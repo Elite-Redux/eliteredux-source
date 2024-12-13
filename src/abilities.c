@@ -124,6 +124,9 @@
         return 1;                                            \
     }
 
+#define ON_MOVE_TYPE static int COMBINE(onMoveType, CONTEXT)(int ability, int move, int moveType, u8 *ateBoost)
+#define CONTEXT_ON_MOVE_TYPE .onMoveType = COMBINE(onMoveType, CONTEXT)
+
 static void InsertCorrectEndType(AbilityCallType type) {
     switch (type) {
         case ABILITY_BS_EXECUTE:
@@ -243,9 +246,14 @@ static int MoxieClone(int battler, int stat) {
     return TRUE;
 }
 
-#define ON_ATE_MULTIPLIER(type)                                             \
+#define ATE_ABILITY(type)                                                   \
     ON_OFFENSIVE_MULTIPLIER {                                               \
         if (moveType == type && gBattleStruct->ateBoost[battler]) MUL(1.1); \
+    }                                                                       \
+    ON_MOVE_TYPE {                                                          \
+        CHECK(moveType == TYPE_NORMAL)                                      \
+        *ateBoost = TRUE;                                                   \
+        return type + 1;                                                    \
     }
 
 #define ON_SWARM_MULTIPLIER(type)                                            \
@@ -1481,11 +1489,17 @@ static const Ability QuickFeet = {
 
 #undef CONTEXT
 #define CONTEXT Normalize
-ON_ATE_MULTIPLIER(TYPE_NORMAL)
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
+}
+ON_MOVE_TYPE {
+    return TYPE_NORMAL + 1;
+}
 static const Ability Normalize = {
     .name = $("Normalize"),
     .description = $("Its moves become Normal-type,\nget 1.1x boost, ignore resists."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -2470,11 +2484,12 @@ static const Ability StrongJaw = {
 
 #undef CONTEXT
 #define CONTEXT Refrigerate
-ON_ATE_MULTIPLIER(TYPE_ICE)
+ATE_ABILITY(TYPE_ICE)
 static const Ability Refrigerate = {
     .name = $("Refrigerate"),
     .description = $("Normal-type moves become Ice-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -2543,11 +2558,12 @@ static const Ability ToughClaws = {
 
 #undef CONTEXT
 #define CONTEXT Pixilate
-ON_ATE_MULTIPLIER(TYPE_FAIRY)
+ATE_ABILITY(TYPE_FAIRY)
 static const Ability Pixilate = {
     .name = $("Pixilate"),
     .description = $("Normal-type moves become Fairy-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -2569,11 +2585,12 @@ static const Ability Gooey = {
 
 #undef CONTEXT
 #define CONTEXT Aerilate
-ON_ATE_MULTIPLIER(TYPE_FLYING)
+ATE_ABILITY(TYPE_FLYING)
 static const Ability Aerilate = {
     .name = $("Aerilate"),
     .description = $("Normal-type moves become Flying-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -2867,10 +2884,16 @@ static const Ability LongReach = {
 ON_OFFENSIVE_MULTIPLIER {
     if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.2);
 }
+ON_MOVE_TYPE {
+    CHECK(moveType == TYPE_NORMAL)
+    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+    return TYPE_WATER + 1;
+}
 static const Ability LiquidVoice = {
     .name = $("Liquid Voice"),
     .description = $("Sound moves get a 1.2x boost\nand become Water if Normal."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -2887,11 +2910,12 @@ static const Ability Triage = {
 
 #undef CONTEXT
 #define CONTEXT Galvanize
-ON_ATE_MULTIPLIER(TYPE_ELECTRIC)
+ATE_ABILITY(TYPE_ELECTRIC)
 static const Ability Galvanize = {
     .name = $("Galvanize"),
     .description = $("Normal-type moves become Elec.-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -3871,10 +3895,16 @@ static const Ability PowerFists = {
 
 #undef CONTEXT
 #define CONTEXT SandSong
+ON_MOVE_TYPE {
+    CHECK(moveType == TYPE_NORMAL)
+    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+    return TYPE_GROUND + 1;
+}
 static const Ability SandSong = {
     .name = $("Sand Song"),
     .description = $("Sound moves get a 1.2x boost\nand become Ground if Normal."),
     .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -3927,20 +3957,29 @@ static const Ability AntarcticBird = {
 
 #undef CONTEXT
 #define CONTEXT Immolate
-ON_ATE_MULTIPLIER(TYPE_FIRE)
+ATE_ABILITY(TYPE_FIRE)
 static const Ability Immolate = {
     .name = $("Immolate"),
     .description = $("Normal-type moves become Fire-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
 #define CONTEXT Crystallize
-ON_ATE_MULTIPLIER(TYPE_ICE)
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_ICE && gBattleStruct->ateBoost[battler]) MUL(1.1);
+}
+ON_MOVE_TYPE {
+    CHECK(moveType == TYPE_ROCK)
+    *ateBoost = TRUE;
+    return TYPE_ICE + 1;
+}
 static const Ability Crystallize = {
     .name = $("Crystallize"),
     .description = $("Rock-type moves become Ice-type\nmoves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -4166,11 +4205,12 @@ static const Ability Earthbound = {
 
 #undef CONTEXT
 #define CONTEXT FightSpirit
-ON_ATE_MULTIPLIER(TYPE_FIGHTING)
+ATE_ABILITY(TYPE_FIGHTING)
 static const Ability FightSpirit = {
     .name = $("Fighting Spirit"),
     .description = $("Normal-type moves become Fight.-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -4286,11 +4326,12 @@ static const Ability SelfSufficient = {
 
 #undef CONTEXT
 #define CONTEXT Tectonize
-ON_ATE_MULTIPLIER(TYPE_GROUND)
+ATE_ABILITY(TYPE_GROUND)
 static const Ability Tectonize = {
     .name = $("Tectonize"),
     .description = $("Normal-type moves become Ground-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -4359,11 +4400,12 @@ static const Ability Mountaineer = {
 
 #undef CONTEXT
 #define CONTEXT Hydrate
-ON_ATE_MULTIPLIER(TYPE_WATER)
+ATE_ABILITY(TYPE_WATER)
 static const Ability Hydrate = {
     .name = $("Hydrate"),
     .description = $("Normal-type moves become Water-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -4476,11 +4518,12 @@ static const Ability Phantom = {
 
 #undef CONTEXT
 #define CONTEXT Intoxicate
-ON_ATE_MULTIPLIER(TYPE_POISON)
+ATE_ABILITY(TYPE_POISON)
 static const Ability Intoxicate = {
     .name = $("Intoxicate"),
     .description = $("Normal-type moves become Poison-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -4983,6 +5026,7 @@ static const Ability SolarFlare = {
     .description = $("Chloroplast + Immolate.\nFire moves gain STAB."),
     .chloroplast = TRUE,
     .onOffensiveMultiplier = Immolate.onOffensiveMultiplier,
+    .onMoveType = Immolate.onMoveType,
     CONTEXT_ON_STAB,
 };
 
@@ -5178,11 +5222,12 @@ static const Ability SunWorship = {
 
 #undef CONTEXT
 #define CONTEXT Pollinate
-ON_ATE_MULTIPLIER(TYPE_BUG)
+ATE_ABILITY(TYPE_BUG)
 static const Ability Pollinate = {
     .name = $("Pollinate"),
     .description = $("Normal-type moves become Bug-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -5225,11 +5270,12 @@ static const Ability Nosferatu = {
 
 #undef CONTEXT
 #define CONTEXT Spectralize
-ON_ATE_MULTIPLIER(TYPE_GHOST)
+ATE_ABILITY(TYPE_GHOST)
 static const Ability Spectralize = {
     .name = $("Spectralize"),
     .description = $("Normal-type moves become Ghost-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -5248,6 +5294,7 @@ static const Ability SpectralShroud = {
     .description = $("Spectralize + 30% chance\nto badly poison the foe."),
     CONTEXT_ON_ATTACKER,
     .onOffensiveMultiplier = Spectralize.onOffensiveMultiplier,
+    .onMoveType = Spectralize.onMoveType,
 };
 
 #undef CONTEXT
@@ -5475,11 +5522,12 @@ static const Ability Roundhouse = {
 
 #undef CONTEXT
 #define CONTEXT Mineralize
-ON_ATE_MULTIPLIER(TYPE_ROCK)
+ATE_ABILITY(TYPE_ROCK)
 static const Ability Mineralize = {
     .name = $("Mineralize"),
     .description = $("Normal-type moves become Rock-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -5590,11 +5638,12 @@ static const Ability DesertCloak = {
 
 #undef CONTEXT
 #define CONTEXT Draconize
-ON_ATE_MULTIPLIER(TYPE_DRAGON)
+ATE_ABILITY(TYPE_DRAGON)
 static const Ability Draconize = {
     .name = $("Draconize"),
     .description = $("Normal-type moves become Dragon-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -6429,11 +6478,12 @@ static const Ability Purgatory = {
 
 #undef CONTEXT
 #define CONTEXT Emanate
-ON_ATE_MULTIPLIER(TYPE_PSYCHIC)
+ATE_ABILITY(TYPE_PSYCHIC)
 static const Ability Emanate = {
     .name = $("Emanate"),
     .description = $("Normal-type moves become Psy.-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -6832,6 +6882,7 @@ static const Ability Enlightened = {
     .description = $("Emanate + Inner Focus."),
     .breakable = TRUE,
     .onOffensiveMultiplier = Emanate.onOffensiveMultiplier,
+    .onMoveType = Emanate.onMoveType,
     .onAccuracy = InnerFocus.onAccuracy,
 };
 
@@ -6964,6 +7015,7 @@ static const Ability Refrigerator = {
     .name = $("Refrigerator"),
     .description = $("Refrigerate + Illuminate."),
     .onOffensiveMultiplier = Refrigerate.onOffensiveMultiplier,
+    .onMoveType = Refrigerate.onMoveType,
     .onAccuracy = Illuminate.onAccuracy,
 };
 
@@ -7035,11 +7087,12 @@ static const Ability Determination = {
 
 #undef CONTEXT
 #define CONTEXT Fertilize
-ON_ATE_MULTIPLIER(TYPE_GRASS)
+ATE_ABILITY(TYPE_GRASS)
 static const Ability Fertilize = {
     .name = $("Fertilize"),
     .description = $("Normal-type moves become Grass-\ntype moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -7425,10 +7478,16 @@ static const Ability ChromeCoat = {
 
 #undef CONTEXT
 #define CONTEXT Banshee
+ON_MOVE_TYPE {
+    CHECK(moveType == TYPE_NORMAL)
+    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+    return TYPE_GHOST + 1;
+}
 static const Ability Banshee = {
     .name = $("Banshee"),
     .description = $("Sound moves get a 1.2x boost\nand become Ghost if Normal."),
     .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -8612,10 +8671,16 @@ static const Ability Surprise = {
 
 #undef CONTEXT
 #define CONTEXT SnowSong
+ON_MOVE_TYPE {
+    CHECK(moveType == TYPE_NORMAL)
+    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+    return TYPE_ICE + 1;
+}
 static const Ability SnowSong = {
     .name = $("Snow Song"),
     .description = $("Sound moves get a 1.2x boost\nand become Ice if Normal."),
     .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -9050,10 +9115,16 @@ static const Ability Tag = {
 
 #undef CONTEXT
 #define CONTEXT PowerMetal
+ON_MOVE_TYPE {
+    CHECK(moveType == TYPE_NORMAL)
+    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+    return TYPE_STEEL + 1;
+}
 static const Ability PowerMetal = {
     .name = $("Power Metal"),
     .description = $("Sound moves get a 1.2x boost\nand become Steel if Normal."),
     .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -9066,11 +9137,19 @@ static const Ability PowerEdge = {
 
 #undef CONTEXT
 #define CONTEXT Superconductor
-ON_ATE_MULTIPLIER(TYPE_ELECTRIC)
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
+}
+ON_MOVE_TYPE {
+    CHECK(moveType == TYPE_STEEL)
+    *ateBoost = TRUE;
+    return TYPE_ELECTRIC + 1;
+}
 static const Ability Superconductor = {
     .name = $("Superconductor"),
     .description = $("Steel-type moves become Electric\n-type moves and get a 1.1x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT
@@ -9669,6 +9748,7 @@ static const Ability SteelBeetle = {
     .description = $("Raging Boxer + Pollinate."),
     .onParentalBond = RagingBoxer.onParentalBond,
     .onOffensiveMultiplier = Pollinate.onOffensiveMultiplier,
+    .onMoveType = Pollinate.onMoveType,
 };
 
 #undef CONTEXT
@@ -9977,6 +10057,7 @@ static const Ability SludgyMix = {
     .name = $("Sludgy Mix"),
     .description = $("Intoxicate + Punk Rock."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onMoveType = Intoxicate.onMoveType,
 };
 
 #undef CONTEXT
@@ -10006,10 +10087,16 @@ ON_DEFENDER {
     UseOutOfTurnAttack(battler, attacker, ability, MOVE_EXPLOSION, 100);
     return FALSE;
 }
+ON_MOVE_TYPE {
+    CHECK(gProcessingExtraAttacks)
+    CHECK(gQueuedExtraAttackData[0].ability == ability)
+    return TYPE_FIRE + 1;
+}
 static const Ability VictoryBomb = {
     .name = $("Victory Bomb"),
     .description = $("Attacks with a 100BP Fire-type\nExplosion on fainting."),
     CONTEXT_ON_DEFENDER,
+    CONTEXT_ON_MOVE_TYPE,
 };
 
 #undef CONTEXT

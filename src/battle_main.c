@@ -5017,9 +5017,8 @@ void RunBattleScriptCommands(void) {
     if (gBattleControllerExecFlags == 0) gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
 }
 
-#define HAS_ABILITY(abilityToCheck) (MonHasInnate(mon, abilityToCheck, disableRandomizer) || ability == abilityToCheck)
 u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
-    u32 moveType, ateType;
+    u32 moveType = gBattleMoves[move].type;
     u16 item = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
     u16 holdEffect = ItemId_GetHoldEffect(item);
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -5034,8 +5033,6 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
         type1 = RandomizeType(gBaseStats[species].type1, species, personality, TRUE);
         type2 = RandomizeType(gBaseStats[species].type2, species, personality, FALSE);
     }
-
-    GET_MOVE_TYPE(move, moveType);
 
     if (move == MOVE_STRUGGLE) return TYPE_NORMAL;
 
@@ -5087,73 +5084,24 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
         }
     }
 
-    // Sand Song
-    if (HAS_ABILITY(ABILITY_SAND_SONG) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL) {
-        return TYPE_GROUND;
+    if (gAbilities[ability].onMoveType) {
+        u8 unused;
+        int result = gAbilities[ability].onMoveType(ability, move, moveType, &unused);
+        if (result) return result - 1;
     }
 
-    // Power Metal
-    if (HAS_ABILITY(ABILITY_POWER_METAL) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL) {
-        return TYPE_STEEL;
-    }
-
-    // Snow Song
-    if (HAS_ABILITY(ABILITY_SNOW_SONG) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL) {
-        return TYPE_ICE;
-    }
-
-    // Banshee
-    if (HAS_ABILITY(ABILITY_BANSHEE) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL) {
-        return TYPE_GHOST;
-    }
-
-    // Banshee
-    if (HAS_ABILITY(ABILITY_LIQUID_VOICE) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL) {
-        return TYPE_WATER;
-    }
-
-    if (gBattleMoves[move].type == TYPE_NORMAL && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER && gBattleMoves[move].effect != EFFECT_WEATHER_BALL &&
-        gBattleMoves[move].effect != EFFECT_CHANGE_TYPE_ON_ITEM && gBattleMoves[move].effect != EFFECT_NATURAL_GIFT &&
-        ((HAS_ABILITY(ABILITY_PIXILATE) && (ateType = TYPE_FAIRY)) || (HAS_ABILITY(ABILITY_REFRIGERATE) && (ateType = TYPE_ICE)) ||
-         (HAS_ABILITY(ABILITY_REFRIGERATOR) && (ateType = TYPE_ICE)) || (HAS_ABILITY(ABILITY_AERILATE) && (ateType = TYPE_FLYING)) ||
-         (HAS_ABILITY(ABILITY_IMMOLATE) && (ateType = TYPE_FIRE)) || (HAS_ABILITY(ABILITY_SOLAR_FLARE) && (ateType = TYPE_FIRE)) ||
-         (HAS_ABILITY(ABILITY_TECTONIZE) && (ateType = TYPE_GROUND)) || (HAS_ABILITY(ABILITY_FIGHT_SPIRIT) && (ateType = TYPE_FIGHTING)) ||
-         (HAS_ABILITY(ABILITY_INTOXICATE) && (ateType = TYPE_POISON)) || (HAS_ABILITY(ABILITY_SLUDGY_MIX) && (ateType = TYPE_POISON)) ||
-         (HAS_ABILITY(ABILITY_HYDRATE) && (ateType = TYPE_WATER)) || (HAS_ABILITY(ABILITY_GALVANIZE) && (ateType = TYPE_ELECTRIC)) ||
-         (HAS_ABILITY(ABILITY_POLLINATE) && (ateType = TYPE_BUG)) || (HAS_ABILITY(ABILITY_STEEL_BEETLE) && (ateType = TYPE_BUG)) ||
-         (HAS_ABILITY(ABILITY_SPECTRAL_SHROUD) && (ateType = TYPE_GHOST)) || (HAS_ABILITY(ABILITY_SPECTRALIZE) && (ateType = TYPE_GHOST)) ||
-         (HAS_ABILITY(ABILITY_MINERALIZE) && (ateType = TYPE_ROCK)) || (HAS_ABILITY(ABILITY_DRACONIZE) && (ateType = TYPE_DRAGON)) ||
-         (HAS_ABILITY(ABILITY_EMANATE) && (ateType = TYPE_PSYCHIC)) || (HAS_ABILITY(ABILITY_ENLIGHTENED) && (ateType = TYPE_PSYCHIC)) ||
-         (HAS_ABILITY(ABILITY_FERTILIZE) && (ateType = TYPE_GRASS)))) {
-        return ateType;
-    }
-    // Superconductor
-    if (HAS_ABILITY(ABILITY_SUPERCONDUCTOR)) {
-        if (gBattleMoves[move].type == TYPE_STEEL) return TYPE_ELECTRIC;
-    }
-    // Crystallize
-    if (HAS_ABILITY(ABILITY_CRYSTALLIZE)) {
-        if (gBattleMoves[move].type == TYPE_ROCK) return TYPE_ICE;
-    }
-    // Normalize
-    if (HAS_ABILITY(ABILITY_NORMALIZE)) {
-        if (gBattleMoves[move].type != TYPE_NORMAL && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER && gBattleMoves[move].effect != EFFECT_WEATHER_BALL)
-            return TYPE_NORMAL;
-    }
-    // Fight Spirit
-    if (HAS_ABILITY(ABILITY_FIGHT_SPIRIT)) {
-        if (gBattleMoves[move].type == TYPE_NORMAL && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER && gBattleMoves[move].effect != EFFECT_WEATHER_BALL &&
-            gBattleMoves[move].effect != EFFECT_CHANGE_TYPE_ON_ITEM && gBattleMoves[move].effect != EFFECT_NATURAL_GIFT)
-            return TYPE_FIGHTING;
+    for (int i = 0; i < NUM_INNATE_PER_SPECIES; i++) {
+        u8 unused;
+        int innate = GetMonInnate(mon, i, disableRandomizer);
+        FILTER(gAbilities[innate].onMoveType)
+        int result = gAbilities[innate].onMoveType(innate, move, moveType, &unused);
+        if (result) return result - 1;
     }
 
     return gBattleMoves[move].type;
 }
-#undef HAS_ABILITY
 
 static int GetMoveTypeInternal(int move, int battlerAtk, u8 *ateBoost, s8 *realType) {
-    int i, moveType;
-
     switch (move) {
         case MOVE_STRUGGLE:
             return TYPE_NORMAL;
@@ -5182,11 +5130,6 @@ static int GetMoveTypeInternal(int move, int battlerAtk, u8 *ateBoost, s8 *realT
             if (gBattleWeather & WEATHER_HAIL_ANY) return TYPE_ICE;
             if (gBattleWeather & WEATHER_FOG_ANY) return TYPE_GHOST;
             break;
-
-        case MOVE_EXPLOSION:
-            REQUIRE(gProcessingExtraAttacks)
-            REQUIRE(gQueuedExtraAttackData[0].ability == ABILITY_VICTORY_BOMB)
-            return TYPE_FIRE;
 
         case MOVE_PRESENT:
             *realType = TYPE_MYSTERY;
@@ -5244,134 +5187,13 @@ static int GetMoveTypeInternal(int move, int battlerAtk, u8 *ateBoost, s8 *realT
             break;
     }
 
-    moveType = gBattleMoves[move].type;
+    int moveType = gBattleMoves[move].type;
 
     if ((gFieldStatuses & STATUS_FIELD_ION_DELUGE && moveType == TYPE_NORMAL) || gStatuses4[battlerAtk] & STATUS4_ELECTRIFIED) return TYPE_ELECTRIC;
     if (gStatuses4[battlerAtk] & STATUS4_PLASMA_FISTS && moveType == TYPE_NORMAL) return TYPE_ELECTRIC;
 
-    for (i = 0; i < TOTAL_ABILITY_COUNT; i++) {
-        switch (GetAbilityAtIndex(battlerAtk, i, FALSE)) {
-            case ABILITY_SAND_SONG:
-                REQUIRE(moveType == TYPE_NORMAL)
-                REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-                return TYPE_GROUND;
-
-            case ABILITY_POWER_METAL:
-                REQUIRE(moveType == TYPE_NORMAL)
-                REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-                return TYPE_STEEL;
-
-            case ABILITY_SNOW_SONG:
-                REQUIRE(moveType == TYPE_NORMAL)
-                REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-                return TYPE_ICE;
-
-            case ABILITY_BANSHEE:
-                REQUIRE(moveType == TYPE_NORMAL)
-                REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-                return TYPE_GHOST;
-
-            case ABILITY_LIQUID_VOICE:
-                REQUIRE(moveType == TYPE_NORMAL)
-                REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-                return TYPE_WATER;
-
-            case ABILITY_PIXILATE:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_FAIRY;
-
-            case ABILITY_REFRIGERATE:
-            case ABILITY_REFRIGERATOR:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_ICE;
-
-            case ABILITY_AERILATE:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_FLYING;
-
-            case ABILITY_IMMOLATE:
-            case ABILITY_SOLAR_FLARE:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_FIRE;
-
-            case ABILITY_TECTONIZE:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_GROUND;
-
-            case ABILITY_FIGHT_SPIRIT:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_FIGHTING;
-
-            case ABILITY_INTOXICATE:
-            case ABILITY_SLUDGY_MIX:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_POISON;
-
-            case ABILITY_HYDRATE:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_WATER;
-
-            case ABILITY_GALVANIZE:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_ELECTRIC;
-
-            case ABILITY_POLLINATE:
-            case ABILITY_STEEL_BEETLE:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_BUG;
-
-            case ABILITY_SPECTRAL_SHROUD:
-            case ABILITY_SPECTRALIZE:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_GHOST;
-
-            case ABILITY_MINERALIZE:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_ROCK;
-
-            case ABILITY_DRACONIZE:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_DRAGON;
-
-            case ABILITY_EMANATE:
-            case ABILITY_ENLIGHTENED:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_PSYCHIC;
-
-            case ABILITY_FERTILIZE:
-                REQUIRE(moveType == TYPE_NORMAL)
-                *ateBoost = TRUE;
-                return TYPE_GRASS;
-
-            case ABILITY_CRYSTALLIZE:
-                REQUIRE(moveType == TYPE_ROCK)
-                *ateBoost = TRUE;
-                return TYPE_ICE;
-
-            case ABILITY_SUPERCONDUCTOR:
-                REQUIRE(moveType == TYPE_STEEL)
-                *ateBoost = TRUE;
-                return TYPE_ELECTRIC;
-
-            case ABILITY_NORMALIZE:
-                *ateBoost = TRUE;
-                return TYPE_NORMAL;
-        }
-    }
+    ON_ABILITY(battlerAtk, FALSE, gAbilities[ability].onMoveType, int newType = gAbilities[ability].onMoveType(ability, move, moveType, ateBoost);
+               if (newType) return newType - 1;)
 
     *realType = -1;
     return moveType;
