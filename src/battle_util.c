@@ -7734,17 +7734,13 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
 
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move) {
     if (move == MOVE_STRUGGLE) return 2;
-    if (IS_BATTLER_OF_TYPE(battler, moveType) || BATTLER_HAS_ABILITY(battler, ABILITY_MYSTIC_POWER) || BATTLER_HAS_ABILITY(battler, ABILITY_ARCANE_FORCE) ||
-        (BATTLER_HAS_ABILITY(battler, ABILITY_LUNAR_ECLIPSE) && (moveType == TYPE_FAIRY || moveType == TYPE_DARK)) ||
-        (BATTLER_HAS_ABILITY(battler, ABILITY_MOON_SPIRIT) && (moveType == TYPE_FAIRY || moveType == TYPE_DARK)) ||
-        (BATTLER_HAS_ABILITY(battler, ABILITY_SOLAR_FLARE) && moveType == TYPE_FIRE) ||
-        (BATTLER_HAS_ABILITY(battler, ABILITY_AURORA_BOREALIS) && moveType == TYPE_ICE) ||
-        (BATTLER_HAS_ABILITY(battler, ABILITY_AMPHIBIOUS) && moveType == TYPE_WATER) ||
-        (BATTLER_HAS_ABILITY(battler, ABILITY_OLD_MARINER) && moveType == TYPE_WATER)) {
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_ADAPTABILITY) || BATTLER_HAS_ABILITY(battler, ABILITY_RKS_SYSTEM))
-            return 4;
-        else
-            return 3;
+    int isStab = IS_BATTLER_OF_TYPE(battler, moveType);
+    if (!isStab) {
+        ON_ABILITY(battler, FALSE, gAbilities[ability].onStab, isStab = gAbilities[ability].onStab(moveType); if (isStab) break)
+    }
+    if (isStab) {
+        ON_ABILITY(battler, FALSE, gAbilities[ability].adaptability, return 4)
+        return 3;
     }
     return 2;
 }

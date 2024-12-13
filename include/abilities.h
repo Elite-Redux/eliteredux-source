@@ -62,6 +62,7 @@ typedef AccuracyPriority (*AbilityOnAccuracyHandler)(int ability, int battler, i
 typedef int (*AbilityOnSwapSplitHandler)(int battler, int move);
 typedef void (*AbilityOnChooseOffensiveStat)(int battler, int move, int ignoreOffensiveStatDrops, int targetUnaware, u8* atkStatToUse, u8* secondaryAtkStatToUse);
 typedef int (*AbilityOnChooseDefensiveStat)(int battler, int target, int move, int ignoreDefensiveStatBoosts, int battlerUnaware);
+typedef int (*AbilityOnStab)(int moveType);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -104,6 +105,7 @@ typedef struct Ability {
     const AbilityOnSwapSplitHandler onSwapSplit;
     const AbilityOnChooseOffensiveStat onChooseOffensiveStat;
     const AbilityOnChooseDefensiveStat onChooseDefensiveStat;
+    const AbilityOnStab onStab;
     u16 redirectType:5;
     AbilityApplyOn onImmuneFor:3;
     u16 noDamageHits:2;
@@ -127,6 +129,7 @@ typedef struct Ability {
     u16 protean:1;
     u16 colorChange:1;
     AbilityApplyOnWithTarget onAccuracyFor:5;
+    u16 adaptability:1;
 } Ability;
 
 extern const Ability gAbilities[ABILITIES_COUNT];

@@ -110,6 +110,9 @@
 #define ON_CHOOSE_DEFENSIVE_STAT static int COMBINE(onChooseDefensiveStat, CONTEXT)(int battler, int target, int move, int ignoreDefensiveStatBoosts, int battlerUnaware)
 #define CONTEXT_ON_CHOOSE_DEFENSIVE_STAT .onChooseDefensiveStat = COMBINE(onChooseDefensiveStat, CONTEXT)
 
+#define ON_STAB static int COMBINE(onStab, CONTEXT)(int moveType)
+#define CONTEXT_ON_STAB .onStab = COMBINE(onStab, CONTEXT)
+
 static void InsertCorrectEndType(AbilityCallType type) {
     switch (type) {
         case ABILITY_BS_EXECUTE:
@@ -1417,6 +1420,7 @@ static const Ability PoisonHeal = {
 static const Ability Adaptability = {
     .name = $("Adaptability"),
     .description = $("Increases STAB from 1.5x to 2x."),
+    .adaptability = TRUE,
 };
 
 #undef CONTEXT
@@ -3177,6 +3181,7 @@ static const Ability RksSystem = {
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
     .protean = TRUE,
+    .adaptability = TRUE,
 };
 
 #undef CONTEXT
@@ -3975,9 +3980,13 @@ static const Ability AncientIdol = {
 
 #undef CONTEXT
 #define CONTEXT MysticPower
+ON_STAB {
+    return TRUE;
+}
 static const Ability MysticPower = {
     .name = $("Mystic Power"),
     .description = $("All moves gain the 1.5x power\nboost from STAB."),
+    CONTEXT_ON_STAB,
 };
 
 #undef CONTEXT
@@ -4022,9 +4031,13 @@ static const Ability Inflatable = {
 
 #undef CONTEXT
 #define CONTEXT AuroraBorealis
+ON_STAB {
+    return moveType == TYPE_ICE;
+}
 static const Ability AuroraBorealis = {
     .name = $("Aurora Borealis"),
     .description = $("Boosts the power of Ice-type\nmoves by 1.5x (due to STAB)."),
+    CONTEXT_ON_STAB,
 };
 
 #undef CONTEXT
@@ -4095,9 +4108,13 @@ static const Ability LeadCoat = {
 
 #undef CONTEXT
 #define CONTEXT Amphibious
+ON_STAB {
+    return moveType == TYPE_WATER;
+}
 static const Ability Amphibious = {
     .name = $("Amphibious"),
     .description = $("Boosts the power of Water-type\nmoves by 1.5x (due to STAB)."),
+    CONTEXT_ON_STAB,
 };
 
 #undef CONTEXT
@@ -4917,18 +4934,27 @@ static const Ability Looter = {
 
 #undef CONTEXT
 #define CONTEXT LunarEclipse
+ON_STAB {
+    return moveType == TYPE_DARK || moveType == TYPE_FAIRY;
+}
 static const Ability LunarEclipse = {
     .name = $("Lunar Eclipse"),
     .description = $("Fairy & Dark gains STAB.\nHypnosis has 1.5x accuracy."),
+    .onAccuracy = Hypnotist.onAccuracy,
+    CONTEXT_ON_STAB,
 };
 
 #undef CONTEXT
 #define CONTEXT SolarFlare
+ON_STAB {
+    return moveType == TYPE_FIRE;
+}
 static const Ability SolarFlare = {
     .name = $("Solar Flare"),
     .description = $("Chloroplast + Immolate.\nFire moves gain STAB."),
     .chloroplast = TRUE,
     .onOffensiveMultiplier = Immolate.onOffensiveMultiplier,
+    CONTEXT_ON_STAB,
 };
 
 #undef CONTEXT
@@ -6589,9 +6615,13 @@ static const Ability Generator = {
 
 #undef CONTEXT
 #define CONTEXT MoonSpirit
+ON_STAB {
+    return moveType == TYPE_FAIRY || moveType == TYPE_DARK;
+}
 static const Ability MoonSpirit = {
     .name = $("Moon Spirit"),
     .description = $("Fairy & Dark gains STAB.\nMoonlight recovers 75% HP."),
+    CONTEXT_ON_STAB,
 };
 
 #undef CONTEXT
@@ -6827,6 +6857,7 @@ static const Ability ArcaneForce = {
     .name = $("Arcane Force"),
     .description = $("All moves gain STAB.\nUps “supereffective” by 10%."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onStab = MysticPower.onStab,
 };
 
 #undef CONTEXT
@@ -8488,6 +8519,7 @@ static const Ability OldMariner = {
     .breakable = TRUE,
     .onOffensiveMultiplier = Seaweed.onOffensiveMultiplier,
     .onDefensiveMultiplier = Seaweed.onDefensiveMultiplier,
+    .onStab = Amphibious.onStab,
 };
 
 #undef CONTEXT
