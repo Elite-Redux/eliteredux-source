@@ -1290,7 +1290,6 @@ bool8 JumpIfMoveAffectedByProtect(u16 move) {
 }
 
 u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState* moveState) {
-    int moveAcc;
     s8 buff, accStage, evasionStage;
     u8 atkParam = GetBattlerHoldEffectParam(battlerAtk);
     u8 defParam = GetBattlerHoldEffectParam(battlerDef);
@@ -1323,6 +1322,8 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState*
             return ACCURACY_ALWAYS_MISSES;
     }
 
+    int moveAcc = gBattleMoves[move].accuracy;
+
     if (prio < ACCURACY_ALWAYS_MISSES) {
         if (moveAcc == 0)
             prio = ACCURACY_HITS_IF_POSSIBLE;
@@ -1352,8 +1353,6 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState*
 
     if (buff < 0) buff = 0;
     if (buff >= ARRAY_COUNT(gAccuracyStageRatios)) buff = ARRAY_COUNT(gAccuracyStageRatios) - 1;
-
-    moveAcc = gBattleMoves[move].accuracy;
 
     // Check Thunder and Hurricane on sunny weather.
     if (IsBattlerWeatherAffected(battlerDef, WEATHER_SUN_ANY) &&
