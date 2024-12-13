@@ -2882,7 +2882,7 @@ ON_PRIORITY {
 static const Ability Triage = {
     .name = $("Triage"),
     .description = $("Moves that have a healing effect\ngain +3 priority."),
-    CONTEXT_ON_PRIORITY;
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -3911,7 +3911,7 @@ ON_PRIORITY {
 static const Ability BlitzBoxer = {
     .name = $("Blitz Boxer"),
     .description = $("At full HP, gives +1 priority to\nthis Pokémon's punching moves."),
-    CONTEXT_ON_PRIORITY;
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
