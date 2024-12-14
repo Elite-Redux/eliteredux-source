@@ -4389,7 +4389,7 @@ static void Cmd_moveend(void) {
                 if (gCurrentMove != MOVE_STRUGGLE) {
                     if (IsMagicGuardProtected(gBattlerAttacker)) break;
                     int blocked = FALSE;
-                    ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].noRecoil, blocked = FALSE; break)
+                    ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].noRecoil, blocked = TRUE; break)
                     if (blocked) break;
                 }
 

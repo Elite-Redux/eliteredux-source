@@ -392,6 +392,7 @@ static const Ability Limber = {
     .description = $("Immune to paralysis.\n"
                      "Takes 50% less recoil damage."),
     .breakable = TRUE,
+    .halfRecoil = TRUE,
 };
 
 #undef CONTEXT
@@ -1222,6 +1223,7 @@ static const Ability RockHead = {
     .name = $("Rock Head"),
     .description = $("Immune to recoil damage, but not\n"
                      "immune to Explosion/crash dmg."),
+    .noRecoil = TRUE,
 };
 
 #undef CONTEXT
@@ -5772,6 +5774,7 @@ static const Ability SteelBarrel = {
     .name = $("Steel Barrel"),
     .description = $("Immune to recoil damage, but not\n"
                      "immune to Explosion/crash dmg."),
+    .noRecoil = TRUE,
 };
 
 #undef CONTEXT
