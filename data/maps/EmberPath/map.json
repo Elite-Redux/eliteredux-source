@@ -60,14 +60,14 @@
       "y": 38,
       "elevation": 0,
       "dest_map": "MAP_JAGGED_PASS",
-      "dest_warp_id": "5"
+      "dest_warp_id": 5
     },
     {
       "x": 3,
       "y": 17,
       "elevation": 0,
       "dest_map": "MAP_ASHEN_WOODS",
-      "dest_warp_id": "0"
+      "dest_warp_id": 0
     }
   ],
   "coord_events": [
