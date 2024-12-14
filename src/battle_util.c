@@ -6765,7 +6765,7 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move) {
     else if (gRoundStructs[battlerId].protectedThisTurn)
         return TRUE;
     else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_WIDE_GUARD &&
-             GetBattlerBattleMoveTargetFlags(move, battlerId) & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
+             GetBattlerBattleMoveTargetFlags(move, gBattlerAttacker) & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
         return TRUE;
     else if (gRoundStructs[battlerId].banefulBunkered)
         return TRUE;
