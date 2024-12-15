@@ -2548,6 +2548,7 @@ const u8 gText_LevelCap[]       = _("Level Cap");
 const u8 gText_LevelUp[]        = _("Level Up");
 const u8 gText_GiveMegaStone[]  = _("Mega Stone");
 const u8 gText_GiveMegaStone2[] = _("Mega Stone 2");
+const u8 gText_GiveMegaStone3[] = _("Mega Stone 3");
 
 // Tutorial NPC in Littleroot
 /*const u8 gText_TutorialTalkToNurseJoy[]          = _("Talk to Nurse Joy!");
