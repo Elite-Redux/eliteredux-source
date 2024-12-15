@@ -549,6 +549,10 @@ static const Ability Immunity = {
 
 #undef CONTEXT
 #define CONTEXT FlashFire
+ON_ABSORB {
+    CHECK(moveType == TYPE_FIRE)
+    return ABSORB_RESULT_FLASH_FIRE;
+}
 ON_OFFENSIVE_MULTIPLIER {
     if (moveType == TYPE_FIRE && gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE) MUL(1.5);
 }
@@ -557,6 +561,7 @@ static const Ability FlashFire = {
     .description = $("Powers up Fire-type moves by\n"
                      "1.5x if hit by a Fire-type move."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
