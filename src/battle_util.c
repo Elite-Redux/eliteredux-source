@@ -4072,7 +4072,7 @@ int DidMoveHit() { return WasMoveSuccessful() && TARGET_TURN_DAMAGED; }
 
 int ShouldApplyOnHitAffect(int applyTo) { return DidMoveHit() && IsBattlerAlive(applyTo); }
 
-int UseIntimidateClone(int battler, int abilityToCheck) {
+int UseIntimidateClone(int abilityToCheck, int battler) {
     u8 numAbility;
 
     for (numAbility = 0; numAbility < NUM_INTIMIDATE_CLONES; numAbility++) {
