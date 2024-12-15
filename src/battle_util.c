@@ -4008,7 +4008,9 @@ bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower) {
     return FALSE;
 }
 
-static u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, u8 movePower) {
+u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, u8 movePower) {
+    if (!CheckAndSetOncePerTurnAbility(battler, ability)) return FALSE;
+
     gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
         .ability = ability,
         .attacker = battler,
@@ -4018,7 +4020,7 @@ static u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extr
         .movePos = MAX_MON_MOVES,
     };
 
-    return TRUE;
+    return FALSE;
 }
 
 int AbilityHealMonStatus(u8 battler, u16 ability) {
@@ -4970,9 +4972,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
             for (int i = 0; i < gBattlersCount; i++) {
                 ON_ABILITY(i, FALSE, gAbilities[ability].onReactive, effect += gAbilities[ability].onReactive(ability, battler))
             }
-            break;
-        case ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE:
-            HandleFollowupAttackAbilities(battler, gBattlerTarget, move);
             break;
         case ABILITYEFFECT_MOVE_END_EITHER:
             break;
@@ -9664,104 +9663,6 @@ int HasAbilityIgnoringSuppression(int battler, int ability) {
 void ReplaceAbility(int battler, int ability) { gBattleMons[battler].abilities[0] = ability; }
 
 int GetBattlerAbility(int battler) { return gBattleMons[battler].abilities[0]; }
-
-static int HandleFollowupAttackAbilityAs(int ability, int battler, int target, int move, int moveType);
-
-int AdjustTarget(int battler, int target, int move) {
-    int targetFlags = GetBattlerBattleMoveTargetFlags(move, battler);
-    if (targetFlags == MOVE_TARGET_BOTH || targetFlags == MOVE_TARGET_FOES_AND_ALLY) {
-        // Move doesn't matter, just pick a single target move
-        int newTarget = GetMoveTarget(MOVE_POUND, MOVE_TARGET_SELECTED + 1);
-        if (GetBattlerSide(newTarget) != GetBattlerSide(battler)) return newTarget;
-    }
-    return target;
-}
-
-void HandleFollowupAttackAbilities(int battler, int target, int move) {
-    int i, ability, moveType;
-
-    if (!IsBattlerAlive(battler)) return;
-    if (gRoundStructs[battler].attackCancelled) return;
-
-    GET_MOVE_TYPE(move, moveType)
-    gBattlerAbility = battler;
-    target = AdjustTarget(battler, target, move);
-
-    for (i = 0; i < TOTAL_ABILITY_COUNT; i++) {
-        ability = gBattleScripting.abilityPopupOverwrite = GetAbilityAtIndex(battler, i, TRUE);
-        HandleFollowupAttackAbilityAs(ability, battler, target, move, moveType);
-    }
-}
-
-int HandleFollowupAttackAbilityAs(int ability, int battler, int target, int move, int moveType) {
-    int followupMove = 0;
-
-    if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT && ability != ABILITY_FORECAST) return FALSE;
-
-    switch (ability) {
-        case ABILITY_TWO_STEP:
-        case ABILITY_BLADE_DANCE:
-            if (target == battler || (target == BATTLE_PARTNER(battler) && gBattleMoves[move].target == MOVE_TARGET_ALLY))
-                target = GetMoveTarget(MOVE_POUND, 0);
-            break;
-    }
-
-    if (target == battler) return FALSE;
-
-    switch (ability) {
-        case ABILITY_BLADE_DANCE:
-            followupMove = MOVE_LEAF_BLADE;
-            FALLTHROUGH
-        case ABILITY_TWO_STEP:
-            REQUIRE_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-            REQUIRE(IsDance(gBattlerAttacker, move))
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            if (!followupMove) followupMove = MOVE_REVELATION_DANCE;
-            return UseAttackerFollowUpMove(battler, target, ability, followupMove, 50);
-
-        case ABILITY_FORECAST:
-            REQUIRE(move == MOVE_SUNNY_DAY || move == MOVE_RAIN_DANCE || move == MOVE_SANDSTORM || move == MOVE_HAIL || move == MOVE_EERIE_FOG)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_WEATHER_BALL, 0);
-
-        case ABILITY_VOLCANO_RAGE:
-            REQUIRE(moveType == TYPE_FIRE)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_ERUPTION, 50);
-
-        case ABILITY_FROST_BURN:
-            REQUIRE(moveType == TYPE_FIRE)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_ICE_BEAM, 40);
-
-        case ABILITY_PYRO_SHELLS:
-            REQUIRE(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_OUTBURST, 50);
-
-        case ABILITY_THUNDERCALL:
-            REQUIRE(moveType == TYPE_ELECTRIC)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_SMITE, 20);
-
-        case ABILITY_AFTERSHOCK:
-            REQUIRE(gBattleMoves[move].power)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_MAGNITUDE, 65);
-
-        case ABILITY_HIGH_TIDE:
-            REQUIRE(moveType == TYPE_WATER)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_SURF, 50);
-
-        case ABILITY_CHUNKY_BASS_LINE:
-            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_EARTHQUAKE, 40);
-    }
-
-    return FALSE;
-}
 
 int IsStickyHold(int battler) {
     int ability = BattlerHasAbility(battler, ABILITY_STICKY_HOLD, TRUE);
