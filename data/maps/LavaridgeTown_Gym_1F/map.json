@@ -164,14 +164,14 @@
       "y": 18,
       "elevation": 3,
       "dest_map": "MAP_LAVARIDGE_TOWN",
-      "dest_warp_id": "1"
+      "dest_warp_id": 1
     },
     {
       "x": 14,
       "y": 18,
       "elevation": 3,
       "dest_map": "MAP_LAVARIDGE_TOWN",
-      "dest_warp_id": "1"
+      "dest_warp_id": 1
     }
   ],
   "coord_events": [

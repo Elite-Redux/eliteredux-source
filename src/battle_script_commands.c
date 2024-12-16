@@ -4968,10 +4968,6 @@ static void Cmd_moveend(void) {
                 gBattleScripting.moveendState++;
                 break;
             }
-            case MOVEEND_ATTACKER_FOLLOWUP_MOVE:
-                if (!gProcessingExtraAttacks) AbilityBattleEffects(ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE, gBattlerAttacker, 0, 0, gChosenMove);
-                gBattleScripting.moveendState++;
-                break;
             case MOVEEND_CLEAR_BITS:  // Clear/Set bits for things like using a move for all targets and all hits.
 
 #if B_RAMPAGE_CANCELLING >= GEN_5

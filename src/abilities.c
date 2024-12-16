@@ -164,6 +164,31 @@ int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApply
     return FALSE;
 }
 
+typedef enum {
+    FOLLOWUP_STANDARD,
+    FOLLOWUP_ALLOW_FAILED,
+    FOLLOWUP_ALLOW_SELF,
+} FollowupType;
+static int AdjustFollowupMoveTarget(int battler, int *target, int move, FollowupType type) {
+    if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT && type != FOLLOWUP_ALLOW_FAILED) return FALSE;
+
+    switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
+        case MOVE_TARGET_BOTH:
+        case MOVE_TARGET_FOES_AND_ALLY:
+            *target = GetMoveTarget(MOVE_POUND, MOVE_TARGET_SELECTED + 1);
+            return IsBattlerAlive(*target);
+
+        default:
+            if (*target == battler || *target == BATTLE_PARTNER(battler)) {
+                if (type == FOLLOWUP_ALLOW_SELF)
+                    *target = GetMoveTarget(MOVE_POUND, MOVE_TARGET_SELECTED + 1);
+                else
+                    return FALSE;
+            }
+            return battler != *target && IsBattlerAlive(*target);
+    }
+}
+
 static int SwitchInAnnounce(int message) {
     gBattleCommunication[MULTISTRING_CHOOSER] = message;
     BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
@@ -524,6 +549,10 @@ static const Ability Immunity = {
 
 #undef CONTEXT
 #define CONTEXT FlashFire
+ON_ABSORB {
+    CHECK(moveType == TYPE_FIRE)
+    return ABSORB_RESULT_FLASH_FIRE;
+}
 ON_OFFENSIVE_MULTIPLIER {
     if (moveType == TYPE_FIRE && gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE) MUL(1.5);
 }
@@ -532,6 +561,7 @@ static const Ability FlashFire = {
     .description = $("Powers up Fire-type moves by\n"
                      "1.5x if hit by a Fire-type move."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
@@ -1110,6 +1140,22 @@ static const Ability Minus = {
 ON_SWITCH { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
 ON_WEATHER { return TryTransformAttacker(ability, battler, ABILITY_BS_CALL); }
 ON_END_TURN { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_ATTACKER {
+    switch (move) {
+        case MOVE_SUNNY_DAY:
+        case MOVE_RAIN_DANCE:
+        case MOVE_SANDSTORM:
+        case MOVE_HAIL:
+        case MOVE_EERIE_FOG:
+            break;
+
+        default:
+            return FALSE;
+    }
+    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_FAILED))
+
+    return UseAttackerFollowUpMove(battler, target, ability, MOVE_WEATHER_BALL, 0);
+}
 static const Ability Forecast = {
     .name = $("Forecast"),
     .description = $("Changes form with the weather.\n"
@@ -1119,6 +1165,7 @@ static const Ability Forecast = {
     CONTEXT_ON_SWITCH,
     CONTEXT_ON_WEATHER,
     CONTEXT_ON_END_TURN,
+    CONTEXT_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -5581,10 +5628,17 @@ static const Ability Pollinate = {
 
 #undef CONTEXT
 #define CONTEXT VolcanoRage
+ON_ATTACKER {
+    CHECK(moveType == TYPE_FIRE)
+    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+    return UseAttackerFollowUpMove(battler, target, ability, MOVE_ERUPTION, 50);
+}
 static const Ability VolcanoRage = {
     .name = $("Volcano Rage"),
     .description = $("Triggers 50 BP Eruption after\n"
                      "using a Fire-type move."),
+    CONTEXT_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -5662,10 +5716,17 @@ static const Ability Discipline = {
 
 #undef CONTEXT
 #define CONTEXT Thundercall
+ON_ATTACKER {
+    CHECK(moveType == TYPE_ELECTRIC)
+    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+    return UseAttackerFollowUpMove(battler, target, ability, MOVE_SMITE, .2 * gBattleMoves[MOVE_SMITE].power);
+}
 static const Ability Thundercall = {
     .name = $("Thundercall"),
     .description = $("Triggers Smite at 20% power\n"
                      "when using an Electric move."),
+    CONTEXT_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -5779,10 +5840,17 @@ static const Ability SteelBarrel = {
 
 #undef CONTEXT
 #define CONTEXT PyroShells
+ON_ATTACKER {
+    CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
+    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+    return UseAttackerFollowUpMove(battler, target, ability, MOVE_OUTBURST, 50);
+}
 static const Ability PyroShells = {
     .name = $("Pyro Shells"),
     .description = $("Triggers 50 BP Outburst after\n"
                      "using a Mega Launcher move."),
+    CONTEXT_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -7082,10 +7150,17 @@ static const Ability Accelerate = {
 
 #undef CONTEXT
 #define CONTEXT FrostBurn
+ON_ATTACKER {
+    CHECK(moveType == TYPE_FIRE)
+    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+    return UseAttackerFollowUpMove(battler, target, ability, MOVE_ICE_BEAM, 40);
+}
 static const Ability FrostBurn = {
     .name = $("Frost Burn"),
     .description = $("Triggers 40BP Ice Beam after\n"
                      "using a Fire-type move."),
+    CONTEXT_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -7345,10 +7420,17 @@ static const Ability PeacefulSlumber = {
 
 #undef CONTEXT
 #define CONTEXT Aftershock
+ON_ATTACKER {
+    CHECK(gBattleMoves[move].power)
+    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+    return UseAttackerFollowUpMove(battler, target, ability, MOVE_MAGNITUDE, 65);
+}
 static const Ability Aftershock = {
     .name = $("Aftershock"),
     .description = $("Triggers Magnitude 4-7 after\n"
                      "using a damaging move."),
+    CONTEXT_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -7498,10 +7580,17 @@ static const Ability Seaborne = {
 
 #undef CONTEXT
 #define CONTEXT HighTide
+ON_ATTACKER {
+    CHECK(moveType == TYPE_WATER)
+    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+    return UseAttackerFollowUpMove(battler, target, ability, MOVE_SURF, 50);
+}
 static const Ability HighTide = {
     .name = $("High Tide"),
     .description = $("Triggers 50 BP Surf after\n"
                      "using a Water-type move."),
+    CONTEXT_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -7652,10 +7741,17 @@ static const Ability MonsterMash = {
 
 #undef CONTEXT
 #define CONTEXT TwoStep
+ON_ATTACKER {
+    CHECK(IsDance(battler, move))
+    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
+
+    return UseAttackerFollowUpMove(battler, target, ability, MOVE_REVELATION_DANCE, 50);
+}
 static const Ability TwoStep = {
     .name = $("Two Step"),
     .description = $("Triggers 50BP Revelation Dance\n"
                      "after using a Dance move."),
+    CONTEXT_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -9443,10 +9539,17 @@ static const Ability Rhythmic = {
 
 #undef CONTEXT
 #define CONTEXT ChunkyBassLine
+ON_ATTACKER {
+    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+    return UseAttackerFollowUpMove(battler, target, ability, MOVE_EARTHQUAKE, 40);
+}
 static const Ability ChunkyBassLine = {
     .name = $("Chunky Bass Line"),
     .description = $("Triggers a 40BP Earthquake\n"
                      "after using a sound move."),
+    CONTEXT_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -10745,10 +10848,17 @@ static const Ability ToTheBone = {
 
 #undef CONTEXT
 #define CONTEXT BladeDance
+ON_ATTACKER {
+    CHECK(IsDance(battler, move))
+    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
+
+    return UseAttackerFollowUpMove(battler, target, ability, MOVE_LEAF_BLADE, 50);
+}
 static const Ability BladeDance = {
     .name = $("Blade Dance"),
     .description = $("Triggers 50 BP Leaf Blade after\n"
                      "using a dance move."),
+    CONTEXT_ON_ATTACKER,
 };
 
 #undef CONTEXT

@@ -22,14 +22,14 @@
       "y": 15,
       "elevation": 3,
       "dest_map": "MAP_METEOR_FALLS_B1F_1R",
-      "dest_warp_id": "3"
+      "dest_warp_id": 3
     },
     {
       "x": 5,
       "y": 2,
       "elevation": 0,
       "dest_map": "MAP_METEOR_FALLS_JIRACHIS_ROOM",
-      "dest_warp_id": "0"
+      "dest_warp_id": 0
     }
   ],
   "coord_events": [

@@ -29,8 +29,7 @@
 #define ABILITYEFFECT_NEUTRALIZINGGAS 15
 #define ABILITYEFFECT_AFTER_RECOIL 16
 #define ABILITYEFFECT_REACTIVE 17
-#define ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE 18
-#define ABILITYEFFECT_MOVE_END_EITHER 19
+#define ABILITYEFFECT_MOVE_END_EITHER 18
 // Special cases
 #define ABILITYEFFECT_SWITCH_IN_TERRAIN 0xFE
 #define ABILITYEFFECT_SWITCH_IN_WEATHER 0xFF
@@ -235,6 +234,7 @@ int IsSuppressed(int battler, int ability, int checkMoldBreaker);
 int AbilityHealMonStatus(u8 battler, u16 ability);
 int CheckHalfHpAbility(int battlerDef, int battlerAtk);
 bool8 UseOutOfTurnAttack(u8 battler, u8 target, u16 ability, u16 move, u8 movePower);
+u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, u8 movePower);
 
 #define ON_ABILITY(battler, checkMoldBreaker, condition, callback)   \
     for (int idx = TOTAL_ABILITY_COUNT - 1; idx >= 0; idx--) {       \
@@ -400,7 +400,7 @@ int HasRedirectionAbility(int battlerAtk, int battlerDef, int move, int type);
 int CanRaiseStat(int battler, int stat);
 int CanLowerStat(int battler, int stat);
 bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower);
-int UseIntimidateClone(int battler, int abilityToCheck);
+int UseIntimidateClone(int abilityToCheck, int battler);
 bool32 TryRemoveScreens(u8 battler);
 void DisableSwitchInAbility(u8 battlerId, u16 ability);
 bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8* timer);
