@@ -31,14 +31,14 @@
 #define __COMBINE(val1, val2) val1##val2
 #define COMBINE(val1, val2) __COMBINE(val1, val2)
 
-#define ON_SWITCH static int COMBINE(OnSwitch, CONTEXT)(int ability, int battler)
-#define CONTEXT_ON_SWITCH .onSwitch = COMBINE(OnSwitch, CONTEXT)
+#define ON_ENTRY static int COMBINE(onEntry, CONTEXT)(int ability, int battler)
+#define CONTEXT_ON_ENTRY .onEntry = COMBINE(onEntry, CONTEXT)
 
-#define ON_ABSORB static int COMBINE(OnAbsorb, CONTEXT)(int battler, int move, int moveType, int *statId)
-#define CONTEXT_ON_ABSORB .onAbsorb = COMBINE(OnAbsorb, CONTEXT)
+#define ON_ABSORB static int COMBINE(onAbsorb, CONTEXT)(int battler, int move, int moveType, int *statId)
+#define CONTEXT_ON_ABSORB .onAbsorb = COMBINE(onAbsorb, CONTEXT)
 
-#define ON_IMMUNE static int COMBINE(OnImmune, CONTEXT)(int battler, int attacker, int move, int moveType, const u8 **immunityScript)
-#define CONTEXT_ON_IMMUNE .onImmune = COMBINE(OnImmune, CONTEXT)
+#define ON_IMMUNE static int COMBINE(onImmune, CONTEXT)(int battler, int attacker, int move, int moveType, const u8 **immunityScript)
+#define CONTEXT_ON_IMMUNE .onImmune = COMBINE(onImmune, CONTEXT)
 
 #define ON_INFILTRATE static InfiltrateType COMBINE(onInfiltrate, CONTEXT)(int battler, int move)
 #define CONTEXT_ON_INFILTRATE .onInfiltrate = COMBINE(onInfiltrate, CONTEXT)
@@ -126,6 +126,9 @@
 
 #define ON_MOVE_TYPE static int COMBINE(onMoveType, CONTEXT)(int ability, int move, int moveType, u8 *ateBoost)
 #define CONTEXT_ON_MOVE_TYPE .onMoveType = COMBINE(onMoveType, CONTEXT)
+
+#define ON_EXIT static int COMBINE(onExit, CONTEXT)(int ability, int battler)
+#define CONTEXT_ON_EXIT .onExit = COMBINE(onExit, CONTEXT)
 
 static void InsertCorrectEndType(AbilityCallType type) {
     switch (type) {
@@ -334,7 +337,7 @@ static const Ability Stench = {
 
 #undef CONTEXT
 #define CONTEXT Drizzle
-ON_SWITCH {
+ON_ENTRY {
     if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE)) {
         BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
         return TRUE;
@@ -348,7 +351,7 @@ static const Ability Drizzle = {
     .name = $("Drizzle"),
     .description = $("Summons rain on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -493,7 +496,7 @@ static const Ability Oblivious = {
 
 #undef CONTEXT
 #define CONTEXT CloudNine
-ON_SWITCH {
+ON_ENTRY {
     BattleScriptPushCursorAndCallback(BattleScript_AnnounceAirLockCloudNine);
     return TRUE;
 }
@@ -501,7 +504,7 @@ static const Ability CloudNine = {
     .name = $("Cloud Nine"),
     .description = $("Clears weather and prevents\n"
                      "its effects."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -598,7 +601,7 @@ static const Ability Intimidate = {
     .name = $("Intimidate"),
     .description = $("Lowers foes' Atk by one stage on\n"
                      "entry."),
-    .onSwitch = UseIntimidateClone,
+    .onEntry = UseIntimidateClone,
 };
 
 #undef CONTEXT
@@ -709,10 +712,24 @@ static const Ability ClearBody = {
 
 #undef CONTEXT
 #define CONTEXT NaturalCure
+ON_EXIT {
+    CHECK(IsBattlerAlive(battler))
+    CHECK(gBattleMons[battler].status1 & STATUS1_ANY)
+
+    gActiveBattler = battler;
+    gBattleMons[battler].status1 &= ~STATUS1_ANY;
+    BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
+    MarkBattlerForControllerExec(battler);
+
+    gBattleScripting.abilityPopupOverwrite = ability;
+    BattleScriptCall(BattleScript_NaturalCureExits);
+    return TRUE;
+}
 static const Ability NaturalCure = {
     .name = $("Natural Cure"),
     .description = $("Heals status condition upon\n"
                      "switching out."),
+    CONTEXT_ON_EXIT,
 };
 
 #undef CONTEXT
@@ -777,7 +794,7 @@ static const Ability Illuminate = {
 
 #undef CONTEXT
 #define CONTEXT Trace
-ON_SWITCH {
+ON_ENTRY {
     int target = BATTLE_OPPOSITE(battler);
     int newAbility = GetBattlerAbility(target);
     if (!IsBattlerAlive(target) || IsRolePlayBannedAbility(newAbility)) {
@@ -806,7 +823,7 @@ static const Ability Trace = {
     .description = $("Copies the foe's ability.\n"
                      "Does not copy innates."),
     .randomizerBanned = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -868,7 +885,7 @@ static const Ability MagmaArmor = {
 
 #undef CONTEXT
 #define CONTEXT WaterVeil
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gStatuses3[battler] & STATUS3_AQUA_RING)
 
     gStatuses3[battler] |= STATUS3_AQUA_RING;
@@ -880,7 +897,7 @@ static const Ability WaterVeil = {
     .description = $("Burn-immune.\n"
                      "Casts Aqua Ring on entry."),
     .breakable = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -930,7 +947,7 @@ static const Ability RainDish = {
 
 #undef CONTEXT
 #define CONTEXT SandStream
-ON_SWITCH {
+ON_ENTRY {
     if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
         BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
         return TRUE;
@@ -944,12 +961,12 @@ static const Ability SandStream = {
     .name = $("Sand Stream"),
     .description = $("Summons a sandstorm on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT Pressure
-ON_SWITCH {
+ON_ENTRY {
     int loweredStats = 0;
     for (int i = 0; i < gBattlersCount; i++) {
         if (!IsBattlerAlive(i)) continue;
@@ -968,7 +985,7 @@ static const Ability Pressure = {
     .name = $("Pressure"),
     .description = $("Doubles foe's PP usage.\n"
                      "Clears stat buffs on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -1042,7 +1059,7 @@ static const Ability HyperCutter = {
 
 #undef CONTEXT
 #define CONTEXT Pickup
-ON_SWITCH {
+ON_ENTRY {
     int side = GetBattlerSide(battler);
     CHECK(gSideStatuses[side] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[side].hotCoals || gSideTimers[side].caltrops)
 
@@ -1058,7 +1075,7 @@ static const Ability Pickup = {
     .name = $("Pickup"),
     .description = $("Removes all hazards on entry.\n"
                      "Not immune to hazards."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -1137,7 +1154,7 @@ static const Ability Minus = {
 
 #undef CONTEXT
 #define CONTEXT Forecast
-ON_SWITCH { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_ENTRY { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
 ON_WEATHER { return TryTransformAttacker(ability, battler, ABILITY_BS_CALL); }
 ON_END_TURN { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
 ON_ATTACKER {
@@ -1162,7 +1179,7 @@ static const Ability Forecast = {
                      "Weather setting triggers attack."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_WEATHER,
     CONTEXT_ON_END_TURN,
     CONTEXT_ON_ATTACKER,
@@ -1275,7 +1292,7 @@ static const Ability RockHead = {
 
 #undef CONTEXT
 #define CONTEXT Drought
-ON_SWITCH {
+ON_ENTRY {
     if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE)) {
         BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
         return TRUE;
@@ -1289,7 +1306,7 @@ static const Ability Drought = {
     .name = $("Drought"),
     .description = $("Summons sun on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -1317,7 +1334,7 @@ static const Ability VitalSpirit = {
 
 #undef CONTEXT
 #define CONTEXT WhiteSmoke
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gSideTimers[GET_BATTLER_SIDE(battler)].smokescreenTimer)
 
     int side = GET_BATTLER_SIDE(battler);
@@ -1330,7 +1347,7 @@ static const Ability WhiteSmoke = {
     .name = $("White Smoke"),
     .description = $("Sets Smokescreen for 3 turns\n"
                      "on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -1358,7 +1375,7 @@ static const Ability AirLock = {
     .name = $("Air Lock"),
     .description = $("Clears weather and prevents\n"
                      "its effects."),
-    .onSwitch = CloudNine.onSwitch,
+    .onEntry = CloudNine.onEntry,
 };
 
 #undef CONTEXT
@@ -1529,7 +1546,7 @@ static const Ability DrySkin = {
 
 #undef CONTEXT
 #define CONTEXT Download
-ON_SWITCH {
+ON_ENTRY {
     gBattlerTarget = BATTLE_OPPOSITE(battler);
     if (!IsBattlerAlive(battler)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
     CHECK(IsBattlerAlive(battler))
@@ -1543,7 +1560,7 @@ static const Ability Download = {
     .name = $("Download"),
     .description = $("Raises Atk/Sp. Atk by one stage\n"
                      "depending on opponent."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -1712,12 +1729,12 @@ static const Ability Klutz = {
 
 #undef CONTEXT
 #define CONTEXT MoldBreaker
-ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER); }
+ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER); }
 static const Ability MoldBreaker = {
     .name = $("Mold Breaker"),
     .description = $("Moves hit through abilities.\n"
                      "Also affects innates."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -1750,7 +1767,7 @@ static const Ability Aftermath = {
 
 #undef CONTEXT
 #define CONTEXT Anticipation
-ON_SWITCH {
+ON_ENTRY {
     int side = GetBattlerSide(battler);
     int any = FALSE;
 
@@ -1777,12 +1794,12 @@ static const Ability Anticipation = {
                      "Blocks one Super-effective hit."),
     .persistent = TRUE,
     .breakable = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT Forewarn
-ON_SWITCH {
+ON_ENTRY {
     gBattlerTarget = BATTLE_OPPOSITE(battler);
     if (!IsBattlerAlive(gBattlerTarget) || gWishFutureKnock.futureSightCounter[gBattlerTarget]) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
     CHECK(IsBattlerAlive(gBattlerTarget))
@@ -1801,7 +1818,7 @@ static const Ability Forewarn = {
     .name = $("Forewarn"),
     .description = $("Casts a 50 BP Future Sight on\n"
                      "entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -1841,7 +1858,7 @@ static const Ability Filter = {
 
 #undef CONTEXT
 #define CONTEXT SlowStart
-ON_SWITCH {
+ON_ENTRY {
     gVolatileStructs[battler].slowStartTimer = 5;
     return SwitchInAnnounce(B_MSG_SWITCHIN_SLOWSTART);
 }
@@ -1853,7 +1870,7 @@ static const Ability SlowStart = {
     .name = $("Slow Start"),
     .description = $("Halves Attack and Speed during\n"
                      "the first 5 turns out."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_STAT,
 };
 
@@ -1914,7 +1931,7 @@ static const Ability SolidRock = {
 
 #undef CONTEXT
 #define CONTEXT SnowWarning
-ON_SWITCH {
+ON_ENTRY {
     if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE)) {
         BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
         return TRUE;
@@ -1928,7 +1945,7 @@ static const Ability SnowWarning = {
     .name = $("Snow Warning"),
     .description = $("Summons hail on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -1950,7 +1967,7 @@ static const Ability HoneyGather = {
 
 #undef CONTEXT
 #define CONTEXT Frisk
-ON_SWITCH {
+ON_ENTRY {
     int any = FALSE;
     for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2) {
         FILTER(IsBattlerAlive(i))
@@ -1967,7 +1984,7 @@ static const Ability Frisk = {
     .name = $("Frisk"),
     .description = $("Checks foes' item and disables\n"
                      "their items for two turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -2005,7 +2022,7 @@ static const Ability FlowerGift = {
     .unsuppressable = TRUE,
     .breakable = TRUE,
     .randomizerBanned = TRUE,
-    .onSwitch = Forecast.onSwitch,
+    .onEntry = Forecast.onEntry,
     .onWeather = Forecast.onWeather,
     .onEndTurn = Forecast.onEndTurn,
     .onStatFor = APPLY_ON_ALLY,
@@ -2057,12 +2074,12 @@ static const Ability Contrary = {
 
 #undef CONTEXT
 #define CONTEXT Unnerve
-ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE); }
+ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE); }
 static const Ability Unnerve = {
     .name = $("Unnerve"),
     .description = $("Foes can't eat Berries as long\n"
                      "as this Pokémon is in battle."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -2216,7 +2233,7 @@ int FlareBoostHandler(int ability, int battler, AbilityCallType callType) {
     BattleScriptCall(BattleScript_FlareBoostRet);
     return TRUE;
 }
-ON_SWITCH { return FlareBoostHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_ENTRY { return FlareBoostHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
 ON_WEATHER { return FlareBoostHandler(ability, battler, ABILITY_BS_CALL); }
 ON_STAT {
     if (statId != STAT_SPATK) return;
@@ -2226,7 +2243,7 @@ static const Ability FlareBoost = {
     .name = $("Flare Boost"),
     .description = $("Ups Sp. Atk by 1.5x if burned.\n"
                      "Ignites in fog."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_WEATHER,
     CONTEXT_ON_STAT,
 };
@@ -2319,10 +2336,17 @@ static const Ability PoisonTouch = {
 
 #undef CONTEXT
 #define CONTEXT Regenerator
+ON_EXIT {
+    CHECK(IsBattlerAlive(battler))
+    CHECK(BATTLER_MAX_HP(battler))
+    BattleScriptCall(BattleScript_RegeneratorExits);
+    return FALSE;
+}
 static const Ability Regenerator = {
     .name = $("Regenerator"),
     .description = $("Heals 1/3 of max HP upon\n"
                      "switching out."),
+    CONTEXT_ON_EXIT,
 };
 
 #undef CONTEXT
@@ -2400,7 +2424,7 @@ static const Ability Illusion = {
 
 #undef CONTEXT
 #define CONTEXT Imposter
-ON_SWITCH {
+ON_ENTRY {
     gBattlerTarget = BATTLE_OPPOSITE(battler);
     if (!IsBattlerAlive(gBattlerTarget)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
     CHECK(IsBattlerAlive(gBattlerTarget))
@@ -2416,7 +2440,7 @@ static const Ability Imposter = {
     .name = $("Imposter"),
     .description = $("Transforms into the foe on\n"
                      "entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -2560,7 +2584,7 @@ static const Ability ZenMode = {
                      "entry until end of battle."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    .onSwitch = Forecast.onSwitch,
+    .onEntry = Forecast.onEntry,
     .onEndTurn = Forecast.onEndTurn,
 };
 
@@ -2580,22 +2604,22 @@ static const Ability VictoryStar = {
 
 #undef CONTEXT
 #define CONTEXT Turboblaze
-ON_SWITCH { return AddBattlerType(battler, TYPE_FIRE); }
+ON_ENTRY { return AddBattlerType(battler, TYPE_FIRE); }
 static const Ability Turboblaze = {
     .name = $("Turboblaze"),
     .description = $("Moves hit through abilities.\n"
                      "Adds Fire type to itself."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT Teravolt
-ON_SWITCH { return AddBattlerType(battler, TYPE_ELECTRIC); }
+ON_ENTRY { return AddBattlerType(battler, TYPE_ELECTRIC); }
 static const Ability Teravolt = {
     .name = $("Teravolt"),
     .description = $("Moves hit through abilities.\n"
                      "Adds Electric type to itself."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -2825,7 +2849,7 @@ static const Ability ParentalBond = {
 
 #undef CONTEXT
 #define CONTEXT DarkAura
-ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_DARKAURA); }
+ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_DARKAURA); }
 ON_OFFENSIVE_MULTIPLIER {
     if (moveType != TYPE_DARK) return;
     if (IsAbilityOnField(ABILITY_AURA_BREAK))
@@ -2837,7 +2861,7 @@ static const Ability DarkAura = {
     .name = $("Dark Aura"),
     .description = $("Boosts Dark moves by 1.33x for\n"
                      "all while this Pokémon is out."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
@@ -2851,30 +2875,30 @@ ON_OFFENSIVE_MULTIPLIER {
     else
         MUL(1.33);
 }
-ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_FAIRYAURA); }
+ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_FAIRYAURA); }
 static const Ability FairyAura = {
     .name = $("Fairy Aura"),
     .description = $("Boosts Fairy moves by 1.33x for\n"
                      "all while this Pokémon is out."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT AuraBreak
-ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_AURABREAK); }
+ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_AURABREAK); }
 static const Ability AuraBreak = {
     .name = $("Aura Break"),
     .description = $("Cancels aura abilities and makes\n"
                      "them 25% weaker instead."),
     .breakable = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT PrimordialSea
-ON_SWITCH {
+ON_ENTRY {
     CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN_PRIMAL, TRUE))
 
     BattleScriptPushCursorAndCallback(BattleScript_PrimordialSeaActivates);
@@ -2884,12 +2908,12 @@ static const Ability PrimordialSea = {
     .name = $("Primordial Sea"),
     .description = $("Heavy Rain until switched out.\n"
                      "Fire-type moves are unusable."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT DesolateLand
-ON_SWITCH {
+ON_ENTRY {
     CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_SUN_PRIMAL, TRUE))
 
     BattleScriptPushCursorAndCallback(BattleScript_DesolateLandActivates);
@@ -2899,12 +2923,12 @@ static const Ability DesolateLand = {
     .name = $("Desolate Land"),
     .description = $("Intense Sun until switched out.\n"
                      "Water-type moves are unusable."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT DeltaStream
-ON_SWITCH {
+ON_ENTRY {
     CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_STRONG_WINDS, TRUE))
 
     BattleScriptPushCursorAndCallback(BattleScript_DeltaStreamActivates);
@@ -2920,7 +2944,7 @@ static const Ability DeltaStream = {
     .name = $("Delta Stream"),
     .description = $("Strong Winds until switched out.\n"
                      "Weather-based moves not usable."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_IMMUNE,
 };
 
@@ -3031,7 +3055,7 @@ static const Ability ShieldsDown = {
     .description = $("At 1/2 of max HP or below,\n"
                      "transforms into Core form."),
     .unsuppressable = TRUE,
-    .onSwitch = Forecast.onSwitch,
+    .onEntry = Forecast.onEntry,
     .onEndTurn = Forecast.onEndTurn,
     CONTEXT_ON_ATTACKER,
 };
@@ -3173,7 +3197,7 @@ static const Ability SurgeSurfer = {
 
 #undef CONTEXT
 #define CONTEXT Schooling
-ON_SWITCH {
+ON_ENTRY {
     CHECK(gBattleMons[battler].level >= 20)
     return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
 }
@@ -3187,7 +3211,7 @@ static const Ability Schooling = {
                      "School form until 1/4 HP or less."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_END_TURN,
 };
 
@@ -3216,7 +3240,7 @@ int DisguiseReformHandler(int ability, int battler, AbilityCallType callType) {
     BattleScriptCall(BattleScript_AttackerFormChange);
     return TRUE;
 }
-ON_SWITCH { return DisguiseReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_ENTRY { return DisguiseReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
 ON_WEATHER { return DisguiseReformHandler(ability, battler, ABILITY_BS_CALL); }
 static const Ability Disguise = {
     .name = $("Disguise"),
@@ -3225,7 +3249,7 @@ static const Ability Disguise = {
     .unsuppressable = TRUE,
     .breakable = TRUE,
     .randomizerBanned = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_DISGUISE,
     CONTEXT_ON_WEATHER,
 };
@@ -3295,7 +3319,7 @@ static const Ability Corrosion = {
 
 #undef CONTEXT
 #define CONTEXT Comatose
-ON_SWITCH {
+ON_ENTRY {
     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
     BattleScriptPushCursorAndCallback(BattleScript_AnnounceStatusAbility);
     return TRUE;
@@ -3305,7 +3329,7 @@ static const Ability Comatose = {
     .description = $("Can move, but is always asleep.\n"
                      "Immune to status conditions."),
     .unsuppressable = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -3441,7 +3465,7 @@ static const Ability Receiver = {
 
 #undef CONTEXT
 #define CONTEXT PowerOfAlchemy
-ON_SWITCH {
+ON_ENTRY {
     int any = FALSE;
     for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2) {
         FILTER(IsBattlerAlive(i))
@@ -3463,7 +3487,7 @@ static const Ability PowerOfAlchemy = {
     .name = $("Power of Alchemy"),
     .description = $("Transmutes berries on entry.\n"
                      "Transmutes items when lost."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
     CONTEXT_ON_BATTLER_FAINTS,
 };
@@ -3493,7 +3517,7 @@ static const Ability RksSystem = {
 
 #undef CONTEXT
 #define CONTEXT ElectricSurge
-ON_SWITCH {
+ON_ENTRY {
     CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
 
     for (int i = 0; i < gBattlersCount; i++) {
@@ -3507,12 +3531,12 @@ static const Ability ElectricSurge = {
     .name = $("Electro Surge"),
     .description = $("Casts Electric Terrain on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT PsychicSurge
-ON_SWITCH {
+ON_ENTRY {
     CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
 
     BattleScriptPushCursorAndCallback(BattleScript_PsychicSurgeActivates);
@@ -3522,12 +3546,12 @@ static const Ability PsychicSurge = {
     .name = $("Psychic Surge"),
     .description = $("Casts Psychic Terrain on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT MistySurge
-ON_SWITCH {
+ON_ENTRY {
     CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
 
     BattleScriptPushCursorAndCallback(BattleScript_MistySurgeActivates);
@@ -3537,12 +3561,12 @@ static const Ability MistySurge = {
     .name = $("Misty Surge"),
     .description = $("Casts Misty Terrain on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT GrassySurge
-ON_SWITCH {
+ON_ENTRY {
     CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
 
     BattleScriptPushCursorAndCallback(BattleScript_GrassySurgeActivates);
@@ -3552,7 +3576,7 @@ static const Ability GrassySurge = {
     .name = $("Grassy Surge"),
     .description = $("Casts Grassy Terrain on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -3594,7 +3618,7 @@ static const Ability Neuroforce = {
 
 #undef CONTEXT
 #define CONTEXT IntrepidSword
-ON_SWITCH {
+ON_ENTRY {
     CHECK(CanRaiseStat(battler, STAT_ATK))
 
     SetStatChanger(STAT_ATK, 1);
@@ -3605,12 +3629,12 @@ static const Ability IntrepidSword = {
     .name = $("Intrepid Sword"),
     .description = $("On entry, raises Attack by one\n"
                      "stage."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT DauntlessShield
-ON_SWITCH {
+ON_ENTRY {
     CHECK(CanRaiseStat(battler, STAT_DEF))
 
     SetStatChanger(STAT_DEF, 1);
@@ -3621,7 +3645,7 @@ static const Ability DauntlessShield = {
     .name = $("Dauntless Shield"),
     .description = $("On entry, raises Defense by one\n"
                      "stage."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -3812,7 +3836,7 @@ int IceFaceReformHandler(int ability, int battler, AbilityCallType callType) {
     BattleScriptCall(BattleScript_AttackerFormChange);
     return TRUE;
 }
-ON_SWITCH { return IceFaceReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_ENTRY { return IceFaceReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
 ON_WEATHER { return IceFaceReformHandler(ability, battler, ABILITY_BS_CALL); }
 static const Ability IceFace = {
     .name = $("Ice Face"),
@@ -3821,7 +3845,7 @@ static const Ability IceFace = {
     .unsuppressable = TRUE,
     .breakable = TRUE,
     .randomizerBanned = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_DISGUISE,
     CONTEXT_ON_WEATHER,
 };
@@ -3839,7 +3863,7 @@ static const Ability PowerSpot = {
 
 #undef CONTEXT
 #define CONTEXT Mimicry
-ON_SWITCH {
+ON_ENTRY {
     CHECK(IsBattlerAlive(battler))
     CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
@@ -3850,12 +3874,12 @@ static const Ability Mimicry = {
     .name = $("Mimicry"),
     .description = $("Changes type depending on active\n"
                      "Terrain."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT ScreenCleaner
-ON_SWITCH {
+ON_ENTRY {
     CHECK(TryRemoveScreens(battler))
 
     return SwitchInAnnounce(B_MSG_SWITCHIN_SCREENCLEANER);
@@ -3864,7 +3888,7 @@ static const Ability ScreenCleaner = {
     .name = $("Screen Cleaner"),
     .description = $("Clears screens and Aurora Veil\n"
                      "from both sides on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -3960,7 +3984,7 @@ static const Ability NeutralizingGas = {
 
 #undef CONTEXT
 #define CONTEXT PastelVeil
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD)
 
     int side = GetBattlerSide(battler);
@@ -3974,7 +3998,7 @@ ON_SWITCH {
 static const Ability PastelVeil = {
     .name = $("Pastel Veil"),
     .description = $("Casts Safeguard on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -4025,7 +4049,7 @@ static const Ability UnseenFist = {
 
 #undef CONTEXT
 #define CONTEXT CuriousMedicine
-ON_SWITCH {
+ON_ENTRY {
     CHECK(IsDoubleBattle())
     CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
     CHECK(TryResetBattlerStatChanges(BATTLE_PARTNER(battler), RESET_ALL_STATS))
@@ -4039,7 +4063,7 @@ static const Ability CuriousMedicine = {
     .name = $("CuriusMedicn"),
     .description = $("Resets its ally's stat changes\n"
                      "on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -4093,13 +4117,13 @@ ON_BATTLER_FAINTS {
     BattleScriptCall(BattleScript_AbilityPopUpStack);
     return NO_ANNOUNCE;
 }
-ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE); }
+ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE); }
 static const Ability AsOneIceRider = {
     .name = $("As One"),
     .description = $("Unnerve + Chilling Neigh."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
 };
@@ -4117,7 +4141,7 @@ static const Ability AsOneShadowRider = {
     .description = $("Unnerve + Grim Neigh."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    .onSwitch = AsOneIceRider.onSwitch,
+    .onEntry = AsOneIceRider.onEntry,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
 };
@@ -4439,7 +4463,7 @@ static const Ability Avenger = {
 
 #undef CONTEXT
 #define CONTEXT LetsRoll
-ON_SWITCH {
+ON_ENTRY {
     CHECK(CanRaiseStat(battler, STAT_DEF))
 
     SetStatChanger(STAT_DEF, 1);
@@ -4450,7 +4474,7 @@ ON_SWITCH {
 static const Ability LetsRoll = {
     .name = $("Let's Roll"),
     .description = $("Casts Defense Curl on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -4506,11 +4530,11 @@ static const Ability Amphibious = {
 
 #undef CONTEXT
 #define CONTEXT Grounded
-ON_SWITCH { return AddBattlerType(battler, TYPE_GROUND); }
+ON_ENTRY { return AddBattlerType(battler, TYPE_GROUND); }
 static const Ability Grounded = {
     .name = $("Grounded"),
     .description = $("Adds Ground type to itself."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -4548,7 +4572,7 @@ static const Ability FelineProwess = {
 
 #undef CONTEXT
 #define CONTEXT CoilUp
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gStatuses4[battler] & STATUS4_COILED)
 
     gStatuses4[battler] |= STATUS4_COILED;
@@ -4559,7 +4583,7 @@ static const Ability CoilUp = {
     .name = $("Coil Up"),
     .description = $("On entry, gives +1 priority once\n"
                      "to the first biting move used."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -4665,20 +4689,20 @@ static const Ability Tectonize = {
 
 #undef CONTEXT
 #define CONTEXT IceAge
-ON_SWITCH { return AddBattlerType(battler, TYPE_ICE); }
+ON_ENTRY { return AddBattlerType(battler, TYPE_ICE); }
 static const Ability IceAge = {
     .name = $("Ice Age"),
     .description = $("Adds Ice type to itself."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT HalfDrake
-ON_SWITCH { return AddBattlerType(battler, TYPE_DRAGON); }
+ON_ENTRY { return AddBattlerType(battler, TYPE_DRAGON); }
 static const Ability HalfDrake = {
     .name = $("Half Drake"),
     .description = $("Adds Dragon type to itself."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -4702,7 +4726,7 @@ static const Ability Dragonfly = {
     .description = $("Adds Dragon type to itself.\n"
                      "Avoids Ground attacks."),
     .breakable = TRUE,
-    .onSwitch = HalfDrake.onSwitch,
+    .onEntry = HalfDrake.onEntry,
 };
 
 #undef CONTEXT
@@ -4744,11 +4768,11 @@ static const Ability Hydrate = {
 
 #undef CONTEXT
 #define CONTEXT Metallic
-ON_SWITCH { return AddBattlerType(battler, TYPE_STEEL); }
+ON_ENTRY { return AddBattlerType(battler, TYPE_STEEL); }
 static const Ability Metallic = {
     .name = $("Metallic"),
     .description = $("Adds Steel type to itself."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -4792,7 +4816,7 @@ static const Ability RagingBoxer = {
 
 #undef CONTEXT
 #define CONTEXT AirBlower
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
     int side = GetBattlerSide(battler);
     gSideTimers[side].started.tailwind = TRUE;
@@ -4809,7 +4833,7 @@ ON_SWITCH {
 static const Ability AirBlower = {
     .name = $("Air Blower"),
     .description = $("Casts a 3-turn Tailwind on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -4849,11 +4873,11 @@ static const Ability MajesticBird = {
 
 #undef CONTEXT
 #define CONTEXT Phantom
-ON_SWITCH { return AddBattlerType(battler, TYPE_GHOST); }
+ON_ENTRY { return AddBattlerType(battler, TYPE_GHOST); }
 static const Ability Phantom = {
     .name = $("Phantom"),
     .description = $("Adds Ghost type to itself."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -4903,12 +4927,12 @@ static const Ability Scare = {
     .name = $("Scare"),
     .description = $("Lowers foes' Sp. Atk by one\n"
                      "stage on entry."),
-    .onSwitch = UseIntimidateClone,
+    .onEntry = UseIntimidateClone,
 };
 
 #undef CONTEXT
 #define CONTEXT MajesticMoth
-ON_SWITCH {
+ON_ENTRY {
     CHECK(ChangeStatBuffs(battler, 1, GetHighestStatId(battler, TRUE), MOVE_EFFECT_AFFECTS_USER, NULL))
 
     BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
@@ -4918,7 +4942,7 @@ static const Ability MajesticMoth = {
     .name = $("Majestic Moth"),
     .description = $("On entry, raises highest\n"
                      "calculated stat by one stage."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -5064,7 +5088,7 @@ static const Ability Solenoglyphs = {
 
 #undef CONTEXT
 #define CONTEXT SpiderLair
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
     int side = BATTLE_OPPOSITE(battler);
@@ -5078,7 +5102,7 @@ static const Ability SpiderLair = {
     .name = $("Spider Lair"),
     .description = $("Casts Sticky Web on entry.\n"
                      "Lasts 5 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -5161,7 +5185,7 @@ static const Ability Scavenger = {
 
 #undef CONTEXT
 #define CONTEXT TwistedDimension
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
 
     gFieldTimers.started.trickRoom = TRUE;
@@ -5174,7 +5198,7 @@ static const Ability TwistedDimension = {
     .name = $("Twist. Dimension"),
     .description = $("Sets up Trick Room on\n"
                      "entry, lasts 3 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -5194,7 +5218,7 @@ static const Ability MultiHeaded = {
 
 #undef CONTEXT
 #define CONTEXT NorthWind
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_AURORA_VEIL)
 
     int side = GetBattlerSide(battler);
@@ -5212,7 +5236,7 @@ static const Ability NorthWind = {
     .name = $("North Wind"),
     .description = $("3 turns Aurora Veil on entry.\n"
                      "Immune to Hail damage."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -5225,7 +5249,7 @@ static const Ability Overcharge = {
 
 #undef CONTEXT
 #define CONTEXT ViolentRush
-ON_SWITCH {
+ON_ENTRY {
     gVolatileStructs[battler].violentRush = gVolatileStructs[battler].started.violentRush = TRUE;
     return SwitchInAnnounce(B_MSG_SWITCHIN_VIOLENT_RUSH);
 }
@@ -5233,7 +5257,7 @@ static const Ability ViolentRush = {
     .name = $("Violent Rush"),
     .description = $("Boosts Speed by 50% + Attack\n"
                      "by 20% on first turn."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -5290,7 +5314,7 @@ static const Ability SpeedForce = {
 
 #undef CONTEXT
 #define CONTEXT SeaGuardian
-ON_SWITCH {
+ON_ENTRY {
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
     int stat = GetHighestStatId(battler, TRUE);
@@ -5303,7 +5327,7 @@ static const Ability SeaGuardian = {
     .name = $("Sea Guardian"),
     .description = $("Ups highest stat by +1\n"
                      "on entry when it rains."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -5600,7 +5624,7 @@ static const Ability IceDew = {
 
 #undef CONTEXT
 #define CONTEXT SunWorship
-ON_SWITCH {
+ON_ENTRY {
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
 
     int stat = GetHighestStatId(battler, TRUE);
@@ -5612,7 +5636,7 @@ static const Ability SunWorship = {
     .name = $("Sun Worship"),
     .description = $("Ups highest stat by +1\n"
                      "on entry when sunny."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -5659,12 +5683,12 @@ static const Ability ColdRebound = {
 
 #undef CONTEXT
 #define CONTEXT LowBlow
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40); }
 static const Ability LowBlow = {
     .name = $("Low Blow"),
     .description = $("Attacks with 40BP Feint\n"
                      "Attack on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -5785,7 +5809,7 @@ static const Ability ArcticFur = {
 
 #undef CONTEXT
 #define CONTEXT Lethargy
-ON_SWITCH {
+ON_ENTRY {
     TryResetBattlerStatChanges(battler, RESET_ALL_STATS);
     gVolatileStructs[battler].slowStartTimer = 5;
     BattleScriptPushCursorAndCallback(BattleScript_LethargyEnters);
@@ -5815,7 +5839,7 @@ static const Ability Lethargy = {
     .name = $("Lethargy"),
     .description = $("Damage drops 20% each turn to 20%.\n"
                      "Resets on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
@@ -6042,7 +6066,7 @@ static const Ability Fearmonger = {
     .name = $("Fearmonger"),
     .description = $("Intimidate + Scare; 10%\n"
                      "para chance on contact moves."),
-    .onSwitch = UseIntimidateClone,
+    .onEntry = UseIntimidateClone,
     CONTEXT_ON_ATTACKER,
 };
 
@@ -6064,15 +6088,20 @@ static const Ability QueensMourning = {
 
 #undef CONTEXT
 #define CONTEXT ToxicSpill
-ON_SWITCH {
+ON_ENTRY {
     BattleScriptPushCursorAndCallback(BattleScript_BattlerAnnouncedToxicSpill);
+    return TRUE;
+}
+ON_EXIT {
+    BattleScriptCall(BattleScript_TheToxicWasHasDissapeared);
     return TRUE;
 }
 static const Ability ToxicSpill = {
     .name = $("Toxic Spill"),
     .description = $("Non-Poison-types take 1/8 dmg\n"
                      "every turn when on field."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
+    CONTEXT_ON_EXIT,
 };
 
 #undef CONTEXT
@@ -6113,6 +6142,7 @@ static const Ability SelfRepair = {
     .name = $("Self Repair"),
     .description = $("Self Sufficient + Natural Cure."),
     .onEndTurn = SelfSufficient.onEndTurn,
+    .onExit = NaturalCure.onExit,
 };
 
 #undef CONTEXT
@@ -6266,12 +6296,12 @@ static const Ability Clueless = {
     .description = $("Negates Weather, Rooms\n"
                      "and Terrains."),
     .unsuppressable = TRUE,
-    .onSwitch = CloudNine.onSwitch,
+    .onEntry = CloudNine.onEntry,
 };
 
 #undef CONTEXT
 #define CONTEXT CheatingDeath
-ON_SWITCH {
+ON_ENTRY {
     int uses = 2 - GetSingleUseAbilityCounter(battler, ability);
     CHECK(uses)
 
@@ -6289,22 +6319,22 @@ static const Ability CheatingDeath = {
                      "the first two hits."),
     .persistent = TRUE,
     .noDamageHits = 2,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT CheapTactics
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_SCRATCH, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_SCRATCH, 0); }
 static const Ability CheapTactics = {
     .name = $("Cheap Tactics"),
     .description = $("Attacks with Scratch\n"
                      "on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT Coward
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
 
     SetSingleUseAbilityCounter(battler, ability, TRUE);
@@ -6317,7 +6347,7 @@ static const Ability Coward = {
     .description = $("Sets up Protect on switch-in.\n"
                      "Only works once."),
     .persistent = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -6422,7 +6452,7 @@ static const Ability Ambush = {
 
 #undef CONTEXT
 #define CONTEXT Atlas
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
 
     gFieldTimers.started.gravity = TRUE;
@@ -6435,7 +6465,7 @@ static const Ability Atlas = {
     .name = $("Atlas"),
     .description = $("Sets Gravity on entry for\n"
                      "8 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -6625,7 +6655,7 @@ static const Ability FaeHunter = {
 
 #undef CONTEXT
 #define CONTEXT GravityWell
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
 
     gFieldTimers.started.gravity = TRUE;
@@ -6638,7 +6668,7 @@ static const Ability GravityWell = {
     .name = $("Gravity Well"),
     .description = $("Sets Gravity on entry for\n"
                      "5 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -6684,7 +6714,7 @@ static const Ability WellBakedBody = {
 
 #undef CONTEXT
 #define CONTEXT Furnace
-ON_SWITCH {
+ON_ENTRY {
     CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
     CHECK(gSideTimers[GetBattlerSide(battler)].stealthRockType == TYPE_ROCK)
     CHECK(IsBattlerAlive(battler))
@@ -6706,7 +6736,7 @@ static const Ability Furnace = {
     .name = $("Furnace"),
     .description = $("User gains +2 Speed when\n"
                      "when hit by rocks."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_DEFENDER,
 };
 
@@ -6763,11 +6793,11 @@ static const Ability LingeringAroma = {
 
 #undef CONTEXT
 #define CONTEXT FairyTale
-ON_SWITCH { return AddBattlerType(battler, TYPE_FAIRY); }
+ON_ENTRY { return AddBattlerType(battler, TYPE_FAIRY); }
 static const Ability FairyTale = {
     .name = $("Fairy Tale"),
     .description = $("Adds Fairy type to itself."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -6987,11 +7017,11 @@ static const Ability KunoichiBlade = {
 
 #undef CONTEXT
 #define CONTEXT MonkeyBusiness
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_TICKLE, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_TICKLE, 0); }
 static const Ability MonkeyBusiness = {
     .name = $("Monkey Business"),
     .description = $("Uses Tickle on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -7037,7 +7067,7 @@ static const Ability PixiePower = {
     .name = $("Pixie Power"),
     .description = $("1.2x accuracy. Boosts Fairy\n"
                      "moves by 1.33x for all."),
-    .onSwitch = FairyAura.onSwitch,
+    .onEntry = FairyAura.onEntry,
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
     .onOffensiveMultiplier = FairyAura.onOffensiveMultiplier,
     CONTEXT_ON_ACCURACY,
@@ -7124,7 +7154,7 @@ static const Ability SuperSlammer = {
 
 #undef CONTEXT
 #define CONTEXT InverseRoom
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)
 
     gFieldTimers.started.inverseRoom = TRUE;
@@ -7137,7 +7167,7 @@ static const Ability InverseRoom = {
     .name = $("Inversion"),
     .description = $("Sets up Inverse Room on\n"
                      "entry, lasts 3 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -7191,7 +7221,7 @@ static const Ability ItchyDefense = {
 
 #undef CONTEXT
 #define CONTEXT Generator
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
     int any = FALSE;
@@ -7216,12 +7246,18 @@ ON_TERRAIN {
     BattleScriptCall(BattleScript_GeneratorActivatesRet);
     return TRUE;
 }
+ON_EXIT {
+    CHECK(gStatuses3[battler] & STATUS3_CHARGED_UP)
+    SetSingleUseAbilityCounter(battler, ability, FALSE);
+    return FALSE;
+}
 static const Ability Generator = {
     .name = $("Generator"),
     .description = $("Charges up once on entry or\n"
                      "when electric terrain is active."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_TERRAIN,
+    CONTEXT_ON_EXIT,
 };
 
 #undef CONTEXT
@@ -7236,12 +7272,12 @@ static const Ability MoonSpirit = {
 
 #undef CONTEXT
 #define CONTEXT DustCloud
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_SAND_ATTACK, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_SAND_ATTACK, 0); }
 static const Ability DustCloud = {
     .name = $("Dust Cloud"),
     .description = $("Attacks with Sand Attack\n"
                      "on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -7256,12 +7292,12 @@ static const Ability BerserkerRage = {
 
 #undef CONTEXT
 #define CONTEXT Trickster
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_DISABLE, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_DISABLE, 0); }
 static const Ability Trickster = {
     .name = $("Trickster"),
     .description = $("Uses Disable\n"
                      "on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -7284,14 +7320,16 @@ static const Ability SandGuard = {
 
 #undef CONTEXT
 #define CONTEXT NaturalRecovery
+ON_EXIT { return NaturalCure.onExit(ability, battler) | Regenerator.onExit(ability, battler); }
 static const Ability NaturalRecovery = {
     .name = $("Natural Recovery"),
     .description = $("Natural Cure + Regenerator."),
+    CONTEXT_ON_EXIT,
 };
 
 #undef CONTEXT
 #define CONTEXT WindRider
-ON_SWITCH {
+ON_ENTRY {
     CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
     CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
 
@@ -7308,13 +7346,13 @@ static const Ability WindRider = {
     .description = $("Increases attack in tailwind or\n"
                      "when hit by wind move."),
     .breakable = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
 #define CONTEXT SoothingAroma
-ON_SWITCH {
+ON_ENTRY {
     int anyStatus = FALSE;
     struct Pokemon *party;
 
@@ -7339,7 +7377,7 @@ ON_SWITCH {
 static const Ability SoothingAroma = {
     .name = $("Soothing Aroma"),
     .description = $("Cures party status on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -7490,17 +7528,17 @@ static const Ability ArcaneForce = {
 
 #undef CONTEXT
 #define CONTEXT Doombringer
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_DOOM_DESIRE, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_DOOM_DESIRE, 0); }
 static const Ability Doombringer = {
     .name = $("Doombringer"),
     .description = $("Uses Doom Desire\n"
                      "on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT Wishmaker
-ON_SWITCH {
+ON_ENTRY {
     int counter = GetSingleUseAbilityCounter(battler, ability);
     CHECK(counter < 3)
     CHECK(UseEntryMove(battler, ability, MOVE_WISH, 0))
@@ -7513,7 +7551,7 @@ static const Ability Wishmaker = {
     .description = $("Uses Wish on switch-in.\n"
                      "Three uses per battle."),
     .persistent = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -7529,17 +7567,17 @@ static const Ability YukiOnna = {
     .name = $("Yuki Onna"),
     .description = $("Scare + Intimidate.\n"
                      "10% chance to infatuate on hit."),
-    .onSwitch = UseIntimidateClone,
+    .onEntry = UseIntimidateClone,
     CONTEXT_ON_ATTACKER,
 };
 
 #undef CONTEXT
 #define CONTEXT Suppress
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_TORMENT, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_TORMENT, 0); }
 static const Ability Suppress = {
     .name = $("Suppress"),
     .description = $("Casts Torment on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -7565,7 +7603,7 @@ static const Ability HeavenAsunder = {
 static const Ability PurifyingWaters = {
     .name = $("Purifying Waters"),
     .description = $("Hydration + Water Veil."),
-    .onSwitch = WaterVeil.onSwitch,
+    .onEntry = WaterVeil.onEntry,
     .onEndTurn = Hydration.onEndTurn,
 };
 
@@ -7574,7 +7612,7 @@ static const Ability PurifyingWaters = {
 static const Ability Seaborne = {
     .name = $("Seaborne"),
     .description = $("Drizzle + Swift Swim."),
-    .onSwitch = Drizzle.onSwitch,
+    .onEntry = Drizzle.onEntry,
     .onStat = SwiftSwim.onStat,
 };
 
@@ -7595,12 +7633,12 @@ static const Ability HighTide = {
 
 #undef CONTEXT
 #define CONTEXT ChangeOfHeart
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_HEART_SWAP, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_HEART_SWAP, 0); }
 static const Ability ChangeOfHeart = {
     .name = $("Change of Heart"),
     .description = $("Uses Heart Swap\n"
                      "on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -7682,11 +7720,11 @@ static const Ability MyceliumMight = {
 
 #undef CONTEXT
 #define CONTEXT Telekinetic
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_TELEKINESIS, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_TELEKINESIS, 0); }
 static const Ability Telekinetic = {
     .name = $("Telekinetic"),
     .description = $("Casts Telekinesis on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -7716,27 +7754,45 @@ static const Ability PonyPower = {
 
 #undef CONTEXT
 #define CONTEXT PowderBurst
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_POWDER, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_POWDER, 0); }
 static const Ability PowderBurst = {
     .name = $("Powder Burst"),
     .description = $("Casts Powder on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT Retriever
+ON_EXIT {
+    CHECK(IsBattlerAlive(battler))
+    CHECK_NOT(gBattleMons[battler].item)
+
+    u8 side = GetBattlerSide(gActiveBattler);
+    u8 index = gBattlerPartyIndexes[gActiveBattler];
+    u16 originalItem = gLastUsedItem = side == B_SIDE_PLAYER ? gBattleStruct->itemStolen[index].originalItem : gBattleStruct->opposingOriginalItems[index];
+
+    CHECK(originalItem)
+
+    gBattleStruct->usedHeldItems[index][side] = ITEM_NONE;
+
+    UpdateBattlerItem(gActiveBattler, originalItem);
+
+    BattleScriptCall(BattleScript_RetrieverExits);
+    return TRUE;
+}
 static const Ability Retriever = {
     .name = $("Retriever"),
     .description = $("Retrieves item on switch-out."),
+    CONTEXT_ON_EXIT,
 };
 
 #undef CONTEXT
 #define CONTEXT MonsterMash
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_TRICK_OR_TREAT, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_TRICK_OR_TREAT, 0); }
 static const Ability MonsterMash = {
     .name = $("Monster Mash"),
     .description = $("Casts Trick-or-Treat on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -7805,12 +7861,12 @@ static const Ability Devourer = {
 
 #undef CONTEXT
 #define CONTEXT PhantomThief
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_SPECTRAL_THIEF, 40); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_SPECTRAL_THIEF, 40); }
 static const Ability PhantomThief = {
     .name = $("Phantom Thief"),
     .description = $("Attacks with 40BP Spectral Thief\n"
                      "on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -7875,7 +7931,7 @@ static const Ability MonsterHunter = {
 static const Ability CrownedSword = {
     .name = $("Crowned Sword"),
     .description = $("Intrepid Sword + Anger Point."),
-    .onSwitch = IntrepidSword.onSwitch,
+    .onEntry = IntrepidSword.onEntry,
     .onDefender = AngerPoint.onDefender,
 };
 
@@ -7884,13 +7940,13 @@ static const Ability CrownedSword = {
 static const Ability CrownedShield = {
     .name = $("Crowned Shield"),
     .description = $("Dauntless Shield + Stamina."),
-    .onSwitch = DauntlessShield.onSwitch,
+    .onEntry = DauntlessShield.onEntry,
     .onDefender = Stamina.onDefender,
 };
 
 #undef CONTEXT
 #define CONTEXT BerserkDna
-ON_SWITCH {
+ON_ENTRY {
     CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
     if (CanBeConfused(battler)) {
         gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
@@ -7904,12 +7960,12 @@ static const Ability BerserkDna = {
     .name = $("Berserk DNA"),
     .description = $("Sharply ups highest attacking stat\n"
                      "but confuses on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT CrownedKing
-ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); }
+ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); }
 ON_BATTLER_FAINTS {
     return AsOneShadowRider.onBattlerFaints(ability, battler, attacker, fainted, move, moveType) |
            AsOneIceRider.onBattlerFaints(ability, battler, attacker, fainted, move, moveType);
@@ -7920,7 +7976,7 @@ static const Ability CrownedKing = {
                      "Chilling Neigh."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
 };
@@ -7943,11 +7999,11 @@ static const Ability SnapTrapWhenHit = {
 
 #undef CONTEXT
 #define CONTEXT Permanence
-ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_PERMANENCE); }
+ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_PERMANENCE); }
 static const Ability Permanence = {
     .name = $("Permanence"),
     .description = $("Foes can't heal in any way."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -8067,24 +8123,24 @@ static const Ability Banshee = {
 
 #undef CONTEXT
 #define CONTEXT WebSpinner
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_STRING_SHOT, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_STRING_SHOT, 0); }
 static const Ability WebSpinner = {
     .name = $("Web Spinner"),
     .description = $("Uses String Shot\n"
                      "on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT ShowdownMode
-ON_SWITCH {
+ON_ENTRY {
     gVolatileStructs[battler].showdownMode = gVolatileStructs[battler].started.showdownMode = TRUE;
     return SwitchInAnnounce(B_MSG_SWITCHIN_SHOWDOWN_MODE);
 }
 static const Ability ShowdownMode = {
     .name = $("Showdown Mode"),
     .description = $("Ambush + Violent Rush."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -8129,7 +8185,7 @@ static const Ability Parroting = {
 
 #undef CONTEXT
 #define CONTEXT SaltCircle
-ON_SWITCH {
+ON_ENTRY {
     int anyBlocked = FALSE;
     gBattlerTarget = BATTLE_OPPOSITE(battler);
 
@@ -8153,7 +8209,7 @@ static const Ability SaltCircle = {
     .name = $("Salt Circle"),
     .description = $("Prevents opposing pokemon\n"
                      "from fleeing on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -8212,7 +8268,7 @@ int ProtosynthesisHandler(int ability, int battler, AbilityCallType callType) {
     }
     return FALSE;
 }
-ON_SWITCH { return ProtosynthesisHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_ENTRY { return ProtosynthesisHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
 ON_WEATHER { return ProtosynthesisHandler(ability, battler, ABILITY_BS_CALL); }
 ON_STAT {
     ParadoxBoost boost = GetAbilityStateAs(battler, ability).paradoxBoost;
@@ -8226,7 +8282,7 @@ static const Ability Protosynthesis = {
     .name = $("Protosynthesis"),
     .description = $("Boosts highest stat in Sun\n"
                      "or with Booster Energy."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_WEATHER,
     CONTEXT_ON_STAT,
 };
@@ -8274,13 +8330,13 @@ int QuarkDriveHandler(int ability, int battler, AbilityCallType callType) {
     }
     return FALSE;
 }
-ON_SWITCH { return QuarkDriveHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_ENTRY { return QuarkDriveHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
 ON_TERRAIN { return QuarkDriveHandler(ability, battler, ABILITY_BS_CALL); }
 static const Ability QuarkDrive = {
     .name = $("Quark Drive"),
     .description = $("Boosts highest stat in Electric\n"
                      "Terrain or with Booster Energy."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_TERRAIN,
     .onStat = Protosynthesis.onStat,
 };
@@ -8371,7 +8427,7 @@ static const Ability Subdue = {
 
 #undef CONTEXT
 #define CONTEXT ReadiedAction
-ON_SWITCH {
+ON_ENTRY {
     gVolatileStructs[battler].readiedAction = gVolatileStructs[battler].started.readiedAction = TRUE;
     return SwitchInAnnounce(B_MSG_SWITCHIN_READIED_ACTION);
 }
@@ -8379,7 +8435,7 @@ static const Ability ReadiedAction = {
     .name = $("Readied Action"),
     .description = $("Doubles attack on\n"
                      "first turn."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -8421,14 +8477,19 @@ static const Ability WaterGaleWings = {
 
 #undef CONTEXT
 #define CONTEXT ZeroToHero
-ON_SWITCH {
+ON_ENTRY {
     CHECK(gBattleMons[battler].species == SPECIES_PALAFIN)
     CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+    CHECK(GetSingleUseAbilityCounter(battler, ability))
 
     UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_PALAFIN_HERO);
     gBattleMons[battler].species = SPECIES_PALAFIN_HERO;
     BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
     return TRUE;
+}
+ON_EXIT {
+    SetSingleUseAbilityCounter(battler, ability, TRUE);
+    return FALSE;
 }
 static const Ability ZeroToHero = {
     .name = $("Zero To Hero"),
@@ -8436,12 +8497,13 @@ static const Ability ZeroToHero = {
                      "switching out."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
+    CONTEXT_ON_EXIT,
 };
 
 #undef CONTEXT
 #define CONTEXT Costar
-ON_SWITCH {
+ON_ENTRY {
     CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
 
     int anyChanged = FALSE;
@@ -8459,7 +8521,7 @@ static const Ability Costar = {
     .name = $("Costar"),
     .description = $("Copies its ally's stat changes\n"
                      "on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -8556,7 +8618,7 @@ static const Ability MindCrush = {
 
 #undef CONTEXT
 #define CONTEXT SupremeOverlord
-ON_SWITCH {
+ON_ENTRY {
     CHECK(gFaintedMonCount[GetBattlerSide(battler)])
 
     return SwitchInAnnounce(B_MSG_SWITCHIN_SUPREME_OVERLORD);
@@ -8568,7 +8630,7 @@ static const Ability SupremeOverlord = {
     .name = $("Supreme Overlord"),
     .description = $("Each fainted ally increases\n"
                      "Attack and SpAtk by 10%."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_STAT,
 };
 
@@ -8607,7 +8669,7 @@ static const Ability FireScales = {
 
 #undef CONTEXT
 #define CONTEXT WatchYourStep
-ON_SWITCH {
+ON_ENTRY {
     u8 targetSide = GetBattlerSide(BATTLE_OPPOSITE(battler));
     CHECK(gSideTimers[targetSide].spikesAmount < 3)
 
@@ -8620,12 +8682,12 @@ static const Ability WatchYourStep = {
     .name = $("Watch Your Step"),
     .description = $("Spreads two layers of\n"
                      "Spikes on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT RapidResponse
-ON_SWITCH {
+ON_ENTRY {
     gVolatileStructs[battler].rapidResponse = gVolatileStructs[battler].started.rapidResponse = TRUE;
     return SwitchInAnnounce(B_MSG_SWITCHIN_RAPID_RESPONSE);
 }
@@ -8633,7 +8695,7 @@ static const Ability RapidResponse = {
     .name = $("Rapid Response"),
     .description = $("Boosts Speed by 50% + SpAtk\n"
                      "by 20% on first turn."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -8754,7 +8816,7 @@ static const Ability PermafrostClone = {
 
 #undef CONTEXT
 #define CONTEXT Gallantry
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
 
     BattleScriptPushCursorAndCallback(BattleScript_BattlerHasASingleNoDamageHit);
@@ -8767,7 +8829,7 @@ static const Ability Gallantry = {
     .persistent = TRUE,
     .breakable = TRUE,
     .noDamageHits = 1,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -8780,7 +8842,7 @@ static const Ability OrichalcumPulse = {
     .name = $("Orichalcum Pulse"),
     .description = $("Summons sun on entry.\n"
                      "Raises Atk by 1.33x in sun."),
-    .onSwitch = Drought.onSwitch,
+    .onEntry = Drought.onEntry,
     CONTEXT_ON_STAT,
 };
 
@@ -8822,7 +8884,7 @@ static const Ability HadronEngine = {
     .name = $("Hadron Engine"),
     .description = $("Field becomes Electric.\n"
                      "+33% SpAtk in Electric Terrain."),
-    .onSwitch = ElectricSurge.onSwitch,
+    .onEntry = ElectricSurge.onEntry,
     CONTEXT_ON_STAT,
 };
 
@@ -8975,7 +9037,7 @@ static const Ability Malicious = {
     .name = $("Malicious"),
     .description = $("Lowers the foe's highest\n"
                      "Attack and Defense stat."),
-    .onSwitch = UseIntimidateClone,
+    .onEntry = UseIntimidateClone,
 };
 
 #undef CONTEXT
@@ -9026,7 +9088,7 @@ static const Ability MythicalArrows = {
 
 #undef CONTEXT
 #define CONTEXT Lawnmower
-ON_SWITCH {
+ON_ENTRY {
     CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
     BattleScriptPushCursorAndCallback(BattleScript_Lawnmower);
@@ -9036,7 +9098,7 @@ static const Ability Lawnmower = {
     .name = $("Lawnmower"),
     .description = $("Removes terrain on switch-in.\n"
                      "Stat up if terrain removed."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -9057,7 +9119,7 @@ static const Ability DesertSpirit = {
     .name = $("Desert Spirit"),
     .description = $("Summons sand on entry. Ground\n"
                      "moves hit airborne in sand."),
-    .onSwitch = SandStream.onSwitch,
+    .onEntry = SandStream.onEntry,
 };
 
 #undef CONTEXT
@@ -9109,7 +9171,7 @@ static const Ability ToxicChain = {
 
 #undef CONTEXT
 #define CONTEXT ParasiticSpores
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gVolatileStructs[battler].parasiticSpores)
 
     gVolatileStructs[battler].parasiticSpores = TRUE;
@@ -9119,7 +9181,7 @@ static const Ability ParasiticSpores = {
     .name = $("Parasitic Spores"),
     .description = $("Deals 1/8 HP damage to non-\n"
                      "Ghost. Spreads on contact."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -9153,7 +9215,7 @@ static const Ability Entrance = {
 
 #undef CONTEXT
 #define CONTEXT Rejection
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gFieldTimers.quashTimer)
 
     gFieldTimers.quashTimer = QUASH_DURATION;
@@ -9163,7 +9225,7 @@ ON_SWITCH {
 static const Ability Rejection = {
     .name = $("Rejection"),
     .description = $("Applies Quash on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -9212,7 +9274,7 @@ static const Ability Demolitionist = {
     .name = $("Demolitionist"),
     .description = $("Readied Action + Ignores Protect\n"
                      "+ screens break on readied turn"),
-    .onSwitch = ReadiedAction.onSwitch,
+    .onEntry = ReadiedAction.onEntry,
     CONTEXT_ON_INFILTRATE,
     CONTEXT_ON_ATTACKER,
 };
@@ -9246,7 +9308,7 @@ static const Ability FragrantDaze = {
 
 #undef CONTEXT
 #define CONTEXT LowVisibility
-ON_SWITCH {
+ON_ENTRY {
     if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
         BattleScriptPushCursorAndCallback(BattleScript_BadOmensActivates);
         return TRUE;
@@ -9259,7 +9321,7 @@ ON_SWITCH {
 static const Ability LowVisibility = {
     .name = $("Low Visibility"),
     .description = $("Summons Eerie Fog on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -9328,7 +9390,7 @@ static const Ability SnowSong = {
 
 #undef CONTEXT
 #define CONTEXT GreaterSpirit
-ON_SWITCH {
+ON_ENTRY {
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
     int stat = GetHighestStatId(battler, TRUE);
@@ -9340,7 +9402,7 @@ static const Ability GreaterSpirit = {
     .name = $("Greater Spirit"),
     .description = $("Ups highest stat by +1\n"
                      "on entry in fog."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -9430,7 +9492,7 @@ static const Ability Terrify = {
     .name = $("Terrify"),
     .description = $("Lowers foes' Sp. Atk by two\n"
                      "stages on entry."),
-    .onSwitch = UseIntimidateClone,
+    .onEntry = UseIntimidateClone,
 };
 
 #undef CONTEXT
@@ -9650,7 +9712,7 @@ static const Ability Unicorn = {
 
 #undef CONTEXT
 #define CONTEXT OnTheProwl
-ON_SWITCH {
+ON_ENTRY {
     gVolatileStructs[battler].onTheProwl = gVolatileStructs[battler].started.onTheProwl = TRUE;
     return SwitchInAnnounce(B_MSG_SWITCHIN_ON_THE_PROWL);
 }
@@ -9658,7 +9720,7 @@ static const Ability OnTheProwl = {
     .name = $("On the Prowl"),
     .description = $("+1 priority for the first turn.\n"
                      "Negative priority becomes +0."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -9716,6 +9778,7 @@ static const Ability EternalBlessing = {
     .description = $("Celestial Blessing + Regenerator."),
     .persistent = TRUE,
     .onEndTurn = CelestialBlessing.onEndTurn,
+    .onExit = Regenerator.onExit,
 };
 
 #undef CONTEXT
@@ -9869,12 +9932,12 @@ static const Ability HigherRank = {
 
 #undef CONTEXT
 #define CONTEXT FuneralPyre
-ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE); }
+ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE); }
 static const Ability FuneralPyre = {
     .name = $("Funeral Pyre"),
     .description = $("Non-Ghost and Dark-types\n"
                      "take 1/4 damage every turn."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -9903,7 +9966,7 @@ static const Ability SnowyWrath = {
     .name = $("Snowy Wrath"),
     .description = $("Snow Warning + Whiteout."),
     .onStat = Whiteout.onStat,
-    .onSwitch = SnowWarning.onSwitch,
+    .onEntry = SnowWarning.onEntry,
 };
 
 #undef CONTEXT
@@ -9957,12 +10020,12 @@ static const Ability FlammableCoat = {
 
 #undef CONTEXT
 #define CONTEXT DracoMorale
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_DRAGON_CHEER, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_DRAGON_CHEER, 0); }
 static const Ability DracoMorale = {
     .name = $("Draco Morale"),
     .description = $("Uses Dragon Cheer\n"
                      "on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -9998,7 +10061,7 @@ static const Ability MoshPit = {
 
 #undef CONTEXT
 #define CONTEXT BloodStain
-ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_BLOOD_STAIN); }
+ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_BLOOD_STAIN); }
 ON_EITHER {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
@@ -10019,7 +10082,7 @@ static const Ability BloodStain = {
     .description = $("Bleeds if not immune. Can't get\n"
                      "other status. Spreads on contact."),
     .unsuppressable = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_EITHER,
 };
 
@@ -10059,14 +10122,14 @@ static const Ability Sidewinder = {
     .name = $("Sidewinder"),
     .description = $("First biting move each entry gets\n"
                      "+1 priority. Resets on KO."),
-    .onSwitch = CoilUp.onSwitch,
+    .onEntry = CoilUp.onEntry,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
 #define CONTEXT Petrify
-ON_SWITCH {
+ON_ENTRY {
     int loweredStats = 0;
     int intimidated = UseIntimidateClone(battler, ability);
     for (int i = BATTLE_OPPOSITE(GET_BATTLER_SIDE(battler)); i < gBattlersCount; i += 2) {
@@ -10083,7 +10146,7 @@ static const Ability Petrify = {
     .name = $("Petrify"),
     .description = $("Clears stat buffs then lowers\n"
                      "speed by one stage on entry."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -10170,11 +10233,11 @@ static const Ability Hospitality = {
 
 #undef CONTEXT
 #define CONTEXT ButterUp
-ON_SWITCH { return Hospitality.onSwitch(ability, battler) | SoothingAroma.onSwitch(ability, battler); }
+ON_ENTRY { return Hospitality.onEntry(ability, battler) | SoothingAroma.onEntry(ability, battler); }
 static const Ability ButterUp = {
     .name = $("Butter Up"),
     .description = $("Hospitality + Soothing Aroma"),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -10313,7 +10376,7 @@ static const Ability Patchwork = {
     .unsuppressable = TRUE,
     .breakable = TRUE,
     .randomizerBanned = TRUE,
-    .onSwitch = Disguise.onSwitch,
+    .onEntry = Disguise.onEntry,
     CONTEXT_ON_DISGUISE,
     CONTEXT_ON_DEFENDER,
 };
@@ -10323,7 +10386,7 @@ static const Ability Patchwork = {
 static const Ability BlindRage = {
     .name = $("Blind Rage"),
     .description = $("Scrappy + Mold Breaker."),
-    .onSwitch = MoldBreaker.onSwitch,
+    .onEntry = MoldBreaker.onEntry,
 };
 
 #undef CONTEXT
@@ -10412,10 +10475,11 @@ static const Ability Energized = {
     .description = $("Generator + charges up on KO\n"
                      "with an Electric-type move."),
     .persistent = TRUE,
-    .onSwitch = Generator.onSwitch,
+    .onEntry = Generator.onEntry,
     .onTerrain = Generator.onTerrain,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onExit = Generator.onExit,
 };
 
 #undef CONTEXT
@@ -10500,7 +10564,7 @@ static const Ability RagePoint = {
 
 #undef CONTEXT
 #define CONTEXT HotCoals
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals)
 
     gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals = TRUE;
@@ -10510,7 +10574,7 @@ static const Ability HotCoals = {
     .name = $("Hot Coals"),
     .description = $("Sets a trap that burns the next\n"
                      "foe that switches in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -10540,11 +10604,11 @@ static const Ability ShockingMaw = {
 
 #undef CONTEXT
 #define CONTEXT GleamEyes
-ON_SWITCH { return UseIntimidateClone(battler, ability) | Frisk.onSwitch(battler, ability); }
+ON_ENTRY { return UseIntimidateClone(battler, ability) | Frisk.onEntry(battler, ability); }
 static const Ability GleamEyes = {
     .name = $("Gleam Eyes"),
     .description = $("Frisk + Scare."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -10569,11 +10633,11 @@ static const Ability DreamState = {
 
 #undef CONTEXT
 #define CONTEXT DreamWhimsy
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_YAWN, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_YAWN, 0); }
 static const Ability DreamWhimsy = {
     .name = $("Dream Whimsy"),
     .description = $("Uses Yawn on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -10596,7 +10660,7 @@ static const Ability FlameShield = {
 
 #undef CONTEXT
 #define CONTEXT AquaticDweller
-ON_SWITCH { return AddBattlerType(battler, TYPE_WATER); }
+ON_ENTRY { return AddBattlerType(battler, TYPE_WATER); }
 ON_OFFENSIVE_MULTIPLIER {
     if (moveType == TYPE_WATER) MUL(1.5);
 }
@@ -10604,7 +10668,7 @@ static const Ability AquaticDweller = {
     .name = $("Aquatic Dweller"),
     .description = $("Boosts the power of Water-type\n"
                      "moves by 1.5x."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
@@ -10618,13 +10682,13 @@ static const Ability ApplePie = {
 
 #undef CONTEXT
 #define CONTEXT Hover
-ON_SWITCH { return AddBattlerType(battler, TYPE_PSYCHIC); }
+ON_ENTRY { return AddBattlerType(battler, TYPE_PSYCHIC); }
 static const Ability Hover = {
     .name = $("Hover"),
     .description = $("Adds Psychic type to itself.\n"
                      "Avoids Ground attacks."),
     .breakable = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -10652,7 +10716,7 @@ static const Ability Wildfire = {
 
 #undef CONTEXT
 #define CONTEXT JumpScare
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
     SetSingleUseAbilityCounter(battler, ability, TRUE);
     return UseEntryMove(battler, ability, MOVE_ASTONISH, 0);
@@ -10661,16 +10725,16 @@ static const Ability JumpScare = {
     .name = $("Jumpscare"),
     .description = $("Attacks with Astonish on first\n"
                      "switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
 #define CONTEXT TarToss
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_TAR_SHOT, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_TAR_SHOT, 0); }
 static const Ability TarToss = {
     .name = $("Tar Toss"),
     .description = $("Uses Tar Shot on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -10764,7 +10828,8 @@ static const Ability LuckyHalo = {
 static const Ability TrashHeap = {
     .name = $("Trash Heap"),
     .description = $("Corrosion + Toxic Spill."),
-    .onSwitch = ToxicSpill.onSwitch,
+    .onEntry = ToxicSpill.onEntry,
+    .onExit = ToxicSpill.onExit,
 };
 
 #undef CONTEXT
@@ -10785,18 +10850,18 @@ static const Ability SludgyMix = {
 static const Ability Overwatch = {
     .name = $("Overwatch"),
     .description = $("On the Prowl + Stakeout."),
-    .onSwitch = OnTheProwl.onSwitch,
+    .onEntry = OnTheProwl.onEntry,
     .onOffensiveMultiplier = Stakeout.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
 #define CONTEXT WindRage
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_DEFOG, 0); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_DEFOG, 0); }
 static const Ability WindRage = {
     .name = $("Wind Rage"),
     .description = $("Uses Defog on switch-in. Air-\n"
                      "based moves get a 1.3x boost."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     .onOffensiveMultiplier = GiantWings.onOffensiveMultiplier,
 };
 
@@ -10884,7 +10949,7 @@ int ApeShiftHandler(int battler, AbilityCallType callType) {
     BattleScriptCall(BattleScript_StackBattlerFormChange);
     return TRUE;
 }
-ON_SWITCH { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_ENTRY { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
 ON_END_TURN { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
 ON_DEFENDER { return ApeShiftHandler(battler, ABILITY_BS_CALL); }
 static const Ability ApeShift = {
@@ -10892,7 +10957,7 @@ static const Ability ApeShift = {
     .description = $("Transforms when below 50% HP,\n"
                      "curing status and always critting."),
     .randomizerBanned = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
     CONTEXT_ON_END_TURN,
     CONTEXT_ON_DEFENDER,
 };
@@ -10950,7 +11015,7 @@ static const Ability RudeAwakening = {
 
 #undef CONTEXT
 #define CONTEXT TeraformZero
-ON_SWITCH {
+ON_ENTRY {
     CHECK(!GetSingleUseAbilityCounter(battler, ability))
     SetSingleUseAbilityCounter(battler, ability, TRUE);
     CHECK(IsWeatherActive(WEATHER_ANY) || IsTerrainActive(STATUS_FIELD_TERRAIN_ANY))
@@ -10962,7 +11027,7 @@ static const Ability TeraformZero = {
     .description = $("Tera Shell + clears weather and\n"
                      "terrain on first entry."),
     .breakable = TRUE,
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -11000,7 +11065,7 @@ static const Ability MagicalFists = {
 
 #undef CONTEXT
 #define CONTEXT Cutthroat
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(GetAbilityState(battler, ability))
 
     gStatuses4[battler] |= STATUS4_CUTTHROAT;
@@ -11010,7 +11075,7 @@ static const Ability Cutthroat = {
     .name = $("Cutthroat"),
     .description = $("The first slicing move used on\n"
                      "each entry in gets +1 priority."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -11018,18 +11083,18 @@ static const Ability Cutthroat = {
 static const Ability SandBender = {
     .name = $("Sand Bender"),
     .description = $("Sand Stream + Sand Force."),
-    .onSwitch = SandStream.onSwitch,
+    .onEntry = SandStream.onEntry,
     .onStat = SandForce.onStat,
 };
 
 #undef CONTEXT
 #define CONTEXT SandPit
-ON_SWITCH { return UseEntryMove(battler, ability, MOVE_SAND_TOMB, 20); }
+ON_ENTRY { return UseEntryMove(battler, ability, MOVE_SAND_TOMB, 20); }
 static const Ability SandPit = {
     .name = $("Sand Pit"),
     .description = $("Attacks with 20BP Sand Tomb\n"
                      "on switch-in."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT
@@ -11123,7 +11188,7 @@ static const Ability EnergizedHorns = {
 
 #undef CONTEXT
 #define CONTEXT SpiderLairUpgrade
-ON_SWITCH {
+ON_ENTRY {
     CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
     int side = BATTLE_OPPOSITE(battler);
@@ -11137,7 +11202,7 @@ static const Ability SpiderLairUpgrade = {
     .name = $("Rising Dough"),
     .description = $("Casts Sticky Web on entry.\n"
                      "Lasts 7 turns."),
-    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ENTRY,
 };
 
 #undef CONTEXT

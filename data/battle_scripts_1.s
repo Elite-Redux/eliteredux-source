@@ -11872,16 +11872,14 @@ BattleScript_DoSingleSwitchIn::
 	switchinabilities BS_STACK_1
 	return
 
-BattleScript_NaturalCureExits::
-	jumpifstatus BS_ATTACKER, STATUS1_ANY, BattleScript_NaturalRecoveryExits_HasStatus
+BattleScript_RegeneratorExits::
+	tryhealpercenthealth BS_ATTACKER, 33, BattleScript_Return
+	datahpupdate BS_ATTACKER
 	return
-BattleScript_NaturalRecoveryExits_HasStatus:
-	clearstatus BS_ATTACKER
-	copybyte gBattlerAbility, gBattlerAttacker
-	sethword sABILITY_OVERWRITE, ABILITY_NATURAL_RECOVERY
-	call BattleScript_AbilityPopUp
-	pause B_WAIT_TIME_SHORT
-	printfromtable gCureStatusOnExitStringIds
+
+BattleScript_NaturalCureExits::
+	printstring STRINGID_NATURAL_CURE_EXITS
+	updatestatusicon BS_ATTACKER
 	waitmessage B_WAIT_TIME_LONG
 	return
 

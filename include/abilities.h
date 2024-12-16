@@ -4,7 +4,7 @@
 #include "constants/abilities.h"
 #include "global.h"
 
-typedef int (*AbilityOnSwitchHandler)(int ability, int battler);
+typedef int (*AbilityOnEntryHandler)(int ability, int battler);
 typedef int (*AbilityOnAbsorbHandler)(int battler, int move, int moveType, int* statId);
 typedef int (*AbilityOnImmuneHandler)(int battler, int attacker, int move, int moveType, const u8** immunityScript);
 typedef enum {
@@ -66,6 +66,7 @@ typedef int (*AbilityOnChooseDefensiveStat)(int battler, int target, int move, i
 typedef int (*AbilityOnStab)(int moveType);
 typedef int (*AbilityOnPriority)(int battler, int target, int move);
 typedef int (*AbilityOnMoveType)(int ability, int move, int moveType, u8* ateBoost);
+typedef int (*AbilityOnSwitchOut)(int ability, int battler);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -87,7 +88,7 @@ typedef enum {
 typedef struct Ability {
     const u8* name;
     const u8* description;
-    const AbilityOnSwitchHandler onSwitch;
+    const AbilityOnEntryHandler onEntry;
     const AbilityOnAbsorbHandler onAbsorb;
     const AbilityOnImmuneHandler onImmune;
     const AbilityOnInfiltrateHandler onInfiltrate;
@@ -111,6 +112,7 @@ typedef struct Ability {
     const AbilityOnStab onStab;
     const AbilityOnPriority onPriority;
     const AbilityOnMoveType onMoveType;
+    const AbilityOnSwitchOut onExit;
     u16 redirectType:5;
     AbilityApplyOn onImmuneFor:3;
     u16 noDamageHits:2;

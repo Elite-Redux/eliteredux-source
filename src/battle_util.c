@@ -9533,7 +9533,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
     }
 
     ability = gBattleMons[battler].abilities[abilityNumber];
-    AbilityOnSwitchHandler handler = gAbilities[ability].onSwitch;
+    AbilityOnEntryHandler handler = gAbilities[ability].onEntry;
     if (!handler) return FALSE;
 
     if (IsSuppressed(battler, ability, FALSE)) return FALSE;
