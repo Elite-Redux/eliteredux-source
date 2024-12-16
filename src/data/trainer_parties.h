@@ -38968,56 +38968,56 @@ static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Bug[] = {
     {
     .lvl = 0,
     .species = SPECIES_KLEAVOR,
-    .heldItem = ITEM_CUSTAP_BERRY,
+    .heldItem = ITEM_LUM_BERRY,
     .ability = 2,
-    .evs = {4, 252, 0, 0, 0, 252},
+    .evs = {252, 252, 6, 0, 0, 0},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_STONE_AXE, MOVE_CUT, MOVE_CROSS_CHOP, MOVE_ACCELEROCK
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_GOLISOPOD,
-    .heldItem = ITEM_ASSAULT_VEST,
-    .ability = 1,
-    .evs = {252, 252, 4, 0, 0, 0},
-    .nature = NATURE_ADAMANT,
-    .moves = MOVE_FIRST_IMPRESSION, MOVE_RAZOR_SHELL, MOVE_LEECH_LIFE, MOVE_U_TURN
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_VIVILLON_POKE_BALL,
-    .heldItem = ITEM_FOCUS_SASH,
-    .ability = 2,
-    .evs = {4, 0, 0, 252, 0, 252},
-    .nature = NATURE_MODEST,
-    .moves = MOVE_GUST, MOVE_HURRICANE, MOVE_SLEEP_POWDER, MOVE_HEAT_WAVE
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_LOKIX,
-    .heldItem = ITEM_FOCUS_SASH,
-    .ability = -1,
-    .evs = {4, 252, 0, 0, 0, 252},
-    .nature = NATURE_ADAMANT,
-    .moves = MOVE_FIRST_IMPRESSION, MOVE_RIDER_KICK, MOVE_AXE_KICK, MOVE_U_TURN
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_DUSTOX,
-    .heldItem = ITEM_BLACK_SLUDGE,
-    .ability = 2,
-    .evs = {252, 0, 252, 0, 4, 0},
-    .nature = NATURE_BOLD,
-    .moves = MOVE_FOUL_PLAY, MOVE_ROOST, MOVE_TOXIC, MOVE_U_TURN
+    .moves = MOVE_STONE_AXE, MOVE_CROSS_CHOP, MOVE_X_SCISSOR, MOVE_ACCELEROCK
     },
     {
     .lvl = 0,
     .species = SPECIES_RIBOMBEE_REDUX,
     .heldItem = ITEM_RIBOMBITE_R,
     .ability = 2,
-    .evs = {4, 252, 0, 0, 0, 252},
+    .evs = {6, 252, 0, 0, 0, 252},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_MERCULIGHT, MOVE_SPARKLING_BARRAGE, MOVE_VOLT_BOLT, MOVE_SPARK
+    .moves = MOVE_SPARKLING_BARRAGE, MOVE_VOLT_BOLT, MOVE_MERCULIGHT, MOVE_KINESIS
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_VIVILLON_POKE_BALL,
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 2,
+    .evs = {6, 0, 0, 252, 0, 252},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_HURRICANE, MOVE_RAZOR_WIND, MOVE_SLEEP_POWDER, MOVE_HEAT_WAVE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_GOLISOPOD,
+    .heldItem = ITEM_TACTICAL_VEST,
+    .ability = 1,
+    .evs = {252, 252, 6, 0, 0, 0},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_FIRST_IMPRESSION, MOVE_LEECH_LIFE, MOVE_RAZOR_SHELL, MOVE_AQUA_JET
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_DUSTOX,
+    .heldItem = ITEM_BLACK_SLUDGE,
+    .ability = 2,
+    .evs = {252, 0, 6, 0, 252, 0},
+    .nature = NATURE_CAREFUL,
+    .moves = MOVE_SKY_DROP, MOVE_TOXIC, MOVE_ROOST, MOVE_TELEPORT
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_PHEROMOSA,
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 2,
+    .evs = {6, 252, 0, 0, 0, 252},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_DOUBLE_KICK, MOVE_RIDER_KICK, MOVE_TRIPLE_AXEL, MOVE_ROLLING_KICK
     }
 };
 
