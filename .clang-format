@@ -1,0 +1,8 @@
+BasedOnStyle: Google
+IndentWidth: 4
+ColumnLimit: 160
+BinPackArguments: false
+BitFieldColonSpacing: None
+BinPackParameters: false
+InsertTrailingCommas: Wrapped
+SortIncludes: false
