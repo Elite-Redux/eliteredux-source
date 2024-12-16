@@ -1120,6 +1120,7 @@ static void Cmd_attackcanceler(void) {
     if ((ability = HasProtean(gBattlerAttacker)) && !IS_BATTLER_OF_TYPE(gBattlerAttacker, moveType) && gCurrentMove != MOVE_STRUGGLE) {
         gBattleScripting.abilityPopupOverwrite = ability;
         SET_BATTLER_TYPE(gBattlerAttacker, moveType);
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
         gBattlerAbility = gBattlerAttacker;
         BattleScriptCall(BattleScript_ProteanActivates);
         return;
@@ -7160,7 +7161,8 @@ static void Cmd_various(void) {
                            gAbilities[ability].onBattlerFaints &&
                                IsTargettedApplyOnFlagAppropriate(gActiveBattler, i, MAX_BATTLERS_COUNT, gActiveBattler, gAbilities[ability].onBattlerFaintsFor),
                            gStackBattler1 = i;
-                           if (gAbilities[ability].onBattlerFaints(ability, i, MAX_BATTLERS_COUNT, gActiveBattler, 0, 0) & 1) BattleScriptCall(BattleScript_AbilityPopUpStack))
+                           if (gAbilities[ability].onBattlerFaints(ability, i, MAX_BATTLERS_COUNT, gActiveBattler, 0, 0) & 1)
+                               BattleScriptCall(BattleScript_AbilityPopUpStack))
             }
             ReadActiveScriptInitialStackState();
             break;
