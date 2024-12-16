@@ -7981,7 +7981,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
         u16 randomizedAbility;
         do {
             randomizedAbility = RandRangeDeterministic(1, ABILITIES_COUNT - 1, &randomizedAbilitySeed);
-        } while (gAbilities[ability].randomizerBanned);
+        } while (gAbilities[randomizedAbility].randomizerBanned);
         return randomizedAbility;
     } else
         return ability;
