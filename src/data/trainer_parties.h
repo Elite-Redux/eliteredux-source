@@ -26557,9 +26557,9 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt26[] = { // with Grunt
     },
     {
     .lvl = 0,
-    .species = SPECIES_SCRAFTY,
-    .heldItem = ITEM_SCRAFTITE,
-    .ability = 0,
+    .species = SPECIES_SCRAFTY_MEGA,
+    .heldItem = ITEM_LEFTOVERS,
+    .ability = 1,
     .evs = {252, 252, 0, 0, 0, 4},
     .nature = NATURE_JOLLY,
     .moves = MOVE_SUBMISSION, MOVE_WICKED_BLOW, MOVE_DRAGON_DANCE, MOVE_HEAD_SMASH
@@ -39397,11 +39397,57 @@ static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Electric_Ins
 static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Psychic[] = {
     {
     .lvl = 0,
-    .species = SPECIES_BULBASAUR,
+    .species = SPECIES_VICTINI,
+    .heldItem = ITEM_FOCUS_SASH,
     .ability = 0,
-    .evs = {0, 0, 0, 252, 4, 252},
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_EXPANDING_FORCE, MOVE_BLUE_FLARE, MOVE_THUNDERBOLT, MOVE_QUIVER_DANCE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_CALYREX_SHADOW_RIDER,
+    .heldItem = ITEM_COLBUR_BERRY,
+    .ability = 0,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_EXPANDING_FORCE, MOVE_ASTRAL_BARRAGE, MOVE_AURA_SPHERE, MOVE_CALM_MIND
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_JIRACHI,
+    .heldItem = ITEM_LEFTOVERS,
+    .ability = 0,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_IRON_HEAD, MOVE_ZEN_HEADBUTT, MOVE_COSMIC_POWER, MOVE_WISH
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_MEOWSTIC_FEMALE,
+    .heldItem = ITEM_LIFE_ORB,
+    .ability = 0,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_EXPANDING_FORCE, MOVE_DARK_PULSE, MOVE_THUNDERBOLT, MOVE_CALM_MIND
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_ALAKAZAM,
+    .heldItem = ITEM_ALAKAZITE,
+    .ability = 0,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_EXPANDING_FORCE, MOVE_AURA_SPHERE, MOVE_DAZZLING_GLEAM, MOVE_CALM_MIND
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_ESPEON_GALAXY,
+    .heldItem = ITEM_GALACTIC_ORB,
+    .ability = 0,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_EXPANDING_FORCE, MOVE_SHEER_COLD, MOVE_CALM_MIND, MOVE_MOONBLAST
     }
 };
 
@@ -43241,7 +43287,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt41Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_SCRAFTY,
+    .species = SPECIES_SCRAFTY_MEGA,
     .heldItem = ITEM_LEFTOVERS,
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
@@ -43255,8 +43301,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt41Insane[] = {
     .ability = 0,
     .evs = {68, 0, 0, 188, 0, 252},
     .nature = NATURE_MODEST,
-    .moves = MOVE_SHELL_SMASH, MOVE_POWER_GEM, MOVE_BLAST_BURN, MOVE_HIDDEN_POWER,
-    .hpType = TYPE_GRASS,
+    .moves = MOVE_SHELL_SMASH, MOVE_POWER_GEM, MOVE_BLAST_BURN, MOVE_HIDDEN_POWER
     },
     {
     .lvl = 0,

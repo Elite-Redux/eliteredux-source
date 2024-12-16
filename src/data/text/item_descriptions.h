@@ -3428,7 +3428,7 @@ static const u8 sVictiniOrbDesc[] = _(
 
 static const u8 sWigglytuffOrbDesc[] = _(
     "This stone enables\n"
-    "Wigglytuff to Primal\n"
+    "Wigglytuff-A to Primal\n"
     "Reverse in battle.");
 
 static const u8 sWigglytuffiteDesc[] = _(
@@ -3561,9 +3561,19 @@ static const u8 sAmphybuzziteDesc[] = _(
     "Amphybuzz to Mega\n"
     "Evolve in battle.");
 
+static const u8 sYveltaliteDesc[] = _(
+    "This stone enables\n"
+    "Yveltal to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sDynamaxOrbDesc[] = _(
     "This stone enables\n"
     "Eternatus to Primal\n"
+    "Revert in battle.");
+
+static const u8 sGalacticOrbDesc[] = _(
+    "This stone enables\n"
+    "Espeon to Primal\n"
     "Revert in battle.");
 
 static const u8 sTeraOrbDesc[] = _(
