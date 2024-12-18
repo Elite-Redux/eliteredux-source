@@ -469,7 +469,7 @@ static void EnterNewlyCreatedSecretBase_WaitFadeIn(u8 taskId)
 
 static void EnterNewlyCreatedSecretBase_StartFadeIn(void)
 {
-    s16 x, y;
+    s16 x = 0, y = 0;
 
     ScriptContext2_Enable();
     HideMapNamePopUpWindow();
@@ -518,7 +518,7 @@ bool8 CurMapIsSecretBase(void)
 void InitSecretBaseAppearance(bool8 hidePC)
 {
     u16 secretBaseIdx;
-    u16 x, y;
+    u16 x = 0, y = 0;
     u8 *decorations;
     u8 *decorPos;
 
