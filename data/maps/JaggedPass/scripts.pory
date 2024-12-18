@@ -378,7 +378,7 @@ movement JaggedPass_Movement_SudoWudoSuplex{
 }
 
 movement JaggedPass_Movement_SudoWudoSuplex_CameraReCenter{
-	walk_down * 2
+	walk_up
 }
 
 
