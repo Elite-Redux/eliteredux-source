@@ -289,11 +289,11 @@ struct TutorStruct
     ALL_TUTORS
 };
 
-union TutorUnion
+typedef union TutorUnion
 {
     u32 bits[(TUTOR_COUNT + 31) / 32];
     struct TutorStruct fields;
-};
+} TutorUnion;
 
 #undef TUTOR_DECORATOR
 

@@ -397,12 +397,13 @@
 #define EVO_TRADE_SPECIFIC_MON            31     // Pokémon is traded for a specified Pokémon
 #define EVO_SPECIFIC_MAP                  32     // Pokémon levels up on specified map
 #define EVO_ITEM_HOLD                     33     // Pokémon levels up, holds specified item
+#define EVO_UNMEGA                        34     // Reversion after mega or primal evo
 
 #define EVOS_PER_MON 10
 
 //Form Change Methods
-#define EVO_FORM_SHIFT                    34     // Normal Form Change
-#define EVO_FORM_SHIFT_GENDER             35     // Form Change by gender
+#define EVO_FORM_SHIFT                    35     // Normal Form Change
+#define EVO_FORM_SHIFT_GENDER             36     // Form Change by gender
 
 // Evolution 'modes,' for GetEvolutionTargetSpecies
 #define EVO_MODE_NORMAL     0

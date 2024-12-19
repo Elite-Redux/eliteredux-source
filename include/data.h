@@ -2,6 +2,7 @@
 #define GUARD_DATA_H
 
 #include "constants/moves.h"
+#include "sprite.h"
 
 #define SPECIES_SHINY_TAG 5000
 
@@ -11,13 +12,13 @@ enum {
     BATTLER_AFFINE_RETURN,
 };
 
-struct MonCoords
+typedef struct MonCoords
 {
     // This would use a bitfield, but some function
     // uses it as a u8 and casting won't match.
     u8 size; // u8 width:4, height:4;
     u8 y_offset;
-};
+} ALIGNED_PACKED(2) MonCoords;
 
 struct TrainerMonNoItemDefaultMoves
 {

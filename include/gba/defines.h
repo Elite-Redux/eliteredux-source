@@ -17,6 +17,7 @@
 #define NOINLINE
 #endif
 
+#define ALIGNED_PACKED(n) __attribute__((packed, aligned(n)))
 #define ALIGNED(n) __attribute__((aligned(n)))
 
 #define SOUND_INFO_PTR (*(struct SoundInfo **)0x3007FF0)

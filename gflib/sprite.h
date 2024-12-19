@@ -12,12 +12,12 @@ struct SpriteSheet
     u16 tag;
 };
 
-struct CompressedSpriteSheet
+typedef struct CompressedSpriteSheet
 {
     const u32 *data;  // LZ77 compressed pixel data
     u16 size;        // Uncompressed size of pixel data
     u16 tag;
-};
+} CompressedSpriteSheet;
 
 struct SpriteFrameImage
 {
@@ -35,11 +35,11 @@ struct SpritePalette
     u16 tag;
 };
 
-struct CompressedSpritePalette
+typedef struct CompressedSpritePalette
 {
     const u32 *data;  // LZ77 compressed palette data
     u16 tag;
-};
+} CompressedSpritePalette;
 
 struct AnimFrameCmd
 {
@@ -67,13 +67,13 @@ struct AnimJumpCmd
 // The first halfword of this union specifies the type of command.
 // If it -2, then it is a jump command. If it is -1, then it is the end of the script.
 // Otherwise, it is the imageValue for a frame command.
-union AnimCmd
+typedef union AnimCmd
 {
     s16 type;
     struct AnimFrameCmd frame;
     struct AnimLoopCmd loop;
     struct AnimJumpCmd jump;
-};
+} AnimCmd;
 
 #define ANIMCMD_FRAME(...) \
     {.frame = {__VA_ARGS__}}

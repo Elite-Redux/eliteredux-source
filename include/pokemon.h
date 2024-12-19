@@ -3,6 +3,7 @@
 
 #include "constants/pokemon.h"
 #include "constants/species.h"
+#include "data.h"
 #include "sprite.h"
 #include "constants/region_map_sections.h"
 #include "constants/pokemon_config.h"
@@ -280,10 +281,11 @@ struct SpindaSpot {
     u16 image[16];
 };
 
-struct LevelUpMove {
+typedef struct LevelUpMove {
     u16 move;
     u16 level;
-};
+} LevelUpMove;
+ARRAY_WITH_COUNT(LevelUpMove)
 
 struct TrainerMonSpread {
     u8 EVs[6];
@@ -291,18 +293,115 @@ struct TrainerMonSpread {
     u8 nature;
 };
 
-struct Evolution {
+typedef struct Evolution {
     u16 method;
     u16 param;
     u16 targetSpecies;
-};
+} Evolution;
+ARRAY_WITH_COUNT(Evolution)
 
-struct FormChange {
+typedef struct FormChange {
     u16 method;
     u16 targetSpecies;
     u16 param1;
     u16 param2;
-};
+} FormChange;
+ARRAY_WITH_COUNT(FormChange)
+
+typedef enum {
+    TWO_HEADED = 1,
+    THREE_HEADED,
+} NumHeads;
+
+typedef enum {
+    MEGA_X = 1,
+    MEGA_Y,
+    MEGA_Z,
+    MEGA_UNSPECIFIED,
+    MEGA_PRIMAL,
+    MEGA_RESTORATION,
+    MEGA_ORIGIN,
+} MegaType;
+
+typedef enum {
+    VARIANT_ALOLA,
+    VARIANT_GALAR,
+    VARIANT_HISUI,
+    VARIANT_PALDEA,
+    VARIANT_REDUX,
+} VariantType;
+
+#define __SPECIES_DATA_STRUCT_NAME(species) DataSpecies##species
+#define SPECIES_DATA_STRUCT_NAME(species) __SPECIES_DATA_STRUCT_NAME(species)
+#define SPECIES_DATA_STRUCT(species) static const SpeciesData SPECIES_DATA_STRUCT_NAME(species)
+
+typedef struct {
+    const u8 *name;
+    const u8 *longName;
+    const u8 *icon;
+    const u8 *femaleIcon;
+    const EvolutionArray *evos;
+    const EvolutionArray *formShifts;
+    const u16Array *forms;
+    const LevelUpMoveArray *levelUpMoves;
+    const TutorUnion *tutors;
+    const MonCoords frontCoords;
+    const MonCoords backCoords;
+    const CompressedSpriteSheet frontPic;
+    const CompressedSpriteSheet frontPicFemale;
+    const AnimCmd *const *const frontAnim;
+    const CompressedSpriteSheet backPic;
+    const CompressedSpriteSheet backPicFemale;
+    const CompressedSpritePalette palette;
+    const CompressedSpritePalette paletteFemale;
+    const CompressedSpritePalette shinyPalette;
+    const CompressedSpritePalette shinyPaletteFemale;
+    const CompressedSpritePalette shinyPaletteRare;
+    const CompressedSpritePalette shinyPaletteLegendary;
+    u16 abilities[NUM_ABILITY_SLOTS];
+    u16 innates[NUM_INNATE_PER_SPECIES];
+    u16 expYield;
+    u16 item1;
+    u16 item2;
+    u16 shopPrice;
+    u16 tier;
+    u16 hoennDexNum;
+    u16 nationalDexNum;
+    u16 evYield_HP:2;
+    u16 evYield_Attack:2;
+    u16 evYield_Defense:2;
+    u16 evYield_Speed:2;
+    u16 evYield_SpAttack:2;
+    u16 evYield_SpDefense:2;
+    u16 numShinies:2;  // 1 if it has a rare, 2 if it has legendary, 3 if it has both
+    NumHeads heads:2;
+    u16 bodyColor:7;
+    u16 noFlip:1;
+    u16 isLegendary:1;
+    u16 randomizerBanned:1;
+    u16 generateVariants:1;
+    MegaType mega:3;
+    VariantType variant:3;
+    u8 genderRatio;
+    u8 baseHP;
+    u8 baseAttack;
+    u8 baseDefense;
+    u8 baseSpeed;
+    u8 baseSpAttack;
+    u8 baseSpDefense;
+    u8 type1;
+    u8 type2;
+    u8 catchRate;
+    u8 eggCycles;
+    u8 friendship;
+    u8 growthRate;
+    u8 eggGroup1;
+    u8 eggGroup2;
+    u8 safariZoneFleeRate;
+    u8 iconPalette;
+    u8 backAnimation;
+    u8 frontAnimation;
+} SpeciesData;
 
 #define NUM_UNOWN_FORMS 28
 

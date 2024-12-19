@@ -39,7 +39,7 @@
 
 #define $(str) (const u8[]) _(str)
 
-#define ARRAY_COUNT(array) (size_t)(sizeof(array) / sizeof((array)[0]))
+#define ARRAY_COUNT(array) (size_t)(sizeof((array)) / sizeof(((array))[0]))
 #define STATIC_ASSERT(condition, name) typedef char static_assertion_##name [2 * (condition) - 1];
 #define ARRAY_COPY(to, from) { STATIC_ASSERT(sizeof(to) == sizeof(from), ARRAY_COPY); memcpy(&to, &from, sizeof(to)); }
 #define ZERO(arr) memset(&arr, 0, sizeof(arr));
