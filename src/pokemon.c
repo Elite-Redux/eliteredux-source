@@ -62,7 +62,7 @@
 #include "constants/maps.h"
 #include "script_pokemon_util.h"
 #include "tmhm_struct.h"
-#include "abilities.h"
+#include "abilities.hh"
 
 struct SpeciesItem {
     u16 species;

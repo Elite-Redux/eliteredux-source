@@ -1,6 +1,8 @@
-#include "constants/abilities.h"
 
-#include "abilities.h"
+#include "abilities.hh"
+
+extern "C" {
+#include "constants/abilities.h"
 #include "battle.h"
 #include "battle_anim.h"
 #include "battle_controllers.h"
@@ -15,18 +17,32 @@
 #include "global.h"
 #include "item.h"
 #include "mgba_printf/mgba.h"
+#include "pokemon.h"
 #include "random.h"
 #include "string_util.h"
+}
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic error "-Wunused-function"
 
 #define NO_ANNOUNCE 2
 
+class __EnumHack {
+   public:
+    operator int() const { return 0; }
+    operator AccuracyPriority() const { return ACCURACY_NO_RESULT; }
+    operator MultihitType() const { return MULTIHIT_SINGLE; }
+};
+
+#define ENUM_OR(enumType) \
+    inline enumType operator|(enumType a, enumType b) { return static_cast<enumType>(static_cast<int>(a) | static_cast<int>(b)); }
+
+ENUM_OR(InfiltrateType)
+
 #define CHECK(effect) \
-    if (!(effect)) return FALSE;
+    if (!(effect)) return __EnumHack();
 #define CHECK_NOT(effect) \
-    if (effect) return FALSE;
+    if (effect) return __EnumHack();
 
 #define __COMBINE(val1, val2) val1##val2
 #define COMBINE(val1, val2) __COMBINE(val1, val2)
@@ -309,7 +325,7 @@ static void RuinEffect(int ruinStat, const AbilityOnStatHandler dedup, int battl
     if (*flags & NON_STACKING_RUIN) return;
     ON_ABILITY(battler, FALSE, gAbilities[ability].onStat == dedup, return)
     *stat *= .75;
-    *flags |= NON_STACKING_RUIN;
+    *flags = static_cast<NonStackingState>(static_cast<int>(*flags) | static_cast<int>(NON_STACKING_RUIN));
 }
 
 #define CONTEXT None
@@ -378,8 +394,8 @@ static const Ability BattleArmor = {
     .name = $("Battle Armor"),
     .description = $("Immune to critical hits. Takes\n"
                      "20% less damage from all attacks."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -434,9 +450,9 @@ static const Ability SandVeil = {
     .name = $("Sand Veil"),
     .description = $("Evasion is boosted by 1.25x\n"
                      "while a sandstorm is active."),
-    .breakable = TRUE,
-    .onAccuracyFor = APPLY_ON_TARGET,
     CONTEXT_ON_ACCURACY,
+    .onAccuracyFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -467,8 +483,8 @@ static const Ability VoltAbsorb = {
     .name = $("Volt Absorb"),
     .description = $("Heals 25% of max HP when hit\n"
                      "by an Electric-type move."),
-    .breakable = TRUE,
     CONTEXT_ON_ABSORB,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -481,8 +497,8 @@ static const Ability WaterAbsorb = {
     .name = $("Water Absorb"),
     .description = $("Heals 25% of max HP when hit\n"
                      "by a Water-type move."),
-    .breakable = TRUE,
     CONTEXT_ON_ABSORB,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -546,8 +562,8 @@ static const Ability Immunity = {
     .name = $("Immunity"),
     .description = $("Cannot be poisoned. Halves\n"
                      "damage taken from Poison moves."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -563,9 +579,9 @@ static const Ability FlashFire = {
     .name = $("Flash Fire"),
     .description = $("Powers up Fire-type moves by\n"
                      "1.5x if hit by a Fire-type move."),
-    .breakable = TRUE,
     CONTEXT_ON_ABSORB,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -651,8 +667,8 @@ static const Ability Levitate = {
     .name = $("Levitate"),
     .description = $("Immune to Ground-type moves.\n"
                      "Ups own Flying moves by 1.25x."),
-    .breakable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -743,9 +759,9 @@ static const Ability LightningRod = {
     .name = $("Lightning Rod"),
     .description = $("Redirects Electric moves.\n"
                      "Absorbs them, ups highest Atk."),
-    .breakable = TRUE,
-    .redirectType = TYPE_ELECTRIC,
     CONTEXT_ON_ABSORB,
+    .redirectType = TYPE_ELECTRIC,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -822,8 +838,8 @@ static const Ability Trace = {
     .name = $("Trace"),
     .description = $("Copies the foe's ability.\n"
                      "Does not copy innates."),
-    .randomizerBanned = TRUE,
     CONTEXT_ON_ENTRY,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -866,8 +882,8 @@ static const Ability InnerFocus = {
     .name = $("Inner Focus"),
     .description = $("Blocks flinch, Intimidate, Scare.\n"
                      "Focus Blast never misses."),
-    .breakable = TRUE,
     CONTEXT_ON_ACCURACY,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -879,8 +895,8 @@ static const Ability MagmaArmor = {
     .name = $("Magma Armor"),
     .description = $("Frostbite-immune. Takes 30% less\n"
                      "dmg from Water/Ice-type moves."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -896,8 +912,8 @@ static const Ability WaterVeil = {
     .name = $("Water Veil"),
     .description = $("Burn-immune.\n"
                      "Casts Aqua Ring on entry."),
-    .breakable = TRUE,
     CONTEXT_ON_ENTRY,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -919,9 +935,9 @@ ON_IMMUNE {
 static const Ability Soundproof = {
     .name = $("Soundproof"),
     .description = $("Immune to sound-based moves."),
+    CONTEXT_ON_IMMUNE,
     .breakable = TRUE,
     .isSoundproof = TRUE,
-    CONTEXT_ON_IMMUNE,
 };
 
 #undef CONTEXT
@@ -997,8 +1013,8 @@ static const Ability ThickFat = {
     .name = $("Thick Fat"),
     .description = $("Takes 1/2 damage from Fire-type\n"
                      "and Ice-type attacks."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1044,8 +1060,8 @@ static const Ability KeenEye = {
     .name = $("Keen Eye"),
     .description = $("Immune to accuracy drops.\n"
                      "Grants a 1.2x accuracy boost."),
-    .breakable = TRUE,
     CONTEXT_ON_ACCURACY,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1177,12 +1193,12 @@ static const Ability Forecast = {
     .name = $("Forecast"),
     .description = $("Changes form with the weather.\n"
                      "Weather setting triggers attack."),
-    .unsuppressable = TRUE,
-    .randomizerBanned = TRUE,
     CONTEXT_ON_ENTRY,
     CONTEXT_ON_WEATHER,
     CONTEXT_ON_END_TURN,
     CONTEXT_ON_ATTACKER,
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -1229,8 +1245,8 @@ static const Ability MarvelScale = {
     .name = $("Marvel Scale"),
     .description = $("Ups Def by 1.5x if suffering\n"
                      "from a status condition."),
-    .breakable = TRUE,
     CONTEXT_ON_STAT,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1328,8 +1344,8 @@ static const Ability VitalSpirit = {
     .name = $("Vital Spirit"),
     .description = $("Can't fall asleep. Heals status\n"
                      "after using Fighting-type moves."),
-    .breakable = TRUE,
     CONTEXT_ON_ATTACKER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1365,8 +1381,8 @@ static const Ability ShellArmor = {
     .name = $("Shell Armor"),
     .description = $("Immune to critical hits. Takes\n"
                      "20% less damage from all attacks."),
-    .breakable = TRUE,
     .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1388,9 +1404,9 @@ ON_ACCURACY {
 static const Ability TangledFeet = {
     .name = $("Tangled Feet"),
     .description = $("Doubles Evasion when confused."),
-    .breakable = TRUE,
-    .onAccuracyFor = APPLY_ON_TARGET,
     CONTEXT_ON_ACCURACY,
+    .onAccuracyFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1404,8 +1420,8 @@ static const Ability MotorDrive = {
     .name = $("Motor Drive"),
     .description = $("Boosts Speed instead of being\n"
                      "hit by Electric-type moves."),
-    .breakable = TRUE,
     CONTEXT_ON_ABSORB,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1427,9 +1443,9 @@ static const Ability Rivalry = {
     .name = $("Rivalry"),
     .description = $("Deals 1.25x to same gender.\n"
                      "Takes .75x from opposite gender."),
-    .breakable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1451,9 +1467,9 @@ static const Ability SnowCloak = {
     .name = $("Snow Cloak"),
     .description = $("Evasion is boosted by 1.25x\n"
                      "under hail."),
-    .breakable = TRUE,
-    .onAccuracyFor = APPLY_ON_TARGET,
     CONTEXT_ON_ACCURACY,
+    .onAccuracyFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1507,8 +1523,8 @@ static const Ability Heatproof = {
     .name = $("Heatproof"),
     .description = $("Halves damage taken from Fire-\n"
                      "type moves. Takes no burn damage."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1538,10 +1554,10 @@ static const Ability DrySkin = {
     .name = $("Dry Skin"),
     .description = $("Water/Rain heals.\n"
                      "Fire/Sun hurts."),
-    .breakable = TRUE,
     .onAbsorb = WaterAbsorb.onAbsorb,
     CONTEXT_ON_END_TURN,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1681,8 +1697,8 @@ static const Ability NoGuard = {
     .name = $("No Guard"),
     .description = $("Attacks used by and on this\n"
                      "Pokémon bypass accuracy checks."),
-    .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
     CONTEXT_ON_ACCURACY,
+    .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
 };
 
 #undef CONTEXT
@@ -1694,8 +1710,8 @@ static const Ability Stall = {
     .name = $("Stall"),
     .description = $("Takes 30% less damage if it\n"
                      "hasn't moved yet."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1792,9 +1808,9 @@ static const Ability Anticipation = {
     .name = $("Anticipation"),
     .description = $("Senses Super-effective moves.\n"
                      "Blocks one Super-effective hit."),
-    .persistent = TRUE,
-    .breakable = TRUE,
     CONTEXT_ON_ENTRY,
+    .breakable = TRUE,
+    .persistent = TRUE,
 };
 
 #undef CONTEXT
@@ -1852,8 +1868,8 @@ static const Ability Filter = {
     .name = $("Filter"),
     .description = $("Takes 35% less damage from\n"
                      "Super-effective moves."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1893,9 +1909,9 @@ static const Ability StormDrain = {
     .name = $("Storm Drain"),
     .description = $("Redirects Water moves.\n"
                      "Absorbs them, ups highest Atk."),
-    .breakable = TRUE,
-    .redirectType = TYPE_WATER,
     CONTEXT_ON_ABSORB,
+    .redirectType = TYPE_WATER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1925,8 +1941,8 @@ static const Ability SolidRock = {
     .name = $("Solid Rock"),
     .description = $("Takes 35% less damage from\n"
                      "Super-effective moves."),
-    .breakable = TRUE,
     .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2019,14 +2035,14 @@ static const Ability FlowerGift = {
     .name = $("Flower Gift"),
     .description = $("Increases the party's SpAtk\n"
                      "and SpDef by 1.5x in Sun."),
-    .unsuppressable = TRUE,
-    .breakable = TRUE,
-    .randomizerBanned = TRUE,
     .onEntry = Forecast.onEntry,
     .onWeather = Forecast.onWeather,
     .onEndTurn = Forecast.onEndTurn,
-    .onStatFor = APPLY_ON_ALLY,
     CONTEXT_ON_STAT,
+    .onStatFor = APPLY_ON_ALLY,
+    .breakable = TRUE,
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -2204,8 +2220,8 @@ static const Ability Multiscale = {
     .name = $("Multiscale"),
     .description = $("At full HP, halves damage taken\n"
                      "from attacks"),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2320,8 +2336,8 @@ static const Ability Overcoat = {
     .name = $("Overcoat"),
     .description = $("Blocks weather dmg, powder moves.\n"
                      "20% Special damage reduction."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2384,9 +2400,9 @@ static const Ability WonderSkin = {
     .name = $("Wonder Skin"),
     .description = $("Opposing status moves have\n"
                      "their accuracy halved."),
-    .breakable = TRUE,
-    .onAccuracyFor = APPLY_ON_TARGET,
     CONTEXT_ON_ACCURACY,
+    .onAccuracyFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2481,8 +2497,8 @@ static const Ability Moxie = {
     .name = $("Moxie"),
     .description = $("Dealing a KO raises Attack by\n"
                      "one stage."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -2537,8 +2553,8 @@ static const Ability SapSipper = {
     .name = $("Sap Sipper"),
     .description = $("Boosts highest Atk instead of\n"
                      "being hit by Grass-type moves."),
-    .breakable = TRUE,
     CONTEXT_ON_ABSORB,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2582,10 +2598,10 @@ static const Ability ZenMode = {
     .name = $("Zen Mode"),
     .description = $("Transforms into Zen Mode on\n"
                      "entry until end of battle."),
-    .unsuppressable = TRUE,
-    .randomizerBanned = TRUE,
     .onEntry = Forecast.onEntry,
     .onEndTurn = Forecast.onEndTurn,
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -2598,8 +2614,8 @@ static const Ability VictoryStar = {
     .name = $("Victory Star"),
     .description = $("Gives 1.2x accuracy boost to\n"
                      "its own and its allies' moves."),
-    .onAccuracyFor = APPLY_ON_ALLY,
     CONTEXT_ON_ACCURACY,
+    .onAccuracyFor = APPLY_ON_ALLY,
 };
 
 #undef CONTEXT
@@ -2666,8 +2682,8 @@ static const Ability FurCoat = {
     .name = $("Fur Coat"),
     .description = $("Halves damage taken by Physical\n"
                      "moves. Does NOT double Defense."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2690,8 +2706,8 @@ static const Ability Bulletproof = {
     .name = $("Bulletproof"),
     .description = $("Immune to projectile, ball, or\n"
                      "bomb-based moves."),
-    .breakable = TRUE,
     CONTEXT_ON_IMMUNE,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2775,8 +2791,8 @@ static const Ability GrassPelt = {
     .name = $("Grass Pelt"),
     .description = $("This Pokémon's Defense gets a\n"
                      "1.5x boost in Grassy Terrain."),
-    .breakable = TRUE,
     CONTEXT_ON_STAT,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2843,8 +2859,8 @@ static const Ability ParentalBond = {
     .name = $("Parental Bond"),
     .description = $("Moves hit twice. 1st hit at 100%\n"
                      "power, 2nd hit at 25%."),
-    .resistsFortKnox = TRUE,
     CONTEXT_ON_PARENTAL_BOND,
+    .resistsFortKnox = TRUE,
 };
 
 #undef CONTEXT
@@ -2862,8 +2878,8 @@ static const Ability DarkAura = {
     .description = $("Boosts Dark moves by 1.33x for\n"
                      "all while this Pokémon is out."),
     CONTEXT_ON_ENTRY,
-    .onOffensiveMultiplierFor = APPLY_ON_ANY,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
 #undef CONTEXT
@@ -2881,8 +2897,8 @@ static const Ability FairyAura = {
     .description = $("Boosts Fairy moves by 1.33x for\n"
                      "all while this Pokémon is out."),
     CONTEXT_ON_ENTRY,
-    .onOffensiveMultiplierFor = APPLY_ON_ANY,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
 #undef CONTEXT
@@ -2892,8 +2908,8 @@ static const Ability AuraBreak = {
     .name = $("Aura Break"),
     .description = $("Cancels aura abilities and makes\n"
                      "them 25% weaker instead."),
-    .breakable = TRUE,
     CONTEXT_ON_ENTRY,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3015,9 +3031,9 @@ static const Ability WaterCompaction = {
     .name = $("Water Compaction"),
     .description = $("Takes 1/2 dmg from Water-type\n"
                      "moves. +2 Def when hit by those."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENDER,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3054,10 +3070,10 @@ static const Ability ShieldsDown = {
     .name = $("Shields Down"),
     .description = $("At 1/2 of max HP or below,\n"
                      "transforms into Core form."),
-    .unsuppressable = TRUE,
     .onEntry = Forecast.onEntry,
     .onEndTurn = Forecast.onEndTurn,
     CONTEXT_ON_ATTACKER,
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -3081,9 +3097,9 @@ static const Ability WaterBubble = {
     .name = $("Water Bubble"),
     .description = $("Halves Fire dmg taken, no burns,\n"
                      "doubles power of its Water moves."),
-    .breakable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
     .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3209,10 +3225,10 @@ static const Ability Schooling = {
     .name = $("Schooling"),
     .description = $("If Lv. 20 or more: changes into\n"
                      "School form until 1/4 HP or less."),
-    .unsuppressable = TRUE,
-    .randomizerBanned = TRUE,
     CONTEXT_ON_ENTRY,
     CONTEXT_ON_END_TURN,
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -3246,12 +3262,12 @@ static const Ability Disguise = {
     .name = $("Disguise"),
     .description = $("Protects once against an attack.\n"
                      "Restores protection in fog."),
-    .unsuppressable = TRUE,
-    .breakable = TRUE,
-    .randomizerBanned = TRUE,
     CONTEXT_ON_ENTRY,
     CONTEXT_ON_DISGUISE,
     CONTEXT_ON_WEATHER,
+    .breakable = TRUE,
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -3281,10 +3297,10 @@ static const Ability BattleBond = {
     .name = $("Battle Bond"),
     .description = $("Transforms into Battle Bond form\n"
                      "after dealing a KO."),
+    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
-    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -3304,9 +3320,9 @@ static const Ability PowerConstruct = {
     .name = $("Power Construct"),
     .description = $("At 1/2 of max HP or below,\n"
                      "transforms into Complete form."),
+    CONTEXT_ON_END_TURN,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -3328,8 +3344,8 @@ static const Ability Comatose = {
     .name = $("Comatose"),
     .description = $("Can move, but is always asleep.\n"
                      "Immune to status conditions."),
-    .unsuppressable = TRUE,
     CONTEXT_ON_ENTRY,
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -3345,9 +3361,9 @@ static const Ability QueenlyMajesty = {
     .name = $("Queenly Majesty"),
     .description = $("Protects itself and ally from\n"
                      "priority moves."),
-    .breakable = TRUE,
-    .onImmuneFor = APPLY_ON_ALLY,
     CONTEXT_ON_IMMUNE,
+    .onImmuneFor = APPLY_ON_ALLY,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3385,8 +3401,8 @@ static const Ability Battery = {
     .name = $("Battery"),
     .description = $("Grants a 1.3x power boost to\n"
                      "ally's Special attacks."),
-    .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
 
 #undef CONTEXT
@@ -3399,8 +3415,8 @@ static const Ability Fluffy = {
     .name = $("Fluffy"),
     .description = $("Takes 1/2 dmg from contact moves\n"
                      "but Fire moves hurt it 2x more."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3409,9 +3425,9 @@ static const Ability Dazzling = {
     .name = $("Dazzling"),
     .description = $("Protects itself and ally from\n"
                      "priority moves."),
-    .breakable = TRUE,
-    .onImmuneFor = APPLY_ON_ALLY,
     .onImmune = QueenlyMajesty.onImmune,
+    .onImmuneFor = APPLY_ON_ALLY,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3426,8 +3442,8 @@ static const Ability SoulHeart = {
     .name = $("Soul-Heart"),
     .description = $("KOs dealt anywhere on the field\n"
                      "raise Sp. Atk by one stage."),
-    .onBattlerFaintsFor = APPLY_ON_ANY,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ANY,
 };
 
 #undef CONTEXT
@@ -3459,8 +3475,8 @@ static const Ability Receiver = {
     .name = $("Receiver"),
     .description = $("In Double Battles, copies its\n"
                      "fainting partner's ability."),
-    .onBattlerFaintsFor = APPLY_ON_ALLY,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ALLY,
 };
 
 #undef CONTEXT
@@ -3488,8 +3504,8 @@ static const Ability PowerOfAlchemy = {
     .description = $("Transmutes berries on entry.\n"
                      "Transmutes items when lost."),
     CONTEXT_ON_ENTRY,
-    .onBattlerFaintsFor = APPLY_ON_OTHER,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
 #undef CONTEXT
@@ -3499,8 +3515,8 @@ static const Ability BeastBoost = {
     .name = $("Beast Boost"),
     .description = $("Dealing a KO raises highest\n"
                      "calculated stat by one stage."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -3729,10 +3745,10 @@ static const Ability GulpMissile = {
     .name = $("Gulp Missile"),
     .description = $("Gulps a prey after Dive/Surf.\n"
                      "If hit, shoots prey at enemy."),
-    .unsuppressable = TRUE,
-    .randomizerBanned = TRUE,
     CONTEXT_ON_ATTACKER,
     CONTEXT_ON_DEFENDER,
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -3773,9 +3789,9 @@ static const Ability PunkRock = {
     .name = $("Punk Rock"),
     .description = $("Sound moves deal 1.3x more dmg.\n"
                      "Takes -50% dmg from sound moves."),
-    .breakable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3809,8 +3825,8 @@ static const Ability IceScales = {
     .name = $("Ice Scales"),
     .description = $("Halves damage taken by Special\n"
                      "moves. Does NOT double SpDef."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3842,12 +3858,12 @@ static const Ability IceFace = {
     .name = $("Ice Face"),
     .description = $("Protects once against an attack.\n"
                      "Restores protection under hail."),
-    .unsuppressable = TRUE,
-    .breakable = TRUE,
-    .randomizerBanned = TRUE,
     CONTEXT_ON_ENTRY,
     CONTEXT_ON_DISGUISE,
     CONTEXT_ON_WEATHER,
+    .breakable = TRUE,
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -3857,8 +3873,8 @@ static const Ability PowerSpot = {
     .name = $("Power Spot"),
     .description = $("Grants a 1.3x boost to ally's\n"
                      "attacks."),
-    .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
 
 #undef CONTEXT
@@ -3900,8 +3916,8 @@ static const Ability SteelySpirit = {
     .name = $("Steely Spirit"),
     .description = $("Boosts own & ally's Steel-type\n"
                      "moves by 1.3x."),
-    .onOffensiveMultiplierFor = APPLY_ON_ALLY,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplierFor = APPLY_ON_ALLY,
 };
 
 #undef CONTEXT
@@ -4027,9 +4043,9 @@ static const Ability HungerSwitch = {
     .name = $("HungerSwitch"),
     .description = $("Changes between Full and Hangry\n"
                      "forms after each turn."),
+    CONTEXT_ON_END_TURN,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -4095,8 +4111,8 @@ static const Ability DragonsMaw = {
 static const Ability ChillingNeigh = {
     .name = $("ChillngNeigh"),
     .description = $("KOs raise Attack by one stage."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = Moxie.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -4105,8 +4121,8 @@ ON_BATTLER_FAINTS { return MoxieClone(battler, STAT_SPATK); }
 static const Ability GrimNeigh = {
     .name = $("Grim Neigh"),
     .description = $("KOs raise Sp. Atk by one stage."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -4121,11 +4137,11 @@ ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE); }
 static const Ability AsOneIceRider = {
     .name = $("As One"),
     .description = $("Unnerve + Chilling Neigh."),
+    CONTEXT_ON_ENTRY,
+    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    CONTEXT_ON_ENTRY,
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
-    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -4139,11 +4155,11 @@ ON_BATTLER_FAINTS {
 static const Ability AsOneShadowRider = {
     .name = $("As One"),
     .description = $("Unnerve + Grim Neigh."),
+    .onEntry = AsOneIceRider.onEntry,
+    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    .onEntry = AsOneIceRider.onEntry,
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
-    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -4196,8 +4212,8 @@ static const Ability PrismScales = {
     .name = $("Prism Scales"),
     .description = $("Takes 30% less damage from\n"
                      "Special attacks."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4241,8 +4257,8 @@ static const Ability Rampage = {
     .name = $("Rampage"),
     .description = $("No recharge after a KO, if it\n"
                      "usually would need to recharge."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -4333,8 +4349,8 @@ static const Ability Aerodynamics = {
     .name = $("Aerodynamics"),
     .description = $("Boosts Speed instead of being\n"
                      "hit by Flying-type moves."),
-    .breakable = TRUE,
     CONTEXT_ON_ABSORB,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4346,8 +4362,8 @@ static const Ability ChristmasSpirit = {
     .name = $("Christmas Spirit"),
     .description = $("Takes 50% less damage if hail is\n"
                      "active."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4513,9 +4529,9 @@ static const Ability LeadCoat = {
     .name = $("Lead Coat"),
     .description = $("Takes 40% less from Phys. moves.\n"
                      "This Pokémon's Speed is 0.9x."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
     CONTEXT_ON_STAT,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4598,9 +4614,9 @@ static const Ability Fossilized = {
     .name = $("Fossilized"),
     .description = $("Halves dmg taken by Rock moves.\n"
                      "Boosts own Rock moves by 1.2x."),
-    .breakable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4651,9 +4667,9 @@ static const Ability Nocturnal = {
     .name = $("Nocturnal"),
     .description = $("Boosts own Dark moves by 1.25x.\n"
                      "Takes -25% dmg from Dark/Fairy."),
-    .breakable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4715,8 +4731,8 @@ static const Ability Liquified = {
     .name = $("Liquified"),
     .description = $("Takes 1/2 dmg from contact moves\n"
                      "but Water moves hurt it 2x more."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4725,8 +4741,8 @@ static const Ability Dragonfly = {
     .name = $("Dragonfly"),
     .description = $("Adds Dragon type to itself.\n"
                      "Avoids Ground attacks."),
-    .breakable = TRUE,
     .onEntry = HalfDrake.onEntry,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4741,9 +4757,9 @@ static const Ability Dragonslayer = {
     .name = $("Dragonslayer"),
     .description = $("Deals 1.5x damage to Dragons.\n"
                      "Takes .5x damage from Dragons."),
-    .breakable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4784,8 +4800,8 @@ static const Ability Permafrost = {
     .name = $("Permafrost"),
     .description = $("Takes 25% less damage from\n"
                      "Super-effective moves."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4797,8 +4813,8 @@ static const Ability PrimalArmor = {
     .name = $("Primal Armor"),
     .description = $("Takes 50% less damage from\n"
                      "Super-effective moves."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4845,8 +4861,8 @@ static const Ability Juggernaut = {
     .name = $("Juggernaut"),
     .description = $("Paralysis-immune. Uses 20% of its\n"
                      "Def when using a contact move."),
-    .breakable = TRUE,
     CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4957,8 +4973,8 @@ static const Ability SoulEater = {
     .name = $("Soul Eater"),
     .description = $("Dealing a KO heals 1/4 of this\n"
                      "Pokémon's max HP."),
-    .onBattlerFaintsFor = APPLY_ON_ALLY,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ALLY,
 };
 
 #undef CONTEXT
@@ -5009,9 +5025,9 @@ static const Ability BadLuck = {
     .name = $("Bad Luck"),
     .description = $("Foes hit the lowest damage roll,\n"
                      "have 5% less acc. and can't crit."),
-    .breakable = TRUE,
-    .onAccuracyFor = APPLY_ON_FOE,
     CONTEXT_ON_ACCURACY,
+    .onAccuracyFor = APPLY_ON_FOE,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5064,9 +5080,9 @@ static const Ability RawWood = {
     .name = $("Raw Wood"),
     .description = $("Halves dmg taken by Grass moves.\n"
                      "Boosts own Grass moves by 1.2x."),
-    .breakable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5144,9 +5160,9 @@ static const Ability Seaweed = {
     .name = $("Seaweed"),
     .description = $("Takes 1/2 dmg from Fire if Grass,\n"
                      "doubles Grass dmg on Fire-types."),
-    .breakable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5169,8 +5185,8 @@ static const Ability PoisonAbsorb = {
     .name = $("Poison Absorb"),
     .description = $("Heals 25% of max HP when hit\n"
                      "by a Poison-type move."),
-    .breakable = TRUE,
     CONTEXT_ON_ABSORB,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5179,8 +5195,8 @@ static const Ability Scavenger = {
     .name = $("Scavenger"),
     .description = $("Dealing a KO heals 1/4 of this\n"
                      "Pokémon's max HP."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = SoulEater.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -5203,17 +5219,17 @@ static const Ability TwistedDimension = {
 
 #undef CONTEXT
 #define CONTEXT MultiHeaded
-ON_PARENTAL_BOND {
-    if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
-    if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
-    return MULTIHIT_SINGLE;
-}
 static const Ability MultiHeaded = {
     .name = $("Multi Headed"),
     .description = $("Hits as many times,\n"
                      "as it has heads."),
+    .onParentalBond =
+        [](int battler, int move, int moveType) {
+            if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
+            if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
+            return MULTIHIT_SINGLE;
+        },
     .resistsFortKnox = TRUE,
-    CONTEXT_ON_PARENTAL_BOND,
 };
 
 #undef CONTEXT
@@ -5296,8 +5312,8 @@ static const Ability WeatherControl = {
     .name = $("Weather Control"),
     .description = $("Negates all weather based\n"
                      "moves from enemies."),
-    .breakable = TRUE,
     .onImmune = DeltaStream.onImmune,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5397,8 +5413,8 @@ static const Ability Predator = {
     .name = $("Predator"),
     .description = $("Dealing a KO heals 1/4 of this\n"
                      "Pokémon's max HP."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = SoulEater.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -5407,8 +5423,8 @@ static const Ability Looter = {
     .name = $("Looter"),
     .description = $("Dealing a KO heals 1/4 of this\n"
                      "Pokémon's max HP."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = SoulEater.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -5429,10 +5445,10 @@ static const Ability SolarFlare = {
     .name = $("Solar Flare"),
     .description = $("Chloroplast + Immolate.\n"
                      "Fire moves gain STAB."),
-    .chloroplast = TRUE,
     .onOffensiveMultiplier = Immolate.onOffensiveMultiplier,
-    .onMoveType = Immolate.onMoveType,
     CONTEXT_ON_STAB,
+    .onMoveType = Immolate.onMoveType,
+    .chloroplast = TRUE,
 };
 
 #undef CONTEXT
@@ -5549,10 +5565,10 @@ static const Ability BigLeaves = {
     .name = $("Big Leaves"),
     .description = $("Chloroplast + Chlorophyll + Leaf\n"
                      "Guard + Harvest + Solar Power."),
-    .breakable = TRUE,
-    .chloroplast = TRUE,
     .onEndTurn = Harvest.onEndTurn,
     CONTEXT_ON_STAT,
+    .breakable = TRUE,
+    .chloroplast = TRUE,
 };
 
 #undef CONTEXT
@@ -5618,8 +5634,8 @@ static const Ability IceDew = {
     .name = $("Ice Dew"),
     .description = $("Boosts highest Atk instead of\n"
                      "being hit by Ice-type moves."),
-    .breakable = TRUE,
     CONTEXT_ON_ABSORB,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5803,8 +5819,8 @@ static const Ability ArcticFur = {
     .name = $("Arctic Fur"),
     .description = $("Weakens incoming physical\n"
                      "and special moves by 35%."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -6227,8 +6243,8 @@ static const Ability GiftedMind = {
     .name = $("Gifted Mind"),
     .description = $("Nulls Psychic weakness;\n"
                      "status moves always hit."),
-    .breakable = TRUE,
     CONTEXT_ON_ACCURACY,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -6295,8 +6311,8 @@ static const Ability Clueless = {
     .name = $("Clueless"),
     .description = $("Negates Weather, Rooms\n"
                      "and Terrains."),
-    .unsuppressable = TRUE,
     .onEntry = CloudNine.onEntry,
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -6317,9 +6333,9 @@ static const Ability CheatingDeath = {
     .name = $("Cheating Death"),
     .description = $("Gets no damage for\n"
                      "the first two hits."),
-    .persistent = TRUE,
-    .noDamageHits = 2,
     CONTEXT_ON_ENTRY,
+    .noDamageHits = 2,
+    .persistent = TRUE,
 };
 
 #undef CONTEXT
@@ -6346,8 +6362,8 @@ static const Ability Coward = {
     .name = $("Coward"),
     .description = $("Sets up Protect on switch-in.\n"
                      "Only works once."),
-    .persistent = TRUE,
     CONTEXT_ON_ENTRY,
+    .persistent = TRUE,
 };
 
 #undef CONTEXT
@@ -6372,9 +6388,9 @@ static const Ability DuneTerror = {
     .name = $("Dune Terror"),
     .description = $("Sand reduces damage by 35%.\n"
                      "Boosts Ground moves by 20%."),
-    .breakable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -6479,10 +6495,10 @@ static const Ability Radiance = {
     .name = $("Radiance"),
     .description = $("+20% accuracy; Dark moves\n"
                      "fail when user is present."),
-    .breakable = TRUE,
-    .onImmuneFor = APPLY_ON_ANY,
     CONTEXT_ON_IMMUNE,
     .onAccuracy = Illuminate.onAccuracy,
+    .onImmuneFor = APPLY_ON_ANY,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -6500,15 +6516,15 @@ static const Ability JawsOfCarnage = {
     .name = $("Jaws of Carnage"),
     .description = $("Devours 1/2 of the foe\n"
                      "when defeating it."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
 #define CONTEXT AngelsWrath
 ON_ATTACKER {
     switch (move) {
-        case MOVE_TACKLE:
+        case MOVE_TACKLE: {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(gVolatileStructs[target].encoreTimer)
             CHECK(gVolatileStructs[target].disableTimer)
@@ -6521,8 +6537,9 @@ ON_ATTACKER {
 
             BattleScriptCall(BattleScript_AngelsWrath_Effect_Tackle);
             return TRUE;
+        }
 
-        case MOVE_STRING_SHOT:
+        case MOVE_STRING_SHOT: {
             CHECK(WasMoveSuccessful())
 
             int side = GetBattlerSide(target);
@@ -6545,8 +6562,9 @@ ON_ATTACKER {
 
             BattleScriptCall(BattleScript_AngelsWrath_Effect_String_Shot);
             return TRUE;
+        }
 
-        case MOVE_HARDEN:
+        case MOVE_HARDEN: {
             CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
 
             {
@@ -6562,15 +6580,17 @@ ON_ATTACKER {
                 }
             }
             break;
+        }
 
-        case MOVE_IRON_DEFENSE:
+        case MOVE_IRON_DEFENSE: {
             CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
 
             gRoundStructs[battler].angelsWrathProtected = TRUE;
             BattleScriptCall(BattleScript_AngelsWrath_Effect_Iron_Defense);
             return TRUE;
+        }
 
-        case MOVE_ELECTROWEB:
+        case MOVE_ELECTROWEB: {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
             CHECK_NOT(gBattleMons[target].statStages[STAT_SPEED] == MIN_STAT_STAGE)
@@ -6579,8 +6599,9 @@ ON_ATTACKER {
             gBattleMons[target].status2 |= (STATUS2_ESCAPE_PREVENTION);
             BattleScriptCall(BattleScript_AngelsWrath_Effect_Electroweb);
             return TRUE;
+        }
 
-        case MOVE_BUG_BITE:
+        case MOVE_BUG_BITE: {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
@@ -6589,6 +6610,7 @@ ON_ATTACKER {
             if (!gBattleMoveDamage) gBattleMoveDamage = -1;
             BattleScriptCall(BattleScript_AngelsWrath_Effect_Bug_Bite_2);
             return TRUE;
+        }
     }
     return FALSE;
 }
@@ -6619,9 +6641,9 @@ static const Ability PrismaticFur = {
     .name = $("Prismatic Fur"),
     .description = $("Color Change + Protean +\n"
                      "Fur Coat + Ice Scales."),
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
     .protean = TRUE,
     .colorChange = TRUE,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -6681,8 +6703,8 @@ static const Ability Evaporate = {
     .name = $("Evaporate"),
     .description = $("Takes no damage and sets Mist\n"
                      "if hit by water."),
-    .breakable = TRUE,
     CONTEXT_ON_ABSORB,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -6707,9 +6729,9 @@ static const Ability WellBakedBody = {
     .name = $("Well Baked Body"),
     .description = $("Boosts Defense sharply instead\n"
                      "of being hit by Fire-type moves."),
+    CONTEXT_ON_ABSORB,
     .breakable = TRUE,
     .absorbUp2 = TRUE,
-    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -6778,8 +6800,8 @@ static const Ability EarthEater = {
     .name = $("Earth Eater"),
     .description = $("Heals 25% of max HP when hit\n"
                      "by a Ground move."),
-    .breakable = TRUE,
     CONTEXT_ON_ABSORB,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -6819,8 +6841,8 @@ ON_BATTLER_FAINTS { return MoxieClone(battler, STAT_SPEED); }
 static const Ability AdrenalineRush = {
     .name = $("Adrenaline Rush"),
     .description = $("KOs raise Speed by one stage."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -6965,8 +6987,8 @@ static const Ability Archmage = {
     .name = $("Archmage"),
     .description = $("30% chance of adding a type\n"
                      "related effect to each move."),
-    .randomizerBanned = TRUE,
     CONTEXT_ON_ATTACKER,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -7011,8 +7033,8 @@ static const Ability Emanate = {
 static const Ability KunoichiBlade = {
     .name = $("Kunoichi's Blade"),
     .description = $("Technician + Skill Link."),
-    .skillLink = TRUE,
     .onOffensiveMultiplier = Technician.onOffensiveMultiplier,
+    .skillLink = TRUE,
 };
 
 #undef CONTEXT
@@ -7052,9 +7074,9 @@ static const Ability HuntersHorn = {
     .name = $("Hunter's Horn"),
     .description = $("Boost horn moves and heals\n"
                      "1/4 HP when defeating an enemy."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = SoulEater.onBattlerFaints,
     .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -7068,9 +7090,9 @@ static const Ability PixiePower = {
     .description = $("1.2x accuracy. Boosts Fairy\n"
                      "moves by 1.33x for all."),
     .onEntry = FairyAura.onEntry,
-    .onOffensiveMultiplierFor = APPLY_ON_ANY,
     .onOffensiveMultiplier = FairyAura.onOffensiveMultiplier,
     CONTEXT_ON_ACCURACY,
+    .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
 #undef CONTEXT
@@ -7096,8 +7118,8 @@ static const Ability PlasmaLamp = {
 static const Ability MagmaEater = {
     .name = $("Magma Eater"),
     .description = $("Predator + Molten Down."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = SoulEater.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -7286,8 +7308,8 @@ static const Ability BerserkerRage = {
     .name = $("Berserker Rage"),
     .description = $("Berserk + Rampage."),
     .onDefender = Berserk.onDefender,
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = Rampage.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -7313,9 +7335,9 @@ static const Ability SandGuard = {
     .name = $("Sand Guard"),
     .description = $("Blocks priority and reduces\n"
                      "special damage by 1/2 in sand."),
-    .breakable = TRUE,
     CONTEXT_ON_IMMUNE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -7345,9 +7367,9 @@ static const Ability WindRider = {
     .name = $("Wind Rider"),
     .description = $("Increases attack in tailwind or\n"
                      "when hit by wind move."),
-    .breakable = TRUE,
     CONTEXT_ON_ENTRY,
     CONTEXT_ON_ABSORB,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -7386,8 +7408,8 @@ static const Ability PrimAndProper = {
     .name = $("Prim and Proper"),
     .description = $("Wonder Skin + Cute Charm."),
     .onDefender = CuteCharm.onDefender,
-    .onAccuracyFor = APPLY_ON_TARGET,
     .onAccuracy = WonderSkin.onAccuracy,
+    .onAccuracyFor = APPLY_ON_TARGET,
 };
 
 #undef CONTEXT
@@ -7406,8 +7428,8 @@ static const Ability SuperStrain = {
     .description = $("KOs lower Attack by +1.\n"
                      "Take 25% recoil damage."),
     CONTEXT_ON_RECOIL,
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -7437,10 +7459,10 @@ static const Ability TippingPoint = {
 static const Ability Enlightened = {
     .name = $("Enlightened"),
     .description = $("Emanate + Inner Focus."),
-    .breakable = TRUE,
     .onOffensiveMultiplier = Emanate.onOffensiveMultiplier,
-    .onMoveType = Emanate.onMoveType,
     .onAccuracy = InnerFocus.onAccuracy,
+    .onMoveType = Emanate.onMoveType,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -7509,8 +7531,8 @@ static const Ability CryoProficiency = {
     .name = $("Cryo Proficiency"),
     .description = $("Triggers hail when hit. 30%\n"
                      "chance to frostbite on contact."),
-    CONTEXT_ON_DEFENDER,
     .onAttacker = FreezingPoint.onAttacker,
+    CONTEXT_ON_DEFENDER,
 };
 
 #undef CONTEXT
@@ -7550,8 +7572,8 @@ static const Ability Wishmaker = {
     .name = $("Wishmaker"),
     .description = $("Uses Wish on switch-in.\n"
                      "Three uses per battle."),
-    .persistent = TRUE,
     CONTEXT_ON_ENTRY,
+    .persistent = TRUE,
 };
 
 #undef CONTEXT
@@ -7586,8 +7608,8 @@ static const Ability Refrigerator = {
     .name = $("Refrigerator"),
     .description = $("Refrigerate + Illuminate."),
     .onOffensiveMultiplier = Refrigerate.onOffensiveMultiplier,
-    .onMoveType = Refrigerate.onMoveType,
     .onAccuracy = Illuminate.onAccuracy,
+    .onMoveType = Refrigerate.onMoveType,
 };
 
 #undef CONTEXT
@@ -7896,9 +7918,9 @@ ON_OFFENSIVE_MULTIPLIER {
 static const Ability BassBoosted = {
     .name = $("Bass Boosted"),
     .description = $("Amplifier + Punk Rock."),
-    .breakable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
     .onDefensiveMultiplier = PunkRock.onDefensiveMultiplier,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -7974,11 +7996,11 @@ static const Ability CrownedKing = {
     .name = $("Crowned King"),
     .description = $("Unnerve + Grim Neigh +\n"
                      "Chilling Neigh."),
+    CONTEXT_ON_ENTRY,
+    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    CONTEXT_ON_ENTRY,
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
-    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -8011,8 +8033,8 @@ static const Ability Permanence = {
 static const Ability Hubris = {
     .name = $("Hubris"),
     .description = $("KOs raise SpAtk by one stage."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = GrimNeigh.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -8101,9 +8123,9 @@ static const Ability ChromeCoat = {
     .name = $("Chrome Coat"),
     .description = $("Reduces special damage taken by\n"
                      "40%, but decreases Speed by 10%."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
     .onStat = LeadCoat.onStat,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -8168,8 +8190,8 @@ static const Ability Airborne = {
     .name = $("Airborne"),
     .description = $("Boosts own & ally's Flying-type\n"
                      "moves by 1.3x."),
-    .onOffensiveMultiplierFor = APPLY_ON_ALLY,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplierFor = APPLY_ON_ALLY,
 };
 
 #undef CONTEXT
@@ -8178,9 +8200,9 @@ static const Ability Parroting = {
     .name = $("Parroting"),
     .description = $("Copies sound moves used by\n"
                      "others. Immune to sound."),
+    .onImmune = Soundproof.onImmune,
     .breakable = TRUE,
     .isSoundproof = TRUE,
-    .onImmune = Soundproof.onImmune,
 };
 
 #undef CONTEXT
@@ -8221,8 +8243,8 @@ static const Ability PurifyingSalt = {
     .name = $("Purifying Salt"),
     .description = $("Immune to status conditions.\n"
                      "Take 1/2 damage from Ghost."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -8232,7 +8254,7 @@ int ProtosynthesisHandler(int ability, int battler, AbilityCallType callType) {
 
     if (state.source == PARADOX_BOOST_NOT_ACTIVE && IsWeatherActive(WEATHER_SUN_ANY)) {
         InsertCorrectEndType(callType);
-        ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_WEATHER_ACTIVE};
+        ParadoxBoost boost = {.source = PARADOX_WEATHER_ACTIVE, .statId = GetHighestStatId(battler, TRUE)};
         SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
         SetStatChanger(boost.statId, 0);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_WEATHER;
@@ -8244,7 +8266,7 @@ int ProtosynthesisHandler(int ability, int battler, AbilityCallType callType) {
         InsertCorrectEndType(callType);
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
             // Push this first so it resolves last
-            ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY};
+            ParadoxBoost boost = {.source = PARADOX_BOOSTER_ENERGY, .statId = GetHighestStatId(battler, TRUE)};
             SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
             RemoveItem(battler);
@@ -8258,7 +8280,7 @@ int ProtosynthesisHandler(int ability, int battler, AbilityCallType callType) {
 
     if (state.source == PARADOX_BOOST_NOT_ACTIVE && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
         InsertCorrectEndType(callType);
-        ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY};
+        ParadoxBoost boost = {.source = PARADOX_BOOSTER_ENERGY, .statId = GetHighestStatId(battler, TRUE)};
         SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
         SetStatChanger(boost.statId, 0);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
@@ -8294,7 +8316,7 @@ int QuarkDriveHandler(int ability, int battler, AbilityCallType callType) {
 
     if (state.source == PARADOX_BOOST_NOT_ACTIVE && IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) {
         InsertCorrectEndType(callType);
-        ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_WEATHER_ACTIVE};
+        ParadoxBoost boost = {.source = PARADOX_WEATHER_ACTIVE, .statId = GetHighestStatId(battler, TRUE)};
         SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
         SetStatChanger(boost.statId, 0);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_TERRAIN;
@@ -8306,7 +8328,7 @@ int QuarkDriveHandler(int ability, int battler, AbilityCallType callType) {
         InsertCorrectEndType(callType);
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
             // Push this first so it resolves last
-            ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY};
+            ParadoxBoost boost = {.source = PARADOX_BOOSTER_ENERGY, .statId = GetHighestStatId(battler, TRUE)};
             SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
             RemoveItem(battler);
@@ -8320,7 +8342,7 @@ int QuarkDriveHandler(int ability, int battler, AbilityCallType callType) {
 
     if (state.source == PARADOX_BOOST_NOT_ACTIVE && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
         InsertCorrectEndType(callType);
-        ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY};
+        ParadoxBoost boost = {.source = PARADOX_BOOSTER_ENERGY, .statId = GetHighestStatId(battler, TRUE)};
         SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
         SetStatChanger(boost.statId, 0);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
@@ -8495,10 +8517,10 @@ static const Ability ZeroToHero = {
     .name = $("Zero To Hero"),
     .description = $("Changes forms after\n"
                      "switching out."),
-    .unsuppressable = TRUE,
-    .randomizerBanned = TRUE,
     CONTEXT_ON_ENTRY,
     CONTEXT_ON_EXIT,
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -8542,12 +8564,12 @@ static const Ability Commander = {
     .name = $("Commander"),
     .description = $("Hops inside an allied Dondozo.\n"
                      "Boosts its ally but can't act."),
+    CONTEXT_ON_BATTLER_FAINTS,
+    CONTEXT_ON_ACCURACY,
+    .onBattlerFaintsFor = APPLY_ON_ALLY,
+    .onAccuracyFor = APPLY_ON_TARGET,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    .onBattlerFaintsFor = APPLY_ON_ALLY,
-    CONTEXT_ON_BATTLER_FAINTS,
-    .onAccuracyFor = APPLY_ON_TARGET,
-    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -8598,9 +8620,9 @@ static const Ability ArmorTail = {
     .name = $("Armor Tail"),
     .description = $("Protects itself and ally from\n"
                      "priority moves."),
-    .breakable = TRUE,
-    .onImmuneFor = APPLY_ON_ALLY,
     .onImmune = QueenlyMajesty.onImmune,
+    .onImmuneFor = APPLY_ON_ALLY,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -8663,8 +8685,8 @@ static const Ability FireScales = {
     .name = $("Fire Scales"),
     .description = $("Halves damage taken by Special\n"
                      "moves. Does NOT double SpDef."),
-    .breakable = TRUE,
     .onDefensiveMultiplier = IceScales.onDefensiveMultiplier,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -8732,8 +8754,8 @@ static const Ability ThermalExchange = {
     .name = $("Thermal Exchange"),
     .description = $("Ups Attack when hit by Fire.\n"
                      "Immune to burn."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENDER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -8748,8 +8770,8 @@ static const Ability GoodAsGold = {
     .name = $("Good As Gold"),
     .description = $("Immune to all Status moves,\n"
                      "unless whole field is affected."),
-    .breakable = TRUE,
     CONTEXT_ON_IMMUNE,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -8767,8 +8789,8 @@ static const Ability TabletsOfRuin = {
     .name = $("Tablets Of Ruin"),
     .description = $("Lowers the Attack of\n"
                      "other Pokemon by 25%."),
-    .onStatFor = APPLY_ON_OTHER,
     CONTEXT_ON_STAT,
+    .onStatFor = APPLY_ON_OTHER,
 };
 
 #undef CONTEXT
@@ -8778,8 +8800,8 @@ static const Ability SwordOfRuin = {
     .name = $("Sword Of Ruin"),
     .description = $("Lowers the Defense of\n"
                      "other Pokemon by 25%."),
-    .onStatFor = APPLY_ON_OTHER,
     CONTEXT_ON_STAT,
+    .onStatFor = APPLY_ON_OTHER,
 };
 
 #undef CONTEXT
@@ -8789,8 +8811,8 @@ static const Ability VesselOfRuin = {
     .name = $("Vessel Of Ruin"),
     .description = $("Lowers the Special Attack of\n"
                      "other Pokemon by 25%."),
-    .onStatFor = APPLY_ON_OTHER,
     CONTEXT_ON_STAT,
+    .onStatFor = APPLY_ON_OTHER,
 };
 
 #undef CONTEXT
@@ -8800,8 +8822,8 @@ static const Ability BeadsOfRuin = {
     .name = $("Beads Of Ruin"),
     .description = $("Lowers the Special Defense\n"
                      "of other Pokemon by 25%."),
-    .onStatFor = APPLY_ON_OTHER,
     CONTEXT_ON_STAT,
+    .onStatFor = APPLY_ON_OTHER,
 };
 
 #undef CONTEXT
@@ -8810,8 +8832,8 @@ static const Ability PermafrostClone = {
     .name = $("Thick Skin"),
     .description = $("Takes 25% less damage from\n"
                      "Super-effective moves."),
-    .breakable = TRUE,
     .onDefensiveMultiplier = Permafrost.onDefensiveMultiplier,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -8826,10 +8848,10 @@ static const Ability Gallantry = {
     .name = $("Gallantry"),
     .description = $("Gets no damage for\n"
                      "first hit."),
-    .persistent = TRUE,
-    .breakable = TRUE,
-    .noDamageHits = 1,
     CONTEXT_ON_ENTRY,
+    .noDamageHits = 1,
+    .breakable = TRUE,
+    .persistent = TRUE,
 };
 
 #undef CONTEXT
@@ -8859,9 +8881,9 @@ static const Ability SunBasking = {
     .name = $("Sun Basking"),
     .description = $("Blocks priority and reduces\n"
                      "physical damage by 1/2 in sun."),
-    .breakable = TRUE,
     CONTEXT_ON_IMMUNE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -8976,8 +8998,8 @@ static const Ability HauntingFrenzy = {
     .description = $("20% chance to flinch the\n"
                      "opponent. +1 speed on kill."),
     CONTEXT_ON_ATTACKER,
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = AdrenalineRush.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -8986,10 +9008,10 @@ static const Ability NoiseCancel = {
     .name = $("Noise Cancel"),
     .description = $("Protects the party from sound-\n"
                      "based moves."),
+    .onImmune = Soundproof.onImmune,
+    .onImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
     .isSoundproof = TRUE,
-    .onImmuneFor = APPLY_ON_ALLY,
-    .onImmune = Soundproof.onImmune,
 };
 
 #undef CONTEXT
@@ -9027,8 +9049,8 @@ static const Ability Ole = {
     .name = $("Olé!"),
     .description = $("30% chance to evade single-\n"
                      "target moves."),
-    .onAccuracyFor = APPLY_ON_TARGET,
     CONTEXT_ON_ACCURACY,
+    .onAccuracyFor = APPLY_ON_TARGET,
 };
 
 #undef CONTEXT
@@ -9067,8 +9089,8 @@ static const Ability BrawlingWyvern = {
     .name = $("Brawling Wyvern"),
     .description = $("No guard + Dragon type\n"
                      "moves become punching moves."),
-    .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
     .onAccuracy = NoGuard.onAccuracy,
+    .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
 };
 
 #undef CONTEXT
@@ -9140,8 +9162,8 @@ ON_OFFENSIVE_MULTIPLIER {
 static const Ability Aerialist = {
     .name = $("Aerialist"),
     .description = $("Levitate + Flock."),
-    .breakable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -9197,8 +9219,8 @@ static const Ability PoisonPuppeteer = {
     .name = $("Poison Puppeteer"),
     .description = $("Poison also inflicts confusion."),
     CONTEXT_ON_REACTIVE,
-    .onBattlerFaintsFor = APPLY_ON_OTHER,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
 #undef CONTEXT
@@ -9209,8 +9231,8 @@ static const Ability Entrance = {
     .description = $("Confusion also inflicts\n"
                      "infatuation."),
     CONTEXT_ON_REACTIVE,
-    .onBattlerFaintsFor = APPLY_ON_OTHER,
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
 #undef CONTEXT
@@ -9233,9 +9255,9 @@ static const Ability Rejection = {
 static const Ability AppleEnlightenment = {
     .name = $("Apple Enlightenment"),
     .description = $("Fur coat + Magic Guard."),
+    .onDefensiveMultiplier = FurCoat.onDefensiveMultiplier,
     .breakable = TRUE,
     .magicGuard = TRUE,
-    .onDefensiveMultiplier = FurCoat.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -9260,7 +9282,7 @@ static const Ability FlamingMaw = {
 #define CONTEXT Demolitionist
 ON_INFILTRATE {
     if (gVolatileStructs[battler].readiedAction && !IS_MOVE_STATUS(move)) return INFILTRATE_BREAK_SCREENS;
-    return FALSE;
+    return INFILTRATE_NONE;
 }
 ON_ATTACKER {
     CHECK(DidMoveHit())
@@ -9329,10 +9351,10 @@ static const Ability LowVisibility = {
 static const Ability OldMariner = {
     .name = $("Old Mariner"),
     .description = $("Seaweed + Water STAB."),
-    .breakable = TRUE,
     .onOffensiveMultiplier = Seaweed.onOffensiveMultiplier,
     .onDefensiveMultiplier = Seaweed.onDefensiveMultiplier,
     .onStab = Amphibious.onStab,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -9521,8 +9543,8 @@ static const Ability LastStand = {
     .name = $("Last Stand"),
     .description = $("Def and SpDef increase as\n"
                      "HP drops. Max 1.6x."),
-    .breakable = TRUE,
     CONTEXT_ON_STAT,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -9540,10 +9562,10 @@ static const Ability BloodBath = {
     .name = $("Blood Bath"),
     .description = $("Immune to bleed. Inflict fear\n"
                      "when inflicting bleed."),
-    .breakable = TRUE,
     CONTEXT_ON_REACTIVE,
-    .onBattlerFaintsFor = APPLY_ON_OTHER,
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -9566,10 +9588,10 @@ ON_BATTLER_FAINTS {
 static const Ability Bloodlust = {
     .name = $("Bloodlust"),
     .description = $("Blood Bath + Soul Eater."),
-    .breakable = TRUE,
     .onReactive = BloodBath.onReactive,
-    .onBattlerFaintsFor = APPLY_ON_ANY,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ANY,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -9705,9 +9727,9 @@ static const Ability ArcFlash = {
 static const Ability Unicorn = {
     .name = $("Unicorn"),
     .description = $("Mighty Horn + Dazzling."),
-    .onImmuneFor = APPLY_ON_ALLY,
     .onImmune = QueenlyMajesty.onImmune,
     .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
+    .onImmuneFor = APPLY_ON_ALLY,
 };
 
 #undef CONTEXT
@@ -9736,8 +9758,8 @@ static const Ability Pretentious = {
     .name = $("Pretentious"),
     .description = $("Dealing a KO raises Crit by\n"
                      "one stage."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -9776,9 +9798,9 @@ static const Ability VenoblazePincers = {
 static const Ability EternalBlessing = {
     .name = $("Eternal Blessing"),
     .description = $("Celestial Blessing + Regenerator."),
-    .persistent = TRUE,
     .onEndTurn = CelestialBlessing.onEndTurn,
     .onExit = Regenerator.onExit,
+    .persistent = TRUE,
 };
 
 #undef CONTEXT
@@ -9838,9 +9860,9 @@ static const Ability SmokeyManeuvers = {
     .name = $("Smokey Maneuvers"),
     .description = $("Evasion is boosted by 1.25x\n"
                      "in fog."),
-    .breakable = TRUE,
-    .onAccuracyFor = APPLY_ON_TARGET,
     CONTEXT_ON_ACCURACY,
+    .onAccuracyFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -9965,8 +9987,8 @@ static const Ability ElementalVortex = {
 static const Ability SnowyWrath = {
     .name = $("Snowy Wrath"),
     .description = $("Snow Warning + Whiteout."),
-    .onStat = Whiteout.onStat,
     .onEntry = SnowWarning.onEntry,
+    .onStat = Whiteout.onStat,
 };
 
 #undef CONTEXT
@@ -10013,9 +10035,9 @@ static const Ability FlammableCoat = {
     .name = $("Flammable Coat"),
     .description = $("Changes forms when using or\n"
                      "hit by a Fire-type move."),
+    CONTEXT_ON_DEFENDER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    CONTEXT_ON_DEFENDER,
 };
 
 #undef CONTEXT
@@ -10037,10 +10059,10 @@ static const Ability BadOmen = {
     .name = $("Bad Omen"),
     .description = $("Foes min roll and may miss.\n"
                      "Takes 1/4 damage from crits."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
-    .onAccuracyFor = APPLY_ON_FOE,
     .onAccuracy = BadLuck.onAccuracy,
+    .onAccuracyFor = APPLY_ON_FOE,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -10055,8 +10077,8 @@ static const Ability MoshPit = {
     .name = $("Mosh Pit"),
     .description = $("Ally's attacks get a 1.25x boost.\n"
                      "1.5x if attack causes recoil."),
-    .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
 
 #undef CONTEXT
@@ -10081,9 +10103,9 @@ static const Ability BloodStain = {
     .name = $("Blood Stain"),
     .description = $("Bleeds if not immune. Can't get\n"
                      "other status. Spreads on contact."),
-    .unsuppressable = TRUE,
     CONTEXT_ON_ENTRY,
     CONTEXT_ON_EITHER,
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -10095,8 +10117,8 @@ static const Ability BloodStigma = {
     .name = $("Blood Stigma"),
     .description = $("Immune to status. Gets a 50%\n"
                      "boost vs bleeding foes."),
-    .unsuppressable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -10123,8 +10145,8 @@ static const Ability Sidewinder = {
     .description = $("First biting move each entry gets\n"
                      "+1 priority. Resets on KO."),
     .onEntry = CoilUp.onEntry,
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -10159,8 +10181,8 @@ static const Ability Fluffiest = {
     .name = $("Fluffiest"),
     .description = $("Quarters contact damage taken.\n"
                      "4x weak to fire."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -10168,8 +10190,8 @@ static const Ability Fluffiest = {
 static const Ability WayOfPrecision = {
     .name = $("Way of Precision"),
     .description = $("Inner Focus + Precise Fist."),
-    .breakable = TRUE,
     .onAccuracy = InnerFocus.onAccuracy,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -10177,9 +10199,9 @@ static const Ability WayOfPrecision = {
 static const Ability WayOfSwiftness = {
     .name = $("Way of Swiftness"),
     .description = $("Pretentious + Swift Swim."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = Pretentious.onBattlerFaints,
     .onStat = SwiftSwim.onStat,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -10199,9 +10221,9 @@ static const Ability AtomicPunch = {
 static const Ability IronGiant = {
     .name = $("Iron Giant"),
     .description = $("Heatproof + Juggernaut."),
-    .breakable = TRUE,
     .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
     .onChooseOffensiveStat = Juggernaut.onChooseOffensiveStat,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -10209,9 +10231,9 @@ static const Ability IronGiant = {
 static const Ability MasterHand = {
     .name = $("Master Hand"),
     .description = $("Mega Launcher + Rampage."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = Rampage.onBattlerFaints,
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -10269,8 +10291,8 @@ ON_OFFENSIVE_MULTIPLIER {
 static const Ability HugeWings = {
     .name = $("Huge Wings"),
     .description = $("Giant Wings + Levitate."),
-    .breakable = TRUE,
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -10278,9 +10300,9 @@ static const Ability HugeWings = {
 static const Ability SwordOfDamnation = {
     .name = $("Sword of Damnation"),
     .description = $("Unaware + Sword of Ruin."),
-    .unaware = TRUE,
-    .onStatFor = APPLY_ON_OTHER,
     .onStat = SwordOfRuin.onStat,
+    .onStatFor = APPLY_ON_OTHER,
+    .unaware = TRUE,
 };
 
 #undef CONTEXT
@@ -10373,12 +10395,12 @@ static const Ability Patchwork = {
     .name = $("Patchwork"),
     .description = $("Disguise + curses the opponent\n"
                      "when its Disguise breaks."),
-    .unsuppressable = TRUE,
-    .breakable = TRUE,
-    .randomizerBanned = TRUE,
     .onEntry = Disguise.onEntry,
     CONTEXT_ON_DISGUISE,
     CONTEXT_ON_DEFENDER,
+    .breakable = TRUE,
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -10404,9 +10426,9 @@ static const Ability Slipstream = {
 static const Ability ApexPredator = {
     .name = $("Apex Predator"),
     .description = $("Tough Claws + Predator."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = SoulEater.onBattlerFaints,
     .onOffensiveMultiplier = ToughClaws.onOffensiveMultiplier,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -10420,13 +10442,13 @@ static const Ability DragonsRitual = {
     .name = $("Dragon's Ritual"),
     .description = $("Dealing a KO raises Attack and\n"
                      "Speed by one stage."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
 #define CONTEXT PinnacleBlade
-ON_INFILTRATE { return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : 0; }
+ON_INFILTRATE { return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : INFILTRATE_NONE; }
 ON_ATTACKER {
     CHECK(DidMoveHit())
     CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
@@ -10474,12 +10496,12 @@ static const Ability Energized = {
     .name = $("Energized"),
     .description = $("Generator + charges up on KO\n"
                      "with an Electric-type move."),
-    .persistent = TRUE,
     .onEntry = Generator.onEntry,
     .onTerrain = Generator.onTerrain,
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     CONTEXT_ON_BATTLER_FAINTS,
     .onExit = Generator.onExit,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .persistent = TRUE,
 };
 
 #undef CONTEXT
@@ -10587,9 +10609,9 @@ static const Ability TerastalTreasure = {
     .name = $("Terastal Treasure"),
     .description = $("Reduces damage taken by 40%,\n"
                      "but lowers speed by 20%."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
     CONTEXT_ON_STAT,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -10627,8 +10649,8 @@ static const Ability DreamState = {
     .name = $("Dream State"),
     .description = $("Immune to critical hits. Takes\n"
                      "20% less damage from all attacks."),
-    .breakable = TRUE,
     .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -10654,8 +10676,8 @@ static const Ability FlameShield = {
     .name = $("Flame Shield"),
     .description = $("Takes 35% less damage from\n"
                      "Super-effective moves."),
-    .breakable = TRUE,
     .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -10687,8 +10709,8 @@ static const Ability Hover = {
     .name = $("Hover"),
     .description = $("Adds Psychic type to itself.\n"
                      "Avoids Ground attacks."),
-    .breakable = TRUE,
     CONTEXT_ON_ENTRY,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -10767,9 +10789,9 @@ static const Ability StunShock = {
 static const Ability RagingGoddess = {
     .name = $("Raging Goddess"),
     .description = $("Rampage + Hyper Aggressive."),
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = Rampage.onBattlerFaints,
     .onParentalBond = ParentalBond.onParentalBond,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 #undef CONTEXT
@@ -10811,8 +10833,8 @@ static const Ability SupersweetSyrup = {
     .name = $("Supersweet Syrup"),
     .description = $("Can't lose its item. Disables foe's\n"
                      "item for 2 turns on contact."),
-    .breakable = TRUE,
     CONTEXT_ON_DEFENDER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -10956,10 +10978,10 @@ static const Ability ApeShift = {
     .name = $("Ape Shift"),
     .description = $("Transforms when below 50% HP,\n"
                      "curing status and always critting."),
-    .randomizerBanned = TRUE,
     CONTEXT_ON_ENTRY,
     CONTEXT_ON_END_TURN,
     CONTEXT_ON_DEFENDER,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -11026,8 +11048,8 @@ static const Ability TeraformZero = {
     .name = $("Teraform Zero"),
     .description = $("Tera Shell + clears weather and\n"
                      "terrain on first entry."),
-    .breakable = TRUE,
     CONTEXT_ON_ENTRY,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -11036,8 +11058,8 @@ static const Ability SetAblaze = {
     .name = $("Set Ablaze"),
     .description = $("Inflicting burn also inflicts fear."),
     .onReactive = BloodBath.onReactive,
-    .onBattlerFaintsFor = APPLY_ON_OTHER,
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
 #undef CONTEXT
@@ -11045,9 +11067,9 @@ static const Ability SetAblaze = {
 static const Ability Breakwater = {
     .name = $("Breakwater"),
     .description = $("Swift Swim + Stall."),
-    .breakable = TRUE,
     .onDefensiveMultiplier = Stall.onDefensiveMultiplier,
     .onStat = SwiftSwim.onStat,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -11151,9 +11173,9 @@ ON_ABSORB {
 static const Ability Reservoir = {
     .name = $("Reservoir"),
     .description = $("Water Absorb + Storm Drain."),
-    .breakable = TRUE,
-    .redirectType = TYPE_WATER,
     CONTEXT_ON_ABSORB,
+    .redirectType = TYPE_WATER,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -11167,8 +11189,8 @@ static const Ability Neurotoxin = {
     .description = $("Inflicting poison also lowers\n"
                      "Attack, Defense, and Speed."),
     CONTEXT_ON_REACTIVE,
-    .onBattlerFaintsFor = APPLY_ON_OTHER,
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
 #undef CONTEXT
@@ -11211,8 +11233,8 @@ static const Ability CrustCoat = {
     .name = $("Crust Coat"),
     .description = $("Immune to critical hits. Takes\n"
                      "20% less damage from all attacks."),
-    .breakable = TRUE,
     .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -11221,8 +11243,8 @@ static const Ability Puffy = {
     .name = $("Puffy"),
     .description = $("Takes 1/2 dmg from contact moves\n"
                      "but Fire moves hurt it 2x more."),
-    .breakable = TRUE,
     .onDefensiveMultiplier = Fluffy.onDefensiveMultiplier,
+    .breakable = TRUE,
 };
 
 #undef CONTEXT

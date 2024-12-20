@@ -32,7 +32,7 @@
 #include "constants/weather.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
-#include "abilities.h"
+#include "abilities.hh"
 
 struct BattleWindowText
 {

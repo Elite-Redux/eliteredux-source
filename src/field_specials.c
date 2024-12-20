@@ -2992,7 +2992,7 @@ static void Task_ShowScrollableMultichoice(u8 taskId)
 {
     u32 width;
     u8 i, windowId;
-    struct WindowTemplate template;
+    struct WindowTemplate spriteTemplate;
     struct Task *task = &gTasks[taskId];
 
     ScriptContext2_Enable();
@@ -3027,8 +3027,8 @@ static void Task_ShowScrollableMultichoice(u8 taskId)
         }
     }
 
-    template = CreateWindowTemplate(0, task->tLeft, task->tTop, task->tWidth, task->tHeight, 0xF, 0x64);
-    windowId = AddWindow(&template);
+    spriteTemplate = CreateWindowTemplate(0, task->tLeft, task->tTop, task->tWidth, task->tHeight, 0xF, 0x64);
+    windowId = AddWindow(&spriteTemplate);
     task->tWindowId = windowId;
     SetStandardWindowBorderStyle(windowId, 0);
 
@@ -3189,16 +3189,16 @@ static void ScrollableMultichoice_UpdateScrollArrows(u8 taskId)
     };
 
     struct Task *task = &gTasks[taskId];
-    struct ScrollArrowsTemplate template = sScrollableMultichoice_ScrollArrowsTemplate;
+    struct ScrollArrowsTemplate spriteTemplate = sScrollableMultichoice_ScrollArrowsTemplate;
     if (task->tMaxItemsOnScreen != task->data[1])
     {
-        template.firstX = (task->tWidth / 2) * 8 + 12 + (task->tLeft - 1) * 8;
-        template.firstY = 8;
-        template.secondX = (task->tWidth / 2) * 8 + 12 + (task->tLeft - 1) * 8;
-        template.secondY = task->tHeight * 8 + 10;
-        template.fullyUpThreshold = 0;
-        template.fullyDownThreshold = task->data[1] - task->tMaxItemsOnScreen;
-        task->tScrollArrowId = AddScrollIndicatorArrowPair(&template, &sScrollableMultichoice_ScrollOffset);
+        spriteTemplate.firstX = (task->tWidth / 2) * 8 + 12 + (task->tLeft - 1) * 8;
+        spriteTemplate.firstY = 8;
+        spriteTemplate.secondX = (task->tWidth / 2) * 8 + 12 + (task->tLeft - 1) * 8;
+        spriteTemplate.secondY = task->tHeight * 8 + 10;
+        spriteTemplate.fullyUpThreshold = 0;
+        spriteTemplate.fullyDownThreshold = task->data[1] - task->tMaxItemsOnScreen;
+        task->tScrollArrowId = AddScrollIndicatorArrowPair(&spriteTemplate, &sScrollableMultichoice_ScrollOffset);
     }
 }
 

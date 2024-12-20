@@ -188,9 +188,9 @@ void DoYesNoFuncWithChoice(u8 taskId, const struct YesNoFuncTable *data)
     gTasks[taskId].func = Task_CallYesOrNoCallback;
 }
 
-void CreateYesNoMenuWithCallbacks(u8 taskId, const struct WindowTemplate *template, u8 arg2, u8 arg3, u8 arg4, u16 tileStart, u8 palette, const struct YesNoFuncTable *yesNo)
+void CreateYesNoMenuWithCallbacks(u8 taskId, const struct WindowTemplate *spriteTemplate, u8 arg2, u8 arg3, u8 arg4, u16 tileStart, u8 palette, const struct YesNoFuncTable *yesNo)
 {
-    CreateYesNoMenu(template, tileStart, palette, 0);
+    CreateYesNoMenu(spriteTemplate, tileStart, palette, 0);
     sYesNo = *yesNo;
     gTasks[taskId].func = Task_CallYesOrNoCallback;
 }

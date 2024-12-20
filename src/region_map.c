@@ -534,17 +534,17 @@ void InitRegionMap(struct RegionMap *regionMap, bool8 zoomed)
     while (LoadRegionMapGfx());
 }
 
-void InitRegionMapData(struct RegionMap *regionMap, const struct BgTemplate *template, bool8 zoomed)
+void InitRegionMapData(struct RegionMap *regionMap, const struct BgTemplate *spriteTemplate, bool8 zoomed)
 {
     gRegionMap = regionMap;
     gRegionMap->initStep = 0;
     gRegionMap->zoomed = zoomed;
     gRegionMap->inputCallback = zoomed == TRUE ? ProcessRegionMapInput_Zoomed : ProcessRegionMapInput_Full;
-    if (template != NULL)
+    if (spriteTemplate != NULL)
     {
-        gRegionMap->bgNum = template->bg;
-        gRegionMap->charBaseIdx = template->charBaseIndex;
-        gRegionMap->mapBaseIdx = template->mapBaseIndex;
+        gRegionMap->bgNum = spriteTemplate->bg;
+        gRegionMap->charBaseIdx = spriteTemplate->charBaseIndex;
+        gRegionMap->mapBaseIdx = spriteTemplate->mapBaseIndex;
         gRegionMap->bgManaged = TRUE;
     }
     else
@@ -1418,33 +1418,33 @@ static void SpriteCB_CursorMapZoomed(struct Sprite *sprite)
 void CreateRegionMapCursor(u16 tileTag, u16 paletteTag)
 {
     u8 spriteId;
-    struct SpriteTemplate template;
+    struct SpriteTemplate spriteTemplate;
     struct SpritePalette palette;
     struct SpriteSheet sheet;
 
     palette = sRegionMapCursorSpritePalette;
-    template = sRegionMapCursorSpriteTemplate;
+    spriteTemplate = sRegionMapCursorSpriteTemplate;
     sheet.tag = tileTag;
-    template.tileTag = tileTag;
+    spriteTemplate.tileTag = tileTag;
     gRegionMap->cursorTileTag = tileTag;
     palette.tag = paletteTag;
-    template.paletteTag = paletteTag;
+    spriteTemplate.paletteTag = paletteTag;
     gRegionMap->cursorPaletteTag = paletteTag;
     if (!gRegionMap->zoomed)
     {
         sheet.data = gRegionMap->cursorSmallImage;
         sheet.size = sizeof(gRegionMap->cursorSmallImage);
-        template.callback = SpriteCB_CursorMapFull;
+        spriteTemplate.callback = SpriteCB_CursorMapFull;
     }
     else
     {
         sheet.data = gRegionMap->cursorLargeImage;
         sheet.size = sizeof(gRegionMap->cursorLargeImage);
-        template.callback = SpriteCB_CursorMapZoomed;
+        spriteTemplate.callback = SpriteCB_CursorMapZoomed;
     }
     LoadSpriteSheet(&sheet);
     LoadSpritePalette(&palette);
-    spriteId = CreateSprite(&template, 0x38, 0x48, 0);
+    spriteId = CreateSprite(&spriteTemplate, 0x38, 0x48, 0);
     if (spriteId != MAX_SPRITES)
     {
         gRegionMap->cursorSprite = &gSprites[spriteId];
@@ -1494,7 +1494,7 @@ void CreateRegionMapPlayerIcon(u16 tileTag, u16 paletteTag)
     u8 spriteId;
     struct SpriteSheet sheet = {sRegionMapPlayerIcon_BrendanGfx, 0x80, tileTag};
     struct SpritePalette palette = {sRegionMapPlayerIcon_BrendanPal, paletteTag};
-    struct SpriteTemplate template = {tileTag, paletteTag, &sRegionMapPlayerIconOam, sRegionMapPlayerIconAnimTable, NULL, gDummySpriteAffineAnimTable, SpriteCallbackDummy};
+    struct SpriteTemplate spriteTemplate = {tileTag, paletteTag, &sRegionMapPlayerIconOam, sRegionMapPlayerIconAnimTable, NULL, gDummySpriteAffineAnimTable, SpriteCallbackDummy};
 
     if (IsEventIslandMapSecId(gMapHeader.regionMapSectionId))
     {
@@ -1508,7 +1508,7 @@ void CreateRegionMapPlayerIcon(u16 tileTag, u16 paletteTag)
     }
     LoadSpriteSheet(&sheet);
     LoadSpritePalette(&palette);
-    spriteId = CreateSprite(&template, 0, 0, 1);
+    spriteId = CreateSprite(&spriteTemplate, 0, 0, 1);
     gRegionMap->playerIconSprite = &gSprites[spriteId];
     if (!gRegionMap->zoomed)
     {

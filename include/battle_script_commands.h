@@ -1,7 +1,7 @@
 #ifndef GUARD_BATTLE_SCRIPT_COMMANDS_H
 #define GUARD_BATTLE_SCRIPT_COMMANDS_H
 
-#include "abilities.h"
+#include "abilities.hh"
 #include "battle_ai_new.h"
 #include "battle_util.h"
 #include "constants/pokemon.h"

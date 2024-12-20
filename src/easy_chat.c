@@ -4018,17 +4018,17 @@ static void CreateEasyChatYesNoMenu(u8 initialCursorPos)
 static void AddPhraseWindow(void)
 {
     u8 frameId;
-    struct WindowTemplate template;
+    struct WindowTemplate spriteTemplate;
 
     frameId = GetEasyChatScreenFrameId();
-    template.bg = 3;
-    template.tilemapLeft = sPhraseFrameDimensions[frameId].left;
-    template.tilemapTop = sPhraseFrameDimensions[frameId].top;
-    template.width = sPhraseFrameDimensions[frameId].width;
-    template.height = sPhraseFrameDimensions[frameId].height;
-    template.paletteNum = 11;
-    template.baseBlock = 0x6C;
-    sScreenControl->windowId = AddWindow(&template);
+    spriteTemplate.bg = 3;
+    spriteTemplate.tilemapLeft = sPhraseFrameDimensions[frameId].left;
+    spriteTemplate.tilemapTop = sPhraseFrameDimensions[frameId].top;
+    spriteTemplate.width = sPhraseFrameDimensions[frameId].width;
+    spriteTemplate.height = sPhraseFrameDimensions[frameId].height;
+    spriteTemplate.paletteNum = 11;
+    spriteTemplate.baseBlock = 0x6C;
+    sScreenControl->windowId = AddWindow(&spriteTemplate);
     PutWindowTilemap(sScreenControl->windowId);
 }
 
@@ -5061,19 +5061,19 @@ static void AddMainScreenButtonWindow(void)
 {
     int i;
     u16 windowId;
-    struct WindowTemplate template;
+    struct WindowTemplate spriteTemplate;
     int footerIndex = GetFooterIndex();
     if (footerIndex == NUM_FOOTER_TYPES)
         return;
 
-    template.bg = 3;
-    template.tilemapLeft = 1;
-    template.tilemapTop = 11;
-    template.width = 28;
-    template.height = 2;
-    template.paletteNum = 11;
-    template.baseBlock = 0x34;
-    windowId = AddWindow(&template);
+    spriteTemplate.bg = 3;
+    spriteTemplate.tilemapLeft = 1;
+    spriteTemplate.tilemapTop = 11;
+    spriteTemplate.width = 28;
+    spriteTemplate.height = 2;
+    spriteTemplate.paletteNum = 11;
+    spriteTemplate.baseBlock = 0x34;
+    windowId = AddWindow(&spriteTemplate);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
     for (i = 0; i < (int)ARRAY_COUNT(sFooterTextOptions[0]); i++)
     {

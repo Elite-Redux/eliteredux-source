@@ -522,17 +522,17 @@ void InitDecorationContextItems(void)
 static u8 AddDecorationWindow(u8 windowIndex)
 {
     u8 *windowId;
-    struct WindowTemplate template;
+    struct WindowTemplate spriteTemplate;
 
     windowId = &sDecorMenuWindowIds[windowIndex];
     if (windowIndex == WINDOW_MAIN_MENU)
     {
-        template = sDecorationWindowTemplates[WINDOW_MAIN_MENU];
-        template.width = GetMaxWidthInMenuTable(sDecorationMainMenuActions, ARRAY_COUNT(sDecorationMainMenuActions));
-        if (template.width > 18)
-            template.width = 18;
+        spriteTemplate = sDecorationWindowTemplates[WINDOW_MAIN_MENU];
+        spriteTemplate.width = GetMaxWidthInMenuTable(sDecorationMainMenuActions, ARRAY_COUNT(sDecorationMainMenuActions));
+        if (spriteTemplate.width > 18)
+            spriteTemplate.width = 18;
 
-        *windowId = AddWindow(&template);
+        *windowId = AddWindow(&spriteTemplate);
     }
     else
     {
@@ -2041,7 +2041,7 @@ static u8 AddDecorationIconObjectFromIconTable(u16 tilesTag, u16 paletteTag, u8 
 {
     struct SpriteSheet sheet;
     struct CompressedSpritePalette palette;
-    struct SpriteTemplate *template;
+    struct SpriteTemplate *spriteTemplate;
     u8 spriteId;
 
     if (!AllocItemIconTemporaryBuffers())
@@ -2056,13 +2056,13 @@ static u8 AddDecorationIconObjectFromIconTable(u16 tilesTag, u16 paletteTag, u8 
     palette.data = GetDecorationIconPicOrPalette(decor, 1);
     palette.tag = paletteTag;
     LoadCompressedSpritePalette(&palette);
-    template = malloc(sizeof(struct SpriteTemplate));
-    *template = gItemIconSpriteTemplate;
-    template->tileTag = tilesTag;
-    template->paletteTag = paletteTag;
-    spriteId = CreateSprite(template, 0, 0, 0);
+    spriteTemplate = malloc(sizeof(struct SpriteTemplate));
+    *spriteTemplate = gItemIconSpriteTemplate;
+    spriteTemplate->tileTag = tilesTag;
+    spriteTemplate->paletteTag = paletteTag;
+    spriteId = CreateSprite(spriteTemplate, 0, 0, 0);
     FreeItemIconTemporaryBuffers();
-    free(template);
+    free(spriteTemplate);
     return spriteId;
 }
 
@@ -2079,7 +2079,7 @@ static u8 AddDecorationIconObjectFromObjectEvent(u16 tilesTag, u16 paletteTag, u
     u8 spriteId;
     struct SpriteSheet sheet;
     struct SpritePalette palette;
-    struct SpriteTemplate *template;
+    struct SpriteTemplate *spriteTemplate;
 
     ClearPlaceDecorationGraphicsDataBuffer(&sPlaceDecorationGraphicsDataBuffer);
     sPlaceDecorationGraphicsDataBuffer.decoration = &gDecorations[decor];
@@ -2096,12 +2096,12 @@ static u8 AddDecorationIconObjectFromObjectEvent(u16 tilesTag, u16 paletteTag, u
         palette.data = sPlaceDecorationGraphicsDataBuffer.palette;
         palette.tag = paletteTag;
         LoadSpritePalette(&palette);
-        template = Alloc(sizeof(struct SpriteTemplate));
-        *template = sDecorWhilePlacingSpriteTemplate;
-        template->tileTag = tilesTag;
-        template->paletteTag = paletteTag;
-        spriteId = CreateSprite(template, 0, 0, 0);
-        free(template);
+        spriteTemplate = Alloc(sizeof(struct SpriteTemplate));
+        *spriteTemplate = sDecorWhilePlacingSpriteTemplate;
+        spriteTemplate->tileTag = tilesTag;
+        spriteTemplate->paletteTag = paletteTag;
+        spriteId = CreateSprite(spriteTemplate, 0, 0, 0);
+        free(spriteTemplate);
     }
     else
     {

@@ -731,20 +731,20 @@ static void RotatingGate_CreateGatesWithinViewport(s16 deltaX, s16 deltaY)
 static u8 RotatingGate_CreateGate(u8 gateId, s16 deltaX, s16 deltaY)
 {
     struct Sprite *sprite;
-    struct SpriteTemplate template;
+    struct SpriteTemplate spriteTemplate;
     u8 spriteId;
     s16 x, y;
 
     const struct RotatingGatePuzzle *gate = &gRotatingGate_PuzzleConfig[gateId];
 
     if (gate->shape == GATE_SHAPE_L1 || gate->shape == GATE_SHAPE_T1)
-        template = sSpriteTemplate_RotatingGateRegular;
+        spriteTemplate = sSpriteTemplate_RotatingGateRegular;
     else
-        template = sSpriteTemplate_RotatingGateLarge;
+        spriteTemplate = sSpriteTemplate_RotatingGateLarge;
 
-    template.tileTag = gate->shape + ROTATING_GATE_TILE_TAG;
+    spriteTemplate.tileTag = gate->shape + ROTATING_GATE_TILE_TAG;
 
-    spriteId = CreateSprite(&template, 0, 0, 0x94);
+    spriteId = CreateSprite(&spriteTemplate, 0, 0, 0x94);
     if (spriteId == MAX_SPRITES)
         return MAX_SPRITES;
 

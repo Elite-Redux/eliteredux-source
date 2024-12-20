@@ -505,7 +505,7 @@ inline static void GLYPH_COPY(u8 *windowTiles, u32 widthOffset, u32 j, u64 i, u3
 void CopyGlyphToWindow(struct TextPrinter *textPrinter)
 {
     struct Window *window;
-    struct WindowTemplate *template;
+    struct WindowTemplate *spriteTemplate;
     u32 *glyphPixels;
     u32 currX, widthOffset;
     s32 glyphWidth, glyphHeight;
@@ -513,12 +513,12 @@ void CopyGlyphToWindow(struct TextPrinter *textPrinter)
     u8 *windowTiles;
 
     window = &gWindows[textPrinter->printerTemplate.windowId];
-    template = &window->window;
+    spriteTemplate = &window->window;
 
-    if ((glyphWidth = (template->width * 8) - textPrinter->printerTemplate.currentX) > gCurGlyph.width)
+    if ((glyphWidth = (spriteTemplate->width * 8) - textPrinter->printerTemplate.currentX) > gCurGlyph.width)
         glyphWidth = gCurGlyph.width;
 
-    if ((glyphHeight = (template->height * 8) - textPrinter->printerTemplate.currentY) > gCurGlyph.height)
+    if ((glyphHeight = (spriteTemplate->height * 8) - textPrinter->printerTemplate.currentY) > gCurGlyph.height)
         glyphHeight = gCurGlyph.height;
 
     currX = textPrinter->printerTemplate.currentX;
@@ -528,7 +528,7 @@ void CopyGlyphToWindow(struct TextPrinter *textPrinter)
         currY = textPrinter->printerTemplate.currentY;
     glyphPixels = gCurGlyph.gfxBufferTop;
     windowTiles = window->tileData;
-    widthOffset = template->width * 32;
+    widthOffset = spriteTemplate->width * 32;
 
     if (glyphWidth < 9)
     {

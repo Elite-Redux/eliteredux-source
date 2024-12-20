@@ -1,6 +1,6 @@
 #include "constants/battle_script_commands.h"
 
-#include "abilities.h"
+#include "abilities.hh"
 #include "battle.h"
 #include "battle_ai_main.h"
 #include "battle_ai_new.h"
@@ -2847,7 +2847,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     break;
                 case MOVE_EFFECT_FEINT:
                     if (IS_BATTLER_PROTECTED(gBattlerTarget)) {
-                        gRoundStructs[gBattlerTarget].protected = FALSE;
+                        gRoundStructs[gBattlerTarget].isProtected = FALSE;
                         gRoundStructs[gBattlerTarget].protectedThisTurn = FALSE;
                         gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_WIDE_GUARD);
                         gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_CRAFTY_SHIELD);
@@ -9050,7 +9050,7 @@ static void Cmd_setprotectlike(void) {
                 gRoundStructs[gBattlerAttacker].endured = TRUE;
                 SetActiveMultistringChooser(B_MSG_BRACED_ITSELF);
             } else if (gCurrentMove == MOVE_PROTECT) {
-                gRoundStructs[gBattlerAttacker].protected = TRUE;
+                gRoundStructs[gBattlerAttacker].isProtected = TRUE;
                 SetActiveMultistringChooser(B_MSG_PROTECTED_ITSELF);
             } else if (gCurrentMove == MOVE_DETECT) {
                 gRoundStructs[gBattlerAttacker].detected = TRUE;

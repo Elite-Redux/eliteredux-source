@@ -2507,13 +2507,13 @@ static s16 GetSubpriorityForMoveAnim(u8 argVar)
 static void ScriptCmd_createsprite(void)
 {
     s32 i;
-    const struct SpriteTemplate *template;
+    const struct SpriteTemplate *spriteTemplate;
     u8 argVar;
     u8 argsCount;
     s16 subpriority;
 
     sBattleAnimScriptPtr++;
-    template = (const struct SpriteTemplate *)(T2_READ_32(sBattleAnimScriptPtr));
+    spriteTemplate = (const struct SpriteTemplate *)(T2_READ_32(sBattleAnimScriptPtr));
     sBattleAnimScriptPtr += 4;
 
     argVar = sBattleAnimScriptPtr[0];
@@ -2530,14 +2530,14 @@ static void ScriptCmd_createsprite(void)
     subpriority = GetSubpriorityForMoveAnim(argVar);
 
     CreateSpriteAndAnimate(
-        template,
+        spriteTemplate,
         GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2),
         GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET),
         subpriority);
     gAnimVisualTaskCount++;
 }
 
-static void CreateSpriteOnTargets(const struct SpriteTemplate *template, u8 argVar, u8 battlerArgIndex, u8 argsCount, bool32 overwriteAnimTgt)
+static void CreateSpriteOnTargets(const struct SpriteTemplate *spriteTemplate, u8 argVar, u8 battlerArgIndex, u8 argsCount, bool32 overwriteAnimTgt)
 {
     u32 i, battler;
     u8 targets[MAX_BATTLERS_COUNT];
@@ -2562,7 +2562,7 @@ static void CreateSpriteOnTargets(const struct SpriteTemplate *template, u8 argV
         if (overwriteAnimTgt)
             gBattleAnimArgs[battlerArgIndex] = targets[i];
 
-        if (CreateSpriteAndAnimate(template,
+        if (CreateSpriteAndAnimate(spriteTemplate,
             GetBattlerSpriteCoord(battler, BATTLER_COORD_X_2),
             GetBattlerSpriteCoord(battler, BATTLER_COORD_Y_PIC_OFFSET),
             subpriority) != MAX_SPRITES) // Don't increment the task count if the sprite couldn't be created(i.e. there are too many created sprites atm).
@@ -4046,13 +4046,13 @@ static void Cmd_createvisualtaskontargets(void)
 // will NOT overwrite gBattleAnimArgs
 static void Cmd_createspriteontargets_onpos(void)
 {
-    const struct SpriteTemplate *template;
+    const struct SpriteTemplate *spriteTemplate;
     u8 argVar;
     u8 argsCount;
     u8 battlerArgIndex;
 
     sBattleAnimScriptPtr++;
-    template = (const struct SpriteTemplate *)(T2_READ_32(sBattleAnimScriptPtr));
+    spriteTemplate = (const struct SpriteTemplate *)(T2_READ_32(sBattleAnimScriptPtr));
     sBattleAnimScriptPtr += 4;
 
     argVar = sBattleAnimScriptPtr[0];
@@ -4064,19 +4064,19 @@ static void Cmd_createspriteontargets_onpos(void)
     argsCount = sBattleAnimScriptPtr[0];
     sBattleAnimScriptPtr++;
 
-    CreateSpriteOnTargets(template, argVar, battlerArgIndex, argsCount, FALSE);
+    CreateSpriteOnTargets(spriteTemplate, argVar, battlerArgIndex, argsCount, FALSE);
 }
 
 // DOES overwrite gBattleAnimArgs
 static void Cmd_createspriteontargets(void)
 {
-    const struct SpriteTemplate *template;
+    const struct SpriteTemplate *spriteTemplate;
     u8 argVar;
     u8 argsCount;
     u8 battlerArgIndex;
 
     sBattleAnimScriptPtr++;
-    template = (const struct SpriteTemplate *)(T2_READ_32(sBattleAnimScriptPtr));
+    spriteTemplate = (const struct SpriteTemplate *)(T2_READ_32(sBattleAnimScriptPtr));
     sBattleAnimScriptPtr += 4;
 
     argVar = sBattleAnimScriptPtr[0];
@@ -4088,5 +4088,5 @@ static void Cmd_createspriteontargets(void)
     argsCount = sBattleAnimScriptPtr[0];
     sBattleAnimScriptPtr++;
 
-    CreateSpriteOnTargets(template, argVar, battlerArgIndex, argsCount, TRUE);
+    CreateSpriteOnTargets(spriteTemplate, argVar, battlerArgIndex, argsCount, TRUE);
 }

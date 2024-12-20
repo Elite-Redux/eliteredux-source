@@ -1,6 +1,10 @@
 #ifndef GUARD_ABILITIES_H
 #define GUARD_ABILITIES_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "constants/abilities.h"
 #include "global.h"
 
@@ -8,6 +12,7 @@ typedef int (*AbilityOnEntryHandler)(int ability, int battler);
 typedef int (*AbilityOnAbsorbHandler)(int battler, int move, int moveType, int* statId);
 typedef int (*AbilityOnImmuneHandler)(int battler, int attacker, int move, int moveType, const u8** immunityScript);
 typedef enum {
+    INFILTRATE_NONE = 0,
     INFILTRATE_SCREENS = 1 << 0,
     INFILTRATE_SUBSTITUTE = 1 << 1,
     INFILTRATE_BREAK_SCREENS = 1 << 2,
@@ -46,7 +51,7 @@ typedef void (*AbilityOnOffensiveMultiplierHandler)(
     int battler, int target, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistance, u16* modifier);
 typedef void (*AbilityOnDefensiveMultiplierHandler)(
     int battler, int attacker, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier);
-typedef enum {
+typedef enum NonStackingState {
     NON_STACKING_NONE = 0,
     NON_STACKING_RUIN = 1 << 0,
 } NonStackingState;
@@ -85,6 +90,10 @@ typedef enum {
     APPLY_ON_ATTACKER_OR_TARGET = APPLY_ON_ATTACKER | APPLY_ON_TARGET,
 } AbilityApplyOnWithTarget;
 
+#ifdef __cplusplus
+#define AbilityApplyOnWithTarget int
+#endif
+
 typedef struct Ability {
     const u8* name;
     const u8* description;
@@ -113,8 +122,12 @@ typedef struct Ability {
     const AbilityOnPriority onPriority;
     const AbilityOnMoveType onMoveType;
     const AbilityOnSwitchOut onExit;
-    u16 redirectType:5;
     AbilityApplyOn onImmuneFor:3;
+    AbilityApplyOnWithTarget onBattlerFaintsFor:5;
+    AbilityApplyOn onOffensiveMultiplierFor:3;
+    AbilityApplyOnWithTarget onAccuracyFor:5;
+    AbilityApplyOn onStatFor:3;
+    u16 redirectType:5;
     u16 noDamageHits:2;
     u16 breakable:1;
     u16 unsuppressable:1;
@@ -127,21 +140,25 @@ typedef struct Ability {
     u16 noRecoil:1;
     u16 halfRecoil:1;
     u16 chloroplast:1;
-    AbilityApplyOnWithTarget onBattlerFaintsFor:5;
-    AbilityApplyOn onOffensiveMultiplierFor:3;
     u16 skillLink:1;
     u16 resistsFortKnox:1;
     u16 fortKnox:1;
-    AbilityApplyOn onStatFor:3;
     u16 protean:1;
     u16 colorChange:1;
-    AbilityApplyOnWithTarget onAccuracyFor:5;
     u16 adaptability:1;
 } Ability;
+
+#ifdef __cplusplus
+#undef AbilityApplyOnWithTarget
+#endif
 
 extern const Ability gAbilities[ABILITIES_COUNT];
 
 int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag);
 int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
