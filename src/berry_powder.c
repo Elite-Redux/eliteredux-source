@@ -223,9 +223,9 @@ void PrintPlayerBerryPowderAmount(void)
 
 void DisplayBerryPowderVendorMenu(void)
 {
-    struct WindowTemplate template;
-    SetWindowTemplateFields(&template, 0, 1, 1, 7, 4, 15, 0x1C);
-    sBerryPowderVendorWindowId = AddWindow(&template);
+    struct WindowTemplate spriteTemplate;
+    SetWindowTemplateFields(&spriteTemplate, 0, 1, 1, 7, 4, 15, 0x1C);
+    sBerryPowderVendorWindowId = AddWindow(&spriteTemplate);
     FillWindowPixelBuffer(sBerryPowderVendorWindowId, PIXEL_FILL(0));
     PutWindowTilemap(sBerryPowderVendorWindowId);
     LoadUserWindowBorderGfx_(sBerryPowderVendorWindowId, 0x21D, 0xD0);

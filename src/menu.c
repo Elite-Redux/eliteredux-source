@@ -1158,29 +1158,29 @@ void sub_81989B8(u8 windowId, u8 fontId, u8 lineHeight, u8 itemCount, const stru
     AddItemMenuActionTextPrinters(windowId, fontId, GetFontAttribute(fontId, FONTATTR_MAX_LETTER_WIDTH), 1, GetFontAttribute(fontId, FONTATTR_LETTER_SPACING), lineHeight, itemCount, menuActions, actionIds);
 }
 
-void SetWindowTemplateFields(struct WindowTemplate *template, u8 bg, u8 left, u8 top, u8 width, u8 height, u8 paletteNum, u16 baseBlock)
+void SetWindowTemplateFields(struct WindowTemplate *spriteTemplate, u8 bg, u8 left, u8 top, u8 width, u8 height, u8 paletteNum, u16 baseBlock)
 {
-    template->bg = bg;
-    template->tilemapLeft = left;
-    template->tilemapTop = top;
-    template->width = width;
-    template->height = height;
-    template->paletteNum = paletteNum;
-    template->baseBlock = baseBlock;
+    spriteTemplate->bg = bg;
+    spriteTemplate->tilemapLeft = left;
+    spriteTemplate->tilemapTop = top;
+    spriteTemplate->width = width;
+    spriteTemplate->height = height;
+    spriteTemplate->paletteNum = paletteNum;
+    spriteTemplate->baseBlock = baseBlock;
 }
 
 struct WindowTemplate CreateWindowTemplate(u8 bg, u8 left, u8 top, u8 width, u8 height, u8 paletteNum, u16 baseBlock)
 {
-    struct WindowTemplate template;
-    SetWindowTemplateFields(&template, bg, left, top, width, height, paletteNum, baseBlock);
-    return template;
+    struct WindowTemplate spriteTemplate;
+    SetWindowTemplateFields(&spriteTemplate, bg, left, top, width, height, paletteNum, baseBlock);
+    return spriteTemplate;
 }
 
 u16 sub_8198AA4(u8 bg, u8 left, u8 top, u8 width, u8 height, u8 paletteNum, u16 baseBlock)
 {
-    struct WindowTemplate template;
-    SetWindowTemplateFields(&template, bg, left, top, width, height, paletteNum, baseBlock);
-    return AddWindow(&template);
+    struct WindowTemplate spriteTemplate;
+    SetWindowTemplateFields(&spriteTemplate, bg, left, top, width, height, paletteNum, baseBlock);
+    return AddWindow(&spriteTemplate);
 }
 
 void sub_8198AF8(const struct WindowTemplate *window, u8 fontId, u8 left, u8 top, u16 baseTileNum, u8 paletteNum, u8 initialCursorPos)

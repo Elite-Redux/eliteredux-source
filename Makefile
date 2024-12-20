@@ -107,12 +107,15 @@ LIBPATH := -L ../../tools/agbcc/lib
 LIB := $(LIBPATH) -lgcc -lc -L../../libagbsyscall -lagbsyscall
 else
 CC1              = $(shell $(PATH_MODERNCC) --print-prog-name=cc1) -quiet
-override CFLAGS += -std=gnu17 -Wall -Wextra -Werror -Wno-missing-braces -Wno-pointer-sign -Wno-unused-function -Wno-switch -Wno-unused-local-typedefs -Wno-missing-field-initializers -Wno-ignored-qualifiers -Wno-unused-parameter -Wno-sign-compare -Wno-unused-label -mthumb -mthumb-interwork -O2 -mabi=apcs-gnu -mtune=arm7tdmi -march=armv4t -fno-toplevel-reorder -fshort-enums -g
+CC1PLUS 		 = $(shell $(PATH_MODERNCC) --print-prog-name=cc1plus) -quiet
+override CFLAGS += -Wall -Wextra -Werror -Wno-int-in-bool-context -Wno-missing-braces -Wno-pointer-sign -Wno-unused-function -Wno-switch -Wno-unused-local-typedefs -Wno-missing-field-initializers -Wno-ignored-qualifiers -Wno-unused-parameter -Wno-sign-compare -Wno-unused-label -mthumb -mthumb-interwork -O2 -mabi=apcs-gnu -mtune=arm7tdmi -march=armv4t -fno-toplevel-reorder -fshort-enums -g
 ROM := $(MODERN_ROM_NAME)
 OBJ_DIR := $(MODERN_OBJ_DIR_NAME)
 LIBPATH := -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libgcc.a))" -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libnosys.a))" -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libc.a))"
 LIB := $(LIBPATH) -lc -lnosys -lgcc -L../../libagbsyscall -lagbsyscall
 endif
+
+CPPCOMPILEFLAGS := -fno-exceptions -fno-rtti $(subst -Wno-pointer-sign,,$(CFLAGS))
 
 CPPFLAGS := -iquote include -iquote $(GFLIB_SUBDIR) -Wno-trigraphs -DMODERN=$(MODERN)
 ifneq ($(MODERN),1)
@@ -181,8 +184,10 @@ endif
 
 ifeq ($(SCAN_DEPS),1)
 C_SRCS_IN := $(wildcard $(C_SUBDIR)/*.c $(C_SUBDIR)/*/*.c $(C_SUBDIR)/*/*/*.c)
+CPP_SRCS := $(wildcard $(C_SUBDIR)/*.cc $(C_SUBDIR)/*/*.cc $(C_SUBDIR)/*/*/*.cc)
 C_SRCS := $(foreach src,$(C_SRCS_IN),$(if $(findstring .inc.c,$(src)),,$(src)))
 C_OBJS := $(patsubst $(C_SUBDIR)/%.c,$(C_BUILDDIR)/%.o,$(C_SRCS))
+CPP_OBJS := $(patsubst $(C_SUBDIR)/%.cc,$(C_BUILDDIR)/%.o,$(CPP_SRCS))
 
 GFLIB_SRCS := $(wildcard $(GFLIB_SUBDIR)/*.c)
 GFLIB_OBJS := $(patsubst $(GFLIB_SUBDIR)/%.c,$(GFLIB_BUILDDIR)/%.o,$(GFLIB_SRCS))
@@ -205,7 +210,7 @@ SONG_OBJS := $(patsubst $(SONG_SUBDIR)/%.s,$(SONG_BUILDDIR)/%.o,$(SONG_SRCS))
 MID_SRCS := $(wildcard $(MID_SUBDIR)/*.mid)
 MID_OBJS := $(patsubst $(MID_SUBDIR)/%.mid,$(MID_BUILDDIR)/%.o,$(MID_SRCS))
 
-OBJS     := $(C_OBJS) $(GFLIB_OBJS) $(C_ASM_OBJS) $(ASM_OBJS) $(DATA_ASM_OBJS) $(SONG_OBJS) $(MID_OBJS)
+OBJS     := $(C_OBJS) $(CPP_OBJS) $(GFLIB_OBJS) $(C_ASM_OBJS) $(ASM_OBJS) $(DATA_ASM_OBJS) $(SONG_OBJS) $(MID_OBJS)
 OBJS_REL := $(patsubst $(OBJ_DIR)/%,%,$(OBJS))
 
 SUBDIRS  := $(sort $(dir $(OBJS)))
@@ -290,7 +295,7 @@ include songs.mk
 $(CRY_SUBDIR)/uncomp_%.bin: $(CRY_SUBDIR)/uncomp_%.aif ; $(AIF) $< $@
 $(CRY_SUBDIR)/%.bin: $(CRY_SUBDIR)/%.aif ; $(AIF) $< $@ --compress
 sound/%.bin: sound/%.aif ; $(AIF) $< $@
-data/%.inc: data/%.pory; $(SCRIPT) -i $< -o $@ -fc tools/poryscript/font_config.json
+data/%.inc: data/%.pory; $(SCRIPT) -i $< -o $@ -fc tools/poryscript/font_config.json -cc tools/poryscript/command_config.json
 
 
 ifeq ($(MODERN),0)
@@ -345,7 +350,20 @@ else
 	$$(AS) $$(ASFLAGS) -o $$@ $$(C_BUILDDIR)/$3.s
 endif
 endef
+define CPP_DEP
+$1: $2 $$(shell $(SCANINC) -I include -I tools/agbcc/include -I gflib $2)
+ifeq (,$$(KEEP_TEMPS))
+	@echo "$$(CC1PLUS) <flags> -o $$@ $$<"
+	@$$(CPP) $$(CPPFLAGS) $$< | $$(PREPROC) $$< charmap.txt -i | $$(CC1PLUS) $$(CPPCOMPILEFLAGS) -o - - | cat - <(echo -e ".text\n\t.align\t2, 0") | $$(AS) $$(ASFLAGS) -o $$@ -
+else
+	@$$(CPP) $$(CPPFLAGS) $$< -o $$(C_BUILDDIR)/$3.i
+	@$$(PREPROC) $$(C_BUILDDIR)/$3.i charmap.txt | $$(CC1PLUS) $$(CPPCOMPILEFLAGS) -o $$(C_BUILDDIR)/$3.s
+	@echo -e ".text\n\t.align\t2, 0\n" >> $$(C_BUILDDIR)/$3.s
+	$$(AS) $$(ASFLAGS) -o $$@ $$(C_BUILDDIR)/$3.s
+endif
+endef
 $(foreach src, $(C_SRCS), $(eval $(call C_DEP,$(patsubst $(C_SUBDIR)/%.c,$(C_BUILDDIR)/%.o,$(src)),$(src),$(patsubst $(C_SUBDIR)/%.c,%,$(src)))))
+$(foreach src, $(CPP_SRCS), $(eval $(call CPP_DEP,$(patsubst $(C_SUBDIR)/%.cc,$(C_BUILDDIR)/%.o,$(src)),$(src),$(patsubst $(C_SUBDIR)/%.cc,%,$(src)))))
 endif
 
 ifeq ($(NODEP),1)
@@ -411,7 +429,7 @@ $(SONG_BUILDDIR)/%.o: $(SONG_SUBDIR)/%.s
 $(OBJ_DIR)/sym_bss.ld: sym_bss.txt
 	$(RAMSCRGEN) .bss $< ENGLISH > $@
 
-$(OBJ_DIR)/sym_common.ld: sym_common.txt $(C_OBJS) $(wildcard common_syms/*.txt)
+$(OBJ_DIR)/sym_common.ld: sym_common.txt $(C_OBJS) $(CPP_OBJS) $(wildcard common_syms/*.txt)
 	$(RAMSCRGEN) COMMON $< ENGLISH -c $(C_BUILDDIR),common_syms > $@
 
 $(OBJ_DIR)/sym_ewram.ld: sym_ewram.txt

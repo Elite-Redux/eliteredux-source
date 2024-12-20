@@ -32,7 +32,7 @@
 #include "constants/weather.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
-#include "abilities.h"
+#include "abilities.hh"
 
 struct BattleWindowText
 {
@@ -689,13 +689,12 @@ static const u8 sText_PkmnFrostbiteHealed[] = _("{B_DEF_NAME_WITH_PREFIX}'s\nfro
 static const u8 sText_PkmnFrostbiteHealed2[] = _("{B_ATK_NAME_WITH_PREFIX}'s\nfrostbite was healed!");
 static const u8 sText_PkmnFrostbiteHealedBy[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_CURRENT_MOVE}\nhealed its frostbite!");
 static const u8 sText_RegeneratorExits[] = _("Regenerator cured some of\n{B_ATK_NAME_WITH_PREFIX}'s health!");
-static const u8 sText_NaturalCureExits[] = _("Natural Cure cured\n{B_ATK_NAME_WITH_PREFIX}'s status!");
+static const u8 sText_NaturalCureExits[] = _("{B_LAST_ABILITY} cured\n{B_ATK_NAME_WITH_PREFIX}'s status!");
 static const u8 sText_AbilityLetItUseMove[] = _("{B_ATK_NAME_WITH_PREFIX}'s ability let it use\n{B_CURRENT_MOVE}!");
 static const u8 sText_LethargyEnters[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} has its full energy!");
 static const u8 sText_LethargyEnd[] = _("{B_ATK_NAME_WITH_PREFIX} it's out\nof energy!");
 static const u8 sText_PickupActivated[] = _("{B_ATK_NAME_WITH_PREFIX} removed hazards\non its field side!");
 static const u8 sText_PkmnRaisedDefense[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s Ability\nraised its Defense!");
-static const u8 sText_SelfRepairExits[] = _("Self Repair cured\n{B_ATK_NAME_WITH_PREFIX}'s status!");
 static const u8 sText_PkmnRaisedSpecialAttack[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s Ability\nraised its Special Attack!");
 static const u8 sText_PkmnRaisedSpecialDefense[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s Ability\nraised its Special Defense!");
 static const u8 sText_TargetyBecameCursed[] = _("{B_DEF_NAME_WITH_PREFIX} became Cursed!");
@@ -750,7 +749,6 @@ static const u8 sText_PkmnBleedHealed[] = _("{B_DEF_NAME_WITH_PREFIX}'s\nbleedin
 static const u8 sText_PkmnBleedHealed2[] = _("{B_ATK_NAME_WITH_PREFIX}'s\nbleeding was healed!");
 static const u8 sText_PkmnBleedHealedBy[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_CURRENT_MOVE}\nstopped its bleeding!");
 static const u8 sText_PkmnsItemHealedBleed[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_LAST_ITEM}\nstopped its bleeding!");
-static const u8 sText_NaturalRecoveryExits[] = _("Natural Recovery cured\n{B_ATK_NAME_WITH_PREFIX}'s status!");
 static const u8 sText_LastAbilityLoweredBuff1[] = _("{B_STACK_1_NAME_WITH_PREFIX}'s ability\nlowered its {B_STAT_CHANGER}!");
 static const u8 sText_TippingPointsPkmnRaisedSpecialAttack[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s Tipping Point\nraised its Special Attack!");
 static const u8 sText_PkmnInverseDimensions[] = _("{B_ATK_NAME_WITH_PREFIX} inverted\nthe dimensions!");
@@ -1710,7 +1708,6 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_LETHARGYENDS - 12] = sText_LethargyEnd,
     [STRINGID_PICKUPACTIVATED - 12] = sText_PickupActivated,
     [STRINGID_PKMNRAISEDDEFENSE - 12] = sText_PkmnRaisedDefense,
-    [STRINGID_SELF_REPAIR_EXITS - 12] = sText_SelfRepairExits,
     [STRINGID_PKMNRAISEDSPECIALATTACK - 12] = sText_PkmnRaisedSpecialAttack,
     [STRINGID_PKMNRAISEDSPECIALDEFENSE - 12] = sText_PkmnRaisedSpecialDefense,
     [STRINGID_TARGETGOTCURSED - 12] = sText_TargetyBecameCursed,
@@ -1765,7 +1762,6 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_PKMNBLEEDHEALED2 - 12] = sText_PkmnBleedHealed2,
     [STRINGID_PKMNBLEEDHEALEDBY - 12] = sText_PkmnBleedHealedBy,
     [STRINGID_PKMNSITEMHEALEDBLEED - 12] = sText_PkmnsItemHealedBleed,
-    [STRINGID_NATURAL_RECOVERY_EXITS - 12] = sText_NaturalRecoveryExits,
     [STRINGID_LASTABILITYLOWEREDSTAT - 12] = sText_LastAbilityLoweredBuff1,
     [STRINGID_TIPPINGPOINTSPKMNRAISEDSPATTACK - 12] = sText_TippingPointsPkmnRaisedSpecialAttack,
     [STRINGID_SETUPINVERSEROOM - 12] = sText_PkmnInverseDimensions,
@@ -2421,13 +2417,6 @@ const u16 gStatusConditionsStringIds[] =
     [B_MSG_PKMNFELLASLEEP] = STRINGID_PKMNFELLASLEEP,
     [B_MSG_PKMNGOTFROSTBITE] = STRINGID_PKMNGOTFROSTBITE,
     [B_MSG_PKMNSTARTBLEED] = STRINGID_PKMNSTARTBLEED,
-};
-
-const u16 gCureStatusOnExitStringIds[] = 
-{
-    [B_MSG_NATURAL_CURE_EXITS] = STRINGID_NATURAL_CURE_EXITS,
-    [B_MSG_SELF_REPAIR_EXITS] = STRINGID_SELF_REPAIR_EXITS,
-    [B_MSG_NATURAL_RECOVERY_EXITS] = STRINGID_NATURAL_RECOVERY_EXITS,
 };
 
 const u16 gCantSelectMove[] = 

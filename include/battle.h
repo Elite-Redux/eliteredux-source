@@ -162,7 +162,7 @@ struct RoundStruct
     u32 specialDmg;
     u8 physicalBattlerId;
     u8 specialBattlerId;
-    u8 protected:1;
+    u8 isProtected:1;
     u8 spikyShielded:1;
     u8 kingsShielded:1;
     u8 banefulBunkered:1;
@@ -789,7 +789,7 @@ struct BattleStruct
     gBattleMons[battlerId].type3 = TYPE_MYSTERY;    \
 }
 
-#define IS_BATTLER_PROTECTED(battlerId)(gRoundStructs[battlerId].protected                                           \
+#define IS_BATTLER_PROTECTED(battlerId)(gRoundStructs[battlerId].isProtected                                           \
                                         || gRoundStructs[gActiveBattler].protectedThisTurn                           \
                                         || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_WIDE_GUARD           \
                                         || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_QUICK_GUARD          \

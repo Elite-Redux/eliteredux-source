@@ -864,20 +864,20 @@ u32 ExitMatchCall(s32 taskState)
 
 static void InitMatchCallPokenavListMenuTemplate(void)
 {
-    struct PokenavListTemplate template;
-    template.list.matchCallEntries = sub_81CAE94();
-    template.count = GetNumberRegistered();
-    template.unk8 = 4;
-    template.unk6 = 0;
-    template.item_X = 13;
-    template.windowWidth = 16;
-    template.listTop = 1;
-    template.maxShowed = 8;
-    template.fillValue = 3;
-    template.fontId = 7;
-    template.listFunc.unk10_2 = BufferMatchCallNameAndDesc;
-    template.unk14 = TryDrawRematchPokeballIcon;
-    sub_81C81D4(&sMatchCallBgTemplates[2], &template, 2);
+    struct PokenavListTemplate spriteTemplate;
+    spriteTemplate.list.matchCallEntries = sub_81CAE94();
+    spriteTemplate.count = GetNumberRegistered();
+    spriteTemplate.unk8 = 4;
+    spriteTemplate.unk6 = 0;
+    spriteTemplate.item_X = 13;
+    spriteTemplate.windowWidth = 16;
+    spriteTemplate.listTop = 1;
+    spriteTemplate.maxShowed = 8;
+    spriteTemplate.fillValue = 3;
+    spriteTemplate.fontId = 7;
+    spriteTemplate.listFunc.unk10_2 = BufferMatchCallNameAndDesc;
+    spriteTemplate.unk14 = TryDrawRematchPokeballIcon;
+    sub_81C81D4(&sMatchCallBgTemplates[2], &spriteTemplate, 2);
     CreateTask(sub_81CBC64, 7);
 }
 

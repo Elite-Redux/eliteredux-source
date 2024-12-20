@@ -753,8 +753,8 @@ static bool8 IsPicboxClosed(void)
 
 u8 CreateWindowFromRect(u8 x, u8 y, u8 width, u8 height)
 {
-    struct WindowTemplate template = CreateWindowTemplate(0, x + 1, y + 1, width, height, 15, 100);
-    u8 windowId = AddWindow(&template);
+    struct WindowTemplate spriteTemplate = CreateWindowTemplate(0, x + 1, y + 1, width, height, 15, 100);
+    u8 windowId = AddWindow(&spriteTemplate);
     PutWindowTilemap(windowId);
     return windowId;
 }

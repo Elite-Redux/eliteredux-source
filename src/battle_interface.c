@@ -35,7 +35,7 @@
 #include "mgba_printf/mini_printf.h"
 #include "battle_events.h"
 #include "constants/abilities.h"
-#include "abilities.h"
+#include "abilities.hh"
 
 enum
 {   // Corresponds to gHealthboxElementsGfxTable (and the tables after it) in graphics.c

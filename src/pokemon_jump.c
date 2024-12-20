@@ -3761,7 +3761,7 @@ static int DoSameJumpTimeBonus(u8 flags)
 
 static void InitDigitPrinters(void)
 {
-    struct DigitObjUtilTemplate template = {
+    struct DigitObjUtilTemplate spriteTemplate = {
         .shape = SPRITE_SHAPE(8x8),
         .size = SPRITE_SIZE(8x8),
         .strConvMode = 0,
@@ -3775,12 +3775,12 @@ static void InitDigitPrinters(void)
     };
 
     DigitObjUtil_Init(NUM_WINDOWS);
-    DigitObjUtil_CreatePrinter(WIN_POINTS, 0, &template);
+    DigitObjUtil_CreatePrinter(WIN_POINTS, 0, &spriteTemplate);
 
-    template.oamCount = 4;
-    template.x = 30;
-    template.y = 6;
-    DigitObjUtil_CreatePrinter(WIN_TIMES, 0, &template);
+    spriteTemplate.oamCount = 4;
+    spriteTemplate.x = 30;
+    spriteTemplate.y = 6;
+    DigitObjUtil_CreatePrinter(WIN_TIMES, 0, &spriteTemplate);
 }
 
 static void PrintScore(int num)

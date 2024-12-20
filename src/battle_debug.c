@@ -34,7 +34,7 @@
 #include "constants/items.h"
 #include "constants/rgb.h"
 #include "constants/hold_effects.h"
-#include "abilities.h"
+#include "abilities.hh"
 
 #define MAX_MODIFY_DIGITS 4
 

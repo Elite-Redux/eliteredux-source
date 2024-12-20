@@ -51,7 +51,7 @@ static void BuildSpritePriorities(void);
 static void SortSprites(void);
 static void CopyMatricesToOamBuffer(void);
 static void AddSpritesToOamBuffer(void);
-static u8 CreateSpriteAt(u8 index, const struct SpriteTemplate *template, s16 x, s16 y, u8 subpriority);
+static u8 CreateSpriteAt(u8 index, const struct SpriteTemplate *spriteTemplate, s16 x, s16 y, u8 subpriority);
 static void ResetOamMatrices(void);
 static void ResetSprite(struct Sprite *sprite);
 static s16 AllocSpriteTiles(u16 tileCount);
@@ -161,7 +161,7 @@ static const struct Sprite sDummySprite =
     .anims = gDummySpriteAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .template = &gDummySpriteTemplate,
+    .spriteTemplate = &gDummySpriteTemplate,
     .subspriteTables = NULL,
     .callback = SpriteCallbackDummy,
     .x = 304, .y = 160,
@@ -528,24 +528,24 @@ void AddSpritesToOamBuffer(void)
     }
 }
 
-u8 CreateSprite(const struct SpriteTemplate *template, s16 x, s16 y, u8 subpriority)
+u8 CreateSprite(const struct SpriteTemplate *spriteTemplate, s16 x, s16 y, u8 subpriority)
 {
     u8 i;
 
     for (i = 0; i < MAX_SPRITES; i++)
         if (!gSprites[i].inUse)
-            return CreateSpriteAt(i, template, x, y, subpriority);
+            return CreateSpriteAt(i, spriteTemplate, x, y, subpriority);
 
     return MAX_SPRITES;
 }
 
-u8 CreateSpriteAtEnd(const struct SpriteTemplate *template, s16 x, s16 y, u8 subpriority)
+u8 CreateSpriteAtEnd(const struct SpriteTemplate *spriteTemplate, s16 x, s16 y, u8 subpriority)
 {
     s16 i;
 
     for (i = MAX_SPRITES - 1; i > -1; i--)
         if (!gSprites[i].inUse)
-            return CreateSpriteAt(i, template, x, y, subpriority);
+            return CreateSpriteAt(i, spriteTemplate, x, y, subpriority);
 
     return MAX_SPRITES;
 }
@@ -566,7 +566,7 @@ u8 CreateInvisibleSprite(void (*callback)(struct Sprite *))
     }
 }
 
-u8 CreateSpriteAt(u8 index, const struct SpriteTemplate *template, s16 x, s16 y, u8 subpriority)
+u8 CreateSpriteAt(u8 index, const struct SpriteTemplate *spriteTemplate, s16 x, s16 y, u8 subpriority)
 {
     struct Sprite *sprite = &gSprites[index];
 
@@ -578,20 +578,20 @@ u8 CreateSpriteAt(u8 index, const struct SpriteTemplate *template, s16 x, s16 y,
     sprite->usingSheet = TRUE;
 
     sprite->subpriority = subpriority;
-    sprite->oam = *template->oam;
-    sprite->anims = template->anims;
-    sprite->affineAnims = template->affineAnims;
-    sprite->template = template;
-    sprite->callback = template->callback;
+    sprite->oam = *spriteTemplate->oam;
+    sprite->anims = spriteTemplate->anims;
+    sprite->affineAnims = spriteTemplate->affineAnims;
+    sprite->spriteTemplate = spriteTemplate;
+    sprite->callback = spriteTemplate->callback;
     sprite->x = x;
     sprite->y = y;
 
     CalcCenterToCornerVec(sprite, sprite->oam.shape, sprite->oam.size, sprite->oam.affineMode);
 
-    if (template->tileTag == 0xFFFF)
+    if (spriteTemplate->tileTag == 0xFFFF)
     {
         s16 tileNum;
-        sprite->images = template->images;
+        sprite->images = spriteTemplate->images;
         tileNum = AllocSpriteTiles((u8)(sprite->images->size / TILE_SIZE_4BPP));
         if (tileNum == -1)
         {
@@ -604,20 +604,20 @@ u8 CreateSpriteAt(u8 index, const struct SpriteTemplate *template, s16 x, s16 y,
     }
     else
     {
-        sprite->sheetTileStart = GetSpriteTileStartByTag(template->tileTag);
+        sprite->sheetTileStart = GetSpriteTileStartByTag(spriteTemplate->tileTag);
         SetSpriteSheetFrameTileNum(sprite);
     }
 
     if (sprite->oam.affineMode & ST_OAM_AFFINE_ON_MASK)
         InitSpriteAffineAnim(sprite);
 
-    if (template->paletteTag != 0xFFFF)
-        sprite->oam.paletteNum = IndexOfSpritePaletteTag(template->paletteTag);
+    if (spriteTemplate->paletteTag != 0xFFFF)
+        sprite->oam.paletteNum = IndexOfSpritePaletteTag(spriteTemplate->paletteTag);
 
     return index;
 }
 
-u8 CreateSpriteAndAnimate(const struct SpriteTemplate *template, s16 x, s16 y, u8 subpriority)
+u8 CreateSpriteAndAnimate(const struct SpriteTemplate *spriteTemplate, s16 x, s16 y, u8 subpriority)
 {
     u8 i;
 
@@ -627,7 +627,7 @@ u8 CreateSpriteAndAnimate(const struct SpriteTemplate *template, s16 x, s16 y, u
 
         if (!gSprites[i].inUse)
         {
-            u8 index = CreateSpriteAt(i, template, x, y, subpriority);
+            u8 index = CreateSpriteAt(i, spriteTemplate, x, y, subpriority);
 
             if (index == MAX_SPRITES)
                 return MAX_SPRITES;
@@ -890,17 +890,17 @@ void ResetAllSprites(void)
     ResetSprite(&gSprites[i]);
 }
 
-// UB: template pointer may point to freed temporary storage
+// UB: spriteTemplate pointer may point to freed temporary storage
 void FreeSpriteTiles(struct Sprite *sprite)
 {
-    if (sprite->template->tileTag != 0xFFFF)
-        FreeSpriteTilesByTag(sprite->template->tileTag);
+    if (sprite->spriteTemplate->tileTag != 0xFFFF)
+        FreeSpriteTilesByTag(sprite->spriteTemplate->tileTag);
 }
 
-// UB: template pointer may point to freed temporary storage
+// UB: spriteTemplate pointer may point to freed temporary storage
 void FreeSpritePalette(struct Sprite *sprite)
 {
-    FreeSpritePaletteByTag(sprite->template->paletteTag);
+    FreeSpritePaletteByTag(sprite->spriteTemplate->paletteTag);
 }
 
 void FreeSpriteOamMatrix(struct Sprite *sprite)

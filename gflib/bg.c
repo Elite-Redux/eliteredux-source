@@ -339,22 +339,22 @@ void InitBgsFromTemplates(u8 bgMode, const struct BgTemplate *templates, u8 numT
     }
 }
 
-void InitBgFromTemplate(const struct BgTemplate *template)
+void InitBgFromTemplate(const struct BgTemplate *spriteTemplate)
 {
-    u8 bg = template->bg;
+    u8 bg = spriteTemplate->bg;
 
     if (bg < NUM_BACKGROUNDS)
     {
         SetBgControlAttributes(bg,
-                               template->charBaseIndex,
-                               template->mapBaseIndex,
-                               template->screenSize,
-                               template->paletteMode,
-                               template->priority,
+                               spriteTemplate->charBaseIndex,
+                               spriteTemplate->mapBaseIndex,
+                               spriteTemplate->screenSize,
+                               spriteTemplate->paletteMode,
+                               spriteTemplate->priority,
                                0,
                                0);
 
-        sGpuBgConfigs2[bg].baseTile = template->baseTile;
+        sGpuBgConfigs2[bg].baseTile = spriteTemplate->baseTile;
         sGpuBgConfigs2[bg].basePalette = 0;
         sGpuBgConfigs2[bg].unk_3 = 0;
 

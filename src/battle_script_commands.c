@@ -1,6 +1,6 @@
 #include "constants/battle_script_commands.h"
 
-#include "abilities.h"
+#include "abilities.hh"
 #include "battle.h"
 #include "battle_ai_main.h"
 #include "battle_ai_new.h"
@@ -1120,6 +1120,7 @@ static void Cmd_attackcanceler(void) {
     if ((ability = HasProtean(gBattlerAttacker)) && !IS_BATTLER_OF_TYPE(gBattlerAttacker, moveType) && gCurrentMove != MOVE_STRUGGLE) {
         gBattleScripting.abilityPopupOverwrite = ability;
         SET_BATTLER_TYPE(gBattlerAttacker, moveType);
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
         gBattlerAbility = gBattlerAttacker;
         BattleScriptCall(BattleScript_ProteanActivates);
         return;
@@ -2846,7 +2847,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     break;
                 case MOVE_EFFECT_FEINT:
                     if (IS_BATTLER_PROTECTED(gBattlerTarget)) {
-                        gRoundStructs[gBattlerTarget].protected = FALSE;
+                        gRoundStructs[gBattlerTarget].isProtected = FALSE;
                         gRoundStructs[gBattlerTarget].protectedThisTurn = FALSE;
                         gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_WIDE_GUARD);
                         gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_CRAFTY_SHIELD);
@@ -7160,7 +7161,8 @@ static void Cmd_various(void) {
                            gAbilities[ability].onBattlerFaints &&
                                IsTargettedApplyOnFlagAppropriate(gActiveBattler, i, MAX_BATTLERS_COUNT, gActiveBattler, gAbilities[ability].onBattlerFaintsFor),
                            gStackBattler1 = i;
-                           if (gAbilities[ability].onBattlerFaints(ability, i, MAX_BATTLERS_COUNT, gActiveBattler, 0, 0) & 1) BattleScriptCall(BattleScript_AbilityPopUpStack))
+                           if (gAbilities[ability].onBattlerFaints(ability, i, MAX_BATTLERS_COUNT, gActiveBattler, 0, 0) & 1)
+                               BattleScriptCall(BattleScript_AbilityPopUpStack))
             }
             ReadActiveScriptInitialStackState();
             break;
@@ -9048,7 +9050,7 @@ static void Cmd_setprotectlike(void) {
                 gRoundStructs[gBattlerAttacker].endured = TRUE;
                 SetActiveMultistringChooser(B_MSG_BRACED_ITSELF);
             } else if (gCurrentMove == MOVE_PROTECT) {
-                gRoundStructs[gBattlerAttacker].protected = TRUE;
+                gRoundStructs[gBattlerAttacker].isProtected = TRUE;
                 SetActiveMultistringChooser(B_MSG_PROTECTED_ITSELF);
             } else if (gCurrentMove == MOVE_DETECT) {
                 gRoundStructs[gBattlerAttacker].detected = TRUE;
@@ -12119,66 +12121,12 @@ void DoRegenerator() {
 static void Cmd_switchoutabilities(void) {
     gActiveBattler = GetBattlerForBattleScript(READ_FIRST_8_INC);
     gRoundStructs[gActiveBattler].protectedThisTurn = FALSE;
-    ZERO(gVolatileStructs[gActiveBattler].switchInAbilityDone);
 
-    SetSingleUseAbilityCounter(gActiveBattler, ABILITY_ZERO_TO_HERO, TRUE);
-
-    if (BattlerHasAbility(gActiveBattler, ABILITY_TOXIC_SPILL, TRUE)) {
-        gBattleScripting.switchInBattlerOverwrite = gActiveBattler;
-
-        BattleScriptCall(BattleScript_TheToxicWasHasDissapeared);
-    }
-
-    if (IsBattlerAlive(gActiveBattler)) {
-        if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_NATURAL_CURE) || CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_SELF_REPAIR) ||
-            CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_NATURAL_RECOVERY)) {
-            u16 ability = gBattleScripting.abilityPopupOverwrite;
-            if (gBattleMons[gActiveBattler].status1 & STATUS1_ANY) {
-                switch (gBattleScripting.abilityPopupOverwrite) {
-                    case ABILITY_NATURAL_CURE:
-                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_NATURAL_CURE_EXITS;
-                        break;
-                    case ABILITY_SELF_REPAIR:
-                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SELF_REPAIR_EXITS;
-                        break;
-                    case ABILITY_NATURAL_RECOVERY:
-                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_NATURAL_RECOVERY_EXITS;
-                        break;
-                }
-                gBattleCommunication[MULTISTRING_CHOOSER] = ability == ABILITY_SELF_REPAIR ? B_MSG_SELF_REPAIR_EXITS : B_MSG_NATURAL_CURE_EXITS;
-                BattleScriptCall(BattleScript_NaturalCureExits);
-            }
-
-            if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_REGENERATOR) || CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_ETERNAL_BLESSING) ||
-                gBattleScripting.abilityPopupOverwrite == ABILITY_NATURAL_RECOVERY) {
-                if (!IsAbilityOnOpposingSide(gActiveBattler, ABILITY_PERMANENCE)) DoRegenerator();
-            }
-        } else if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_REGENERATOR) || CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_ETERNAL_BLESSING)) {
-            if (!(gBattleMons[gActiveBattler].status1 & STATUS1_BLEED) && !IsAbilityOnOpposingSide(gActiveBattler, ABILITY_PERMANENCE)) {
-                DoRegenerator();
-            }
-        }
-
-        if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_RETRIEVER) && gBattleMons[gActiveBattler].item == 0) {
-            u8 side = GetBattlerSide(gActiveBattler);
-            u8 index = gBattlerPartyIndexes[gActiveBattler];
-            u16 originalItem = gLastUsedItem =
-                side == B_SIDE_PLAYER ? gBattleStruct->itemStolen[index].originalItem : gBattleStruct->opposingOriginalItems[index];
-
-            if (originalItem) {
-                gBattleStruct->usedHeldItems[index][side] = ITEM_NONE;
-
-                UpdateBattlerItem(gActiveBattler, originalItem);
-
-                BattleScriptCall(BattleScript_RetrieverExits);
-            }
-        }
-
-        if (gStatuses3[gActiveBattler] & STATUS3_CHARGED_UP) {
-            SetSingleUseAbilityCounter(gActiveBattler, ABILITY_GENERATOR, FALSE);
-            SetSingleUseAbilityCounter(gActiveBattler, ABILITY_ENERGIZED, FALSE);
-        }
-    }
+    ON_ABILITY(
+        gActiveBattler, FALSE, gAbilities[ability].onExit, if (gAbilities[ability].onExit(ability, gActiveBattler)) {
+            gBattlerAbility = gActiveBattler;
+            BattleScriptCall(BattleScript_AbilityPopUp);
+        })
 
     ReadActiveScriptInitialStackState();
 }

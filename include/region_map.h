@@ -93,7 +93,7 @@ struct RegionMapLocation
 // Exported RAM declarations
 
 // Exported ROM declarations
-void InitRegionMapData(struct RegionMap *regionMap, const struct BgTemplate *template, bool8 zoomed);
+void InitRegionMapData(struct RegionMap *regionMap, const struct BgTemplate *spriteTemplate, bool8 zoomed);
 bool8 LoadRegionMapGfx(void);
 void UpdateRegionMapVideoRegs(void);
 void InitRegionMap(struct RegionMap *regionMap, u8 argument);

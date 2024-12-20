@@ -48,7 +48,7 @@
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
 #include "trig.h"
-#include "abilities.h"
+#include "abilities.hh"
 
 //==========DEFINES==========//
 enum

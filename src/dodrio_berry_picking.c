@@ -3837,7 +3837,7 @@ static void LoadDodrioGfx(void)
 
 static void CreateDodrioSprite(struct DodrioGame_MonInfo * monInfo, u8 playerId, u8 id, u8 numPlayers)
 {
-    struct SpriteTemplate template =
+    struct SpriteTemplate spriteTemplate =
     {
         .tileTag = GFXTAG_DODRIO,
         .paletteTag = monInfo->isShiny, // PALTAG_DODRIO_NORMAL / PALTAG_DODRIO_SHINY
@@ -3849,7 +3849,7 @@ static void CreateDodrioSprite(struct DodrioGame_MonInfo * monInfo, u8 playerId,
     };
 
     sDodrioSpriteIds[id] = AllocZeroed(4);
-    *sDodrioSpriteIds[id] = CreateSprite(&template, GetDodrioXPos(playerId, numPlayers), 136, 3);
+    *sDodrioSpriteIds[id] = CreateSprite(&spriteTemplate, GetDodrioXPos(playerId, numPlayers), 136, 3);
     SetDodrioInvisibility(TRUE, id);
 }
 
@@ -4012,7 +4012,7 @@ static void CreateStatusBarSprites(void)
     if (ptr)
     {
         struct SpriteSheet sheet = {ptr, 0x180, GFXTAG_STATUS};
-        struct SpriteTemplate template =
+        struct SpriteTemplate spriteTemplate =
         {
             .tileTag = GFXTAG_STATUS,
             .paletteTag = PALTAG_STATUS,
@@ -4027,7 +4027,7 @@ static void CreateStatusBarSprites(void)
         LoadSpriteSheet(&sheet);
         LoadSpritePalette(&pal);
         for (i = 0; i < NUM_STATUS_SQUARES; i++)
-            sStatusBar->spriteIds[i] = CreateSprite(&template, (i * 16) + 48, -8 - (i * 8), 0);
+            sStatusBar->spriteIds[i] = CreateSprite(&spriteTemplate, (i * 16) + 48, -8 - (i * 8), 0);
     }
 
     Free(ptr);
@@ -4302,7 +4302,7 @@ static void CreateCloudSprites(void)
     if (ptr)
     {
         struct SpriteSheet sheet = {ptr, 0x400, GFXTAG_CLOUD};
-        struct SpriteTemplate template =
+        struct SpriteTemplate spriteTemplate =
         {
             .tileTag = GFXTAG_CLOUD,
             .paletteTag = PALTAG_CLOUD,
@@ -4318,7 +4318,7 @@ static void CreateCloudSprites(void)
         for (i = 0; i < NUM_CLOUDS; i++)
         {
             sCloudSpriteIds[i] = AllocZeroed(4);
-            *sCloudSpriteIds[i] = CreateSprite(&template, sCloudStartCoords[i][0], sCloudStartCoords[i][1], 4);
+            *sCloudSpriteIds[i] = CreateSprite(&spriteTemplate, sCloudStartCoords[i][0], sCloudStartCoords[i][1], 4);
         }
     }
 
@@ -4446,32 +4446,32 @@ static void ResetGfxState(void)
     sGfx->playAgainState = PLAY_AGAIN_NONE;
 }
 
-static void DrawYesNoMessageWindow(const struct WindowTemplate *template)
+static void DrawYesNoMessageWindow(const struct WindowTemplate *spriteTemplate)
 {
     u8 pal = 10;
 
-    FillBgTilemapBufferRect(BG_INTERFACE, 1, template->tilemapLeft - 1,                template->tilemapTop - 1,                   1, 1, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 2, template->tilemapLeft,                    template->tilemapTop - 1,                   template->width, 1, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 3, template->tilemapLeft + template->width,  template->tilemapTop - 1,                   1, 1, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 4, template->tilemapLeft - 1,                template->tilemapTop, 1,                    template->height, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 6, template->tilemapLeft + template->width,  template->tilemapTop, 1,                    template->height, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 7, template->tilemapLeft - 1,                template->tilemapTop + template->height,    1, 1, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 8, template->tilemapLeft,                    template->tilemapTop + template->height,    template->width, 1, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 9, template->tilemapLeft + template->width,  template->tilemapTop + template->height,    1, 1, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 1, spriteTemplate->tilemapLeft - 1,                spriteTemplate->tilemapTop - 1,                   1, 1, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 2, spriteTemplate->tilemapLeft,                    spriteTemplate->tilemapTop - 1,                   spriteTemplate->width, 1, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 3, spriteTemplate->tilemapLeft + spriteTemplate->width,  spriteTemplate->tilemapTop - 1,                   1, 1, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 4, spriteTemplate->tilemapLeft - 1,                spriteTemplate->tilemapTop, 1,                    spriteTemplate->height, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 6, spriteTemplate->tilemapLeft + spriteTemplate->width,  spriteTemplate->tilemapTop, 1,                    spriteTemplate->height, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 7, spriteTemplate->tilemapLeft - 1,                spriteTemplate->tilemapTop + spriteTemplate->height,    1, 1, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 8, spriteTemplate->tilemapLeft,                    spriteTemplate->tilemapTop + spriteTemplate->height,    spriteTemplate->width, 1, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 9, spriteTemplate->tilemapLeft + spriteTemplate->width,  spriteTemplate->tilemapTop + spriteTemplate->height,    1, 1, pal);
 }
 
-static void DrawMessageWindow(const struct WindowTemplate *template)
+static void DrawMessageWindow(const struct WindowTemplate *spriteTemplate)
 {
     u8 pal = 11;
 
-    FillBgTilemapBufferRect(BG_INTERFACE, 10, template->tilemapLeft - 1,                template->tilemapTop - 1,                   1, 1, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 11, template->tilemapLeft,                    template->tilemapTop - 1,                   template->width, 1, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 12, template->tilemapLeft + template->width,  template->tilemapTop - 1,                   1, 1, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 13, template->tilemapLeft - 1,                template->tilemapTop, 1,                    template->height, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 15, template->tilemapLeft + template->width,  template->tilemapTop, 1,                    template->height, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 16, template->tilemapLeft - 1,                template->tilemapTop + template->height,    1, 1, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 17, template->tilemapLeft,                    template->tilemapTop + template->height,    template->width, 1, pal);
-    FillBgTilemapBufferRect(BG_INTERFACE, 18, template->tilemapLeft + template->width,  template->tilemapTop + template->height,    1, 1, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 10, spriteTemplate->tilemapLeft - 1,                spriteTemplate->tilemapTop - 1,                   1, 1, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 11, spriteTemplate->tilemapLeft,                    spriteTemplate->tilemapTop - 1,                   spriteTemplate->width, 1, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 12, spriteTemplate->tilemapLeft + spriteTemplate->width,  spriteTemplate->tilemapTop - 1,                   1, 1, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 13, spriteTemplate->tilemapLeft - 1,                spriteTemplate->tilemapTop, 1,                    spriteTemplate->height, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 15, spriteTemplate->tilemapLeft + spriteTemplate->width,  spriteTemplate->tilemapTop, 1,                    spriteTemplate->height, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 16, spriteTemplate->tilemapLeft - 1,                spriteTemplate->tilemapTop + spriteTemplate->height,    1, 1, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 17, spriteTemplate->tilemapLeft,                    spriteTemplate->tilemapTop + spriteTemplate->height,    spriteTemplate->width, 1, pal);
+    FillBgTilemapBufferRect(BG_INTERFACE, 18, spriteTemplate->tilemapLeft + spriteTemplate->width,  spriteTemplate->tilemapTop + spriteTemplate->height,    1, 1, pal);
 }
 
 static void InitGameGfx(struct DodrioGame_Gfx *ptr)

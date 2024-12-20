@@ -52,7 +52,7 @@
 #include "tmhm_struct.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
-#include "abilities.h"
+#include "abilities.hh"
 
 enum
 {

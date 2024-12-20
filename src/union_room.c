@@ -3620,9 +3620,9 @@ static s8 UnionRoomHandleYesNo(u8 *state, bool32 noDraw)
     return -2;
 }
 
-static u8 CreateTradeBoardWindow(const struct WindowTemplate * template)
+static u8 CreateTradeBoardWindow(const struct WindowTemplate * spriteTemplate)
 {
-    u8 windowId = AddWindow(template);
+    u8 windowId = AddWindow(spriteTemplate);
     DrawStdWindowFrame(windowId, FALSE);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(15));
     UR_AddTextPrinterParameterized(windowId, 1, sText_NameWantedOfferLv, 8, 1, 6);

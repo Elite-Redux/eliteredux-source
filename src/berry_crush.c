@@ -1726,19 +1726,19 @@ static void PrintCrushingResults(struct BerryCrushGame *game)
 static bool32 OpenResultsWindow(struct BerryCrushGame *game, struct BerryCrushGame_Gfx *gfx)
 {
     u8 playerCountIdx;
-    struct WindowTemplate template;
+    struct WindowTemplate spriteTemplate;
 
     switch (gfx->resultsState)
     {
     case 0:
         playerCountIdx = game->playerCount - 2;
         HideTimer(gfx);
-        memcpy(&template, &sWindowTemplates_Results[game->gameState - RESULTS_STATE_START], sizeof(struct WindowTemplate));
+        memcpy(&spriteTemplate, &sWindowTemplates_Results[game->gameState - RESULTS_STATE_START], sizeof(struct WindowTemplate));
         if (game->gameState == STATE_RESULTS_CRUSHING)
-            template.height = sResultsWindowHeights[1][playerCountIdx];
+            spriteTemplate.height = sResultsWindowHeights[1][playerCountIdx];
         else
-            template.height = sResultsWindowHeights[0][playerCountIdx];
-        gfx->resultsWindowId = AddWindow(&template);
+            spriteTemplate.height = sResultsWindowHeights[0][playerCountIdx];
+        gfx->resultsWindowId = AddWindow(&spriteTemplate);
         break;
     case 1:
         PutWindowTilemap(gfx->resultsWindowId);

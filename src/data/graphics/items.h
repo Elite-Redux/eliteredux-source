@@ -1646,10 +1646,6 @@ const u32 gItemIconPalette_Amphybuzzite[]  = INCBIN_U32("graphics/items/icon_pal
 const u32 gItemIcon_DynamaxOrb[]  = INCBIN_U32("graphics/items/icons/purple_orb.4bpp.lz");
 const u32 gItemIconPalette_DynamaxOrb[]  = INCBIN_U32("graphics/items/icon_palettes/purple_orb.gbapal.lz");
 
-
-const u32 gItemIcon_GalacticOrb[]  = INCBIN_U32("graphics/items/icons/purple_orb.4bpp.lz");
-const u32 gItemIconPalette_GalacticOrb[]  = INCBIN_U32("graphics/items/icon_palettes/purple_orb.gbapal.lz");
-
 const u32 gItemIcon_TeraOrb[]  = INCBIN_U32("graphics/items/icons/tera_orb.4bpp.lz");
 const u32 gItemIconPalette_TeraOrb[]  = INCBIN_U32("graphics/items/icon_palettes/tera_orb.gbapal.lz");
 

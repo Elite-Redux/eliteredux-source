@@ -402,7 +402,7 @@ extern struct TextGlyph gCurGlyph;
 void SetFontsPointer(const struct FontInfo *fonts);
 void DeactivateAllTextPrinters(void);
 u16 AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 *str, u8 x, u8 y, u8 speed, void (*callback)(struct TextPrinterTemplate *, u16));
-bool16 AddTextPrinter(struct TextPrinterTemplate *template, u8 speed, void (*callback)(struct TextPrinterTemplate *, u16));
+bool16 AddTextPrinter(struct TextPrinterTemplate *spriteTemplate, u8 speed, void (*callback)(struct TextPrinterTemplate *, u16));
 void RunTextPrinters(void);
 bool16 IsTextPrinterActive(u8 id);
 u32 RenderFont(struct TextPrinter *textPrinter);

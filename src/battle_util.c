@@ -1,6 +1,6 @@
 #include "battle_util.h"
 
-#include "abilities.h"
+#include "abilities.hh"
 #include "battle.h"
 #include "battle_ai_main.h"
 #include "battle_ai_util.h"
@@ -6759,7 +6759,7 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move) {
         return FALSE;
     else if (gBattleMoves[move].effect == MOVE_EFFECT_FEINT)
         return FALSE;
-    else if (gRoundStructs[battlerId].protected)
+    else if (gRoundStructs[battlerId].isProtected)
         return TRUE;
     else if (gRoundStructs[battlerId].protectedThisTurn)
         return TRUE;
@@ -9533,7 +9533,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
     }
 
     ability = gBattleMons[battler].abilities[abilityNumber];
-    AbilityOnSwitchHandler handler = gAbilities[ability].onSwitch;
+    AbilityOnEntryHandler handler = gAbilities[ability].onEntry;
     if (!handler) return FALSE;
 
     if (IsSuppressed(battler, ability, FALSE)) return FALSE;

@@ -62,7 +62,7 @@
 #include "constants/maps.h"
 #include "script_pokemon_util.h"
 #include "tmhm_struct.h"
-#include "abilities.h"
+#include "abilities.hh"
 
 struct SpeciesItem {
     u16 species;
@@ -7981,7 +7981,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
         u16 randomizedAbility;
         do {
             randomizedAbility = RandRangeDeterministic(1, ABILITIES_COUNT - 1, &randomizedAbilitySeed);
-        } while (gAbilities[ability].randomizerBanned);
+        } while (gAbilities[randomizedAbility].randomizerBanned);
         return randomizedAbility;
     } else
         return ability;

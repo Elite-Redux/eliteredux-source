@@ -1752,9 +1752,9 @@ static void FieldTask_ReturnToPcMenu(void)
 static void CreateMainMenu(u8 whichMenu, s16 *windowIdPtr)
 {
     s16 windowId;
-    struct WindowTemplate template = sWindowTemplate_MainMenu;
-    template.width = GetMaxWidthInMenuTable((void *)sMainMenuTexts, OPTIONS_COUNT);
-    windowId = AddWindow(&template);
+    struct WindowTemplate spriteTemplate = sWindowTemplate_MainMenu;
+    spriteTemplate.width = GetMaxWidthInMenuTable((void *)sMainMenuTexts, OPTIONS_COUNT);
+    windowId = AddWindow(&spriteTemplate);
 
     DrawStdWindowFrame(windowId, FALSE);
     PrintMenuTable(windowId, OPTIONS_COUNT, (void *)sMainMenuTexts);
@@ -1912,29 +1912,29 @@ static void ChooseBoxMenu_CreateSprites(u8 curBox)
 {
     u16 i;
     u8 spriteId;
-    struct SpriteTemplate template;
+    struct SpriteTemplate spriteTemplate;
     struct OamData oamData = {};
     oamData.size = SPRITE_SIZE(64x64);
     oamData.paletteNum = 1;
-    template = (struct SpriteTemplate) {
+    spriteTemplate = (struct SpriteTemplate) {
         0, 0, &oamData, gDummySpriteAnimTable, NULL, gDummySpriteAffineAnimTable, SpriteCallbackDummy
     };
 
     sChooseBoxMenu->curBox = curBox;
-    template.tileTag = sChooseBoxMenu->tileTag;
-    template.paletteTag = sChooseBoxMenu->paletteTag;
+    spriteTemplate.tileTag = sChooseBoxMenu->tileTag;
+    spriteTemplate.paletteTag = sChooseBoxMenu->paletteTag;
 
-    spriteId = CreateSprite(&template, 160, 96, 0);
+    spriteId = CreateSprite(&spriteTemplate, 160, 96, 0);
     sChooseBoxMenu->menuSprite = &gSprites[spriteId];
 
     oamData.shape = SPRITE_SHAPE(8x32);
     oamData.size = SPRITE_SIZE(8x32);
-    template.tileTag = sChooseBoxMenu->tileTag + 1;
-    template.anims = sAnims_ChooseBoxMenu;
+    spriteTemplate.tileTag = sChooseBoxMenu->tileTag + 1;
+    spriteTemplate.anims = sAnims_ChooseBoxMenu;
     for (i = 0; i < ARRAY_COUNT(sChooseBoxMenu->menuSideSprites); i++)
     {
         u16 anim;
-        spriteId = CreateSprite(&template, 124, 80, sChooseBoxMenu->subpriority);
+        spriteId = CreateSprite(&spriteTemplate, 124, 80, sChooseBoxMenu->subpriority);
         sChooseBoxMenu->menuSideSprites[i] = &gSprites[spriteId];
         anim = 0;
         if (i & 2)
@@ -2001,18 +2001,18 @@ static void ChooseBoxMenu_MoveLeft(void)
 static void ChooseBoxMenu_PrintInfo(void)
 {
     u8 numBoxMonsText[16];
-    struct WindowTemplate template;
+    struct WindowTemplate spriteTemplate;
     u8 windowId;
     u8 *boxName = GetBoxNamePtr(sChooseBoxMenu->curBox);
     u8 numInBox = CountMonsInBox(sChooseBoxMenu->curBox);
     u32 winTileData;
     s32 center;
 
-    memset(&template, 0, sizeof(template));
-    template.width = 8;
-    template.height = 4;
+    memset(&spriteTemplate, 0, sizeof(spriteTemplate));
+    spriteTemplate.width = 8;
+    spriteTemplate.height = 4;
 
-    windowId = AddWindow(&template);
+    windowId = AddWindow(&spriteTemplate);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(4));
 
     // Print box name
@@ -4024,7 +4024,7 @@ static void CreateDisplayMonSprite(void)
     u8 spriteId;
     struct SpriteSheet sheet = {sStorage->tileBuffer, MON_PIC_SIZE, GFXTAG_DISPLAY_MON};
     struct SpritePalette palette = {sStorage->displayMonPalBuffer, PALTAG_DISPLAY_MON};
-    struct SpriteTemplate template = sSpriteTemplate_DisplayMon;
+    struct SpriteTemplate spriteTemplate = sSpriteTemplate_DisplayMon;
 
     for (i = 0; i < MON_PIC_SIZE; i++)
         sStorage->tileBuffer[i] = 0;
@@ -4043,7 +4043,7 @@ static void CreateDisplayMonSprite(void)
         if (palSlot == 0xFF)
             break;
 
-        spriteId = CreateSprite(&template, 40, 48, 0);
+        spriteId = CreateSprite(&spriteTemplate, 40, 48, 0);
         if (spriteId == MAX_SPRITES)
             break;
 
@@ -5456,22 +5456,22 @@ static struct Sprite *CreateMonIconSprite(u16 species, u32 personality, s16 x, s
 {
     u16 tileNum;
     u8 spriteId;
-    struct SpriteTemplate template = sSpriteTemplate_MonIcon;
+    struct SpriteTemplate spriteTemplate = sSpriteTemplate_MonIcon;
 
     species = GetIconSpecies(species, personality);
     if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
     {
-        template.paletteTag = PALTAG_MON_ICON_0 + gMonIconPaletteIndicesFemale[species];
+        spriteTemplate.paletteTag = PALTAG_MON_ICON_0 + gMonIconPaletteIndicesFemale[species];
     }
     else
     {
-        template.paletteTag = PALTAG_MON_ICON_0 + gMonIconPaletteIndices[species];
+        spriteTemplate.paletteTag = PALTAG_MON_ICON_0 + gMonIconPaletteIndices[species];
     }
     tileNum = TryLoadMonIconTiles(species, personality);
     if (tileNum == 0xFFFF)
         return NULL;
 
-    spriteId = CreateSprite(&template, x, y, subpriority);
+    spriteId = CreateSprite(&spriteTemplate, x, y, subpriority);
     if (spriteId == MAX_SPRITES)
     {
         RemoveSpeciesFromIconList(species);
@@ -5850,7 +5850,7 @@ static void CreateIncomingBoxTitle(u8 boxId, s8 direction)
     s16 x, adjustedX;
     u16 i;
     struct SpriteSheet spriteSheet = {sStorage->boxTitleTiles, 0x200, GFXTAG_BOX_TITLE};
-    struct SpriteTemplate template = sSpriteTemplate_BoxTitle;
+    struct SpriteTemplate spriteTemplate = sSpriteTemplate_BoxTitle;
 
     sStorage->boxTitleCycleId = (sStorage->boxTitleCycleId == 0);
     if (sStorage->boxTitleCycleId == 0)
@@ -5862,8 +5862,8 @@ static void CreateIncomingBoxTitle(u8 boxId, s8 direction)
     {
         spriteSheet.tag = GFXTAG_BOX_TITLE_ALT;
         palOffset = sStorage->boxTitlePalOffset;
-        template.tileTag = GFXTAG_BOX_TITLE_ALT;
-        template.paletteTag = PALTAG_BOX_TITLE;
+        spriteTemplate.tileTag = GFXTAG_BOX_TITLE_ALT;
+        spriteTemplate.paletteTag = PALTAG_BOX_TITLE;
     }
 
     StringCopyPadded(sStorage->boxTitleText, GetBoxNamePtr(boxId), 0, 8);
@@ -5877,7 +5877,7 @@ static void CreateIncomingBoxTitle(u8 boxId, s8 direction)
     // Title is split across two sprites
     for (i = 0; i < 2; i++)
     {
-        u8 spriteId = CreateSprite(&template, i * 32 + adjustedX, 28, 24);
+        u8 spriteId = CreateSprite(&spriteTemplate, i * 32 + adjustedX, 28, 24);
 
         sStorage->nextBoxTitleSprites[i] = &gSprites[spriteId];
         sStorage->nextBoxTitleSprites[i]->sSpeed = (-direction) * 6;
@@ -6258,7 +6258,7 @@ static bool8 UpdateCursorPos(void)
 
 static void InitNewCursorPos(u8 newCursorArea, u8 newCursorPosition)
 {
-    u16 x, y;
+    u16 x = 0, y = 0;
 
     GetCursorCoordsByPos(newCursorArea, newCursorPosition, &x, &y);
     sStorage->newCursorArea = newCursorArea;

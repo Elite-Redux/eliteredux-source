@@ -51,7 +51,7 @@ struct ListMenuTemplate
 
 struct ListMenu
 {
-    struct ListMenuTemplate template;
+    struct ListMenuTemplate spriteTemplate;
     u16 scrollOffset;
     u16 selectedRow;
     u8 unk_1C;
@@ -106,7 +106,7 @@ void DestroyListMenuTask(u8 listTaskId, u16 *scrollOffset, u16 *selectedRow);
 void RedrawListMenu(u8 listTaskId);
 void ChangeListMenuPals(u8 listTaskId, u8 cursorPal, u8 fillValue, u8 cursorShadowPal);
 void ChangeListMenuCoords(u8 listTaskId, u8 x, u8 y);
-s32 ListMenuTestInput(struct ListMenuTemplate *template, u32 scrollOffset, u32 selectedRow, u16 keys, u16 *newScrollOffset, u16 *newSelectedRow);
+s32 ListMenuTestInput(struct ListMenuTemplate *spriteTemplate, u32 scrollOffset, u32 selectedRow, u16 keys, u16 *newScrollOffset, u16 *newSelectedRow);
 void ListMenuGetCurrentItemArrayId(u8 listTaskId, u16 *arrayId);
 void ListMenuGetScrollAndRow(u8 listTaskId, u16 *scrollOffset, u16 *selectedRow);
 u16 ListMenuGetYCoordForPrintingArrowCursor(u8 listTaskId);
