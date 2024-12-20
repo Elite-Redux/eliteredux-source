@@ -8451,7 +8451,7 @@ static const Ability RestrainingOrder = {
     .description = $("Forces the attacker when hit\n"
                      "once each switch-in."),
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(GetAbilityState(battler, ability); == RESTRAINING_ORDER_NOT_TRIGGERED);
+        CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
         CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
