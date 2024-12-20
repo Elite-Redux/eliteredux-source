@@ -128,6 +128,7 @@ typedef struct Ability {
     AbilityApplyOnWithTarget onAccuracyFor:5;
     AbilityApplyOn onStatFor:3;
     u16 redirectType:5;
+    u16 ruinStat:3;
     u16 noDamageHits:2;
     u16 breakable:1;
     u16 unsuppressable:1;

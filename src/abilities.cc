@@ -47,53 +47,41 @@ ENUM_OR(InfiltrateType)
 #define __COMBINE(val1, val2) val1##val2
 #define COMBINE(val1, val2) __COMBINE(val1, val2)
 
-#define ON_ENTRY static int COMBINE(onEntry, CONTEXT)(int ability, int battler)
-#define CONTEXT_ON_ENTRY .onEntry = COMBINE(onEntry, CONTEXT)
+#define ON_ENTRY int ability, int battler
+#define ON_ABSORB int battler, int move, int moveType, int *statId
+#define ON_IMMUNE int battler, int attacker, int move, int moveType, const u8 **immunityScript
+#define ON_INFILTRATE int battler, int move
+#define ON_DISGUISE int battler, int testOnly
+#define ON_WEATHER int ability, int battler
+#define ON_TERRAIN int ability, int battler
+#define ON_END_TURN int ability, int battler
+#define ON_ATTACKER int ability, int battler, int target, int move, int moveType
+#define ON_DEFENDER int ability, int battler, int attacker, int move, int moveType
+#define ON_EITHER(name) static int name##OnEither(int ability, int battler, int opponent, int move, int moveType)
+#define ON_EITHER_ABILITY(name) .onAttacker = name##OnEither, .onDefender = name##OnEither
+#define ON_RECOIL int damage, int battler, int moveType
+#define ON_REACTIVE int ability, int battler
+#define ON_BATTLER_FAINTS int ability, int battler, int attacker, int fainted, int move, int moveType
+#define ON_PARENTAL_BOND int battler, int move, int moveType
+#define ON_STAT int ability, int battler, int statId, u32 *stat, NonStackingState *flags
+#define ON_OFFENSIVE_MULTIPLIER \
+    int battler, int target, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, u16 *modifier
+#define ON_DEFENSIVE_MULTIPLIER int battler, int attacker, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
+#define ON_ACCURACY int ability, int battler, int target, int move, int moveType, int *accuracy
+#define ON_SWAP_SPLIT int battler, int move
+#define ON_CHOOSE_OFFENSIVE_STAT int battler, int move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 *secondaryAtkStatToUse
+#define ON_CHOOSE_DEFENSIVE_STAT int battler, int target, int move, int ignoreDefensiveStatBoosts, int battlerUnaware
+#define ON_STAB int moveType
+#define ON_PRIORITY int battler, int target, int move
+#define ON_MOVE_TYPE int ability, int move, int moveType, u8 *ateBoost
+#define ON_EXIT int ability, int battler
 
-#define ON_ABSORB static int COMBINE(onAbsorb, CONTEXT)(int battler, int move, int moveType, int *statId)
-#define CONTEXT_ON_ABSORB .onAbsorb = COMBINE(onAbsorb, CONTEXT)
-
-#define ON_IMMUNE static int COMBINE(onImmune, CONTEXT)(int battler, int attacker, int move, int moveType, const u8 **immunityScript)
-#define CONTEXT_ON_IMMUNE .onImmune = COMBINE(onImmune, CONTEXT)
-
-#define ON_INFILTRATE static InfiltrateType COMBINE(onInfiltrate, CONTEXT)(int battler, int move)
-#define CONTEXT_ON_INFILTRATE .onInfiltrate = COMBINE(onInfiltrate, CONTEXT)
-
-#define ON_DISGUISE static int COMBINE(onDisguise, CONTEXT)(int battler, int testOnly)
-#define CONTEXT_ON_DISGUISE .onDisguise = COMBINE(onDisguise, CONTEXT)
-
-#define ON_WEATHER static int COMBINE(onWeather, CONTEXT)(int ability, int battler)
-#define CONTEXT_ON_WEATHER .onWeather = COMBINE(onWeather, CONTEXT)
-
-#define ON_TERRAIN static int COMBINE(onTerrain, CONTEXT)(int ability, int battler)
-#define CONTEXT_ON_TERRAIN .onTerrain = COMBINE(onTerrain, CONTEXT)
-
-#define ON_END_TURN static int COMBINE(onEndTurn, CONTEXT)(int ability, int battler)
-#define CONTEXT_ON_END_TURN .onEndTurn = COMBINE(onEndTurn, CONTEXT)
-
-#define ON_ATTACKER static int COMBINE(onAttacker, CONTEXT)(int ability, int battler, int target, int move, int moveType)
-#define CONTEXT_ON_ATTACKER .onAttacker = COMBINE(onAttacker, CONTEXT)
-
-#define ON_DEFENDER static int COMBINE(onDefender, CONTEXT)(int ability, int battler, int attacker, int move, int moveType)
-#define CONTEXT_ON_DEFENDER .onDefender = COMBINE(onDefender, CONTEXT)
-
-#define ON_EITHER static int COMBINE(onEither, CONTEXT)(int ability, int battler, int opponent, int move, int moveType)
-#define CONTEXT_ON_EITHER .onAttacker = COMBINE(onEither, CONTEXT), .onDefender = COMBINE(onEither, CONTEXT)
-
-#define ON_RECOIL static int COMBINE(onRecoil, CONTEXT)(int damage, int battler, int moveType)
-#define CONTEXT_ON_RECOIL .onRecoil = COMBINE(onRecoil, CONTEXT)
-
-#define ON_REACTIVE static int COMBINE(onReactive, CONTEXT)(int ability, int battler)
-#define CONTEXT_ON_REACTIVE .onReactive = COMBINE(onReactive, CONTEXT)
-
-#define ON_BATTLER_FAINTS static int COMBINE(onBattlerFaints, CONTEXT)(int ability, int battler, int attacker, int fainted, int move, int moveType)
-#define CONTEXT_ON_BATTLER_FAINTS .onBattlerFaints = COMBINE(onBattlerFaints, CONTEXT)
-
-#define ON_PARENTAL_BOND static MultihitType COMBINE(onParentalBond, CONTEXT)(int battler, int move, int moveType)
-#define CONTEXT_ON_PARENTAL_BOND .onParentalBond = COMBINE(onParentalBond, CONTEXT)
-
-#define ON_STAT static void COMBINE(onStat, CONTEXT)(int ability, int battler, int statId, u32 *stat, NonStackingState *flags)
-#define CONTEXT_ON_STAT .onStat = COMBINE(onStat, CONTEXT)
+#define GALE_WINGS_CLONE(type)                               \
+    +[](ON_PRIORITY) -> int {                                \
+        CHECK(GetTypeBeforeUsingMove(move, battler) == type) \
+        CHECK(BATTLER_MAX_HP(battler))                       \
+        return 1;                                            \
+    }
 
 #define MUL(val) MUL_MODIFIER(modifier, val)
 #define RESISTANCE(val)                \
@@ -101,51 +89,6 @@ ENUM_OR(InfiltrateType)
         MUL_MODIFIER(resistance, val); \
         MUL_MODIFIER(modifier, val);   \
     }
-
-#define ON_OFFENSIVE_MULTIPLIER                          \
-    static void COMBINE(onOffensiveMultiplier, CONTEXT)( \
-        int battler, int target, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, u16 *modifier)
-#define CONTEXT_ON_OFFENSIVE_MULTIPLIER .onOffensiveMultiplier = COMBINE(onOffensiveMultiplier, CONTEXT)
-
-#define ON_DEFENSIVE_MULTIPLIER                          \
-    static void COMBINE(onDefensiveMultiplier, CONTEXT)( \
-        int battler, int attacker, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier)
-#define CONTEXT_ON_DEFENSIVE_MULTIPLIER .onDefensiveMultiplier = COMBINE(onDefensiveMultiplier, CONTEXT)
-
-#define ON_ACCURACY static AccuracyPriority COMBINE(onAccuracy, CONTEXT)(int ability, int battler, int target, int move, int moveType, int *accuracy)
-#define CONTEXT_ON_ACCURACY .onAccuracy = COMBINE(onAccuracy, CONTEXT)
-
-#define ON_SWAP_SPLIT static int COMBINE(onSwapSplit, CONTEXT)(int battler, int move)
-#define CONTEXT_ON_SWAP_SPLIT .onSwapSplit = COMBINE(onSwapSplit, CONTEXT)
-
-#define ON_CHOOSE_OFFENSIVE_STAT                         \
-    static void COMBINE(onChooseOffensiveStat, CONTEXT)( \
-        int battler, int move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 *secondaryAtkStatToUse)
-#define CONTEXT_ON_CHOOSE_OFFENSIVE_STAT .onChooseOffensiveStat = COMBINE(onChooseOffensiveStat, CONTEXT)
-
-#define ON_CHOOSE_DEFENSIVE_STAT \
-    static int COMBINE(onChooseDefensiveStat, CONTEXT)(int battler, int target, int move, int ignoreDefensiveStatBoosts, int battlerUnaware)
-#define CONTEXT_ON_CHOOSE_DEFENSIVE_STAT .onChooseDefensiveStat = COMBINE(onChooseDefensiveStat, CONTEXT)
-
-#define ON_STAB static int COMBINE(onStab, CONTEXT)(int moveType)
-#define CONTEXT_ON_STAB .onStab = COMBINE(onStab, CONTEXT)
-
-#define ON_PRIORITY static int COMBINE(onPriority, CONTEXT)(int battler, int target, int move)
-#define CONTEXT_ON_PRIORITY .onPriority = COMBINE(onPriority, CONTEXT)
-
-#define GALE_WINGS_CLONE(type)                               \
-    ON_PRIORITY {                                            \
-        CHECK(GetTypeBeforeUsingMove(move, battler) == type) \
-        CHECK(BATTLER_MAX_HP(battler))                       \
-        return 1;                                            \
-    }
-
-#define ON_MOVE_TYPE static int COMBINE(onMoveType, CONTEXT)(int ability, int move, int moveType, u8 *ateBoost)
-#define CONTEXT_ON_MOVE_TYPE .onMoveType = COMBINE(onMoveType, CONTEXT)
-
-#define ON_EXIT static int COMBINE(onExit, CONTEXT)(int ability, int battler)
-#define CONTEXT_ON_EXIT .onExit = COMBINE(onExit, CONTEXT)
-
 static void InsertCorrectEndType(AbilityCallType type) {
     switch (type) {
         case ABILITY_BS_EXECUTE:
@@ -290,18 +233,19 @@ static int MoxieClone(int battler, int stat) {
     return TRUE;
 }
 
-#define ATE_ABILITY(type)                                                   \
-    ON_OFFENSIVE_MULTIPLIER {                                               \
-        if (moveType == type && gBattleStruct->ateBoost[battler]) MUL(1.1); \
-    }                                                                       \
-    ON_MOVE_TYPE {                                                          \
-        CHECK(moveType == TYPE_NORMAL)                                      \
-        *ateBoost = TRUE;                                                   \
-        return type + 1;                                                    \
+#define ATE_ABILITY(type)                                                       \
+    .onOffensiveMultiplier =                                                    \
+        +[](ON_OFFENSIVE_MULTIPLIER) {                                          \
+            if (moveType == type && gBattleStruct->ateBoost[battler]) MUL(1.1); \
+        },                                                                      \
+    .onMoveType = +[](ON_MOVE_TYPE) -> int {                                    \
+        CHECK(moveType == TYPE_NORMAL)                                          \
+        *ateBoost = TRUE;                                                       \
+        return type + 1;                                                        \
     }
 
-#define ON_SWARM_MULTIPLIER(type)                                            \
-    ON_OFFENSIVE_MULTIPLIER {                                                \
+#define SWARM_MULTIPLIER(type)                                               \
+    +[](ON_OFFENSIVE_MULTIPLIER) {                                           \
         if (moveType == type) {                                              \
             if (gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 3)) \
                 MUL(1.5);                                                    \
@@ -310,8 +254,8 @@ static int MoxieClone(int battler, int stat) {
         }                                                                    \
     }
 
-#define ON_BOOSTED_SWARM_MULTIPLIER(type)                                    \
-    ON_OFFENSIVE_MULTIPLIER {                                                \
+#define BOOSTED_SWARM_MULTIPLIER(type)                                       \
+    +[](ON_OFFENSIVE_MULTIPLIER) {                                           \
         if (moveType == type) {                                              \
             if (gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 3)) \
                 MUL(1.8);                                                    \
@@ -320,11 +264,10 @@ static int MoxieClone(int battler, int stat) {
         }                                                                    \
     }
 
-static void RuinEffect(int ruinStat, const AbilityOnStatHandler dedup, int battler, int statId, u32 *stat, NonStackingState *flags) {
+static void RuinEffect(int ruinStat, int battler, int statId, u32 *stat, NonStackingState *flags) {
     if (statId != ruinStat) return;
     if (*flags & NON_STACKING_RUIN) return;
-    ON_ABILITY(battler, FALSE, gAbilities[ability].onStat == dedup, return)
-    *stat *= .75;
+    ON_ABILITY(battler, FALSE, gAbilities[ability].ruinStat == statId, return) *stat *= .75;
     *flags = static_cast<NonStackingState>(static_cast<int>(*flags) | static_cast<int>(NON_STACKING_RUIN));
 }
 
@@ -335,71 +278,57 @@ static const Ability None = {
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Stench
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanMoveHaveExtraFlinchChance(move))
-    CHECK(Random() % 100 < 10)
-
-    return AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
-}
 static const Ability Stench = {
     .name = $("Stench"),
     .description = $("Attacks have a 10% chance to\n"
                      "cause enemy to flinch."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanMoveHaveExtraFlinchChance(move))
+        CHECK(Random() % 100 < 10)
+
+        return AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Drizzle
-ON_ENTRY {
-    if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE)) {
-        BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
-        return TRUE;
-    } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
-        BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
-        return NO_ANNOUNCE;
-    }
-    return FALSE;
-}
 static const Ability Drizzle = {
     .name = $("Drizzle"),
     .description = $("Summons rain on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE)) {
+            BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
+            return TRUE;
+        } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
+            BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
+            return NO_ANNOUNCE;
+        }
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SpeedBoost
-ON_END_TURN {
-    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-    CHECK(ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
-
-    BattleScriptPushCursorAndCallback(BattleScript_SpeedBoostActivates);
-    gBattleScripting.battler = battler;
-    return TRUE;
-}
 static const Ability SpeedBoost = {
     .name = $("Speed Boost"),
     .description = $("Raises own Speed by one stage\n"
                      "after every turn."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+        CHECK(ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
+
+        BattleScriptPushCursorAndCallback(BattleScript_SpeedBoostActivates);
+        gBattleScripting.battler = battler;
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT BattleArmor
-ON_DEFENSIVE_MULTIPLIER { MUL(.8); }
 static const Ability BattleArmor = {
     .name = $("Battle Armor"),
     .description = $("Immune to critical hits. Takes\n"
                      "20% less damage from all attacks."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.8); },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Sturdy
 static const Ability Sturdy = {
     .name = $("Sturdy"),
     .description = $("At full HP, cannot be KO in one\n"
@@ -407,9 +336,7 @@ static const Ability Sturdy = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Damp
-ON_EITHER {
+ON_EITHER(Damp) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK_NOT(IS_BATTLER_OF_TYPE(opponent, TYPE_WATER))
@@ -426,11 +353,9 @@ static const Ability Damp = {
     .name = $("Damp"),
     .description = $("Makes foe Water-type on contact.\n"
                      "Also works on offense."),
-    CONTEXT_ON_EITHER,
+    ON_EITHER_ABILITY(Damp),
 };
 
-#undef CONTEXT
-#define CONTEXT Limber
 static const Ability Limber = {
     .name = $("Limber"),
     .description = $("Immune to paralysis.\n"
@@ -439,25 +364,20 @@ static const Ability Limber = {
     .halfRecoil = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SandVeil
-ON_ACCURACY {
-    CHECK(IsBattlerWeatherAffected(target, WEATHER_SANDSTORM_ANY))
-    *accuracy /= 1.25;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability SandVeil = {
     .name = $("Sand Veil"),
     .description = $("Evasion is boosted by 1.25x\n"
                      "while a sandstorm is active."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(IsBattlerWeatherAffected(target, WEATHER_SANDSTORM_ANY));
+        *accuracy /= 1.25;
+        return ACCURACY_MULTIPLICATIVE;
+    },
     .onAccuracyFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Static
-ON_EITHER {
+ON_EITHER(Static) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(CanBeParalyzed(battler, opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
@@ -470,39 +390,31 @@ static const Ability Static = {
     .name = $("Static"),
     .description = $("30% chance to paralyze on\n"
                      "contact. Also works on offense."),
-    CONTEXT_ON_EITHER,
+    ON_EITHER_ABILITY(Static),
 };
 
-#undef CONTEXT
-#define CONTEXT VoltAbsorb
-ON_ABSORB {
-    CHECK(moveType == TYPE_ELECTRIC)
-    return ABSORB_RESULT_HEAL;
-}
 static const Ability VoltAbsorb = {
     .name = $("Volt Absorb"),
     .description = $("Heals 25% of max HP when hit\n"
                      "by an Electric-type move."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_ELECTRIC)
+        return ABSORB_RESULT_HEAL;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT WaterAbsorb
-ON_ABSORB {
-    CHECK(moveType == TYPE_WATER)
-    return ABSORB_RESULT_HEAL;
-}
 static const Ability WaterAbsorb = {
     .name = $("Water Absorb"),
     .description = $("Heals 25% of max HP when hit\n"
                      "by a Water-type move."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_WATER)
+        return ABSORB_RESULT_HEAL;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Oblivious
 static const Ability Oblivious = {
     .name = $("Oblivious"),
     .description = $("Immune to infatuation, Scare,\n"
@@ -510,33 +422,25 @@ static const Ability Oblivious = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT CloudNine
-ON_ENTRY {
-    BattleScriptPushCursorAndCallback(BattleScript_AnnounceAirLockCloudNine);
-    return TRUE;
-}
 static const Ability CloudNine = {
     .name = $("Cloud Nine"),
     .description = $("Clears weather and prevents\n"
                      "its effects."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        BattleScriptPushCursorAndCallback(BattleScript_AnnounceAirLockCloudNine);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT CompoundEyes
-ON_ACCURACY {
-    *accuracy *= 1.3;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability CompoundEyes = {
     .name = $("Compound Eyes"),
     .description = $("Grants a 1.3x accuracy boost."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        *accuracy *= 1.3;
+        return ACCURACY_MULTIPLICATIVE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Insomnia
 static const Ability Insomnia = {
     .name = $("Insomnia"),
     .description = $("Cannot fall asleep.\n"
@@ -544,8 +448,6 @@ static const Ability Insomnia = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT ColorChange
 static const Ability ColorChange = {
     .name = $("Color Change"),
     .description = $("Changes type to a resist or an\n"
@@ -553,39 +455,32 @@ static const Ability ColorChange = {
     .colorChange = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Immunity
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_POISON) RESISTANCE(.5);
-}
 static const Ability Immunity = {
     .name = $("Immunity"),
     .description = $("Cannot be poisoned. Halves\n"
                      "damage taken from Poison moves."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_POISON) RESISTANCE(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT FlashFire
-ON_ABSORB {
-    CHECK(moveType == TYPE_FIRE)
-    return ABSORB_RESULT_FLASH_FIRE;
-}
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_FIRE && gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE) MUL(1.5);
-}
 static const Ability FlashFire = {
     .name = $("Flash Fire"),
     .description = $("Powers up Fire-type moves by\n"
                      "1.5x if hit by a Fire-type move."),
-    CONTEXT_ON_ABSORB,
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_FIRE)
+        return ABSORB_RESULT_FLASH_FIRE;
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIRE && gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE) MUL(1.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT ShieldDust
 static const Ability ShieldDust = {
     .name = $("Shield Dust"),
     .description = $("Immune to added move effects and\n"
@@ -593,8 +488,6 @@ static const Ability ShieldDust = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT OwnTempo
 static const Ability OwnTempo = {
     .name = $("Own Tempo"),
     .description = $("Immune to confusion, Intimidate\n"
@@ -602,8 +495,6 @@ static const Ability OwnTempo = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SuctionCups
 static const Ability SuctionCups = {
     .name = $("Suction Cups"),
     .description = $("Cannot be forced to switch out\n"
@@ -611,8 +502,6 @@ static const Ability SuctionCups = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Intimidate
 static const Ability Intimidate = {
     .name = $("Intimidate"),
     .description = $("Lowers foes' Atk by one stage on\n"
@@ -620,36 +509,28 @@ static const Ability Intimidate = {
     .onEntry = UseIntimidateClone,
 };
 
-#undef CONTEXT
-#define CONTEXT ShadowTag
 static const Ability ShadowTag = {
     .name = $("Shadow Tag"),
     .description = $("Opponents can't be switched out.\n"
                      "Ghosts aren't affected."),
 };
 
-#undef CONTEXT
-#define CONTEXT RoughSkin
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK_NOT(IsMagicGuardProtected(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-
-    gBattleMoveDamage = gBattleMons[attacker].maxHP / 8;
-    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-    PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ability);
-    BattleScriptCall(BattleScript_IronBarbsActivates);
-    return TRUE;
-}
 static const Ability RoughSkin = {
     .name = $("Rough Skin"),
     .description = $("Enemies lose 1/8 of max HP if\n"
                      "they use a contact move."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK_NOT(IsMagicGuardProtected(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+        gBattleMoveDamage = gBattleMons[attacker].maxHP / 8;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ability);
+        BattleScriptCall(BattleScript_IronBarbsActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT WonderGuard
 static const Ability WonderGuard = {
     .name = $("Wonder Guard"),
     .description = $("Is only hit by Super-effective\n"
@@ -658,205 +539,174 @@ static const Ability WonderGuard = {
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Levitate
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_FLYING) MUL(1.25);
-}
 static const Ability Levitate = {
     .name = $("Levitate"),
     .description = $("Immune to Ground-type moves.\n"
                      "Ups own Flying moves by 1.25x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FLYING) MUL(1.25);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT EffectSpore
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_GRASS))
-    CHECK_NOT(BATTLER_HAS_ABILITY(attacker, ABILITY_OVERCOAT))
-    CHECK_NOT(BATTLER_HAS_ABILITY(attacker, ABILITY_EFFECT_SPORE))
-    CHECK(GetBattlerHoldEffect(attacker, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES)
-    CHECK(Random() % 100 < 30)
-
-    switch (Random() % 3) {
-        case 0:
-            CHECK(CanBePoisoned(battler, attacker))
-
-            AbilityStatusEffect(MOVE_EFFECT_POISON | MOVE_EFFECT_AFFECTS_USER);
-            return TRUE;
-
-        case 1:
-            CHECK(CanBeParalyzed(battler, attacker))
-
-            AbilityStatusEffect(MOVE_EFFECT_PARALYSIS | MOVE_EFFECT_AFFECTS_USER);
-            return TRUE;
-
-        case 2:
-            CHECK(CanSleep(attacker))
-
-            AbilityStatusEffect(MOVE_EFFECT_SLEEP | MOVE_EFFECT_AFFECTS_USER);
-            return TRUE;
-    }
-    return FALSE;
-}
 static const Ability EffectSpore = {
     .name = $("Effect Spore"),
     .description = $("30% chance to inflict SLP, PARA\n"
                      "or PSN if hit by a contact move."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_GRASS))
+        CHECK_NOT(BATTLER_HAS_ABILITY(attacker, ABILITY_OVERCOAT))
+        CHECK_NOT(BATTLER_HAS_ABILITY(attacker, ABILITY_EFFECT_SPORE))
+        CHECK(GetBattlerHoldEffect(attacker, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES)
+        CHECK(Random() % 100 < 30)
+
+        switch (Random() % 3) {
+            case 0:
+                CHECK(CanBePoisoned(battler, attacker))
+
+                AbilityStatusEffect(MOVE_EFFECT_POISON | MOVE_EFFECT_AFFECTS_USER);
+                return TRUE;
+
+            case 1:
+                CHECK(CanBeParalyzed(battler, attacker))
+
+                AbilityStatusEffect(MOVE_EFFECT_PARALYSIS | MOVE_EFFECT_AFFECTS_USER);
+                return TRUE;
+
+            case 2:
+                CHECK(CanSleep(attacker))
+
+                AbilityStatusEffect(MOVE_EFFECT_SLEEP | MOVE_EFFECT_AFFECTS_USER);
+                return TRUE;
+        }
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Synchronize
 static const Ability Synchronize = {
     .name = $("Synchronize"),
     .description = $("Enemies inflicting status on\n"
                      "this Pokémon get same status."),
 };
 
-#undef CONTEXT
-#define CONTEXT ClearBody
 static const Ability ClearBody = {
     .name = $("Clear Body"),
     .description = $("Immune to stat drops."),
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT NaturalCure
-ON_EXIT {
-    CHECK(IsBattlerAlive(battler))
-    CHECK(gBattleMons[battler].status1 & STATUS1_ANY)
-
-    gActiveBattler = battler;
-    gBattleMons[battler].status1 &= ~STATUS1_ANY;
-    BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
-    MarkBattlerForControllerExec(battler);
-
-    gBattleScripting.abilityPopupOverwrite = ability;
-    BattleScriptCall(BattleScript_NaturalCureExits);
-    return TRUE;
-}
 static const Ability NaturalCure = {
     .name = $("Natural Cure"),
     .description = $("Heals status condition upon\n"
                      "switching out."),
-    CONTEXT_ON_EXIT,
+    .onExit = +[](ON_EXIT) -> int {
+        CHECK(IsBattlerAlive(battler))
+        CHECK(gBattleMons[battler].status1 & STATUS1_ANY)
+
+        gActiveBattler = battler;
+        gBattleMons[battler].status1 &= ~STATUS1_ANY;
+        BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
+        MarkBattlerForControllerExec(battler);
+
+        gBattleScripting.abilityPopupOverwrite = ability;
+        BattleScriptCall(BattleScript_NaturalCureExits);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT LightningRod
-ON_ABSORB {
-    CHECK(moveType == TYPE_ELECTRIC)
-    *statId = GetHighestAttackingStatId(battler, TRUE);
-    return ABSORB_RESULT_STAT;
-}
 static const Ability LightningRod = {
     .name = $("Lightning Rod"),
     .description = $("Redirects Electric moves.\n"
                      "Absorbs them, ups highest Atk."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_ELECTRIC);
+        *statId = GetHighestAttackingStatId(battler, TRUE);
+        return ABSORB_RESULT_STAT;
+    },
     .redirectType = TYPE_ELECTRIC,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SereneGrace
 static const Ability SereneGrace = {
     .name = $("Serene Grace"),
     .description = $("Doubles chance of secondary\n"
                      "effects on its own moves."),
 };
 
-#undef CONTEXT
-#define CONTEXT SwiftSwim
-ON_STAT {
-    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat *= 1.5;
-}
 static const Ability SwiftSwim = {
     .name = $("Swift Swim"),
     .description = $("This Pokémon's Speed gets a\n"
                      "1.5x boost if rain is active."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Chlorophyll
-ON_STAT {
-    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat *= 1.5;
-}
 static const Ability Chlorophyll = {
     .name = $("Chlorophyll"),
     .description = $("This Pokémon's Speed gets a\n"
                      "1.5x boost if sun is active."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Illuminate
-ON_ACCURACY {
-    *accuracy *= 1.2;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability Illuminate = {
     .name = $("Illuminate"),
     .description = $("Grants a 1.2x accuracy boost."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        *accuracy *= 1.2;
+        return ACCURACY_MULTIPLICATIVE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Trace
-ON_ENTRY {
-    int target = BATTLE_OPPOSITE(battler);
-    int newAbility = GetBattlerAbility(target);
-    if (!IsBattlerAlive(target) || IsRolePlayBannedAbility(newAbility)) {
-        target = BATTLE_PARTNER(target);
-        CHECK(IsBattlerAlive(target))
-        newAbility = GetBattlerAbility(target);
-        CHECK_NOT(IsRolePlayBannedAbility(newAbility))
-    }
-
-    CHECK_NOT(HasAbilityIgnoringSuppression(battler, newAbility))
-
-    int index = GetAbilityIndex(battler, ability, FALSE);
-    CHECK(index < TOTAL_ABILITY_COUNT)
-
-    gBattleMons[battler].abilities[index] = newAbility;
-    gVolatileStructs[battler].switchInAbilityDone[index] = FALSE;
-
-    gStackBattler1 = battler;
-    gStackBattler2 = target;
-    gBattleScripting.abilityPopupOverwrite = newAbility;
-    BattleScriptPushCursorAndCallback(BattleScript_TraceActivatesEnd3);
-    return TRUE;
-}
 static const Ability Trace = {
     .name = $("Trace"),
     .description = $("Copies the foe's ability.\n"
                      "Does not copy innates."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        int target = BATTLE_OPPOSITE(battler);
+        int newAbility = GetBattlerAbility(target);
+        if (!IsBattlerAlive(target) || IsRolePlayBannedAbility(newAbility)) {
+            target = BATTLE_PARTNER(target);
+            CHECK(IsBattlerAlive(target))
+            newAbility = GetBattlerAbility(target);
+            CHECK_NOT(IsRolePlayBannedAbility(newAbility))
+        }
+
+        CHECK_NOT(HasAbilityIgnoringSuppression(battler, newAbility))
+
+        int index = GetAbilityIndex(battler, ability, FALSE);
+        CHECK(index < TOTAL_ABILITY_COUNT)
+
+        gBattleMons[battler].abilities[index] = newAbility;
+        gVolatileStructs[battler].switchInAbilityDone[index] = FALSE;
+
+        gStackBattler1 = battler;
+        gStackBattler2 = target;
+        gBattleScripting.abilityPopupOverwrite = newAbility;
+        BattleScriptPushCursorAndCallback(BattleScript_TraceActivatesEnd3);
+        return TRUE;
+    },
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT HugePower
-ON_STAT {
-    if (statId == STAT_ATK) *stat *= 2;
-}
 static const Ability HugePower = {
     .name = $("Huge Power"),
     .description = $("Doubles own Attack stat.\n"
                      "Boosts raw stat, not base stat."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_ATK) *stat *= 2;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT PoisonPoint
-ON_EITHER {
+ON_EITHER(PoisonPoint) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(CanBePoisoned(battler, opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
@@ -869,164 +719,135 @@ static const Ability PoisonPoint = {
     .name = $("Poison Point"),
     .description = $("30% chance to poison on contact.\n"
                      "Also works on offense."),
-    CONTEXT_ON_EITHER,
+    ON_EITHER_ABILITY(PoisonPoint),
 };
 
-#undef CONTEXT
-#define CONTEXT InnerFocus
-ON_ACCURACY {
-    CHECK(move == MOVE_FOCUS_BLAST)
-    return ACCURACY_ALWAYS_HITS;
-}
 static const Ability InnerFocus = {
     .name = $("Inner Focus"),
     .description = $("Blocks flinch, Intimidate, Scare.\n"
                      "Focus Blast never misses."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(move == MOVE_FOCUS_BLAST)
+        return ACCURACY_ALWAYS_HITS;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT MagmaArmor
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_WATER || moveType == TYPE_ICE) RESISTANCE(.7);
-}
 static const Ability MagmaArmor = {
     .name = $("Magma Armor"),
     .description = $("Frostbite-immune. Takes 30% less\n"
                      "dmg from Water/Ice-type moves."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_WATER || moveType == TYPE_ICE) RESISTANCE(.7);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT WaterVeil
-ON_ENTRY {
-    CHECK_NOT(gStatuses3[battler] & STATUS3_AQUA_RING)
-
-    gStatuses3[battler] |= STATUS3_AQUA_RING;
-    BattleScriptPushCursorAndCallback(BattleScript_BattlerEnvelopedItselfInAVeil);
-    return TRUE;
-}
 static const Ability WaterVeil = {
     .name = $("Water Veil"),
     .description = $("Burn-immune.\n"
                      "Casts Aqua Ring on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gStatuses3[battler] & STATUS3_AQUA_RING)
+
+        gStatuses3[battler] |= STATUS3_AQUA_RING;
+        BattleScriptPushCursorAndCallback(BattleScript_BattlerEnvelopedItselfInAVeil);
+        return TRUE;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT MagnetPull
 static const Ability MagnetPull = {
     .name = $("Magnet Pull"),
     .description = $("Traps opposing Steel-types.\n"
                      "Ghosts aren't affected."),
 };
 
-#undef CONTEXT
-#define CONTEXT Soundproof
-ON_IMMUNE {
-    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-    CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)
-    *immunityScript = BattleScript_SoundproofProtected;
-    return TRUE;
-}
 static const Ability Soundproof = {
     .name = $("Soundproof"),
     .description = $("Immune to sound-based moves."),
-    CONTEXT_ON_IMMUNE,
+    .onImmune = +[](ON_IMMUNE) -> int {
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
+        return TRUE;
+    },
     .breakable = TRUE,
     .isSoundproof = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT RainDish
-ON_END_TURN {
-    CHECK_NOT(BATTLER_MAX_HP(battler))
-    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-    CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
-
-    gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-    gBattleMoveDamage *= -1;
-    BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
-    return TRUE;
-}
 static const Ability RainDish = {
     .name = $("Rain Dish"),
     .description = $("Heals 1/8 of max HP every turn\n"
                      "if rain is active."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
+
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        gBattleMoveDamage *= -1;
+        BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SandStream
-ON_ENTRY {
-    if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
-        BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
-        return TRUE;
-    } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
-        BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
-        return NO_ANNOUNCE;
-    }
-    return FALSE;
-}
 static const Ability SandStream = {
     .name = $("Sand Stream"),
     .description = $("Summons a sandstorm on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
+            BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
+            return TRUE;
+        } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
+            BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
+            return NO_ANNOUNCE;
+        }
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Pressure
-ON_ENTRY {
-    int loweredStats = 0;
-    for (int i = 0; i < gBattlersCount; i++) {
-        if (!IsBattlerAlive(i)) continue;
-        loweredStats |= TryResetBattlerStatChanges(i, i == battler ? RESET_STAT_DROPS : RESET_STAT_BUFFS);
-    }
-
-    if (loweredStats) {
-        BattleScriptPushCursorAndCallback(BattleScript_PressureRemoveStats);
-    }
-
-    SwitchInAnnounce(B_MSG_SWITCHIN_PRESSURE);
-
-    return TRUE;
-}
 static const Ability Pressure = {
     .name = $("Pressure"),
     .description = $("Doubles foe's PP usage.\n"
                      "Clears stat buffs on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        int loweredStats = 0;
+        for (int i = 0; i < gBattlersCount; i++) {
+            if (!IsBattlerAlive(i)) continue;
+            loweredStats |= TryResetBattlerStatChanges(i, i == battler ? RESET_STAT_DROPS : RESET_STAT_BUFFS);
+        }
+
+        if (loweredStats) {
+            BattleScriptPushCursorAndCallback(BattleScript_PressureRemoveStats);
+        }
+
+        SwitchInAnnounce(B_MSG_SWITCHIN_PRESSURE);
+
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ThickFat
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.5);
-}
 static const Ability ThickFat = {
     .name = $("Thick Fat"),
     .description = $("Takes 1/2 damage from Fire-type\n"
                      "and Ice-type attacks."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT EarlyBird
 static const Ability EarlyBird = {
     .name = $("Early Bird"),
     .description = $("Awakens twice as fast from sleep."),
 };
 
-#undef CONTEXT
-#define CONTEXT FlameBody
-ON_EITHER {
+ON_EITHER(FlameBody) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(CanBeBurned(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
@@ -1039,33 +860,26 @@ static const Ability FlameBody = {
     .name = $("Flame Body"),
     .description = $("30% chance to burn on contact.\n"
                      "Also works on offense."),
-    CONTEXT_ON_EITHER,
+    ON_EITHER_ABILITY(FlameBody),
 };
 
-#undef CONTEXT
-#define CONTEXT RunAway
 static const Ability RunAway = {
     .name = $("Run Away"),
     .description = $("Guarantees fleeing. Raises Speed\n"
                      "if stats lowered by an enemy."),
 };
 
-#undef CONTEXT
-#define CONTEXT KeenEye
-ON_ACCURACY {
-    *accuracy *= 1.2;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability KeenEye = {
     .name = $("Keen Eye"),
     .description = $("Immune to accuracy drops.\n"
                      "Grants a 1.2x accuracy boost."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        *accuracy *= 1.2;
+        return ACCURACY_MULTIPLICATIVE;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT HyperCutter
 static const Ability HyperCutter = {
     .name = $("Hyper Cutter"),
     .description = $("Enemies can't lower Atk/Sp. Atk.\n"
@@ -1073,94 +887,76 @@ static const Ability HyperCutter = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Pickup
-ON_ENTRY {
-    int side = GetBattlerSide(battler);
-    CHECK(gSideStatuses[side] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[side].hotCoals || gSideTimers[side].caltrops)
-
-    gSideStatuses[side] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
-    gSideTimers[side].spikesAmount = 0;
-    gSideTimers[side].toxicSpikesAmount = 0;
-    gSideTimers[side].hotCoals = FALSE;
-    gSideTimers[side].caltrops = FALSE;
-    BattleScriptPushCursorAndCallback(BattleScript_PickUpActivate);
-    return TRUE;
-}
 static const Ability Pickup = {
     .name = $("Pickup"),
     .description = $("Removes all hazards on entry.\n"
                      "Not immune to hazards."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        int side = GetBattlerSide(battler);
+        CHECK(gSideStatuses[side] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[side].hotCoals || gSideTimers[side].caltrops)
+
+        gSideStatuses[side] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
+        gSideTimers[side].spikesAmount = 0;
+        gSideTimers[side].toxicSpikesAmount = 0;
+        gSideTimers[side].hotCoals = FALSE;
+        gSideTimers[side].caltrops = FALSE;
+        BattleScriptPushCursorAndCallback(BattleScript_PickUpActivate);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Truant
-ON_END_TURN {
-    if (GetAbilityState(battler, ability))
-        SetAbilityState(battler, ability, FALSE);
-    else if (gChosenMoveByBattler[battler] && !IS_MOVE_STATUS(gChosenMoveByBattler[battler]))
-        SetAbilityState(battler, ability, TRUE);
-    return FALSE;
-}
 static const Ability Truant = {
     .name = $("Truant"),
     .description = $("Can only attack every other turn.\n"
                      "Can use status moves every turn."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        if (GetAbilityState(battler, ability))
+            SetAbilityState(battler, ability, FALSE);
+        else if (gChosenMoveByBattler[battler] && !IS_MOVE_STATUS(gChosenMoveByBattler[battler]))
+            SetAbilityState(battler, ability, TRUE);
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Hustle
-ON_OFFENSIVE_MULTIPLIER { MUL(1.4); }
-ON_ACCURACY {
-    CHECK_NOT(IS_MOVE_STATUS(move))
-    *accuracy *= .9;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability Hustle = {
     .name = $("Hustle"),
     .description = $("0.9x accuracy.\n"
                      "Boosts damage by 1.4x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_ACCURACY,
+    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MUL(1.4); },
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK_NOT(IS_MOVE_STATUS(move)) *accuracy *= .9;
+        return ACCURACY_MULTIPLICATIVE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT CuteCharm
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK(CanInfatuate(battler, attacker))
-    CHECK(Random() % 100 < 30)
-
-    gBattleMons[attacker].status2 |= STATUS2_INFATUATED_WITH(battler);
-    BattleScriptCall(BattleScript_CuteCharmActivates);
-    return TRUE;
-}
 static const Ability CuteCharm = {
     .name = $("Cute Charm"),
     .description = $("30% chance to charm attacker on\n"
                      "contact, which halves its power."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK(CanInfatuate(battler, attacker))
+        CHECK(Random() % 100 < 30)
+
+        gBattleMons[attacker].status2 |= STATUS2_INFATUATED_WITH(battler);
+        BattleScriptCall(BattleScript_CuteCharmActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Plus
-ON_OFFENSIVE_MULTIPLIER {
-    int partner = BATTLE_PARTNER(battler);
-    if (!IsBattlerAlive(partner)) return;
-    if (BattlerHasAbility(partner, ABILITY_PLUS, FALSE) || BattlerHasAbility(partner, ABILITY_MINUS, FALSE)) MUL(2.0);
-}
 static const Ability Plus = {
     .name = $("Plus"),
     .description = $("Deals double damage if an ally\n"
                      "Pokémon has Minus or Plus."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            int partner = BATTLE_PARTNER(battler);
+            if (!IsBattlerAlive(partner)) return;
+            if (BattlerHasAbility(partner, ABILITY_PLUS, FALSE) || BattlerHasAbility(partner, ABILITY_MINUS, FALSE)) MUL(2.0);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Minus
 static const Ability Minus = {
     .name = $("Minus"),
     .description = $("Deals double damage if an ally\n"
@@ -1168,137 +964,106 @@ static const Ability Minus = {
     .onOffensiveMultiplier = Plus.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT Forecast
-ON_ENTRY { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-ON_WEATHER { return TryTransformAttacker(ability, battler, ABILITY_BS_CALL); }
-ON_END_TURN { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-ON_ATTACKER {
-    switch (move) {
-        case MOVE_SUNNY_DAY:
-        case MOVE_RAIN_DANCE:
-        case MOVE_SANDSTORM:
-        case MOVE_HAIL:
-        case MOVE_EERIE_FOG:
-            break;
-
-        default:
-            return FALSE;
-    }
-    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_FAILED))
-
-    return UseAttackerFollowUpMove(battler, target, ability, MOVE_WEATHER_BALL, 0);
-}
 static const Ability Forecast = {
     .name = $("Forecast"),
     .description = $("Changes form with the weather.\n"
                      "Weather setting triggers attack."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_WEATHER,
-    CONTEXT_ON_END_TURN,
-    CONTEXT_ON_ATTACKER,
+    .onEntry = +[](ON_ENTRY) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onWeather = +[](ON_WEATHER) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_CALL); },
+    .onEndTurn = +[](ON_END_TURN) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        switch (move) {
+            case MOVE_SUNNY_DAY:
+            case MOVE_RAIN_DANCE:
+            case MOVE_SANDSTORM:
+            case MOVE_HAIL:
+            case MOVE_EERIE_FOG:
+                break;
+
+            default:
+                return FALSE;
+        }
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_FAILED))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_WEATHER_BALL, 0);
+    },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT StickyHold
 static const Ability StickyHold = {
     .name = $("Sticky Hold"),
     .description = $("Can't lose its item."),
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT ShedSkin
-ON_END_TURN {
-    CHECK(Random() % 100 < 30)
-
-    CHECK(AbilityHealMonStatus(battler, ability))
-    return TRUE;
-}
 static const Ability ShedSkin = {
     .name = $("Shed Skin"),
     .description = $("30% chance to heal its status\n"
                      "condition at the end of a turn."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(Random() % 100 < 30)
+
+        CHECK(AbilityHealMonStatus(battler, ability));
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Guts
-ON_OFFENSIVE_MULTIPLIER {
-    if (HasAnyStatusOrAbility(battler) && IS_MOVE_PHYSICAL(move)) MUL(1.5);
-}
 static const Ability Guts = {
     .name = $("Guts"),
     .description = $("Ups Atk by 1.5x if suffering\n"
                      "from a status condition."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (HasAnyStatusOrAbility(battler) && IS_MOVE_PHYSICAL(move)) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT MarvelScale
-ON_STAT {
-    if (statId == STAT_DEF && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
-}
 static const Ability MarvelScale = {
     .name = $("Marvel Scale"),
     .description = $("Ups Def by 1.5x if suffering\n"
                      "from a status condition."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_DEF && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT LiquidOoze
 static const Ability LiquidOoze = {
     .name = $("Liquid Ooze"),
     .description = $("Draining causes harm to enemies\n"
                      "instead of healing them."),
 };
 
-#undef CONTEXT
-#define CONTEXT Overgrow
-ON_SWARM_MULTIPLIER(TYPE_GRASS)
 static const Ability Overgrow = {
     .name = $("Overgrow"),
     .description = $("Boosts Grass-type moves by 1.2x,\n"
                      "or 1.5x when under 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_GRASS),
 };
 
-#undef CONTEXT
-#define CONTEXT Blaze
-ON_SWARM_MULTIPLIER(TYPE_FIRE)
 static const Ability Blaze = {
     .name = $("Blaze"),
     .description = $("Boosts Fire-type moves by 1.2x,\n"
                      "or 1.5x when under 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_FIRE),
 };
 
-#undef CONTEXT
-#define CONTEXT Torrent
-ON_SWARM_MULTIPLIER(TYPE_WATER)
 static const Ability Torrent = {
     .name = $("Torrent"),
     .description = $("Boosts Water-type moves by 1.2x,\n"
                      "or 1.5x when under 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_WATER),
 };
 
-#undef CONTEXT
-#define CONTEXT Swarm
-ON_SWARM_MULTIPLIER(TYPE_BUG)
 static const Ability Swarm = {
     .name = $("Swarm"),
     .description = $("Boosts Bug-type moves by 1.2x,\n"
                      "or 1.5x when under 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_BUG),
 };
 
-#undef CONTEXT
-#define CONTEXT RockHead
 static const Ability RockHead = {
     .name = $("Rock Head"),
     .description = $("Immune to recoil damage, but not\n"
@@ -1306,68 +1071,55 @@ static const Ability RockHead = {
     .noRecoil = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Drought
-ON_ENTRY {
-    if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE)) {
-        BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
-        return TRUE;
-    } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
-        BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
-        return NO_ANNOUNCE;
-    }
-    return FALSE;
-}
 static const Ability Drought = {
     .name = $("Drought"),
     .description = $("Summons sun on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE)) {
+            BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
+            return TRUE;
+        } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
+            BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
+            return NO_ANNOUNCE;
+        }
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ArenaTrap
 static const Ability ArenaTrap = {
     .name = $("Arena Trap"),
     .description = $("Enemies can't flee. Ghosts and\n"
                      "ungrounded Pokémon are immune."),
 };
 
-#undef CONTEXT
-#define CONTEXT VitalSpirit
-ON_ATTACKER {
-    CHECK(moveType == TYPE_FIGHTING)
-    CHECK(AbilityHealMonStatus(battler, ability))
-    return TRUE;
-}
 static const Ability VitalSpirit = {
     .name = $("Vital Spirit"),
     .description = $("Can't fall asleep. Heals status\n"
                      "after using Fighting-type moves."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(moveType == TYPE_FIGHTING)
+        CHECK(AbilityHealMonStatus(battler, ability));
+        return TRUE;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT WhiteSmoke
-ON_ENTRY {
-    CHECK_NOT(gSideTimers[GET_BATTLER_SIDE(battler)].smokescreenTimer)
-
-    int side = GET_BATTLER_SIDE(battler);
-    gSideTimers[side].smokescreenTimer = GetBattlerHoldEffect(battler, TRUE) == ITEM_LIGHT_CLAY ? SCREEN_DURATION : SCREEN_DURATION_SHORT;
-    gSideTimers[side].started.smokescreen = TRUE;
-    gSideTimers[side].smokescreenBattler = battler;
-    return SwitchInAnnounce(B_MSG_SWITCHIN_WHITE_SMOKE);
-}
 static const Ability WhiteSmoke = {
     .name = $("White Smoke"),
     .description = $("Sets Smokescreen for 3 turns\n"
                      "on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideTimers[GET_BATTLER_SIDE(battler)].smokescreenTimer)
+
+        int side = GET_BATTLER_SIDE(battler);
+        gSideTimers[side].smokescreenTimer = GetBattlerHoldEffect(battler, TRUE) == ITEM_LIGHT_CLAY ? SCREEN_DURATION : SCREEN_DURATION_SHORT;
+        gSideTimers[side].started.smokescreen = TRUE;
+        gSideTimers[side].smokescreenBattler = battler;
+        return SwitchInAnnounce(B_MSG_SWITCHIN_WHITE_SMOKE);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT PurePower
 static const Ability PurePower = {
     .name = $("Pure Power"),
     .description = $("Doubles own Attack stat.\n"
@@ -1375,8 +1127,6 @@ static const Ability PurePower = {
     .onStat = HugePower.onStat,
 };
 
-#undef CONTEXT
-#define CONTEXT ShellArmor
 static const Ability ShellArmor = {
     .name = $("Shell Armor"),
     .description = $("Immune to critical hits. Takes\n"
@@ -1385,8 +1135,6 @@ static const Ability ShellArmor = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT AirLock
 static const Ability AirLock = {
     .name = $("Air Lock"),
     .description = $("Clears weather and prevents\n"
@@ -1394,221 +1142,184 @@ static const Ability AirLock = {
     .onEntry = CloudNine.onEntry,
 };
 
-#undef CONTEXT
-#define CONTEXT TangledFeet
-ON_ACCURACY {
-    CHECK(gBattleMons[target].status2 & STATUS2_CONFUSION)
-    *accuracy /= 2;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability TangledFeet = {
     .name = $("Tangled Feet"),
     .description = $("Doubles Evasion when confused."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(gBattleMons[target].status2 & STATUS2_CONFUSION);
+        *accuracy /= 2;
+        return ACCURACY_MULTIPLICATIVE;
+    },
     .onAccuracyFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT MotorDrive
-ON_ABSORB {
-    CHECK(moveType == TYPE_ELECTRIC)
-    *statId = STAT_SPEED;
-    return ABSORB_RESULT_STAT;
-}
 static const Ability MotorDrive = {
     .name = $("Motor Drive"),
     .description = $("Boosts Speed instead of being\n"
                      "hit by Electric-type moves."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_ELECTRIC);
+        *statId = STAT_SPEED;
+        return ABSORB_RESULT_STAT;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Rivalry
-ON_OFFENSIVE_MULTIPLIER {
-    int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, gBattleMons[battler].personality);
-    if (genderAtk != MON_GENDERLESS && genderAtk == GetGenderFromSpeciesAndPersonality(gBattleMons[target].species, gBattleMons[target].personality)) MUL(1.25);
-}
-ON_DEFENSIVE_MULTIPLIER {
-    int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[attacker].species, gBattleMons[attacker].personality);
-    if (genderAtk == MON_MALE)
-        genderAtk = MON_FEMALE;
-    else if (genderAtk == MON_FEMALE)
-        genderAtk = MON_MALE;
-    if (genderAtk != MON_GENDERLESS && genderAtk == GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, gBattleMons[battler].personality))
-        MUL(.75);
-}
 static const Ability Rivalry = {
     .name = $("Rivalry"),
     .description = $("Deals 1.25x to same gender.\n"
                      "Takes .75x from opposite gender."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, gBattleMons[battler].personality);
+            if (genderAtk != MON_GENDERLESS && genderAtk == GetGenderFromSpeciesAndPersonality(gBattleMons[target].species, gBattleMons[target].personality))
+                MUL(1.25);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[attacker].species, gBattleMons[attacker].personality);
+            if (genderAtk == MON_MALE)
+                genderAtk = MON_FEMALE;
+            else if (genderAtk == MON_FEMALE)
+                genderAtk = MON_MALE;
+            if (genderAtk != MON_GENDERLESS && genderAtk == GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, gBattleMons[battler].personality))
+                MUL(.75);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Steadfast
 static const Ability Steadfast = {
     .name = $("Steadfast"),
     .description = $("Raises Speed by one stage if\n"
                      "this Pokémon flinches."),
 };
 
-#undef CONTEXT
-#define CONTEXT SnowCloak
-ON_ACCURACY {
-    CHECK(IsBattlerWeatherAffected(target, WEATHER_HAIL_ANY))
-    *accuracy /= 1.25;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability SnowCloak = {
     .name = $("Snow Cloak"),
     .description = $("Evasion is boosted by 1.25x\n"
                      "under hail."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(IsBattlerWeatherAffected(target, WEATHER_HAIL_ANY));
+        *accuracy /= 1.25;
+        return ACCURACY_MULTIPLICATIVE;
+    },
     .onAccuracyFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Gluttony
 static const Ability Gluttony = {
     .name = $("Gluttony"),
     .description = $("Eats berries early. Berries also\n"
                      "restore 1/3 of max HP."),
 };
 
-#undef CONTEXT
-#define CONTEXT AngerPoint
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(CanRaiseStat(battler, STAT_ATK))
-
-    if (gIsCriticalHit) {
-        SetStatChanger(STAT_ATK, 12);
-        BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
-    } else {
-        SetStatChanger(STAT_ATK, 1);
-        BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-    }
-    return TRUE;
-}
 static const Ability AngerPoint = {
     .name = $("Anger Point"),
     .description = $("Getting hit raises Atk by +1.\n"
                      "Critical hits maximize Attack."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(CanRaiseStat(battler, STAT_ATK))
+
+        if (gIsCriticalHit) {
+            SetStatChanger(STAT_ATK, 12);
+            BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
+        } else {
+            SetStatChanger(STAT_ATK, 1);
+            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+        }
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Unburden
-ON_STAT {
-    if (statId == STAT_SPEED && GetAbilityState(battler, ability)) *stat *= 2;
-}
 static const Ability Unburden = {
     .name = $("Unburden"),
     .description = $("Consuming its held item doubles\n"
                      "Speed until switched out."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED && GetAbilityState(battler, ability)) *stat *= 2;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Heatproof
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_FIRE) RESISTANCE(.5);
-}
 static const Ability Heatproof = {
     .name = $("Heatproof"),
     .description = $("Halves damage taken from Fire-\n"
                      "type moves. Takes no burn damage."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIRE) RESISTANCE(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Simple
 static const Ability Simple = {
     .name = $("Simple"),
     .description = $("Doubles all stat changes on\n"
                      "this Pokémon."),
 };
 
-#undef CONTEXT
-#define CONTEXT DrySkin
-ON_END_TURN {
-    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && !IsMagicGuardProtected(battler)) {
-        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-        BattleScriptPushCursorAndCallback(BattleScript_SolarPowerActivates);
-        return TRUE;
-    }
-
-    return RainDish.onEndTurn(ability, battler);
-}
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_FIRE) RESISTANCE(1.25);
-}
 static const Ability DrySkin = {
     .name = $("Dry Skin"),
     .description = $("Water/Rain heals.\n"
                      "Fire/Sun hurts."),
     .onAbsorb = WaterAbsorb.onAbsorb,
-    CONTEXT_ON_END_TURN,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && !IsMagicGuardProtected(battler)) {
+            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+            if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+            BattleScriptPushCursorAndCallback(BattleScript_SolarPowerActivates);
+            return TRUE;
+        }
+
+        return RainDish.onEndTurn(ability, battler);
+    },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIRE) RESISTANCE(1.25);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Download
-ON_ENTRY {
-    gBattlerTarget = BATTLE_OPPOSITE(battler);
-    if (!IsBattlerAlive(battler)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
-    CHECK(IsBattlerAlive(battler))
-
-    int stat = GetHighestDefendingStatId(gBattlerTarget, TRUE) == STAT_DEF ? STAT_SPATK : STAT_ATK;
-    CHECK(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
-    return TRUE;
-}
 static const Ability Download = {
     .name = $("Download"),
     .description = $("Raises Atk/Sp. Atk by one stage\n"
                      "depending on opponent."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        gBattlerTarget = BATTLE_OPPOSITE(battler);
+        if (!IsBattlerAlive(battler)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
+        CHECK(IsBattlerAlive(battler))
+
+        int stat = GetHighestDefendingStatId(gBattlerTarget, TRUE) == STAT_DEF ? STAT_SPATK : STAT_ATK;
+        CHECK(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT IronFist
-ON_OFFENSIVE_MULTIPLIER {
-    if (IS_IRON_FIST(battler, move)) MUL(1.3);
-}
 static const Ability IronFist = {
     .name = $("Iron Fist"),
     .description = $("Boosts the power of punching\n"
                      "moves by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_IRON_FIST(battler, move)) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT PoisonHeal
 static const Ability PoisonHeal = {
     .name = $("Poison Heal"),
     .description = $("Restores 1/8 of max HP after\n"
                      "each turn if poisoned."),
 };
 
-#undef CONTEXT
-#define CONTEXT Adaptability
 static const Ability Adaptability = {
     .name = $("Adaptability"),
     .description = $("Increases STAB from 1.5x to 2x."),
     .adaptability = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SkillLink
 static const Ability SkillLink = {
     .name = $("Skill Link"),
     .description = $("Multi-hit moves always hit the\n"
@@ -1616,118 +1327,95 @@ static const Ability SkillLink = {
     .skillLink = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Hydration
-ON_END_TURN {
-    CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
-
-    CHECK(AbilityHealMonStatus(battler, ability))
-    return TRUE;
-}
 static const Ability Hydration = {
     .name = $("Hydration"),
     .description = $("Cures own status at the end of\n"
                      "every turn in rain."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
+
+        CHECK(AbilityHealMonStatus(battler, ability));
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SolarPower
-ON_STAT {
-    if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
-    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat *= 1.5;
-}
 static const Ability SolarPower = {
     .name = $("Solar Power"),
     .description = $("Ups highest attacking stat\n"
                      "by 1.5x in sun."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
+            if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT QuickFeet
-ON_STAT {
-    if (statId == STAT_SPEED && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
-}
 static const Ability QuickFeet = {
     .name = $("Quick Feet"),
     .description = $("Ups Speed by 1.5x if suffering\n"
                      "from a status condition."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Normalize
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
-}
-ON_MOVE_TYPE { return TYPE_NORMAL + 1; }
 static const Ability Normalize = {
     .name = $("Normalize"),
     .description = $("Its moves become Normal-type,\n"
                      "get 1.1x boost, ignore resists."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
+        },
+    .onMoveType = +[](ON_MOVE_TYPE) -> int { return TYPE_NORMAL + 1; },
 };
 
-#undef CONTEXT
-#define CONTEXT Sniper
-ON_OFFENSIVE_MULTIPLIER {
-    if (isCrit) MUL(1.5);
-}
 static const Ability Sniper = {
     .name = $("Sniper"),
     .description = $("Critical hits have a 2.25x dmg\n"
                      "multiplier instead of 1.5x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (isCrit) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT MagicGuard
 static const Ability MagicGuard = {
     .name = $("Magic Guard"),
     .description = $("Only damaged by attacks."),
     .magicGuard = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT NoGuard
-ON_ACCURACY { return ACCURACY_ALWAYS_HITS; }
 static const Ability NoGuard = {
     .name = $("No Guard"),
     .description = $("Attacks used by and on this\n"
                      "Pokémon bypass accuracy checks."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority { return ACCURACY_ALWAYS_HITS; },
     .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
 };
 
-#undef CONTEXT
-#define CONTEXT Stall
-ON_DEFENSIVE_MULTIPLIER {
-    if (gCurrentTurnActionNumber < GetBattlerTurnOrderNum(battler)) MUL(.7);
-}
 static const Ability Stall = {
     .name = $("Stall"),
     .description = $("Takes 30% less damage if it\n"
                      "hasn't moved yet."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (gCurrentTurnActionNumber < GetBattlerTurnOrderNum(battler)) MUL(.7);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Technician
-ON_OFFENSIVE_MULTIPLIER {
-    if (basePower <= 60) MUL(1.5);
-}
 static const Ability Technician = {
     .name = $("Technician"),
     .description = $("Moves with 60 BP or less get\n"
                      "a 1.5x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (basePower <= 60) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT LeafGuard
 static const Ability LeafGuard = {
     .name = $("Leaf Guard"),
     .description = $("Immune to status conditions if\n"
@@ -1735,110 +1423,92 @@ static const Ability LeafGuard = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Klutz
 static const Ability Klutz = {
     .name = $("Klutz"),
     .description = $("Own held item has no effect.\n"
                      "Mega Stones are unaffected."),
 };
 
-#undef CONTEXT
-#define CONTEXT MoldBreaker
-ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER); }
 static const Ability MoldBreaker = {
     .name = $("Mold Breaker"),
     .description = $("Moves hit through abilities.\n"
                      "Also affects innates."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER); },
 };
 
-#undef CONTEXT
-#define CONTEXT SuperLuck
 static const Ability SuperLuck = {
     .name = $("Super Luck"),
     .description = $("Raises critical-hit ratio of own\n"
                      "moves by +1."),
 };
 
-#undef CONTEXT
-#define CONTEXT Aftermath
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK_NOT(IsBattlerAlive(battler))
-    CHECK_NOT(IsMagicGuardProtected(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-
-    gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
-    if (!gBattleMoveDamage) gBattleMoveDamage = 1;
-    BattleScriptCall(BattleScript_AftermathDmg);
-    return TRUE;
-}
 static const Ability Aftermath = {
     .name = $("Aftermath"),
     .description = $("If faints by a contact move,\n"
                      "attacker takes 25% of max HP."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK_NOT(IsBattlerAlive(battler))
+        CHECK_NOT(IsMagicGuardProtected(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
+        if (!gBattleMoveDamage) gBattleMoveDamage = 1;
+        BattleScriptCall(BattleScript_AftermathDmg);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Anticipation
-ON_ENTRY {
-    int side = GetBattlerSide(battler);
-    int any = FALSE;
-
-    for (int i = 0; i < gBattlersCount; i++) {
-        if (IsBattlerAlive(i) && side != GetBattlerSide(i)) {
-            for (int j = 0; j < MAX_MON_MOVES; j++) {
-                int move = gBattleMons[i].moves[j];
-                int moveType = gBattleMoves[move].type;
-                if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0)) {
-                    any = TRUE;
-                    break;
-                }
-            }
-        }
-    }
-
-    CHECK(any)
-
-    return SwitchInAnnounce(B_MSG_SWITCHIN_ANTICIPATION);
-}
 static const Ability Anticipation = {
     .name = $("Anticipation"),
     .description = $("Senses Super-effective moves.\n"
                      "Blocks one Super-effective hit."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        int side = GetBattlerSide(battler);
+        int any = FALSE;
+
+        for (int i = 0; i < gBattlersCount; i++) {
+            if (IsBattlerAlive(i) && side != GetBattlerSide(i)) {
+                for (int j = 0; j < MAX_MON_MOVES; j++) {
+                    int move = gBattleMons[i].moves[j];
+                    int moveType = gBattleMoves[move].type;
+                    if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0)) {
+                        any = TRUE;
+                        break;
+                    }
+                }
+            }
+        }
+
+        CHECK(any)
+
+        return SwitchInAnnounce(B_MSG_SWITCHIN_ANTICIPATION);
+    },
     .breakable = TRUE,
     .persistent = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Forewarn
-ON_ENTRY {
-    gBattlerTarget = BATTLE_OPPOSITE(battler);
-    if (!IsBattlerAlive(gBattlerTarget) || gWishFutureKnock.futureSightCounter[gBattlerTarget]) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
-    CHECK(IsBattlerAlive(gBattlerTarget))
-    CHECK_NOT(gWishFutureKnock.futureSightCounter[gBattlerTarget])
-
-    gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)] |= SIDE_STATUS_FUTUREATTACK;
-    gWishFutureKnock.futureSightMove[gBattlerTarget] = MOVE_FUTURE_SIGHT;
-    gWishFutureKnock.futureSightPower[gBattlerTarget] = 50;
-    gWishFutureKnock.futureSightAttacker[gBattlerTarget] = battler;
-    gWishFutureKnock.futureSightCounter[gBattlerTarget] = 3;
-
-    BattleScriptPushCursorAndCallback(BattleScript_ForewarnReworkActivates);
-    return TRUE;
-}
 static const Ability Forewarn = {
     .name = $("Forewarn"),
     .description = $("Casts a 50 BP Future Sight on\n"
                      "entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        gBattlerTarget = BATTLE_OPPOSITE(battler);
+        if (!IsBattlerAlive(gBattlerTarget) || gWishFutureKnock.futureSightCounter[gBattlerTarget]) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
+        CHECK(IsBattlerAlive(gBattlerTarget))
+        CHECK_NOT(gWishFutureKnock.futureSightCounter[gBattlerTarget])
+
+        gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)] |= SIDE_STATUS_FUTUREATTACK;
+        gWishFutureKnock.futureSightMove[gBattlerTarget] = MOVE_FUTURE_SIGHT;
+        gWishFutureKnock.futureSightPower[gBattlerTarget] = 50;
+        gWishFutureKnock.futureSightAttacker[gBattlerTarget] = battler;
+        gWishFutureKnock.futureSightCounter[gBattlerTarget] = 3;
+
+        BattleScriptPushCursorAndCallback(BattleScript_ForewarnReworkActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Unaware
 static const Ability Unaware = {
     .name = $("Unaware"),
     .description = $("Ignores foes' stat changes, both\n"
@@ -1847,96 +1517,79 @@ static const Ability Unaware = {
     .unaware = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT TintedLens
-ON_OFFENSIVE_MULTIPLIER {
-    if (typeEffectivenessMultiplier <= UQ_4_12(.5)) RESISTANCE(2);
-}
 static const Ability TintedLens = {
     .name = $("Tinted Lens"),
     .description = $("Attacks deal double damage if\n"
                      "resisted."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (typeEffectivenessMultiplier <= UQ_4_12(.5)) RESISTANCE(2);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Filter
-ON_DEFENSIVE_MULTIPLIER {
-    if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
-}
 static const Ability Filter = {
     .name = $("Filter"),
     .description = $("Takes 35% less damage from\n"
                      "Super-effective moves."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SlowStart
-ON_ENTRY {
-    gVolatileStructs[battler].slowStartTimer = 5;
-    return SwitchInAnnounce(B_MSG_SWITCHIN_SLOWSTART);
-}
-ON_STAT {
-    if (statId != STAT_ATK && statId != STAT_SPEED) return;
-    if (gVolatileStructs[battler].slowStartTimer) *stat /= 2;
-}
 static const Ability SlowStart = {
     .name = $("Slow Start"),
     .description = $("Halves Attack and Speed during\n"
                      "the first 5 turns out."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_STAT,
+    .onEntry = +[](ON_ENTRY) -> int {
+        gVolatileStructs[battler].slowStartTimer = 5;
+        return SwitchInAnnounce(B_MSG_SWITCHIN_SLOWSTART);
+    },
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != STAT_ATK && statId != STAT_SPEED) return;
+            if (gVolatileStructs[battler].slowStartTimer) *stat /= 2;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Scrappy
 static const Ability Scrappy = {
     .name = $("Scrappy"),
     .description = $("Normal/Fighting can hit Ghosts.\n"
                      "Immune to Intimidate/Scare."),
 };
 
-#undef CONTEXT
-#define CONTEXT StormDrain
-ON_ABSORB {
-    CHECK(moveType == TYPE_WATER)
-    *statId = GetHighestAttackingStatId(battler, TRUE);
-    return ABSORB_RESULT_STAT;
-}
 static const Ability StormDrain = {
     .name = $("Storm Drain"),
     .description = $("Redirects Water moves.\n"
                      "Absorbs them, ups highest Atk."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_WATER);
+        *statId = GetHighestAttackingStatId(battler, TRUE);
+        return ABSORB_RESULT_STAT;
+    },
     .redirectType = TYPE_WATER,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT IceBody
-ON_END_TURN {
-    CHECK_NOT(BATTLER_MAX_HP(battler))
-    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-    CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
-
-    gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-    gBattleMoveDamage *= -1;
-    BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
-    return TRUE;
-}
 static const Ability IceBody = {
     .name = $("Ice Body"),
     .description = $("Heals 1/8 of max HP every turn\n"
                      "in hail."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
+
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        gBattleMoveDamage *= -1;
+        BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SolidRock
 static const Ability SolidRock = {
     .name = $("Solid Rock"),
     .description = $("Takes 35% less damage from\n"
@@ -1945,78 +1598,65 @@ static const Ability SolidRock = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SnowWarning
-ON_ENTRY {
-    if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE)) {
-        BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
-        return TRUE;
-    } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
-        BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
-        return NO_ANNOUNCE;
-    }
-    return FALSE;
-}
 static const Ability SnowWarning = {
     .name = $("Snow Warning"),
     .description = $("Summons hail on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE)) {
+            BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
+            return TRUE;
+        } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
+            BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
+            return NO_ANNOUNCE;
+        }
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT HoneyGather
-ON_END_TURN {
-    CHECK_NOT(gBattleMons[battler].item)
-    CHECK(Random() % 2)
-
-    gBattleMons[battler].item = gLastUsedItem = ITEM_HONEY;
-    BattleScriptPushCursorAndCallback(BattleScript_HoneyGatherActivates);
-    return TRUE;
-}
 static const Ability HoneyGather = {
     .name = $("Honey Gather"),
     .description = $("Has a 50% chance to find Honey\n"
                      "each turn."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(gBattleMons[battler].item)
+        CHECK(Random() % 2)
+
+        gBattleMons[battler].item = gLastUsedItem = ITEM_HONEY;
+        BattleScriptPushCursorAndCallback(BattleScript_HoneyGatherActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Frisk
-ON_ENTRY {
-    int any = FALSE;
-    for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2) {
-        FILTER(IsBattlerAlive(i))
-        FILTER(gBattleMons[i].item)
-        any = TRUE;
-        break;
-    }
-
-    CHECK(any)
-    BattleScriptPushCursorAndCallback(BattleScript_FriskActivates);
-    return TRUE;
-}
 static const Ability Frisk = {
     .name = $("Frisk"),
     .description = $("Checks foes' item and disables\n"
                      "their items for two turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        int any = FALSE;
+        for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2) {
+            FILTER(IsBattlerAlive(i))
+            FILTER(gBattleMons[i].item)
+            any = TRUE;
+            break;
+        }
+
+        CHECK(any)
+        BattleScriptPushCursorAndCallback(BattleScript_FriskActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Reckless
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
-}
 static const Ability Reckless = {
     .name = $("Reckless"),
     .description = $("Moves causing recoil damage\n"
                      "deal 1.2x more damage."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Multitype
 static const Ability Multitype = {
     .name = $("Multitype"),
     .description = $("Held Plate item decides holder's\n"
@@ -2025,12 +1665,6 @@ static const Ability Multitype = {
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT FlowerGift
-ON_STAT {
-    if (statId != STAT_SPATK && statId != STAT_SPDEF) return;
-    if (IsWeatherActive(WEATHER_SUN_ANY)) *stat *= 1.5;
-}
 static const Ability FlowerGift = {
     .name = $("Flower Gift"),
     .description = $("Increases the party's SpAtk\n"
@@ -2038,49 +1672,44 @@ static const Ability FlowerGift = {
     .onEntry = Forecast.onEntry,
     .onWeather = Forecast.onWeather,
     .onEndTurn = Forecast.onEndTurn,
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != STAT_SPATK && statId != STAT_SPDEF) return;
+            if (IsWeatherActive(WEATHER_SUN_ANY)) *stat *= 1.5;
+        },
     .onStatFor = APPLY_ON_ALLY,
     .breakable = TRUE,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT BadDreams
-ON_END_TURN {
-    gBattleScripting.abilityPopupOverwrite = ability;
-    BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
-    return NO_ANNOUNCE;
-}
 static const Ability BadDreams = {
     .name = $("Bad Dreams"),
     .description = $("Sleeping Pokémon lose 1/4 of max\n"
                      "HP at the end of each turn."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        gBattleScripting.abilityPopupOverwrite = ability;
+        BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
+        return NO_ANNOUNCE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Pickpocket
 static const Ability Pickpocket = {
     .name = $("Pickpocket"),
     .description = $("Steals the foe's held item on\n"
                      "contact."),
 };
 
-#undef CONTEXT
-#define CONTEXT SheerForce
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST) MUL(1.3);
-}
 static const Ability SheerForce = {
     .name = $("Sheer Force"),
     .description = $("Exchanges added effects on its\n"
                      "moves for 1.3x more power."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Contrary
 static const Ability Contrary = {
     .name = $("Contrary"),
     .description = $("Stat raises turn into stat drops\n"
@@ -2088,84 +1717,69 @@ static const Ability Contrary = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Unnerve
-ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE); }
 static const Ability Unnerve = {
     .name = $("Unnerve"),
     .description = $("Foes can't eat Berries as long\n"
                      "as this Pokémon is in battle."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE); },
 };
 
-#undef CONTEXT
-#define CONTEXT Defiant
 static const Ability Defiant = {
     .name = $("Defiant"),
     .description = $("Raises Attack by two stages if\n"
                      "stats are lowered by an enemy."),
 };
 
-#undef CONTEXT
-#define CONTEXT Defeatist
-ON_STAT {
-    if (statId != STAT_ATK && statId != STAT_SPATK) return;
-    if (gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 3) *stat /= 2;
-}
 static const Ability Defeatist = {
     .name = $("Defeatist"),
     .description = $("Halves Atk and Sp. Atk stats if\n"
                      "user is below 1/3 of max HP."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != STAT_ATK && statId != STAT_SPATK) return;
+            if (gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 3) *stat /= 2;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT CursedBody
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK_NOT(gVolatileStructs[attacker].disabledMove)
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK_NOT(IsAbilityOnSide(attacker, ABILITY_AROMA_VEIL))
-    CHECK(gBattleMons[attacker].pp[gChosenMovePos])
-    CHECK(Random() % 100 < 30)
-
-    gVolatileStructs[attacker].disabledMove = gChosenMove;
-    gVolatileStructs[attacker].disableTimer = 4;
-    PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove);
-    BattleScriptCall(BattleScript_CursedBodyActivates);
-    return TRUE;
-}
 static const Ability CursedBody = {
     .name = $("Cursed Body"),
     .description = $("30% chance to disable moves\n"
                      "if enemy makes contact."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK_NOT(gVolatileStructs[attacker].disabledMove)
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(IsAbilityOnSide(attacker, ABILITY_AROMA_VEIL))
+        CHECK(gBattleMons[attacker].pp[gChosenMovePos])
+        CHECK(Random() % 100 < 30)
+
+        gVolatileStructs[attacker].disabledMove = gChosenMove;
+        gVolatileStructs[attacker].disableTimer = 4;
+        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove);
+        BattleScriptCall(BattleScript_CursedBodyActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Healer
-ON_END_TURN {
-    CHECK(Random() % 100 < 30)
-
-    if (IsBattlerAlive(BATTLE_PARTNER(battler)) && gBattleMons[BATTLE_PARTNER(battler)].status1 & STATUS1_ANY) {
-        gEffectBattler = battler;
-        gBattleScripting.battler = BATTLE_PARTNER(battler);
-        BattleScriptPushCursorAndCallback(BattleScript_HealerActivates);
-        return TRUE;
-    } else if (IsBattlerAlive(battler) && gBattleMons[battler].status1 & STATUS1_ANY) {
-        if (AbilityHealMonStatus(battler, ability)) return TRUE;
-    }
-    return FALSE;
-}
 static const Ability Healer = {
     .name = $("Healer"),
     .description = $("30% chance to heal user or ally's\n"
                      "status at the end of each turn."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(Random() % 100 < 30)
+
+        if (IsBattlerAlive(BATTLE_PARTNER(battler)) && gBattleMons[BATTLE_PARTNER(battler)].status1 & STATUS1_ANY) {
+            gEffectBattler = battler;
+            gBattleScripting.battler = BATTLE_PARTNER(battler);
+            BattleScriptPushCursorAndCallback(BattleScript_HealerActivates);
+            return TRUE;
+        } else if (IsBattlerAlive(battler) && gBattleMons[battler].status1 & STATUS1_ANY) {
+            if (AbilityHealMonStatus(battler, ability)) return TRUE;
+        }
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT FriendGuard
 static const Ability FriendGuard = {
     .name = $("Friend Guard"),
     .description = $("Reduces damage that ally takes\n"
@@ -2173,71 +1787,59 @@ static const Ability FriendGuard = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT WeakArmor
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(IS_MOVE_PHYSICAL(move))
-    CHECK(CanRaiseStat(battler, STAT_SPEED) || CanLowerStat(battler, STAT_DEF))
-
-    if (gBattleMoves[move].effect == EFFECT_HIT_ESCAPE && CanBattlerSwitch(attacker)) gRoundStructs[battler].disableEjectPack = TRUE;  // Set flag for target
-
-    BattleScriptCall(BattleScript_WeakArmorActivates);
-    return TRUE;
-}
 static const Ability WeakArmor = {
     .name = $("Weak Armor"),
     .description = $("If hit by a contact attack:\n"
                      "-1 Defense and +2 Speed."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(IS_MOVE_PHYSICAL(move))
+        CHECK(CanRaiseStat(battler, STAT_SPEED) || CanLowerStat(battler, STAT_DEF))
+
+        if (gBattleMoves[move].effect == EFFECT_HIT_ESCAPE && CanBattlerSwitch(attacker))
+            gRoundStructs[battler].disableEjectPack = TRUE;  // Set flag for target
+
+        BattleScriptCall(BattleScript_WeakArmorActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT HeavyMetal
 static const Ability HeavyMetal = {
     .name = $("Heavy Metal"),
     .description = $("Doubles this Pokémon's weight."),
 };
 
-#undef CONTEXT
-#define CONTEXT LightMetal
-ON_STAT {
-    if (statId == STAT_SPEED) *stat *= 1.3;
-}
 static const Ability LightMetal = {
     .name = $("Light Metal"),
     .description = $("Boosts Speed by 1.3x and halves\n"
                      "this Pokémon's weight."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED) *stat *= 1.3;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Multiscale
-ON_DEFENSIVE_MULTIPLIER {
-    if (BATTLER_MAX_HP(battler)) MUL(.5);
-}
 static const Ability Multiscale = {
     .name = $("Multiscale"),
     .description = $("At full HP, halves damage taken\n"
                      "from attacks"),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (BATTLER_MAX_HP(battler)) MUL(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT ToxicBoost
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMons[battler].status1 & STATUS1_PSN_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
-}
 static const Ability ToxicBoost = {
     .name = $("Toxic Boost"),
     .description = $("Ups Atk by 1.5x if poisoned.\n"
                      "Immune to Poison status damage."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMons[battler].status1 & STATUS1_PSN_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT FlareBoost
 int FlareBoostHandler(int ability, int battler, AbilityCallType callType) {
     CHECK(CanBeBurned(battler))
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
@@ -2249,99 +1851,86 @@ int FlareBoostHandler(int ability, int battler, AbilityCallType callType) {
     BattleScriptCall(BattleScript_FlareBoostRet);
     return TRUE;
 }
-ON_ENTRY { return FlareBoostHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-ON_WEATHER { return FlareBoostHandler(ability, battler, ABILITY_BS_CALL); }
-ON_STAT {
-    if (statId != STAT_SPATK) return;
-    if (gBattleMons[battler].status1 & STATUS1_BURN) *stat *= 1.5;
-}
+
 static const Ability FlareBoost = {
     .name = $("Flare Boost"),
     .description = $("Ups Sp. Atk by 1.5x if burned.\n"
                      "Ignites in fog."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_WEATHER,
-    CONTEXT_ON_STAT,
+    .onEntry = +[](ON_ENTRY) -> int { return FlareBoostHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onWeather = +[](ON_WEATHER) -> int { return FlareBoostHandler(ability, battler, ABILITY_BS_CALL); },
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != STAT_SPATK) return;
+            if (gBattleMons[battler].status1 & STATUS1_BURN) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Harvest
-ON_END_TURN {
-    CHECK_NOT(gBattleMons[battler].item)
-    CHECK_NOT(gBattleStruct->changedItems[battler])
-    CHECK(ItemId_GetPocket(GetUsedHeldItem(battler)) == POCKET_BERRIES)
-    CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) || Random() % 2)
-
-    BattleScriptPushCursorAndCallback(BattleScript_HarvestActivates);
-    return TRUE;
-}
 static const Ability Harvest = {
     .name = $("Harvest"),
     .description = $("50% chance to recycle a used\n"
                      "Berry every turn, 100% in sun."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(gBattleMons[battler].item)
+        CHECK_NOT(gBattleStruct->changedItems[battler])
+        CHECK(ItemId_GetPocket(GetUsedHeldItem(battler)) == POCKET_BERRIES)
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) || Random() % 2)
+
+        BattleScriptPushCursorAndCallback(BattleScript_HarvestActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Telepathy
 static const Ability Telepathy = {
     .name = $("Telepathy"),
     .description = $("Can't be damaged by ally attacks."),
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Moody
-ON_END_TURN {
-    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-    int validToRaise = 0, validToLower = 0;
-
-    int i;
-    for (i = STAT_ATK; i < NUM_STATS; i++) {
-        if (CanLowerStat(battler, i)) validToLower |= 1 << i;
-        if (CanRaiseStat(battler, i)) validToRaise |= 1 << i;
-    }
-
-    CHECK(validToLower || validToRaise)
-
-    if (validToRaise) {
-        do {
-            i = (Random() % NUM_STATS - STAT_ATK) + STAT_ATK;
-        } while (!(validToRaise & (1 << i)));
-        SetStatChanger(i, 2);
-        validToLower &= ~(1 << i);
-    }
-    if (validToLower) {
-        do {
-            i = (Random() % NUM_STATS - STAT_ATK) + STAT_ATK;
-        } while (!(validToLower & (1 << i)));
-        SET_STATCHANGER2(gBattleScripting.savedStatChanger, i, 1, TRUE);
-    }
-    BattleScriptPushCursorAndCallback(BattleScript_MoodyActivates);
-    return TRUE;
-}
 static const Ability Moody = {
     .name = $("Moody"),
     .description = $("Lowers a random stat by -1 and\n"
                      "raises another by +2 every turn."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2);
+        int validToRaise = 0, validToLower = 0;
+
+        int i;
+        for (i = STAT_ATK; i < NUM_STATS; i++) {
+            if (CanLowerStat(battler, i)) validToLower |= 1 << i;
+            if (CanRaiseStat(battler, i)) validToRaise |= 1 << i;
+        }
+
+        CHECK(validToLower || validToRaise)
+
+        if (validToRaise) {
+            do {
+                i = (Random() % NUM_STATS - STAT_ATK) + STAT_ATK;
+            } while (!(validToRaise & (1 << i)));
+            SetStatChanger(i, 2);
+            validToLower &= ~(1 << i);
+        }
+        if (validToLower) {
+            do {
+                i = (Random() % NUM_STATS - STAT_ATK) + STAT_ATK;
+            } while (!(validToLower & (1 << i)));
+            SET_STATCHANGER2(gBattleScripting.savedStatChanger, i, 1, TRUE);
+        }
+        BattleScriptPushCursorAndCallback(BattleScript_MoodyActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Overcoat
-ON_DEFENSIVE_MULTIPLIER {
-    if (IS_MOVE_SPECIAL(move)) MUL(.8);
-}
 static const Ability Overcoat = {
     .name = $("Overcoat"),
     .description = $("Blocks weather dmg, powder moves.\n"
                      "20% Special damage reduction."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_SPECIAL(move)) MUL(.8);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PoisonTouch
 static const Ability PoisonTouch = {
     .name = $("Poison Touch"),
     .description = $("30% chance to poison on contact.\n"
@@ -2350,191 +1939,155 @@ static const Ability PoisonTouch = {
     .onDefender = PoisonPoint.onDefender,
 };
 
-#undef CONTEXT
-#define CONTEXT Regenerator
-ON_EXIT {
-    CHECK(IsBattlerAlive(battler))
-    CHECK(BATTLER_MAX_HP(battler))
-    BattleScriptCall(BattleScript_RegeneratorExits);
-    return FALSE;
-}
 static const Ability Regenerator = {
     .name = $("Regenerator"),
     .description = $("Heals 1/3 of max HP upon\n"
                      "switching out."),
-    CONTEXT_ON_EXIT,
+    .onExit = +[](ON_EXIT) -> int {
+        CHECK(IsBattlerAlive(battler)) CHECK(BATTLER_MAX_HP(battler));
+        BattleScriptCall(BattleScript_RegeneratorExits);
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT BigPecks
-ON_OFFENSIVE_MULTIPLIER {
-    if (IsMoveMakingContact(move, battler)) MUL(1.3);
-}
 static const Ability BigPecks = {
     .name = $("Big Pecks"),
     .description = $("Boosts the power of contact\n"
                      "moves by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IsMoveMakingContact(move, battler)) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT SandRush
-ON_STAT {
-    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat *= 1.5;
-}
 static const Ability SandRush = {
     .name = $("Sand Rush"),
     .description = $("This Pokémon's Speed gets a\n"
                      "1.5x boost in a sandstorm."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT WonderSkin
-ON_ACCURACY {
-    CHECK(IS_MOVE_STATUS(move))
-    *accuracy /= 2;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability WonderSkin = {
     .name = $("Wonder Skin"),
     .description = $("Opposing status moves have\n"
                      "their accuracy halved."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(IS_MOVE_STATUS(move));
+        *accuracy /= 2;
+        return ACCURACY_MULTIPLICATIVE;
+    },
     .onAccuracyFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Analytic
-ON_OFFENSIVE_MULTIPLIER {
-    if (GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber && move != MOVE_FUTURE_SIGHT && move != MOVE_DOOM_DESIRE) MUL(1.3);
-}
 static const Ability Analytic = {
     .name = $("Analytic"),
     .description = $("Attacks get a 1.3x power boost\n"
                      "if it moves last."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber && move != MOVE_FUTURE_SIGHT && move != MOVE_DOOM_DESIRE) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Illusion
-ON_DEFENDER {
-    CHECK(DidMoveHit())
-    CHECK(gBattleStruct->illusion[battler].on)
-    CHECK_NOT(gBattleStruct->illusion[battler].broken)
-
-    BattleScriptCall(BattleScript_IllusionOff);
-    return TRUE;
-}
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleStruct->illusion[battler].on && !gBattleStruct->illusion[battler].broken) MUL(1.3);
-}
 static const Ability Illusion = {
     .name = $("Illusion"),
     .description = $("Appears as last party slot and\n"
                      "boosts power by 1.3x until hit."),
-    CONTEXT_ON_DEFENDER,
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(gBattleStruct->illusion[battler].on)
+        CHECK_NOT(gBattleStruct->illusion[battler].broken)
+
+        BattleScriptCall(BattleScript_IllusionOff);
+        return TRUE;
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleStruct->illusion[battler].on && !gBattleStruct->illusion[battler].broken) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Imposter
-ON_ENTRY {
-    gBattlerTarget = BATTLE_OPPOSITE(battler);
-    if (!IsBattlerAlive(gBattlerTarget)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
-    CHECK(IsBattlerAlive(gBattlerTarget))
-    CHECK_NOT(gBattleMons[gBattlerTarget].status2 & (STATUS2_TRANSFORMED | STATUS2_SUBSTITUTE))
-    CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
-    CHECK_NOT(gBattleStruct->illusion[gBattlerTarget].on)
-    CHECK_NOT(gStatuses3[gBattlerTarget] & STATUS3_SEMI_INVULNERABLE)
-
-    BattleScriptPushCursorAndCallback(BattleScript_ImposterActivates);
-    return TRUE;
-}
 static const Ability Imposter = {
     .name = $("Imposter"),
     .description = $("Transforms into the foe on\n"
                      "entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        gBattlerTarget = BATTLE_OPPOSITE(battler);
+        if (!IsBattlerAlive(gBattlerTarget)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
+        CHECK(IsBattlerAlive(gBattlerTarget))
+        CHECK_NOT(gBattleMons[gBattlerTarget].status2 & (STATUS2_TRANSFORMED | STATUS2_SUBSTITUTE))
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
+        CHECK_NOT(gBattleStruct->illusion[gBattlerTarget].on)
+        CHECK_NOT(gStatuses3[gBattlerTarget] & STATUS3_SEMI_INVULNERABLE)
+
+        BattleScriptPushCursorAndCallback(BattleScript_ImposterActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Infiltrator
-ON_INFILTRATE { return INFILTRATE_SCREENS | INFILTRATE_SUBSTITUTE; }
 static const Ability Infiltrator = {
     .name = $("Infiltrator"),
     .description = $("Own moves bypass Substitutes\n"
                      "and damage reduction screens."),
-    CONTEXT_ON_INFILTRATE,
+    .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType { return INFILTRATE_SCREENS | INFILTRATE_SUBSTITUTE; },
 };
 
-#undef CONTEXT
-#define CONTEXT Mummy
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK_NOT(BattlerHasAbility(attacker, ability, FALSE))
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
-    CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
-
-    UpdateAbilityStateIndicesForNewAbility(attacker, ability);
-    ReplaceAbility(attacker, ability);
-    BattleScriptCall(BattleScript_MummyActivates);
-    return TRUE;
-}
 static const Ability Mummy = {
     .name = $("Mummy"),
     .description = $("If hit, makes the attacker's ability\n"
                      "Mummy."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK_NOT(BattlerHasAbility(attacker, ability, FALSE))
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
+        CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
+
+        UpdateAbilityStateIndicesForNewAbility(attacker, ability);
+        ReplaceAbility(attacker, ability);
+        BattleScriptCall(BattleScript_MummyActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Moxie
-ON_BATTLER_FAINTS { return MoxieClone(battler, STAT_ATK); }
 static const Ability Moxie = {
     .name = $("Moxie"),
     .description = $("Dealing a KO raises Attack by\n"
                      "one stage."),
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, STAT_ATK); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT Justified
-ON_ABSORB {
-    CHECK(moveType == TYPE_DARK)
-    *statId = GetHighestAttackingStatId(battler, TRUE);
-    return ABSORB_RESULT_STAT;
-}
 static const Ability Justified = {
     .name = $("Justified"),
     .description = $("Boosts Attack instead of being\n"
                      "hit by Dark-type moves."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_DARK);
+        *statId = GetHighestAttackingStatId(battler, TRUE);
+        return ABSORB_RESULT_STAT;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Rattled
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(moveType == TYPE_DARK || moveType == TYPE_BUG || moveType == TYPE_GHOST)
-    CHECK(CanRaiseStat(battler, STAT_SPEED))
-
-    SetStatChanger(STAT_SPEED, 1);
-    BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-    return TRUE;
-}
 static const Ability Rattled = {
     .name = $("Rattled"),
     .description = $("If hit by Bug, Dark or Ghost\n"
                      "move, or flinches: +1 Speed."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(moveType == TYPE_DARK || moveType == TYPE_BUG || moveType == TYPE_GHOST)
+        CHECK(CanRaiseStat(battler, STAT_SPEED))
+
+        SetStatChanger(STAT_SPEED, 1);
+        BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT MagicBounce
 static const Ability MagicBounce = {
     .name = $("Magic Bounce"),
     .description = $("Bounces back the effect of\n"
@@ -2542,49 +2095,39 @@ static const Ability MagicBounce = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SapSipper
-ON_ABSORB {
-    CHECK(moveType == TYPE_GRASS)
-    *statId = GetHighestAttackingStatId(battler, TRUE);
-    return ABSORB_RESULT_STAT;
-}
 static const Ability SapSipper = {
     .name = $("Sap Sipper"),
     .description = $("Boosts highest Atk instead of\n"
                      "being hit by Grass-type moves."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_GRASS);
+        *statId = GetHighestAttackingStatId(battler, TRUE);
+        return ABSORB_RESULT_STAT;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Prankster
-ON_PRIORITY {
-    CHECK(IS_MOVE_STATUS(move))
-    return 1;
-}
 static const Ability Prankster = {
     .name = $("Prankster"),
     .description = $("Status moves have +1 priority\n"
                      "but fail on opposing Dark-types."),
-    CONTEXT_ON_PRIORITY,
+    .onPriority = +[](ON_PRIORITY) -> int {
+        CHECK(IS_MOVE_STATUS(move))
+        return 1;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SandForce
-ON_STAT {
-    if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
-    if (IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat *= 1.5;
-}
 static const Ability SandForce = {
     .name = $("Sand Force"),
     .description = $("Ups highest attacking stat\n"
                      "by 1.5x in sand."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
+            if (IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT IronBarbs
 static const Ability IronBarbs = {
     .name = $("Iron Barbs"),
     .description = $("Enemies lose 1/8 of max HP if\n"
@@ -2592,8 +2135,6 @@ static const Ability IronBarbs = {
     .onDefender = RoughSkin.onDefender,
 };
 
-#undef CONTEXT
-#define CONTEXT ZenMode
 static const Ability ZenMode = {
     .name = $("Zen Mode"),
     .description = $("Transforms into Zen Mode on\n"
@@ -2604,42 +2145,31 @@ static const Ability ZenMode = {
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT VictoryStar
-ON_ACCURACY {
-    *accuracy *= 1.2;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability VictoryStar = {
     .name = $("Victory Star"),
     .description = $("Gives 1.2x accuracy boost to\n"
                      "its own and its allies' moves."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        *accuracy *= 1.2;
+        return ACCURACY_MULTIPLICATIVE;
+    },
     .onAccuracyFor = APPLY_ON_ALLY,
 };
 
-#undef CONTEXT
-#define CONTEXT Turboblaze
-ON_ENTRY { return AddBattlerType(battler, TYPE_FIRE); }
 static const Ability Turboblaze = {
     .name = $("Turboblaze"),
     .description = $("Moves hit through abilities.\n"
                      "Adds Fire type to itself."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIRE); },
 };
 
-#undef CONTEXT
-#define CONTEXT Teravolt
-ON_ENTRY { return AddBattlerType(battler, TYPE_ELECTRIC); }
 static const Ability Teravolt = {
     .name = $("Teravolt"),
     .description = $("Moves hit through abilities.\n"
                      "Adds Electric type to itself."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ELECTRIC); },
 };
 
-#undef CONTEXT
-#define CONTEXT AromaVeil
 static const Ability AromaVeil = {
     .name = $("Aroma Veil"),
     .description = $("Immune to Encore, Attract, Taunt,\n"
@@ -2647,8 +2177,6 @@ static const Ability AromaVeil = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT FlowerVeil
 static const Ability FlowerVeil = {
     .name = $("Flower Veil"),
     .description = $("Grass-types on this Pokémon's\n"
@@ -2656,16 +2184,12 @@ static const Ability FlowerVeil = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT CheekPouch
 static const Ability CheekPouch = {
     .name = $("Cheek Pouch"),
     .description = $("This ability has no effect."),
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Protean
 static const Ability Protean = {
     .name = $("Protean"),
     .description = $("Changes type depending on the\n"
@@ -2673,76 +2197,58 @@ static const Ability Protean = {
     .protean = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT FurCoat
-ON_DEFENSIVE_MULTIPLIER {
-    if (IS_MOVE_PHYSICAL(move)) MUL(.5);
-}
 static const Ability FurCoat = {
     .name = $("Fur Coat"),
     .description = $("Halves damage taken by Physical\n"
                      "moves. Does NOT double Defense."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_PHYSICAL(move)) MUL(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Magician
 static const Ability Magician = {
     .name = $("Magician"),
     .description = $("Steals the foe's held item after\n"
                      "using a non-contact move."),
 };
 
-#undef CONTEXT
-#define CONTEXT Bulletproof
-ON_IMMUNE {
-    CHECK(gBattleMoves[move].flags & FLAG_BALLISTIC)
-    CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)
-    *immunityScript = BattleScript_SoundproofProtected;
-    return TRUE;
-}
 static const Ability Bulletproof = {
     .name = $("Bulletproof"),
     .description = $("Immune to projectile, ball, or\n"
                      "bomb-based moves."),
-    CONTEXT_ON_IMMUNE,
+    .onImmune = +[](ON_IMMUNE) -> int {
+        CHECK(gBattleMoves[move].flags & FLAG_BALLISTIC)
+        CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
+        return TRUE;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Competitive
 static const Ability Competitive = {
     .name = $("Competitive"),
     .description = $("Raises Sp. Atk by two stages if\n"
                      "stats are lowered by an enemy."),
 };
 
-#undef CONTEXT
-#define CONTEXT StrongJaw
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) MUL(1.3);
-}
 static const Ability StrongJaw = {
     .name = $("Strong Jaw"),
     .description = $("Boosts the power of bite/fang\n"
                      "moves by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Refrigerate
-ATE_ABILITY(TYPE_ICE)
 static const Ability Refrigerate = {
     .name = $("Refrigerate"),
     .description = $("Normal-type moves become Ice-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_ICE),
 };
 
-#undef CONTEXT
-#define CONTEXT SweetVeil
 static const Ability SweetVeil = {
     .name = $("Sweet Veil"),
     .description = $("This Pokémon and its ally are\n"
@@ -2750,8 +2256,6 @@ static const Ability SweetVeil = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT StanceChange
 static const Ability StanceChange = {
     .name = $("Stance Change"),
     .description = $("Turns into Blade or Shield form\n"
@@ -2760,51 +2264,40 @@ static const Ability StanceChange = {
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT GaleWings
-GALE_WINGS_CLONE(TYPE_FLYING)
 static const Ability GaleWings = {
     .name = $("Gale Wings"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's Flying-type moves."),
-    CONTEXT_ON_PRIORITY,
+    .onPriority = GALE_WINGS_CLONE(TYPE_FLYING),
 };
 
-#undef CONTEXT
-#define CONTEXT MegaLauncher
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.3);
-}
 static const Ability MegaLauncher = {
     .name = $("Mega Launcher"),
     .description = $("Boosts Beam/Pump/Cannon/Shot/\n"
                      "Gun/Pulse, etc. moves by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT GrassPelt
-ON_STAT {
-    if (statId == STAT_DEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
-}
 static const Ability GrassPelt = {
     .name = $("Grass Pelt"),
     .description = $("This Pokémon's Defense gets a\n"
                      "1.5x boost in Grassy Terrain."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_DEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Symbiosis
 static const Ability Symbiosis = {
     .name = $("Symbiosis"),
     .description = $("Passes own item to its ally if\n"
                      "said ally consumes its item."),
 };
 
-#undef CONTEXT
-#define CONTEXT ToughClaws
 static const Ability ToughClaws = {
     .name = $("Tough Claws"),
     .description = $("Boosts the power of contact\n"
@@ -2812,200 +2305,159 @@ static const Ability ToughClaws = {
     .onOffensiveMultiplier = BigPecks.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT Pixilate
-ATE_ABILITY(TYPE_FAIRY)
 static const Ability Pixilate = {
     .name = $("Pixilate"),
     .description = $("Normal-type moves become Fairy-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_FAIRY),
 };
 
-#undef CONTEXT
-#define CONTEXT Gooey
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(StatLowerableOrMirrorArmor(attacker, STAT_SPEED))
-    CHECK(IsMoveMakingContact(move, attacker))
-
-    BattleScriptCall(BattleScript_GooeyActivates);
-    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-    return TRUE;
-}
 static const Ability Gooey = {
     .name = $("Gooey"),
     .description = $("Lowers Speed of enemies that\n"
                      "make contact with this Pokémon."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(StatLowerableOrMirrorArmor(attacker, STAT_SPEED))
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        BattleScriptCall(BattleScript_GooeyActivates);
+        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Aerilate
-ATE_ABILITY(TYPE_FLYING)
 static const Ability Aerilate = {
     .name = $("Aerilate"),
     .description = $("Normal-type moves become Flying-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_FLYING),
 };
 
-#undef CONTEXT
-#define CONTEXT ParentalBond
-ON_PARENTAL_BOND { return PARENTAL_BOND_HYPER_AGGRESSIVE; }
 static const Ability ParentalBond = {
     .name = $("Parental Bond"),
     .description = $("Moves hit twice. 1st hit at 100%\n"
                      "power, 2nd hit at 25%."),
-    CONTEXT_ON_PARENTAL_BOND,
+    .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType { return PARENTAL_BOND_HYPER_AGGRESSIVE; },
     .resistsFortKnox = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT DarkAura
-ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_DARKAURA); }
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType != TYPE_DARK) return;
-    if (IsAbilityOnField(ABILITY_AURA_BREAK))
-        MUL(.75);
-    else
-        MUL(1.33);
-}
 static const Ability DarkAura = {
     .name = $("Dark Aura"),
     .description = $("Boosts Dark moves by 1.33x for\n"
                      "all while this Pokémon is out."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_DARKAURA); },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType != TYPE_DARK) return;
+            if (IsAbilityOnField(ABILITY_AURA_BREAK))
+                MUL(.75);
+            else
+                MUL(1.33);
+        },
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
-#undef CONTEXT
-#define CONTEXT FairyAura
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType != TYPE_FAIRY) return;
-    if (IsAbilityOnField(ABILITY_AURA_BREAK))
-        MUL(.75);
-    else
-        MUL(1.33);
-}
-ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_FAIRYAURA); }
 static const Ability FairyAura = {
     .name = $("Fairy Aura"),
     .description = $("Boosts Fairy moves by 1.33x for\n"
                      "all while this Pokémon is out."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_FAIRYAURA); },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType != TYPE_FAIRY) return;
+            if (IsAbilityOnField(ABILITY_AURA_BREAK))
+                MUL(.75);
+            else
+                MUL(1.33);
+        },
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
-#undef CONTEXT
-#define CONTEXT AuraBreak
-ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_AURABREAK); }
 static const Ability AuraBreak = {
     .name = $("Aura Break"),
     .description = $("Cancels aura abilities and makes\n"
                      "them 25% weaker instead."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_AURABREAK); },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PrimordialSea
-ON_ENTRY {
-    CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN_PRIMAL, TRUE))
-
-    BattleScriptPushCursorAndCallback(BattleScript_PrimordialSeaActivates);
-    return TRUE;
-}
 static const Ability PrimordialSea = {
     .name = $("Primordial Sea"),
     .description = $("Heavy Rain until switched out.\n"
                      "Fire-type moves are unusable."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN_PRIMAL, TRUE))
+
+        BattleScriptPushCursorAndCallback(BattleScript_PrimordialSeaActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT DesolateLand
-ON_ENTRY {
-    CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_SUN_PRIMAL, TRUE))
-
-    BattleScriptPushCursorAndCallback(BattleScript_DesolateLandActivates);
-    return TRUE;
-}
 static const Ability DesolateLand = {
     .name = $("Desolate Land"),
     .description = $("Intense Sun until switched out.\n"
                      "Water-type moves are unusable."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_SUN_PRIMAL, TRUE))
+
+        BattleScriptPushCursorAndCallback(BattleScript_DesolateLandActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT DeltaStream
-ON_ENTRY {
-    CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_STRONG_WINDS, TRUE))
-
-    BattleScriptPushCursorAndCallback(BattleScript_DeltaStreamActivates);
-    return TRUE;
-}
-ON_IMMUNE {
-    CHECK(gBattleMoves[move].flags & FLAG_WEATHER_BASED)
-    CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)
-    *immunityScript = BattleScript_SoundproofProtected;
-    return TRUE;
-}
 static const Ability DeltaStream = {
     .name = $("Delta Stream"),
     .description = $("Strong Winds until switched out.\n"
                      "Weather-based moves not usable."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_IMMUNE,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_STRONG_WINDS, TRUE))
+
+        BattleScriptPushCursorAndCallback(BattleScript_DeltaStreamActivates);
+        return TRUE;
+    },
+    .onImmune = +[](ON_IMMUNE) -> int {
+        CHECK(gBattleMoves[move].flags & FLAG_WEATHER_BASED)
+        CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)
+        *immunityScript = BattleScript_SoundproofProtected;
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Stamina
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(CanRaiseStat(battler, STAT_DEF))
-
-    if (gIsCriticalHit) {
-        SetStatChanger(STAT_DEF, 12);
-        BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
-    } else {
-        SetStatChanger(STAT_DEF, 1);
-        BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-    }
-    return TRUE;
-}
 static const Ability Stamina = {
     .name = $("Stamina"),
     .description = $("Getting hit raises Def by +1.\n"
                      "Critical hits maximize Defense."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(CanRaiseStat(battler, STAT_DEF))
+
+        if (gIsCriticalHit) {
+            SetStatChanger(STAT_DEF, 12);
+            BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
+        } else {
+            SetStatChanger(STAT_DEF, 1);
+            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+        }
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT WimpOut
-ON_DEFENDER {
-    CHECK(CheckHalfHpAbility(battler, attacker))
-    CHECK_NOT(TestSheerForceFlag(attacker, gCurrentMove))
-    CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-    CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
-    CHECK(CountUsablePartyMons(battler))
-    gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_EMERGENCY_EXIT;
-    return FALSE;
-}
 static const Ability WimpOut = {
     .name = $("Wimp Out"),
     .description = $("At 1/2 of max HP or below,\n"
                      "instantly switches out."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(CheckHalfHpAbility(battler, attacker))
+        CHECK_NOT(TestSheerForceFlag(attacker, gCurrentMove))
+        CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+        CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
+        CHECK(CountUsablePartyMons(battler));
+        gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_EMERGENCY_EXIT;
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT EmergencyExit
 static const Ability EmergencyExit = {
     .name = $("Emergency Exit"),
     .description = $("At 1/2 of max HP or below,\n"
@@ -3013,227 +2465,188 @@ static const Ability EmergencyExit = {
     .onDefender = WimpOut.onDefender,
 };
 
-#undef CONTEXT
-#define CONTEXT WaterCompaction
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(moveType == TYPE_WATER)
-    CHECK(CanRaiseStat(battler, STAT_DEF))
-
-    SetStatChanger(STAT_DEF, 2);
-    BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-    return TRUE;
-}
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_WATER) RESISTANCE(.5);
-}
 static const Ability WaterCompaction = {
     .name = $("Water Compaction"),
     .description = $("Takes 1/2 dmg from Water-type\n"
                      "moves. +2 Def when hit by those."),
-    CONTEXT_ON_DEFENDER,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(moveType == TYPE_WATER)
+        CHECK(CanRaiseStat(battler, STAT_DEF))
+
+        SetStatChanger(STAT_DEF, 2);
+        BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+        return TRUE;
+    },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_WATER) RESISTANCE(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Merciless
 static const Ability Merciless = {
     .name = $("Merciless"),
     .description = $("100% crit if targetting slowed,\n"
                      "poisoned, paralyzed, or bleeding foes."),
 };
 
-#undef CONTEXT
-#define CONTEXT ShieldsDown
-ON_ATTACKER {
-    CHECK(IsBattlerAlive(battler))
-    CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-    CHECK(gBattleMoves[move].effect == EFFECT_SHELL_SMASH)
-    CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-
-    int i;
-    for (i = 0; i < ARRAY_COUNT(gHpTransformations); i++) {
-        if (gHpTransformations[i][0] == ability && gBattleMons[battler].species == gHpTransformations[i][1]) break;
-    }
-
-    if (i < ARRAY_COUNT(gHpTransformations)) {
-        UpdateAbilityStateIndicesForNewSpecies(battler, gHpTransformations[i][2]);
-        SetAbilityState(battler, ability, TRUE);
-        gBattleMons[battler].species = gHpTransformations[i][2];
-        BattleScriptCall(BattleScript_AttackerFormChange);
-        return TRUE;
-    }
-    return FALSE;
-}
 static const Ability ShieldsDown = {
     .name = $("Shields Down"),
     .description = $("At 1/2 of max HP or below,\n"
                      "transforms into Core form."),
     .onEntry = Forecast.onEntry,
     .onEndTurn = Forecast.onEndTurn,
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IsBattlerAlive(battler))
+        CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        CHECK(gBattleMoves[move].effect == EFFECT_SHELL_SMASH)
+        CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+
+        int i;
+        for (i = 0; i < ARRAY_COUNT(gHpTransformations); i++) {
+            if (gHpTransformations[i][0] == ability && gBattleMons[battler].species == gHpTransformations[i][1]) break;
+        }
+
+        if (i < ARRAY_COUNT(gHpTransformations)) {
+            UpdateAbilityStateIndicesForNewSpecies(battler, gHpTransformations[i][2]);
+            SetAbilityState(battler, ability, TRUE);
+            gBattleMons[battler].species = gHpTransformations[i][2];
+            BattleScriptCall(BattleScript_AttackerFormChange);
+            return TRUE;
+        }
+        return FALSE;
+    },
     .unsuppressable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Stakeout
-ON_OFFENSIVE_MULTIPLIER {
-    if (gVolatileStructs[target].isFirstTurn == 2) MUL(2.0);
-}
 static const Ability Stakeout = {
     .name = $("Stakeout"),
     .description = $("Deals double damage to opponents\n"
                      "being switched in."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gVolatileStructs[target].isFirstTurn == 2) MUL(2.0);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT WaterBubble
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_WATER) MUL(2.0);
-}
 static const Ability WaterBubble = {
     .name = $("Water Bubble"),
     .description = $("Halves Fire dmg taken, no burns,\n"
                      "doubles power of its Water moves."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_WATER) MUL(2.0);
+        },
     .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Steelworker
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_STEEL) MUL(1.3);
-}
 static const Ability Steelworker = {
     .name = $("Steelworker"),
     .description = $("Boosts the power of Steel-type\n"
                      "moves by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_STEEL) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Berserk
-ON_DEFENDER {
-    CHECK(CheckHalfHpAbility(battler, attacker))
-    CHECK_NOT(GetAbilityState(battler, ability))
-    CHECK(CanRaiseStat(battler, STAT_SPATK))
-
-    SetAbilityState(battler, ability, TRUE);
-    SetStatChanger(STAT_SPATK, 1);
-    BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-    return TRUE;
-}
 static const Ability Berserk = {
     .name = $("Berserk"),
     .description = $("Boosts Sp. Atk by one stage when\n"
                      "at 1/2 of max HP or lower."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(CheckHalfHpAbility(battler, attacker))
+        CHECK_NOT(GetAbilityState(battler, ability))
+        CHECK(CanRaiseStat(battler, STAT_SPATK))
+
+        SetAbilityState(battler, ability, TRUE);
+        SetStatChanger(STAT_SPATK, 1);
+        BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SlushRush
-ON_STAT {
-    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
-}
 static const Ability SlushRush = {
     .name = $("Slush Rush"),
     .description = $("This Pokémon's Speed gets a\n"
                      "1.5x boost in hail."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT LongReach
-ON_OFFENSIVE_MULTIPLIER {
-    if (IS_MOVE_PHYSICAL(move) && !(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) MUL(1.2);
-}
 static const Ability LongReach = {
     .name = $("Long Reach"),
     .description = $("Doesn't make contact. Boosts\n"
                      "Phys. non-contact moves by 1.2x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_PHYSICAL(move) && !(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) MUL(1.2);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT LiquidVoice
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.2);
-}
-ON_MOVE_TYPE {
-    CHECK(moveType == TYPE_NORMAL)
-    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-    return TYPE_WATER + 1;
-}
 static const Ability LiquidVoice = {
     .name = $("Liquid Voice"),
     .description = $("Sound moves get a 1.2x boost\n"
                      "and become Water if Normal."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.2);
+        },
+    .onMoveType = +[](ON_MOVE_TYPE) -> int {
+        CHECK(moveType == TYPE_NORMAL)
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        return TYPE_WATER + 1;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Triage
-ON_PRIORITY {
-    CHECK(IsHealingMoveEffect(gBattleMoves[move].effect))
-    return 3;
-}
 static const Ability Triage = {
     .name = $("Triage"),
     .description = $("Moves that have a healing effect\n"
                      "gain +3 priority."),
-    CONTEXT_ON_PRIORITY,
+    .onPriority = +[](ON_PRIORITY) -> int {
+        CHECK(IsHealingMoveEffect(gBattleMoves[move].effect))
+        return 3;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Galvanize
-ATE_ABILITY(TYPE_ELECTRIC)
 static const Ability Galvanize = {
     .name = $("Galvanize"),
     .description = $("Normal-type moves become Elec.-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_ELECTRIC),
 };
 
-#undef CONTEXT
-#define CONTEXT SurgeSurfer
-ON_STAT {
-    if (statId == STAT_SPEED && IsWeatherActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat *= 1.5;
-}
 static const Ability SurgeSurfer = {
     .name = $("Surge Surfer"),
     .description = $("If Electric Terrain is active,\n"
                      "gets a 1.5x Speed boost."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED && IsWeatherActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Schooling
-ON_ENTRY {
-    CHECK(gBattleMons[battler].level >= 20)
-    return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
-}
-ON_END_TURN {
-    CHECK(gBattleMons[battler].level >= 20)
-    return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
-}
 static const Ability Schooling = {
     .name = $("Schooling"),
     .description = $("If Lv. 20 or more: changes into\n"
                      "School form until 1/4 HP or less."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_END_TURN,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(gBattleMons[battler].level >= 20)
+        return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(gBattleMons[battler].level >= 20)
+        return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+    },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Disguise
-ON_DISGUISE {
+static int DisguiseSpecies(int battler) {
     switch (gBattleMons[battler].species) {
         case SPECIES_MIMIKYU:
             return SPECIES_MIMIKYU_BUSTED;
@@ -3244,8 +2657,8 @@ ON_DISGUISE {
             return SPECIES_NONE;
     }
 }
-int DisguiseReformHandler(int ability, int battler, AbilityCallType callType) {
-    int newSpecies = onDisguiseDisguise(battler, TRUE);
+static int DisguiseReformHandler(int ability, int battler, AbilityCallType callType) {
+    int newSpecies = DisguiseSpecies(battler);
     CHECK(newSpecies)
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
     CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
@@ -3256,171 +2669,144 @@ int DisguiseReformHandler(int ability, int battler, AbilityCallType callType) {
     BattleScriptCall(BattleScript_AttackerFormChange);
     return TRUE;
 }
-ON_ENTRY { return DisguiseReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-ON_WEATHER { return DisguiseReformHandler(ability, battler, ABILITY_BS_CALL); }
 static const Ability Disguise = {
     .name = $("Disguise"),
     .description = $("Protects once against an attack.\n"
                      "Restores protection in fog."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_DISGUISE,
-    CONTEXT_ON_WEATHER,
+    .onEntry = +[](ON_ENTRY) -> int { return DisguiseReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onDisguise = +[](ON_DISGUISE) -> int { return DisguiseSpecies(battler); },
+    .onWeather = +[](ON_WEATHER) -> int { return DisguiseReformHandler(ability, battler, ABILITY_BS_CALL); },
     .breakable = TRUE,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT BattleBond
-ON_BATTLER_FAINTS {
-    int newSpecies = 0;
-    switch (gBattleMons[battler].species) {
-        case SPECIES_GRENINJA_BATTLE_BOND:
-            newSpecies = SPECIES_GRENINJA_ASH;
-            break;
-
-        case SPECIES_DARMANITAN_REDUX_BOND:
-            newSpecies = SPECIES_DARMANITAN_REDUX_BLUNDER;
-            break;
-    }
-
-    CHECK(newSpecies)
-
-    PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[battler].species);
-    gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
-    UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
-    gBattleMons[battler].species = newSpecies;
-    BattleScriptCall(BattleScript_BattleBondActivatesOnMoveEndAttacker);
-    return TRUE;
-}
 static const Ability BattleBond = {
     .name = $("Battle Bond"),
     .description = $("Transforms into Battle Bond form\n"
                      "after dealing a KO."),
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        int newSpecies = 0;
+        switch (gBattleMons[battler].species) {
+            case SPECIES_GRENINJA_BATTLE_BOND:
+                newSpecies = SPECIES_GRENINJA_ASH;
+                break;
+
+            case SPECIES_DARMANITAN_REDUX_BOND:
+                newSpecies = SPECIES_DARMANITAN_REDUX_BLUNDER;
+                break;
+        }
+
+        CHECK(newSpecies)
+
+        PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[battler].species);
+        gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
+        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+        gBattleMons[battler].species = newSpecies;
+        BattleScriptCall(BattleScript_BattleBondActivatesOnMoveEndAttacker);
+        return TRUE;
+    },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PowerConstruct
-ON_END_TURN {
-    CHECK(gBattleMons[battler].species == SPECIES_ZYGARDE || gBattleMons[battler].species == SPECIES_ZYGARDE_10)
-    CHECK(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
-    CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-
-    gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
-    UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_ZYGARDE_COMPLETE);
-    gBattleMons[battler].species = SPECIES_ZYGARDE_COMPLETE;
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
-    return TRUE;
-}
 static const Ability PowerConstruct = {
     .name = $("Power Construct"),
     .description = $("At 1/2 of max HP or below,\n"
                      "transforms into Complete form."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(gBattleMons[battler].species == SPECIES_ZYGARDE || gBattleMons[battler].species == SPECIES_ZYGARDE_10)
+        CHECK(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
+        CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+
+        gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
+        UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_ZYGARDE_COMPLETE);
+        gBattleMons[battler].species = SPECIES_ZYGARDE_COMPLETE;
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+        return TRUE;
+    },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Corrosion
 static const Ability Corrosion = {
     .name = $("Corrosion"),
     .description = $("Steel-types take Supereffective\n"
                      "from Poison. Can poison any type."),
 };
 
-#undef CONTEXT
-#define CONTEXT Comatose
-ON_ENTRY {
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
-    BattleScriptPushCursorAndCallback(BattleScript_AnnounceStatusAbility);
-    return TRUE;
-}
 static const Ability Comatose = {
     .name = $("Comatose"),
     .description = $("Can move, but is always asleep.\n"
                      "Immune to status conditions."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
+        BattleScriptPushCursorAndCallback(BattleScript_AnnounceStatusAbility);
+        return TRUE;
+    },
     .unsuppressable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT QueenlyMajesty
-ON_IMMUNE {
-    CHECK_NOT(gProcessingExtraAttacks)
-    CHECK(GetBattlerSide(attacker) != GetBattlerSide(battler))
-    CHECK(GetMovePriority(attacker, move, battler) > 0)
-    *immunityScript = BattleScript_DazzlingProtected;
-    return TRUE;
-}
 static const Ability QueenlyMajesty = {
     .name = $("Queenly Majesty"),
     .description = $("Protects itself and ally from\n"
                      "priority moves."),
-    CONTEXT_ON_IMMUNE,
+    .onImmune = +[](ON_IMMUNE) -> int {
+        CHECK_NOT(gProcessingExtraAttacks)
+        CHECK(GetBattlerSide(attacker) != GetBattlerSide(battler))
+        CHECK(GetMovePriority(attacker, move, battler) > 0);
+        *immunityScript = BattleScript_DazzlingProtected;
+        return TRUE;
+    },
     .onImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT InnardsOut
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK_NOT(IsBattlerAlive(battler))
-    CHECK_NOT(IsMagicGuardProtected(attacker))
-
-    gBattleMoveDamage = gTurnStructs[battler].dmg;
-    BattleScriptCall(BattleScript_AftermathDmg);
-    return TRUE;
-}
 static const Ability InnardsOut = {
     .name = $("Innards Out"),
     .description = $("If KO'd, deals as much damage as\n"
                      "what the fatal attack dealt."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK_NOT(IsBattlerAlive(battler))
+        CHECK_NOT(IsMagicGuardProtected(attacker))
+
+        gBattleMoveDamage = gTurnStructs[battler].dmg;
+        BattleScriptCall(BattleScript_AftermathDmg);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Dancer
 static const Ability Dancer = {
     .name = $("Dancer"),
     .description = $("Copies dance moves used by\n"
                      "others."),
 };
 
-#undef CONTEXT
-#define CONTEXT Battery
-ON_OFFENSIVE_MULTIPLIER {
-    if (IS_MOVE_SPECIAL(move)) MUL(1.3);
-}
 static const Ability Battery = {
     .name = $("Battery"),
     .description = $("Grants a 1.3x power boost to\n"
                      "ally's Special attacks."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_SPECIAL(move)) MUL(1.3);
+        },
     .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
 
-#undef CONTEXT
-#define CONTEXT Fluffy
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_FIRE) RESISTANCE(2.0);
-    if (IsMoveMakingContact(move, attacker)) MUL(0.5);
-}
 static const Ability Fluffy = {
     .name = $("Fluffy"),
     .description = $("Takes 1/2 dmg from contact moves\n"
                      "but Fire moves hurt it 2x more."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIRE) RESISTANCE(2.0);
+            if (IsMoveMakingContact(move, attacker)) MUL(0.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Dazzling
 static const Ability Dazzling = {
     .name = $("Dazzling"),
     .description = $("Protects itself and ally from\n"
@@ -3430,24 +2816,19 @@ static const Ability Dazzling = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SoulHeart
-ON_BATTLER_FAINTS {
-    CHECK(ChangeStatBuffs(battler, 1, STAT_SPATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
-
-    BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
-    return TRUE;
-}
 static const Ability SoulHeart = {
     .name = $("Soul-Heart"),
     .description = $("KOs dealt anywhere on the field\n"
                      "raise Sp. Atk by one stage."),
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK(ChangeStatBuffs(battler, 1, STAT_SPATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
+
+        BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
+        return TRUE;
+    },
     .onBattlerFaintsFor = APPLY_ON_ANY,
 };
 
-#undef CONTEXT
-#define CONTEXT TanglingHair
 static const Ability TanglingHair = {
     .name = $("Tangling Hair"),
     .description = $("Lowers Speed of enemies that\n"
@@ -3455,72 +2836,60 @@ static const Ability TanglingHair = {
     .onDefender = Gooey.onDefender,
 };
 
-#undef CONTEXT
-#define CONTEXT Receiver
-ON_BATTLER_FAINTS {
-    int allyAbility = GetBattlerAbility(fainted);
-    CHECK_NOT(IsRolePlayBannedAbility(allyAbility))
-    CHECK_NOT(HasAbilityIgnoringSuppression(battler, allyAbility))
-    int index = GetAbilityIndex(battler, ability, FALSE);
-    CHECK(index < TOTAL_ABILITY_COUNT)
-
-    gBattleMons[battler].abilities[index] = allyAbility;
-    gVolatileStructs[battler].switchInAbilityDone[index] = FALSE;
-
-    gBattleScripting.abilityPopupOverwrite = allyAbility;
-    BattleScriptCall(BattleScript_ReceiverActivates);
-    return TRUE;
-}
 static const Ability Receiver = {
     .name = $("Receiver"),
     .description = $("In Double Battles, copies its\n"
                      "fainting partner's ability."),
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        int allyAbility = GetBattlerAbility(fainted);
+        CHECK_NOT(IsRolePlayBannedAbility(allyAbility))
+        CHECK_NOT(HasAbilityIgnoringSuppression(battler, allyAbility))
+        int index = GetAbilityIndex(battler, ability, FALSE);
+        CHECK(index < TOTAL_ABILITY_COUNT)
+
+        gBattleMons[battler].abilities[index] = allyAbility;
+        gVolatileStructs[battler].switchInAbilityDone[index] = FALSE;
+
+        gBattleScripting.abilityPopupOverwrite = allyAbility;
+        BattleScriptCall(BattleScript_ReceiverActivates);
+        return TRUE;
+    },
     .onBattlerFaintsFor = APPLY_ON_ALLY,
 };
 
-#undef CONTEXT
-#define CONTEXT PowerOfAlchemy
-ON_ENTRY {
-    int any = FALSE;
-    for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2) {
-        FILTER(IsBattlerAlive(i))
-        FILTER(ItemId_GetPocket(GetBattlerHoldEffect(i, FALSE)) == POCKET_BERRIES)
-        any = TRUE;
-        UpdateBattlerItem(i, ITEM_BLACK_SLUDGE);
-        BattleScriptPushCursorAndCallback(BattleScript_End3);
-        BattleScriptCall(BattleScript_PowerOfAlchemySludgeNoPopup);
-    }
-    CHECK(any)
-    return TRUE;
-}
-ON_BATTLER_FAINTS {
-    int state = GetAbilityState(battler, ability);
-    if (state & (3 << fainted)) SetAbilityState(battler, ability, state & ~(3 << fainted));
-    return NO_ANNOUNCE;
-}
 static const Ability PowerOfAlchemy = {
     .name = $("Power of Alchemy"),
     .description = $("Transmutes berries on entry.\n"
                      "Transmutes items when lost."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onEntry = +[](ON_ENTRY) -> int {
+        int any = FALSE;
+        for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2) {
+            FILTER(IsBattlerAlive(i))
+            FILTER(ItemId_GetPocket(GetBattlerHoldEffect(i, FALSE)) == POCKET_BERRIES)
+            any = TRUE;
+            UpdateBattlerItem(i, ITEM_BLACK_SLUDGE);
+            BattleScriptPushCursorAndCallback(BattleScript_End3);
+            BattleScriptCall(BattleScript_PowerOfAlchemySludgeNoPopup);
+        }
+        CHECK(any)
+        return TRUE;
+    },
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        int state = GetAbilityState(battler, ability);
+        if (state & (3 << fainted)) SetAbilityState(battler, ability, state & ~(3 << fainted));
+        return NO_ANNOUNCE;
+    },
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-#undef CONTEXT
-#define CONTEXT BeastBoost
-ON_BATTLER_FAINTS { return MoxieClone(battler, GetHighestStatId(battler, FALSE)); }
 static const Ability BeastBoost = {
     .name = $("Beast Boost"),
     .description = $("Dealing a KO raises highest\n"
                      "calculated stat by one stage."),
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, GetHighestStatId(battler, FALSE)); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT RksSystem
 static const Ability RksSystem = {
     .name = $("RKS System"),
     .description = $("Held Memory determines its type.\n"
@@ -3531,79 +2900,63 @@ static const Ability RksSystem = {
     .adaptability = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT ElectricSurge
-ON_ENTRY {
-    CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
-
-    for (int i = 0; i < gBattlersCount; i++) {
-        DisableSwitchInAbility(i, ABILITY_GENERATOR);
-        DisableSwitchInAbility(i, ABILITY_ENERGIZED);
-    }
-    BattleScriptPushCursorAndCallback(BattleScript_ElectricSurgeActivates);
-    return TRUE;
-}
 static const Ability ElectricSurge = {
     .name = $("Electro Surge"),
     .description = $("Casts Electric Terrain on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
+
+        for (int i = 0; i < gBattlersCount; i++) {
+            DisableSwitchInAbility(i, ABILITY_GENERATOR);
+            DisableSwitchInAbility(i, ABILITY_ENERGIZED);
+        }
+        BattleScriptPushCursorAndCallback(BattleScript_ElectricSurgeActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT PsychicSurge
-ON_ENTRY {
-    CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
-
-    BattleScriptPushCursorAndCallback(BattleScript_PsychicSurgeActivates);
-    return TRUE;
-}
 static const Ability PsychicSurge = {
     .name = $("Psychic Surge"),
     .description = $("Casts Psychic Terrain on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
+
+        BattleScriptPushCursorAndCallback(BattleScript_PsychicSurgeActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT MistySurge
-ON_ENTRY {
-    CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
-
-    BattleScriptPushCursorAndCallback(BattleScript_MistySurgeActivates);
-    return TRUE;
-}
 static const Ability MistySurge = {
     .name = $("Misty Surge"),
     .description = $("Casts Misty Terrain on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
+
+        BattleScriptPushCursorAndCallback(BattleScript_MistySurgeActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT GrassySurge
-ON_ENTRY {
-    CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
-
-    BattleScriptPushCursorAndCallback(BattleScript_GrassySurgeActivates);
-    return TRUE;
-}
 static const Ability GrassySurge = {
     .name = $("Grassy Surge"),
     .description = $("Casts Grassy Terrain on entry.\n"
                      "Lasts 8 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
+
+        BattleScriptPushCursorAndCallback(BattleScript_GrassySurgeActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT FullMetalBody
 static const Ability FullMetalBody = {
     .name = $("Full Metal Body"),
     .description = $("Immune to stat drops."),
 };
 
-#undef CONTEXT
-#define CONTEXT ShadowShield
 static const Ability ShadowShield = {
     .name = $("Shadow Shield"),
     .description = $("At full HP, halves damage taken\n"
@@ -3611,8 +2964,6 @@ static const Ability ShadowShield = {
     .onDefensiveMultiplier = Multiscale.onDefensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT PrismArmor
 static const Ability PrismArmor = {
     .name = $("Prism Armor"),
     .description = $("Takes 35% less damage from\n"
@@ -3620,52 +2971,42 @@ static const Ability PrismArmor = {
     .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT Neuroforce
-ON_OFFENSIVE_MULTIPLIER {
-    if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.25);
-}
 static const Ability Neuroforce = {
     .name = $("Neuroforce"),
     .description = $("Grants an additional 1.25x boost\n"
                      "to Super-effective moves."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.25);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT IntrepidSword
-ON_ENTRY {
-    CHECK(CanRaiseStat(battler, STAT_ATK))
-
-    SetStatChanger(STAT_ATK, 1);
-    BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-    return TRUE;
-}
 static const Ability IntrepidSword = {
     .name = $("Intrepid Sword"),
     .description = $("On entry, raises Attack by one\n"
                      "stage."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(CanRaiseStat(battler, STAT_ATK))
+
+        SetStatChanger(STAT_ATK, 1);
+        BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT DauntlessShield
-ON_ENTRY {
-    CHECK(CanRaiseStat(battler, STAT_DEF))
-
-    SetStatChanger(STAT_DEF, 1);
-    BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-    return TRUE;
-}
 static const Ability DauntlessShield = {
     .name = $("Dauntless Shield"),
     .description = $("On entry, raises Defense by one\n"
                      "stage."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(CanRaiseStat(battler, STAT_DEF))
+
+        SetStatChanger(STAT_DEF, 1);
+        BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Libero
 static const Ability Libero = {
     .name = $("Libero"),
     .description = $("Before using a move, changes its\n"
@@ -3673,42 +3014,33 @@ static const Ability Libero = {
     .protean = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT BallFetch
 static const Ability BallFetch = {
     .name = $("Ball Fetch"),
     .description = $("No effect in battle."),
 };
 
-#undef CONTEXT
-#define CONTEXT CottonDown
-ON_DEFENDER {
-    CHECK(DidMoveHit())
-    gStackBattler1 = BATTLE_OPPOSITE(battler);
-    CHECK(IsBattlerAlive(gStackBattler1) || IsBattlerAlive(BATTLE_PARTNER(gStackBattler1)))
-
-    gEffectBattler = battler;
-    gStackBattler1 = BATTLE_OPPOSITE(GetBattlerSide(battler));
-    BattleScriptCall(BattleScript_CottonDownActivates);
-    return TRUE;
-}
 static const Ability CottonDown = {
     .name = $("Cotton Down"),
     .description = $("Lowers the Speed of all foes\n"
                      "by one stage when hit."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(DidMoveHit());
+        gStackBattler1 = BATTLE_OPPOSITE(battler);
+        CHECK(IsBattlerAlive(gStackBattler1) || IsBattlerAlive(BATTLE_PARTNER(gStackBattler1)))
+
+        gEffectBattler = battler;
+        gStackBattler1 = BATTLE_OPPOSITE(GetBattlerSide(battler));
+        BattleScriptCall(BattleScript_CottonDownActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT PropellerTail
 static const Ability PropellerTail = {
     .name = $("Propeller Tail"),
     .description = $("Isn't affected by target\n"
                      "redirection."),
 };
 
-#undef CONTEXT
-#define CONTEXT MirrorArmor
 static const Ability MirrorArmor = {
     .name = $("Mirror Armor"),
     .description = $("Bounces back any stat drops\n"
@@ -3716,132 +3048,111 @@ static const Ability MirrorArmor = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT GulpMissile
-ON_ATTACKER {
-    CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-    CHECK(gBattleMons[battler].species == SPECIES_CRAMORANT)
-    CHECK(((gCurrentMove == MOVE_SURF || gCurrentMove == MOVE_TRIPLE_DIVE) && TARGET_TURN_DAMAGED) || gStatuses3[battler] & STATUS3_UNDERWATER ||
-          (gCurrentMove == MOVE_DIVE && gBattleScripting.acceleratedTwoTurn))
-
-    u16 newSpecies = gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2 ? SPECIES_CRAMORANT_GORGING : SPECIES_CRAMORANT_GULPING;
-    UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
-    gBattleMons[battler].species = newSpecies;
-    BattleScriptCall(BattleScript_AttackerFormChange);
-    return TRUE;
-}
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    int species = gBattleMons[battler].species;
-    CHECK(species == SPECIES_CRAMORANT_GORGING || species == SPECIES_CRAMORANT_GULPING)
-    gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = species;
-    UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_CRAMORANT);
-    gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
-    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-    BattleScriptCall(species == SPECIES_CRAMORANT_GORGING ? BattleScript_GulpMissileGorging : BattleScript_GulpMissileGulping);
-    return TRUE;
-}
 static const Ability GulpMissile = {
     .name = $("Gulp Missile"),
     .description = $("Gulps a prey after Dive/Surf.\n"
                      "If hit, shoots prey at enemy."),
-    CONTEXT_ON_ATTACKER,
-    CONTEXT_ON_DEFENDER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+        CHECK(gBattleMons[battler].species == SPECIES_CRAMORANT)
+        CHECK(((gCurrentMove == MOVE_SURF || gCurrentMove == MOVE_TRIPLE_DIVE) && TARGET_TURN_DAMAGED) || gStatuses3[battler] & STATUS3_UNDERWATER ||
+              (gCurrentMove == MOVE_DIVE && gBattleScripting.acceleratedTwoTurn))
+
+        u16 newSpecies = gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2 ? SPECIES_CRAMORANT_GORGING : SPECIES_CRAMORANT_GULPING;
+        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+        gBattleMons[battler].species = newSpecies;
+        BattleScriptCall(BattleScript_AttackerFormChange);
+        return TRUE;
+    },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        int species = gBattleMons[battler].species;
+        CHECK(species == SPECIES_CRAMORANT_GORGING || species == SPECIES_CRAMORANT_GULPING)
+        gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = species;
+        UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_CRAMORANT);
+        gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        BattleScriptCall(species == SPECIES_CRAMORANT_GORGING ? BattleScript_GulpMissileGorging : BattleScript_GulpMissileGulping);
+        return TRUE;
+    },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Stalwart
 static const Ability Stalwart = {
     .name = $("Stalwart"),
     .description = $("Isn't affected by target\n"
                      "redirection."),
 };
 
-#undef CONTEXT
-#define CONTEXT SteamEngine
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(CanRaiseStat(battler, STAT_SPEED))
-    CHECK(moveType == TYPE_FIRE || moveType == TYPE_WATER)
-
-    SetStatChanger(STAT_SPEED, 12);
-    BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-    return TRUE;
-}
 static const Ability SteamEngine = {
     .name = $("Steam Engine"),
     .description = $("Maximizes Speed if hit by a\n"
                      "Fire-type or Water-type attack."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(CanRaiseStat(battler, STAT_SPEED))
+        CHECK(moveType == TYPE_FIRE || moveType == TYPE_WATER)
+
+        SetStatChanger(STAT_SPEED, 12);
+        BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT PunkRock
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.3);
-}
-ON_DEFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].flags & FLAG_SOUND) MUL(.5);
-}
 static const Ability PunkRock = {
     .name = $("Punk Rock"),
     .description = $("Sound moves deal 1.3x more dmg.\n"
                      "Takes -50% dmg from sound moves."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.3);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SandSpit
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK_NOT(gBattleWeather & WEATHER_SANDSTORM_ANY)
-    if (gBattleWeather & WEATHER_PRIMAL_ANY) {
-        BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
-        return NO_ANNOUNCE;
-    } else if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
-        gBattleScripting.battler = battler;
-        BattleScriptCall(BattleScript_SandSpitActivates);
-        return TRUE;
-    }
-    return FALSE;
-}
 static const Ability SandSpit = {
     .name = $("Sand Spit"),
     .description = $("If hit, summons a sandstorm that\n"
                      "lasts 8 turns."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_SANDSTORM_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
+            BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
+            return NO_ANNOUNCE;
+        }
+        else if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
+            gBattleScripting.battler = battler;
+            BattleScriptCall(BattleScript_SandSpitActivates);
+            return TRUE;
+        }
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT IceScales
-ON_DEFENSIVE_MULTIPLIER {
-    if (IS_MOVE_SPECIAL(move)) MUL(.5);
-}
 static const Ability IceScales = {
     .name = $("Ice Scales"),
     .description = $("Halves damage taken by Special\n"
                      "moves. Does NOT double SpDef."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_SPECIAL(move)) MUL(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Ripen
 static const Ability Ripen = {
     .name = $("Ripen"),
     .description = $("Doubles resistance, healing and\n"
                      "stat raises provided by Berries."),
 };
 
-#undef CONTEXT
-#define CONTEXT IceFace
-ON_DISGUISE { return gBattleMons[battler].species == SPECIES_EISCUE ? SPECIES_EISCUE_NOICE_FACE : SPECIES_NONE; }
+int IceFaceSpecies(int battler) { return gBattleMons[battler].species == SPECIES_EISCUE ? SPECIES_EISCUE_NOICE_FACE : SPECIES_NONE; }
 int IceFaceReformHandler(int ability, int battler, AbilityCallType callType) {
-    int newSpecies = onDisguiseIceFace(battler, TRUE);
+    int newSpecies = IceFaceSpecies(battler);
     CHECK(newSpecies)
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
     CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
@@ -3852,262 +3163,219 @@ int IceFaceReformHandler(int ability, int battler, AbilityCallType callType) {
     BattleScriptCall(BattleScript_AttackerFormChange);
     return TRUE;
 }
-ON_ENTRY { return IceFaceReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-ON_WEATHER { return IceFaceReformHandler(ability, battler, ABILITY_BS_CALL); }
 static const Ability IceFace = {
     .name = $("Ice Face"),
     .description = $("Protects once against an attack.\n"
                      "Restores protection under hail."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_DISGUISE,
-    CONTEXT_ON_WEATHER,
+    .onEntry = +[](ON_ENTRY) -> int { return IceFaceReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onDisguise = +[](ON_DISGUISE) -> int { return IceFaceSpecies(battler); },
+    .onWeather = +[](ON_WEATHER) -> int { return IceFaceReformHandler(ability, battler, ABILITY_BS_CALL); },
     .breakable = TRUE,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PowerSpot
-ON_OFFENSIVE_MULTIPLIER { MUL(1.3); }
 static const Ability PowerSpot = {
     .name = $("Power Spot"),
     .description = $("Grants a 1.3x boost to ally's\n"
                      "attacks."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MUL(1.3); },
     .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
 
-#undef CONTEXT
-#define CONTEXT Mimicry
-ON_ENTRY {
-    CHECK(IsBattlerAlive(battler))
-    CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
-
-    TryToApplyMimicry(battler, FALSE);
-    return TRUE;
-}
 static const Ability Mimicry = {
     .name = $("Mimicry"),
     .description = $("Changes type depending on active\n"
                      "Terrain."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(IsBattlerAlive(battler))
+        CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
+
+        TryToApplyMimicry(battler, FALSE);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ScreenCleaner
-ON_ENTRY {
-    CHECK(TryRemoveScreens(battler))
-
-    return SwitchInAnnounce(B_MSG_SWITCHIN_SCREENCLEANER);
-}
 static const Ability ScreenCleaner = {
     .name = $("Screen Cleaner"),
     .description = $("Clears screens and Aurora Veil\n"
                      "from both sides on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(TryRemoveScreens(battler))
+
+        return SwitchInAnnounce(B_MSG_SWITCHIN_SCREENCLEANER);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SteelySpirit
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_STEEL) MUL(1.3);
-}
 static const Ability SteelySpirit = {
     .name = $("Steely Spirit"),
     .description = $("Boosts own & ally's Steel-type\n"
                      "moves by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_STEEL) MUL(1.3);
+        },
     .onOffensiveMultiplierFor = APPLY_ON_ALLY,
 };
 
-#undef CONTEXT
-#define CONTEXT PerishBody
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(IsBattlerAlive(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK_NOT(gStatuses3[attacker] & STATUS3_PERISH_SONG)
-
-    if (!(gStatuses3[battler] & STATUS3_PERISH_SONG)) {
-        gStatuses3[battler] |= STATUS3_PERISH_SONG;
-        gVolatileStructs[battler].perishSongTimer = 3;
-        gVolatileStructs[battler].perishSongTimerStartValue = 3;
-    }
-    gStatuses3[attacker] |= STATUS3_PERISH_SONG;
-    gVolatileStructs[attacker].perishSongTimer = 3;
-    gVolatileStructs[attacker].perishSongTimerStartValue = 3;
-    BattleScriptCall(BattleScript_PerishBodyActivates);
-    return TRUE;
-}
 static const Ability PerishBody = {
     .name = $("Perish Body"),
     .description = $("If hit, casts Perish Song."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(IsBattlerAlive(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(gStatuses3[attacker] & STATUS3_PERISH_SONG)
+
+        if (!(gStatuses3[battler] & STATUS3_PERISH_SONG)) {
+            gStatuses3[battler] |= STATUS3_PERISH_SONG;
+            gVolatileStructs[battler].perishSongTimer = 3;
+            gVolatileStructs[battler].perishSongTimerStartValue = 3;
+        }
+        gStatuses3[attacker] |= STATUS3_PERISH_SONG;
+        gVolatileStructs[attacker].perishSongTimer = 3;
+        gVolatileStructs[attacker].perishSongTimerStartValue = 3;
+        BattleScriptCall(BattleScript_PerishBodyActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT WanderingSpirit
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(GetBattlerAbility(battler) == ability)
-    CHECK_NOT(BattlerHasAbility(attacker, ability, FALSE))
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
-    CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
-
-    UpdateAbilityStateIndicesForNewAbility(attacker, GetBattlerAbility(attacker));
-    UpdateAbilityStateIndicesForNewAbility(battler, ability);
-    ReplaceAbility(battler, GetBattlerAbility(attacker));
-    ReplaceAbility(attacker, ability);
-
-    BattleScriptCall(BattleScript_WanderingSpiritActivates);
-
-    gBattleScripting.abilityPopupOverwrite = GetBattlerAbility(attacker);
-    gStackBattler1 = battler;
-    BattleScriptCall(BattleScript_WanderingSpiritSwap);
-
-    gBattleScripting.abilityPopupOverwrite = GetBattlerAbility(battler);
-    gStackBattler1 = attacker;
-    BattleScriptCall(BattleScript_WanderingSpiritSwap);
-    return NO_ANNOUNCE;
-}
 static const Ability WanderingSpirit = {
     .name = $("WandrngSprit"),
     .description = $("Trades ability with attacker on\n"
                      "contact."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(GetBattlerAbility(battler) == ability)
+        CHECK_NOT(BattlerHasAbility(attacker, ability, FALSE))
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
+        CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
+
+        UpdateAbilityStateIndicesForNewAbility(attacker, GetBattlerAbility(attacker));
+        UpdateAbilityStateIndicesForNewAbility(battler, ability);
+        ReplaceAbility(battler, GetBattlerAbility(attacker));
+        ReplaceAbility(attacker, ability);
+
+        BattleScriptCall(BattleScript_WanderingSpiritActivates);
+
+        gBattleScripting.abilityPopupOverwrite = GetBattlerAbility(attacker);
+        gStackBattler1 = battler;
+        BattleScriptCall(BattleScript_WanderingSpiritSwap);
+
+        gBattleScripting.abilityPopupOverwrite = GetBattlerAbility(battler);
+        gStackBattler1 = attacker;
+        BattleScriptCall(BattleScript_WanderingSpiritSwap);
+        return NO_ANNOUNCE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT GorillaTactics
-ON_OFFENSIVE_MULTIPLIER {
-    if (IS_MOVE_PHYSICAL(move)) MUL(1.5);
-}
 static const Ability GorillaTactics = {
     .name = $("Gorilla Tactics"),
     .description = $("Raises own Atk by 1.5x, but can\n"
                      "only use the first chosen move."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_PHYSICAL(move)) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT NeutralizingGas
 static const Ability NeutralizingGas = {
     .name = $("Neutralizing Gas"),
     .description = $("All abilities are nullified."),
     .unsuppressable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PastelVeil
-ON_ENTRY {
-    CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD)
-
-    int side = GetBattlerSide(battler);
-    gSideTimers[side].started.safeguard = TRUE;
-    gSideStatuses[side] |= SIDE_STATUS_SAFEGUARD;
-    gSideTimers[side].safeguardBattlerId = battler;
-    gSideTimers[side].safeguardTimer = SCREEN_DURATION;
-    BattleScriptPushCursorAndCallback(BattleScript_PastelVeilActivated);
-    return TRUE;
-}
 static const Ability PastelVeil = {
     .name = $("Pastel Veil"),
     .description = $("Casts Safeguard on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD)
+
+        int side = GetBattlerSide(battler);
+        gSideTimers[side].started.safeguard = TRUE;
+        gSideStatuses[side] |= SIDE_STATUS_SAFEGUARD;
+        gSideTimers[side].safeguardBattlerId = battler;
+        gSideTimers[side].safeguardTimer = SCREEN_DURATION;
+        BattleScriptPushCursorAndCallback(BattleScript_PastelVeilActivated);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT HungerSwitch
-ON_END_TURN {
-    CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
-    int newSpecies;
-    switch (gBattleMons[battler].species) {
-        case SPECIES_MORPEKO:
-            newSpecies = SPECIES_MORPEKO_HANGRY;
-            break;
-        case SPECIES_MORPEKO_HANGRY:
-            newSpecies = SPECIES_MORPEKO;
-            break;
-
-        default:
-            return FALSE;
-    }
-
-    UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
-    gBattleMons[battler].species = newSpecies;
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
-    return TRUE;
-}
 static const Ability HungerSwitch = {
     .name = $("HungerSwitch"),
     .description = $("Changes between Full and Hangry\n"
                      "forms after each turn."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED) int newSpecies;
+        switch (gBattleMons[battler].species) {
+            case SPECIES_MORPEKO:
+                newSpecies = SPECIES_MORPEKO_HANGRY;
+                break;
+            case SPECIES_MORPEKO_HANGRY:
+                newSpecies = SPECIES_MORPEKO;
+                break;
+
+            default:
+                return FALSE;
+        }
+
+        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+        gBattleMons[battler].species = newSpecies;
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+        return TRUE;
+    },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT QuickDraw
 static const Ability QuickDraw = {
     .name = $("Quick Draw"),
     .description = $("30% chance to move first."),
 };
 
-#undef CONTEXT
-#define CONTEXT UnseenFist
 static const Ability UnseenFist = {
     .name = $("Unseen Fist"),
     .description = $("Its contact moves hit enemies,\n"
                      "even if they protect themselves."),
 };
 
-#undef CONTEXT
-#define CONTEXT CuriousMedicine
-ON_ENTRY {
-    CHECK(IsDoubleBattle())
-    CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
-    CHECK(TryResetBattlerStatChanges(BATTLE_PARTNER(battler), RESET_ALL_STATS))
-
-    gEffectBattler = BATTLE_PARTNER(battler);
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CURIOUS_MEDICINE;
-    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-    return TRUE;
-}
 static const Ability CuriousMedicine = {
     .name = $("CuriusMedicn"),
     .description = $("Resets its ally's stat changes\n"
                      "on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(IsDoubleBattle())
+        CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
+        CHECK(TryResetBattlerStatChanges(BATTLE_PARTNER(battler), RESET_ALL_STATS))
+
+        gEffectBattler = BATTLE_PARTNER(battler);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CURIOUS_MEDICINE;
+        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Transistor
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_ELECTRIC) MUL(1.5);
-}
 static const Ability Transistor = {
     .name = $("Transistor"),
     .description = $("Boosts the power of Electric-\n"
                      "type moves by 1.5x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ELECTRIC) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT DragonsMaw
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_DRAGON) MUL(1.5);
-}
 static const Ability DragonsMaw = {
     .name = $("Dragon's Maw"),
     .description = $("Boosts the power of Dragon-type\n"
                      "moves by 1.5x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_DRAGON) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT ChillingNeigh
 static const Ability ChillingNeigh = {
     .name = $("ChillngNeigh"),
     .description = $("KOs raise Attack by one stage."),
@@ -4115,55 +3383,43 @@ static const Ability ChillingNeigh = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT GrimNeigh
-ON_BATTLER_FAINTS { return MoxieClone(battler, STAT_SPATK); }
 static const Ability GrimNeigh = {
     .name = $("Grim Neigh"),
     .description = $("KOs raise Sp. Atk by one stage."),
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, STAT_SPATK); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT AsOneIceRider
-ON_BATTLER_FAINTS {
-    CHECK(ChillingNeigh.onBattlerFaints(ability, battler, attacker, fainted, move, moveType))
-    gBattleScripting.abilityPopupOverwrite = ABILITY_CHILLING_NEIGH;
-    BattleScriptCall(BattleScript_AbilityPopUpStack);
-    return NO_ANNOUNCE;
-}
-ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE); }
 static const Ability AsOneIceRider = {
     .name = $("As One"),
     .description = $("Unnerve + Chilling Neigh."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE); },
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK(ChillingNeigh.onBattlerFaints(ability, battler, attacker, fainted, move, moveType))
+        gBattleScripting.abilityPopupOverwrite = ABILITY_CHILLING_NEIGH;
+        BattleScriptCall(BattleScript_AbilityPopUpStack);
+        return NO_ANNOUNCE;
+    },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT AsOneShadowRider
-ON_BATTLER_FAINTS {
-    CHECK(GrimNeigh.onBattlerFaints(ability, battler, attacker, fainted, move, moveType))
-    gBattleScripting.abilityPopupOverwrite = ABILITY_GRIM_NEIGH;
-    BattleScriptCall(BattleScript_AbilityPopUpStack);
-    return NO_ANNOUNCE;
-}
 static const Ability AsOneShadowRider = {
     .name = $("As One"),
     .description = $("Unnerve + Grim Neigh."),
     .onEntry = AsOneIceRider.onEntry,
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK(GrimNeigh.onBattlerFaints(ability, battler, attacker, fainted, move, moveType))
+        gBattleScripting.abilityPopupOverwrite = ABILITY_GRIM_NEIGH;
+        BattleScriptCall(BattleScript_AbilityPopUpStack);
+        return NO_ANNOUNCE;
+    },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Chloroplast
 static const Ability Chloroplast = {
     .name = $("Chloroplast"),
     .description = $("Weather Ball, Solar Beam/Blade,\n"
@@ -4171,572 +3427,455 @@ static const Ability Chloroplast = {
     .chloroplast = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Whiteout
-ON_STAT {
-    if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
-    if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
-}
 static const Ability Whiteout = {
     .name = $("Whiteout"),
     .description = $("Ups highest attacking stat\n"
                      "by 1.5x in hail."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
+            if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Pyromancy
 static const Ability Pyromancy = {
     .name = $("Pyromancy"),
     .description = $("Moves inflict burn 5x as often."),
 };
 
-#undef CONTEXT
-#define CONTEXT KeenEdge
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) MUL(1.3);
-}
 static const Ability KeenEdge = {
     .name = $("Keen Edge"),
     .description = $("Boosts the power of slashing\n"
                      "moves by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT PrismScales
-ON_DEFENSIVE_MULTIPLIER {
-    if (IS_MOVE_SPECIAL(move)) MUL(.7);
-}
 static const Ability PrismScales = {
     .name = $("Prism Scales"),
     .description = $("Takes 30% less damage from\n"
                      "Special attacks."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_SPECIAL(move)) MUL(.7);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PowerFists
-ON_CHOOSE_DEFENSIVE_STAT {
-    CHECK(IS_IRON_FIST(battler, move))
-    return STAT_SPDEF;
-}
 static const Ability PowerFists = {
     .name = $("Power Fists"),
     .description = $("Iron Fist moves target Special\n"
                      "Defense and get a 1.3x boost."),
     .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
-    CONTEXT_ON_CHOOSE_DEFENSIVE_STAT,
+    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
+        CHECK(IS_IRON_FIST(battler, move))
+        return STAT_SPDEF;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SandSong
-ON_MOVE_TYPE {
-    CHECK(moveType == TYPE_NORMAL)
-    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-    return TYPE_GROUND + 1;
-}
 static const Ability SandSong = {
     .name = $("Sand Song"),
     .description = $("Sound moves get a 1.2x boost\n"
                      "and become Ground if Normal."),
     .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
-    CONTEXT_ON_MOVE_TYPE,
+    .onMoveType = +[](ON_MOVE_TYPE) -> int {
+        CHECK(moveType == TYPE_NORMAL)
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND);
+        return TYPE_GROUND + 1;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Rampage
-ON_BATTLER_FAINTS {
-    SetAbilityState(battler, ability, TRUE);
-    gVolatileStructs[battler].rechargeTimer = 0;
-    gBattleMons[battler].status2 &= ~(STATUS2_RECHARGE);
-    return FALSE;
-}
 static const Ability Rampage = {
     .name = $("Rampage"),
     .description = $("No recharge after a KO, if it\n"
                      "usually would need to recharge."),
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        SetAbilityState(battler, ability, TRUE);
+        gVolatileStructs[battler].rechargeTimer = 0;
+        gBattleMons[battler].status2 &= ~(STATUS2_RECHARGE);
+        return FALSE;
+    },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT Vengeance
-ON_SWARM_MULTIPLIER(TYPE_GHOST)
 static const Ability Vengeance = {
     .name = $("Vengeance"),
     .description = $("Boosts Ghost-type moves by 1.2x,\n"
                      "or 1.5x when below 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_GHOST),
 };
 
-#undef CONTEXT
-#define CONTEXT BlitzBoxer
-ON_PRIORITY {
-    CHECK(IS_IRON_FIST(battler, move))
-    CHECK(BATTLER_MAX_HP(battler))
-    return 1;
-}
 static const Ability BlitzBoxer = {
     .name = $("Blitz Boxer"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's punching moves."),
-    CONTEXT_ON_PRIORITY,
+    .onPriority = +[](ON_PRIORITY) -> int {
+        CHECK(IS_IRON_FIST(battler, move))
+        CHECK(BATTLER_MAX_HP(battler));
+        return 1;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT AntarcticBird
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_FLYING || moveType == TYPE_ICE) MUL(1.3);
-}
 static const Ability AntarcticBird = {
     .name = $("Antarctic Bird"),
     .description = $("Ice-type and Flying-type moves\n"
                      "get a 1.3x power boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FLYING || moveType == TYPE_ICE) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Immolate
-ATE_ABILITY(TYPE_FIRE)
 static const Ability Immolate = {
     .name = $("Immolate"),
     .description = $("Normal-type moves become Fire-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_FIRE),
 };
 
-#undef CONTEXT
-#define CONTEXT Crystallize
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_ICE && gBattleStruct->ateBoost[battler]) MUL(1.1);
-}
-ON_MOVE_TYPE {
-    CHECK(moveType == TYPE_ROCK)
-    *ateBoost = TRUE;
-    return TYPE_ICE + 1;
-}
 static const Ability Crystallize = {
     .name = $("Crystallize"),
     .description = $("Rock-type moves become Ice-type\n"
                      "moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ICE && gBattleStruct->ateBoost[battler]) MUL(1.1);
+        },
+    .onMoveType = +[](ON_MOVE_TYPE) -> int {
+        CHECK(moveType == TYPE_ROCK)
+        *ateBoost = TRUE;
+        return TYPE_ICE + 1;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Electrocytes
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_ELECTRIC) MUL(1.25);
-}
 static const Ability Electrocytes = {
     .name = $("Electrocytes"),
     .description = $("Boosts the power of Electric-\n"
                      "type moves by 1.25x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ELECTRIC) MUL(1.25);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Aerodynamics
-ON_ABSORB {
-    CHECK(moveType == TYPE_FLYING)
-    *statId = STAT_SPEED;
-    return ABSORB_RESULT_STAT;
-}
 static const Ability Aerodynamics = {
     .name = $("Aerodynamics"),
     .description = $("Boosts Speed instead of being\n"
                      "hit by Flying-type moves."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_FLYING);
+        *statId = STAT_SPEED;
+        return ABSORB_RESULT_STAT;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT ChristmasSpirit
-ON_DEFENSIVE_MULTIPLIER {
-    if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) MUL(.5);
-}
 static const Ability ChristmasSpirit = {
     .name = $("Christmas Spirit"),
     .description = $("Takes 50% less damage if hail is\n"
                      "active."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) MUL(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT ExploitWeakness
-ON_OFFENSIVE_MULTIPLIER {
-    if (HasAnyStatusOrAbility(target)) MUL(1.25);
-}
 static const Ability ExploitWeakness = {
     .name = $("Exploit Weakness"),
     .description = $("Moves are 1.25x stronger on foes\n"
                      "affected by a status condition."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (HasAnyStatusOrAbility(target)) MUL(1.25);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT GroundShock
 static const Ability GroundShock = {
     .name = $("Ground Shock"),
     .description = $("Target Grounds aren't immune to\n"
                      "Electric but resist it instead."),
 };
 
-#undef CONTEXT
-#define CONTEXT AncientIdol
-ON_CHOOSE_OFFENSIVE_STAT { *atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; }
 static const Ability AncientIdol = {
     .name = $("Ancient Idol"),
     .description = $("Uses Def and Sp. Def instead of\n"
                      "Atk and Sp. Atk when attacking."),
-    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; },
 };
 
-#undef CONTEXT
-#define CONTEXT MysticPower
-ON_STAB { return TRUE; }
 static const Ability MysticPower = {
     .name = $("Mystic Power"),
     .description = $("All moves gain the 1.5x power\n"
                      "boost from STAB."),
-    CONTEXT_ON_STAB,
+    .onStab = +[](ON_STAB) -> int { return TRUE; },
 };
 
-#undef CONTEXT
-#define CONTEXT Perfectionist
-ON_PRIORITY {
-    CHECK(gBattleMoves[move].power <= 25)
-    CHECK(gBattleMoves[move].power)
-    return 1;
-}
 static const Ability Perfectionist = {
     .name = $("Perfectionist"),
     .description = $("Move BP < 51 BP: +1 to crit rate.\n"
                      "Move BP < 26 BP: +1 priority too."),
-    CONTEXT_ON_PRIORITY,
+    .onPriority = +[](ON_PRIORITY) -> int {
+        CHECK(gBattleMoves[move].power <= 25)
+        CHECK(gBattleMoves[move].power);
+        return 1;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT GrowingTooth
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-    CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
-
-    gBattleScripting.battler = battler;
-    BattleScriptCall(BattleScript_AttackBoostActivates);
-    return TRUE;
-}
 static const Ability GrowingTooth = {
     .name = $("Growing Tooth"),
     .description = $("Raises Attack by one stage after\n"
                      "using a biting move."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
+
+        gBattleScripting.battler = battler;
+        BattleScriptCall(BattleScript_AttackBoostActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Inflatable
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(CanRaiseStat(battler, STAT_DEF) || CanRaiseStat(battler, STAT_SPDEF))
-    CHECK(moveType == TYPE_FIRE || moveType == TYPE_FLYING)
-    BattleScriptCall(BattleScript_InflatableActivates);
-    gBattleScripting.battler = battler;
-    return TRUE;
-}
 static const Ability Inflatable = {
     .name = $("Inflatable"),
     .description = $("Ups Def and Sp. Def by one stage\n"
                      "if hit by Flying or Fire moves."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(CanRaiseStat(battler, STAT_DEF) || CanRaiseStat(battler, STAT_SPDEF))
+        CHECK(moveType == TYPE_FIRE || moveType == TYPE_FLYING);
+        BattleScriptCall(BattleScript_InflatableActivates);
+        gBattleScripting.battler = battler;
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT AuroraBorealis
-ON_STAB { return moveType == TYPE_ICE; }
 static const Ability AuroraBorealis = {
     .name = $("Aurora Borealis"),
     .description = $("Boosts the power of Ice-type\n"
                      "moves by 1.5x (due to STAB)."),
-    CONTEXT_ON_STAB,
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_ICE; },
 };
 
-#undef CONTEXT
-#define CONTEXT Avenger
-ON_OFFENSIVE_MULTIPLIER {
-    if (gSideTimers[GET_BATTLER_SIDE(battler)].retaliateTimer) MUL(1.5);
-}
 static const Ability Avenger = {
     .name = $("Avenger"),
     .description = $("If a party Pokémon fainted last\n"
                      "turn, next move gets 1.5x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gSideTimers[GET_BATTLER_SIDE(battler)].retaliateTimer) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT LetsRoll
-ON_ENTRY {
-    CHECK(CanRaiseStat(battler, STAT_DEF))
-
-    SetStatChanger(STAT_DEF, 1);
-    gBattleMons[battler].status2 = STATUS2_DEFENSE_CURL;
-    BattleScriptPushCursorAndCallback(BattleScript_BattlerInnateStatRaiseOnSwitchIn);
-    return TRUE;
-}
 static const Ability LetsRoll = {
     .name = $("Let's Roll"),
     .description = $("Casts Defense Curl on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(CanRaiseStat(battler, STAT_DEF))
+
+        SetStatChanger(STAT_DEF, 1);
+        gBattleMons[battler].status2 = STATUS2_DEFENSE_CURL;
+        BattleScriptPushCursorAndCallback(BattleScript_BattlerInnateStatRaiseOnSwitchIn);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Aquatic
 static const Ability Aquatic = {
     .name = $("Aquatic"),
     .description = $("Adds Water type to itself."),
 };
 
-#undef CONTEXT
-#define CONTEXT LoudBang
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBeConfused(target))
-    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-    CHECK(Random() % 2)
-
-    return AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
-}
 static const Ability LoudBang = {
     .name = $("Loud Bang"),
     .description = $("Sound-based moves have 50%\n"
                      "chance to confuse the foe."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBeConfused(target))
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(Random() % 2)
+
+        return AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT LeadCoat
-ON_DEFENSIVE_MULTIPLIER {
-    if (IS_MOVE_PHYSICAL(move)) MUL(.6);
-}
-ON_STAT {
-    if (statId == STAT_SPEED) *stat *= .9;
-}
 static const Ability LeadCoat = {
     .name = $("Lead Coat"),
     .description = $("Takes 40% less from Phys. moves.\n"
                      "This Pokémon's Speed is 0.9x."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
-    CONTEXT_ON_STAT,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_PHYSICAL(move)) MUL(.6);
+        },
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED) *stat *= .9;
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Amphibious
-ON_STAB { return moveType == TYPE_WATER; }
 static const Ability Amphibious = {
     .name = $("Amphibious"),
     .description = $("Boosts the power of Water-type\n"
                      "moves by 1.5x (due to STAB)."),
-    CONTEXT_ON_STAB,
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
 };
 
-#undef CONTEXT
-#define CONTEXT Grounded
-ON_ENTRY { return AddBattlerType(battler, TYPE_GROUND); }
 static const Ability Grounded = {
     .name = $("Grounded"),
     .description = $("Adds Ground type to itself."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GROUND); },
 };
 
-#undef CONTEXT
-#define CONTEXT Earthbound
-ON_SWARM_MULTIPLIER(TYPE_GROUND)
 static const Ability Earthbound = {
     .name = $("Earthbound"),
     .description = $("Boosts Ground-type moves by\n"
                      "1.2x, or 1.5x when under 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_GROUND),
 };
 
-#undef CONTEXT
-#define CONTEXT FightSpirit
-ATE_ABILITY(TYPE_FIGHTING)
 static const Ability FightSpirit = {
     .name = $("Fighting Spirit"),
     .description = $("Normal-type moves become Fight.-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_FIGHTING),
 };
 
-#undef CONTEXT
-#define CONTEXT FelineProwess
-ON_STAT {
-    if (statId == STAT_SPATK) *stat *= 2;
-}
 static const Ability FelineProwess = {
     .name = $("Feline Prowess"),
     .description = $("Doubles own Sp. Atk stat.\n"
                      "Boosts raw stat, not base stat."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPATK) *stat *= 2;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT CoilUp
-ON_ENTRY {
-    CHECK_NOT(gStatuses4[battler] & STATUS4_COILED)
-
-    gStatuses4[battler] |= STATUS4_COILED;
-    BattleScriptPushCursorAndCallback(BattleScript_BattlerCoiledUp);
-    return TRUE;
-}
 static const Ability CoilUp = {
     .name = $("Coil Up"),
     .description = $("On entry, gives +1 priority once\n"
                      "to the first biting move used."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gStatuses4[battler] & STATUS4_COILED)
+
+        gStatuses4[battler] |= STATUS4_COILED;
+        BattleScriptPushCursorAndCallback(BattleScript_BattlerCoiledUp);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Fossilized
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_ROCK) MUL(1.2);
-}
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_ROCK) RESISTANCE(.5);
-}
 static const Ability Fossilized = {
     .name = $("Fossilized"),
     .description = $("Halves dmg taken by Rock moves.\n"
                      "Boosts own Rock moves by 1.2x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ROCK) MUL(1.2);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ROCK) RESISTANCE(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT MagicalDust
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_PSYCHIC))
-
-    gBattleMons[attacker].type3 = TYPE_PSYCHIC;
-    PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMons[attacker].type3);
-    BattleScriptCall(BattleScript_AttackerBecameTheType);
-    return TRUE;
-}
 static const Ability MagicalDust = {
     .name = $("Magical Dust"),
     .description = $("If hit by a contact move, gives\n"
                      "Psychic type to the attacker."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_PSYCHIC))
+
+        gBattleMons[attacker].type3 = TYPE_PSYCHIC;
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMons[attacker].type3);
+        BattleScriptCall(BattleScript_AttackerBecameTheType);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Dreamcatcher
-ON_OFFENSIVE_MULTIPLIER {
-    for (int i = 0; i < gBattlersCount; i++) {
-        if (IsBattlerAlive(i) && gBattleMons[i].status1 & STATUS1_SLEEP) {
-            MUL(2.0);
-            return;
-        }
-    }
-}
 static const Ability Dreamcatcher = {
     .name = $("Dreamcatcher"),
     .description = $("Doubles move power if anyone on\n"
                      "the field is asleep."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            for (int i = 0; i < gBattlersCount; i++) {
+                if (IsBattlerAlive(i) && gBattleMons[i].status1 & STATUS1_SLEEP) {
+                    MUL(2.0);
+                    return;
+                }
+            }
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Nocturnal
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_DARK) MUL(1.25);
-}
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_DARK || moveType == TYPE_FAIRY) RESISTANCE(.75);
-}
 static const Ability Nocturnal = {
     .name = $("Nocturnal"),
     .description = $("Boosts own Dark moves by 1.25x.\n"
                      "Takes -25% dmg from Dark/Fairy."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_DARK) MUL(1.25);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_DARK || moveType == TYPE_FAIRY) RESISTANCE(.75);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SelfSufficient
-ON_END_TURN {
-    CHECK_NOT(BATTLER_MAX_HP(battler))
-    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-
-    gBattleMoveDamage = gBattleMons[battler].maxHP / 16;
-    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-    gBattleMoveDamage *= -1;
-    BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
-    return TRUE;
-}
 static const Ability SelfSufficient = {
     .name = $("Self Sufficient"),
     .description = $("Recovers 1/16 of max HP at the\n"
                      "end of each turn."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 16;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        gBattleMoveDamage *= -1;
+        BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Tectonize
-ATE_ABILITY(TYPE_GROUND)
 static const Ability Tectonize = {
     .name = $("Tectonize"),
     .description = $("Normal-type moves become Ground-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_GROUND),
 };
 
-#undef CONTEXT
-#define CONTEXT IceAge
-ON_ENTRY { return AddBattlerType(battler, TYPE_ICE); }
 static const Ability IceAge = {
     .name = $("Ice Age"),
     .description = $("Adds Ice type to itself."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ICE); },
 };
 
-#undef CONTEXT
-#define CONTEXT HalfDrake
-ON_ENTRY { return AddBattlerType(battler, TYPE_DRAGON); }
 static const Ability HalfDrake = {
     .name = $("Half Drake"),
     .description = $("Adds Dragon type to itself."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_DRAGON); },
 };
 
-#undef CONTEXT
-#define CONTEXT Liquified
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_WATER) RESISTANCE(2);
-    if (IsMoveMakingContact(move, attacker)) MUL(0.5);
-}
 static const Ability Liquified = {
     .name = $("Liquified"),
     .description = $("Takes 1/2 dmg from contact moves\n"
                      "but Water moves hurt it 2x more."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_WATER) RESISTANCE(2);
+            if (IsMoveMakingContact(move, attacker)) MUL(0.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Dragonfly
 static const Ability Dragonfly = {
     .name = $("Dragonfly"),
     .description = $("Adds Dragon type to itself.\n"
@@ -4745,25 +3884,21 @@ static const Ability Dragonfly = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Dragonslayer
-ON_OFFENSIVE_MULTIPLIER {
-    if (IS_BATTLER_OF_TYPE(target, TYPE_DRAGON)) RESISTANCE(1.5);
-}
-ON_DEFENSIVE_MULTIPLIER {
-    if (IS_BATTLER_OF_TYPE(attacker, TYPE_DRAGON)) MUL(.5);
-}
 static const Ability Dragonslayer = {
     .name = $("Dragonslayer"),
     .description = $("Deals 1.5x damage to Dragons.\n"
                      "Takes .5x damage from Dragons."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(target, TYPE_DRAGON)) RESISTANCE(1.5);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(attacker, TYPE_DRAGON)) MUL(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Mountaineer
 static const Ability Mountaineer = {
     .name = $("Mountaineer"),
     .description = $("Immune to Rock-type attacks and\n"
@@ -4771,174 +3906,133 @@ static const Ability Mountaineer = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Hydrate
-ATE_ABILITY(TYPE_WATER)
 static const Ability Hydrate = {
     .name = $("Hydrate"),
     .description = $("Normal-type moves become Water-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_WATER),
 };
 
-#undef CONTEXT
-#define CONTEXT Metallic
-ON_ENTRY { return AddBattlerType(battler, TYPE_STEEL); }
 static const Ability Metallic = {
     .name = $("Metallic"),
     .description = $("Adds Steel type to itself."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_STEEL); },
 };
 
-#undef CONTEXT
-#define CONTEXT Permafrost
-ON_DEFENSIVE_MULTIPLIER {
-    if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.75);
-}
 static const Ability Permafrost = {
     .name = $("Permafrost"),
     .description = $("Takes 25% less damage from\n"
                      "Super-effective moves."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.75);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PrimalArmor
-ON_DEFENSIVE_MULTIPLIER {
-    if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.5);
-}
 static const Ability PrimalArmor = {
     .name = $("Primal Armor"),
     .description = $("Takes 50% less damage from\n"
                      "Super-effective moves."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT RagingBoxer
-ON_PARENTAL_BOND {
-    CHECK(IS_IRON_FIST(battler, move))
-    return PARENTAL_BOND_PRIMAL_MAW;
-}
 static const Ability RagingBoxer = {
     .name = $("Raging Boxer"),
     .description = $("Punching moves hit twice. 1st hit\n"
                      "at 100% power, 2nd hit at 40%."),
-    CONTEXT_ON_PARENTAL_BOND,
+    .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
+        CHECK(IS_IRON_FIST(battler, move))
+        return PARENTAL_BOND_PRIMAL_MAW;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT AirBlower
-ON_ENTRY {
-    CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
-    int side = GetBattlerSide(battler);
-    gSideTimers[side].started.tailwind = TRUE;
-    gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
-    gSideTimers[side].tailwindBattlerId = battler;
-    gSideTimers[side].tailwindTimer = TAILWIND_DURATION_SHORT;
-
-    DisableSwitchInAbility(battler, ABILITY_WIND_RIDER);
-    DisableSwitchInAbility(BATTLE_PARTNER(battler), ABILITY_WIND_RIDER);
-
-    BattleScriptPushCursorAndCallback(BattleScript_AirBlowerActivated);
-    return TRUE;
-}
 static const Ability AirBlower = {
     .name = $("Air Blower"),
     .description = $("Casts a 3-turn Tailwind on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND) int side = GetBattlerSide(battler);
+        gSideTimers[side].started.tailwind = TRUE;
+        gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
+        gSideTimers[side].tailwindBattlerId = battler;
+        gSideTimers[side].tailwindTimer = TAILWIND_DURATION_SHORT;
+
+        DisableSwitchInAbility(battler, ABILITY_WIND_RIDER);
+        DisableSwitchInAbility(BATTLE_PARTNER(battler), ABILITY_WIND_RIDER);
+
+        BattleScriptPushCursorAndCallback(BattleScript_AirBlowerActivated);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Juggernaut
-ON_CHOOSE_OFFENSIVE_STAT {
-    if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *secondaryAtkStatToUse = STAT_DEF;
-}
 static const Ability Juggernaut = {
     .name = $("Juggernaut"),
     .description = $("Paralysis-immune. Uses 20% of its\n"
                      "Def when using a contact move."),
-    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
+    .onChooseOffensiveStat =
+        +[](ON_CHOOSE_OFFENSIVE_STAT) {
+            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *secondaryAtkStatToUse = STAT_DEF;
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT ShortCircuit
-ON_SWARM_MULTIPLIER(TYPE_ELECTRIC)
 static const Ability ShortCircuit = {
     .name = $("Short Circuit"),
     .description = $("Boosts Elec.-type moves by 1.2x,\n"
                      "or 1.5x when below 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_ELECTRIC),
 };
 
-#undef CONTEXT
-#define CONTEXT MajesticBird
-ON_STAT {
-    if (statId == STAT_SPATK) *stat *= 1.5;
-}
 static const Ability MajesticBird = {
     .name = $("Majestic Bird"),
     .description = $("Boosts own Sp. Atk by 1.5x.\n"
                      "Boosts raw stat, not base stat."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPATK) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Phantom
-ON_ENTRY { return AddBattlerType(battler, TYPE_GHOST); }
 static const Ability Phantom = {
     .name = $("Phantom"),
     .description = $("Adds Ghost type to itself."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GHOST); },
 };
 
-#undef CONTEXT
-#define CONTEXT Intoxicate
-ATE_ABILITY(TYPE_POISON)
 static const Ability Intoxicate = {
     .name = $("Intoxicate"),
     .description = $("Normal-type moves become Poison-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_POISON),
 };
 
-#undef CONTEXT
-#define CONTEXT Impenetrable
 static const Ability Impenetrable = {
     .name = $("Impenetrable"),
     .description = $("Only damaged by attacks."),
     .magicGuard = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Hypnotist
-ON_ACCURACY {
-    CHECK(move == MOVE_HYPNOSIS)
-    *accuracy *= 1.5;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability Hypnotist = {
     .name = $("Hypnotist"),
     .description = $("Hypnosis accuracy is 90% when\n"
                      "used by this Pokémon."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(move == MOVE_HYPNOSIS);
+        *accuracy *= 1.5;
+        return ACCURACY_MULTIPLICATIVE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Overwhelm
 static const Ability Overwhelm = {
     .name = $("Overwhelm"),
     .description = $("Hits Fairies with Dragon moves.\n"
                      "Immune to Intimidate and Scare."),
 };
 
-#undef CONTEXT
-#define CONTEXT Scare
 static const Ability Scare = {
     .name = $("Scare"),
     .description = $("Lowers foes' Sp. Atk by one\n"
@@ -4946,40 +4040,30 @@ static const Ability Scare = {
     .onEntry = UseIntimidateClone,
 };
 
-#undef CONTEXT
-#define CONTEXT MajesticMoth
-ON_ENTRY {
-    CHECK(ChangeStatBuffs(battler, 1, GetHighestStatId(battler, TRUE), MOVE_EFFECT_AFFECTS_USER, NULL))
-
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
-    return TRUE;
-}
 static const Ability MajesticMoth = {
     .name = $("Majestic Moth"),
     .description = $("On entry, raises highest\n"
                      "calculated stat by one stage."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(ChangeStatBuffs(battler, 1, GetHighestStatId(battler, TRUE), MOVE_EFFECT_AFFECTS_USER, NULL))
+
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SoulEater
-ON_BATTLER_FAINTS {
-    CHECK_NOT(BATTLER_MAX_HP(battler))
-    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-    BattleScriptCall(BattleScript_HandleSoulEaterEffect);
-    return TRUE;
-}
 static const Ability SoulEater = {
     .name = $("Soul Eater"),
     .description = $("Dealing a KO heals 1/4 of this\n"
                      "Pokémon's max HP."),
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK_NOT(BATTLER_MAX_HP(battler)) CHECK_NOT(BATTLER_HEALING_BLOCKED(battler)) BattleScriptCall(BattleScript_HandleSoulEaterEffect);
+        return TRUE;
+    },
     .onBattlerFaintsFor = APPLY_ON_ALLY,
 };
 
-#undef CONTEXT
-#define CONTEXT SoulLinker
-ON_EITHER {
+ON_EITHER(SoulLinker) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(IsBattlerAlive(battler))
     CHECK_NOT(BATTLER_HAS_ABILITY(opponent, ABILITY_SOUL_LINKER))
@@ -4992,155 +4076,130 @@ static const Ability SoulLinker = {
     .name = $("Soul Linker"),
     .description = $("Enemies take all the damage they\n"
                      "deal, same for this Pokémon."),
-    CONTEXT_ON_EITHER,
+    ON_EITHER_ABILITY(SoulLinker),
 };
 
-#undef CONTEXT
-#define CONTEXT SweetDreams
-ON_END_TURN {
-    CHECK_NOT(BATTLER_MAX_HP(battler))
-    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-    CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
-
-    gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-    gBattleMoveDamage *= -1;
-    BattleScriptPushCursorAndCallback(BattleScript_SweetDreamsActivates);
-    return TRUE;
-}
 static const Ability SweetDreams = {
     .name = $("Sweet Dreams"),
     .description = $("Heals 1/8 of max HP every turn\n"
                      "if asleep. Immune to Bad Dreams."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
+
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        gBattleMoveDamage *= -1;
+        BattleScriptPushCursorAndCallback(BattleScript_SweetDreamsActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT BadLuck
-ON_ACCURACY {
-    *accuracy *= .95;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability BadLuck = {
     .name = $("Bad Luck"),
     .description = $("Foes hit the lowest damage roll,\n"
                      "have 5% less acc. and can't crit."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        *accuracy *= .95;
+        return ACCURACY_MULTIPLICATIVE;
+    },
     .onAccuracyFor = APPLY_ON_FOE,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT HauntedSpirit
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK_NOT(IsBattlerAlive(battler))
-    CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_GHOST))
-    CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED)
-    CHECK(IsMoveMakingContact(move, attacker))
-
-    gBattleMons[attacker].status2 |= STATUS2_CURSED;
-    BattleScriptCall(BattleScript_HauntedSpiritActivated);
-    return TRUE;
-}
 static const Ability HauntedSpirit = {
     .name = $("Haunted Spirit"),
     .description = $("When this Pokémon is KO'd, casts\n"
                      "a Curse on the attacker."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK_NOT(IsBattlerAlive(battler))
+        CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_GHOST))
+        CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED)
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        gBattleMons[attacker].status2 |= STATUS2_CURSED;
+        BattleScriptCall(BattleScript_HauntedSpiritActivated);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ElectricBurst
-ON_RECOIL {
-    CHECK(moveType == TYPE_ELECTRIC)
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
-    return max(damage / 20, 1);
-}
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_ELECTRIC) MUL(1.35);
-}
 static const Ability ElectricBurst = {
     .name = $("Electric Burst"),
     .description = $("Boosts own Elec. moves by 1.35x,\n"
                      "takes 10% of dmg dealt as recoil."),
-    CONTEXT_ON_RECOIL,
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onRecoil = +[](ON_RECOIL) -> int {
+        CHECK(moveType == TYPE_ELECTRIC);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
+        return max(damage / 20, 1);
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ELECTRIC) MUL(1.35);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT RawWood
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_GRASS) MUL(1.2);
-}
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_GRASS) RESISTANCE(.5);
-}
 static const Ability RawWood = {
     .name = $("Raw Wood"),
     .description = $("Halves dmg taken by Grass moves.\n"
                      "Boosts own Grass moves by 1.2x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_GRASS) MUL(1.2);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_GRASS) RESISTANCE(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Solenoglyphs
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBePoisoned(battler, target))
-    CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-    CHECK(Random() % 2)
-
-    return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
-}
 static const Ability Solenoglyphs = {
     .name = $("Solenoglyphs"),
     .description = $("Biting moves have a 50% chance to\n"
                      "badly poison the target."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBePoisoned(battler, target))
+        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        CHECK(Random() % 2)
+
+        return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SpiderLair
-ON_ENTRY {
-    CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
-
-    int side = BATTLE_OPPOSITE(battler);
-    gSideTimers[side].started.spiderWeb = TRUE;
-    gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
-    gSideTimers[side].stickyWebTimer = 5;
-    BattleScriptPushCursorAndCallback(BattleScript_SpiderLairActivated);
-    return TRUE;
-}
 static const Ability SpiderLair = {
     .name = $("Spider Lair"),
     .description = $("Casts Sticky Web on entry.\n"
                      "Lasts 5 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
+
+        int side = BATTLE_OPPOSITE(battler);
+        gSideTimers[side].started.spiderWeb = TRUE;
+        gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
+        gSideTimers[side].stickyWebTimer = 5;
+        BattleScriptPushCursorAndCallback(BattleScript_SpiderLairActivated);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT FatalPrecision
-ON_OFFENSIVE_MULTIPLIER {
-    if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.2);
-}
-ON_ACCURACY {
-    CHECK_NOT(IS_MOVE_STATUS(move))
-    CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, TRUE) >= UQ_4_12(2.0))
-    return ACCURACY_HITS_IF_POSSIBLE;
-}
 static const Ability FatalPrecision = {
     .name = $("Fatal Precision"),
     .description = $("Super-effective moves never miss\n"
                      "and get a 1.2x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_ACCURACY,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.2);
+        },
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK_NOT(IS_MOVE_STATUS(move))
+        CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, TRUE) >= UQ_4_12(2.0))
+        return ACCURACY_HITS_IF_POSSIBLE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT FortKnox
 static const Ability FortKnox = {
     .name = $("Fort Knox"),
     .description = $("Blocks most damage boosting\n"
@@ -5148,49 +4207,39 @@ static const Ability FortKnox = {
     .fortKnox = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Seaweed
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(target, TYPE_FIRE)) RESISTANCE(2);
-}
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_FIRE && IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)) RESISTANCE(0.5);
-}
 static const Ability Seaweed = {
     .name = $("Seaweed"),
     .description = $("Takes 1/2 dmg from Fire if Grass,\n"
                      "doubles Grass dmg on Fire-types."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(target, TYPE_FIRE)) RESISTANCE(2);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIRE && IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)) RESISTANCE(0.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PsychicMind
-ON_SWARM_MULTIPLIER(TYPE_PSYCHIC)
 static const Ability PsychicMind = {
     .name = $("Psychic Mind"),
     .description = $("Boosts Psychic-type moves by\n"
                      "1.2x, or 1.5x when under 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_PSYCHIC),
 };
 
-#undef CONTEXT
-#define CONTEXT PoisonAbsorb
-ON_ABSORB {
-    CHECK(moveType == TYPE_POISON)
-    return ABSORB_RESULT_HEAL;
-}
 static const Ability PoisonAbsorb = {
     .name = $("Poison Absorb"),
     .description = $("Heals 25% of max HP when hit\n"
                      "by a Poison-type move."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_POISON)
+        return ABSORB_RESULT_HEAL;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Scavenger
 static const Ability Scavenger = {
     .name = $("Scavenger"),
     .description = $("Dealing a KO heals 1/4 of this\n"
@@ -5199,32 +4248,27 @@ static const Ability Scavenger = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT TwistedDimension
-ON_ENTRY {
-    CHECK_NOT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
-
-    gFieldTimers.started.trickRoom = TRUE;
-    gFieldStatuses |= STATUS_FIELD_TRICK_ROOM;
-    gFieldTimers.trickRoomTimer = TRICK_ROOM_DURATION_SHORT;
-    BattleScriptPushCursorAndCallback(BattleScript_TwistedDimensionActivated);
-    return TRUE;
-}
 static const Ability TwistedDimension = {
     .name = $("Twist. Dimension"),
     .description = $("Sets up Trick Room on\n"
                      "entry, lasts 3 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
+
+        gFieldTimers.started.trickRoom = TRUE;
+        gFieldStatuses |= STATUS_FIELD_TRICK_ROOM;
+        gFieldTimers.trickRoomTimer = TRICK_ROOM_DURATION_SHORT;
+        BattleScriptPushCursorAndCallback(BattleScript_TwistedDimensionActivated);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT MultiHeaded
 static const Ability MultiHeaded = {
     .name = $("Multi Headed"),
     .description = $("Hits as many times,\n"
                      "as it has heads."),
     .onParentalBond =
-        [](int battler, int move, int moveType) {
+        +[](int battler, int move, int moveType) {
             if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
             if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
             return MULTIHIT_SINGLE;
@@ -5232,82 +4276,65 @@ static const Ability MultiHeaded = {
     .resistsFortKnox = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT NorthWind
-ON_ENTRY {
-    CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_AURORA_VEIL)
-
-    int side = GetBattlerSide(battler);
-    gSideTimers[side].started.auroraVeil = TRUE;
-    gSideStatuses[side] |= SIDE_STATUS_AURORA_VEIL;
-    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
-        gSideTimers[side].auroraVeilTimer = SCREEN_DURATION;
-    else
-        gSideTimers[side].auroraVeilTimer = SCREEN_DURATION_SHORT;
-    BattleScriptPushCursorAndCallback(BattleScript_NorthWindActivated);
-
-    return TRUE;
-}
 static const Ability NorthWind = {
     .name = $("North Wind"),
     .description = $("3 turns Aurora Veil on entry.\n"
                      "Immune to Hail damage."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_AURORA_VEIL)
+
+        int side = GetBattlerSide(battler);
+        gSideTimers[side].started.auroraVeil = TRUE;
+        gSideStatuses[side] |= SIDE_STATUS_AURORA_VEIL;
+        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
+            gSideTimers[side].auroraVeilTimer = SCREEN_DURATION;
+        else
+            gSideTimers[side].auroraVeilTimer = SCREEN_DURATION_SHORT;
+        BattleScriptPushCursorAndCallback(BattleScript_NorthWindActivated);
+
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Overcharge
 static const Ability Overcharge = {
     .name = $("Overcharge"),
     .description = $("Electric is super effective vs\n"
                      "Electric. Can paralyze Electric."),
 };
 
-#undef CONTEXT
-#define CONTEXT ViolentRush
-ON_ENTRY {
-    gVolatileStructs[battler].violentRush = gVolatileStructs[battler].started.violentRush = TRUE;
-    return SwitchInAnnounce(B_MSG_SWITCHIN_VIOLENT_RUSH);
-}
 static const Ability ViolentRush = {
     .name = $("Violent Rush"),
     .description = $("Boosts Speed by 50% + Attack\n"
                      "by 20% on first turn."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        gVolatileStructs[battler].violentRush = gVolatileStructs[battler].started.violentRush = TRUE;
+        return SwitchInAnnounce(B_MSG_SWITCHIN_VIOLENT_RUSH);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT FlamingSoul
-GALE_WINGS_CLONE(TYPE_FIRE)
 static const Ability FlamingSoul = {
     .name = $("Flaming Soul"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's Fire-type moves."),
-    CONTEXT_ON_PRIORITY,
+    .onPriority = GALE_WINGS_CLONE(TYPE_FIRE),
 };
 
-#undef CONTEXT
-#define CONTEXT SagePower
-ON_OFFENSIVE_MULTIPLIER {
-    if (IS_MOVE_SPECIAL(move)) MUL(1.5);
-}
 static const Ability SagePower = {
     .name = $("Sage Power"),
     .description = $("Ups Special Attack by 50%\n"
                      "and locks move."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_SPECIAL(move)) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT BoneZone
 static const Ability BoneZone = {
     .name = $("Bone Zone"),
     .description = $("Bone moves ignore immunities and\n"
                      "deal 2x on not very effective."),
 };
 
-#undef CONTEXT
-#define CONTEXT WeatherControl
 static const Ability WeatherControl = {
     .name = $("Weather Control"),
     .description = $("Negates all weather based\n"
@@ -5316,46 +4343,37 @@ static const Ability WeatherControl = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SpeedForce
-ON_CHOOSE_OFFENSIVE_STAT {
-    if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *secondaryAtkStatToUse = STAT_SPEED;
-}
 static const Ability SpeedForce = {
     .name = $("Speed Force"),
     .description = $("Contact moves use 20% of its\n"
                      "Speed stat additionally."),
-    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
+    .onChooseOffensiveStat =
+        +[](ON_CHOOSE_OFFENSIVE_STAT) {
+            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *secondaryAtkStatToUse = STAT_SPEED;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT SeaGuardian
-ON_ENTRY {
-    CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
-
-    int stat = GetHighestStatId(battler, TRUE);
-    CHECK(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
-    SetStatChanger(stat, 1);
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
-    return TRUE;
-}
 static const Ability SeaGuardian = {
     .name = $("Sea Guardian"),
     .description = $("Ups highest stat by +1\n"
                      "on entry when it rains."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
+
+        int stat = GetHighestStatId(battler, TRUE);
+        CHECK(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
+        SetStatChanger(stat, 1);
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT MoltenDown
 static const Ability MoltenDown = {
     .name = $("Molten Down"),
     .description = $("Fire-type is super effective\n"
                      "against Rock-type."),
 };
 
-#undef CONTEXT
-#define CONTEXT HyperAggressive
 static const Ability HyperAggressive = {
     .name = $("Hyper Aggressive"),
     .description = $("Moves hit twice.\n"
@@ -5363,52 +4381,40 @@ static const Ability HyperAggressive = {
     .onParentalBond = ParentalBond.onParentalBond,
 };
 
-#undef CONTEXT
-#define CONTEXT Flock
-ON_SWARM_MULTIPLIER(TYPE_FLYING)
 static const Ability Flock = {
     .name = $("Flock"),
     .description = $("Boosts Flying-type moves by 1.2x,\n"
                      "or 1.5x when below 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_FLYING),
 };
 
-#undef CONTEXT
-#define CONTEXT FieldExplorer
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.5);
-}
 static const Ability FieldExplorer = {
     .name = $("Field Explorer"),
     .description = $("Boosts field moves by 50%.\n"
                      "Cut, Surf, Strength etc."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Striker
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) MUL(1.3);
-}
 static const Ability Striker = {
     .name = $("Striker"),
     .description = $("Boosts the power of kicking\n"
                      "moves by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT FrozenSoul
-GALE_WINGS_CLONE(TYPE_ICE)
 static const Ability FrozenSoul = {
     .name = $("Frozen Soul"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's Ice-type moves."),
-    CONTEXT_ON_PRIORITY,
+    .onPriority = GALE_WINGS_CLONE(TYPE_ICE),
 };
 
-#undef CONTEXT
-#define CONTEXT Predator
 static const Ability Predator = {
     .name = $("Predator"),
     .description = $("Dealing a KO heals 1/4 of this\n"
@@ -5417,8 +4423,6 @@ static const Ability Predator = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT Looter
 static const Ability Looter = {
     .name = $("Looter"),
     .description = $("Dealing a KO heals 1/4 of this\n"
@@ -5427,58 +4431,43 @@ static const Ability Looter = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT LunarEclipse
-ON_STAB { return moveType == TYPE_DARK || moveType == TYPE_FAIRY; }
 static const Ability LunarEclipse = {
     .name = $("Lunar Eclipse"),
     .description = $("Fairy & Dark gains STAB.\n"
                      "Hypnosis has 1.5x accuracy."),
     .onAccuracy = Hypnotist.onAccuracy,
-    CONTEXT_ON_STAB,
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_DARK || moveType == TYPE_FAIRY; },
 };
 
-#undef CONTEXT
-#define CONTEXT SolarFlare
-ON_STAB { return moveType == TYPE_FIRE; }
 static const Ability SolarFlare = {
     .name = $("Solar Flare"),
     .description = $("Chloroplast + Immolate.\n"
                      "Fire moves gain STAB."),
     .onOffensiveMultiplier = Immolate.onOffensiveMultiplier,
-    CONTEXT_ON_STAB,
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FIRE; },
     .onMoveType = Immolate.onMoveType,
     .chloroplast = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PowerCore
-ON_CHOOSE_OFFENSIVE_STAT { *secondaryAtkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; }
 static const Ability PowerCore = {
     .name = $("Power Core"),
     .description = $("The Pokémon uses +20% of its\n"
                      "Defense or SpDef during moves."),
-    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *secondaryAtkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; },
 };
 
-#undef CONTEXT
-#define CONTEXT SightingSystem
-ON_ACCURACY { return ACCURACY_HITS_IF_POSSIBLE; }
-ON_PRIORITY {
-    CHECK(gBattleMoves[move].accuracy)
-    CHECK(gBattleMoves[move].accuracy < 80)
-    return -3;
-}
 static const Ability SightingSystem = {
     .name = $("Sighting System"),
     .description = $("Moves always hit. Moves last\n"
                      "for moves less than 80% accuracy."),
-    CONTEXT_ON_ACCURACY,
-    CONTEXT_ON_PRIORITY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority { return ACCURACY_HITS_IF_POSSIBLE; },
+    .onPriority = +[](ON_PRIORITY) -> int {
+        CHECK(gBattleMoves[move].accuracy)
+        CHECK(gBattleMoves[move].accuracy < 80);
+        return -3;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT BadCompany
 static const Ability BadCompany = {
     .name = $("Bad Company"),
     .description = $("Not implemented right now.\n"
@@ -5486,136 +4475,112 @@ static const Ability BadCompany = {
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Opportunist
-ON_PRIORITY {
-    CHECK(gBattleMons[target].hp <= gBattleMons[target].maxHP / 2)
-    return 1;
-}
 static const Ability Opportunist = {
     .name = $("Opportunist"),
     .description = $("If target has less than 1/2 HP,\n"
                      "single-target moves get +1 prio."),
-    CONTEXT_ON_PRIORITY,
+    .onPriority = +[](ON_PRIORITY) -> int {
+        CHECK(gBattleMons[target].hp <= gBattleMons[target].maxHP / 2)
+        return 1;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT GiantWings
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].airBased) MUL(1.3);
-}
 static const Ability GiantWings = {
     .name = $("Giant Wings"),
     .description = $("Boosts the power of wing, wind\n"
                      "or air-based moves by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].airBased) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Momentum
-ON_CHOOSE_OFFENSIVE_STAT {
-    if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *atkStatToUse = STAT_SPEED;
-}
 static const Ability Momentum = {
     .name = $("Momentum"),
     .description = $("Contact moves use the Speed stat\n"
                      "for damage calculation."),
-    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
+    .onChooseOffensiveStat =
+        +[](ON_CHOOSE_OFFENSIVE_STAT) {
+            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *atkStatToUse = STAT_SPEED;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT GripPincer
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(gBattlerTarget))
-    CHECK(IsBattlerAlive(battler))
-    CHECK(IsMoveMakingContact(move, battler))
-    CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
-    CHECK(Random() % 2)
-
-    gBattleMons[target].status2 |= STATUS2_WRAPPED;
-    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_GRIP_CLAW)
-        gVolatileStructs[target].wrapTurns = 7;
-    else
-        gVolatileStructs[target].wrapTurns = (Random() % 2) + 4;
-
-    gBattleStruct->wrappedMove[target] = gCurrentMove;
-    gBattleStruct->wrappedBy[target] = battler;
-    BattleScriptCall(BattleScript_GripPincerActivated);
-    return TRUE;
-}
-ON_ACCURACY {
-    CHECK(gBattleMons[target].status2 & STATUS2_WRAPPED)
-    return ACCURACY_ALWAYS_HITS;
-}
 static const Ability GripPincer = {
     .name = $("Grip Pincer"),
     .description = $("50% chance to trap. Then ignores\n"
                      "Defense & accuracy checks."),
-    CONTEXT_ON_ATTACKER,
-    CONTEXT_ON_ACCURACY,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(gBattlerTarget))
+        CHECK(IsBattlerAlive(battler))
+        CHECK(IsMoveMakingContact(move, battler))
+        CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
+        CHECK(Random() % 2)
+
+        gBattleMons[target].status2 |= STATUS2_WRAPPED;
+        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_GRIP_CLAW)
+            gVolatileStructs[target].wrapTurns = 7;
+        else
+            gVolatileStructs[target].wrapTurns = (Random() % 2) + 4;
+
+        gBattleStruct->wrappedMove[target] = gCurrentMove;
+        gBattleStruct->wrappedBy[target] = battler;
+        BattleScriptCall(BattleScript_GripPincerActivated);
+        return TRUE;
+    },
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(gBattleMons[target].status2 & STATUS2_WRAPPED)
+        return ACCURACY_ALWAYS_HITS;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT BigLeaves
-ON_STAT {
-    SolarPower.onStat(ability, battler, statId, stat, flags);
-    Chlorophyll.onStat(ability, battler, statId, stat, flags);
-}
 static const Ability BigLeaves = {
     .name = $("Big Leaves"),
     .description = $("Chloroplast + Chlorophyll + Leaf\n"
                      "Guard + Harvest + Solar Power."),
     .onEndTurn = Harvest.onEndTurn,
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            SolarPower.onStat(ability, battler, statId, stat, flags);
+            Chlorophyll.onStat(ability, battler, statId, stat, flags);
+        },
     .breakable = TRUE,
     .chloroplast = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PreciseFist
 static const Ability PreciseFist = {
     .name = $("Precise Fist"),
     .description = $("Punching moves get +1 crit\n"
                      "and 5x effect chance."),
 };
 
-#undef CONTEXT
-#define CONTEXT Deadeye
-ON_ACCURACY { return ACCURACY_HITS_IF_POSSIBLE; }
-ON_CHOOSE_DEFENSIVE_STAT {
-    CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].arrowBased)
-    u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
-    u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
-    if (def < spDef)
-        return STAT_DEF;
-    else if (spDef < def)
-        return STAT_SPDEF;
-    else
-        return 0;
-}
 static const Ability Deadeye = {
     .name = $("Deadeye"),
     .description = $("Never misses. Arrow and cannon\n"
                      "moves hit weakest defense."),
-    CONTEXT_ON_ACCURACY,
-    CONTEXT_ON_CHOOSE_DEFENSIVE_STAT,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority { return ACCURACY_HITS_IF_POSSIBLE; },
+    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
+        CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].arrowBased)
+        u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+        u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+        if (def < spDef)
+            return STAT_DEF;
+        else if (spDef < def)
+            return STAT_SPDEF;
+        else
+            return 0;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Artillery
-ON_ACCURACY {
-    CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
-    return ACCURACY_HITS_IF_POSSIBLE;
-}
 static const Ability Artillery = {
     .name = $("Artillery"),
     .description = $("Mega Launcher moves always hit.\n"
                      "Single-target now hits both foes."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
+        return ACCURACY_HITS_IF_POSSIBLE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Amplifier
 static const Ability Amplifier = {
     .name = $("Amplifier"),
     .description = $("Ups sound moves by 30% and\n"
@@ -5623,244 +4588,196 @@ static const Ability Amplifier = {
     .onOffensiveMultiplier = PunkRock.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT IceDew
-ON_ABSORB {
-    CHECK(moveType == TYPE_ICE)
-    *statId = GetHighestAttackingStatId(battler, TRUE);
-    return ABSORB_RESULT_STAT;
-}
 static const Ability IceDew = {
     .name = $("Ice Dew"),
     .description = $("Boosts highest Atk instead of\n"
                      "being hit by Ice-type moves."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_ICE);
+        *statId = GetHighestAttackingStatId(battler, TRUE);
+        return ABSORB_RESULT_STAT;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SunWorship
-ON_ENTRY {
-    CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
-
-    int stat = GetHighestStatId(battler, TRUE);
-    CHECK(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
-    return TRUE;
-}
 static const Ability SunWorship = {
     .name = $("Sun Worship"),
     .description = $("Ups highest stat by +1\n"
                      "on entry when sunny."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
+
+        int stat = GetHighestStatId(battler, TRUE);
+        CHECK(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Pollinate
-ATE_ABILITY(TYPE_BUG)
 static const Ability Pollinate = {
     .name = $("Pollinate"),
     .description = $("Normal-type moves become Bug-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_BUG),
 };
 
-#undef CONTEXT
-#define CONTEXT VolcanoRage
-ON_ATTACKER {
-    CHECK(moveType == TYPE_FIRE)
-    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
-
-    return UseAttackerFollowUpMove(battler, target, ability, MOVE_ERUPTION, 50);
-}
 static const Ability VolcanoRage = {
     .name = $("Volcano Rage"),
     .description = $("Triggers 50 BP Eruption after\n"
                      "using a Fire-type move."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(moveType == TYPE_FIRE)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_ERUPTION, 50);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ColdRebound
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-
-    UseOutOfTurnAttack(battler, attacker, ability, MOVE_ICY_WIND, 0);
-    return FALSE;
-}
 static const Ability ColdRebound = {
     .name = $("Cold Rebound"),
     .description = $("Attacks with Icy Wind\n"
                      "when hit by a contact move."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_ICY_WIND, 0);
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT LowBlow
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40); }
 static const Ability LowBlow = {
     .name = $("Low Blow"),
     .description = $("Attacks with 40BP Feint\n"
                      "Attack on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40); },
 };
 
-#undef CONTEXT
-#define CONTEXT Nosferatu
 static const Ability Nosferatu = {
     .name = $("Nosferatu"),
     .description = $("Contact moves do +20% damage\n"
                      "and heal 1/2 of damage dealt."),
 };
 
-#undef CONTEXT
-#define CONTEXT Spectralize
-ATE_ABILITY(TYPE_GHOST)
 static const Ability Spectralize = {
     .name = $("Spectralize"),
     .description = $("Normal-type moves become Ghost-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_GHOST),
 };
 
-#undef CONTEXT
-#define CONTEXT SpectralShroud
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBePoisoned(battler, target))
-    CHECK(gBattleStruct->ateBoost[battler])
-    CHECK(moveType == TYPE_GHOST)
-    CHECK(Random() % 100 < 30)
-
-    return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
-}
 static const Ability SpectralShroud = {
     .name = $("Spectral Shroud"),
     .description = $("Spectralize + 30% chance\n"
                      "to badly poison the foe."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBePoisoned(battler, target))
+        CHECK(gBattleStruct->ateBoost[battler])
+        CHECK(moveType == TYPE_GHOST)
+        CHECK(Random() % 100 < 30)
+
+        return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
+    },
     .onOffensiveMultiplier = Spectralize.onOffensiveMultiplier,
     .onMoveType = Spectralize.onMoveType,
 };
 
-#undef CONTEXT
-#define CONTEXT Discipline
 static const Ability Discipline = {
     .name = $("Discipline"),
     .description = $("Rampage moves no longer trap you.\n"
                      "Can't be confused or intimidated."),
 };
 
-#undef CONTEXT
-#define CONTEXT Thundercall
-ON_ATTACKER {
-    CHECK(moveType == TYPE_ELECTRIC)
-    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
-
-    return UseAttackerFollowUpMove(battler, target, ability, MOVE_SMITE, .2 * gBattleMoves[MOVE_SMITE].power);
-}
 static const Ability Thundercall = {
     .name = $("Thundercall"),
     .description = $("Triggers Smite at 20% power\n"
                      "when using an Electric move."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(moveType == TYPE_ELECTRIC)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_SMITE, .2 * gBattleMoves[MOVE_SMITE].power);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT MarineApex
-ON_OFFENSIVE_MULTIPLIER {
-    if (IS_BATTLER_OF_TYPE(target, TYPE_WATER)) RESISTANCE(1.5);
-}
 static const Ability MarineApex = {
     .name = $("Marine Apex"),
     .description = $("50% more damage to Water-\n"
                      "types + Infiltrator."),
     .onInfiltrate = Infiltrator.onInfiltrate,
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(target, TYPE_WATER)) RESISTANCE(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT MightyHorn
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].hornBased) MUL(1.3);
-}
 static const Ability MightyHorn = {
     .name = $("Mighty Horn"),
     .description = $("Boosts the power of horn and\n"
                      "drill-based by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].hornBased) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT HardenedSheath
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(gBattleMoves[move].hornBased)
-    CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
-
-    BattleScriptCall(BattleScript_AttackBoostActivates);
-    gBattleScripting.battler = battler;
-    return TRUE;
-}
 static const Ability HardenedSheath = {
     .name = $("Hardened Sheath"),
     .description = $("Ups Attack by +1\n"
                      "when using horn moves."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(gBattleMoves[move].hornBased)
+        CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
+
+        BattleScriptCall(BattleScript_AttackBoostActivates);
+        gBattleScripting.battler = battler;
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ArcticFur
-ON_DEFENSIVE_MULTIPLIER { MUL(.65); }
 static const Ability ArcticFur = {
     .name = $("Arctic Fur"),
     .description = $("Weakens incoming physical\n"
                      "and special moves by 35%."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.65); },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Lethargy
-ON_ENTRY {
-    TryResetBattlerStatChanges(battler, RESET_ALL_STATS);
-    gVolatileStructs[battler].slowStartTimer = 5;
-    BattleScriptPushCursorAndCallback(BattleScript_LethargyEnters);
-    return TRUE;
-}
-ON_OFFENSIVE_MULTIPLIER {
-    switch (gVolatileStructs[battler].slowStartTimer) {
-        case 0:
-        case 1:
-            MUL(.2);
-            return;
-
-        case 2:
-            MUL(.4);
-            return;
-
-        case 3:
-            MUL(.6);
-            return;
-
-        case 4:
-            MUL(.8);
-            return;
-    }
-}
 static const Ability Lethargy = {
     .name = $("Lethargy"),
     .description = $("Damage drops 20% each turn to 20%.\n"
                      "Resets on switch-in."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onEntry = +[](ON_ENTRY) -> int {
+        TryResetBattlerStatChanges(battler, RESET_ALL_STATS);
+        gVolatileStructs[battler].slowStartTimer = 5;
+        BattleScriptPushCursorAndCallback(BattleScript_LethargyEnters);
+        return TRUE;
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            switch (gVolatileStructs[battler].slowStartTimer) {
+                case 0:
+                case 1:
+                    MUL(.2);
+                    return;
+
+                case 2:
+                    MUL(.4);
+                    return;
+
+                case 3:
+                    MUL(.6);
+                    return;
+
+                case 4:
+                    MUL(.8);
+                    return;
+            }
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT IronBarrage
 static const Ability IronBarrage = {
     .name = $("Iron Barrage"),
     .description = $("Mega Launcher + Sighting System."),
@@ -5869,8 +4786,6 @@ static const Ability IronBarrage = {
     .onPriority = SightingSystem.onPriority,
 };
 
-#undef CONTEXT
-#define CONTEXT SteelBarrel
 static const Ability SteelBarrel = {
     .name = $("Steel Barrel"),
     .description = $("Immune to recoil damage, but not\n"
@@ -5878,78 +4793,63 @@ static const Ability SteelBarrel = {
     .noRecoil = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PyroShells
-ON_ATTACKER {
-    CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
-    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
-
-    return UseAttackerFollowUpMove(battler, target, ability, MOVE_OUTBURST, 50);
-}
 static const Ability PyroShells = {
     .name = $("Pyro Shells"),
     .description = $("Triggers 50 BP Outburst after\n"
                      "using a Mega Launcher move."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_OUTBURST, 50);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT FungalInfection
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
-    CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
-    CHECK(IsMoveMakingContact(move, battler))
-
-    gStatuses3[target] |= battler;
-    gStatuses3[target] |= STATUS3_LEECHSEED;
-    BattleScriptCall(BattleScript_AbsorbantActivated);
-    return TRUE;
-}
 static const Ability FungalInfection = {
     .name = $("Fungal Infection"),
     .description = $("Contact moves inflict\n"
                      "Leech Seed on the target."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
+        CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
+        CHECK(IsMoveMakingContact(move, battler))
+
+        gStatuses3[target] |= battler;
+        gStatuses3[target] |= STATUS3_LEECHSEED;
+        BattleScriptCall(BattleScript_AbsorbantActivated);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Parry
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-
-    UseOutOfTurnAttack(battler, attacker, ability, MOVE_MACH_PUNCH, 0);
-    return FALSE;
-}
-ON_DEFENSIVE_MULTIPLIER { MUL(.8); }
 static const Ability Parry = {
     .name = $("Parry"),
     .description = $("Counters contact with Mach\n"
                      "Punch. Takes 20% less damage."),
-    CONTEXT_ON_DEFENDER,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_MACH_PUNCH, 0);
+        return FALSE;
+    },
+    .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.8); },
 };
 
-#undef CONTEXT
-#define CONTEXT Scrapyard
-ON_DEFENDER {
-    CHECK(DidMoveHit())
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK(gSideTimers[GetBattlerSide(attacker)].spikesAmount < 3)
-
-    BattleScriptCall(BattleScript_DefenderSetsSpikeLayer_Scrapyard);
-    return TRUE;
-}
 static const Ability Scrapyard = {
     .name = $("Scrapyard"),
     .description = $("Sets a layer of Spikes when hit\n"
                      "(contact move)."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK(gSideTimers[GetBattlerSide(attacker)].spikesAmount < 3)
+
+        BattleScriptCall(BattleScript_DefenderSetsSpikeLayer_Scrapyard);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT LooseQuills
 static const Ability LooseQuills = {
     .name = $("Loose Quills"),
     .description = $("Sets a layer of Spikes when hit\n"
@@ -5957,171 +4857,140 @@ static const Ability LooseQuills = {
     .onDefender = Scrapyard.onDefender,
 };
 
-#undef CONTEXT
-#define CONTEXT ToxicDebris
-ON_DEFENDER {
-    CHECK(DidMoveHit())
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK(gSideTimers[GetBattlerSide(attacker)].toxicSpikesAmount < 2)
-
-    BattleScriptCall(BattleScript_DefenderSetsToxicSpikeLayer);
-    return TRUE;
-}
 static const Ability ToxicDebris = {
     .name = $("Toxic Debris"),
     .description = $("Sets a layer of Toxic Spikes\n"
                      "when hit by contact moves."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK(gSideTimers[GetBattlerSide(attacker)].toxicSpikesAmount < 2)
+
+        BattleScriptCall(BattleScript_DefenderSetsToxicSpikeLayer);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Roundhouse
-ON_ACCURACY {
-    CHECK(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
-    return ACCURACY_HITS_IF_POSSIBLE;
-}
-ON_CHOOSE_DEFENSIVE_STAT {
-    CHECK(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
-    u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
-    u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
-    if (def < spDef)
-        return STAT_DEF;
-    else if (spDef < def)
-        return STAT_SPDEF;
-    else
-        return 0;
-}
 static const Ability Roundhouse = {
     .name = $("Roundhouse"),
     .description = $("Kicks always hit.\n"
                      "Damages foes' weaker defenses."),
-    CONTEXT_ON_ACCURACY,
-    CONTEXT_ON_CHOOSE_DEFENSIVE_STAT,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
+        return ACCURACY_HITS_IF_POSSIBLE;
+    },
+    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
+        CHECK(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
+        u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+        u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+        if (def < spDef)
+            return STAT_DEF;
+        else if (spDef < def)
+            return STAT_SPDEF;
+        else
+            return 0;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Mineralize
-ATE_ABILITY(TYPE_ROCK)
 static const Ability Mineralize = {
     .name = $("Mineralize"),
     .description = $("Normal-type moves become Rock-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_ROCK),
 };
 
-#undef CONTEXT
-#define CONTEXT LooseRocks
-ON_DEFENDER {
-    CHECK(DidMoveHit())
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
-
-    BattleScriptCall(BattleScript_DefenderSetsStealthRock);
-    return TRUE;
-}
 static const Ability LooseRocks = {
     .name = $("Loose Rocks"),
     .description = $("Deploys Stealth Rocks\n"
                      "when hit by contact."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
+
+        BattleScriptCall(BattleScript_DefenderSetsStealthRock);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SpinningTop
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(moveType == TYPE_FIGHTING)
-    CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
-
-    int any = FALSE;
-    if (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[GetBattlerSide(battler)].hotCoals ||
-        gSideTimers[GetBattlerSide(battler)].caltrops) {
-        gSideStatuses[GetBattlerSide(battler)] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_STICKY_WEB);
-        gSideTimers[GetBattlerSide(battler)].hotCoals = TRUE;
-        gSideTimers[GetBattlerSide(battler)].caltrops = TRUE;
-        BattleScriptCall(BattleScript_AnnounceRemovedHazards);
-        gBattleScripting.battler = battler;
-        any = TRUE;
-    }
-
-    if (ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL)) {
-        BattleScriptCall(BattleScript_AnnounceAbilitySpeedBoost);
-        gBattleScripting.battler = battler;
-        any = TRUE;
-    }
-
-    return any;
-}
 static const Ability SpinningTop = {
     .name = $("Spinning Top"),
     .description = $("Fighting moves up speed +1\n"
                      "and clear hazards."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(moveType == TYPE_FIGHTING)
+        CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
+
+        int any = FALSE;
+        if (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[GetBattlerSide(battler)].hotCoals ||
+            gSideTimers[GetBattlerSide(battler)].caltrops) {
+            gSideStatuses[GetBattlerSide(battler)] &=
+                ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_STICKY_WEB);
+            gSideTimers[GetBattlerSide(battler)].hotCoals = TRUE;
+            gSideTimers[GetBattlerSide(battler)].caltrops = TRUE;
+            BattleScriptCall(BattleScript_AnnounceRemovedHazards);
+            gBattleScripting.battler = battler;
+            any = TRUE;
+        }
+
+        if (ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL)) {
+            BattleScriptCall(BattleScript_AnnounceAbilitySpeedBoost);
+            gBattleScripting.battler = battler;
+            any = TRUE;
+        }
+
+        return any;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT RetributionBlow
 static const Ability RetributionBlow = {
     .name = $("Retribution Blow"),
     .description = $("Uses Hyper Beam if any foe\n"
                      "uses an stat boosting move."),
 };
 
-#undef CONTEXT
-#define CONTEXT Fearmonger
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBeParalyzed(battler, target))
-    CHECK(IsMoveMakingContact(move, battler))
-    CHECK(Random() % 100 < 10)
-
-    return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
-}
 static const Ability Fearmonger = {
     .name = $("Fearmonger"),
     .description = $("Intimidate + Scare; 10%\n"
                      "para chance on contact moves."),
     .onEntry = UseIntimidateClone,
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBeParalyzed(battler, target))
+        CHECK(IsMoveMakingContact(move, battler))
+        CHECK(Random() % 100 < 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT KingsWrath
 static const Ability KingsWrath = {
     .name = $("King's Wrath"),
     .description = $("Lowering any stats on its\n"
                      "side raises Atk and Def."),
 };
 
-#undef CONTEXT
-#define CONTEXT QueensMourning
 static const Ability QueensMourning = {
     .name = $("Queen's Mourning"),
     .description = $("Lowering any stats on its\n"
                      "side raises SpAtk and SpDef."),
 };
 
-#undef CONTEXT
-#define CONTEXT ToxicSpill
-ON_ENTRY {
-    BattleScriptPushCursorAndCallback(BattleScript_BattlerAnnouncedToxicSpill);
-    return TRUE;
-}
-ON_EXIT {
-    BattleScriptCall(BattleScript_TheToxicWasHasDissapeared);
-    return TRUE;
-}
 static const Ability ToxicSpill = {
     .name = $("Toxic Spill"),
     .description = $("Non-Poison-types take 1/8 dmg\n"
                      "every turn when on field."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_EXIT,
+    .onEntry = +[](ON_ENTRY) -> int {
+        BattleScriptPushCursorAndCallback(BattleScript_BattlerAnnouncedToxicSpill);
+        return TRUE;
+    },
+    .onExit = +[](ON_EXIT) -> int {
+        BattleScriptCall(BattleScript_TheToxicWasHasDissapeared);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT DesertCloak
 static const Ability DesertCloak = {
     .name = $("Desert Cloak"),
     .description = $("Protects its side from status\n"
@@ -6129,31 +4998,23 @@ static const Ability DesertCloak = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Draconize
-ATE_ABILITY(TYPE_DRAGON)
 static const Ability Draconize = {
     .name = $("Draconize"),
     .description = $("Normal-type moves become Dragon-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_DRAGON),
 };
 
-#undef CONTEXT
-#define CONTEXT PrettyPrincess
-ON_OFFENSIVE_MULTIPLIER {
-    if (!IsUnaware(battler) && HasAnyLoweredStat(target)) MUL(1.5);
-}
 static const Ability PrettyPrincess = {
     .name = $("Pretty Princess"),
     .description = $("Does 50% more damage if the\n"
                      "target has any lowered stat."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (!IsUnaware(battler) && HasAnyLoweredStat(target)) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT SelfRepair
 static const Ability SelfRepair = {
     .name = $("Self Repair"),
     .description = $("Self Sufficient + Natural Cure."),
@@ -6161,152 +5022,121 @@ static const Ability SelfRepair = {
     .onExit = NaturalCure.onExit,
 };
 
-#undef CONTEXT
-#define CONTEXT AtomicBurst
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
-
-    UseOutOfTurnAttack(battler, attacker, ability, MOVE_HYPER_BEAM, 50);
-    return FALSE;
-}
 static const Ability AtomicBurst = {
     .name = $("Atomic Burst"),
     .description = $("When hit super-effectively,\n"
                      "triggers 50 BP Hyper Beam."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_HYPER_BEAM, 50);
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Hellblaze
-ON_BOOSTED_SWARM_MULTIPLIER(TYPE_FIRE)
 static const Ability Hellblaze = {
     .name = $("Hellblaze"),
     .description = $("Boosts Fire-type moves by 1.3x,\n"
                      "or 1.8x when below 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_FIRE),
 };
 
-#undef CONTEXT
-#define CONTEXT Riptide
-ON_BOOSTED_SWARM_MULTIPLIER(TYPE_WATER)
 static const Ability Riptide = {
     .name = $("Riptide"),
     .description = $("Boosts Water-type moves by 1.3x,\n"
                      "or 1.8x when below 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_WATER),
 };
 
-#undef CONTEXT
-#define CONTEXT ForestRage
-ON_BOOSTED_SWARM_MULTIPLIER(TYPE_GRASS)
 static const Ability ForestRage = {
     .name = $("Forest Rage"),
     .description = $("Boosts Grass-type moves by 1.3x,\n"
                      "or 1.8x when below 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_WATER),
 };
 
-#undef CONTEXT
-#define CONTEXT PrimalMaw
-ON_PARENTAL_BOND {
-    CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-    return PARENTAL_BOND_PRIMAL_MAW;
-}
 static const Ability PrimalMaw = {
     .name = $("Primal Maw"),
     .description = $("Biting moves hit twice.\n"
                      "2nd hit does 0.4x damage."),
-    CONTEXT_ON_PARENTAL_BOND,
+    .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
+        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        return PARENTAL_BOND_PRIMAL_MAW;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SweepingEdge
-ON_ACCURACY {
-    CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-    return ACCURACY_HITS_IF_POSSIBLE;
-}
 static const Ability SweepingEdge = {
     .name = $("Sweeping Edge"),
     .description = $("Keen Edge moves always hit.\n"
                      "Single-target now hits both foes."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        return ACCURACY_HITS_IF_POSSIBLE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT GiftedMind
-ON_ACCURACY {
-    CHECK(IS_MOVE_STATUS(move))
-    return ACCURACY_HITS_IF_POSSIBLE;
-}
 static const Ability GiftedMind = {
     .name = $("Gifted Mind"),
     .description = $("Nulls Psychic weakness;\n"
                      "status moves always hit."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(IS_MOVE_STATUS(move))
+        return ACCURACY_HITS_IF_POSSIBLE;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT HydroCircuit
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK_NOT(BATTLER_MAX_HP(battler))
-    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-    CHECK(moveType == TYPE_WATER)
-
-    gBattleMoveDamage = -gHpDealt / 4;
-    if (!gBattleMoveDamage) gBattleMoveDamage = -1;
-    BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
-    return TRUE;
-}
 static const Ability HydroCircuit = {
     .name = $("Hydro Circuit"),
     .description = $("Electric moves +50%;\n"
                      "Water moves siphon 25% damage."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(moveType == TYPE_WATER)
+
+        gBattleMoveDamage = -gHpDealt / 4;
+        if (!gBattleMoveDamage) gBattleMoveDamage = -1;
+        BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
+        return TRUE;
+    },
     .onOffensiveMultiplier = Transistor.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT Equinox
-ON_CHOOSE_OFFENSIVE_STAT {
-    int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
-    int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
-    if (atk > spAtk)
-        *atkStatToUse = STAT_ATK;
-    else if (spAtk > atk)
-        *atkStatToUse = STAT_SPATK;
-}
 static const Ability Equinox = {
     .name = $("Equinox"),
     .description = $("Boosts Atk or SpAtk to\n"
                      "match the higher value."),
-    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
+    .onChooseOffensiveStat =
+        +[](ON_CHOOSE_OFFENSIVE_STAT) {
+            int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
+            int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
+            if (atk > spAtk)
+                *atkStatToUse = STAT_ATK;
+            else if (spAtk > atk)
+                *atkStatToUse = STAT_SPATK;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Absorbant
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
-    CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
-    CHECK(gBattleMoves[move].effect == EFFECT_ABSORB || gBattleMoves[move].effect == EFFECT_DREAM_EATER)
-
-    gStatuses3[target] |= battler;
-    gStatuses3[target] |= STATUS3_LEECHSEED;
-    BattleScriptCall(BattleScript_AbsorbantActivated);
-    return TRUE;
-}
 static const Ability Absorbant = {
     .name = $("Absorbant"),
     .description = $("Drain moves recover +50%\n"
                      "HP & apply Leech Seed."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
+        CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
+        CHECK(gBattleMoves[move].effect == EFFECT_ABSORB || gBattleMoves[move].effect == EFFECT_DREAM_EATER)
+
+        gStatuses3[target] |= battler;
+        gStatuses3[target] |= STATUS3_LEECHSEED;
+        BattleScriptCall(BattleScript_AbsorbantActivated);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Clueless
 static const Ability Clueless = {
     .name = $("Clueless"),
     .description = $("Negates Weather, Rooms\n"
@@ -6315,497 +5145,426 @@ static const Ability Clueless = {
     .unsuppressable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT CheatingDeath
-ON_ENTRY {
-    int uses = 2 - GetSingleUseAbilityCounter(battler, ability);
-    CHECK(uses)
-
-    if (uses == 1)
-        BattleScriptPushCursorAndCallback(BattleScript_BattlerHasASingleNoDamageHit);
-    else if (uses > 1) {
-        ConvertIntToDecimalStringN(gBattleTextBuff4, uses, STR_CONV_MODE_LEFT_ALIGN, 2);
-        BattleScriptPushCursorAndCallback(BattleScript_BattlerHasNoDamageHits);
-    }
-    return TRUE;
-}
 static const Ability CheatingDeath = {
     .name = $("Cheating Death"),
     .description = $("Gets no damage for\n"
                      "the first two hits."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        int uses = 2 - GetSingleUseAbilityCounter(battler, ability);
+        CHECK(uses)
+
+        if (uses == 1)
+            BattleScriptPushCursorAndCallback(BattleScript_BattlerHasASingleNoDamageHit);
+        else if (uses > 1) {
+            ConvertIntToDecimalStringN(gBattleTextBuff4, uses, STR_CONV_MODE_LEFT_ALIGN, 2);
+            BattleScriptPushCursorAndCallback(BattleScript_BattlerHasNoDamageHits);
+        }
+        return TRUE;
+    },
     .noDamageHits = 2,
     .persistent = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT CheapTactics
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_SCRATCH, 0); }
 static const Ability CheapTactics = {
     .name = $("Cheap Tactics"),
     .description = $("Attacks with Scratch\n"
                      "on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SCRATCH, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT Coward
-ON_ENTRY {
-    CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
-
-    SetSingleUseAbilityCounter(battler, ability, TRUE);
-    gRoundStructs[battler].protectedThisTurn = TRUE;
-    BattleScriptPushCursorAndCallback(BattleScript_BattlerIsProtectedForThisTurn);
-    return TRUE;
-}
 static const Ability Coward = {
     .name = $("Coward"),
     .description = $("Sets up Protect on switch-in.\n"
                      "Only works once."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
+
+        SetSingleUseAbilityCounter(battler, ability, TRUE);
+        gRoundStructs[battler].protectedThisTurn = TRUE;
+        BattleScriptPushCursorAndCallback(BattleScript_BattlerIsProtectedForThisTurn);
+        return TRUE;
+    },
     .persistent = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT VoltRush
-GALE_WINGS_CLONE(TYPE_ELECTRIC)
 static const Ability VoltRush = {
     .name = $("Volt Rush"),
     .description = $("At full HP, gives +1 priority to\n"
                      "its Electric-type moves."),
-    CONTEXT_ON_PRIORITY,
+    .onPriority = GALE_WINGS_CLONE(TYPE_ELECTRIC),
 };
 
-#undef CONTEXT
-#define CONTEXT DuneTerror
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_GROUND) MUL(1.2);
-}
-ON_DEFENSIVE_MULTIPLIER {
-    if (IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) MUL(.65);
-}
 static const Ability DuneTerror = {
     .name = $("Dune Terror"),
     .description = $("Sand reduces damage by 35%.\n"
                      "Boosts Ground moves by 20%."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_GROUND) MUL(1.2);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) MUL(.65);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT InfernalRage
-ON_RECOIL {
-    CHECK(moveType == TYPE_FIRE)
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
-    return max(damage / 20, 1);
-}
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_FIRE) MUL(1.35);
-}
 static const Ability InfernalRage = {
     .name = $("Infernal Rage"),
     .description = $("Fire-type moves are boosted\n"
                      "by 35% with 5% recoil."),
-    CONTEXT_ON_RECOIL,
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onRecoil = +[](ON_RECOIL) -> int {
+        CHECK(moveType == TYPE_FIRE);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
+        return max(damage / 20, 1);
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIRE) MUL(1.35);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT DualWield
-ON_PARENTAL_BOND {
-    CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-    return PARENTAL_BOND_DUAL_WIELD;
-}
 static const Ability DualWield = {
     .name = $("Dual Wield"),
     .description = $("Mega Launcher and Keen Edge\n"
                      "moves hit twice for 70% damage."),
-    CONTEXT_ON_PARENTAL_BOND,
+    .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
+        CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
+        return PARENTAL_BOND_DUAL_WIELD;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ElementalCharge
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(Random() % 100 < 20)
-
-    switch (moveType) {
-        case TYPE_ELECTRIC:
-            CHECK(CanBeParalyzed(battler, target))
-
-            AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
-            return TRUE;
-
-        case TYPE_FIRE:
-            CHECK(CanBeBurned(target))
-
-            AbilityStatusEffect(MOVE_EFFECT_BURN);
-            return TRUE;
-
-        case TYPE_ICE:
-            CHECK(CanGetFrostbite(target))
-
-            AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
-            return TRUE;
-    }
-    return FALSE;
-}
 static const Ability ElementalCharge = {
     .name = $("Elemental Charge"),
     .description = $("20% chance to BRN/FRZ/PARA\n"
                      "with respective types."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(Random() % 100 < 20)
+
+        switch (moveType) {
+            case TYPE_ELECTRIC:
+                CHECK(CanBeParalyzed(battler, target))
+
+                AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+                return TRUE;
+
+            case TYPE_FIRE:
+                CHECK(CanBeBurned(target))
+
+                AbilityStatusEffect(MOVE_EFFECT_BURN);
+                return TRUE;
+
+            case TYPE_ICE:
+                CHECK(CanGetFrostbite(target))
+
+                AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
+                return TRUE;
+        }
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Ambush
 static const Ability Ambush = {
     .name = $("Ambush"),
     .description = $("Guaranteed critical hit\n"
                      "on first turn."),
 };
 
-#undef CONTEXT
-#define CONTEXT Atlas
-ON_ENTRY {
-    CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
-
-    gFieldTimers.started.gravity = TRUE;
-    gFieldTimers.gravityTimer = GRAVITY_DURATION_EXTENDED;
-    gFieldStatuses |= STATUS_FIELD_GRAVITY;
-    BattleScriptPushCursorAndCallback(BattleScript_GravityStarts);
-    return TRUE;
-}
 static const Ability Atlas = {
     .name = $("Atlas"),
     .description = $("Sets Gravity on entry for\n"
                      "8 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
+
+        gFieldTimers.started.gravity = TRUE;
+        gFieldTimers.gravityTimer = GRAVITY_DURATION_EXTENDED;
+        gFieldStatuses |= STATUS_FIELD_GRAVITY;
+        BattleScriptPushCursorAndCallback(BattleScript_GravityStarts);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Radiance
-ON_IMMUNE {
-    CHECK(moveType == TYPE_DARK)
-    *immunityScript = BattleScript_RadianceProtected;
-    return TRUE;
-}
 static const Ability Radiance = {
     .name = $("Radiance"),
     .description = $("+20% accuracy; Dark moves\n"
                      "fail when user is present."),
-    CONTEXT_ON_IMMUNE,
+    .onImmune = +[](ON_IMMUNE) -> int {
+        CHECK(moveType == TYPE_DARK);
+        *immunityScript = BattleScript_RadianceProtected;
+        return TRUE;
+    },
     .onAccuracy = Illuminate.onAccuracy,
     .onImmuneFor = APPLY_ON_ANY,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT JawsOfCarnage
-ON_BATTLER_FAINTS {
-    CHECK_NOT(BATTLER_MAX_HP(battler))
-    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-    if (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST)
-        BattleScriptCall(BattleScript_HandleJawsOfCarnageEffect);
-    else
-        BattleScriptCall(BattleScript_HandleSoulEaterEffect);
-    return TRUE;
-}
 static const Ability JawsOfCarnage = {
     .name = $("Jaws of Carnage"),
     .description = $("Devours 1/2 of the foe\n"
                      "when defeating it."),
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        if (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST)
+            BattleScriptCall(BattleScript_HandleJawsOfCarnageEffect);
+        else
+            BattleScriptCall(BattleScript_HandleSoulEaterEffect);
+        return TRUE;
+    },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT AngelsWrath
-ON_ATTACKER {
-    switch (move) {
-        case MOVE_TACKLE: {
-            CHECK(ShouldApplyOnHitAffect(target))
-            CHECK(gVolatileStructs[target].encoreTimer)
-            CHECK(gVolatileStructs[target].disableTimer)
-
-            gVolatileStructs[target].encoreTimer = 2;
-            gVolatileStructs[target].encoredMove = gBattleMons[target].moves[0];
-
-            gVolatileStructs[target].disableTimer = gVolatileStructs[target].disableTimerStartValue = 2;
-            gVolatileStructs[target].disabledMove = gBattleMons[target].moves[0];
-
-            BattleScriptCall(BattleScript_AngelsWrath_Effect_Tackle);
-            return TRUE;
-        }
-
-        case MOVE_STRING_SHOT: {
-            CHECK(WasMoveSuccessful())
-
-            int side = GetBattlerSide(target);
-            if (gSideStatuses[side] & SIDE_STATUS_STEALTH_ROCK && gSideStatuses[side] & SIDE_STATUS_TOXIC_SPIKES && gSideStatuses[side] & SIDE_STATUS_SPIKES &&
-                gSideStatuses[side] & SIDE_STATUS_STICKY_WEB)
-                break;
-
-            gSideStatuses[side] |= (SIDE_STATUS_STEALTH_ROCK);
-            gSideTimers[side].stealthRockType = TYPE_ROCK;
-
-            gSideStatuses[side] |= (SIDE_STATUS_TOXIC_SPIKES);
-            gSideTimers[side].toxicSpikesAmount++;
-            if (gSideTimers[side].toxicSpikesAmount > 2) gSideTimers[side].toxicSpikesAmount = 2;
-
-            gSideStatuses[side] |= (SIDE_STATUS_SPIKES);
-            gSideTimers[side].spikesAmount++;
-            if (gSideTimers[side].spikesAmount > 3) gSideTimers[side].spikesAmount = 3;
-
-            gSideStatuses[side] |= (SIDE_STATUS_STICKY_WEB);
-
-            BattleScriptCall(BattleScript_AngelsWrath_Effect_String_Shot);
-            return TRUE;
-        }
-
-        case MOVE_HARDEN: {
-            CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-
-            {
-                int activated = FALSE;
-                for (int i = 1; i < NUM_STATS; i++) {
-                    if (i == STAT_DEF) continue;
-                    activated |= ChangeStatBuffs(battler, 1, i, MOVE_EFFECT_AFFECTS_USER, NULL);
-                }
-
-                if (activated) {
-                    BattleScriptCall(BattleScript_AngelsWrath_Effect_Harden);
-                    return TRUE;
-                }
-            }
-            break;
-        }
-
-        case MOVE_IRON_DEFENSE: {
-            CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-
-            gRoundStructs[battler].angelsWrathProtected = TRUE;
-            BattleScriptCall(BattleScript_AngelsWrath_Effect_Iron_Defense);
-            return TRUE;
-        }
-
-        case MOVE_ELECTROWEB: {
-            CHECK(ShouldApplyOnHitAffect(target))
-            CHECK_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
-            CHECK_NOT(gBattleMons[target].statStages[STAT_SPEED] == MIN_STAT_STAGE)
-
-            gBattleMons[target].statStages[STAT_SPEED] = MIN_STAT_STAGE;
-            gBattleMons[target].status2 |= (STATUS2_ESCAPE_PREVENTION);
-            BattleScriptCall(BattleScript_AngelsWrath_Effect_Electroweb);
-            return TRUE;
-        }
-
-        case MOVE_BUG_BITE: {
-            CHECK(ShouldApplyOnHitAffect(battler))
-            CHECK_NOT(BATTLER_MAX_HP(battler))
-            CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-
-            gBattleMoveDamage = -gHpDealt;
-            if (!gBattleMoveDamage) gBattleMoveDamage = -1;
-            BattleScriptCall(BattleScript_AngelsWrath_Effect_Bug_Bite_2);
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-ON_ACCURACY {
-    switch (move) {
-        case MOVE_TACKLE:
-        case MOVE_POISON_STING:
-        case MOVE_ELECTROWEB:
-        case MOVE_BUG_BITE:
-            return ACCURACY_HITS_IF_POSSIBLE;
-
-        default:
-            return ACCURACY_NO_RESULT;
-    }
-}
 static const Ability AngelsWrath = {
     .name = $("Angel's Wrath"),
     .description = $("Drastically alters all\n"
                      "of the users moves."),
-    CONTEXT_ON_ATTACKER,
-    CONTEXT_ON_ACCURACY,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        switch (move) {
+            case MOVE_TACKLE: {
+                CHECK(ShouldApplyOnHitAffect(target))
+                CHECK(gVolatileStructs[target].encoreTimer)
+                CHECK(gVolatileStructs[target].disableTimer)
+
+                gVolatileStructs[target].encoreTimer = 2;
+                gVolatileStructs[target].encoredMove = gBattleMons[target].moves[0];
+
+                gVolatileStructs[target].disableTimer = gVolatileStructs[target].disableTimerStartValue = 2;
+                gVolatileStructs[target].disabledMove = gBattleMons[target].moves[0];
+
+                BattleScriptCall(BattleScript_AngelsWrath_Effect_Tackle);
+                return TRUE;
+            }
+
+            case MOVE_STRING_SHOT: {
+                CHECK(WasMoveSuccessful())
+
+                int side = GetBattlerSide(target);
+                if (gSideStatuses[side] & SIDE_STATUS_STEALTH_ROCK && gSideStatuses[side] & SIDE_STATUS_TOXIC_SPIKES &&
+                    gSideStatuses[side] & SIDE_STATUS_SPIKES && gSideStatuses[side] & SIDE_STATUS_STICKY_WEB)
+                    break;
+
+                gSideStatuses[side] |= (SIDE_STATUS_STEALTH_ROCK);
+                gSideTimers[side].stealthRockType = TYPE_ROCK;
+
+                gSideStatuses[side] |= (SIDE_STATUS_TOXIC_SPIKES);
+                gSideTimers[side].toxicSpikesAmount++;
+                if (gSideTimers[side].toxicSpikesAmount > 2) gSideTimers[side].toxicSpikesAmount = 2;
+
+                gSideStatuses[side] |= (SIDE_STATUS_SPIKES);
+                gSideTimers[side].spikesAmount++;
+                if (gSideTimers[side].spikesAmount > 3) gSideTimers[side].spikesAmount = 3;
+
+                gSideStatuses[side] |= (SIDE_STATUS_STICKY_WEB);
+
+                BattleScriptCall(BattleScript_AngelsWrath_Effect_String_Shot);
+                return TRUE;
+            }
+
+            case MOVE_HARDEN: {
+                CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+
+                {
+                    int activated = FALSE;
+                    for (int i = 1; i < NUM_STATS; i++) {
+                        if (i == STAT_DEF) continue;
+                        activated |= ChangeStatBuffs(battler, 1, i, MOVE_EFFECT_AFFECTS_USER, NULL);
+                    }
+
+                    if (activated) {
+                        BattleScriptCall(BattleScript_AngelsWrath_Effect_Harden);
+                        return TRUE;
+                    }
+                }
+                break;
+            }
+
+            case MOVE_IRON_DEFENSE: {
+                CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+
+                gRoundStructs[battler].angelsWrathProtected = TRUE;
+                BattleScriptCall(BattleScript_AngelsWrath_Effect_Iron_Defense);
+                return TRUE;
+            }
+
+            case MOVE_ELECTROWEB: {
+                CHECK(ShouldApplyOnHitAffect(target))
+                CHECK_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
+                CHECK_NOT(gBattleMons[target].statStages[STAT_SPEED] == MIN_STAT_STAGE)
+
+                gBattleMons[target].statStages[STAT_SPEED] = MIN_STAT_STAGE;
+                gBattleMons[target].status2 |= (STATUS2_ESCAPE_PREVENTION);
+                BattleScriptCall(BattleScript_AngelsWrath_Effect_Electroweb);
+                return TRUE;
+            }
+
+            case MOVE_BUG_BITE: {
+                CHECK(ShouldApplyOnHitAffect(battler))
+                CHECK_NOT(BATTLER_MAX_HP(battler))
+                CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+
+                gBattleMoveDamage = -gHpDealt;
+                if (!gBattleMoveDamage) gBattleMoveDamage = -1;
+                BattleScriptCall(BattleScript_AngelsWrath_Effect_Bug_Bite_2);
+                return TRUE;
+            }
+        }
+        return FALSE;
+    },
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        switch (move) {
+            case MOVE_TACKLE:
+            case MOVE_POISON_STING:
+            case MOVE_ELECTROWEB:
+            case MOVE_BUG_BITE:
+                return ACCURACY_HITS_IF_POSSIBLE;
+
+            default:
+                return ACCURACY_NO_RESULT;
+        }
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT PrismaticFur
-ON_DEFENSIVE_MULTIPLIER { MUL(.5); }
 static const Ability PrismaticFur = {
     .name = $("Prismatic Fur"),
     .description = $("Color Change + Protean +\n"
                      "Fur Coat + Ice Scales."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.5); },
     .protean = TRUE,
     .colorChange = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT ShockingJaws
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBeParalyzed(battler, target))
-    CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-    CHECK(Random() % 2)
-
-    return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
-}
 static const Ability ShockingJaws = {
     .name = $("Shocking Jaws"),
     .description = $("Biting moves have 50% chance\n"
                      "to paralyze the target."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBeParalyzed(battler, target))
+        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        CHECK(Random() % 2)
+
+        return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT FaeHunter
-ON_OFFENSIVE_MULTIPLIER {
-    if (IS_BATTLER_OF_TYPE(target, TYPE_FAIRY)) RESISTANCE(1.5);
-}
 static const Ability FaeHunter = {
     .name = $("Fae Hunter"),
     .description = $("Does 50% more damage to\n"
                      "Fairy-types."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(target, TYPE_FAIRY)) RESISTANCE(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT GravityWell
-ON_ENTRY {
-    CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
-
-    gFieldTimers.started.gravity = TRUE;
-    gFieldTimers.gravityTimer = GRAVITY_DURATION;
-    gFieldStatuses |= STATUS_FIELD_GRAVITY;
-    BattleScriptPushCursorAndCallback(BattleScript_GravityStarts);
-    return TRUE;
-}
 static const Ability GravityWell = {
     .name = $("Gravity Well"),
     .description = $("Sets Gravity on entry for\n"
                      "5 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
+
+        gFieldTimers.started.gravity = TRUE;
+        gFieldTimers.gravityTimer = GRAVITY_DURATION;
+        gFieldStatuses |= STATUS_FIELD_GRAVITY;
+        BattleScriptPushCursorAndCallback(BattleScript_GravityStarts);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Evaporate
-ON_ABSORB {
-    CHECK(moveType == TYPE_WATER)
-    return ABSORB_RESULT_EVAPORATE;
-}
 static const Ability Evaporate = {
     .name = $("Evaporate"),
     .description = $("Takes no damage and sets Mist\n"
                      "if hit by water."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_WATER)
+        return ABSORB_RESULT_EVAPORATE;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Lumberjack
-ON_OFFENSIVE_MULTIPLIER {
-    if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) RESISTANCE(1.5);
-}
 static const Ability Lumberjack = {
     .name = $("Lumberjack"),
     .description = $("1.5x damage to Grass types."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) RESISTANCE(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT WellBakedBody
-ON_ABSORB {
-    CHECK(moveType == TYPE_FIRE)
-    *statId = STAT_DEF;
-    return ABSORB_RESULT_STAT;
-}
 static const Ability WellBakedBody = {
     .name = $("Well Baked Body"),
     .description = $("Boosts Defense sharply instead\n"
                      "of being hit by Fire-type moves."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_FIRE);
+        *statId = STAT_DEF;
+        return ABSORB_RESULT_STAT;
+    },
     .breakable = TRUE,
     .absorbUp2 = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Furnace
-ON_ENTRY {
-    CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
-    CHECK(gSideTimers[GetBattlerSide(battler)].stealthRockType == TYPE_ROCK)
-    CHECK(IsBattlerAlive(battler))
-    CHECK(ChangeStatBuffs(battler, 2, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
-
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
-    return TRUE;
-}
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(moveType == TYPE_ROCK)
-    CHECK(CanRaiseStat(battler, STAT_SPEED))
-
-    SetStatChanger(STAT_SPEED, 2);
-    BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-    return TRUE;
-}
 static const Ability Furnace = {
     .name = $("Furnace"),
     .description = $("User gains +2 Speed when\n"
                      "when hit by rocks."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_DEFENDER,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
+        CHECK(gSideTimers[GetBattlerSide(battler)].stealthRockType == TYPE_ROCK)
+        CHECK(IsBattlerAlive(battler))
+        CHECK(ChangeStatBuffs(battler, 2, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
+
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+        return TRUE;
+    },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(moveType == TYPE_ROCK)
+        CHECK(CanRaiseStat(battler, STAT_SPEED))
+
+        SetStatChanger(STAT_SPEED, 2);
+        BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Electromorphosis
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
-
-    gStatuses3[battler] |= STATUS3_CHARGED_UP;
-    BattleScriptCall(BattleScript_ElectromorphosisActivates);
-    return TRUE;
-}
 static const Ability Electromorphosis = {
     .name = $("Electromorphosis"),
     .description = $("Charges up when getting hit."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
+
+        gStatuses3[battler] |= STATUS3_CHARGED_UP;
+        BattleScriptCall(BattleScript_ElectromorphosisActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT RockyPayload
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_ROCK || gBattleMoves[move].throwingBased) MUL(1.5);
-}
 static const Ability RockyPayload = {
     .name = $("Rocky Payload"),
     .description = $("Boosts the power of Rock-type\n"
                      "and throwing moves by 1.5x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ROCK || gBattleMoves[move].throwingBased) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT EarthEater
-ON_ABSORB {
-    CHECK(moveType == TYPE_GROUND)
-    return ABSORB_RESULT_HEAL;
-}
 static const Ability EarthEater = {
     .name = $("Earth Eater"),
     .description = $("Heals 25% of max HP when hit\n"
                      "by a Ground move."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_GROUND)
+        return ABSORB_RESULT_HEAL;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT LingeringAroma
 static const Ability LingeringAroma = {
     .name = $("Lingering Aroma"),
     .description = $("If hit, makes the attacker's ability\n"
@@ -6813,223 +5572,198 @@ static const Ability LingeringAroma = {
     .onDefender = Mummy.onDefender,
 };
 
-#undef CONTEXT
-#define CONTEXT FairyTale
-ON_ENTRY { return AddBattlerType(battler, TYPE_FAIRY); }
 static const Ability FairyTale = {
     .name = $("Fairy Tale"),
     .description = $("Adds Fairy type to itself."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FAIRY); },
 };
 
-#undef CONTEXT
-#define CONTEXT RagingMoth
-ON_PARENTAL_BOND {
-    CHECK(moveType == TYPE_FIRE)
-    return PARENTAL_BOND_DUAL_WIELD;
-}
 static const Ability RagingMoth = {
     .name = $("Raging Moth"),
     .description = $("Fire moves hits twice,\n"
                      "both hits at 70% power."),
-    CONTEXT_ON_PARENTAL_BOND,
+    .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
+        CHECK(moveType == TYPE_FIRE)
+        return PARENTAL_BOND_DUAL_WIELD;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT AdrenalineRush
-ON_BATTLER_FAINTS { return MoxieClone(battler, STAT_SPEED); }
 static const Ability AdrenalineRush = {
     .name = $("Adrenaline Rush"),
     .description = $("KOs raise Speed by one stage."),
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, STAT_SPEED); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT Archmage
-ON_ATTACKER {
-    CHECK(DidMoveHit())
-    CHECK_NOT(IS_MOVE_STATUS(move))
-    CHECK(Random() % 100 < 30)
-
-    switch (moveType) {
-        case TYPE_POISON:
-            CHECK(IsBattlerAlive(target))
-            CHECK(CanBePoisoned(battler, target))
-
-            AbilityStatusEffect(MOVE_EFFECT_TOXIC);
-            return TRUE;
-
-        case TYPE_ICE:
-            CHECK(IsBattlerAlive(target))
-            CHECK(CanGetFrostbite(target))
-
-            AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
-            return TRUE;
-
-        case TYPE_WATER:
-            CHECK(IsBattlerAlive(target))
-            CHECK(CanBeConfused(target))
-
-            AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
-            return TRUE;
-
-        case TYPE_FIRE:
-            CHECK(IsBattlerAlive(target))
-            CHECK(CanBeBurned(target))
-
-            AbilityStatusEffect(MOVE_EFFECT_BURN);
-            ;
-            return TRUE;
-
-        case TYPE_ELECTRIC:
-            CHECK(IsBattlerAlive(target))
-            CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
-
-            BattleScriptCall(BattleScript_Archmage_Effect_Type_Electric);
-            return TRUE;
-
-        case TYPE_PSYCHIC:
-            CHECK(IsBattlerAlive(target))
-            CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
-
-            BattleScriptCall(BattleScript_Archmage_Effect_Type_Psychic);
-            return TRUE;
-
-        case TYPE_FAIRY:
-            CHECK(IsBattlerAlive(target))
-            CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
-
-            BattleScriptCall(BattleScript_Archmage_Effect_Type_Fairy);
-            return TRUE;
-
-        case TYPE_GRASS:
-            CHECK(IsBattlerAlive(target))
-            CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
-
-            BattleScriptCall(BattleScript_Archmage_Effect_Type_Grass);
-            return TRUE;
-
-        case TYPE_NORMAL:
-            CHECK(IsBattlerAlive(target))
-            CHECK_NOT(gVolatileStructs[target].encoreTimer)
-            CHECK_NOT(IsAbilityOnSide(target, ABILITY_AROMA_VEIL))
-            CHECK_NOT(BATTLER_HAS_ABILITY(target, ABILITY_OBLIVIOUS))
-            CHECK(SetEncore(target))
-
-            BattleScriptCall(BattleScript_Archmage_Effect_Type_Normal);
-            return TRUE;
-
-        case TYPE_ROCK:
-            CHECK_NOT(gSideStatuses[GetBattlerSide(target)] & SIDE_STATUS_STEALTH_ROCK)
-
-            gSideStatuses[GetBattlerSide(target)] |= (SIDE_STATUS_STEALTH_ROCK);
-            gSideTimers[GetBattlerSide(target)].stealthRockType = TYPE_ROCK;
-            BattleScriptCall(BattleScript_Archmage_Effect_Type_Rock);
-            return TRUE;
-
-        case TYPE_GHOST:
-            CHECK(IsBattlerAlive(target))
-            CHECK(CanBeDisabled(target))
-
-            AbilityStatusEffect(MOVE_EFFECT_DISABLE);
-            return TRUE;
-
-        case TYPE_DARK:
-            CHECK(IsBattlerAlive(target))
-            CHECK(CanBleed(target))
-
-            AbilityStatusEffect(MOVE_EFFECT_BLEED);
-            return TRUE;
-
-        case TYPE_FIGHTING:
-            CHECK(IsBattlerAlive(target))
-            CHECK(CanRaiseStat(battler, STAT_SPATK))
-
-            AbilityStatusEffect(MOVE_EFFECT_SP_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER);
-            return TRUE;
-
-        case TYPE_FLYING:
-            CHECK(IsBattlerAlive(target))
-            CHECK(CanRaiseStat(battler, STAT_SPEED))
-
-            AbilityStatusEffect(MOVE_EFFECT_SPD_PLUS_1 | MOVE_EFFECT_AFFECTS_USER);
-            return TRUE;
-
-        case TYPE_BUG:
-            // TODO: Set sticky web
-            break;
-
-        case TYPE_DRAGON:
-            CHECK(IsBattlerAlive(target))
-            CHECK(StatLowerableOrMirrorArmor(target, STAT_ATK))
-
-            AbilityStatusEffect(MOVE_EFFECT_ATK_MINUS_1);
-            return TRUE;
-
-        case TYPE_GROUND:
-            CHECK(IsBattlerAlive(target))
-            CHECK_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
-
-            AbilityStatusEffect(MOVE_EFFECT_PREVENT_ESCAPE);
-            return TRUE;
-
-        case TYPE_STEEL:
-            CHECK(IsBattlerAlive(target))
-            CHECK(CanRaiseStat(battler, STAT_DEF))
-
-            AbilityStatusEffect(MOVE_EFFECT_DEF_PLUS_1 | MOVE_EFFECT_AFFECTS_USER);
-            return TRUE;
-    }
-    return FALSE;
-}
 static const Ability Archmage = {
     .name = $("Archmage"),
     .description = $("30% chance of adding a type\n"
                      "related effect to each move."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(DidMoveHit())
+        CHECK_NOT(IS_MOVE_STATUS(move))
+        CHECK(Random() % 100 < 30)
+
+        switch (moveType) {
+            case TYPE_POISON:
+                CHECK(IsBattlerAlive(target))
+                CHECK(CanBePoisoned(battler, target))
+
+                AbilityStatusEffect(MOVE_EFFECT_TOXIC);
+                return TRUE;
+
+            case TYPE_ICE:
+                CHECK(IsBattlerAlive(target))
+                CHECK(CanGetFrostbite(target))
+
+                AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
+                return TRUE;
+
+            case TYPE_WATER:
+                CHECK(IsBattlerAlive(target))
+                CHECK(CanBeConfused(target))
+
+                AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
+                return TRUE;
+
+            case TYPE_FIRE:
+                CHECK(IsBattlerAlive(target))
+                CHECK(CanBeBurned(target))
+
+                AbilityStatusEffect(MOVE_EFFECT_BURN);
+                ;
+                return TRUE;
+
+            case TYPE_ELECTRIC:
+                CHECK(IsBattlerAlive(target))
+                CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
+
+                BattleScriptCall(BattleScript_Archmage_Effect_Type_Electric);
+                return TRUE;
+
+            case TYPE_PSYCHIC:
+                CHECK(IsBattlerAlive(target))
+                CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
+
+                BattleScriptCall(BattleScript_Archmage_Effect_Type_Psychic);
+                return TRUE;
+
+            case TYPE_FAIRY:
+                CHECK(IsBattlerAlive(target))
+                CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
+
+                BattleScriptCall(BattleScript_Archmage_Effect_Type_Fairy);
+                return TRUE;
+
+            case TYPE_GRASS:
+                CHECK(IsBattlerAlive(target))
+                CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
+
+                BattleScriptCall(BattleScript_Archmage_Effect_Type_Grass);
+                return TRUE;
+
+            case TYPE_NORMAL:
+                CHECK(IsBattlerAlive(target))
+                CHECK_NOT(gVolatileStructs[target].encoreTimer)
+                CHECK_NOT(IsAbilityOnSide(target, ABILITY_AROMA_VEIL))
+                CHECK_NOT(BATTLER_HAS_ABILITY(target, ABILITY_OBLIVIOUS))
+                CHECK(SetEncore(target))
+
+                BattleScriptCall(BattleScript_Archmage_Effect_Type_Normal);
+                return TRUE;
+
+            case TYPE_ROCK:
+                CHECK_NOT(gSideStatuses[GetBattlerSide(target)] & SIDE_STATUS_STEALTH_ROCK)
+
+                gSideStatuses[GetBattlerSide(target)] |= (SIDE_STATUS_STEALTH_ROCK);
+                gSideTimers[GetBattlerSide(target)].stealthRockType = TYPE_ROCK;
+                BattleScriptCall(BattleScript_Archmage_Effect_Type_Rock);
+                return TRUE;
+
+            case TYPE_GHOST:
+                CHECK(IsBattlerAlive(target))
+                CHECK(CanBeDisabled(target))
+
+                AbilityStatusEffect(MOVE_EFFECT_DISABLE);
+                return TRUE;
+
+            case TYPE_DARK:
+                CHECK(IsBattlerAlive(target))
+                CHECK(CanBleed(target))
+
+                AbilityStatusEffect(MOVE_EFFECT_BLEED);
+                return TRUE;
+
+            case TYPE_FIGHTING:
+                CHECK(IsBattlerAlive(target))
+                CHECK(CanRaiseStat(battler, STAT_SPATK))
+
+                AbilityStatusEffect(MOVE_EFFECT_SP_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER);
+                return TRUE;
+
+            case TYPE_FLYING:
+                CHECK(IsBattlerAlive(target))
+                CHECK(CanRaiseStat(battler, STAT_SPEED))
+
+                AbilityStatusEffect(MOVE_EFFECT_SPD_PLUS_1 | MOVE_EFFECT_AFFECTS_USER);
+                return TRUE;
+
+            case TYPE_BUG:
+                // TODO: Set sticky web
+                break;
+
+            case TYPE_DRAGON:
+                CHECK(IsBattlerAlive(target))
+                CHECK(StatLowerableOrMirrorArmor(target, STAT_ATK))
+
+                AbilityStatusEffect(MOVE_EFFECT_ATK_MINUS_1);
+                return TRUE;
+
+            case TYPE_GROUND:
+                CHECK(IsBattlerAlive(target))
+                CHECK_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
+
+                AbilityStatusEffect(MOVE_EFFECT_PREVENT_ESCAPE);
+                return TRUE;
+
+            case TYPE_STEEL:
+                CHECK(IsBattlerAlive(target))
+                CHECK(CanRaiseStat(battler, STAT_DEF))
+
+                AbilityStatusEffect(MOVE_EFFECT_DEF_PLUS_1 | MOVE_EFFECT_AFFECTS_USER);
+                return TRUE;
+        }
+        return FALSE;
+    },
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Cryomancy
 static const Ability Cryomancy = {
     .name = $("Cryomancy"),
     .description = $("Moves inflict frostbite\n"
                      "5x as often."),
 };
 
-#undef CONTEXT
-#define CONTEXT PhantomPain
 static const Ability PhantomPain = {
     .name = $("Phantom Pain"),
     .description = $("Ghost type moves can hit normal\n"
                      "type pokemon for neutral damage."),
 };
 
-#undef CONTEXT
-#define CONTEXT Purgatory
-ON_BOOSTED_SWARM_MULTIPLIER(TYPE_GHOST)
 static const Ability Purgatory = {
     .name = $("Purgatory"),
     .description = $("Boosts Ghost-type moves by 1.3x,\n"
                      "or 1.8x when below 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_GHOST),
 };
 
-#undef CONTEXT
-#define CONTEXT Emanate
-ATE_ABILITY(TYPE_PSYCHIC)
 static const Ability Emanate = {
     .name = $("Emanate"),
     .description = $("Normal-type moves become Psy.-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_PSYCHIC),
 };
 
-#undef CONTEXT
-#define CONTEXT KunoichiBlade
 static const Ability KunoichiBlade = {
     .name = $("Kunoichi's Blade"),
     .description = $("Technician + Skill Link."),
@@ -7037,30 +5771,23 @@ static const Ability KunoichiBlade = {
     .skillLink = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT MonkeyBusiness
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_TICKLE, 0); }
 static const Ability MonkeyBusiness = {
     .name = $("Monkey Business"),
     .description = $("Uses Tickle on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TICKLE, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT CombatSpecialist
-ON_OFFENSIVE_MULTIPLIER {
-    IronFist.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-    Striker.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-}
 static const Ability CombatSpecialist = {
     .name = $("Combat Specialist"),
     .description = $("Boosts the power of punching and\n"
                      "kicking moves by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            IronFist.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            Striker.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT JunglesGuard
 static const Ability JunglesGuard = {
     .name = $("Jungle's Guard"),
     .description = $("Grass-types on user side: immune\n"
@@ -7068,8 +5795,6 @@ static const Ability JunglesGuard = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT HuntersHorn
 static const Ability HuntersHorn = {
     .name = $("Hunter's Horn"),
     .description = $("Boost horn moves and heals\n"
@@ -7079,42 +5804,34 @@ static const Ability HuntersHorn = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT PixiePower
-ON_ACCURACY {
-    *accuracy *= 1.2;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability PixiePower = {
     .name = $("Pixie Power"),
     .description = $("1.2x accuracy. Boosts Fairy\n"
                      "moves by 1.33x for all."),
     .onEntry = FairyAura.onEntry,
     .onOffensiveMultiplier = FairyAura.onOffensiveMultiplier,
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        *accuracy *= 1.2;
+        return ACCURACY_MULTIPLICATIVE;
+    },
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
-#undef CONTEXT
-#define CONTEXT PlasmaLamp
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC) MUL(1.2);
-}
-ON_ACCURACY {
-    CHECK(moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC)
-    *accuracy *= 1.2;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability PlasmaLamp = {
     .name = $("Plasma Lamp"),
     .description = $("Boost accuracy & power of Fire\n"
                      "& Electric type moves by 1.2x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_ACCURACY,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC) MUL(1.2);
+        },
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC)
+        *accuracy *= 1.2;
+        return ACCURACY_MULTIPLICATIVE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT MagmaEater
 static const Ability MagmaEater = {
     .name = $("Magma Eater"),
     .description = $("Predator + Molten Down."),
@@ -7122,19 +5839,16 @@ static const Ability MagmaEater = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT SuperHotGoo
-ON_DEFENDER { return Gooey.onDefender(ability, battler, attacker, move, moveType) | FlameBody.onDefender(ability, battler, attacker, move, moveType); }
 static const Ability SuperHotGoo = {
     .name = $("Super Hot Goo"),
     .description = $("Inflicts burn and lowers\n"
                      "Speed on contact."),
     .onAttacker = FlameBody.onAttacker,
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        return Gooey.onDefender(ability, battler, attacker, move, moveType) | FlameBody.onDefender(ability, battler, attacker, move, moveType);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Nika
 static const Ability Nika = {
     .name = $("Nika"),
     .description = $("Iron fist + Water moves\n"
@@ -7142,168 +5856,138 @@ static const Ability Nika = {
     .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT Archer
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].arrowBased) MUL(1.3);
-}
 static const Ability Archer = {
     .name = $("Archer"),
     .description = $("Boosts the power of arrow moves\n"
                      "by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].arrowBased) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT ColdPlasma
 static const Ability ColdPlasma = {
     .name = $("Cold Plasma"),
     .description = $("Electric type moves now\n"
                      "inflict burn instead of paralysis."),
 };
 
-#undef CONTEXT
-#define CONTEXT SuperSlammer
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].hammerBased) MUL(1.3);
-}
 static const Ability SuperSlammer = {
     .name = $("Super Slammer"),
     .description = $("Boosts the power of hammer and\n"
                      "slamming moves by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].hammerBased) MUL(1.3);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT InverseRoom
-ON_ENTRY {
-    CHECK_NOT(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)
-
-    gFieldTimers.started.inverseRoom = TRUE;
-    gFieldStatuses |= STATUS_FIELD_INVERSE_ROOM;
-    gFieldTimers.inverseRoomTimer = INVERSE_ROOM_DURATION_SHORT;
-    BattleScriptPushCursorAndCallback(BattleScript_InversedRoomActivated);
-    return TRUE;
-}
 static const Ability InverseRoom = {
     .name = $("Inversion"),
     .description = $("Sets up Inverse Room on\n"
                      "entry, lasts 3 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)
+
+        gFieldTimers.started.inverseRoom = TRUE;
+        gFieldStatuses |= STATUS_FIELD_INVERSE_ROOM;
+        gFieldTimers.inverseRoomTimer = INVERSE_ROOM_DURATION_SHORT;
+        BattleScriptPushCursorAndCallback(BattleScript_InversedRoomActivated);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Accelerate
 static const Ability Accelerate = {
     .name = $("Accelerate"),
     .description = $("Moves that need a charge turn\n"
                      "are now used instantly."),
 };
 
-#undef CONTEXT
-#define CONTEXT FrostBurn
-ON_ATTACKER {
-    CHECK(moveType == TYPE_FIRE)
-    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
-
-    return UseAttackerFollowUpMove(battler, target, ability, MOVE_ICE_BEAM, 40);
-}
 static const Ability FrostBurn = {
     .name = $("Frost Burn"),
     .description = $("Triggers 40BP Ice Beam after\n"
                      "using a Fire-type move."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(moveType == TYPE_FIRE)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_ICE_BEAM, 40);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ItchyDefense
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_WRAPPED)
-
-    gBattleMons[attacker].status2 |= STATUS2_WRAPPED;
-    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_GRIP_CLAW)
-        gVolatileStructs[attacker].wrapTurns = 7;
-    else
-        gVolatileStructs[attacker].wrapTurns = (Random() % 2) + 4;
-
-    gBattleStruct->wrappedMove[attacker] = MOVE_INFESTATION;
-    gBattleStruct->wrappedBy[attacker] = battler;
-
-    BattleScriptCall(BattleScript_AttackerBecameInfested);
-    return TRUE;
-}
 static const Ability ItchyDefense = {
     .name = $("Itchy Defense"),
     .description = $("Causes infestation when\n"
                      "hit by a contact move."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_WRAPPED)
+
+        gBattleMons[attacker].status2 |= STATUS2_WRAPPED;
+        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_GRIP_CLAW)
+            gVolatileStructs[attacker].wrapTurns = 7;
+        else
+            gVolatileStructs[attacker].wrapTurns = (Random() % 2) + 4;
+
+        gBattleStruct->wrappedMove[attacker] = MOVE_INFESTATION;
+        gBattleStruct->wrappedBy[attacker] = battler;
+
+        BattleScriptCall(BattleScript_AttackerBecameInfested);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Generator
-ON_ENTRY {
-    CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
-
-    int any = FALSE;
-    if (IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) {
-        any = TRUE;
-    } else if (!GetSingleUseAbilityCounter(battler, ability)) {
-        SetSingleUseAbilityCounter(battler, ability, TRUE);
-        any = TRUE;
-    }
-
-    CHECK(any)
-
-    gStackBattler1 = battler;
-    BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
-    return TRUE;
-}
-ON_TERRAIN {
-    CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
-    CHECK(IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN))
-
-    gStackBattler1 = battler;
-    BattleScriptCall(BattleScript_GeneratorActivatesRet);
-    return TRUE;
-}
-ON_EXIT {
-    CHECK(gStatuses3[battler] & STATUS3_CHARGED_UP)
-    SetSingleUseAbilityCounter(battler, ability, FALSE);
-    return FALSE;
-}
 static const Ability Generator = {
     .name = $("Generator"),
     .description = $("Charges up once on entry or\n"
                      "when electric terrain is active."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_TERRAIN,
-    CONTEXT_ON_EXIT,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
+
+        int any = FALSE;
+        if (IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) {
+            any = TRUE;
+        } else if (!GetSingleUseAbilityCounter(battler, ability)) {
+            SetSingleUseAbilityCounter(battler, ability, TRUE);
+            any = TRUE;
+        }
+
+        CHECK(any)
+
+        gStackBattler1 = battler;
+        BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
+        return TRUE;
+    },
+    .onTerrain = +[](ON_TERRAIN) -> int {
+        CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
+        CHECK(IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN))
+
+        gStackBattler1 = battler;
+        BattleScriptCall(BattleScript_GeneratorActivatesRet);
+        return TRUE;
+    },
+    .onExit = +[](ON_EXIT) -> int {
+        CHECK(gStatuses3[battler] & STATUS3_CHARGED_UP)
+        SetSingleUseAbilityCounter(battler, ability, FALSE);
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT MoonSpirit
-ON_STAB { return moveType == TYPE_FAIRY || moveType == TYPE_DARK; }
 static const Ability MoonSpirit = {
     .name = $("Moon Spirit"),
     .description = $("Fairy & Dark gains STAB.\n"
                      "Moonlight recovers 75% HP."),
-    CONTEXT_ON_STAB,
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FAIRY || moveType == TYPE_DARK; },
 };
 
-#undef CONTEXT
-#define CONTEXT DustCloud
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_SAND_ATTACK, 0); }
 static const Ability DustCloud = {
     .name = $("Dust Cloud"),
     .description = $("Attacks with Sand Attack\n"
                      "on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SAND_ATTACK, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT BerserkerRage
 static const Ability BerserkerRage = {
     .name = $("Berserker Rage"),
     .description = $("Berserk + Rampage."),
@@ -7312,98 +5996,80 @@ static const Ability BerserkerRage = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT Trickster
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_DISABLE, 0); }
 static const Ability Trickster = {
     .name = $("Trickster"),
     .description = $("Uses Disable\n"
                      "on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DISABLE, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT SandGuard
-ON_IMMUNE {
-    CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
-    return QueenlyMajesty.onImmune(battler, attacker, move, moveType, immunityScript);
-}
-ON_DEFENSIVE_MULTIPLIER {
-    if (IS_MOVE_SPECIAL(move) && IsBattlerWeatherAffected(attacker, WEATHER_SANDSTORM_ANY)) MUL(.5);
-}
 static const Ability SandGuard = {
     .name = $("Sand Guard"),
     .description = $("Blocks priority and reduces\n"
                      "special damage by 1/2 in sand."),
-    CONTEXT_ON_IMMUNE,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onImmune = +[](ON_IMMUNE) -> int {
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY));
+        return QueenlyMajesty.onImmune(battler, attacker, move, moveType, immunityScript);
+    },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_SPECIAL(move) && IsBattlerWeatherAffected(attacker, WEATHER_SANDSTORM_ANY)) MUL(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT NaturalRecovery
-ON_EXIT { return NaturalCure.onExit(ability, battler) | Regenerator.onExit(ability, battler); }
 static const Ability NaturalRecovery = {
     .name = $("Natural Recovery"),
     .description = $("Natural Cure + Regenerator."),
-    CONTEXT_ON_EXIT,
+    .onExit = +[](ON_EXIT) -> int { return NaturalCure.onExit(ability, battler) | Regenerator.onExit(ability, battler); },
 };
 
-#undef CONTEXT
-#define CONTEXT WindRider
-ON_ENTRY {
-    CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
-    CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
-
-    BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityHighestAttackingStatRaiseOnSwitchIn);
-    return TRUE;
-}
-ON_ABSORB {
-    CHECK(gBattleMoves[move].airBased)
-    *statId = GetHighestAttackingStatId(battler, TRUE);
-    return ABSORB_RESULT_STAT;
-}
 static const Ability WindRider = {
     .name = $("Wind Rider"),
     .description = $("Increases attack in tailwind or\n"
                      "when hit by wind move."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_ABSORB,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
+        CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
+
+        BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityHighestAttackingStatRaiseOnSwitchIn);
+        return TRUE;
+    },
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(gBattleMoves[move].airBased)
+        *statId = GetHighestAttackingStatId(battler, TRUE);
+        return ABSORB_RESULT_STAT;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SoothingAroma
-ON_ENTRY {
-    int anyStatus = FALSE;
-    struct Pokemon *party;
-
-    if (GetBattlerSide(battler) == B_SIDE_PLAYER)
-        party = gPlayerParty;
-    else
-        party = gEnemyParty;
-
-    for (int i = 0; i < PARTY_SIZE; i++) {
-        u32 status1 = GetMonData(&party[i], MON_DATA_STATUS);
-        if (status1 & STATUS1_ANY) {
-            anyStatus = TRUE;
-            break;
-        }
-    }
-
-    CHECK(anyStatus)
-
-    BattleScriptPushCursorAndCallback(BattleScript_EffectSoothingAroma);
-    return TRUE;
-}
 static const Ability SoothingAroma = {
     .name = $("Soothing Aroma"),
     .description = $("Cures party status on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        int anyStatus = FALSE;
+        struct Pokemon *party;
+
+        if (GetBattlerSide(battler) == B_SIDE_PLAYER)
+            party = gPlayerParty;
+        else
+            party = gEnemyParty;
+
+        for (int i = 0; i < PARTY_SIZE; i++) {
+            u32 status1 = GetMonData(&party[i], MON_DATA_STATUS);
+            if (status1 & STATUS1_ANY) {
+                anyStatus = TRUE;
+                break;
+            }
+        }
+
+        CHECK(anyStatus)
+
+        BattleScriptPushCursorAndCallback(BattleScript_EffectSoothingAroma);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT PrimAndProper
 static const Ability PrimAndProper = {
     .name = $("Prim and Proper"),
     .description = $("Wonder Skin + Cute Charm."),
@@ -7412,50 +6078,41 @@ static const Ability PrimAndProper = {
     .onAccuracyFor = APPLY_ON_TARGET,
 };
 
-#undef CONTEXT
-#define CONTEXT SuperStrain
-ON_RECOIL {
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_STRAIN;
-    return max(damage / 4, 1);
-}
-ON_BATTLER_FAINTS {
-    CHECK(ChangeStatBuffs(battler, -1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS | MOVE_EFFECT_CERTAIN, NULL))
-    BattleScriptCall(BattleScript_LowerStatOnFaintingTarget);
-    return TRUE;
-}
 static const Ability SuperStrain = {
     .name = $("Super Strain"),
     .description = $("KOs lower Attack by +1.\n"
                      "Take 25% recoil damage."),
-    CONTEXT_ON_RECOIL,
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onRecoil = +[](ON_RECOIL) -> int {
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_STRAIN;
+        return max(damage / 4, 1);
+    },
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK(ChangeStatBuffs(battler, -1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS | MOVE_EFFECT_CERTAIN, NULL))
+        BattleScriptCall(BattleScript_LowerStatOnFaintingTarget);
+        return TRUE;
+    },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT TippingPoint
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(CanRaiseStat(battler, STAT_SPATK))
-
-    if (gIsCriticalHit) {
-        SetStatChanger(STAT_SPATK, 12);
-        BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
-    } else {
-        SetStatChanger(STAT_SPATK, 1);
-        BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-    }
-    return TRUE;
-}
 static const Ability TippingPoint = {
     .name = $("Tipping Point"),
     .description = $("Getting hit raises SpAtk.\n"
                      "Critical hits maximize SpAtk."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(CanRaiseStat(battler, STAT_SPATK))
+
+        if (gIsCriticalHit) {
+            SetStatChanger(STAT_SPATK, 12);
+            BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
+        } else {
+            SetStatChanger(STAT_SPATK, 1);
+            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+        }
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Enlightened
 static const Ability Enlightened = {
     .name = $("Enlightened"),
     .description = $("Emanate + Inner Focus."),
@@ -7465,37 +6122,29 @@ static const Ability Enlightened = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PeacefulSlumber
-ON_END_TURN {
-    if (!SweetDreams.onEndTurn(ability, battler)) return SelfSufficient.onEndTurn(ability, battler);
-    gBattleMoveDamage -= gBattleMons[battler].maxHP / 16;
-    return TRUE;
-}
 static const Ability PeacefulSlumber = {
     .name = $("Peaceful Slumber"),
     .description = $("Sweet Dreams + Self Sufficient."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        if (!SweetDreams.onEndTurn(ability, battler)) return SelfSufficient.onEndTurn(ability, battler);
+        gBattleMoveDamage -= gBattleMons[battler].maxHP / 16;
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Aftershock
-ON_ATTACKER {
-    CHECK(gBattleMoves[move].power)
-    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
-
-    return UseAttackerFollowUpMove(battler, target, ability, MOVE_MAGNITUDE, 65);
-}
 static const Ability Aftershock = {
     .name = $("Aftershock"),
     .description = $("Triggers Magnitude 4-7 after\n"
                      "using a damaging move."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(gBattleMoves[move].power)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_MAGNITUDE, 65);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT FreezingPoint
-ON_EITHER {
+ON_EITHER(FreezingPoint) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(CanGetFrostbite(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
@@ -7508,11 +6157,9 @@ static const Ability FreezingPoint = {
     .name = $("Freezing Point"),
     .description = $("30% chance to get frostbitten\n"
                      "on contact."),
-    CONTEXT_ON_EITHER,
+    ON_EITHER_ABILITY(FreezingPoint),
 };
 
-#undef CONTEXT
-#define CONTEXT CryoProficiency
 static int CryoProficiencyHail(int ability, int battler, int attacker, int move, int moveType) {
     CHECK(ShouldApplyOnHitAffect(battler))
     CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY)
@@ -7526,84 +6173,69 @@ static int CryoProficiencyHail(int ability, int battler, int attacker, int move,
     }
     return FALSE;
 }
-ON_DEFENDER { return FreezingPoint.onDefender(ability, battler, attacker, move, moveType) | CryoProficiencyHail(ability, battler, attacker, move, moveType); }
 static const Ability CryoProficiency = {
     .name = $("Cryo Proficiency"),
     .description = $("Triggers hail when hit. 30%\n"
                      "chance to frostbite on contact."),
     .onAttacker = FreezingPoint.onAttacker,
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        return FreezingPoint.onDefender(ability, battler, attacker, move, moveType) | CryoProficiencyHail(ability, battler, attacker, move, moveType);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ArcaneForce
-ON_OFFENSIVE_MULTIPLIER {
-    if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
-}
 static const Ability ArcaneForce = {
     .name = $("Arcane Force"),
     .description = $("All moves gain STAB.\n"
                      "Ups “supereffective” by 10%."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
+        },
     .onStab = MysticPower.onStab,
 };
 
-#undef CONTEXT
-#define CONTEXT Doombringer
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_DOOM_DESIRE, 0); }
 static const Ability Doombringer = {
     .name = $("Doombringer"),
     .description = $("Uses Doom Desire\n"
                      "on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DOOM_DESIRE, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT Wishmaker
-ON_ENTRY {
-    int counter = GetSingleUseAbilityCounter(battler, ability);
-    CHECK(counter < 3)
-    CHECK(UseEntryMove(battler, ability, MOVE_WISH, 0))
-
-    SetSingleUseAbilityCounter(battler, ability, counter + 1);
-    return TRUE;
-}
 static const Ability Wishmaker = {
     .name = $("Wishmaker"),
     .description = $("Uses Wish on switch-in.\n"
                      "Three uses per battle."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        int counter = GetSingleUseAbilityCounter(battler, ability);
+        CHECK(counter < 3)
+        CHECK(UseEntryMove(battler, ability, MOVE_WISH, 0))
+
+        SetSingleUseAbilityCounter(battler, ability, counter + 1);
+        return TRUE;
+    },
     .persistent = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT YukiOnna
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanInfatuate(battler, target))
-    CHECK(Random() % 100 < 10)
-
-    return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
-}
 static const Ability YukiOnna = {
     .name = $("Yuki Onna"),
     .description = $("Scare + Intimidate.\n"
                      "10% chance to infatuate on hit."),
     .onEntry = UseIntimidateClone,
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanInfatuate(battler, target))
+        CHECK(Random() % 100 < 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Suppress
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_TORMENT, 0); }
 static const Ability Suppress = {
     .name = $("Suppress"),
     .description = $("Casts Torment on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TORMENT, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT Refrigerator
 static const Ability Refrigerator = {
     .name = $("Refrigerator"),
     .description = $("Refrigerate + Illuminate."),
@@ -7612,16 +6244,12 @@ static const Ability Refrigerator = {
     .onMoveType = Refrigerate.onMoveType,
 };
 
-#undef CONTEXT
-#define CONTEXT HeavenAsunder
 static const Ability HeavenAsunder = {
     .name = $("Heaven Asunder"),
     .description = $("Spacial Rend always crits.\n"
                      "Ups crit level by +1."),
 };
 
-#undef CONTEXT
-#define CONTEXT PurifyingWaters
 static const Ability PurifyingWaters = {
     .name = $("Purifying Waters"),
     .description = $("Hydration + Water Veil."),
@@ -7629,8 +6257,6 @@ static const Ability PurifyingWaters = {
     .onEndTurn = Hydration.onEndTurn,
 };
 
-#undef CONTEXT
-#define CONTEXT Seaborne
 static const Ability Seaborne = {
     .name = $("Seaborne"),
     .description = $("Drizzle + Swift Swim."),
@@ -7638,242 +6264,192 @@ static const Ability Seaborne = {
     .onStat = SwiftSwim.onStat,
 };
 
-#undef CONTEXT
-#define CONTEXT HighTide
-ON_ATTACKER {
-    CHECK(moveType == TYPE_WATER)
-    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
-
-    return UseAttackerFollowUpMove(battler, target, ability, MOVE_SURF, 50);
-}
 static const Ability HighTide = {
     .name = $("High Tide"),
     .description = $("Triggers 50 BP Surf after\n"
                      "using a Water-type move."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(moveType == TYPE_WATER)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_SURF, 50);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ChangeOfHeart
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_HEART_SWAP, 0); }
 static const Ability ChangeOfHeart = {
     .name = $("Change of Heart"),
     .description = $("Uses Heart Swap\n"
                      "on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_HEART_SWAP, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT MysticBlades
-ON_SWAP_SPLIT {
-    CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
-    CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-    return TRUE;
-}
 static const Ability MysticBlades = {
     .name = $("Mystic Blades"),
     .description = $("Keen edge moves become special\n"
                      "and deal 30% more damage."),
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
-    CONTEXT_ON_SWAP_SPLIT,
+    .onSwapSplit = +[](ON_SWAP_SPLIT) -> int {
+        CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
+        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Determination
-ON_OFFENSIVE_MULTIPLIER {
-    if (HasAnyStatusOrAbility(battler) && IS_MOVE_SPECIAL(move)) MUL(1.5);
-}
 static const Ability Determination = {
     .name = $("Determination"),
     .description = $("Ups Special Attack by 50%\n"
                      "if suffering."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (HasAnyStatusOrAbility(battler) && IS_MOVE_SPECIAL(move)) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Fertilize
-ATE_ABILITY(TYPE_GRASS)
 static const Ability Fertilize = {
     .name = $("Fertilize"),
     .description = $("Normal-type moves become Grass-\n"
                      "type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    ATE_ABILITY(TYPE_GRASS),
 };
 
-#undef CONTEXT
-#define CONTEXT PureLove
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK_NOT(BATTLER_MAX_HP(battler))
-    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-    CHECK(gBattleMons[target].status2 & STATUS2_INFATUATION)
-
-    gBattleMoveDamage = -gHpDealt / 4;
-    if (!gBattleMoveDamage) gBattleMoveDamage = -1;
-    BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
-    return TRUE;
-}
 static const Ability PureLove = {
     .name = $("Pure Love"),
     .description = $("Infatuates on contact.\n"
                      "Heal 25% damage vs infatuated."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(gBattleMons[target].status2 & STATUS2_INFATUATION)
+
+        gBattleMoveDamage = -gHpDealt / 4;
+        if (!gBattleMoveDamage) gBattleMoveDamage = -1;
+        BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
+        return TRUE;
+    },
     .onDefender = CuteCharm.onDefender,
 };
 
-#undef CONTEXT
-#define CONTEXT Fighter
-ON_SWARM_MULTIPLIER(TYPE_FIGHTING)
 static const Ability Fighter = {
     .name = $("Fighter"),
     .description = $("Boosts Fight.-type moves by 1.2x,\n"
                      "or 1.5x when below 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_FIGHTING),
 };
 
-#undef CONTEXT
-#define CONTEXT MyceliumMight
 static const Ability MyceliumMight = {
     .name = $("Mycelium Might"),
     .description = $("Status moves ignore immunities\n"
                      "but go last."),
 };
 
-#undef CONTEXT
-#define CONTEXT Telekinetic
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_TELEKINESIS, 0); }
 static const Ability Telekinetic = {
     .name = $("Telekinetic"),
     .description = $("Casts Telekinesis on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TELEKINESIS, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT Combustion
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_FIRE) MUL(1.5);
-}
 static const Ability Combustion = {
     .name = $("Combustion"),
     .description = $("Boosts the power of Fire-type\n"
                      "moves by 1.5x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIRE) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT PonyPower
-ON_OFFENSIVE_MULTIPLIER {
-    KeenEdge.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-    MysticBlades.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-}
 static const Ability PonyPower = {
     .name = $("Pony Power"),
     .description = $("Keen Edge + Mystic Blades."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            KeenEdge.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            MysticBlades.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+        },
     .onSwapSplit = MysticBlades.onSwapSplit,
 };
 
-#undef CONTEXT
-#define CONTEXT PowderBurst
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_POWDER, 0); }
 static const Ability PowderBurst = {
     .name = $("Powder Burst"),
     .description = $("Casts Powder on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_POWDER, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT Retriever
-ON_EXIT {
-    CHECK(IsBattlerAlive(battler))
-    CHECK_NOT(gBattleMons[battler].item)
-
-    u8 side = GetBattlerSide(gActiveBattler);
-    u8 index = gBattlerPartyIndexes[gActiveBattler];
-    u16 originalItem = gLastUsedItem = side == B_SIDE_PLAYER ? gBattleStruct->itemStolen[index].originalItem : gBattleStruct->opposingOriginalItems[index];
-
-    CHECK(originalItem)
-
-    gBattleStruct->usedHeldItems[index][side] = ITEM_NONE;
-
-    UpdateBattlerItem(gActiveBattler, originalItem);
-
-    BattleScriptCall(BattleScript_RetrieverExits);
-    return TRUE;
-}
 static const Ability Retriever = {
     .name = $("Retriever"),
     .description = $("Retrieves item on switch-out."),
-    CONTEXT_ON_EXIT,
+    .onExit = +[](ON_EXIT) -> int {
+        CHECK(IsBattlerAlive(battler))
+        CHECK_NOT(gBattleMons[battler].item)
+
+        u8 side = GetBattlerSide(gActiveBattler);
+        u8 index = gBattlerPartyIndexes[gActiveBattler];
+        u16 originalItem = gLastUsedItem = side == B_SIDE_PLAYER ? gBattleStruct->itemStolen[index].originalItem : gBattleStruct->opposingOriginalItems[index];
+
+        CHECK(originalItem)
+
+        gBattleStruct->usedHeldItems[index][side] = ITEM_NONE;
+
+        UpdateBattlerItem(gActiveBattler, originalItem);
+
+        BattleScriptCall(BattleScript_RetrieverExits);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT MonsterMash
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_TRICK_OR_TREAT, 0); }
 static const Ability MonsterMash = {
     .name = $("Monster Mash"),
     .description = $("Casts Trick-or-Treat on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TRICK_OR_TREAT, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT TwoStep
-ON_ATTACKER {
-    CHECK(IsDance(battler, move))
-    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
-
-    return UseAttackerFollowUpMove(battler, target, ability, MOVE_REVELATION_DANCE, 50);
-}
 static const Ability TwoStep = {
     .name = $("Two Step"),
     .description = $("Triggers 50BP Revelation Dance\n"
                      "after using a Dance move."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IsDance(battler, move))
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_REVELATION_DANCE, 50);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Spiteful
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(move != MOVE_STRUGGLE)
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK(gBattleMons[attacker].pp[gChosenMovePos])
-
-    BattleScriptCall(BattleScript_AbilitySpiteful);
-    return TRUE;
-}
 static const Ability Spiteful = {
     .name = $("Spiteful"),
     .description = $("Reduces attacker's PP\n"
                      "on contact."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(move != MOVE_STRUGGLE)
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK(gBattleMons[attacker].pp[gChosenMovePos])
+
+        BattleScriptCall(BattleScript_AbilitySpiteful);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Fortitude
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(CanRaiseStat(battler, STAT_SPDEF))
-
-    if (gIsCriticalHit) {
-        SetStatChanger(STAT_SPDEF, 12);
-        BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
-    } else {
-        SetStatChanger(STAT_SPDEF, 1);
-        BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-    }
-    return TRUE;
-}
 static const Ability Fortitude = {
     .name = $("Fortitude"),
     .description = $("Boosts SpDef +1 when hit.\n"
                      "Maxes SpDef on crit."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(CanRaiseStat(battler, STAT_SPDEF))
+
+        if (gIsCriticalHit) {
+            SetStatChanger(STAT_SPDEF, 12);
+            BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
+        } else {
+            SetStatChanger(STAT_SPDEF, 1);
+            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+        }
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Devourer
 static const Ability Devourer = {
     .name = $("Devourer"),
     .description = $("Strong Jaw + Primal Maw."),
@@ -7881,75 +6457,58 @@ static const Ability Devourer = {
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT PhantomThief
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_SPECTRAL_THIEF, 40); }
 static const Ability PhantomThief = {
     .name = $("Phantom Thief"),
     .description = $("Attacks with 40BP Spectral Thief\n"
                      "on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SPECTRAL_THIEF, 40); },
 };
 
-#undef CONTEXT
-#define CONTEXT EarlyGrave
-GALE_WINGS_CLONE(TYPE_GHOST)
 static const Ability EarlyGrave = {
     .name = $("Early Grave"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's Ghost-type moves."),
-    CONTEXT_ON_PRIORITY,
+    .onPriority = GALE_WINGS_CLONE(TYPE_GHOST),
 };
 
-#undef CONTEXT
-#define CONTEXT Grappler
 static const Ability Grappler = {
     .name = $("Grappler"),
     .description = $("Trapping moves last 6 turns.\n"
                      "Trapping deals 1/6 HP."),
 };
 
-#undef CONTEXT
-#define CONTEXT BassBoosted
-ON_OFFENSIVE_MULTIPLIER {
-    Amplifier.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-    PunkRock.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-}
 static const Ability BassBoosted = {
     .name = $("Bass Boosted"),
     .description = $("Amplifier + Punk Rock."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            Amplifier.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            PunkRock.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+        },
     .onDefensiveMultiplier = PunkRock.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT FlamingJaws
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBeBurned(target))
-    CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-    CHECK(Random() % 2)
-
-    return AbilityStatusEffect(MOVE_EFFECT_BURN);
-}
 static const Ability FlamingJaws = {
     .name = $("Flaming Jaws"),
     .description = $("Biting moves have 50% chance\n"
                      "to burn the target."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBeBurned(target))
+        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        CHECK(Random() % 2)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BURN);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT MonsterHunter
 static const Ability MonsterHunter = {
     .name = $("Monster Hunter"),
     .description = $("Deals 1.5x more damage to\n"
                      "Dark-types."),
 };
 
-#undef CONTEXT
-#define CONTEXT CrownedSword
 static const Ability CrownedSword = {
     .name = $("Crowned Sword"),
     .description = $("Intrepid Sword + Anger Point."),
@@ -7957,8 +6516,6 @@ static const Ability CrownedSword = {
     .onDefender = AngerPoint.onDefender,
 };
 
-#undef CONTEXT
-#define CONTEXT CrownedShield
 static const Ability CrownedShield = {
     .name = $("Crowned Shield"),
     .description = $("Dauntless Shield + Stamina."),
@@ -7966,70 +6523,55 @@ static const Ability CrownedShield = {
     .onDefender = Stamina.onDefender,
 };
 
-#undef CONTEXT
-#define CONTEXT BerserkDna
-ON_ENTRY {
-    CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
-    if (CanBeConfused(battler)) {
-        gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
-        BattleScriptPushCursorAndCallback(BattleScript_BerserkDNA);
-    } else {
-        BattleScriptPushCursorAndCallback(BattleScript_BerserkDNANoConfusion);
-    }
-    return TRUE;
-}
 static const Ability BerserkDna = {
     .name = $("Berserk DNA"),
     .description = $("Sharply ups highest attacking stat\n"
                      "but confuses on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE))) if (CanBeConfused(battler)) {
+            gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
+            BattleScriptPushCursorAndCallback(BattleScript_BerserkDNA);
+        }
+        else {
+            BattleScriptPushCursorAndCallback(BattleScript_BerserkDNANoConfusion);
+        }
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT CrownedKing
-ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); }
-ON_BATTLER_FAINTS {
-    return AsOneShadowRider.onBattlerFaints(ability, battler, attacker, fainted, move, moveType) |
-           AsOneIceRider.onBattlerFaints(ability, battler, attacker, fainted, move, moveType);
-}
 static const Ability CrownedKing = {
     .name = $("Crowned King"),
     .description = $("Unnerve + Grim Neigh +\n"
                      "Chilling Neigh."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); },
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        return AsOneShadowRider.onBattlerFaints(ability, battler, attacker, fainted, move, moveType) |
+               AsOneIceRider.onBattlerFaints(ability, battler, attacker, fainted, move, moveType);
+    },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SnapTrapWhenHit
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-
-    UseOutOfTurnAttack(battler, attacker, ability, MOVE_SNAP_TRAP, 50);
-    return FALSE;
-}
 static const Ability SnapTrapWhenHit = {
     .name = $("Clap Trap"),
     .description = $("Counters contact with\n"
                      "50BP Snap Trap."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_SNAP_TRAP, 50);
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Permanence
-ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_PERMANENCE); }
 static const Ability Permanence = {
     .name = $("Permanence"),
     .description = $("Foes can't heal in any way."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_PERMANENCE); },
 };
 
-#undef CONTEXT
-#define CONTEXT Hubris
 static const Ability Hubris = {
     .name = $("Hubris"),
     .description = $("KOs raise SpAtk by one stage."),
@@ -8037,50 +6579,40 @@ static const Ability Hubris = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT CosmicDaze
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMons[target].status2 & STATUS2_CONFUSION) MUL(2);
-}
 static const Ability CosmicDaze = {
     .name = $("Cosmic Daze"),
     .description = $("2x damage vs confused. Enemies\n"
                      "take 2x confusion damage."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMons[target].status2 & STATUS2_CONFUSION) MUL(2);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT MindsEye
 static const Ability MindsEye = {
     .name = $("Mind's Eye"),
     .description = $("Hits Ghost-type Pokémon.\n"
                      "Accuracy can't be lowered."),
 };
 
-#undef CONTEXT
-#define CONTEXT BloodPrice
-ON_END_TURN {
-    CHECK_NOT(IS_MOVE_STATUS(gLastResultingMoves[battler]))
-    CHECK_NOT(IsMagicGuardProtected(battler))
-    CHECK(IsBattlerAlive(battler))
-
-    gBattleMoveDamage = gBattleMons[battler].maxHP / 10;
-    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-    BattleScriptPushCursorAndCallback(BattleScript_AbilitySelfDamage);
-    return TRUE;
-}
-ON_OFFENSIVE_MULTIPLIER { MUL(1.3); }
 static const Ability BloodPrice = {
     .name = $("Blood Price"),
     .description = $("Does 30% more damage but\n"
                      "lose 10% HP when attacking."),
-    CONTEXT_ON_END_TURN,
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(IS_MOVE_STATUS(gLastResultingMoves[battler]))
+        CHECK_NOT(IsMagicGuardProtected(battler))
+        CHECK(IsBattlerAlive(battler))
+
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 10;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        BattleScriptPushCursorAndCallback(BattleScript_AbilitySelfDamage);
+        return TRUE;
+    },
+    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MUL(1.3); },
 };
 
-#undef CONTEXT
-#define CONTEXT SpikeArmor
-ON_EITHER {
+ON_EITHER(SpikeArmor) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(CanBleed(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
@@ -8093,109 +6625,88 @@ static const Ability SpikeArmor = {
     .name = $("Spike Armor"),
     .description = $("30% chance to bleed\n"
                      "on contact or offense."),
-    CONTEXT_ON_EITHER,
+    ON_EITHER_ABILITY(SpikeArmor),
 };
 
-#undef CONTEXT
-#define CONTEXT VoodooPower
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(IS_MOVE_SPECIAL(move))
-    CHECK(CanBleed(attacker))
-    CHECK(Random() % 100 < 30)
-
-    AbilityStatusEffect(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_BLEED);
-    return TRUE;
-}
 static const Ability VoodooPower = {
     .name = $("Voodoo Power"),
     .description = $("30% chance to bleed when\n"
                      "hit by special attacks."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IS_MOVE_SPECIAL(move))
+        CHECK(CanBleed(attacker))
+        CHECK(Random() % 100 < 30)
+
+        AbilityStatusEffect(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_BLEED);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ChromeCoat
-ON_DEFENSIVE_MULTIPLIER {
-    if (IS_MOVE_SPECIAL(move)) MUL(.6);
-}
 static const Ability ChromeCoat = {
     .name = $("Chrome Coat"),
     .description = $("Reduces special damage taken by\n"
                      "40%, but decreases Speed by 10%."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_SPECIAL(move)) MUL(.6);
+        },
     .onStat = LeadCoat.onStat,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Banshee
-ON_MOVE_TYPE {
-    CHECK(moveType == TYPE_NORMAL)
-    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-    return TYPE_GHOST + 1;
-}
 static const Ability Banshee = {
     .name = $("Banshee"),
     .description = $("Sound moves get a 1.2x boost\n"
                      "and become Ghost if Normal."),
     .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
-    CONTEXT_ON_MOVE_TYPE,
+    .onMoveType = +[](ON_MOVE_TYPE) -> int {
+        CHECK(moveType == TYPE_NORMAL)
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND);
+        return TYPE_GHOST + 1;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT WebSpinner
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_STRING_SHOT, 0); }
 static const Ability WebSpinner = {
     .name = $("Web Spinner"),
     .description = $("Uses String Shot\n"
                      "on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_STRING_SHOT, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT ShowdownMode
-ON_ENTRY {
-    gVolatileStructs[battler].showdownMode = gVolatileStructs[battler].started.showdownMode = TRUE;
-    return SwitchInAnnounce(B_MSG_SWITCHIN_SHOWDOWN_MODE);
-}
 static const Ability ShowdownMode = {
     .name = $("Showdown Mode"),
     .description = $("Ambush + Violent Rush."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        gVolatileStructs[battler].showdownMode = gVolatileStructs[battler].started.showdownMode = TRUE;
+        return SwitchInAnnounce(B_MSG_SWITCHIN_SHOWDOWN_MODE);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SeedSower
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
-
-    BattleScriptCall(BattleScript_SeedSower);
-    return TRUE;
-}
 static const Ability SeedSower = {
     .name = $("Seed Sower"),
     .description = $("Sets Grassy Terrain when hit.\n"
                      "Heals party status when it does."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
+
+        BattleScriptCall(BattleScript_SeedSower);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Airborne
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_FLYING) MUL(1.3);
-}
 static const Ability Airborne = {
     .name = $("Airborne"),
     .description = $("Boosts own & ally's Flying-type\n"
                      "moves by 1.3x."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FLYING) MUL(1.3);
+        },
     .onOffensiveMultiplierFor = APPLY_ON_ALLY,
 };
 
-#undef CONTEXT
-#define CONTEXT Parroting
 static const Ability Parroting = {
     .name = $("Parroting"),
     .description = $("Copies sound moves used by\n"
@@ -8205,50 +6716,43 @@ static const Ability Parroting = {
     .isSoundproof = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SaltCircle
-ON_ENTRY {
-    int anyBlocked = FALSE;
-    gBattlerTarget = BATTLE_OPPOSITE(battler);
-
-    if (IsBattlerAlive(gBattlerTarget) && !(gBattleMons[gBattlerTarget].status2 & STATUS2_ESCAPE_PREVENTION)) {
-        gBattleMons[gBattlerTarget].status2 |= STATUS2_ESCAPE_PREVENTION;
-        gVolatileStructs[gBattlerTarget].battlerPreventingEscape = battler;
-        anyBlocked = TRUE;
-    }
-
-    gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
-    if (IsBattlerAlive(gBattlerTarget) && !(gBattleMons[gBattlerTarget].status2 & STATUS2_ESCAPE_PREVENTION)) {
-        gBattleMons[gBattlerTarget].status2 |= STATUS2_ESCAPE_PREVENTION;
-        gVolatileStructs[gBattlerTarget].battlerPreventingEscape = battler;
-        anyBlocked = TRUE;
-    }
-
-    CHECK(anyBlocked)
-    return SwitchInAnnounce(B_MSG_SWITCHIN_SALT_CIRCLE);
-}
 static const Ability SaltCircle = {
     .name = $("Salt Circle"),
     .description = $("Prevents opposing pokemon\n"
                      "from fleeing on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        int anyBlocked = FALSE;
+        gBattlerTarget = BATTLE_OPPOSITE(battler);
+
+        if (IsBattlerAlive(gBattlerTarget) && !(gBattleMons[gBattlerTarget].status2 & STATUS2_ESCAPE_PREVENTION)) {
+            gBattleMons[gBattlerTarget].status2 |= STATUS2_ESCAPE_PREVENTION;
+            gVolatileStructs[gBattlerTarget].battlerPreventingEscape = battler;
+            anyBlocked = TRUE;
+        }
+
+        gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
+        if (IsBattlerAlive(gBattlerTarget) && !(gBattleMons[gBattlerTarget].status2 & STATUS2_ESCAPE_PREVENTION)) {
+            gBattleMons[gBattlerTarget].status2 |= STATUS2_ESCAPE_PREVENTION;
+            gVolatileStructs[gBattlerTarget].battlerPreventingEscape = battler;
+            anyBlocked = TRUE;
+        }
+
+        CHECK(anyBlocked)
+        return SwitchInAnnounce(B_MSG_SWITCHIN_SALT_CIRCLE);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT PurifyingSalt
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_GHOST) RESISTANCE(.5);
-}
 static const Ability PurifyingSalt = {
     .name = $("Purifying Salt"),
     .description = $("Immune to status conditions.\n"
                      "Take 1/2 damage from Ghost."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_GHOST) RESISTANCE(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Protosynthesis
 int ProtosynthesisHandler(int ability, int battler, AbilityCallType callType) {
     ParadoxBoost state = GetAbilityStateAs(battler, ability).paradoxBoost;
 
@@ -8290,27 +6794,23 @@ int ProtosynthesisHandler(int ability, int battler, AbilityCallType callType) {
     }
     return FALSE;
 }
-ON_ENTRY { return ProtosynthesisHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-ON_WEATHER { return ProtosynthesisHandler(ability, battler, ABILITY_BS_CALL); }
-ON_STAT {
-    ParadoxBoost boost = GetAbilityStateAs(battler, ability).paradoxBoost;
-    if (!boost.source || boost.statId != statId) return;
-    if (statId == STAT_SPEED)
-        *stat *= 1.5;
-    else
-        *stat *= 1.3;
-}
 static const Ability Protosynthesis = {
     .name = $("Protosynthesis"),
     .description = $("Boosts highest stat in Sun\n"
                      "or with Booster Energy."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_WEATHER,
-    CONTEXT_ON_STAT,
+    .onEntry = +[](ON_ENTRY) -> int { return ProtosynthesisHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onWeather = +[](ON_WEATHER) -> int { return ProtosynthesisHandler(ability, battler, ABILITY_BS_CALL); },
+    .onStat =
+        +[](ON_STAT) {
+            ParadoxBoost boost = GetAbilityStateAs(battler, ability).paradoxBoost;
+            if (!boost.source || boost.statId != statId) return;
+            if (statId == STAT_SPEED)
+                *stat *= 1.5;
+            else
+                *stat *= 1.3;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT QuarkDrive
 int QuarkDriveHandler(int ability, int battler, AbilityCallType callType) {
     ParadoxBoost state = GetAbilityStateAs(battler, ability).paradoxBoost;
 
@@ -8352,236 +6852,191 @@ int QuarkDriveHandler(int ability, int battler, AbilityCallType callType) {
     }
     return FALSE;
 }
-ON_ENTRY { return QuarkDriveHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-ON_TERRAIN { return QuarkDriveHandler(ability, battler, ABILITY_BS_CALL); }
 static const Ability QuarkDrive = {
     .name = $("Quark Drive"),
     .description = $("Boosts highest stat in Electric\n"
                      "Terrain or with Booster Energy."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_TERRAIN,
+    .onEntry = +[](ON_ENTRY) -> int { return QuarkDriveHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onTerrain = +[](ON_TERRAIN) -> int { return QuarkDriveHandler(ability, battler, ABILITY_BS_CALL); },
     .onStat = Protosynthesis.onStat,
 };
 
-#undef CONTEXT
-#define CONTEXT WindPower
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(gBattleMoves[move].airBased)
-    CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
-
-    gStatuses3[battler] |= STATUS3_CHARGED_UP;
-    BattleScriptCall(BattleScript_ElectromorphosisActivates);
-    return TRUE;
-}
 static const Ability WindPower = {
     .name = $("Wind Power"),
     .description = $("Charges up when hit by wind\n"
                      "moves or Tailwind starts."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(gBattleMoves[move].airBased)
+        CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
+
+        gStatuses3[battler] |= STATUS3_CHARGED_UP;
+        BattleScriptCall(BattleScript_ElectromorphosisActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Impulse
-ON_CHOOSE_OFFENSIVE_STAT {
-    if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) *atkStatToUse = STAT_SPEED;
-}
 static const Ability Impulse = {
     .name = $("Impulse"),
     .description = $("Non-contact moves use the\n"
                      "Speed stat for damage."),
-    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
+    .onChooseOffensiveStat =
+        +[](ON_CHOOSE_OFFENSIVE_STAT) {
+            if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) *atkStatToUse = STAT_SPEED;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT TerminalVelocity
-ON_CHOOSE_OFFENSIVE_STAT {
-    if (IS_MOVE_SPECIAL(move)) *secondaryAtkStatToUse = STAT_SPEED;
-}
 static const Ability TerminalVelocity = {
     .name = $("Terminal Velocity"),
     .description = $("Special moves use 20% of its\n"
                      "Speed stat additionally."),
-    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
+    .onChooseOffensiveStat =
+        +[](ON_CHOOSE_OFFENSIVE_STAT) {
+            if (IS_MOVE_SPECIAL(move)) *secondaryAtkStatToUse = STAT_SPEED;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT GuardDog
 static const Ability GuardDog = {
     .name = $("Guard Dog"),
     .description = $("Can't be forced out.\n"
                      "Inverts Intimidate effects."),
 };
 
-#undef CONTEXT
-#define CONTEXT AngerShell
-ON_DEFENDER {
-    CHECK(CheckHalfHpAbility(battler, attacker))
-    CHECK_NOT(GetAbilityState(battler, ability))
-    CHECK(CanRaiseStat(battler, STAT_ATK) || CanRaiseStat(battler, STAT_SPATK) || CanRaiseStat(battler, STAT_SPEED))
-
-    SetAbilityState(battler, ability, TRUE);
-    BattleScriptCall(BattleScript_AngerShell);
-    return TRUE;
-}
 static const Ability AngerShell = {
     .name = $("Anger Shell"),
     .description = $("Applies Shell Smash when\n"
                      "reduced below 1/2 HP."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(CheckHalfHpAbility(battler, attacker))
+        CHECK_NOT(GetAbilityState(battler, ability))
+        CHECK(CanRaiseStat(battler, STAT_ATK) || CanRaiseStat(battler, STAT_SPATK) || CanRaiseStat(battler, STAT_SPEED))
+
+        SetAbilityState(battler, ability, TRUE);
+        BattleScriptCall(BattleScript_AngerShell);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Egoist
 static const Ability Egoist = {
     .name = $("Egoist"),
     .description = $("Raises its own stats when\n"
                      "foes raise theirs."),
 };
 
-#undef CONTEXT
-#define CONTEXT Subdue
 static const Ability Subdue = {
     .name = $("Subdue"),
     .description = $("Doubles the power of\n"
                      "stat dropping moves."),
 };
 
-#undef CONTEXT
-#define CONTEXT ReadiedAction
-ON_ENTRY {
-    gVolatileStructs[battler].readiedAction = gVolatileStructs[battler].started.readiedAction = TRUE;
-    return SwitchInAnnounce(B_MSG_SWITCHIN_READIED_ACTION);
-}
 static const Ability ReadiedAction = {
     .name = $("Readied Action"),
     .description = $("Doubles attack on\n"
                      "first turn."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        gVolatileStructs[battler].readiedAction = gVolatileStructs[battler].started.readiedAction = TRUE;
+        return SwitchInAnnounce(B_MSG_SWITCHIN_READIED_ACTION);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT DarkGaleWings
-GALE_WINGS_CLONE(TYPE_DARK)
 static const Ability DarkGaleWings = {
     .name = $("Stygian Rush"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's Dark-type moves."),
-    CONTEXT_ON_PRIORITY,
+    .onPriority = GALE_WINGS_CLONE(TYPE_DARK),
 };
 
-#undef CONTEXT
-#define CONTEXT GuiltTrip
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK_NOT(IsBattlerAlive(battler))
-    CHECK(CanLowerStat(attacker, STAT_ATK) || CanLowerStat(attacker, STAT_SPATK))
-
-    BattleScriptCall(BattleScript_GuiltTrip);
-    return TRUE;
-}
 static const Ability GuiltTrip = {
     .name = $("Guilt Trip"),
     .description = $("Sharply lowers attacker's Attack\n"
                      "and SpAtk when fainting."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK_NOT(IsBattlerAlive(battler))
+        CHECK(CanLowerStat(attacker, STAT_ATK) || CanLowerStat(attacker, STAT_SPATK))
+
+        BattleScriptCall(BattleScript_GuiltTrip);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT WaterGaleWings
-GALE_WINGS_CLONE(TYPE_WATER)
 static const Ability WaterGaleWings = {
     .name = $("Tidal Rush"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's Water-type moves."),
-    CONTEXT_ON_PRIORITY,
+    .onPriority = GALE_WINGS_CLONE(TYPE_WATER),
 };
 
-#undef CONTEXT
-#define CONTEXT ZeroToHero
-ON_ENTRY {
-    CHECK(gBattleMons[battler].species == SPECIES_PALAFIN)
-    CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-    CHECK(GetSingleUseAbilityCounter(battler, ability))
-
-    UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_PALAFIN_HERO);
-    gBattleMons[battler].species = SPECIES_PALAFIN_HERO;
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
-    return TRUE;
-}
-ON_EXIT {
-    SetSingleUseAbilityCounter(battler, ability, TRUE);
-    return FALSE;
-}
 static const Ability ZeroToHero = {
     .name = $("Zero To Hero"),
     .description = $("Changes forms after\n"
                      "switching out."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_EXIT,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(gBattleMons[battler].species == SPECIES_PALAFIN)
+        CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+        CHECK(GetSingleUseAbilityCounter(battler, ability))
+
+        UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_PALAFIN_HERO);
+        gBattleMons[battler].species = SPECIES_PALAFIN_HERO;
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+        return TRUE;
+    },
+    .onExit = +[](ON_EXIT) -> int {
+        SetSingleUseAbilityCounter(battler, ability, TRUE);
+        return FALSE;
+    },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Costar
-ON_ENTRY {
-    CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
-
-    int anyChanged = FALSE;
-    for (int i = STAT_ATK; i < NUM_BATTLE_STATS; i++) {
-        if (gBattleMons[battler].statStages[i] != gBattleMons[BATTLE_PARTNER(battler)].statStages[i]) {
-            gBattleMons[battler].statStages[i] = gBattleMons[BATTLE_PARTNER(battler)].statStages[i];
-            anyChanged = TRUE;
-        }
-    }
-
-    CHECK(anyChanged)
-    return SwitchInAnnounce(B_MSG_SWITCHIN_COSTAR);
-}
 static const Ability Costar = {
     .name = $("Costar"),
     .description = $("Copies its ally's stat changes\n"
                      "on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
+
+        int anyChanged = FALSE;
+        for (int i = STAT_ATK; i < NUM_BATTLE_STATS; i++) {
+            if (gBattleMons[battler].statStages[i] != gBattleMons[BATTLE_PARTNER(battler)].statStages[i]) {
+                gBattleMons[battler].statStages[i] = gBattleMons[BATTLE_PARTNER(battler)].statStages[i];
+                anyChanged = TRUE;
+            }
+        }
+
+        CHECK(anyChanged)
+        return SwitchInAnnounce(B_MSG_SWITCHIN_COSTAR);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Commander
-ON_BATTLER_FAINTS {
-    CHECK(GetAbilityState(battler, ability))
-    SetAbilityState(battler, ability, COMMANDER_NOT_ACTIVE);
-
-    gStatuses3[battler] &= ~STATUS3_SEMI_INVULNERABLE;
-    BattleScriptCall(BattleScript_CommanderEnds);
-    return TRUE;
-}
-ON_ACCURACY {
-    CHECK(GetAbilityState(target, ability))
-    return ACCURACY_ALWAYS_MISSES;
-}
 static const Ability Commander = {
     .name = $("Commander"),
     .description = $("Hops inside an allied Dondozo.\n"
                      "Boosts its ally but can't act."),
-    CONTEXT_ON_BATTLER_FAINTS,
-    CONTEXT_ON_ACCURACY,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK(GetAbilityState(battler, ability))
+
+        SetAbilityState(battler, ability, COMMANDER_NOT_ACTIVE);
+        gStatuses3[battler] &= ~STATUS3_SEMI_INVULNERABLE;
+        BattleScriptCall(BattleScript_CommanderEnds);
+        return TRUE;
+    },
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(GetAbilityState(target, ability))
+        return ACCURACY_ALWAYS_MISSES;
+    },
     .onBattlerFaintsFor = APPLY_ON_ALLY,
     .onAccuracyFor = APPLY_ON_TARGET,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT EjectPackAbility
 static const Ability EjectPackAbility = {
     .name = $("Tactical Retreat"),
     .description = $("Flees when stats are lowered."),
     .persistent = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT VengefulSpirit
 static const Ability VengefulSpirit = {
     .name = $("Vengeful Spirit"),
     .description = $("Haunted Spirit + Vengeance."),
@@ -8589,33 +7044,28 @@ static const Ability VengefulSpirit = {
     .onOffensiveMultiplier = Vengeance.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT CudChew
-ON_END_TURN {
-    CudChewState state = GetAbilityStateAs(battler, ability).cudChewState;
-    if (state.setThisTurn) {
-        SetAbilityStateAs(battler, ability, (AbilityStates){.cudChewState = {.itemId = state.itemId}});
-    } else if (state.itemId) {
-        // attacker temporarily gains their item
-        gBattleStruct->changedItems[battler] = gBattleMons[battler].item;
-        gBattleMons[battler].item = state.itemId;
-
-        SetAbilityStateAs(battler, ability, (AbilityStates){.cudChewState = {.activating = TRUE}});
-
-        BattleScriptPushCursorAndCallback(BattleScript_CudChew);
-        return TRUE;
-    }
-    return FALSE;
-}
 static const Ability CudChew = {
     .name = $("Cud Chew"),
     .description = $("Eats berries again at the\n"
                      "end of the next turn."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CudChewState state = GetAbilityStateAs(battler, ability).cudChewState;
+        if (state.setThisTurn) {
+            SetAbilityStateAs(battler, ability, (AbilityStates){.cudChewState = {.itemId = state.itemId}});
+        } else if (state.itemId) {
+            // attacker temporarily gains their item
+            gBattleStruct->changedItems[battler] = gBattleMons[battler].item;
+            gBattleMons[battler].item = state.itemId;
+
+            SetAbilityStateAs(battler, ability, (AbilityStates){.cudChewState = {.activating = TRUE}});
+
+            BattleScriptPushCursorAndCallback(BattleScript_CudChew);
+            return TRUE;
+        }
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ArmorTail
 static const Ability ArmorTail = {
     .name = $("Armor Tail"),
     .description = $("Protects itself and ally from\n"
@@ -8625,62 +7075,52 @@ static const Ability ArmorTail = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT MindCrush
-ON_CHOOSE_OFFENSIVE_STAT {
-    if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) *atkStatToUse = STAT_SPATK;
-}
 static const Ability MindCrush = {
     .name = $("Mind Crunch"),
     .description = $("Biting moves use SpAtk and\n"
                      "deal 30% more damage."),
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
-    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
+    .onChooseOffensiveStat =
+        +[](ON_CHOOSE_OFFENSIVE_STAT) {
+            if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) *atkStatToUse = STAT_SPATK;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT SupremeOverlord
-ON_ENTRY {
-    CHECK(gFaintedMonCount[GetBattlerSide(battler)])
-
-    return SwitchInAnnounce(B_MSG_SWITCHIN_SUPREME_OVERLORD);
-}
-ON_STAT {
-    if (statId == STAT_ATK || statId == STAT_SPATK) *stat = *stat * (10 + min(5, gFaintedMonCount[GetBattlerSide(battler)])) / 10;
-}
 static const Ability SupremeOverlord = {
     .name = $("Supreme Overlord"),
     .description = $("Each fainted ally increases\n"
                      "Attack and SpAtk by 10%."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_STAT,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(gFaintedMonCount[GetBattlerSide(battler)])
+
+        return SwitchInAnnounce(B_MSG_SWITCHIN_SUPREME_OVERLORD);
+    },
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_ATK || statId == STAT_SPATK) *stat = *stat * (10 + min(5, gFaintedMonCount[GetBattlerSide(battler)])) / 10;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT IllWill
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(move != MOVE_STRUGGLE)
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK(gBattleMons[attacker].pp[gChosenMovePos])
-    CHECK_NOT(IsBattlerAlive(battler))
-
-    gBattleMons[attacker].pp[gChosenMovePos] = 0;
-    PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove)
-    gActiveBattler = battler;
-    BtlController_EmitSetMonData(0, gChosenMovePos + REQUEST_PPMOVE1_BATTLE, 0, 1, &gBattleMons[battler].pp[gChosenMovePos]);
-    BattleScriptCall(BattleScript_IllWillTakesPp);
-    return TRUE;
-}
 static const Ability IllWill = {
     .name = $("Ill Will"),
     .description = $("Deletes the PP of the move\n"
                      "that faints this Pokemon."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(move != MOVE_STRUGGLE)
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK(gBattleMons[attacker].pp[gChosenMovePos])
+        CHECK_NOT(IsBattlerAlive(battler))
+
+        gBattleMons[attacker].pp[gChosenMovePos] = 0;
+        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove)
+        gActiveBattler = battler;
+        BtlController_EmitSetMonData(0, gChosenMovePos + REQUEST_PPMOVE1_BATTLE, 0, 1, &gBattleMons[battler].pp[gChosenMovePos]);
+        BattleScriptCall(BattleScript_IllWillTakesPp);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT FireScales
 static const Ability FireScales = {
     .name = $("Fire Scales"),
     .description = $("Halves damage taken by Special\n"
@@ -8689,145 +7129,117 @@ static const Ability FireScales = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT WatchYourStep
-ON_ENTRY {
-    u8 targetSide = GetBattlerSide(BATTLE_OPPOSITE(battler));
-    CHECK(gSideTimers[targetSide].spikesAmount < 3)
-
-    gSideTimers[targetSide].spikesAmount = min(gSideTimers[targetSide].spikesAmount + 2, 3);
-    gSideStatuses[targetSide] |= SIDE_STATUS_SPIKES;
-    BattleScriptPushCursorAndCallback(BattleScript_DoubleSpikesOnEntry);
-    return TRUE;
-}
 static const Ability WatchYourStep = {
     .name = $("Watch Your Step"),
     .description = $("Spreads two layers of\n"
                      "Spikes on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        u8 targetSide = GetBattlerSide(BATTLE_OPPOSITE(battler));
+        CHECK(gSideTimers[targetSide].spikesAmount < 3)
+
+        gSideTimers[targetSide].spikesAmount = min(gSideTimers[targetSide].spikesAmount + 2, 3);
+        gSideStatuses[targetSide] |= SIDE_STATUS_SPIKES;
+        BattleScriptPushCursorAndCallback(BattleScript_DoubleSpikesOnEntry);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT RapidResponse
-ON_ENTRY {
-    gVolatileStructs[battler].rapidResponse = gVolatileStructs[battler].started.rapidResponse = TRUE;
-    return SwitchInAnnounce(B_MSG_SWITCHIN_RAPID_RESPONSE);
-}
 static const Ability RapidResponse = {
     .name = $("Rapid Response"),
     .description = $("Boosts Speed by 50% + SpAtk\n"
                      "by 20% on first turn."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        gVolatileStructs[battler].rapidResponse = gVolatileStructs[battler].started.rapidResponse = TRUE;
+        return SwitchInAnnounce(B_MSG_SWITCHIN_RAPID_RESPONSE);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT DoubleIronBarbs
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK_NOT(IsMagicGuardProtected(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-
-    gBattleMoveDamage = gBattleMons[attacker].maxHP / 6;
-    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-    PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ability);
-    BattleScriptCall(BattleScript_IronBarbsActivates);
-    return TRUE;
-}
 static const Ability DoubleIronBarbs = {
     .name = $("Sharp Edges"),
     .description = $("1/6 HP damage when touched."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK_NOT(IsMagicGuardProtected(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        gBattleMoveDamage = gBattleMons[attacker].maxHP / 6;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ability);
+        BattleScriptCall(BattleScript_IronBarbsActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ThermalExchange
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(moveType == TYPE_FIRE)
-    CHECK(CanRaiseStat(battler, STAT_ATK))
-
-    SetStatChanger(STAT_ATK, 1);
-    BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-    return TRUE;
-}
 static const Ability ThermalExchange = {
     .name = $("Thermal Exchange"),
     .description = $("Ups Attack when hit by Fire.\n"
                      "Immune to burn."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(moveType == TYPE_FIRE)
+        CHECK(CanRaiseStat(battler, STAT_ATK))
+
+        SetStatChanger(STAT_ATK, 1);
+        BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+        return TRUE;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT GoodAsGold
-ON_IMMUNE {
-    CHECK(battler != attacker)
-    CHECK(IS_MOVE_STATUS(move))
-    *immunityScript = BattleScript_SoundproofProtected;
-    return TRUE;
-}
 static const Ability GoodAsGold = {
     .name = $("Good As Gold"),
     .description = $("Immune to all Status moves,\n"
                      "unless whole field is affected."),
-    CONTEXT_ON_IMMUNE,
+    .onImmune = +[](ON_IMMUNE) -> int {
+        CHECK(battler != attacker) CHECK(IS_MOVE_STATUS(move));
+        *immunityScript = BattleScript_SoundproofProtected;
+        return TRUE;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SharingIsCaring
 static const Ability SharingIsCaring = {
     .name = $("Sharing Is Caring"),
     .description = $("Stat changes are shared\n"
                      "between all battlers."),
 };
 
-#undef CONTEXT
-#define CONTEXT TabletsOfRuin
-ON_STAT { RuinEffect(STAT_ATK, onStatTabletsOfRuin, battler, statId, stat, flags); }
 static const Ability TabletsOfRuin = {
     .name = $("Tablets Of Ruin"),
     .description = $("Lowers the Attack of\n"
                      "other Pokemon by 25%."),
-    CONTEXT_ON_STAT,
+    .onStat = +[](ON_STAT) { RuinEffect(STAT_ATK, battler, statId, stat, flags); },
     .onStatFor = APPLY_ON_OTHER,
+    .ruinStat = STAT_ATK,
 };
 
-#undef CONTEXT
-#define CONTEXT SwordOfRuin
-ON_STAT { RuinEffect(STAT_DEF, onStatSwordOfRuin, battler, statId, stat, flags); }
 static const Ability SwordOfRuin = {
     .name = $("Sword Of Ruin"),
     .description = $("Lowers the Defense of\n"
                      "other Pokemon by 25%."),
-    CONTEXT_ON_STAT,
+    .onStat = +[](ON_STAT) { RuinEffect(STAT_DEF, battler, statId, stat, flags); },
     .onStatFor = APPLY_ON_OTHER,
+    .ruinStat = STAT_DEF,
 };
 
-#undef CONTEXT
-#define CONTEXT VesselOfRuin
-ON_STAT { RuinEffect(STAT_SPATK, onStatVesselOfRuin, battler, statId, stat, flags); }
 static const Ability VesselOfRuin = {
     .name = $("Vessel Of Ruin"),
     .description = $("Lowers the Special Attack of\n"
                      "other Pokemon by 25%."),
-    CONTEXT_ON_STAT,
+    .onStat = +[](ON_STAT) { RuinEffect(STAT_SPATK, battler, statId, stat, flags); },
     .onStatFor = APPLY_ON_OTHER,
+    .ruinStat = STAT_SPATK,
 };
 
-#undef CONTEXT
-#define CONTEXT BeadsOfRuin
-ON_STAT { RuinEffect(STAT_DEF, onStatBeadsOfRuin, battler, statId, stat, flags); }
 static const Ability BeadsOfRuin = {
     .name = $("Beads Of Ruin"),
     .description = $("Lowers the Special Defense\n"
                      "of other Pokemon by 25%."),
-    CONTEXT_ON_STAT,
+    .onStat = +[](ON_STAT) { RuinEffect(STAT_DEF, battler, statId, stat, flags); },
     .onStatFor = APPLY_ON_OTHER,
+    .ruinStat = STAT_DEF,
 };
 
-#undef CONTEXT
-#define CONTEXT PermafrostClone
 static const Ability PermafrostClone = {
     .name = $("Thick Skin"),
     .description = $("Takes 25% less damage from\n"
@@ -8836,98 +7248,80 @@ static const Ability PermafrostClone = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Gallantry
-ON_ENTRY {
-    CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
-
-    BattleScriptPushCursorAndCallback(BattleScript_BattlerHasASingleNoDamageHit);
-    return TRUE;
-}
 static const Ability Gallantry = {
     .name = $("Gallantry"),
     .description = $("Gets no damage for\n"
                      "first hit."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
+
+        BattleScriptPushCursorAndCallback(BattleScript_BattlerHasASingleNoDamageHit);
+        return TRUE;
+    },
     .noDamageHits = 1,
     .breakable = TRUE,
     .persistent = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT OrichalcumPulse
-ON_STAT {
-    if (statId != STAT_ATK) return;
-    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat = *stat * 4 / 3;
-}
 static const Ability OrichalcumPulse = {
     .name = $("Orichalcum Pulse"),
     .description = $("Summons sun on entry.\n"
                      "Raises Atk by 1.33x in sun."),
     .onEntry = Drought.onEntry,
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != STAT_ATK) return;
+            if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat = *stat * 4 / 3;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT SunBasking
-ON_IMMUNE {
-    CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
-    return QueenlyMajesty.onImmune(battler, attacker, move, moveType, immunityScript);
-}
-ON_DEFENSIVE_MULTIPLIER {
-    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && IS_MOVE_PHYSICAL(move)) MUL(.5);
-}
 static const Ability SunBasking = {
     .name = $("Sun Basking"),
     .description = $("Blocks priority and reduces\n"
                      "physical damage by 1/2 in sun."),
-    CONTEXT_ON_IMMUNE,
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onImmune = +[](ON_IMMUNE) -> int {
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY));
+        return QueenlyMajesty.onImmune(battler, attacker, move, moveType, immunityScript);
+    },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && IS_MOVE_PHYSICAL(move)) MUL(.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT WingedKing
-ON_OFFENSIVE_MULTIPLIER {
-    if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.33);
-}
 static const Ability WingedKing = {
     .name = $("Winged King"),
     .description = $("Ups “supereffective” by 33%."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.33);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT HadronEngine
-ON_STAT {
-    if (statId == STAT_SPATK && IsBattlerTerrainAffected(battler, STATUS_FIELD_ELECTRIC_TERRAIN)) *stat = *stat * 4 / 3;
-}
 static const Ability HadronEngine = {
     .name = $("Hadron Engine"),
     .description = $("Field becomes Electric.\n"
                      "+33% SpAtk in Electric Terrain."),
     .onEntry = ElectricSurge.onEntry,
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPATK && IsBattlerTerrainAffected(battler, STATUS_FIELD_ELECTRIC_TERRAIN)) *stat = *stat * 4 / 3;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT IronSerpent
 static const Ability IronSerpent = {
     .name = $("Iron Serpent"),
     .description = $("Ups “supereffective” by 33%."),
     .onOffensiveMultiplier = WingedKing.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT WeatherDoubleBoost
 static const Ability WeatherDoubleBoost = {
     .name = $("Catastrophe"),
     .description = $("Sun boosts Water.\n"
                      "Rain boosts Fire."),
 };
 
-#undef CONTEXT
-#define CONTEXT SweepingEdgePlus
 static const Ability SweepingEdgePlus = {
     .name = $("Blademaster"),
     .description = $("Sweeping Edge + Keen Edge."),
@@ -8935,75 +7329,61 @@ static const Ability SweepingEdgePlus = {
     .onAccuracy = SweepingEdge.onAccuracy,
 };
 
-#undef CONTEXT
-#define CONTEXT CelestialBlessing
-ON_END_TURN {
-    CHECK_NOT(BATTLER_MAX_HP(battler))
-    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-    CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
-
-    gBattleMoveDamage = gBattleMons[battler].maxHP / 12;
-    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-    gBattleMoveDamage *= -1;
-    BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
-    return TRUE;
-}
 static const Ability CelestialBlessing = {
     .name = $("Celestial Blessing"),
     .description = $("Recovers 1/12 of its health each\n"
                      "turn under Misty Terrain."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+        CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
+
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 12;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        gBattleMoveDamage *= -1;
+        BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT MinionControl
-ON_PARENTAL_BOND { return PARENTAL_BOND_MINION_CONTROL; }
 static const Ability MinionControl = {
     .name = $("Minion Control"),
     .description = $("Moves hit an extra time for\n"
                      "each healthy party member."),
-    CONTEXT_ON_PARENTAL_BOND,
+    .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType { return PARENTAL_BOND_MINION_CONTROL; },
 };
 
-#undef CONTEXT
-#define CONTEXT MoltenBlades
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBeBurned(target))
-    CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-    CHECK(Random() % 100 < 20)
-
-    return AbilityStatusEffect(MOVE_EFFECT_BURN);
-}
 static const Ability MoltenBlades = {
     .name = $("Molten Blades"),
     .description = $("Keen Edge + Keen Edge moves\n"
                      "have a 20% chance to burn."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBeBurned(target))
+        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        CHECK(Random() % 100 < 20)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BURN);
+    },
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT HauntingFrenzy
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanMoveHaveExtraFlinchChance(move))
-    CHECK(Random() % 100 < 20)
-
-    return AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
-}
 static const Ability HauntingFrenzy = {
     .name = $("Haunting Frenzy"),
     .description = $("20% chance to flinch the\n"
                      "opponent. +1 speed on kill."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanMoveHaveExtraFlinchChance(move))
+        CHECK(Random() % 100 < 20)
+
+        return AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
+    },
     .onBattlerFaints = AdrenalineRush.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT NoiseCancel
 static const Ability NoiseCancel = {
     .name = $("Noise Cancel"),
     .description = $("Protects the party from sound-\n"
@@ -9014,47 +7394,39 @@ static const Ability NoiseCancel = {
     .isSoundproof = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT RadioJam
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBeDisabled(target))
-    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-    CHECK(Random() % 100 < 20)
-
-    return AbilityStatusEffect(MOVE_EFFECT_DISABLE);
-}
 static const Ability RadioJam = {
     .name = $("Radio Jam"),
     .description = $("Sound-based moves have a 20%\n"
                      "chance to inflict disable."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBeDisabled(target))
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(Random() % 100 < 20)
+
+        return AbilityStatusEffect(MOVE_EFFECT_DISABLE);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Ole
-ON_ACCURACY {
-    switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
-        case MOVE_TARGET_SELECTED:
-        case MOVE_TARGET_USER_OR_SELECTED:
-        case MOVE_TARGET_RANDOM:
-            *accuracy *= .7;
-            return ACCURACY_MULTIPLICATIVE;
-
-        default:
-            return ACCURACY_NO_RESULT;
-    }
-}
 static const Ability Ole = {
     .name = $("Olé!"),
     .description = $("30% chance to evade single-\n"
                      "target moves."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
+            case MOVE_TARGET_SELECTED:
+            case MOVE_TARGET_USER_OR_SELECTED:
+            case MOVE_TARGET_RANDOM:
+                *accuracy *= .7;
+                return ACCURACY_MULTIPLICATIVE;
+
+            default:
+                return ACCURACY_NO_RESULT;
+        }
+    },
     .onAccuracyFor = APPLY_ON_TARGET,
 };
 
-#undef CONTEXT
-#define CONTEXT Malicious
 static const Ability Malicious = {
     .name = $("Malicious"),
     .description = $("Lowers the foe's highest\n"
@@ -9062,29 +7434,24 @@ static const Ability Malicious = {
     .onEntry = UseIntimidateClone,
 };
 
-#undef CONTEXT
-#define CONTEXT DeadPower
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK_NOT(gBattleMons[target].status2 & STATUS2_CURSED)
-    CHECK(IsMoveMakingContact(move, battler))
-    CHECK(Random() % 100 < 20)
-
-    return AbilityStatusEffect(MOVE_EFFECT_CURSE);
-}
-ON_STAT {
-    if (statId == STAT_ATK) *stat *= 1.5;
-}
 static const Ability DeadPower = {
     .name = $("Dead Power"),
     .description = $("1.5x Attack boost. 20% chance\n"
                      "to curse on contact moves."),
-    CONTEXT_ON_ATTACKER,
-    CONTEXT_ON_STAT,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK_NOT(gBattleMons[target].status2 & STATUS2_CURSED)
+        CHECK(IsMoveMakingContact(move, battler))
+        CHECK(Random() % 100 < 20)
+
+        return AbilityStatusEffect(MOVE_EFFECT_CURSE);
+    },
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_ATK) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT BrawlingWyvern
 static const Ability BrawlingWyvern = {
     .name = $("Brawling Wyvern"),
     .description = $("No guard + Dragon type\n"
@@ -9093,50 +7460,40 @@ static const Ability BrawlingWyvern = {
     .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
 };
 
-#undef CONTEXT
-#define CONTEXT MythicalArrows
-ON_SWAP_SPLIT {
-    CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
-    CHECK(gBattleMoves[move].arrowBased)
-    return TRUE;
-}
 static const Ability MythicalArrows = {
     .name = $("Mythical Arrows"),
     .description = $("Arrow moves become special\n"
                      "and deal 30% more damage."),
     .onOffensiveMultiplier = Archer.onOffensiveMultiplier,
-    CONTEXT_ON_SWAP_SPLIT,
+    .onSwapSplit = +[](ON_SWAP_SPLIT) -> int {
+        CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
+        CHECK(gBattleMoves[move].arrowBased);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Lawnmower
-ON_ENTRY {
-    CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
-
-    BattleScriptPushCursorAndCallback(BattleScript_Lawnmower);
-    return TRUE;
-}
 static const Ability Lawnmower = {
     .name = $("Lawnmower"),
     .description = $("Removes terrain on switch-in.\n"
                      "Stat up if terrain removed."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
+
+        BattleScriptPushCursorAndCallback(BattleScript_Lawnmower);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Flourish
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_GRASS && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) MUL(1.5);
-}
 static const Ability Flourish = {
     .name = $("Flourish"),
     .description = $("Boosts Grass moves by 50% in\n"
                      "grassy terrain."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_GRASS && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT DesertSpirit
 static const Ability DesertSpirit = {
     .name = $("Desert Spirit"),
     .description = $("Summons sand on entry. Ground\n"
@@ -9144,8 +7501,6 @@ static const Ability DesertSpirit = {
     .onEntry = SandStream.onEntry,
 };
 
-#undef CONTEXT
-#define CONTEXT Contempt
 static const Ability Contempt = {
     .name = $("Contempt"),
     .description = $("Ignores opposing stat changes.\n"
@@ -9153,21 +7508,17 @@ static const Ability Contempt = {
     .unaware = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Aerialist
-ON_OFFENSIVE_MULTIPLIER {
-    Levitate.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-    Flock.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-}
 static const Ability Aerialist = {
     .name = $("Aerialist"),
     .description = $("Levitate + Flock."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            Levitate.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            Flock.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT TeraShell
 static const Ability TeraShell = {
     .name = $("Tera Shell"),
     .description = $("All hits will be not very effective\n"
@@ -9175,83 +7526,66 @@ static const Ability TeraShell = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT ToxicChain
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBePoisoned(battler, target))
-    CHECK(Random() % 100 < 30)
-
-    return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
-}
 static const Ability ToxicChain = {
     .name = $("Toxic Chain"),
     .description = $("Moves have a 30% chance to\n"
                      "badly poison the foe."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBePoisoned(battler, target))
+        CHECK(Random() % 100 < 30)
+
+        return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ParasiticSpores
-ON_ENTRY {
-    CHECK_NOT(gVolatileStructs[battler].parasiticSpores)
-
-    gVolatileStructs[battler].parasiticSpores = TRUE;
-    return SwitchInAnnounce(B_MSG_SWITCHIN_PARASITIC_SPORES);
-}
 static const Ability ParasiticSpores = {
     .name = $("Parasitic Spores"),
     .description = $("Deals 1/8 HP damage to non-\n"
                      "Ghost. Spreads on contact."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gVolatileStructs[battler].parasiticSpores)
+
+        gVolatileStructs[battler].parasiticSpores = TRUE;
+        return SwitchInAnnounce(B_MSG_SWITCHIN_PARASITIC_SPORES);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT PoisonPuppeteer
-static int PoisonPuppeteerCondition(int battler, int target) { return CanBeConfused(target); }
-ON_REACTIVE { return PoisonPuppeteerClone(ability, battler, PoisonPuppeteerCondition, BattleScript_PoisonPuppeteer); }
-ON_BATTLER_FAINTS {
-    int state = GetAbilityState(battler, ability);
-    if (state & (1 << fainted)) SetAbilityState(battler, ability, state ^ (1 << fainted));
-    return NO_ANNOUNCE;
-}
 static const Ability PoisonPuppeteer = {
     .name = $("Poison Puppeteer"),
     .description = $("Poison also inflicts confusion."),
-    CONTEXT_ON_REACTIVE,
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onReactive = +[](ON_REACTIVE) -> int {
+        return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) -> int { return CanBeConfused(target); }, BattleScript_PoisonPuppeteer);
+    },
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        int state = GetAbilityState(battler, ability);
+        if (state & (1 << fainted)) SetAbilityState(battler, ability, state ^ (1 << fainted));
+        return NO_ANNOUNCE;
+    },
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-#undef CONTEXT
-#define CONTEXT Entrance
-ON_REACTIVE { return PoisonPuppeteerClone(ability, battler, CanInfatuate, BattleScript_Entrance); }
 static const Ability Entrance = {
     .name = $("Entrance"),
     .description = $("Confusion also inflicts\n"
                      "infatuation."),
-    CONTEXT_ON_REACTIVE,
+    .onReactive = +[](ON_REACTIVE) -> int { return PoisonPuppeteerClone(ability, battler, CanInfatuate, BattleScript_Entrance); },
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-#undef CONTEXT
-#define CONTEXT Rejection
-ON_ENTRY {
-    CHECK_NOT(gFieldTimers.quashTimer)
-
-    gFieldTimers.quashTimer = QUASH_DURATION;
-    gFieldTimers.started.quash = TRUE;
-    return SwitchInAnnounce(B_MSG_SWITCHIN_REJECTION);
-}
 static const Ability Rejection = {
     .name = $("Rejection"),
     .description = $("Applies Quash on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gFieldTimers.quashTimer)
+
+        gFieldTimers.quashTimer = QUASH_DURATION;
+        gFieldTimers.started.quash = TRUE;
+        return SwitchInAnnounce(B_MSG_SWITCHIN_REJECTION);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT AppleEnlightenment
 static const Ability AppleEnlightenment = {
     .name = $("Apple Enlightenment"),
     .description = $("Fur coat + Magic Guard."),
@@ -9260,17 +7594,14 @@ static const Ability AppleEnlightenment = {
     .magicGuard = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT BalloonBomber
-ON_DEFENDER { return Aftermath.onDefender(ability, battler, attacker, move, moveType) || Inflatable.onDefender(ability, battler, attacker, move, moveType); }
 static const Ability BalloonBomber = {
     .name = $("Balloon Bomb"),
     .description = $("Aftermath + Inflatable"),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        return Aftermath.onDefender(ability, battler, attacker, move, moveType) || Inflatable.onDefender(ability, battler, attacker, move, moveType);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT FlamingMaw
 static const Ability FlamingMaw = {
     .name = $("Flaming Maw"),
     .description = $("Strong Jaw + Flaming Jaws"),
@@ -9278,42 +7609,33 @@ static const Ability FlamingMaw = {
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT Demolitionist
-ON_INFILTRATE {
-    if (gVolatileStructs[battler].readiedAction && !IS_MOVE_STATUS(move)) return INFILTRATE_BREAK_SCREENS;
-    return INFILTRATE_NONE;
-}
-ON_ATTACKER {
-    CHECK(DidMoveHit())
-    CHECK(gVolatileStructs[battler].readiedAction)
-    int opposingSide = GetBattlerSide(target);
-    CHECK(gSideTimers[opposingSide].reflectTimer || gSideTimers[opposingSide].lightscreenTimer || gSideTimers[opposingSide].auroraVeilTimer)
-    BattleScriptCall(BattleScript_AttackerShattersScreens);
-    return TRUE;
-}
 static const Ability Demolitionist = {
     .name = $("Demolitionist"),
     .description = $("Readied Action + Ignores Protect\n"
                      "+ screens break on readied turn"),
     .onEntry = ReadiedAction.onEntry,
-    CONTEXT_ON_INFILTRATE,
-    CONTEXT_ON_ATTACKER,
+    .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType {
+        if (gVolatileStructs[battler].readiedAction && !IS_MOVE_STATUS(move)) return INFILTRATE_BREAK_SCREENS;
+        return INFILTRATE_NONE;
+    },
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(gVolatileStructs[battler].readiedAction)
+        int opposingSide = GetBattlerSide(target);
+        CHECK(gSideTimers[opposingSide].reflectTimer || gSideTimers[opposingSide].lightscreenTimer || gSideTimers[opposingSide].auroraVeilTimer)
+        BattleScriptCall(BattleScript_AttackerShattersScreens);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT RockhardWill
-ON_SWARM_MULTIPLIER(TYPE_ROCK)
 static const Ability RockhardWill = {
     .name = $("Rockhard Will"),
     .description = $("Boosts Rock-type moves by 1.2x,\n"
                      "or 1.5x when under 1/3 HP."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_ROCK),
 };
 
-#undef CONTEXT
-#define CONTEXT FragrantDaze
-ON_EITHER {
+ON_EITHER(FragrantDaze) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(CanBeConfused(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
@@ -9325,29 +7647,24 @@ ON_EITHER {
 static const Ability FragrantDaze = {
     .name = $("Fragrant Daze"),
     .description = $("30% chance to confuse on contact."),
-    CONTEXT_ON_EITHER,
+    ON_EITHER_ABILITY(FragrantDaze),
 };
 
-#undef CONTEXT
-#define CONTEXT LowVisibility
-ON_ENTRY {
-    if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
-        BattleScriptPushCursorAndCallback(BattleScript_BadOmensActivates);
-        return TRUE;
-    } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
-        BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
-        return NO_ANNOUNCE;
-    }
-    return FALSE;
-}
 static const Ability LowVisibility = {
     .name = $("Low Visibility"),
     .description = $("Summons Eerie Fog on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
+            BattleScriptPushCursorAndCallback(BattleScript_BadOmensActivates);
+            return TRUE;
+        } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
+            BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
+            return NO_ANNOUNCE;
+        }
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT OldMariner
 static const Ability OldMariner = {
     .name = $("Old Mariner"),
     .description = $("Seaweed + Water STAB."),
@@ -9357,116 +7674,93 @@ static const Ability OldMariner = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Ectoplasm
-ON_STAT {
-    if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
-    if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
-}
 static const Ability Ectoplasm = {
     .name = $("Ectoplasm"),
     .description = $("Ups highest attacking stat\n"
                      "by 1.5x in fog."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
+            if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT BeautifulMusic
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(Random() % 2)
-    CHECK(CanInfatuate(battler, target))
-    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-
-    return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
-}
 static const Ability BeautifulMusic = {
     .name = $("Beautiful Music"),
     .description = $("Sound-based moves have 50% chance\n"
                      "to infatuate the foe."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(Random() % 2)
+        CHECK(CanInfatuate(battler, target))
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+
+        return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Surprise
 static const Ability Surprise = {
     .name = $("Surprise!"),
     .description = $("Astonishes enemy priority users\n"
                      "in fog."),
 };
 
-#undef CONTEXT
-#define CONTEXT SnowSong
-ON_MOVE_TYPE {
-    CHECK(moveType == TYPE_NORMAL)
-    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-    return TYPE_ICE + 1;
-}
 static const Ability SnowSong = {
     .name = $("Snow Song"),
     .description = $("Sound moves get a 1.2x boost\n"
                      "and become Ice if Normal."),
     .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
-    CONTEXT_ON_MOVE_TYPE,
+    .onMoveType = +[](ON_MOVE_TYPE) -> int {
+        CHECK(moveType == TYPE_NORMAL)
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND);
+        return TYPE_ICE + 1;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT GreaterSpirit
-ON_ENTRY {
-    CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
-
-    int stat = GetHighestStatId(battler, TRUE);
-    CHECK(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
-    return TRUE;
-}
 static const Ability GreaterSpirit = {
     .name = $("Greater Spirit"),
     .description = $("Ups highest stat by +1\n"
                      "on entry in fog."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+
+        int stat = GetHighestStatId(battler, TRUE);
+        CHECK(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Resonance
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBleed(target))
-    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-
-    return AbilityStatusEffect(MOVE_EFFECT_BLEED);
-}
 static const Ability Resonance = {
     .name = $("Resonance"),
     .description = $("Sound moves cause the target to\n"
                      "bleed."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBleed(target))
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT EtherealRush
-ON_STAT {
-    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
-}
 static const Ability EtherealRush = {
     .name = $("Ethereal Rush"),
     .description = $("This Pokémon's Speed gets a\n"
                      "1.5x boost in fog."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT CuteAntecedence
-GALE_WINGS_CLONE(TYPE_FAIRY)
 static const Ability CuteAntecedence = {
     .name = $("Cute Antecedence"),
     .description = $("At full HP, gives +1 priority to\n"
                      "its Fairy-type moves."),
-    CONTEXT_ON_PRIORITY,
+    .onPriority = GALE_WINGS_CLONE(TYPE_FAIRY),
 };
 
-#undef CONTEXT
-#define CONTEXT RecurringNightmare
 static const Ability RecurringNightmare = {
     .name = $("Shallow Grave"),
     .description = $("Revives at 25% HP once after\n"
@@ -9474,9 +7768,7 @@ static const Ability RecurringNightmare = {
     .persistent = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT MenacingSituation
-ON_EITHER {
+ON_EITHER(MenacingSituation) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK_NOT(gVolatileStructs[opponent].fear)
@@ -9491,25 +7783,20 @@ static const Ability MenacingSituation = {
     .name = $("Menacing Situation"),
     .description = $("20% chance to Fear on contact.\n"
                      "Also works on offense."),
-    CONTEXT_ON_EITHER,
+    ON_EITHER_ABILITY(MenacingSituation),
 };
 
-#undef CONTEXT
-#define CONTEXT ShinyLightning
-ON_ACCURACY {
-    if (move == MOVE_THUNDER) return ACCURACY_HITS_IF_POSSIBLE;
-    *accuracy *= 1.2;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability ShinyLightning = {
     .name = $("Shiny Lightning"),
     .description = $("Grants a 1.2x accuracy boost.\n"
                      "Thunder never misses."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        if (move == MOVE_THUNDER) return ACCURACY_HITS_IF_POSSIBLE;
+        *accuracy *= 1.2;
+        return ACCURACY_MULTIPLICATIVE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Terrify
 static const Ability Terrify = {
     .name = $("Terrify"),
     .description = $("Lowers foes' Sp. Atk by two\n"
@@ -9517,213 +7804,172 @@ static const Ability Terrify = {
     .onEntry = UseIntimidateClone,
 };
 
-#undef CONTEXT
-#define CONTEXT IceDownfall
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-
-    UseOutOfTurnAttack(battler, attacker, ability, MOVE_ICICLE_CRASH, 60);
-    return FALSE;
-}
 static const Ability IceDownfall = {
     .name = $("Ice Downfall"),
     .description = $("Counters contact with\n"
                      "60BP Icicle Crash."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_ICICLE_CRASH, 60);
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT LastStand
-ON_STAT {
-    if (statId == STAT_DEF || statId == STAT_SPDEF)
-        *stat = *stat + (*stat * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
-}
 static const Ability LastStand = {
     .name = $("Last Stand"),
     .description = $("Def and SpDef increase as\n"
                      "HP drops. Max 1.6x."),
-    CONTEXT_ON_STAT,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_DEF || statId == STAT_SPDEF)
+                *stat = *stat + (*stat * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PyroclasticFlow
 static const Ability PyroclasticFlow = {
     .name = $("Pyroclastic Flow"),
     .description = $("Molten Down + Corrosion."),
 };
 
-#undef CONTEXT
-#define CONTEXT BloodBath
-static int BloodBathCondition(int battler, int target) { return !gVolatileStructs[target].fear; }
-ON_REACTIVE { return PoisonPuppeteerClone(ability, battler, BloodBathCondition, BattleScript_Bloodlust); }
 static const Ability BloodBath = {
     .name = $("Blood Bath"),
     .description = $("Immune to bleed. Inflict fear\n"
                      "when inflicting bleed."),
-    CONTEXT_ON_REACTIVE,
+    .onReactive = +[](ON_REACTIVE) -> int {
+        return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) -> int { return !gVolatileStructs[target].fear; }, BattleScript_Bloodlust);
+    },
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT BattleAura
 static const Ability BattleAura = {
     .name = $("Battle Aura"),
     .description = $("Sharply increases the critical\n"
                      "hit rate for all while on the field."),
 };
 
-#undef CONTEXT
-#define CONTEXT Bloodlust
-ON_BATTLER_FAINTS {
-    int result = 0;
-    if (battler == attacker) {
-        result |= SoulEater.onBattlerFaints(ability, battler, attacker, fainted, move, moveType);
-    }
-    return result | BloodBath.onBattlerFaints(ability, battler, attacker, fainted, move, moveType);
-}
 static const Ability Bloodlust = {
     .name = $("Bloodlust"),
     .description = $("Blood Bath + Soul Eater."),
     .onReactive = BloodBath.onReactive,
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        int result = 0;
+        if (battler == attacker) {
+            result |= SoulEater.onBattlerFaints(ability, battler, attacker, fainted, move, moveType);
+        }
+        return result | BloodBath.onBattlerFaints(ability, battler, attacker, fainted, move, moveType);
+    },
     .onBattlerFaintsFor = APPLY_ON_ANY,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT PiercingSolo
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBleed(target))
-    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-    CHECK(Random() % 100 < 30)
-
-    return AbilityStatusEffect(MOVE_EFFECT_BLEED);
-}
 static const Ability PiercingSolo = {
     .name = $("Piercing Solo"),
     .description = $("Sound moves have a 30%\n"
                      "chance to cause bleeding."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBleed(target))
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(Random() % 100 < 30)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Rhythmic
-ON_OFFENSIVE_MULTIPLIER { MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battler]); }
 static const Ability Rhythmic = {
     .name = $("Rhythmic"),
     .description = $("Deals 10% more damage for\n"
                      "each repeated move use."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battler]); },
 };
 
-#undef CONTEXT
-#define CONTEXT ChunkyBassLine
-ON_ATTACKER {
-    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
-
-    return UseAttackerFollowUpMove(battler, target, ability, MOVE_EARTHQUAKE, 40);
-}
 static const Ability ChunkyBassLine = {
     .name = $("Chunky Bass Line"),
     .description = $("Triggers a 40BP Earthquake\n"
                      "after using a sound move."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_EARTHQUAKE, 40);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT DualHammer
-ON_PARENTAL_BOND {
-    CHECK(gBattleMoves[move].hammerBased)
-    return PARENTAL_BOND_DUAL_WIELD;
-}
 static const Ability DualHammer = {
     .name = $("Jackhammer"),
     .description = $("Super Slammer moves hit twice\n"
                      "for 70% damage."),
-    CONTEXT_ON_PARENTAL_BOND,
+    .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
+        CHECK(gBattleMoves[move].hammerBased)
+        return PARENTAL_BOND_DUAL_WIELD;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT DentingBlows
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(gBattleMoves[move].hammerBased)
-    CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
-
-    int affected = GetOncePerTurnAbilityCounter(battler, ability);
-    CHECK_NOT(affected & (1 << target))
-
-    SetOncePerTurnAbilityCounter(battler, ability, affected | (1 << target));
-    return AbilityStatusEffect(MOVE_EFFECT_DEF_MINUS_1);
-}
 static const Ability DentingBlows = {
     .name = $("Denting Blows"),
     .description = $("Hammer moves lower Defense."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(gBattleMoves[move].hammerBased)
+        CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
+
+        int affected = GetOncePerTurnAbilityCounter(battler, ability);
+        CHECK_NOT(affected & (1 << target))
+
+        SetOncePerTurnAbilityCounter(battler, ability, affected | (1 << target));
+        return AbilityStatusEffect(MOVE_EFFECT_DEF_MINUS_1);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT IceColdHunter
-ON_PARENTAL_BOND {
-    CHECK(moveType == TYPE_ICE)
-    return PARENTAL_BOND_ICE_COLD_HUNTER;
-}
 static const Ability IceColdHunter = {
     .name = $("Ice Cold Hunter"),
     .description = $("Ice-type moves hit twice in hail."),
-    CONTEXT_ON_PARENTAL_BOND,
+    .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
+        CHECK(moveType == TYPE_ICE)
+        return PARENTAL_BOND_ICE_COLD_HUNTER;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SoulCrusher
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].hammerBased) MUL(1.1);
-}
-ON_CHOOSE_DEFENSIVE_STAT {
-    CHECK(gBattleMoves[move].hammerBased)
-    return STAT_SPDEF;
-}
 static const Ability SoulCrusher = {
     .name = $("Soul Crusher"),
     .description = $("Hammer moves hit SpDef\n"
                      "and get a 1.1x power boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_CHOOSE_DEFENSIVE_STAT,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].hammerBased) MUL(1.1);
+        },
+    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
+        CHECK(gBattleMoves[move].hammerBased)
+        return STAT_SPDEF;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ArcFlash
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBeParalyzed(battler, target))
-    CHECK(Random() % 2)
-
-    return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
-}
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(CanBeBurned(attacker))
-    CHECK(Random() % 2)
-
-    AbilityStatusEffect(MOVE_EFFECT_BURN | MOVE_EFFECT_AFFECTS_USER);
-    return TRUE;
-}
 static const Ability ArcFlash = {
     .name = $("Arc Flash"),
     .description = $("50% chance to burn when hit or\n"
                      "paralyze when dealing damage."),
-    CONTEXT_ON_ATTACKER,
-    CONTEXT_ON_DEFENDER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBeParalyzed(battler, target))
+        CHECK(Random() % 2)
+
+        return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+    },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(CanBeBurned(attacker))
+        CHECK(Random() % 2)
+
+        AbilityStatusEffect(MOVE_EFFECT_BURN | MOVE_EFFECT_AFFECTS_USER);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Unicorn
 static const Ability Unicorn = {
     .name = $("Unicorn"),
     .description = $("Mighty Horn + Dazzling."),
@@ -9732,69 +7978,58 @@ static const Ability Unicorn = {
     .onImmuneFor = APPLY_ON_ALLY,
 };
 
-#undef CONTEXT
-#define CONTEXT OnTheProwl
-ON_ENTRY {
-    gVolatileStructs[battler].onTheProwl = gVolatileStructs[battler].started.onTheProwl = TRUE;
-    return SwitchInAnnounce(B_MSG_SWITCHIN_ON_THE_PROWL);
-}
 static const Ability OnTheProwl = {
     .name = $("On the Prowl"),
     .description = $("+1 priority for the first turn.\n"
                      "Negative priority becomes +0."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        gVolatileStructs[battler].onTheProwl = gVolatileStructs[battler].started.onTheProwl = TRUE;
+        return SwitchInAnnounce(B_MSG_SWITCHIN_ON_THE_PROWL);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Pretentious
-ON_BATTLER_FAINTS {
-    CHECK(gVolatileStructs[battler].critBoost < 3)
-    gVolatileStructs[battler].critBoost++;
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CRIT_INCREASE_1;
-    BattleScriptCall(BattleScript_AbilityBoostsCrit);
-    return TRUE;
-}
 static const Ability Pretentious = {
     .name = $("Pretentious"),
     .description = $("Dealing a KO raises Crit by\n"
                      "one stage."),
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK(gVolatileStructs[battler].critBoost < 3);
+        gVolatileStructs[battler].critBoost++;
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CRIT_INCREASE_1;
+        BattleScriptCall(BattleScript_AbilityBoostsCrit);
+        return TRUE;
+    },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT VenoblazePincers
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(IS_MOVE_PHYSICAL(move))
-    CHECK(Random() % 100 < 20)
-
-    switch (Random() % 2) {
-        case 0:
-            CHECK(CanBeBurned(target))
-            AbilityStatusEffect(MOVE_EFFECT_BURN);
-            return TRUE;
-
-        case 1:
-            CHECK(CanBePoisoned(battler, target))
-            AbilityStatusEffect(MOVE_EFFECT_TOXIC);
-            return TRUE;
-    }
-    return FALSE;
-}
-ON_OFFENSIVE_MULTIPLIER {
-    if (IS_MOVE_PHYSICAL(move)) MUL(1.2);
-}
 static const Ability VenoblazePincers = {
     .name = $("Venoblaze Pincers"),
     .description = $("1.2x boost to physical moves and\n"
                      "20% chance to Burn or Poison."),
-    CONTEXT_ON_ATTACKER,
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(IS_MOVE_PHYSICAL(move))
+        CHECK(Random() % 100 < 20)
+
+        switch (Random() % 2) {
+            case 0:
+                CHECK(CanBeBurned(target));
+                AbilityStatusEffect(MOVE_EFFECT_BURN);
+                return TRUE;
+
+            case 1:
+                CHECK(CanBePoisoned(battler, target))
+                AbilityStatusEffect(MOVE_EFFECT_TOXIC);
+                return TRUE;
+        }
+        return FALSE;
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_PHYSICAL(move)) MUL(1.2);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT EternalBlessing
 static const Ability EternalBlessing = {
     .name = $("Eternal Blessing"),
     .description = $("Celestial Blessing + Regenerator."),
@@ -9803,44 +8038,34 @@ static const Ability EternalBlessing = {
     .persistent = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SugarRush
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(IsMoveMakingContact(move, battler))
-    CHECK(EatTargetBerry(battler, target))
-    return TRUE;
-}
 static const Ability SugarRush = {
     .name = $("Sugar Rush"),
     .description = $("Gluttony + eats foe's berry when\n"
                      "hitting with contact move."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler)) CHECK(IsMoveMakingContact(move, battler)) CHECK(EatTargetBerry(battler, target));
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT PeacefulRest
-ON_END_TURN {
-    CHECK_NOT(BATTLER_MAX_HP(battler))
-    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-    CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
-
-    gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-    gBattleMoveDamage *= -1;
-    BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
-    return TRUE;
-}
 static const Ability PeacefulRest = {
     .name = $("Rest in Peace"),
     .description = $("Heals 1/8 of max HP every turn\n"
                      "in fog."),
-    CONTEXT_ON_END_TURN,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        gBattleMoveDamage *= -1;
+        BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT WhiteNoise
 static const Ability WhiteNoise = {
     .name = $("White Noise"),
     .description = $("Static + Rest in Peace."),
@@ -9849,47 +8074,37 @@ static const Ability WhiteNoise = {
     .onDefender = Static.onDefender,
 };
 
-#undef CONTEXT
-#define CONTEXT SmokeyManeuvers
-ON_ACCURACY {
-    CHECK(IsBattlerWeatherAffected(target, WEATHER_FOG_ANY))
-    *accuracy /= 1.25;
-    return ACCURACY_MULTIPLICATIVE;
-}
 static const Ability SmokeyManeuvers = {
     .name = $("Smokey Maneuvers"),
     .description = $("Evasion is boosted by 1.25x\n"
                      "in fog."),
-    CONTEXT_ON_ACCURACY,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(IsBattlerWeatherAffected(target, WEATHER_FOG_ANY));
+        *accuracy /= 1.25;
+        return ACCURACY_MULTIPLICATIVE;
+    },
     .onAccuracyFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Tag
 static const Ability Tag = {
     .name = $("Tag"),
     .description = $("Attacks switching opponents\n"
                      "with a 20BP Pursuit."),
 };
 
-#undef CONTEXT
-#define CONTEXT PowerMetal
-ON_MOVE_TYPE {
-    CHECK(moveType == TYPE_NORMAL)
-    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-    return TYPE_STEEL + 1;
-}
 static const Ability PowerMetal = {
     .name = $("Power Metal"),
     .description = $("Sound moves get a 1.2x boost\n"
                      "and become Steel if Normal."),
     .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
-    CONTEXT_ON_MOVE_TYPE,
+    .onMoveType = +[](ON_MOVE_TYPE) -> int {
+        CHECK(moveType == TYPE_NORMAL)
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND);
+        return TYPE_STEEL + 1;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT PowerEdge
 static const Ability PowerEdge = {
     .name = $("Power Edge"),
     .description = $("Keen Edge moves target Special\n"
@@ -9897,43 +8112,35 @@ static const Ability PowerEdge = {
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT Superconductor
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
-}
-ON_MOVE_TYPE {
-    CHECK(moveType == TYPE_STEEL)
-    *ateBoost = TRUE;
-    return TYPE_ELECTRIC + 1;
-}
 static const Ability Superconductor = {
     .name = $("Superconductor"),
     .description = $("Steel-type moves become Electric\n"
                      "-type moves and get a 1.1x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
-    CONTEXT_ON_MOVE_TYPE,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
+        },
+    .onMoveType = +[](ON_MOVE_TYPE) -> int {
+        CHECK(moveType == TYPE_STEEL)
+        *ateBoost = TRUE;
+        return TYPE_ELECTRIC + 1;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT UltraInstinct
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-
-    UseOutOfTurnAttack(battler, attacker, ability, MOVE_VACUUM_WAVE, 0);
-    return FALSE;
-}
 static const Ability UltraInstinct = {
     .name = $("Ultra Instinct"),
     .description = $("Counters contact with Vacuum\n"
                      "Wave. Takes 20% less damage."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_VACUUM_WAVE, 0);
+        return FALSE;
+    },
     .onDefensiveMultiplier = Parry.onDefensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT UnlockedPotential
 static const Ability UnlockedPotential = {
     .name = $("Unlocked Potential"),
     .description = $("Inner Focus + Berserk."),
@@ -9941,29 +8148,22 @@ static const Ability UnlockedPotential = {
     .onAccuracy = InnerFocus.onAccuracy,
 };
 
-#undef CONTEXT
-#define CONTEXT HigherRank
-ON_OFFENSIVE_MULTIPLIER {
-    if (GetMovePriority(battler, move, target) > 0) MUL(1.2);
-}
 static const Ability HigherRank = {
     .name = $("Higher Rank"),
     .description = $("Priority moves get a 1.2x boost."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (GetMovePriority(battler, move, target) > 0) MUL(1.2);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT FuneralPyre
-ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE); }
 static const Ability FuneralPyre = {
     .name = $("Funeral Pyre"),
     .description = $("Non-Ghost and Dark-types\n"
                      "take 1/4 damage every turn."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE); },
 };
 
-#undef CONTEXT
-#define CONTEXT FlameBubble
 static const Ability FlameBubble = {
     .name = $("Flame Bubble"),
     .description = $("Water Bubble + Flaming Soul."),
@@ -9972,18 +8172,13 @@ static const Ability FlameBubble = {
     .onPriority = FlamingSoul.onPriority,
 };
 
-#undef CONTEXT
-#define CONTEXT ElementalVortex
-ON_ABSORB { return WaterAbsorb.onAbsorb(battler, move, moveType, statId) | FlashFire.onAbsorb(battler, move, moveType, statId); }
 static const Ability ElementalVortex = {
     .name = $("Elemental Vortex"),
     .description = $("Flash Fire + Water Absorb."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int { return WaterAbsorb.onAbsorb(battler, move, moveType, statId) | FlashFire.onAbsorb(battler, move, moveType, statId); },
     .onOffensiveMultiplier = FlashFire.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT SnowyWrath
 static const Ability SnowyWrath = {
     .name = $("Snowy Wrath"),
     .description = $("Snow Warning + Whiteout."),
@@ -9991,8 +8186,6 @@ static const Ability SnowyWrath = {
     .onStat = Whiteout.onStat,
 };
 
-#undef CONTEXT
-#define CONTEXT PatternChange
 static const Ability PatternChange = {
     .name = $("Pattern Change"),
     .description = $("Changes type depending on the\n"
@@ -10000,91 +8193,75 @@ static const Ability PatternChange = {
     .protean = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT NoTurningBack
-ON_DEFENDER {
-    CHECK(CheckHalfHpAbility(battler, attacker))
-    CHECK_NOT(GetAbilityState(battler, ability))
-    CHECK_NOT(gVolatileStructs[battler].noRetreat || gBattleMons[battler].status2 & STATUS2_ESCAPE_PREVENTION)
-
-    SetAbilityState(battler, ability, TRUE);
-    BattleScriptCall(BattleScript_NoTurningBack);
-    return TRUE;
-}
 static const Ability NoTurningBack = {
     .name = $("No Turning Back"),
     .description = $("Boosts all stats but can't retreat\n"
                      "when below 1/2 max HP."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(CheckHalfHpAbility(battler, attacker))
+        CHECK_NOT(GetAbilityState(battler, ability))
+        CHECK_NOT(gVolatileStructs[battler].noRetreat || gBattleMons[battler].status2 & STATUS2_ESCAPE_PREVENTION)
+
+        SetAbilityState(battler, ability, TRUE);
+        BattleScriptCall(BattleScript_NoTurningBack);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT FlammableCoat
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(moveType == TYPE_FIRE)
-    CHECK(gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH)
-    CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
-
-    UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_LUMBERING_SLOTH_ENGULFED);
-    gBattleMons[battler].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
-    BattleScriptCall(BattleScript_TargetFormChange);
-    return TRUE;
-}
 static const Ability FlammableCoat = {
     .name = $("Flammable Coat"),
     .description = $("Changes forms when using or\n"
                      "hit by a Fire-type move."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(moveType == TYPE_FIRE)
+        CHECK(gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH)
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
+
+        UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_LUMBERING_SLOTH_ENGULFED);
+        gBattleMons[battler].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
+        BattleScriptCall(BattleScript_TargetFormChange);
+        return TRUE;
+    },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT DracoMorale
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_DRAGON_CHEER, 0); }
 static const Ability DracoMorale = {
     .name = $("Draco Morale"),
     .description = $("Uses Dragon Cheer\n"
                      "on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DRAGON_CHEER, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT BadOmen
-ON_DEFENSIVE_MULTIPLIER {
-    if (isCrit) MUL(.25);
-}
 static const Ability BadOmen = {
     .name = $("Bad Omen"),
     .description = $("Foes min roll and may miss.\n"
                      "Takes 1/4 damage from crits."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (isCrit) MUL(.25);
+        },
     .onAccuracy = BadLuck.onAccuracy,
     .onAccuracyFor = APPLY_ON_FOE,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT MoshPit
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
-        MUL(1.25);
-    else
-        MUL(1.5);
-}
 static const Ability MoshPit = {
     .name = $("Mosh Pit"),
     .description = $("Ally's attacks get a 1.25x boost.\n"
                      "1.5x if attack causes recoil."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
+                MUL(1.25);
+            else
+                MUL(1.5);
+        },
     .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
 
-#undef CONTEXT
-#define CONTEXT BloodStain
-ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_BLOOD_STAIN); }
-ON_EITHER {
+ON_EITHER(BloodStain) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK_NOT(BATTLER_HAS_ABILITY(opponent, ABILITY_BLOOD_STAIN))
@@ -10103,90 +8280,75 @@ static const Ability BloodStain = {
     .name = $("Blood Stain"),
     .description = $("Bleeds if not immune. Can't get\n"
                      "other status. Spreads on contact."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_EITHER,
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_BLOOD_STAIN); },
+    ON_EITHER_ABILITY(BloodStain),
     .unsuppressable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT BloodStigma
-ON_OFFENSIVE_MULTIPLIER {
-    if (gBattleMons[target].status1 & STATUS1_BLEED || IsBloodStainAffected(target)) MUL(1.5);
-}
 static const Ability BloodStigma = {
     .name = $("Blood Stigma"),
     .description = $("Immune to status. Gets a 50%\n"
                      "boost vs bleeding foes."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMons[target].status1 & STATUS1_BLEED || IsBloodStainAffected(target)) MUL(1.5);
+        },
     .unsuppressable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT MaximumAcceleration
-ON_CHOOSE_OFFENSIVE_STAT { *atkStatToUse = STAT_SPEED; }
 static const Ability MaximumAcceleration = {
     .name = $("Max Acceleration"),
     .description = $("Moves use the Speed stat\n"
                      "for damage calculations."),
-    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *atkStatToUse = STAT_SPEED; },
 };
 
-#undef CONTEXT
-#define CONTEXT Sidewinder
-ON_BATTLER_FAINTS {
-    CHECK(gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST || !(gStatuses4[battler] & STATUS4_COILED))
-    gStatuses4[battler] |= STATUS4_COILED;
-    SetAbilityState(battler, ability, TRUE);
-    BattleScriptCall(BattleScript_BattlerCoiledUpReturnNoPopup);
-    return TRUE;
-}
 static const Ability Sidewinder = {
     .name = $("Sidewinder"),
     .description = $("First biting move each entry gets\n"
                      "+1 priority. Resets on KO."),
     .onEntry = CoilUp.onEntry,
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK(gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST || !(gStatuses4[battler] & STATUS4_COILED))
+        gStatuses4[battler] |= STATUS4_COILED;
+        SetAbilityState(battler, ability, TRUE);
+        BattleScriptCall(BattleScript_BattlerCoiledUpReturnNoPopup);
+        return TRUE;
+    },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT Petrify
-ON_ENTRY {
-    int loweredStats = 0;
-    int intimidated = UseIntimidateClone(battler, ability);
-    for (int i = BATTLE_OPPOSITE(GET_BATTLER_SIDE(battler)); i < gBattlersCount; i += 2) {
-        if (!IsBattlerAlive(i)) continue;
-        loweredStats |= TryResetBattlerStatChanges(i, RESET_STAT_BUFFS);
-    }
-
-    if (loweredStats) {
-        BattleScriptPushCursorAndCallback(BattleScript_Petrify);
-    }
-    return intimidated || loweredStats;
-}
 static const Ability Petrify = {
     .name = $("Petrify"),
     .description = $("Clears stat buffs then lowers\n"
                      "speed by one stage on entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        int loweredStats = 0;
+        int intimidated = UseIntimidateClone(battler, ability);
+        for (int i = BATTLE_OPPOSITE(GET_BATTLER_SIDE(battler)); i < gBattlersCount; i += 2) {
+            if (!IsBattlerAlive(i)) continue;
+            loweredStats |= TryResetBattlerStatChanges(i, RESET_STAT_BUFFS);
+        }
+
+        if (loweredStats) {
+            BattleScriptPushCursorAndCallback(BattleScript_Petrify);
+        }
+        return intimidated || loweredStats;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Fluffiest
-ON_DEFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_FIRE) RESISTANCE(2.0);
-    if (IsMoveMakingContact(move, attacker)) MUL(0.5);
-}
 static const Ability Fluffiest = {
     .name = $("Fluffiest"),
     .description = $("Quarters contact damage taken.\n"
                      "4x weak to fire."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIRE) RESISTANCE(2.0);
+            if (IsMoveMakingContact(move, attacker)) MUL(0.5);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT WayOfPrecision
 static const Ability WayOfPrecision = {
     .name = $("Way of Precision"),
     .description = $("Inner Focus + Precise Fist."),
@@ -10194,8 +8356,6 @@ static const Ability WayOfPrecision = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT WayOfSwiftness
 static const Ability WayOfSwiftness = {
     .name = $("Way of Swiftness"),
     .description = $("Pretentious + Swift Swim."),
@@ -10204,20 +8364,16 @@ static const Ability WayOfSwiftness = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT AtomicPunch
-ON_OFFENSIVE_MULTIPLIER {
-    IronFist.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-    Steelworker.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-}
 static const Ability AtomicPunch = {
     .name = $("Atomic Punch"),
     .description = $("Iron Fist + Steelworker."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            IronFist.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            Steelworker.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT IronGiant
 static const Ability IronGiant = {
     .name = $("Iron Giant"),
     .description = $("Heatproof + Juggernaut."),
@@ -10226,8 +8382,6 @@ static const Ability IronGiant = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT MasterHand
 static const Ability MasterHand = {
     .name = $("Master Hand"),
     .description = $("Mega Launcher + Rampage."),
@@ -10236,8 +8390,6 @@ static const Ability MasterHand = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT FinalBlow
 static const Ability FinalBlow = {
     .name = $("Final Blow"),
     .description = $("Unseen Fist + Fatal Precision."),
@@ -10245,184 +8397,153 @@ static const Ability FinalBlow = {
     .onAccuracy = FatalPrecision.onAccuracy,
 };
 
-#undef CONTEXT
-#define CONTEXT Hospitality
 static const Ability Hospitality = {
     .name = $("Hospitality"),
     .description = $("Heals partner for 25% of its max\n"
                      "HP on switch-in."),
 };
 
-#undef CONTEXT
-#define CONTEXT ButterUp
-ON_ENTRY { return Hospitality.onEntry(ability, battler) | SoothingAroma.onEntry(ability, battler); }
 static const Ability ButterUp = {
     .name = $("Butter Up"),
     .description = $("Hospitality + Soothing Aroma"),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return Hospitality.onEntry(ability, battler) | SoothingAroma.onEntry(ability, battler); },
 };
 
-#undef CONTEXT
-#define CONTEXT VitalityStrike
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK_NOT(BATTLER_MAX_HP(battler))
-    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-    CHECK(IS_IRON_FIST(battler, move))
-
-    gBattleMoveDamage = -gHpDealt / 10;
-    if (!gBattleMoveDamage) gBattleMoveDamage = -1;
-    BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
-    return TRUE;
-}
 static const Ability VitalityStrike = {
     .name = $("Vitality Strike"),
     .description = $("Heals for 10% of the damage\n"
                      "dealt by punching moves."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(IS_IRON_FIST(battler, move))
+
+        gBattleMoveDamage = -gHpDealt / 10;
+        if (!gBattleMoveDamage) gBattleMoveDamage = -1;
+        BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT HugeWings
-ON_OFFENSIVE_MULTIPLIER {
-    GiantWings.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-    Levitate.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-}
 static const Ability HugeWings = {
     .name = $("Huge Wings"),
     .description = $("Giant Wings + Levitate."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            GiantWings.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            Levitate.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SwordOfDamnation
 static const Ability SwordOfDamnation = {
     .name = $("Sword of Damnation"),
     .description = $("Unaware + Sword of Ruin."),
     .onStat = SwordOfRuin.onStat,
     .onStatFor = APPLY_ON_OTHER,
+    .ruinStat = STAT_DEF,
     .unaware = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT RestrainingOrder
-ON_DEFENDER {
-    CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED);
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-    CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
-    CHECK(CountUsablePartyMons(battler))
-
-    SetAbilityState(battler, ability, RESTRAINING_ORDER_ACTIVATING);
-    return FALSE;
-}
 static const Ability RestrainingOrder = {
     .name = $("Restraining Order"),
     .description = $("Forces the attacker when hit\n"
                      "once each switch-in."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(GetAbilityState(battler, ability); == RESTRAINING_ORDER_NOT_TRIGGERED);
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+        CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
+        CHECK(CountUsablePartyMons(battler))
+
+        SetAbilityState(battler, ability, RESTRAINING_ORDER_ACTIVATING);
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT AssassinsTools
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(IsMoveMakingContact(move, battler))
-
-    switch (Random() % 3) {
-        case 0:
-            CHECK(CanBePoisoned(battler, target))
-            AbilityStatusEffect(MOVE_EFFECT_POISON);
-            return TRUE;
-
-        case 1:
-            CHECK(CanBeParalyzed(battler, target))
-            AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
-            return TRUE;
-
-        case 2:
-            CHECK(CanBleed(target))
-            AbilityStatusEffect(MOVE_EFFECT_BLEED);
-            return TRUE;
-    }
-    return FALSE;
-}
 static const Ability AssassinsTools = {
     .name = $("Assassin's Tools"),
     .description = $("Contact moves have a 30%\n"
                      "chance to PSN, PRLZ, or BLD."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(IsMoveMakingContact(move, battler))
+
+        switch (Random() % 3) {
+            case 0:
+                CHECK(CanBePoisoned(battler, target));
+                AbilityStatusEffect(MOVE_EFFECT_POISON);
+                return TRUE;
+
+            case 1:
+                CHECK(CanBeParalyzed(battler, target))
+                AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+                return TRUE;
+
+            case 2:
+                CHECK(CanBleed(target))
+                AbilityStatusEffect(MOVE_EFFECT_BLEED);
+                return TRUE;
+        }
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Frostmaw
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanGetFrostbite(target))
-    CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-    CHECK(Random() % 2)
-
-    return AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
-}
 static const Ability Frostmaw = {
     .name = $("Frostmaw"),
     .description = $("Biting moves have a 50% chance\n"
                      "to inflict frostbite."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanGetFrostbite(target))
+        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        CHECK(Random() % 2)
+
+        return AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Patchwork
-ON_DISGUISE {
-    int species = Disguise.onDisguise(battler, testOnly);
-    if (species && !testOnly) {
-        SetOncePerTurnAbilityCounter(battler, ABILITY_PATCHWORK, gBattlerAttacker);
-    }
-    return species;
-}
-ON_DEFENDER {
-    CHECK(GetSingleUseAbilityCounter(battler, ability))
-    SetSingleUseAbilityCounter(battler, ability, 0);
-
-    CHECK(IsBattlerAlive(attacker))
-    CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED)
-
-    AbilityStatusEffect(MOVE_EFFECT_CURSE | MOVE_EFFECT_AFFECTS_USER);
-    return TRUE;
-}
 static const Ability Patchwork = {
     .name = $("Patchwork"),
     .description = $("Disguise + curses the opponent\n"
                      "when its Disguise breaks."),
     .onEntry = Disguise.onEntry,
-    CONTEXT_ON_DISGUISE,
-    CONTEXT_ON_DEFENDER,
+    .onDisguise = +[](ON_DISGUISE) -> int {
+        int species = Disguise.onDisguise(battler, testOnly);
+        if (species && !testOnly) {
+            SetOncePerTurnAbilityCounter(battler, ABILITY_PATCHWORK, gBattlerAttacker);
+        }
+        return species;
+    },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(GetSingleUseAbilityCounter(battler, ability))
+        SetSingleUseAbilityCounter(battler, ability, 0);
+
+        CHECK(IsBattlerAlive(attacker))
+        CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED)
+
+        AbilityStatusEffect(MOVE_EFFECT_CURSE | MOVE_EFFECT_AFFECTS_USER);
+        return TRUE;
+    },
     .breakable = TRUE,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT BlindRage
 static const Ability BlindRage = {
     .name = $("Blind Rage"),
     .description = $("Scrappy + Mold Breaker."),
     .onEntry = MoldBreaker.onEntry,
 };
 
-#undef CONTEXT
-#define CONTEXT Slipstream
-ON_CHOOSE_OFFENSIVE_STAT { *secondaryAtkStatToUse = STAT_SPEED; }
 static const Ability Slipstream = {
     .name = $("Slipstream"),
     .description = $("Moves use 20% of its Speed\n"
                      "stat additionally."),
-    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *secondaryAtkStatToUse = STAT_SPEED; },
 };
 
-#undef CONTEXT
-#define CONTEXT ApexPredator
 static const Ability ApexPredator = {
     .name = $("Apex Predator"),
     .description = $("Tough Claws + Predator."),
@@ -10431,107 +8552,94 @@ static const Ability ApexPredator = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT DragonsRitual
-ON_BATTLER_FAINTS {
-    CHECK(CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN) || CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
-    BattleScriptCall(BattleScript_DragonsRitual);
-    return TRUE;
-}
 static const Ability DragonsRitual = {
     .name = $("Dragon's Ritual"),
     .description = $("Dealing a KO raises Attack and\n"
                      "Speed by one stage."),
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK(CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN) || CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
+        BattleScriptCall(BattleScript_DragonsRitual);
+        return TRUE;
+    },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT PinnacleBlade
-ON_INFILTRATE { return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : INFILTRATE_NONE; }
-ON_ATTACKER {
-    CHECK(DidMoveHit())
-    CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-
-    int shouldApply = FALSE;
-    int opposingSide = GetBattlerSide(target);
-
-    if (gVolatileStructs[target].substituteHP) {
-        gVolatileStructs[target].substituteHP = 0;
-        BattleScriptCall(BattleScript_AttackerDestroysSubstitute);
-        shouldApply = TRUE;
-    }
-
-    if (IsBattlerAlive(target)) {
-        if (gSideTimers[opposingSide].reflectTimer || gSideTimers[opposingSide].lightscreenTimer || gSideTimers[opposingSide].auroraVeilTimer) {
-            BattleScriptCall(BattleScript_AttackerShattersScreens);
-            shouldApply = TRUE;
-        }
-
-        if (IS_BATTLER_PROTECTED(target)) {
-            AbilityStatusEffectDirect(MOVE_EFFECT_FEINT);
-            shouldApply = TRUE;
-        }
-    }
-
-    return shouldApply;
-}
 static const Ability PinnacleBlade = {
     .name = $("Pinnacle Blade"),
     .description = $("Slashing moves always hit and\n"
                      "break protection and barriers."),
-    CONTEXT_ON_INFILTRATE,
-    CONTEXT_ON_ATTACKER,
+    .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType {
+        return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : INFILTRATE_NONE;
+    },
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+
+        int shouldApply = FALSE;
+        int opposingSide = GetBattlerSide(target);
+
+        if (gVolatileStructs[target].substituteHP) {
+            gVolatileStructs[target].substituteHP = 0;
+            BattleScriptCall(BattleScript_AttackerDestroysSubstitute);
+            shouldApply = TRUE;
+        }
+
+        if (IsBattlerAlive(target)) {
+            if (gSideTimers[opposingSide].reflectTimer || gSideTimers[opposingSide].lightscreenTimer || gSideTimers[opposingSide].auroraVeilTimer) {
+                BattleScriptCall(BattleScript_AttackerShattersScreens);
+                shouldApply = TRUE;
+            }
+
+            if (IS_BATTLER_PROTECTED(target)) {
+                AbilityStatusEffectDirect(MOVE_EFFECT_FEINT);
+                shouldApply = TRUE;
+            }
+        }
+
+        return shouldApply;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Energized
-ON_BATTLER_FAINTS {
-    CHECK(moveType == TYPE_ELECTRIC)
-    SetOncePerTurnAbilityCounter(battler, ability, TRUE);
-    BattleScriptCall(BattleScript_GeneratorActivatesRet);
-    return TRUE;
-}
 static const Ability Energized = {
     .name = $("Energized"),
     .description = $("Generator + charges up on KO\n"
                      "with an Electric-type move."),
     .onEntry = Generator.onEntry,
     .onTerrain = Generator.onTerrain,
-    CONTEXT_ON_BATTLER_FAINTS,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK(moveType == TYPE_ELECTRIC);
+        SetOncePerTurnAbilityCounter(battler, ability, TRUE);
+        BattleScriptCall(BattleScript_GeneratorActivatesRet);
+        return TRUE;
+    },
     .onExit = Generator.onExit,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .persistent = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT ColorSpectrum
-ON_END_TURN {
-    int newType;
-    do {
-        newType = Random() % NUMBER_OF_MON_TYPES;
-    } while (newType == TYPE_MYSTERY || newType == TYPE_STELLAR || IS_BATTLER_OF_TYPE(battler, newType));
-
-    gBattleMons[battler].type1 = newType;
-    gBattleMons[battler].type2 = newType;
-    gBattleMons[battler].type3 = TYPE_MYSTERY;
-    PREPARE_TYPE_BUFFER(gBattleTextBuff1, newType);
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerBecameTheTypeFullEnd3);
-    return TRUE;
-}
-ON_OFFENSIVE_MULTIPLIER {
-    if (StabMultiplierInHalves(battler, moveType, move) > 2) MUL(1.2);
-}
 static const Ability ColorSpectrum = {
     .name = $("Color Spectrum"),
     .description = $("Same-type attacks get a 1.2x\n"
                      "boost. Changes type each turn."),
-    CONTEXT_ON_END_TURN,
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        int newType;
+        do {
+            newType = Random() % NUMBER_OF_MON_TYPES;
+        } while (newType == TYPE_MYSTERY || newType == TYPE_STELLAR || IS_BATTLER_OF_TYPE(battler, newType));
+
+        gBattleMons[battler].type1 = newType;
+        gBattleMons[battler].type2 = newType;
+        gBattleMons[battler].type3 = TYPE_MYSTERY;
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, newType);
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerBecameTheTypeFullEnd3);
+        return TRUE;
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (StabMultiplierInHalves(battler, moveType, move) > 2) MUL(1.2);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT SteelBeetle
 static const Ability SteelBeetle = {
     .name = $("Steel Beetle"),
     .description = $("Raging Boxer + Pollinate."),
@@ -10540,82 +8648,68 @@ static const Ability SteelBeetle = {
     .onMoveType = Pollinate.onMoveType,
 };
 
-#undef CONTEXT
-#define CONTEXT FromTheShadows
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(GetBattlerTurnOrderNum(target) >= gCurrentTurnActionNumber)
-
-    if (CanMoveHaveExtraFlinchChance(move) && Random() % 100 < 20) {
-        AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
-    }
-
-    CHECK_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
-    gBattleMons[target].status2 |= STATUS2_ESCAPE_PREVENTION;
-    gVolatileStructs[target].battlerPreventingEscape = battler;
-    BattleScriptCall(BattleScript_AnnounceTargetTrapped);
-    return TRUE;
-}
 static const Ability FromTheShadows = {
     .name = $("From the Shadows"),
     .description = $("Attacks trap and have a 20%\n"
                      "flinch chance when moving first."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(GetBattlerTurnOrderNum(target) >= gCurrentTurnActionNumber)
+
+        if (CanMoveHaveExtraFlinchChance(move) && Random() % 100 < 20) {
+            AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
+        }
+
+        CHECK_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
+        gBattleMons[target].status2 |= STATUS2_ESCAPE_PREVENTION;
+        gVolatileStructs[target].battlerPreventingEscape = battler;
+        BattleScriptCall(BattleScript_AnnounceTargetTrapped);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT RagePoint
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK(gIsCriticalHit)
-    CHECK(CanRaiseStat(battler, STAT_ATK) || CanRaiseStat(battler, STAT_SPATK))
-
-    BattleScriptCall(BattleScript_RagePointActivates);
-    return TRUE;
-}
-ON_OFFENSIVE_MULTIPLIER {
-    if (HasAnyStatusOrAbility(battler)) MUL(1.5);
-}
 static const Ability RagePoint = {
     .name = $("Rage Point"),
     .description = $("Gets a 1.5x boost while statused.\n"
                      "Raises offenses when crit."),
-    CONTEXT_ON_DEFENDER,
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(gIsCriticalHit)
+        CHECK(CanRaiseStat(battler, STAT_ATK) || CanRaiseStat(battler, STAT_SPATK))
+
+        BattleScriptCall(BattleScript_RagePointActivates);
+        return TRUE;
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (HasAnyStatusOrAbility(battler)) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT HotCoals
-ON_ENTRY {
-    CHECK_NOT(gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals)
-
-    gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals = TRUE;
-    return SwitchInAnnounce(B_MSG_SWITCHIN_HOT_COALS);
-}
 static const Ability HotCoals = {
     .name = $("Hot Coals"),
     .description = $("Sets a trap that burns the next\n"
                      "foe that switches in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals)
+
+        gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals = TRUE;
+        return SwitchInAnnounce(B_MSG_SWITCHIN_HOT_COALS);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT TerastalTreasure
-ON_DEFENSIVE_MULTIPLIER { MUL(.6); }
-ON_STAT {
-    if (statId == STAT_SPEED) *stat *= .8;
-}
 static const Ability TerastalTreasure = {
     .name = $("Terastal Treasure"),
     .description = $("Reduces damage taken by 40%,\n"
                      "but lowers speed by 20%."),
-    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
-    CONTEXT_ON_STAT,
+    .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.6); },
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED) *stat *= .8;
+        },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT ShockingMaw
 static const Ability ShockingMaw = {
     .name = $("Shocking Maw"),
     .description = $("Strong Jaw + Bite moves have\n"
@@ -10624,17 +8718,12 @@ static const Ability ShockingMaw = {
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT GleamEyes
-ON_ENTRY { return UseIntimidateClone(battler, ability) | Frisk.onEntry(battler, ability); }
 static const Ability GleamEyes = {
     .name = $("Gleam Eyes"),
     .description = $("Frisk + Scare."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseIntimidateClone(battler, ability) | Frisk.onEntry(battler, ability); },
 };
 
-#undef CONTEXT
-#define CONTEXT RousedFangs
 static const Ability RousedFangs = {
     .name = $("Megabite"),
     .description = $("Biting moves use SpAtk and\n"
@@ -10643,8 +8732,6 @@ static const Ability RousedFangs = {
     .onChooseOffensiveStat = MindCrush.onChooseOffensiveStat,
 };
 
-#undef CONTEXT
-#define CONTEXT DreamState
 static const Ability DreamState = {
     .name = $("Dream State"),
     .description = $("Immune to critical hits. Takes\n"
@@ -10653,25 +8740,18 @@ static const Ability DreamState = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT DreamWhimsy
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_YAWN, 0); }
 static const Ability DreamWhimsy = {
     .name = $("Dream Whimsy"),
     .description = $("Uses Yawn on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_YAWN, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT LunarAffinity
 static const Ability LunarAffinity = {
     .name = $("Lunar Affinity"),
     .description = $("Copies lunar moves used by\n"
                      "others."),
 };
 
-#undef CONTEXT
-#define CONTEXT FlameShield
 static const Ability FlameShield = {
     .name = $("Flame Shield"),
     .description = $("Takes 35% less damage from\n"
@@ -10680,112 +8760,85 @@ static const Ability FlameShield = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT AquaticDweller
-ON_ENTRY { return AddBattlerType(battler, TYPE_WATER); }
-ON_OFFENSIVE_MULTIPLIER {
-    if (moveType == TYPE_WATER) MUL(1.5);
-}
 static const Ability AquaticDweller = {
     .name = $("Aquatic Dweller"),
     .description = $("Boosts the power of Water-type\n"
                      "moves by 1.5x."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_WATER); },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_WATER) MUL(1.5);
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT ApplePie
 static const Ability ApplePie = {
     .name = $("Apple Pie"),
     .description = $("Self Sufficient + Ripen."),
     .onEndTurn = SelfSufficient.onEndTurn,
 };
 
-#undef CONTEXT
-#define CONTEXT Hover
-ON_ENTRY { return AddBattlerType(battler, TYPE_PSYCHIC); }
 static const Ability Hover = {
     .name = $("Hover"),
     .description = $("Adds Psychic type to itself.\n"
                      "Avoids Ground attacks."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_PSYCHIC); },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Depravity
 static const Ability Depravity = {
     .name = $("Depravity"),
     .description = $("Merciless + Overcharge."),
 };
 
-#undef CONTEXT
-#define CONTEXT Wildfire
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-
-    UseOutOfTurnAttack(battler, attacker, ability, MOVE_FIRE_SPIN, 20);
-    return FALSE;
-}
 static const Ability Wildfire = {
     .name = $("Wildfire"),
     .description = $("Attacks with 20BP Fire Spin\n"
                      "when hit by a contact move."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_FIRE_SPIN, 20);
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT JumpScare
-ON_ENTRY {
-    CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
-    SetSingleUseAbilityCounter(battler, ability, TRUE);
-    return UseEntryMove(battler, ability, MOVE_ASTONISH, 0);
-}
 static const Ability JumpScare = {
     .name = $("Jumpscare"),
     .description = $("Attacks with Astonish on first\n"
                      "switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
+        return UseEntryMove(battler, ability, MOVE_ASTONISH, 0);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT TarToss
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_TAR_SHOT, 0); }
 static const Ability TarToss = {
     .name = $("Tar Toss"),
     .description = $("Uses Tar Shot on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TAR_SHOT, 0); },
 };
 
-#undef CONTEXT
-#define CONTEXT StunShock
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(Random() % 100 < 60)
-    switch (Random() % 2) {
-        case 0:
-            CHECK(CanBePoisoned(battler, target))
-            AbilityStatusEffect(MOVE_EFFECT_POISON);
-            return TRUE;
-
-        case 1:
-            CHECK(CanBeParalyzed(battler, target))
-            AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
-            return TRUE;
-    }
-    return FALSE;
-}
 static const Ability StunShock = {
     .name = $("Stun Shock"),
     .description = $("Attacks have a 60% chance to\n"
                      "Paralyze or Poison."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target)) CHECK(Random() % 100 < 60) switch (Random() % 2) {
+            case 0:
+                CHECK(CanBePoisoned(battler, target));
+                AbilityStatusEffect(MOVE_EFFECT_POISON);
+                return TRUE;
+
+            case 1:
+                CHECK(CanBeParalyzed(battler, target))
+                AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+                return TRUE;
+        }
+        return FALSE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT RagingGoddess
 static const Ability RagingGoddess = {
     .name = $("Raging Goddess"),
     .description = $("Rampage + Hyper Aggressive."),
@@ -10794,59 +8847,49 @@ static const Ability RagingGoddess = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-#undef CONTEXT
-#define CONTEXT Whiplash
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(Random() % 2)
-    CHECK(IS_MOVE_PHYSICAL(move))
-    CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
-
-    int affected = GetOncePerTurnAbilityCounter(battler, ability);
-    CHECK_NOT(affected & (1 << target))
-
-    SetOncePerTurnAbilityCounter(battler, ability, affected | (1 << target));
-    return AbilityStatusEffect(MOVE_EFFECT_DEF_MINUS_1);
-}
 static const Ability Whiplash = {
     .name = $("Whiplash"),
     .description = $("Physical attacks have a 50%\n"
                      "chance to lower Defense."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(Random() % 2)
+        CHECK(IS_MOVE_PHYSICAL(move))
+        CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
+
+        int affected = GetOncePerTurnAbilityCounter(battler, ability);
+        CHECK_NOT(affected & (1 << target))
+
+        SetOncePerTurnAbilityCounter(battler, ability, affected | (1 << target));
+        return AbilityStatusEffect(MOVE_EFFECT_DEF_MINUS_1);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SupersweetSyrup
-ON_DEFENDER {
-    CHECK(ShouldApplyOnHitAffect(attacker))
-    CHECK(IsMoveMakingContact(move, attacker))
-    CHECK_NOT(gStatuses3[attacker] & STATUS3_EMBARGO)
-    CHECK(gBattleMons[attacker].item)
-
-    gVolatileStructs[attacker].embargoTimer = 2;
-    gStatuses3[attacker] |= STATUS3_EMBARGO;
-    gLastUsedItem = gBattleMons[attacker].item;
-    BattleScriptCall(BattleScript_AnnounceAttackerItemDisabled);
-    return TRUE;
-}
 static const Ability SupersweetSyrup = {
     .name = $("Supersweet Syrup"),
     .description = $("Can't lose its item. Disables foe's\n"
                      "item for 2 turns on contact."),
-    CONTEXT_ON_DEFENDER,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(gStatuses3[attacker] & STATUS3_EMBARGO)
+        CHECK(gBattleMons[attacker].item)
+
+        gVolatileStructs[attacker].embargoTimer = 2;
+        gStatuses3[attacker] |= STATUS3_EMBARGO;
+        gLastUsedItem = gBattleMons[attacker].item;
+        BattleScriptCall(BattleScript_AnnounceAttackerItemDisabled);
+        return TRUE;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT LuckyHalo
 static const Ability LuckyHalo = {
     .name = $("Lucky Halo"),
     .description = $("Negates self stat drops. Survives\n"
                      "the first hit that would KO it."),
 };
 
-#undef CONTEXT
-#define CONTEXT TrashHeap
 static const Ability TrashHeap = {
     .name = $("Trash Heap"),
     .description = $("Corrosion + Toxic Spill."),
@@ -10854,21 +8897,17 @@ static const Ability TrashHeap = {
     .onExit = ToxicSpill.onExit,
 };
 
-#undef CONTEXT
-#define CONTEXT SludgyMix
-ON_OFFENSIVE_MULTIPLIER {
-    Intoxicate.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-    PunkRock.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-}
 static const Ability SludgyMix = {
     .name = $("Sludgy Mix"),
     .description = $("Intoxicate + Punk Rock."),
-    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            Intoxicate.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            PunkRock.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+        },
     .onMoveType = Intoxicate.onMoveType,
 };
 
-#undef CONTEXT
-#define CONTEXT Overwatch
 static const Ability Overwatch = {
     .name = $("Overwatch"),
     .description = $("On the Prowl + Stakeout."),
@@ -10876,55 +8915,43 @@ static const Ability Overwatch = {
     .onOffensiveMultiplier = Stakeout.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT WindRage
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_DEFOG, 0); }
 static const Ability WindRage = {
     .name = $("Wind Rage"),
     .description = $("Uses Defog on switch-in. Air-\n"
                      "based moves get a 1.3x boost."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DEFOG, 0); },
     .onOffensiveMultiplier = GiantWings.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT VictoryBomb
-ON_DEFENDER {
-    CHECK_NOT(IsBattlerAlive(battler))
-
-    UseOutOfTurnAttack(battler, attacker, ability, MOVE_EXPLOSION, 100);
-    return FALSE;
-}
-ON_MOVE_TYPE {
-    CHECK(gProcessingExtraAttacks)
-    CHECK(gQueuedExtraAttackData[0].ability == ability)
-    return TYPE_FIRE + 1;
-}
 static const Ability VictoryBomb = {
     .name = $("Victory Bomb"),
     .description = $("Attacks with a 100BP Fire-type\n"
                      "Explosion on fainting."),
-    CONTEXT_ON_DEFENDER,
-    CONTEXT_ON_MOVE_TYPE,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK_NOT(IsBattlerAlive(battler))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_EXPLOSION, 100);
+        return FALSE;
+    },
+    .onMoveType = +[](ON_MOVE_TYPE) -> int {
+        CHECK(gProcessingExtraAttacks)
+        CHECK(gQueuedExtraAttackData[0].ability == ability)
+        return TYPE_FIRE + 1;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT RazorSharp
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBleed(target))
-    CHECK(gIsCriticalHit)
-
-    return AbilityStatusEffect(MOVE_EFFECT_BLEED);
-}
 static const Ability RazorSharp = {
     .name = $("Razor Sharp"),
     .description = $("Critical hits also inflict bleeding."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBleed(target))
+        CHECK(gIsCriticalHit)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT ToTheBone
 static const Ability ToTheBone = {
     .name = $("To The Bone"),
     .description = $("Critical hits get a 1.5x boost and\n"
@@ -10933,30 +8960,23 @@ static const Ability ToTheBone = {
     .onOffensiveMultiplier = Sniper.onOffensiveMultiplier,
 };
 
-#undef CONTEXT
-#define CONTEXT BladeDance
-ON_ATTACKER {
-    CHECK(IsDance(battler, move))
-    CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
-
-    return UseAttackerFollowUpMove(battler, target, ability, MOVE_LEAF_BLADE, 50);
-}
 static const Ability BladeDance = {
     .name = $("Blade Dance"),
     .description = $("Triggers 50 BP Leaf Blade after\n"
                      "using a dance move."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IsDance(battler, move))
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_LEAF_BLADE, 50);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Taekkyeon
 static const Ability Taekkyeon = {
     .name = $("Taekkyeon"),
     .description = $("All attacks are dances."),
 };
 
-#undef CONTEXT
-#define CONTEXT ApeShift
 int ApeShiftHandler(int battler, AbilityCallType callType) {
     CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
     CHECK(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
@@ -10971,89 +8991,71 @@ int ApeShiftHandler(int battler, AbilityCallType callType) {
     BattleScriptCall(BattleScript_StackBattlerFormChange);
     return TRUE;
 }
-ON_ENTRY { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-ON_END_TURN { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-ON_DEFENDER { return ApeShiftHandler(battler, ABILITY_BS_CALL); }
 static const Ability ApeShift = {
     .name = $("Ape Shift"),
     .description = $("Transforms when below 50% HP,\n"
                      "curing status and always critting."),
-    CONTEXT_ON_ENTRY,
-    CONTEXT_ON_END_TURN,
-    CONTEXT_ON_DEFENDER,
+    .onEntry = +[](ON_ENTRY) -> int { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onEndTurn = +[](ON_END_TURN) -> int { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onDefender = +[](ON_DEFENDER) -> int { return ApeShiftHandler(battler, ABILITY_BS_CALL); },
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT KnowYourPlace
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK_NOT(gVolatileStructs[target].dazed)
-    CHECK(IsMoveMakingContact(move, battler))
-
-    gVolatileStructs[target].dazed = 5;
-    BattleScriptCall(BattleScript_TargetDazed);
-    return TRUE;
-}
 static const Ability KnowYourPlace = {
     .name = $("Know Your Place"),
     .description = $("Contact attacks make foes move\n"
                      "last for 5 turns."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK_NOT(gVolatileStructs[target].dazed)
+        CHECK(IsMoveMakingContact(move, battler))
+
+        gVolatileStructs[target].dazed = 5;
+        BattleScriptCall(BattleScript_TargetDazed);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT DeepCuts
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(target))
-    CHECK(CanBleed(target))
-    CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-    CHECK(Random() % 2)
-
-    return AbilityStatusEffect(MOVE_EFFECT_BLEED);
-}
 static const Ability DeepCuts = {
     .name = $("Deep Cuts"),
     .description = $("Slashing moves have a 50%\n"
                      "chance to inflict bleeding."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBleed(target))
+        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        CHECK(Random() % 2)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT LifeSteal
 static const Ability LifeSteal = {
     .name = $("Life Steal"),
     .description = $("Steals 1/10 HP from foes each\n"
                      "turn."),
 };
 
-#undef CONTEXT
-#define CONTEXT RudeAwakening
 static const Ability RudeAwakening = {
     .name = $("Rude Awakening"),
     .description = $("Raises all stats becomes immune\n"
                      "to sleep after waking up."),
 };
 
-#undef CONTEXT
-#define CONTEXT TeraformZero
-ON_ENTRY {
-    CHECK(!GetSingleUseAbilityCounter(battler, ability))
-    SetSingleUseAbilityCounter(battler, ability, TRUE);
-    CHECK(IsWeatherActive(WEATHER_ANY) || IsTerrainActive(STATUS_FIELD_TERRAIN_ANY))
-    BattleScriptPushCursorAndCallback(BattleScript_TeraformZero);
-    return TRUE;
-}
 static const Ability TeraformZero = {
     .name = $("Teraform Zero"),
     .description = $("Tera Shell + clears weather and\n"
                      "terrain on first entry."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(!GetSingleUseAbilityCounter(battler, ability));
+        SetSingleUseAbilityCounter(battler, ability, TRUE);
+        CHECK(IsWeatherActive(WEATHER_ANY) || IsTerrainActive(STATUS_FIELD_TERRAIN_ANY))
+        BattleScriptPushCursorAndCallback(BattleScript_TeraformZero);
+        return TRUE;
+    },
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT SetAblaze
 static const Ability SetAblaze = {
     .name = $("Set Ablaze"),
     .description = $("Inflicting burn also inflicts fear."),
@@ -11062,8 +9064,6 @@ static const Ability SetAblaze = {
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-#undef CONTEXT
-#define CONTEXT Breakwater
 static const Ability Breakwater = {
     .name = $("Breakwater"),
     .description = $("Swift Swim + Stall."),
@@ -11072,36 +9072,29 @@ static const Ability Breakwater = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT MagicalFists
-ON_CHOOSE_OFFENSIVE_STAT {
-    if (IS_IRON_FIST(battler, move)) *atkStatToUse = STAT_SPATK;
-}
 static const Ability MagicalFists = {
     .name = $("Magical Fists"),
     .description = $("Punching moves use Special\n"
                      "Attack and get a 1.3x boost."),
     .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
-    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
+    .onChooseOffensiveStat =
+        +[](ON_CHOOSE_OFFENSIVE_STAT) {
+            if (IS_IRON_FIST(battler, move)) *atkStatToUse = STAT_SPATK;
+        },
 };
 
-#undef CONTEXT
-#define CONTEXT Cutthroat
-ON_ENTRY {
-    CHECK_NOT(GetAbilityState(battler, ability))
-
-    gStatuses4[battler] |= STATUS4_CUTTHROAT;
-    return SwitchInAnnounce(B_MSG_SWITCHIN_CUTTHROAT);
-}
 static const Ability Cutthroat = {
     .name = $("Cutthroat"),
     .description = $("The first slicing move used on\n"
                      "each entry in gets +1 priority."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(GetAbilityState(battler, ability))
+
+        gStatuses4[battler] |= STATUS4_CUTTHROAT;
+        return SwitchInAnnounce(B_MSG_SWITCHIN_CUTTHROAT);
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SandBender
 static const Ability SandBender = {
     .name = $("Sand Bender"),
     .description = $("Sand Stream + Sand Force."),
@@ -11109,27 +9102,20 @@ static const Ability SandBender = {
     .onStat = SandForce.onStat,
 };
 
-#undef CONTEXT
-#define CONTEXT SandPit
-ON_ENTRY { return UseEntryMove(battler, ability, MOVE_SAND_TOMB, 20); }
 static const Ability SandPit = {
     .name = $("Sand Pit"),
     .description = $("Attacks with 20BP Sand Tomb\n"
                      "on switch-in."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SAND_TOMB, 20); },
 };
 
-#undef CONTEXT
-#define CONTEXT DesolateSun
 static const Ability DesolateSun = {
     .name = $("Desolate Sun"),
     .description = $("Desolate Land + Earth Eater."),
     .randomizerBanned = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Daybreak
-ON_EITHER {
+ON_EITHER(Daybreak) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(CanBeBurned(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
@@ -11141,94 +9127,77 @@ static const Ability Daybreak = {
     .name = $("Daybreak"),
     .description = $("Burns the foe on contact.\n"
                      "Also works on offense."),
-    CONTEXT_ON_EITHER,
+    ON_EITHER_ABILITY(Daybreak),
 };
 
-#undef CONTEXT
-#define CONTEXT EnergySiphon
-ON_ATTACKER {
-    CHECK(ShouldApplyOnHitAffect(battler))
-    CHECK_NOT(BATTLER_MAX_HP(battler))
-    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-
-    gBattleMoveDamage = -gHpDealt / 4;
-    if (!gBattleMoveDamage) gBattleMoveDamage = -1;
-    BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
-    return TRUE;
-}
 static const Ability EnergySiphon = {
     .name = $("Energy Siphon"),
     .description = $("Heals the user for 1/4\n"
                      "of the damage they deal."),
-    CONTEXT_ON_ATTACKER,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+
+        gBattleMoveDamage = -gHpDealt / 4;
+        if (!gBattleMoveDamage) gBattleMoveDamage = -1;
+        BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT Reservoir
-ON_ABSORB {
-    CHECK(moveType == TYPE_WATER)
-    *statId = GetHighestAttackingStatId(battler, TRUE);
-    return ABSORB_RESULT_STAT | ABSORB_RESULT_HEAL;
-}
 static const Ability Reservoir = {
     .name = $("Reservoir"),
     .description = $("Water Absorb + Storm Drain."),
-    CONTEXT_ON_ABSORB,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_WATER);
+        *statId = GetHighestAttackingStatId(battler, TRUE);
+        return ABSORB_RESULT_STAT | ABSORB_RESULT_HEAL;
+    },
     .redirectType = TYPE_WATER,
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Neurotoxin
 static int NeurotoxinCondition(int battler, int target) {
     return CanLowerStat(target, STAT_ATK) || CanLowerStat(target, STAT_DEF) || CanLowerStat(target, STAT_SPEED);
 }
-ON_REACTIVE { return PoisonPuppeteerClone(ability, battler, NeurotoxinCondition, BattleScript_Neurotoxin); }
 static const Ability Neurotoxin = {
     .name = $("Neurotoxin"),
     .description = $("Inflicting poison also lowers\n"
                      "Attack, Defense, and Speed."),
-    CONTEXT_ON_REACTIVE,
+    .onReactive = +[](ON_REACTIVE) -> int { return PoisonPuppeteerClone(ability, battler, NeurotoxinCondition, BattleScript_Neurotoxin); },
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-#undef CONTEXT
-#define CONTEXT EnergizedHorns
-ON_SWAP_SPLIT {
-    CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
-    CHECK(gBattleMoves[move].hornBased)
-    return TRUE;
-}
 static const Ability EnergizedHorns = {
     .name = $("Energy Horns"),
     .description = $("Mighty horn moves become special\n"
                      "and deal 30% more damage."),
     .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
-    CONTEXT_ON_SWAP_SPLIT,
+    .onSwapSplit = +[](ON_SWAP_SPLIT) -> int {
+        CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
+        CHECK(gBattleMoves[move].hornBased);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT SpiderLairUpgrade
-ON_ENTRY {
-    CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
-
-    int side = BATTLE_OPPOSITE(battler);
-    gSideTimers[side].started.spiderWeb = TRUE;
-    gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
-    gSideTimers[side].stickyWebTimer = 7;
-    BattleScriptPushCursorAndCallback(BattleScript_SpiderLairActivated);
-    return TRUE;
-}
 static const Ability SpiderLairUpgrade = {
     .name = $("Rising Dough"),
     .description = $("Casts Sticky Web on entry.\n"
                      "Lasts 7 turns."),
-    CONTEXT_ON_ENTRY,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
+
+        int side = BATTLE_OPPOSITE(battler);
+        gSideTimers[side].started.spiderWeb = TRUE;
+        gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
+        gSideTimers[side].stickyWebTimer = 7;
+        BattleScriptPushCursorAndCallback(BattleScript_SpiderLairActivated);
+        return TRUE;
+    },
 };
 
-#undef CONTEXT
-#define CONTEXT CrustCoat
 static const Ability CrustCoat = {
     .name = $("Crust Coat"),
     .description = $("Immune to critical hits. Takes\n"
@@ -11237,8 +9206,6 @@ static const Ability CrustCoat = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT Puffy
 static const Ability Puffy = {
     .name = $("Puffy"),
     .description = $("Takes 1/2 dmg from contact moves\n"
@@ -11247,8 +9214,6 @@ static const Ability Puffy = {
     .breakable = TRUE,
 };
 
-#undef CONTEXT
-#define CONTEXT BalloonBlitz
 static const Ability BalloonBlitz = {
     .name = $("Balloon Blitz"),
     .description = $("Inflatable + Hyper Aggressive."),
