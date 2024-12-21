@@ -1764,17 +1764,19 @@ const u16 gHoennToNationalOrder[HOENN_DEX_COUNT] =  // Assigns Hoenn Dex Pokémo
         HOENN_TO_NATIONAL(DEOXYS),
 };
 
-const struct SpindaSpot gSpindaSpotGraphics[] = {{16, 7, INCBIN_U16("graphics/spinda_spots/spot_0.bin")},
-                                                 {40, 8, INCBIN_U16("graphics/spinda_spots/spot_1.bin")},
-                                                 {22, 25, INCBIN_U16("graphics/spinda_spots/spot_2.bin")},
-                                                 {34, 26, INCBIN_U16("graphics/spinda_spots/spot_3.bin")}};
+const struct SpindaSpot gSpindaSpotGraphics[] = {
+    {16, 7, INCBIN_U16("graphics/spinda_spots/spot_0.bin")},
+    {40, 8, INCBIN_U16("graphics/spinda_spots/spot_1.bin")},
+    {22, 25, INCBIN_U16("graphics/spinda_spots/spot_2.bin")},
+    {34, 26, INCBIN_U16("graphics/spinda_spots/spot_3.bin")},
+};
 
 #include "data/pokemon/item_effects.h"
 
 #define __NATURE_STAT(stat, up, down) (up == stat) - (down == stat)
 #define NATURE_STAT(up, down)             \
     {__NATURE_STAT(STAT_ATK, up, down),   \
-     __NATURE_STAT(STAT_DEF, up, down), \
+     __NATURE_STAT(STAT_DEF, up, down),   \
      __NATURE_STAT(STAT_SPEED, up, down), \
      __NATURE_STAT(STAT_SPATK, up, down), \
      __NATURE_STAT(STAT_SPDEF, up, down)}
@@ -3348,19 +3350,21 @@ static const struct SpeciesItem sAlteringCaveWildMonHeldItems[] = {
     {SPECIES_SMEARGLE, ITEM_SALAC_BERRY},
 };
 
-static const struct OamData sOamData_8329F20 = {.y = 0,
-                                                .affineMode = ST_OAM_AFFINE_OFF,
-                                                .objMode = ST_OAM_OBJ_NORMAL,
-                                                .mosaic = 0,
-                                                .bpp = ST_OAM_4BPP,
-                                                .shape = SPRITE_SHAPE(64x64),
-                                                .x = 0,
-                                                .matrixNum = 0,
-                                                .size = SPRITE_SIZE(64x64),
-                                                .tileNum = 0,
-                                                .priority = 0,
-                                                .paletteNum = 0,
-                                                .affineParam = 0};
+static const struct OamData sOamData_8329F20 = {
+    .y = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .mosaic = 0,
+    .bpp = ST_OAM_4BPP,
+    .shape = SPRITE_SHAPE(64x64),
+    .x = 0,
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(64x64),
+    .tileNum = 0,
+    .priority = 0,
+    .paletteNum = 0,
+    .affineParam = 0,
+};
 
 static const struct SpriteTemplate gUnknown_08329F28 = {
     .tileTag = 0xFFFF,
@@ -7724,10 +7728,12 @@ u16 getRandomSpecies(void) {
         {SPECIES_NAGANADEL}, {SPECIES_STAKATAKA}, {SPECIES_BLACEPHALON}, {SPECIES_ZERAORA},
     };
 
-    static const u16 ObtLegends[][1] = {{SPECIES_ARTICUNO},  {SPECIES_ZAPDOS},   {SPECIES_MOLTRES},  {SPECIES_MEWTWO},    {SPECIES_MEW},      {SPECIES_LUGIA},
-                                        {SPECIES_HO_OH},     {SPECIES_REGIROCK}, {SPECIES_REGICE},   {SPECIES_REGISTEEL}, {SPECIES_LATIAS},   {SPECIES_LATIOS},
-                                        {SPECIES_KYOGRE},    {SPECIES_GROUDON},  {SPECIES_RAYQUAZA}, {SPECIES_JIRACHI},   {SPECIES_DEOXYS},   {SPECIES_HEATRAN},
-                                        {SPECIES_REGIGIGAS}, {SPECIES_MELOETTA}, {SPECIES_DIANCIE},  {SPECIES_COSMOG},    {SPECIES_MAGEARNA}, {SPECIES_MELTAN}};
+    static const u16 ObtLegends[][1] = {
+        {SPECIES_ARTICUNO},  {SPECIES_ZAPDOS},   {SPECIES_MOLTRES},  {SPECIES_MEWTWO},    {SPECIES_MEW},      {SPECIES_LUGIA},
+        {SPECIES_HO_OH},     {SPECIES_REGIROCK}, {SPECIES_REGICE},   {SPECIES_REGISTEEL}, {SPECIES_LATIAS},   {SPECIES_LATIOS},
+        {SPECIES_KYOGRE},    {SPECIES_GROUDON},  {SPECIES_RAYQUAZA}, {SPECIES_JIRACHI},   {SPECIES_DEOXYS},   {SPECIES_HEATRAN},
+        {SPECIES_REGIGIGAS}, {SPECIES_MELOETTA}, {SPECIES_DIANCIE},  {SPECIES_COSMOG},    {SPECIES_MAGEARNA}, {SPECIES_MELTAN},
+    };
 
     static const u16 NonObt[][1] = {
         /*

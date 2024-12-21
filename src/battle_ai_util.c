@@ -364,15 +364,17 @@ static const u16 sEncouragedEncoreEffects[] = {
     EFFECT_CAMOUFLAGE,
 };
 
-static const u16 sDiscouragedPowerfulMoveEffects[] = {EFFECT_EXPLOSION,
-                                                      EFFECT_DREAM_EATER,
-                                                      EFFECT_RECHARGE,
-                                                      EFFECT_SKULL_BASH,
-                                                      EFFECT_FOCUS_PUNCH,
-                                                      EFFECT_SUPERPOWER,
-                                                      EFFECT_ERUPTION,
-                                                      EFFECT_MIND_BLOWN,
-                                                      0xFFFF};
+static const u16 sDiscouragedPowerfulMoveEffects[] = {
+    EFFECT_EXPLOSION,
+    EFFECT_DREAM_EATER,
+    EFFECT_RECHARGE,
+    EFFECT_SKULL_BASH,
+    EFFECT_FOCUS_PUNCH,
+    EFFECT_SUPERPOWER,
+    EFFECT_ERUPTION,
+    EFFECT_MIND_BLOWN,
+    0xFFFF,
+};
 
 static const u16 sIgnoreMoldBreakerMoves[] = {
     MOVE_MOONGEIST_BEAM,

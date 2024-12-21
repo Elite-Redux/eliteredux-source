@@ -73,11 +73,13 @@ extern const u8 *const gBattlescriptsForRunningByItem[];
 extern const u8 *const gBattlescriptsForUsingItem[];
 extern const u8 *const gBattlescriptsForSafariActions[];
 
-static const u8 sPkblToEscapeFactor[][3] = {{[B_MSG_MON_CURIOUS] = 0, [B_MSG_MON_ENTHRALLED] = 0, [B_MSG_MON_IGNORED] = 0},
-                                            {[B_MSG_MON_CURIOUS] = 3, [B_MSG_MON_ENTHRALLED] = 5, [B_MSG_MON_IGNORED] = 0},
-                                            {[B_MSG_MON_CURIOUS] = 2, [B_MSG_MON_ENTHRALLED] = 3, [B_MSG_MON_IGNORED] = 0},
-                                            {[B_MSG_MON_CURIOUS] = 1, [B_MSG_MON_ENTHRALLED] = 2, [B_MSG_MON_IGNORED] = 0},
-                                            {[B_MSG_MON_CURIOUS] = 1, [B_MSG_MON_ENTHRALLED] = 1, [B_MSG_MON_IGNORED] = 0}};
+static const u8 sPkblToEscapeFactor[][3] = {
+    {[B_MSG_MON_CURIOUS] = 0, [B_MSG_MON_ENTHRALLED] = 0, [B_MSG_MON_IGNORED] = 0},
+    {[B_MSG_MON_CURIOUS] = 3, [B_MSG_MON_ENTHRALLED] = 5, [B_MSG_MON_IGNORED] = 0},
+    {[B_MSG_MON_CURIOUS] = 2, [B_MSG_MON_ENTHRALLED] = 3, [B_MSG_MON_IGNORED] = 0},
+    {[B_MSG_MON_CURIOUS] = 1, [B_MSG_MON_ENTHRALLED] = 2, [B_MSG_MON_IGNORED] = 0},
+    {[B_MSG_MON_CURIOUS] = 1, [B_MSG_MON_ENTHRALLED] = 1, [B_MSG_MON_IGNORED] = 0},
+};
 static const u8 sGoNearCounterToCatchFactor[] = {4, 3, 2, 1};
 static const u8 sGoNearCounterToEscapeFactor[] = {4, 4, 4, 4};
 
