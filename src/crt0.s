@@ -44,7 +44,6 @@ GPIOPortReadEnable: @ 80000C8
 	.4byte gMonFrontPicTable
 	.4byte gMonBackPicTable
 	.4byte gMonPaletteTable
-	.4byte gMonIconTable
 	.4byte gMonIconPaletteIndices
 	.4byte gMonIconPaletteTable
 	.4byte gSpeciesNames
