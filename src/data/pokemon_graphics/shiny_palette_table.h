@@ -12,7 +12,3 @@ const struct CompressedSpritePalette gMonLegendaryShinyPaletteTable[] =
 {
     
 };
-
-const struct CompressedSpritePalette gMonShinyPaletteTableFemale[] =
-{
-};

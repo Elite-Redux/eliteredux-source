@@ -7062,44 +7062,44 @@ const u32 *GetShinySpritePal(u16 species, u32 isShiny) {
     u8 numShinies = gBaseStats[species].numShinies;
     switch (isShiny) {
         case SHINY_VANILLA:
-            return gSpecies[species].shinyPalette->data;
+            return gSpecies[species].shinyPalette.data;
             break;
         case SHINY_RARE:
             if (numShinies >= SHINY_RARE)
                 return gMonRareShinyPaletteTable[species].data;
             else
-                return gSpecies[species].shinyPalette->data;
+                return gSpecies[species].shinyPalette.data;
             break;
         case SHINY_LEGENDARY:
             if (numShinies >= SHINY_LEGENDARY)
                 return gMonLegendaryShinyPaletteTable[species].data;
             else
-                return gSpecies[species].shinyPalette->data;
+                return gSpecies[species].shinyPalette.data;
             break;
     }
-    return gSpecies[species].shinyPalette->data;
+    return gSpecies[species].shinyPalette.data;
 }
 
 const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 isShiny) {
     u8 numShinies = gBaseStats[species].numShinies;
     switch (isShiny) {
         case SHINY_VANILLA:
-            return gSpecies[species].shinyPalette;
+            return &gSpecies[species].shinyPalette;
             break;
         case SHINY_RARE:
             if (numShinies >= SHINY_RARE)
                 return &gMonRareShinyPaletteTable[species];
             else
-                return gSpecies[species].shinyPalette;
+                return &gSpecies[species].shinyPalette;
             break;
         case SHINY_LEGENDARY:
             if (numShinies >= SHINY_RARE)
                 return &gMonLegendaryShinyPaletteTable[species];
             else
-                return gSpecies[species].shinyPalette;
+                return &gSpecies[species].shinyPalette;
             break;
     }
-    return gSpecies[species].shinyPalette;
+    return &gSpecies[species].shinyPalette;
 }
 const u32 *GetMonFrontSpritePal(struct Pokemon *mon) {
     u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, 0);
@@ -7108,7 +7108,7 @@ const u32 *GetMonFrontSpritePal(struct Pokemon *mon) {
 
     if (isShiny) {
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
-            return gMonShinyPaletteTableFemale[species].data;
+            return gSpecies[species].shinyPaletteFemale.data;
         else
             return GetShinySpritePal(species, isShiny);
     } else {
@@ -7122,7 +7122,7 @@ const u32 *GetMonFrontSpritePal(struct Pokemon *mon) {
 const u32 *GetMonSpritePal(u16 species, u32 personality, u8 isShiny) {
     if (isShiny != SHINY_NONE) {
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
-            return gMonShinyPaletteTableFemale[species].data;
+            return gSpecies[species].shinyPaletteFemale.data;
         else
             return GetShinySpritePal(species, isShiny);
     } else {
@@ -7145,7 +7145,7 @@ const struct CompressedSpritePalette *GetMonSpritePalStructFromOtIdPersonality(u
 
     if (isShiny != SHINY_NONE) {
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
-            return &gMonShinyPaletteTableFemale[species];
+            return &gSpecies[species].shinyPaletteFemale;
         else
             return GetShinySpritePalAddr(species, isShiny);
     } else {
