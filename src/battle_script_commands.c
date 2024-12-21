@@ -1524,7 +1524,7 @@ static const u8 sCriticalHitChance[] = {16, 8, 4, 3, 2};  // Gens 2,3,4,5
 
 #define BENEFITS_FROM_LEEK(battler, holdEffect) \
     ((holdEffect == HOLD_EFFECT_LEEK) &&        \
-     (GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_FARFETCHD || gBattleMons[battler].species == SPECIES_SIRFETCHD))
+     (GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_FARFETCHD || gBattleMons[battler].species == SPECIES_FARFETCHD_GALARIAN || gBattleMons[battler].species == SPECIES_SIRFETCHD))
 s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbility) {
     s32 critChance = 0;
     u32 holdEffectAtk = GetBattlerHoldEffect(battlerAtk, TRUE);
