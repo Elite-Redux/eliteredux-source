@@ -7062,44 +7062,44 @@ const u32 *GetShinySpritePal(u16 species, u32 isShiny) {
     u8 numShinies = gBaseStats[species].numShinies;
     switch (isShiny) {
         case SHINY_VANILLA:
-            return gMonShinyPaletteTable[species].data;
+            return gSpecies[species].shinyPalette->data;
             break;
         case SHINY_RARE:
             if (numShinies >= SHINY_RARE)
                 return gMonRareShinyPaletteTable[species].data;
             else
-                return gMonShinyPaletteTable[species].data;
+                return gSpecies[species].shinyPalette->data;
             break;
         case SHINY_LEGENDARY:
             if (numShinies >= SHINY_LEGENDARY)
                 return gMonLegendaryShinyPaletteTable[species].data;
             else
-                return gMonShinyPaletteTable[species].data;
+                return gSpecies[species].shinyPalette->data;
             break;
     }
-    return gMonShinyPaletteTable[species].data;
+    return gSpecies[species].shinyPalette->data;
 }
 
 const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 isShiny) {
     u8 numShinies = gBaseStats[species].numShinies;
     switch (isShiny) {
         case SHINY_VANILLA:
-            return &gMonShinyPaletteTable[species];
+            return gSpecies[species].shinyPalette;
             break;
         case SHINY_RARE:
             if (numShinies >= SHINY_RARE)
                 return &gMonRareShinyPaletteTable[species];
             else
-                return &gMonShinyPaletteTable[species];
+                return gSpecies[species].shinyPalette;
             break;
         case SHINY_LEGENDARY:
             if (numShinies >= SHINY_RARE)
                 return &gMonLegendaryShinyPaletteTable[species];
             else
-                return &gMonShinyPaletteTable[species];
+                return gSpecies[species].shinyPalette;
             break;
     }
-    return &gMonShinyPaletteTable[species];
+    return gSpecies[species].shinyPalette;
 }
 const u32 *GetMonFrontSpritePal(struct Pokemon *mon) {
     u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, 0);

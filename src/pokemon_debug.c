@@ -732,7 +732,7 @@ static const u32 *GetMonSpritePalStructCustom(u16 species, bool8 isFemale, u8 is
         if (SpeciesHasGenderDifference[species] && isFemale)
             return gMonShinyPaletteTableFemale[species].data;
         else
-            return gMonShinyPaletteTable[species].data;
+            return gSpecies[species].shinyPalette->data;
     }
     else
     {
@@ -756,7 +756,7 @@ static void BattleLoadOpponentMonSpriteGfxCustom(u16 species, bool8 isFemale, u8
         if (SpeciesHasGenderDifference[species] && isFemale)
             lzPaletteData = gMonShinyPaletteTableFemale[species].data;
         else
-            lzPaletteData = gMonShinyPaletteTable[species].data;
+            lzPaletteData = gSpecies[species].shinyPalette->data;
     }
     else
     {

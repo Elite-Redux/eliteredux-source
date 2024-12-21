@@ -122,7 +122,6 @@ extern const struct CompressedSpriteSheet gMonBackPicTable[];
 extern const struct CompressedSpriteSheet gMonBackPicTableFemale[];
 extern const struct CompressedSpritePalette gMonPaletteTable[];
 extern const struct CompressedSpritePalette gMonPaletteTableFemale[];
-extern const struct CompressedSpritePalette gMonShinyPaletteTable[];
 extern const struct CompressedSpritePalette gMonRareShinyPaletteTable[];
 extern const struct CompressedSpritePalette gMonLegendaryShinyPaletteTable[];
 extern const struct CompressedSpritePalette gMonShinyPaletteTableFemale[];
