@@ -1,4 +1,4 @@
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SPRIGATITO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SPRIGATITO) = {
     .name = $("Sprigatito"),
     .baseHP = 40,
     .baseAttack = 66,
@@ -76,7 +76,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SPRIGATITO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLORAGATO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FLORAGATO) = {
     .name = $("Floragato"),
     .baseHP = 66,
     .baseAttack = 80,
@@ -156,7 +156,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLORAGATO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MEOWSCARADA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MEOWSCARADA) = {
     .name = $("Meowscarada"),
     .baseHP = 81,
     .baseAttack = 110,
@@ -256,7 +256,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MEOWSCARADA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FUECOCO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FUECOCO) = {
     .name = $("Fuecoco"),
     .baseHP = 72,
     .baseAttack = 45,
@@ -326,7 +326,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FUECOCO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CROCALOR) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CROCALOR) = {
     .name = $("Crocalor"),
     .baseHP = 86,
     .baseAttack = 55,
@@ -401,7 +401,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CROCALOR) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SKELEDIRGE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SKELEDIRGE) = {
     .name = $("Skeledirge"),
     .baseHP = 104,
     .baseAttack = 75,
@@ -489,7 +489,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SKELEDIRGE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_QUAXLY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_QUAXLY) = {
     .name = $("Quaxly"),
     .baseHP = 55,
     .baseAttack = 65,
@@ -566,7 +566,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_QUAXLY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_QUAXWELL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_QUAXWELL) = {
     .name = $("Quaxwell"),
     .baseHP = 70,
     .baseAttack = 85,
@@ -647,7 +647,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_QUAXWELL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_QUAQUAVAL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_QUAQUAVAL) = {
     .name = $("Quaquaval"),
     .baseHP = 85,
     .baseAttack = 120,
@@ -736,7 +736,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_QUAQUAVAL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_LECHONK) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_LECHONK) = {
     .name = $("Lechonk"),
     .baseHP = 54,
     .baseAttack = 60,
@@ -822,7 +822,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_LECHONK) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_OINKOLOGNE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_OINKOLOGNE) = {
     .name = $("Oinkologne"),
     .baseHP = 100,
     .baseAttack = 110,
@@ -911,7 +911,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_OINKOLOGNE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TAROUNTULA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TAROUNTULA) = {
     .name = $("Tarountula"),
     .baseHP = 35,
     .baseAttack = 41,
@@ -992,7 +992,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TAROUNTULA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SPIDOPS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SPIDOPS) = {
     .name = $("Spidops"),
     .baseHP = 90,
     .baseAttack = 85,
@@ -1079,7 +1079,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SPIDOPS) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_NYMBLE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_NYMBLE) = {
     .name = $("Nymble"),
     .baseHP = 33,
     .baseAttack = 46,
@@ -1163,7 +1163,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_NYMBLE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_LOKIX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_LOKIX) = {
     .name = $("Lokix"),
     .baseHP = 71,
     .baseAttack = 102,
@@ -1252,7 +1252,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_LOKIX) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PAWMI) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PAWMI) = {
     .name = $("Pawmi"),
     .baseHP = 45,
     .baseAttack = 50,
@@ -1324,7 +1324,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PAWMI) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PAWMO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PAWMO) = {
     .name = $("Pawmo"),
     .baseHP = 60,
     .baseAttack = 75,
@@ -1407,7 +1407,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PAWMO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PAWMOT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PAWMOT) = {
     .name = $("Pawmot"),
     .baseHP = 70,
     .baseAttack = 115,
@@ -1498,7 +1498,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PAWMOT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TANDEMAUS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TANDEMAUS) = {
     .name = $("Tandemaus"),
     .baseHP = 50,
     .baseAttack = 50,
@@ -1572,7 +1572,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TANDEMAUS) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MAUSHOLD) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MAUSHOLD) = {
     .name = $("Maushold"),
     .longName = $("Maushold Three"),
     .hasWildVariants = TRUE,
@@ -1657,7 +1657,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MAUSHOLD) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MAUSHOLD_FOUR) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MAUSHOLD_FOUR) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_MAUSHOLD).name,
     .longName = $("Maushold Four"),
     .randomizerBanned = TRUE,
@@ -1726,7 +1726,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MAUSHOLD_FOUR) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FIDOUGH) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FIDOUGH) = {
     .name = $("Fidough"),
     .baseHP = 37,
     .baseAttack = 55,
@@ -1803,7 +1803,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FIDOUGH) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DACHSBUN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DACHSBUN) = {
     .name = $("Dachsbun"),
     .baseHP = 57,
     .baseAttack = 80,
@@ -1885,7 +1885,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DACHSBUN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FIDOUGH_PARTNER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FIDOUGH_PARTNER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_FIDOUGH).name,
     .randomizerBanned = TRUE,
     .baseHP = 80,
@@ -1960,7 +1960,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FIDOUGH_PARTNER) = {
     DUPLICATE_IMAGE(SPECIES_FIDOUGH),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FIDOUGH_PARTNER_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FIDOUGH_PARTNER_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_FIDOUGH).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -2008,7 +2008,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FIDOUGH_PARTNER_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SMOLIV) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SMOLIV) = {
     .name = $("Smoliv"),
     .baseHP = 41,
     .baseAttack = 35,
@@ -2082,7 +2082,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SMOLIV) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DOLLIV) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DOLLIV) = {
     .name = $("Dolliv"),
     .baseHP = 52,
     .baseAttack = 53,
@@ -2157,7 +2157,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DOLLIV) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARBOLIVA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ARBOLIVA) = {
     .name = $("Arboliva"),
     .baseHP = 78,
     .baseAttack = 69,
@@ -2248,7 +2248,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARBOLIVA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY) = {
     .name = $("Squawkabilly"),
     .hasWildVariants = TRUE,
     .baseHP = 90,
@@ -2343,7 +2343,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY_BLUE_PLUMAGE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY_BLUE_PLUMAGE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY).name,
     .randomizerBanned = TRUE,
     .baseHP = 90,
@@ -2390,7 +2390,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY_BLUE_PLUMAGE) 
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY).name,
     .randomizerBanned = TRUE,
     .baseHP = 90,
@@ -2437,7 +2437,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY_WHITE_PLUMAGE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY_WHITE_PLUMAGE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY).name,
     .randomizerBanned = TRUE,
     .baseHP = 90,
@@ -2484,7 +2484,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY_WHITE_PLUMAGE)
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_NACLI) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_NACLI) = {
     .name = $("Nacli"),
     .baseHP = 55,
     .baseAttack = 55,
@@ -2561,7 +2561,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_NACLI) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_NACLSTACK) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_NACLSTACK) = {
     .name = $("Naclstack"),
     .baseHP = 60,
     .baseAttack = 60,
@@ -2641,7 +2641,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_NACLSTACK) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GARGANACL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GARGANACL) = {
     .name = $("Garganacl"),
     .baseHP = 100,
     .baseAttack = 100,
@@ -2732,7 +2732,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GARGANACL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CHARCADET) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CHARCADET) = {
     .name = $("Charcadet"),
     .baseHP = 40,
     .baseAttack = 50,
@@ -2813,7 +2813,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CHARCADET) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARMAROUGE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ARMAROUGE) = {
     .name = $("Armarouge"),
     .baseHP = 85,
     .baseAttack = 60,
@@ -2922,7 +2922,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARMAROUGE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CERULEDGE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CERULEDGE) = {
     .name = $("Ceruledge"),
     .baseHP = 75,
     .baseAttack = 125,
@@ -3032,7 +3032,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CERULEDGE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TADBULB) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TADBULB) = {
     .name = $("Tadbulb"),
     .baseHP = 71,
     .baseAttack = 31,
@@ -3105,7 +3105,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TADBULB) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BELLIBOLT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_BELLIBOLT) = {
     .name = $("Bellibolt"),
     .baseHP = 109,
     .baseAttack = 64,
@@ -3185,7 +3185,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BELLIBOLT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WATTREL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_WATTREL) = {
     .name = $("Wattrel"),
     .baseHP = 40,
     .baseAttack = 40,
@@ -3272,7 +3272,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WATTREL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KILOWATTREL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_KILOWATTREL) = {
     .name = $("Kilowattrel"),
     .baseHP = 70,
     .baseAttack = 70,
@@ -3361,7 +3361,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KILOWATTREL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MASCHIFF) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MASCHIFF) = {
     .name = $("Maschiff"),
     .baseHP = 60,
     .baseAttack = 78,
@@ -3441,7 +3441,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MASCHIFF) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MABOSSTIFF) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MABOSSTIFF) = {
     .name = $("Mabosstiff"),
     .baseHP = 80,
     .baseAttack = 120,
@@ -3529,7 +3529,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MABOSSTIFF) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SHROODLE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SHROODLE) = {
     .name = $("Shroodle"),
     .baseHP = 40,
     .baseAttack = 65,
@@ -3623,7 +3623,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SHROODLE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRAFAIAI) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GRAFAIAI) = {
     .name = $("Grafaiai"),
     .baseHP = 63,
     .baseAttack = 95,
@@ -3725,7 +3725,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRAFAIAI) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BRAMBLIN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_BRAMBLIN) = {
     .name = $("Bramblin"),
     .baseHP = 50,
     .baseAttack = 65,
@@ -3807,7 +3807,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BRAMBLIN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BRAMBLEGHAST) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_BRAMBLEGHAST) = {
     .name = $("Brambleghast"),
     .baseHP = 65,
     .baseAttack = 115,
@@ -3898,7 +3898,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BRAMBLEGHAST) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOEDSCOOL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TOEDSCOOL) = {
     .name = $("Toedscool"),
     .baseHP = 40,
     .baseAttack = 40,
@@ -3994,7 +3994,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOEDSCOOL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOEDSCRUEL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TOEDSCRUEL) = {
     .name = $("Toedscruel"),
     .baseHP = 80,
     .baseAttack = 70,
@@ -4096,7 +4096,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOEDSCRUEL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KLAWF) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_KLAWF) = {
     .name = $("Klawf"),
     .baseHP = 70,
     .baseAttack = 100,
@@ -4183,7 +4183,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KLAWF) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CAPSAKID) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CAPSAKID) = {
     .name = $("Capsakid"),
     .baseHP = 50,
     .baseAttack = 62,
@@ -4263,7 +4263,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CAPSAKID) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SCOVILLAIN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SCOVILLAIN) = {
     .name = $("Scovillain"),
     .heads = TWO_HEADED,
     .baseHP = 65,
@@ -4358,7 +4358,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SCOVILLAIN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RELLOR) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_RELLOR) = {
     .name = $("Rellor"),
     .baseHP = 41,
     .baseAttack = 50,
@@ -4448,7 +4448,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RELLOR) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RABSCA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_RABSCA) = {
     .name = $("Rabsca"),
     .baseHP = 75,
     .baseAttack = 50,
@@ -4550,7 +4550,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RABSCA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLITTLE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FLITTLE) = {
     .name = $("Flittle"),
     .baseHP = 30,
     .baseAttack = 35,
@@ -4632,7 +4632,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLITTLE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ESPATHRA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ESPATHRA) = {
     .name = $("Espathra"),
     .baseHP = 95,
     .baseAttack = 60,
@@ -4719,7 +4719,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ESPATHRA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TINKATINK) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TINKATINK) = {
     .name = $("Tinkatink"),
     .baseHP = 50,
     .baseAttack = 55,
@@ -4795,7 +4795,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TINKATINK) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TINKATUFF) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TINKATUFF) = {
     .name = $("Tinkatuff"),
     .baseHP = 65,
     .baseAttack = 65,
@@ -4877,7 +4877,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TINKATUFF) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TINKATON) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TINKATON) = {
     .name = $("Tinkaton"),
     .baseHP = 85,
     .baseAttack = 75,
@@ -4975,7 +4975,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TINKATON) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TINKATON_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TINKATON_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_TINKATON).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -5024,7 +5024,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TINKATON_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WIGLETT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_WIGLETT) = {
     .name = $("Wiglett"),
     .baseHP = 10,
     .baseAttack = 55,
@@ -5099,7 +5099,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WIGLETT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WUGTRIO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_WUGTRIO) = {
     .name = $("Wugtrio"),
     .heads = THREE_HEADED,
     .baseHP = 35,
@@ -5190,7 +5190,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WUGTRIO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BOMBIRDIER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_BOMBIRDIER) = {
     .name = $("Bombirdier"),
     .baseHP = 70,
     .baseAttack = 103,
@@ -5277,7 +5277,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BOMBIRDIER) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FINIZEN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FINIZEN) = {
     .name = $("Finizen"),
     .baseHP = 70,
     .baseAttack = 45,
@@ -5360,7 +5360,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FINIZEN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PALAFIN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PALAFIN) = {
     .name = $("Palafin"),
     .baseHP = 100,
     .baseAttack = 70,
@@ -5461,7 +5461,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PALAFIN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VAROOM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VAROOM) = {
     .name = $("Varoom"),
     .baseHP = 45,
     .baseAttack = 70,
@@ -5547,7 +5547,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VAROOM) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_REVAVROOM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_REVAVROOM) = {
     .name = $("Revavroom"),
     .baseHP = 80,
     .baseAttack = 119,
@@ -5645,7 +5645,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_REVAVROOM) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CYCLIZAR) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CYCLIZAR) = {
     .name = $("Cyclizar"),
     .baseHP = 70,
     .baseAttack = 95,
@@ -5731,7 +5731,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CYCLIZAR) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ORTHWORM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ORTHWORM) = {
     .name = $("Orthworm"),
     .baseHP = 70,
     .baseAttack = 85,
@@ -5830,7 +5830,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ORTHWORM) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GLIMMET) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GLIMMET) = {
     .name = $("Glimmet"),
     .baseHP = 48,
     .baseAttack = 35,
@@ -5914,7 +5914,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GLIMMET) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GLIMMORA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GLIMMORA) = {
     .name = $("Glimmora"),
     .baseHP = 83,
     .baseAttack = 55,
@@ -6003,7 +6003,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GLIMMORA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GREAVARD) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GREAVARD) = {
     .name = $("Greavard"),
     .baseHP = 50,
     .baseAttack = 61,
@@ -6078,7 +6078,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GREAVARD) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HOUNDSTONE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HOUNDSTONE) = {
     .name = $("Houndstone"),
     .baseHP = 72,
     .baseAttack = 101,
@@ -6166,7 +6166,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HOUNDSTONE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLAMIGO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FLAMIGO) = {
     .name = $("Flamigo"),
     .baseHP = 82,
     .baseAttack = 115,
@@ -6276,7 +6276,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLAMIGO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CETODDLE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CETODDLE) = {
     .name = $("Cetoddle"),
     .baseHP = 108,
     .baseAttack = 68,
@@ -6363,7 +6363,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CETODDLE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CETITAN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CETITAN) = {
     .name = $("Cetitan"),
     .baseHP = 170,
     .baseAttack = 113,
@@ -6453,7 +6453,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CETITAN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VELUZA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VELUZA) = {
     .name = $("Veluza"),
     .baseHP = 102,
     .baseAttack = 102,
@@ -6538,7 +6538,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VELUZA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DONDOZO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DONDOZO) = {
     .name = $("Dondozo"),
     .baseHP = 150,
     .baseAttack = 100,
@@ -6624,7 +6624,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DONDOZO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI) = {
     .name = $("Tatsugiri"),
     .hasWildVariants = TRUE,
     .baseHP = 68,
@@ -6712,7 +6712,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI_CURLY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI_CURLY) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI).name,
     .longName = $("Tatsugiri Curly"),
     .randomizerBanned = TRUE,
@@ -6760,7 +6760,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI_CURLY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI_STRETCHY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI_STRETCHY) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI).name,
     .longName = $("Tatsugiri Stretchy"),
     .randomizerBanned = TRUE,
@@ -6808,7 +6808,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI_STRETCHY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI_DROOPY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI_DROOPY) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI).name,
     .longName = $("Tatsugiri Droopy"),
     .randomizerBanned = TRUE,
@@ -6856,7 +6856,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TATSUGIRI_DROOPY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GREAT_TUSK) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GREAT_TUSK) = {
     .name = $("Great Tusk"),
     .baseHP = 115,
     .baseAttack = 131,
@@ -6957,7 +6957,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GREAT_TUSK) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SCREAM_TAIL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SCREAM_TAIL) = {
     .name = $("Scream Tail"),
     .baseHP = 115,
     .baseAttack = 65,
@@ -7054,7 +7054,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SCREAM_TAIL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BRUTE_BONNET) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_BRUTE_BONNET) = {
     .name = $("Brute Bonnet"),
     .baseHP = 111,
     .baseAttack = 127,
@@ -7158,7 +7158,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BRUTE_BONNET) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLUTTER_MANE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FLUTTER_MANE) = {
     .name = $("Flutter Mane"),
     .baseHP = 55,
     .baseAttack = 55,
@@ -7260,7 +7260,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLUTTER_MANE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SLITHER_WING) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SLITHER_WING) = {
     .name = $("Slither Wing"),
     .baseHP = 85,
     .baseAttack = 135,
@@ -7359,7 +7359,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SLITHER_WING) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SANDY_SHOCKS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SANDY_SHOCKS) = {
     .name = $("Sandy Shocks"),
     .heads = THREE_HEADED,
     .baseHP = 85,
@@ -7464,7 +7464,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SANDY_SHOCKS) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_TREADS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_IRON_TREADS) = {
     .name = $("Iron Treads"),
     .baseHP = 90,
     .baseAttack = 112,
@@ -7566,7 +7566,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_TREADS) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_BUNDLE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_IRON_BUNDLE) = {
     .name = $("Iron Bundle"),
     .baseHP = 56,
     .baseAttack = 80,
@@ -7663,7 +7663,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_BUNDLE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_HANDS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_IRON_HANDS) = {
     .name = $("Iron Hands"),
     .baseHP = 154,
     .baseAttack = 140,
@@ -7758,7 +7758,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_HANDS) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_JUGULIS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_IRON_JUGULIS) = {
     .name = $("Iron Jugulis"),
     .heads = THREE_HEADED,
     .baseHP = 94,
@@ -7861,7 +7861,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_JUGULIS) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_MOTH) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_IRON_MOTH) = {
     .name = $("Iron Moth"),
     .baseHP = 80,
     .baseAttack = 70,
@@ -7950,7 +7950,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_MOTH) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_THORNS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_IRON_THORNS) = {
     .name = $("Iron Thorns"),
     .baseHP = 100,
     .baseAttack = 134,
@@ -8047,7 +8047,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_THORNS) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FRIGIBAX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FRIGIBAX) = {
     .name = $("Frigibax"),
     .baseHP = 65,
     .baseAttack = 75,
@@ -8126,7 +8126,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FRIGIBAX) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARCTIBAX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ARCTIBAX) = {
     .name = $("Arctibax"),
     .baseHP = 90,
     .baseAttack = 95,
@@ -8209,7 +8209,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARCTIBAX) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BAXCALIBUR) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_BAXCALIBUR) = {
     .name = $("Baxcalibur"),
     .baseHP = 115,
     .baseAttack = 145,
@@ -8299,7 +8299,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BAXCALIBUR) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GIMMIGHOUL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GIMMIGHOUL) = {
     .name = $("Gimmighoul"),
     .hasWildVariants = TRUE,
     .baseHP = 65,
@@ -8379,7 +8379,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GIMMIGHOUL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GHOLDENGO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GHOLDENGO) = {
     .name = $("Gholdengo"),
     .baseHP = 87,
     .baseAttack = 60,
@@ -8473,7 +8473,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GHOLDENGO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GIMMIGHOUL_ROAMING) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GIMMIGHOUL_ROAMING) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_GIMMIGHOUL).name,
     .longName = $("Gimmighoul Roaming"),
     .randomizerBanned = TRUE,
@@ -8521,7 +8521,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GIMMIGHOUL_ROAMING) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WO_CHIEN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_WO_CHIEN) = {
     .name = $("Wo Chien"),
     .isLegendary = TRUE,
     .baseHP = 125,
@@ -8636,7 +8636,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WO_CHIEN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CHIEN_PAO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CHIEN_PAO) = {
     .name = $("Chien Pao"),
     .isLegendary = TRUE,
     .baseHP = 80,
@@ -8746,7 +8746,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CHIEN_PAO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CHIEN_PAO_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CHIEN_PAO_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_CHIEN_PAO).name,
     .randomizerBanned = TRUE,
     .isLegendary = TRUE,
@@ -8796,7 +8796,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CHIEN_PAO_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TING_LU) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TING_LU) = {
     .name = $("Ting Lu"),
     .isLegendary = TRUE,
     .baseHP = 165,
@@ -8909,7 +8909,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TING_LU) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CHI_YU) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CHI_YU) = {
     .name = $("Chi Yu"),
     .isLegendary = TRUE,
     .baseHP = 55,
@@ -9001,7 +9001,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CHI_YU) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ROARING_MOON) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ROARING_MOON) = {
     .name = $("Roaring Moon"),
     .baseHP = 105,
     .baseAttack = 139,
@@ -9103,7 +9103,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ROARING_MOON) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_VALIANT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_IRON_VALIANT) = {
     .name = $("Iron Valiant"),
     .baseHP = 74,
     .baseAttack = 130,
@@ -9211,7 +9211,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_VALIANT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KORAIDON) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_KORAIDON) = {
     .name = $("Koraidon"),
     .isLegendary = TRUE,
     .baseHP = 100,
@@ -9318,7 +9318,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KORAIDON) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MIRAIDON) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MIRAIDON) = {
     .name = $("Miraidon"),
     .isLegendary = TRUE,
     .baseHP = 100,
@@ -9419,7 +9419,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MIRAIDON) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WALKING_WAKE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_WALKING_WAKE) = {
     .name = $("Walking Wake"),
     .baseHP = 99,
     .baseAttack = 83,
@@ -9509,7 +9509,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WALKING_WAKE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_LEAVES) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_IRON_LEAVES) = {
     .name = $("Iron Leaves"),
     .baseHP = 90,
     .baseAttack = 104,
@@ -9600,7 +9600,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_LEAVES) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_POLTCHAGEIST) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_POLTCHAGEIST) = {
     .name = $("Poltchageist"),
     .baseHP = 40,
     .baseAttack = 45,
@@ -9678,7 +9678,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_POLTCHAGEIST) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SINISTCHA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SINISTCHA) = {
     .name = $("Sinistcha"),
     .baseHP = 71,
     .baseAttack = 60,
@@ -9766,7 +9766,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SINISTCHA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_OKIDOGI) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_OKIDOGI) = {
     .name = $("Okidogi"),
     .isLegendary = TRUE,
     .baseHP = 88,
@@ -9865,7 +9865,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_OKIDOGI) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MUNKIDORI) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MUNKIDORI) = {
     .name = $("Munkidori"),
     .isLegendary = TRUE,
     .baseHP = 88,
@@ -9964,7 +9964,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MUNKIDORI) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FEZANDIPITI) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FEZANDIPITI) = {
     .name = $("Fezandipiti"),
     .isLegendary = TRUE,
     .baseHP = 82,
@@ -10065,7 +10065,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FEZANDIPITI) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_OGERPON) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_OGERPON) = {
     .name = $("Ogerpon"),
     .isLegendary = TRUE,
     .baseHP = 80,
@@ -10170,7 +10170,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_OGERPON) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_OGERPON_CORNERSTONE_MASK) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_OGERPON_CORNERSTONE_MASK) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_OGERPON).name,
     .longName = $("Ogerpon Cornerstone"),
     .randomizerBanned = TRUE,
@@ -10246,7 +10246,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_OGERPON_CORNERSTONE_MASK) =
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_OGERPON_HEARTHFLAME_MASK) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_OGERPON_HEARTHFLAME_MASK) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_OGERPON).name,
     .longName = $("Ogerpon Hearthflame"),
     .randomizerBanned = TRUE,
@@ -10322,7 +10322,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_OGERPON_HEARTHFLAME_MASK) =
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_OGERPON_WELLSPRING_MASK) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_OGERPON_WELLSPRING_MASK) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_OGERPON).name,
     .longName = $("Ogerpon Wellspring"),
     .randomizerBanned = TRUE,
@@ -10398,7 +10398,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_OGERPON_WELLSPRING_MASK) = 
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GOUGING_FIRE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GOUGING_FIRE) = {
     .name = $("Gouging Fire"),
     .baseHP = 105,
     .baseAttack = 115,
@@ -10486,7 +10486,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GOUGING_FIRE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RAGING_BOLT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_RAGING_BOLT) = {
     .name = $("Raging Bolt"),
     .baseHP = 125,
     .baseAttack = 63,
@@ -10577,7 +10577,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RAGING_BOLT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_BOULDER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_IRON_BOULDER) = {
     .name = $("Iron Boulder"),
     .baseHP = 90,
     .baseAttack = 120,
@@ -10671,7 +10671,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_BOULDER) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_CROWN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_IRON_CROWN) = {
     .name = $("Iron Crown"),
     .baseHP = 90,
     .baseAttack = 72,
@@ -10758,7 +10758,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_CROWN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TERAPAGOS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TERAPAGOS) = {
     .name = $("Terapagos"),
     .isLegendary = TRUE,
     .baseHP = 105,
@@ -10859,7 +10859,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TERAPAGOS) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TERAPAGOS_STELLAR) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TERAPAGOS_STELLAR) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_TERAPAGOS).name,
     .randomizerBanned = TRUE,
     .isLegendary = TRUE,
@@ -10909,7 +10909,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TERAPAGOS_STELLAR) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PECHARUNT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PECHARUNT) = {
     .name = $("Pecharunt"),
     .isLegendary = TRUE,
     .baseHP = 88,
@@ -11013,7 +11013,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PECHARUNT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CORM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CORM) = {
     .name = $("Corm"),
     .baseHP = 50,
     .baseAttack = 45,
@@ -11067,7 +11067,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CORM) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CORMOTH) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CORMOTH) = {
     .name = $("Cormoth"),
     .baseHP = 95,
     .baseAttack = 50,
@@ -11144,7 +11144,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CORMOTH) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CORMOTH_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CORMOTH_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_CORMOTH).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -11184,7 +11184,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CORMOTH_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_POPCORM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_POPCORM) = {
     .name = $("Popcorm"),
     .baseHP = 95,
     .baseAttack = 110,
@@ -11267,7 +11267,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_POPCORM) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_POPCORM_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_POPCORM_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_POPCORM).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -11308,7 +11308,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_POPCORM_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BLIZZARD_MAW) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_BLIZZARD_MAW) = {
     .name = $("Blizzard Maw"),
     .baseHP = 111,
     .baseAttack = 117,
@@ -11391,7 +11391,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BLIZZARD_MAW) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_LUMBERING_SLOTH) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_LUMBERING_SLOTH) = {
     .name = $("Lumber Sloth"),
     .baseHP = 110,
     .baseAttack = 135,
@@ -11477,7 +11477,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_LUMBERING_SLOTH) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_LUMBERING_SLOTH_ENGULFED) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_LUMBERING_SLOTH_ENGULFED) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_LUMBERING_SLOTH).name,
     .randomizerBanned = TRUE,
     .baseHP = 110,
@@ -11516,7 +11516,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_LUMBERING_SLOTH_ENGULFED) =
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_CARAPACE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_IRON_CARAPACE) = {
     .name = $("IronCarapace"),
     .baseHP = 92,
     .baseAttack = 64,
@@ -11605,7 +11605,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_CARAPACE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MARBEEP) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MARBEEP) = {
     .name = $("Marbeep"),
     .baseHP = 70,
     .baseAttack = 40,
@@ -11669,7 +11669,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MARBEEP) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLUFFBEE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FLUFFBEE) = {
     .name = $("Fluffbee"),
     .baseHP = 85,
     .baseAttack = 55,
@@ -11736,7 +11736,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLUFFBEE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHYBUZZ) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_AMPHYBUZZ) = {
     .name = $("Amphybuzz"),
     .baseHP = 110,
     .baseAttack = 75,
@@ -11813,7 +11813,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHYBUZZ) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHYBUZZ_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_AMPHYBUZZ_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_AMPHYBUZZ).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -11874,7 +11874,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHYBUZZ_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BUBBLEO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_BUBBLEO) = {
     .name = $("Bubbleo"),
     .baseHP = 72,
     .baseAttack = 85,
@@ -11963,7 +11963,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BUBBLEO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HYDROAR) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HYDROAR) = {
     .name = $("Hydroar"),
     .baseHP = 100,
     .baseAttack = 125,
@@ -12057,7 +12057,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HYDROAR) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HYDROAR_F) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HYDROAR_F) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_HYDROAR).name,
     .randomizerBanned = TRUE,
     .baseHP = 100,
@@ -12126,7 +12126,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HYDROAR_F) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BURMY_ETERNA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_BURMY_ETERNA) = {
     .name = $("Eternaburm"),
     .baseHP = 55,
     .baseAttack = 29,
@@ -12171,7 +12171,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BURMY_ETERNA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_COSPLAY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_COSPLAY) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .baseHP = 35,
     .baseAttack = 55,
@@ -12209,7 +12209,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_COSPLAY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_ROCK_STAR) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_ROCK_STAR) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .baseHP = 35,
     .baseAttack = 55,
@@ -12247,7 +12247,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_ROCK_STAR) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_BELLE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_BELLE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .baseHP = 35,
     .baseAttack = 55,
@@ -12285,7 +12285,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_BELLE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_POP_STAR) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_POP_STAR) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .baseHP = 35,
     .baseAttack = 55,
@@ -12323,7 +12323,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_POP_STAR) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_PH_D) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_PH_D) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .baseHP = 35,
     .baseAttack = 55,
@@ -12361,7 +12361,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_PH_D) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_LIBRE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_LIBRE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .baseHP = 35,
     .baseAttack = 55,
@@ -12399,7 +12399,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_LIBRE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_ORIGINAL_CAP) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_ORIGINAL_CAP) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .longName = $("Pikachu Kanto"),
     .baseHP = 50,
@@ -12467,7 +12467,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_ORIGINAL_CAP) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_PARTNER_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_PARTNER_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -12542,7 +12542,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_PARTNER_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_HOENN_CAP) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_HOENN_CAP) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .longName = $("Pikachu Hoenn"),
     .baseHP = 50,
@@ -12610,7 +12610,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_HOENN_CAP) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_SINNOH_CAP) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_SINNOH_CAP) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .longName = $("Pikachu Sinnoh"),
     .baseHP = 50,
@@ -12678,7 +12678,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_SINNOH_CAP) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_UNOVA_CAP) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_UNOVA_CAP) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .longName = $("Pikachu Unova"),
     .baseHP = 50,
@@ -12746,7 +12746,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_UNOVA_CAP) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_KALOS_CAP) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_KALOS_CAP) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .longName = $("Pikachu Kalos"),
     .baseHP = 50,
@@ -12814,7 +12814,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_KALOS_CAP) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_ALOLA_CAP) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_ALOLA_CAP) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .longName = $("Pikachu Alola"),
     .baseHP = 50,
@@ -12882,7 +12882,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_ALOLA_CAP) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_PARTNER_CAP) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_PARTNER_CAP) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .baseHP = 50,
     .baseAttack = 80,
@@ -12949,7 +12949,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_PARTNER_CAP) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_WORLD_CAP) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_WORLD_CAP) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .longName = $("Pikachu World"),
     .baseHP = 50,
@@ -13016,7 +13016,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_WORLD_CAP) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CHERRIM_SUNSHINE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CHERRIM_SUNSHINE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_CHERRIM).name,
     .baseHP = 70,
     .baseAttack = 100,
@@ -13065,7 +13065,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CHERRIM_SUNSHINE) = {
                                      ANIMCMD_END)),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRENINJA_BATTLE_BOND) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GRENINJA_BATTLE_BOND) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_GRENINJA).name,
     .baseHP = 72,
     .baseAttack = 100,
@@ -13130,7 +13130,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRENINJA_BATTLE_BOND) = {
     DUPLICATE_IMAGE(SPECIES_GRENINJA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRENINJA_ASH) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GRENINJA_ASH) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_GRENINJA).name,
     .baseHP = 72,
     .baseAttack = 150,
@@ -13169,7 +13169,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRENINJA_ASH) = {
                            ANIM_PART(ANIMCMD_FRAME(1, 8), ANIMCMD_FRAME(0, 15), ANIMCMD_FRAME(1, 35), ANIMCMD_FRAME(1, 30), ANIMCMD_FRAME(0, 10), ANIMCMD_END)),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_MEADOW) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VIVILLON_MEADOW) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_VIVILLON).name,
     .baseHP = 80,
     .baseAttack = 52,
@@ -13208,7 +13208,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_MEADOW) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_VIVILLON_MEADOW, INCBIN_PTR_U32("graphics/pokemon/vivillon/meadow/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_MODERN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VIVILLON_MODERN) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_VIVILLON).name,
     .baseHP = 80,
     .baseAttack = 52,
@@ -13247,7 +13247,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_MODERN) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_VIVILLON_MODERN, INCBIN_PTR_U32("graphics/pokemon/vivillon/modern/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_MARINE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VIVILLON_MARINE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_VIVILLON).name,
     .baseHP = 80,
     .baseAttack = 52,
@@ -13286,7 +13286,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_MARINE) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_VIVILLON_MARINE, INCBIN_PTR_U32("graphics/pokemon/vivillon/marine/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_ARCHIPELAGO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VIVILLON_ARCHIPELAGO) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_VIVILLON).name,
     .baseHP = 80,
     .baseAttack = 52,
@@ -13325,7 +13325,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_ARCHIPELAGO) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_VIVILLON_ARCHIPELAGO, INCBIN_PTR_U32("graphics/pokemon/vivillon/archipelago/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_SANDSTORM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VIVILLON_SANDSTORM) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_VIVILLON).name,
     .baseHP = 80,
     .baseAttack = 52,
@@ -13364,7 +13364,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_SANDSTORM) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_VIVILLON_SANDSTORM, INCBIN_PTR_U32("graphics/pokemon/vivillon/sandstorm/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_RIVER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VIVILLON_RIVER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_VIVILLON).name,
     .baseHP = 80,
     .baseAttack = 52,
@@ -13403,7 +13403,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_RIVER) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_VIVILLON_RIVER, INCBIN_PTR_U32("graphics/pokemon/vivillon/river/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_MONSOON) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VIVILLON_MONSOON) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_VIVILLON).name,
     .baseHP = 80,
     .baseAttack = 52,
@@ -13442,7 +13442,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_MONSOON) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_VIVILLON_MONSOON, INCBIN_PTR_U32("graphics/pokemon/vivillon/monsoon/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_SAVANNA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VIVILLON_SAVANNA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_VIVILLON).name,
     .baseHP = 80,
     .baseAttack = 52,
@@ -13481,7 +13481,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_SAVANNA) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_VIVILLON_SAVANNA, INCBIN_PTR_U32("graphics/pokemon/vivillon/savanna/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_OCEAN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VIVILLON_OCEAN) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_VIVILLON).name,
     .baseHP = 80,
     .baseAttack = 52,
@@ -13520,7 +13520,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_OCEAN) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_VIVILLON_OCEAN, INCBIN_PTR_U32("graphics/pokemon/vivillon/ocean/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_JUNGLE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VIVILLON_JUNGLE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_VIVILLON).name,
     .baseHP = 80,
     .baseAttack = 52,
@@ -13559,7 +13559,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VIVILLON_JUNGLE) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_VIVILLON_JUNGLE, INCBIN_PTR_U32("graphics/pokemon/vivillon/jungle/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLOETTE_ETERNAL_FLOWER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FLOETTE_ETERNAL_FLOWER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_FLOETTE).name,
     .baseHP = 74,
     .baseAttack = 65,
@@ -13641,7 +13641,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLOETTE_ETERNAL_FLOWER) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AEGISLASH_BLADE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_AEGISLASH_BLADE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_AEGISLASH).name,
     .baseHP = 60,
     .baseAttack = 140,
@@ -13682,7 +13682,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AEGISLASH_BLADE) = {
                   ANIM_PART(ANIMCMD_FRAME(0, 18), ANIMCMD_FRAME(1, 18), ANIMCMD_FRAME(0, 18), ANIMCMD_FRAME(1, 18), ANIMCMD_FRAME(0, 10), ANIMCMD_END)),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_FIGHTING) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_FIGHTING) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -13713,7 +13713,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_FIGHTING) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_FLYING) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_FLYING) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -13744,7 +13744,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_FLYING) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_POISON) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_POISON) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -13775,7 +13775,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_POISON) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_GROUND) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_GROUND) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -13806,7 +13806,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_GROUND) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_ROCK) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_ROCK) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -13837,7 +13837,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_ROCK) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_BUG) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_BUG) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -13868,7 +13868,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_BUG) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_GHOST) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_GHOST) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -13899,7 +13899,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_GHOST) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_STEEL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_STEEL) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -13930,7 +13930,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_STEEL) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_FIRE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_FIRE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -13961,7 +13961,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_FIRE) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_WATER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_WATER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -13992,7 +13992,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_WATER) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_GRASS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_GRASS) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -14023,7 +14023,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_GRASS) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_ELECTRIC) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_ELECTRIC) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -14054,7 +14054,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_ELECTRIC) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_PSYCHIC) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_PSYCHIC) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -14085,7 +14085,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_PSYCHIC) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_ICE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_ICE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -14116,7 +14116,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_ICE) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_DRAGON) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_DRAGON) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -14147,7 +14147,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_DRAGON) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_DARK) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_DARK) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -14178,7 +14178,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_DARK) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_FAIRY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILVALLY_FAIRY) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SILVALLY).name,
     .isLegendary = TRUE,
     .baseHP = 95,
@@ -14209,7 +14209,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILVALLY_FAIRY) = {
     DUPLICATE_IMAGE(SPECIES_SILVALLY),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PALAFIN_HERO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PALAFIN_HERO) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PALAFIN).name,
     .randomizerBanned = TRUE,
     .baseHP = 100,
@@ -14256,7 +14256,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PALAFIN_HERO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY_GREEN_PLUMAGE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY_GREEN_PLUMAGE) = {
     .name = $("Squawkabilly"),
     .randomizerBanned = TRUE,
     .baseHP = 90,
@@ -14302,7 +14302,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SQUAWKABILLY_GREEN_PLUMAGE)
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_PARTNER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PIKACHU_PARTNER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_PIKACHU).name,
     .randomizerBanned = TRUE,
     .baseHP = 50,
@@ -14379,7 +14379,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PIKACHU_PARTNER) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_EEVEE_PARTNER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_EEVEE_PARTNER) = {
     .name = $("Eevee"),
     .randomizerBanned = TRUE,
     .baseHP = 65,
@@ -14433,7 +14433,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_EEVEE_PARTNER) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MEOWTH_PARTNER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MEOWTH_PARTNER) = {
     .name = $("Meowth"),
     .randomizerBanned = TRUE,
     .baseHP = 50,
@@ -14529,7 +14529,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MEOWTH_PARTNER) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MEOWTH_PARTNER_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MEOWTH_PARTNER_MEGA) = {
     .name = $("Meowth"),
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -14571,7 +14571,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MEOWTH_PARTNER_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SLAKING_MEGA_APE_SHIFT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SLAKING_MEGA_APE_SHIFT) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SLAKING).name,
     .randomizerBanned = TRUE,
     .baseHP = 130,
@@ -14608,7 +14608,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SLAKING_MEGA_APE_SHIFT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN).name,
     .randomizerBanned = TRUE,
     .baseHP = 80,
@@ -14640,7 +14640,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER) = {
     DUPLICATE_IMAGE(SPECIES_HITMONCHAN),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -14672,7 +14672,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_MEGA) = 
     DUPLICATE_IMAGE(SPECIES_HITMONCHAN_MEGA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_AMPHAROS).name,
     .randomizerBanned = TRUE,
     .baseHP = 110,
@@ -14704,7 +14704,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER) = {
     DUPLICATE_IMAGE(SPECIES_AMPHAROS),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_AMPHAROS).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -14736,7 +14736,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_MEGA) = {
     DUPLICATE_ICON(SPECIES_AMPHAROS_MEGA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VOLCARONA_PARTNER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VOLCARONA_PARTNER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_VOLCARONA).name,
     .randomizerBanned = TRUE,
     .baseHP = 85,
@@ -14769,7 +14769,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VOLCARONA_PARTNER) = {
     DUPLICATE_IMAGE(SPECIES_VOLCARONA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_DRAGONITE).name,
     .randomizerBanned = TRUE,
     .baseHP = 91,
@@ -14802,7 +14802,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER) = {
     DUPLICATE_IMAGE(SPECIES_DRAGONITE),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_DRAGONITE).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -14834,7 +14834,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_MEGA) = {
     DUPLICATE_ICON(SPECIES_DRAGONITE_MEGA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_REUNICLUS_PARTNER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_REUNICLUS_PARTNER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_REUNICLUS).name,
     .randomizerBanned = TRUE,
     .baseHP = 110,
@@ -14865,7 +14865,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_REUNICLUS_PARTNER) = {
     DUPLICATE_IMAGE(SPECIES_REUNICLUS),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_KINGDRA).name,
     .randomizerBanned = TRUE,
     .baseHP = 75,
@@ -14901,7 +14901,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER) = {
     DUPLICATE_IMAGE(SPECIES_KINGDRA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_KINGDRA).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -14935,7 +14935,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_MEGA) = {
     DUPLICATE_ICON(SPECIES_KINGDRA_MEGA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AURORUS_PARTNER_B) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_AURORUS_PARTNER_B) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_AURORUS).name,
     .randomizerBanned = TRUE,
     .baseHP = 123,
@@ -14966,7 +14966,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AURORUS_PARTNER_B) = {
     DUPLICATE_IMAGE(SPECIES_AURORUS),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_B) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_B) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN).name,
     .randomizerBanned = TRUE,
     .baseHP = 80,
@@ -14999,7 +14999,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_B) = {
     DUPLICATE_IMAGE(SPECIES_HITMONCHAN),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_MEGA_B) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_MEGA_B) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_X,
@@ -15031,7 +15031,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_MEGA_B) 
     DUPLICATE_IMAGE(SPECIES_HITMONCHAN_MEGA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_MEGA_C) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_MEGA_C) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_X,
@@ -15063,7 +15063,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_MEGA_C) 
     DUPLICATE_IMAGE(SPECIES_HITMONCHAN_MEGA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_B) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_B) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_AMPHAROS).name,
     .randomizerBanned = TRUE,
     .baseHP = 110,
@@ -15096,7 +15096,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_B) = {
     DUPLICATE_IMAGE(SPECIES_AMPHAROS),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_MEGA_B) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_MEGA_B) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_AMPHAROS).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_X,
@@ -15128,7 +15128,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_MEGA_B) = 
     DUPLICATE_ICON(SPECIES_AMPHAROS_MEGA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_MEGA_C) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_MEGA_C) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_AMPHAROS).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_X,
@@ -15161,7 +15161,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_MEGA_C) = 
     DUPLICATE_IMAGE(SPECIES_AMPHAROS_MEGA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VOLCARONA_PARTNER_B) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VOLCARONA_PARTNER_B) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_VOLCARONA).name,
     .randomizerBanned = TRUE,
     .baseHP = 85,
@@ -15194,7 +15194,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VOLCARONA_PARTNER_B) = {
     DUPLICATE_IMAGE(SPECIES_VOLCARONA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_B) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_B) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_DRAGONITE).name,
     .randomizerBanned = TRUE,
     .baseHP = 91,
@@ -15227,7 +15227,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_B) = {
     DUPLICATE_IMAGE(SPECIES_DRAGONITE),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_MEGA_B) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_MEGA_B) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_DRAGONITE).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -15259,7 +15259,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_MEGA_B) =
     DUPLICATE_ICON(SPECIES_DRAGONITE_MEGA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_REUNICLUS_PARTNER_B) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_REUNICLUS_PARTNER_B) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_REUNICLUS).name,
     .randomizerBanned = TRUE,
     .baseHP = 110,
@@ -15290,7 +15290,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_REUNICLUS_PARTNER_B) = {
     DUPLICATE_IMAGE(SPECIES_REUNICLUS),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_B) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_B) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_KINGDRA).name,
     .randomizerBanned = TRUE,
     .baseHP = 75,
@@ -15326,7 +15326,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_B) = {
     DUPLICATE_IMAGE(SPECIES_KINGDRA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_MEGA_B) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_MEGA_B) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_KINGDRA).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -15360,7 +15360,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_MEGA_B) = {
     DUPLICATE_ICON(SPECIES_KINGDRA_MEGA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AURORUS_PARTNER_C) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_AURORUS_PARTNER_C) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_AURORUS).name,
     .randomizerBanned = TRUE,
     .baseHP = 123,
@@ -15391,7 +15391,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AURORUS_PARTNER_C) = {
     DUPLICATE_IMAGE(SPECIES_AURORUS),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_C) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_C) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN).name,
     .randomizerBanned = TRUE,
     .baseHP = 80,
@@ -15422,7 +15422,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HITMONCHAN_PARTNER_C) = {
     DUPLICATE_IMAGE(SPECIES_HITMONCHAN),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_C) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_C) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_AMPHAROS).name,
     .randomizerBanned = TRUE,
     .baseHP = 110,
@@ -15453,7 +15453,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AMPHAROS_PARTNER_C) = {
     DUPLICATE_IMAGE(SPECIES_AMPHAROS),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VOLCARONA_PARTNER_C) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_VOLCARONA_PARTNER_C) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_VOLCARONA).name,
     .randomizerBanned = TRUE,
     .baseHP = 85,
@@ -15486,7 +15486,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_VOLCARONA_PARTNER_C) = {
     DUPLICATE_IMAGE(SPECIES_VOLCARONA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_C) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_C) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_DRAGONITE).name,
     .randomizerBanned = TRUE,
     .baseHP = 91,
@@ -15519,7 +15519,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_C) = {
     DUPLICATE_IMAGE(SPECIES_DRAGONITE),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_MEGA_C) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_MEGA_C) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_DRAGONITE).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -15552,7 +15552,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_PARTNER_MEGA_C) =
     DUPLICATE_IMAGE(SPECIES_DRAGONITE_MEGA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_REUNICLUS_PARTNER_C) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_REUNICLUS_PARTNER_C) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_REUNICLUS).name,
     .randomizerBanned = TRUE,
     .baseHP = 110,
@@ -15583,7 +15583,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_REUNICLUS_PARTNER_C) = {
     DUPLICATE_IMAGE(SPECIES_REUNICLUS),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_C) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_C) = {
     .name = $("Kingdra"),
     .randomizerBanned = TRUE,
     .baseHP = 75,
@@ -15618,7 +15618,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_C) = {
     DUPLICATE_IMAGE(SPECIES_KINGDRA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_MEGA_C) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_MEGA_C) = {
     .name = $("Kingdra"),
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -15652,7 +15652,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_PARTNER_MEGA_C) = {
     DUPLICATE_IMAGE(SPECIES_KINGDRA_MEGA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_MEGA_Y) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_KINGDRA_MEGA_Y) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_KINGDRA).name,
     .randomizerBanned = TRUE,
     .baseHP = 75,
@@ -15694,7 +15694,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KINGDRA_MEGA_Y) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AEGISLASH_BLADE_REDUX_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_AEGISLASH_BLADE_REDUX_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_AEGISLASH).name,
     .randomizerBanned = TRUE,
     .variant = VARIANT_REDUX,
@@ -15735,7 +15735,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AEGISLASH_BLADE_REDUX_MEGA)
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KECLEONG) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_KECLEONG) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_DEWGONG).name,
     .baseHP = 90,
     .baseAttack = 90,
@@ -15870,7 +15870,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KECLEONG) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_INFERNAPE_REDUX_B) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_INFERNAPE_REDUX_B) = {
     .name = $("Infernape"),
     .randomizerBanned = TRUE,
     .variant = VARIANT_REDUX,
@@ -15898,7 +15898,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_INFERNAPE_REDUX_B) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_LUXRAY_REDUX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_LUXRAY_REDUX) = {
     .name = $("Luxray"),
     .randomizerBanned = TRUE,
     .variant = VARIANT_REDUX,
@@ -15951,7 +15951,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_LUXRAY_REDUX) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AEGISLASH_BLADE_REDUX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_AEGISLASH_BLADE_REDUX) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_AEGISLASH).name,
     .variant = VARIANT_REDUX,
     .baseHP = 70,
@@ -15992,7 +15992,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_AEGISLASH_BLADE_REDUX) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_EXO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_IRON_EXO) = {
     .name = $("Iron Exo"),
     .baseHP = 70,
     .baseAttack = 75,
@@ -16083,7 +16083,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IRON_EXO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SCIZOR_REDUX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SCIZOR_REDUX) = {
     .name = $("Scizor"),
     .randomizerBanned = TRUE,
     .variant = VARIANT_REDUX,
@@ -16133,7 +16133,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SCIZOR_REDUX) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_DELIVERY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_DELIVERY) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_DRAGONITE).name,
     .randomizerBanned = TRUE,
     .baseHP = 91,
@@ -16234,7 +16234,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGONITE_DELIVERY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_LEDIAN_PARADOX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_LEDIAN_PARADOX) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_LEDIAN).name,
     .randomizerBanned = TRUE,
     .baseHP = 78,
@@ -16320,7 +16320,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_LEDIAN_PARADOX) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WIGGLYTUFF_APEX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_WIGGLYTUFF_APEX) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_WIGGLYTUFF).name,
     .randomizerBanned = TRUE,
     .baseHP = 120,
@@ -16452,7 +16452,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WIGGLYTUFF_APEX) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WIGGLYTUFF_PRIMAL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_WIGGLYTUFF_PRIMAL) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_WIGGLYTUFF).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_PRIMAL,
@@ -16537,7 +16537,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WIGGLYTUFF_PRIMAL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLYGON_REDUX_B) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FLYGON_REDUX_B) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_FLYGON).name,
     .randomizerBanned = TRUE,
     .variant = VARIANT_REDUX,
@@ -16629,7 +16629,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLYGON_REDUX_B) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLYGON_REDUX_B_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FLYGON_REDUX_B_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_FLYGON).name,
     .randomizerBanned = TRUE,
     .variant = VARIANT_REDUX,
@@ -16672,7 +16672,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLYGON_REDUX_B_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RIBOMBEE_REDUX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_RIBOMBEE_REDUX) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_RIBOMBEE).name,
     .randomizerBanned = TRUE,
     .variant = VARIANT_REDUX,
@@ -16766,7 +16766,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RIBOMBEE_REDUX) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RIBOMBEE_REDUX_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_RIBOMBEE_REDUX_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_RIBOMBEE).name,
     .randomizerBanned = TRUE,
     .variant = VARIANT_REDUX,
@@ -16815,7 +16815,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RIBOMBEE_REDUX_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WEAVILE_REDUX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_WEAVILE_REDUX) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_WEAVILE).name,
     .randomizerBanned = TRUE,
     .variant = VARIANT_REDUX,
@@ -16910,7 +16910,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WEAVILE_REDUX) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WEAVILE_REDUX_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_WEAVILE_REDUX_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_WEAVILE).name,
     .randomizerBanned = TRUE,
     .variant = VARIANT_REDUX,
@@ -16959,7 +16959,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WEAVILE_REDUX_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BEWEAR_ANGRY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_BEWEAR_ANGRY) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_BEWEAR).name,
     .randomizerBanned = TRUE,
     .baseHP = 120,
@@ -17072,7 +17072,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BEWEAR_ANGRY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DARMANITAN_REDUX_BLUNDER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DARMANITAN_REDUX_BLUNDER) = {
     .name = $("Darmanitan"),
     .variant = VARIANT_REDUX,
     .baseHP = 80,
@@ -17108,7 +17108,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DARMANITAN_REDUX_BLUNDER) =
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DARMANITAN_REDUX_BOND) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DARMANITAN_REDUX_BOND) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_DARMANITAN).name,
     .variant = VARIANT_REDUX,
     .baseHP = 80,
@@ -17163,7 +17163,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DARMANITAN_REDUX_BOND) = {
     DUPLICATE_IMAGE(SPECIES_DARMANITAN_REDUX),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_EGG) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_EGG) = {
     .icon = INCBIN_PTR_U8("graphics/pokemon/egg/icon.4bpp"),
     .iconPalette = 1,
     .frontPic = SPECIES_SPRITE(SPECIES_EGG, INCBIN_PTR_U32("graphics/pokemon/egg/anim_front.4bpp.lz")),

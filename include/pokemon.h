@@ -328,7 +328,7 @@ typedef enum {
     VARIANT_REDUX,
 } VariantType;
 
-typedef struct SpeciesData {
+typedef struct Species {
     const u8 *const name;
     const u8 *const longName;
     const u8 *const icon;
@@ -395,7 +395,7 @@ typedef struct SpeciesData {
     u8 femaleIconPalette;
     u8 frontAnimId;
     u8 backAnimId;
-} SpeciesData;
+} Species;
 
 #define NUM_UNOWN_FORMS 28
 
@@ -415,6 +415,7 @@ extern const struct TrainerMonSpread gSets[];
 extern const u8 gFacilityClassToPicIndex[];
 extern const u8 gFacilityClassToTrainerClass[];
 extern const struct BaseStats gBaseStats[];
+extern const Species gSpecies[];
 extern const u8 *const gItemEffectTable[];
 extern const u32 gExperienceTables[][MAX_LEVEL + 1];
 extern const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON];

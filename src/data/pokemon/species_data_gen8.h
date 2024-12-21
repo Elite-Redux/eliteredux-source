@@ -1,4 +1,4 @@
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GROOKEY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GROOKEY) = {
     .name = $("Grookey"),
     .baseHP = 55,
     .baseAttack = 70,
@@ -65,7 +65,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GROOKEY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_THWACKEY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_THWACKEY) = {
     .name = $("Thwackey"),
     .baseHP = 70,
     .baseAttack = 85,
@@ -137,7 +137,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_THWACKEY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RILLABOOM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_RILLABOOM) = {
     .name = $("Rillaboom"),
     .baseHP = 100,
     .baseAttack = 125,
@@ -220,7 +220,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RILLABOOM) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RILLABOOM_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_RILLABOOM_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_RILLABOOM).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -260,7 +260,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RILLABOOM_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SCORBUNNY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SCORBUNNY) = {
     .name = $("Scorbunny"),
     .baseHP = 50,
     .baseAttack = 76,
@@ -333,7 +333,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SCORBUNNY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RABOOT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_RABOOT) = {
     .name = $("Raboot"),
     .baseHP = 65,
     .baseAttack = 86,
@@ -406,7 +406,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_RABOOT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CINDERACE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CINDERACE) = {
     .name = $("Cinderace"),
     .baseHP = 80,
     .baseAttack = 120,
@@ -486,7 +486,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CINDERACE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CINDERACE_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CINDERACE_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_CINDERACE).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -525,7 +525,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CINDERACE_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SOBBLE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SOBBLE) = {
     .name = $("Sobble"),
     .baseHP = 50,
     .baseAttack = 40,
@@ -606,7 +606,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SOBBLE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRIZZILE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DRIZZILE) = {
     .name = $("Drizzile"),
     .baseHP = 65,
     .baseAttack = 60,
@@ -687,7 +687,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRIZZILE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_INTELEON) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_INTELEON) = {
     .name = $("Inteleon"),
     .baseHP = 75,
     .baseAttack = 85,
@@ -780,7 +780,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_INTELEON) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_INTELEON_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_INTELEON_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_INTELEON).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -819,7 +819,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_INTELEON_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SKWOVET) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SKWOVET) = {
     .name = $("Skwovet"),
     .baseHP = 70,
     .baseAttack = 55,
@@ -892,7 +892,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SKWOVET) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GREEDENT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GREEDENT) = {
     .name = $("Greedent"),
     .baseHP = 120,
     .baseAttack = 95,
@@ -967,7 +967,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GREEDENT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ROOKIDEE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ROOKIDEE) = {
     .name = $("Rookidee"),
     .baseHP = 38,
     .baseAttack = 33,
@@ -1043,7 +1043,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ROOKIDEE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CORVISQUIRE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CORVISQUIRE) = {
     .name = $("Corvisquir"),
     .baseHP = 68,
     .baseAttack = 43,
@@ -1121,7 +1121,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CORVISQUIRE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CORVIKNIGHT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CORVIKNIGHT) = {
     .name = $("Corviknight"),
     .baseHP = 98,
     .baseAttack = 53,
@@ -1217,7 +1217,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CORVIKNIGHT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CORVIKNIGHT_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CORVIKNIGHT_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_CORVIKNIGHT).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -1256,7 +1256,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CORVIKNIGHT_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BLIPBUG) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_BLIPBUG) = {
     .name = $("Blipbug"),
     .baseHP = 25,
     .baseAttack = 20,
@@ -1332,7 +1332,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BLIPBUG) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DOTTLER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DOTTLER) = {
     .name = $("Dottler"),
     .baseHP = 50,
     .baseAttack = 35,
@@ -1411,7 +1411,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DOTTLER) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ORBEETLE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ORBEETLE) = {
     .name = $("Orbeetle"),
     .baseHP = 60,
     .baseAttack = 45,
@@ -1499,7 +1499,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ORBEETLE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ORBEETLE_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ORBEETLE_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ORBEETLE).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -1540,7 +1540,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ORBEETLE_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_NICKIT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_NICKIT) = {
     .name = $("Nickit"),
     .baseHP = 40,
     .baseAttack = 58,
@@ -1623,7 +1623,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_NICKIT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_THIEVUL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_THIEVUL) = {
     .name = $("Thievul"),
     .baseHP = 70,
     .baseAttack = 88,
@@ -1711,7 +1711,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_THIEVUL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GOSSIFLEUR) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GOSSIFLEUR) = {
     .name = $("Gossifleur"),
     .baseHP = 40,
     .baseAttack = 40,
@@ -1781,7 +1781,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GOSSIFLEUR) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ELDEGOSS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ELDEGOSS) = {
     .name = $("Eldegoss"),
     .baseHP = 60,
     .baseAttack = 50,
@@ -1854,7 +1854,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ELDEGOSS) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WOOLOO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_WOOLOO) = {
     .name = $("Wooloo"),
     .baseHP = 42,
     .baseAttack = 55,
@@ -1921,7 +1921,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_WOOLOO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DUBWOOL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DUBWOOL) = {
     .name = $("Dubwool"),
     .baseHP = 72,
     .baseAttack = 80,
@@ -2004,7 +2004,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DUBWOOL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CHEWTLE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CHEWTLE) = {
     .name = $("Chewtle"),
     .baseHP = 50,
     .baseAttack = 64,
@@ -2072,7 +2072,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CHEWTLE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DREDNAW) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DREDNAW) = {
     .name = $("Drednaw"),
     .baseHP = 90,
     .baseAttack = 115,
@@ -2155,7 +2155,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DREDNAW) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DREDNAW_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DREDNAW_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_DREDNAW).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -2195,7 +2195,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DREDNAW_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_YAMPER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_YAMPER) = {
     .name = $("Yamper"),
     .baseHP = 59,
     .baseAttack = 65,
@@ -2275,7 +2275,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_YAMPER) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BOLTUND) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_BOLTUND) = {
     .name = $("Boltund"),
     .baseHP = 69,
     .baseAttack = 110,
@@ -2359,7 +2359,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BOLTUND) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ROLYCOLY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ROLYCOLY) = {
     .name = $("Rolycoly"),
     .baseHP = 30,
     .baseAttack = 40,
@@ -2426,7 +2426,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ROLYCOLY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CARKOL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CARKOL) = {
     .name = $("Carkol"),
     .baseHP = 80,
     .baseAttack = 60,
@@ -2506,7 +2506,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CARKOL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_COALOSSAL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_COALOSSAL) = {
     .name = $("Coalossal"),
     .baseHP = 110,
     .baseAttack = 90,
@@ -2599,7 +2599,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_COALOSSAL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_COALOSSAL_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_COALOSSAL_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_COALOSSAL).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -2639,7 +2639,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_COALOSSAL_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_APPLIN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_APPLIN) = {
     .name = $("Applin"),
     .baseHP = 55,
     .baseAttack = 55,
@@ -2704,7 +2704,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_APPLIN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLAPPLE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FLAPPLE) = {
     .name = $("Flapple"),
     .baseHP = 70,
     .baseAttack = 110,
@@ -2798,7 +2798,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FLAPPLE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FUJIFLAP) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FUJIFLAP) = {
     .name = $("Fujiflap"),
     .baseHP = 80,
     .baseAttack = 125,
@@ -2889,7 +2889,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FUJIFLAP) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_APPLETUN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_APPLETUN) = {
     .name = $("Appletun"),
     .baseHP = 110,
     .baseAttack = 100,
@@ -2978,7 +2978,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_APPLETUN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRANITUN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GRANITUN) = {
     .name = $("Granitun"),
     .baseHP = 110,
     .baseAttack = 100,
@@ -3066,7 +3066,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRANITUN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DIPPLIN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DIPPLIN) = {
     .name = $("Dipplin"),
     .baseHP = 95,
     .baseAttack = 80,
@@ -3140,7 +3140,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DIPPLIN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HYDRAPPLE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HYDRAPPLE) = {
     .name = $("Hydrapple"),
     .heads = THREE_HEADED,
     .baseHP = 106,
@@ -3228,7 +3228,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HYDRAPPLE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILICOBRA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SILICOBRA) = {
     .name = $("Silicobra"),
     .baseHP = 52,
     .baseAttack = 35,
@@ -3293,7 +3293,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SILICOBRA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SANDACONDA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SANDACONDA) = {
     .name = $("Sandaconda"),
     .baseHP = 72,
     .baseAttack = 65,
@@ -3384,7 +3384,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SANDACONDA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SANDACONDA_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SANDACONDA_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SANDACONDA).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -3424,7 +3424,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SANDACONDA_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CRAMORANT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CRAMORANT) = {
     .name = $("Cramorant"),
     .baseHP = 75,
     .baseAttack = 90,
@@ -3511,7 +3511,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CRAMORANT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CRAMORANT_GULPING) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CRAMORANT_GULPING) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_CRAMORANT).name,
     .randomizerBanned = TRUE,
     .baseHP = 70,
@@ -3548,7 +3548,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CRAMORANT_GULPING) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_CRAMORANT_GULPING, INCBIN_PTR_U32("graphics/pokemon/cramorant/gulping/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CRAMORANT_GORGING) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CRAMORANT_GORGING) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_CRAMORANT).name,
     .randomizerBanned = TRUE,
     .baseHP = 70,
@@ -3585,7 +3585,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CRAMORANT_GORGING) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_CRAMORANT_GORGING, INCBIN_PTR_U32("graphics/pokemon/cramorant/gorging/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARROKUDA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ARROKUDA) = {
     .name = $("Arrokuda"),
     .baseHP = 41,
     .baseAttack = 63,
@@ -3655,7 +3655,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARROKUDA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BARRASKEWDA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_BARRASKEWDA) = {
     .name = $("Barraskewda"),
     .baseHP = 61,
     .baseAttack = 123,
@@ -3734,7 +3734,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_BARRASKEWDA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXEL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TOXEL) = {
     .name = $("Toxel"),
     .baseHP = 40,
     .baseAttack = 38,
@@ -3801,7 +3801,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXEL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY) = {
     .name = $("Toxtricity"),
     .baseHP = 75,
     .baseAttack = 75,
@@ -3888,7 +3888,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -3928,7 +3928,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_LOW_KEY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_LOW_KEY) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY).name,
     .baseHP = 75,
     .baseAttack = 75,
@@ -4005,7 +4005,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_LOW_KEY) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_TOXTRICITY_LOW_KEY, INCBIN_PTR_U32("graphics/pokemon/toxtricity/low_key/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXEL_REDUX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TOXEL_REDUX) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_TOXEL).name,
     .variant = VARIANT_REDUX,
     .baseHP = 40,
@@ -4079,7 +4079,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXEL_REDUX) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_REDUX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_REDUX) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY).name,
     .variant = VARIANT_REDUX,
     .baseHP = 80,
@@ -4167,7 +4167,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_REDUX) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_REDUX_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_REDUX_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY).name,
     .randomizerBanned = TRUE,
     .variant = VARIANT_REDUX,
@@ -4209,7 +4209,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_REDUX_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_REDUX_FUZZ) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_REDUX_FUZZ) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY).name,
     .variant = VARIANT_REDUX,
     .baseHP = 80,
@@ -4279,7 +4279,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_REDUX_FUZZ) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_REDUX_FUZZ_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_REDUX_FUZZ_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY).name,
     .randomizerBanned = TRUE,
     .variant = VARIANT_REDUX,
@@ -4321,7 +4321,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_TOXTRICITY_REDUX_FUZZ_MEGA)
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SIZZLIPEDE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SIZZLIPEDE) = {
     .name = $("Sizzlipede"),
     .baseHP = 50,
     .baseAttack = 65,
@@ -4388,7 +4388,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SIZZLIPEDE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CENTISKORCH) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CENTISKORCH) = {
     .name = $("Centiskorch"),
     .baseHP = 100,
     .baseAttack = 115,
@@ -4462,7 +4462,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CENTISKORCH) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CENTISKORCH_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CENTISKORCH_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_CENTISKORCH).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -4502,7 +4502,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CENTISKORCH_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CLOBBOPUS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CLOBBOPUS) = {
     .name = $("Clobbopus"),
     .baseHP = 50,
     .baseAttack = 68,
@@ -4575,7 +4575,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CLOBBOPUS) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRAPPLOCT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GRAPPLOCT) = {
     .name = $("Grapploct"),
     .baseHP = 80,
     .baseAttack = 118,
@@ -4654,7 +4654,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRAPPLOCT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SINISTEA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SINISTEA) = {
     .name = $("Sinistea"),
     .baseHP = 40,
     .baseAttack = 45,
@@ -4724,7 +4724,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SINISTEA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_POLTEAGEIST) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_POLTEAGEIST) = {
     .name = $("Polteageist"),
     .baseHP = 60,
     .baseAttack = 65,
@@ -4810,7 +4810,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_POLTEAGEIST) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SINISTEA_ANTIQUE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SINISTEA_ANTIQUE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SINISTEA).name,
     .randomizerBanned = TRUE,
     .baseHP = 40,
@@ -4842,7 +4842,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SINISTEA_ANTIQUE) = {
     DUPLICATE_IMAGE(SPECIES_SINISTEA),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_POLTEAGEIST_ANTIQUE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_POLTEAGEIST_ANTIQUE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_POLTEAGEIST).name,
     .randomizerBanned = TRUE,
     .baseHP = 60,
@@ -4873,7 +4873,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_POLTEAGEIST_ANTIQUE) = {
     DUPLICATE_IMAGE(SPECIES_POLTEAGEIST),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HATENNA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HATENNA) = {
     .name = $("Hatenna"),
     .baseHP = 42,
     .baseAttack = 30,
@@ -4966,7 +4966,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HATENNA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HATTREM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HATTREM) = {
     .name = $("Hattrem"),
     .baseHP = 57,
     .baseAttack = 40,
@@ -5059,7 +5059,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HATTREM) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HATTERENE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HATTERENE) = {
     .name = $("Hatterene"),
     .baseHP = 57,
     .baseAttack = 90,
@@ -5166,7 +5166,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HATTERENE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HATTERENE_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_HATTERENE_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_HATTERENE).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -5206,7 +5206,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_HATTERENE_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IMPIDIMP) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_IMPIDIMP) = {
     .name = $("Impidimp"),
     .baseHP = 45,
     .baseAttack = 55,
@@ -5282,7 +5282,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_IMPIDIMP) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MORGREM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MORGREM) = {
     .name = $("Morgrem"),
     .baseHP = 65,
     .baseAttack = 75,
@@ -5359,7 +5359,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MORGREM) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRIMMSNARL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GRIMMSNARL) = {
     .name = $("Grimmsnarl"),
     .baseHP = 95,
     .baseAttack = 120,
@@ -5449,7 +5449,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRIMMSNARL) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRIMMSNARL_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GRIMMSNARL_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_GRIMMSNARL).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -5489,7 +5489,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GRIMMSNARL_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MILCERY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MILCERY) = {
     .name = $("Milcery"),
     .baseHP = 65,
     .baseAttack = 40,
@@ -5565,7 +5565,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MILCERY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ALCREMIE) = {
     .name = $("Alcremie"),
     .longName = $("Alcremie Vanilla"),
     .hasWildVariants = TRUE,
@@ -5661,7 +5661,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ALCREMIE).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -5701,7 +5701,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_CARAMEL_SWIRL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_CARAMEL_SWIRL) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ALCREMIE).name,
     .longName = $("Alcremie Caramel"),
     .randomizerBanned = TRUE,
@@ -5738,7 +5738,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_CARAMEL_SWIRL) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_ALCREMIE_CARAMEL_SWIRL, INCBIN_PTR_U32("graphics/pokemon/alcremie/caramel_swirl/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_LEMON_CREAM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_LEMON_CREAM) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ALCREMIE).name,
     .longName = $("Alcremie Lemon"),
     .randomizerBanned = TRUE,
@@ -5775,7 +5775,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_LEMON_CREAM) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_ALCREMIE_LEMON_CREAM, INCBIN_PTR_U32("graphics/pokemon/alcremie/lemon_cream/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_MINT_CREAM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_MINT_CREAM) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ALCREMIE).name,
     .longName = $("Alcremie Mint"),
     .randomizerBanned = TRUE,
@@ -5812,7 +5812,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_MINT_CREAM) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_ALCREMIE_MINT_CREAM, INCBIN_PTR_U32("graphics/pokemon/alcremie/mint_cream/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_RAINBOW_SWIRL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_RAINBOW_SWIRL) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ALCREMIE).name,
     .longName = $("Alcremie Rainbow"),
     .randomizerBanned = TRUE,
@@ -5849,7 +5849,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_RAINBOW_SWIRL) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_ALCREMIE_RAINBOW_SWIRL, INCBIN_PTR_U32("graphics/pokemon/alcremie/rainbow_swirl/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_RUBY_CREAM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_RUBY_CREAM) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ALCREMIE).name,
     .longName = $("Alcremie Ruby"),
     .randomizerBanned = TRUE,
@@ -5886,7 +5886,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_RUBY_CREAM) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_ALCREMIE_RUBY_CREAM, INCBIN_PTR_U32("graphics/pokemon/alcremie/ruby_cream/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_RUBY_SWIRL) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_RUBY_SWIRL) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ALCREMIE).name,
     .longName = $("Alcremie Ruby Swirl"),
     .randomizerBanned = TRUE,
@@ -5923,7 +5923,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_RUBY_SWIRL) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_ALCREMIE_RUBY_SWIRL, INCBIN_PTR_U32("graphics/pokemon/alcremie/ruby_swirl/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_MATCHA_CREAM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_MATCHA_CREAM) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ALCREMIE).name,
     .longName = $("Alcremie Matcha"),
     .randomizerBanned = TRUE,
@@ -5960,7 +5960,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_MATCHA_CREAM) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_ALCREMIE_MATCHA_CREAM, INCBIN_PTR_U32("graphics/pokemon/alcremie/matcha_cream/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_SALTED_CREAM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_SALTED_CREAM) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ALCREMIE).name,
     .randomizerBanned = TRUE,
     .baseHP = 75,
@@ -5996,7 +5996,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ALCREMIE_SALTED_CREAM) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_ALCREMIE_SALTED_CREAM, INCBIN_PTR_U32("graphics/pokemon/alcremie/salted_cream/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FALINKS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FALINKS) = {
     .name = $("Falinks"),
     .baseHP = 65,
     .baseAttack = 100,
@@ -6086,7 +6086,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FALINKS) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PINCURCHIN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_PINCURCHIN) = {
     .name = $("Pincurchin"),
     .baseHP = 75,
     .baseAttack = 101,
@@ -6174,7 +6174,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_PINCURCHIN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SNOM) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SNOM) = {
     .name = $("Snom"),
     .baseHP = 50,
     .baseAttack = 45,
@@ -6228,7 +6228,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SNOM) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FROSMOTH) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_FROSMOTH) = {
     .name = $("Frosmoth"),
     .baseHP = 95,
     .baseAttack = 50,
@@ -6314,7 +6314,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_FROSMOTH) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_STONJOURNER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_STONJOURNER) = {
     .name = $("Stonjourner"),
     .baseHP = 100,
     .baseAttack = 125,
@@ -6397,7 +6397,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_STONJOURNER) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_EISCUE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_EISCUE) = {
     .name = $("Eiscue"),
     .baseHP = 85,
     .baseAttack = 100,
@@ -6483,7 +6483,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_EISCUE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_EISCUE_NOICE_FACE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_EISCUE_NOICE_FACE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_EISCUE).name,
     .randomizerBanned = TRUE,
     .baseHP = 85,
@@ -6520,7 +6520,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_EISCUE_NOICE_FACE) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_EISCUE_NOICE_FACE, INCBIN_PTR_U32("graphics/pokemon/eiscue/noice_face/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_INDEEDEE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_INDEEDEE) = {
     .name = $("Indeedee"),
     .baseHP = 60,
     .baseAttack = 55,
@@ -6607,7 +6607,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_INDEEDEE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_INDEEDEE_FEMALE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_INDEEDEE_FEMALE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_INDEEDEE).name,
     .randomizerBanned = TRUE,
     .baseHP = 70,
@@ -6688,7 +6688,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_INDEEDEE_FEMALE) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_INDEEDEE_FEMALE, INCBIN_PTR_U32("graphics/pokemon/indeedee/female/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MORPEKO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MORPEKO) = {
     .name = $("Morpeko"),
     .baseHP = 67,
     .baseAttack = 101,
@@ -6769,7 +6769,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MORPEKO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MORPEKO_HANGRY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_MORPEKO_HANGRY) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_MORPEKO).name,
     .randomizerBanned = TRUE,
     .baseHP = 67,
@@ -6806,7 +6806,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_MORPEKO_HANGRY) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_MORPEKO_HANGRY, INCBIN_PTR_U32("graphics/pokemon/morpeko/hangry/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CUFANT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CUFANT) = {
     .name = $("Cufant"),
     .baseHP = 72,
     .baseAttack = 80,
@@ -6882,7 +6882,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CUFANT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_COPPERAJAH) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_COPPERAJAH) = {
     .name = $("Copperajah"),
     .baseHP = 122,
     .baseAttack = 130,
@@ -6973,7 +6973,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_COPPERAJAH) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_COPPERAJAH_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_COPPERAJAH_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_COPPERAJAH).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -7014,7 +7014,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_COPPERAJAH_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRACOZOLT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DRACOZOLT) = {
     .name = $("Dracozolt"),
     .baseHP = 90,
     .baseAttack = 100,
@@ -7081,7 +7081,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRACOZOLT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARCTOZOLT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ARCTOZOLT) = {
     .name = $("Arctozolt"),
     .baseHP = 90,
     .baseAttack = 100,
@@ -7151,7 +7151,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARCTOZOLT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRACOVISH) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DRACOVISH) = {
     .name = $("Dracovish"),
     .baseHP = 90,
     .baseAttack = 90,
@@ -7221,7 +7221,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRACOVISH) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRACOVISH_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DRACOVISH_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_DRACOVISH).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -7262,7 +7262,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRACOVISH_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARCTOVISH) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ARCTOVISH) = {
     .name = $("Arctovish"),
     .baseHP = 90,
     .baseAttack = 90,
@@ -7330,7 +7330,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARCTOVISH) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DURALUDON) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DURALUDON) = {
     .name = $("Duraludon"),
     .baseHP = 70,
     .baseAttack = 95,
@@ -7414,7 +7414,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DURALUDON) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARCHALUDON) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ARCHALUDON) = {
     .name = $("Archaludon"),
     .baseHP = 90,
     .baseAttack = 105,
@@ -7508,7 +7508,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ARCHALUDON) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DURALUDON_PARTNER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DURALUDON_PARTNER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_DURALUDON).name,
     .randomizerBanned = TRUE,
     .baseHP = 70,
@@ -7585,7 +7585,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DURALUDON_PARTNER) = {
     DUPLICATE_IMAGE(SPECIES_DURALUDON),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DURALUDON_PARTNER_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DURALUDON_PARTNER_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_DURALUDON).name,
     .randomizerBanned = TRUE,
     .mega = MEGA_UNSPECIFIED,
@@ -7625,7 +7625,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DURALUDON_PARTNER_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DREEPY) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DREEPY) = {
     .name = $("Dreepy"),
     .baseHP = 28,
     .baseAttack = 70,
@@ -7713,7 +7713,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DREEPY) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAKLOAK) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DRAKLOAK) = {
     .name = $("Drakloak"),
     .baseHP = 68,
     .baseAttack = 90,
@@ -7802,7 +7802,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAKLOAK) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGAPULT) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_DRAGAPULT) = {
     .name = $("Dragapult"),
     .baseHP = 88,
     .baseAttack = 120,
@@ -7895,7 +7895,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_DRAGAPULT) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ZACIAN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ZACIAN) = {
     .name = $("Zacian"),
     .isLegendary = TRUE,
     .baseHP = 92,
@@ -7977,7 +7977,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ZACIAN) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ZACIAN_CROWNED_SWORD) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ZACIAN_CROWNED_SWORD) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ZACIAN).name,
     .isLegendary = TRUE,
     .mega = MEGA_RESTORATION,
@@ -8016,7 +8016,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ZACIAN_CROWNED_SWORD) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_ZACIAN_CROWNED_SWORD, INCBIN_PTR_U32("graphics/pokemon/zacian/crowned_sword/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ZAMAZENTA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ZAMAZENTA) = {
     .name = $("Zamazenta"),
     .isLegendary = TRUE,
     .baseHP = 92,
@@ -8099,7 +8099,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ZAMAZENTA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ZAMAZENTA_CROWNED_SHIELD) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ZAMAZENTA_CROWNED_SHIELD) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ZAMAZENTA).name,
     .isLegendary = TRUE,
     .mega = MEGA_RESTORATION,
@@ -8138,7 +8138,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ZAMAZENTA_CROWNED_SHIELD) =
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_ZAMAZENTA_CROWNED_SHIELD, INCBIN_PTR_U32("graphics/pokemon/zamazenta/crowned_shield/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ETERNATUS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ETERNATUS) = {
     .name = $("Eternatus"),
     .isLegendary = TRUE,
     .baseHP = 140,
@@ -8219,7 +8219,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ETERNATUS) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ETERNATUS_ETERNAMAX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ETERNATUS_ETERNAMAX) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ETERNATUS).name,
     .isLegendary = TRUE,
     .mega = MEGA_PRIMAL,
@@ -8258,7 +8258,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ETERNATUS_ETERNAMAX) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_ETERNATUS_ETERNAMAX, INCBIN_PTR_U32("graphics/pokemon/eternatus/eternamax/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KUBFU) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_KUBFU) = {
     .name = $("Kubfu"),
     .isLegendary = TRUE,
     .baseHP = 60,
@@ -8326,7 +8326,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_KUBFU) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_URSHIFU) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_URSHIFU) = {
     .name = $("Urshifu"),
     .isLegendary = TRUE,
     .baseHP = 100,
@@ -8415,7 +8415,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_URSHIFU) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_URSHIFU_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_URSHIFU_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_URSHIFU).name,
     .randomizerBanned = TRUE,
     .isLegendary = TRUE,
@@ -8456,7 +8456,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_URSHIFU_MEGA) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_URSHIFU_RAPID_STRIKE_STYLE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_URSHIFU_RAPID_STRIKE_STYLE) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_URSHIFU).name,
     .isLegendary = TRUE,
     .baseHP = 90,
@@ -8540,7 +8540,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_URSHIFU_RAPID_STRIKE_STYLE)
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_URSHIFU_RAPID_STRIKE_STYLE, INCBIN_PTR_U32("graphics/pokemon/urshifu/rapid_strike_style/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_URSHIFU).name,
     .randomizerBanned = TRUE,
     .isLegendary = TRUE,
@@ -8581,7 +8581,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_URSHIFU_RAPID_STRIKE_STYLE_
                                       INCBIN_PTR_U32("graphics/pokemon/urshifu/rapid_strike_style_mega/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ZARUDE) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ZARUDE) = {
     .name = $("Zarude"),
     .isLegendary = TRUE,
     .baseHP = 105,
@@ -8696,7 +8696,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ZARUDE) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ZARUDE_DADA) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ZARUDE_DADA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ZARUDE).name,
     .isLegendary = TRUE,
     .baseHP = 105,
@@ -8815,7 +8815,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ZARUDE_DADA) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_ZARUDE_DADA, INCBIN_PTR_U32("graphics/pokemon/zarude/dada/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_REGIELEKI) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_REGIELEKI) = {
     .name = $("Regieleki"),
     .isLegendary = TRUE,
     .baseHP = 80,
@@ -8901,7 +8901,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_REGIELEKI) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_REGIDRAGO) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_REGIDRAGO) = {
     .name = $("Regidrago"),
     .isLegendary = TRUE,
     .baseHP = 200,
@@ -8982,7 +8982,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_REGIDRAGO) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GLASTRIER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_GLASTRIER) = {
     .name = $("Glastrier"),
     .isLegendary = TRUE,
     .baseHP = 100,
@@ -9055,7 +9055,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_GLASTRIER) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SPECTRIER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SPECTRIER) = {
     .name = $("Spectrier"),
     .isLegendary = TRUE,
     .baseHP = 100,
@@ -9130,7 +9130,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SPECTRIER) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SPECTRIER_CLOUD) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_SPECTRIER_CLOUD) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_SPECTRIER).name,
     .randomizerBanned = TRUE,
     .isLegendary = TRUE,
@@ -9178,7 +9178,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_SPECTRIER_CLOUD) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CALYREX) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CALYREX) = {
     .name = $("Calyrex"),
     .isLegendary = TRUE,
     .baseHP = 100,
@@ -9262,7 +9262,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CALYREX) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CALYREX_CLOUD_RIDER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CALYREX_CLOUD_RIDER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_CALYREX).name,
     .randomizerBanned = TRUE,
     .isLegendary = TRUE,
@@ -9329,7 +9329,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CALYREX_CLOUD_RIDER) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CALYREX_ICE_RIDER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CALYREX_ICE_RIDER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_CALYREX).name,
     .isLegendary = TRUE,
     .baseHP = 100,
@@ -9424,7 +9424,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CALYREX_ICE_RIDER) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_CALYREX_ICE_RIDER, INCBIN_PTR_U32("graphics/pokemon/calyrex/ice_rider/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CALYREX_SHADOW_RIDER) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_CALYREX_SHADOW_RIDER) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_CALYREX).name,
     .isLegendary = TRUE,
     .baseHP = 100,
@@ -9518,7 +9518,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_CALYREX_SHADOW_RIDER) = {
     .shinyPalette = SPECIES_SHINY_PAL(SPECIES_CALYREX_SHADOW_RIDER, INCBIN_PTR_U32("graphics/pokemon/calyrex/shadow_rider/shiny.gbapal.lz")),
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ENAMORUS) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ENAMORUS) = {
     .name = $("Enamorus"),
     .isLegendary = TRUE,
     .baseHP = 74,
@@ -9618,7 +9618,7 @@ static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ENAMORUS) = {
     .frontAnim = ANIM_LIST_GENERIC,
 };
 
-static const SpeciesData SPECIES_DATA_STRUCT(SPECIES_ENAMORUS_THERIAN) = {
+static const Species SPECIES_DATA_STRUCT(SPECIES_ENAMORUS_THERIAN) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_ENAMORUS).name,
     .longName = $("Enamorus Therian"),
     .randomizerBanned = TRUE,

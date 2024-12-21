@@ -1,4 +1,4 @@
-const SpeciesData gSpeciesData[] = {
+const Species gSpecies[] = {
     SPECIES_ENTRY(SPECIES_NONE),
     SPECIES_ENTRY(SPECIES_BULBASAUR),
     SPECIES_ENTRY(SPECIES_IVYSAUR),
