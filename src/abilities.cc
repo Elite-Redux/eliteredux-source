@@ -9220,6 +9220,17 @@ static const Ability BalloonBlitz = {
     .onParentalBond = ParentalBond.onParentalBond,
 };
 
+static const Ability StrikerPixilate = {
+    .name = $("StrikerPixilate"),
+    .description = $("Boosts the power of kicking\n"
+                     "moves by 1.3x + Pixilate."),
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) MUL(1.3);
+        },
+    ATE_ABILITY(TYPE_FAIRY),
+};
+
 const Ability gAbilities[] = {
     [ABILITY_NONE] = None,
     [ABILITY_STENCH] = Stench,
@@ -9977,6 +9988,7 @@ const Ability gAbilities[] = {
     [ABILITY_CRUST_COAT] = CrustCoat,
     [ABILITY_PUFFY] = Puffy,
     [ABILITY_BALLOON_BLITZ] = BalloonBlitz,
+    [ABILITY_STRIKER_PIXILATE] = StrikerPixilate,
 };
 
 #pragma GCC diagnostic pop
