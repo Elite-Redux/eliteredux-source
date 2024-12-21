@@ -57,7 +57,7 @@
 #include "mgba_printf/mini_printf.h"
 #include "recommended_set_struct.h"
 #include "data/pokemon/recommended_sets.h"
-#include "abilities.h"
+#include "abilities.hh"
 
 // Config options - Note that some config options need external modifications to fully work, such as CONFIG_CAN_FORGET_HM_MOVES, CONFIG_PHYSICAL_SPECIAL_SPLIT, and CONFIG_DECAPITALIZE_MET_LOCATION_STRINGS
 #define CONFIG_CAN_FORGET_HM_MOVES                      TRUE
@@ -4275,12 +4275,12 @@ static void PutPageWindowTilemaps(u8 page)
     ScheduleBgCopyTilemapToVram(0);
 }
 
-static u8 AddWindowFromTemplateList(const struct WindowTemplate *template, u8 templateId)
+static u8 AddWindowFromTemplateList(const struct WindowTemplate *spriteTemplate, u8 templateId)
 {
     u8 *windowIdPtr = &sMonSummaryScreen->windowIds[templateId];
     if (*windowIdPtr == WINDOW_NONE)
     {
-        *windowIdPtr = AddWindow(&template[templateId]);
+        *windowIdPtr = AddWindow(&spriteTemplate[templateId]);
         FillWindowPixelBuffer(*windowIdPtr, PIXEL_FILL(0));
     }
     return *windowIdPtr;
@@ -6969,7 +6969,7 @@ static void CreateHealthBarSprites(u16 tileTag, u16 palTag)
 
     for (i = 0; i < HP_BAR_SPRITES_COUNT; i++)
     {
-        struct SpriteTemplate template = {
+        struct SpriteTemplate spriteTemplate = {
             .tileTag = tileTag,
             .paletteTag = palTag + hpBarPalTagOffset,
             .oam = &sOamData_ExpHealthBars,
@@ -6980,7 +6980,7 @@ static void CreateHealthBarSprites(u16 tileTag, u16 palTag)
         };
 
         sHealthBar->spritePositions[i] = i * 8 + 158;
-        spriteId = CreateSprite(&template, sHealthBar->spritePositions[i], 38, 0);
+        spriteId = CreateSprite(&spriteTemplate, sHealthBar->spritePositions[i], 38, 0);
         sHealthBar->sprites[i] = &gSprites[spriteId];
         sHealthBar->sprites[i]->oam.priority = 1;
         sHealthBar->sprites[i]->invisible = TRUE;
@@ -7116,7 +7116,7 @@ static void CreateExpBarSprites(u16 tileTag, u16 palTag)
 
     for (i = 0; i < EXP_BAR_SPRITES_COUNT; i++)
     {
-        struct SpriteTemplate template = {
+        struct SpriteTemplate spriteTemplate = {
             .tileTag = tileTag,
             .paletteTag = palTag,
             .oam = &sOamData_ExpHealthBars,
@@ -7127,7 +7127,7 @@ static void CreateExpBarSprites(u16 tileTag, u16 palTag)
         };
 
         sExpBar->spritePositions[i] = i * 8 + 158;
-        spriteId = CreateSprite(&template, sExpBar->spritePositions[i], 153, 0);
+        spriteId = CreateSprite(&spriteTemplate, sExpBar->spritePositions[i], 153, 0);
         sExpBar->sprites[i] = &gSprites[spriteId];
         sExpBar->sprites[i]->oam.priority = 1;
         sExpBar->sprites[i]->invisible = TRUE;

@@ -1,6 +1,6 @@
 #include "battle_ai_util.h"
 
-#include "abilities.h"
+#include "abilities.hh"
 #include "battle.h"
 #include "battle_ai_main.h"
 #include "battle_ai_switch_items.h"

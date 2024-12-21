@@ -85,7 +85,7 @@
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
 #include "tmhm_struct.h"
-#include "abilities.h"
+#include "abilities.hh"
 // #include "data/pokemon/form_species_table_pointers.h"
 
 #define PARTY_PAL_SELECTED (1 << 0)

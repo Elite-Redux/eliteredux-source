@@ -936,18 +936,18 @@ void ToggleMatchCallVerticalArrows(bool32 shouldHide)
     structPtr->list.downArrow->data[7] = shouldHide;
 }
 
-void InitMatchCallWindowState(struct MatchCallWindowState *dst, struct PokenavListTemplate *template)
+void InitMatchCallWindowState(struct MatchCallWindowState *dst, struct PokenavListTemplate *spriteTemplate)
 {
-    dst->unk10 = template->list.matchCallEntries;
-    dst->windowTopIndex = template->unk6;
-    dst->listLength = template->count;
-    dst->unkC = template->unk8;
-    dst->visibleEntries = template->maxShowed;
+    dst->unk10 = spriteTemplate->list.matchCallEntries;
+    dst->windowTopIndex = spriteTemplate->unk6;
+    dst->listLength = spriteTemplate->count;
+    dst->unkC = spriteTemplate->unk8;
+    dst->visibleEntries = spriteTemplate->maxShowed;
     if (dst->visibleEntries >= dst->listLength)
     {
         dst->windowTopIndex = 0;
         dst->unk4 = 0;
-        dst->selectedIndexOffset = template->unk6;
+        dst->selectedIndexOffset = spriteTemplate->unk6;
     }
     else
     {
@@ -955,7 +955,7 @@ void InitMatchCallWindowState(struct MatchCallWindowState *dst, struct PokenavLi
         if (dst->windowTopIndex + dst->visibleEntries > dst->listLength)
         {
             dst->selectedIndexOffset = dst->windowTopIndex + dst->visibleEntries - dst->listLength;
-            dst->windowTopIndex = template->unk6 - dst->selectedIndexOffset;
+            dst->windowTopIndex = spriteTemplate->unk6 - dst->selectedIndexOffset;
         }
         else
         {
@@ -964,26 +964,26 @@ void InitMatchCallWindowState(struct MatchCallWindowState *dst, struct PokenavLi
     }
 }
 
-bool32 CopyPokenavListMenuTemplate(struct PokenavSub17Substruct *dest, const struct BgTemplate *bgTemplate, struct PokenavListTemplate *template, s32 a3)
+bool32 CopyPokenavListMenuTemplate(struct PokenavSub17Substruct *dest, const struct BgTemplate *bgTemplate, struct PokenavListTemplate *spriteTemplate, s32 a3)
 {
     struct WindowTemplate window;
 
     dest->listWindow.bg = bgTemplate->bg;
     dest->listWindow.unk6 = a3;
-    dest->unk34 = template->listFunc.unk10_2;
-    dest->unk38 = template->unk14;
-    dest->listWindow.unk1 = template->fillValue;
-    dest->listWindow.unk2 = template->item_X;
-    dest->listWindow.unk3 = template->listTop;
-    dest->listWindow.unk4 = template->windowWidth;
-    dest->listWindow.fontId = template->fontId;
+    dest->unk34 = spriteTemplate->listFunc.unk10_2;
+    dest->unk38 = spriteTemplate->unk14;
+    dest->listWindow.unk1 = spriteTemplate->fillValue;
+    dest->listWindow.unk2 = spriteTemplate->item_X;
+    dest->listWindow.unk3 = spriteTemplate->listTop;
+    dest->listWindow.unk4 = spriteTemplate->windowWidth;
+    dest->listWindow.fontId = spriteTemplate->fontId;
 
     window.bg = bgTemplate->bg;
-    window.tilemapLeft = template->item_X;
+    window.tilemapLeft = spriteTemplate->item_X;
     window.tilemapTop = 0;
-    window.width = template->windowWidth;
+    window.width = spriteTemplate->windowWidth;
     window.height = 32;
-    window.paletteNum = template->fillValue;
+    window.paletteNum = spriteTemplate->fillValue;
     window.baseBlock = a3 + 2;
 
     dest->listWindow.windowId = AddWindow(&window);

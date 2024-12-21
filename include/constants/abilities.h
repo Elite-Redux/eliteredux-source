@@ -518,7 +518,7 @@
 #define ABILITY_WISHMAKER 496 // Uses Wish on switch-in. Three uses per battle.
 #define ABILITY_YUKI_ONNA 497 // Scare + Intimidate. 10% chance to infatuate on hit.
 #define ABILITY_SUPPRESS 498 // Casts Torment on entry.
-#define ABILITY_REFRIGERATOR 499 // Refrigerate + Illuminate.
+#define ABILITY_REFRIGERATOR 499 // Filter + Illuminate.
 #define ABILITY_HEAVEN_ASUNDER 500 // Spacial Rend always crits. Ups crit level by +1.
 #define ABILITY_PURIFYING_WATERS 501 // Hydration + Water Veil.
 #define ABILITY_SEABORNE 502 // Drizzle + Swift Swim.
@@ -775,8 +775,9 @@
 #define ABILITY_CRUST_COAT 753 // Immune to critical hits. Takes 20% less damage from all attacks.
 #define ABILITY_PUFFY 754 // Takes 1/2 dmg from contact moves but Fire moves hurt it 2x more.
 #define ABILITY_BALLOON_BLITZ 755 // Inflatable + Hyper Aggressive.
+#define ABILITY_STRIKER_PIXILATE 756 // Striker + Pixilate
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_BALLOON_BLITZ + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_STRIKER_PIXILATE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

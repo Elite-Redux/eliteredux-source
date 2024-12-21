@@ -190,7 +190,7 @@ void BattleAI_SetupAIData(u8 defaultScoreMoves) {
 u8 BattleAI_ChooseMoveOrAction(void) {
     u32 savedCurrentMove = gCurrentMove;
     u8 ret;
-    u8 protected = gRoundStructs[gActiveBattler].protected;
+    u8 isProtected = gRoundStructs[gActiveBattler].isProtected;
 
     if (!(gBattleTypeFlags & BATTLE_TYPE_DOUBLE))
         ret = ChooseMoveOrAction_Singles();
@@ -198,7 +198,7 @@ u8 BattleAI_ChooseMoveOrAction(void) {
         ret = ChooseMoveOrAction_Doubles();
 
     memset(&gRoundStructs[gActiveBattler], 0, sizeof(struct RoundStruct));
-    gRoundStructs[gActiveBattler].protected = protected;
+    gRoundStructs[gActiveBattler].isProtected = isProtected;
 
     gCurrentMove = savedCurrentMove;
     return ret;

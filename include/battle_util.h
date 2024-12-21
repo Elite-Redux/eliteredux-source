@@ -1,7 +1,7 @@
 #ifndef GUARD_BATTLE_UTIL_H
 #define GUARD_BATTLE_UTIL_H
 
-#include "abilities.h"
+#include "abilities.hh"
 #include "battle_ai_new.h"
 
 #define MOVE_LIMITATION_ZEROMOVE (1 << 0)

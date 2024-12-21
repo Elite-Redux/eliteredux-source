@@ -59,7 +59,7 @@
 #include "constants/songs.h"
 #include "constants/species.h"
 #include "constants/weather.h"
-#include "abilities.h"
+#include "abilities.hh"
 
 
 #if TX_DEBUG_SYSTEM_ENABLE == TRUE

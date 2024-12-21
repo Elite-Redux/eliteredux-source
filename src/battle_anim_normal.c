@@ -845,7 +845,7 @@ void UnusedAnimTask_8115F94(u8 taskId)
 
     if (gTasks[taskId].data[2] & 0x1)
     {
-        paletteIndex = IndexOfSpritePaletteTag(gSprites[gHealthboxSpriteIds[attackerBattler]].template->paletteTag);
+        paletteIndex = IndexOfSpritePaletteTag(gSprites[gHealthboxSpriteIds[attackerBattler]].spriteTemplate->paletteTag);
         selectedPalettes |= (1 << paletteIndex) << 16;
     }
 

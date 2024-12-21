@@ -476,7 +476,7 @@ static const u8 sAbilityDoombringerDescription[] = _("Uses Doom Desire\non switc
 static const u8 sAbilityWishmakerDescription[] = _("Uses Wish on switch-in.\nThree uses per battle.");
 static const u8 sAbilityYukiOnnaDescription[] = _("Scare + Intimidate.\n10% chance to infatuate on hit.");
 static const u8 sAbilitySuppressDescription[] = _("Casts Torment on entry.");
-static const u8 sAbilityRefrigeratorDescription[] = _("Refrigerate + Illuminate.");
+static const u8 sAbilityRefrigeratorDescription[] = _("Filter + Illuminate.");
 static const u8 sAbilityHeavenAsunderDescription[] = _("Spacial Rend always crits.\nUps crit level by +1.");
 static const u8 sAbilityPurifyingWatersDescription[] = _("Hydration + Water Veil.");
 static const u8 sAbilitySeaborneDescription[] = _("Drizzle + Swift Swim.");
@@ -723,6 +723,7 @@ static const u8 sAbilityNeurotoxinDescription[] = _("Inflicting poison also lowe
 static const u8 sAbilityEnergizedHornsDescription[] = _("Mighty horn moves become special\nand deal 30% more damage.");
 static const u8 sAbilitySpiderLairUpgradeDescription[] = _("Casts Sticky Web on entry.\nLasts 7 turns.");
 static const u8 sAbilityBalloonBlitzDescription[] = _("Inflatable + Hyper Aggressive.");
+static const u8 sAbilityStrikerPixilateDescription[] = _("Striker + Pixilate.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1239,7 +1240,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_MYCELIUM_MIGHT] = _("Mycelium Might"),
     [ABILITY_TELEKINETIC] = _("Telekinetic"),
     [ABILITY_COMBUSTION] = _("Combustion"),
-    [ABILITY_PONY_POWER] = _("Pony Power"),
+    [ABILITY_PONY_POWER] = _("Blade's Essence"),
     [ABILITY_POWDER_BURST] = _("Powder Burst"),
     [ABILITY_RETRIEVER] = _("Retriever"),
     [ABILITY_MONSTER_MASH] = _("Monster Mash"),
@@ -1482,6 +1483,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_CRUST_COAT] = _("Crust Coat"),
     [ABILITY_PUFFY] = _("Puffy"),
     [ABILITY_BALLOON_BLITZ] = _("Balloon Blitz"),
+    [ABILITY_STRIKER_PIXILATE] = _("StrikerPixilate"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2242,4 +2244,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_CRUST_COAT] = sAbilityBattleArmorDescription,
     [ABILITY_PUFFY] = sAbilityFluffyDescription,
     [ABILITY_BALLOON_BLITZ] = sAbilityBalloonBlitzDescription,
+    [ABILITY_STRIKER_PIXILATE] = sAbilityStrikerPixilateDescription,
 };

@@ -44,8 +44,8 @@ struct Window
 
 #define INIT_WINDOWS(templates) InitWindows(templates, ARRAY_COUNT(templates))
 bool16 InitWindows(const struct WindowTemplate *templates, int count);
-u16 AddWindow(const struct WindowTemplate *template);
-int AddWindowWithoutTileMap(const struct WindowTemplate *template);
+u16 AddWindow(const struct WindowTemplate *spriteTemplate);
+int AddWindowWithoutTileMap(const struct WindowTemplate *spriteTemplate);
 void RemoveWindow(u8 windowId);
 void FreeAllWindowBuffers(void);
 void CopyWindowToVram(u8 windowId, u8 mode);
@@ -63,7 +63,7 @@ void ScrollWindow(u8 windowId, u8 direction, u8 distance, u8 fillValue);
 void CallWindowFunction(u8 windowId, void ( *func)(u8, u8, u8, u8, u8, u8));
 bool8 SetWindowAttribute(u8 windowId, u8 attributeId, u32 value);
 u32 GetWindowAttribute(u8 windowId, u8 attributeId);
-u16 AddWindow8Bit(const struct WindowTemplate *template);
+u16 AddWindow8Bit(const struct WindowTemplate *spriteTemplate);
 void FillWindowPixelBuffer8Bit(u8 windowId, u8 fillValue);
 void FillWindowPixelRect8Bit(u8 windowId, u8 fillValue, u16 x, u16 y, u16 width, u16 height);
 void BlitBitmapRectToWindow4BitTo8Bit(u8 windowId, const u8 *pixels, u16 srcX, u16 srcY, u16 srcWidth, int srcHeight, u16 destX, u16 destY, u16 rectWidth, u16 rectHeight, u8 paletteNum);

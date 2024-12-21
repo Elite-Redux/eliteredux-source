@@ -1210,10 +1210,10 @@ static s32 DrawResultsTextWindow(const u8 *text, u8 spriteId)
 static void CreateResultsTextWindowSprites(void)
 {
     int i;
-    struct SpriteTemplate template;
+    struct SpriteTemplate spriteTemplate;
     u8 spriteIds[ARRAY_COUNT(sSpriteSheets_ResultsTextWindow)];
 
-    template = sSpriteTemplate_ResultsTextWindow;
+    spriteTemplate = sSpriteTemplate_ResultsTextWindow;
     for (i = 0; i < (int)ARRAY_COUNT(sSpriteSheets_ResultsTextWindow); i++)
         LoadSpriteSheet(&sSpriteSheets_ResultsTextWindow[i]);
 
@@ -1222,8 +1222,8 @@ static void CreateResultsTextWindowSprites(void)
     // Create sprites for the two window types, each made up of 4 sprites
     for (i = 0; i < (int)ARRAY_COUNT(sSpriteSheets_ResultsTextWindow); i++)
     {
-        spriteIds[i] = CreateSprite(&template, TEXT_BOX_X, TEXT_BOX_Y, 10);
-        template.tileTag++;
+        spriteIds[i] = CreateSprite(&spriteTemplate, TEXT_BOX_X, TEXT_BOX_Y, 10);
+        spriteTemplate.tileTag++;
     }
 
     // Save sprite ids of the sliding text box onto its leftmost sprite

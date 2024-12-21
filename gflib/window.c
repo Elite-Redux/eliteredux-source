@@ -111,7 +111,7 @@ bool16 InitWindows(const struct WindowTemplate *templates, int count)
     return TRUE;
 }
 
-u16 AddWindow(const struct WindowTemplate *template)
+u16 AddWindow(const struct WindowTemplate *spriteTemplate)
 {
     u16 win;
     u8 bgLayer;
@@ -129,12 +129,12 @@ u16 AddWindow(const struct WindowTemplate *template)
     if (win == WINDOWS_MAX)
         return WINDOW_NONE;
 
-    bgLayer = template->bg;
+    bgLayer = spriteTemplate->bg;
     allocatedBaseBlock = 0;
 
     if (gUnneededFireRedVariable == 1)
     {
-        allocatedBaseBlock = DummiedOutFireRedLeafGreenTileAllocFunc(bgLayer, 0, template->width * template->height, 0);
+        allocatedBaseBlock = DummiedOutFireRedLeafGreenTileAllocFunc(bgLayer, 0, spriteTemplate->width * spriteTemplate->height, 0);
 
         if (allocatedBaseBlock == -1)
             return WINDOW_NONE;
@@ -159,7 +159,7 @@ u16 AddWindow(const struct WindowTemplate *template)
         }
     }
 
-    allocatedTilemapBuffer = AllocZeroed((u16)(32 * (template->width * template->height)));
+    allocatedTilemapBuffer = AllocZeroed((u16)(32 * (spriteTemplate->width * spriteTemplate->height)));
 
     if (allocatedTilemapBuffer == NULL)
     {
@@ -172,7 +172,7 @@ u16 AddWindow(const struct WindowTemplate *template)
     }
 
     gWindows[win].tileData = allocatedTilemapBuffer;
-    gWindows[win].window = *template;
+    gWindows[win].window = *spriteTemplate;
 
     if (gUnneededFireRedVariable == 1)
     {
@@ -183,7 +183,7 @@ u16 AddWindow(const struct WindowTemplate *template)
     return win;
 }
 
-int AddWindowWithoutTileMap(const struct WindowTemplate *template)
+int AddWindowWithoutTileMap(const struct WindowTemplate *spriteTemplate)
 {
     u16 win;
     u8 bgLayer;
@@ -198,18 +198,18 @@ int AddWindowWithoutTileMap(const struct WindowTemplate *template)
     if (win == WINDOWS_MAX)
         return WINDOW_NONE;
 
-    bgLayer = template->bg;
+    bgLayer = spriteTemplate->bg;
     allocatedBaseBlock = 0;
 
     if (gUnneededFireRedVariable == 1)
     {
-        allocatedBaseBlock = DummiedOutFireRedLeafGreenTileAllocFunc(bgLayer, 0, template->width * template->height, 0);
+        allocatedBaseBlock = DummiedOutFireRedLeafGreenTileAllocFunc(bgLayer, 0, spriteTemplate->width * spriteTemplate->height, 0);
 
         if (allocatedBaseBlock == -1)
             return WINDOW_NONE;
     }
 
-    gWindows[win].window = *template;
+    gWindows[win].window = *spriteTemplate;
 
     if (gUnneededFireRedVariable == 1)
     {
@@ -610,7 +610,7 @@ static void DummyWindowBgTilemap8Bit(void)
 
 }
 
-u16 AddWindow8Bit(const struct WindowTemplate *template)
+u16 AddWindow8Bit(const struct WindowTemplate *spriteTemplate)
 {
     u16 windowId;
     u8* memAddress;
@@ -623,7 +623,7 @@ u16 AddWindow8Bit(const struct WindowTemplate *template)
     }
     if (windowId == WINDOWS_MAX)
         return WINDOW_NONE;
-    bgLayer = template->bg;
+    bgLayer = spriteTemplate->bg;
     if (gWindowBgTilemapBuffers[bgLayer] == NULL)
     {
         u16 attribute = GetBgAttribute(bgLayer, BG_ATTR_METRIC);
@@ -639,7 +639,7 @@ u16 AddWindow8Bit(const struct WindowTemplate *template)
             SetBgTilemapBuffer(bgLayer, memAddress);
         }
     }
-    memAddress = Alloc((u16)(64 * (template->width * template->height)));
+    memAddress = Alloc((u16)(64 * (spriteTemplate->width * spriteTemplate->height)));
     if (memAddress == NULL)
     {
         if (GetNumActiveWindowsOnBg8Bit(bgLayer) == 0 && gWindowBgTilemapBuffers[bgLayer] != DummyWindowBgTilemap8Bit)
@@ -652,7 +652,7 @@ u16 AddWindow8Bit(const struct WindowTemplate *template)
     else
     {
         gWindows[windowId].tileData = memAddress;
-        gWindows[windowId].window = *template;
+        gWindows[windowId].window = *spriteTemplate;
         return windowId;
     }
 }

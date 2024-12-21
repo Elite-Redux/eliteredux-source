@@ -1311,7 +1311,7 @@ void DestroyRecordMixingLights(void)
 
     for (i = 0; i < MAX_SPRITES; i++)
     {
-        if (gSprites[i].template == &sSpriteTemplate_RecordMixLights)
+        if (gSprites[i].spriteTemplate == &sSpriteTemplate_RecordMixLights)
         {
             FreeSpritePalette(&gSprites[i]);
             DestroySprite(&gSprites[i]);
