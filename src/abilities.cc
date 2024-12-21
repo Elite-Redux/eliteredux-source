@@ -6238,10 +6238,9 @@ static const Ability Suppress = {
 
 static const Ability Refrigerator = {
     .name = $("Refrigerator"),
-    .description = $("Refrigerate + Illuminate."),
-    .onOffensiveMultiplier = Refrigerate.onOffensiveMultiplier,
+    .description = $("Filter + Illuminate."),
+    .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
     .onAccuracy = Illuminate.onAccuracy,
-    .onMoveType = Refrigerate.onMoveType,
 };
 
 static const Ability HeavenAsunder = {
@@ -6360,7 +6359,7 @@ static const Ability Combustion = {
 };
 
 static const Ability PonyPower = {
-    .name = $("Pony Power"),
+    .name = $("Blade's Essence"),
     .description = $("Keen Edge + Mystic Blades."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
