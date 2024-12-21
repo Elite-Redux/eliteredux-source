@@ -1527,7 +1527,6 @@ static const u16 sDoduoFormSpeciesIdTable[] = {
 static const u16 sDodrioFormSpeciesIdTable[] = {
     SPECIES_DODRIO,
     SPECIES_DODRIO_REDUX,
-    SPECIES_ARCANINE_HISUIAN,
     FORM_SPECIES_END,
 };
 static const u16 sVoltorbFormSpeciesIdTable[] = {
@@ -1885,18 +1884,14 @@ static const u16 sSpectrierFormSpeciesIdTable[] = {
     FORM_SPECIES_END,
 };
 static const u16 sYveltal_MegaFormSpeciesIdTable[] = {
-    SPECIES_YVELTAL_MEGA,
     SPECIES_YVELTAL,
+    SPECIES_YVELTAL_MEGA,
     FORM_SPECIES_END,
 };
-static const u16 sKingambit_Redux_MegaFormSpeciesIdTable[] = {
-    SPECIES_KINGAMBIT_REDUX_MEGA,
-    SPECIES_KINGAMBIT,
-    FORM_SPECIES_END,
-};
+
 static const u16 sKartana_FallenFormSpeciesIdTable[] = {
-    SPECIES_KARTANA_FALLEN,
     SPECIES_KARTANA,
+    SPECIES_KARTANA_FALLEN,
     FORM_SPECIES_END,
 };
 static const u16 sTinkatonFormSpeciesIdTable[] = {

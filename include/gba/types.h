@@ -3,18 +3,6 @@
 
 #include <stdint.h>
 
-#define ARRAY_WITH_COUNT(type) \
-    typedef struct {           \
-        u16 count;             \
-        type *values;          \
-    } type##Array;
-
-#define ARRAY_COUNT_LITERAL(struct)   \
-    {                                 \
-        .count = ARRAY_COUNT(struct), \
-        .values = struct,             \
-    }
-
 typedef uint8_t   u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
@@ -42,10 +30,6 @@ typedef u32 bool32;
 typedef vu8  vbool8;
 typedef vu16 vbool16;
 typedef vu32 vbool32;
-
-ARRAY_WITH_COUNT(u8)
-ARRAY_WITH_COUNT(u16)
-ARRAY_WITH_COUNT(u32)
 
 #ifndef __GNUC__
 #define __attribute__(value)

@@ -1801,6 +1801,21 @@ const s8 gNatureStatTable[NUM_NATURES][NUM_NATURE_STATS] = {
 #include "data/pokemon/trainer_class_lookups.h"
 #include "data/pokemon/experience_tables.h"
 #include "data/pokemon/base_stats.h"
+// For some dumbass reason transitive includes fail
+#undef LEVEL_UP_END
+#include "data/pokemon/species_data_defines.h"
+#include "data/pokemon/species_data_gen1.h"
+#include "data/pokemon/species_data_gen2.h"
+#include "data/pokemon/species_data_gen3.h"
+#include "data/pokemon/species_data_gen4.h"
+#include "data/pokemon/species_data_gen5.h"
+#include "data/pokemon/species_data_gen6.h"
+#include "data/pokemon/species_data_gen7.h"
+#include "data/pokemon/species_data_gen8.h"
+#include "data/pokemon/species_data_gen9.h"
+#include "data/pokemon/species_data.h"
+#undef LEVEL_UP_END
+#define LEVEL_UP_END 0xFFFF
 #include "data/pokemon/level_up_learnsets.h"
 #include "data/pokemon/evolution.h"
 #include "data/pokemon/level_up_learnset_pointers.h"

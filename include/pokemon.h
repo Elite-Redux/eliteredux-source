@@ -285,7 +285,6 @@ typedef struct LevelUpMove {
     u16 move;
     u16 level;
 } LevelUpMove;
-ARRAY_WITH_COUNT(LevelUpMove)
 
 struct TrainerMonSpread {
     u8 EVs[6];
@@ -298,7 +297,6 @@ typedef struct Evolution {
     u16 param;
     u16 targetSpecies;
 } Evolution;
-ARRAY_WITH_COUNT(Evolution)
 
 typedef struct FormChange {
     u16 method;
@@ -306,7 +304,6 @@ typedef struct FormChange {
     u16 param1;
     u16 param2;
 } FormChange;
-ARRAY_WITH_COUNT(FormChange)
 
 typedef enum {
     TWO_HEADED = 1,
@@ -331,20 +328,16 @@ typedef enum {
     VARIANT_REDUX,
 } VariantType;
 
-#define __SPECIES_DATA_STRUCT_NAME(species) DataSpecies##species
-#define SPECIES_DATA_STRUCT_NAME(species) __SPECIES_DATA_STRUCT_NAME(species)
-#define SPECIES_DATA_STRUCT(species) static const SpeciesData SPECIES_DATA_STRUCT_NAME(species)
-
-typedef struct {
-    const u8 *name;
-    const u8 *longName;
-    const u8 *icon;
-    const u8 *femaleIcon;
-    const EvolutionArray *evos;
-    const EvolutionArray *formShifts;
-    const u16Array *forms;
-    const LevelUpMoveArray *levelUpMoves;
-    const TutorUnion *tutors;
+typedef struct SpeciesData {
+    const u8 *const name;
+    const u8 *const longName;
+    const u8 *const icon;
+    const u8 *const femaleIcon;
+    const Evolution *const evos;
+    const Evolution *const formShifts;
+    const u16 *const forms;
+    const LevelUpMove *const levelUpMoves;
+    const TutorUnion tutors;
     const MonCoords frontCoords;
     const MonCoords backCoords;
     const CompressedSpriteSheet frontPic;
@@ -379,7 +372,7 @@ typedef struct {
     u16 noFlip:1;
     u16 isLegendary:1;
     u16 randomizerBanned:1;
-    u16 generateVariants:1;
+    u16 hasWildVariants:1;
     MegaType mega:3;
     VariantType variant:3;
     u8 genderRatio;
@@ -399,8 +392,9 @@ typedef struct {
     u8 eggGroup2;
     u8 safariZoneFleeRate;
     u8 iconPalette;
-    u8 backAnimation;
-    u8 frontAnimation;
+    u8 femaleIconPalette;
+    u8 frontAnimId;
+    u8 backAnimId;
 } SpeciesData;
 
 #define NUM_UNOWN_FORMS 28

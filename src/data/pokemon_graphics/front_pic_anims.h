@@ -11451,6 +11451,11 @@ static const union AnimCmd *const sAnims_SPECIES_VENUSAUR[] = {
     sAnim_VENUSAUR_1,
 };
 
+static const union AnimCmd *const sAnims_SPECIES_CHARMANDER[] = {
+    sAnim_GeneralFrame0,
+    sAnim_CHARMANDER_1,
+};
+
 static const union AnimCmd *const sAnims_SPECIES_CHARMELEON[] = {
     sAnim_GeneralFrame0,
     sAnim_CHARMELEON_1,

@@ -113,7 +113,7 @@ const struct SpriteFrameImage gTrainerBackPicTable_Steven[] =
     gTrainerBackPic_Steven + 0x1800, 0x0800,
 };
 
-static const union AnimCmd sAnim_GeneralFrame0[] =
+const union AnimCmd sAnim_GeneralFrame0[] =
 {
     ANIMCMD_FRAME(0, 0),
     ANIMCMD_END,
