@@ -31302,12 +31302,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_GRIMMSNARL_MEGA] =
     {
-    .baseHP        = 95,
-    .baseAttack    = 135,
-    .baseDefense   = 75,
-    .baseSpeed     = 85,
-    .baseSpAttack  = 110,
-    .baseSpDefense = 105,
+    .baseHP         = 95,
+    .baseAttack     = 140,
+    .baseDefense    = 75,
+    .baseSpeed      = 85,
+    .baseSpAttack   = 110,
+    .baseSpDefense  = 105,
     .type1 = TYPE_DARK,
     .type2 = TYPE_FAIRY,
     .catchRate = 255,
