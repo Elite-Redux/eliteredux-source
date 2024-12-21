@@ -2854,8 +2854,8 @@ bool8 ScrCmd_checkpartyfortypeornumber(struct ScriptContext *ctx)
     if (type != NUMBER_OF_MON_TYPES) {
         for (i = 0; i < partySize; i++) {
             species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
-            type1 = gBaseStats[species].type1;
-            type2 = gBaseStats[species].type2;
+            type1 = gSpecies[species].type1;
+            type2 = gSpecies[species].type2;
             if (type1 != type && type2 != type) {
                 gSpecialVar_Result = FALSE;
                 return FALSE;

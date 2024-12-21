@@ -4294,8 +4294,8 @@ static const Ability MultiHeaded = {
                      "as it has heads."),
     .onParentalBond =
         +[](int battler, int move, int moveType) {
-            if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
-            if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
+            if (gSpecies[gBattleMons[battler].species].heads == TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
+            if (gSpecies[gBattleMons[battler].species].heads == THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
             return MULTIHIT_SINGLE;
         },
     .resistsFortKnox = TRUE,

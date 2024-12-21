@@ -2840,7 +2840,7 @@ static void BattleStartClearSetData(void) {
     gBattleStruct->runTries = 0;
     gBattleStruct->safariGoNearCounter = 0;
     gBattleStruct->safariPkblThrowCounter = 0;
-    gBattleStruct->safariCatchFactor = gBaseStats[GetMonData(&gEnemyParty[0], MON_DATA_SPECIES)].catchRate * 100 / 1275;
+    gBattleStruct->safariCatchFactor = gSpecies[GetMonData(&gEnemyParty[0], MON_DATA_SPECIES)].catchRate * 100 / 1275;
     gBattleStruct->safariEscapeFactor = 3;
     gBattleStruct->wildVictorySong = 0;
     gBattleStruct->moneyMultiplier = 1;
@@ -3061,8 +3061,8 @@ void FaintClearSetData(void) {
 
     gBattleResources->flags->flags[gActiveBattler] = 0;
 
-    gBattleMons[gActiveBattler].type1 = gBaseStats[gBattleMons[gActiveBattler].species].type1;
-    gBattleMons[gActiveBattler].type2 = gBaseStats[gBattleMons[gActiveBattler].species].type2;
+    gBattleMons[gActiveBattler].type1 = gSpecies[gBattleMons[gActiveBattler].species].type1;
+    gBattleMons[gActiveBattler].type2 = gSpecies[gBattleMons[gActiveBattler].species].type2;
     gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
 
     ClearBattlerMoveHistory(gActiveBattler);
@@ -3121,11 +3121,11 @@ static void DoBattleIntro(void) {
                 } else {
                     memcpy(&gBattleMons[gActiveBattler], &gBattleResources->bufferB[gActiveBattler][4], sizeof(gBattleMons[gActiveBattler]));
 
-                    gBattleMons[gActiveBattler].type1 = RandomizeType(gBaseStats[gBattleMons[gActiveBattler].species].type1,
+                    gBattleMons[gActiveBattler].type1 = RandomizeType(gSpecies[gBattleMons[gActiveBattler].species].type1,
                                                                       gBattleMons[gActiveBattler].species,
                                                                       gBattleMons[gActiveBattler].personality,
                                                                       TRUE);
-                    gBattleMons[gActiveBattler].type2 = RandomizeType(gBaseStats[gBattleMons[gActiveBattler].species].type2,
+                    gBattleMons[gActiveBattler].type2 = RandomizeType(gSpecies[gBattleMons[gActiveBattler].species].type2,
                                                                       gBattleMons[gActiveBattler].species,
                                                                       gBattleMons[gActiveBattler].personality,
                                                                       FALSE);
@@ -5025,13 +5025,13 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     u8 abilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM, NULL);
     u16 ability = GetAbilityBySpecies(species, abilityNum);
-    u8 type1 = gBaseStats[species].type1;
-    u8 type2 = gBaseStats[species].type2;
+    u8 type1 = gSpecies[species].type1;
+    u8 type2 = gSpecies[species].type2;
 
     if (!disableRandomizer) {
         ability = RandomizeAbility(GetAbilityBySpecies(species, abilityNum), species, personality);
-        type1 = RandomizeType(gBaseStats[species].type1, species, personality, TRUE);
-        type2 = RandomizeType(gBaseStats[species].type2, species, personality, FALSE);
+        type1 = RandomizeType(gSpecies[species].type1, species, personality, TRUE);
+        type2 = RandomizeType(gSpecies[species].type2, species, personality, FALSE);
     }
 
     if (move == MOVE_STRUGGLE) return TYPE_NORMAL;
@@ -5727,8 +5727,8 @@ u16 selectMoves(u16 species, u8 i, u16 atk, u16 spAtk) {
         },
     };
 
-    u8 type1 = gBaseStats[species].type1;
-    u8 type2 = gBaseStats[species].type2;
+    u8 type1 = gSpecies[species].type1;
+    u8 type2 = gSpecies[species].type2;
     u16 moveTypeArraysID = (type1 * 19) + type2;
     u8 randomMove = Random() % 3;
     u8 split = 0;
@@ -5795,11 +5795,11 @@ u16 selectMoves(u16 species, u8 i, u16 atk, u16 spAtk) {
 
 static u8 getRole(u16 species) {
     u16 max = 0;
-    u16 atk = gBaseStats[species].baseAttack;
-    u16 spAtk = gBaseStats[species].baseSpAttack;
-    u16 def = gBaseStats[species].baseDefense;
-    u16 spDef = gBaseStats[species].baseSpDefense;
-    u16 HP = gBaseStats[species].baseHP;
+    u16 atk = gSpecies[species].baseAttack;
+    u16 spAtk = gSpecies[species].baseSpAttack;
+    u16 def = gSpecies[species].baseDefense;
+    u16 spDef = gSpecies[species].baseSpDefense;
+    u16 HP = gSpecies[species].baseHP;
 
     if (atk >= spAtk)
         max = atk;

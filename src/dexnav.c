@@ -1428,8 +1428,8 @@ static u16 DexNavGenerateHeldItem(u16 species, u8 searchLevel)
 {
     u16 randVal = Random() % 100;
     u8 searchLevelInfluence = searchLevel >> 1;
-    u16 item1 = gBaseStats[species].item1;
-    u16 item2 = gBaseStats[species].item2;
+    u16 item1 = gSpecies[species].item1;
+    u16 item2 = gSpecies[species].item2;
     
     // if both are the same, 100% to hold
     if (item1 == item2)
@@ -1502,9 +1502,9 @@ static u8 DexNavGetAbilityNum(u16 species, u8 searchLevel)
     }
     
     #ifdef BATTLE_ENGINE    // if using RHH, the base stats abilities field is expanded
-    if (genAbility && gBaseStats[species].abilities[2] != ABILITY_NONE && GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
+    if (genAbility && gSpecies[species].abilities[2] != ABILITY_NONE && GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
     #else
-    if (genAbility && gBaseStats[species].abilityHidden != ABILITY_NONE && GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
+    if (genAbility && gSpecies[species].abilityHidden != ABILITY_NONE && GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
     #endif
     {
         //Only give hidden ability if Pokemon has been caught before
@@ -1513,7 +1513,7 @@ static u8 DexNavGetAbilityNum(u16 species, u8 searchLevel)
     else
     {
         //Pick a normal ability of that Pokemon
-        if (gBaseStats[species].abilities[1] != ABILITY_NONE)
+        if (gSpecies[species].abilities[1] != ABILITY_NONE)
             abilityNum = Random() & 1;
         else
             abilityNum = 0;
@@ -2529,8 +2529,8 @@ static void PrintCurrentSpeciesInfo(void)
     AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8) - 4 + offset, (y * 8) - 4, sFontColor_Black, 0, gStringVar4);
 
     // Type icon(s)
-    type1 = gBaseStats[species].type1;
-    type2 = gBaseStats[species].type2;
+    type1 = gSpecies[species].type1;
+    type2 = gSpecies[species].type2;
     if (species == SPECIES_NONE)
         type1 = type2 = TYPE_MYSTERY;
     
@@ -2553,10 +2553,10 @@ static void PrintCurrentSpeciesInfo(void)
     y++;
     for (i = 0; i < NUM_ABILITY_SLOTS; i++)
     {
-        if (gBaseStats[species].innates[i] == ABILITY_NONE)
+        if (gSpecies[species].innates[i] == ABILITY_NONE)
             break;
 
-        StringCopy(gStringVar1, gAbilities[gBaseStats[species].innates[i]].name);
+        StringCopy(gStringVar1, gAbilities[gSpecies[species].innates[i]].name);
         offset = GetStringCenterAlignXOffset(font, gStringVar1, 68);
         AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8) - 4 + offset, (y * 8) - 4, sFontColor_Black, 0, gStringVar1);
         y++;

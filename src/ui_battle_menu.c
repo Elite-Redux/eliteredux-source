@@ -1733,17 +1733,17 @@ static void PrintAbilityTab() {
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
     u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
-    u16 innate1 = gBaseStats[species].innates[0];
-    u16 innate2 = gBaseStats[species].innates[1];
-    u16 innate3 = gBaseStats[species].innates[2];
+    u16 innate1 = gSpecies[species].innates[0];
+    u16 innate2 = gSpecies[species].innates[1];
+    u16 innate3 = gSpecies[species].innates[2];
     u16 ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
     u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
     bool8 isEnemyMon = GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_OPPONENT;
 
     if (!isEnemyMon) { //Enemy Mons have disabled randomized innates/abilies 
-        innate1 = RandomizeInnate(gBaseStats[species].innates[0], species, personality);
-        innate2 = RandomizeInnate(gBaseStats[species].innates[1], species, personality);
-        innate3 = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
+        innate1 = RandomizeInnate(gSpecies[species].innates[0], species, personality);
+        innate2 = RandomizeInnate(gSpecies[species].innates[1], species, personality);
+        innate3 = RandomizeInnate(gSpecies[species].innates[2], species, personality);
     }
 
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
@@ -4478,9 +4478,9 @@ static void PrintToWindow(u8 windowId, u8 colorIdx)
     u8 i, j;
     u8 x, y, x2, y2;
     u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
-    u16 innate1 = gBaseStats[species].innates[0];
-    u16 innate2 = gBaseStats[species].innates[1];
-    u16 innate3 = gBaseStats[species].innates[2];
+    u16 innate1 = gSpecies[species].innates[0];
+    u16 innate2 = gSpecies[species].innates[1];
+    u16 innate3 = gSpecies[species].innates[2];
     u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
     u8 gender = GetGenderFromSpeciesAndPersonality(gBattleMons[sMenuDataPtr->battlerId].species, gBattleMons[sMenuDataPtr->battlerId].personality);
     u8 statStage;
@@ -4491,9 +4491,9 @@ static void PrintToWindow(u8 windowId, u8 colorIdx)
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
 
     if (!isEnemyMon) { //Enemy Mons have disabled randomized innates/abilies 
-        innate1 = RandomizeInnate(gBaseStats[species].innates[0], species, personality);
-        innate2 = RandomizeInnate(gBaseStats[species].innates[1], species, personality);
-        innate3 = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
+        innate1 = RandomizeInnate(gSpecies[species].innates[0], species, personality);
+        innate2 = RandomizeInnate(gSpecies[species].innates[1], species, personality);
+        innate3 = RandomizeInnate(gSpecies[species].innates[2], species, personality);
     }
 
     //Title

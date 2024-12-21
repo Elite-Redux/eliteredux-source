@@ -414,7 +414,6 @@ extern const struct BattleMove gBattleMoves[];
 extern const struct TrainerMonSpread gSets[];
 extern const u8 gFacilityClassToPicIndex[];
 extern const u8 gFacilityClassToTrainerClass[];
-extern const struct BaseStats gBaseStats[];
 extern const Species gSpecies[];
 extern const u8 *const gItemEffectTable[];
 extern const u32 gExperienceTables[][MAX_LEVEL + 1];

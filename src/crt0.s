@@ -79,7 +79,7 @@ GPIOPortReadEnable: @ 80000C8
 	.4byte 0x000031b3 @ offsetof(struct SaveBlock1, externalEventData)
 	.4byte 0x00000000
 
-	.4byte gBaseStats
+	.4byte gSpecies
 	.4byte gItems
 	.4byte gBattleMoves
 	.4byte gBallSpriteSheets

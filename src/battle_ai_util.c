@@ -529,9 +529,9 @@ void SetBattlerData(u8 battlerId) {
 
         if (illusionSpecies != SPECIES_NONE) {
             // If the battler's type has not been changed, AI assumes the types of the illusion mon.
-            if (gBattleMons[battlerId].type1 == gBaseStats[species].type1 && gBattleMons[battlerId].type2 == gBaseStats[species].type2) {
-                gBattleMons[battlerId].type1 = gBaseStats[illusionSpecies].type1;
-                gBattleMons[battlerId].type2 = gBaseStats[illusionSpecies].type2;
+            if (gBattleMons[battlerId].type1 == gSpecies[species].type1 && gBattleMons[battlerId].type2 == gSpecies[species].type2) {
+                gBattleMons[battlerId].type1 = gSpecies[illusionSpecies].type1;
+                gBattleMons[battlerId].type2 = gSpecies[illusionSpecies].type2;
             }
             species = illusionSpecies;
         }
@@ -582,8 +582,8 @@ bool32 IsBattlerTrapped(u8 battler, bool8 checkSwitch) {
 }
 
 u32 GetTotalBaseStat(u32 species) {
-    return gBaseStats[species].baseHP + gBaseStats[species].baseAttack + gBaseStats[species].baseDefense + gBaseStats[species].baseSpeed +
-           gBaseStats[species].baseSpAttack + gBaseStats[species].baseSpDefense;
+    return gSpecies[species].baseHP + gSpecies[species].baseAttack + gSpecies[species].baseDefense + gSpecies[species].baseSpeed +
+           gSpecies[species].baseSpAttack + gSpecies[species].baseSpDefense;
 }
 
 bool32 IsTruantMonVulnerable(u32 battlerAI, u32 opposingBattler) {
@@ -2019,7 +2019,7 @@ static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler) {
         (ability == ABILITY_LEVITATE || MonHasInnate(mon, ABILITY_LEVITATE, isEnemyMon) || ability == ABILITY_AERIALIST ||
          MonHasInnate(mon, ABILITY_AERIALIST, isEnemyMon) || ability == ABILITY_DRAGONFLY || MonHasInnate(mon, ABILITY_DRAGONFLY, isEnemyMon) ||
          ability == ABILITY_HOVER || MonHasInnate(mon, ABILITY_HOVER, isEnemyMon) || holdEffect == HOLD_EFFECT_AIR_BALLOON ||
-         gBaseStats[species].type1 == TYPE_FLYING || gBaseStats[species].type2 == TYPE_FLYING))
+         gSpecies[species].type1 == TYPE_FLYING || gSpecies[species].type2 == TYPE_FLYING))
         return FALSE;
 
     if (flags & (SIDE_STATUS_SPIKES | SIDE_STATUS_STEALTH_ROCK) && GetMonData(mon, MON_DATA_HP) < (GetMonData(mon, MON_DATA_MAX_HP) / 8)) return TRUE;

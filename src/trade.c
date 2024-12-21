@@ -2481,7 +2481,7 @@ int GetUnionRoomTradeMessageId(struct GFtgtGnameSub rfuPlayer, struct GFtgtGname
     }
     else
     {
-        if (gBaseStats[playerSpecies2].type1 != requestedType && gBaseStats[playerSpecies2].type2 != requestedType)
+        if (gSpecies[playerSpecies2].type1 != requestedType && gSpecies[playerSpecies2].type2 != requestedType)
         {
             return UR_TRADE_MSG_NOT_MON_PARTNER_WANTS;
         }

@@ -1800,7 +1800,6 @@ const s8 gNatureStatTable[NUM_NATURES][NUM_NATURE_STATS] = {
 #include "data/pokemon/tmhm_learnsets.h"
 #include "data/pokemon/trainer_class_lookups.h"
 #include "data/pokemon/experience_tables.h"
-#include "data/pokemon/base_stats.h"
 // For some dumbass reason transitive includes fail
 #undef LEVEL_UP_END
 #include "data/pokemon/species_data_defines.h"
@@ -3436,7 +3435,7 @@ void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFix
 }
 
 u8 GenerateShinyForm(u16 species) {
-    u8 numShinies = gBaseStats[species].numShinies;
+    u8 numShinies = gSpecies[species].numShinies;
     u8 isShiny = SHINY_VANILLA;
     u16 rand = Random();  // Max value is 65535
 
@@ -3507,7 +3506,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     SetBoxMonData(boxMon, MON_DATA_LANGUAGE, &gGameLanguage);
     SetBoxMonData(boxMon, MON_DATA_OT_NAME, gSaveBlock2Ptr->playerName);
     SetBoxMonData(boxMon, MON_DATA_SPECIES, &species);
-    SetBoxMonData(boxMon, MON_DATA_EXP, &gExperienceTables[gBaseStats[species].growthRate][level]);
+    SetBoxMonData(boxMon, MON_DATA_EXP, &gExperienceTables[gSpecies[species].growthRate][level]);
     value = 4;
     SetBoxMonData(boxMon, MON_DATA_FRIENDSHIP, &value);
     value = GetCurrentRegionMapSectionId();
@@ -3574,7 +3573,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     nature = personality % 25;
     SetBoxMonData(boxMon, MON_DATA_NATURE, &nature);
 
-    if (gBaseStats[species].abilities[1]) {
+    if (gSpecies[species].abilities[1]) {
         value = personality & 1;
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
     }
@@ -3946,7 +3945,7 @@ void CreateEventLegalEnemyMon(void) {
 
 #define CALC_STAT(base, iv, ev, statIndex, field)                   \
     {                                                               \
-        u8 baseStat = gBaseStats[species].base;                     \
+        u8 baseStat = gSpecies[species].base;                     \
         s32 n = (((2 * baseStat + iv + ev / 4) * level) / 100) + 5; \
         u8 nature = GetMonData(mon, MON_DATA_NATURE);               \
         n = ModifyStatByNature(nature, n, statIndex);               \
@@ -4001,7 +4000,7 @@ void CalculateMonStats(struct Pokemon *mon) {
     if (species == SPECIES_SHEDINJA || species == SPECIES_SHEDINJA_MEGA) {
         newMaxHP = 1;
     } else {
-        s32 n = 2 * gBaseStats[species].baseHP + hpIV;
+        s32 n = 2 * gSpecies[species].baseHP + hpIV;
         newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
     }
 
@@ -4060,7 +4059,7 @@ u8 GetLevelFromMonExp(struct Pokemon *mon) {
     u32 exp = GetMonData(mon, MON_DATA_EXP, NULL);
     s32 level = 1;
 
-    while (level <= MAX_LEVEL && gExperienceTables[gBaseStats[species].growthRate][level] <= exp) level++;
+    while (level <= MAX_LEVEL && gExperienceTables[gSpecies[species].growthRate][level] <= exp) level++;
 
     return level - 1;
 }
@@ -4070,7 +4069,7 @@ u8 GetLevelFromBoxMonExp(struct BoxPokemon *boxMon) {
     u32 exp = GetBoxMonData(boxMon, MON_DATA_EXP, NULL);
     s32 level = 1;
 
-    while (level <= MAX_LEVEL && gExperienceTables[gBaseStats[species].growthRate][level] <= exp) level++;
+    while (level <= MAX_LEVEL && gExperienceTables[gSpecies[species].growthRate][level] <= exp) level++;
 
     return level - 1;
 }
@@ -4298,28 +4297,28 @@ u8 GetBoxMonGender(struct BoxPokemon *boxMon) {
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
     u32 personality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL);
 
-    switch (gBaseStats[species].genderRatio) {
+    switch (gSpecies[species].genderRatio) {
         case MON_MALE:
         case MON_FEMALE:
         case MON_GENDERLESS:
-            return gBaseStats[species].genderRatio;
+            return gSpecies[species].genderRatio;
     }
 
-    if (gBaseStats[species].genderRatio > (personality & 0xFF))
+    if (gSpecies[species].genderRatio > (personality & 0xFF))
         return MON_FEMALE;
     else
         return MON_MALE;
 }
 
 u8 GetGenderFromSpeciesAndPersonality(u16 species, u32 personality) {
-    switch (gBaseStats[species].genderRatio) {
+    switch (gSpecies[species].genderRatio) {
         case MON_MALE:
         case MON_FEMALE:
         case MON_GENDERLESS:
-            return gBaseStats[species].genderRatio;
+            return gSpecies[species].genderRatio;
     }
 
-    if (gBaseStats[species].genderRatio > (personality & 0xFF))
+    if (gSpecies[species].genderRatio > (personality & 0xFF))
         return MON_FEMALE;
     else
         return MON_MALE;
@@ -5143,11 +5142,11 @@ u8 GetMonsStateToDoubles_2(void) {
 u16 GetAbilityBySpecies(u16 species, u8 abilityNum) {
     int ability;
     if (abilityNum < NUM_ABILITY_SLOTS)
-        ability = gBaseStats[species].abilities[abilityNum];
+        ability = gSpecies[species].abilities[abilityNum];
     else
-        ability = gBaseStats[species].abilities[0];
+        ability = gSpecies[species].abilities[0];
 
-    if (ability == ABILITY_NONE) ability = gBaseStats[species].abilities[0];
+    if (ability == ABILITY_NONE) ability = gSpecies[species].abilities[0];
 
     return ability;
 }
@@ -5271,8 +5270,8 @@ void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst) {
     dst->abilityNum = GetMonData(src, MON_DATA_ABILITY_NUM, NULL);
     dst->otId = GetMonData(src, MON_DATA_OT_ID, NULL);
     dst->hpType = GetMonData(src, MON_DATA_HP_TYPE, NULL);
-    dst->type1 = gBaseStats[dst->species].type1;
-    dst->type2 = gBaseStats[dst->species].type2;
+    dst->type1 = gSpecies[dst->species].type1;
+    dst->type2 = gSpecies[dst->species].type2;
     dst->type3 = TYPE_MYSTERY;
     dst->abilities[0] = GetAbilityBySpecies(dst->species, dst->abilityNum);
     dst->abilities[1] = GetInnateInSlot(dst->level, dst->species, 0, dst->personality, FALSE);
@@ -5562,7 +5561,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                     if ((GetMonData(mon, MON_DATA_LEVEL, NULL) + levelUp) >= MAX_LEVEL) levelUp = MAX_LEVEL - GetMonData(mon, MON_DATA_LEVEL, NULL);
 
                     dataUnsigned =
-                        gExperienceTables[gBaseStats[GetMonData(mon, MON_DATA_SPECIES, NULL)].growthRate][GetMonData(mon, MON_DATA_LEVEL, NULL) + levelUp];
+                        gExperienceTables[gSpecies[GetMonData(mon, MON_DATA_SPECIES, NULL)].growthRate][GetMonData(mon, MON_DATA_LEVEL, NULL) + levelUp];
                     SetMonData(mon, MON_DATA_EXP, &dataUnsigned);
                     CalculateMonStats(mon);
                     retVal = FALSE;
@@ -5573,7 +5572,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                     GetMonData(mon, MON_DATA_LEVEL, NULL) < GetLevelCap()) {
                     levelUp = 1;
                     dataUnsigned =
-                        gExperienceTables[gBaseStats[GetMonData(mon, MON_DATA_SPECIES, NULL)].growthRate][GetMonData(mon, MON_DATA_LEVEL, NULL) + levelUp];
+                        gExperienceTables[gSpecies[GetMonData(mon, MON_DATA_SPECIES, NULL)].growthRate][GetMonData(mon, MON_DATA_LEVEL, NULL) + levelUp];
                     SetMonData(mon, MON_DATA_EXP, &dataUnsigned);
                     CalculateMonStats(mon);
                     retVal = FALSE;
@@ -6245,7 +6244,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
                         if (gEvolutionTable[species][i].param <= level) {
                             for (j = 0; j < PARTY_SIZE; j++) {
                                 u16 currSpecies = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
-                                if (gBaseStats[currSpecies].type1 == TYPE_DARK || gBaseStats[currSpecies].type2 == TYPE_DARK) {
+                                if (gSpecies[currSpecies].type1 == TYPE_DARK || gSpecies[currSpecies].type2 == TYPE_DARK) {
                                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                                     break;
                                 }
@@ -6560,22 +6559,22 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) {
 
         switch (i) {
             case STAT_HP:
-                evIncrease = gBaseStats[defeatedSpecies].evYield_HP * multiplier;
+                evIncrease = gSpecies[defeatedSpecies].evYield_HP * multiplier;
                 break;
             case STAT_ATK:
-                evIncrease = gBaseStats[defeatedSpecies].evYield_Attack * multiplier;
+                evIncrease = gSpecies[defeatedSpecies].evYield_Attack * multiplier;
                 break;
             case STAT_DEF:
-                evIncrease = gBaseStats[defeatedSpecies].evYield_Defense * multiplier;
+                evIncrease = gSpecies[defeatedSpecies].evYield_Defense * multiplier;
                 break;
             case STAT_SPEED:
-                evIncrease = gBaseStats[defeatedSpecies].evYield_Speed * multiplier;
+                evIncrease = gSpecies[defeatedSpecies].evYield_Speed * multiplier;
                 break;
             case STAT_SPATK:
-                evIncrease = gBaseStats[defeatedSpecies].evYield_SpAttack * multiplier;
+                evIncrease = gSpecies[defeatedSpecies].evYield_SpAttack * multiplier;
                 break;
             case STAT_SPDEF:
-                evIncrease = gBaseStats[defeatedSpecies].evYield_SpDefense * multiplier;
+                evIncrease = gSpecies[defeatedSpecies].evYield_SpDefense * multiplier;
                 break;
         }
 
@@ -6719,11 +6718,11 @@ bool8 TryIncrementMonLevel(struct Pokemon *mon) {
     u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
     u8 nextLevel = GetMonData(mon, MON_DATA_LEVEL, 0) + 1;
     u32 expPoints = GetMonData(mon, MON_DATA_EXP, 0);
-    if (expPoints > gExperienceTables[gBaseStats[species].growthRate][MAX_LEVEL]) {
-        expPoints = gExperienceTables[gBaseStats[species].growthRate][MAX_LEVEL];
+    if (expPoints > gExperienceTables[gSpecies[species].growthRate][MAX_LEVEL]) {
+        expPoints = gExperienceTables[gSpecies[species].growthRate][MAX_LEVEL];
         SetMonData(mon, MON_DATA_EXP, &expPoints);
     }
-    if (nextLevel > MAX_LEVEL || expPoints < gExperienceTables[gBaseStats[species].growthRate][nextLevel]) {
+    if (nextLevel > MAX_LEVEL || expPoints < gExperienceTables[gSpecies[species].growthRate][nextLevel]) {
         return FALSE;
     } else {
         SetMonData(mon, MON_DATA_LEVEL, &nextLevel);
@@ -7059,7 +7058,7 @@ static void Task_PlayMapChosenOrBattleBGM(u8 taskId) {
 #undef tSongId
 
 const u32 *GetShinySpritePal(u16 species, u32 isShiny) {
-    u8 numShinies = gBaseStats[species].numShinies;
+    u8 numShinies = gSpecies[species].numShinies;
     switch (isShiny) {
         case SHINY_VANILLA:
             return gSpecies[species].shinyPalette.data;
@@ -7081,7 +7080,7 @@ const u32 *GetShinySpritePal(u16 species, u32 isShiny) {
 }
 
 const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 isShiny) {
-    u8 numShinies = gBaseStats[species].numShinies;
+    u8 numShinies = gSpecies[species].numShinies;
     switch (isShiny) {
         case SHINY_VANILLA:
             return &gSpecies[species].shinyPalette;
@@ -7164,7 +7163,7 @@ bool32 IsHMMove2(u16 move) {
     return FALSE;
 }
 
-bool8 IsMonSpriteNotFlipped(u16 species) { return gBaseStats[species].noFlip; }
+bool8 IsMonSpriteNotFlipped(u16 species) { return gSpecies[species].noFlip; }
 
 s8 GetMonFlavorRelation(struct Pokemon *mon, u8 flavor) {
     u8 nature = GetMonData(mon, MON_DATA_NATURE, NULL);
@@ -7254,19 +7253,19 @@ void SetWildMonHeldItem(void) {
             } else {
                 if (rnd < var1) continue;
                 if (rnd < var2)
-                    SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gBaseStats[species].item1);
+                    SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gSpecies[species].item1);
                 else
-                    SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gBaseStats[species].item2);
+                    SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gSpecies[species].item2);
             }
         } else {
-            if (gBaseStats[species].item1 == gBaseStats[species].item2 && gBaseStats[species].item1 != 0) {
-                SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gBaseStats[species].item1);
+            if (gSpecies[species].item1 == gSpecies[species].item2 && gSpecies[species].item1 != 0) {
+                SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gSpecies[species].item1);
             } else {
                 if (rnd < var1) continue;
                 if (rnd < var2)
-                    SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gBaseStats[species].item1);
+                    SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gSpecies[species].item1);
                 else
-                    SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gBaseStats[species].item2);
+                    SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gSpecies[species].item2);
             }
         }
     }
@@ -7945,14 +7944,14 @@ u16 getRandomSpecies(void) {
 }
 
 bool8 SpeciesHasInnate(u16 species, u16 ability, u8 level, u32 personality, bool8 disablerandomizer, bool8 isEnemyMon) {
-    u16 innate1 = gBaseStats[species].innates[0];
-    u16 innate2 = gBaseStats[species].innates[1];
-    u16 innate3 = gBaseStats[species].innates[2];
+    u16 innate1 = gSpecies[species].innates[0];
+    u16 innate2 = gSpecies[species].innates[1];
+    u16 innate3 = gSpecies[species].innates[2];
 
     if (!disablerandomizer) {
-        innate1 = RandomizeInnate(gBaseStats[species].innates[0], species, personality);
-        innate2 = RandomizeInnate(gBaseStats[species].innates[1], species, personality);
-        innate3 = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
+        innate1 = RandomizeInnate(gSpecies[species].innates[0], species, personality);
+        innate2 = RandomizeInnate(gSpecies[species].innates[1], species, personality);
+        innate3 = RandomizeInnate(gSpecies[species].innates[2], species, personality);
     }
 
     if (innate1 == ability && (level >= INNATE_1_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
@@ -8028,7 +8027,7 @@ int GetMonInnate(struct Pokemon *mon, int slot, int disableRandomizer) {
     int personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     int level = GetMonData(mon, MON_DATA_LEVEL, NULL);
 
-    int innate = gBaseStats[species].innates[slot];
+    int innate = gSpecies[species].innates[slot];
 
     if (!disableRandomizer) {
         innate = RandomizeInnate(innate, species, personality);
@@ -8065,14 +8064,14 @@ bool8 BoxMonHasInnate(struct BoxPokemon *boxmon, u16 ability, bool8 disableRando
 }
 
 u8 GetSpeciesInnateNum(u16 species, u16 ability, u8 level, u32 personality, bool8 disablerandomizer) {
-    u16 innate1 = gBaseStats[species].innates[0];
-    u16 innate2 = gBaseStats[species].innates[1];
-    u16 innate3 = gBaseStats[species].innates[2];
+    u16 innate1 = gSpecies[species].innates[0];
+    u16 innate2 = gSpecies[species].innates[1];
+    u16 innate3 = gSpecies[species].innates[2];
 
     if (!disablerandomizer) {
-        innate1 = RandomizeInnate(gBaseStats[species].innates[0], species, personality);
-        innate2 = RandomizeInnate(gBaseStats[species].innates[1], species, personality);
-        innate3 = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
+        innate1 = RandomizeInnate(gSpecies[species].innates[0], species, personality);
+        innate2 = RandomizeInnate(gSpecies[species].innates[1], species, personality);
+        innate3 = RandomizeInnate(gSpecies[species].innates[2], species, personality);
     }
 
     if (innate1 == ability)
@@ -8229,7 +8228,7 @@ u16 GetRandomPokemonFromDiffTag(u16 rndseed, u32 tags, u8 total, u8 tier) {
             }
         }
         mon = tagSwitch(tag, rand >> 16);
-        mon_tier = gBaseStats[mon].tier;
+        mon_tier = gSpecies[mon].tier;
         if (tier == 2 && mon_tier == 1) {
             mon_tier = 2;
         }
@@ -8301,7 +8300,7 @@ u16 GetRandomStarter(u8 gen, bool8 enc, bool8 leg, u8 starterID) {
     if (!enc && leg) {
         do {
             species = RandRangeDeterministic(min, max, &rndSeed);
-        } while (gBaseStats[species].tier != 3);
+        } while (gSpecies[species].tier != 3);
     } else if (enc && leg) {
         return RandRangeDeterministic(min, max, &rndSeed);
     } else {
@@ -8423,7 +8422,7 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies) {
         do {
             rndSeed = ISO_RANDOMIZE1(rndSeed);
             species = GetRandomPokemonFromTag(rndSeed >> 16, loc, locG);
-        } while (species == SPECIES_NONE || (gBaseStats[species].tier != map_tier && gBaseStats[species].tier != map_tier_extra));
+        } while (species == SPECIES_NONE || (gSpecies[species].tier != map_tier && gSpecies[species].tier != map_tier_extra));
         return species;
     }
     if (gSaveBlock2Ptr->encounterRandomizedMode == TRUE && basespecies != SPECIES_NONE) {
@@ -9945,7 +9944,7 @@ u16 GetEvolutionForMon(struct Pokemon *mon, u8 num) {
             if (gEvolutionTable[species][i].param <= level) {
                 for (j = 0; j < PARTY_SIZE; j++) {
                     u16 partyspecies = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
-                    if (gBaseStats[partyspecies].type1 == TYPE_DARK || gBaseStats[partyspecies].type2 == TYPE_DARK)
+                    if (gSpecies[partyspecies].type1 == TYPE_DARK || gSpecies[partyspecies].type2 == TYPE_DARK)
                         return gEvolutionTable[species][i].targetSpecies;  // Get base species
                 }
             }

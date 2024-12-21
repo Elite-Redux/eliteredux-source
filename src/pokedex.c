@@ -4509,8 +4509,8 @@ static void PrintCurrentSpeciesTypeInfo(void)
     u8 type1, type2;
 
     //type icon(s)
-    type1 = gBaseStats[species].type1;
-    type2 = gBaseStats[species].type2;
+    type1 = gSpecies[species].type1;
+    type2 = gSpecies[species].type2;
     if (species == SPECIES_NONE)
         type1 = type2 = TYPE_MYSTERY;
     
@@ -5142,7 +5142,7 @@ static int DoPokedexSearch(u8 dexMode, u8 order, u8 abcGroup, u8 bodyColor, u8 t
         {
             species = NationalPokedexNumToSpecies(sPokedexView->pokedexList[i].dexNum);
 
-            if (bodyColor == gBaseStats[species].bodyColor)
+            if (bodyColor == gSpecies[species].bodyColor)
             {
                 sPokedexView->pokedexList[resultsCount] = sPokedexView->pokedexList[i];
                 resultsCount++;
@@ -5168,8 +5168,8 @@ static int DoPokedexSearch(u8 dexMode, u8 order, u8 abcGroup, u8 bodyColor, u8 t
                 {
                     species = NationalPokedexNumToSpecies(sPokedexView->pokedexList[i].dexNum);
 
-                    types[0] = gBaseStats[species].type1;
-                    types[1] = gBaseStats[species].type2;
+                    types[0] = gSpecies[species].type1;
+                    types[1] = gSpecies[species].type2;
                     if (types[0] == type1 || types[1] == type1)
                     {
                         sPokedexView->pokedexList[resultsCount] = sPokedexView->pokedexList[i];
@@ -5186,8 +5186,8 @@ static int DoPokedexSearch(u8 dexMode, u8 order, u8 abcGroup, u8 bodyColor, u8 t
                 {
                     species = NationalPokedexNumToSpecies(sPokedexView->pokedexList[i].dexNum);
 
-                    types[0] = gBaseStats[species].type1;
-                    types[1] = gBaseStats[species].type2;
+                    types[0] = gSpecies[species].type1;
+                    types[1] = gSpecies[species].type2;
                     if ((types[0] == type1 && types[1] == type2) || (types[0] == type2 && types[1] == type1))
                     {
                         sPokedexView->pokedexList[resultsCount] = sPokedexView->pokedexList[i];
@@ -6392,7 +6392,7 @@ static void Task_HandleStatsScreenInput(u8 taskId)
                 else
                     sPokedexView->abilitynum = 0;
             }
-            while (gBaseStats[species].abilities[sPokedexView->abilitynum] == ABILITY_NONE);
+            while (gSpecies[species].abilities[sPokedexView->abilitynum] == ABILITY_NONE);
         }
         else {
             do {
@@ -6401,7 +6401,7 @@ static void Task_HandleStatsScreenInput(u8 taskId)
                 else
                     sPokedexView->innatenum = 0;
             }
-            while (gBaseStats[species].innates[sPokedexView->innatenum] == ABILITY_NONE);
+            while (gSpecies[species].innates[sPokedexView->innatenum] == ABILITY_NONE);
         }
 
         FillWindowPixelRect(0, PIXEL_FILL(0), 0, 48, 240, 130);
@@ -6666,7 +6666,7 @@ static void PrintStatsScreen_NameGender(u8 taskId, u32 num, u32 value, u32 owned
     //Gender ratio //MON_GENDERLESS == 0xFF
     gender_x = 38;
     gender_y = 36;
-    switch (gBaseStats[species].genderRatio)
+    switch (gSpecies[species].genderRatio)
     {
     case 0:
         PrintInfoScreenTextSmall(gText_Stats_Gender_0, gender_x, gender_y);
@@ -6744,36 +6744,36 @@ static void PrintStatsScreen_Left(u8 taskId)
     u8 abilities_y = 99;
     u16 ability0;
     u8 differentEVs = 0;
-    u8 EVs[6] = {gBaseStats[species].evYield_HP, gBaseStats[species].evYield_Speed, gBaseStats[species].evYield_Attack, gBaseStats[species].evYield_SpAttack, gBaseStats[species].evYield_Defense, gBaseStats[species].evYield_SpDefense};
+    u8 EVs[6] = {gSpecies[species].evYield_HP, gSpecies[species].evYield_Speed, gSpecies[species].evYield_Attack, gSpecies[species].evYield_SpAttack, gSpecies[species].evYield_Defense, gSpecies[species].evYield_SpDefense};
 
 
     //Base stats
     if (gTasks[taskId].data[5] == 0)
     {
         PrintInfoScreenTextSmall(gText_Stats_HP, base_x, base_y + base_y_offset*base_i);
-        ConvertIntToDecimalStringN(strBase, gBaseStats[species].baseHP, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        ConvertIntToDecimalStringN(strBase, gSpecies[species].baseHP, STR_CONV_MODE_RIGHT_ALIGN, 3);
         PrintInfoScreenTextSmall(strBase, base_x+base_x_first_row, base_y + base_y_offset*base_i);
 
         PrintInfoScreenTextSmall(gText_Stats_Speed, base_x+base_x_second_row, base_y + base_y_offset*base_i);
-        ConvertIntToDecimalStringN(strBase, gBaseStats[species].baseSpeed, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        ConvertIntToDecimalStringN(strBase, gSpecies[species].baseSpeed, STR_CONV_MODE_RIGHT_ALIGN, 3);
         PrintInfoScreenTextSmall(strBase, base_x+base_x_offset, base_y + base_y_offset*base_i);
 
         base_i++;
         PrintInfoScreenTextSmall(gText_Stats_Attack, base_x, base_y + base_y_offset*base_i);
-        ConvertIntToDecimalStringN(strBase, gBaseStats[species].baseAttack, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        ConvertIntToDecimalStringN(strBase, gSpecies[species].baseAttack, STR_CONV_MODE_RIGHT_ALIGN, 3);
         PrintInfoScreenTextSmall(strBase, base_x+base_x_first_row, base_y + base_y_offset*base_i);
 
         PrintInfoScreenTextSmall(gText_Stats_SpAttack, base_x+base_x_second_row, base_y + base_y_offset*base_i);
-        ConvertIntToDecimalStringN(strBase, gBaseStats[species].baseSpAttack, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        ConvertIntToDecimalStringN(strBase, gSpecies[species].baseSpAttack, STR_CONV_MODE_RIGHT_ALIGN, 3);
         PrintInfoScreenTextSmall(strBase, base_x+base_x_offset, base_y + base_y_offset*base_i);
 
         base_i++;
         PrintInfoScreenTextSmall(gText_Stats_Defense, base_x, base_y + base_y_offset*base_i);
-        ConvertIntToDecimalStringN(strBase, gBaseStats[species].baseDefense, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        ConvertIntToDecimalStringN(strBase, gSpecies[species].baseDefense, STR_CONV_MODE_RIGHT_ALIGN, 3);
         PrintInfoScreenTextSmall(strBase, base_x+base_x_first_row, base_y + base_y_offset*base_i);
 
         PrintInfoScreenTextSmall(gText_Stats_SpDefense, base_x+base_x_second_row, base_y + base_y_offset*base_i);
-        ConvertIntToDecimalStringN(strBase, gBaseStats[species].baseSpDefense, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        ConvertIntToDecimalStringN(strBase, gSpecies[species].baseSpDefense, STR_CONV_MODE_RIGHT_ALIGN, 3);
         PrintInfoScreenTextSmall(strBase, base_x+base_x_offset, base_y + base_y_offset*base_i);
         base_i++;
     }
@@ -6798,7 +6798,7 @@ static void PrintStatsScreen_Left(u8 taskId)
         {
             differentEVs = 0;
 
-            if (gBaseStats[species].evYield_HP > 0) //HP
+            if (gSpecies[species].evYield_HP > 0) //HP
             {
                 differentEVs++;
                 column = PrintMonStatsToggle_DifferentEVsColumn(differentEVs);
@@ -6809,7 +6809,7 @@ static void PrintStatsScreen_Left(u8 taskId)
                 PrintInfoScreenTextSmall(gStringVar3, base_x + x_offset_column*column, base_y + base_y_offset*base_i);
             }
 
-            if (gBaseStats[species].evYield_Speed > 0) //Speed
+            if (gSpecies[species].evYield_Speed > 0) //Speed
             {
                 differentEVs++;
                 column = PrintMonStatsToggle_DifferentEVsColumn(differentEVs);
@@ -6820,7 +6820,7 @@ static void PrintStatsScreen_Left(u8 taskId)
                 PrintInfoScreenTextSmall(gStringVar3, base_x + x_offset_column*column, base_y + base_y_offset*base_i);
             }
 
-            if (gBaseStats[species].evYield_Attack > 0) //Attack
+            if (gSpecies[species].evYield_Attack > 0) //Attack
             {
                 differentEVs++;
                 column = PrintMonStatsToggle_DifferentEVsColumn(differentEVs);
@@ -6831,7 +6831,7 @@ static void PrintStatsScreen_Left(u8 taskId)
                 PrintInfoScreenTextSmall(gStringVar3, base_x + x_offset_column*column, base_y + base_y_offset*base_i);
             }
 
-            if (gBaseStats[species].evYield_SpAttack > 0) //Special Attack
+            if (gSpecies[species].evYield_SpAttack > 0) //Special Attack
             {
                 differentEVs++;
                 column = PrintMonStatsToggle_DifferentEVsColumn(differentEVs);
@@ -6842,7 +6842,7 @@ static void PrintStatsScreen_Left(u8 taskId)
                 PrintInfoScreenTextSmall(gStringVar3, base_x + x_offset_column*column, base_y + base_y_offset*base_i);
             }
 
-            if (gBaseStats[species].evYield_Defense > 0) //Defense
+            if (gSpecies[species].evYield_Defense > 0) //Defense
             {
                 differentEVs++;
                 column = PrintMonStatsToggle_DifferentEVsColumn(differentEVs);
@@ -6853,7 +6853,7 @@ static void PrintStatsScreen_Left(u8 taskId)
                 PrintInfoScreenTextSmall(gStringVar3, base_x + x_offset_column*column, base_y + base_y_offset*base_i);
             }
 
-            if (gBaseStats[species].evYield_SpDefense > 0) //Special Defense
+            if (gSpecies[species].evYield_SpDefense > 0) //Special Defense
             {
                 differentEVs++;
                 column = PrintMonStatsToggle_DifferentEVsColumn(differentEVs);
@@ -6867,7 +6867,7 @@ static void PrintStatsScreen_Left(u8 taskId)
         else //3 different EVs in 1 row
         {
             column = 0;
-            if (gBaseStats[species].evYield_HP > 0) //HP
+            if (gSpecies[species].evYield_HP > 0) //HP
             {
                 StringCopy(gStringVar1, gText_Stats_HP);
                 PrintMonStatsToggle_EV_Arrows(gStringVar2, EVs, 0);
@@ -6876,7 +6876,7 @@ static void PrintStatsScreen_Left(u8 taskId)
                 column++;
             }
 
-            if (gBaseStats[species].evYield_Speed > 0) //Speed
+            if (gSpecies[species].evYield_Speed > 0) //Speed
             {
                 StringCopy(gStringVar1, gText_Stats_Speed);
                 PrintMonStatsToggle_EV_Arrows(gStringVar2, EVs, 1);
@@ -6885,7 +6885,7 @@ static void PrintStatsScreen_Left(u8 taskId)
                 column++;
             }
 
-            if (gBaseStats[species].evYield_Attack > 0) //Attack
+            if (gSpecies[species].evYield_Attack > 0) //Attack
             {
                 StringCopy(gStringVar1, gText_Stats_Attack);
                 PrintMonStatsToggle_EV_Arrows(gStringVar2, EVs, 2);
@@ -6894,7 +6894,7 @@ static void PrintStatsScreen_Left(u8 taskId)
                 column++;
             }
 
-            if (gBaseStats[species].evYield_SpAttack > 0) //Special Attack
+            if (gSpecies[species].evYield_SpAttack > 0) //Special Attack
             {
                 StringCopy(gStringVar1, gText_Stats_SpAttack);
                 PrintMonStatsToggle_EV_Arrows(gStringVar2, EVs, 3);
@@ -6903,7 +6903,7 @@ static void PrintStatsScreen_Left(u8 taskId)
                 column++;
             }
 
-            if (gBaseStats[species].evYield_Defense > 0) //Defense
+            if (gSpecies[species].evYield_Defense > 0) //Defense
             {
                 StringCopy(gStringVar1, gText_Stats_Defense);
                 PrintMonStatsToggle_EV_Arrows(gStringVar2, EVs, 4);
@@ -6912,7 +6912,7 @@ static void PrintStatsScreen_Left(u8 taskId)
                 column++;
             }
 
-            if (gBaseStats[species].evYield_SpDefense > 0) //Special Defense
+            if (gSpecies[species].evYield_SpDefense > 0) //Special Defense
             {
                 StringCopy(gStringVar1, gText_Stats_SpDefense);
                 PrintMonStatsToggle_EV_Arrows(gStringVar2, EVs, 5);
@@ -6929,15 +6929,15 @@ static void PrintStatsScreen_Left(u8 taskId)
     {
         //Catch rate
         PrintInfoScreenTextSmall(gText_Stats_CatchRate, base_x, base_y + base_y_offset*base_i);
-        if (gBaseStats[species].catchRate <= 10)
+        if (gSpecies[species].catchRate <= 10)
             PrintInfoScreenTextSmall(gText_Stats_CatchRate_Legend, base_x + x_offset_column, base_y + base_y_offset*base_i);
-        else if (gBaseStats[species].catchRate <= 70)
+        else if (gSpecies[species].catchRate <= 70)
             PrintInfoScreenTextSmall(gText_Stats_CatchRate_VeryHard, base_x + x_offset_column, base_y + base_y_offset*base_i);
-        else if (gBaseStats[species].catchRate <= 100)
+        else if (gSpecies[species].catchRate <= 100)
             PrintInfoScreenTextSmall(gText_Stats_CatchRate_Difficult, base_x + x_offset_column, base_y + base_y_offset*base_i);
-        else if (gBaseStats[species].catchRate <= 150)
+        else if (gSpecies[species].catchRate <= 150)
             PrintInfoScreenTextSmall(gText_Stats_CatchRate_Medium, base_x + x_offset_column, base_y + base_y_offset*base_i);
-        else if (gBaseStats[species].catchRate <= 200)
+        else if (gSpecies[species].catchRate <= 200)
             PrintInfoScreenTextSmall(gText_Stats_CatchRate_Relaxed, base_x + x_offset_column, base_y + base_y_offset*base_i);
         else
             PrintInfoScreenTextSmall(gText_Stats_CatchRate_Easy, base_x + x_offset_column, base_y + base_y_offset*base_i);
@@ -6945,7 +6945,7 @@ static void PrintStatsScreen_Left(u8 taskId)
 
         //Growth rate
         PrintInfoScreenTextSmall(gText_Stats_Growthrate, base_x, base_y + base_y_offset*base_i);
-        switch (gBaseStats[species].growthRate)
+        switch (gSpecies[species].growthRate)
         {
         case GROWTH_MEDIUM_FAST:
             StringCopy(strEV, gText_Stats_MEDIUM_FAST);
@@ -6975,13 +6975,13 @@ static void PrintStatsScreen_Left(u8 taskId)
     {
         //Exp Yield
         PrintInfoScreenTextSmall(gText_Stats_ExpYield, base_x, base_y + base_y_offset*base_i);
-        ConvertIntToDecimalStringN(gStringVar1, gBaseStats[species].expYield, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        ConvertIntToDecimalStringN(gStringVar1, gSpecies[species].expYield, STR_CONV_MODE_RIGHT_ALIGN, 3);
         PrintInfoScreenTextSmall(gStringVar1, base_x + base_x_offset, base_y + base_y_offset*base_i);
         base_i++;
 
         //Friendship
         PrintInfoScreenTextSmall(gText_Stats_Friendship, base_x, base_y + base_y_offset*base_i);
-        switch (gBaseStats[species].friendship)
+        switch (gSpecies[species].friendship)
         {
         case 35:
             StringCopy(strEV, gText_Stats_Friendship_BigAnger);
@@ -6999,7 +6999,7 @@ static void PrintStatsScreen_Left(u8 taskId)
             StringCopy(strEV, gText_Stats_Friendship_BigSmile);
             break;
         default:
-            ConvertIntToDecimalStringN(strEV, gBaseStats[species].friendship, STR_CONV_MODE_RIGHT_ALIGN, 3);
+            ConvertIntToDecimalStringN(strEV, gSpecies[species].friendship, STR_CONV_MODE_RIGHT_ALIGN, 3);
             break;
         }
         align_x = GetStringRightAlignXOffset(0, strEV, total_x);
@@ -7007,7 +7007,7 @@ static void PrintStatsScreen_Left(u8 taskId)
         base_i++;
 
         //Egg cycles
-        if (gBaseStats[species].eggGroup1 == EGG_GROUP_UNDISCOVERED || gBaseStats[species].eggGroup2 == EGG_GROUP_UNDISCOVERED) //Species without eggs (legendaries etc)
+        if (gSpecies[species].eggGroup1 == EGG_GROUP_UNDISCOVERED || gSpecies[species].eggGroup2 == EGG_GROUP_UNDISCOVERED) //Species without eggs (legendaries etc)
         {
             PrintInfoScreenTextSmall(gText_Stats_EggCycles, base_x, base_y + base_y_offset*base_i);
             PrintInfoScreenTextSmall(gText_ThreeDashes, 78, base_y + base_y_offset*base_i);
@@ -7015,17 +7015,17 @@ static void PrintStatsScreen_Left(u8 taskId)
         else
         {
             PrintInfoScreenTextSmall(gText_Stats_EggCycles, base_x, base_y + base_y_offset*base_i);
-            if (gBaseStats[species].eggCycles <= 10)
+            if (gSpecies[species].eggCycles <= 10)
             {
                 StringCopy(strEV, gText_Stats_EggCycles_VeryFast);
                 align_x = 76;
             }
-            else if (gBaseStats[species].eggCycles <= 20)
+            else if (gSpecies[species].eggCycles <= 20)
             {
                 StringCopy(strEV, gText_Stats_EggCycles_Fast);
                 align_x = 85;
             }
-            else if (gBaseStats[species].eggCycles <= 30)
+            else if (gSpecies[species].eggCycles <= 30)
             {
                 StringCopy(strEV, gText_Stats_EggCycles_Normal);
                 align_x = 76;
@@ -7040,7 +7040,7 @@ static void PrintStatsScreen_Left(u8 taskId)
         base_i++;
 
         //Egg group 1
-        switch (gBaseStats[species].eggGroup1)
+        switch (gSpecies[species].eggGroup1)
         {
         case EGG_GROUP_MONSTER     :
             StringCopy(gStringVar1, gText_Stats_eggGroup_MONSTER);
@@ -7089,9 +7089,9 @@ static void PrintStatsScreen_Left(u8 taskId)
             break;
         }
         //Egg group 2
-        if (gBaseStats[species].eggGroup1 != gBaseStats[species].eggGroup2)
+        if (gSpecies[species].eggGroup1 != gSpecies[species].eggGroup2)
         {
-            switch (gBaseStats[species].eggGroup2)
+            switch (gSpecies[species].eggGroup2)
             {
             case EGG_GROUP_MONSTER     :
                 StringCopy(gStringVar2, gText_Stats_eggGroup_MONSTER);
@@ -7154,13 +7154,13 @@ static void PrintStatsScreen_Left(u8 taskId)
     if (gTasks[taskId].data[5] == 0)
     {    
         //Abilitie(s)
-        ability0 = gBaseStats[species].abilities[sPokedexView->abilitynum];
+        ability0 = gSpecies[species].abilities[sPokedexView->abilitynum];
         PrintInfoScreenTextSmallWhite(gAbilities[ability0].name, abilities_x, abilities_y);
         PrintInfoScreenTextSmall(gAbilityDescriptionPointers[ability0], abilities_x, abilities_y + 14);
     }
     else {
         //Innates
-        ability0 = gBaseStats[species].innates[sPokedexView->innatenum];
+        ability0 = gSpecies[species].innates[sPokedexView->innatenum];
         PrintInfoScreenTextSmallWhite(gAbilities[ability0].name, abilities_x, abilities_y);
         PrintInfoScreenTextSmall(gAbilityDescriptionPointers[ability0], abilities_x, abilities_y + 14);
         
@@ -7954,7 +7954,7 @@ static void CreateStatBars(struct PokedexListItem *dexMon)
         memcpy(gfx, sStatBarsGfx, sizeof(sStatBarsGfx));
         for (i = 0; i < NUM_STATS; i++)
         {
-            statValue = *((u8*)(&gBaseStats[species]) + sBaseStatOffsets[i]);
+            statValue = *((u8*)(&gSpecies[species]) + sBaseStatOffsets[i]);
             if (statValue <= 100)
             {
                 width = statValue / 3;

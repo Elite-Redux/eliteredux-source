@@ -367,7 +367,7 @@ void CreateWildMon(u16 species, u8 level, int useRandomizer)
 
     if (useRandomizer) species = GetRandomPokemonFromSpecies(species);
 
-    switch (gBaseStats[species].genderRatio)
+    switch (gSpecies[species].genderRatio)
     {
     case MON_MALE:
     case MON_FEMALE:
@@ -1296,7 +1296,7 @@ static bool8 TryGetRandomWildMonIndexByType(const struct WildPokemon *wildMon, u
 
     for (validMonCount = 0, i = 0; i < numMon; i++)
     {
-        if (gBaseStats[wildMon[i].species].type1 == type || gBaseStats[wildMon[i].species].type2 == type)
+        if (gSpecies[wildMon[i].species].type1 == type || gSpecies[wildMon[i].species].type2 == type)
             validIndexes[validMonCount++] = i;
     }
 

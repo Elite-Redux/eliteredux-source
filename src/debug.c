@@ -3136,7 +3136,7 @@ static void DebugAction_Give_Pokemon_SelectLevel(u8 taskId)
 static void DebugAction_Give_Pokemon_SelectShiny(u8 taskId)
 {
     u16 species = sDebugMonData->mon_speciesId;
-    u8 numShinies = gBaseStats[species].numShinies;;
+    u8 numShinies = gSpecies[species].numShinies;;
 
     if (numShinies == 0)
         numShinies = SHINY_VANILLA;

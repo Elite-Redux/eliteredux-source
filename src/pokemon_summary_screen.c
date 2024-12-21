@@ -1641,12 +1641,12 @@ static bool8 ExtractMonDataToSummaryStruct(struct Pokemon *mon)
         sum->tough = GetMonData(mon, MON_DATA_TOUGH);
         break;
     case 5:
-        sum->hpBS    = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseHP;
-        sum->atkBS   = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseAttack;
-        sum->defBS   = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseDefense;
-        sum->spatkBS = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseSpAttack;
-        sum->spdefBS = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseSpDefense;
-        sum->speedBS = gBaseStats[GetMonData(mon, MON_DATA_SPECIES2)].baseSpeed;
+        sum->hpBS    = gSpecies[GetMonData(mon, MON_DATA_SPECIES2)].baseHP;
+        sum->atkBS   = gSpecies[GetMonData(mon, MON_DATA_SPECIES2)].baseAttack;
+        sum->defBS   = gSpecies[GetMonData(mon, MON_DATA_SPECIES2)].baseDefense;
+        sum->spatkBS = gSpecies[GetMonData(mon, MON_DATA_SPECIES2)].baseSpAttack;
+        sum->spdefBS = gSpecies[GetMonData(mon, MON_DATA_SPECIES2)].baseSpDefense;
+        sum->speedBS = gSpecies[GetMonData(mon, MON_DATA_SPECIES2)].baseSpeed;
         break;
     case 6:
         sum->hpEV = GetMonData(mon, MON_DATA_HP_EV);
@@ -1965,7 +1965,7 @@ static void Task_HandleInput(u8 taskId)
                     else
                         abilityNum = NUM_ABILITY_SLOTS - 1;
                 }
-                while (gBaseStats[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
+                while (gSpecies[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
 
                 if (!sMonSummaryScreen->isBoxMon) {
                     SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM, &abilityNum);
@@ -2116,7 +2116,7 @@ static void Task_HandleInput(u8 taskId)
                     else
                         abilityNum = 0;
                 }
-                while (gBaseStats[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
+                while (gSpecies[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
 
                 if (!sMonSummaryScreen->isBoxMon) {
                     SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM, &abilityNum);
@@ -2745,9 +2745,9 @@ static void PopulateAbilities(u16* abilities)
     int personality = sMonSummaryScreen->summary.pid;
 
     abilities[0] = GetAbilityBySpecies(sMonSummaryScreen->summary.species, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
-    abilities[1] = gBaseStats[species].innates[0];
-    abilities[2] = gBaseStats[species].innates[1];
-    abilities[3] = gBaseStats[species].innates[2];
+    abilities[1] = gSpecies[species].innates[0];
+    abilities[2] = gSpecies[species].innates[1];
+    abilities[3] = gSpecies[species].innates[2];
     
     if (!isEnemyMon) { //Enemy Mons have disabled randomized innates/abilies
         abilities[0] = RandomizeAbility(abilities[0], sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid);
@@ -2768,8 +2768,8 @@ static int IsStab(u16* abilities, int type)
     if (!abilities[1])
     {
         PopulateAbilities(abilities);
-        abilities[4] = RandomizeType(gBaseStats[sMonSummaryScreen->summary.species].type1, sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid, TRUE);
-        abilities[5] = RandomizeType(gBaseStats[sMonSummaryScreen->summary.species].type2, sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid, FALSE);
+        abilities[4] = RandomizeType(gSpecies[sMonSummaryScreen->summary.species].type1, sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid, TRUE);
+        abilities[5] = RandomizeType(gSpecies[sMonSummaryScreen->summary.species].type2, sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid, FALSE);
     }
 
     // Everything has stab so don't promote anything
@@ -4357,7 +4357,7 @@ static void PrintInfoPage(void)
 
     PrintTextOnWindow(PSS_LABEL_PANE_RIGHT, sText_ToNextLevel, 8, 116, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
     if (summary->level < MAX_LEVEL)
-        ConvertIntToDecimalStringN(gStringVar1, gExperienceTables[gBaseStats[summary->species].growthRate][summary->level + 1] - summary->exp, STR_CONV_MODE_RIGHT_ALIGN, 6);
+        ConvertIntToDecimalStringN(gStringVar1, gExperienceTables[gSpecies[summary->species].growthRate][summary->level + 1] - summary->exp, STR_CONV_MODE_RIGHT_ALIGN, 6);
     else
         ConvertIntToDecimalStringN(gStringVar1, 0, STR_CONV_MODE_RIGHT_ALIGN, 6);
     x = GetStringRightAlignXOffset(1, gStringVar1, 42) + 91;
@@ -4365,8 +4365,8 @@ static void PrintInfoPage(void)
 
     if (summary->level < MAX_LEVEL)
     {
-        u32 expBetweenLevels = gExperienceTables[gBaseStats[summary->species].growthRate][summary->level + 1] - gExperienceTables[gBaseStats[summary->species].growthRate][summary->level];
-        u32 expSinceLastLevel = summary->exp - gExperienceTables[gBaseStats[summary->species].growthRate][summary->level];
+        u32 expBetweenLevels = gExperienceTables[gSpecies[summary->species].growthRate][summary->level + 1] - gExperienceTables[gSpecies[summary->species].growthRate][summary->level];
+        u32 expSinceLastLevel = summary->exp - gExperienceTables[gSpecies[summary->species].growthRate][summary->level];
 
         // Calculate the number of 1-pixel "ticks" to illuminate in the experience progress bar.
         // There are 8 tiles that make up the bar, and each tile has 8 "ticks". Hence, the numerator
@@ -6296,8 +6296,8 @@ static void RedrawMoveDetailsBase(bool8 moveReplaceMode)
     int PosX, PosY, i;
     struct Pokemon *mon = &sMonSummaryScreen->currentMon;
     struct PokeSummary *summary = &sMonSummaryScreen->summary;
-    int type1 = RandomizeType(gBaseStats[summary->species].type1, summary->species, summary->pid, TRUE);
-    int type2 = RandomizeType(gBaseStats[summary->species].type2, summary->species, summary->pid, FALSE);
+    int type1 = RandomizeType(gSpecies[summary->species].type1, summary->species, summary->pid, TRUE);
+    int type2 = RandomizeType(gSpecies[summary->species].type2, summary->species, summary->pid, FALSE);
 
     SetSpriteInvisibility(SPRITE_ARR_ID_MON, TRUE);
     SetSpriteInvisibility(SPRITE_ARR_ID_ITEM, TRUE);
@@ -6411,8 +6411,8 @@ static void PrintMoveDetails(u16 move, bool8 moveReplaceMode)
 	u8 PosX, PosY, i;
     struct Pokemon *mon = &sMonSummaryScreen->currentMon;
     struct PokeSummary *summary = &sMonSummaryScreen->summary;
-    u8 type1 = RandomizeType(gBaseStats[summary->species].type1, summary->species, summary->pid, TRUE);
-    u8 type2 = RandomizeType(gBaseStats[summary->species].type2, summary->species, summary->pid, FALSE);
+    u8 type1 = RandomizeType(gSpecies[summary->species].type1, summary->species, summary->pid, TRUE);
+    u8 type2 = RandomizeType(gSpecies[summary->species].type2, summary->species, summary->pid, FALSE);
 
     SetSpriteInvisibility(SPRITE_ARR_ID_MON, TRUE);
     SetSpriteInvisibility(SPRITE_ARR_ID_ITEM, TRUE);
@@ -6585,8 +6585,8 @@ static void CreateMoveTypeIcons(void)
 static void SetMonTypeIcons(void)
 {
     struct PokeSummary *summary = &sMonSummaryScreen->summary;
-    u8 type1 = RandomizeType(gBaseStats[summary->species].type1, summary->species, summary->pid, TRUE);
-    u8 type2 = RandomizeType(gBaseStats[summary->species].type2, summary->species, summary->pid, FALSE);
+    u8 type1 = RandomizeType(gSpecies[summary->species].type1, summary->species, summary->pid, TRUE);
+    u8 type2 = RandomizeType(gSpecies[summary->species].type2, summary->species, summary->pid, FALSE);
 
     if (type1 != type2)
     {
@@ -7165,8 +7165,8 @@ static void ConfigureExpBarSprites(void)
 
     if (level < 100)
     {
-        totalExpToNextLevel = gExperienceTables[gBaseStats[species].growthRate][level + 1] - gExperienceTables[gBaseStats[species].growthRate][level];
-        curExpToNextLevel = exp - gExperienceTables[gBaseStats[species].growthRate][level];
+        totalExpToNextLevel = gExperienceTables[gSpecies[species].growthRate][level + 1] - gExperienceTables[gSpecies[species].growthRate][level];
+        curExpToNextLevel = exp - gExperienceTables[gSpecies[species].growthRate][level];
         v0 = ((totalExpToNextLevel << 2) / 8);
         v1 = (curExpToNextLevel << 2);
 

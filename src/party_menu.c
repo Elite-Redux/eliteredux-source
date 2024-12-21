@@ -4502,7 +4502,7 @@ void Task_AbilityCapsule(u8 taskId) {
         case 0:
             // Can't use.
             if (item == ITEM_ABILITY_CAPSULE) {
-                if (gBaseStats[tSpecies].abilities[0] == gBaseStats[tSpecies].abilities[1] || gBaseStats[tSpecies].abilities[1] == 0 || tAbilityNum > 1 ||
+                if (gSpecies[tSpecies].abilities[0] == gSpecies[tSpecies].abilities[1] || gSpecies[tSpecies].abilities[1] == 0 || tAbilityNum > 1 ||
                     !tSpecies) {
                     gPartyMenuUseExitCallback = FALSE;
                     PlaySE(SE_SELECT);
@@ -4513,7 +4513,7 @@ void Task_AbilityCapsule(u8 taskId) {
                 }
             } else  // if (item == ITEM_ABILITY_PATCH)
             {
-                if (gBaseStats[tSpecies].abilities[2] == 0) {
+                if (gSpecies[tSpecies].abilities[2] == 0) {
                     gPartyMenuUseExitCallback = FALSE;
                     PlaySE(SE_SELECT);
                     DisplayPartyMenuMessage(gText_WontHaveEffect, 1);

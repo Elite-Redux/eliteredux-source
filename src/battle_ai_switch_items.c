@@ -246,7 +246,7 @@ static bool8 FindMonThatAbsorbsOpponentsMove(void)
         
         species = GetMonData(&party[i], MON_DATA_SPECIES);
         // Updated to handle hidden abilities
-        monAbility = gBaseStats[species].abilities[GetMonData(&party[i], MON_DATA_ABILITY_NUM)];
+        monAbility = gSpecies[species].abilities[GetMonData(&party[i], MON_DATA_ABILITY_NUM)];
         
         for (j = 0; j < numAbsorbingAbilities; j++)
         {
@@ -474,7 +474,7 @@ static bool8 FindMonWithFlagsAndSuperEffective(u16 flags, u8 moduloPercent)
         species = GetMonData(&party[i], MON_DATA_SPECIES);
         level = GetMonData(&party[i], MON_DATA_LEVEL);
         // Updated to handle hidden abilities
-        monAbility = gBaseStats[species].abilities[GetMonData(&party[i], MON_DATA_ABILITY_NUM)];
+        monAbility = gSpecies[species].abilities[GetMonData(&party[i], MON_DATA_ABILITY_NUM)];
         
         CalcPartyMonTypeEffectivenessMultiplier(gLastLandedMoves[gActiveBattler], species, monAbility, level);//ToDo
         if (gMoveResultFlags & flags)
@@ -549,8 +549,8 @@ static u8 PredictFoesMoveType(u32 opposingBattler)
     u32 typeDmg1 = UQ_4_12(1.0), typeDmg2 = UQ_4_12(1.0), typeDmg3, bestTypeDmg = UQ_4_12(1.0);
     u16 *moves = GetMovesArray(opposingBattler);
 
-    u8 defType1 = gBaseStats[species].type1;
-    u8 defType2 = gBaseStats[species].type2;
+    u8 defType1 = gSpecies[species].type1;
+    u8 defType2 = gSpecies[species].type2;
     u8 atkType1 = gBattleMons[opposingBattler].type1;
     u8 atkType2 = gBattleMons[opposingBattler].type2;
     u8 predictedType = atkType1;
@@ -815,8 +815,8 @@ static u32 GetBestMonDefensive(struct Pokemon *party, int firstId, int lastId, u
     //             u16 species = GetMonData(&party[i], MON_DATA_SPECIES);
     //             u32 typeDmg = UQ_4_12(1.0);
 
-    //             u8 defType1 = gBaseStats[species].type1;
-    //             u8 defType2 = gBaseStats[species].type2;
+    //             u8 defType1 = gSpecies[species].type1;
+    //             u8 defType2 = gSpecies[species].type2;
 
     //             typeDmg *= GetTypeModifier(predictedMoveType, defType1, gActiveBattler, opposingBattler);
     //             if (defType2 != defType1)
@@ -889,8 +889,8 @@ static u32 GetBestMonOffensive(struct Pokemon *party, int firstId, int lastId, u
                 u16 species = GetMonData(&party[i], MON_DATA_SPECIES);
                 u32 typeDmg = UQ_4_12(1.0);
 
-                u8 atkType1 = gBaseStats[species].type1;
-                u8 atkType2 = gBaseStats[species].type2;
+                u8 atkType1 = gSpecies[species].type1;
+                u8 atkType2 = gSpecies[species].type2;
                 u8 defType1 = gBattleMons[opposingBattler].type1;
                 u8 defType2 = gBattleMons[opposingBattler].type2;
 

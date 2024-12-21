@@ -60,3 +60,5 @@ extern const union AnimCmd sAnim_GeneralFrame0[];
 #define SPECIES_SPRITE(species, sprite) {(sprite), MON_PIC_SIZE, species}
 #define SPECIES_PAL(species, pal) {(pal), species}
 #define SPECIES_SHINY_PAL(species, pal) {(pal), species + SPECIES_SHINY_TAG}
+
+#define PERCENT_FEMALE(percent) min(254, ((percent * 255) / 100))

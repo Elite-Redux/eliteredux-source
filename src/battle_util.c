@@ -109,7 +109,7 @@ u8 CalcBeatUpPower(void) {
 
     // Party slot is set in the battle script for Beat Up
     species = GetMonData(&party[gBattleCommunication[0] - 1], MON_DATA_SPECIES);
-    basePower = (gBaseStats[species].baseAttack / 10) + 5;
+    basePower = (gSpecies[species].baseAttack / 10) + 5;
 
     return basePower;
 }
@@ -1630,8 +1630,8 @@ u8 GetImprisonedMovesCount(u8 battlerId, u16 move) {
 }
 
 void RestoreBattlerOriginalTypes(u8 battlerId) {
-    gBattleMons[battlerId].type1 = gBaseStats[gBattleMons[battlerId].species].type1;
-    gBattleMons[battlerId].type2 = gBaseStats[gBattleMons[battlerId].species].type2;
+    gBattleMons[battlerId].type1 = gSpecies[gBattleMons[battlerId].species].type1;
+    gBattleMons[battlerId].type2 = gSpecies[gBattleMons[battlerId].species].type2;
 }
 
 void TryToApplyMimicry(u8 battlerId, bool8 various) {
@@ -8122,9 +8122,9 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
 static void TryNoticeIllusionInTypeEffectiveness(u32 move, u32 moveType, u32 battlerAtk, u32 battlerDef, u16 resultingModifier, u32 illusionSpecies) {
     // Check if the type effectiveness would've been different if the pokemon really had the types as the disguise.
     u16 presumedModifier = UQ_4_12(1.0);
-    MulByTypeEffectiveness(&presumedModifier, move, moveType, battlerDef, gBaseStats[illusionSpecies].type1, battlerAtk, FALSE);
-    if (gBaseStats[illusionSpecies].type2 != gBaseStats[illusionSpecies].type1)
-        MulByTypeEffectiveness(&presumedModifier, move, moveType, battlerDef, gBaseStats[illusionSpecies].type2, battlerAtk, FALSE);
+    MulByTypeEffectiveness(&presumedModifier, move, moveType, battlerDef, gSpecies[illusionSpecies].type1, battlerAtk, FALSE);
+    if (gSpecies[illusionSpecies].type2 != gSpecies[illusionSpecies].type1)
+        MulByTypeEffectiveness(&presumedModifier, move, moveType, battlerDef, gSpecies[illusionSpecies].type2, battlerAtk, FALSE);
 
     // TODO: Allow AI to notice illusion
 }
@@ -8249,9 +8249,9 @@ u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilit
     u8 moveType = gBattleMoves[move].type;
 
     if (move != MOVE_STRUGGLE && moveType != TYPE_MYSTERY) {
-        MulByTypeEffectiveness(&modifier, move, moveType, 0, gBaseStats[speciesDef].type1, 0, FALSE);
-        if (gBaseStats[speciesDef].type2 != gBaseStats[speciesDef].type1)
-            MulByTypeEffectiveness(&modifier, move, moveType, 0, gBaseStats[speciesDef].type2, 0, FALSE);
+        MulByTypeEffectiveness(&modifier, move, moveType, 0, gSpecies[speciesDef].type1, 0, FALSE);
+        if (gSpecies[speciesDef].type2 != gSpecies[speciesDef].type1)
+            MulByTypeEffectiveness(&modifier, move, moveType, 0, gSpecies[speciesDef].type2, 0, FALSE);
 
         if (moveType == TYPE_GROUND &&
             (BATTLER_HAS_ABILITY(battlerDef, ABILITY_LEVITATE) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_DRAGONFLY) ||
@@ -9183,7 +9183,7 @@ u16 GetInnateInSlot(int level, u16 species, u8 position, u32 personality, u8 isP
                 break;
         }
     }
-    return isPlayer ? RandomizeInnate(gBaseStats[species].innates[position], species, personality) : gBaseStats[species].innates[position];
+    return isPlayer ? RandomizeInnate(gSpecies[species].innates[position], species, personality) : gSpecies[species].innates[position];
 }
 
 void UpdateAbilityStateIndicesForNewSpecies(u8 battler, u16 newSpecies) {

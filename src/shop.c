@@ -999,7 +999,7 @@ static void BuyMenuPrintPriceInList(u8 windowId, u32 itemId, u8 y)
                 }
             break;
             case MART_TYPE_MONS:{
-                u8 price = gBaseStats[itemId].shopPrice;
+                u8 price = gSpecies[itemId].shopPrice;
 
                 if (price == 0)
                     price = DEFAULT_POKEMON_PRICE;
@@ -1439,7 +1439,7 @@ static void Task_BuyMenu(u8 taskId)
             }
             else if (sMartInfo.martType == MART_TYPE_DECOR || sMartInfo.martType == MART_TYPE_DECOR2) {
                 if (VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_BATTLE_POINTS) {
-                    u8 price = gBaseStats[itemId].shopPrice;
+                    u8 price = gSpecies[itemId].shopPrice;
 
                     if (price == 0)
                         price = DEFAULT_DECORATION_PRICE;
@@ -1452,7 +1452,7 @@ static void Task_BuyMenu(u8 taskId)
             }
             else// if (sMartInfo.martType == MART_TYPE_MONS) {
             {
-                u8 price = gBaseStats[itemId].shopPrice;
+                u8 price = gSpecies[itemId].shopPrice;
 
                 if (price == 0)
                     price = DEFAULT_POKEMON_PRICE;

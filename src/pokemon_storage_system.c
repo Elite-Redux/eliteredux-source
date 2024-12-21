@@ -4517,7 +4517,7 @@ static void Task_LevelUpMon(u8 taskId)
             if (newLevel > 100)
                 newLevel = 100;
 
-            experience = gExperienceTables[gBaseStats[sStorage->displayMonSpecies].growthRate][newLevel];
+            experience = gExperienceTables[gSpecies[sStorage->displayMonSpecies].growthRate][newLevel];
 
             if (sInPartyMenu) {
                 SetMonData(&gPlayerParty[pos], MON_DATA_EXP,   &experience);

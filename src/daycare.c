@@ -1283,8 +1283,8 @@ static bool8 DoMonsShareEggGroup(struct DayCare *daycare)
     for (i = 0; i < DAYCARE_MON_COUNT; i++)
     {
         species[i] = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES);
-        eggGroups[i][0] = gBaseStats[species[i]].eggGroup1;
-        eggGroups[i][1] = gBaseStats[species[i]].eggGroup2;
+        eggGroups[i][0] = gSpecies[species[i]].eggGroup1;
+        eggGroups[i][1] = gSpecies[species[i]].eggGroup2;
     }
 
     if (EggGroupsOverlap(eggGroups[0], eggGroups[1]))
@@ -1310,8 +1310,8 @@ static u8 GetDaycareCompatibilityScore(struct DayCare *daycare)
         trainerIds[i] = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_OT_ID);
         personality = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_PERSONALITY);
         genders[i] = GetGenderFromSpeciesAndPersonality(species[i], personality);
-        eggGroups[i][0] = gBaseStats[species[i]].eggGroup1;
-        eggGroups[i][1] = gBaseStats[species[i]].eggGroup2;
+        eggGroups[i][0] = gSpecies[species[i]].eggGroup1;
+        eggGroups[i][1] = gSpecies[species[i]].eggGroup2;
     }
 
     // check unbreedable egg group

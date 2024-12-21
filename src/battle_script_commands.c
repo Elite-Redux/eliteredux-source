@@ -913,8 +913,6 @@ static const u8 sBattlePalaceNatureToFlavorTextId[NUM_NATURES] = {
     [NATURE_QUIRKY] = B_MSG_EAGER_FOR_MORE,
 };
 
-#define IS_THREE_HEADED(battlerAttacker) (gBaseStats[gBattleMons[battlerAttacker].species].flags & F_THREE_HEADED)
-
 static bool32 NoTargetPresent(u32 move) {
     switch (move) {
         case MOVE_SUNNY_DAY:
@@ -3390,9 +3388,9 @@ static void Cmd_getexp(void) {
                     holdEffect = ItemId_GetHoldEffect(item);
             }
 #if (B_SCALED_EXP >= GEN_5) && (B_SCALED_EXP != GEN_6)
-            calculatedExp = gBaseStats[gBattleMons[gBattlerFainted].species].expYield * gBattleMons[gBattlerFainted].level / 5;
+            calculatedExp = gSpecies[gBattleMons[gBattlerFainted].species].expYield * gBattleMons[gBattlerFainted].level / 5;
 #else
-            calculatedExp = gBaseStats[gBattleMons[gBattlerFainted].species].expYield * gBattleMons[gBattlerFainted].level / 7;
+            calculatedExp = gSpecies[gBattleMons[gBattlerFainted].species].expYield * gBattleMons[gBattlerFainted].level / 7;
 #endif
 
             // Exp share effect always on. Any Pokemon that was sent in gets 100% of the exp, the rest get 25%
@@ -5052,9 +5050,9 @@ static void Cmd_switchindataupdate(void) {
     memcpy(&gBattleMons[gActiveBattler], &gBattleResources->bufferB[gActiveBattler][4], sizeof(gBattleMons[gActiveBattler]));
 
     gBattleMons[gActiveBattler].type1 = RandomizeType(
-        gBaseStats[gBattleMons[gActiveBattler].species].type1, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, TRUE);
+        gSpecies[gBattleMons[gActiveBattler].species].type1, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, TRUE);
     gBattleMons[gActiveBattler].type2 = RandomizeType(
-        gBaseStats[gBattleMons[gActiveBattler].species].type2, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, FALSE);
+        gSpecies[gBattleMons[gActiveBattler].species].type2, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, FALSE);
     gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_BATON_PASS || gBattleMoves[gCurrentMove].effect == EFFECT_SHED_TAIL) {
@@ -6692,9 +6690,9 @@ static void RecalcBattlerStats(u32 battler, struct Pokemon* mon) {
     RepopulateAbilities(battler);
 
     gBattleMons[battler].type1 =
-        RandomizeType(gBaseStats[gBattleMons[battler].species].type1, gBattleMons[battler].species, gBattleMons[battler].personality, TRUE);
+        RandomizeType(gSpecies[gBattleMons[battler].species].type1, gBattleMons[battler].species, gBattleMons[battler].personality, TRUE);
     gBattleMons[battler].type2 =
-        RandomizeType(gBaseStats[gBattleMons[battler].species].type2, gBattleMons[battler].species, gBattleMons[battler].personality, FALSE);
+        RandomizeType(gSpecies[gBattleMons[battler].species].type2, gBattleMons[battler].species, gBattleMons[battler].personality, FALSE);
 }
 
 static bool32 IsRototillerAffected(u32 battlerId) {
@@ -11545,10 +11543,10 @@ static void Cmd_trydobeatup(void) {
 
             gBattlescriptCurrInstr += 9;
 
-            gBattleMoveDamage = gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].baseAttack;
+            gBattleMoveDamage = gSpecies[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].baseAttack;
             gBattleMoveDamage *= gBattleMoves[gCurrentMove].power;
             gBattleMoveDamage *= (GetMonData(&party[gBattleCommunication[0]], MON_DATA_LEVEL) * 2 / 5 + 2);
-            gBattleMoveDamage /= gBaseStats[gBattleMons[gBattlerTarget].species].baseDefense;
+            gBattleMoveDamage /= gSpecies[gBattleMons[gBattlerTarget].species].baseDefense;
             gBattleMoveDamage = (gBattleMoveDamage / 50) + 2;
             if (gRoundStructs[gBattlerAttacker].helpingHand) gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
 
@@ -12260,9 +12258,9 @@ static void Cmd_pickup(void) {
             heldItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
 
             if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM))
-                ability = gBaseStats[species].abilities[1];
+                ability = gSpecies[species].abilities[1];
             else
-                ability = gBaseStats[species].abilities[0];
+                ability = gSpecies[species].abilities[0];
 
             if (ability == ABILITY_PICKUP && species != 0 && species != SPECIES_EGG && heldItem == ITEM_NONE && (Random() % 10) == 0) {
                 heldItem = GetBattlePyramidPickupItemId();
@@ -12285,9 +12283,9 @@ static void Cmd_pickup(void) {
             if (lvlDivBy10 > 9) lvlDivBy10 = 9;
 
             if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM))
-                ability = gBaseStats[species].abilities[1];
+                ability = gSpecies[species].abilities[1];
             else
-                ability = gBaseStats[species].abilities[0];
+                ability = gSpecies[species].abilities[0];
 
             if (ability == ABILITY_PICKUP && species != 0 && species != SPECIES_EGG && heldItem == ITEM_NONE && (Random() % 10) == 0) {
                 s32 j;
@@ -12567,10 +12565,10 @@ static void Cmd_handleballthrow(void) {
         if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
             catchRate = gBattleStruct->safariCatchFactor * 1275 / 100;
         else
-            catchRate = gBaseStats[gBattleMons[gBattlerTarget].species].catchRate;
+            catchRate = gSpecies[gBattleMons[gBattlerTarget].species].catchRate;
 
 #ifdef POKEMON_EXPANSION
-        if (gBaseStats[gBattleMons[gBattlerTarget].species].flags & F_ULTRA_BEAST) {
+        if (FALSE) { // gSpecies[gBattleMons[gBattlerTarget].species].flags & F_ULTRA_BEAST) {
             if (gLastUsedItem == ITEM_BEAST_BALL)
                 ballMultiplier = 50;
             else
@@ -12685,7 +12683,7 @@ static void Cmd_handleballthrow(void) {
                     }
                     break;
                 case ITEM_FAST_BALL:
-                    if (gBaseStats[gBattleMons[gBattlerTarget].species].baseSpeed >= 100) ballMultiplier = 40;
+                    if (gSpecies[gBattleMons[gBattlerTarget].species].baseSpeed >= 100) ballMultiplier = 40;
                     break;
                 case ITEM_HEAVY_BALL:
                     i = GetPokedexHeightWeight(SpeciesToNationalPokedexNum(gBattleMons[gBattlerTarget].species), 1);

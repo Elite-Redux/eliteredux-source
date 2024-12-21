@@ -806,7 +806,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_CHEAP_TACTICS, ABILITY_RUN_AWAY, ABILITY_THICK_FAT},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 1,
     },
 
@@ -860,7 +860,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_GROWING_TOOTH, ABILITY_OPPORTUNIST, ABILITY_GLUTTONY},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 0,
     },
 
@@ -1100,7 +1100,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_SURGE_SURFER, ABILITY_LEVITATE, ABILITY_GROUND_SHOCK},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .shopPrice = 25,
     .tier = 0,
     },
@@ -1157,7 +1157,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_LETS_ROLL, ABILITY_SLUSH_RUSH, ABILITY_BATTLE_ARMOR},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 0,
     },
 
@@ -1239,7 +1239,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_LETS_ROLL, ABILITY_TOUGH_CLAWS, ABILITY_IRON_BARBS},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 0,
     },
 
@@ -1559,7 +1559,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_QUICK_FEET, ABILITY_REFRIGERATE, ABILITY_FROZEN_SOUL},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 4,
     },
 
@@ -1615,7 +1615,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_SERENE_GRACE, ABILITY_ICE_DEW, ABILITY_QUEENLY_MAJESTY},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 0,
     },
 
@@ -2077,7 +2077,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_TANGLING_HAIR, ABILITY_STEELWORKER, ABILITY_AMBUSH},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 1,
     },
 
@@ -2105,7 +2105,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_MULTI_HEADED, ABILITY_SAND_FORCE, ABILITY_SPEED_FORCE},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -2133,7 +2133,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_MULTI_HEADED, ABILITY_SAND_FORCE, ABILITY_SPEED_FORCE},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = TRUE,
-    .flags = F_ALOLAN_FORM | F_THREE_HEADED,
+    //flags = F_ALOLAN_FORM | F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -2249,7 +2249,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_CHEAP_TACTICS, ABILITY_COWARD, ABILITY_PERFECTIONIST},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 2,
     },
 
@@ -2277,7 +2277,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_TOUGH_CLAWS, ABILITY_OPPORTUNIST, ABILITY_PERFECTIONIST},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 2,
     },
 
@@ -2360,7 +2360,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_FUR_COAT, ABILITY_COWARD, ABILITY_PERFECTIONIST},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 0,
     },
 
@@ -2998,7 +2998,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_LETS_ROLL, ABILITY_STURDY, ABILITY_STATIC},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 1,
     },
 
@@ -3053,7 +3053,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_LETS_ROLL, ABILITY_STURDY, ABILITY_GALVANIZE},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 0,
     },
 
@@ -3108,7 +3108,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_GROUND_SHOCK, ABILITY_STURDY, ABILITY_GALVANIZE},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 0,
     },
 
@@ -3187,7 +3187,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_COWARD, ABILITY_SPEED_FORCE, ABILITY_DAZZLING},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 3,
     },
 
@@ -3214,7 +3214,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_MIGHTY_HORN, ABILITY_SPEED_FORCE, ABILITY_DAZZLING},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 0,
     },
 
@@ -3268,7 +3268,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_OBLIVIOUS, ABILITY_POISON_ABSORB, ABILITY_STALL},
     .bodyColor = BODY_COLOR_PINK,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 4,
     },
 
@@ -3322,7 +3322,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_OBLIVIOUS, ABILITY_QUICK_DRAW, ABILITY_STALL},
     .bodyColor = BODY_COLOR_PINK,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 0,
     },
 
@@ -3404,7 +3404,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_FILTER, ABILITY_MULTI_HEADED, ABILITY_MAGNET_PULL},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -3459,7 +3459,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_SCRAPPY, ABILITY_SNIPER, ABILITY_MOXIE},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 0,
     },
 
@@ -3514,7 +3514,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_MULTI_HEADED, ABILITY_GROUNDED, ABILITY_MOXIE},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 4,
     },
 
@@ -3542,7 +3542,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_MULTI_HEADED, ABILITY_GROUNDED, ABILITY_MOXIE},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -3676,7 +3676,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_LIQUIFIED, ABILITY_CORROSION, ABILITY_POWER_OF_ALCHEMY},
     .bodyColor = BODY_COLOR_GREEN,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 2,
     },
 
@@ -3735,7 +3735,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_LIQUIFIED, ABILITY_CORROSION, ABILITY_POWER_OF_ALCHEMY},
     .bodyColor = BODY_COLOR_GREEN,
     .noFlip = TRUE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 0,
     },
 
@@ -4157,7 +4157,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_SOLAR_POWER, ABILITY_CHLOROPHYLL, ABILITY_MULTI_HEADED},
     .bodyColor = BODY_COLOR_PINK,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 4,
     },
 
@@ -4184,7 +4184,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_HARVEST, ABILITY_CHLOROPLAST, ABILITY_MULTI_HEADED},
     .bodyColor = BODY_COLOR_YELLOW,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -4211,7 +4211,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_LONG_REACH, ABILITY_BIG_LEAVES, ABILITY_MULTI_HEADED},
     .bodyColor = BODY_COLOR_YELLOW,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM | F_THREE_HEADED,
+    //flags = F_ALOLAN_FORM | F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -4295,7 +4295,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_BONE_ZONE, ABILITY_EARLY_GRAVE, ABILITY_ROCK_HEAD},
     .bodyColor = BODY_COLOR_PURPLE,
     .noFlip = FALSE,
-    .flags = F_ALOLAN_FORM,
+    //flags = F_ALOLAN_FORM,
     .tier = 0,
     },
 
@@ -4481,7 +4481,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_LEVITATE, ABILITY_MULTI_HEADED, ABILITY_INFLATABLE},
     .bodyColor = BODY_COLOR_PURPLE,
     .noFlip = TRUE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 0,
     },
 
@@ -7576,7 +7576,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_MULTI_HEADED, ABILITY_NOCTURNAL, ABILITY_STRONG_JAW},
     .bodyColor = BODY_COLOR_YELLOW,
     .noFlip = FALSE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 4,
     },
 
@@ -7950,7 +7950,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_MULTI_HEADED, ABILITY_JUGGERNAUT, ABILITY_UNAWARE},
     .bodyColor = BODY_COLOR_YELLOW,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -9598,7 +9598,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_SCRAPPY, ABILITY_QUICK_FEET, ABILITY_GUTS},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 1,
     },
 
@@ -9625,7 +9625,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_SCRAPPY, ABILITY_HYPER_AGGRESSIVE, ABILITY_GUTS},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 0,
     },
 
@@ -10881,7 +10881,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_MULTI_HEADED, ABILITY_STRONG_JAW, ABILITY_GRIP_PINCER},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 4,
     },
 
@@ -10909,7 +10909,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_MULTI_HEADED, ABILITY_STRONG_JAW, ABILITY_GRIP_PINCER},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -14899,7 +14899,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_SWARM, ABILITY_POLLINATE, ABILITY_MULTI_HEADED},
     .bodyColor = BODY_COLOR_YELLOW,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 3,
     },
 
@@ -16363,7 +16363,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_FILTER, ABILITY_MULTI_HEADED, ABILITY_MAGNET_PULL},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -16390,7 +16390,7 @@ const struct BaseStats gBaseStats[] =
         .innates = {ABILITY_ELECTRIC_SURGE, ABILITY_MULTI_HEADED, ABILITY_MAGNET_PULL},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .flags = F_THREE_HEADED,
+        //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -16788,7 +16788,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_MULTI_HEADED, ABILITY_LEVITATE, ABILITY_SOLID_ROCK},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -19687,7 +19687,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_HEATPROOF, ABILITY_INNER_FOCUS, ABILITY_ICE_BODY},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 2,
     },
 
@@ -19740,7 +19740,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_HEATPROOF, ABILITY_IRON_FIST, ABILITY_MOLD_BREAKER},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 0,
     },
 
@@ -19871,7 +19871,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_HEATPROOF, ABILITY_IRON_FIST, ABILITY_TURBOBLAZE},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 0,
     },
 
@@ -20141,7 +20141,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_VENGEANCE, ABILITY_CURSED_BODY, ABILITY_HAUNTED_SPIRIT},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 3,
     },
 
@@ -20749,7 +20749,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_MULTI_HEADED, ABILITY_ICE_BODY, ABILITY_SLUSH_RUSH},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 0,
     },
 
@@ -21328,7 +21328,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_MULTI_HEADED, ABILITY_STURDY, ABILITY_FULL_METAL_BODY},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = TRUE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 4,
     },
 
@@ -21355,7 +21355,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_MULTI_HEADED, ABILITY_STURDY, ABILITY_FULL_METAL_BODY},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = TRUE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -21382,7 +21382,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_MULTI_HEADED, ABILITY_STURDY, ABILITY_STEELWORKER},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = TRUE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -22272,7 +22272,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_MULTI_HEADED, ABILITY_GLUTTONY, ABILITY_PREDATOR},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 0,
     },
 
@@ -22299,7 +22299,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_MULTI_HEADED, ABILITY_LEVITATE, ABILITY_PREDATOR},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -24434,7 +24434,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_LEVITATE, ABILITY_DUAL_WIELD, ABILITY_SOUL_EATER},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 0,
     },
 
@@ -24671,7 +24671,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_MULTI_HEADED, ABILITY_TOUGH_CLAWS, ABILITY_SNIPER},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 4,
     },
 
@@ -24698,7 +24698,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_MULTI_HEADED, ABILITY_TOUGH_CLAWS, ABILITY_SNIPER},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = TRUE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -28954,7 +28954,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_BEAST_BOOST, ABILITY_LEVITATE, ABILITY_HYPER_AGGRESSIVE},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_ULTRA_BEAST,
+    //flags = F_ULTRA_BEAST,
     .tier = 5,
     },
 
@@ -28982,7 +28982,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_BEAST_BOOST, ABILITY_IRON_FIST, ABILITY_RAGING_BOXER},
     .bodyColor = BODY_COLOR_RED,
     .noFlip = FALSE,
-    .flags = F_ULTRA_BEAST,
+    //flags = F_ULTRA_BEAST,
     .tier = 5,
     },
 
@@ -29009,7 +29009,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_BEAST_BOOST, ABILITY_SPEED_BOOST, ABILITY_STRIKER},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_ULTRA_BEAST,
+    //flags = F_ULTRA_BEAST,
     .tier = 5,
     },
 
@@ -29036,7 +29036,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_BEAST_BOOST, ABILITY_VOLT_RUSH, ABILITY_INFILTRATOR},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
-    .flags = F_ULTRA_BEAST,
+    //flags = F_ULTRA_BEAST,
     .tier = 5,
     },
 
@@ -29065,7 +29065,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_BEAST_BOOST, ABILITY_BATTLE_ARMOR, ABILITY_LEAD_COAT},
     .bodyColor = BODY_COLOR_GREEN,
     .noFlip = FALSE,
-    .flags = F_ULTRA_BEAST,
+    //flags = F_ULTRA_BEAST,
     .tier = 5,
     },
 
@@ -29092,7 +29092,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_BEAST_BOOST, ABILITY_HYPER_CUTTER, ABILITY_KEEN_EDGE},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_ULTRA_BEAST,
+    //flags = F_ULTRA_BEAST,
     .tier = 5,
     },
 
@@ -29119,7 +29119,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_BEAST_BOOST, ABILITY_THICK_FAT, ABILITY_JAWS_OF_CARNAGE},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
-    .flags = F_ULTRA_BEAST,
+    //flags = F_ULTRA_BEAST,
     .tier = 5,
     },
 
@@ -29332,7 +29332,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_BEAST_BOOST, ABILITY_POISON_TOUCH, ABILITY_LEVITATE},
     .bodyColor = BODY_COLOR_PURPLE,
     .noFlip = FALSE,
-    .flags = F_ULTRA_BEAST,
+    //flags = F_ULTRA_BEAST,
     .shopPrice = 250,
     .tier = 5,
     },
@@ -29360,7 +29360,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_BEAST_BOOST, ABILITY_LEVITATE, ABILITY_MERCILESS},
     .bodyColor = BODY_COLOR_PURPLE,
     .noFlip = FALSE,
-    .flags = F_ULTRA_BEAST,
+    //flags = F_ULTRA_BEAST,
     .tier = 0,
     },
 
@@ -29387,7 +29387,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_BEAST_BOOST, ABILITY_LEAD_COAT, ABILITY_FORT_KNOX},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = TRUE,
-    .flags = F_ULTRA_BEAST,
+    //flags = F_ULTRA_BEAST,
     .tier = 5,
     },
 
@@ -29414,7 +29414,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_BEAST_BOOST, ABILITY_RECKLESS, ABILITY_PYROMANCY},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = TRUE,
-    .flags = F_ULTRA_BEAST,
+    //flags = F_ULTRA_BEAST,
     .tier = 5,
     },
 
@@ -32318,7 +32318,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_SOLENOGLYPHS, ABILITY_HALF_DRAKE, ABILITY_MULTI_HEADED},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 0,
     },
 
@@ -32346,7 +32346,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_SOLENOGLYPHS, ABILITY_HALF_DRAKE, ABILITY_MULTI_HEADED},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -32562,7 +32562,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_STRONG_JAW, ABILITY_OPPORTUNIST, ABILITY_FAE_HUNTER},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 0,
     },
 
@@ -32590,7 +32590,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_MULTI_HEADED, ABILITY_STRONG_JAW, ABILITY_SHADOW_TAG},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -32619,7 +32619,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_MULTI_HEADED, ABILITY_STRONG_JAW, ABILITY_SCARE},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 0,
     },
 
@@ -32647,7 +32647,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_HUGE_POWER, ABILITY_MULTI_HEADED, ABILITY_CORROSION},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -32752,7 +32752,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_CELESTIAL_BLESSING, ABILITY_MULTI_HEADED, ABILITY_MISTY_SURGE},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 0,
     },
 
@@ -32779,7 +32779,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_CELESTIAL_BLESSING, ABILITY_MULTI_HEADED, ABILITY_MISTY_SURGE},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -33874,7 +33874,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_SWEEPING_EDGE, ABILITY_VENGEANCE, ABILITY_CURSED_BODY},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
-    .flags = F_TWO_HEADED,
+    //flags = F_TWO_HEADED,
     .tier = 0,
     },
 
@@ -35918,7 +35918,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_WATER_ABSORB, ABILITY_MULTI_HEADED, ABILITY_PYROMANCY},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .flags = F_TWO_HEADED,
+        //flags = F_TWO_HEADED,
     .tier = 0,
     },
 
@@ -36216,7 +36216,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_GOOEY, ABILITY_FIELD_EXPLORER, ABILITY_MULTI_HEADED},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .flags = F_THREE_HEADED,
+        //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -37141,7 +37141,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_PROTOSYNTHESIS, ABILITY_MULTI_HEADED, ABILITY_TRANSISTOR},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .flags = F_THREE_HEADED,
+        //flags = F_THREE_HEADED,
     .tier = 5,
     },
 
@@ -37274,7 +37274,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_QUARK_DRIVE, ABILITY_MULTI_HEADED, ABILITY_RAPID_RESPONSE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .flags = F_THREE_HEADED,
+        //flags = F_THREE_HEADED,
     .tier = 5,
     },
 
@@ -37924,7 +37924,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_MULTI_HEADED, ABILITY_SHELL_ARMOR, ABILITY_SUPER_HOT_GOO},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-        .flags = F_THREE_HEADED,
+        //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -38810,7 +38810,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_LEVITATE, ABILITY_MULTI_HEADED, ABILITY_POISON_ABSORB},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM | F_TWO_HEADED,
+    //flags = F_GALARIAN_FORM | F_TWO_HEADED,
     .tier = 0,
     },
 
@@ -38837,7 +38837,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_SCREEN_CLEANER, ABILITY_ICE_BODY, ABILITY_OBLIVIOUS},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 0,
     },
 
@@ -38864,7 +38864,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_AURORA_BOREALIS, ABILITY_PERMAFROST, ABILITY_GIFTED_MIND},
     .bodyColor = BODY_COLOR_PURPLE,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 5,
     },
 
@@ -38891,7 +38891,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_STRIKER, ABILITY_SPEED_BOOST, ABILITY_ROUNDHOUSE},
     .bodyColor = BODY_COLOR_YELLOW,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 5,
     },
 
@@ -38918,7 +38918,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_DARK_AURA, ABILITY_SHADOW_SHIELD, ABILITY_TIPPING_POINT},
     .bodyColor = BODY_COLOR_RED,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 5,
     },
 
@@ -38945,7 +38945,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_SPITEFUL, ABILITY_PRESSURE, ABILITY_PERMANENCE},
     .bodyColor = BODY_COLOR_PINK,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 4,
     },
 
@@ -38972,7 +38972,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_CURSED_BODY, ABILITY_STURDY, ABILITY_RATTLED},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 3,
     },
 
@@ -38999,7 +38999,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_MIMICRY, ABILITY_SCRAPYARD, ABILITY_IRON_BARBS},
     .bodyColor = BODY_COLOR_GREEN,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 1,
     },
 
@@ -42391,7 +42391,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_MULTI_HEADED, ABILITY_STRONG_JAW, ABILITY_GUARD_DOG},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
@@ -44107,7 +44107,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_UNICORN, ABILITY_SPEED_FORCE, ABILITY_PIXILATE},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
-    .flags = F_GALARIAN_FORM,
+    //flags = F_GALARIAN_FORM,
     .tier = 0,
     },
 
@@ -44247,7 +44247,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_ETERNAL_BLESSING, ABILITY_MULTI_HEADED, ABILITY_RADIANCE},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
-    .flags = F_THREE_HEADED,
+    //flags = F_THREE_HEADED,
     .tier = 0,
     },
 
