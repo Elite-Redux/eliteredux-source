@@ -76,6 +76,32 @@ ENUM_OR(InfiltrateType)
 #define ON_MOVE_TYPE int ability, int move, int moveType, u8 *ateBoost
 #define ON_EXIT int ability, int battler
 
+#define DELEGATE_ENTRY ability, battler
+#define DELEGATE_ABSORB battler, move, moveType, statId
+#define DELEGATE_IMMUNE battler, attacker, move, moveType, const immunityScript
+#define DELEGATE_INFILTRATE battler, move
+#define DELEGATE_DISGUISE battler, testOnly
+#define DELEGATE_WEATHER ability, battler
+#define DELEGATE_TERRAIN ability, battler
+#define DELEGATE_END_TURN ability, battler
+#define DELEGATE_ATTACKER ability, battler, target, move, moveType
+#define DELEGATE_DEFENDER ability, battler, attacker, move, moveType
+#define DELEGATE_RECOIL damage, battler, moveType
+#define DELEGATE_REACTIVE ability, battler
+#define DELEGATE_BATTLER_FAINTS ability, battler, attacker, fainted, move, moveType
+#define DELEGATE_PARENTAL_BOND battler, move, moveType
+#define DELEGATE_STAT ability, battler, statId, stat, flags
+#define DELEGATE_OFFENSIVE_MULTIPLIER battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier
+#define DELEGATE_DEFENSIVE_MULTIPLIER battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier
+#define DELEGATE_ACCURACY ability, battler, target, move, moveType, accuracy
+#define DELEGATE_SWAP_SPLIT battler, move
+#define DELEGATE_CHOOSE_OFFENSIVE_STAT battler, move, ignoreOffensiveStatDrops, targetUnaware, atkStatToUse, secondaryAtkStatToUse
+#define DELEGATE_CHOOSE_DEFENSIVE_STAT battler, target, move, ignoreDefensiveStatBoosts, battlerUnaware
+#define DELEGATE_STAB moveType
+#define DELEGATE_PRIORITY battler, target, move
+#define DELEGATE_MOVE_TYPE ability, move, moveType, ateBoost
+#define DELEGATE_EXIT ability, battler
+
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
         CHECK(GetTypeBeforeUsingMove(move, battler) == type) \
@@ -8174,7 +8200,7 @@ static const Ability FlameBubble = {
 static const Ability ElementalVortex = {
     .name = $("Elemental Vortex"),
     .description = $("Flash Fire + Water Absorb."),
-    .onAbsorb = +[](ON_ABSORB) -> int { return WaterAbsorb.onAbsorb(battler, move, moveType, statId) | FlashFire.onAbsorb(battler, move, moveType, statId); },
+    .onAbsorb = +[](ON_ABSORB) -> int { return WaterAbsorb.onAbsorb(battler, move, moveType, statId) || FlashFire.onAbsorb(battler, move, moveType, statId); },
     .onOffensiveMultiplier = FlashFire.onOffensiveMultiplier,
 };
 
@@ -9226,9 +9252,10 @@ static const Ability StrikerPixilate = {
                      "moves by 1.3x + Pixilate."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) MUL(1.3);
+            Striker.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Pixilate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
-    ATE_ABILITY(TYPE_FAIRY),
+    .onMoveType = Pixilate.onMoveType,
 };
 
 const Ability gAbilities[] = {
