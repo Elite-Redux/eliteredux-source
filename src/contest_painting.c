@@ -382,7 +382,7 @@ static void InitContestMonPixels(u16 species, u8 whichSprite)
     else
     {
         HandleLoadSpecialPokePic(
-            &gMonBackPicTable[species],
+            &gSpecies[species].backPic,
             gMonSpritesGfxPtr->sprites.ptr[0],
             species,
             gContestPaintingWinner->personality);

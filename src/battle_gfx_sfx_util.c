@@ -624,7 +624,7 @@ static void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battlerId, bool32 op
     }
     else
     {
-        HandleLoadSpecialPokePic(&gMonBackPicTable[species],
+        HandleLoadSpecialPokePic(&gSpecies[species].backPic,
                                  gMonSpritesGfxPtr->sprites.ptr[position],
                                  species, currentPersonality);
     }
@@ -912,7 +912,7 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 notTransform
         targetSpecies = gContestResources->moveAnim->targetSpecies;
         personalityValue = gContestResources->moveAnim->personality;
 
-        HandleLoadSpecialPokePic(&gMonBackPicTable[targetSpecies],
+        HandleLoadSpecialPokePic(&gSpecies[targetSpecies].backPic,
                                  gMonSpritesGfxPtr->sprites.ptr[0],
                                  targetSpecies,
                                  gContestResources->moveAnim->targetPersonality);
@@ -938,7 +938,7 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 notTransform
         {
             personalityValue = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_PERSONALITY);
 
-            HandleLoadSpecialPokePic(&gMonBackPicTable[targetSpecies],
+            HandleLoadSpecialPokePic(&gSpecies[targetSpecies].backPic,
                                      gMonSpritesGfxPtr->sprites.ptr[position],
                                      targetSpecies,
                                      gTransformedPersonalities[battlerAtk]);

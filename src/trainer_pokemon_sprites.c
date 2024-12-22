@@ -73,7 +73,7 @@ static bool16 DecompressPic(u16 species, u32 personality, bool8 isFrontPic, u8 *
         }
         else
         {
-            LoadSpecialPokePic(&gMonBackPicTable[species], dest, species, personality, isFrontPic);
+            LoadSpecialPokePic(&gSpecies[species].backPic, dest, species, personality, isFrontPic);
         }
     }
     else

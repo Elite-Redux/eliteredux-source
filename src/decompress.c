@@ -115,7 +115,7 @@ void LoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *dest, s32
         u32 id = GetUnownSpeciesId(personality);
 
         if (!isFrontPic)
-            LZ77UnCompWram(gMonBackPicTable[id].data, dest);
+            LZ77UnCompWram(gSpecies[id].backPic.data, dest);
         else
             LZ77UnCompWram(gSpecies[id].frontPic.data, dest);
     }
@@ -126,7 +126,7 @@ void LoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *dest, s32
         if (isFrontPic)
             LZ77UnCompWram(gSpecies[species].frontPicFemale.data, dest);
         else
-            LZ77UnCompWram(gMonBackPicTableFemale[species].data, dest);
+            LZ77UnCompWram(gSpecies[species].backPicFemale.data, dest);
     }
     else
         LZ77UnCompWram(src->data, dest);

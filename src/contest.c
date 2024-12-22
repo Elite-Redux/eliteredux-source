@@ -3124,7 +3124,7 @@ static u8 CreateContestantSprite(u16 species, u32 otId, u32 personality, u32 ind
     bool8 isAlpha = FALSE;
     species = SanitizeSpecies(species);
 
-    HandleLoadSpecialPokePic(&gMonBackPicTable[species], gMonSpritesGfxPtr->sprites.ptr[0], species, personality);
+    HandleLoadSpecialPokePic(&gSpecies[species].backPic, gMonSpritesGfxPtr->sprites.ptr[0], species, personality);
     LoadHueShiftedMonPalette(GetMonSpritePal(species, personality, isShiny), 0x120, 0x20, personality, isAlpha);
     SetMultiuseSpriteTemplateToPokemon(species, 0);
 
