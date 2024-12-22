@@ -2531,7 +2531,6 @@ static void sub_80398D0(struct Sprite *sprite) {
     }
 }
 
-extern const struct MonCoords gMonFrontPicCoords[];
 extern const struct MonCoords gCastformFrontSpriteCoords[];
 
 void SpriteCB_FaintOpponentMon(struct Sprite *sprite) {
@@ -2549,13 +2548,13 @@ void SpriteCB_FaintOpponentMon(struct Sprite *sprite) {
 
     if (species == SPECIES_UNOWN) {
         species = GetUnownSpeciesId(personality);
-        yOffset = gMonFrontPicCoords[species].y_offset;
+        yOffset = gSpecies[species].frontCoords.y_offset;
     } else if (species == SPECIES_CASTFORM) {
         yOffset = gCastformFrontSpriteCoords[gBattleMonForms[battler]].y_offset;
     } else if (species > NUM_SPECIES) {
-        yOffset = gMonFrontPicCoords[SPECIES_NONE].y_offset;
+        yOffset = gSpecies[SPECIES_NONE].frontCoords.y_offset;
     } else {
-        yOffset = gMonFrontPicCoords[species].y_offset;
+        yOffset = gSpecies[species].frontCoords.y_offset;
     }
 
     sprite->data[3] = 8 - yOffset / 8;
