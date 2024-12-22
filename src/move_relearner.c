@@ -155,7 +155,8 @@
 #define JAM_HEART_EMPTY 2
 #define JAM_HEART_FULL 3
 
-#define MAX_RELEARNER_MOVES (MAX_LEVEL_UP_MOVES > 25 ? MAX_LEVEL_UP_MOVES : 25)
+// TODO Generate a consteval for this
+#define MAX_RELEARNER_MOVES 300
 
 static EWRAM_DATA struct
 {

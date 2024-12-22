@@ -344,7 +344,7 @@ static u16 GetRandomAlternateMove(u8 monId)
 
     id = APPRENTICE_SPECIES_ID(monId);
     species = gApprentices[PLAYER_APPRENTICE.id].species[id];
-    learnset = gLevelUpLearnsets[species];
+    learnset = gSpecies[species].levelUpMoves;
     j = 0;
 
     // Despite being open level, level up moves are only read up to level 60
@@ -353,7 +353,7 @@ static u16 GetRandomAlternateMove(u8 monId)
     else // == APPRENTICE_LVL_MODE_OPEN
         level = 60;
 
-    for (j = 0; learnset[j].move != LEVEL_UP_END; j++)
+    for (j = 0; learnset[j].move; j++)
     {
         if (learnset[j].level > level)
             break;
@@ -426,8 +426,8 @@ static void GetLatestLearnedMoves(u16 species, u16 *moves)
     else // == APPRENTICE_LVL_MODE_OPEN
         level = 60;
 
-    learnset = gLevelUpLearnsets[species];
-    for (i = 0; learnset[i].move != LEVEL_UP_END; i++)
+    learnset = gSpecies[species].levelUpMoves;
+    for (i = 0; learnset[i].move; i++)
     {
         if (learnset[i].level > level)
             break;

@@ -419,7 +419,6 @@ extern const u8 *const gItemEffectTable[];
 extern const u32 gExperienceTables[][MAX_LEVEL + 1];
 extern const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON];
 extern const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON];
-extern const struct LevelUpMove *const gLevelUpLearnsets[];
 extern const u8 gPPUpGetMask[];
 extern const u8 gPPUpSetMask[];
 extern const u8 gPPUpAddMask[];
