@@ -4712,83 +4712,100 @@ const u8 gText_EVO_MEGA_EVOLUTION[] = _("Mega Evolve holding a\n{STR_VAR_2}");
 const u8 gText_EVO_PRIMAL_REVERSION[] = _("Primal Reversion holding a\n{STR_VAR_2}");
 const u8 gText_EVO_MOVE_MEGA_EVOLUTION[] = _("Mega Evolve knowing\n{STR_VAR_2}");
 
-const u8 gText_Subname[] = _("{STR_VAR_1} {STR_VAR_2}");
-const u8 gText_Subname2[] = _("{STR_VAR_1} {STR_VAR_2} {STR_VAR_3}");
+const u8 gText_Subname12[] = _("{STR_VAR_1} {STR_VAR_2}");
+const u8 gText_Subname123[] = _("{STR_VAR_1} {STR_VAR_2} {STR_VAR_3}");
+
 const u8 gText_Mega[] = _("Mega");
 const u8 gText_Primal[] = _("Primal");
-const u8 gText_Ultra[] = _("Ultra");
+const u8 gText_Origin[] = _("Origin");
+const u8 gText_Crowned[] = _("Crowned");
 const u8 gText_Alolan[] = _("Alolan");
 const u8 gText_Galarian[] = _("Galarian");
 const u8 gText_Hisuian[] = _("Hisuian");
+const u8 gText_Paldean[] = _("Paldean");
 const u8 gText_Redux[] = _("Redux");
-const u8 gText_Midday[] = _("(Midday Form)");
-const u8 gText_Midnight[] = _("(Midnight Form)");
-const u8 gText_Dusk[] = _("(Dusk Form)");
 const u8 gText_X[] = _("X");
 const u8 gText_Y[] = _("Y");
+const u8 gText_Z[] = _("Z");
 
 const u8 *SaveSpeciesWithSurname(u16 species) {
-    if (species == SPECIES_CHARIZARD_MEGA_X || species == SPECIES_MEWTWO_MEGA_X) {  // Mega X
-        StringCopy(gStringVar1, gText_Mega);
-        StringCopy(gStringVar2, gSpecies[species].name);
-        StringCopy(gStringVar3, gText_X);
-        StringExpandPlaceholders(gStringVar4, gText_Subname2);
-    } else if (species == SPECIES_CHARIZARD_MEGA_Y || species == SPECIES_MEWTWO_MEGA_Y) {  // Mega Y
-        StringCopy(gStringVar1, gText_Mega);
-        StringCopy(gStringVar2, gSpecies[species].name);
-        StringCopy(gStringVar3, gText_Y);
-        StringExpandPlaceholders(gStringVar4, gText_Subname2);
-    } else if (species >= SPECIES_VENUSAUR_MEGA && species <= SPECIES_RAYQUAZA_MEGA) {  // Megas
-        StringCopy(gStringVar1, gText_Mega);
-        StringCopy(gStringVar2, gSpecies[species].name);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    } else if (species == SPECIES_KYOGRE_PRIMAL || species == SPECIES_GROUDON_PRIMAL || species == SPECIES_CASCOON_PRIMAL) {  // Primals
-        StringCopy(gStringVar1, gText_Primal);
-        StringCopy(gStringVar2, gSpecies[species].name);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    } else if (species >= CUSTOM_MEGA_START && species <= LAST_CUSTOM_MEGA) {  // Custom Mega
-        StringCopy(gStringVar1, gText_Mega);
-        StringCopy(gStringVar2, gSpecies[species].name);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    } else if (species == SPECIES_NECROZMA_ULTRA) {  // Ultra Necrozma
-        StringCopy(gStringVar1, gText_Ultra);
-        StringCopy(gStringVar2, gSpecies[species].name);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    } else if (species >= SPECIES_RATTATA_ALOLAN && species <= SPECIES_MAROWAK_ALOLAN) {  // Alolan
-        StringCopy(gStringVar1, gText_Alolan);
-        StringCopy(gStringVar2, gSpecies[species].name);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    } else if (species >= SPECIES_MEOWTH_GALARIAN && species <= SPECIES_STUNFISK_GALARIAN) {  // Galarian
-        StringCopy(gStringVar1, gText_Galarian);
-        StringCopy(gStringVar2, gSpecies[species].name);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    } else if (species >= SPECIES_QWILFISH_HISUIAN && species <= SPECIES_ZOROARK_HISUIAN) {  // Hisuian
-        StringCopy(gStringVar1, gText_Hisuian);
-        StringCopy(gStringVar2, gSpecies[species].name);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    } else if (species >= SPECIES_INFERNAPE_REDUX && species <= SPECIES_SCIZOR_REDUX) {  // Redux
-        StringCopy(gStringVar2, gText_Redux);
-        StringCopy(gStringVar1, gSpecies[species].name);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    } else if (species == SPECIES_LYCANROC) {  // Midday Lycanroc
-        StringCopy(gStringVar1, gSpecies[species].name);
-        StringCopy(gStringVar2, gText_Midday);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    } else if (species == SPECIES_LYCANROC_MIDNIGHT) {  // Midnight Lycanroc
-        StringCopy(gStringVar1, gSpecies[species].name);
-        StringCopy(gStringVar2, gText_Midnight);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    } else if (species == SPECIES_LYCANROC_DUSK) {  // Dusk Lycanroc
-        StringCopy(gStringVar1, gSpecies[species].name);
-        StringCopy(gStringVar2, gText_Dusk);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    } else {  // Normal
-        const u8 *longName = GetSpeciesLongName(species);
-        if (longName)
-            StringCopy(gStringVar4, longName);
-        else
-            StringCopy(gStringVar4, gSpecies[species].name);
+    const u8 *longName = GetSpeciesLongName(species);
+    if (longName) {
+        StringCopy(gStringVar4, longName);
+        return gStringVar4;
     }
+
+    const u8 *name = gSpecies[species].name;
+    int nameAt4 = FALSE;
+    switch (gSpecies[species].variant) {
+        case VARIANT_ALOLA:
+            StringCopy(gStringVar1, gText_Alolan);
+        CASE_VARIANT_PREFIX:
+            StringCopy(gStringVar2, name);
+            StringExpandPlaceholders(gStringVar4, gText_Subname12);
+            nameAt4 = TRUE;
+            break;
+
+        case VARIANT_GALAR:
+            StringCopy(gStringVar1, gText_Galarian);
+            goto CASE_VARIANT_PREFIX;
+
+        case VARIANT_HISUI:
+            StringCopy(gStringVar1, gText_Hisuian);
+            goto CASE_VARIANT_PREFIX;
+
+        case VARIANT_PALDEA:
+            StringCopy(gStringVar1, gText_Paldean);
+            goto CASE_VARIANT_PREFIX;
+
+        case VARIANT_REDUX:
+            StringCopy(gStringVar1, name);
+            StringCopy(gStringVar2, gText_Redux);
+            StringExpandPlaceholders(gStringVar4, gText_Subname12);
+            nameAt4 = TRUE;
+            break;
+    }
+
+    switch (gSpecies[species].mega) {
+        case MEGA_PRIMAL:
+            StringCopy(gStringVar1, gText_Primal);
+            goto CASE_MEGA_UNSPECIFIED;
+        case MEGA_UNSPECIFIED:
+            StringCopy(gStringVar1, gText_Mega);
+        CASE_MEGA_UNSPECIFIED:
+            StringCopy(gStringVar2, nameAt4 ? gStringVar4 : name);
+            StringExpandPlaceholders(gStringVar4, gText_Subname12);
+            nameAt4 = TRUE;
+            break;
+
+        case MEGA_RESTORATION:
+            StringCopy(gStringVar2, gText_Crowned);
+            goto CASE_MEGA_ORIGIN;
+        case MEGA_ORIGIN:
+            StringCopy(gStringVar2, gText_Origin);
+        CASE_MEGA_ORIGIN:
+            StringCopy(gStringVar1, nameAt4 ? gStringVar4 : name);
+            StringExpandPlaceholders(gStringVar4, gText_Subname12);
+            nameAt4 = TRUE;
+            break;
+
+        case MEGA_X:
+            StringCopy(gStringVar3, gText_X);
+            goto CASE_MEGA_XYZ;
+        case MEGA_Y:
+            StringCopy(gStringVar3, gText_Y);
+            goto CASE_MEGA_XYZ;
+        case MEGA_Z:
+            StringCopy(gStringVar3, gText_Z);
+        CASE_MEGA_XYZ:
+            StringCopy(gStringVar1, gText_Mega);
+            StringCopy(gStringVar2, nameAt4 ? gStringVar4 : name);
+            StringExpandPlaceholders(gStringVar4, gText_Subname123);
+            nameAt4 = TRUE;
+            break;
+    }
+
+    if (!nameAt4) StringCopy(gStringVar4, name);
 
     return gStringVar4;
 }

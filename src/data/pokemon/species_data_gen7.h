@@ -9053,6 +9053,7 @@ static const Species SPECIES_DATA_STRUCT(SPECIES_NECROZMA_DAWN_WINGS) = {
 
 static const Species SPECIES_DATA_STRUCT(SPECIES_NECROZMA_ULTRA) = {
     .name = SPECIES_DATA_STRUCT(SPECIES_NECROZMA).name,
+    .longName = $("Ultra Necrozma"),
     .isLegendary = TRUE,
     .mega = MEGA_PRIMAL,
     .baseHP = 97,
