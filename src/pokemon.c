@@ -7065,13 +7065,13 @@ const u32 *GetShinySpritePal(u16 species, u32 isShiny) {
             break;
         case SHINY_RARE:
             if (numShinies >= SHINY_RARE)
-                return gMonRareShinyPaletteTable[species].data;
+                return gSpecies[species].shinyPaletteRare.data;
             else
                 return gSpecies[species].shinyPalette.data;
             break;
         case SHINY_LEGENDARY:
             if (numShinies >= SHINY_LEGENDARY)
-                return gMonLegendaryShinyPaletteTable[species].data;
+                return gSpecies[species].shinyPaletteLegendary.data;
             else
                 return gSpecies[species].shinyPalette.data;
             break;
@@ -7087,13 +7087,13 @@ const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 isS
             break;
         case SHINY_RARE:
             if (numShinies >= SHINY_RARE)
-                return &gMonRareShinyPaletteTable[species];
+                return &gSpecies[species].shinyPaletteRare;
             else
                 return &gSpecies[species].shinyPalette;
             break;
         case SHINY_LEGENDARY:
             if (numShinies >= SHINY_RARE)
-                return &gMonLegendaryShinyPaletteTable[species];
+                return &gSpecies[species].shinyPaletteLegendary;
             else
                 return &gSpecies[species].shinyPalette;
             break;

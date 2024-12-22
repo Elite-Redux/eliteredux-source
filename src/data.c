@@ -299,10 +299,6 @@ const union AnimCmd *const gAnims_MonPic[] =
     sAnim_MonPic_3,
 };
 
-#define SPECIES_SPRITE(species, sprite) [SPECIES_##species] = {sprite, MON_PIC_SIZE, SPECIES_##species}
-#define SPECIES_PAL(species, pal) [SPECIES_##species] = {pal, SPECIES_##species}
-#define SPECIES_SHINY_PAL(species, pal) [SPECIES_##species] = {pal, SPECIES_##species + SPECIES_SHINY_TAG}
-
 const bool8 SpeciesHasGenderDifference[NUM_SPECIES] =
 {
     [SPECIES_EEVEE] = TRUE,
@@ -317,8 +313,6 @@ const bool8 SpeciesHasGenderDifference[NUM_SPECIES] =
 
 #include "data/pokemon_graphics/front_pic_coordinates.h"
 #include "data/pokemon_graphics/back_pic_coordinates.h"
-
-#include "data/pokemon_graphics/shiny_palette_table.h"
 
 #include "data/trainer_graphics/front_pic_anims.h"
 #include "data/trainer_graphics/front_pic_tables.h"
