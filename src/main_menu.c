@@ -2691,7 +2691,7 @@ static void LoadMainMenuWindowFrameTiles(u8 bgId, u16 tileOffset)
     LoadPalette(GetWindowFrameTilesPal(gSaveBlock2Ptr->optionsWindowFrameType)->pal, 32, 32);
 }
 
-static void DrawMainMenuWindowBorder(const struct WindowTemplate *template, u16 baseTileNum)
+static void DrawMainMenuWindowBorder(const struct WindowTemplate *spriteTemplate, u16 baseTileNum)
 {
     u16 r9 = 1 + baseTileNum;
     u16 r10 = 2 + baseTileNum;
@@ -2701,21 +2701,21 @@ static void DrawMainMenuWindowBorder(const struct WindowTemplate *template, u16 
     u16 sp14 = 7 + baseTileNum;
     u16 r6 = 8 + baseTileNum;
 
-    FillBgTilemapBufferRect(template->bg, baseTileNum, template->tilemapLeft - 1, template->tilemapTop - 1, 1, 1, 2);
-    FillBgTilemapBufferRect(template->bg, r9, template->tilemapLeft, template->tilemapTop - 1, template->width, 1, 2);
-    FillBgTilemapBufferRect(template->bg, r10, template->tilemapLeft + template->width, template->tilemapTop - 1, 1, 1, 2);
-    FillBgTilemapBufferRect(template->bg, sp18, template->tilemapLeft - 1, template->tilemapTop, 1, template->height, 2);
-    FillBgTilemapBufferRect(template->bg, spC, template->tilemapLeft + template->width, template->tilemapTop, 1, template->height, 2);
-    FillBgTilemapBufferRect(template->bg, sp10, template->tilemapLeft - 1, template->tilemapTop + template->height, 1, 1, 2);
-    FillBgTilemapBufferRect(template->bg, sp14, template->tilemapLeft, template->tilemapTop + template->height, template->width, 1, 2);
-    FillBgTilemapBufferRect(template->bg, r6, template->tilemapLeft + template->width, template->tilemapTop + template->height, 1, 1, 2);
-    CopyBgTilemapBufferToVram(template->bg);
+    FillBgTilemapBufferRect(spriteTemplate->bg, baseTileNum, spriteTemplate->tilemapLeft - 1, spriteTemplate->tilemapTop - 1, 1, 1, 2);
+    FillBgTilemapBufferRect(spriteTemplate->bg, r9, spriteTemplate->tilemapLeft, spriteTemplate->tilemapTop - 1, spriteTemplate->width, 1, 2);
+    FillBgTilemapBufferRect(spriteTemplate->bg, r10, spriteTemplate->tilemapLeft + spriteTemplate->width, spriteTemplate->tilemapTop - 1, 1, 1, 2);
+    FillBgTilemapBufferRect(spriteTemplate->bg, sp18, spriteTemplate->tilemapLeft - 1, spriteTemplate->tilemapTop, 1, spriteTemplate->height, 2);
+    FillBgTilemapBufferRect(spriteTemplate->bg, spC, spriteTemplate->tilemapLeft + spriteTemplate->width, spriteTemplate->tilemapTop, 1, spriteTemplate->height, 2);
+    FillBgTilemapBufferRect(spriteTemplate->bg, sp10, spriteTemplate->tilemapLeft - 1, spriteTemplate->tilemapTop + spriteTemplate->height, 1, 1, 2);
+    FillBgTilemapBufferRect(spriteTemplate->bg, sp14, spriteTemplate->tilemapLeft, spriteTemplate->tilemapTop + spriteTemplate->height, spriteTemplate->width, 1, 2);
+    FillBgTilemapBufferRect(spriteTemplate->bg, r6, spriteTemplate->tilemapLeft + spriteTemplate->width, spriteTemplate->tilemapTop + spriteTemplate->height, 1, 1, 2);
+    CopyBgTilemapBufferToVram(spriteTemplate->bg);
 }
 
-static void ClearMainMenuWindowTilemap(const struct WindowTemplate *template)
+static void ClearMainMenuWindowTilemap(const struct WindowTemplate *spriteTemplate)
 {
-    FillBgTilemapBufferRect(template->bg, 0, template->tilemapLeft - 1, template->tilemapTop - 1, template->tilemapLeft + template->width + 1, template->tilemapTop + template->height + 1, 2);
-    CopyBgTilemapBufferToVram(template->bg);
+    FillBgTilemapBufferRect(spriteTemplate->bg, 0, spriteTemplate->tilemapLeft - 1, spriteTemplate->tilemapTop - 1, spriteTemplate->tilemapLeft + spriteTemplate->width + 1, spriteTemplate->tilemapTop + spriteTemplate->height + 1, 2);
+    CopyBgTilemapBufferToVram(spriteTemplate->bg);
 }
 
 static void NewGameBirchSpeech_ClearGenderWindowTilemap(u8 a, u8 b, u8 c, u8 d, u8 e, u8 unused)

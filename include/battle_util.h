@@ -1,6 +1,7 @@
 #ifndef GUARD_BATTLE_UTIL_H
 #define GUARD_BATTLE_UTIL_H
 
+#include "abilities.hh"
 #include "battle_ai_new.h"
 
 #define MOVE_LIMITATION_ZEROMOVE (1 << 0)
@@ -28,8 +29,7 @@
 #define ABILITYEFFECT_NEUTRALIZINGGAS 15
 #define ABILITYEFFECT_AFTER_RECOIL 16
 #define ABILITYEFFECT_REACTIVE 17
-#define ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE 18
-#define ABILITYEFFECT_MOVE_END_EITHER 19
+#define ABILITYEFFECT_MOVE_END_EITHER 18
 // Special cases
 #define ABILITYEFFECT_SWITCH_IN_TERRAIN 0xFE
 #define ABILITYEFFECT_SWITCH_IN_WEATHER 0xFF
@@ -81,26 +81,6 @@
 #define BATTLER_HEALING_BLOCKED(battlerId)                                                                                                                     \
     (gStatuses3[battlerId] & STATUS3_HEAL_BLOCK || gBattleMons[battlerId].status1 & STATUS1_BLEED || IsAbilityOnOpposingSide(battlerId, ABILITY_PERMANENCE) || \
      IsBloodStainAffected(battlerId))
-
-typedef enum {
-    MULTIHIT_SINGLE,
-    MULTIHIT_TWO_TO_FIVE,
-    MULTIHIT_FOUR_OR_FIVE,
-    MULTIHIT_TWO,
-    MULTIHIT_THREE,
-    MULTIHIT_FIVE,
-    MULTIHIT_TRIPLE_KICK,
-    MULTIHIT_TEN_CAN_MISS,
-    MULTIHIT_TEN,
-    MULTIHIT_BEAT_UP,
-    PARENTAL_BOND_START,
-    PARENTAL_BOND_HYPER_AGGRESSIVE = PARENTAL_BOND_START,
-    PARENTAL_BOND_PRIMAL_MAW,
-    PARENTAL_BOND_DUAL_WIELD,
-    PARENTAL_BOND_MINION_CONTROL,
-    PARENTAL_BOND_THREE_HEADED,
-    PARENTAL_BOND_ICE_COLD_HUNTER,
-} MultihitType;
 
 enum MiscMoveEffects {
     MISC_EFFECT_SUPEREFFECTIVE_BOOST = 1,
@@ -254,6 +234,7 @@ int IsSuppressed(int battler, int ability, int checkMoldBreaker);
 int AbilityHealMonStatus(u8 battler, u16 ability);
 int CheckHalfHpAbility(int battlerDef, int battlerAtk);
 bool8 UseOutOfTurnAttack(u8 battler, u8 target, u16 ability, u16 move, u8 movePower);
+u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, u8 movePower);
 
 #define ON_ABILITY(battler, checkMoldBreaker, condition, callback)   \
     for (int idx = TOTAL_ABILITY_COUNT - 1; idx >= 0; idx--) {       \
@@ -262,6 +243,8 @@ bool8 UseOutOfTurnAttack(u8 battler, u8 target, u16 ability, u16 move, u8 movePo
         FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker)) \
         callback;                                                    \
     }
+
+#define RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, flag) ON_ABILITY(battler, checkMoldBreaker, gAbilities[ability].flag, return ability)
 
 void GetAllBattlerAbilities(u16* abilities, int battler, int battlerAtk);
 u32 IsAbilityOnSide(u32 battlerId, u32 ability);
@@ -392,10 +375,11 @@ int IsMagicGuardProtected(int battler);
 #define ABSORB_RESULT_EVAPORATE 1 << 3
 int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, int move, int moveType);
 int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int* statId, u16* ability);
-u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit,
-                                u16* resistanceMultiplier);
+u16 CalculateAbilityMultipliers(
+    int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier);
 int TestImmunityAbilitiesOnly(int battler, int attacker, int move, int moveType);
 int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8** immunityScript, u8* overrideBattler, u16* abilityPopup);
+#define MUL_MODIFIER(modifier, val) MulModifier(modifier, UQ_4_12(val))
 u16 DivideModifier(u16 mod1, u16 mod2);
 void MulModifier(u16* modifier, u16 val);
 u32 ApplyModifier(u16 modifier, u32 val);
@@ -412,14 +396,15 @@ void HandleFollowupAttackAbilities(int battler, int target, int move);
 int CheckAndSetOncePerTurnAbility(int battler, int ability);
 int IsStickyHold(int battler);
 int HasChloroplast(int battler);
-int HasRedirectionAbility(int battler, int type);
+int HasRedirectionAbility(int battlerAtk, int battlerDef, int move, int type);
 int CanRaiseStat(int battler, int stat);
 int CanLowerStat(int battler, int stat);
 bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower);
-int UseIntimidateClone(int battler, int abilityToCheck);
+int UseIntimidateClone(int abilityToCheck, int battler);
 bool32 TryRemoveScreens(u8 battler);
 void DisableSwitchInAbility(u8 battlerId, u16 ability);
 bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8* timer);
+int HasSkillLink(int battler);
 
 MultihitType GetMultihitType(int battler, int move);
 

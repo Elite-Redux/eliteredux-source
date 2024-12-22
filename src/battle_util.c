@@ -1,6 +1,6 @@
 #include "battle_util.h"
 
-#include "abilities.h"
+#include "abilities.hh"
 #include "battle.h"
 #include "battle_ai_main.h"
 #include "battle_ai_util.h"
@@ -171,7 +171,7 @@ u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler) {
 
 // Functions
 void HandleAction_UseMove(void) {
-    u32 i, side, moveType, var = 4;
+    u32 i, side, moveType;
 
     gBattlerAttacker = GetTurnBattler();
     if (gBattleStruct->field_91 & 1 << gBattlerAttacker ||
@@ -256,17 +256,12 @@ void HandleAction_UseMove(void) {
         gBattlerTarget = gSideTimers[side].followmeTarget;
     } else if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gSideTimers[side].followmeTimer == 0 &&
                (gBattleMoves[gCurrentMove].power != 0 || GetBattlerBattleMoveTargetFlags(gCurrentMove, gBattlerAttacker) != MOVE_TARGET_USER) &&
-               !HasRedirectionAbility(gBattlerTarget, moveType)) {
+               !HasRedirectionAbility(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType)) {
         int partner = BATTLE_PARTNER(gBattlerTarget);
-        if (IsBattlerAlive(partner) && HasRedirectionAbility(partner, moveType)) side = GetBattlerSide(gBattlerAttacker);
-        for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++) {
-            if (side != GetBattlerSide(gActiveBattler) && gBattlerTarget != gActiveBattler && HasRedirectionAbility(gActiveBattler, moveType) &&
-                GetBattlerTurnOrderNum(gActiveBattler) < var && gBattleMoves[gCurrentMove].effect != EFFECT_SNIPE_SHOT &&
-                !(BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PROPELLER_TAIL) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_STALWART))) {
-                var = GetBattlerTurnOrderNum(gActiveBattler);
-            }
-        }
-        if (var == 4) {
+        if (IsBattlerAlive(partner) &&
+            (gTurnStructs[gActiveBattler].redirectedAbility = HasRedirectionAbility(gBattlerAttacker, partner, gCurrentMove, moveType))) {
+            gBattlerTarget = gActiveBattler = partner;
+        } else {
             if (GetBattlerBattleMoveTargetFlags(gChosenMove, gBattlerAttacker) & MOVE_TARGET_RANDOM) {
                 if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER) {
                     if (Random() & 1)
@@ -285,10 +280,6 @@ void HandleAction_UseMove(void) {
                     if (IsBattlerAlive(gBattlerTarget)) break;
                 }
             }
-        } else {
-            gActiveBattler = gBattlerByTurnOrder[var];
-            gTurnStructs[gActiveBattler].redirectedAbility = HasRedirectionAbility(gActiveBattler, moveType);
-            gBattlerTarget = gActiveBattler;
         }
     } else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && GetBattlerBattleMoveTargetFlags(gChosenMove, gBattlerAttacker) & MOVE_TARGET_RANDOM) {
         if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER) {
@@ -2305,7 +2296,6 @@ enum {
     ENDTURN_PLASMA_FISTS,
     ENDTURN_TOXIC_WASTE_DAMAGE,
     ENDTURN_SEA_OF_FIRE_DAMAGE,
-    ENDTURN_COMMANDER,
     ENDTURN_PARASITIC_SPORES_DAMAGE,
     ENDTURN_FUNERAL_PYRE_DAMAGE,
     ENDTURN_LIFE_STEAL_DAMAGE,
@@ -2538,9 +2528,6 @@ u8 DoBattlerEndTurnEffects(void) {
                 MarkBattlerForControllerExec(gActiveBattler);
                 BattleScriptExecute(BattleScript_HurtByTheSeaOfFire);
                 effect++;
-                break;
-            case ENDTURN_COMMANDER:
-                gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_PARASITIC_SPORES_DAMAGE:
                 if (IsBattlerAlive(gActiveBattler) && gVolatileStructs[gActiveBattler].parasiticSpores && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)) {
@@ -3564,8 +3551,7 @@ MultihitType GetMultihitType(int battler, int move) {
 
     switch (gBattleMoves[gCurrentMove].effect) {
         case EFFECT_MULTI_HIT:
-            if (BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE)) return MULTIHIT_FIVE;
-            if (BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE)) return MULTIHIT_FIVE;
+            if (HasSkillLink(battler)) return MULTIHIT_FIVE;
             if (move == MOVE_WATER_SHURIKEN && BattlerHasAbility(battler, ABILITY_BATTLE_BOND, FALSE) && gBattleMons[battler].species == SPECIES_GRENINJA_ASH)
                 return MULTIHIT_THREE;
             if (GetBattlerHoldEffect(battler, FALSE) == HOLD_EFFECT_LOADED_DICE) return MULTIHIT_FOUR_OR_FIVE;
@@ -3576,13 +3562,11 @@ MultihitType GetMultihitType(int battler, int move) {
             return MULTIHIT_TWO;
 
         case EFFECT_TRIPLE_KICK:
-            if (BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE)) return MULTIHIT_THREE;
-            if (BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE)) return MULTIHIT_THREE;
+            if (HasSkillLink(battler)) return MULTIHIT_THREE;
             return MULTIHIT_TRIPLE_KICK;
 
         case EFFECT_TEN_HITS:
-            if (BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE)) return MULTIHIT_TEN;
-            if (BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE)) return MULTIHIT_TEN;
+            if (HasSkillLink(battler)) return MULTIHIT_TEN;
             return MULTIHIT_TEN_CAN_MISS;
 
         case EFFECT_BEAT_UP:
@@ -4024,7 +4008,9 @@ bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower) {
     return FALSE;
 }
 
-static u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, u8 movePower) {
+u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, u8 movePower) {
+    if (!CheckAndSetOncePerTurnAbility(battler, ability)) return FALSE;
+
     gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
         .ability = ability,
         .attacker = battler,
@@ -4034,7 +4020,7 @@ static u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extr
         .movePos = MAX_MON_MOVES,
     };
 
-    return TRUE;
+    return FALSE;
 }
 
 int AbilityHealMonStatus(u8 battler, u16 ability) {
@@ -4086,7 +4072,7 @@ int DidMoveHit() { return WasMoveSuccessful() && TARGET_TURN_DAMAGED; }
 
 int ShouldApplyOnHitAffect(int applyTo) { return DidMoveHit() && IsBattlerAlive(applyTo); }
 
-int UseIntimidateClone(int battler, int abilityToCheck) {
+int UseIntimidateClone(int abilityToCheck, int battler) {
     u8 numAbility;
 
     for (numAbility = 0; numAbility < NUM_INTIMIDATE_CLONES; numAbility++) {
@@ -4986,9 +4972,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
             for (int i = 0; i < gBattlersCount; i++) {
                 ON_ABILITY(i, FALSE, gAbilities[ability].onReactive, effect += gAbilities[ability].onReactive(ability, battler))
             }
-            break;
-        case ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE:
-            HandleFollowupAttackAbilities(battler, gBattlerTarget, move);
             break;
         case ABILITYEFFECT_MOVE_END_EITHER:
             break;
@@ -6551,11 +6534,12 @@ u32 GetMoveTarget(u16 move, u8 setTarget) {
                 targetBattler = gSideTimers[side].followmeTarget;
             } else {
                 targetBattler = SetRandomTarget(gBattlerAttacker);
-                if (!HasRedirectionAbility(targetBattler, gBattleMoves[move].type)) {
+                if (!HasRedirectionAbility(gBattlerAttacker, targetBattler, move, gBattleMoves[move].type)) {
                     int opposite = BATTLE_OPPOSITE(gBattlerAttacker);
-                    int ability;
-                    if (!IsBattlerAlive(opposite) || !(ability = HasRedirectionAbility(opposite, gBattleMoves[move].type))) opposite = BATTLE_PARTNER(opposite);
-                    if (ability || (IsBattlerAlive(opposite) && (ability = HasRedirectionAbility(opposite, gBattleMoves[move].type)))) {
+                    int ability = 0;
+                    if (!IsBattlerAlive(opposite) || !(ability = HasRedirectionAbility(gBattlerAttacker, opposite, move, gBattleMoves[move].type)))
+                        opposite = BATTLE_PARTNER(opposite);
+                    if (ability || (IsBattlerAlive(opposite) && (ability = HasRedirectionAbility(gBattlerAttacker, opposite, move, gBattleMoves[move].type)))) {
                         targetBattler ^= BIT_FLANK;
                         gTurnStructs[targetBattler].redirectedAbility = ability;
                     }
@@ -6775,12 +6759,12 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move) {
         return FALSE;
     else if (gBattleMoves[move].effect == MOVE_EFFECT_FEINT)
         return FALSE;
-    else if (gRoundStructs[battlerId].protected)
+    else if (gRoundStructs[battlerId].isProtected)
         return TRUE;
     else if (gRoundStructs[battlerId].protectedThisTurn)
         return TRUE;
     else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_WIDE_GUARD &&
-             GetBattlerBattleMoveTargetFlags(move, battlerId) & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
+             GetBattlerBattleMoveTargetFlags(move, gBattlerAttacker) & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
         return TRUE;
     else if (gRoundStructs[battlerId].banefulBunkered)
         return TRUE;
@@ -6952,8 +6936,6 @@ u32 GetMoveTargetCount(u16 move, u8 battlerAtk, u8 battlerDef) {
             return 0;
     }
 }
-
-#define MUL_MODIFIER(modifier, val) MulModifier(modifier, UQ_4_12(val))
 
 u16 DivideModifier(u16 mod1, u16 mod2) { return (((u32)mod1) << UQ_4_12_PRECISION) / mod2; }
 
@@ -7269,755 +7251,31 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef) {
     return basePower;
 }
 
-#define MUL(val) MUL_MODIFIER(modifier, val)
-#define RESISTANCE(val)                \
-    {                                  \
-        MUL_MODIFIER(resistance, val); \
-        MUL_MODIFIER(modifier, val);   \
-    }
-
-static void CalculateOffensiveAbilityMultiplier(int ability,
-                                                int battlerAtk,
-                                                int battlerDef,
-                                                int move,
-                                                int moveType,
-                                                int basePower,
-                                                int typeEffectivenessMultiplier,
-                                                int isCrit,
-                                                u16 *resistance,
-                                                u16 *modifier) {
-    switch (ability) {
-        case ABILITY_OLD_MARINER:
-        case ABILITY_SEAWEED:
-            if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(battlerDef, TYPE_FIRE)) RESISTANCE(2);
-            return;
-
-        case ABILITY_RECKLESS:
-            if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
-            return;
-
-        case ABILITY_POWER_EDGE:
-        case ABILITY_MYSTIC_BLADES:
-        case ABILITY_SWEEPING_EDGE_PLUS:
-        case ABILITY_MOLTEN_BLADES:
-        case ABILITY_KEEN_EDGE:
-            if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) MUL(1.3);
-            return;
-
-        case ABILITY_PONY_POWER:
-            if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) {
-                MUL(1.3 * 1.3);
-            }
-            return;
-
-        case ABILITY_MAGICAL_FISTS:
-        case ABILITY_NIKA:
-        case ABILITY_POWER_FISTS:
-        case ABILITY_IRON_FIST:
-            if (IS_IRON_FIST(battlerAtk, move)) MUL(1.3);
-            return;
-
-        case ABILITY_MYTHICAL_ARROWS:
-        case ABILITY_ARCHER:
-            if (gBattleMoves[move].arrowBased) MUL(1.3);
-            return;
-
-        case ABILITY_STRIKER:
-            if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) MUL(1.3);
-            return;
-
-        case ABILITY_COMBAT_SPECIALIST:
-            CalculateOffensiveAbilityMultiplier(
-                ABILITY_IRON_FIST, battlerAtk, battlerDef, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-            CalculateOffensiveAbilityMultiplier(
-                ABILITY_STRIKER, battlerAtk, battlerDef, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-            return;
-
-        case ABILITY_HUNTERS_HORN:
-        case ABILITY_MIGHTY_HORN:
-        case ABILITY_UNICORN:
-        case ABILITY_ENERGIZED_HORNS:
-            if (gBattleMoves[move].hornBased) MUL(1.3);
-            return;
-
-        case ABILITY_SUPER_SLAMMER:
-            if (gBattleMoves[move].hammerBased) MUL(1.3);
-            return;
-
-        case ABILITY_SOUL_CRUSHER:
-            if (gBattleMoves[move].hammerBased) MUL(1.1);
-            return;
-
-        case ABILITY_FIELD_EXPLORER:
-            if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.5);
-            return;
-
-        case ABILITY_WIND_RAGE:
-        case ABILITY_GIANT_WINGS:
-            if (gBattleMoves[move].airBased) MUL(1.3);
-            return;
-
-        case ABILITY_HUGE_WINGS:
-            if (gBattleMoves[move].airBased) MUL(1.3);
-            if (moveType == TYPE_FLYING) MUL(1.25);
-            return;
-
-        case ABILITY_SHEER_FORCE:
-            if (gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST) MUL(1.3);
-            return;
-
-        case ABILITY_ANALYTIC:
-            if (GetBattlerTurnOrderNum(battlerDef) < gCurrentTurnActionNumber && move != MOVE_FUTURE_SIGHT && move != MOVE_DOOM_DESIRE) MUL(1.3);
-            return;
-
-        case ABILITY_FLAMING_MAW:
-        case ABILITY_STRONG_JAW:
-        case ABILITY_DEVOURER:
-        case ABILITY_MIND_CRUSH:
-        case ABILITY_ROUSED_FANGS:
-        case ABILITY_SHOCKING_MAW:
-            if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) MUL(1.3);
-            return;
-
-#define MUL_ATE(type)                                                      \
-    if (moveType == type && gBattleStruct->ateBoost[battlerAtk]) MUL(1.1); \
-    return;
-
-        case ABILITY_PIXILATE:
-            MUL_ATE(TYPE_FAIRY)
-
-        case ABILITY_EMANATE:
-        case ABILITY_ENLIGHTENED:
-            MUL_ATE(TYPE_PSYCHIC)
-
-        case ABILITY_POLLINATE:
-        case ABILITY_STEEL_BEETLE:
-            MUL_ATE(TYPE_BUG)
-
-        case ABILITY_DRACONIZE:
-            MUL_ATE(TYPE_DRAGON)
-
-        case ABILITY_SUPERCONDUCTOR:
-        case ABILITY_GALVANIZE:
-            MUL_ATE(TYPE_ELECTRIC)
-
-        case ABILITY_REFRIGERATE:
-        case ABILITY_REFRIGERATOR:
-        case ABILITY_CRYSTALLIZE:
-            MUL_ATE(TYPE_ICE)
-
-        case ABILITY_AERILATE:
-            MUL_ATE(TYPE_FLYING)
-
-        case ABILITY_FERTILIZE:
-            MUL_ATE(TYPE_GRASS)
-
-        case ABILITY_NORMALIZE:
-            MUL_ATE(TYPE_NORMAL)
-
-        case ABILITY_SOLAR_FLARE:
-        case ABILITY_IMMOLATE:
-            MUL_ATE(TYPE_FIRE)
-
-        case ABILITY_MINERALIZE:
-            MUL_ATE(TYPE_ROCK)
-
-        case ABILITY_SPECTRAL_SHROUD:
-        case ABILITY_SPECTRALIZE:
-            MUL_ATE(TYPE_GHOST)
-
-        case ABILITY_FIGHT_SPIRIT:
-            MUL_ATE(TYPE_FIGHTING)
-
-        case ABILITY_TECTONIZE:
-            MUL_ATE(TYPE_GROUND)
-
-        case ABILITY_HYDRATE:
-            MUL_ATE(TYPE_WATER)
-
-        case ABILITY_INTOXICATE:
-            MUL_ATE(TYPE_POISON)
-
-        case ABILITY_SLUDGY_MIX:
-            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.3);
-            MUL_ATE(TYPE_POISON)
-            return;
-
-#undef MUL_ATE
-
-        case ABILITY_LIQUID_VOICE:
-        case ABILITY_BANSHEE:
-        case ABILITY_SNOW_SONG:
-        case ABILITY_POWER_METAL:
-        case ABILITY_SAND_SONG:
-            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.2);
-            return;
-
-        case ABILITY_AMPLIFIER:
-        case ABILITY_PUNK_ROCK:
-            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.3);
-            return;
-
-        case ABILITY_BASS_BOOSTED:
-            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.3 * 1.3);
-            return;
-
-        case ABILITY_HYDRO_CIRCUIT:
-        case ABILITY_TRANSISTOR:
-            if (moveType == TYPE_ELECTRIC) MUL(1.5);
-            return;
-
-        case ABILITY_DRAGONS_MAW:
-            if (moveType == TYPE_DRAGON) MUL(1.5);
-            return;
-
-        case ABILITY_GORILLA_TACTICS:
-            if (IS_MOVE_PHYSICAL(move)) MUL(1.5);
-            return;
-
-        case ABILITY_SAGE_POWER:
-            if (IS_MOVE_SPECIAL(move)) MUL(1.5);
-            return;
-
-        case ABILITY_EXPLOIT_WEAKNESS:
-            if (HasAnyStatusOrAbility(battlerDef)) MUL(1.25);
-            return;
-
-        case ABILITY_AVENGER:
-            if (gSideTimers[GET_BATTLER_SIDE(battlerAtk)].retaliateTimer) MUL(1.5);
-            return;
-
-        case ABILITY_LONG_REACH:
-            if (IS_MOVE_PHYSICAL(move) && !(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) MUL(1.2);
-            return;
-
-        case ABILITY_TOUGH_CLAWS:
-        case ABILITY_BIG_PECKS:
-        case ABILITY_APEX_PREDATOR:
-            if (IsMoveMakingContact(move, battlerAtk)) MUL(1.3);
-            return;
-
-        case ABILITY_VENOBLAZE_PINCERS:
-            if (IS_MOVE_PHYSICAL(move)) MUL(1.2);
-            return;
-
-        case ABILITY_DREAMCATCHER: {
-            int i;
-            for (i = 0; i < gBattlersCount; i++) {
-                if (IsBattlerAlive(i) && gBattleMons[i].status1 & STATUS1_SLEEP) {
-                    MUL(2.0);
-                    return;
-                }
-            }
-        }
-            return;
-
-        case ABILITY_RIVALRY: {
-            int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[battlerAtk].species, gBattleMons[battlerAtk].personality);
-            if (genderAtk != MON_GENDERLESS &&
-                genderAtk == GetGenderFromSpeciesAndPersonality(gBattleMons[battlerDef].species, gBattleMons[battlerDef].personality))
-                MUL(1.25);
-        }
-            return;
-
-        case ABILITY_COSMIC_DAZE:
-            if (gBattleMons[battlerDef].status2 & STATUS2_CONFUSION) MUL(2);
-            return;
-
-        case ABILITY_DRAGONSLAYER:
-            if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_DRAGON)) RESISTANCE(1.5);
-            return;
-
-        case ABILITY_FAE_HUNTER:
-            if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_FAIRY)) RESISTANCE(1.5);
-            return;
-
-        case ABILITY_MARINE_APEX:
-            if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_WATER)) RESISTANCE(1.5);
-            return;
-
-        case ABILITY_LUMBERJACK:
-            if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS)) RESISTANCE(1.5);
-            return;
-
-        case ABILITY_BLOOD_PRICE:
-            MUL(1.3);
-            return;
-
-        case ABILITY_TOXIC_BOOST:
-            if (gBattleMons[battlerAtk].status1 & STATUS1_PSN_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
-            return;
-
-        case ABILITY_IRON_BARRAGE:
-        case ABILITY_MASTER_HAND:
-        case ABILITY_MEGA_LAUNCHER:
-            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.3);
-            return;
-
-        case ABILITY_HUSTLE:
-            MUL(1.4);
-            return;
-
-        case ABILITY_KUNOICHI_BLADE:
-        case ABILITY_TECHNICIAN:
-            if (basePower <= 60) MUL(1.5);
-            return;
-
-        case ABILITY_WATER_BUBBLE:
-        case ABILITY_FLAME_BUBBLE:
-            if (moveType == TYPE_WATER) MUL(2.0);
-            return;
-
-        case ABILITY_DUNE_TERROR:
-            if (moveType == TYPE_GROUND && IsBattlerWeatherAffected(battlerAtk, WEATHER_SANDSTORM_ANY)) MUL(1.2);
-            return;
-
-        case ABILITY_FLASH_FIRE:
-        case ABILITY_ELEMENTAL_VORTEX:
-            if (moveType == TYPE_FIRE && gBattleResources->flags->flags[battlerAtk] & RESOURCE_FLAG_FLASH_FIRE) MUL(1.5);
-            return;
-
-#define SWARM_LIKE(type)                                                       \
-    if (moveType == type) {                                                    \
-        if (gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3)) \
-            MUL(1.5);                                                          \
-        else                                                                   \
-            MUL(1.2);                                                          \
-    }                                                                          \
-    return;
-
-        case ABILITY_SWARM:
-            SWARM_LIKE(TYPE_BUG)
-
-        case ABILITY_TORRENT:
-            SWARM_LIKE(TYPE_WATER)
-
-        case ABILITY_BLAZE:
-            SWARM_LIKE(TYPE_FIRE)
-
-        case ABILITY_OVERGROW:
-            SWARM_LIKE(TYPE_GRASS)
-
-        case ABILITY_ROCKHARD_WILL:
-            SWARM_LIKE(TYPE_ROCK)
-
-        case ABILITY_VENGEFUL_SPIRIT:
-        case ABILITY_VENGEANCE:
-            SWARM_LIKE(TYPE_GHOST)
-
-        case ABILITY_SHORT_CIRCUIT:
-            SWARM_LIKE(TYPE_ELECTRIC)
-
-        case ABILITY_FLOCK:
-            SWARM_LIKE(TYPE_FLYING)
-
-        case ABILITY_FIGHTER:
-            SWARM_LIKE(TYPE_FIGHTING)
-
-        case ABILITY_PSYCHIC_MIND:
-            SWARM_LIKE(TYPE_PSYCHIC)
-
-        case ABILITY_EARTHBOUND:
-            SWARM_LIKE(TYPE_GROUND)
-
-#undef SWARM_LIKE
-
-#define SUPER_SWARM_LIKE(type)                                                 \
-    if (moveType == type) {                                                    \
-        if (gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3)) \
-            MUL(1.8);                                                          \
-        else                                                                   \
-            MUL(1.3);                                                          \
-    }                                                                          \
-    return;
-
-        case ABILITY_PURGATORY:
-            SUPER_SWARM_LIKE(TYPE_GHOST)
-
-        case ABILITY_HELLBLAZE:
-            SUPER_SWARM_LIKE(TYPE_FIRE)
-
-        case ABILITY_RIPTIDE:
-            SUPER_SWARM_LIKE(TYPE_WATER)
-
-        case ABILITY_FOREST_RAGE:
-            SUPER_SWARM_LIKE(TYPE_GRASS)
-
-#undef SUPER_SWARM_LIKE
-
-        case ABILITY_PLASMA_LAMP:
-            if (moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC) MUL(1.2);
-            return;
-
-        case ABILITY_ANTARCTIC_BIRD:
-            if (moveType == TYPE_FLYING || moveType == TYPE_ICE) MUL(1.3);
-            return;
-
-        case ABILITY_ELECTROCYTES:
-            if (moveType == TYPE_ELECTRIC) MUL(1.25);
-            return;
-
-        case ABILITY_NOCTURNAL:
-            if (moveType == TYPE_DARK) MUL(1.25);
-            return;
-
-        case ABILITY_FOSSILIZED:
-            if (moveType == TYPE_ROCK) MUL(1.2);
-            return;
-
-        case ABILITY_RAW_WOOD:
-            if (moveType == TYPE_GRASS) MUL(1.2);
-            return;
-
-        case ABILITY_STEELWORKER:
-            if (moveType == TYPE_STEEL) MUL(1.3);
-            return;
-
-        case ABILITY_ATOMIC_PUNCH:
-            if (moveType == TYPE_STEEL) MUL(1.3);
-            if (IS_IRON_FIST(battlerAtk, move)) MUL(1.3);
-            return;
-
-        case ABILITY_PLUS:
-        case ABILITY_MINUS:
-            if (BATTLER_HAS_ABILITY(BATTLE_PARTNER(battlerAtk), ABILITY_PLUS) || BATTLER_HAS_ABILITY(BATTLE_PARTNER(battlerDef), ABILITY_PLUS)) MUL(2.0);
-            return;
-
-        case ABILITY_STAKEOUT:
-        case ABILITY_OVERWATCH:
-            if (gVolatileStructs[battlerDef].isFirstTurn == 2) MUL(2.0);
-            return;
-
-        case ABILITY_GUTS:
-            if (HasAnyStatusOrAbility(battlerAtk) && IS_MOVE_PHYSICAL(move)) MUL(1.5);
-            return;
-
-        case ABILITY_RAGE_POINT:
-            if (HasAnyStatusOrAbility(battlerAtk)) MUL(1.5);
-            return;
-
-        case ABILITY_BLOOD_STIGMA:
-            if (gBattleMons[battlerDef].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerDef)) MUL(1.5);
-            return;
-
-        case ABILITY_DETERMINATION:
-            if (HasAnyStatusOrAbility(battlerAtk) && IS_MOVE_SPECIAL(move)) MUL(1.5);
-            return;
-
-        case ABILITY_LETHARGY:
-            if (gVolatileStructs[battlerAtk].slowStartTimer == 0 || gVolatileStructs[battlerAtk].slowStartTimer == 1)
-                MUL(.2);
-            else if (gVolatileStructs[battlerAtk].slowStartTimer == 2)
-                MUL(.4);
-            else if (gVolatileStructs[battlerAtk].slowStartTimer == 3)
-                MUL(.6);
-            else if (gVolatileStructs[battlerAtk].slowStartTimer == 4)
-                MUL(.8);
-            return;
-
-        case ABILITY_FLOURISH:
-            if (moveType == TYPE_GRASS && IsBattlerTerrainAffected(battlerAtk, STATUS_FIELD_GRASSY_TERRAIN)) MUL(1.5);
-            return;
-
-        case ABILITY_ILLUSION:
-            if (gBattleStruct->illusion[battlerAtk].on && !gBattleStruct->illusion[battlerAtk].broken) MUL(1.3);
-            return;
-
-        case ABILITY_LEVITATE:
-            if (moveType == TYPE_FLYING) MUL(1.25);
-            return;
-
-        case ABILITY_AERIALIST:
-            CalculateOffensiveAbilityMultiplier(
-                ABILITY_LEVITATE, battlerAtk, battlerDef, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-            CalculateOffensiveAbilityMultiplier(
-                ABILITY_FLOCK, battlerAtk, battlerDef, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-            return;
-
-        case ABILITY_ROCKY_PAYLOAD:
-            if (moveType == TYPE_ROCK || gBattleMoves[move].throwingBased) MUL(1.5);
-            return;
-
-        case ABILITY_COMBUSTION:
-            if (moveType == TYPE_FIRE) MUL(1.5);
-            return;
-
-        case ABILITY_AQUATIC_DWELLER:
-            if (moveType == TYPE_WATER) MUL(1.5);
-            return;
-
-        case ABILITY_ELECTRIC_BURST:
-            if (moveType == TYPE_ELECTRIC && gBattleMons[battlerAtk].hp > 1) MUL(1.35);
-            return;
-
-        case ABILITY_INFERNAL_RAGE:
-            if (moveType == TYPE_FIRE && gBattleMons[battlerAtk].hp > 1) MUL(1.35);
-            return;
-
-        case ABILITY_TINTED_LENS:
-            if (typeEffectivenessMultiplier <= UQ_4_12(.5)) RESISTANCE(2);
-            return;
-
-        case ABILITY_TO_THE_BONE:
-        case ABILITY_SNIPER:
-            if (isCrit) MUL(1.5);
-            return;
-
-        case ABILITY_IRON_SERPENT:
-        case ABILITY_WINGED_KING:
-        case ABILITY_NEUROFORCE:
-            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.25);
-            return;
-
-        case ABILITY_FINAL_BLOW:
-        case ABILITY_FATAL_PRECISION:
-            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.2);
-            return;
-
-        case ABILITY_ARCANE_FORCE:
-            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
-            return;
-
-        case ABILITY_RHYTHMIC:
-            MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battlerAtk]);
-            return;
-
-        case ABILITY_HIGHER_RANK:
-            if (GetMovePriority(battlerAtk, move, battlerDef) > 0) MUL(1.2);
-            return;
-
-        case ABILITY_COLOR_SPECTRUM:
-            if (StabMultiplierInHalves(battlerAtk, moveType, move) > 2) MUL(1.2);
-            return;
-    }
-}
-
-static void CalculateDefensiveAbilityMultiplier(
-    int ability, int battlerAtk, int battlerDef, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier) {
-    switch (ability) {
-        case ABILITY_OLD_MARINER:
-        case ABILITY_SEAWEED:
-            if (moveType == TYPE_FIRE && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS)) RESISTANCE(0.5);
-            return;
-
-        case ABILITY_DRY_SKIN:
-            if (moveType == TYPE_FIRE) MUL(1.25);
-            return;
-
-        case ABILITY_FLUFFY:
-        case ABILITY_PUFFY:
-            if (moveType == TYPE_FIRE) RESISTANCE(2.0);
-            if (IsMoveMakingContact(move, battlerAtk)) MUL(0.5);
-            return;
-
-        case ABILITY_FLUFFIEST:
-            if (moveType == TYPE_FIRE) RESISTANCE(4.0);
-            if (IsMoveMakingContact(move, battlerAtk)) MUL(0.25);
-            return;
-
-        case ABILITY_LIQUIFIED:
-            if (moveType == TYPE_WATER) RESISTANCE(2);
-            if (IsMoveMakingContact(move, battlerAtk)) MUL(0.5);
-            return;
-
-        case ABILITY_PRETTY_PRINCESS:
-            if (!IsUnaware(battlerAtk) && HasAnyLoweredStat(battlerDef)) MUL(1.5);
-            return;
-
-        case ABILITY_HEATPROOF:
-        case ABILITY_WATER_BUBBLE:
-        case ABILITY_FLAME_BUBBLE:
-        case ABILITY_IRON_GIANT:
-            if (moveType == TYPE_FIRE) RESISTANCE(.5);
-            return;
-
-        case ABILITY_CHRISTMAS_SPIRIT:
-            if (IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY)) MUL(.5);
-            return;
-
-        case ABILITY_DUNE_TERROR:
-            if (IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY)) MUL(.65);
-            return;
-
-        case ABILITY_STALL:
-        case ABILITY_BREAKWATER:
-            if (gCurrentTurnActionNumber < GetBattlerTurnOrderNum(battlerDef)) MUL(.7);
-            return;
-
-        case ABILITY_SHELL_ARMOR:
-        case ABILITY_BATTLE_ARMOR:
-        case ABILITY_CRUST_COAT:
-        case ABILITY_DREAM_STATE:
-            MUL(.8);
-            return;
-
-        case ABILITY_LEAD_COAT:
-            if (IS_MOVE_PHYSICAL(move)) MUL(.6);
-            return;
-
-        case ABILITY_CHROME_COAT:
-            if (IS_MOVE_SPECIAL(move)) MUL(.6);
-            return;
-
-        case ABILITY_TERASTAL_TREASURE:
-            MUL(.6);
-            return;
-
-        case ABILITY_ULTRA_INSTINCT:
-        case ABILITY_PARRY:
-            MUL(.8);
-            return;
-
-        case ABILITY_FOSSILIZED:
-            if (moveType == TYPE_ROCK) RESISTANCE(.5);
-            return;
-
-        case ABILITY_IMMUNITY:
-            if (moveType == TYPE_POISON) RESISTANCE(.5);
-            return;
-
-        case ABILITY_THICK_FAT:
-            if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.5);
-            return;
-
-        case ABILITY_NOCTURNAL:
-            if (moveType == TYPE_DARK || moveType == TYPE_FAIRY) RESISTANCE(.75);
-            return;
-
-        case ABILITY_MAGMA_ARMOR:
-            if (moveType == TYPE_WATER || moveType == TYPE_ICE) RESISTANCE(.7);
-            return;
-
-        case ABILITY_OVERCOAT:
-            if (IS_MOVE_SPECIAL(move)) MUL(.8);
-            return;
-
-        case ABILITY_RAW_WOOD:
-            if (moveType == TYPE_GRASS) RESISTANCE(.5);
-            return;
-
-        case ABILITY_WATER_COMPACTION:
-            if (moveType == TYPE_WATER) RESISTANCE(.5);
-            return;
-
-        case ABILITY_PURIFYING_SALT:
-            if (moveType == TYPE_GHOST) RESISTANCE(.5);
-            return;
-
-        case ABILITY_BASS_BOOSTED:
-        case ABILITY_PUNK_ROCK:
-            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(.5);
-            return;
-
-        case ABILITY_MULTISCALE:
-        case ABILITY_SHADOW_SHIELD:
-            if (BATTLER_MAX_HP(battlerDef)) MUL(.5);
-            return;
-
-        case ABILITY_DRAGONSLAYER:
-            if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_DRAGON)) MUL(.5);
-            return;
-
-        case ABILITY_FILTER:
-        case ABILITY_SOLID_ROCK:
-        case ABILITY_PRISM_ARMOR:
-        case ABILITY_FLAME_SHIELD:
-            if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
-            return;
-
-        case ABILITY_PERMAFROST:
-        case ABILITY_PERMAFROST_CLONE:
-            if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.75);
-            return;
-
-        case ABILITY_PRIMAL_ARMOR:
-            if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.5);
-            return;
-
-        case ABILITY_PRISM_SCALES:
-            if (IS_MOVE_SPECIAL(move)) MUL(.7);
-            return;
-
-        case ABILITY_ARCTIC_FUR:
-            MUL(.65);
-            return;
-
-        case ABILITY_PRISMATIC_FUR:
-            MUL(.5);
-            return;
-
-        case ABILITY_ICE_SCALES:
-        case ABILITY_FIRE_SCALES:
-            if (IS_MOVE_SPECIAL(move)) MUL(.5);
-            return;
-
-        case ABILITY_APPLE_ENLIGHTENMENT:
-        case ABILITY_FUR_COAT:
-            if (IS_MOVE_PHYSICAL(move)) MUL(.5);
-            return;
-
-        case ABILITY_SAND_GUARD:
-            if (IS_MOVE_SPECIAL(move) && IsBattlerWeatherAffected(battlerAtk, WEATHER_SANDSTORM_ANY)) MUL(.5);
-            return;
-
-        case ABILITY_RIVALRY: {
-            int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[battlerAtk].species, gBattleMons[battlerAtk].personality);
-            if (genderAtk == MON_MALE)
-                genderAtk = MON_FEMALE;
-            else if (genderAtk == MON_FEMALE)
-                genderAtk = MON_MALE;
-            if (genderAtk != MON_GENDERLESS &&
-                genderAtk == GetGenderFromSpeciesAndPersonality(gBattleMons[battlerDef].species, gBattleMons[battlerDef].personality))
-                MUL(.75);
-        }
-            return;
-
-        case ABILITY_BAD_OMEN:
-            if (isCrit) MUL(.25);
-            return;
-
-        case ABILITY_SUN_BASKING:
-            REQUIRE(IsBattlerWeatherAffected(battlerDef, WEATHER_SUN_ANY))
-            REQUIRE(IS_MOVE_PHYSICAL(move))
-            MUL(.5);
-            return;
-    }
-}
-
 #undef MUL
 #undef RESISTANCE
 
 u16 CalculateAbilityMultipliers(
     int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistanceMultiplier) {
     u16 multiplier = UQ_4_12(1.0);
-    int i = 0;
+    int hasFortKnox = HasFortKnox(battlerDef);
 
-    if (!BattlerHasAbility(battlerDef, ABILITY_FORT_KNOX, FALSE)) {
-        for (i = 0; i < NUM_ABILITY_SLOTS + 1; i++) {
-            CalculateOffensiveAbilityMultiplier(GetAbilityAtIndex(battlerAtk, i, FALSE),
-                                                battlerAtk,
-                                                battlerDef,
-                                                move,
-                                                moveType,
-                                                basePower,
-                                                typeEffectivenessMultiplier,
-                                                isCrit,
-                                                resistanceMultiplier,
-                                                &multiplier);
+    if (!hasFortKnox) {
+        for (int sourceBattler = 0; sourceBattler < gBattlersCount; sourceBattler++) {
+            FILTER(IsBattlerAlive(sourceBattler))
+            ON_ABILITY(
+                sourceBattler,
+                FALSE,
+                gAbilities[ability].onOffensiveMultiplier && IsApplyOnFlagAppropriate(battlerAtk, sourceBattler, gAbilities[ability].onOffensiveMultiplierFor),
+                gAbilities[ability].onOffensiveMultiplier(
+                    battlerAtk, battlerDef, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier))
         }
     }
 
-    for (i = 0; i < NUM_ABILITY_SLOTS + 1; i++) {
-        CalculateDefensiveAbilityMultiplier(GetAbilityAtIndex(battlerDef, i, TRUE),
-                                            battlerAtk,
-                                            battlerDef,
-                                            move,
-                                            moveType,
-                                            typeEffectivenessMultiplier,
-                                            isCrit,
-                                            resistanceMultiplier,
-                                            &multiplier);
-    }
+    ON_ABILITY(battlerDef,
+               TRUE,
+               gAbilities[ability].onDefensiveMultiplier,
+               gAbilities[ability].onDefensiveMultiplier(
+                   battlerDef, battlerAtk, move, moveType, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier))
 
     return multiplier;
 }
@@ -8034,39 +7292,6 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
 
     for (i = 0; i < gBattlersCount; i++) {
         if ((gBattleMons[i].status1 & STATUS1_SLEEP) && IsBattlerAlive(i)) numsleepmons++;
-    }
-
-    // Side abilities
-    // Steely Spirit
-    if (IsAbilityOnSide(battlerAtk, ABILITY_STEELY_SPIRIT) && moveType == TYPE_STEEL) MUL_MODIFIER(&modifier, 1.3);
-
-    // Airborne
-    if (IsAbilityOnSide(battlerAtk, ABILITY_AIRBORNE) && moveType == TYPE_FLYING) MUL_MODIFIER(&modifier, 1.3);
-
-    // Attacker Partner's Abilities
-    if (IsBattlerAlive(BATTLE_PARTNER(battlerAtk))) {
-        // Battery
-        if (BattlerHasAbility(BATTLE_PARTNER(battlerAtk), ABILITY_BATTERY, TRUE) && IS_MOVE_SPECIAL(move)) MUL_MODIFIER(&modifier, 1.3);
-
-        // Power Spot
-        if (BattlerHasAbility(BATTLE_PARTNER(battlerAtk), ABILITY_POWER_SPOT, TRUE)) MUL_MODIFIER(&modifier, 1.3);
-
-        // Power Spot
-        if (BattlerHasAbility(BATTLE_PARTNER(battlerAtk), ABILITY_MOSH_PIT, TRUE)) {
-            if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
-                MUL_MODIFIER(&modifier, 1.25);
-            else
-                MUL_MODIFIER(&modifier, 1.5);
-        }
-    }
-
-    // Field Abilities
-    if ((IsAbilityOnField(ABILITY_DARK_AURA) && moveType == TYPE_DARK) || (IsAbilityOnField(ABILITY_FAIRY_AURA) && moveType == TYPE_FAIRY) ||
-        (IsAbilityOnField(ABILITY_PIXIE_POWER) && moveType == TYPE_FAIRY)) {
-        if (IsAbilityOnField(ABILITY_AURA_BREAK))
-            MulModifier(&modifier, UQ_4_12(0.75));
-        else
-            MulModifier(&modifier, UQ_4_12(1.33));
     }
 
     if (gBattleMoves[move].doubleDamageVsMega && (gBattleStruct->mega.evolvedSpecies[battlerDef] || gBattleStruct->mega.primalRevertedSpecies[battlerDef])) {
@@ -8196,30 +7421,20 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
     u32 statBase = 0;
     u8 statStage = gBattleMons[battler].statStages[statEnum];
     u8 extraStatLevel = 0;
-#define RUIN_CHECK(ability) \
-    if (IsAbilityOnFieldExcept(battler, ability) && !BATTLER_HAS_ABILITY(battler, ability)) statBase = statBase * 3 / 4;
+
+    if (isWonderRoomActive()) {
+        if (statEnum == STAT_ATK)
+            statEnum = STAT_SPATK;
+        else if (statEnum == STAT_SPATK)
+            statEnum = STAT_ATK;
+    }
+
     switch (statEnum) {
         case STAT_HP:
             return 0;
         case STAT_ATK:
-            if (isWonderRoomActive()) goto CALCULATE_STAT_SPATK;
-        CALCULATE_STAT_ATK:
             statBase = gBattleMons[battler].attack;
             extraStatLevel = gVolatileStructs[battler].extraAttackLevel;
-            // Tablets of Ruin
-            RUIN_CHECK(ABILITY_TABLETS_OF_RUIN)
-
-            // Huge Power
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_HUGE_POWER)) statBase *= 2;
-
-            // Pure Power
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_PURE_POWER)) statBase *= 2;
-
-            // Dead Power
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_DEAD_POWER)) statBase = statBase * 3 / 2;
-
-            // Slow Start
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_SLOW_START) && gVolatileStructs[battler].slowStartTimer != 0) statBase /= 2;
 
             // Violent Rush
             if (gVolatileStructs[battler].violentRush) statBase = statBase * 6 / 5;
@@ -8230,122 +7445,37 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             // Huge Power on First Turn
             if (gVolatileStructs[battler].readiedAction) statBase *= 2;
 
-            // Hadron Engine
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_ORICHALCUM_PULSE) && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) statBase = statBase * 4 / 3;
-
             // Burn
             if ((gBattleMons[battler].status1 & STATUS1_BURN) && gBattleMoves[move].effect != EFFECT_FACADE &&
                 !BATTLER_HAS_ABILITY(battler, ABILITY_FLARE_BOOST) && !BATTLER_HAS_ABILITY(battler, ABILITY_HEATPROOF) &&
                 !BATTLER_HAS_ABILITY(battler, ABILITY_IRON_GIANT) && !BATTLER_HAS_ABILITY(battler, ABILITY_GUTS))
                 statBase /= 2;
-
-        HANDLE_STAT_CALC_ATK_OR_SPATK:
-            // Big Leaves/Solar Power
-            if ((BATTLER_HAS_ABILITY(battler, ABILITY_BIG_LEAVES) || BATTLER_HAS_ABILITY(battler, ABILITY_SOLAR_POWER)) &&
-                IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && GetHighestAttackingStatId(battler, TRUE) == statEnum)
-                statBase = statBase * 3 / 2;
-
-            // Sand Force
-            if ((BATTLER_HAS_ABILITY(battler, ABILITY_SAND_FORCE) || BATTLER_HAS_ABILITY(battler, ABILITY_SAND_BENDER)) &&
-                IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY) && GetHighestAttackingStatId(battler, TRUE) == statEnum)
-                statBase = statBase * 3 / 2;
-
-            // Fog Power
-            if ((BATTLER_HAS_ABILITY(battler, ABILITY_ECTOPLASM)) && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY) &&
-                GetHighestAttackingStatId(battler, TRUE) == statEnum)
-                statBase = statBase * 3 / 2;
-
-            // Fog Power
-            if ((BATTLER_HAS_ABILITY(battler, ABILITY_WHITEOUT) || BATTLER_HAS_ABILITY(battler, ABILITY_SNOWY_WRATH)) &&
-                IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY) && GetHighestAttackingStatId(battler, TRUE) == statEnum)
-                statBase = statBase * 3 / 2;
-
-            // Supreme Overlord
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_SUPREME_OVERLORD)) statBase = statBase * (10 + max(5, gFaintedMonCount[GetBattlerSide(battler)])) / 10;
-
-            // Defeatist
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_DEFEATIST) && gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 3)) statBase /= 2;
             break;
+
         case STAT_SPATK:
-            if (isWonderRoomActive()) goto CALCULATE_STAT_ATK;
-        CALCULATE_STAT_SPATK:
             statBase = gBattleMons[battler].spAttack;
             extraStatLevel = gVolatileStructs[battler].extraSpAttackLevel;
-            // Tablets of Ruin
-            RUIN_CHECK(ABILITY_VESSEL_OF_RUIN)
-
-            // Majestic Bird
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_MAJESTIC_BIRD)) statBase = statBase * 3 / 2;
-
-            // Feline Prowess
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_FELINE_PROWESS)) statBase *= 2;
 
             // Special Violent Rush
             if (gVolatileStructs[battler].rapidResponse) statBase = statBase * 6 / 5;
-
-            // Flare Boost
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_FLARE_BOOST) && gBattleMons[battler].status1 & STATUS1_BURN) statBase = statBase * 3 / 2;
-
-            // Flower Gift
-            {
-                int flowerGiftUser;
-                if ((flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT)) && IsBattlerWeatherAffected(flowerGiftUser - 1, WEATHER_SUN_ANY))
-                    statBase = statBase * 3 / 2;
-            }
-
-            // Hadron Engine
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_HADRON_ENGINE) && TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
-                statBase = statBase * 4 / 3;
 
             // Frostbite
             if ((gBattleMons[battler].status1 & STATUS1_FROSTBITE) && gBattleMoves[move].effect != EFFECT_FACADE &&
                 !BATTLER_HAS_ABILITY(battler, ABILITY_DETERMINATION))
                 statBase /= 2;
-
-            goto HANDLE_STAT_CALC_ATK_OR_SPATK;
             break;
+
         case STAT_DEF:
             statBase = gBattleMons[battler].defense;
             extraStatLevel = gVolatileStructs[battler].extraDefenseLevel;
 
-            // Sword of Ruin
-            RUIN_CHECK(ABILITY_SWORD_OF_RUIN)
-
-            // Sword of Damnation
-            RUIN_CHECK(ABILITY_SWORD_OF_DAMNATION)
-
-            // Last Stand
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_LAST_STAND)) {
-                statBase = statBase + (statBase * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
-            }
-
-            // Marvel Scale
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_MARVEL_SCALE) && HasAnyStatusOrAbility(battler)) statBase = statBase * 3 / 2;
-
-            // Grass Pelt
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_GRASS_PELT) && GetCurrentTerrain() == STATUS_FIELD_GRASSY_TERRAIN) statBase = statBase * 3 / 2;
-
             // Hail
             if (IS_BATTLER_OF_TYPE(battler, TYPE_ICE) && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) statBase = statBase * 3 / 2;
             break;
+
         case STAT_SPDEF:
             statBase = gBattleMons[battler].spDefense;
             extraStatLevel = gVolatileStructs[battler].extraSpDefenseLevel;
-
-            // Tablets of Ruin
-            RUIN_CHECK(ABILITY_BEADS_OF_RUIN)
-
-            // Last Stand
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_LAST_STAND)) {
-                statBase = statBase + (statBase * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
-            }
-
-            // Flower Gift
-            {
-                int flowerGiftUser;
-                if ((flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT)) && IsBattlerWeatherAffected(flowerGiftUser - 1, WEATHER_SUN_ANY))
-                    statBase = statBase * 3 / 2;
-            }
 
             // Sandstorm
             if (IS_BATTLER_OF_TYPE(battler, TYPE_ROCK) && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) statBase = statBase * 3 / 2;
@@ -8355,11 +7485,15 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             extraStatLevel = gVolatileStructs[battler].extraSpeedLevel;
             break;
     }
-    if (statEnum != STAT_SPEED && GetAbilityStateAs(battler, ABILITY_PROTOSYNTHESIS).paradoxBoost.statId == statEnum) statBase = statBase * 13 / 10;
 
-    if (statEnum != STAT_SPEED && GetAbilityStateAs(battler, ABILITY_QUARK_DRIVE).paradoxBoost.statId == statEnum) statBase = statBase * 13 / 10;
-
-#undef RUIN_CHECK
+    NonStackingState flags = 0;
+    for (int sourceBattler = 0; sourceBattler < gBattlersCount; sourceBattler++) {
+        FILTER(IsBattlerAlive(sourceBattler))
+        ON_ABILITY(sourceBattler,
+                   TRUE,
+                   gAbilities[ability].onStat && IsApplyOnFlagAppropriate(battler, sourceBattler, gAbilities[ability].onStatFor),
+                   gAbilities[ability].onStat(ability, battler, statEnum, &statBase, &flags))
+    }
 
     if (isUnaware)
         statStage = DEFAULT_STAT_STAGE;
@@ -8401,7 +7535,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     bool8 isUnaware = IsUnaware(battlerDef);
     u32 atkStat;
     u16 modifier;
-    int i;
 
     if (gBattleMoves[move].effect == EFFECT_LASH_OUT) isCrit = TRUE;
 
@@ -8411,70 +7544,10 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     } else if (gBattleMoves[move].effect == EFFECT_BODY_PRESS) {
         atkStatToUse = STAT_DEF;
     } else {
-        for (i = 0; i < TOTAL_ABILITY_COUNT; i++) {
-            switch (GetAbilityAtIndex(battlerAtk, i, FALSE)) {
-                // Secondary stat
-                case ABILITY_SPEED_FORCE:
-                    REQUIRE(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
-                    secondaryAtkStatToUse = STAT_SPEED;
-                    break;
-
-                case ABILITY_TERMINAL_VELOCITY:
-                    REQUIRE(IS_MOVE_SPECIAL(move))
-                    secondaryAtkStatToUse = STAT_SPEED;
-                    break;
-
-                case ABILITY_SLIPSTREAM:
-                    secondaryAtkStatToUse = STAT_SPEED;
-                    break;
-
-                case ABILITY_POWER_CORE:
-                    secondaryAtkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF;
-                    break;
-
-                case ABILITY_IRON_GIANT:
-                case ABILITY_JUGGERNAUT:
-                    REQUIRE(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
-                    secondaryAtkStatToUse = STAT_DEF;
-                    break;
-
-                // Primary stat
-                case ABILITY_EQUINOX: {
-                    u32 atk = CalculateStat(battlerAtk, STAT_ATK, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
-                    u32 spAtk = CalculateStat(battlerAtk, STAT_SPATK, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
-                    atkStatToUse = atk > spAtk ? STAT_ATK : STAT_SPATK;
-                } break;
-
-                case ABILITY_ANCIENT_IDOL:
-                    atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF;
-                    break;
-
-                case ABILITY_MOMENTUM:
-                    REQUIRE(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
-                    atkStatToUse = STAT_SPEED;
-                    break;
-
-                case ABILITY_IMPULSE:
-                    REQUIRE_NOT(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
-                    atkStatToUse = STAT_SPEED;
-                    break;
-
-                case ABILITY_MAXIMUM_ACCELERATION:
-                    atkStatToUse = STAT_SPEED;
-                    break;
-
-                case ABILITY_MIND_CRUSH:
-                case ABILITY_ROUSED_FANGS:
-                    REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-                    atkStatToUse = STAT_SPATK;
-                    break;
-
-                case ABILITY_MAGICAL_FISTS:
-                    REQUIRE(IS_IRON_FIST(battlerAtk, move))
-                    atkStatToUse = STAT_SPATK;
-                    break;
-            }
-        }
+        ON_ABILITY(battlerAtk,
+                   FALSE,
+                   gAbilities[ability].onChooseOffensiveStat,
+                   gAbilities[ability].onChooseOffensiveStat(battlerAtk, move, isCrit, isUnaware, &atkStatToUse, &secondaryAtkStatToUse))
     }
 
     atkStat = CalculateStat(statBattler, atkStatToUse, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
@@ -8535,23 +7608,8 @@ static bool32 CanEvolve(u32 species) {
 void SetSwapDamageCategory(int battler, int target, int move) {
     switch (gBattleMoves[move].splitFlag) {
         default:
-            if (gBattleMoves[move].split == SPLIT_PHYSICAL) {
-                if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST &&
-                    (BattlerHasAbility(battler, ABILITY_MYSTIC_BLADES, FALSE) || BattlerHasAbility(battler, ABILITY_PONY_POWER, FALSE))) {
-                    gSwapDamageCategory = TRUE;
-                    return;
-                }
-
-                if (gBattleMoves[move].arrowBased && BattlerHasAbility(battler, ABILITY_MYTHICAL_ARROWS, FALSE)) {
-                    gSwapDamageCategory = TRUE;
-                    return;
-                }
-
-                if (gBattleMoves[move].hornBased && BattlerHasAbility(battler, ABILITY_ENERGIZED_HORNS, FALSE)) {
-                    gSwapDamageCategory = TRUE;
-                    return;
-                }
-            }
+            ON_ABILITY(battler, FALSE, gAbilities[ability].onSwapSplit, gSwapDamageCategory = gAbilities[ability].onSwapSplit(battler, move);
+                       if (gSwapDamageCategory) return)
             gSwapDamageCategory = FALSE;
             return;
 
@@ -8608,46 +7666,15 @@ u8 CalculateBattlerHighestAttack(u8 battler) {
 
 static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 isCrit, bool32 updateFlags) {
     u8 defStatToUse = 0;
-    u32 defStat;
     u8 noPositiveStatStages = isCrit || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED ||
                               (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BattlerHasAbility(battlerAtk, ABILITY_GRIP_PINCER, FALSE));
     u8 isUnaware = IsUnaware(battlerAtk);
-    u16 modifier;
-    int i;
 
-    for (i = 0; i < TOTAL_ABILITY_COUNT; i++) {
-        switch (GetAbilityAtIndex(battlerAtk, i, FALSE)) {
-            case ABILITY_POWER_FISTS:
-                REQUIRE(IS_IRON_FIST(battlerAtk, move))
-                defStatToUse = STAT_SPDEF;
-                break;
-
-            case ABILITY_SOUL_CRUSHER:
-                REQUIRE(gBattleMoves[move].hammerBased)
-                defStatToUse = STAT_SPDEF;
-                break;
-
-            case ABILITY_POWER_EDGE:
-                REQUIRE(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-                defStatToUse = STAT_SPDEF;
-                break;
-
-            case ABILITY_ROUNDHOUSE:
-                REQUIRE(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
-            CHOOSE_HIGHEST_DEFENSE: {
-                u32 def = CalculateStat(battlerDef, STAT_DEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
-                u32 spDef = CalculateStat(battlerDef, STAT_SPDEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
-                defStat = min(def, spDef);
-                defStatToUse = defStat == def ? STAT_DEF : STAT_SPDEF;
-            } break;
-
-            case ABILITY_DEADEYE:
-                REQUIRE(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].arrowBased)
-                goto CHOOSE_HIGHEST_DEFENSE;
-        }
-
-        REQUIRE_NOT(defStatToUse)
-    }
+    ON_ABILITY(battlerAtk,
+               FALSE,
+               gAbilities[ability].onChooseDefensiveStat,
+               defStatToUse = gAbilities[ability].onChooseDefensiveStat(battlerAtk, battlerDef, move, noPositiveStatStages, isUnaware);
+               if (!defStatToUse) break)
 
     if (!defStatToUse) {
         if (gBattleMoves[move].splitFlag == HITS_SPDEF) {
@@ -8660,10 +7687,10 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
         }
     }
 
-    defStat = CalculateStat(battlerDef, defStatToUse, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
+    u32 defStat = CalculateStat(battlerDef, defStatToUse, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
 
     // apply defense stat modifiers
-    modifier = UQ_4_12(1.0);
+    u16 modifier = UQ_4_12(1.0);
 
     // target's hold effects
     switch (GetBattlerHoldEffect(battlerDef, TRUE)) {
@@ -8698,17 +7725,13 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
 
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move) {
     if (move == MOVE_STRUGGLE) return 2;
-    if (IS_BATTLER_OF_TYPE(battler, moveType) || BATTLER_HAS_ABILITY(battler, ABILITY_MYSTIC_POWER) || BATTLER_HAS_ABILITY(battler, ABILITY_ARCANE_FORCE) ||
-        (BATTLER_HAS_ABILITY(battler, ABILITY_LUNAR_ECLIPSE) && (moveType == TYPE_FAIRY || moveType == TYPE_DARK)) ||
-        (BATTLER_HAS_ABILITY(battler, ABILITY_MOON_SPIRIT) && (moveType == TYPE_FAIRY || moveType == TYPE_DARK)) ||
-        (BATTLER_HAS_ABILITY(battler, ABILITY_SOLAR_FLARE) && moveType == TYPE_FIRE) ||
-        (BATTLER_HAS_ABILITY(battler, ABILITY_AURORA_BOREALIS) && moveType == TYPE_ICE) ||
-        (BATTLER_HAS_ABILITY(battler, ABILITY_AMPHIBIOUS) && moveType == TYPE_WATER) ||
-        (BATTLER_HAS_ABILITY(battler, ABILITY_OLD_MARINER) && moveType == TYPE_WATER)) {
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_ADAPTABILITY) || BATTLER_HAS_ABILITY(battler, ABILITY_RKS_SYSTEM))
-            return 4;
-        else
-            return 3;
+    int isStab = IS_BATTLER_OF_TYPE(battler, moveType);
+    if (!isStab) {
+        ON_ABILITY(battler, FALSE, gAbilities[ability].onStab, isStab = gAbilities[ability].onStab(moveType); if (isStab) break)
+    }
+    if (isStab) {
+        ON_ABILITY(battler, FALSE, gAbilities[ability].adaptability, return 4)
+        return 3;
     }
     return 2;
 }
@@ -10277,7 +9300,7 @@ void MakePlayerTeamAsleep(void) {
 }
 
 int IsMagicGuardProtected(int battler) {
-    ON_ABILITY(battler, FALSE, gAbilities[ability].magicGuard, return TRUE)
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, magicGuard)
     if (isMagicRoomActive()) return TRUE;
 
     return FALSE;
@@ -10339,7 +9362,7 @@ int IsBloodStainAffected(int battler) {
 }
 
 int IsUnaware(int battler) {
-    ON_ABILITY(battler, TRUE, gAbilities[ability].unaware, return TRUE)
+    RETURN_ABILITY_IF_FLAG(battler, TRUE, unaware)
     return FALSE;
 }
 
@@ -10510,7 +9533,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
     }
 
     ability = gBattleMons[battler].abilities[abilityNumber];
-    AbilityOnSwitchHandler handler = gAbilities[ability].onSwitch;
+    AbilityOnEntryHandler handler = gAbilities[ability].onEntry;
     if (!handler) return FALSE;
 
     if (IsSuppressed(battler, ability, FALSE)) return FALSE;
@@ -10641,104 +9664,6 @@ void ReplaceAbility(int battler, int ability) { gBattleMons[battler].abilities[0
 
 int GetBattlerAbility(int battler) { return gBattleMons[battler].abilities[0]; }
 
-static int HandleFollowupAttackAbilityAs(int ability, int battler, int target, int move, int moveType);
-
-int AdjustTarget(int battler, int target, int move) {
-    int targetFlags = GetBattlerBattleMoveTargetFlags(move, battler);
-    if (targetFlags == MOVE_TARGET_BOTH || targetFlags == MOVE_TARGET_FOES_AND_ALLY) {
-        // Move doesn't matter, just pick a single target move
-        int newTarget = GetMoveTarget(MOVE_POUND, MOVE_TARGET_SELECTED + 1);
-        if (GetBattlerSide(newTarget) != GetBattlerSide(battler)) return newTarget;
-    }
-    return target;
-}
-
-void HandleFollowupAttackAbilities(int battler, int target, int move) {
-    int i, ability, moveType;
-
-    if (!IsBattlerAlive(battler)) return;
-    if (gRoundStructs[battler].attackCancelled) return;
-
-    GET_MOVE_TYPE(move, moveType)
-    gBattlerAbility = battler;
-    target = AdjustTarget(battler, target, move);
-
-    for (i = 0; i < TOTAL_ABILITY_COUNT; i++) {
-        ability = gBattleScripting.abilityPopupOverwrite = GetAbilityAtIndex(battler, i, TRUE);
-        HandleFollowupAttackAbilityAs(ability, battler, target, move, moveType);
-    }
-}
-
-int HandleFollowupAttackAbilityAs(int ability, int battler, int target, int move, int moveType) {
-    int followupMove = 0;
-
-    if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT && ability != ABILITY_FORECAST) return FALSE;
-
-    switch (ability) {
-        case ABILITY_TWO_STEP:
-        case ABILITY_BLADE_DANCE:
-            if (target == battler || (target == BATTLE_PARTNER(battler) && gBattleMoves[move].target == MOVE_TARGET_ALLY))
-                target = GetMoveTarget(MOVE_POUND, 0);
-            break;
-    }
-
-    if (target == battler) return FALSE;
-
-    switch (ability) {
-        case ABILITY_BLADE_DANCE:
-            followupMove = MOVE_LEAF_BLADE;
-            FALLTHROUGH
-        case ABILITY_TWO_STEP:
-            REQUIRE_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-            REQUIRE(IsDance(gBattlerAttacker, move))
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            if (!followupMove) followupMove = MOVE_REVELATION_DANCE;
-            return UseAttackerFollowUpMove(battler, target, ability, followupMove, 50);
-
-        case ABILITY_FORECAST:
-            REQUIRE(move == MOVE_SUNNY_DAY || move == MOVE_RAIN_DANCE || move == MOVE_SANDSTORM || move == MOVE_HAIL || move == MOVE_EERIE_FOG)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_WEATHER_BALL, 0);
-
-        case ABILITY_VOLCANO_RAGE:
-            REQUIRE(moveType == TYPE_FIRE)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_ERUPTION, 50);
-
-        case ABILITY_FROST_BURN:
-            REQUIRE(moveType == TYPE_FIRE)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_ICE_BEAM, 40);
-
-        case ABILITY_PYRO_SHELLS:
-            REQUIRE(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_OUTBURST, 50);
-
-        case ABILITY_THUNDERCALL:
-            REQUIRE(moveType == TYPE_ELECTRIC)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_SMITE, 20);
-
-        case ABILITY_AFTERSHOCK:
-            REQUIRE(gBattleMoves[move].power)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_MAGNITUDE, 65);
-
-        case ABILITY_HIGH_TIDE:
-            REQUIRE(moveType == TYPE_WATER)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_SURF, 50);
-
-        case ABILITY_CHUNKY_BASS_LINE:
-            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-            return UseAttackerFollowUpMove(battler, target, ability, MOVE_EARTHQUAKE, 40);
-    }
-
-    return FALSE;
-}
-
 int IsStickyHold(int battler) {
     int ability = BattlerHasAbility(battler, ABILITY_STICKY_HOLD, TRUE);
     if (!ability) ability = BattlerHasAbility(battler, ABILITY_SUPERSWEET_SYRUP, TRUE);
@@ -10746,16 +9671,23 @@ int IsStickyHold(int battler) {
 }
 
 int HasChloroplast(int battler) {
-    ON_ABILITY(battler, FALSE, gAbilities[ability].chloroplast, return TRUE)
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, chloroplast)
     return FALSE;
 }
 
-int HasRedirectionAbility(int battler, int type) {
-    if (!type) return FALSE;
-    ON_ABILITY(battler, TRUE, gAbilities[ability].redirectType == type, return TRUE)
-    return FALSE;
+int HasRedirectionAbility(int battlerAtk, int battlerDef, int move, int type) {
+    if (!type) return ABILITY_NONE;
+    if (gBattleMoves[move].effect == EFFECT_SNIPE_SHOT) return ABILITY_NONE;
+    if (BattlerHasAbility(battlerAtk, ABILITY_PROPELLER_TAIL, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_STALWART, FALSE)) return ABILITY_NONE;
+    RETURN_ABILITY_IF_FLAG(battlerDef, TRUE, redirectType == type)
+    return ABILITY_NONE;
 }
 
 int CanRaiseStat(int battler, int stat) { return CompareStat(battler, stat, MAX_STAT_STAGE, CMP_LESS_THAN); }
 
 int CanLowerStat(int battler, int stat) { return CompareStat(battler, stat, MIN_STAT_STAGE, CMP_GREATER_THAN); }
+
+int HasSkillLink(int battler) {
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, skillLink)
+    return FALSE;
+}

@@ -3877,5 +3877,6 @@ extern const u8 gText_LevelCap[];
 extern const u8 gText_LevelUp[];
 extern const u8 gText_GiveMegaStone[];
 extern const u8 gText_GiveMegaStone2[];
+extern const u8 gText_GiveMegaStone3[];
 
 #endif // GUARD_STRINGS_H

@@ -228,9 +228,9 @@ u8 MailboxMenu_AddWindow(u8 windowIdx)
     {
         if (windowIdx == MAILBOXWIN_OPTIONS)
         {
-            struct WindowTemplate template = sWindowTemplates_MailboxMenu[windowIdx];
-            template.width = GetMaxWidthInMenuTable(&gMailboxMailOptions[0], 4);
-            sMailboxWindowIds[windowIdx] = AddWindow(&template);
+            struct WindowTemplate spriteTemplate = sWindowTemplates_MailboxMenu[windowIdx];
+            spriteTemplate.width = GetMaxWidthInMenuTable(&gMailboxMailOptions[0], 4);
+            sMailboxWindowIds[windowIdx] = AddWindow(&spriteTemplate);
         }
         else // MAILBOXWIN_TITLE or MAILBOXWIN_LIST
         {
@@ -1124,7 +1124,7 @@ static const union AnimCmd *const sAnims_ConditionSelectionIcon[] =
 };
 
 // Just loads the generic data, up to the caller to load the actual sheet/pal for the specific mon
-void LoadConditionMonPicTemplate(struct SpriteSheet *sheet, struct SpriteTemplate *template, struct SpritePalette *pal)
+void LoadConditionMonPicTemplate(struct SpriteSheet *sheet, struct SpriteTemplate *spriteTemplate, struct SpritePalette *pal)
 {
     struct SpriteSheet dataSheet = {NULL, MON_PIC_SIZE, TAG_CONDITION_MON};
 
@@ -1142,11 +1142,11 @@ void LoadConditionMonPicTemplate(struct SpriteSheet *sheet, struct SpriteTemplat
     struct SpritePalette dataPal = {NULL, TAG_CONDITION_MON};
 
     *sheet = dataSheet;
-    *template = dataTemplate;
+    *spriteTemplate = dataTemplate;
     *pal = dataPal;
 }
 
-void LoadConditionSelectionIcons(struct SpriteSheet *sheets, struct SpriteTemplate * template, struct SpritePalette *pals)
+void LoadConditionSelectionIcons(struct SpriteSheet *sheets, struct SpriteTemplate * spriteTemplate, struct SpritePalette *pals)
 {
     u8 i;
 
@@ -1180,7 +1180,7 @@ void LoadConditionSelectionIcons(struct SpriteSheet *sheets, struct SpriteTempla
     for (i = 0; i < ARRAY_COUNT(dataSheets); i++)
         *(sheets++) = dataSheets[i];
 
-    *template = dataTemplate;
+    *spriteTemplate = dataTemplate;
 
     for (i = 0; i < ARRAY_COUNT(dataPals); i++)
         *(pals++) = dataPals[i];

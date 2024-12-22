@@ -64,7 +64,7 @@
 #include "constants/maps.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
-#include "abilities.h"
+#include "abilities.hh"
 
 #define GLOBAL_DEXNAV_SEARCH_LEVEL 0
 #define HIDDEN_WILD_COUNT 3
@@ -511,7 +511,7 @@ static void DrawDexNavSearchMonIcon(u16 species, u8 *dst, bool8 owned)
 
 static void AddSearchWindow(u8 width)
 {
-    struct WindowTemplate template;
+    struct WindowTemplate spriteTemplate;
     u16 y = 16;
     
     if (sDexNavSearchDataPtr->tileY > (gSaveBlock1Ptr->pos.y + 7))
@@ -519,9 +519,9 @@ static void AddSearchWindow(u8 width)
 
     LoadDexNavWindowGfx(sDexNavSearchDataPtr->windowId, 0x1d5, 14 * 16);
     
-    SetWindowTemplateFields(&template, 0, 1, y, width, 3, 14, 8);
+    SetWindowTemplateFields(&spriteTemplate, 0, 1, y, width, 3, 14, 8);
     
-    sDexNavSearchDataPtr->windowId = AddWindow(&template);
+    sDexNavSearchDataPtr->windowId = AddWindow(&spriteTemplate);
     FillWindowPixelBuffer(sDexNavSearchDataPtr->windowId, PIXEL_FILL(1));
     PutWindowTilemap(sDexNavSearchDataPtr->windowId);
     CopyWindowToVram(sDexNavSearchDataPtr->windowId, 3);
@@ -1118,7 +1118,7 @@ static void Task_RevealHiddenMon(u8 taskId)
         DrawSearchWindow(species, sDexNavSearchDataPtr->potential, TRUE);
         DrawDexNavSearchMonIcon(species, &sDexNavSearchDataPtr->iconSpriteId, FALSE);
         // whiteout icon
-        index = IndexOfSpritePaletteTag(gSprites[sDexNavSearchDataPtr->iconSpriteId].template->paletteTag);
+        index = IndexOfSpritePaletteTag(gSprites[sDexNavSearchDataPtr->iconSpriteId].spriteTemplate->paletteTag);
         CpuCopy16(&gPlttBufferUnfaded[0x100 + index * 16], sDexNavSearchDataPtr->palBuffer, 32);
         TintPalette_CustomTone(sDexNavSearchDataPtr->palBuffer, 16, 510, 510, 510);
         LoadPalette(sDexNavSearchDataPtr->palBuffer, 0x100 + index * 16, 32);

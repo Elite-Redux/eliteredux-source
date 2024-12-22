@@ -377,6 +377,11 @@ movement JaggedPass_Movement_SudoWudoSuplex{
 	jump_2_up
 }
 
+movement JaggedPass_Movement_SudoWudoSuplex_CameraReCenter{
+	walk_up
+}
+
+
 script JaggedPass_EventScript_ChonJena {
 	lock
 	msgbox("Wait, this is not a tree.", MSGBOX_SIGN)
@@ -392,6 +397,10 @@ script JaggedPass_EventScript_ChonJena {
 	playse(SE_LEDGE)
 	waitmovement(OBJ_EVENT_ID_PLAYER)
 	playse(SE_EFFECTIVE)
+    special(SpawnCameraObject)
+    applymovement(OBJ_EVENT_ID_CAMERA, JaggedPass_Movement_SudoWudoSuplex_CameraReCenter)
+    waitmovement(OBJ_EVENT_ID_CAMERA)
+    special(RemoveCameraObject)
 	waitse()
 	waitbuttonpress
 	release

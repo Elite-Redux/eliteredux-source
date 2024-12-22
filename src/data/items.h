@@ -9572,7 +9572,7 @@ const struct Item gItems[] =
 
     [ITEM_MAWILITE_R_B] = 
     {
-        .name = _("Mawilite R B"), //ToChange
+        .name = _("Mawilite P"), //ToChange
         .itemId = ITEM_MAWILITE_R_B,
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,
@@ -9606,6 +9606,18 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
 
+    [ITEM_ABOMASITE_S] = 
+    {
+        .name = _("Abomasite S"),
+        .itemId = ITEM_ABOMASITE_S,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sAbomasiteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+
     [ITEM_WEAVILEITE_R] = 
     {
         .name = _("Weavilite R"),
@@ -9620,7 +9632,7 @@ const struct Item gItems[] =
 
     [ITEM_FLYGONITE_R_B] = 
     {
-        .name = _("Flygonite R"),
+        .name = _("Flygonite E"),
         .itemId = ITEM_WEAVILEITE_R,
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,
@@ -10181,6 +10193,17 @@ const struct Item gItems[] =
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
+    [ITEM_YVELTALITE] =
+    {
+        .name = _("Yveltalite"),
+        .itemId = ITEM_YVELTALITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sYveltaliteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
     [ITEM_DYNAMAX_ORB] = 
     {
         .name = _("Dynamax Orb"),
@@ -10188,6 +10211,17 @@ const struct Item gItems[] =
         .price = 0,
         .holdEffect = HOLD_EFFECT_PRIMAL_ORB,
         .description = sDynamaxOrbDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_GALACTIC_ORB] = 
+    {
+        .name = _("Galactic Orb"),
+        .itemId = ITEM_GALACTIC_ORB,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_PRIMAL_ORB,
+        .description = sGalacticOrbDesc,
         .pocket = POCKET_MEGA_STONES,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,

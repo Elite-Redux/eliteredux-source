@@ -8728,6 +8728,7 @@ extern const u32 gItemIconPalette_BlastoisiniteX[];
 extern const u32 gItemIconPalette_Snorlaxite[];
 extern const u32 gItemIconPalette_GengariteX[];
 extern const u32 gItemIconPalette_WigglytuffiteX[];
+extern const u32 gItemIconPalette_AbomasiteS[];
 
 // Gen 7 Items
 extern const u32 gItemIcon_ProtectivePads[];

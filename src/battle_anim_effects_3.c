@@ -1820,7 +1820,7 @@ static void TormentAttacker_Step(u8 taskId) {
             break;
         case 4:
             for (i = 0, j = 0; i < MAX_SPRITES; i++) {
-                if (gSprites[i].template == &gThoughtBubbleSpriteTemplate) {
+                if (gSprites[i].spriteTemplate == &gThoughtBubbleSpriteTemplate) {
                     gSprites[i].data[0] = taskId;
                     gSprites[i].data[1] = 6;
                     StartSpriteAnim(&gSprites[i], 2);

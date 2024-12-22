@@ -10278,7 +10278,7 @@ BattleScript_OnWeatherChange::
 	saveattackertostack3
 	setbyte gBattlerAttacker, 0
 BattleScript_OnWeatherChangeLoop::
-	handleweatherchange BS_ATTACKER
+	onweatherchange BS_ATTACKER
 	addbyte gBattlerAttacker, 1
 	jumpifbytenotequal gBattlerAttacker, gBattlersCount, BattleScript_OnWeatherChangeLoop
 	readattackerfromstack3
@@ -10379,17 +10379,14 @@ BattleScript_SnowWarningActivates::
 	call BattleScript_OnWeatherChange
 	end3
 	
-BattleScript_OnTerrainChanged:	
-	savetarget
-	setbyte gBattlerTarget, 0
-BattleScript_OnTerrainChangedIter:
-	copybyte sBATTLER, gBattlerTarget
-	handleterrainchange BS_TARGET
-	doterrainseed BS_TARGET
-	addbyte gBattlerTarget, 0x1
-	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_OnTerrainChangedIter
-	restoretarget
-	callifabilitypresent ABILITY_MIMICRY, BattleScript_ApplyMimicry
+BattleScript_OnTerrainChanged:
+	saveattackertostack3
+	setbyte gBattlerAttacker, 0
+BattleScript_OnTerrainChangedLoop::
+	onterrainchange BS_ATTACKER
+	addbyte gBattlerAttacker, 1
+	jumpifbytenotequal gBattlerAttacker, gBattlersCount, BattleScript_OnTerrainChangedLoop
+	readattackerfromstack3
 	return
 
 BattleScript_ElectricSurgeActivates::
@@ -11875,16 +11872,14 @@ BattleScript_DoSingleSwitchIn::
 	switchinabilities BS_STACK_1
 	return
 
-BattleScript_NaturalCureExits::
-	jumpifstatus BS_ATTACKER, STATUS1_ANY, BattleScript_NaturalRecoveryExits_HasStatus
+BattleScript_RegeneratorExits::
+	tryhealpercenthealth BS_ATTACKER, 33, BattleScript_Return
+	datahpupdate BS_ATTACKER
 	return
-BattleScript_NaturalRecoveryExits_HasStatus:
-	clearstatus BS_ATTACKER
-	copybyte gBattlerAbility, gBattlerAttacker
-	sethword sABILITY_OVERWRITE, ABILITY_NATURAL_RECOVERY
-	call BattleScript_AbilityPopUp
-	pause B_WAIT_TIME_SHORT
-	printfromtable gCureStatusOnExitStringIds
+
+BattleScript_NaturalCureExits::
+	printstring STRINGID_NATURAL_CURE_EXITS
+	updatestatusicon BS_ATTACKER
 	waitmessage B_WAIT_TIME_LONG
 	return
 
@@ -12989,7 +12984,7 @@ BattleScript_EffectAllySwitch:
 	ppreduce
 	attackanimation
 	waitanimation
-	swapwith BS_TARGET
+	swapwith BS_ATTACKER_PARTNER
 	printstring STRINGID_SWAPWITH
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd

@@ -1624,11 +1624,11 @@ static void CreateConditionSprite(void)
     int yStart = 17;
     int var = 8;
     struct Sprite **sprites = sMenu->condition;
-    const struct SpriteTemplate *template = &sSpriteTemplate_Condition;
+    const struct SpriteTemplate *spriteTemplate = &sSpriteTemplate_Condition;
 
     for (i = 0, xDiff = 64, xStart = -96; i < 2; i++)
     {
-        u8 spriteId = CreateSprite(template, i * xDiff + xStart, yStart, 0);
+        u8 spriteId = CreateSprite(spriteTemplate, i * xDiff + xStart, yStart, 0);
         if (spriteId != MAX_SPRITES)
         {
             gSprites[spriteId].data[0] = var;

@@ -712,6 +712,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_FIDOUGHITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
 
     //Monotype Mega Stones
+    [ITEM_GALACTIC_ORB]   = {gItemIcon_PurprleOrb, gItemIconPalette_PurprleOrb},
     [ITEM_CHIEN_PAOITE]     = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_DRACOVISHITE]     = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_MAWILITE_R_B]     = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
@@ -721,6 +722,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_SNORLAX_ORB]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_VICTINI_ORB]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_WIGGLITUFF_ORB]   = {gItemIcon_TartApple, gItemIconPalette_TartApple},
+    [ITEM_YVELTALITE] = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
 
     [ITEM_MEGA_BRACELET] = {gItemIcon_MegaBracelet, gItemIconPalette_MegaBracelet},
     [ITEM_ABILITY_CAPSULE] = {gItemIcon_AbilityCapsule, gItemIconPalette_AbilityCapsule},
@@ -804,6 +806,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_SOLGANIUM_Z] = {gItemIcon_SolganiumZ, gItemIconPalette_SolganiumZ},
     [ITEM_TAPUNIUM_Z] = {gItemIcon_TapuniumZ, gItemIconPalette_TapuniumZ},
     [ITEM_ULTRANECROZIUM_Z] = {gItemIcon_UltranecroziumZ, gItemIconPalette_UltranecroziumZ},
+    [ITEM_ULTRANECROZIUM_P] = {gItemIcon_UltranecroziumZ, gItemIconPalette_UltranecroziumZ},
 
     // Gen 8 Items
     [ITEM_BERRY_SWEET] = {gItemIcon_BerrySweet, gItemIconPalette_BerrySweet},

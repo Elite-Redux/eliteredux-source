@@ -17,7 +17,7 @@ struct DigitObjUtilTemplate
 
 bool32 DigitObjUtil_Init(u32 count);
 void DigitObjUtil_Free(void);
-bool32 DigitObjUtil_CreatePrinter(u32 id, s32 num, const struct DigitObjUtilTemplate *template);
+bool32 DigitObjUtil_CreatePrinter(u32 id, s32 num, const struct DigitObjUtilTemplate *spriteTemplate);
 void DigitObjUtil_PrintNumOn(u32 id, s32 arg1);
 void DigitObjUtil_DeletePrinter(u32 id);
 void DigitObjUtil_HideOrShow(u32 id, bool32 arg1);

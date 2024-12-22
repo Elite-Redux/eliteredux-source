@@ -6374,7 +6374,7 @@ static void AnimTask_MoonlightEndFade_Step(u8 taskId)
             u8 spriteId;
             for (spriteId = 0; spriteId < MAX_SPRITES; spriteId++)
             {
-                if (gSprites[spriteId].template == &gMoonSpriteTemplate || gSprites[spriteId].template == &gMoonlightSparkleSpriteTemplate)
+                if (gSprites[spriteId].spriteTemplate == &gMoonSpriteTemplate || gSprites[spriteId].spriteTemplate == &gMoonlightSparkleSpriteTemplate)
                     gSprites[spriteId].data[0] = 1;
             }
 
@@ -6573,20 +6573,20 @@ void AnimTask_DoubleTeam(u8 taskId)
 
 void AnimTask_AllySwitchAttacker(u8 taskId)
 {
-    PrepareDoubleTeamAnim(taskId, ANIM_ATTACKER, TRUE);
-    gSprites[gBattlerSpriteIds[gBattlerAttacker]].invisible = TRUE;
-    gSprites[gBattlerSpriteIds[BATTLE_PARTNER(gBattlerAttacker)]].invisible = TRUE;
-    // Edge case: Partner's sprite is invisible(i.e. after using Dig).
-    if (gBattleSpritesDataPtr->battlerData[BATTLE_PARTNER(gBattlerAttacker)].invisible)
-    {
-        gBattleSpritesDataPtr->battlerData[BATTLE_PARTNER(gBattlerAttacker)].invisible = FALSE;
-        gBattleSpritesDataPtr->battlerData[gBattlerAttacker].invisible = TRUE;
-    }
+    PrepareDoubleTeamAnim(taskId, ANIM_ATTACKER, FALSE);//TRUE);
+    // gSprites[gBattlerSpriteIds[gBattlerAttacker]].invisible = TRUE;
+    // gSprites[gBattlerSpriteIds[BATTLE_PARTNER(gBattlerAttacker)]].invisible = TRUE;
+    // // Edge case: Partner's sprite is invisible(i.e. after using Dig).
+    // if (gBattleSpritesDataPtr->battlerData[BATTLE_PARTNER(gBattlerAttacker)].invisible)
+    // {
+    //     gBattleSpritesDataPtr->battlerData[BATTLE_PARTNER(gBattlerAttacker)].invisible = FALSE;
+    //     gBattleSpritesDataPtr->battlerData[gBattlerAttacker].invisible = TRUE;
+    // }
 }
 
 void AnimTask_AllySwitchPartner(u8 taskId)
 {
-    PrepareDoubleTeamAnim(taskId, ANIM_ATK_PARTNER, TRUE);
+    PrepareDoubleTeamAnim(taskId, ANIM_ATK_PARTNER, FALSE);// TRUE);
 }
 
 static void AnimSuperFang(struct Sprite* sprite)

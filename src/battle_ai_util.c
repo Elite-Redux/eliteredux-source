@@ -1,5 +1,6 @@
 #include "battle_ai_util.h"
 
+#include "abilities.hh"
 #include "battle.h"
 #include "battle_ai_main.h"
 #include "battle_ai_switch_items.h"
@@ -685,35 +686,76 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness)
         dmg = 0;
     }
 
-    // Handle dynamic move damage
-    switch (gBattleMoves[move].effect) {
-        case EFFECT_LEVEL_DAMAGE:
-        case EFFECT_PSYWAVE:
-            dmg = gBattleMons[battlerAtk].level * (100 + BattlerHasAbility(battlerAtk, ABILITY_PARENTAL_BOND, FALSE) ? 25 : 0) / 100;
-            break;
-        case EFFECT_DRAGON_RAGE:
-            dmg = 40 * (100 + BattlerHasAbility(battlerAtk, ABILITY_PARENTAL_BOND, FALSE) ? 25 : 0) / 100;
-            break;
-        case EFFECT_SONICBOOM:
-            dmg = 20 * (100 + BattlerHasAbility(battlerAtk, ABILITY_PARENTAL_BOND, FALSE) ? 25 : 0) / 100;
-            break;
-        case EFFECT_MULTI_HIT:
-            dmg *= BattlerHasAbility(battlerAtk, ABILITY_SKILL_LINK, FALSE) ? 5 : 3;
-            break;
-        case EFFECT_TRIPLE_KICK:
-            dmg *= BattlerHasAbility(battlerAtk, ABILITY_SKILL_LINK, FALSE) ? 6 : 5;
-            break;
-        case EFFECT_ENDEAVOR:
-            // If target has less HP than user, Endeavor does no damage
-            dmg = max(0, gBattleMons[battlerDef].hp - gBattleMons[battlerAtk].hp);
-            break;
-        case EFFECT_SUPER_FANG:
-            dmg = (BattlerHasAbility(battlerAtk, ABILITY_PARENTAL_BOND, FALSE) ? max(2, gBattleMons[battlerDef].hp * 5 / 8)
-                                                                               : max(1, gBattleMons[battlerDef].hp / 2));
-            break;
-        case EFFECT_FINAL_GAMBIT:
-            dmg = gBattleMons[battlerAtk].hp;
-            break;
+    MultihitType multihitType = GetMultihitType(battlerAtk, move);
+    if (!multihitType) multihitType = GetParentalBondType(battlerAtk, battlerDef, move, moveType);
+
+    if (gBattleMoves[move].effect == EFFECT_SUPER_FANG || gBattleMoves[move].effect == EFFECT_SUPER_FANG_HAZE) {
+        dmg = multihitType ? max(2, gBattleMons[battlerDef].hp * 5 / 8) : max(1, gBattleMons[battlerDef].hp / 2);
+    } else {
+        // Handle dynamic move damage
+        switch (gBattleMoves[move].effect) {
+            case EFFECT_LEVEL_DAMAGE:
+            case EFFECT_PSYWAVE:
+                dmg = gBattleMons[battlerAtk].level;
+                break;
+            case EFFECT_DRAGON_RAGE:
+                dmg = 40;
+                break;
+            case EFFECT_SONICBOOM:
+                dmg = 20;
+                break;
+            case EFFECT_ENDEAVOR:
+                // If target has less HP than user, Endeavor does no damage
+                dmg = max(0, gBattleMons[battlerDef].hp - gBattleMons[battlerAtk].hp);
+                break;
+            case EFFECT_FINAL_GAMBIT:
+                dmg = gBattleMons[battlerAtk].hp;
+                break;
+        }
+
+        switch (multihitType) {
+            case MULTIHIT_TRIPLE_KICK:
+            case MULTIHIT_FOUR_OR_FIVE:
+            case MULTIHIT_FIVE:
+            case MULTIHIT_BEAT_UP:
+                dmg *= 5;
+                break;
+
+            case MULTIHIT_THREE:
+                if (gBattleMoves[move].effect == EFFECT_TRIPLE_KICK)
+                    dmg *= 6;
+                else
+                    dmg *= 3;
+                break;
+
+            case MULTIHIT_TEN:
+                dmg *= 10;
+                break;
+
+            case MULTIHIT_TEN_CAN_MISS:
+                dmg *= 6;
+                break;
+
+            case MULTIHIT_TWO_TO_FIVE:
+                dmg *= 3;
+                break;
+
+            case MULTIHIT_TWO:
+                dmg *= 2;
+
+            case MULTIHIT_SINGLE:
+                break;
+
+            default:
+                // Must be parental bond
+                int parentalBondCount = GetParentalBondCount(battlerAtk, multihitType);
+                int multiplier = 0;
+                for (int i = 0; i < parentalBondCount; i++) {
+                    multiplier += GetParentalBondMultiplier(multihitType, i);
+                }
+                dmg = ApplyModifier(multiplier, dmg);
+                break;
+        }
     }
 
     // Handle other multi-strike moves

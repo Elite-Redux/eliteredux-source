@@ -55,7 +55,7 @@ struct EasyChatScreenControl
     u8 destWindowAnimState;
     s8 windowAnimStateDir;
     u8 modeWindowState;
-    bool8 fourFooterOptions; // Never read (template is used directly instead)
+    bool8 fourFooterOptions; // Never read (spriteTemplate is used directly instead)
     u8 phrasePrintBuffer[193];
     u8 wordSelectPrintBuffer[514];
     u16 scrollOffset;

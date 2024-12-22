@@ -332,6 +332,10 @@ static const u16 sAdoptionCenterInventory_ZeroBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
+    SPECIES_CLEFFA_REDUX, //testing purposes
+    SPECIES_CORM, //testing purposes
+    SPECIES_MARBEEP, //testing purposes
+    SPECIES_NOIBAT_REDUX,
     SPECIES_NONE,
 };
 
@@ -340,6 +344,7 @@ static const u16 sAdoptionCenterInventory_OneBadges[] = {
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes
+    SPECIES_BUBBLEO, //testing purposes
     SPECIES_WEEDLE_REDUX,
     SPECIES_WHISMUR_REDUX,
     SPECIES_STUFFUL_REDUX,
@@ -360,6 +365,7 @@ static const u16 sAdoptionCenterInventory_TwoBadges[] = {
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes
+    SPECIES_BUBBLEO, //testing purposes
     SPECIES_PAWNIARD_REDUX,
     SPECIES_MACHOP_REDUX,
     SPECIES_BUIZEL_REDUX,
@@ -388,6 +394,7 @@ static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes
+    SPECIES_BUBBLEO, //testing purposes
     SPECIES_SNORUNT_REDUX, //testing purposes
     SPECIES_DEINO_REDUX,
     SPECIES_LARVITAR_REDUX,
@@ -426,6 +433,7 @@ static const u16 sAdoptionCenterInventory_FourBadges[] = {
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes
+    SPECIES_BUBBLEO, //testing purposes
     SPECIES_SNORUNT_REDUX, //testing purposes
     SPECIES_DEINO_REDUX,
     SPECIES_LARVITAR_REDUX,
@@ -465,6 +473,7 @@ static const u16 sAdoptionCenterInventory_FiveBadges[] = {
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes
+    SPECIES_BUBBLEO, //testing purposes
     SPECIES_SNORUNT_REDUX, //testing purposes
     SPECIES_DEINO_REDUX,
     SPECIES_LARVITAR_REDUX,
@@ -504,6 +513,7 @@ static const u16 sAdoptionCenterInventory_SixBadges[] = {
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes
+    SPECIES_BUBBLEO, //testing purposes
     SPECIES_SNORUNT_REDUX, //testing purposes
     SPECIES_DEINO_REDUX,
     SPECIES_GIBLE_REDUX,
@@ -545,6 +555,7 @@ static const u16 sAdoptionCenterInventory_SevenBadges[] = {
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes
+    SPECIES_BUBBLEO, //testing purposes
     SPECIES_SNORUNT_REDUX, //testing purposes
     SPECIES_DEINO_REDUX,
     SPECIES_GIBLE_REDUX,
@@ -586,6 +597,7 @@ static const u16 sAdoptionCenterInventory_EightBadges[] = {
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes
+    SPECIES_BUBBLEO, //testing purposes
     SPECIES_SNORUNT_REDUX, //testing purposes
     SPECIES_MELTAN,
     SPECIES_POIPOLE,

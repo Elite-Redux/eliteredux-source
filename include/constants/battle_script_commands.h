@@ -230,8 +230,8 @@
 #define VARIOUS_SET_DYNAMIC_TYPE                147
 #define VARIOUS_GOTO_ACTUAL_MOVE                148
 #define VARIOUS_SET_FEAR                        149
-#define VARIOUS_HANDLE_WEATHER_CHANGE           150
-#define VARIOUS_HANDLE_TERRAIN_CHANGE           151
+#define VARIOUS_ON_WEATHER_CHANGE               150
+#define VARIOUS_ON_TERRAIN_CHANGE               151
 #define VARIOUS_GET_BATTLER                     152
 #define VARIOUS_DO_COPY_STAT_CHANGE             153
 #define VARIOUS_TRY_LOSE_PERCENT_HP             154
@@ -271,6 +271,7 @@
 #define VARIOUS_JUMP_IF_ABILITY_STATE           188
 #define VARIOUS_SET_ABILITY_STATE               189
 #define VARIOUS_DO_INTIMIDATE                   190
+#define VARIOUS_HP_FRACTION_TO_DAMAGE           191
 
 #define HAZARD_MODE_SPIKES 0
 #define HAZARD_MODE_ROCKS 1
@@ -346,8 +347,7 @@
 #define MOVEEND_MOVE_EFFECTS2                     MOVEEND_NEXT_TARGET + 1
 #define MOVEEND_RECOIL                            MOVEEND_MOVE_EFFECTS2 + 1
 #define MOVEEND_CHARGE                            MOVEEND_RECOIL + 1
-#define MOVEEND_ATTACKER_FOLLOWUP_MOVE            MOVEEND_CHARGE + 1
-#define MOVEEND_ABILITIES_AFTER_RECOIL            MOVEEND_ATTACKER_FOLLOWUP_MOVE + 1
+#define MOVEEND_ABILITIES_AFTER_RECOIL            MOVEEND_CHARGE + 1
 #define MOVEEND_EJECT_BUTTON                      MOVEEND_ABILITIES_AFTER_RECOIL + 1
 #define MOVEEND_RED_CARD                          MOVEEND_EJECT_BUTTON + 1
 #define MOVEEND_EJECT_PACK                        MOVEEND_RED_CARD + 1

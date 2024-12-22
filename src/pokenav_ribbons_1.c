@@ -679,20 +679,20 @@ static void sub_81D02B0(s32 windowId, s32 val1, s32 val2)
 
 static void InitMonRibbonPokenavListMenuTemplate(void)
 {
-    struct PokenavListTemplate template;
-    template.list.monList = GetMonRibbonMonListData();
-    template.count = GetRibbonsMonListCount();
-    template.unk8 = 4;
-    template.unk6 = GetRibbonListMenuCurrIndex();
-    template.item_X = 13;
-    template.windowWidth = 17;
-    template.listTop = 1;
-    template.maxShowed = 8;
-    template.fillValue = 2;
-    template.fontId = 1;
-    template.listFunc.printMonFunc = BufferRibbonMonInfoText;
-    template.unk14 = NULL;
-    sub_81C81D4(&sMonRibbonListBgTemplates[1], &template, 0);
+    struct PokenavListTemplate spriteTemplate;
+    spriteTemplate.list.monList = GetMonRibbonMonListData();
+    spriteTemplate.count = GetRibbonsMonListCount();
+    spriteTemplate.unk8 = 4;
+    spriteTemplate.unk6 = GetRibbonListMenuCurrIndex();
+    spriteTemplate.item_X = 13;
+    spriteTemplate.windowWidth = 17;
+    spriteTemplate.listTop = 1;
+    spriteTemplate.maxShowed = 8;
+    spriteTemplate.fillValue = 2;
+    spriteTemplate.fontId = 1;
+    spriteTemplate.listFunc.printMonFunc = BufferRibbonMonInfoText;
+    spriteTemplate.unk14 = NULL;
+    sub_81C81D4(&sMonRibbonListBgTemplates[1], &spriteTemplate, 0);
 }
 
 // Buffers the "Nickname gender/level" text for the ribbon mon list

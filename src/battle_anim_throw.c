@@ -1624,7 +1624,7 @@ static void SpriteCB_Ball_FadeOut(struct Sprite *sprite)
         sprite->oam.objMode = ST_OAM_OBJ_BLEND;
         SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_ALL);
         SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(16, 0));
-        paletteIndex = IndexOfSpritePaletteTag(sprite->template->paletteTag);
+        paletteIndex = IndexOfSpritePaletteTag(sprite->spriteTemplate->paletteTag);
         BeginNormalPaletteFade(1 << (paletteIndex + 0x10), 0, 0, 16, RGB(31, 31, 31));
         sprite->sState++;
         break;
