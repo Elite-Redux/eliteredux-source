@@ -1568,7 +1568,7 @@ static void DeterminePokemonToShow(void)
 
     // Fill the rest of the array with zeroes
     for (dexNum = j; dexNum < NATIONAL_DEX_COUNT; dexNum++)
-        sCreditsData->caughtMonIds[dexNum] = NATIONAL_DEX_NONE;
+        sCreditsData->caughtMonIds[dexNum] = 0;
 
     // Cap the number of pokemon we care about to NUM_MON_SLIDES, the max we show in the credits scene (-1 for the starter)
     sCreditsData->numCaughtMon = j;

@@ -794,80 +794,86 @@ static const struct BgTemplate sInfoScreen_BgTemplate[] = {
 #define WIN_VU_METER 3
 #define WIN_NAVIGATION_BUTTONS 4
 
-static const struct WindowTemplate sInfoScreen_WindowTemplates[] = {[WIN_INFO] =
-                                                                        {
-                                                                            .bg = 2,
-                                                                            .tilemapLeft = 0,
-                                                                            .tilemapTop = 0,
-                                                                            .width = 32,
-                                                                            .height = 20,
-                                                                            .paletteNum = 0,
-                                                                            .baseBlock = 1,
-                                                                        },
-                                                                    [WIN_FOOTPRINT] =
-                                                                        {
-                                                                            .bg = 2,
-                                                                            .tilemapLeft = 15,  // HGSSS_Ui
-                                                                            .tilemapTop = 7,    // HGSSS_Ui
-                                                                            .width = 2,
-                                                                            .height = 2,
-                                                                            .paletteNum = 15,
-                                                                            .baseBlock = 641,
-                                                                        },
-                                                                    [WIN_CRY_WAVE] =
-                                                                        {
-                                                                            .bg = 0,
-                                                                            .tilemapLeft = 0,
-                                                                            .tilemapTop = 12,
-                                                                            .width = 32,
-                                                                            .height = 7,
-                                                                            .paletteNum = 8,
-                                                                            .baseBlock = 645,
-                                                                        },
-                                                                    [WIN_VU_METER] =
-                                                                        {
-                                                                            .bg = 2,
-                                                                            .tilemapLeft = 18,
-                                                                            .tilemapTop = 3,
-                                                                            .width = 10,
-                                                                            .height = 8,
-                                                                            .paletteNum = 9,
-                                                                            .baseBlock = 869,
-                                                                        },
-                                                                    [WIN_NAVIGATION_BUTTONS] = {
-                                                                        .bg = 2,
-                                                                        .tilemapLeft = 0,
-                                                                        .tilemapTop = 18,
-                                                                        .width = 12,
-                                                                        .height = 2,
-                                                                        .paletteNum = 15,
-                                                                        .baseBlock = 641,
-                                                                    }};
+static const struct WindowTemplate sInfoScreen_WindowTemplates[] = {
+    [WIN_INFO] =
+        {
+            .bg = 2,
+            .tilemapLeft = 0,
+            .tilemapTop = 0,
+            .width = 32,
+            .height = 20,
+            .paletteNum = 0,
+            .baseBlock = 1,
+        },
+    [WIN_FOOTPRINT] =
+        {
+            .bg = 2,
+            .tilemapLeft = 15,  // HGSSS_Ui
+            .tilemapTop = 7,    // HGSSS_Ui
+            .width = 2,
+            .height = 2,
+            .paletteNum = 15,
+            .baseBlock = 641,
+        },
+    [WIN_CRY_WAVE] =
+        {
+            .bg = 0,
+            .tilemapLeft = 0,
+            .tilemapTop = 12,
+            .width = 32,
+            .height = 7,
+            .paletteNum = 8,
+            .baseBlock = 645,
+        },
+    [WIN_VU_METER] =
+        {
+            .bg = 2,
+            .tilemapLeft = 18,
+            .tilemapTop = 3,
+            .width = 10,
+            .height = 8,
+            .paletteNum = 9,
+            .baseBlock = 869,
+        },
+    [WIN_NAVIGATION_BUTTONS] =
+        {
+            .bg = 2,
+            .tilemapLeft = 0,
+            .tilemapTop = 18,
+            .width = 12,
+            .height = 2,
+            .paletteNum = 15,
+            .baseBlock = 641,
+        },
+};
 
 static const struct BgTemplate sNewEntryInfoScreen_BgTemplate[] = {
     {.bg = 2, .charBaseIndex = 2, .mapBaseIndex = 14, .screenSize = 0, .paletteMode = 0, .priority = 2, .baseTile = 0},
     {.bg = 3, .charBaseIndex = 1, .mapBaseIndex = 15, .screenSize = 0, .paletteMode = 0, .priority = 3, .baseTile = 0},
 };
 
-static const struct WindowTemplate sNewEntryInfoScreen_WindowTemplates[] = {[WIN_INFO] =
-                                                                                {
-                                                                                    .bg = 2,
-                                                                                    .tilemapLeft = 0,
-                                                                                    .tilemapTop = 0,
-                                                                                    .width = 32,
-                                                                                    .height = 20,
-                                                                                    .paletteNum = 0,
-                                                                                    .baseBlock = 1,
-                                                                                },
-                                                                            [WIN_FOOTPRINT] = {
-                                                                                .bg = 2,
-                                                                                .tilemapLeft = 15,  // HGSSS_Ui
-                                                                                .tilemapTop = 7,    // HGSSS_Ui
-                                                                                .width = 2,
-                                                                                .height = 2,
-                                                                                .paletteNum = 15,
-                                                                                .baseBlock = 641,
-                                                                            }};
+static const struct WindowTemplate sNewEntryInfoScreen_WindowTemplates[] = {
+    [WIN_INFO] =
+        {
+            .bg = 2,
+            .tilemapLeft = 0,
+            .tilemapTop = 0,
+            .width = 32,
+            .height = 20,
+            .paletteNum = 0,
+            .baseBlock = 1,
+        },
+    [WIN_FOOTPRINT] =
+        {
+            .bg = 2,
+            .tilemapLeft = 15,  // HGSSS_Ui
+            .tilemapTop = 7,    // HGSSS_Ui
+            .width = 2,
+            .height = 2,
+            .paletteNum = 15,
+            .baseBlock = 641,
+        },
+};
 
 static const u8 sText_TenDashes2[] = _("----------");
 
@@ -1118,7 +1124,8 @@ static const struct BgTemplate sSearchMenu_BgTemplate[] = {
     {.bg = 0, .charBaseIndex = 2, .mapBaseIndex = 12, .screenSize = 0, .paletteMode = 0, .priority = 0, .baseTile = 0},
     {.bg = 1, .charBaseIndex = 0, .mapBaseIndex = 13, .screenSize = 0, .paletteMode = 0, .priority = 1, .baseTile = 0},
     {.bg = 2, .charBaseIndex = 2, .mapBaseIndex = 14, .screenSize = 0, .paletteMode = 0, .priority = 2, .baseTile = 0},
-    {.bg = 3, .charBaseIndex = 0, .mapBaseIndex = 15, .screenSize = 0, .paletteMode = 0, .priority = 3, .baseTile = 0}};
+    {.bg = 3, .charBaseIndex = 0, .mapBaseIndex = 15, .screenSize = 0, .paletteMode = 0, .priority = 3, .baseTile = 0},
+};
 
 static const struct WindowTemplate sSearchMenu_WindowTemplate[] = {{
     .bg = 2,
@@ -1788,7 +1795,7 @@ static void CreatePokedexList(u8 dexMode, u8 order) {
             break;
         case ORDER_ALPHABETICAL:
             for (i = 0; i < ARRAY_COUNT(gPokedexOrder_Alphabetical); i++) {
-                temp_dexNum = gPokedexOrder_Alphabetical[i];
+                temp_dexNum = gSpecies[gPokedexOrder_Alphabetical[i]].nationalDexNum;
 
                 if ((!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_SEEN)) {
                     sPokedexView->pokedexList[sPokedexView->pokemonListCount].dexNum = temp_dexNum;
@@ -1800,7 +1807,7 @@ static void CreatePokedexList(u8 dexMode, u8 order) {
             break;
         case ORDER_HEAVIEST:
             for (i = ARRAY_COUNT(gPokedexOrder_Weight) - 1; i >= 0; i--) {
-                temp_dexNum = gPokedexOrder_Weight[i];
+                temp_dexNum = gSpecies[gPokedexOrder_Weight[i]].nationalDexNum;
 
                 if ((!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT)) {
                     sPokedexView->pokedexList[sPokedexView->pokemonListCount].dexNum = temp_dexNum;
@@ -1812,7 +1819,7 @@ static void CreatePokedexList(u8 dexMode, u8 order) {
             break;
         case ORDER_LIGHTEST:
             for (i = 0; i < ARRAY_COUNT(gPokedexOrder_Weight); i++) {
-                temp_dexNum = gPokedexOrder_Weight[i];
+                temp_dexNum = gSpecies[gPokedexOrder_Weight[i]].nationalDexNum;
 
                 if ((!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT)) {
                     sPokedexView->pokedexList[sPokedexView->pokemonListCount].dexNum = temp_dexNum;
@@ -3188,8 +3195,12 @@ static void Task_LoadSizeScreen(u8 taskId) {
             gSprites[spriteId].oam.affineMode = ST_OAM_AFFINE_NORMAL;
             gSprites[spriteId].oam.matrixNum = 1;
             gSprites[spriteId].oam.priority = 0;
-            gSprites[spriteId].y2 = gPokedexEntries[sPokedexListItem->dexNum].trainerOffset;
-            SetOamMatrix(1, gPokedexEntries[sPokedexListItem->dexNum].trainerScale, 0, 0, gPokedexEntries[sPokedexListItem->dexNum].trainerScale);
+            gSprites[spriteId].y2 = gPokedexEntries[NationalPokedexNumToSpecies(sPokedexListItem->dexNum)].trainerOffset;
+            SetOamMatrix(1,
+                         gPokedexEntries[NationalPokedexNumToSpecies(sPokedexListItem->dexNum)].trainerScale,
+                         0,
+                         0,
+                         gPokedexEntries[NationalPokedexNumToSpecies(sPokedexListItem->dexNum)].trainerScale);
             LoadPalette(sSizeScreenSilhouette_Pal, (gSprites[spriteId].oam.paletteNum + 16) * 16, 0x20);
             gTasks[taskId].data[5] = spriteId;
             gMain.state++;
@@ -3199,8 +3210,12 @@ static void Task_LoadSizeScreen(u8 taskId) {
             gSprites[spriteId].oam.affineMode = ST_OAM_AFFINE_NORMAL;
             gSprites[spriteId].oam.matrixNum = 2;
             gSprites[spriteId].oam.priority = 0;
-            gSprites[spriteId].y2 = gPokedexEntries[sPokedexListItem->dexNum].pokemonOffset;
-            SetOamMatrix(2, gPokedexEntries[sPokedexListItem->dexNum].pokemonScale, 0, 0, gPokedexEntries[sPokedexListItem->dexNum].pokemonScale);
+            gSprites[spriteId].y2 = gPokedexEntries[NationalPokedexNumToSpecies(sPokedexListItem->dexNum)].pokemonOffset;
+            SetOamMatrix(2,
+                         gPokedexEntries[NationalPokedexNumToSpecies(sPokedexListItem->dexNum)].pokemonScale,
+                         0,
+                         0,
+                         gPokedexEntries[NationalPokedexNumToSpecies(sPokedexListItem->dexNum)].pokemonScale);
             LoadPalette(sSizeScreenSilhouette_Pal, (gSprites[spriteId].oam.paletteNum + 16) * 16, 0x20);
             gTasks[taskId].tMonSpriteId = spriteId;
             CopyWindowToVram(WIN_INFO, 3);
@@ -3586,21 +3601,21 @@ static void PrintMonInfo(u32 num, u32 value, u32 owned, u32 newEntry) {
     PrintInfoScreenText(gText_HTHeight, 155, 64);  // HGSS_Ui
     PrintInfoScreenText(gText_WTWeight, 155, 77);  // HGSS_Ui
     if (owned) {
-        PrintMonHeight(gPokedexEntries[num].height, 180, 64);  // HGSS_Ui
-        PrintMonWeight(gPokedexEntries[num].weight, 180, 77);  // HGSS_Ui
+        PrintMonHeight(gPokedexEntries[NationalPokedexNumToSpecies(num)].height, 180, 64);  // HGSS_Ui
+        PrintMonWeight(gPokedexEntries[NationalPokedexNumToSpecies(num)].weight, 180, 77);  // HGSS_Ui
     } else {
         PrintInfoScreenText(gText_UnkHeight, 180, 64);  // HGSS_Ui
         PrintInfoScreenText(gText_UnkWeight, 180, 77);  // HGSS_Ui
     }
     if (owned) {
-        description = gPokedexEntries[num].description;
+        description = gPokedexEntries[NationalPokedexNumToSpecies(num)].description;
     } else
         description = gExpandedPlaceholder_PokedexDescription;
     PrintInfoScreenText(description, GetStringCenterAlignXOffset(1, description, 0xF0), 93);  // HGSS_Ui
 
     // Type Icon(s) //HGSS_Ui
     if (owned && !newEntry) {
-        description = gPokedexEntries[num].description;
+        description = gPokedexEntries[NationalPokedexNumToSpecies(num)].description;
         PrintCurrentSpeciesTypeInfo();  // HGSS_Ui
     }
 }
@@ -3682,15 +3697,15 @@ static void PrintMonWeight(u16 weight, u8 left, u8 top) {
 
 const u8 *GetPokedexCategoryName(u16 dexNum)  // unused
 {
-    return gPokedexEntries[dexNum].categoryName;
+    return gPokedexEntries[NationalPokedexNumToSpecies(dexNum)].categoryName;
 }
 
 u16 GetPokedexHeightWeight(u16 dexNum, u8 data) {
     switch (data) {
         case 0:  // height
-            return gPokedexEntries[dexNum].height;
+            return gPokedexEntries[NationalPokedexNumToSpecies(dexNum)].height;
         case 1:  // weight
-            return gPokedexEntries[dexNum].weight;
+            return gPokedexEntries[NationalPokedexNumToSpecies(dexNum)].weight;
         default:
             return 1;
     }

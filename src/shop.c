@@ -926,7 +926,7 @@ static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, s
                 u16 dexnum = SpeciesToNationalPokedexNum(item);
 
                 StringCopy(gStringVar1, gSpecies[item].name);
-                StringCopy(gStringVar2, gPokedexEntries[dexnum].categoryName);
+                StringCopy(gStringVar2, gPokedexEntries[NationalPokedexNumToSpecies(dexnum)].categoryName);
                 ConvertIntToDecimalStringN(gStringVar3, level, STR_CONV_MODE_LEFT_ALIGN, 3);
                 StringExpandPlaceholders(gStringVar4, sText_Title_PokemonDescription);
 

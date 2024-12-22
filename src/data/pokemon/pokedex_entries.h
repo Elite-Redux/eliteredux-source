@@ -1,6 +1,6 @@
 const struct PokedexEntry gPokedexEntries[] =
 {
-    [NATIONAL_DEX_NONE] =
+    [SPECIES_NONE] =
     {
         .categoryName = _("Unknown"),
         .height = 0,
@@ -12,7 +12,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PHANTOWL] =
+    [SPECIES_PHANTOWL] =
     {
         .categoryName = _("Phantowl"),
         .height = 10,
@@ -24,7 +24,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DUELUMBER] =
+    [SPECIES_DUELUMBER] =
     {
         .categoryName = _("Duelumber"),
         .height = 10,
@@ -36,7 +36,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ESCARGINITE] =
+    [SPECIES_ESCARGINITE] =
     {
         .categoryName = _("Escarginite"),
         .height = 10,
@@ -48,7 +48,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARCHALUDON] =
+    [SPECIES_ARCHALUDON] =
     {
         .categoryName = _("Archaludon"),
         .height = 10,
@@ -60,7 +60,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOUGING_FIRE] =
+    [SPECIES_GOUGING_FIRE] =
     {
         .categoryName = _("Gouging Fire"),
         .height = 10,
@@ -72,7 +72,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_IRON_BOULDER] =
+    [SPECIES_IRON_BOULDER] =
     {
         .categoryName = _("Iron Boulder"),
         .height = 10,
@@ -84,7 +84,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_IRON_CROWN] =
+    [SPECIES_IRON_CROWN] =
     {
         .categoryName = _("Iron Crown"),
         .height = 10,
@@ -96,7 +96,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PECHARUNT] =
+    [SPECIES_PECHARUNT] =
     {
         .categoryName = _("Pecharunt"),
         .height = 10,
@@ -108,7 +108,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TERAPAGOS] =
+    [SPECIES_TERAPAGOS] =
     {
         .categoryName = _("Terapagos"),
         .height = 10,
@@ -120,7 +120,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RAGING_BOLT] =
+    [SPECIES_RAGING_BOLT] =
     {
         .categoryName = _("Raging Bolt"),
         .height = 10,
@@ -132,7 +132,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HYDRAPPLE] =
+    [SPECIES_HYDRAPPLE] =
     {
         .categoryName = _("Hydrapple"),
         .height = 10,
@@ -144,7 +144,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BULBASAUR] =
+    [SPECIES_BULBASAUR] =
     {
         .categoryName = _("Seed"),
         .height = 7,
@@ -156,7 +156,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_IVYSAUR] =
+    [SPECIES_IVYSAUR] =
     {
         .categoryName = _("Seed"),
         .height = 10,
@@ -168,7 +168,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VENUSAUR] =
+    [SPECIES_VENUSAUR] =
     {
         .categoryName = _("Seed"),
         .height = 20,
@@ -180,7 +180,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 6,
     },
 
-    [NATIONAL_DEX_CHARMANDER] =
+    [SPECIES_CHARMANDER] =
     {
         .categoryName = _("Lizard"),
         .height = 6,
@@ -192,7 +192,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHARMELEON] =
+    [SPECIES_CHARMELEON] =
     {
         .categoryName = _("Flame"),
         .height = 11,
@@ -204,7 +204,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHARIZARD] =
+    [SPECIES_CHARIZARD] =
     {
         .categoryName = _("Flame"),
         .height = 17,
@@ -216,7 +216,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 3,
     },
 
-    [NATIONAL_DEX_SQUIRTLE] =
+    [SPECIES_SQUIRTLE] =
     {
         .categoryName = _("Tiny Turtle"),
         .height = 5,
@@ -228,7 +228,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WARTORTLE] =
+    [SPECIES_WARTORTLE] =
     {
         .categoryName = _("Turtle"),
         .height = 10,
@@ -240,7 +240,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BLASTOISE] =
+    [SPECIES_BLASTOISE] =
     {
         .categoryName = _("Shellfish"),
         .height = 16,
@@ -252,7 +252,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_CATERPIE] =
+    [SPECIES_CATERPIE] =
     {
         .categoryName = _("Worm"),
         .height = 3,
@@ -264,7 +264,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_METAPOD] =
+    [SPECIES_METAPOD] =
     {
         .categoryName = _("Cocoon"),
         .height = 7,
@@ -276,7 +276,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BUTTERFREE] =
+    [SPECIES_BUTTERFREE] =
     {
         .categoryName = _("Butterfly"),
         .height = 11,
@@ -288,7 +288,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WEEDLE] =
+    [SPECIES_WEEDLE] =
     {
         .categoryName = _("Hairy Bug"),
         .height = 3,
@@ -300,7 +300,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KAKUNA] =
+    [SPECIES_KAKUNA] =
     {
         .categoryName = _("Cocoon"),
         .height = 6,
@@ -312,7 +312,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BEEDRILL] =
+    [SPECIES_BEEDRILL] =
     {
         .categoryName = _("Poison Bee"),
         .height = 10,
@@ -324,7 +324,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PIDGEY] =
+    [SPECIES_PIDGEY] =
     {
         .categoryName = _("Tiny Bird"),
         .height = 3,
@@ -336,7 +336,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PIDGEOTTO] =
+    [SPECIES_PIDGEOTTO] =
     {
         .categoryName = _("Bird"),
         .height = 11,
@@ -348,7 +348,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PIDGEOT] =
+    [SPECIES_PIDGEOT] =
     {
         .categoryName = _("Bird"),
         .height = 15,
@@ -360,7 +360,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RATTATA] =
+    [SPECIES_RATTATA] =
     {
         .categoryName = _("Mouse"),
         .height = 3,
@@ -372,7 +372,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RATICATE] =
+    [SPECIES_RATICATE] =
     {
         .categoryName = _("Mouse"),
         .height = 7,
@@ -384,7 +384,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SPEAROW] =
+    [SPECIES_SPEAROW] =
     {
         .categoryName = _("Tiny Bird"),
         .height = 3,
@@ -396,7 +396,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FEAROW] =
+    [SPECIES_FEAROW] =
     {
         .categoryName = _("Beak"),
         .height = 12,
@@ -408,7 +408,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_EKANS] =
+    [SPECIES_EKANS] =
     {
         .categoryName = _("Snake"),
         .height = 20,
@@ -420,7 +420,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARBOK] =
+    [SPECIES_ARBOK] =
     {
         .categoryName = _("Cobra"),
         .height = 35,
@@ -432,7 +432,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_PIKACHU] =
+    [SPECIES_PIKACHU] =
     {
         .categoryName = _("Mouse"),
         .height = 4,
@@ -444,7 +444,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RAICHU] =
+    [SPECIES_RAICHU] =
     {
         .categoryName = _("Mouse"),
         .height = 8,
@@ -456,7 +456,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SANDSHREW] =
+    [SPECIES_SANDSHREW] =
     {
         .categoryName = _("Mouse"),
         .height = 6,
@@ -468,7 +468,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SANDSLASH] =
+    [SPECIES_SANDSLASH] =
     {
         .categoryName = _("Mouse"),
         .height = 10,
@@ -480,7 +480,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NIDORAN_F] =
+    [SPECIES_NIDORAN_F] =
     {
         .categoryName = _("Poison Pin"),
         .height = 4,
@@ -492,7 +492,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NIDORINA] =
+    [SPECIES_NIDORINA] =
     {
         .categoryName = _("Poison Pin"),
         .height = 8,
@@ -504,7 +504,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NIDOQUEEN] =
+    [SPECIES_NIDOQUEEN] =
     {
         .categoryName = _("Drill"),
         .height = 13,
@@ -516,7 +516,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NIDORAN_M] =
+    [SPECIES_NIDORAN_M] =
     {
         .categoryName = _("Poison Pin"),
         .height = 5,
@@ -528,7 +528,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NIDORINO] =
+    [SPECIES_NIDORINO] =
     {
         .categoryName = _("Poison Pin"),
         .height = 9,
@@ -540,7 +540,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NIDOKING] =
+    [SPECIES_NIDOKING] =
     {
         .categoryName = _("Drill"),
         .height = 14,
@@ -552,7 +552,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CLEFAIRY] =
+    [SPECIES_CLEFAIRY] =
     {
         .categoryName = _("Fairy"),
         .height = 6,
@@ -564,7 +564,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CLEFABLE] =
+    [SPECIES_CLEFABLE] =
     {
         .categoryName = _("Fairy"),
         .height = 13,
@@ -576,7 +576,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VULPIX] =
+    [SPECIES_VULPIX] =
     {
         .categoryName = _("Fox"),
         .height = 6,
@@ -588,7 +588,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NINETALES] =
+    [SPECIES_NINETALES] =
     {
         .categoryName = _("Fox"),
         .height = 11,
@@ -600,7 +600,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_JIGGLYPUFF] =
+    [SPECIES_JIGGLYPUFF] =
     {
         .categoryName = _("Balloon"),
         .height = 5,
@@ -612,7 +612,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WIGGLYTUFF] =
+    [SPECIES_WIGGLYTUFF] =
     {
         .categoryName = _("Balloon"),
         .height = 10,
@@ -624,7 +624,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ZUBAT] =
+    [SPECIES_ZUBAT] =
     {
         .categoryName = _("Bat"),
         .height = 8,
@@ -636,7 +636,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOLBAT] =
+    [SPECIES_GOLBAT] =
     {
         .categoryName = _("Bat"),
         .height = 16,
@@ -648,7 +648,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ODDISH] =
+    [SPECIES_ODDISH] =
     {
         .categoryName = _("Weed"),
         .height = 5,
@@ -660,7 +660,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GLOOM] =
+    [SPECIES_GLOOM] =
     {
         .categoryName = _("Weed"),
         .height = 8,
@@ -672,7 +672,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VILEPLUME] =
+    [SPECIES_VILEPLUME] =
     {
         .categoryName = _("Flower"),
         .height = 12,
@@ -684,7 +684,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PARAS] =
+    [SPECIES_PARAS] =
     {
         .categoryName = _("Mushroom"),
         .height = 3,
@@ -696,7 +696,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PARASECT] =
+    [SPECIES_PARASECT] =
     {
         .categoryName = _("Mushroom"),
         .height = 10,
@@ -708,7 +708,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VENONAT] =
+    [SPECIES_VENONAT] =
     {
         .categoryName = _("Insect"),
         .height = 10,
@@ -720,7 +720,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = -1,
     },
 
-    [NATIONAL_DEX_VENOMOTH] =
+    [SPECIES_VENOMOTH] =
     {
         .categoryName = _("Poison Moth"),
         .height = 15,
@@ -732,7 +732,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_DIGLETT] =
+    [SPECIES_DIGLETT] =
     {
         .categoryName = _("Mole"),
         .height = 2,
@@ -744,7 +744,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DUGTRIO] =
+    [SPECIES_DUGTRIO] =
     {
         .categoryName = _("Mole"),
         .height = 7,
@@ -756,7 +756,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MEOWTH] =
+    [SPECIES_MEOWTH] =
     {
         .categoryName = _("Scratch Cat"),
         .height = 4,
@@ -768,7 +768,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PERSIAN] =
+    [SPECIES_PERSIAN] =
     {
         .categoryName = _("Classy Cat"),
         .height = 10,
@@ -780,7 +780,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PSYDUCK] =
+    [SPECIES_PSYDUCK] =
     {
         .categoryName = _("Duck"),
         .height = 8,
@@ -792,7 +792,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOLDUCK] =
+    [SPECIES_GOLDUCK] =
     {
         .categoryName = _("Duck"),
         .height = 17,
@@ -804,7 +804,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_MANKEY] =
+    [SPECIES_MANKEY] =
     {
         .categoryName = _("Pig Monkey"),
         .height = 5,
@@ -816,7 +816,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PRIMEAPE] =
+    [SPECIES_PRIMEAPE] =
     {
         .categoryName = _("Pig Monkey"),
         .height = 10,
@@ -828,7 +828,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GROWLITHE] =
+    [SPECIES_GROWLITHE] =
     {
         .categoryName = _("Puppy"),
         .height = 7,
@@ -840,7 +840,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARCANINE] =
+    [SPECIES_ARCANINE] =
     {
         .categoryName = _("Legendary"),
         .height = 19,
@@ -852,7 +852,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 4,
     },
 
-    [NATIONAL_DEX_POLIWAG] =
+    [SPECIES_POLIWAG] =
     {
         .categoryName = _("Tadpole"),
         .height = 6,
@@ -864,7 +864,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_POLIWHIRL] =
+    [SPECIES_POLIWHIRL] =
     {
         .categoryName = _("Tadpole"),
         .height = 10,
@@ -876,7 +876,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_POLIWRATH] =
+    [SPECIES_POLIWRATH] =
     {
         .categoryName = _("Tadpole"),
         .height = 13,
@@ -888,7 +888,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ABRA] =
+    [SPECIES_ABRA] =
     {
         .categoryName = _("Psi"),
         .height = 9,
@@ -900,7 +900,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KADABRA] =
+    [SPECIES_KADABRA] =
     {
         .categoryName = _("Psi"),
         .height = 13,
@@ -912,7 +912,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ALAKAZAM] =
+    [SPECIES_ALAKAZAM] =
     {
         .categoryName = _("Psi"),
         .height = 15,
@@ -924,7 +924,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MACHOP] =
+    [SPECIES_MACHOP] =
     {
         .categoryName = _("Superpower"),
         .height = 8,
@@ -936,7 +936,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MACHOKE] =
+    [SPECIES_MACHOKE] =
     {
         .categoryName = _("Superpower"),
         .height = 15,
@@ -948,7 +948,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MACHAMP] =
+    [SPECIES_MACHAMP] =
     {
         .categoryName = _("Superpower"),
         .height = 16,
@@ -960,7 +960,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = -1,
     },
 
-    [NATIONAL_DEX_BELLSPROUT] =
+    [SPECIES_BELLSPROUT] =
     {
         .categoryName = _("Flower"),
         .height = 7,
@@ -972,7 +972,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WEEPINBELL] =
+    [SPECIES_WEEPINBELL] =
     {
         .categoryName = _("Flycatcher"),
         .height = 10,
@@ -984,7 +984,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VICTREEBEL] =
+    [SPECIES_VICTREEBEL] =
     {
         .categoryName = _("Flycatcher"),
         .height = 17,
@@ -996,7 +996,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 3,
     },
 
-    [NATIONAL_DEX_TENTACOOL] =
+    [SPECIES_TENTACOOL] =
     {
         .categoryName = _("Jellyfish"),
         .height = 9,
@@ -1008,7 +1008,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TENTACRUEL] =
+    [SPECIES_TENTACRUEL] =
     {
         .categoryName = _("Jellyfish"),
         .height = 16,
@@ -1020,7 +1020,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_GEODUDE] =
+    [SPECIES_GEODUDE] =
     {
         .categoryName = _("Rock"),
         .height = 4,
@@ -1032,7 +1032,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GRAVELER] =
+    [SPECIES_GRAVELER] =
     {
         .categoryName = _("Rock"),
         .height = 10,
@@ -1044,7 +1044,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOLEM] =
+    [SPECIES_GOLEM] =
     {
         .categoryName = _("Megaton"),
         .height = 14,
@@ -1056,7 +1056,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_PONYTA] =
+    [SPECIES_PONYTA] =
     {
         .categoryName = _("Fire Horse"),
         .height = 10,
@@ -1068,7 +1068,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RAPIDASH] =
+    [SPECIES_RAPIDASH] =
     {
         .categoryName = _("Fire Horse"),
         .height = 17,
@@ -1080,7 +1080,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_SLOWPOKE] =
+    [SPECIES_SLOWPOKE] =
     {
         .categoryName = _("Dopey"),
         .height = 12,
@@ -1092,7 +1092,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SLOWBRO] =
+    [SPECIES_SLOWBRO] =
     {
         .categoryName = _("Hermit Crab"),
         .height = 16,
@@ -1104,7 +1104,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_MAGNEMITE] =
+    [SPECIES_MAGNEMITE] =
     {
         .categoryName = _("Magnet"),
         .height = 3,
@@ -1116,7 +1116,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAGNETON] =
+    [SPECIES_MAGNETON] =
     {
         .categoryName = _("Magnet"),
         .height = 10,
@@ -1128,7 +1128,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FARFETCHD] =
+    [SPECIES_FARFETCHD] =
     {
         .categoryName = _("Wild Duck"),
         .height = 8,
@@ -1140,7 +1140,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_DODUO] =
+    [SPECIES_DODUO] =
     {
         .categoryName = _("Twin Bird"),
         .height = 14,
@@ -1152,7 +1152,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = -1,
     },
 
-    [NATIONAL_DEX_DODRIO] =
+    [SPECIES_DODRIO] =
     {
         .categoryName = _("Triple Bird"),
         .height = 18,
@@ -1164,7 +1164,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SEEL] =
+    [SPECIES_SEEL] =
     {
         .categoryName = _("Sea Lion"),
         .height = 11,
@@ -1176,7 +1176,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DEWGONG] =
+    [SPECIES_DEWGONG] =
     {
         .categoryName = _("Sea Lion"),
         .height = 17,
@@ -1188,7 +1188,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GRIMER] =
+    [SPECIES_GRIMER] =
     {
         .categoryName = _("Sludge"),
         .height = 9,
@@ -1200,7 +1200,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MUK] =
+    [SPECIES_MUK] =
     {
         .categoryName = _("Sludge"),
         .height = 12,
@@ -1212,7 +1212,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHELLDER] =
+    [SPECIES_SHELLDER] =
     {
         .categoryName = _("Bivalve"),
         .height = 3,
@@ -1224,7 +1224,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CLOYSTER] =
+    [SPECIES_CLOYSTER] =
     {
         .categoryName = _("Bivalve"),
         .height = 15,
@@ -1236,7 +1236,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_GASTLY] =
+    [SPECIES_GASTLY] =
     {
         .categoryName = _("Gas"),
         .height = 13,
@@ -1248,7 +1248,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HAUNTER] =
+    [SPECIES_HAUNTER] =
     {
         .categoryName = _("Gas"),
         .height = 16,
@@ -1260,7 +1260,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_GENGAR] =
+    [SPECIES_GENGAR] =
     {
         .categoryName = _("Shadow"),
         .height = 15,
@@ -1272,7 +1272,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_ONIX] =
+    [SPECIES_ONIX] =
     {
         .categoryName = _("Rock Snake"),
         .height = 88,
@@ -1284,7 +1284,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 14,
     },
 
-    [NATIONAL_DEX_DROWZEE] =
+    [SPECIES_DROWZEE] =
     {
         .categoryName = _("Hypnosis"),
         .height = 10,
@@ -1296,7 +1296,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HYPNO] =
+    [SPECIES_HYPNO] =
     {
         .categoryName = _("Hypnosis"),
         .height = 16,
@@ -1308,7 +1308,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KRABBY] =
+    [SPECIES_KRABBY] =
     {
         .categoryName = _("River Crab"),
         .height = 4,
@@ -1320,7 +1320,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KINGLER] =
+    [SPECIES_KINGLER] =
     {
         .categoryName = _("Pincer"),
         .height = 13,
@@ -1332,7 +1332,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VOLTORB] =
+    [SPECIES_VOLTORB] =
     {
         .categoryName = _("Ball"),
         .height = 5,
@@ -1344,7 +1344,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ELECTRODE] =
+    [SPECIES_ELECTRODE] =
     {
         .categoryName = _("Ball"),
         .height = 12,
@@ -1356,7 +1356,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_EXEGGCUTE] =
+    [SPECIES_EXEGGCUTE] =
     {
         .categoryName = _("Egg"),
         .height = 4,
@@ -1368,7 +1368,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_EXEGGUTOR] =
+    [SPECIES_EXEGGUTOR] =
     {
         .categoryName = _("Coconut"),
         .height = 20,
@@ -1380,7 +1380,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 5,
     },
 
-    [NATIONAL_DEX_CUBONE] =
+    [SPECIES_CUBONE] =
     {
         .categoryName = _("Lonely"),
         .height = 4,
@@ -1392,7 +1392,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAROWAK] =
+    [SPECIES_MAROWAK] =
     {
         .categoryName = _("Bone Keeper"),
         .height = 10,
@@ -1404,7 +1404,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HITMONLEE] =
+    [SPECIES_HITMONLEE] =
     {
         .categoryName = _("Kicking"),
         .height = 15,
@@ -1416,7 +1416,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_HITMONCHAN] =
+    [SPECIES_HITMONCHAN] =
     {
         .categoryName = _("Punching"),
         .height = 14,
@@ -1428,7 +1428,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_LICKITUNG] =
+    [SPECIES_LICKITUNG] =
     {
         .categoryName = _("Licking"),
         .height = 12,
@@ -1440,7 +1440,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KOFFING] =
+    [SPECIES_KOFFING] =
     {
         .categoryName = _("Poison Gas"),
         .height = 6,
@@ -1452,7 +1452,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WEEZING] =
+    [SPECIES_WEEZING] =
     {
         .categoryName = _("Poison Gas"),
         .height = 12,
@@ -1464,7 +1464,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RHYHORN] =
+    [SPECIES_RHYHORN] =
     {
         .categoryName = _("Spikes"),
         .height = 10,
@@ -1476,7 +1476,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RHYDON] =
+    [SPECIES_RHYDON] =
     {
         .categoryName = _("Drill"),
         .height = 19,
@@ -1488,7 +1488,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_CHANSEY] =
+    [SPECIES_CHANSEY] =
     {
         .categoryName = _("Egg"),
         .height = 11,
@@ -1500,7 +1500,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TANGELA] =
+    [SPECIES_TANGELA] =
     {
         .categoryName = _("Vine"),
         .height = 10,
@@ -1512,7 +1512,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KANGASKHAN] =
+    [SPECIES_KANGASKHAN] =
     {
         .categoryName = _("Parent"),
         .height = 22,
@@ -1524,7 +1524,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 8,
     },
 
-    [NATIONAL_DEX_HORSEA] =
+    [SPECIES_HORSEA] =
     {
         .categoryName = _("Dragon"),
         .height = 4,
@@ -1536,7 +1536,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SEADRA] =
+    [SPECIES_SEADRA] =
     {
         .categoryName = _("Dragon"),
         .height = 12,
@@ -1548,7 +1548,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOLDEEN] =
+    [SPECIES_GOLDEEN] =
     {
         .categoryName = _("Goldfish"),
         .height = 6,
@@ -1560,7 +1560,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SEAKING] =
+    [SPECIES_SEAKING] =
     {
         .categoryName = _("Goldfish"),
         .height = 13,
@@ -1572,7 +1572,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STARYU] =
+    [SPECIES_STARYU] =
     {
         .categoryName = _("Star Shape"),
         .height = 8,
@@ -1584,7 +1584,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STARMIE] =
+    [SPECIES_STARMIE] =
     {
         .categoryName = _("Mysterious"),
         .height = 11,
@@ -1596,7 +1596,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MR_MIME] =
+    [SPECIES_MR_MIME] =
     {
         .categoryName = _("Barrier"),
         .height = 13,
@@ -1608,7 +1608,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SCYTHER] =
+    [SPECIES_SCYTHER] =
     {
         .categoryName = _("Mantis"),
         .height = 15,
@@ -1620,7 +1620,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_JYNX] =
+    [SPECIES_JYNX] =
     {
         .categoryName = _("Human Shape"),
         .height = 14,
@@ -1632,7 +1632,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_ELECTABUZZ] =
+    [SPECIES_ELECTABUZZ] =
     {
         .categoryName = _("Electric"),
         .height = 11,
@@ -1644,7 +1644,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAGMAR] =
+    [SPECIES_MAGMAR] =
     {
         .categoryName = _("Spitfire"),
         .height = 13,
@@ -1656,7 +1656,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PINSIR] =
+    [SPECIES_PINSIR] =
     {
         .categoryName = _("Stag Beetle"),
         .height = 15,
@@ -1668,7 +1668,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TAUROS] =
+    [SPECIES_TAUROS] =
     {
         .categoryName = _("Wild Bull"),
         .height = 14,
@@ -1680,7 +1680,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAGIKARP] =
+    [SPECIES_MAGIKARP] =
     {
         .categoryName = _("Fish"),
         .height = 9,
@@ -1692,7 +1692,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GYARADOS] =
+    [SPECIES_GYARADOS] =
     {
         .categoryName = _("Atrocious"),
         .height = 65,
@@ -1704,7 +1704,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 13,
     },
 
-    [NATIONAL_DEX_LAPRAS] =
+    [SPECIES_LAPRAS] =
     {
         .categoryName = _("Transport"),
         .height = 25,
@@ -1716,7 +1716,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 8,
     },
 
-    [NATIONAL_DEX_DITTO] =
+    [SPECIES_DITTO] =
     {
         .categoryName = _("Transform"),
         .height = 3,
@@ -1728,7 +1728,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_EEVEE] =
+    [SPECIES_EEVEE] =
     {
         .categoryName = _("Evolution"),
         .height = 3,
@@ -1740,7 +1740,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VAPOREON] =
+    [SPECIES_VAPOREON] =
     {
         .categoryName = _("Bubble Jet"),
         .height = 10,
@@ -1752,7 +1752,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_JOLTEON] =
+    [SPECIES_JOLTEON] =
     {
         .categoryName = _("Lightning"),
         .height = 8,
@@ -1764,7 +1764,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLAREON] =
+    [SPECIES_FLAREON] =
     {
         .categoryName = _("Flame"),
         .height = 9,
@@ -1776,7 +1776,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PORYGON] =
+    [SPECIES_PORYGON] =
     {
         .categoryName = _("Virtual"),
         .height = 8,
@@ -1788,7 +1788,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_OMANYTE] =
+    [SPECIES_OMANYTE] =
     {
         .categoryName = _("Spiral"),
         .height = 4,
@@ -1800,7 +1800,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_OMASTAR] =
+    [SPECIES_OMASTAR] =
     {
         .categoryName = _("Spiral"),
         .height = 10,
@@ -1812,7 +1812,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KABUTO] =
+    [SPECIES_KABUTO] =
     {
         .categoryName = _("Shellfish"),
         .height = 5,
@@ -1824,7 +1824,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KABUTOPS] =
+    [SPECIES_KABUTOPS] =
     {
         .categoryName = _("Shellfish"),
         .height = 13,
@@ -1836,7 +1836,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AERODACTYL] =
+    [SPECIES_AERODACTYL] =
     {
         .categoryName = _("Fossil"),
         .height = 18,
@@ -1848,7 +1848,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 4,
     },
 
-    [NATIONAL_DEX_SNORLAX] =
+    [SPECIES_SNORLAX] =
     {
         .categoryName = _("Sleeping"),
         .height = 21,
@@ -1860,7 +1860,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 11,
     },
 
-    [NATIONAL_DEX_ARTICUNO] =
+    [SPECIES_ARTICUNO] =
     {
         .categoryName = _("Freeze"),
         .height = 17,
@@ -1872,7 +1872,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_ZAPDOS] =
+    [SPECIES_ZAPDOS] =
     {
         .categoryName = _("Electric"),
         .height = 16,
@@ -1884,7 +1884,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 3,
     },
 
-    [NATIONAL_DEX_MOLTRES] =
+    [SPECIES_MOLTRES] =
     {
         .categoryName = _("Flame"),
         .height = 20,
@@ -1896,7 +1896,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 8,
     },
 
-    [NATIONAL_DEX_DRATINI] =
+    [SPECIES_DRATINI] =
     {
         .categoryName = _("Dragon"),
         .height = 18,
@@ -1908,7 +1908,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 6,
     },
 
-    [NATIONAL_DEX_DRAGONAIR] =
+    [SPECIES_DRAGONAIR] =
     {
         .categoryName = _("Dragon"),
         .height = 40,
@@ -1920,7 +1920,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 5,
     },
 
-    [NATIONAL_DEX_DRAGONITE] =
+    [SPECIES_DRAGONITE] =
     {
         .categoryName = _("Dragon"),
         .height = 22,
@@ -1932,7 +1932,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 4,
     },
 
-    [NATIONAL_DEX_MEWTWO] =
+    [SPECIES_MEWTWO] =
     {
         .categoryName = _("Genetic"),
         .height = 20,
@@ -1944,7 +1944,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 4,
     },
 
-    [NATIONAL_DEX_MEW] =
+    [SPECIES_MEW] =
     {
         .categoryName = _("New Species"),
         .height = 4,
@@ -1956,7 +1956,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHIKORITA] =
+    [SPECIES_CHIKORITA] =
     {
         .categoryName = _("Leaf"),
         .height = 9,
@@ -1968,7 +1968,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BAYLEEF] =
+    [SPECIES_BAYLEEF] =
     {
         .categoryName = _("Leaf"),
         .height = 12,
@@ -1980,7 +1980,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MEGANIUM] =
+    [SPECIES_MEGANIUM] =
     {
         .categoryName = _("Herb"),
         .height = 18,
@@ -1992,7 +1992,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_CYNDAQUIL] =
+    [SPECIES_CYNDAQUIL] =
     {
         .categoryName = _("Fire Mouse"),
         .height = 5,
@@ -2004,7 +2004,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_QUILAVA] =
+    [SPECIES_QUILAVA] =
     {
         .categoryName = _("Volcano"),
         .height = 9,
@@ -2016,7 +2016,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TYPHLOSION] =
+    [SPECIES_TYPHLOSION] =
     {
         .categoryName = _("Volcano"),
         .height = 17,
@@ -2028,7 +2028,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_TOTODILE] =
+    [SPECIES_TOTODILE] =
     {
         .categoryName = _("Big Jaw"),
         .height = 6,
@@ -2040,7 +2040,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CROCONAW] =
+    [SPECIES_CROCONAW] =
     {
         .categoryName = _("Big Jaw"),
         .height = 11,
@@ -2052,7 +2052,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FERALIGATR] =
+    [SPECIES_FERALIGATR] =
     {
         .categoryName = _("Big Jaw"),
         .height = 23,
@@ -2064,7 +2064,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 7,
     },
 
-    [NATIONAL_DEX_SENTRET] =
+    [SPECIES_SENTRET] =
     {
         .categoryName = _("Scout"),
         .height = 8,
@@ -2076,7 +2076,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FURRET] =
+    [SPECIES_FURRET] =
     {
         .categoryName = _("Long Body"),
         .height = 18,
@@ -2088,7 +2088,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HOOTHOOT] =
+    [SPECIES_HOOTHOOT] =
     {
         .categoryName = _("Owl"),
         .height = 7,
@@ -2100,7 +2100,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NOCTOWL] =
+    [SPECIES_NOCTOWL] =
     {
         .categoryName = _("Owl"),
         .height = 16,
@@ -2112,7 +2112,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LEDYBA] =
+    [SPECIES_LEDYBA] =
     {
         .categoryName = _("Five Star"),
         .height = 10,
@@ -2124,7 +2124,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LEDIAN] =
+    [SPECIES_LEDIAN] =
     {
         .categoryName = _("Five Star"),
         .height = 14,
@@ -2136,7 +2136,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SPINARAK] =
+    [SPECIES_SPINARAK] =
     {
         .categoryName = _("String Spit"),
         .height = 5,
@@ -2148,7 +2148,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARIADOS] =
+    [SPECIES_ARIADOS] =
     {
         .categoryName = _("Long Leg"),
         .height = 11,
@@ -2160,7 +2160,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CROBAT] =
+    [SPECIES_CROBAT] =
     {
         .categoryName = _("Bat"),
         .height = 18,
@@ -2172,7 +2172,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_CHINCHOU] =
+    [SPECIES_CHINCHOU] =
     {
         .categoryName = _("Angler"),
         .height = 5,
@@ -2184,7 +2184,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LANTURN] =
+    [SPECIES_LANTURN] =
     {
         .categoryName = _("Light"),
         .height = 12,
@@ -2196,7 +2196,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PICHU] =
+    [SPECIES_PICHU] =
     {
         .categoryName = _("Tiny Mouse"),
         .height = 3,
@@ -2208,7 +2208,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CLEFFA] =
+    [SPECIES_CLEFFA] =
     {
         .categoryName = _("Star Shape"),
         .height = 3,
@@ -2220,7 +2220,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_IGGLYBUFF] =
+    [SPECIES_IGGLYBUFF] =
     {
         .categoryName = _("Balloon"),
         .height = 3,
@@ -2232,7 +2232,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TOGEPI] =
+    [SPECIES_TOGEPI] =
     {
         .categoryName = _("Spike Ball"),
         .height = 3,
@@ -2244,7 +2244,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TOGETIC] =
+    [SPECIES_TOGETIC] =
     {
         .categoryName = _("Happiness"),
         .height = 6,
@@ -2256,7 +2256,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NATU] =
+    [SPECIES_NATU] =
     {
         .categoryName = _("Tiny Bird"),
         .height = 2,
@@ -2268,7 +2268,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_XATU] =
+    [SPECIES_XATU] =
     {
         .categoryName = _("Mystic"),
         .height = 15,
@@ -2280,7 +2280,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 4,
     },
 
-    [NATIONAL_DEX_MAREEP] =
+    [SPECIES_MAREEP] =
     {
         .categoryName = _("Wool"),
         .height = 6,
@@ -2292,7 +2292,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLAAFFY] =
+    [SPECIES_FLAAFFY] =
     {
         .categoryName = _("Wool"),
         .height = 8,
@@ -2304,7 +2304,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AMPHAROS] =
+    [SPECIES_AMPHAROS] =
     {
         .categoryName = _("Light"),
         .height = 14,
@@ -2316,7 +2316,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BELLOSSOM] =
+    [SPECIES_BELLOSSOM] =
     {
         .categoryName = _("Flower"),
         .height = 4,
@@ -2328,7 +2328,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MARILL] =
+    [SPECIES_MARILL] =
     {
         .categoryName = _("Aqua Mouse"),
         .height = 4,
@@ -2340,7 +2340,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AZUMARILL] =
+    [SPECIES_AZUMARILL] =
     {
         .categoryName = _("Aqua Rabbit"),
         .height = 8,
@@ -2352,7 +2352,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SUDOWOODO] =
+    [SPECIES_SUDOWOODO] =
     {
         .categoryName = _("Imitation"),
         .height = 12,
@@ -2364,7 +2364,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_POLITOED] =
+    [SPECIES_POLITOED] =
     {
         .categoryName = _("Frog"),
         .height = 11,
@@ -2376,7 +2376,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HOPPIP] =
+    [SPECIES_HOPPIP] =
     {
         .categoryName = _("Cottonweed"),
         .height = 4,
@@ -2388,7 +2388,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SKIPLOOM] =
+    [SPECIES_SKIPLOOM] =
     {
         .categoryName = _("Cottonweed"),
         .height = 6,
@@ -2400,7 +2400,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_JUMPLUFF] =
+    [SPECIES_JUMPLUFF] =
     {
         .categoryName = _("Cottonweed"),
         .height = 8,
@@ -2412,7 +2412,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AIPOM] =
+    [SPECIES_AIPOM] =
     {
         .categoryName = _("Long Tail"),
         .height = 8,
@@ -2424,7 +2424,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SUNKERN] =
+    [SPECIES_SUNKERN] =
     {
         .categoryName = _("Seed"),
         .height = 3,
@@ -2436,7 +2436,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SUNFLORA] =
+    [SPECIES_SUNFLORA] =
     {
         .categoryName = _("Sun"),
         .height = 8,
@@ -2448,7 +2448,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_YANMA] =
+    [SPECIES_YANMA] =
     {
         .categoryName = _("Clear Wing"),
         .height = 12,
@@ -2460,7 +2460,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WOOPER] =
+    [SPECIES_WOOPER] =
     {
         .categoryName = _("Water Fish"),
         .height = 4,
@@ -2472,7 +2472,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_QUAGSIRE] =
+    [SPECIES_QUAGSIRE] =
     {
         .categoryName = _("Water Fish"),
         .height = 14,
@@ -2484,7 +2484,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ESPEON] =
+    [SPECIES_ESPEON] =
     {
         .categoryName = _("Sun"),
         .height = 9,
@@ -2496,7 +2496,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_UMBREON] =
+    [SPECIES_UMBREON] =
     {
         .categoryName = _("Moonlight"),
         .height = 10,
@@ -2508,7 +2508,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MURKROW] =
+    [SPECIES_MURKROW] =
     {
         .categoryName = _("Darkness"),
         .height = 5,
@@ -2520,7 +2520,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_SLOWKING] =
+    [SPECIES_SLOWKING] =
     {
         .categoryName = _("Royal"),
         .height = 20,
@@ -2532,7 +2532,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 5,
     },
 
-    [NATIONAL_DEX_MISDREAVUS] =
+    [SPECIES_MISDREAVUS] =
     {
         .categoryName = _("Screech"),
         .height = 7,
@@ -2544,7 +2544,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_UNOWN] =
+    [SPECIES_UNOWN] =
     {
         .categoryName = _("Symbol"),
         .height = 5,
@@ -2556,7 +2556,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WOBBUFFET] =
+    [SPECIES_WOBBUFFET] =
     {
         .categoryName = _("Patient"),
         .height = 13,
@@ -2568,7 +2568,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GIRAFARIG] =
+    [SPECIES_GIRAFARIG] =
     {
         .categoryName = _("Long Neck"),
         .height = 15,
@@ -2580,7 +2580,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PINECO] =
+    [SPECIES_PINECO] =
     {
         .categoryName = _("Bagworm"),
         .height = 6,
@@ -2592,7 +2592,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FORRETRESS] =
+    [SPECIES_FORRETRESS] =
     {
         .categoryName = _("Bagworm"),
         .height = 12,
@@ -2604,7 +2604,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DUNSPARCE] =
+    [SPECIES_DUNSPARCE] =
     {
         .categoryName = _("Land Snake"),
         .height = 15,
@@ -2616,7 +2616,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GLIGAR] =
+    [SPECIES_GLIGAR] =
     {
         .categoryName = _("Fly Scorpion"),
         .height = 11,
@@ -2628,7 +2628,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STEELIX] =
+    [SPECIES_STEELIX] =
     {
         .categoryName = _("Iron Snake"),
         .height = 92,
@@ -2640,7 +2640,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 13,
     },
 
-    [NATIONAL_DEX_SNUBBULL] =
+    [SPECIES_SNUBBULL] =
     {
         .categoryName = _("Fairy"),
         .height = 6,
@@ -2652,7 +2652,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GRANBULL] =
+    [SPECIES_GRANBULL] =
     {
         .categoryName = _("Fairy"),
         .height = 14,
@@ -2664,7 +2664,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_QWILFISH] =
+    [SPECIES_QWILFISH] =
     {
         .categoryName = _("Balloon"),
         .height = 5,
@@ -2676,7 +2676,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SCIZOR] =
+    [SPECIES_SCIZOR] =
     {
         .categoryName = _("Pincer"),
         .height = 18,
@@ -2688,7 +2688,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHUCKLE] =
+    [SPECIES_SHUCKLE] =
     {
         .categoryName = _("Mold"),
         .height = 6,
@@ -2700,7 +2700,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HERACROSS] =
+    [SPECIES_HERACROSS] =
     {
         .categoryName = _("Single Horn"),
         .height = 15,
@@ -2712,7 +2712,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SNEASEL] =
+    [SPECIES_SNEASEL] =
     {
         .categoryName = _("Sharp Claw"),
         .height = 9,
@@ -2724,7 +2724,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TEDDIURSA] =
+    [SPECIES_TEDDIURSA] =
     {
         .categoryName = _("Little Bear"),
         .height = 6,
@@ -2736,7 +2736,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_URSARING] =
+    [SPECIES_URSARING] =
     {
         .categoryName = _("Hibernator"),
         .height = 18,
@@ -2748,7 +2748,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SLUGMA] =
+    [SPECIES_SLUGMA] =
     {
         .categoryName = _("Lava"),
         .height = 7,
@@ -2760,7 +2760,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAGCARGO] =
+    [SPECIES_MAGCARGO] =
     {
         .categoryName = _("Lava"),
         .height = 8,
@@ -2772,7 +2772,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SWINUB] =
+    [SPECIES_SWINUB] =
     {
         .categoryName = _("Pig"),
         .height = 4,
@@ -2784,7 +2784,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PILOSWINE] =
+    [SPECIES_PILOSWINE] =
     {
         .categoryName = _("Swine"),
         .height = 11,
@@ -2796,7 +2796,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CORSOLA] =
+    [SPECIES_CORSOLA] =
     {
         .categoryName = _("Coral"),
         .height = 6,
@@ -2808,7 +2808,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_REMORAID] =
+    [SPECIES_REMORAID] =
     {
         .categoryName = _("Jet"),
         .height = 6,
@@ -2820,7 +2820,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_OCTILLERY] =
+    [SPECIES_OCTILLERY] =
     {
         .categoryName = _("Jet"),
         .height = 9,
@@ -2832,7 +2832,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DELIBIRD] =
+    [SPECIES_DELIBIRD] =
     {
         .categoryName = _("Delivery"),
         .height = 9,
@@ -2844,7 +2844,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MANTINE] =
+    [SPECIES_MANTINE] =
     {
         .categoryName = _("Kite"),
         .height = 21,
@@ -2856,7 +2856,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 7,
     },
 
-    [NATIONAL_DEX_SKARMORY] =
+    [SPECIES_SKARMORY] =
     {
         .categoryName = _("Armor Bird"),
         .height = 17,
@@ -2868,7 +2868,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_HOUNDOUR] =
+    [SPECIES_HOUNDOUR] =
     {
         .categoryName = _("Dark"),
         .height = 6,
@@ -2880,7 +2880,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HOUNDOOM] =
+    [SPECIES_HOUNDOOM] =
     {
         .categoryName = _("Dark"),
         .height = 14,
@@ -2892,7 +2892,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KINGDRA] =
+    [SPECIES_KINGDRA] =
     {
         .categoryName = _("Dragon"),
         .height = 18,
@@ -2904,7 +2904,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PHANPY] =
+    [SPECIES_PHANPY] =
     {
         .categoryName = _("Long Nose"),
         .height = 5,
@@ -2916,7 +2916,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DONPHAN] =
+    [SPECIES_DONPHAN] =
     {
         .categoryName = _("Armor"),
         .height = 11,
@@ -2928,7 +2928,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PORYGON2] =
+    [SPECIES_PORYGON2] =
     {
         .categoryName = _("Virtual"),
         .height = 6,
@@ -2940,7 +2940,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STANTLER] =
+    [SPECIES_STANTLER] =
     {
         .categoryName = _("Big Horn"),
         .height = 14,
@@ -2952,7 +2952,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SMEARGLE] =
+    [SPECIES_SMEARGLE] =
     {
         .categoryName = _("Painter"),
         .height = 12,
@@ -2964,7 +2964,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TYROGUE] =
+    [SPECIES_TYROGUE] =
     {
         .categoryName = _("Scuffle"),
         .height = 7,
@@ -2976,7 +2976,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HITMONTOP] =
+    [SPECIES_HITMONTOP] =
     {
         .categoryName = _("Handstand"),
         .height = 14,
@@ -2988,7 +2988,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SMOOCHUM] =
+    [SPECIES_SMOOCHUM] =
     {
         .categoryName = _("Kiss"),
         .height = 4,
@@ -3000,7 +3000,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ELEKID] =
+    [SPECIES_ELEKID] =
     {
         .categoryName = _("Electric"),
         .height = 6,
@@ -3012,7 +3012,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAGBY] =
+    [SPECIES_MAGBY] =
     {
         .categoryName = _("Live Coal"),
         .height = 7,
@@ -3024,7 +3024,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MILTANK] =
+    [SPECIES_MILTANK] =
     {
         .categoryName = _("Milk Cow"),
         .height = 12,
@@ -3036,7 +3036,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BLISSEY] =
+    [SPECIES_BLISSEY] =
     {
         .categoryName = _("Happiness"),
         .height = 15,
@@ -3048,7 +3048,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 3,
     },
 
-    [NATIONAL_DEX_RAIKOU] =
+    [SPECIES_RAIKOU] =
     {
         .categoryName = _("Thunder"),
         .height = 19,
@@ -3060,7 +3060,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 7,
     },
 
-    [NATIONAL_DEX_ENTEI] =
+    [SPECIES_ENTEI] =
     {
         .categoryName = _("Volcano"),
         .height = 21,
@@ -3072,7 +3072,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 7,
     },
 
-    [NATIONAL_DEX_SUICUNE] =
+    [SPECIES_SUICUNE] =
     {
         .categoryName = _("Aurora"),
         .height = 20,
@@ -3084,7 +3084,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 7,
     },
 
-    [NATIONAL_DEX_LARVITAR] =
+    [SPECIES_LARVITAR] =
     {
         .categoryName = _("Rock Skin"),
         .height = 6,
@@ -3096,7 +3096,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PUPITAR] =
+    [SPECIES_PUPITAR] =
     {
         .categoryName = _("Hard Shell"),
         .height = 12,
@@ -3108,7 +3108,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TYRANITAR] =
+    [SPECIES_TYRANITAR] =
     {
         .categoryName = _("Armor"),
         .height = 20,
@@ -3120,7 +3120,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 7,
     },
 
-    [NATIONAL_DEX_LUGIA] =
+    [SPECIES_LUGIA] =
     {
         .categoryName = _("Diving"),
         .height = 52,
@@ -3132,7 +3132,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 19,
     },
 
-    [NATIONAL_DEX_HO_OH] =
+    [SPECIES_HO_OH] =
     {
         .categoryName = _("Rainbow"),
         .height = 38,
@@ -3144,7 +3144,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 17,
     },
 
-    [NATIONAL_DEX_CELEBI] =
+    [SPECIES_CELEBI] =
     {
         .categoryName = _("Time Travel"),
         .height = 6,
@@ -3156,7 +3156,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TREECKO] =
+    [SPECIES_TREECKO] =
     {
         .categoryName = _("Wood Gecko"),
         .height = 5,
@@ -3168,7 +3168,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GROVYLE] =
+    [SPECIES_GROVYLE] =
     {
         .categoryName = _("Wood Gecko"),
         .height = 9,
@@ -3180,7 +3180,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SCEPTILE] =
+    [SPECIES_SCEPTILE] =
     {
         .categoryName = _("Forest"),
         .height = 17,
@@ -3192,7 +3192,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_TORCHIC] =
+    [SPECIES_TORCHIC] =
     {
         .categoryName = _("Chick"),
         .height = 4,
@@ -3204,7 +3204,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_COMBUSKEN] =
+    [SPECIES_COMBUSKEN] =
     {
         .categoryName = _("Young Fowl"),
         .height = 9,
@@ -3216,7 +3216,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BLAZIKEN] =
+    [SPECIES_BLAZIKEN] =
     {
         .categoryName = _("Blaze"),
         .height = 19,
@@ -3228,7 +3228,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 4,
     },
 
-    [NATIONAL_DEX_MUDKIP] =
+    [SPECIES_MUDKIP] =
     {
         .categoryName = _("Mud Fish"),
         .height = 4,
@@ -3240,7 +3240,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MARSHTOMP] =
+    [SPECIES_MARSHTOMP] =
     {
         .categoryName = _("Mud Fish"),
         .height = 7,
@@ -3252,7 +3252,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SWAMPERT] =
+    [SPECIES_SWAMPERT] =
     {
         .categoryName = _("Mud Fish"),
         .height = 15,
@@ -3264,7 +3264,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_POOCHYENA] =
+    [SPECIES_POOCHYENA] =
     {
         .categoryName = _("Bite"),
         .height = 5,
@@ -3276,7 +3276,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MIGHTYENA] =
+    [SPECIES_MIGHTYENA] =
     {
         .categoryName = _("Bite"),
         .height = 10,
@@ -3288,7 +3288,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ZIGZAGOON] =
+    [SPECIES_ZIGZAGOON] =
     {
         .categoryName = _("Tiny Raccoon"),
         .height = 4,
@@ -3300,7 +3300,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LINOONE] =
+    [SPECIES_LINOONE] =
     {
         .categoryName = _("Rushing"),
         .height = 5,
@@ -3312,7 +3312,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WURMPLE] =
+    [SPECIES_WURMPLE] =
     {
         .categoryName = _("Worm"),
         .height = 3,
@@ -3324,7 +3324,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SILCOON] =
+    [SPECIES_SILCOON] =
     {
         .categoryName = _("Cocoon"),
         .height = 6,
@@ -3336,7 +3336,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BEAUTIFLY] =
+    [SPECIES_BEAUTIFLY] =
     {
         .categoryName = _("Butterfly"),
         .height = 10,
@@ -3348,7 +3348,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CASCOON] =
+    [SPECIES_CASCOON] =
     {
         .categoryName = _("Cocoon"),
         .height = 7,
@@ -3360,7 +3360,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DUSTOX] =
+    [SPECIES_DUSTOX] =
     {
         .categoryName = _("Poison Moth"),
         .height = 12,
@@ -3372,7 +3372,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LOTAD] =
+    [SPECIES_LOTAD] =
     {
         .categoryName = _("Water Weed"),
         .height = 5,
@@ -3384,7 +3384,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LOMBRE] =
+    [SPECIES_LOMBRE] =
     {
         .categoryName = _("Jolly"),
         .height = 12,
@@ -3396,7 +3396,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LUDICOLO] =
+    [SPECIES_LUDICOLO] =
     {
         .categoryName = _("Carefree"),
         .height = 15,
@@ -3408,7 +3408,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = -1,
     },
 
-    [NATIONAL_DEX_SEEDOT] =
+    [SPECIES_SEEDOT] =
     {
         .categoryName = _("Acorn"),
         .height = 5,
@@ -3420,7 +3420,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NUZLEAF] =
+    [SPECIES_NUZLEAF] =
     {
         .categoryName = _("Wily"),
         .height = 10,
@@ -3432,7 +3432,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHIFTRY] =
+    [SPECIES_SHIFTRY] =
     {
         .categoryName = _("Wicked"),
         .height = 13,
@@ -3444,7 +3444,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TAILLOW] =
+    [SPECIES_TAILLOW] =
     {
         .categoryName = _("Tiny Swallow"),
         .height = 3,
@@ -3456,7 +3456,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SWELLOW] =
+    [SPECIES_SWELLOW] =
     {
         .categoryName = _("Swallow"),
         .height = 7,
@@ -3468,7 +3468,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WINGULL] =
+    [SPECIES_WINGULL] =
     {
         .categoryName = _("Seagull"),
         .height = 6,
@@ -3480,7 +3480,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PELIPPER] =
+    [SPECIES_PELIPPER] =
     {
         .categoryName = _("Water Bird"),
         .height = 12,
@@ -3492,7 +3492,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RALTS] =
+    [SPECIES_RALTS] =
     {
         .categoryName = _("Feeling"),
         .height = 4,
@@ -3504,7 +3504,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KIRLIA] =
+    [SPECIES_KIRLIA] =
     {
         .categoryName = _("Emotion"),
         .height = 8,
@@ -3516,7 +3516,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GARDEVOIR] =
+    [SPECIES_GARDEVOIR] =
     {
         .categoryName = _("Embrace"),
         .height = 16,
@@ -3528,7 +3528,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SURSKIT] =
+    [SPECIES_SURSKIT] =
     {
         .categoryName = _("Pond Skater"),
         .height = 5,
@@ -3540,7 +3540,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MASQUERAIN] =
+    [SPECIES_MASQUERAIN] =
     {
         .categoryName = _("Eyeball"),
         .height = 8,
@@ -3552,7 +3552,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHROOMISH] =
+    [SPECIES_SHROOMISH] =
     {
         .categoryName = _("Mushroom"),
         .height = 4,
@@ -3564,7 +3564,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BRELOOM] =
+    [SPECIES_BRELOOM] =
     {
         .categoryName = _("Mushroom"),
         .height = 12,
@@ -3576,7 +3576,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SLAKOTH] =
+    [SPECIES_SLAKOTH] =
     {
         .categoryName = _("Slacker"),
         .height = 8,
@@ -3588,7 +3588,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VIGOROTH] =
+    [SPECIES_VIGOROTH] =
     {
         .categoryName = _("Wild Monkey"),
         .height = 14,
@@ -3600,7 +3600,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SLAKING] =
+    [SPECIES_SLAKING] =
     {
         .categoryName = _("Lazy"),
         .height = 20,
@@ -3612,7 +3612,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_NINCADA] =
+    [SPECIES_NINCADA] =
     {
         .categoryName = _("Trainee"),
         .height = 5,
@@ -3624,7 +3624,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NINJASK] =
+    [SPECIES_NINJASK] =
     {
         .categoryName = _("Ninja"),
         .height = 8,
@@ -3636,7 +3636,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHEDINJA] =
+    [SPECIES_SHEDINJA] =
     {
         .categoryName = _("Shed"),
         .height = 8,
@@ -3648,7 +3648,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WHISMUR] =
+    [SPECIES_WHISMUR] =
     {
         .categoryName = _("Whisper"),
         .height = 6,
@@ -3660,7 +3660,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LOUDRED] =
+    [SPECIES_LOUDRED] =
     {
         .categoryName = _("Big Voice"),
         .height = 10,
@@ -3672,7 +3672,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_EXPLOUD] =
+    [SPECIES_EXPLOUD] =
     {
         .categoryName = _("Loud Noise"),
         .height = 15,
@@ -3684,7 +3684,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAKUHITA] =
+    [SPECIES_MAKUHITA] =
     {
         .categoryName = _("Guts"),
         .height = 10,
@@ -3696,7 +3696,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HARIYAMA] =
+    [SPECIES_HARIYAMA] =
     {
         .categoryName = _("Arm Thrust"),
         .height = 23,
@@ -3708,7 +3708,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 7,
     },
 
-    [NATIONAL_DEX_AZURILL] =
+    [SPECIES_AZURILL] =
     {
         .categoryName = _("Polka Dot"),
         .height = 2,
@@ -3720,7 +3720,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NOSEPASS] =
+    [SPECIES_NOSEPASS] =
     {
         .categoryName = _("Compass"),
         .height = 10,
@@ -3732,7 +3732,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 3,
     },
 
-    [NATIONAL_DEX_SKITTY] =
+    [SPECIES_SKITTY] =
     {
         .categoryName = _("Kitten"),
         .height = 6,
@@ -3744,7 +3744,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DELCATTY] =
+    [SPECIES_DELCATTY] =
     {
         .categoryName = _("Prim"),
         .height = 11,
@@ -3756,7 +3756,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SABLEYE] =
+    [SPECIES_SABLEYE] =
     {
         .categoryName = _("Darkness"),
         .height = 5,
@@ -3768,7 +3768,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAWILE] =
+    [SPECIES_MAWILE] =
     {
         .categoryName = _("Deceiver"),
         .height = 6,
@@ -3780,7 +3780,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARON] =
+    [SPECIES_ARON] =
     {
         .categoryName = _("Iron Armor"),
         .height = 4,
@@ -3792,7 +3792,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LAIRON] =
+    [SPECIES_LAIRON] =
     {
         .categoryName = _("Iron Armor"),
         .height = 9,
@@ -3804,7 +3804,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AGGRON] =
+    [SPECIES_AGGRON] =
     {
         .categoryName = _("Iron Armor"),
         .height = 21,
@@ -3816,7 +3816,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 6,
     },
 
-    [NATIONAL_DEX_MEDITITE] =
+    [SPECIES_MEDITITE] =
     {
         .categoryName = _("Meditate"),
         .height = 6,
@@ -3828,7 +3828,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MEDICHAM] =
+    [SPECIES_MEDICHAM] =
     {
         .categoryName = _("Meditate"),
         .height = 13,
@@ -3840,7 +3840,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ELECTRIKE] =
+    [SPECIES_ELECTRIKE] =
     {
         .categoryName = _("Lightning"),
         .height = 6,
@@ -3852,7 +3852,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MANECTRIC] =
+    [SPECIES_MANECTRIC] =
     {
         .categoryName = _("Discharge"),
         .height = 15,
@@ -3864,7 +3864,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PLUSLE] =
+    [SPECIES_PLUSLE] =
     {
         .categoryName = _("Cheering"),
         .height = 4,
@@ -3876,7 +3876,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MINUN] =
+    [SPECIES_MINUN] =
     {
         .categoryName = _("Cheering"),
         .height = 4,
@@ -3888,7 +3888,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VOLBEAT] =
+    [SPECIES_VOLBEAT] =
     {
         .categoryName = _("Firefly"),
         .height = 7,
@@ -3900,7 +3900,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ILLUMISE] =
+    [SPECIES_ILLUMISE] =
     {
         .categoryName = _("Firefly"),
         .height = 6,
@@ -3912,7 +3912,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ROSELIA] =
+    [SPECIES_ROSELIA] =
     {
         .categoryName = _("Thorn"),
         .height = 3,
@@ -3924,7 +3924,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GULPIN] =
+    [SPECIES_GULPIN] =
     {
         .categoryName = _("Stomach"),
         .height = 4,
@@ -3936,7 +3936,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SWALOT] =
+    [SPECIES_SWALOT] =
     {
         .categoryName = _("Poison Bag"),
         .height = 17,
@@ -3948,7 +3948,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 3,
     },
 
-    [NATIONAL_DEX_CARVANHA] =
+    [SPECIES_CARVANHA] =
     {
         .categoryName = _("Savage"),
         .height = 8,
@@ -3960,7 +3960,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHARPEDO] =
+    [SPECIES_SHARPEDO] =
     {
         .categoryName = _("Brutal"),
         .height = 18,
@@ -3972,7 +3972,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 3,
     },
 
-    [NATIONAL_DEX_WAILMER] =
+    [SPECIES_WAILMER] =
     {
         .categoryName = _("Ball Whale"),
         .height = 20,
@@ -3984,7 +3984,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WAILORD] =
+    [SPECIES_WAILORD] =
     {
         .categoryName = _("Float Whale"),
         .height = 145,
@@ -3996,7 +3996,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 18,
     },
 
-    [NATIONAL_DEX_NUMEL] =
+    [SPECIES_NUMEL] =
     {
         .categoryName = _("Numb"),
         .height = 7,
@@ -4008,7 +4008,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CAMERUPT] =
+    [SPECIES_CAMERUPT] =
     {
         .categoryName = _("Eruption"),
         .height = 19,
@@ -4020,7 +4020,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 6,
     },
 
-    [NATIONAL_DEX_TORKOAL] =
+    [SPECIES_TORKOAL] =
     {
         .categoryName = _("Coal"),
         .height = 5,
@@ -4032,7 +4032,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SPOINK] =
+    [SPECIES_SPOINK] =
     {
         .categoryName = _("Bounce"),
         .height = 7,
@@ -4044,7 +4044,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GRUMPIG] =
+    [SPECIES_GRUMPIG] =
     {
         .categoryName = _("Manipulate"),
         .height = 9,
@@ -4056,7 +4056,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SPINDA] =
+    [SPECIES_SPINDA] =
     {
         .categoryName = _("Spot Panda"),
         .height = 11,
@@ -4068,7 +4068,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TRAPINCH] =
+    [SPECIES_TRAPINCH] =
     {
         .categoryName = _("Ant Pit"),
         .height = 7,
@@ -4080,7 +4080,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VIBRAVA] =
+    [SPECIES_VIBRAVA] =
     {
         .categoryName = _("Vibration"),
         .height = 11,
@@ -4092,7 +4092,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLYGON] =
+    [SPECIES_FLYGON] =
     {
         .categoryName = _("Mystic"),
         .height = 20,
@@ -4104,7 +4104,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_CACNEA] =
+    [SPECIES_CACNEA] =
     {
         .categoryName = _("Cactus"),
         .height = 4,
@@ -4116,7 +4116,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CACTURNE] =
+    [SPECIES_CACTURNE] =
     {
         .categoryName = _("Scarecrow"),
         .height = 13,
@@ -4128,7 +4128,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SWABLU] =
+    [SPECIES_SWABLU] =
     {
         .categoryName = _("Cotton Bird"),
         .height = 4,
@@ -4140,7 +4140,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ALTARIA] =
+    [SPECIES_ALTARIA] =
     {
         .categoryName = _("Humming"),
         .height = 11,
@@ -4152,7 +4152,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ZANGOOSE] =
+    [SPECIES_ZANGOOSE] =
     {
         .categoryName = _("Cat Ferret"),
         .height = 13,
@@ -4164,7 +4164,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SEVIPER] =
+    [SPECIES_SEVIPER] =
     {
         .categoryName = _("Fang Snake"),
         .height = 27,
@@ -4176,7 +4176,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LUNATONE] =
+    [SPECIES_LUNATONE] =
     {
         .categoryName = _("Meteorite"),
         .height = 10,
@@ -4188,7 +4188,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SOLROCK] =
+    [SPECIES_SOLROCK] =
     {
         .categoryName = _("Meteorite"),
         .height = 12,
@@ -4200,7 +4200,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BARBOACH] =
+    [SPECIES_BARBOACH] =
     {
         .categoryName = _("Whiskers"),
         .height = 4,
@@ -4212,7 +4212,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WHISCASH] =
+    [SPECIES_WHISCASH] =
     {
         .categoryName = _("Whiskers"),
         .height = 9,
@@ -4224,7 +4224,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CORPHISH] =
+    [SPECIES_CORPHISH] =
     {
         .categoryName = _("Ruffian"),
         .height = 6,
@@ -4236,7 +4236,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CRAWDAUNT] =
+    [SPECIES_CRAWDAUNT] =
     {
         .categoryName = _("Rogue"),
         .height = 11,
@@ -4248,7 +4248,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BALTOY] =
+    [SPECIES_BALTOY] =
     {
         .categoryName = _("Clay Doll"),
         .height = 5,
@@ -4260,7 +4260,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CLAYDOL] =
+    [SPECIES_CLAYDOL] =
     {
         .categoryName = _("Clay Doll"),
         .height = 15,
@@ -4272,7 +4272,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_LILEEP] =
+    [SPECIES_LILEEP] =
     {
         .categoryName = _("Sea Lily"),
         .height = 10,
@@ -4284,7 +4284,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CRADILY] =
+    [SPECIES_CRADILY] =
     {
         .categoryName = _("Barnacle"),
         .height = 15,
@@ -4296,7 +4296,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ANORITH] =
+    [SPECIES_ANORITH] =
     {
         .categoryName = _("Old Shrimp"),
         .height = 7,
@@ -4308,7 +4308,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARMALDO] =
+    [SPECIES_ARMALDO] =
     {
         .categoryName = _("Plate"),
         .height = 15,
@@ -4320,7 +4320,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FEEBAS] =
+    [SPECIES_FEEBAS] =
     {
         .categoryName = _("Fish"),
         .height = 6,
@@ -4332,7 +4332,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MILOTIC] =
+    [SPECIES_MILOTIC] =
     {
         .categoryName = _("Tender"),
         .height = 62,
@@ -4344,7 +4344,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 7,
     },
 
-    [NATIONAL_DEX_CASTFORM] =
+    [SPECIES_CASTFORM] =
     {
         .categoryName = _("Weather"),
         .height = 3,
@@ -4356,7 +4356,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KECLEON] =
+    [SPECIES_KECLEON] =
     {
         .categoryName = _("Color Swap"),
         .height = 10,
@@ -4368,7 +4368,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHUPPET] =
+    [SPECIES_SHUPPET] =
     {
         .categoryName = _("Puppet"),
         .height = 6,
@@ -4380,7 +4380,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BANETTE] =
+    [SPECIES_BANETTE] =
     {
         .categoryName = _("Marionette"),
         .height = 11,
@@ -4392,7 +4392,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DUSKULL] =
+    [SPECIES_DUSKULL] =
     {
         .categoryName = _("Requiem"),
         .height = 8,
@@ -4404,7 +4404,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DUSCLOPS] =
+    [SPECIES_DUSCLOPS] =
     {
         .categoryName = _("Beckon"),
         .height = 16,
@@ -4416,7 +4416,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_TROPIUS] =
+    [SPECIES_TROPIUS] =
     {
         .categoryName = _("Fruit"),
         .height = 20,
@@ -4428,7 +4428,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 7,
     },
 
-    [NATIONAL_DEX_CHIMECHO] =
+    [SPECIES_CHIMECHO] =
     {
         .categoryName = _("Wind Chime"),
         .height = 6,
@@ -4440,7 +4440,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ABSOL] =
+    [SPECIES_ABSOL] =
     {
         .categoryName = _("Disaster"),
         .height = 12,
@@ -4452,7 +4452,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WYNAUT] =
+    [SPECIES_WYNAUT] =
     {
         .categoryName = _("Bright"),
         .height = 6,
@@ -4464,7 +4464,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SNORUNT] =
+    [SPECIES_SNORUNT] =
     {
         .categoryName = _("Snow Hat"),
         .height = 7,
@@ -4476,7 +4476,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GLALIE] =
+    [SPECIES_GLALIE] =
     {
         .categoryName = _("Face"),
         .height = 15,
@@ -4488,7 +4488,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SPHEAL] =
+    [SPECIES_SPHEAL] =
     {
         .categoryName = _("Clap"),
         .height = 8,
@@ -4500,7 +4500,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SEALEO] =
+    [SPECIES_SEALEO] =
     {
         .categoryName = _("Ball Roll"),
         .height = 11,
@@ -4512,7 +4512,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WALREIN] =
+    [SPECIES_WALREIN] =
     {
         .categoryName = _("Ice Break"),
         .height = 14,
@@ -4524,7 +4524,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CLAMPERL] =
+    [SPECIES_CLAMPERL] =
     {
         .categoryName = _("Bivalve"),
         .height = 4,
@@ -4536,7 +4536,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HUNTAIL] =
+    [SPECIES_HUNTAIL] =
     {
         .categoryName = _("Deep Sea"),
         .height = 17,
@@ -4548,7 +4548,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOREBYSS] =
+    [SPECIES_GOREBYSS] =
     {
         .categoryName = _("South Sea"),
         .height = 18,
@@ -4560,7 +4560,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RELICANTH] =
+    [SPECIES_RELICANTH] =
     {
         .categoryName = _("Longevity"),
         .height = 10,
@@ -4572,7 +4572,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LUVDISC] =
+    [SPECIES_LUVDISC] =
     {
         .categoryName = _("Rendezvous"),
         .height = 6,
@@ -4584,7 +4584,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BAGON] =
+    [SPECIES_BAGON] =
     {
         .categoryName = _("Rock Head"),
         .height = 6,
@@ -4596,7 +4596,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHELGON] =
+    [SPECIES_SHELGON] =
     {
         .categoryName = _("Endurance"),
         .height = 11,
@@ -4608,7 +4608,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SALAMENCE] =
+    [SPECIES_SALAMENCE] =
     {
         .categoryName = _("Dragon"),
         .height = 15,
@@ -4620,7 +4620,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BELDUM] =
+    [SPECIES_BELDUM] =
     {
         .categoryName = _("Iron Ball"),
         .height = 6,
@@ -4632,7 +4632,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_METANG] =
+    [SPECIES_METANG] =
     {
         .categoryName = _("Iron Claw"),
         .height = 12,
@@ -4644,7 +4644,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_METAGROSS] =
+    [SPECIES_METAGROSS] =
     {
         .categoryName = _("Iron Leg"),
         .height = 16,
@@ -4656,7 +4656,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 9,
     },
 
-    [NATIONAL_DEX_REGIROCK] =
+    [SPECIES_REGIROCK] =
     {
         .categoryName = _("Rock Peak"),
         .height = 17,
@@ -4668,7 +4668,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 1,
     },
 
-    [NATIONAL_DEX_REGICE] =
+    [SPECIES_REGICE] =
     {
         .categoryName = _("Iceberg"),
         .height = 18,
@@ -4680,7 +4680,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_REGISTEEL] =
+    [SPECIES_REGISTEEL] =
     {
         .categoryName = _("Iron"),
         .height = 19,
@@ -4692,7 +4692,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 6,
     },
 
-    [NATIONAL_DEX_LATIAS] =
+    [SPECIES_LATIAS] =
     {
         .categoryName = _("Eon"),
         .height = 14,
@@ -4704,7 +4704,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LATIOS] =
+    [SPECIES_LATIOS] =
     {
         .categoryName = _("Eon"),
         .height = 20,
@@ -4716,7 +4716,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 3,
     },
 
-    [NATIONAL_DEX_KYOGRE] =
+    [SPECIES_KYOGRE] =
     {
         .categoryName = _("Sea Basin"),
         .height = 45,
@@ -4728,7 +4728,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 13,
     },
 
-    [NATIONAL_DEX_GROUDON] =
+    [SPECIES_GROUDON] =
     {
         .categoryName = _("Continent"),
         .height = 35,
@@ -4740,7 +4740,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 14,
     },
 
-    [NATIONAL_DEX_RAYQUAZA] =
+    [SPECIES_RAYQUAZA] =
     {
         .categoryName = _("Sky High"),
         .height = 70,
@@ -4752,7 +4752,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 12,
     },
 
-    [NATIONAL_DEX_JIRACHI] =
+    [SPECIES_JIRACHI] =
     {
         .categoryName = _("Wish"),
         .height = 3,
@@ -4764,7 +4764,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DEOXYS] =
+    [SPECIES_DEOXYS] =
     {
         .categoryName = _("DNA"),
         .height = 17,
@@ -4776,7 +4776,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_TURTWIG] =
+    [SPECIES_TURTWIG] =
     {
         .categoryName = _("Tiny Leaf"),
         .height = 4,
@@ -4788,7 +4788,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GROTLE] =
+    [SPECIES_GROTLE] =
     {
         .categoryName = _("Grove"),
         .height = 11,
@@ -4800,7 +4800,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TORTERRA] =
+    [SPECIES_TORTERRA] =
     {
         .categoryName = _("Continent"),
         .height = 22,
@@ -4812,7 +4812,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHIMCHAR] =
+    [SPECIES_CHIMCHAR] =
     {
         .categoryName = _("Chimp"),
         .height = 5,
@@ -4824,7 +4824,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MONFERNO] =
+    [SPECIES_MONFERNO] =
     {
         .categoryName = _("Playful"),
         .height = 9,
@@ -4836,7 +4836,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_INFERNAPE] =
+    [SPECIES_INFERNAPE] =
     {
         .categoryName = _("Flame"),
         .height = 12,
@@ -4848,7 +4848,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PIPLUP] =
+    [SPECIES_PIPLUP] =
     {
         .categoryName = _("Penguin"),
         .height = 4,
@@ -4860,7 +4860,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PRINPLUP] =
+    [SPECIES_PRINPLUP] =
     {
         .categoryName = _("Penguin"),
         .height = 8,
@@ -4872,7 +4872,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_EMPOLEON] =
+    [SPECIES_EMPOLEON] =
     {
         .categoryName = _("Emperor"),
         .height = 17,
@@ -4884,7 +4884,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STARLY] =
+    [SPECIES_STARLY] =
     {
         .categoryName = _("Starling"),
         .height = 3,
@@ -4896,7 +4896,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STARAVIA] =
+    [SPECIES_STARAVIA] =
     {
         .categoryName = _("Starling"),
         .height = 6,
@@ -4908,7 +4908,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STARAPTOR] =
+    [SPECIES_STARAPTOR] =
     {
         .categoryName = _("Predator"),
         .height = 12,
@@ -4920,7 +4920,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BIDOOF] =
+    [SPECIES_BIDOOF] =
     {
         .categoryName = _("Plump Mouse"),
         .height = 5,
@@ -4932,7 +4932,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BIBAREL] =
+    [SPECIES_BIBAREL] =
     {
         .categoryName = _("Beaver"),
         .height = 10,
@@ -4944,7 +4944,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KRICKETOT] =
+    [SPECIES_KRICKETOT] =
     {
         .categoryName = _("Cricket"),
         .height = 3,
@@ -4956,7 +4956,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KRICKETUNE] =
+    [SPECIES_KRICKETUNE] =
     {
         .categoryName = _("Cricket"),
         .height = 10,
@@ -4968,7 +4968,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHINX] =
+    [SPECIES_SHINX] =
     {
         .categoryName = _("Flash"),
         .height = 5,
@@ -4980,7 +4980,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LUXIO] =
+    [SPECIES_LUXIO] =
     {
         .categoryName = _("Spark"),
         .height = 9,
@@ -4992,7 +4992,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LUXRAY] =
+    [SPECIES_LUXRAY] =
     {
         .categoryName = _("Gleam Eyes"),
         .height = 14,
@@ -5004,7 +5004,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BUDEW] =
+    [SPECIES_BUDEW] =
     {
         .categoryName = _("Bud"),
         .height = 2,
@@ -5016,7 +5016,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ROSERADE] =
+    [SPECIES_ROSERADE] =
     {
         .categoryName = _("Bouquet"),
         .height = 9,
@@ -5028,7 +5028,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CRANIDOS] =
+    [SPECIES_CRANIDOS] =
     {
         .categoryName = _("Head Butt"),
         .height = 9,
@@ -5040,7 +5040,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RAMPARDOS] =
+    [SPECIES_RAMPARDOS] =
     {
         .categoryName = _("Head Butt"),
         .height = 16,
@@ -5052,7 +5052,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHIELDON] =
+    [SPECIES_SHIELDON] =
     {
         .categoryName = _("Shield"),
         .height = 5,
@@ -5064,7 +5064,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BASTIODON] =
+    [SPECIES_BASTIODON] =
     {
         .categoryName = _("Shield"),
         .height = 13,
@@ -5076,7 +5076,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BURMY] =
+    [SPECIES_BURMY] =
     {
         .categoryName = _("Bagworm"),
         .height = 2,
@@ -5088,7 +5088,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WORMADAM] =
+    [SPECIES_WORMADAM] =
     {
         .categoryName = _("Bagworm"),
         .height = 5,
@@ -5100,7 +5100,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MOTHIM] =
+    [SPECIES_MOTHIM] =
     {
         .categoryName = _("Moth"),
         .height = 9,
@@ -5112,7 +5112,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_COMBEE] =
+    [SPECIES_COMBEE] =
     {
         .categoryName = _("Tiny Bee"),
         .height = 3,
@@ -5124,7 +5124,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VESPIQUEN] =
+    [SPECIES_VESPIQUEN] =
     {
         .categoryName = _("Beehive"),
         .height = 12,
@@ -5136,7 +5136,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PACHIRISU] =
+    [SPECIES_PACHIRISU] =
     {
         .categoryName = _("EleSquirrel"),
         .height = 4,
@@ -5148,7 +5148,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BUIZEL] =
+    [SPECIES_BUIZEL] =
     {
         .categoryName = _("Sea Weasel"),
         .height = 7,
@@ -5160,7 +5160,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLOATZEL] =
+    [SPECIES_FLOATZEL] =
     {
         .categoryName = _("Sea Weasel"),
         .height = 11,
@@ -5172,7 +5172,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHERUBI] =
+    [SPECIES_CHERUBI] =
     {
         .categoryName = _("Cherry"),
         .height = 4,
@@ -5184,7 +5184,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHERRIM] =
+    [SPECIES_CHERRIM] =
     {
         .categoryName = _("Blossom"),
         .height = 5,
@@ -5196,7 +5196,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHELLOS] =
+    [SPECIES_SHELLOS] =
     {
         .categoryName = _("Sea Slug"),
         .height = 3,
@@ -5208,7 +5208,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GASTRODON] =
+    [SPECIES_GASTRODON] =
     {
         .categoryName = _("Sea Slug"),
         .height = 9,
@@ -5220,7 +5220,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AMBIPOM] =
+    [SPECIES_AMBIPOM] =
     {
         .categoryName = _("Long Tail"),
         .height = 12,
@@ -5232,7 +5232,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DRIFLOON] =
+    [SPECIES_DRIFLOON] =
     {
         .categoryName = _("Balloon"),
         .height = 4,
@@ -5244,7 +5244,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DRIFBLIM] =
+    [SPECIES_DRIFBLIM] =
     {
         .categoryName = _("Blimp"),
         .height = 12,
@@ -5256,7 +5256,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BUNEARY] =
+    [SPECIES_BUNEARY] =
     {
         .categoryName = _("Rabbit"),
         .height = 4,
@@ -5268,7 +5268,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LOPUNNY] =
+    [SPECIES_LOPUNNY] =
     {
         .categoryName = _("Rabbit"),
         .height = 12,
@@ -5280,7 +5280,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MISMAGIUS] =
+    [SPECIES_MISMAGIUS] =
     {
         .categoryName = _("Magical"),
         .height = 9,
@@ -5292,7 +5292,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HONCHKROW] =
+    [SPECIES_HONCHKROW] =
     {
         .categoryName = _("Big Boss"),
         .height = 9,
@@ -5304,7 +5304,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GLAMEOW] =
+    [SPECIES_GLAMEOW] =
     {
         .categoryName = _("Catty"),
         .height = 5,
@@ -5316,7 +5316,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PURUGLY] =
+    [SPECIES_PURUGLY] =
     {
         .categoryName = _("Tiger Cat"),
         .height = 10,
@@ -5328,7 +5328,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHINGLING] =
+    [SPECIES_CHINGLING] =
     {
         .categoryName = _("Bell"),
         .height = 2,
@@ -5340,7 +5340,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STUNKY] =
+    [SPECIES_STUNKY] =
     {
         .categoryName = _("Skunk"),
         .height = 4,
@@ -5352,7 +5352,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SKUNTANK] =
+    [SPECIES_SKUNTANK] =
     {
         .categoryName = _("Skunk"),
         .height = 10,
@@ -5364,7 +5364,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BRONZOR] =
+    [SPECIES_BRONZOR] =
     {
         .categoryName = _("Bronze"),
         .height = 5,
@@ -5376,7 +5376,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BRONZONG] =
+    [SPECIES_BRONZONG] =
     {
         .categoryName = _("Bronze Bell"),
         .height = 13,
@@ -5388,7 +5388,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BONSLY] =
+    [SPECIES_BONSLY] =
     {
         .categoryName = _("Bonsai"),
         .height = 5,
@@ -5400,7 +5400,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MIME_JR] =
+    [SPECIES_MIME_JR] =
     {
         .categoryName = _("Mime"),
         .height = 6,
@@ -5412,7 +5412,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HAPPINY] =
+    [SPECIES_HAPPINY] =
     {
         .categoryName = _("Playhouse"),
         .height = 6,
@@ -5424,7 +5424,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHATOT] =
+    [SPECIES_CHATOT] =
     {
         .categoryName = _("Music Note"),
         .height = 5,
@@ -5436,7 +5436,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SPIRITOMB] =
+    [SPECIES_SPIRITOMB] =
     {
         .categoryName = _("Forbidden"),
         .height = 10,
@@ -5448,7 +5448,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GIBLE] =
+    [SPECIES_GIBLE] =
     {
         .categoryName = _("Land Shark"),
         .height = 7,
@@ -5460,7 +5460,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GABITE] =
+    [SPECIES_GABITE] =
     {
         .categoryName = _("Cave"),
         .height = 14,
@@ -5472,7 +5472,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GARCHOMP] =
+    [SPECIES_GARCHOMP] =
     {
         .categoryName = _("Mach"),
         .height = 19,
@@ -5484,7 +5484,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MUNCHLAX] =
+    [SPECIES_MUNCHLAX] =
     {
         .categoryName = _("Big Eater"),
         .height = 6,
@@ -5496,7 +5496,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RIOLU] =
+    [SPECIES_RIOLU] =
     {
         .categoryName = _("Emanation"),
         .height = 7,
@@ -5508,7 +5508,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LUCARIO] =
+    [SPECIES_LUCARIO] =
     {
         .categoryName = _("Aura"),
         .height = 12,
@@ -5520,7 +5520,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HIPPOPOTAS] =
+    [SPECIES_HIPPOPOTAS] =
     {
         .categoryName = _("Hippo"),
         .height = 8,
@@ -5532,7 +5532,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HIPPOWDON] =
+    [SPECIES_HIPPOWDON] =
     {
         .categoryName = _("Heavyweight"),
         .height = 20,
@@ -5544,7 +5544,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SKORUPI] =
+    [SPECIES_SKORUPI] =
     {
         .categoryName = _("Scorpion"),
         .height = 8,
@@ -5556,7 +5556,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DRAPION] =
+    [SPECIES_DRAPION] =
     {
         .categoryName = _("Ogre Scorp"),
         .height = 13,
@@ -5568,7 +5568,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CROAGUNK] =
+    [SPECIES_CROAGUNK] =
     {
         .categoryName = _("Toxic Mouth"),
         .height = 7,
@@ -5580,7 +5580,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TOXICROAK] =
+    [SPECIES_TOXICROAK] =
     {
         .categoryName = _("Toxic Mouth"),
         .height = 13,
@@ -5592,7 +5592,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CARNIVINE] =
+    [SPECIES_CARNIVINE] =
     {
         .categoryName = _("Bug Catcher"),
         .height = 14,
@@ -5604,7 +5604,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FINNEON] =
+    [SPECIES_FINNEON] =
     {
         .categoryName = _("Wing Fish"),
         .height = 4,
@@ -5616,7 +5616,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LUMINEON] =
+    [SPECIES_LUMINEON] =
     {
         .categoryName = _("Neon"),
         .height = 12,
@@ -5628,7 +5628,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MANTYKE] =
+    [SPECIES_MANTYKE] =
     {
         .categoryName = _("Kite"),
         .height = 10,
@@ -5640,7 +5640,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SNOVER] =
+    [SPECIES_SNOVER] =
     {
         .categoryName = _("Frost Tree"),
         .height = 10,
@@ -5652,7 +5652,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ABOMASNOW] =
+    [SPECIES_ABOMASNOW] =
     {
         .categoryName = _("Frost Tree"),
         .height = 22,
@@ -5664,7 +5664,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WEAVILE] =
+    [SPECIES_WEAVILE] =
     {
         .categoryName = _("Sharp Claw"),
         .height = 11,
@@ -5676,7 +5676,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAGNEZONE] =
+    [SPECIES_MAGNEZONE] =
     {
         .categoryName = _("Magnet Area"),
         .height = 12,
@@ -5688,7 +5688,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LICKILICKY] =
+    [SPECIES_LICKILICKY] =
     {
         .categoryName = _("Licking"),
         .height = 17,
@@ -5700,7 +5700,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RHYPERIOR] =
+    [SPECIES_RHYPERIOR] =
     {
         .categoryName = _("Drill"),
         .height = 24,
@@ -5712,7 +5712,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TANGROWTH] =
+    [SPECIES_TANGROWTH] =
     {
         .categoryName = _("Vine"),
         .height = 20,
@@ -5724,7 +5724,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ELECTIVIRE] =
+    [SPECIES_ELECTIVIRE] =
     {
         .categoryName = _("Thunderbolt"),
         .height = 18,
@@ -5736,7 +5736,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAGMORTAR] =
+    [SPECIES_MAGMORTAR] =
     {
         .categoryName = _("Blast"),
         .height = 16,
@@ -5748,7 +5748,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TOGEKISS] =
+    [SPECIES_TOGEKISS] =
     {
         .categoryName = _("Jubilee"),
         .height = 15,
@@ -5760,7 +5760,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_YANMEGA] =
+    [SPECIES_YANMEGA] =
     {
         .categoryName = _("Ogre Darner"),
         .height = 19,
@@ -5772,7 +5772,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LEAFEON] =
+    [SPECIES_LEAFEON] =
     {
         .categoryName = _("Verdant"),
         .height = 10,
@@ -5784,7 +5784,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GLACEON] =
+    [SPECIES_GLACEON] =
     {
         .categoryName = _("Fresh Snow"),
         .height = 8,
@@ -5796,7 +5796,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GLISCOR] =
+    [SPECIES_GLISCOR] =
     {
         .categoryName = _("Fang Scorp"),
         .height = 20,
@@ -5808,7 +5808,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAMOSWINE] =
+    [SPECIES_MAMOSWINE] =
     {
         .categoryName = _("Twin Tusk"),
         .height = 25,
@@ -5820,7 +5820,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PORYGON_Z] =
+    [SPECIES_PORYGON_Z] =
     {
         .categoryName = _("Virtual"),
         .height = 9,
@@ -5832,7 +5832,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GALLADE] =
+    [SPECIES_GALLADE] =
     {
         .categoryName = _("Blade"),
         .height = 16,
@@ -5844,7 +5844,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PROBOPASS] =
+    [SPECIES_PROBOPASS] =
     {
         .categoryName = _("Compass"),
         .height = 14,
@@ -5856,7 +5856,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DUSKNOIR] =
+    [SPECIES_DUSKNOIR] =
     {
         .categoryName = _("Gripper"),
         .height = 22,
@@ -5868,7 +5868,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FROSLASS] =
+    [SPECIES_FROSLASS] =
     {
         .categoryName = _("Snow Land"),
         .height = 13,
@@ -5880,7 +5880,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ROTOM] =
+    [SPECIES_ROTOM] =
     {
         .categoryName = _("Plasma"),
         .height = 3,
@@ -5892,7 +5892,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_UXIE] =
+    [SPECIES_UXIE] =
     {
         .categoryName = _("Knowledge"),
         .height = 3,
@@ -5904,7 +5904,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MESPRIT] =
+    [SPECIES_MESPRIT] =
     {
         .categoryName = _("Emotion"),
         .height = 3,
@@ -5916,7 +5916,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AZELF] =
+    [SPECIES_AZELF] =
     {
         .categoryName = _("Willpower"),
         .height = 3,
@@ -5928,7 +5928,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DIALGA] =
+    [SPECIES_DIALGA] =
     {
         .categoryName = _("Temporal"),
         .height = 54,
@@ -5940,7 +5940,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PALKIA] =
+    [SPECIES_PALKIA] =
     {
         .categoryName = _("Spatial"),
         .height = 42,
@@ -5952,7 +5952,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HEATRAN] =
+    [SPECIES_HEATRAN] =
     {
         .categoryName = _("Lava Dome"),
         .height = 17,
@@ -5964,7 +5964,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_REGIGIGAS] =
+    [SPECIES_REGIGIGAS] =
     {
         .categoryName = _("Colossal"),
         .height = 37,
@@ -5976,7 +5976,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GIRATINA] =
+    [SPECIES_GIRATINA] =
     {
         .categoryName = _("Renegade"),
         .height = 45,
@@ -5988,7 +5988,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CRESSELIA] =
+    [SPECIES_CRESSELIA] =
     {
         .categoryName = _("Lunar"),
         .height = 15,
@@ -6000,7 +6000,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PHIONE] =
+    [SPECIES_PHIONE] =
     {
         .categoryName = _("Sea Drifter"),
         .height = 4,
@@ -6012,7 +6012,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MANAPHY] =
+    [SPECIES_MANAPHY] =
     {
         .categoryName = _("Seafaring"),
         .height = 3,
@@ -6024,7 +6024,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DARKRAI] =
+    [SPECIES_DARKRAI] =
     {
         .categoryName = _("Pitch-Black"),
         .height = 15,
@@ -6036,7 +6036,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHAYMIN] =
+    [SPECIES_SHAYMIN] =
     {
         .categoryName = _("Gratitude"),
         .height = 2,
@@ -6048,7 +6048,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARCEUS] =
+    [SPECIES_ARCEUS] =
     {
         .categoryName = _("Alpha"),
         .height = 32,
@@ -6060,7 +6060,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VICTINI] =
+    [SPECIES_VICTINI] =
     {
         .categoryName = _("Victory"),
         .height = 4,
@@ -6072,7 +6072,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SNIVY] =
+    [SPECIES_SNIVY] =
     {
         .categoryName = _("Grass Snake"),
         .height = 6,
@@ -6084,7 +6084,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SERVINE] =
+    [SPECIES_SERVINE] =
     {
         .categoryName = _("Grass Snake"),
         .height = 8,
@@ -6096,7 +6096,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SERPERIOR] =
+    [SPECIES_SERPERIOR] =
     {
         .categoryName = _("Regal"),
         .height = 33,
@@ -6108,7 +6108,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TEPIG] =
+    [SPECIES_TEPIG] =
     {
         .categoryName = _("Fire Pig"),
         .height = 5,
@@ -6120,7 +6120,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PIGNITE] =
+    [SPECIES_PIGNITE] =
     {
         .categoryName = _("Fire Pig"),
         .height = 10,
@@ -6132,7 +6132,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_EMBOAR] =
+    [SPECIES_EMBOAR] =
     {
         .categoryName = _("Fire Pig"),
         .height = 16,
@@ -6144,7 +6144,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_OSHAWOTT] =
+    [SPECIES_OSHAWOTT] =
     {
         .categoryName = _("Sea Otter"),
         .height = 5,
@@ -6156,7 +6156,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DEWOTT] =
+    [SPECIES_DEWOTT] =
     {
         .categoryName = _("Discipline"),
         .height = 8,
@@ -6168,7 +6168,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SAMUROTT] =
+    [SPECIES_SAMUROTT] =
     {
         .categoryName = _("Formidable"),
         .height = 15,
@@ -6180,7 +6180,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PATRAT] =
+    [SPECIES_PATRAT] =
     {
         .categoryName = _("Scout"),
         .height = 5,
@@ -6192,7 +6192,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WATCHOG] =
+    [SPECIES_WATCHOG] =
     {
         .categoryName = _("Lookout"),
         .height = 11,
@@ -6204,7 +6204,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LILLIPUP] =
+    [SPECIES_LILLIPUP] =
     {
         .categoryName = _("Puppy"),
         .height = 4,
@@ -6216,7 +6216,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HERDIER] =
+    [SPECIES_HERDIER] =
     {
         .categoryName = _("Loyal Dog"),
         .height = 9,
@@ -6228,7 +6228,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STOUTLAND] =
+    [SPECIES_STOUTLAND] =
     {
         .categoryName = _("Big-Hearted"),
         .height = 12,
@@ -6240,7 +6240,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PURRLOIN] =
+    [SPECIES_PURRLOIN] =
     {
         .categoryName = _("Devious"),
         .height = 4,
@@ -6252,7 +6252,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LIEPARD] =
+    [SPECIES_LIEPARD] =
     {
         .categoryName = _("Cruel"),
         .height = 11,
@@ -6264,7 +6264,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PANSAGE] =
+    [SPECIES_PANSAGE] =
     {
         .categoryName = _("Grass Monkey"),
         .height = 6,
@@ -6276,7 +6276,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SIMISAGE] =
+    [SPECIES_SIMISAGE] =
     {
         .categoryName = _("Thorn Monkey"),
         .height = 11,
@@ -6288,7 +6288,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PANSEAR] =
+    [SPECIES_PANSEAR] =
     {
         .categoryName = _("High Temp"),
         .height = 6,
@@ -6300,7 +6300,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SIMISEAR] =
+    [SPECIES_SIMISEAR] =
     {
         .categoryName = _("Ember"),
         .height = 10,
@@ -6312,7 +6312,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PANPOUR] =
+    [SPECIES_PANPOUR] =
     {
         .categoryName = _("Spray"),
         .height = 6,
@@ -6324,7 +6324,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SIMIPOUR] =
+    [SPECIES_SIMIPOUR] =
     {
         .categoryName = _("Geyser"),
         .height = 10,
@@ -6336,7 +6336,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MUNNA] =
+    [SPECIES_MUNNA] =
     {
         .categoryName = _("Dream Eater"),
         .height = 6,
@@ -6348,7 +6348,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MUSHARNA] =
+    [SPECIES_MUSHARNA] =
     {
         .categoryName = _("Drowsing"),
         .height = 11,
@@ -6360,7 +6360,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PIDOVE] =
+    [SPECIES_PIDOVE] =
     {
         .categoryName = _("Tiny Pigeon"),
         .height = 3,
@@ -6372,7 +6372,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TRANQUILL] =
+    [SPECIES_TRANQUILL] =
     {
         .categoryName = _("Wild Pigeon"),
         .height = 6,
@@ -6384,7 +6384,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_UNFEZANT] =
+    [SPECIES_UNFEZANT] =
     {
         .categoryName = _("Proud"),
         .height = 12,
@@ -6396,7 +6396,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BLITZLE] =
+    [SPECIES_BLITZLE] =
     {
         .categoryName = _("Electrified"),
         .height = 8,
@@ -6408,7 +6408,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ZEBSTRIKA] =
+    [SPECIES_ZEBSTRIKA] =
     {
         .categoryName = _("Thunderbolt"),
         .height = 16,
@@ -6420,7 +6420,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ROGGENROLA] =
+    [SPECIES_ROGGENROLA] =
     {
         .categoryName = _("Mantle"),
         .height = 4,
@@ -6432,7 +6432,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BOLDORE] =
+    [SPECIES_BOLDORE] =
     {
         .categoryName = _("Ore"),
         .height = 9,
@@ -6444,7 +6444,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GIGALITH] =
+    [SPECIES_GIGALITH] =
     {
         .categoryName = _("Compressed"),
         .height = 17,
@@ -6456,7 +6456,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WOOBAT] =
+    [SPECIES_WOOBAT] =
     {
         .categoryName = _("Bat"),
         .height = 4,
@@ -6468,7 +6468,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SWOOBAT] =
+    [SPECIES_SWOOBAT] =
     {
         .categoryName = _("Courting"),
         .height = 9,
@@ -6480,7 +6480,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DRILBUR] =
+    [SPECIES_DRILBUR] =
     {
         .categoryName = _("Mole"),
         .height = 3,
@@ -6492,7 +6492,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_EXCADRILL] =
+    [SPECIES_EXCADRILL] =
     {
         .categoryName = _("Subterrene"),
         .height = 7,
@@ -6504,7 +6504,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AUDINO] =
+    [SPECIES_AUDINO] =
     {
         .categoryName = _("Hearing"),
         .height = 11,
@@ -6516,7 +6516,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TIMBURR] =
+    [SPECIES_TIMBURR] =
     {
         .categoryName = _("Muscular"),
         .height = 6,
@@ -6528,7 +6528,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GURDURR] =
+    [SPECIES_GURDURR] =
     {
         .categoryName = _("Muscular"),
         .height = 12,
@@ -6540,7 +6540,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CONKELDURR] =
+    [SPECIES_CONKELDURR] =
     {
         .categoryName = _("Muscular"),
         .height = 14,
@@ -6552,7 +6552,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TYMPOLE] =
+    [SPECIES_TYMPOLE] =
     {
         .categoryName = _("Tadpole"),
         .height = 5,
@@ -6564,7 +6564,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PALPITOAD] =
+    [SPECIES_PALPITOAD] =
     {
         .categoryName = _("Vibration"),
         .height = 8,
@@ -6576,7 +6576,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SEISMITOAD] =
+    [SPECIES_SEISMITOAD] =
     {
         .categoryName = _("Vibration"),
         .height = 15,
@@ -6588,7 +6588,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_THROH] =
+    [SPECIES_THROH] =
     {
         .categoryName = _("Judo"),
         .height = 13,
@@ -6600,7 +6600,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SAWK] =
+    [SPECIES_SAWK] =
     {
         .categoryName = _("Karate"),
         .height = 14,
@@ -6612,7 +6612,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SEWADDLE] =
+    [SPECIES_SEWADDLE] =
     {
         .categoryName = _("Sewing"),
         .height = 3,
@@ -6624,7 +6624,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SWADLOON] =
+    [SPECIES_SWADLOON] =
     {
         .categoryName = _("Leaf-Wrapped"),
         .height = 5,
@@ -6636,7 +6636,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LEAVANNY] =
+    [SPECIES_LEAVANNY] =
     {
         .categoryName = _("Nurturing"),
         .height = 12,
@@ -6648,7 +6648,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VENIPEDE] =
+    [SPECIES_VENIPEDE] =
     {
         .categoryName = _("Centipede"),
         .height = 4,
@@ -6660,7 +6660,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WHIRLIPEDE] =
+    [SPECIES_WHIRLIPEDE] =
     {
         .categoryName = _("Curlipede"),
         .height = 12,
@@ -6672,7 +6672,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SCOLIPEDE] =
+    [SPECIES_SCOLIPEDE] =
     {
         .categoryName = _("Megapede"),
         .height = 25,
@@ -6684,7 +6684,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_COTTONEE] =
+    [SPECIES_COTTONEE] =
     {
         .categoryName = _("Cotton Puff"),
         .height = 3,
@@ -6696,7 +6696,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WHIMSICOTT] =
+    [SPECIES_WHIMSICOTT] =
     {
         .categoryName = _("Windveiled"),
         .height = 7,
@@ -6708,7 +6708,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PETILIL] =
+    [SPECIES_PETILIL] =
     {
         .categoryName = _("Bulb"),
         .height = 5,
@@ -6720,7 +6720,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LILLIGANT] =
+    [SPECIES_LILLIGANT] =
     {
         .categoryName = _("Flowering"),
         .height = 11,
@@ -6732,7 +6732,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BASCULIN] =
+    [SPECIES_BASCULIN] =
     {
         .categoryName = _("Hostile"),
         .height = 10,
@@ -6744,7 +6744,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SANDILE] =
+    [SPECIES_SANDILE] =
     {
         .categoryName = _("Desert Croc"),
         .height = 7,
@@ -6756,7 +6756,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KROKOROK] =
+    [SPECIES_KROKOROK] =
     {
         .categoryName = _("Desert Croc"),
         .height = 10,
@@ -6768,7 +6768,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KROOKODILE] =
+    [SPECIES_KROOKODILE] =
     {
         .categoryName = _("Intimidate"),
         .height = 15,
@@ -6780,7 +6780,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DARUMAKA] =
+    [SPECIES_DARUMAKA] =
     {
         .categoryName = _("Zen Charm"),
         .height = 6,
@@ -6792,7 +6792,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DARMANITAN] =
+    [SPECIES_DARMANITAN] =
     {
         .categoryName = _("Blazing"),
         .height = 13,
@@ -6804,7 +6804,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MARACTUS] =
+    [SPECIES_MARACTUS] =
     {
         .categoryName = _("Cactus"),
         .height = 10,
@@ -6816,7 +6816,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DWEBBLE] =
+    [SPECIES_DWEBBLE] =
     {
         .categoryName = _("Rock Inn"),
         .height = 3,
@@ -6828,7 +6828,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CRUSTLE] =
+    [SPECIES_CRUSTLE] =
     {
         .categoryName = _("Stone Home"),
         .height = 14,
@@ -6840,7 +6840,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SCRAGGY] =
+    [SPECIES_SCRAGGY] =
     {
         .categoryName = _("Shedding"),
         .height = 6,
@@ -6852,7 +6852,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SCRAFTY] =
+    [SPECIES_SCRAFTY] =
     {
         .categoryName = _("Hoodlum"),
         .height = 11,
@@ -6864,7 +6864,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SIGILYPH] =
+    [SPECIES_SIGILYPH] =
     {
         .categoryName = _("Avianoid"),
         .height = 14,
@@ -6876,7 +6876,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_YAMASK] =
+    [SPECIES_YAMASK] =
     {
         .categoryName = _("Spirit"),
         .height = 5,
@@ -6888,7 +6888,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_COFAGRIGUS] =
+    [SPECIES_COFAGRIGUS] =
     {
         .categoryName = _("Coffin"),
         .height = 17,
@@ -6900,7 +6900,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TIRTOUGA] =
+    [SPECIES_TIRTOUGA] =
     {
         .categoryName = _("Prototurtle"),
         .height = 7,
@@ -6912,7 +6912,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CARRACOSTA] =
+    [SPECIES_CARRACOSTA] =
     {
         .categoryName = _("Prototurtle"),
         .height = 12,
@@ -6924,7 +6924,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARCHEN] =
+    [SPECIES_ARCHEN] =
     {
         .categoryName = _("First Bird"),
         .height = 5,
@@ -6936,7 +6936,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARCHEOPS] =
+    [SPECIES_ARCHEOPS] =
     {
         .categoryName = _("First Bird"),
         .height = 14,
@@ -6948,7 +6948,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TRUBBISH] =
+    [SPECIES_TRUBBISH] =
     {
         .categoryName = _("Trash Bag"),
         .height = 6,
@@ -6960,7 +6960,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GARBODOR] =
+    [SPECIES_GARBODOR] =
     {
         .categoryName = _("Trash Heap"),
         .height = 19,
@@ -6972,7 +6972,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ZORUA] =
+    [SPECIES_ZORUA] =
     {
         .categoryName = _("Tricky Fox"),
         .height = 7,
@@ -6984,7 +6984,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ZOROARK] =
+    [SPECIES_ZOROARK] =
     {
         .categoryName = _("Illusion Fox"),
         .height = 16,
@@ -6996,7 +6996,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MINCCINO] =
+    [SPECIES_MINCCINO] =
     {
         .categoryName = _("Chinchilla"),
         .height = 4,
@@ -7008,7 +7008,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CINCCINO] =
+    [SPECIES_CINCCINO] =
     {
         .categoryName = _("Scarf"),
         .height = 5,
@@ -7020,7 +7020,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOTHITA] =
+    [SPECIES_GOTHITA] =
     {
         .categoryName = _("Fixation"),
         .height = 4,
@@ -7032,7 +7032,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOTHORITA] =
+    [SPECIES_GOTHORITA] =
     {
         .categoryName = _("Manipulate"),
         .height = 7,
@@ -7044,7 +7044,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOTHITELLE] =
+    [SPECIES_GOTHITELLE] =
     {
         .categoryName = _("Astral Body"),
         .height = 15,
@@ -7056,7 +7056,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SOLOSIS] =
+    [SPECIES_SOLOSIS] =
     {
         .categoryName = _("Cell"),
         .height = 3,
@@ -7068,7 +7068,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DUOSION] =
+    [SPECIES_DUOSION] =
     {
         .categoryName = _("Mitosis"),
         .height = 6,
@@ -7080,7 +7080,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_REUNICLUS] =
+    [SPECIES_REUNICLUS] =
     {
         .categoryName = _("Multiplying"),
         .height = 10,
@@ -7092,7 +7092,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DUCKLETT] =
+    [SPECIES_DUCKLETT] =
     {
         .categoryName = _("Water Bird"),
         .height = 5,
@@ -7104,7 +7104,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SWANNA] =
+    [SPECIES_SWANNA] =
     {
         .categoryName = _("White Bird"),
         .height = 13,
@@ -7116,7 +7116,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VANILLITE] =
+    [SPECIES_VANILLITE] =
     {
         .categoryName = _("Fresh Snow"),
         .height = 4,
@@ -7128,7 +7128,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VANILLISH] =
+    [SPECIES_VANILLISH] =
     {
         .categoryName = _("Icy Snow"),
         .height = 11,
@@ -7140,7 +7140,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VANILLUXE] =
+    [SPECIES_VANILLUXE] =
     {
         .categoryName = _("Snowstorm"),
         .height = 13,
@@ -7152,7 +7152,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DEERLING] =
+    [SPECIES_DEERLING] =
     {
         .categoryName = _("Season"),
         .height = 6,
@@ -7164,7 +7164,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SAWSBUCK] =
+    [SPECIES_SAWSBUCK] =
     {
         .categoryName = _("Season"),
         .height = 19,
@@ -7176,7 +7176,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_EMOLGA] =
+    [SPECIES_EMOLGA] =
     {
         .categoryName = _("Sky Squirrel"),
         .height = 4,
@@ -7188,7 +7188,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KARRABLAST] =
+    [SPECIES_KARRABLAST] =
     {
         .categoryName = _("Clamping"),
         .height = 5,
@@ -7200,7 +7200,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ESCAVALIER] =
+    [SPECIES_ESCAVALIER] =
     {
         .categoryName = _("Cavalry"),
         .height = 10,
@@ -7212,7 +7212,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FOONGUS] =
+    [SPECIES_FOONGUS] =
     {
         .categoryName = _("Mushroom"),
         .height = 2,
@@ -7224,7 +7224,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AMOONGUSS] =
+    [SPECIES_AMOONGUSS] =
     {
         .categoryName = _("Mushroom"),
         .height = 6,
@@ -7236,7 +7236,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FRILLISH] =
+    [SPECIES_FRILLISH] =
     {
         .categoryName = _("Floating"),
         .height = 12,
@@ -7248,7 +7248,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_JELLICENT] =
+    [SPECIES_JELLICENT] =
     {
         .categoryName = _("Floating"),
         .height = 22,
@@ -7260,7 +7260,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ALOMOMOLA] =
+    [SPECIES_ALOMOMOLA] =
     {
         .categoryName = _("Caring"),
         .height = 12,
@@ -7272,7 +7272,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_JOLTIK] =
+    [SPECIES_JOLTIK] =
     {
         .categoryName = _("Attaching"),
         .height = 1,
@@ -7284,7 +7284,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GALVANTULA] =
+    [SPECIES_GALVANTULA] =
     {
         .categoryName = _("EleSpider"),
         .height = 8,
@@ -7296,7 +7296,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FERROSEED] =
+    [SPECIES_FERROSEED] =
     {
         .categoryName = _("Thorn Seed"),
         .height = 6,
@@ -7308,7 +7308,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FERROTHORN] =
+    [SPECIES_FERROTHORN] =
     {
         .categoryName = _("Thorn Pod"),
         .height = 10,
@@ -7320,7 +7320,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KLINK] =
+    [SPECIES_KLINK] =
     {
         .categoryName = _("Gear"),
         .height = 3,
@@ -7332,7 +7332,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KLANG] =
+    [SPECIES_KLANG] =
     {
         .categoryName = _("Gear"),
         .height = 6,
@@ -7344,7 +7344,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KLINKLANG] =
+    [SPECIES_KLINKLANG] =
     {
         .categoryName = _("Gear"),
         .height = 6,
@@ -7356,7 +7356,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TYNAMO] =
+    [SPECIES_TYNAMO] =
     {
         .categoryName = _("EleFish"),
         .height = 2,
@@ -7368,7 +7368,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_EELEKTRIK] =
+    [SPECIES_EELEKTRIK] =
     {
         .categoryName = _("EleFish"),
         .height = 12,
@@ -7380,7 +7380,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_EELEKTROSS] =
+    [SPECIES_EELEKTROSS] =
     {
         .categoryName = _("EleFish"),
         .height = 21,
@@ -7392,7 +7392,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ELGYEM] =
+    [SPECIES_ELGYEM] =
     {
         .categoryName = _("Cerebral"),
         .height = 5,
@@ -7404,7 +7404,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BEHEEYEM] =
+    [SPECIES_BEHEEYEM] =
     {
         .categoryName = _("Cerebral"),
         .height = 10,
@@ -7416,7 +7416,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LITWICK] =
+    [SPECIES_LITWICK] =
     {
         .categoryName = _("Candle"),
         .height = 3,
@@ -7428,7 +7428,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LAMPENT] =
+    [SPECIES_LAMPENT] =
     {
         .categoryName = _("Lamp"),
         .height = 6,
@@ -7440,7 +7440,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHANDELURE] =
+    [SPECIES_CHANDELURE] =
     {
         .categoryName = _("Luring"),
         .height = 10,
@@ -7452,7 +7452,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AXEW] =
+    [SPECIES_AXEW] =
     {
         .categoryName = _("Tusk"),
         .height = 6,
@@ -7464,7 +7464,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FRAXURE] =
+    [SPECIES_FRAXURE] =
     {
         .categoryName = _("Axe Jaw"),
         .height = 10,
@@ -7476,7 +7476,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HAXORUS] =
+    [SPECIES_HAXORUS] =
     {
         .categoryName = _("Axe Jaw"),
         .height = 18,
@@ -7488,7 +7488,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CUBCHOO] =
+    [SPECIES_CUBCHOO] =
     {
         .categoryName = _("Chill"),
         .height = 5,
@@ -7500,7 +7500,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BEARTIC] =
+    [SPECIES_BEARTIC] =
     {
         .categoryName = _("Freezing"),
         .height = 26,
@@ -7512,7 +7512,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CRYOGONAL] =
+    [SPECIES_CRYOGONAL] =
     {
         .categoryName = _("Crystallize"),
         .height = 11,
@@ -7524,7 +7524,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHELMET] =
+    [SPECIES_SHELMET] =
     {
         .categoryName = _("Snail"),
         .height = 4,
@@ -7536,7 +7536,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ACCELGOR] =
+    [SPECIES_ACCELGOR] =
     {
         .categoryName = _("Shell Out"),
         .height = 8,
@@ -7548,7 +7548,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STUNFISK] =
+    [SPECIES_STUNFISK] =
     {
         .categoryName = _("Trap"),
         .height = 7,
@@ -7560,7 +7560,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MIENFOO] =
+    [SPECIES_MIENFOO] =
     {
         .categoryName = _("Martial Arts"),
         .height = 9,
@@ -7572,7 +7572,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MIENSHAO] =
+    [SPECIES_MIENSHAO] =
     {
         .categoryName = _("Martial Arts"),
         .height = 14,
@@ -7584,7 +7584,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DRUDDIGON] =
+    [SPECIES_DRUDDIGON] =
     {
         .categoryName = _("Cave"),
         .height = 16,
@@ -7596,7 +7596,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOLETT] =
+    [SPECIES_GOLETT] =
     {
         .categoryName = _("Automaton"),
         .height = 10,
@@ -7608,7 +7608,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOLURK] =
+    [SPECIES_GOLURK] =
     {
         .categoryName = _("Automaton"),
         .height = 28,
@@ -7620,7 +7620,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PAWNIARD] =
+    [SPECIES_PAWNIARD] =
     {
         .categoryName = _("Sharp Blade"),
         .height = 5,
@@ -7632,7 +7632,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BISHARP] =
+    [SPECIES_BISHARP] =
     {
         .categoryName = _("Sword Blade"),
         .height = 16,
@@ -7644,7 +7644,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BOUFFALANT] =
+    [SPECIES_BOUFFALANT] =
     {
         .categoryName = _("Bash Buffalo"),
         .height = 16,
@@ -7656,7 +7656,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RUFFLET] =
+    [SPECIES_RUFFLET] =
     {
         .categoryName = _("Eaglet"),
         .height = 5,
@@ -7668,7 +7668,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BRAVIARY] =
+    [SPECIES_BRAVIARY] =
     {
         .categoryName = _("Valiant"),
         .height = 15,
@@ -7680,7 +7680,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VULLABY] =
+    [SPECIES_VULLABY] =
     {
         .categoryName = _("Diapered"),
         .height = 5,
@@ -7692,7 +7692,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MANDIBUZZ] =
+    [SPECIES_MANDIBUZZ] =
     {
         .categoryName = _("Bone Vulture"),
         .height = 12,
@@ -7704,7 +7704,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HEATMOR] =
+    [SPECIES_HEATMOR] =
     {
         .categoryName = _("Anteater"),
         .height = 14,
@@ -7716,7 +7716,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DURANT] =
+    [SPECIES_DURANT] =
     {
         .categoryName = _("Iron Ant"),
         .height = 3,
@@ -7728,7 +7728,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DEINO] =
+    [SPECIES_DEINO] =
     {
         .categoryName = _("Irate"),
         .height = 8,
@@ -7740,7 +7740,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ZWEILOUS] =
+    [SPECIES_ZWEILOUS] =
     {
         .categoryName = _("Hostile"),
         .height = 14,
@@ -7752,7 +7752,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HYDREIGON] =
+    [SPECIES_HYDREIGON] =
     {
         .categoryName = _("Brutal"),
         .height = 18,
@@ -7764,7 +7764,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LARVESTA] =
+    [SPECIES_LARVESTA] =
     {
         .categoryName = _("Torch"),
         .height = 11,
@@ -7776,7 +7776,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VOLCARONA] =
+    [SPECIES_VOLCARONA] =
     {
         .categoryName = _("Sun"),
         .height = 16,
@@ -7788,7 +7788,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_COBALION] =
+    [SPECIES_COBALION] =
     {
         .categoryName = _("Iron Will"),
         .height = 21,
@@ -7800,7 +7800,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TERRAKION] =
+    [SPECIES_TERRAKION] =
     {
         .categoryName = _("Cavern"),
         .height = 19,
@@ -7812,7 +7812,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VIRIZION] =
+    [SPECIES_VIRIZION] =
     {
         .categoryName = _("Grassland"),
         .height = 20,
@@ -7824,7 +7824,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TORNADUS] =
+    [SPECIES_TORNADUS] =
     {
         .categoryName = _("Cyclone"),
         .height = 15,
@@ -7836,7 +7836,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_THUNDURUS] =
+    [SPECIES_THUNDURUS] =
     {
         .categoryName = _("Bolt Strike"),
         .height = 15,
@@ -7848,7 +7848,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RESHIRAM] =
+    [SPECIES_RESHIRAM] =
     {
         .categoryName = _("Vast White"),
         .height = 32,
@@ -7860,7 +7860,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ZEKROM] =
+    [SPECIES_ZEKROM] =
     {
         .categoryName = _("Deep Black"),
         .height = 29,
@@ -7872,7 +7872,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LANDORUS] =
+    [SPECIES_LANDORUS] =
     {
         .categoryName = _("Abundance"),
         .height = 15,
@@ -7884,7 +7884,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KYUREM] =
+    [SPECIES_KYUREM] =
     {
         .categoryName = _("Boundary"),
         .height = 30,
@@ -7896,7 +7896,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KELDEO] =
+    [SPECIES_KELDEO] =
     {
         .categoryName = _("Colt"),
         .height = 14,
@@ -7908,7 +7908,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MELOETTA] =
+    [SPECIES_MELOETTA] =
     {
         .categoryName = _("Melody"),
         .height = 6,
@@ -7920,7 +7920,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GENESECT] =
+    [SPECIES_GENESECT] =
     {
         .categoryName = _("Paleozoic"),
         .height = 15,
@@ -7932,7 +7932,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHESPIN] =
+    [SPECIES_CHESPIN] =
     {
         .categoryName = _("Spiny Nut"),
         .height = 4,
@@ -7944,7 +7944,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_QUILLADIN] =
+    [SPECIES_QUILLADIN] =
     {
         .categoryName = _("Spiny Armor"),
         .height = 7,
@@ -7956,7 +7956,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHESNAUGHT] =
+    [SPECIES_CHESNAUGHT] =
     {
         .categoryName = _("Spiny Armor"),
         .height = 16,
@@ -7968,7 +7968,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FENNEKIN] =
+    [SPECIES_FENNEKIN] =
     {
         .categoryName = _("Fox"),
         .height = 4,
@@ -7980,7 +7980,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BRAIXEN] =
+    [SPECIES_BRAIXEN] =
     {
         .categoryName = _("Fox"),
         .height = 10,
@@ -7992,7 +7992,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DELPHOX] =
+    [SPECIES_DELPHOX] =
     {
         .categoryName = _("Fox"),
         .height = 15,
@@ -8004,7 +8004,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FROAKIE] =
+    [SPECIES_FROAKIE] =
     {
         .categoryName = _("Bubble Frog"),
         .height = 3,
@@ -8016,7 +8016,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FROGADIER] =
+    [SPECIES_FROGADIER] =
     {
         .categoryName = _("Bubble Frog"),
         .height = 6,
@@ -8028,7 +8028,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GRENINJA] =
+    [SPECIES_GRENINJA] =
     {
         .categoryName = _("Ninja"),
         .height = 15,
@@ -8040,7 +8040,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BUNNELBY] =
+    [SPECIES_BUNNELBY] =
     {
         .categoryName = _("Digging"),
         .height = 4,
@@ -8052,7 +8052,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DIGGERSBY] =
+    [SPECIES_DIGGERSBY] =
     {
         .categoryName = _("Digging"),
         .height = 10,
@@ -8064,7 +8064,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLETCHLING] =
+    [SPECIES_FLETCHLING] =
     {
         .categoryName = _("Tiny Robin"),
         .height = 3,
@@ -8076,7 +8076,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLETCHINDER] =
+    [SPECIES_FLETCHINDER] =
     {
         .categoryName = _("Ember"),
         .height = 7,
@@ -8088,7 +8088,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TALONFLAME] =
+    [SPECIES_TALONFLAME] =
     {
         .categoryName = _("Scorching"),
         .height = 12,
@@ -8100,7 +8100,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SCATTERBUG] =
+    [SPECIES_SCATTERBUG] =
     {
         .categoryName = _("Scatterdust"),
         .height = 3,
@@ -8112,7 +8112,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SPEWPA] =
+    [SPECIES_SPEWPA] =
     {
         .categoryName = _("Scatterdust"),
         .height = 3,
@@ -8124,7 +8124,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VIVILLON] =
+    [SPECIES_VIVILLON] =
     {
         .categoryName = _("Scale"),
         .height = 12,
@@ -8136,7 +8136,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LITLEO] =
+    [SPECIES_LITLEO] =
     {
         .categoryName = _("Lion Cub"),
         .height = 6,
@@ -8148,7 +8148,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PYROAR] =
+    [SPECIES_PYROAR] =
     {
         .categoryName = _("Royal"),
         .height = 15,
@@ -8160,7 +8160,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLABEBE] =
+    [SPECIES_FLABEBE] =
     {
         .categoryName = _("Single Bloom"),
         .height = 1,
@@ -8172,7 +8172,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLOETTE] =
+    [SPECIES_FLOETTE] =
     {
         .categoryName = _("Single Bloom"),
         .height = 2,
@@ -8184,7 +8184,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLORGES] =
+    [SPECIES_FLORGES] =
     {
         .categoryName = _("Garden"),
         .height = 11,
@@ -8196,7 +8196,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SKIDDO] =
+    [SPECIES_SKIDDO] =
     {
         .categoryName = _("Mount"),
         .height = 9,
@@ -8208,7 +8208,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOGOAT] =
+    [SPECIES_GOGOAT] =
     {
         .categoryName = _("Mount"),
         .height = 17,
@@ -8220,7 +8220,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PANCHAM] =
+    [SPECIES_PANCHAM] =
     {
         .categoryName = _("Playful"),
         .height = 6,
@@ -8232,7 +8232,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PANGORO] =
+    [SPECIES_PANGORO] =
     {
         .categoryName = _("Daunting"),
         .height = 21,
@@ -8244,7 +8244,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FURFROU] =
+    [SPECIES_FURFROU] =
     {
         .categoryName = _("Poodle"),
         .height = 12,
@@ -8256,7 +8256,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ESPURR] =
+    [SPECIES_ESPURR] =
     {
         .categoryName = _("Restraint"),
         .height = 3,
@@ -8268,7 +8268,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MEOWSTIC] =
+    [SPECIES_MEOWSTIC] =
     {
         .categoryName = _("Constraint"),
         .height = 6,
@@ -8280,7 +8280,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HONEDGE] =
+    [SPECIES_HONEDGE] =
     {
         .categoryName = _("Sword"),
         .height = 8,
@@ -8292,7 +8292,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DOUBLADE] =
+    [SPECIES_DOUBLADE] =
     {
         .categoryName = _("Sword"),
         .height = 8,
@@ -8304,7 +8304,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AEGISLASH] =
+    [SPECIES_AEGISLASH] =
     {
         .categoryName = _("Royal Sword"),
         .height = 17,
@@ -8316,7 +8316,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SPRITZEE] =
+    [SPECIES_SPRITZEE] =
     {
         .categoryName = _("Perfume"),
         .height = 2,
@@ -8328,7 +8328,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AROMATISSE] =
+    [SPECIES_AROMATISSE] =
     {
         .categoryName = _("Fragrance"),
         .height = 8,
@@ -8340,7 +8340,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SWIRLIX] =
+    [SPECIES_SWIRLIX] =
     {
         .categoryName = _("Cotton Candy"),
         .height = 4,
@@ -8352,7 +8352,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SLURPUFF] =
+    [SPECIES_SLURPUFF] =
     {
         .categoryName = _("Meringue"),
         .height = 8,
@@ -8364,7 +8364,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_INKAY] =
+    [SPECIES_INKAY] =
     {
         .categoryName = _("Revolving"),
         .height = 4,
@@ -8376,7 +8376,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MALAMAR] =
+    [SPECIES_MALAMAR] =
     {
         .categoryName = _("Overturning"),
         .height = 15,
@@ -8388,7 +8388,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BINACLE] =
+    [SPECIES_BINACLE] =
     {
         .categoryName = _("Two-Handed"),
         .height = 5,
@@ -8400,7 +8400,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BARBARACLE] =
+    [SPECIES_BARBARACLE] =
     {
         .categoryName = _("Collective"),
         .height = 13,
@@ -8412,7 +8412,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SKRELP] =
+    [SPECIES_SKRELP] =
     {
         .categoryName = _("Mock Kelp"),
         .height = 5,
@@ -8424,7 +8424,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DRAGALGE] =
+    [SPECIES_DRAGALGE] =
     {
         .categoryName = _("Mock Kelp"),
         .height = 18,
@@ -8436,7 +8436,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CLAUNCHER] =
+    [SPECIES_CLAUNCHER] =
     {
         .categoryName = _("Water Gun"),
         .height = 5,
@@ -8448,7 +8448,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CLAWITZER] =
+    [SPECIES_CLAWITZER] =
     {
         .categoryName = _("Howitzer"),
         .height = 13,
@@ -8460,7 +8460,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HELIOPTILE] =
+    [SPECIES_HELIOPTILE] =
     {
         .categoryName = _("Generator"),
         .height = 5,
@@ -8472,7 +8472,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HELIOLISK] =
+    [SPECIES_HELIOLISK] =
     {
         .categoryName = _("Generator"),
         .height = 10,
@@ -8484,7 +8484,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TYRUNT] =
+    [SPECIES_TYRUNT] =
     {
         .categoryName = _("Royal Heir"),
         .height = 8,
@@ -8496,7 +8496,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TYRANTRUM] =
+    [SPECIES_TYRANTRUM] =
     {
         .categoryName = _("Despot"),
         .height = 25,
@@ -8508,7 +8508,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AMAURA] =
+    [SPECIES_AMAURA] =
     {
         .categoryName = _("Tundra"),
         .height = 13,
@@ -8520,7 +8520,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AURORUS] =
+    [SPECIES_AURORUS] =
     {
         .categoryName = _("Tundra"),
         .height = 27,
@@ -8532,7 +8532,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SYLVEON] =
+    [SPECIES_SYLVEON] =
     {
         .categoryName = _("Intertwine"),
         .height = 10,
@@ -8544,7 +8544,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HAWLUCHA] =
+    [SPECIES_HAWLUCHA] =
     {
         .categoryName = _("Wrestling"),
         .height = 8,
@@ -8556,7 +8556,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DEDENNE] =
+    [SPECIES_DEDENNE] =
     {
         .categoryName = _("Antenna"),
         .height = 2,
@@ -8568,7 +8568,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CARBINK] =
+    [SPECIES_CARBINK] =
     {
         .categoryName = _("Jewel"),
         .height = 3,
@@ -8580,7 +8580,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOOMY] =
+    [SPECIES_GOOMY] =
     {
         .categoryName = _("Soft Tissue"),
         .height = 3,
@@ -8592,7 +8592,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SLIGGOO] =
+    [SPECIES_SLIGGOO] =
     {
         .categoryName = _("Soft Tissue"),
         .height = 8,
@@ -8604,7 +8604,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOODRA] =
+    [SPECIES_GOODRA] =
     {
         .categoryName = _("Dragon"),
         .height = 20,
@@ -8616,7 +8616,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KLEFKI] =
+    [SPECIES_KLEFKI] =
     {
         .categoryName = _("Key Ring"),
         .height = 2,
@@ -8628,7 +8628,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PHANTUMP] =
+    [SPECIES_PHANTUMP] =
     {
         .categoryName = _("Stump"),
         .height = 4,
@@ -8640,7 +8640,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TREVENANT] =
+    [SPECIES_TREVENANT] =
     {
         .categoryName = _("Elder Tree"),
         .height = 15,
@@ -8652,7 +8652,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PUMPKABOO] =
+    [SPECIES_PUMPKABOO] =
     {
         .categoryName = _("Pumpkin"),
         .height = 4,
@@ -8664,7 +8664,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOURGEIST] =
+    [SPECIES_GOURGEIST] =
     {
         .categoryName = _("Pumpkin"),
         .height = 9,
@@ -8676,7 +8676,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BERGMITE] =
+    [SPECIES_BERGMITE] =
     {
         .categoryName = _("Ice Chunk"),
         .height = 10,
@@ -8688,7 +8688,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_AVALUGG] =
+    [SPECIES_AVALUGG] =
     {
         .categoryName = _("Iceberg"),
         .height = 20,
@@ -8700,7 +8700,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NOIBAT] =
+    [SPECIES_NOIBAT] =
     {
         .categoryName = _("Sound Wave"),
         .height = 5,
@@ -8712,7 +8712,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NOIVERN] =
+    [SPECIES_NOIVERN] =
     {
         .categoryName = _("Sound Wave"),
         .height = 15,
@@ -8724,7 +8724,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_XERNEAS] =
+    [SPECIES_XERNEAS] =
     {
         .categoryName = _("Life"),
         .height = 30,
@@ -8736,7 +8736,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_YVELTAL] =
+    [SPECIES_YVELTAL] =
     {
         .categoryName = _("Destruction"),
         .height = 58,
@@ -8748,7 +8748,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ZYGARDE] =
+    [SPECIES_ZYGARDE] =
     {
         .categoryName = _("Order"),
         .height = 50,
@@ -8760,7 +8760,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DIANCIE] =
+    [SPECIES_DIANCIE] =
     {
         .categoryName = _("Jewel"),
         .height = 7,
@@ -8772,7 +8772,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HOOPA] =
+    [SPECIES_HOOPA] =
     {
         .categoryName = _("Mischief"),
         .height = 5,
@@ -8784,7 +8784,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VOLCANION] =
+    [SPECIES_VOLCANION] =
     {
         .categoryName = _("Steam"),
         .height = 17,
@@ -8796,7 +8796,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ROWLET] =
+    [SPECIES_ROWLET] =
     {
         .categoryName = _("Grass Quill"),
         .height = 3,
@@ -8808,7 +8808,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DARTRIX] =
+    [SPECIES_DARTRIX] =
     {
         .categoryName = _("Blade Quill"),
         .height = 7,
@@ -8820,7 +8820,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DECIDUEYE] =
+    [SPECIES_DECIDUEYE] =
     {
         .categoryName = _("Arrow Quill"),
         .height = 16,
@@ -8832,7 +8832,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LITTEN] =
+    [SPECIES_LITTEN] =
     {
         .categoryName = _("Fire Cat"),
         .height = 4,
@@ -8844,7 +8844,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TORRACAT] =
+    [SPECIES_TORRACAT] =
     {
         .categoryName = _("Fire Cat"),
         .height = 7,
@@ -8856,7 +8856,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_INCINEROAR] =
+    [SPECIES_INCINEROAR] =
     {
         .categoryName = _("Heel"),
         .height = 18,
@@ -8868,7 +8868,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_POPPLIO] =
+    [SPECIES_POPPLIO] =
     {
         .categoryName = _("Sea Lion"),
         .height = 4,
@@ -8880,7 +8880,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BRIONNE] =
+    [SPECIES_BRIONNE] =
     {
         .categoryName = _("Pop Star"),
         .height = 6,
@@ -8892,7 +8892,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PRIMARINA] =
+    [SPECIES_PRIMARINA] =
     {
         .categoryName = _("Soloist"),
         .height = 18,
@@ -8904,7 +8904,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PIKIPEK] =
+    [SPECIES_PIKIPEK] =
     {
         .categoryName = _("Woodpecker"),
         .height = 3,
@@ -8916,7 +8916,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TRUMBEAK] =
+    [SPECIES_TRUMBEAK] =
     {
         .categoryName = _("Bugle Beak"),
         .height = 6,
@@ -8928,7 +8928,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TOUCANNON] =
+    [SPECIES_TOUCANNON] =
     {
         .categoryName = _("Cannon"),
         .height = 11,
@@ -8940,7 +8940,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_YUNGOOS] =
+    [SPECIES_YUNGOOS] =
     {
         .categoryName = _("Loitering"),
         .height = 4,
@@ -8952,7 +8952,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GUMSHOOS] =
+    [SPECIES_GUMSHOOS] =
     {
         .categoryName = _("Stakeout"),
         .height = 7,
@@ -8964,7 +8964,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GRUBBIN] =
+    [SPECIES_GRUBBIN] =
     {
         .categoryName = _("Larva"),
         .height = 4,
@@ -8976,7 +8976,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHARJABUG] =
+    [SPECIES_CHARJABUG] =
     {
         .categoryName = _("Battery"),
         .height = 5,
@@ -8988,7 +8988,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VIKAVOLT] =
+    [SPECIES_VIKAVOLT] =
     {
         .categoryName = _("Stag Beetle"),
         .height = 15,
@@ -9000,7 +9000,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CRABRAWLER] =
+    [SPECIES_CRABRAWLER] =
     {
         .categoryName = _("Boxing"),
         .height = 6,
@@ -9012,7 +9012,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CRABOMINABLE] =
+    [SPECIES_CRABOMINABLE] =
     {
         .categoryName = _("Woolly Crab"),
         .height = 17,
@@ -9024,7 +9024,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ORICORIO] =
+    [SPECIES_ORICORIO] =
     {
         .categoryName = _("Dancing"),
         .height = 6,
@@ -9036,7 +9036,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CUTIEFLY] =
+    [SPECIES_CUTIEFLY] =
     {
         .categoryName = _("Bee Fly"),
         .height = 1,
@@ -9048,7 +9048,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RIBOMBEE] =
+    [SPECIES_RIBOMBEE] =
     {
         .categoryName = _("Bee Fly"),
         .height = 2,
@@ -9060,7 +9060,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ROCKRUFF] =
+    [SPECIES_ROCKRUFF] =
     {
         .categoryName = _("Puppy"),
         .height = 5,
@@ -9072,7 +9072,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LYCANROC] =
+    [SPECIES_LYCANROC] =
     {
         .categoryName = _("Wolf"),
         .height = 8,
@@ -9084,7 +9084,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WISHIWASHI] =
+    [SPECIES_WISHIWASHI] =
     {
         .categoryName = _("Small Fry"),
         .height = 2,
@@ -9096,7 +9096,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAREANIE] =
+    [SPECIES_MAREANIE] =
     {
         .categoryName = _("Brutal Star"),
         .height = 4,
@@ -9108,7 +9108,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TOXAPEX] =
+    [SPECIES_TOXAPEX] =
     {
         .categoryName = _("Brutal Star"),
         .height = 7,
@@ -9120,7 +9120,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MUDBRAY] =
+    [SPECIES_MUDBRAY] =
     {
         .categoryName = _("Donkey"),
         .height = 10,
@@ -9132,7 +9132,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MUDSDALE] =
+    [SPECIES_MUDSDALE] =
     {
         .categoryName = _("Draft Horse"),
         .height = 25,
@@ -9144,7 +9144,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DEWPIDER] =
+    [SPECIES_DEWPIDER] =
     {
         .categoryName = _("Water Bubble"),
         .height = 3,
@@ -9156,7 +9156,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARAQUANID] =
+    [SPECIES_ARAQUANID] =
     {
         .categoryName = _("Water Bubble"),
         .height = 18,
@@ -9168,7 +9168,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FOMANTIS] =
+    [SPECIES_FOMANTIS] =
     {
         .categoryName = _("Sickle Grass"),
         .height = 3,
@@ -9180,7 +9180,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LURANTIS] =
+    [SPECIES_LURANTIS] =
     {
         .categoryName = _("Bloom Sickle"),
         .height = 9,
@@ -9192,7 +9192,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MORELULL] =
+    [SPECIES_MORELULL] =
     {
         .categoryName = _("Illuminate"),
         .height = 2,
@@ -9204,7 +9204,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHIINOTIC] =
+    [SPECIES_SHIINOTIC] =
     {
         .categoryName = _("Illuminate"),
         .height = 10,
@@ -9216,7 +9216,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SALANDIT] =
+    [SPECIES_SALANDIT] =
     {
         .categoryName = _("Toxic Lizard"),
         .height = 6,
@@ -9228,7 +9228,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SALAZZLE] =
+    [SPECIES_SALAZZLE] =
     {
         .categoryName = _("Toxic Lizard"),
         .height = 12,
@@ -9240,7 +9240,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STUFFUL] =
+    [SPECIES_STUFFUL] =
     {
         .categoryName = _("Flailing"),
         .height = 5,
@@ -9252,7 +9252,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BEWEAR] =
+    [SPECIES_BEWEAR] =
     {
         .categoryName = _("Strong Arm"),
         .height = 21,
@@ -9264,7 +9264,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BOUNSWEET] =
+    [SPECIES_BOUNSWEET] =
     {
         .categoryName = _("Fruit"),
         .height = 3,
@@ -9276,7 +9276,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STEENEE] =
+    [SPECIES_STEENEE] =
     {
         .categoryName = _("Fruit"),
         .height = 7,
@@ -9288,7 +9288,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TSAREENA] =
+    [SPECIES_TSAREENA] =
     {
         .categoryName = _("Fruit"),
         .height = 12,
@@ -9300,7 +9300,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_COMFEY] =
+    [SPECIES_COMFEY] =
     {
         .categoryName = _("Posy Picker"),
         .height = 1,
@@ -9312,7 +9312,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ORANGURU] =
+    [SPECIES_ORANGURU] =
     {
         .categoryName = _("Sage"),
         .height = 15,
@@ -9324,7 +9324,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PASSIMIAN] =
+    [SPECIES_PASSIMIAN] =
     {
         .categoryName = _("Teamwork"),
         .height = 20,
@@ -9336,7 +9336,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WIMPOD] =
+    [SPECIES_WIMPOD] =
     {
         .categoryName = _("Turn Tail"),
         .height = 5,
@@ -9348,7 +9348,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOLISOPOD] =
+    [SPECIES_GOLISOPOD] =
     {
         .categoryName = _("Hard Scale"),
         .height = 20,
@@ -9360,7 +9360,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SANDYGAST] =
+    [SPECIES_SANDYGAST] =
     {
         .categoryName = _("Sand Heap"),
         .height = 5,
@@ -9372,7 +9372,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PALOSSAND] =
+    [SPECIES_PALOSSAND] =
     {
         .categoryName = _("Sand Castle"),
         .height = 13,
@@ -9384,7 +9384,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PYUKUMUKU] =
+    [SPECIES_PYUKUMUKU] =
     {
         .categoryName = _("Sea Cucumber"),
         .height = 3,
@@ -9396,7 +9396,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TYPE_NULL] =
+    [SPECIES_TYPE_NULL] =
     {
         .categoryName = _("Synthetic"),
         .height = 19,
@@ -9408,7 +9408,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SILVALLY] =
+    [SPECIES_SILVALLY] =
     {
         .categoryName = _("Synthetic"),
         .height = 23,
@@ -9420,7 +9420,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MINIOR] =
+    [SPECIES_MINIOR] =
     {
         .categoryName = _("Meteor"),
         .height = 3,
@@ -9432,7 +9432,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KOMALA] =
+    [SPECIES_KOMALA] =
     {
         .categoryName = _("Drowsing"),
         .height = 4,
@@ -9444,7 +9444,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TURTONATOR] =
+    [SPECIES_TURTONATOR] =
     {
         .categoryName = _("Blast Turtle"),
         .height = 20,
@@ -9456,7 +9456,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TOGEDEMARU] =
+    [SPECIES_TOGEDEMARU] =
     {
         .categoryName = _("Roly-Poly"),
         .height = 3,
@@ -9468,7 +9468,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MIMIKYU] =
+    [SPECIES_MIMIKYU] =
     {
         .categoryName = _("Disguise"),
         .height = 2,
@@ -9480,7 +9480,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BRUXISH] =
+    [SPECIES_BRUXISH] =
     {
         .categoryName = _("Gnash Teeth"),
         .height = 9,
@@ -9492,7 +9492,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DRAMPA] =
+    [SPECIES_DRAMPA] =
     {
         .categoryName = _("Placid"),
         .height = 30,
@@ -9504,7 +9504,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DHELMISE] =
+    [SPECIES_DHELMISE] =
     {
         .categoryName = _("Sea Creeper"),
         .height = 39,
@@ -9516,7 +9516,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_JANGMO_O] =
+    [SPECIES_JANGMO_O] =
     {
         .categoryName = _("Scaly"),
         .height = 6,
@@ -9528,7 +9528,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HAKAMO_O] =
+    [SPECIES_HAKAMO_O] =
     {
         .categoryName = _("Scaly"),
         .height = 12,
@@ -9540,7 +9540,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KOMMO_O] =
+    [SPECIES_KOMMO_O] =
     {
         .categoryName = _("Scaly"),
         .height = 16,
@@ -9552,7 +9552,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TAPU_KOKO] =
+    [SPECIES_TAPU_KOKO] =
     {
         .categoryName = _("Land Spirit"),
         .height = 18,
@@ -9564,7 +9564,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TAPU_LELE] =
+    [SPECIES_TAPU_LELE] =
     {
         .categoryName = _("Land Spirit"),
         .height = 12,
@@ -9576,7 +9576,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TAPU_BULU] =
+    [SPECIES_TAPU_BULU] =
     {
         .categoryName = _("Land Spirit"),
         .height = 19,
@@ -9588,7 +9588,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TAPU_FINI] =
+    [SPECIES_TAPU_FINI] =
     {
         .categoryName = _("Land Spirit"),
         .height = 13,
@@ -9600,7 +9600,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_COSMOG] =
+    [SPECIES_COSMOG] =
     {
         .categoryName = _("Nebula"),
         .height = 2,
@@ -9612,7 +9612,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_COSMOEM] =
+    [SPECIES_COSMOEM] =
     {
         .categoryName = _("Protostar"),
         .height = 1,
@@ -9624,7 +9624,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SOLGALEO] =
+    [SPECIES_SOLGALEO] =
     {
         .categoryName = _("Sunne"),
         .height = 34,
@@ -9636,7 +9636,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LUNALA] =
+    [SPECIES_LUNALA] =
     {
         .categoryName = _("Moone"),
         .height = 40,
@@ -9648,7 +9648,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NIHILEGO] =
+    [SPECIES_NIHILEGO] =
     {
         .categoryName = _("Parasite"),
         .height = 12,
@@ -9660,7 +9660,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BUZZWOLE] =
+    [SPECIES_BUZZWOLE] =
     {
         .categoryName = _("Swollen"),
         .height = 24,
@@ -9672,7 +9672,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PHEROMOSA] =
+    [SPECIES_PHEROMOSA] =
     {
         .categoryName = _("Lissome"),
         .height = 18,
@@ -9684,7 +9684,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_XURKITREE] =
+    [SPECIES_XURKITREE] =
     {
         .categoryName = _("Glowing"),
         .height = 38,
@@ -9696,7 +9696,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CELESTEELA] =
+    [SPECIES_CELESTEELA] =
     {
         .categoryName = _("Launch"),
         .height = 92,
@@ -9708,7 +9708,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KARTANA] =
+    [SPECIES_KARTANA] =
     {
         .categoryName = _("Drawn Sword"),
         .height = 3,
@@ -9720,7 +9720,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GUZZLORD] =
+    [SPECIES_GUZZLORD] =
     {
         .categoryName = _("Junkivore"),
         .height = 55,
@@ -9732,7 +9732,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NECROZMA] =
+    [SPECIES_NECROZMA] =
     {
         .categoryName = _("Prism"),
         .height = 24,
@@ -9744,7 +9744,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAGEARNA] =
+    [SPECIES_MAGEARNA] =
     {
         .categoryName = _("Artificial"),
         .height = 10,
@@ -9756,7 +9756,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MARSHADOW] =
+    [SPECIES_MARSHADOW] =
     {
         .categoryName = _("Gloomdwellr"),
         .height = 7,
@@ -9768,7 +9768,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_POIPOLE] =
+    [SPECIES_POIPOLE] =
     {
         .categoryName = _("Poison Pin"),
         .height = 6,
@@ -9780,7 +9780,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NAGANADEL] =
+    [SPECIES_NAGANADEL] =
     {
         .categoryName = _("Poison Pin"),
         .height = 36,
@@ -9792,7 +9792,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STAKATAKA] =
+    [SPECIES_STAKATAKA] =
     {
         .categoryName = _("Rampart"),
         .height = 55,
@@ -9804,7 +9804,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BLACEPHALON] =
+    [SPECIES_BLACEPHALON] =
     {
         .categoryName = _("Fireworks"),
         .height = 18,
@@ -9816,7 +9816,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ZERAORA] =
+    [SPECIES_ZERAORA] =
     {
         .categoryName = _("Thunderclap"),
         .height = 15,
@@ -9828,7 +9828,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MELTAN] =
+    [SPECIES_MELTAN] =
     {
         .categoryName = _("Hex Nut"),
         .height = 2,
@@ -9840,7 +9840,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MELMETAL] =
+    [SPECIES_MELMETAL] =
     {
         .categoryName = _("Hex Nut"),
         .height = 25,
@@ -9852,7 +9852,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 2,
     },
 
-    [NATIONAL_DEX_GROOKEY] =
+    [SPECIES_GROOKEY] =
     {
         .categoryName = _("Chimp"),
         .height = 3,
@@ -9864,7 +9864,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_THWACKEY] =
+    [SPECIES_THWACKEY] =
     {
         .categoryName = _("Beat"),
         .height = 7,
@@ -9876,7 +9876,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RILLABOOM] =
+    [SPECIES_RILLABOOM] =
     {
         .categoryName = _("Drummer"),
         .height = 21,
@@ -9888,7 +9888,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SCORBUNNY] =
+    [SPECIES_SCORBUNNY] =
     {
         .categoryName = _("Rabbit"),
         .height = 3,
@@ -9900,7 +9900,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RABOOT] =
+    [SPECIES_RABOOT] =
     {
         .categoryName = _("Rabbit"),
         .height = 6,
@@ -9912,7 +9912,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CINDERACE] =
+    [SPECIES_CINDERACE] =
     {
         .categoryName = _("Striker"),
         .height = 14,
@@ -9924,7 +9924,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SOBBLE] =
+    [SPECIES_SOBBLE] =
     {
         .categoryName = _("Water Lizard"),
         .height = 3,
@@ -9936,7 +9936,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DRIZZILE] =
+    [SPECIES_DRIZZILE] =
     {
         .categoryName = _("Water Lizard"),
         .height = 7,
@@ -9948,7 +9948,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_INTELEON] =
+    [SPECIES_INTELEON] =
     {
         .categoryName = _("Secret Agent"),
         .height = 19,
@@ -9960,7 +9960,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SKWOVET] =
+    [SPECIES_SKWOVET] =
     {
         .categoryName = _("Cheeky"),
         .height = 3,
@@ -9972,7 +9972,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GREEDENT] =
+    [SPECIES_GREEDENT] =
     {
         .categoryName = _("Greedy"),
         .height = 6,
@@ -9984,7 +9984,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ROOKIDEE] =
+    [SPECIES_ROOKIDEE] =
     {
         .categoryName = _("Tiny Bird"),
         .height = 2,
@@ -9996,7 +9996,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CORVISQUIRE] =
+    [SPECIES_CORVISQUIRE] =
     {
         .categoryName = _("Raven"),
         .height = 8,
@@ -10008,7 +10008,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CORVIKNIGHT] =
+    [SPECIES_CORVIKNIGHT] =
     {
         .categoryName = _("Raven"),
         .height = 22,
@@ -10020,7 +10020,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BLIPBUG] =
+    [SPECIES_BLIPBUG] =
     {
         .categoryName = _("Larva"),
         .height = 4,
@@ -10032,7 +10032,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DOTTLER] =
+    [SPECIES_DOTTLER] =
     {
         .categoryName = _("Radome"),
         .height = 4,
@@ -10044,7 +10044,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ORBEETLE] =
+    [SPECIES_ORBEETLE] =
     {
         .categoryName = _("Seven Spot"),
         .height = 4,
@@ -10056,7 +10056,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NICKIT] =
+    [SPECIES_NICKIT] =
     {
         .categoryName = _("Fox"),
         .height = 6,
@@ -10068,7 +10068,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_THIEVUL] =
+    [SPECIES_THIEVUL] =
     {
         .categoryName = _("Fox"),
         .height = 12,
@@ -10080,7 +10080,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GOSSIFLEUR] =
+    [SPECIES_GOSSIFLEUR] =
     {
         .categoryName = _("Flowering"),
         .height = 4,
@@ -10092,7 +10092,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ELDEGOSS] =
+    [SPECIES_ELDEGOSS] =
     {
         .categoryName = _("Cotton Bloom"),
         .height = 5,
@@ -10104,7 +10104,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WOOLOO] =
+    [SPECIES_WOOLOO] =
     {
         .categoryName = _("Sheep"),
         .height = 6,
@@ -10116,7 +10116,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DUBWOOL] =
+    [SPECIES_DUBWOOL] =
     {
         .categoryName = _("Sheep"),
         .height = 13,
@@ -10128,7 +10128,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHEWTLE] =
+    [SPECIES_CHEWTLE] =
     {
         .categoryName = _("Snapping"),
         .height = 3,
@@ -10140,7 +10140,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DREDNAW] =
+    [SPECIES_DREDNAW] =
     {
         .categoryName = _("Bite"),
         .height = 10,
@@ -10152,7 +10152,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_YAMPER] =
+    [SPECIES_YAMPER] =
     {
         .categoryName = _("Puppy"),
         .height = 3,
@@ -10164,7 +10164,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BOLTUND] =
+    [SPECIES_BOLTUND] =
     {
         .categoryName = _("Dog"),
         .height = 10,
@@ -10176,7 +10176,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ROLYCOLY] =
+    [SPECIES_ROLYCOLY] =
     {
         .categoryName = _("Coal"),
         .height = 3,
@@ -10188,7 +10188,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CARKOL] =
+    [SPECIES_CARKOL] =
     {
         .categoryName = _("Coal"),
         .height = 11,
@@ -10200,7 +10200,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_COALOSSAL] =
+    [SPECIES_COALOSSAL] =
     {
         .categoryName = _("Coal"),
         .height = 28,
@@ -10212,7 +10212,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_APPLIN] =
+    [SPECIES_APPLIN] =
     {
         .categoryName = _("Apple Core"),
         .height = 2,
@@ -10224,7 +10224,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLAPPLE] =
+    [SPECIES_FLAPPLE] =
     {
         .categoryName = _("Apple Wing"),
         .height = 3,
@@ -10236,7 +10236,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_APPLETUN] =
+    [SPECIES_APPLETUN] =
     {
         .categoryName = _("Apple Nectar"),
         .height = 4,
@@ -10248,7 +10248,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SILICOBRA] =
+    [SPECIES_SILICOBRA] =
     {
         .categoryName = _("Sand Snake"),
         .height = 22,
@@ -10260,7 +10260,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SANDACONDA] =
+    [SPECIES_SANDACONDA] =
     {
         .categoryName = _("Sand Snake"),
         .height = 38,
@@ -10272,7 +10272,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CRAMORANT] =
+    [SPECIES_CRAMORANT] =
     {
         .categoryName = _("Gulp"),
         .height = 8,
@@ -10284,7 +10284,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARROKUDA] =
+    [SPECIES_ARROKUDA] =
     {
         .categoryName = _("Rush"),
         .height = 5,
@@ -10296,7 +10296,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BARRASKEWDA] =
+    [SPECIES_BARRASKEWDA] =
     {
         .categoryName = _("Skewer"),
         .height = 13,
@@ -10308,7 +10308,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TOXEL] =
+    [SPECIES_TOXEL] =
     {
         .categoryName = _("Baby"),
         .height = 4,
@@ -10320,7 +10320,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TOXTRICITY] =
+    [SPECIES_TOXTRICITY] =
     {
         .categoryName = _("Punk"),
         .height = 16,
@@ -10332,7 +10332,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SIZZLIPEDE] =
+    [SPECIES_SIZZLIPEDE] =
     {
         .categoryName = _("Radiator"),
         .height = 7,
@@ -10344,7 +10344,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CENTISKORCH] =
+    [SPECIES_CENTISKORCH] =
     {
         .categoryName = _("Radiator"),
         .height = 30,
@@ -10356,7 +10356,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CLOBBOPUS] =
+    [SPECIES_CLOBBOPUS] =
     {
         .categoryName = _("Tantrum"),
         .height = 6,
@@ -10368,7 +10368,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GRAPPLOCT] =
+    [SPECIES_GRAPPLOCT] =
     {
         .categoryName = _("Jujitsu"),
         .height = 16,
@@ -10380,7 +10380,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SINISTEA] =
+    [SPECIES_SINISTEA] =
     {
         .categoryName = _("Black Tea"),
         .height = 1,
@@ -10392,7 +10392,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_POLTEAGEIST] =
+    [SPECIES_POLTEAGEIST] =
     {
         .categoryName = _("Black Tea"),
         .height = 2,
@@ -10404,7 +10404,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HATENNA] =
+    [SPECIES_HATENNA] =
     {
         .categoryName = _("Calm"),
         .height = 4,
@@ -10416,7 +10416,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HATTREM] =
+    [SPECIES_HATTREM] =
     {
         .categoryName = _("Serene"),
         .height = 6,
@@ -10428,7 +10428,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HATTERENE] =
+    [SPECIES_HATTERENE] =
     {
         .categoryName = _("Silent"),
         .height = 21,
@@ -10440,7 +10440,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_IMPIDIMP] =
+    [SPECIES_IMPIDIMP] =
     {
         .categoryName = _("Wily"),
         .height = 4,
@@ -10452,7 +10452,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MORGREM] =
+    [SPECIES_MORGREM] =
     {
         .categoryName = _("Devious"),
         .height = 8,
@@ -10464,7 +10464,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GRIMMSNARL] =
+    [SPECIES_GRIMMSNARL] =
     {
         .categoryName = _("Bulk Up"),
         .height = 15,
@@ -10476,7 +10476,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_OBSTAGOON] =
+    [SPECIES_OBSTAGOON] =
     {
         .categoryName = _("Blocking"),
         .height = 16,
@@ -10488,7 +10488,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PERRSERKER] =
+    [SPECIES_PERRSERKER] =
     {
         .categoryName = _("Viking"),
         .height = 8,
@@ -10500,7 +10500,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CURSOLA] =
+    [SPECIES_CURSOLA] =
     {
         .categoryName = _("Coral"),
         .height = 10,
@@ -10512,7 +10512,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SIRFETCHD] =
+    [SPECIES_SIRFETCHD] =
     {
         .categoryName = _("Wild Duck"),
         .height = 8,
@@ -10524,7 +10524,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MR_RIME] =
+    [SPECIES_MR_RIME] =
     {
         .categoryName = _("Comedian"),
         .height = 15,
@@ -10536,7 +10536,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RUNERIGUS] =
+    [SPECIES_RUNERIGUS] =
     {
         .categoryName = _("Grudge"),
         .height = 16,
@@ -10548,7 +10548,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MILCERY] =
+    [SPECIES_MILCERY] =
     {
         .categoryName = _("Cream"),
         .height = 2,
@@ -10560,7 +10560,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ALCREMIE] =
+    [SPECIES_ALCREMIE] =
     {
         .categoryName = _("Cream"),
         .height = 3,
@@ -10572,7 +10572,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FALINKS] =
+    [SPECIES_FALINKS] =
     {
         .categoryName = _("Formation"),
         .height = 30,
@@ -10584,7 +10584,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PINCURCHIN] =
+    [SPECIES_PINCURCHIN] =
     {
         .categoryName = _("Sea Urchin"),
         .height = 3,
@@ -10596,7 +10596,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SNOM] =
+    [SPECIES_SNOM] =
     {
         .categoryName = _("Worm"),
         .height = 3,
@@ -10608,7 +10608,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FROSMOTH] =
+    [SPECIES_FROSMOTH] =
     {
         .categoryName = _("Frost Moth"),
         .height = 13,
@@ -10620,7 +10620,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_STONJOURNER] =
+    [SPECIES_STONJOURNER] =
     {
         .categoryName = _("Big Rock"),
         .height = 25,
@@ -10632,7 +10632,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_EISCUE] =
+    [SPECIES_EISCUE] =
     {
         .categoryName = _("Penguin"),
         .height = 14,
@@ -10644,7 +10644,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_INDEEDEE] =
+    [SPECIES_INDEEDEE] =
     {
         .categoryName = _("Emotion"),
         .height = 9,
@@ -10656,7 +10656,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MORPEKO] =
+    [SPECIES_MORPEKO] =
     {
         .categoryName = _("Two-Sided"),
         .height = 3,
@@ -10668,7 +10668,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CUFANT] =
+    [SPECIES_CUFANT] =
     {
         .categoryName = _("Copperderm"),
         .height = 12,
@@ -10680,7 +10680,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_COPPERAJAH] =
+    [SPECIES_COPPERAJAH] =
     {
         .categoryName = _("Copperderm"),
         .height = 30,
@@ -10692,7 +10692,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DRACOZOLT] =
+    [SPECIES_DRACOZOLT] =
     {
         .categoryName = _("Fossil"),
         .height = 18,
@@ -10704,7 +10704,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARCTOZOLT] =
+    [SPECIES_ARCTOZOLT] =
     {
         .categoryName = _("Fossil"),
         .height = 23,
@@ -10716,7 +10716,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DRACOVISH] =
+    [SPECIES_DRACOVISH] =
     {
         .categoryName = _("Fossil"),
         .height = 23,
@@ -10728,7 +10728,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARCTOVISH] =
+    [SPECIES_ARCTOVISH] =
     {
         .categoryName = _("Fossil"),
         .height = 20,
@@ -10740,7 +10740,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DURALUDON] =
+    [SPECIES_DURALUDON] =
     {
         .categoryName = _("Alloy"),
         .height = 18,
@@ -10752,7 +10752,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DREEPY] =
+    [SPECIES_DREEPY] =
     {
         .categoryName = _("Lingering"),
         .height = 5,
@@ -10764,7 +10764,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DRAKLOAK] =
+    [SPECIES_DRAKLOAK] =
     {
         .categoryName = _("Caretaker"),
         .height = 14,
@@ -10776,7 +10776,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DRAGAPULT] =
+    [SPECIES_DRAGAPULT] =
     {
         .categoryName = _("Stealth"),
         .height = 30,
@@ -10788,7 +10788,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ZACIAN] =
+    [SPECIES_ZACIAN] =
     {
         .categoryName = _("Warrior"),
         .height = 28,
@@ -10800,7 +10800,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ZAMAZENTA] =
+    [SPECIES_ZAMAZENTA] =
     {
         .categoryName = _("Warrior"),
         .height = 29,
@@ -10812,7 +10812,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ETERNATUS] =
+    [SPECIES_ETERNATUS] =
     {
         .categoryName = _("Gigantic"),
         .height = 200,
@@ -10824,7 +10824,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KUBFU] =
+    [SPECIES_KUBFU] =
     {
         .categoryName = _("Wushu"),
         .height = 6,
@@ -10836,7 +10836,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_URSHIFU] =
+    [SPECIES_URSHIFU] =
     {
         .categoryName = _("Wushu"),
         .height = 19,
@@ -10848,7 +10848,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ZARUDE] =
+    [SPECIES_ZARUDE] =
     {
         .categoryName = _("Rogue Monkey"),
         .height = 18,
@@ -10860,7 +10860,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_REGIELEKI] =
+    [SPECIES_REGIELEKI] =
     {
         .categoryName = _("Electron"),
         .height = 12,
@@ -10872,7 +10872,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_REGIDRAGO] =
+    [SPECIES_REGIDRAGO] =
     {
         .categoryName = _("Dragon Orb"),
         .height = 21,
@@ -10884,7 +10884,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GLASTRIER] =
+    [SPECIES_GLASTRIER] =
     {
         .categoryName = _("Wild Horse"),
         .height = 22,
@@ -10896,7 +10896,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SPECTRIER] =
+    [SPECIES_SPECTRIER] =
     {
         .categoryName = _("Swift Horse"),
         .height = 20,
@@ -10908,7 +10908,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CALYREX] =
+    [SPECIES_CALYREX] =
     {
         .categoryName = _("King"),
         .height = 11,
@@ -10920,7 +10920,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WYRDEER] =
+    [SPECIES_WYRDEER] =
     {
         .categoryName = _("Big Horn"),
         .height = 18,
@@ -10932,7 +10932,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KLEAVOR] =
+    [SPECIES_KLEAVOR] =
     {
         .categoryName = _("Axe"),
         .height = 10,
@@ -10944,7 +10944,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_URSALUNA] =
+    [SPECIES_URSALUNA] =
     {
         .categoryName = _("Peat"),
         .height = 24,
@@ -10956,7 +10956,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SNEASLER] =
+    [SPECIES_SNEASLER] =
     {
         .categoryName = _("Free Climb"),
         .height = 13,
@@ -10968,7 +10968,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_OVERQWIL] =
+    [SPECIES_OVERQWIL] =
     {
         .categoryName = _("Pin Cluster"),
         .height = 25,
@@ -10980,7 +10980,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ENAMORUS] =
+    [SPECIES_ENAMORUS] =
     {
         .categoryName = _("Love-Hate"),
         .height = 16,
@@ -10992,7 +10992,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SPRIGATITO] =
+    [SPECIES_SPRIGATITO] =
     {
         .categoryName = _("Grass Cat"),
         .height = 4,
@@ -11004,7 +11004,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLORAGATO] =
+    [SPECIES_FLORAGATO] =
     {
         .categoryName = _("Grass Cat"),
         .height = 9,
@@ -11016,7 +11016,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MEOWSCARADA] =
+    [SPECIES_MEOWSCARADA] =
     {
         .categoryName = _("Magician"),
         .height = 15,
@@ -11028,7 +11028,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FUECOCO] =
+    [SPECIES_FUECOCO] =
     {
         .categoryName = _("Fire Croc"),
         .height = 4,
@@ -11040,7 +11040,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CROCALOR] =
+    [SPECIES_CROCALOR] =
     {
         .categoryName = _("Fire Croc"),
         .height = 10,
@@ -11052,7 +11052,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SKELEDIRGE] =
+    [SPECIES_SKELEDIRGE] =
     {
         .categoryName = _("Singer"),
         .height = 16,
@@ -11064,7 +11064,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_QUAXLY] =
+    [SPECIES_QUAXLY] =
     {
         .categoryName = _("Duckling"),
         .height = 5,
@@ -11076,7 +11076,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_QUAXWELL] =
+    [SPECIES_QUAXWELL] =
     {
         .categoryName = _("Practicing"),
         .height = 12,
@@ -11088,7 +11088,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_QUAQUAVAL] =
+    [SPECIES_QUAQUAVAL] =
     {
         .categoryName = _("Dancer"),
         .height = 18,
@@ -11100,7 +11100,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LECHONK] =
+    [SPECIES_LECHONK] =
     {
         .categoryName = _("Hog"),
         .height = 5,
@@ -11112,7 +11112,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_OINKOLOGNE] =
+    [SPECIES_OINKOLOGNE] =
     {
         .categoryName = _("Hog"),
         .height = 10,
@@ -11124,7 +11124,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TAROUNTULA] =
+    [SPECIES_TAROUNTULA] =
     {
         .categoryName = _("String Ball"),
         .height = 3,
@@ -11136,7 +11136,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SPIDOPS] =
+    [SPECIES_SPIDOPS] =
     {
         .categoryName = _("Trap"),
         .height = 10,
@@ -11148,7 +11148,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NYMBLE] =
+    [SPECIES_NYMBLE] =
     {
         .categoryName = _("Grasshopper"),
         .height = 2,
@@ -11160,7 +11160,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_LOKIX] =
+    [SPECIES_LOKIX] =
     {
         .categoryName = _("Grasshopper"),
         .height = 10,
@@ -11172,7 +11172,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PAWMI] =
+    [SPECIES_PAWMI] =
     {
         .categoryName = _("Mouse"),
         .height = 3,
@@ -11184,7 +11184,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PAWMO] =
+    [SPECIES_PAWMO] =
     {
         .categoryName = _("Mouse"),
         .height = 4,
@@ -11196,7 +11196,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PAWMOT] =
+    [SPECIES_PAWMOT] =
     {
         .categoryName = _("Hands-On"),
         .height = 9,
@@ -11208,7 +11208,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TANDEMAUS] =
+    [SPECIES_TANDEMAUS] =
     {
         .categoryName = _("Couple"),
         .height = 3,
@@ -11220,7 +11220,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MAUSHOLD] =
+    [SPECIES_MAUSHOLD] =
     {
         .categoryName = _("Family"),
         .height = 3,
@@ -11232,7 +11232,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FIDOUGH] =
+    [SPECIES_FIDOUGH] =
     {
         .categoryName = _("Puppy"),
         .height = 3,
@@ -11244,7 +11244,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DACHSBUN] =
+    [SPECIES_DACHSBUN] =
     {
         .categoryName = _("Dog"),
         .height = 5,
@@ -11256,7 +11256,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SMOLIV] =
+    [SPECIES_SMOLIV] =
     {
         .categoryName = _("Olive"),
         .height = 3,
@@ -11268,7 +11268,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DOLLIV] =
+    [SPECIES_DOLLIV] =
     {
         .categoryName = _("Olive"),
         .height = 6,
@@ -11280,7 +11280,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARBOLIVA] =
+    [SPECIES_ARBOLIVA] =
     {
         .categoryName = _("Olive"),
         .height = 14,
@@ -11292,7 +11292,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SQUAWKABILLY] =
+    [SPECIES_SQUAWKABILLY] =
     {
         .categoryName = _("Parrot"),
         .height = 6,
@@ -11304,7 +11304,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NACLI] =
+    [SPECIES_NACLI] =
     {
         .categoryName = _("Rock Salt"),
         .height = 4,
@@ -11316,7 +11316,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_NACLSTACK] =
+    [SPECIES_NACLSTACK] =
     {
         .categoryName = _("Rock Salt"),
         .height = 6,
@@ -11328,7 +11328,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GARGANACL] =
+    [SPECIES_GARGANACL] =
     {
         .categoryName = _("Rock Salt"),
         .height = 23,
@@ -11340,7 +11340,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHARCADET] =
+    [SPECIES_CHARCADET] =
     {
         .categoryName = _("Fire Child"),
         .height = 6,
@@ -11352,7 +11352,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARMAROUGE] =
+    [SPECIES_ARMAROUGE] =
     {
         .categoryName = _("Fire Warrior"),
         .height = 15,
@@ -11364,7 +11364,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CERULEDGE] =
+    [SPECIES_CERULEDGE] =
     {
         .categoryName = _("Fire Blades"),
         .height = 16,
@@ -11376,7 +11376,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TADBULB] =
+    [SPECIES_TADBULB] =
     {
         .categoryName = _("EleTadpole"),
         .height = 3,
@@ -11388,7 +11388,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BELLIBOLT] =
+    [SPECIES_BELLIBOLT] =
     {
         .categoryName = _("EleFrog"),
         .height = 12,
@@ -11400,7 +11400,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WATTREL] =
+    [SPECIES_WATTREL] =
     {
         .categoryName = _("Storm Petrel"),
         .height = 4,
@@ -11412,7 +11412,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KILOWATTREL] =
+    [SPECIES_KILOWATTREL] =
     {
         .categoryName = _("Frigatebird"),
         .height = 14,
@@ -11424,7 +11424,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MASCHIFF] =
+    [SPECIES_MASCHIFF] =
     {
         .categoryName = _("Rascal"),
         .height = 5,
@@ -11436,7 +11436,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MABOSSTIFF] =
+    [SPECIES_MABOSSTIFF] =
     {
         .categoryName = _("Boss"),
         .height = 11,
@@ -11448,7 +11448,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SHROODLE] =
+    [SPECIES_SHROODLE] =
     {
         .categoryName = _("Toxic Mouse"),
         .height = 2,
@@ -11460,7 +11460,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GRAFAIAI] =
+    [SPECIES_GRAFAIAI] =
     {
         .categoryName = _("Toxic Monkey"),
         .height = 7,
@@ -11472,7 +11472,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BRAMBLIN] =
+    [SPECIES_BRAMBLIN] =
     {
         .categoryName = _("Tumbleweed"),
         .height = 6,
@@ -11484,7 +11484,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BRAMBLEGHAST] =
+    [SPECIES_BRAMBLEGHAST] =
     {
         .categoryName = _("Tumbleweed"),
         .height = 12,
@@ -11496,7 +11496,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TOEDSCOOL] =
+    [SPECIES_TOEDSCOOL] =
     {
         .categoryName = _("Woodear"),
         .height = 9,
@@ -11508,7 +11508,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TOEDSCRUEL] =
+    [SPECIES_TOEDSCRUEL] =
     {
         .categoryName = _("Woodear"),
         .height = 190,
@@ -11520,7 +11520,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KLAWF] =
+    [SPECIES_KLAWF] =
     {
         .categoryName = _("Ambush"),
         .height = 13,
@@ -11532,7 +11532,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CAPSAKID] =
+    [SPECIES_CAPSAKID] =
     {
         .categoryName = _("Spicy Pepper"),
         .height = 10,
@@ -11544,7 +11544,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SCOVILLAIN] =
+    [SPECIES_SCOVILLAIN] =
     {
         .categoryName = _("Spicy Pepper"),
         .height = 9,
@@ -11556,7 +11556,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RELLOR] =
+    [SPECIES_RELLOR] =
     {
         .categoryName = _("Rolling"),
         .height = 2,
@@ -11568,7 +11568,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_RABSCA] =
+    [SPECIES_RABSCA] =
     {
         .categoryName = _("Rolling"),
         .height = 3,
@@ -11580,7 +11580,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLITTLE] =
+    [SPECIES_FLITTLE] =
     {
         .categoryName = _("Frill"),
         .height = 2,
@@ -11592,7 +11592,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ESPATHRA] =
+    [SPECIES_ESPATHRA] =
     {
         .categoryName = _("Ostrich"),
         .height = 19,
@@ -11604,7 +11604,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TINKATINK] =
+    [SPECIES_TINKATINK] =
     {
         .categoryName = _("Metalsmith"),
         .height = 4,
@@ -11616,7 +11616,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TINKATUFF] =
+    [SPECIES_TINKATUFF] =
     {
         .categoryName = _("Hammer"),
         .height = 7,
@@ -11628,7 +11628,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TINKATON] =
+    [SPECIES_TINKATON] =
     {
         .categoryName = _("Hammer"),
         .height = 7,
@@ -11640,7 +11640,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WIGLETT] =
+    [SPECIES_WIGLETT] =
     {
         .categoryName = _("Garden Eel"),
         .height = 12,
@@ -11652,7 +11652,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WUGTRIO] =
+    [SPECIES_WUGTRIO] =
     {
         .categoryName = _("Garden Eel"),
         .height = 12,
@@ -11664,7 +11664,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BOMBIRDIER] =
+    [SPECIES_BOMBIRDIER] =
     {
         .categoryName = _("Item Drop"),
         .height = 15,
@@ -11676,7 +11676,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FINIZEN] =
+    [SPECIES_FINIZEN] =
     {
         .categoryName = _("Dolphin"),
         .height = 13,
@@ -11688,7 +11688,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PALAFIN] =
+    [SPECIES_PALAFIN] =
     {
         .categoryName = _("Dolphin"),
         .height = 13,
@@ -11700,7 +11700,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VAROOM] =
+    [SPECIES_VAROOM] =
     {
         .categoryName = _("Single-Cyl"),
         .height = 10,
@@ -11712,7 +11712,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_REVAVROOM] =
+    [SPECIES_REVAVROOM] =
     {
         .categoryName = _("Single-Cyl"),
         .height = 18,
@@ -11724,7 +11724,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CYCLIZAR] =
+    [SPECIES_CYCLIZAR] =
     {
         .categoryName = _("Mount"),
         .height = 16,
@@ -11736,7 +11736,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ORTHWORM] =
+    [SPECIES_ORTHWORM] =
     {
         .categoryName = _("Earthworm"),
         .height = 25,
@@ -11748,7 +11748,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GLIMMET] =
+    [SPECIES_GLIMMET] =
     {
         .categoryName = _("Ore"),
         .height = 7,
@@ -11760,7 +11760,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GLIMMORA] =
+    [SPECIES_GLIMMORA] =
     {
         .categoryName = _("Ore"),
         .height = 15,
@@ -11772,7 +11772,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GREAVARD] =
+    [SPECIES_GREAVARD] =
     {
         .categoryName = _("Ghost Dog"),
         .height = 6,
@@ -11784,7 +11784,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_HOUNDSTONE] =
+    [SPECIES_HOUNDSTONE] =
     {
         .categoryName = _("Ghost Dog"),
         .height = 20,
@@ -11796,7 +11796,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLAMIGO] =
+    [SPECIES_FLAMIGO] =
     {
         .categoryName = _("Synchronize"),
         .height = 16,
@@ -11808,7 +11808,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CETODDLE] =
+    [SPECIES_CETODDLE] =
     {
         .categoryName = _("Terra Whale"),
         .height = 12,
@@ -11820,7 +11820,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CETITAN] =
+    [SPECIES_CETITAN] =
     {
         .categoryName = _("Terra Whale"),
         .height = 45,
@@ -11832,7 +11832,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_VELUZA] =
+    [SPECIES_VELUZA] =
     {
         .categoryName = _("Jettison"),
         .height = 25,
@@ -11844,7 +11844,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DONDOZO] =
+    [SPECIES_DONDOZO] =
     {
         .categoryName = _("Big Catfish"),
         .height = 120,
@@ -11856,7 +11856,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TATSUGIRI] =
+    [SPECIES_TATSUGIRI] =
     {
         .categoryName = _("Mimicry"),
         .height = 3,
@@ -11868,7 +11868,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ANNIHILAPE] =
+    [SPECIES_ANNIHILAPE] =
     {
         .categoryName = _("Rage Monkey"),
         .height = 12,
@@ -11880,7 +11880,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CLODSIRE] =
+    [SPECIES_CLODSIRE] =
     {
         .categoryName = _("Spiny Fish"),
         .height = 18,
@@ -11892,7 +11892,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FARIGIRAF] =
+    [SPECIES_FARIGIRAF] =
     {
         .categoryName = _("Long Neck"),
         .height = 32,
@@ -11904,7 +11904,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DUDUNSPARCE] =
+    [SPECIES_DUDUNSPARCE] =
     {
         .categoryName = _("Land Snake"),
         .height = 36,
@@ -11916,7 +11916,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KINGAMBIT] =
+    [SPECIES_KINGAMBIT] =
     {
         .categoryName = _("Big Blade"),
         .height = 20,
@@ -11928,7 +11928,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GREAT_TUSK] =
+    [SPECIES_GREAT_TUSK] =
     {
         .categoryName = _("Paradox"),
         .height = 22,
@@ -11940,7 +11940,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SCREAM_TAIL] =
+    [SPECIES_SCREAM_TAIL] =
     {
         .categoryName = _("Paradox"),
         .height = 12,
@@ -11952,7 +11952,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BRUTE_BONNET] =
+    [SPECIES_BRUTE_BONNET] =
     {
         .categoryName = _("Paradox"),
         .height = 12,
@@ -11964,7 +11964,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FLUTTER_MANE] =
+    [SPECIES_FLUTTER_MANE] =
     {
         .categoryName = _("Paradox"),
         .height = 14,
@@ -11976,7 +11976,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SLITHER_WING] =
+    [SPECIES_SLITHER_WING] =
     {
         .categoryName = _("Paradox"),
         .height = 32,
@@ -11988,7 +11988,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SANDY_SHOCKS] =
+    [SPECIES_SANDY_SHOCKS] =
     {
         .categoryName = _("Paradox"),
         .height = 23,
@@ -12000,7 +12000,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_IRON_TREADS] =
+    [SPECIES_IRON_TREADS] =
     {
         .categoryName = _("Paradox"),
         .height = 9,
@@ -12012,7 +12012,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_IRON_BUNDLE] =
+    [SPECIES_IRON_BUNDLE] =
     {
         .categoryName = _("Paradox"),
         .height = 6,
@@ -12024,7 +12024,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_IRON_HANDS] =
+    [SPECIES_IRON_HANDS] =
     {
         .categoryName = _("Paradox"),
         .height = 18,
@@ -12036,7 +12036,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_IRON_JUGULIS] =
+    [SPECIES_IRON_JUGULIS] =
     {
         .categoryName = _("Paradox"),
         .height = 12,
@@ -12048,7 +12048,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_IRON_MOTH] =
+    [SPECIES_IRON_MOTH] =
     {
         .categoryName = _("Paradox"),
         .height = 12,
@@ -12060,7 +12060,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_IRON_THORNS] =
+    [SPECIES_IRON_THORNS] =
     {
         .categoryName = _("Paradox"),
         .height = 16,
@@ -12072,7 +12072,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FRIGIBAX] =
+    [SPECIES_FRIGIBAX] =
     {
         .categoryName = _("Ice Fin"),
         .height = 5,
@@ -12084,7 +12084,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ARCTIBAX] =
+    [SPECIES_ARCTIBAX] =
     {
         .categoryName = _("Ice Fin"),
         .height = 8,
@@ -12096,7 +12096,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BAXCALIBUR] =
+    [SPECIES_BAXCALIBUR] =
     {
         .categoryName = _("Ice Dragon"),
         .height = 21,
@@ -12108,7 +12108,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GIMMIGHOUL] =
+    [SPECIES_GIMMIGHOUL] =
     {
         .categoryName = _("Coin Chest"),
         .height = 3,
@@ -12120,7 +12120,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_GHOLDENGO] =
+    [SPECIES_GHOLDENGO] =
     {
         .categoryName = _("Coin Entity"),
         .height = 12,
@@ -12132,7 +12132,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WO_CHIEN] =
+    [SPECIES_WO_CHIEN] =
     {
         .categoryName = _("Ruinous"),
         .height = 15,
@@ -12144,7 +12144,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHIEN_PAO] =
+    [SPECIES_CHIEN_PAO] =
     {
         .categoryName = _("Ruinous"),
         .height = 19,
@@ -12156,7 +12156,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TING_LU] =
+    [SPECIES_TING_LU] =
     {
         .categoryName = _("Ruinous"),
         .height = 27,
@@ -12168,7 +12168,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_CHI_YU] =
+    [SPECIES_CHI_YU] =
     {
         .categoryName = _("Ruinous"),
         .height = 4,
@@ -12180,7 +12180,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ROARING_MOON] =
+    [SPECIES_ROARING_MOON] =
     {
         .categoryName = _("Paradox"),
         .height = 20,
@@ -12192,7 +12192,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_IRON_VALIANT] =
+    [SPECIES_IRON_VALIANT] =
     {
         .categoryName = _("Paradox"),
         .height = 14,
@@ -12204,7 +12204,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_KORAIDON] =
+    [SPECIES_KORAIDON] =
     {
         .categoryName = _("Paradox"),
         .height = 25,
@@ -12216,7 +12216,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MIRAIDON] =
+    [SPECIES_MIRAIDON] =
     {
         .categoryName = _("Paradox"),
         .height = 35,
@@ -12228,7 +12228,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WALKING_WAKE] =
+    [SPECIES_WALKING_WAKE] =
     {
         .categoryName = _("Paradox"),
         .height = 35,
@@ -12240,7 +12240,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_IRON_LEAVES] =
+    [SPECIES_IRON_LEAVES] =
     {
         .categoryName = _("Paradox"),
         .height = 15,
@@ -12252,7 +12252,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_DIPPLIN] =
+    [SPECIES_DIPPLIN] =
     {
         .categoryName = _("Candy Apple"),
         .height = 4,
@@ -12264,7 +12264,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_POLTCHAGEIST] =
+    [SPECIES_POLTCHAGEIST] =
     {
         .categoryName = _("Matcha"),
         .height = 1,
@@ -12276,7 +12276,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_SINISTCHA] =
+    [SPECIES_SINISTCHA] =
     {
         .categoryName = _("Matcha"),
         .height = 2,
@@ -12288,7 +12288,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_OKIDOGI] =
+    [SPECIES_OKIDOGI] =
     {
         .categoryName = _("Retainer"),
         .height = 18,
@@ -12300,7 +12300,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MUNKIDORI] =
+    [SPECIES_MUNKIDORI] =
     {
         .categoryName = _("Retainer"),
         .height = 10,
@@ -12312,7 +12312,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FEZANDIPITI] =
+    [SPECIES_FEZANDIPITI] =
     {
         .categoryName = _("Retainer"),
         .height = 14,
@@ -12324,7 +12324,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_OGERPON] =
+    [SPECIES_OGERPON] =
     {
         .categoryName = _("Mask"),
         .height = 12,
@@ -12336,7 +12336,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BASCULEGION] =
+    [SPECIES_BASCULEGION] =
     {
         .categoryName = _("Big Fish"),
         .height = 30,

@@ -2552,7 +2552,7 @@ static void SetPartyMonHeldItemSelectionActions(struct Pokemon *mons, u8 slotId)
     // Give Mega Stone
     if (megaStones[1] && CheckBagHasItem(megaStones[1], 1) && helditem != megaStones[1])
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MEGA_STONE_2);
-        
+
     // Give Mega Stone
     if (megaStones[2] && CheckBagHasItem(megaStones[2], 1) && helditem != megaStones[2])
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MEGA_STONE_3);
@@ -5709,7 +5709,8 @@ void ItemUseCB_Nectar(u8 taskId, TaskFunc task) {
     newSpecies = sOricorioFormSpeciesIdTable[secondaryId];
 
     PlaySE(SE_SELECT);
-    if (gSpeciesToNationalPokedexNum[currSpecies - 1] != SPECIES_ORICORIO || (newSpecies == currSpecies)) {
+
+    if (newSpecies == currSpecies || (gSpecies[currSpecies].forms && gSpecies[currSpecies].forms[0] != SPECIES_ORICORIO)) {
         gPartyMenuUseExitCallback = FALSE;
         DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
         ScheduleBgCopyTilemapToVram(2);
