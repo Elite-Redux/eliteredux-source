@@ -25,6 +25,9 @@ extern "C" {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic error "-Wunused-function"
 
+#pragma GCC push_options
+#pragma GCC optimize("-ftoplevel-reorder")
+
 #define NO_ANNOUNCE 2
 
 class __EnumHack {
@@ -10012,3 +10015,4 @@ const Ability gAbilities[] = {
 };
 
 #pragma GCC diagnostic pop
+#pragma GCC pop_options

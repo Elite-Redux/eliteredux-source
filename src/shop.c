@@ -882,7 +882,7 @@ static void BuyMenuSetListEntry(struct ListMenuItem *menuItem, u16 item, u8 *nam
             StringCopy(name, gDecorations[item].name);
         break;
         case MART_TYPE_MONS:
-            StringCopy(name, gSpeciesNames[item]);
+            StringCopy(name, gSpecies[item].name);
         break;
     }
 
@@ -925,7 +925,7 @@ static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, s
             case MART_TYPE_MONS:{
                 u16 dexnum = SpeciesToNationalPokedexNum(item);
 
-                StringCopy(gStringVar1, gSpeciesNames[item]);
+                StringCopy(gStringVar1, gSpecies[item].name);
                 StringCopy(gStringVar2, gPokedexEntries[dexnum].categoryName);
                 ConvertIntToDecimalStringN(gStringVar3, level, STR_CONV_MODE_LEFT_ALIGN, 3);
                 StringExpandPlaceholders(gStringVar4, sText_Title_PokemonDescription);
@@ -1536,7 +1536,7 @@ static void Task_BuyMenu(u8 taskId)
                         BuyMenuDisplayMessage(taskId, gStringVar4, BuyMenuConfirmPurchase);
                     }
                     else if (sMartInfo.martType == MART_TYPE_MONS) {
-                        StringCopy(gStringVar1, gSpeciesNames[itemId]);
+                        StringCopy(gStringVar1, gSpecies[itemId].name);
                         ConvertIntToDecimalStringN(gStringVar2, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
                         StringExpandPlaceholders(gStringVar4, gText_Var1IsItThatllBeVar2BP);
 

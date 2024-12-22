@@ -1802,7 +1802,9 @@ const s8 gNatureStatTable[NUM_NATURES][NUM_NATURE_STATS] = {
 #include "data/pokemon/experience_tables.h"
 // For some dumbass reason transitive includes fail
 #undef LEVEL_UP_END
+#pragma GCC push_options
 #include "data/pokemon/species_data_defines.h"
+#pragma GCC optimize("-ftoplevel-reorder")
 #include "data/pokemon/species_data_gen1.h"
 #include "data/pokemon/species_data_gen2.h"
 #include "data/pokemon/species_data_gen3.h"
@@ -1813,6 +1815,7 @@ const s8 gNatureStatTable[NUM_NATURES][NUM_NATURE_STATS] = {
 #include "data/pokemon/species_data_gen8.h"
 #include "data/pokemon/species_data_gen9.h"
 #include "data/pokemon/species_data.h"
+#pragma GCC pop_options
 #undef LEVEL_UP_END
 #define LEVEL_UP_END 0xFFFF
 #include "data/pokemon/level_up_learnsets.h"
@@ -5220,9 +5223,9 @@ void GetSpeciesName(u8 *name, u16 species) {
 
     for (i = 0; i <= POKEMON_NAME_LENGTH; i++) {
         if (species > NUM_SPECIES)
-            name[i] = gSpeciesNames[0][i];
+            name[i] = gSpecies[0].name[i];
         else
-            name[i] = gSpeciesNames[species][i];
+            name[i] = gSpecies[species].name[i];
 
         if (name[i] == EOS) break;
     }
@@ -6413,7 +6416,7 @@ void EvolutionRenameMon(struct Pokemon *mon, u16 oldSpecies, u16 newSpecies) {
     u8 language;
     GetMonData(mon, MON_DATA_NICKNAME, gStringVar1);
     language = GetMonData(mon, MON_DATA_LANGUAGE, &language);
-    if (language == GAME_LANGUAGE && !StringCompare(gSpeciesNames[oldSpecies], gStringVar1)) SetMonData(mon, MON_DATA_NICKNAME, gSpeciesNames[newSpecies]);
+    if (language == GAME_LANGUAGE && !StringCompare(gSpecies[oldSpecies].name, gStringVar1)) SetMonData(mon, MON_DATA_NICKNAME, gSpecies[newSpecies].name);
 }
 
 // The below two functions determine which side of a multi battle the trainer battles on
@@ -8160,7 +8163,7 @@ bool8 isMonNicknamed(struct Pokemon *mon) {
     u8 strArray[POKEMON_SPECIES_NAME_LENGTH + 1];
     u8 strNickname[POKEMON_NAME_LENGTH + 1];
 
-    StringCopy(strArray, gSpeciesNames[species]);
+    StringCopy(strArray, gSpecies[species].name);
     GetMonData(mon, MON_DATA_NICKNAME, strNickname);
 
     for (i = 0; i < POKEMON_NAME_LENGTH; i++) {
@@ -8179,7 +8182,7 @@ bool8 isBoxMonNicknamed(struct BoxPokemon *boxMon) {
     u8 strArray[POKEMON_SPECIES_NAME_LENGTH + 1];
     u8 strNickname[POKEMON_NAME_LENGTH + 1];
 
-    StringCopy(strArray, gSpeciesNames[species]);
+    StringCopy(strArray, gSpecies[species].name);
     GetBoxMonData(boxMon, MON_DATA_NICKNAME, strNickname);
 
     for (i = 0; i < POKEMON_NAME_LENGTH; i++) {
@@ -9361,383 +9364,8 @@ u16 GetFormShiftSpecies(u16 species) {
     return SPECIES_NONE;
 }
 
-const u8 gSpeciesNameLongTatsugiriDroopy[] = _("Tatsugiri Droopy");
-const u8 gSpeciesNameLongTatsugiriStretchy[] = _("Tatsugiri Stretchy");
-const u8 gSpeciesNameLongTatsugiriCurly[] = _("Tatsugiri Curly");
-
-const u8 gSpeciesNameLongOricorioPau[] = _("Oricorio Pau");
-const u8 gSpeciesNameLongOricorioPomPom[] = _("Oricorio Pom Pom");
-const u8 gSpeciesNameLongOricorioSensu[] = _("Oricorio Sensu");
-
-const u8 gSpeciesNameLongShayminSky[] = _("Shaymin Sky");
-
-const u8 gSpeciesNameLongDeoxysAttack[] = _("Deoxys Attack");
-const u8 gSpeciesNameLongDeoxysDefense[] = _("Deoxys Defense");
-const u8 gSpeciesNameLongDeoxysSpeed[] = _("Deoxys Speed");
-
-const u8 gSpeciesNameLongRotomHeat[] = _("Rotom Heat");
-const u8 gSpeciesNameLongRotomFan[] = _("Rotom Fan");
-const u8 gSpeciesNameLongRotomFrost[] = _("Rotom Frost");
-const u8 gSpeciesNameLongRotomMow[] = _("Rotom Mow");
-const u8 gSpeciesNameLongRotomWash[] = _("Rotom Wash");
-
-const u8 gSpeciesNameLongTornadusTherian[] = _("Tornadus Therian");
-const u8 gSpeciesNameLongThundurusTherian[] = _("Thundurus Therian");
-const u8 gSpeciesNameLongLandorusTherian[] = _("Landorus Therian");
-const u8 gSpeciesNameLongEnamorusTherian[] = _("Enamorus Therian");
-
-const u8 gSpeciesNameLongKeldeoResolute[] = _("Keldeo Resolute");
-
-const u8 gSpeciesNameLongOgerponHearthflameMask[] = _("Ogerpon Hearthflame");
-const u8 gSpeciesNameLongOgerponCornerstoneMask[] = _("Ogerpon Cornerstone");
-const u8 gSpeciesNameLongOgerponWellspringMask[] = _("Ogerpon Wellspring");
-
-const u8 gSpeciesNameLongFurfrouDandy[] = _("Furfrou Dandy");
-const u8 gSpeciesNameLongFurfrouDebutante[] = _("Furfrou Debutante");
-const u8 gSpeciesNameLongFurfrouDiamond[] = _("Furfrou Diamond");
-const u8 gSpeciesNameLongFurfrouHeart[] = _("Furfrou Heart");
-const u8 gSpeciesNameLongFurfrouKabuki[] = _("Furfrou Kabuki");
-const u8 gSpeciesNameLongFurfrouLaReine[] = _("Furfrou La Reine");
-const u8 gSpeciesNameLongFurfrouMatron[] = _("Furfrou Matron");
-const u8 gSpeciesNameLongFurfrouPharaoh[] = _("Furfrou Pharaoh");
-const u8 gSpeciesNameLongFurfrouStar[] = _("Furfrou Star");
-
-const u8 gSpeciesNameLongNecrozmaDawnWings[] = _("Dawn Wings");
-const u8 gSpeciesNameLongNecrozmaDuskMane[] = _("Dusk Mane");
-
-const u8 gSpeciesNameLongMiniorRed[] = _("Minior Red");
-const u8 gSpeciesNameLongMiniorOrange[] = _("Minior Orange");
-const u8 gSpeciesNameLongMiniorYellow[] = _("Minior Yellow");
-const u8 gSpeciesNameLongMiniorGreen[] = _("Minior Green");
-const u8 gSpeciesNameLongMiniorBlue[] = _("Minior Blue");
-const u8 gSpeciesNameLongMiniorIndigo[] = _("Minior Indigo");
-const u8 gSpeciesNameLongMiniorViolet[] = _("Minior Violet");
-
-const u8 gSpeciesNameLongShellosEast[] = _("East Shellos");
-const u8 gSpeciesNameLongShellosWest[] = _("West Shellos");
-const u8 gSpeciesNameLongGastrodonEast[] = _("East Gastrodon");
-const u8 gSpeciesNameLongGastrodonWest[] = _("West Gastrodon");
-
-const u8 gSpeciesNameLongSquawkabillyGreen[] = _("Squawk Green");
-const u8 gSpeciesNameLongSquawkabillyBlue[] = _("Squawk Blue");
-const u8 gSpeciesNameLongSquawkabillyYellow[] = _("Squawk Yellow");
-const u8 gSpeciesNameLongSquawkabillyWhite[] = _("Squawk White");
-
-const u8 gSpeciesNameLongBurmyGrass[] = _("Burmy Grass");
-const u8 gSpeciesNameLongBurmySand[] = _("Burmy Sand");
-const u8 gSpeciesNameLongBurmyTrash[] = _("Burmy Trash");
-
-const u8 gSpeciesNameLongWormadamGrass[] = _("Wormadam Grass");
-const u8 gSpeciesNameLongWormadamSand[] = _("Wormadam Sand");
-const u8 gSpeciesNameLongWormadamTrash[] = _("Wormadam Trash");
-
-const u8 gSpeciesNameLongMeloettaAria[] = _("Meloetta Aria");
-const u8 gSpeciesNameLongMeloettaPirouette[] = _("Meloetta Pirouette");
-
-const u8 gSpeciesNameLongUrsalunaBloodmoon[] = _("Ursaluna Bloodmoon");
-
-const u8 gSpeciesNameLongBasculin[] = _("Basculin Red");
-const u8 gSpeciesNameLongBasculinBlue[] = _("Basculin Blue");
-const u8 gSpeciesNameLongBasculinWhite[] = _("Basculin White");
-
-#define SPECIES_NAME_LONG_VALUE(species, string) const u8 gSpeciesNameLong##species[] = _(string);
-#define RETURN_SPECIES_NAME_LONG(species) \
-    case species:                         \
-        return gSpeciesNameLong##species;
-
-SPECIES_NAME_LONG_VALUE(SPECIES_POLARTIC_BLUEMOON, "Polartic Bluemoon")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_DUDUNSPARCE, "Dudunsparce Two")
-SPECIES_NAME_LONG_VALUE(SPECIES_DUDUNSPARCE_THREE_SEGMENT, "Dudunsparce Three")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_MAUSHOLD, "Maushold Three")
-SPECIES_NAME_LONG_VALUE(SPECIES_MAUSHOLD_FOUR, "Maushold Four")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_GIMMIGHOUL_ROAMING, "Gimmighoul Roaming")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_FLABEBE, "Flabebe Red")
-SPECIES_NAME_LONG_VALUE(SPECIES_FLABEBE_BLUE_FLOWER, "Flabebe Blue")
-SPECIES_NAME_LONG_VALUE(SPECIES_FLABEBE_ORANGE_FLOWER, "Flabebe Orange")
-SPECIES_NAME_LONG_VALUE(SPECIES_FLABEBE_YELLOW_FLOWER, "Flabebe Yellow")
-SPECIES_NAME_LONG_VALUE(SPECIES_FLABEBE_WHITE_FLOWER, "Flabebe White")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_FLOETTE, "Floette Red")
-SPECIES_NAME_LONG_VALUE(SPECIES_FLOETTE_BLUE_FLOWER, "Floette Blue")
-SPECIES_NAME_LONG_VALUE(SPECIES_FLOETTE_ORANGE_FLOWER, "Floette Orange")
-SPECIES_NAME_LONG_VALUE(SPECIES_FLOETTE_YELLOW_FLOWER, "Floette Yellow")
-SPECIES_NAME_LONG_VALUE(SPECIES_FLOETTE_WHITE_FLOWER, "Floette White")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_FLORGES, "Florges Red")
-SPECIES_NAME_LONG_VALUE(SPECIES_FLORGES_BLUE_FLOWER, "Florges Blue")
-SPECIES_NAME_LONG_VALUE(SPECIES_FLORGES_ORANGE_FLOWER, "Florges Orange")
-SPECIES_NAME_LONG_VALUE(SPECIES_FLORGES_YELLOW_FLOWER, "Florges Yellow")
-SPECIES_NAME_LONG_VALUE(SPECIES_FLORGES_WHITE_FLOWER, "Florges White")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_DEERLING, "Deerling Spring")
-SPECIES_NAME_LONG_VALUE(SPECIES_DEERLING_AUTUMN, "Deerling Autumn")
-SPECIES_NAME_LONG_VALUE(SPECIES_DEERLING_SUMMER, "Deerling Summer")
-SPECIES_NAME_LONG_VALUE(SPECIES_DEERLING_WINTER, "Deerling Winter")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_SAWSBUCK, "Sawsbuck Spring")
-SPECIES_NAME_LONG_VALUE(SPECIES_SAWSBUCK_AUTUMN, "Sawsbuck Autumn")
-SPECIES_NAME_LONG_VALUE(SPECIES_SAWSBUCK_SUMMER, "Sawsbuck Summer")
-SPECIES_NAME_LONG_VALUE(SPECIES_SAWSBUCK_WINTER, "Sawsbuck Winter")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_ALCREMIE, "Alcremie Vanilla")
-SPECIES_NAME_LONG_VALUE(SPECIES_ALCREMIE_CARAMEL_SWIRL, "Alcremie Caramel")
-SPECIES_NAME_LONG_VALUE(SPECIES_ALCREMIE_LEMON_CREAM, "Alcremie Lemon")
-SPECIES_NAME_LONG_VALUE(SPECIES_ALCREMIE_MINT_CREAM, "Alcremie Mint")
-SPECIES_NAME_LONG_VALUE(SPECIES_ALCREMIE_RAINBOW_SWIRL, "Alcremie Rainbow")
-SPECIES_NAME_LONG_VALUE(SPECIES_ALCREMIE_RUBY_CREAM, "Alcremie Ruby")
-SPECIES_NAME_LONG_VALUE(SPECIES_ALCREMIE_RUBY_SWIRL, "Alcremie Ruby Swirl")
-SPECIES_NAME_LONG_VALUE(SPECIES_ALCREMIE_MATCHA_CREAM, "Alcremie Matcha")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_PIKACHU_ORIGINAL_CAP, "Pikachu Kanto")
-SPECIES_NAME_LONG_VALUE(SPECIES_PIKACHU_HOENN_CAP, "Pikachu Hoenn")
-SPECIES_NAME_LONG_VALUE(SPECIES_PIKACHU_SINNOH_CAP, "Pikachu Sinnoh")
-SPECIES_NAME_LONG_VALUE(SPECIES_PIKACHU_UNOVA_CAP, "Pikachu Unova")
-SPECIES_NAME_LONG_VALUE(SPECIES_PIKACHU_KALOS_CAP, "Pikachu Kalos")
-SPECIES_NAME_LONG_VALUE(SPECIES_PIKACHU_ALOLA_CAP, "Pikachu Alola")
-SPECIES_NAME_LONG_VALUE(SPECIES_PIKACHU_WORLD_CAP, "Pikachu World")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_PICHU_SPIKY_EARED, "Pichu Spiky")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_HOOPA_UNBOUND, "Hoopa Unbound")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_VIVILLON_SUN, "Vivillon Sun")
-SPECIES_NAME_LONG_VALUE(SPECIES_VIVILLON_FANCY, "Vivillon Fancy")
-SPECIES_NAME_LONG_VALUE(SPECIES_VIVILLON_POKE_BALL, "Vivillon Pokeball")
-SPECIES_NAME_LONG_VALUE(SPECIES_VIVILLON_POLAR, "Vivillon Polar")
-SPECIES_NAME_LONG_VALUE(SPECIES_VIVILLON_TUNDRA, "Vivillon Tundra")
-SPECIES_NAME_LONG_VALUE(SPECIES_VIVILLON_CONTINENTAL, "Vivillon Continental")
-SPECIES_NAME_LONG_VALUE(SPECIES_VIVILLON_HIGH_PLAINS, "Vivillon High Plains")
-SPECIES_NAME_LONG_VALUE(SPECIES_VIVILLON_GARDEN, "Vivillon Gardens")
-SPECIES_NAME_LONG_VALUE(SPECIES_VIVILLON_ELEGANT, "Vivillon Elegant")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_DARMANITAN_ZEN_MODE, "Darmanitan Zen")
-
-SPECIES_NAME_LONG_VALUE(SPECIES_DARMANITAN_REDUX_AURA, "Darmanitan Aura")
-
 const u8 *GetSpeciesLongName(u16 species) {
-    switch (species) {
-        case SPECIES_TATSUGIRI_DROOPY:
-            return gSpeciesNameLongTatsugiriDroopy;
-        case SPECIES_TATSUGIRI_STRETCHY:
-            return gSpeciesNameLongTatsugiriStretchy;
-        case SPECIES_TATSUGIRI:
-        case SPECIES_TATSUGIRI_CURLY:
-            return gSpeciesNameLongTatsugiriCurly;
-
-        case SPECIES_ORICORIO_PAU:
-            return gSpeciesNameLongOricorioPau;
-        case SPECIES_ORICORIO_POM_POM:
-            return gSpeciesNameLongOricorioPomPom;
-        case SPECIES_ORICORIO_SENSU:
-            return gSpeciesNameLongOricorioSensu;
-
-        case SPECIES_SHAYMIN_SKY:
-            return gSpeciesNameLongShayminSky;
-
-        case SPECIES_DEOXYS_ATTACK:
-            return gSpeciesNameLongDeoxysAttack;
-        case SPECIES_DEOXYS_DEFENSE:
-            return gSpeciesNameLongDeoxysDefense;
-        case SPECIES_DEOXYS_SPEED:
-            return gSpeciesNameLongDeoxysSpeed;
-
-        case SPECIES_ROTOM_HEAT:
-            return gSpeciesNameLongRotomHeat;
-        case SPECIES_ROTOM_FAN:
-            return gSpeciesNameLongRotomFan;
-        case SPECIES_ROTOM_FROST:
-            return gSpeciesNameLongRotomFrost;
-        case SPECIES_ROTOM_MOW:
-            return gSpeciesNameLongRotomMow;
-        case SPECIES_ROTOM_WASH:
-            return gSpeciesNameLongRotomWash;
-
-        case SPECIES_TORNADUS_THERIAN:
-            return gSpeciesNameLongTornadusTherian;
-        case SPECIES_THUNDURUS_THERIAN:
-            return gSpeciesNameLongThundurusTherian;
-        case SPECIES_LANDORUS_THERIAN:
-            return gSpeciesNameLongLandorusTherian;
-        case SPECIES_ENAMORUS_THERIAN:
-            return gSpeciesNameLongEnamorusTherian;
-
-        case SPECIES_KELDEO_RESOLUTE:
-            return gSpeciesNameLongKeldeoResolute;
-
-        case SPECIES_OGERPON_HEARTHFLAME_MASK:
-            return gSpeciesNameLongOgerponHearthflameMask;
-        case SPECIES_OGERPON_CORNERSTONE_MASK:
-            return gSpeciesNameLongOgerponCornerstoneMask;
-        case SPECIES_OGERPON_WELLSPRING_MASK:
-            return gSpeciesNameLongOgerponWellspringMask;
-
-        case SPECIES_FURFROU_DANDY_TRIM:
-            return gSpeciesNameLongFurfrouDandy;
-        case SPECIES_FURFROU_DEBUTANTE_TRIM:
-            return gSpeciesNameLongFurfrouDebutante;
-        case SPECIES_FURFROU_DIAMOND_TRIM:
-            return gSpeciesNameLongFurfrouDiamond;
-        case SPECIES_FURFROU_HEART_TRIM:
-            return gSpeciesNameLongFurfrouHeart;
-        case SPECIES_FURFROU_KABUKI_TRIM:
-            return gSpeciesNameLongFurfrouKabuki;
-        case SPECIES_FURFROU_LA_REINE_TRIM:
-            return gSpeciesNameLongFurfrouLaReine;
-        case SPECIES_FURFROU_MATRON_TRIM:
-            return gSpeciesNameLongFurfrouMatron;
-        case SPECIES_FURFROU_PHARAOH_TRIM:
-            return gSpeciesNameLongFurfrouPharaoh;
-        case SPECIES_FURFROU_STAR_TRIM:
-            return gSpeciesNameLongFurfrouStar;
-
-        case SPECIES_NECROZMA_DAWN_WINGS:
-            return gSpeciesNameLongNecrozmaDawnWings;
-        case SPECIES_NECROZMA_DUSK_MANE:
-            return gSpeciesNameLongNecrozmaDuskMane;
-
-        case SPECIES_MINIOR:
-            return gSpeciesNameLongMiniorRed;
-        case SPECIES_MINIOR_METEOR_ORANGE:
-            return gSpeciesNameLongMiniorOrange;
-        case SPECIES_MINIOR_METEOR_YELLOW:
-            return gSpeciesNameLongMiniorYellow;
-        case SPECIES_MINIOR_METEOR_GREEN:
-            return gSpeciesNameLongMiniorGreen;
-        case SPECIES_MINIOR_METEOR_BLUE:
-            return gSpeciesNameLongMiniorBlue;
-        case SPECIES_MINIOR_METEOR_INDIGO:
-            return gSpeciesNameLongMiniorIndigo;
-        case SPECIES_MINIOR_METEOR_VIOLET:
-            return gSpeciesNameLongMiniorViolet;
-
-        case SPECIES_SHELLOS:
-            return gSpeciesNameLongShellosWest;
-        case SPECIES_SHELLOS_EAST_SEA:
-            return gSpeciesNameLongShellosEast;
-        case SPECIES_GASTRODON:
-            return gSpeciesNameLongGastrodonWest;
-        case SPECIES_GASTRODON_EAST_SEA:
-            return gSpeciesNameLongGastrodonEast;
-
-        case SPECIES_SQUAWKABILLY:
-            return gSpeciesNameLongSquawkabillyGreen;
-        case SPECIES_SQUAWKABILLY_BLUE_PLUMAGE:
-            return gSpeciesNameLongSquawkabillyBlue;
-        case SPECIES_SQUAWKABILLY_WHITE_PLUMAGE:
-            return gSpeciesNameLongSquawkabillyWhite;
-        case SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE:
-            return gSpeciesNameLongSquawkabillyYellow;
-
-        case SPECIES_BURMY:
-            return gSpeciesNameLongBurmyGrass;
-        case SPECIES_BURMY_SANDY_CLOAK:
-            return gSpeciesNameLongBurmySand;
-        case SPECIES_BURMY_TRASH_CLOAK:
-            return gSpeciesNameLongBurmyTrash;
-
-        case SPECIES_WORMADAM:
-            return gSpeciesNameLongWormadamGrass;
-        case SPECIES_WORMADAM_SANDY_CLOAK:
-            return gSpeciesNameLongWormadamSand;
-        case SPECIES_WORMADAM_TRASH_CLOAK:
-            return gSpeciesNameLongWormadamTrash;
-
-        case SPECIES_MELOETTA:
-            return gSpeciesNameLongMeloettaAria;
-        case SPECIES_MELOETTA_PIROUETTE:
-            return gSpeciesNameLongMeloettaPirouette;
-
-        case SPECIES_URSALUNA_BLOODMOON:
-            return gSpeciesNameLongUrsalunaBloodmoon;
-
-        case SPECIES_BASCULIN:
-            return gSpeciesNameLongBasculin;
-        case SPECIES_BASCULIN_BLUE_STRIPED:
-            return gSpeciesNameLongBasculinBlue;
-        case SPECIES_BASCULIN_WHITESTRIPED:
-            return gSpeciesNameLongBasculinWhite;
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_POLARTIC_BLUEMOON)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_DUDUNSPARCE)
-            RETURN_SPECIES_NAME_LONG(SPECIES_DUDUNSPARCE_THREE_SEGMENT)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_MAUSHOLD)
-            RETURN_SPECIES_NAME_LONG(SPECIES_MAUSHOLD_FOUR)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_GIMMIGHOUL_ROAMING)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLABEBE)
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLABEBE_BLUE_FLOWER)
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLABEBE_ORANGE_FLOWER)
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLABEBE_YELLOW_FLOWER)
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLABEBE_WHITE_FLOWER)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLOETTE)
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLOETTE_BLUE_FLOWER)
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLOETTE_ORANGE_FLOWER)
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLOETTE_YELLOW_FLOWER)
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLOETTE_WHITE_FLOWER)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLORGES)
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLORGES_BLUE_FLOWER)
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLORGES_ORANGE_FLOWER)
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLORGES_YELLOW_FLOWER)
-            RETURN_SPECIES_NAME_LONG(SPECIES_FLORGES_WHITE_FLOWER)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_DEERLING)
-            RETURN_SPECIES_NAME_LONG(SPECIES_DEERLING_AUTUMN)
-            RETURN_SPECIES_NAME_LONG(SPECIES_DEERLING_SUMMER)
-            RETURN_SPECIES_NAME_LONG(SPECIES_DEERLING_WINTER)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_SAWSBUCK)
-            RETURN_SPECIES_NAME_LONG(SPECIES_SAWSBUCK_AUTUMN)
-            RETURN_SPECIES_NAME_LONG(SPECIES_SAWSBUCK_SUMMER)
-            RETURN_SPECIES_NAME_LONG(SPECIES_SAWSBUCK_WINTER)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_ALCREMIE)
-            RETURN_SPECIES_NAME_LONG(SPECIES_ALCREMIE_CARAMEL_SWIRL)
-            RETURN_SPECIES_NAME_LONG(SPECIES_ALCREMIE_LEMON_CREAM)
-            RETURN_SPECIES_NAME_LONG(SPECIES_ALCREMIE_MINT_CREAM)
-            RETURN_SPECIES_NAME_LONG(SPECIES_ALCREMIE_RAINBOW_SWIRL)
-            RETURN_SPECIES_NAME_LONG(SPECIES_ALCREMIE_RUBY_CREAM)
-            RETURN_SPECIES_NAME_LONG(SPECIES_ALCREMIE_RUBY_SWIRL)
-            RETURN_SPECIES_NAME_LONG(SPECIES_ALCREMIE_MATCHA_CREAM)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_PIKACHU_ORIGINAL_CAP)
-            RETURN_SPECIES_NAME_LONG(SPECIES_PIKACHU_HOENN_CAP)
-            RETURN_SPECIES_NAME_LONG(SPECIES_PIKACHU_SINNOH_CAP)
-            RETURN_SPECIES_NAME_LONG(SPECIES_PIKACHU_UNOVA_CAP)
-            RETURN_SPECIES_NAME_LONG(SPECIES_PIKACHU_KALOS_CAP)
-            RETURN_SPECIES_NAME_LONG(SPECIES_PIKACHU_ALOLA_CAP)
-            RETURN_SPECIES_NAME_LONG(SPECIES_PIKACHU_WORLD_CAP)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_PICHU_SPIKY_EARED)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_HOOPA_UNBOUND)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_VIVILLON_SUN)
-            RETURN_SPECIES_NAME_LONG(SPECIES_VIVILLON_FANCY)
-            RETURN_SPECIES_NAME_LONG(SPECIES_VIVILLON_POKE_BALL)
-            RETURN_SPECIES_NAME_LONG(SPECIES_VIVILLON_POLAR)
-            RETURN_SPECIES_NAME_LONG(SPECIES_VIVILLON_TUNDRA)
-            RETURN_SPECIES_NAME_LONG(SPECIES_VIVILLON_CONTINENTAL)
-            RETURN_SPECIES_NAME_LONG(SPECIES_VIVILLON_HIGH_PLAINS)
-            RETURN_SPECIES_NAME_LONG(SPECIES_VIVILLON_GARDEN)
-            RETURN_SPECIES_NAME_LONG(SPECIES_VIVILLON_ELEGANT)
-
-        case SPECIES_DARMANITAN_ZEN_MODE_GALARIAN:
-            RETURN_SPECIES_NAME_LONG(SPECIES_DARMANITAN_ZEN_MODE)
-
-            RETURN_SPECIES_NAME_LONG(SPECIES_DARMANITAN_REDUX_AURA)
-
-        default:
-            return NULL;
-    }
+    return gSpecies[species].longName;
 }
 
 u16 GetRandomSpeciesFromPool(u8 id) {

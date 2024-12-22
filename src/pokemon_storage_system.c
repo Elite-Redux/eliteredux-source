@@ -4460,13 +4460,13 @@ static void Task_EvolveMon(u8 taskId)
 
             if (sInPartyMenu) {
                 SetMonData(&gPlayerParty[pos], MON_DATA_SPECIES, &targetSpecies);
-                SetMonData(&gPlayerParty[pos], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
+                SetMonData(&gPlayerParty[pos], MON_DATA_NICKNAME, gSpecies[targetSpecies].name);
                 CalculateMonStats(&gPlayerParty[pos]);
                 UpdateSpeciesSpritePSS_Mon(&gPlayerParty[pos]);
             }
             else {
                 SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_SPECIES, &targetSpecies);
-                SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
+                SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_NICKNAME, gSpecies[targetSpecies].name);
                 UpdateSpeciesSpritePSS(&gPokemonStoragePtr->boxes[boxId][pos]);
             }
 
@@ -7326,7 +7326,7 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
                 StringGetEnd10(sStorage->displayMonName);
             }
             else {
-                StringCopy(sStorage->displayMonName, gSpeciesNames[sStorage->displayMonSpecies]);
+                StringCopy(sStorage->displayMonName, gSpecies[sStorage->displayMonSpecies].name);
                 StringGetEnd12(sStorage->displayMonName);
             }
             sStorage->displayMonLevel = GetMonData(mon, MON_DATA_LEVEL);
@@ -7360,7 +7360,7 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
                 StringGetEnd10(sStorage->displayMonName);
             }
             else {
-                StringCopy(sStorage->displayMonName, gSpeciesNames[sStorage->displayMonSpecies]);
+                StringCopy(sStorage->displayMonName, gSpecies[sStorage->displayMonSpecies].name);
                 StringGetEnd12(sStorage->displayMonName);
             }
             sStorage->displayMonLevel = GetLevelFromBoxMonExp(boxMon);
@@ -7405,7 +7405,7 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
 
         txtPtr = sStorage->displayMonSpeciesName;
         *(txtPtr)++ = CHAR_SLASH;
-        StringCopyPadded(txtPtr, gSpeciesNames[sStorage->displayMonSpecies], CHAR_SPACE, 5);
+        StringCopyPadded(txtPtr, gSpecies[sStorage->displayMonSpecies].name, CHAR_SPACE, 5);
 
         txtPtr = sStorage->displayMonGenderLvlText;
         *(txtPtr)++ = EXT_CTRL_CODE_BEGIN;

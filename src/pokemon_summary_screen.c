@@ -4331,7 +4331,7 @@ static void PrintInfoPage(void)
     PrintTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar1, x, 16, 0, PSS_COLOR_BLACK_GRAY_SHADOW);
 
     PrintTextOnWindow(PSS_LABEL_PANE_RIGHT, sText_Species, 8, 32, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
-    StringCopy(gStringVar1, gSpeciesNames[summary->species2]);
+    StringCopy(gStringVar1, gSpecies[summary->species2].name);
     x = GetStringCenterAlignXOffset(FONT_NORMAL, gStringVar1, 72) + 76;
     PrintTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar1, x, 32, 0, PSS_COLOR_BLACK_GRAY_SHADOW);
 
@@ -5379,68 +5379,68 @@ const u8 gText_Y[] = _("Y");
 const u8* SaveSpeciesWithSurname(u16 species) {
     if (species == SPECIES_CHARIZARD_MEGA_X || species == SPECIES_MEWTWO_MEGA_X) { //Mega X
         StringCopy(gStringVar1, gText_Mega);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
+        StringCopy(gStringVar2, gSpecies[species].name);
         StringCopy(gStringVar3, gText_X);
         StringExpandPlaceholders(gStringVar4, gText_Subname2);
     }
     else if (species == SPECIES_CHARIZARD_MEGA_Y || species == SPECIES_MEWTWO_MEGA_Y) { //Mega Y
         StringCopy(gStringVar1, gText_Mega);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
+        StringCopy(gStringVar2, gSpecies[species].name);
         StringCopy(gStringVar3, gText_Y);
         StringExpandPlaceholders(gStringVar4, gText_Subname2);
     }
     else if (species >= SPECIES_VENUSAUR_MEGA && species <= SPECIES_RAYQUAZA_MEGA) { //Megas
         StringCopy(gStringVar1, gText_Mega);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
+        StringCopy(gStringVar2, gSpecies[species].name);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
     else if (species == SPECIES_KYOGRE_PRIMAL || species == SPECIES_GROUDON_PRIMAL || species == SPECIES_CASCOON_PRIMAL) { //Primals
         StringCopy(gStringVar1, gText_Primal);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
+        StringCopy(gStringVar2, gSpecies[species].name);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
     else if (species >= CUSTOM_MEGA_START && species <= LAST_CUSTOM_MEGA) { //Custom Mega
         StringCopy(gStringVar1, gText_Mega);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
+        StringCopy(gStringVar2, gSpecies[species].name);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
     else if (species == SPECIES_NECROZMA_ULTRA) { //Ultra Necrozma
         StringCopy(gStringVar1, gText_Ultra);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
+        StringCopy(gStringVar2, gSpecies[species].name);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
     else if (species >= SPECIES_RATTATA_ALOLAN && species <= SPECIES_MAROWAK_ALOLAN) { //Alolan
         StringCopy(gStringVar1, gText_Alolan);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
+        StringCopy(gStringVar2, gSpecies[species].name);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
     else if (species >= SPECIES_MEOWTH_GALARIAN && species <= SPECIES_STUNFISK_GALARIAN) { //Galarian
         StringCopy(gStringVar1, gText_Galarian);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
+        StringCopy(gStringVar2, gSpecies[species].name);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
     else if (species >= SPECIES_QWILFISH_HISUIAN && species <= SPECIES_ZOROARK_HISUIAN) { //Hisuian
         StringCopy(gStringVar1, gText_Hisuian);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
+        StringCopy(gStringVar2, gSpecies[species].name);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
     else if (species >= SPECIES_INFERNAPE_REDUX && species <= SPECIES_SCIZOR_REDUX) { //Redux
         StringCopy(gStringVar2, gText_Redux);
-        StringCopy(gStringVar1, gSpeciesNames[species]);
+        StringCopy(gStringVar1, gSpecies[species].name);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
     else if (species == SPECIES_LYCANROC) { //Midday Lycanroc
-        StringCopy(gStringVar1, gSpeciesNames[species]);
+        StringCopy(gStringVar1, gSpecies[species].name);
         StringCopy(gStringVar2, gText_Midday);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
     else if (species == SPECIES_LYCANROC_MIDNIGHT) { //Midnight Lycanroc
-        StringCopy(gStringVar1, gSpeciesNames[species]);
+        StringCopy(gStringVar1, gSpecies[species].name);
         StringCopy(gStringVar2, gText_Midnight);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
     else if (species == SPECIES_LYCANROC_DUSK) { //Dusk Lycanroc
-        StringCopy(gStringVar1, gSpeciesNames[species]);
+        StringCopy(gStringVar1, gSpecies[species].name);
         StringCopy(gStringVar2, gText_Dusk);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
@@ -5449,7 +5449,7 @@ const u8* SaveSpeciesWithSurname(u16 species) {
         if (longName)
             StringCopy(gStringVar4, longName);
         else
-            StringCopy(gStringVar4, gSpeciesNames[species]);
+            StringCopy(gStringVar4, gSpecies[species].name);
     }
 
     return gStringVar4;
@@ -5790,7 +5790,7 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
         SaveSpeciesWithSurname(targetSpecies);
         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         //Evolution Method
-        StringCopy(gStringVar2, gSpeciesNames[gEvolutionTable[species][i].param]); //mon name
+        StringCopy(gStringVar2, gSpecies[gEvolutionTable[species][i].param].name); //mon name
         StringExpandPlaceholders(gStringVar4, gText_EVO_SPECIFIC_MON_IN_PARTY );
         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         break;
@@ -5810,7 +5810,7 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
         SaveSpeciesWithSurname(targetSpecies);
         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         //Evolution Method
-        StringCopy(gStringVar2, gSpeciesNames[gEvolutionTable[species][i].param]); //mon name
+        StringCopy(gStringVar2, gSpecies[gEvolutionTable[species][i].param].name); //mon name
         ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS); //level
         StringExpandPlaceholders(gStringVar4, gText_EVO_TRADE_SPECIFIC_MON );
         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
@@ -5897,7 +5897,7 @@ static void BufferMonPokemonEvolutionData(void)
     //If there are no evolutions print text
     if (times == 0)// || isEnemyMon
     {
-        StringCopy(gStringVar1, gSpeciesNames[species]); //mon name
+        StringCopy(gStringVar1, gSpecies[species].name); //mon name
         StringExpandPlaceholders(gStringVar4, gText_EVO_NONE); 
         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         y +=24;

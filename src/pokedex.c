@@ -2753,7 +2753,7 @@ static u8 CreateMonName(u16 num, u8 left, u8 top)
 
     num = NationalPokedexNumToSpecies(num);
     if (num)
-        str = gSpeciesNames[num];
+        str = gSpecies[num].name;
     else
         str = sText_TenDashes;
     PrintMonName(0, FONT_SMALL_NARROW, str, left, top);
@@ -4562,7 +4562,7 @@ static void PrintMonInfo(u32 num, u32 value, u32 owned, u32 newEntry)
     PrintInfoScreenTextWhite(str, 123, 17); //HGSS_Ui
     natNum = NationalPokedexNumToSpecies(num);
     if (natNum)
-        name = gSpeciesNames[natNum];
+        name = gSpecies[natNum].name;
     else
         name = sText_TenDashes2;
     PrintInfoScreenTextWhite(name, 157, 17); //HGSS_Ui
@@ -4934,8 +4934,8 @@ static u8 PrintCryScreenSpeciesName(u8 windowId, u16 num, u8 left, u8 top)
     switch (num)
     {
     default:
-        for (i = 0; gSpeciesNames[num][i] != EOS && i < POKEMON_NAME_LENGTH; i++)
-            str[i] = gSpeciesNames[num][i];
+        for (i = 0; gSpecies[num].name[i] != EOS && i < POKEMON_NAME_LENGTH; i++)
+            str[i] = gSpecies[num].name[i];
         break;
     case 0:
         for (i = 0; i < 5; i++)
@@ -5125,7 +5125,7 @@ static int DoPokedexSearch(u8 dexMode, u8 order, u8 abcGroup, u8 bodyColor, u8 t
             u8 firstLetter;
 
             species = NationalPokedexNumToSpecies(sPokedexView->pokedexList[i].dexNum);
-            firstLetter = gSpeciesNames[species][0];
+            firstLetter = gSpecies[species].name[0];
             if (LETTER_IN_RANGE_UPPER(firstLetter, abcGroup) || LETTER_IN_RANGE_LOWER(firstLetter, abcGroup))
             {
                 sPokedexView->pokedexList[resultsCount] = sPokedexView->pokedexList[i];
@@ -6653,7 +6653,7 @@ static void PrintStatsScreen_NameGender(u8 taskId, u32 num, u32 value, u32 owned
     u8 gender_x, gender_y;
 
     //Name
-    PrintInfoScreenTextSmall(gSpeciesNames[species], 38, 16);
+    PrintInfoScreenTextSmall(gSpecies[species].name, 38, 16);
 
     //Number
     if (value == 0)
@@ -7417,7 +7417,7 @@ static void handleTargetSpeciesPrint(u8 taskId, u16 targetSpecies, u8 base_x, u8
         if (longName)
             StringCopy(gStringVar3, longName); //evolution mon name
         else
-            StringCopy(gStringVar3, gSpeciesNames[targetSpecies]); //evolution mon name
+            StringCopy(gStringVar3, gSpecies[targetSpecies].name); //evolution mon name
     }
     else
         StringCopy(gStringVar3, gText_ThreeQuestionMarks); //show questionmarks instead of name
@@ -7471,7 +7471,7 @@ static u8 PrintEvolutionTargetSpeciesAndMethod(u8 taskId, u16 species, u8 depth,
 
     if (formSpecies) species = formSpecies;
 
-    StringCopy(gStringVar1, gSpeciesNames[species]);
+    StringCopy(gStringVar1, gSpecies[species].name);
 
     //Calculate number of possible direct evolutions (e.g. Eevee has 5 but torchic has 1)
     for (i = 0; i < EVOS_PER_MON; i++)
@@ -7740,7 +7740,7 @@ static u8 PrintEvolutionTargetSpeciesAndMethod(u8 taskId, u16 species, u8 depth,
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x*depth+base_x_offset, base_y + base_y_offset*base_i);
                 break;
             case EVO_SPECIFIC_MON_IN_PARTY:
-                StringCopy(gStringVar2, gSpeciesNames[gEvolutionTable[species][i].param]); //mon name
+                StringCopy(gStringVar2, gSpecies[gEvolutionTable[species][i].param].name); //mon name
                 targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x*depth-9, base_y + base_y_offset*base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x*depth, base_y, base_y_offset, base_i); //evolution mon name
@@ -7755,7 +7755,7 @@ static u8 PrintEvolutionTargetSpeciesAndMethod(u8 taskId, u16 species, u8 depth,
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x*depth+base_x_offset, base_y + base_y_offset*base_i);
                 break;
             case EVO_TRADE_SPECIFIC_MON:
-                StringCopy(gStringVar2, gSpeciesNames[gEvolutionTable[species][i].param]); //mon name
+                StringCopy(gStringVar2, gSpecies[gEvolutionTable[species][i].param].name); //mon name
                 targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x*depth-9, base_y + base_y_offset*base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x*depth, base_y, base_y_offset, base_i); //evolution mon name
@@ -8168,7 +8168,7 @@ static void PrintForms(u8 taskId, u16 species)
     if (species == SPECIES_UNOWN)
         y_offset_icons = 8;
 
-    StringCopy(gStringVar1, gSpeciesNames[species]);
+    StringCopy(gStringVar1, gSpecies[species].name);
 
     for (i=0; i < 11; i++)
     {

@@ -515,9 +515,9 @@ static void PrintDigitChars(struct PokemonDebugMenu *data)
 
     text[i++] = CHAR_SPACE;
     if (isPlaceHolderMon)
-        StringCopy(&text[i], gSpeciesNames[SPECIES_NONE]);
+        StringCopy(&text[i], gSpecies[SPECIES_NONE].name);
     else
-        StringCopy(&text[i], gSpeciesNames[species]);
+        StringCopy(&text[i], gSpecies[species].name);
 
     FillWindowPixelBuffer(WIN_NAME_NUMBERS, 0x11);
     AddTextPrinterParameterized(WIN_NAME_NUMBERS, FONT_NORMAL, text, 6, 0, 0, NULL);

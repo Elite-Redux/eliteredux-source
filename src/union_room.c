@@ -3013,7 +3013,7 @@ static void Task_RunUnionRoom(u8 taskId)
             }
             else
             {
-                StringCopy(gStringVar1, gSpeciesNames[GetHostRFUtgtGname()->species]);
+                StringCopy(gStringVar1, gSpecies[GetHostRFUtgtGname()->species].name);
                 ConvertIntToDecimalStringN(gStringVar2, GetHostRFUtgtGname()->level, STR_CONV_MODE_LEFT_ALIGN, 3);
                 StringExpandPlaceholders(gStringVar4, sText_CancelRegistrationOfMon);
             }
@@ -4090,7 +4090,7 @@ static void TradeBoardPrintItemInfo(u8 windowId, u8 y, struct GFtgtGname * gname
     else
     {
         BlitMenuInfoIcon(windowId, type + 1, 68, y);
-        UR_AddTextPrinterParameterized(windowId, 1, gSpeciesNames[species], 118, y, colorIdx);
+        UR_AddTextPrinterParameterized(windowId, 1, gSpecies[species].name, 118, y, colorIdx);
         ConvertIntToDecimalStringN(levelStr, level, STR_CONV_MODE_RIGHT_ALIGN, 3);
         UR_AddTextPrinterParameterized(windowId, 1, levelStr, 198, y, colorIdx);
     }
@@ -4241,13 +4241,13 @@ static s32 GetChatLeaderActionRequestMessage(u8 *dst, u32 gender, u16 *activityD
         break;
     case ACTIVITY_TRADE | IN_UNION_ROOM:
         ConvertIntToDecimalStringN(uroom->activityRequestStrbufs[0], sUnionRoomTrade.playerLevel, STR_CONV_MODE_LEFT_ALIGN, 3);
-        StringCopy(uroom->activityRequestStrbufs[1], gSpeciesNames[sUnionRoomTrade.playerSpecies]);
+        StringCopy(uroom->activityRequestStrbufs[1], gSpecies[sUnionRoomTrade.playerSpecies].name);
         for (i = 0; i < RFU_CHILD_MAX; i++)
         {
             if (gRfuLinkStatus->partner[i].serialNo == 2)
             {
                 ConvertIntToDecimalStringN(uroom->activityRequestStrbufs[2], activityData[2], STR_CONV_MODE_LEFT_ALIGN, 3);
-                StringCopy(uroom->activityRequestStrbufs[3], gSpeciesNames[activityData[1]]);
+                StringCopy(uroom->activityRequestStrbufs[3], gSpecies[activityData[1]].name);
                 species = activityData[1];
                 break;
             }

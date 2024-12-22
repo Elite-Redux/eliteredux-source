@@ -547,7 +547,7 @@ static void AddSearchWindowText(u16 species, u8 proximity, u8 searchLevel, bool8
     }
     else
     {
-        StringCopy(gStringVar1, gSpeciesNames[species]);
+        StringCopy(gStringVar1, gSpecies[species].name);
         AddTextPrinterParameterized3(sDexNavSearchDataPtr->windowId, 0, WINDOW_COL_0, 0, sSearchFontColor, TEXT_SKIP_DRAW, gStringVar1);
     }
     
@@ -2494,7 +2494,7 @@ static void PrintCurrentSpeciesInfo(void)
     if (species == SPECIES_NONE)
         StringCopy(gStringVar1, sText_DexNav_SpeciesName_None);
     else
-        StringCopy(gStringVar1, gSpeciesNames[species]);
+        StringCopy(gStringVar1, gSpecies[species].name);
 
     offset = GetStringCenterAlignXOffset(font, gStringVar1, 68);
     AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8) - 4 + offset, (y * 8) - 4, sFontColor_Black, 0, gStringVar1);
@@ -2503,7 +2503,7 @@ static void PrintCurrentSpeciesInfo(void)
     if (species == SPECIES_NONE)
         StringCopy(gStringVar4, sText_DexNav_SpeciesName_None);
     else {
-        StringCopy(gStringVar1, gSpeciesNames[species]);
+        StringCopy(gStringVar1, gSpecies[species].name);
         if (GetSetPokedexFlag(species, FLAG_GET_CAUGHT))
             StringCopy(gStringVar3, sText_DexNav_Caught_Type_Yes);
         else
@@ -2624,12 +2624,12 @@ static void PrintCurrentSpeciesInfo(void)
             AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_CouldNotGiveMon);
         break;
         case DEXNAV_MESSAGE_SEARCH:
-            StringCopy(gStringVar1, gSpeciesNames[species]);
+            StringCopy(gStringVar1, gSpecies[species].name);
             StringExpandPlaceholders(gStringVar4, sText_DexNav_Message_Search);
             AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, gStringVar4);
         break;
         case DEXNAV_MESSAGE_BUY:
-            StringCopy(gStringVar1, gSpeciesNames[species]);
+            StringCopy(gStringVar1, gSpecies[species].name);
             ConvertIntToDecimalStringN(gStringVar2, price, STR_CONV_MODE_LEFT_ALIGN, 3);
             StringExpandPlaceholders(gStringVar4, sText_DexNav_Message_Buy);
             AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, gStringVar4);

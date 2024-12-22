@@ -1519,7 +1519,7 @@ u8 *GetMonNickname(struct Pokemon *mon, u8 *dest) {
         GetMonData(mon, MON_DATA_NICKNAME, dest);
         return StringGetEnd10(dest);
     } else {
-        StringCopy(dest, gSpeciesNames[species]);
+        StringCopy(dest, gSpecies[species].name);
         return StringGetEnd12(dest);
     }
 }
@@ -2070,7 +2070,7 @@ static void DisplayPartyPokemonGender(u8 gender, u16 species, u8 *nickname, stru
     u8 palNum = GetWindowAttribute(menuBox->windowId, WINDOW_PALETTE_NUM) * 16;
 
     if (species == SPECIES_NONE) return;
-    if ((species == SPECIES_NIDORAN_M || species == SPECIES_NIDORAN_F) && StringCompare(nickname, gSpeciesNames[species]) == 0) return;
+    if ((species == SPECIES_NIDORAN_M || species == SPECIES_NIDORAN_F) && StringCompare(nickname, gSpecies[species].name) == 0) return;
     switch (gender) {
         case MON_MALE:
             LoadPalette(GetPartyMenuPalBufferPtr(sGenderMalePalIds[0]), sGenderPalOffsets[0] + palNum, 2);

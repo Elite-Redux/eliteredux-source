@@ -2379,12 +2379,12 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         ptr = StringAppend(gDisplayedStringBattle, nickname);
     }
     else {
-        StringCopy(nickname, gSpeciesNames[species]);
+        StringCopy(nickname, gSpecies[species].name);
         StringGetEnd12(nickname);
         ptr = StringAppend(gDisplayedStringBattle, nickname);
     }
 
-    if ((species == SPECIES_NIDORAN_F || species == SPECIES_NIDORAN_M) && StringCompare(nickname, gSpeciesNames[species]) == 0)
+    if ((species == SPECIES_NIDORAN_F || species == SPECIES_NIDORAN_M) && StringCompare(nickname, gSpecies[species].name) == 0)
         gender = 100;
 
     // AddTextPrinterAndCreateWindowOnHealthbox's arguments are the same in all 3 cases.

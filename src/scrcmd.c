@@ -1579,7 +1579,7 @@ bool8 ScrCmd_bufferspeciesname(struct ScriptContext *ctx)
     u8 stringVarIndex = ScriptReadByte(ctx);
     u16 species = VarGet(ScriptReadHalfword(ctx));
 
-    StringCopy(sScriptStringVars[stringVarIndex], gSpeciesNames[species]);
+    StringCopy(sScriptStringVars[stringVarIndex], gSpecies[species].name);
     return FALSE;
 }
 
@@ -1590,7 +1590,7 @@ bool8 ScrCmd_bufferleadmonspeciesname(struct ScriptContext *ctx)
     u8 *dest = sScriptStringVars[stringVarIndex];
     u8 partyIndex = GetLeadMonIndex();
     u32 species = GetMonData(&gPlayerParty[partyIndex], MON_DATA_SPECIES, NULL);
-    StringCopy(dest, gSpeciesNames[species]);
+    StringCopy(dest, gSpecies[species].name);
     return FALSE;
 }
 
@@ -2988,12 +2988,12 @@ bool8 ScrCmd_getobjecteventextraid(struct ScriptContext *ctx)
             FlagSet(gMapHeader.events->objectEvents[gSpecialVar_LastTalked - 1].flagId);
         break;
         case GET_EXTRA_ID_POKEMON:
-            StringCopy(gStringVar1, gSpeciesNames[num]);
+            StringCopy(gStringVar1, gSpecies[num].name);
             FlagSet(gMapHeader.events->objectEvents[gSpecialVar_LastTalked - 1].flagId);
         break;
         case GET_EXTRA_ID_RANDOM_FROM_POOL:
             num = GetRandomSpeciesFromPool(num);
-            StringCopy(gStringVar1, gSpeciesNames[num]);
+            StringCopy(gStringVar1, gSpecies[num].name);
             FlagSet(gMapHeader.events->objectEvents[gSpecialVar_LastTalked - 1].flagId);
         break;
     }

@@ -3371,7 +3371,7 @@ static void GetBattlerNick(u32 battlerId, u8 *dst)
     }
     else {
         u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
-        StringCopy(dst, gSpeciesNames[species]);
+        StringCopy(dst, gSpecies[species].name);
         StringGetEnd12(dst);
     }   
 }
@@ -3655,7 +3655,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                     }
                     else {
                         u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES, NULL);
-                        StringCopy(text, gSpeciesNames[species]);
+                        StringCopy(text, gSpecies[species].name);
                         StringGetEnd12(text);
                     }
                 }
@@ -3666,7 +3666,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                     }
                     else {
                         u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES, NULL);
-                        StringCopy(text, gSpeciesNames[species]);
+                        StringCopy(text, gSpecies[species].name);
                         StringGetEnd12(text);
                     }
                 }

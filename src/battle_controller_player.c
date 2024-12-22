@@ -638,7 +638,7 @@ void PrintBattleWindow_ActionPromt(void) {
             y++;
 
             // Part two
-            StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battler].species]);
+            StringCopy(gStringVar1, gSpecies[gBattleMons[battler].species].name);
             StringExpandPlaceholders(gStringVar4, sText_BattleMenu_Action_What_Will_X_Do_2);
             offset = 4 + GetStringCenterAlignXOffset(font, gStringVar4, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE_DPPT);
             AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
@@ -652,7 +652,7 @@ void PrintBattleWindow_ActionPromt(void) {
             y++;
 
             // Part two
-            StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battler].species]);
+            StringCopy(gStringVar1, gSpecies[gBattleMons[battler].species].name);
             StringExpandPlaceholders(gStringVar4, sText_BattleMenu_Action_What_Will_X_Do_2);
             offset = GetStringCenterAlignXOffset(font, gStringVar4, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
             AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
@@ -1743,7 +1743,7 @@ void PrintBattleWindow_MoveSelection(void) {
             for (i = 0; i < gBattlersCount; i++) {
                 battlertoCheck = sBattlerByTurnOrder[i];
                 if (IsBattlerAlive(battlertoCheck)) {
-                    StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battlertoCheck].species]);
+                    StringCopy(gStringVar1, gSpecies[gBattleMons[battlertoCheck].species].name);
                     AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
 
                     monSpeed = GetBattlerTotalSpeedStat(battlertoCheck, TOTAL_SPEED_FULL);
@@ -1769,7 +1769,7 @@ void PrintBattleWindow_MoveSelection(void) {
 
                 if (immune) minDamage = maxDamage = 0;
                 x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
-                StringCopy(gStringVar3, gSpeciesNames[gBattleMons[target].species]);
+                StringCopy(gStringVar3, gSpecies[gBattleMons[target].species].name);
 
                 if (maxDamage == 0) {
                     StringCopy(gStringVar1, gMoveNamesLong[move]);

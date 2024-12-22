@@ -2938,7 +2938,7 @@ static void GetPotentialPartnerMoveAndSpecies(u16 trainerId, u16 monId)
     }
 
     StringCopy(gStringVar1, gMoveNames[move]);
-    StringCopy(gStringVar2, gSpeciesNames[species]);
+    StringCopy(gStringVar2, gSpecies[species].name);
 }
 
 // For multi battles in the Battle Tower, the player may choose a partner by talking to them

@@ -1367,7 +1367,7 @@ static void HallOfFame_PrintMonInfo(struct HallofFameMon* currMon, u8 unused1, u
         AddTextPrinterParameterized3(0, 1, width, 1, sMonInfoTextColors, -1, text);
 
         text[0] = CHAR_SLASH;
-        stringPtr = StringCopy(text + 1, gSpeciesNames[currMon->species]);
+        stringPtr = StringCopy(text + 1, gSpecies[currMon->species].name);
 
         if (currMon->species != SPECIES_NIDORAN_M && currMon->species != SPECIES_NIDORAN_F)
         {

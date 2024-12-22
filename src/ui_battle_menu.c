@@ -1492,7 +1492,7 @@ static void PrintStatsTab() {
     y  = 4;
     x2 = 0;
     y2 = -4;
-    AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gSpeciesNames[species]);
+    AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gSpecies[species].name);
     //Pokemon Gender
     x = x + 8;
     switch (gender) {
@@ -2453,7 +2453,7 @@ static void PrintStatusTab(void) {
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 3), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
                 
                 //Description
-                StringCopy(gStringVar1, gSpeciesNames[gBattleMons[gWishFutureKnock.futureSightAttacker[sMenuDataPtr->battlerId]].species]);
+                StringCopy(gStringVar1, gSpecies[gBattleMons[gWishFutureKnock.futureSightAttacker[sMenuDataPtr->battlerId]].species].name);
                 StringCopy(gStringVar2, gMoveNames[gWishFutureKnock.futureSightMove[sMenuDataPtr->battlerId]]);
                 ConvertIntToDecimalStringN(gStringVar3, gWishFutureKnock.futureSightPower[sMenuDataPtr->battlerId], STR_CONV_MODE_LEFT_ALIGN, 4);
                 StringExpandPlaceholders(gStringVar4, sText_Title_Status_IncomingAttack_Description);
@@ -2533,7 +2533,7 @@ static void PrintStatusTab(void) {
             {
                 u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
                 
-                StringCopy(gStringVar1, gSpeciesNames[species]);
+                StringCopy(gStringVar1, gSpecies[species].name);
                 StringExpandPlaceholders(gStringVar4, sText_Title_Status_Transformed);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar4);
                 //Description
@@ -2591,7 +2591,7 @@ static void PrintStatusTab(void) {
                 u8 seedUser = gStatuses3[sMenuDataPtr->battlerId] & STATUS3_LEECHSEED_BATTLER;
                 u16 species  = gBattleMons[seedUser].species;
 
-                StringCopy(gStringVar1, gSpeciesNames[species]);
+                StringCopy(gStringVar1, gSpecies[species].name);
                 StringExpandPlaceholders(gStringVar4, sText_Title_Status_Leech_Seed_Target);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar4);
 
@@ -3313,7 +3313,7 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx) {
     maxDamage = damageCalculation->maxDamage;
 
     //First Part
-    StringCopy(gStringVar2, gSpeciesNames[gBattleMons[battler].species]);
+    StringCopy(gStringVar2, gSpecies[gBattleMons[battler].species].name);
     StringCopy(gStringVar3, gMoveNames[move]);
     if (gBattleMoves[move].split == SPLIT_SPECIAL) {
         ConvertIntToDecimalStringN(gStringVar1, damageCalculation->battlerEvs[SPATK_EV_INDEX], STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -3358,7 +3358,7 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx) {
         
     //Third Part
     StringCopy(gStringVar1, gStringVar4);
-    StringCopy(gStringVar2, gSpeciesNames[gBattleMons[target].species]);
+    StringCopy(gStringVar2, gSpecies[gBattleMons[target].species].name);
     ConvertIntToDecimalStringN(gStringVar3, minDamage, STR_CONV_MODE_LEFT_ALIGN, 4);
     StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_ThirdPart);
 
@@ -4413,7 +4413,7 @@ static void PrintSpeedTab(void)
             targetCurrentHp = gBattleMons[target].hp;
             
             //Species Name
-            StringCopy(gStringVar1, gSpeciesNames[species]);
+            StringCopy(gStringVar1, gSpecies[species].name);
             AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gStringVar1);
             x = x + 8;
 
@@ -4508,7 +4508,7 @@ static void PrintToWindow(u8 windowId, u8 colorIdx)
 
     //Pokemon Name
     y++;
-    AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gSpeciesNames[species]);
+    AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gSpecies[species].name);
     //Pokemon HP
     y++;
     ConvertIntToDecimalStringN(gStringVar1, gBattleMons[sMenuDataPtr->battlerId].hp, STR_CONV_MODE_LEFT_ALIGN, 3);

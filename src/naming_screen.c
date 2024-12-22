@@ -1716,7 +1716,7 @@ static void DrawMonTextEntryBox(void)
 {
     u8 buffer[32];
 
-    StringCopy(buffer, gSpeciesNames[sNamingScreen->monSpecies]);
+    StringCopy(buffer, gSpecies[sNamingScreen->monSpecies].name);
     StringAppendN(buffer, sNamingScreen->spriteTemplate->title, 15);
     FillWindowPixelBuffer(sNamingScreen->windows[WIN_TEXT_ENTRY_BOX], PIXEL_FILL(1));
     AddTextPrinterParameterized(sNamingScreen->windows[WIN_TEXT_ENTRY_BOX], 1, buffer, 8, 1, 0, 0);
