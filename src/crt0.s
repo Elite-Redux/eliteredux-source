@@ -41,7 +41,6 @@ GPIOPortReadEnable: @ 80000C8
 	.ascii "pokemon emerald version"
 	.space 9
 
-	.4byte gMonPaletteTable
 	.4byte gMonIconPaletteIndices
 	.4byte gMonIconPaletteTable
 	.4byte gSpeciesNames

@@ -238,7 +238,6 @@ static void Task_MoveDeoxysRock(u8 taskId);
 static u8 sActiveList[32];
 
 // External declarations
-extern const struct CompressedSpritePalette gMonPaletteTable[]; // GF made a mistake and did not extern it as const.
 extern const struct CompressedSpritePalette gTrainerFrontPicPaletteTable[];
 extern const struct CompressedSpriteSheet gTrainerFrontPicTable[];
 extern u8 *gFieldEffectScriptPointers[];
@@ -907,8 +906,8 @@ u8 CreateMonSprite_PicBox(u16 species, s16 x, s16 y, u8 subpriority)
 {
     u8 isShiny = FALSE;
     bool8 isAlpha = FALSE;
-    s32 spriteId = CreateMonPicSprite(species, 0, 0x8000, 1, x, y, 0, gMonPaletteTable[species].tag, isShiny, isAlpha);
-    PreservePaletteInWeather(IndexOfSpritePaletteTag(gMonPaletteTable[species].tag) + 0x10);
+    s32 spriteId = CreateMonPicSprite(species, 0, 0x8000, 1, x, y, 0, gSpecies[species].palette.tag, isShiny, isAlpha);
+    PreservePaletteInWeather(IndexOfSpritePaletteTag(gSpecies[species].palette.tag) + 0x10);
     if (spriteId == 0xFFFF)
         return MAX_SPRITES;
     else

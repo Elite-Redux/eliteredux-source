@@ -737,9 +737,9 @@ static const u32 *GetMonSpritePalStructCustom(u16 species, bool8 isFemale, u8 is
     else
     {
         if (SpeciesHasGenderDifference[species] && isFemale)
-            return gMonPaletteTableFemale[species].data;
+            return gSpecies[species].paletteFemale.data;
         else
-            return gMonPaletteTable[species].data;
+            return gSpecies[species].palette.data;
     }
 }
 
@@ -761,9 +761,9 @@ static void BattleLoadOpponentMonSpriteGfxCustom(u16 species, bool8 isFemale, u8
     else
     {
         if (SpeciesHasGenderDifference[species] && isFemale)
-            lzPaletteData = gMonPaletteTableFemale[species].data;
+            lzPaletteData = gSpecies[species].paletteFemale.data;
         else
-            lzPaletteData = gMonPaletteTable[species].data;
+            lzPaletteData = gSpecies[species].palette.data;
     }
 
     LZDecompressWram(lzPaletteData, gDecompressionBuffer);
