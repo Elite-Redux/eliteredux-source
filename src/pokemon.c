@@ -3943,7 +3943,7 @@ void CreateEventLegalEnemyMon(void) {
 
 #define CALC_STAT(base, iv, ev, statIndex, field)                   \
     {                                                               \
-        u8 baseStat = gSpecies[species].base;                     \
+        u8 baseStat = gSpecies[species].base;                       \
         s32 n = (((2 * baseStat + iv + ev / 4) * level) / 100) + 5; \
         u8 nature = GetMonData(mon, MON_DATA_NATURE);               \
         n = ModifyStatByNature(nature, n, statIndex);               \
@@ -8277,6 +8277,20 @@ u16 tagSwitch(u8 tag, u16 rndseed) {
     }
     return 0;
 }
+static int IsValidRandomizerMon(int species, int allowLegendaries) {
+    if (!gSpecies[species].name) return FALSE;
+    if (gSpecies[species].randomizerBanned) return FALSE;
+    if (gSpecies[species].mega) return FALSE;
+    if (!allowLegendaries && gSpecies[species].isLegendary) return FALSE;
+
+    const u16 *forms = gSpecies[species].forms;
+    if (forms && forms[0] != species) {
+        if (gSpecies[forms[0]].randomizerBanned) return FALSE;
+        if (!allowLegendaries && gSpecies[forms[0]].isLegendary) return FALSE;
+    }
+    return TRUE;
+}
+
 u16 GetRandomStarter(u8 gen, bool8 enc, bool8 leg, u8 starterID) {
     u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
     u16 min, max = 0;
@@ -8297,44 +8311,7 @@ u16 GetRandomStarter(u8 gen, bool8 enc, bool8 leg, u8 starterID) {
     } else {
         do {
             species = RandRangeDeterministic(min, max, &rndSeed);
-        } while (species == SPECIES_ARTICUNO || species == SPECIES_ZAPDOS || species == SPECIES_MOLTRES || species == SPECIES_RAIKOU ||
-                 species == SPECIES_ENTEI || species == SPECIES_SUICUNE || species == SPECIES_REGICE || species == SPECIES_REGIROCK ||
-                 species == SPECIES_REGISTEEL || species == SPECIES_LATIAS || species == SPECIES_LATIOS || species == SPECIES_UXIE ||
-                 species == SPECIES_MESPRIT || species == SPECIES_AZELF || species == SPECIES_HEATRAN || species == SPECIES_REGIGIGAS ||
-                 species == SPECIES_CRESSELIA || species == SPECIES_COBALION || species == SPECIES_TERRAKION || species == SPECIES_VIRIZION ||
-                 species == SPECIES_TORNADUS || species == SPECIES_THUNDURUS || species == SPECIES_TYPE_NULL || species == SPECIES_SILVALLY ||
-                 species == SPECIES_TAPU_KOKO || species == SPECIES_TAPU_LELE || species == SPECIES_TAPU_BULU || species == SPECIES_TAPU_FINI ||
-                 species == SPECIES_NIHILEGO || species == SPECIES_BUZZWOLE || species == SPECIES_PHEROMOSA || species == SPECIES_XURKITREE ||
-                 species == SPECIES_CELESTEELA || species == SPECIES_KARTANA || species == SPECIES_GUZZLORD || species == SPECIES_POIPOLE ||
-                 species == SPECIES_NAGANADEL || species == SPECIES_STAKATAKA || species == SPECIES_BLACEPHALON ||
-                 // Legendary
-                 species == SPECIES_MEWTWO || species == SPECIES_LUGIA || species == SPECIES_HO_OH || species == SPECIES_KYOGRE || species == SPECIES_GROUDON ||
-                 species == SPECIES_RAYQUAZA || species == SPECIES_DIALGA || species == SPECIES_PALKIA || species == SPECIES_GIRATINA ||
-                 species == SPECIES_RESHIRAM || species == SPECIES_ZEKROM || species == SPECIES_KYUREM || species == SPECIES_XERNEAS ||
-                 species == SPECIES_YVELTAL || species == SPECIES_ZYGARDE || species == SPECIES_COSMOG || species == SPECIES_COSMOEM ||
-                 species == SPECIES_SOLGALEO || species == SPECIES_LUNALA || species == SPECIES_NECROZMA ||
-                 // Mythical
-                 species == SPECIES_MEW || species == SPECIES_CELEBI || species == SPECIES_JIRACHI || species == SPECIES_DEOXYS || species == SPECIES_PHIONE ||
-                 species == SPECIES_MANAPHY || species == SPECIES_DARKRAI || species == SPECIES_SHAYMIN || species == SPECIES_ARCEUS ||
-                 species == SPECIES_VICTINI || species == SPECIES_KELDEO || species == SPECIES_MELOETTA || species == SPECIES_GENESECT ||
-                 species == SPECIES_DIANCIE || species == SPECIES_HOOPA || species == SPECIES_VOLCANION || species == SPECIES_MAGEARNA ||
-                 species == SPECIES_MARSHADOW || species == SPECIES_ZERAORA || species == SPECIES_MELTAN || species == SPECIES_MELMETAL ||
-                 species == SPECIES_ZACIAN ||                      // Unfinished
-                 species == SPECIES_ZAMAZENTA ||                   // Unfinished
-                 species == SPECIES_ETERNATUS ||                   // Unfinished
-                 species == SPECIES_KUBFU ||                       // Unfinished
-                 species == SPECIES_URSHIFU ||                     // Unfinished
-                 species == SPECIES_ZARUDE ||                      // Unfinished
-                 species == SPECIES_REGIELEKI ||                   // Unfinished
-                 species == SPECIES_REGIDRAGO ||                   // Unfinished
-                 species == SPECIES_GLASTRIER ||                   // Unfinished
-                 species == SPECIES_SPECTRIER ||                   // Unfinished
-                 species == SPECIES_CALYREX ||                     // Unfinished
-                 species == SPECIES_ZACIAN_CROWNED_SWORD ||        // Unfinished
-                 species == SPECIES_ZAMAZENTA_CROWNED_SHIELD ||    // Unfinished
-                 species == SPECIES_ETERNATUS_ETERNAMAX ||         // Unfinished
-                 species == SPECIES_URSHIFU_RAPID_STRIKE_STYLE ||  // Unfinished
-                 species == SPECIES_ZARUDE_DADA);
+        } while (!IsValidRandomizerMon(species, FALSE));
     }
     return species;
 }
@@ -8417,88 +8394,10 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies) {
         return species;
     }
     if (gSaveBlock2Ptr->encounterRandomizedMode == TRUE && basespecies != SPECIES_NONE) {
-        if (gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE) {
-            // Legendary Mons Disabled
-
-            do {
-                species = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, &rndSeed);
-            } while (species == SPECIES_NONE ||
-                     // Sub-Legendary
-                     species == SPECIES_ARTICUNO || species == SPECIES_ZAPDOS || species == SPECIES_MOLTRES || species == SPECIES_RAIKOU ||
-                     species == SPECIES_ENTEI || species == SPECIES_SUICUNE || species == SPECIES_REGICE || species == SPECIES_REGIROCK ||
-                     species == SPECIES_REGISTEEL || species == SPECIES_LATIAS || species == SPECIES_LATIOS || species == SPECIES_UXIE ||
-                     species == SPECIES_MESPRIT || species == SPECIES_AZELF || species == SPECIES_HEATRAN || species == SPECIES_REGIGIGAS ||
-                     species == SPECIES_CRESSELIA || species == SPECIES_COBALION || species == SPECIES_TERRAKION || species == SPECIES_VIRIZION ||
-                     species == SPECIES_TORNADUS || species == SPECIES_THUNDURUS || species == SPECIES_TYPE_NULL || species == SPECIES_SILVALLY ||
-                     species == SPECIES_TAPU_KOKO || species == SPECIES_TAPU_LELE || species == SPECIES_TAPU_BULU || species == SPECIES_TAPU_FINI ||
-                     species == SPECIES_NIHILEGO || species == SPECIES_BUZZWOLE || species == SPECIES_PHEROMOSA || species == SPECIES_XURKITREE ||
-                     species == SPECIES_CELESTEELA || species == SPECIES_KARTANA || species == SPECIES_GUZZLORD || species == SPECIES_POIPOLE ||
-                     species == SPECIES_NAGANADEL || species == SPECIES_STAKATAKA || species == SPECIES_BLACEPHALON ||
-                     // Legendary
-                     species == SPECIES_MEWTWO || species == SPECIES_LUGIA || species == SPECIES_HO_OH || species == SPECIES_KYOGRE ||
-                     species == SPECIES_GROUDON || species == SPECIES_RAYQUAZA || species == SPECIES_DIALGA || species == SPECIES_PALKIA ||
-                     species == SPECIES_GIRATINA || species == SPECIES_RESHIRAM || species == SPECIES_ZEKROM || species == SPECIES_KYUREM ||
-                     species == SPECIES_XERNEAS || species == SPECIES_YVELTAL || species == SPECIES_ZYGARDE || species == SPECIES_COSMOG ||
-                     species == SPECIES_COSMOEM || species == SPECIES_SOLGALEO || species == SPECIES_LUNALA || species == SPECIES_NECROZMA ||
-                     // Mythical
-                     species == SPECIES_MEW || species == SPECIES_CELEBI || species == SPECIES_JIRACHI || species == SPECIES_DEOXYS ||
-                     species == SPECIES_PHIONE || species == SPECIES_MANAPHY || species == SPECIES_DARKRAI || species == SPECIES_SHAYMIN ||
-                     species == SPECIES_ARCEUS || species == SPECIES_VICTINI || species == SPECIES_KELDEO || species == SPECIES_MELOETTA ||
-                     species == SPECIES_GENESECT || species == SPECIES_DIANCIE || species == SPECIES_HOOPA || species == SPECIES_VOLCANION ||
-                     species == SPECIES_MAGEARNA || species == SPECIES_MARSHADOW || species == SPECIES_ZERAORA || species == SPECIES_MELTAN ||
-                     species == SPECIES_MELMETAL || species == SPECIES_ZACIAN ||  // Unfinished
-                     species == SPECIES_ZAMAZENTA ||                              // Unfinished
-                     species == SPECIES_ETERNATUS ||                              // Unfinished
-                     species == SPECIES_KUBFU ||                                  // Unfinished
-                     species == SPECIES_URSHIFU ||                                // Unfinished
-                     species == SPECIES_ZARUDE ||                                 // Unfinished
-                     species == SPECIES_REGIELEKI ||                              // Unfinished
-                     species == SPECIES_REGIDRAGO ||                              // Unfinished
-                     species == SPECIES_GLASTRIER ||                              // Unfinished
-                     species == SPECIES_SPECTRIER ||                              // Unfinished
-                     species == SPECIES_CALYREX ||                                // Unfinished
-                     species == SPECIES_ZACIAN_CROWNED_SWORD ||                   // Unfinished
-                     species == SPECIES_ZAMAZENTA_CROWNED_SHIELD ||               // Unfinished
-                     species == SPECIES_ETERNATUS_ETERNAMAX ||                    // Unfinished
-                     species == SPECIES_URSHIFU_RAPID_STRIKE_STYLE ||             // Unfinished
-                     species == SPECIES_ZARUDE_DADA ||                            // Unfinished|
-                     // Unfinished Mons
-                     species == SPECIES_INFERNAPE_REDUX_B || species == SPECIES_TERAPAGOS_STELLAR || species == SPECIES_SCIZOR_REDUX ||
-                     species == SPECIES_LUXRAY_REDUX || species == SPECIES_CRAMORANT_GULPING || species == SPECIES_CRAMORANT_GORGING ||
-                     species == SPECIES_SINISTEA_ANTIQUE || species == SPECIES_POLTEAGEIST_ANTIQUE || species == SPECIES_ALCREMIE_RUBY_CREAM ||
-                     species == SPECIES_ALCREMIE_MATCHA_CREAM || species == SPECIES_ALCREMIE_MINT_CREAM || species == SPECIES_ALCREMIE_LEMON_CREAM ||
-                     species == SPECIES_ALCREMIE_SALTED_CREAM || species == SPECIES_ALCREMIE_RUBY_SWIRL || species == SPECIES_ALCREMIE_CARAMEL_SWIRL ||
-                     species == SPECIES_ALCREMIE_RAINBOW_SWIRL || species == SPECIES_EISCUE_NOICE_FACE || species == SPECIES_INDEEDEE_FEMALE ||
-                     species == SPECIES_MORPEKO_HANGRY || (species > LAST_VALID_SPECIES && species < SPECIES_RATTATA_ALOLAN) ||
-                     (species > SPECIES_STUNFISK_GALARIAN && species < SPECIES_QWILFISH_HISUIAN) ||
-                     (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KECLEONG) ||
-                     (species >= SPECIES_DRAGONITE_DELIVERY && species <= SPECIES_TINKATON_MEGA));
-        } else {
-            // Legendary Mons Enabled
-            do {
-                species = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, &rndSeed);
-            } while (species == SPECIES_NONE ||
-                     // Monochamp Mons
-                     species == SPECIES_DRACOVISH_MEGA || species == SPECIES_WIGGLYTUFF_APEX || species == SPECIES_WIGGLYTUFF_PRIMAL ||
-                     species == SPECIES_CHIEN_PAO_MEGA || species == SPECIES_SOLROCK_SYSTEM || species == SPECIES_RIBOMBEE_REDUX ||
-                     species == SPECIES_RIBOMBEE_REDUX_MEGA || species == SPECIES_SNORLAX_PRIMAL || species == SPECIES_LEDIAN_PARADOX ||
-                     species == SPECIES_KARTANA_FALLEN || species == SPECIES_YVELTAL_MEGA || species == SPECIES_DARKRAI_NIGHTMARE ||
-                     species == SPECIES_CALYREX_CLOUD_RIDER || species == SPECIES_SPECTRIER_CLOUD || species == SPECIES_FLYGON_REDUX_B ||
-                     species == SPECIES_FLYGON_REDUX_B_MEGA || species == SPECIES_MAWILE_REDUX_B || species == SPECIES_MAWILE_REDUX_B_MEGA ||
-                     species == SPECIES_ABOMASNOW_SANTA || species == SPECIES_BEWEAR_ANGRY || species == SPECIES_MIMIKYU_RAYQUAZA ||
-                     species == SPECIES_MIMIKYU_RAYQUAZA_BUSTED || species == SPECIES_VICTINI_PRIMAL ||
-                     // Unfinished Mons
-                     species == SPECIES_INFERNAPE_REDUX_B || species == SPECIES_TERAPAGOS_STELLAR || species == SPECIES_SCIZOR_REDUX ||
-                     species == SPECIES_LUXRAY_REDUX || species == SPECIES_CRAMORANT_GULPING || species == SPECIES_CRAMORANT_GORGING ||
-                     species == SPECIES_SINISTEA_ANTIQUE || species == SPECIES_POLTEAGEIST_ANTIQUE || species == SPECIES_ALCREMIE_RUBY_CREAM ||
-                     species == SPECIES_ALCREMIE_MATCHA_CREAM || species == SPECIES_ALCREMIE_MINT_CREAM || species == SPECIES_ALCREMIE_LEMON_CREAM ||
-                     species == SPECIES_ALCREMIE_SALTED_CREAM || species == SPECIES_ALCREMIE_RUBY_SWIRL || species == SPECIES_ALCREMIE_CARAMEL_SWIRL ||
-                     species == SPECIES_ALCREMIE_RAINBOW_SWIRL || species == SPECIES_EISCUE_NOICE_FACE || species == SPECIES_INDEEDEE_FEMALE ||
-                     species == SPECIES_MORPEKO_HANGRY || (species > LAST_VALID_SPECIES && species < SPECIES_RATTATA_ALOLAN) ||
-                     (species > SPECIES_STUNFISK_GALARIAN && species < SPECIES_QWILFISH_HISUIAN) ||
-                     (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KECLEONG) ||
-                     (species >= SPECIES_DRAGONITE_DELIVERY && species <= SPECIES_TINKATON_MEGA));
-        }
+        int allowLegendaries = gSaveBlock2Ptr->encounterRandomizedLegendaryMode;
+        do {
+            species = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, &rndSeed);
+        } while (!IsValidRandomizerMon(species, allowLegendaries));
     }
 
     return species;
@@ -9352,9 +9251,7 @@ u16 GetFormShiftSpecies(u16 species) {
     return SPECIES_NONE;
 }
 
-const u8 *GetSpeciesLongName(u16 species) {
-    return gSpecies[species].longName;
-}
+const u8 *GetSpeciesLongName(u16 species) { return gSpecies[species].longName; }
 
 u16 GetRandomSpeciesFromPool(u8 id) {
     u8 rand = Random();
