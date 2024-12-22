@@ -7599,10 +7599,14 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
 static bool32 CanEvolve(u32 species) {
     u32 i;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
-        if (gEvolutionTable[species][i].method && gEvolutionTable[species][i].method != EVO_MEGA_EVOLUTION &&
-            gEvolutionTable[species][i].method != EVO_MOVE_MEGA_EVOLUTION && gEvolutionTable[species][i].method != EVO_PRIMAL_REVERSION)
-            return TRUE;
+    const Evolution *evos = EvoOrEmpty(species);
+
+    for (i = 0; evos[i].method; i++) {
+        FILTER(evos[i].method != EVO_MEGA_EVOLUTION)
+        FILTER(evos[i].method != EVO_MOVE_MEGA_EVOLUTION)
+        FILTER(evos[i].method != EVO_PRIMAL_REVERSION)
+        FILTER(evos[i].method != EVO_UNMEGA)
+        return TRUE;
     }
     return FALSE;
 }
@@ -8343,9 +8347,10 @@ bool32 IsPartnerMonFromSameTrainer(u8 battlerId) {
 u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId) {
     u32 i;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
-        if (gEvolutionTable[preEvoSpecies][i].method == EVO_MEGA_EVOLUTION && gEvolutionTable[preEvoSpecies][i].param == heldItemId)
-            return gEvolutionTable[preEvoSpecies][i].targetSpecies;
+    const Evolution *evos = EvoOrEmpty(preEvoSpecies);
+
+    for (i = 0; evos[i].method; i++) {
+        if (evos[i].method == EVO_MEGA_EVOLUTION && evos[i].param == heldItemId) return evos[i].targetSpecies;
     }
     return SPECIES_NONE;
 }
@@ -8353,9 +8358,10 @@ u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId) {
 u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId) {
     u32 i;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
-        if (gEvolutionTable[preEvoSpecies][i].method == EVO_PRIMAL_REVERSION && gEvolutionTable[preEvoSpecies][i].param == heldItemId)
-            return gEvolutionTable[preEvoSpecies][i].targetSpecies;
+    const Evolution *evos = EvoOrEmpty(preEvoSpecies);
+
+    for (i = 0; evos[i].method; i++) {
+        if (evos[i].method == EVO_PRIMAL_REVERSION && evos[i].param == heldItemId) return evos[i].targetSpecies;
     }
     return SPECIES_NONE;
 }
@@ -8363,10 +8369,12 @@ u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId) {
 u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, u16 moveId1, u16 moveId2, u16 moveId3, u16 moveId4) {
     u32 i, par;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
-        if (gEvolutionTable[preEvoSpecies][i].method == EVO_MOVE_MEGA_EVOLUTION) {
-            par = gEvolutionTable[preEvoSpecies][i].param;
-            if (par == moveId1 || par == moveId2 || par == moveId3 || par == moveId4) return gEvolutionTable[preEvoSpecies][i].targetSpecies;
+    const Evolution *evos = EvoOrEmpty(preEvoSpecies);
+
+    for (i = 0; evos[i].method; i++) {
+        if (evos[i].method == EVO_MOVE_MEGA_EVOLUTION) {
+            par = evos[i].param;
+            if (par == moveId1 || par == moveId2 || par == moveId3 || par == moveId4) return evos[i].targetSpecies;
         }
     }
     return SPECIES_NONE;

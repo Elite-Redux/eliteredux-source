@@ -335,7 +335,7 @@ typedef struct Species {
     const u8 *const femaleIcon;
     const Evolution *const evos; // TODO
     const Evolution *const formShifts; // TODO
-    const u16 *const forms; // TODO
+    const u16 *const forms;
     const LevelUpMove *const levelUpMoves;
     const TutorUnion tutors; // TODO
     const MonCoords frontCoords;
@@ -419,8 +419,6 @@ extern const u16 gNationalDexSpeciesMap[];
 extern const u16 gHoennDexSpeciesMap[];
 extern const u8 *const gItemEffectTable[];
 extern const u32 gExperienceTables[][MAX_LEVEL + 1];
-extern const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON];
-extern const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON];
 extern const u8 gPPUpGetMask[];
 extern const u8 gPPUpSetMask[];
 extern const u8 gPPUpAddMask[];
@@ -467,6 +465,8 @@ u16 MonTryLearningNewEvolutionMove(struct Pokemon *mon, bool8 firstMove);
 void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move);
 void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
 u16 RandomizeMoves(u16 moves, u16 species, u32 personality);
+const Evolution* EvoOrEmpty(int species);
+const Evolution* FormChangeOrEmpty(int species);
 
 u8 CountAliveMonsInBattle(u8 caseId);
 #define BATTLE_ALIVE_EXCEPT_ACTIVE 0

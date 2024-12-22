@@ -1520,9 +1520,9 @@ static const u8 sCriticalHitChance[] = {16, 8, 2, 1, 1};
 static const u8 sCriticalHitChance[] = {16, 8, 4, 3, 2};  // Gens 2,3,4,5
 #endif  // B_CRIT_CHANCE
 
-#define BENEFITS_FROM_LEEK(battler, holdEffect) \
-    ((holdEffect == HOLD_EFFECT_LEEK) &&        \
-     (GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_FARFETCHD || gBattleMons[battler].species == SPECIES_FARFETCHD_GALARIAN || gBattleMons[battler].species == SPECIES_SIRFETCHD))
+#define BENEFITS_FROM_LEEK(battler, holdEffect)                                                                     \
+    ((holdEffect == HOLD_EFFECT_LEEK) && (GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_FARFETCHD || \
+                                          gBattleMons[battler].species == SPECIES_FARFETCHD_GALARIAN || gBattleMons[battler].species == SPECIES_SIRFETCHD))
 s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbility) {
     s32 critChance = 0;
     u32 holdEffectAtk = GetBattlerHoldEffect(battlerAtk, TRUE);
@@ -5049,10 +5049,10 @@ static void Cmd_switchindataupdate(void) {
     oldData = gBattleMons[gActiveBattler];
     memcpy(&gBattleMons[gActiveBattler], &gBattleResources->bufferB[gActiveBattler][4], sizeof(gBattleMons[gActiveBattler]));
 
-    gBattleMons[gActiveBattler].type1 = RandomizeType(
-        gSpecies[gBattleMons[gActiveBattler].species].type1, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, TRUE);
-    gBattleMons[gActiveBattler].type2 = RandomizeType(
-        gSpecies[gBattleMons[gActiveBattler].species].type2, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, FALSE);
+    gBattleMons[gActiveBattler].type1 =
+        RandomizeType(gSpecies[gBattleMons[gActiveBattler].species].type1, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, TRUE);
+    gBattleMons[gActiveBattler].type2 =
+        RandomizeType(gSpecies[gBattleMons[gActiveBattler].species].type2, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, FALSE);
     gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_BATON_PASS || gBattleMoves[gCurrentMove].effect == EFFECT_SHED_TAIL) {
@@ -8018,10 +8018,10 @@ static void Cmd_various(void) {
             bool8 canDoPrimalReversion = FALSE;
             ptr = READ_PTR_INC;
 
-            for (i = 0; i < EVOS_PER_MON; i++) {
-                if (gEvolutionTable[gBattleMons[gActiveBattler].species][i].method == EVO_PRIMAL_REVERSION &&
-                    gEvolutionTable[gBattleMons[gActiveBattler].species][i].param == gBattleMons[gActiveBattler].item)
-                    canDoPrimalReversion = TRUE;
+            const Evolution* evos = EvoOrEmpty(gBattleMons[gActiveBattler].species);
+
+            for (i = 0; evos[i].method; i++) {
+                if (evos[i].method == EVO_PRIMAL_REVERSION && evos[i].param == gBattleMons[gActiveBattler].item) canDoPrimalReversion = TRUE;
             }
 
             if (!canDoPrimalReversion) gBattlescriptCurrInstr = ptr;
@@ -12568,7 +12568,7 @@ static void Cmd_handleballthrow(void) {
             catchRate = gSpecies[gBattleMons[gBattlerTarget].species].catchRate;
 
 #ifdef POKEMON_EXPANSION
-        if (FALSE) { // gSpecies[gBattleMons[gBattlerTarget].species].flags & F_ULTRA_BEAST) {
+        if (FALSE) {  // gSpecies[gBattleMons[gBattlerTarget].species].flags & F_ULTRA_BEAST) {
             if (gLastUsedItem == ITEM_BEAST_BALL)
                 ballMultiplier = 50;
             else
@@ -12668,9 +12668,10 @@ static void Cmd_handleballthrow(void) {
 #endif
                     break;
                 case ITEM_MOON_BALL:
-                    for (i = 0; i < EVOS_PER_MON; i++) {
-                        if (gEvolutionTable[gBattleMons[gBattlerTarget].species][i].method == EVO_ITEM &&
-                            gEvolutionTable[gBattleMons[gBattlerTarget].species][i].param == ITEM_MOON_STONE)
+                    const Evolution* evos = EvoOrEmpty(gBattleMons[gBattlerTarget].species);
+                    for (i = 0; evos[i].method; i++) {
+                        if (evos[i].method == EVO_ITEM &&
+                            evos[i].param == ITEM_MOON_STONE)
                             ballMultiplier = 40;
                     }
                     break;

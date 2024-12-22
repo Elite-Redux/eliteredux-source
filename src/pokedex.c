@@ -6135,10 +6135,10 @@ static u8 PrintEvolutionTargetSpeciesAndMethod(u8 taskId, u16 species, u8 depth,
     // Calculate number of possible direct evolutions (e.g. Eevee has 5 but torchic has 1)
     for (i = 0; i < EVOS_PER_MON; i++) {
 #ifndef POKEMON_EXPANSION
-        if (gEvolutionTable[species][i].method != 0) times += 1;
+        if (gSpecies[species].evos[i].method != 0) times += 1;
 #endif
 #ifdef POKEMON_EXPANSION
-        if (gEvolutionTable[species][i].method != 0 && gEvolutionTable[species][i].method != EVO_MEGA_EVOLUTION) times += 1;
+        if (gSpecies[species].evos[i].method != 0 && gSpecies[species].evos[i].method != EVO_MEGA_EVOLUTION) times += 1;
 #endif
     }
     gTasks[taskId].data[3] = times;
@@ -6153,9 +6153,9 @@ static u8 PrintEvolutionTargetSpeciesAndMethod(u8 taskId, u16 species, u8 depth,
     for (i = 0; i < times; i++) {
         base_i = i + depth_i;
         left = !left;
-        switch (gEvolutionTable[species][i].method) {
+        switch (gSpecies[species].evos[i].method) {
             case EVO_FRIENDSHIP:
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 ConvertIntToDecimalStringN(gStringVar2, 220, STR_CONV_MODE_LEADING_ZEROS, 3);                              // friendship value
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
@@ -6163,47 +6163,47 @@ static u8 PrintEvolutionTargetSpeciesAndMethod(u8 taskId, u16 species, u8 depth,
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_FRIENDSHIP_DAY:
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_FRIENDSHIP_DAY);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_FRIENDSHIP_NIGHT:
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_FRIENDSHIP_NIGHT);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_LEVEL:
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_TRADE:
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_TRADE);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_TRADE_ITEM:
-                item = gEvolutionTable[species][i].param;  // item
+                item = gSpecies[species].evos[i].param;  // item
                 CopyItemName(item, gStringVar2);           // item
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_TRADE_ITEM);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_ITEM:
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 if (targetSpecies == actualSpecies) continue;
-                item = gEvolutionTable[species][i].param;
+                item = gSpecies[species].evos[i].param;
                 CopyItemName(item, gStringVar2);
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
@@ -6211,64 +6211,64 @@ static u8 PrintEvolutionTargetSpeciesAndMethod(u8 taskId, u16 species, u8 depth,
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_LEVEL_ATK_GT_DEF:
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_ATK_GT_DEF);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_LEVEL_ATK_EQ_DEF:
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_ATK_EQ_DEF);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_LEVEL_ATK_LT_DEF:
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon namee
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_ATK_LT_DEF);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_LEVEL_SILCOON:
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_SILCOON);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_LEVEL_CASCOON:
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_CASCOON);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_LEVEL_NINJASK:
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_NINJASK);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_LEVEL_SHEDINJA:
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_SHEDINJA);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_BEAUTY:
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, 3);  // beauty
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, 3);  // beauty
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_BEAUTY);
@@ -6276,109 +6276,109 @@ static u8 PrintEvolutionTargetSpeciesAndMethod(u8 taskId, u16 species, u8 depth,
                 break;
 #ifdef POKEMON_EXPANSION
             case EVO_LEVEL_FEMALE:
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_FEMALE);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_LEVEL_MALE:
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_MALE);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_LEVEL_NIGHT:
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_NIGHT);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_LEVEL_DAY:
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_DAY);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_LEVEL_DUSK:
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                ConvertIntToDecimalStringN(gStringVar2, gSpecies[species].evos[i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS);  // level
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_DUSK);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_ITEM_HOLD_DAY:
-                item = gEvolutionTable[species][i].param;  // item
+                item = gSpecies[species].evos[i].param;  // item
                 CopyItemName(item, gStringVar2);           // item
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_ITEM_HOLD_DAY);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_ITEM_HOLD_NIGHT:
-                item = gEvolutionTable[species][i].param;  // item
+                item = gSpecies[species].evos[i].param;  // item
                 CopyItemName(item, gStringVar2);           // item
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_ITEM_HOLD_NIGHT);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_ITEM_HOLD:
-                item = gEvolutionTable[species][i].param;  // item
+                item = gSpecies[species].evos[i].param;  // item
                 CopyItemName(item, gStringVar2);           // item
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_ITEM_HOLD);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_MOVE:
-                StringCopy(gStringVar2, gMoveNames[gEvolutionTable[species][i].param]);
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                StringCopy(gStringVar2, gMoveNames[gSpecies[species].evos[i].param]);
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_MOVE);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_MOVE_TYPE:
-                StringCopy(gStringVar2, gTypeNames[gEvolutionTable[species][i].param]);
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                StringCopy(gStringVar2, gTypeNames[gSpecies[species].evos[i].param]);
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_MOVE_TYPE);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_SPECIFIC_MAPSEC:
-                StringCopy(gStringVar2, gRegionMapEntries[gEvolutionTable[species][i].param].name);
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                StringCopy(gStringVar2, gRegionMapEntries[gSpecies[species].evos[i].param].name);
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_SPECIFIC_MAPSEC);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_ITEM_MALE:
-                item = gEvolutionTable[species][i].param;  // item
+                item = gSpecies[species].evos[i].param;  // item
                 CopyItemName(item, gStringVar2);           // item
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_ITEM_MALE);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_ITEM_FEMALE:
-                item = gEvolutionTable[species][i].param;  // item
+                item = gSpecies[species].evos[i].param;  // item
                 CopyItemName(item, gStringVar2);           // item
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_ITEM_FEMALE);
@@ -6386,39 +6386,39 @@ static u8 PrintEvolutionTargetSpeciesAndMethod(u8 taskId, u16 species, u8 depth,
                 break;
             case EVO_LEVEL_RAIN:
                 // if (j == WEATHER_RAIN || j == WEATHER_RAIN_THUNDERSTORM || j == WEATHER_DOWNPOUR)
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_RAIN);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_SPECIFIC_MON_IN_PARTY:
-                StringCopy(gStringVar2, gSpecies[gEvolutionTable[species][i].param].name);  // mon name
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                StringCopy(gStringVar2, gSpecies[gSpecies[species].evos[i].param].name);  // mon name
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_SPECIFIC_MON_IN_PARTY);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_LEVEL_DARK_TYPE_MON_IN_PARTY:
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_DARK_TYPE_MON_IN_PARTY);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_TRADE_SPECIFIC_MON:
-                StringCopy(gStringVar2, gSpecies[gEvolutionTable[species][i].param].name);  // mon name
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                StringCopy(gStringVar2, gSpecies[gSpecies[species].evos[i].param].name);  // mon name
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_TRADE_SPECIFIC_MON);
                 PrintInfoScreenTextSmall(gStringVar4, base_x + depth_x * depth + base_x_offset, base_y + base_y_offset * base_i);
                 break;
             case EVO_SPECIFIC_MAP:
-                mapHeader = Overworld_GetMapHeaderByGroupAndId(gEvolutionTable[species][i].param >> 8, gEvolutionTable[species][i].param & 0xFF);
+                mapHeader = Overworld_GetMapHeaderByGroupAndId(gSpecies[species].evos[i].param >> 8, gSpecies[species].evos[i].param & 0xFF);
                 GetMapName(gStringVar2, mapHeader->regionMapSectionId, 0);
-                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                 CreateCaughtBallEvolutionScreen(targetSpecies, base_x + depth_x * depth - 9, base_y + base_y_offset * base_i, 0);
                 handleTargetSpeciesPrint(taskId, targetSpecies, base_x + depth_x * depth, base_y, base_y_offset, base_i);  // evolution mon name
                 StringExpandPlaceholders(gStringVar4, gText_EVO_SPECIFIC_MAP);

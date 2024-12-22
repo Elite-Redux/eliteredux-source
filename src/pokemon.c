@@ -97,7 +97,6 @@ struct CombinedMove {
 
 static const struct CombinedMove sCombinedMoves[2] = {{MOVE_EMBER, MOVE_GUST, MOVE_HEAT_WAVE}, {0xFFFF, 0xFFFF, 0xFFFF}};
 
-
 const struct SpindaSpot gSpindaSpotGraphics[] = {
     {16, 7, INCBIN_U16("graphics/spinda_spots/spot_0.bin")},
     {40, 8, INCBIN_U16("graphics/spinda_spots/spot_1.bin")},
@@ -149,7 +148,6 @@ const s8 gNatureStatTable[NUM_NATURES][NUM_NATURE_STATS] = {
 #include "data/pokemon/species_data_gen9.h"
 #include "data/pokemon/species_data.h"
 #pragma GCC pop_options
-#include "data/pokemon/evolution.h"
 #include "data/pokemon/form_species_tables.h"
 #include "data/pokemon/form_species_table_pointers.h"
 #include "data/pokemon/form_change_tables.h"
@@ -4470,115 +4468,112 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
             friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
 
             for (i = 0; i < EVOS_PER_MON; i++) {
-                switch (gEvolutionTable[species][i].method) {
+                switch (gSpecies[species].evos[i].method) {
                     case EVO_FRIENDSHIP:
-                        if (friendship >= 160) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (friendship >= 160) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_FRIENDSHIP_DAY:
                         RtcCalcLocalTime();
-                        if (IsCurrentlyDay() < NIGHT_START && friendship >= 160) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (IsCurrentlyDay() < NIGHT_START && friendship >= 160) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_LEVEL_DAY:
                         RtcCalcLocalTime();
-                        if (IsCurrentlyDay() && gEvolutionTable[species][i].param <= level) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (IsCurrentlyDay() && gSpecies[species].evos[i].param <= level) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_FRIENDSHIP_NIGHT:
                         RtcCalcLocalTime();
-                        if (!IsCurrentlyDay() && friendship >= 160) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (!IsCurrentlyDay() && friendship >= 160) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_LEVEL_NIGHT:
                         RtcCalcLocalTime();
-                        if (!IsCurrentlyDay() && gEvolutionTable[species][i].param <= level) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (!IsCurrentlyDay() && gSpecies[species].evos[i].param <= level) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_ITEM_HOLD_NIGHT:
                         RtcCalcLocalTime();
-                        if (!IsCurrentlyDay() && heldItem == gEvolutionTable[species][i].param) {
+                        if (!IsCurrentlyDay() && heldItem == gSpecies[species].evos[i].param) {
                             heldItem = 0;
                             SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
-                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                            targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         }
                         break;
                     case EVO_ITEM_HOLD_DAY:
                         RtcCalcLocalTime();
-                        if (IsCurrentlyDay() && heldItem == gEvolutionTable[species][i].param) {
+                        if (IsCurrentlyDay() && heldItem == gSpecies[species].evos[i].param) {
                             heldItem = 0;
                             SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
-                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                            targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         }
                         break;
                     case EVO_ITEM_HOLD:
-                        if (heldItem == gEvolutionTable[species][i].param) {
+                        if (heldItem == gSpecies[species].evos[i].param) {
                             heldItem = 0;
                             SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
-                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                            targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         }
                         break;
                     case EVO_LEVEL_DUSK:
                         RtcCalcLocalTime();
-                        if (IsCurrentlyDusk() && gEvolutionTable[species][i].param <= level) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (IsCurrentlyDusk() && gSpecies[species].evos[i].param <= level) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_LEVEL:
-                        if (gEvolutionTable[species][i].param <= level) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (gSpecies[species].evos[i].param <= level) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_LEVEL_FEMALE:
-                        if (gEvolutionTable[species][i].param <= level && GetMonGender(mon) == MON_FEMALE)
-                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (gSpecies[species].evos[i].param <= level && GetMonGender(mon) == MON_FEMALE)
+                            targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_LEVEL_MALE:
-                        if (gEvolutionTable[species][i].param <= level && GetMonGender(mon) == MON_MALE)
-                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (gSpecies[species].evos[i].param <= level && GetMonGender(mon) == MON_MALE) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_LEVEL_ATK_GT_DEF:
-                        if (gEvolutionTable[species][i].param <= level)
-                            if (GetMonData(mon, MON_DATA_ATK, 0) > GetMonData(mon, MON_DATA_DEF, 0)) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (gSpecies[species].evos[i].param <= level)
+                            if (GetMonData(mon, MON_DATA_ATK, 0) > GetMonData(mon, MON_DATA_DEF, 0)) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_LEVEL_ATK_EQ_DEF:
-                        if (gEvolutionTable[species][i].param <= level)
-                            if (GetMonData(mon, MON_DATA_ATK, 0) == GetMonData(mon, MON_DATA_DEF, 0)) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (gSpecies[species].evos[i].param <= level)
+                            if (GetMonData(mon, MON_DATA_ATK, 0) == GetMonData(mon, MON_DATA_DEF, 0)) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_LEVEL_ATK_LT_DEF:
-                        if (gEvolutionTable[species][i].param <= level)
-                            if (GetMonData(mon, MON_DATA_ATK, 0) < GetMonData(mon, MON_DATA_DEF, 0)) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (gSpecies[species].evos[i].param <= level)
+                            if (GetMonData(mon, MON_DATA_ATK, 0) < GetMonData(mon, MON_DATA_DEF, 0)) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_LEVEL_SILCOON:
-                        if (gEvolutionTable[species][i].param <= level && (upperPersonality % 10) <= 4)
-                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (gSpecies[species].evos[i].param <= level && (upperPersonality % 10) <= 4) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_LEVEL_CASCOON:
-                        if (gEvolutionTable[species][i].param <= level && (upperPersonality % 10) > 4)
-                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (gSpecies[species].evos[i].param <= level && (upperPersonality % 10) > 4) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_LEVEL_NINJASK:
-                        if (gEvolutionTable[species][i].param <= level) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (gSpecies[species].evos[i].param <= level) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_BEAUTY:
-                        if (gEvolutionTable[species][i].param <= beauty) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (gSpecies[species].evos[i].param <= beauty) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_MOVE:
-                        if (MonKnowsMove(mon, gEvolutionTable[species][i].param)) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (MonKnowsMove(mon, gSpecies[species].evos[i].param)) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_MOVE_TYPE:
                         for (j = 0; j < 4; j++) {
-                            if (gBattleMoves[GetMonData(mon, MON_DATA_MOVE1 + j, NULL)].type == gEvolutionTable[species][i].param) {
-                                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                            if (gBattleMoves[GetMonData(mon, MON_DATA_MOVE1 + j, NULL)].type == gSpecies[species].evos[i].param) {
+                                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                                 break;
                             }
                         }
                         break;
                     case EVO_SPECIFIC_MON_IN_PARTY:
                         for (j = 0; j < PARTY_SIZE; j++) {
-                            if (GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL) == gEvolutionTable[species][i].param) {
-                                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                            if (GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL) == gSpecies[species].evos[i].param) {
+                                targetSpecies = gSpecies[species].evos[i].targetSpecies;
                                 break;
                             }
                         }
                         break;
                     case EVO_LEVEL_DARK_TYPE_MON_IN_PARTY:
-                        if (gEvolutionTable[species][i].param <= level) {
+                        if (gSpecies[species].evos[i].param <= level) {
                             for (j = 0; j < PARTY_SIZE; j++) {
                                 u16 currSpecies = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
                                 if (gSpecies[currSpecies].type1 == TYPE_DARK || gSpecies[currSpecies].type2 == TYPE_DARK) {
-                                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                                    targetSpecies = gSpecies[species].evos[i].targetSpecies;
                                     break;
                                 }
                             }
@@ -4587,33 +4582,33 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
                     case EVO_LEVEL_RAIN:
                         j = GetCurrentWeather();
                         if (j == WEATHER_RAIN || j == WEATHER_RAIN_THUNDERSTORM || j == WEATHER_DOWNPOUR)
-                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                            targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_SPECIFIC_MAPSEC:
-                        if (gMapHeader.regionMapSectionId == gEvolutionTable[species][i].param) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (gMapHeader.regionMapSectionId == gSpecies[species].evos[i].param) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_SPECIFIC_MAP:
                         currentMap = ((gSaveBlock1Ptr->location.mapGroup) << 8 | gSaveBlock1Ptr->location.mapNum);
-                        if (currentMap == gEvolutionTable[species][i].param) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (currentMap == gSpecies[species].evos[i].param) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                 }
             }
             break;
         case EVO_MODE_TRADE:
             for (i = 0; i < EVOS_PER_MON; i++) {
-                switch (gEvolutionTable[species][i].method) {
+                switch (gSpecies[species].evos[i].method) {
                     case EVO_TRADE:
-                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_TRADE_ITEM:
-                        if (gEvolutionTable[species][i].param == heldItem) {
+                        if (gSpecies[species].evos[i].param == heldItem) {
                             heldItem = 0;
                             SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
-                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                            targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         }
                         break;
                     case EVO_TRADE_SPECIFIC_MON:
-                        if (gEvolutionTable[species][i].param == tradePartnerSpecies) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (gSpecies[species].evos[i].param == tradePartnerSpecies) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                 }
             }
@@ -4621,17 +4616,17 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
         case EVO_MODE_ITEM_USE:
         case EVO_MODE_ITEM_CHECK:
             for (i = 0; i < EVOS_PER_MON; i++) {
-                switch (gEvolutionTable[species][i].method) {
+                switch (gSpecies[species].evos[i].method) {
                     case EVO_ITEM:
-                        if (gEvolutionTable[species][i].param == evolutionItem) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (gSpecies[species].evos[i].param == evolutionItem) targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_ITEM_FEMALE:
-                        if (GetMonGender(mon) == MON_FEMALE && gEvolutionTable[species][i].param == evolutionItem)
-                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (GetMonGender(mon) == MON_FEMALE && gSpecies[species].evos[i].param == evolutionItem)
+                            targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                     case EVO_ITEM_MALE:
-                        if (GetMonGender(mon) == MON_MALE && gEvolutionTable[species][i].param == evolutionItem)
-                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (GetMonGender(mon) == MON_MALE && gSpecies[species].evos[i].param == evolutionItem)
+                            targetSpecies = gSpecies[species].evos[i].targetSpecies;
                         break;
                 }
             }
@@ -7608,12 +7603,12 @@ u16 GetFormChangeForMon(struct Pokemon *mon, u8 num) {
 
     if (canMegaEvolve && notMegaSpecies == SPECIES_NONE)  // Permanent mega mode only
     {
-        switch (gEvolutionTable[species][i].method) {
+        switch (gSpecies[species].evos[i].method) {
             case EVO_MEGA_EVOLUTION:
             case EVO_PRIMAL_REVERSION:
-                if (gEvolutionTable[species][i].param == heldItem ||
-                    CheckBagHasItem(gEvolutionTable[species][i].param, 1))  // Check if the mon holds the evolution item or the player has it in the bag
-                    return gEvolutionTable[species][i].targetSpecies;
+                if (gSpecies[species].evos[i].param == heldItem ||
+                    CheckBagHasItem(gSpecies[species].evos[i].param, 1))  // Check if the mon holds the evolution item or the player has it in the bag
+                    return gSpecies[species].evos[i].targetSpecies;
                 break;
             case EVO_MOVE_MEGA_EVOLUTION: {
                 u16 move1 = GetMonData(mon, MON_DATA_MOVE1, 0);
@@ -7621,9 +7616,9 @@ u16 GetFormChangeForMon(struct Pokemon *mon, u8 num) {
                 u16 move3 = GetMonData(mon, MON_DATA_MOVE3, 0);
                 u16 move4 = GetMonData(mon, MON_DATA_MOVE4, 0);
 
-                if (gEvolutionTable[species][i].param == move1 || gEvolutionTable[species][i].param == move2 || gEvolutionTable[species][i].param == move3 ||
-                    gEvolutionTable[species][i].param == move4)  // Check if the mon has the evolution move
-                    return gEvolutionTable[species][i].targetSpecies;
+                if (gSpecies[species].evos[i].param == move1 || gSpecies[species].evos[i].param == move2 || gSpecies[species].evos[i].param == move3 ||
+                    gSpecies[species].evos[i].param == move4)  // Check if the mon has the evolution move
+                    return gSpecies[species].evos[i].targetSpecies;
             } break;
         }
     } else if (num == 0 && notMegaSpecies != SPECIES_NONE)
@@ -7661,117 +7656,114 @@ u16 GetEvolutionForMon(struct Pokemon *mon, u8 num) {
 
     if ((species == SPECIES_NECROZMA_DUSK_MANE || species == SPECIES_NECROZMA_DAWN_WINGS) && num == 0) return SPECIES_NECROZMA;
 
-    switch (gEvolutionTable[species][i].method) {
+    switch (gSpecies[species].evos[i].method) {
         case EVO_FRIENDSHIP:
-            if (friendship >= 220) return gEvolutionTable[species][i].targetSpecies;
+            if (friendship >= 220) return gSpecies[species].evos[i].targetSpecies;
             break;
         case EVO_FRIENDSHIP_DAY:
             RtcCalcLocalTime();
-            if (IsCurrentlyDay() && friendship >= 220) return gEvolutionTable[species][i].targetSpecies;
+            if (IsCurrentlyDay() && friendship >= 220) return gSpecies[species].evos[i].targetSpecies;
             break;
         case EVO_LEVEL_DUSK:
             RtcCalcLocalTime();
-            if (IsCurrentlyDusk() && gEvolutionTable[species][i].param <= level) return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (IsCurrentlyDusk() && gSpecies[species].evos[i].param <= level) return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_LEVEL_DAY:
             RtcCalcLocalTime();
-            if (IsCurrentlyDay() && gEvolutionTable[species][i].param <= level && !(IsCurrentlyDusk() && species == SPECIES_ROCKRUFF))
-                return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (IsCurrentlyDay() && gSpecies[species].evos[i].param <= level && !(IsCurrentlyDusk() && species == SPECIES_ROCKRUFF))
+                return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_LEVEL_NIGHT:
             RtcCalcLocalTime();
-            if (!IsCurrentlyDay() && gEvolutionTable[species][i].param <= level && !(IsCurrentlyDusk() && species == SPECIES_ROCKRUFF))
-                return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (!IsCurrentlyDay() && gSpecies[species].evos[i].param <= level && !(IsCurrentlyDusk() && species == SPECIES_ROCKRUFF))
+                return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_FRIENDSHIP_NIGHT:
             RtcCalcLocalTime();
-            if (!IsCurrentlyDay() && friendship >= 220) return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (!IsCurrentlyDay() && friendship >= 220) return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_ITEM_HOLD_NIGHT:
             RtcCalcLocalTime();
-            if (!IsCurrentlyDay() && heldItem == gEvolutionTable[species][i].param) {
+            if (!IsCurrentlyDay() && heldItem == gSpecies[species].evos[i].param) {
                 heldItem = 0;
                 SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
-                return gEvolutionTable[species][i].targetSpecies;  // Get base species
+                return gSpecies[species].evos[i].targetSpecies;  // Get base species
             }
             break;
         case EVO_ITEM_HOLD_DAY:
             RtcCalcLocalTime();
-            if (IsCurrentlyDay() && heldItem == gEvolutionTable[species][i].param) {
+            if (IsCurrentlyDay() && heldItem == gSpecies[species].evos[i].param) {
                 heldItem = 0;
                 SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
-                return gEvolutionTable[species][i].targetSpecies;  // Get base species
+                return gSpecies[species].evos[i].targetSpecies;  // Get base species
             }
             break;
         case EVO_LEVEL:
-            if (gEvolutionTable[species][i].param <= level) return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (gSpecies[species].evos[i].param <= level) return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_LEVEL_FEMALE:
-            if (gEvolutionTable[species][i].param <= level && GetMonGender(mon) == MON_FEMALE)
-                return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (gSpecies[species].evos[i].param <= level && GetMonGender(mon) == MON_FEMALE)
+                return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_LEVEL_MALE:
-            if (gEvolutionTable[species][i].param <= level && GetMonGender(mon) == MON_MALE)
-                return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (gSpecies[species].evos[i].param <= level && GetMonGender(mon) == MON_MALE) return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_LEVEL_ATK_GT_DEF:
-            if (gEvolutionTable[species][i].param <= level && (GetMonData(mon, MON_DATA_ATK, 0) > GetMonData(mon, MON_DATA_DEF, 0)))
-                return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (gSpecies[species].evos[i].param <= level && (GetMonData(mon, MON_DATA_ATK, 0) > GetMonData(mon, MON_DATA_DEF, 0)))
+                return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_LEVEL_ATK_EQ_DEF:
-            if (gEvolutionTable[species][i].param <= level && GetMonData(mon, MON_DATA_ATK, 0) == GetMonData(mon, MON_DATA_DEF, 0))
-                return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (gSpecies[species].evos[i].param <= level && GetMonData(mon, MON_DATA_ATK, 0) == GetMonData(mon, MON_DATA_DEF, 0))
+                return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_LEVEL_ATK_LT_DEF:
-            if (gEvolutionTable[species][i].param <= level && GetMonData(mon, MON_DATA_ATK, 0) < GetMonData(mon, MON_DATA_DEF, 0))
-                return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (gSpecies[species].evos[i].param <= level && GetMonData(mon, MON_DATA_ATK, 0) < GetMonData(mon, MON_DATA_DEF, 0))
+                return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_LEVEL_SILCOON:
-            if (gEvolutionTable[species][i].param <= level && (upperPersonality % 10) <= 4)
-                return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (gSpecies[species].evos[i].param <= level && (upperPersonality % 10) <= 4) return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_LEVEL_CASCOON:
-            if (gEvolutionTable[species][i].param <= level && (upperPersonality % 10) > 4)
-                return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (gSpecies[species].evos[i].param <= level && (upperPersonality % 10) > 4) return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_LEVEL_NINJASK:
-            if (gEvolutionTable[species][i].param <= level) return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (gSpecies[species].evos[i].param <= level) return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_BEAUTY:
-            if (gEvolutionTable[species][i].param <= beauty) return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (gSpecies[species].evos[i].param <= beauty) return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_MOVE:
-            if (MonKnowsMove(mon, gEvolutionTable[species][i].param)) return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (MonKnowsMove(mon, gSpecies[species].evos[i].param)) return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_MOVE_TYPE:
             for (j = 0; j < 4; j++) {
-                if (gBattleMoves[GetMonData(mon, MON_DATA_MOVE1 + j, NULL)].type == gEvolutionTable[species][i].param)
-                    return gEvolutionTable[species][i].targetSpecies;  // Get base species
+                if (gBattleMoves[GetMonData(mon, MON_DATA_MOVE1 + j, NULL)].type == gSpecies[species].evos[i].param)
+                    return gSpecies[species].evos[i].targetSpecies;  // Get base species
             }
             break;
         case EVO_SPECIFIC_MON_IN_PARTY:
             for (j = 0; j < PARTY_SIZE; j++) {
-                if (GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL) == gEvolutionTable[species][i].param)
-                    return gEvolutionTable[species][i].targetSpecies;  // Get base species
+                if (GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL) == gSpecies[species].evos[i].param)
+                    return gSpecies[species].evos[i].targetSpecies;  // Get base species
             }
             break;
         case EVO_LEVEL_DARK_TYPE_MON_IN_PARTY:
-            if (gEvolutionTable[species][i].param <= level) {
+            if (gSpecies[species].evos[i].param <= level) {
                 for (j = 0; j < PARTY_SIZE; j++) {
                     u16 partyspecies = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
                     if (gSpecies[partyspecies].type1 == TYPE_DARK || gSpecies[partyspecies].type2 == TYPE_DARK)
-                        return gEvolutionTable[species][i].targetSpecies;  // Get base species
+                        return gSpecies[species].evos[i].targetSpecies;  // Get base species
                 }
             }
             break;
         case EVO_LEVEL_RAIN:
             j = GetCurrentWeather();
             if (j == WEATHER_RAIN || j == WEATHER_RAIN_THUNDERSTORM || j == WEATHER_DOWNPOUR)
-                return gEvolutionTable[species][i].targetSpecies;  // Get base species
+                return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
         case EVO_SPECIFIC_MAP:
             currentMap = ((gSaveBlock1Ptr->location.mapGroup) << 8 | gSaveBlock1Ptr->location.mapNum);
-            if (currentMap == gEvolutionTable[species][i].param) return gEvolutionTable[species][i].targetSpecies;  // Get base species
+            if (currentMap == gSpecies[species].evos[i].param) return gSpecies[species].evos[i].targetSpecies;  // Get base species
             break;
     }
 
@@ -7827,3 +7819,7 @@ bool8 isShinyVariantUnlocked(u16 species, u8 variant) {
     else
         return TRUE;
 }
+
+const static Evolution emptyEvo = {0};
+const Evolution *EvoOrEmpty(int species) { return gSpecies[species].evos ? gSpecies[species].evos : &emptyEvo; }
+const Evolution *FormChangeOrEmpty(int species) { return gSpecies[species].formShifts ? gSpecies[species].formShifts : &emptyEvo; }

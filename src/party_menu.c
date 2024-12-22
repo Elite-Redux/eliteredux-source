@@ -2296,12 +2296,12 @@ static u8 DisplaySelectionWindow(u8 windowType) {
             u16 megaEvoItem = ITEM_NONE;
             int skip = sPartyMenuInternal->actions[i] - MENU_MEGA_STONE;
 
-            for (j = 0; j < EVOS_PER_MON && gEvolutionTable[species][j].method; j++) {
-                if (gEvolutionTable[species][j].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][j].method == EVO_PRIMAL_REVERSION) {
+            for (j = 0; j < EVOS_PER_MON && gSpecies[species].evos[j].method; j++) {
+                if (gSpecies[species].evos[j].method == EVO_MEGA_EVOLUTION || gSpecies[species].evos[j].method == EVO_PRIMAL_REVERSION) {
                     if (skip) {
                         skip--;
                     } else {
-                        megaEvoItem = gEvolutionTable[species][j].param;
+                        megaEvoItem = gSpecies[species].evos[j].param;
                         break;
                     }
                 }
@@ -2538,9 +2538,9 @@ static void SetPartyMonHeldItemSelectionActions(struct Pokemon *mons, u8 slotId)
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_GIVE);
     }
 
-    for (i = 0; i < EVOS_PER_MON && gEvolutionTable[species][i].method && j < ARRAY_COUNT(megaStones); i++) {
-        if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][i].method == EVO_PRIMAL_REVERSION) {
-            megaStones[j++] = gEvolutionTable[species][i].param;
+    for (i = 0; i < EVOS_PER_MON && gSpecies[species].evos[i].method && j < ARRAY_COUNT(megaStones); i++) {
+        if (gSpecies[species].evos[i].method == EVO_MEGA_EVOLUTION || gSpecies[species].evos[i].method == EVO_PRIMAL_REVERSION) {
+            megaStones[j++] = gSpecies[species].evos[i].param;
         }
     }
 
@@ -3171,8 +3171,8 @@ static void GiveMegaStone(int taskId, int itemCount) {
     for (i = 0; i < EVOS_PER_MON; i++) {
         if (itemCount-- > 0) continue;
 
-        if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][i].method == EVO_PRIMAL_REVERSION) {
-            megaEvoItem = gEvolutionTable[species][i].param;
+        if (gSpecies[species].evos[i].method == EVO_MEGA_EVOLUTION || gSpecies[species].evos[i].method == EVO_PRIMAL_REVERSION) {
+            megaEvoItem = gSpecies[species].evos[i].param;
             break;
         }
     }
