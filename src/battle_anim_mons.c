@@ -2094,7 +2094,7 @@ u8 CreateAdditionalMonSpriteForMoveAnim(u16 species, bool8 isBackpic, u8 id, s16
     if (!isBackpic)
     {
         LoadHueShiftedMonPalette(GetMonSpritePal(species, personality, isShiny), (palette * 0x10) + 0x100, 0x20, personality, isAlpha);
-        LoadSpecialPokePic(&gMonFrontPicTable[species],
+        LoadSpecialPokePic(&gSpecies[species].frontPic,
                            gMonSpritesGfxPtr->buffer,
                            species,
                            personality,

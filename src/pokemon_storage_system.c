@@ -4067,7 +4067,7 @@ static void LoadDisplayMonGfx(u16 species, u32 pid)
 
     if (species != SPECIES_NONE)
     {
-        LoadSpecialPokePic(&gMonFrontPicTable[species], sStorage->tileBuffer, species, pid, TRUE);
+        LoadSpecialPokePic(&gSpecies[species].frontPic, sStorage->tileBuffer, species, pid, TRUE);
         LZ77UnCompWram(sStorage->displayMonPalette, sStorage->displayMonPalBuffer);
         HueShiftMonPalette((u16*) sStorage->displayMonPalBuffer, sStorage->displayMonPersonality, isAlpha);
         CpuCopy32(sStorage->tileBuffer, sStorage->displayMonTilePtr, MON_PIC_SIZE);

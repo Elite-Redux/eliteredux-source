@@ -618,7 +618,7 @@ static void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battlerId, bool32 op
     position = GetBattlerPosition(battlerId);
     if (opponent)
     {
-        HandleLoadSpecialPokePic(&gMonFrontPicTable[species],
+        HandleLoadSpecialPokePic(&gSpecies[species].frontPic,
                                  gMonSpritesGfxPtr->sprites.ptr[position],
                                  species, currentPersonality);
     }
@@ -947,7 +947,7 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 notTransform
         {
             personalityValue = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_PERSONALITY);
 
-            HandleLoadSpecialPokePic(&gMonFrontPicTable[targetSpecies],
+            HandleLoadSpecialPokePic(&gSpecies[targetSpecies].frontPic,
                                      gMonSpritesGfxPtr->sprites.ptr[position],
                                      targetSpecies,
                                      gTransformedPersonalities[battlerAtk]);

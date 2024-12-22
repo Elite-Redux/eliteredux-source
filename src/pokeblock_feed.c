@@ -732,7 +732,7 @@ static bool8 LoadMonAndSceneGfx(struct Pokemon *mon)
         // Load mon gfx
         species = GetMonData(mon, MON_DATA_SPECIES2);
         personality = GetMonData(mon, MON_DATA_PERSONALITY);
-        HandleLoadSpecialPokePic(&gMonFrontPicTable[species], gMonSpritesGfxPtr->sprites.ptr[1], species, personality);
+        HandleLoadSpecialPokePic(&gSpecies[species].frontPic, gMonSpritesGfxPtr->sprites.ptr[1], species, personality);
         sPokeblockFeed->loadGfxState++;
         break;
     case 1:

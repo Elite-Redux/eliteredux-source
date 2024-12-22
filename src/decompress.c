@@ -77,7 +77,7 @@ void LoadCompressedSpritePaletteOverrideBuffer(const struct CompressedSpritePale
 void DecompressPicFromTable(const struct CompressedSpriteSheet *src, void* buffer, s32 species)
 {
     if (species > NUM_SPECIES)
-        LZ77UnCompWram(gMonFrontPicTable[0].data, buffer);
+        LZ77UnCompWram(gSpecies[0].frontPic.data, buffer);
     else
         LZ77UnCompWram(src->data, buffer);
 }
@@ -85,9 +85,9 @@ void DecompressPicFromTable(const struct CompressedSpriteSheet *src, void* buffe
 void DecompressPicFromTableGender(void* buffer, s32 species, u32 personality)
 {
     if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
-        DecompressPicFromTable(&gMonFrontPicTableFemale[species], buffer, species);
+        DecompressPicFromTable(&gSpecies[species].frontPicFemale, buffer, species);
     else
-        DecompressPicFromTable(&gMonFrontPicTable[species], buffer, species);
+        DecompressPicFromTable(&gSpecies[species].frontPic, buffer, species);
 }
 
 void HandleLoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *dest, s32 species, u32 personality)
@@ -97,7 +97,7 @@ void HandleLoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *des
     if (isSpeciesPlaceholderMon(species))
         species = PLACEHOLDER_SPECIES;
 
-    if (src == &gMonFrontPicTable[species])
+    if (src == &gSpecies[species].frontPic)
         isFrontPic = TRUE; // frontPic
     else
         isFrontPic = FALSE; // backPic
@@ -117,14 +117,14 @@ void LoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *dest, s32
         if (!isFrontPic)
             LZ77UnCompWram(gMonBackPicTable[id].data, dest);
         else
-            LZ77UnCompWram(gMonFrontPicTable[id].data, dest);
+            LZ77UnCompWram(gSpecies[id].frontPic.data, dest);
     }
     else if (species > NUM_SPECIES) // is species unknown? draw the ? icon
-        LZ77UnCompWram(gMonFrontPicTable[0].data, dest);
+        LZ77UnCompWram(gSpecies[0].frontPic.data, dest);
     else if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
     {
         if (isFrontPic)
-            LZ77UnCompWram(gMonFrontPicTableFemale[species].data, dest);
+            LZ77UnCompWram(gSpecies[species].frontPicFemale.data, dest);
         else
             LZ77UnCompWram(gMonBackPicTableFemale[species].data, dest);
     }

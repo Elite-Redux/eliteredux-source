@@ -533,7 +533,7 @@ void ConditionGraphDrawMonPic(s16 index, u8 arg1)
     isShiny = GetBoxOrPartyMonData(boxId, monId, MON_DATA_IS_SHINY, NULL);
     isAlpha = GetBoxOrPartyMonData(boxId, monId, MON_DATA_IS_ALPHA, NULL);
     personality = GetBoxOrPartyMonData(boxId, monId, MON_DATA_PERSONALITY, NULL);
-    LoadSpecialPokePic(&gMonFrontPicTable[species], structPtr->monPicGfx[arg1], species, personality, TRUE);
+    LoadSpecialPokePic(&gSpecies[species].frontPic, structPtr->monPicGfx[arg1], species, personality, TRUE);
     LZ77UnCompWram(GetMonSpritePal(species, personality, isShiny), structPtr->monPal[arg1]);
     HueShiftMonPalette((u16*) structPtr->monPal[arg1], personality, isAlpha);
 }

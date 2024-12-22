@@ -27,8 +27,6 @@
 #include "gba/io_reg.h"
 #include "mgba_printf/mgba.h"
 
-extern const struct CompressedSpriteSheet gMonFrontPicTable[];
-
 EWRAM_DATA static u8 sMailboxWindowIds[MAILBOXWIN_COUNT] = {0};
 EWRAM_DATA static struct ListMenuItem *sMailboxList = NULL;
 
@@ -1026,7 +1024,7 @@ void GetConditionMenuMonGfx(void *tilesDst, void *palDst, u16 boxId, u16 monId, 
         u8 isShiny = GetBoxOrPartyMonData(boxId, monId, MON_DATA_IS_SHINY, NULL);
         bool8 isAlpha = GetBoxOrPartyMonData(boxId, monId, MON_DATA_IS_ALPHA, NULL);
 
-        LoadSpecialPokePic(&gMonFrontPicTable[species], tilesDst, species, personality, TRUE);
+        LoadSpecialPokePic(&gSpecies[species].frontPic, tilesDst, species, personality, TRUE);
         LZ77UnCompWram(GetMonSpritePal(species, personality, isShiny), palDst);
         HueShiftMonPalette((u16*) palDst, personality, isAlpha);
     }

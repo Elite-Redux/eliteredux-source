@@ -24,10 +24,6 @@ struct MonIconSpriteTemplate
 // static functions
 static u8 CreateMonIconSprite(struct MonIconSpriteTemplate *, s16, s16, u8);
 
-const u8 *const gMonIconTableFemale[] =
-{
-};
-
 const u8 gMonIconPaletteIndices[] =
 {
     [SPECIES_BULBASAUR] = 4,
@@ -1999,7 +1995,7 @@ const u8* GetMonIconTiles(u16 species, u32 personality)
     const u8* iconSprite = gSpecies[species].icon;
     if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
     {
-        iconSprite = gMonIconTableFemale[species];
+        iconSprite = gSpecies[species].femaleIcon;
     }
     return iconSprite;
 }
