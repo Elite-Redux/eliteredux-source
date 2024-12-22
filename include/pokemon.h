@@ -333,16 +333,16 @@ typedef struct Species {
     const u8 *const longName;
     const u8 *const icon;
     const u8 *const femaleIcon;
-    const Evolution *const evos;
-    const Evolution *const formShifts;
-    const u16 *const forms;
+    const Evolution *const evos; // TODO
+    const Evolution *const formShifts; // TODO
+    const u16 *const forms; // TODO
     const LevelUpMove *const levelUpMoves;
-    const TutorUnion tutors;
+    const TutorUnion tutors; // TODO
     const MonCoords frontCoords;
     const MonCoords backCoords;
     const CompressedSpriteSheet frontPic;
     const CompressedSpriteSheet frontPicFemale;
-    const AnimCmd *const *const frontAnim;
+    const AnimCmd *const *const frontAnim; // TODO
     const CompressedSpriteSheet backPic;
     const CompressedSpriteSheet backPicFemale;
     const CompressedSpritePalette palette;

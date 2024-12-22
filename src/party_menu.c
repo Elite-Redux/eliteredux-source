@@ -439,7 +439,6 @@ u16 GetSilvallyForm(struct Pokemon *mon);
 u16 GetGiratinaForm(struct Pokemon *mon);
 
 // static const data
-#include "data/pokemon/tutor_learnsets.h"
 #include "data/party_menu.h"
 
 // code
@@ -1827,7 +1826,7 @@ bool32 CanLearnTutorMove(u16 species, u8 tutor)  // note the change to bool32
         return 0;
     }
 
-    return gTutorLearnsets[species].bits[tutor / 32] & (1 << (tutor % 32));
+    return gSpecies[species].tutors.bits[tutor / 32] & (1 << (tutor % 32));
 }
 
 static void InitPartyMenuWindows(u8 layout) {
