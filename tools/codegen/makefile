@@ -26,12 +26,12 @@ codegen.jar: codegenkt.jar protobuf-java.jar
 	jar cf codegen.jar -C javabuild . && exit
 
 define GENERATE
-../../generated/$(strip $1): codegen.jar
-	java -cp codegen.jar er.FileGenerator $2 $(realpath ../../generated/)/$(strip $1)
-ALL_GENERATED += ../../generated/$(strip $1)
+../../$(strip $1): codegen.jar
+	java -cp codegen.jar er.FileGenerator $2 $(realpath ../..)/$(strip $1)
+ALL_GENERATED += ../../$(strip $1)
 endef
 
-$(eval $(call GENERATE, include/constants/abilities.h,abilities))
+$(eval $(call GENERATE, include/generated/constants/abilities.h,abilities))
 
 generated: $(ALL_GENERATED)
 
