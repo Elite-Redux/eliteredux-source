@@ -16,13 +16,13 @@ object MovesEnumGenerator {
                 |
                 |${moves.joinToString("\n") { "#define ${it.name} ${it.number}" }}
                 |
-                |#define MOEVS_COUNT $movesCount
+                |#define MOVES_COUNT $movesCount
                 |
                 |#else
                 |
                 |typedef enum MoveEnum {
                 |${moves.joinToString("\n") { "    ${it.name} = ${it.number}," }}
-                |    MOEVS_COUNT = $movesCount,
+                |    MOVES_COUNT = $movesCount,
                 |} MoveEnum;
                 |
                 |#endif

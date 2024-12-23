@@ -1,6 +1,8 @@
 package er
 
 import er.abilities.AbilitiesEnumGenerator
+import er.abilities.MovesEnumGenerator
+import er.abilities.SpeciesEnumGenerator
 import java.io.File
 
 object FileGenerator {
@@ -11,7 +13,8 @@ object FileGenerator {
             File(file).parentFile.mkdirs()
             when (type) {
                 "abilities" -> AbilitiesEnumGenerator.generate(file)
-                "moves" -> AbilitiesEnumGenerator.generate(file)
+                "moves" -> MovesEnumGenerator.generate(file)
+                "species" -> SpeciesEnumGenerator.generate(file)
                 else -> error("Invalid file type $type")
             }
         } catch (e: Exception) {

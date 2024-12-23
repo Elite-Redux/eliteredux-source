@@ -35,6 +35,7 @@ endef
 
 $(eval $(call GENERATE, include/generated/constants/abilities.h,abilities))
 $(eval $(call GENERATE, include/generated/constants/moves.h,moves))
+$(eval $(call GENERATE, include/generated/constants/species.h,species))
 
 generated: $(ALL_GENERATED)
 
