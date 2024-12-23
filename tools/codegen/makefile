@@ -14,8 +14,10 @@ KT_SRCS := $(wildcard src/*.kt src/*/*.kt src/*/*/*.kt)
 PROTOS := ../../proto
 PROTO_SRCS := $(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.proto)
 
-codegenkt.jar: protoc protobuf-java.jar $(KT_SRCS) $(PROTO_SRCS)
+protos: protoc  $(PROTO_SRCS)
 	find ../../proto -name '*.proto' | xargs -I % protoc % --proto_path=./../../proto --java_out=src && exit
+
+codegenkt.jar: protoc protobuf-java.jar $(KT_SRCS)
 	find src/ -name '*.kt' -o -name '*.java' | xargs  kotlinc -cp "protobuf-java.jar" -include-runtime -d codegenkt.jar && exit
 
 codegen.jar: codegenkt.jar protobuf-java.jar
@@ -32,6 +34,7 @@ ALL_GENERATED += ../../$(strip $1)
 endef
 
 $(eval $(call GENERATE, include/generated/constants/abilities.h,abilities))
+$(eval $(call GENERATE, include/generated/constants/moves.h,moves))
 
 generated: $(ALL_GENERATED)
 

@@ -11,7 +11,8 @@ object FileGenerator {
             File(file).parentFile.mkdirs()
             when (type) {
                 "abilities" -> AbilitiesEnumGenerator.generate(file)
-                else -> error("Invalid file type ${type}")
+                "moves" -> AbilitiesEnumGenerator.generate(file)
+                else -> error("Invalid file type $type")
             }
         } catch (e: Exception) {
             throw Exception("Failed processing $type generating file $file", e)
