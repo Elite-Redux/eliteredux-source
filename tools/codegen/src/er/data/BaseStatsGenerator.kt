@@ -12,7 +12,10 @@ object BaseStatsGenerator {
     private const val IND = "    "
     fun generate(path: String) {
         FileWriter(path).use { writer ->
-            writer.appendLine("const struct BaseStats gBaseStats[] = {")
+            writer.appendLine("""
+                |#define PERCENT_FEMALE(percent) min(254, ((percent * 255) / 100))
+                |
+                |const struct BaseStats gBaseStats[] = {""".trimMargin())
             val speciesList =
                 TextFormat.parse(File("../../proto/Species.textproto").readText(), SpeciesList::class.java).speciesList
             val speciesMap = speciesList.associateBy { it.id }
