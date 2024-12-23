@@ -2,13 +2,13 @@ all: generated codegen.jar
 	@echo "Codegen complete"
 
 protoc.zip:
-	wget -o protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-linux-x86_64.zip && exit
+	wget -O protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-linux-x86_64.zip && exit
 
 protoc: protoc.zip
 	unzip -p protoc.zip bin/protoc > protoc && exit
 
 protobuf-java.jar:
-	wget -o protobuf-java.jar https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/4.29.2/protobuf-java-4.29.2.jar && exit
+	wget -O protobuf-java.jar https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/4.29.2/protobuf-java-4.29.2.jar && exit
 
 KT_SRCS := $(wildcard src/*.kt src/*/*.kt src/*/*/*.kt)
 PROTOS := ../../proto
@@ -27,10 +27,23 @@ codegen.jar: codegenkt.jar protobuf-java.jar
 
 define GENERATE
 ../../generated/$(strip $1): codegen.jar
-	java -cp codegen.jar er.FileGenerator $2 $(realpath ../../generated/$(strip $1))/ 
+	java -cp codegen.jar er.FileGenerator $2 $(realpath ../../generated/)/$(strip $1)
 ALL_GENERATED += ../../generated/$(strip $1)
 endef
 
 $(eval $(call GENERATE, include/constants/abilities.h,abilities))
 
 generated: $(ALL_GENERATED)
+
+removegenerated:
+	find ../../generated -name "*.h" -type f -delete
+
+regenerate: removegenerated generated
+
+clean: removegenerated
+	rm -rf javabuild
+	rm -f protoc
+	rm -f protoc.zip
+	rm -f codegen.jar
+	rm -f codegenkt.jar
+	rm -f protobuf-java.jar
