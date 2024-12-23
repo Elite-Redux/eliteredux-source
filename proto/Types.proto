@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package er;
+
+option java_package = "er.proto";
+option java_multiple_files = true;
+
+enum Type {
+  TYPE_NONE = 0;
+  TYPE_NORMAL = 1;
+  TYPE_FIGHTING = 2;
+  TYPE_FLYING = 3;
+  TYPE_POISON = 4;
+  TYPE_GROUND = 5;
+  TYPE_ROCK = 6;
+  TYPE_BUG = 7;
+  TYPE_GHOST = 8;
+  TYPE_STEEL = 9;
+  TYPE_MYSTERY = 10;
+  TYPE_FIRE = 11;
+  TYPE_WATER = 12;
+  TYPE_GRASS = 13;
+  TYPE_ELECTRIC = 14;
+  TYPE_PSYCHIC = 15;
+  TYPE_ICE = 16;
+  TYPE_DRAGON = 17;
+  TYPE_DARK = 18;
+  TYPE_FAIRY = 19;
+  TYPE_STELLAR = 20;
+}

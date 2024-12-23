@@ -1897,18 +1897,18 @@ static const u16 sSpectrierFormSpeciesIdTable[] = {
     FORM_SPECIES_END,
 };
 static const u16 sYveltal_MegaFormSpeciesIdTable[] = {
-    SPECIES_YVELTAL_MEGA,
     SPECIES_YVELTAL,
+    SPECIES_YVELTAL_MEGA,
     FORM_SPECIES_END,
 };
 static const u16 sKingambit_Redux_MegaFormSpeciesIdTable[] = {
-    SPECIES_KINGAMBIT_REDUX_MEGA,
     SPECIES_KINGAMBIT,
+    SPECIES_KINGAMBIT_REDUX_MEGA,
     FORM_SPECIES_END,
 };
 static const u16 sKartana_FallenFormSpeciesIdTable[] = {
-    SPECIES_KARTANA_FALLEN,
     SPECIES_KARTANA,
+    SPECIES_KARTANA_FALLEN,
     FORM_SPECIES_END,
 };
 static const u16 sTinkatonFormSpeciesIdTable[] = {
