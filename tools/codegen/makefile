@@ -17,7 +17,7 @@ KT_SRCS := $(wildcard src/*.kt src/*/*.kt src/*/*/*.kt)
 PROTOS := ../../proto
 PROTO_SRCS := $(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.proto)
 
-protos: protoc  $(PROTO_SRCS)
+protos: protoc $(PROTO_SRCS)
 	find ../../proto -name '*.proto' | xargs -I % ./protoc % --proto_path=./../../proto --java_out=src --kotlin_out=src --experimental_allow_proto3_optional && exit
 
 codegenkt.jar: protoc protobuf-java.jar protobuf-kotlin.jar $(KT_SRCS)
@@ -31,15 +31,18 @@ codegen.jar: codegenkt.jar protobuf-java.jar
 	unzip -uoq codegenkt.jar -d javabuild && exit
 	jar cf codegen.jar -C javabuild . && exit
 
+TEXTPROTO_SRCS := $(wildcard $(PROTOS)/*.textproto $(PROTOS)/*/*.textproto $(PROTOS)/*/*/*.textproto)
+
 define GENERATE
-../../$(strip $1): codegen.jar
+../../$(strip $1): codegen.jar $$(TEXTPROTO_SRCS)
 	java -cp codegen.jar er.FileGenerator $2 $(realpath ../..)/$(strip $1)
 ALL_GENERATED += ../../$(strip $1)
 endef
 
-$(eval $(call GENERATE, include/generated/constants/abilities.h,abilities))
-$(eval $(call GENERATE, include/generated/constants/moves.h,moves))
-$(eval $(call GENERATE, include/generated/constants/species.h,species))
+$(eval $(call GENERATE, generated/include/constants/abilities.h,abilities))
+$(eval $(call GENERATE, generated/include/constants/moves.h,moves))
+$(eval $(call GENERATE, generated/include/constants/species.h,species))
+$(eval $(call GENERATE, generated/src/data/pokemon/base_stats.h,basestats))
 
 generated: $(ALL_GENERATED)
 

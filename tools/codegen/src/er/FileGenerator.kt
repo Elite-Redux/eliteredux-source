@@ -1,5 +1,6 @@
 package er
 
+import er.data.BaseStatsGenerator
 import er.defines.AbilitiesEnumGenerator
 import er.defines.MovesEnumGenerator
 import er.defines.SpeciesEnumGenerator
@@ -15,6 +16,7 @@ object FileGenerator {
                 "abilities" -> AbilitiesEnumGenerator.generate(file)
                 "moves" -> MovesEnumGenerator.generate(file)
                 "species" -> SpeciesEnumGenerator.generate(file)
+                "basestats" -> BaseStatsGenerator.generate(file)
                 else -> error("Invalid file type $type")
             }
         } catch (e: Exception) {

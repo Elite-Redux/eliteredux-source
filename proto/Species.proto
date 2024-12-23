@@ -110,7 +110,7 @@ message Species {
   }
   int32 tier = 17;
   int32 heads = 18;
-  BodyColor body_color = 20;
+  optional BodyColor body_color = 20;
   bool no_flip = 21;
   int32 bp_cost = 22;
   // missing
