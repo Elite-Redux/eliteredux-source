@@ -15,10 +15,12 @@ message SpeciesList {
 }
 
 message Species {
-  message BaseSpeciesInfo {
+  message SpeciesDexInfo {
     string name = 1;
-    int32 national_dex_num = 3;
-    int32 hoenn_dex_num = 2;
+    int32 national_dex_num = 2;
+    int32 hoenn_dex_num = 3;
+    EggGroup egg_group = 4;
+    EggGroup egg_group_2 = 5;
   }
 
   enum Gender {
@@ -89,7 +91,7 @@ message Species {
   SpeciesEnum id = 1;
   oneof base_species_info {
     SpeciesEnum form_of = 2;
-    BaseSpeciesInfo info = 3;
+    SpeciesDexInfo dex = 3;
   }
   string long_name = 4;
   Type type = 5;
@@ -111,8 +113,7 @@ message Species {
   BodyColor body_color = 20;
   bool no_flip = 21;
   int32 bp_cost = 22;
-  EggGroup egg_group = 23;
-  EggGroup egg_group_2 = 24;
+  // missing
   repeated Evolution evo = 25;
   repeated MegaEvolution mega = 26;
   repeated PrimalEvolution primal = 27;
