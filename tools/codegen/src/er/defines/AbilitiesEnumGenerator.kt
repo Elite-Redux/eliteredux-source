@@ -1,4 +1,4 @@
-package er.abilities
+package er.defines
 
 import er.proto.AbilityEnum
 import java.io.FileWriter

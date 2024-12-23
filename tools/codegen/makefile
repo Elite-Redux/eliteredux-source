@@ -15,7 +15,7 @@ PROTOS := ../../proto
 PROTO_SRCS := $(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.proto)
 
 protos: protoc  $(PROTO_SRCS)
-	find ../../proto -name '*.proto' | xargs -I % protoc % --proto_path=./../../proto --java_out=src && exit
+	find ../../proto -name '*.proto' | xargs -I % ./protoc % --proto_path=./../../proto --java_out=src --kotlin_out=src --experimental_allow_proto3_optional && exit
 
 codegenkt.jar: protoc protobuf-java.jar $(KT_SRCS)
 	find src/ -name '*.kt' -o -name '*.java' | xargs  kotlinc -cp "protobuf-java.jar" -include-runtime -d codegenkt.jar && exit

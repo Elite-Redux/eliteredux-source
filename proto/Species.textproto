@@ -1,0 +1,5 @@
+# proto-file: Species.proto
+# proto-message: er.SpeciesList
+
+species {
+}

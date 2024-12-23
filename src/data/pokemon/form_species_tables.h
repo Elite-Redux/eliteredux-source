@@ -1527,7 +1527,6 @@ static const u16 sDoduoFormSpeciesIdTable[] = {
 static const u16 sDodrioFormSpeciesIdTable[] = {
     SPECIES_DODRIO,
     SPECIES_DODRIO_REDUX,
-    SPECIES_ARCANINE_HISUIAN,
     FORM_SPECIES_END,
 };
 static const u16 sVoltorbFormSpeciesIdTable[] = {

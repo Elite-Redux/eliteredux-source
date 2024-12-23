@@ -1,8 +1,8 @@
 package er
 
-import er.abilities.AbilitiesEnumGenerator
-import er.abilities.MovesEnumGenerator
-import er.abilities.SpeciesEnumGenerator
+import er.defines.AbilitiesEnumGenerator
+import er.defines.MovesEnumGenerator
+import er.defines.SpeciesEnumGenerator
 import java.io.File
 
 object FileGenerator {
