@@ -10,6 +10,9 @@ protoc: protoc.zip
 protobuf-java.jar:
 	wget -O protobuf-java.jar https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/4.29.2/protobuf-java-4.29.2.jar && exit
 
+protobuf-kotlin.jar:
+	wget -O protobuf-kotlin.jar https://repo1.maven.org/maven2/com/google/protobuf/protobuf-kotlin/4.29.2/protobuf-kotlin-4.29.2.jar && exit
+
 KT_SRCS := $(wildcard src/*.kt src/*/*.kt src/*/*/*.kt)
 PROTOS := ../../proto
 PROTO_SRCS := $(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.proto)
@@ -17,13 +20,14 @@ PROTO_SRCS := $(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.p
 protos: protoc  $(PROTO_SRCS)
 	find ../../proto -name '*.proto' | xargs -I % ./protoc % --proto_path=./../../proto --java_out=src --kotlin_out=src --experimental_allow_proto3_optional && exit
 
-codegenkt.jar: protoc protobuf-java.jar $(KT_SRCS)
-	find src/ -name '*.kt' -o -name '*.java' | xargs  kotlinc -cp "protobuf-java.jar" -include-runtime -d codegenkt.jar && exit
+codegenkt.jar: protoc protobuf-java.jar protobuf-kotlin.jar $(KT_SRCS)
+	find src/ -name '*.kt' -o -name '*.java' | xargs  kotlinc -cp "protobuf-java.jar:protobuf-kotlin.jar" -include-runtime -d codegenkt.jar && exit
 
 codegen.jar: codegenkt.jar protobuf-java.jar
 	rm -rf javabuild
 	find src/ -name '*.java' | xargs  javac -cp "protobuf-java.jar:protobufkt.jar" -d javabuild && exit
 	unzip -uoq protobuf-java.jar -d javabuild && exit
+	unzip -uoq protobuf-kotlin.jar -d javabuild && exit
 	unzip -uoq codegenkt.jar -d javabuild && exit
 	jar cf codegen.jar -C javabuild . && exit
 
