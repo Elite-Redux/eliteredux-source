@@ -16,14 +16,14 @@ object AbilitiesEnumGenerator {
                 |
                 |${abilities.joinToString("\n") { "#define ${it.name} ${it.number}" }}
                 |
-                |#define ABILITY_COUNT $abilityCount
+                |#define ABILITIES_COUNT $abilityCount
                 |
                 |#else
                 |
                 |typedef enum AbilityEnum {
                 |${abilities.joinToString("\n") { "    ${it.name} = ${it.number}," }}
-                |    ABILITY_COUNT = $abilityCount,
-                |};
+                |    ABILITIES_COUNT = $abilityCount,
+                |} AbilityEnum;
                 |
                 |#endif
                 """.trimMargin()
