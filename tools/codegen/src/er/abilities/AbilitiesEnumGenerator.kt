@@ -4,12 +4,12 @@ import er.proto.AbilityEnum
 import java.io.FileWriter
 
 object AbilitiesEnumGenerator {
-    private const val PATH = "/include/constants/abilities.h"
-    fun generate(erPath: String) {
-        FileWriter(erPath + PATH).use {writer ->
+    fun generate(file: String) {
+        FileWriter(file).use { writer ->
             val abilities = AbilityEnum.entries.filter { it != AbilityEnum.UNRECOGNIZED }
             val abilityCount = abilities.maxOf { it.number } + 1
-            writer.appendLine("""
+            writer.appendLine(
+                """
                 |#pragma once
                 |
                 |#ifdef __assembly__
@@ -26,7 +26,8 @@ object AbilitiesEnumGenerator {
                 |};
                 |
                 |#endif
-                """.trimMargin())
+                """.trimMargin()
+            )
         }
     }
 }

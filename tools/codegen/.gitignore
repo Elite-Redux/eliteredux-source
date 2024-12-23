@@ -4,6 +4,7 @@
 protoc
 src/er/proto
 *.zip
+javabuild/
 
 ### IntelliJ IDEA ###
 out/

@@ -5,6 +5,10 @@ import er.abilities.AbilitiesEnumGenerator
 object FileGenerator {
     @JvmStatic
     fun main(args: Array<String>) {
-        AbilitiesEnumGenerator.generate(args.first())
+        val (type, file) = args
+        when (type) {
+            "abilities" -> AbilitiesEnumGenerator.generate(file)
+            else -> error("Invalid file type ${type}")
+        }
     }
 }

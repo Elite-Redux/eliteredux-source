@@ -1,4 +1,4 @@
-all: codegen.jar
+all: generated codegen.jar
 	@echo "Codegen complete"
 
 protoc.zip:
@@ -10,8 +10,27 @@ protoc: protoc.zip
 protobuf-java.jar:
 	wget -o protobuf-java.jar https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/4.29.2/protobuf-java-4.29.2.jar && exit
 
-codegen.jar: protoc protobuf-java.jar
+KT_SRCS := $(wildcard src/*.kt src/*/*.kt src/*/*/*.kt)
+PROTOS := ../../proto
+PROTO_SRCS := $(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.proto)
+
+codegenkt.jar: protoc protobuf-java.jar $(KT_SRCS) $(PROTO_SRCS)
 	find ../../proto -name '*.proto' | xargs -I % protoc % --proto_path=./../../proto --java_out=src && exit
-	find src/ -name '*.kt' -o -name '*.java' | xargs  kotlinc -cp "src/er/abilities:protobuf-java.jar" -include-runtime -d codegen.jar && exit
+	find src/ -name '*.kt' -o -name '*.java' | xargs  kotlinc -cp "protobuf-java.jar" -include-runtime -d codegenkt.jar && exit
 
+codegen.jar: codegenkt.jar protobuf-java.jar
+	rm -rf javabuild
+	find src/ -name '*.java' | xargs  javac -cp "protobuf-java.jar:protobufkt.jar" -d javabuild && exit
+	unzip -uoq protobuf-java.jar -d javabuild && exit
+	unzip -uoq codegenkt.jar -d javabuild && exit
+	jar cf codegen.jar -C javabuild . && exit
 
+define GENERATE
+../../generated/$(strip $1): codegen.jar
+	java -cp codegen.jar er.FileGenerator $2 $(realpath ../../generated/$(strip $1))/ 
+ALL_GENERATED += ../../generated/$(strip $1)
+endef
+
+$(eval $(call GENERATE, include/constants/abilities.h,abilities))
+
+generated: $(ALL_GENERATED)
