@@ -45477,12 +45477,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_VELOZEL] =
     {
-    .baseHP        =   100,
-    .baseAttack    =  80,
-    .baseDefense   =  70,
-    .baseSpeed     =   150,
-    .baseSpAttack  =  80,
-    .baseSpDefense =  70,
+    .baseHP         = 95,
+    .baseAttack     = 80,
+    .baseDefense    = 70,
+    .baseSpeed      = 155,
+    .baseSpAttack   = 80,
+    .baseSpDefense  = 70,
     .type1 = TYPE_FLYING,
     .type2 = TYPE_FLYING,
     .catchRate = 255,
@@ -45495,7 +45495,7 @@ const struct BaseStats gBaseStats[] =
     .eggGroup1 = EGG_GROUP_WATER_1,
     .eggGroup2 = EGG_GROUP_FIELD,
 	.abilities = {ABILITY_IMPULSE, ABILITY_MOMENTUM, ABILITY_AIR_BLOWER},
-    .innates        = {ABILITY_AERODYNAMICS, ABILITY_PROPELLER_TAIL, ABILITY_CLOUD_NINE},
+    .innates        = {ABILITY_AERODYNAMICS, ABILITY_OVERCOAT, ABILITY_LOOTER},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
     .tier = 0,
