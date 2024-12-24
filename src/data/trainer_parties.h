@@ -5655,7 +5655,7 @@ static const struct TrainerMonItemCustomMoves sParty_Brawly1Insane[] = {
     .zeroSpeedIvs = TRUE,
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_QUIET,
-    .moves = MOVE_PSYCHIC, MOVE_THUNDERBOLT, MOVE_TRI_ATTACK, MOVE_HIDDEN_POWER
+    .moves = MOVE_PSYCHIC, MOVE_THUNDERBOLT, MOVE_TRI_ATTACK, MOVE_MYSTICAL_FIRE
     }
 };
 
