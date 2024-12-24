@@ -24,8 +24,9 @@ message Species {
   }
 
   enum Gender {
-    MALE = 0;
-    FEMALE = 1;
+    GENDER_NONE = 0;
+    MALE = 1;
+    FEMALE = 2;
   }
 
   message Evolution {
@@ -117,7 +118,7 @@ message Species {
   repeated Evolution evo = 25;
   repeated MegaEvolution mega = 26;
   repeated PrimalEvolution primal = 27;
-  SpeciesEnum form_shifts_to = 28;
+  SpeciesEnum form_shift_of = 28;
   Gender form_shift_gender = 29;
   oneof learnset_or_ref {
     Learnset learnset = 30;

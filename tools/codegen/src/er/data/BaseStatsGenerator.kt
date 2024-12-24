@@ -1,27 +1,24 @@
 package er.data
 
-import com.google.protobuf.TextFormat
 import er.FileGenerator.HEADER
+import er.FileGenerator.IND
+import er.TextprotoReader.SPECIES_LIST
 import er.proto.EggGroup
 import er.proto.SpeciesEnum
-import er.proto.SpeciesList
 import er.proto.Type
-import java.io.File
 import java.io.FileWriter
 
 object BaseStatsGenerator {
-    private const val IND = "    "
     fun generate(path: String) {
         FileWriter(path).use { writer ->
             writer.appendLine("""
                 |$HEADER
                 |#define PERCENT_FEMALE(percent) min(254, ((percent * 255) / 100))
                 |
-                |const struct BaseStats gBaseStats[] = {""".trimMargin())
-            val speciesList =
-                TextFormat.parse(File("../../proto/Species.textproto").readText(), SpeciesList::class.java).speciesList
-            val speciesMap = speciesList.associateBy { it.id }
-            for (species in speciesList) {
+                |const BaseStats gBaseStats[] = {""".trimMargin())
+
+            val speciesMap = SPECIES_LIST.associateBy { it.id }
+            for (species in SPECIES_LIST) {
                 val lines = mutableListOf<String>()
                 if (species.hp > 0) lines += ".baseHP = ${species.hp}"
                 if (species.atk > 0) lines += ".baseAttack = ${species.atk}"

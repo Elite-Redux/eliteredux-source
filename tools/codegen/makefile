@@ -1,4 +1,9 @@
-all: generated codegen.jar
+KT_SRCS := $(wildcard src/*.kt src/*/*.kt src/*/*/*.kt)
+PROTOS := ../../proto
+PROTO_SRCS := $(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.proto)
+TEXTPROTO_SRCS := $(wildcard $(PROTOS)/*.textproto $(PROTOS)/*/*.textproto $(PROTOS)/*/*/*.textproto)
+
+all: protos codegen.jar generated
 	@echo "Codegen complete"
 
 protoc.zip:
@@ -13,12 +18,11 @@ protobuf-java.jar:
 protobuf-kotlin.jar:
 	wget -O protobuf-kotlin.jar https://repo1.maven.org/maven2/com/google/protobuf/protobuf-kotlin/4.29.2/protobuf-kotlin-4.29.2.jar && exit
 
-KT_SRCS := $(wildcard src/*.kt src/*/*.kt src/*/*/*.kt)
-PROTOS := ../../proto
-PROTO_SRCS := $(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.proto)
-
-protos: protoc $(PROTO_SRCS)
+timestamp/protos: protoc $(PROTO_SRCS)
 	find ../../proto -name '*.proto' | xargs -I % ./protoc % --proto_path=./../../proto --java_out=src --kotlin_out=src --experimental_allow_proto3_optional && exit
+	touch protos
+
+protos: timestamp/protos
 
 codegenkt.jar: protoc protobuf-java.jar protobuf-kotlin.jar $(KT_SRCS)
 	find src/ -name '*.kt' -o -name '*.java' | xargs  kotlinc -cp "protobuf-java.jar:protobuf-kotlin.jar" -include-runtime -d codegenkt.jar && exit
@@ -31,9 +35,8 @@ codegen.jar: codegenkt.jar protobuf-java.jar
 	unzip -uoq codegenkt.jar -d javabuild && exit
 	jar cf codegen.jar -C javabuild . && exit
 
-TEXTPROTO_SRCS := $(wildcard $(PROTOS)/*.textproto $(PROTOS)/*/*.textproto $(PROTOS)/*/*/*.textproto)
-
 define GENERATE
+timestamp/$(strip $1):
 ../../$(strip $1): codegen.jar $$(TEXTPROTO_SRCS)
 	java -cp codegen.jar er.FileGenerator $2 $(realpath ../..)/$(strip $1)
 ALL_GENERATED += ../../$(strip $1)
@@ -43,6 +46,7 @@ $(eval $(call GENERATE, generated/include/constants/abilities.h,abilities))
 $(eval $(call GENERATE, generated/include/constants/moves.h,moves))
 $(eval $(call GENERATE, generated/include/constants/species.h,species))
 $(eval $(call GENERATE, generated/src/data/pokemon/base_stats.h,basestats))
+$(eval $(call GENERATE, generated/src/data/pokemon/evolution.h,evos))
 
 generated: $(ALL_GENERATED)
 
@@ -58,3 +62,5 @@ clean: removegenerated
 	rm -f codegen.jar
 	rm -f codegenkt.jar
 	rm -f protobuf-java.jar
+	rm -f protos
+	rm -f generated

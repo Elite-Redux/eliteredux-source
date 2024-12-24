@@ -1,6 +1,7 @@
 package er
 
 import er.data.BaseStatsGenerator
+import er.data.EvolutionsGenerator
 import er.defines.AbilitiesEnumGenerator
 import er.defines.MovesEnumGenerator
 import er.defines.SpeciesEnumGenerator
@@ -12,6 +13,8 @@ object FileGenerator {
         |
     """.trimMargin()
 
+    const val IND = "    "
+
     @JvmStatic
     fun main(args: Array<String>) {
         val (type, file) = args
@@ -22,6 +25,7 @@ object FileGenerator {
                 "moves" -> MovesEnumGenerator.generate(file)
                 "species" -> SpeciesEnumGenerator.generate(file)
                 "basestats" -> BaseStatsGenerator.generate(file)
+                "evos" -> EvolutionsGenerator.generate(file)
                 else -> error("Invalid file type $type")
             }
         } catch (e: Exception) {
