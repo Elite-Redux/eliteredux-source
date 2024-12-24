@@ -1,9 +1,6 @@
 package er
 
-import er.data.BaseStatsGenerator
-import er.data.EvolutionsGenerator
-import er.data.SpeciesNameGenerator
-import er.data.TutorLearnsetGenerator
+import er.data.*
 import er.defines.AbilitiesEnumGenerator
 import er.defines.MovesEnumGenerator
 import er.defines.SpeciesEnumGenerator
@@ -30,6 +27,7 @@ object FileGenerator {
                 "evos" -> EvolutionsGenerator.generate(file)
                 "speciesnames" -> SpeciesNameGenerator.generate(file)
                 "tutorlearnsets" -> TutorLearnsetGenerator.generate(file)
+                "leveluplearnsets" -> LevelUpLearnsetGenerator.generate(file)
                 else -> error("Invalid file type $type")
             }
         } catch (e: Exception) {

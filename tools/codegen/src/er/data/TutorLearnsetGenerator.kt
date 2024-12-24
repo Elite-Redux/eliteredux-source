@@ -9,9 +9,20 @@ import er.proto.MoveEnum
 import er.proto.Species
 import er.proto.Species.Learnset
 import er.proto.Species.Learnset.UniversalTutors
+import er.proto.SpeciesEnum
 import java.io.FileWriter
 
 object TutorLearnsetGenerator {
+    fun findLearnsetForSpecies(species: Species) =
+        when {
+            species.hasLearnset() -> species.learnset
+            species.usesLearnset != SpeciesEnum.SPECIES_NONE -> SPECIES_MAP[species.usesLearnset]!!.learnset
+            species.formShiftOf != SpeciesEnum.SPECIES_NONE -> SPECIES_MAP[species.formShiftOf]!!.learnset
+            species.megaList.isNotEmpty() -> SPECIES_MAP[species.megaList.first().from]!!.learnset
+            species.primalList.isNotEmpty() -> SPECIES_MAP[species.primalList.first().from]!!.learnset
+            else -> SPECIES_MAP[species.formOf]!!.learnset
+        }
+
     private val UNIVERSAL_TUTORS = listOf(
         MoveEnum.MOVE_ENDURE,
         MoveEnum.MOVE_HELPING_HAND,
@@ -50,11 +61,8 @@ object TutorLearnsetGenerator {
                 |
                 |const TutorUnion *const gTutorLearnsets[$REAL_SPECIES_COUNT] = {
                 |${
-                    SPECIES_LIST.joinToString("\n") {
-                        learnsetString(
-                            it,
-                            if (it.hasLearnset()) it.learnset else SPECIES_MAP[it.usesLearnset]!!.learnset
-                        )
+                    SPECIES_LIST.filter { it.id != SpeciesEnum.SPECIES_EGG }.joinToString("\n") {
+                        learnsetString(it, findLearnsetForSpecies(it))
                     }
                 }
                 |};
