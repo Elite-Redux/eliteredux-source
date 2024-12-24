@@ -18,4 +18,8 @@ object TextprotoReader {
             }
         }.maxOf { it.number } + 1
     }
+
+    val SPECIES_MAP by lazy {
+        SPECIES_LIST.associateBy { it.id }
+    }
 }

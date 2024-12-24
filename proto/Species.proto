@@ -122,7 +122,7 @@ message Species {
   Gender form_shift_gender = 29;
   oneof learnset_or_ref {
     Learnset learnset = 30;
-    bool uses_form_learnset = 31;
+    SpeciesEnum uses_learnset = 31;
   }
 }
 

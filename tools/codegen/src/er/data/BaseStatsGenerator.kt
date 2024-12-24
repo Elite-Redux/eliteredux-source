@@ -3,6 +3,7 @@ package er.data
 import er.FileGenerator.HEADER
 import er.FileGenerator.IND
 import er.TextprotoReader.SPECIES_LIST
+import er.TextprotoReader.SPECIES_MAP
 import er.proto.EggGroup
 import er.proto.SpeciesEnum
 import er.proto.Type
@@ -17,7 +18,6 @@ object BaseStatsGenerator {
                 |
                 |const BaseStats gBaseStats[] = {""".trimMargin())
 
-            val speciesMap = SPECIES_LIST.associateBy { it.id }
             for (species in SPECIES_LIST) {
                 val lines = mutableListOf<String>()
                 if (species.hp > 0) lines += ".baseHP = ${species.hp}"
@@ -44,7 +44,7 @@ object BaseStatsGenerator {
                 }
                 val dex =
                     if (species.formOf != SpeciesEnum.SPECIES_NONE) {
-                        checkNotNull(speciesMap[species.id]) { "Expected ${species.formOf} (from ${species.id}) to have dex but did not have one." }.dex
+                        checkNotNull(SPECIES_MAP[species.id]) { "Expected ${species.formOf} (from ${species.id}) to have dex but did not have one." }.dex
                     } else {
                         species.dex
                     }

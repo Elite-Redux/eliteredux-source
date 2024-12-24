@@ -4842,7 +4842,7 @@ species {
     from: SPECIES_CROBAT
     item: "ITEM_CROBATITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_CROBAT
 }
 species {
   id: SPECIES_ODDISH
@@ -15837,7 +15837,7 @@ species {
   percent_female: 100.0
   tier: 3
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_KANGASKHAN
 }
 species {
   id: SPECIES_KANGASKHAN_PARTNER_MEGA
@@ -15926,7 +15926,7 @@ species {
   percent_female: 100.0
   tier: 3
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_KANGASKHAN
 }
 species {
   id: SPECIES_KANGASKHAN_PARTNER_C
@@ -15946,7 +15946,7 @@ species {
   percent_female: 100.0
   tier: 3
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_KANGASKHAN
 }
 species {
   id: SPECIES_HORSEA
@@ -16255,7 +16255,7 @@ species {
   innate: ABILITY_MULTISCALE
   percent_female: 50.0
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_KINGDRA
 }
 species {
   id: SPECIES_KINGDRA_PARTNER
@@ -16275,7 +16275,7 @@ species {
   innate: ABILITY_MULTISCALE
   percent_female: 50.0
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_KINGDRA
 }
 species {
   id: SPECIES_KINGDRA_PARTNER_MEGA
@@ -16318,7 +16318,7 @@ species {
   innate: ABILITY_MULTISCALE
   percent_female: 50.0
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_KINGDRA
 }
 species {
   id: SPECIES_KINGDRA_PARTNER_MEGA_B
@@ -16362,7 +16362,7 @@ species {
   innate: ABILITY_MULTISCALE
   percent_female: 50.0
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_KINGDRA
 }
 species {
   id: SPECIES_KINGDRA_PARTNER_MEGA_C
@@ -20133,7 +20133,7 @@ species {
     from: SPECIES_DRAGONITE
     item: "ITEM_DRAGONITENITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_DRAGONITE
 }
 species {
   id: SPECIES_DRAGONITE_DELIVERY
@@ -20253,7 +20253,7 @@ species {
   innate: ABILITY_RAMPAGE
   percent_female: 50.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_DRAGONITE
 }
 species {
   id: SPECIES_DRAGONITE_PARTNER_MEGA
@@ -20277,7 +20277,7 @@ species {
     from: SPECIES_DRAGONITE_PARTNER
     item: "ITEM_DRAGONITENITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_DRAGONITE
 }
 species {
   id: SPECIES_DRAGONITE_PARTNER_B
@@ -20297,7 +20297,7 @@ species {
   innate: ABILITY_RAMPAGE
   percent_female: 50.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_DRAGONITE
 }
 species {
   id: SPECIES_DRAGONITE_PARTNER_MEGA_B
@@ -20322,7 +20322,7 @@ species {
     item: "ITEM_DRAGONITENITE"
     type: MEGA_B
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_DRAGONITE
 }
 species {
   id: SPECIES_DRAGONITE_PARTNER_C
@@ -20342,7 +20342,7 @@ species {
   innate: ABILITY_RAMPAGE
   percent_female: 50.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_DRAGONITE
 }
 species {
   id: SPECIES_DRAGONITE_PARTNER_MEGA_C
@@ -20367,7 +20367,7 @@ species {
     item: "ITEM_DRAGONITENITE"
     type: MEGA_C
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_DRAGONITE
 }
 species {
   id: SPECIES_MEWTWO
@@ -23455,7 +23455,8 @@ species {
   percent_female: 50.0
   body_color: YELLOW
   form_shift_of: SPECIES_PIKACHU_PARTNER
-  uses_form_learnset: true
+  form_shift_gender: MALE
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PIKACHU_HOENN_CAP
@@ -23477,7 +23478,8 @@ species {
   percent_female: 50.0
   body_color: YELLOW
   form_shift_of: SPECIES_PIKACHU_PARTNER
-  uses_form_learnset: true
+  form_shift_gender: MALE
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PIKACHU_SINNOH_CAP
@@ -23499,7 +23501,8 @@ species {
   percent_female: 50.0
   body_color: YELLOW
   form_shift_of: SPECIES_PIKACHU_PARTNER
-  uses_form_learnset: true
+  form_shift_gender: MALE
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PIKACHU_UNOVA_CAP
@@ -23521,7 +23524,8 @@ species {
   percent_female: 50.0
   body_color: YELLOW
   form_shift_of: SPECIES_PIKACHU_PARTNER
-  uses_form_learnset: true
+  form_shift_gender: MALE
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PIKACHU_KALOS_CAP
@@ -23543,7 +23547,8 @@ species {
   percent_female: 50.0
   body_color: YELLOW
   form_shift_of: SPECIES_PIKACHU_PARTNER
-  uses_form_learnset: true
+  form_shift_gender: MALE
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PIKACHU_ALOLA_CAP
@@ -23565,7 +23570,8 @@ species {
   percent_female: 50.0
   body_color: YELLOW
   form_shift_of: SPECIES_PIKACHU_PARTNER
-  uses_form_learnset: true
+  form_shift_gender: MALE
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PIKACHU_PARTNER_CAP
@@ -23586,7 +23592,8 @@ species {
   percent_female: 50.0
   body_color: YELLOW
   form_shift_of: SPECIES_PIKACHU_PARTNER
-  uses_form_learnset: true
+  form_shift_gender: MALE
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PIKACHU_WORLD_CAP
@@ -23608,7 +23615,8 @@ species {
   percent_female: 50.0
   body_color: YELLOW
   form_shift_of: SPECIES_PIKACHU_PARTNER
-  uses_form_learnset: true
+  form_shift_gender: MALE
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PIKACHU_COSPLAY
@@ -23628,7 +23636,7 @@ species {
   innate: ABILITY_GROUND_SHOCK
   percent_female: 100.0
   body_color: YELLOW
-  uses_form_learnset: true
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PIKACHU_ROCK_STAR
@@ -23648,7 +23656,7 @@ species {
   innate: ABILITY_GROUND_SHOCK
   percent_female: 100.0
   body_color: YELLOW
-  uses_form_learnset: true
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PIKACHU_BELLE
@@ -23668,7 +23676,7 @@ species {
   innate: ABILITY_GROUND_SHOCK
   percent_female: 100.0
   body_color: YELLOW
-  uses_form_learnset: true
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PIKACHU_POP_STAR
@@ -23688,7 +23696,7 @@ species {
   innate: ABILITY_GROUND_SHOCK
   percent_female: 100.0
   body_color: YELLOW
-  uses_form_learnset: true
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PIKACHU_PH_D
@@ -23708,7 +23716,7 @@ species {
   innate: ABILITY_GROUND_SHOCK
   percent_female: 100.0
   body_color: YELLOW
-  uses_form_learnset: true
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PIKACHU_LIBRE
@@ -23728,7 +23736,7 @@ species {
   innate: ABILITY_GROUND_SHOCK
   percent_female: 100.0
   body_color: YELLOW
-  uses_form_learnset: true
+  uses_learnset: SPECIES_PIKACHU
 }
 species {
   id: SPECIES_PICHU_SPIKY_EARED
@@ -23755,7 +23763,6 @@ species {
     level: 10
   }
   form_shift_of: SPECIES_PICHU
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_CLEFFA
@@ -25122,7 +25129,7 @@ species {
   innate: ABILITY_OVERWHELM
   percent_female: 50.0
   body_color: YELLOW
-  uses_form_learnset: true
+  uses_learnset: SPECIES_AMPHAROS
 }
 species {
   id: SPECIES_AMPHAROS_PARTNER_MEGA
@@ -25165,7 +25172,7 @@ species {
   innate: ABILITY_OVERWHELM
   percent_female: 50.0
   body_color: YELLOW
-  uses_form_learnset: true
+  uses_learnset: SPECIES_AMPHAROS
 }
 species {
   id: SPECIES_AMPHAROS_PARTNER_MEGA_B
@@ -25233,7 +25240,7 @@ species {
   innate: ABILITY_OVERWHELM
   percent_female: 50.0
   body_color: YELLOW
-  uses_form_learnset: true
+  uses_learnset: SPECIES_AMPHAROS
 }
 species {
   id: SPECIES_BELLOSSOM
@@ -26526,7 +26533,7 @@ species {
     from: SPECIES_QUAGSIRE
     item: "ITEM_QUAGSIRENITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_QUAGSIRE
 }
 species {
   id: SPECIES_WOOPER_PALDEAN
@@ -26957,7 +26964,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_C
@@ -26978,7 +26985,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_D
@@ -26999,7 +27006,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_E
@@ -27020,7 +27027,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_F
@@ -27041,7 +27048,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_G
@@ -27062,7 +27069,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_H
@@ -27083,7 +27090,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_I
@@ -27104,7 +27111,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_J
@@ -27125,7 +27132,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_K
@@ -27146,7 +27153,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_L
@@ -27167,7 +27174,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_M
@@ -27187,7 +27194,7 @@ species {
   innate: ABILITY_NONE
   genderless: true
   body_color: BLACK
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_N
@@ -27208,7 +27215,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_O
@@ -27228,7 +27235,7 @@ species {
   innate: ABILITY_NONE
   genderless: true
   body_color: BLACK
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_P
@@ -27249,7 +27256,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_Q
@@ -27270,7 +27277,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_R
@@ -27291,7 +27298,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_S
@@ -27312,7 +27319,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_T
@@ -27332,7 +27339,7 @@ species {
   innate: ABILITY_NONE
   genderless: true
   body_color: BLACK
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_U
@@ -27352,7 +27359,7 @@ species {
   innate: ABILITY_NONE
   genderless: true
   body_color: BLACK
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_V
@@ -27373,7 +27380,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_W
@@ -27393,7 +27400,7 @@ species {
   innate: ABILITY_NONE
   genderless: true
   body_color: BLACK
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_X
@@ -27413,7 +27420,7 @@ species {
   innate: ABILITY_NONE
   genderless: true
   body_color: BLACK
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_Y
@@ -27433,7 +27440,7 @@ species {
   innate: ABILITY_NONE
   genderless: true
   body_color: BLACK
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_Z
@@ -27454,7 +27461,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_EMARK
@@ -27474,7 +27481,7 @@ species {
   innate: ABILITY_NONE
   genderless: true
   body_color: BLACK
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_UNOWN_QMARK
@@ -27495,7 +27502,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_UNOWN
 }
 species {
   id: SPECIES_WOBBUFFET
@@ -27989,7 +27996,6 @@ species {
   percent_female: 50.0
   body_color: YELLOW
   form_shift_of: SPECIES_DUDUNSPARCE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_GLIGAR
@@ -28846,7 +28852,7 @@ species {
     from: SPECIES_SHUCKLE
     item: "ITEM_SHUCKLENITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SHUCKLE
 }
 species {
   id: SPECIES_HERACROSS
@@ -31057,7 +31063,7 @@ species {
     from: SPECIES_SKARMORY
     item: "ITEM_SKARMORITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SKARMORY
 }
 species {
   id: SPECIES_SKARMORY_REDUX
@@ -32623,7 +32629,7 @@ species {
     from: SPECIES_HITMONCHAN
     item: "ITEM_HITMONCHANITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_HITMONCHAN
 }
 species {
   id: SPECIES_HITMONLEE_MEGA
@@ -32648,7 +32654,7 @@ species {
     from: SPECIES_HITMONLEE
     item: "ITEM_HITMONLEENITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_HITMONLEE
 }
 species {
   id: SPECIES_HITMONTOP_MEGA
@@ -32673,7 +32679,7 @@ species {
     from: SPECIES_HITMONTOP
     item: "ITEM_HITMONTOPITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_HITMONTOP
 }
 species {
   id: SPECIES_HITMONCHAN_PARTNER
@@ -32692,7 +32698,7 @@ species {
   innate: ABILITY_PERFECTIONIST
   percent_female: 0.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_HITMONCHAN
 }
 species {
   id: SPECIES_HITMONCHAN_PARTNER_MEGA
@@ -32716,7 +32722,7 @@ species {
     from: SPECIES_HITMONCHAN_PARTNER
     item: "ITEM_HITMONCHANITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_HITMONCHAN
 }
 species {
   id: SPECIES_HITMONCHAN_PARTNER_B
@@ -32735,7 +32741,7 @@ species {
   innate: ABILITY_PERFECTIONIST
   percent_female: 0.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_HITMONCHAN
 }
 species {
   id: SPECIES_HITMONCHAN_PARTNER_MEGA_B
@@ -32760,7 +32766,7 @@ species {
     item: "ITEM_HITMONCHANITE"
     type: MEGA_B
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_HITMONCHAN
 }
 species {
   id: SPECIES_HITMONCHAN_PARTNER_MEGA_C
@@ -32785,7 +32791,7 @@ species {
     item: "ITEM_HITMONCHANITE"
     type: MEGA_C
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_HITMONCHAN
 }
 species {
   id: SPECIES_HITMONCHAN_PARTNER_C
@@ -32804,7 +32810,7 @@ species {
   innate: ABILITY_PERFECTIONIST
   percent_female: 0.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_HITMONCHAN
 }
 species {
   id: SPECIES_SMOOCHUM
@@ -37170,6 +37176,7 @@ species {
   evo {
     to: SPECIES_GALLADE
     level: 30
+    gender: MALE
   }
   learnset {
     level {
@@ -37888,7 +37895,7 @@ species {
     from: SPECIES_BRELOOM
     item: "ITEM_BRELOOMITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_BRELOOM
 }
 species {
   id: SPECIES_SLAKOTH
@@ -38142,7 +38149,7 @@ species {
     from: SPECIES_SLAKING
     item: "ITEM_SLAKINGITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SLAKING
 }
 species {
   id: SPECIES_SLAKING_MEGA_APE_SHIFT
@@ -38163,7 +38170,7 @@ species {
   innate: ABILITY_CRYSTALLIZE
   percent_female: 50.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SLAKING
 }
 species {
   id: SPECIES_NINCADA
@@ -45548,7 +45555,7 @@ species {
   innate: ABILITY_ADAPTABILITY
   percent_female: 50.0
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_CASTFORM
 }
 species {
   id: SPECIES_CASTFORM_SUNNY
@@ -45568,7 +45575,7 @@ species {
   innate: ABILITY_ADAPTABILITY
   percent_female: 50.0
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_CASTFORM
 }
 species {
   id: SPECIES_CASTFORM_RAINY
@@ -45588,7 +45595,7 @@ species {
   innate: ABILITY_ADAPTABILITY
   percent_female: 50.0
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_CASTFORM
 }
 species {
   id: SPECIES_CASTFORM_SNOWY
@@ -45608,7 +45615,7 @@ species {
   innate: ABILITY_ADAPTABILITY
   percent_female: 50.0
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_CASTFORM
 }
 species {
   id: SPECIES_CASTFORM_FOGGY
@@ -45629,7 +45636,7 @@ species {
   percent_female: 50.0
   tier: 4
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_CASTFORM
 }
 species {
   id: SPECIES_KECLEON
@@ -47946,7 +47953,7 @@ species {
     from: SPECIES_RELICANTH
     item: "ITEM_RELICANTHITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_RELICANTH
 }
 species {
   id: SPECIES_LUVDISC
@@ -49741,7 +49748,6 @@ species {
   genderless: true
   body_color: RED
   form_shift_of: SPECIES_DEOXYS
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_DEOXYS_DEFENSE
@@ -49763,7 +49769,6 @@ species {
   genderless: true
   body_color: RED
   form_shift_of: SPECIES_DEOXYS
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_DEOXYS_SPEED
@@ -49785,7 +49790,6 @@ species {
   genderless: true
   body_color: RED
   form_shift_of: SPECIES_DEOXYS
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_TURTWIG
@@ -50112,7 +50116,7 @@ species {
     from: SPECIES_TORTERRA
     item: "ITEM_TORTERRANITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_TORTERRA
 }
 species {
   id: SPECIES_TURTWIG_REDUX
@@ -50686,7 +50690,7 @@ species {
     from: SPECIES_INFERNAPE
     item: "ITEM_INFERNAPENITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_INFERNAPE
 }
 species {
   id: SPECIES_INFERNAPE_REDUX_B
@@ -51318,7 +51322,7 @@ species {
     from: SPECIES_EMPOLEON
     item: "ITEM_EMPOLEONITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_EMPOLEON
 }
 species {
   id: SPECIES_PIPLUP_REDUX
@@ -53094,6 +53098,7 @@ species {
   evo {
     to: SPECIES_MOTHIM
     level: 20
+    gender: MALE
   }
   learnset {
     level {
@@ -53212,9 +53217,9 @@ species {
   evo {
     to: SPECIES_MOTHIM
     level: 20
+    gender: MALE
   }
   form_shift_of: SPECIES_BURMY
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_WORMADAM_SANDY_CLOAK
@@ -53340,9 +53345,9 @@ species {
   evo {
     to: SPECIES_MOTHIM
     level: 20
+    gender: MALE
   }
   form_shift_of: SPECIES_BURMY
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_WORMADAM_TRASH_CLOAK
@@ -53591,6 +53596,7 @@ species {
   evo {
     to: SPECIES_BEEFENDER
     level: 21
+    gender: MALE
   }
   learnset {
     level {
@@ -54319,7 +54325,7 @@ species {
   innate: ABILITY_SOLAR_FLARE
   percent_female: 50.0
   body_color: PINK
-  uses_form_learnset: true
+  uses_learnset: SPECIES_CHERRIM
 }
 species {
   id: SPECIES_SHELLOS
@@ -54530,7 +54536,6 @@ species {
     level: 30
   }
   form_shift_of: SPECIES_SHELLOS
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_GASTRODON_EAST_SEA
@@ -54552,7 +54557,6 @@ species {
   percent_female: 50.0
   body_color: BLUE
   form_shift_of: SPECIES_GASTRODON
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_AMBIPOM
@@ -57389,7 +57393,7 @@ species {
     from: SPECIES_SNORLAX
     item: "ITEM_SNORLAX_ORB"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SNORLAX
 }
 species {
   id: SPECIES_RIOLU
@@ -60069,7 +60073,6 @@ species {
   genderless: true
   body_color: RED
   form_shift_of: SPECIES_ROTOM
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ROTOM_WASH
@@ -60093,7 +60096,6 @@ species {
   body_color: RED
   no_flip: true
   form_shift_of: SPECIES_ROTOM
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ROTOM_FROST
@@ -60116,7 +60118,6 @@ species {
   genderless: true
   body_color: RED
   form_shift_of: SPECIES_ROTOM
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ROTOM_FAN
@@ -60139,7 +60140,6 @@ species {
   genderless: true
   body_color: RED
   form_shift_of: SPECIES_ROTOM
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ROTOM_MOW
@@ -60162,7 +60162,6 @@ species {
   genderless: true
   body_color: RED
   form_shift_of: SPECIES_ROTOM
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_UXIE
@@ -61768,7 +61767,7 @@ species {
   innate: ABILITY_DARK_AURA
   percent_female: 50.0
   body_color: PINK
-  uses_form_learnset: true
+  uses_learnset: SPECIES_DARKRAI
 }
 species {
   id: SPECIES_SHAYMIN
@@ -61886,7 +61885,6 @@ species {
   genderless: true
   body_color: GREEN
   form_shift_of: SPECIES_SHAYMIN
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ARCEUS
@@ -62214,7 +62212,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_FLYING
@@ -62234,7 +62232,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_POISON
@@ -62254,7 +62252,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_GROUND
@@ -62274,7 +62272,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_ROCK
@@ -62294,7 +62292,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_BUG
@@ -62314,7 +62312,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_GHOST
@@ -62334,7 +62332,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_STEEL
@@ -62354,7 +62352,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_FIRE
@@ -62374,7 +62372,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_WATER
@@ -62394,7 +62392,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_GRASS
@@ -62414,7 +62412,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_ELECTRIC
@@ -62434,7 +62432,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_PSYCHIC
@@ -62454,7 +62452,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_ICE
@@ -62474,7 +62472,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_DRAGON
@@ -62494,7 +62492,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_DARK
@@ -62514,7 +62512,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_ARCEUS_FAIRY
@@ -62534,7 +62532,7 @@ species {
   innate: ABILITY_LEVITATE
   genderless: true
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ARCEUS
 }
 species {
   id: SPECIES_VICTINI
@@ -65475,6 +65473,7 @@ species {
   evo {
     to: SPECIES_UNFEZANT
     level: 32
+    gender: MALE
   }
   evo {
     to: SPECIES_UNFEZANT
@@ -68150,6 +68149,7 @@ species {
   evo {
     to: SPECIES_BASCULEGION
     level: 45
+    gender: MALE
   }
   evo {
     to: SPECIES_BASCULEGION_F
@@ -68425,6 +68425,7 @@ species {
   evo {
     to: SPECIES_BASCULEGION
     level: 45
+    gender: MALE
   }
   evo {
     to: SPECIES_BASCULEGION_F
@@ -68432,7 +68433,6 @@ species {
     gender: FEMALE
   }
   form_shift_of: SPECIES_BASCULIN
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_BASCULIN_BLUE_STRIPED
@@ -68455,6 +68455,7 @@ species {
   evo {
     to: SPECIES_BASCULEGION
     level: 45
+    gender: MALE
   }
   evo {
     to: SPECIES_BASCULEGION_F
@@ -68462,7 +68463,6 @@ species {
     gender: FEMALE
   }
   form_shift_of: SPECIES_BASCULIN
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_SANDILE
@@ -68984,7 +68984,6 @@ species {
   percent_female: 50.0
   body_color: BLUE
   form_shift_of: SPECIES_DARMANITAN
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_DARUMAKA_GALARIAN
@@ -69179,7 +69178,6 @@ species {
   percent_female: 50.0
   body_color: WHITE
   form_shift_of: SPECIES_DARMANITAN_GALARIAN
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_DARUMAKA_REDUX
@@ -69381,7 +69379,6 @@ species {
   percent_female: 50.0
   body_color: WHITE
   form_shift_of: SPECIES_DARMANITAN_REDUX
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_DARMANITAN_REDUX_BOND
@@ -69402,7 +69399,7 @@ species {
   innate: ABILITY_MOLD_BREAKER
   percent_female: 50.0
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_DARMANITAN_REDUX
 }
 species {
   id: SPECIES_DARMANITAN_REDUX_BLUNDER
@@ -69423,7 +69420,7 @@ species {
   innate: ABILITY_MOLD_BREAKER
   percent_female: 50.0
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_DARMANITAN
 }
 species {
   id: SPECIES_MARACTUS
@@ -69914,7 +69911,7 @@ species {
   innate: ABILITY_RECKLESS
   percent_female: 50.0
   body_color: RED
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SCRAFTY
 }
 species {
   id: SPECIES_SIGILYPH
@@ -71922,7 +71919,7 @@ species {
   innate: ABILITY_MAGIC_GUARD
   percent_female: 50.0
   body_color: GREEN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_REUNICLUS
 }
 species {
   id: SPECIES_REUNICLUS_PARTNER_B
@@ -71941,7 +71938,7 @@ species {
   innate: ABILITY_MAGIC_GUARD
   percent_female: 50.0
   body_color: GREEN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_REUNICLUS
 }
 species {
   id: SPECIES_REUNICLUS_PARTNER_C
@@ -71960,7 +71957,7 @@ species {
   innate: ABILITY_MAGIC_GUARD
   percent_female: 50.0
   body_color: GREEN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_REUNICLUS
 }
 species {
   id: SPECIES_SOLOSIS_REDUX
@@ -72843,7 +72840,6 @@ species {
     level: 23
   }
   form_shift_of: SPECIES_DEERLING
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_SAWSBUCK_SUMMER
@@ -72866,7 +72862,6 @@ species {
   percent_female: 50.0
   body_color: BROWN
   form_shift_of: SPECIES_SAWSBUCK
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_DEERLING_AUTUMN
@@ -72893,7 +72888,6 @@ species {
     level: 23
   }
   form_shift_of: SPECIES_DEERLING
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_SAWSBUCK_AUTUMN
@@ -72916,7 +72910,6 @@ species {
   percent_female: 50.0
   body_color: BROWN
   form_shift_of: SPECIES_SAWSBUCK
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_DEERLING_WINTER
@@ -72943,7 +72936,6 @@ species {
     level: 23
   }
   form_shift_of: SPECIES_DEERLING
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_SAWSBUCK_WINTER
@@ -72966,7 +72958,6 @@ species {
   percent_female: 50.0
   body_color: BROWN
   form_shift_of: SPECIES_SAWSBUCK
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_EMOLGA
@@ -73596,7 +73587,7 @@ species {
     from: SPECIES_JELLICENT
     item: "ITEM_JELLICENTITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_JELLICENT
 }
 species {
   id: SPECIES_ALOMOMOLA
@@ -78573,7 +78564,7 @@ species {
   innate: ABILITY_LEVITATE
   percent_female: 50.0
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_VOLCARONA
 }
 species {
   id: SPECIES_VOLCARONA_PARTNER_B
@@ -78593,7 +78584,7 @@ species {
   innate: ABILITY_LEVITATE
   percent_female: 50.0
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_VOLCARONA
 }
 species {
   id: SPECIES_VOLCARONA_PARTNER_C
@@ -78613,7 +78604,7 @@ species {
   innate: ABILITY_LEVITATE
   percent_female: 50.0
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_VOLCARONA
 }
 species {
   id: SPECIES_COBALION
@@ -79003,7 +78994,6 @@ species {
   percent_female: 0.0
   body_color: GREEN
   form_shift_of: SPECIES_TORNADUS
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_THUNDURUS
@@ -79129,7 +79119,6 @@ species {
   percent_female: 0.0
   body_color: BLUE
   form_shift_of: SPECIES_THUNDURUS
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_RESHIRAM
@@ -79445,7 +79434,6 @@ species {
   percent_female: 0.0
   body_color: BROWN
   form_shift_of: SPECIES_LANDORUS
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_KYUREM
@@ -79913,7 +79901,6 @@ species {
   genderless: true
   body_color: YELLOW
   form_shift_of: SPECIES_KELDEO
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_MELOETTA
@@ -80035,7 +80022,6 @@ species {
   body_color: WHITE
   no_flip: true
   form_shift_of: SPECIES_MELOETTA
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_GENESECT
@@ -80159,7 +80145,7 @@ species {
   innate: ABILITY_MEGA_LAUNCHER
   genderless: true
   body_color: PURPLE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_GENESECT
 }
 species {
   id: SPECIES_GENESECT_SHOCK_DRIVE
@@ -80180,7 +80166,7 @@ species {
   innate: ABILITY_MEGA_LAUNCHER
   genderless: true
   body_color: PURPLE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_GENESECT
 }
 species {
   id: SPECIES_GENESECT_BURN_DRIVE
@@ -80201,7 +80187,7 @@ species {
   innate: ABILITY_MEGA_LAUNCHER
   genderless: true
   body_color: PURPLE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_GENESECT
 }
 species {
   id: SPECIES_GENESECT_CHILL_DRIVE
@@ -80222,7 +80208,7 @@ species {
   innate: ABILITY_MEGA_LAUNCHER
   genderless: true
   body_color: PURPLE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_GENESECT
 }
 species {
   id: SPECIES_CHESPIN
@@ -81020,7 +81006,7 @@ species {
   percent_female: 0.0
   body_color: BLUE
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_GRENINJA
 }
 species {
   id: SPECIES_GRENINJA_ASH
@@ -81042,7 +81028,7 @@ species {
   percent_female: 0.0
   body_color: BLUE
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_GRENINJA
 }
 species {
   id: SPECIES_BUNNELBY
@@ -81669,7 +81655,6 @@ species {
   percent_female: 50.0
   body_color: BLUE
   form_shift_of: SPECIES_VIVILLON
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_VIVILLON_TUNDRA
@@ -81692,7 +81677,6 @@ species {
   percent_female: 50.0
   body_color: BLUE
   form_shift_of: SPECIES_VIVILLON
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_VIVILLON_CONTINENTAL
@@ -81715,7 +81699,6 @@ species {
   percent_female: 50.0
   body_color: YELLOW
   form_shift_of: SPECIES_VIVILLON
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_VIVILLON_GARDEN
@@ -81738,7 +81721,6 @@ species {
   percent_female: 50.0
   body_color: GREEN
   form_shift_of: SPECIES_VIVILLON
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_VIVILLON_ELEGANT
@@ -81761,7 +81743,6 @@ species {
   percent_female: 50.0
   body_color: PURPLE
   form_shift_of: SPECIES_VIVILLON
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_VIVILLON_MEADOW
@@ -81782,7 +81763,7 @@ species {
   innate: ABILITY_MAJESTIC_MOTH
   percent_female: 50.0
   body_color: PINK
-  uses_form_learnset: true
+  uses_learnset: SPECIES_VIVILLON
 }
 species {
   id: SPECIES_VIVILLON_MODERN
@@ -81803,7 +81784,7 @@ species {
   innate: ABILITY_MAJESTIC_MOTH
   percent_female: 50.0
   body_color: RED
-  uses_form_learnset: true
+  uses_learnset: SPECIES_VIVILLON
 }
 species {
   id: SPECIES_VIVILLON_MARINE
@@ -81824,7 +81805,7 @@ species {
   innate: ABILITY_MAJESTIC_MOTH
   percent_female: 50.0
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_VIVILLON
 }
 species {
   id: SPECIES_VIVILLON_ARCHIPELAGO
@@ -81845,7 +81826,7 @@ species {
   innate: ABILITY_MAJESTIC_MOTH
   percent_female: 50.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_VIVILLON
 }
 species {
   id: SPECIES_VIVILLON_HIGH_PLAINS
@@ -81868,7 +81849,6 @@ species {
   percent_female: 50.0
   body_color: BROWN
   form_shift_of: SPECIES_VIVILLON
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_VIVILLON_SANDSTORM
@@ -81889,7 +81869,7 @@ species {
   innate: ABILITY_MAJESTIC_MOTH
   percent_female: 50.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_VIVILLON
 }
 species {
   id: SPECIES_VIVILLON_RIVER
@@ -81910,7 +81890,7 @@ species {
   innate: ABILITY_MAJESTIC_MOTH
   percent_female: 50.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_VIVILLON
 }
 species {
   id: SPECIES_VIVILLON_MONSOON
@@ -81931,7 +81911,7 @@ species {
   innate: ABILITY_MAJESTIC_MOTH
   percent_female: 50.0
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_VIVILLON
 }
 species {
   id: SPECIES_VIVILLON_SAVANNA
@@ -81952,7 +81932,7 @@ species {
   innate: ABILITY_MAJESTIC_MOTH
   percent_female: 50.0
   body_color: GREEN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_VIVILLON
 }
 species {
   id: SPECIES_VIVILLON_SUN
@@ -81975,7 +81955,6 @@ species {
   percent_female: 50.0
   body_color: RED
   form_shift_of: SPECIES_VIVILLON
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_VIVILLON_OCEAN
@@ -81996,7 +81975,7 @@ species {
   innate: ABILITY_MAJESTIC_MOTH
   percent_female: 50.0
   body_color: RED
-  uses_form_learnset: true
+  uses_learnset: SPECIES_VIVILLON
 }
 species {
   id: SPECIES_VIVILLON_JUNGLE
@@ -82017,7 +81996,7 @@ species {
   innate: ABILITY_MAJESTIC_MOTH
   percent_female: 50.0
   body_color: GREEN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_VIVILLON
 }
 species {
   id: SPECIES_VIVILLON_FANCY
@@ -82040,7 +82019,6 @@ species {
   percent_female: 50.0
   body_color: PINK
   form_shift_of: SPECIES_VIVILLON
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_VIVILLON_POKE_BALL
@@ -82063,7 +82041,6 @@ species {
   percent_female: 50.0
   body_color: RED
   form_shift_of: SPECIES_VIVILLON
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_LITLEO
@@ -82092,6 +82069,7 @@ species {
   evo {
     to: SPECIES_PYROAR
     level: 35
+    gender: MALE
   }
   evo {
     to: SPECIES_PYROAR
@@ -82587,7 +82565,6 @@ species {
     level: 19
   }
   form_shift_of: SPECIES_FLABEBE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FLOETTE_YELLOW_FLOWER
@@ -82613,7 +82590,6 @@ species {
     level: 36
   }
   form_shift_of: SPECIES_FLOETTE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FLORGES_YELLOW_FLOWER
@@ -82635,7 +82611,6 @@ species {
   percent_female: 100.0
   body_color: WHITE
   form_shift_of: SPECIES_FLORGES
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FLABEBE_ORANGE_FLOWER
@@ -82661,7 +82636,6 @@ species {
     level: 19
   }
   form_shift_of: SPECIES_FLABEBE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FLOETTE_ORANGE_FLOWER
@@ -82687,7 +82661,6 @@ species {
     level: 36
   }
   form_shift_of: SPECIES_FLOETTE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FLORGES_ORANGE_FLOWER
@@ -82709,7 +82682,6 @@ species {
   percent_female: 100.0
   body_color: WHITE
   form_shift_of: SPECIES_FLORGES
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FLABEBE_BLUE_FLOWER
@@ -82735,7 +82707,6 @@ species {
     level: 19
   }
   form_shift_of: SPECIES_FLABEBE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FLOETTE_BLUE_FLOWER
@@ -82761,7 +82732,6 @@ species {
     level: 36
   }
   form_shift_of: SPECIES_FLOETTE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FLORGES_BLUE_FLOWER
@@ -82783,7 +82753,6 @@ species {
   percent_female: 100.0
   body_color: WHITE
   form_shift_of: SPECIES_FLORGES
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FLABEBE_WHITE_FLOWER
@@ -82809,7 +82778,6 @@ species {
     level: 19
   }
   form_shift_of: SPECIES_FLABEBE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FLOETTE_WHITE_FLOWER
@@ -82835,7 +82803,6 @@ species {
     level: 36
   }
   form_shift_of: SPECIES_FLOETTE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FLORGES_WHITE_FLOWER
@@ -82857,7 +82824,6 @@ species {
   percent_female: 100.0
   body_color: WHITE
   form_shift_of: SPECIES_FLORGES
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_SKIDDO
@@ -83309,7 +83275,6 @@ species {
   body_color: WHITE
   form_shift_of: SPECIES_FURFROU
   form_shift_gender: FEMALE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FURFROU_STAR_TRIM
@@ -83330,7 +83295,7 @@ species {
   percent_female: 50.0
   body_color: WHITE
   form_shift_of: SPECIES_FURFROU
-  uses_form_learnset: true
+  form_shift_gender: MALE
 }
 species {
   id: SPECIES_FURFROU_DIAMOND_TRIM
@@ -83351,7 +83316,6 @@ species {
   percent_female: 50.0
   body_color: WHITE
   form_shift_of: SPECIES_FURFROU
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FURFROU_DEBUTANTE_TRIM
@@ -83372,7 +83336,6 @@ species {
   percent_female: 50.0
   body_color: WHITE
   form_shift_of: SPECIES_FURFROU
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FURFROU_MATRON_TRIM
@@ -83393,7 +83356,6 @@ species {
   percent_female: 50.0
   body_color: WHITE
   form_shift_of: SPECIES_FURFROU
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FURFROU_DANDY_TRIM
@@ -83414,7 +83376,6 @@ species {
   percent_female: 50.0
   body_color: WHITE
   form_shift_of: SPECIES_FURFROU
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FURFROU_LA_REINE_TRIM
@@ -83435,7 +83396,6 @@ species {
   percent_female: 50.0
   body_color: WHITE
   form_shift_of: SPECIES_FURFROU
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FURFROU_KABUKI_TRIM
@@ -83456,7 +83416,6 @@ species {
   percent_female: 50.0
   body_color: WHITE
   form_shift_of: SPECIES_FURFROU
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FURFROU_PHARAOH_TRIM
@@ -83477,7 +83436,6 @@ species {
   percent_female: 50.0
   body_color: WHITE
   form_shift_of: SPECIES_FURFROU
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ESPURR
@@ -83505,6 +83463,7 @@ species {
   evo {
     to: SPECIES_MEOWSTIC
     level: 25
+    gender: MALE
   }
   evo {
     to: SPECIES_MEOWSTIC_FEMALE
@@ -84022,7 +83981,7 @@ species {
   innate: ABILITY_STANCE_CHANGE
   percent_female: 50.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_AEGISLASH
 }
 species {
   id: SPECIES_HONEDGE_REDUX
@@ -84258,7 +84217,7 @@ species {
   innate: ABILITY_STANCE_CHANGE
   percent_female: 50.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_AEGISLASH_REDUX
 }
 species {
   id: SPECIES_AEGISLASH_REDUX_MEGA
@@ -84303,7 +84262,7 @@ species {
   innate: ABILITY_STANCE_CHANGE
   percent_female: 50.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_AEGISLASH_REDUX
 }
 species {
   id: SPECIES_SPRITZEE
@@ -85995,7 +85954,7 @@ species {
   innate: ABILITY_PERMAFROST
   percent_female: 12.5
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_AURORUS
 }
 species {
   id: SPECIES_AURORUS_PARTNER_C
@@ -86015,7 +85974,7 @@ species {
   innate: ABILITY_PERMAFROST
   percent_female: 12.5
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_AURORUS
 }
 species {
   id: SPECIES_AMAURA_PARTNER
@@ -86040,7 +85999,7 @@ species {
     to: SPECIES_AURORUS_PARTNER
     level: 36
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_AMAURA
 }
 species {
   id: SPECIES_AURORUS_PARTNER
@@ -86060,7 +86019,7 @@ species {
   innate: ABILITY_PERMAFROST
   percent_female: 12.5
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_AURORUS
 }
 species {
   id: SPECIES_AMAURA_PARTNER_B
@@ -86081,7 +86040,7 @@ species {
   percent_female: 12.5
   tier: 4
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_AMAURA
 }
 species {
   id: SPECIES_AMAURA_PARTNER_C
@@ -86102,7 +86061,7 @@ species {
   percent_female: 12.5
   tier: 4
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_AMAURA
 }
 species {
   id: SPECIES_SYLVEON
@@ -87407,7 +87366,7 @@ species {
     to: SPECIES_GOURGEIST_SMALL
     level: 20
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_PUMPKABOO
 }
 species {
   id: SPECIES_GOURGEIST_SMALL
@@ -87428,7 +87387,7 @@ species {
   innate: ABILITY_HAUNTED_SPIRIT
   percent_female: 50.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_GOURGEIST
 }
 species {
   id: SPECIES_PUMPKABOO_LARGE
@@ -87453,7 +87412,7 @@ species {
     to: SPECIES_GOURGEIST_LARGE
     level: 20
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_PUMPKABOO
 }
 species {
   id: SPECIES_GOURGEIST_LARGE
@@ -87474,7 +87433,7 @@ species {
   innate: ABILITY_HAUNTED_SPIRIT
   percent_female: 50.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_GOURGEIST
 }
 species {
   id: SPECIES_PUMPKABOO_SUPER
@@ -87499,7 +87458,7 @@ species {
     to: SPECIES_GOURGEIST_SUPER
     level: 20
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_PUMPKABOO
 }
 species {
   id: SPECIES_GOURGEIST_SUPER
@@ -87520,7 +87479,7 @@ species {
   innate: ABILITY_HAUNTED_SPIRIT
   percent_female: 50.0
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_GOURGEIST
 }
 species {
   id: SPECIES_BERGMITE
@@ -88281,7 +88240,7 @@ species {
   innate: ABILITY_SOUL_HEART
   genderless: true
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_XERNEAS
 }
 species {
   id: SPECIES_YVELTAL
@@ -88550,7 +88509,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ZYGARDE
 }
 species {
   id: SPECIES_ZYGARDE_10_POWER_CONSTRUCT
@@ -88572,7 +88531,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ZYGARDE
 }
 species {
   id: SPECIES_ZYGARDE_50_POWER_CONSTRUCT
@@ -88594,7 +88553,7 @@ species {
   genderless: true
   body_color: GREEN
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ZYGARDE
 }
 species {
   id: SPECIES_ZYGARDE_COMPLETE
@@ -88616,7 +88575,7 @@ species {
   genderless: true
   body_color: BLACK
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ZYGARDE
 }
 species {
   id: SPECIES_DIANCIE
@@ -88876,7 +88835,6 @@ species {
   genderless: true
   body_color: PURPLE
   form_shift_of: SPECIES_HOOPA
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_VOLCANION
@@ -90118,7 +90076,7 @@ species {
     from: SPECIES_TOUCANNON
     item: "ITEM_TOUCANNONITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_TOUCANNON
 }
 species {
   id: SPECIES_YUNGOOS
@@ -90965,7 +90923,6 @@ species {
   percent_female: 75.0
   body_color: YELLOW
   form_shift_of: SPECIES_ORICORIO
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ORICORIO_PAU
@@ -90988,7 +90945,6 @@ species {
   percent_female: 75.0
   body_color: PINK
   form_shift_of: SPECIES_ORICORIO
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ORICORIO_SENSU
@@ -91011,7 +90967,6 @@ species {
   percent_female: 75.0
   body_color: YELLOW
   form_shift_of: SPECIES_ORICORIO
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ORICORIO_MEGA
@@ -91721,7 +91676,7 @@ species {
     to: SPECIES_LYCANROC_DUSK
     level: 23
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ROCKRUFF
 }
 species {
   id: SPECIES_WISHIWASHI
@@ -91831,7 +91786,7 @@ species {
   innate: ABILITY_MULTISCALE
   percent_female: 50.0
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_WISHIWASHI
 }
 species {
   id: SPECIES_MAREANIE
@@ -92657,6 +92612,7 @@ species {
   evo {
     to: SPECIES_SALAZARUS
     level: 33
+    gender: MALE
   }
   learnset {
     level {
@@ -94637,7 +94593,7 @@ species {
   innate: ABILITY_INNER_FOCUS
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_FLYING
@@ -94657,7 +94613,7 @@ species {
   innate: ABILITY_AERIALIST
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_POISON
@@ -94677,7 +94633,7 @@ species {
   innate: ABILITY_POISON_POINT
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_GROUND
@@ -94697,7 +94653,7 @@ species {
   innate: ABILITY_EARTH_EATER
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_ROCK
@@ -94717,7 +94673,7 @@ species {
   innate: ABILITY_MOUNTAINEER
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_BUG
@@ -94737,7 +94693,7 @@ species {
   innate: ABILITY_PREDATOR
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_GHOST
@@ -94757,7 +94713,7 @@ species {
   innate: ABILITY_CURSED_BODY
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_STEEL
@@ -94777,7 +94733,7 @@ species {
   innate: ABILITY_ARMOR_TAIL
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_FIRE
@@ -94797,7 +94753,7 @@ species {
   innate: ABILITY_FLASH_FIRE
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_WATER
@@ -94817,7 +94773,7 @@ species {
   innate: ABILITY_MARINE_APEX
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_GRASS
@@ -94837,7 +94793,7 @@ species {
   innate: ABILITY_RAW_WOOD
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_ELECTRIC
@@ -94857,7 +94813,7 @@ species {
   innate: ABILITY_LIGHTNING_ROD
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_PSYCHIC
@@ -94877,7 +94833,7 @@ species {
   innate: ABILITY_MAGIC_BOUNCE
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_ICE
@@ -94897,7 +94853,7 @@ species {
   innate: ABILITY_FREEZING_POINT
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_DRAGON
@@ -94917,7 +94873,7 @@ species {
   innate: ABILITY_OVERWHELM
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_DARK
@@ -94937,7 +94893,7 @@ species {
   innate: ABILITY_JUSTIFIED
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_SILVALLY_FAIRY
@@ -94957,7 +94913,7 @@ species {
   innate: ABILITY_REGENERATOR
   genderless: true
   body_color: GRAY
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SILVALLY
 }
 species {
   id: SPECIES_MINIOR
@@ -95068,7 +95024,6 @@ species {
   body_color: BROWN
   no_flip: true
   form_shift_of: SPECIES_MINIOR
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_MINIOR_METEOR_YELLOW
@@ -95091,7 +95046,6 @@ species {
   body_color: BROWN
   no_flip: true
   form_shift_of: SPECIES_MINIOR
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_MINIOR_METEOR_GREEN
@@ -95114,7 +95068,6 @@ species {
   body_color: BROWN
   no_flip: true
   form_shift_of: SPECIES_MINIOR
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_MINIOR_METEOR_BLUE
@@ -95137,7 +95090,6 @@ species {
   body_color: BROWN
   no_flip: true
   form_shift_of: SPECIES_MINIOR
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_MINIOR_METEOR_INDIGO
@@ -95160,7 +95112,6 @@ species {
   body_color: BROWN
   no_flip: true
   form_shift_of: SPECIES_MINIOR
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_MINIOR_METEOR_VIOLET
@@ -95183,7 +95134,6 @@ species {
   body_color: BROWN
   no_flip: true
   form_shift_of: SPECIES_MINIOR
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_MINIOR_CORE_RED
@@ -95205,7 +95155,7 @@ species {
   genderless: true
   body_color: RED
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_MINIOR
 }
 species {
   id: SPECIES_MINIOR_CORE_ORANGE
@@ -95227,7 +95177,7 @@ species {
   genderless: true
   body_color: RED
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_MINIOR
 }
 species {
   id: SPECIES_MINIOR_CORE_YELLOW
@@ -95249,7 +95199,7 @@ species {
   genderless: true
   body_color: YELLOW
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_MINIOR
 }
 species {
   id: SPECIES_MINIOR_CORE_GREEN
@@ -95271,7 +95221,7 @@ species {
   genderless: true
   body_color: GREEN
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_MINIOR
 }
 species {
   id: SPECIES_MINIOR_CORE_BLUE
@@ -95293,7 +95243,7 @@ species {
   genderless: true
   body_color: BLUE
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_MINIOR
 }
 species {
   id: SPECIES_MINIOR_CORE_INDIGO
@@ -95315,7 +95265,7 @@ species {
   genderless: true
   body_color: BLUE
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_MINIOR
 }
 species {
   id: SPECIES_MINIOR_CORE_VIOLET
@@ -95337,7 +95287,7 @@ species {
   genderless: true
   body_color: PURPLE
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_MINIOR
 }
 species {
   id: SPECIES_KOMALA
@@ -95747,7 +95697,7 @@ species {
 species {
   id: SPECIES_MIMIKYU_RAYQUAZA_BUSTED
   form_of: SPECIES_MIMIKYU
-  uses_form_learnset: true
+  uses_learnset: SPECIES_MIMIKYU_RAYQUAZA
 }
 species {
   id: SPECIES_MIMIKYU_BUSTED
@@ -95768,7 +95718,7 @@ species {
   innate: ABILITY_PHANTOM_PAIN
   percent_female: 50.0
   body_color: YELLOW
-  uses_form_learnset: true
+  uses_learnset: SPECIES_MIMIKYU
 }
 species {
   id: SPECIES_BRUXISH
@@ -95894,7 +95844,7 @@ species {
     from: SPECIES_BRUXISH
     item: "ITEM_BRUXISHITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_BRUXISH
 }
 species {
   id: SPECIES_DRAMPA
@@ -97618,7 +97568,7 @@ species {
   innate: ABILITY_AERODYNAMICS
   percent_female: 50.0
   body_color: PINK
-  uses_form_learnset: true
+  uses_learnset: SPECIES_KARTANA
 }
 species {
   id: SPECIES_GUZZLORD
@@ -97857,7 +97807,7 @@ species {
   genderless: true
   body_color: YELLOW
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_NECROZMA
 }
 species {
   id: SPECIES_NECROZMA_ULTRA
@@ -97909,7 +97859,7 @@ species {
   genderless: true
   body_color: BLUE
   no_flip: true
-  uses_form_learnset: true
+  uses_learnset: SPECIES_NECROZMA
 }
 species {
   id: SPECIES_MAGEARNA
@@ -98036,7 +97986,7 @@ species {
   innate: ABILITY_POWER_CORE
   genderless: true
   body_color: RED
-  uses_form_learnset: true
+  uses_learnset: SPECIES_MAGEARNA
 }
 species {
   id: SPECIES_MARSHADOW
@@ -102002,7 +101952,7 @@ species {
   innate: ABILITY_FIELD_EXPLORER
   percent_female: 50.0
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_CRAMORANT
 }
 species {
   id: SPECIES_CRAMORANT_GORGING
@@ -102023,7 +101973,7 @@ species {
   innate: ABILITY_FIELD_EXPLORER
   percent_female: 50.0
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_CRAMORANT
 }
 species {
   id: SPECIES_ARROKUDA
@@ -102209,6 +102159,7 @@ species {
   evo {
     to: SPECIES_TOXTRICITY
     level: 30
+    gender: MALE
   }
   evo {
     to: SPECIES_TOXTRICITY_LOW_KEY
@@ -102476,6 +102427,7 @@ species {
   evo {
     to: SPECIES_TOXTRICITY_REDUX
     level: 30
+    gender: MALE
   }
   evo {
     to: SPECIES_TOXTRICITY_REDUX_FUZZ
@@ -102668,7 +102620,7 @@ species {
   innate: ABILITY_BASS_BOOSTED
   percent_female: 50.0
   body_color: PURPLE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_TOXTRICITY_REDUX
 }
 species {
   id: SPECIES_TOXTRICITY_REDUX_FUZZ_MEGA
@@ -103217,7 +103169,7 @@ species {
     to: SPECIES_POLTEAGEIST_ANTIQUE
     level: 36
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SINISTEA
 }
 species {
   id: SPECIES_POLTEAGEIST_ANTIQUE
@@ -103237,7 +103189,7 @@ species {
   innate: ABILITY_NONE
   genderless: true
   body_color: PURPLE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_POLTEAGEIST
 }
 species {
   id: SPECIES_HATENNA
@@ -104660,7 +104612,6 @@ species {
   percent_female: 100.0
   body_color: WHITE
   form_shift_of: SPECIES_ALCREMIE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ALCREMIE_MATCHA_CREAM
@@ -104682,7 +104633,6 @@ species {
   percent_female: 100.0
   body_color: WHITE
   form_shift_of: SPECIES_ALCREMIE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ALCREMIE_MINT_CREAM
@@ -104704,7 +104654,6 @@ species {
   percent_female: 100.0
   body_color: WHITE
   form_shift_of: SPECIES_ALCREMIE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ALCREMIE_LEMON_CREAM
@@ -104726,7 +104675,6 @@ species {
   percent_female: 100.0
   body_color: WHITE
   form_shift_of: SPECIES_ALCREMIE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ALCREMIE_SALTED_CREAM
@@ -104746,7 +104694,7 @@ species {
   innate: ABILITY_SELF_SUFFICIENT
   percent_female: 100.0
   body_color: WHITE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_ALCREMIE
 }
 species {
   id: SPECIES_ALCREMIE_RUBY_SWIRL
@@ -104768,7 +104716,6 @@ species {
   percent_female: 100.0
   body_color: WHITE
   form_shift_of: SPECIES_ALCREMIE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ALCREMIE_CARAMEL_SWIRL
@@ -104790,7 +104737,6 @@ species {
   percent_female: 100.0
   body_color: WHITE
   form_shift_of: SPECIES_ALCREMIE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ALCREMIE_RAINBOW_SWIRL
@@ -104812,7 +104758,6 @@ species {
   percent_female: 100.0
   body_color: WHITE
   form_shift_of: SPECIES_ALCREMIE
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FALINKS
@@ -105351,7 +105296,7 @@ species {
   innate: ABILITY_AMPHIBIOUS
   percent_female: 50.0
   body_color: BLUE
-  uses_form_learnset: true
+  uses_learnset: SPECIES_EISCUE
 }
 species {
   id: SPECIES_INDEEDEE
@@ -105627,7 +105572,7 @@ species {
   innate: ABILITY_SPEED_FORCE
   percent_female: 50.0
   body_color: YELLOW
-  uses_form_learnset: true
+  uses_learnset: SPECIES_MORPEKO
 }
 species {
   id: SPECIES_CUFANT
@@ -106072,7 +106017,7 @@ species {
     from: SPECIES_DRACOVISH
     item: "ITEM_DRACOVISHITE"
   }
-  uses_form_learnset: true
+  uses_learnset: SPECIES_DRACOVISH
 }
 species {
   id: SPECIES_ARCTOVISH
@@ -108703,7 +108648,6 @@ species {
   percent_female: 100.0
   body_color: PINK
   form_shift_of: SPECIES_ENAMORUS
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_SPRIGATITO
@@ -110318,7 +110262,6 @@ species {
   genderless: true
   body_color: WHITE
   form_shift_of: SPECIES_MAUSHOLD
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_FIDOUGH
@@ -110911,7 +110854,6 @@ species {
   percent_female: 50.0
   body_color: WHITE
   form_shift_of: SPECIES_SQUAWKABILLY
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE
@@ -110933,7 +110875,6 @@ species {
   percent_female: 50.0
   body_color: YELLOW
   form_shift_of: SPECIES_SQUAWKABILLY
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_SQUAWKABILLY_BLUE_PLUMAGE
@@ -110955,7 +110896,6 @@ species {
   percent_female: 50.0
   body_color: BLUE
   form_shift_of: SPECIES_SQUAWKABILLY
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_SQUAWKABILLY_GREEN_PLUMAGE
@@ -110976,7 +110916,7 @@ species {
   innate: ABILITY_PARROTING
   percent_female: 50.0
   body_color: GREEN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_SQUAWKABILLY
 }
 species {
   id: SPECIES_NACLI
@@ -113815,7 +113755,7 @@ species {
   innate: ABILITY_ADAPTABILITY
   percent_female: 50.0
   body_color: PINK
-  uses_form_learnset: true
+  uses_learnset: SPECIES_PALAFIN
 }
 species {
   id: SPECIES_VAROOM
@@ -115048,7 +114988,6 @@ species {
   percent_female: 50.0
   body_color: PINK
   form_shift_of: SPECIES_TATSUGIRI
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_TATSUGIRI_DROOPY
@@ -115071,7 +115010,6 @@ species {
   percent_female: 50.0
   body_color: PINK
   form_shift_of: SPECIES_TATSUGIRI
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_TATSUGIRI_STRETCHY
@@ -115094,7 +115032,6 @@ species {
   percent_female: 50.0
   body_color: PINK
   form_shift_of: SPECIES_TATSUGIRI
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ANNIHILAPE
@@ -116914,7 +116851,6 @@ species {
     level: 44
   }
   form_shift_of: SPECIES_GIMMIGHOUL
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_GHOLDENGO
@@ -118726,7 +118662,6 @@ species {
   percent_female: 100.0
   body_color: PINK
   form_shift_of: SPECIES_OGERPON
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_OGERPON_CORNERSTONE_MASK
@@ -118749,7 +118684,6 @@ species {
   percent_female: 100.0
   body_color: PINK
   form_shift_of: SPECIES_OGERPON
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_OGERPON_WELLSPRING_MASK
@@ -118772,7 +118706,6 @@ species {
   percent_female: 100.0
   body_color: PINK
   form_shift_of: SPECIES_OGERPON
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_ARCHALUDON
@@ -121576,7 +121509,6 @@ species {
   genderless: true
   body_color: YELLOW
   form_shift_of: SPECIES_LUMBERING_SLOTH
-  uses_form_learnset: true
 }
 species {
   id: SPECIES_IRON_CARAPACE
@@ -122859,6 +122791,7 @@ species {
   evo {
     to: SPECIES_HYDROAR
     level: 35
+    gender: MALE
   }
   evo {
     to: SPECIES_HYDROAR_F
@@ -123059,7 +122992,7 @@ species {
   innate: ABILITY_ACCELERATE
   percent_female: 87.5
   body_color: BROWN
-  uses_form_learnset: true
+  uses_learnset: SPECIES_HYDROAR
 }
 species {
   id: SPECIES_GRANITUN

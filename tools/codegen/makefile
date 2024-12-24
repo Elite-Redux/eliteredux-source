@@ -4,7 +4,6 @@ PROTO_SRCS := $(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.p
 TEXTPROTO_SRCS := $(wildcard $(PROTOS)/*.textproto $(PROTOS)/*/*.textproto $(PROTOS)/*/*/*.textproto)
 
 all: protos codegen.jar generated
-	@echo "Codegen complete"
 
 protoc.zip:
 	wget -O protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-linux-x86_64.zip && exit
@@ -36,7 +35,6 @@ codegen.jar: codegenkt.jar protobuf-java.jar
 	jar cf codegen.jar -C javabuild . && exit
 
 define GENERATE
-timestamp/$(strip $1):
 ../../$(strip $1): codegen.jar $$(TEXTPROTO_SRCS)
 	java -cp codegen.jar er.FileGenerator $2 $(realpath ../..)/$(strip $1)
 ALL_GENERATED += ../../$(strip $1)
@@ -47,6 +45,7 @@ $(eval $(call GENERATE, generated/include/constants/moves.h,moves))
 $(eval $(call GENERATE, generated/include/constants/species.h,species))
 $(eval $(call GENERATE, generated/src/data/pokemon/base_stats.h,basestats))
 $(eval $(call GENERATE, generated/src/data/pokemon/evolution.h,evos))
+$(eval $(call GENERATE, generated/src/data/text/species_names.h,speciesnames))
 
 generated: $(ALL_GENERATED)
 
