@@ -1,5 +1,6 @@
 package er.defines
 
+import er.FileGenerator.HEADER
 import er.proto.SpeciesEnum
 import java.io.FileWriter
 
@@ -10,6 +11,7 @@ object SpeciesEnumGenerator {
             val speciesCount = species.maxOf { it.number } + 1
             writer.appendLine(
                 """
+                |$HEADER
                 |#pragma once
                 |
                 |#ifdef __assembly__

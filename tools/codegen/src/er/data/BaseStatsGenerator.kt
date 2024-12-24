@@ -1,6 +1,7 @@
 package er.data
 
 import com.google.protobuf.TextFormat
+import er.FileGenerator.HEADER
 import er.proto.EggGroup
 import er.proto.SpeciesEnum
 import er.proto.SpeciesList
@@ -13,6 +14,7 @@ object BaseStatsGenerator {
     fun generate(path: String) {
         FileWriter(path).use { writer ->
             writer.appendLine("""
+                |$HEADER
                 |#define PERCENT_FEMALE(percent) min(254, ((percent * 255) / 100))
                 |
                 |const struct BaseStats gBaseStats[] = {""".trimMargin())
