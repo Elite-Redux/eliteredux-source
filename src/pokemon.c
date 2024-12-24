@@ -9328,7 +9328,7 @@ u16 GetFormShiftSpecies(u16 species) {
         baseSpecies = GetFormSpeciesId(species, 0);
     }
 
-    for (i = 0; gFormChangeTable[baseSpecies][i].method == EVO_FORM_SHIFT || gFormChangeTable[baseSpecies][i].method == EVO_FORM_SHIFT_GENDER; i++) {
+    for (i = 0; gFormChangeTable[baseSpecies][i].method; i++) {
         if (gFormChangeTable[baseSpecies][i].targetSpecies == species) return baseSpecies;
     }
 

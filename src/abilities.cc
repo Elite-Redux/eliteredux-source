@@ -48,33 +48,58 @@ ENUM_OR(InfiltrateType)
 #define COMBINE(val1, val2) __COMBINE(val1, val2)
 
 #define ON_ENTRY int ability, int battler
+#define DELEGATE_ENTRY ability, battler
 #define ON_ABSORB int battler, int move, int moveType, int *statId
+#define DELEGATE_ABSORB battler, move, moveType, statId
 #define ON_IMMUNE int battler, int attacker, int move, int moveType, const u8 **immunityScript
+#define DELEGATE_IMMUNE battler, attacker, move, moveType, immunityScript
 #define ON_INFILTRATE int battler, int move
+#define DELEGATE_INFILTRATE battler, move
 #define ON_DISGUISE int battler, int testOnly
+#define DELEGATE_DISGUISE battler, testOnly
 #define ON_WEATHER int ability, int battler
+#define DELEGATE_WEATHER ability, battler
 #define ON_TERRAIN int ability, int battler
+#define DELEGATE_TERRAIN ability, battler
 #define ON_END_TURN int ability, int battler
+#define DELEGATE_END_TURN ability, battler
 #define ON_ATTACKER int ability, int battler, int target, int move, int moveType
+#define DELEGATE_ATTACKER ability, battler, target, move, moveType
 #define ON_DEFENDER int ability, int battler, int attacker, int move, int moveType
+#define DELEGATE_DEFENDER ability, battler, attacker, move, moveType
 #define ON_EITHER(name) static int name##OnEither(int ability, int battler, int opponent, int move, int moveType)
 #define ON_EITHER_ABILITY(name) .onAttacker = name##OnEither, .onDefender = name##OnEither
 #define ON_RECOIL int damage, int battler, int moveType
+#define DELEGATE_RECOIL damage, battler, moveType
 #define ON_REACTIVE int ability, int battler
+#define DELEGATE_REACTIVE ability, battler
 #define ON_BATTLER_FAINTS int ability, int battler, int attacker, int fainted, int move, int moveType
+#define DELEGATE_BATTLER_FAINTS ability, battler, attacker, fainted, move, moveType
 #define ON_PARENTAL_BOND int battler, int move, int moveType
+#define DELEGATE_PARENTAL_BOND battler, move, moveType
 #define ON_STAT int ability, int battler, int statId, u32 *stat, NonStackingState *flags
+#define DELEGATE_STAT ability, battler, statId, stat, flags
 #define ON_OFFENSIVE_MULTIPLIER \
     int battler, int target, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, u16 *modifier
+#define DELEGATE_OFFENSIVE_MULTIPLIER battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier
 #define ON_DEFENSIVE_MULTIPLIER int battler, int attacker, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
+#define DELEGATE_DEFENSIVE_MULTIPLIER battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier
 #define ON_ACCURACY int ability, int battler, int target, int move, int moveType, int *accuracy
+#define DELEGATE_ACCURACY ability, battler, target, move, moveType, accuracy
 #define ON_SWAP_SPLIT int battler, int move
+#define DELEGATE_SWAP_SPLIT battler, move
 #define ON_CHOOSE_OFFENSIVE_STAT int battler, int move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 *secondaryAtkStatToUse
+#define DELEGATE_CHOOSE_OFFENSIVE_STAT battler, move, ignoreOffensiveStatDrops, targetUnaware, atkStatToUse, secondaryAtkStatToUse
 #define ON_CHOOSE_DEFENSIVE_STAT int battler, int target, int move, int ignoreDefensiveStatBoosts, int battlerUnaware
+#define DELEGATE_CHOOSE_DEFENSIVE_STAT battler, target, move, ignoreDefensiveStatBoosts, battlerUnaware
 #define ON_STAB int moveType
+#define DELEGATE_STAB moveType
 #define ON_PRIORITY int battler, int target, int move
+#define DELEGATE_PRIORITY battler, target, move
 #define ON_MOVE_TYPE int ability, int move, int moveType, u8 *ateBoost
+#define DELEGATE_MOVE_TYPE ability, move, moveType, ateBoost
 #define ON_EXIT int ability, int battler
+#define DELEGATE_EXIT ability, battler
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -1273,7 +1298,7 @@ static const Ability DrySkin = {
             return TRUE;
         }
 
-        return RainDish.onEndTurn(ability, battler);
+        return RainDish.onEndTurn(DELEGATE_END_TURN);
     },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
@@ -3395,7 +3420,7 @@ static const Ability AsOneIceRider = {
     .description = $("Unnerve + Chilling Neigh."),
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE); },
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        CHECK(ChillingNeigh.onBattlerFaints(ability, battler, attacker, fainted, move, moveType))
+        CHECK(ChillingNeigh.onBattlerFaints(DELEGATE_BATTLER_FAINTS))
         gBattleScripting.abilityPopupOverwrite = ABILITY_CHILLING_NEIGH;
         BattleScriptCall(BattleScript_AbilityPopUpStack);
         return NO_ANNOUNCE;
@@ -3410,7 +3435,7 @@ static const Ability AsOneShadowRider = {
     .description = $("Unnerve + Grim Neigh."),
     .onEntry = AsOneIceRider.onEntry,
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        CHECK(GrimNeigh.onBattlerFaints(ability, battler, attacker, fainted, move, moveType))
+        CHECK(GrimNeigh.onBattlerFaints(DELEGATE_BATTLER_FAINTS))
         gBattleScripting.abilityPopupOverwrite = ABILITY_GRIM_NEIGH;
         BattleScriptCall(BattleScript_AbilityPopUpStack);
         return NO_ANNOUNCE;
@@ -4540,8 +4565,8 @@ static const Ability BigLeaves = {
     .onEndTurn = Harvest.onEndTurn,
     .onStat =
         +[](ON_STAT) {
-            SolarPower.onStat(ability, battler, statId, stat, flags);
-            Chlorophyll.onStat(ability, battler, statId, stat, flags);
+            SolarPower.onStat(DELEGATE_STAT);
+            Chlorophyll.onStat(DELEGATE_STAT);
         },
     .breakable = TRUE,
     .chloroplast = TRUE,
@@ -5783,8 +5808,8 @@ static const Ability CombatSpecialist = {
                      "kicking moves by 1.3x."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            IronFist.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-            Striker.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            IronFist.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Striker.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
 };
 
@@ -5844,9 +5869,7 @@ static const Ability SuperHotGoo = {
     .description = $("Inflicts burn and lowers\n"
                      "Speed on contact."),
     .onAttacker = FlameBody.onAttacker,
-    .onDefender = +[](ON_DEFENDER) -> int {
-        return Gooey.onDefender(ability, battler, attacker, move, moveType) | FlameBody.onDefender(ability, battler, attacker, move, moveType);
-    },
+    .onDefender = +[](ON_DEFENDER) -> int { return Gooey.onDefender(DELEGATE_DEFENDER) | FlameBody.onDefender(DELEGATE_DEFENDER); },
 };
 
 static const Ability Nika = {
@@ -6009,7 +6032,7 @@ static const Ability SandGuard = {
                      "special damage by 1/2 in sand."),
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY));
-        return QueenlyMajesty.onImmune(battler, attacker, move, moveType, immunityScript);
+        return QueenlyMajesty.onImmune(DELEGATE_IMMUNE);
     },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
@@ -6021,7 +6044,7 @@ static const Ability SandGuard = {
 static const Ability NaturalRecovery = {
     .name = $("Natural Recovery"),
     .description = $("Natural Cure + Regenerator."),
-    .onExit = +[](ON_EXIT) -> int { return NaturalCure.onExit(ability, battler) | Regenerator.onExit(ability, battler); },
+    .onExit = +[](ON_EXIT) -> int { return NaturalCure.onExit(DELEGATE_EXIT) | Regenerator.onExit(DELEGATE_EXIT); },
 };
 
 static const Ability WindRider = {
@@ -6126,7 +6149,7 @@ static const Ability PeacefulSlumber = {
     .name = $("Peaceful Slumber"),
     .description = $("Sweet Dreams + Self Sufficient."),
     .onEndTurn = +[](ON_END_TURN) -> int {
-        if (!SweetDreams.onEndTurn(ability, battler)) return SelfSufficient.onEndTurn(ability, battler);
+        if (!SweetDreams.onEndTurn(DELEGATE_END_TURN)) return SelfSufficient.onEndTurn(DELEGATE_END_TURN);
         gBattleMoveDamage -= gBattleMons[battler].maxHP / 16;
         return TRUE;
     },
@@ -6178,9 +6201,8 @@ static const Ability CryoProficiency = {
     .description = $("Triggers hail when hit. 30%\n"
                      "chance to frostbite on contact."),
     .onAttacker = FreezingPoint.onAttacker,
-    .onDefender = +[](ON_DEFENDER) -> int {
-        return FreezingPoint.onDefender(ability, battler, attacker, move, moveType) | CryoProficiencyHail(ability, battler, attacker, move, moveType);
-    },
+    .onDefender =
+        +[](ON_DEFENDER) -> int { return FreezingPoint.onDefender(DELEGATE_DEFENDER) | CryoProficiencyHail(ability, battler, attacker, move, moveType); },
 };
 
 static const Ability ArcaneForce = {
@@ -6363,8 +6385,8 @@ static const Ability PonyPower = {
     .description = $("Keen Edge + Mystic Blades."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            KeenEdge.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-            MysticBlades.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            KeenEdge.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            MysticBlades.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
     .onSwapSplit = MysticBlades.onSwapSplit,
 };
@@ -6481,8 +6503,8 @@ static const Ability BassBoosted = {
     .description = $("Amplifier + Punk Rock."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            Amplifier.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-            PunkRock.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            Amplifier.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            PunkRock.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
     .onDefensiveMultiplier = PunkRock.onDefensiveMultiplier,
     .breakable = TRUE,
@@ -6544,8 +6566,7 @@ static const Ability CrownedKing = {
                      "Chilling Neigh."),
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); },
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        return AsOneShadowRider.onBattlerFaints(ability, battler, attacker, fainted, move, moveType) |
-               AsOneIceRider.onBattlerFaints(ability, battler, attacker, fainted, move, moveType);
+        return AsOneShadowRider.onBattlerFaints(DELEGATE_BATTLER_FAINTS) | AsOneIceRider.onBattlerFaints(DELEGATE_BATTLER_FAINTS);
     },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
@@ -7280,7 +7301,7 @@ static const Ability SunBasking = {
                      "physical damage by 1/2 in sun."),
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY));
-        return QueenlyMajesty.onImmune(battler, attacker, move, moveType, immunityScript);
+        return QueenlyMajesty.onImmune(DELEGATE_IMMUNE);
     },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
@@ -7512,8 +7533,8 @@ static const Ability Aerialist = {
     .description = $("Levitate + Flock."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            Levitate.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-            Flock.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            Levitate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Flock.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
     .breakable = TRUE,
 };
@@ -7596,9 +7617,7 @@ static const Ability AppleEnlightenment = {
 static const Ability BalloonBomber = {
     .name = $("Balloon Bomb"),
     .description = $("Aftermath + Inflatable"),
-    .onDefender = +[](ON_DEFENDER) -> int {
-        return Aftermath.onDefender(ability, battler, attacker, move, moveType) || Inflatable.onDefender(ability, battler, attacker, move, moveType);
-    },
+    .onDefender = +[](ON_DEFENDER) -> int { return Aftermath.onDefender(DELEGATE_DEFENDER) || Inflatable.onDefender(DELEGATE_DEFENDER); },
 };
 
 static const Ability FlamingMaw = {
@@ -7858,9 +7877,9 @@ static const Ability Bloodlust = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         int result = 0;
         if (battler == attacker) {
-            result |= SoulEater.onBattlerFaints(ability, battler, attacker, fainted, move, moveType);
+            result |= SoulEater.onBattlerFaints(DELEGATE_BATTLER_FAINTS);
         }
-        return result | BloodBath.onBattlerFaints(ability, battler, attacker, fainted, move, moveType);
+        return result | BloodBath.onBattlerFaints(DELEGATE_BATTLER_FAINTS);
     },
     .onBattlerFaintsFor = APPLY_ON_ANY,
     .breakable = TRUE,
@@ -8174,7 +8193,7 @@ static const Ability FlameBubble = {
 static const Ability ElementalVortex = {
     .name = $("Elemental Vortex"),
     .description = $("Flash Fire + Water Absorb."),
-    .onAbsorb = +[](ON_ABSORB) -> int { return WaterAbsorb.onAbsorb(battler, move, moveType, statId) | FlashFire.onAbsorb(battler, move, moveType, statId); },
+    .onAbsorb = +[](ON_ABSORB) -> int { return WaterAbsorb.onAbsorb(DELEGATE_ABSORB) || FlashFire.onAbsorb(DELEGATE_ABSORB); },
     .onOffensiveMultiplier = FlashFire.onOffensiveMultiplier,
 };
 
@@ -8368,8 +8387,8 @@ static const Ability AtomicPunch = {
     .description = $("Iron Fist + Steelworker."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            IronFist.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-            Steelworker.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            IronFist.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Steelworker.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
 };
 
@@ -8405,7 +8424,7 @@ static const Ability Hospitality = {
 static const Ability ButterUp = {
     .name = $("Butter Up"),
     .description = $("Hospitality + Soothing Aroma"),
-    .onEntry = +[](ON_ENTRY) -> int { return Hospitality.onEntry(ability, battler) | SoothingAroma.onEntry(ability, battler); },
+    .onEntry = +[](ON_ENTRY) -> int { return Hospitality.onEntry(DELEGATE_ENTRY) | SoothingAroma.onEntry(DELEGATE_ENTRY); },
 };
 
 static const Ability VitalityStrike = {
@@ -8430,8 +8449,8 @@ static const Ability HugeWings = {
     .description = $("Giant Wings + Levitate."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            GiantWings.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-            Levitate.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            GiantWings.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Levitate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
     .breakable = TRUE,
 };
@@ -8509,7 +8528,7 @@ static const Ability Patchwork = {
                      "when its Disguise breaks."),
     .onEntry = Disguise.onEntry,
     .onDisguise = +[](ON_DISGUISE) -> int {
-        int species = Disguise.onDisguise(battler, testOnly);
+        int species = Disguise.onDisguise(DELEGATE_DISGUISE);
         if (species && !testOnly) {
             SetOncePerTurnAbilityCounter(battler, ABILITY_PATCHWORK, gBattlerAttacker);
         }
@@ -8720,7 +8739,7 @@ static const Ability ShockingMaw = {
 static const Ability GleamEyes = {
     .name = $("Gleam Eyes"),
     .description = $("Frisk + Scare."),
-    .onEntry = +[](ON_ENTRY) -> int { return UseIntimidateClone(battler, ability) | Frisk.onEntry(battler, ability); },
+    .onEntry = +[](ON_ENTRY) -> int { return UseIntimidateClone(battler, ability) | Frisk.onEntry(DELEGATE_ENTRY); },
 };
 
 static const Ability RousedFangs = {
@@ -8901,8 +8920,8 @@ static const Ability SludgyMix = {
     .description = $("Intoxicate + Punk Rock."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            Intoxicate.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
-            PunkRock.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+            Intoxicate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            PunkRock.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
     .onMoveType = Intoxicate.onMoveType,
 };
@@ -9226,9 +9245,10 @@ static const Ability StrikerPixilate = {
                      "moves by 1.3x + Pixilate."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) MUL(1.3);
+            Striker.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Pixilate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
-    ATE_ABILITY(TYPE_FAIRY),
+    .onMoveType = Pixilate.onMoveType,
 };
 
 const Ability gAbilities[] = {

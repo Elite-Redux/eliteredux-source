@@ -1,0 +1,159 @@
+syntax = "proto3";
+
+package er;
+
+import "MoveEnum.proto";
+import "SpeciesEnum.proto";
+import "AbilityEnum.proto";
+import "Types.proto";
+
+option java_package = "er.proto";
+option java_multiple_files = true;
+
+message SpeciesList {
+  repeated Species species = 1;
+}
+
+message Species {
+  message SpeciesDexInfo {
+    string name = 1;
+    int32 national_dex_num = 2;
+    int32 hoenn_dex_num = 3;
+    EggGroup egg_group = 4;
+    EggGroup egg_group_2 = 5;
+  }
+
+  enum Gender {
+    GENDER_NONE = 0;
+    MALE = 1;
+    FEMALE = 2;
+  }
+
+  message Evolution {
+    SpeciesEnum to = 1;
+    int32 level = 2;
+    Gender gender = 3;
+  }
+
+  message MegaEvolution {
+    enum MegaType {
+      MEGA_UNSPECIFIED = 0;
+      MEGA_X = 1;
+      MEGA_Y = 2;
+      MEGA_Z = 3;
+      MEGA_A = 4;
+      MEGA_B = 5;
+      MEGA_C = 6;
+    }
+
+    SpeciesEnum from = 1;
+    oneof evo_using {
+      string item = 2;
+      MoveEnum move = 3;
+    }
+    MegaType type = 4;
+  }
+
+  message PrimalEvolution {
+    enum PrimalType {
+      PRIMAL = 0;
+      ORIGIN = 1;
+      CROWNED = 2;
+    }
+
+    SpeciesEnum from = 1;
+    string item = 2;
+    PrimalType type = 3;
+  }
+
+  message Learnset {
+    message LevelUpMove {
+      int32 level = 1;
+      repeated MoveEnum move = 2;
+    }
+
+    enum UniversalTutors {
+      ALL_TUTORS = 0;
+      NO_ATTACKS = 1;
+    }
+
+    repeated LevelUpMove level = 1;
+    UniversalTutors universal_tutors = 3;
+    repeated MoveEnum tutor = 2;
+  }
+
+  enum AdditionalShiny {
+    ADDITIONAL_SHINY_NONE = 0;
+    SHINY_RARE = 1;
+    SHINY_LEGENDARY = 2;
+    SHINY_FEMALE = 3;
+  }
+
+  SpeciesEnum id = 1;
+  oneof base_species_info {
+    SpeciesEnum form_of = 2;
+    SpeciesDexInfo dex = 3;
+  }
+  string long_name = 4;
+  Type type = 5;
+  Type type2 = 6;
+  int32 hp = 7;
+  int32 atk = 8;
+  int32 def = 9;
+  int32 spatk = 10;
+  int32 spdef = 11;
+  int32 spe = 12;
+  repeated AbilityEnum ability = 13;
+  repeated AbilityEnum innate = 14;
+  oneof gender {
+    float percent_female = 15;
+    bool genderless = 16;
+  }
+  int32 tier = 17;
+  int32 heads = 18;
+  optional BodyColor body_color = 20;
+  bool no_flip = 21;
+  int32 bp_cost = 22;
+  // missing
+  repeated Evolution evo = 25;
+  repeated MegaEvolution mega = 26;
+  repeated PrimalEvolution primal = 27;
+  SpeciesEnum form_shift_of = 28;
+  Gender form_shift_gender = 29;
+  oneof learnset_or_ref {
+    Learnset learnset = 30;
+    SpeciesEnum uses_learnset = 31;
+  }
+}
+
+enum EggGroup {
+  EGG_GROUP_NONE = 0;
+  MONSTER = 1;
+  WATER_1 = 2;
+  BUG = 3;
+  FLYING = 4;
+  FIELD = 5;
+  FAIRY = 6;
+  GRASS = 7;
+  HUMAN_LIKE = 8;
+  WATER_3 = 9;
+  MINERAL = 10;
+  AMORPHOUS = 11;
+  WATER_2 = 12;
+  DITTO = 13;
+  DRAGON = 14;
+  UNDISCOVERED = 15;
+}
+
+enum BodyColor {
+  RED = 0;
+  BLUE = 1;
+  YELLOW = 2;
+  GREEN = 3;
+  BLACK = 4;
+  BROWN = 5;
+  PURPLE = 6;
+  GRAY = 7;
+  WHITE = 8;
+  PINK = 9;
+}

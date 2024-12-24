@@ -198,7 +198,7 @@ struct RawStatsLevel {
     u8 extraSpeedLevel;
 };
 
-struct BaseStats {
+typedef struct BaseStats {
     /* 0x00 */ u8 baseHP;
     /* 0x01 */ u8 baseAttack;
     /* 0x02 */ u8 baseDefense;
@@ -232,7 +232,7 @@ struct BaseStats {
     /* 0x15 */ u16 shopPrice;
     u8 tier;
     u8 numShinies:2;  // 1 if it has a rare, 2 if it has legendary, 3 if it has both
-};
+} BaseStats;
 
 typedef enum {
     USE_BASE_SPLIT,
@@ -291,11 +291,11 @@ struct TrainerMonSpread {
     u8 nature;
 };
 
-struct Evolution {
+typedef struct Evolution {
     u16 method;
     u16 param;
     u16 targetSpecies;
-};
+} Evolution;
 
 struct FormChange {
     u16 method;

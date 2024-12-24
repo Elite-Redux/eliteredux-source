@@ -5655,7 +5655,7 @@ static const struct TrainerMonItemCustomMoves sParty_Brawly1Insane[] = {
     .zeroSpeedIvs = TRUE,
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_QUIET,
-    .moves = MOVE_PSYCHIC, MOVE_THUNDERBOLT, MOVE_TRI_ATTACK, MOVE_HIDDEN_POWER
+    .moves = MOVE_PSYCHIC, MOVE_THUNDERBOLT, MOVE_TRI_ATTACK, MOVE_MYSTICAL_FIRE
     }
 };
 
@@ -34255,12 +34255,12 @@ static const struct TrainerMonItemCustomMoves sParty_PhoebeInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_CALYREX_SHADOW_RIDER,
-    .heldItem = ITEM_FOCUS_SASH,
-    .ability = 0,
-    .evs = {0, 0, 0, 252, 4, 252},
-    .nature = NATURE_TIMID,
-    .moves = MOVE_ASTRAL_BARRAGE, MOVE_PSYCHIC, MOVE_AURA_SPHERE, MOVE_OMINOUS_WIND
+    .species = SPECIES_PHEROMOSA,
+    .heldItem = ITEM_HEAVY_DUTY_BOOTS,
+    .ability = 2,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_TRIPLE_AXEL, MOVE_TRIPLE_KICK, MOVE_RIDER_KICK, MOVE_AXE_KICK
     },
     {
     .lvl = 0,
@@ -34275,7 +34275,7 @@ static const struct TrainerMonItemCustomMoves sParty_PhoebeInsane[] = {
     .lvl = 0,
     .species = SPECIES_HOUNDOOM_REDUX,
     .heldItem = ITEM_HOUNDOOMINITE_R,
-    .ability = 0,
+    .ability = 1,
     .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,
     .moves = MOVE_RAGING_SOULS, MOVE_AURA_SPHERE, MOVE_DESTINY_BOND, MOVE_OVERHEAT
