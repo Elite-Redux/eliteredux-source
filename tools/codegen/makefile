@@ -29,14 +29,11 @@ codegenkt.jar: protoc protobuf-java.jar protobuf-kotlin.jar $(KT_SRCS)
 codegen.jar: codegenkt.jar protobuf-java.jar
 	rm -rf javabuild
 	find src/ -name '*.java' | xargs  javac -cp "protobuf-java.jar:protobufkt.jar" -d javabuild && exit
-	unzip -uoq protobuf-java.jar -d javabuild && exit
-	unzip -uoq protobuf-kotlin.jar -d javabuild && exit
-	unzip -uoq codegenkt.jar -d javabuild && exit
 	jar cf codegen.jar -C javabuild . && exit
 
 define GENERATE
-../../$(strip $1): codegen.jar $$(TEXTPROTO_SRCS)
-	java -cp codegen.jar er.FileGenerator $2 $(realpath ../..)/$(strip $1)
+../../$(strip $1): codegen.jar $$(TEXTPROTO_SRCS) codegenkt.jar protobuf-java.jar protobuf-kotlin.jar
+	java -cp codegen.jar:codegenkt.jar:protobuf-java.jar:protobuf-kotlin.jar er.FileGenerator $2 $(realpath ../..)/$(strip $1)
 ALL_GENERATED += ../../$(strip $1)
 endef
 
@@ -64,3 +61,4 @@ clean: removegenerated
 	rm -f protobuf-java.jar
 	rm -f protos
 	rm -f generated
+	rm -rf ../../generated
