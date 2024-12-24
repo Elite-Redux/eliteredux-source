@@ -63,3 +63,13 @@ clean: removegenerated
 	rm -f protos
 	rm -f generated
 	rm -rf ../../generated
+
+define ENCODE
+echo "../../proto/$1.textproto";
+./protoc ../../proto/$1.proto --encode=er.$1 --proto_path="../../proto/" --experimental_allow_proto3_optional < ../../proto/$1.textproto > bin/$1.binpb;
+endef
+
+binary: protoc
+	mkdir -p bin/
+	rm -rf bin/*.binpb
+	$(foreach textproto,$(patsubst ../../proto/%.textproto,%,$(TEXTPROTO_SRCS)),$(call ENCODE,$(textproto)))

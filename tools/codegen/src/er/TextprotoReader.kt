@@ -7,7 +7,7 @@ import java.io.File
 
 object TextprotoReader {
     val SPECIES_LIST by lazy {
-        TextFormat.parse(File("../../proto/Species.textproto").readText(), SpeciesList::class.java).speciesList
+        TextFormat.parse(File("../../proto/SpeciesList.textproto").readText(), SpeciesList::class.java).speciesList
     }
 
     val REAL_SPECIES_COUNT by lazy {

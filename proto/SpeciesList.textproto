@@ -1,4 +1,4 @@
-# proto-file: Species.proto
+# proto-file: SpeciesList.proto
 # proto-message: er.SpeciesList
 
 species {
