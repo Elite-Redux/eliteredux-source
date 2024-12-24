@@ -1452,8 +1452,8 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_THUNDURUS_THERIAN] = sThundurusLevelUpLearnset,
     [SPECIES_LANDORUS_THERIAN] = sLandorusLevelUpLearnset,
     // Kyurem
-    [SPECIES_KYUREM_WHITE] = sKyuremWhiteLevelUpLearnset,
-    [SPECIES_KYUREM_BLACK] = sKyuremBlackLevelUpLearnset,
+    [SPECIES_KYUREM_WHITE] = sKyuremLevelUpLearnset,
+    [SPECIES_KYUREM_BLACK] = sKyuremLevelUpLearnset,
     // Keldeo
     [SPECIES_KELDEO_RESOLUTE] = sKeldeoLevelUpLearnset,
     // Meloetta
