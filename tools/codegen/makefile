@@ -46,6 +46,7 @@ $(eval $(call GENERATE, generated/include/constants/species.h,species))
 $(eval $(call GENERATE, generated/src/data/pokemon/base_stats.h,basestats))
 $(eval $(call GENERATE, generated/src/data/pokemon/evolution.h,evos))
 $(eval $(call GENERATE, generated/src/data/text/species_names.h,speciesnames))
+$(eval $(call GENERATE, generated/src/data/pokemon/tutor_learnsets.h,tutorlearnsets))
 
 generated: $(ALL_GENERATED)
 
