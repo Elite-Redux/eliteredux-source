@@ -6,10 +6,8 @@ TEXTPROTO_SRCS := $(wildcard $(PROTOS)/*.textproto $(PROTOS)/*/*.textproto $(PRO
 
 all: protodep codegen.jar generated
 
-protoc.zip:
-	wget -O protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-linux-x86_64.zip -q && exit
-
-protoc: protoc.zip
+protoc:
+	if [ ! -f protoc.zip ]; then wget -O protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-linux-x86_64.zip -q && exit; fi
 	unzip -p protoc.zip bin/protoc > protoc && exit
 
 protobuf-java.jar:
@@ -27,6 +25,7 @@ endef
 $(foreach proto,$(PROTO_SRCS),$(eval $(call BUILD_PROTO,$(proto))))
 
 protodep: $(addsuffix .protodep.txt,$(addprefix protodep/,$(PROTO_SRCS)))
+protos: protodep
 
 codegenkt.jar: protoc protobuf-java.jar protobuf-kotlin.jar $(KT_SRCS)
 	find src/ -name '*.kt' -o -name '*.java' | xargs  kotlinc -cp "protobuf-java.jar:protobuf-kotlin.jar" -include-runtime -d codegenkt.jar && exit
