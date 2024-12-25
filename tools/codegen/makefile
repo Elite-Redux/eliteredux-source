@@ -1,4 +1,5 @@
-KT_SRCS := $(wildcard src/*.kt src/*/*.kt src/*/*/*.kt)
+KT_SRCS := $(wildcard src/er/*.kt src/er/*/*.kt src/er/*/*/*.kt)
+PREPROC_SRCS := $(wildcard src/preproc/*.kt src/preproc/*/*.kt src/preproc/*/*/*.kt)
 JAVA_SRCS := $(wildcard src/*.java src/*/*.java src/*/*/*.java)
 PROTOS := ../../proto
 PROTO_SRCS := $(subst ../../proto/,,$(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.proto))
@@ -16,27 +17,36 @@ protobuf-java.jar:
 protobuf-kotlin.jar:
 	wget -O protobuf-kotlin.jar https://repo1.maven.org/maven2/com/google/protobuf/protobuf-kotlin/4.29.2/protobuf-kotlin-4.29.2.jar -q && exit
 
+preproc.jar: $(PREPROC_SRCS) protobuf-java.jar
+	find src/preproc -name '*.kt' | xargs  kotlinc -cp protobuf-java.jar  -include-runtime -d preproc.jar && exit 
+
 define BUILD_PROTO
 DEPS := $(shell grep -oPs '\S+\.proto(?=\\)' protodep/$1.protodep.txt)
-protodep/$1.protodep.txt: protoc ../../proto/$1 $$(DEPS)
+protodep/$1.protodep.txt: protoc ../../proto/$1 $$(DEPS) preproc.jar protobuf-java.jar
+	@perl -pi.bak -e 'BEGIN{$$$$counter=1000000;} s/\@NEXT/$$$$counter++/ge' ../../proto/SpeciesEnum.proto
+	@mkdir -p out/depsets
+	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --descriptor_set_out=out/depsets/$1 --experimental_allow_proto3_optional
+	java -cp preproc.jar:protobuf-java.jar preproc.ProtoProcessor ../../proto/$1 out/depsets/$1 && exit
 	@mkdir -p protodep
 	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --kotlin_out=src --dependency_out=protodep/$1.protodep.txt --experimental_allow_proto3_optional
 endef
 $(foreach proto,$(PROTO_SRCS),$(eval $(call BUILD_PROTO,$(proto))))
 
 protodep: $(addsuffix .protodep.txt,$(addprefix protodep/,$(PROTO_SRCS)))
+
 protos: protodep
 
 codegen.jar: protobuf-java.jar $(JAVA_SRCS) protodep
 	rm -rf javabuild
-	find src/ -name '*.java' | xargs  javac -cp "protobuf-java.jar:protobufkt.jar" -d javabuild && exit
+	find src/er -name '*.java' | xargs  javac -cp "protobuf-java.jar:protobufkt.jar" -d javabuild && exit
 	jar cf codegen.jar -C javabuild . && exit
 
 codegenkt.jar: protoc protobuf-java.jar codegen.jar protobuf-kotlin.jar $(KT_SRCS)
-	find src/ -name '*.kt' | xargs  kotlinc -cp "protobuf-java.jar:protobuf-kotlin.jar:codegen.jar" -include-runtime -d codegenkt.jar && exit
+	find src/er -name '*.kt' | xargs  kotlinc -cp "protobuf-java.jar:protobuf-kotlin.jar:codegen.jar" -include-runtime -d codegenkt.jar && exit
 
 define GENERATE
 ../../$(strip $1): codegen.jar $$(TEXTPROTO_SRCS) codegenkt.jar protobuf-java.jar protobuf-kotlin.jar
+	java -cp preproc.jar preproc.FixProtos $(realpath ../../$(strip $1)) && exit
 	java -cp codegen.jar:codegenkt.jar:protobuf-java.jar:protobuf-kotlin.jar er.FileGenerator $2 $(realpath ../..)/$(strip $1)
 ALL_GENERATED += ../../$(strip $1)
 endef
