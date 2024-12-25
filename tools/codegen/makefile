@@ -27,13 +27,13 @@ $(foreach proto,$(PROTO_SRCS),$(eval $(call BUILD_PROTO,$(proto))))
 protodep: $(addsuffix .protodep.txt,$(addprefix protodep/,$(PROTO_SRCS)))
 protos: protodep
 
-codegenkt.jar: protoc protobuf-java.jar protobuf-kotlin.jar $(KT_SRCS)
-	find src/ -name '*.kt' -o -name '*.java' | xargs  kotlinc -cp "protobuf-java.jar:protobuf-kotlin.jar" -include-runtime -d codegenkt.jar && exit
-
-codegen.jar: codegenkt.jar protobuf-java.jar
+codegen.jar: protobuf-java.jar $(JAVA_SRCS) protodep
 	rm -rf javabuild
 	find src/ -name '*.java' | xargs  javac -cp "protobuf-java.jar:protobufkt.jar" -d javabuild && exit
 	jar cf codegen.jar -C javabuild . && exit
+
+codegenkt.jar: protoc protobuf-java.jar codegen.jar protobuf-kotlin.jar $(KT_SRCS)
+	find src/ -name '*.kt' | xargs  kotlinc -cp "protobuf-java.jar:protobuf-kotlin.jar:codegen.jar" -include-runtime -d codegenkt.jar && exit
 
 define GENERATE
 ../../$(strip $1): codegen.jar $$(TEXTPROTO_SRCS) codegenkt.jar protobuf-java.jar protobuf-kotlin.jar
