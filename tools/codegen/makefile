@@ -1,27 +1,32 @@
 KT_SRCS := $(wildcard src/*.kt src/*/*.kt src/*/*/*.kt)
+JAVA_SRCS := $(wildcard src/*.java src/*/*.java src/*/*/*.java)
 PROTOS := ../../proto
-PROTO_SRCS := $(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.proto)
+PROTO_SRCS := $(subst ../../proto/,,$(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.proto))
 TEXTPROTO_SRCS := $(wildcard $(PROTOS)/*.textproto $(PROTOS)/*/*.textproto $(PROTOS)/*/*/*.textproto)
 
-all: protos codegen.jar generated
+all: protodep codegen.jar generated
 
 protoc.zip:
-	wget -O protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-linux-x86_64.zip && exit
+	wget -O protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-linux-x86_64.zip -q && exit
 
 protoc: protoc.zip
 	unzip -p protoc.zip bin/protoc > protoc && exit
 
 protobuf-java.jar:
-	wget -O protobuf-java.jar https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/4.29.2/protobuf-java-4.29.2.jar && exit
+	wget -O protobuf-java.jar https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/4.29.2/protobuf-java-4.29.2.jar -q && exit
 
 protobuf-kotlin.jar:
-	wget -O protobuf-kotlin.jar https://repo1.maven.org/maven2/com/google/protobuf/protobuf-kotlin/4.29.2/protobuf-kotlin-4.29.2.jar && exit
+	wget -O protobuf-kotlin.jar https://repo1.maven.org/maven2/com/google/protobuf/protobuf-kotlin/4.29.2/protobuf-kotlin-4.29.2.jar -q && exit
 
-timestamp/protos: protoc $(PROTO_SRCS)
-	find ../../proto -name '*.proto' | xargs -I % ./protoc % --proto_path=./../../proto --java_out=src --kotlin_out=src --experimental_allow_proto3_optional && exit
-	touch protos
+define BUILD_PROTO
+DEPS := $(shell grep -oPs '\S+\.proto(?=\\)' protodep/$1.protodep.txt)
+protodep/$1.protodep.txt: protoc ../../proto/$1 $$(DEPS)
+	@mkdir -p protodep
+	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --kotlin_out=src --dependency_out=protodep/$1.protodep.txt --experimental_allow_proto3_optional
+endef
+$(foreach proto,$(PROTO_SRCS),$(eval $(call BUILD_PROTO,$(proto))))
 
-protos: timestamp/protos
+protodep: $(addsuffix .protodep.txt,$(addprefix protodep/,$(PROTO_SRCS)))
 
 codegenkt.jar: protoc protobuf-java.jar protobuf-kotlin.jar $(KT_SRCS)
 	find src/ -name '*.kt' -o -name '*.java' | xargs  kotlinc -cp "protobuf-java.jar:protobuf-kotlin.jar" -include-runtime -d codegenkt.jar && exit
@@ -37,30 +42,29 @@ define GENERATE
 ALL_GENERATED += ../../$(strip $1)
 endef
 
-$(eval $(call GENERATE, generated/include/constants/abilities.h,abilities))
-$(eval $(call GENERATE, generated/include/constants/moves.h,moves))
-$(eval $(call GENERATE, generated/include/constants/species.h,species))
-$(eval $(call GENERATE, generated/src/data/pokemon/base_stats.h,basestats))
-$(eval $(call GENERATE, generated/src/data/pokemon/evolution.h,evos))
-$(eval $(call GENERATE, generated/src/data/text/species_names.h,speciesnames))
-$(eval $(call GENERATE, generated/src/data/pokemon/tutor_learnsets.h,tutorlearnsets))
-$(eval $(call GENERATE, generated/src/data/pokemon/level_up_learnset_pointers.h,leveluplearnsets))
+$(eval $(call GENERATE, generated/include/constants/abilities.h, abilities))
+$(eval $(call GENERATE, generated/include/constants/moves.h, moves))
+$(eval $(call GENERATE, generated/include/constants/species.h, species))
+$(eval $(call GENERATE, generated/src/data/pokemon/base_stats.h, basestats))
+$(eval $(call GENERATE, generated/src/data/pokemon/evolution.h, evos))
+$(eval $(call GENERATE, generated/src/data/text/species_names.h, speciesnames))
+$(eval $(call GENERATE, generated/src/data/pokemon/tutor_learnsets.h, tutorlearnsets))
+$(eval $(call GENERATE, generated/src/data/pokemon/level_up_learnset_pointers.h, leveluplearnsets))
+$(eval $(call GENERATE, generated/src/data/pokemon/form_species_table_pointers.h, forms))
 
 generated: $(ALL_GENERATED)
 
 removegenerated:
-	find ../../generated -name "*.h" -type f -delete
+	rm -rf ../../generated
 
 regenerate: removegenerated generated
 
 clean: removegenerated
 	rm -rf javabuild
+	rm -rf protodep
 	rm -f protoc
 	rm -f protoc.zip
-	rm -f codegen.jar
-	rm -f codegenkt.jar
-	rm -f protobuf-java.jar
-	rm -f protos
+	rm -f *.jar
 	rm -f generated
 	rm -rf ../../generated
 

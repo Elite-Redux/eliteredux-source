@@ -5,6 +5,11 @@ import er.defines.AbilitiesEnumGenerator
 import er.defines.MovesEnumGenerator
 import er.defines.SpeciesEnumGenerator
 import java.io.File
+import java.io.OutputStreamWriter
+
+interface Generator {
+    fun generate(writer: OutputStreamWriter)
+}
 
 object FileGenerator {
     val HEADER = """
@@ -14,24 +19,28 @@ object FileGenerator {
 
     const val IND = "    "
 
+    val GENERATORS = mapOf<String, Generator>(
+        "abilities" to AbilitiesEnumGenerator,
+        "moves" to MovesEnumGenerator,
+        "species" to SpeciesEnumGenerator,
+        "basestats" to BaseStatsGenerator,
+        "evos" to EvolutionsGenerator,
+        "speciesnames" to SpeciesNameGenerator,
+        "tutorlearnsets" to TutorLearnsetGenerator,
+        "leveluplearnsets" to LevelUpLearnsetGenerator,
+        "forms" to FormSpeciesTableGenerator,
+    )
+
     @JvmStatic
     fun main(args: Array<String>) {
-        val (type, file) = args
+        val (type, filepath) = args
         try {
-            File(file).parentFile.mkdirs()
-            when (type) {
-                "abilities" -> AbilitiesEnumGenerator.generate(file)
-                "moves" -> MovesEnumGenerator.generate(file)
-                "species" -> SpeciesEnumGenerator.generate(file)
-                "basestats" -> BaseStatsGenerator.generate(file)
-                "evos" -> EvolutionsGenerator.generate(file)
-                "speciesnames" -> SpeciesNameGenerator.generate(file)
-                "tutorlearnsets" -> TutorLearnsetGenerator.generate(file)
-                "leveluplearnsets" -> LevelUpLearnsetGenerator.generate(file)
-                else -> error("Invalid file type $type")
-            }
+            val file = File(filepath)
+            file.parentFile.mkdirs()
+            val generator = GENERATORS[type] ?: error("No generator $type for file $filepath")
+            file.writer().use { generator.generate(it) }
         } catch (e: Exception) {
-            throw Exception("Failed processing $type generating file $file", e)
+            throw Exception("Failed processing $type generating file $filepath", e)
         }
     }
 }

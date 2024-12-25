@@ -5,8 +5,10 @@ protoc
 src/er/proto
 *.zip
 javabuild/
+ktbuild/
 protos
 generated
+protodep/
 
 ### IntelliJ IDEA ###
 out/

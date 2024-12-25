@@ -2,7 +2,7 @@ package er.data
 
 import er.FileGenerator.HEADER
 import er.FileGenerator.IND
-import er.TextprotoReader.REAL_SPECIES_COUNT
+import er.Generator
 import er.TextprotoReader.SPECIES_LIST
 import er.TextprotoReader.SPECIES_MAP
 import er.proto.MoveEnum
@@ -10,9 +10,9 @@ import er.proto.Species
 import er.proto.Species.Learnset
 import er.proto.Species.Learnset.UniversalTutors
 import er.proto.SpeciesEnum
-import java.io.FileWriter
+import java.io.OutputStreamWriter
 
-object TutorLearnsetGenerator {
+object TutorLearnsetGenerator : Generator {
     fun findLearnsetForSpecies(species: Species) =
         when {
             species.hasLearnset() -> species.learnset
@@ -43,31 +43,29 @@ object TutorLearnsetGenerator {
                 .orEmpty() + listOfNotNull(MoveEnum.MOVE_ATTRACT.takeIf { !species.genderless }) + learnset.tutorList
 
         return """
-            |$IND[${species.id}] = TUTOR_LEARNSET
-            |$IND$IND${tutors.joinToString("\n$IND$IND") { "TUTOR($it)" }}
-            |$IND${IND}TUTOR_LEARNSET_END
-            |
-        """.trimMargin()
+        |$IND[${species.id}] = TUTOR_LEARNSET
+        |$IND$IND${tutors.joinToString("\n$IND$IND") { "TUTOR($it)" }}
+        |$IND${IND}TUTOR_LEARNSET_END
+        |
+        |""".trimMargin()
     }
 
-    fun generate(file: String) {
-        FileWriter(file).use { writer ->
-            writer.appendLine(
-                """
-                |$HEADER
-                |#define TUTOR_LEARNSET (TutorUnion[]) {{ .fields = {
-                |#define TUTOR(tutor) .TUTOR_BIT_FIELD(tutor) = TRUE,
-                |#define TUTOR_LEARNSET_END }}},
-                |
-                |const TutorUnion *const gTutorLearnsets[$REAL_SPECIES_COUNT] = {
-                |${
-                    SPECIES_LIST.filter { it.id != SpeciesEnum.SPECIES_EGG }.joinToString("\n") {
-                        learnsetString(it, findLearnsetForSpecies(it))
-                    }
+    override fun generate(writer: OutputStreamWriter) {
+        writer.appendLine(
+            """
+            |$HEADER
+            |#define TUTOR_LEARNSET (TutorUnion[]) {{ .fields = {
+            |#define TUTOR(tutor) .TUTOR_BIT_FIELD(tutor) = TRUE,
+            |#define TUTOR_LEARNSET_END }}},
+            |
+            |const TutorUnion *const gTutorLearnsets[REAL_SPECIES_COUNT] = {
+            |${
+                SPECIES_LIST.filter { it.id != SpeciesEnum.SPECIES_EGG }.joinToString("\n") {
+                    learnsetString(it, findLearnsetForSpecies(it))
                 }
-                |};
-            """.trimMargin()
-            )
-        }
+            }
+            |};
+            |""".trimMargin()
+        )
     }
 }
