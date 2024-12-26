@@ -1,11 +1,12 @@
 KT_SRCS := $(wildcard src/er/*.kt src/er/*/*.kt src/er/*/*/*.kt)
 PREPROC_SRCS := $(wildcard src/preproc/*.kt src/preproc/*/*.kt src/preproc/*/*/*.kt)
-KT_SRCS := $(wildcard src/er/*.java src/er/*/*.java src/er/*/*/*.java)
+JAVA_SRCS := $(wildcard src/er/*.java src/er/*/*.java src/er/*/*/*.java)
 PROTOS := ../../proto
 PROTO_SRCS := $(subst ../../proto/,,$(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.proto))
 TEXTPROTO_SRCS := $(wildcard $(PROTOS)/*.textproto $(PROTOS)/*/*.textproto $(PROTOS)/*/*/*.textproto)
 
-all: protodep codegen.jar timestamp/generated
+all: timestamp/generated
+	@:
 
 protoc:
 	if [ ! -f protoc.zip ]; then wget -O protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-linux-x86_64.zip -q && exit; fi
