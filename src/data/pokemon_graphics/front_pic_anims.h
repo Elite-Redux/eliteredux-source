@@ -13313,6 +13313,7 @@ static const union AnimCmd *const sAnims_AGGRON[] = {
 };
 
 static const union AnimCmd *const sAnims_CASTFORM[] = {
+    sAnim_GeneralFrame0,
     sAnim_CASTFORM_0,
 };
 

@@ -6,6 +6,7 @@ import "MoveEnum.proto";
 import "SpeciesEnum.proto";
 import "AbilityEnum.proto";
 import "Types.proto";
+import "Anims.proto";
 
 option java_package = "er.proto";
 option java_multiple_files = true;
@@ -19,8 +20,9 @@ message Species {
     string name = 1;
     int32 national_dex_num = 2;
     int32 hoenn_dex_num = 3;
-    EggGroup egg_group = 4;
-    EggGroup egg_group_2 = 5;
+    optional BodyColor body_color = 4;
+    EggGroup egg_group = 5;
+    EggGroup egg_group_2 = 6;
   }
 
   enum Gender {
@@ -111,18 +113,83 @@ message Species {
   }
   int32 tier = 17;
   int32 heads = 18;
-  optional BodyColor body_color = 20;
-  bool no_flip = 21;
-  int32 bp_cost = 22;
-  // missing
-  repeated Evolution evo = 25;
-  repeated MegaEvolution mega = 26;
-  repeated PrimalEvolution primal = 27;
-  SpeciesEnum form_shift_of = 28;
-  Gender form_shift_gender = 29;
+  bool no_flip = 19;
+  int32 bp_cost = 20;
+  repeated Evolution evo = 21;
+  repeated MegaEvolution mega = 22;
+  repeated PrimalEvolution primal = 23;
+  SpeciesEnum form_shift_of = 24;
+  Gender form_shift_gender = 25;
   oneof learnset_or_ref {
-    Learnset learnset = 30;
-    SpeciesEnum uses_learnset = 31;
+    Learnset learnset = 26;
+    SpeciesEnum uses_learnset = 27;
+  }
+  oneof visuals_or {
+    SpeciesEnum reuse_visuals = 28;
+    Visuals visuals = 29;
+  }
+}
+
+message Visuals {
+  message Icon {
+    string path = 1;
+    int32 palette = 2;
+  }
+  message Coords {
+    int32 size = 1;
+    int32 y_offset = 2;
+  }
+  message FrontPic {
+    string path = 1;
+    FrontAnim anim = 2;
+    Coords coords = 3;
+  }
+  message BackPic {
+    string path = 1;
+    BackAnim anim = 2;
+    Coords coords = 3;
+  }
+  message Female {
+    Icon icon = 1;
+    string front = 2;
+    string back = 3;
+    string palette = 4;
+    string shiny = 5;
+  }
+  message AnimationList {
+    message AnimCmd {
+      enum Type {
+        FRAME = 0;
+        END = 1;
+        JUMP = 2;
+        LOOP = 3;
+      }
+      Type type = 1;
+      optional int32 image = 2;
+      optional int32 duration = 3;
+    }
+    message AnimStep {
+      repeated AnimCmd frame = 1;
+    }
+    // First step is implicitly sAnim_GeneralFrame0
+    repeated AnimStep step = 1;
+  }
+
+  oneof icon_or {
+    SpeciesEnum reuse_icon = 1;
+    Icon icon = 2;
+  }
+  FrontPic front = 3;
+  BackPic back = 4;
+  string palette = 5;
+  string shiny = 6;
+  string rare = 7;
+  string legendary = 8;
+  Female female = 9;
+  oneof animations_or {
+    SpeciesEnum reuse_animation = 10;
+    // If empty is implicitly generic 1 frame anim
+    AnimationList anim = 11;
   }
 }
 

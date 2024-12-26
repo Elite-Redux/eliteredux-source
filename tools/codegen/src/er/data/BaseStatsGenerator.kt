@@ -57,8 +57,8 @@ object BaseStatsGenerator : Generator {
                 } else {
                     dex.eggGroup.name
                 }
+                if (dex.hasBodyColor()) lines += ".bodyColor = BODY_COLOR_${dex.bodyColor}"
             }
-            if (species.hasBodyColor()) lines += ".bodyColor = BODY_COLOR_${species.bodyColor}"
             if (species.noFlip) lines += ".noFlip = TRUE"
             if (species.tier > 0) lines += ".tier = ${species.tier}"
             if (lines.isNotEmpty()) {
