@@ -3,12 +3,11 @@ package er.data
 import er.FileGenerator.HEADER
 import er.FileGenerator.IND
 import er.Generator
-import er.TextprotoReader.SPECIES_LIST
+import er.TextprotoReader.NO_EGG_LIST
+import er.TextprotoReader.createDedupMaps
 import er.data.TutorLearnsetGenerator.findLearnsetForSpecies
 import er.proto.MoveEnum
-import er.proto.Species
 import er.proto.Species.Learnset
-import er.proto.SpeciesEnum
 import java.io.OutputStreamWriter
 
 object LevelUpLearnsetGenerator : Generator {
@@ -28,12 +27,7 @@ object LevelUpLearnsetGenerator : Generator {
         |""".trimMargin()
 
     override fun generate(writer: OutputStreamWriter) {
-        val learnsets =
-            SPECIES_LIST.map { it.id to findLearnsetForSpecies(it) }.groupBy({ it.second }, { it.first }).toMap()
-
-        val learnsetIds = learnsets.keys.withIndex().associate { it.value to it.index }
-        val idForSpecies =
-            learnsets.flatMap { (key, value) -> value.map { it to key } }.toMap().mapValues { learnsetIds[it.value] }
+        val (learnsetIds, speciesIds) = NO_EGG_LIST.map { findLearnsetForSpecies(it) to it.id }.createDedupMaps()
 
         writer.appendLine(HEADER)
         writer.appendLine()
@@ -43,8 +37,7 @@ object LevelUpLearnsetGenerator : Generator {
             """
             |const LevelUpMove *const gLevelUpLearnsets[REAL_SPECIES_COUNT] = {
             |$IND${
-                SPECIES_LIST.filter { it.id != SpeciesEnum.SPECIES_EGG }
-                    .joinToString("\n$IND") { "[${it.id}] = $PREFIX${idForSpecies[it.id]}," }
+                NO_EGG_LIST.joinToString("\n$IND") { "[${it.id}] = $PREFIX${speciesIds[it.id]}," }
             }
             |};
             |""".trimMargin()

@@ -35215,48 +35215,6 @@ species {
   }
 }
 species {
-  id: SPECIES_PIKACHU_PARTNER_CAP
-  form_of: SPECIES_PIKACHU
-  type: TYPE_ELECTRIC
-  hp: 50
-  atk: 80
-  def: 50
-  spatk: 75
-  spdef: 60
-  spe: 120
-  ability: ABILITY_GROUND_SHOCK
-  ability: ABILITY_GENERATOR
-  ability: ABILITY_ELECTRIC_BURST
-  innate: ABILITY_SHORT_CIRCUIT
-  innate: ABILITY_ELECTROCYTES
-  innate: ABILITY_OVERCHARGE
-  percent_female: 50.0
-  form_shift_of: SPECIES_PIKACHU_PARTNER
-  form_shift_gender: MALE
-  uses_learnset: SPECIES_PIKACHU
-  visuals {
-    icon {
-      path: "pikachu/partner_cap/icon"
-    }
-    front {
-      path: "pikachu/partner_cap/front"
-      coords {
-        size: 103
-        y_offset: 9
-      }
-    }
-    back {
-      path: "pikachu/partner_cap/back"
-      coords {
-        size: 135
-        y_offset: 4
-      }
-    }
-    palette: "pikachu/partner_cap/normal"
-    shiny: "pikachu/partner_cap/shiny"
-  }
-}
-species {
   id: SPECIES_PIKACHU_WORLD_CAP
   form_of: SPECIES_PIKACHU
   long_name: "Pikachu World"
@@ -35538,6 +35496,46 @@ species {
     }
     palette: "pikachu/libre/normal"
     shiny: "pikachu/libre/shiny"
+  }
+}
+species {
+  id: SPECIES_PIKACHU_PARTNER_CAP
+  form_of: SPECIES_PIKACHU
+  type: TYPE_ELECTRIC
+  hp: 50
+  atk: 80
+  def: 50
+  spatk: 75
+  spdef: 60
+  spe: 120
+  ability: ABILITY_GROUND_SHOCK
+  ability: ABILITY_GENERATOR
+  ability: ABILITY_ELECTRIC_BURST
+  innate: ABILITY_SHORT_CIRCUIT
+  innate: ABILITY_ELECTROCYTES
+  innate: ABILITY_OVERCHARGE
+  percent_female: 50.0
+  uses_learnset: SPECIES_PIKACHU
+  visuals {
+    icon {
+      path: "pikachu/partner_cap/icon"
+    }
+    front {
+      path: "pikachu/partner_cap/front"
+      coords {
+        size: 103
+        y_offset: 9
+      }
+    }
+    back {
+      path: "pikachu/partner_cap/back"
+      coords {
+        size: 135
+        y_offset: 4
+      }
+    }
+    palette: "pikachu/partner_cap/normal"
+    shiny: "pikachu/partner_cap/shiny"
   }
 }
 species {
@@ -45163,7 +45161,6 @@ species {
   innate: ABILITY_MOON_SPIRIT
   innate: ABILITY_OVERCOAT
   percent_female: 50.0
-  form_shift_of: SPECIES_URSALUNA
   learnset {
     level {
       level: 1
@@ -158808,7 +158805,6 @@ species {
   innate: ABILITY_COMBAT_SPECIALIST
   innate: ABILITY_PRECISE_FIST
   percent_female: 12.5
-  form_shift_of: SPECIES_URSHIFU
   learnset {
     level {
       level: 1
@@ -176744,7 +176740,7 @@ species {
   innate: ABILITY_TOUGH_CLAWS
   innate: ABILITY_PYROMANCY
   genderless: true
-  form_shift_of: SPECIES_LUMBERING_SLOTH
+  uses_learnset: SPECIES_LUMBERING_SLOTH
   visuals {
     icon {
       path: "lumbering_sloth/engulfed/icon"

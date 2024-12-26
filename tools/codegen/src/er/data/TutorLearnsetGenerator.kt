@@ -3,8 +3,10 @@ package er.data
 import er.FileGenerator.HEADER
 import er.FileGenerator.IND
 import er.Generator
+import er.TextprotoReader.NO_EGG_LIST
 import er.TextprotoReader.SPECIES_LIST
 import er.TextprotoReader.SPECIES_MAP
+import er.TextprotoReader.createDedupMaps
 import er.proto.MoveEnum
 import er.proto.Species
 import er.proto.Species.Learnset
@@ -24,6 +26,10 @@ object TutorLearnsetGenerator : Generator {
             else -> findLearnsetForSpecies(SPECIES_MAP[species.formOf]!!)
         }
 
+    private fun expandLearnset(learnset: Learnset, species: Species) =
+        UNIVERSAL_TUTORS + UNIVERSAL_ATTACKS.takeIf { learnset.universalTutors != UniversalTutors.NO_ATTACKS }
+            .orEmpty() + listOfNotNull(MoveEnum.MOVE_ATTRACT.takeIf { !species.genderless }) + learnset.tutorList
+
     private val UNIVERSAL_TUTORS = listOf(
         MoveEnum.MOVE_ENDURE,
         MoveEnum.MOVE_HELPING_HAND,
@@ -38,33 +44,28 @@ object TutorLearnsetGenerator : Generator {
         MoveEnum.MOVE_RETURN,
     )
 
-    private fun learnsetString(species: Species, learnset: Learnset): String {
-        val tutors =
-            UNIVERSAL_TUTORS + UNIVERSAL_ATTACKS.takeIf { learnset.universalTutors != UniversalTutors.NO_ATTACKS }
-                .orEmpty() + listOfNotNull(MoveEnum.MOVE_ATTRACT.takeIf { !species.genderless }) + learnset.tutorList
+    private const val PREFIX = "__sTutorMoveset_"
 
-        return """
-        |$IND[${species.id}] = TUTOR_LEARNSET
-        |$IND$IND${tutors.joinToString("\n$IND$IND") { "TUTOR($it)" }}
-        |$IND${IND}TUTOR_LEARNSET_END
-        |
+    private fun learnsetString(id: Int, learnset: List<MoveEnum>): String = """
+        |const static TutorUnion $PREFIX$id = TUTOR_LEARNSET
+        |$IND${learnset.joinToString("\n$IND") { "TUTOR($it)" }}
+        |${IND}TUTOR_LEARNSET_END
         |""".trimMargin()
-    }
 
     override fun generate(writer: OutputStreamWriter) {
+        val (tutorIds, speciesIds) = NO_EGG_LIST.map { expandLearnset(findLearnsetForSpecies(it), it) to it.id }
+            .createDedupMaps()
+
         writer.appendLine(
             """
             |$HEADER
-            |#define TUTOR_LEARNSET (TutorUnion[]) {{ .fields = {
+            |#define TUTOR_LEARNSET { .fields = {
             |#define TUTOR(tutor) .TUTOR_BIT_FIELD(tutor) = TRUE,
-            |#define TUTOR_LEARNSET_END }}},
+            |#define TUTOR_LEARNSET_END }}
             |
+            |${tutorIds.entries.joinToString("\n") { learnsetString(it.value, it.key) }}
             |const TutorUnion *const gTutorLearnsets[REAL_SPECIES_COUNT] = {
-            |${
-                SPECIES_LIST.filter { it.id != SpeciesEnum.SPECIES_EGG }.joinToString("\n") {
-                    learnsetString(it, findLearnsetForSpecies(it))
-                }
-            }
+            |$IND${speciesIds.entries.joinToString("\n$IND") { "[${it.key}] = $PREFIX${it.value}," }}
             |};
             |""".trimMargin()
         )

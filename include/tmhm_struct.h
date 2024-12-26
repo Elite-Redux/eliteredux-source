@@ -295,8 +295,6 @@ typedef union TutorUnion
     struct TutorStruct fields;
 } TutorUnion;
 
-
-
 #undef TUTOR_DECORATOR
 
 extern const u16 gTutorMoveMapping[];

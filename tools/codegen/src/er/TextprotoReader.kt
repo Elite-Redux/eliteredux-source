@@ -10,6 +10,10 @@ object TextprotoReader {
         TextFormat.parse(File("../../proto/SpeciesList.textproto").readText(), SpeciesList::class.java).speciesList
     }
 
+    val NO_EGG_LIST by lazy {
+        SPECIES_LIST.filter { it.id != SpeciesEnum.SPECIES_EGG }
+    }
+
     val REAL_SPECIES_COUNT by lazy {
         SpeciesEnum.entries.filter {
             when (it) {
@@ -21,5 +25,15 @@ object TextprotoReader {
 
     val SPECIES_MAP by lazy {
         SPECIES_LIST.associateBy { it.id }
+    }
+
+    fun <Key, Value> List<Pair<Key, Value>>.createDedupMaps(): Pair<Map<Key, Int>, Map<Value, Int>> {
+        val groups = groupBy({ it.first }, { it.second })
+
+        val keyIds = groups.keys.withIndex().associate { it.value to it.index }
+        val valueIds =
+            groups.flatMap { (key, values) -> values.map { it to keyIds[key]!! } }
+                .toMap()
+        return keyIds to valueIds
     }
 }

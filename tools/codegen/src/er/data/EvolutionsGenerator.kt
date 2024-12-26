@@ -3,82 +3,99 @@ package er.data
 import er.FileGenerator.HEADER
 import er.FileGenerator.IND
 import er.Generator
+import er.TextprotoReader.NO_EGG_LIST
 import er.TextprotoReader.SPECIES_LIST
+import er.TextprotoReader.SPECIES_MAP
+import er.TextprotoReader.createDedupMaps
 import er.proto.Species
 import er.proto.SpeciesEnum
 import java.io.OutputStreamWriter
 
 object EvolutionsGenerator : Generator {
+    private const val EVO_PREFIX = "__sEvoList_"
+    private const val FORM_PREFX = "__sFormList_"
+
+    private data class Evo(val method: String, val condition: String, val to: SpeciesEnum) {
+        override fun toString() = "{$method, $condition, $to}"
+    }
+
     override fun generate(writer: OutputStreamWriter) {
         val megas = SPECIES_LIST.flatMap { it.megaList }.groupBy { it.from }
         val primals = SPECIES_LIST.flatMap { it.primalList }.groupBy { it.from }
-        val formShifts = SPECIES_LIST.groupBy({ it.formShiftOf }, { it.id to it.formShiftGender })
 
         writer.appendLine(
             """
             |$HEADER
-            |const struct Evolution *const gEvolutionTable[REAL_SPECIES_COUNT] = {
             |""".trimMargin()
         )
-        for (species in SPECIES_LIST) {
-            if (species.evoList.isEmpty() && species.id !in megas && species.id !in primals && species.id !in formShifts) continue
-            writer.appendLine("$IND[${species.id}] = (Evolution[]) {")
-            species.evoList.forEach {
-                val evo = when {
-                    it.gender == Species.Gender.MALE -> "EVO_LEVEL_MALE"
-                    it.gender == Species.Gender.FEMALE -> "EVO_LEVEL_MALE"
-                    species.id == SpeciesEnum.SPECIES_SHEDINJA -> "EVO_LEVEL_SHEDINJA"
-                    species.id == SpeciesEnum.SPECIES_NINJASK -> "EVO_LEVEL_NINJASK"
-                    else -> "EVO_LEVEL"
-                }
-                writer.appendLine("$IND$IND{$evo, ${it.level}, ${it.to}},")
-            }
-            megas[species.id].orEmpty().forEach {
+        val (evoIds, speciesEvoIds) = NO_EGG_LIST.map { species ->
+            species.evoList.map {
+                Evo(
+                    when {
+                        it.gender == Species.Gender.MALE -> "EVO_LEVEL_MALE"
+                        it.gender == Species.Gender.FEMALE -> "EVO_LEVEL_MALE"
+                        species.id == SpeciesEnum.SPECIES_SHEDINJA -> "EVO_LEVEL_SHEDINJA"
+                        species.id == SpeciesEnum.SPECIES_NINJASK -> "EVO_LEVEL_NINJASK"
+                        else -> "EVO_LEVEL"
+                    }, it.level.toString(), it.to
+                )
+            } + megas[species.id].orEmpty().map {
                 if (it.hasMove()) {
-                    writer.appendLine("$IND$IND{EVO_MOVE_MEGA_EVOLUTION,${it.move},${it.from}},")
+                    Evo("EVO_MOVE_MEGA_EVOLUTION", it.move.toString(), it.from)
                 } else {
-                    writer.appendLine("$IND$IND{EVO_MEGA_EVOLUTION,${it.item},${it.from}},")
+                    Evo("EVO_MEGA_EVOLUTION", it.item.toString(), it.from)
                 }
-            }
-            primals[species.id].orEmpty().forEach {
-                writer.appendLine("$IND$IND{EVO_PRIMAL_REVERSION,${it.item},${it.from}},")
-            }
-            writer.appendLine(
-                """
-                |$IND$IND{0}},
-                |""".trimMargin()
-            )
-        }
+            } + primals[species.id].orEmpty().map {
+                Evo("EVO_PRIMAL_REVERSION", it.item.toString(), it.from)
+            }.toSet() to species.id
+        }.createDedupMaps()
+
+        writer.appendLine(evoIds.entries.joinToString("\n") {
+            """
+            |const static Evolution *const $EVO_PREFIX${it.value} = {
+            |$IND${it.key.joinToString("\n$IND") { evo -> "$evo," }}
+            |${IND}0};
+            |""".trimMargin()
+        })
+
         writer.appendLine(
             """
+            |const Evolution *const gEvolutionTable[REAL_SPECIES_COUNT] = {
+            |$IND${speciesEvoIds.entries.joinToString("\n$IND") { "[${it.key}] = $EVO_PREFIX${it.value}," }}
             |};
-            |
-            |const struct Evolution *const gFormChangeTable[REAL_SPECIES_COUNT] = {
             |""".trimMargin()
         )
 
-        for (species in SPECIES_LIST) {
-            val shiftBase = when {
-                species.id == SpeciesEnum.SPECIES_NONE -> continue
-                species.id in formShifts -> species.id
-                species.formShiftOf != SpeciesEnum.SPECIES_NONE -> species.formShiftOf
-                else -> continue
-            }
-            writer.appendLine(
-                """
-                |$IND[${species.id}] = (Evolution[]) {
-                |$IND$IND{EVO_FORM_SHIFT, 1, $shiftBase},""".trimMargin()
-            )
-            formShifts[shiftBase]!!.forEach { (mon, gender) ->
-                when (gender) {
-                    Species.Gender.MALE -> writer.appendLine("$IND$IND{EVO_FORM_SHIFT_GENDER, MON_MALE, $mon},")
-                    Species.Gender.FEMALE -> writer.appendLine("$IND$IND{EVO_FORM_SHIFT_GENDER, FEMALE_MALE, $mon},")
-                    else -> writer.appendLine("$IND$IND{EVO_FORM_SHIFT, 1, $mon},")
+        val reverseForms =
+            NO_EGG_LIST.map { it.formShiftOf to it.id }.groupBy({ it.first }, { it.second }) - SpeciesEnum.SPECIES_NONE
+
+        val (formIds, speciesFormIds) = NO_EGG_LIST.map { species ->
+            val id = if (species.hasFormShiftOf()) species.formShiftOf else species.id
+            reverseForms[id]?.let { listOf(id) + it }.orEmpty() to species.id
+        }.createDedupMaps()
+
+        writer.appendLine(formIds.entries.joinToString("\n") {
+            """
+            |static const Evolution *const $FORM_PREFX${it.value} = {
+            |$IND${
+                it.key.joinToString("\n$IND") { id ->
+                    when (SPECIES_MAP[id]!!.formShiftGender) {
+                        Species.Gender.MALE -> "{EVO_FORM_SHIFT_GENDER, MON_MALE, $id},"
+                        Species.Gender.FEMALE -> "{EVO_FORM_SHIFT_GENDER, FEMALE_MALE, $id},"
+                        else -> "{EVO_FORM_SHIFT, 1, $id},"
+                    }
                 }
             }
-            writer.appendLine("$IND$IND{0}},")
-        }
+            |${IND}0};
+            |""".trimMargin()
+        })
 
-        writer.appendLine("};")
+        writer.appendLine(
+            """
+            |const Evolution *const gFormChangeTable[REAL_SPECIES_COUNT] = {
+            |$IND${speciesFormIds.entries.joinToString("\n$IND") { "[${it.key}] = $FORM_PREFX${it.value}," }}
+            |};
+            |""".trimMargin()
+        )
     }
 }

@@ -118,8 +118,8 @@ message Species {
   repeated Evolution evo = 21;
   repeated MegaEvolution mega = 22;
   repeated PrimalEvolution primal = 23;
-  SpeciesEnum form_shift_of = 24;
-  Gender form_shift_gender = 25;
+  optional SpeciesEnum form_shift_of = 24;
+  optional Gender form_shift_gender = 25;
   oneof learnset_or_ref {
     Learnset learnset = 26;
     SpeciesEnum uses_learnset = 27;
