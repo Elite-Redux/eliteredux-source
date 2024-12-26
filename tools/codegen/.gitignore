@@ -6,9 +6,8 @@ src/er/proto
 *.zip
 javabuild/
 ktbuild/
-protos
-generated
 protodep/
+timestamp/
 
 ### IntelliJ IDEA ###
 out/

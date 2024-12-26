@@ -6,13 +6,16 @@ import com.google.protobuf.DescriptorProtos.FileDescriptorSet
 import java.io.File
 
 object ProtoProcessor {
+    fun Collection<Int>.firstFree(n: Int, from: Int) =
+        toSet().let { ids -> (from..size + from).filter { it !in ids }.take(n) }
+
     private fun EnumDescriptorProto.firstFree(n: Int) =
-        valueList.map { it.number }.toSet().let { ids -> (0..valueList.size).filter { it !in ids }.take(n) }
+        valueList.map { it.number }.firstFree(n, 0)
 
     private fun DescriptorProto.firstFree(n: Int) =
-        fieldList.map { it.number }.toSet().let { ids -> (1..fieldList.size + 1).filter { it !in ids }.take(n) }
+        fieldList.map { it.number }.firstFree(n, 1)
 
-    private val BIG_INT = """(\d{6,})""".toRegex()
+    val BIG_INT = """(\d{6,})""".toRegex()
 
     @JvmStatic
     fun main(args: Array<String>) {

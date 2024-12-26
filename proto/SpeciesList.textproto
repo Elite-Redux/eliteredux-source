@@ -122768,7 +122768,7 @@ species {
   id: SPECIES_BUBBLEO
   dex {
     name: "Bubbleo"
-    national_dex_num: 1071
+    national_dex_num: 1069
     egg_group: FIELD
   }
   type: TYPE_WATER
@@ -123092,7 +123092,7 @@ species {
   id: SPECIES_FUJIFLAP
   dex {
     name: "Fujiflap"
-    national_dex_num: 1069
+    national_dex_num: 1071
     egg_group: GRASS
     egg_group_2: DRAGON
   }
@@ -123723,7 +123723,7 @@ species {
   id: SPECIES_IRON_EXO
   dex {
     name: "Iron Exo"
-    national_dex_num: 1072
+    national_dex_num: 1067
     egg_group: UNDISCOVERED
   }
   type: TYPE_GHOST
