@@ -6254,19 +6254,20 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
             // Occur after the final hit of a multi-strike move
             switch (atkHoldEffect) {
                 case HOLD_EFFECT_SHELL_BELL:
-                    if (gTurnStructs[gBattlerTarget].dmg != 0 && gTurnStructs[gBattlerTarget].dmg != 0xFFFF &&
-                        !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove)) && gBattlerAttacker != gBattlerTarget &&
-                        gBattleMons[gBattlerAttacker].hp != gBattleMons[gBattlerAttacker].maxHP && gBattleMons[gBattlerAttacker].hp != 0 &&
-                        !BATTLER_HEALING_BLOCKED(gBattlerAttacker)) {
-                        gLastUsedItem = atkItem;
-                        gPotentialItemEffectBattler = gBattlerAttacker;
-                        gBattleScripting.battler = gBattlerAttacker;
-                        gBattleMoveDamage = (gTurnStructs[gBattlerTarget].dmg / 4) * -1;
-                        if (gBattleMoveDamage == 0) gBattleMoveDamage = -1;
-                        gTurnStructs[gBattlerTarget].dmg = 0;
-                        BattleScriptCall(BattleScript_ItemHealHP_Ret);
-                        effect = ITEM_HP_CHANGE;
-                    }
+                    REQUIRE(gTurnStructs[gBattlerAttacker].savedDmg)
+                    REQUIRE(IsBattlerAlive(gBattlerAttacker))
+                    REQUIRE_NOT(BATTLER_MAX_HP(gBattlerAttacker))
+                    REQUIRE_NOT(BATTLER_HEALING_BLOCKED(gBattlerAttacker))
+                    REQUIRE_NOT(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
+                    REQUIRE(gBattlerAttacker != gBattlerTarget)
+
+                    gLastUsedItem = atkItem;
+                    gPotentialItemEffectBattler = gBattlerAttacker;
+                    gBattleScripting.battler = gBattlerAttacker;
+                    gBattleMoveDamage = (gTurnStructs[gBattlerTarget].savedDmg / 4) * -1;
+                    if (gBattleMoveDamage == 0) gBattleMoveDamage = -1;
+                    BattleScriptCall(BattleScript_ItemHealHP_Ret);
+                    effect = ITEM_HP_CHANGE;
                     break;
                 case HOLD_EFFECT_LIFE_ORB: {
                     int canProc = gBattlerAttacker == gBattlerByTurnOrder[gCurrentTurnActionNumber];
