@@ -42,9 +42,9 @@ MAKER_CODE  := 01
 REVISION    := 0
 MODERN      ?= 0
 
-ifeq (modern,$(MAKECMDGOALS))
-  MODERN := 1
-endif
+# ifeq (modern,$(MAKECMDGOALS))
+MODERN := 1
+# endif
 
 # use arm-none-eabi-cpp for macOS
 # as macOS's default compiler is clang
