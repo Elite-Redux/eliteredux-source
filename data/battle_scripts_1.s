@@ -7403,7 +7403,7 @@ BattleScript_GiveExp::
 BattleScript_HandleFaintedMon::
 	saveattackerandtargetto34
 	setbyte sSHIFT_SWITCHED, 0
-	atk24 BattleScript_HandleFaintedMonMultiple
+	checkteamslost BattleScript_HandleFaintedMonMultiple
 	jumpifbyte CMP_NOT_EQUAL, gBattleOutcome, 0, BattleScript_FaintedMonEnd
 	jumpifbattletype BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLE, BattleScript_FaintedMonTryChooseAnother
 	jumpifword CMP_NO_COMMON_BITS, gHitMarker, HITMARKER_x400000, BattleScript_FaintedMonTryChooseAnother
@@ -7780,23 +7780,16 @@ BattleScript_DamagingWeatherLoop::
 	copyarraywithindex gBattlerAttacker, gBattlerByTurnOrder, gBattleCommunication, 1
 	weatherdamage
 	jumpifword CMP_EQUAL, gBattleMoveDamage, 0, BattleScript_DamagingWeatherLoopIncrement
-	jumpifword CMP_COMMON_BITS gBattleMoveDamage, 1 << 31, BattleScript_DamagingWeatherHeal
+	restorestackstate
 	printfromtable gSandStormHailDmgStringIds
 	waitmessage B_WAIT_TIME_LONG
 	effectivenesssound
 	hitanimation BS_ATTACKER
-	goto BattleScript_DamagingWeatherHpChange
-BattleScript_DamagingWeatherHeal:
-	sethword sABILITY_OVERWRITE, ABILITY_ICE_BODY
-	call BattleScript_AbilityPopUp
-	printstring STRINGID_ICEBODYHPGAIN
-	waitmessage B_WAIT_TIME_LONG
-BattleScript_DamagingWeatherHpChange:
 	orword gHitMarker, HITMARKER_SKIP_DMG_TRACK | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_GRUDGE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	tryfaintmon BS_ATTACKER, FALSE, NULL
-	atk24 BattleScript_DamagingWeatherLoopIncrement
+	checkteamslost BattleScript_DamagingWeatherLoopIncrement
 BattleScript_DamagingWeatherLoopIncrement::
 	jumpifbyte CMP_NOT_EQUAL, gBattleOutcome, 0, BattleScript_DamagingWeatherContinuesEnd
 	addbyte gBattleCommunication, 1
@@ -8520,7 +8513,7 @@ BattleScript_DoFutureAttackResult:
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
 	tryfaintmon BS_TARGET, FALSE, NULL
-	atk24 BattleScript_FutureAttackEnd
+	checkteamslost BattleScript_FutureAttackEnd
 BattleScript_FutureAttackEnd::
 	moveendcase MOVEEND_RAGE
 	moveendfromto MOVEEND_ITEM_EFFECTS_ALL, MOVEEND_UPDATE_LAST_MOVES
@@ -9097,7 +9090,7 @@ BattleScript_DoTurnDmg:
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	tryfaintmon BS_ATTACKER, FALSE, NULL
-	atk24 BattleScript_DoTurnDmgEnd
+	checkteamslost BattleScript_DoTurnDmgEnd
 BattleScript_DoTurnDmgEnd:
 	end2
 
@@ -10434,7 +10427,7 @@ BattleScript_BadDreamsLoop:
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
 	tryfaintmon BS_TARGET, FALSE, NULL
-	atk24 BattleScript_BadDreamsIncrement
+	checkteamslost BattleScript_BadDreamsIncrement
 	goto BattleScript_BadDreamsIncrement
 BattleScript_BadDreamsPrevented:
 	call BattleScript_AbilityPopUp
@@ -11626,7 +11619,7 @@ BattleScript_TotemVarPrintStatMsg:
 
 BattleScript_AnnounceAirLockCloudNine::
 	removeweather
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_AnnounceAirLockCloudNine_Primal
 	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_SUN_ENDS, BattleScript_AnnounceAirLockCloudNine_Primal
 	printfromtable gWeatherCleared
 	goto BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged

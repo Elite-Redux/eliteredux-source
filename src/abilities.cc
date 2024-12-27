@@ -9106,7 +9106,7 @@ static const Ability Cutthroat = {
     .description = $("The first slicing move used on\n"
                      "each entry in gets +1 priority."),
     .onEntry = +[](ON_ENTRY) -> int {
-        CHECK_NOT(GetAbilityState(battler, ability))
+        CHECK_NOT(gStatuses4[battler] & STATUS4_CUTTHROAT)
 
         gStatuses4[battler] |= STATUS4_CUTTHROAT;
         return SwitchInAnnounce(B_MSG_SWITCHIN_CUTTHROAT);
