@@ -4868,7 +4868,7 @@ static const Ability Scrapyard = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(IsMoveMakingContact(move, attacker))
-        CHECK(gSideTimers[GetBattlerSide(attacker)].spikesAmount < 3)
+        CHECK(gSideTimers[BATTLE_OPPOSITE(battler)].spikesAmount < 3)
 
         BattleScriptCall(BattleScript_DefenderSetsSpikeLayer_Scrapyard);
         return TRUE;
@@ -4889,7 +4889,7 @@ static const Ability ToxicDebris = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(IsMoveMakingContact(move, attacker))
-        CHECK(gSideTimers[GetBattlerSide(attacker)].toxicSpikesAmount < 2)
+        CHECK(gSideTimers[BATTLE_OPPOSITE(battler)].toxicSpikesAmount < 2)
 
         BattleScriptCall(BattleScript_DefenderSetsToxicSpikeLayer);
         return TRUE;
@@ -4931,7 +4931,7 @@ static const Ability LooseRocks = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
+        CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STEALTH_ROCK)
 
         BattleScriptCall(BattleScript_DefenderSetsStealthRock);
         return TRUE;
