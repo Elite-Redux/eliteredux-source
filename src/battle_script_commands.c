@@ -2323,6 +2323,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
             case MOVE_EFFECT_SWAMP:
             case MOVE_EFFECT_RAINBOW:
             case MOVE_EFFECT_FIRE_SEA:
+            case MOVE_EFFECT_SPECTRAL_THIEF:
                 break;
 
             default:
