@@ -12,7 +12,7 @@ import er.proto.SpeciesEnum
 import java.io.OutputStreamWriter
 
 object SpeciesNameGenerator : Generator {
-    const val PREFIX = "__sName_"
+    private const val PREFIX = "__sName_"
     override fun generate(writer: OutputStreamWriter) {
         writer.appendLine(HEADER)
         val (nameIds, speciesIds) = NO_EGG_LIST.map { it.id to if (it.hasFormOf()) it.formOf else it.id }
@@ -20,7 +20,7 @@ object SpeciesNameGenerator : Generator {
                 (SPECIES_MAP[form]?.dex?.name ?: "") to mon
             }.createDedupMaps()
 
-        writer.appendLine(nameIds.entries.joinToString("\n") { """static const u8 $PREFIX${it.value}[] = _("${it.key}")""" })
+        writer.appendLine(nameIds.entries.joinToString("\n") { """static const u8 $PREFIX${it.value}[] = _("${it.key}");""" })
 
         speciesIds.printLookupTable("const u8 *const gSpeciesNames[]", PREFIX, writer)
 

@@ -12,8 +12,7 @@ import er.proto.Species.Learnset
 import java.io.OutputStreamWriter
 
 object LevelUpLearnsetGenerator : Generator {
-
-    const val PREFIX = "__sLevelUpMoveset_"
+    private const val PREFIX = "__sLevelUpMoveset_"
 
     private fun learnsetString(index: Int, learnset: Learnset): String =
         """
