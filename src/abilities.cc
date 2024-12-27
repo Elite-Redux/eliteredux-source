@@ -4085,7 +4085,7 @@ static const Ability SoulEater = {
         CHECK_NOT(BATTLER_MAX_HP(battler)) CHECK_NOT(BATTLER_HEALING_BLOCKED(battler)) BattleScriptCall(BattleScript_HandleSoulEaterEffect);
         return TRUE;
     },
-    .onBattlerFaintsFor = APPLY_ON_ALLY,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
 ON_EITHER(SoulLinker) {
