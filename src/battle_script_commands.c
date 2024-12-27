@@ -10214,7 +10214,7 @@ static void Cmd_setlightscreen(void) {
     gBattlescriptCurrInstr++;
 }
 
-bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler) {
+u16 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler) {
     int i;
 
     if (BattlerHasAbility(battler, ABILITY_GUARD_DOG, TRUE)) return FALSE;
