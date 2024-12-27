@@ -1827,7 +1827,7 @@ bool32 CanLearnTutorMove(u16 species, u8 tutor)  // note the change to bool32
         return 0;
     }
 
-    return gTutorLearnsets[species].bits[tutor / 32] & (1 << (tutor % 32));
+    return gTutorLearnsets[species].bits[tutor / 16] & (1 << (tutor % 16));
 }
 
 static void InitPartyMenuWindows(u8 layout) {
