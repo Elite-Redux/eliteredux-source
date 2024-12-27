@@ -71,7 +71,7 @@ ENUM_OR(InfiltrateType)
 #define ON_EITHER_ABILITY(name) .onAttacker = name##OnEither, .onDefender = name##OnEither
 #define ON_RECOIL int damage, int battler, int moveType
 #define DELEGATE_RECOIL damage, battler, moveType
-#define ON_REACTIVE int ability, int battler
+#define ON_REACTIVE int ability, int battler, AbilityCallType callType
 #define DELEGATE_REACTIVE ability, battler
 #define ON_BATTLER_FAINTS int ability, int battler, int attacker, int fainted, int move, int moveType
 #define DELEGATE_BATTLER_FAINTS ability, battler, attacker, fainted, move, moveType
@@ -2898,6 +2898,33 @@ static const Ability PowerOfAlchemy = {
         }
         CHECK(any)
         return TRUE;
+    },
+    .onReactive = +[](ON_REACTIVE) -> int {
+        int any = FALSE;
+        int state = GetAbilityState(battler, ability);
+        CHECK(state)
+
+        for (int target = 0; target < gBattlersCount; target++) {
+            int item = state & 3;
+            state = state >> 2;
+            FILTER(item)
+            FILTER_NOT(gBattleMons[target].item)
+            gStackBattler1 = battler;
+            gStackBattler2 = target;
+            if (!any) {
+                InsertCorrectEndType(callType);
+                any = TRUE;
+            }
+            if (item == 1) {
+                UpdateBattlerItem(target, ITEM_BLACK_SLUDGE);
+                BattleScriptCall(BattleScript_PowerOfAlchemySludge);
+            } else {
+                UpdateBattlerItem(target, ITEM_BIG_NUGGET);
+                BattleScriptCall(BattleScript_PowerOfAlchemyGold);
+            }
+        }
+        SetAbilityState(battler, ABILITY_POWER_OF_ALCHEMY, 0);
+        return any;
     },
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         int state = GetAbilityState(battler, ability);
@@ -6941,6 +6968,23 @@ static const Ability Egoist = {
     .name = $("Egoist"),
     .description = $("Raises its own stats when\n"
                      "foes raise theirs."),
+    .onReactive = +[](ON_REACTIVE) -> int {
+        CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
+        for (int opponent = BATTLE_OPPOSITE(GetBattlerSide(battler)); opponent < gBattlersCount; opponent += 2) {
+            for (int stat = STAT_ATK; stat < ARRAY_COUNT(gBattleStruct->statChangesToCheck[opponent]); stat++) {
+                if (gBattleStruct->statChangesToCheck[opponent][stat - 1] > 0) {
+                    if (gBattleStruct->statStageCheckState == STAT_STAGE_CHECK_NEEDED) {
+                        gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_IN_PROGRESS;
+                        InsertCorrectEndType(callType);
+                        BattleScriptCall(BattleScript_PerformCopyStatEffects);
+                    }
+                    SetAbilityStateAs(battler, ability, (AbilityStates){.statCopyState = (StatCopyState){.inProgress = TRUE}});
+                    return TRUE;
+                }
+            }
+        }
+        return FALSE;
+    },
 };
 
 static const Ability Subdue = {
@@ -7222,6 +7266,16 @@ static const Ability SharingIsCaring = {
     .name = $("Sharing Is Caring"),
     .description = $("Stat changes are shared\n"
                      "between all battlers."),
+    .onReactive = +[](ON_REACTIVE) -> int {
+        CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
+        CHECK(IsAbilityOnField(ability) - 1 == battler)
+        if (gBattleStruct->statStageCheckState == STAT_STAGE_CHECK_NEEDED) {
+            InsertCorrectEndType(callType);
+            BattleScriptCall(BattleScript_PerformCopyStatEffects);
+        }
+        SetAbilityStateAs(battler, ability, (AbilityStates){.statCopyState = (StatCopyState){.inProgress = TRUE}});
+        return TRUE;
+    },
 };
 
 static const Ability TabletsOfRuin = {

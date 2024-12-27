@@ -25,7 +25,12 @@ typedef int (*AbilityOnEndTurnHandler)(int ability, int battler);
 typedef int (*AbilityOnAttackerHandler)(int ability, int battler, int target, int move, int moveType);
 typedef int (*AbilityOnDefenderHandler)(int ability, int battler, int attacker, int move, int moveType);
 typedef int (*AbilityOnRecoilHandler)(int damage, int battler, int moveType);
-typedef int (*AbilityOnReactiveHandler)(int ability, int battler);
+typedef enum {
+    ABILITY_BS_PUSH_CURSOR_AND_CALLBACK,
+    ABILITY_BS_CALL,
+    ABILITY_BS_EXECUTE,
+} AbilityCallType;
+typedef int (*AbilityOnReactiveHandler)(int ability, int battler, AbilityCallType callType);
 typedef int (*AbilityOnBattlerFaintsHandler)(int ability, int battler, int attacker, int fainted, int move, int moveType);
 typedef enum {
     MULTIHIT_SINGLE,
