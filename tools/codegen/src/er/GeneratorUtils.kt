@@ -1,11 +1,14 @@
 package er
 
 import com.google.protobuf.TextFormat
+import er.FileGenerator.IND
 import er.proto.SpeciesEnum
 import er.proto.SpeciesList
 import java.io.File
+import java.io.FileWriter
+import java.io.OutputStreamWriter
 
-object TextprotoReader {
+object GeneratorUtils {
     val SPECIES_LIST by lazy {
         TextFormat.parse(File("../../proto/SpeciesList.textproto").readText(), SpeciesList::class.java).speciesList
     }
@@ -35,5 +38,15 @@ object TextprotoReader {
             groups.flatMap { (key, values) -> values.map { it to keyIds[key]!! } }
                 .toMap()
         return keyIds to valueIds
+    }
+
+    fun Map<*, Int>.printLookupTable(tableSignature: String, prefix: String, writer: OutputStreamWriter) {
+        writer.appendLine(
+            """
+            |$tableSignature = {
+            |$IND${entries.joinToString("\n$IND") { "[${it.key}] = $prefix${it.value}," }}
+            |};
+            |""".trimMargin()
+        )
     }
 }

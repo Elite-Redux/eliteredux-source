@@ -3,8 +3,8 @@ package er.data
 import er.FileGenerator.HEADER
 import er.FileGenerator.IND
 import er.Generator
-import er.TextprotoReader.SPECIES_LIST
-import er.TextprotoReader.SPECIES_MAP
+import er.GeneratorUtils.SPECIES_LIST
+import er.GeneratorUtils.SPECIES_MAP
 import er.proto.EggGroup
 import er.proto.SpeciesEnum
 import er.proto.Type

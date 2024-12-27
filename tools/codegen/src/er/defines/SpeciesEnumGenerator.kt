@@ -2,7 +2,7 @@ package er.defines
 
 import er.FileGenerator.HEADER
 import er.Generator
-import er.TextprotoReader.REAL_SPECIES_COUNT
+import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.proto.SpeciesEnum
 import java.io.OutputStreamWriter
 

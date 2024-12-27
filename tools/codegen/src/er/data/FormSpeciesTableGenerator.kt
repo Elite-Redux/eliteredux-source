@@ -3,33 +3,34 @@ package er.data
 import er.FileGenerator.HEADER
 import er.FileGenerator.IND
 import er.Generator
-import er.TextprotoReader.SPECIES_LIST
+import er.GeneratorUtils.NO_EGG_LIST
+import er.GeneratorUtils.SPECIES_LIST
+import er.GeneratorUtils.createDedupMaps
+import er.GeneratorUtils.printLookupTable
 import er.proto.SpeciesEnum
+import er.proto.species
 import java.io.OutputStreamWriter
 
 object FormSpeciesTableGenerator : Generator {
+    val PREFIX = "__sFormSpeciesTable_"
     override fun generate(writer: OutputStreamWriter) {
         val forms = SPECIES_LIST.groupBy({ it.formOf }, { it.id }) - SpeciesEnum.SPECIES_NONE
 
-        writer.appendLine(
-            """
-            |$HEADER
-            |const SpeciesEnum *const gFormSpeciesIdTables[REAL_SPECIES_COUNT] = {
-            |""".trimMargin()
-        )
+        writer.appendLine(HEADER)
 
-        for ((base, variants) in forms) {
-            val monForms = listOf(base) + variants
-            for (variant in monForms) {
-                writer.appendLine(
-                    """
-                    |$IND[$variant] = (SpeciesEnum[]) {
-                    |$IND$IND${monForms.joinToString(",\n$IND$IND")},
-                    |$IND$IND{0}},
-                    |""".trimMargin()
-                )
-            }
-        }
-        writer.appendLine("};")
+        val (formIds, speciesIds) = NO_EGG_LIST.map {
+            val id = if (it.hasFormOf()) it.formOf else it.id
+            (listOf(id) + forms[id].orEmpty()) to it.id
+        }.createDedupMaps()
+
+        writer.appendLine(formIds.entries.joinToString("\n") {
+            """
+            |const SpeciesEnum[] $PREFIX${it.value} = {
+            |$IND${it.key.joinToString("\n$IND") { id -> "$id," }}
+            |${IND}0};
+            |""".trimMargin()
+        })
+
+        speciesIds.printLookupTable("const u16 *const gFormSpeciesIdTables[REAL_SPECIES_COUNT]", PREFIX, writer)
     }
 }

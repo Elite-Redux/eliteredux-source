@@ -3,10 +3,11 @@ package er.data
 import er.FileGenerator.HEADER
 import er.FileGenerator.IND
 import er.Generator
-import er.TextprotoReader.NO_EGG_LIST
-import er.TextprotoReader.SPECIES_LIST
-import er.TextprotoReader.SPECIES_MAP
-import er.TextprotoReader.createDedupMaps
+import er.GeneratorUtils.NO_EGG_LIST
+import er.GeneratorUtils.SPECIES_LIST
+import er.GeneratorUtils.SPECIES_MAP
+import er.GeneratorUtils.createDedupMaps
+import er.GeneratorUtils.printLookupTable
 import er.proto.Species
 import er.proto.SpeciesEnum
 import java.io.OutputStreamWriter
@@ -23,11 +24,8 @@ object EvolutionsGenerator : Generator {
         val megas = SPECIES_LIST.flatMap { it.megaList }.groupBy { it.from }
         val primals = SPECIES_LIST.flatMap { it.primalList }.groupBy { it.from }
 
-        writer.appendLine(
-            """
-            |$HEADER
-            |""".trimMargin()
-        )
+        writer.appendLine(HEADER)
+
         val (evoIds, speciesEvoIds) = NO_EGG_LIST.map { species ->
             species.evoList.map {
                 Evo(
@@ -58,13 +56,7 @@ object EvolutionsGenerator : Generator {
             |""".trimMargin()
         })
 
-        writer.appendLine(
-            """
-            |const Evolution *const gEvolutionTable[REAL_SPECIES_COUNT] = {
-            |$IND${speciesEvoIds.entries.joinToString("\n$IND") { "[${it.key}] = $EVO_PREFIX${it.value}," }}
-            |};
-            |""".trimMargin()
-        )
+        speciesEvoIds.printLookupTable("const Evolution *const gEvolutionTable[REAL_SPECIES_COUNT]", EVO_PREFIX, writer)
 
         val reverseForms =
             NO_EGG_LIST.map { it.formShiftOf to it.id }.groupBy({ it.first }, { it.second }) - SpeciesEnum.SPECIES_NONE
@@ -90,12 +82,10 @@ object EvolutionsGenerator : Generator {
             |""".trimMargin()
         })
 
-        writer.appendLine(
-            """
-            |const Evolution *const gFormChangeTable[REAL_SPECIES_COUNT] = {
-            |$IND${speciesFormIds.entries.joinToString("\n$IND") { "[${it.key}] = $FORM_PREFX${it.value}," }}
-            |};
-            |""".trimMargin()
+        speciesFormIds.printLookupTable(
+            "const Evolution *const gFormChangeTable[REAL_SPECIES_COUNT]",
+            FORM_PREFX,
+            writer
         )
     }
 }

@@ -3,8 +3,9 @@ package er.data
 import er.FileGenerator.HEADER
 import er.FileGenerator.IND
 import er.Generator
-import er.TextprotoReader.NO_EGG_LIST
-import er.TextprotoReader.createDedupMaps
+import er.GeneratorUtils.NO_EGG_LIST
+import er.GeneratorUtils.createDedupMaps
+import er.GeneratorUtils.printLookupTable
 import er.data.TutorLearnsetGenerator.findLearnsetForSpecies
 import er.proto.MoveEnum
 import er.proto.Species.Learnset
@@ -33,14 +34,6 @@ object LevelUpLearnsetGenerator : Generator {
         writer.appendLine()
         learnsetIds.forEach { writer.appendLine(learnsetString(it.value, it.key)) }
 
-        writer.appendLine(
-            """
-            |const LevelUpMove *const gLevelUpLearnsets[REAL_SPECIES_COUNT] = {
-            |$IND${
-                NO_EGG_LIST.joinToString("\n$IND") { "[${it.id}] = $PREFIX${speciesIds[it.id]}," }
-            }
-            |};
-            |""".trimMargin()
-        )
+        speciesIds.printLookupTable("const LevelUpMove *const gLevelUpLearnsets[REAL_SPECIES_COUNT]", PREFIX, writer)
     }
 }

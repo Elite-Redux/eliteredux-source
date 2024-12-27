@@ -3,10 +3,10 @@ package er.data
 import er.FileGenerator.HEADER
 import er.FileGenerator.IND
 import er.Generator
-import er.TextprotoReader.NO_EGG_LIST
-import er.TextprotoReader.SPECIES_LIST
-import er.TextprotoReader.SPECIES_MAP
-import er.TextprotoReader.createDedupMaps
+import er.GeneratorUtils.NO_EGG_LIST
+import er.GeneratorUtils.SPECIES_MAP
+import er.GeneratorUtils.createDedupMaps
+import er.GeneratorUtils.printLookupTable
 import er.proto.MoveEnum
 import er.proto.Species
 import er.proto.Species.Learnset
@@ -64,10 +64,8 @@ object TutorLearnsetGenerator : Generator {
             |#define TUTOR_LEARNSET_END }}
             |
             |${tutorIds.entries.joinToString("\n") { learnsetString(it.value, it.key) }}
-            |const TutorUnion *const gTutorLearnsets[REAL_SPECIES_COUNT] = {
-            |$IND${speciesIds.entries.joinToString("\n$IND") { "[${it.key}] = $PREFIX${it.value}," }}
-            |};
-            |""".trimMargin()
-        )
+            |""")
+
+        speciesIds.printLookupTable("const TutorUnion *const gTutorLearnsets[REAL_SPECIES_COUNT]", PREFIX, writer)
     }
 }
