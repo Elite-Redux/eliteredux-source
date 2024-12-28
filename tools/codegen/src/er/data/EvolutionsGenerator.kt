@@ -1,6 +1,6 @@
 package er.data
 
-import er.FileGenerator.HEADER
+import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.NO_EGG_LIST
@@ -24,7 +24,7 @@ object EvolutionsGenerator : Generator {
         val megas = SPECIES_LIST.flatMap { it.megaList }.groupBy { it.from }
         val primals = SPECIES_LIST.flatMap { it.primalList }.groupBy { it.from }
 
-        writer.appendLine(HEADER)
+        writer.appendLine(header)
 
         val (evoIds, speciesEvoIds) = NO_EGG_LIST.map { species ->
             species.evoList.map {

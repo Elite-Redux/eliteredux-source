@@ -1,6 +1,6 @@
 package er.data
 
-import er.FileGenerator.HEADER
+import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.NO_EGG_LIST
@@ -8,7 +8,6 @@ import er.GeneratorUtils.SPECIES_LIST
 import er.GeneratorUtils.createDedupMaps
 import er.GeneratorUtils.printLookupTable
 import er.proto.SpeciesEnum
-import er.proto.species
 import java.io.OutputStreamWriter
 
 object FormSpeciesTableGenerator : Generator {
@@ -16,12 +15,12 @@ object FormSpeciesTableGenerator : Generator {
     override fun generate(writer: OutputStreamWriter) {
         val forms = SPECIES_LIST.groupBy({ it.formOf }, { it.id }) - SpeciesEnum.SPECIES_NONE
 
-        writer.appendLine(HEADER)
+        writer.appendLine(header)
 
         val (formIds, speciesIds) = NO_EGG_LIST.map {
             val id = if (it.hasFormOf()) it.formOf else it.id
             (listOf(id) + forms[id].orEmpty()) to it.id
-        }.createDedupMaps()
+        }.filter { it.first.size > 1 }.createDedupMaps()
 
         writer.appendLine(formIds.entries.joinToString("\n") {
             """

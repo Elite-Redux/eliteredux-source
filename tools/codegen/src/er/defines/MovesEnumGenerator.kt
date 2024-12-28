@@ -1,6 +1,6 @@
 package er.defines
 
-import er.FileGenerator.HEADER
+import er.FileGenerator.header
 import er.Generator
 import er.proto.MoveEnum
 import java.io.OutputStreamWriter
@@ -11,7 +11,7 @@ object MovesEnumGenerator : Generator {
         val movesCount = moves.maxOf { it.number } + 1
         writer.appendLine(
             """
-                |$HEADER
+                |$header
                 |#pragma once
                 |
                 |#define MOVES_COUNT $movesCount

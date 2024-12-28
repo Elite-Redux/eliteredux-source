@@ -1,6 +1,6 @@
 package er.data
 
-import er.FileGenerator.HEADER
+import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.NO_EGG_LIST
@@ -29,7 +29,7 @@ object LevelUpLearnsetGenerator : Generator {
     override fun generate(writer: OutputStreamWriter) {
         val (learnsetIds, speciesIds) = NO_EGG_LIST.map { findLearnsetForSpecies(it) to it.id }.createDedupMaps()
 
-        writer.appendLine(HEADER)
+        writer.appendLine(header)
         writer.appendLine()
         learnsetIds.forEach { writer.appendLine(learnsetString(it.value, it.key)) }
 

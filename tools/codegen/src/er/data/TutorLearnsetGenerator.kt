@@ -1,6 +1,6 @@
 package er.data
 
-import er.FileGenerator.HEADER
+import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.NO_EGG_LIST
@@ -47,9 +47,9 @@ object TutorLearnsetGenerator : Generator {
     private const val PREFIX = "__sTutorMoveset_"
 
     private fun learnsetString(id: Int, learnset: List<MoveEnum>): String = """
-        |const static TutorUnion $PREFIX$id = TUTOR_LEARNSET
-        |$IND${learnset.joinToString("\n$IND") { "TUTOR($it)" }}
-        |${IND}TUTOR_LEARNSET_END
+        |const static TutorUnion $PREFIX$id = { .fields = {
+        |$IND${learnset.joinToString("\n$IND") { ".TUTOR_BIT_FIELD($it) = TRUE," }}
+        |${IND}}};
         |""".trimMargin()
 
     override fun generate(writer: OutputStreamWriter) {
@@ -58,13 +58,9 @@ object TutorLearnsetGenerator : Generator {
 
         writer.appendLine(
             """
-            |$HEADER
-            |#define TUTOR_LEARNSET { .fields = {
-            |#define TUTOR(tutor) .TUTOR_BIT_FIELD(tutor) = TRUE,
-            |#define TUTOR_LEARNSET_END }}
-            |
+            |$header
             |${tutorIds.entries.joinToString("\n") { learnsetString(it.value, it.key) }}
-            |""")
+            |""".trimMargin())
 
         speciesIds.printLookupTable("const TutorUnion *const gTutorLearnsets[REAL_SPECIES_COUNT]", PREFIX, writer)
     }

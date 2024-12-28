@@ -1,6 +1,6 @@
 package er.defines
 
-import er.FileGenerator.HEADER
+import er.FileGenerator.header
 import er.Generator
 import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.proto.SpeciesEnum
@@ -12,7 +12,7 @@ object SpeciesEnumGenerator : Generator {
         val speciesCount = species.maxOf { it.number } + 1
         writer.appendLine(
             """
-            |$HEADER
+            |$header
             |#pragma once
             |
             |// Max possible number of species

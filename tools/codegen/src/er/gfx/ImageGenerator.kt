@@ -1,6 +1,6 @@
 package er.gfx
 
-import er.FileGenerator.HEADER
+import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.SPECIES_LIST
@@ -17,9 +17,7 @@ object ImageGenerator : Generator {
         }.filter { it.first.isNotBlank() }.createDedupMaps()
 
         writer.appendLine(imageIds.entries.joinToString("\n") {
-            """
-            |const u32 $prefix${it.value}[] = INCBIN_U32("graphics/pokemon/${it.key}.4bpp.lz");
-            |""".trimMargin()
+            """const u32 $prefix${it.value}[] = INCBIN_U32("graphics/pokemon/${it.key}.4bpp.lz");"""
         })
 
         writer.appendLine(
@@ -33,7 +31,7 @@ object ImageGenerator : Generator {
     }
 
     override fun generate(writer: OutputStreamWriter) {
-        writer.appendLine(HEADER)
+        writer.appendLine(header)
 
         printImageTable(writer, "__sFrontPic_", "gMonFrontPicTable") { it.visuals.front.path }
         printImageTable(writer, "__sFrontPicFemale_", "gMonFrontPicTableFemale") { it.visuals.female.front }

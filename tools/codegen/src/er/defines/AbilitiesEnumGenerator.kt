@@ -1,6 +1,6 @@
 package er.defines
 
-import er.FileGenerator.HEADER
+import er.FileGenerator.header
 import er.Generator
 import er.proto.AbilityEnum
 import java.io.OutputStreamWriter
@@ -11,7 +11,7 @@ object AbilitiesEnumGenerator : Generator {
         val abilityCount = abilities.maxOf { it.number } + 1
         writer.appendLine(
             """
-            |$HEADER
+            |$header
             |#pragma once
             |
             |#ifdef __assembly__

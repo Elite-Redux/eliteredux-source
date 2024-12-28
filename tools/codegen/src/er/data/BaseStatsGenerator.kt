@@ -1,6 +1,6 @@
 package er.data
 
-import er.FileGenerator.HEADER
+import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.SPECIES_LIST
@@ -14,7 +14,7 @@ object BaseStatsGenerator : Generator {
     override fun generate(writer: OutputStreamWriter) {
         writer.appendLine(
             """
-            |$HEADER
+            |$header
             |#define PERCENT_FEMALE(percent) min(254, ((percent * 255) / 100))
             |
             |const BaseStats gBaseStats[REAL_SPECIES_COUNT] = {""".trimMargin()
