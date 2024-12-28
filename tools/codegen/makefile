@@ -23,11 +23,13 @@ preproc.jar: $(PREPROC_SRCS) protobuf-java.jar
 
 define BUILD_PROTO
 DEPS := $(shell grep -oPs '\S+\.proto(?=\\)' protodep/$1.protodep.txt)
-protodep/$1.protodep.txt: protoc ../../proto/$1 $$(DEPS) preproc.jar protobuf-java.jar
+timestamp/depsets/$1: ../../proto/$1 protoc
 	@perl -pi.bak -e 'BEGIN{$$$$counter=1000000;} s/\@NEXT/$$$$counter++/ge' ../../proto/$1
 	@rm -f ../../proto/$1.bak
 	@mkdir -p timestamp/depsets
 	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --descriptor_set_out=timestamp/depsets/$1 --experimental_allow_proto3_optional
+
+protodep/$1.protodep.txt: timestamp/depsets/$1 protoc ../../proto/$1 $$(DEPS) preproc.jar protobuf-java.jar
 	java -cp preproc.jar:protobuf-java.jar preproc.ProtoProcessor ../../proto/$1 timestamp/depsets/$1 && exit
 	@mkdir -p protodep
 	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --kotlin_out=src --dependency_out=protodep/$1.protodep.txt --experimental_allow_proto3_optional
@@ -96,7 +98,9 @@ cleanlocal: removegenerated
 	rm -rf ../../generated
 	rm -rf timestamp
 	rm -f codegen.jar
-	rm -f codegenkt.jar	
+	rm -f codegenkt.jar
+	rm -rf out/depsets
+	rm -rf out/descriptors
 
 clean: cleanlocal
 	rm -f *.jar
