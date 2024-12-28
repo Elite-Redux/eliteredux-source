@@ -4,7 +4,9 @@ import er.data.*
 import er.defines.AbilitiesEnumGenerator
 import er.defines.MovesEnumGenerator
 import er.defines.SpeciesEnumGenerator
+import er.gfx.CoordsGenerator
 import er.gfx.IconGenerator
+import er.gfx.ImageGenerator
 import java.io.File
 import java.io.OutputStreamWriter
 
@@ -20,7 +22,7 @@ object FileGenerator {
 
     const val IND = "    "
 
-    val GENERATORS = mapOf<String, Generator>(
+    val GENERATORS = mapOf(
         "abilities" to AbilitiesEnumGenerator,
         "moves" to MovesEnumGenerator,
         "species" to SpeciesEnumGenerator,
@@ -31,6 +33,8 @@ object FileGenerator {
         "leveluplearnsets" to LevelUpLearnsetGenerator,
         "forms" to FormSpeciesTableGenerator,
         "icons" to IconGenerator,
+        "monpics" to ImageGenerator,
+        "coords" to CoordsGenerator
     )
 
     @JvmStatic

@@ -73,7 +73,9 @@ $(eval $(call GENERATE, generated/src/data/text/species_names.h, speciesnames))
 $(eval $(call GENERATE, generated/src/data/pokemon/tutor_learnsets.h, tutorlearnsets))
 $(eval $(call GENERATE, generated/src/data/pokemon/level_up_learnset_pointers.h, leveluplearnsets))
 $(eval $(call GENERATE, generated/src/data/pokemon/form_species_table_pointers.h, forms))
-$(eval $(call GENERATE, generated/src/data/pokemon/pokemon_icons.h, icons))
+$(eval $(call GENERATE, generated/src/data/pokemon_graphics/pokemon_icons.h, icons))
+$(eval $(call GENERATE, generated/src/data/pokemon_graphics/pokemon_pics.h, monpics))
+$(eval $(call GENERATE, generated/src/data/pokemon_graphics/pokemon_pic_coordinates.h, coords))
 
 timestamp/generated: $(ALL_GENERATED)
 	@touch timestamp/generated
