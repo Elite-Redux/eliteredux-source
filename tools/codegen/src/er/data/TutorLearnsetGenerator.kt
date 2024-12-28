@@ -4,6 +4,7 @@ import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.NO_EGG_LIST
+import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.GeneratorUtils.SPECIES_MAP
 import er.GeneratorUtils.createDedupMaps
 import er.GeneratorUtils.printLookupTable
@@ -47,8 +48,8 @@ object TutorLearnsetGenerator : Generator {
     private const val PREFIX = "__sTutorMoveset_"
 
     private fun learnsetString(id: Int, learnset: List<MoveEnum>): String = """
-        |const static TutorUnion $PREFIX$id = { .fields = {
-        |$IND${learnset.joinToString("\n$IND") { ".TUTOR_BIT_FIELD($it) = TRUE," }}
+        |static const TutorUnion $PREFIX$id = { .fields = {
+        |$IND${learnset.joinToString("\n$IND") { ".TUTOR_BIT_FIELD(${it.number}) = TRUE," }}
         |${IND}}};
         |""".trimMargin()
 
@@ -62,6 +63,6 @@ object TutorLearnsetGenerator : Generator {
             |${tutorIds.entries.joinToString("\n") { learnsetString(it.value, it.key) }}
             |""".trimMargin())
 
-        speciesIds.printLookupTable("const TutorUnion *const gTutorLearnsets[REAL_SPECIES_COUNT]", PREFIX, writer)
+        speciesIds.printLookupTable("const TutorUnion *const gTutorLearnsets[$REAL_SPECIES_COUNT]", "&$PREFIX", writer)
     }
 }

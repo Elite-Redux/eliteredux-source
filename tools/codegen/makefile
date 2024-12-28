@@ -64,19 +64,19 @@ define GENERATE
 ALL_GENERATED += ../../$(strip $1)
 endef
 
-$(eval $(call GENERATE, generated/include/constants/abilities.h, abilities))
-$(eval $(call GENERATE, generated/include/constants/moves.h, moves))
-$(eval $(call GENERATE, generated/include/constants/species.h, species))
-$(eval $(call GENERATE, generated/src/data/pokemon/base_stats.h, basestats))
-$(eval $(call GENERATE, generated/src/data/pokemon/evolution.h, evos))
-$(eval $(call GENERATE, generated/src/data/text/species_names.h, speciesnames))
-$(eval $(call GENERATE, generated/src/data/pokemon/tutor_learnsets.h, tutorlearnsets))
-$(eval $(call GENERATE, generated/src/data/pokemon/level_up_learnset_pointers.h, leveluplearnsets))
-$(eval $(call GENERATE, generated/src/data/pokemon/form_species_table_pointers.h, forms))
-$(eval $(call GENERATE, generated/src/data/pokemon_graphics/icons.h, icons))
-$(eval $(call GENERATE, generated/src/data/pokemon_graphics/pics.h, monpics))
-$(eval $(call GENERATE, generated/src/data/pokemon_graphics/coordinates.h, coords))
-$(eval $(call GENERATE, generated/src/data/pokemon_graphics/palette_table.h, monpals))
+$(eval $(call GENERATE, include/generated/constants/abilities.h, abilities))
+$(eval $(call GENERATE, include/generated/constants/moves.h, moves))
+$(eval $(call GENERATE, include/generated/constants/species.h, species))
+$(eval $(call GENERATE, include/generated/data/pokemon/base_stats.h, basestats))
+$(eval $(call GENERATE, include/generated/data/pokemon/evolution.h, evos))
+$(eval $(call GENERATE, include/generated/data/text/species_names.h, speciesnames))
+$(eval $(call GENERATE, include/generated/data/pokemon/tutor_learnsets.h, tutorlearnsets))
+$(eval $(call GENERATE, include/generated/data/pokemon/level_up_learnset_pointers.h, leveluplearnsets))
+$(eval $(call GENERATE, include/generated/data/pokemon/form_species_table_pointers.h, forms))
+$(eval $(call GENERATE, include/generated/data/pokemon_graphics/icons.h, icons))
+$(eval $(call GENERATE, include/generated/data/pokemon_graphics/pics.h, monpics))
+$(eval $(call GENERATE, include/generated/data/pokemon_graphics/coordinates.h, coords))
+$(eval $(call GENERATE, include/generated/data/pokemon_graphics/palette_table.h, monpals))
 
 timestamp/generated: $(ALL_GENERATED)
 	@touch timestamp/generated
@@ -84,7 +84,7 @@ timestamp/generated: $(ALL_GENERATED)
 generated: timestamp/generated
 
 removegenerated:
-	rm -rf ../../generated
+	rm -rf ../../include/generated
 
 regenerate: removegenerated generated
 

@@ -50,7 +50,7 @@ object EvolutionsGenerator : Generator {
 
         writer.appendLine(evoIds.entries.joinToString("\n") {
             """
-            |const static Evolution *const $EVO_PREFIX${it.value} = {
+            |static const Evolution *const $EVO_PREFIX${it.value} = {
             |$IND${it.key.joinToString("\n$IND") { evo -> "$evo," }}
             |${IND}0};
             |""".trimMargin()
