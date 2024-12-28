@@ -12,7 +12,7 @@ import er.proto.SpeciesEnum
 import java.io.OutputStreamWriter
 
 object FormSpeciesTableGenerator : Generator {
-    val PREFIX = "__sFormSpeciesTable_"
+    private const val PREFIX = "__sFormSpeciesTable_"
     override fun generate(writer: OutputStreamWriter) {
         val forms = SPECIES_LIST.groupBy({ it.formOf }, { it.id }) - SpeciesEnum.SPECIES_NONE
 
