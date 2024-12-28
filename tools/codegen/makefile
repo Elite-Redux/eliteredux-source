@@ -27,12 +27,12 @@ timestamp/depsets/$1: ../../proto/$1 protoc
 	@perl -pi.bak -e 'BEGIN{$$$$counter=1000000;} s/\@NEXT/$$$$counter++/ge' ../../proto/$1
 	@rm -f ../../proto/$1.bak
 	@mkdir -p timestamp/depsets
-	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --descriptor_set_out=timestamp/depsets/$1 --experimental_allow_proto3_optional
+	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --descriptor_set_out=timestamp/depsets/$1 --experimental_allow_proto3_optional && exit
 
 protodep/$1.protodep.txt: timestamp/depsets/$1 protoc ../../proto/$1 $$(DEPS) preproc.jar protobuf-java.jar
 	java -cp preproc.jar:protobuf-java.jar preproc.ProtoProcessor ../../proto/$1 timestamp/depsets/$1 && exit
 	@mkdir -p protodep
-	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --kotlin_out=src --dependency_out=protodep/$1.protodep.txt --experimental_allow_proto3_optional
+	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --kotlin_out=src --dependency_out=protodep/$1.protodep.txt --experimental_allow_proto3_optional && exit
 endef
 $(foreach proto,$(PROTO_SRCS),$(eval $(call BUILD_PROTO,$(proto))))
 
@@ -51,7 +51,7 @@ codegenkt.jar: protoc protobuf-java.jar codegen.jar protobuf-kotlin.jar $(KT_SRC
 define PREPROC_TEXTPROTO
 $1: $2 preproc.jar protobuf-java.jar codegen.jar protoc
 	@perl -pi.bak -e 'BEGIN{$$$$counter=1000000;} s/\@NEXT/$$$$counter++/ge' $2
-	@./protoc ../../proto/$3.proto --encode=er.$3 --proto_path="../../proto/" --experimental_allow_proto3_optional < $2 > bin/$3.binpb;
+	@./protoc ../../proto/$3.proto --encode=er.$3 --proto_path="../../proto/" --experimental_allow_proto3_optional < $2 > bin/$3.binpb && exit
 	java -cp preproc.jar:protobuf-java.jar:codegen.jar preproc.TextprotoProcessor $2 bin/$3.binpb && exit
 	@mkdir -p timestamp/preproc
 	@touch $1
@@ -62,7 +62,7 @@ $(foreach textproto,$(TEXTPROTO_SRCS),$(eval $(call PREPROC_TEXTPROTO,$(patsubst
 
 define GENERATE
 ../../$(strip $1): codegen.jar $(TEXTPROTO_SRCS) codegenkt.jar protobuf-java.jar protobuf-kotlin.jar $(TEXTPROTO_PREPROC)
-	java -cp codegen.jar:codegenkt.jar:protobuf-java.jar:protobuf-kotlin.jar er.FileGenerator $2 $(realpath ../..)/$(strip $1)
+	java -cp codegen.jar:codegenkt.jar:protobuf-java.jar:protobuf-kotlin.jar er.FileGenerator $2 $(realpath ../..)/$(strip $1) && exit
 ALL_GENERATED += ../../$(strip $1)
 endef
 
