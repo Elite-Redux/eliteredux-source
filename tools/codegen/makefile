@@ -76,7 +76,7 @@ $(eval $(call GENERATE, include/generated/data/pokemon/form_species_table_pointe
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/icons.h, icons))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/pics.h, monpics))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/coordinates.h, coords))
-$(eval $(call GENERATE, include/generated/data/pokemon_graphics/palette_table.h, monpals))
+$(eval $(call GENERATE, include/generated/data/pokemon_graphics/palettes.h, monpals))
 
 timestamp/generated: $(ALL_GENERATED)
 	@touch timestamp/generated

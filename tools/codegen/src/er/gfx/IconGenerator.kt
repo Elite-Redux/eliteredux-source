@@ -3,6 +3,7 @@ package er.gfx
 import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
+import er.GeneratorUtils.SPECIES_COUNT
 import er.GeneratorUtils.SPECIES_LIST
 import er.GeneratorUtils.SPECIES_MAP
 import er.GeneratorUtils.createDedupMaps
@@ -27,7 +28,7 @@ object IconGenerator : Generator {
         writer.appendLine(iconIds.entries.joinToString("\n") {
             "const u8 $ICON_PREFIX${it.value}[] = INCBIN_U8(\"graphics/pokemon/${it.key.path}.4bpp\");"
         })
-        speciesIconIds.printLookupTable("const u8 *const gMonIconTable[SPECIES_COUNT]", ICON_PREFIX, writer)
+        speciesIconIds.printLookupTable("const u8 *const gMonIconTable[$SPECIES_COUNT]", ICON_PREFIX, writer)
 
         writer.appendLine(
             """
@@ -41,7 +42,7 @@ object IconGenerator : Generator {
 
         writer.appendLine(
             """
-            |const u8 *const gMonIconTableFemale[] = {
+            |const u8 *const gMonIconTableFemale[$SPECIES_COUNT] = {
             |$IND${femaleIcons.joinToString("\n$IND") { "[${it.first}] = (const u8[]) INCBIN_U8(\"graphics/pokemon/${it.second.path}.4bpp\")," }}
             |};
             |

@@ -1,3 +1,4 @@
+#if !USE_GENERATED
 const u8 gMonIcon_Phantowl[] = INCBIN_U8("graphics/pokemon/phantowl/icon.4bpp");
 const u8 gMonIcon_Duelumber[] = INCBIN_U8("graphics/pokemon/duelumber/icon.4bpp");
 const u8 gMonIcon_Escarginite[] = INCBIN_U8("graphics/pokemon/escarginite/icon.4bpp");
@@ -8558,6 +8559,7 @@ const u32 gMonRareShinyPalette_Bulbasaur[]      = INCBIN_U32("graphics/pokemon/b
 const u32 gMonRareShinyPalette_Ivysaur[]        = INCBIN_U32("graphics/pokemon/ivysaur/rareshiny.gbapal.lz");
 const u32 gMonRareShinyPalette_Venusaur[]       = INCBIN_U32("graphics/pokemon/venusaur/rareshiny.gbapal.lz");
 const u32 gMonRareShinyPalette_VenusaurMega[]   = INCBIN_U32("graphics/pokemon/venusaur/mega/rareshiny.gbapal.lz");
+#endif
 
 
 //Legendary Shinies

@@ -17,6 +17,15 @@ object GeneratorUtils {
         SPECIES_LIST.filter { it.id != SpeciesEnum.SPECIES_EGG }
     }
 
+    val SPECIES_COUNT by lazy {
+        SpeciesEnum.entries.filter {
+            when (it) {
+                SpeciesEnum.UNRECOGNIZED, SpeciesEnum.SPECIES_NONE -> false
+                else -> true
+            }
+        }.maxOf { it.number } + 1
+    }
+
     val REAL_SPECIES_COUNT by lazy {
         SpeciesEnum.entries.filter {
             when (it) {

@@ -3,6 +3,7 @@ package er.data
 import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
+import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.GeneratorUtils.SPECIES_LIST
 import er.GeneratorUtils.SPECIES_MAP
 import er.proto.EggGroup
@@ -17,7 +18,7 @@ object BaseStatsGenerator : Generator {
             |$header
             |#define PERCENT_FEMALE(percent) min(254, ((percent * 255) / 100))
             |
-            |const BaseStats gBaseStats[REAL_SPECIES_COUNT] = {""".trimMargin()
+            |const BaseStats gBaseStats[$REAL_SPECIES_COUNT] = {""".trimMargin()
         )
 
         for (species in SPECIES_LIST) {

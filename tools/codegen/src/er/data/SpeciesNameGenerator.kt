@@ -4,6 +4,7 @@ import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.NO_EGG_LIST
+import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.GeneratorUtils.SPECIES_LIST
 import er.GeneratorUtils.SPECIES_MAP
 import er.GeneratorUtils.createDedupMaps
@@ -25,7 +26,7 @@ object SpeciesNameGenerator : Generator {
 
         writer.appendLine(
             """
-            |const u8 *const gSpeciesLongNames[REAL_SPECIES_COUNT] = {
+            |const u8 *const gSpeciesLongNames[$REAL_SPECIES_COUNT] = {
             |$IND${
                 SPECIES_LIST.filter { it.longName.isNotBlank() }
                     .joinToString(",\n$IND") { """[${it.id}] = $("${it.longName}")""" }

@@ -4,6 +4,7 @@ import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.NO_EGG_LIST
+import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.GeneratorUtils.createDedupMaps
 import er.GeneratorUtils.printLookupTable
 import er.data.TutorLearnsetGenerator.findLearnsetForSpecies
@@ -33,6 +34,6 @@ object LevelUpLearnsetGenerator : Generator {
         writer.appendLine()
         learnsetIds.forEach { writer.appendLine(learnsetString(it.value, it.key)) }
 
-        speciesIds.printLookupTable("const LevelUpMove *const gLevelUpLearnsets[REAL_SPECIES_COUNT]", PREFIX, writer)
+        speciesIds.printLookupTable("const LevelUpMove *const gLevelUpLearnsets[$REAL_SPECIES_COUNT]", PREFIX, writer)
     }
 }

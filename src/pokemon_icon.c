@@ -26,6 +26,9 @@ static u8 CreateMonIconSprite(struct MonIconSpriteTemplate *, s16, s16, u8);
 
 // .rodata
 
+#if USE_GENERATED
+#include "generated/data/pokemon_graphics/icons.h"
+#else
 const u8 *const gMonIconTable[] =
 {
     [SPECIES_NONE] = gMonIcon_QuestionMark,
@@ -3473,6 +3476,7 @@ const u8 gMonIconPaletteIndicesFemale[] =
     [SPECIES_JELLICENT] = 1,
     [SPECIES_PYROAR] = 2,
 };
+#endif
 
 const struct SpritePalette gMonIconPaletteTable[] =
 {

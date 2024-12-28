@@ -3,20 +3,20 @@ package er.defines
 import er.FileGenerator.header
 import er.Generator
 import er.GeneratorUtils.REAL_SPECIES_COUNT
+import er.GeneratorUtils.SPECIES_COUNT
 import er.proto.SpeciesEnum
 import java.io.OutputStreamWriter
 
 object SpeciesEnumGenerator : Generator {
     override fun generate(writer: OutputStreamWriter) {
         val species = SpeciesEnum.entries.filter { it != SpeciesEnum.UNRECOGNIZED }
-        val speciesCount = species.maxOf { it.number } + 1
         writer.appendLine(
             """
             |$header
             |#pragma once
             |
             |// Max possible number of species
-            |#define SPECIES_COUNT $speciesCount
+            |#define SPECIES_COUNT $SPECIES_COUNT
             |// Max number of non-egg mons
             |#define REAL_SPECIES_COUNT $REAL_SPECIES_COUNT
             |

@@ -4,6 +4,7 @@ import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.NO_EGG_LIST
+import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.GeneratorUtils.SPECIES_LIST
 import er.GeneratorUtils.SPECIES_MAP
 import er.GeneratorUtils.createDedupMaps
@@ -56,7 +57,7 @@ object EvolutionsGenerator : Generator {
             |""".trimMargin()
         })
 
-        speciesEvoIds.printLookupTable("const Evolution *const gEvolutionTable[REAL_SPECIES_COUNT]", EVO_PREFIX, writer)
+        speciesEvoIds.printLookupTable("const Evolution *const gEvolutionTable[$REAL_SPECIES_COUNT]", EVO_PREFIX, writer)
 
         val reverseForms =
             NO_EGG_LIST.map { it.formShiftOf to it.id }.groupBy({ it.first }, { it.second }) - SpeciesEnum.SPECIES_NONE
@@ -83,7 +84,7 @@ object EvolutionsGenerator : Generator {
         })
 
         speciesFormIds.printLookupTable(
-            "const Evolution *const gFormChangeTable[REAL_SPECIES_COUNT]",
+            "const Evolution *const gFormChangeTable[$REAL_SPECIES_COUNT]",
             FORM_PREFX,
             writer
         )

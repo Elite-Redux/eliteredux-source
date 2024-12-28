@@ -4,6 +4,7 @@ import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.NO_EGG_LIST
+import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.GeneratorUtils.SPECIES_LIST
 import er.GeneratorUtils.createDedupMaps
 import er.GeneratorUtils.printLookupTable
@@ -30,6 +31,6 @@ object FormSpeciesTableGenerator : Generator {
             |""".trimMargin()
         })
 
-        speciesIds.printLookupTable("const u16 *const gFormSpeciesIdTables[REAL_SPECIES_COUNT]", PREFIX, writer)
+        speciesIds.printLookupTable("const u16 *const gFormSpeciesIdTables[$REAL_SPECIES_COUNT]", PREFIX, writer)
     }
 }
