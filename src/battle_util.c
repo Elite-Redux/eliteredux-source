@@ -4009,6 +4009,7 @@ bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower) {
 }
 
 u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, u8 movePower) {
+    if (!CanUseExtraMove(battler, target)) return FALSE;
     if (!CheckAndSetOncePerTurnAbility(battler, ability)) return FALSE;
 
     gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
