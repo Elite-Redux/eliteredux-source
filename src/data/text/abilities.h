@@ -1483,7 +1483,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_CRUST_COAT] = _("Crust Coat"),
     [ABILITY_PUFFY] = _("Puffy"),
     [ABILITY_BALLOON_BLITZ] = _("Balloon Blitz"),
-    [ABILITY_STRIKER_PIXILATE] = _("StrikerPixilate"),
+    [ABILITY_STRIKER_PIXILATE] = _("Twinkle Toes"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
