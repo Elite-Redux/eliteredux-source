@@ -12360,7 +12360,7 @@ static void Cmd_settypebasedhalvers(void)  // water and mud sport
 }
 
 int Infiltrates(int battler, int move, InfiltrateType type) {
-    ON_ABILITY(battler, FALSE, gAbilities[ability].onInfiltrate, if (gAbilities[ability].onInfiltrate(battler, move) == type) return TRUE)
+    ON_ABILITY(battler, FALSE, gAbilities[ability].onInfiltrate, if (gAbilities[ability].onInfiltrate(battler, move) & type) return TRUE)
 
     return FALSE;
 }
