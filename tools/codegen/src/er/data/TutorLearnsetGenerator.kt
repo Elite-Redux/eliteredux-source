@@ -1,27 +1,35 @@
 package er.data
 
-import er.FileGenerator.HEADER
+import er.FileGenerator.header
 import er.FileGenerator.IND
-import er.TextprotoReader.REAL_SPECIES_COUNT
-import er.TextprotoReader.SPECIES_LIST
-import er.TextprotoReader.SPECIES_MAP
+import er.Generator
+import er.GeneratorUtils.NO_EGG_LIST
+import er.GeneratorUtils.REAL_SPECIES_COUNT
+import er.GeneratorUtils.SPECIES_MAP
+import er.GeneratorUtils.createDedupMaps
+import er.GeneratorUtils.printLookupTable
 import er.proto.MoveEnum
 import er.proto.Species
 import er.proto.Species.Learnset
 import er.proto.Species.Learnset.UniversalTutors
 import er.proto.SpeciesEnum
-import java.io.FileWriter
+import java.io.OutputStreamWriter
 
-object TutorLearnsetGenerator {
-    fun findLearnsetForSpecies(species: Species) =
+object TutorLearnsetGenerator : Generator {
+    fun findLearnsetForSpecies(species: Species): Learnset =
         when {
+            species.id == SpeciesEnum.SPECIES_NONE -> species.learnset
             species.hasLearnset() -> species.learnset
-            species.usesLearnset != SpeciesEnum.SPECIES_NONE -> SPECIES_MAP[species.usesLearnset]!!.learnset
-            species.formShiftOf != SpeciesEnum.SPECIES_NONE -> SPECIES_MAP[species.formShiftOf]!!.learnset
-            species.megaList.isNotEmpty() -> SPECIES_MAP[species.megaList.first().from]!!.learnset
-            species.primalList.isNotEmpty() -> SPECIES_MAP[species.primalList.first().from]!!.learnset
-            else -> SPECIES_MAP[species.formOf]!!.learnset
+            species.usesLearnset != SpeciesEnum.SPECIES_NONE -> findLearnsetForSpecies(SPECIES_MAP[species.usesLearnset]!!)
+            species.formShiftOf != SpeciesEnum.SPECIES_NONE -> findLearnsetForSpecies(SPECIES_MAP[species.formShiftOf]!!)
+            species.megaList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.megaList.first().from]!!)
+            species.primalList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.primalList.first().from]!!)
+            else -> findLearnsetForSpecies(SPECIES_MAP[species.formOf]!!)
         }
+
+    private fun expandLearnset(learnset: Learnset, species: Species) =
+        UNIVERSAL_TUTORS + UNIVERSAL_ATTACKS.takeIf { learnset.universalTutors != UniversalTutors.NO_ATTACKS }
+            .orEmpty() + listOfNotNull(MoveEnum.MOVE_ATTRACT.takeIf { !species.genderless }) + learnset.tutorList
 
     private val UNIVERSAL_TUTORS = listOf(
         MoveEnum.MOVE_ENDURE,
@@ -37,37 +45,24 @@ object TutorLearnsetGenerator {
         MoveEnum.MOVE_RETURN,
     )
 
-    private fun learnsetString(species: Species, learnset: Learnset): String {
-        val tutors =
-            UNIVERSAL_TUTORS + UNIVERSAL_ATTACKS.takeIf { learnset.universalTutors != UniversalTutors.NO_ATTACKS }
-                .orEmpty() + listOfNotNull(MoveEnum.MOVE_ATTRACT.takeIf { !species.genderless }) + learnset.tutorList
+    private const val PREFIX = "__sTutorMoveset_"
 
-        return """
-            |$IND[${species.id}] = TUTOR_LEARNSET
-            |$IND$IND${tutors.joinToString("\n$IND$IND") { "TUTOR($it)" }}
-            |$IND${IND}TUTOR_LEARNSET_END
-            |
-        """.trimMargin()
-    }
+    private fun learnsetString(id: Int, learnset: List<MoveEnum>): String = """
+        |static const TutorUnion $PREFIX$id = { .fields = {
+        |$IND${learnset.joinToString("\n$IND") { ".TUTOR_BIT_FIELD(${it.number}) = TRUE," }}
+        |${IND}}};
+        |""".trimMargin()
 
-    fun generate(file: String) {
-        FileWriter(file).use { writer ->
-            writer.appendLine(
-                """
-                |$HEADER
-                |#define TUTOR_LEARNSET (TutorUnion[]) {{ .fields = {
-                |#define TUTOR(tutor) .TUTOR_BIT_FIELD(tutor) = TRUE,
-                |#define TUTOR_LEARNSET_END }}},
-                |
-                |const TutorUnion *const gTutorLearnsets[$REAL_SPECIES_COUNT] = {
-                |${
-                    SPECIES_LIST.filter { it.id != SpeciesEnum.SPECIES_EGG }.joinToString("\n") {
-                        learnsetString(it, findLearnsetForSpecies(it))
-                    }
-                }
-                |};
-            """.trimMargin()
-            )
-        }
+    override fun generate(writer: OutputStreamWriter) {
+        val (tutorIds, speciesIds) = NO_EGG_LIST.map { expandLearnset(findLearnsetForSpecies(it), it) to it.id }
+            .createDedupMaps()
+
+        writer.appendLine(
+            """
+            |$header
+            |${tutorIds.entries.joinToString("\n") { learnsetString(it.value, it.key) }}
+            |""".trimMargin())
+
+        speciesIds.printLookupTable("const TutorUnion *const gTutorLearnsets[$REAL_SPECIES_COUNT]", "&$PREFIX", writer)
     }
 }

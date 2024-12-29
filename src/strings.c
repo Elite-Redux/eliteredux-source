@@ -1689,7 +1689,11 @@ const u8 gText_SavingEasyMode[] = _("Easy Mode");
 const u8 gText_SavingAceMode[] = _("Ace Mode");
 const u8 gText_SavingEliteMode[] = _("Elite Mode");
 const u8 gText_SavingNormalMode[] = _("Normal Mode"); // not used
+#ifdef DEBUG_BUILD
+const u8 gText_SavingVersionNum[] = _("v2.5 Debug");
+#else
 const u8 gText_SavingVersionNum[] = _("v2.5");
+#endif
 const u8 gText_WirelessCommStatus[] = _("Wireless Communication Status");
 const u8 gText_PeopleTrading[] = _("People trading:");
 const u8 gText_PeopleBattling[] = _("People battling:");

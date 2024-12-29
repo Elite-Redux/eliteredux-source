@@ -4009,6 +4009,7 @@ bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower) {
 }
 
 u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, u8 movePower) {
+    if (!CanUseExtraMove(battler, target)) return FALSE;
     if (!CheckAndSetOncePerTurnAbility(battler, ability)) return FALSE;
 
     gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
@@ -4902,28 +4903,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                 u8 i, statId, j;
                 bool8 found = FALSE;
                 for (i = 0; i < gBattlersCount; i++) {
-                    bool8 hasEgoist = BATTLER_HAS_ABILITY(i, ABILITY_EGOIST);
-                    if (hasEgoist || (GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_MIRROR_HERB && !found)) {
-                        bool8 foundForBattler = FALSE;
+                    if (GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_MIRROR_HERB) {
                         for (statId = STAT_ATK; statId < NUM_BATTLE_STATS; statId++) {
                             for (j = 0; j < gBattlersCount; j++) {
-                                if (GetBattlerSide(i) == GetBattlerSide(j)) continue;
+                                FILTER(GetBattlerSide(i) != GetBattlerSide(j))
                                 if (gBattleStruct->statChangesToCheck[j][statId - 1] > 0) {
-                                    found = foundForBattler = TRUE;
-                                    if (hasEgoist) {
-                                        SetAbilityStateAs(i, ABILITY_EGOIST, (AbilityStates){.statCopyState = (StatCopyState){.inProgress = TRUE}});
-                                    }
+                                    found = TRUE;
+                                    break;
                                 }
                             }
-                            if (foundForBattler) break;
+                            if (found) break;
                         }
                     }
-                }
-
-                battler = IsAbilityOnField(ABILITY_SHARING_IS_CARING) - 1;
-                if ((s8)battler >= 0) {
-                    found = TRUE;
-                    SetAbilityStateAs(battler, ABILITY_SHARING_IS_CARING, (AbilityStates){.statCopyState = (StatCopyState){.inProgress = TRUE}});
+                    if (found) break;
                 }
 
                 if (found) {
@@ -4933,44 +4925,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                         BattleScriptExecute(BattleScript_End2);
                     }
                     BattleScriptCall(BattleScript_PerformCopyStatEffects);
-                    effect++;
-                } else {
-                    ZERO(gBattleStruct->statChangesToCheck)
-                    gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_NOT_NEEDED;
-                }
-            }
-
-            for (i = 0; i < gBattlersCount; i++) {
-                int j, state = GetAbilityState(i, ABILITY_POWER_OF_ALCHEMY);
-                FILTER(state)
-                for (j = 0; j < gBattlersCount; j++) {
-                    int item = state & 3;
-                    state = state >> 2;
-                    FILTER(item)
-                    FILTER(gBattleMons[j].item == ITEM_NONE)
-                    gStackBattler1 = i;
-                    gStackBattler2 = j;
-                    if (!effect) {
-                        if (extraArg == ABILITY_BS_PUSH_CURSOR_AND_CALLBACK) {
-                            BattleScriptPushCursorAndCallback(BattleScript_End3);
-                        } else if (extraArg == ABILITY_BS_EXECUTE) {
-                            BattleScriptExecute(BattleScript_End2);
-                        }
-                    }
-                    if (item == 1) {
-                        UpdateBattlerItem(j, ITEM_BLACK_SLUDGE);
-                        BattleScriptCall(BattleScript_PowerOfAlchemySludge);
-                    } else {
-                        UpdateBattlerItem(j, ITEM_BIG_NUGGET);
-                        BattleScriptCall(BattleScript_PowerOfAlchemyGold);
-                    }
+                    gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_IN_PROGRESS;
                     effect++;
                 }
-                SetAbilityState(i, ABILITY_POWER_OF_ALCHEMY, 0);
             }
 
             for (int i = 0; i < gBattlersCount; i++) {
-                ON_ABILITY(i, FALSE, gAbilities[ability].onReactive, effect += gAbilities[ability].onReactive(ability, battler))
+                ON_ABILITY(i, FALSE, gAbilities[ability].onReactive, effect += gAbilities[ability].onReactive(ability, battler, extraArg))
+            }
+
+            if (gBattleStruct->statStageCheckState == STAT_STAGE_CHECK_NEEDED) {
+                gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_NOT_NEEDED;
+                ZERO(gBattleStruct->statChangesToCheck)
             }
             break;
         case ABILITYEFFECT_MOVE_END_EITHER:
@@ -6254,19 +6220,20 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
             // Occur after the final hit of a multi-strike move
             switch (atkHoldEffect) {
                 case HOLD_EFFECT_SHELL_BELL:
-                    if (gTurnStructs[gBattlerTarget].dmg != 0 && gTurnStructs[gBattlerTarget].dmg != 0xFFFF &&
-                        !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove)) && gBattlerAttacker != gBattlerTarget &&
-                        gBattleMons[gBattlerAttacker].hp != gBattleMons[gBattlerAttacker].maxHP && gBattleMons[gBattlerAttacker].hp != 0 &&
-                        !BATTLER_HEALING_BLOCKED(gBattlerAttacker)) {
-                        gLastUsedItem = atkItem;
-                        gPotentialItemEffectBattler = gBattlerAttacker;
-                        gBattleScripting.battler = gBattlerAttacker;
-                        gBattleMoveDamage = (gTurnStructs[gBattlerTarget].dmg / 4) * -1;
-                        if (gBattleMoveDamage == 0) gBattleMoveDamage = -1;
-                        gTurnStructs[gBattlerTarget].dmg = 0;
-                        BattleScriptCall(BattleScript_ItemHealHP_Ret);
-                        effect = ITEM_HP_CHANGE;
-                    }
+                    REQUIRE(gTurnStructs[gBattlerAttacker].savedDmg)
+                    REQUIRE(IsBattlerAlive(gBattlerAttacker))
+                    REQUIRE_NOT(BATTLER_MAX_HP(gBattlerAttacker))
+                    REQUIRE_NOT(BATTLER_HEALING_BLOCKED(gBattlerAttacker))
+                    REQUIRE_NOT(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
+                    REQUIRE(gBattlerAttacker != gBattlerTarget)
+
+                    gLastUsedItem = atkItem;
+                    gPotentialItemEffectBattler = gBattlerAttacker;
+                    gBattleScripting.battler = gBattlerAttacker;
+                    gBattleMoveDamage = (gTurnStructs[gBattlerTarget].savedDmg / 4) * -1;
+                    if (gBattleMoveDamage == 0) gBattleMoveDamage = -1;
+                    BattleScriptCall(BattleScript_ItemHealHP_Ret);
+                    effect = ITEM_HP_CHANGE;
                     break;
                 case HOLD_EFFECT_LIFE_ORB: {
                     int canProc = gBattlerAttacker == gBattlerByTurnOrder[gCurrentTurnActionNumber];

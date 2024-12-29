@@ -80,7 +80,7 @@ void RemoveItem(u8 battler);
 u8 GetCatchingBattler(void);
 u32 IsDesertCloakProtected(u32 battler);
 u8 getStatToLowerFromIntimidateClone(u16 ability, u8 num);
-bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler);
+u16 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler);
 void SetStatChanger(u8 statId, s8 change);
 s8 ChangeStatBuffsImplicit(s8 statValue, u32 statId, u32 flags, const u8* BS_ptr);
 s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS_ptr);

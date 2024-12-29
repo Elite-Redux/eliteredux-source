@@ -1532,6 +1532,7 @@
 #define FLAG_RECEIVED_VOLCANION                                     3091
 #define FLAG_RECEIVED_FLOETTE_ETERNAL                               3092
 #define FLAG_RECEIVED_DURALUDON_PARTNER                             3093
+#define FLAG_SYS_UPPED_DIFFICULTY                                   3094
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 

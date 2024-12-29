@@ -280,10 +280,10 @@ struct SpindaSpot {
     u16 image[16];
 };
 
-struct LevelUpMove {
+typedef struct LevelUpMove {
     u16 move;
     u16 level;
-};
+} LevelUpMove;
 
 struct TrainerMonSpread {
     u8 EVs[6];

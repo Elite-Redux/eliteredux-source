@@ -2323,6 +2323,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
             case MOVE_EFFECT_SWAMP:
             case MOVE_EFFECT_RAINBOW:
             case MOVE_EFFECT_FIRE_SEA:
+            case MOVE_EFFECT_SPECTRAL_THIEF:
                 break;
 
             default:
@@ -8190,7 +8191,6 @@ static void Cmd_various(void) {
             break;
         case VARIOUS_DO_COPY_STAT_CHANGE:
             if (gBattleStruct->statStageCheckState == STAT_STAGE_CHECK_NOT_NEEDED) break;
-            gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_IN_PROGRESS;
             ptr = gBattlescriptCurrInstr;
             gBattlescriptCurrInstr = runAgain;
             for (i = 0; i < gBattlersCount; i++) {
@@ -10213,7 +10213,7 @@ static void Cmd_setlightscreen(void) {
     gBattlescriptCurrInstr++;
 }
 
-bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler) {
+u16 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler) {
     int i;
 
     if (BattlerHasAbility(battler, ABILITY_GUARD_DOG, TRUE)) return FALSE;

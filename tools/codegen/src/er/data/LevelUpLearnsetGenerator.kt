@@ -1,50 +1,39 @@
 package er.data
 
-import er.FileGenerator.HEADER
+import er.FileGenerator.header
 import er.FileGenerator.IND
-import er.TextprotoReader.REAL_SPECIES_COUNT
-import er.TextprotoReader.SPECIES_LIST
-import er.TextprotoReader.SPECIES_MAP
+import er.Generator
+import er.GeneratorUtils.NO_EGG_LIST
+import er.GeneratorUtils.REAL_SPECIES_COUNT
+import er.GeneratorUtils.createDedupMaps
+import er.GeneratorUtils.printLookupTable
 import er.data.TutorLearnsetGenerator.findLearnsetForSpecies
 import er.proto.MoveEnum
-import er.proto.Species
 import er.proto.Species.Learnset
-import er.proto.Species.Learnset.UniversalTutors
-import er.proto.SpeciesEnum
-import java.io.FileWriter
+import java.io.OutputStreamWriter
 
-object LevelUpLearnsetGenerator {
+object LevelUpLearnsetGenerator : Generator {
+    private const val PREFIX = "__sLevelUpMoveset_"
 
-    private fun learnsetString(species: Species, learnset: Learnset): String =
-        if (learnset.levelList.isNotEmpty()) (
-                """
-            |$IND[${species.id}] = (LevelUpMove[]) {
-            |$IND$IND${
-                    learnset.levelList.flatMap { it.moveList.map { move -> it.level to move } }
-                        .sortedWith(compareBy<Pair<Int, MoveEnum>> { it.first }.thenBy { it.second.name })
-                        .joinToString("\n$IND$IND") { "{ .level = ${it.first}, .move = ${it.second} }," }
-                }
-            |$IND$IND{0}},
-            |
-        """.trimMargin()) else {
-            ""
+    private fun learnsetString(index: Int, learnset: Learnset): String =
+        """
+        |static const LevelUpMove $PREFIX$index[] = {
+        |$IND${
+            learnset.levelList.flatMap { it.moveList.map { move -> it.level to move } }
+                .sortedWith(compareBy<Pair<Int, MoveEnum>> { it.first }.thenBy { it.second.name })
+                .joinToString("\n$IND") { "{ .level = ${it.first}, .move = ${it.second} }," }
         }
+        |$IND{0}
+        |};
+        |""".trimMargin()
 
-    fun generate(file: String) {
-        FileWriter(file).use { writer ->
-            writer.appendLine(
-                """
-                |$HEADER
-                |
-                |const LevelUpMove *const gLevelUpLearnsets[$REAL_SPECIES_COUNT] = {
-                |${
-                    SPECIES_LIST.filter { it.id != SpeciesEnum.SPECIES_EGG }.joinToString("\n") {
-                        learnsetString(it, findLearnsetForSpecies(it))
-                    }
-                }
-                |};
-            """.trimMargin()
-            )
-        }
+    override fun generate(writer: OutputStreamWriter) {
+        val (learnsetIds, speciesIds) = NO_EGG_LIST.map { findLearnsetForSpecies(it) to it.id }.createDedupMaps()
+
+        writer.appendLine(header)
+        writer.appendLine()
+        learnsetIds.forEach { writer.appendLine(learnsetString(it.value, it.key)) }
+
+        speciesIds.printLookupTable("const LevelUpMove *const gLevelUpLearnsets[$REAL_SPECIES_COUNT]", PREFIX, writer)
     }
 }

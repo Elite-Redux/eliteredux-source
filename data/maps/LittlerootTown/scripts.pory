@@ -2123,11 +2123,15 @@ script PKMN_Center_Move_Tutor{
 		break
 		case 4:
 			closemessage
+			goto(PKMN_Center_EventScript_Up_Difficulty)
+		break
+		case 5:
+			closemessage
 			goto(PKMN_Center_EventScript_Lower_Difficulty)
 		break
 		case MULTI_B_PRESSED:
 		default:
-		case 5:
+		case 6:
 			closemessage
 			goto(PKMN_Center_Move_Tutor_General_Exit)
 		break
@@ -2194,7 +2198,7 @@ script PKMN_Center_EventScript_RandomizerToggle{
 script PKMN_Center_EventScript_Lower_Difficulty{
 	checkSaveblockValue(SAVEBLOCK_DIFFICULTY)
 	if(var(VAR_RESULT) != DIFFICULTY_EASY){
-		msgbox(format("Do you want to lower the difficulty? THIS CAN NOT BE UNDONE LATER!"), MSGBOX_YESNO)
+		msgbox(format("Do you want to lower the difficulty?"), MSGBOX_YESNO)
 		switch(var(VAR_RESULT)){
 			case YES:
 				checkSaveblockValue(SAVEBLOCK_DIFFICULTY)
@@ -2226,13 +2230,49 @@ script PKMN_Center_EventScript_Lower_Difficulty{
     end
 }
 
+script PKMN_Center_EventScript_Up_Difficulty{
+	checkSaveblockValue(SAVEBLOCK_DIFFICULTY)
+	if(var(VAR_RESULT) != DIFFICULTY_ELITE){
+		msgbox(format("Do you want to up the difficulty?"), MSGBOX_YESNO)
+		switch(var(VAR_RESULT)){
+			case YES:
+				checkSaveblockValue(SAVEBLOCK_DIFFICULTY)
+				if(var(VAR_RESULT) == DIFFICULTY_EASY){
+					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_ACE)
+					playfanfare(MUS_OBTAIN_ITEM)
+					message(format("The difficulty became Ace."))
+				}
+				else{
+					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_ELITE)
+					playfanfare(MUS_OBTAIN_ITEM)
+					message(format("The difficulty became Elite."))
+				}
+				setflag(FLAG_SYS_UPPED_DIFFICULTY)
+				waitmessage
+				waitfanfare
+			break
+			case NO:
+			case MULTI_B_PRESSED:
+			default:
+				goto(PKMN_Center_Move_Tutor)
+			break
+		}
+	}
+	else{
+		msgbox(format("You are already in the highest difficulty, touch some grass!"))
+		goto(PKMN_Center_Move_Tutor)
+	}
+    release
+    end
+}
+
 text MultiChoice_Move_Tutor_NPC{
     "Invert Day and Night$"
     "Disable Randomizer$"
     "Rate a nickname$"
     "Mystery Gift$"
+    "Upping Difficulty$"
     "Lower Difficulty$"
-    "Exit$"
     "$"
 }
 

@@ -27,5 +27,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="kotlinx-coroutines-core" level="project" />
   </component>
 </module>

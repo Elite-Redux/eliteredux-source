@@ -1018,12 +1018,6 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_MELOETTA] = {{EVO_FORM_SHIFT, 1, SPECIES_MELOETTA},
                             {EVO_FORM_SHIFT, 1, SPECIES_MELOETTA_PIROUETTE},},
 
-  //  [SPECIES_URSALUNA] = {{EVO_FORM_SHIFT, 1, SPECIES_URSALUNA},
-  //                          {EVO_FORM_SHIFT, 1, SPECIES_URSALUNA_BLOODMOON},},
-                            
-  //  [SPECIES_URSHIFU] = {{EVO_FORM_SHIFT, 1, SPECIES_URSHIFU}, //disabled for now
-  //                          {EVO_FORM_SHIFT, 1, SPECIES_URSHIFU_RAPID_STRIKE_STYLE},}, 
-
     [SPECIES_BASCULIN] = {{EVO_FORM_SHIFT, 1, SPECIES_BASCULIN},
                             {EVO_FORM_SHIFT, 1, SPECIES_BASCULIN_BLUE_STRIPED},
                             {EVO_FORM_SHIFT, 1, SPECIES_BASCULIN_WHITESTRIPED},},
@@ -1036,9 +1030,6 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
 
     [SPECIES_MAUSHOLD] = {{EVO_FORM_SHIFT, 1, SPECIES_MAUSHOLD},
                             {EVO_FORM_SHIFT, 1, SPECIES_MAUSHOLD_FOUR},},
-
-   // [SPECIES_LUMBERING_SLOTH] = {{EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH},
-   //                                 {EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH_ENGULFED},}, // testing purposes. subject to removal
 
     [SPECIES_GIMMIGHOUL] = {{EVO_FORM_SHIFT, 1, SPECIES_GIMMIGHOUL},
                                 {EVO_FORM_SHIFT, 1, SPECIES_GIMMIGHOUL_ROAMING},},
@@ -1088,7 +1079,6 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                                 {EVO_FORM_SHIFT, MON_MALE, SPECIES_PIKACHU_UNOVA_CAP},
                                 {EVO_FORM_SHIFT, MON_MALE, SPECIES_PIKACHU_KALOS_CAP},
                                 {EVO_FORM_SHIFT, MON_MALE, SPECIES_PIKACHU_ALOLA_CAP},
-                             //   {EVO_FORM_SHIFT, MON_MALE, SPECIES_PIKACHU_PARTNER_CAP}, //
                                 {EVO_FORM_SHIFT, MON_MALE, SPECIES_PIKACHU_WORLD_CAP},},
 
     [SPECIES_PICHU] = {{EVO_FORM_SHIFT, 1, SPECIES_PICHU},
