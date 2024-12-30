@@ -46,6 +46,7 @@
 #include "trainer_card.h"
 #include "window.h"
 #include "ui_intro_options.h"
+#include "ui_start_menu.h"
 #include "ui_battle_menu.h"
 #include "constants/songs.h"
 #include "constants/map_groups.h"
@@ -897,7 +898,8 @@ static bool8 StartMenuDebugCallback(void)
 static bool8 StartMenuIntroOptionMenuCallback(void)
 {
     FlagSet(FLAG_SYS_DEBUG_MENU_OPENED);
-    CreateTask(Task_OpenIntroOptionMenuFromStartMenu, 0);
+    CreateTask(Task_OpenStartMenuFromStartMenu, 0);
+    //CreateTask(Task_OpenIntroOptionMenuFromStartMenu, 0);
     return TRUE;
 }
 
