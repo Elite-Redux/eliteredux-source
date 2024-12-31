@@ -75,11 +75,12 @@ enum
     START_MENU_ACTION_POKEMON,
 	START_MENU_ACTION_PLAYER,
     START_MENU_ACTION_BAG,
-    //START_MENU_ACTION_SKILLS,
-	//START_MENU_ACTION_ACHIEVEMENTS,
     START_MENU_ACTION_DEXNAV,
-    //START_MENU_ACTION_POKENAV,
+    START_MENU_ACTION_POKENAV,
+	START_MENU_ACTION_GUIDE,
 	START_MENU_ACTION_OPTIONS,
+    START_MENU_ACTION_DEBUG,
+	START_MENU_ACTION_PC,
     START_MENU_ACTION_SAVE,
     START_MENU_ACTION_EXIT,
     NUM_START_MENU_ACTIONS,
@@ -798,10 +799,9 @@ static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS]
 			"or even evolve them."
 		),
     },
-    #ifdef START_MENU_ACTION_ACHIEVEMENTS
-	[START_MENU_ACTION_ACHIEVEMENTS] =
+	[START_MENU_ACTION_PC] =
     {
-        .title = _("Achievements"),
+        .title = _("Use the PC"),
         .description = _(
 			"See all your completed\n"
 			"Achievements, get your\n"
@@ -809,7 +809,6 @@ static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS]
 			"need to complete."
 		),
     },
-    #endif
 	[START_MENU_ACTION_BAG] =
     {
         .title = _("Inventory"),
@@ -830,15 +829,26 @@ static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS]
 			"stuff you don't like."
 		),
     },
-    #ifdef START_MENU_ACTION_POKENAV
 	[START_MENU_ACTION_POKENAV] =
     {
-        .title = _("Map"),
+        .title = _("PokeNav"),
         .description = _(
-			"Check the world Map."
+			"Change your settings,\n"
+			"character colors,\n"
+			"bike type or disable\n"
+			"stuff you don't like."
 		),
     },
-    #endif
+	[START_MENU_ACTION_GUIDE] =
+    {
+        .title = _("Information"),
+        .description = _(
+			"Change your settings,\n"
+			"character colors,\n"
+			"bike type or disable\n"
+			"stuff you don't like."
+		),
+    },
 	[START_MENU_ACTION_DEXNAV] =
     {
         .title = _("DexNav"),
@@ -849,10 +859,9 @@ static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS]
 			"of available Pokémon."
 		),
     },
-    #ifdef START_MENU_ACTION_SKILLS
-	[START_MENU_ACTION_SKILLS] =
+	[START_MENU_ACTION_DEBUG] =
     {
-        .title = _("Trainer Skills"),
+        .title = _("Debug"),
         .description = _(
 			"Power Up your trainer\n"
 			"skills to give you an\n"
@@ -860,7 +869,6 @@ static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS]
 			"adventure."
 		),
     },
-    #endif
 	[START_MENU_ACTION_SAVE] =
     {
         .title = _("Save"),
@@ -1131,36 +1139,31 @@ static void PrintToWindow(u8 windowId, u8 colorIdx)
 				else
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Bag, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 			break;
-    		#ifdef START_MENU_ACTION_ACHIEVEMENTS
-			case START_MENU_ACTION_ACHIEVEMENTS:
+			case START_MENU_ACTION_PC:
 				if(j == sMenuDataPtr->cursorRowY)
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Achievements_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 				else
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Achievements, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 			break;
-    		#endif
-    		#ifdef START_MENU_ACTION_SKILLS
-			case START_MENU_ACTION_SKILLS:
+			case START_MENU_ACTION_DEBUG:
 				if(j == sMenuDataPtr->cursorRowY)
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Skills_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 				else
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Skills, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 			break;
-    		#endif
-    		#ifdef START_MENU_ACTION_POKENAV
 			case START_MENU_ACTION_POKENAV:
 				if(j == sMenuDataPtr->cursorRowY)
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_PokeNav_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 				else
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_PokeNav, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 			break;
-    		#endif
 			case START_MENU_ACTION_OPTIONS:
 				if(j == sMenuDataPtr->cursorRowY)
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Options_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 				else
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Options, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 			break;
+			case START_MENU_ACTION_GUIDE:
 			case START_MENU_ACTION_SAVE:
 				if(j == sMenuDataPtr->cursorRowY)
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Save_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
@@ -1329,7 +1332,7 @@ static void PrintToWindow(u8 windowId, u8 colorIdx)
 //Map Stuff
 /*static void CB2_OpenTownMapFromBag(void)
 {
-    OpenPokenavForTownMap(CB2_ReturnToField);
+    OpenPokenavForTownMap(CB2_ReturnToUIMenu);
 }
 
 static void Task_OpenRegisteredTownMap(u8 taskId)
@@ -1337,7 +1340,7 @@ static void Task_OpenRegisteredTownMap(u8 taskId)
     if (!gPaletteFade.active)
     {
         CleanupOverworldWindowsAndTilemaps();
-        OpenPokenavForTownMap(CB2_ReturnToField);
+        OpenPokenavForTownMap(CB2_ReturnToUIMenu);
         DestroyTask(taskId);
     }
 }
@@ -1427,11 +1430,11 @@ void Task_OpenTrainerCardFromStartMenu(u8 taskId)
 		CleanupOverworldWindowsAndTilemaps();
 		
 		if (InUnionRoom())
-			ShowPlayerTrainerCard(CB2_ReturnToField); // Display trainer card
+			ShowPlayerTrainerCard(CB2_ReturnToUIMenu); // Display trainer card
 		else if (FlagGet(FLAG_SYS_FRONTIER_PASS))
-			ShowFrontierPass(CB2_ReturnToField); // Display frontier pass
+			ShowFrontierPass(CB2_ReturnToUIMenu); // Display frontier pass
 		else
-			ShowPlayerTrainerCard(CB2_ReturnToField); // Display trainer card
+			ShowPlayerTrainerCard(CB2_ReturnToUIMenu); // Display trainer card
     }
 }
 
@@ -1454,7 +1457,7 @@ void Task_OpenOptionsMenuStartMenu(u8 taskId)
 		PlayRainStoppingSoundEffect();
         CleanupOverworldWindowsAndTilemaps();
         SetMainCallback2(CB2_InitOptionMenu); // Display option menu
-        gMain.savedCallback = CB2_ReturnToField;
+        gMain.savedCallback = CB2_ReturnToUIMenu;
     }
 }
 
@@ -1465,18 +1468,21 @@ void Task_OpenPokenavStartMenu(u8 taskId)
 		Menu_FreeResources();
 		PlayRainStoppingSoundEffect();
 		CleanupOverworldWindowsAndTilemaps();
-        //OpenPokenavForTownMap(sMenuDataPtr->savedCallback);
+        SetMainCallback2(CB2_InitPokeNav);  // Display PokeNav
 		DestroyTask(taskId);
     }
 }  
 
-void Task_OpenTrainerSkillsStartMenu(u8 taskId)
+void Task_OpenDebugStartMenu(u8 taskId)
 {
 	if (!gPaletteFade.active)
     {
+		//To Change
+		Menu_FreeResources();
+		PlayRainStoppingSoundEffect();
         CleanupOverworldWindowsAndTilemaps();
-        //Trainer_Skill_Menu_Init(CB2_ReturnToField); //CB2_ReturnToFieldWithOpenMenu
-        DestroyTask(taskId);
+        SetMainCallback2(CB2_InitOptionMenu); // Display option menu
+        gMain.savedCallback = CB2_ReturnToUIMenu;
     }
 }  
 
@@ -1497,26 +1503,26 @@ void Task_ChangeTrainerName(u8 taskId)
     if (!gPaletteFade.active)
     {
 		NewGameBirchSpeech_SetDefaultPlayerName(Random() % 20);
-		//DoNamingScreen(0, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, CB2_ReturnToField, 0);
+		//DoNamingScreen(0, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, CB2_ReturnToUIMenu, 0);
     }
 }
 
-void Task_ChangeTime(u8 taskId)
+void Task_OpenPokemonStorageSystemFromStartMenu(u8 taskId)
 {
 	Menu_FreeResources();
     if (!gPaletteFade.active)
     {
 		SetMainCallback2(CB2_StartWallClock);
-		gMain.savedCallback = CB2_ReturnToField;
+		gMain.savedCallback = CB2_ReturnToUIMenu;
 
 		//NewGameBirchSpeech_SetDefaultPlayerName(Random() % 20);
-		//DoNamingScreen(0, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, CB2_ReturnToField, 0);
+		//DoNamingScreen(0, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, CB2_ReturnToUIMenu, 0);
     }
 }
 
 static bool8 QuestMenuCallback(void)
 {
-    CreateTask(Task_OpenQuestMenuFromStartMenu, 0);
+    CreateTask(Task_OpenPokemonStorageSystemFromStartMenu, 0);
     return TRUE;
 }
 
@@ -1557,6 +1563,58 @@ static void PressedUpButton(){
     else{
         sMenuDataPtr->cursorRowY--;
     }
+}
+
+static bool8 canUsePC(void){
+    bool8 disablePC = FALSE;
+
+	switch(gSaveBlock1Ptr->location.mapNum){
+		case MAP_NUM(EVER_GRANDE_CITY_SIDNEYS_ROOM):
+			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_SIDNEYS_ROOM))
+				disablePC = TRUE;
+		break;
+		case MAP_NUM(EVER_GRANDE_CITY_PHOEBES_ROOM):
+			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_PHOEBES_ROOM))
+				disablePC = TRUE;
+		break;
+		case MAP_NUM(EVER_GRANDE_CITY_GLACIAS_ROOM):
+			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_GLACIAS_ROOM))
+				disablePC = TRUE;
+		break;
+		case MAP_NUM(EVER_GRANDE_CITY_DRAKES_ROOM):
+			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_DRAKES_ROOM))
+				disablePC = TRUE;
+		break;
+		case MAP_NUM(EVER_GRANDE_CITY_CHAMPIONS_ROOM):
+			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_CHAMPIONS_ROOM))
+				disablePC = TRUE;
+		break;
+		case MAP_NUM(EVER_GRANDE_CITY_HALL1):
+			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL1))
+				disablePC = TRUE;
+		break;
+		case MAP_NUM(EVER_GRANDE_CITY_HALL2):
+			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL2))
+				disablePC = TRUE;
+		break;
+		case MAP_NUM(EVER_GRANDE_CITY_HALL3):
+			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL3))
+				disablePC = TRUE;
+		break;
+		case MAP_NUM(EVER_GRANDE_CITY_HALL4):
+			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL4))
+				disablePC = TRUE;
+		break;
+		case MAP_NUM(EVER_GRANDE_CITY_HALL5):
+			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL5))
+				disablePC = TRUE;
+		break;
+	}
+
+	if(!disablePC && FlagGet(FLAG_SYS_POKEMON_GET))
+	    return TRUE;
+
+	return FALSE;
 }
 
 static bool8 ShouldDisableSaving(){
@@ -1614,10 +1672,6 @@ static bool8 ShouldDisableSaving(){
 	return FALSE;
 }
 
-static bool8 HasMapMons(void){
-	return TRUE;
-}
-
 /* This is the meat of the UI. This is where you wait for player inputs and can branch to other tasks accordingly */
 static void Task_MenuMain(u8 taskId)
 {
@@ -1626,54 +1680,14 @@ static void Task_MenuMain(u8 taskId)
 
 	VarSet(VAR_START_MENU_CURSOR_Y, sMenuDataPtr->cursorRowY);
 	VarSet(VAR_START_MENU_CURSOR_X, sMenuDataPtr->FirstItem);
-
-	//SetOutBreakPokemonFromCompanion();
-	//SetRoamerPokemonFromCompanion();
-	
-	/*if ((JOY_HELD(START_BUTTON)) && JOY_NEW(R_BUTTON))
-    {
-		//Change Player's Time
-		if(!FlagGet(FLAG_CHANGED_TIME)){
-			FlagSet(FLAG_CHANGED_TIME);
-			PlaySE(SE_SELECT);
-			BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-			gTasks[taskId].func = Task_ChangeTime;
-		}
-		else{
-			sMenuDataPtr->CurrentMessage = MESSAGE_CANT_CHANGE_TIME;
-			PlaySE(SE_BOO);
-			PrintToWindow(WINDOW_1, FONT_BLACK);
-		}
-    }
-
-	if ((JOY_HELD(START_BUTTON)) && JOY_NEW(L_BUTTON))
-    {
-		//Reset Steps
-		PlaySE(SE_SELECT);
-		VarSet(VAR_FARAWAY_ISLAND_STEP_COUNTER, 0);
-		sMenuDataPtr->CurrentMessage = MESSAGE_STEPS_RESET;
-		PrintToWindow(WINDOW_1, FONT_BLACK);
-
-		//Change Player Name
-		PlaySE(SE_SELECT);
-		BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-		gTasks[taskId].func = Task_ChangeTrainerName;
-    }*/
 	
 	if (JOY_NEW(B_BUTTON))
     {
 		//Konami Code
-		if(sMenuDataPtr->KonamiCodeState == 8){
-			PlaySE(SE_SELECT);
-			sMenuDataPtr->KonamiCodeState++;
-		}
-		else{
-			sMenuDataPtr->KonamiCodeState = 0;
-			PlaySE(SE_PC_OFF);
-			BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-			gTasks[taskId].func = Task_MenuTurnOff;
-		}
-		PrintToWindow(WINDOW_1, FONT_BLACK);
+		sMenuDataPtr->KonamiCodeState = 0;
+		PlaySE(SE_PC_OFF);
+		BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+		gTasks[taskId].func = Task_MenuTurnOff;
     }
 	
 	if (JOY_NEW(A_BUTTON))
@@ -1707,13 +1721,11 @@ static void Task_MenuMain(u8 taskId)
 					//CheckPartyforIlegalMoves();
 					gTasks[taskId].func = Task_OpenPokemonPartyFromStartMenu;
 				break;
-    			#ifdef START_MENU_ACTION_ACHIEVEMENTS
-				case START_MENU_ACTION_ACHIEVEMENTS:
+				case START_MENU_ACTION_PC:
 					PlaySE(SE_SELECT);
 					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-					gTasks[taskId].func = Task_OpenQuestMenuFromStartMenu;
+					gTasks[taskId].func = Task_OpenPokemonStorageSystemFromStartMenu;
 				break;
-				#endif
 				case START_MENU_ACTION_BAG:
 					PlaySE(SE_SELECT);
 					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
@@ -1724,15 +1736,14 @@ static void Task_MenuMain(u8 taskId)
 					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
 					gTasks[taskId].func = Task_OpenOptionsMenuStartMenu;
 				break;
-    			#ifdef START_MENU_ACTION_POKENAV
+				case START_MENU_ACTION_GUIDE:
 				case START_MENU_ACTION_POKENAV:
 					PlaySE(SE_SELECT);
 					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
 					gTasks[taskId].func = Task_OpenPokenavStartMenu;
 				break;
-				#endif
 				case START_MENU_ACTION_DEXNAV:
-					if(HasMapMons()){
+					if(canOpenDexnav()){
 						PlaySE(SE_SELECT);
 						BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
 						gTasks[taskId].func = Task_OpenDexNavFromStartMenu;
@@ -1742,13 +1753,11 @@ static void Task_MenuMain(u8 taskId)
 						sMenuDataPtr->CurrentMessage = MESSAGE_CANT_USE_DEXNAV;
 					}
 				break;
-    			#ifdef START_MENU_ACTION_SKILLS
-				case START_MENU_ACTION_SKILLS:
+				case START_MENU_ACTION_DEBUG:
 					PlaySE(SE_SELECT);
 					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-					gTasks[taskId].func = Task_OpenTrainerSkillsStartMenu;
+					gTasks[taskId].func = Task_OpenDebugStartMenu;
 				break;
-				#endif
 				case START_MENU_ACTION_SAVE:
 					if(!ShouldDisableSaving()){
 						PlaySE(SE_SELECT);

@@ -698,6 +698,18 @@ void Task_ShowStartMenu(u8 taskId)
     }
 }
 
+void ShowUIStartMenu(void)
+{
+    if (!IsUpdateLinkStateCBActive())
+    {
+        FreezeObjectEvents();
+        PlayerFreeze();
+        sub_808BCF4();
+    }
+	StartMenuUiStartMenuCallback();
+    ScriptContext2_Enable();
+}
+
 void ShowStartMenu(void)
 {
     if (!IsUpdateLinkStateCBActive())
@@ -898,8 +910,7 @@ static bool8 StartMenuDebugCallback(void)
 static bool8 StartMenuIntroOptionMenuCallback(void)
 {
     FlagSet(FLAG_SYS_DEBUG_MENU_OPENED);
-    CreateTask(Task_OpenStartMenuFromStartMenu, 0);
-    //CreateTask(Task_OpenIntroOptionMenuFromStartMenu, 0);
+    CreateTask(Task_OpenIntroOptionMenuFromStartMenu, 0);
     return TRUE;
 }
 
@@ -1657,5 +1668,11 @@ static void ShowGameVersionWindow(void)
 static bool8 QuestMenuCallback(void)
 {
     CreateTask(Task_OpenQuestMenuFromStartMenu, 0);
+    return TRUE;
+}
+
+bool8 StartMenuUiStartMenuCallback(void)
+{
+    CreateTask(Task_OpenStartMenuFromStartMenu, 0);
     return TRUE;
 }
