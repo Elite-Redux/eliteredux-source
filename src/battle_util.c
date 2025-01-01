@@ -4931,6 +4931,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
             }
 
             for (int i = 0; i < gBattlersCount; i++) {
+                FILTER(IsBattlerAlive(i))
                 ON_ABILITY(i, FALSE, gAbilities[ability].onReactive, effect += gAbilities[ability].onReactive(ability, battler, extraArg))
             }
 
@@ -9213,7 +9214,9 @@ void UpdateAbilityStateIndices(u8 battler, u16 newAbilities[]) {
 u16 IsSoundproof(u8 battler) {
     ON_ABILITY(battler, TRUE, gAbilities[ability].isSoundproof && IsApplyOnFlagAppropriate(battler, battler, gAbilities[ability].onImmuneFor), return TRUE)
     int ally = BATTLE_PARTNER(battler);
-    ON_ABILITY(ally, TRUE, gAbilities[ability].isSoundproof && IsApplyOnFlagAppropriate(battler, ally, gAbilities[ability].onImmuneFor), return TRUE)
+    if (IsBattlerAlive(ally)) {
+        ON_ABILITY(ally, TRUE, gAbilities[ability].isSoundproof && IsApplyOnFlagAppropriate(battler, ally, gAbilities[ability].onImmuneFor), return TRUE)
+    }
     return FALSE;
 }
 
@@ -9299,7 +9302,7 @@ int TestImmunityAbilitiesOnly(int battler, int attacker, int move, int moveType)
 int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8 **immunityScript, u8 *overrideBattler, u16 *abilityPopup) {
     for (int i = 0; i < gBattlersCount; i++) {
         int testBattler = (battler + i) % gBattlersCount;
-        if (!IsBattlerAlive(testBattler)) continue;
+        FILTER(IsBattlerAlive(testBattler))
 
         ON_ABILITY(
             testBattler,
@@ -9382,6 +9385,8 @@ int CheckHalfHpAbility(int battlerDef, int battlerAtk) {
 
 int HandleDefenderAbility(int abilityNumber, int battler, int attacker, int move) {
     int ability, moveType;
+
+    if (battler >= gBattlersCount) return FALSE;
 
     if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
     abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
