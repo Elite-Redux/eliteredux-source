@@ -2671,20 +2671,19 @@ static const Ability Schooling = {
     .randomizerBanned = TRUE,
 };
 
-static int DisguiseSpecies(int battler) {
+static int DisguiseReformHandler(int ability, int battler, AbilityCallType callType) {
+    int newSpecies;
     switch (gBattleMons[battler].species) {
-        case SPECIES_MIMIKYU:
-            return SPECIES_MIMIKYU_BUSTED;
-        case SPECIES_MIMIKYU_RAYQUAZA:
-            return SPECIES_MIMIKYU_RAYQUAZA_BUSTED;
+        case SPECIES_MIMIKYU_BUSTED:
+            newSpecies = SPECIES_MIMIKYU;
+            break;
+        case SPECIES_MIMIKYU_RAYQUAZA_BUSTED:
+            newSpecies = SPECIES_MIMIKYU_RAYQUAZA;
+            break;
 
         default:
-            return SPECIES_NONE;
+            return FALSE;
     }
-}
-static int DisguiseReformHandler(int ability, int battler, AbilityCallType callType) {
-    int newSpecies = DisguiseSpecies(battler);
-    CHECK(newSpecies)
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
     CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
 
@@ -2699,7 +2698,17 @@ static const Ability Disguise = {
     .description = $("Protects once against an attack.\n"
                      "Restores protection in fog."),
     .onEntry = +[](ON_ENTRY) -> int { return DisguiseReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
-    .onDisguise = +[](ON_DISGUISE) -> int { return DisguiseSpecies(battler); },
+    .onDisguise = +[](ON_DISGUISE) -> int {
+        switch (gBattleMons[battler].species) {
+            case SPECIES_MIMIKYU:
+                return SPECIES_MIMIKYU_BUSTED;
+            case SPECIES_MIMIKYU_RAYQUAZA:
+                return SPECIES_MIMIKYU_RAYQUAZA_BUSTED;
+
+            default:
+                return SPECIES_NONE;
+        }
+    },
     .onWeather = +[](ON_WEATHER) -> int { return DisguiseReformHandler(ability, battler, ABILITY_BS_CALL); },
     .breakable = TRUE,
     .unsuppressable = TRUE,
@@ -3202,16 +3211,14 @@ static const Ability Ripen = {
                      "stat raises provided by Berries."),
 };
 
-int IceFaceSpecies(int battler) { return gBattleMons[battler].species == SPECIES_EISCUE ? SPECIES_EISCUE_NOICE_FACE : SPECIES_NONE; }
 int IceFaceReformHandler(int ability, int battler, AbilityCallType callType) {
-    int newSpecies = IceFaceSpecies(battler);
-    CHECK(newSpecies)
+    CHECK(gBattleMons[battler].species == SPECIES_EISCUE_NOICE_FACE)
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
     CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
 
     InsertCorrectEndType(callType);
-    UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
-    gBattleMons[battler].species = newSpecies;
+    UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_EISCUE);
+    gBattleMons[battler].species = SPECIES_EISCUE;
     BattleScriptCall(BattleScript_AttackerFormChange);
     return TRUE;
 }
@@ -3220,7 +3227,7 @@ static const Ability IceFace = {
     .description = $("Protects once against an attack.\n"
                      "Restores protection under hail."),
     .onEntry = +[](ON_ENTRY) -> int { return IceFaceReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
-    .onDisguise = +[](ON_DISGUISE) -> int { return IceFaceSpecies(battler); },
+    .onDisguise = +[](ON_DISGUISE) -> int { return gBattleMons[battler].species == SPECIES_EISCUE ? SPECIES_EISCUE_NOICE_FACE : SPECIES_NONE; },
     .onWeather = +[](ON_WEATHER) -> int { return IceFaceReformHandler(ability, battler, ABILITY_BS_CALL); },
     .breakable = TRUE,
     .unsuppressable = TRUE,
