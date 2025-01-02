@@ -6231,7 +6231,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                     gLastUsedItem = atkItem;
                     gPotentialItemEffectBattler = gBattlerAttacker;
                     gBattleScripting.battler = gBattlerAttacker;
-                    gBattleMoveDamage = (gTurnStructs[gBattlerTarget].savedDmg / 4) * -1;
+                    gBattleMoveDamage = (gTurnStructs[gBattlerAttacker].savedDmg / 4) * -1;
                     if (gBattleMoveDamage == 0) gBattleMoveDamage = -1;
                     BattleScriptCall(BattleScript_ItemHealHP_Ret);
                     effect = ITEM_HP_CHANGE;
