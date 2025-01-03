@@ -15911,12 +15911,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_LUCARIO_MEGA] =
     {
-    .baseHP        = 70,
-    .baseAttack    = 145,
-    .baseDefense   = 88,
-    .baseSpeed     = 112,
-    .baseSpAttack  = 140,
-    .baseSpDefense = 70,
+    .baseHP         = 65,
+    .baseAttack     = 145,
+    .baseDefense    = 88,
+    .baseSpeed      = 117,
+    .baseSpAttack   = 140,
+    .baseSpDefense  = 70,
     .type1 = TYPE_FIGHTING,
     .type2 = TYPE_STEEL,
     .catchRate = 255,
@@ -45450,12 +45450,12 @@ const struct BaseStats gBaseStats[] =
     
     [SPECIES_LUCARIO_MEGA_Y] =
     {
-    .baseHP        = 70,
-    .baseAttack    = 130,
-    .baseDefense   = 85,
-    .baseSpeed     = 120,
-    .baseSpAttack  = 150,
-    .baseSpDefense = 70,
+    .baseHP         = 65,
+    .baseAttack     = 135,
+    .baseDefense    = 85,
+    .baseSpeed      = 120,
+    .baseSpAttack   = 150,
+    .baseSpDefense  = 70,
     .type1 = TYPE_FIGHTING,
     .type2 = TYPE_ELECTRIC,
     .catchRate = 255,
