@@ -6231,7 +6231,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                     gLastUsedItem = atkItem;
                     gPotentialItemEffectBattler = gBattlerAttacker;
                     gBattleScripting.battler = gBattlerAttacker;
-                    gBattleMoveDamage = (gTurnStructs[gBattlerTarget].savedDmg / 4) * -1;
+                    gBattleMoveDamage = (gTurnStructs[gBattlerAttacker].savedDmg / 4) * -1;
                     if (gBattleMoveDamage == 0) gBattleMoveDamage = -1;
                     BattleScriptCall(BattleScript_ItemHealHP_Ret);
                     effect = ITEM_HP_CHANGE;
@@ -8428,42 +8428,6 @@ void UndoMegaEvolution(u32 monId) {
         SetMonData(&gPlayerParty[monId], MON_DATA_SPECIES, &gBattleStruct->changedSpecies[monId]);
         gBattleStruct->changedSpecies[monId] = 0;
         CalculateMonStats(&gPlayerParty[monId]);
-    }
-}
-
-void DoBurmyFormChange(u32 monId) {
-    u16 newSpecies, currSpecies;
-    struct Pokemon *party = gPlayerParty;
-
-    currSpecies = GetMonData(&party[monId], MON_DATA_SPECIES, NULL);
-
-    if ((GET_BASE_SPECIES_ID(currSpecies) == SPECIES_BURMY) && (gBattleStruct->appearedInBattle & 1 << monId)  // Burmy appeared in battle
-        && GetMonData(&party[monId], MON_DATA_HP, NULL) != 0)                                                  // Burmy isn't fainted
-    {
-        switch (gBattleTerrain) {
-            case BATTLE_TERRAIN_GRASS:
-            case BATTLE_TERRAIN_LONG_GRASS:
-            case BATTLE_TERRAIN_POND:
-            case BATTLE_TERRAIN_MOUNTAIN:
-            case BATTLE_TERRAIN_PLAIN:
-                newSpecies = SPECIES_BURMY;
-                break;
-            case BATTLE_TERRAIN_CAVE:
-            case BATTLE_TERRAIN_SAND:
-                newSpecies = SPECIES_BURMY_SANDY_CLOAK;
-                break;
-            case BATTLE_TERRAIN_BUILDING:
-                newSpecies = SPECIES_BURMY_TRASH_CLOAK;
-                break;
-            default:  // Don't change form if last battle was water-related
-                newSpecies = SPECIES_NONE;
-                break;
-        }
-
-        if (newSpecies != SPECIES_NONE) {
-            SetMonData(&party[monId], MON_DATA_SPECIES, &newSpecies);
-            CalculateMonStats(&party[monId]);
-        }
     }
 }
 

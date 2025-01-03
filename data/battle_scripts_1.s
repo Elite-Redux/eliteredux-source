@@ -12723,6 +12723,7 @@ BattleScript_ExtraSkillSubstitute::
 	printstring STRINGID_PKMNMADESUBSTITUTE
 	playmoveanimation BS_ATTACKER, MOVE_SUBSTITUTE
 	waitanimation
+	bicword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	end2
 
 BattleScript_ExtraSkillEmbargo::

@@ -4863,7 +4863,6 @@ static void HandleEndTurn_FinishBattle(void) {
         for (i = 0; i < PARTY_SIZE; i++) {
             UndoMegaEvolution(i);
             UndoFormChange(i, B_SIDE_PLAYER, FALSE);
-            DoBurmyFormChange(i);
         }
 
         FlagClear(FLAG_SMART_AI);
