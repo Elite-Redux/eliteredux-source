@@ -448,6 +448,7 @@
 #define MOVE_TARGET_FOES_AND_ALLY       0x20
 #define MOVE_TARGET_OPPONENTS_FIELD     0x40
 #define MOVE_TARGET_ALLY                0x80
+#define MOVE_TARGET_USER_OR_ALLY        MOVE_TARGET_USER | MOVE_TARGET_ALLY
 #define MOVE_TARGET_ALL_BATTLERS        (0x100 | MOVE_TARGET_USER)
 
 // Window Ids for sStandardBattleWindowTemplates / sBattleArenaWindowTemplates
