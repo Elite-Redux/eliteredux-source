@@ -4561,7 +4561,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 0,
         .pp = 20,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_USER | MOVE_TARGET_ALLY,
+        .target = MOVE_TARGET_USER_OR_ALLY,
         .split = SPLIT_STATUS,
     },
     [MOVE_METAL_BURST] =
