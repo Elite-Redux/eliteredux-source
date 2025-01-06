@@ -27,7 +27,7 @@ static u8 CreateMonIconSprite(struct MonIconSpriteTemplate *, s16, s16, u8);
 // .rodata
 
 #if USE_GENERATED
-#include "generated/data/pokemon_graphics/icons.h"
+// #include "generated/data/pokemon_graphics/icons.h"
 #else
 const u8 *const gMonIconTable[] =
 {
