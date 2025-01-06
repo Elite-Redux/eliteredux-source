@@ -300,9 +300,9 @@ const union AnimCmd *const gAnims_MonPic[] =
 };
 
 #if USE_GENERATED
-#define SPECIES_SPRITE(species, sprite) [species] = {sprite, MON_PIC_SIZE, species}
-#define SPECIES_PAL(species, pal) [species] = {pal, species}
-#define SPECIES_SHINY_PAL(species, pal) [species] = {pal, species + SPECIES_SHINY_TAG}
+// #define SPECIES_SPRITE(species, sprite) [species] = {sprite, MON_PIC_SIZE, species}
+// #define SPECIES_PAL(species, pal) [species] = {pal, species}
+// #define SPECIES_SHINY_PAL(species, pal) [species] = {pal, species + SPECIES_SHINY_TAG}
 #else
 #define SPECIES_SPRITE(species, sprite) [SPECIES_##species] = {sprite, MON_PIC_SIZE, SPECIES_##species}
 #define SPECIES_PAL(species, pal) [SPECIES_##species] = {pal, SPECIES_##species}
@@ -322,9 +322,9 @@ const bool8 SpeciesHasGenderDifference[NUM_SPECIES] =
 };
 
 #if USE_GENERATED
-#include "generated/data/pokemon_graphics/coordinates.h"
-#include "generated/data/pokemon_graphics/palettes.h"
-#include "generated/data/pokemon_graphics/pics.h"
+// #include "generated/data/pokemon_graphics/coordinates.h"
+// #include "generated/data/pokemon_graphics/palettes.h"
+// #include "generated/data/pokemon_graphics/pics.h"
 #else
 #include "data/pokemon_graphics/front_pic_coordinates.h"
 #include "data/pokemon_graphics/back_pic_coordinates.h"
