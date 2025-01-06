@@ -267,6 +267,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_SURF)
         TUTOR(MOVE_WATER_PULSE)
         TUTOR(MOVE_WHIRLPOOL)
+        TUTOR(MOVE_DARK_PULSE)  
         TUTOR_LEARNSET_END
 
     [SPECIES_WARTORTLE] = TUTOR_LEARNSET
@@ -306,6 +307,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_SURF)
         TUTOR(MOVE_WATER_PULSE)
         TUTOR(MOVE_WHIRLPOOL)
+        TUTOR(MOVE_DARK_PULSE)  
         TUTOR_LEARNSET_END
 
     [SPECIES_BLASTOISE] = TUTOR_LEARNSET
@@ -350,6 +352,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_SURF)
         TUTOR(MOVE_WATER_PULSE)
         TUTOR(MOVE_WHIRLPOOL)
+        TUTOR(MOVE_DARK_PULSE)  
         TUTOR_LEARNSET_END
 
     [SPECIES_CATERPIE] = TUTOR_LEARNSET
