@@ -12469,12 +12469,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_CASTFORM] =
     {
-    .baseHP        = 70,
-    .baseAttack    = 70,
-    .baseDefense   = 70,
-    .baseSpeed     = 100,
-    .baseSpAttack  = 100,
-    .baseSpDefense = 70,
+    .baseHP         = 75,
+    .baseAttack     = 75,
+    .baseDefense    = 75,
+    .baseSpeed      = 110,
+    .baseSpAttack   = 105,
+    .baseSpDefense  = 75,
     .type1 = TYPE_NORMAL,
     .type2 = TYPE_NORMAL,
     .catchRate = 255,
