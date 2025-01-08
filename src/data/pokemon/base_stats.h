@@ -32625,12 +32625,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_MAWILE_REDUX_B_MEGA] =
     {
-    .baseHP        =  70,
-    .baseAttack    =  105,
-    .baseDefense   =  110,
-    .baseSpeed     = 95,
-    .baseSpAttack  =  90,
-    .baseSpDefense =  105,
+    .baseHP         = 70,
+    .baseAttack     = 105,
+    .baseDefense    = 110,
+    .baseSpeed      = 95,
+    .baseSpAttack   = 95,
+    .baseSpDefense  = 105,
     .type1 = TYPE_GRASS,
     .type2 = TYPE_POISON,
     .catchRate = 255,
