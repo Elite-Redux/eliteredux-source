@@ -195,4 +195,10 @@
 #define BATTLE_BOX_YES_NO_Y     0
 #define BATTLE_BOX_YES_NO_WIDTH 4
 
+//Seasons
+#define SEASON_SPRING 0
+#define SEASON_SUMMER 1
+#define SEASON_AUTUMN 2
+#define SEASON_WINTER 3
+
 #endif // GUARD_CONSTANTS_GLOBAL_H

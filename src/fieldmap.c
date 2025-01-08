@@ -1,6 +1,7 @@
 #include "global.h"
 #include "battle_pyramid.h"
 #include "bg.h"
+#include "event_data.h"
 #include "fieldmap.h"
 #include "fldeff.h"
 #include "fldeff_misc.h"
@@ -875,23 +876,92 @@ static void FieldmapUnkDummy(void)
 void LoadTilesetPalette(struct Tileset const *tileset, u16 destOffset, u16 size)
 {
     u16 black = RGB_BLACK;
+    u8 season = getCurrentSeason();
 
     if (tileset)
     {
         if (tileset->isSecondary == FALSE)
         {
             LoadPalette(&black, destOffset, 2);
-            LoadPalette(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+            switch(season){
+                default:
+                case SEASON_SPRING:
+                    LoadPalette(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+                break;
+                case SEASON_SUMMER:
+                    if(tileset->palettes_summer != NULL)
+                        LoadPalette(((u16*)tileset->palettes_summer) + 1, destOffset + 1, size - 2);
+                    else
+                        LoadPalette(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+                break;
+                case SEASON_AUTUMN:
+                    if(tileset->palettes_autumn != NULL)
+                        LoadPalette(((u16*)tileset->palettes_autumn) + 1, destOffset + 1, size - 2);
+                    else
+                        LoadPalette(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+                break;
+                case SEASON_WINTER:
+                    if(tileset->palettes_winter != NULL)
+                        LoadPalette(((u16*)tileset->palettes_winter) + 1, destOffset + 1, size - 2);
+                    else
+                        LoadPalette(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+                break;
+            }
+
             FieldmapPaletteDummy(destOffset + 1, (size - 2) >> 1);
         }
         else if (tileset->isSecondary == TRUE)
         {
-            LoadPalette(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+            switch(season){
+                case SEASON_SPRING:
+                    LoadPalette(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                break;
+                case SEASON_SUMMER:
+                    if(tileset->palettes_summer != NULL)
+                        LoadPalette(((u16*)tileset->palettes_summer) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                    else
+                        LoadPalette(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                break;
+                case SEASON_AUTUMN:
+                    if(tileset->palettes_autumn != NULL)
+                        LoadPalette(((u16*)tileset->palettes_autumn) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                    else
+                        LoadPalette(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                break;
+                case SEASON_WINTER:
+                    if(tileset->palettes_winter != NULL)
+                        LoadPalette(((u16*)tileset->palettes_winter) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                    else
+                        LoadPalette(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                break;
+            }
             FieldmapPaletteDummy(destOffset, size >> 1);
         }
         else
         {
-            LoadCompressedPalette((u32*)tileset->palettes, destOffset, size);
+            switch(season){
+                case SEASON_SPRING:
+                    LoadCompressedPalette((u32*)tileset->palettes, destOffset, size);
+                break;
+                case SEASON_SUMMER:
+                    if(tileset->palettes_summer != NULL)
+                        LoadCompressedPalette((u32*)tileset->palettes_summer, destOffset, size);
+                    else
+                        LoadCompressedPalette((u32*)tileset->palettes, destOffset, size);
+                break;
+                case SEASON_AUTUMN:
+                    if(tileset->palettes_autumn != NULL)
+                        LoadCompressedPalette((u32*)tileset->palettes_autumn, destOffset, size);
+                    else
+                        LoadCompressedPalette((u32*)tileset->palettes, destOffset, size);
+                break;
+                case SEASON_WINTER:
+                    if(tileset->palettes_winter != NULL)
+                        LoadCompressedPalette((u32*)tileset->palettes_winter, destOffset, size);
+                    else
+                        LoadCompressedPalette((u32*)tileset->palettes, destOffset, size);
+                break;
+            }
             FieldmapPaletteDummy(destOffset, size >> 1);
         }
     }
