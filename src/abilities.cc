@@ -8010,6 +8010,7 @@ static const Ability IceColdHunter = {
     .description = $("Ice-type moves hit twice in hail."),
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
         CHECK(moveType == TYPE_ICE)
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
         return PARENTAL_BOND_ICE_COLD_HUNTER;
     },
 };
