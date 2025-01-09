@@ -11427,41 +11427,6 @@
               }
             ]
           },
-          "honey_mons": {
-            "encounter_rate": 20,
-            "mons": [
-              {
-                "min_level": 2,
-                "max_level": 2,
-                "species": "SPECIES_SWABLU"
-              },
-              {
-                "min_level": 2,
-                "max_level": 2,
-                "species": "SPECIES_DUCKLETT"
-              },
-              {
-                "min_level": 2,
-                "max_level": 2,
-                "species": "SPECIES_DREEPY"
-              },
-              {
-                "min_level": 3,
-                "max_level": 3,
-                "species": "SPECIES_RATTATA"
-              },
-              {
-                "min_level": 3,
-                "max_level": 3,
-                "species": "SPECIES_RATTATA_ALOLAN"
-              },
-              {
-                "min_level": 3,
-                "max_level": 3,
-                "species": "SPECIES_AUDINO"
-              }
-            ]
-          },
           "water_mons": {
             "encounter_rate": 1,
             "mons": [
@@ -11539,6 +11504,41 @@
                 "min_level": 40,
                 "max_level": 45,
                 "species": "SPECIES_CORPHISH"
+              }
+            ]
+          },
+          "honey_mons": {
+            "encounter_rate": 20,
+            "mons": [
+              {
+                "min_level": 2,
+                "max_level": 2,
+                "species": "SPECIES_SWABLU"
+              },
+              {
+                "min_level": 2,
+                "max_level": 2,
+                "species": "SPECIES_DUCKLETT"
+              },
+              {
+                "min_level": 2,
+                "max_level": 2,
+                "species": "SPECIES_DREEPY"
+              },
+              {
+                "min_level": 3,
+                "max_level": 3,
+                "species": "SPECIES_RATTATA"
+              },
+              {
+                "min_level": 3,
+                "max_level": 3,
+                "species": "SPECIES_RATTATA_ALOLAN"
+              },
+              {
+                "min_level": 3,
+                "max_level": 3,
+                "species": "SPECIES_AUDINO"
               }
             ]
           }
