@@ -7826,7 +7826,7 @@ bool8 IsElevationMismatchAt(u8 z, s16 x, s16 y)
 
     mapZ = MapGridGetElevationAt(x, y);
 
-    if (mapZ == 0 || mapZ == 15)
+    if (mapZ == 0 || mapZ == MAX_ELEVATION_LEVEL)
         return FALSE;
 
     if (mapZ != z)
@@ -7871,16 +7871,16 @@ u8 ElevationToPriority(u8 z)
 
 void ObjectEventUpdateElevation(struct ObjectEvent *objEvent)
 {
-    u8 z = MapGridGetElevationAt(objEvent->currentCoords.x, objEvent->currentCoords.y);
-    u8 z2 = MapGridGetElevationAt(objEvent->previousCoords.x, objEvent->previousCoords.y);
+    u8 curElevation = MapGridGetElevationAt(objEvent->currentCoords.x, objEvent->currentCoords.y);
+    u8 prevElevation = MapGridGetElevationAt(objEvent->previousCoords.x, objEvent->previousCoords.y);
 
-    if (z == 0xF || z2 == 0xF)
+    if (curElevation == MAX_ELEVATION_LEVEL || prevElevation == MAX_ELEVATION_LEVEL)
         return;
 
-    objEvent->currentElevation = z;
+    objEvent->currentElevation = curElevation;
 
-    if (z != 0 && z != 0xF)
-        objEvent->previousElevation = z;
+    if (curElevation != 0 && curElevation != MAX_ELEVATION_LEVEL)
+        objEvent->previousElevation = curElevation;
 }
 
 void SetObjectSubpriorityByElevation(u8 elevation, struct Sprite *sprite, u8 subpriority)
