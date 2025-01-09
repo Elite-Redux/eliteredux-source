@@ -255,5 +255,6 @@ bool8 FlagGet(u16 id)
 }
 
 u8 getCurrentSeason(void){
-    return gSaveBlock2Ptr->season;
+    return SEASON_AUTUMN;
+    //return gSaveBlock2Ptr->season;
 }
