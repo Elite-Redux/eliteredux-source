@@ -306,7 +306,7 @@ static void FindMetatileIdMapCoords(s16 *x, s16 *y, u16 metatileId)
     {
         for (i = 0; i < mapLayout->width; i++)
         {
-            if ((mapLayout->map[j * mapLayout->width + i] & METATILE_ID_MASK) == metatileId)
+            if ((mapLayout->map[j * mapLayout->width + i] & MAPGRID_METATILE_ID_MASK) == metatileId)
             {
                 *x = i;
                 *y = j;
@@ -331,7 +331,7 @@ void ToggleSecretBaseEntranceMetatile(void)
     {
         if (sSecretBaseEntranceMetatiles[i].closedMetatileId == metatileId)
         {
-            MapGridSetMetatileIdAt(x, y, sSecretBaseEntranceMetatiles[i].openMetatileId | METATILE_COLLISION_MASK);
+            MapGridSetMetatileIdAt(x, y, sSecretBaseEntranceMetatiles[i].openMetatileId | MAPGRID_COLLISION_MASK);
             CurrentMapDrawMetatileAt(x, y);
             return;
         }
@@ -342,7 +342,7 @@ void ToggleSecretBaseEntranceMetatile(void)
     {
         if (sSecretBaseEntranceMetatiles[i].openMetatileId == metatileId)
         {
-            MapGridSetMetatileIdAt(x, y, sSecretBaseEntranceMetatiles[i].closedMetatileId | METATILE_COLLISION_MASK);
+            MapGridSetMetatileIdAt(x, y, sSecretBaseEntranceMetatiles[i].closedMetatileId | MAPGRID_COLLISION_MASK);
             CurrentMapDrawMetatileAt(x, y);
             return;
         }
@@ -397,7 +397,7 @@ void SetOccupiedSecretBaseEntranceMetatiles(struct MapEvents const *events)
                     {
                         if (sSecretBaseEntranceMetatiles[i].closedMetatileId == tile_id)
                         {
-                            MapGridSetMetatileIdAt(x, y, sSecretBaseEntranceMetatiles[i].openMetatileId | METATILE_COLLISION_MASK);
+                            MapGridSetMetatileIdAt(x, y, sSecretBaseEntranceMetatiles[i].openMetatileId | MAPGRID_COLLISION_MASK);
                             break;
                         }
                     }
@@ -476,7 +476,7 @@ static void EnterNewlyCreatedSecretBase_StartFadeIn(void)
     FindMetatileIdMapCoords(&x, &y, METATILE_SecretBase_PC);
     x += 7;
     y += 7;
-    MapGridSetMetatileIdAt(x, y, METATILE_SecretBase_PC | METATILE_COLLISION_MASK);
+    MapGridSetMetatileIdAt(x, y, METATILE_SecretBase_PC | MAPGRID_COLLISION_MASK);
     CurrentMapDrawMetatileAt(x, y);
     FadeInFromBlack();
     CreateTask(EnterNewlyCreatedSecretBase_WaitFadeIn, 0);
@@ -537,13 +537,13 @@ void InitSecretBaseAppearance(bool8 hidePC)
         {
             // Another player's secret base. Change PC type to the "Register" PC.
             FindMetatileIdMapCoords(&x, &y, METATILE_SecretBase_PC);
-            MapGridSetMetatileIdAt(x + 7, y + 7, METATILE_SecretBase_RegisterPC | METATILE_COLLISION_MASK);
+            MapGridSetMetatileIdAt(x + 7, y + 7, METATILE_SecretBase_RegisterPC | MAPGRID_COLLISION_MASK);
         }
         else if (hidePC == TRUE && VarGet(VAR_SECRET_BASE_INITIALIZED) == 1)
         {
             // Change PC to regular ground tile.
             FindMetatileIdMapCoords(&x, &y, METATILE_SecretBase_PC);
-            MapGridSetMetatileIdAt(x + 7, y + 7, METATILE_SecretBase_Ground | METATILE_COLLISION_MASK);
+            MapGridSetMetatileIdAt(x + 7, y + 7, METATILE_SecretBase_Ground | MAPGRID_COLLISION_MASK);
         }
     }
 }
@@ -835,7 +835,7 @@ static void ClosePlayerSecretBaseEntrance(void)
             {
                 if (sSecretBaseEntranceMetatiles[j].openMetatileId == metatileId)
                 {
-                    MapGridSetMetatileIdAt(events->bgEvents[i].x + 7, events->bgEvents[i].y + 7, sSecretBaseEntranceMetatiles[j].closedMetatileId | METATILE_COLLISION_MASK);
+                    MapGridSetMetatileIdAt(events->bgEvents[i].x + 7, events->bgEvents[i].y + 7, sSecretBaseEntranceMetatiles[j].closedMetatileId | MAPGRID_COLLISION_MASK);
                     break;
                 }
             }
