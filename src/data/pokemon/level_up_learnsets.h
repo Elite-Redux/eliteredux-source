@@ -21897,6 +21897,7 @@ static const struct LevelUpMove sRegidragoLevelUpLearnset[] = {
     LEVEL_UP_MOVE(51, MOVE_OUTBURST),
     LEVEL_UP_MOVE(56, MOVE_DRAGON_ENERGY),
     LEVEL_UP_MOVE(56, MOVE_SEARING_SHOT),
+    LEVEL_UP_MOVE(61, MOVE_DYNAMAX_CANNON),
     LEVEL_UP_END
 };
 
