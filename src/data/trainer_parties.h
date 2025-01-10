@@ -32358,16 +32358,16 @@ static const struct TrainerMonItemCustomMoves sParty_Steven[] = { // Postgame
     .ability = 1,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_STEALTH_ROCK, MOVE_MOUNTAIN_CHUNK, MOVE_IRON_HEAD, MOVE_RAPID_SPIN
+    .moves = MOVE_STEALTH_ROCK, MOVE_MOUNTAIN_CHUNK, MOVE_ROCKET_PUNCH, MOVE_RAPID_SPIN
     },
     {
     .lvl = 0,
     .species = SPECIES_KINGAMBIT_REDUX,
     .heldItem = ITEM_BRIGHT_POWDER,
-    .ability = 0,
+    .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_EXCALIBUR, MOVE_SACRED_SWORD, MOVE_NIGHT_SLASH, MOVE_SWORDS_DANCE
+    .moves = MOVE_CUT, MOVE_CROSS_CHOP, MOVE_NIGHT_SLASH, MOVE_SWORDS_DANCE
     },
     {
     .lvl = 0,
@@ -32382,7 +32382,7 @@ static const struct TrainerMonItemCustomMoves sParty_Steven[] = { // Postgame
     .lvl = 0,
     .species = SPECIES_MELMETAL,
     .heldItem = ITEM_ASSAULT_VEST,
-    .ability = 0,
+    .ability = 1,
     .evs = {4, 252, 0, 0, 252, 0},
     .nature = NATURE_BRAVE,
     .moves = MOVE_DOUBLE_IRON_BASH, MOVE_HIGH_HORSEPOWER, MOVE_ICE_PUNCH, MOVE_THUNDER_PUNCH

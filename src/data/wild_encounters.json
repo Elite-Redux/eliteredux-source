@@ -17292,7 +17292,7 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_SANDSHREW"
+                "species": "SPECIES_SANDSHREW_ALOLAN"
               }
             ]
           },
@@ -17302,32 +17302,32 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_AUDINO"
+                "species": "SPECIES_PIKIPEK"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_AUDINO"
+                "species": "SPECIES_FERROSEED"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_AUDINO"
+                "species": "SPECIES_AIPOM"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_AUDINO"
+                "species": "SPECIES_MURKROW"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_AUDINO"
+                "species": "SPECIES_BURMY"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_AUDINO"
+                "species": "SPECIES_MUNCHLAX"
               }
             ]
           }
