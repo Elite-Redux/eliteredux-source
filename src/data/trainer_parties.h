@@ -32382,7 +32382,7 @@ static const struct TrainerMonItemCustomMoves sParty_Steven[] = { // Postgame
     .lvl = 0,
     .species = SPECIES_MELMETAL,
     .heldItem = ITEM_ASSAULT_VEST,
-    .ability = 1,
+    .ability = 2,
     .evs = {4, 252, 0, 0, 252, 0},
     .nature = NATURE_BRAVE,
     .moves = MOVE_DOUBLE_IRON_BASH, MOVE_HIGH_HORSEPOWER, MOVE_ICE_PUNCH, MOVE_THUNDER_PUNCH
@@ -32390,7 +32390,7 @@ static const struct TrainerMonItemCustomMoves sParty_Steven[] = { // Postgame
     {
     .lvl = 0,
     .species = SPECIES_GHOLDENGO,
-    .heldItem = ITEM_CHOICE_SCARF,
+    .heldItem = ITEM_AIR_BALLOON,
     .ability = 0,
     .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,

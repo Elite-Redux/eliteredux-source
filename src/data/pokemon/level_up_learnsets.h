@@ -2828,6 +2828,7 @@ static const struct LevelUpMove sLickitungLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_DEFENSE_CURL),
     LEVEL_UP_MOVE(1, MOVE_SELF_DESTRUCT),
     LEVEL_UP_MOVE(1, MOVE_WRAP),
+    LEVEL_UP_MOVE(1, MOVE_ROLLOUT),
     LEVEL_UP_MOVE(17, MOVE_HEAL_BELL),
     LEVEL_UP_MOVE(17, MOVE_WISH),
     LEVEL_UP_MOVE(24, MOVE_AMNESIA),
@@ -11551,6 +11552,7 @@ static const struct LevelUpMove sLickilickyLevelUpLearnset[] = {
     LEVEL_UP_MOVE(51, MOVE_FLAIL),
     LEVEL_UP_MOVE(51, MOVE_SPIT_UP),
     LEVEL_UP_MOVE(51, MOVE_SWALLOW),
+    LEVEL_UP_MOVE(1, MOVE_ROLLOUT),
     LEVEL_UP_END
 };
 
