@@ -1632,7 +1632,7 @@ static const struct TrainerMonItemCustomMoves sParty_MayRoute119Mudkip[] = {
     .ability = 0,
     .evs = {252, 252, 4, 0, 0, 0},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_EARTHQUAKE, MOVE_RAGE_FIST, MOVE_ONE_INCH_PUNCH, MOVE_SHADOW_SNEAK
+    .moves = MOVE_EARTHQUAKE, MOVE_RAGE_FIST, MOVE_ONE_INCH_PUNCH, MOVE_ROCKET_PUNCH
     }
 };
 
@@ -1689,7 +1689,7 @@ static const struct TrainerMonItemCustomMoves sParty_MayRoute119Treecko[] = {
     .ability = 0,
     .evs = {252, 252, 4, 0, 0, 0},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_EARTHQUAKE, MOVE_RAGE_FIST, MOVE_ONE_INCH_PUNCH, MOVE_SHADOW_SNEAK
+    .moves = MOVE_EARTHQUAKE, MOVE_RAGE_FIST, MOVE_ONE_INCH_PUNCH, MOVE_ROCKET_PUNCH
     }
 };
 
@@ -1746,7 +1746,7 @@ static const struct TrainerMonItemCustomMoves sParty_MayRoute119Torchic[] = {
     .ability = 0,
     .evs = {252, 252, 4, 0, 0, 0},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_EARTHQUAKE, MOVE_RAGE_FIST, MOVE_ONE_INCH_PUNCH, MOVE_SHADOW_SNEAK
+    .moves = MOVE_EARTHQUAKE, MOVE_RAGE_FIST, MOVE_ONE_INCH_PUNCH, MOVE_ROCKET_PUNCH
     }
 };
 
@@ -16050,7 +16050,7 @@ static const struct TrainerMonItemCustomMoves sParty_TabithaMtChimneyInsane[] = 
     .ability = 0,
     .evs = {252, 252, 4, 0, 0, 0},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_SEISMIC_FIST, MOVE_RAGE_FIST, MOVE_SHADOW_SNEAK, MOVE_MEGA_PUNCH
+    .moves = MOVE_SEISMIC_FIST, MOVE_RAGE_FIST, MOVE_ROCKET_PUNCH, MOVE_MEGA_PUNCH
     },
     {
     .lvl = 0,
@@ -48603,7 +48603,7 @@ static const struct TrainerMonItemCustomMoves sParty_Mayroute110mudkipInsane[] =
     .ability = 0,
     .evs = {252, 252, 4, 0, 0, 0},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_EARTHQUAKE, MOVE_RAGE_FIST, MOVE_ONE_INCH_PUNCH, MOVE_SHADOW_SNEAK
+    .moves = MOVE_EARTHQUAKE, MOVE_RAGE_FIST, MOVE_ONE_INCH_PUNCH, MOVE_ROCKET_PUNCH
     },
     {
     .lvl = 0,
@@ -48669,7 +48669,7 @@ static const struct TrainerMonItemCustomMoves sParty_Mayroute110treeckoInsane[] 
     .ability = 0,
     .evs = {252, 252, 4, 0, 0, 0},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_EARTHQUAKE, MOVE_RAGE_FIST, MOVE_ONE_INCH_PUNCH, MOVE_SHADOW_SNEAK
+    .moves = MOVE_EARTHQUAKE, MOVE_RAGE_FIST, MOVE_ONE_INCH_PUNCH, MOVE_ROCKET_PUNCH
     }
 };
 
@@ -48726,7 +48726,7 @@ static const struct TrainerMonItemCustomMoves sParty_Mayroute110torchicInsane[] 
     .ability = 0,
     .evs = {252, 252, 4, 0, 0, 0},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_EARTHQUAKE, MOVE_RAGE_FIST, MOVE_ONE_INCH_PUNCH, MOVE_SHADOW_SNEAK
+    .moves = MOVE_EARTHQUAKE, MOVE_RAGE_FIST, MOVE_ONE_INCH_PUNCH, MOVE_ROCKET_PUNCH
     }
 };
 
