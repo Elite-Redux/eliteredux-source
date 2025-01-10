@@ -3315,6 +3315,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_USER,
         .priority = 2,
         .split = SPLIT_STATUS,
+        .metronomeBanned = TRUE,
     },
     [MOVE_NATURE_POWER] =
     {
@@ -7746,7 +7747,6 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 4,
         .flags = FLAG_PROTECTION_MOVE,
         .split = SPLIT_STATUS,
-        .metronomeBanned = TRUE,
     },
     [MOVE_SPIRIT_SHACKLE] =
     {
@@ -7874,6 +7874,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 3,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED,
         .split = SPLIT_STATUS,
+        .metronomeBanned = TRUE,
     },
     [MOVE_TOXIC_THREAD] =
     {
