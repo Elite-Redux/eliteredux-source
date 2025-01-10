@@ -7502,12 +7502,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_UNOWN] =
     {
-    .baseHP        = 48,
-    .baseAttack    = 72,
-    .baseDefense   = 48,
-    .baseSpeed     = 48,
-    .baseSpAttack  = 72,
-    .baseSpDefense = 48,
+    .baseHP         = 48,
+    .baseAttack     = 72,
+    .baseDefense    = 48,
+    .baseSpeed      = 48,
+    .baseSpAttack   = 255,
+    .baseSpDefense  = 48,
     .type1 = TYPE_PSYCHIC,
     .type2 = TYPE_PSYCHIC,
     .catchRate = 225,
