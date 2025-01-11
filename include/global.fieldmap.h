@@ -39,16 +39,17 @@ typedef void (*TilesetCB)(void);
 
 struct Tileset
 {
-    /*0x00*/ bool8 isCompressed;
-    /*0x01*/ bool8 isSecondary;
-    /*0x04*/ void *tiles;
-    /*0x08*/ void *palettes; //Spring Palette
-    /*0x0c*/ u16 *metatiles;
-    /*0x10*/ u16 *metatileAttributes;
-    /*0x14*/ TilesetCB callback;
-    /*0x08*/ void *palettes_summer;
-    /*0x08*/ void *palettes_autumn;
-    /*0x08*/ void *palettes_winter;
+    bool8 isCompressed;
+    bool8 isSecondary;
+    void *tiles;
+    void *palettes; //Spring Palette
+    u16 *metatiles;
+    u16 *metatileAttributes;
+    TilesetCB callback;
+    const struct PaletteOverride *paletteOverrides;
+    void *palettes_summer;
+    void *palettes_autumn;
+    void *palettes_winter;
 };
 
 struct MapLayout

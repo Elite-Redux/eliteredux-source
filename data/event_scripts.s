@@ -53,6 +53,7 @@
 #include "constants/union_room.h"
 #include "constants/vars.h"
 #include "constants/weather.h"
+#include "constants/day_night.h"
 #include "constants/quests.h"
 #include "constants/battle_events.h"
 	.include "asm/macros.inc"

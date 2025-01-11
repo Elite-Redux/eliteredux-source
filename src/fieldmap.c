@@ -17,6 +17,7 @@
 #include "tv.h"
 #include "constants/rgb.h"
 #include "constants/metatile_behaviors.h"
+#include "day_night.h"
 
 struct ConnectionFlags
 {
@@ -883,29 +884,30 @@ void LoadTilesetPalette(struct Tileset const *tileset, u16 destOffset, u16 size)
     {
         if (tileset->isSecondary == FALSE)
         {
+            gPaletteOverrides[0] = tileset->paletteOverrides;
             LoadPalette(&black, destOffset, 2);
             switch(season){
                 default:
                 case SEASON_SPRING:
-                    LoadPalette(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+                    LoadPaletteDayNight(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
                 break;
                 case SEASON_SUMMER:
                     if(tileset->palettes_summer != NULL)
                         LoadPalette(((u16*)tileset->palettes_summer) + 1, destOffset + 1, size - 2);
                     else
-                        LoadPalette(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+                        LoadPaletteDayNight(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
                 break;
                 case SEASON_AUTUMN:
                     if(tileset->palettes_autumn != NULL)
-                        LoadPalette(((u16*)tileset->palettes_autumn) + 1, destOffset + 1, size - 2);
+                        LoadPaletteDayNight(((u16*)tileset->palettes_autumn) + 1, destOffset + 1, size - 2);
                     else
-                        LoadPalette(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+                        LoadPaletteDayNight(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
                 break;
                 case SEASON_WINTER:
                     if(tileset->palettes_winter != NULL)
-                        LoadPalette(((u16*)tileset->palettes_winter) + 1, destOffset + 1, size - 2);
+                        LoadPaletteDayNight(((u16*)tileset->palettes_winter) + 1, destOffset + 1, size - 2);
                     else
-                        LoadPalette(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+                        LoadPaletteDayNight(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
                 break;
             }
 
@@ -915,25 +917,25 @@ void LoadTilesetPalette(struct Tileset const *tileset, u16 destOffset, u16 size)
         {
             switch(season){
                 case SEASON_SPRING:
-                    LoadPalette(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                    LoadPaletteDayNight(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
                 break;
                 case SEASON_SUMMER:
                     if(tileset->palettes_summer != NULL)
-                        LoadPalette(((u16*)tileset->palettes_summer) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                        LoadPaletteDayNight(((u16*)tileset->palettes_summer) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
                     else
-                        LoadPalette(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                        LoadPaletteDayNight(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
                 break;
                 case SEASON_AUTUMN:
                     if(tileset->palettes_autumn != NULL)
-                        LoadPalette(((u16*)tileset->palettes_autumn) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                        LoadPaletteDayNight(((u16*)tileset->palettes_autumn) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
                     else
-                        LoadPalette(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                        LoadPaletteDayNight(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
                 break;
                 case SEASON_WINTER:
                     if(tileset->palettes_winter != NULL)
-                        LoadPalette(((u16*)tileset->palettes_winter) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                        LoadPaletteDayNight(((u16*)tileset->palettes_winter) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
                     else
-                        LoadPalette(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                        LoadPaletteDayNight(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
                 break;
             }
             FieldmapPaletteDummy(destOffset, size >> 1);

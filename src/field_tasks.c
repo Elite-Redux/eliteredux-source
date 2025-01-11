@@ -22,6 +22,7 @@
 #include "constants/metatile_labels.h"
 #include "mgba_printf/mgba.h"
 #include "event_object_movement.h"
+#include "day_night.h"
 
 struct PacifidlogMetatileOffsets
 {
@@ -128,6 +129,7 @@ static void Task_RunPerStepCallback(u8 taskId)
 #define tState           data[0]
 #define tAmbientCryState data[1]
 #define tAmbientCryDelay data[2]
+#define tForceTimeUpdate data[3]
 
 static void RunTimeBasedEvents(s16 *data)
 {
@@ -153,16 +155,33 @@ static void Task_RunTimeBasedEvents(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
 
+    ProcessImmediateTimeEvents();
+
     if (!ScriptContext2_IsEnabled())
     {
         RunTimeBasedEvents(data);
         UpdateAmbientCry(&tAmbientCryState, &tAmbientCryDelay);
     }
+
+    if (tForceTimeUpdate)
+    {
+        tForceTimeUpdate = 0;
+        DoTimeBasedEvents();
+    }
+}
+
+void ForceTimeBasedEvents(void)
+{
+    u8 taskId = FindTaskIdByFunc(Task_RunTimeBasedEvents);
+
+    if (taskId != 0xFF)
+        gTasks[taskId].tForceTimeUpdate = 1;
 }
 
 #undef tState
 #undef tAmbientCryState
 #undef tAmbientCryDelay
+#undef tForceTimeUpdate
 
 void SetUpFieldTasks(void)
 {
