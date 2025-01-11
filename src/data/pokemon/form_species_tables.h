@@ -1222,7 +1222,6 @@ static const u16 sTyphlosionFormSpeciesIdTable[] = {
 static const u16 sMeganiumFormSpeciesIdTable[] = {
     SPECIES_MEGANIUM,
     SPECIES_MEGANIUM_MEGA,
-    SPECIES_MEGANIUM_MEGA_X,
     FORM_SPECIES_END,
 };
 
@@ -2175,21 +2174,6 @@ static const u16 sEmboarFormSpeciesIdTable[] = {
 static const u16 sMorpekyllFormSpeciesIdTable[] = {
     SPECIES_MORPEKYLL,
     SPECIES_MORPEKYLL_HANGRY,
-    FORM_SPECIES_END,
-};
-static const u16 sHatennaFormSpeciesIdTable[] = {
-    SPECIES_HATENNA,
-    SPECIES_HATENNA_REDUX,
-    FORM_SPECIES_END,
-};
-static const u16 sHattremFormSpeciesIdTable[] = {
-    SPECIES_HATTREM,
-    SPECIES_HATTREM_REDUX,
-    FORM_SPECIES_END,
-};
-static const u16 sWimpodFormSpeciesIdTable[] = {
-    SPECIES_WIMPOD,
-    SPECIES_WIMPOD_REDUX,
     FORM_SPECIES_END,
 };
 static const u16 sSpiritombFormSpeciesIdTable[] = {

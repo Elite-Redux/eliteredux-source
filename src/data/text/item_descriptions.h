@@ -4182,16 +4182,6 @@ static const u8 sSamurottiteHDesc[] = _(
     "Samurott H to Mega\n"
     "Evolve in battle.");
 
-static const u8 sGolisopoditeRDesc[] = _(
-    "This stone enables\n"
-    "Golisopod R to Mega\n"
-    "Evolve in battle.");
-
-static const u8 sHattereniteRDesc[] = _(
-    "This stone enables\n"
-    "Hatterene R to Mega\n"
-    "Evolve in battle.");
-
 static const u8 sDeciduiteDesc[] = _(
     "This stone enables\n"
     "Decidueye to Mega\n"

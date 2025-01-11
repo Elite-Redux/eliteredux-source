@@ -47234,33 +47234,6 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_MEGANIUM_MEGA_X] =
-    {
-    .baseHP        = 80,
-    .baseAttack    = 82,
-    .baseDefense   = 100,
-    .baseSpeed     = 80,
-    .baseSpAttack  = 93,
-    .baseSpDefense = 100,
-    .type1 = TYPE_GRASS,
-    .type2 = TYPE_FAIRY,
-    .catchRate = 255,
-    .expYield = 236,
-    .evYield_Defense   = 1,
-    .evYield_SpDefense = 2,
-    .genderRatio = PERCENT_FEMALE(50),
-    .eggCycles = 20,
-    .friendship = 70,
-    .growthRate = GROWTH_MEDIUM_SLOW,
-    .eggGroup1 = EGG_GROUP_MONSTER,
-    .eggGroup2 = EGG_GROUP_GRASS,
-    .abilities = {ABILITY_REGENERATOR, ABILITY_TRIAGE, ABILITY_GRASSY_SURGE},
-    .innates        = {ABILITY_OVERGROW, ABILITY_BIG_LEAVES, ABILITY_PASTEL_VEIL},
-    .bodyColor = BODY_COLOR_GREEN,
-    .noFlip = FALSE,
-    .tier = 0,
-    },
-
     [SPECIES_MEOWSCARADA_MEGA] =
     {
     .baseHP        = 81,

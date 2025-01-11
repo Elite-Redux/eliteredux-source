@@ -10293,28 +10293,6 @@ const struct Item gItems[] =
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
-    [ITEM_GOLISOPODITE_R] =
-    {
-        .name = _("Golisopodite R"),
-        .itemId = ITEM_GOLISOPODITE_R,
-        .price = 0,
-        .holdEffect = HOLD_EFFECT_MEGA_STONE,
-        .description = sGolisopoditeRDesc,
-        .pocket = POCKET_MEGA_STONES,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
-    },
-    [ITEM_HATTERENITE_R] =
-    {
-        .name = _("Hatterenite R"),
-        .itemId = ITEM_HATTERENITE,
-        .price = 0,
-        .holdEffect = HOLD_EFFECT_MEGA_STONE,
-        .description = sHattereniteRDesc,
-        .pocket = POCKET_MEGA_STONES,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
-    },
     [ITEM_DECIDUITE] =
     {
         .name = _("Deciduite"),
