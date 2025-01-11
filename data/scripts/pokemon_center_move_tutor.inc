@@ -363,6 +363,8 @@ PKMN_Center_EventScript_Mystery_Gift::
 PKMN_Center_Mystery_Gift_EventScript_TakeCare::
 	switch VAR_TEMP_1
 	case SPECIES_GRENINJA_BATTLE_BOND, PKMN_Center_EventScript_SetflagGreninja
+	case SPECIES_DELPHOX_BATTLE_BOND, PKMN_Center_EventScript_SetflagDelphox
+	case SPECIES_CHESNAUGHT_BATTLE_BOND, PKMN_Center_EventScript_SetflagChesnaught
 	case SPECIES_ZYGARDE_10, PKMN_Center_EventScript_SetflagZygarde10
 	case SPECIES_ZYGARDE_10_POWER_CONSTRUCT, PKMN_Center_EventScript_SetflagZygarde10PowerConstruct
 	case SPECIES_MELOETTA, PKMN_Center_EventScript_SetflagMeloetta
@@ -390,6 +392,16 @@ PKMN_Center_Mystery_Gift_EventScript_TakeCare::
 
 PKMN_Center_EventScript_SetflagGreninja::
 	setflag FLAG_RECEIVED_ASH_GRENINJA
+	releaseall
+	end
+
+PKMN_Center_EventScript_SetflagDelphox::
+	setflag FLAG_RECEIVED_SERENA_DELPHOX
+	releaseall
+	end
+
+PKMN_Center_EventScript_SetflagChesnaught::
+	setflag FLAG_RECEIVED_CLEMONT_CHESNAUGHT
 	releaseall
 	end
 

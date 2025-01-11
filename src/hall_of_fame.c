@@ -471,6 +471,9 @@ u16 getHallofFameSpecies(u8 num) {
     switch (species) {
         case SPECIES_WISHIWASHI:
             return SPECIES_WISHIWASHI_SCHOOL;
+
+        case SPECIES_UNOWN:
+            return SPECIES_UNOWN_REVELATION;
         
         case SPECIES_CHERRIM:
             return SPECIES_CHERRIM_SUNSHINE;
@@ -480,6 +483,12 @@ u16 getHallofFameSpecies(u8 num) {
             
         case SPECIES_GRENINJA_BATTLE_BOND:
             return SPECIES_GRENINJA_ASH;
+
+        case SPECIES_CHESNAUGHT_BATTLE_BOND:
+            return SPECIES_CHESNAUGHT_CLEMONT;
+
+        case SPECIES_DELPHOX_BATTLE_BOND:
+            return SPECIES_DELPHOX_SERENA;
         break;
     }
 

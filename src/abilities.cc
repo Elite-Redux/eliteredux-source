@@ -3374,6 +3374,12 @@ static const Ability HungerSwitch = {
             case SPECIES_MORPEKO_HANGRY:
                 newSpecies = SPECIES_MORPEKO;
                 break;
+            case SPECIES_MORPEKYLL:
+                newSpecies = SPECIES_MORPEKYLL_HANGRY;
+                break;
+            case SPECIES_MORPEKYLL_HANGRY:
+                newSpecies = SPECIES_MORPEKYLL;
+                break;
 
             default:
                 return FALSE;

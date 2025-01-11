@@ -89,8 +89,8 @@ MossdeepCity_StevensHouse_EventScript_LeaveMeltan:: @ 822285B
 	end
 
 MossdeepCity_StevensHouse_EventScript_GiveMeltan:: @ 8222865
-	setvar VAR_TEMP_1, SPECIES_MELMETAL
-	givemon SPECIES_MELMETAL, 100, ITEM_MELMETALITE
+	setvar VAR_TEMP_1, SPECIES_MELTAN
+	givemon SPECIES_MELTAN, 5, ITEM_MELMETALITE
 	compare VAR_RESULT, 0
 	goto_if_eq MossdeepCity_StevensHouse_EventScript_SendMeltanParty
 	compare VAR_RESULT, 1
@@ -188,11 +188,11 @@ MossdeepCity_StevensHouse_Text_UnderwateCavernBetweenMossdeepSootopolis: @ 8222B
 MossdeepCity_StevensHouse_Text_TakeBallContainingMeltan: @ 8222B9E
 	.string "{PLAYER} checked the Poké Ball.\p"
 	.string "It contained the Pokémon\n"
-	.string "Melmetal.\p"
+	.string "Meltan.\p"
 	.string "Take the Poké Ball?$"
 
 MossdeepCity_StevensHouse_Text_ObtainedMeltan: @ 8222BED
-	.string "{PLAYER} obtained a Melmetal.$"
+	.string "{PLAYER} obtained a Meltan.$"
 
 @ Unused
 MossdeepCity_StevensHouse_Text_NoSpaceForAnotherMon: @ 8222C03
@@ -213,10 +213,8 @@ MossdeepCity_StevensHouse_Text_LetterFromSteven: @ 8222C4E
 	.string "I have a favor to ask of you.\p"
 	.string "I want you to take the Poké Ball on\n"
 	.string "the desk.\p"
-	.string "Inside it is a Melmetal, one of my\n"
+	.string "Inside it is a Meltan, one of my\n"
 	.string "favorite Pokémon.\p"
-	.string "Alongside it is a mega stone\n
-	.string "that will unlock it's true strength.\p"
 	.string "I'm counting on you.\p"
 	.string "May our paths cross someday.\p"
 	.string "Steven Stone$"
