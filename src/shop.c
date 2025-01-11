@@ -353,7 +353,7 @@ static const u16 sAdoptionCenterInventory_OneBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX
+    SPECIES_NOIBAT_REDUX,
     SPECIES_NONE,
 };
 
@@ -379,7 +379,7 @@ static const u16 sAdoptionCenterInventory_TwoBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX
+    SPECIES_NOIBAT_REDUX,
     SPECIES_NONE,
 };
 
@@ -420,7 +420,7 @@ static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX
+    SPECIES_NOIBAT_REDUX,
     SPECIES_NONE,
 };
 
@@ -461,7 +461,7 @@ static const u16 sAdoptionCenterInventory_FourBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX
+    SPECIES_NOIBAT_REDUX,
     SPECIES_NONE,
 };
 
@@ -505,7 +505,7 @@ static const u16 sAdoptionCenterInventory_FiveBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX
+    SPECIES_NOIBAT_REDUX,
     SPECIES_NONE,
 };
 
@@ -550,7 +550,7 @@ static const u16 sAdoptionCenterInventory_SixBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX
+    SPECIES_NOIBAT_REDUX,
     SPECIES_NONE,
 };
 
@@ -596,7 +596,7 @@ static const u16 sAdoptionCenterInventory_SevenBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX
+    SPECIES_NOIBAT_REDUX,
     SPECIES_NONE,
 };
 
@@ -647,7 +647,7 @@ static const u16 sAdoptionCenterInventory_EightBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX
+    SPECIES_NOIBAT_REDUX,
     SPECIES_NONE,
 };
 
