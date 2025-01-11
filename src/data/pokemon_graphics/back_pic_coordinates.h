@@ -7224,11 +7224,6 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x78,
         .y_offset = 2,
     },
-    [SPECIES_DARMANITAN_REDUX_BLUNDER] =
-    {
-        .size = 0x78,
-        .y_offset = 2,
-    },
     [SPECIES_DARMANITAN_REDUX_BOND] =
     {
         .size = 0x78,
@@ -8513,7 +8508,6 @@ const struct MonCoords gMonBackPicCoords[] =
     {
         .size = 0x78,
         .y_offset = 2,
-        .y_offset = 2,
     },
     [SPECIES_SAMUROTT_MEGA] =
     {
@@ -8525,12 +8519,12 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x78,
         .y_offset = 0,
     },
-    [SPECIES_LYCANROC_REDUX] =
+    [SPECIES_LYCANROC_ECLIPSE] =
     {
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_ROCKRUFF_REDUX] =
+    [SPECIES_LYCANROC_TWILIGHT] =
     {
         .size = 0,
         .y_offset =  0
@@ -8543,7 +8537,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SPIRITOMB_REDUX] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  7
     },
     [SPECIES_GOLISOPOD_REDUX] =
     {
@@ -8593,12 +8587,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_INCINEROAR_MEGA] =
     {
         .size = 0x78,
-        .y_offset = 0,
-    },
-    [SPECIES_MEGANIUM_MEGA_X] =
-    {
-        .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 2,
     },
     [SPECIES_MEOWSCARADA_MEGA] =
     {
@@ -8608,7 +8597,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SAMUROTT_HISUIAN_MEGA] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 4,
     },
     [SPECIES_PRIMARINA_MEGA] =
     {
@@ -8623,18 +8612,52 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SKELEDIRGE_MEGA] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 3,
     },
     [SPECIES_TYPHLOSION_HISUIAN_MEGA] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 2,
     },
     [SPECIES_UNOWN_REVELATION] =
     {
         .size = 0x78,
         .y_offset = 0,
     },
-
+    [SPECIES_GOODRA_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_TOXAPEX_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_ARCANINE_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 4,
+    },
+    [SPECIES_SLOWBRO_MEGA_GALARIAN] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_SLOWKING_MEGA_GALARIAN] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_ROSERADE_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 6,
+    },
+    [SPECIES_MIENSHAO_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
 
 };

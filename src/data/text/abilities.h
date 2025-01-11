@@ -724,6 +724,12 @@ static const u8 sAbilityEnergizedHornsDescription[] = _("Mighty horn moves becom
 static const u8 sAbilitySpiderLairUpgradeDescription[] = _("Casts Sticky Web on entry.\nLasts 7 turns.");
 static const u8 sAbilityBalloonBlitzDescription[] = _("Inflatable + Hyper Aggressive.");
 static const u8 sAbilityStrikerPixilateDescription[] = _("Striker + Pixilate.");
+static const u8 sAbilityDoomBlastDescription[] = _("Boosts own Dark moves by 1.35x,\ntakes 10% of dmg dealt as recoil.");
+static const u8 sAbilityBruteforceDescription[] = _("Rock Head + Reckless.");
+static const u8 sAbilityFaradaysCageDescription[] = _("Shell Armor + 50BP Thunder\nCage when hit by contact.");
+static const u8 sAbilityAcidicSlimeDescription[] = _("Corrosion + Poison STAB.");
+static const u8 sAbilityRoseGardenDescription[] = _("Sets 2 layers of Toxic\nSpikes on entry.");
+static const u8 sAbilityQigongDescription[] = _("Always hits. Fighting Spirit\n+ Rampage.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1484,6 +1490,12 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_PUFFY] = _("Puffy"),
     [ABILITY_BALLOON_BLITZ] = _("Balloon Blitz"),
     [ABILITY_STRIKER_PIXILATE] = _("Twinkle Toes"),
+    [ABILITY_DOOM_BLAST] = _("Doom Blast"),
+    [ABILITY_BRUTEFORCE] = _("Bruteforce"),
+    [ABILITY_FARADAYS_CAGE] = _("Faradays Cage"),
+    [ABILITY_ACIDIC_SLIME] = _("Acidic Slime"),
+    [ABILITY_ROSE_GARDEN] = _("Rose Garden"),
+    [ABILITY_QIGONG] = _("Qigong"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2245,4 +2257,10 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_PUFFY] = sAbilityFluffyDescription,
     [ABILITY_BALLOON_BLITZ] = sAbilityBalloonBlitzDescription,
     [ABILITY_STRIKER_PIXILATE] = sAbilityStrikerPixilateDescription,
+    [ABILITY_DOOM_BLAST] = sAbilityDoomBlastDescription,
+    [ABILITY_BRUTEFORCE] = sAbilityBruteforceDescription,
+    [ABILITY_FARADAYS_CAGE] = sAbilityFaradaysCageDescription,
+    [ABILITY_ACIDIC_SLIME] = sAbilityAcidicSlimeDescription,
+    [ABILITY_ROSE_GARDEN] = sAbilityRoseGardenDescription,
+    [ABILITY_QIGONG] = sAbilityQigongDescription,
 };

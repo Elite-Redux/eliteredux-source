@@ -1757,8 +1757,8 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(EMBOAR_MEGA,  gMonShinyPalette_EmboarMega),
     SPECIES_SHINY_PAL(SAMUROTT_MEGA,  gMonShinyPalette_SamurottMega),
     SPECIES_SHINY_PAL(MORPEKYLL,  gMonShinyPalette_Morpekyll),
-    SPECIES_SHINY_PAL(LYCANROC_REDUX, gMonShinyPalette_Lycanroc_Redux),
-    SPECIES_SHINY_PAL(ROCKRUFF_REDUX, gMonShinyPalette_Rockruff_Redux),
+    SPECIES_SHINY_PAL(LYCANROC_ECLIPSE, gMonShinyPalette_LycanrocEclipse),
+    SPECIES_SHINY_PAL(LYCANROC_TWILIGHT, gMonShinyPalette_LycanrocTwilight),
     SPECIES_SHINY_PAL(GOLISOPOD_REDUX_MEGA, gMonShinyPalette_Golisopod_Redux_Mega),
     SPECIES_SHINY_PAL(SPIRITOMB_REDUX, gMonShinyPalette_Spiritomb_Redux),
     SPECIES_SHINY_PAL(GOLISOPOD_REDUX, gMonShinyPalette_Golisopod_Redux),
@@ -1771,7 +1771,6 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(DECIDUEYE_MEGA,  gMonShinyPalette_DecidueyeMega),
     SPECIES_SHINY_PAL(DECIDUEYE_HISUIAN_MEGA,  gMonShinyPalette_DecidueyeHisuianMega),
     SPECIES_SHINY_PAL(INCINEROAR_MEGA,  gMonShinyPalette_IncineroarMega),
-    SPECIES_SHINY_PAL(MEGANIUM_MEGA_X,  gMonShinyPalette_MeganiumMegaX),
     SPECIES_SHINY_PAL(MEOWSCARADA_MEGA,  gMonShinyPalette_MeowscaradaMega),
     SPECIES_SHINY_PAL(PRIMARINA_MEGA,  gMonShinyPalette_PrimarinaMega),
     SPECIES_SHINY_PAL(QUAQUAVAL_MEGA,  gMonShinyPalette_QuaquavalMega),
@@ -1779,6 +1778,13 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(SKELEDIRGE_MEGA,  gMonShinyPalette_SkeledirgeMega),
     SPECIES_SHINY_PAL(TYPHLOSION_HISUIAN_MEGA,  gMonShinyPalette_TyphlosionHisuianMega),
     SPECIES_SHINY_PAL(UNOWN_REVELATION,  gMonShinyPalette_UnownRevelation),
+    SPECIES_SHINY_PAL(GOODRA_MEGA,  gMonShinyPalette_GoodraMega),
+    SPECIES_SHINY_PAL(ARCANINE_MEGA,  gMonShinyPalette_ArcanineMega),
+    SPECIES_SHINY_PAL(TOXAPEX_MEGA,  gMonShinyPalette_ToxapexMega),
+    SPECIES_SHINY_PAL(SLOWKING_MEGA_GALARIAN,  gMonShinyPalette_SlowkingGalarianMega),
+    SPECIES_SHINY_PAL(SLOWBRO_MEGA_GALARIAN,  gMonShinyPalette_SlowbroGalarianMega),
+    SPECIES_SHINY_PAL(ROSERADE_MEGA,  gMonShinyPalette_RoseradeMega),
+    SPECIES_SHINY_PAL(MIENSHAO_MEGA,  gMonShinyPalette_MienshaoMega),
 };
 
                                      

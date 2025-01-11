@@ -1805,8 +1805,8 @@ const u8 *const gMonIconTable[] =
     [SPECIES_EMBOAR_MEGA] = gMonIcon_EmboarMega,
     [SPECIES_SAMUROTT_MEGA] = gMonIcon_SamurottMega,
     [SPECIES_MORPEKYLL] = gMonIcon_Morpekyll,
-    [SPECIES_LYCANROC_REDUX] = gMonIcon_Lycanroc_Redux,
-    [SPECIES_ROCKRUFF_REDUX] = gMonIcon_Rockruff_Redux,
+    [SPECIES_LYCANROC_ECLIPSE] = gMonIcon_LycanrocEclipse,
+    [SPECIES_LYCANROC_TWILIGHT] = gMonIcon_LycanrocTwilight,
     [SPECIES_GOLISOPOD_REDUX_MEGA] = gMonIcon_Golisopod_Redux_Mega,
     [SPECIES_SPIRITOMB_REDUX] = gMonIcon_Spiritomb_Redux,
     [SPECIES_GOLISOPOD_REDUX] = gMonIcon_Golisopod_Redux,
@@ -1818,7 +1818,6 @@ const u8 *const gMonIconTable[] =
     [SPECIES_DECIDUEYE_MEGA] = gMonIcon_DecidueyeMega,
     [SPECIES_DECIDUEYE_HISUIAN_MEGA] = gMonIcon_DecidueyeHisuianMega,
     [SPECIES_INCINEROAR_MEGA] = gMonIcon_IncineroarMega,
-    [SPECIES_MEGANIUM_MEGA_X] = gMonIcon_MeganiumMegaX,
     [SPECIES_MEOWSCARADA_MEGA] = gMonIcon_MeowscaradaMega,
     [SPECIES_PRIMARINA_MEGA] = gMonIcon_PrimarinaMega,
     [SPECIES_QUAQUAVAL_MEGA] = gMonIcon_QuaquavalMega,
@@ -1826,6 +1825,13 @@ const u8 *const gMonIconTable[] =
     [SPECIES_SKELEDIRGE_MEGA] = gMonIcon_SkeledirgeMega,
     [SPECIES_TYPHLOSION_HISUIAN_MEGA] = gMonIcon_TyphlosionHisuianMega,
     [SPECIES_UNOWN_REVELATION] = gMonIcon_UnownRevelation,
+    [SPECIES_TOXAPEX_MEGA] = gMonIcon_ToxapexMega,
+    [SPECIES_ARCANINE_MEGA] = gMonIcon_ArcanineMega,
+    [SPECIES_GOODRA_MEGA] = gMonIcon_GoodraMega,
+    [SPECIES_SLOWBRO_MEGA_GALARIAN] = gMonIcon_SlowbroGalarianMega,
+    [SPECIES_SLOWKING_MEGA_GALARIAN] = gMonIcon_SlowkingGalarianMega,
+    [SPECIES_ROSERADE_MEGA] = gMonIcon_RoseradeMega,
+    [SPECIES_MIENSHAO_MEGA] = gMonIcon_MienshaoMega,
 
     [SPECIES_MORPEKYLL_HANGRY] = gMonIcon_MorpekyllHangry,
 
@@ -3490,7 +3496,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_WOOPER_PALDEAN] = 2,
     [SPECIES_SCIZOR_REDUX] = 1,
     [SPECIES_IRON_EXO] = 1,
-    [SPECIES_CASTFORM_SANDY] = 1,
+    [SPECIES_CASTFORM_SANDY] = 4,
 
     [SPECIES_LARVITAR_REDUX] = 0,
     [SPECIES_PUPITAR_REDUX] = 2,
@@ -3508,7 +3514,8 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_HAPPINY_REDUX] = 0,
     [SPECIES_CHANSEY_REDUX] = 0,
     [SPECIES_BLISSEY_REDUX] = 0,
-    [SPECIES_CHESNAUGHT_CLEMONT] = 0,
+    [SPECIES_CHESNAUGHT_BATTLE_BOND] = 1,
+    [SPECIES_CHESNAUGHT_CLEMONT] = 4,
     [SPECIES_DELPHOX_SERENA] = 0,
     [SPECIES_SERPERIOR_MEGA] = 1,
     [SPECIES_EMBOAR_MEGA] = 0,
@@ -3521,19 +3528,23 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_GOLISOPOD_REDUX] = 2,
     [SPECIES_GOLISOPOD_REDUX_MEGA] = 2,
     [SPECIES_SPIRITOMB_REDUX] = 2,
-    [SPECIES_ROCKRUFF_REDUX] = 2,
-    [SPECIES_LYCANROC_REDUX] = 2,
+    [SPECIES_LYCANROC_TWILIGHT] = 2,
+    [SPECIES_LYCANROC_ECLIPSE] = 2,
     [SPECIES_DECIDUEYE_MEGA] = 1,
     [SPECIES_DECIDUEYE_HISUIAN_MEGA] = 0,
     [SPECIES_INCINEROAR_MEGA] = 3,
-    [SPECIES_MEGANIUM_MEGA_X] = 1,
     [SPECIES_MEOWSCARADA_MEGA] = 1,
     [SPECIES_PRIMARINA_MEGA] = 0,
-    [SPECIES_QUAQUAVAL_MEGA] = 2,
+    [SPECIES_QUAQUAVAL_MEGA] = 3,
     [SPECIES_SAMUROTT_HISUIAN_MEGA] = 0,
     [SPECIES_SKELEDIRGE_MEGA] = 0,
-    [SPECIES_TYPHLOSION_HISUIAN_MEGA] = 0,
+    [SPECIES_TYPHLOSION_HISUIAN_MEGA] = 1,
     [SPECIES_UNOWN_REVELATION] = 0,
+    [SPECIES_TOXAPEX_MEGA] = 1,
+    [SPECIES_GOODRA_MEGA] = 0,
+    [SPECIES_ARCANINE_MEGA] = 0,
+    [SPECIES_ROSERADE_MEGA] = 1,
+    [SPECIES_MIENSHAO_MEGA] = 1,
 };
 
 const u8 gMonIconPaletteIndicesFemale[] =
@@ -3547,7 +3558,6 @@ const u8 gMonIconPaletteIndicesFemale[] =
     [SPECIES_JELLICENT] = 1,
     [SPECIES_PYROAR] = 2,
 };
-#endif
 
 const struct SpritePalette gMonIconPaletteTable[] =
 {

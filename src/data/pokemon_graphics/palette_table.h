@@ -1759,8 +1759,8 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(EMBOAR_MEGA,     gMonPalette_EmboarMega),
     SPECIES_PAL(SAMUROTT_MEGA,     gMonPalette_SamurottMega),
     SPECIES_PAL(MORPEKYLL,     gMonPalette_Morpekyll),
-    SPECIES_PAL(LYCANROC_REDUX, gMonPalette_Lycanroc_Redux),
-    SPECIES_PAL(ROCKRUFF_REDUX, gMonPalette_Rockruff_Redux),
+    SPECIES_PAL(LYCANROC_ECLIPSE, gMonPalette_LycanrocEclipse),
+    SPECIES_PAL(LYCANROC_TWILIGHT, gMonPalette_LycanrocTwilight),
     SPECIES_PAL(GOLISOPOD_REDUX_MEGA, gMonPalette_Golisopod_Redux_Mega),
     SPECIES_PAL(SPIRITOMB_REDUX, gMonPalette_Spiritomb_Redux),
     SPECIES_PAL(GOLISOPOD_REDUX, gMonPalette_Golisopod_Redux),
@@ -1773,7 +1773,6 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(DECIDUEYE_MEGA,     gMonPalette_DecidueyeMega),
     SPECIES_PAL(DECIDUEYE_HISUIAN_MEGA,     gMonPalette_DecidueyeHisuianMega),
     SPECIES_PAL(INCINEROAR_MEGA,     gMonPalette_IncineroarMega),
-    SPECIES_PAL(MEGANIUM_MEGA_X,     gMonPalette_MeganiumMegaX),
     SPECIES_PAL(MEOWSCARADA_MEGA,     gMonPalette_MeowscaradaMega),
     SPECIES_PAL(PRIMARINA_MEGA,     gMonPalette_PrimarinaMega),
     SPECIES_PAL(QUAQUAVAL_MEGA,     gMonPalette_QuaquavalMega),
@@ -1781,6 +1780,13 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(SKELEDIRGE_MEGA,     gMonPalette_SkeledirgeMega),
     SPECIES_PAL(TYPHLOSION_HISUIAN_MEGA,     gMonPalette_TyphlosionHisuianMega),
     SPECIES_PAL(UNOWN_REVELATION,     gMonPalette_UnownRevelation),
+    SPECIES_PAL(GOODRA_MEGA,     gMonPalette_GoodraMega),
+    SPECIES_PAL(ARCANINE_MEGA,     gMonPalette_ArcanineMega),
+    SPECIES_PAL(TOXAPEX_MEGA,     gMonPalette_ToxapexMega),
+    SPECIES_PAL(SLOWBRO_MEGA_GALARIAN,     gMonPalette_SlowbroGalarianMega),
+    SPECIES_PAL(SLOWKING_MEGA_GALARIAN,     gMonPalette_SlowkingGalarianMega),
+    SPECIES_PAL(ROSERADE_MEGA,     gMonPalette_RoseradeMega),
+    SPECIES_PAL(MIENSHAO_MEGA,     gMonPalette_MienshaoMega),
 };
 
 const struct CompressedSpritePalette gMonPaletteTableFemale[] =

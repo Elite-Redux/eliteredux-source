@@ -1803,8 +1803,8 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(EMBOAR_MEGA, gMonFrontPic_EmboarMega),
     SPECIES_SPRITE(SAMUROTT_MEGA, gMonFrontPic_SamurottMega),
     SPECIES_SPRITE(MORPEKYLL, gMonFrontPic_Morpekyll),
-    SPECIES_SPRITE(LYCANROC_REDUX, gMonFrontPic_Lycanroc_Redux),
-    SPECIES_SPRITE(ROCKRUFF_REDUX, gMonFrontPic_Rockruff_Redux),
+    SPECIES_SPRITE(LYCANROC_ECLIPSE, gMonFrontPic_LycanrocEclipse),
+    SPECIES_SPRITE(LYCANROC_TWILIGHT, gMonFrontPic_LycanrocTwilight),
     SPECIES_SPRITE(GOLISOPOD_REDUX_MEGA, gMonFrontPic_Golisopod_Redux_Mega),
     SPECIES_SPRITE(SPIRITOMB_REDUX, gMonFrontPic_Spiritomb_Redux),
     SPECIES_SPRITE(GOLISOPOD_REDUX, gMonFrontPic_Golisopod_Redux),
@@ -1817,7 +1817,6 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(DECIDUEYE_MEGA, gMonFrontPic_DecidueyeMega),
     SPECIES_SPRITE(DECIDUEYE_HISUIAN_MEGA, gMonFrontPic_DecidueyeHisuianMega),
     SPECIES_SPRITE(INCINEROAR_MEGA, gMonFrontPic_IncineroarMega),
-    SPECIES_SPRITE(MEGANIUM_MEGA_X, gMonFrontPic_MeganiumMegaX),
     SPECIES_SPRITE(MEOWSCARADA_MEGA, gMonFrontPic_MeowscaradaMega),
     SPECIES_SPRITE(PRIMARINA_MEGA, gMonFrontPic_PrimarinaMega),
     SPECIES_SPRITE(QUAQUAVAL_MEGA, gMonFrontPic_QuaquavalMega),
@@ -1825,6 +1824,13 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(SKELEDIRGE_MEGA, gMonFrontPic_SkeledirgeMega),
     SPECIES_SPRITE(TYPHLOSION_HISUIAN_MEGA, gMonFrontPic_TyphlosionHisuianMega),
     SPECIES_SPRITE(UNOWN_REVELATION, gMonFrontPic_UnownRevelation),
+    SPECIES_SPRITE(ARCANINE_MEGA, gMonFrontPic_ArcanineMega),
+    SPECIES_SPRITE(TOXAPEX_MEGA, gMonFrontPic_ToxapexMega),
+    SPECIES_SPRITE(GOODRA_MEGA, gMonFrontPic_GoodraMega),
+    SPECIES_SPRITE(SLOWBRO_MEGA_GALARIAN, gMonFrontPic_SlowbroGalarianMega),
+    SPECIES_SPRITE(SLOWKING_MEGA_GALARIAN, gMonFrontPic_SlowkingGalarianMega),
+    SPECIES_SPRITE(ROSERADE_MEGA, gMonFrontPic_RoseradeMega),
+    SPECIES_SPRITE(MIENSHAO_MEGA, gMonFrontPic_MienshaoMega),
     
 };
 

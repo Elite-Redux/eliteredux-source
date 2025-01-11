@@ -1206,6 +1206,16 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_SKELEDIRGE_MEGA] = sSkeledirgeFormSpeciesIdTable,
     [SPECIES_TYPHLOSION_HISUIAN_MEGA] = sTyphlosionFormSpeciesIdTable,
     [SPECIES_UNOWN_REVELATION] = sUnownFormSpeciesIdTable,
+    [SPECIES_TOXAPEX] = sToxapexFormSpeciesIdTable,
+    [SPECIES_TOXAPEX_MEGA] = sToxapexFormSpeciesIdTable,
+    [SPECIES_GOODRA_MEGA] = sGoodraFormSpeciesIdTable,
+    [SPECIES_ARCANINE_MEGA] = sArcanineFormSpeciesIdTable,
+    [SPECIES_SLOWBRO_MEGA_GALARIAN] = sSlowbroFormSpeciesIdTable,
+    [SPECIES_SLOWKING_MEGA_GALARIAN] = sSlowkingFormSpeciesIdTable,
+    [SPECIES_ROSERADE] = sRoseradeFormSpeciesIdTable,
+    [SPECIES_ROSERADE_MEGA] = sRoseradeFormSpeciesIdTable,
+    [SPECIES_MIENSHAO] = sMienshaoFormSpeciesIdTable,
+    [SPECIES_MIENSHAO_MEGA] = sMienshaoFormSpeciesIdTable,
 
     [SPECIES_HATTREM_REDUX] = sHattremFormSpeciesIdTable,
 

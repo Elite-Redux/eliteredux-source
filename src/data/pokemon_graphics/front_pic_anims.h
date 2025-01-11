@@ -18769,7 +18769,82 @@ static const union AnimCmd *const sAnims_UNOWN_REVELATION[] ={
     sAnim_UNOWN_REVELATION_1,
 };
 
+static const union AnimCmd sAnim_TOXAPEX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 
+static const union AnimCmd *const sAnims_TOXAPEX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TOXAPEX_MEGA_1,
+};
+
+static const union AnimCmd sAnim_ARCANINE_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_ARCANINE_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_ARCANINE_MEGA_1,
+};
+
+static const union AnimCmd sAnim_GOODRA_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_GOODRA_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_GOODRA_MEGA_1,
+};
+
+static const union AnimCmd sAnim_SLOWBRO_MEGA_GALARIAN_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_SLOWBRO_MEGA_GALARIAN[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SLOWBRO_MEGA_GALARIAN_1,
+};
+
+static const union AnimCmd sAnim_SLOWKING_MEGA_GALARIAN_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_SLOWKING_MEGA_GALARIAN[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SLOWKING_MEGA_GALARIAN_1,
+};
+
+static const union AnimCmd sAnim_ROSERADE_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_ROSERADE_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_ROSERADE_MEGA_1,
+};
+
+static const union AnimCmd sAnim_MIENSHAO_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_MIENSHAO_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_MIENSHAO_MEGA_1,
+};
 
 
 #define ANIM_CMD(name)             [SPECIES_##name] = sAnims_##name
@@ -20490,6 +20565,13 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] = {
     ANIM_CMD(SKELEDIRGE_MEGA),
     ANIM_CMD(TYPHLOSION_HISUIAN_MEGA),
     ANIM_CMD(UNOWN_REVELATION),
+    ANIM_CMD(TOXAPEX_MEGA),
+    ANIM_CMD(ARCANINE_MEGA),
+    ANIM_CMD(GOODRA_MEGA),
+    ANIM_CMD(SLOWKING_MEGA_GALARIAN),
+    ANIM_CMD(SLOWBRO_MEGA_GALARIAN),
+    ANIM_CMD(ROSERADE_MEGA),
+    ANIM_CMD(MIENSHAO_MEGA),
 };
 
 #undef ANIM_CMD

@@ -1799,8 +1799,9 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_EMBOAR_MEGA] = _("Emboar"),
     [SPECIES_SAMUROTT_MEGA] = _("Samurott"),
     [SPECIES_MORPEKYLL] = _("Morpekyll"),
-[SPECIES_LYCANROC_REDUX] = _("Lycanroc"),
-[SPECIES_ROCKRUFF_REDUX] = _("Rockruff"),
+    [SPECIES_MORPEKYLL_HANGRY] = _("Morpekyll"),
+[SPECIES_LYCANROC_ECLIPSE] = _("Lycanroc"),
+[SPECIES_LYCANROC_TWILIGHT] = _("Lycanroc"),
 [SPECIES_GOLISOPOD_REDUX_MEGA] = _("Golisopod"),
 [SPECIES_SPIRITOMB_REDUX] = _("Spiritomb"),
 [SPECIES_GOLISOPOD_REDUX] = _("Golisopod"),
@@ -1812,7 +1813,6 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_DECIDUEYE_MEGA] = _("Decidueye"),
     [SPECIES_DECIDUEYE_HISUIAN_MEGA] = _("Decidueye"),
     [SPECIES_INCINEROAR_MEGA] = _("Incineroar"),
-    [SPECIES_MEGANIUM_MEGA_X] = _("Meganium"),
     [SPECIES_MEOWSCARADA_MEGA] = _("Meowscarada"),
     [SPECIES_PRIMARINA_MEGA] = _("Primarina"),
     [SPECIES_QUAQUAVAL_MEGA] = _("Quaquaval"),
@@ -1820,6 +1820,14 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_SKELEDIRGE_MEGA] = _("Skeledirge"),
     [SPECIES_TYPHLOSION_HISUIAN_MEGA] = _("Typhlosion"),
     [SPECIES_UNOWN_REVELATION] = _("Unown"),
+    [SPECIES_TOXAPEX_MEGA] = _("Toxapex"),
+    [SPECIES_ARCANINE_MEGA] = _("Arcanine"),
+    [SPECIES_GOODRA_MEGA] = _("Goodra"),
+    [SPECIES_SLOWBRO_MEGA_GALARIAN] = _("Slowbro"),
+    [SPECIES_SLOWKING_MEGA_GALARIAN] = _("Slowking"),
+    [SPECIES_ROSERADE_MEGA] = _("Roserade"),
+    [SPECIES_MIENSHAO_MEGA] = _("Mienshao"),
+    
 
 
     // PARTNER POKEMON

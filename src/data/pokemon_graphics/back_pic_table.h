@@ -1757,8 +1757,8 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(EMBOAR_MEGA, gMonBackPic_EmboarMega),
     SPECIES_SPRITE(SAMUROTT_MEGA, gMonBackPic_SamurottMega),
     SPECIES_SPRITE(MORPEKYLL, gMonBackPic_Morpekyll),
-    SPECIES_SPRITE(LYCANROC_REDUX, gMonBackPic_Lycanroc_Redux),
-    SPECIES_SPRITE(ROCKRUFF_REDUX, gMonBackPic_Rockruff_Redux),
+    SPECIES_SPRITE(LYCANROC_ECLIPSE, gMonBackPic_LycanrocEclipse),
+    SPECIES_SPRITE(LYCANROC_TWILIGHT, gMonBackPic_LycanrocTwilight),
     SPECIES_SPRITE(GOLISOPOD_REDUX_MEGA, gMonBackPic_Golisopod_Redux_Mega),
     SPECIES_SPRITE(SPIRITOMB_REDUX, gMonBackPic_Spiritomb_Redux),
     SPECIES_SPRITE(GOLISOPOD_REDUX, gMonBackPic_Golisopod_Redux),
@@ -1771,7 +1771,6 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(DECIDUEYE_MEGA, gMonBackPic_DecidueyeMega),
     SPECIES_SPRITE(DECIDUEYE_HISUIAN_MEGA, gMonBackPic_DecidueyeHisuianMega),
     SPECIES_SPRITE(INCINEROAR_MEGA, gMonBackPic_IncineroarMega),
-    SPECIES_SPRITE(MEGANIUM_MEGA_X, gMonBackPic_MeganiumMegaX),
     SPECIES_SPRITE(MEOWSCARADA_MEGA, gMonBackPic_MeowscaradaMega),
     SPECIES_SPRITE(PRIMARINA_MEGA, gMonBackPic_PrimarinaMega),
     SPECIES_SPRITE(QUAQUAVAL_MEGA, gMonBackPic_QuaquavalMega),
@@ -1779,6 +1778,13 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(SKELEDIRGE_MEGA, gMonBackPic_SkeledirgeMega),
     SPECIES_SPRITE(TYPHLOSION_HISUIAN_MEGA, gMonBackPic_TyphlosionHisuianMega),
     SPECIES_SPRITE(UNOWN_REVELATION, gMonBackPic_UnownRevelation),
+    SPECIES_SPRITE(ARCANINE_MEGA, gMonBackPic_ArcanineMega),
+    SPECIES_SPRITE(GOODRA_MEGA, gMonBackPic_GoodraMega),
+    SPECIES_SPRITE(TOXAPEX_MEGA, gMonBackPic_ToxapexMega),
+    SPECIES_SPRITE(SLOWBRO_MEGA_GALARIAN, gMonBackPic_SlowbroGalarianMega),
+    SPECIES_SPRITE(SLOWKING_MEGA_GALARIAN, gMonBackPic_SlowkingGalarianMega),
+    SPECIES_SPRITE(ROSERADE_MEGA, gMonBackPic_RoseradeMega),
+    SPECIES_SPRITE(MIENSHAO_MEGA, gMonBackPic_MienshaoMega),
 };
 
 const struct CompressedSpriteSheet gMonBackPicTableFemale[] =
