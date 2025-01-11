@@ -775,7 +775,13 @@
 #define ABILITY_CRUST_COAT 753 // Immune to critical hits. Takes 20% less damage from all attacks.
 #define ABILITY_PUFFY 754 // Takes 1/2 dmg from contact moves but Fire moves hurt it 2x more.
 #define ABILITY_BALLOON_BLITZ 755 // Inflatable + Hyper Aggressive.
-#define ABILITY_STRIKER_PIXILATE 756 // Striker + Pixilate.
+#define ABILITY_DOOM_BLAST 756 // Boosts own Dark moves by 1.35x, takes 10% of dmg dealt as recoil.
+#define ABILITY_BRUTEFORCE 757 // Rock Head + Reckless
+#define ABILITY_FARADAYS_CAGE 758 // Shell Armor + Thunder Cage when hit by contact.
+#define ABILITY_ACIDIC_SLIME 759 // Corrosion + Poison STAB.
+#define ABILITY_ROSE_GARDEN 760 // Sets 2 layers of Toxic Spikes on entry.
+#define ABILITY_QIGONG 761 // Can't miss. Fighting Spirit + Rampage.
+#define ABILITY_STRIKER_PIXILATE 762 // Striker + Pixilate.
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_STRIKER_PIXILATE + 1)
 
