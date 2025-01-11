@@ -8447,42 +8447,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_GOLISOPOD_REDUX_MEGA] =
-    {
-        .size = 0,
-        .y_offset =  0
-    },
     [SPECIES_SPIRITOMB_REDUX] =
-    {
-        .size = 0,
-        .y_offset =  0
-    },
-    [SPECIES_GOLISOPOD_REDUX] =
-    {
-        .size = 0,
-        .y_offset =  0
-    },
-    [SPECIES_WIMPOD_REDUX] =
-    {
-        .size = 0,
-        .y_offset =  0
-    },
-    [SPECIES_HATTERENE_REDUX_MEGA] =
-    {
-        .size = 0,
-        .y_offset =  0
-    },
-    [SPECIES_HATTERENE_REDUX] =
-    {
-        .size = 0,
-        .y_offset =  0
-    },
-    [SPECIES_HATTREM_REDUX] =
-    {
-        .size = 0,
-        .y_offset =  0
-    },
-    [SPECIES_HATENNA_REDUX] =
     {
         .size = 0,
         .y_offset =  0

@@ -20344,22 +20344,7 @@ static const union AnimCmd sAnim_LYCANROC_TWILIGHT_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
-static const union AnimCmd sAnim_GOLISOPOD_REDUX_MEGA_1[] =
-{
-    ANIMCMD_FRAME(0, 1),
-    ANIMCMD_END,
-};
 static const union AnimCmd sAnim_SPIRITOMB_REDUX_1[] =
-{
-    ANIMCMD_FRAME(0, 1),
-    ANIMCMD_END,
-};
-static const union AnimCmd sAnim_GOLISOPOD_REDUX_1[] =
-{
-    ANIMCMD_FRAME(0, 1),
-    ANIMCMD_END,
-};
-static const union AnimCmd sAnim_WIMPOD_REDUX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -20400,44 +20385,9 @@ static const union AnimCmd *const sAnims_LYCANROC_TWILIGHT[] ={
     sAnim_LYCANROC_TWILIGHT_1,
 };
 
-static const union AnimCmd *const sAnims_GOLISOPOD_REDUX_MEGA[] ={
-    sAnim_GeneralFrame0,
-    sAnim_GOLISOPOD_REDUX_MEGA_1,
-};
-
 static const union AnimCmd *const sAnims_SPIRITOMB_REDUX[] ={
     sAnim_GeneralFrame0,
     sAnim_SPIRITOMB_REDUX_1,
-};
-
-static const union AnimCmd *const sAnims_GOLISOPOD_REDUX[] ={
-    sAnim_GeneralFrame0,
-    sAnim_GOLISOPOD_REDUX_1,
-};
-
-static const union AnimCmd *const sAnims_WIMPOD_REDUX[] ={
-    sAnim_GeneralFrame0,
-    sAnim_WIMPOD_REDUX_1,
-};
-
-static const union AnimCmd *const sAnims_HATTERENE_REDUX_MEGA[] ={
-    sAnim_GeneralFrame0,
-    sAnim_HATTERENE_REDUX_MEGA_1,
-};
-
-static const union AnimCmd *const sAnims_HATTERENE_REDUX[] ={
-    sAnim_GeneralFrame0,
-    sAnim_HATTERENE_REDUX_1,
-};
-
-static const union AnimCmd *const sAnims_HATTREM_REDUX[] ={
-    sAnim_GeneralFrame0,
-    sAnim_HATTREM_REDUX_1,
-};
-
-static const union AnimCmd *const sAnims_HATENNA_REDUX[] ={
-    sAnim_GeneralFrame0,
-    sAnim_HATENNA_REDUX_1,
 };
 
 static const union AnimCmd sAnim_MORPEKYLL_HANGRY_1[] =
@@ -22337,14 +22287,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(MORPEKYLL_HANGRY),
     ANIM_CMD(LYCANROC_ECLIPSE),
     ANIM_CMD(LYCANROC_TWILIGHT),
-    ANIM_CMD(GOLISOPOD_REDUX_MEGA),
     ANIM_CMD(SPIRITOMB_REDUX),
-    ANIM_CMD(GOLISOPOD_REDUX),
-    ANIM_CMD(WIMPOD_REDUX),
-    ANIM_CMD(HATTERENE_REDUX_MEGA),
-    ANIM_CMD(HATTERENE_REDUX),
-    ANIM_CMD(HATTREM_REDUX),
-    ANIM_CMD(HATENNA_REDUX),
     ANIM_CMD(DECIDUEYE_MEGA),
     ANIM_CMD(DECIDUEYE_HISUIAN_MEGA),
     ANIM_CMD(INCINEROAR_MEGA),

@@ -443,6 +443,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     // Lycanroc
     [SPECIES_LYCANROC_MIDNIGHT] = sLycanrocFormSpeciesIdTable,
     [SPECIES_LYCANROC_DUSK] = sLycanrocFormSpeciesIdTable,
+    [SPECIES_LYCANROC_ECLIPSE] = sLycanrocFormSpeciesIdTable,
+    [SPECIES_LYCANROC_TWILIGHT] = sLycanrocFormSpeciesIdTable,
     // Wishiwashi
     [SPECIES_WISHIWASHI_SCHOOL] = sWishiwashiFormSpeciesIdTable,
     // Silvally
@@ -1189,12 +1191,10 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_SAMUROTT_MEGA] = sSamurottFormSpeciesIdTable,
     [SPECIES_MORPEKYLL] = sMorpekyllFormSpeciesIdTable, 
     [SPECIES_MORPEKYLL_HANGRY] = sMorpekyllFormSpeciesIdTable,
-    [SPECIES_HATENNA_REDUX] = sHatennaFormSpeciesIdTable,
     [SPECIES_DECIDUEYE_MEGA] = sDecidueyeFormSpeciesIdTable,
     [SPECIES_DECIDUEYE_HISUIAN_MEGA] = sDecidueyeFormSpeciesIdTable,
     [SPECIES_INCINEROAR_MEGA] = sIncineroarFormSpeciesIdTable,
     [SPECIES_INCINEROAR] = sIncineroarFormSpeciesIdTable,
-    [SPECIES_MEGANIUM_MEGA_X] = sMeganiumFormSpeciesIdTable,
     [SPECIES_MEOWSCARADA] = sMeowscaradaFormSpeciesIdTable,
     [SPECIES_MEOWSCARADA_MEGA] = sMeowscaradaFormSpeciesIdTable,
     [SPECIES_PRIMARINA] = sPrimarinaFormSpeciesIdTable,
@@ -1217,14 +1217,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_MIENSHAO] = sMienshaoFormSpeciesIdTable,
     [SPECIES_MIENSHAO_MEGA] = sMienshaoFormSpeciesIdTable,
 
-    [SPECIES_HATTREM_REDUX] = sHattremFormSpeciesIdTable,
-
-    [SPECIES_HATTERENE_REDUX_MEGA] = sHattereneFormSpeciesIdTable,
-
-    [SPECIES_WIMPOD_REDUX] = sWimpodFormSpeciesIdTable,
-
     [SPECIES_SPIRITOMB_REDUX] = sSpiritombFormSpeciesIdTable,
-
-    [SPECIES_GOLISOPOD_REDUX_MEGA] = sGolisopodFormSpeciesIdTable,
 
 };
