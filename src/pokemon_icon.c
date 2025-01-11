@@ -3489,7 +3489,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_WOOPER_PALDEAN] = 2,
     [SPECIES_SCIZOR_REDUX] = 1,
     [SPECIES_IRON_EXO] = 1,
-    [SPECIES_CASTFORM_SANDY] = 4,
+    [SPECIES_CASTFORM_SANDY] = 1,
 
     [SPECIES_LARVITAR_REDUX] = 0,
     [SPECIES_PUPITAR_REDUX] = 2,
@@ -3500,7 +3500,6 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_HYDROAR] = 3,
     [SPECIES_HYDROAR_F] = 3,
     [SPECIES_EGG] = 1,
-
     //3.0 CUTOFF
     [SPECIES_IRON_VOCA] = 0,
     [SPECIES_WEAVILE_MEGA] = 0,
@@ -3544,6 +3543,7 @@ const u8 gMonIconPaletteIndicesFemale[] =
     [SPECIES_JELLICENT] = 1,
     [SPECIES_PYROAR] = 2,
 };
+#endif
 
 const struct SpritePalette gMonIconPaletteTable[] =
 {
