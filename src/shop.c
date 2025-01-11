@@ -353,6 +353,7 @@ static const u16 sAdoptionCenterInventory_OneBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
+    SPECIES_NOIBAT_REDUX
     SPECIES_NONE,
 };
 
@@ -378,11 +379,13 @@ static const u16 sAdoptionCenterInventory_TwoBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
+    SPECIES_NOIBAT_REDUX
     SPECIES_NONE,
 };
 
 // 3 Badges
 static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
+    SPECIES_DARUMAKA_REDUX, //testing purposes
     SPECIES_GLIGAR_REDUX, //testing purposes
     SPECIES_CRABRAWLER_REDUX, //testing purposes
     SPECIES_TRAPINCH_REDUX, //testing purposes
@@ -417,11 +420,13 @@ static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
+    SPECIES_NOIBAT_REDUX
     SPECIES_NONE,
 };
 
 // 4 Badges
 static const u16 sAdoptionCenterInventory_FourBadges[] = {
+    SPECIES_DARUMAKA_REDUX, //testing purposes
     SPECIES_GLIGAR_REDUX, //testing purposes
     SPECIES_CRABRAWLER_REDUX, //testing purposes
     SPECIES_TRAPINCH_REDUX, //testing purposes
@@ -456,11 +461,15 @@ static const u16 sAdoptionCenterInventory_FourBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
+    SPECIES_NOIBAT_REDUX
     SPECIES_NONE,
 };
 
 // 5 Badges
 static const u16 sAdoptionCenterInventory_FiveBadges[] = {
+    SPECIES_HAPPINY_REDUX, //testing purposes
+    SPECIES_SPIRITOMB_REDUX, //testing purposes
+    SPECIES_DARUMAKA_REDUX, //testing purposes
     SPECIES_SEEL_REDUX, //testing purposes
     SPECIES_GLIGAR_REDUX, //testing purposes
     SPECIES_CRABRAWLER_REDUX, //testing purposes
@@ -496,11 +505,15 @@ static const u16 sAdoptionCenterInventory_FiveBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
+    SPECIES_NOIBAT_REDUX
     SPECIES_NONE,
 };
 
 // 6 Badges
 static const u16 sAdoptionCenterInventory_SixBadges[] = {
+    SPECIES_HAPPINY_REDUX, //testing purposes
+    SPECIES_SPIRITOMB_REDUX, //testing purposes
+    SPECIES_DARUMAKA_REDUX, //testing purposes
     SPECIES_SEEL_REDUX, //testing purposes
     SPECIES_GLIGAR_REDUX, //testing purposes
     SPECIES_CRABRAWLER_REDUX, //testing purposes
@@ -537,11 +550,15 @@ static const u16 sAdoptionCenterInventory_SixBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
+    SPECIES_NOIBAT_REDUX
     SPECIES_NONE,
 };
 
 // 7 Badges
 static const u16 sAdoptionCenterInventory_SevenBadges[] = {
+    SPECIES_HAPPINY_REDUX, //testing purposes
+    SPECIES_SPIRITOMB_REDUX, //testing purposes
+    SPECIES_DARUMAKA_REDUX, //testing purposes
     SPECIES_SEEL_REDUX, //testing purposes
     SPECIES_GLIGAR_REDUX, //testing purposes
     SPECIES_CRABRAWLER_REDUX, //testing purposes
@@ -579,11 +596,15 @@ static const u16 sAdoptionCenterInventory_SevenBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
+    SPECIES_NOIBAT_REDUX
     SPECIES_NONE,
 };
 
 // 8 Badges
 static const u16 sAdoptionCenterInventory_EightBadges[] = {
+    SPECIES_HAPPINY_REDUX, //testing purposes
+    SPECIES_SPIRITOMB_REDUX, //testing purposes
+    SPECIES_DARUMAKA_REDUX, //testing purposes
     SPECIES_SEEL_REDUX, //testing purposes
     SPECIES_GLIGAR_REDUX, //testing purposes
     SPECIES_CRABRAWLER_REDUX, //testing purposes
@@ -626,6 +647,7 @@ static const u16 sAdoptionCenterInventory_EightBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
+    SPECIES_NOIBAT_REDUX
     SPECIES_NONE,
 };
 

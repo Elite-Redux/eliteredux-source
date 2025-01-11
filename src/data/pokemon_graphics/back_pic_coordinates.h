@@ -8622,7 +8622,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_MIENSHAO_MEGA] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 7,
     },
 
 };
