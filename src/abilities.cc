@@ -9302,7 +9302,7 @@ static const Ability BalloonBlitz = {
 };
 
 static const Ability StrikerPixilate = {
-    .name = $("StrikerPixilate"),
+    .name = $("Twinkle Toes"),
     .description = $("Boosts the power of kicking\n"
                      "moves by 1.3x + Pixilate."),
     .onOffensiveMultiplier =
@@ -9311,6 +9311,73 @@ static const Ability StrikerPixilate = {
             Pixilate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
     .onMoveType = Pixilate.onMoveType,
+};
+
+//2.6
+static const Ability DoomBlast = {
+    .name = $("Doom Blast"),
+    .description = $("Boosts own Dark moves by 1.35x,\n"
+                     "takes 10% of dmg dealt as recoil."),
+    .onRecoil = +[](ON_RECOIL) -> int {
+        CHECK(moveType == TYPE_DARK);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
+        return max(damage / 20, 1);
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_DARK) MUL(1.35);
+        },
+};
+
+static const Ability Bruteforce = {
+    .name = $("Rock Head"),
+    .description = $("Rock Head + Reckless"),
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
+        },
+    .noRecoil = TRUE,
+};
+
+static const Ability FaradaysCage = {
+    .name = $("Faradays Cage"),
+    .description = $("Shell Armor + 50BP Thunder\n"
+                     "Cage when hit by contact."),
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_THUNDER_CAGE, 50);
+        return FALSE;
+    },
+    .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .breakable = TRUE,
+};
+
+static const Ability AcidicSlime = {
+    .name = $("Acidic Slime"),
+    .description = $("Corrosion + Poison STAB."),
+};
+
+static const Ability RoseGarden = {
+    .name = $("Watch Your Step"),
+    .description = $("Spreads two layers of\n"
+                     "Toxic Spikes on switch-in."),
+    .onEntry = +[](ON_ENTRY) -> int {
+        u8 targetSide = GetBattlerSide(BATTLE_OPPOSITE(battler));
+        CHECK(gSideTimers[targetSide].toxicSpikesAmount < 3)
+
+        gSideTimers[targetSide].spikesAmount = min(gSideTimers[targetSide].toxicSpikesAmount + 2, 3);
+        gSideStatuses[targetSide] |= SIDE_STATUS_TOXIC_SPIKES;
+        BattleScriptPushCursorAndCallback(BattleScript_DoubleSpikesOnEntry);
+        return TRUE;
+    },
+};
+
+static const Ability Qigong = {
+    .name = $("Qigong"),
+    .description = $("Always hits. Fighting Spirit\n"
+                     "+ Rampage."),
 };
 
 const Ability gAbilities[] = {
@@ -10071,6 +10138,12 @@ const Ability gAbilities[] = {
     [ABILITY_PUFFY] = Puffy,
     [ABILITY_BALLOON_BLITZ] = BalloonBlitz,
     [ABILITY_STRIKER_PIXILATE] = StrikerPixilate,
+    [ABILITY_DOOM_BLAST] = DoomBlast,
+    [ABILITY_BRUTEFORCE] = Bruteforce,
+    [ABILITY_FARADAYS_CAGE] = FaradaysCage,
+    [ABILITY_ACIDIC_SLIME] = AcidicSlime,
+    [ABILITY_ROSE_GARDEN] = RoseGarden,
+    [ABILITY_QIGONG] = Qigong,
 };
 
 #pragma GCC diagnostic pop
