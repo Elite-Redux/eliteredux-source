@@ -5258,7 +5258,7 @@ bool32 CanBeConfused(u8 battlerId) {
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
     if (BATTLER_HAS_ABILITY(battlerId, ABILITY_OWN_TEMPO) || BATTLER_HAS_ABILITY(battlerId, ABILITY_DISCIPLINE) ||
-        BATTLER_HAS_ABILITY(battlerId, ABILITY_ROCK_HEAD) || BATTLER_HAS_ABILITY(battlerId, ABILITY_STEEL_BARREL))
+        BATTLER_HAS_ABILITY(battlerId, ABILITY_ROCK_HEAD) || BATTLER_HAS_ABILITY(battlerId, ABILITY_BRUTEFORCE) || BATTLER_HAS_ABILITY(battlerId, ABILITY_STEEL_BARREL))
         return FALSE;
     return TRUE;
 }
@@ -8042,7 +8042,7 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
         // Has Innate Effect here too
         mod = UQ_4_12(2.0);  // super-effective
     } else if (moveType == TYPE_POISON && defType == TYPE_STEEL &&
-               (BattlerHasAbility(battlerAtk, ABILITY_CORROSION, TRUE) || BattlerHasAbility(battlerAtk, ABILITY_PYROCLASTIC_FLOW, TRUE) ||
+               (BattlerHasAbility(battlerAtk, ABILITY_CORROSION, TRUE) || BattlerHasAbility(battlerAtk, ABILITY_PYROCLASTIC_FLOW, TRUE) || BattlerHasAbility(battlerAtk, ABILITY_ACIDIC_SLIME, TRUE) ||
                 BattlerHasAbility(battlerAtk, ABILITY_TRASH_HEAP, TRUE))) {
         // Has Innate Effect here too
         mod = UQ_4_12(2.0);  // super-effective

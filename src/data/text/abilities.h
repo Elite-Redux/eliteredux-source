@@ -724,12 +724,12 @@ static const u8 sAbilityEnergizedHornsDescription[] = _("Mighty horn moves becom
 static const u8 sAbilitySpiderLairUpgradeDescription[] = _("Casts Sticky Web on entry.\nLasts 7 turns.");
 static const u8 sAbilityBalloonBlitzDescription[] = _("Inflatable + Hyper Aggressive.");
 static const u8 sAbilityStrikerPixilateDescription[] = _("Striker + Pixilate.");
-static const u8 sAbilityDoomBlastDescription[] = _("(NOT DONE)Boosts own Dark moves by 1.35x,\ntakes 10% of dmg dealt as recoil.");
-static const u8 sAbilityBruteforceDescription[] = _("(NOT DONE)Rock Head + Reckless.");
+static const u8 sAbilityDoomBlastDescription[] = _("Boosts own Dark moves by 1.35x,\ntakes 10% of dmg dealt as recoil.");
+static const u8 sAbilityBruteforceDescription[] = _("Rock Head + Reckless.");
 static const u8 sAbilityFaradaysCageDescription[] = _("(NOT DONE)Shell Armor + 50BP\nThunder Cage when hit by contact.");
-static const u8 sAbilityAcidicSlimeDescription[] = _("(NOT DONE)Corrosion + Poison STAB.");
+static const u8 sAbilityAcidicSlimeDescription[] = _("Corrosion + Poison STAB.");
 static const u8 sAbilityRoseGardenDescription[] = _("(NOT DONE)Sets 2 layers of Toxic\nSpikes on entry.");
-static const u8 sAbilityQigongDescription[] = _("(NOT DONE)Always hits. Fighting Spirit\n+ Rampage.");
+static const u8 sAbilityQigongDescription[] = _("Always hits. Fighting Spirit\n+ Rampage.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {

@@ -9363,6 +9363,7 @@ static const Ability FaradaysCage = {
 static const Ability AcidicSlime = {
     .name = $("Acidic Slime"),
     .description = $("Corrosion + Poison STAB."),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
 };
 
 static const Ability RoseGarden = {
@@ -9384,6 +9385,7 @@ static const Ability Qigong = {
     .name = $("Qigong"),
     .description = $("Always hits. Fighting Spirit\n"
                      "+ Rampage."),
+    ATE_ABILITY(TYPE_FIGHTING),
 };
 
 const Ability gAbilities[] = {
