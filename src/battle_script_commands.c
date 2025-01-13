@@ -1555,6 +1555,9 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
         critChance = ((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0) + (holdEffectAtk == HOLD_EFFECT_SCOPE_LENS) +
                      2 * (holdEffectAtk == HOLD_EFFECT_LUCKY_PUNCH && (GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_HAPPINY ||
                                                                        GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_CHANSEY ||
+                                                                       GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_HAPPINY_REDUX ||
+                                                                       GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_CHANSEY_REDUX ||
+                                                                       GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_BLISSEY_REDUX ||
                                                                        GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_BLISSEY)) +
                      BENEFITS_FROM_LEEK(battlerAtk, holdEffectAtk) +
                      (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PERFECTIONIST) > 0 && gBattleMoves[move].power <= 50 && gBattleMoves[move].power > 0) +
@@ -1565,7 +1568,7 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
                      (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WAY_OF_PRECISION) > 0 && IS_IRON_FIST(battlerAtk, move)) +
                      gVolatileStructs[battlerAtk].critBoost + (move == MOVE_VISE_GRIP);
 
-        if (critChance >= ARRAY_COUNT(sCriticalHitChance)) critChance = ARRAY_COUNT(sCriticalHitChance) - 1;
+        if (critChance >= ARRAY_COUNT(sCriticalHitChance)) critChance = ARRAY_COUNT(sCriticalHitChance) - 2;
     }
 
     return critChance;

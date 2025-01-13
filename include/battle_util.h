@@ -155,7 +155,7 @@ typedef union AbilityStates {
 
 extern const struct TypePower gNaturalGiftTable[];
 extern const u16 gPercentToModifier[];
-extern const u16 gHpTransformations[9][4];
+extern const u16 gHpTransformations[10][4];
 
 int GetAbilityIndex(int battler, int ability, int checkMoldBreaker);
 s32 CountUsablePartyMons(u8 battlerId);
