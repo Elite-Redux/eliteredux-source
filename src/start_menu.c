@@ -46,6 +46,7 @@
 #include "trainer_card.h"
 #include "window.h"
 #include "ui_intro_options.h"
+#include "ui_start_menu.h"
 #include "ui_battle_menu.h"
 #include "constants/songs.h"
 #include "constants/map_groups.h"
@@ -695,6 +696,18 @@ void Task_ShowStartMenu(u8 taskId)
             DestroyTask(taskId);
         break;
     }
+}
+
+void ShowUIStartMenu(void)
+{
+    if (!IsUpdateLinkStateCBActive())
+    {
+        FreezeObjectEvents();
+        PlayerFreeze();
+        sub_808BCF4();
+    }
+	StartMenuUiStartMenuCallback();
+    ScriptContext2_Enable();
 }
 
 void ShowStartMenu(void)
@@ -1652,5 +1665,11 @@ static void ShowGameVersionWindow(void)
 static bool8 QuestMenuCallback(void)
 {
     CreateTask(Task_OpenQuestMenuFromStartMenu, 0);
+    return TRUE;
+}
+
+bool8 StartMenuUiStartMenuCallback(void)
+{
+    CreateTask(Task_OpenStartMenuFromStartMenu, 0);
     return TRUE;
 }

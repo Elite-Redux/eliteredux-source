@@ -204,6 +204,17 @@
 
 #define POKEMON_SPECIES_NAME_LENGTH 12
 
+#define STRINGLIST_MAX_LENGHT 20
+#define STRINGLIST_LONG_MAX_LENGHT 75
+struct StringList
+{
+    const u8 string[STRINGLIST_MAX_LENGHT];
+};
+struct StringList_Long
+{
+    const u8 string[STRINGLIST_LONG_MAX_LENGHT];
+};
+
 struct Coords8
 {
     s8 x;
