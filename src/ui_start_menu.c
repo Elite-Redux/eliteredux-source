@@ -203,13 +203,45 @@ static const struct WindowTemplate sMenuWindowTemplates[] =
     },
 };
 
-static const u32 sMenuTiles[] 	          = INCBIN_U32("graphics/ui_menus/start_menu/tiles.4bpp.lz");
-static const u16 sMenuPalette[]           = INCBIN_U16("graphics/ui_menus/start_menu/palette.gbapal");
-static const u16 sMenuPalette_Interface[] = INCBIN_U16("graphics/ui_menus/start_menu/palette_interface.gbapal");
+static const u32 sMenuTiles[] 	           = INCBIN_U32("graphics/ui_menus/start_menu/tiles.4bpp.lz");
+static const u16 sMenuPalette_Interface[]  = INCBIN_U16("graphics/ui_menus/start_menu/palette_interface.gbapal");
+
+//Palettes
+static const u16 sMenuPalette[]            = INCBIN_U16("graphics/ui_menus/sharedPalettes/palette.gbapal");
+static const u16 sMenuPalette_Blue[]       = INCBIN_U16("graphics/ui_menus/sharedPalettes/palette_blue.gbapal");
+static const u16 sMenuPalette_Yellow[]     = INCBIN_U16("graphics/ui_menus/sharedPalettes/palette_yellow.gbapal");
+static const u16 sMenuPalette_Green[]      = INCBIN_U16("graphics/ui_menus/sharedPalettes/palette_green.gbapal");
+static const u16 sMenuPalette_Dark[]       = INCBIN_U16("graphics/ui_menus/sharedPalettes/palette_dark.gbapal");
+static const u16 sMenuPalette_Red[]        = INCBIN_U16("graphics/ui_menus/sharedPalettes/palette_red.gbapal");
 
 const u32 sMenuTilemap[]                   = INCBIN_U32("graphics/ui_menus/start_menu/tilemap.bin.lz");
 const u32 sStartMenuScrollingBGTilemap[]   = INCBIN_U32("graphics/ui_menus/start_menu/scrolling_bg.bin.lz");
 const u32 sStartMenuTransparentBGTilemap[] = INCBIN_U32("graphics/ui_menus/start_menu/tilemap_transparent.bin.lz");
+
+static void LoadStartMenuPalette(void) {
+    u8 menuColor = gSaveBlock2Ptr->startMenuPaletteNum;
+
+    switch (menuColor){
+        case MENU_COLOR_BLUE:
+            LoadPalette(sMenuPalette_Blue, 0, 32);
+        break;
+        case MENU_COLOR_YELLOW:
+            LoadPalette(sMenuPalette_Yellow, 0, 32);
+        break;
+        case MENU_COLOR_RED:
+            LoadPalette(sMenuPalette_Red, 0, 32);
+        break;
+        case MENU_COLOR_GREEN:
+            LoadPalette(sMenuPalette_Green, 0, 32);
+        break;
+        case MENU_COLOR_DARK:
+            LoadPalette(sMenuPalette_Dark, 0, 32);
+        break;
+        default:
+            LoadPalette(sMenuPalette, 0, 32);
+        break;
+    }
+}
 
 enum Colors
 {
@@ -608,7 +640,7 @@ static bool8 Menu_LoadGraphics(void)
         sMenuDataPtr->gfxLoadState++;
         break;
     case 4:
-        LoadPalette(sMenuPalette, 0, 32);
+        LoadStartMenuPalette();
         LoadPalette(sMenuPalette_Interface, 16, 32);
         sMenuDataPtr->gfxLoadState++;
         break;

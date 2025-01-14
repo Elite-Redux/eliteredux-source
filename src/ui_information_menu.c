@@ -20,10 +20,11 @@
 #include "constants/songs.h"
 #include "window.h"
 
-#define ENTRY_TITLE_LENGTH 22
+#define ENTRY_TITLE_LENGTH 30
 #define ENTRY_DESCRIPTION_LENGTH 600
 #define MAX_ENTRY_PAGES 5
 #define MAX_ENTRIES_ON_SCREEN 5
+#define MAX_NUM_ENTRIES_PER_TAB 25
 
 //Sprites
 enum{
@@ -38,17 +39,25 @@ struct MenuResources
     u8 gfxLoadState;
     u8 selectorOffset;
     u8 selectorPosY;
+    u8 currentTab;
     u8 entryIdx;
     u8 pageIdx;
     bool8 isEntryOpen;
 	u8 spriteIDs[NUM_INFORMATION_MENU_SPRITES];
 };
 
-struct MenuEntry
+struct InformationEntry
 {
     const u8 title[ENTRY_TITLE_LENGTH];
     const u8 description[MAX_ENTRY_PAGES][ENTRY_DESCRIPTION_LENGTH];
     const u8 numPages;
+};
+
+struct MenuEntry
+{
+    const u8 title[ENTRY_TITLE_LENGTH];
+    const u8 numEntries;
+    const u8 paletteNum;
 };
 
 enum WindowIds
@@ -70,6 +79,8 @@ static void Menu_InitWindows(void);
 static void PrintToWindow(void);
 static void Task_MenuWaitFadeIn(u8 taskId);
 static void Task_MenuMain(u8 taskId);
+static u8 getCurrentTabEntries(void);
+static void LoadTabPalette(void);
 
 // const data
 static const struct BgTemplate sMenuBgTemplates[] =
@@ -108,16 +119,24 @@ static const struct WindowTemplate sMenuWindowTemplates[] =
     },
 };
 
-static const u32 sMenuTiles[]   = INCBIN_U32("graphics/ui_menus/information_menu/tiles.4bpp.lz");
-static const u32 sMenuTilemap[] = INCBIN_U32("graphics/ui_menus/information_menu/tilemap.bin.lz");
+static const u32 sMenuTiles[]    = INCBIN_U32("graphics/ui_menus/information_menu/tiles.4bpp.lz");
+static const u32 sMenuTilemap[]  = INCBIN_U32("graphics/ui_menus/information_menu/tilemap.bin.lz");
 static const u32 sMenuTilemap2[] = INCBIN_U32("graphics/ui_menus/information_menu/tilemap_selected.bin.lz");
-static const u16 sMenuPalette[] = INCBIN_U16("graphics/ui_menus/information_menu/palette.gbapal");
+
+//Palettes
+static const u16 sMenuPalette[]        = INCBIN_U16("graphics/ui_menus/sharedPalettes/palette.gbapal");
+static const u16 sMenuPalette_Blue[]   = INCBIN_U16("graphics/ui_menus/sharedPalettes/palette_blue.gbapal");
+static const u16 sMenuPalette_Yellow[] = INCBIN_U16("graphics/ui_menus/sharedPalettes/palette_yellow.gbapal");
+static const u16 sMenuPalette_Green[]  = INCBIN_U16("graphics/ui_menus/sharedPalettes/palette_green.gbapal");
+static const u16 sMenuPalette_Dark[]   = INCBIN_U16("graphics/ui_menus/sharedPalettes/palette_dark.gbapal");
+static const u16 sMenuPalette_Red[]    = INCBIN_U16("graphics/ui_menus/sharedPalettes/palette_red.gbapal");
 
 enum Colors
 {
     FONT_BLACK,
     FONT_BLACK_2,
     FONT_WHITE,
+    FONT_WHITE_2,
     FONT_RED,
     FONT_BLUE,
 };
@@ -127,91 +146,12 @@ static const u8 sMenuWindowFontColors[][3] =
     [FONT_BLACK]   = {TEXT_COLOR_TRANSPARENT,  3,  2},
     [FONT_BLACK_2] = {TEXT_COLOR_TRANSPARENT,  3,  TEXT_COLOR_TRANSPARENT},
     [FONT_WHITE]   = {TEXT_COLOR_TRANSPARENT,  1,  2},
+    [FONT_WHITE_2] = {TEXT_COLOR_TRANSPARENT,  1,  TEXT_COLOR_TRANSPARENT},
     [FONT_RED]     = {TEXT_COLOR_TRANSPARENT,  TEXT_COLOR_RED,        TEXT_COLOR_LIGHT_GRAY},
     [FONT_BLUE]    = {TEXT_COLOR_TRANSPARENT,  TEXT_COLOR_BLUE,       TEXT_COLOR_LIGHT_GRAY},
 };
 
-enum{
-    INFORMATION_1,
-    INFORMATION_2,
-    INFORMATION_3,
-    INFORMATION_4,
-    INFORMATION_5,
-    INFORMATION_6,
-    INFORMATION_7,
-    INFORMATION_8,
-    INFORMATION_9,
-    INFORMATION_10,
-    NUM_ENTRIES,
-};
-
-static const struct MenuEntry sMenuEntries[] =
-{
-    [INFORMATION_1] = {
-        .title = _("Title 1"),
-        .description = {
-          _("Lorem ipsum dolor sit amet, consectetur\n"
-            "adipiscing elit, sed do eiusmod tempor\n"
-            "aliqua. Morbi quis commodo odio aenean\n"
-            "sed  adipiscing diam donec. Diam vel quam\n"
-            "elementum pulvinar.\n"),
-          _("Aliquam ut porttitor leo a diam\n"
-            "sollicitudin tempor id. Vehicula ipsum a\n"
-            "arcu cursus vitae congue mauris\n"
-            "rhoncus aenean.\n"),
-          _("Vivamus ac purus interdum risus\n:"
-            "vestibulum egestas ut sed massa. Class\n"
-            "aptent taciti sociosqu ad litora torquent\n"
-            "per conubia nostra, per inceptos himenaeos."),
-        },
-        .numPages = 3
-    },
-    [INFORMATION_2] = {
-        .title = _("Title 2"),
-        .description = _("Description 2"),
-        .numPages = 1
-    },
-    [INFORMATION_3] = {
-        .title = _("Title 3"),
-        .description = _("Description 3"),
-        .numPages = 1
-    },
-    [INFORMATION_4] = {
-        .title = _("Title 4"),
-        .description = _("Description 4"),
-        .numPages = 1
-    },
-    [INFORMATION_5] = {
-        .title = _("Title 5"),
-        .description = _("Description 5"),
-        .numPages = 1
-    },
-    [INFORMATION_6] = {
-        .title = _("Title 6"),
-        .description = _("Description 6"),
-        .numPages = 1
-    },
-    [INFORMATION_7] = {
-        .title = _("Title 7"),
-        .description = _("Description 7"),
-        .numPages = 1
-    },
-    [INFORMATION_8] = {
-        .title = _("Title 8"),
-        .description = _("Description 8"),
-        .numPages = 1
-    },
-    [INFORMATION_9] = {
-        .title = _("Title 9"),
-        .description = _("Description 9"),
-        .numPages = 1
-    },
-    [INFORMATION_10] = {
-        .title = _("Title 10"),
-        .description = _("Description 10"),
-        .numPages = 1
-    },
-};
+#include "data/text/information_entries.h"
 
 static const u8 sSelector[]  = INCBIN_U8("graphics/ui_menus/information_menu/selector.4bpp");
 static const u8 sSelector2[] = INCBIN_U8("graphics/ui_menus/information_menu/selector2.4bpp");
@@ -236,7 +176,8 @@ void InformationMenu_Init(MainCallback callback)
     }
 
     // initialize stuff
-    sMenuDataPtr->gfxLoadState = 0;
+    sMenuDataPtr->gfxLoadState  = 0;
+    sMenuDataPtr->currentTab    = 0;
     sMenuDataPtr->savedCallback = callback;
 
     SetMainCallback2(Menu_RunSetup);
@@ -282,12 +223,12 @@ static void SpriteCallback_Inventory_UpArrow(struct Sprite *sprite)
 
 static void SpriteCallback_Inventory_DownArrow(struct Sprite *sprite)
 {
-    u8 numitems = NUM_ENTRIES;
+    u8 numEntries = getCurrentTabEntries();
     u8 val = sprite->data[0] + 128;
     sprite->y2 = gSineTable[val] / 128;
     sprite->data[0] += 8;
 
-    if(sMenuDataPtr->entryIdx >= (numitems - 1) || sMenuDataPtr->isEntryOpen) //Because of the Exit Button
+    if(sMenuDataPtr->entryIdx >= (numEntries - 1) || sMenuDataPtr->isEntryOpen) //Because of the Exit Button
         sprite->invisible = TRUE;
     else
         sprite->invisible = FALSE;
@@ -327,7 +268,7 @@ static void CreateUpArrowSprite(void)
 }
 
 #define DOWN_ARROW_X UP_ARROW_X
-#define DOWN_ARROW_Y 96 + 56
+#define DOWN_ARROW_Y 96 + 40
 
 static void CreateDownArrowSprite(void)
 {
@@ -502,7 +443,7 @@ static bool8 Menu_LoadGraphics(void)
         }
         break;
     case 2:
-        LoadPalette(sMenuPalette, 0, 32);
+        LoadTabPalette();
         sMenuDataPtr->gfxLoadState++;
         break;
     default:
@@ -526,21 +467,51 @@ static void Menu_InitWindows(void)
     ScheduleBgCopyTilemapToVram(2);
 }
 
+static void LoadTabPalette(void) {
+    u8 currentTab = sMenuDataPtr->currentTab;
+    switch (sMenuEntry[currentTab].paletteNum) {
+        case MENU_COLOR_BLUE:
+            LoadPalette(sMenuPalette_Blue, 0, 32);
+        break;
+        case MENU_COLOR_YELLOW:
+            LoadPalette(sMenuPalette_Yellow, 0, 32);
+        break;
+        case MENU_COLOR_RED:
+            LoadPalette(sMenuPalette_Red, 0, 32);
+        break;
+        case MENU_COLOR_GREEN:
+            LoadPalette(sMenuPalette_Green, 0, 32);
+        break;
+        case MENU_COLOR_DARK:
+            LoadPalette(sMenuPalette_Dark, 0, 32);
+        break;
+        default:
+            LoadPalette(sMenuPalette, 0, 32);
+        break;
+    }
+}
+
+#define SPACE_BETWEEN_INFORMATION_START   24
 #define SPACE_BETWEEN_INFORMATION_OPTIONS 24
+#define INFORMATION_HELP_BAR_Y           (18 * 8)
 static const u8 sText_PageNum[]       = _("Page {STR_VAR_1}/{STR_VAR_2}");
-const u8 sText_Help_Bar_Information[] = _("Pokémon Elite Redux - {A_BUTTON} View Info {DPAD_UPDOWN} Move {B_BUTTON} Exit");
-const u8 sText_Help_Bar_Informatio2n[] = _("Pokémon Elite Redux - {DPAD_LEFTRIGHT} Page {DPAD_UPDOWN} Next {B_BUTTON} Exit");
+const u8 sText_Information_Menu_Title[] = _("Pokémon Elite Redux - {STR_VAR_1}");
+const u8 sText_Help_Bar_Information[] = _("{A_BUTTON} View Info {DPAD_LEFTRIGHT} Move Tab {DPAD_UPDOWN} Move Entry {B_BUTTON} Exit");
+const u8 sText_Help_Bar_Information2[] = _("{DPAD_LEFTRIGHT} Page {DPAD_UPDOWN} Entry {B_BUTTON} Exit");
+
 static void PrintToWindow(void)
 {
     u8 windowId   = WINDOW_1;
     u8 fontTitle  = FONT_NARROW;
     u8 fontText   = FONT_SMALL_NARROW;
+    u8 currentTab = sMenuDataPtr->currentTab;
     u8 entryIdx   = sMenuDataPtr->entryIdx;
     u8 pageIdx    = sMenuDataPtr->pageIdx;
     u8 offset     = sMenuDataPtr->selectorOffset;
-    u8 numPages   = sMenuEntries[entryIdx].numPages;
-    u8 numEntries = min(MAX_ENTRIES_ON_SCREEN, NUM_ENTRIES);
-    u8 helpBarFontColor = FONT_BLACK_2;
+    u8 numPages   = sInformationEntry[currentTab][entryIdx].numPages;
+    u8 numEntries = min(MAX_ENTRIES_ON_SCREEN, getCurrentTabEntries());
+    u8 infoTitleFontColor   = FONT_BLACK_2;
+    u8 helpBarFontColor = FONT_WHITE_2;
     u8 titleFontColor   = FONT_BLACK;
     u8 textFontColor    = FONT_BLACK;
     u8 i = 0;
@@ -549,30 +520,35 @@ static void PrintToWindow(void)
 
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
 
+    //Help Bar
+    StringCopy(gStringVar1, sMenuEntry[currentTab].title);
+	StringExpandPlaceholders(gStringVar4, sText_Information_Menu_Title);
+    AddTextPrinterParameterized4(windowId, fontTitle, x, y, 0, 0, sMenuWindowFontColors[infoTitleFontColor], 0xFF, gStringVar4);
+
     if(!sMenuDataPtr->isEntryOpen)
     {
-        //Help Bar
-        AddTextPrinterParameterized4(windowId, fontTitle, 8, y, 0, 0, sMenuWindowFontColors[helpBarFontColor], 0xFF, sText_Help_Bar_Information);
         for (i = 0; i < numEntries; i++)
         {
-            y = 32 + (SPACE_BETWEEN_INFORMATION_OPTIONS * i);
-            AddTextPrinterParameterized4(windowId, fontTitle, x, y, 0, 0, sMenuWindowFontColors[titleFontColor], 0xFF, sMenuEntries[offset + i].title);
+            y = SPACE_BETWEEN_INFORMATION_START + (SPACE_BETWEEN_INFORMATION_OPTIONS * i);
+            AddTextPrinterParameterized4(windowId, fontTitle, x, y, 0, 0, sMenuWindowFontColors[titleFontColor], 0xFF, sInformationEntry[currentTab][offset + i].title);
         }
-        BlitBitmapToWindow(windowId, sSelector, 8,         32 + (SPACE_BETWEEN_INFORMATION_OPTIONS * sMenuDataPtr->selectorPosY), 8, 16);
-        BlitBitmapToWindow(windowId, sSelector2, (8 * 28), 32 + (SPACE_BETWEEN_INFORMATION_OPTIONS * sMenuDataPtr->selectorPosY), 8, 16);
+        BlitBitmapToWindow(windowId, sSelector, 8,         SPACE_BETWEEN_INFORMATION_START + (SPACE_BETWEEN_INFORMATION_OPTIONS * sMenuDataPtr->selectorPosY), 8, 16);
+        BlitBitmapToWindow(windowId, sSelector2, (8 * 28), SPACE_BETWEEN_INFORMATION_START + (SPACE_BETWEEN_INFORMATION_OPTIONS * sMenuDataPtr->selectorPosY), 8, 16);
+
+        //Help Bar
+        x = (2 * 8);
+        y = INFORMATION_HELP_BAR_Y;
+        AddTextPrinterParameterized4(windowId, fontTitle, 8, y, 0, 0, sMenuWindowFontColors[helpBarFontColor], 0xFF, sText_Help_Bar_Information);
     }
     else {
-        //Help Bar
-        AddTextPrinterParameterized4(windowId, fontTitle, 8, y, 0, 0, sMenuWindowFontColors[helpBarFontColor], 0xFF, sText_Help_Bar_Informatio2n);
-
         x = (2 * 8);
         y = (3 * 8);
-        AddTextPrinterParameterized4(windowId, fontTitle, x, y, 0, 0, sMenuWindowFontColors[titleFontColor], 0xFF, sMenuEntries[entryIdx].title);
+        AddTextPrinterParameterized4(windowId, fontTitle, x, y, 0, 0, sMenuWindowFontColors[titleFontColor], 0xFF, sInformationEntry[currentTab][entryIdx].title);
         y = y + (2 * 8) + 4;
-        AddTextPrinterParameterized4(windowId, fontText, x, y, 0, 0, sMenuWindowFontColors[textFontColor], 0xFF, sMenuEntries[entryIdx].description[pageIdx]);
+        AddTextPrinterParameterized4(windowId, fontText, x, y, 0, 0, sMenuWindowFontColors[textFontColor], 0xFF, sInformationEntry[currentTab][entryIdx].description[pageIdx]);
 
         //Num Pages
-        y = y + (12 * 8);
+        y = y + (10 * 8);
 
         if(numPages == 0)
             numPages = 1;
@@ -582,6 +558,11 @@ static void PrintToWindow(void)
 	    StringExpandPlaceholders(gStringVar4, sText_PageNum);
 
         AddTextPrinterParameterized4(windowId, fontText, x, y, 0, 0, sMenuWindowFontColors[textFontColor], 0xFF, gStringVar4);
+
+        //Help Bar
+        x = (2 * 8);
+        y = INFORMATION_HELP_BAR_Y;
+        AddTextPrinterParameterized4(windowId, fontTitle, 8, y, 0, 0, sMenuWindowFontColors[helpBarFontColor], 0xFF, sText_Help_Bar_Information2);
     }
 
     PutWindowTilemap(windowId);
@@ -604,18 +585,26 @@ static void Task_MenuTurnOff(u8 taskId)
     }
 }
 
+static u8 getCurrentTabEntries(void){
+    u8 currentTab = sMenuDataPtr->currentTab;
+    u8 numEntries = sMenuEntry[currentTab].numEntries;
+
+    return numEntries;
+}
+
 static void Menu_PressedButtonUp(void)
 {
+    u8 numEntries = getCurrentTabEntries();
     u8 halfScreen = MAX_ENTRIES_ON_SCREEN / 2;
-    u8 maxOffset  = NUM_ENTRIES - MAX_ENTRIES_ON_SCREEN;
+    u8 maxOffset  = numEntries - MAX_ENTRIES_ON_SCREEN;
     u8 maxPosY    = MAX_ENTRIES_ON_SCREEN - 1;
 
-    if (NUM_ENTRIES < MAX_ENTRIES_ON_SCREEN)
+    if (numEntries < MAX_ENTRIES_ON_SCREEN)
     {
         if (sMenuDataPtr->selectorPosY > 0)
             sMenuDataPtr->selectorPosY--;
         else
-            sMenuDataPtr->selectorPosY = NUM_ENTRIES - 1;
+            sMenuDataPtr->selectorPosY = numEntries - 1;
     }
     else
     {
@@ -638,13 +627,14 @@ static void Menu_PressedButtonUp(void)
 
 static void Menu_PressedButtonDown(void)
 {
+    u8 numEntries = getCurrentTabEntries() - 1;
     u8 halfScreen = MAX_ENTRIES_ON_SCREEN / 2;
-    u8 maxOffset  = NUM_ENTRIES - MAX_ENTRIES_ON_SCREEN;
+    u8 maxOffset  = numEntries - MAX_ENTRIES_ON_SCREEN;
     u8 maxPosY    = MAX_ENTRIES_ON_SCREEN - 1;
 
-    if (NUM_ENTRIES < MAX_ENTRIES_ON_SCREEN)
+    if (numEntries < MAX_ENTRIES_ON_SCREEN)
     {
-        if (sMenuDataPtr->selectorPosY < NUM_ENTRIES)
+        if (sMenuDataPtr->selectorPosY < numEntries)
             sMenuDataPtr->selectorPosY++;
         else
             sMenuDataPtr->selectorPosY = 0;
@@ -672,21 +662,58 @@ static void Menu_PressedButtonDown(void)
 static void Task_MenuMain(u8 taskId)
 {
     u8 entryIdx = sMenuDataPtr->entryIdx;
+    u8 currentTab = sMenuDataPtr->currentTab;
 
-    if (JOY_NEW(DPAD_RIGHT) && sMenuDataPtr->isEntryOpen)
-    {
-        PlaySE(SE_SELECT);
-        sMenuDataPtr->pageIdx++;
-        sMenuDataPtr->pageIdx %= sMenuEntries[entryIdx].numPages;
-        PrintToWindow();
+    if(sMenuDataPtr->isEntryOpen){
+        u8 numPages = sInformationEntry[currentTab][entryIdx].numPages;
+        if (JOY_NEW(DPAD_RIGHT))
+        {
+            PlaySE(SE_SELECT);
+            if(sMenuDataPtr->pageIdx < numPages - 1)
+                sMenuDataPtr->pageIdx++;
+            else
+                sMenuDataPtr->pageIdx = 0;
+            PrintToWindow();
+        }
+
+        if (JOY_NEW(DPAD_LEFT))
+        {
+            PlaySE(SE_SELECT);
+            if(sMenuDataPtr->pageIdx != 0)
+                sMenuDataPtr->pageIdx--;
+            else
+                sMenuDataPtr->pageIdx = numPages - 1;
+            PrintToWindow();
+        }
     }
+    else{
+        u8 numTabs = NUM_INFORMATION_ENTRIES;
+        if (JOY_NEW(DPAD_RIGHT))
+        {
+            PlaySE(SE_SELECT);
+            if(sMenuDataPtr->currentTab < numTabs - 1)
+                sMenuDataPtr->currentTab++;
+            else
+                sMenuDataPtr->currentTab = 0;
+            
+            sMenuDataPtr->selectorPosY   = 0;
+            sMenuDataPtr->selectorOffset = 0;
+            LoadTabPalette();
+            PrintToWindow();
+        }
 
-    if (JOY_NEW(DPAD_LEFT) && sMenuDataPtr->isEntryOpen)
-    {
-        PlaySE(SE_SELECT);
-        sMenuDataPtr->pageIdx--;
-        sMenuDataPtr->pageIdx %= sMenuEntries[entryIdx].numPages;
-        PrintToWindow();
+        if (JOY_NEW(DPAD_LEFT))
+        {
+            PlaySE(SE_SELECT);
+            if(sMenuDataPtr->currentTab != 0)
+                sMenuDataPtr->currentTab--;
+            else
+                sMenuDataPtr->currentTab = numTabs - 1;
+            sMenuDataPtr->selectorPosY   = 0;
+            sMenuDataPtr->selectorOffset = 0;
+            LoadTabPalette();
+            PrintToWindow();
+        }
     }
 
     if (JOY_NEW(A_BUTTON))

@@ -635,7 +635,7 @@ struct SaveBlock2
     u32 encounteredroutes5;
     u8 shortcutButton:3;
     u8 season:2;
-    u8 filler:3;
+    u8 startMenuPaletteNum:3;
     
 }; // sizeof=0xF2C
 

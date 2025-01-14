@@ -201,4 +201,11 @@
 #define SEASON_AUTUMN 2
 #define SEASON_WINTER 3
 
+#define MENU_COLOR_BLUE   0
+#define MENU_COLOR_RED    1
+#define MENU_COLOR_YELLOW 2
+#define MENU_COLOR_GREEN  3
+#define MENU_COLOR_DARK   4
+#define NUM_MENU_COLORS   5
+
 #endif // GUARD_CONSTANTS_GLOBAL_H
