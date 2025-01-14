@@ -537,8 +537,8 @@ PokemonCenterMoveTutor_Text_MudSlapDesc::
 	.string "duce its accuracy.$"
 
 PokemonCenterMoveTutor_Text_MetronomeDesc::
-	.string "Waggles a finger\n"
-	.string "to use any move\n"
+	.string "An unknown power\n"
+	.string "uses any move\n"
 	.string "at random.$"
 
 PokemonCenterMoveTutor_Text_OminousWindDesc::

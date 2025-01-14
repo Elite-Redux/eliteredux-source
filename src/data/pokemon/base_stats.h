@@ -47582,33 +47582,6 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_TOXAPEX_MEGA] =
-    {
-    .baseHP         = 75,
-    .baseAttack     = 65,
-    .baseDefense    = 162,
-    .baseSpeed      = 90,
-    .baseSpAttack   = 76,
-    .baseSpDefense  = 152,
-    .type1 = TYPE_POISON,
-    .type2 = TYPE_WATER,
-    .catchRate = 255,
-    .expYield = 173,
-    .evYield_Defense   = 2,
-    .item2 = ITEM_POISON_BARB,
-    .genderRatio = PERCENT_FEMALE(50),
-    .eggCycles = 20,
-    .friendship = 70,
-    .growthRate = GROWTH_MEDIUM_FAST,
-    .eggGroup1 = EGG_GROUP_WATER_1,
-    .eggGroup2 = EGG_GROUP_WATER_1,
-    .abilities      = {ABILITY_MERCILESS, ABILITY_FORT_KNOX, ABILITY_CORROSION},
-    .innates        = {ABILITY_HUGE_POWER, ABILITY_REGENERATOR, ABILITY_DOUBLE_IRON_BARBS},
-    .bodyColor = BODY_COLOR_BLUE,
-    .noFlip = FALSE,
-    .tier = 0,
-    },
-
     [SPECIES_ARCANINE_MEGA] =
     {
     .baseHP        = 90, // 90

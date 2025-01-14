@@ -467,7 +467,7 @@ static const u8 sMoveTwoLineDescription_MoveBide[] = _(
     "turns to retaliate double.");
 
 static const u8 sMoveTwoLineDescription_MoveMetronome[] = _(
-    "Waggles a finger to use any\n"
+    "An unknown power uses any\n"
     "Pokémon move at random.");
 
 static const u8 sMoveTwoLineDescription_MoveMirrorMove[] = _(
@@ -5055,7 +5055,7 @@ static const u8 sMoveFourLineDescription_MoveHaze[] = _("Eliminates all stat\nch
 static const u8 sMoveFourLineDescription_MoveReflect[] = _("A wall of light\ncuts damage from\nphysical attacks\nfor five turns.");
 static const u8 sMoveFourLineDescription_MoveFocusEnergy[] = _("The user takes a\ndeep breath and\nfocuses to raise its\ncritical-hit ratio.");
 static const u8 sMoveFourLineDescription_MoveBide[] = _("The user endures\nattacks for two\nturns, then strikes\nback double.");
-static const u8 sMoveFourLineDescription_MoveMetronome[] = _("Waggles a finger\nand stimulates the\nbrain into using any\nmove at random.");
+static const u8 sMoveFourLineDescription_MoveMetronome[] = _("An unknown power\nstimulates the\nbrain into using any\nmove at random.");
 static const u8 sMoveFourLineDescription_MoveMirrorMove[] = _("The user counters\nthe move last used\nby the foe with the\nsame move.");
 static const u8 sMoveFourLineDescription_MoveSelfDestruct[] = _("The user blows up\nto inflict severe\ndamage. Deals 2x\ndamage if hit first.");
 static const u8 sMoveFourLineDescription_MoveEggBomb[] = _("Hurls a hot egg. 30%\nBurn chance. 1.5x\ndamage under Gravity.\nThrow-based.");

@@ -1786,15 +1786,14 @@
 #define SPECIES_SAMUROTT_HISUIAN_MEGA       CUSTOM_MEGA_START + 123
 #define SPECIES_SKELEDIRGE_MEGA             CUSTOM_MEGA_START + 124
 #define SPECIES_TYPHLOSION_HISUIAN_MEGA     CUSTOM_MEGA_START + 125
-#define SPECIES_TOXAPEX_MEGA                CUSTOM_MEGA_START + 126
+#define SPECIES_MIENSHAO_MEGA                CUSTOM_MEGA_START + 126
 #define SPECIES_ARCANINE_MEGA               CUSTOM_MEGA_START + 127
 #define SPECIES_GOODRA_MEGA                 CUSTOM_MEGA_START + 128
 #define SPECIES_SLOWBRO_MEGA_GALARIAN       CUSTOM_MEGA_START + 129
 #define SPECIES_SLOWKING_MEGA_GALARIAN      CUSTOM_MEGA_START + 130
 #define SPECIES_ROSERADE_MEGA               CUSTOM_MEGA_START + 131
-#define SPECIES_MIENSHAO_MEGA               CUSTOM_MEGA_START + 132
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_MIENSHAO_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_ROSERADE_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA
