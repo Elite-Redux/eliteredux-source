@@ -746,7 +746,7 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness)
             case MULTIHIT_SINGLE:
                 break;
 
-            default:
+            default:{
                 // Must be parental bond
                 int parentalBondCount = GetParentalBondCount(battlerAtk, multihitType);
                 int multiplier = 0;
@@ -754,7 +754,8 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness)
                     multiplier += GetParentalBondMultiplier(multihitType, i);
                 }
                 dmg = ApplyModifier(multiplier, dmg);
-                break;
+            }
+            break;
         }
     }
 

@@ -303,8 +303,8 @@ static void Menu_VBlankCB(void)
     TransferPlttBuffer();
 
 	//Scroll Background
-	ChangeBgX(BACKGROUND_SCROLLING, 128, 1);
-    ChangeBgY(BACKGROUND_SCROLLING, 128, 2);
+	//ChangeBgX(BACKGROUND_SCROLLING, 128, 1);
+    //ChangeBgY(BACKGROUND_SCROLLING, 128, 2);
 }
 
 //Arrows
