@@ -1565,3 +1565,9 @@ void BtlController_EmitInfoMenu(u8 bufferId)
     PrepareBufferDataTransfer(bufferId, sBattleBuffersTransferData, 1);
 }
 
+void BtlController_EmitInGameWikiMenu(u8 bufferId)
+{
+    sBattleBuffersTransferData[0] = CONTROLLER_IN_GAME_WIKI;
+    PrepareBufferDataTransfer(bufferId, sBattleBuffersTransferData, 1);
+}
+

@@ -177,7 +177,23 @@ void InformationMenu_Init(MainCallback callback)
 
     // initialize stuff
     sMenuDataPtr->gfxLoadState  = 0;
-    sMenuDataPtr->currentTab    = 0;
+    sMenuDataPtr->currentTab    = INFORMATION_ENTRIES_BASIC_INFO;
+    sMenuDataPtr->savedCallback = callback;
+
+    SetMainCallback2(Menu_RunSetup);
+}
+
+void InformationMenu_Init_From_Battle(MainCallback callback)
+{
+    if ((sMenuDataPtr = AllocZeroed(sizeof(struct MenuResources))) == NULL)
+    {
+        SetMainCallback2(callback);
+        return;
+    }
+
+    // initialize stuff
+    sMenuDataPtr->gfxLoadState  = 0;
+    sMenuDataPtr->currentTab    = INFORMATION_ENTRIES_BATTLE_INFO;
     sMenuDataPtr->savedCallback = callback;
 
     SetMainCallback2(Menu_RunSetup);

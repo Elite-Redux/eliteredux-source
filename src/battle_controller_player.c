@@ -40,6 +40,7 @@
 #include "text.h"
 #include "util.h"
 #include "ui_battle_menu.h"
+#include "ui_information_menu.h"
 #include "window.h"
 #include "constants/abilities.h"
 #include "constants/battle_anim.h"
@@ -73,6 +74,7 @@ static const u8 sTheme_Dark_Extra_Button_Info[] = INCBIN_U8("graphics/ui_menus/b
 static const u8 sTheme_Dark_Extra_Button_Pokemon[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_pokemon.4bpp");
 static const u8 sTheme_Dark_Extra_Button_Run[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_run.4bpp");
 static const u8 sTheme_Dark_Extra_Button_Debug[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_debug.4bpp");
+static const u8 sTheme_Dark_Extra_Button_Wiki[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_wiki.4bpp");
 
 static const u8 sTheme_Dark_Pokeball_Sane_Gfx[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_sane.4bpp");
 static const u8 sTheme_Dark_Pokeball_Status_Gfx[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_status.4bpp");
@@ -113,6 +115,7 @@ static const u8 sTheme_Light_Extra_Button_Info[] = INCBIN_U8("graphics/ui_menus/
 static const u8 sTheme_Light_Extra_Button_Pokemon[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_pokemon.4bpp");
 static const u8 sTheme_Light_Extra_Button_Run[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_run.4bpp");
 static const u8 sTheme_Light_Extra_Button_Debug[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_debug.4bpp");
+static const u8 sTheme_Light_Extra_Button_Wiki[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_wiki.4bpp");
 
 static const u8 sTheme_Light_Pokeball_Sane_Gfx[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_sane.4bpp");
 static const u8 sTheme_Light_Pokeball_Status_Gfx[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_status.4bpp");
@@ -153,6 +156,7 @@ static const u8 sTheme_DPPt_Extra_Button_Info[] = INCBIN_U8("graphics/ui_menus/b
 static const u8 sTheme_DPPt_Extra_Button_Pokemon[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_pokemon.4bpp");
 static const u8 sTheme_DPPt_Extra_Button_Run[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_run.4bpp");
 static const u8 sTheme_DPPt_Extra_Button_Debug[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_debug.4bpp");
+static const u8 sTheme_DPPt_Extra_Button_Wiki[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_wiki.4bpp");
 
 static const u8 sTheme_DPPt_Pokeball_Sane_Gfx[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/pokeball_sane.4bpp");
 static const u8 sTheme_DPPt_Pokeball_Status_Gfx[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/pokeball_status.4bpp");
@@ -193,6 +197,8 @@ static const u8 sTheme_Classic_Extra_Button_Info[] = INCBIN_U8("graphics/ui_menu
 static const u8 sTheme_Classic_Extra_Button_Pokemon[] = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/extra/l_button_pokemon.4bpp");
 static const u8 sTheme_Classic_Extra_Button_Run[] = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/extra/l_button_run.4bpp");
 static const u8 sTheme_Classic_Extra_Button_Debug[] = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/extra/l_button_debug.4bpp");
+static const u8 sTheme_Classic_Extra_Button_Wiki[] = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/extra/l_button_wiki.4bpp");
+
 
 static const u8 sTheme_Classic_Pokeball_Sane_Gfx[] = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/pokeball_icons/pokeball_sane.4bpp");
 static const u8 sTheme_Classic_Pokeball_Status_Gfx[] = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/pokeball_icons/pokeball_status.4bpp");
@@ -281,6 +287,7 @@ static void PlayerHandleResetActionMoveSelection(void);
 static void PlayerHandleEndLinkBattle(void);
 static void PlayerHandleBattleDebug(void);
 static void PlayerHandleBattleInfoMenu(void);
+static void PlayerHandleBattleInGameWikiMenu(void);
 static void PlayerCmdEnd(void);
 static void HandleInputChooseActionPlayer(void);
 
@@ -376,6 +383,7 @@ static void (*const sPlayerBufferCommands[CONTROLLER_CMDS_COUNT])(void) = {
     [CONTROLLER_ENDLINKBATTLE] = PlayerHandleEndLinkBattle,
     [CONTROLLER_DEBUGMENU] = PlayerHandleBattleDebug,
     [CONTROLLER_INFO_MENU] = PlayerHandleBattleInfoMenu,
+    [CONTROLLER_IN_GAME_WIKI] = PlayerHandleBattleInGameWikiMenu,
     [CONTROLLER_TERMINATOR_NOP] = PlayerCmdEnd,
 };
 
@@ -420,6 +428,7 @@ enum optionsButtonMode {
     BATTLE_ACTION_RUN,
     BATTLE_ACTION_INFO,
     BATTLE_ACTION_DEBUG,
+    BATTLE_ACTION_WIKI,
 };
 
 const u8 sText_BattleMenu_Action_Fight[] = _("Fight");
@@ -452,9 +461,16 @@ const u8 sText_BattleMenu_Action_What_Will_X_Do_2[] = _("{STR_VAR_1} do?");
 #define BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_CLASSIC 4
 
 void PrintShortcutButton(u8 windowId, u8 button, u8 x, u8 y, u8 x2, u8 y2) {
+    u8 option;
     u8 theme = getBattleInterfaceTheme();
     bool8 isTrainerBattle = FALSE;
-    switch (button) {
+
+    if(button == 0)
+        option = BATTLE_ACTION_WIKI;
+    else
+        option = button - 1;
+
+    switch (option) {
         case BATTLE_ACTION_FIGHT:
             if (theme == THEME_DARK)
                 BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Fight, (x * 8) + x2, (y * 8) + y2, 32, 8);
@@ -518,6 +534,16 @@ void PrintShortcutButton(u8 windowId, u8 button, u8 x, u8 y, u8 x2, u8 y2) {
                 else if (theme == THEME_CLASSIC)
                     BlitBitmapToWindow(windowId, sTheme_Classic_Extra_Button_Debug, (x * 8) + x2, (y * 8) + y2, 32, 8);
             }
+            break;
+        case BATTLE_ACTION_WIKI:
+            if (theme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Wiki, (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if (theme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Extra_Button_Wiki, (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if (theme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Extra_Button_Wiki, (x * 8) + x2, (y * 8) + y2, 32, 16);
+            else if (theme == THEME_CLASSIC)
+                BlitBitmapToWindow(windowId, sTheme_Classic_Extra_Button_Wiki, (x * 8) + x2, (y * 8) + y2, 32, 8);
             break;
     }
 }
@@ -1943,6 +1969,10 @@ static void HandleInputChooseActionPlayer(void) {
             PlayerBufferExecCompleted();
         }
     } else if (JOY_NEW(L_BUTTON)) {
+        if(shortcutButton == 0)
+            shortcutButton = BATTLE_ACTION_WIKI;
+        else
+            shortcutButton--;
         switch (shortcutButton) {
             case BATTLE_ACTION_FIGHT:
                 PlaySE(SE_SELECT);
@@ -1978,6 +2008,14 @@ static void HandleInputChooseActionPlayer(void) {
                     BtlController_EmitTwoReturnValues(1, B_ACTION_DEBUG, 0);
                     PlayerBufferExecCompleted();
                 }
+                break;
+            case BATTLE_ACTION_WIKI:
+                PlaySE(SE_SELECT);
+                FreeAllWindowBuffers();
+                BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
+                BtlController_EmitTwoReturnValues(1, B_ACTION_SHOW_IN_GAME_WIKI, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
                 break;
         }
     } else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59) {
@@ -4799,6 +4837,12 @@ static void PlayerHandleBattleInfoMenu(void) {
     gBattlerControllerFuncs[gActiveBattler] = WaitForDebug;
 }
 
+static void PlayerHandleBattleInGameWikiMenu(void) {
+    BeginNormalPaletteFade(-1, 0, 0, 0x10, 0);
+    // SetMainCallback2(ReshowBattleScreenAfterMenu);
+    InformationMenu_Init_From_Battle(ReshowBattleScreenAfterMenu);
+    gBattlerControllerFuncs[gActiveBattler] = WaitForDebug;
+}
 static void PlayerCmdEnd(void) {}
 
 static void ChangeMoveDisplayMode() {}

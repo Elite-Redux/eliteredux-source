@@ -1,5 +1,6 @@
 enum{
     INFORMATION_ENTRIES_BASIC_INFO,
+    INFORMATION_ENTRIES_BATTLE_INFO,
     INFORMATION_ENTRIES_ABILITIES_INFO,
     INFORMATION_ENTRIES_MISC_INFO,
     NUM_INFORMATION_ENTRIES,
@@ -18,6 +19,14 @@ enum{
     BASIC_INFORMATION_9,
     BASIC_INFORMATION_10,
     NUM_BASIC_ENTRIES,
+};
+
+//Battle Information
+enum{
+    BATTLE_INFORMATION_1,
+    BATTLE_INFORMATION_2,
+    BATTLE_INFORMATION_3,
+    NUM_BATTLE_ENTRIES,
 };
 
 //Abilities Information
@@ -44,6 +53,11 @@ const struct MenuEntry sMenuEntry[NUM_INFORMATION_ENTRIES] = {
         .numEntries = NUM_BASIC_ENTRIES,
         .paletteNum = MENU_COLOR_BLUE,
     },
+    [INFORMATION_ENTRIES_BATTLE_INFO] = {
+        .title = _("Battle Information"),
+        .numEntries = NUM_BATTLE_ENTRIES,
+        .paletteNum = MENU_COLOR_RED,
+    },
     [INFORMATION_ENTRIES_ABILITIES_INFO] = {
         .title = _("Abilities Information"),
         .numEntries = NUM_ABILITIES_ENTRIES,
@@ -52,7 +66,7 @@ const struct MenuEntry sMenuEntry[NUM_INFORMATION_ENTRIES] = {
     [INFORMATION_ENTRIES_MISC_INFO] = {
         .title = _("Misc Information"),
         .numEntries = NUM_MISC_ENTRIES,
-        .paletteNum = MENU_COLOR_RED,
+        .paletteNum = MENU_COLOR_GREEN,
     },
 };
 
@@ -125,6 +139,46 @@ const struct InformationEntry sInformationEntry[NUM_INFORMATION_ENTRIES][MAX_NUM
             .title = _("Basic Information 10"),
             .description = _("Description 10"),
             .numPages = 1
+        },
+    },
+    
+    [INFORMATION_ENTRIES_BATTLE_INFO] = {
+        //Abilities Information
+        [BATTLE_INFORMATION_1] = {
+            .title = _("Battle Information 1"),
+            .description = {
+            //Page 1
+            _("Page 1"),
+            //Page 2
+            _("Page 2"),
+            //Page 3
+            _("Page 3"),
+            },
+            .numPages = 3
+        },
+        [BATTLE_INFORMATION_2] = {
+            .title = _("Battle Information 2"),
+            .description = {
+            //Page 1
+            _("Page 1"),
+            //Page 2
+            _("Page 2"),
+            //Page 3
+            _("Page 3"),
+            },
+            .numPages = 3
+        },
+        [BATTLE_INFORMATION_3] = {
+            .title = _("Battle Information 3"),
+            .description = {
+            //Page 1
+            _("Page 1"),
+            //Page 2
+            _("Page 2"),
+            //Page 3
+            _("Page 3"),
+            },
+            .numPages = 3
         },
     },
     

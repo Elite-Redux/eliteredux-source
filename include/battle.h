@@ -41,6 +41,7 @@
 #define B_ACTION_DEBUG                  20
 #define B_ACTION_THROW_BALL             21 // R to throw last used ball
 #define B_ACTION_SHOW_BATTLE_INFO       22 // New battle info screen
+#define B_ACTION_SHOW_IN_GAME_WIKI      23 // New battle info screen
 #define B_ACTION_NONE                   0xFF
 
 #define MAX_TRAINER_ITEMS 4

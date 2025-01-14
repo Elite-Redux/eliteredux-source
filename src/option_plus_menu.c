@@ -161,6 +161,7 @@ static int ProcessInput_Options_Two(int selection);
 static int ProcessInput_Options_Three(int selection);
 static int ProcessInput_Options_Four(int selection);
 static int ProcessInput_Options_Five(int selection);
+static int ProcessInput_Options_Six(int selection);
 static int ProcessInput_Options_Eleven(int selection);
 static int ProcessInput_Sound(int selection);
 static int ProcessInput_FrameType(int selection);
@@ -238,7 +239,7 @@ static struct // MENU_CUSTOM
 {
     [MENUITEM_CUSTOM_BATTLE_UI_THEME]     = {DrawChoices_BattleInterfaceTheme,     ProcessInput_Options_Four},
     [MENUITEM_CUSTOM_START_MENU_COLOR]    = {DrawChoices_StartMenuColor,           ProcessInput_Options_Five},
-    [MENUITEM_CUSTOM_SHORTCUT_BUTTON]     = {DrawChoices_BattleInterfaceShortcut,  ProcessInput_Options_Five},
+    [MENUITEM_CUSTOM_SHORTCUT_BUTTON]     = {DrawChoices_BattleInterfaceShortcut,  ProcessInput_Options_Six},
     [MENUITEM_CUSTOM_AUTO_RUN]            = {DrawChoices_AutoRun,                  ProcessInput_Options_Two},
     //[MENUITEM_CUSTOM_PERMANENT_REPEL]   = {DrawChoices_PermanentRepel,           ProcessInput_Options_Two},
     [MENUITEM_CUSTOM_DISPLAY_DAMAGE]      = {DrawChoices_EnableDisableCustom,      ProcessInput_Options_Two},
@@ -1112,6 +1113,11 @@ static int ProcessInput_Options_Five(int selection)
     return XOptions_ProcessInput(5, selection);
 }
 
+static int ProcessInput_Options_Six(int selection)
+{
+    return XOptions_ProcessInput(6, selection);
+}
+
 static int ProcessInput_Options_Eleven(int selection)
 {
     return XOptions_ProcessInput(11, selection);
@@ -1410,18 +1416,19 @@ const u8 gText_Start_Menu_Color_03[]   = _("Yellow");
 const u8 gText_Start_Menu_Color_04[]   = _("Green");
 const u8 gText_Start_Menu_Color_05[]   = _("Dark");
 
-const u8 gText_Shortuct_01[]        = _("Fight");
-const u8 gText_Shortuct_02[]        = _("Pokemon");
-const u8 gText_Shortuct_03[]        = _("Run");
-const u8 gText_Shortuct_04[]        = _("Info");
-const u8 gText_Shortuct_05[]        = _("None");
+const u8 gText_Shortuct_01[]        = _("Wiki");
+const u8 gText_Shortuct_02[]        = _("Fight");
+const u8 gText_Shortuct_03[]        = _("Pokemon");
+const u8 gText_Shortuct_04[]        = _("Run");
+const u8 gText_Shortuct_05[]        = _("Info");
+const u8 gText_Shortuct_06[]        = _("None");
 
-const u8 gText_Shortuct_05_Debug[]  = _("Debug");
+const u8 gText_Shortuct_06_Debug[]  = _("Debug");
 
 static const u8 *const sThemeNames[]          = {gText_Theme_Name_01, gText_Theme_Name_02, gText_Theme_Name_03, gText_Theme_Name_04};
 static const u8 *const sStartMenuColors[]     = {gText_Start_Menu_Color_01, gText_Start_Menu_Color_02, gText_Start_Menu_Color_03, gText_Start_Menu_Color_04, gText_Start_Menu_Color_05};
-static const u8 *const sShortcutNames[]       = {gText_Shortuct_01, gText_Shortuct_02, gText_Shortuct_03, gText_Shortuct_04, gText_Shortuct_05};
-static const u8 *const sShortcutNames_Debug[] = {gText_Shortuct_01, gText_Shortuct_02, gText_Shortuct_03, gText_Shortuct_04, gText_Shortuct_05_Debug};
+static const u8 *const sShortcutNames[]       = {gText_Shortuct_01, gText_Shortuct_02, gText_Shortuct_03, gText_Shortuct_04, gText_Shortuct_05, gText_Shortuct_06};
+static const u8 *const sShortcutNames_Debug[] = {gText_Shortuct_01, gText_Shortuct_02, gText_Shortuct_03, gText_Shortuct_04, gText_Shortuct_05, gText_Shortuct_06_Debug};
 
 static void DrawChoices_BattleInterfaceTheme(int selection, int y)
 {

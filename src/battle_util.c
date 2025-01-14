@@ -608,6 +608,18 @@ void HandleAction_ShowBattleInfo(void) {
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
 }
 
+void HandleAction_ShowInGameWiki(void) {
+    u8 value = 2;
+    gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
+    VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
+
+    gBattle_BG0_X = 0;
+    gBattle_BG0_Y = 0;
+    VarSet(VAR_TEMP_SPECIAL_VAR, gActiveBattler);
+    gBattlescriptCurrInstr = BattleScript_PrintCantRunFromTrainer;
+    gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
+}
+
 void HandleAction_ThrowPokeblock(void) {
     gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     gBattle_BG0_X = 0;
