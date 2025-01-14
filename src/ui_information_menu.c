@@ -24,7 +24,6 @@
 #define ENTRY_DESCRIPTION_LENGTH 600
 #define MAX_ENTRY_PAGES 5
 #define MAX_ENTRIES_ON_SCREEN 5
-#define NUM_ENTRIES 10
 
 //Sprites
 enum{
@@ -132,9 +131,23 @@ static const u8 sMenuWindowFontColors[][3] =
     [FONT_BLUE]    = {TEXT_COLOR_TRANSPARENT,  TEXT_COLOR_BLUE,       TEXT_COLOR_LIGHT_GRAY},
 };
 
+enum{
+    INFORMATION_1,
+    INFORMATION_2,
+    INFORMATION_3,
+    INFORMATION_4,
+    INFORMATION_5,
+    INFORMATION_6,
+    INFORMATION_7,
+    INFORMATION_8,
+    INFORMATION_9,
+    INFORMATION_10,
+    NUM_ENTRIES,
+};
+
 static const struct MenuEntry sMenuEntries[] =
 {
-    {
+    [INFORMATION_1] = {
         .title = _("Title 1"),
         .description = {
           _("Lorem ipsum dolor sit amet, consectetur\n"
@@ -153,47 +166,47 @@ static const struct MenuEntry sMenuEntries[] =
         },
         .numPages = 3
     },
-    {
+    [INFORMATION_2] = {
         .title = _("Title 2"),
         .description = _("Description 2"),
         .numPages = 1
     },
-    {
+    [INFORMATION_3] = {
         .title = _("Title 3"),
         .description = _("Description 3"),
         .numPages = 1
     },
-    {
+    [INFORMATION_4] = {
         .title = _("Title 4"),
         .description = _("Description 4"),
         .numPages = 1
     },
-    {
+    [INFORMATION_5] = {
         .title = _("Title 5"),
         .description = _("Description 5"),
         .numPages = 1
     },
-    {
+    [INFORMATION_6] = {
         .title = _("Title 6"),
         .description = _("Description 6"),
         .numPages = 1
     },
-    {
+    [INFORMATION_7] = {
         .title = _("Title 7"),
         .description = _("Description 7"),
         .numPages = 1
     },
-    {
+    [INFORMATION_8] = {
         .title = _("Title 8"),
         .description = _("Description 8"),
         .numPages = 1
     },
-    {
+    [INFORMATION_9] = {
         .title = _("Title 9"),
         .description = _("Description 9"),
         .numPages = 1
     },
-    {
+    [INFORMATION_10] = {
         .title = _("Title 10"),
         .description = _("Description 10"),
         .numPages = 1
