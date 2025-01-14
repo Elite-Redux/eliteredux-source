@@ -20274,6 +20274,39 @@ static const union AnimCmd *const sAnims_BLISSEY_REDUX[] ={
     sAnim_BLISSEY_REDUX_1,
 };
 
+static const union AnimCmd sAnim_DEWPIDER_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_DEWPIDER_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DEWPIDER_REDUX_1,
+};
+
+static const union AnimCmd sAnim_ARAQUANID_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_ARAQUANID_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_ARAQUANID_REDUX_1,
+};
+
+static const union AnimCmd sAnim_FROSTULA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_FROSTULA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FROSTULA_1,
+};
+
 static const union AnimCmd sAnim_CHESNAUGHT_CLEMONT_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -22276,6 +22309,9 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(HAPPINY_REDUX),
     ANIM_CMD(CHANSEY_REDUX),
     ANIM_CMD(BLISSEY_REDUX),
+    ANIM_CMD(DEWPIDER_REDUX),
+    ANIM_CMD(ARAQUANID_REDUX),
+    ANIM_CMD(FROSTULA),
     ANIM_CMD_FULL(CHESNAUGHT_BATTLE_BOND, sAnims_CHESNAUGHT),
     ANIM_CMD(CHESNAUGHT_CLEMONT),
     ANIM_CMD_FULL(DELPHOX_BATTLE_BOND, sAnims_DELPHOX),

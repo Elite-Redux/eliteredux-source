@@ -2150,6 +2150,16 @@ static const u16 sBlisseyFormSpeciesIdTable[] = {
     SPECIES_BLISSEY_REDUX,
     FORM_SPECIES_END,
 };
+static const u16 sDewpiderFormSpeciesIdTable[] = {
+    SPECIES_DEWPIDER,
+    SPECIES_DEWPIDER_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sAraquanidFormSpeciesIdTable[] = {
+    SPECIES_ARAQUANID,
+    SPECIES_ARAQUANID_REDUX,
+    FORM_SPECIES_END,
+};
 static const u16 sChesnaughtFormSpeciesIdTable[] = {
     SPECIES_CHESNAUGHT,
     SPECIES_CHESNAUGHT_BATTLE_BOND,

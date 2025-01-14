@@ -8330,6 +8330,24 @@ const u32 gMonPalette_BlisseyRedux[]           = INCBIN_U32("graphics/pokemon/bl
 const u32 gMonShinyPalette_BlisseyRedux[]      = INCBIN_U32("graphics/pokemon/blissey/redux/shiny.gbapal.lz");
 const u8  gMonIcon_BlisseyRedux[]              = INCBIN_U8("graphics/pokemon/blissey/redux/icon.4bpp");
 
+const u32 gMonFrontPic_DewpiderRedux[]          = INCBIN_U32("graphics/pokemon/dewpider/redux/front.4bpp.lz");
+const u32 gMonBackPic_DewpiderRedux[]           = INCBIN_U32("graphics/pokemon/dewpider/redux/back.4bpp.lz");
+const u32 gMonPalette_DewpiderRedux[]           = INCBIN_U32("graphics/pokemon/dewpider/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_DewpiderRedux[]      = INCBIN_U32("graphics/pokemon/dewpider/redux/shiny.gbapal.lz");
+const u8  gMonIcon_DewpiderRedux[]              = INCBIN_U8("graphics/pokemon/dewpider/redux/icon.4bpp");
+
+const u32 gMonFrontPic_AraquanidRedux[]          = INCBIN_U32("graphics/pokemon/araquanid/redux/front.4bpp.lz");
+const u32 gMonBackPic_AraquanidRedux[]           = INCBIN_U32("graphics/pokemon/araquanid/redux/back.4bpp.lz");
+const u32 gMonPalette_AraquanidRedux[]           = INCBIN_U32("graphics/pokemon/araquanid/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_AraquanidRedux[]      = INCBIN_U32("graphics/pokemon/araquanid/redux/shiny.gbapal.lz");
+const u8  gMonIcon_AraquanidRedux[]              = INCBIN_U8("graphics/pokemon/araquanid/redux/icon.4bpp");
+
+const u32 gMonFrontPic_Frostula[]          = INCBIN_U32("graphics/pokemon/frostula/front.4bpp.lz");
+const u32 gMonBackPic_Frostula[]           = INCBIN_U32("graphics/pokemon/frostula/back.4bpp.lz");
+const u32 gMonPalette_Frostula[]           = INCBIN_U32("graphics/pokemon/frostula/normal.gbapal.lz");
+const u32 gMonShinyPalette_Frostula[]      = INCBIN_U32("graphics/pokemon/frostula/shiny.gbapal.lz");
+const u8  gMonIcon_Frostula[]              = INCBIN_U8("graphics/pokemon/frostula/icon.4bpp");
+
 const u32 gMonFrontPic_ChesnaughtClemont[]          = INCBIN_U32("graphics/pokemon/chesnaught/clemont/front.4bpp.lz");
 const u32 gMonBackPic_ChesnaughtClemont[]           = INCBIN_U32("graphics/pokemon/chesnaught/clemont/back.4bpp.lz");
 const u32 gMonPalette_ChesnaughtClemont[]           = INCBIN_U32("graphics/pokemon/chesnaught/clemont/normal.gbapal.lz");

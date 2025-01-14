@@ -8479,6 +8479,21 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x78,
         .y_offset = 0,
     },
+    [SPECIES_DEWPIDER_REDUX] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_ARAQUANID_REDUX] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_FROSTULA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
     [SPECIES_CHESNAUGHT_BATTLE_BOND] =
     {
         .size = 0x78,

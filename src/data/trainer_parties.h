@@ -12959,12 +12959,12 @@ static const struct TrainerMonItemCustomMoves sParty_Wattson1[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_MORPEKO,
-    .heldItem = ITEM_FOCUS_SASH,
+    .species = SPECIES_MORPEKYLL,
+    .heldItem = ITEM_BLACK_GLASSES,
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_TAUNT, MOVE_FAKE_OUT, MOVE_AURA_WHEEL, MOVE_SUCKER_PUNCH
+    .moves = MOVE_SEED_BOMB, MOVE_FAKE_OUT, MOVE_AURA_WHEEL, MOVE_SUCKER_PUNCH
     },
     {
     .lvl = 0,
@@ -12978,7 +12978,7 @@ static const struct TrainerMonItemCustomMoves sParty_Wattson1[] = {
     {
     .lvl = 0,
     .species = SPECIES_KILOWATTREL,
-    .heldItem = ITEM_LIFE_ORB,
+    .heldItem = ITEM_FOCUS_SASH,
     .ability = 2,
     .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,
