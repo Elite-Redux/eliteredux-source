@@ -53,6 +53,7 @@
 #include "script_pokemon_util.h"
 #include "pokenav.h"
 #include "option_menu.h"
+#include "ui_information_menu.h"
 #include "wallclock.h"
 #include "constants/map_groups.h"
 #include "constants/maps.h"
@@ -1455,6 +1456,16 @@ void Task_OpenOptionsMenuStartMenu(u8 taskId)
     }
 }
 
+void Task_OpenInformationMenu(u8 taskId)
+{
+	if (!gPaletteFade.active)
+    {
+        CleanupOverworldWindowsAndTilemaps();
+        InformationMenu_Init(CB2_ReturnToUIMenu);
+        DestroyTask(taskId);
+    }
+} 
+
 void Task_OpenPokenavStartMenu(u8 taskId)
 {
     if (!gPaletteFade.active)
@@ -1731,6 +1742,10 @@ static void Task_MenuMain(u8 taskId)
 					gTasks[taskId].func = Task_OpenOptionsMenuStartMenu;
 				break;
 				case START_MENU_ACTION_GUIDE:
+					PlaySE(SE_SELECT);
+					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+					gTasks[taskId].func = Task_OpenInformationMenu;
+				break;
 				case START_MENU_ACTION_POKENAV:
 					PlaySE(SE_SELECT);
 					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);

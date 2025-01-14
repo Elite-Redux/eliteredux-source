@@ -21,6 +21,7 @@
 #include "international_string_util.h"
 #include "item_menu.h"
 #include "link.h"
+#include "ui_information_menu.h"
 #include "load_save.h"
 #include "main.h"
 #include "menu.h"
