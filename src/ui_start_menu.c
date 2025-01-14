@@ -148,7 +148,7 @@ static void setTransparentBackground(void);
 static void Menu_FadeAndBail(void);
 static bool8 Menu_LoadGraphics(void);
 static void Menu_Start_InitWindows(void);
-static void PrintToWindow(u8 windowId, u8 colorIdx);
+static void PrintToWindow(void);
 static void Task_MenuWaitFadeIn(u8 taskId);
 static void Task_MenuMain(u8 taskId);
 
@@ -204,7 +204,7 @@ static const struct WindowTemplate sMenuWindowTemplates[] =
 };
 
 static const u32 sMenuTiles[] 	          = INCBIN_U32("graphics/ui_menus/start_menu/tiles.4bpp.lz");
-static const u16 sMenuPalette[]           = INCBIN_U16("graphics/ui_menus/start_menu/palette_tiles.gbapal");
+static const u16 sMenuPalette[]           = INCBIN_U16("graphics/ui_menus/start_menu/palette.gbapal");
 static const u16 sMenuPalette_Interface[] = INCBIN_U16("graphics/ui_menus/start_menu/palette_interface.gbapal");
 
 const u32 sMenuTilemap[]                   = INCBIN_U32("graphics/ui_menus/start_menu/tilemap.bin.lz");
@@ -223,7 +223,7 @@ enum Colors
 
 const u8 sMenuWindowFontColors[][3] = 
 {
-    [FONT_BLACK]    = {TEXT_COLOR_TRANSPARENT,  7,  6},
+    [FONT_BLACK]    = {TEXT_COLOR_TRANSPARENT,  7,  5},
     [FONT_BLACK_2]  = {TEXT_COLOR_TRANSPARENT,  7,  TEXT_COLOR_TRANSPARENT},
     [FONT_WHITE]    = {TEXT_COLOR_TRANSPARENT,  1,  2},
     [FONT_WHITE_2]  = {TEXT_COLOR_TRANSPARENT,  1,  TEXT_COLOR_TRANSPARENT},
@@ -435,7 +435,7 @@ static bool8 Menu_DoGfxSetup(void)
         gMain.state++;
         break;
     case 5:
-        PrintToWindow(WINDOW_1, FONT_BLACK);
+        PrintToWindow();
         //taskId = CreateTask(Task_MenuWaitFadeIn, 0);
         CreateTask(Task_MenuWaitFadeIn, 0);
         BlendPalettes(0xFFFFFFFF, 16, RGB_BLACK);
@@ -1057,8 +1057,9 @@ const u8 sText_Message_TrainerInfo[] = _(
 
 #define GFX_STATUS_MINUS_X 3
 
-static void PrintToWindow(u8 windowId, u8 colorIdx)
+static void PrintToWindow(void)
 {
+	u8 windowId = WINDOW_1;
 	u8 i, j, x, y, x2, y2;
 	u8 strArray[16]; //For the Player Name
 	//const u8 *SelectedOption;
@@ -1073,7 +1074,7 @@ static void PrintToWindow(u8 windowId, u8 colorIdx)
 	u8 hours     = gLocalTime.hours;
 	u8 minutes   = gLocalTime.minutes;
 	u8 font      = FONT_SMALL_NARROW;
-	u8 fontColor = FONT_WHITE_2;
+	u8 fontColor = FONT_BLACK_2;
     //u16 year     = RtcGetCurrentYear();
     //u8 month     = RtcGetCurrentMonth();
     //u8 day       = RtcGetCurrentDay();
@@ -1200,7 +1201,7 @@ static void PrintToWindow(u8 windowId, u8 colorIdx)
 		StringCopy(gStringVar2, sText_Help_Bar_Use);
 
 	StringExpandPlaceholders(gStringVar4, sText_Help_Bar);
-	AddTextPrinterParameterized4(windowId, font, (x*8)+4, (y*8), 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+	AddTextPrinterParameterized4(windowId, font, (x*8)+4, (y*8), 0, 0, sMenuWindowFontColors[FONT_WHITE_2], 0xFF, gStringVar4);
 	
 	//Current Option Description
     x  = 16;
@@ -1785,7 +1786,7 @@ static void Task_MenuMain(u8 taskId)
 				break;
 			}
 
-			PrintToWindow(WINDOW_1, FONT_BLACK);
+			PrintToWindow();
 		}
 	}
 	
@@ -1799,7 +1800,7 @@ static void Task_MenuMain(u8 taskId)
 			FlagSet(FLAG_SYS_AUTO_RUN);
 			PlaySE(SE_SELECT);
 		}
-		PrintToWindow(WINDOW_1, FONT_BLACK);
+		PrintToWindow();
 	}
 	
 	if (JOY_NEW(START_BUTTON)){
@@ -1834,7 +1835,7 @@ static void Task_MenuMain(u8 taskId)
 			PlaySE(SE_BOO);
 			sMenuDataPtr->CurrentMessage = MESSAGE_CANT_USE_BIKE;
 		}
-		PrintToWindow(WINDOW_1, FONT_BLACK);
+		PrintToWindow();
 	}
 	
     if ((JOY_NEW(DPAD_DOWN)) || (JOY_REPEAT(DPAD_DOWN))){
@@ -1847,7 +1848,7 @@ static void Task_MenuMain(u8 taskId)
 		PressedDownButton();
 		//-----------------------------
 		PlaySE(SE_SELECT);
-		PrintToWindow(WINDOW_1, FONT_BLACK);
+		PrintToWindow();
 	}
 	
     if ((JOY_NEW(DPAD_UP)) || (JOY_REPEAT(DPAD_UP))){
@@ -1862,6 +1863,6 @@ static void Task_MenuMain(u8 taskId)
 		PressedUpButton();
 		//-----------------------------
 		PlaySE(SE_SELECT);	
-		PrintToWindow(WINDOW_1, FONT_BLACK);
+		PrintToWindow();
 	}
 }
