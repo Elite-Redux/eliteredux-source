@@ -3,6 +3,7 @@
 #include "strings.h"
 #include "bg.h"
 #include "random.h"
+#include "battle_setup.h"
 #include "bike.h"
 #include "data.h"
 #include "decompress.h"
@@ -53,6 +54,7 @@
 #include "script_pokemon_util.h"
 #include "pokenav.h"
 #include "option_menu.h"
+#include "ui_intro_options.h"
 #include "ui_information_menu.h"
 #include "wallclock.h"
 #include "constants/map_groups.h"
@@ -66,8 +68,6 @@
 
 #define VAR_START_MENU_CURSOR_Y VAR_TEMP_0
 #define VAR_START_MENU_CURSOR_X VAR_TEMP_1
-#define VAR_DEFEATED_TRAINERS   VAR_TEMP_2
-#define FLAG_SYS_AUTO_RUN 0
 
 // Menu actions
 enum
@@ -80,7 +80,9 @@ enum
     START_MENU_ACTION_POKENAV,
 	START_MENU_ACTION_GUIDE,
 	START_MENU_ACTION_OPTIONS,
+	#ifdef DEBUG_BUILD
     START_MENU_ACTION_DEBUG,
+    #endif
 	START_MENU_ACTION_PC,
     START_MENU_ACTION_SAVE,
     START_MENU_ACTION_EXIT,
@@ -151,6 +153,7 @@ static void Menu_Start_InitWindows(void);
 static void PrintToWindow(void);
 static void Task_MenuWaitFadeIn(u8 taskId);
 static void Task_MenuMain(u8 taskId);
+bool8 CanUseBikeFromStartMenu(void);
 
 void Task_OpenPokemonPartyFromStartMenu(u8 taskId);
 void Task_OpenPokedexFromStartMenu(u8 taskId);
@@ -886,6 +889,7 @@ static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS]
 			"of available Pokémon."
 		),
     },
+	#ifdef DEBUG_BUILD
 	[START_MENU_ACTION_DEBUG] =
     {
         .title = _("Debug"),
@@ -896,6 +900,7 @@ static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS]
 			"adventure."
 		),
     },
+    #endif
 	[START_MENU_ACTION_SAVE] =
     {
         .title = _("Save"),
@@ -1021,14 +1026,15 @@ const u8 MonthString[]   =  _("{STR_VAR_1} {STR_VAR_2}, {STR_VAR_3}");
 const u8 TimeDisplay[]   =  _("{STR_VAR_1}: {STR_VAR_2}");
 const u8 TimeDisplay2[]  =  _("{STR_VAR_1}: 0{STR_VAR_2}");
 const u8 Steps[]         =  _("{STR_VAR_1} - You have walked {STR_VAR_2} steps$");
-const u8 sEliteReduxTitle[] =  _("Pokémon Elite Redux");
+const u8 sEliteReduxTitle[] =  _("Pokémon Elite Redux {STR_VAR_1}");
 
 const u8 sText_Help_Bar_Enable[]  = _("Enable");
 const u8 sText_Help_Bar_Disable[] = _("Disable");
 const u8 sText_Help_Bar_Use[]     = _("Use");
 const u8 sText_Help_Bar_Unmount[] = _("Dismount");
 
-const u8 sText_Help_Bar[] = _("{START_BUTTON} Save {L_BUTTON} {STR_VAR_2} Bike {R_BUTTON} {STR_VAR_1} Auto Run");
+const u8 sText_Help_Bar[]         = _("{START_BUTTON} Save {L_BUTTON} {STR_VAR_2} Bike {R_BUTTON} {STR_VAR_1} Auto Run");
+const u8 sText_Help_Bar_No_Bike[] = _("{START_BUTTON} Save {R_BUTTON} {STR_VAR_1} Auto Run");
 
 const u8 sText_Message_Test[] = _(
 	"Save your game with\n"
@@ -1070,9 +1076,9 @@ const u8 sText_Message_Saving[] = _(
 
 const u8 sText_Message_TrainerInfo[] = _(
 	"See all your information\n"
-	"Money: ¥ {STR_VAR_1}\n"
-	"Battle Points: {STR_VAR_2}\n"
-	"Defeated Trainers: {STR_VAR_3}"
+	"Battle Points: {STR_VAR_1}\n"
+	"Defeated Trainers: {STR_VAR_2}\n"
+	"Losses: {STR_VAR_3}"
 );
 
 #define EXTRA_SPACE_BETWEEN_OPTIONS_X (10 * 8)
@@ -1173,12 +1179,14 @@ static void PrintToWindow(void)
 				else
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Achievements, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 			break;
+			#ifdef DEBUG_BUILD
 			case START_MENU_ACTION_DEBUG:
 				if(j == sMenuDataPtr->cursorRowY)
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Skills_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 				else
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Skills, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 			break;
+    		#endif
 			case START_MENU_ACTION_POKENAV:
 				if(j == sMenuDataPtr->cursorRowY)
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_PokeNav_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
@@ -1222,7 +1230,7 @@ static void PrintToWindow(void)
     y = 18;
 	ConvertIntToDecimalStringN(gStringVar2, hours, STR_CONV_MODE_RIGHT_ALIGN, 2);
 	ConvertIntToDecimalStringN(gStringVar3, minutes, STR_CONV_MODE_LEFT_ALIGN, 2);
-	if(!FlagGet(FLAG_SYS_AUTO_RUN))
+	if(!gSaveBlock2Ptr->autoRun)
 		StringCopy(gStringVar1, sText_Help_Bar_Enable);
 	else
 		StringCopy(gStringVar1, sText_Help_Bar_Disable);
@@ -1232,7 +1240,10 @@ static void PrintToWindow(void)
 	else
 		StringCopy(gStringVar2, sText_Help_Bar_Use);
 
-	StringExpandPlaceholders(gStringVar4, sText_Help_Bar);
+	if(CanUseBikeFromStartMenu())
+		StringExpandPlaceholders(gStringVar4, sText_Help_Bar);
+	else
+		StringExpandPlaceholders(gStringVar4, sText_Help_Bar_No_Bike);
 	AddTextPrinterParameterized4(windowId, font, (x*8)+4, (y*8), 0, 0, sMenuWindowFontColors[FONT_WHITE_2], 0xFF, gStringVar4);
 	
 	//Current Option Description
@@ -1245,13 +1256,13 @@ static void PrintToWindow(void)
 			if(sMenuDataPtr->cursorRowY != START_MENU_ACTION_PLAYER)
 				StringCopy(gStringVar4, StartMenuActions[sMenuDataPtr->cursorRowY].description);
 			else{
-				u32 money        = GetMoney(&gSaveBlock1Ptr->money);
+				u32 defeats      = 0 + VarGet(VAR_TIMES_WHITED_OUT);
 				u32 battlepoints = gSaveBlock2Ptr->frontier.battlePoints;
-				u16 trainers     = VarGet(VAR_DEFEATED_TRAINERS);
+				u16 trainers     = GetTrainerBattleWins();
 
-				ConvertIntToDecimalStringN(gStringVar1, money, STR_CONV_MODE_LEFT_ALIGN, 8);
-				ConvertIntToDecimalStringN(gStringVar2, battlepoints, STR_CONV_MODE_LEFT_ALIGN, 5);
-				ConvertIntToDecimalStringN(gStringVar3, trainers, STR_CONV_MODE_LEFT_ALIGN, 4);
+				ConvertIntToDecimalStringN(gStringVar1, battlepoints, STR_CONV_MODE_LEFT_ALIGN, 5);
+				ConvertIntToDecimalStringN(gStringVar2, trainers, STR_CONV_MODE_LEFT_ALIGN, 4);
+				ConvertIntToDecimalStringN(gStringVar3, defeats, STR_CONV_MODE_LEFT_ALIGN, 8);
 				StringExpandPlaceholders(gStringVar4, sText_Message_TrainerInfo);
 			}
 		break;
@@ -1304,7 +1315,9 @@ static void PrintToWindow(void)
 	StringCopy(gStringVar2, CurrentSeason);
 	StringExpandPlaceholders(gStringVar4, SeasonDisplay);*/
 
-	AddTextPrinterParameterized4(windowId, font, (x*8) + x2, (y*8), 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sEliteReduxTitle);
+	StringCopy(gStringVar1, gText_SavingVersionNum);
+	StringExpandPlaceholders(gStringVar4, sEliteReduxTitle);
+	AddTextPrinterParameterized4(windowId, font, (x*8) + x2, (y*8), 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
 
 	// HP Bars --------------------------------------------------------------------------------------------------------
     x = ICON_STARTING_X - 8;
@@ -1515,21 +1528,18 @@ void Task_OpenDebugStartMenu(u8 taskId)
 {
 	if (!gPaletteFade.active)
     {
-		//To Change
 		Menu_FreeResources();
-		PlayRainStoppingSoundEffect();
         CleanupOverworldWindowsAndTilemaps();
-        SetMainCallback2(CB2_InitOptionMenu); // Display option menu
-        gMain.savedCallback = CB2_ReturnToUIMenu;
+    	FlagSet(FLAG_SYS_DEBUG_MENU_OPENED);
+        Intro_Options_Menu_Init(CB2_ReturnToUIMenu);
+        DestroyTask(taskId);
     }
 }  
 
-void Task_OpenSaveMenuStartMenu(u8 taskId)
+void Task_OpenVanillaStartMenu(u8 taskId)
 {
     if (!gPaletteFade.active)
     {
-		//PlayRainStoppingSoundEffect();
-		//CleanupOverworldWindowsAndTilemaps();
 		Menu_FreeResources();
 		SetMainCallback2(CB2_ReturnToFieldWithOpenMenu);
     }
@@ -1661,59 +1671,109 @@ static bool8 ShouldDisableSaving(){
 	if(mapSection == MAPSEC_SAFARI_ZONE)
 		return TRUE;
 
-	/*if(GetGameDifficultyLevel() != DIFFICULTY_HARD)
+	return FALSE;
+}
+
+static bool8 ShouldDisablePokemonStorageSystem(void){
+	bool8 disablePC = FALSE;
+
+	switch (gSaveBlock1Ptr->location.mapNum) {
+        case MAP_NUM(EVER_GRANDE_CITY_SIDNEYS_ROOM):
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_SIDNEYS_ROOM))
+                disablePC = TRUE;
+        break;
+        case MAP_NUM(EVER_GRANDE_CITY_PHOEBES_ROOM):
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_PHOEBES_ROOM))
+                disablePC = TRUE;
+        break;
+        case MAP_NUM(EVER_GRANDE_CITY_GLACIAS_ROOM):
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_GLACIAS_ROOM))
+                disablePC = TRUE;
+        break;
+        case MAP_NUM(EVER_GRANDE_CITY_DRAKES_ROOM):
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_DRAKES_ROOM))
+                disablePC = TRUE;
+        break;
+        case MAP_NUM(EVER_GRANDE_CITY_CHAMPIONS_ROOM):
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_CHAMPIONS_ROOM))
+                disablePC = TRUE;
+        break;
+        case MAP_NUM(EVER_GRANDE_CITY_HALL1):
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL1))
+                disablePC = TRUE;
+        break;
+        case MAP_NUM(EVER_GRANDE_CITY_HALL2):
+    	    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL2))
+                disablePC = TRUE;
+        break;
+        case MAP_NUM(EVER_GRANDE_CITY_HALL3):
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL3))
+                disablePC = TRUE;
+        break;
+        case MAP_NUM(EVER_GRANDE_CITY_HALL4):
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL4))
+                disablePC = TRUE;
+        break;
+        case MAP_NUM(EVER_GRANDE_CITY_HALL5):
+            if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL5))
+                disablePC = TRUE;
+        break;
+    }
+
+	return disablePC;
+}
+
+static void UIStartMenuOpenNormanMenuOption(u8 taskId, u8 option){
+	gSaveBlock2Ptr->startMenuOptionToOpen = option;
+	PlaySE(SE_SELECT);
+	BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+	gTasks[taskId].func = Task_OpenVanillaStartMenu;
+}
+
+static void StartMenuTrySaving(u8 taskId){
+	if(!ShouldDisableSaving()){
+		UIStartMenuOpenNormanMenuOption(taskId, MENU_ACTION_SAVE);
+	}
+	else{
+		PlaySE(SE_BOO);
+		sMenuDataPtr->CurrentMessage = MESSAGE_CANT_SAVE;
+	}
+}
+
+static void StartMenuTryUsingPC(u8 taskId){
+	if(!ShouldDisablePokemonStorageSystem()){
+		UIStartMenuOpenNormanMenuOption(taskId, MENU_ACTION_ACCESS_PC);
+	}
+	else{
+		PlaySE(SE_BOO);
+		sMenuDataPtr->CurrentMessage = MESSAGE_CANT_SAVE;
+	}
+}
+
+bool8 CanUseBikeFromStartMenu(void){
+	s16 coordsY;
+	s16 coordsX;
+	u8 behavior;
+	PlayerGetDestCoords(&coordsX, &coordsY);
+	behavior = MapGridGetMetatileBehaviorAt(coordsX, coordsY);
+
+	if(!CheckBagHasItem(ITEM_ACRO_BIKE, 1) && !CheckBagHasItem(ITEM_MACH_BIKE, 1))
 		return FALSE;
 
-	switch(gSaveBlock1Ptr->location.mapNum){
-		case MAP_NUM(EVER_GRANDE_CITY_SIDNEYS_ROOM):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_SIDNEYS_ROOM))
-				return TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_PHOEBES_ROOM):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_PHOEBES_ROOM))
-				return TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_GLACIAS_ROOM):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_GLACIAS_ROOM))
-				return TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_DRAKES_ROOM):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_DRAKES_ROOM))
-				return TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_CHAMPIONS_ROOM):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_CHAMPIONS_ROOM))
-				return TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_HALL1):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL1))
-				return TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_HALL2):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL2))
-				return TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_HALL3):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL3))
-				return TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_HALL4):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL4))
-				return TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_HALL5):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL5))
-				return TRUE;
-		break;
-	}*/
+	if (FlagGet(FLAG_SYS_CYCLING_ROAD) == TRUE                      || 
+	    MetatileBehavior_IsVerticalRail(behavior) == TRUE           || 
+		MetatileBehavior_IsHorizontalRail(behavior) == TRUE         || 
+		MetatileBehavior_IsIsolatedVerticalRail(behavior) == TRUE   || 
+		MetatileBehavior_IsIsolatedHorizontalRail(behavior) == TRUE ||
+		IsBikingDisallowedByPlayer())
+		return FALSE;
 
-	return FALSE;
+	return TRUE;
 }
 
 /* This is the meat of the UI. This is where you wait for player inputs and can branch to other tasks accordingly */
 static void Task_MenuMain(u8 taskId)
 {
-	//bool8 DisableSave = FALSE;
 	sMenuDataPtr->CurrentMessage = MESSAGE_HELP_BAR;
 
 	VarSet(VAR_START_MENU_CURSOR_Y, sMenuDataPtr->cursorRowY);
@@ -1721,8 +1781,6 @@ static void Task_MenuMain(u8 taskId)
 	
 	if (JOY_NEW(B_BUTTON))
     {
-		//Konami Code
-		sMenuDataPtr->KonamiCodeState = 0;
 		PlaySE(SE_PC_OFF);
 		BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
 		gTasks[taskId].func = Task_MenuTurnOff;
@@ -1730,135 +1788,96 @@ static void Task_MenuMain(u8 taskId)
 	
 	if (JOY_NEW(A_BUTTON))
     {
-		//Konami Code
-		if(sMenuDataPtr->KonamiCodeState == 9){
-			sMenuDataPtr->KonamiCodeState++;
-			sMenuDataPtr->KonamiCodeState = 0;
-
-			//Change Player Name
-			PlaySE(SE_SELECT);
-			BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-			gTasks[taskId].func = Task_ChangeTrainerName;
+		switch(sMenuDataPtr->cursorRowY)
+		{
+			case START_MENU_ACTION_POKEDEX:
+				PlaySE(SE_SELECT);
+				BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+				gTasks[taskId].func = Task_OpenPokedexFromStartMenu;
+			break;
+			case START_MENU_ACTION_PLAYER:
+				PlaySE(SE_SELECT);
+				BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+				gTasks[taskId].func = Task_OpenTrainerCardFromStartMenu;
+			break;
+			case START_MENU_ACTION_POKEMON:
+				PlaySE(SE_SELECT);
+				BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+				gTasks[taskId].func = Task_OpenPokemonPartyFromStartMenu;
+			break;
+			case START_MENU_ACTION_PC:
+				StartMenuTryUsingPC(taskId);
+			break;
+			case START_MENU_ACTION_BAG:
+				PlaySE(SE_SELECT);
+				BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+				gTasks[taskId].func = Task_OpenBagFromStartMenu;
+			break;
+			case START_MENU_ACTION_OPTIONS:
+				PlaySE(SE_SELECT);
+				BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+				gTasks[taskId].func = Task_OpenOptionsMenuStartMenu;
+			break;
+			case START_MENU_ACTION_GUIDE:
+				PlaySE(SE_SELECT);
+				BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+				gTasks[taskId].func = Task_OpenInformationMenu;
+			break;
+			case START_MENU_ACTION_POKENAV:
+				PlaySE(SE_SELECT);
+				BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+				gTasks[taskId].func = Task_OpenPokenavStartMenu;
+			break;
+			case START_MENU_ACTION_DEXNAV:
+				if(canOpenDexnav()){
+					PlaySE(SE_SELECT);
+					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+					gTasks[taskId].func = Task_OpenDexNavFromStartMenu;
+				}
+				else{
+					PlaySE(SE_BOO);
+					sMenuDataPtr->CurrentMessage = MESSAGE_CANT_USE_DEXNAV;
+				}
+			break;
+			#ifdef DEBUG_BUILD
+			case START_MENU_ACTION_DEBUG:
+				PlaySE(SE_SELECT);
+				BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+				gTasks[taskId].func = Task_OpenDebugStartMenu;
+			break;
+			#endif
+			case START_MENU_ACTION_SAVE:
+				StartMenuTrySaving(taskId);
+			break;
+			case START_MENU_ACTION_EXIT:
+				PlaySE(SE_PC_OFF);
+				BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+				gTasks[taskId].func = Task_MenuTurnOff;
+			break;
 		}
-		else{
-			switch(sMenuDataPtr->cursorRowY)
-			{
-				case START_MENU_ACTION_POKEDEX:
-					PlaySE(SE_SELECT);
-					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-					gTasks[taskId].func = Task_OpenPokedexFromStartMenu;
-				break;
-				case START_MENU_ACTION_PLAYER:
-					PlaySE(SE_SELECT);
-					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-					gTasks[taskId].func = Task_OpenTrainerCardFromStartMenu;
-				break;
-				case START_MENU_ACTION_POKEMON:
-					PlaySE(SE_SELECT);
-					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-					//CheckPartyforIlegalMoves();
-					gTasks[taskId].func = Task_OpenPokemonPartyFromStartMenu;
-				break;
-				case START_MENU_ACTION_PC:
-					PlaySE(SE_SELECT);
-					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-					gTasks[taskId].func = Task_OpenPokemonStorageSystemFromStartMenu;
-				break;
-				case START_MENU_ACTION_BAG:
-					PlaySE(SE_SELECT);
-					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-					gTasks[taskId].func = Task_OpenBagFromStartMenu;
-				break;
-				case START_MENU_ACTION_OPTIONS:
-					PlaySE(SE_SELECT);
-					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-					gTasks[taskId].func = Task_OpenOptionsMenuStartMenu;
-				break;
-				case START_MENU_ACTION_GUIDE:
-					PlaySE(SE_SELECT);
-					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-					gTasks[taskId].func = Task_OpenInformationMenu;
-				break;
-				case START_MENU_ACTION_POKENAV:
-					PlaySE(SE_SELECT);
-					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-					gTasks[taskId].func = Task_OpenPokenavStartMenu;
-				break;
-				case START_MENU_ACTION_DEXNAV:
-					if(canOpenDexnav()){
-						PlaySE(SE_SELECT);
-						BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-						gTasks[taskId].func = Task_OpenDexNavFromStartMenu;
-					}
-					else{
-						PlaySE(SE_BOO);
-						sMenuDataPtr->CurrentMessage = MESSAGE_CANT_USE_DEXNAV;
-					}
-				break;
-				case START_MENU_ACTION_DEBUG:
-					PlaySE(SE_SELECT);
-					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-					gTasks[taskId].func = Task_OpenDebugStartMenu;
-				break;
-				case START_MENU_ACTION_SAVE:
-					if(!ShouldDisableSaving()){
-						PlaySE(SE_SELECT);
-						BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-						gTasks[taskId].func = Task_OpenSaveMenuStartMenu;
-					}
-					else{
-						PlaySE(SE_BOO);
-						sMenuDataPtr->CurrentMessage = MESSAGE_CANT_SAVE;
-					}
-				break;
-				case START_MENU_ACTION_EXIT:
-					PlaySE(SE_PC_OFF);
-					BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-					gTasks[taskId].func = Task_MenuTurnOff;
-				break;
-			}
 
-			PrintToWindow();
-		}
+		PrintToWindow();
 	}
 	
 	if (JOY_NEW(R_BUTTON)){
 		
-		if (FlagGet(FLAG_SYS_AUTO_RUN)){
-			FlagClear(FLAG_SYS_AUTO_RUN);
+		if (gSaveBlock2Ptr->autoRun){
+			gSaveBlock2Ptr->autoRun = FALSE;
 			PlaySE(SE_BOO);
 		}
 		else{
-			FlagSet(FLAG_SYS_AUTO_RUN);
+			gSaveBlock2Ptr->autoRun = TRUE;
 			PlaySE(SE_SELECT);
 		}
 		PrintToWindow();
 	}
 	
 	if (JOY_NEW(START_BUTTON)){
-		if(!ShouldDisableSaving()){
-			PlaySE(SE_SELECT);
-			BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-			gTasks[taskId].func = Task_OpenSaveMenuStartMenu;
-		}
-		else{
-			PlaySE(SE_BOO);
-			sMenuDataPtr->CurrentMessage = MESSAGE_CANT_SAVE;
-		}
+		StartMenuTrySaving(taskId);
 	}
 	
 	if (JOY_NEW(L_BUTTON)){
-		s16 coordsY;
-		s16 coordsX;
-		u8 behavior;
-		PlayerGetDestCoords(&coordsX, &coordsY);
-		behavior = MapGridGetMetatileBehaviorAt(coordsX, coordsY);
-
-		if (FlagGet(FLAG_SYS_CYCLING_ROAD) == TRUE || MetatileBehavior_IsVerticalRail(behavior) == TRUE || MetatileBehavior_IsHorizontalRail(behavior) == TRUE || MetatileBehavior_IsIsolatedVerticalRail(behavior) == TRUE || MetatileBehavior_IsIsolatedHorizontalRail(behavior) == TRUE){
-			PlaySE(SE_BOO);
-			sMenuDataPtr->CurrentMessage = MESSAGE_CANT_USE_BIKE;
-		}
-		else if(!IsBikingDisallowedByPlayer()){
+		if(CanUseBikeFromStartMenu()){
 			PlaySE(SE_SELECT);
 			BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
 			gTasks[taskId].func = Task_MenuTurnOff_Bike;
@@ -1871,29 +1890,16 @@ static void Task_MenuMain(u8 taskId)
 	}
 	
     if ((JOY_NEW(DPAD_DOWN)) || (JOY_REPEAT(DPAD_DOWN))){
-		//Konami Code
-		if(sMenuDataPtr->KonamiCodeState == 2 || sMenuDataPtr->KonamiCodeState == 3)
-			sMenuDataPtr->KonamiCodeState++;
-		else
-			sMenuDataPtr->KonamiCodeState = 0;
-		//-----------------------------
 		PressedDownButton();
-		//-----------------------------
+
 		PlaySE(SE_SELECT);
 		PrintToWindow();
 	}
 	
     if ((JOY_NEW(DPAD_UP)) || (JOY_REPEAT(DPAD_UP))){
-		//Konami Code
-		if(sMenuDataPtr->KonamiCodeState == 0 || sMenuDataPtr->KonamiCodeState == 1){
-			sMenuDataPtr->KonamiCodeState++;
-		}
-		else
-			sMenuDataPtr->KonamiCodeState = 0;
 		
-		//-----------------------------
 		PressedUpButton();
-		//-----------------------------
+		
 		PlaySE(SE_SELECT);	
 		PrintToWindow();
 	}

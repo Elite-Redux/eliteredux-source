@@ -57,29 +57,6 @@
 #include "quests.h"
 #include "battle_setup.h"
 
-// Menu actions
-enum
-{
-    MENU_ACTION_POKEDEX,
-    MENU_ACTION_POKEMON,
-    MENU_ACTION_BAG,
-    MENU_ACTION_POKENAV,
-    MENU_ACTION_PLAYER,
-    MENU_ACTION_SAVE,
-    MENU_ACTION_OPTION,
-    MENU_ACTION_EXIT,
-    MENU_ACTION_RETIRE_SAFARI,
-    MENU_ACTION_PLAYER_LINK,
-    MENU_ACTION_REST_FRONTIER,
-    MENU_ACTION_RETIRE_FRONTIER,
-    MENU_ACTION_PYRAMID_BAG,
-	MENU_ACTION_DEXNAV,
-    MENU_ACTION_ACCESS_PC,
-	MENU_ACTION_DEBUG,
-	MENU_ACTION_UI_TEST,
-    MENU_ACTION_QUEST_MENU,
-};
-
 // Save status
 enum
 {
@@ -160,6 +137,7 @@ static void Task_WaitForBattleTowerLinkSave(u8 taskId);
 static bool8 FieldCB_ReturnToFieldStartMenu(void);
 
 static void ShowGameVersionWindow(void);
+EWRAM_DATA static u8 calledMenuAction = NUM_MENU_ACTIONS;
 
 static const struct WindowTemplate sSafariBallsWindowTemplate = {0, 1, 1, 9, 4, 0xF, 8};
 static const struct WindowTemplate sExtraWindowTemplate = {
@@ -321,11 +299,14 @@ static void BuildStartMenuActions(void)
     }
     else
     {
-        #if defined(TX_DEBUG_SYSTEM_ENABLE) && TX_DEBUG_SYSTEM_IN_MENU
+	    calledMenuAction = gSaveBlock2Ptr->startMenuOptionToOpen;
+        gSaveBlock2Ptr->startMenuOptionToOpen = 0;
+        BuildNormalStartMenu();
+        /*#if defined(TX_DEBUG_SYSTEM_ENABLE) && TX_DEBUG_SYSTEM_IN_MENU
 			BuildDebugStartMenu();
 		#else
 			BuildNormalStartMenu();
-		#endif
+		#endif*/
     }
 }
 
@@ -339,83 +320,97 @@ static void BuildNormalStartMenu(void)
     bool8 disablePC = FALSE;
     canSave = TRUE;
 
-    if (FlagGet(FLAG_SYS_POKEDEX_GET) == TRUE)
-    {
-        AddStartMenuAction(MENU_ACTION_POKEDEX);
+	switch(calledMenuAction){
+        case MENU_ACTION_SAVE:
+            InitSave();
+            gMenuCallback = StartMenuSaveCallback;
+        break;
+        case MENU_ACTION_ACCESS_PC:
+            PlaySE(SE_PC_ON);
+            ScriptContext1_SetupScript(EventScript_PC_FromStartMenu); // Display save menu
+            gMenuCallback = StartMenuSaveCallback;
+        break;
+        case NUM_MENU_ACTIONS:
+        default:
+            if (FlagGet(FLAG_SYS_POKEDEX_GET) == TRUE)
+            {
+                AddStartMenuAction(MENU_ACTION_POKEDEX);
+            }
+            if (FlagGet(FLAG_SYS_POKEMON_GET) == TRUE)
+            {
+                AddStartMenuAction(MENU_ACTION_POKEMON);
+            }
+            
+            if (FlagGet(FLAG_SYS_DEXNAV_GET) && canOpenDexnav())
+                AddStartMenuAction(MENU_ACTION_DEXNAV);
+
+            AddStartMenuAction(MENU_ACTION_BAG);
+
+            if (FlagGet(FLAG_SYS_POKENAV_GET) == TRUE)
+            {
+                AddStartMenuAction(MENU_ACTION_POKENAV);
+            }
+
+            switch (gSaveBlock1Ptr->location.mapNum) {
+                case MAP_NUM(EVER_GRANDE_CITY_SIDNEYS_ROOM):
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_SIDNEYS_ROOM))
+                        disablePC = TRUE;
+                break;
+                case MAP_NUM(EVER_GRANDE_CITY_PHOEBES_ROOM):
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_PHOEBES_ROOM))
+                        disablePC = TRUE;
+                break;
+                case MAP_NUM(EVER_GRANDE_CITY_GLACIAS_ROOM):
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_GLACIAS_ROOM))
+                        disablePC = TRUE;
+                break;
+                case MAP_NUM(EVER_GRANDE_CITY_DRAKES_ROOM):
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_DRAKES_ROOM))
+                        disablePC = TRUE;
+                break;
+                case MAP_NUM(EVER_GRANDE_CITY_CHAMPIONS_ROOM):
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_CHAMPIONS_ROOM))
+                        disablePC = TRUE;
+                break;
+                case MAP_NUM(EVER_GRANDE_CITY_HALL1):
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL1))
+                        disablePC = TRUE;
+                break;
+                case MAP_NUM(EVER_GRANDE_CITY_HALL2):
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL2))
+                        disablePC = TRUE;
+                break;
+                case MAP_NUM(EVER_GRANDE_CITY_HALL3):
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL3))
+                        disablePC = TRUE;
+                break;
+                case MAP_NUM(EVER_GRANDE_CITY_HALL4):
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL4))
+                        disablePC = TRUE;
+                break;
+                case MAP_NUM(EVER_GRANDE_CITY_HALL5):
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL5))
+                        disablePC = TRUE;
+                break;
+            }
+
+            AddStartMenuAction(MENU_ACTION_PLAYER);
+            //if (FlagGet(FLAG_SYS_QUEST_MENU_GET))
+            //    AddStartMenuAction(MENU_ACTION_QUEST_MENU);
+            
+            //AddStartMenuAction(MENU_ACTION_SAVE);
+            AddStartMenuAction(MENU_ACTION_OPTION);
+
+            if (!disablePC && FlagGet(FLAG_SYS_POKEMON_GET))
+                AddStartMenuAction(MENU_ACTION_ACCESS_PC);
+            else
+                AddStartMenuAction(MENU_ACTION_EXIT);
+
+            #ifdef DEBUG_BUILD
+                AddStartMenuAction(MENU_ACTION_UI_TEST);
+            #endif
+        break;
     }
-    if (FlagGet(FLAG_SYS_POKEMON_GET) == TRUE)
-    {
-        AddStartMenuAction(MENU_ACTION_POKEMON);
-    }
-	
-	if (FlagGet(FLAG_SYS_DEXNAV_GET) && canOpenDexnav())
-        AddStartMenuAction(MENU_ACTION_DEXNAV);
-
-    AddStartMenuAction(MENU_ACTION_BAG);
-
-    if (FlagGet(FLAG_SYS_POKENAV_GET) == TRUE)
-    {
-        AddStartMenuAction(MENU_ACTION_POKENAV);
-    }
-
-    switch (gSaveBlock1Ptr->location.mapNum) {
-		case MAP_NUM(EVER_GRANDE_CITY_SIDNEYS_ROOM):
-			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_SIDNEYS_ROOM))
-				disablePC = TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_PHOEBES_ROOM):
-			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_PHOEBES_ROOM))
-				disablePC = TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_GLACIAS_ROOM):
-			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_GLACIAS_ROOM))
-				disablePC = TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_DRAKES_ROOM):
-			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_DRAKES_ROOM))
-				disablePC = TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_CHAMPIONS_ROOM):
-			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_CHAMPIONS_ROOM))
-				disablePC = TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_HALL1):
-			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL1))
-				disablePC = TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_HALL2):
-			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL2))
-				disablePC = TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_HALL3):
-			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL3))
-				disablePC = TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_HALL4):
-			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL4))
-				disablePC = TRUE;
-		break;
-		case MAP_NUM(EVER_GRANDE_CITY_HALL5):
-			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL5))
-				disablePC = TRUE;
-		break;
-	}
-
-    AddStartMenuAction(MENU_ACTION_PLAYER);
-    //if (FlagGet(FLAG_SYS_QUEST_MENU_GET))
-    //    AddStartMenuAction(MENU_ACTION_QUEST_MENU);
-    
-    //AddStartMenuAction(MENU_ACTION_SAVE);
-    AddStartMenuAction(MENU_ACTION_OPTION);
-
-    if (!disablePC && FlagGet(FLAG_SYS_POKEMON_GET))
-	    AddStartMenuAction(MENU_ACTION_ACCESS_PC);
-    else
-        AddStartMenuAction(MENU_ACTION_EXIT);
-
-    #ifdef DEBUG_BUILD
-        AddStartMenuAction(MENU_ACTION_UI_TEST);
-    #endif
 }
 
 static void BuildDebugStartMenu(void)
@@ -610,8 +605,10 @@ static bool32 InitStartMenuStep(void)
         sInitStartMenuData[0]++;
         break;
     case 2:
-        LoadMessageBoxAndBorderGfx();
-        DrawStdWindowFrame(sub_81979C4(sNumStartMenuActions), FALSE);
+        if(calledMenuAction == NUM_MENU_ACTIONS){
+            LoadMessageBoxAndBorderGfx();
+            DrawStdWindowFrame(sub_81979C4(sNumStartMenuActions), FALSE);
+        }
         sInitStartMenuData[1] = 0;
         sInitStartMenuData[0]++;
         break;
@@ -620,7 +617,7 @@ static bool32 InitStartMenuStep(void)
             ShowSafariBallsWindow();
         else if (InBattlePyramid())
             ShowPyramidFloorWindow();
-        else
+        else if(calledMenuAction == NUM_MENU_ACTIONS)
             ShowGameVersionWindow();
         sInitStartMenuData[0]++;
         break;
@@ -725,54 +722,68 @@ void ShowStartMenu(void)
 
 static bool8 HandleStartMenuInput(void)
 {
-    if (JOY_NEW(DPAD_UP))
-    {
-        PlaySE(SE_SELECT);
-        sStartMenuCursorPos = Menu_MoveCursor(-1);
-    }
+    switch(calledMenuAction){
+        case MENU_ACTION_SAVE:
+            InitSave();
+            gMenuCallback = SaveCallback;
+            return FALSE;
+        break;
+        case MENU_ACTION_ACCESS_PC:
+            //gMenuCallback = sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorPos]].func.u8_void;
+            return TRUE;
+        break;
+        case NUM_MENU_ACTIONS:
+        default:
+            if (JOY_NEW(DPAD_UP))
+            {
+                PlaySE(SE_SELECT);
+                sStartMenuCursorPos = Menu_MoveCursor(-1);
+            }
 
-    if (JOY_NEW(DPAD_DOWN))
-    {
-        PlaySE(SE_SELECT);
-        sStartMenuCursorPos = Menu_MoveCursor(1);
-    }
+            if (JOY_NEW(DPAD_DOWN))
+            {
+                PlaySE(SE_SELECT);
+                sStartMenuCursorPos = Menu_MoveCursor(1);
+            }
 
-    if (JOY_NEW(SELECT_BUTTON) && canSave)
-    {
-        gMenuCallback = StartMenuSaveCallback;
-        PlaySE(SE_SELECT);
-        return FALSE;
-    }
-
-    if (JOY_NEW(A_BUTTON))
-    {
-        PlaySE(SE_SELECT);
-        if (sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorPos]].func.u8_void == StartMenuPokedexCallback)
-        {
-            if (GetNationalPokedexCount(FLAG_GET_SEEN) == 0)
+            if (JOY_NEW(SELECT_BUTTON) && canSave)
+            {
+                gMenuCallback = StartMenuSaveCallback;
+                PlaySE(SE_SELECT);
                 return FALSE;
-        }
+            }
 
-        gMenuCallback = sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorPos]].func.u8_void;
+            if (JOY_NEW(A_BUTTON))
+            {
+                PlaySE(SE_SELECT);
+                if (sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorPos]].func.u8_void == StartMenuPokedexCallback)
+                {
+                    if (GetNationalPokedexCount(FLAG_GET_SEEN) == 0)
+                        return FALSE;
+                }
 
-        if (gMenuCallback != StartMenuSaveCallback
-            && gMenuCallback != StartMenuExitCallback
-			&& gMenuCallback != StartMenuDebugCallback
-            && gMenuCallback != StartMenuSafariZoneRetireCallback
-			&& gMenuCallback != StartMenuStorageCallback
-            && gMenuCallback != StartMenuBattlePyramidRetireCallback)
-        {
-           FadeScreen(FADE_TO_BLACK, 0);
-        }
+                gMenuCallback = sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorPos]].func.u8_void;
 
-        return FALSE;
-    }
+                if (gMenuCallback != StartMenuSaveCallback
+                    && gMenuCallback != StartMenuExitCallback
+                    && gMenuCallback != StartMenuDebugCallback
+                    && gMenuCallback != StartMenuSafariZoneRetireCallback
+                    && gMenuCallback != StartMenuStorageCallback
+                    && gMenuCallback != StartMenuBattlePyramidRetireCallback)
+                {
+                    FadeScreen(FADE_TO_BLACK, 0);
+                }
 
-    if (JOY_NEW(START_BUTTON | B_BUTTON))
-    {
-        RemoveExtraStartMenuWindows();
-        HideStartMenu();
-        return TRUE;
+                return FALSE;
+            }
+
+            if (JOY_NEW(START_BUTTON | B_BUTTON))
+            {
+                RemoveExtraStartMenuWindows();
+                HideStartMenu();
+                return TRUE;
+            }
+        break;
     }
 
     return FALSE;

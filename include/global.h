@@ -71,7 +71,7 @@
 
 #define USE_GENERATED FALSE
 
-#define DEBUG_BUILD
+//#define DEBUG_BUILD
 #define DEBUG_POKEMON_MENU   TRUE
 #define CURRENT_GAME_VERSION 1046
 
@@ -636,6 +636,8 @@ struct SaveBlock2
     u8 shortcutButton:3;
     u8 season:2;
     u8 startMenuPaletteNum:3;
+    u8 startMenuOptionToOpen:5;//Space for 31 options
+    u8 filler:3;
     
 }; // sizeof=0xF2C
 
