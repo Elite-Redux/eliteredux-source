@@ -38,6 +38,10 @@
 #include "constants/maps.h"
 #include "constants/songs.h"
 #include "constants/trainer_hill.h"
+#include "palette.h"
+#include "start_menu.h"
+#include "ui_start_menu.h"
+#include "constants/rgb.h"
 
 static EWRAM_DATA u8 sWildEncounterImmunitySteps = 0;
 static EWRAM_DATA u16 sPreviousPlayerMetatileBehavior = 0;
@@ -202,9 +206,14 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
         return TRUE;
     if (input->pressedStartButton)
     {
-        PlaySE(SE_WIN_OPEN);
-        ShowStartMenu();
-        return TRUE;
+        if(!gPlayerAvatar.preventStep){
+            PlaySE(SE_WIN_OPEN);
+            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
+            ShowUIStartMenu();
+            return TRUE;
+		}
+		else
+			return FALSE;
     }
 	
 	if (input->tookStep && TryFindHiddenPokemon())

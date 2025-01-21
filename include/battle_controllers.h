@@ -178,6 +178,7 @@ enum
     /*new controllers should go here*/
     CONTROLLER_TERMINATOR_NOP,
     CONTROLLER_INFO_MENU,
+    CONTROLLER_IN_GAME_WIKI,
     CONTROLLER_CMDS_COUNT
 };
 
@@ -250,6 +251,7 @@ void BtlController_EmitResetActionMoveSelection(u8 bufferId, u8 caseId);
 void BtlController_EmitEndLinkBattle(u8 bufferId, u8 battleOutcome);
 void BtlController_EmitDebugMenu(u8 bufferId);
 void BtlController_EmitInfoMenu(u8 bufferId);
+void BtlController_EmitInGameWikiMenu(u8 bufferId);
 
 // player controller
 void SetControllerToPlayer(void);

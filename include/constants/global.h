@@ -195,4 +195,33 @@
 #define BATTLE_BOX_YES_NO_Y     0
 #define BATTLE_BOX_YES_NO_WIDTH 4
 
+//General UI Stuff
+#define MENU_COLOR_BLUE   0
+#define MENU_COLOR_RED    1
+#define MENU_COLOR_YELLOW 2
+#define MENU_COLOR_GREEN  3
+#define MENU_COLOR_DARK   4
+#define NUM_MENU_COLORS   5
+
+// Start Menu actions
+#define MENU_ACTION_POKEDEX         1
+#define MENU_ACTION_POKEMON         2
+#define MENU_ACTION_BAG             3
+#define MENU_ACTION_POKENAV         4
+#define MENU_ACTION_PLAYER          5
+#define MENU_ACTION_SAVE            6
+#define MENU_ACTION_OPTION          7
+#define MENU_ACTION_RETIRE_SAFARI   8
+#define MENU_ACTION_PLAYER_LINK     9
+#define MENU_ACTION_REST_FRONTIER   10
+#define MENU_ACTION_RETIRE_FRONTIER 11
+#define MENU_ACTION_PYRAMID_BAG     12
+#define MENU_ACTION_DEXNAV          13
+#define MENU_ACTION_ACCESS_PC       14
+#define MENU_ACTION_DEBUG           15
+#define MENU_ACTION_UI_TEST         16
+#define MENU_ACTION_QUEST_MENU      17
+#define MENU_ACTION_EXIT            18
+#define NUM_MENU_ACTIONS            19
+
 #endif // GUARD_CONSTANTS_GLOBAL_H

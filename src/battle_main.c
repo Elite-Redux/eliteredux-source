@@ -485,6 +485,7 @@ static void (*const sTurnActionsFuncsTable[])(void) = {
     [B_ACTION_NOTHING_FAINTED] = HandleAction_NothingIsFainted,
     [B_ACTION_THROW_BALL] = HandleAction_ThrowBall,
     [B_ACTION_SHOW_BATTLE_INFO] = HandleAction_ShowBattleInfo,
+    [B_ACTION_SHOW_IN_GAME_WIKI] = HandleAction_ShowInGameWiki,
 };
 
 static void (*const sEndTurnFuncsTable[])(void) = {
@@ -3838,6 +3839,11 @@ static void HandleTurnActionSelectionState(void) {
                             BtlController_EmitInfoMenu(0);
                             MarkBattlerForControllerExec(gActiveBattler);
                             break;
+                        case B_ACTION_SHOW_IN_GAME_WIKI:
+                            *(gBattleStruct->battlerPartyIndexes + gActiveBattler) = gBattlerPartyIndexes[gActiveBattler];
+                            BtlController_EmitInGameWikiMenu(0);
+                            MarkBattlerForControllerExec(gActiveBattler);
+                            break;
                         case B_ACTION_CANCEL_PARTNER:
                             gBattleCommunication[gActiveBattler] = STATE_WAIT_SET_BEFORE_ACTION;
                             gBattleCommunication[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gActiveBattler)))] = STATE_BEFORE_ACTION_CHOSEN;
@@ -4014,6 +4020,9 @@ static void HandleTurnActionSelectionState(void) {
                             gBattleCommunication[gActiveBattler]++;
                             break;
                         case B_ACTION_SHOW_BATTLE_INFO:
+                            gBattleCommunication[gActiveBattler] = STATE_BEFORE_ACTION_CHOSEN;
+                            break;
+                        case B_ACTION_SHOW_IN_GAME_WIKI:
                             gBattleCommunication[gActiveBattler] = STATE_BEFORE_ACTION_CHOSEN;
                             break;
                         case B_ACTION_DEBUG:

@@ -1705,7 +1705,7 @@ static void Exit_Debug_Pokemon(u8 taskId)
         Free(data);
         FreeMonSpritesGfx();
         DestroyTask(taskId);
-        SetMainCallback2(CB2_ReturnToFieldWithOpenMenu);
+        SetMainCallback2(CB2_ReturnToUIMenu);
         m4aMPlayVolumeControl(&gMPlayInfo_BGM, TRACKS_ALL, 0x100);
     }
 }
