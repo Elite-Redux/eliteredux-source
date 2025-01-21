@@ -8532,11 +8532,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x88,
         .y_offset = 3,
     },
-    [SPECIES_TOXAPEX_MEGA] =
+    /*[SPECIES_TOXAPEX_MEGA] =
     {
         .size = 0x88,
         .y_offset = 3,
-    },
+    },*/
     [SPECIES_SLOWBRO_MEGA_GALARIAN] =
     {
         .size = 0x88,
