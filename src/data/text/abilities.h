@@ -1490,6 +1490,12 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_PUFFY] = _("Puffy"),
     [ABILITY_BALLOON_BLITZ] = _("Balloon Blitz"),
     [ABILITY_STRIKER_PIXILATE] = _("Twinkle Toes"),
+    [ABILITY_DOOM_BLAST] = _("Doom Blast"),
+    [ABILITY_BRUTEFORCE] = _("Bruteforce"),
+    [ABILITY_FARADAYS_CAGE] = _("Faradays Cage"),
+    [ABILITY_ACIDIC_SLIME] = _("Acidic Slime"),
+    [ABILITY_ROSE_GARDEN] = _("Rose Garden"),
+    [ABILITY_QIGONG] = _("Qigong"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
