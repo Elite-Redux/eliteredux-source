@@ -366,7 +366,7 @@ static const u8 sAbilityColdReboundDescription[] = _("Attacks with Icy Wind\nwhe
 static const u8 sAbilityLowBlowDescription[] = _("Attacks with 40BP Feint\nAttack on switch-in.");
 static const u8 sAbilityNosferatuDescription[] = _("Contact moves do +20% damage\nand heal 1/2 of damage dealt.");
 static const u8 sAbilitySpectralShroudDescription[] = _("Spectralize + 30% chance\nto badly poison the foe.");
-static const u8 sAbilityDisciplineDescription[] = _("Rampage moves no longer trap you.\nCan't be confused or intimidated.");
+static const u8 sAbilityDisciplineDescription[] = _("You can switch during lock-in moves.\nImmune to confusion/intimidate.");
 static const u8 sAbilityThundercallDescription[] = _("Triggers Smite at 20% power\nwhen using an Electric move.");
 static const u8 sAbilityMarineApexDescription[] = _("50% more damage to Water-\ntypes + Infiltrator.");
 static const u8 sAbilityMightyHornDescription[] = _("Boosts the power of horn and\ndrill-based by 1.3x.");
@@ -1490,12 +1490,6 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_PUFFY] = _("Puffy"),
     [ABILITY_BALLOON_BLITZ] = _("Balloon Blitz"),
     [ABILITY_STRIKER_PIXILATE] = _("Twinkle Toes"),
-    [ABILITY_DOOM_BLAST] = _("Doom Blast"),
-    [ABILITY_BRUTEFORCE] = _("Bruteforce"),
-    [ABILITY_FARADAYS_CAGE] = _("Faradays Cage"),
-    [ABILITY_ACIDIC_SLIME] = _("Acidic Slime"),
-    [ABILITY_ROSE_GARDEN] = _("Rose Garden"),
-    [ABILITY_QIGONG] = _("Qigong"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
