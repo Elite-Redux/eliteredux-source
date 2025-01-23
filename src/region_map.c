@@ -1704,7 +1704,7 @@ void CB2_OpenFlyMap(void)
         sFlyMap = malloc(sizeof(*sFlyMap));
         if (sFlyMap == NULL)
         {
-            SetMainCallback2(CB2_ReturnToFieldWithOpenMenu);
+            SetMainCallback2(CB2_ReturnToUIMenu);
         }
         else
         {

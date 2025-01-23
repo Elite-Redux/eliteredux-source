@@ -186,6 +186,17 @@
     f;                       \
 })
 
+#define STRINGLIST_MAX_LENGHT       20
+#define STRINGLIST_LONG_MAX_LENGHT  75
+struct StringList
+{
+    const u8 string[STRINGLIST_MAX_LENGHT];
+};
+struct StringList_Long
+{
+    const u8 string[STRINGLIST_LONG_MAX_LENGHT];
+};
+
 // Branch defines: Used by other branches to detect each other.
 // Each define must be here for each of RHH's branch you have pulled.
 // e.g. If you have both the battle_engine and pokemon_expansion branch,
@@ -623,8 +634,10 @@ struct SaveBlock2
     u32 encounteredroutes4;
     u32 encounteredroutes5;
     u8 shortcutButton:3;
-    u8 filler:5;
-    
+    u8 season:2; //Unused in upcoming, to avoid any kind of problems when porting over the seasons branch
+    u8 startMenuPaletteNum:3;
+    u8 startMenuOptionToOpen:5;//Space for 31 options
+    u8 filler:3;
 }; // sizeof=0xF2C
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;

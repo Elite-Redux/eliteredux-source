@@ -274,15 +274,6 @@ enum field_TabsIds
     NUM_FIELD_TABS,
 };
 
-enum menu_colors
-{
-    MENU_COLOR_BLUE,
-    MENU_COLOR_RED,
-    MENU_COLOR_YELLOW,
-    MENU_COLOR_GREEN,
-    NUM_COLORS,
-};
-
 enum modes
 {
     MODE_BATTLER2,

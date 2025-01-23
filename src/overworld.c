@@ -58,6 +58,7 @@
 #include "trainer_pokemon_sprites.h"
 #include "tv.h"
 #include "scanline_effect.h"
+#include "ui_start_menu.h"
 #include "wild_encounter.h"
 #include "frontier_util.h"
 #include "constants/abilities.h"
@@ -1679,6 +1680,12 @@ void CB2_ReturnToFieldWithOpenMenu(void)
     FieldClearVBlankHBlankCallbacks();
     gFieldCallback2 = FieldCB_ReturnToFieldOpenStartMenu;
     CB2_ReturnToField();
+}
+
+void CB2_ReturnToUIMenu(void)
+{
+    FieldClearVBlankHBlankCallbacks();
+	Menu_Start_Init(CB2_ReturnToField);
 }
 
 void CB2_ReturnToFieldContinueScript(void)

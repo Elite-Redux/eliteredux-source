@@ -1817,7 +1817,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_ARCANINE_MEGA] = sArcanineLevelUpLearnset,
     [SPECIES_SLOWBRO_MEGA_GALARIAN] = sSlowbroGalarianLevelUpLearnset,
     [SPECIES_SLOWKING_MEGA_GALARIAN] = sSlowkingGalarianLevelUpLearnset,
-    [SPECIES_TOXAPEX_MEGA] = sToxapexLevelUpLearnset,
+    //[SPECIES_TOXAPEX_MEGA] = sToxapexLevelUpLearnset,
     [SPECIES_UNOWN_REVELATION] = sUnownLevelUpLearnset,
     [SPECIES_GOODRA_MEGA] = sGoodraLevelUpLearnset,
 };

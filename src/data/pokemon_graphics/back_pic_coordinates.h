@@ -8609,11 +8609,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x78,
         .y_offset = 0,
     },
-    [SPECIES_TOXAPEX_MEGA] =
+    /*[SPECIES_TOXAPEX_MEGA] =
     {
         .size = 0x78,
         .y_offset = 0,
-    },
+    },}*/
     [SPECIES_ARCANINE_MEGA] =
     {
         .size = 0x78,

@@ -3940,7 +3940,7 @@ void CB2_ReturnToPartyMenuFromFlyMap(void) {
                   TRUE,
                   PARTY_MSG_CHOOSE_MON,
                   Task_HandleChooseMonInput,
-                  CB2_ReturnToFieldWithOpenMenu);
+                  CB2_ReturnToUIMenu);
 }
 
 static void FieldCallback_Waterfall(void) {
@@ -5975,7 +5975,7 @@ void CB2_PartyMenuFromStartMenu(void) {
                   FALSE,
                   PARTY_MSG_CHOOSE_MON,
                   Task_HandleChooseMonInput,
-                  CB2_ReturnToFieldWithOpenMenu);
+                  CB2_ReturnToUIMenu);
 }
 
 // Giving an item by selecting Give from the bag menu

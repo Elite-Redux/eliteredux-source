@@ -161,6 +161,7 @@ int GetAbilityIndex(int battler, int ability, int checkMoldBreaker);
 s32 CountUsablePartyMons(u8 battlerId);
 void HandleAction_ThrowBall(void);
 void HandleAction_ShowBattleInfo(void);
+void HandleAction_ShowInGameWiki(void);
 void HandleAction_OpenInfoMenu(void);
 bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move);
 void HandleAction_UseMove(void);

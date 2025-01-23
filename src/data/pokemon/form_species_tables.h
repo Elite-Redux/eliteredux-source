@@ -2219,7 +2219,7 @@ static const u16 sSkeledirgeFormSpeciesIdTable[] = {
 };
 static const u16 sToxapexFormSpeciesIdTable[] = {
     SPECIES_TOXAPEX,
-    SPECIES_TOXAPEX_MEGA,
+    //SPECIES_TOXAPEX_MEGA,
     FORM_SPECIES_END,
 };
 static const u16 sRoseradeFormSpeciesIdTable[] = {
