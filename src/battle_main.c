@@ -17,7 +17,6 @@
 #include "berry.h"
 #include "bg.h"
 #include "cable_club.h"
-#include "constants/abilities.h"
 #include "constants/battle_config.h"
 #include "constants/battle_move_effects.h"
 #include "constants/battle_string_ids.h"
@@ -75,6 +74,7 @@
 #include "util.h"
 #include "wild_encounter.h"
 #include "window.h"
+#include "constants/abilities.h"
 
 extern struct MusicPlayerInfo gMPlayInfo_SE1;
 extern struct MusicPlayerInfo gMPlayInfo_SE2;

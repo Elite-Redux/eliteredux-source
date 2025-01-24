@@ -114,6 +114,19 @@ extern const struct TrainerMoney gTrainerMoneyTable[];
 extern const struct TrainerBall gTrainerBallTable[];
 extern const u8 *const gAbilityDescriptionPointers[];
 
+#define TWO_LINES_DESCRIPTION_MAX_LENGTH 100
+#define EXPANDED_DESCRIPTION_MAX_LENGTH  1000
+
+struct AbilityTextData
+{
+    const u8 name[ABILITY_NAME_LENGTH + 1]
+    const u8 expandedDescription[EXPANDED_DESCRIPTION_MAX_LENGTH];
+    const u8 description[TWO_LINES_DESCRIPTION_MAX_LENGTH];
+    bool8 hasBeenDefined;
+};
+
+extern const struct AbilityTextData gAbilityTextData[];
+
 extern const u8 gStatusConditionString_PoisonJpn[8];
 extern const u8 gStatusConditionString_SleepJpn[8];
 extern const u8 gStatusConditionString_ParalysisJpn[8];
