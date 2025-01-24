@@ -320,6 +320,7 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_EMBOARITE
 	ITEM_SAMUROTTITE
 	ITEM_WEAVILEITE
+	ITEM_MIENSHAOITE
 }
 
 script General_Adoption_Center_Mega_Stones_Script{

@@ -4162,6 +4162,7 @@ static const u8 sLoadedDiceDesc[] = _(
     "hit more times.");
 
 //3.0 CUTOFF
+
 static const u8 sWeavileiteDesc[] = _(
     "This stone enables\n"
     "Weavile to Mega\n"
@@ -4225,4 +4226,9 @@ static const u8 sTyphlosioniteHDesc[] = _(
 static const u8 sEmboariteDesc[] = _(
     "This stone enables\n"
     "Emboar to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sMienshaoiteDesc[] = _(
+    "This stone enables\n"
+    "Mienshao to Mega\n"
     "Evolve in battle.");
