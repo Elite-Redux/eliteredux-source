@@ -26,6 +26,18 @@ struct UnknownPokemonStruct4 {
     /*0x1D*/ u8 language;
 };
 
+#define TWO_LINES_DESCRIPTION_MAX_LENGTH 100
+#define EXPANDED_DESCRIPTION_MAX_LENGTH  1000
+#define ABILITY_NAME_LENGTH 20
+
+struct AbilityTextData
+{
+    const u8 name[ABILITY_NAME_LENGTH + 1];
+    const u8 expandedDescription[EXPANDED_DESCRIPTION_MAX_LENGTH];
+    const u8 description[TWO_LINES_DESCRIPTION_MAX_LENGTH];
+    bool8 hasBeenDefined;
+};
+
 union SpeedValue {
     struct {
         // Compiler lays this out in reverse order
@@ -113,18 +125,6 @@ extern const u8 gTypeNames[NUMBER_OF_MON_TYPES][TYPE_NAME_LENGTH + 1];
 extern const struct TrainerMoney gTrainerMoneyTable[];
 extern const struct TrainerBall gTrainerBallTable[];
 extern const u8 *const gAbilityDescriptionPointers[];
-
-#define TWO_LINES_DESCRIPTION_MAX_LENGTH 100
-#define EXPANDED_DESCRIPTION_MAX_LENGTH  1000
-
-struct AbilityTextData
-{
-    const u8 name[ABILITY_NAME_LENGTH + 1]
-    const u8 expandedDescription[EXPANDED_DESCRIPTION_MAX_LENGTH];
-    const u8 description[TWO_LINES_DESCRIPTION_MAX_LENGTH];
-    bool8 hasBeenDefined;
-};
-
 extern const struct AbilityTextData gAbilityTextData[];
 
 extern const u8 gStatusConditionString_PoisonJpn[8];

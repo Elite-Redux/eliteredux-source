@@ -324,7 +324,6 @@ static void PrintBattleMoves(void);
 static void PrintBattleMovesFromReplaceMenu(void);
 static void PrintMoveNameAndPP(u8 a);
 static void PrintAbilityAndInnates(void);
-static void PrintExpandedAbilityAndInnates(void);
 static void BufferMonPokemonAbilityAndInnates(void);
 static void BufferMonPokemonExpandedAbilityAndInnates(void);
 static void PrintEvolutionData(void);
@@ -1038,7 +1037,6 @@ const u8 sText_TitlePageDetail[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Detail {R_B
 const u8 sText_TitlePageDetail_Boxmon[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Detail");
 const u8 sText_TitlePickSwitch[] = _("{DPAD_UPDOWN}Pick {A_BUTTON}Switch {L_BUTTON}Details");
 const u8 sText_TitlePageIVs[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Modify");
-const u8 sText_TitlePageAbilityModify[] = _("{DPAD_LEFTRIGHT}Page {B_BUTTON}Save");
 const u8 sText_TitlePageEVs[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}EVs");
 const u8 sText_TitlePageStats[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Stats");
 const u8 sText_TitlePageModify[] = _("{A_BUTTON}Modify");
@@ -1113,9 +1111,7 @@ const u8 sText_HeldItem[] = _("HELD ITEM");
 
 
 const u8 sText_MainAbility[] = _("Ability");
-const u8 sText_Innate1[] = _("Innate");
-const u8 sText_Innate2[] = _("Innate 2");
-const u8 sText_Innate3[] = _("Innate 3");
+const u8 sText_Innate[] = _("Innate");
 const u8 sText_InnateUnlock[] = _("Locked until level {STR_VAR_1}");
 
 #if CONFIG_PHYSICAL_SPECIAL_SPLIT || CONFIG_SHOW_ICONS_FOR_OLD_SPLIT
@@ -1763,6 +1759,26 @@ bool8 canChangePokemonData(void){
     return FALSE;
 }
 
+static void ChangeIntoExpandedAbilityMode(void){
+    PlaySE(SE_SELECT);
+
+    if(sMonSummaryScreen->expandedAbilityMode){
+        sMonSummaryScreen->expandedAbilityMode = FALSE;
+        LZDecompressWram(sPageTilemaps[sMonSummaryScreen->currPageIndex], sMonSummaryScreen->bgTilemapBufferPage);
+        ScheduleBgCopyTilemapToVram(2);
+        BufferMonPokemonAbilityAndInnates();
+    }
+    else{
+        //Expanded Ability Mode
+        sMonSummaryScreen->expandedAbilityMode = TRUE;
+        LZDecompressWram(gSummaryScreenPageAbilityExpandedTilemap, sMonSummaryScreen->bgTilemapBufferPage);
+        ScheduleBgCopyTilemapToVram(2);
+        BufferMonPokemonExpandedAbilityAndInnates();
+    }
+    PutWindowTilemap(PSS_LABEL_PANE_RIGHT);
+    PrintInfoBar(sMonSummaryScreen->currPageIndex, TRUE);
+}
+
 static void Task_HandleInput(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
@@ -1810,10 +1826,7 @@ static void Task_HandleInput(u8 taskId)
                         else
                             sMonSummaryScreen->currentAbilityIndex--;
 
-                        if(!sMonSummaryScreen->expandedAbilityMode)
-                            PrintAbilityAndInnates();
-                        else
-                            PrintExpandedAbilityAndInnates();
+                        PrintAbilityAndInnates();
                         shouldChangeMon = FALSE;
                     }
                 break;
@@ -1848,10 +1861,7 @@ static void Task_HandleInput(u8 taskId)
                         else
                             sMonSummaryScreen->currentAbilityIndex++;
 
-                        if(!sMonSummaryScreen->expandedAbilityMode)
-                            PrintAbilityAndInnates();
-                        else
-                            PrintExpandedAbilityAndInnates();
+                        PrintAbilityAndInnates();
                         shouldChangeMon = FALSE;
                     }
                 break;
@@ -1927,7 +1937,7 @@ static void Task_HandleInput(u8 taskId)
                 break;
                 case PSS_PAGE_ABILITY:
                     if(sMonSummaryScreen->ModifyMode){
-                        if(canChangePokemonData()){
+                        if(canChangePokemonData() && !sMonSummaryScreen->expandedAbilityMode){
                             do {
                                 if (abilityNum != 0)
                                     abilityNum--;
@@ -2017,7 +2027,7 @@ static void Task_HandleInput(u8 taskId)
                 case PSS_PAGE_ABILITY:
                     //Ability Modifier
                     if(sMonSummaryScreen->ModifyMode){
-                        if(canChangePokemonData()){
+                        if(canChangePokemonData() && !sMonSummaryScreen->expandedAbilityMode){
                             do {
                                 if (abilityNum < NUM_ABILITY_SLOTS - 1)
                                     abilityNum++;
@@ -2154,22 +2164,14 @@ static void Task_HandleInput(u8 taskId)
             switch (sMonSummaryScreen->currPageIndex){
                 case PSS_PAGE_ABILITY:
                     if(sMonSummaryScreen->ModifyMode){
-                        //Change into extended info page
-                        if(sMonSummaryScreen->expandedAbilityMode){
-                            sMonSummaryScreen->expandedAbilityMode = FALSE;
-                            PrintAbilityAndInnates();
-                        }
-                        else{
-                            sMonSummaryScreen->expandedAbilityMode = TRUE;
-                            PrintExpandedAbilityAndInnates();
-                        }
-                        LoadCurrentPageTilemap();
+                        ChangeIntoExpandedAbilityMode();
                     }
                     else{
                         sMonSummaryScreen->currentAbilityIndex = 0;
                         sMonSummaryScreen->ModifyMode = TRUE;
                         sMonSummaryScreen->expandedAbilityMode = FALSE;
                         PrintAbilityAndInnates();
+                        PrintInfoBar(sMonSummaryScreen->currPageIndex, TRUE);
                     }
                     PlaySE(SE_SELECT);
                 break;
@@ -2205,15 +2207,24 @@ static void Task_HandleInput(u8 taskId)
                 BeginCloseSummaryScreen(taskId);
             }
             else {
-                sMonSummaryScreen->ModifyMode = !sMonSummaryScreen->ModifyMode;
                 switch (sMonSummaryScreen->currPageIndex) {
                     case PSS_PAGE_ABILITY:
-                        PrintAbilityAndInnates();
+                        if(sMonSummaryScreen->expandedAbilityMode)
+                            ChangeIntoExpandedAbilityMode();
+                        else{
+                            sMonSummaryScreen->currentAbilityIndex = 0;
+                            sMonSummaryScreen->ModifyMode = FALSE;
+                            sMonSummaryScreen->expandedAbilityMode = FALSE;
+                            PrintAbilityAndInnates();
+                            PrintInfoBar(sMonSummaryScreen->currPageIndex, TRUE);
+                        }
                     break;
                     case PSS_PAGE_MEMO:
+                        sMonSummaryScreen->ModifyMode = !sMonSummaryScreen->ModifyMode;
                         PrintMemoPage();
                     break;
                     case PSS_PAGE_SKILLS:
+                        sMonSummaryScreen->ModifyMode = !sMonSummaryScreen->ModifyMode;
                         if (!sMonSummaryScreen->isBoxMon)
                             CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
                         CalculateMonStats(&sMonSummaryScreen->currentMon);
@@ -2491,8 +2502,8 @@ static bool8 IsValidToViewInMulti(struct Pokemon* mon)
 static void ChangePage(u8 taskId, s8 delta)
 {
     s16 *data = gTasks[taskId].data;
-	
-	sMonSummaryScreen->ModifyMode = FALSE;
+
+    sMonSummaryScreen->ModifyMode = FALSE;
     sMonSummaryScreen->sCurrentModifyIndex = 0;
 
     if (sMonSummaryScreen->minPageIndex == sMonSummaryScreen->maxPageIndex)
@@ -2505,7 +2516,11 @@ static void ChangePage(u8 taskId, s8 delta)
         sMonSummaryScreen->currPageIndex += delta;
 	
 	LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
-    LZDecompressWram(sPageTilemaps[sMonSummaryScreen->currPageIndex], sMonSummaryScreen->bgTilemapBufferPage);
+
+    if(sMonSummaryScreen->expandedAbilityMode && sMonSummaryScreen->currPageIndex == PSS_PAGE_ABILITY)
+        LZDecompressWram(gSummaryScreenPageAbilityExpandedTilemap, sMonSummaryScreen->bgTilemapBufferPage);
+    else
+        LZDecompressWram(sPageTilemaps[sMonSummaryScreen->currPageIndex], sMonSummaryScreen->bgTilemapBufferPage);
     
     PlaySE(SE_SELECT);
     ClearWindowTilemap(PSS_LABEL_PANE_RIGHT);
@@ -4365,11 +4380,11 @@ static void BufferMonTrainerMemo(void)
     }
 }
 
-static const u8 sSummaryEVIcon[]         = INCBIN_U8("graphics/interface/summary_EVs_icon.4bpp");
-static const u8 sSummaryInfoPageIcon[]   = INCBIN_U8("graphics/interface/summary_info_page_icon.4bpp");
-static const u8 sSummaryNatureSlider[]   = INCBIN_U8("graphics/interface/summary_nature_slider.4bpp");
-static const u8 sSummaryAbilitySlider[]  = INCBIN_U8("graphics/summary_screen/summary_ability_cursor.4bpp");
-static const u8 sSummaryExpandedCursor[] = INCBIN_U8("graphics/summary_screen/summary_ability_cursor_num.4bpp");
+static const u8 sSummaryEVIcon[]               = INCBIN_U8("graphics/interface/summary_EVs_icon.4bpp");
+static const u8 sSummaryInfoPageIcon[]         = INCBIN_U8("graphics/interface/summary_info_page_icon.4bpp");
+static const u8 sSummaryNatureSlider[]         = INCBIN_U8("graphics/interface/summary_nature_slider.4bpp");
+static const u8 sSummaryAbilitySlider[]        = INCBIN_U8("graphics/summary_screen/summary_ability_cursor.4bpp");
+static const u8 sSummaryAbilitySlider_Innate[] = INCBIN_U8("graphics/summary_screen/summary_ability_cursor_innate.4bpp");
 
 static void BufferNatureString(void)
 {
@@ -5019,40 +5034,22 @@ static void PrintMoveNameAndPP(u8 moveIndex)
 
 static void PrintAbilityAndInnates(void)
 {
-    FillWindowPixelBuffer(PSS_LABEL_PANE_RIGHT, PIXEL_FILL(0));
-
-    if (sMonSummaryScreen->summary.isEgg)
+    if (sMonSummaryScreen->summary.isEgg){
+        FillWindowPixelBuffer(PSS_LABEL_PANE_RIGHT, PIXEL_FILL(0));
         BufferEggMemo();
+    }
+    else if(sMonSummaryScreen->expandedAbilityMode)
+        BufferMonPokemonExpandedAbilityAndInnates();
     else
         BufferMonPokemonAbilityAndInnates();
-
-    ScheduleBgCopyTilemapToVram(0);
-    PutWindowTilemap(PSS_LABEL_PANE_RIGHT);
-}
-
-static void PrintExpandedAbilityAndInnates(void)
-{
-    FillWindowPixelBuffer(PSS_LABEL_PANE_RIGHT, PIXEL_FILL(0));
-
-    if (sMonSummaryScreen->summary.isEgg)
-        BufferEggMemo();
-    else
-        BufferMonPokemonExpandedAbilityAndInnates();
-
-    ScheduleBgCopyTilemapToVram(0);
-    PutWindowTilemap(PSS_LABEL_PANE_RIGHT);
 }
 
 #define ABILITY_NAME_COLUMN_SIZE 147
 static void BufferMonPokemonExpandedAbilityAndInnates(void)
 {
     struct PokeSummary *sum = &sMonSummaryScreen->summary;
-	//u8 level = sum->level;
 	u8 y;
-    //bool8 isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2; //checks if you are looking into the summary screen for the enemy
     u16 abilityToShow = ABILITY_NONE;
-    //u16 L_Ability = ABILITY_NONE;
-    //u16 R_Ability = ABILITY_NONE;
     u8 offset;
     u8 font = FONT_NORMAL;
     u16 species = sum->species;
@@ -5075,28 +5072,37 @@ static void BufferMonPokemonExpandedAbilityAndInnates(void)
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(1, sMemoMiscTextColor);
     BufferCharacteristicString();
 	
-	y = 4;
+	y = 0;
+    
+    FillWindowPixelBuffer(PSS_LABEL_PANE_RIGHT, PIXEL_FILL(0));
 
     DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilityToShow].name);
     offset = GetStringCenterAlignXOffset(font, gStringVar4, ABILITY_NAME_COLUMN_SIZE);
-    PrintTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, offset, y + 2, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
+    PrintTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, offset, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
 
 	// Main Ability Description
     if(gAbilityTextData[abilityToShow].hasBeenDefined == TRUE)
-	    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityExpandedDescription[abilityToShow].expandedDescription);
+	    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityTextData[abilityToShow].expandedDescription);
     else
 	    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilityToShow]);
-    PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 20), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
+    PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
+    
+    ScheduleBgCopyTilemapToVram(0);
+    PutWindowTilemap(PSS_LABEL_PANE_RIGHT);
 }
+
+static u8 GetInnateUnlockLevel(u8 index);
+static void PrintAbilityDetails(u16 abilityId, u8 *x, u8 *y, const u8 *title, u8 unlockLevel);
 
 static void BufferMonPokemonAbilityAndInnates(void)
 {
     struct PokeSummary *sum = &sMonSummaryScreen->summary;
-	u8 level = sum->level;
-	u8 x, y, i;
-    bool8 isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2; //checks if you are looking into the summary screen for the enemy
+    u8 level = sum->level;
+    u8 x = 60, y = 4;
+    bool8 isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2; // Checks if looking at enemy summary screen
     u16 abilities[4] = {0};
     bool8 testInnateLock = FALSE;
+    u8 unlockLevel = FALSE;
 
     PopulateAbilities(abilities);
 
@@ -5104,117 +5110,62 @@ static void BufferMonPokemonAbilityAndInnates(void)
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, sMemoNatureTextColor);
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(1, sMemoMiscTextColor);
     BufferCharacteristicString();
-	
-	x = 60;
-	y = 4;
-	
-	if (sMonSummaryScreen->ModifyMode){
-        if(!isEnemyMon){
-		    BlitBitmapToWindow(PSS_LABEL_PANE_RIGHT, sSummaryAbilitySlider, (x - 8), 8, 96, 8);
-        }
+    
+    FillWindowPixelBuffer(PSS_LABEL_PANE_RIGHT, PIXEL_FILL(0));
 
-		BlitBitmapToWindow(PSS_LABEL_PANE_RIGHT, sSummaryExpandedCursor, 32, (sMonSummaryScreen->currentAbilityIndex * 32) + 4, 24, 16);
+    if (sMonSummaryScreen->ModifyMode) {
+        if (!isEnemyMon && sMonSummaryScreen->currentAbilityIndex != 0)
+            BlitBitmapToWindow(PSS_LABEL_PANE_RIGHT, sSummaryAbilitySlider_Innate, 32 + 17, (sMonSummaryScreen->currentAbilityIndex * 32) + 6, 104, 16);
+        else
+            BlitBitmapToWindow(PSS_LABEL_PANE_RIGHT, sSummaryAbilitySlider, 32 + 17, (sMonSummaryScreen->currentAbilityIndex * 32) + 6, 104, 16);
     }
 
-	// Main Ability
-	DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_MainAbility);
-    PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
-	// Name ---------------------------------------------------------------------------------------------------
-    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[0]].name);
-    PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
-	// Description ---------------------------------------------------------------------------------------------------
-	DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[0]]);
-    PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
+    // Main Ability
+    PrintAbilityDetails(abilities[0], &x, &y, sText_MainAbility, unlockLevel);
 
-	// Innates
-	for (i = 0; i < NUM_INNATE_PER_SPECIES; i++) {
-        switch (i) {
-            case 0:
-                if (abilities[1] != ABILITY_NONE) {
-                    y += 32;
-                    if ((level >= INNATE_1_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon) && !testInnateLock) {
-                        //Title
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
-                        // Name ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[1]].name);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
-                        // Description ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[1]]);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
-                    }
-                    else {
-                        //Title
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
-                        // Name ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[1]].name);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
-                        // Unlock Level ---------------------------------------------------------------------------------------------------
-                        ConvertIntToDecimalStringN(gStringVar1, INNATE_1_LEVEL, STR_CONV_MODE_LEFT_ALIGN, 3);
-                        StringExpandPlaceholders(gStringVar4, sText_InnateUnlock);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
-                    }
-                }
-            break;
-            case 1:
-                if (abilities[2] != ABILITY_NONE) {
-                    y += 32;
-                    if ((level >= INNATE_2_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon) && !testInnateLock) {
-                        //Title
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
-                        // Name ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[2]].name);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
-                        // Description ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[2]]);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
-                    }
-                    else {
-                        //Title
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
-                        // Name ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[2]].name);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
-                        // Unlock Level ---------------------------------------------------------------------------------------------------
-                        ConvertIntToDecimalStringN(gStringVar1, INNATE_2_LEVEL, STR_CONV_MODE_LEFT_ALIGN, 3);
-                        StringExpandPlaceholders(gStringVar4, sText_InnateUnlock);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
-                    }
-                }
-            break;
-            case 2:
-                if (abilities[3] != ABILITY_NONE) {
-                    y += 32;
-                    if ((level >= INNATE_3_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon) && !testInnateLock) {
-                        //Title
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
-                        // Name ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[3]].name);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
-                        // Description ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[3]]);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
-                    }
-                    else {
-                        //Title
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
-                        // Name ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[3]].name);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
-                        // Unlock Level ---------------------------------------------------------------------------------------------------
-                        ConvertIntToDecimalStringN(gStringVar1, INNATE_3_LEVEL, STR_CONV_MODE_LEFT_ALIGN, 3);
-                        StringExpandPlaceholders(gStringVar4, sText_InnateUnlock);
-                        PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
-                    }
-                }
-            break;
+    // Innates
+    for (u8 i = 0; i < NUM_INNATE_PER_SPECIES; i++) {
+        if (abilities[i + 1] != ABILITY_NONE) {
+            y += 32;
+
+            if((level >= GetInnateUnlockLevel(i) || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon) && !testInnateLock)
+                unlockLevel = FALSE;
+            else
+                unlockLevel = GetInnateUnlockLevel(i);
+            
+            PrintAbilityDetails(abilities[i + 1], &x, &y, sText_Innate, unlockLevel);
         }
-	}
+    }
+
+    ScheduleBgCopyTilemapToVram(0);
+    PutWindowTilemap(PSS_LABEL_PANE_RIGHT);
+}
+
+static void PrintAbilityDetails(u16 abilityId, u8 *x, u8 *y, const u8 *title, u8 unlockLevel)
+{
+    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, title);
+    PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, *y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
+
+    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilityId].name);
+    PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, *x, *y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
+
+    if (!unlockLevel)
+        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilityId]);
+    else{
+        ConvertIntToDecimalStringN(gStringVar1, unlockLevel, STR_CONV_MODE_LEFT_ALIGN, 3);
+        StringExpandPlaceholders(gStringVar4, sText_InnateUnlock);
+    }
+    PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, *y + 12, 0, PSS_COLOR_BLACK_GRAY_SHADOW);
+}
+
+static u8 GetInnateUnlockLevel(u8 index)
+{
+    switch (index) {
+        case 0: return INNATE_1_LEVEL;
+        case 1: return INNATE_2_LEVEL;
+        case 2: return INNATE_3_LEVEL;
+        default: return 0; // Default case
+    }
 }
 
 static void PrintEvolutionData(void)
@@ -7106,6 +7057,9 @@ static void SetExpBarSprites(void)
     }
 }
 
+const u8 sText_TitlePageAbility[]             = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Ability Info");
+const u8 sText_TitlePageAbilityModifyMode[]   = _("{DPAD_UPDOWN}Move {A_BUTTON}Info {B_BUTTON}Save");
+const u8 sText_TitlePageAbilityExpandedMode[] = _("{DPAD_UPDOWN}Move {A_BUTTON}Back");
 
 static void PrintInfoBar(u8 pageIndex, bool8 detailsShown)
 {
@@ -7125,10 +7079,14 @@ static void PrintInfoBar(u8 pageIndex, bool8 detailsShown)
             break;
 		case PSS_PAGE_ABILITY:
             StringCopy(gStringVar1, sText_TitleAbilities);
-            if(sMonSummaryScreen->ModifyMode)
-                StringCopy(gStringVar2, sText_TitlePageIVs);
+            if(sMonSummaryScreen->ModifyMode){
+                if(sMonSummaryScreen->expandedAbilityMode)
+                    StringCopy(gStringVar2, sText_TitlePageAbilityExpandedMode);
+                else
+                    StringCopy(gStringVar2, sText_TitlePageAbilityModifyMode);
+            }
             else
-                StringCopy(gStringVar2, sText_TitlePageAbilityModify);
+                StringCopy(gStringVar2, sText_TitlePageAbility);
             break;
         case PSS_PAGE_SKILLS:
             /*

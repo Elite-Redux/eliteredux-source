@@ -13,13 +13,13 @@ const struct AbilityTextData gAbilityTextData[ABILITIES_COUNT] = {
         .name = _("Blaze"),
         .description = _(
             "Boosts Fire-type moves by 1.2x\n"
-            "or 1.5x when under 1/3 HP."),
+            "or 1.5x when under 1/3 HP."
+        ),
         .expandedDescription = _(
-            "Boosts Fire-type moves by 1.2x,\n"
-            "or 1.5x when under 1/3 HP\n"
-            "this is an ability normally\n"
-            "given to fire-type\n"
-            "starter Pokémon like\n"
+            "Boosts Fire-type moves by 1.2x or\n"
+            "1.5x when under 1/3 HP this is an\n"
+            "ability normally given to fire\n"
+            "type starter Pokémon like\n"
             "charmander."
         ),
         .hasBeenDefined = TRUE,
