@@ -2135,6 +2135,7 @@ const u32 gSummaryScreenPageContestNewMoveTilemap[] = INCBIN_U32("graphics/summa
 const u32 gSummaryScreenPageConditionTilemap[] = INCBIN_U32("graphics/summary_screen/page_condition.bin.lz");
 // 7 - Battle Moves
 const u32 gSummaryScreenPageAbilityTilemap[] = INCBIN_U32("graphics/summary_screen/page_abilities.bin.lz");
+const u32 gSummaryScreenPageAbilityExpandedTilemap[] = INCBIN_U32("graphics/summary_screen/page_abilities_expanded.bin.lz");
 // 8 - Evolution Data
 const u32 gSummaryScreenPageEvolutionTilemap[] = INCBIN_U32("graphics/summary_screen/page_evolution.bin.lz");
 // 9 - Ribbons

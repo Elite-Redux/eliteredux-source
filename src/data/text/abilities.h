@@ -1,3 +1,31 @@
+const struct AbilityTextData gAbilityTextData[ABILITIES_COUNT] = {
+    [ABILITY_NONE]  = {
+        .name = _("---"),
+        .description = _(
+            "This is not an ability."
+        ),
+        .expandedDescription = _(
+            "This is not an ability."
+        ),
+        .hasBeenDefined = TRUE,
+    },
+    [ABILITY_BLAZE]  = {
+        .name = _("Blaze"),
+        .description = _(
+            "Boosts Fire-type moves by 1.2x\n"
+            "or 1.5x when under 1/3 HP."
+        ),
+        .expandedDescription = _(
+            "Boosts Fire-type moves by 1.2x or\n"
+            "1.5x when under 1/3 HP this is an\n"
+            "ability normally given to fire\n"
+            "type starter Pokémon like\n"
+            "charmander."
+        ),
+        .hasBeenDefined = TRUE,
+    },
+};
+
 static const u8 sAbilityNoneDescription[] = _("Empty ability slot.");
 static const u8 sAbilityStenchDescription[] = _("Attacks have a 10% chance to\ncause enemy to flinch.");
 static const u8 sAbilityDrizzleDescription[] = _("Summons rain on entry.\nLasts 8 turns.");
