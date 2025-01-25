@@ -31722,12 +31722,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_COPPERAJAH_MEGA] =
     {
-    .baseHP        =  122,
-    .baseAttack    =  160,
-    .baseDefense   =  89,
-    .baseSpeed     =  30,
-    .baseSpAttack  =  110,
-    .baseSpDefense =  89,
+    .baseHP         = 122,
+    .baseAttack     = 160,
+    .baseDefense    = 109,
+    .baseSpeed      = 20,
+    .baseSpAttack   = 80,
+    .baseSpDefense  = 109,
     .type1 = TYPE_STEEL,
     .type2 = TYPE_WATER,
     .catchRate = 255,
@@ -31740,7 +31740,7 @@ const struct BaseStats gBaseStats[] =
     .growthRate = GROWTH_MEDIUM_FAST,
     .eggGroup1 = EGG_GROUP_FIELD,
     .eggGroup2 = EGG_GROUP_MINERAL,
-	.abilities = {ABILITY_LONG_REACH, ABILITY_WATER_ABSORB, ABILITY_SAP_SIPPER},
+    .abilities      = {ABILITY_LONG_REACH, ABILITY_STALL, ABILITY_SAP_SIPPER},
 	.innates = {ABILITY_STEELY_SPIRIT, ABILITY_JUGGERNAUT, ABILITY_BATTLE_ARMOR},
     .bodyColor = BODY_COLOR_GREEN,
     .noFlip = FALSE,
