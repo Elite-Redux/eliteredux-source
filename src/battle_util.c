@@ -7102,7 +7102,7 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef) {
             break;
         case EFFECT_LASH_OUT:
             basePower += CountBattlerStatDecreases(battlerAtk) * 20;
-            if (basePower > 200) basePower = 200;
+            if (basePower > 140) basePower = 140;
             break;
         case EFFECT_STORED_POWER:
             basePower += (CountBattlerStatIncreases(battlerAtk, TRUE) * 20);
