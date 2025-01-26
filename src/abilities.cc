@@ -101,7 +101,9 @@ ENUM_OR(InfiltrateType)
 #define ON_EXIT int ability, int battler
 #define DELEGATE_EXIT ability, battler
 #define ON_CRIT int battler, int target, int move
-#define DELEGATE_ON_CRIT battler, target, move
+#define DELEGATE_CRIT battler, target, move
+#define ON_TYPE_EFFECTIVENESS int defType, int move, int moveType, u16 *mod
+#define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -1404,6 +1406,10 @@ static const Ability Normalize = {
             if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
         },
     .onMoveType = +[](ON_MOVE_TYPE) -> int { return TYPE_NORMAL + 1; },
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_NORMAL) CHECK(*mod) CHECK(*mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
+        return TRUE;
+    },
 };
 
 static const Ability Sniper = {
@@ -1593,6 +1599,13 @@ static const Ability Scrappy = {
     .name = $("Scrappy"),
     .description = $("Normal/Fighting can hit Ghosts.\n"
                      "Immune to Intimidate/Scare."),
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING)
+        CHECK(defType == TYPE_GHOST)
+        CHECK_NOT(*mod)
+        *mod = UQ_4_12(1.0);
+        return TRUE;
+    },
 };
 
 static const Ability StormDrain = {
@@ -2129,6 +2142,7 @@ static const Ability MagicBounce = {
     .description = $("Bounces back the effect of\n"
                      "status moves to their user."),
     .breakable = TRUE,
+    .magicBounce = TRUE,
 };
 
 static const Ability SapSipper = {
@@ -2787,6 +2801,12 @@ static const Ability Corrosion = {
     .name = $("Corrosion"),
     .description = $("Steel-types take Supereffective\n"
                      "from Poison. Can poison any type."),
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_POISON)
+        CHECK(defType == TYPE_STEEL)
+        *mod = UQ_4_12(2.0);
+        return TRUE;
+    },
 };
 
 static const Ability Comatose = {
@@ -3681,6 +3701,13 @@ static const Ability GroundShock = {
     .name = $("Ground Shock"),
     .description = $("Target Grounds aren't immune to\n"
                      "Electric but resist it instead."),
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_ELECTRIC)
+        CHECK(defType == TYPE_GROUND)
+        CHECK_NOT(*mod)
+        *mod = UQ_4_12(.5);
+        return TRUE;
+    },
 };
 
 static const Ability AncientIdol = {
@@ -4120,6 +4147,10 @@ static const Ability Overwhelm = {
     .name = $("Overwhelm"),
     .description = $("Hits Fairies with Dragon moves.\n"
                      "Immune to Intimidate and Scare."),
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_DRAGON) CHECK(defType == TYPE_FAIRY) CHECK_NOT(*mod) *mod = 1.0;
+        return TRUE;
+    },
 };
 
 static const Ability Scare = {
@@ -4391,6 +4422,12 @@ static const Ability Overcharge = {
     .name = $("Overcharge"),
     .description = $("Electric is super effective vs\n"
                      "Electric. Can paralyze Electric."),
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_ELECTRIC)
+        CHECK(defType == TYPE_ELECTRIC)
+        *mod = UQ_4_12(2.0);
+        return TRUE;
+    },
 };
 
 static const Ability ViolentRush = {
@@ -4463,6 +4500,12 @@ static const Ability MoltenDown = {
     .name = $("Molten Down"),
     .description = $("Fire-type is super effective\n"
                      "against Rock-type."),
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_FIRE)
+        CHECK(defType == TYPE_ROCK)
+        *mod = UQ_4_12(2.0);
+        return TRUE;
+    },
 };
 
 static const Ability HyperAggressive = {
@@ -5523,6 +5566,20 @@ static const Ability AngelsWrath = {
                 return ACCURACY_NO_RESULT;
         }
     },
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        if (move == MOVE_POISON_STING) {
+            CHECK(defType == TYPE_STEEL)
+            *mod = UQ_4_12(2.0);
+            return TRUE;
+        }
+
+        if (move == MOVE_ELECTROWEB) {
+            CHECK(defType == TYPE_GROUND)
+            *mod = UQ_4_12(2.0);
+            return TRUE;
+        }
+        return FALSE;
+    },
 };
 
 static const Ability PrismaticFur = {
@@ -5847,6 +5904,13 @@ static const Ability PhantomPain = {
     .name = $("Phantom Pain"),
     .description = $("Ghost type moves can hit normal\n"
                      "type pokemon for neutral damage."),
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_GHOST)
+        CHECK(defType == TYPE_NORMAL)
+        CHECK_NOT(*mod)
+        *mod = UQ_4_12(1.0);
+        return TRUE;
+    },
 };
 
 static const Ability Purgatory = {
@@ -5935,6 +5999,7 @@ static const Ability MagmaEater = {
     .name = $("Magma Eater"),
     .description = $("Predator + Molten Down."),
     .onBattlerFaints = SoulEater.onBattlerFaints,
+    .onTypeEffectiveness = MoltenDown.onTypeEffectiveness,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
@@ -6692,6 +6757,7 @@ static const Ability MindsEye = {
     .name = $("Mind's Eye"),
     .description = $("Hits Ghost-type Pokémon.\n"
                      "Accuracy can't be lowered."),
+    .onTypeEffectiveness = Scrappy.onTypeEffectiveness,
 };
 
 static const Ability BloodPrice = {
@@ -7956,6 +8022,9 @@ static const Ability LastStand = {
 static const Ability PyroclasticFlow = {
     .name = $("Pyroclastic Flow"),
     .description = $("Molten Down + Corrosion."),
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        return MoltenDown.onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS) || Corrosion.onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS);
+    },
 };
 
 static const Ability BloodBath = {
@@ -8663,6 +8732,7 @@ static const Ability BlindRage = {
     .name = $("Blind Rage"),
     .description = $("Scrappy + Mold Breaker."),
     .onEntry = MoldBreaker.onEntry,
+    .onTypeEffectiveness = Scrappy.onTypeEffectiveness,
 };
 
 static const Ability Slipstream = {
@@ -8919,6 +8989,7 @@ static const Ability Depravity = {
     .name = $("Depravity"),
     .description = $("Merciless + Overcharge."),
     .onCrit = Merciless.onCrit,
+    .onTypeEffectiveness = Overcharge.onTypeEffectiveness,
 };
 
 static const Ability Wildfire = {
@@ -9026,6 +9097,7 @@ static const Ability TrashHeap = {
     .description = $("Corrosion + Toxic Spill."),
     .onEntry = ToxicSpill.onEntry,
     .onExit = ToxicSpill.onExit,
+    .onTypeEffectiveness = Corrosion.onTypeEffectiveness,
 };
 
 static const Ability SludgyMix = {
@@ -9413,11 +9485,11 @@ static const Ability FaradayCage = {
     .breakable = TRUE,
 };
 
-// TODO: Corrosion
 static const Ability AcidicSlime = {
     .name = $("Acidic Slime"),
     .description = $("Corrosion + Poison STAB."),
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
+    .onTypeEffectiveness = Corrosion.onTypeEffectiveness,
 };
 
 static const Ability RoseGarden = {
@@ -9444,6 +9516,37 @@ static const Ability Qigong = {
     ATE_ABILITY(TYPE_FIGHTING),
     .onAccuracy = +[](ON_ACCURACY) { return ACCURACY_ALWAYS_HITS; },
     .onBattlerFaintsFor = Rampage.onBattlerFaintsFor,
+};
+
+static const Ability ConjurerOfDeceit = {
+    .name = $("Conjurer Of Deceit"),
+    .description = $("Magic Guard + Magic Bounce"),
+    .breakable = TRUE,
+    .magicGuard = TRUE,
+    .magicBounce = TRUE,
+};
+
+static const Ability DeepFreeze = {
+    .name = $("Deep Freeze"),
+    .description = $("Boosts Water and Ice by 1.25x.\n"
+                     "Halves Fire damage taken."),
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_WATER || moveType == TYPE_ICE) MUL(1.25);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIRE) RESISTANCE(.5);
+        },
+    .breakable = TRUE,
+};
+
+static const Ability SoulDevourer = {
+    .name = $("Soul Devourer"),
+    .description = $("Soul Eater + Phantom Pain"),
+    .onBattlerFaints = SoulEater.onBattlerFaints,
+    .onTypeEffectiveness = PhantomPain.onTypeEffectiveness,
+    .onBattlerFaintsFor = SoulEater.onBattlerFaintsFor,
 };
 
 const Ability gAbilities[] = {
@@ -10210,6 +10313,9 @@ const Ability gAbilities[] = {
     [ABILITY_ACIDIC_SLIME] = AcidicSlime,
     [ABILITY_ROSE_GARDEN] = RoseGarden,
     [ABILITY_QIGONG] = Qigong,
+    [ABILITY_CONJOURER_OF_DECEIT] = ConjurerOfDeceit,
+    [ABILITY_DEEP_FREEZE] = DeepFreeze,
+    [ABILITY_SOUL_DEVOURER] = SoulDevourer,
 };
 
 #pragma GCC diagnostic pop
