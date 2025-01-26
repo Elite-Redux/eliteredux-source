@@ -778,12 +778,26 @@
 #define ABILITY_STRIKER_PIXILATE 756 // Striker + Pixilate.
 #define ABILITY_DOOM_BLAST 757 // Boosts own Dark moves by 1.35x, takes 10% of dmg dealt as recoil.
 #define ABILITY_BRUTEFORCE 758 // Rock Head + Reckless
-#define ABILITY_FARADAYS_CAGE 759 // Shell Armor + Thunder Cage when hit by contact.
+#define ABILITY_FARADAY_CAGE 759 // Shell Armor + Thunder Cage when hit by contact.
 #define ABILITY_ACIDIC_SLIME 760 // Corrosion + Poison STAB.
 #define ABILITY_ROSE_GARDEN 761 // Sets 2 layers of Toxic Spikes on entry.
 #define ABILITY_QIGONG 762 // Can't miss. Fighting Spirit + Rampage.
+#define ABILITY_CONJOURER_OF_DECEIT 763 // magic guard + magic bounce
+#define ABILITY_DEEP_FREEZE 764 // boosts water and ice by 25% and halves fire damage taken
+#define ABILITY_SOUL_DEVOURER 765 // soul eater + phantom pain
+#define ABILITY_CHAMPIONS_ENTRANCE 766 // intimidate + violent rush
+#define ABILITY_PRESTO 767 // sound moves get +1 priority at full hp
+#define ABILITY_SAMBA 768 // striker + dancer
+#define ABILITY_JUNSHI_SANDA 769 // every move is effected by combat specialist, effectively every move gets a 30% boost from that ability
+#define ABILITY_GLADIATOR 770 // fighting type forest rage
+#define ABILITY_FORSAKEN_HEART 771 // physical attack soul heart
+#define ABILITY_RELENTLESS 772 // exploit weakness + merciless
+#define ABILITY_SOOTHSAYER 773 // all super effective moves against this pokemon become not very effective for 5 turns (once per battle prob best for this)
+#define ABILITY_CORRUPTED_MIND 774 // psychic moves used by this pokemon always hit super effectively
+#define ABILITY_FLAME_COAT 775 // toxic spill but for fire types + flash fire
+#define ABILITY_UNOWN_POWER 776 // mystic power + hidden power always hits super effectively
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_QIGONG + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_UNOWN_POWER + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

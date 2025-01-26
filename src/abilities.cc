@@ -100,6 +100,8 @@ ENUM_OR(InfiltrateType)
 #define DELEGATE_MOVE_TYPE ability, move, moveType, ateBoost
 #define ON_EXIT int ability, int battler
 #define DELEGATE_EXIT ability, battler
+#define ON_CRIT int battler, int target, int move
+#define DELEGATE_ON_CRIT battler, target, move
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -351,6 +353,8 @@ static const Ability BattleArmor = {
     .description = $("Immune to critical hits. Takes\n"
                      "20% less damage from all attacks."),
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.8); },
+    .onCrit = +[](ON_CRIT) { return NEVER_CRIT; },
+    .onCritFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
@@ -909,6 +913,10 @@ static const Ability HyperCutter = {
     .name = $("Hyper Cutter"),
     .description = $("Enemies can't lower Atk/Sp. Atk.\n"
                      "Crit rate of contact moves: +1."),
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(IsMoveMakingContact(move, battler))
+        return 1;
+    },
     .breakable = TRUE,
 };
 
@@ -1157,6 +1165,8 @@ static const Ability ShellArmor = {
     .description = $("Immune to critical hits. Takes\n"
                      "20% less damage from all attacks."),
     .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .onCrit = BattleArmor.onCrit,
+    .onCritFor = BattleArmor.onCritFor,
     .breakable = TRUE,
 };
 
@@ -1465,6 +1475,7 @@ static const Ability SuperLuck = {
     .name = $("Super Luck"),
     .description = $("Raises critical-hit ratio of own\n"
                      "moves by +1."),
+    .onCrit = +[](ON_CRIT) -> int { return 1; },
 };
 
 static const Ability Aftermath = {
@@ -2514,6 +2525,14 @@ static const Ability Merciless = {
     .name = $("Merciless"),
     .description = $("100% crit if targetting slowed,\n"
                      "poisoned, paralyzed, or bleeding foes."),
+    .onCrit = +[](ON_CRIT) -> int {
+        if (gBattleMons[target].status1 & STATUS1_PSN_ANY) return ALWAYS_CRIT;
+        if (gBattleMons[target].status1 & STATUS1_PARALYSIS) return ALWAYS_CRIT;
+        if (gBattleMons[target].status1 & STATUS1_BLEED) return ALWAYS_CRIT;
+        if (gBattleMons[target].statStages[STAT_SPEED] < DEFAULT_STAT_STAGE) return ALWAYS_CRIT;
+        if (GetBattlerHoldEffect(target, TRUE) == HOLD_EFFECT_IRON_BALL) return ALWAYS_CRIT;
+        return 0;
+    },
 };
 
 static const Ability ShieldsDown = {
@@ -3687,6 +3706,11 @@ static const Ability Perfectionist = {
         CHECK(gBattleMoves[move].power);
         return 1;
     },
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(gBattleMoves[move].power <= 50)
+        CHECK(gBattleMoves[move].power)
+        return 1;
+    },
 };
 
 static const Ability GrowingTooth = {
@@ -4169,7 +4193,9 @@ static const Ability BadLuck = {
         *accuracy *= .95;
         return ACCURACY_MULTIPLICATIVE;
     },
+    .onCrit = +[](ON_CRIT) -> int { return NEVER_CRIT; },
     .onAccuracyFor = APPLY_ON_FOE,
+    .onCritFor = APPLY_ON_FOE,
     .breakable = TRUE,
 };
 
@@ -4509,8 +4535,8 @@ static const Ability SolarFlare = {
     .description = $("Chloroplast + Immolate.\n"
                      "Fire moves gain STAB."),
     .onOffensiveMultiplier = Immolate.onOffensiveMultiplier,
-    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FIRE; },
     .onMoveType = Immolate.onMoveType,
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FIRE; },
     .chloroplast = TRUE,
 };
 
@@ -4616,6 +4642,10 @@ static const Ability PreciseFist = {
     .name = $("Precise Fist"),
     .description = $("Punching moves get +1 crit\n"
                      "and 5x effect chance."),
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(IS_IRON_FIST(battler, move))
+        return 1;
+    },
 };
 
 static const Ability Deadeye = {
@@ -5334,6 +5364,10 @@ static const Ability Ambush = {
     .name = $("Ambush"),
     .description = $("Guaranteed critical hit\n"
                      "on first turn."),
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(gVolatileStructs[battler].isFirstTurn)
+        return ALWAYS_CRIT;
+    },
 };
 
 static const Ability Atlas = {
@@ -6180,8 +6214,8 @@ static const Ability Enlightened = {
     .name = $("Enlightened"),
     .description = $("Emanate + Inner Focus."),
     .onOffensiveMultiplier = Emanate.onOffensiveMultiplier,
-    .onAccuracy = InnerFocus.onAccuracy,
     .onMoveType = Emanate.onMoveType,
+    .onAccuracy = InnerFocus.onAccuracy,
     .breakable = TRUE,
 };
 
@@ -6309,6 +6343,11 @@ static const Ability HeavenAsunder = {
     .name = $("Heaven Asunder"),
     .description = $("Spacial Rend always crits.\n"
                      "Ups crit level by +1."),
+    .onCrit =
+        +[](ON_CRIT) {
+            if (move == MOVE_SPACIAL_REND) return ALWAYS_CRIT;
+            return 1;
+        },
 };
 
 static const Ability PurifyingWaters = {
@@ -7935,6 +7974,8 @@ static const Ability BattleAura = {
     .name = $("Battle Aura"),
     .description = $("Sharply increases the critical\n"
                      "hit rate for all while on the field."),
+    .onCrit = +[](ON_CRIT) -> int { return 2; },
+    .onCritFor = APPLY_ON_ANY,
 };
 
 static const Ability Bloodlust = {
@@ -8439,6 +8480,7 @@ static const Ability WayOfPrecision = {
     .name = $("Way of Precision"),
     .description = $("Inner Focus + Precise Fist."),
     .onAccuracy = InnerFocus.onAccuracy,
+    .onCrit = PreciseFist.onCrit,
     .breakable = TRUE,
 };
 
@@ -8823,6 +8865,8 @@ static const Ability DreamState = {
     .description = $("Immune to critical hits. Takes\n"
                      "20% less damage from all attacks."),
     .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .onCrit = BattleArmor.onCrit,
+    .onCritFor = BattleArmor.onCritFor,
     .breakable = TRUE,
 };
 
@@ -8874,6 +8918,7 @@ static const Ability Hover = {
 static const Ability Depravity = {
     .name = $("Depravity"),
     .description = $("Merciless + Overcharge."),
+    .onCrit = Merciless.onCrit,
 };
 
 static const Ability Wildfire = {
@@ -9084,6 +9129,10 @@ static const Ability ApeShift = {
     .onEntry = +[](ON_ENTRY) -> int { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onEndTurn = +[](ON_END_TURN) -> int { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onDefender = +[](ON_DEFENDER) -> int { return ApeShiftHandler(battler, ABILITY_BS_CALL); },
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
+        return ALWAYS_CRIT;
+    },
     .randomizerBanned = TRUE,
 };
 
@@ -9289,6 +9338,8 @@ static const Ability CrustCoat = {
     .description = $("Immune to critical hits. Takes\n"
                      "20% less damage from all attacks."),
     .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .onCrit = BattleArmor.onCrit,
+    .onCritFor = BattleArmor.onCritFor,
     .breakable = TRUE,
 };
 
@@ -9319,7 +9370,7 @@ static const Ability StrikerPixilate = {
     .onMoveType = Pixilate.onMoveType,
 };
 
-//2.6
+// 2.6
 static const Ability DoomBlast = {
     .name = $("Doom Blast"),
     .description = $("Boosts own Dark moves by 1.35x,\n"
@@ -9336,7 +9387,7 @@ static const Ability DoomBlast = {
 };
 
 static const Ability Bruteforce = {
-    .name = $("Rock Head"),
+    .name = $("Brute Force"),
     .description = $("Rock Head + Reckless"),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
@@ -9345,8 +9396,8 @@ static const Ability Bruteforce = {
     .noRecoil = TRUE,
 };
 
-static const Ability FaradaysCage = {
-    .name = $("Faradays Cage"),
+static const Ability FaradayCage = {
+    .name = $("Faraday Cage"),
     .description = $("Shell Armor + 50BP Thunder\n"
                      "Cage when hit by contact."),
     .onDefender = +[](ON_DEFENDER) -> int {
@@ -9357,9 +9408,12 @@ static const Ability FaradaysCage = {
         return FALSE;
     },
     .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .onCrit = ShellArmor.onCrit,
+    .onCritFor = ShellArmor.onCritFor,
     .breakable = TRUE,
 };
 
+// TODO: Corrosion
 static const Ability AcidicSlime = {
     .name = $("Acidic Slime"),
     .description = $("Corrosion + Poison STAB."),
@@ -9367,15 +9421,16 @@ static const Ability AcidicSlime = {
 };
 
 static const Ability RoseGarden = {
-    .name = $("Watch Your Step"),
+    .name = $("Rose Garden"),
     .description = $("Spreads two layers of\n"
                      "Toxic Spikes on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int {
         u8 targetSide = GetBattlerSide(BATTLE_OPPOSITE(battler));
-        CHECK(gSideTimers[targetSide].toxicSpikesAmount < 3)
+        CHECK(gSideTimers[targetSide].toxicSpikesAmount < 2)
 
-        gSideTimers[targetSide].spikesAmount = min(gSideTimers[targetSide].toxicSpikesAmount + 2, 3);
+        gSideTimers[targetSide].toxicSpikesAmount = 2;
         gSideStatuses[targetSide] |= SIDE_STATUS_TOXIC_SPIKES;
+        // TODO: Fix display message
         BattleScriptPushCursorAndCallback(BattleScript_DoubleSpikesOnEntry);
         return TRUE;
     },
@@ -9385,7 +9440,10 @@ static const Ability Qigong = {
     .name = $("Qigong"),
     .description = $("Always hits. Fighting Spirit\n"
                      "+ Rampage."),
+    .onBattlerFaints = Rampage.onBattlerFaints,
     ATE_ABILITY(TYPE_FIGHTING),
+    .onAccuracy = +[](ON_ACCURACY) { return ACCURACY_ALWAYS_HITS; },
+    .onBattlerFaintsFor = Rampage.onBattlerFaintsFor,
 };
 
 const Ability gAbilities[] = {
@@ -10148,7 +10206,7 @@ const Ability gAbilities[] = {
     [ABILITY_STRIKER_PIXILATE] = StrikerPixilate,
     [ABILITY_DOOM_BLAST] = DoomBlast,
     [ABILITY_BRUTEFORCE] = Bruteforce,
-    [ABILITY_FARADAYS_CAGE] = FaradaysCage,
+    [ABILITY_FARADAY_CAGE] = FaradayCage,
     [ABILITY_ACIDIC_SLIME] = AcidicSlime,
     [ABILITY_ROSE_GARDEN] = RoseGarden,
     [ABILITY_QIGONG] = Qigong,

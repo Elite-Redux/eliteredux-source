@@ -77,6 +77,9 @@ typedef int (*AbilityOnStab)(int moveType);
 typedef int (*AbilityOnPriority)(int battler, int target, int move);
 typedef int (*AbilityOnMoveType)(int ability, int move, int moveType, u8* ateBoost);
 typedef int (*AbilityOnSwitchOut)(int ability, int battler);
+typedef int (*AbilityOnCrit)(int battler, int target, int move);
+#define NEVER_CRIT -2
+#define ALWAYS_CRIT 3
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -117,6 +120,7 @@ typedef struct Ability {
     const AbilityOnBattlerFaintsHandler onBattlerFaints;
     const AbilityOnParentalBondHandler onParentalBond;
     const AbilityOnOffensiveMultiplierHandler onOffensiveMultiplier;
+    const AbilityOnMoveType onMoveType;
     const AbilityOnDefensiveMultiplierHandler onDefensiveMultiplier;
     const AbilityOnStatHandler onStat;
     const AbilityOnAccuracyHandler onAccuracy;
@@ -125,13 +129,14 @@ typedef struct Ability {
     const AbilityOnChooseDefensiveStat onChooseDefensiveStat;
     const AbilityOnStab onStab;
     const AbilityOnPriority onPriority;
-    const AbilityOnMoveType onMoveType;
     const AbilityOnSwitchOut onExit;
+    const AbilityOnCrit onCrit;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;
     AbilityApplyOnWithTarget onAccuracyFor:5;
     AbilityApplyOn onStatFor:3;
+    AbilityApplyOnWithTarget onCritFor:5;
     u16 redirectType:5;
     u16 ruinStat:3;
     u16 noDamageHits:2;

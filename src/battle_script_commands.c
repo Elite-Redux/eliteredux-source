@@ -1522,56 +1522,42 @@ static const u8 sCriticalHitChance[] = {16, 8, 2, 1, 1};
 static const u8 sCriticalHitChance[] = {16, 8, 4, 3, 2};  // Gens 2,3,4,5
 #endif  // B_CRIT_CHANCE
 
-#define BENEFITS_FROM_LEEK(battler, holdEffect) \
-    ((holdEffect == HOLD_EFFECT_LEEK) &&        \
-     (GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_FARFETCHD || gBattleMons[battler].species == SPECIES_FARFETCHD_GALARIAN || gBattleMons[battler].species == SPECIES_SIRFETCHD))
+#define BENEFITS_FROM_LEEK(battler, holdEffect)                                                                     \
+    ((holdEffect == HOLD_EFFECT_LEEK) && (GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_FARFETCHD || \
+                                          gBattleMons[battler].species == SPECIES_FARFETCHD_GALARIAN || gBattleMons[battler].species == SPECIES_SIRFETCHD))
 s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbility) {
-    s32 critChance = 0;
     u32 holdEffectAtk = GetBattlerHoldEffect(battlerAtk, TRUE);
 
     if (gSideStatuses[battlerDef] & SIDE_STATUS_LUCKY_CHANT || gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT) {
-        critChance = -1;
+        return NEVER_CRIT;
     }
-    // Never Critical
-    else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_SHELL_ARMOR) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_BATTLE_ARMOR) ||
-             BATTLER_HAS_ABILITY(battlerDef, ABILITY_CRUST_COAT) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_DREAM_STATE) ||
-             IsAbilityOnSide(battlerDef, ABILITY_BAD_LUCK)) {
-        critChance = -1;
+
+    int critChance = 0;
+
+    for (int battler = 0; battler < gBattlersCount; battler++) {
+        ON_ABILITY(battler,
+                   TRUE,
+                   gAbilities[ability].onCrit && IsTargettedApplyOnFlagAppropriate(battlerAtk, battler, battlerAtk, battlerDef, gAbilities[ability].onCritFor),
+                   int result = gAbilities[ability].onCrit(battler, battlerDef, move);
+                   if (result == NEVER_CRIT) return NEVER_CRIT;
+                   critChance += result)
     }
+
     // Always Critical
-    else if (gStatuses3[battlerAtk] & STATUS3_LASER_FOCUS || gBattleMoves[move].effect == EFFECT_ALWAYS_CRIT || (gBattleMoves[move].alwaysCrit) ||
-             (gBattleMoves[move].effect == EFFECT_FLAIL && gBattleMons[battlerAtk].hp <= gBattleMons[battlerAtk].maxHP / 2) ||
-             ((BattlerHasAbility(battlerAtk, ABILITY_MERCILESS, TRUE) || BattlerHasAbility(battlerAtk, ABILITY_DEPRAVITY, TRUE)) &&
-              (gBattleMons[battlerDef].status1 & STATUS1_PSN_ANY || gBattleMons[battlerDef].statStages[STAT_SPEED] < DEFAULT_STAT_STAGE ||
-               gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS || gBattleMons[battlerDef].status1 & STATUS1_BLEED ||
-               GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_IRON_BALL)) ||
-             (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_AMBUSH) && gVolatileStructs[battlerAtk].isFirstTurn) || (gVolatileStructs[battlerAtk].showdownMode) ||
-             (move == MOVE_SPACIAL_REND && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER)) ||
-             (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) ||
-             (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_APE_SHIFT) && gBattleMons[battlerAtk].species == SPECIES_SLAKING_MEGA_APE_SHIFT)) {
-        critChance = -2;
-    } else {
-        // Boost Critical Chance
-        critChance = ((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0) + (holdEffectAtk == HOLD_EFFECT_SCOPE_LENS) +
-                     2 * (holdEffectAtk == HOLD_EFFECT_LUCKY_PUNCH && (GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_HAPPINY ||
-                                                                       GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_CHANSEY ||
-                                                                       GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_HAPPINY_REDUX ||
-                                                                       GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_CHANSEY_REDUX ||
-                                                                       GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_BLISSEY_REDUX ||
-                                                                       GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_BLISSEY)) +
-                     BENEFITS_FROM_LEEK(battlerAtk, holdEffectAtk) +
-                     (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PERFECTIONIST) > 0 && gBattleMoves[move].power <= 50 && gBattleMoves[move].power > 0) +
-                     (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HYPER_CUTTER) && IsMoveMakingContact(move, battlerAtk)) +
-                     (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PRECISE_FIST) > 0 && IS_IRON_FIST(battlerAtk, move)) +
-                     (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SUPER_LUCK) > 0) + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER) > 0) +
-                     2 * (IsAbilityOnField(ABILITY_BATTLE_AURA) > 0) +
-                     (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WAY_OF_PRECISION) > 0 && IS_IRON_FIST(battlerAtk, move)) +
-                     gVolatileStructs[battlerAtk].critBoost + (move == MOVE_VISE_GRIP);
-
-        if (critChance >= ARRAY_COUNT(sCriticalHitChance)) critChance = ARRAY_COUNT(sCriticalHitChance) - 2;
+    if (gStatuses3[battlerAtk] & STATUS3_LASER_FOCUS || gBattleMoves[move].effect == EFFECT_ALWAYS_CRIT || (gBattleMoves[move].alwaysCrit) ||
+        (gBattleMoves[move].effect == EFFECT_FLAIL && gBattleMons[battlerAtk].hp <= gBattleMons[battlerAtk].maxHP / 2) ||
+        (gVolatileStructs[battlerAtk].showdownMode)) {
+        return ALWAYS_CRIT;
     }
 
-    return critChance;
+    // Boost Critical Chance
+    critChance += ((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0) + (holdEffectAtk == HOLD_EFFECT_SCOPE_LENS) +
+                  2 * (holdEffectAtk == HOLD_EFFECT_LUCKY_PUNCH && (GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_HAPPINY ||
+                                                                    GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_CHANSEY ||
+                                                                    GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_BLISSEY)) +
+                  BENEFITS_FROM_LEEK(battlerAtk, holdEffectAtk) + gVolatileStructs[battlerAtk].critBoost + (move == MOVE_VISE_GRIP);
+
+    return min(critChance, ALWAYS_CRIT);
 }
 #undef BENEFITS_FROM_LEEK
 
@@ -4500,7 +4486,8 @@ static void Cmd_moveend(void) {
                 if (ItemBattleEffects(ITEMEFFECT_TARGET, gBattlerTarget, FALSE)) effect = TRUE;
                 gBattleScripting.moveendState++;
                 break;
-            case MOVEEND_MOVE_EFFECTS2_ON_EACH:  // For effects which should happen after target items, for example Knock Off after damage from Rocky Helmet.
+            case MOVEEND_MOVE_EFFECTS2_ON_EACH:  // For effects which should happen after target items, for example Knock Off after damage from Rocky
+                                                 // Helmet.
             {
                 int moveEffect = gBattleStruct->moveEffect2;
                 gBattleStruct->moveEffect2 = 0;
