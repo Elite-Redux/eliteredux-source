@@ -685,7 +685,7 @@
 #define ABILITY_FUNERAL_PYRE 663 // Non-Ghost and Dark-types take 1/4 damage every turn.
 #define ABILITY_FLAME_BUBBLE 664 // Water Bubble + Flaming Soul.
 #define ABILITY_ELEMENTAL_VORTEX 665 // Flash Fire + Water Absorb.
-#define ABILITY_SNOWY_WRATH 666 // Snow Warning + Whiteout.
+#define ABILITY_SNOWY_WRATH 666 // Snow Warning + Cryomancy.
 #define ABILITY_PATTERN_CHANGE 667 // Changes type depending on the move it's about to use.
 #define ABILITY_NO_TURNING_BACK 668 // Boosts all stats but can't retreat when below 1/2 max HP.
 #define ABILITY_FLAMMABLE_COAT 669 // Changes forms when using or hit by a Fire-type move.

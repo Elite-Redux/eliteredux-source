@@ -8267,9 +8267,8 @@ static const Ability ElementalVortex = {
 
 static const Ability SnowyWrath = {
     .name = $("Snowy Wrath"),
-    .description = $("Snow Warning + Whiteout."),
+    .description = $("Snow Warning + Cryomancy."),
     .onEntry = SnowWarning.onEntry,
-    .onStat = Whiteout.onStat,
 };
 
 static const Ability PatternChange = {
