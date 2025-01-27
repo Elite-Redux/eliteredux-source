@@ -81,6 +81,7 @@ typedef int (*AbilityOnCrit)(int battler, int target, int move);
 #define NEVER_CRIT -2
 #define ALWAYS_CRIT 3
 typedef int (*AbilityOnTypeEffectiveness)(int defType, int move, int moveType, u16* mod);
+typedef int (*AbilityOnCopyMove)(int ability, int battler, int attacker, int target, int move);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -133,6 +134,7 @@ typedef struct Ability {
     const AbilityOnSwitchOut onExit;
     const AbilityOnCrit onCrit;
     const AbilityOnTypeEffectiveness onTypeEffectiveness;
+    const AbilityOnCopyMove onCopyMove;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;
