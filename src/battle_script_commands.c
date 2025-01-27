@@ -4868,27 +4868,27 @@ static void Cmd_moveend(void) {
                 gBattleScripting.moveendState++;
                 break;
             case MOVEEND_DANCER:  // Special case because it's so annoying
-            {
-                int i, dancersCount = 0, include = 0;
-                u8 battlers[MAX_BATTLERS_COUNT];
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
+                    int i, dancersCount = 0, include = 0;
+                    u8 battlers[MAX_BATTLERS_COUNT];
 
-                // Get list of battlers that can dance
-                for (i = 0; i < gBattlersCount; i++) {
-                    FILTER(i != gBattlerAttacker)
-                    FILTER_NOT(gTurnStructs[i].dancerUsedMove)
-                    FILTER(IsBattlerAlive(i))
-                    include |= 1 << i;
-                    dancersCount++;
+                    // Get list of battlers that can dance
+                    for (i = 0; i < gBattlersCount; i++) {
+                        FILTER(i != gBattlerAttacker)
+                        FILTER_NOT(gTurnStructs[i].dancerUsedMove)
+                        FILTER(IsBattlerAlive(i))
+                        include |= 1 << i;
+                        dancersCount++;
+                    }
+
+                    SortBattlersExcept(battlers, TRUE, ~include);
+
+                    // Reverse order so faster battlers resolve first
+                    for (i = dancersCount - 1; i >= 0; i--) {
+                        // Out of turn moves do not use battle scripting so there's no point in pausing
+                        AbilityBattleEffects(ABILITYEFFECT_MOVE_END_OTHER, battlers[i], 0, 0, 0);
+                    }
                 }
-
-                SortBattlersExcept(battlers, TRUE, ~include);
-
-                // Reverse order so faster battlers resolve first
-                for (i = dancersCount - 1; i >= 0; i--) {
-                    // Out of turn moves do not use battle scripting so there's no point in pausing
-                    AbilityBattleEffects(ABILITYEFFECT_MOVE_END_OTHER, battlers[i], 0, 0, 0);
-                }
-            }
                 gBattleScripting.moveendState++;
                 break;
             case MOVEEND_EMERGENCY_EXIT:  // Special case, because moves hitting multiple opponents stop after switching out

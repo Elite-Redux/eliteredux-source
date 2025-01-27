@@ -4524,21 +4524,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
             break;
 
         case ABILITYEFFECT_MOVE_END_OTHER:  // Abilities that activate on *another* battler's moveend: Dancer, Soul-Heart, Receiver, Symbiosis
-            // Dancer
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_DANCER) && !(gBattleStruct->lastMoveFailed & 1 << gBattlerAttacker) && IsDance(gBattlerAttacker, move)) {
-                u8 target = GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker) ? gBattlerTarget : BATTLE_OPPOSITE(battler);
-                if (UseOutOfTurnAttack(battler, target, ABILITY_DANCER, gCurrentMove, 0)) return TRUE;
-            } else if (BattlerHasAbility(battler, ABILITY_PARROTING, TRUE) && (gBattleMoves[gCurrentMove].flags & FLAG_SOUND)) {
-                u8 target = GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker) ? gBattlerTarget : BATTLE_OPPOSITE(battler);
-                if (UseOutOfTurnAttack(battler, target, ABILITY_PARROTING, gCurrentMove, 0)) return TRUE;
-            } else if (BattlerHasAbility(battler, ABILITY_LUNAR_AFFINITY, TRUE) && gBattleMoves[gCurrentMove].lunar) {
-                u8 target = GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker) ? gBattlerTarget : BATTLE_OPPOSITE(battler);
-                if (UseOutOfTurnAttack(battler, target, ABILITY_LUNAR_AFFINITY, gCurrentMove, 0)) return TRUE;
-            } else if (BATTLER_HAS_ABILITY(battler, ABILITY_RETRIBUTION_BLOW)) {
-                if (GetBattlerSide(battler) != GetBattlerSide(gBattlerAttacker) && IsBattlerAlive(gBattlerAttacker) && DoesMoveBoostStats(gCurrentMove)) {
-                    if (UseOutOfTurnAttack(battler, gBattlerAttacker, ABILITY_RETRIBUTION_BLOW, MOVE_HYPER_BEAM, 0)) return TRUE;
-                }
-            }
+            u8 target = GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker) ? gBattlerTarget : BATTLE_OPPOSITE(battler);
+            ON_ABILITY(battler,
+                       FALSE,
+                       gAbilities[ability].onCopyMove,
+                       REQUIRE_NOT(gAbilities[ability].onCopyMove(ability, battler, gBattlerAttacker, target, gCurrentMove)))
 
             break;
         case ABILITYEFFECT_IMMUNITY:  // 5
@@ -8918,43 +8908,6 @@ bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags) {
 }
 
 bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler) { return ShouldSetMoldBreaker(battler, MOVE_NONE); }
-
-static bool8 DoesMoveBoostStats(u16 move) {
-    switch (gBattleMoves[move].effect) {
-        // Multiple Stats Up
-        case EFFECT_CALM_MIND:
-        // Attack
-        case EFFECT_ATTACK_UP:
-        case EFFECT_ATTACK_UP_2:
-        case EFFECT_HOWL:
-        // Defense
-        case EFFECT_DEFENSE_UP:
-        case EFFECT_DEFENSE_UP_2:
-        // Special Attack
-        case EFFECT_SPECIAL_ATTACK_UP:
-        case EFFECT_SPECIAL_ATTACK_UP_2:
-        case EFFECT_SPECIAL_ATTACK_UP_3:
-        // Special Defense
-        case EFFECT_SPECIAL_DEFENSE_UP_2:
-        // Speed
-        case EFFECT_SPEED_UP_HIT:
-        case EFFECT_SPEED_UP_2:
-            // Accuracy
-            // case EFFECT_ACCURACY_UP:
-            return TRUE;
-            break;
-        case EFFECT_ATTACK_UP_HIT:
-        case EFFECT_SPECIAL_DEFENSE_UP:
-        case EFFECT_SP_ATTACK_UP_HIT:
-        case EFFECT_DEFENSE_UP_HIT:
-        case EFFECT_ALL_STATS_UP_HIT:
-            if (gBattleMoves[move].secondaryEffectChance == 100 || (gBattleScripting.moveEffect & MOVE_EFFECT_CERTAIN) ||
-                FlagGet(FLAG_LAST_MOVE_SECONDARY_EFFECT_ACTIVATED))
-                return TRUE;
-            break;
-    }
-    return FALSE;
-}
 
 bool8 HasAnyLoweredStat(u8 battler) {
     u8 i;

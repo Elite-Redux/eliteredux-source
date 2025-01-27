@@ -104,6 +104,8 @@ ENUM_OR(InfiltrateType)
 #define DELEGATE_CRIT battler, target, move
 #define ON_TYPE_EFFECTIVENESS int defType, int move, int moveType, u16 *mod
 #define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
+#define ON_COPY_MOVE int ability, int battler, int attacker, int target, int move
+#define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -2855,6 +2857,10 @@ static const Ability Dancer = {
     .name = $("Dancer"),
     .description = $("Copies dance moves used by\n"
                      "others."),
+    .onCopyMove = +[](ON_COPY_MOVE) -> int {
+        CHECK(IsDance(attacker, move))
+        return UseOutOfTurnAttack(battler, target, ability, move, 0);
+    },
 };
 
 static const Ability Battery = {
@@ -5086,6 +5092,19 @@ static const Ability RetributionBlow = {
     .name = $("Retribution Blow"),
     .description = $("Uses Hyper Beam if any foe\n"
                      "uses an stat boosting move."),
+    .onReactive = +[](ON_REACTIVE) -> int {
+        CHECK_NOT(gTurnStructs[battler].dancerUsedMove)
+        CHECK(IsBattlerAlive(gBattlerAttacker))
+        CHECK(gCurrentTurnActionNumber < gBattlersCount || gProcessingExtraAttacks)
+        CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
+        for (int stat = STAT_ATK; stat < NUM_STATS; stat++) {
+            if (gBattleStruct->statChangesToCheck[gBattlerAttacker][stat - 1] > 0) {
+                UseOutOfTurnAttack(battler, gBattlerAttacker, ability, MOVE_HYPER_BEAM, 0);
+                return FALSE;
+            }
+        }
+        return FALSE;
+    },
 };
 
 static const Ability Fearmonger = {
@@ -6877,6 +6896,10 @@ static const Ability Parroting = {
     .description = $("Copies sound moves used by\n"
                      "others. Immune to sound."),
     .onImmune = Soundproof.onImmune,
+    .onCopyMove = +[](ON_COPY_MOVE) -> int {
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        return UseOutOfTurnAttack(battler, target, ability, move, 0);
+    },
     .breakable = TRUE,
     .isSoundproof = TRUE,
 };
@@ -8949,6 +8972,10 @@ static const Ability LunarAffinity = {
     .name = $("Lunar Affinity"),
     .description = $("Copies lunar moves used by\n"
                      "others."),
+    .onCopyMove = +[](ON_COPY_MOVE) -> int {
+        CHECK(gBattleMoves[move].lunar)
+        return UseOutOfTurnAttack(battler, target, ability, move, 0);
+    },
 };
 
 static const Ability FlameShield = {
@@ -9564,6 +9591,13 @@ static const Ability Presto = {
         CHECK(gBattleMoves[move].flags & FLAG_SOUND)
         return 1;
     },
+};
+
+static const Ability Samba = {
+    .name = $("Samba"),
+    .description = $("Striker + Dancer"),
+    .onOffensiveMultiplier = Striker.onOffensiveMultiplier,
+    .onCopyMove = Dancer.onCopyMove,
 };
 
 const Ability gAbilities[] = {
@@ -10335,6 +10369,7 @@ const Ability gAbilities[] = {
     [ABILITY_SOUL_DEVOURER] = SoulDevourer,
     [ABILITY_CHAMPIONS_ENTRANCE] = ChampionsEntrance,
     [ABILITY_PRESTO] = Presto,
+    [ABILITY_SAMBA] = Samba,
 };
 
 #pragma GCC diagnostic pop
