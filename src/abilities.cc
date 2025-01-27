@@ -7536,14 +7536,14 @@ static const Ability RadioJam = {
 
 static const Ability Ole = {
     .name = $("Olé!"),
-    .description = $("30% chance to evade single-\n"
+    .description = $("20% chance to evade single-\n"
                      "target moves."),
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
             case MOVE_TARGET_SELECTED:
             case MOVE_TARGET_USER_OR_SELECTED:
             case MOVE_TARGET_RANDOM:
-                *accuracy *= .7;
+                *accuracy *= .8;
                 return ACCURACY_MULTIPLICATIVE;
 
             default:
