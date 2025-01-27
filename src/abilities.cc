@@ -9579,7 +9579,7 @@ static const Ability SoulDevourer = {
 static const Ability ChampionsEntrance = {
     .name = $("Champion's Entrance"),
     .description = $("Intimidate + Violent Rush"),
-    .onEntry = +[](ON_ENTRY) -> int { Intimidate.onEntry(DELEGATE_ENTRY) | ViolentRush.onEntry(DELEGATE_ENTRY); },
+    .onEntry = +[](ON_ENTRY) -> int { return Intimidate.onEntry(DELEGATE_ENTRY) | ViolentRush.onEntry(DELEGATE_ENTRY); },
 };
 
 static const Ability Presto = {
