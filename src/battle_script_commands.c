@@ -1200,26 +1200,26 @@ static void Cmd_attackcanceler(void) {
         return;
     }
 
-    if (gRoundStructs[gBattlerTarget].bounceMove && gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED &&
-        !gRoundStructs[gBattlerAttacker].usesBouncedMove) {
-        gRoundStructs[gBattlerTarget].bounceMove = FALSE;
-        gRoundStructs[gBattlerTarget].usesBouncedMove = TRUE;
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PKMNMOVEBOUNCED;
-        if (BlocksPrankster(gCurrentMove, gBattlerTarget, gBattlerAttacker, TRUE)) {
-            // Opponent used a prankster'd magic coat -> reflected status move should fail against a dark-type attacker
-            gBattlerTarget = gBattlerAttacker;
-            gBattlescriptCurrInstr = BattleScript_MagicCoatBouncePrankster;
-        } else {
-            BattleScriptCall(BattleScript_MagicCoatBounce);
+    if (gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED && !gRoundStructs[gBattlerAttacker].usesBouncedMove) {
+        if (gRoundStructs[gBattlerTarget].bounceMove) {
+            gRoundStructs[gBattlerTarget].bounceMove = FALSE;
+            gRoundStructs[gBattlerTarget].usesBouncedMove = TRUE;
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PKMNMOVEBOUNCED;
+            if (BlocksPrankster(gCurrentMove, gBattlerTarget, gBattlerAttacker, TRUE)) {
+                // Opponent used a prankster'd magic coat -> reflected status move should fail against a dark-type attacker
+                gBattlerTarget = gBattlerAttacker;
+                gBattlescriptCurrInstr = BattleScript_MagicCoatBouncePrankster;
+            } else {
+                BattleScriptCall(BattleScript_MagicCoatBounce);
+            }
+            return;
         }
-        return;
-    } else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_MAGIC_BOUNCE) && gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED &&
-               !gRoundStructs[gBattlerAttacker].usesBouncedMove) {
-        gBattleScripting.abilityPopupOverwrite = ABILITY_MAGIC_BOUNCE;
-        gRoundStructs[gBattlerTarget].usesBouncedMove = TRUE;
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PKMNMOVEBOUNCEDABILITY;
-        BattleScriptCall(BattleScript_MagicCoatBounce);
-        return;
+
+        ON_ABILITY(gBattlerTarget, TRUE, gAbilities[ability].magicBounce, gBattleScripting.abilityPopupOverwrite = ability;
+                   gRoundStructs[gBattlerTarget].usesBouncedMove = TRUE;
+                   gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PKMNMOVEBOUNCEDABILITY;
+                   BattleScriptCall(BattleScript_MagicCoatBounce);
+                   return)
     }
 
     for (i = 0; i < gBattlersCount; i++) {

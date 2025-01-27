@@ -5270,7 +5270,8 @@ bool32 CanBeConfused(u8 battlerId) {
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
     if (BATTLER_HAS_ABILITY(battlerId, ABILITY_OWN_TEMPO) || BATTLER_HAS_ABILITY(battlerId, ABILITY_DISCIPLINE) ||
-        BATTLER_HAS_ABILITY(battlerId, ABILITY_ROCK_HEAD) || BATTLER_HAS_ABILITY(battlerId, ABILITY_BRUTEFORCE) || BATTLER_HAS_ABILITY(battlerId, ABILITY_STEEL_BARREL))
+        BATTLER_HAS_ABILITY(battlerId, ABILITY_ROCK_HEAD) || BATTLER_HAS_ABILITY(battlerId, ABILITY_BRUTEFORCE) ||
+        BATTLER_HAS_ABILITY(battlerId, ABILITY_STEEL_BARREL))
         return FALSE;
     return TRUE;
 }
@@ -8021,72 +8022,65 @@ int CalcMoveDamageAi(int move, int battlerAtk, int battlerDef, u8 *moveType, int
 void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities) {
     u16 mod = GetTypeModifier(moveType, defType, battlerAtk, battlerDef);
 
-    if (BattlerHasAbility(battlerAtk, ABILITY_NORMALIZE, TRUE) && moveType == TYPE_NORMAL && mod && mod < UQ_4_12(1.0)) {
-        mod = UQ_4_12(1.0);
-    } else if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET) {
-        mod = UQ_4_12(1.0);
-        if (recordAbilities) RecordItemEffectBattle(battlerDef, HOLD_EFFECT_RING_TARGET);
-    } else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT &&
-               mod == UQ_4_12(0.0)) {
-        mod = UQ_4_12(1.0);
-    } else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST &&
-               (BattlerHasAbility(battlerAtk, ABILITY_SCRAPPY, TRUE) || BattlerHasAbility(battlerAtk, ABILITY_BLIND_RAGE, TRUE) ||
-                BattlerHasAbility(battlerAtk, ABILITY_MINDS_EYE, TRUE)) &&
-               mod == UQ_4_12(0.0)) {
-        mod = UQ_4_12(1.0);
-    } else if (moveType == TYPE_GHOST && defType == TYPE_NORMAL && BattlerHasAbility(battlerAtk, ABILITY_PHANTOM_PAIN, TRUE)) {
-        mod = UQ_4_12(1.0);
-    } else if (mod == UQ_4_12(0.0) && moveType == TYPE_ELECTRIC && defType == TYPE_GROUND && BattlerHasAbility(battlerAtk, ABILITY_GROUND_SHOCK, TRUE)) {
-        mod = UQ_4_12(0.5);
-    } else if (moveType == TYPE_ELECTRIC && defType == TYPE_ELECTRIC &&
-               (BattlerHasAbility(battlerAtk, ABILITY_OVERCHARGE, TRUE) || BattlerHasAbility(battlerAtk, ABILITY_DEPRAVITY, TRUE))) {
-        // Has Innate Effect here too
-        mod = UQ_4_12(2.0);  // super-effective
-    }
-    // Molten Down
-    else if (moveType == TYPE_FIRE && defType == TYPE_ROCK &&
-             (BattlerHasAbility(battlerAtk, ABILITY_MOLTEN_DOWN, TRUE) || BattlerHasAbility(battlerAtk, ABILITY_PYROCLASTIC_FLOW, TRUE))) {
-        // Has Innate Effect here too
-        mod = UQ_4_12(2.0);  // super-effective
-    }
-    // Magma Eater
-    else if (moveType == TYPE_FIRE && defType == TYPE_ROCK && BattlerHasAbility(battlerAtk, ABILITY_MAGMA_EATER, TRUE)) {
-        // Has Innate Effect here too
-        mod = UQ_4_12(2.0);  // super-effective
-    } else if (moveType == TYPE_POISON && defType == TYPE_STEEL &&
-               (BattlerHasAbility(battlerAtk, ABILITY_CORROSION, TRUE) || BattlerHasAbility(battlerAtk, ABILITY_PYROCLASTIC_FLOW, TRUE) || BattlerHasAbility(battlerAtk, ABILITY_ACIDIC_SLIME, TRUE) ||
-                BattlerHasAbility(battlerAtk, ABILITY_TRASH_HEAP, TRUE))) {
-        // Has Innate Effect here too
-        mod = UQ_4_12(2.0);  // super-effective
-    } else if (move == MOVE_POISON_STING && defType == TYPE_STEEL && BattlerHasAbility(battlerAtk, ABILITY_ANGELS_WRATH, TRUE)) {
-        // Has Innate Effect here too
-        mod = UQ_4_12(2.0);  // super-effective
-    } else if (move == MOVE_ELECTROWEB && defType == TYPE_GROUND && BattlerHasAbility(battlerAtk, ABILITY_ANGELS_WRATH, TRUE)) {
-        // Has Innate Effect here too
-        mod = UQ_4_12(2.0);  // super-effective
-    } else if (mod == UQ_4_12(0.0) && moveType == TYPE_DRAGON && defType == TYPE_FAIRY && BattlerHasAbility(battlerAtk, ABILITY_OVERWHELM, TRUE)) {
-        // Has Innate Effect here too
-        mod = UQ_4_12(1.0);
-    } else if (moveType == TYPE_FAIRY && (defType == TYPE_POISON || defType == TYPE_STEEL) && GetBattlerSide(battlerDef) == B_SIDE_PLAYER &&
-               getMonotypeChampType() == TYPE_FAIRY) {
-        mod = UQ_4_12(2.0);  // super-effective
-    } else if (mod == UQ_4_12(0.0) && GetBattlerSide(battlerDef) == B_SIDE_PLAYER && getMonotypeChampType() == TYPE_DRAGON) {
-        mod = UQ_4_12(1.0);
-    } else if (getMonotypeChampType() == TYPE_ROCK) {
-        if (GetBattlerSide(battlerDef) == B_SIDE_PLAYER && defType == TYPE_ROCK && moveType == TYPE_ROCK)
+    int abilityModified = FALSE;
+    ON_ABILITY(
+        battlerAtk, FALSE, gAbilities[ability].onTypeEffectiveness, if (gAbilities[ability].onTypeEffectiveness(defType, move, moveType, &mod)) {
+            abilityModified = TRUE;
+            break;
+        })
+
+    if (!abilityModified) {
+        if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET) {
+            mod = UQ_4_12(1.0);
+            if (recordAbilities) RecordItemEffectBattle(battlerDef, HOLD_EFFECT_RING_TARGET);
+        } else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT &&
+                   mod == UQ_4_12(0.0)) {
+            mod = UQ_4_12(1.0);
+        } else if (moveType == TYPE_FAIRY && (defType == TYPE_POISON || defType == TYPE_STEEL) && GetBattlerSide(battlerDef) == B_SIDE_PLAYER &&
+                   getMonotypeChampType() == TYPE_FAIRY) {
             mod = UQ_4_12(2.0);  // super-effective
-        else if (GetBattlerSide(battlerDef) != B_SIDE_PLAYER && moveType == TYPE_ROCK)
-            mod = UQ_4_12(0.0);  // Immune
+        } else if (mod == UQ_4_12(0.0) && GetBattlerSide(battlerDef) == B_SIDE_PLAYER && getMonotypeChampType() == TYPE_DRAGON) {
+            mod = UQ_4_12(1.0);
+        } else if (getMonotypeChampType() == TYPE_ROCK) {
+            if (GetBattlerSide(battlerDef) == B_SIDE_PLAYER && defType == TYPE_ROCK && moveType == TYPE_ROCK)
+                mod = UQ_4_12(2.0);  // super-effective
+            else if (GetBattlerSide(battlerDef) != B_SIDE_PLAYER && moveType == TYPE_ROCK)
+                mod = UQ_4_12(0.0);  // Immune
+        }
     }
 
     if (moveType == TYPE_GROUND && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(0.0)) mod = UQ_4_12(1.0);
-    if (gBattleMoves[move].effect == EFFECT_IGNORE_TYPE_IMMUNITY && mod == UQ_4_12(0.0)) mod = UQ_4_12(1.0);
-    if (gBattleMoves[move].effect == EFFECT_SE_AGAINST_TYPE_HIT && defType == gBattleMoves[move].argument) mod = UQ_4_12(2.0);  // super-effective
-    if (gBattleMoves[move].effect == EFFECT_FREEZE_DRY && defType == TYPE_WATER) mod = UQ_4_12(2.0);                            // super-effective
-    if (gBattleMoves[move].effect == EFFECT_EXCALIBUR && defType == TYPE_DRAGON) mod = UQ_4_12(2.0);                            // super-effective
-    if (gBattleMoves[move].effect == EFFECT_ACID && defType == TYPE_STEEL) mod = UQ_4_12(2.0);
-    if (gBattleMoves[move].effect == EFFECT_SLUDGE && defType == TYPE_WATER) mod = UQ_4_12(2.0);
-    if (gBattleMoves[move].effect == EFFECT_POISON_GAS && defType == TYPE_FLYING) mod = UQ_4_12(2.0);
+
+    switch (gBattleMoves[move].effect) {
+        case EFFECT_IGNORE_TYPE_IMMUNITY:
+            if (mod == UQ_4_12(0.0)) mod = UQ_4_12(1.0);
+            break;
+
+        case EFFECT_SE_AGAINST_TYPE_HIT:
+            if (defType == gBattleMoves[move].argument) mod = UQ_4_12(2.0);
+            break;
+
+        case EFFECT_FREEZE_DRY:
+            if (defType == TYPE_WATER) mod = UQ_4_12(2.0);
+            break;
+
+        case EFFECT_EXCALIBUR:
+            if (defType == TYPE_DRAGON) mod = UQ_4_12(2.0);
+            break;
+
+        case EFFECT_ACID:
+            if (defType == TYPE_STEEL) mod = UQ_4_12(2.0);
+            break;
+
+        case EFFECT_SLUDGE:
+            if (defType == TYPE_WATER) mod = UQ_4_12(2.0);
+            break;
+
+        case EFFECT_POISON_GAS:
+            if (defType == TYPE_FLYING) mod = UQ_4_12(2.0);
+            break;
+    }
+
     if (moveType == TYPE_FIRE && gVolatileStructs[battlerDef].tarShot) mod = UQ_4_12(2.0);  // super-effective
 
     // WEATHER_STRONG_WINDS weakens Super Effective moves against Flying-type Pokémon
