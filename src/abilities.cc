@@ -3853,7 +3853,7 @@ static const Ability Earthbound = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_GROUND),
 };
 
-static const Ability FightSpirit = {
+static const Ability FightingSpirit = {
     .name = $("Fighting Spirit"),
     .description = $("Normal-type moves become Fight.-\n"
                      "type moves and get a 1.1x boost."),
@@ -9478,7 +9478,7 @@ static const Ability FaradayCage = {
         UseOutOfTurnAttack(battler, attacker, ability, MOVE_THUNDER_CAGE, 50);
         return FALSE;
     },
-    .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .onDefensiveMultiplier = ShellArmor.onDefensiveMultiplier,
     .onCrit = ShellArmor.onCrit,
     .onCritFor = ShellArmor.onCritFor,
     .breakable = TRUE,
@@ -9512,7 +9512,8 @@ static const Ability Qigong = {
     .description = $("Always hits. Fighting Spirit\n"
                      "+ Rampage."),
     .onBattlerFaints = Rampage.onBattlerFaints,
-    ATE_ABILITY(TYPE_FIGHTING),
+    .onOffensiveMultiplier = FightingSpirit.onOffensiveMultiplier,
+    .onMoveType = FightingSpirit.onMoveType,
     .onAccuracy = +[](ON_ACCURACY) { return ACCURACY_ALWAYS_HITS; },
     .onBattlerFaintsFor = Rampage.onBattlerFaintsFor,
 };
@@ -9546,6 +9547,23 @@ static const Ability SoulDevourer = {
     .onBattlerFaints = SoulEater.onBattlerFaints,
     .onTypeEffectiveness = PhantomPain.onTypeEffectiveness,
     .onBattlerFaintsFor = SoulEater.onBattlerFaintsFor,
+};
+
+static const Ability ChampionsEntrance = {
+    .name = $("Champion's Entrance"),
+    .description = $("Intimidate + Violent Rush"),
+    .onEntry = +[](ON_ENTRY) -> int { Intimidate.onEntry(DELEGATE_ENTRY) | ViolentRush.onEntry(DELEGATE_ENTRY); },
+};
+
+static const Ability Presto = {
+    .name = $("Presto"),
+    .description = $("Sound moves get +1 priority\n"
+                     "at full HP."),
+    .onPriority = +[](ON_PRIORITY) -> int {
+        CHECK(BATTLER_MAX_HP(battler))
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        return 1;
+    },
 };
 
 const Ability gAbilities[] = {
@@ -9849,7 +9867,7 @@ const Ability gAbilities[] = {
     [ABILITY_AMPHIBIOUS] = Amphibious,
     [ABILITY_GROUNDED] = Grounded,
     [ABILITY_EARTHBOUND] = Earthbound,
-    [ABILITY_FIGHT_SPIRIT] = FightSpirit,
+    [ABILITY_FIGHT_SPIRIT] = FightingSpirit,
     [ABILITY_FELINE_PROWESS] = FelineProwess,
     [ABILITY_COIL_UP] = CoilUp,
     [ABILITY_FOSSILIZED] = Fossilized,
@@ -10315,6 +10333,8 @@ const Ability gAbilities[] = {
     [ABILITY_CONJOURER_OF_DECEIT] = ConjurerOfDeceit,
     [ABILITY_DEEP_FREEZE] = DeepFreeze,
     [ABILITY_SOUL_DEVOURER] = SoulDevourer,
+    [ABILITY_CHAMPIONS_ENTRANCE] = ChampionsEntrance,
+    [ABILITY_PRESTO] = Presto,
 };
 
 #pragma GCC diagnostic pop
