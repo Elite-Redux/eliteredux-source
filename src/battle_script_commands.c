@@ -1563,10 +1563,10 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
 
 s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, u32 move) {
     s32 critChanceIndex = CalcCritChanceStage(battlerAtk, battlerDef, move, FALSE);
-    if (critChanceIndex < 0)
+    if (critChanceIndex <= NEVER_CRIT)
         return -1;
     else
-        return sCriticalHitChance[critChanceIndex];
+        return sCriticalHitChance[min(critChanceIndex, ALWAYS_CRIT)];
 }
 
 static void Cmd_critcalc(void) {
@@ -1575,9 +1575,9 @@ static void Cmd_critcalc(void) {
 
     if (gBattleTypeFlags & (BATTLE_TYPE_WALLY_TUTORIAL | BATTLE_TYPE_FIRST_BATTLE))
         gIsCriticalHit = FALSE;
-    else if (critChance == -1)
+    else if (critChance <= NEVER_CRIT)
         gIsCriticalHit = FALSE;
-    else if (critChance == -2)
+    else if (critChance >= ALWAYS_CRIT)
         gIsCriticalHit = TRUE;
     else if (Random() % sCriticalHitChance[critChance] == 0)
         gIsCriticalHit = TRUE;
