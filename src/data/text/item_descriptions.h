@@ -4232,3 +4232,28 @@ static const u8 sMienshaoiteDesc[] = _(
     "This stone enables\n"
     "Mienshao to Mega\n"
     "Evolve in battle.");
+
+static const u8 sGoodriteDesc[] = _(
+    "This stone enables\n"
+    "Goodra to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sRoseradeiteDesc[] = _(
+    "This stone enables\n"
+    "Roserade to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sSlowkingiteGDesc[] = _(
+    "This stone enables\n"
+    "Slowking-G to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sSlowbroniteGDesc[] = _(
+    "This stone enables\n"
+    "Slowbro-G to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sArcaniteDesc[] = _(
+    "This stone enables\n"
+    "Arcanine to Mega\n"
+    "Evolve in battle.");
