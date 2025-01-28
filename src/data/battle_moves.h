@@ -510,7 +510,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .priority = 1,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MAKES_CONTACT | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_TWINEEDLE] =
@@ -12512,6 +12512,12 @@ const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES] = {
         .ability = ABILITY_GLEAM_EYES,
         .numStatsLowered = 1,
         .statsLowered = {STAT_SPATK, 0, 0},
+        .targetBoth = TRUE,
+    },
+    [I_CLONE_CHAMPIONS_ENTRANCE] = {
+        .ability = ABILITY_CHAMPIONS_ENTRANCE,
+        .numStatsLowered = 1,
+        .statsLowered = {STAT_ATK, 0, 0},
         .targetBoth = TRUE,
     },
 };

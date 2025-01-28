@@ -1200,26 +1200,26 @@ static void Cmd_attackcanceler(void) {
         return;
     }
 
-    if (gRoundStructs[gBattlerTarget].bounceMove && gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED &&
-        !gRoundStructs[gBattlerAttacker].usesBouncedMove) {
-        gRoundStructs[gBattlerTarget].bounceMove = FALSE;
-        gRoundStructs[gBattlerTarget].usesBouncedMove = TRUE;
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PKMNMOVEBOUNCED;
-        if (BlocksPrankster(gCurrentMove, gBattlerTarget, gBattlerAttacker, TRUE)) {
-            // Opponent used a prankster'd magic coat -> reflected status move should fail against a dark-type attacker
-            gBattlerTarget = gBattlerAttacker;
-            gBattlescriptCurrInstr = BattleScript_MagicCoatBouncePrankster;
-        } else {
-            BattleScriptCall(BattleScript_MagicCoatBounce);
+    if (gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED && !gRoundStructs[gBattlerAttacker].usesBouncedMove) {
+        if (gRoundStructs[gBattlerTarget].bounceMove) {
+            gRoundStructs[gBattlerTarget].bounceMove = FALSE;
+            gRoundStructs[gBattlerTarget].usesBouncedMove = TRUE;
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PKMNMOVEBOUNCED;
+            if (BlocksPrankster(gCurrentMove, gBattlerTarget, gBattlerAttacker, TRUE)) {
+                // Opponent used a prankster'd magic coat -> reflected status move should fail against a dark-type attacker
+                gBattlerTarget = gBattlerAttacker;
+                gBattlescriptCurrInstr = BattleScript_MagicCoatBouncePrankster;
+            } else {
+                BattleScriptCall(BattleScript_MagicCoatBounce);
+            }
+            return;
         }
-        return;
-    } else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_MAGIC_BOUNCE) && gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED &&
-               !gRoundStructs[gBattlerAttacker].usesBouncedMove) {
-        gBattleScripting.abilityPopupOverwrite = ABILITY_MAGIC_BOUNCE;
-        gRoundStructs[gBattlerTarget].usesBouncedMove = TRUE;
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PKMNMOVEBOUNCEDABILITY;
-        BattleScriptCall(BattleScript_MagicCoatBounce);
-        return;
+
+        ON_ABILITY(gBattlerTarget, TRUE, gAbilities[ability].magicBounce, gBattleScripting.abilityPopupOverwrite = ability;
+                   gRoundStructs[gBattlerTarget].usesBouncedMove = TRUE;
+                   gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PKMNMOVEBOUNCEDABILITY;
+                   BattleScriptCall(BattleScript_MagicCoatBounce);
+                   return)
     }
 
     for (i = 0; i < gBattlersCount; i++) {
@@ -4868,27 +4868,27 @@ static void Cmd_moveend(void) {
                 gBattleScripting.moveendState++;
                 break;
             case MOVEEND_DANCER:  // Special case because it's so annoying
-            {
-                int i, dancersCount = 0, include = 0;
-                u8 battlers[MAX_BATTLERS_COUNT];
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
+                    int i, dancersCount = 0, include = 0;
+                    u8 battlers[MAX_BATTLERS_COUNT];
 
-                // Get list of battlers that can dance
-                for (i = 0; i < gBattlersCount; i++) {
-                    FILTER(i != gBattlerAttacker)
-                    FILTER_NOT(gTurnStructs[i].dancerUsedMove)
-                    FILTER(IsBattlerAlive(i))
-                    include |= 1 << i;
-                    dancersCount++;
+                    // Get list of battlers that can dance
+                    for (i = 0; i < gBattlersCount; i++) {
+                        FILTER(i != gBattlerAttacker)
+                        FILTER_NOT(gTurnStructs[i].dancerUsedMove)
+                        FILTER(IsBattlerAlive(i))
+                        include |= 1 << i;
+                        dancersCount++;
+                    }
+
+                    SortBattlersExcept(battlers, TRUE, ~include);
+
+                    // Reverse order so faster battlers resolve first
+                    for (i = dancersCount - 1; i >= 0; i--) {
+                        // Out of turn moves do not use battle scripting so there's no point in pausing
+                        AbilityBattleEffects(ABILITYEFFECT_MOVE_END_OTHER, battlers[i], 0, 0, 0);
+                    }
                 }
-
-                SortBattlersExcept(battlers, TRUE, ~include);
-
-                // Reverse order so faster battlers resolve first
-                for (i = dancersCount - 1; i >= 0; i--) {
-                    // Out of turn moves do not use battle scripting so there's no point in pausing
-                    AbilityBattleEffects(ABILITYEFFECT_MOVE_END_OTHER, battlers[i], 0, 0, 0);
-                }
-            }
                 gBattleScripting.moveendState++;
                 break;
             case MOVEEND_EMERGENCY_EXIT:  // Special case, because moves hitting multiple opponents stop after switching out
