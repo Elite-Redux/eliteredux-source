@@ -767,6 +767,9 @@ const u8 sStartMenu_IconGfx_Pokemon[]   	 = INCBIN_U8("graphics/ui_menus/start_m
 const u8 sStartMenu_IconGfx_PokeNav[]   	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_pokenav.4bpp");
 const u8 sStartMenu_IconGfx_Save[]   	 	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_save.4bpp");
 const u8 sStartMenu_IconGfx_Skills[]   		 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_skills.4bpp");
+const u8 sStartMenu_IconGfx_Use_PC[]   		 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_pss.4bpp");
+const u8 sStartMenu_IconGfx_Info[]   		 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_info.4bpp");
+const u8 sStartMenu_IconGfx_Debug[]   		 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_debug.4bpp");
 
 const u8 sStartMenu_IconGfx_Achievements_Selected[]  = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_achievements_selected.4bpp");
 const u8 sStartMenu_IconGfx_Bag_Selected[]   		 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_bag_selected.4bpp");
@@ -779,6 +782,9 @@ const u8 sStartMenu_IconGfx_Pokemon_Selected[]   	 = INCBIN_U8("graphics/ui_menu
 const u8 sStartMenu_IconGfx_PokeNav_Selected[]   	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_pokenav_selected.4bpp");
 const u8 sStartMenu_IconGfx_Save_Selected[]   	 	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_save_selected.4bpp");
 const u8 sStartMenu_IconGfx_Skills_Selected[]   	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_skills_selected.4bpp");
+const u8 sStartMenu_IconGfx_Use_PC_Selected[]   	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_pss_selected.4bpp");
+const u8 sStartMenu_IconGfx_Info_Selected[]   	 	= INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_info_selected.4bpp");
+const u8 sStartMenu_IconGfx_Debug_Selected[]   	 	= INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_debug_selected.4bpp");
 
 static const u8 sStartMenuHeldItem_Gfx[]   		 = INCBIN_U8("graphics/ui_menus/start_menu/icons/held_item.4bpp");
 static const u8 sStartMenuStatus_Burn_Gfx[]      = INCBIN_U8("graphics/ui_menus/start_menu/icons/status_burn.4bpp");
@@ -832,10 +838,10 @@ static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS]
     {
         .title = _("Use the PC"),
         .description = _(
-			"See all your completed\n"
-			"Achievements, get your\n"
-			"rewards or see what you\n"
-			"need to complete."
+			"Open the Pokemon\n"
+			"Storage System without\n"
+			"having to go to any\n"
+			"Pokemon Center."
 		),
     },
 	[START_MENU_ACTION_BAG] =
@@ -872,10 +878,10 @@ static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS]
     {
         .title = _("Information"),
         .description = _(
-			"Change your settings,\n"
-			"character colors,\n"
-			"bike type or disable\n"
-			"stuff you don't like."
+			"See some in-game,\n"
+			"changes and tips to\n"
+			"make your adventure\n"
+			"easier."
 		),
     },
 	[START_MENU_ACTION_DEXNAV] =
@@ -893,10 +899,10 @@ static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS]
     {
         .title = _("Debug"),
         .description = _(
-			"Power Up your trainer\n"
-			"skills to give you an\n"
-			"advantage in your\n"
-			"adventure."
+			"Open some developer\n"
+			"options that let you\n"
+			"cheat anything into\n"
+			"the game."
 		),
     },
     #endif
@@ -1032,7 +1038,7 @@ const u8 sText_Help_Bar_Disable[] = _("Disable");
 const u8 sText_Help_Bar_Use[]     = _("Use");
 const u8 sText_Help_Bar_Unmount[] = _("Dismount");
 
-const u8 sText_Help_Bar[]         = _("{START_BUTTON} Save {L_BUTTON} {STR_VAR_2} Bike {R_BUTTON} {STR_VAR_1} Auto Run");
+const u8 sText_Help_Bar[]         = _("{START_BUTTON} Save {L_BUTTON} {STR_VAR_2} Repel {R_BUTTON} {STR_VAR_1} Auto Run");
 const u8 sText_Help_Bar_No_Bike[] = _("{START_BUTTON} Save {R_BUTTON} {STR_VAR_1} Auto Run");
 
 const u8 sText_Message_Test[] = _(
@@ -1103,6 +1109,7 @@ static void PrintToWindow(void)
 	u8 minutes   = gLocalTime.minutes;
 	u8 font      = FONT_SMALL_NARROW;
 	u8 fontColor = FONT_BLACK_2;
+	bool8 isRepelEnabled = gSaveBlock2Ptr->permanentRepel;
 	
 	FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
 
@@ -1162,16 +1169,16 @@ static void PrintToWindow(void)
 			break;
 			case START_MENU_ACTION_PC:
 				if(j == sMenuDataPtr->cursorRowY)
-					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Achievements_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
+					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Use_PC_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 				else
-					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Achievements, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
+					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Use_PC, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 			break;
 			#ifdef DEBUG_BUILD
 			case START_MENU_ACTION_DEBUG:
 				if(j == sMenuDataPtr->cursorRowY)
-					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Skills_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
+					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Debug_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 				else
-					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Skills, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
+					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Debug, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 			break;
     		#endif
 			case START_MENU_ACTION_POKENAV:
@@ -1187,6 +1194,11 @@ static void PrintToWindow(void)
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Options, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 			break;
 			case START_MENU_ACTION_GUIDE:
+				if(j == sMenuDataPtr->cursorRowY)
+					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Info_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
+				else
+					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Info, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
+			break;
 			case START_MENU_ACTION_SAVE:
 				if(j == sMenuDataPtr->cursorRowY)
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Save_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
@@ -1214,15 +1226,12 @@ static void PrintToWindow(void)
 	else
 		StringCopy(gStringVar1, sText_Help_Bar_Disable);
 
-	if((gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_MACH_BIKE) || (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_ACRO_BIKE))
-		StringCopy(gStringVar2, sText_Help_Bar_Unmount);
+	if(!isRepelEnabled)
+		StringCopy(gStringVar2, sText_Help_Bar_Enable);
 	else
-		StringCopy(gStringVar2, sText_Help_Bar_Use);
+		StringCopy(gStringVar2, sText_Help_Bar_Disable);
 
-	if(CanUseBikeFromStartMenu())
-		StringExpandPlaceholders(gStringVar4, sText_Help_Bar);
-	else
-		StringExpandPlaceholders(gStringVar4, sText_Help_Bar_No_Bike);
+	StringExpandPlaceholders(gStringVar4, sText_Help_Bar);
 	AddTextPrinterParameterized4(windowId, font, (x*8)+4, (y*8), 0, 0, sMenuWindowFontColors[FONT_WHITE_2], 0xFF, gStringVar4);
 	
 	//Current Option Description
@@ -1829,15 +1838,8 @@ static void Task_MenuMain(u8 taskId)
 	}
 	
 	if (JOY_NEW(L_BUTTON)){
-		if(CanUseBikeFromStartMenu()){
-			PlaySE(SE_SELECT);
-			BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-			gTasks[taskId].func = Task_MenuTurnOff_Bike;
-		}
-		else{
-			PlaySE(SE_BOO);
-			sMenuDataPtr->CurrentMessage = MESSAGE_CANT_USE_BIKE;
-		}
+		PlaySE(SE_SELECT);
+		gSaveBlock2Ptr->permanentRepel = !gSaveBlock2Ptr->permanentRepel;
 		PrintToWindow();
 	}
 	

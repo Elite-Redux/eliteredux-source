@@ -107,6 +107,7 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->optionsBattleSceneOff = FALSE;
     gSaveBlock2Ptr->regionMapZoom = FALSE;
     gSaveBlock2Ptr->optionsHpBarSpeed = OPTIONS_TEXT_SPEED_MID;
+    gSaveBlock2Ptr->startMenuPaletteNum = MENU_COLOR_DARK;
 }
 
 static void ClearPokedexFlags(void)
