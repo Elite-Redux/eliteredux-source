@@ -10307,7 +10307,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BERRY_SMASH] =
     {
         .effect = EFFECT_BERRY_SMASH,
-        .power = 50,
+        .power = 70,
         .type = TYPE_GRASS,
         .accuracy = 100,
         .pp = 5,
