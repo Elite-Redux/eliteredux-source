@@ -1995,7 +1995,8 @@ static const Ability Regenerator = {
     .description = $("Heals 1/3 of max HP upon\n"
                      "switching out."),
     .onExit = +[](ON_EXIT) -> int {
-        CHECK(IsBattlerAlive(battler)) CHECK(BATTLER_MAX_HP(battler));
+        CHECK(IsBattlerAlive(battler))
+        CHECK_NOT(BATTLER_MAX_HP(battler))
         BattleScriptCall(BattleScript_RegeneratorExits);
         return FALSE;
     },
