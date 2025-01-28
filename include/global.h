@@ -638,6 +638,8 @@ struct SaveBlock2
     u8 startMenuPaletteNum:3;
     u8 startMenuOptionToOpen:5;//Space for 31 options
     u8 filler:3;
+    u8 start_cursorRowY;
+    u8 start_FirstItem;
 }; // sizeof=0xF2C
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;

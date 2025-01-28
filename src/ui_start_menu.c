@@ -65,9 +65,8 @@
 #include "constants/songs.h"
 #include "constants/rgb.h"
 #include "naming_screen.h"
-
-#define VAR_START_MENU_CURSOR_Y VAR_TEMP_0
-#define VAR_START_MENU_CURSOR_X VAR_TEMP_1
+#include "mgba_printf/mgba.h"
+#include "mgba_printf/mini_printf.h"
 
 // Menu actions
 enum
@@ -293,8 +292,8 @@ void Menu_Start_Init(MainCallback callback)
     sMenuDataPtr->gfxLoadState = 0;
     sMenuDataPtr->savedCallback = callback;
 	
-	sMenuDataPtr->cursorRowY = VarGet(VAR_START_MENU_CURSOR_Y);
-	sMenuDataPtr->FirstItem  = VarGet(VAR_START_MENU_CURSOR_X);
+	sMenuDataPtr->cursorRowY = gSaveBlock2Ptr->start_cursorRowY;
+	sMenuDataPtr->FirstItem  = gSaveBlock2Ptr->start_FirstItem;
 	
 	sMenuDataPtr->KonamiCodeState = 0;
 	//setCorrectSeason();
@@ -1100,22 +1099,10 @@ static void PrintToWindow(void)
 	u8 windowId = WINDOW_1;
 	u8 i, j, x, y, x2, y2;
 	u8 strArray[16]; //For the Player Name
-	//const u8 *SelectedOption;
-	//const u8 *SelectedOption2;
-	//const u8 *Weekday;
-	//const u8 *CurrentSeason;
-	//const u8 *MonthName;
-	//const u8 *DayName;
-	
-	//u16 steps    = VarGet(VAR_FARAWAY_ISLAND_STEP_COUNTER);
-	//u8 season    = getCurrentSeason();
 	u8 hours     = gLocalTime.hours;
 	u8 minutes   = gLocalTime.minutes;
 	u8 font      = FONT_SMALL_NARROW;
 	u8 fontColor = FONT_BLACK_2;
-    //u16 year     = RtcGetCurrentYear();
-    //u8 month     = RtcGetCurrentMonth();
-    //u8 day       = RtcGetCurrentDay();
 	
 	FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
 
@@ -1217,14 +1204,6 @@ static void PrintToWindow(void)
 		y = y + EXTRA_SPACE_BETWEEN_OPTIONS_Y;
 	}
 	
-	//if(gLocalTime.dayOfWeek >= NUM_DAYS_OF_THE_WEEK)
-	//	RtcSetDayOfWeek(0);
-
-	//Weekday       = DaysOfTheWeek[0].string;
-	//CurrentSeason = SeasonList[season].string;
-	//MonthName     = MonthList[month].string;
-	//DayName       = DayNames[day].string;
-	
 	//Help Bar
 	x = 0;
     y = 18;
@@ -1251,6 +1230,7 @@ static void PrintToWindow(void)
     y  = 12;
 	x2 = 0;
 	y2 = 4;
+
 	switch(sMenuDataPtr->CurrentMessage){
 		case MESSAGE_HELP_BAR:
 			if(sMenuDataPtr->cursorRowY != START_MENU_ACTION_PLAYER)
@@ -1289,31 +1269,6 @@ static void PrintToWindow(void)
 	x = 0;
     y = 0;
 	x2 = 4;
-	
-	//Date
-	/*StringCopy(gStringVar1, Weekday);
-	StringCopy(gStringVar2, DayName);
-	StringExpandPlaceholders(gStringVar4, DateDisplay1);
-
-	StringCopy(gStringVar1, gStringVar4);
-	StringCopy(gStringVar2, MonthName);
-	ConvertIntToDecimalStringN(gStringVar3, year, STR_CONV_MODE_LEFT_ALIGN, 4);
-	StringExpandPlaceholders(gStringVar4, MonthString);
-
-	StringCopy(gStringVar1, gStringVar4);
-
-	//Time
-	ConvertIntToDecimalStringN(gStringVar1, hours, STR_CONV_MODE_LEFT_ALIGN, 2);
-	ConvertIntToDecimalStringN(gStringVar2, minutes, STR_CONV_MODE_LEFT_ALIGN, 2);
-
-	if(minutes >= 10)
-		StringExpandPlaceholders(gStringVar4, TimeDisplay);
-	else
-		StringExpandPlaceholders(gStringVar4, TimeDisplay2);
-
-	StringCopy(gStringVar1, gStringVar4);
-	StringCopy(gStringVar2, CurrentSeason);
-	StringExpandPlaceholders(gStringVar4, SeasonDisplay);*/
 
 	StringCopy(gStringVar1, gText_SavingVersionNum);
 	StringExpandPlaceholders(gStringVar4, sEliteReduxTitle);
@@ -1328,14 +1283,11 @@ static void PrintToWindow(void)
     for(i = 0; i < PARTY_SIZE; i++){
         if(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE){
         	u32 currentStatus = GetAilmentFromStatus(GetMonData(&gPlayerParty[i], MON_DATA_STATUS));
-            //u16 maxHP = GetMonData(&gPlayerParty[i], MON_DATA_MAX_HP);
-            //u16 currentHP = GetMonData(&gPlayerParty[i], MON_DATA_HP);
 
             BlitBitmapToWindow(windowId, GetBarGfx(GetHPEggCyclePercent(i)), (x + x2) - ICON_STARTING_X2, (y + y2), 24, 8);
 			
 			if(GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM) != ITEM_NONE)
 				BlitBitmapToWindow(windowId, sStartMenuHeldItem_Gfx, (x + x2) - ICON_STARTING_X2 - 4, (y + y2) - 8, 8, 8);
-				//BlitBitmapToWindow(windowId, sStartMenuHeldItem_Gfx, (x + x2) - ICON_STARTING_X2 - 4, (y + y2) - 8, 8, 8);
 
 			switch(currentStatus){
 				case AILMENT_BRN:
@@ -1345,7 +1297,7 @@ static void PrintToWindow(void)
 					BlitBitmapToWindow(windowId, sStartMenuStatus_Paralysis_Gfx, (x + x2) - ICON_STARTING_X2 + 20, (y + y2) - 8, 8, 8);
 				break;
 				case AILMENT_FRZ:
-				//case AILMENT_FSB:
+				case AILMENT_FSB:
 					BlitBitmapToWindow(windowId, sStartMenuStatus_Freeze_Gfx, (x + x2) - ICON_STARTING_X2 + 20, (y + y2) - 8, 8, 8);
 				break;
 				case AILMENT_PSN:
@@ -1776,8 +1728,8 @@ static void Task_MenuMain(u8 taskId)
 {
 	sMenuDataPtr->CurrentMessage = MESSAGE_HELP_BAR;
 
-	VarSet(VAR_START_MENU_CURSOR_Y, sMenuDataPtr->cursorRowY);
-	VarSet(VAR_START_MENU_CURSOR_X, sMenuDataPtr->FirstItem);
+	gSaveBlock2Ptr->start_cursorRowY = sMenuDataPtr->cursorRowY;
+	gSaveBlock2Ptr->start_FirstItem  = sMenuDataPtr->FirstItem;
 	
 	if (JOY_NEW(B_BUTTON))
     {
