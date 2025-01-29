@@ -2676,6 +2676,10 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId) {
 
     if (!InBattlePike()) {
         if (GetMonData(&mons[1], MON_DATA_SPECIES) != SPECIES_NONE) AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SWITCH);
+
+        if (GetMonData(&mons[slotId], MON_DATA_SPECIES) != SPECIES_NONE && enablePokemonChanges())
+            AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MOVES);
+
         if (ItemIsMail(GetMonData(&mons[slotId], MON_DATA_HELD_ITEM)))
             AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MAIL);
         else
@@ -2850,7 +2854,12 @@ static void CB2_ShowPokemonSummaryScreen(void) {
         UpdatePartyToBattleOrder();
         ShowPokemonSummaryScreen(SUMMARY_MODE_LOCK_MOVES, gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuFromSummaryScreen);
     } else {
-        ShowPokemonSummaryScreen(SUMMARY_MODE_NORMAL, gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuFromSummaryScreen);
+        if(FlagGet(FLAG_SYS_OPEN_MOVE_MENU_FROM_PARTY_SCREEN)){
+            ShowPokemonSummaryScreen(SUMMARY_MODE_MOVE_LEARNER, gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuFromSummaryScreen);
+            FlagClear(FLAG_SYS_OPEN_MOVE_MENU_FROM_PARTY_SCREEN);
+        }
+        else
+            ShowPokemonSummaryScreen(SUMMARY_MODE_NORMAL, gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuFromSummaryScreen);
     }
 }
 
@@ -2863,10 +2872,8 @@ void CB2_ReturnToPartyMenuFromSummaryScreen(void) {
 
 static void CursorCb_ChangeMoves(u8 taskId) {
     PlaySE(SE_SELECT);
-    VarSet(VAR_PARTY_MENU_TUTOR_STATE, MOVE_TUTOR_LEVEL_UP_MOVES);
-    gLastViewedMonIndex = gPartyMenu.slotId;
-    VarSet(VAR_0x8004, gPartyMenu.slotId);
-    TeachMoveRelearnerMove();
+    FlagSet(FLAG_SYS_OPEN_MOVE_MENU_FROM_PARTY_SCREEN);
+    sPartyMenuInternal->exitCallback = CB2_ShowPokemonSummaryScreen;
     Task_ClosePartyMenu(taskId);
 }
 

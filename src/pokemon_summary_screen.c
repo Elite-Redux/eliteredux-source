@@ -1258,6 +1258,12 @@ void ShowPokemonSummaryScreen(u8 mode, void *mons, u8 monIndex, u8 maxMonIndex, 
             sMonSummaryScreen->trueMaxPageIndex = PSS_PAGE_BATTLE_MOVES;
         sMonSummaryScreen->lockMonFlag = TRUE;
         break;
+    case SUMMARY_MODE_MOVE_LEARNER:    // Index limiters aren't actually used in this case, but we'll keep them for clarity
+        sMonSummaryScreen->trueMinPageIndex = PSS_PAGE_BATTLE_MOVES;
+        sMonSummaryScreen->trueMaxPageIndex = PSS_PAGE_BATTLE_MOVES;
+        sMonSummaryScreen->lockMonFlag = FALSE;
+        sMonSummaryScreen->replaceMoveMode = TRUE;
+        break;
     }
 
     sMonSummaryScreen->minPageIndex = sMonSummaryScreen->trueMinPageIndex;
@@ -1420,7 +1426,7 @@ static bool8 LoadGraphics(void)
         gMain.state++;
         break;
     case 23:
-        if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+        if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE || sMonSummaryScreen->mode == SUMMARY_MODE_MOVE_LEARNER)
         {
             SetSpriteInvisibility(SPRITE_ARR_ID_MON, TRUE);
             SetSpriteInvisibility(SPRITE_ARR_ID_ITEM, TRUE);
@@ -1432,7 +1438,18 @@ static bool8 LoadGraphics(void)
         gMain.state++;
         break;
     case 24:
-        if (sMonSummaryScreen->mode != SUMMARY_MODE_SELECT_MOVE)
+        if(sMonSummaryScreen->mode == SUMMARY_MODE_MOVE_LEARNER)
+        {
+            LZDecompressWram(gSummaryScreenPageNewMoveTilemap, sMonSummaryScreen->bgTilemapBufferPage);
+            SetBgTilemapBuffer(2, sMonSummaryScreen->bgTilemapBufferPage);
+            ScheduleBgCopyTilemapToVram(2);
+            DoScheduledBgTilemapCopiesToVram();
+            PrintInfoBar(sMonSummaryScreen->currPageIndex, TRUE);
+            PrintMoveDetails(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex], FALSE);
+            ChangeBgX(1, 0, 0);
+            CreateTask(SwitchToMoveReplaceMenu, 0);
+        }
+        else if (sMonSummaryScreen->mode != SUMMARY_MODE_SELECT_MOVE)
         {
             LZDecompressWram(sPageTilemaps[sMonSummaryScreen->currPageIndex], sMonSummaryScreen->bgTilemapBufferPage);
             SetBgTilemapBuffer(2, sMonSummaryScreen->bgTilemapBufferPage);
@@ -3476,7 +3493,11 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
         }
     }
     else if (JOY_NEW(B_BUTTON)) {
-        if (sMonSummaryScreen->replaceMoveMode) {
+        if(sMonSummaryScreen->mode == SUMMARY_MODE_MOVE_LEARNER){
+            PlaySE(SE_SELECT);
+            BeginCloseSummaryScreen(taskId);
+        }
+        else if (sMonSummaryScreen->replaceMoveMode) {
             sMonSummaryScreen->moveReplaceMoveNum = 0;
             sMonSummaryScreen->replaceMoveMode = FALSE;
             PrintMoveInfoFromReplaceTab();

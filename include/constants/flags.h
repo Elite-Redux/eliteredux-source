@@ -1535,6 +1535,7 @@
 #define FLAG_SYS_UPPED_DIFFICULTY                                   3094
 #define FLAG_RECEIVED_CLEMONT_CHESNAUGHT                            3095
 #define FLAG_RECEIVED_SERENA_DELPHOX                                3096
+#define FLAG_SYS_OPEN_MOVE_MENU_FROM_PARTY_SCREEN                   3097
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 

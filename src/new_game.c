@@ -227,6 +227,8 @@ void NewGameInitData(void)
 	gSaveBlock1Ptr->dexNavChain = 0;
     memset(&gSaveBlock2Ptr->questStatus, 0, sizeof(gSaveBlock2Ptr->questStatus));
     gSaveBlock2Ptr->activeQuest = 0;
+	gSaveBlock2Ptr->start_cursorRowY = 0;
+	gSaveBlock2Ptr->start_FirstItem  = 0;
     VarSet(VAR_SAVE_VERSION, CURRENT_GAME_VERSION);
 }
 
