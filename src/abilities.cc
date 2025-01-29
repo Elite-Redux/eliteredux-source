@@ -9082,7 +9082,7 @@ static const Ability Whiplash = {
                      "chance to lower Defense."),
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(Random() % 2)
+        CHECK(Random() % 1)
         CHECK(IS_MOVE_PHYSICAL(move))
         CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
 
