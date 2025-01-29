@@ -114,6 +114,8 @@ struct MenuResources
 	u8 CurrentMessage;
 	u16 bgTilemapBuffers[NUM_START_MENU_BACKGROUNDS][0x400];
 	u8 spriteIDs[NUM_START_MENU_SPRITES];
+	u8 MenuOptions[NUM_START_MENU_ACTIONS];
+	u8 actionNumber;
 };
 
 enum WindowIds
@@ -130,6 +132,155 @@ enum MessagesIds
 	MESSAGE_CANT_CHANGE_TIME,
 	MESSAGE_STEPS_RESET,
 	NUM_MESSAGES,
+};
+
+#define START_MENU_ACTION_NAME_LENGTH 20
+#define MAX_START_MENU_ACTION_DESCRIPTION_LENGTH 100
+#define MAX_SHOWN_START_MENU_ROWS 5
+#define MAX_SHOWN_START_MENU_OPTIONS MAX_SHOWN_START_MENU_ROWS * 2
+
+#define FLAG_NONE 0
+
+struct StartMenuActionData
+{
+    const u8 title[START_MENU_ACTION_NAME_LENGTH];
+    const u8 description[MAX_START_MENU_ACTION_DESCRIPTION_LENGTH];
+	u16 flag;
+};
+
+static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS] = {
+    [START_MENU_ACTION_POKEDEX] =
+    {
+        .title = _("Pokedex"),
+        .description = _(
+			"Open a database of all\n"
+			"the Pokémon you have\n"
+			"seen and all their\n"
+			"information."
+		),
+		.flag = FLAG_SYS_POKEDEX_GET,
+    },
+	[START_MENU_ACTION_PLAYER] =
+    {
+        .title = _("{PLAYER}."),
+        .description = _(
+			"See all your Trainer\n"
+			"information, money,\n"
+			"battle points, etc."
+		),
+		.flag = FLAG_NONE,
+    },
+	[START_MENU_ACTION_POKEMON] =
+    {
+        .title = _("Pokemon"),
+        .description = _(
+			"Organize your Pokémon\n"
+			"party, see their stats,\n"
+			"change their moves\n"
+			"or even evolve them."
+		),
+		.flag = FLAG_SYS_POKEMON_GET,
+    },
+	[START_MENU_ACTION_PC] =
+    {
+        .title = _("Use the PC"),
+        .description = _(
+			"Open the Pokemon\n"
+			"Storage System without\n"
+			"having to go to any\n"
+			"Pokemon Center."
+		),
+		.flag = FLAG_SYS_POKEMON_GET,
+    },
+	[START_MENU_ACTION_BAG] =
+    {
+        .title = _("Inventory"),
+        .description = _(
+			"Organize your Inventory,\n"
+			"use your items or\n"
+			"power up your Pokémon\n"
+			"party."
+		),
+		.flag = FLAG_NONE,
+    },
+	[START_MENU_ACTION_OPTIONS] =
+    {
+        .title = _("Settings"),
+        .description = _(
+			"Change your settings,\n"
+			"character colors,\n"
+			"bike type or disable\n"
+			"stuff you don't like."
+		),
+		.flag = FLAG_NONE,
+    },
+	[START_MENU_ACTION_POKENAV] =
+    {
+        .title = _("PokeNav"),
+        .description = _(
+			"Change your settings,\n"
+			"character colors,\n"
+			"bike type or disable\n"
+			"stuff you don't like."
+		),
+		.flag = FLAG_SYS_POKENAV_GET,
+    },
+	[START_MENU_ACTION_GUIDE] =
+    {
+        .title = _("Information"),
+        .description = _(
+			"See some in-game,\n"
+			"changes and tips to\n"
+			"make your adventure\n"
+			"easier."
+		),
+		.flag = FLAG_NONE,
+    },
+	[START_MENU_ACTION_DEXNAV] =
+    {
+        .title = _("DexNav"),
+        .description = _(
+			"Search for nearby\n"
+			"Pokémon, chain them,\n"
+			"or just see the list\n"
+			"of available Pokémon."
+		),
+		.flag = FLAG_SYS_DEXNAV_GET,
+    },
+	#ifdef DEBUG_BUILD
+	[START_MENU_ACTION_DEBUG] =
+    {
+        .title = _("Debug"),
+        .description = _(
+			"Open some developer\n"
+			"options that let you\n"
+			"cheat anything into\n"
+			"the game."
+		),
+		.flag = FLAG_NONE,
+    },
+    #endif
+	[START_MENU_ACTION_SAVE] =
+    {
+        .title = _("Save"),
+        .description = _(
+			"Save your game with\n"
+			"a complete record of\n"
+			"your progress to take\n"
+			"a break."
+		),
+		.flag = FLAG_NONE,
+    },
+	[START_MENU_ACTION_EXIT] =
+    {
+        .title = _("Exit"),
+        .description = _(
+			"Exit this menu and\n"
+			"continue your Pokémon\n"
+			"adventure!"
+		),
+		.flag = FLAG_NONE,
+    },
 };
 
 //==========EWRAM==========//
@@ -282,6 +433,7 @@ void Task_OpenStartMenuFromStartMenu(u8 taskId)
 void Menu_Start_Init(MainCallback callback)
 {
 	u8 i;
+	u8 j = 0;
 	if ((sMenuDataPtr = AllocZeroed(sizeof(struct MenuResources))) == NULL)
     {
         SetMainCallback2(callback);
@@ -300,6 +452,15 @@ void Menu_Start_Init(MainCallback callback)
 
 	for(i = 0; i < NUM_START_MENU_SPRITES; i++)
 		sMenuDataPtr->spriteIDs[i] = 0xFF;
+
+	for(i = 0; i < NUM_START_MENU_ACTIONS; i++){
+		if(FlagGet(StartMenuActions[i].flag) || StartMenuActions[i].flag == FLAG_NONE){
+			sMenuDataPtr->MenuOptions[j] = i;
+			j++;
+		}
+	}
+
+	sMenuDataPtr->actionNumber = j;
 
     SetMainCallback2(Menu_RunSetup);
 }
@@ -354,7 +515,7 @@ static void SpriteCallback_Inventory_UpArrow(struct Sprite *sprite)
 
 static void SpriteCallback_Inventory_DownArrow(struct Sprite *sprite)
 {
-    u8 numitems = NUM_START_MENU_ACTIONS;
+    u8 numitems = sMenuDataPtr->actionNumber;
     sprite->data[0] += 8;
 
     if(sMenuDataPtr->cursorRowY >= numitems -1) //Because of the Exit Button
@@ -783,8 +944,8 @@ const u8 sStartMenu_IconGfx_PokeNav_Selected[]   	 = INCBIN_U8("graphics/ui_menu
 const u8 sStartMenu_IconGfx_Save_Selected[]   	 	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_save_selected.4bpp");
 const u8 sStartMenu_IconGfx_Skills_Selected[]   	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_skills_selected.4bpp");
 const u8 sStartMenu_IconGfx_Use_PC_Selected[]   	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_pss_selected.4bpp");
-const u8 sStartMenu_IconGfx_Info_Selected[]   	 	= INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_info_selected.4bpp");
-const u8 sStartMenu_IconGfx_Debug_Selected[]   	 	= INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_debug_selected.4bpp");
+const u8 sStartMenu_IconGfx_Info_Selected[]   	 	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_info_selected.4bpp");
+const u8 sStartMenu_IconGfx_Debug_Selected[]   	 	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_debug_selected.4bpp");
 
 static const u8 sStartMenuHeldItem_Gfx[]   		 = INCBIN_U8("graphics/ui_menus/start_menu/icons/held_item.4bpp");
 static const u8 sStartMenuStatus_Burn_Gfx[]      = INCBIN_U8("graphics/ui_menus/start_menu/icons/status_burn.4bpp");
@@ -792,140 +953,6 @@ static const u8 sStartMenuStatus_Poison_Gfx[]    = INCBIN_U8("graphics/ui_menus/
 static const u8 sStartMenuStatus_Freeze_Gfx[]    = INCBIN_U8("graphics/ui_menus/start_menu/icons/status_freeze.4bpp");
 static const u8 sStartMenuStatus_Paralysis_Gfx[] = INCBIN_U8("graphics/ui_menus/start_menu/icons/status_paralysis.4bpp");
 static const u8 sStartMenuStatus_Sleep_Gfx[]     = INCBIN_U8("graphics/ui_menus/start_menu/icons/status_sleep.4bpp");
-
-#define START_MENU_ACTION_NAME_LENGTH 20
-#define MAX_START_MENU_ACTION_DESCRIPTION_LENGTH 100
-#define MAX_SHOWN_START_MENU_ROWS 5
-#define MAX_SHOWN_START_MENU_OPTIONS MAX_SHOWN_START_MENU_ROWS * 2
-
-struct StartMenuActionData
-{
-    const u8 title[START_MENU_ACTION_NAME_LENGTH];
-    const u8 description[MAX_START_MENU_ACTION_DESCRIPTION_LENGTH];
-};
-
-static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS] = {
-    [START_MENU_ACTION_POKEDEX] =
-    {
-        .title = _("Pokedex"),
-        .description = _(
-			"Open a database of all\n"
-			"the Pokémon you have\n"
-			"seen and all their\n"
-			"information."
-		),
-    },
-	[START_MENU_ACTION_PLAYER] =
-    {
-        .title = _("{PLAYER}."),
-        .description = _(
-			"See all your Trainer\n"
-			"information, money,\n"
-			"battle points, etc."
-		),
-    },
-	[START_MENU_ACTION_POKEMON] =
-    {
-        .title = _("Pokemon"),
-        .description = _(
-			"Organize your Pokémon\n"
-			"party, see their stats,\n"
-			"change their moves\n"
-			"or even evolve them."
-		),
-    },
-	[START_MENU_ACTION_PC] =
-    {
-        .title = _("Use the PC"),
-        .description = _(
-			"Open the Pokemon\n"
-			"Storage System without\n"
-			"having to go to any\n"
-			"Pokemon Center."
-		),
-    },
-	[START_MENU_ACTION_BAG] =
-    {
-        .title = _("Inventory"),
-        .description = _(
-			"Organize your Inventory,\n"
-			"use your items or\n"
-			"power up your Pokémon\n"
-			"party."
-		),
-    },
-	[START_MENU_ACTION_OPTIONS] =
-    {
-        .title = _("Settings"),
-        .description = _(
-			"Change your settings,\n"
-			"character colors,\n"
-			"bike type or disable\n"
-			"stuff you don't like."
-		),
-    },
-	[START_MENU_ACTION_POKENAV] =
-    {
-        .title = _("PokeNav"),
-        .description = _(
-			"Change your settings,\n"
-			"character colors,\n"
-			"bike type or disable\n"
-			"stuff you don't like."
-		),
-    },
-	[START_MENU_ACTION_GUIDE] =
-    {
-        .title = _("Information"),
-        .description = _(
-			"See some in-game,\n"
-			"changes and tips to\n"
-			"make your adventure\n"
-			"easier."
-		),
-    },
-	[START_MENU_ACTION_DEXNAV] =
-    {
-        .title = _("DexNav"),
-        .description = _(
-			"Search for nearby\n"
-			"Pokémon, chain them,\n"
-			"or just see the list\n"
-			"of available Pokémon."
-		),
-    },
-	#ifdef DEBUG_BUILD
-	[START_MENU_ACTION_DEBUG] =
-    {
-        .title = _("Debug"),
-        .description = _(
-			"Open some developer\n"
-			"options that let you\n"
-			"cheat anything into\n"
-			"the game."
-		),
-    },
-    #endif
-	[START_MENU_ACTION_SAVE] =
-    {
-        .title = _("Save"),
-        .description = _(
-			"Save your game with\n"
-			"a complete record of\n"
-			"your progress to take\n"
-			"a break."
-		),
-    },
-	[START_MENU_ACTION_EXIT] =
-    {
-        .title = _("Exit"),
-        .description = _(
-			"Exit this menu and\n"
-			"continue your Pokémon\n"
-			"adventure!"
-		),
-    },
-};
 
 //Saving Stuff
 enum
@@ -991,15 +1018,15 @@ static const struct StringList MonthList[MONTH_DEC + 1] = {
 };
 
 static const struct StringList DayNames[32] = {
-    [1] = _("1st"),
-    [2] = _("2nd"),
-    [3] = _("3rd"),
-    [4] = _("4th"),
-    [5] = _("5th"),
-    [6] = _("6th"),
-    [7] = _("7th"),
-    [8] = _("8th"),
-    [9] = _("9th"),
+    [1]  = _("1st"),
+    [2]  = _("2nd"),
+    [3]  = _("3rd"),
+    [4]  = _("4th"),
+    [5]  = _("5th"),
+    [6]  = _("6th"),
+    [7]  = _("7th"),
+    [8]  = _("8th"),
+    [9]  = _("9th"),
     [10] = _("10th"),
     [11] = _("11th"),
     [12] = _("12th"),
@@ -1100,6 +1127,10 @@ const u8 sText_Message_TrainerInfo[] = _(
 
 #define GFX_STATUS_MINUS_X 3
 
+u8 getCurrentOptionIndex(u8 num){
+	return sMenuDataPtr->MenuOptions[num];
+}
+
 static void PrintToWindow(void)
 {
 	u8 windowId = WINDOW_1;
@@ -1132,11 +1163,11 @@ static void PrintToWindow(void)
 		if(j == START_MENU_ACTION_PLAYER)
 			StringCopy(&strArray[0], gSaveBlock2Ptr->playerName);
 		else
-			StringCopy(&strArray[0], StartMenuActions[j].title);
+			StringCopy(&strArray[0], StartMenuActions[getCurrentOptionIndex(j)].title);
 		
 		AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, &strArray[0]);
 
-		switch(j){
+		switch(getCurrentOptionIndex(j)){
 			case START_MENU_ACTION_POKEDEX:
 				if(j == sMenuDataPtr->cursorRowY)
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Pokedex_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
@@ -1243,7 +1274,7 @@ static void PrintToWindow(void)
 	switch(sMenuDataPtr->CurrentMessage){
 		case MESSAGE_HELP_BAR:
 			if(sMenuDataPtr->cursorRowY != START_MENU_ACTION_PLAYER)
-				StringCopy(gStringVar4, StartMenuActions[sMenuDataPtr->cursorRowY].description);
+				StringCopy(gStringVar4, StartMenuActions[getCurrentOptionIndex(sMenuDataPtr->cursorRowY)].description);
 			else{
 				u32 defeats      = 0 + VarGet(VAR_TIMES_WHITED_OUT);
 				u32 battlepoints = gSaveBlock2Ptr->frontier.battlePoints;
@@ -1537,12 +1568,12 @@ static bool8 QuestMenuCallback(void)
 
 static void PressedDownButton(){
     u8 halfScreen = (MAX_SHOWN_START_MENU_ROWS) / 2;
-    u8 finalhalfScreen = NUM_START_MENU_ACTIONS - halfScreen;
+    u8 finalhalfScreen = sMenuDataPtr->actionNumber - halfScreen;
 
     if(sMenuDataPtr->cursorRowY < halfScreen){
         sMenuDataPtr->cursorRowY++;
     }
-	else if(sMenuDataPtr->cursorRowY >= (NUM_START_MENU_ACTIONS - 1)){ 
+	else if(sMenuDataPtr->cursorRowY >= (sMenuDataPtr->actionNumber - 1)){ 
 		//If you are in the last option go to the first one
 		sMenuDataPtr->cursorRowY = 0;
 		sMenuDataPtr->FirstItem = 0;
@@ -1558,7 +1589,7 @@ static void PressedDownButton(){
 
 static void PressedUpButton(){
     u8 halfScreen = (MAX_SHOWN_START_MENU_ROWS) / 2;
-    u8 finalhalfScreen = NUM_START_MENU_ACTIONS - halfScreen;
+    u8 finalhalfScreen = sMenuDataPtr->actionNumber - halfScreen;
 
     if(sMenuDataPtr->cursorRowY > halfScreen && sMenuDataPtr->cursorRowY <= (finalhalfScreen - 1)){
         sMenuDataPtr->cursorRowY--;
@@ -1566,8 +1597,8 @@ static void PressedUpButton(){
     }
 	else if(sMenuDataPtr->cursorRowY == 0){ 
 		//If you are in the first option go to the last one
-		sMenuDataPtr->cursorRowY = NUM_START_MENU_ACTIONS - 1;
-		sMenuDataPtr->FirstItem = NUM_START_MENU_ACTIONS - MAX_SHOWN_START_MENU_ROWS;
+		sMenuDataPtr->cursorRowY = sMenuDataPtr->actionNumber - 1;
+		sMenuDataPtr->FirstItem = sMenuDataPtr->actionNumber - MAX_SHOWN_START_MENU_ROWS;
     }
     else{
         sMenuDataPtr->cursorRowY--;
@@ -1749,7 +1780,7 @@ static void Task_MenuMain(u8 taskId)
 	
 	if (JOY_NEW(A_BUTTON))
     {
-		switch(sMenuDataPtr->cursorRowY)
+		switch(getCurrentOptionIndex(sMenuDataPtr->cursorRowY))
 		{
 			case START_MENU_ACTION_POKEDEX:
 				PlaySE(SE_SELECT);
