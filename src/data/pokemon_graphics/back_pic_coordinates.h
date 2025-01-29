@@ -6954,7 +6954,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SANDSLASH_MEGA] =
     {
         .size = 0x87,
-        .y_offset = 0,
+        .y_offset = 11,
     },
     [SPECIES_TYPHLOSION_MEGA] =
     {
