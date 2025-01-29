@@ -626,6 +626,7 @@ static bool32 AI_GetIfCrit(u32 move, u8 battlerAtk, u8 battlerDef) {
     bool32 isCrit;
 
     switch (CalcCritChanceStage(battlerAtk, battlerDef, move, FALSE)) {
+        case -2:
         case -1:
         case 0:
         default:
@@ -645,7 +646,6 @@ static bool32 AI_GetIfCrit(u32 move, u8 battlerAtk, u8 battlerDef) {
             else
                 isCrit = FALSE;
             break;
-        case -2:
         case 3:
         case 4:
             isCrit = TRUE;

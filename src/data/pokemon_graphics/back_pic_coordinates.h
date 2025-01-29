@@ -4688,7 +4688,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SCRAFTY_MEGA] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  5
     },
     [SPECIES_FROSLASS_MEGA] =
     {
@@ -8492,7 +8492,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_FROSTULA] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 6,
     },
     [SPECIES_CHESNAUGHT_BATTLE_BOND] =
     {

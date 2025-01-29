@@ -7156,13 +7156,13 @@ static void PrintStatsScreen_Left(u8 taskId)
         //Abilitie(s)
         ability0 = gBaseStats[species].abilities[sPokedexView->abilitynum];
         PrintInfoScreenTextSmallWhite(gAbilities[ability0].name, abilities_x, abilities_y);
-        PrintInfoScreenTextSmall(gAbilityDescriptionPointers[ability0], abilities_x, abilities_y + 14);
+        PrintInfoScreenTextSmall(gAbilities[ability0].description, abilities_x, abilities_y + 14);
     }
     else {
         //Innates
         ability0 = gBaseStats[species].innates[sPokedexView->innatenum];
         PrintInfoScreenTextSmallWhite(gAbilities[ability0].name, abilities_x, abilities_y);
-        PrintInfoScreenTextSmall(gAbilityDescriptionPointers[ability0], abilities_x, abilities_y + 14);
+        PrintInfoScreenTextSmall(gAbilities[ability0].description, abilities_x, abilities_y + 14);
         
     }
 }

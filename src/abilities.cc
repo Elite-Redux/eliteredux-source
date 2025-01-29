@@ -1995,7 +1995,8 @@ static const Ability Regenerator = {
     .description = $("Heals 1/3 of max HP upon\n"
                      "switching out."),
     .onExit = +[](ON_EXIT) -> int {
-        CHECK(IsBattlerAlive(battler)) CHECK(BATTLER_MAX_HP(battler));
+        CHECK(IsBattlerAlive(battler))
+        CHECK_NOT(BATTLER_MAX_HP(battler))
         BattleScriptCall(BattleScript_RegeneratorExits);
         return FALSE;
     },
@@ -5210,7 +5211,7 @@ static const Ability ForestRage = {
     .name = $("Forest Rage"),
     .description = $("Boosts Grass-type moves by 1.3x,\n"
                      "or 1.8x when below 1/3 HP."),
-    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_WATER),
+    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_GRASS),
 };
 
 static const Ability PrimalMaw = {
@@ -9600,6 +9601,63 @@ static const Ability Samba = {
     .onCopyMove = Dancer.onCopyMove,
 };
 
+static const Ability JunshiSanda = {
+    .name = $("JunshiSanda"),
+    .description = $("Placeholder"),
+    .randomizerBanned = TRUE,
+};
+
+static const Ability Gladiator = {
+    .name = $("Gladiator"),
+    .description = $("Boosts Fighting-type moves by 1.3x,\n"
+                     "or 1.8x when below 1/3 HP."),
+    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_FIGHTING),
+};
+
+static const Ability ForsakenHeart = {
+    .name = $("Forsaken Heart"),
+    .description = $("KOs dealt anywhere on the field\n"
+                     "raise Attack by one stage."),
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
+
+        BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
+        return TRUE;
+    },
+    .onBattlerFaintsFor = APPLY_ON_ANY,
+};
+
+static const Ability Relentless = {
+    .name = $("Relentless"),
+    .description = $("Exploit Weakness + Merciless"),
+    .onOffensiveMultiplier = ExploitWeakness.onOffensiveMultiplier,
+    .onCrit = Merciless.onCrit,
+};
+
+static const Ability Soothsayer = {
+    .name = $("Soothsayer"),
+    .description = $("Placeholder"),
+    .randomizerBanned = TRUE,
+};
+
+static const Ability CorruptedMind = {
+    .name = $("Corrupted Mind"),
+    .description = $("Placeholder"),
+    .randomizerBanned = TRUE,
+};
+
+static const Ability FlameCoat = {
+    .name = $("Flame Coat"),
+    .description = $("Placeholder"),
+    .randomizerBanned = TRUE,
+};
+
+static const Ability UnownPower = {
+    .name = $("Unown Power"),
+    .description = $("Placeholder"),
+    .randomizerBanned = TRUE,
+};
+
 const Ability gAbilities[] = {
     [ABILITY_NONE] = None,
     [ABILITY_STENCH] = Stench,
@@ -10370,6 +10428,14 @@ const Ability gAbilities[] = {
     [ABILITY_CHAMPIONS_ENTRANCE] = ChampionsEntrance,
     [ABILITY_PRESTO] = Presto,
     [ABILITY_SAMBA] = Samba,
+    [ABILITY_JUNSHI_SANDA] = JunshiSanda,
+    [ABILITY_GLADIATOR] = Gladiator,
+    [ABILITY_FORSAKEN_HEART] = ForsakenHeart,
+    [ABILITY_RELENTLESS] = Relentless,
+    [ABILITY_SOOTHSAYER] = Soothsayer,
+    [ABILITY_CORRUPTED_MIND] = CorruptedMind,
+    [ABILITY_FLAME_COAT] = FlameCoat,
+    [ABILITY_UNOWN_POWER] = UnownPower,
 };
 
 #pragma GCC diagnostic pop

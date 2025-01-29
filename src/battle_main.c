@@ -466,8 +466,6 @@ const struct TrainerBall gTrainerBallTable[] = {
     {0xFF, ITEM_POKE_BALL},
 };
 
-#include "data/text/abilities.h"
-
 static void (*const sTurnActionsFuncsTable[])(void) = {
     [B_ACTION_USE_MOVE] = HandleAction_UseMove,
     [B_ACTION_USE_ITEM] = HandleAction_UseItem,
