@@ -9817,11 +9817,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BRAMBLE_BLAST] =
     {
         .effect = EFFECT_LEECH_SEED_HIT,
-        .power = 70,
+        .power = 85,
         .type = TYPE_GRASS,
         .accuracy = 100,
-        .pp = 20,
-        .secondaryEffectChance = 20,
+        .pp = 10,
+        .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
