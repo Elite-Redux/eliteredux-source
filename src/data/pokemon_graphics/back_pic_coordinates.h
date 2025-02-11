@@ -6131,6 +6131,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x77,
         .y_offset = 7,
     },
+    [SPECIES_MIMIKYU_APEX_BUSTED] =
+    {
+        .size = 0x77,
+        .y_offset = 7,
+    },
     [SPECIES_MIMIKYU_RAYQUAZA] =
     {
         .size = 0,

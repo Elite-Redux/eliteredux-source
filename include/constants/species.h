@@ -1940,8 +1940,9 @@
 #define SPECIES_DEWPIDER_REDUX       REDUX_FORMS_START + 136
 #define SPECIES_ARAQUANID_REDUX       REDUX_FORMS_START + 137
 #define SPECIES_MIMIKYU_APEX       REDUX_FORMS_START + 138
+#define SPECIES_MIMIKYU_APEX_BUSTED       REDUX_FORMS_START + 139
 
-#define LAST_REDUX_FORM                     SPECIES_MIMIKYU_APEX
+#define LAST_REDUX_FORM                     SPECIES_MIMIKYU_APEX_BUSTED
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

@@ -1221,6 +1221,7 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(DARKRAI_NIGHTMARE, gMonPalette_Darkrai_Nightmare),
     SPECIES_PAL(ESPEON_GALAXY, gMonPalette_Espeon_Galaxy),
     SPECIES_PAL(MIMIKYU_APEX, gMonPalette_MimikyuApex),
+    SPECIES_PAL(MIMIKYU_APEX_BUSTED, gMonPalette_MimikyuApex),
     SPECIES_PAL(MIMIKYU_RAYQUAZA, gMonPalette_Mimikyu_Rayquaza),
     SPECIES_PAL(MIMIKYU_RAYQUAZA_BUSTED, gMonPalette_Mimikyu_RayquazaBusted),
     SPECIES_PAL(BEWEAR_ANGRY, gMonPalette_Bewear_Angry),

@@ -8507,6 +8507,12 @@ const u32 gMonPalette_MimikyuApex[]           = INCBIN_U32("graphics/pokemon/mim
 const u32 gMonShinyPalette_MimikyuApex[]      = INCBIN_U32("graphics/pokemon/mimikyu/mimirayshiny.gbapal.lz");
 const u8  gMonIcon_MimikyuApex[]              = INCBIN_U8("graphics/pokemon/mimikyu/apex/icon.4bpp");
 
+const u32 gMonFrontPic_MimikyuApexBusted[]          = INCBIN_U32("graphics/pokemon/mimikyu/busted/front.4bpp.lz");
+const u32 gMonBackPic_MimikyuApexBusted[]           = INCBIN_U32("graphics/pokemon/mimikyu/busted/back.4bpp.lz");
+const u32 gMonPalette_MimikyuApexBusted[]           = INCBIN_U32("graphics/pokemon/mimikyu/mimiraybase.gbapal.lz");
+const u32 gMonShinyPalette_MimikyuApexBusted[]      = INCBIN_U32("graphics/pokemon/mimikyu/mimirayshiny.gbapal.lz");
+const u8  gMonIcon_MimikyuApexBusted[]              = INCBIN_U8("graphics/pokemon/mimikyu/apex/icon.4bpp");
+
 const u32 gMonFrontPic_MienshaoMega[]          = INCBIN_U32("graphics/pokemon/mienshao/mega/front.4bpp.lz");
 const u32 gMonBackPic_MienshaoMega[]           = INCBIN_U32("graphics/pokemon/mienshao/mega/back.4bpp.lz");
 const u32 gMonPalette_MienshaoMega[]           = INCBIN_U32("graphics/pokemon/mienshao/mega/normal.gbapal.lz");
