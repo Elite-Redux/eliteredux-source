@@ -6126,6 +6126,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_MIMIKYU_APEX] =
+    {
+        .size = 0x77,
+        .y_offset = 7,
+    },
     [SPECIES_MIMIKYU_RAYQUAZA] =
     {
         .size = 0,
@@ -8482,12 +8487,12 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_DEWPIDER_REDUX] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 8,
     },
     [SPECIES_ARAQUANID_REDUX] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 12,
     },
     [SPECIES_FROSTULA] =
     {

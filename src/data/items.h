@@ -10215,6 +10215,17 @@ const struct Item gItems[] =
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
+    [ITEM_PHANTOM_METEOR] = 
+    {
+        .name = _("Phantom Meteor"),
+        .itemId = ITEM_PHANTOM_METEOR,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_PRIMAL_ORB,
+        .description = sPhantomMeteorDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
     [ITEM_GALACTIC_ORB] = 
     {
         .name = _("Galactic Orb"),

@@ -20274,6 +20274,17 @@ static const union AnimCmd *const sAnims_BLISSEY_REDUX[] ={
     sAnim_BLISSEY_REDUX_1,
 };
 
+static const union AnimCmd sAnim_MIMIKYU_APEX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_MIMIKYU_APEX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_MIMIKYU_APEX_1,
+};
+
 static const union AnimCmd sAnim_DEWPIDER_REDUX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -21980,6 +21991,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(SOLROCK_SYSTEM),
     ANIM_CMD(DARKRAI_NIGHTMARE),
     ANIM_CMD(ESPEON_GALAXY),
+    ANIM_CMD(MIMIKYU_APEX),
     ANIM_CMD(MIMIKYU_RAYQUAZA),
     ANIM_CMD(MIMIKYU_RAYQUAZA_BUSTED),
     ANIM_CMD(BEWEAR_ANGRY),

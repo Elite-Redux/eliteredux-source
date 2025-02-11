@@ -1225,6 +1225,7 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(SOLROCK_SYSTEM, gMonShinyPalette_Solrock_System),
     SPECIES_SHINY_PAL(DARKRAI_NIGHTMARE, gMonShinyPalette_Darkrai_Nightmare),
     SPECIES_SHINY_PAL(ESPEON_GALAXY, gMonShinyPalette_Espeon_Galaxy),
+    SPECIES_SHINY_PAL(MIMIKYU_APEX, gMonShinyPalette_MimikyuApex),
     SPECIES_SHINY_PAL(MIMIKYU_RAYQUAZA, gMonShinyPalette_Mimikyu_Rayquaza),
     SPECIES_SHINY_PAL(MIMIKYU_RAYQUAZA_BUSTED, gMonShinyPalette_Mimikyu_RayquazaBusted),
     SPECIES_SHINY_PAL(BEWEAR_ANGRY, gMonShinyPalette_Bewear_Angry),

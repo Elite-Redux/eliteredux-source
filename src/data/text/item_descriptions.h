@@ -3571,6 +3571,11 @@ static const u8 sDynamaxOrbDesc[] = _(
     "Eternatus to Primal\n"
     "Revert in battle.");
 
+static const u8 sPhantomMeteorDesc[] = _(
+    "This stone enables\n"
+    "MimikyuApex to Primal\n"
+    "Revert in battle.");
+
 static const u8 sGalacticOrbDesc[] = _(
     "This stone enables\n"
     "Espeon to Primal\n"
