@@ -39033,11 +39033,57 @@ static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Bug_Insane[]
 static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Ghost[] = {
     {
     .lvl = 0,
-    .species = SPECIES_BULBASAUR,
+    .species = SPECIES_PECHARUNT,
+    .heldItem = ITEM_CUSTAP_BERRY,
+    .ability = 1,
+    .evs = {252, 0, 0, 4, 252, 0},
+    .nature = NATURE_CALM,
+    .moves = MOVE_TOXIC_SPIKES, MOVE_MALIGNANT_CHAIN, MOVE_ASTRAL_BARRAGE, MOVE_BODY_PRESS
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_GHOLDENGO,
+    .heldItem = ITEM_AIR_BALLOON,
+    .ability = 1,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_GEAR_UP, MOVE_MAKE_IT_RAIN, MOVE_OMINOUS_WIND, MOVE_SURF
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_IRON_EXO,
+    .heldItem = ITEM_BOOSTER_ENERGY,
+    .ability = 2,
+    .evs = {252, 0, 4, 252, 0, 0},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_ZAP_CANNON, MOVE_MOONGEIST_BEAM, MOVE_ARMOR_CANNON, MOVE_SHOCK_WAVE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_TYPHLOSION_HISUIAN,
+    .heldItem = ITEM_TYPHLOSIONITE_H,
+    .ability = 2,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPECTRAL_SERENADE, MOVE_FLAMETHROWER, MOVE_EARTH_POWER, MOVE_INFERNAL_PARADE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_DECIDUEYE,
+    .heldItem = ITEM_DECIDUITE,
     .ability = 0,
-    .evs = {0, 0, 0, 252, 4, 252},
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_SPIRIT_SHACKLE, MOVE_BRAMBLE_BLAST, MOVE_CLAY_DART, MOVE_SWORDS_DANCE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_MIMIKYU_APEX,
+    .heldItem = ITEM_PHANTOM_METEOR,
+    .ability = 2,
+    .evs = {0, 252, 0, 4, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_SHADOW_CLAW, MOVE_DRAGON_DANCE, MOVE_PLAY_ROUGH, MOVE_V_CREATE
     }
 };
 
