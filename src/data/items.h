@@ -7692,6 +7692,18 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
 
+    [ITEM_KINGDRANITE_Y] =
+    {
+        .name = _("Kingdranite Y"),
+        .itemId = ITEM_KINGDRANITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sKingdraniteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+
     [ITEM_DEWGONGITE] =
     {
         .name = _("Dewgongite"),

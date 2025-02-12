@@ -8687,7 +8687,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BOLT_BEAK] =
     {
         .effect = EFFECT_BOLT_BEAK,
-        .power = 85,
+        .power = 75,
         .type = TYPE_ELECTRIC,
         .accuracy = 100,
         .pp = 10,
@@ -8699,7 +8699,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_FISHIOUS_REND] =
     {
         .effect = EFFECT_BOLT_BEAK,
-        .power = 85,
+        .power = 75,
         .type = TYPE_WATER,
         .accuracy = 100,
         .pp = 10,

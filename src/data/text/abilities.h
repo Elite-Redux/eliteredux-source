@@ -744,6 +744,7 @@ static const u8 sAbilitySoothsayerDescription[] = _("All hits will be not very e
 static const u8 sAbilityCorruptedMindDescription[] = _("Psychic moves used by this Pokemon\nalways hit super-effectively.");
 static const u8 sAbilityFlameCoatDescription[] = _("Non-Fire-types take 1/8 dmg every\nturn when on field + Flash Fire.");
 static const u8 sAbilityUnownPowerDescription[] = _("Mystic Power + Hidden Power is\nalways super-effective.");
+static const u8 sAbilitySuperScopeDescription[] = _("Mega Launcher + Artillery");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1524,6 +1525,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_CORRUPTED_MIND] = _("Corrupted Mind"),
     [ABILITY_FLAME_COAT] = _("Flame Coat"),
     [ABILITY_UNOWN_POWER] = _("Unown Power"),
+    [ABILITY_SUPER_SCOPE] = _("Super Scope"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2304,4 +2306,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_CORRUPTED_MIND] = sAbilityCorruptedMindDescription,
     [ABILITY_FLAME_COAT] = sAbilityFlameCoatDescription,
     [ABILITY_UNOWN_POWER] = sAbilityUnownPowerDescription,
+    [ABILITY_SUPER_SCOPE] = sAbilitySuperScopeDescription,
 };

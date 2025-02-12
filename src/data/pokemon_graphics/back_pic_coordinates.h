@@ -6944,7 +6944,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_KINGDRA_MEGA_Y] =
     {
         .size = 0x87,
-        .y_offset = 0,
+        .y_offset = 2,
     },
     [SPECIES_LUXRAY_MEGA] =
     {

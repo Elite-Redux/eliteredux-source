@@ -2334,6 +2334,19 @@ static const Ability MegaLauncher = {
         },
 };
 
+static const Ability SuperScope = {
+    .name = $("Super Scope"),
+    .description = $("Mega Launcher + Artillery."),
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.3);
+        },
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+            CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
+            return ACCURACY_HITS_IF_POSSIBLE;
+        },
+};
+
 static const Ability GrassPelt = {
     .name = $("Grass Pelt"),
     .description = $("This Pokémon's Defense gets a\n"
