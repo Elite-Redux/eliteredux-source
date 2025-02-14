@@ -763,6 +763,7 @@ static const Ability VenomCrown = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].hornBased) MUL(1.3);
         },
+        .randomizerBanned = TRUE,
 };
 
 static const Ability InnerFocus = {
@@ -1892,7 +1893,7 @@ static const Ability Multiscale = {
 };
 
 static const Ability Blightscale = {
-    .name = $("Blight scale"),
+    .name = $("Blight Scale"),
     .description = $("Multiscale + Poison Point"),
     ON_EITHER_ABILITY(PoisonPoint),
     .onDefensiveMultiplier =
@@ -1900,6 +1901,7 @@ static const Ability Blightscale = {
             if (BATTLER_MAX_HP(battler)) MUL(.5);
         },
     .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 static const Ability ToxicBoost = {
@@ -2794,6 +2796,14 @@ static const Ability BattleBond = {
         switch (gBattleMons[battler].species) {
             case SPECIES_GRENINJA_BATTLE_BOND:
                 newSpecies = SPECIES_GRENINJA_ASH;
+                break;
+
+            case SPECIES_CHESNAUGHT_BATTLE_BOND:
+                newSpecies = SPECIES_CHESNAUGHT_CLEMONT;
+                break;
+
+            case SPECIES_DELPHOX_BATTLE_BOND:
+                newSpecies = SPECIES_DELPHOX_SERENA;
                 break;
 
             case SPECIES_DARMANITAN_REDUX_BOND:
