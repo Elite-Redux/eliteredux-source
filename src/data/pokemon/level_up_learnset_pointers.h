@@ -1340,12 +1340,12 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_STUNFISK_GALARIAN] = sStunfiskGalarianLevelUpLearnset,
     // Misc Forms
     // Cosplay Pikachu
-    [SPECIES_PIKACHU_COSPLAY] = sPikachuLevelUpLearnset,
-    [SPECIES_PIKACHU_ROCK_STAR] = sPikachuLevelUpLearnset,
-    [SPECIES_PIKACHU_BELLE] = sPikachuLevelUpLearnset,
-    [SPECIES_PIKACHU_POP_STAR] = sPikachuLevelUpLearnset,
-    [SPECIES_PIKACHU_PH_D] = sPikachuLevelUpLearnset,
-    [SPECIES_PIKACHU_LIBRE] = sPikachuLevelUpLearnset,
+    [SPECIES_PIKACHU_COSPLAY] = sPikachuCosplayLevelUpLearnset,
+    [SPECIES_PIKACHU_ROCK_STAR] = sPikachuRockStarLevelUpLearnset,
+    [SPECIES_PIKACHU_BELLE] = sPikachuBelleLevelUpLearnset,
+    [SPECIES_PIKACHU_POP_STAR] = sPikachuPopStarLevelUpLearnset,
+    [SPECIES_PIKACHU_PH_D] = sPikachuPhDLevelUpLearnset,
+    [SPECIES_PIKACHU_LIBRE] = sPikachuLibreLevelUpLearnset,
     // Cap Pikachu
     [SPECIES_PIKACHU_ORIGINAL_CAP] = sPikachuLevelUpLearnset,
     [SPECIES_PIKACHU_HOENN_CAP] = sPikachuLevelUpLearnset,

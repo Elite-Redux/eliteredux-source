@@ -744,7 +744,9 @@ static const u8 sAbilitySoothsayerDescription[] = _("All hits will be not very e
 static const u8 sAbilityCorruptedMindDescription[] = _("Psychic moves used by this Pokemon\nalways hit super-effectively.");
 static const u8 sAbilityFlameCoatDescription[] = _("Non-Fire-types take 1/8 dmg every\nturn when on field + Flash Fire.");
 static const u8 sAbilityUnownPowerDescription[] = _("Mystic Power + Hidden Power is\nalways super-effective.");
-static const u8 sAbilitySuperScopeDescription[] = _("Mega Launcher + Artillery");
+static const u8 sAbilitySuperScopeDescription[] = _("Mega Launcher + Artillery.");
+static const u8 sAbilityVenomCrownDescription[] = _("Mighty Horn + Poison Point.");
+static const u8 sAbilityBlightScaleDescription[] = _("Multiscale + Poison Point.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1526,6 +1528,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_FLAME_COAT] = _("Flame Coat"),
     [ABILITY_UNOWN_POWER] = _("Unown Power"),
     [ABILITY_SUPER_SCOPE] = _("Super Scope"),
+    [ABILITY_VENOM_CROWN] = _("Venom Crown"),
+    [ABILITY_BLIGHT_SCALE] = _("Blight Scale"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2298,6 +2302,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SOUL_DEVOURER] = sAbilitySoulDevourerDescription,
     [ABILITY_CHAMPIONS_ENTRANCE] = sAbilityChampionsEntranceDescription,
     [ABILITY_SAMBA] = sAbilitySambaDescription,
+    [ABILITY_PRESTO] = sAbilityPrestoDescription,
     [ABILITY_JUNSHI_SANDA] = sAbilityJunshiSandaDescription,
     [ABILITY_GLADIATOR] = sAbilityGladiatorDescription,
     [ABILITY_FORSAKEN_HEART] = sAbilityForsakenHeartDescription,
@@ -2307,4 +2312,6 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_FLAME_COAT] = sAbilityFlameCoatDescription,
     [ABILITY_UNOWN_POWER] = sAbilityUnownPowerDescription,
     [ABILITY_SUPER_SCOPE] = sAbilitySuperScopeDescription,
+    [ABILITY_VENOM_CROWN] = sAbilityVenomCrownDescription,
+    [ABILITY_BLIGHT_SCALE] = sAbilityBlightScaleDescription,
 };

@@ -797,8 +797,10 @@
 #define ABILITY_FLAME_COAT 775 // toxic spill but for fire types + flash fire
 #define ABILITY_UNOWN_POWER 776 // mystic power + hidden power always hits super effectively
 #define ABILITY_SUPER_SCOPE 777 // Mega Launcher + Artillery
+#define ABILITY_VENOM_CROWN 778 // Mighty Horn + Poison Point
+#define ABILITY_BLIGHT_SCALE 779 // Multiscale + Poison Point
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_SUPER_SCOPE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_BLIGHT_SCALE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

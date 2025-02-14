@@ -755,6 +755,16 @@ static const Ability PoisonPoint = {
     ON_EITHER_ABILITY(PoisonPoint),
 };
 
+static const Ability VenomCrown = {
+    .name = $("Venom Crown"),
+    .description = $("Poison Point + Mighty Horn."),
+    ON_EITHER_ABILITY(PoisonPoint),
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].hornBased) MUL(1.3);
+        },
+};
+
 static const Ability InnerFocus = {
     .name = $("Inner Focus"),
     .description = $("Blocks flinch, Intimidate, Scare.\n"
@@ -1874,6 +1884,17 @@ static const Ability Multiscale = {
     .name = $("Multiscale"),
     .description = $("At full HP, halves damage taken\n"
                      "from attacks"),
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (BATTLER_MAX_HP(battler)) MUL(.5);
+        },
+    .breakable = TRUE,
+};
+
+static const Ability Blightscale = {
+    .name = $("Blight scale"),
+    .description = $("Multiscale + Poison Point"),
+    ON_EITHER_ABILITY(PoisonPoint),
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (BATTLER_MAX_HP(battler)) MUL(.5);
