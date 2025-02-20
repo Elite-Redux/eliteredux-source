@@ -111,6 +111,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_CUBONE] = sCuboneLevelUpLearnset,
     [SPECIES_MAROWAK] = sMarowakLevelUpLearnset,
     [SPECIES_HITMONLEE] = sHitmonleeLevelUpLearnset,
+    [SPECIES_HITMONLEE_MEGA] = sHitmonleeLevelUpLearnset,
     [SPECIES_HITMONCHAN] = sHitmonchanLevelUpLearnset,
     [SPECIES_HITMONCHAN_PARTNER] = sHitmonchanLevelUpLearnset,
     [SPECIES_HITMONCHAN_PARTNER_B] = sHitmonchanLevelUpLearnset,
