@@ -9124,7 +9124,6 @@ static const Ability Whiplash = {
     .description = $("Physical attacks lower defense."),
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(Random() % 1)
         CHECK(IS_MOVE_PHYSICAL(move))
         CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
 
