@@ -7991,12 +7991,13 @@ static const Ability GreaterSpirit = {
 
 static const Ability Resonance = {
     .name = $("Resonance"),
-    .description = $("Sound moves cause the target to\n"
-                     "bleed."),
-    .onAttacker = +[](ON_ATTACKER) -> int {
+    .description = $("Sound moves have a 30%\n"
+                     "chance to cause bleeding."),
+.onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
         CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(Random() % 100 < 50)
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     },
@@ -8013,7 +8014,7 @@ static const Ability EtherealRush = {
 };
 
 static const Ability CuteAntecedence = {
-    .name = $("Cute Antecedence"),
+    .name = $("Pretty Privilege"),
     .description = $("At full HP, gives +1 priority to\n"
                      "its Fairy-type moves."),
     .onPriority = GALE_WINGS_CLONE(TYPE_FAIRY),
@@ -8132,13 +8133,11 @@ static const Ability Bloodlust = {
 
 static const Ability PiercingSolo = {
     .name = $("Piercing Solo"),
-    .description = $("Sound moves have a 30%\n"
-                     "chance to cause bleeding."),
+    .description = $("Sound moves cause bleeding."),
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
         CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-        CHECK(Random() % 100 < 30)
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     },
@@ -8691,7 +8690,7 @@ static const Ability VitalityStrike = {
 };
 
 static const Ability HugeWings = {
-    .name = $("Huge Wings"),
+    .name = $("Imposing Wings"),
     .description = $("Giant Wings + Levitate."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
@@ -9122,8 +9121,7 @@ static const Ability RagingGoddess = {
 
 static const Ability Whiplash = {
     .name = $("Whiplash"),
-    .description = $("Physical attacks have a 50%\n"
-                     "chance to lower Defense."),
+    .description = $("Physical attacks lower defense."),
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(Random() % 1)
