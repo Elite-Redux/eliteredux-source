@@ -8567,6 +8567,26 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x88,
         .y_offset = 0,
     },
+    [SPECIES_TINKATINK_REDUX] =
+    {
+        .size = 0x88,
+        .y_offset = 10,
+    },
+    [SPECIES_TINKATUFF_REDUX] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_TINKATON_REDUX] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_TINKATON_REDUX_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
 
     // Egg
     [SPECIES_EGG] =

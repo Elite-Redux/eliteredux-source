@@ -3933,6 +3933,10 @@ static const u8 sMoveTwoLineDescription_MoveMetallicMelody[] = _(
     "Hits the body rhythmically\n"
     "to damage the opponent with sound.");
 
+static const u8 sMoveTwoLineDescription_MoveTsunamiHammer[] = _(
+    "Super effective vs Water.\n"
+    "Can't be used twice in a row.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4936,6 +4940,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_LIGHTNING_BULLET - 1] = sMoveTwoLineDescription_MoveLightningBullet,
     //3.0 CUTOFF
     [MOVE_METALLIC_MELODY - 1] = sMoveTwoLineDescription_MoveMetallicMelody,
+    [MOVE_TSUNAMI_HAMMER - 1] = sMoveTwoLineDescription_MoveTsunamiHammer,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5938,6 +5943,7 @@ static const u8 sMoveFourLineDescription_MoveInsectImpact[] = _("A powerful punc
 static const u8 sMoveFourLineDescription_MoveLightningBullet[] = _("Shoots a strong\nenergy projectile.\n10% paralyze chance\nMega Launcher Boost.");
 //3.0 CUTOFF
 static const u8 sMoveFourLineDescription_MoveMetallicMelody[] = _("The user emits a\nsound by hitting\ntheir metallic body\nrhythmically.");
+static const u8 sMoveFourLineDescription_MoveTsunamiHammer[] = _("Super effective vs\nWater. Can't be used\ntwice in a row.\nHammer-based.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6940,4 +6946,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_LIGHTNING_BULLET - 1] = sMoveFourLineDescription_MoveLightningBullet,
     //3.0 CUTOFF
     [MOVE_METALLIC_MELODY - 1] = sMoveFourLineDescription_MoveMetallicMelody,
+    [MOVE_TSUNAMI_HAMMER - 1] = sMoveFourLineDescription_MoveTsunamiHammer,
 };

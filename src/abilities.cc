@@ -9699,6 +9699,34 @@ static const Ability UnownPower = {
     .randomizerBanned = TRUE,
 };
 
+static const Ability Downpour = {
+    .name = $("Downpour"),
+    .description = $("Boosts the power of Water-type\n"
+                     "moves by 1.5x."),
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_WATER) MUL(1.5);
+        },
+};
+
+static const Ability AtlanticOverlord = {
+    .name = $("Atlantic Ruler"),
+    .description = $("Downpour + Fearmonger."),
+    .onEntry = UseIntimidateClone,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBeParalyzed(battler, target))
+        CHECK(IsMoveMakingContact(move, battler))
+        CHECK(Random() % 100 < 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_WATER) MUL(1.5);
+        },
+};
+
 const Ability gAbilities[] = {
     [ABILITY_NONE] = None,
     [ABILITY_STENCH] = Stench,

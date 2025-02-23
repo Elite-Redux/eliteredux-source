@@ -6134,7 +6134,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_MIMIKYU_APEX_BUSTED] =
     {
         .size = 0x77,
-        .y_offset = 7,
+        .y_offset = 15,
     },
     [SPECIES_MIMIKYU_RAYQUAZA] =
     {
@@ -8648,6 +8648,26 @@ const struct MonCoords gMonBackPicCoords[] =
     {
         .size = 0x78,
         .y_offset = 7,
+    },
+    [SPECIES_TINKATINK_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  4
+    },
+    [SPECIES_TINKATUFF_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  6
+    },
+    [SPECIES_TINKATON_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  4
+    },
+    [SPECIES_TINKATON_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  4
     },
 
 };

@@ -2005,4 +2005,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_INSECT_IMPACT] = _("Insect Impact"),
     [MOVE_LIGHTNING_BULLET] = _("Lightning Bullet"),
     [MOVE_METALLIC_MELODY] = _("Metallic Melody"),
+    [MOVE_TSUNAMI_HAMMER] = _("Tsunami Hammer"),
 };

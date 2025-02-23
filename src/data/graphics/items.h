@@ -1715,6 +1715,8 @@ const u32 gItemIcon_PhantomMeteor[] = INCBIN_U32("graphics/items/icons/meteorite
 const u32 gItemIconPalette_PhantomMeteor[] = INCBIN_U32("graphics/items/icon_palettes/meteorite.gbapal.lz");
 const u32 gItemIcon_KingdraniteY[] = INCBIN_U32("graphics/items/icons/kingdranite.4bpp.lz");
 const u32 gItemIconPalette_KingdraniteY[] = INCBIN_U32("graphics/items/icon_palettes/kingdranite.gbapal.lz");
+const u32 gItemIcon_TinkatiteR[] = INCBIN_U32("graphics/items/icons/tinkatite.4bpp.lz");
+const u32 gItemIconPalette_TinkatiteR[] = INCBIN_U32("graphics/items/icon_palettes/tinkatite.gbapal.lz");
 
 // Gen 7 Items
 

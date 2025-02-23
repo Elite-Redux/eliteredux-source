@@ -20643,6 +20643,48 @@ static const union AnimCmd *const sAnims_MIENSHAO_MEGA[] ={
     sAnim_MIENSHAO_MEGA_1,
 };
 
+static const union AnimCmd sAnim_TINKATINK_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TINKATUFF_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TINKATON_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_TINKATINK_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TINKATINK_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_TINKATUFF_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TINKATUFF_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_TINKATON_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TINKATON_REDUX_1,
+};
+
+static const union AnimCmd sAnim_TINKATON_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_TINKATON_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TINKATON_REDUX_MEGA_1,
+};
+
 #define ANIM_CMD(name)             [SPECIES_##name] = sAnims_##name
 #define ANIM_CMD_FULL(name, anims) [SPECIES_##name] = anims
 
@@ -22365,6 +22407,10 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(SLOWBRO_MEGA_GALARIAN),
     ANIM_CMD(ROSERADE_MEGA),
     ANIM_CMD(MIENSHAO_MEGA),
+    ANIM_CMD(TINKATINK_REDUX),
+    ANIM_CMD(TINKATUFF_REDUX),
+    ANIM_CMD(TINKATON_REDUX),
+    ANIM_CMD(TINKATON_REDUX_MEGA),
 };
 
 #undef ANIM_CMD

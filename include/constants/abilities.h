@@ -799,8 +799,10 @@
 #define ABILITY_SUPER_SCOPE 777 // Mega Launcher + Artillery
 #define ABILITY_VENOM_CROWN 778 // Mighty Horn + Poison Point
 #define ABILITY_BLIGHT_SCALE 779 // Multiscale + Poison Point
+#define ABILITY_DOWNPOUR 780 // 50% more water power.
+#define ABILITY_ATLANTIC_OVERLORD 781 // Downpour + Fearmonger
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_BLIGHT_SCALE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_ATLANTIC_OVERLORD + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

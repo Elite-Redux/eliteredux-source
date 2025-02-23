@@ -8519,6 +8519,30 @@ const u32 gMonPalette_MienshaoMega[]           = INCBIN_U32("graphics/pokemon/mi
 const u32 gMonShinyPalette_MienshaoMega[]      = INCBIN_U32("graphics/pokemon/mienshao/mega/shiny.gbapal.lz");
 const u8  gMonIcon_MienshaoMega[]              = INCBIN_U8("graphics/pokemon/mienshao/mega/icon.4bpp");
 
+const u32 gMonFrontPic_TinkatinkRedux[]          = INCBIN_U32("graphics/pokemon/tinkatink/redux/front.4bpp.lz");
+const u32 gMonBackPic_TinkatinkRedux[]           = INCBIN_U32("graphics/pokemon/tinkatink/redux/back.4bpp.lz");
+const u32 gMonPalette_TinkatinkRedux[]           = INCBIN_U32("graphics/pokemon/tinkatink/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_TinkatinkRedux[]      = INCBIN_U32("graphics/pokemon/tinkatink/redux/shiny.gbapal.lz");
+const u8  gMonIcon_TinkatinkRedux[]              = INCBIN_U8("graphics/pokemon/tinkatink/redux/icon.4bpp");
+
+const u32 gMonFrontPic_TinkatuffRedux[]          = INCBIN_U32("graphics/pokemon/tinkatuff/redux/front.4bpp.lz");
+const u32 gMonBackPic_TinkatuffRedux[]           = INCBIN_U32("graphics/pokemon/tinkatuff/redux/back.4bpp.lz");
+const u32 gMonPalette_TinkatuffRedux[]           = INCBIN_U32("graphics/pokemon/tinkatuff/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_TinkatuffRedux[]      = INCBIN_U32("graphics/pokemon/tinkatuff/redux/shiny.gbapal.lz");
+const u8  gMonIcon_TinkatuffRedux[]              = INCBIN_U8("graphics/pokemon/tinkatuff/redux/icon.4bpp");
+
+const u32 gMonFrontPic_TinkatonRedux[]          = INCBIN_U32("graphics/pokemon/tinkaton/redux/front.4bpp.lz");
+const u32 gMonBackPic_TinkatonRedux[]           = INCBIN_U32("graphics/pokemon/tinkaton/redux/back.4bpp.lz");
+const u32 gMonPalette_TinkatonRedux[]           = INCBIN_U32("graphics/pokemon/tinkaton/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_TinkatonRedux[]      = INCBIN_U32("graphics/pokemon/tinkaton/redux/shiny.gbapal.lz");
+const u8  gMonIcon_TinkatonRedux[]              = INCBIN_U8("graphics/pokemon/tinkaton/redux/icon.4bpp");
+
+const u32 gMonFrontPic_TinkatonReduxMega[]          = INCBIN_U32("graphics/pokemon/tinkaton/redux/mega/front.4bpp.lz");
+const u32 gMonBackPic_TinkatonReduxMega[]           = INCBIN_U32("graphics/pokemon/tinkaton/redux/mega/back.4bpp.lz");
+const u32 gMonPalette_TinkatonReduxMega[]           = INCBIN_U32("graphics/pokemon/tinkaton/redux/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_TinkatonReduxMega[]      = INCBIN_U32("graphics/pokemon/tinkaton/redux/mega/shiny.gbapal.lz");
+const u8  gMonIcon_TinkatonReduxMega[]              = INCBIN_U8("graphics/pokemon/tinkaton/redux/mega/icon.4bpp");
+
 //PARTNER POKEMON
 
 const u32 gMonFrontPic_AmauraPartner[]          = INCBIN_U32("graphics/pokemon/amaura/front.4bpp.lz");

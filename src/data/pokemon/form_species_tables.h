@@ -1923,6 +1923,8 @@ static const u16 sKartana_FallenFormSpeciesIdTable[] = {
 static const u16 sTinkatonFormSpeciesIdTable[] = {
     SPECIES_TINKATON,
     SPECIES_TINKATON_MEGA,
+    SPECIES_TINKATON_REDUX,
+    SPECIES_TINKATON_REDUX_MEGA,
     FORM_SPECIES_END,
 };
 static const u16 sFidoughFormSpeciesIdTable[] = {
@@ -2232,5 +2234,15 @@ static const u16 sRoseradeFormSpeciesIdTable[] = {
 static const u16 sMienshaoFormSpeciesIdTable[] = {
     SPECIES_MIENSHAO,
     SPECIES_MIENSHAO_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sTinkatinkFormSpeciesIdTable[] = {
+    SPECIES_TINKATINK,
+    SPECIES_TINKATINK_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sTinkatuffFormSpeciesIdTable[] = {
+    SPECIES_TINKATINK,
+    SPECIES_TINKATUFF_REDUX,
     FORM_SPECIES_END,
 };

@@ -1792,8 +1792,9 @@
 #define SPECIES_SLOWBRO_MEGA_GALARIAN       CUSTOM_MEGA_START + 129
 #define SPECIES_SLOWKING_MEGA_GALARIAN      CUSTOM_MEGA_START + 130
 #define SPECIES_ROSERADE_MEGA               CUSTOM_MEGA_START + 131
+#define SPECIES_TINKATON_REDUX_MEGA         CUSTOM_MEGA_START + 132
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_ROSERADE_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_TINKATON_REDUX_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA
@@ -1941,8 +1942,11 @@
 #define SPECIES_ARAQUANID_REDUX       REDUX_FORMS_START + 137
 #define SPECIES_MIMIKYU_APEX       REDUX_FORMS_START + 138
 #define SPECIES_MIMIKYU_APEX_BUSTED       REDUX_FORMS_START + 139
+#define SPECIES_TINKATINK_REDUX           REDUX_FORMS_START + 140
+#define SPECIES_TINKATUFF_REDUX           REDUX_FORMS_START + 141
+#define SPECIES_TINKATON_REDUX            REDUX_FORMS_START + 142
 
-#define LAST_REDUX_FORM                     SPECIES_MIMIKYU_APEX_BUSTED
+#define LAST_REDUX_FORM                     SPECIES_TINKATON_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

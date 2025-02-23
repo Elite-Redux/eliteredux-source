@@ -1223,6 +1223,10 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_ROSERADE_MEGA] = sRoseradeFormSpeciesIdTable,
     [SPECIES_MIENSHAO] = sMienshaoFormSpeciesIdTable,
     [SPECIES_MIENSHAO_MEGA] = sMienshaoFormSpeciesIdTable,
+    [SPECIES_TINKATINK_REDUX] = sTinkatinkFormSpeciesIdTable,
+    [SPECIES_TINKATUFF_REDUX] = sTinkatuffFormSpeciesIdTable,
+    [SPECIES_TINKATON_REDUX] = sTinkatonFormSpeciesIdTable,
+    [SPECIES_TINKATON_REDUX_MEGA] = sTinkatonFormSpeciesIdTable,
 
     [SPECIES_SPIRITOMB_REDUX] = sSpiritombFormSpeciesIdTable,
 

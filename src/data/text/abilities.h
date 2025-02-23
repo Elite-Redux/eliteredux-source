@@ -747,6 +747,8 @@ static const u8 sAbilityUnownPowerDescription[] = _("Mystic Power + Hidden Power
 static const u8 sAbilitySuperScopeDescription[] = _("Mega Launcher + Artillery.");
 static const u8 sAbilityVenomCrownDescription[] = _("Mighty Horn + Poison Point.");
 static const u8 sAbilityBlightScaleDescription[] = _("Multiscale + Poison Point.");
+static const u8 sAbilityDownpourDescription[] = _("Boosts the power of Water-type\nmoves by 1.5x.");
+static const u8 sAbilityAtlanticOverlordDescription[] = _("Downpour + Fearmonger.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1530,6 +1532,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SUPER_SCOPE] = _("Super Scope"),
     [ABILITY_VENOM_CROWN] = _("Venom Crown"),
     [ABILITY_BLIGHT_SCALE] = _("Blight Scale"),
+    [ABILITY_DOWNPOUR] = _("Downpour"),
+    [ABILITY_ATLANTIC_OVERLORD] = _("Atlantic Ruler"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2314,4 +2318,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SUPER_SCOPE] = sAbilitySuperScopeDescription,
     [ABILITY_VENOM_CROWN] = sAbilityVenomCrownDescription,
     [ABILITY_BLIGHT_SCALE] = sAbilityBlightScaleDescription,
+    [ABILITY_DOWNPOUR] = sAbilityDownpourDescription,
+    [ABILITY_ATLANTIC_OVERLORD] = sAbilityAtlanticOverlordDescription,
+
 };

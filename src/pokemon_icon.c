@@ -1830,6 +1830,10 @@ const u8 *const gMonIconTable[] =
     [SPECIES_SLOWKING_MEGA_GALARIAN] = gMonIcon_SlowkingGalarianMega,
     [SPECIES_ROSERADE_MEGA] = gMonIcon_RoseradeMega,
     [SPECIES_MIENSHAO_MEGA] = gMonIcon_MienshaoMega,
+    [SPECIES_TINKATINK_REDUX] = gMonIcon_TinkatinkRedux,
+    [SPECIES_TINKATUFF_REDUX] = gMonIcon_TinkatuffRedux,
+    [SPECIES_TINKATON_REDUX] = gMonIcon_TinkatonRedux,
+    [SPECIES_TINKATON_REDUX_MEGA] = gMonIcon_TinkatonReduxMega,
 
     [SPECIES_MORPEKYLL_HANGRY] = gMonIcon_MorpekyllHangry,
 
@@ -3537,6 +3541,10 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_ARCANINE_MEGA] = 0,
     [SPECIES_ROSERADE_MEGA] = 1,
     [SPECIES_MIENSHAO_MEGA] = 1,
+    [SPECIES_TINKATINK_REDUX] = 0,
+    [SPECIES_TINKATUFF_REDUX] = 0,
+    [SPECIES_TINKATON_REDUX] = 0,
+    [SPECIES_TINKATON_REDUX_MEGA] = 0,
 };
 
 const u8 gMonIconPaletteIndicesFemale[] =

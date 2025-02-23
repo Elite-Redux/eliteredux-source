@@ -1829,6 +1829,10 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(SLOWKING_MEGA_GALARIAN, gMonFrontPic_SlowkingGalarianMega),
     SPECIES_SPRITE(ROSERADE_MEGA, gMonFrontPic_RoseradeMega),
     SPECIES_SPRITE(MIENSHAO_MEGA, gMonFrontPic_MienshaoMega),
+    SPECIES_SPRITE(TINKATINK_REDUX, gMonFrontPic_TinkatinkRedux),
+    SPECIES_SPRITE(TINKATUFF_REDUX, gMonFrontPic_TinkatuffRedux),
+    SPECIES_SPRITE(TINKATON_REDUX, gMonFrontPic_TinkatonRedux),
+    SPECIES_SPRITE(TINKATON_REDUX_MEGA, gMonFrontPic_TinkatonReduxMega),
     
 };
 

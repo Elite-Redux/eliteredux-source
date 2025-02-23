@@ -11569,6 +11569,26 @@ extern const u32 gMonBackPic_MienshaoMega[];
 extern const u32 gMonPalette_MienshaoMega[];
 extern const u32 gMonShinyPalette_MienshaoMega[];
 extern const u8  gMonIcon_MienshaoMega[];
+extern const u32 gMonFrontPic_TinkatinkRedux[];
+extern const u32 gMonBackPic_TinkatinkRedux[];
+extern const u32 gMonPalette_TinkatinkRedux[];
+extern const u32 gMonShinyPalette_TinkatinkRedux[];
+extern const u8  gMonIcon_TinkatinkRedux[];
+extern const u32 gMonFrontPic_TinkatuffRedux[];
+extern const u32 gMonBackPic_TinkatuffRedux[];
+extern const u32 gMonPalette_TinkatuffRedux[];
+extern const u32 gMonShinyPalette_TinkatuffRedux[];
+extern const u8  gMonIcon_TinkatuffRedux[];
+extern const u32 gMonFrontPic_TinkatonRedux[];
+extern const u32 gMonBackPic_TinkatonRedux[];
+extern const u32 gMonPalette_TinkatonRedux[];
+extern const u32 gMonShinyPalette_TinkatonRedux[];
+extern const u8  gMonIcon_TinkatonRedux[];
+extern const u32 gMonFrontPic_TinkatonReduxMega[];
+extern const u32 gMonBackPic_TinkatonReduxMega[];
+extern const u32 gMonPalette_TinkatonReduxMega[];
+extern const u32 gMonShinyPalette_TinkatonReduxMega[];
+extern const u8  gMonIcon_TinkatonReduxMega[];
 //3.0 CUTOFF END
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
