@@ -755,17 +755,6 @@ static const Ability PoisonPoint = {
     ON_EITHER_ABILITY(PoisonPoint),
 };
 
-static const Ability VenomCrown = {
-    .name = $("Venom Crown"),
-    .description = $("Poison Point + Mighty Horn."),
-    ON_EITHER_ABILITY(PoisonPoint),
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].hornBased) MUL(1.3);
-        },
-        .randomizerBanned = TRUE,
-};
-
 static const Ability InnerFocus = {
     .name = $("Inner Focus"),
     .description = $("Blocks flinch, Intimidate, Scare.\n"
@@ -1892,18 +1881,6 @@ static const Ability Multiscale = {
     .breakable = TRUE,
 };
 
-static const Ability Blightscale = {
-    .name = $("Blight Scale"),
-    .description = $("Multiscale + Poison Point"),
-    ON_EITHER_ABILITY(PoisonPoint),
-    .onDefensiveMultiplier =
-        +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (BATTLER_MAX_HP(battler)) MUL(.5);
-        },
-    .breakable = TRUE,
-    .randomizerBanned = TRUE,
-};
-
 static const Ability ToxicBoost = {
     .name = $("Toxic Boost"),
     .description = $("Ups Atk by 1.5x if poisoned.\n"
@@ -2354,19 +2331,6 @@ static const Ability MegaLauncher = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.3);
-        },
-};
-
-static const Ability SuperScope = {
-    .name = $("Super Scope"),
-    .description = $("Mega Launcher + Artillery."),
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.3);
-        },
-    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-            CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
-            return ACCURACY_HITS_IF_POSSIBLE;
         },
 };
 
@@ -9699,6 +9663,42 @@ static const Ability UnownPower = {
     .randomizerBanned = TRUE,
 };
 
+static const Ability SuperScope = {
+    .name = $("Super Scope"),
+    .description = $("Mega Launcher + Artillery."),
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.3);
+        },
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+            CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
+            return ACCURACY_HITS_IF_POSSIBLE;
+        },
+};
+
+static const Ability VenomCrown = {
+    .name = $("Venom Crown"),
+    .description = $("Poison Point + Mighty Horn."),
+    ON_EITHER_ABILITY(PoisonPoint),
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].hornBased) MUL(1.3);
+        },
+        .randomizerBanned = TRUE,
+};
+
+static const Ability BlightScale = {
+    .name = $("Blight Scale"),
+    .description = $("Multiscale + Poison Point"),
+    ON_EITHER_ABILITY(PoisonPoint),
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (BATTLER_MAX_HP(battler)) MUL(.5);
+        },
+    .breakable = TRUE,
+    .randomizerBanned = TRUE,
+};
+
 static const Ability Downpour = {
     .name = $("Downpour"),
     .description = $("Boosts the power of Water-type\n"
@@ -10505,6 +10505,11 @@ const Ability gAbilities[] = {
     [ABILITY_CORRUPTED_MIND] = CorruptedMind,
     [ABILITY_FLAME_COAT] = FlameCoat,
     [ABILITY_UNOWN_POWER] = UnownPower,
+    [ABILITY_SUPER_SCOPE] = SuperScope,
+    [ABILITY_VENOM_CROWN] = VenomCrown,
+    [ABILITY_BLIGHT_SCALE] = BlightScale,
+    [ABILITY_DOWNPOUR] = Downpour,
+    [ABILITY_ATLANTIC_OVERLORD] = AtlanticOverlord,
 };
 
 #pragma GCC diagnostic pop
