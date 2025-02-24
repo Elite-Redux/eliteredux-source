@@ -27577,6 +27577,7 @@ static const struct LevelUpMove sHydreigonReduxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(46, MOVE_MOONLIGHT),
     LEVEL_UP_MOVE(51, MOVE_DRACO_METEOR),
     LEVEL_UP_MOVE(51, MOVE_FLEUR_CANNON),
+    LEVEL_UP_MOVE(71, MOVE_JUDGMENT),
     LEVEL_UP_END
 };
 
