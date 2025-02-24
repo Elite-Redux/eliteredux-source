@@ -9666,10 +9666,7 @@ static const Ability UnownPower = {
 static const Ability SuperScope = {
     .name = $("Super Scope"),
     .description = $("Mega Launcher + Artillery."),
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.3);
-        },
+    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
             CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
             return ACCURACY_HITS_IF_POSSIBLE;
