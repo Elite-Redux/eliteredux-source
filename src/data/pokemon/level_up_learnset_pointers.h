@@ -1828,4 +1828,10 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_TINKATUFF_REDUX] = sTinkatuffReduxLevelUpLearnset,
     [SPECIES_TINKATON_REDUX] = sTinkatonReduxLevelUpLearnset,
     [SPECIES_TINKATON_REDUX_MEGA] = sTinkatonReduxLevelUpLearnset,
+    [SPECIES_KNAIVER_REDUX] = sKnaiverReduxLevelUpLearnset,
+    [SPECIES_SCYTHER_REDUX] = sScytherReduxLevelUpLearnset,
+    [SPECIES_KLEAVOR_REDUX] = sKleavorReduxLevelUpLearnset,
+    [SPECIES_SCYTHER_REDUX_MEGA] = sScytherReduxLevelUpLearnset,
+    [SPECIES_KLEAVOR_REDUX_MEGA] = sKleavorReduxLevelUpLearnset,
+    [SPECIES_SCIZOR_REDUX_MEGA] = sScizor_ReduxLevelUpLearnset,
 };

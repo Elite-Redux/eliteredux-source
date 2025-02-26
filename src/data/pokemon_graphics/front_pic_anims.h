@@ -20685,6 +20685,72 @@ static const union AnimCmd *const sAnims_TINKATON_REDUX_MEGA[] ={
     sAnim_TINKATON_REDUX_MEGA_1,
 };
 
+static const union AnimCmd sAnim_KNAIVER_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_KNAIVER_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_KNAIVER_REDUX_1,
+};
+
+static const union AnimCmd sAnim_SCYTHER_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_SCYTHER_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SCYTHER_REDUX_1,
+};
+
+static const union AnimCmd sAnim_SCYTHER_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_SCYTHER_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SCYTHER_REDUX_MEGA_1,
+};
+
+static const union AnimCmd sAnim_KLEAVOR_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_KLEAVOR_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_KLEAVOR_REDUX_1,
+};
+
+static const union AnimCmd sAnim_KLEAVOR_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_KLEAVOR_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_KLEAVOR_REDUX_MEGA_1,
+};
+
+static const union AnimCmd sAnim_SCIZOR_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_SCIZOR_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SCIZOR_REDUX_MEGA_1,
+};
+
 #define ANIM_CMD(name)             [SPECIES_##name] = sAnims_##name
 #define ANIM_CMD_FULL(name, anims) [SPECIES_##name] = anims
 
@@ -22411,6 +22477,12 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(TINKATUFF_REDUX),
     ANIM_CMD(TINKATON_REDUX),
     ANIM_CMD(TINKATON_REDUX_MEGA),
+    ANIM_CMD(KNAIVER_REDUX),
+    ANIM_CMD(SCYTHER_REDUX),
+    ANIM_CMD(KLEAVOR_REDUX),
+    ANIM_CMD(KLEAVOR_REDUX_MEGA),
+    ANIM_CMD(SCYTHER_REDUX_MEGA),
+    ANIM_CMD(SCIZOR_REDUX_MEGA),
 };
 
 #undef ANIM_CMD

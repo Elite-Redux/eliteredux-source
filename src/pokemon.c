@@ -8858,7 +8858,7 @@ u32 getMask(s8 loc, s8 locG) {
 bool8 isSpeciesPlaceholderMon(u16 species) {
     // Special Cases
     switch (species) {
-        case SPECIES_SCIZOR_REDUX:
+        case SPECIES_UNOWN_Z:
             return TRUE;
             break;
     }

@@ -353,6 +353,7 @@ static const u16 sScizorFormSpeciesIdTable[] = {
     SPECIES_SCIZOR,
     SPECIES_SCIZOR_MEGA,
     SPECIES_SCIZOR_REDUX,
+    SPECIES_SCIZOR_REDUX_MEGA,
     FORM_SPECIES_END,
 };
 
@@ -2244,5 +2245,22 @@ static const u16 sTinkatinkFormSpeciesIdTable[] = {
 static const u16 sTinkatuffFormSpeciesIdTable[] = {
     SPECIES_TINKATINK,
     SPECIES_TINKATUFF_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sKnaiverFormSpeciesIdTable[] = {
+    SPECIES_KNAIVER,
+    SPECIES_KNAIVER_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sScytherFormSpeciesIdTable[] = {
+    SPECIES_SCYTHER,
+    SPECIES_SCYTHER_REDUX,
+    SPECIES_SCYTHER_REDUX_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sKleavorFormSpeciesIdTable[] = {
+    SPECIES_KLEAVOR,
+    SPECIES_KLEAVOR_REDUX,
+    SPECIES_KLEAVOR_REDUX_MEGA,
     FORM_SPECIES_END,
 };

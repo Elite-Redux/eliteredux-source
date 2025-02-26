@@ -8587,6 +8587,36 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x88,
         .y_offset = 0,
     },
+    [SPECIES_KNAIVER_REDUX] =
+    {
+        .size = 0x88,
+        .y_offset = 8,
+    },
+    [SPECIES_SCYTHER_REDUX] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_SCYTHER_REDUX_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_SCIZOR_REDUX_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_KLEAVOR_REDUX] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_KLEAVOR_REDUX_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
 
     // Egg
     [SPECIES_EGG] =

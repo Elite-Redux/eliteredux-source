@@ -730,6 +730,11 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_SLOWKINGITE_G]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_ARCANITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_ROSERADEITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_KLEAVITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_KLEAVITE_R]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_SCIZORITE_R]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_SCYTHERITE_R]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_SCYTHERITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_TINKATITE_R]   = {gItemIcon_Tinkatite, gItemIconPalette_Tinkatite},
 
     //Monotype Mega Stones

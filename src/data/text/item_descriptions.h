@@ -4265,5 +4265,30 @@ static const u8 sArcaniteDesc[] = _(
 
 static const u8 sTinkatiteRDesc[] = _(
     "This stone enables\n"
-    "Tinkaton to Mega\n"
+    "Tinkaton R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sScizoriteRDesc[] = _(
+    "This stone enables\n"
+    "Scizor R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sKleaviteRDesc[] = _(
+    "This stone enables\n"
+    "Kleavor R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sScytheriteRDesc[] = _(
+    "This stone enables\n"
+    "Scyther R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sKleaviteDesc[] = _(
+    "This stone enables\n"
+    "Kleavor to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sScytheriteDesc[] = _(
+    "This stone enables\n"
+    "Scyther to Mega\n"
     "Evolve in battle.");

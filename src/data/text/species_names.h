@@ -1829,6 +1829,12 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_TINKATUFF_REDUX] = _("Tinkatuff"),
     [SPECIES_TINKATON_REDUX] = _("Tinkaton"),
     [SPECIES_TINKATON_REDUX_MEGA] = _("Tinkaton"),
+    [SPECIES_KNAIVER_REDUX] = _("Knaiver"),
+    [SPECIES_SCYTHER_REDUX] = _("Scyther"),
+    [SPECIES_KLEAVOR_REDUX] = _("Kleavor"),
+    [SPECIES_SCYTHER_REDUX_MEGA] = _("Scyther"),
+    [SPECIES_SCIZOR_REDUX_MEGA] = _("Scizor"),
+    [SPECIES_KLEAVOR_REDUX_MEGA] = _("Kleavor"),
 
     // PARTNER POKEMON
     [SPECIES_PIKACHU_PARTNER] = _("Pikachu"),

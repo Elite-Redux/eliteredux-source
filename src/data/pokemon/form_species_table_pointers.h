@@ -1227,6 +1227,15 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_TINKATUFF_REDUX] = sTinkatuffFormSpeciesIdTable,
     [SPECIES_TINKATON_REDUX] = sTinkatonFormSpeciesIdTable,
     [SPECIES_TINKATON_REDUX_MEGA] = sTinkatonFormSpeciesIdTable,
+    [SPECIES_KNAIVER_REDUX] = sKnaiverFormSpeciesIdTable,
+    [SPECIES_SCYTHER_REDUX] = sScytherFormSpeciesIdTable,
+    [SPECIES_KLEAVOR_REDUX] = sKleavorFormSpeciesIdTable,
+    [SPECIES_SCYTHER_REDUX_MEGA] = sScytherFormSpeciesIdTable,
+    [SPECIES_KLEAVOR_REDUX_MEGA] = sKleavorFormSpeciesIdTable,
+    [SPECIES_SCIZOR_REDUX_MEGA] = sScizorFormSpeciesIdTable,
+    [SPECIES_KNAIVER] = sKnaiverFormSpeciesIdTable,
+    [SPECIES_SCYTHER] = sScytherFormSpeciesIdTable,
+    [SPECIES_KLEAVOR] = sKleavorFormSpeciesIdTable,
 
     [SPECIES_SPIRITOMB_REDUX] = sSpiritombFormSpeciesIdTable,
 

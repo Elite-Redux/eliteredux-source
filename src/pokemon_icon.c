@@ -1834,6 +1834,12 @@ const u8 *const gMonIconTable[] =
     [SPECIES_TINKATUFF_REDUX] = gMonIcon_TinkatuffRedux,
     [SPECIES_TINKATON_REDUX] = gMonIcon_TinkatonRedux,
     [SPECIES_TINKATON_REDUX_MEGA] = gMonIcon_TinkatonReduxMega,
+    [SPECIES_KNAIVER_REDUX] = gMonIcon_KnaiverRedux,
+    [SPECIES_SCYTHER_REDUX] = gMonIcon_ScytherRedux,
+    [SPECIES_KLEAVOR_REDUX] = gMonIcon_KleavorRedux,
+    [SPECIES_SCIZOR_REDUX_MEGA] = gMonIcon_ScizorReduxMega,
+    [SPECIES_SCYTHER_REDUX_MEGA] = gMonIcon_ScytherReduxMega,
+    [SPECIES_KLEAVOR_REDUX_MEGA] = gMonIcon_KleavorReduxMega,
 
     [SPECIES_MORPEKYLL_HANGRY] = gMonIcon_MorpekyllHangry,
 
@@ -3546,6 +3552,12 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_TINKATUFF_REDUX] = 2,
     [SPECIES_TINKATON_REDUX] = 2,
     [SPECIES_TINKATON_REDUX_MEGA] = 2,
+    [SPECIES_KNAIVER_REDUX] = 0,
+    [SPECIES_SCYTHER_REDUX] = 0,
+    [SPECIES_KLEAVOR_REDUX] = 0,
+    [SPECIES_KLEAVOR_REDUX_MEGA] = 0,
+    [SPECIES_SCYTHER_REDUX_MEGA] = 0,
+    [SPECIES_SCIZOR_REDUX_MEGA] = 0,
 };
 
 const u8 gMonIconPaletteIndicesFemale[] =

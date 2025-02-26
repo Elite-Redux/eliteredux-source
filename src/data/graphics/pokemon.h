@@ -8543,6 +8543,42 @@ const u32 gMonPalette_TinkatonReduxMega[]           = INCBIN_U32("graphics/pokem
 const u32 gMonShinyPalette_TinkatonReduxMega[]      = INCBIN_U32("graphics/pokemon/tinkaton/redux/mega/shiny.gbapal.lz");
 const u8  gMonIcon_TinkatonReduxMega[]              = INCBIN_U8("graphics/pokemon/tinkaton/redux/mega/icon.4bpp");
 
+const u32 gMonFrontPic_KnaiverRedux[]          = INCBIN_U32("graphics/pokemon/knaiver/redux/front.4bpp.lz");
+const u32 gMonBackPic_KnaiverRedux[]           = INCBIN_U32("graphics/pokemon/knaiver/redux/back.4bpp.lz");
+const u32 gMonPalette_KnaiverRedux[]           = INCBIN_U32("graphics/pokemon/knaiver/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_KnaiverRedux[]      = INCBIN_U32("graphics/pokemon/knaiver/redux/shiny.gbapal.lz");
+const u8  gMonIcon_KnaiverRedux[]              = INCBIN_U8("graphics/pokemon/knaiver/redux/icon.4bpp");
+
+const u32 gMonFrontPic_ScytherRedux[]          = INCBIN_U32("graphics/pokemon/scyther/redux/front.4bpp.lz");
+const u32 gMonBackPic_ScytherRedux[]           = INCBIN_U32("graphics/pokemon/scyther/redux/back.4bpp.lz");
+const u32 gMonPalette_ScytherRedux[]           = INCBIN_U32("graphics/pokemon/scyther/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_ScytherRedux[]      = INCBIN_U32("graphics/pokemon/scyther/redux/shiny.gbapal.lz");
+const u8  gMonIcon_ScytherRedux[]              = INCBIN_U8("graphics/pokemon/scyther/redux/icon.4bpp");
+
+const u32 gMonFrontPic_ScytherReduxMega[]          = INCBIN_U32("graphics/pokemon/scyther/redux/mega/front.4bpp.lz");
+const u32 gMonBackPic_ScytherReduxMega[]           = INCBIN_U32("graphics/pokemon/scyther/redux/mega/back.4bpp.lz");
+const u32 gMonPalette_ScytherReduxMega[]           = INCBIN_U32("graphics/pokemon/scyther/redux/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_ScytherReduxMega[]      = INCBIN_U32("graphics/pokemon/scyther/redux/mega/shiny.gbapal.lz");
+const u8  gMonIcon_ScytherReduxMega[]              = INCBIN_U8("graphics/pokemon/scyther/redux/mega/icon.4bpp");
+
+const u32 gMonFrontPic_ScizorReduxMega[]          = INCBIN_U32("graphics/pokemon/scizor/redux/mega/front.4bpp.lz");
+const u32 gMonBackPic_ScizorReduxMega[]           = INCBIN_U32("graphics/pokemon/scizor/redux/mega/back.4bpp.lz");
+const u32 gMonPalette_ScizorReduxMega[]           = INCBIN_U32("graphics/pokemon/scizor/redux/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_ScizorReduxMega[]      = INCBIN_U32("graphics/pokemon/scizor/redux/mega/shiny.gbapal.lz");
+const u8  gMonIcon_ScizorReduxMega[]              = INCBIN_U8("graphics/pokemon/scizor/redux/mega/icon.4bpp");
+
+const u32 gMonFrontPic_KleavorRedux[]          = INCBIN_U32("graphics/pokemon/kleavor/redux/front.4bpp.lz");
+const u32 gMonBackPic_KleavorRedux[]           = INCBIN_U32("graphics/pokemon/kleavor/redux/back.4bpp.lz");
+const u32 gMonPalette_KleavorRedux[]           = INCBIN_U32("graphics/pokemon/kleavor/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_KleavorRedux[]      = INCBIN_U32("graphics/pokemon/kleavor/redux/shiny.gbapal.lz");
+const u8  gMonIcon_KleavorRedux[]              = INCBIN_U8("graphics/pokemon/kleavor/redux/icon.4bpp");
+
+const u32 gMonFrontPic_KleavorReduxMega[]          = INCBIN_U32("graphics/pokemon/kleavor/redux/mega/front.4bpp.lz");
+const u32 gMonBackPic_KleavorReduxMega[]           = INCBIN_U32("graphics/pokemon/kleavor/redux/mega/back.4bpp.lz");
+const u32 gMonPalette_KleavorReduxMega[]           = INCBIN_U32("graphics/pokemon/kleavor/redux/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_KleavorReduxMega[]      = INCBIN_U32("graphics/pokemon/kleavor/redux/mega/shiny.gbapal.lz");
+const u8  gMonIcon_KleavorReduxMega[]              = INCBIN_U8("graphics/pokemon/kleavor/redux/mega/icon.4bpp");
+
 //PARTNER POKEMON
 
 const u32 gMonFrontPic_AmauraPartner[]          = INCBIN_U32("graphics/pokemon/amaura/front.4bpp.lz");

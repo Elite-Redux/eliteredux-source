@@ -10481,5 +10481,60 @@ const struct Item gItems[] =
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
+    [ITEM_SCIZORITE_R] =
+    {
+        .name = _("Scizorite R"),
+        .itemId = ITEM_SCIZORITE_R,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sScizoriteRDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_SCYTHERITE_R] =
+    {
+        .name = _("Scytherite R"),
+        .itemId = ITEM_SCYTHERITE_R,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sScytheriteRDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_KLEAVITE_R] =
+    {
+        .name = _("Kleavite R"),
+        .itemId = ITEM_KLEAVITE_R,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sKleaviteRDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_SCYTHERITE] =
+    {
+        .name = _("Scytherite"),
+        .itemId = ITEM_SCYTHERITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sScytheriteRDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_KLEAVITE] =
+    {
+        .name = _("Kleavite"),
+        .itemId = ITEM_KLEAVITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sKleaviteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
     
 };

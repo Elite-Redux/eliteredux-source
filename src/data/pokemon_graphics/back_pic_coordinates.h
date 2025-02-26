@@ -6299,7 +6299,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SCIZOR_REDUX] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  5
     },
     [SPECIES_IRON_EXO] =
     {
@@ -8668,6 +8668,36 @@ const struct MonCoords gMonBackPicCoords[] =
     {
         .size = 0,
         .y_offset =  4
+    },
+    [SPECIES_KNAIVER_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  6
+    },
+    [SPECIES_SCYTHER_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  2
+    },
+    [SPECIES_SCYTHER_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_SCIZOR_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  7
+    },
+    [SPECIES_KLEAVOR_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  4
+    },
+    [SPECIES_KLEAVOR_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  6
     },
 
 };
