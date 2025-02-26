@@ -3537,6 +3537,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_ARCANINE_MEGA] = 0,
     [SPECIES_ROSERADE_MEGA] = 1,
     [SPECIES_MIENSHAO_MEGA] = 1,
+    [SPECIES_FROSTULA] = 3,
 };
 
 const u8 gMonIconPaletteIndicesFemale[] =
