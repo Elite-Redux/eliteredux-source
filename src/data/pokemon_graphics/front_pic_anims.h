@@ -4413,14 +4413,6 @@ static const union AnimCmd sAnim_CELEBI_1[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnim_OLD_UNOWN_B_1[] =
-{
-    ANIMCMD_FRAME(0, 30),
-    ANIMCMD_FRAME(1, 30),
-    ANIMCMD_FRAME(0, 1),
-    ANIMCMD_END,
-};
-
 static const union AnimCmd sAnim_TREECKO_1[] =
 {
     ANIMCMD_FRAME(0, 6),
@@ -6085,40 +6077,30 @@ static const union AnimCmd sAnim_EGG_1[] =
 
 static const union AnimCmd sAnim_UNOWN_B_1[] =
 {
-    ANIMCMD_FRAME(0, 30),
-    ANIMCMD_FRAME(1, 30),
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
 
 static const union AnimCmd sAnim_UNOWN_C_1[] =
 {
-    ANIMCMD_FRAME(0, 30),
-    ANIMCMD_FRAME(1, 30),
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
 
 static const union AnimCmd sAnim_STEVE_REALER_1[] =
 {
-    ANIMCMD_FRAME(0, 30),
-    ANIMCMD_FRAME(1, 30),
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
 
 static const union AnimCmd sAnim_UNOWN_E_1[] =
 {
-    ANIMCMD_FRAME(0, 30),
-    ANIMCMD_FRAME(1, 30),
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
 
 static const union AnimCmd sAnim_UNOWN_F_1[] =
 {
-    ANIMCMD_FRAME(0, 30),
-    ANIMCMD_FRAME(1, 30),
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
@@ -14561,11 +14543,6 @@ static const union AnimCmd *const sAnims_HO_OH[] ={
 static const union AnimCmd *const sAnims_CELEBI[] ={
     sAnim_GeneralFrame0,
     sAnim_CELEBI_1,
-};
-
-static const union AnimCmd *const sAnims_OLD_UNOWN_B[] ={
-    sAnim_GeneralFrame0,
-    sAnim_OLD_UNOWN_B_1,
 };
 
 static const union AnimCmd *const sAnims_TREECKO[] ={

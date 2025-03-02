@@ -7342,27 +7342,27 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_UNOWN_B] =
     {
         .size = 0x56,
-        .y_offset = 9,
+        .y_offset = 6,
     },
     [SPECIES_UNOWN_C] =
     {
         .size = 0x67,
-        .y_offset = 6,
+        .y_offset = 5,
     },
     [SPECIES_STEVE_REALER] =
     {
         .size = 0x56,
-        .y_offset = 8,
+        .y_offset = 0,
     },
     [SPECIES_UNOWN_E] =
     {
         .size = 0x56,
-        .y_offset = 10,
+        .y_offset = 4,
     },
     [SPECIES_UNOWN_F] =
     {
         .size = 0x66,
-        .y_offset = 10,
+        .y_offset = 8,
     },
     [SPECIES_UNOWN_G] =
     {

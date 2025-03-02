@@ -7268,22 +7268,22 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_UNOWN_B] =
     {
         .size = 0x34,
-        .y_offset = 16,
+        .y_offset = 3,
     },
     [SPECIES_UNOWN_C] =
     {
         .size = 0x44,
-        .y_offset = 16,
+        .y_offset = 2,
     },
     [SPECIES_STEVE_REALER] =
     {
         .size = 0x44,
-        .y_offset = 16,
+        .y_offset = 7,
     },
     [SPECIES_UNOWN_E] =
     {
         .size = 0x44,
-        .y_offset = 17,
+        .y_offset = 7,
     },
     [SPECIES_UNOWN_F] =
     {
