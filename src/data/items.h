@@ -9998,7 +9998,7 @@ const struct Item gItems[] =
     },
     [ITEM_SNORLAXITE] =
     {
-        .name = _("Snorlaxite"),
+        .name = _("RTX"),
         .itemId = ITEM_SNORLAXITE,
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,

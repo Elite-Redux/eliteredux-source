@@ -5580,6 +5580,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
         .argument = HOLD_EFFECT_PLATE,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_BUG_BITE] =
     {
@@ -10663,17 +10664,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_GIGATON_HAMMER] =
     {
         .effect = EFFECT_SE_AGAINST_TYPE_HIT,
-        .power = 140,
+        .power = 255,
         .type = TYPE_STEEL,
         .accuracy = 100,
-        .pp = 5,
+        .pp = 40,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
         .argument = TYPE_STEEL,
         .hammerBased = TRUE,
-        .everyOtherTurn = TRUE,
     },
     [MOVE_TRIPLE_DIVE] =
     {
@@ -12463,6 +12463,18 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_BOTH,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
+    },
+    [MOVE_JUDGEMENT_BONE] =
+    {
+        .effect = EFFECT_JUDGEMENT_BONE,
+        .power = 5,
+        .type = TYPE_MYSTERY,
+        .accuracy = 100,
+        .pp = 40,
+        .secondaryEffectChance = 100,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_BONE_BASED,
+        .split = SPLIT_PHYSICAL,
     },
 };
 

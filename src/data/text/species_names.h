@@ -1508,11 +1508,11 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     // Pichu
     [SPECIES_PICHU_SPIKY_EARED] = _("Pichu"),
     // Unown
-    [SPECIES_UNOWN_B] = _("Unown"),
-    [SPECIES_UNOWN_C] = _("Unown"),
-    [SPECIES_UNOWN_D] = _("Unown"),
-    [SPECIES_UNOWN_E] = _("Unown"),
-    [SPECIES_UNOWN_F] = _("Unown"),
+    [SPECIES_UNOWN_B] = _("P. Bidoof"),
+    [SPECIES_UNOWN_C] = _("steve"),
+    [SPECIES_STEVE_REALER] = _("real steve"),
+    [SPECIES_UNOWN_E] = _("skibiper"),
+    [SPECIES_UNOWN_F] = _("sans"),
     [SPECIES_UNOWN_G] = _("Unown"),
     [SPECIES_UNOWN_H] = _("Unown"),
     [SPECIES_UNOWN_I] = _("Unown"),

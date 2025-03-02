@@ -4891,7 +4891,7 @@ static const Ability HardenedSheath = {
 };
 
 static const Ability ArcticFur = {
-    .name = $("Arctic Fur"),
+    .name = $("Neon Wall"),
     .description = $("Weakens incoming physical\n"
                      "and special moves by 35%."),
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.65); },
@@ -9696,6 +9696,13 @@ static const Ability BlightScale = {
     .randomizerBanned = TRUE,
 };
 
+static const Ability iamsteve = {
+    .name = $("i am steve"),
+    .description = $("guys why is steve jack black\n"
+                    "what were they thinking bro"),
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_NO_RETREAT, 0); },
+};
+
 const Ability gAbilities[] = {
     [ABILITY_NONE] = None,
     [ABILITY_STENCH] = Stench,
@@ -10477,6 +10484,7 @@ const Ability gAbilities[] = {
     [ABILITY_SUPER_SCOPE] = SuperScope,
     [ABILITY_VENOM_CROWN] = VenomCrown,
     [ABILITY_BLIGHT_SCALE] = BlightScale,
+    [ABILITY_I_AM_STEVE] = iamsteve,
 };
 
 #pragma GCC diagnostic pop

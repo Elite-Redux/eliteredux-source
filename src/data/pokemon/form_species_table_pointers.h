@@ -262,7 +262,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     // Unown
     [SPECIES_UNOWN_B] = sUnownFormSpeciesIdTable,
     [SPECIES_UNOWN_C] = sUnownFormSpeciesIdTable,
-    [SPECIES_UNOWN_D] = sUnownFormSpeciesIdTable,
+    [SPECIES_STEVE_REALER] = sUnownFormSpeciesIdTable,
     [SPECIES_UNOWN_E] = sUnownFormSpeciesIdTable,
     [SPECIES_UNOWN_F] = sUnownFormSpeciesIdTable,
     [SPECIES_UNOWN_G] = sUnownFormSpeciesIdTable,

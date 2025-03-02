@@ -315,7 +315,6 @@ static const u16 sUnownFormSpeciesIdTable[] = {
     SPECIES_UNOWN_REVELATION,
     SPECIES_UNOWN_B,
     SPECIES_UNOWN_C,
-    SPECIES_UNOWN_D,
     SPECIES_UNOWN_E,
     SPECIES_UNOWN_F,
     SPECIES_UNOWN_G,

@@ -1341,7 +1341,7 @@ const u16 gSpeciesToNationalPokedexNum[NUM_SPECIES] =  // Assigns all species to
         // Unown
         [SPECIES_UNOWN_B - 1] = NATIONAL_DEX_UNOWN,
         [SPECIES_UNOWN_C - 1] = NATIONAL_DEX_UNOWN,
-        [SPECIES_UNOWN_D - 1] = NATIONAL_DEX_UNOWN,
+        [SPECIES_STEVE_REALER - 1] = NATIONAL_DEX_UNOWN,
         [SPECIES_UNOWN_E - 1] = NATIONAL_DEX_UNOWN,
         [SPECIES_UNOWN_F - 1] = NATIONAL_DEX_UNOWN,
         [SPECIES_UNOWN_G - 1] = NATIONAL_DEX_UNOWN,

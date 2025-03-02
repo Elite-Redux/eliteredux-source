@@ -12012,6 +12012,16 @@ extern const u32 gMonRareShinyPalette_Bulbasaur[];
 extern const u32 gMonRareShinyPalette_Ivysaur[];
 extern const u32 gMonRareShinyPalette_Venusaur[];
 extern const u32 gMonRareShinyPalette_VenusaurMega[];
+extern const u32 gMonPalette_UnownB[];
+extern const u32 gMonShinyPalette_UnownB[];
+extern const u32 gMonPalette_UnownC[];
+extern const u32 gMonShinyPalette_UnownC[];
+extern const u32 gMonPalette_UnownD[];
+extern const u32 gMonShinyPalette_UnownD[];
+extern const u32 gMonPalette_UnownE[];
+extern const u32 gMonShinyPalette_UnownE[];
+extern const u32 gMonPalette_UnownF[];
+extern const u32 gMonShinyPalette_UnownF[];
 
 // GEN IX ITEMS
 extern const u32 gItemIcon_AbilityShield[];

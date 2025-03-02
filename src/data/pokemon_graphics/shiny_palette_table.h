@@ -1475,11 +1475,11 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
 
     SPECIES_SHINY_PAL(PICHU_SPIKY_EARED, gMonShinyPalette_PichuSpikyEared),
 
-    SPECIES_SHINY_PAL(UNOWN_B, gMonShinyPalette_Unown),
-    SPECIES_SHINY_PAL(UNOWN_C, gMonShinyPalette_Unown),
-    SPECIES_SHINY_PAL(UNOWN_D, gMonShinyPalette_Unown),
-    SPECIES_SHINY_PAL(UNOWN_E, gMonShinyPalette_Unown),
-    SPECIES_SHINY_PAL(UNOWN_F, gMonShinyPalette_Unown),
+    SPECIES_SHINY_PAL(UNOWN_B, gMonShinyPalette_UnownB),
+    SPECIES_SHINY_PAL(UNOWN_C, gMonShinyPalette_UnownC),
+    SPECIES_SHINY_PAL(STEVE_REALER, gMonShinyPalette_UnownD),
+    SPECIES_SHINY_PAL(UNOWN_E, gMonShinyPalette_UnownE),
+    SPECIES_SHINY_PAL(UNOWN_F, gMonShinyPalette_UnownF),
     SPECIES_SHINY_PAL(UNOWN_G, gMonShinyPalette_Unown),
     SPECIES_SHINY_PAL(UNOWN_H, gMonShinyPalette_Unown),
     SPECIES_SHINY_PAL(UNOWN_I, gMonShinyPalette_Unown),

@@ -7275,7 +7275,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x44,
         .y_offset = 16,
     },
-    [SPECIES_UNOWN_D] =
+    [SPECIES_STEVE_REALER] =
     {
         .size = 0x44,
         .y_offset = 16,

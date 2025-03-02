@@ -498,6 +498,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectQuickGuard			  @ EFFECT_QUICK_GUARD
 	.4byte BattleScript_EffectTwoTurnRetaliation	  @ EFFECT_TWO_TURN_RETALIATION
 	.4byte BattleScript_EffectShellTrap				  @ EFFECT_SHELL_TRAP
+	.4byte BattleScript_EffectJudgementBone			@ EFFECT_JUDGEMENT_BONE
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -4634,6 +4635,15 @@ BattleScript_EffectSweetKiss:
 	setmoveeffect MOVE_EFFECT_CONFUSION
 	seteffectprimary
 	setmoveeffect MOVE_EFFECT_ATTRACT
+	seteffectprimary
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
+BattleScript_EffectJudgementBone:
+	setmoveeffect MOVE_EFFECT_CURSE
+	seteffectprimary
+	setmoveeffect MOVE_EFFECT_TOXIC
 	seteffectprimary
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG

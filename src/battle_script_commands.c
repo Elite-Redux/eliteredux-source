@@ -8096,7 +8096,7 @@ static void Cmd_various(void) {
             return;
         case VARIOUS_TRY_NO_RETREAT:
             ptr = READ_PTR_INC;
-            if (gVolatileStructs[gActiveBattler].noRetreat || gBattleMons[gActiveBattler].status2 & STATUS2_ESCAPE_PREVENTION) {
+            if (gVolatileStructs[gActiveBattler].noRetreat || gBattleMons[gActiveBattler].status2 & STATUS2_FOCUS_ENERGY) {
                 gBattlescriptCurrInstr = ptr;
             } else {
                 gVolatileStructs[gActiveBattler].noRetreat = TRUE;

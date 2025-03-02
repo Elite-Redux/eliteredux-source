@@ -6099,7 +6099,7 @@ static const union AnimCmd sAnim_UNOWN_C_1[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnim_UNOWN_D_1[] =
+static const union AnimCmd sAnim_STEVE_REALER_1[] =
 {
     ANIMCMD_FRAME(0, 30),
     ANIMCMD_FRAME(1, 30),
@@ -15283,9 +15283,9 @@ static const union AnimCmd *const sAnims_UNOWN_C[] ={
     sAnim_UNOWN_C_1,
 };
 
-static const union AnimCmd *const sAnims_UNOWN_D[] ={
+static const union AnimCmd *const sAnims_STEVE_REALER[] ={
     sAnim_GeneralFrame0,
-    sAnim_UNOWN_D_1,
+    sAnim_STEVE_REALER_1,
 };
 
 static const union AnimCmd *const sAnims_UNOWN_E[] ={
@@ -22121,7 +22121,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(PICHU_SPIKY_EARED),
     ANIM_CMD(UNOWN_B),
     ANIM_CMD(UNOWN_C),
-    ANIM_CMD(UNOWN_D),
+    ANIM_CMD(STEVE_REALER),
     ANIM_CMD(UNOWN_E),
     ANIM_CMD(UNOWN_F),
     ANIM_CMD(UNOWN_G),

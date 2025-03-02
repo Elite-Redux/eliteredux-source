@@ -1205,7 +1205,7 @@
 // Unown
 #define SPECIES_UNOWN_B                      FORMS_START + 103
 #define SPECIES_UNOWN_C                      FORMS_START + 104
-#define SPECIES_UNOWN_D                      FORMS_START + 105
+#define SPECIES_STEVE_REALER                      FORMS_START + 105
 #define SPECIES_UNOWN_E                      FORMS_START + 106
 #define SPECIES_UNOWN_F                      FORMS_START + 107
 #define SPECIES_UNOWN_G                      FORMS_START + 108

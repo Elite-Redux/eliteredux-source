@@ -1359,11 +1359,11 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     // Pichu
     [SPECIES_PICHU_SPIKY_EARED] = sPichuLevelUpLearnset,
     // Unown
-    [SPECIES_UNOWN_B] = sUnownLevelUpLearnset,
-    [SPECIES_UNOWN_C] = sUnownLevelUpLearnset,
-    [SPECIES_UNOWN_D] = sUnownLevelUpLearnset,
-    [SPECIES_UNOWN_E] = sUnownLevelUpLearnset,
-    [SPECIES_UNOWN_F] = sUnownLevelUpLearnset,
+    [SPECIES_UNOWN_B] = sPerfectBidoofLevelUpLearnset,
+    [SPECIES_UNOWN_C] = sSteveLevelUpLearnset,
+    [SPECIES_STEVE_REALER] = sSteveLevelUpLearnset,
+    [SPECIES_UNOWN_E] = sskibiperLevelUpLearnset,
+    [SPECIES_UNOWN_F] = ssansLevelUpLearnset,
     [SPECIES_UNOWN_G] = sUnownLevelUpLearnset,
     [SPECIES_UNOWN_H] = sUnownLevelUpLearnset,
     [SPECIES_UNOWN_I] = sUnownLevelUpLearnset,
