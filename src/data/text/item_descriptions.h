@@ -4262,3 +4262,8 @@ static const u8 sArcaniteDesc[] = _(
     "This stone enables\n"
     "Arcanine to Mega\n"
     "Evolve in battle.");
+
+static const u8 sObamiumDesc[] = _(
+    "obomasnow reaches\n"
+    "his full potential\n"
+    "once again.");

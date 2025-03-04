@@ -302,10 +302,10 @@ const u8 gJigglypuffPokedexText[] = _(
     "someone in a deep sleep.");
 
 const u8 gWigglytuffPokedexText[] = _(
-    "Its fur is the ultimate in luxuriousness.\n"
-    "Sleeping alongside a Wigglytuff is simply\n"
-    "divine. Its body expands seemingly without\n"
-    "end when it inhales.");
+    "omg please stop adding wigglytuff\n"
+    "forms it doesn't deserve it pls give\n"
+    "it to something cool and underrated\n"
+    "like gyarados !1!!!!");
 
 const u8 gZubatPokedexText[] = _(
     "While living in pitch-black caverns, their\n"

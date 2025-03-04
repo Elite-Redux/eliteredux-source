@@ -744,6 +744,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_VICTINI_ORB]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_WIGGLITUFF_ORB]   = {gItemIcon_TartApple, gItemIconPalette_TartApple},
     [ITEM_YVELTALITE] = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_OBAMIUM] = {gItemIcon_Obamium, gItemIconPalette_Obamium},
 
     [ITEM_MEGA_BRACELET] = {gItemIcon_MegaBracelet, gItemIconPalette_MegaBracelet},
     [ITEM_ABILITY_CAPSULE] = {gItemIcon_AbilityCapsule, gItemIconPalette_AbilityCapsule},

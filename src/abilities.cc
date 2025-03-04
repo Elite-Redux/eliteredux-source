@@ -730,12 +730,12 @@ static const Ability Trace = {
 };
 
 static const Ability HugePower = {
-    .name = $("Huge Power"),
-    .description = $("Doubles own Attack stat.\n"
-                     "Boosts raw stat, not base stat."),
+    .name = $("Average Power"),
+    .description = $("increases your mons attack\n"
+                    "5 billion quintillion real."),
     .onStat =
         +[](ON_STAT) {
-            if (statId == STAT_ATK) *stat *= 2;
+            if (statId == STAT_ATK) *stat *= 1;
         },
 };
 
@@ -865,7 +865,7 @@ static const Ability Pressure = {
 };
 
 static const Ability ThickFat = {
-    .name = $("Thick Fat"),
+    .name = $("ur mom"),
     .description = $("Takes 1/2 damage from Fire-type\n"
                      "and Ice-type attacks."),
     .onDefensiveMultiplier =
@@ -1583,17 +1583,17 @@ static const Ability Filter = {
 };
 
 static const Ability SlowStart = {
-    .name = $("Slow Start"),
-    .description = $("Halves Attack and Speed during\n"
-                     "the first 5 turns out."),
+    .name = $("Slowest Start"),
+    .description = $("Lowers all stats for\n"
+                     "the first 20 turns out. 90%"),
     .onEntry = +[](ON_ENTRY) -> int {
-        gVolatileStructs[battler].slowStartTimer = 5;
+        gVolatileStructs[battler].slowStartTimer = 20;
         return SwitchInAnnounce(B_MSG_SWITCHIN_SLOWSTART);
     },
     .onStat =
         +[](ON_STAT) {
-            if (statId != STAT_ATK && statId != STAT_SPEED) return;
-            if (gVolatileStructs[battler].slowStartTimer) *stat /= 2;
+            if (statId != STAT_ATK && statId != STAT_SPATK && statId != STAT_DEF && statId != STAT_SPDEF && statId != STAT_SPEED) return;
+            if (gVolatileStructs[battler].slowStartTimer) *stat /= 9;
         },
 };
 
@@ -7633,15 +7633,15 @@ static const Ability RadioJam = {
 };
 
 static const Ability Ole = {
-    .name = $("Olé!"),
-    .description = $("20% chance to evade single-\n"
+    .name = $("Olé 2"),
+    .description = $("50% chance to evade single-\n"
                      "target moves."),
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
             case MOVE_TARGET_SELECTED:
             case MOVE_TARGET_USER_OR_SELECTED:
             case MOVE_TARGET_RANDOM:
-                *accuracy *= .8;
+                *accuracy *= .5;
                 return ACCURACY_MULTIPLICATIVE;
 
             default:

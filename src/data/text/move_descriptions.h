@@ -3383,8 +3383,7 @@ static const u8 sMoveTwoLineDescription_MoveSoilDrain[] = _(
     "Heals 50% damage done.");
 
 static const u8 sMoveTwoLineDescription_MoveGigatonHammer[] = _(
-    "Super effective vs Steel.\n"
-    "Can't be used twice in a row.");
+    "Super effective vs Steel.");
 
 static const u8 sMoveTwoLineDescription_MoveTripleDive[] = _(
     "Hits 3 times.");
@@ -5796,7 +5795,7 @@ static const u8 sMoveFourLineDescription_MoveRequiem[] = _("Sings a haunting\nme
 static const u8 sMoveFourLineDescription_MoveArmorCannon[] = _("The user shoots its\nown armor. This\nlowers its defs.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveBitterBlade[] = _("The user forces its\nbitter feelings into\na slashing attack\nand restores health.");
 static const u8 sMoveFourLineDescription_MoveSoilDrain[] = _("Foe's power is\nleeched into the\nground. Heals 50%\nof damage done.");
-static const u8 sMoveFourLineDescription_MoveGigatonHammer[] = _("Super effective vs\nSteel. Can't be used\ntwice in a row.\nHammer-based.");
+static const u8 sMoveFourLineDescription_MoveGigatonHammer[] = _("Super effective vs\nSteel. Hammer-based.");
 static const u8 sMoveFourLineDescription_MoveTripleDive[] = _("The user performs a\nperfectly timed\ntriple dive, hitting\nthe foe three times.");
 static const u8 sMoveFourLineDescription_MoveJetPunch[] = _("An aquatic punch.\nAlways goes first.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveRageFist[] = _("+20 base power per\ntime damaged.\nMax. +60 power.\nIron fist boost.");

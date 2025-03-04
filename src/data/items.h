@@ -9998,7 +9998,7 @@ const struct Item gItems[] =
     },
     [ITEM_SNORLAXITE] =
     {
-        .name = _("RTX"),
+        .name = _("Snorlaxite"),
         .itemId = ITEM_SNORLAXITE,
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,
@@ -10466,6 +10466,17 @@ const struct Item gItems[] =
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,
         .description = sArcaniteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_OBAMIUM] =
+    {
+        .name = _("Obamium"),
+        .itemId = ITEM_OBAMIUM,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sObamiumDesc,
         .pocket = POCKET_MEGA_STONES,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
