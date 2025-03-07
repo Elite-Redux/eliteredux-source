@@ -730,12 +730,12 @@ static const Ability Trace = {
 };
 
 static const Ability HugePower = {
-    .name = $("Average Power"),
+    .name = $("Huge Power"),
     .description = $("increases your mons attack\n"
                     "5 billion quintillion real."),
     .onStat =
         +[](ON_STAT) {
-            if (statId == STAT_ATK) *stat *= 1;
+            if (statId == STAT_ATK) *stat *= 2;
         },
 };
 
@@ -9707,6 +9707,11 @@ static const Ability iamsteve = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_NO_RETREAT, 0); },
 };
 
+static const Ability AveragePower = {
+    .name = $("average power"),
+    .description = $("the best ability ever made..."),
+};
+
 const Ability gAbilities[] = {
     [ABILITY_NONE] = None,
     [ABILITY_STENCH] = Stench,
@@ -10489,6 +10494,7 @@ const Ability gAbilities[] = {
     [ABILITY_VENOM_CROWN] = VenomCrown,
     [ABILITY_BLIGHT_SCALE] = BlightScale,
     [ABILITY_I_AM_STEVE] = iamsteve,
+    [ABILITY_AVERAGE_POWER] = AveragePower,
 };
 
 #pragma GCC diagnostic pop

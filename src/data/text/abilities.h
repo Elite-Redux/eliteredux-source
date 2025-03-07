@@ -748,6 +748,7 @@ static const u8 sAbilitySuperScopeDescription[] = _("Mega Launcher + Artillery."
 static const u8 sAbilityVenomCrownDescription[] = _("Mighty Horn + Poison Point.");
 static const u8 sAbilityBlightScaleDescription[] = _("Multiscale + Poison Point.");
 static const u8 sAbilityiamsteveDescription[] = _("guys why is steve jack black\nwhat were they thinking bro");
+static const u8 sAbilityAveragePowerDescription[] = _("the best ability ever made...");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1532,6 +1533,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_VENOM_CROWN] = _("Venom Crown"),
     [ABILITY_BLIGHT_SCALE] = _("Blight Scale"),
     [ABILITY_I_AM_STEVE] = _("i am steve"),
+    [ABILITY_AVERAGE_POWER] = _("average power"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2317,4 +2319,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_VENOM_CROWN] = sAbilityVenomCrownDescription,
     [ABILITY_BLIGHT_SCALE] = sAbilityBlightScaleDescription,
     [ABILITY_I_AM_STEVE] = sAbilityiamsteveDescription,
+    [ABILITY_AVERAGE_POWER] = sAbilityAveragePowerDescription,
 };
