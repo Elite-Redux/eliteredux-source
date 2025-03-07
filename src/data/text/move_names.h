@@ -999,6 +999,8 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_ONI_FIST] = _("Oni Fist"),
     [MOVE_INSECT_IMPACT] = _("InsectImpact"),
     [MOVE_LIGHTNING_BULLET] = _("LghtngBullet"),
+    [MOVE_STUNLOCK] = _("stunlock"),
+    [MOVE_HALF_FULL] = _("Half Full"),
 };
 
 // Second table with longer move names for places where they fit.
@@ -1299,7 +1301,7 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_DIVE] = _("Dive"),
     [MOVE_ARM_THRUST] = _("Arm Thrust"),
     [MOVE_CAMOUFLAGE] = _("Camouflage"),
-    [MOVE_TAIL_GLOW] = _("Tail Glow"),
+    [MOVE_TAIL_GLOW] = _("Power Surge"),
     [MOVE_LUSTER_PURGE] = _("Luster Purge"),
     [MOVE_MIST_BALL] = _("Mist Ball"),
     [MOVE_FEATHER_DANCE] = _("Feather Dance"),
@@ -2006,4 +2008,6 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_LIGHTNING_BULLET] = _("Lightning Bullet"),
     [MOVE_METALLIC_MELODY] = _("Metallic Melody"),
     [MOVE_JUDGEMENT_BONE] = _("Judgement Bone"),
+    [MOVE_STUNLOCK] = _("stunlock"),
+    [MOVE_HALF_FULL] = _("Half Full"),
 };

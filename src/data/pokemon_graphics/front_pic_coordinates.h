@@ -7293,17 +7293,17 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_UNOWN_G] =
     {
         .size = 0x35,
-        .y_offset = 14,
+        .y_offset = 0,
     },
     [SPECIES_UNOWN_H] =
     {
         .size = 0x44,
-        .y_offset = 16,
+        .y_offset = 11,
     },
     [SPECIES_UNOWN_I] =
     {
         .size = 0x34,
-        .y_offset = 16,
+        .y_offset = 5,
     },
     [SPECIES_UNOWN_J] =
     {
@@ -7313,12 +7313,12 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_UNOWN_K] =
     {
         .size = 0x44,
-        .y_offset = 17,
+        .y_offset = 9,
     },
     [SPECIES_UNOWN_L] =
     {
         .size = 0x34,
-        .y_offset = 19,
+        .y_offset = 5,
     },
     [SPECIES_UNOWN_M] =
     {

@@ -2289,9 +2289,9 @@ static const struct TrainerMonItemCustomMoves sParty_Calvin1[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_SHEDINJA,
-    .heldItem = ITEM_FOCUS_SASH,
-    .ability = 0,
+    .species = SPECIES_BLISSEY,
+    .heldItem = ITEM_CHOICE_SCARF,
+    .ability = 1,
     .evs = {252, 0, 0, 0, 4, 252},
     .nature = NATURE_TIMID,
     .moves = MOVE_FINAL_GAMBIT, MOVE_FINAL_GAMBIT, MOVE_FINAL_GAMBIT, MOVE_FINAL_GAMBIT

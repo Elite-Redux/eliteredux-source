@@ -7633,7 +7633,7 @@ static const Ability RadioJam = {
 };
 
 static const Ability Ole = {
-    .name = $("Olé 2"),
+    .name = $("Trolled"),
     .description = $("50% chance to evade single-\n"
                      "target moves."),
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
@@ -9554,7 +9554,11 @@ static const Ability Qigong = {
 static const Ability ConjurerOfDeceit = {
     .name = $("Conjurer Of Deceit"),
     .description = $("Magic Guard + Magic Bounce"),
-    .breakable = TRUE,
+    .onImmune = +[](ON_IMMUNE) -> int {
+        CHECK(battler != attacker) CHECK(IS_MOVE_STATUS(move));
+        *immunityScript = BattleScript_SoundproofProtected;
+        return TRUE;
+    },
     .magicGuard = TRUE,
     .magicBounce = TRUE,
 };

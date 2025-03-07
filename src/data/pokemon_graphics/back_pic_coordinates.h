@@ -7367,37 +7367,37 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_UNOWN_G] =
     {
         .size = 0x57,
-        .y_offset = 5,
+        .y_offset = 13,
     },
     [SPECIES_UNOWN_H] =
     {
         .size = 0x66,
-        .y_offset = 8,
+        .y_offset = 16,
     },
     [SPECIES_UNOWN_I] =
     {
         .size = 0x37,
-        .y_offset = 7,
+        .y_offset = 9,
     },
     [SPECIES_UNOWN_J] =
     {
         .size = 0x46,
-        .y_offset = 9,
+        .y_offset = 14,
     },
     [SPECIES_UNOWN_K] =
     {
         .size = 0x57,
-        .y_offset = 7,
+        .y_offset = 17,
     },
     [SPECIES_UNOWN_L] =
     {
         .size = 0x46,
-        .y_offset = 10,
+        .y_offset = 2,
     },
     [SPECIES_UNOWN_M] =
     {
         .size = 0x65,
-        .y_offset = 13,
+        .y_offset = 14,
     },
     [SPECIES_UNOWN_N] =
     {
