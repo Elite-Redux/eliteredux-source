@@ -127,7 +127,7 @@
               {
                 "min_level": 3,
                 "max_level": 3,
-                "species": "SPECIES_SEWADDLE"
+                "species": "SPECIES_UNOWN_M"
               },
               {
                 "min_level": 3,
@@ -167,7 +167,7 @@
               {
                 "min_level": 2,
                 "max_level": 2,
-                "species": "SPECIES_AUDINO"
+                "species": "SPECIES_SEWADDLE"
               },
               {
                 "min_level": 2,
@@ -674,7 +674,7 @@
               {
                 "min_level": 5,
                 "max_level": 7,
-                "species": "SPECIES_APPLIN"
+                "species": "SPECIES_UNOWN_I"
               }
             ]
           },

@@ -7161,13 +7161,13 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef) {
         case EFFECT_MISC_HIT:
             switch (gBattleMoves[move].argument) {
                 case MISC_EFFECT_FAINTED_MON_BOOST:
-                    basePower += 10 * gFaintedMonCount[GetBattlerSide(battlerAtk)];
+                    basePower += 50 * gFaintedMonCount[GetBattlerSide(battlerAtk)];
                     break;
                 case MISC_EFFECT_ELECTRIC_TERRAIN_BOOST:
                     if (IsBattlerTerrainAffected(battlerAtk, STATUS_FIELD_ELECTRIC_TERRAIN)) basePower = basePower * 3 / 2;
                     break;
                 case MISC_EFFECT_TOOK_DAMAGE_BOOST:
-                    basePower += 20 * min(3, gBattleStruct->timesDamaged[gBattlerPartyIndexes[battlerAtk]][GetBattlerSide(battlerAtk)]);
+                    basePower += 50 * min(3, gBattleStruct->timesDamaged[gBattlerPartyIndexes[battlerAtk]][GetBattlerSide(battlerAtk)]);
                     break;
                 case MISC_EFFECT_DOUBLE_DAMAGE:
                     basePower *= 1 + ((Random() % 100) < gBattleMoves[move].secondaryEffectChance);

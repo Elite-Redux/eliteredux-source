@@ -14654,7 +14654,7 @@ const struct BaseStats gBaseStats[] =
     .growthRate = GROWTH_ERRATIC,
     .eggGroup1 = EGG_GROUP_MONSTER,
     .eggGroup2 = EGG_GROUP_MONSTER,
-	.abilities = {ABILITY_STURDY, ABILITY_HYPER_AGGRESSIVE, ABILITY_VIOLENT_RUSH},
+    .abilities      = {ABILITY_STURDY, ABILITY_HYPER_AGGRESSIVE, ABILITY_AIR_BLOWER},
 	.innates = {ABILITY_FOSSILIZED, ABILITY_RECKLESS, ABILITY_ROCK_HEAD},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
@@ -36089,12 +36089,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_TINKATUFF] =
     {
-        .baseHP        = 65,
-        .baseAttack    = 65, //55
-        .baseDefense   = 55,
-        .baseSpeed     = 82, //78
-        .baseSpAttack  = 45,
-        .baseSpDefense = 82,
+    .baseHP         = 65,
+    .baseAttack     = 95,
+    .baseDefense    = 55,
+    .baseSpeed      = 82,
+    .baseSpAttack   = 41,
+    .baseSpDefense  = 82,
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_STEEL,
         .catchRate = 90,

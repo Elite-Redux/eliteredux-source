@@ -276,7 +276,7 @@ script VictoryRoad_1F_EventScript_LegendaryNPC{
 }
 
 script VictoryRoad_1F_EventScript_Calvin {
-	trainerbattle_single(TRAINER_CALVIN_E4, format("Hehe! I'm almost at the Pokémon League. Some say I'm not ready. Look at me now, I'm Calvin, and I'm a wall before the League! Ready for a real challenge?"), format("Whoa, you're tough!"))
+	trainerbattle_single(TRAINER_CALVIN_E4, format("You better have learned the power of mystery-type moves! I'm Calvin, and I will be your penultimate challenge."), format("Maybe next year."))
 	msgbox(format("Hey, give the E4 a run for their money, will ya? Good luck!"), MSGBOX_NPC) // after player won
 	settrainerflag(TRAINER_CALVIN_E4)
 	release

@@ -38045,48 +38045,48 @@ static const struct TrainerMonItemCustomMoves sParty_CalvinE4[] = { // E4
     },
     {
     .lvl = 0,
-    .species = SPECIES_SHUCKLE,
-    .heldItem = ITEM_SHUCKLENITE,
-    .ability = 1,
-    .evs = {252, 0, 252, 0, 4, 0},
-    .nature = NATURE_RELAXED,
-    .moves = MOVE_CURSE, MOVE_PAIN_SPLIT, MOVE_INFESTATION, MOVE_ROLLOUT
+    .species = SPECIES_UNOWN_B,
+    .heldItem = ITEM_LIFE_ORB,
+    .ability = 0,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_NO_RETREAT, MOVE_EXTREME_SPEED, MOVE_JUDGMENT, MOVE_BRAVE_BIRD
     },
     {
     .lvl = 0,
     .species = SPECIES_TINKATON,
     .heldItem = ITEM_TINKATITE,
     .ability = 1,
-    .evs = {252, 252, 4, 0, 0, 0},
-    .nature = NATURE_ADAMANT,
+    .evs = {0, 252, 4, 0, 0, 252},
+    .nature = NATURE_JOLLY,
     .moves = MOVE_GIGATON_HAMMER, MOVE_BONK, MOVE_EARTHQUAKE, MOVE_CRACKLE_SLAM
     },
     {
     .lvl = 0,
-    .species = SPECIES_WOBBUFFET,
-    .heldItem = ITEM_CUSTAP_BERRY,
-    .ability = 1,
-    .evs = {252, 0, 128, 0, 128, 0},
-    .nature = NATURE_BOLD,
-    .moves = MOVE_MIRROR_COAT, MOVE_ENCORE, MOVE_COUNTER, MOVE_DESTINY_BOND
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_SKULBERUS,
-    .heldItem = ITEM_DARK_GEM,
-    .ability = 0,
+    .species = SPECIES_UNOWN_J,
+    .heldItem = ITEM_BRIGHT_POWDER,
+    .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_RIP_AND_TEAR, MOVE_PSYCHIC_FANGS, MOVE_IRON_FANGS, MOVE_PURSUIT
+    .moves = MOVE_HEADBUTT, MOVE_DOUBLE_IRON_BASH, MOVE_ZEN_HEADBUTT, MOVE_BONE_CLUB
     },
     {
     .lvl = 0,
-    .species = SPECIES_SMEARGLE,
+    .species = SPECIES_UNOWN_E,
+    .heldItem = ITEM_CHOICE_SPECS,
+    .ability = 1,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_FISHIOUS_REND, MOVE_HURRICANE, MOVE_POISON_FANG, MOVE_SNAP_TRAP
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_UNOWN_F,
     .heldItem = ITEM_FOCUS_SASH,
-    .ability = 0,
-    .evs = {252, 4, 0, 0, 0, 252},
-    .nature = NATURE_JOLLY,
-    .moves = MOVE_SPORE, MOVE_REVIVAL_BLESSING, MOVE_CEASELESS_EDGE, MOVE_BURNING_BULWARK
+    .ability = 2,
+    .evs = {0, 0, 0, 0, 0, 0},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_JUDGEMENT_BONE, MOVE_JUDGEMENT_BONE, MOVE_JUDGEMENT_BONE, MOVE_JUDGEMENT_BONE
     }
 };
 
