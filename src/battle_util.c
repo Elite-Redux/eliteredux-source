@@ -6783,16 +6783,7 @@ static int CheckLevitatingEffects(u8 battlerId) {
         return TRUE;
     else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
         return TRUE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_LEVITATE))
-        return TRUE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_HUGE_WINGS))
-        return TRUE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_AERIALIST))
-        return TRUE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_DRAGONFLY))  // Dragonfly
-        return TRUE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_HOVER))
-        return TRUE;
+    RETURN_ABILITY_IF_FLAG(battlerId, TRUE, levitate)
 
     return FALSE;
 }
@@ -8128,56 +8119,26 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     if (recordAbilities && (illusionSpecies = GetIllusionMonSpecies(battlerDef)))
         TryNoticeIllusionInTypeEffectiveness(move, moveType, battlerAtk, battlerDef, modifier, illusionSpecies);
 
-    if (moveType == TYPE_GROUND && !IsBattlerGroundedIgnoreType(battlerDef) && !(gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING) &&
-        !(BattlerHasAbility(battlerAtk, ABILITY_DESERT_SPIRIT, TRUE) &&
-          IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY)))  // Moves that ignore ground immunity
-    {
-        if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_LEVITATE))
-            immunityAbility = ABILITY_LEVITATE;
-        else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_HUGE_WINGS))
-            immunityAbility = ABILITY_HUGE_WINGS;
-        else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_AERIALIST))
-            immunityAbility = ABILITY_AERIALIST;
-        else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_DRAGONFLY))
-            immunityAbility = ABILITY_DRAGONFLY;
-        else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_HOVER))
-            immunityAbility = ABILITY_HOVER;
-
-        modifier = UQ_4_12(0.0);
-    } else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_MOUNTAINEER) && moveType == TYPE_ROCK) {
-        modifier = UQ_4_12(0.0);
-        immunityAbility = ABILITY_MOUNTAINEER;
-    } else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_GIFTED_MIND) && (moveType == TYPE_DARK || moveType == TYPE_GHOST || moveType == TYPE_BUG)) {
-        modifier = UQ_4_12(0.0);
-        immunityAbility = ABILITY_GIFTED_MIND;
+    if (moveType == TYPE_GROUND && !modifier) {
+        immunityAbility = CheckLevitatingEffects(battlerDef);
+        if (immunityAbility == TRUE) immunityAbility = ABILITY_NONE;
     }
 
-    if (BattlerHasAbility(battlerAtk, ABILITY_BONE_ZONE, TRUE) && gBattleMoves[move].flags & FLAG_BONE_BASED && modifier < UQ_4_12(1.0)) {
-        modifier = UQ_4_12(1.0);
-        if (modifier1) MulModifier(&modifier, modifier1);
-        if (modifier2) MulModifier(&modifier, modifier2);
-        if (modifier3) MulModifier(&modifier, modifier3);
-        if (modifier < UQ_4_12(1.0)) MulModifier(&modifier, UQ_4_12(2.0));
+    for (int i = 0; i < gBattlersCount; i++) {
+        int battler = (battlerDef + i) % gBattlersCount;
+        ON_ABILITY(battler,
+                   TRUE,
+                   gAbilities[ability].onAfterTypeEffectiveness &&
+                       IsTargettedApplyOnFlagAppropriate(battlerAtk, battler, battlerAtk, battlerDef, gAbilities[ability].onAfterTypeEffectivenessFor),
+                   int wasImmune = modifier == 0;
+                   gAbilities[ability].onAfterTypeEffectiveness(battler, battlerDef, move, moveType, &modifier, modifier1, modifier2, modifier3);
+                   if (!wasImmune && !modifier) immunityAbility = ability)
     }
 
     // Thousand Arrows ignores type modifiers for flying mons
-    if (!IsBattlerGrounded(battlerDef) &&
-        (gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING ||
-         (BattlerHasAbility(battlerAtk, ABILITY_DESERT_SPIRIT, TRUE) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))) &&
-        moveType == TYPE_GROUND && modifier == UQ_4_12(0)) {
+    if (!IsBattlerGrounded(battlerDef) && gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING && moveType == TYPE_GROUND &&
+        modifier == UQ_4_12(0)) {
         modifier = UQ_4_12(1.0);
-    }
-
-    if (modifier > UQ_4_12(0.5) && gBattleMons[battlerDef].hp == gBattleMons[battlerDef].maxHP &&
-        (BATTLER_HAS_ABILITY(battlerDef, ABILITY_TERA_SHELL) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_TERAFORM_ZERO)))
-        modifier = UQ_4_12(0.5);
-
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_WONDER_GUARD) && modifier <= UQ_4_12(1.0) && gBattleMoves[move].power) {
-        modifier = UQ_4_12(0.0);
-        immunityAbility = ABILITY_WONDER_GUARD;
-    } else if (BattlerHasAbility(battlerAtk, ABILITY_TELEPATHY, FALSE) && battlerDef == BATTLE_PARTNER(battlerAtk) && gBattleMoves[move].power) {
-        modifier = UQ_4_12(0.0);
-        immunityAbility = ABILITY_TELEPATHY;
     }
 
     if (recordAbilities && immunityAbility && !modifier) {

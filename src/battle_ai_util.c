@@ -2013,12 +2013,14 @@ static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler) {
         MonHasInnate(mon, ABILITY_APPLE_ENLIGHTENMENT, isEnemyMon) || holdEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS)
         return FALSE;
 
-    if (!(flags & SIDE_STATUS_STEALTH_ROCK) && !IsGravityActive() && holdEffect != HOLD_EFFECT_IRON_BALL &&
-        (ability == ABILITY_LEVITATE || MonHasInnate(mon, ABILITY_LEVITATE, isEnemyMon) || ability == ABILITY_AERIALIST ||
-         MonHasInnate(mon, ABILITY_AERIALIST, isEnemyMon) || ability == ABILITY_DRAGONFLY || MonHasInnate(mon, ABILITY_DRAGONFLY, isEnemyMon) ||
-         ability == ABILITY_HOVER || MonHasInnate(mon, ABILITY_HOVER, isEnemyMon) || holdEffect == HOLD_EFFECT_AIR_BALLOON ||
-         gBaseStats[species].type1 == TYPE_FLYING || gBaseStats[species].type2 == TYPE_FLYING))
-        return FALSE;
+    if (!(flags & SIDE_STATUS_STEALTH_ROCK) && !IsGravityActive() && holdEffect != HOLD_EFFECT_IRON_BALL) {
+        if (holdEffect == HOLD_EFFECT_AIR_BALLOON) return FALSE;
+        if (gBaseStats[species].type1 == TYPE_FLYING || gBaseStats[species].type2 == TYPE_FLYING) return FALSE;
+        if (gAbilities[ability].levitate) return FALSE;
+        for (int i = 0; i < NUM_INNATE_PER_SPECIES; i++) {
+            if (gAbilities[GetMonInnate(mon, i, isEnemyMon)].levitate) return FALSE;
+        }
+    }
 
     if (flags & (SIDE_STATUS_SPIKES | SIDE_STATUS_STEALTH_ROCK) && GetMonData(mon, MON_DATA_HP) < (GetMonData(mon, MON_DATA_MAX_HP) / 8)) return TRUE;
 
