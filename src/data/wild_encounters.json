@@ -450,7 +450,7 @@
               {
                 "min_level": 3,
                 "max_level": 3,
-                "species": "SPECIES_GRUBBIN"
+                "species": "SPECIES_UNOWN_N"
               },
               {
                 "min_level": 3,
@@ -565,7 +565,7 @@
               {
                 "min_level": 2,
                 "max_level": 2,
-                "species": "SPECIES_CHARJABUG"
+                "species": "SPECIES_GRUBBIN"
               },
               {
                 "min_level": 3,
@@ -4698,7 +4698,7 @@
               {
                 "min_level": 22,
                 "max_level": 22,
-                "species": "SPECIES_ELECTABUZZ"
+                "species": "SPECIES_ZEKROM"
               },
               {
                 "min_level": 22,

@@ -12471,7 +12471,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .power = 5,
         .type = TYPE_MYSTERY,
         .accuracy = 100,
-        .pp = 40,
+        .pp = 5,
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_BONE_BASED,
@@ -12480,14 +12480,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_STUNLOCK] =
     {
         .effect = EFFECT_FLINCH_HIT,
-        .power = 50,
+        .power = 10,
         .type = TYPE_MYSTERY,
         .accuracy = 100,
-        .pp = 40,
-        .secondaryEffectChance = 90,
+        .pp = 30,
+        .secondaryEffectChance = 70,
         .priority = 2,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_TWO_STRIKES,
         .split = SPLIT_PHYSICAL,
         .parentalBondBanned = TRUE,
     },
@@ -12503,6 +12502,19 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
         .argument = MISC_EFFECT_SUPEREFFECTIVE_BOOST,
+    },
+    [MOVE_ZEKROM_KICK] =
+    {
+        .effect = EFFECT_CONFUSE_HIT,
+        .power = 150,
+        .type = TYPE_DRAGON,
+        .type2 = TYPE_ELECTRIC,
+        .accuracy = 100,
+        .pp = 10,
+        .secondaryEffectChance = 50,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_RECKLESS_BOOST | FLAG_STRIKER_BOOST,
+        .split = SPLIT_PHYSICAL,
     },
 };
 

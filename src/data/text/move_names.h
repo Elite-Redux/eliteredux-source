@@ -2010,4 +2010,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_JUDGEMENT_BONE] = _("Judgement Bone"),
     [MOVE_STUNLOCK] = _("stunlock"),
     [MOVE_HALF_FULL] = _("Half Full"),
+    [MOVE_ZEKROM_KICK] = _("ZEKROM KICK"),
 };

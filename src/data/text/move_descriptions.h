@@ -3938,6 +3938,9 @@ static const u8 sMoveTwoLineDescription_MoveStunlock[] = _(
 static const u8 sMoveTwoLineDescription_MoveHalfFull[] = _(
     "this is insane.");
 
+static const u8 sMoveTwoLineDescription_MoveZekromKick[] = _(
+    "stunfisk be damned.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4943,6 +4946,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_METALLIC_MELODY - 1] = sMoveTwoLineDescription_MoveMetallicMelody,
     [MOVE_STUNLOCK - 1] = sMoveTwoLineDescription_MoveStunlock,
     [MOVE_HALF_FULL - 1] = sMoveTwoLineDescription_MoveHalfFull,
+    [MOVE_ZEKROM_KICK - 1] = sMoveTwoLineDescription_MoveZekromKick,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5946,8 +5950,9 @@ static const u8 sMoveFourLineDescription_MoveLightningBullet[] = _("Shoots a str
 //3.0 CUTOFF
 static const u8 sMoveFourLineDescription_MoveMetallicMelody[] = _("The user emits a\nsound by hitting\ntheir metallic body\nrhythmically.");
 static const u8 sMoveFourLineDescription_MoveJudgementBone[] = _("Badly poisons and\ncurses the enemy.");
-static const u8 sMoveFourLineDescription_MoveStunlock[] = _("lmao gottem ggs.");
-static const u8 sMoveFourLineDescription_MoveHalfFull[] = _("this is insane.");
+static const u8 sMoveFourLineDescription_MoveStunlock[] = _("almost always\nflinches.");
+static const u8 sMoveFourLineDescription_MoveHalfFull[] = _("sets stealth rock\non hit.\nthis is\ninsane.");
+static const u8 sMoveFourLineDescription_MoveZekromKick[] = _("Uses dragon/electric\nfor damage calc.\nstunfisk be damned.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6953,4 +6958,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_JUDGEMENT_BONE - 1] = sMoveFourLineDescription_MoveJudgementBone,
     [MOVE_STUNLOCK - 1] = sMoveFourLineDescription_MoveStunlock,
     [MOVE_HALF_FULL - 1] = sMoveFourLineDescription_MoveHalfFull,
+    [MOVE_ZEKROM_KICK - 1] = sMoveFourLineDescription_MoveZekromKick,
 };
