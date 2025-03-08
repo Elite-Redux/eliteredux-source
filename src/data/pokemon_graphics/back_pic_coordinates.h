@@ -6126,6 +6126,16 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_MIMIKYU_APEX] =
+    {
+        .size = 0x77,
+        .y_offset = 7,
+    },
+    [SPECIES_MIMIKYU_APEX_BUSTED] =
+    {
+        .size = 0x77,
+        .y_offset = 7,
+    },
     [SPECIES_MIMIKYU_RAYQUAZA] =
     {
         .size = 0,
@@ -6814,7 +6824,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_DEWGONG_MEGA] =
     {
         .size = 0x87,
-        .y_offset = 2,
+        .y_offset = 5,
     },
     [SPECIES_HITMONCHAN_MEGA] =
     {
@@ -6934,7 +6944,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_KINGDRA_MEGA_Y] =
     {
         .size = 0x87,
-        .y_offset = 0,
+        .y_offset = 2,
     },
     [SPECIES_LUXRAY_MEGA] =
     {
@@ -8482,12 +8492,12 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_DEWPIDER_REDUX] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 8,
     },
     [SPECIES_ARAQUANID_REDUX] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 12,
     },
     [SPECIES_FROSTULA] =
     {

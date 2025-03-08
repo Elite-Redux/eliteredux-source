@@ -7539,6 +7539,14 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
         case HOLD_EFFECT_LIGHT_BALL:
             if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PIKACHU) MulModifier(&modifier, UQ_4_12(2.0));
             if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PIKACHU_PARTNER) MulModifier(&modifier, UQ_4_12(1.6));
+            if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PIKACHU_BELLE) MulModifier(&modifier, UQ_4_12(1.6));
+            if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PIKACHU_COSPLAY) MulModifier(&modifier, UQ_4_12(1.6));
+            if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PIKACHU_LIBRE) MulModifier(&modifier, UQ_4_12(1.6));
+            if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PIKACHU_POP_STAR) MulModifier(&modifier, UQ_4_12(1.6));
+            if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PIKACHU_ROCK_STAR) MulModifier(&modifier, UQ_4_12(1.6));
+            if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PIKACHU_PH_D) MulModifier(&modifier, UQ_4_12(1.6));
+            if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PICHU) MulModifier(&modifier, UQ_4_12(2.0));
+            if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PICHU_SPIKY_EARED) MulModifier(&modifier, UQ_4_12(2.0));
             if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PIKACHU_PARTNER_MEGA) MulModifier(&modifier, UQ_4_12(1.6));
             if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_RAICHU) MulModifier(&modifier, UQ_4_12(1.5));
             break;

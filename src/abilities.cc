@@ -2774,6 +2774,14 @@ static const Ability BattleBond = {
                 newSpecies = SPECIES_GRENINJA_ASH;
                 break;
 
+            case SPECIES_CHESNAUGHT_BATTLE_BOND:
+                newSpecies = SPECIES_CHESNAUGHT_CLEMONT;
+                break;
+
+            case SPECIES_DELPHOX_BATTLE_BOND:
+                newSpecies = SPECIES_DELPHOX_SERENA;
+                break;
+
             case SPECIES_DARMANITAN_REDUX_BOND:
                 newSpecies = SPECIES_DARMANITAN_REDUX_BLUNDER;
                 break;
@@ -7993,12 +8001,13 @@ static const Ability GreaterSpirit = {
 
 static const Ability Resonance = {
     .name = $("Resonance"),
-    .description = $("Sound moves cause the target to\n"
-                     "bleed."),
-    .onAttacker = +[](ON_ATTACKER) -> int {
+    .description = $("Sound moves have a 30%\n"
+                     "chance to cause bleeding."),
+.onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
         CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(Random() % 100 < 50)
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     },
@@ -8015,7 +8024,7 @@ static const Ability EtherealRush = {
 };
 
 static const Ability CuteAntecedence = {
-    .name = $("Cute Antecedence"),
+    .name = $("Pretty Privilege"),
     .description = $("At full HP, gives +1 priority to\n"
                      "its Fairy-type moves."),
     .onPriority = GALE_WINGS_CLONE(TYPE_FAIRY),
@@ -8134,13 +8143,11 @@ static const Ability Bloodlust = {
 
 static const Ability PiercingSolo = {
     .name = $("Piercing Solo"),
-    .description = $("Sound moves have a 30%\n"
-                     "chance to cause bleeding."),
+    .description = $("Sound moves cause bleeding."),
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
         CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-        CHECK(Random() % 100 < 30)
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     },
@@ -8693,7 +8700,7 @@ static const Ability VitalityStrike = {
 };
 
 static const Ability HugeWings = {
-    .name = $("Huge Wings"),
+    .name = $("Imposing Wings"),
     .description = $("Giant Wings + Levitate."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
@@ -9126,11 +9133,9 @@ static const Ability RagingGoddess = {
 
 static const Ability Whiplash = {
     .name = $("Whiplash"),
-    .description = $("Physical attacks have a 50%\n"
-                     "chance to lower Defense."),
+    .description = $("Physical attacks lower defense."),
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(Random() % 1)
         CHECK(IS_MOVE_PHYSICAL(move))
         CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
 
@@ -9715,6 +9720,39 @@ static const Ability UnownPower = {
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
             if (*mod < UQ_4_12(2.0) && (move == MOVE_HIDDEN_POWER || move == MOVE_SECRET_POWER)) *mod = UQ_4_12(2.0);
         },
+    .randomizerBanned = TRUE,
+};
+
+static const Ability SuperScope = {
+    .name = $("Super Scope"),
+    .description = $("Mega Launcher + Artillery."),
+    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+            CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
+            return ACCURACY_HITS_IF_POSSIBLE;
+        },
+};
+
+static const Ability VenomCrown = {
+    .name = $("Venom Crown"),
+    .description = $("Poison Point + Mighty Horn."),
+    ON_EITHER_ABILITY(PoisonPoint),
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gBattleMoves[move].hornBased) MUL(1.3);
+        },
+        .randomizerBanned = TRUE,
+};
+
+static const Ability BlightScale = {
+    .name = $("Blight Scale"),
+    .description = $("Multiscale + Poison Point"),
+    ON_EITHER_ABILITY(PoisonPoint),
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (BATTLER_MAX_HP(battler)) MUL(.5);
+        },
+    .breakable = TRUE,
     .randomizerBanned = TRUE,
 };
 
@@ -10496,6 +10534,9 @@ const Ability gAbilities[] = {
     [ABILITY_CORRUPTED_MIND] = CorruptedMind,
     [ABILITY_FLAME_COAT] = FlameCoat,
     [ABILITY_UNOWN_POWER] = UnownPower,
+    [ABILITY_SUPER_SCOPE] = SuperScope,
+    [ABILITY_VENOM_CROWN] = VenomCrown,
+    [ABILITY_BLIGHT_SCALE] = BlightScale,
 };
 
 #pragma GCC diagnostic pop

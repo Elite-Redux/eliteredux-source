@@ -11389,6 +11389,11 @@ extern const u32 gMonPalette_CastformFoggy[];
 extern const u32 gMonShinyPalette_CastformFoggy[];
 extern const u8  gMonIcon_CastformFoggy[];
 //3.0 CUTOFF
+extern const u32 gMonFrontPic_MimikyuApex[];
+extern const u32 gMonBackPic_MimikyuApex[];
+extern const u32 gMonPalette_MimikyuApex[];
+extern const u32 gMonShinyPalette_MimikyuApex[];
+extern const u8  gMonIcon_MimikyuApex[];
 extern const u32 gMonFrontPic_IronVoca[];
 extern const u32 gMonBackPic_IronVoca[];
 extern const u32 gMonPalette_IronVoca[];

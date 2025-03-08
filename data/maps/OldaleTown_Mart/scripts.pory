@@ -326,6 +326,7 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_SLOWBRONITE_G
 	ITEM_SLOWKINGITE_G
 	ITEM_ARCANITE
+	ITEM_KINGDRANITE_Y
 }
 
 script General_Adoption_Center_Mega_Stones_Script{

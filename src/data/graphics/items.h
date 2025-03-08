@@ -1711,6 +1711,10 @@ const u32 gItemIconPalette_Meowthite[] = INCBIN_U32("graphics/items/icon_palette
 const u32 gItemIconPalette_VenusauriteX[]  = INCBIN_U32("graphics/items/icon_palettes/venusaurite.gbapal.lz");
 const u32 gItemIconPalette_BlastoisiniteX[]  = INCBIN_U32("graphics/items/icon_palettes/blastoisinite.gbapal.lz");
 const u32 gItemIconPalette_Yveltalite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIcon_PhantomMeteor[] = INCBIN_U32("graphics/items/icons/meteorite.4bpp.lz");
+const u32 gItemIconPalette_PhantomMeteor[] = INCBIN_U32("graphics/items/icon_palettes/meteorite.gbapal.lz");
+const u32 gItemIcon_KingdraniteY[] = INCBIN_U32("graphics/items/icons/kingdranite.4bpp.lz");
+const u32 gItemIconPalette_KingdraniteY[] = INCBIN_U32("graphics/items/icon_palettes/kingdranite.gbapal.lz");
 
 // Gen 7 Items
 
