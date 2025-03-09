@@ -7123,13 +7123,16 @@ static void Cmd_various(void) {
             GET_MOVE_TYPE(gCurrentMove, moveType)
             for (int i = 0; i < gBattlersCount; i++) {
                 FILTER(IsBattlerAlive(i))
-                ON_ABILITY(i,
-                           FALSE,
-                           gAbilities[ability].onBattlerFaints &&
-                               IsTargettedApplyOnFlagAppropriate(gActiveBattler, i, gBattlerAttacker, gActiveBattler, gAbilities[ability].onBattlerFaintsFor),
-                           gStackBattler1 = i;
-                           if (gAbilities[ability].onBattlerFaints(ability, i, gBattlerAttacker, gActiveBattler, gCurrentMove, moveType) & 1)
-                               BattleScriptCall(BattleScript_AbilityPopUpStack))
+                ON_ABILITY(
+                    i,
+                    FALSE,
+                    gAbilities[ability].onBattlerFaints &&
+                        IsTargettedApplyOnFlagAppropriate(gActiveBattler, i, gBattlerAttacker, gActiveBattler, gAbilities[ability].onBattlerFaintsFor),
+                    gStackBattler1 = i;
+                    if (gAbilities[ability].onBattlerFaints(ability, i, gBattlerAttacker, gActiveBattler, gCurrentMove, moveType) & 1) {
+                        gBattleScripting.abilityPopupOverwrite = ability;
+                        BattleScriptCall(BattleScript_AbilityPopUpStack);
+                    })
             }
             ReadActiveScriptInitialStackState();
             break;
@@ -7147,13 +7150,16 @@ static void Cmd_various(void) {
             REQUIRE_NOT(NoAliveMonsForEitherParty())
             for (int i = 0; i < gBattlersCount; i++) {
                 FILTER(IsBattlerAlive(i))
-                ON_ABILITY(i,
-                           FALSE,
-                           gAbilities[ability].onBattlerFaints &&
-                               IsTargettedApplyOnFlagAppropriate(gActiveBattler, i, MAX_BATTLERS_COUNT, gActiveBattler, gAbilities[ability].onBattlerFaintsFor),
-                           gStackBattler1 = i;
-                           if (gAbilities[ability].onBattlerFaints(ability, i, MAX_BATTLERS_COUNT, gActiveBattler, 0, 0) & 1)
-                               BattleScriptCall(BattleScript_AbilityPopUpStack))
+                ON_ABILITY(
+                    i,
+                    FALSE,
+                    gAbilities[ability].onBattlerFaints &&
+                        IsTargettedApplyOnFlagAppropriate(gActiveBattler, i, MAX_BATTLERS_COUNT, gActiveBattler, gAbilities[ability].onBattlerFaintsFor),
+                    gStackBattler1 = i;
+                    if (gAbilities[ability].onBattlerFaints(ability, i, MAX_BATTLERS_COUNT, gActiveBattler, 0, 0) & 1) {
+                        gBattleScripting.abilityPopupOverwrite = ability;
+                        BattleScriptCall(BattleScript_AbilityPopUpStack);
+                    })
             }
             ReadActiveScriptInitialStackState();
             break;
