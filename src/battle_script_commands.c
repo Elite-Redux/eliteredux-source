@@ -6498,6 +6498,8 @@ bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget) {
     if (BATTLER_HAS_ABILITY(battlerAttacker, ABILITY_CORROSION)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerAttacker, ABILITY_TOXIC_SPILL)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerAttacker, ABILITY_ANGELS_WRATH)) return TRUE;
+    if (BATTLER_HAS_ABILITY(battlerAttacker, ABILITY_ACIDIC_SLIME)) return TRUE;
+    if (BATTLER_HAS_ABILITY(battlerAttacker, ABILITY_PYROCLASTIC_FLOW)) return TRUE;
     if (IS_BATTLER_OF_TYPE(battlerTarget, TYPE_POISON)) return FALSE;
     if (IS_BATTLER_OF_TYPE(battlerTarget, TYPE_STEEL)) return FALSE;
     return TRUE;
