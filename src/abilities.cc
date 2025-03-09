@@ -4165,7 +4165,7 @@ static const Ability Overwhelm = {
     .description = $("Hits Fairies with Dragon moves.\n"
                      "Immune to Intimidate and Scare."),
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
-        CHECK(moveType == TYPE_DRAGON) CHECK(defType == TYPE_FAIRY) CHECK_NOT(*mod) *mod = 1.0;
+        CHECK(moveType == TYPE_DRAGON) CHECK(defType == TYPE_FAIRY) CHECK_NOT(*mod) *mod = UQ_4_12(1.0);
         return TRUE;
     },
 };
