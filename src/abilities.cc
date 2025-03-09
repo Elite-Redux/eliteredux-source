@@ -2687,7 +2687,9 @@ static const Ability SurgeSurfer = {
                      "gets a 1.5x Speed boost."),
     .onStat =
         +[](ON_STAT) {
-            if (statId == STAT_SPEED && IsWeatherActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat *= 1.5;
+            MGBA_PRINT_VALUES(*stat)
+            if (statId == STAT_SPEED && IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat *= 1.5;
+            MGBA_PRINT_VALUES(*stat)
         },
 };
 
