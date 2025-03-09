@@ -4824,7 +4824,7 @@ static void Cmd_moveend(void) {
 
                         if (IsBattlerAlive(battler) && gRoundStructs[battler].statFell && gRoundStructs[battler].disableEjectPack == 0 &&
                             BATTLER_HAS_ABILITY(battler, ABILITY_EJECT_PACK_ABILITY) && !GetSingleUseAbilityCounter(battler, ABILITY_EJECT_PACK_ABILITY) &&
-                            CountUsablePartyMons(battler) > 0)  // Has mon to switch into
+                            CanBattlerSwitch(battler))  // Has mon to switch into
                         {
                             SetSingleUseAbilityCounter(battler, ABILITY_EJECT_PACK_ABILITY, TRUE);
                             gStackBattler1 = battler;
