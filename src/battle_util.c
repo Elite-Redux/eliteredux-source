@@ -9232,16 +9232,6 @@ int IsUnaware(int battler) {
     return FALSE;
 }
 
-#define ABILITY_STATUS_EFFECT(effect)                   \
-    gBattleScripting.moveEffect = effect;               \
-    BattleScriptCall(BattleScript_AbilityStatusEffect); \
-    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-
-#define ABILITY_STATUS_EFFECT_DIRECT(effect)  \
-    gBattleScripting.moveEffect = effect;     \
-    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD; \
-    SetMoveEffect(FALSE, FALSE);
-
 int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) {
     int ability, moveType;
 
