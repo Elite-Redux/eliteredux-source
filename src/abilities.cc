@@ -190,7 +190,7 @@ static int SwitchInAnnounce(int message) {
 
 static int TryTransformAttacker(int ability, int battler, AbilityCallType callType) {
     CHECK(ShouldChangeFormHpBased(battler))
-    CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+    CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
     InsertCorrectEndType(callType);
     BattleScriptCall(BattleScript_AttackerFormChange);
@@ -2562,7 +2562,7 @@ static const Ability ShieldsDown = {
         CHECK(IsBattlerAlive(battler))
         CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
         CHECK(gBattleMoves[move].effect == EFFECT_SHELL_SMASH)
-        CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
         int i;
         for (i = 0; i < ARRAY_COUNT(gHpTransformations); i++) {
@@ -2723,7 +2723,7 @@ static int DisguiseReformHandler(int ability, int battler, AbilityCallType callT
             return FALSE;
     }
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
-    CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+    CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
     InsertCorrectEndType(callType);
     UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
@@ -2798,7 +2798,7 @@ static const Ability PowerConstruct = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(gBattleMons[battler].species == SPECIES_ZYGARDE || gBattleMons[battler].species == SPECIES_ZYGARDE_10)
         CHECK(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
-        CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
         gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
         UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_ZYGARDE_COMPLETE);
@@ -3170,7 +3170,7 @@ static const Ability GulpMissile = {
     .description = $("Gulps a prey after Dive/Surf.\n"
                      "If hit, shoots prey at enemy."),
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
         CHECK(gBattleMons[battler].species == SPECIES_CRAMORANT)
         CHECK(((gCurrentMove == MOVE_SURF || gCurrentMove == MOVE_TRIPLE_DIVE) && TARGET_TURN_DAMAGED) || gStatuses3[battler] & STATUS3_UNDERWATER ||
               (gCurrentMove == MOVE_DIVE && gBattleScripting.acceleratedTwoTurn))
@@ -3270,7 +3270,7 @@ static const Ability Ripen = {
 int IceFaceReformHandler(int ability, int battler, AbilityCallType callType) {
     CHECK(gBattleMons[battler].species == SPECIES_EISCUE_NOICE_FACE)
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
-    CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+    CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
     InsertCorrectEndType(callType);
     UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_EISCUE);
@@ -7189,7 +7189,7 @@ static const Ability ZeroToHero = {
                      "switching out."),
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gBattleMons[battler].species == SPECIES_PALAFIN)
-        CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
         CHECK(GetSingleUseAbilityCounter(battler, ability))
 
         UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_PALAFIN_HERO);
@@ -9215,7 +9215,7 @@ static const Ability Taekkyeon = {
 };
 
 int ApeShiftHandler(int battler, AbilityCallType callType) {
-    CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+    CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
     CHECK(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
     CHECK(ShouldChangeFormHpBased(battler))
 
