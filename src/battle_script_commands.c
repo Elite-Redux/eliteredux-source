@@ -4922,6 +4922,9 @@ static void Cmd_moveend(void) {
                         BattleScriptCall(BattleScript_MultiHitPrintStrings);
                         effect = 1;
                     } else {
+                        // Clear hitmarker flags from abilities
+                        gHitMarker &= ~HITMARKER_IGNORE_SAFEGUARD;
+
                         if (gCurrentMove == MOVE_DRAGON_DARTS) {
                             if (IsBattlerAlive(BATTLE_PARTNER(gBattlerTarget))) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
                         }
