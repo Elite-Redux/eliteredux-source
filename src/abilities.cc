@@ -5082,8 +5082,8 @@ static const Ability SpinningTop = {
             gSideTimers[GetBattlerSide(battler)].caltrops) {
             gSideStatuses[GetBattlerSide(battler)] &=
                 ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_STICKY_WEB);
-            gSideTimers[GetBattlerSide(battler)].hotCoals = TRUE;
-            gSideTimers[GetBattlerSide(battler)].caltrops = TRUE;
+            gSideTimers[GetBattlerSide(battler)].hotCoals = FALSE;
+            gSideTimers[GetBattlerSide(battler)].caltrops = FALSE;
             BattleScriptCall(BattleScript_AnnounceRemovedHazards);
             gBattleScripting.battler = battler;
             any = TRUE;
