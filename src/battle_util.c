@@ -9543,6 +9543,7 @@ int HasChloroplast(int battler) {
 
 int HasRedirectionAbility(int battlerAtk, int battlerDef, int move, int type) {
     if (!type) return ABILITY_NONE;
+    if (battlerAtk == battlerDef) return ABILITY_NONE;
     if (gBattleMoves[move].effect == EFFECT_SNIPE_SHOT) return ABILITY_NONE;
     if (BattlerHasAbility(battlerAtk, ABILITY_PROPELLER_TAIL, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_STALWART, FALSE)) return ABILITY_NONE;
     RETURN_ABILITY_IF_FLAG(battlerDef, TRUE, redirectType == type)
