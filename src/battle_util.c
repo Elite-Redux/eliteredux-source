@@ -9053,7 +9053,7 @@ void UpdateAbilityStateIndicesForNewSpecies(u8 battler, u16 newSpecies) {
     bool8 isPlayer = GetBattlerSide(battler) == B_SIDE_PLAYER;
     int level = gBattleMons[battler].level;
     u16 newAbilities[] = {
-        GetAbilityBySpecies(newSpecies, newSpecies),
+        GetAbilityBySpecies(newSpecies, gBattleMons[battler].abilityNum),
         GetInnateInSlot(level, newSpecies, 0, personality, isPlayer),
         GetInnateInSlot(level, newSpecies, 1, personality, isPlayer),
         GetInnateInSlot(level, newSpecies, 2, personality, isPlayer),
