@@ -3632,7 +3632,9 @@ BattleScript_EffectToxicHit:
 	goto BattleScript_EffectHit
 
 BattleScript_AbilityDrainsHp::
-	call BattleScript_AbilityPopUp
+	hpfractiontodamage BS_STACK_2, 10
+	copybyte gBattlerAttacker, BS_STACK_1
+	copybyte gBattlerTarget, BS_STACK_2
 	printstring STRINGID_LIFE_STEAL
 	waitmessage B_WAIT_TIME_LONG
 	healthbarupdate BS_TARGET
@@ -9095,18 +9097,35 @@ BattleScript_DoTurnDmgEnd:
 	end2
 
 BattleScript_FuneralPyreDamage::
-	call BattleScript_AbilityPopUp
+	hpfractiontodamage BS_STACK_1, 4
+	copybyte gBattlerAttacker, gStackBattler1
 	printstring STRINGID_PKMNHURTBYFUNERALPYRE
 	waitmessage B_WAIT_TIME_LONG
 	chosenstatus2animation BS_ATTACKER, STATUS2_CURSED
 	goto BattleScript_DoTurnDmg
 
+BattleScript_FireCoatDamage::
+	hpfractiontodamage BS_STACK_1, 8
+	copybyte gBattlerAttacker, gStackBattler1
+	printstring STRINGID_FIRECOATDAMAGE
+	waitmessage B_WAIT_TIME_LONG
+	chosenstatus1animation BS_ATTACKER, STATUS1_BURN
+	goto BattleScript_DoTurnDmg
+
 BattleScript_ToxicWasteTurnDmg::
+	hpfractiontodamage BS_STACK_1, 8
+	copybyte gBattlerAttacker, gStackBattler1
 	printstring STRINGID_PKMNHURTBYTOXICWASTE
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_DoToxicWasteTurnDmg::
 	chosenstatus1animation BS_ATTACKER, STATUS1_POISON
 	goto BattleScript_DoTurnDmg
+
+BattleScript_ToxicWasteHeal::
+	hpfractiontodamage BS_STACK_1, 8
+	manipulatedamage DMG_CHANGE_SIGN
+	copybyte gBattlerAttacker, gStackBattler1
+	goto BattleScript_PoisonHealActivates
 
 BattleScript_PoisonHealActivates::
 	printstring STRINGID_POISONHEALHPUP

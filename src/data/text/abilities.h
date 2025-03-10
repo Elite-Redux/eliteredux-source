@@ -747,6 +747,9 @@ static const u8 sAbilityUnownPowerDescription[] = _("Mystic Power + Hidden Power
 static const u8 sAbilitySuperScopeDescription[] = _("Mega Launcher + Artillery.");
 static const u8 sAbilityVenomCrownDescription[] = _("Mighty Horn + Poison Point.");
 static const u8 sAbilityBlightScaleDescription[] = _("Multiscale + Poison Point.");
+static const u8 sAbilityGunmanDescription[] = _("Mega Launcher + All moves are Mega Launcher boosted.");
+static const u8 sAbilityHuntersMarkDescription[] = _("Attacks switching foes with 40BP Spirit Shackle.");
+static const u8 sAbilityHemolysisDescription[] = _("Poisoned foes can't heal and lose all stat buffs.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1530,6 +1533,9 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SUPER_SCOPE] = _("Super Scope"),
     [ABILITY_VENOM_CROWN] = _("Venom Crown"),
     [ABILITY_BLIGHT_SCALE] = _("Blight Scale"),
+    [ABILITY_GUNMAN] = _("Gunman"),
+    [ABILITY_HUNTERS_MARK] = _("Hunter's Mark"),
+    [ABILITY_HEMOLYSIS] = _("Hemolysis"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2301,8 +2307,8 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_DEEP_FREEZE] = sAbilityDeepFreezeDescription,
     [ABILITY_SOUL_DEVOURER] = sAbilitySoulDevourerDescription,
     [ABILITY_CHAMPIONS_ENTRANCE] = sAbilityChampionsEntranceDescription,
-    [ABILITY_SAMBA] = sAbilitySambaDescription,
     [ABILITY_PRESTO] = sAbilityPrestoDescription,
+    [ABILITY_SAMBA] = sAbilitySambaDescription,
     [ABILITY_JUNSHI_SANDA] = sAbilityJunshiSandaDescription,
     [ABILITY_GLADIATOR] = sAbilityGladiatorDescription,
     [ABILITY_FORSAKEN_HEART] = sAbilityForsakenHeartDescription,
@@ -2314,4 +2320,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SUPER_SCOPE] = sAbilitySuperScopeDescription,
     [ABILITY_VENOM_CROWN] = sAbilityVenomCrownDescription,
     [ABILITY_BLIGHT_SCALE] = sAbilityBlightScaleDescription,
+    [ABILITY_GUNMAN] = sAbilityGunmanDescription,
+    [ABILITY_HUNTERS_MARK] = sAbilityHuntersMarkDescription,
+    [ABILITY_HEMOLYSIS] = sAbilityHemolysisDescription,
 };

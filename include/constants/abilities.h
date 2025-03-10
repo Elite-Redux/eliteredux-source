@@ -406,7 +406,7 @@
 #define ABILITY_LOW_BLOW 384 // Attacks with 40BP Feint Attack on switch-in.
 #define ABILITY_NOSFERATU 385 // Contact moves do +20% damage and heal 1/2 of damage dealt.
 #define ABILITY_SPECTRAL_SHROUD 386 // Spectralize + 30% chance to badly poison the foe.
-#define ABILITY_DISCIPLINE 387 // Rampage moves no longer trap you. Can't be confused or intimidated.
+#define ABILITY_DISCIPLINE 387 // You can switch during lock-in moves. Immune to confusion/intimidate.
 #define ABILITY_THUNDERCALL 388 // Triggers Smite at 20% power when using an Electric move.
 #define ABILITY_MARINE_APEX 389 // 50% more damage to Water- types + Infiltrator.
 #define ABILITY_MIGHTY_HORN 390 // Boosts the power of horn and drill-based by 1.3x.
@@ -457,7 +457,7 @@
 #define ABILITY_AMBUSH 435 // Guaranteed critical hit on first turn.
 #define ABILITY_ATLAS 436 // Sets Gravity on entry for 8 turns.
 #define ABILITY_RADIANCE 437 // +20% accuracy; Dark moves fail when user is present.
-#define ABILITY_JAWS_OF_CARNAGE 438 // Devours 1/2 of the foe when defeating it.
+#define ABILITY_JAWS_OF_CARNAGE 438 // Heals 1/2 HP when KO'ing with a biting move. 1/4 HP otherwise.
 #define ABILITY_ANGELS_WRATH 439 // Drastically alters all of the users moves.
 #define ABILITY_PRISMATIC_FUR 440 // Color Change + Protean + Fur Coat + Ice Scales.
 #define ABILITY_SHOCKING_JAWS 441 // Biting moves have 50% chance to paralyze the target.
@@ -645,7 +645,7 @@
 #define ABILITY_SURPRISE 623 // Astonishes enemy priority users in fog.
 #define ABILITY_SNOW_SONG 624 // Sound moves get a 1.2x boost and become Ice if Normal.
 #define ABILITY_GREATER_SPIRIT 625 // Ups highest stat by +1 on entry in fog.
-#define ABILITY_RESONANCE 626 // Sound moves cause the target to  bleed.
+#define ABILITY_RESONANCE 626 // Sound moves have a 30% bleed chance.
 #define ABILITY_ETHEREAL_RUSH 627 // This Pokémon's Speed gets a 1.5x boost in fog.
 #define ABILITY_CUTE_ANTECEDENCE 628 // At full HP, gives +1 priority to its Fairy-type moves.
 #define ABILITY_RECURRING_NIGHTMARE 629 // Revives at 25% HP once after fainting in fog.
@@ -658,7 +658,7 @@
 #define ABILITY_BLOOD_BATH 636 // Immune to bleed. Inflict fear when inflicting bleed.
 #define ABILITY_BATTLE_AURA 637 // Sharply increases the critical hit rate for all while on the field.
 #define ABILITY_BLOODLUST 638 // Blood Bath + Soul Eater.
-#define ABILITY_PIERCING_SOLO 639 // Sound moves have a 30% chance to cause bleeding.
+#define ABILITY_PIERCING_SOLO 639 // Sound moves cause bleeding.
 #define ABILITY_RHYTHMIC 640 // Deals 10% more damage for each repeated move use.
 #define ABILITY_CHUNKY_BASS_LINE 641 // Triggers a 40BP Earthquake after using a sound move.
 #define ABILITY_DUAL_HAMMER 642 // Super Slammer moves hit twice for 70% damage.
@@ -741,7 +741,7 @@
 #define ABILITY_TAR_TOSS 719 // Uses Tar Shot on switch-in.
 #define ABILITY_STUN_SHOCK 720 // Attacks have a 60% chance to Paralyze or Poison.
 #define ABILITY_RAGING_GODDESS 721 // Rampage + Hyper Aggressive.
-#define ABILITY_WHIPLASH 722 // Physical attacks have a 50% chance to lower Defense.
+#define ABILITY_WHIPLASH 722 // Physical attacks lower Defense.
 #define ABILITY_SUPERSWEET_SYRUP 723 // Can't lose its item. Disables foe's item for 2 turns on contact.
 #define ABILITY_LUCKY_HALO 724 // Negates self stat drops. Survives the first hit that would KO it.
 #define ABILITY_TRASH_HEAP 725 // Corrosion + Toxic Spill.
@@ -777,28 +777,28 @@
 #define ABILITY_BALLOON_BLITZ 755 // Inflatable + Hyper Aggressive.
 #define ABILITY_STRIKER_PIXILATE 756 // Striker + Pixilate.
 #define ABILITY_DOOM_BLAST 757 // Boosts own Dark moves by 1.35x, takes 10% of dmg dealt as recoil.
-#define ABILITY_BRUTEFORCE 758 // Rock Head + Reckless
-#define ABILITY_FARADAY_CAGE 759 // Shell Armor + Thunder Cage when hit by contact.
+#define ABILITY_BRUTEFORCE 758 // Rock Head + Reckless.
+#define ABILITY_FARADAY_CAGE 759 // Shell Armor + 50BP Thunder Cage when hit by contact.
 #define ABILITY_ACIDIC_SLIME 760 // Corrosion + Poison STAB.
 #define ABILITY_ROSE_GARDEN 761 // Sets 2 layers of Toxic Spikes on entry.
-#define ABILITY_QIGONG 762 // Can't miss. Fighting Spirit + Rampage.
-#define ABILITY_CONJOURER_OF_DECEIT 763 // magic guard + magic bounce
-#define ABILITY_DEEP_FREEZE 764 // boosts water and ice by 25% and halves fire damage taken
-#define ABILITY_SOUL_DEVOURER 765 // soul eater + phantom pain
-#define ABILITY_CHAMPIONS_ENTRANCE 766 // intimidate + violent rush
-#define ABILITY_PRESTO 767 // sound moves get +1 priority at full hp
-#define ABILITY_SAMBA 768 // striker + dancer
-#define ABILITY_JUNSHI_SANDA 769 // every move is effected by combat specialist, effectively every move gets a 30% boost from that ability
-#define ABILITY_GLADIATOR 770 // fighting type forest rage
-#define ABILITY_FORSAKEN_HEART 771 // physical attack soul heart
-#define ABILITY_RELENTLESS 772 // exploit weakness + merciless
-#define ABILITY_SOOTHSAYER 773 // all super effective moves against this pokemon become not very effective for 5 turns (once per battle prob best for this)
-#define ABILITY_CORRUPTED_MIND 774 // psychic moves used by this pokemon always hit super effectively
-#define ABILITY_FLAME_COAT 775 // toxic spill but for fire types + flash fire
-#define ABILITY_UNOWN_POWER 776 // mystic power + hidden power always hits super effectively
-#define ABILITY_SUPER_SCOPE 777 // Mega Launcher + Artillery
-#define ABILITY_VENOM_CROWN 778 // Mighty Horn + Poison Point
-#define ABILITY_BLIGHT_SCALE 779 // Multiscale + Poison Point
+#define ABILITY_QIGONG 762 // Always hits. Fighting Spirit + Rampage.
+#define ABILITY_CONJOURER_OF_DECEIT 763 // Magic Guard + Magic Bounce.
+#define ABILITY_DEEP_FREEZE 764 // Boosts water and ice by 25% and halves fire damage taken
+#define ABILITY_SOUL_DEVOURER 765 // Phantom Pain + Soul Eater.
+#define ABILITY_CHAMPIONS_ENTRANCE 766 // Intimidate + Violent Rush.
+#define ABILITY_PRESTO 767 // At full HP, gives +1 priority to this Pokémon's Sound-based moves.
+#define ABILITY_SAMBA 768 // Striker + Dancer.
+#define ABILITY_JUNSHI_SANDA 769 // Every move gets a 30% boost from Combat Specialist.
+#define ABILITY_GLADIATOR 770 // Boosts Fighting-type moves by 1.3x, or 1.8x when below 1/3 HP.
+#define ABILITY_FORSAKEN_HEART 771 // KOs dealt anywhere on the field raise Attack by one stage.
+#define ABILITY_RELENTLESS 772 // Exploit Weakness + Merciless.
+#define ABILITY_SOOTHSAYER 773 // All hits will be not very effective for 5 turns against this Pokemon.
+#define ABILITY_CORRUPTED_MIND 774 // Psychic moves used by this Pokemon always hit super-effectively.
+#define ABILITY_FLAME_COAT 775 // Non-Fire-types take 1/8 dmg every turn when on field + Flash Fire.
+#define ABILITY_UNOWN_POWER 776 // Mystic Power + Hidden Power is always super-effective.
+#define ABILITY_SUPER_SCOPE 777 // Mega Launcher + Artillery.
+#define ABILITY_VENOM_CROWN 778 // Mighty Horn + Poison Point.
+#define ABILITY_BLIGHT_SCALE 779 // Multiscale + Poison Point.
 #define ABILITY_GUNMAN 780 // Mega Launcher + All moves are Mega Launcher boosted.
 #define ABILITY_HUNTERS_MARK 781 // Attacks switching foes with 40BP Spirit Shackle.
 #define ABILITY_HEMOLYSIS 782 // Poisoned foes can't heal and lose all stat buffs.

@@ -3928,7 +3928,6 @@ static const u8 sMoveTwoLineDescription_MoveLightningBullet[] = _(
     "Shoots a powerful energy\n"
     "projectile that may paralyze.");
 
-//3.0 CUTOFF
 static const u8 sMoveTwoLineDescription_MoveMetallicMelody[] = _(
     "Hits the body rhythmically\n"
     "to damage the opponent with sound.");
@@ -4934,7 +4933,6 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_ONI_FIST - 1] = sMoveTwoLineDescription_MoveOniFist,
     [MOVE_INSECT_IMPACT - 1] = sMoveTwoLineDescription_MoveInsectImpact,
     [MOVE_LIGHTNING_BULLET - 1] = sMoveTwoLineDescription_MoveLightningBullet,
-    //3.0 CUTOFF
     [MOVE_METALLIC_MELODY - 1] = sMoveTwoLineDescription_MoveMetallicMelody,
 };
 
@@ -5936,7 +5934,6 @@ static const u8 sMoveFourLineDescription_MoveBerserkerHorn[] = _("Rotates its bo
 static const u8 sMoveFourLineDescription_MoveOniFist[] = _("A strong punch from\nthe shadows.\nAlways hits.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveInsectImpact[] = _("A powerful punch. 30%\nchance to drop\ndefense. Iron\nFist boost.");
 static const u8 sMoveFourLineDescription_MoveLightningBullet[] = _("Shoots a strong\nenergy projectile.\n10% paralyze chance\nMega Launcher Boost.");
-//3.0 CUTOFF
 static const u8 sMoveFourLineDescription_MoveMetallicMelody[] = _("The user emits a\nsound by hitting\ntheir metallic body\nrhythmically.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
@@ -6938,6 +6935,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_ONI_FIST - 1] = sMoveFourLineDescription_MoveOniFist,
     [MOVE_INSECT_IMPACT - 1] = sMoveFourLineDescription_MoveInsectImpact,
     [MOVE_LIGHTNING_BULLET - 1] = sMoveFourLineDescription_MoveLightningBullet,
-    //3.0 CUTOFF
     [MOVE_METALLIC_MELODY - 1] = sMoveFourLineDescription_MoveMetallicMelody,
 };

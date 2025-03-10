@@ -123,8 +123,7 @@ bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move) {
 }
 
 u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler) {
-    if ((BATTLER_HAS_ABILITY(battler, ABILITY_ARTILLERY)) && IsMegaLauncherBoosted(battler, moveId) &&
-        gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
+    if ((BATTLER_HAS_ABILITY(battler, ABILITY_ARTILLERY)) && IsMegaLauncherBoosted(battler, moveId) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
         return MOVE_TARGET_BOTH;
     else if ((BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE) || BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE_PLUS)) &&
              (gBattleMoves[moveId].flags & FLAG_KEEN_EDGE_BOOST) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
@@ -2289,8 +2288,6 @@ enum {
     ENDTURN_TOXIC_WASTE_DAMAGE,
     ENDTURN_SEA_OF_FIRE_DAMAGE,
     ENDTURN_PARASITIC_SPORES_DAMAGE,
-    ENDTURN_FUNERAL_PYRE_DAMAGE,
-    ENDTURN_LIFE_STEAL_DAMAGE,
     ENDTURN_GENERIC_BATTLER_TIMERS,
     ENDTURN_BATTLER_COUNT,
 };
@@ -2415,40 +2412,8 @@ u8 DoBattlerEndTurnEffects(void) {
                 BattleScriptExecute(BattleScript_LeechSeedTurnDrain);
                 effect++;
                 break;
-            case ENDTURN_TOXIC_WASTE_DAMAGE: {
-                int triggerAbility = 0;
-                int source;
-                if ((source = IsAbilityOnField(ABILITY_TOXIC_SPILL)))
-                    triggerAbility = ABILITY_TOXIC_SPILL;
-                else if ((source = IsAbilityOnField(ABILITY_TRASH_HEAP)))
-                    triggerAbility = ABILITY_TRASH_HEAP;
-                else if (getMonotypeChampType() == TYPE_POISON && GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
-                    triggerAbility = TRUE;
-                if (triggerAbility && gBattleMons[gActiveBattler].hp != 0 && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_POISON)) {
-                    MAGIC_GUARD_CHECK;
-                    if (!BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_POISON_HEAL)) TOXIC_BOOST_CHECK;
-
-                    if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_POISON_HEAL)) {
-                        if (!BATTLER_MAX_HP(gActiveBattler) && !BATTLER_HEALING_BLOCKED(gActiveBattler)) {
-                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
-                            if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-                            gBattleMoveDamage *= -1;
-                            BattleScriptExecute(BattleScript_PoisonHealActivates);
-                            effect++;
-                        }
-                    } else {
-                        gBattleScripting.abilityPopupOverwrite = triggerAbility;
-                        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
-                        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-                        BattleScriptExecute(BattleScript_ToxicWasteTurnDmg);
-                        if (triggerAbility != TRUE) {
-                            BattleScriptCall(BattleScript_AbilityPopUp);
-                            gBattlerAbility = source - 1;
-                        }
-                        effect++;
-                    }
-                }
-            }
+            case ENDTURN_TOXIC_WASTE_DAMAGE:
+                if (getMonotypeChampType() == TYPE_POISON) effect = gAbilities[ABILITY_TOXIC_SPILL].onEndTurn(ABILITY_NONE, MAX_BATTLERS_COUNT);
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_POISON:  // poison
@@ -2531,42 +2496,6 @@ u8 DoBattlerEndTurnEffects(void) {
                     effect++;
                 }
                 gBattleStruct->turnEffectsTracker++;
-                break;
-            case ENDTURN_FUNERAL_PYRE_DAMAGE: {
-                int source;
-                if (IsBattlerAlive(gActiveBattler) && (source = IsAbilityOnField(ABILITY_FUNERAL_PYRE)) &&
-                    !(IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST) || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_DARK))) {
-                    MAGIC_GUARD_CHECK;
-
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_FUNERAL_PYRE;
-                    gBattlerAbility = source - 1;
-                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
-                    gBattleMoveDamage = max(gBattleMoveDamage, 1);
-                    BattleScriptExecute(BattleScript_FuneralPyreDamage);
-                    effect++;
-                }
-            }
-                gBattleStruct->turnEffectsTracker++;
-                break;
-            case ENDTURN_LIFE_STEAL_DAMAGE:
-                gBattleStruct->turnEffectsTracker++;
-                REQUIRE(IsBattlerAlive(gActiveBattler)) {
-                    int source;
-                    REQUIRE(source = IsAbilityOnOpposingSide(gActiveBattler, ABILITY_LIFE_STEAL))
-                    REQUIRE_NOT(IsMagicGuardProtected(gActiveBattler))
-
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_LIFE_STEAL;
-                    gBattlerAbility = gBattlerAttacker = source - 1;
-                    gBattlerTarget = gActiveBattler;
-                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 10;
-                    if (!gBattleMoveDamage)
-                        gBattleMoveDamage = 1;
-                    else if (gBattleMoveDamage > gBattleMons[gBattlerTarget].hp)
-                        gBattleMoveDamage = gBattleMons[gBattlerTarget].hp;
-                    gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE;
-                    BattleScriptExecute(BattleScript_AbilityDrainsHp);
-                    effect++;
-                }
                 break;
             case ENDTURN_BURN:  // burn
                 if ((gBattleMons[gActiveBattler].status1 & STATUS1_BURN) && gBattleMons[gActiveBattler].hp != 0 &&
