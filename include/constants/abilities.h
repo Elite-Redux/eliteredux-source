@@ -799,8 +799,11 @@
 #define ABILITY_SUPER_SCOPE 777 // Mega Launcher + Artillery
 #define ABILITY_VENOM_CROWN 778 // Mighty Horn + Poison Point
 #define ABILITY_BLIGHT_SCALE 779 // Multiscale + Poison Point
+#define ABILITY_GUNMAN 780 // Mega Launcher + All moves are Mega Launcher boosted.
+#define ABILITY_HUNTERS_MARK 781 // Attacks switching foes with 40BP Spirit Shackle.
+#define ABILITY_HEMOLYSIS 782 // Poisoned foes can't heal and lose all stat buffs.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_BLIGHT_SCALE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_HEMOLYSIS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

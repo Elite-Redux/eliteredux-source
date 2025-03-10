@@ -315,7 +315,6 @@ void TryToApplyMimicry(u8 battlerId, bool8 various);
 void TryToRevertMimicry(void);
 void RestoreBattlerOriginalTypes(u8 battlerId);
 bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId);
-u8 GetBattleMoveTargetFlags(u16 moveId, u16 ability);
 u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler);
 bool32 ShouldChangeFormHpBased(u32 battler);
 u32 CountBattlerStatIncreases(u8 battlerId, bool32 countEvasionAcc);
@@ -401,6 +400,7 @@ bool32 TryRemoveScreens(u8 battler);
 void DisableSwitchInAbility(u8 battlerId, u16 ability);
 bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8* timer);
 int HasSkillLink(int battler);
+int IsMegaLauncherBoosted(int battler, int move);
 
 MultihitType GetMultihitType(int battler, int move);
 
