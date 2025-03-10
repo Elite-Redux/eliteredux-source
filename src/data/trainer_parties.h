@@ -31301,7 +31301,7 @@ static const struct TrainerMonItemCustomMoves sParty_ArchieInsane[] = { // Seafl
     },
     {
     .lvl = 0,
-    .species = SPECIES_UNOWN_K,
+    .species = SPECIES_UNOWN_K1,
     .heldItem = ITEM_SHUCA_BERRY,
     .ability = 1,
     .evs = {4, 0, 0, 252, 0, 252},
@@ -34349,7 +34349,7 @@ static const struct TrainerMonItemCustomMoves sParty_Glacia[] = {
 static const struct TrainerMonItemCustomMoves sParty_GlaciaInsane[] = {
     {
     .lvl = 0,
-    .species = SPECIES_UNOWN_G,
+    .species = SPECIES_UNOWN_G1,
     .heldItem = ITEM_OBAMIUM,
     .ability = 1,
     .evs = {252, 0, 4, 252, 0, 0},
@@ -38045,7 +38045,7 @@ static const struct TrainerMonItemCustomMoves sParty_CalvinE4[] = { // E4
     },
     {
     .lvl = 0,
-    .species = SPECIES_UNOWN_B,
+    .species = SPECIES_UNOWN_B1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
@@ -38063,7 +38063,7 @@ static const struct TrainerMonItemCustomMoves sParty_CalvinE4[] = { // E4
     },
     {
     .lvl = 0,
-    .species = SPECIES_UNOWN_J,
+    .species = SPECIES_UNOWN_J1,
     .heldItem = ITEM_BRIGHT_POWDER,
     .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
@@ -38072,7 +38072,7 @@ static const struct TrainerMonItemCustomMoves sParty_CalvinE4[] = { // E4
     },
     {
     .lvl = 0,
-    .species = SPECIES_UNOWN_E,
+    .species = SPECIES_UNOWN_E1,
     .heldItem = ITEM_CHOICE_SPECS,
     .ability = 1,
     .evs = {4, 0, 0, 252, 0, 252},
@@ -38081,7 +38081,7 @@ static const struct TrainerMonItemCustomMoves sParty_CalvinE4[] = { // E4
     },
     {
     .lvl = 0,
-    .species = SPECIES_UNOWN_F,
+    .species = SPECIES_UNOWN_F1,
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 2,
     .evs = {0, 0, 0, 0, 0, 0},
@@ -44925,7 +44925,7 @@ static const struct TrainerMonItemCustomMoves sParty_Calvin1Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_UNOWN_I,
+    .species = SPECIES_UNOWN_I1,
     .heldItem = ITEM_IRON_BALL,
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
@@ -52226,8 +52226,8 @@ static const struct TrainerMonItemCustomMoves sParty_StevenmossdeepInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_UNOWN_C,
-    .heldItem = ITEM_SNORLAXITE,
+    .species = SPECIES_UNOWN_C1,
+    .heldItem = ITEM_EYE_OF_ENDER,
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,

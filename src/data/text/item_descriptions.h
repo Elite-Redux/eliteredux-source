@@ -4267,3 +4267,8 @@ static const u8 sObamiumDesc[] = _(
     "obomasnow reaches\n"
     "his full potential\n"
     "once again.");
+
+static const u8 sEyeOfEnderDesc[] = _(
+    "steve becomes the\n"
+    "real and true steve\n"
+    "once again.");

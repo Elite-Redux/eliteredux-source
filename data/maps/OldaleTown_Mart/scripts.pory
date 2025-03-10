@@ -327,6 +327,8 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_SLOWKINGITE_G
 	ITEM_ARCANITE
 	ITEM_KINGDRANITE_Y
+	ITEM_OBAMIUM
+	ITEM_EYE_OF_ENDER
 }
 
 script General_Adoption_Center_Mega_Stones_Script{

@@ -7265,12 +7265,12 @@ const struct MonCoords gMonFrontPicCoords[] =
         .y_offset = 14,
     },
     // Unown
-    [SPECIES_UNOWN_B] =
+    [SPECIES_UNOWN_B1] =
     {
         .size = 0x34,
         .y_offset = 3,
     },
-    [SPECIES_UNOWN_C] =
+    [SPECIES_UNOWN_C1] =
     {
         .size = 0x44,
         .y_offset = 2,
@@ -7280,77 +7280,77 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x44,
         .y_offset = 7,
     },
-    [SPECIES_UNOWN_E] =
+    [SPECIES_UNOWN_E1] =
     {
         .size = 0x44,
         .y_offset = 7,
     },
-    [SPECIES_UNOWN_F] =
+    [SPECIES_UNOWN_F1] =
     {
         .size = 0x44,
         .y_offset = 7,
     },
-    [SPECIES_UNOWN_G] =
+    [SPECIES_UNOWN_G1] =
     {
         .size = 0x35,
         .y_offset = 0,
     },
-    [SPECIES_UNOWN_H] =
+    [SPECIES_UNOWN_H1] =
     {
         .size = 0x44,
         .y_offset = 11,
     },
-    [SPECIES_UNOWN_I] =
+    [SPECIES_UNOWN_I1] =
     {
         .size = 0x34,
         .y_offset = 5,
     },
-    [SPECIES_UNOWN_J] =
+    [SPECIES_UNOWN_J1] =
     {
         .size = 0x34,
         .y_offset = 17,
     },
-    [SPECIES_UNOWN_K] =
+    [SPECIES_UNOWN_K1] =
     {
         .size = 0x44,
         .y_offset = 9,
     },
-    [SPECIES_UNOWN_L] =
+    [SPECIES_UNOWN_L1] =
     {
         .size = 0x34,
         .y_offset = 5,
     },
-    [SPECIES_UNOWN_M] =
+    [SPECIES_UNOWN_M1] =
     {
         .size = 0x44,
         .y_offset = 19,
     },
-    [SPECIES_UNOWN_N] =
+    [SPECIES_UNOWN_N1] =
     {
         .size = 0x43,
         .y_offset = 20,
     },
-    [SPECIES_UNOWN_O] =
+    [SPECIES_UNOWN_O1] =
     {
         .size = 0x44,
         .y_offset = 16,
     },
-    [SPECIES_UNOWN_P] =
+    [SPECIES_UNOWN_P1] =
     {
         .size = 0x34,
         .y_offset = 19,
     },
-    [SPECIES_UNOWN_Q] =
+    [SPECIES_UNOWN_Q1] =
     {
         .size = 0x43,
         .y_offset = 21,
     },
-    [SPECIES_UNOWN_R] =
+    [SPECIES_UNOWN_R1] =
     {
         .size = 0x34,
         .y_offset = 19,
     },
-    [SPECIES_UNOWN_S] =
+    [SPECIES_UNOWN_S1] =
     {
         .size = 0x45,
         .y_offset = 12,

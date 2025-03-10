@@ -39831,7 +39831,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 4,
     },
 
-[SPECIES_UNOWN_B] =
+[SPECIES_UNOWN_B1] =
     {
     .baseHP         = 239,
     .baseAttack     = 255,
@@ -39858,7 +39858,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_C] =
+[SPECIES_UNOWN_C1] =
     {
     .baseHP         = 160,
     .baseAttack     = 120,
@@ -39912,7 +39912,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_E] =
+[SPECIES_UNOWN_E1] =
     {
     .baseHP         = 69,
     .baseAttack     = 69,
@@ -39939,7 +39939,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_F] =
+[SPECIES_UNOWN_F1] =
     {
     .baseHP         = 1,
     .baseAttack     = 1,
@@ -39966,7 +39966,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_G] =
+[SPECIES_UNOWN_G1] =
     {
     .baseHP         = 77,
     .baseAttack     = 72,
@@ -39993,7 +39993,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_H] =
+[SPECIES_UNOWN_H1] =
     {
     .baseHP         = 77,
     .baseAttack     = 47,
@@ -40020,7 +40020,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_I] =
+[SPECIES_UNOWN_I1] =
     {
     .baseHP         = 255,
     .baseAttack     = 255,
@@ -40047,7 +40047,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_J] =
+[SPECIES_UNOWN_J1] =
     {
     .baseHP         = 19,
     .baseAttack     = 100,
@@ -40074,7 +40074,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_K] =
+[SPECIES_UNOWN_K1] =
     {
     .baseHP         = 100,
     .baseAttack     = 150,
@@ -40101,7 +40101,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_L] =
+[SPECIES_UNOWN_L1] =
     {
     .baseHP         = 100,
     .baseAttack     = 95,
@@ -40128,7 +40128,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_M] =
+[SPECIES_UNOWN_M1] =
     {
     .baseHP         = 39,
     .baseAttack     = 91,
@@ -40155,7 +40155,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_N] =
+[SPECIES_UNOWN_N1] =
     {
     .baseHP         = 110,
     .baseAttack     = 65,
@@ -40182,7 +40182,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_O] =
+[SPECIES_UNOWN_O1] =
     {
     .baseHP         = 109,
     .baseAttack     = 135,
@@ -40209,7 +40209,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_P] =
+[SPECIES_UNOWN_P1] =
     {
     .baseHP         = 109,
     .baseAttack     = 175,
@@ -40236,7 +40236,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_Q] =
+[SPECIES_UNOWN_Q1] =
     {
     .baseHP         = 70,
     .baseAttack     = 135,
@@ -40263,43 +40263,42 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_R] =
-    {
-    .baseHP        = 48,
-    .baseAttack    = 72,
-    .baseDefense   = 48,
-    .baseSpeed     = 48,
-    .baseSpAttack  = 72,
-    .baseSpDefense = 48,
-    .type1 = TYPE_PSYCHIC,
-    .type2 = TYPE_PSYCHIC,
-    .catchRate = 225,
-    .expYield = 118,
-    .evYield_Attack    = 1,
+[SPECIES_UNOWN_R1] =
+{
+    .baseHP        = 59, //55
+    .baseAttack    = 68, //55
+    .baseDefense   = 45,
+    .baseSpeed     = 35,
+    .baseSpAttack  = 68,
+    .baseSpDefense = 45,
+    .type1 = TYPE_GRASS,
+    .type2 = TYPE_GRASS,
+    .catchRate = 255,
+    .expYield = 62,
     .evYield_SpAttack  = 1,
-    .genderRatio = MON_GENDERLESS,
-    .eggCycles = 40,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
     .friendship = 70,
-    .growthRate = GROWTH_MEDIUM_FAST,
-    .eggGroup1 = EGG_GROUP_UNDISCOVERED,
-    .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-    .abilities = {ABILITY_RUN_AWAY, ABILITY_MYSTIC_POWER, ABILITY_MAGIC_GUARD},
-    .innates = {ABILITY_SCHOOLING, ABILITY_LEVITATE, ABILITY_NONE},
-    .bodyColor = BODY_COLOR_BLACK,
-    .noFlip = TRUE,
-    .tier = 0,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_FIELD,
+    .eggGroup2 = EGG_GROUP_FIELD,
+    .abilities = {ABILITY_SWIFT_SWIM, ABILITY_VIOLENT_RUSH, ABILITY_FATAL_PRECISION},
+    .innates = {ABILITY_TORRENT, ABILITY_SHELL_ARMOR, ABILITY_KEEN_EDGE},
+    .bodyColor = BODY_COLOR_BLUE,
+    .noFlip = FALSE,
+    .tier = 3,
     },
 
-[SPECIES_UNOWN_S] =
+[SPECIES_UNOWN_S1] =
     {
-    .baseHP        = 48,
-    .baseAttack    = 72,
-    .baseDefense   = 48,
-    .baseSpeed     = 48,
-    .baseSpAttack  = 72,
-    .baseSpDefense = 48,
-    .type1 = TYPE_PSYCHIC,
-    .type2 = TYPE_PSYCHIC,
+    .baseHP         = 69,
+    .baseAttack     = 121,
+    .baseDefense    = 69,
+    .baseSpeed      = 131,
+    .baseSpAttack   = 69,
+    .baseSpDefense  = 69,
+    .type1          = TYPE_STEEL,
+    .type2          = TYPE_POISON,
     .catchRate = 225,
     .expYield = 118,
     .evYield_Attack    = 1,
@@ -40310,8 +40309,8 @@ const struct BaseStats gBaseStats[] =
     .growthRate = GROWTH_MEDIUM_FAST,
     .eggGroup1 = EGG_GROUP_UNDISCOVERED,
     .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-    .abilities = {ABILITY_RUN_AWAY, ABILITY_MYSTIC_POWER, ABILITY_MAGIC_GUARD},
-    .innates = {ABILITY_SCHOOLING, ABILITY_LEVITATE, ABILITY_NONE},
+    .abilities      = {ABILITY_MOMENTUM, ABILITY_EJECT_PACK_ABILITY, ABILITY_ARENA_TRAP},
+    .innates        = {ABILITY_MULTI_HEADED, ABILITY_LOW_BLOW, ABILITY_ON_THE_PROWL},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = TRUE,
     .tier = 0,

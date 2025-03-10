@@ -414,7 +414,7 @@ enum
 u16 MaybeFindSpecialMon(u8 area)
 {
     if (Random() % 2048 == 0) return SPECIES_MEW;
-    if (Random() % 420 == 0) return SPECIES_UNOWN_E;
+    if (Random() % 420 == 0) return SPECIES_UNOWN_E1;
     if (Random() % 512 > 0) return FALSE;
     
     switch (area)

@@ -127,7 +127,7 @@
               {
                 "min_level": 3,
                 "max_level": 3,
-                "species": "SPECIES_UNOWN_M"
+                "species": "SPECIES_UNOWN_M1"
               },
               {
                 "min_level": 3,
@@ -450,7 +450,7 @@
               {
                 "min_level": 3,
                 "max_level": 3,
-                "species": "SPECIES_UNOWN_N"
+                "species": "SPECIES_UNOWN_N1"
               },
               {
                 "min_level": 3,
@@ -674,7 +674,7 @@
               {
                 "min_level": 5,
                 "max_level": 7,
-                "species": "SPECIES_UNOWN_I"
+                "species": "SPECIES_UNOWN_I1"
               }
             ]
           },
@@ -17120,7 +17120,7 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_CORVIKNIGHT"
+                "species": "SPECIES_BURMY_ETERNA"
               },
               {
                 "min_level": 5,
@@ -17234,7 +17234,7 @@
               {
                 "min_level": 2,
                 "max_level": 2,
-                "species": "SPECIES_UNOWN_K"
+                "species": "SPECIES_UNOWN_K1"
               },
               {
                 "min_level": 2,
