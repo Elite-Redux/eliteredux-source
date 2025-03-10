@@ -1072,6 +1072,8 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_FireCoatDamage[] = _("{B_ATK_NAME_WITH_PREFIX} is scorched\nby the flames!");
+static const u8 sText_FireCoatStart[] = _("Flames engulf the battlefield!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1927,6 +1929,8 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ITEM_STAT_PROTECTED - 12] = sText_ItemStatProtected,
     [STRINGID_STACKTYPECHANGEDTO - 12] = sText_StackChangedTypeTo,
     [STRINGID_STACKREGAINEDHEALTH - 12] = sText_StackRegainedHealth,
+    [STRINGID_FIRECOATDAMAGE - 12] = sText_FireCoatDamage,
+    [STRINGID_FIRECOATSTART - 12] = sText_FireCoatStart,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2018,6 +2022,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_HOT_COALS] = STRINGID_HOT_COALS_SET,
     [B_MSG_SWITCHIN_BLOOD_STAIN] = STRINGID_BLOOD_STAIN_ANNOUNCE,
     [B_MSG_SWITCHIN_CUTTHROAT] = STRINGID_CUTTHROAT,
+    [B_MSG_SWITCHIN_FIRE_COAT] = STRINGID_FIRECOATSTART,
 };
 
 const u16 gParadoxBoostSourceIds[] = 

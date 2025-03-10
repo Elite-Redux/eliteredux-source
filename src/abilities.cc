@@ -5152,10 +5152,47 @@ static const Ability ToxicSpill = {
     .description = $("Non-Poison-types take 1/8 dmg\n"
                      "every turn when on field."),
     .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
         BattleScriptPushCursorAndCallback(BattleScript_BattlerAnnouncedToxicSpill);
         return TRUE;
     },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        if (ability) {
+            CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
+            u16 sourceAbilities[] = {ABILITY_TOXIC_SPILL, ABILITY_TRASH_HEAP};
+            for (u16 sourceAbility : sourceAbilities) {
+                int source = IsAbilityOnField(sourceAbility);
+                FILTER(source)
+                CHECK(sourceAbility == ability)
+                CHECK(source - 1 == battler)
+            }
+        }
+
+        int any = FALSE;
+        for (int target = 0; target < gBattlersCount; target++) {
+            FILTER(IsBattlerAlive(target))
+
+            if (BATTLER_HAS_ABILITY(target, ABILITY_POISON_HEAL)) {
+                FILTER_NOT(BATTLER_MAX_HP(target))
+                FILTER_NOT(BATTLER_HEALING_BLOCKED(target))
+                gStackBattler1 = target;
+                BattleScriptExecute(BattleScript_ToxicWasteHeal);
+                any = TRUE;
+                continue;
+            }
+
+            FILTER_NOT(IS_BATTLER_OF_TYPE(target, TYPE_POISON))
+            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(BATTLER_HAS_ABILITY(battler, ABILITY_TOXIC_BOOST))
+
+            gStackBattler1 = target;
+            BattleScriptExecute(BattleScript_ToxicWasteTurnDmg);
+            any = TRUE;
+        }
+        return any;
+    },
     .onExit = +[](ON_EXIT) -> int {
+        CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
         BattleScriptCall(BattleScript_TheToxicWasHasDissapeared);
         return TRUE;
     },
@@ -8393,6 +8430,21 @@ static const Ability FuneralPyre = {
     .description = $("Non-Ghost and Dark-types\n"
                      "take 1/4 damage every turn."),
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE); },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(IsAbilityOnField(ability) - 1 == battler)
+
+        int any = FALSE;
+        for (int target = 0; target < gBattlersCount; target++) {
+            FILTER(IsBattlerAlive(target))
+            FILTER_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GHOST) || IS_BATTLER_OF_TYPE(target, TYPE_DARK))
+            FILTER_NOT(IsMagicGuardProtected(target))
+
+            gStackBattler1 = target;
+            BattleScriptExecute(BattleScript_FuneralPyreDamage);
+            any = TRUE;
+        }
+        return any;
+    },
 };
 
 static const Ability FlameBubble = {
@@ -9278,6 +9330,20 @@ static const Ability LifeSteal = {
     .name = $("Life Steal"),
     .description = $("Steals 1/10 HP from foes each\n"
                      "turn."),
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        int any = FALSE;
+        for (int target = BATTLE_OPPOSITE(GetBattlerSide(battler)); target < gBattlersCount; target += 2) {
+            FILTER(IsBattlerAlive(target))
+            FILTER_NOT(IsMagicGuardProtected(target))
+
+            gStackBattler1 = battler;
+            gStackBattler2 = target;
+            gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE;
+            BattleScriptExecute(BattleScript_AbilityDrainsHp);
+            any = TRUE;
+        }
+        return any;
+    },
 };
 
 static const Ability RudeAwakening = {
@@ -9662,8 +9728,25 @@ static const Ability CorruptedMind = {
 
 static const Ability FlameCoat = {
     .name = $("Flame Coat"),
-    .description = $("Placeholder"),
-    .randomizerBanned = TRUE,
+    .description = $("Non-Fire-types take 1/8 dmg\n"
+                     "every turn when on field."),
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_FIRE_COAT); },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(IsAbilityOnField(ability) - 1 == battler)
+
+        int any = FALSE;
+        for (int target = 0; target < gBattlersCount; target++) {
+            FILTER(IsBattlerAlive(target))
+            FILTER_NOT(IS_BATTLER_OF_TYPE(target, TYPE_FIRE))
+            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(BATTLER_HAS_ABILITY(target, ABILITY_FLARE_BOOST))
+
+            gStackBattler1 = target;
+            BattleScriptExecute(BattleScript_FireCoatDamage);
+            any = TRUE;
+        }
+        return any;
+    },
 };
 
 static const Ability UnownPower = {
@@ -10498,9 +10581,9 @@ const Ability gAbilities[] = {
     [ABILITY_SUPER_SCOPE] = SuperScope,
     [ABILITY_VENOM_CROWN] = VenomCrown,
     [ABILITY_BLIGHT_SCALE] = BlightScale,
+    [ABILITY_GUNMAN] = Gunman,
     [ABILITY_I_AM_STEVE] = iamsteve,
     [ABILITY_AVERAGE_POWER] = AveragePower,
-    [ABILITY_GUNMAN] = None,
     [ABILITY_HUNTERS_MARK] = None,
     [ABILITY_HEMOLYSIS] = None,
 };
