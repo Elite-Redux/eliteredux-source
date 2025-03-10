@@ -9751,14 +9751,13 @@ static const Ability BlightScale = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Gunman =
-    {
-        .name = $("Gunman"),
-        .description = $("Mega Launcher + All attacks are\n"
-                         "Mega Launcher boosted."),
-        .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
-        .megaLauncherBoost = TRUE,
-}
+static const Ability Gunman = {
+    .name = $("Gunman"),
+    .description = $("Mega Launcher + All attacks are\n"
+                     "Mega Launcher boosted."),
+    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+    .megaLauncherBoost = TRUE,
+};
 
 const Ability gAbilities[] = {
     [ABILITY_NONE] = None,
