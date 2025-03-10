@@ -2330,8 +2330,9 @@ static const Ability MegaLauncher = {
                      "Gun/Pulse, etc. moves by 1.3x."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.3);
+            if (IsMegaLauncherBoosted(battler, move)) MUL(1.3);
         },
+    .megaLauncherBoost = TRUE,
 };
 
 static const Ability GrassPelt = {
@@ -4714,7 +4715,7 @@ static const Ability Deadeye = {
                      "moves hit weakest defense."),
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority { return ACCURACY_HITS_IF_POSSIBLE; },
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].arrowBased)
+        CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].arrowBased)
         u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
         u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
         if (def < spDef)
@@ -4731,7 +4732,7 @@ static const Ability Artillery = {
     .description = $("Mega Launcher moves always hit.\n"
                      "Single-target now hits both foes."),
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-        CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
+        CHECK(IsMegaLauncherBoosted(battler, move))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
 };
@@ -4939,6 +4940,7 @@ static const Ability IronBarrage = {
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
     .onAccuracy = SightingSystem.onAccuracy,
     .onPriority = SightingSystem.onPriority,
+    .megaLauncherBoost = TRUE,
 };
 
 static const Ability SteelBarrel = {
@@ -4953,7 +4955,7 @@ static const Ability PyroShells = {
     .description = $("Triggers 50 BP Outburst after\n"
                      "using a Mega Launcher move."),
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
+        CHECK(IsMegaLauncherBoosted(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_OUTBURST, 50);
@@ -5397,7 +5399,7 @@ static const Ability DualWield = {
     .description = $("Mega Launcher and Keen Edge\n"
                      "moves hit twice for 70% damage."),
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
-        CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
+        CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
         return PARENTAL_BOND_DUAL_WIELD;
     },
 };
@@ -7959,7 +7961,7 @@ static const Ability Resonance = {
     .name = $("Resonance"),
     .description = $("Sound moves have a 30%\n"
                      "chance to cause bleeding."),
-.onAttacker = +[](ON_ATTACKER) -> int {
+    .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
         CHECK(gBattleMoves[move].flags & FLAG_SOUND)
@@ -8617,6 +8619,7 @@ static const Ability MasterHand = {
     .onBattlerFaints = Rampage.onBattlerFaints,
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .megaLauncherBoost = TRUE,
 };
 
 static const Ability FinalBlow = {
@@ -9673,34 +9676,35 @@ static const Ability SuperScope = {
     .name = $("Super Scope"),
     .description = $("Mega Launcher + Artillery."),
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
-    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-            CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
-            return ACCURACY_HITS_IF_POSSIBLE;
-        },
+    .onAccuracy = Artillery.onAccuracy,
+    .megaLauncherBoost = TRUE,
 };
 
 static const Ability VenomCrown = {
     .name = $("Venom Crown"),
     .description = $("Poison Point + Mighty Horn."),
     ON_EITHER_ABILITY(PoisonPoint),
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].hornBased) MUL(1.3);
-        },
-        .randomizerBanned = TRUE,
+    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
+    .randomizerBanned = TRUE,
 };
 
 static const Ability BlightScale = {
     .name = $("Blight Scale"),
     .description = $("Multiscale + Poison Point"),
     ON_EITHER_ABILITY(PoisonPoint),
-    .onDefensiveMultiplier =
-        +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (BATTLER_MAX_HP(battler)) MUL(.5);
-        },
+    .onDefensiveMultiplier = Multiscale.onDefensiveMultiplier,
     .breakable = TRUE,
     .randomizerBanned = TRUE,
 };
+
+static const Ability Gunman =
+    {
+        .name = $("Gunman"),
+        .description = $("Mega Launcher + All attacks are\n"
+                         "Mega Launcher boosted."),
+        .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+        .megaLauncherBoost = TRUE,
+}
 
 static const Ability iamsteve = {
     .name = $("i am steve"),
@@ -10497,6 +10501,9 @@ const Ability gAbilities[] = {
     [ABILITY_BLIGHT_SCALE] = BlightScale,
     [ABILITY_I_AM_STEVE] = iamsteve,
     [ABILITY_AVERAGE_POWER] = AveragePower,
+    [ABILITY_GUNMAN] = None,
+    [ABILITY_HUNTERS_MARK] = None,
+    [ABILITY_HEMOLYSIS] = None,
 };
 
 #pragma GCC diagnostic pop

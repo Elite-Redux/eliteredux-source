@@ -1772,7 +1772,7 @@ const struct SpindaSpot gSpindaSpotGraphics[] = {{16, 7, INCBIN_U16("graphics/sp
 #define __NATURE_STAT(stat, up, down) (up == stat) - (down == stat)
 #define NATURE_STAT(up, down)             \
     {__NATURE_STAT(STAT_ATK, up, down),   \
-     __NATURE_STAT(STAT_DEF, up, down), \
+     __NATURE_STAT(STAT_DEF, up, down),   \
      __NATURE_STAT(STAT_SPEED, up, down), \
      __NATURE_STAT(STAT_SPATK, up, down), \
      __NATURE_STAT(STAT_SPDEF, up, down)}
@@ -4277,17 +4277,7 @@ u8 GetBoxMonGender(struct BoxPokemon *boxMon) {
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
     u32 personality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL);
 
-    switch (gBaseStats[species].genderRatio) {
-        case MON_MALE:
-        case MON_FEMALE:
-        case MON_GENDERLESS:
-            return gBaseStats[species].genderRatio;
-    }
-
-    if (gBaseStats[species].genderRatio > (personality & 0xFF))
-        return MON_FEMALE;
-    else
-        return MON_MALE;
+    return GetGenderFromSpeciesAndPersonality(species, personality);
 }
 
 u8 GetGenderFromSpeciesAndPersonality(u16 species, u32 personality) {

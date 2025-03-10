@@ -1185,7 +1185,7 @@ bool32 IsMoveEncouragedToHit(u8 battlerAtk, u8 battlerDef, u16 move) {
 
     if (IsSemiInvulnerable(battlerDef, move)) return FALSE;
 
-    if (BattlerHasAbility(battlerAtk, ABILITY_ARTILLERY, FALSE) && gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) return TRUE;
+    if (BattlerHasAbility(battlerAtk, ABILITY_ARTILLERY, FALSE) && IsMegaLauncherBoosted(battlerAtk, move)) return TRUE;
 
     if ((BattlerHasAbility(battlerAtk, ABILITY_SWEEPING_EDGE, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_SWEEPING_EDGE_PLUS, FALSE)) &&
         gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)

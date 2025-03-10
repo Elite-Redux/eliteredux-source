@@ -801,8 +801,11 @@
 #define ABILITY_BLIGHT_SCALE 779 // Multiscale + Poison Point
 #define ABILITY_I_AM_STEVE 780 // Multiscale + Poison Point
 #define ABILITY_AVERAGE_POWER 781 // Multiscale + Poison Point
+#define ABILITY_GUNMAN 780 // Mega Launcher + All moves are Mega Launcher boosted.
+#define ABILITY_HUNTERS_MARK 781 // Attacks switching foes with 40BP Spirit Shackle.
+#define ABILITY_HEMOLYSIS 782 // Poisoned foes can't heal and lose all stat buffs.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_AVERAGE_POWER + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_HEMOLYSIS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

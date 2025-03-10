@@ -122,27 +122,8 @@ bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move) {
     return TRUE;
 }
 
-// Returns the target field of a move, modified by ability
-u8 GetBattleMoveTargetFlags(u16 moveId, u16 ability) {
-    if ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_ARTILLERY)) && (gBattleMoves[moveId].flags & FLAG_MEGA_LAUNCHER_BOOST) &&
-        gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
-        return MOVE_TARGET_BOTH;
-    else if ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SWEEPING_EDGE) || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SWEEPING_EDGE_PLUS)) &&
-             (gBattleMoves[moveId].flags & FLAG_KEEN_EDGE_BOOST) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
-        return MOVE_TARGET_BOTH;
-    else if ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_AMPLIFIER) || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BASS_BOOSTED)) &&
-             (gBattleMoves[moveId].flags & FLAG_SOUND) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
-        return MOVE_TARGET_BOTH;
-    else if (gBattleMoves[moveId].effect == EFFECT_EXPANDING_FORCE && GetCurrentTerrain() == STATUS_FIELD_PSYCHIC_TERRAIN)
-        return MOVE_TARGET_BOTH;
-    else if (gBattleMoves[moveId].effect == EFFECT_PAY_DAY && GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_AMULET_COIN &&
-             (gBattleMons[gActiveBattler].species == SPECIES_MEOWTH_PARTNER || gBattleMons[gActiveBattler].species == SPECIES_MEOWTH_PARTNER_MEGA))
-        return MOVE_TARGET_BOTH;
-    return gBattleMoves[moveId].target;
-}
-
 u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler) {
-    if ((BATTLER_HAS_ABILITY(battler, ABILITY_ARTILLERY)) && (gBattleMoves[moveId].flags & FLAG_MEGA_LAUNCHER_BOOST) &&
+    if ((BATTLER_HAS_ABILITY(battler, ABILITY_ARTILLERY)) && IsMegaLauncherBoosted(battler, moveId) &&
         gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
         return MOVE_TARGET_BOTH;
     else if ((BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE) || BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE_PLUS)) &&
@@ -9588,4 +9569,8 @@ int CanLowerStat(int battler, int stat) { return CompareStat(battler, stat, MIN_
 int HasSkillLink(int battler) {
     RETURN_ABILITY_IF_FLAG(battler, FALSE, skillLink)
     return FALSE;
+}
+
+int IsMegaLauncherBoosted(int battler, int move) {
+    return gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || BattlerHasAbility(battler, ABILITY_GUNMAN, FALSE);
 }

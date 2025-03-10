@@ -7262,8 +7262,12 @@ static void Cmd_various(void) {
             } else if (BATTLER_MAX_HP(gActiveBattler)) {
                 gBattlescriptCurrInstr = ptr;
             } else {
-                if ((BattlerHasAbility(gBattlerAttacker, ABILITY_MEGA_LAUNCHER, FALSE) || BattlerHasAbility(gBattlerAttacker, ABILITY_IRON_BARRAGE, FALSE)) &&
-                    gBattleMoves[gCurrentMove].flags & FLAG_MEGA_LAUNCHER_BOOST)
+                int megaLauncherBoosted = FALSE;
+                if (IsMegaLauncherBoosted(gBattlerAttacker, gCurrentMove)) {
+                    ON_ABILITY(gActiveBattler, FALSE, gAbilities[ability].megaLauncherBoost, megaLauncherBoosted = TRUE; break)
+                }
+
+                if (megaLauncherBoosted)
                     gBattleMoveDamage = -(gBattleMons[gActiveBattler].maxHP * 3 / 4);
                 else
                     gBattleMoveDamage = -(gBattleMons[gActiveBattler].maxHP / 2);
