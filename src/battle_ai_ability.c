@@ -92,7 +92,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
         return AI_SCORE_ABSORB_MOVE(50);
     
     case ABILITY_VITALITY_STRIKE:
-        REQUIRE(IS_IRON_FIST(battlerAtk, move))
+        REQUIRE(IsIronFistBoosted(battlerAtk, move))
         return AI_SCORE_ABSORB_MOVE(50);
     
     case ABILITY_PURE_LOVE:

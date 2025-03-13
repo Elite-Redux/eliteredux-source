@@ -1343,7 +1343,7 @@ static const Ability IronFist = {
                      "moves by 1.3x."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (IS_IRON_FIST(battler, move)) MUL(1.3);
+            if (IsIronFistBoosted(battler, move)) MUL(1.3);
         },
 };
 
@@ -3592,7 +3592,7 @@ static const Ability PowerFists = {
                      "Defense and get a 1.3x boost."),
     .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(IS_IRON_FIST(battler, move))
+        CHECK(IsIronFistBoosted(battler, move))
         return STAT_SPDEF;
     },
 };
@@ -3634,7 +3634,7 @@ static const Ability BlitzBoxer = {
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's punching moves."),
     .onPriority = +[](ON_PRIORITY) -> int {
-        CHECK(IS_IRON_FIST(battler, move))
+        CHECK(IsIronFistBoosted(battler, move))
         CHECK(BATTLER_MAX_HP(battler));
         return 1;
     },
@@ -4080,7 +4080,7 @@ static const Ability RagingBoxer = {
     .description = $("Punching moves hit twice. 1st hit\n"
                      "at 100% power, 2nd hit at 40%."),
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
-        CHECK(IS_IRON_FIST(battler, move))
+        CHECK(IsIronFistBoosted(battler, move))
         return PARENTAL_BOND_PRIMAL_MAW;
     },
 };
@@ -4556,7 +4556,7 @@ static const Ability Striker = {
                      "moves by 1.3x."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) MUL(1.3);
+            if (IsStrikerBoosted(battler, move)) MUL(1.3);
         },
 };
 
@@ -4704,7 +4704,7 @@ static const Ability PreciseFist = {
     .description = $("Punching moves get +1 crit\n"
                      "and 5x effect chance."),
     .onCrit = +[](ON_CRIT) -> int {
-        CHECK(IS_IRON_FIST(battler, move))
+        CHECK(IsIronFistBoosted(battler, move))
         return 1;
     },
 };
@@ -5033,11 +5033,11 @@ static const Ability Roundhouse = {
     .description = $("Kicks always hit.\n"
                      "Damages foes' weaker defenses."),
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-        CHECK(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
+        CHECK(IsStrikerBoosted(battler, move))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
+        CHECK(IsStrikerBoosted(battler, move))
         u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
         u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
         if (def < spDef)
@@ -8701,7 +8701,7 @@ static const Ability VitalityStrike = {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-        CHECK(IS_IRON_FIST(battler, move))
+        CHECK(IsIronFistBoosted(battler, move))
 
         gBattleMoveDamage = -gHpDealt / 10;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
@@ -9389,7 +9389,7 @@ static const Ability MagicalFists = {
     .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (IS_IRON_FIST(battler, move)) *atkStatToUse = STAT_SPATK;
+            if (IsIronFistBoosted(battler, move)) *atkStatToUse = STAT_SPATK;
         },
 };
 
@@ -9683,8 +9683,8 @@ static const Ability Samba = {
 
 static const Ability JunshiSanda = {
     .name = $("JunshiSanda"),
-    .description = $("Placeholder"),
-    .randomizerBanned = TRUE,
+    .description = $("Punching or Kicking moves count as\n"
+                     "both Punching and Kicking moves."),
 };
 
 static const Ability Gladiator = {
@@ -9782,8 +9782,8 @@ static const Ability BlightScale = {
 
 static const Ability Gunman = {
     .name = $("Gunman"),
-    .description = $("Mega Launcher + All attacks are\n"
-                     "Mega Launcher boosted."),
+    .description = $("Mega Launcher + Status moves are\n"
+                     "Mega Launcher moves."),
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
     .megaLauncherBoost = TRUE,
 };

@@ -149,10 +149,6 @@ typedef union AbilityStates {
 #define ABILITY_SUPPRESSION_ABILITY (1 << 15)
 #define ABILITY_SUPPRESSION_MASK (ABILITY_SUPPRESSION_ABILITY | ABILITY_SUPPRESSION_PERSISTENT)
 
-#define IS_IRON_FIST(attacker, moveToCheck)                    \
-    (gBattleMoves[moveToCheck].flags & FLAG_IRON_FIST_BOOST || \
-     (BATTLER_HAS_ABILITY(attacker, ABILITY_BRAWLING_WYVERN) && IS_MOVE_TYPE(moveToCheck, TYPE_DRAGON)))
-
 extern const struct TypePower gNaturalGiftTable[];
 extern const u16 gPercentToModifier[];
 extern const u16 gHpTransformations[10][4];
@@ -401,6 +397,8 @@ void DisableSwitchInAbility(u8 battlerId, u16 ability);
 bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8* timer);
 int HasSkillLink(int battler);
 int IsMegaLauncherBoosted(int battler, int move);
+int IsIronFistBoosted(int battler, int move);
+int IsStrikerBoosted(int battler, int move);
 
 MultihitType GetMultihitType(int battler, int move);
 

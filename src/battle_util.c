@@ -6607,7 +6607,7 @@ bool32 IsMoveMakingContact(u16 move, u8 battlerAtk) {
         return FALSE;
     } else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PROTECTIVE_PADS) {
         return FALSE;
-    } else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PUNCHING_GLOVE && IS_IRON_FIST(battlerAtk, move)) {
+    } else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PUNCHING_GLOVE && IsIronFistBoosted(battlerAtk, move)) {
         return FALSE;
     } else {
         return TRUE;
@@ -7758,7 +7758,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
                 MUL_MODIFIER(&finalModifier, 1.3);
             break;
         case HOLD_EFFECT_PUNCHING_GLOVE:
-            if (IS_IRON_FIST(battlerAtk, move)) MulModifier(&finalModifier, UQ_4_12(1.1));
+            if (IsIronFistBoosted(battlerAtk, move)) MulModifier(&finalModifier, UQ_4_12(1.1));
             break;
     }
 
@@ -9501,5 +9501,20 @@ int HasSkillLink(int battler) {
 }
 
 int IsMegaLauncherBoosted(int battler, int move) {
-    return gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || BattlerHasAbility(battler, ABILITY_GUNMAN, FALSE);
+    if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) return TRUE;
+    if (IS_MOVE_STATUS(move) || BattlerHasAbility(battler, ABILITY_GUNMAN, FALSE)) return TRUE;
+    return FALSE;
+}
+
+int IsIronFistBoosted(int battler, int move) {
+    if (gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST) return TRUE;
+    if (IS_MOVE_TYPE(move, TYPE_DRAGON) && BattlerHasAbility(battler, ABILITY_BRAWLING_WYVERN, FALSE)) return TRUE;
+    if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST && BattlerHasAbility(battler, ABILITY_JUNSHI_SANDA, FALSE)) return TRUE;
+    return FALSE;
+}
+
+int IsStrikerBoosted(int battler, int move) {
+    if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) return TRUE;
+    if (gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST && BattlerHasAbility(battler, ABILITY_JUNSHI_SANDA, FALSE)) return TRUE;
+    return FALSE;
 }
