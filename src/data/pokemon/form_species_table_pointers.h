@@ -24,7 +24,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_GRAVELER] = sGravelerFormSpeciesIdTable,
     [SPECIES_GOLEM] = sGolemFormSpeciesIdTable,
     [SPECIES_PONYTA] = sPonytaFormSpeciesIdTable,
-    [SPECIES_RAPIDASH] = sRapidashFormSpeciesIdTable,
+    [SPECIES_RAPIDASH1] = sRapidashFormSpeciesIdTable,
     [SPECIES_SLOWPOKE] = sSlowpokeFormSpeciesIdTable,
     [SPECIES_SLOWBRO] = sSlowbroFormSpeciesIdTable,
     [SPECIES_FARFETCHD] = sFarfetchdFormSpeciesIdTable,
@@ -519,8 +519,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_DEWGONG] = sDewgongFormSpeciesIdTable,
     [SPECIES_DEWGONG_MEGA] = sDewgongFormSpeciesIdTable,
     [SPECIES_KECLEONG] = sDewgongFormSpeciesIdTable,
-    [SPECIES_HITMONCHAN] = sHitmonchanFormSpeciesIdTable,
-    [SPECIES_HITMONCHAN_MEGA] = sHitmonchanFormSpeciesIdTable,
+    [SPECIES_HITMONCHAN1] = sHitmonchanFormSpeciesIdTable,
+    [SPECIES_HITMONCHAN_MEGA1] = sHitmonchanFormSpeciesIdTable,
     [SPECIES_SKARMORY_MEGA] = sSkarmoryFormSpeciesIdTable,
     [SPECIES_SKARMORY_REDUX] = sSkarmoryFormSpeciesIdTable,
     [SPECIES_SKARMORY_MEGA_REDUX] = sSkarmoryFormSpeciesIdTable,
@@ -552,7 +552,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_TYPHLOSION_MEGA] = sTyphlosionFormSpeciesIdTable,
     [SPECIES_TYPHLOSION_HISUIAN] = sTyphlosionFormSpeciesIdTable,
     [SPECIES_MEGANIUM] = sMeganiumFormSpeciesIdTable,
-    [SPECIES_MEGANIUM_MEGA] = sMeganiumFormSpeciesIdTable,
+    [SPECIES_MEGANIUM_MEGA1] = sMeganiumFormSpeciesIdTable,
     [SPECIES_SLOWKING_MEGA] = sSlowkingFormSpeciesIdTable,
 
     [SPECIES_KROOKODILE] = sKrookodileFormSpeciesIdTable,
@@ -932,9 +932,9 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_VICTINI_PRIMAL] = sVictiniFormSpeciesIdTable,
 
-    [SPECIES_WIGGLYTUFF_APEX] = sWigglytuffFormSpeciesIdTable,
+    [SPECIES_WIGGLYTUFF_APEX1] = sWigglytuffFormSpeciesIdTable,
 
-    [SPECIES_WIGGLYTUFF_PRIMAL] = sWigglytuffFormSpeciesIdTable,
+    [SPECIES_WIGGLYTUFF_PRIMAL1] = sWigglytuffFormSpeciesIdTable,
 
     [SPECIES_FLYGON_REDUX_B_MEGA] = sFlygonFormSpeciesIdTable,
 
@@ -956,9 +956,9 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_SPECTRIER_CLOUD] = sSpectrierFormSpeciesIdTable,
 
-    [SPECIES_WIGGLYTUFF_MEGA] = sWigglytuffFormSpeciesIdTable,
+    [SPECIES_WIGGLYTUFF_MEGA1] = sWigglytuffFormSpeciesIdTable,
 
-    [SPECIES_WIGGLYTUFF_MEGA_X] = sWigglytuffFormSpeciesIdTable,
+    [SPECIES_WIGGLYTUFF_MEGA_X1] = sWigglytuffFormSpeciesIdTable,
 
     [SPECIES_YVELTAL_MEGA] = sYveltal_MegaFormSpeciesIdTable,
 
@@ -966,7 +966,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_KARTANA_FALLEN] = sKartana_FallenFormSpeciesIdTable,
 
-    [SPECIES_TINKATON_MEGA] = sTinkatonFormSpeciesIdTable,
+    [SPECIES_TINKATON_MEGA1] = sTinkatonFormSpeciesIdTable,
 
     [SPECIES_FIDOUGH_PARTNER] = sFidoughFormSpeciesIdTable,
 

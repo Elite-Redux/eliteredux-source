@@ -39,7 +39,7 @@ gCryTable::
 	cry Cry_Vulpix
 	cry Cry_Ninetales
 	cry Cry_Jigglypuff
-	cry Cry_Wigglytuff
+	cry Cry_Wigglytuff1
 	cry Cry_Zubat
 	cry Cry_Golbat
 	cry Cry_Oddish
@@ -77,7 +77,7 @@ gCryTable::
 	cry Cry_Graveler
 	cry Cry_Golem
 	cry Cry_Ponyta
-	cry Cry_Rapidash
+	cry Cry_Rapidash1
 	cry Cry_Slowpoke
 	cry Cry_Slowbro
 	cry Cry_Magnemite
@@ -106,7 +106,7 @@ gCryTable::
 	cry Cry_Cubone
 	cry Cry_Marowak
 	cry Cry_Hitmonlee
-	cry Cry_Hitmonchan
+	cry Cry_Hitmonchan1
 	cry Cry_Lickitung
 	cry Cry_Koffing
 	cry Cry_Weezing
@@ -749,7 +749,7 @@ gCryTable::
 	cry_uncomp Cry_Mareanie
 	cry_uncomp Cry_Toxapex
 	cry_uncomp Cry_Mudbray
-	cry_uncomp Cry_Mudsdale
+	cry_uncomp Cry_Mudsdale1
 	cry_uncomp Cry_Dewpider
 	cry_uncomp Cry_Araquanid
 	cry_uncomp Cry_Fomantis
@@ -805,7 +805,7 @@ gCryTable::
 	cry_uncomp Cry_Poipole
 	cry_uncomp Cry_Naganadel
 	cry_uncomp Cry_Stakataka
-	cry_uncomp Cry_Blacephalon
+	cry_uncomp Cry_Blacephalon1
 	cry_uncomp Cry_Zeraora
 	cry_uncomp Cry_Meltan
 	cry_uncomp Cry_Melmetal
@@ -972,7 +972,7 @@ gCryTable::
 	@ Galarian Forms
 	cry Cry_Meowth
 	cry Cry_Ponyta
-	cry Cry_Rapidash
+	cry Cry_Rapidash1
 	cry_uncomp Cry_SlowpokeGalarian
 	cry Cry_Slowbro
 	cry Cry_Farfetchd
@@ -1321,7 +1321,7 @@ gCryTable2::
 	cry2 Cry_Vulpix
 	cry2 Cry_Ninetales
 	cry2 Cry_Jigglypuff
-	cry2 Cry_Wigglytuff
+	cry2 Cry_Wigglytuff1
 	cry2 Cry_Zubat
 	cry2 Cry_Golbat
 	cry2 Cry_Oddish
@@ -1359,7 +1359,7 @@ gCryTable2::
 	cry2 Cry_Graveler
 	cry2 Cry_Golem
 	cry2 Cry_Ponyta
-	cry2 Cry_Rapidash
+	cry2 Cry_Rapidash1
 	cry2 Cry_Slowpoke
 	cry2 Cry_Slowbro
 	cry2 Cry_Magnemite
@@ -1388,7 +1388,7 @@ gCryTable2::
 	cry2 Cry_Cubone
 	cry2 Cry_Marowak
 	cry2 Cry_Hitmonlee
-	cry2 Cry_Hitmonchan
+	cry2 Cry_Hitmonchan1
 	cry2 Cry_Lickitung
 	cry2 Cry_Koffing
 	cry2 Cry_Weezing
@@ -2031,7 +2031,7 @@ gCryTable2::
 	cry2_uncomp Cry_Mareanie
 	cry2_uncomp Cry_Toxapex
 	cry2_uncomp Cry_Mudbray
-	cry2_uncomp Cry_Mudsdale
+	cry2_uncomp Cry_Mudsdale1
 	cry2_uncomp Cry_Dewpider
 	cry2_uncomp Cry_Araquanid
 	cry2_uncomp Cry_Fomantis
@@ -2087,7 +2087,7 @@ gCryTable2::
 	cry2_uncomp Cry_Poipole
 	cry2_uncomp Cry_Naganadel
 	cry2_uncomp Cry_Stakataka
-	cry2_uncomp Cry_Blacephalon
+	cry2_uncomp Cry_Blacephalon1
 	cry2_uncomp Cry_Zeraora
 	cry2_uncomp Cry_Meltan
 	cry2_uncomp Cry_Melmetal
@@ -2254,7 +2254,7 @@ gCryTable2::
 	@ Galarian Forms
 	cry2 Cry_Meowth
 	cry2 Cry_Ponyta
-	cry2 Cry_Rapidash
+	cry2 Cry_Rapidash1
 	cry2_uncomp Cry_SlowpokeGalarian
 	cry2 Cry_Slowbro
 	cry2 Cry_Farfetchd

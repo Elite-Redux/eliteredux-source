@@ -1646,7 +1646,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_WIGGLYTUFF] =
+[SPECIES_WIGGLYTUFF1] =
     {
     .baseHP         = 247,
     .baseAttack     = 70,
@@ -1673,7 +1673,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_WIGGLYTUFF_MEGA] =
+    [SPECIES_WIGGLYTUFF_MEGA1] =
     {
     .baseHP         = 247,
     .baseAttack     = 90,
@@ -1700,7 +1700,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_WIGGLYTUFF_MEGA_X] =
+    [SPECIES_WIGGLYTUFF_MEGA_X1] =
     {
     .baseHP         = 247,
     .baseAttack     = 133,
@@ -1727,7 +1727,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_WIGGLYTUFF_APEX] =
+    [SPECIES_WIGGLYTUFF_APEX1] =
     {
     .baseHP         = 255,
     .baseAttack     = 70,
@@ -1754,7 +1754,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_WIGGLYTUFF_PRIMAL] =
+[SPECIES_WIGGLYTUFF_PRIMAL1] =
     {
     .baseHP         = 255,
     .baseAttack     = 65,
@@ -3138,7 +3138,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 3,
     },
 
-[SPECIES_RAPIDASH] =
+[SPECIES_RAPIDASH1] =
     {
     .baseHP        = 85,
     .baseAttack    = 110,
@@ -4351,7 +4351,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_HITMONCHAN] =
+[SPECIES_HITMONCHAN1] =
     {
     .baseHP        = 80,
     .baseAttack    = 105,
@@ -4377,7 +4377,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_HITMONCHAN_MEGA] =
+[SPECIES_HITMONCHAN_MEGA1] =
     {
     .baseHP        = 80,
     .baseAttack    = 145,
@@ -6050,7 +6050,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_MEGANIUM_MEGA] =
+[SPECIES_MEGANIUM_MEGA1] =
     {
     .baseHP        = 80,
     .baseAttack    = 97,
@@ -26916,7 +26916,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 1,
     },
 
-[SPECIES_MUDSDALE] =
+[SPECIES_MUDSDALE1] =
     {
     .baseHP        = 100,
     .baseAttack    = 125,
@@ -29391,7 +29391,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 5,
     },
 
-[SPECIES_BLACEPHALON] =
+[SPECIES_BLACEPHALON1] =
     {
     .baseHP        =  53,
     .baseAttack    =  107,
@@ -36120,7 +36120,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_TINKATON] =
+    [SPECIES_TINKATON1] =
     {
     .baseHP         = 85,
     .baseAttack     = 125,
@@ -36981,12 +36981,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_SCREAM_TAIL] =
     {
-        .baseHP        = 115,
-        .baseAttack    = 65,
-        .baseDefense   = 99,
-        .baseSpeed     = 111,
-        .baseSpAttack  = 65,
-        .baseSpDefense = 115,
+    .baseHP         = 115,
+    .baseAttack     = 129,
+    .baseDefense    = 99,
+    .baseSpeed      = 111,
+    .baseSpAttack   = 1,
+    .baseSpDefense  = 115,
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 50,
@@ -41776,7 +41776,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_TINKATON_MEGA] =
+    [SPECIES_TINKATON_MEGA1] =
     {
     .baseHP         = 85,
     .baseAttack     = 160,
@@ -44030,7 +44030,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_RAPIDASH_MEGA] =
+[SPECIES_RAPIDASH_MEGA1] =
     {
     .baseHP        = 85,
     .baseAttack    = 130,

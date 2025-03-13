@@ -496,7 +496,7 @@ DewfordTown_Gym_Text_BrawlyAllowLegends:
 `
 script DewfordTown_Gym_EventScript_GiveBulkUp{
 	msgbox(format("Take this special Pokémon as a gift from me!"))
-	givecustommon(SPECIES_HITMONCHAN, 20, ITEM_COBA_BERRY, ITEM_CHERISH_BALL, NATURE_JOLLY, 2, 4, 252, 0, 252, 0, 0, 0, 0, 0, 0, 0, 0, MOVE_DRAIN_PUNCH, MOVE_RAPID_SPIN, MOVE_ICE_PUNCH, MOVE_THUNDER_PUNCH, FALSE)
+	givecustommon(SPECIES_HITMONCHAN1, 20, ITEM_COBA_BERRY, ITEM_CHERISH_BALL, NATURE_JOLLY, 2, 4, 252, 0, 252, 0, 0, 0, 0, 0, 0, 0, 0, MOVE_DRAIN_PUNCH, MOVE_RAPID_SPIN, MOVE_ICE_PUNCH, MOVE_THUNDER_PUNCH, FALSE)
 	playfanfare(MUS_OBTAIN_ITEM)
 	message(format("{PLAYER} got Brawly's {COLOR BLUE}Hitmonchan{COLOR DARK_GRAY} as a gift!"))
 	waitfanfare

@@ -1419,7 +1419,7 @@ const struct ContestPokemon gContestOpponents[] =
         .otId = 0xFFFF
     },
     [CONTEST_OPPONENT_DIEGO] = {
-        .species = SPECIES_HITMONCHAN,
+        .species = SPECIES_HITMONCHAN1,
         .nickname = _("HITEMON"),
         .trainerName = _("DIEGO"),
         .trainerGfxId = OBJ_EVENT_GFX_EXPERT_M,

@@ -2165,13 +2165,13 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_PIDGEOT_MEGA:
         case SPECIES_ARBOK_MEGA:
         case SPECIES_PIKACHU_PARTNER_MEGA:
-        case SPECIES_WIGGLYTUFF_MEGA:
-        case SPECIES_WIGGLYTUFF_MEGA_X:
+        case SPECIES_WIGGLYTUFF_MEGA1:
+        case SPECIES_WIGGLYTUFF_MEGA_X1:
         case SPECIES_MEOWTH_PARTNER_MEGA:
         case SPECIES_ARCANINE_MEGA_REDUX:
         case SPECIES_ALAKAZAM_MEGA:
         case SPECIES_MACHAMP_MEGA:
-        case SPECIES_RAPIDASH_MEGA:
+        case SPECIES_RAPIDASH_MEGA1:
         case SPECIES_SLOWBRO_MEGA:
         case SPECIES_DEWGONG_MEGA:
         case SPECIES_GENGAR_MEGA:
@@ -2247,7 +2247,7 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA:
         case SPECIES_RAPIDASH_MEGA_GALARIAN:
         case SPECIES_NECROZMA_ULTRA:
-        case SPECIES_HITMONCHAN_MEGA:
+        case SPECIES_HITMONCHAN_MEGA1:
         case SPECIES_HITMONLEE_MEGA:
         case SPECIES_HITMONTOP_MEGA:
         case SPECIES_CROBAT_MEGA:
@@ -2273,7 +2273,7 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_NIDOQUEEN_MEGA:
         case SPECIES_SANDSLASH_MEGA:
         case SPECIES_TYPHLOSION_MEGA:
-        case SPECIES_MEGANIUM_MEGA:
+        case SPECIES_MEGANIUM_MEGA1:
         case SPECIES_KROOKODILE_MEGA:
         case SPECIES_MAGNEZONE_MEGA:
         case SPECIES_SHEDINJA_MEGA:
@@ -2281,7 +2281,7 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_LANTURN_MEGA:
         case SPECIES_SLOWKING_MEGA:
         case SPECIES_RIBOMBEE_MEGA:
-        case SPECIES_TINKATON_MEGA:
+        case SPECIES_TINKATON_MEGA1:
         case SPECIES_FIDOUGH_PARTNER_MEGA:
         case SPECIES_AEGISLASH_REDUX_MEGA:
         case SPECIES_ALAKAZAM_MEGA_REDUX:
@@ -2329,7 +2329,7 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_SNORLAX_PRIMAL:
         case SPECIES_VICTINI_PRIMAL:
         case SPECIES_MAWILE_REDUX_B_MEGA:
-        case SPECIES_WIGGLYTUFF_PRIMAL:
+        case SPECIES_WIGGLYTUFF_PRIMAL1:
         case SPECIES_HITMONCHAN_PARTNER_MEGA:
         case SPECIES_HITMONCHAN_PARTNER_MEGA_B:
         case SPECIES_HITMONCHAN_PARTNER_MEGA_C:

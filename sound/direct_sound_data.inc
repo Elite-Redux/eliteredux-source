@@ -543,7 +543,7 @@ Cry_Jigglypuff::
 	.incbin "sound/direct_sound_samples/cries/jigglypuff.bin"
 
 	.align 2
-Cry_Wigglytuff::
+Cry_Wigglytuff1::
 	.incbin "sound/direct_sound_samples/cries/wigglytuff.bin"
 
 	.align 2
@@ -695,7 +695,7 @@ Cry_Ponyta::
 	.incbin "sound/direct_sound_samples/cries/ponyta.bin"
 
 	.align 2
-Cry_Rapidash::
+Cry_Rapidash1::
 	.incbin "sound/direct_sound_samples/cries/rapidash.bin"
 
 	.align 2
@@ -811,7 +811,7 @@ Cry_Hitmonlee::
 	.incbin "sound/direct_sound_samples/cries/hitmonlee.bin"
 
 	.align 2
-Cry_Hitmonchan::
+Cry_Hitmonchan1::
 	.incbin "sound/direct_sound_samples/cries/hitmonchan.bin"
 
 	.align 2
@@ -3383,7 +3383,7 @@ Cry_Mudbray::
 	.incbin "sound/direct_sound_samples/cries/uncomp_mudbray.bin"
 
 	.align 2
-Cry_Mudsdale::
+Cry_Mudsdale1::
 	.incbin "sound/direct_sound_samples/cries/uncomp_mudsdale.bin"
 
 	.align 2
@@ -3607,7 +3607,7 @@ Cry_Stakataka::
 	.incbin "sound/direct_sound_samples/cries/uncomp_stakataka.bin"
 
 	.align 2
-Cry_Blacephalon::
+Cry_Blacephalon1::
 	.incbin "sound/direct_sound_samples/cries/uncomp_blacephalon.bin"
 
 	.align 2

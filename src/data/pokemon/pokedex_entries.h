@@ -612,7 +612,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_WIGGLYTUFF] =
+    [NATIONAL_DEX_WIGGLYTUFF1] =
     {
         .categoryName = _("Balloon"),
         .height = 10,
@@ -9132,7 +9132,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_MUDSDALE] =
+    [NATIONAL_DEX_MUDSDALE1] =
     {
         .categoryName = _("Draft Horse"),
         .height = 25,
@@ -9804,7 +9804,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_BLACEPHALON] =
+    [NATIONAL_DEX_BLACEPHALON1] =
     {
         .categoryName = _("Fireworks"),
         .height = 18,
@@ -11628,7 +11628,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_TINKATON] =
+    [NATIONAL_DEX_TINKATON1] =
     {
         .categoryName = _("Hammer"),
         .height = 7,

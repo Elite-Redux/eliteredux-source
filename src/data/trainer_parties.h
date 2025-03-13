@@ -1253,7 +1253,7 @@ static const struct TrainerMonItemCustomMoves sParty_MayRustboroMudkip[] = { // 
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2, // ABILITY_RECKLESS, ABILITY_TURBOBLAZE, ABILITY_STRIKER},
     // .innates = {ABILITY_FLASH_FIRE, ABILITY_SPEED_FORCE, ABILITY_FLAME_BODY},
@@ -1360,7 +1360,7 @@ static const struct TrainerMonItemCustomMoves sParty_MayRustboroTorchic[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2, // ABILITY_RECKLESS, ABILITY_TURBOBLAZE, ABILITY_STRIKER},
     // .innates = {ABILITY_FLASH_FIRE, ABILITY_SPEED_FORCE, ABILITY_FLAME_BODY},
@@ -1413,7 +1413,7 @@ static const struct TrainerMonItemCustomMoves sParty_MayRoute110Mudkip[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_CHOICE_SCARF,
     .ability = 0, // ABILITY_RECKLESS, ABILITY_TURBOBLAZE, ABILITY_STRIKER},
     // .innates = {ABILITY_FLASH_FIRE, ABILITY_SPEED_FORCE, ABILITY_FLAME_BODY},
@@ -1539,7 +1539,7 @@ static const struct TrainerMonItemCustomMoves sParty_MayRoute110Torchic[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_CHOICE_SCARF,
     .ability = 0, // ABILITY_RECKLESS, ABILITY_TURBOBLAZE, ABILITY_STRIKER},
     // .innates = {ABILITY_FLASH_FIRE, ABILITY_SPEED_FORCE, ABILITY_FLAME_BODY},
@@ -1609,7 +1609,7 @@ static const struct TrainerMonItemCustomMoves sParty_MayRoute119Mudkip[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
@@ -1783,7 +1783,7 @@ static const struct TrainerMonItemCustomMoves sParty_MayLilycoveMudkip[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH, // Turboblaze
+    .species = SPECIES_RAPIDASH1, // Turboblaze
     .heldItem = ITEM_FIRE_GEM,
     .ability = 1, // ABILITY_RECKLESS, ABILITY_TURBOBLAZE, ABILITY_STRIKER},
     // .innates = {ABILITY_FLASH_FIRE, ABILITY_SPEED_FORCE, ABILITY_FLAME_BODY},
@@ -1905,7 +1905,7 @@ static const struct TrainerMonItemCustomMoves sParty_MayLilycoveTorchic[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH, // Turboblaze
+    .species = SPECIES_RAPIDASH1, // Turboblaze
     .heldItem = ITEM_FIRE_GEM,
     .ability = 1, // ABILITY_RECKLESS, ABILITY_TURBOBLAZE, ABILITY_STRIKER},
     // .innates = {ABILITY_FLASH_FIRE, ABILITY_SPEED_FORCE, ABILITY_FLAME_BODY},
@@ -5622,7 +5622,7 @@ static const struct TrainerMonItemCustomMoves sParty_Brawly1Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_HITMONCHAN,
+    .species = SPECIES_HITMONCHAN1,
     .heldItem = ITEM_SHELL_BELL,
     .ability = 1,
     .evs = {252, 252, 0, 0, 4, 0},
@@ -8966,7 +8966,7 @@ static const struct TrainerMonItemCustomMoves sParty_Sophia[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_MUDSDALE,
+    .species = SPECIES_MUDSDALE1,
     .heldItem = ITEM_FIGY_BERRY,
     .ability = 2, // ABILITY_OWN_TEMPO, ABILITY_STRIKER, ABILITY_FORT_KNOX},
     // .innates = {ABILITY_STAMINA, ABILITY_BATTLE_ARMOR, ABILITY_WATER_COMPACTION},
@@ -8976,7 +8976,7 @@ static const struct TrainerMonItemCustomMoves sParty_Sophia[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2, // ABILITY_RECKLESS, ABILITY_TURBOBLAZE, ABILITY_STRIKER},
     // .innates = {ABILITY_FLASH_FIRE, ABILITY_SPEED_FORCE, ABILITY_FLAME_BODY},
@@ -10764,7 +10764,7 @@ static const struct TrainerMonItemCustomMoves sParty_Derek[] = {
 static const struct TrainerMonItemCustomMoves sParty_Melina[] = { // potential double w/ Brandi or Aisha
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_FIRE_GEM,
     .ability = 0, // ABILITY_RECKLESS, ABILITY_TURBOBLAZE, ABILITY_STRIKER},
     // .innates = {ABILITY_FLASH_FIRE, ABILITY_SPEED_FORCE, ABILITY_FLAME_BODY},
@@ -12027,7 +12027,7 @@ static const struct TrainerMonItemCustomMoves sParty_Brooke1[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_TINKATON,
+    .species = SPECIES_TINKATON1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 1,
     .evs = {252, 252, 0, 0, 0, 4},
@@ -12273,7 +12273,7 @@ static const struct TrainerMonItemCustomMoves sParty_Daisuke[] = {
 static const struct TrainerMonItemCustomMoves sParty_Heidi[] = {
     {
     .lvl = 0,
-    .species = SPECIES_MUDSDALE,
+    .species = SPECIES_MUDSDALE1,
     .heldItem = ITEM_LEFTOVERS,
     .ability = 2, // ABILITY_OWN_TEMPO, ABILITY_STRIKER, ABILITY_FORT_KNOX},
     // .innates = {ABILITY_STAMINA, ABILITY_BATTLE_ARMOR, ABILITY_WATER_COMPACTION},
@@ -13052,7 +13052,7 @@ static const struct TrainerMonItemCustomMoves sParty_Wattson1Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_RAPIDASHITE,
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
@@ -13720,7 +13720,7 @@ static const struct TrainerMonItemCustomMoves sParty_Lawrence[] = { // double w/
     },
     {
     .lvl = 0,
-    .species = SPECIES_MUDSDALE,
+    .species = SPECIES_MUDSDALE1,
     .heldItem = ITEM_LEFTOVERS,
     .ability = 0, // ABILITY_OWN_TEMPO, ABILITY_STRIKER, ABILITY_FORT_KNOX},
     // .innates = {ABILITY_STAMINA, ABILITY_BATTLE_ARMOR, ABILITY_WATER_COMPACTION},
@@ -15148,7 +15148,7 @@ static const struct TrainerMonItemCustomMoves sParty_MayTorchicMeteorFalls[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2, // ABILITY_RECKLESS, ABILITY_TURBOBLAZE, ABILITY_STRIKER},
     // .innates = {ABILITY_FLASH_FIRE, ABILITY_SPEED_FORCE, ABILITY_FLAME_BODY},
@@ -15171,7 +15171,7 @@ static const struct TrainerMonItemCustomMoves sParty_MayMudkipMeteorFalls[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 0, // ABILITY_RECKLESS, ABILITY_TURBOBLAZE, ABILITY_STRIKER},
     // .innates = {ABILITY_FLASH_FIRE, ABILITY_SPEED_FORCE, ABILITY_FLAME_BODY},
@@ -16132,7 +16132,7 @@ static const struct TrainerMonItemCustomMoves sParty_MaxieMtChimneyInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_BLACEPHALON,
+    .species = SPECIES_BLACEPHALON1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 0,
     .evs = {4, 0, 0, 252, 0, 252},
@@ -16715,7 +16715,7 @@ static const struct TrainerMonItemCustomMoves sParty_Diana1[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_WIGGLYTUFF,
+    .species = SPECIES_WIGGLYTUFF1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2,
     .evs = {252, 0, 252, 4, 0, 0},
@@ -17330,7 +17330,7 @@ static const struct TrainerMonItemCustomMoves sParty_Axle[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2, // ABILITY_RECKLESS, ABILITY_TURBOBLAZE, ABILITY_STRIKER},
     // .innates = {ABILITY_FLASH_FIRE, ABILITY_SPEED_FORCE, ABILITY_FLAME_BODY},
@@ -17538,7 +17538,7 @@ static const struct TrainerMonItemCustomMoves sParty_Flannery1Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_WIGGLYTUFF,
+    .species = SPECIES_WIGGLYTUFF1,
     .heldItem = ITEM_WIGGLYTUFFITE,
     .ability = 0,
     .evs = {252, 0, 4, 252, 0, 0},
@@ -18114,7 +18114,7 @@ static const struct TrainerMonItemCustomMoves sParty_Parker[] = { // Confusion R
     },
     {
     .lvl = 0,
-    .species = SPECIES_WIGGLYTUFF,
+    .species = SPECIES_WIGGLYTUFF1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2,
     .evs = {252, 0, 0, 252, 4, 0},
@@ -29569,7 +29569,7 @@ static const struct TrainerMonItemCustomMoves sParty_Jack[] = {
 static const struct TrainerMonItemCustomMoves sParty_Hitoshi[] = { // with Reyna
     {
     .lvl = 0,
-    .species = SPECIES_HITMONCHAN, // Sash, Precise Fist & Perfectionist + Comet Punch
+    .species = SPECIES_HITMONCHAN1, // Sash, Precise Fist & Perfectionist + Comet Punch
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 0, // ABILITY_PRECISE_FIST, ABILITY_BLITZ_BOXER, ABILITY_RAGING_BOXER},
     // .innates = {ABILITY_INNER_FOCUS, ABILITY_FATAL_PRECISION, ABILITY_PERFECTIONIST},
@@ -34196,7 +34196,7 @@ static const struct TrainerMonItemCustomMoves sParty_Phoebe[] = { // TR team
     },
     {
     .lvl = 0,
-    .species = SPECIES_BLACEPHALON,
+    .species = SPECIES_BLACEPHALON1,
     .heldItem = ITEM_CHOICE_SPECS,
     .ability = 0,
     .evs = {3, 0, 0, 252, 0, 252},
@@ -37956,7 +37956,7 @@ static const struct TrainerMonItemCustomMoves sParty_BlackBelt_Hitmon_Mega_Stone
 static const struct TrainerMonItemCustomMoves sParty_BlackBelt_Hitmon_Mega_Stone_Hitmonchan[] = {
     {
     .lvl = 0,
-    .species = SPECIES_HITMONCHAN, // Mega
+    .species = SPECIES_HITMONCHAN1, // Mega
     .heldItem = ITEM_HITMONCHANITE,
     .ability = 0, // Precise Fist > Parry
     .evs = {252, 252, 0, 0, 0, 4}, // HP, Atk, Def, Sp.Atk, Sp.Def, Speed
@@ -38054,7 +38054,7 @@ static const struct TrainerMonItemCustomMoves sParty_CalvinE4[] = { // E4
     },
     {
     .lvl = 0,
-    .species = SPECIES_TINKATON,
+    .species = SPECIES_TINKATON1,
     .heldItem = ITEM_TINKATITE,
     .ability = 1,
     .evs = {0, 252, 4, 0, 0, 252},
@@ -38415,7 +38415,7 @@ static const struct TrainerMonItemCustomMoves sParty_Salsa[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_BLACEPHALON,
+    .species = SPECIES_BLACEPHALON1,
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 0,
     .evs = {4, 0, 0, 252, 0, 252},
@@ -39740,7 +39740,7 @@ static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Fairy[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_TINKATON,
+    .species = SPECIES_TINKATON1,
     .heldItem = ITEM_TINKATITE,
     .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
@@ -39758,7 +39758,7 @@ static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Fairy[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_WIGGLYTUFF_APEX,
+    .species = SPECIES_WIGGLYTUFF_APEX1,
     .heldItem = ITEM_WIGGLITUFF_ORB,
     .ability = 1,
     .evs = {4, 0, 0, 252, 0, 252},
@@ -39810,7 +39810,7 @@ static const struct TrainerMonItemCustomMoves sParty_Trent15[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_WIGGLYTUFF,
+    .species = SPECIES_WIGGLYTUFF1,
     .heldItem = ITEM_WIGGLYTUFFITE,
     .ability = 0,
     .evs = {252, 0, 4, 252, 0, 0},
@@ -40776,7 +40776,7 @@ static const struct TrainerMonItemCustomMoves sParty_ParkerInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_WIGGLYTUFF,
+    .species = SPECIES_WIGGLYTUFF1,
     .heldItem = ITEM_WIGGLYTUFFITE,
     .ability = 0,
     .evs = {252, 0, 4, 252, 0, 0},
@@ -44425,7 +44425,7 @@ static const struct TrainerMonItemCustomMoves sParty_MarcelInsane[] = {
 static const struct TrainerMonItemCustomMoves sParty_Cristin1Insane[] = {
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
@@ -44452,7 +44452,7 @@ static const struct TrainerMonItemCustomMoves sParty_Cristin1Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_HITMONCHAN,
+    .species = SPECIES_HITMONCHAN1,
     .heldItem = ITEM_PUNCHING_GLOVE,
     .ability = 1,
     .evs = {252, 252, 0, 0, 0, 4},
@@ -44692,7 +44692,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt32Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_MUDSDALE,
+    .species = SPECIES_MUDSDALE1,
     .heldItem = ITEM_LEFTOVERS,
     .ability = 2,
     .evs = {4, 252, 0, 0, 252, 0},
@@ -45789,7 +45789,7 @@ static const struct TrainerMonItemCustomMoves sParty_Dalton1Insane[] = {
 static const struct TrainerMonItemCustomMoves sParty_EricInsane[] = {
     {
     .lvl = 0,
-    .species = SPECIES_MUDSDALE,
+    .species = SPECIES_MUDSDALE1,
     .heldItem = ITEM_LEFTOVERS,
     .ability = 0,
     .evs = {252, 252, 4, 0, 0, 0},
@@ -45894,7 +45894,7 @@ static const struct TrainerMonItemCustomMoves sParty_JulioInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_CHARCOAL,
     .ability = 2,
     .evs = {0, 252, 0, 0, 4, 252},
@@ -46038,7 +46038,7 @@ static const struct TrainerMonItemCustomMoves sParty_Diana1Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_WIGGLYTUFF,
+    .species = SPECIES_WIGGLYTUFF1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2,
     .evs = {252, 0, 252, 4, 0, 0},
@@ -47416,7 +47416,7 @@ static const struct TrainerMonItemCustomMoves sParty_MayrustboromudkipInsane[] =
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2,
     .evs = {0, 252, 4, 0, 0, 252},
@@ -48351,7 +48351,7 @@ static const struct TrainerMonItemCustomMoves sParty_Lola1Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_WIGGLYTUFF,
+    .species = SPECIES_WIGGLYTUFF1,
     .heldItem = ITEM_LEFTOVERS,
     .ability = 1,
     .evs = {252, 0, 0, 252, 4, 0},
@@ -48697,7 +48697,7 @@ static const struct TrainerMonItemCustomMoves sParty_Mayroute110mudkipInsane[] =
     },
     {
     .lvl = 0,
-    .species = SPECIES_RAPIDASH,
+    .species = SPECIES_RAPIDASH1,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
@@ -51239,7 +51239,7 @@ static const struct TrainerMonItemCustomMoves sParty_Gabrielle1Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_TINKATON,
+    .species = SPECIES_TINKATON1,
     .heldItem = ITEM_TINKATITE,
     .ability = 1,
     .evs = {0, 252, 0, 0, 4, 252},
@@ -51365,7 +51365,7 @@ static const struct TrainerMonItemCustomMoves sParty_AtsushiInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_HITMONCHAN,
+    .species = SPECIES_HITMONCHAN1,
     .heldItem = ITEM_HITMONCHANITE,
     .ability = 2,
     .evs = {0, 252, 0, 0, 4, 252},
@@ -52151,7 +52151,7 @@ static const struct TrainerMonItemCustomMoves sParty_MegaFidough[] = {
 static const struct TrainerMonItemCustomMoves sParty_Blunder[] = {
     {
     .lvl = 0,
-    .species = SPECIES_BLACEPHALON,
+    .species = SPECIES_BLACEPHALON1,
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 0,
     .evs = {4, 0, 252, 0, 0, 252},
@@ -52617,7 +52617,7 @@ static const struct TrainerMonItemCustomMoves sParty_AlannahInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_TINKATON,
+    .species = SPECIES_TINKATON1,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 1,
     .evs = {252, 192, 0, 0, 0, 64},

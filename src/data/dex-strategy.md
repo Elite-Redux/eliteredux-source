@@ -1296,7 +1296,7 @@ Tyranitar-mega
     moves = Dragon Dance, Wicked Blow, Strength, High Horsepower
    comment = Tyranitar has been blessed with a myriad of boons, from a nuclear new Dark STAB in Wicked Blow to a more consistent(and stronger thanks to Juggernaut) Rock STAB in Strength, to slightly stronger Ground coverage thanks to Juggernaut additionally boosting High Horsepower. 168 Speed EVs outspeed Timid base 100s after a Dragon Dance, with the rest going into Attack and HP to maximize it's damage and bulk.
 }
-Blacephalon
+Blacephalon1
 {
     name = Special Scarf 
     item = Choice Scarf 
@@ -2007,7 +2007,7 @@ Lunatone
    comment = Very Basic set to capitalize on Lunatones 4 STAB options as quickly and as powerful as possible. Due to Lunar Eclipse Lunatone gets 4 STAB options coming off of its very respectable 125 Base Sp Atk that is at a free +1 because of Sage Power. Lunatone will break through most things that you need broken and is surprisingly fast once Scarfed.
     .tags = Singles, Offensive
 } 
-Mudsdale
+Mudsdale1
 {
     name = Rock Setter 
     item = Leftovers / Rocky Helmet 
@@ -2162,7 +2162,7 @@ Victreebel
    comment = Substitutes to Activate Liechi Berry (preferably in Sun), waits a couple turns (click Substitute if Destiny Bond scares you), gets many attack boosts, breaks walls. 3rd slot depends on what you want whether it's support or priority. Don't recommend Jolly to get kills it wouldn't without +attack nature. You can pick whether you want the power or accuracy. (Note: for 1.6 and up)
    .tags = Singles, Offensive
 }
-Wigglytuff
+Wigglytuff1
 {
     name = Defensive Powerhouse
     item = Assault Vest
@@ -2337,7 +2337,7 @@ Rayquaza-Mega
    comment = "As the two primordial titans clashed, it seemed like it would cause the end of all life. When a third primordial beast approached, many thought it would be their ends, until the third beast finally stopped the two clashing terrors" - Book of Rayquaza, Chapter 0
     .tags = Singles, Offensive
 }
-Hitmonchan
+Hitmonchan1
 {
     name = Perfectionist Abuser
     item = Liechi Berry
@@ -2358,7 +2358,7 @@ Feraligatr-Mega-Y
     moves = Hydro Cannon, Hyper Beam, Ice Beam, Agility 
    comment = Feragatr gets 2 new megas (guess darky realy likes florida) But we,ll be using the y mega. With this mega feralagatr becomes a bulky special attacker and also changes from water/dark to electrick/type.The goal for this strat is to hopefully live through one hit activate riptide (better torrent) use agility to offset its horrible speed and then spam galvanize hyper beam and hydro cannon with no stinking rechange due to  rampage. Also has ice beam for bolt beam coverage and to kill grass types that may thwart your crocodile rampage. But the main appeal of this set is to spam 150 bp moves with almost no drawbacks like your a gen 1 tauros.
 }
-Hitmonchan-Mega
+Hitmonchan-Mega1
 { 
     name = Blitz Boxer Sweeper / Cleaner
     item = Hitmonchanite

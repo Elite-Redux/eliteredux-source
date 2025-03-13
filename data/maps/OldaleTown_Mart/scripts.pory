@@ -453,7 +453,7 @@ script SlateportCity_EventScript_IncenseStand{
 
 mart MartEnergyGuruMons {
 	SPECIES_TYROGUE
-	SPECIES_HITMONCHAN
+	SPECIES_HITMONCHAN1
 	SPECIES_HITMONLEE
 	SPECIES_HITMONTOP
 }

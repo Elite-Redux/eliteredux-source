@@ -1415,7 +1415,7 @@
               {
                 "min_level": 3,
                 "max_level": 3,
-                "species": "SPECIES_HITMONCHAN"
+                "species": "SPECIES_HITMONCHAN1"
               },
               {
                 "min_level": 3,
@@ -7335,7 +7335,7 @@
               {
                 "min_level": 50,
                 "max_level": 50,
-                "species": "SPECIES_BLACEPHALON"
+                "species": "SPECIES_BLACEPHALON1"
               }
             ]
           }
@@ -17125,7 +17125,7 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_TINKATON"
+                "species": "SPECIES_TINKATON1"
               }
             ]
           },

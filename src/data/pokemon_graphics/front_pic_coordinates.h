@@ -210,7 +210,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 14,
     },
-    [SPECIES_WIGGLYTUFF] =
+    [SPECIES_WIGGLYTUFF1] =
     {
         .size = 0x67,
         .y_offset = 4,
@@ -410,7 +410,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x66,
         .y_offset = 6,
     },
-    [SPECIES_RAPIDASH] =
+    [SPECIES_RAPIDASH1] =
     {
         .size = 0x88,
         .y_offset = 0,
@@ -555,7 +555,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x87,
         .y_offset = 3,
     },
-    [SPECIES_HITMONCHAN] =
+    [SPECIES_HITMONCHAN1] =
     {
         .size = 0x67,
         .y_offset = 3,
@@ -3801,7 +3801,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 7,
     },
-    [SPECIES_MUDSDALE] =
+    [SPECIES_MUDSDALE1] =
     {
         .size = 0x45,
         .y_offset = 0,
@@ -4081,7 +4081,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 0,
     },
-    [SPECIES_BLACEPHALON] =
+    [SPECIES_BLACEPHALON1] =
     {
         .size = 0x45,
         .y_offset = 1,
@@ -4641,12 +4641,12 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_WIGGLYTUFF_MEGA] =
+    [SPECIES_WIGGLYTUFF_MEGA1] =
     {
         .size = 0x67,
         .y_offset = 4,
     },
-    [SPECIES_WIGGLYTUFF_MEGA_X] =
+    [SPECIES_WIGGLYTUFF_MEGA_X1] =
     {
         .size = 0x67,
         .y_offset = 4,
@@ -5262,7 +5262,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  7
     },
-    [SPECIES_TINKATON] =
+    [SPECIES_TINKATON1] =
     {
         .size = 0,
         .y_offset =  0
@@ -5577,7 +5577,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_TINKATON_MEGA] =
+    [SPECIES_TINKATON_MEGA1] =
     {
         .size = 0,
         .y_offset =  0
@@ -6017,7 +6017,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 0,
     },
-    [SPECIES_RAPIDASH_MEGA] =
+    [SPECIES_RAPIDASH_MEGA1] =
     {
         .size = 0x88,
         .y_offset = 0,
@@ -6137,12 +6137,12 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_WIGGLYTUFF_PRIMAL] =
+    [SPECIES_WIGGLYTUFF_PRIMAL1] =
     {
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_WIGGLYTUFF_APEX] =
+    [SPECIES_WIGGLYTUFF_APEX1] =
     {
         .size = 0x67,
         .y_offset = 4,
@@ -6767,7 +6767,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x87,
         .y_offset = 2,
     },
-    [SPECIES_HITMONCHAN_MEGA] =
+    [SPECIES_HITMONCHAN_MEGA1] =
     {
         .size = 0x87,
         .y_offset = 2,
@@ -6907,7 +6907,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x87,
         .y_offset = 0,
     },
-    [SPECIES_MEGANIUM_MEGA] =
+    [SPECIES_MEGANIUM_MEGA1] =
     {
         .size = 0x87,
         .y_offset = 0,
@@ -7328,27 +7328,27 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_UNOWN_N1] =
     {
         .size = 0x43,
-        .y_offset = 20,
+        .y_offset = 6,
     },
     [SPECIES_UNOWN_O1] =
     {
         .size = 0x44,
-        .y_offset = 16,
+        .y_offset = 0,
     },
     [SPECIES_UNOWN_P1] =
     {
         .size = 0x34,
-        .y_offset = 19,
+        .y_offset = 4,
     },
     [SPECIES_UNOWN_Q1] =
     {
         .size = 0x43,
-        .y_offset = 21,
+        .y_offset = 0,
     },
     [SPECIES_UNOWN_R1] =
     {
         .size = 0x34,
-        .y_offset = 19,
+        .y_offset = 13,
     },
     [SPECIES_UNOWN_S1] =
     {

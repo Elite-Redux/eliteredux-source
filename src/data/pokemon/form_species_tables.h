@@ -160,8 +160,8 @@ static const u16 sPonytaFormSpeciesIdTable[] = {
 };
 
 static const u16 sRapidashFormSpeciesIdTable[] = {
-    SPECIES_RAPIDASH,
-    SPECIES_RAPIDASH_MEGA,
+    SPECIES_RAPIDASH1,
+    SPECIES_RAPIDASH_MEGA1,
     SPECIES_RAPIDASH_GALARIAN,
     SPECIES_RAPIDASH_MEGA_GALARIAN,
     FORM_SPECIES_END,
@@ -1120,8 +1120,8 @@ static const u16 sDewgongFormSpeciesIdTable[] = {
 };
 
 static const u16 sHitmonchanFormSpeciesIdTable[] = {
-    SPECIES_HITMONCHAN,
-    SPECIES_HITMONCHAN_MEGA,
+    SPECIES_HITMONCHAN1,
+    SPECIES_HITMONCHAN_MEGA1,
     SPECIES_HITMONCHAN_PARTNER,
     SPECIES_HITMONCHAN_PARTNER_MEGA,
     SPECIES_HITMONCHAN_PARTNER_B,
@@ -1206,7 +1206,7 @@ static const u16 sTyphlosionFormSpeciesIdTable[] = {
 
 static const u16 sMeganiumFormSpeciesIdTable[] = {
     SPECIES_MEGANIUM,
-    SPECIES_MEGANIUM_MEGA,
+    SPECIES_MEGANIUM_MEGA1,
     FORM_SPECIES_END,
 };
 
@@ -1853,11 +1853,11 @@ static const u16 sVictiniFormSpeciesIdTable[] = {
     FORM_SPECIES_END,
 };
 static const u16 sWigglytuffFormSpeciesIdTable[] = {
-    SPECIES_WIGGLYTUFF,
-    SPECIES_WIGGLYTUFF_MEGA,
-    SPECIES_WIGGLYTUFF_MEGA_X,
-    SPECIES_WIGGLYTUFF_APEX,
-    SPECIES_WIGGLYTUFF_PRIMAL,
+    SPECIES_WIGGLYTUFF1,
+    SPECIES_WIGGLYTUFF_MEGA1,
+    SPECIES_WIGGLYTUFF_MEGA_X1,
+    SPECIES_WIGGLYTUFF_APEX1,
+    SPECIES_WIGGLYTUFF_PRIMAL1,
     FORM_SPECIES_END,
 };
 static const u16 sWeavileFormSpeciesIdTable[] = {
@@ -1903,8 +1903,8 @@ static const u16 sKartana_FallenFormSpeciesIdTable[] = {
     FORM_SPECIES_END,
 };
 static const u16 sTinkatonFormSpeciesIdTable[] = {
-    SPECIES_TINKATON,
-    SPECIES_TINKATON_MEGA,
+    SPECIES_TINKATON1,
+    SPECIES_TINKATON_MEGA1,
     FORM_SPECIES_END,
 };
 static const u16 sFidoughFormSpeciesIdTable[] = {
