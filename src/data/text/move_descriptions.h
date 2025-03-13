@@ -3148,7 +3148,7 @@ static const u8 sMoveTwoLineDescription_MoveFairySpheres[] = _(
     "Not done yet.");
 
 static const u8 sMoveTwoLineDescription_MoveBrambleBlast[] = _(
-    "20% chance to apply leech seed.\n"
+    "30% chance to apply leech seed.\n"
     "Archer boost.");
 
 static const u8 sMoveTwoLineDescription_MoveAsteroidDownfall[] = _(
@@ -5737,7 +5737,7 @@ static const u8 sMoveFourLineDescription_MoveScatterBlast[] = _("A blast of sand
 static const u8 sMoveFourLineDescription_MoveJaggedPunch[] = _("The foe is punched\nby a stony fist.\n10% chance to set\nStealth Rocks.");
 static const u8 sMoveFourLineDescription_MoveCutsieSlap[] = _("The foe is slapped\ncutely. 10%\ninfatuation chance.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveFairySpheres[] = _("Magical spheres hit\n2 to 5 times.\nHits SpDef.\nMega Launcher boost.");
-static const u8 sMoveFourLineDescription_MoveBrambleBlast[] = _("Fires thorny brambles.\n20% chance to\napply Leech Seed.\nArcher boost.");
+static const u8 sMoveFourLineDescription_MoveBrambleBlast[] = _("Fires thorny brambles.\n30% chance to\napply Leech Seed.\nArcher boost.");
 static const u8 sMoveFourLineDescription_MoveAsteroidDownfall[] = _("Launches a small\nasteroid onto the\ntarget. Cannot miss.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveAquaBash[] = _("A mystical jab\nstrikes the foe.\n20% flinch chance.\nMighty Horn boost.");
 static const u8 sMoveFourLineDescription_MoveTectonicFangs[] = _("User inserts its\nground shaking fangs,\n10% chance to flinch.\nStrong Jaw boost.");
