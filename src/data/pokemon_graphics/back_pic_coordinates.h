@@ -8649,5 +8649,15 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x78,
         .y_offset = 7,
     },
+    [SPECIES_DUDUDUNSPARCE] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_DUDUDUNSPARCE_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
 
 };

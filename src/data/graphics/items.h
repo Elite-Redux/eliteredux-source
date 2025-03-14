@@ -1715,6 +1715,7 @@ const u32 gItemIcon_PhantomMeteor[] = INCBIN_U32("graphics/items/icons/meteorite
 const u32 gItemIconPalette_PhantomMeteor[] = INCBIN_U32("graphics/items/icon_palettes/meteorite.gbapal.lz");
 const u32 gItemIcon_KingdraniteY[] = INCBIN_U32("graphics/items/icons/kingdranite.4bpp.lz");
 const u32 gItemIconPalette_KingdraniteY[] = INCBIN_U32("graphics/items/icon_palettes/kingdranite.gbapal.lz");
+const u32 gItemIconPalette_Dudunite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
 const u32 gItemIcon_Obamium[] = INCBIN_U32("graphics/items/icons/obamium.4bpp.lz");
 const u32 gItemIconPalette_Obamium[] = INCBIN_U32("graphics/items/icon_palettes/obamium.gbapal.lz");
 

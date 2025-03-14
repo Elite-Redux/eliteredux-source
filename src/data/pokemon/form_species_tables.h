@@ -2216,3 +2216,8 @@ static const u16 sMienshaoFormSpeciesIdTable[] = {
     SPECIES_MIENSHAO_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sDududunsparceFormSpeciesIdTable[] = {
+    SPECIES_DUDUDUNSPARCE,
+    SPECIES_DUDUDUNSPARCE_THREE_SEGMENT,
+    FORM_SPECIES_END,
+};

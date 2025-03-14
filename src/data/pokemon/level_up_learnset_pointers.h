@@ -1824,4 +1824,6 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_UNOWN_REVELATION] = sUnownLevelUpLearnset,
     [SPECIES_GOODRA_MEGA] = sGoodraLevelUpLearnset,
     [SPECIES_MIENSHAO_MEGA] = sMienshaoLevelUpLearnset,
+    [SPECIES_DUDUDUNSPARCE] = sDududunsparceLevelUpLearnset,
+    [SPECIES_DUDUDUNSPARCE_MEGA] = sDududunsparceLevelUpLearnset,
 };

@@ -710,6 +710,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_SENZU]           = {gItemIcon_Senzu, gItemIconPalette_Senzu},
     [ITEM_DURALUDITE]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_FIDOUGHITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_DUDUNITE]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
         //3.0 CUTOFF
     [ITEM_WEAVILEITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_SERPERIORITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},

@@ -1883,4 +1883,6 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_KINGDRA_PARTNER_MEGA_B] = _("Kingdra"),
     [SPECIES_KINGDRA_PARTNER_C] = _("Kingdra"),
     [SPECIES_KINGDRA_PARTNER_MEGA_C] = _("Kingdra"),
+    [SPECIES_DUDUDUNSPARCE] = _("Dududunsprce"),
+    [SPECIES_DUDUDUNSPARCE_MEGA] = _("Dududunsprce"),
 };

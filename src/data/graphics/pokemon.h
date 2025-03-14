@@ -338,7 +338,7 @@ const u32 gMonFrontPic_Geodude[] = INCBIN_U32("graphics/pokemon/geodude/anim_fro
 const u32 gMonFrontPic_Graveler[] = INCBIN_U32("graphics/pokemon/graveler/anim_front.4bpp.lz");
 const u32 gMonFrontPic_Golem[] = INCBIN_U32("graphics/pokemon/golem/anim_front.4bpp.lz");
 const u32 gMonFrontPic_Ponyta[] = INCBIN_U32("graphics/pokemon/ponyta/anim_front.4bpp.lz");
-const u32 gMonFrontPic_Rapidash[] = INCBIN_U32("graphics/pokemon/rapidashfront.4bpp.lz");
+const u32 gMonFrontPic_Rapidash[] = INCBIN_U32("graphics/pokemon/rapidash/front.4bpp.lz");
 const u32 gMonFrontPic_Slowpoke[] = INCBIN_U32("graphics/pokemon/slowpoke/anim_front.4bpp.lz");
 const u32 gMonFrontPic_Slowbro[] = INCBIN_U32("graphics/pokemon/slowbro/anim_front.4bpp.lz");
 const u32 gMonFrontPic_Magnemite[] = INCBIN_U32("graphics/pokemon/magnemite/anim_front.4bpp.lz");
@@ -8823,6 +8823,18 @@ const u32 gMonBackPic_KingdraPartnerMegaC[]           = INCBIN_U32("graphics/pok
 const u32 gMonPalette_KingdraPartnerMegaC[]           = INCBIN_U32("graphics/pokemon/kingdra/mega/normal.gbapal.lz");
 const u32 gMonShinyPalette_KingdraPartnerMegaC[]      = INCBIN_U32("graphics/pokemon/kingdra/mega/shiny.gbapal.lz");
 const u8  gMonIcon_KingdraPartnerMegaC[]              = INCBIN_U8("graphics/pokemon/kingdra/mega/icon.4bpp");
+
+const u32 gMonFrontPic_Dududunsparce[]          = INCBIN_U32("graphics/pokemon/dududunsparce/front.4bpp.lz");
+const u32 gMonBackPic_Dududunsparce[]           = INCBIN_U32("graphics/pokemon/dududunsparce/back.4bpp.lz");
+const u32 gMonPalette_Dududunsparce[]           = INCBIN_U32("graphics/pokemon/dududunsparce/normal.gbapal.lz");
+const u32 gMonShinyPalette_Dududunsparce[]      = INCBIN_U32("graphics/pokemon/dududunsparce/shiny.gbapal.lz");
+const u8  gMonIcon_Dududunsparce[]              = INCBIN_U8("graphics/pokemon/dududunsparce/icon.4bpp");
+
+const u32 gMonFrontPic_DududunsparceMega[]          = INCBIN_U32("graphics/pokemon/dududunsparce/mega/front.4bpp.lz");
+const u32 gMonBackPic_DududunsparceMega[]           = INCBIN_U32("graphics/pokemon/dududunsparce/mega/back.4bpp.lz");
+const u32 gMonPalette_DududunsparceMega[]           = INCBIN_U32("graphics/pokemon/dududunsparce/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_DududunsparceMega[]      = INCBIN_U32("graphics/pokemon/dududunsparce/mega/shiny.gbapal.lz");
+const u8  gMonIcon_DududunsparceMega[]              = INCBIN_U8("graphics/pokemon/dududunsparce/mega/icon.4bpp");
 
 //Rare Shinies
 const u32 gMonRareShinyPalette_Corphish[]       = INCBIN_U32("graphics/pokemon/corphish/shinyalt1.gbapal.lz");

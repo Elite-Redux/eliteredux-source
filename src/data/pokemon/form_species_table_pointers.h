@@ -791,6 +791,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_DUDUNSPARCE_THREE_SEGMENT] = sDudunsparceFormSpeciesIdTable,
     [SPECIES_DUDUNSPARCE] = sDudunsparceFormSpeciesIdTable,
+    [SPECIES_DUDUDUNSPARCE] = sDududunsparceFormSpeciesIdTable,
+    [SPECIES_DUDUDUNSPARCE_MEGA] = sDududunsparceFormSpeciesIdTable,
 
     [SPECIES_MAUSHOLD_FOUR] = sMausholdFormSpeciesIdTable,
 
