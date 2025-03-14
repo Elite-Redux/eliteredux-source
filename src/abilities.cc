@@ -9780,14 +9780,6 @@ static const Ability BlightScale = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Gunman = {
-    .name = $("Gunman"),
-    .description = $("Mega Launcher + Status moves are\n"
-                     "Mega Launcher moves."),
-    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
-    .megaLauncherBoost = TRUE,
-};
-
 static const Ability iamsteve = {
     .name = $("i am steve"),
     .description = $("guys why is steve jack black\n"
@@ -9798,6 +9790,14 @@ static const Ability iamsteve = {
 static const Ability AveragePower = {
     .name = $("average power"),
     .description = $("the best ability ever made..."),
+};
+
+static const Ability Gunman = {
+    .name = $("Gunman"),
+    .description = $("Mega Launcher + Status moves are\n"
+                     "Mega Launcher moves."),
+    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+    .megaLauncherBoost = TRUE,
 };
 
 const Ability gAbilities[] = {
@@ -10581,9 +10581,9 @@ const Ability gAbilities[] = {
     [ABILITY_SUPER_SCOPE] = SuperScope,
     [ABILITY_VENOM_CROWN] = VenomCrown,
     [ABILITY_BLIGHT_SCALE] = BlightScale,
-    [ABILITY_GUNMAN] = Gunman,
     [ABILITY_I_AM_STEVE] = iamsteve,
     [ABILITY_AVERAGE_POWER] = AveragePower,
+    [ABILITY_GUNMAN] = Gunman,
     [ABILITY_HUNTERS_MARK] = None,
     [ABILITY_HEMOLYSIS] = None,
 };

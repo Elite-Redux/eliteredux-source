@@ -3549,8 +3549,8 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_ROSERADE_MEGA] = 1,
     [SPECIES_MIENSHAO_MEGA] = 1,
     [SPECIES_FROSTULA] = 3,
-    [SPECIES_DUDUDUNSPARCE] = 3,
-    [SPECIES_DUDUDUNSPARCE_MEGA] = 3,
+    [SPECIES_DUDUDUNSPARCE] = 0,
+    [SPECIES_DUDUDUNSPARCE_MEGA] = 0,
 };
 
 const u8 gMonIconPaletteIndicesFemale[] =
