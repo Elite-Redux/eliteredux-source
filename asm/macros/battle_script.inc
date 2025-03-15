@@ -2423,9 +2423,15 @@
 	.byte \fraction
 	.endm
 
+	.macro jumpifconsumableblocked battler:req, ptr:req
+	various \battler, VARIOUS_HP_FRACTION_TO_DAMAGE
+	.4byte \ptr
+	.endm
+
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr
+	jumpifconsumableblocked BS_ATTACKER, \ptr
 	call BattleScript_PowerHerbActivation
 twoturnmoveacceleratecheck_\@:
 	setbyte sACCELERATED_TWO_TURN, 1

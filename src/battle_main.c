@@ -4446,7 +4446,7 @@ static void SetActionsAndBattlersTurnOrder(void) {
             gRoundStructs[i].quickDraw = TRUE;
         else if (GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_QUICK_CLAW && (Random() % 100) < GetBattlerHoldEffectParam(i))
             gRoundStructs[i].usedCustapBerry = TRUE;
-        else if (!IsAbilityOnOpposingSide(i, ABILITY_UNNERVE) && GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_CUSTAP_BERRY &&
+        else if (!IsUnnerveAbilityOnOpposingSide(i) && GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_CUSTAP_BERRY &&
                  HasEnoughHpToEatBerry(i, 4, gBattleMons[i].item))
             gRoundStructs[i].usedCustapBerry = TRUE;
     }
@@ -5221,7 +5221,8 @@ void ApplyTypeOverrideInformation(int move, int battlerAtk, int moveType, int at
     }
 
     // Check if a gem should activate.
-    if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_GEMS && moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item)) {
+    if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_GEMS && moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item) &&
+        !IsUnnerveAbilityOnOpposingSide(battlerAtk)) {
         gTurnStructs[battlerAtk].gemParam = GetBattlerHoldEffectParam(battlerAtk);
         gTurnStructs[battlerAtk].gemBoost = TRUE;
     } else {
@@ -5244,7 +5245,8 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk) {
         gBattleStruct->dynamicMoveType = 0;
 
     // Check if a gem should activate.
-    if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_GEMS && moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item)) {
+    if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_GEMS && moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item) &&
+        !IsUnnerveAbilityOnOpposingSide(battlerAtk)) {
         gTurnStructs[battlerAtk].gemParam = GetBattlerHoldEffectParam(battlerAtk);
         gTurnStructs[battlerAtk].gemBoost = TRUE;
     } else {

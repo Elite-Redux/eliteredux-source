@@ -63,7 +63,6 @@ match the ROM; this is also why sSoundMovesTable's declaration is in the middle 
 functions instead of at the top of the file with the other declarations.
 */
 
-static bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId);
 static bool8 DoesMoveBoostStats(u16 move);
 static void UpdateMoveResultFlags(u16 modifier);
 
@@ -5388,13 +5387,10 @@ static u8 ItemHealHp(u32 battlerId, u32 itemId, bool32 end2, bool32 percentHeal)
     return 0;
 }
 
-static bool32 UnnerveOn(u32 battlerId, u32 itemId) {
-    if (ItemId_GetPocket(itemId) == POCKET_BERRIES && IsUnnerveAbilityOnOpposingSide(battlerId)) return TRUE;
-    return FALSE;
-}
-
 static bool32 GetMentalHerbEffect(u8 battlerId) {
     bool32 ret = FALSE;
+
+    if (IsUnnerveAbilityOnOpposingSide(battlerId)) return FALSE;
 
     // Check infatuation
     if (gBattleMons[battlerId].status2 & STATUS2_INFATUATION) {
@@ -5486,6 +5482,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_RESTORE_STATS:
+                        REQUIRE_NOT(IsUnnerveAbilityOnOpposingSide(battlerId))
                         for (i = 0; i < NUM_BATTLE_STATS; i++) {
                             if (gBattleMons[battlerId].statStages[i] < DEFAULT_STAT_STAGE) {
                                 gBattleMons[battlerId].statStages[i] = DEFAULT_STAT_STAGE;
@@ -5542,40 +5539,40 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         if (B_BERRIES_INSTANT >= GEN_4) effect = RandomStatRaiseBerry(battlerId, gLastUsedItem, TRUE);
                         break;
                     case HOLD_EFFECT_CURE_PAR:
-                        if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_PARALYSIS && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_PARALYSIS && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_PARALYSIS);
                             BattleScriptExecute(BattleScript_BerryCurePrlzEnd2);
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
                     case HOLD_EFFECT_CURE_PSN:
-                        if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_PSN_ANY && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_PSN_ANY && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_PSN_ANY | STATUS1_TOXIC_COUNTER);
                             BattleScriptExecute(BattleScript_BerryCurePsnEnd2);
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
                     case HOLD_EFFECT_CURE_BRN:
-                        if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_BURN && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_BURN && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_BURN);
                             BattleScriptExecute(BattleScript_BerryCureBrnEnd2);
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
                     case HOLD_EFFECT_CURE_FRZ:
-                        if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_FREEZE && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_FREEZE && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_FREEZE);
                             BattleScriptExecute(BattleScript_BerryCureFrzEnd2);
                             effect = ITEM_STATUS_CHANGE;
                         }
-                        if (gBattleMons[battlerId].status1 & STATUS1_FROSTBITE && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status1 & STATUS1_FROSTBITE && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~STATUS1_FROSTBITE;
                             BattleScriptCall(BattleScript_BerryCureFsbRet);
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
                     case HOLD_EFFECT_CURE_SLP:
-                        if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_SLEEP && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_SLEEP && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_SLEEP);
                             gBattleMons[battlerId].status2 &= ~(STATUS2_NIGHTMARE);
                             BattleScriptExecute(BattleScript_BerryCureSlpEnd2);
@@ -5585,7 +5582,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                     case HOLD_EFFECT_CURE_STATUS:
                         if (B_BERRIES_INSTANT >= GEN_4 &&
                             (gBattleMons[battlerId].status1 & STATUS1_ANY || gBattleMons[battlerId].status2 & STATUS2_CONFUSION) &&
-                            !UnnerveOn(battlerId, gLastUsedItem)) {
+                            !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             i = 0;
                             if (gBattleMons[battlerId].status1 & STATUS1_PSN_ANY) {
                                 StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
@@ -5749,6 +5746,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_RESTORE_STATS:
+                        REQUIRE_NOT(IsUnnerveAbilityOnOpposingSide(battlerId))
                         for (i = 0; i < NUM_BATTLE_STATS; i++) {
                             if (gBattleMons[battlerId].statStages[i] < DEFAULT_STAT_STAGE) {
                                 gBattleMons[battlerId].statStages[i] = DEFAULT_STAT_STAGE;
@@ -5828,40 +5826,40 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         if (!moveTurn) effect = RandomStatRaiseBerry(battlerId, gLastUsedItem, TRUE);
                         break;
                     case HOLD_EFFECT_CURE_PAR:
-                        if (gBattleMons[battlerId].status1 & STATUS1_PARALYSIS && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status1 & STATUS1_PARALYSIS && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_PARALYSIS);
                             BattleScriptExecute(BattleScript_BerryCurePrlzEnd2);
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
                     case HOLD_EFFECT_CURE_PSN:
-                        if (gBattleMons[battlerId].status1 & STATUS1_PSN_ANY && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status1 & STATUS1_PSN_ANY && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_PSN_ANY | STATUS1_TOXIC_COUNTER);
                             BattleScriptExecute(BattleScript_BerryCurePsnEnd2);
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
                     case HOLD_EFFECT_CURE_BRN:
-                        if (gBattleMons[battlerId].status1 & STATUS1_BURN && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status1 & STATUS1_BURN && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_BURN);
                             BattleScriptExecute(BattleScript_BerryCureBrnEnd2);
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
                     case HOLD_EFFECT_CURE_FRZ:
-                        if (gBattleMons[battlerId].status1 & STATUS1_FREEZE && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status1 & STATUS1_FREEZE && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_FREEZE);
                             BattleScriptExecute(BattleScript_BerryCureFrzEnd2);
                             effect = ITEM_STATUS_CHANGE;
                         }
-                        if (gBattleMons[battlerId].status1 & STATUS1_FROSTBITE && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status1 & STATUS1_FROSTBITE && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~STATUS1_FROSTBITE;
                             BattleScriptExecute(BattleScript_BerryCureFsbEnd2);
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
                     case HOLD_EFFECT_CURE_SLP:
-                        if (gBattleMons[battlerId].status1 & STATUS1_SLEEP && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status1 & STATUS1_SLEEP && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_SLEEP);
                             gBattleMons[battlerId].status2 &= ~(STATUS2_NIGHTMARE);
                             BattleScriptExecute(BattleScript_BerryCureSlpEnd2);
@@ -5869,7 +5867,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_CURE_CONFUSION:
-                        if (gBattleMons[battlerId].status2 & STATUS2_CONFUSION && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status2 & STATUS2_CONFUSION && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status2 &= ~(STATUS2_CONFUSION);
                             BattleScriptExecute(BattleScript_BerryCureConfusionEnd2);
                             effect = ITEM_EFFECT_OTHER;
@@ -5877,7 +5875,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         break;
                     case HOLD_EFFECT_CURE_STATUS:
                         if ((gBattleMons[battlerId].status1 & STATUS1_ANY || gBattleMons[battlerId].status2 & STATUS2_CONFUSION) &&
-                            !UnnerveOn(battlerId, gLastUsedItem)) {
+                            !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             i = 0;
                             if (gBattleMons[battlerId].status1 & STATUS1_PSN_ANY) {
                                 StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
@@ -5999,35 +5997,35 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         if (B_BERRIES_INSTANT >= GEN_4) effect = RandomStatRaiseBerry(battlerId, gLastUsedItem, FALSE);
                         break;
                     case HOLD_EFFECT_CURE_PAR:
-                        if (gBattleMons[battlerId].status1 & STATUS1_PARALYSIS && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status1 & STATUS1_PARALYSIS && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_PARALYSIS);
                             BattleScriptCall(BattleScript_BerryCureParRet);
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
                     case HOLD_EFFECT_CURE_PSN:
-                        if (gBattleMons[battlerId].status1 & STATUS1_PSN_ANY && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status1 & STATUS1_PSN_ANY && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_PSN_ANY | STATUS1_TOXIC_COUNTER);
                             BattleScriptCall(BattleScript_BerryCurePsnRet);
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
                     case HOLD_EFFECT_CURE_BRN:
-                        if (gBattleMons[battlerId].status1 & STATUS1_BURN && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status1 & STATUS1_BURN && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_BURN);
                             BattleScriptCall(BattleScript_BerryCureBrnRet);
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
                     case HOLD_EFFECT_CURE_FRZ:
-                        if (gBattleMons[battlerId].status1 & STATUS1_FREEZE && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status1 & STATUS1_FREEZE && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_FREEZE);
                             BattleScriptCall(BattleScript_BerryCureFrzRet);
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
                     case HOLD_EFFECT_CURE_SLP:
-                        if (gBattleMons[battlerId].status1 & STATUS1_SLEEP && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status1 & STATUS1_SLEEP && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~(STATUS1_SLEEP);
                             gBattleMons[battlerId].status2 &= ~(STATUS2_NIGHTMARE);
                             BattleScriptCall(BattleScript_BerryCureSlpRet);
@@ -6035,7 +6033,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_CURE_CONFUSION:
-                        if (gBattleMons[battlerId].status2 & STATUS2_CONFUSION && !UnnerveOn(battlerId, gLastUsedItem)) {
+                        if (gBattleMons[battlerId].status2 & STATUS2_CONFUSION && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status2 &= ~(STATUS2_CONFUSION);
                             BattleScriptCall(BattleScript_BerryCureConfusionRet);
                             effect = ITEM_EFFECT_OTHER;
@@ -6050,7 +6048,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         break;
                     case HOLD_EFFECT_CURE_STATUS:
                         if ((gBattleMons[battlerId].status1 & STATUS1_ANY || gBattleMons[battlerId].status2 & STATUS2_CONFUSION) &&
-                            !UnnerveOn(battlerId, gLastUsedItem)) {
+                            !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             if (gBattleMons[battlerId].status1 & STATUS1_PSN_ANY) {
                                 StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
                             }
@@ -6081,6 +6079,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_RESTORE_STATS:
+                        REQUIRE_NOT(IsUnnerveAbilityOnOpposingSide(battlerId))
                         for (i = 0; i < NUM_BATTLE_STATS; i++) {
                             if (gBattleMons[battlerId].statStages[i] < DEFAULT_STAT_STAGE) {
                                 gBattleMons[battlerId].statStages[i] = DEFAULT_STAT_STAGE;
@@ -7654,7 +7653,6 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
     u32 percentBoost;
     u32 defSide = GET_BATTLER_SIDE(battlerDef);
     u16 finalModifier = UQ_4_12(1.0);
-    u16 itemDef = gBattleMons[battlerDef].item;
     u16 ignored;
 
     // check multiple targets in double battle
@@ -7766,7 +7764,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
         // berries reducing dmg
         case HOLD_EFFECT_RESIST_BERRY:
             if (moveType == GetBattlerHoldEffectParam(battlerDef) && (moveType == TYPE_NORMAL || typeEffectivenessModifier >= UQ_4_12(2.0)) &&
-                !UnnerveOn(battlerDef, itemDef)) {
+                !IsUnnerveAbilityOnOpposingSide(battlerDef)) {
                 if (HasRipenEffect(battlerDef))
                     MulModifier(&finalModifier, UQ_4_12(0.25));
                 else
@@ -8516,10 +8514,11 @@ bool32 TryRemoveScreens(u8 battler) {
     return removed;
 }
 
-static bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId) {
-    if (IsAbilityOnOpposingSide(battlerId, ABILITY_UNNERVE) || IsAbilityOnOpposingSide(battlerId, ABILITY_AS_ONE_ICE_RIDER) ||
-        IsAbilityOnOpposingSide(battlerId, ABILITY_AS_ONE_SHADOW_RIDER) || IsAbilityOnOpposingSide(battlerId, ABILITY_CROWNED_KING))
-        return TRUE;
+bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId) {
+    int opponent = BATTLE_OPPOSITE(battlerId);
+    if (IsBattlerAlive(opponent)) { RETURN_ABILITY_IF_FLAG(BATTLE_OPPOSITE(battlerId), FALSE, unnerve) }
+    opponent = BATTLE_PARTNER(opponent);
+    if (IsBattlerAlive(opponent)) { RETURN_ABILITY_IF_FLAG(BATTLE_OPPOSITE(battlerId), FALSE, unnerve) }
     return FALSE;
 }
 

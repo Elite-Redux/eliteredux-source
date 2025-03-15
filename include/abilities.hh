@@ -167,6 +167,7 @@ typedef struct Ability {
     u16 magicBounce:1;
     u16 levitate:1;
     u16 megaLauncherBoost:1;
+    u16 unnerve:1;
 } Ability;
 
 #ifdef __cplusplus

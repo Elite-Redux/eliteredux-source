@@ -397,6 +397,7 @@ int HasSkillLink(int battler);
 int IsMegaLauncherBoosted(int battler, int move);
 int IsIronFistBoosted(int battler, int move);
 int IsStrikerBoosted(int battler, int move);
+bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId);
 
 MultihitType GetMultihitType(int battler, int move);
 
