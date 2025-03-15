@@ -817,7 +817,7 @@ static const Ability RainDish = {
                      "if rain is active."),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
@@ -1631,7 +1631,7 @@ static const Ability IceBody = {
                      "in hail."),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
 
@@ -3964,7 +3964,7 @@ static const Ability SelfSufficient = {
                      "end of each turn."),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
 
         gBattleMoveDamage = gBattleMons[battler].maxHP / 16;
@@ -4191,7 +4191,9 @@ static const Ability SoulEater = {
     .description = $("Dealing a KO heals 1/4 of this\n"
                      "Pokémon's max HP."),
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        CHECK_NOT(BATTLER_MAX_HP(battler)) CHECK_NOT(BATTLER_HEALING_BLOCKED(battler)) BattleScriptCall(BattleScript_HandleSoulEaterEffect);
+        CHECK_NOT(BATTLER_MAX_HP(battler));
+        CHECK(CanBattlerHeal(battler));
+        BattleScriptCall(BattleScript_HandleSoulEaterEffect);
         return TRUE;
     },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
@@ -4219,7 +4221,7 @@ static const Ability SweetDreams = {
                      "if asleep. Immune to Bad Dreams."),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
 
         gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
@@ -5170,7 +5172,7 @@ static const Ability ToxicSpill = {
 
             if (BATTLER_HAS_ABILITY(target, ABILITY_POISON_HEAL)) {
                 FILTER_NOT(BATTLER_MAX_HP(target))
-                FILTER_NOT(BATTLER_HEALING_BLOCKED(target))
+                FILTER(CanBattlerHeal(target))
                 gStackBattler1 = target;
                 BattleScriptExecute(BattleScript_ToxicWasteHeal);
                 any = TRUE;
@@ -5297,7 +5299,7 @@ static const Ability HydroCircuit = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(moveType == TYPE_WATER)
 
         gBattleMoveDamage = -gHpDealt / 4;
@@ -5513,7 +5515,7 @@ static const Ability JawsOfCarnage = {
                      "when defeating it."),
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         if (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST)
             BattleScriptCall(BattleScript_HandleJawsOfCarnageEffect);
         else
@@ -5609,7 +5611,7 @@ static const Ability AngelsWrath = {
             case MOVE_BUG_BITE: {
                 CHECK(ShouldApplyOnHitAffect(battler))
                 CHECK_NOT(BATTLER_MAX_HP(battler))
-                CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+                CHECK(CanBattlerHeal(battler))
 
                 gBattleMoveDamage = -gHpDealt;
                 if (!gBattleMoveDamage) gBattleMoveDamage = -1;
@@ -6548,7 +6550,7 @@ static const Ability PureLove = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gBattleMons[target].status2 & STATUS2_INFATUATION)
 
         gBattleMoveDamage = -gHpDealt / 4;
@@ -7595,7 +7597,7 @@ static const Ability CelestialBlessing = {
                      "turn under Misty Terrain."),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
 
@@ -8322,7 +8324,7 @@ static const Ability PeacefulRest = {
                      "in fog."),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
@@ -8700,7 +8702,7 @@ static const Ability VitalityStrike = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(IsIronFistBoosted(battler, move))
 
         gBattleMoveDamage = -gHpDealt / 10;
@@ -9441,7 +9443,7 @@ static const Ability EnergySiphon = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
 
         gBattleMoveDamage = -gHpDealt / 4;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
@@ -9835,6 +9837,12 @@ static const Ability PoseidonsDominion = {
     .name = $("Poseidon's Dominion"),
     .description = $("Whirlpool on entry."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_WHIRLPOOL, 0); },
+};
+
+static const Ability Hemolysis = {
+    .name = $("Hemolysis"),
+    .description = $("Poisoned foes lose all stat buffs\n"
+                     "and can't heal."),
 };
 
 const Ability gAbilities[] = {
@@ -10622,6 +10630,7 @@ const Ability gAbilities[] = {
     [ABILITY_AVERAGE_POWER] = AveragePower,
     [ABILITY_GUNMAN] = Gunman,
     [ABILITY_HUNTERS_MARK] = HuntersMark,
+    [ABILITY_HEMOLYSIS] = Hemolysis,
     [ABILITY_HEMOLYSIS] = None,
     [ABILITY_CARETAKER] = Caretaker,
     [ABILITY_POSEIDONS_DOMINION] = PoseidonsDominion,

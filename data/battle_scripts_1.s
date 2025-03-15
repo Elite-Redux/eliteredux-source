@@ -11861,7 +11861,7 @@ BattleScript_PastelVeilActivates::
 	setbyte gBattleCommunication, 0
 	setbyte gBattleCommunication + 1, 0
 BattleScript_PastelVeil_TryCurePoison:
-	jumpifstatus BS_TARGET, STATUS1_POISON | STATUS1_TOXIC_POISON, BattleScript_PastelVeilCurePoison
+	jumpifstatus BS_TARGET, STATUS1_POISON_ANY, BattleScript_PastelVeilCurePoison
 	goto BattleScript_PastelVeilLoopIncrement
 BattleScript_PastelVeilCurePoison:
 	jumpifbyte CMP_NOT_EQUAL, gBattleCommunication + 1, 0x0, BattleScript_PastelVeilCurePoisonNoPopUp

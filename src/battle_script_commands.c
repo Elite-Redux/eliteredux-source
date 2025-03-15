@@ -6054,7 +6054,7 @@ static void TryCheekPouch(u32 battlerId, u32 itemId) {
     int ability;
     if (ItemId_GetPocket(itemId) == POCKET_BERRIES &&
         ((ability = BattlerHasAbility(battlerId, ABILITY_GLUTTONY, FALSE)) || (ability = BattlerHasAbility(battlerId, ABILITY_SUGAR_RUSH, FALSE))) &&
-        !BATTLER_HEALING_BLOCKED(battlerId) && gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]] &&
+        CanBattlerHeal(battlerId) && gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]] &&
         !BATTLER_MAX_HP(battlerId)) {
         gBattleScripting.abilityPopupOverwrite = ability;
         gBattleMoveDamage = gBattleMons[battlerId].maxHP / 3;
@@ -7893,7 +7893,7 @@ static void Cmd_various(void) {
 
             if (gBattleMons[gActiveBattler].hp == gBattleMons[gActiveBattler].maxHP)
                 gBattlescriptCurrInstr = ptr;  // fail
-            else if (BATTLER_HEALING_BLOCKED(gActiveBattler))
+            else if (!CanBattlerHeal(gActiveBattler))
                 gBattlescriptCurrInstr = ptr;  // fail
             return;
         case VARIOUS_REMOVE_TERRAIN:
@@ -9175,7 +9175,7 @@ static void Cmd_tryhealhalfhealth(void) {
 
     if (gBattlescriptCurrInstr[5] == BS_ATTACKER) gBattlerTarget = gBattlerAttacker;
 
-    if (BATTLER_HEALING_BLOCKED(gBattlerTarget)) {
+    if (!CanBattlerHeal(gBattlerTarget)) {
         gBattleMoveDamage = 0;
         gBattlescriptCurrInstr += 6;
         return;
@@ -9314,7 +9314,7 @@ static void Cmd_manipulatedamage(void) {
             gBattleMoveDamage = GetDrainedBigRootHp(gBattlerAttacker, gBattleMoveDamage);
             break;
         case DMG_TO_HP_FROM_MOVE:
-            if (BATTLER_HEALING_BLOCKED(gBattlerAttacker)) {
+            if (!CanBattlerHeal(gBattlerAttacker)) {
                 gBattleMoveDamage = 0;
                 break;
             }

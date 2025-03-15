@@ -2360,7 +2360,7 @@ u8 DoBattlerEndTurnEffects(void) {
                 effect++;
                 break;
             case ENDTURN_INGRAIN:  // ingrain
-                if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED) && !BATTLER_MAX_HP(gActiveBattler) && !BATTLER_HEALING_BLOCKED(gActiveBattler) &&
+                if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED) && !BATTLER_MAX_HP(gActiveBattler) && CanBattlerHeal(gActiveBattler) &&
                     gBattleMons[gActiveBattler].hp != 0) {
                     gBattleMoveDamage = GetDrainedBigRootHp(gActiveBattler, -gBattleMons[gActiveBattler].maxHP / 8);
                     BattleScriptExecute(BattleScript_IngrainTurnHeal);
@@ -2369,7 +2369,7 @@ u8 DoBattlerEndTurnEffects(void) {
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_AQUA_RING:  // aqua ring
-                if ((gStatuses3[gActiveBattler] & STATUS3_AQUA_RING) && !BATTLER_MAX_HP(gActiveBattler) && !BATTLER_HEALING_BLOCKED(gActiveBattler) &&
+                if ((gStatuses3[gActiveBattler] & STATUS3_AQUA_RING) && !BATTLER_MAX_HP(gActiveBattler) && CanBattlerHeal(gActiveBattler) &&
                     gBattleMons[gActiveBattler].hp != 0) {
                     gBattleMoveDamage = GetDrainedBigRootHp(gActiveBattler, -gBattleMons[gActiveBattler].maxHP / 16);
                     BattleScriptExecute(BattleScript_AquaRingHeal);
@@ -2431,7 +2431,7 @@ u8 DoBattlerEndTurnEffects(void) {
 
                 if (BattlerHasAbility(gActiveBattler, ABILITY_POISON_HEAL, FALSE)) {
                     REQUIRE_NOT(BATTLER_MAX_HP(gActiveBattler))
-                    REQUIRE_NOT(BATTLER_HEALING_BLOCKED(gActiveBattler))
+                    REQUIRE(CanBattlerHeal(gActiveBattler))
 
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
                     if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
@@ -2456,7 +2456,7 @@ u8 DoBattlerEndTurnEffects(void) {
 
                 if (BattlerHasAbility(gActiveBattler, ABILITY_POISON_HEAL, FALSE)) {
                     REQUIRE_NOT(BATTLER_MAX_HP(gActiveBattler))
-                    REQUIRE_NOT(BATTLER_HEALING_BLOCKED(gActiveBattler))
+                    REQUIRE(CanBattlerHeal(gActiveBattler))
 
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
                     if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
@@ -4381,7 +4381,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                     }
                     SetActiveAbilityPopupOverride(gBattleScripting.abilityPopupOverwrite);
 
-                    if (effect & ABSORB_RESULT_HEAL && !BATTLER_MAX_HP(battler) && !BATTLER_HEALING_BLOCKED(battler))  // Drain Hp ability.
+                    if (effect & ABSORB_RESULT_HEAL && !BATTLER_MAX_HP(battler) && CanBattlerHeal(battler))  // Drain Hp ability.
                     {
                         any = TRUE;
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 4;
@@ -4810,7 +4810,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
         case ABILITYEFFECT_AFTER_RECOIL:
             // Nosferatu
             if (BATTLER_HAS_ABILITY(battler, ABILITY_NOSFERATU) && ShouldApplyOnHitAffect(battler) && IsMoveMakingContact(move, battler) &&
-                !BATTLER_MAX_HP(battler) && !BATTLER_HEALING_BLOCKED(battler)) {
+                !BATTLER_MAX_HP(battler) && CanBattlerHeal(battler)) {
                 gBattleScripting.abilityPopupOverwrite = ABILITY_NOSFERATU;
                 gBattleMoveDamage = -gHpDealt / 2;
                 if (!gBattleMoveDamage) gBattleMoveDamage = -1;
@@ -5365,7 +5365,7 @@ u8 TryHandleSeed(u8 battler, u32 terrainFlag, u8 statId, u16 itemId, bool32 exec
 }
 
 static u8 ItemHealHp(u32 battlerId, u32 itemId, bool32 end2, bool32 percentHeal) {
-    if (BATTLER_HEALING_BLOCKED(battlerId)) return 0;
+    if (!CanBattlerHeal(battlerId)) return 0;
 
     if (HasEnoughHpToEatBerry(battlerId, 2, itemId) &&
         !(gBattleScripting.overrideBerryRequirements && gBattleMons[battlerId].hp == gBattleMons[battlerId].maxHP)) {
@@ -5776,7 +5776,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         break;
                     case HOLD_EFFECT_LEFTOVERS:
                     LEFTOVERS:
-                        if (gBattleMons[battlerId].hp < gBattleMons[battlerId].maxHP && !BATTLER_HEALING_BLOCKED(battlerId) && !moveTurn) {
+                        if (gBattleMons[battlerId].hp < gBattleMons[battlerId].maxHP && CanBattlerHeal(battlerId) && !moveTurn) {
                             gBattleMoveDamage = gBattleMons[battlerId].maxHP / 16;
                             if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
                             gBattleMoveDamage *= -1;
@@ -6145,7 +6145,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                     REQUIRE(gTurnStructs[gBattlerAttacker].savedDmg)
                     REQUIRE(IsBattlerAlive(gBattlerAttacker))
                     REQUIRE_NOT(BATTLER_MAX_HP(gBattlerAttacker))
-                    REQUIRE_NOT(BATTLER_HEALING_BLOCKED(gBattlerAttacker))
+                    REQUIRE(CanBattlerHeal(gBattlerAttacker))
                     REQUIRE_NOT(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
                     REQUIRE(gBattlerAttacker != gBattlerTarget)
 
@@ -7393,7 +7393,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
     else if (isCrit && !isAttack)
         statStage = min(statStage, DEFAULT_STAT_STAGE);
 
-    if (gBattleMons[battler].status1 & STATUS1_BLEED || IsBloodStainAffected(battler)) statStage = min(statStage, DEFAULT_STAT_STAGE);
+    if (!BenefitsFromStatBuffs(battler)) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
     if (!calculatingSecondary) {
         if (secondaryStat == statEnum && statEnum != STAT_SPEED)
@@ -8909,7 +8909,7 @@ int GetHighestStatIdExcept(int battlerId, int includeStatStages, int exclude) {
         if (i == exclude) continue;
         if (includeStatStages) {
             u8 statStage = gBattleMons[battlerId].statStages[i];
-            if (gBattleMons[battlerId].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerId)) statStage = min(statStage, DEFAULT_STAT_STAGE);
+            if (!BenefitsFromStatBuffs(battlerId)) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
             statVal = statVal * gStatStageRatios[statStage][0] / gStatStageRatios[statStage][1];
         }
@@ -8932,7 +8932,7 @@ u8 GetHighestAttackingStatId(u8 battlerId, u8 includeStatStages) {
         u16 statVal = (&gBattleMons[battlerId].attack)[i - 1];
         if (includeStatStages) {
             u8 statStage = gBattleMons[battlerId].statStages[i];
-            if (gBattleMons[battlerId].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerId)) statStage = min(statStage, DEFAULT_STAT_STAGE);
+            if (!BenefitsFromStatBuffs(battlerId)) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
             statVal = statVal * gStatStageRatios[statStage][0] / gStatStageRatios[statStage][1];
         }
@@ -8953,7 +8953,7 @@ u8 GetHighestDefendingStatId(u8 battlerId, u8 includeStatStages) {
         u16 statVal = (&gBattleMons[battlerId].attack)[i - 1];
         if (includeStatStages) {
             u8 statStage = gBattleMons[battlerId].statStages[i];
-            if (gBattleMons[battlerId].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerId)) statStage = min(statStage, DEFAULT_STAT_STAGE);
+            if (!BenefitsFromStatBuffs(battlerId)) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
             statVal = statVal * gStatStageRatios[statStage][0] / gStatStageRatios[statStage][1];
         }
@@ -9162,6 +9162,22 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
     }
 
     return FALSE;
+}
+
+int CanBattlerHeal(int battler) {
+    if (gStatuses3[battler] & STATUS3_HEAL_BLOCK) return FALSE;
+    if (gBattleMons[battler].status1 & STATUS1_BLEED) return FALSE;
+    if (IsBloodStainAffected(battler)) return FALSE;
+    if (IsAbilityOnOpposingSide(battler, ABILITY_PERMANENCE)) return FALSE;
+    if (gBattleMons[battler].status1 & STATUS1_POISON_ANY && IsAbilityOnOpposingSide(battler, ABILITY_HEMOLYSIS)) return FALSE;
+    return TRUE;     
+}
+
+int BenefitsFromStatBuffs(int battler) {
+    if (gBattleMons[battler].status1 & STATUS1_BLEED) return FALSE;
+    if (IsBloodStainAffected(battler)) return FALSE;
+    if (gBattleMons[battler].status1 & STATUS1_POISON_ANY && IsAbilityOnOpposingSide(battler, ABILITY_HEMOLYSIS)) return FALSE;
+    return TRUE;
 }
 
 int IsBloodStainAffected(int battler) {

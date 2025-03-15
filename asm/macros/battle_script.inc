@@ -2477,6 +2477,10 @@ checkstatbuffonlowered_none_\@:
 	jumpifability \battler, ABILITY_BLOOD_STAIN, jumpifhealingblocked_blockedbyability_\@
 	jumpifhealingblocked_nobloodstain_\@:
 	jumpifabilityonside \battler, ABILITY_PERMANENCE, jumpifhealingblocked_blockedbyability_\@, TRUE
+	jumpifstatus \battler, STATUS1_POISON_ANY, jumpifhealingblocked_poisoned_\@
+	goto jumpifhealingblocked_notblocked_\@
+	jumpifhealingblocked_poisoned_\@:
+	jumpifabilityonside \battler, ABILITY_HEMOLYSIS, jumpifhealingblocked_blockedbyability_\@, TRUE
 	goto jumpifhealingblocked_notblocked_\@
 	jumpifhealingblocked_blockedbyability_\@:
 	call BattleScript_AbilityPopUp

@@ -78,10 +78,6 @@
 #define BATTLER_HAS_ABILITY_AND_ALIVE(battlerId, ability, checkMoldBreaker) \
     (IsBattlerAlive(battlerId) && BattlerHasAbility(battlerId, ability, checkMoldBreaker))
 
-#define BATTLER_HEALING_BLOCKED(battlerId)                                                                                                                     \
-    (gStatuses3[battlerId] & STATUS3_HEAL_BLOCK || gBattleMons[battlerId].status1 & STATUS1_BLEED || IsAbilityOnOpposingSide(battlerId, ABILITY_PERMANENCE) || \
-     IsBloodStainAffected(battlerId))
-
 enum MiscMoveEffects {
     MISC_EFFECT_SUPEREFFECTIVE_BOOST = 1,
     MISC_EFFECT_FAINTED_MON_BOOST,
@@ -374,6 +370,8 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
 u16 DivideModifier(u16 mod1, u16 mod2);
 void MulModifier(u16* modifier, u16 val);
 u32 ApplyModifier(u16 modifier, u32 val);
+int CanBattlerHeal(int battler);
+int BenefitsFromStatBuffs(int battler);
 int IsBloodStainAffected(int battler);
 int IsUnaware(int battler);
 int GetOncePerTurnAbilityCounter(int battler, int ability);
