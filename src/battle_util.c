@@ -8049,7 +8049,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
                    gAbilities[ability].onAfterTypeEffectiveness &&
                        IsTargettedApplyOnFlagAppropriate(battlerAtk, battler, battlerAtk, battlerDef, gAbilities[ability].onAfterTypeEffectivenessFor),
                    int wasImmune = modifier == 0;
-                   gAbilities[ability].onAfterTypeEffectiveness(battler, battlerDef, move, moveType, &modifier, modifier1, modifier2, modifier3);
+                   gAbilities[ability].onAfterTypeEffectiveness(battler, ability, battlerDef, move, moveType, &modifier, modifier1, modifier2, modifier3);
                    if (!wasImmune && !modifier) immunityAbility = ability)
     }
 

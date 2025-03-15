@@ -82,7 +82,7 @@ typedef int (*AbilityOnCrit)(int battler, int target, int move);
 #define ALWAYS_CRIT 3
 typedef int (*AbilityOnTypeEffectiveness)(int defType, int move, int moveType, u16* mod);
 typedef int (*AbilityOnCopyMove)(int ability, int battler, int attacker, int target, int move);
-typedef void (*AbilityOnAfterTypeEffectiveness)(int battler, int target, int move, int moveType, u16* mod, u16 mod1, u16 mod2, u16 mod3);
+typedef void (*AbilityOnAfterTypeEffectiveness)(int battler, int ability, int target, int move, int moveType, u16* mod, u16 mod1, u16 mod2, u16 mod3);
 
 typedef enum {
     APPLY_ON_SELF = 0,

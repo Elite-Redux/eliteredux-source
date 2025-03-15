@@ -914,6 +914,9 @@ static const u8 sText_Cutthroat[] = _("{B_ATK_NAME_WITH_PREFIX} readies\ntheir b
 static const u8 sText_ItemStatProtected[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_LAST_ITEM}\nprevents its stats from lowering!");
 static const u8 sText_StackChangedTypeTo[] = _("{B_STACK_1_NAME_WITH_PREFIX}'s type\nchanged to {B_BUFF1}!");
 static const u8 sText_StackRegainedHealth[] = _("{B_STACK_1_NAME_WITH_PREFIX} regained\nhealth!");
+static const u8 sText_FireCoatDamage[] = _("{B_ATK_NAME_WITH_PREFIX} is scorched\nby the flames!");
+static const u8 sText_FireCoatStart[] = _("Flames engulf the battlefield!");
+static const u8 sText_Soothsayer[] = _("{B_ATK_NAME_WITH_PREFIX} peers\ninto the future!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1072,8 +1075,6 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_FireCoatDamage[] = _("{B_ATK_NAME_WITH_PREFIX} is scorched\nby the flames!");
-static const u8 sText_FireCoatStart[] = _("Flames engulf the battlefield!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1931,6 +1932,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_STACKREGAINEDHEALTH - 12] = sText_StackRegainedHealth,
     [STRINGID_FIRECOATDAMAGE - 12] = sText_FireCoatDamage,
     [STRINGID_FIRECOATSTART - 12] = sText_FireCoatStart,
+    [STRINGID_SOOTHSAYER - 12] = sText_Soothsayer,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2023,6 +2025,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_BLOOD_STAIN] = STRINGID_BLOOD_STAIN_ANNOUNCE,
     [B_MSG_SWITCHIN_CUTTHROAT] = STRINGID_CUTTHROAT,
     [B_MSG_SWITCHIN_FIRE_COAT] = STRINGID_FIRECOATSTART,
+    [B_MSG_SWITCHIN_SOOTHSAYER] = STRINGID_SOOTHSAYER,
 };
 
 const u16 gParadoxBoostSourceIds[] = 
