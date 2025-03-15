@@ -9861,6 +9861,12 @@ static const Ability Gunman = {
     .megaLauncherBoost = TRUE,
 };
 
+static const Ability HuntersMark = {
+    .name = $("Hunter's Mark"),
+    .description = $("Attacks with 40BP Spirit Shackle\n"
+                     "when foes try to switch."),
+};
+
 const Ability gAbilities[] = {
     [ABILITY_NONE] = None,
     [ABILITY_STENCH] = Stench,
@@ -10643,7 +10649,7 @@ const Ability gAbilities[] = {
     [ABILITY_VENOM_CROWN] = VenomCrown,
     [ABILITY_BLIGHT_SCALE] = BlightScale,
     [ABILITY_GUNMAN] = Gunman,
-    [ABILITY_HUNTERS_MARK] = None,
+    [ABILITY_HUNTERS_MARK] = HuntersMark,
     [ABILITY_HEMOLYSIS] = None,
 };
 

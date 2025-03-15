@@ -741,6 +741,14 @@ void TryPreemptiveActions() {
                     .target = battler,
                     .movePower = 20,
                 };
+            } else if (BATTLER_HAS_ABILITY(i, ABILITY_HUNTERS_MARK)) {
+                gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+                    .ability = ABILITY_HUNTERS_MARK,
+                    .attacker = i,
+                    .move = MOVE_SPIRIT_SHACKLE,
+                    .target = battler,
+                    .movePower = 40,
+                };
             }
         }
     }
