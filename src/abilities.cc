@@ -106,6 +106,8 @@ ENUM_OR(InfiltrateType)
 #define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
 #define ON_COPY_MOVE int ability, int battler, int attacker, int target, int move
 #define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
+#define ON_AFTER_TYPE_EFFECTIVENESS int battler, int ability, int target, int move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
+#define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -7781,6 +7783,11 @@ static const Ability TeraShell = {
     .name = $("Tera Shell"),
     .description = $("All hits will be not very effective\n"
                      "while at full HP."),
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (*mod >= UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
@@ -9703,8 +9710,27 @@ static const Ability Relentless = {
 
 static const Ability Soothsayer = {
     .name = $("Soothsayer"),
-    .description = $("Placeholder"),
-    .randomizerBanned = TRUE,
+    .description = $("Resists all attacks for three\n"
+                     "turns on first entry."),
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(!GetSingleUseAbilityCounter(battler, ability))
+        SetSingleUseAbilityCounter(battler, ability, TRUE);
+        SetAbilityState(battler, ability, 3);
+        return SwitchInAnnounce(B_MSG_SWITCHIN_SOOTHSAYER);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        int counter = GetAbilityState(battler, ability);
+        if (counter) SetAbilityState(battler, ability, counter - 1);
+        return FALSE;
+    },
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (!GetAbilityState(battler, ability)) return;
+            if (*mod >= UQ_4_12(1.0)) *mod = UQ_4_12(0.5);
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
+    .unsuppressable = TRUE,
 };
 
 static const Ability CorruptedMind = {
