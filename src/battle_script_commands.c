@@ -4112,14 +4112,14 @@ static void PlayStatChangeAnimation(int battler, int statsToCheck, int flags, in
                         statAnimId = startingStatAnimId + currStat;
                         changeableStatsCount++;
                     }
-                } else if (!gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer && !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) &&
-                           !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) &&
-                           !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_KEEN_EYE) && currStat == STAT_ACC && flags & MOVE_EFFECT_AFFECTS_USER) &&
-                           !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MINDS_EYE) && currStat == STAT_ACC && flags & MOVE_EFFECT_AFFECTS_USER) &&
-                           !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && (currStat == STAT_ATK || currStat == STAT_SPATK) &&
-                             flags & MOVE_EFFECT_AFFECTS_USER) &&
-                           !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LUCKY_HALO) && flags & MOVE_EFFECT_AFFECTS_USER) &&
-                           GetBattlerHoldEffect(gActiveBattler, TRUE) != HOLD_EFFECT_CLEAR_AMULET) {
+                } else if (!BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) && !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) &&
+                           !(!(flags & MOVE_EFFECT_AFFECTS_USER) &&
+                             (gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer ||
+                              (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_KEEN_EYE) && currStat == STAT_ACC) ||
+                              (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MINDS_EYE) && currStat == STAT_ACC) ||
+                              (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && (currStat == STAT_ATK || currStat == STAT_SPATK)) ||
+                              BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LUCKY_HALO) ||
+                              GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_CLEAR_AMULET))) {
                     if (gBattleMons[gActiveBattler].statStages[currStat] > MIN_STAT_STAGE) {
                         statAnimId = startingStatAnimId + currStat;
                         changeableStatsCount++;
@@ -9794,7 +9794,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
                 BattleScriptCall(BattleScript_MirrorArmorReflect);
             }
             return 0;
-        } else if (!certain && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_CLEAR_AMULET) {
+        } else if (!certain && !affectsUser && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_CLEAR_AMULET) {
             if (flags == STAT_BUFF_ALLOW_PTR) {
                 if (gTurnStructs[battler].statLowered) {
                     gBattlescriptCurrInstr = BS_ptr;
