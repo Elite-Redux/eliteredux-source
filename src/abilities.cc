@@ -106,7 +106,7 @@ ENUM_OR(InfiltrateType)
 #define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
 #define ON_COPY_MOVE int ability, int battler, int attacker, int target, int move
 #define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
-#define ON_AFTER_TYPE_EFFECTIVENESS int battler, int ability, int target, int move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
+#define ON_AFTER_TYPE_EFFECTIVENESS int battler, int target, int move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
 #define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
 
 #define GALE_WINGS_CLONE(type)                               \
@@ -7785,7 +7785,7 @@ static const Ability TeraShell = {
                      "while at full HP."),
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
-            if (*mod >= UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
+            if (*mod > UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
         },
     .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
@@ -10621,7 +10621,7 @@ const Ability gAbilities[] = {
     [ABILITY_I_AM_STEVE] = iamsteve,
     [ABILITY_AVERAGE_POWER] = AveragePower,
     [ABILITY_GUNMAN] = Gunman,
-    [ABILITY_HUNTERS_MARK] = None,
+    [ABILITY_HUNTERS_MARK] = HuntersMark,
     [ABILITY_HEMOLYSIS] = None,
     [ABILITY_CARETAKER] = Caretaker,
     [ABILITY_POSEIDONS_DOMINION] = PoseidonsDominion,
