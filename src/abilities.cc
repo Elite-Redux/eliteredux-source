@@ -9747,7 +9747,7 @@ static const Ability Soothsayer = {
         },
     .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
-    .unsuppressable = TRUE,
+    .persistent = TRUE,
 };
 
 static const Ability CorruptedMind = {
