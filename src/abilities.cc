@@ -3717,11 +3717,22 @@ static const Ability ChristmasSpirit = {
 
 static const Ability ExploitWeakness = {
     .name = $("Exploit Weakness"),
-    .description = $("Moves are 1.25x stronger on foes\n"
-                     "affected by a status condition."),
+    .description = $("Deals 1.25x and targets lowest\n"
+                     "defense vs statused foes."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (HasAnyStatusOrAbility(target)) MUL(1.25);
+        },
+        .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
+            CHECK(HasAnyStatusOrAbility(target))
+            u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+            u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+            if (def < spDef)
+                return STAT_DEF;
+            else if (spDef < def)
+                return STAT_SPDEF;
+            else
+                return 0;
         },
 };
 
@@ -9757,6 +9768,7 @@ static const Ability Relentless = {
     .name = $("Relentless"),
     .description = $("Exploit Weakness + Merciless"),
     .onOffensiveMultiplier = ExploitWeakness.onOffensiveMultiplier,
+    .onChooseDefensiveStat = ExploitWeakness.onChooseDefensiveStat,
     .onCrit = Merciless.onCrit,
 };
 
