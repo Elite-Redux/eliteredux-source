@@ -9144,13 +9144,13 @@ static const Ability Depravity = {
 
 static const Ability Wildfire = {
     .name = $("Wildfire"),
-    .description = $("Attacks with 20BP Fire Spin\n"
+    .description = $("Attacks with 50BP Fire Spin\n"
                      "when hit by a contact move."),
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
-        UseOutOfTurnAttack(battler, attacker, ability, MOVE_FIRE_SPIN, 20);
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_FIRE_SPIN, 50);
         return FALSE;
     },
 };
