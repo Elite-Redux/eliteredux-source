@@ -9,7 +9,8 @@ all: timestamp/generated
 	@:
 
 protoc:
-	if [ ! -f protoc.zip ]; then wget -O protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-linux-x86_64.zip -q && exit; fi
+	@if [[ "$$(uname)" == "Darwin" ]]; then target="osx"; else target="linux"; fi
+	if [ ! -f protoc.zip ]; then wget -O protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-$$(target)-x86_64.zip -q && exit; fi
 	@unzip -p protoc.zip bin/protoc > protoc && exit
 
 protobuf-java.jar:
