@@ -1772,9 +1772,9 @@ static const Ability Contrary = {
 
 static const Ability Unnerve = {
     .name = $("Unnerve"),
-    .description = $("Foes can't eat Berries as long\n"
-                     "as this Pokémon is in battle."),
+    .description = $("Foes can't use consumable items."),
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE); },
+    .unnerve = TRUE,
 };
 
 static const Ability Defiant = {
@@ -3521,6 +3521,7 @@ static const Ability AsOneIceRider = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    .unnerve = TRUE,
 };
 
 static const Ability AsOneShadowRider = {
@@ -3536,6 +3537,7 @@ static const Ability AsOneShadowRider = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    .unnerve = TRUE,
 };
 
 static const Ability Chloroplast = {
@@ -3709,17 +3711,17 @@ static const Ability ExploitWeakness = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (HasAnyStatusOrAbility(target)) MUL(1.25);
         },
-        .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-            CHECK(HasAnyStatusOrAbility(target))
-            u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
-            u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
-            if (def < spDef)
-                return STAT_DEF;
-            else if (spDef < def)
-                return STAT_SPDEF;
-            else
-                return 0;
-        },
+    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
+        CHECK(HasAnyStatusOrAbility(target))
+        u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+        u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+        if (def < spDef)
+            return STAT_DEF;
+        else if (spDef < def)
+            return STAT_SPDEF;
+        else
+            return 0;
+    },
 };
 
 static const Ability GroundShock = {
@@ -6792,6 +6794,7 @@ static const Ability CrownedKing = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    .unnerve = TRUE,
 };
 
 static const Ability SnapTrapWhenHit = {

@@ -1636,7 +1636,7 @@ static void Cmd_adjustdamage(void) {
     if (holdEffect == HOLD_EFFECT_FOCUS_BAND && (Random() % 100) < param) {
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gTurnStructs[gBattlerTarget].focusBanded = TRUE;
-    } else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && BATTLER_MAX_HP(gBattlerTarget)) {
+    } else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && !IsUnnerveAbilityOnOpposingSide(gBattlerTarget) && BATTLER_MAX_HP(gBattlerTarget)) {
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gTurnStructs[gBattlerTarget].focusSashed = TRUE;
     } else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_STURDY) && BATTLER_MAX_HP(gBattlerTarget)) {
@@ -4750,7 +4750,8 @@ static void Cmd_moveend(void) {
                         if (battler == GetTurnBattler()) continue;
                         // Attacker is the damage-dealer, battler is mon to be switched out
                         if (gTurnStructs[battler].shouldTriggerSwitchItem && IsBattlerAlive(battler) &&
-                            GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_BUTTON && CanBattlerSwitch(battler))  // Has mon to switch into
+                            GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_BUTTON && !IsUnnerveAbilityOnOpposingSide(battler) &&
+                            CanBattlerSwitch(battler))  // Has mon to switch into
                         {
                             gStackBattler1 = battler;
                             gTurnStructs[battler].shouldTriggerSwitchItem = FALSE;
@@ -4787,7 +4788,8 @@ static void Cmd_moveend(void) {
                             effect = TRUE;
                             break;
                         } else if (gTurnStructs[battler].shouldTriggerSwitchItem && IsBattlerAlive(battler) &&
-                                   GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_RED_CARD && CanBattlerSwitch(gBattlerAttacker))  // Has mon to switch into
+                                   GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_RED_CARD && !IsUnnerveAbilityOnOpposingSide(battler) &&
+                                   CanBattlerSwitch(gBattlerAttacker))  // Has mon to switch into
                         {
                             gLastUsedItem = gBattleMons[battler].item;
                             gStackBattler1 = battler;
@@ -8275,8 +8277,9 @@ static void Cmd_various(void) {
             }
             for (gEffectBattler = 0; gEffectBattler < gBattlersCount; gEffectBattler++) {
                 u8 stat;
-                if (!IsBattlerAlive(gEffectBattler)) continue;
-                if (!gTurnStructs[gEffectBattler].mirrorHerbStat && GetBattlerHoldEffect(gEffectBattler, TRUE) != HOLD_EFFECT_MIRROR_HERB) continue;
+                FILTER(IsBattlerAlive(gEffectBattler))
+                FILTER(gTurnStructs[gEffectBattler].mirrorHerbStat ||
+                       (GetBattlerHoldEffect(gEffectBattler, TRUE) == HOLD_EFFECT_MIRROR_HERB && !IsUnnerveAbilityOnOpposingSide(gEffectBattler)))
 
                 for (stat = max(gTurnStructs[gEffectBattler].mirrorHerbStat, STAT_ATK); stat < NUM_BATTLE_STATS; stat++) {
                     s8 change = 0;
@@ -9013,6 +9016,14 @@ static void Cmd_various(void) {
             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / fraction;
             if (gBattleMoveDamage > gBattleMons[gActiveBattler].hp) gBattleMoveDamage = gBattleMons[gActiveBattler].hp;
             if (!gBattleMoveDamage) gBattleMoveDamage = 1;
+            break;
+        case VARIOUS_JUMP_IF_CONSUMABLE_BLOCKED:
+            ptr = READ_PTR_INC;
+            int ability = IsUnnerveAbilityOnOpposingSide(gActiveBattler);
+            REQUIRE(ability)
+            SetActiveAbilityPopupOverride(ability);
+            gBattleScripting.battlerPopupOverwrite = IsAbilityOnOpposingSide(gActiveBattler, ability) - 1;
+            gBattlescriptCurrInstr = ptr;
             break;
     }  // End of switch (gBattlescriptCurrInstr[2])
 }

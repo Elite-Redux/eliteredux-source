@@ -2059,16 +2059,18 @@ bool32 ShouldPivot(u8 battlerAtk, u8 battlerDef, u16 move, u8 moveIndex) {
                     // attacker can kill target in two hits (theoretically)
                     if (CanTargetFaintAi(battlerDef, battlerAtk)) return PIVOT;  // Won't get the two turns, pivot
 
-                    if (!IS_MOVE_STATUS(move) && (shouldSwitch || (AtMaxHp(battlerDef) && (AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH ||
-                                                                                           BattlerHasAbility(battlerDef, ABILITY_STURDY, TRUE) ||
-                                                                                           BattlerHasAbility(battlerDef, ABILITY_MULTISCALE, TRUE) ||
-                                                                                           BattlerHasAbility(battlerDef, ABILITY_SHADOW_SHIELD, TRUE)))))
+                    if (!IS_MOVE_STATUS(move) &&
+                        (shouldSwitch || (AtMaxHp(battlerDef) &&
+                                          ((AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH && !IsUnnerveAbilityOnOpposingSide(battlerDef)) ||
+                                           BattlerHasAbility(battlerDef, ABILITY_STURDY, TRUE) || BattlerHasAbility(battlerDef, ABILITY_MULTISCALE, TRUE) ||
+                                           BattlerHasAbility(battlerDef, ABILITY_SHADOW_SHIELD, TRUE)))))
                         return PIVOT;  // pivot to break sash/sturdy/multiscale
                 } else if (!hasStatBoost) {
                     if (!IS_MOVE_STATUS(move) &&
                         (AtMaxHp(battlerDef) &&
-                         (AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH || BattlerHasAbility(battlerDef, ABILITY_STURDY, TRUE) ||
-                          BattlerHasAbility(battlerDef, ABILITY_MULTISCALE, TRUE) || BattlerHasAbility(battlerDef, ABILITY_SHADOW_SHIELD, TRUE))))
+                         ((AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH && !IsUnnerveAbilityOnOpposingSide(battlerDef)) ||
+                          BattlerHasAbility(battlerDef, ABILITY_STURDY, TRUE) || BattlerHasAbility(battlerDef, ABILITY_MULTISCALE, TRUE) ||
+                          BattlerHasAbility(battlerDef, ABILITY_SHADOW_SHIELD, TRUE))))
                         return PIVOT;  // pivot to break sash/sturdy/multiscale
 
                     if (shouldSwitch) return PIVOT;
@@ -2102,7 +2104,7 @@ bool32 ShouldPivot(u8 battlerAtk, u8 battlerDef, u16 move, u8 moveIndex) {
                     if (IS_MOVE_STATUS(move) &&
                         (shouldSwitch  // Damaging move
                                        //&& (switchScore >= SWITCHING_INCREASE_RESIST_ALL_MOVES + SWITCHING_INCREASE_KO_FOE //remove hazards
-                         || (AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH && AtMaxHp(battlerDef))))
+                         || (AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH && !IsUnnerveAbilityOnOpposingSide(battlerDef) && AtMaxHp(battlerDef))))
                         return DONT_PIVOT;  // Pivot to break the sash
                     else
                         return CAN_TRY_PIVOT;
