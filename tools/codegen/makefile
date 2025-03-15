@@ -8,9 +8,15 @@ TEXTPROTO_SRCS := $(wildcard $(PROTOS)/*.textproto $(PROTOS)/*/*.textproto $(PRO
 all: timestamp/generated
 	@:
 
+OS :=$(shell uname)
+ifeq ($(OS),Darwin)
+	TARGET := osx
+else
+	TARGET := linux
+endif
+
 protoc:
-	@if [[ "$$(uname)" == "Darwin" ]]; then target="osx"; else target="linux"; fi
-	if [ ! -f protoc.zip ]; then wget -O protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-$$(target)-x86_64.zip -q && exit; fi
+	if [ ! -f protoc.zip ]; then wget -O protoc.zip "https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-$(TARGET)-x86_64.zip" -q && exit; fi
 	@unzip -p protoc.zip bin/protoc > protoc && exit
 
 protobuf-java.jar:
