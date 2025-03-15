@@ -6250,6 +6250,7 @@ static const Ability Generator = {
         SetSingleUseAbilityCounter(battler, ability, FALSE);
         return FALSE;
     },
+    .persistent = TRUE,
 };
 
 static const Ability MoonSpirit = {
@@ -9166,6 +9167,7 @@ static const Ability JumpScare = {
         CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
         return UseEntryMove(battler, ability, MOVE_ASTONISH, 0);
     },
+    .persistent = TRUE,
 };
 
 static const Ability TarToss = {
