@@ -3002,6 +3002,7 @@ int GetMoveEffectChance(int battler, int move, int moveEffect, int baseChance) {
 
         case MOVE_EFFECT_FROSTBITE:
             if (BATTLER_HAS_ABILITY(battler, ABILITY_CRYOMANCY)) baseChance *= 5;
+            if (BATTLER_HAS_ABILITY(battler, ABILITY_SNOWY_WRATH)) baseChance *= 5;
             break;
 
         case MOVE_EFFECT_FLINCH:
