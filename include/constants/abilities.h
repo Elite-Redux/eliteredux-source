@@ -804,10 +804,11 @@
 #define ABILITY_HEMOLYSIS 782 // Poisoned foes can't heal and lose all stat buffs.
 #define ABILITY_CARETAKER 783 // Healer + Friend Guard.
 #define ABILITY_POSEIDONS_DOMINION 784 // Whirlpool on entry + Sea Guardian
-#define ABILITY_I_AM_STEVE 785 // Multiscale + Poison Point
-#define ABILITY_AVERAGE_POWER 786 // Multiscale + Poison Point
+#define ABILITY_DUAL_SHADOW 785 // Hunger Switch + Electric burst and doom blast
+#define ABILITY_I_AM_STEVE 786 // Multiscale + Poison Point
+#define ABILITY_AVERAGE_POWER 787 // Multiscale + Poison Point
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_POSEIDONS_DOMINION + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_AVERAGE_POWER + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

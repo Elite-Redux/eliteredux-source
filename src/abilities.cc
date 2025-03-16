@@ -9862,6 +9862,48 @@ static const Ability Hemolysis = {
                      "and can't heal."),
 };
 
+static const Ability DualShadow = {
+    .name = $("Dual Shadow"),
+    .description = $("Changes form each turn. boosts elec\n"
+    "/dark moves by 35% with 10% recoil"),
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED) int newSpecies;
+        switch (gBattleMons[battler].species) {
+            case SPECIES_MORPEKO:
+                newSpecies = SPECIES_MORPEKO_HANGRY;
+                break;
+            case SPECIES_MORPEKO_HANGRY:
+                newSpecies = SPECIES_MORPEKO;
+                break;
+            case SPECIES_MORPEKYLL:
+                newSpecies = SPECIES_MORPEKYLL_HANGRY;
+                break;
+            case SPECIES_MORPEKYLL_HANGRY:
+                newSpecies = SPECIES_MORPEKYLL;
+                break;
+
+            default:
+                return FALSE;
+        }
+
+        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+        gBattleMons[battler].species = newSpecies;
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+        return TRUE;
+    },
+    .onRecoil = +[](ON_RECOIL) -> int {
+        CHECK(moveType == TYPE_ELECTRIC);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
+        return max(damage / 20, 1);
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ELECTRIC || moveType == TYPE_DARK) MUL(1.35);
+        },
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
+};
+
 const Ability gAbilities[] = {
     [ABILITY_NONE] = None,
     [ABILITY_STENCH] = Stench,
@@ -10651,6 +10693,7 @@ const Ability gAbilities[] = {
     [ABILITY_HEMOLYSIS] = None,
     [ABILITY_CARETAKER] = Caretaker,
     [ABILITY_POSEIDONS_DOMINION] = PoseidonsDominion,
+    [ABILITY_DUAL_SHADOW] = DualShadow,
 };
 
 #pragma GCC diagnostic pop
