@@ -106,7 +106,7 @@ ENUM_OR(InfiltrateType)
 #define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
 #define ON_COPY_MOVE int ability, int battler, int attacker, int target, int move
 #define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
-#define ON_AFTER_TYPE_EFFECTIVENESS int battler, int target, int move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
+#define ON_AFTER_TYPE_EFFECTIVENESS int battler, int ability, int target, int move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
 #define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
 
 #define GALE_WINGS_CLONE(type)                               \
@@ -570,6 +570,11 @@ static const Ability WonderGuard = {
     .name = $("Wonder Guard"),
     .description = $("Is only hit by Super-effective\n"
                      "attacks or indirect damage."),
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (*mod < UQ_4_12(2.0)) *mod = 0;
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
     .randomizerBanned = TRUE,
 };
@@ -583,6 +588,7 @@ static const Ability Levitate = {
             if (moveType == TYPE_FLYING) MUL(1.25);
         },
     .breakable = TRUE,
+    .levitate = TRUE,
 };
 
 static const Ability EffectSpore = {
@@ -733,8 +739,8 @@ static const Ability Trace = {
 
 static const Ability HugePower = {
     .name = $("Huge Power"),
-    .description = $("increases your mons attack\n"
-                    "5 billion quintillion real."),
+    .description = $("Doubles own Attack stat.\n"
+                     "Boosts raw stat, not base stat."),
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_ATK) *stat *= 2;
@@ -867,7 +873,7 @@ static const Ability Pressure = {
 };
 
 static const Ability ThickFat = {
-    .name = $("ur mom"),
+    .name = $("Thick Fat"),
     .description = $("Takes 1/2 damage from Fire-type\n"
                      "and Ice-type attacks."),
     .onDefensiveMultiplier =
@@ -1585,17 +1591,17 @@ static const Ability Filter = {
 };
 
 static const Ability SlowStart = {
-    .name = $("Slowest Start"),
-    .description = $("Lowers all stats for\n"
-                     "the first 20 turns out. 90%"),
+    .name = $("Slow Start"),
+    .description = $("Halves Attack and Speed during\n"
+                     "the first 5 turns out."),
     .onEntry = +[](ON_ENTRY) -> int {
-        gVolatileStructs[battler].slowStartTimer = 20;
+        gVolatileStructs[battler].slowStartTimer = 5;
         return SwitchInAnnounce(B_MSG_SWITCHIN_SLOWSTART);
     },
     .onStat =
         +[](ON_STAT) {
-            if (statId != STAT_ATK && statId != STAT_SPATK && statId != STAT_DEF && statId != STAT_SPDEF && statId != STAT_SPEED) return;
-            if (gVolatileStructs[battler].slowStartTimer) *stat /= 9;
+            if (statId != STAT_ATK && statId != STAT_SPEED) return;
+            if (gVolatileStructs[battler].slowStartTimer) *stat /= 2;
         },
 };
 
@@ -1936,6 +1942,10 @@ static const Ability Harvest = {
 static const Ability Telepathy = {
     .name = $("Telepathy"),
     .description = $("Can't be damaged by ally attacks."),
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (target == BATTLE_PARTNER(battler) && gBattleMoves[move].power) *mod = 0;
+        },
     .breakable = TRUE,
 };
 
@@ -2684,9 +2694,7 @@ static const Ability SurgeSurfer = {
                      "gets a 1.5x Speed boost."),
     .onStat =
         +[](ON_STAT) {
-            MGBA_PRINT_VALUES(*stat)
             if (statId == STAT_SPEED && IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat *= 1.5;
-            MGBA_PRINT_VALUES(*stat)
         },
 };
 
@@ -4025,6 +4033,7 @@ static const Ability Dragonfly = {
                      "Avoids Ground attacks."),
     .onEntry = HalfDrake.onEntry,
     .breakable = TRUE,
+    .levitate = TRUE,
 };
 
 static const Ability Dragonslayer = {
@@ -4046,6 +4055,11 @@ static const Ability Mountaineer = {
     .name = $("Mountaineer"),
     .description = $("Immune to Rock-type attacks and\n"
                      "Stealth Rock damage."),
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (moveType == TYPE_ROCK) *mod = 0;
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
@@ -4490,6 +4504,17 @@ static const Ability BoneZone = {
     .name = $("Bone Zone"),
     .description = $("Bone moves ignore immunities and\n"
                      "deal 2x on not very effective."),
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (*mod >= UQ_4_12(1.0)) return;
+            if (*mod == 0) {
+                *mod = UQ_4_12(1.0);
+                if (mod1) MulModifier(mod, mod1);
+                if (mod2) MulModifier(mod, mod2);
+                if (mod3) MulModifier(mod, mod3);
+            }
+            if (*mod < UQ_4_12(1.0)) MulModifier(mod, UQ_4_12(2.0));
+        },
 };
 
 static const Ability WeatherControl = {
@@ -4905,7 +4930,7 @@ static const Ability HardenedSheath = {
 };
 
 static const Ability ArcticFur = {
-    .name = $("Neon Wall"),
+    .name = $("Arctic Fur"),
     .description = $("Weakens incoming physical\n"
                      "and special moves by 35%."),
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.65); },
@@ -5302,6 +5327,11 @@ static const Ability GiftedMind = {
         CHECK(IS_MOVE_STATUS(move))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (moveType == TYPE_BUG || moveType == TYPE_GHOST || moveType == TYPE_DARK) *mod = 0;
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
@@ -7686,15 +7716,15 @@ static const Ability RadioJam = {
 };
 
 static const Ability Ole = {
-    .name = $("Trolled"),
-    .description = $("50% chance to evade single-\n"
+    .name = $("Olé!"),
+    .description = $("20% chance to evade single-\n"
                      "target moves."),
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
             case MOVE_TARGET_SELECTED:
             case MOVE_TARGET_USER_OR_SELECTED:
             case MOVE_TARGET_RANDOM:
-                *accuracy *= .5;
+                *accuracy *= .8;
                 return ACCURACY_MULTIPLICATIVE;
 
             default:
@@ -7776,6 +7806,12 @@ static const Ability DesertSpirit = {
     .description = $("Summons sand on entry. Ground\n"
                      "moves hit airborne in sand."),
     .onEntry = SandStream.onEntry,
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (*mod == 0 && !IsBattlerGrounded(target) && moveType == TYPE_GROUND && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) {
+                *mod = UQ_4_12(1.0);
+            }
+        },
 };
 
 static const Ability Contempt = {
@@ -7794,6 +7830,7 @@ static const Ability Aerialist = {
             Flock.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
     .breakable = TRUE,
+    .levitate = TRUE,
 };
 
 static const Ability TeraShell = {
@@ -7802,7 +7839,7 @@ static const Ability TeraShell = {
                      "while at full HP."),
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
-            if (*mod > UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
+            if (*mod >= UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
         },
     .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
@@ -8736,6 +8773,7 @@ static const Ability HugeWings = {
             Levitate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
     .breakable = TRUE,
+    .levitate = TRUE,
 };
 
 static const Ability SwordOfDamnation = {
@@ -9091,6 +9129,7 @@ static const Ability Hover = {
                      "Avoids Ground attacks."),
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_PSYCHIC); },
     .breakable = TRUE,
+    .levitate = TRUE,
 };
 
 static const Ability Depravity = {
@@ -9375,6 +9414,8 @@ static const Ability TeraformZero = {
         BattleScriptPushCursorAndCallback(BattleScript_TeraformZero);
         return TRUE;
     },
+    .onAfterTypeEffectiveness = TeraShell.onAfterTypeEffectiveness,
+    .onAfterTypeEffectivenessFor = TeraShell.onAfterTypeEffectivenessFor,
     .breakable = TRUE,
 };
 
@@ -9637,11 +9678,7 @@ static const Ability Qigong = {
 static const Ability ConjurerOfDeceit = {
     .name = $("Conjurer Of Deceit"),
     .description = $("Magic Guard + Magic Bounce"),
-    .onImmune = +[](ON_IMMUNE) -> int {
-        CHECK(battler != attacker) CHECK(IS_MOVE_STATUS(move));
-        *immunityScript = BattleScript_SoundproofProtected;
-        return TRUE;
-    },
+    .breakable = TRUE,
     .magicGuard = TRUE,
     .magicBounce = TRUE,
 };
@@ -9754,7 +9791,12 @@ static const Ability Soothsayer = {
 
 static const Ability CorruptedMind = {
     .name = $("Corrupted Mind"),
-    .description = $("Placeholder"),
+    .description = $("Psychic-type moves deal\n"
+                     "Super-effective damage."),
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (*mod < UQ_4_12(2.0) && moveType == TYPE_PSYCHIC) *mod = UQ_4_12(2.0);
+        },
     .randomizerBanned = TRUE,
 };
 
@@ -9783,7 +9825,12 @@ static const Ability FlameCoat = {
 
 static const Ability UnownPower = {
     .name = $("Unown Power"),
-    .description = $("Placeholder"),
+    .description = $("Hidden and Secret Power deal\n"
+                     "Super-effective damage."),
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (*mod < UQ_4_12(2.0) && (move == MOVE_HIDDEN_POWER || move == MOVE_SECRET_POWER)) *mod = UQ_4_12(2.0);
+        },
     .randomizerBanned = TRUE,
 };
 
@@ -9812,24 +9859,24 @@ static const Ability BlightScale = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability iamsteve = {
-    .name = $("i am steve"),
-    .description = $("guys why is steve jack black\n"
-                    "what were they thinking bro"),
-    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_NO_RETREAT, 0); },
-};
-
-static const Ability AveragePower = {
-    .name = $("average power"),
-    .description = $("the best ability ever made..."),
-};
-
 static const Ability Gunman = {
     .name = $("Gunman"),
     .description = $("Mega Launcher + Status moves are\n"
                      "Mega Launcher moves."),
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
     .megaLauncherBoost = TRUE,
+};
+
+static const Ability HuntersMark = {
+    .name = $("Hunter's Mark"),
+    .description = $("Attacks with 40BP Spirit Shackle\n"
+                     "when foes try to switch."),
+};
+
+static const Ability Hemolysis = {
+    .name = $("Hemolysis"),
+    .description = $("Poisoned foes lose all stat buffs\n"
+                     "and can't heal."),
 };
 
 static const Ability Caretaker = {
@@ -9854,12 +9901,6 @@ static const Ability PoseidonsDominion = {
     .name = $("Poseidon's Dominion"),
     .description = $("Whirlpool on entry."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_WHIRLPOOL, 0); },
-};
-
-static const Ability Hemolysis = {
-    .name = $("Hemolysis"),
-    .description = $("Poisoned foes lose all stat buffs\n"
-                     "and can't heal."),
 };
 
 static const Ability DualShadow = {
@@ -9902,6 +9943,18 @@ static const Ability DualShadow = {
         },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+};
+
+static const Ability iamsteve = {
+    .name = $("i am steve"),
+    .description = $("guys why is steve jack black\n"
+                    "what were they thinking bro"),
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_NO_RETREAT, 0); },
+};
+
+static const Ability AveragePower = {
+    .name = $("average power"),
+    .description = $("the best ability ever made..."),
 };
 
 const Ability gAbilities[] = {
@@ -10685,15 +10738,15 @@ const Ability gAbilities[] = {
     [ABILITY_SUPER_SCOPE] = SuperScope,
     [ABILITY_VENOM_CROWN] = VenomCrown,
     [ABILITY_BLIGHT_SCALE] = BlightScale,
-    [ABILITY_I_AM_STEVE] = iamsteve,
-    [ABILITY_AVERAGE_POWER] = AveragePower,
     [ABILITY_GUNMAN] = Gunman,
     [ABILITY_HUNTERS_MARK] = HuntersMark,
     [ABILITY_HEMOLYSIS] = Hemolysis,
-    [ABILITY_HEMOLYSIS] = None,
     [ABILITY_CARETAKER] = Caretaker,
     [ABILITY_POSEIDONS_DOMINION] = PoseidonsDominion,
     [ABILITY_DUAL_SHADOW] = DualShadow,
+    [ABILITY_I_AM_STEVE] = iamsteve,
+    [ABILITY_AVERAGE_POWER] = AveragePower,
+    
 };
 
 #pragma GCC diagnostic pop
