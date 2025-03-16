@@ -6700,16 +6700,7 @@ static int CheckLevitatingEffects(u8 battlerId) {
         return TRUE;
     else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
         return TRUE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_LEVITATE))
-        return TRUE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_HUGE_WINGS))
-        return TRUE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_AERIALIST))
-        return TRUE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_DRAGONFLY))  // Dragonfly
-        return TRUE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_HOVER))
-        return TRUE;
+    RETURN_ABILITY_IF_FLAG(battlerId, TRUE, levitate)
 
     return FALSE;
 }
@@ -7078,13 +7069,13 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef) {
         case EFFECT_MISC_HIT:
             switch (gBattleMoves[move].argument) {
                 case MISC_EFFECT_FAINTED_MON_BOOST:
-                    basePower += 50 * gFaintedMonCount[GetBattlerSide(battlerAtk)];
+                    basePower += 10 * gFaintedMonCount[GetBattlerSide(battlerAtk)];
                     break;
                 case MISC_EFFECT_ELECTRIC_TERRAIN_BOOST:
                     if (IsBattlerTerrainAffected(battlerAtk, STATUS_FIELD_ELECTRIC_TERRAIN)) basePower = basePower * 3 / 2;
                     break;
                 case MISC_EFFECT_TOOK_DAMAGE_BOOST:
-                    basePower += 50 * min(3, gBattleStruct->timesDamaged[gBattlerPartyIndexes[battlerAtk]][GetBattlerSide(battlerAtk)]);
+                    basePower += 20 * min(3, gBattleStruct->timesDamaged[gBattlerPartyIndexes[battlerAtk]][GetBattlerSide(battlerAtk)]);
                     break;
                 case MISC_EFFECT_DOUBLE_DAMAGE:
                     basePower *= 1 + ((Random() % 100) < gBattleMoves[move].secondaryEffectChance);
@@ -8082,23 +8073,9 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     }
 
     // Thousand Arrows ignores type modifiers for flying mons
-    if (!IsBattlerGrounded(battlerDef) &&
-        (gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING ||
-         (BattlerHasAbility(battlerAtk, ABILITY_DESERT_SPIRIT, TRUE) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))) &&
-        moveType == TYPE_GROUND && modifier == UQ_4_12(0)) {
+    if (!IsBattlerGrounded(battlerDef) && gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING && moveType == TYPE_GROUND &&
+        modifier == UQ_4_12(0)) {
         modifier = UQ_4_12(1.0);
-    }
-
-    if (modifier > UQ_4_12(0.5) && gBattleMons[battlerDef].hp == gBattleMons[battlerDef].maxHP &&
-        (BATTLER_HAS_ABILITY(battlerDef, ABILITY_TERA_SHELL) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_TERAFORM_ZERO)))
-        modifier = UQ_4_12(0.5);
-
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_WONDER_GUARD) && modifier <= UQ_4_12(1.0) && gBattleMoves[move].power) {
-        modifier = UQ_4_12(0.0);
-        immunityAbility = ABILITY_WONDER_GUARD;
-    } else if (BattlerHasAbility(battlerAtk, ABILITY_TELEPATHY, FALSE) && battlerDef == BATTLE_PARTNER(battlerAtk) && gBattleMoves[move].power) {
-        modifier = UQ_4_12(0.0);
-        immunityAbility = ABILITY_TELEPATHY;
     }
 
     if (recordAbilities && immunityAbility && !modifier) {
