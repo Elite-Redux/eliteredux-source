@@ -120,7 +120,7 @@ static const u8 sAbilityBadDreamsDescription[] = _("Sleeping Pokémon lose 1/4 o
 static const u8 sAbilityPickpocketDescription[] = _("Steals the foe's held item on\ncontact.");
 static const u8 sAbilitySheerForceDescription[] = _("Exchanges added effects on its\nmoves for 1.3x more power.");
 static const u8 sAbilityContraryDescription[] = _("Stat raises turn into stat drops\nfor this Pokémon and vice versa.");
-static const u8 sAbilityUnnerveDescription[] = _("Foes can't eat Berries as long\nas this Pokémon is in battle.");
+static const u8 sAbilityUnnerveDescription[] = _("Foes can't use consumable items.");
 static const u8 sAbilityDefiantDescription[] = _("Raises Attack by two stages if\nstats are lowered by an enemy.");
 static const u8 sAbilityDefeatistDescription[] = _("Halves Atk and Sp. Atk stats if\nuser is below 1/3 of max HP.");
 static const u8 sAbilityCursedBodyDescription[] = _("30% chance to disable moves\nif enemy makes contact.");
@@ -752,6 +752,7 @@ static const u8 sAbilityHuntersMarkDescription[] = _("Attacks switching foes wit
 static const u8 sAbilityHemolysisDescription[] = _("Poisoned foes can't heal and lose all stat buffs.");
 static const u8 sAbilityCaretakerDescription[] = _("Healer + Friend Guard.");
 static const u8 sAbilityPoseidonsDominionDescription[] = _("Whirlpool on entry +\nSea Guardian.");
+static const u8 sAbilityDualShadowDescription[] = _("Changes form each turn. boosts\nelec/dark moves by 35% with 10% recoil.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1540,6 +1541,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_HEMOLYSIS] = _("Hemolysis"),
     [ABILITY_CARETAKER] = _("Caretaker"),
     [ABILITY_POSEIDONS_DOMINION] = _("Poseidon's Dominion"),
+    [ABILITY_DUAL_SHADOW] = _("Dual Shadow"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2329,4 +2331,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_HEMOLYSIS] = sAbilityHemolysisDescription,
     [ABILITY_CARETAKER] = sAbilityCaretakerDescription,
     [ABILITY_POSEIDONS_DOMINION] = sAbilityPoseidonsDominionDescription,
+    [ABILITY_DUAL_SHADOW] = sAbilityDualShadowDescription,
 };
