@@ -12018,7 +12018,6 @@ static const struct LevelUpMove sUxieLevelUpLearnset[] = {
     LEVEL_UP_MOVE(46, MOVE_MIND_READER),
     LEVEL_UP_MOVE(46, MOVE_MYSTICAL_POWER),
     LEVEL_UP_MOVE(51, MOVE_STAR_CRASH),
-    LEVEL_UP_MOVE(51, MOVE_MIND_BLOWN),
     LEVEL_UP_END
 };
 
