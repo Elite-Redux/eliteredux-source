@@ -781,31 +781,33 @@
 #define ABILITY_FARADAY_CAGE 759 // Shell Armor + 50BP Thunder Cage when hit by contact.
 #define ABILITY_ACIDIC_SLIME 760 // Corrosion + Poison STAB.
 #define ABILITY_ROSE_GARDEN 761 // Sets 2 layers of Toxic Spikes on entry.
-#define ABILITY_QIGONG 762 // Can't miss. Fighting Spirit + Rampage.
-#define ABILITY_CONJOURER_OF_DECEIT 763 // magic guard + magic bounce
-#define ABILITY_DEEP_FREEZE 764 // boosts water and ice by 25% and halves fire damage taken
-#define ABILITY_SOUL_DEVOURER 765 // soul eater + phantom pain
-#define ABILITY_CHAMPIONS_ENTRANCE 766 // intimidate + violent rush
-#define ABILITY_PRESTO 767 // sound moves get +1 priority at full hp
-#define ABILITY_SAMBA 768 // striker + dancer
-#define ABILITY_JUNSHI_SANDA 769 // every move is effected by combat specialist, effectively every move gets a 30% boost from that ability
-#define ABILITY_GLADIATOR 770 // fighting type forest rage
-#define ABILITY_FORSAKEN_HEART 771 // physical attack soul heart
-#define ABILITY_RELENTLESS 772 // exploit weakness + merciless
-#define ABILITY_SOOTHSAYER 773 // all super effective moves against this pokemon become not very effective for 5 turns (once per battle prob best for this)
-#define ABILITY_CORRUPTED_MIND 774 // psychic moves used by this pokemon always hit super effectively
-#define ABILITY_FLAME_COAT 775 // toxic spill but for fire types + flash fire
-#define ABILITY_UNOWN_POWER 776 // mystic power + hidden power always hits super effectively
-#define ABILITY_SUPER_SCOPE 777 // Mega Launcher + Artillery
-#define ABILITY_VENOM_CROWN 778 // Mighty Horn + Poison Point
-#define ABILITY_BLIGHT_SCALE 779 // Multiscale + Poison Point
-#define ABILITY_I_AM_STEVE 780 // Multiscale + Poison Point
-#define ABILITY_AVERAGE_POWER 781 // Multiscale + Poison Point
-#define ABILITY_GUNMAN 782 // Mega Launcher + All moves are Mega Launcher boosted.
-#define ABILITY_HUNTERS_MARK 783 // Attacks switching foes with 40BP Spirit Shackle.
-#define ABILITY_HEMOLYSIS 784 // Poisoned foes can't heal and lose all stat buffs.
+#define ABILITY_QIGONG 762 // Always hits. Fighting Spirit + Rampage.
+#define ABILITY_CONJOURER_OF_DECEIT 763 // Magic Guard + Magic Bounce.
+#define ABILITY_DEEP_FREEZE 764 // Boosts water and ice by 25% and halves fire damage taken
+#define ABILITY_SOUL_DEVOURER 765 // Phantom Pain + Soul Eater.
+#define ABILITY_CHAMPIONS_ENTRANCE 766 // Intimidate + Violent Rush.
+#define ABILITY_PRESTO 767 // At full HP, gives +1 priority to this Pokémon's Sound-based moves.
+#define ABILITY_SAMBA 768 // Striker + Dancer.
+#define ABILITY_JUNSHI_SANDA 769 // Every move gets a 30% boost from Combat Specialist.
+#define ABILITY_GLADIATOR 770 // Boosts Fighting-type moves by 1.3x, or 1.8x when below 1/3 HP.
+#define ABILITY_FORSAKEN_HEART 771 // KOs dealt anywhere on the field raise Attack by one stage.
+#define ABILITY_RELENTLESS 772 // Exploit Weakness + Merciless.
+#define ABILITY_SOOTHSAYER 773 // All hits will be not very effective for 5 turns against this Pokemon.
+#define ABILITY_CORRUPTED_MIND 774 // Psychic moves used by this Pokemon always hit super-effectively.
+#define ABILITY_FLAME_COAT 775 // Non-Fire-types take 1/8 dmg every turn when on field + Flash Fire.
+#define ABILITY_UNOWN_POWER 776 // Mystic Power + Hidden Power is always super-effective.
+#define ABILITY_SUPER_SCOPE 777 // Mega Launcher + Artillery.
+#define ABILITY_VENOM_CROWN 778 // Mighty Horn + Poison Point.
+#define ABILITY_BLIGHT_SCALE 779 // Multiscale + Poison Point.
+#define ABILITY_GUNMAN 780 // Mega Launcher + All moves are Mega Launcher boosted.
+#define ABILITY_HUNTERS_MARK 781 // Attacks switching foes with 40BP Spirit Shackle.
+#define ABILITY_HEMOLYSIS 782 // Poisoned foes can't heal and lose all stat buffs.
+#define ABILITY_CARETAKER 783 // Healer + Friend Guard.
+#define ABILITY_POSEIDONS_DOMINION 784 // Whirlpool on entry + Sea Guardian
+#define ABILITY_I_AM_STEVE 785 // Multiscale + Poison Point
+#define ABILITY_AVERAGE_POWER 786 // Multiscale + Poison Point
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_HEMOLYSIS + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_POSEIDONS_DOMINION + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

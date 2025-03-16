@@ -3940,6 +3940,10 @@ static const u8 sMoveTwoLineDescription_MoveHalfFull[] = _(
 static const u8 sMoveTwoLineDescription_MoveZekromKick[] = _(
     "stunfisk be damned.");
 
+static const u8 sMoveTwoLineDescription_MoveBlueMoon[] = _(
+    "The user unleashes the spirit from a full blue moon\n"
+    "This move can't be used twice in a row.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4945,6 +4949,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_STUNLOCK - 1] = sMoveTwoLineDescription_MoveStunlock,
     [MOVE_HALF_FULL - 1] = sMoveTwoLineDescription_MoveHalfFull,
     [MOVE_ZEKROM_KICK - 1] = sMoveTwoLineDescription_MoveZekromKick,
+    [MOVE_BLUE_MOON - 1] = sMoveTwoLineDescription_MoveBlueMoon,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5950,6 +5955,7 @@ static const u8 sMoveFourLineDescription_MoveJudgementBone[] = _("Badly poisons 
 static const u8 sMoveFourLineDescription_MoveStunlock[] = _("almost always\nflinches.");
 static const u8 sMoveFourLineDescription_MoveHalfFull[] = _("sets stealth rock\non hit.\nthis is\ninsane.");
 static const u8 sMoveFourLineDescription_MoveZekromKick[] = _("Uses dragon/electric\nfor damage calc.\nstunfisk be damned.");
+static const u8 sMoveFourLineDescription_MoveBlueMoon[] = _("The user's spirit surges\nfrom a azure full moon.\nCannot be used twice\nconsecutively.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6955,4 +6961,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_STUNLOCK - 1] = sMoveFourLineDescription_MoveStunlock,
     [MOVE_HALF_FULL - 1] = sMoveFourLineDescription_MoveHalfFull,
     [MOVE_ZEKROM_KICK - 1] = sMoveFourLineDescription_MoveZekromKick,
+    [MOVE_BLUE_MOON - 1] = sMoveFourLineDescription_MoveBlueMoon,
 };

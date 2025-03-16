@@ -686,7 +686,7 @@ static const u8 sAbilityAquaticDwellerDescription[] = _("Boosts the power of Wat
 static const u8 sAbilityApplePieDescription[] = _("Self Sufficient + Ripen.");
 static const u8 sAbilityHoverDescription[] = _("Adds Psychic type to itself.\nAvoids Ground attacks.");
 static const u8 sAbilityDepravityDescription[] = _("Merciless + Overcharge.");
-static const u8 sAbilityWildfireDescription[] = _("Attacks with 20BP Fire Spin\nwhen hit by a contact move.");
+static const u8 sAbilityWildfireDescription[] = _("Attacks with Fire Spin\non entry.");
 static const u8 sAbilityJumpScareDescription[] = _("Attacks with Astonish on first\nswitch-in.");
 static const u8 sAbilityTarTossDescription[] = _("Uses Tar Shot on switch-in.");
 static const u8 sAbilityStunShockDescription[] = _("Attacks have a 60% chance to\nParalyze or Poison.");
@@ -752,6 +752,8 @@ static const u8 sAbilityHuntersMarkDescription[] = _("Attacks switching foes wit
 static const u8 sAbilityHemolysisDescription[] = _("Poisoned foes can't heal and lose all stat buffs.");
 static const u8 sAbilityiamsteveDescription[] = _("guys why is steve jack black\nwhat were they thinking bro");
 static const u8 sAbilityAveragePowerDescription[] = _("the best ability ever made...");
+static const u8 sAbilityCaretakerDescription[] = _("Healer + Friend Guard.");
+static const u8 sAbilityPoseidonsDominionDescription[] = _("Whirlpool on entry +\nSea Guardian.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1540,6 +1542,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_GUNMAN] = _("Gunman"),
     [ABILITY_HUNTERS_MARK] = _("Hunter's Mark"),
     [ABILITY_HEMOLYSIS] = _("Hemolysis"),
+    [ABILITY_CARETAKER] = _("Caretaker"),
+    [ABILITY_POSEIDONS_DOMINION] = _("Poseidon's Dominion"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1691,7 +1695,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_REGENERATOR] = sAbilityRegeneratorDescription,
     [ABILITY_BIG_PECKS] = sAbilityBigPecksDescription,
     [ABILITY_SAND_RUSH] = sAbilitySandRushDescription,
-    [ABILITY_WONDER_SKIN] = sAbilityWonderSkinDescription,
+    [ABILITY_WONDER_SKIN] = sAbilityFortKnoxDescription,
     [ABILITY_ANALYTIC] = sAbilityAnalyticDescription,
     [ABILITY_ILLUSION] = sAbilityIllusionDescription,
     [ABILITY_IMPOSTER] = sAbilityImposterDescription,
@@ -2329,4 +2333,6 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_GUNMAN] = sAbilityGunmanDescription,
     [ABILITY_HUNTERS_MARK] = sAbilityHuntersMarkDescription,
     [ABILITY_HEMOLYSIS] = sAbilityHemolysisDescription,
+    [ABILITY_CARETAKER] = sAbilityCaretakerDescription,
+    [ABILITY_POSEIDONS_DOMINION] = sAbilityPoseidonsDominionDescription,
 };

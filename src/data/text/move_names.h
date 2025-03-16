@@ -2012,4 +2012,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_STUNLOCK] = _("stunlock"),
     [MOVE_HALF_FULL] = _("Half Full"),
     [MOVE_ZEKROM_KICK] = _("ZEKROM KICK"),
+    [MOVE_BLUE_MOON] = _("Blue Moon"),
 };

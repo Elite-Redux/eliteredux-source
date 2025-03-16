@@ -2024,15 +2024,9 @@ static const Ability SandRush = {
 
 static const Ability WonderSkin = {
     .name = $("Wonder Skin"),
-    .description = $("Opposing status moves have\n"
-                     "their accuracy halved."),
-    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-        CHECK(IS_MOVE_STATUS(move));
-        *accuracy /= 2;
-        return ACCURACY_MULTIPLICATIVE;
-    },
-    .onAccuracyFor = APPLY_ON_TARGET,
-    .breakable = TRUE,
+    .description = $("Blocks most damage boosting\n"
+                     "and multihit abilities."),
+    .fortKnox = TRUE,
 };
 
 static const Ability Analytic = {
@@ -6305,8 +6299,7 @@ static const Ability PrimAndProper = {
     .name = $("Prim and Proper"),
     .description = $("Wonder Skin + Cute Charm."),
     .onDefender = CuteCharm.onDefender,
-    .onAccuracy = WonderSkin.onAccuracy,
-    .onAccuracyFor = APPLY_ON_TARGET,
+    .fortKnox = TRUE,
 };
 
 static const Ability SuperStrain = {
@@ -9085,15 +9078,9 @@ static const Ability Depravity = {
 
 static const Ability Wildfire = {
     .name = $("Wildfire"),
-    .description = $("Attacks with 20BP Fire Spin\n"
-                     "when hit by a contact move."),
-    .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
-        CHECK(IsMoveMakingContact(move, attacker))
-
-        UseOutOfTurnAttack(battler, attacker, ability, MOVE_FIRE_SPIN, 20);
-        return FALSE;
-    },
+    .description = $("Attacks with Fire Spin\n"
+                     "on entry."),
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_FIRE_SPIN, 0); },
 };
 
 static const Ability JumpScare = {
@@ -9798,6 +9785,30 @@ static const Ability Gunman = {
                      "Mega Launcher moves."),
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
     .megaLauncherBoost = TRUE,
+};
+
+static const Ability Caretaker = {
+    .name = $("Caretaker"),
+    .description = $("Healer + Friend Guard."),
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(Random() % 100 < 30)
+
+        if (IsBattlerAlive(BATTLE_PARTNER(battler)) && gBattleMons[BATTLE_PARTNER(battler)].status1 & STATUS1_ANY) {
+            gEffectBattler = battler;
+            gBattleScripting.battler = BATTLE_PARTNER(battler);
+            BattleScriptPushCursorAndCallback(BattleScript_HealerActivates);
+            return TRUE;
+        } else if (IsBattlerAlive(battler) && gBattleMons[battler].status1 & STATUS1_ANY) {
+            if (AbilityHealMonStatus(battler, ability)) return TRUE;
+        }
+        return FALSE;
+    },
+};
+
+static const Ability PoseidonsDominion = {
+    .name = $("Poseidon's Dominion"),
+    .description = $("Whirlpool on entry."),
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_WHIRLPOOL, 0); },
 };
 
 const Ability gAbilities[] = {
@@ -10586,6 +10597,8 @@ const Ability gAbilities[] = {
     [ABILITY_GUNMAN] = Gunman,
     [ABILITY_HUNTERS_MARK] = None,
     [ABILITY_HEMOLYSIS] = None,
+    [ABILITY_CARETAKER] = Caretaker,
+    [ABILITY_POSEIDONS_DOMINION] = PoseidonsDominion,
 };
 
 #pragma GCC diagnostic pop
