@@ -7358,12 +7358,12 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_UNOWN_T] =
     {
         .size = 0x34,
-        .y_offset = 18,
+        .y_offset = 7,
     },
     [SPECIES_UNOWN_U] =
     {
         .size = 0x44,
-        .y_offset = 18,
+        .y_offset = 0,
     },
     [SPECIES_UNOWN_V] =
     {

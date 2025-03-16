@@ -136,12 +136,14 @@ typedef struct Ability {
     const AbilityOnCrit onCrit;
     const AbilityOnTypeEffectiveness onTypeEffectiveness;
     const AbilityOnCopyMove onCopyMove;
+    const AbilityOnAfterTypeEffectiveness onAfterTypeEffectiveness;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;
     AbilityApplyOnWithTarget onAccuracyFor:5;
     AbilityApplyOn onStatFor:3;
     AbilityApplyOnWithTarget onCritFor:5;
+    AbilityApplyOnWithTarget onAfterTypeEffectivenessFor:5;
     u16 redirectType:5;
     u16 ruinStat:3;
     u16 noDamageHits:2;
@@ -163,6 +165,7 @@ typedef struct Ability {
     u16 colorChange:1;
     u16 adaptability:1;
     u16 magicBounce:1;
+    u16 levitate:1;
     u16 megaLauncherBoost:1;
     u16 unnerve:1;
 } Ability;
