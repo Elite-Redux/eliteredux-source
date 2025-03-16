@@ -106,7 +106,7 @@ ENUM_OR(InfiltrateType)
 #define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
 #define ON_COPY_MOVE int ability, int battler, int attacker, int target, int move
 #define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
-#define ON_AFTER_TYPE_EFFECTIVENESS int battler, int target, int move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
+#define ON_AFTER_TYPE_EFFECTIVENESS int battler, int ability, int target, int move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
 #define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
 
 #define GALE_WINGS_CLONE(type)                               \
@@ -823,7 +823,7 @@ static const Ability RainDish = {
                      "if rain is active."),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
@@ -1637,7 +1637,7 @@ static const Ability IceBody = {
                      "in hail."),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
 
@@ -1778,9 +1778,9 @@ static const Ability Contrary = {
 
 static const Ability Unnerve = {
     .name = $("Unnerve"),
-    .description = $("Foes can't eat Berries as long\n"
-                     "as this Pokémon is in battle."),
+    .description = $("Foes can't use consumable items."),
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE); },
+    .unnerve = TRUE,
 };
 
 static const Ability Defiant = {
@@ -3529,6 +3529,7 @@ static const Ability AsOneIceRider = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    .unnerve = TRUE,
 };
 
 static const Ability AsOneShadowRider = {
@@ -3544,6 +3545,7 @@ static const Ability AsOneShadowRider = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    .unnerve = TRUE,
 };
 
 static const Ability Chloroplast = {
@@ -3711,12 +3713,23 @@ static const Ability ChristmasSpirit = {
 
 static const Ability ExploitWeakness = {
     .name = $("Exploit Weakness"),
-    .description = $("Moves are 1.25x stronger on foes\n"
-                     "affected by a status condition."),
+    .description = $("Deals 1.25x and targets lowest\n"
+                     "defense vs statused foes."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (HasAnyStatusOrAbility(target)) MUL(1.25);
         },
+    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
+        CHECK(HasAnyStatusOrAbility(target))
+        u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+        u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+        if (def < spDef)
+            return STAT_DEF;
+        else if (spDef < def)
+            return STAT_SPDEF;
+        else
+            return 0;
+    },
 };
 
 static const Ability GroundShock = {
@@ -3972,7 +3985,7 @@ static const Ability SelfSufficient = {
                      "end of each turn."),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
 
         gBattleMoveDamage = gBattleMons[battler].maxHP / 16;
@@ -4205,7 +4218,9 @@ static const Ability SoulEater = {
     .description = $("Dealing a KO heals 1/4 of this\n"
                      "Pokémon's max HP."),
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        CHECK_NOT(BATTLER_MAX_HP(battler)) CHECK_NOT(BATTLER_HEALING_BLOCKED(battler)) BattleScriptCall(BattleScript_HandleSoulEaterEffect);
+        CHECK_NOT(BATTLER_MAX_HP(battler));
+        CHECK(CanBattlerHeal(battler));
+        BattleScriptCall(BattleScript_HandleSoulEaterEffect);
         return TRUE;
     },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
@@ -4233,7 +4248,7 @@ static const Ability SweetDreams = {
                      "if asleep. Immune to Bad Dreams."),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
 
         gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
@@ -5195,7 +5210,7 @@ static const Ability ToxicSpill = {
 
             if (BATTLER_HAS_ABILITY(target, ABILITY_POISON_HEAL)) {
                 FILTER_NOT(BATTLER_MAX_HP(target))
-                FILTER_NOT(BATTLER_HEALING_BLOCKED(target))
+                FILTER(CanBattlerHeal(target))
                 gStackBattler1 = target;
                 BattleScriptExecute(BattleScript_ToxicWasteHeal);
                 any = TRUE;
@@ -5327,7 +5342,7 @@ static const Ability HydroCircuit = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(moveType == TYPE_WATER)
 
         gBattleMoveDamage = -gHpDealt / 4;
@@ -5543,7 +5558,7 @@ static const Ability JawsOfCarnage = {
                      "when defeating it."),
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         if (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST)
             BattleScriptCall(BattleScript_HandleJawsOfCarnageEffect);
         else
@@ -5639,7 +5654,7 @@ static const Ability AngelsWrath = {
             case MOVE_BUG_BITE: {
                 CHECK(ShouldApplyOnHitAffect(battler))
                 CHECK_NOT(BATTLER_MAX_HP(battler))
-                CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+                CHECK(CanBattlerHeal(battler))
 
                 gBattleMoveDamage = -gHpDealt;
                 if (!gBattleMoveDamage) gBattleMoveDamage = -1;
@@ -6229,6 +6244,7 @@ static const Ability Generator = {
         SetSingleUseAbilityCounter(battler, ability, FALSE);
         return FALSE;
     },
+    .persistent = TRUE,
 };
 
 static const Ability MoonSpirit = {
@@ -6578,7 +6594,7 @@ static const Ability PureLove = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gBattleMons[target].status2 & STATUS2_INFATUATION)
 
         gBattleMoveDamage = -gHpDealt / 4;
@@ -6809,6 +6825,7 @@ static const Ability CrownedKing = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    .unnerve = TRUE,
 };
 
 static const Ability SnapTrapWhenHit = {
@@ -7625,7 +7642,7 @@ static const Ability CelestialBlessing = {
                      "turn under Misty Terrain."),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
 
@@ -7822,7 +7839,7 @@ static const Ability TeraShell = {
                      "while at full HP."),
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
-            if (*mod > UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
+            if (*mod >= UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
         },
     .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
@@ -8359,7 +8376,7 @@ static const Ability PeacefulRest = {
                      "in fog."),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
@@ -8737,7 +8754,7 @@ static const Ability VitalityStrike = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(IsIronFistBoosted(battler, move))
 
         gBattleMoveDamage = -gHpDealt / 10;
@@ -9137,6 +9154,7 @@ static const Ability JumpScare = {
         CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
         return UseEntryMove(battler, ability, MOVE_ASTONISH, 0);
     },
+    .persistent = TRUE,
 };
 
 static const Ability TarToss = {
@@ -9482,7 +9500,7 @@ static const Ability EnergySiphon = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
 
         gBattleMoveDamage = -gHpDealt / 4;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
@@ -9742,13 +9760,33 @@ static const Ability Relentless = {
     .name = $("Relentless"),
     .description = $("Exploit Weakness + Merciless"),
     .onOffensiveMultiplier = ExploitWeakness.onOffensiveMultiplier,
+    .onChooseDefensiveStat = ExploitWeakness.onChooseDefensiveStat,
     .onCrit = Merciless.onCrit,
 };
 
 static const Ability Soothsayer = {
     .name = $("Soothsayer"),
-    .description = $("Placeholder"),
-    .randomizerBanned = TRUE,
+    .description = $("Resists all attacks for three\n"
+                     "turns on first entry."),
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(!GetSingleUseAbilityCounter(battler, ability))
+        SetSingleUseAbilityCounter(battler, ability, TRUE);
+        SetAbilityState(battler, ability, 3);
+        return SwitchInAnnounce(B_MSG_SWITCHIN_SOOTHSAYER);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        int counter = GetAbilityState(battler, ability);
+        if (counter) SetAbilityState(battler, ability, counter - 1);
+        return FALSE;
+    },
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (!GetAbilityState(battler, ability)) return;
+            if (*mod >= UQ_4_12(1.0)) *mod = UQ_4_12(0.5);
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
+    .persistent = TRUE,
 };
 
 static const Ability CorruptedMind = {
@@ -9827,6 +9865,18 @@ static const Ability Gunman = {
                      "Mega Launcher moves."),
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
     .megaLauncherBoost = TRUE,
+};
+
+static const Ability HuntersMark = {
+    .name = $("Hunter's Mark"),
+    .description = $("Attacks with 40BP Spirit Shackle\n"
+                     "when foes try to switch."),
+};
+
+static const Ability Hemolysis = {
+    .name = $("Hemolysis"),
+    .description = $("Poisoned foes lose all stat buffs\n"
+                     "and can't heal."),
 };
 
 static const Ability Caretaker = {
@@ -10635,8 +10685,8 @@ const Ability gAbilities[] = {
     [ABILITY_VENOM_CROWN] = VenomCrown,
     [ABILITY_BLIGHT_SCALE] = BlightScale,
     [ABILITY_GUNMAN] = Gunman,
-    [ABILITY_HUNTERS_MARK] = None,
-    [ABILITY_HEMOLYSIS] = None,
+    [ABILITY_HUNTERS_MARK] = HuntersMark,
+    [ABILITY_HEMOLYSIS] = Hemolysis,
     [ABILITY_CARETAKER] = Caretaker,
     [ABILITY_POSEIDONS_DOMINION] = PoseidonsDominion,
 };

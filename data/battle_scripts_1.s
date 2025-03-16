@@ -8060,6 +8060,7 @@ BattleScript_RoarSuccessRet_Ret:
 
 BattleScript_WeaknessPolicy::
 	copybyte sBATTLER, gBattlerTarget
+	jumpifconsumableblocked BS_TARGET, BattleScript_Return
 	jumpifstat BS_TARGET, CMP_LESS_THAN, STAT_ATK, MAX_STAT_STAGE, BattleScript_WeaknessPolicyAtk
 	jumpifstat BS_TARGET, CMP_EQUAL, STAT_SPATK, MAX_STAT_STAGE, BattleScript_WeaknessPolicyEnd
 BattleScript_WeaknessPolicyAtk:
@@ -8085,6 +8086,7 @@ BattleScript_WeaknessPolicyEnd:
 
 BattleScript_TargetItemStatRaise::
 	copybyte sBATTLER, gBattlerTarget
+	jumpifconsumableblocked BS_TARGET, BattleScript_Return
 	statbuffchange 0, BattleScript_TargetItemStatRaiseRemoveItemRet
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_TargetItemStatRaiseRemoveItemRet
 	playanimation BS_TARGET, B_ANIM_HELD_ITEM_EFFECT, NULL
@@ -8100,6 +8102,7 @@ BattleScript_TargetItemStatRaiseRemoveItemRet:
 	
 BattleScript_AttackerItemStatRaise::
 	copybyte sBATTLER, gBattlerAttacker
+	jumpifconsumableblocked BS_ATTACKER, BattleScript_Return
 	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_AttackerItemStatRaiseRet
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x2, BattleScript_AttackerItemStatRaiseRet
 	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT, NULL
@@ -10310,6 +10313,7 @@ BattleScript_DoCastformChange::
 	return
 	
 BattleScript_TryAdrenalineOrb:
+	jumpifconsumableblocked BS_TARGET, BattleScript_Return
 	jumpifnoholdeffect BS_TARGET, HOLD_EFFECT_ADRENALINE_ORB, BattleScript_TryAdrenalineOrbRet
 	jumpifstat BS_TARGET, CMP_EQUAL, STAT_SPEED, 12, BattleScript_TryAdrenalineOrbRet
 	setstatchanger STAT_SPEED, 1, FALSE
@@ -11304,6 +11308,7 @@ BattleScript_WhiteHerbRet::
 	return
 	
 BattleScript_ItemHealHP_RemoveItemRet::
+	jumpifconsumableblocked BS_SCRIPTING, BattleScript_Return
 	jumpifripen BS_SCRIPTING, BattleScript_ItemHealHP_RemoveItemRet_AbilityPopUp
 	goto BattleScript_ItemHealHP_RemoveItemRet_Anim
 BattleScript_ItemHealHP_RemoveItemRet_AbilityPopUp:
@@ -11319,6 +11324,7 @@ BattleScript_ItemHealHP_RemoveItemRet_Anim:
 	return
 
 BattleScript_ItemHealHP_RemoveItemEnd2::
+	jumpifconsumableblocked BS_ATTACKER, BattleScript_End2
 	jumpifripen BS_ATTACKER, BattleScript_ItemHealHP_RemoveItemEnd2_AbilityPopUp
 	goto BattleScript_ItemHealHP_RemoveItemEnd2_Anim
 BattleScript_ItemHealHP_RemoveItemEnd2_AbilityPopUp:
@@ -11851,7 +11857,7 @@ BattleScript_PastelVeilActivates::
 	setbyte gBattleCommunication, 0
 	setbyte gBattleCommunication + 1, 0
 BattleScript_PastelVeil_TryCurePoison:
-	jumpifstatus BS_TARGET, STATUS1_POISON | STATUS1_TOXIC_POISON, BattleScript_PastelVeilCurePoison
+	jumpifstatus BS_TARGET, STATUS1_POISON_ANY, BattleScript_PastelVeilCurePoison
 	goto BattleScript_PastelVeilLoopIncrement
 BattleScript_PastelVeilCurePoison:
 	jumpifbyte CMP_NOT_EQUAL, gBattleCommunication + 1, 0x0, BattleScript_PastelVeilCurePoisonNoPopUp

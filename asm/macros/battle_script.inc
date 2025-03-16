@@ -2423,9 +2423,15 @@
 	.byte \fraction
 	.endm
 
+	.macro jumpifconsumableblocked battler:req, ptr:req
+	various \battler, VARIOUS_HP_FRACTION_TO_DAMAGE
+	.4byte \ptr
+	.endm
+
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr
+	jumpifconsumableblocked BS_ATTACKER, \ptr
 	call BattleScript_PowerHerbActivation
 twoturnmoveacceleratecheck_\@:
 	setbyte sACCELERATED_TWO_TURN, 1
@@ -2477,6 +2483,10 @@ checkstatbuffonlowered_none_\@:
 	jumpifability \battler, ABILITY_BLOOD_STAIN, jumpifhealingblocked_blockedbyability_\@
 	jumpifhealingblocked_nobloodstain_\@:
 	jumpifabilityonside \battler, ABILITY_PERMANENCE, jumpifhealingblocked_blockedbyability_\@, TRUE
+	jumpifstatus \battler, STATUS1_POISON_ANY, jumpifhealingblocked_poisoned_\@
+	goto jumpifhealingblocked_notblocked_\@
+	jumpifhealingblocked_poisoned_\@:
+	jumpifabilityonside \battler, ABILITY_HEMOLYSIS, jumpifhealingblocked_blockedbyability_\@, TRUE
 	goto jumpifhealingblocked_notblocked_\@
 	jumpifhealingblocked_blockedbyability_\@:
 	call BattleScript_AbilityPopUp

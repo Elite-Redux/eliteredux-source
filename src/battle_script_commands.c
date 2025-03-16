@@ -1636,7 +1636,7 @@ static void Cmd_adjustdamage(void) {
     if (holdEffect == HOLD_EFFECT_FOCUS_BAND && (Random() % 100) < param) {
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gTurnStructs[gBattlerTarget].focusBanded = TRUE;
-    } else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && BATTLER_MAX_HP(gBattlerTarget)) {
+    } else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && !IsUnnerveAbilityOnOpposingSide(gBattlerTarget) && BATTLER_MAX_HP(gBattlerTarget)) {
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gTurnStructs[gBattlerTarget].focusSashed = TRUE;
     } else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_STURDY) && BATTLER_MAX_HP(gBattlerTarget)) {
@@ -3002,6 +3002,7 @@ int GetMoveEffectChance(int battler, int move, int moveEffect, int baseChance) {
 
         case MOVE_EFFECT_FROSTBITE:
             if (BATTLER_HAS_ABILITY(battler, ABILITY_CRYOMANCY)) baseChance *= 5;
+            if (BATTLER_HAS_ABILITY(battler, ABILITY_SNOWY_WRATH)) baseChance *= 5;
             break;
 
         case MOVE_EFFECT_FLINCH:
@@ -4111,14 +4112,14 @@ static void PlayStatChangeAnimation(int battler, int statsToCheck, int flags, in
                         statAnimId = startingStatAnimId + currStat;
                         changeableStatsCount++;
                     }
-                } else if (!gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer && !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) &&
-                           !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) &&
-                           !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_KEEN_EYE) && currStat == STAT_ACC && flags & MOVE_EFFECT_AFFECTS_USER) &&
-                           !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MINDS_EYE) && currStat == STAT_ACC && flags & MOVE_EFFECT_AFFECTS_USER) &&
-                           !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && (currStat == STAT_ATK || currStat == STAT_SPATK) &&
-                             flags & MOVE_EFFECT_AFFECTS_USER) &&
-                           !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LUCKY_HALO) && flags & MOVE_EFFECT_AFFECTS_USER) &&
-                           GetBattlerHoldEffect(gActiveBattler, TRUE) != HOLD_EFFECT_CLEAR_AMULET) {
+                } else if (!BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) && !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) &&
+                           !(!(flags & MOVE_EFFECT_AFFECTS_USER) &&
+                             (gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer ||
+                              (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_KEEN_EYE) && currStat == STAT_ACC) ||
+                              (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MINDS_EYE) && currStat == STAT_ACC) ||
+                              (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && (currStat == STAT_ATK || currStat == STAT_SPATK)) ||
+                              BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LUCKY_HALO) ||
+                              GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_CLEAR_AMULET))) {
                     if (gBattleMons[gActiveBattler].statStages[currStat] > MIN_STAT_STAGE) {
                         statAnimId = startingStatAnimId + currStat;
                         changeableStatsCount++;
@@ -4749,7 +4750,8 @@ static void Cmd_moveend(void) {
                         if (battler == GetTurnBattler()) continue;
                         // Attacker is the damage-dealer, battler is mon to be switched out
                         if (gTurnStructs[battler].shouldTriggerSwitchItem && IsBattlerAlive(battler) &&
-                            GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_BUTTON && CanBattlerSwitch(battler))  // Has mon to switch into
+                            GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_BUTTON && !IsUnnerveAbilityOnOpposingSide(battler) &&
+                            CanBattlerSwitch(battler))  // Has mon to switch into
                         {
                             gStackBattler1 = battler;
                             gTurnStructs[battler].shouldTriggerSwitchItem = FALSE;
@@ -4786,7 +4788,8 @@ static void Cmd_moveend(void) {
                             effect = TRUE;
                             break;
                         } else if (gTurnStructs[battler].shouldTriggerSwitchItem && IsBattlerAlive(battler) &&
-                                   GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_RED_CARD && CanBattlerSwitch(gBattlerAttacker))  // Has mon to switch into
+                                   GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_RED_CARD && !IsUnnerveAbilityOnOpposingSide(battler) &&
+                                   CanBattlerSwitch(gBattlerAttacker))  // Has mon to switch into
                         {
                             gLastUsedItem = gBattleMons[battler].item;
                             gStackBattler1 = battler;
@@ -6054,7 +6057,7 @@ static void TryCheekPouch(u32 battlerId, u32 itemId) {
     int ability;
     if (ItemId_GetPocket(itemId) == POCKET_BERRIES &&
         ((ability = BattlerHasAbility(battlerId, ABILITY_GLUTTONY, FALSE)) || (ability = BattlerHasAbility(battlerId, ABILITY_SUGAR_RUSH, FALSE))) &&
-        !BATTLER_HEALING_BLOCKED(battlerId) && gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]] &&
+        CanBattlerHeal(battlerId) && gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]] &&
         !BATTLER_MAX_HP(battlerId)) {
         gBattleScripting.abilityPopupOverwrite = ability;
         gBattleMoveDamage = gBattleMons[battlerId].maxHP / 3;
@@ -7893,7 +7896,7 @@ static void Cmd_various(void) {
 
             if (gBattleMons[gActiveBattler].hp == gBattleMons[gActiveBattler].maxHP)
                 gBattlescriptCurrInstr = ptr;  // fail
-            else if (BATTLER_HEALING_BLOCKED(gActiveBattler))
+            else if (!CanBattlerHeal(gActiveBattler))
                 gBattlescriptCurrInstr = ptr;  // fail
             return;
         case VARIOUS_REMOVE_TERRAIN:
@@ -8274,8 +8277,9 @@ static void Cmd_various(void) {
             }
             for (gEffectBattler = 0; gEffectBattler < gBattlersCount; gEffectBattler++) {
                 u8 stat;
-                if (!IsBattlerAlive(gEffectBattler)) continue;
-                if (!gTurnStructs[gEffectBattler].mirrorHerbStat && GetBattlerHoldEffect(gEffectBattler, TRUE) != HOLD_EFFECT_MIRROR_HERB) continue;
+                FILTER(IsBattlerAlive(gEffectBattler))
+                FILTER(gTurnStructs[gEffectBattler].mirrorHerbStat ||
+                       (GetBattlerHoldEffect(gEffectBattler, TRUE) == HOLD_EFFECT_MIRROR_HERB && !IsUnnerveAbilityOnOpposingSide(gEffectBattler)))
 
                 for (stat = max(gTurnStructs[gEffectBattler].mirrorHerbStat, STAT_ATK); stat < NUM_BATTLE_STATS; stat++) {
                     s8 change = 0;
@@ -9013,6 +9017,14 @@ static void Cmd_various(void) {
             if (gBattleMoveDamage > gBattleMons[gActiveBattler].hp) gBattleMoveDamage = gBattleMons[gActiveBattler].hp;
             if (!gBattleMoveDamage) gBattleMoveDamage = 1;
             break;
+        case VARIOUS_JUMP_IF_CONSUMABLE_BLOCKED:
+            ptr = READ_PTR_INC;
+            int ability = IsUnnerveAbilityOnOpposingSide(gActiveBattler);
+            REQUIRE(ability)
+            SetActiveAbilityPopupOverride(ability);
+            gBattleScripting.battlerPopupOverwrite = IsAbilityOnOpposingSide(gActiveBattler, ability) - 1;
+            gBattlescriptCurrInstr = ptr;
+            break;
     }  // End of switch (gBattlescriptCurrInstr[2])
 }
 
@@ -9175,7 +9187,7 @@ static void Cmd_tryhealhalfhealth(void) {
 
     if (gBattlescriptCurrInstr[5] == BS_ATTACKER) gBattlerTarget = gBattlerAttacker;
 
-    if (BATTLER_HEALING_BLOCKED(gBattlerTarget)) {
+    if (!CanBattlerHeal(gBattlerTarget)) {
         gBattleMoveDamage = 0;
         gBattlescriptCurrInstr += 6;
         return;
@@ -9314,7 +9326,7 @@ static void Cmd_manipulatedamage(void) {
             gBattleMoveDamage = GetDrainedBigRootHp(gBattlerAttacker, gBattleMoveDamage);
             break;
         case DMG_TO_HP_FROM_MOVE:
-            if (BATTLER_HEALING_BLOCKED(gBattlerAttacker)) {
+            if (!CanBattlerHeal(gBattlerAttacker)) {
                 gBattleMoveDamage = 0;
                 break;
             }
@@ -9782,7 +9794,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
                 BattleScriptCall(BattleScript_MirrorArmorReflect);
             }
             return 0;
-        } else if (!certain && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_CLEAR_AMULET) {
+        } else if (!certain && !affectsUser && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_CLEAR_AMULET) {
             if (flags == STAT_BUFF_ALLOW_PTR) {
                 if (gTurnStructs[battler].statLowered) {
                     gBattlescriptCurrInstr = BS_ptr;
