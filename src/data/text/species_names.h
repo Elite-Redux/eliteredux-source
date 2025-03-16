@@ -1526,8 +1526,8 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_UNOWN_Q1] = _("escavalegs"),
     [SPECIES_UNOWN_R1] = _("Oshawott?"),
     [SPECIES_UNOWN_S1] = _("sustrio"),
-    [SPECIES_UNOWN_T] = _("Unown"),
-    [SPECIES_UNOWN_U] = _("Unown"),
+    [SPECIES_UNOWN_T] = _("Bowserstoise"),
+    [SPECIES_UNOWN_U] = _("Bowserstoise"),
     [SPECIES_UNOWN_V] = _("Unown"),
     [SPECIES_UNOWN_W] = _("Unown"),
     [SPECIES_UNOWN_X] = _("Unown"),
@@ -1885,6 +1885,4 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_KINGDRA_PARTNER_MEGA_C] = _("Kingdra"),
     [SPECIES_DUDUDUNSPARCE] = _("Dududunsprce"),
     [SPECIES_DUDUDUNSPARCE_MEGA] = _("Dududunsprce"),
-    [SPECIES_UNOWN_T] = _("Bowserstoise"),
-    [SPECIES_UNOWN_U] = _("Bowserstoise"),
 };
