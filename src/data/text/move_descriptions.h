@@ -3932,6 +3932,10 @@ static const u8 sMoveTwoLineDescription_MoveMetallicMelody[] = _(
     "Hits the body rhythmically\n"
     "to damage the opponent with sound.");
 
+static const u8 sMoveTwoLineDescription_MoveBlueMoon[] = _(
+    "The user unleashes the spirit from a full blue moon\n"
+    "This move can't be used twice in a row.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4934,6 +4938,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_INSECT_IMPACT - 1] = sMoveTwoLineDescription_MoveInsectImpact,
     [MOVE_LIGHTNING_BULLET - 1] = sMoveTwoLineDescription_MoveLightningBullet,
     [MOVE_METALLIC_MELODY - 1] = sMoveTwoLineDescription_MoveMetallicMelody,
+    [MOVE_BLUE_MOON - 1] = sMoveTwoLineDescription_MoveBlueMoon,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5935,6 +5940,7 @@ static const u8 sMoveFourLineDescription_MoveOniFist[] = _("A strong punch from\
 static const u8 sMoveFourLineDescription_MoveInsectImpact[] = _("A powerful punch. 30%\nchance to drop\ndefense. Iron\nFist boost.");
 static const u8 sMoveFourLineDescription_MoveLightningBullet[] = _("Shoots a strong\nenergy projectile.\n10% paralyze chance\nMega Launcher Boost.");
 static const u8 sMoveFourLineDescription_MoveMetallicMelody[] = _("The user emits a\nsound by hitting\ntheir metallic body\nrhythmically.");
+static const u8 sMoveFourLineDescription_MoveBlueMoon[] = _("The user's spirit surges\nfrom a azure full moon.\nCannot be used twice\nconsecutively.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6936,4 +6942,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_INSECT_IMPACT - 1] = sMoveFourLineDescription_MoveInsectImpact,
     [MOVE_LIGHTNING_BULLET - 1] = sMoveFourLineDescription_MoveLightningBullet,
     [MOVE_METALLIC_MELODY - 1] = sMoveFourLineDescription_MoveMetallicMelody,
+    [MOVE_BLUE_MOON - 1] = sMoveFourLineDescription_MoveBlueMoon,
 };
