@@ -755,6 +755,7 @@ static const u8 sAbilityAveragePowerDescription[] = _("the best ability ever mad
 static const u8 sAbilityCaretakerDescription[] = _("Healer + Friend Guard.");
 static const u8 sAbilityPoseidonsDominionDescription[] = _("Whirlpool on entry +\nSea Guardian.");
 static const u8 sAbilityDualShadowDescription[] = _("Changes form each turn. boosts\nelec/dark moves by 35% with 10% recoil.");
+static const u8 sAbilityLullabyDescription[] = _("Sing accuracy is 90% when\nused by this Pokémon.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1546,6 +1547,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_CARETAKER] = _("Caretaker"),
     [ABILITY_POSEIDONS_DOMINION] = _("Poseidon's Dominion"),
     [ABILITY_DUAL_SHADOW] = _("Dual Shadow"),
+    [ABILITY_LULLABY] = _("Lullaby"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2338,4 +2340,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_CARETAKER] = sAbilityCaretakerDescription,
     [ABILITY_POSEIDONS_DOMINION] = sAbilityPoseidonsDominionDescription,
     [ABILITY_DUAL_SHADOW] = sAbilityDualShadowDescription,
+    [ABILITY_LULLABY] = sAbilityLullabyDescription,
 };

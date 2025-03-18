@@ -9904,7 +9904,7 @@ static const Ability PoseidonsDominion = {
 };
 
 static const Ability DualShadow = {
-    .name = $("Dual Shadow"),
+    .name = $("Two-Faced"),
     .description = $("Changes form each turn. boosts elec\n"
     "/dark moves by 35% with 10% recoil"),
     .onEndTurn = +[](ON_END_TURN) -> int {
@@ -9943,6 +9943,17 @@ static const Ability DualShadow = {
         },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+};
+
+static const Ability Lullaby = {
+    .name = $("Lullaby"),
+    .description = $("Sing accuracy is 90% when\n"
+                     "used by this Pokémon."),
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(move == MOVE_SING);
+        *accuracy *= 1.5;
+        return ACCURACY_MULTIPLICATIVE;
+    },
 };
 
 static const Ability iamsteve = {
@@ -10744,9 +10755,9 @@ const Ability gAbilities[] = {
     [ABILITY_CARETAKER] = Caretaker,
     [ABILITY_POSEIDONS_DOMINION] = PoseidonsDominion,
     [ABILITY_DUAL_SHADOW] = DualShadow,
+    [ABILITY_LULLABY] = Lullaby,
     [ABILITY_I_AM_STEVE] = iamsteve,
     [ABILITY_AVERAGE_POWER] = AveragePower,
-    
 };
 
 #pragma GCC diagnostic pop
