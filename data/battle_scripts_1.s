@@ -10998,7 +10998,7 @@ BattleScript_PoisonPuppeteer_Internal:
 
 BattleScript_KingsShieldEffect::
 	swapbattlerandtargetvia34
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_SAFEGUARD
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	bichalfword gMoveResultFlags, MOVE_RESULT_NO_EFFECT
 	seteffectsecondary
 	setmoveeffect 0
