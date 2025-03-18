@@ -1546,7 +1546,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_HEMOLYSIS] = _("Hemolysis"),
     [ABILITY_CARETAKER] = _("Caretaker"),
     [ABILITY_POSEIDONS_DOMINION] = _("Poseidon's Dominion"),
-    [ABILITY_DUAL_SHADOW] = _("Dual Shadow"),
+    [ABILITY_DUAL_SHADOW] = _("Two-Faced"),
     [ABILITY_LULLABY] = _("Lullaby"),
 };
 
