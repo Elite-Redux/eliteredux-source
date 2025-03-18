@@ -805,8 +805,9 @@
 #define ABILITY_CARETAKER 783 // Healer + Friend Guard.
 #define ABILITY_POSEIDONS_DOMINION 784 // Whirlpool on entry + Sea Guardian
 #define ABILITY_DUAL_SHADOW 785 // Hunger Switch + Electric burst and doom blast
+#define ABILITY_LULLABY // Sing has 90% accuracy
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_DUAL_SHADOW + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_LULLABY + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
