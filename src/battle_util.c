@@ -6208,7 +6208,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_AIR_BALLOON:
-                        if (TARGET_TURN_DAMAGED) {
+                        if (gBattlerTarget != gBattlerAttacker && TARGET_TURN_DAMAGED) {
                             effect = ITEM_EFFECT_OTHER;
                             BattleScriptCall(BattleScript_AirBaloonMsgPop);
                         }
