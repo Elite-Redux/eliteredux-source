@@ -8990,13 +8990,13 @@ static const Ability SteelBeetle = {
 
 static const Ability FromTheShadows = {
     .name = $("From the Shadows"),
-    .description = $("Attacks trap and have a 20%\n"
+    .description = $("Attacks trap and have a 99%\n"
                      "flinch chance when moving first."),
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(GetBattlerTurnOrderNum(target) >= gCurrentTurnActionNumber)
 
-        if (CanMoveHaveExtraFlinchChance(move) && Random() % 100 < 20) {
+        if (CanMoveHaveExtraFlinchChance(move) && Random() % 100 < 99) {
             AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
         }
 
