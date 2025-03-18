@@ -4851,7 +4851,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
 
             for (int i = 0; i < gBattlersCount; i++) {
                 FILTER(IsBattlerAlive(i))
-                ON_ABILITY(i, FALSE, gAbilities[ability].onReactive, effect += gAbilities[ability].onReactive(ability, battler, extraArg))
+                ON_ABILITY(i, FALSE, gAbilities[ability].onReactive, effect += gAbilities[ability].onReactive(ability, i, extraArg))
             }
 
             if (gBattleStruct->statStageCheckState == STAT_STAGE_CHECK_NEEDED) {
