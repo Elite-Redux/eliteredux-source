@@ -3721,7 +3721,7 @@ bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer) {
         else
             *timer = TERRAIN_DURATION;
 
-        gBattlerAttacker = gBattleScripting.battler = battler;
+        gBattleScripting.battler = battler;
         return TRUE;
     }
 
