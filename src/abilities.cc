@@ -3190,11 +3190,11 @@ static const Ability GulpMissile = {
         CHECK(ShouldApplyOnHitAffect(attacker))
         int species = gBattleMons[battler].species;
         CHECK(species == SPECIES_CRAMORANT_GORGING || species == SPECIES_CRAMORANT_GULPING)
-        gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = species;
         UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_CRAMORANT);
         gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         BattleScriptCall(species == SPECIES_CRAMORANT_GORGING ? BattleScript_GulpMissileGorging : BattleScript_GulpMissileGulping);
+        gBattleMons[battler].species = SPECIES_CRAMORANT;
         return TRUE;
     },
     .unsuppressable = TRUE,
