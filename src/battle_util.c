@@ -3721,7 +3721,7 @@ bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer) {
         else
             *timer = TERRAIN_DURATION;
 
-        gBattlerAttacker = gBattleScripting.battler = battler;
+        gBattleScripting.battler = battler;
         return TRUE;
     }
 
@@ -4851,7 +4851,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
 
             for (int i = 0; i < gBattlersCount; i++) {
                 FILTER(IsBattlerAlive(i))
-                ON_ABILITY(i, FALSE, gAbilities[ability].onReactive, effect += gAbilities[ability].onReactive(ability, battler, extraArg))
+                ON_ABILITY(i, FALSE, gAbilities[ability].onReactive, effect += gAbilities[ability].onReactive(ability, i, extraArg))
             }
 
             if (gBattleStruct->statStageCheckState == STAT_STAGE_CHECK_NEEDED) {
@@ -6208,7 +6208,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_AIR_BALLOON:
-                        if (TARGET_TURN_DAMAGED) {
+                        if (gBattlerTarget != gBattlerAttacker && TARGET_TURN_DAMAGED) {
                             effect = ITEM_EFFECT_OTHER;
                             BattleScriptCall(BattleScript_AirBaloonMsgPop);
                         }
