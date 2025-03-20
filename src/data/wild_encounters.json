@@ -1350,12 +1350,12 @@
               {
                 "min_level": 14,
                 "max_level": 14,
-                "species": "SPECIES_SAWK"
+                "species": "SPECIES_UNOWN_L1"
               },
               {
                 "min_level": 16,
                 "max_level": 16,
-                "species": "SPECIES_THROH"
+                "species": "SPECIES_UNOWN_S1"
               },
               {
                 "min_level": 16,
@@ -6295,7 +6295,7 @@
               {
                 "min_level": 13,
                 "max_level": 15,
-                "species": "SPECIES_TIMBURR"
+                "species": "SPECIES_UNOWN_C1"
               },
               {
                 "min_level": 13,
@@ -10300,7 +10300,7 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_PIKACHU_PH_D"
+                "species": "SPECIES_UNOWN_J1"
               },
               {
                 "min_level": 5,
@@ -11603,7 +11603,7 @@
               {
                 "min_level": 3,
                 "max_level": 3,
-                "species": "SPECIES_AUDINO"
+                "species": "SPECIES_UNOWN_R1"
               }
             ]
           }
@@ -11879,7 +11879,7 @@
               {
                 "min_level": 5,
                 "max_level": 35,
-                "species": "SPECIES_MAGIKARP"
+                "species": "SPECIES_UNOWN_E1"
               },
               {
                 "min_level": 10,
