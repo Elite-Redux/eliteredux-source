@@ -405,6 +405,7 @@ static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
     SPECIES_MARBEEP, //testing purposes
     SPECIES_BUBBLEO, //testing purposes
     SPECIES_SNORUNT_REDUX, //testing purposes
+    SPECIES_DEWPIDER_REDUX, //testing purposes
     SPECIES_DEINO_REDUX,
     SPECIES_LARVITAR_REDUX,
     SPECIES_HOUNDOUR_REDUX,
@@ -446,6 +447,7 @@ static const u16 sAdoptionCenterInventory_FourBadges[] = {
     SPECIES_MARBEEP, //testing purposes
     SPECIES_BUBBLEO, //testing purposes
     SPECIES_SNORUNT_REDUX, //testing purposes
+    SPECIES_DEWPIDER_REDUX, //testing purposes
     SPECIES_DEINO_REDUX,
     SPECIES_LARVITAR_REDUX,
     SPECIES_HOUNDOUR_REDUX,
@@ -490,6 +492,7 @@ static const u16 sAdoptionCenterInventory_FiveBadges[] = {
     SPECIES_MARBEEP, //testing purposes
     SPECIES_BUBBLEO, //testing purposes
     SPECIES_SNORUNT_REDUX, //testing purposes
+    SPECIES_DEWPIDER_REDUX, //testing purposes
     SPECIES_DEINO_REDUX,
     SPECIES_LARVITAR_REDUX,
     SPECIES_HOUNDOUR_REDUX,
@@ -534,6 +537,7 @@ static const u16 sAdoptionCenterInventory_SixBadges[] = {
     SPECIES_MARBEEP, //testing purposes
     SPECIES_BUBBLEO, //testing purposes
     SPECIES_SNORUNT_REDUX, //testing purposes
+    SPECIES_DEWPIDER_REDUX, //testing purposes
     SPECIES_DEINO_REDUX,
     SPECIES_GIBLE_REDUX,
     SPECIES_LARVITAR_REDUX,
@@ -580,6 +584,7 @@ static const u16 sAdoptionCenterInventory_SevenBadges[] = {
     SPECIES_MARBEEP, //testing purposes
     SPECIES_BUBBLEO, //testing purposes
     SPECIES_SNORUNT_REDUX, //testing purposes
+    SPECIES_DEWPIDER_REDUX, //testing purposes
     SPECIES_DEINO_REDUX,
     SPECIES_GIBLE_REDUX,
     SPECIES_LARVITAR_REDUX,
@@ -626,6 +631,7 @@ static const u16 sAdoptionCenterInventory_EightBadges[] = {
     SPECIES_MARBEEP, //testing purposes
     SPECIES_BUBBLEO, //testing purposes
     SPECIES_SNORUNT_REDUX, //testing purposes
+    SPECIES_DEWPIDER_REDUX, //testing purposes
     SPECIES_MELTAN,
     SPECIES_POIPOLE,
     SPECIES_AZELF_REDUX,
