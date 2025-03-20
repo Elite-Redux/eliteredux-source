@@ -155,7 +155,7 @@ static const u8 sMoveTwoLineDescription_MoveTailWhip[] = _(
     "foe's Defense.");
 
 static const u8 sMoveTwoLineDescription_MovePoisonSting[] = _(
-    "Has 30% poison chance\n"
+    "Has 10% poison chance\n"
     "and +1 priority.");
 
 static const u8 sMoveTwoLineDescription_MoveTwineedle[] = _(
@@ -4991,7 +4991,7 @@ static const u8 sMoveFourLineDescription_MoveTakeDown[] = _("Slams the foe back.
 static const u8 sMoveFourLineDescription_MoveThrash[] = _("The user rampages\nabout for two to\nthree turns, then\nbecomes confused.");
 static const u8 sMoveFourLineDescription_MoveDoubleEdge[] = _("A reckless, life-\nrisking tackle that\nalso has 33%\nrecoil damage.");
 static const u8 sMoveFourLineDescription_MoveTailWhip[] = _("The user wags its\ntail cutely, making\nthe foe lower its\nDefense stat.");
-static const u8 sMoveFourLineDescription_MovePoisonSting[] = _("Quick and painful\nsting. Has 30%\npoison chance.\nHas +1 priority.");
+static const u8 sMoveFourLineDescription_MovePoisonSting[] = _("Quick and painful\nsting. Has 10%\npoison chance.\nHas +1 priority.");
 static const u8 sMoveFourLineDescription_MoveTwineedle[] = _("The foe is stabbed\ntwice with foreleg\nstingers. 50%\npoison chance.");
 static const u8 sMoveFourLineDescription_MovePinMissile[] = _("Sharp pins are shot\nat the foe and hit\ntwo to five times\nat once.");
 static const u8 sMoveFourLineDescription_MoveLeer[] = _("The foe is given an\nintimidating look\nthat lowers its\nDefense stat.");

@@ -9522,12 +9522,12 @@ static const Ability Reservoir = {
 };
 
 static int NeurotoxinCondition(int battler, int target) {
-    return CanLowerStat(target, STAT_ATK) || CanLowerStat(target, STAT_DEF) || CanLowerStat(target, STAT_SPEED);
+    return CanLowerStat(target, STAT_ATK) || CanLowerStat(target, STAT_SPATK) || CanLowerStat(target, STAT_SPEED);
 }
 static const Ability Neurotoxin = {
     .name = $("Neurotoxin"),
     .description = $("Inflicting poison also lowers\n"
-                     "Attack, Defense, and Speed."),
+                     "Attack, SpAtk, and Speed."),
     .onReactive = +[](ON_REACTIVE) -> int { return PoisonPuppeteerClone(ability, battler, NeurotoxinCondition, BattleScript_Neurotoxin); },
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
