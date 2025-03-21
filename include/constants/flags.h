@@ -1536,6 +1536,7 @@
 #define FLAG_RECEIVED_CLEMONT_CHESNAUGHT                            3095
 #define FLAG_RECEIVED_SERENA_DELPHOX                                3096
 #define FLAG_SYS_OPEN_MOVE_MENU_FROM_PARTY_SCREEN                   3097
+#define FLAG_RECEIVED_CALYREX                                       3098
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 
