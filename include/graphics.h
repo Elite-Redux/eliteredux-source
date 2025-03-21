@@ -12029,5 +12029,7 @@ extern const u32 gItemIconPalette_PunchingGlove[];
 extern const u32 gItemIcon_MirrorHerb[];
 extern const u32 gItemIconPalette_MirrorHerb[];
 
+extern const u32 gItemIcon_SwirlyGlasses[];
+extern const u32 gItemIconPalette_SwirlyGlasses[];
 
 #endif //GUARD_GRAPHICS_H

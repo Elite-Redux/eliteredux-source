@@ -7495,10 +7495,10 @@ static bool32 CanEvolve(u32 species) {
 void SetSwapDamageCategory(int battler, int target, int move) {
     switch (gBattleMoves[move].splitFlag) {
         default:
-            ON_ABILITY(battler, FALSE, gAbilities[ability].onSwapSplit, gSwapDamageCategory = gAbilities[ability].onSwapSplit(battler, move);
-                       if (gSwapDamageCategory) return)
             gSwapDamageCategory = FALSE;
-            return;
+            ON_ABILITY(battler, FALSE, gAbilities[ability].onSwapSplit, gSwapDamageCategory = gAbilities[ability].onSwapSplit(battler, move);
+                       if (gSwapDamageCategory) break)
+            break;
 
         case USE_HIGHEST_OFFENSE: {
             int isTargetUnaware = IsUnaware(target);
@@ -7510,8 +7510,8 @@ void SetSwapDamageCategory(int battler, int target, int move) {
                 gSwapDamageCategory = gBattleMoves[move].split == SPLIT_PHYSICAL;
             else
                 gSwapDamageCategory = Random() % 2;
+            break;
         }
-            return;
 
         case USE_HIGHEST_DAMAGE: {
             int isUnaware = IsUnaware(battler);
@@ -7527,8 +7527,11 @@ void SetSwapDamageCategory(int battler, int target, int move) {
                 gSwapDamageCategory = gBattleMoves[move].split == SPLIT_PHYSICAL;
             else
                 gSwapDamageCategory = Random() % 2;
+            break;
         }
     }
+
+    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SWIRLY_GLASSES) gSwapDamageCategory = !gSwapDamageCategory;
 }
 
 u8 CalculateBattlerLowestDefense(u8 battler) {
