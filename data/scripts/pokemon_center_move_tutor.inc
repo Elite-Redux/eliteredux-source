@@ -369,6 +369,7 @@ PKMN_Center_Mystery_Gift_EventScript_TakeCare::
 	case SPECIES_ZYGARDE_10_POWER_CONSTRUCT, PKMN_Center_EventScript_SetflagZygarde10PowerConstruct
 	case SPECIES_MELOETTA, PKMN_Center_EventScript_SetflagMeloetta
 	case SPECIES_SILVALLY, PKMN_Center_Eventscript_SetflagSilvally
+	case SPECIES_CALYREX, PKMN_Center_Eventscript_SetflagCalyrex
 	case SPECIES_TERAPAGOS, PKMN_Center_EventScript_SetflagTerapagos
 	case SPECIES_CHI_YU, PKMN_Center_EventScript_SetflagChiYu
 	case SPECIES_WO_CHIEN, PKMN_Center_EventScript_SetflagWoChien
@@ -487,6 +488,11 @@ PKMN_Center_EventScript_SetflagEnamorus::
 
 PKMN_Center_EventScript_SetflagMeloetta::
 	setflag FLAG_RECEIVED_MELOETTA
+	releaseall
+	end
+
+PKMN_Center_Eventscript_SetflagCalyrex::
+	setflag FLAG_RECEIVED_CALYREX
 	releaseall
 	end
 
