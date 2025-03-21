@@ -9236,6 +9236,7 @@ static const Ability TrashHeap = {
     .name = $("Trash Heap"),
     .description = $("Corrosion + Toxic Spill."),
     .onEntry = ToxicSpill.onEntry,
+    .onEndTurn = ToxicSpill.onEndTurn,
     .onExit = ToxicSpill.onExit,
     .onTypeEffectiveness = Corrosion.onTypeEffectiveness,
 };
