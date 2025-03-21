@@ -9908,7 +9908,7 @@ static const Ability PoseidonsDominion = {
 static const Ability DualShadow = {
     .name = $("Two-Faced"),
     .description = $("Hunger Switch + Elec and Dark\n"
-                     "get a 1.35x boost with 10% recoil."),
+                     "deal 1.35x with 10% recoil."),
     .onEndTurn = HungerSwitch.onEndTurn,
     .onRecoil = +[](ON_RECOIL) -> int {
         CHECK(moveType == TYPE_ELECTRIC || moveType == TYPE_DARK);
