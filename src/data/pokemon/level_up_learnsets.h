@@ -30630,6 +30630,7 @@ static const struct LevelUpMove sZarudeDadaLevelUpLearnset[] = {
 static const struct LevelUpMove sIronVocaLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_ROUND),
     LEVEL_UP_MOVE(1, MOVE_DISARMING_VOICE),
+    LEVEL_UP_MOVE(1, MOVE_SING),
     LEVEL_UP_MOVE(17, MOVE_HEAL_PULSE),
     LEVEL_UP_MOVE(17, MOVE_ALLURING_VOICE),
     LEVEL_UP_MOVE(24, MOVE_OVERDRIVE),
