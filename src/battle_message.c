@@ -769,7 +769,7 @@ static const u8 sText_OverflowingWithSpacePower[] = _("{B_ATK_NAME_WITH_PREFIX} 
 static const u8 sText_PlayerGotBP[] = _("{B_PLAYER_NAME} got {B_BUFF1} Battle Point(s)\nfor winning!\p");
 static const u8 sText_CantUseTwiceInARow[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s can't use\n{B_CURRENT_MOVE} twice in a row!\p");
 static const u8 sText_AttackerLostElectricType[] = _("{B_ATK_NAME_WITH_PREFIX} used up\nall its electricity!");
-static const u8 sText_HeavySpikesScattered[] = _("Spikes were rain down on\nthe opponent's side!");
+static const u8 sText_HeavySpikesScattered[] = _("Spikes rain down on\nthe opponent's side!");
 static const u8 sText_PkmnAlreadyType[] = _("{B_ATK_NAME_WITH_PREFIX} couldn't\nchange its type!");
 static const u8 sText_PkmnCutHPRaisedStats[] = _("{B_ATK_NAME_WITH_PREFIX} cut its own HP\nand raised its stats!");
 static const u8 sText_PkmnAfflictedBySaltCure[] = _("{B_ATK_NAME_WITH_PREFIX} is hurt\nby Salt Cure!");
@@ -1075,6 +1075,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_RoseGarden[] = _("Toxic spikes rain down on\nthe opponent's side!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1933,6 +1934,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_FIRECOATDAMAGE - 12] = sText_FireCoatDamage,
     [STRINGID_FIRECOATSTART - 12] = sText_FireCoatStart,
     [STRINGID_SOOTHSAYER - 12] = sText_Soothsayer,
+    [STRINGID_ROSEGARDEN - 12] = sText_RoseGarden,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

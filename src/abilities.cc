@@ -9658,8 +9658,8 @@ static const Ability RoseGarden = {
 
         gSideTimers[targetSide].toxicSpikesAmount = 2;
         gSideStatuses[targetSide] |= SIDE_STATUS_TOXIC_SPIKES;
-        // TODO: Fix display message
-        BattleScriptPushCursorAndCallback(BattleScript_DoubleSpikesOnEntry);
+        gBattlerTarget = targetSide;
+        BattleScriptPushCursorAndCallback(BattleScript_RoseGarden);
         return TRUE;
     },
 };

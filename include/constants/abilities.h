@@ -795,7 +795,7 @@
 #define ABILITY_SOOTHSAYER 773 // All hits will be not very effective for 5 turns against this Pokemon.
 #define ABILITY_CORRUPTED_MIND 774 // Psychic moves used by this Pokemon always hit super-effectively.
 #define ABILITY_FLAME_COAT 775 // Non-Fire-types take 1/8 dmg every turn when on field + Flash Fire.
-#define ABILITY_UNOWN_POWER 776 // Mystic Power + Hidden Power is always super-effective.
+#define ABILITY_UNOWN_POWER 776 // Mystic Power + Hidden and Secret Power hit Super-effectively.
 #define ABILITY_SUPER_SCOPE 777 // Mega Launcher + Artillery.
 #define ABILITY_VENOM_CROWN 778 // Mighty Horn + Poison Point.
 #define ABILITY_BLIGHT_SCALE 779 // Multiscale + Poison Point.
@@ -803,7 +803,7 @@
 #define ABILITY_HUNTERS_MARK 781 // Attacks switching foes with 40BP Spirit Shackle.
 #define ABILITY_HEMOLYSIS 782 // Poisoned foes can't heal and lose all stat buffs.
 #define ABILITY_CARETAKER 783 // Healer + Friend Guard.
-#define ABILITY_POSEIDONS_DOMINION 784 // Whirlpool on entry + Sea Guardian.
+#define ABILITY_POSEIDONS_DOMINION 784 // Whirlpool on entry.
 #define ABILITY_DUAL_SHADOW 785 // Changes form each turn. boosts elec/dark moves by 35% with 10% recoil.
 #define ABILITY_LULLABY 786 // Sing accuracy is 90% when used by this Pokémon.
 #define ABILITY_CRYO_ARCHITECT 787 // Boosts attack and def from ice and water
