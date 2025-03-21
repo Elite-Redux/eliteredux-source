@@ -9825,8 +9825,9 @@ static const Ability FlameCoat = {
 
 static const Ability UnownPower = {
     .name = $("Unown Power"),
-    .description = $("Hidden and Secret Power deal\n"
-                     "Super-effective damage."),
+    .description = $("Mystic Power + Hidden and Secret\n"
+                    "Power hit Super-effectively."),
+    .onStab = +[](ON_STAB) -> int { return TRUE; },
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
             if (*mod < UQ_4_12(2.0) && (move == MOVE_HIDDEN_POWER || move == MOVE_SECRET_POWER)) *mod = UQ_4_12(2.0);
