@@ -9907,9 +9907,27 @@ static const Ability PoseidonsDominion = {
 
 static const Ability DualShadow = {
     .name = $("Two-Faced"),
-    .description = $("Hunger Switch + Elec and Dark\n"
-                     "deal 1.35x with 10% recoil."),
-    .onEndTurn = HungerSwitch.onEndTurn,
+    .description = $("Changes forms. boosts electric/\n"
+                     "dark moves by 35% with 5% recoil"),
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED) int newSpecies;
+        switch (gBattleMons[battler].species) {
+            case SPECIES_MORPEKYLL:
+                newSpecies = SPECIES_MORPEKYLL_HANGRY;
+                break;
+            case SPECIES_MORPEKYLL_HANGRY:
+                newSpecies = SPECIES_MORPEKYLL;
+                break;
+
+            default:
+                return FALSE;
+        }
+
+        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+        gBattleMons[battler].species = newSpecies;
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+        return TRUE;
+    },
     .onRecoil = +[](ON_RECOIL) -> int {
         CHECK(moveType == TYPE_ELECTRIC || moveType == TYPE_DARK);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
