@@ -1002,6 +1002,7 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_STUNLOCK] = _("stunlock"),
     [MOVE_HALF_FULL] = _("Half Full"),
     [MOVE_METALLIC_MELODY] = _("MetalcMelody"),
+    [MOVE_BLUE_MOON] = _("Blue Moon"),
 };
 
 // Second table with longer move names for places where they fit.

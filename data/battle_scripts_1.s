@@ -9590,22 +9590,6 @@ BattleScript_AbilityPopUp::
 	sethword sABILITY_OVERWRITE, 0
 	return
 
-BattleScript_SpeedBoostActivates::
-	setstatchanger STAT_SPEED, 1, FALSE
-	setgraphicalstatchangevalues
-	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printfromtable gStatUpStringIds
-	waitmessage B_WAIT_TIME_LONG
-	end3
-
-BattleScript_AnnounceAbilitySpeedBoost::
-	setstatchanger STAT_SPEED, 1, FALSE
-	setgraphicalstatchangevalues
-	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printfromtable gStatUpStringIds
-	waitmessage B_WAIT_TIME_LONG
-	return
-
 BattleScript_AnnounceRemovedHazards::
 	printstring STRINGID_PICKUPACTIVATED
 	waitmessage B_WAIT_TIME_LONG

@@ -134,7 +134,7 @@
 #define ABILITY_PICKPOCKET 124 // Steals the foe's held item on contact.
 #define ABILITY_SHEER_FORCE 125 // Exchanges added effects on its moves for 1.3x more power.
 #define ABILITY_CONTRARY 126 // Stat raises turn into stat drops for this Pokémon and vice versa.
-#define ABILITY_UNNERVE 127 // Foes can't eat Berries as long as this Pokémon is in battle.
+#define ABILITY_UNNERVE 127 // Foes can't use consumable items.
 #define ABILITY_DEFIANT 128 // Raises Attack by two stages if stats are lowered by an enemy.
 #define ABILITY_DEFEATIST 129 // Halves Atk and Sp. Atk stats if user is below 1/3 of max HP.
 #define ABILITY_CURSED_BODY 130 // 30% chance to disable moves if enemy makes contact.
@@ -154,7 +154,7 @@
 #define ABILITY_REGENERATOR 144 // Heals 1/3 of max HP upon switching out.
 #define ABILITY_BIG_PECKS 145 // Boosts the power of contact moves by 1.3x.
 #define ABILITY_SAND_RUSH 146 // This Pokémon's Speed gets a 1.5x boost in a sandstorm.
-#define ABILITY_WONDER_SKIN 147 // Opposing status moves have their accuracy halved.
+#define ABILITY_WONDER_SKIN 147 // Blocks most damage boosting and multihit abilities.
 #define ABILITY_ANALYTIC 148 // Attacks get a 1.3x power boost if it moves last.
 #define ABILITY_ILLUSION 149 // Appears as last party slot and boosts power by 1.3x until hit.
 #define ABILITY_IMPOSTER 150 // Transforms into the foe on entry.
@@ -736,7 +736,7 @@
 #define ABILITY_APPLE_PIE 714 // Self Sufficient + Ripen.
 #define ABILITY_HOVER 715 // Adds Psychic type to itself. Avoids Ground attacks.
 #define ABILITY_DEPRAVITY 716 // Merciless + Overcharge.
-#define ABILITY_WILDFIRE 717 // Attacks with 20BP Fire Spin when hit by a contact move.
+#define ABILITY_WILDFIRE 717 // Attacks with Fire Spin on entry.
 #define ABILITY_JUMP_SCARE 718 // Attacks with Astonish on first switch-in.
 #define ABILITY_TAR_TOSS 719 // Uses Tar Shot on switch-in.
 #define ABILITY_STUN_SHOCK 720 // Attacks have a 60% chance to Paralyze or Poison.
@@ -769,7 +769,7 @@
 #define ABILITY_DAYBREAK 747 // Burns the foe on contact. Also works on offense.
 #define ABILITY_ENERGY_SIPHON 748 // Heals the user for 1/4 of the damage they deal.
 #define ABILITY_RESERVOIR 749 // Water Absorb + Storm Drain.
-#define ABILITY_NEUROTOXIN 750 // Inflicting poison also lowers Attack, Defense, and Speed.
+#define ABILITY_NEUROTOXIN 750 // Inflicting poison also lowers Attack, SpAtk, and Speed.
 #define ABILITY_ENERGIZED_HORNS 751 // Mighty horn moves become special and deal 30% more damage.
 #define ABILITY_SPIDER_LAIR_UPGRADE 752 // Casts Sticky Web on entry. Lasts 7 turns.
 #define ABILITY_CRUST_COAT 753 // Immune to critical hits. Takes 20% less damage from all attacks.
@@ -806,8 +806,9 @@
 #define ABILITY_POSEIDONS_DOMINION 784 // Whirlpool on entry + Sea Guardian
 #define ABILITY_DUAL_SHADOW 785 // Hunger Switch + Electric burst and doom blast
 #define ABILITY_LULLABY 786 // Sing has 90% accuracy
-#define ABILITY_I_AM_STEVE 787 // Multiscale + Poison Point
-#define ABILITY_AVERAGE_POWER 788 // Multiscale + Poison Point
+#define ABILITY_CRYO_ARCHITECT 787 // Boosts attack and def from ice and water
+#define ABILITY_I_AM_STEVE 788 // Multiscale + Poison Point
+#define ABILITY_AVERAGE_POWER 789 // Multiscale + Poison Point
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_AVERAGE_POWER + 1)
 

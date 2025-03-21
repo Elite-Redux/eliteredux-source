@@ -139,7 +139,7 @@ static const u8 sAbilityOvercoatDescription[] = _("Blocks weather dmg, powder mo
 static const u8 sAbilityRegeneratorDescription[] = _("Heals 1/3 of max HP upon\nswitching out.");
 static const u8 sAbilityBigPecksDescription[] = _("Boosts the power of contact\nmoves by 1.3x.");
 static const u8 sAbilitySandRushDescription[] = _("This Pokémon's Speed gets a\n1.5x boost in a sandstorm.");
-static const u8 sAbilityWonderSkinDescription[] = _("Opposing status moves have\ntheir accuracy halved.");
+static const u8 sAbilityWonderSkinDescription[] = _("Blocks most damage boosting\nand multihit abilities.");
 static const u8 sAbilityAnalyticDescription[] = _("Attacks get a 1.3x power boost\nif it moves last.");
 static const u8 sAbilityIllusionDescription[] = _("Appears as last party slot and\nboosts power by 1.3x until hit.");
 static const u8 sAbilityImposterDescription[] = _("Transforms into the foe on\nentry.");
@@ -323,7 +323,6 @@ static const u8 sAbilityRawWoodDescription[] = _("Halves dmg taken by Grass move
 static const u8 sAbilitySolenoglyphsDescription[] = _("Biting moves have a 50% chance to\nbadly poison the target.");
 static const u8 sAbilitySpiderLairDescription[] = _("Casts Sticky Web on entry.\nLasts 5 turns.");
 static const u8 sAbilityFatalPrecisionDescription[] = _("Super-effective moves never miss\nand get a 1.2x boost.");
-static const u8 sAbilityFortKnoxDescription[] = _("Blocks most damage boosting\nand multihit abilities.");
 static const u8 sAbilitySeaweedDescription[] = _("Takes 1/2 dmg from Fire if Grass,\ndoubles Grass dmg on Fire-types.");
 static const u8 sAbilityPsychicMindDescription[] = _("Boosts Psychic-type moves by\n1.2x, or 1.5x when under 1/3 HP.");
 static const u8 sAbilityPoisonAbsorbDescription[] = _("Heals 25% of max HP when hit\nby a Poison-type move.");
@@ -756,6 +755,7 @@ static const u8 sAbilityCaretakerDescription[] = _("Healer + Friend Guard.");
 static const u8 sAbilityPoseidonsDominionDescription[] = _("Whirlpool on entry +\nSea Guardian.");
 static const u8 sAbilityDualShadowDescription[] = _("Changes form each turn. boosts\nelec/dark moves by 35% with 10% recoil.");
 static const u8 sAbilityLullabyDescription[] = _("Sing accuracy is 90% when\nused by this Pokémon.");
+static const u8 sAbilityCryoArchitectDescription[] = _("Boosts attack and def from ice and water");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1548,6 +1548,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_POSEIDONS_DOMINION] = _("Poseidon's Dominion"),
     [ABILITY_DUAL_SHADOW] = _("Two-Faced"),
     [ABILITY_LULLABY] = _("Lullaby"),
+    [ABILITY_CRYO_ARCHITECT] = _("Cryo Architect"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1699,7 +1700,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_REGENERATOR] = sAbilityRegeneratorDescription,
     [ABILITY_BIG_PECKS] = sAbilityBigPecksDescription,
     [ABILITY_SAND_RUSH] = sAbilitySandRushDescription,
-    [ABILITY_WONDER_SKIN] = sAbilityFortKnoxDescription,
+    [ABILITY_WONDER_SKIN] = sAbilityWonderSkinDescription,
     [ABILITY_ANALYTIC] = sAbilityAnalyticDescription,
     [ABILITY_ILLUSION] = sAbilityIllusionDescription,
     [ABILITY_IMPOSTER] = sAbilityImposterDescription,
@@ -1893,7 +1894,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SOLENOGLYPHS] = sAbilitySolenoglyphsDescription,
     [ABILITY_SPIDER_LAIR] = sAbilitySpiderLairDescription,
     [ABILITY_FATAL_PRECISION] = sAbilityFatalPrecisionDescription,
-    [ABILITY_FORT_KNOX] = sAbilityFortKnoxDescription,
+    [ABILITY_FORT_KNOX] = sAbilityWonderSkinDescription,
     [ABILITY_SEAWEED] = sAbilitySeaweedDescription,
     [ABILITY_PSYCHIC_MIND] = sAbilityPsychicMindDescription,
     [ABILITY_POISON_ABSORB] = sAbilityPoisonAbsorbDescription,
@@ -2341,4 +2342,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_POSEIDONS_DOMINION] = sAbilityPoseidonsDominionDescription,
     [ABILITY_DUAL_SHADOW] = sAbilityDualShadowDescription,
     [ABILITY_LULLABY] = sAbilityLullabyDescription,
+    [ABILITY_CRYO_ARCHITECT] = sAbilityCryoArchitectDescription,
 };

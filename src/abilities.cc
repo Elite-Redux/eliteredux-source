@@ -348,7 +348,7 @@ static const Ability SpeedBoost = {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
 
-        BattleScriptPushCursorAndCallback(BattleScript_SpeedBoostActivates);
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         gBattleScripting.battler = battler;
         return TRUE;
     },
@@ -5128,8 +5128,8 @@ static const Ability SpinningTop = {
         }
 
         if (ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL)) {
-            BattleScriptCall(BattleScript_AnnounceAbilitySpeedBoost);
             gBattleScripting.battler = battler;
+            BattleScriptCall(BattleScript_AttackBoostActivates);
             any = TRUE;
         }
 
@@ -9906,7 +9906,7 @@ static const Ability PoseidonsDominion = {
 static const Ability DualShadow = {
     .name = $("Two-Faced"),
     .description = $("Changes form each turn. boosts elec\n"
-    "/dark moves by 35% with 10% recoil"),
+                     "/dark moves by 35% with 10% recoil"),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED) int newSpecies;
         switch (gBattleMons[battler].species) {
@@ -9953,6 +9953,52 @@ static const Ability Lullaby = {
         CHECK(move == MOVE_SING);
         *accuracy *= 1.5;
         return ACCURACY_MULTIPLICATIVE;
+    },
+};
+
+static const Ability CryoArchitect = {
+    .name = $("Cryo Architect"),
+    .description = $("Boosts Attack and Def when\n"
+                     "hit by Water or Ice."),
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        int abilityState = GetAbilityState(battler, ability);
+        CHECK(abilityState)
+
+        int activate = abilityState & 1;
+        SetAbilityState(battler, ability, abilityState >> 1);
+
+        CHECK(activate)
+        CHECK(CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_LESS_THAN))
+
+        SetStatChanger(STAT_DEF, 1);
+        gBattleScripting.battler = battler;
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+        return TRUE;
+    },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(moveType == TYPE_WATER || moveType == TYPE_ICE)
+
+        int any = FALSE;
+
+        if (CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_LESS_THAN)) {
+            if (moveType == TYPE_WATER) {
+                int abilityState = GetAbilityState(battler, ability);
+                abilityState |= 1 << 1;
+                SetAbilityState(battler, ability, abilityState);
+            } else {
+                SetStatChanger(STAT_DEF, 1);
+                BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+                any = TRUE;
+            }
+        }
+
+        if (CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)) {
+            SetStatChanger(STAT_ATK, 1);
+            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+            any = TRUE;
+        }
+        return any;
     },
 };
 
@@ -10756,6 +10802,7 @@ const Ability gAbilities[] = {
     [ABILITY_POSEIDONS_DOMINION] = PoseidonsDominion,
     [ABILITY_DUAL_SHADOW] = DualShadow,
     [ABILITY_LULLABY] = Lullaby,
+    [ABILITY_CRYO_ARCHITECT] = CryoArchitect,
     [ABILITY_I_AM_STEVE] = iamsteve,
     [ABILITY_AVERAGE_POWER] = AveragePower,
 };
