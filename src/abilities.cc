@@ -9906,17 +9906,11 @@ static const Ability PoseidonsDominion = {
 
 static const Ability DualShadow = {
     .name = $("Two-Faced"),
-    .description = $("Changes form each turn. boosts elec\n"
-                     "/dark moves by 35% with 10% recoil"),
+    .description = $("Changes forms. boosts electric/\n"
+                     "dark moves by 35% with 5% recoil"),
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED) int newSpecies;
         switch (gBattleMons[battler].species) {
-            case SPECIES_MORPEKO:
-                newSpecies = SPECIES_MORPEKO_HANGRY;
-                break;
-            case SPECIES_MORPEKO_HANGRY:
-                newSpecies = SPECIES_MORPEKO;
-                break;
             case SPECIES_MORPEKYLL:
                 newSpecies = SPECIES_MORPEKYLL_HANGRY;
                 break;
