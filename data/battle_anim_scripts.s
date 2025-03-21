@@ -1020,6 +1020,7 @@ gBattleAnims_Moves::
 	.4byte Move_DOUBLE_EDGE @ MOVE_INSECT_IMPACT
 	.4byte Move_ZAP_CANNON @ MOVE_LIGHTNING_BULLET
 	.4byte Move_BOOMBURST @ MOVE_METALLIC_MELODY
+	.4byte Move_NONE @ MOVE_BLUE_MOON
 
 	.align 2
 gBattleAnims_StatusConditions::
