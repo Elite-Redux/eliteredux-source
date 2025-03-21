@@ -2055,6 +2055,9 @@ const u32 gItemIconPalette_BoosterEnergy[] = INCBIN_U32("graphics/items/icon_pal
 const u32 gItemIcon_TrainingBand[] = INCBIN_U32("graphics/items/icons/focus_sash.4bpp.lz");
 const u32 gItemIconPalette_TrainingBand[] = INCBIN_U32("graphics/items/icon_palettes/training_band.gbapal.lz");
 
+const u32 gItemIcon_SwirlyGlasses[] = INCBIN_U32("graphics/items/icons/swirly_glasses.4bpp.lz");
+const u32 gItemIconPalette_SwirlyGlasses[] = INCBIN_U32("graphics/items/icon_palettes/swirly_glasses.gbapal.lz");
+
 // Poké Ball Summary Icons
 const u32 gBallIcon_Poke[] = INCBIN_U32("graphics/summary_screen/ball_icons/poke.4bpp.lz");
 const u32 gBallIconPalette_Poke[] = INCBIN_U32("graphics/summary_screen/ball_icons/poke.gbapal.lz");

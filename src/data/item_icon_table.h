@@ -885,6 +885,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_TRAINING_BAND] = {gItemIcon_TrainingBand, gItemIconPalette_TrainingBand},
     [ITEM_CANDY_BOX] = {gItemIcon_OaksParcel, gItemIconPalette_OaksParcel},
     [ITEM_INFINITE_REPEL] = {gItemIcon_Repel, gItemIconPalette_InfiniteRepel},
+    [ITEM_SWIRLY_GLASSES] = {gItemIcon_SwirlyGlasses, gItemIconPalette_SwirlyGlasses},
 };
 
 // RHH's Poké Ball order
