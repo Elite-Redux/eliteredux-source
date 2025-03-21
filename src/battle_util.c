@@ -7699,8 +7699,10 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
         else if (moveType == TYPE_WATER) {
             u16 modifier = CHECK_WEATHER_DOUBLE_BOOST(1.2, 0.5);
             if (modifier < UQ_4_12(1.0)) {
-                if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_NIKA)) modifier = UQ_4_12(1.0);
-                else if (move == MOVE_STEAM_ERUPTION) modifier = UQ_4_12(1.0);
+                if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_NIKA))
+                    modifier = UQ_4_12(1.0);
+                else if (move == MOVE_STEAM_ERUPTION)
+                    modifier = UQ_4_12(1.0);
             }
             dmg = ApplyModifier(modifier, dmg);
         }
@@ -7709,11 +7711,13 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
             dmg = ApplyModifier(CHECK_WEATHER_DOUBLE_BOOST(1.5 * 1.5, 1.5), dmg);
         else if (moveType == TYPE_FIRE)
             dmg = ApplyModifier(UQ_4_12(1.5), dmg);
-        else if (moveType == TYPE_WATER){
+        else if (moveType == TYPE_WATER) {
             u16 modifier = CHECK_WEATHER_DOUBLE_BOOST(1.5, 0.5);
             if (modifier < UQ_4_12(1.0)) {
-                if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_NIKA)) modifier = UQ_4_12(1.0);
-                else if (move == MOVE_STEAM_ERUPTION) modifier = UQ_4_12(1.0);
+                if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_NIKA))
+                    modifier = UQ_4_12(1.0);
+                else if (move == MOVE_STEAM_ERUPTION)
+                    modifier = UQ_4_12(1.0);
             }
             dmg = ApplyModifier(modifier, dmg);
         }
@@ -8059,6 +8063,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     if (moveType == TYPE_GROUND && !modifier) {
         immunityAbility = CheckLevitatingEffects(battlerDef);
         if (immunityAbility == TRUE) immunityAbility = ABILITY_NONE;
+        modifier = 0;
     }
 
     for (int i = 0; i < gBattlersCount; i++) {
@@ -8113,12 +8118,10 @@ u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilit
         if (gBaseStats[speciesDef].type2 != gBaseStats[speciesDef].type1)
             MulByTypeEffectiveness(&modifier, move, moveType, 0, gBaseStats[speciesDef].type2, 0, FALSE);
 
-        if (moveType == TYPE_GROUND &&
-            (BATTLER_HAS_ABILITY(battlerDef, ABILITY_LEVITATE) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_DRAGONFLY) ||
-             BATTLER_HAS_ABILITY(battlerDef, ABILITY_HUGE_WINGS) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_HOVER) ||
-             BATTLER_HAS_ABILITY(battlerDef, ABILITY_AERIALIST)) &&
-            !(gFieldStatuses & STATUS_FIELD_GRAVITY))
-            modifier = UQ_4_12(0.0);
+        if (moveType == TYPE_GROUND) {
+            ON_ABILITY(battlerDef, TRUE, gAbilities[ability].levitate, modifier = UQ_4_12(0); break)
+        }
+
         if (moveType == TYPE_ROCK && (BATTLER_HAS_ABILITY(battlerDef, ABILITY_MOUNTAINEER))) modifier = UQ_4_12(0.0);
         if ((moveType == TYPE_DARK || moveType == TYPE_GHOST || moveType == TYPE_BUG) && (BATTLER_HAS_ABILITY(battlerDef, ABILITY_GIFTED_MIND)))
             modifier = UQ_4_12(0.0);
@@ -8529,9 +8532,13 @@ bool32 TryRemoveScreens(u8 battler) {
 
 bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId) {
     int opponent = BATTLE_OPPOSITE(battlerId);
-    if (IsBattlerAlive(opponent)) { RETURN_ABILITY_IF_FLAG(BATTLE_OPPOSITE(battlerId), FALSE, unnerve) }
+    if (IsBattlerAlive(opponent)) {
+        RETURN_ABILITY_IF_FLAG(BATTLE_OPPOSITE(battlerId), FALSE, unnerve)
+    }
     opponent = BATTLE_PARTNER(opponent);
-    if (IsBattlerAlive(opponent)) { RETURN_ABILITY_IF_FLAG(BATTLE_OPPOSITE(battlerId), FALSE, unnerve) }
+    if (IsBattlerAlive(opponent)) {
+        RETURN_ABILITY_IF_FLAG(BATTLE_OPPOSITE(battlerId), FALSE, unnerve)
+    }
     return FALSE;
 }
 
@@ -9158,7 +9165,7 @@ int CanBattlerHeal(int battler) {
     if (IsBloodStainAffected(battler)) return FALSE;
     if (IsAbilityOnOpposingSide(battler, ABILITY_PERMANENCE)) return FALSE;
     if (gBattleMons[battler].status1 & STATUS1_POISON_ANY && IsAbilityOnOpposingSide(battler, ABILITY_HEMOLYSIS)) return FALSE;
-    return TRUE;     
+    return TRUE;
 }
 
 int BenefitsFromStatBuffs(int battler) {
