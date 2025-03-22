@@ -168,6 +168,8 @@ typedef struct Ability {
     u16 levitate:1;
     u16 megaLauncherBoost:1;
     u16 unnerve:1;
+    u16 negatesBurnAtkDrop:1;
+    u16 negatesFrzSpatkDrop:1;
 } Ability;
 
 #ifdef __cplusplus

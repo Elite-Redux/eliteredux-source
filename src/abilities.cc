@@ -1062,6 +1062,7 @@ static const Ability Guts = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (HasAnyStatusOrAbility(battler) && IS_MOVE_PHYSICAL(move)) MUL(1.5);
         },
+    .negatesBurnAtkDrop = TRUE,
 };
 
 static const Ability MarvelScale = {
@@ -1299,6 +1300,7 @@ static const Ability Heatproof = {
             if (moveType == TYPE_FIRE) RESISTANCE(.5);
         },
     .breakable = TRUE,
+    .negatesBurnAtkDrop = TRUE,
 };
 
 static const Ability Simple = {
@@ -1922,6 +1924,7 @@ static const Ability FlareBoost = {
             if (statId != STAT_SPATK) return;
             if (gBattleMons[battler].status1 & STATUS1_BURN) *stat *= 1.5;
         },
+    .negatesBurnAtkDrop = TRUE,
 };
 
 static const Ability Harvest = {
@@ -6578,6 +6581,7 @@ static const Ability Determination = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (HasAnyStatusOrAbility(battler) && IS_MOVE_SPECIAL(move)) MUL(1.5);
         },
+    .negatesFrzSpatkDrop = TRUE,
 };
 
 static const Ability Fertilize = {
@@ -8717,6 +8721,7 @@ static const Ability IronGiant = {
     .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
     .onChooseOffensiveStat = Juggernaut.onChooseOffensiveStat,
     .breakable = TRUE,
+    .negatesBurnAtkDrop = TRUE,
 };
 
 static const Ability MasterHand = {
@@ -9024,6 +9029,8 @@ static const Ability RagePoint = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (HasAnyStatusOrAbility(battler)) MUL(1.5);
         },
+    .negatesBurnAtkDrop = TRUE,
+    .negatesFrzSpatkDrop = TRUE,
 };
 
 static const Ability HotCoals = {
@@ -9827,7 +9834,7 @@ static const Ability FlameCoat = {
 static const Ability UnownPower = {
     .name = $("Unown Power"),
     .description = $("Mystic Power + Hidden and Secret\n"
-                    "Power hit Super-effectively."),
+                     "Power hit Super-effectively."),
     .onStab = +[](ON_STAB) -> int { return TRUE; },
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {

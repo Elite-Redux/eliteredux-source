@@ -1414,9 +1414,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             if (B_MENTAL_HERB >= GEN_5 && AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_MENTAL_HERB) score -= 6;
             break;
         case EFFECT_WILL_O_WISP:
-            if (!AI_CanBurn(battlerAtk, battlerDef, AI_DATA->partnerMove) || BattlerHasAbility(battlerDef, ABILITY_FLASH_FIRE, TRUE) ||
-                IsMagicGuardProtected(battlerDef) || BattlerHasAbility(battlerDef, ABILITY_FLARE_BOOST, TRUE) ||
-                BattlerHasAbility(battlerDef, ABILITY_GUTS, TRUE))
+            if (!AI_CanBurn(battlerAtk, battlerDef, AI_DATA->partnerMove)|| IsMagicGuardProtected(battlerDef))
                 score -= 10;
             break;
         case EFFECT_MEMENTO:
@@ -2598,8 +2596,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
              BattlerHasAbility(battlerAtk, ABILITY_SELF_REPAIR, TRUE)) &&
             AI_THINKING_STRUCT->aiFlags & AI_FLAG_SMART_SWITCHING && HasOnlyMovesWithSplit(battlerAtk, SPLIT_PHYSICAL, TRUE)) {
             score = 90;  // Force switch if all your attacking moves are special and you have Natural Cure or Self-Repair.
-        } else if (!BattlerHasAbility(battlerAtk, ABILITY_GUTS, TRUE) && !BattlerHasAbility(battlerAtk, ABILITY_HEATPROOF, TRUE) &&
-                   !BattlerHasAbility(battlerAtk, ABILITY_FLARE_BOOST, TRUE) && IS_MOVE_PHYSICAL(move) && gBattleMoves[move].effect != EFFECT_FACADE) {
+        } else if (IS_MOVE_PHYSICAL(move) && gBattleMoves[move].effect != EFFECT_FACADE && !IgnoresBurnAtkDrop(battlerAtk)) {
             score -= 2;
         }
     }
@@ -2610,7 +2607,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
             BattlerHasAbility(battlerAtk, ABILITY_SELF_REPAIR, TRUE)) {
             if (AI_THINKING_STRUCT->aiFlags & AI_FLAG_SMART_SWITCHING && HasOnlyMovesWithSplit(battlerAtk, SPLIT_SPECIAL, TRUE))
                 score = 90;  // Force switch if all your attacking moves are special and you have Natural Cure or Self-Repair.
-        } else if (!BattlerHasAbility(battlerAtk, ABILITY_GUTS, TRUE) && IS_MOVE_SPECIAL(move) && gBattleMoves[move].effect != EFFECT_FACADE) {
+        } else if (IS_MOVE_SPECIAL(move) && gBattleMoves[move].effect != EFFECT_FACADE && !IgnoresFrostbiteSpatkDrop(battlerAtk)) {
             score -= 2;
         }
     }
