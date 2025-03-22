@@ -4166,6 +4166,11 @@ static const u8 sLoadedDiceDesc[] = _(
     "Multihit strikes\n"
     "hit more times.");
 
+static const u8 sSwirlyGlasses[] = _(
+    "Makes physical moves\n"
+    "special and special\n"
+    "moves physical.");
+
 //3.0 CUTOFF
 
 static const u8 sWeavileiteDesc[] = _(

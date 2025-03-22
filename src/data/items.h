@@ -9558,6 +9558,17 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
 
+    [ITEM_SWIRLY_GLASSES] =
+    {
+        .name = _("Swirly Glasses"),
+        .price = 30000,
+        .holdEffect = HOLD_EFFECT_SWIRLY_GLASSES,
+        .description = sSwirlyGlasses,
+        .pocket = POCKET_BATTLE,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+
     [ITEM_CHIEN_PAOITE] = 
     {
         .name = _("Chien-Paoite"),

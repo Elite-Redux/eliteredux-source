@@ -2583,6 +2583,7 @@ static const u16 sBattleItemList[][2] =
     {ITEM_KINGS_ROCK,       50},
     {ITEM_MUSCLE_BAND,      50},
     {ITEM_WISE_GLASSES,     50},
+    {ITEM_SWIRLY_GLASSES,   50},
     {ITEM_ABILITY_SHIELD,   50},
     {ITEM_CLEAR_AMULET,     50},
     {ITEM_PUNCHING_GLOVE,   50},

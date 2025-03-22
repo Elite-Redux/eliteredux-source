@@ -448,6 +448,7 @@
 #define ITEM_FROST_ORB           (LAST_MISC_ITEM_INDEX + 198)
 #define ITEM_TACTICAL_VEST       (LAST_MISC_ITEM_INDEX + 199)
 #define ITEM_BOOSTER_ENERGY      (LAST_MISC_ITEM_INDEX + 200)
+#define ITEM_SWIRLY_GLASSES      (LAST_MISC_ITEM_INDEX + 201)
 // Temp items in case new ones are added later
 #define ITEM_BATTLE_TEMP_100     (LAST_MISC_ITEM_INDEX + 300)
 
