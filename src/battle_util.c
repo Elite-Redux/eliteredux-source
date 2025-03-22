@@ -7296,6 +7296,16 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
     return ApplyModifier(modifier, actualPower);
 }
 
+int IgnoresBurnAtkDrop(int battler) {
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, negatesBurnAtkDrop)
+    return FALSE;
+}
+
+int IgnoresFrostbiteSpatkDrop(int battler) {
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, negatesFrzSpatkDrop)
+    return FALSE;
+}
+
 u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isAttack, bool8 isCrit, bool8 isUnaware, bool8 calculatingSecondary) {
     u32 statBase = 0;
     u8 statStage = gBattleMons[battler].statStages[statEnum];
@@ -7325,10 +7335,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             if (gVolatileStructs[battler].readiedAction) statBase *= 2;
 
             // Burn
-            if ((gBattleMons[battler].status1 & STATUS1_BURN) && gBattleMoves[move].effect != EFFECT_FACADE &&
-                !BATTLER_HAS_ABILITY(battler, ABILITY_FLARE_BOOST) && !BATTLER_HAS_ABILITY(battler, ABILITY_HEATPROOF) &&
-                !BATTLER_HAS_ABILITY(battler, ABILITY_IRON_GIANT) && !BATTLER_HAS_ABILITY(battler, ABILITY_GUTS))
-                statBase /= 2;
+            if ((gBattleMons[battler].status1 & STATUS1_BURN) && gBattleMoves[move].effect != EFFECT_FACADE && !IgnoresBurnAtkDrop(battler)) statBase /= 2;
             break;
 
         case STAT_SPATK:
@@ -7339,8 +7346,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             if (gVolatileStructs[battler].rapidResponse) statBase = statBase * 6 / 5;
 
             // Frostbite
-            if ((gBattleMons[battler].status1 & STATUS1_FROSTBITE) && gBattleMoves[move].effect != EFFECT_FACADE &&
-                !BATTLER_HAS_ABILITY(battler, ABILITY_DETERMINATION))
+            if ((gBattleMons[battler].status1 & STATUS1_FROSTBITE) && gBattleMoves[move].effect != EFFECT_FACADE && !IgnoresFrostbiteSpatkDrop(battler))
                 statBase /= 2;
             break;
 
