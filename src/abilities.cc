@@ -7226,8 +7226,8 @@ static const Ability Egoist = {
 
 static const Ability Subdue = {
     .name = $("Subdue"),
-    .description = $("Doubles the power of\n"
-                     "stat dropping moves."),
+    .description = $("Doubles stat drop effects\n"
+                    "used by this pokemon."),
 };
 
 static const Ability ReadiedAction = {
@@ -8792,8 +8792,8 @@ static const Ability SwordOfDamnation = {
 
 static const Ability RestrainingOrder = {
     .name = $("Restraining Order"),
-    .description = $("Forces the attacker when hit\n"
-                     "once each switch-in."),
+    .description = $("Forces the attacker out when\n"
+                     " hit, once each switch-in."),
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
         CHECK(ShouldApplyOnHitAffect(battler))
@@ -9908,7 +9908,7 @@ static const Ability Caretaker = {
 
 static const Ability PoseidonsDominion = {
     .name = $("Poseidon's Dominion"),
-    .description = $("Whirlpool on entry."),
+    .description = $("Attacks with Whirlpool on entry."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_WHIRLPOOL, 0); },
 };
 
