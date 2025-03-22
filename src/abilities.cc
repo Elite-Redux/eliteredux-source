@@ -108,6 +108,8 @@ ENUM_OR(InfiltrateType)
 #define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
 #define ON_AFTER_TYPE_EFFECTIVENESS int battler, int ability, int target, int move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
 #define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
+#define ON_MODIFY_EFFECT_CHANCE int battler, int move, int moveEffect, int *effectChance
+#define DELEGATE_MODIFY_EFFECT_CHANCE battler, move, moveEffect, effectChance
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -675,6 +677,7 @@ static const Ability SereneGrace = {
     .name = $("Serene Grace"),
     .description = $("Doubles chance of secondary\n"
                      "effects on its own moves."),
+    .onModifyEffectChance = +[](ON_MODIFY_EFFECT_CHANCE) { *effectChance *= 2; },
 };
 
 static const Ability SwiftSwim = {
@@ -3572,6 +3575,10 @@ static const Ability Whiteout = {
 static const Ability Pyromancy = {
     .name = $("Pyromancy"),
     .description = $("Moves inflict burn 5x as often."),
+    .onModifyEffectChance =
+        +[](ON_MODIFY_EFFECT_CHANCE) {
+            if (moveEffect == MOVE_EFFECT_BURN) *effectChance *= 5;
+        },
 };
 
 static const Ability KeenEdge = {
@@ -4746,6 +4753,10 @@ static const Ability PreciseFist = {
         CHECK(IsIronFistBoosted(battler, move))
         return 1;
     },
+    .onModifyEffectChance =
+        +[](ON_MODIFY_EFFECT_CHANCE) {
+            if (IsIronFistBoosted(battler, move)) *effectChance *= 5;
+        },
 };
 
 static const Ability Deadeye = {
@@ -5693,6 +5704,10 @@ static const Ability AngelsWrath = {
         }
         return FALSE;
     },
+    .onModifyEffectChance =
+        +[](ON_MODIFY_EFFECT_CHANCE) {
+            if (move == MOVE_POISON_STING) *effectChance = 100;
+        },
 };
 
 static const Ability PrismaticFur = {
@@ -6011,6 +6026,10 @@ static const Ability Cryomancy = {
     .name = $("Cryomancy"),
     .description = $("Moves inflict frostbite\n"
                      "5x as often."),
+    .onModifyEffectChance =
+        +[](ON_MODIFY_EFFECT_CHANCE) {
+            if (moveEffect == MOVE_EFFECT_FROSTBITE) *effectChance *= 5;
+        },
 };
 
 static const Ability PhantomPain = {
@@ -7227,7 +7246,7 @@ static const Ability Egoist = {
 static const Ability Subdue = {
     .name = $("Subdue"),
     .description = $("Doubles stat drop effects\n"
-                    "used by this pokemon."),
+                     "used by this pokemon."),
 };
 
 static const Ability ReadiedAction = {
@@ -8524,6 +8543,7 @@ static const Ability SnowyWrath = {
     .name = $("Snowy Wrath"),
     .description = $("Snow Warning + Cryomancy."),
     .onEntry = SnowWarning.onEntry,
+    .onModifyEffectChance = Cryomancy.onModifyEffectChance,
 };
 
 static const Ability PatternChange = {
@@ -8694,6 +8714,7 @@ static const Ability WayOfPrecision = {
     .description = $("Inner Focus + Precise Fist."),
     .onAccuracy = InnerFocus.onAccuracy,
     .onCrit = PreciseFist.onCrit,
+    .onModifyEffectChance = PreciseFist.onModifyEffectChance,
     .breakable = TRUE,
 };
 

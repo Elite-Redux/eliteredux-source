@@ -2995,30 +2995,11 @@ void SetMoveEffect(bool32 primary, u32 certain) {
 }
 
 int GetMoveEffectChance(int battler, int move, int moveEffect, int baseChance) {
-    switch (moveEffect) {
-        case MOVE_EFFECT_BURN:
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_PYROMANCY)) baseChance *= 5;
-            break;
+    if (moveEffect == MOVE_EFFECT_FLINCH && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) return 0;
 
-        case MOVE_EFFECT_FROSTBITE:
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_CRYOMANCY)) baseChance *= 5;
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_SNOWY_WRATH)) baseChance *= 5;
-            break;
-
-        case MOVE_EFFECT_FLINCH:
-            if (gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) return 0;
-    }
-
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_SERENE_GRACE)) baseChance *= 2;
+    ON_ABILITY(battler, FALSE, gAbilities[ability].onModifyEffectChance, gAbilities[ability].onModifyEffectChance(battler, move, moveEffect, &baseChance))
 
     if (gSideTimers[GetBattlerSide(battler)].rainbowTimer) baseChance *= 2;
-
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_PRECISE_FIST) && IsIronFistBoosted(battler, move)) baseChance *= 5;
-
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_WAY_OF_PRECISION) && IsIronFistBoosted(battler, move)) baseChance *= 5;
-
-    // Angel's Wrath
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_ANGELS_WRATH) && move == MOVE_POISON_STING) baseChance = 100;
 
     return min(baseChance, 100);
 }
