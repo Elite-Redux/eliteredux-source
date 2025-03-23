@@ -807,8 +807,10 @@
 #define ABILITY_DUAL_SHADOW 785 // Hunger Switch + Electric burst and doom blast
 #define ABILITY_LULLABY 786 // Sing has 90% accuracy
 #define ABILITY_CRYO_ARCHITECT 787 // Boosts attack and def from ice and water
-#define ABILITY_I_AM_STEVE 788 // Multiscale + Poison Point
-#define ABILITY_AVERAGE_POWER 789 // Multiscale + Poison Point
+#define ABILITY_GLACIAL_RAGE 788 // Blizzard Volcano Rage
+#define ABILITY_IMMOVABLE_OBJECT 789 // Impenetrable + Sturdy
+#define ABILITY_I_AM_STEVE 790 // Multiscale + Poison Point
+#define ABILITY_AVERAGE_POWER 791 // Multiscale + Poison Point
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_AVERAGE_POWER + 1)
 

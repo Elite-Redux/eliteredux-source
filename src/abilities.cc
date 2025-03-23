@@ -10005,6 +10005,18 @@ static const Ability CryoArchitect = {
     },
 };
 
+static const Ability GlacialRage = {
+    .name = $("Glacial Rage"),
+    .description = $("Triggers 50 BP Blizzard after\n"
+                     "using a Ice-type move."),
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(moveType == TYPE_ICE)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_BLIZZARD, 50);
+    },
+};
+
 static const Ability ImmovableObject = {
     .name = $("Immovable Object"),
     .description = $("Impenetrable + Sturdy."),
@@ -10812,6 +10824,8 @@ const Ability gAbilities[] = {
     [ABILITY_DUAL_SHADOW] = DualShadow,
     [ABILITY_LULLABY] = Lullaby,
     [ABILITY_CRYO_ARCHITECT] = CryoArchitect,
+    [ABILITY_GLACIAL_RAGE] = GlacialRage,
+    [ABILITY_IMMOVABLE_OBJECT] = ImmovableObject,
     [ABILITY_I_AM_STEVE] = iamsteve,
     [ABILITY_AVERAGE_POWER] = AveragePower,
 };
