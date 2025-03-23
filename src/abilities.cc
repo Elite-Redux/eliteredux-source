@@ -10203,6 +10203,25 @@ static const Ability CryoArchitect = {
     },
 };
 
+static const Ability GlacialRage = {
+    .name = $("Glacial Rage"),
+    .description = $("Triggers 50 BP Blizzard after\n"
+                     "using a Ice-type move."),
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(moveType == TYPE_ICE)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_BLIZZARD, 50);
+    },
+};
+
+static const Ability ImmovableObject = {
+    .name = $("Immovable Object"),
+    .description = $("Impenetrable + Sturdy."),
+    .magicGuard = TRUE,
+    .sturdy = TRUE,
+};
+
 const Ability gAbilities[] = {
     [ABILITY_NONE] = None,
     [ABILITY_STENCH] = Stench,
@@ -10992,6 +11011,8 @@ const Ability gAbilities[] = {
     [ABILITY_DUAL_SHADOW] = DualShadow,
     [ABILITY_LULLABY] = Lullaby,
     [ABILITY_CRYO_ARCHITECT] = CryoArchitect,
+    [ABILITY_GLACIAL_RAGE] = GlacialRage,
+    [ABILITY_IMMOVABLE_OBJECT] = ImmovableObject,
 };
 
 #pragma GCC diagnostic pop
