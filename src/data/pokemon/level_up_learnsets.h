@@ -20116,6 +20116,7 @@ static const struct LevelUpMove sDubwoolLevelUpLearnset[] = {
     LEVEL_UP_MOVE(46, MOVE_STEEL_ROLLER),
     LEVEL_UP_MOVE(51, MOVE_COTTON_GUARD),
     LEVEL_UP_MOVE(51, MOVE_SUBMISSION),
+    LEVEL_UP_MOVE(51, MOVE_VOLT_TACKLE),
     LEVEL_UP_END
 };
 
