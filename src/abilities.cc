@@ -10219,7 +10219,6 @@ static const Ability ImmovableObject = {
     .name = $("Immovable Object"),
     .description = $("Impenetrable + Sturdy."),
     .magicGuard = TRUE,
-    .sturdy = TRUE,
 };
 
 const Ability gAbilities[] = {
