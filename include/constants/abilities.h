@@ -807,8 +807,10 @@
 #define ABILITY_DUAL_SHADOW 785 // Changes form each turn. boosts elec/dark moves by 35% with 10% recoil.
 #define ABILITY_LULLABY 786 // Sing accuracy is 90% when used by this Pokémon.
 #define ABILITY_CRYO_ARCHITECT 787 // Boosts attack and def from ice and water
+#define ABILITY_GLACIAL_RAGE 788 // Blizzard Volcano Rage
+#define ABILITY_IMMOVABLE_OBJECT 789 // Impenetrable + Sturdy
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_CRYO_ARCHITECT + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_IMMOVABLE_OBJECT + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
