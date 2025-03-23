@@ -51503,3 +51503,108 @@ static const struct TrainerMonItemCustomMoves sParty_YdamtpyreInsane[] = {
     .moves = MOVE_SNAP_TRAP, MOVE_LOVELY_BITE, MOVE_SWORDS_DANCE, MOVE_SUCKER_PUNCH
     }
 };
+
+static const struct TrainerMonItemCustomMoves sParty_GretaslateportInsane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_IRON_CROWN,
+    .heldItem = ITEM_TACTICAL_VEST,
+    .ability = 1,
+    .evs = {128, 0, 0, 252, 0, 128},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SECRET_SWORD, MOVE_TACHYON_CUTTER, MOVE_PSYBLADE, MOVE_VOLT_SWITCH
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_HARIYAMA,
+    .heldItem = ITEM_ASSAULT_VEST,
+    .ability = 2,
+    .evs = {252, 252, 4, 0, 0, 0},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_FIRST_IMPRESSION, MOVE_UPPER_HAND, MOVE_KNOCK_OFF, MOVE_HEADLONG_RUSH
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_PHEROMOSA,
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 1,
+    .evs = {0, 252, 4, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_TRIPLE_AXEL, MOVE_RIDER_KICK, MOVE_TRIPLE_KICK, MOVE_VICTORY_DANCE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_BLISSEY_REDUX,
+    .heldItem = ITEM_SCOPE_LENS,
+    .ability = 1,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_CLOSE_COMBAT, MOVE_METEOR_MASH, MOVE_ONE_INCH_PUNCH, MOVE_DIZZY_PUNCH
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_RUNERIGUS,
+    .heldItem = ITEM_LEFTOVERS,
+    .ability = 1,
+    .evs = {252, 96, 160, 0, 0, 0},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_ASTONISH, MOVE_POLTERGEIST, MOVE_EARTHQUAKE, MOVE_SCARY_FACE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_GENGAR,
+    .heldItem = ITEM_GENGARITE_X,
+    .ability = 2,
+    .evs = {0, 252, 0, 0, 4, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_SHADOW_FANGS, MOVE_SLUDGE_WAVE, MOVE_SHADOW_SNEAK, MOVE_JAW_LOCK
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_SpenserfortreeInsane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_WYRDEER,
+    .heldItem = ITEM_LIGHT_CLAY,
+    .ability = 1,
+    .evs = {252, 224, 32, 0, 0, 0},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_PSYSHIELD_BASH, MOVE_HORN_DRILL, MOVE_BERSERKER_HORN, MOVE_AGILITY
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_CELEBI,
+    .heldItem = ITEM_WEAKNESS_POLICY,
+    .ability = 0,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_PSYWAVE, MOVE_MAGICAL_LEAF, MOVE_DAZZLING_GLEAM, MOVE_QUIVER_DANCE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_SLAKING,
+    .heldItem = ITEM_CHOICE_SCARF,
+    .ability = 2,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_GIGA_IMPACT, MOVE_EARTHQUAKE, MOVE_HAMMER_ARM, MOVE_PLAY_ROUGH
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_LYCANROC_TWILIGHT,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 0, 0, 0},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_GROWL, MOVE_EMBER, MOVE_ATTRACT
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_VENUSAUR,
+    .heldItem = ITEM_VENUSAURITE_X,
+    .ability = 1,
+    .evs = {252, 252, 4, 0, 0, 0},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_POWER_WHIP, MOVE_POISON_JAB, MOVE_EARTHQUAKE, MOVE_SWORDS_DANCE
+    }
+};

@@ -2577,6 +2577,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_GretaSlateport),
         .party = {.ItemCustomMoves = sParty_GretaSlateport},
+        .partySizeInsane = ARRAY_COUNT(sParty_GretaslateportInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_GretaslateportInsane},
     },
 
     [TRAINER_CHAD] =
@@ -9423,6 +9425,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_SpenserFortree),
         .party = {.ItemCustomMoves = sParty_SpenserFortree},
+        .partySizeInsane = ARRAY_COUNT(sParty_SpenserfortreeInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_SpenserfortreeInsane},
     },
 
     [TRAINER_ARCHIE_SLATEPORT] =
