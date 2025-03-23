@@ -400,6 +400,7 @@ int IsStrikerBoosted(int battler, int move);
 bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId);
 int IgnoresBurnAtkDrop(int battler);
 int IgnoresFrostbiteSpatkDrop(int battler);
+int IsStatusImmune(u8 battlerId, StatusCheckEnum status);
 
 MultihitType GetMultihitType(int battler, int move);
 
@@ -412,7 +413,7 @@ bool32 IsEntrainmentBannedAbilityAttacker(u16 ability);
 bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability);
 
 bool32 CanSleep(u8 battlerId);
-bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget);
+bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget, int move);
 bool32 CanBeBurned(u8 battlerId);
 bool32 CanBeParalyzed(u8 battlerAttacker, u8 battlerTarget);
 bool32 CanBeParalyzedIgnoreType(u8 battlerAttacker, u8 battlerTarget);

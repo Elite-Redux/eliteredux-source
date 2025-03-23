@@ -83,7 +83,23 @@ typedef int (*AbilityOnCrit)(int battler, int target, int move);
 typedef int (*AbilityOnTypeEffectiveness)(int defType, int move, int moveType, u16* mod);
 typedef int (*AbilityOnCopyMove)(int ability, int battler, int attacker, int target, int move);
 typedef void (*AbilityOnAfterTypeEffectiveness)(int battler, int ability, int target, int move, int moveType, u16* mod, u16 mod1, u16 mod2, u16 mod3);
-typedef void (*AbilityOnModifyEffectChance)(int battler, int move, int moveEffect, int *effectChance);
+typedef void (*AbilityOnModifyEffectChance)(int battler, int move, int moveEffect, int* effectChance);
+typedef enum {
+    CHECK_NONE = 0,
+    CHECK_SLEEP = 1,
+    CHECK_POISON = 1 << 1,
+    CHECK_BURN = 1 << 2,
+    CHECK_PARALYSIS = 1 << 3,
+    CHECK_FROSTBITE = 1 << 4,
+    CHECK_BLEED = 1 << 5,
+    CHECK_STATUS1 = CHECK_SLEEP | CHECK_POISON | CHECK_BURN | CHECK_PARALYSIS | CHECK_FROSTBITE | CHECK_BLEED,
+    CHECK_CONFUSION = 1 << 6,
+    CHECK_INFATUATE = 1 << 7,
+    CHECK_RESTRICTING = 1 << 8,
+    CHECK_HEAL_BLOCK = 1 << 9,
+} StatusCheckEnum;
+typedef int (*AbilityOnCanStatusType)(int battler, int move, StatusCheckEnum status);
+typedef int (*AbilityOnStatusImmune)(int battler, int target, int ability, StatusCheckEnum status);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -139,6 +155,8 @@ typedef struct Ability {
     const AbilityOnCopyMove onCopyMove;
     const AbilityOnAfterTypeEffectiveness onAfterTypeEffectiveness;
     const AbilityOnModifyEffectChance onModifyEffectChance;
+    const AbilityOnCanStatusType onCanStatusType;
+    const AbilityOnStatusImmune onStatusImmune;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;
@@ -146,6 +164,7 @@ typedef struct Ability {
     AbilityApplyOn onStatFor:3;
     AbilityApplyOnWithTarget onCritFor:5;
     AbilityApplyOnWithTarget onAfterTypeEffectivenessFor:5;
+    AbilityApplyOn onStatusImmuneFor:3;
     u16 redirectType:5;
     u16 ruinStat:3;
     u16 noDamageHits:2;
@@ -172,6 +191,9 @@ typedef struct Ability {
     u16 unnerve:1;
     u16 negatesBurnAtkDrop:1;
     u16 negatesFrzSpatkDrop:1;
+    u16 canInfatuateAny:1;
+    u16 removesStatusOnImmunity:1;
+    u16 tauntImmune:1;
 } Ability;
 
 #ifdef __cplusplus

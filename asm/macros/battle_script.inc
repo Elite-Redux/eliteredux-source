@@ -2424,8 +2424,14 @@
 	.endm
 
 	.macro jumpifconsumableblocked battler:req, ptr:req
-	various \battler, VARIOUS_HP_FRACTION_TO_DAMAGE
+	various \battler, VARIOUS_JUMP_IF_CONSUMABLE_BLOCKED
 	.4byte \ptr
+	.endm
+
+	.macro jumpifabilitystatusimmunity battler:req, move:req, ptr:req
+	various \battler, VARIOUS_CHECK_STATUS_MOVE_IMMUNITY
+	.4byte \ptr
+	.2byte \move
 	.endm
 
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd

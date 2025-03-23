@@ -110,6 +110,10 @@ ENUM_OR(InfiltrateType)
 #define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
 #define ON_MODIFY_EFFECT_CHANCE int battler, int move, int moveEffect, int *effectChance
 #define DELEGATE_MODIFY_EFFECT_CHANCE battler, move, moveEffect, effectChance
+#define ABILITY_ON_CAN_STATUS_TYPE int battler, int move, StatusCheckEnum status
+#define DELEGATE_ON_CAN_STATUS_TYPE battler, move, status
+#define ABILITY_ON_STATUS_IMMUNE int battler, int target, int ability, StatusCheckEnum status
+#define DELEGATE_ON_STATUS_IMMUNE int battler, target, ability, status
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -397,8 +401,13 @@ static const Ability Limber = {
     .name = $("Limber"),
     .description = $("Immune to paralysis.\n"
                      "Takes 50% less recoil damage."),
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_PARALYSIS)
+        return TRUE;
+    },
     .breakable = TRUE,
     .halfRecoil = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability SandVeil = {
@@ -456,7 +465,13 @@ static const Ability Oblivious = {
     .name = $("Oblivious"),
     .description = $("Immune to infatuation, Scare,\n"
                      "Intimidate and Taunt."),
+    .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
+        CHECK(status & (CHECK_INFATUATE | CHECK_RESTRICTING))
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+    .tauntImmune = TRUE,
 };
 
 static const Ability CloudNine = {
@@ -482,7 +497,12 @@ static const Ability Insomnia = {
     .name = $("Insomnia"),
     .description = $("Cannot fall asleep.\n"
                      "Rest fails if used."),
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_SLEEP)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability ColorChange = {
@@ -500,7 +520,12 @@ static const Ability Immunity = {
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_POISON) RESISTANCE(.5);
         },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_POISON)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability FlashFire = {
@@ -529,7 +554,13 @@ static const Ability OwnTempo = {
     .name = $("Own Tempo"),
     .description = $("Immune to confusion, Intimidate\n"
                      "and Scare."),
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_CONFUSION)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+    .tauntImmune = TRUE,
 };
 
 static const Ability SuctionCups = {
@@ -608,7 +639,7 @@ static const Ability EffectSpore = {
 
         switch (Random() % 3) {
             case 0:
-                CHECK(CanBePoisoned(battler, attacker))
+                CHECK(CanBePoisoned(battler, attacker, MOVE_NONE))
 
                 AbilityStatusEffect(MOVE_EFFECT_POISON | MOVE_EFFECT_AFFECTS_USER);
                 return TRUE;
@@ -752,7 +783,7 @@ static const Ability HugePower = {
 
 ON_EITHER(PoisonPoint) {
     CHECK(ShouldApplyOnHitAffect(opponent))
-    CHECK(CanBePoisoned(battler, opponent))
+    CHECK(CanBePoisoned(battler, opponent, MOVE_NONE))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK(Random() % 100 < 30)
 
@@ -775,6 +806,7 @@ static const Ability InnerFocus = {
         return ACCURACY_ALWAYS_HITS;
     },
     .breakable = TRUE,
+    .tauntImmune = TRUE,
 };
 
 static const Ability MagmaArmor = {
@@ -785,7 +817,12 @@ static const Ability MagmaArmor = {
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_WATER || moveType == TYPE_ICE) RESISTANCE(.7);
         },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_FROSTBITE)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability WaterVeil = {
@@ -799,7 +836,12 @@ static const Ability WaterVeil = {
         BattleScriptPushCursorAndCallback(BattleScript_BattlerEnvelopedItselfInAVeil);
         return TRUE;
     },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_BURN)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability MagnetPull = {
@@ -1117,7 +1159,13 @@ static const Ability RockHead = {
     .name = $("Rock Head"),
     .description = $("Immune to recoil damage, but not\n"
                      "immune to Explosion/crash dmg."),
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_CONFUSION)
+        return TRUE;
+    },
     .noRecoil = TRUE,
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability Drought = {
@@ -1151,7 +1199,13 @@ static const Ability VitalSpirit = {
         CHECK(AbilityHealMonStatus(battler, ability));
         return TRUE;
     },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_SLEEP)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+    .tauntImmune = TRUE,
 };
 
 static const Ability WhiteSmoke = {
@@ -1476,6 +1530,11 @@ static const Ability LeafGuard = {
     .name = $("Leaf Guard"),
     .description = $("Immune to status conditions if\n"
                      "sun is active."),
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
+        return TRUE;
+    },
     .breakable = TRUE,
 };
 
@@ -1621,6 +1680,7 @@ static const Ability Scrappy = {
         *mod = UQ_4_12(1.0);
         return TRUE;
     },
+    .tauntImmune = TRUE,
 };
 
 static const Ability StormDrain = {
@@ -1813,7 +1873,7 @@ static const Ability CursedBody = {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(gVolatileStructs[attacker].disabledMove)
         CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(IsAbilityOnSide(attacker, ABILITY_AROMA_VEIL))
+        CHECK_NOT(IsAbilityStatusProtected(attacker, CHECK_RESTRICTING))
         CHECK(gBattleMons[attacker].pp[gChosenMovePos])
         CHECK(Random() % 100 < 30)
 
@@ -2237,15 +2297,26 @@ static const Ability Teravolt = {
 
 static const Ability AromaVeil = {
     .name = $("Aroma Veil"),
-    .description = $("Immune to Encore, Attract, Taunt,\n"
-                     "Torment, Disable, Heal Block."),
+    .description = $("Protects the team from infatuation,\n"
+                     "heal block, and move restriction."),
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & (CHECK_INFATUATE | CHECK_RESTRICTING | CHECK_HEAL_BLOCK))
+        return TRUE;
+    },
+    .onStatusImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
 static const Ability FlowerVeil = {
     .name = $("Flower Veil"),
-    .description = $("Grass-types on this Pokémon's\n"
-                     "side are immune to stat drops."),
+    .description = $("Protects Grass-type allies\n"
+                     "from status and stat drops."),
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        CHECK(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
+        return TRUE;
+    },
+    .onStatusImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
@@ -2318,6 +2389,11 @@ static const Ability SweetVeil = {
     .name = $("Sweet Veil"),
     .description = $("This Pokémon and its ally are\n"
                      "immune to sleep."),
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_SLEEP)
+        return TRUE;
+    },
+    .onStatusImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
@@ -2591,6 +2667,22 @@ static const Ability ShieldsDown = {
         }
         return FALSE;
     },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        switch (gBattleMons[battler].species) {
+            case SPECIES_MINIOR:
+            case SPECIES_MINIOR_METEOR_ORANGE:
+            case SPECIES_MINIOR_METEOR_YELLOW:
+            case SPECIES_MINIOR_METEOR_GREEN:
+            case SPECIES_MINIOR_METEOR_BLUE:
+            case SPECIES_MINIOR_METEOR_INDIGO:
+            case SPECIES_MINIOR_METEOR_VIOLET:
+                return TRUE;
+
+            default:
+                return FALSE;
+        }
+    },
     .unsuppressable = TRUE,
 };
 
@@ -2613,7 +2705,12 @@ static const Ability WaterBubble = {
             if (moveType == TYPE_WATER) MUL(2.0);
         },
     .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_BURN)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability Steelworker = {
@@ -2831,6 +2928,10 @@ static const Ability Corrosion = {
         *mod = UQ_4_12(2.0);
         return TRUE;
     },
+    .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
+        CHECK(status & STATUS1_POISON_ANY)
+        return TRUE;
+    },
 };
 
 static const Ability Comatose = {
@@ -2842,7 +2943,12 @@ static const Ability Comatose = {
         BattleScriptPushCursorAndCallback(BattleScript_AnnounceStatusAbility);
         return TRUE;
     },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        return TRUE;
+    },
     .unsuppressable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability QueenlyMajesty = {
@@ -4144,7 +4250,12 @@ static const Ability Juggernaut = {
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
             if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *secondaryAtkStatToUse = STAT_DEF;
         },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_PARALYSIS)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability ShortCircuit = {
@@ -4202,6 +4313,7 @@ static const Ability Overwhelm = {
         CHECK(moveType == TYPE_DRAGON) CHECK(defType == TYPE_FAIRY) CHECK_NOT(*mod) *mod = UQ_4_12(1.0);
         return TRUE;
     },
+    .tauntImmune = TRUE,
 };
 
 static const Ability Scare = {
@@ -4336,7 +4448,7 @@ static const Ability Solenoglyphs = {
                      "badly poison the target."),
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(CanBePoisoned(battler, target))
+        CHECK(CanBePoisoned(battler, target, MOVE_NONE))
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(Random() % 2)
 
@@ -4479,6 +4591,10 @@ static const Ability Overcharge = {
         CHECK(moveType == TYPE_ELECTRIC)
         CHECK(defType == TYPE_ELECTRIC)
         *mod = UQ_4_12(2.0);
+        return TRUE;
+    },
+    .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
+        CHECK(status & STATUS1_PARALYSIS)
         return TRUE;
     },
 };
@@ -4741,6 +4857,7 @@ static const Ability BigLeaves = {
             SolarPower.onStat(DELEGATE_STAT);
             Chlorophyll.onStat(DELEGATE_STAT);
         },
+    .onStatusImmune = LeafGuard.onStatusImmune,
     .breakable = TRUE,
     .chloroplast = TRUE,
 };
@@ -4878,7 +4995,7 @@ static const Ability SpectralShroud = {
                      "to badly poison the foe."),
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(CanBePoisoned(battler, target))
+        CHECK(CanBePoisoned(battler, target, MOVE_NONE))
         CHECK(gBattleStruct->ateBoost[battler])
         CHECK(moveType == TYPE_GHOST)
         CHECK(Random() % 100 < 30)
@@ -4893,6 +5010,13 @@ static const Ability Discipline = {
     .name = $("Discipline"),
     .description = $("Rampage moves no longer trap you.\n"
                      "Can't be confused or intimidated."),
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_CONFUSION)
+        return TRUE;
+    },
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+    .tauntImmune = TRUE,
 };
 
 static const Ability Thundercall = {
@@ -4997,7 +5121,9 @@ static const Ability SteelBarrel = {
     .name = $("Steel Barrel"),
     .description = $("Immune to recoil damage, but not\n"
                      "immune to Explosion/crash dmg."),
+    .onStatusImmune = RockHead.onStatusImmune,
     .noRecoil = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability PyroShells = {
@@ -5252,6 +5378,12 @@ static const Ability DesertCloak = {
     .name = $("Desert Cloak"),
     .description = $("Protects its side from status\n"
                      "and secondary effects in sand."),
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
+        return TRUE;
+    },
+    .onStatusImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
@@ -5590,14 +5722,18 @@ static const Ability AngelsWrath = {
         switch (move) {
             case MOVE_TACKLE: {
                 CHECK(ShouldApplyOnHitAffect(target))
-                CHECK(gVolatileStructs[target].encoreTimer)
-                CHECK(gVolatileStructs[target].disableTimer)
+                CHECK(!IsAbilityStatusProtected(target, CHECK_RESTRICTING))
+                CHECK(!gVolatileStructs[target].encoreTimer || !gVolatileStructs[target].disableTimer)
 
-                gVolatileStructs[target].encoreTimer = 2;
-                gVolatileStructs[target].encoredMove = gBattleMons[target].moves[0];
+                if (!gVolatileStructs[target].encoreTimer) {
+                    gVolatileStructs[target].encoreTimer = 2;
+                    gVolatileStructs[target].encoredMove = gBattleMons[target].moves[0];
+                }
 
-                gVolatileStructs[target].disableTimer = gVolatileStructs[target].disableTimerStartValue = 2;
-                gVolatileStructs[target].disabledMove = gBattleMons[target].moves[0];
+                if (!gVolatileStructs[target].disableTimer) {
+                    gVolatileStructs[target].disableTimer = gVolatileStructs[target].disableTimerStartValue = 2;
+                    gVolatileStructs[target].disabledMove = gBattleMons[target].moves[0];
+                }
 
                 BattleScriptCall(BattleScript_AngelsWrath_Effect_Tackle);
                 return TRUE;
@@ -5708,6 +5844,11 @@ static const Ability AngelsWrath = {
         +[](ON_MODIFY_EFFECT_CHANCE) {
             if (move == MOVE_POISON_STING) *effectChance = 100;
         },
+    .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
+        CHECK(status & STATUS1_POISON_ANY)
+        CHECK(move == MOVE_POISON_STING)
+        return TRUE;
+    },
 };
 
 static const Ability PrismaticFur = {
@@ -5891,7 +6032,7 @@ static const Ability Archmage = {
         switch (moveType) {
             case TYPE_POISON:
                 CHECK(IsBattlerAlive(target))
-                CHECK(CanBePoisoned(battler, target))
+                CHECK(CanBePoisoned(battler, target, MOVE_NONE))
 
                 AbilityStatusEffect(MOVE_EFFECT_TOXIC);
                 return TRUE;
@@ -5949,8 +6090,7 @@ static const Ability Archmage = {
             case TYPE_NORMAL:
                 CHECK(IsBattlerAlive(target))
                 CHECK_NOT(gVolatileStructs[target].encoreTimer)
-                CHECK_NOT(IsAbilityOnSide(target, ABILITY_AROMA_VEIL))
-                CHECK_NOT(BATTLER_HAS_ABILITY(target, ABILITY_OBLIVIOUS))
+                CHECK_NOT(IsAbilityStatusProtected(target, CHECK_RESTRICTING))
                 CHECK(SetEncore(target))
 
                 BattleScriptCall(BattleScript_Archmage_Effect_Type_Normal);
@@ -6085,8 +6225,10 @@ static const Ability CombatSpecialist = {
 
 static const Ability JunglesGuard = {
     .name = $("Jungle's Guard"),
-    .description = $("Grass-types on user side: immune\n"
-                     "to status/stat drops from enemy."),
+    .description = $("Protects Grass-type allies\n"
+                     "from status and stat drops."),
+    .onStatusImmune = FlowerVeil.onStatusImmune,
+    .onStatusImmuneFor = FlowerVeil.onStatusImmuneFor,
     .breakable = TRUE,
 };
 
@@ -6414,6 +6556,7 @@ static const Ability Enlightened = {
     .onMoveType = Emanate.onMoveType,
     .onAccuracy = InnerFocus.onAccuracy,
     .breakable = TRUE,
+    .tauntImmune = TRUE,
 };
 
 static const Ability PeacefulSlumber = {
@@ -6552,6 +6695,9 @@ static const Ability PurifyingWaters = {
     .description = $("Hydration + Water Veil."),
     .onEntry = WaterVeil.onEntry,
     .onEndTurn = Hydration.onEndTurn,
+    .onStatusImmune = WaterVeil.onStatusImmune,
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability Seaborne = {
@@ -6626,6 +6772,7 @@ static const Ability PureLove = {
         return TRUE;
     },
     .onDefender = CuteCharm.onDefender,
+    .canInfatuateAny = TRUE,
 };
 
 static const Ability Fighter = {
@@ -6892,6 +7039,7 @@ static const Ability MindsEye = {
     .description = $("Hits Ghost-type Pokémon.\n"
                      "Accuracy can't be lowered."),
     .onTypeEffectiveness = Scrappy.onTypeEffectiveness,
+    .breakable = TRUE,
 };
 
 static const Ability BloodPrice = {
@@ -7053,7 +7201,12 @@ static const Ability PurifyingSalt = {
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GHOST) RESISTANCE(.5);
         },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 int ProtosynthesisHandler(int ability, int battler, AbilityCallType callType) {
@@ -7503,7 +7656,12 @@ static const Ability ThermalExchange = {
         BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
         return TRUE;
     },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_BURN)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability GoodAsGold = {
@@ -7874,7 +8032,7 @@ static const Ability ToxicChain = {
                      "badly poison the foe."),
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(CanBePoisoned(battler, target))
+        CHECK(CanBePoisoned(battler, target, MOVE_NONE))
         CHECK(Random() % 100 < 30)
 
         return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
@@ -8176,6 +8334,7 @@ static const Ability PyroclasticFlow = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
         return MoltenDown.onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS) || Corrosion.onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS);
     },
+    .onCanStatusType = Corrosion.onCanStatusType,
 };
 
 static const Ability BloodBath = {
@@ -8186,8 +8345,13 @@ static const Ability BloodBath = {
         return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) -> int { return !gVolatileStructs[target].fear; }, BattleScript_Bloodlust);
     },
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_BLEED)
+        return TRUE;
+    },
     .onBattlerFaintsFor = APPLY_ON_OTHER,
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability BattleAura = {
@@ -8209,8 +8373,10 @@ static const Ability Bloodlust = {
         }
         return result | BloodBath.onBattlerFaints(DELEGATE_BATTLER_FAINTS);
     },
+    .onStatusImmune = BloodBath.onStatusImmune,
     .onBattlerFaintsFor = APPLY_ON_ANY,
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability PiercingSolo = {
@@ -8363,7 +8529,7 @@ static const Ability VenoblazePincers = {
                 return TRUE;
 
             case 1:
-                CHECK(CanBePoisoned(battler, target))
+                CHECK(CanBePoisoned(battler, target, MOVE_NONE))
                 AbilityStatusEffect(MOVE_EFFECT_TOXIC);
                 return TRUE;
         }
@@ -8491,6 +8657,7 @@ static const Ability UnlockedPotential = {
     .description = $("Inner Focus + Berserk."),
     .onDefender = Berserk.onDefender,
     .onAccuracy = InnerFocus.onAccuracy,
+    .tauntImmune = TRUE,
 };
 
 static const Ability HigherRank = {
@@ -8530,6 +8697,9 @@ static const Ability FlameBubble = {
     .onOffensiveMultiplier = WaterBubble.onOffensiveMultiplier,
     .onDefensiveMultiplier = WaterBubble.onDefensiveMultiplier,
     .onPriority = FlamingSoul.onPriority,
+    .onStatusImmune = WaterBubble.onStatusImmune,
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability ElementalVortex = {
@@ -8642,7 +8812,12 @@ static const Ability BloodStain = {
                      "other status. Spreads on contact."),
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_BLOOD_STAIN); },
     ON_EITHER_ABILITY(BloodStain),
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        return TRUE;
+    },
     .unsuppressable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability BloodStigma = {
@@ -8653,7 +8828,12 @@ static const Ability BloodStigma = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMons[target].status1 & STATUS1_BLEED || IsBloodStainAffected(target)) MUL(1.5);
         },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        return TRUE;
+    },
     .unsuppressable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability MaximumAcceleration = {
@@ -8716,6 +8896,7 @@ static const Ability WayOfPrecision = {
     .onCrit = PreciseFist.onCrit,
     .onModifyEffectChance = PreciseFist.onModifyEffectChance,
     .breakable = TRUE,
+    .tauntImmune = TRUE,
 };
 
 static const Ability WayOfSwiftness = {
@@ -8741,8 +8922,13 @@ static const Ability IronGiant = {
     .description = $("Heatproof + Juggernaut."),
     .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
     .onChooseOffensiveStat = Juggernaut.onChooseOffensiveStat,
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_PARALYSIS)
+        return TRUE;
+    },
     .breakable = TRUE,
     .negatesBurnAtkDrop = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability MasterHand = {
@@ -8837,7 +9023,7 @@ static const Ability AssassinsTools = {
 
         switch (Random() % 3) {
             case 0:
-                CHECK(CanBePoisoned(battler, target));
+                CHECK(CanBePoisoned(battler, target, MOVE_NONE));
                 AbilityStatusEffect(MOVE_EFFECT_POISON);
                 return TRUE;
 
@@ -8901,6 +9087,7 @@ static const Ability BlindRage = {
     .description = $("Scrappy + Mold Breaker."),
     .onEntry = MoldBreaker.onEntry,
     .onTypeEffectiveness = Scrappy.onTypeEffectiveness,
+    .tauntImmune = TRUE,
 };
 
 static const Ability Slipstream = {
@@ -9165,6 +9352,7 @@ static const Ability Depravity = {
     .description = $("Merciless + Overcharge."),
     .onCrit = Merciless.onCrit,
     .onTypeEffectiveness = Overcharge.onTypeEffectiveness,
+    .onCanStatusType = Overcharge.onCanStatusType,
 };
 
 static const Ability Wildfire = {
@@ -9198,7 +9386,7 @@ static const Ability StunShock = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target)) CHECK(Random() % 100 < 60) switch (Random() % 2) {
             case 0:
-                CHECK(CanBePoisoned(battler, target));
+                CHECK(CanBePoisoned(battler, target, MOVE_NONE));
                 AbilityStatusEffect(MOVE_EFFECT_POISON);
                 return TRUE;
 
@@ -9267,6 +9455,7 @@ static const Ability TrashHeap = {
     .onEndTurn = ToxicSpill.onEndTurn,
     .onExit = ToxicSpill.onExit,
     .onTypeEffectiveness = Corrosion.onTypeEffectiveness,
+    .onCanStatusType = Corrosion.onCanStatusType,
 };
 
 static const Ability SludgyMix = {
@@ -9430,6 +9619,12 @@ static const Ability RudeAwakening = {
     .name = $("Rude Awakening"),
     .description = $("Raises all stats becomes immune\n"
                      "to sleep after waking up."),
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_SLEEP)
+        CHECK(GetAbilityState(battler, ability))
+        return TRUE;
+    },
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability TeraformZero = {
@@ -9646,11 +9841,10 @@ static const Ability DoomBlast = {
 static const Ability Bruteforce = {
     .name = $("Brute Force"),
     .description = $("Rock Head + Reckless"),
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
-        },
+    .onOffensiveMultiplier = Reckless.onOffensiveMultiplier,
+    .onStatusImmune = RockHead.onStatusImmune,
     .noRecoil = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 static const Ability FaradayCage = {
@@ -9675,6 +9869,7 @@ static const Ability AcidicSlime = {
     .description = $("Corrosion + Poison STAB."),
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
     .onTypeEffectiveness = Corrosion.onTypeEffectiveness,
+    .onCanStatusType = Corrosion.onCanStatusType,
 };
 
 static const Ability RoseGarden = {

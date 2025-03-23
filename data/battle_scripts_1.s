@@ -3212,7 +3212,7 @@ BattleScript_EffectHealBlock:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	jumpifability BS_TARGET_SIDE, ABILITY_AROMA_VEIL, BattleScript_AromaVeilProtects
+	jumpifabilitystatusimmunity BS_TARGET, MOVE_HEAL_BLOCK, BattleScript_LeafGuardProtects
 	sethealblock BattleScript_ButItFailed
 	attackanimation
 	waitanimation
@@ -5083,7 +5083,7 @@ BattleScript_EffectDisable::
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifability BS_TARGET_SIDE, ABILITY_AROMA_VEIL, BattleScript_AromaVeilProtects
+	jumpifabilitystatusimmunity BS_TARGET, MOVE_DISABLE, BattleScript_LeafGuardProtects
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	disablelastusedattack BattleScript_ButItFailed
 	attackanimation
@@ -5140,9 +5140,7 @@ BattleScript_EffectEncore::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	@ requirecandoeffect BS_TARGET, MOVE_EFFECT_ENCORE
-	jumpifability BS_TARGET_SIDE, ABILITY_AROMA_VEIL, BattleScript_AromaVeilProtects
-	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_LeafGuardProtects
+	jumpifabilitystatusimmunity BS_TARGET, MOVE_ENCORE, BattleScript_LeafGuardProtects
 	trysetencore BattleScript_ButItFailed
 	attackanimation
 	waitanimation
@@ -5703,7 +5701,7 @@ BattleScript_EffectAttract::
 	attackstring
 	ppreduce
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifability BS_TARGET_SIDE, ABILITY_AROMA_VEIL, BattleScript_AromaVeilProtects
+	jumpifabilitystatusimmunity BS_TARGET, MOVE_ATTRACT, BattleScript_LeafGuardProtects
 	tryinfatuating BattleScript_ButItFailed
 	attackanimation
 	waitanimation
@@ -6523,8 +6521,7 @@ BattleScript_EffectTorment::
 	attackstring
 	ppreduce
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifability BS_TARGET_SIDE, ABILITY_AROMA_VEIL, BattleScript_AromaVeilProtects
-	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_LeafGuardProtects
+	jumpifabilitystatusimmunity BS_TARGET, MOVE_TORMENT, BattleScript_LeafGuardProtects
 	settorment BattleScript_ButItFailed
 	attackanimation
 	waitanimation
@@ -6724,7 +6721,7 @@ BattleScript_EffectTaunt::
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifability BS_TARGET_SIDE, ABILITY_AROMA_VEIL, BattleScript_AromaVeilProtects
+	jumpifabilitystatusimmunity BS_TARGET, MOVE_TAUNT, BattleScript_LeafGuardProtects
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	settaunt BattleScript_ButItFailed
 	attackanimation

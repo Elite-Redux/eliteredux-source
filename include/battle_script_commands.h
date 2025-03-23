@@ -61,13 +61,13 @@ bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, u32 move);
 bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move);
 s8 RemainingNoDamageHits(u8 battler);
 u16 GetNoDamageAbility(u8 battler);
-bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget);
+bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget, int move);
 bool32 CanParalyzeType(u8 battlerAttacker, u8 battlerTarget);
 bool32 CanUseLastResort(u8 battlerId);
 u32 IsFlowerVeilProtected(u32 battler);
 u32 IsLeafGuardProtected(u32 battler);
 bool32 IsShieldsDownProtected(u32 battler);
-u32 IsAbilityStatusProtected(u32 battler);
+u32 IsAbilityStatusProtected(u32 battler, StatusCheckEnum status);
 int GetMoveEffectChance(int battler, int move, int moveEffect, int baseChance);
 #define RESET_ALL_STATS 0
 #define RESET_STAT_BUFFS 1

@@ -3371,7 +3371,7 @@ static u8 GetMoveTypeEffectivenessStatus(u16 moveNum, u8 targetId, u8 userId) {
             break;
         case EFFECT_TOXIC:
         case EFFECT_POISON:
-            if (!CanBePoisoned(userId, targetId)) moveNullified = TRUE;
+            if (!CanBePoisoned(userId, targetId, moveNum)) moveNullified = TRUE;
             break;
         case EFFECT_WILL_O_WISP:
             if (!CanBeBurned(targetId)) moveNullified = TRUE;

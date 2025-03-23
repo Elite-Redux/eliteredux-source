@@ -2191,7 +2191,7 @@ bool32 AI_CanSleep(u8 battler) { return CanSleep(battler); }
 bool32 AI_CanPutToSleep(u8 battlerAtk, u8 battlerDef, u16 move, u16 partnerMove) { return CanSleep(battlerDef); }
 
 bool32 ShouldPoisonSelf(u8 battler) {
-    if (CanBePoisoned(battler, battler) &&
+    if (CanBePoisoned(battler, battler, MOVE_NONE) &&
         (BattlerHasAbility(battler, ABILITY_POISON_HEAL, FALSE) || BattlerHasAbility(battler, ABILITY_MARVEL_SCALE, FALSE) ||
          BattlerHasAbility(battler, ABILITY_QUICK_FEET, FALSE) || IsMagicGuardProtected(battler) || HasMoveEffect(battler, EFFECT_FACADE) ||
          HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT) || (BattlerHasAbility(battler, ABILITY_TOXIC_BOOST, FALSE) && HasMoveWithSplit(battler, SPLIT_PHYSICAL)) ||
@@ -2200,7 +2200,7 @@ bool32 ShouldPoisonSelf(u8 battler) {
     else
         return FALSE;
 }
-bool32 AI_CanPoison(u8 battlerAtk, u8 battlerDef, u16 move, u16 partnerMove) { return CanBePoisoned(battlerAtk, battlerDef); }
+bool32 AI_CanPoison(u8 battlerAtk, u8 battlerDef, u16 move, u16 partnerMove) { return CanBePoisoned(battlerAtk, battlerDef, move); }
 
 bool32 AI_CanParalyze(u8 battlerAtk, u8 battlerDef, u16 move, u16 partnerMove) {
     if (!CanBeParalyzed(battlerAtk, battlerDef) || AI_GetMoveEffectiveness(move, battlerAtk, battlerDef) == AI_EFFECTIVENESS_x0 ||
