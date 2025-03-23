@@ -9000,7 +9000,7 @@ static const Ability SwordOfDamnation = {
 static const Ability RestrainingOrder = {
     .name = $("Restraining Order"),
     .description = $("Forces the attacker out when\n"
-                     " hit, once each switch-in."),
+                     "hit, once each switch-in."),
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
         CHECK(ShouldApplyOnHitAffect(battler))
