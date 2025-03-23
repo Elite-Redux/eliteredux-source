@@ -8473,6 +8473,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_LucyLavaridge),
         .party = {.ItemCustomMoves = sParty_LucyLavaridge},
+        .partySizeInsane = ARRAY_COUNT(sParty_LucylavaridgeInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_LucylavaridgeInsane},
     },
 
     [TRAINER_GRUNT_MT_PYRE_4] =
@@ -9477,6 +9479,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_SpenserFortree),
         .party = {.ItemCustomMoves = sParty_SpenserFortree},
+        .partySizeInsane = ARRAY_COUNT(sParty_SpenserfortreeInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_SpenserfortreeInsane},
     },
 
     [TRAINER_ARCHIE_SLATEPORT] =
@@ -12938,6 +12942,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_NidoMegas_Route116Rusturf),
         .party = {.ItemCustomMoves = sParty_NidoMegas_Route116Rusturf},
+        .partySizeInsane = ARRAY_COUNT(sParty_NidomegasRoute116rusturfInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_NidomegasRoute116rusturfInsane},
     },
 
     [TRAINER_DRAGONITENITE_SAGE_1] = // Dragonitenite
