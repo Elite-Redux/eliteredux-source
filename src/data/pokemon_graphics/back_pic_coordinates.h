@@ -1493,7 +1493,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_WAILORD] =
     {
         .size = 0x85,
-        .y_offset = 14,
+        .y_offset = 22,
     },
     [SPECIES_SKITTY] =
     {
@@ -7432,17 +7432,17 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_UNOWN_T] =
     {
         .size = 0x45,
-        .y_offset = 4,
+        .y_offset = 7,
     },
     [SPECIES_UNOWN_U] =
     {
         .size = 0x65,
-        .y_offset = 13,
+        .y_offset = 0,
     },
     [SPECIES_UNOWN_V] =
     {
         .size = 0x56,
-        .y_offset = 11,
+        .y_offset = 0,
     },
     [SPECIES_UNOWN_W] =
     {
