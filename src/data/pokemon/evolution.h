@@ -662,7 +662,8 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_CETODDLE]              = {{EVO_LEVEL, 30, SPECIES_CETITAN}}, //To Change
     [SPECIES_FRIGIBAX] = {{EVO_LEVEL, 23, SPECIES_ARCTIBAX}},
     [SPECIES_ARCTIBAX]              = {{EVO_LEVEL, 50, SPECIES_BAXCALIBUR}},
-    [SPECIES_GIMMIGHOUL]            = {{EVO_LEVEL, 44, SPECIES_GHOLDENGO}},
+    [SPECIES_GIMMIGHOUL]     = {{EVO_LEVEL, 44, SPECIES_GHOLDENGO},
+                                       {EVO_LEVEL, 50, SPECIES_UNOWN_V}},
     [SPECIES_GIMMIGHOUL_ROAMING]    = {{EVO_LEVEL, 44, SPECIES_GHOLDENGO}},
     [SPECIES_POLTCHAGEIST]          = {{EVO_LEVEL, 36, SPECIES_SINISTCHA}}, //To Change
     //Alternate Forms
