@@ -2761,23 +2761,14 @@ u8 DoBattlerEndTurnEffects(void) {
             case ENDTURN_YAWN:  // yawn
                 if (gStatuses3[gActiveBattler] & STATUS3_YAWN) {
                     gStatuses3[gActiveBattler] -= STATUS3_YAWN_TURN(1);
-                    if (!(gStatuses3[gActiveBattler] & STATUS3_YAWN) && !(gBattleMons[gActiveBattler].status1 & STATUS1_ANY) &&
-                        !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_VITAL_SPIRIT) && !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_INSOMNIA) &&
-                        !UproarWakeUpCheck(gActiveBattler) && !IsLeafGuardProtected(gActiveBattler)) {
+                    if (!(gStatuses3[gActiveBattler] & STATUS3_YAWN) && CanSleep(gActiveBattler)) {
                         CancelMultiTurnMoves(gActiveBattler);
                         gEffectBattler = gActiveBattler;
-                        if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_ELECTRIC_TERRAIN)) {
-                            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINPREVENTS_ELECTRIC;
-                            BattleScriptExecute(BattleScript_TerrainPreventsEnd2);
-                        } else if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_MISTY_TERRAIN)) {
-                            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINPREVENTS_MISTY;
-                            BattleScriptExecute(BattleScript_TerrainPreventsEnd2);
-                        } else {
-                            gBattleMons[gActiveBattler].status1 |= (Random() & 3) + 2;
-                            BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
-                            MarkBattlerForControllerExec(gActiveBattler);
-                            BattleScriptExecute(BattleScript_YawnMakesAsleep);
-                        }
+                        
+                        gBattleMons[gActiveBattler].status1 |= (Random() & 3) + 2;
+                        BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
+                        MarkBattlerForControllerExec(gActiveBattler);
+                        BattleScriptExecute(BattleScript_YawnMakesAsleep);
                         effect++;
                     }
                 }
@@ -4485,9 +4476,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                         })
 
                     if (immunityAbility) {
+                        gBattleScripting.abilityPopupOverwrite = immunityAbility;
+                        effect = 1;
+
                         switch (status) {
-                            gBattleScripting.abilityPopupOverwrite = immunityAbility;
-                            effect = 1;
                             case CHECK_POISON:
                                 StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
                                 break;
@@ -4957,7 +4949,7 @@ bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget, int move) {
 
     if (!IsStatusImmune(battlerTarget, CHECK_POISON)) return FALSE;
 
-    if (!(CanPoisonType(battlerAttacker, battlerTarget, move)) || BATTLER_HAS_ABILITY(battlerTarget, ABILITY_IMMUNITY)) return FALSE;
+    if (!CanPoisonType(battlerAttacker, battlerTarget, move)) return FALSE;
     return TRUE;
 }
 

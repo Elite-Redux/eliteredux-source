@@ -9236,7 +9236,7 @@ static void Cmd_manipulatedamage(void) {
         case DMG_RECOIL_FROM_MISS:
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
 
-            if (BattlerHasAbility(gBattlerAttacker, ABILITY_LIMBER, FALSE)) gBattleMoveDamage = gBattleMoveDamage * 0.5;
+            ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].halfRecoil, gBattleMoveDamage /= 2)
             break;
         case DMG_DOUBLED:
             gBattleMoveDamage *= 2;
@@ -9264,7 +9264,7 @@ static void Cmd_manipulatedamage(void) {
         case DMG_RECOIL_FROM_IMMUNE:
             gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 2;
 
-            if (BattlerHasAbility(gBattlerAttacker, ABILITY_LIMBER, FALSE)) gBattleMoveDamage = gBattleMoveDamage * 0.5;
+            ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].halfRecoil, gBattleMoveDamage /= 2)
             break;
         case DMG_TO_HP_FROM_ABILITY:
             gBattleMoveDamage = GetDrainedBigRootHp(gBattlerAttacker, gBattleMoveDamage);
@@ -10179,7 +10179,7 @@ static void Cmd_setlightscreen(void) {
 u16 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler) {
     if (BattlerHasAbility(battler, ABILITY_GUARD_DOG, FALSE)) return FALSE;
 
-    RETURN_ABILITY_IF_FLAG(battler, FALSE, gAbilities[ability].tauntImmune)
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, tauntImmune)
 
     return FALSE;
 }
@@ -13146,7 +13146,7 @@ static void Cmd_trygetbaddreamstarget(void) {
 }
 
 static void Cmd_tryworryseed(void) {
-    if (IsWorrySeedBannedAbility(GetBattlerAbility(gBattlerTarget)) || DoesBattlerHaveAbilityShield(gBattlerTarget)) {
+    if (IsWorrySeedBannedAbility(GetBattlerAbility(gBattlerTarget)) || HasAbilityIgnoringSuppression(gBattlerTarget, ABILITY_INSOMNIA) || DoesBattlerHaveAbilityShield(gBattlerTarget)) {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     } else {
         UpdateAbilityStateIndicesForNewAbility(gBattlerTarget, ABILITY_INSOMNIA);

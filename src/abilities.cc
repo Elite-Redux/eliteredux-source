@@ -1163,8 +1163,8 @@ static const Ability RockHead = {
         CHECK(status & CHECK_CONFUSION)
         return TRUE;
     },
-    .noRecoil = TRUE,
     .breakable = TRUE,
+    .noRecoil = TRUE,
     .removesStatusOnImmunity = TRUE,
 };
 
