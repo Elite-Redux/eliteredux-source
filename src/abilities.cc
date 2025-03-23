@@ -10005,6 +10005,12 @@ static const Ability CryoArchitect = {
     },
 };
 
+static const Ability ImmovableObject = {
+    .name = $("Immovable Object"),
+    .description = $("Impenetrable + Sturdy."),
+    .magicGuard = TRUE,
+};
+
 static const Ability iamsteve = {
     .name = $("i am steve"),
     .description = $("guys why is steve jack black\n"

@@ -28828,12 +28828,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_COSMOG] =
     {
-    .baseHP        = 43,
-    .baseAttack    = 29,
-    .baseDefense   = 31,
-    .baseSpeed     = 37,
-    .baseSpAttack  = 29,
-    .baseSpDefense = 31,
+    .baseHP         = 43,
+    .baseAttack     = 29,
+    .baseDefense    = 31,
+    .baseSpeed      = 137,
+    .baseSpAttack   = 29,
+    .baseSpDefense  = 31,
     .type1 = TYPE_PSYCHIC,
     .type2 = TYPE_PSYCHIC,
     .catchRate = 255,
