@@ -4155,7 +4155,7 @@ static const Ability Dragonfly = {
 static const Ability Dragonslayer = {
     .name = $("Dragonslayer"),
     .description = $("Deals 1.5x damage to Dragons.\n"
-                     "Takes .5x damage from Dragons."),
+                     "Takes 0.5x damage from Dragons."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_BATTLER_OF_TYPE(target, TYPE_DRAGON)) RESISTANCE(1.5);
