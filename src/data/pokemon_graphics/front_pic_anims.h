@@ -6096,7 +6096,7 @@ static const union AnimCmd sAnim_UNOWN_G1_1[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnim_UNOWN_H1_1[] =
+static const union AnimCmd sAnim_OBAMASNOW_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -6144,7 +6144,7 @@ static const union AnimCmd sAnim_UNOWN_O1_1[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnim_UNOWN_P1_1[] =
+static const union AnimCmd sAnim_PEPSICHAMP_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -6168,19 +6168,19 @@ static const union AnimCmd sAnim_UNOWN_S1_1[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnim_UNOWN_T_1[] =
+static const union AnimCmd sAnim_UNOWN_T1_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnim_UNOWN_U_1[] =
+static const union AnimCmd sAnim_BOWSERSTOISE_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnim_UNOWN_V_1[] =
+static const union AnimCmd sAnim_UNOWN_V1_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -15218,9 +15218,9 @@ static const union AnimCmd *const sAnims_UNOWN_G1[] ={
     sAnim_UNOWN_G1_1,
 };
 
-static const union AnimCmd *const sAnims_UNOWN_H1[] ={
+static const union AnimCmd *const sAnims_OBAMASNOW_MEGA[] ={
     sAnim_GeneralFrame0,
-    sAnim_UNOWN_H1_1,
+    sAnim_OBAMASNOW_MEGA_1,
 };
 
 static const union AnimCmd *const sAnims_UNOWN_I1[] ={
@@ -15258,9 +15258,9 @@ static const union AnimCmd *const sAnims_UNOWN_O1[] ={
     sAnim_UNOWN_O1_1,
 };
 
-static const union AnimCmd *const sAnims_UNOWN_P1[] ={
+static const union AnimCmd *const sAnims_PEPSICHAMP_MEGA[] ={
     sAnim_GeneralFrame0,
-    sAnim_UNOWN_P1_1,
+    sAnim_PEPSICHAMP_MEGA_1,
 };
 
 static const union AnimCmd *const sAnims_UNOWN_Q1[] ={
@@ -15278,19 +15278,19 @@ static const union AnimCmd *const sAnims_UNOWN_S1[] ={
     sAnim_UNOWN_S1_1,
 };
 
-static const union AnimCmd *const sAnims_UNOWN_T[] ={
+static const union AnimCmd *const sAnims_UNOWN_T1[] ={
     sAnim_GeneralFrame0,
-    sAnim_UNOWN_T_1,
+    sAnim_UNOWN_T1_1,
 };
 
-static const union AnimCmd *const sAnims_UNOWN_U[] ={
+static const union AnimCmd *const sAnims_BOWSERSTOISE_MEGA[] ={
     sAnim_GeneralFrame0,
-    sAnim_UNOWN_U_1,
+    sAnim_BOWSERSTOISE_MEGA_1,
 };
 
-static const union AnimCmd *const sAnims_UNOWN_V[] ={
+static const union AnimCmd *const sAnims_UNOWN_V1[] ={
     sAnim_GeneralFrame0,
-    sAnim_UNOWN_V_1,
+    sAnim_UNOWN_V1_1,
 };
 
 static const union AnimCmd *const sAnims_UNOWN_W[] ={
@@ -22062,7 +22062,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(UNOWN_E1),
     ANIM_CMD(UNOWN_F1),
     ANIM_CMD(UNOWN_G1),
-    ANIM_CMD(UNOWN_H1),
+    ANIM_CMD(OBAMASNOW_MEGA),
     ANIM_CMD(UNOWN_I1),
     ANIM_CMD(UNOWN_J1),
     ANIM_CMD(UNOWN_K1),
@@ -22070,13 +22070,13 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(UNOWN_M1),
     ANIM_CMD(UNOWN_N1),
     ANIM_CMD(UNOWN_O1),
-    ANIM_CMD(UNOWN_P1),
+    ANIM_CMD(PEPSICHAMP_MEGA),
     ANIM_CMD(UNOWN_Q1),
     ANIM_CMD(UNOWN_R1),
     ANIM_CMD(UNOWN_S1),
-    ANIM_CMD(UNOWN_T),
-    ANIM_CMD(UNOWN_U),
-    ANIM_CMD(UNOWN_V),
+    ANIM_CMD(UNOWN_T1),
+    ANIM_CMD(BOWSERSTOISE_MEGA),
+    ANIM_CMD(UNOWN_V1),
     ANIM_CMD(UNOWN_W),
     ANIM_CMD(UNOWN_X),
     ANIM_CMD(UNOWN_Y),

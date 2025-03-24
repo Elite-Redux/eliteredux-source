@@ -1210,7 +1210,7 @@
 #define SPECIES_UNOWN_E1                      FORMS_START + 106
 #define SPECIES_UNOWN_F1                      FORMS_START + 107
 #define SPECIES_UNOWN_G1                      FORMS_START + 108
-#define SPECIES_UNOWN_H1                      FORMS_START + 109
+#define SPECIES_OBAMASNOW_MEGA                      FORMS_START + 109
 #define SPECIES_UNOWN_I1                      FORMS_START + 110
 #define SPECIES_UNOWN_J1                      FORMS_START + 111
 #define SPECIES_UNOWN_K1                      FORMS_START + 112
@@ -1218,13 +1218,13 @@
 #define SPECIES_UNOWN_M1                      FORMS_START + 114
 #define SPECIES_UNOWN_N1                      FORMS_START + 115
 #define SPECIES_UNOWN_O1                      FORMS_START + 116
-#define SPECIES_UNOWN_P1                      FORMS_START + 117
+#define SPECIES_PEPSICHAMP_MEGA                      FORMS_START + 117
 #define SPECIES_UNOWN_Q1                      FORMS_START + 118
 #define SPECIES_UNOWN_R1                      FORMS_START + 119
 #define SPECIES_UNOWN_S1                      FORMS_START + 120
-#define SPECIES_UNOWN_T                      FORMS_START + 121
-#define SPECIES_UNOWN_U                      FORMS_START + 122
-#define SPECIES_UNOWN_V                      FORMS_START + 123
+#define SPECIES_UNOWN_T1                      FORMS_START + 121
+#define SPECIES_BOWSERSTOISE_MEGA                      FORMS_START + 122
+#define SPECIES_UNOWN_V1                      FORMS_START + 123
 #define SPECIES_UNOWN_W                      FORMS_START + 124
 #define SPECIES_UNOWN_X                      FORMS_START + 125
 #define SPECIES_UNOWN_Y                      FORMS_START + 126

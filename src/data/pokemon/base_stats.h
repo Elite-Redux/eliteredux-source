@@ -39993,7 +39993,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_H1] =
+[SPECIES_OBAMASNOW_MEGA] =
     {
     .baseHP         = 77,
     .baseAttack     = 47,
@@ -40209,7 +40209,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_P1] =
+[SPECIES_PEPSICHAMP_MEGA] =
     {
     .baseHP         = 109,
     .baseAttack     = 175,
@@ -40256,8 +40256,8 @@ const struct BaseStats gBaseStats[] =
     .growthRate = GROWTH_MEDIUM_FAST,
     .eggGroup1 = EGG_GROUP_UNDISCOVERED,
     .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-    .abilities      = {ABILITY_SPEED_FORCE, ABILITY_MOMENTUM, ABILITY_FULL_METAL_BODY},
-    .innates        = {ABILITY_STRIKER, ABILITY_RECKLESS, ABILITY_SPEED_BOOST},
+    .abilities      = {ABILITY_STRIKER, ABILITY_MOMENTUM, ABILITY_FULL_METAL_BODY},
+    .innates        = {ABILITY_SPEED_FORCE, ABILITY_RECKLESS, ABILITY_SPEED_BOOST},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = TRUE,
     .tier = 0,
@@ -40316,7 +40316,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_T] =
+[SPECIES_UNOWN_T1] =
     {
     .baseHP         = 99,
     .baseAttack     = 123,
@@ -40343,7 +40343,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_U] =
+[SPECIES_BOWSERSTOISE_MEGA] =
     {
     .baseHP         = 99,
     .baseAttack     = 163,
@@ -40370,7 +40370,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_UNOWN_V] =
+[SPECIES_UNOWN_V1] =
     {
     .baseHP         = 88,
     .baseAttack     = 166,
@@ -40378,8 +40378,8 @@ const struct BaseStats gBaseStats[] =
     .baseSpeed      = 166,
     .baseSpAttack   = 166,
     .baseSpDefense  = 88,
-    .type1 = TYPE_MYSTERY,
-    .type2 = TYPE_MYSTERY,
+    .type1 = TYPE_NORMAL,
+    .type2 = TYPE_NORMAL,
     .catchRate = 225,
     .expYield = 118,
     .evYield_Attack    = 1,

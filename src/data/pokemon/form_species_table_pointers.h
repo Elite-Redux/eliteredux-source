@@ -260,17 +260,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     // Pichu
     [SPECIES_PICHU_SPIKY_EARED] = sPichuFormSpeciesIdTable,
     // Unown
-    [SPECIES_STEVE_REALER] = sUnownFormSpeciesIdTable,
-    [SPECIES_UNOWN_S1] = sUnownFormSpeciesIdTable,
-    [SPECIES_UNOWN_T] = sUnownFormSpeciesIdTable,
-    [SPECIES_UNOWN_U] = sUnownFormSpeciesIdTable,
-    [SPECIES_UNOWN_V] = sUnownFormSpeciesIdTable,
-    [SPECIES_UNOWN_W] = sUnownFormSpeciesIdTable,
-    [SPECIES_UNOWN_X] = sUnownFormSpeciesIdTable,
-    [SPECIES_UNOWN_Y] = sUnownFormSpeciesIdTable,
-    [SPECIES_UNOWN_Z] = sUnownFormSpeciesIdTable,
-    [SPECIES_UNOWN_EMARK] = sUnownFormSpeciesIdTable,
-    [SPECIES_UNOWN_QMARK] = sUnownFormSpeciesIdTable,
     // Castform
     [SPECIES_CASTFORM_SUNNY] = sCastformFormSpeciesIdTable,
     [SPECIES_CASTFORM_RAINY] = sCastformFormSpeciesIdTable,

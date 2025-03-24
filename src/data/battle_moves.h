@@ -2709,7 +2709,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_PRESENT] =
     {
         .effect = EFFECT_HIT_ENEMY_HEAL_ALLY,
-        .power = 80,
+        .power = 120,
         .type = TYPE_MYSTERY,
         .accuracy = 100,
         .pp = 15,
@@ -2717,6 +2717,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_FRUSTRATION] =
     {

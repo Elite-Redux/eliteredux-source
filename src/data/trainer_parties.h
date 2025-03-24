@@ -37358,12 +37358,12 @@ static const struct TrainerMonItemCustomMoves sParty_StevenGraniteCaveInsane[] =
     },
     {
     .lvl = 0,
-    .species = SPECIES_LAIRON,
-    .heldItem = ITEM_EVIOLITE,
-    .ability = 2,
-    .evs = {252, 4, 252, 0, 0, 0},
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_IRON_DEFENSE, MOVE_BODY_PRESS, MOVE_STONE_EDGE, MOVE_IRON_HEAD
+    .species = SPECIES_UNOWN_C1,
+    .heldItem = ITEM_LIFE_ORB,
+    .ability = 1,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_BEHEMOTH_BLADE, MOVE_SLASH, MOVE_PIXIE_SLASH, MOVE_SWORDS_DANCE
     },
     {
     .lvl = 0,
@@ -37381,8 +37381,7 @@ static const struct TrainerMonItemCustomMoves sParty_StevenGraniteCaveInsane[] =
     .ability = 0,
     .evs = {0, 0, 0, 252, 4, 252},
     .nature = NATURE_TIMID,
-    .moves = MOVE_ZAP_CANNON, MOVE_TECHNO_BLAST, MOVE_STEEL_BEAM, MOVE_HIDDEN_POWER,
-    .hpType = TYPE_BUG,
+    .moves = MOVE_ZAP_CANNON, MOVE_TECHNO_BLAST, MOVE_STEEL_BEAM, MOVE_HIDDEN_POWER
     },
     {
     .lvl = 0,
@@ -38226,12 +38225,12 @@ static const struct TrainerMonItemCustomMoves sParty_StevenRoute118[] = {
 static const struct TrainerMonItemCustomMoves sParty_StevenRoute118Insane[] = {
     {
     .lvl = 0,
-    .species = SPECIES_KLEAVOR,
-    .heldItem = ITEM_WEAKNESS_POLICY,
+    .species = SPECIES_UNOWN_C1,
+    .heldItem = ITEM_EYE_OF_ENDER,
     .ability = 2,
-    .evs = {0, 252, 4, 0, 0, 252},
+    .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_STONE_AXE, MOVE_U_TURN, MOVE_ACCELEROCK, MOVE_CROSS_CHOP
+    .moves = MOVE_BEHEMOTH_BLADE, MOVE_METEOR_ASSAULT, MOVE_SLASH, MOVE_TIDY_UP
     },
     {
     .lvl = 0,
@@ -52037,12 +52036,12 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt26Insane[] = {
 static const struct TrainerMonItemCustomMoves sParty_YdamtpyreInsane[] = {
     {
     .lvl = 0,
-    .species = SPECIES_WEAVILE,
-    .heldItem = ITEM_FOCUS_SASH,
-    .ability = 0,
-    .evs = {4, 252, 0, 0, 0, 252},
-    .nature = NATURE_JOLLY,
-    .moves = MOVE_TRIPLE_AXEL, MOVE_KNOCK_OFF, MOVE_SWORDS_DANCE, MOVE_ICE_SHARD
+    .species = SPECIES_SLYDUCK,
+    .heldItem = ITEM_LIFE_ORB,
+    .ability = 2,
+    .evs = {4, 252, 0, 0, 0, 0},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_GLACIAL_LANCE, MOVE_BOLT_STRIKE, MOVE_WICKED_BLOW, MOVE_DRAGON_ASCENT
     },
     {
     .lvl = 0,

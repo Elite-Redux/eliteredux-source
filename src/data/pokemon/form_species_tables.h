@@ -313,15 +313,6 @@ static const u16 sSlowkingFormSpeciesIdTable[] = {
 static const u16 sUnownFormSpeciesIdTable[] = {
     SPECIES_UNOWN,
     SPECIES_UNOWN_REVELATION,
-    SPECIES_UNOWN_T,
-    SPECIES_UNOWN_U,
-    SPECIES_UNOWN_V,
-    SPECIES_UNOWN_W,
-    SPECIES_UNOWN_X,
-    SPECIES_UNOWN_Y,
-    SPECIES_UNOWN_Z,
-    SPECIES_UNOWN_EMARK,
-    SPECIES_UNOWN_QMARK,
     FORM_SPECIES_END,
 };
 

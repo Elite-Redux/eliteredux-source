@@ -7369,7 +7369,7 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x57,
         .y_offset = 13,
     },
-    [SPECIES_UNOWN_H1] =
+    [SPECIES_OBAMASNOW_MEGA] =
     {
         .size = 0x66,
         .y_offset = 16,
@@ -7409,7 +7409,7 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x66,
         .y_offset = 0,
     },
-    [SPECIES_UNOWN_P1] =
+    [SPECIES_PEPSICHAMP_MEGA] =
     {
         .size = 0x46,
         .y_offset = 11,
@@ -7429,17 +7429,17 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x57,
         .y_offset = 9,
     },
-    [SPECIES_UNOWN_T] =
+    [SPECIES_UNOWN_T1] =
     {
         .size = 0x45,
         .y_offset = 7,
     },
-    [SPECIES_UNOWN_U] =
+    [SPECIES_BOWSERSTOISE_MEGA] =
     {
         .size = 0x65,
         .y_offset = 0,
     },
-    [SPECIES_UNOWN_V] =
+    [SPECIES_UNOWN_V1] =
     {
         .size = 0x56,
         .y_offset = 0,
