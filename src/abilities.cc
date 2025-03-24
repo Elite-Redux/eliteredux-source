@@ -1021,13 +1021,20 @@ static const Ability Hustle = {
 
 static const Ability CuteCharm = {
     .name = $("Cute Charm"),
-    .description = $("30% chance to charm attacker on\n"
-                     "contact, which halves its power."),
+    .description = $("50% chance to attract on contact.\n"
+                     "Also works on offense."),
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanInfatuate(battler, target))
+        CHECK(Random() % 100 < 50)
+
+        return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
+    },
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK(CanInfatuate(battler, attacker))
-        CHECK(Random() % 100 < 30)
+        CHECK(Random() % 100 < 50)
 
         gBattleMons[attacker].status2 |= STATUS2_INFATUATED_WITH(battler);
         BattleScriptCall(BattleScript_CuteCharmActivates);
@@ -6655,12 +6662,12 @@ static const Ability Wishmaker = {
 static const Ability YukiOnna = {
     .name = $("Yuki Onna"),
     .description = $("Scare + Intimidate.\n"
-                     "10% chance to infatuate on hit."),
+                     "30% chance to infatuate on hit."),
     .onEntry = UseIntimidateClone,
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanInfatuate(battler, target))
-        CHECK(Random() % 100 < 10)
+        CHECK(Random() % 100 < 30)
 
         return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
     },
