@@ -974,27 +974,20 @@ static const Ability Hustle = {
     },
 };
 
+ON_EITHER(CuteCharm) {
+    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+    CHECK(CanInfatuate(battler, opponent))
+    CHECK(Random() % 100 < 50)
+
+    AbilityStatusEffectSafe(MOVE_EFFECT_ATTRACT, battler, opponent);
+    return TRUE;
+}
 static const Ability CuteCharm = {
     .name = $("Cute Charm"),
     .description = $("50% chance to attract on contact.\n"
                      "Also works on offense."),
-    .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(CanInfatuate(battler, target))
-        CHECK(Random() % 100 < 50)
-
-        return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
-    },
-    .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
-        CHECK(IsMoveMakingContact(move, attacker))
-        CHECK(CanInfatuate(battler, attacker))
-        CHECK(Random() % 100 < 50)
-
-        gBattleMons[attacker].status2 |= STATUS2_INFATUATED_WITH(battler);
-        BattleScriptCall(BattleScript_CuteCharmActivates);
-        return TRUE;
-    },
+    ON_EITHER_ABILITY(CuteCharm),
 };
 
 static const Ability Plus = {
