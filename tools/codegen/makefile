@@ -2,7 +2,7 @@ KT_SRCS := $(wildcard src/er/*.kt src/er/*/*.kt src/er/*/*/*.kt)
 PREPROC_SRCS := $(wildcard src/preproc/*.kt src/preproc/*/*.kt src/preproc/*/*/*.kt)
 JAVA_SRCS := $(wildcard src/er/*.java src/er/*/*.java src/er/*/*/*.java)
 PROTOS := ../../proto
-PROTO_SRCS := $(subst ../../proto/,,$(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.proto))
+PROTO_SRCS := $(subst ../../proto/,,$(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto))
 TEXTPROTO_SRCS := $(wildcard $(PROTOS)/*.textproto $(PROTOS)/*/*.textproto $(PROTOS)/*/*/*.textproto)
 
 all: timestamp/generated
