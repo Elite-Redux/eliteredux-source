@@ -498,7 +498,11 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectQuickGuard			  @ EFFECT_QUICK_GUARD
 	.4byte BattleScript_EffectTwoTurnRetaliation	  @ EFFECT_TWO_TURN_RETALIATION
 	.4byte BattleScript_EffectShellTrap				  @ EFFECT_SHELL_TRAP
+<<<<<<< HEAD
 	.4byte BattleScript_EffectJudgementBone			@ EFFECT_JUDGEMENT_BONE
+=======
+	.4byte BattleScript_GrassyTerrainHit			  @ EFFECT_GRASSY_TERRAIN_HIT
+>>>>>>> 67072100cb (Fix missing sheer force flags)
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -3852,6 +3856,16 @@ BattleScript_EffectTailwindHit::
 	printstring STRINGID_TAILWINDBLEW
 	waitmessage B_WAIT_TIME_LONG
 	call BattleScript_OnTailwindStart
+	goto BattleScript_MoveEnd
+
+BattleScript_GrassyTerrainHit::
+	call BattleScript_EffectHit_Return
+	setgrassyterrain BattleScript_MoveEnd
+	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
+	waitanimation
+	printfromtable gTerrainStringIds
+	waitmessage B_WAIT_TIME_LONG
+	call BattleScript_OnTerrainChanged
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectFairyTerrainHit::
