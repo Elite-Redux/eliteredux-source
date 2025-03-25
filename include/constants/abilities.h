@@ -57,7 +57,7 @@
 #define ABILITY_PICKUP 53 // Removes all hazards on entry. Not immune to hazards.
 #define ABILITY_TRUANT 54 // Can only attack every other turn. Can use status moves every turn.
 #define ABILITY_HUSTLE 55 // 0.9x accuracy. Raises Atk & SpAtk by 1.4x.
-#define ABILITY_CUTE_CHARM 56 // 30% chance to charm attacker on contact, which halves its power.
+#define ABILITY_CUTE_CHARM 56 // 50% chance to attract on contact. Also works on offense.
 #define ABILITY_PLUS 57 // Deals double damage if an ally Pokémon has Minus or Plus.
 #define ABILITY_MINUS 58 // Deals double damage if an ally Pokémon has Minus or Plus.
 #define ABILITY_FORECAST 59 // Changes form with the weather. Weather setting triggers attack.
@@ -332,7 +332,7 @@
 #define ABILITY_HALF_DRAKE 310 // Adds Dragon type to itself.
 #define ABILITY_LIQUIFIED 311 // Takes 1/2 dmg from contact moves but Water moves hurt it 2x more.
 #define ABILITY_DRAGONFLY 312 // Adds Dragon type to itself. Avoids Ground attacks.
-#define ABILITY_DRAGONSLAYER 313 // Deals 1.5x damage to Dragons. Takes .5x damage from Dragons.
+#define ABILITY_DRAGONSLAYER 313 // Deals 1.5x damage to Dragons. Takes 0.5x damage from Dragons.
 #define ABILITY_MOUNTAINEER 314 // Immune to Rock-type attacks and Stealth Rock damage.
 #define ABILITY_HYDRATE 315 // Normal-type moves become Water- type moves and get a 1.1x boost.
 #define ABILITY_METALLIC 316 // Adds Steel type to itself.
@@ -516,7 +516,7 @@
 #define ABILITY_ARCANE_FORCE 494 // All moves gain STAB. Ups “supereffective” by 10%.
 #define ABILITY_DOOMBRINGER 495 // Uses Doom Desire on switch-in.
 #define ABILITY_WISHMAKER 496 // Uses Wish on switch-in. Three uses per battle.
-#define ABILITY_YUKI_ONNA 497 // Scare + Intimidate. 10% chance to infatuate on hit.
+#define ABILITY_YUKI_ONNA 497 // Scare + Intimidate. 30% chance to infatuate on hit.
 #define ABILITY_SUPPRESS 498 // Casts Torment on entry.
 #define ABILITY_REFRIGERATOR 499 // Filter + Illuminate.
 #define ABILITY_HEAVEN_ASUNDER 500 // Spacial Rend always crits. Ups crit level by +1.
@@ -575,7 +575,7 @@
 #define ABILITY_GUARD_DOG 553 // Can't be forced out. Inverts Intimidate effects.
 #define ABILITY_ANGER_SHELL 554 // Applies Shell Smash when reduced below 1/2 HP.
 #define ABILITY_EGOIST 555 // Raises its own stats when foes raise theirs.
-#define ABILITY_SUBDUE 556 // Doubles the power of stat dropping moves.
+#define ABILITY_SUBDUE 556 // Doubles stat drop effects used by this pokemon.
 #define ABILITY_READIED_ACTION 557 // Doubles attack on first turn.
 #define ABILITY_DARK_GALE_WINGS 558 // At full HP, gives +1 priority to this Pokémon's Dark-type moves.
 #define ABILITY_GUILT_TRIP 559 // Sharply lowers attacker's Attack and SpAtk when fainting.
@@ -709,7 +709,7 @@
 #define ABILITY_VITALITY_STRIKE 687 // Heals for 10% of the damage dealt by punching moves.
 #define ABILITY_HUGE_WINGS 688 // Giant Wings + Levitate.
 #define ABILITY_SWORD_OF_DAMNATION 689 // Unaware + Sword of Ruin.
-#define ABILITY_RESTRAINING_ORDER 690 // Forces the attacker when hit once each switch-in.
+#define ABILITY_RESTRAINING_ORDER 690 // Forces the attacker out when hit     once each switch-in.
 #define ABILITY_ASSASSINS_TOOLS 691 // Contact moves have a 30% chance to PSN, PRLZ, or BLD.
 #define ABILITY_FROSTMAW 692 // Biting moves have a 50% chance to inflict frostbite.
 #define ABILITY_PATCHWORK 693 // Disguise + curses the opponent when its Disguise breaks.
@@ -788,7 +788,7 @@
 #define ABILITY_CHAMPIONS_ENTRANCE 766 // Intimidate + Violent Rush.
 #define ABILITY_PRESTO 767 // At full HP, gives +1 priority to this Pokémon's Sound-based moves.
 #define ABILITY_SAMBA 768 // Striker + Dancer.
-#define ABILITY_JUNSHI_SANDA 769 // Every move gets a 30% boost from Combat Specialist.
+#define ABILITY_JUNSHI_SANDA 769 // Punching or Kicking moves count as both Punching and Kicking moves.
 #define ABILITY_GLADIATOR 770 // Boosts Fighting-type moves by 1.3x, or 1.8x when below 1/3 HP.
 #define ABILITY_FORSAKEN_HEART 771 // KOs dealt anywhere on the field raise Attack by one stage.
 #define ABILITY_RELENTLESS 772 // Exploit Weakness + Merciless.
@@ -803,11 +803,11 @@
 #define ABILITY_HUNTERS_MARK 781 // Attacks switching foes with 40BP Spirit Shackle.
 #define ABILITY_HEMOLYSIS 782 // Poisoned foes can't heal and lose all stat buffs.
 #define ABILITY_CARETAKER 783 // Healer + Friend Guard.
-#define ABILITY_POSEIDONS_DOMINION 784 // Whirlpool on entry.
+#define ABILITY_POSEIDONS_DOMINION 784 // Uses Whirlpool on entry.
 #define ABILITY_DUAL_SHADOW 785 // Changes form each turn. boosts elec/dark moves by 35% with 10% recoil.
 #define ABILITY_LULLABY 786 // Sing accuracy is 90% when used by this Pokémon.
 #define ABILITY_CRYO_ARCHITECT 787 // Boosts attack and def from ice and water
-#define ABILITY_GLACIAL_RAGE 788 // Blizzard Volcano Rage
+#define ABILITY_GLACIAL_RAGE 788 // Triggers 50 BP Blizzard after using a Ice-type move.
 #define ABILITY_IMMOVABLE_OBJECT 789 // Impenetrable + Sturdy
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_IMMOVABLE_OBJECT + 1)
