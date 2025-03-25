@@ -122,7 +122,8 @@ bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move) {
 }
 
 u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler) {
-    if ((BATTLER_HAS_ABILITY(battler, ABILITY_ARTILLERY) || BATTLER_HAS_ABILITY(battler, ABILITY_SUPER_SCOPE)) && IsMegaLauncherBoosted(battler, moveId) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
+    if ((BATTLER_HAS_ABILITY(battler, ABILITY_ARTILLERY) || BATTLER_HAS_ABILITY(battler, ABILITY_SUPER_SCOPE)) && IsMegaLauncherBoosted(battler, moveId) &&
+        gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
         return MOVE_TARGET_BOTH;
     else if ((BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE) || BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE_PLUS)) &&
              (gBattleMoves[moveId].flags & FLAG_KEEN_EDGE_BOOST) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
@@ -2764,7 +2765,7 @@ u8 DoBattlerEndTurnEffects(void) {
                     if (!(gStatuses3[gActiveBattler] & STATUS3_YAWN) && CanSleep(gActiveBattler)) {
                         CancelMultiTurnMoves(gActiveBattler);
                         gEffectBattler = gActiveBattler;
-                        
+
                         gBattleMons[gActiveBattler].status1 |= (Random() & 3) + 2;
                         BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
                         MarkBattlerForControllerExec(gActiveBattler);
