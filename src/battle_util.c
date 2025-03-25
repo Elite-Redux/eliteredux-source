@@ -4937,7 +4937,7 @@ bool32 CanSleep(u8 battlerId) {
     if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
-    if (!IsStatusImmune(battlerId, CHECK_SLEEP)) return FALSE;
+    if (IsStatusImmune(battlerId, CHECK_SLEEP)) return FALSE;
 
     if (IsBattlerTerrainAffected(battlerId, STATUS_FIELD_ELECTRIC_TERRAIN)) return FALSE;
     return TRUE;
@@ -4947,7 +4947,7 @@ bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget, int move) {
     if (gBattleMons[battlerTarget].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(battlerAttacker)) return TRUE;
 
-    if (!IsStatusImmune(battlerTarget, CHECK_POISON)) return FALSE;
+    if (IsStatusImmune(battlerTarget, CHECK_POISON)) return FALSE;
 
     if (!CanPoisonType(battlerAttacker, battlerTarget, move)) return FALSE;
     return TRUE;
@@ -4957,7 +4957,7 @@ bool32 CanBeBurned(u8 battlerId) {
     if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
-    if (!IsStatusImmune(battlerId, CHECK_BURN)) return FALSE;
+    if (IsStatusImmune(battlerId, CHECK_BURN)) return FALSE;
 
     return TRUE;
 }
@@ -4966,7 +4966,7 @@ bool32 CanBeParalyzed(u8 battlerAttacker, u8 battlerTarget) {
     if (gBattleMons[battlerTarget].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(battlerAttacker)) return TRUE;
 
-    if (!IsStatusImmune(battlerTarget, CHECK_PARALYSIS)) return FALSE;
+    if (IsStatusImmune(battlerTarget, CHECK_PARALYSIS)) return FALSE;
 
     if (!CanParalyzeType(battlerAttacker, battlerTarget)) return FALSE;
     return TRUE;
@@ -4976,12 +4976,12 @@ bool32 CanBeParalyzedIgnoreType(u8 battlerAttacker, u8 battlerTarget) {
     if (gBattleMons[battlerTarget].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(battlerAttacker)) return TRUE;
 
-    if (!IsStatusImmune(battlerTarget, CHECK_PARALYSIS)) return FALSE;
+    if (IsStatusImmune(battlerTarget, CHECK_PARALYSIS)) return FALSE;
     return TRUE;
 }
 
 bool32 CanBeFrozen(u8 battlerId) {
-    if (!IsStatusImmune(battlerId, CHECK_FROSTBITE)) return FALSE;
+    if (IsStatusImmune(battlerId, CHECK_FROSTBITE)) return FALSE;
 
     return TRUE;
 }
@@ -4992,7 +4992,7 @@ bool32 CanGetFrostbite(u8 battlerId) {
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE)) return FALSE;
 
-    if (!IsStatusImmune(battlerId, CHECK_FROSTBITE)) return FALSE;
+    if (IsStatusImmune(battlerId, CHECK_FROSTBITE)) return FALSE;
     return TRUE;
 }
 
@@ -5000,7 +5000,7 @@ bool32 CanBleed(u8 battlerId) {
     if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
-    if (!IsStatusImmune(battlerId, CHECK_BLEED)) return FALSE;
+    if (IsStatusImmune(battlerId, CHECK_BLEED)) return FALSE;
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ROCK) || IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST) || BATTLER_HAS_ABILITY(battlerId, ABILITY_BLOOD_BATH) ||
         BATTLER_HAS_ABILITY(battlerId, ABILITY_BLOODLUST))
