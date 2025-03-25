@@ -2345,6 +2345,22 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_KINGDRA_PARTNER_MEGA:
         case SPECIES_KINGDRA_PARTNER_MEGA_B:
         case SPECIES_KINGDRA_PARTNER_MEGA_C:
+        case SPECIES_SAMUROTT_MEGA:
+        case SPECIES_EMBOAR_MEGA:
+        case SPECIES_SERPERIOR_MEGA:
+        case SPECIES_QUAQUAVAL_MEGA:
+        case SPECIES_MEOWSCARADA_MEGA:
+        case SPECIES_SKELEDIRGE_MEGA:
+        case SPECIES_SAMUROTT_HISUIAN_MEGA:
+        case SPECIES_DECIDUEYE_HISUIAN_MEGA:
+        case SPECIES_TYPHLOSION_HISUIAN_MEGA:
+        case SPECIES_GOODRA_MEGA:
+        case SPECIES_ROSERADE_MEGA:
+        case SPECIES_ARCANINE_MEGA:
+        case SPECIES_MIENSHAO_MEGA:
+        case SPECIES_WEAVILE_MEGA:
+        case SPECIES_SLOWKING_MEGA_GALARIAN:
+        case SPECIES_SLOWBRO_MEGA_GALARIAN:
             isMega = TRUE;
             if (DrawMegaSymbolBeforeName)
                 StringCopy(gDisplayedStringBattle, gText_MegaSymbolBefore);
