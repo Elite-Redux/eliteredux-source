@@ -638,6 +638,7 @@ static const u16 sAdoptionCenterInventory_EightBadges[] = {
     SPECIES_DEWPIDER_REDUX, //testing purposes
     SPECIES_WIGGLYTUFF_APEX1, //testing purposes
     SPECIES_BURMY_ETERNA, //testing purposes
+    SPECIES_KUBFU, //testing purposes
     SPECIES_MELTAN,
     SPECIES_POIPOLE,
     SPECIES_AZELF_REDUX,

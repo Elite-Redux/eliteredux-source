@@ -16824,22 +16824,22 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_FEZANDIPITI"
+                "species": "SPECIES_OGERPON_HEARTHFLAME_MASK"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_PECHARUNT"
+                "species": "SPECIES_OGERPON_CORNERSTONE_MASK"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_OKIDOGI"
+                "species": "SPECIES_OGERPON_WELLSPRING_MASK"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_MUNKIDORI"
+                "species": "SPECIES_OGERPON"
               },
               {
                 "min_level": 5,
