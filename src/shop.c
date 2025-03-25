@@ -632,6 +632,7 @@ static const u16 sAdoptionCenterInventory_EightBadges[] = {
     SPECIES_BUBBLEO, //testing purposes
     SPECIES_SNORUNT_REDUX, //testing purposes
     SPECIES_DEWPIDER_REDUX, //testing purposes
+    SPECIES_KUBFU, //testing purposes
     SPECIES_MELTAN,
     SPECIES_POIPOLE,
     SPECIES_AZELF_REDUX,

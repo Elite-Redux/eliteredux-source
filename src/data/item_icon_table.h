@@ -645,6 +645,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_MELMETALITE]   = {gItemIcon_Melmetalite, gItemIconPalette_Melmetalite},
     [ITEM_DYNAMAX_ORB]   = {gItemIcon_PurprleOrb, gItemIconPalette_PurprleOrb},
     [ITEM_TERA_ORB]   = {gItemIcon_TeraOrb, gItemIconPalette_TeraOrb},
+    [ITEM_KINGDRANITE_Y]     = {gItemIcon_Kingdranite,     gItemIconPalette_Kingdranite},
     
     [ITEM_HITMONCHANITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_HITMONLEENITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonlite},
