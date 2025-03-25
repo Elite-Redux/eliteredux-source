@@ -2361,6 +2361,9 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_WEAVILE_MEGA:
         case SPECIES_SLOWKING_MEGA_GALARIAN:
         case SPECIES_SLOWBRO_MEGA_GALARIAN:
+        case SPECIES_DECIDUEYE_MEGA:
+        case SPECIES_INCINEROAR_MEGA:
+        case SPECIES_PRIMARINA_MEGA:
             isMega = TRUE;
             if (DrawMegaSymbolBeforeName)
                 StringCopy(gDisplayedStringBattle, gText_MegaSymbolBefore);
