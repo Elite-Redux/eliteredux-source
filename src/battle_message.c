@@ -917,6 +917,7 @@ static const u8 sText_StackRegainedHealth[] = _("{B_STACK_1_NAME_WITH_PREFIX} re
 static const u8 sText_FireCoatDamage[] = _("{B_ATK_NAME_WITH_PREFIX} is scorched\nby the flames!");
 static const u8 sText_FireCoatStart[] = _("Flames engulf the battlefield!");
 static const u8 sText_Soothsayer[] = _("{B_ATK_NAME_WITH_PREFIX} peers\ninto the future!");
+static const u8 sText_RoseGarden[] = _("Toxic spikes rain down on\nthe opponent's side!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
