@@ -63,7 +63,7 @@ Some tips before proceeding:
 4. Certain packages are required to build pokeemerald. Install these packages by running the following command:
 
     ```bash
-    sudo apt install build-essential binutils-arm-none-eabi git libpng-dev gdebi-core zip unzip default-jre default-jdk
+    sudo apt install build-essential binutils-arm-none-eabi gcc-arm-none-eabi git libnewlib-arm-none-eabi libpng-dev gdebi-core zip unzip default-jre default-jdk python3
     wget https://apt.devkitpro.org/install-devkitpro-pacman
     chmod +x ./install-devkitpro-pacman
     sudo ./install-devkitpro-pacman
@@ -175,7 +175,7 @@ Open Terminal and enter the following commands, depending on which distro you're
 ### Debian/Ubuntu-based distributions
 Run the following command to install the necessary packages:
 ```bash
-sudo apt install build-essential binutils-arm-none-eabi git libpng-dev gdebi-core zip unzip default-jre default-jdk
+sudo apt install build-essential binutils-arm-none-eabi gcc-arm-none-eabi git libnewlib-arm-none-eabi libpng-dev gdebi-core zip unzip default-jre default-jdk python3
 wget https://apt.devkitpro.org/install-devkitpro-pacman
 chmod +x ./install-devkitpro-pacman
 sudo ./install-devkitpro-pacman
