@@ -90,6 +90,8 @@ $(eval $(call GENERATE, include/generated/data/pokemon_graphics/coordinates.h, c
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/palettes.h, monpals))
 $(eval $(call GENERATE, include/generated/data/text/move_names.h, movenames))
 $(eval $(call GENERATE, include/generated/data/text/move_descriptions.h, movedescriptions))
+$(eval $(call GENERATE, include/generated/constants/battle_move_effects.h, movebehaviors))
+$(eval $(call GENERATE, include/generated/constants/move_effects.h, moveeffects))
 
 timestamp/generated: $(ALL_GENERATED)
 	@touch timestamp/generated
@@ -112,6 +114,8 @@ cleanlocal: removegenerated
 	rm -f codegenkt.jar
 	rm -rf out/depsets
 	rm -rf out/descriptors
+	rm -f src/er/proto/*.java
+	rm -f src/er/proto/*.kt
 
 clean: cleanlocal
 	rm -f *.jar
