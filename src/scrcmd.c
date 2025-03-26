@@ -2590,7 +2590,7 @@ static const u16 sBattleItemList[][2] =
     {ITEM_COVERT_CLOAK,     50},
     {ITEM_LOADED_DICE,      50},
     {ITEM_BOOSTER_ENERGY,   50},
-    {ITEM_SWIRLY_GLASSES,   50},
+    {ITEM_LUCKY_PUNCH,      50},
     //Pokeballs
     {ITEM_POKE_BALL,         99},
     {ITEM_MASTER_BALL,       1},

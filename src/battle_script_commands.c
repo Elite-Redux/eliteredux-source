@@ -1554,6 +1554,9 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
     critChance += ((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0) + (holdEffectAtk == HOLD_EFFECT_SCOPE_LENS) +
                   2 * (holdEffectAtk == HOLD_EFFECT_LUCKY_PUNCH && (GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_HAPPINY ||
                                                                     GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_CHANSEY ||
+                                                                    GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_HAPPINY_REDUX ||
+                                                                    GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_CHANSEY_REDUX ||
+                                                                    GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_BLISSEY_REDUX ||
                                                                     GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_BLISSEY)) +
                   BENEFITS_FROM_LEEK(battlerAtk, holdEffectAtk) + gVolatileStructs[battlerAtk].critBoost + (move == MOVE_VISE_GRIP);
 
