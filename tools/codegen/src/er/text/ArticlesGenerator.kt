@@ -45,7 +45,8 @@ object ArticlesGenerator : Generator {
                                     breakString(
                                         it,
                                         SMALL_NARROW,
-                                        210
+                                        210,
+                                        9
                                     )
                                 }"),"""
                             }

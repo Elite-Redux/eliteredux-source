@@ -31,7 +31,7 @@ object FontMapping {
         return font.widths.entries[index]
     }
 
-    fun breakString(string: String, font: Font, maxLength: Int) = buildString {
+    fun breakString(string: String, font: Font, maxLength: Int, maxLines: Int) = buildString {
         var curLength = 0
         string.split("""((?= )|(?<=-)|(?=\n))""".toRegex()).forEach { piece ->
             val pieceLength = piece.sumOf { it.width(font, true) }
@@ -45,6 +45,10 @@ object FontMapping {
                 append(piece)
                 curLength += pieceLength
             }
+        }
+    }.also { result ->
+        check(result.split("\\n").size <= maxLines) {
+            "String $result exceeds max line length of $maxLines."
         }
     }
 
