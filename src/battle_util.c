@@ -4958,6 +4958,8 @@ bool32 CanBeBurned(u8 battlerId) {
     if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FIRE)) return FALSE;
+
     if (IsStatusImmune(battlerId, CHECK_BURN)) return FALSE;
 
     return TRUE;
@@ -5003,8 +5005,7 @@ bool32 CanBleed(u8 battlerId) {
 
     if (IsStatusImmune(battlerId, CHECK_BLEED)) return FALSE;
 
-    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ROCK) || IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST) || BATTLER_HAS_ABILITY(battlerId, ABILITY_BLOOD_BATH) ||
-        BATTLER_HAS_ABILITY(battlerId, ABILITY_BLOODLUST))
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ROCK) || IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
         return FALSE;
     return TRUE;
 }
