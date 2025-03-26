@@ -3306,16 +3306,70 @@ static const Ability PowerSpot = {
     .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
 
+int HandleMimicry(u8 battler, int ability, AbilityCallType endType) {
+    u32 moveType = 0;
+
+    switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
+        case STATUS_FIELD_ELECTRIC_TERRAIN:
+            moveType = TYPE_ELECTRIC;
+            break;
+        case STATUS_FIELD_MISTY_TERRAIN:
+            moveType = TYPE_FAIRY;
+            break;
+        case STATUS_FIELD_GRASSY_TERRAIN:
+            moveType = TYPE_GRASS;
+            break;
+        case STATUS_FIELD_PSYCHIC_TERRAIN:
+            moveType = TYPE_PSYCHIC;
+            break;
+        default:
+            moveType = 0;
+            break;
+    }
+
+    gStackBattler1 = battler;
+
+    if (!moveType) {
+        MimicryState state = GetAbilityStateAs(battler, ability).mimicryState;
+        if (state.active) {
+            SetAbilityState(battler, ability, 0);
+            gBattleMons[battler].type1 = state.type1;
+            gBattleMons[battler].type2 = state.type2;
+            InsertCorrectEndType(endType);
+            BattleScriptCall(BattleScript_MimicryEnds);
+            return TRUE;
+        }
+    } else {
+        if (!IS_BATTLER_OF_TYPE(battler, moveType)) {
+            MimicryState state = GetAbilityStateAs(battler, ability).mimicryState;
+            if (!state.active) {
+                SetAbilityStateAs(battler,
+                                  ability,
+                                  (AbilityStates){.mimicryState = {.type1 = gBattleMons[battler].type1, .type2 = gBattleMons[battler].type2, .active = TRUE}});
+            }
+            SET_BATTLER_TYPE(battler, moveType);
+            PREPARE_TYPE_BUFFER(gBattleTextBuff2, moveType);
+            InsertCorrectEndType(endType);
+            BattleScriptCall(BattleScript_MimicryActivates);
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
 static const Ability Mimicry = {
     .name = $("Mimicry"),
     .description = $("Changes type depending on active\n"
                      "Terrain."),
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsBattlerAlive(battler))
-        CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
-        TryToApplyMimicry(battler, FALSE);
-        return TRUE;
+        return HandleMimicry(battler, ability, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+    },
+    .onTerrain = +[](ON_TERRAIN) -> int {
+        CHECK(IsBattlerAlive(battler))
+
+        return HandleMimicry(battler, ability, ABILITY_BS_CALL);
     },
 };
 

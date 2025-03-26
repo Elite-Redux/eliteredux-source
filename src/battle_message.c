@@ -648,7 +648,7 @@ static const u8 sText_AbilityAllowsOnlyMove[] = _("{B_ATK_NAME_WITH_PREFIX} can 
 static const u8 sText_SwappedAbilities[] = _("{B_DEF_NAME_WITH_PREFIX} swapped Abilities\nwith its target!");
 static const u8 sText_PastelVeilProtected[] = _("{B_DEF_NAME_WITH_PREFIX} is protected\nby a pastel veil!");
 static const u8 sText_PastelVeilEnters[] = _("{B_DEF_NAME_WITH_PREFIX} was cured\nof its poisoning!");
-static const u8 sText_BattlerTypeChangedTo[] = _("{B_BUFF1}'s type\nchanged to {B_BUFF2}!");
+static const u8 sText_BattlerTypeChangedTo[] = _("{B_STACK_1_NAME_WITH_PREFIX}'s type\nchanged to {B_BUFF2}!");
 static const u8 sText_BothCanNoLongerEscape[] = _("Neither POKéMON can run away!");
 static const u8 sText_CantEscapeDueToUsedMove[] = _("{B_ATK_NAME_WITH_PREFIX} can no longer escape\nbecause it used {B_CURRENT_MOVE}!");
 static const u8 sText_PkmnBecameWeakerToFire[] = _("{B_DEF_NAME_WITH_PREFIX} became\nweaker to fire!");
@@ -1076,6 +1076,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_MimicryEnds[] = _("{B_STACK_1_NAME_WITH_PREFIX}'s type\nreturns to normal!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1934,6 +1935,11 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_FIRECOATDAMAGE - 12] = sText_FireCoatDamage,
     [STRINGID_FIRECOATSTART - 12] = sText_FireCoatStart,
     [STRINGID_SOOTHSAYER - 12] = sText_Soothsayer,
+<<<<<<< HEAD
+=======
+    [STRINGID_ROSEGARDEN - 12] = sText_RoseGarden,
+    [STRINGID_MIMICRYENDS - 12] = sText_MimicryEnds,
+>>>>>>> f457ee1012 (Mimicry fixes)
 };
 
 const u16 gMentalHerbCureStringIds[] = 
