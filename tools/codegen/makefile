@@ -89,6 +89,7 @@ $(eval $(call GENERATE, include/generated/data/pokemon_graphics/pics.h, monpics)
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/coordinates.h, coords))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/palettes.h, monpals))
 $(eval $(call GENERATE, include/generated/data/text/move_names.h, movenames))
+$(eval $(call GENERATE, include/generated/data/text/move_descriptions.h, movedescriptions))
 
 timestamp/generated: $(ALL_GENERATED)
 	@touch timestamp/generated
