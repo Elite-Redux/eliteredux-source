@@ -5166,8 +5166,7 @@ bool32 CanBleed(u8 battlerId) {
 
     if (!CanGetStatus(battlerId)) return FALSE;
 
-    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ROCK) || IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST) || BATTLER_HAS_ABILITY(battlerId, ABILITY_BLOOD_BATH) ||
-        BATTLER_HAS_ABILITY(battlerId, ABILITY_BLOODLUST))
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ROCK) || IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
         return FALSE;
     return TRUE;
 }
