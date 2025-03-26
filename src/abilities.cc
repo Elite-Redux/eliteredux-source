@@ -9063,13 +9063,14 @@ static const Ability Patchwork = {
     .onDisguise = +[](ON_DISGUISE) -> int {
         int species = Disguise.onDisguise(DELEGATE_DISGUISE);
         if (species && !testOnly) {
-            SetOncePerTurnAbilityCounter(battler, ABILITY_PATCHWORK, gBattlerAttacker);
+            SetOncePerTurnAbilityCounter(battler, ABILITY_PATCHWORK, gBattlerAttacker + 1);
         }
         return species;
     },
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(GetSingleUseAbilityCounter(battler, ability))
-        SetSingleUseAbilityCounter(battler, ability, 0);
+        int triggeringBattler = GetOncePerTurnAbilityCounter(battler, ability) - 1;
+        CHECK(triggeringBattler == attacker)
+        SetOncePerTurnAbilityCounter(battler, ability, 0);
 
         CHECK(IsBattlerAlive(attacker))
         CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED)
