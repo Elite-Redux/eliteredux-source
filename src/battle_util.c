@@ -4958,9 +4958,11 @@ bool32 CanBeBurned(u8 battlerId) {
     if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FIRE)) return FALSE;
+
     if (IsStatusImmune(battlerId, CHECK_BURN)) return FALSE;
 
-    return !IS_BATTLER_OF_TYPE(battlerId, TYPE_FIRE);
+    return TRUE;
 }
 
 bool32 CanBeParalyzed(u8 battlerAttacker, u8 battlerTarget) {
