@@ -3927,26 +3927,7 @@ int AbilityHealMonStatus(u8 battler, u16 ability) {
 }
 
 bool8 CanMoveHaveExtraFlinchChance(u16 move) {
-    switch (gBattleMoves[move].effect) {
-        case EFFECT_FLINCH_HIT:
-        case EFFECT_FAKE_OUT:
-        case EFFECT_FLINCH_STATUS:
-        case EFFECT_FLINCH_RECOIL_33:
-        case EFFECT_FLINCH_RECOIL_50:
-        case EFFECT_FLINCH_MINIMIZE_HIT:
-        case EFFECT_FLING:
-        case EFFECT_SECRET_POWER:
-        case EFFECT_SNORE:
-        case EFFECT_TWISTER:
-            return gBattleMoves[move].secondaryEffectChance > 0;
-
-        case EFFECT_TRIPLE_ARROWS:
-            return FALSE;
-
-        default:
-            return TRUE;
-    }
-    return TRUE;
+    return gBattleMoves[move].flags & FLAG_KINGS_ROCK_AFFECTED;
 }
 
 int WasMoveSuccessful() { return !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && gBattlerAttacker != gBattlerTarget; }
