@@ -465,7 +465,7 @@ static const Ability Oblivious = {
     .name = $("Oblivious"),
     .description = $("Immune to infatuation, Scare,\n"
                      "Intimidate and Taunt."),
-    .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
         CHECK(status & (CHECK_INFATUATE | CHECK_RESTRICTING))
         return TRUE;
     },
@@ -2929,7 +2929,7 @@ static const Ability Corrosion = {
         return TRUE;
     },
     .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
-        CHECK(status & STATUS1_POISON_ANY)
+        CHECK(status & CHECK_POISON)
         return TRUE;
     },
 };
@@ -4594,7 +4594,7 @@ static const Ability Overcharge = {
         return TRUE;
     },
     .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
-        CHECK(status & STATUS1_PARALYSIS)
+        CHECK(status & CHECK_PARALYSIS)
         return TRUE;
     },
 };
@@ -5845,7 +5845,7 @@ static const Ability AngelsWrath = {
             if (move == MOVE_POISON_STING) *effectChance = 100;
         },
     .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
-        CHECK(status & STATUS1_POISON_ANY)
+        CHECK(status & CHECK_POISON)
         CHECK(move == MOVE_POISON_STING)
         return TRUE;
     },
