@@ -7415,8 +7415,8 @@ static const Ability IllWill = {
 
         gBattleMons[attacker].pp[gChosenMovePos] = 0;
         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove)
-        gActiveBattler = battler;
-        BtlController_EmitSetMonData(0, gChosenMovePos + REQUEST_PPMOVE1_BATTLE, 0, 1, &gBattleMons[battler].pp[gChosenMovePos]);
+        gActiveBattler = attacker;
+        BtlController_EmitSetMonData(0, gChosenMovePos + REQUEST_PPMOVE1_BATTLE, 0, 1, &gBattleMons[attacker].pp[gChosenMovePos]);
         BattleScriptCall(BattleScript_IllWillTakesPp);
         return TRUE;
     },
