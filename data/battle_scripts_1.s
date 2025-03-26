@@ -3634,11 +3634,10 @@ BattleScript_EffectToxicHit:
 
 BattleScript_AbilityDrainsHp::
 	hpfractiontodamage BS_STACK_2, 10
-	copybyte gBattlerAttacker, BS_STACK_1
-	copybyte gBattlerTarget, BS_STACK_2
+	copybyte gBattlerAttacker, gStackBattler1
+	copybyte gBattlerTarget, gStackBattler2
 	printstring STRINGID_LIFE_STEAL
 	waitmessage B_WAIT_TIME_LONG
-	healthbarupdate BS_TARGET
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
 	manipulatedamage DMG_CHANGE_SIGN
