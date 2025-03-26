@@ -2679,22 +2679,6 @@ BattleScript_EffectPsychicTerrain:
 	call BattleScript_OnTerrainChanged
 	goto BattleScript_MoveEnd
 
-BattleScript_ApplyMimicry::
-	savetargettostack4
-	setbyte gBattlerTarget, 0
-BattleScript_MimicryLoopIter:
-	copybyte sBATTLER, gBattlerTarget
-	trytoapplymimicry BS_TARGET, BattleScript_MimicryLoop_NextBattler
-	copybyte gBattlerAbility, sBATTLER
-	call BattleScript_AbilityPopUp
-	printstring STRINGID_BATTLERTYPECHANGEDTO
-	waitmessage B_WAIT_TIME_LONG
-BattleScript_MimicryLoop_NextBattler:
-	addbyte gBattlerTarget, 0x1
-	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_MimicryLoopIter
-	readtargetfromstack4
-	return
-
 BattleScript_EffectTopsyTurvy:
 	attackcanceler
 	attackstring
@@ -10660,10 +10644,15 @@ BattleScript_ColorChangeActivates::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
-BattleScript_MimicryActivatesEnd3::
+BattleScript_MimicryActivates::
 	printstring STRINGID_BATTLERTYPECHANGEDTO
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
+
+BattleScript_MimicryEnds::
+	printstring STRINGID_MIMICRYENDS
+	waitmessage B_WAIT_TIME_LONG
+	return
 
 BattleScript_ProteanActivates::
 	call BattleScript_AbilityPopUp

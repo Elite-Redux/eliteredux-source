@@ -134,10 +134,17 @@ typedef struct {
     bool8 activating:1;
 } CudChewState;
 
+typedef struct {
+    u8 type1:5;
+    u8 type2:5;
+    u8 active:1;
+} MimicryState;
+
 typedef union AbilityStates {
     ParadoxBoost paradoxBoost;
     StatCopyState statCopyState;
     CudChewState cudChewState;
+    MimicryState mimicryState;
     u32 intValue;
 } AbilityStates;
 
@@ -303,9 +310,6 @@ void DoBurmyFormChange(u32 monId);
 bool32 BlocksPrankster(u16 move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget);
 u16 GetUsedHeldItem(u8 battler);
 bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags);
-void TryToApplyMimicry(u8 battlerId, bool8 various);
-void TryToRevertMimicry(void);
-void RestoreBattlerOriginalTypes(u8 battlerId);
 bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId);
 u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler);
 bool32 ShouldChangeFormHpBased(u32 battler);

@@ -7889,7 +7889,6 @@ static void Cmd_various(void) {
                     break;
             }
             gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;  // remove the terrain
-            TryToRevertMimicry();                         // restore the types of Pokémon with Mimicry
             break;
         case VARIOUS_REMOVE_WEATHER:
             if (gBattleWeather & WEATHER_SUN_PRIMAL)
@@ -8103,17 +8102,9 @@ static void Cmd_various(void) {
             if (gVolatileStructs[gActiveBattler].tarShot || !CompareStat(gActiveBattler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
                 gBattlescriptCurrInstr = ptr;
             return;
-        case VARIOUS_TRY_TO_APPLY_MIMICRY: {
-            bool8 isMimicryDone = FALSE;
-            ptr = READ_PTR_INC;
-
-            if (BattlerHasAbility(gActiveBattler, ABILITY_MIMICRY, FALSE)) {
-                TryToApplyMimicry(gActiveBattler, TRUE);
-                isMimicryDone = TRUE;
-            }
-            if (!isMimicryDone) gBattlescriptCurrInstr = ptr;
+        case VARIOUS_TRY_TO_APPLY_MIMICRY:
+            // Unused
             return;
-        }
         case VARIOUS_CAN_TELEPORT:
             gBattleCommunication[0] = CanTeleport(gActiveBattler);
             break;
