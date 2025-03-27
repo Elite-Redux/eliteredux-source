@@ -4706,6 +4706,10 @@ u32 IsAbilityPreventingEscape(u32 battlerId) {
 #else
     if (id = IsAbilityOnOpposingSide(battlerId, ABILITY_SHADOW_TAG))
 #endif
+#if B_SHADOW_TAG_ESCAPE >= GEN_4
+    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_FRENZIED_PHANTOM)) && !BattlerHasAbility(battlerId, ABILITY_FRENZIED_PHANTOM, FALSE))
+#else
+#endif
         return id;
     if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_ARENA_TRAP)) && IsBattlerGrounded(battlerId)) return id;
     if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_MAGNET_PULL)) && IS_BATTLER_OF_TYPE(battlerId, TYPE_STEEL)) return id;
