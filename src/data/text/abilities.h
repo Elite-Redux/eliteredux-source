@@ -758,6 +758,7 @@ static const u8 sAbilityLullabyDescription[] = _("Sing accuracy is 90% when\nuse
 static const u8 sAbilityCryoArchitectDescription[] = _("Boosts attack and def from ice and water");
 static const u8 sAbilityGlacialRageDescription[] = _("Triggers 50 BP Blizzard after\nusing a Ice-type move.");
 static const u8 sAbilityImmovableObjectDescription[] = _("Impenetrable + Sturdy");
+static const u8 sAbilityFrenziedPhantomDescription[] = _("Hyper Aggressive +\nShadow Tag.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1553,6 +1554,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_CRYO_ARCHITECT] = _("Cryo Architect"),
     [ABILITY_GLACIAL_RAGE] = _("Glacial Rage"),
     [ABILITY_IMMOVABLE_OBJECT] = _("Immovable Object"),
+    [ABILITY_FRENZIED_PHANTOM] = _("Frenzied Phantom"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2349,4 +2351,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_CRYO_ARCHITECT] = sAbilityCryoArchitectDescription,
     [ABILITY_GLACIAL_RAGE] = sAbilityGlacialRageDescription,
     [ABILITY_IMMOVABLE_OBJECT] = sAbilityImmovableObjectDescription,
+    [ABILITY_FRENZIED_PHANTOM] = sAbilityFrenziedPhantomDescription,
 };

@@ -803,20 +803,15 @@
 #define ABILITY_HUNTERS_MARK 781 // Attacks switching foes with 40BP Spirit Shackle.
 #define ABILITY_HEMOLYSIS 782 // Poisoned foes can't heal and lose all stat buffs.
 #define ABILITY_CARETAKER 783 // Healer + Friend Guard.
-<<<<<<< HEAD
-#define ABILITY_POSEIDONS_DOMINION 784 // Whirlpool on entry + Sea Guardian
-#define ABILITY_DUAL_SHADOW 785 // Hunger Switch + Electric burst and doom blast
-#define ABILITY_LULLABY 786 // Sing has 90% accuracy
-=======
 #define ABILITY_POSEIDONS_DOMINION 784 // Uses Whirlpool on entry.
 #define ABILITY_DUAL_SHADOW 785 // Changes form each turn. boosts elec/dark moves by 35% with 10% recoil.
 #define ABILITY_LULLABY 786 // Sing accuracy is 90% when used by this Pokémon.
->>>>>>> f6d3b313ab (Fix some more missing flags)
 #define ABILITY_CRYO_ARCHITECT 787 // Boosts attack and def from ice and water
 #define ABILITY_GLACIAL_RAGE 788 // Triggers 50 BP Blizzard after using a Ice-type move.
 #define ABILITY_IMMOVABLE_OBJECT 789 // Impenetrable + Sturdy
-#define ABILITY_I_AM_STEVE 790 // Multiscale + Poison Point
-#define ABILITY_AVERAGE_POWER 791 // Multiscale + Poison Point
+#define ABILITY_FRENZIED_PHANTOM 790 // HA + Shadow Tag
+#define ABILITY_I_AM_STEVE 791 // Multiscale + Poison Point
+#define ABILITY_AVERAGE_POWER 792 // Multiscale + Poison Point
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_AVERAGE_POWER + 1)
 

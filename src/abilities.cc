@@ -1554,7 +1554,7 @@ static const Ability Forewarn = {
 
         gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)] |= SIDE_STATUS_FUTUREATTACK;
         gWishFutureKnock.futureSightMove[gBattlerTarget] = MOVE_FUTURE_SIGHT;
-        gWishFutureKnock.futureSightPower[gBattlerTarget] = 50;
+        gWishFutureKnock.futureSightPower[gBattlerTarget] = 80;
         gWishFutureKnock.futureSightAttacker[gBattlerTarget] = battler;
         gWishFutureKnock.futureSightCounter[gBattlerTarget] = 3;
 
@@ -10078,6 +10078,13 @@ static const Ability ImmovableObject = {
     .magicGuard = TRUE,
 };
 
+static const Ability FrenziedPhantom = {
+    .name = $("Frenzied Phantom"),
+    .description = $("Hyper Aggressive +\n"
+                     "Shadow Tag."),
+    .onParentalBond = ParentalBond.onParentalBond,
+};
+
 static const Ability iamsteve = {
     .name = $("i am steve"),
     .description = $("guys why is steve jack black\n"
@@ -10883,6 +10890,7 @@ const Ability gAbilities[] = {
     [ABILITY_IMMOVABLE_OBJECT] = ImmovableObject,
     [ABILITY_I_AM_STEVE] = iamsteve,
     [ABILITY_AVERAGE_POWER] = AveragePower,
+    [ABILITY_FRENZIED_PHANTOM] = FrenziedPhantom,
 };
 
 #pragma GCC diagnostic pop

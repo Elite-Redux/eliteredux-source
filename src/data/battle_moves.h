@@ -2975,16 +2975,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_TWISTER] =
     {
-        .effect = EFFECT_TWISTER,
+        .effect = EFFECT_TRAP,
         .power = 50,
         .type = TYPE_DRAGON,
-        .accuracy = 100,
-        .pp = 20,
-        .secondaryEffectChance = 20,
-        .target = MOVE_TARGET_BOTH,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_DMG_2X_IN_AIR,
+        .accuracy = 90,
+        .pp = 10,
+        .secondaryEffectChance = 100,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
-        .airBased = TRUE,
     },
     [MOVE_RAIN_DANCE] =
     {
