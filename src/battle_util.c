@@ -6631,13 +6631,13 @@ static int CheckLevitatingEffects(u8 battlerId) {
 
 bool32 IsBattlerGroundedIgnoreType(u8 battlerId) {
     if (CheckGroundingEffects(battlerId)) return TRUE;
-    return CheckLevitatingEffects(battlerId);
+    return !CheckLevitatingEffects(battlerId);
 }
 
 bool32 IsBattlerGrounded(u8 battlerId) {
     if (CheckGroundingEffects(battlerId)) return TRUE;
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING)) return FALSE;
-    return CheckLevitatingEffects(battlerId);
+    return !CheckLevitatingEffects(battlerId);
 }
 
 bool32 IsBattlerAlive(u8 battlerId) {
@@ -7991,8 +7991,9 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     if (recordAbilities && (illusionSpecies = GetIllusionMonSpecies(battlerDef)))
         TryNoticeIllusionInTypeEffectiveness(move, moveType, battlerAtk, battlerDef, modifier, illusionSpecies);
 
-    if (modifier && moveType == TYPE_GROUND && (immunityAbility = IsBattlerGroundedIgnoreType(battlerDef))) {
+    if (modifier && moveType == TYPE_GROUND && IsBattlerGroundedIgnoreType(battlerDef)) {
         modifier = 0;
+        immunityAbility = CheckLevitatingEffects(battlerDef);
         if (immunityAbility == TRUE) immunityAbility = ABILITY_NONE;
     }
 
