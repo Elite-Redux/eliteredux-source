@@ -100,6 +100,7 @@ typedef enum {
 } StatusCheckEnum;
 typedef int (*AbilityOnCanStatusType)(int battler, int move, StatusCheckEnum status);
 typedef int (*AbilityOnStatusImmune)(int battler, int target, int ability, StatusCheckEnum status);
+typedef int (*AbilityOnTrap)(int escapingBattler);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -157,6 +158,7 @@ typedef struct Ability {
     const AbilityOnModifyEffectChance onModifyEffectChance;
     const AbilityOnCanStatusType onCanStatusType;
     const AbilityOnStatusImmune onStatusImmune;
+    const AbilityOnTrap onTrap;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;
@@ -194,6 +196,7 @@ typedef struct Ability {
     u16 canInfatuateAny:1;
     u16 removesStatusOnImmunity:1;
     u16 tauntImmune:1;
+    u16 shadowTag:1;
 } Ability;
 
 #ifdef __cplusplus
