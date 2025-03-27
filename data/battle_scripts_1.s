@@ -7318,14 +7318,14 @@ BattleScript_Neurotoxin::
 	copybyte gBattlerAttacker, gStackBattler1
 	copybyte gBattlerTarget, gStackBattler2
 	setbyte sSTAT_ANIM_PLAYED, FALSE
-	playstatchangeanimation BS_TARGET, BIT_ATK | BIT_DEF | BIT_SPEED, STAT_CHANGE_NEGATIVE
+	playstatchangeanimation BS_TARGET, BIT_ATK | BIT_SPATK | BIT_SPEED, STAT_CHANGE_NEGATIVE
 	setstatchanger STAT_ATK, 1, TRUE
-	statbuffchange 0, BattleScript_Neurotoxin_Def
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_Neurotoxin_Def
+	statbuffchange 0, BattleScript_Neurotoxin_SpAtk
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_Neurotoxin_SpAtk
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
-BattleScript_Neurotoxin_Def:
-	setstatchanger STAT_DEF, 1, TRUE
+BattleScript_Neurotoxin_SpAtk:
+	setstatchanger STAT_SPATK, 1, TRUE
 	statbuffchange 0, BattleScript_Neurotoxin_Speed
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_Neurotoxin_Speed
 	printfromtable gStatUpStringIds
