@@ -122,7 +122,8 @@ bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move) {
 }
 
 u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler) {
-    if ((BATTLER_HAS_ABILITY(battler, ABILITY_ARTILLERY) || BATTLER_HAS_ABILITY(battler, ABILITY_SUPER_SCOPE)) && IsMegaLauncherBoosted(battler, moveId) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
+    if ((BATTLER_HAS_ABILITY(battler, ABILITY_ARTILLERY) || BATTLER_HAS_ABILITY(battler, ABILITY_SUPER_SCOPE)) && IsMegaLauncherBoosted(battler, moveId) &&
+        gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
         return MOVE_TARGET_BOTH;
     else if ((BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE) || BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE_PLUS)) &&
              (gBattleMoves[moveId].flags & FLAG_KEEN_EDGE_BOOST) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
@@ -2714,23 +2715,14 @@ u8 DoBattlerEndTurnEffects(void) {
             case ENDTURN_YAWN:  // yawn
                 if (gStatuses3[gActiveBattler] & STATUS3_YAWN) {
                     gStatuses3[gActiveBattler] -= STATUS3_YAWN_TURN(1);
-                    if (!(gStatuses3[gActiveBattler] & STATUS3_YAWN) && !(gBattleMons[gActiveBattler].status1 & STATUS1_ANY) &&
-                        !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_VITAL_SPIRIT) && !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_INSOMNIA) &&
-                        !UproarWakeUpCheck(gActiveBattler) && !IsLeafGuardProtected(gActiveBattler)) {
+                    if (!(gStatuses3[gActiveBattler] & STATUS3_YAWN) && CanSleep(gActiveBattler)) {
                         CancelMultiTurnMoves(gActiveBattler);
                         gEffectBattler = gActiveBattler;
-                        if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_ELECTRIC_TERRAIN)) {
-                            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINPREVENTS_ELECTRIC;
-                            BattleScriptExecute(BattleScript_TerrainPreventsEnd2);
-                        } else if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_MISTY_TERRAIN)) {
-                            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINPREVENTS_MISTY;
-                            BattleScriptExecute(BattleScript_TerrainPreventsEnd2);
-                        } else {
-                            gBattleMons[gActiveBattler].status1 |= (Random() & 3) + 2;
-                            BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
-                            MarkBattlerForControllerExec(gActiveBattler);
-                            BattleScriptExecute(BattleScript_YawnMakesAsleep);
-                        }
+
+                        gBattleMons[gActiveBattler].status1 |= (Random() & 3) + 2;
+                        BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
+                        MarkBattlerForControllerExec(gActiveBattler);
+                        BattleScriptExecute(BattleScript_YawnMakesAsleep);
                         effect++;
                     }
                 }
@@ -4384,199 +4376,84 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
             break;
         case ABILITYEFFECT_IMMUNITY:  // 5
             for (battler = 0; battler < gBattlersCount; battler++) {
-                // Innates
-                // Purifying Salt
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_PURIFYING_SALT)) {
-                    if (gBattleMons[battler].status1 & STATUS1_ANY) {
-                        u32 status1 = gBattleMons[battler].status1;
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_PURIFYING_SALT;
-                        if (status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON))
-                            StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
-                        else if (status1 & STATUS1_BLEED)
-                            StringCopy(gBattleTextBuff1, gStatusConditionString_BleedJpn);
-                        else if (status1 & STATUS1_BURN)
-                            StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
-                        else if (status1 & STATUS1_FROSTBITE)
-                            StringCopy(gBattleTextBuff1, gStatusConditionString_IceJpn);
-                        else if (status1 & STATUS1_SLEEP)
-                            StringCopy(gBattleTextBuff1, gStatusConditionString_SleepJpn);
-                        else
-                            StringCopy(gBattleTextBuff1, gStatusConditionString_ParalysisJpn);
+                StatusCheckEnum status = CHECK_NONE;
+
+                if (gBattleMons[battler].status1 & STATUS1_POISON_ANY)
+                    status = CHECK_POISON;
+                else if (gBattleMons[battler].status1 & STATUS1_BLEED)
+                    status = CHECK_BLEED;
+                else if (gBattleMons[battler].status1 & STATUS1_BURN)
+                    status = CHECK_BURN;
+                else if (gBattleMons[battler].status1 & STATUS1_FROSTBITE)
+                    status = CHECK_FROSTBITE;
+                else if (gBattleMons[battler].status1 & STATUS1_SLEEP)
+                    status = CHECK_SLEEP;
+                else if (gBattleMons[battler].status1 & STATUS1_PARALYSIS)
+                    status = CHECK_PARALYSIS;
+                else if (gBattleMons[battler].status2 & STATUS2_CONFUSION)
+                    status = CHECK_CONFUSION;
+                else if (gBattleMons[battler].status2 & STATUS2_INFATUATION)
+                    status = CHECK_INFATUATE;
+                else if (gVolatileStructs[battler].tauntTimer || gVolatileStructs[battler].disableTimer || gVolatileStructs[battler].encoreTimer ||
+                         gBattleMons[battler].status2 & STATUS2_TORMENT)
+                    status = CHECK_RESTRICTING;
+
+                if (status) {
+                    int immunityAbility = ABILITY_NONE;
+
+                    ON_ABILITY(
+                        battler,
+                        FALSE,
+                        gAbilities[ability].removesStatusOnImmunity && gAbilities[ability].onStatusImmune,
+                        if (gAbilities[ability].onStatusImmune(battler, battler, ability, status)) {
+                            immunityAbility = ability;
+                            break;
+                        })
+
+                    if (immunityAbility) {
+                        gBattleScripting.abilityPopupOverwrite = immunityAbility;
                         effect = 1;
-                    }
-                }
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_BLOOD_STIGMA)) {
-                    if (gBattleMons[battler].status1 & STATUS1_ANY) {
-                        u32 status1 = gBattleMons[battler].status1;
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_BLOOD_STIGMA;
-                        if (status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON))
-                            StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
-                        else if (status1 & STATUS1_BLEED)
-                            StringCopy(gBattleTextBuff1, gStatusConditionString_BleedJpn);
-                        else if (status1 & STATUS1_BURN)
-                            StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
-                        else if (status1 & STATUS1_FROSTBITE)
-                            StringCopy(gBattleTextBuff1, gStatusConditionString_IceJpn);
-                        else if (status1 & STATUS1_SLEEP)
-                            StringCopy(gBattleTextBuff1, gStatusConditionString_SleepJpn);
-                        else
-                            StringCopy(gBattleTextBuff1, gStatusConditionString_ParalysisJpn);
-                        effect = 1;
-                    }
-                }
 
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE) && gBattleMons[battler].status1) {
-                    int status1 = gBattleMons[battler].status1;
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_COMATOSE;
-                    if (status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON))
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
-                    else if (status1 & STATUS1_BLEED)
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_BleedJpn);
-                    else if (status1 & STATUS1_BURN)
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
-                    else if (status1 & STATUS1_FROSTBITE)
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_IceJpn);
-                    else if (status1 & STATUS1_SLEEP)
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_SleepJpn);
-                    else
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_ParalysisJpn);
-                    effect = 1;
-                }
-
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_BLOOD_STAIN) && gBattleMons[battler].status1) {
-                    int status1 = gBattleMons[battler].status1;
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_COMATOSE;
-                    if (status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON))
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
-                    else if (status1 & STATUS1_BLEED)
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_BleedJpn);
-                    else if (status1 & STATUS1_BURN)
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
-                    else if (status1 & STATUS1_FROSTBITE)
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_IceJpn);
-                    else if (status1 & STATUS1_SLEEP)
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_SleepJpn);
-                    else
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_ParalysisJpn);
-                    effect = 1;
-                }
-
-                // Immunity
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_IMMUNITY)) {
-                    if (gBattleMons[battler].status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON | STATUS1_TOXIC_COUNTER)) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_IMMUNITY;
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
-                        effect = 1;
-                    }
-                }
-
-                // Own Tempo
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_OWN_TEMPO)) {
-                    if (gBattleMons[battler].status2 & STATUS2_CONFUSION) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_OWN_TEMPO;
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_ConfusionJpn);
-                        effect = 2;
-                    }
-                }
-
-                // Discipline
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_DISCIPLINE)) {
-                    if (gBattleMons[battler].status2 & STATUS2_CONFUSION) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_DISCIPLINE;
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_ConfusionJpn);
-                        effect = 2;
-                    }
-                }
-
-                // Limber
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_LIMBER)) {
-                    if (gBattleMons[battler].status1 & STATUS1_PARALYSIS) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_LIMBER;
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_ParalysisJpn);
-                        effect = 1;
-                    }
-                }
-
-                // Insomnia
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_INSOMNIA)) {
-                    if (gBattleMons[battler].status1 & STATUS1_SLEEP) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_INSOMNIA;
-                        gBattleMons[battler].status2 &= ~(STATUS2_NIGHTMARE);
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_SleepJpn);
-                        effect = 1;
-                    }
-                }
-
-                // Vital Spirit
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_VITAL_SPIRIT)) {
-                    if (gBattleMons[battler].status1 & STATUS1_SLEEP) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_VITAL_SPIRIT;
-                        gBattleMons[battler].status2 &= ~(STATUS2_NIGHTMARE);
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_SleepJpn);
-                        effect = 1;
-                    }
-                }
-
-                // Water Veil
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_WATER_VEIL)) {
-                    if (gBattleMons[battler].status1 & STATUS1_BURN) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_WATER_VEIL;
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
-                        effect = 1;
-                    }
-                }
-
-                // Purifying Waters
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_PURIFYING_WATERS)) {
-                    if (gBattleMons[battler].status1 & STATUS1_BURN) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_PURIFYING_WATERS;
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
-                        effect = 1;
-                    }
-                }
-
-                // Water Bubble
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_WATER_BUBBLE)) {
-                    if (gBattleMons[battler].status1 & STATUS1_BURN) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_WATER_BUBBLE;
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
-                        effect = 1;
-                    }
-                }
-
-                // Flame Bubble (i'll prob merge the code with water bubble later)
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_FLAME_BUBBLE)) {
-                    if (gBattleMons[battler].status1 & STATUS1_BURN) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_FLAME_BUBBLE;
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
-                        effect = 1;
-                    }
-                }
-
-                // Magma Armor
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_MAGMA_ARMOR)) {
-                    if (gBattleMons[battler].status1 & (STATUS1_FREEZE | STATUS1_FROSTBITE)) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_MAGMA_ARMOR;
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_IceJpn);
-                        effect = 1;
-                    }
-                }
-
-                // Oblivious
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_OBLIVIOUS)) {
-                    if (gBattleMons[battler].status2 & STATUS2_INFATUATION) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_OBLIVIOUS;
-                        effect = 3;
-                    } else if (gVolatileStructs[battler].tauntTimer != 0) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_OBLIVIOUS;
-                        effect = 4;
+                        switch (status) {
+                            case CHECK_POISON:
+                                StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
+                                break;
+                            case CHECK_BLEED:
+                                StringCopy(gBattleTextBuff1, gStatusConditionString_BleedJpn);
+                                break;
+                            case CHECK_BURN:
+                                StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
+                                break;
+                            case CHECK_FROSTBITE:
+                                StringCopy(gBattleTextBuff1, gStatusConditionString_IceJpn);
+                                break;
+                            case CHECK_SLEEP:
+                                StringCopy(gBattleTextBuff1, gStatusConditionString_SleepJpn);
+                                break;
+                            case CHECK_PARALYSIS:
+                                StringCopy(gBattleTextBuff1, gStatusConditionString_ParalysisJpn);
+                                break;
+                            case CHECK_CONFUSION:
+                                effect = 2;
+                                StringCopy(gBattleTextBuff1, gStatusConditionString_ConfusionJpn);
+                                break;
+                            case CHECK_INFATUATE:
+                                effect = 3;
+                                break;
+                            case CHECK_RESTRICTING:
+                                effect = 4;
+                                break;
+                        }
                     }
                 }
 
                 if (effect) {
+                    gBattleScripting.battler = gActiveBattler = gBattlerAbility = battler;
                     switch (effect) {
                         case 1:  // status cleared
                             gBattleMons[battler].status1 = 0;
+                            BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
+                            MarkBattlerForControllerExec(gActiveBattler);
                             BattleScriptCall(BattleScript_AbilityCuredStatus);
                             break;
                         case 2:  // get rid of confusion
@@ -4589,40 +4466,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                             break;
                         case 4:  // get rid of taunt
                             gVolatileStructs[battler].tauntTimer = 0;
+                            gVolatileStructs[battler].disableTimer = 0;
+                            gVolatileStructs[battler].encoreTimer = 0;
+                            gBattleMons[battler].status2 &= ~STATUS2_TORMENT;
                             BattleScriptCall(BattleScript_BattlerShookOffTaunt);
                             break;
                     }
 
-                    gBattleScripting.battler = gActiveBattler = gBattlerAbility = battler;
-                    BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
-                    MarkBattlerForControllerExec(gActiveBattler);
                     return effect;
-                }
-
-                // Vital Spirit & Insomnia
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_INSOMNIA) || BATTLER_HAS_ABILITY(battler, ABILITY_VITAL_SPIRIT)) {
-                    if (gBattleMons[battler].status1 & STATUS1_SLEEP) {
-                        gBattleMons[battler].status2 &= ~(STATUS2_NIGHTMARE);
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_SleepJpn);
-                        effect = 1;
-                    }
-                }
-
-                // Oblivious
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_OBLIVIOUS)) {
-                    if (gBattleMons[battler].status2 & STATUS2_INFATUATION)
-                        effect = 3;
-                    else if (gVolatileStructs[battler].tauntTimer != 0)
-                        effect = 4;
-                }
-
-                // Water Veil & Water Bubble
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_WATER_VEIL) || BATTLER_HAS_ABILITY(battler, ABILITY_WATER_BUBBLE) ||
-                    BATTLER_HAS_ABILITY(battler, ABILITY_FLAME_BUBBLE) || BATTLER_HAS_ABILITY(battler, ABILITY_PURIFYING_WATERS)) {
-                    if (gBattleMons[battler].status1 & STATUS1_BURN) {
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
-                        effect = 1;
-                    }
                 }
             }
             break;
@@ -4996,39 +4847,35 @@ bool8 IsSleepClauseDisablingMove(u8 battlerId, u16 move) {
 }
 
 bool8 CanBeDisabled(u8 battlerId) {
-    if (gVolatileStructs[battlerId].disabledMove || IsAbilityOnSide(battlerId, ABILITY_AROMA_VEIL)) return FALSE;
+    if (gVolatileStructs[battlerId].disabledMove || IsAbilityStatusProtected(battlerId, CHECK_RESTRICTING)) return FALSE;
     return TRUE;
 }
 
-bool32 CanGetStatus(u8 battlerId) {
-    if (!IsBattlerAlive(battlerId)) return FALSE;
-    if (gBattleMons[battlerId].status1) return FALSE;
-    if (IsBattlerTerrainAffected(battlerId, STATUS_FIELD_MISTY_TERRAIN)) return FALSE;
-    if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_SAFEGUARD) return FALSE;
-    if (IsAbilityStatusProtected(battlerId)) return FALSE;
-    return TRUE;
+int IsStatusImmune(u8 battlerId, StatusCheckEnum status) {
+    if (!IsBattlerAlive(battlerId)) return TRUE;
+    if (gBattleMons[battlerId].status1) return TRUE;
+    if (IsBattlerTerrainAffected(battlerId, STATUS_FIELD_MISTY_TERRAIN)) return TRUE;
+    if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_SAFEGUARD) return TRUE;
+    return IsAbilityStatusProtected(battlerId, status);
 }
 
 bool32 CanSleep(u8 battlerId) {
     if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
-    if (!CanGetStatus(battlerId)) return FALSE;
+    if (IsStatusImmune(battlerId, CHECK_SLEEP)) return FALSE;
 
-    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_INSOMNIA) || BATTLER_HAS_ABILITY(battlerId, ABILITY_VITAL_SPIRIT) ||
-        GetAbilityState(battlerId, ABILITY_RUDE_AWAKENING) || IsAbilityOnSide(battlerId, ABILITY_SWEET_VEIL) ||
-        IsBattlerTerrainAffected(battlerId, STATUS_FIELD_ELECTRIC_TERRAIN))
-        return FALSE;
+    if (IsBattlerTerrainAffected(battlerId, STATUS_FIELD_ELECTRIC_TERRAIN)) return FALSE;
     return TRUE;
 }
 
-bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget) {
+bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget, int move) {
     if (gBattleMons[battlerTarget].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(battlerAttacker)) return TRUE;
 
-    if (!CanGetStatus(battlerTarget)) return FALSE;
+    if (IsStatusImmune(battlerTarget, CHECK_POISON)) return FALSE;
 
-    if (!(CanPoisonType(battlerAttacker, battlerTarget)) || BATTLER_HAS_ABILITY(battlerTarget, ABILITY_IMMUNITY)) return FALSE;
+    if (!CanPoisonType(battlerAttacker, battlerTarget, move)) return FALSE;
     return TRUE;
 }
 
@@ -5036,12 +4883,10 @@ bool32 CanBeBurned(u8 battlerId) {
     if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
-    if (!CanGetStatus(battlerId)) return FALSE;
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FIRE)) return FALSE;
 
-    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FIRE) || BATTLER_HAS_ABILITY(battlerId, ABILITY_WATER_VEIL) ||
-        BATTLER_HAS_ABILITY(battlerId, ABILITY_PURIFYING_WATERS) || BATTLER_HAS_ABILITY(battlerId, ABILITY_WATER_BUBBLE) ||
-        BATTLER_HAS_ABILITY(battlerId, ABILITY_FLAME_BUBBLE) || BATTLER_HAS_ABILITY(battlerId, ABILITY_THERMAL_EXCHANGE))
-        return FALSE;
+    if (IsStatusImmune(battlerId, CHECK_BURN)) return FALSE;
+
     return TRUE;
 }
 
@@ -5049,9 +4894,9 @@ bool32 CanBeParalyzed(u8 battlerAttacker, u8 battlerTarget) {
     if (gBattleMons[battlerTarget].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(battlerAttacker)) return TRUE;
 
-    if (!CanGetStatus(battlerTarget)) return FALSE;
+    if (IsStatusImmune(battlerTarget, CHECK_PARALYSIS)) return FALSE;
 
-    if (!CanParalyzeType(battlerAttacker, battlerTarget) || !CanBeParalyzedIgnoreType(battlerAttacker, battlerTarget)) return FALSE;
+    if (!CanParalyzeType(battlerAttacker, battlerTarget)) return FALSE;
     return TRUE;
 }
 
@@ -5059,19 +4904,13 @@ bool32 CanBeParalyzedIgnoreType(u8 battlerAttacker, u8 battlerTarget) {
     if (gBattleMons[battlerTarget].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(battlerAttacker)) return TRUE;
 
-    if (!CanGetStatus(battlerTarget)) return FALSE;
-
-    if (BATTLER_HAS_ABILITY(battlerTarget, ABILITY_LIMBER) || BATTLER_HAS_ABILITY(battlerTarget, ABILITY_JUGGERNAUT) ||
-        BATTLER_HAS_ABILITY(battlerTarget, ABILITY_IRON_GIANT))
-        return FALSE;
+    if (IsStatusImmune(battlerTarget, CHECK_PARALYSIS)) return FALSE;
     return TRUE;
 }
 
 bool32 CanBeFrozen(u8 battlerId) {
-    if (!CanGetStatus(battlerId)) return FALSE;
+    if (IsStatusImmune(battlerId, CHECK_FROSTBITE)) return FALSE;
 
-    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE) || IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY) || BATTLER_HAS_ABILITY(battlerId, ABILITY_MAGMA_ARMOR))
-        return FALSE;
     return TRUE;
 }
 
@@ -5079,9 +4918,9 @@ bool32 CanGetFrostbite(u8 battlerId) {
     if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
-    if (!CanGetStatus(battlerId)) return FALSE;
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE)) return FALSE;
 
-    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE) || BATTLER_HAS_ABILITY(battlerId, ABILITY_MAGMA_ARMOR)) return FALSE;
+    if (IsStatusImmune(battlerId, CHECK_FROSTBITE)) return FALSE;
     return TRUE;
 }
 
@@ -5089,7 +4928,7 @@ bool32 CanBleed(u8 battlerId) {
     if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
-    if (!CanGetStatus(battlerId)) return FALSE;
+    if (IsStatusImmune(battlerId, CHECK_BLEED)) return FALSE;
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ROCK) || IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
         return FALSE;
@@ -5100,10 +4939,8 @@ bool32 CanBeConfused(u8 battlerId) {
     if (gBattleMons[battlerId].status2 & STATUS2_CONFUSION) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
-    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_OWN_TEMPO) || BATTLER_HAS_ABILITY(battlerId, ABILITY_DISCIPLINE) ||
-        BATTLER_HAS_ABILITY(battlerId, ABILITY_ROCK_HEAD) || BATTLER_HAS_ABILITY(battlerId, ABILITY_BRUTEFORCE) ||
-        BATTLER_HAS_ABILITY(battlerId, ABILITY_STEEL_BARREL))
-        return FALSE;
+    if (IsAbilityStatusProtected(battlerId, CHECK_CONFUSION)) return FALSE;
+
     return TRUE;
 }
 
@@ -5114,7 +4951,7 @@ int CanInfatuate(int battlerAtk, int battlerDef) {
     if (!IsBattlerAlive(battlerAtk)) return FALSE;
 
     if (IsMyceliumMightActive(battlerAtk)) return TRUE;
-    if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_OBLIVIOUS)) return FALSE;
+    if (IsAbilityStatusProtected(battlerDef, CHECK_INFATUATE)) return FALSE;
 
     if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PURE_LOVE)) return TRUE;
 
@@ -6232,7 +6069,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
         case ITEMEFFECT_ORBS:
             switch (battlerHoldEffect) {
                 case HOLD_EFFECT_TOXIC_ORB:
-                    if (CanBePoisoned(battlerId, battlerId)) {
+                    if (CanBePoisoned(battlerId, battlerId, MOVE_NONE)) {
                         effect = ITEM_STATUS_CHANGE;
                         gBattleMons[battlerId].status1 = STATUS1_TOXIC_POISON;
                         BattleScriptExecute(BattleScript_ToxicOrb);
