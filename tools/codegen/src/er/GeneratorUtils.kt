@@ -2,6 +2,7 @@ package er
 
 import com.google.protobuf.TextFormat
 import er.FileGenerator.IND
+import er.proto.MoveList
 import er.proto.SpeciesEnum
 import er.proto.SpeciesList
 import java.io.File
@@ -9,6 +10,10 @@ import java.io.FileWriter
 import java.io.OutputStreamWriter
 
 object GeneratorUtils {
+    val MOVES_LIST by lazy {
+        TextFormat.parse(File("../../proto/MoveList.textproto").readText(), MoveList::class.java).movesList
+    }
+
     val SPECIES_LIST by lazy {
         TextFormat.parse(File("../../proto/SpeciesList.textproto").readText(), SpeciesList::class.java).speciesList
     }
@@ -39,6 +44,9 @@ object GeneratorUtils {
         SPECIES_LIST.associateBy { it.id }
     }
 
+    /**
+     * Takes a list of key-value pairs and creates a set of mappings of keys/values to a shared index value.
+     */
     fun <Key, Value> List<Pair<Key, Value>>.createDedupMaps(): Pair<Map<Key, Int>, Map<Value, Int>> {
         val groups = groupBy({ it.first }, { it.second })
 

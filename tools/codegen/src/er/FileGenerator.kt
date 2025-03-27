@@ -8,6 +8,7 @@ import er.gfx.CoordsGenerator
 import er.gfx.IconGenerator
 import er.gfx.ImageGenerator
 import er.gfx.PaletteGenerator
+import er.move.MoveNameGenerator
 import er.text.ArticlesGenerator
 import java.io.File
 import java.io.OutputStreamWriter
@@ -39,6 +40,7 @@ object FileGenerator {
         "coords" to CoordsGenerator,
         "monpals" to PaletteGenerator,
         "helparticles" to ArticlesGenerator,
+        "movenames" to MoveNameGenerator,
     )
 
     @JvmStatic
