@@ -1935,11 +1935,8 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_FIRECOATDAMAGE - 12] = sText_FireCoatDamage,
     [STRINGID_FIRECOATSTART - 12] = sText_FireCoatStart,
     [STRINGID_SOOTHSAYER - 12] = sText_Soothsayer,
-<<<<<<< HEAD
-=======
     [STRINGID_ROSEGARDEN - 12] = sText_RoseGarden,
     [STRINGID_MIMICRYENDS - 12] = sText_MimicryEnds,
->>>>>>> f457ee1012 (Mimicry fixes)
 };
 
 const u16 gMentalHerbCureStringIds[] = 
