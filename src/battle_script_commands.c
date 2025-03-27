@@ -8658,10 +8658,6 @@ static void Cmd_various(void) {
                 case HAZARD_MODE_SPIKES:
                     BattleScriptCall(BattleScript_ResolveRocks);
 
-                    MGBA_PRINT_VALUES((gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES),
-                                      IsMagicGuardProtected(gActiveBattler),
-                                      IsBattlerGrounded(gActiveBattler),
-                                      IsBattlerAffectedByHazards(gActiveBattler, FALSE))
                     REQUIRE(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES)
                     REQUIRE_NOT(IsMagicGuardProtected(gActiveBattler))
                     REQUIRE(IsBattlerGrounded(gActiveBattler))
