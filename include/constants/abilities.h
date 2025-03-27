@@ -1,5 +1,8 @@
-#ifndef GUARD_CONSTANTS_ABILITIES_H
-#define GUARD_CONSTANTS_ABILITIES_H
+#pragma once
+
+#if USE_GENERATED_SPECIES
+#include "generated/constants/abilities.h"
+#else
 
 #define ABILITY_NONE 0 // Empty ability slot.
 #define ABILITY_STENCH 1 // Attacks have a 10% chance to cause enemy to flinch.

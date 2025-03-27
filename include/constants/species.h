@@ -1,5 +1,8 @@
-#ifndef GUARD_CONSTANTS_SPECIES_H
-#define GUARD_CONSTANTS_SPECIES_H
+#pragma once
+
+#if USE_GENERATED_SPECIES
+#include "generated/constants/species.h"
+#else
 
 #define SPECIES_NONE 0
 #define SPECIES_BULBASAUR 1
@@ -3239,15 +3242,6 @@
 
 #define HOENN_DEX_COUNT 212
 
-// species flags
-#define F_ULTRA_BEAST   (1 << 0)
-#define F_ALOLAN_FORM   (1 << 1)
-#define F_GALARIAN_FORM (1 << 2)
-#define F_TWO_HEADED    (1 << 3)
-#define F_THREE_HEADED  (1 << 4)
-
-#endif  // GUARD_CONSTANTS_SPECIES_H
-
 // Galarian Forms
 #define SPECIES_MEOWTH_GALARIAN              FORMS_START + 69
 #define SPECIES_PONYTA_GALARIAN              FORMS_START + 70
@@ -3316,6 +3310,8 @@
 // Zarude
 #define SPECIES_ZARUDE_DADA                  FORMS_START + 306
 
+#endif
+
 #define PLACEHOLDER_SPECIES                  SPECIES_NONE
 
 // Generation start indexes
@@ -3328,3 +3324,10 @@
 #define GEN7_START SPECIES_ROWLET
 #define GEN8_START SPECIES_GROOKEY
 #define GEN9_START SPECIES_SPRIGATITO
+
+// species flags
+#define F_ULTRA_BEAST   (1 << 0)
+#define F_ALOLAN_FORM   (1 << 1)
+#define F_GALARIAN_FORM (1 << 2)
+#define F_TWO_HEADED    (1 << 3)
+#define F_THREE_HEADED  (1 << 4)

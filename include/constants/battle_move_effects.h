@@ -1,5 +1,8 @@
-#ifndef GUARD_CONSTANTS_BATTLE_MOVE_EFFECTS_H
-#define GUARD_CONSTANTS_BATTLE_MOVE_EFFECTS_H
+#pragma once
+
+#if USE_GENERATED_MOVES
+#include "generated/constants/battle_move_effects.h"
+#else
 
 #define EFFECT_HIT 0
 #define EFFECT_SLEEP 1

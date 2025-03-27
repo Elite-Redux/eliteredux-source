@@ -1,5 +1,8 @@
-#ifndef GUARD_CONSTANTS_MOVES_H
-#define GUARD_CONSTANTS_MOVES_H
+#pragma once
+
+#if USE_GENERATED_MOVES || USE_GENERATED_SPECIES
+#include "generated/constants/moves.h"
+#else
 
 #define MOVE_NONE 0
 #define MOVE_POUND 1
@@ -1019,9 +1022,9 @@
 
 #define MOVES_COUNT MOVES_COUNT_DARKY
 
+#endif
+
 #define EFFECTIVENESS_NEUTRAL             1.0
 #define EFFECTIVENESS_NOT_VERY_EFFECTIVE  0.5
 #define EFFECTIVENESS_SUPER_EFFECTIVE     2.0
 #define EFFECTIVENESS_SUPER_FROM_NOT_VERY 4.0
-
-#endif  // GUARD_CONSTANTS_MOVES_H

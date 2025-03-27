@@ -69,8 +69,6 @@
     b = temp;               \
 }
 
-#define USE_GENERATED FALSE
-
 #define DEBUG_BUILD
 #define DEBUG_POKEMON_MENU   TRUE
 #define CURRENT_GAME_VERSION 1046

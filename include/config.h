@@ -34,4 +34,21 @@
 #endif
 #endif
 
+#define USE_GENERATED_SPECIES FALSE
+#define USE_GENERATED_MOVES FALSE
+
+#if USE_GENERATED_SPECIES
+#define SPECIES_DEFINITIONS "generated/constants/species.h"
+#else
+#define SPECIES_DEFINITIONS "constants/species.h"
+#endif
+
+#if USE_GENERATED_MOVES
+#define MOVE_BEHAVIOR_DEFINITIONS "generated/constants/battle_move_effects"
+#define MOVE_EFFECT_DEFINITIONS "generated/constants/move_effects.h"
+#else
+#define MOVE_BEHAVIOR_DEFINITIONS "constants/battle_move_effects.h"
+#define MOVE_EFFECT_DEFINITIONS "constants/move_effects.h"
+#endif
+
 #endif // GUARD_CONFIG_H
