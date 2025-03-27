@@ -1,13 +1,12 @@
 package er
 
 import er.data.*
-import er.defines.AbilitiesEnumGenerator
-import er.defines.MovesEnumGenerator
-import er.defines.SpeciesEnumGenerator
+import er.defines.*
 import er.gfx.CoordsGenerator
 import er.gfx.IconGenerator
 import er.gfx.ImageGenerator
 import er.gfx.PaletteGenerator
+import er.move.MoveDescriptionGenerator
 import er.move.MoveNameGenerator
 import er.text.ArticlesGenerator
 import java.io.File
@@ -25,7 +24,7 @@ object FileGenerator {
 
     const val IND = "    "
 
-    val GENERATORS = mapOf(
+    private val GENERATORS = mapOf(
         "abilities" to AbilitiesEnumGenerator,
         "moves" to MovesEnumGenerator,
         "species" to SpeciesEnumGenerator,
@@ -41,6 +40,9 @@ object FileGenerator {
         "monpals" to PaletteGenerator,
         "helparticles" to ArticlesGenerator,
         "movenames" to MoveNameGenerator,
+        "movedescriptions" to MoveDescriptionGenerator,
+        "movebehaviors" to MoveBehaviorGenerator,
+        "moveeffects" to MoveEffectGenerator,
     )
 
     @JvmStatic

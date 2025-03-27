@@ -58,3 +58,4 @@ dockerfile
 dd_lazy_utils/ # doubledot stuff
 *.ups
 generated/
+output.txt
