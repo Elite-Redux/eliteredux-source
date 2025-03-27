@@ -75,12 +75,11 @@ ALL_GENERATED += ../../$(strip $1)
 endef
 
 $(eval $(call GENERATE, include/generated/constants/abilities.h, abilities))
-$(eval $(call GENERATE, include/generated/constants/moves.h, moves))
+
 $(eval $(call GENERATE, include/generated/constants/species.h, species))
 $(eval $(call GENERATE, include/generated/data/pokemon/base_stats.h, basestats))
 $(eval $(call GENERATE, include/generated/data/pokemon/evolution.h, evos))
 $(eval $(call GENERATE, include/generated/data/text/species_names.h, speciesnames))
-$(eval $(call GENERATE, include/generated/data/text/help_articles.h, helparticles))
 $(eval $(call GENERATE, include/generated/data/pokemon/tutor_learnsets.h, tutorlearnsets))
 $(eval $(call GENERATE, include/generated/data/pokemon/level_up_learnset_pointers.h, leveluplearnsets))
 $(eval $(call GENERATE, include/generated/data/pokemon/form_species_table_pointers.h, forms))
@@ -88,10 +87,15 @@ $(eval $(call GENERATE, include/generated/data/pokemon_graphics/icons.h, icons))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/pics.h, monpics))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/coordinates.h, coords))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/palettes.h, monpals))
+
+$(eval $(call GENERATE, include/generated/constants/moves.h, moves))
 $(eval $(call GENERATE, include/generated/data/text/move_names.h, movenames))
 $(eval $(call GENERATE, include/generated/data/text/move_descriptions.h, movedescriptions))
 $(eval $(call GENERATE, include/generated/constants/battle_move_effects.h, movebehaviors))
 $(eval $(call GENERATE, include/generated/constants/move_effects.h, moveeffects))
+$(eval $(call GENERATE, include/generated/data/battle_moves.h, battlemoves))
+
+$(eval $(call GENERATE, include/generated/data/text/help_articles.h, helparticles))
 
 timestamp/generated: $(ALL_GENERATED)
 	@touch timestamp/generated

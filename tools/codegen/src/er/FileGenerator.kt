@@ -6,6 +6,7 @@ import er.gfx.CoordsGenerator
 import er.gfx.IconGenerator
 import er.gfx.ImageGenerator
 import er.gfx.PaletteGenerator
+import er.move.BattleMovesGenerator
 import er.move.MoveDescriptionGenerator
 import er.move.MoveNameGenerator
 import er.text.ArticlesGenerator
@@ -43,6 +44,7 @@ object FileGenerator {
         "movedescriptions" to MoveDescriptionGenerator,
         "movebehaviors" to MoveBehaviorGenerator,
         "moveeffects" to MoveEffectGenerator,
+        "battlemoves" to BattleMovesGenerator,
     )
 
     @JvmStatic
