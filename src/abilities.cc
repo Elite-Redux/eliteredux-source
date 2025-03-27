@@ -548,6 +548,11 @@ static const Ability ShadowTag = {
     .name = $("Shadow Tag"),
     .description = $("Opponents can't be switched out.\n"
                      "Ghosts aren't affected."),
+    .onTrap = +[](ABILITY_ON_TRAP) -> int {
+        ON_ABILITY(switchingBattler, FALSE, gAbilities[ability].shadowTag, return FALSE)
+        return TRUE;
+    },
+    .shadowTag = TRUE,
 };
 
 static const Ability RoughSkin = {
@@ -803,6 +808,7 @@ static const Ability MagnetPull = {
     .name = $("Magnet Pull"),
     .description = $("Traps opposing Steel-types.\n"
                      "Ghosts aren't affected."),
+    .onTrap = +[](ABILITY_ON_TRAP) -> int { return IS_BATTLER_OF_TYPE(switchingBattler, TYPE_STEEL); },
 };
 
 static const Ability Soundproof = {
@@ -1137,6 +1143,7 @@ static const Ability ArenaTrap = {
     .name = $("Arena Trap"),
     .description = $("Enemies can't flee. Ghosts and\n"
                      "ungrounded Pokémon are immune."),
+    .onTrap = +[](ABILITY_ON_TRAP) -> int { return IsBattlerGrounded(switchingBattler); },
 };
 
 static const Ability VitalSpirit = {

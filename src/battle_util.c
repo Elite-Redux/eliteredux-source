@@ -4845,24 +4845,11 @@ u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability) {
 }
 
 u32 IsAbilityPreventingEscape(u32 battlerId) {
-    u32 id;
     if (ItemId_GetHoldEffect(gBattleMons[battlerId].item) == HOLD_EFFECT_SHED_SHELL) return 0;
-#if B_GHOSTS_ESCAPE >= GEN_6
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) return 0;
-#endif
-#if B_SHADOW_TAG_ESCAPE >= GEN_4
-    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_SHADOW_TAG)) && !BattlerHasAbility(battlerId, ABILITY_SHADOW_TAG, FALSE))
-#else
-    if (id = IsAbilityOnOpposingSide(battlerId, ABILITY_SHADOW_TAG))
-#endif
-#if B_SHADOW_TAG_ESCAPE >= GEN_4
-    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_FRENZIED_PHANTOM)) && !BattlerHasAbility(battlerId, ABILITY_FRENZIED_PHANTOM, FALSE))
-#else
-#endif
-        return id;
-    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_ARENA_TRAP)) && IsBattlerGrounded(battlerId)) return id;
-    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_MAGNET_PULL)) && IS_BATTLER_OF_TYPE(battlerId, TYPE_STEEL)) return id;
-
+    for (int opponent = BATTLE_OPPOSITE(GetBattlerSide(battlerId)); opponent < gBattlersCount; opponent += 2) {
+        ON_ABILITY(opponent, FALSE, gAbilities[ability].onTrap, if (gAbilities[ability].onTrap(battlerId)) return ability)
+    }
     return 0;
 }
 
