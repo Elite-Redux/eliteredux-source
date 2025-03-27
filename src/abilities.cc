@@ -10080,7 +10080,7 @@ static const Ability ImmovableObject = {
 
 static const Ability FrenziedPhantom = {
     .name = $("Frenzied Phantom"),
-    .description = $("Hyper Aggresmsive +\n"
+    .description = $("Hyper Aggressive +\n"
                      "Shadow Tag."),
     .onParentalBond = ParentalBond.onParentalBond,
 };
