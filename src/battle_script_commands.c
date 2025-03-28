@@ -103,9 +103,9 @@ static const u16 sTrappingMoves[] = {
 };
 
 // this file's functions
-static bool8 IsTwoTurnsMove(u16 move);
+static bool8 IsTwoTurnsMove(MoveEnum move);
 static void TrySetDestinyBondToHappen(void);
-static u8 AttacksThisTurn(u8 battlerId, u16 move);  // Note: returns 1 if it's a charging turn, otherwise 2.
+static u8 AttacksThisTurn(u8 battlerId, MoveEnum move);  // Note: returns 1 if it's a charging turn, otherwise 2.
 static bool32 IsMonGettingExpSentOut(void);
 static void sub_804F17C(void);
 static bool8 sub_804F1CC(void);
@@ -915,7 +915,7 @@ static const u8 sBattlePalaceNatureToFlavorTextId[NUM_NATURES] = {
 
 #define IS_THREE_HEADED(battlerAttacker) (gBaseStats[gBattleMons[battlerAttacker].species].flags & F_THREE_HEADED)
 
-static bool32 NoTargetPresent(u32 move) {
+static bool32 NoTargetPresent(MoveEnum move) {
     switch (move) {
         case MOVE_SUNNY_DAY:
         case MOVE_RAIN_DANCE:
@@ -992,7 +992,7 @@ bool8 PartyIsMaxLevel(void) {
     return TRUE;
 }
 
-int ShouldSetMoldBreaker(int battler, int move) {
+int ShouldSetMoldBreaker(int battler, MoveEnum move) {
     if (gBattleMoves[gCurrentMove].flags & FLAG_TARGET_ABILITY_IGNORED) return TRUE;
     if (getMonotypeChampType() == TYPE_STEEL && GetBattlerSide(battler) != B_SIDE_PLAYER) return TRUE;
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_MOLD_BREAKER, FALSE)) return TRUE;
@@ -1003,7 +1003,7 @@ int ShouldSetMoldBreaker(int battler, int move) {
     return FALSE;
 }
 
-MultihitType GetParentalBondType(int battler, int target, int move, int moveType) {
+MultihitType GetParentalBondType(int battler, int target, MoveEnum move, int moveType) {
     if (!IsMoveAffectedByParentalBond(move, battler)) return MULTIHIT_SINGLE;
 
     int hasFortKnox = HasFortKnox(target);
@@ -1251,7 +1251,7 @@ static void Cmd_attackcanceler(void) {
     }
 }
 
-static bool32 JumpIfMoveFailed(u8 adder, u16 move) {
+static bool32 JumpIfMoveFailed(u8 adder, MoveEnum move) {
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT) {
         gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
         gLastLandedMoves[gBattlerTarget] = 0;
@@ -1279,7 +1279,7 @@ static void Cmd_jumpifaffectedbyprotect(void) {
     }
 }
 
-bool8 JumpIfMoveAffectedByProtect(u16 move) {
+bool8 JumpIfMoveAffectedByProtect(MoveEnum move) {
     bool8 affected = FALSE;
     if (IsBattlerProtected(gBattlerTarget, move)) {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
@@ -1290,7 +1290,7 @@ bool8 JumpIfMoveAffectedByProtect(u16 move) {
     return affected;
 }
 
-u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState* moveState) {
+u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveState* moveState) {
     s8 buff, accStage, evasionStage;
     u8 atkParam = GetBattlerHoldEffectParam(battlerAtk);
     u8 defParam = GetBattlerHoldEffectParam(battlerDef);
@@ -1332,7 +1332,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState*
                  (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
             prio = ACCURACY_HITS_IF_POSSIBLE;
         else if (IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY) &&
-                 (gBattleMoves[move].effect == EFFECT_FREEZE_DRY || gBattleMoves[move].effect == MOVE_SHEER_COLD || move == MOVE_BLIZZARD))
+                 (gBattleMoves[move].effect == EFFECT_FREEZE_DRY || move == MOVE_SHEER_COLD || move == MOVE_BLIZZARD))
             prio = ACCURACY_HITS_IF_POSSIBLE;
         else if (IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY) && (move == MOVE_EERIE_SPELL || move == MOVE_VEXING_VOID))
             prio = ACCURACY_HITS_IF_POSSIBLE;
@@ -1525,7 +1525,7 @@ static const u8 sCriticalHitChance[] = {16, 8, 4, 3, 2};  // Gens 2,3,4,5
 #define BENEFITS_FROM_LEEK(battler, holdEffect)                                                                     \
     ((holdEffect == HOLD_EFFECT_LEEK) && (GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_FARFETCHD || \
                                           gBattleMons[battler].species == SPECIES_FARFETCHD_GALARIAN || gBattleMons[battler].species == SPECIES_SIRFETCHD))
-s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbility) {
+s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, MoveEnum move, bool32 recordAbility) {
     u32 holdEffectAtk = GetBattlerHoldEffect(battlerAtk, TRUE);
 
     if (gSideStatuses[battlerDef] & SIDE_STATUS_LUCKY_CHANT || gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT) {
@@ -1564,7 +1564,7 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
 }
 #undef BENEFITS_FROM_LEEK
 
-s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, u32 move) {
+s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
     s32 critChanceIndex = CalcCritChanceStage(battlerAtk, battlerDef, move, FALSE);
     if (critChanceIndex <= NEVER_CRIT)
         return -1;
@@ -2990,7 +2990,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
     gBattleScripting.moveSecondaryEffectChance = 0;
 }
 
-int GetMoveEffectChance(int battler, int move, int moveEffect, int baseChance) {
+int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChance) {
     if (moveEffect == MOVE_EFFECT_FLINCH && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) return 0;
 
     ON_ABILITY(battler, FALSE, gAbilities[ability].onModifyEffectChance, gAbilities[ability].onModifyEffectChance(battler, move, moveEffect, &baseChance))
@@ -5687,7 +5687,7 @@ static void Cmd_yesnoboxlearnmove(void) {
                 if (movePosition == MAX_MON_MOVES) {
                     gBattleScripting.learnMoveState = 5;
                 } else {
-                    u16 moveId = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_MOVE1 + movePosition);
+                    MoveEnum moveId = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_MOVE1 + movePosition);
                     gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 
                     PREPARE_MOVE_BUFFER(gBattleTextBuff2, moveId)
@@ -6474,7 +6474,7 @@ static void HandleTerrainMove(u32 moveEffect) {
     }
 }
 
-bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget, int move) {
+bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget, MoveEnum move) {
     if (!IS_BATTLER_OF_TYPE(battlerTarget, TYPE_POISON) && !IS_BATTLER_OF_TYPE(battlerTarget, TYPE_STEEL)) return TRUE;
     ON_ABILITY(
         battlerAttacker, FALSE, gAbilities[ability].onCanStatusType, if (gAbilities[ability].onCanStatusType(battlerAttacker, move, CHECK_POISON)) return TRUE)
@@ -7278,7 +7278,7 @@ static void Cmd_various(void) {
             else if (gBattleMoves[gBattleMons[gBattlerTarget].moves[gBattleStruct->chosenMovePositions[gBattlerTarget]]].power == 0)
                 gBattlescriptCurrInstr = ptr;
             else {
-                u16 move = gBattleMons[gBattlerTarget].moves[gBattleStruct->chosenMovePositions[gBattlerTarget]];
+                MoveEnum move = gBattleMons[gBattlerTarget].moves[gBattleStruct->chosenMovePositions[gBattlerTarget]];
                 switch (move) {
                     case MOVE_STRUGGLE:
                     case MOVE_CHATTER:
@@ -9170,8 +9170,8 @@ static void Cmd_tryhealhalfhealth(void) {
 static void Cmd_trymirrormove(void) {
     s32 validMovesCount;
     s32 i;
-    u16 move;
-    u16 movesArray[4] = {0};
+    MoveEnum move;
+    MoveEnum movesArray[4] = {0};
 
     for (validMovesCount = 0, i = 0; i < gBattlersCount; i++) {
         if (i != gBattlerAttacker) {
@@ -9525,7 +9525,7 @@ static void Cmd_checkcondition(void) {
     }
 }
 
-static u16 ReverseStatChangeMoveEffect(u16 moveEffect) {
+static u16 ReverseStatChangeMoveEffect(MoveEffectEnum moveEffect) {
     switch (moveEffect) {
         // +1
         case MOVE_EFFECT_ATK_PLUS_1:
@@ -10128,7 +10128,7 @@ static void Cmd_forcerandomswitch(void) {
 
 static void Cmd_tryconversiontypechange(void) {
     u8 i;
-    u16 move;
+    MoveEnum move;
     u8 type;
     u8 type2;
     struct BattlePokemon* mon;
@@ -10497,7 +10497,7 @@ static void Cmd_mimicattackcopy(void) {
 }
 
 static void Cmd_metronome(void) {
-    int move;
+    MoveEnum move;
     int allowed;
     do {
         move = (Random() % (MOVES_COUNT - 1)) + 1;
@@ -10866,7 +10866,7 @@ static void Cmd_copymovepermanently(void)  // sketch
     }
 }
 
-static bool8 IsTwoTurnsMove(u16 move) {
+static bool8 IsTwoTurnsMove(MoveEnum move) {
     if (gBattleMoves[move].effect == EFFECT_SKULL_BASH || gBattleMoves[move].effect == EFFECT_TWO_TURNS_ATTACK ||
         gBattleMoves[move].effect == EFFECT_SOLARBEAM || gBattleMoves[move].effect == EFFECT_SEMI_INVULNERABLE || gBattleMoves[move].effect == EFFECT_BIDE)
         return TRUE;
@@ -10875,7 +10875,7 @@ static bool8 IsTwoTurnsMove(u16 move) {
 }
 
 // unused
-static u8 AttacksThisTurn(u8 battlerId, u16 move)  // Note: returns 1 if it's a charging turn, otherwise 2
+static u8 AttacksThisTurn(u8 battlerId, MoveEnum move)  // Note: returns 1 if it's a charging turn, otherwise 2
 {
     // first argument is unused
     if (gBattleMoves[move].effect == EFFECT_SOLARBEAM && (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY) || HasChloroplast(gBattlerAttacker))) return 2;
@@ -12004,7 +12004,7 @@ static void Cmd_assistattackselect(void) {
         if (GetMonData(&party[monId], MON_DATA_SPECIES2) == SPECIES_EGG) continue;
 
         for (moveId = 0; moveId < MAX_MON_MOVES; moveId++) {
-            u16 move = GetMonData(&party[monId], MON_DATA_MOVE1 + moveId);
+            MoveEnum move = GetMonData(&party[monId], MON_DATA_MOVE1 + moveId);
 
             switch (gBattleMoves[move].effect) {
                 case EFFECT_PLACEHOLDER:
@@ -12113,7 +12113,7 @@ static void Cmd_getsecretpowereffect(void) {
 }
 
 u16 GetSecretPowerMoveEffect(void) {
-    u16 moveEffect;
+    MoveEffectEnum moveEffect;
     u32 fieldTerrain = gFieldStatuses & STATUS_FIELD_TERRAIN_ANY;
     if (fieldTerrain) {
         switch (fieldTerrain) {
@@ -12326,13 +12326,13 @@ static void Cmd_settypebasedhalvers(void)  // water and mud sport
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 }
 
-int Infiltrates(int battler, int move, InfiltrateType type) {
+int Infiltrates(int battler, MoveEnum move, InfiltrateType type) {
     ON_ABILITY(battler, FALSE, gAbilities[ability].onInfiltrate, if (gAbilities[ability].onInfiltrate(battler, move) & type) return TRUE)
 
     return FALSE;
 }
 
-bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, u32 move) {
+bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
     if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE)) return FALSE;
     if (gBattleMoves[move].flags & FLAG_SOUND && B_SOUND_SUBSTITUTE >= GEN_6) return FALSE;
     if (gBattleMoves[move].flags & FLAG_HIT_IN_SUBSTITUTE) return FALSE;
@@ -12357,7 +12357,7 @@ u16 GetNoDamageAbility(u8 battler) {
     return ABILITY_NONE;
 }
 
-bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move) {
+bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
     ON_ABILITY(battlerDef, TRUE, gAbilities[ability].onDisguise, FILTER(gAbilities[ability].onDisguise(battlerDef, TRUE));
                FILTER_NOT(gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED);
                FILTER_NOT(IS_MOVE_STATUS(move));
@@ -13238,7 +13238,7 @@ static bool32 CriticalCapture(u32 odds) {
 #endif
 }
 
-bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId) {
+bool8 IsMoveAffectedByParentalBond(MoveEnum move, u8 battlerId) {
     if (gBattleMoves[move].split == SPLIT_STATUS) return FALSE;
     if (gBattleMoves[move].parentalBondBanned) return FALSE;
     if (gBattleMoves[move].effect == EFFECT_SOLARBEAM && (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY) || HasChloroplast(battlerId))) return TRUE;

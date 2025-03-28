@@ -3,17 +3,11 @@ package er.move
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.MOVES_LIST
-import er.GeneratorUtils.createDedupMaps
-import er.GeneratorUtils.printLookupTable
 import java.io.OutputStreamWriter
 
 object MoveNameGenerator : Generator {
     private const val MOVE_NAME_SHORT_LENGTH = 13
     private const val MOVE_NAME_LONG_LENGTH = 19
-
-    private enum class Name { SHORT, LONG }
-
-    private const val PREFIX = "__sMoveName_"
 
     override fun generate(writer: OutputStreamWriter) {
         MOVES_LIST.forEach { check(it.shortName.length <= MOVE_NAME_SHORT_LENGTH) { "Move short name ${it.name} exceeds character limit of 13." } }

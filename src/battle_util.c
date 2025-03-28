@@ -63,7 +63,7 @@ match the ROM; this is also why sSoundMovesTable's declaration is in the middle 
 functions instead of at the top of the file with the other declarations.
 */
 
-static bool8 DoesMoveBoostStats(u16 move);
+static bool8 DoesMoveBoostStats(MoveEnum move);
 static void UpdateMoveResultFlags(u16 modifier);
 
 extern const u8 *const gBattleScriptsForMoveEffects[];
@@ -121,7 +121,7 @@ bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move) {
     return TRUE;
 }
 
-u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler) {
+u8 GetBattlerBattleMoveTargetFlags(MoveEnum moveId, u8 battler) {
     if ((BATTLER_HAS_ABILITY(battler, ABILITY_ARTILLERY) || BATTLER_HAS_ABILITY(battler, ABILITY_SUPER_SCOPE)) && IsMegaLauncherBoosted(battler, moveId) &&
         gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
         return MOVE_TARGET_BOTH;
@@ -715,7 +715,7 @@ void HandleAction_TryFinish(void) {
 void TryPreemptiveActions() {
     int battler = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     if (gCurrentActionFuncId == B_ACTION_USE_MOVE) {
-        int move = GetChosenMove(battler);
+        MoveEnum move = GetChosenMove(battler);
         int target = GetMoveTarget(move, FALSE);
         int targetFlag = GetBattlerBattleMoveTargetFlags(move, battler);
         int surpriser = 0;
@@ -1608,7 +1608,7 @@ bool8 AreAllMovesUnusable(void) {
     return (unusable == 0xF);
 }
 
-u8 GetImprisonedMovesCount(u8 battlerId, u16 move) {
+u8 GetImprisonedMovesCount(u8 battlerId, MoveEnum move) {
     s32 i;
     u8 imprisonedMoves = 0;
     u8 battlerSide = GetBattlerSide(battlerId);
@@ -2340,7 +2340,7 @@ u8 DoBattlerEndTurnEffects(void) {
                 break;
             case ENDTURN_ABILITIES:  // end turn abilities
             {
-                u16 move = gLastResultingMoves[gActiveBattler];
+                MoveEnum move = gLastResultingMoves[gActiveBattler];
                 if (move == 0xFFFF) move = 0;
                 if (AbilityBattleEffects(ABILITYEFFECT_ENDTURN, gActiveBattler, 0, 0, move)) effect++;
             }
@@ -3419,7 +3419,7 @@ u8 AtkCanceller_UnableToUseMove(void) {
     return effect;
 }
 
-MultihitType GetMultihitType(int battler, int move) {
+MultihitType GetMultihitType(int battler, MoveEnum move) {
     if (IsTwoStrikesMove(move)) return MULTIHIT_TWO;
 
     switch (gBattleMoves[gCurrentMove].effect) {
@@ -3633,7 +3633,7 @@ bool32 SetPermanentWeather(u32 weatherEnumId) {
     return FALSE;
 }
 
-bool8 UseOutOfTurnAttack(u8 battler, u8 target, u16 ability, u16 move, u8 movePower) {
+bool8 UseOutOfTurnAttack(u8 battler, u8 target, u16 ability, MoveEnum move, u8 movePower) {
     if (gBattlerAttacker == battler) return FALSE;
     if (gTurnStructs[battler].dancerUsedMove) return FALSE;
     if (gBattleMons[battler].status1 & STATUS1_SLEEP) return FALSE;
@@ -3918,7 +3918,7 @@ int AbilityHealMonStatus(u8 battler, u16 ability) {
     return TRUE;
 }
 
-bool8 CanMoveHaveExtraFlinchChance(u16 move) {
+bool8 CanMoveHaveExtraFlinchChance(MoveEnum move) {
     return gBattleMoves[move].flags & FLAG_KINGS_ROCK_AFFECTED;
 }
 
@@ -4198,7 +4198,7 @@ bool8 TryToSetFieldEffect(u8 battler) {
     return FALSE;
 }
 
-u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 moveArg) {
+u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, MoveEnum moveArg) {
     u8 effect = 0;
     u32 moveType, move;
     u32 i;
@@ -4804,9 +4804,9 @@ bool8 IsSleepDisabled(u8 battlerId) {
         return FALSE;
 }
 
-bool8 IsSleepClauseDisablingMove(u8 battlerId, u16 move) {
+bool8 IsSleepClauseDisablingMove(u8 battlerId, MoveEnum move) {
     u32 target = BATTLE_OPPOSITE(battlerId);
-    u16 moveEffect = gBattleMoves[move].effect;
+    MoveBehaviorEnum moveEffect = gBattleMoves[move].effect;
     bool8 isSleepingMove = FALSE;
     u16 partnerchosenmove = gChosenMoveByBattler[BATTLE_PARTNER(battlerId)];
     bool8 IsDoubleBattle = FALSE;
@@ -4869,7 +4869,7 @@ bool32 CanSleep(u8 battlerId) {
     return TRUE;
 }
 
-bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget, int move) {
+bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget, MoveEnum move) {
     if (gBattleMons[battlerTarget].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(battlerAttacker)) return TRUE;
 
@@ -5475,7 +5475,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         if (!moveTurn) {
                             struct Pokemon *mon;
                             u8 ppBonuses;
-                            u16 move;
+                            MoveEnum move;
 
                             mon = GetBattlerPartyData(battlerId);
                             for (i = 0; i < MAX_MON_MOVES; i++) {
@@ -6157,7 +6157,7 @@ u32 SetRandomTarget(u32 battlerId) {
     return target;
 }
 
-u32 GetMoveTarget(u16 move, u8 setTarget) {
+u32 GetMoveTarget(MoveEnum move, u8 setTarget) {
     u8 targetBattler = 0;
     u32 moveTarget, side;
 
@@ -6365,7 +6365,7 @@ u32 GetBattlerHoldEffectParam(u8 battlerId) {
         return ItemId_GetHoldEffectParam(gBattleMons[battlerId].item);
 }
 
-bool32 IsMoveMakingContact(u16 move, u8 battlerAtk) {
+bool32 IsMoveMakingContact(MoveEnum move, u8 battlerAtk) {
     if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) {
         if (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)
             return TRUE;
@@ -6382,7 +6382,7 @@ bool32 IsMoveMakingContact(u16 move, u8 battlerAtk) {
     }
 }
 
-bool32 IsBattlerProtected(u8 battlerId, u16 move) {
+bool32 IsBattlerProtected(u8 battlerId, MoveEnum move) {
     int moveType;
 
     GET_MOVE_TYPE(move, moveType)
@@ -6406,7 +6406,7 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move) {
         return FALSE;
     else if (!(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED))
         return FALSE;
-    else if (gBattleMoves[move].effect == MOVE_EFFECT_FEINT)
+    else if (gBattleMoves[move].effect == EFFECT_FEINT)
         return FALSE;
     else if (gRoundStructs[battlerId].isProtected)
         return TRUE;
@@ -6488,7 +6488,7 @@ bool32 IsBattlerAlive(u8 battlerId) {
         return TRUE;
 }
 
-u8 GetBattleMonMoveSlot(struct BattlePokemon *battleMon, u16 move) {
+u8 GetBattleMonMoveSlot(struct BattlePokemon *battleMon, MoveEnum move) {
     u8 i;
 
     for (i = 0; i < 4; i++) {
@@ -6553,9 +6553,9 @@ int CountBattlerStatDecreases(int battler) {
     return count;
 }
 
-u32 GetMoveTargetCount(u16 move, u8 battlerAtk, u8 battlerDef) {
+u32 GetMoveTargetCount(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
     int flags = GetBattlerBattleMoveTargetFlags(move, battlerAtk);
-    if (gBattleMoves[move].effect == MOVE_SPARKLING_ARIA && flags == MOVE_TARGET_FOES_AND_ALLY) flags = MOVE_TARGET_BOTH;
+    if (move == MOVE_SPARKLING_ARIA && flags == MOVE_TARGET_FOES_AND_ALLY) flags = MOVE_TARGET_BOTH;
     switch (flags) {
         case MOVE_TARGET_BOTH:
             return IsBattlerAlive(battlerDef) + IsBattlerAlive(BATTLE_PARTNER(battlerDef));
@@ -6627,7 +6627,7 @@ const struct TypePower gNaturalGiftTable[] = {
     [ITEM_TO_BERRY(ITEM_MARANGA_BERRY)] = {TYPE_DARK, 100},
 };
 
-static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef) {
+static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
     u32 i;
     u16 basePower = gBattleMoves[move].power;
     u32 weight, speed;
@@ -6893,7 +6893,7 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef) {
 #undef RESISTANCE
 
 u16 CalculateAbilityMultipliers(
-    int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistanceMultiplier) {
+    int battlerAtk, int battlerDef, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistanceMultiplier) {
     u16 multiplier = UQ_4_12(1.0);
     int hasFortKnox = HasFortKnox(battlerDef);
 
@@ -6918,7 +6918,7 @@ u16 CalculateAbilityMultipliers(
     return multiplier;
 }
 
-u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags) {
+u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags) {
     u32 i;
     u32 holdEffectAtk, holdEffectParamAtk;
     u16 basePower = CalcMoveBasePower(move, battlerAtk, battlerDef);
@@ -7065,7 +7065,7 @@ int IgnoresFrostbiteSpatkDrop(int battler) {
     return FALSE;
 }
 
-u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isAttack, bool8 isCrit, bool8 isUnaware, bool8 calculatingSecondary) {
+u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, MoveEnum move, bool8 isAttack, bool8 isCrit, bool8 isUnaware, bool8 calculatingSecondary) {
     u32 statBase = 0;
     u8 statStage = gBattleMons[battler].statStages[statEnum];
     u8 extraStatLevel = 0;
@@ -7171,7 +7171,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
     return statBase;
 }
 
-static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 isCrit, bool32 updateFlags) {
+static u32 CalcAttackStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 isCrit, bool32 updateFlags) {
     u8 atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_ATK : STAT_SPATK;
     u8 secondaryAtkStatToUse = 0;
     u8 statBattler = battlerAtk;
@@ -7257,7 +7257,7 @@ static bool32 CanEvolve(u32 species) {
     return FALSE;
 }
 
-void SetSwapDamageCategory(int battler, int target, int move) {
+void SetSwapDamageCategory(int battler, int target, MoveEnum move) {
     switch (gBattleMoves[move].splitFlag) {
         default:
             gSwapDamageCategory = FALSE;
@@ -7319,7 +7319,7 @@ u8 CalculateBattlerHighestAttack(u8 battler) {
         return STAT_SPATK;
 }
 
-static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 isCrit, bool32 updateFlags) {
+static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 isCrit, bool32 updateFlags) {
     u8 defStatToUse = 0;
     u8 noPositiveStatStages = isCrit || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED ||
                               (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BattlerHasAbility(battlerAtk, ABILITY_GRIP_PINCER, FALSE));
@@ -7378,7 +7378,7 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     return ApplyModifier(modifier, defStat);
 }
 
-u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move) {
+u8 StabMultiplierInHalves(u8 battler, u8 moveType, MoveEnum move) {
     if (move == MOVE_STRUGGLE) return 2;
     int isStab = IS_BATTLER_OF_TYPE(battler, moveType);
     if (!isStab) {
@@ -7417,7 +7417,7 @@ u16 GetParentalBondMultiplier(MultihitType parentalBondType, int turn) {
     return UQ_4_12(1.0);
 }
 
-u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u16 typeEffectivenessModifier, bool32 isCrit, bool32 updateFlags) {
+u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveType, u16 typeEffectivenessModifier, bool32 isCrit, bool32 updateFlags) {
     u32 percentBoost;
     u32 defSide = GET_BATTLER_SIDE(battlerDef);
     u16 finalModifier = UQ_4_12(1.0);
@@ -7577,7 +7577,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
 }
 
 s32 DoMoveDamageCalcInternal(
-    u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower, bool32 isCrit, bool32 updateFlags, u16 typeEffectivenessModifier) {
+    MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower, bool32 isCrit, bool32 updateFlags, u16 typeEffectivenessModifier) {
     s32 dmg;
 
     // Don't calculate damage if the move has no effect on target.
@@ -7629,7 +7629,7 @@ s32 DoMoveDamageCalcInternal(
     return dmg;
 }
 
-static s32 DoMoveDamageCalc(u16 move,
+static s32 DoMoveDamageCalc(MoveEnum move,
                             u8 battlerAtk,
                             u8 battlerDef,
                             u8 *moveType,
@@ -7670,7 +7670,7 @@ static s32 DoMoveDamageCalc(u16 move,
     return dmg;
 }
 
-s32 DoMoveDamageCalcBattleMenu(u16 move, u8 battlerAtk, u8 battlerDef, u8 *moveType, bool32 isCrit, u8 randomFactor, u16 *typeEffectivenessModifier) {
+s32 DoMoveDamageCalcBattleMenu(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 *moveType, bool32 isCrit, u8 randomFactor, u16 *typeEffectivenessModifier) {
     s32 dmg = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, 0, isCrit, FALSE, FALSE, typeEffectivenessModifier);
 
     if (IsAbilityOnSide(battlerDef, ABILITY_BAD_LUCK) || IsAbilityOnSide(battlerDef, ABILITY_BAD_OMEN)) randomFactor = 16;
@@ -7684,19 +7684,19 @@ s32 DoMoveDamageCalcBattleMenu(u16 move, u8 battlerAtk, u8 battlerDef, u8 *moveT
     return dmg;
 }
 
-s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags) {
+s32 CalculateMoveDamage(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 *moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags) {
     u16 typeEffectiveness;
     return DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, fixedBasePower, isCrit, randomFactor, updateFlags, &typeEffectiveness);
 }
 
 // for AI - get move damage and effectiveness with one function call
-s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, u8 *moveType, u16 *typeEffectivenessModifier) {
+s32 CalculateMoveDamageAndEffectiveness(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 *moveType, u16 *typeEffectivenessModifier) {
     int val = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, 0, FALSE, FALSE, FALSE, typeEffectivenessModifier);
     gSwapDamageCategory = FALSE;
     return val;
 }
 
-int CalcMoveDamageAi(int move, int battlerAtk, int battlerDef, u8 *moveType, int fixedBasePower, struct MoveState *moveState) {
+int CalcMoveDamageAi(MoveEnum move, int battlerAtk, int battlerDef, u8 *moveType, int fixedBasePower, struct MoveState *moveState) {
     u16 typeEffectivenessModifier;
     int val = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, fixedBasePower, FALSE, 0, FALSE, &typeEffectivenessModifier);
 
@@ -7709,7 +7709,7 @@ int CalcMoveDamageAi(int move, int battlerAtk, int battlerDef, u8 *moveType, int
     return val;
 }
 
-void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities) {
+void MulByTypeEffectiveness(u16 *modifier, MoveEnum move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities) {
     u16 mod = GetTypeModifier(moveType, defType, battlerAtk, battlerDef);
 
     int abilityModified = FALSE;
@@ -7807,7 +7807,7 @@ static void UpdateMoveResultFlags(u16 modifier) {
     }
 }
 
-static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities, u16 modifier) {
+static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities, u16 modifier) {
     u32 illusionSpecies;
     u16 modifier1, modifier2, modifier3;
     u8 currentAttackBattler = gBattlerAttacker;
@@ -7864,7 +7864,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     return modifier;
 }
 
-u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities) {
+u16 CalcTypeEffectivenessMultiplier(MoveEnum move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities) {
     u16 modifier = UQ_4_12(1.0);
 
     if (move != MOVE_STRUGGLE && moveType != TYPE_MYSTERY) {
@@ -7877,7 +7877,7 @@ u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 bat
     return modifier;
 }
 
-u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef, u8 battlerDef) {
+u16 CalcPartyMonTypeEffectivenessMultiplier(MoveEnum move, u16 speciesDef, u16 abilityDef, u8 battlerDef) {
     u16 modifier = UQ_4_12(1.0);
     u8 moveType = gBattleMoves[move].type;
 
@@ -7991,7 +7991,7 @@ u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId) {
     return SPECIES_NONE;
 }
 
-u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, u16 moveId1, u16 moveId2, u16 moveId3, u16 moveId4) {
+u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, MoveEnum moveId1, MoveEnum moveId2, MoveEnum moveId3, MoveEnum moveId4) {
     u32 i, par;
 
     for (i = 0; i < EVOS_PER_MON; i++) {
@@ -8259,7 +8259,7 @@ bool8 ShouldGetStatBadgeBoost(u16 badgeFlag, u8 battlerId) {
         return FALSE;
 }
 
-u8 GetBattleMoveSplit(u32 moveId) {
+u8 GetBattleMoveSplit(MoveEnum moveId) {
     if (gSwapDamageCategory)  // Photon Geyser, Shell Side Arm, Light That Burns the Sky
         return gBattleMoves[moveId].split == SPLIT_PHYSICAL ? SPLIT_SPECIAL : SPLIT_PHYSICAL;
     else if (IS_MOVE_STATUS(moveId) || B_PHYSICAL_SPECIAL_SPLIT >= GEN_4)
@@ -8310,7 +8310,7 @@ bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId) {
     return FALSE;
 }
 
-bool32 TestMoveFlags(u16 move, u32 flag) {
+bool32 TestMoveFlags(MoveEnum move, u32 flag) {
     if (gBattleMoves[move].flags & flag) return TRUE;
     return FALSE;
 }
@@ -8447,7 +8447,7 @@ bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 stealthRock) {
     return ret;
 }
 
-bool32 TestSheerForceFlag(u8 battler, u16 move) {
+bool32 TestSheerForceFlag(u8 battler, MoveEnum move) {
     if (BattlerHasAbility(battler, ABILITY_SHEER_FORCE, FALSE) && gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST)
         return TRUE;
     else
@@ -8539,7 +8539,7 @@ bool32 TryRoomService(u8 battlerId) {
 }
 
 // Move Checks
-bool8 IsTwoStrikesMove(u16 move) {
+bool8 IsTwoStrikesMove(MoveEnum move) {
     switch (move) {
         case MOVE_DOUBLE_IRON_BASH:
         case MOVE_TWINEEDLE:
@@ -8551,7 +8551,7 @@ bool8 IsTwoStrikesMove(u16 move) {
     return FALSE;
 }
 
-bool32 BlocksPrankster(u16 move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget) {
+bool32 BlocksPrankster(MoveEnum move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget) {
     if (gProcessingExtraAttacks) {
         if (!gQueuedExtraAttackData[0].prankster) return FALSE;
     } else {
@@ -8829,7 +8829,7 @@ u8 GetTurnBattler() {
         return gBattlerByTurnOrder[gCurrentTurnActionNumber];
 }
 
-bool32 IsHealingMoveEffect(u16 effect) {
+bool32 IsHealingMoveEffect(MoveBehaviorEnum effect) {
     switch (effect) {
         case EFFECT_ABSORB:
         case EFFECT_MORNING_SUN:
@@ -8878,12 +8878,12 @@ int IsMagicGuardProtected(int battler) {
     return FALSE;
 }
 
-int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, int move, int moveType) {
+int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, MoveEnum move, int moveType) {
     int ignored;
     return TestAbsorbingAbilities(target, gActiveBattler, move, moveType, &ignored, (u16 *)&ignored);
 }
 
-int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *absorbingAbility) {
+int TestAbsorbingAbilities(int battler, int battlerAtk, MoveEnum move, int moveType, int *statId, u16 *absorbingAbility) {
     ON_ABILITY(
         battler, TRUE, gAbilities[ability].onAbsorb, int result = gAbilities[ability].onAbsorb(battler, move, moveType, statId); if (result) {
             *absorbingAbility = ability;
@@ -8892,16 +8892,16 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
     return FALSE;
 }
 
-static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 **immunityScript);
-static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 **immunityScript);
-static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 **immunityScript);
+static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
+static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
+static int HandleImmunityAbilityAs(int ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
 
-int TestImmunityAbilitiesOnly(int battler, int attacker, int move, int moveType) {
+int TestImmunityAbilitiesOnly(int battler, int attacker, MoveEnum move, int moveType) {
     int ignored;
     return TestImmunityAbilities(battler, attacker, move, moveType, (const u8 **)&ignored, (u8 *)&ignored, (u16 *)&ignored);
 }
 
-int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8 **immunityScript, u8 *overrideBattler, u16 *abilityPopup) {
+int TestImmunityAbilities(int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript, u8 *overrideBattler, u16 *abilityPopup) {
     for (int i = 0; i < gBattlersCount; i++) {
         int testBattler = (battler + i) % gBattlersCount;
         FILTER(IsBattlerAlive(testBattler))
@@ -8954,7 +8954,7 @@ int IsUnaware(int battler) {
     return FALSE;
 }
 
-int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) {
+int HandleAttackerAbility(int abilityNumber, int battler, int target, MoveEnum move) {
     int ability, moveType;
 
     if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
@@ -8991,7 +8991,7 @@ int CheckHalfHpAbility(int battlerDef, int battlerAtk) {
     return TRUE;
 }
 
-int HandleDefenderAbility(int abilityNumber, int battler, int attacker, int move) {
+int HandleDefenderAbility(int abilityNumber, int battler, int attacker, MoveEnum move) {
     int ability, moveType;
 
     if (battler >= gBattlersCount) return FALSE;
@@ -9024,7 +9024,7 @@ int HandleDefenderAbility(int abilityNumber, int battler, int attacker, int move
     return TRUE;
 }
 
-int HandleMiscAbilityMoveEffects(int battler, int opponent, int move) {
+int HandleMiscAbilityMoveEffects(int battler, int opponent, MoveEnum move) {
     int effect = 0;
 
     if (gVolatileStructs[battler].parasiticSpores && ShouldApplyOnHitAffect(opponent) && IsMoveMakingContact(move, gBattlerAttacker) &&
@@ -9171,7 +9171,7 @@ int HandleEndTurnAbility(int abilityNumber, int battler) {
     return TRUE;
 }
 
-int IsDance(int attacker, int move) {
+int IsDance(int attacker, MoveEnum move) {
     if (gBattleMoves[move].flags & FLAG_DANCE) return TRUE;
     return !IS_MOVE_STATUS(move) && BattlerHasAbility(attacker, ABILITY_TAEKKYEON, FALSE);
 }
@@ -9255,7 +9255,7 @@ int HasChloroplast(int battler) {
     return FALSE;
 }
 
-int HasRedirectionAbility(int battlerAtk, int battlerDef, int move, int type) {
+int HasRedirectionAbility(int battlerAtk, int battlerDef, MoveEnum move, int type) {
     if (!type) return ABILITY_NONE;
     if (battlerAtk == battlerDef) return ABILITY_NONE;
     if (gBattleMoves[move].effect == EFFECT_SNIPE_SHOT) return ABILITY_NONE;
@@ -9273,20 +9273,20 @@ int HasSkillLink(int battler) {
     return FALSE;
 }
 
-int IsMegaLauncherBoosted(int battler, int move) {
+int IsMegaLauncherBoosted(int battler, MoveEnum move) {
     if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) return TRUE;
     if (IS_MOVE_STATUS(move) || BattlerHasAbility(battler, ABILITY_GUNMAN, FALSE)) return TRUE;
     return FALSE;
 }
 
-int IsIronFistBoosted(int battler, int move) {
+int IsIronFistBoosted(int battler, MoveEnum move) {
     if (gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST) return TRUE;
     if (IS_MOVE_TYPE(move, TYPE_DRAGON) && BattlerHasAbility(battler, ABILITY_BRAWLING_WYVERN, FALSE)) return TRUE;
     if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST && BattlerHasAbility(battler, ABILITY_JUNSHI_SANDA, FALSE)) return TRUE;
     return FALSE;
 }
 
-int IsStrikerBoosted(int battler, int move) {
+int IsStrikerBoosted(int battler, MoveEnum move) {
     if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) return TRUE;
     if (gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST && BattlerHasAbility(battler, ABILITY_JUNSHI_SANDA, FALSE)) return TRUE;
     return FALSE;

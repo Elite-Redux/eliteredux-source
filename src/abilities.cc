@@ -38,6 +38,7 @@ class __EnumHack {
     inline enumType operator|(enumType a, enumType b) { return static_cast<enumType>(static_cast<int>(a) | static_cast<int>(b)); }
 
 ENUM_OR(InfiltrateType)
+ENUM_OR(MoveEffectEnum)
 
 #define CHECK(effect) \
     if (!(effect)) return __EnumHack();
@@ -49,11 +50,11 @@ ENUM_OR(InfiltrateType)
 
 #define ON_ENTRY int ability, int battler
 #define DELEGATE_ENTRY ability, battler
-#define ON_ABSORB int battler, int move, int moveType, int *statId
+#define ON_ABSORB int battler, MoveEnum move, int moveType, int *statId
 #define DELEGATE_ABSORB battler, move, moveType, statId
-#define ON_IMMUNE int battler, int attacker, int move, int moveType, const u8 **immunityScript
+#define ON_IMMUNE int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript
 #define DELEGATE_IMMUNE battler, attacker, move, moveType, immunityScript
-#define ON_INFILTRATE int battler, int move
+#define ON_INFILTRATE int battler, MoveEnum move
 #define DELEGATE_INFILTRATE battler, move
 #define ON_DISGUISE int battler, int testOnly
 #define DELEGATE_DISGUISE battler, testOnly
@@ -63,54 +64,55 @@ ENUM_OR(InfiltrateType)
 #define DELEGATE_TERRAIN ability, battler
 #define ON_END_TURN int ability, int battler
 #define DELEGATE_END_TURN ability, battler
-#define ON_ATTACKER int ability, int battler, int target, int move, int moveType
+#define ON_ATTACKER int ability, int battler, int target, MoveEnum move, int moveType
 #define DELEGATE_ATTACKER ability, battler, target, move, moveType
-#define ON_DEFENDER int ability, int battler, int attacker, int move, int moveType
+#define ON_DEFENDER int ability, int battler, int attacker, MoveEnum move, int moveType
 #define DELEGATE_DEFENDER ability, battler, attacker, move, moveType
-#define ON_EITHER(name) static int name##OnEither(int ability, int battler, int opponent, int move, int moveType)
+#define ON_EITHER(name) static int name##OnEither(int ability, int battler, int opponent, MoveEnum move, int moveType)
 #define ON_EITHER_ABILITY(name) .onAttacker = name##OnEither, .onDefender = name##OnEither
 #define ON_RECOIL int damage, int battler, int moveType
 #define DELEGATE_RECOIL damage, battler, moveType
 #define ON_REACTIVE int ability, int battler, AbilityCallType callType
 #define DELEGATE_REACTIVE ability, battler
-#define ON_BATTLER_FAINTS int ability, int battler, int attacker, int fainted, int move, int moveType
+#define ON_BATTLER_FAINTS int ability, int battler, int attacker, int fainted, MoveEnum move, int moveType
 #define DELEGATE_BATTLER_FAINTS ability, battler, attacker, fainted, move, moveType
-#define ON_PARENTAL_BOND int battler, int move, int moveType
+#define ON_PARENTAL_BOND int battler, MoveEnum move, int moveType
 #define DELEGATE_PARENTAL_BOND battler, move, moveType
 #define ON_STAT int ability, int battler, int statId, u32 *stat, NonStackingState *flags
 #define DELEGATE_STAT ability, battler, statId, stat, flags
 #define ON_OFFENSIVE_MULTIPLIER \
-    int battler, int target, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, u16 *modifier
+    int battler, int target, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, u16 *modifier
 #define DELEGATE_OFFENSIVE_MULTIPLIER battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier
-#define ON_DEFENSIVE_MULTIPLIER int battler, int attacker, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
+#define ON_DEFENSIVE_MULTIPLIER \
+    int battler, int attacker, MoveEnum move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
 #define DELEGATE_DEFENSIVE_MULTIPLIER battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier
-#define ON_ACCURACY int ability, int battler, int target, int move, int moveType, int *accuracy
+#define ON_ACCURACY int ability, int battler, int target, MoveEnum move, int moveType, int *accuracy
 #define DELEGATE_ACCURACY ability, battler, target, move, moveType, accuracy
-#define ON_SWAP_SPLIT int battler, int move
+#define ON_SWAP_SPLIT int battler, MoveEnum move
 #define DELEGATE_SWAP_SPLIT battler, move
-#define ON_CHOOSE_OFFENSIVE_STAT int battler, int move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 *secondaryAtkStatToUse
+#define ON_CHOOSE_OFFENSIVE_STAT int battler, MoveEnum move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 *secondaryAtkStatToUse
 #define DELEGATE_CHOOSE_OFFENSIVE_STAT battler, move, ignoreOffensiveStatDrops, targetUnaware, atkStatToUse, secondaryAtkStatToUse
-#define ON_CHOOSE_DEFENSIVE_STAT int battler, int target, int move, int ignoreDefensiveStatBoosts, int battlerUnaware
+#define ON_CHOOSE_DEFENSIVE_STAT int battler, int target, MoveEnum move, int ignoreDefensiveStatBoosts, int battlerUnaware
 #define DELEGATE_CHOOSE_DEFENSIVE_STAT battler, target, move, ignoreDefensiveStatBoosts, battlerUnaware
 #define ON_STAB int moveType
 #define DELEGATE_STAB moveType
-#define ON_PRIORITY int battler, int target, int move
+#define ON_PRIORITY int battler, int target, MoveEnum move
 #define DELEGATE_PRIORITY battler, target, move
-#define ON_MOVE_TYPE int ability, int move, int moveType, u8 *ateBoost
+#define ON_MOVE_TYPE int ability, MoveEnum move, int moveType, u8 *ateBoost
 #define DELEGATE_MOVE_TYPE ability, move, moveType, ateBoost
 #define ON_EXIT int ability, int battler
 #define DELEGATE_EXIT ability, battler
-#define ON_CRIT int battler, int target, int move
+#define ON_CRIT int battler, int target, MoveEnum move
 #define DELEGATE_CRIT battler, target, move
-#define ON_TYPE_EFFECTIVENESS int defType, int move, int moveType, u16 *mod
+#define ON_TYPE_EFFECTIVENESS int defType, MoveEnum move, int moveType, u16 *mod
 #define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
-#define ON_COPY_MOVE int ability, int battler, int attacker, int target, int move
+#define ON_COPY_MOVE int ability, int battler, int attacker, int target, MoveEnum move
 #define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
-#define ON_AFTER_TYPE_EFFECTIVENESS int battler, int ability, int target, int move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
+#define ON_AFTER_TYPE_EFFECTIVENESS int battler, int ability, int target, MoveEnum move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
 #define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
-#define ON_MODIFY_EFFECT_CHANCE int battler, int move, int moveEffect, int *effectChance
+#define ON_MODIFY_EFFECT_CHANCE int battler, MoveEnum move, MoveEffectEnum moveEffect, int *effectChance
 #define DELEGATE_MODIFY_EFFECT_CHANCE battler, move, moveEffect, effectChance
-#define ABILITY_ON_CAN_STATUS_TYPE int battler, int move, StatusCheckEnum status
+#define ABILITY_ON_CAN_STATUS_TYPE int battler, MoveEnum move, StatusCheckEnum status
 #define DELEGATE_ON_CAN_STATUS_TYPE battler, move, status
 #define ABILITY_ON_STATUS_IMMUNE int battler, int target, int ability, StatusCheckEnum status
 #define DELEGATE_ON_STATUS_IMMUNE int battler, target, ability, status
@@ -172,7 +174,7 @@ typedef enum {
     FOLLOWUP_ALLOW_FAILED,
     FOLLOWUP_ALLOW_SELF,
 } FollowupType;
-static int AdjustFollowupMoveTarget(int battler, int *target, int move, FollowupType type) {
+static int AdjustFollowupMoveTarget(int battler, int *target, MoveEnum move, FollowupType type) {
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT && type != FOLLOWUP_ALLOW_FAILED) return FALSE;
 
     switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
@@ -216,21 +218,21 @@ static int AddBattlerType(int battler, int type) {
     return TRUE;
 }
 
-static int AbilityStatusEffect(int effect) {
+static int AbilityStatusEffect(MoveEffectEnum effect) {
     gBattleScripting.moveEffect = effect;
     BattleScriptCall(BattleScript_AbilityStatusEffect);
     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
     return TRUE;
 }
 
-static int AbilityStatusEffectDirect(int effect) {
+static int AbilityStatusEffectDirect(MoveEffectEnum effect) {
     gBattleScripting.moveEffect = effect;
     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
     SetMoveEffect(FALSE, FALSE);
     return FALSE;
 }
 
-static int AbilityStatusEffectSafe(int effect, int attacker, int target) {
+static int AbilityStatusEffectSafe(MoveEffectEnum effect, int attacker, int target) {
     gBattleScripting.moveEffect = effect;
     gStackBattler1 = attacker;
     gStackBattler2 = target;
@@ -1595,7 +1597,7 @@ static const Ability Anticipation = {
         for (int i = 0; i < gBattlersCount; i++) {
             if (IsBattlerAlive(i) && side != GetBattlerSide(i)) {
                 for (int j = 0; j < MAX_MON_MOVES; j++) {
-                    int move = gBattleMons[i].moves[j];
+                    MoveEnum move = gBattleMons[i].moves[j];
                     int moveType = gBattleMoves[move].type;
                     if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0)) {
                         any = TRUE;
@@ -4617,12 +4619,11 @@ static const Ability MultiHeaded = {
     .name = $("Multi Headed"),
     .description = $("Hits as many times,\n"
                      "as it has heads."),
-    .onParentalBond =
-        +[](int battler, int move, int moveType) {
-            if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
-            if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
-            return MULTIHIT_SINGLE;
-        },
+    .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
+        if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
+        if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
+        return MULTIHIT_SINGLE;
+    },
     .resistsFortKnox = TRUE,
 };
 
@@ -6660,7 +6661,7 @@ static const Ability FreezingPoint = {
     ON_EITHER_ABILITY(FreezingPoint),
 };
 
-static int CryoProficiencyHail(int ability, int battler, int attacker, int move, int moveType) {
+static int CryoProficiencyHail(int ability, int battler, int attacker, MoveEnum move, int moveType) {
     CHECK(ShouldApplyOnHitAffect(battler))
     CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY)
     if (gBattleWeather & WEATHER_PRIMAL_ANY) {

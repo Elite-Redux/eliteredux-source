@@ -2,6 +2,7 @@
 #define GUARD_BATTLE_H
 
 // should they be included here or included individually by every file?
+#include "global.h"
 #include "constants/battle.h"
 #include "battle_main.h"
 #include "battle_message.h"
@@ -14,7 +15,6 @@
 #include "pokeball.h"
 #include "pokemon.h"
 #include "battle_debug.h"
-#include "global.h"
 
 #define GET_BATTLER_POSITION(battler)     (gBattlerPositions[battler])
 #define GET_BATTLER_SIDE(battler)         (GetBattlerPosition(battler) & BIT_SIDE)
@@ -829,8 +829,8 @@ struct BattleScripting
     // Fields should be ordered by size, as the compiler will align fields based on their size
     s32 painSplitHp;
     s32 bideDmg;
-    u16 savedMoveEffect; // For moves hitting multiple targets.
-    u16 moveEffect;
+    MoveEffectEnum savedMoveEffect; // For moves hitting multiple targets.
+    MoveEffectEnum moveEffect;
     u16 multihitMoveEffect;
     u16 abilityPopupOverwrite;
     u8 multihitString[6];
@@ -1017,10 +1017,10 @@ extern struct BattlePokemon gBattleMons[MAX_BATTLERS_COUNT];
 extern u8 gBattlerSpriteIds[MAX_BATTLERS_COUNT];
 extern u8 gCurrMovePos;
 extern u8 gChosenMovePos;
-extern u16 gCurrentMove;
-extern u16 gTempMove;
-extern u16 gChosenMove;
-extern u16 gCalledMove;
+extern MoveEnum gCurrentMove;
+extern MoveEnum gTempMove;
+extern MoveEnum gChosenMove;
+extern MoveEnum gCalledMove;
 extern s32 gBattleMoveDamage;
 extern s32 gHpDealt;
 extern s32 gTakenDmg[MAX_BATTLERS_COUNT];

@@ -1,5 +1,6 @@
 package er.defines
 
+import er.FileGenerator.IND
 import er.Generator
 import er.proto.MoveEffect
 import java.io.OutputStreamWriter
@@ -16,10 +17,17 @@ object MoveEffectGenerator : Generator {
                 |
                 |${effects.joinToString("\n") { "#define ${it.name} ${it.number}" }}
                 |
+                |#define MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES 0x2000
+                |#define MOVE_EFFECT_AFFECTS_USER 0x4000
+                |#define MOVE_EFFECT_CERTAIN 0x8000
+                |
                 |#else
                 |
                 |typedef enum MoveEffectEnum {
-                |${effects.joinToString("\n") { "    ${it.name} = ${it.number}," }}
+                |${effects.joinToString("\n") { "$IND${it.name} = ${it.number}," }}
+                |${IND}MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES = 0x2000,
+                |${IND}MOVE_EFFECT_AFFECTS_USER = 0x4000,
+                |${IND}MOVE_EFFECT_CERTAIN = 0x8000,
                 |} MoveEffectEnum;
                 |
                 |#endif

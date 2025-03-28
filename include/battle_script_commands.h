@@ -41,11 +41,11 @@ struct IntimidateCloneData {
 extern const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES];
 
 int GetParentalBondCount(int battler, MultihitType parentalBondType);
-MultihitType GetParentalBondType(int battler, int target, int move, int moveType);
+MultihitType GetParentalBondType(int battler, int target, MoveEnum move, int moveType);
 void CheckForBadEggs(void);
-s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbility);
-s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, u32 move);
-u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState* moveState);
+s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, MoveEnum move, bool32 recordAbility);
+s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, MoveEnum move);
+u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveState* moveState);
 u8 GetBattlerTurnOrderNum(u8 battlerId);
 bool32 NoAliveMonsForEitherParty(void);
 void SetMoveEffect(bool32 primary, u32 certain);
@@ -57,18 +57,18 @@ void BattleCreateYesNoCursorAt_Two(u8 cursorPosition);
 void BufferMoveToLearnIntoBattleTextBuff2(void);
 void HandleBattleWindow(u8 xStart, u8 yStart, u8 xEnd, u8 yEnd, u8 flags);
 bool8 UproarWakeUpCheck(u8 battlerId);
-bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, u32 move);
-bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move);
+bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move);
+bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move);
 s8 RemainingNoDamageHits(u8 battler);
 u16 GetNoDamageAbility(u8 battler);
-bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget, int move);
+bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget, MoveEnum move);
 bool32 CanParalyzeType(u8 battlerAttacker, u8 battlerTarget);
 bool32 CanUseLastResort(u8 battlerId);
 u32 IsFlowerVeilProtected(u32 battler);
 u32 IsLeafGuardProtected(u32 battler);
 bool32 IsShieldsDownProtected(u32 battler);
 u32 IsAbilityStatusProtected(u32 battler, StatusCheckEnum status);
-int GetMoveEffectChance(int battler, int move, int moveEffect, int baseChance);
+int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChance);
 #define RESET_ALL_STATS 0
 #define RESET_STAT_BUFFS 1
 #define RESET_STAT_DROPS -1
@@ -90,11 +90,11 @@ void SetCudChew(u32 battlerId, u32 itemId);
 void SetBattlerAffectedFlag(int attacker, int target, int ability);
 void ClearBattlerAffectedFlag(int attacker, int target, int ability);
 int GetWeatherChangeMultistringChooser(int weather);
-int ShouldSetMoldBreaker(int battler, int move);
+int ShouldSetMoldBreaker(int battler, MoveEnum move);
 int EatTargetBerry(int battler, int target);
 void ClearPowerOfAlchemyState(int alchemyBattler, int battler);
 int UpdateBattlerItem(int battler, int newItem);
-int Infiltrates(int battler, int move, InfiltrateType type);
+int Infiltrates(int battler, MoveEnum move, InfiltrateType type);
 int SetEncore(int target);
 bool32 HasAttackerFaintedTarget(void);
 int HasFortKnox(int battler);

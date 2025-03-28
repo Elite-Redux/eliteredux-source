@@ -8,6 +8,7 @@
 #include "constants/pokemon_config.h"
 #include "constants/map_groups.h"
 #include "tmhm_struct.h"
+#include "constants/battle_move_effects.h"
 
 #define GET_BASE_SPECIES_ID(speciesId) (GetFormSpeciesId(speciesId, 0))
 
@@ -168,7 +169,7 @@ struct BattlePokemon {
         } __attribute__((packed, aligned(2)));
         u16 stats[5];
     } __attribute__((packed, aligned(2)));
-    u16 moves[MAX_MON_MOVES];
+    MoveEnum moves[MAX_MON_MOVES];
     u16 abilities[TOTAL_ABILITY_COUNT];
     u16 hp;
     u16 maxHP;
@@ -246,7 +247,7 @@ typedef enum {
 #include "constants/battle_config.h"
 struct BattleMove {
     u32 flags;
-    u16 effect;
+    MoveBehaviorEnum effect;
     u16 target;
     u16 argument;
     u8 power;

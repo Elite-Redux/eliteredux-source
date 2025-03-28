@@ -478,7 +478,7 @@ static void BattleAI_DoAIProcessing(void) {
 static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
     // move data
     u8 atkPriority = GetMovePriority(battlerAtk, move, battlerDef);
-    u16 moveEffect = gBattleMoves[move].effect;
+    MoveBehaviorEnum moveEffect = gBattleMoves[move].effect;
     s32 moveType;
     u16 moveTarget = gBattleMoves[move].target;
     u16 accuracy = AI_GetMoveAccuracy(battlerAtk, battlerDef, move);
