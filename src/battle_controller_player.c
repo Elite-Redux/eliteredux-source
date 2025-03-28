@@ -1188,7 +1188,7 @@ void PrintBattleWindow_ActionPromt_Safari(void) {
 }
 
 enum {
-    MOVE_INFO_DESCRIPTION,
+    // MOVE_INFO_DESCRIPTION,
     MOVE_INFO_POWER_ACC_PRIO_TYPE,
     MOVE_INFO_POWER_ACC_PRIO_TYPE_2,
     MOVE_SPEED_CALCULATION,
@@ -1418,18 +1418,18 @@ void PrintBattleWindow_MoveSelection(void) {
     x2 = 2;
     y2 = 0;
     switch (moveInfoType) {
-        case MOVE_INFO_DESCRIPTION:
-            if (battleTheme == THEME_DARK) {
-                BlitBitmapToWindow(windowId, sTheme_Dark_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
-            } else if (battleTheme == THEME_LIGHT) {
-                BlitBitmapToWindow(windowId, sTheme_Light_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
+        // case MOVE_INFO_DESCRIPTION:
+        //     if (battleTheme == THEME_DARK) {
+        //         BlitBitmapToWindow(windowId, sTheme_Dark_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
+        //     } else if (battleTheme == THEME_LIGHT) {
+        //         BlitBitmapToWindow(windowId, sTheme_Light_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
 
-            } else if (battleTheme == THEME_DPPT) {
-                BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
-            } else if (battleTheme == THEME_CLASSIC) {
-                BlitBitmapToWindow(windowId, sTheme_Classic_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
-            }
-            break;
+        //     } else if (battleTheme == THEME_DPPT) {
+        //         BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
+        //     } else if (battleTheme == THEME_CLASSIC) {
+        //         BlitBitmapToWindow(windowId, sTheme_Classic_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
+        //     }
+        //     break;
         case MOVE_INFO_POWER_ACC_PRIO_TYPE:
         case MOVE_INFO_POWER_ACC_PRIO_TYPE_2:
             if (battleTheme == THEME_DARK)
@@ -1544,10 +1544,10 @@ void PrintBattleWindow_MoveSelection(void) {
         isDoubleTypedMove = TRUE;
 
     switch (moveInfoType) {
-        case MOVE_INFO_DESCRIPTION:
-            StringCopy(gStringVar4, gMoveFourLineDescriptionPointers[move - 1]);
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
-            break;
+        // case MOVE_INFO_DESCRIPTION:
+        //     StringCopy(gStringVar4, gMoveFourLineDescriptionPointers[move - 1]);
+        //     AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        //     break;
         case MOVE_INFO_POWER_ACC_PRIO_TYPE:
             if (isDoubleTypedMove)
                 extraX = 8;
