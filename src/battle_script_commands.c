@@ -1478,7 +1478,7 @@ static void Cmd_ppreduce(void) {
 
     if (gHitMarker & HITMARKER_NO_ATTACKSTRING) return;
 
-    if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRESSURE) && IsAbilityOnSide(GetBattlerSide(BATTLE_OPPOSITE(gBattlerAttacker)), ABILITY_PRESSURE))
+    if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRESSURE) && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_PRESSURE))
         ppToDeduct++;
 
     if ((gBattleMoves[gCurrentMove].effect == EFFECT_SPIT_UP || gBattleMoves[gCurrentMove].effect == EFFECT_SWALLOW)) {

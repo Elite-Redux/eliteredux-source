@@ -732,7 +732,7 @@ void TryPreemptiveActions() {
 
     if (gCurrentActionFuncId == B_ACTION_SWITCH) {
         int i;
-        for (i = BATTLE_OPPOSITE(GetBattlerSide(battler)); i < gBattlersCount; i += 2) {
+        for (i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
             if (BATTLER_HAS_ABILITY(i, ABILITY_TAG)) {
                 gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
                     .ability = ABILITY_TAG,
@@ -4698,7 +4698,7 @@ u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability) {
 u32 IsAbilityPreventingEscape(u32 battlerId) {
     if (ItemId_GetHoldEffect(gBattleMons[battlerId].item) == HOLD_EFFECT_SHED_SHELL) return 0;
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) return 0;
-    for (int opponent = BATTLE_OPPOSITE(GetBattlerSide(battlerId)); opponent < gBattlersCount; opponent += 2) {
+    for (int opponent = GetOppositeSide(battlerId); opponent < gBattlersCount; opponent += 2) {
         ON_ABILITY(opponent, FALSE, gAbilities[ability].onTrap, if (gAbilities[ability].onTrap(battlerId)) return ability)
     }
     return 0;
@@ -7828,7 +7828,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u
     if (recordAbilities && (illusionSpecies = GetIllusionMonSpecies(battlerDef)))
         TryNoticeIllusionInTypeEffectiveness(move, moveType, battlerAtk, battlerDef, modifier, illusionSpecies);
 
-    if (modifier && moveType == TYPE_GROUND && IsBattlerGroundedIgnoreType(battlerDef)) {
+    if (modifier && moveType == TYPE_GROUND && !IsBattlerGroundedIgnoreType(battlerDef)) {
         modifier = 0;
         immunityAbility = CheckLevitatingEffects(battlerDef);
         if (immunityAbility == TRUE) immunityAbility = ABILITY_NONE;
@@ -8273,7 +8273,7 @@ u8 GetBattleMoveSplit(MoveEnum moveId) {
 bool32 TryRemoveScreens(u8 battler) {
     bool32 removed = FALSE;
     u8 battlerSide = GetBattlerSide(battler);
-    u8 enemySide = GetBattlerSide(BATTLE_OPPOSITE(battler));
+    u8 enemySide = GetOppositeSide(battler);
 
     // try to remove from battler's side
     if (gSideStatuses[battlerSide] & (SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL | SIDE_STATUS_SMOKESCREEN)) {
