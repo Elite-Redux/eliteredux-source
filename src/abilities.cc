@@ -1769,7 +1769,7 @@ static const Ability Frisk = {
                      "their items for two turns."),
     .onEntry = +[](ON_ENTRY) -> int {
         int any = FALSE;
-        for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2) {
+        for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
             FILTER(IsBattlerAlive(i))
             FILTER(gBattleMons[i].item)
             any = TRUE;
@@ -3081,7 +3081,7 @@ static const Ability PowerOfAlchemy = {
                      "Transmutes items when lost."),
     .onEntry = +[](ON_ENTRY) -> int {
         int any = FALSE;
-        for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2) {
+        for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
             FILTER(IsBattlerAlive(i))
             FILTER(ItemId_GetPocket(GetBattlerHoldEffect(i, FALSE)) == POCKET_BERRIES)
             any = TRUE;
@@ -3274,7 +3274,7 @@ static const Ability CottonDown = {
         CHECK(IsBattlerAlive(gStackBattler1) || IsBattlerAlive(BATTLE_PARTNER(gStackBattler1)))
 
         gEffectBattler = battler;
-        gStackBattler1 = BATTLE_OPPOSITE(GetBattlerSide(battler));
+        gStackBattler1 = GetOppositeSide(battler);
         BattleScriptCall(BattleScript_CottonDownActivates);
         return TRUE;
     },
@@ -4528,7 +4528,7 @@ static const Ability SpiderLair = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
-        int side = BATTLE_OPPOSITE(battler);
+        int side = GetOppositeSide(battler);
         gSideTimers[side].started.spiderWeb = TRUE;
         gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
         gSideTimers[side].stickyWebTimer = 5;
@@ -7443,7 +7443,7 @@ static const Ability Egoist = {
                      "foes raise theirs."),
     .onReactive = +[](ON_REACTIVE) -> int {
         CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
-        for (int opponent = BATTLE_OPPOSITE(GetBattlerSide(battler)); opponent < gBattlersCount; opponent += 2) {
+        for (int opponent = GetOppositeSide(battler); opponent < gBattlersCount; opponent += 2) {
             for (int stat = STAT_ATK; stat < ARRAY_COUNT(gBattleStruct->statChangesToCheck[opponent]); stat++) {
                 if (gBattleStruct->statChangesToCheck[opponent][stat - 1] > 0) {
                     if (gBattleStruct->statStageCheckState == STAT_STAGE_CHECK_NEEDED) {
@@ -7671,7 +7671,7 @@ static const Ability WatchYourStep = {
     .description = $("Spreads two layers of\n"
                      "Spikes on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int {
-        u8 targetSide = GetBattlerSide(BATTLE_OPPOSITE(battler));
+        u8 targetSide = GetOppositeSide(battler);
         CHECK(gSideTimers[targetSide].spikesAmount < 3)
 
         gSideTimers[targetSide].spikesAmount = min(gSideTimers[targetSide].spikesAmount + 2, 3);
@@ -8929,7 +8929,7 @@ static const Ability Petrify = {
     .onEntry = +[](ON_ENTRY) -> int {
         int loweredStats = 0;
         int intimidated = UseIntimidateClone(battler, ability);
-        for (int i = BATTLE_OPPOSITE(GET_BATTLER_SIDE(battler)); i < gBattlersCount; i += 2) {
+        for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
             if (!IsBattlerAlive(i)) continue;
             loweredStats |= TryResetBattlerStatChanges(i, RESET_STAT_BUFFS);
         }
@@ -9666,7 +9666,7 @@ static const Ability LifeSteal = {
                      "turn."),
     .onEndTurn = +[](ON_END_TURN) -> int {
         int any = FALSE;
-        for (int target = BATTLE_OPPOSITE(GetBattlerSide(battler)); target < gBattlersCount; target += 2) {
+        for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
             FILTER(IsBattlerAlive(target))
             FILTER_NOT(IsMagicGuardProtected(target))
 
@@ -9841,7 +9841,7 @@ static const Ability SpiderLairUpgrade = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
-        int side = BATTLE_OPPOSITE(battler);
+        int side = GetOppositeSide(battler);
         gSideTimers[side].started.spiderWeb = TRUE;
         gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
         gSideTimers[side].stickyWebTimer = 7;
@@ -9942,7 +9942,7 @@ static const Ability RoseGarden = {
     .description = $("Spreads two layers of\n"
                      "Toxic Spikes on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int {
-        u8 targetSide = GetBattlerSide(BATTLE_OPPOSITE(battler));
+        u8 targetSide = GetOppositeSide(battler);
         CHECK(gSideTimers[targetSide].toxicSpikesAmount < 2)
 
         gSideTimers[targetSide].toxicSpikesAmount = 2;
