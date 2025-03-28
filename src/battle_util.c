@@ -7828,7 +7828,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u
     if (recordAbilities && (illusionSpecies = GetIllusionMonSpecies(battlerDef)))
         TryNoticeIllusionInTypeEffectiveness(move, moveType, battlerAtk, battlerDef, modifier, illusionSpecies);
 
-    if (modifier && moveType == TYPE_GROUND && IsBattlerGroundedIgnoreType(battlerDef)) {
+    if (modifier && moveType == TYPE_GROUND && !IsBattlerGroundedIgnoreType(battlerDef)) {
         modifier = 0;
         immunityAbility = CheckLevitatingEffects(battlerDef);
         if (immunityAbility == TRUE) immunityAbility = ABILITY_NONE;
