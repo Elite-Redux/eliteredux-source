@@ -1,6 +1,5 @@
 package er.defines
 
-import er.FileGenerator.header
 import er.Generator
 import er.proto.MoveBehavior
 import java.io.OutputStreamWriter
@@ -11,9 +10,6 @@ object MoveBehaviorGenerator : Generator {
         val effectsCount = effects.maxOf { it.number } + 1
         writer.appendLine(
             """
-                |$header
-                |#pragma once
-                |
                 |#define NUM_BATTLE_MOVE_EFFECTS $effectsCount
                 |
                 |#ifdef __assembly__

@@ -106,7 +106,6 @@ object BattleMovesGenerator : Generator {
 
             if (bitFlags.isNotEmpty()) writer.appendLine("$IND$IND.flags = ${bitFlags.joinToString(" | ")},")
 
-            writer.appendLine("$IND$IND.split = SPLIT_${move.split},")
             fieldFlags.forEach { writer.appendLine("$IND$IND.$it = TRUE,") }
 
             val argument = when (move.argument.argumentCase) {

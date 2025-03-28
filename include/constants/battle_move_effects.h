@@ -1,5 +1,7 @@
 #pragma once
 
+#include "config.h"
+
 #if USE_GENERATED_MOVES
 #include "generated/constants/battle_move_effects.h"
 #else

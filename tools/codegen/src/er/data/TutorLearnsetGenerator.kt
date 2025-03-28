@@ -1,6 +1,5 @@
 package er.data
 
-import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.NO_EGG_LIST
@@ -59,7 +58,6 @@ object TutorLearnsetGenerator : Generator {
 
         writer.appendLine(
             """
-            |$header
             |${tutorIds.entries.joinToString("\n") { learnsetString(it.value, it.key) }}
             |""".trimMargin())
 

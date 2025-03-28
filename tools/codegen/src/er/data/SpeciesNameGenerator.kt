@@ -1,6 +1,5 @@
 package er.data
 
-import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.NO_EGG_LIST
@@ -14,7 +13,6 @@ import java.io.OutputStreamWriter
 object SpeciesNameGenerator : Generator {
     private const val PREFIX = "__sName_"
     override fun generate(writer: OutputStreamWriter) {
-        writer.appendLine(header)
         val (nameIds, speciesIds) = NO_EGG_LIST.map { it.id to if (it.hasFormOf()) it.formOf else it.id }
             .map { (mon, form) ->
                 (SPECIES_MAP[form]?.dex?.name ?: "") to mon

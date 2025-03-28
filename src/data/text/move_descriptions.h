@@ -1,3 +1,7 @@
+#if USE_GENERATED_MOVES
+#include "generated/data/text/move_descriptions.h"
+#else
+
 static const u8 sMoveTwoLineDescription_MovePound[] = _(
     "Pounds the foe with\n"
     "forelegs or tail.");
@@ -6944,3 +6948,4 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_METALLIC_MELODY - 1] = sMoveFourLineDescription_MoveMetallicMelody,
     [MOVE_BLUE_MOON - 1] = sMoveFourLineDescription_MoveBlueMoon,
 };
+#endif

@@ -1,6 +1,5 @@
 package er.data
 
-import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.NO_EGG_LIST
@@ -15,8 +14,6 @@ object FormSpeciesTableGenerator : Generator {
     private const val PREFIX = "__sFormSpeciesTable_"
     override fun generate(writer: OutputStreamWriter) {
         val forms = SPECIES_LIST.groupBy({ it.formOf }, { it.id }) - SpeciesEnum.SPECIES_NONE
-
-        writer.appendLine(header)
 
         val (formIds, speciesIds) = NO_EGG_LIST.map {
             val id = if (it.hasFormOf()) it.formOf else it.id

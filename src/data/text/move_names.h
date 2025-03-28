@@ -1,3 +1,10 @@
+#ifndef GUARD_MOVE_NAMES_H
+#define GUARD_MOVE_NAMES_H
+
+#if USE_GENERATED_MOVES
+#include "generated/data/text/move_names.h"
+#else
+
 const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
 {
     [MOVE_NONE] = _("-"),
@@ -2009,3 +2016,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_METALLIC_MELODY] = _("Metallic Melody"),
     [MOVE_BLUE_MOON] = _("Blue Moon"),
 };
+#endif
+#endif

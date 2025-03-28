@@ -1,4 +1,4 @@
-#if !USE_GENERATED
+#if !USE_GENERATED_SPECIES
 const u8 gMonIcon_Phantowl[] = INCBIN_U8("graphics/pokemon/phantowl/icon.4bpp");
 const u8 gMonIcon_Duelumber[] = INCBIN_U8("graphics/pokemon/duelumber/icon.4bpp");
 const u8 gMonIcon_Escarginite[] = INCBIN_U8("graphics/pokemon/escarginite/icon.4bpp");

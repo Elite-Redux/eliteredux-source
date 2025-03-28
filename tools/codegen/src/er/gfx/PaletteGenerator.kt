@@ -1,6 +1,5 @@
 package er.gfx
 
-import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.SPECIES_LIST
@@ -36,7 +35,6 @@ object PaletteGenerator : Generator {
     }
 
     override fun generate(writer: OutputStreamWriter) {
-        writer.appendLine(header)
         printTable(writer, "gMonPaletteTable", "SPECIES_PAL", "__sPalette_") { it.visuals.palette }
         printTable(writer, "gMonPaletteTableFemale", "SPECIES_PAL", "__sPaletteFemale_") { it.visuals.female.palette }
         printTable(writer, "gMonShinyPaletteTable", "SPECIES_SHINY_PAL", "__sPaletteShiny_") { it.visuals.shiny }

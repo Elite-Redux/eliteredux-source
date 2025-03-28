@@ -1,7 +1,5 @@
-#pragma once
-
 #if USE_GENERATED_MOVES
-#include "generated\src\data\battle_moves.h"
+#include "generated/data/battle_moves.h"
 #else
 
 const struct BattleMove gBattleMoves[MOVES_COUNT] =

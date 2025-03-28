@@ -1,6 +1,5 @@
 package er.defines
 
-import er.FileGenerator.header
 import er.Generator
 import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.GeneratorUtils.SPECIES_COUNT
@@ -12,9 +11,6 @@ object SpeciesEnumGenerator : Generator {
         val species = SpeciesEnum.entries.filter { it != SpeciesEnum.UNRECOGNIZED }
         writer.appendLine(
             """
-            |$header
-            |#pragma once
-            |
             |// Max possible number of species
             |#define SPECIES_COUNT $SPECIES_COUNT
             |// Max number of non-egg mons
