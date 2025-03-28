@@ -1,3 +1,9 @@
+#pragma once
+
+#if USE_GENERATED_MOVES
+#include "generated\src\data\battle_moves.h"
+#else
+
 const struct BattleMove gBattleMoves[MOVES_COUNT] =
 {
     [MOVE_NONE] =
@@ -12479,6 +12485,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .lunar = TRUE,
     },
 };
+
+#endif
 
 const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES] = {
     [I_CLONE_INTIMIDATE] = {
