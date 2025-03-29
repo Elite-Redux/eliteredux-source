@@ -2019,12 +2019,13 @@ static const Ability Harvest = {
 
 static const Ability Telepathy = {
     .name = $("Telepathy"),
-    .description = $("Can't be damaged by ally attacks."),
+    .description = $("Can't be damaged by ally attacks.\n"
+                     "Doesn't damage allies with attacks.\n"),
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
             if (target == BATTLE_PARTNER(battler) && gBattleMoves[move].power) *mod = 0;
         },
-    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
+    .onAfterTypeEffectivenessFor = APPLY_ON_ATTACKER_OR_TARGET,
     .breakable = TRUE,
 };
 

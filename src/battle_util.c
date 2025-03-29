@@ -6896,7 +6896,7 @@ u16 CalculateAbilityMultipliers(
 
     if (!hasFortKnox) {
         for (int sourceBattler = 0; sourceBattler < gBattlersCount; sourceBattler++) {
-            FILTER(IsBattlerAlive(sourceBattler))
+            FILTER(battlerAtk == sourceBattler || IsBattlerAlive(sourceBattler))
             ON_ABILITY(
                 sourceBattler,
                 FALSE,
@@ -7130,7 +7130,7 @@ u32 CalculateStat(
 
     NonStackingState flags = 0;
     for (int sourceBattler = 0; sourceBattler < gBattlersCount; sourceBattler++) {
-        FILTER(IsBattlerAlive(sourceBattler))
+        FILTER(sourceBattler == battler || IsBattlerAlive(sourceBattler))
         ON_ABILITY(sourceBattler,
                    TRUE,
                    gAbilities[ability].onStat && IsApplyOnFlagAppropriate(battler, sourceBattler, gAbilities[ability].onStatFor),
@@ -7841,6 +7841,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u
 
     for (int i = 0; i < gBattlersCount; i++) {
         int battler = (battlerDef + i) % gBattlersCount;
+        FILTER(battler == battlerDef || battler == battlerAtk || IsBattlerAlive(battler))
         ON_ABILITY(battler,
                    TRUE,
                    gAbilities[ability].onAfterTypeEffectiveness &&
@@ -8909,7 +8910,7 @@ int TestImmunityAbilitiesOnly(int battler, int attacker, MoveEnum move, int move
 int TestImmunityAbilities(int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript, u8 *overrideBattler, u16 *abilityPopup) {
     for (int i = 0; i < gBattlersCount; i++) {
         int testBattler = (battler + i) % gBattlersCount;
-        FILTER(IsBattlerAlive(testBattler))
+        FILTER(testBattler == attacker || testBattler == battler || IsBattlerAlive(testBattler))
 
         ON_ABILITY(
             testBattler,
