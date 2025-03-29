@@ -2023,6 +2023,7 @@ static const Ability Telepathy = {
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
             if (target == BATTLE_PARTNER(battler) && gBattleMoves[move].power) *mod = 0;
         },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
