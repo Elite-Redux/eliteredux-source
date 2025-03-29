@@ -72,7 +72,7 @@ typedef enum {
 typedef AccuracyPriority (*AbilityOnAccuracyHandler)(int ability, int battler, int target, MoveEnum move, int moveType, int* accuracy);
 typedef int (*AbilityOnSwapSplitHandler)(int battler, MoveEnum move);
 typedef void (*AbilityOnChooseOffensiveStat)(
-    int battler, MoveEnum move, int ignoreOffensiveStatDrops, int targetUnaware, u8* atkStatToUse, u8* secondaryAtkStatToUse);
+    int battler, MoveEnum move, int ignoreOffensiveStatDrops, int targetUnaware, u8* atkStatToUse, u8 secondaryAtkStatToUse[NUM_STATS]);
 typedef int (*AbilityOnChooseDefensiveStat)(int battler, int target, MoveEnum move, int ignoreDefensiveStatBoosts, int battlerUnaware);
 typedef int (*AbilityOnStab)(int moveType);
 typedef int (*AbilityOnPriority)(int battler, int target, MoveEnum move);

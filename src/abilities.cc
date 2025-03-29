@@ -90,7 +90,8 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_ACCURACY ability, battler, target, move, moveType, accuracy
 #define ON_SWAP_SPLIT int battler, MoveEnum move
 #define DELEGATE_SWAP_SPLIT battler, move
-#define ON_CHOOSE_OFFENSIVE_STAT int battler, MoveEnum move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 *secondaryAtkStatToUse
+#define ON_CHOOSE_OFFENSIVE_STAT \
+    int battler, MoveEnum move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 secondaryAtkStatToUse[NUM_STATS]
 #define DELEGATE_CHOOSE_OFFENSIVE_STAT battler, move, ignoreOffensiveStatDrops, targetUnaware, atkStatToUse, secondaryAtkStatToUse
 #define ON_CHOOSE_DEFENSIVE_STAT int battler, int target, MoveEnum move, int ignoreDefensiveStatBoosts, int battlerUnaware
 #define DELEGATE_CHOOSE_DEFENSIVE_STAT battler, target, move, ignoreDefensiveStatBoosts, battlerUnaware
@@ -4321,7 +4322,7 @@ static const Ability Juggernaut = {
                      "Def when using a contact move."),
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *secondaryAtkStatToUse = STAT_DEF;
+            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) secondaryAtkStatToUse[STAT_DEF] += 20;
         },
     .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_PARALYSIS)
@@ -4729,7 +4730,7 @@ static const Ability SpeedForce = {
                      "Speed stat additionally."),
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *secondaryAtkStatToUse = STAT_SPEED;
+            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) secondaryAtkStatToUse[STAT_SPEED] += 20;
         },
 };
 
@@ -4839,7 +4840,7 @@ static const Ability PowerCore = {
     .name = $("Power Core"),
     .description = $("The Pokémon uses +20% of its\n"
                      "Defense or SpDef during moves."),
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *secondaryAtkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; },
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF] += 20; },
 };
 
 static const Ability SightingSystem = {
@@ -7420,7 +7421,7 @@ static const Ability TerminalVelocity = {
                      "Speed stat additionally."),
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (IS_MOVE_SPECIAL(move)) *secondaryAtkStatToUse = STAT_SPEED;
+            if (IS_MOVE_SPECIAL(move)) secondaryAtkStatToUse[STAT_SPEED] += 20;
         },
 };
 
@@ -9166,7 +9167,7 @@ static const Ability Slipstream = {
     .name = $("Slipstream"),
     .description = $("Moves use 20% of its Speed\n"
                      "stat additionally."),
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *secondaryAtkStatToUse = STAT_SPEED; },
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPEED] += 20; },
 };
 
 static const Ability ApexPredator = {
