@@ -7502,7 +7502,7 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_UNOWN] =
     {
-    .baseHP         = 48,
+    .baseHP         = 58,
     .baseAttack     = 72,
     .baseDefense    = 48,
     .baseSpeed      = 48,
@@ -7521,7 +7521,7 @@ const struct BaseStats gBaseStats[] =
     .eggGroup1 = EGG_GROUP_UNDISCOVERED,
     .eggGroup2 = EGG_GROUP_UNDISCOVERED,
     .abilities = {ABILITY_RUN_AWAY, ABILITY_MYSTIC_POWER, ABILITY_MAGIC_GUARD},
-    .innates        = {ABILITY_SCHOOLING, ABILITY_LEVITATE, ABILITY_NONE},
+    .innates        = {ABILITY_SCHOOLING, ABILITY_LEVITATE, ABILITY_REGENERATOR},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
     .tier = 1,
@@ -47803,7 +47803,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_UNOWN_REVELATION] =
     {
-    .baseHP         = 48,
+    .baseHP         = 58,
     .baseAttack     = 138,
     .baseDefense    = 133,
     .baseSpeed      = 30,
@@ -47822,7 +47822,7 @@ const struct BaseStats gBaseStats[] =
     .eggGroup1 = EGG_GROUP_UNDISCOVERED,
     .eggGroup2 = EGG_GROUP_UNDISCOVERED,
     .abilities = {ABILITY_ANTICIPATION, ABILITY_MINION_CONTROL, ABILITY_MAGIC_BOUNCE},
-    .innates = {ABILITY_SCHOOLING, ABILITY_LEVITATE, ABILITY_UNOWN_POWER},
+    .innates        = {ABILITY_SCHOOLING, ABILITY_FORT_KNOX, ABILITY_UNOWN_POWER},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
     .tier = 1,
