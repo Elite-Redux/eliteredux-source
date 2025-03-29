@@ -7149,8 +7149,8 @@ u32 CalculateStat(
     if (!BenefitsFromStatBuffs(battler)) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
     if (!calculatingSecondary && secondaryStat) {
-        if (statEnum != STAT_SPEED && secondaryStat[statEnum - 1]) {
-            statBase = statBase * secondaryStat[statEnum - 1] / 100;
+        if (statEnum != STAT_SPEED && secondaryStat[statEnum]) {
+            statBase = statBase * (100 + secondaryStat[statEnum]) / 100;
         }
 
         for (int i = STAT_ATK; i < NUM_STATS; i++) {
