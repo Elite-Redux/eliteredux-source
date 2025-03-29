@@ -46,6 +46,7 @@ object FileGenerator {
         "movebehaviors" to MoveBehaviorGenerator,
         "moveeffects" to MoveEffectGenerator,
         "battlemoves" to BattleMovesGenerator,
+        "reversemegamap" to ReverseMegaMappingGenerator,
     )
 
     @JvmStatic
