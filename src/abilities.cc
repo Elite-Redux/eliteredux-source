@@ -2178,7 +2178,7 @@ static const Ability Mummy = {
                      "Mummy."),
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
-        CHECK_NOT(BattlerHasAbility(attacker, ability, FALSE))
+        CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
         CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
@@ -3552,7 +3552,7 @@ static const Ability WanderingSpirit = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(GetBattlerAbility(battler) == ability)
-        CHECK_NOT(BattlerHasAbility(attacker, ability, FALSE))
+        CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
         CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
@@ -8866,9 +8866,8 @@ static const Ability MoshPit = {
 ON_EITHER(BloodStain) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-    CHECK_NOT(BATTLER_HAS_ABILITY(opponent, ABILITY_BLOOD_STAIN))
     CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(opponent)))
-    CHECK_NOT(BattlerHasAbility(battler, ability, FALSE))
+    CHECK_NOT(HasAbilityIgnoringSuppression(opponent, ability))
     CHECK_NOT(DoesBattlerHaveAbilityShield(opponent))
 
     UpdateAbilityStateIndicesForNewAbility(opponent, ability);
