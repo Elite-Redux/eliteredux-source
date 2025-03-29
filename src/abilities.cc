@@ -2125,7 +2125,7 @@ static const Ability Analytic = {
                      "if it moves last."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber && move != MOVE_FUTURE_SIGHT && move != MOVE_DOOM_DESIRE) MUL(1.3);
+            if (GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber && gBattleMoves[move].effect != EFFECT_FUTURE_SIGHT) MUL(1.3);
         },
 };
 
@@ -3466,7 +3466,14 @@ int HandleMimicry(u8 battler, int ability, AbilityCallType endType) {
             if (!state.active) {
                 SetAbilityStateAs(battler,
                                   ability,
-                                  (AbilityStates){.mimicryState = {.type1 = gBattleMons[battler].type1, .type2 = gBattleMons[battler].type2, .active = TRUE}});
+                                  (AbilityStates){
+                                      .mimicryState =
+                                          {
+                                              .type1 = gBattleMons[battler].type1,
+                                              .type2 = gBattleMons[battler].type2,
+                                              .active = TRUE,
+                                          },
+                                  });
             }
             SET_BATTLER_TYPE(battler, moveType);
             PREPARE_TYPE_BUFFER(gBattleTextBuff2, moveType);
