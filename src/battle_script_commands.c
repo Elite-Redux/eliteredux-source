@@ -973,6 +973,30 @@ static bool32 TryAegiFormChange(void) {
             break;
     }
 
+    if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DNA_SCRAMBLE) || gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED) return FALSE;
+
+    switch (gBattleMons[gBattlerAttacker].species) {
+        default:
+            return FALSE;
+        case SPECIES_DEOXYS:
+            if (gBattleMoves[gCurrentMove].power > 0) newSpecies = SPECIES_DEOXYS_ATTACK;
+            if (gCurrentMove == MOVE_RECOVER) newSpecies = SPECIES_DEOXYS_DEFENSE;
+            if ((gBattleMoves[gCurrentMove].split == SPLIT_STATUS) && !(gCurrentMove == MOVE_RECOVER)) newSpecies = SPECIES_DEOXYS_SPEED;
+            break;
+        case SPECIES_DEOXYS_ATTACK:
+            if (gCurrentMove == MOVE_RECOVER) newSpecies = SPECIES_DEOXYS_DEFENSE;
+            if ((gBattleMoves[gCurrentMove].split == SPLIT_STATUS) && !(gCurrentMove == MOVE_RECOVER)) newSpecies = SPECIES_DEOXYS_SPEED;
+            break;
+        case SPECIES_DEOXYS_DEFENSE:
+            if (gBattleMoves[gCurrentMove].power > 0) newSpecies = SPECIES_DEOXYS_ATTACK;
+            if ((gBattleMoves[gCurrentMove].split == SPLIT_STATUS) && !(gCurrentMove == MOVE_RECOVER)) newSpecies = SPECIES_DEOXYS_SPEED;
+            break;
+        case SPECIES_DEOXYS_SPEED:
+            if (gBattleMoves[gCurrentMove].power > 0) newSpecies = SPECIES_DEOXYS_ATTACK;
+            if (gCurrentMove == MOVE_RECOVER) newSpecies = SPECIES_DEOXYS_DEFENSE;
+            break;
+    }
+
     if (!newSpecies) return FALSE;
     gBattleScripting.abilityPopupOverwrite = ABILITY_STANCE_CHANGE;
 
