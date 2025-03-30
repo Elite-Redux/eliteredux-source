@@ -96,6 +96,8 @@ $(eval $(call GENERATE, include/generated/constants/battle_move_effects.h, moveb
 $(eval $(call GENERATE, include/generated/constants/move_effects.h, moveeffects))
 $(eval $(call GENERATE, include/generated/data/battle_moves.h, battlemoves))
 
+$(eval $(call GENERATE, include/generated/data/abilities/ability_text.hh, abilitytext))
+
 $(eval $(call GENERATE, include/generated/data/text/help_articles.h, helparticles))
 
 timestamp/generated: $(ALL_GENERATED)
