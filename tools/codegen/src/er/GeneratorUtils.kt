@@ -8,6 +8,7 @@ import com.google.protobuf.GeneratedMessage.GeneratedExtension
 import com.google.protobuf.ProtocolMessageEnum
 import com.google.protobuf.TextFormat
 import er.FileGenerator.IND
+import er.proto.AbilityList
 import er.proto.MoveList
 import er.proto.SpeciesEnum
 import er.proto.SpeciesList
@@ -23,6 +24,10 @@ object GeneratorUtils {
 
     fun <T> FieldDescriptor.getOption(extension: GeneratedExtension<FieldOptions, T>): T =
         toProto().options.getExtension(extension)
+
+    val ABILITIES_LIST by lazy {
+        TextFormat.parse(File("../../proto/AbilityList.textproto").readText(), AbilityList::class.java).abilityList
+    }
 
     val MOVES_LIST by lazy {
         TextFormat.parse(File("../../proto/MoveList.textproto").readText(), MoveList::class.java).movesList

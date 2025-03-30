@@ -1,5 +1,6 @@
 package er
 
+import er.ability.AbilityTextGenerator
 import er.data.*
 import er.defines.*
 import er.gfx.CoordsGenerator
@@ -47,6 +48,7 @@ object FileGenerator {
         "moveeffects" to MoveEffectGenerator,
         "battlemoves" to BattleMovesGenerator,
         "reversemegamap" to ReverseMegaMappingGenerator,
+        "abilitytext" to AbilityTextGenerator,
     )
 
     @JvmStatic
@@ -58,7 +60,12 @@ object FileGenerator {
             val generator = GENERATORS[type] ?: error("No generator $type for file $filepath")
             file.writer().use {
                 it.appendLine(generator.header)
-                generator.generate(it)
+                try {
+                    generator.generate(it)
+                } catch (e: Exception) {
+                    it.appendLine(e.stackTraceToString())
+                    throw e
+                }
             }
         } catch (e: Exception) {
             throw Exception("Failed processing $type generating file $filepath", e)
