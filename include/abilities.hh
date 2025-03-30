@@ -127,39 +127,39 @@ typedef enum {
 typedef struct Ability {
     const u8* name;
     const u8* description;
-    const AbilityOnEntryHandler onEntry;
-    const AbilityOnAbsorbHandler onAbsorb;
-    const AbilityOnImmuneHandler onImmune;
-    const AbilityOnInfiltrateHandler onInfiltrate;
-    const AbilityOnDisguiseHandler onDisguise;
-    const AbilityOnWeatherHandler onWeather;
-    const AbilityOnTerrainHandler onTerrain;
-    const AbilityOnEndTurnHandler onEndTurn;
-    const AbilityOnAttackerHandler onAttacker;
-    const AbilityOnDefenderHandler onDefender;
-    const AbilityOnRecoilHandler onRecoil;
-    const AbilityOnReactiveHandler onReactive;
-    const AbilityOnBattlerFaintsHandler onBattlerFaints;
-    const AbilityOnParentalBondHandler onParentalBond;
-    const AbilityOnOffensiveMultiplierHandler onOffensiveMultiplier;
-    const AbilityOnMoveType onMoveType;
-    const AbilityOnDefensiveMultiplierHandler onDefensiveMultiplier;
-    const AbilityOnStatHandler onStat;
-    const AbilityOnAccuracyHandler onAccuracy;
-    const AbilityOnSwapSplitHandler onSwapSplit;
-    const AbilityOnChooseOffensiveStat onChooseOffensiveStat;
-    const AbilityOnChooseDefensiveStat onChooseDefensiveStat;
-    const AbilityOnStab onStab;
-    const AbilityOnPriority onPriority;
-    const AbilityOnSwitchOut onExit;
-    const AbilityOnCrit onCrit;
-    const AbilityOnTypeEffectiveness onTypeEffectiveness;
-    const AbilityOnCopyMove onCopyMove;
-    const AbilityOnAfterTypeEffectiveness onAfterTypeEffectiveness;
-    const AbilityOnModifyEffectChance onModifyEffectChance;
-    const AbilityOnCanStatusType onCanStatusType;
-    const AbilityOnStatusImmune onStatusImmune;
-    const AbilityOnTrap onTrap;
+    AbilityOnEntryHandler onEntry;
+    AbilityOnAbsorbHandler onAbsorb;
+    AbilityOnImmuneHandler onImmune;
+    AbilityOnInfiltrateHandler onInfiltrate;
+    AbilityOnDisguiseHandler onDisguise;
+    AbilityOnWeatherHandler onWeather;
+    AbilityOnTerrainHandler onTerrain;
+    AbilityOnEndTurnHandler onEndTurn;
+    AbilityOnAttackerHandler onAttacker;
+    AbilityOnDefenderHandler onDefender;
+    AbilityOnRecoilHandler onRecoil;
+    AbilityOnReactiveHandler onReactive;
+    AbilityOnBattlerFaintsHandler onBattlerFaints;
+    AbilityOnParentalBondHandler onParentalBond;
+    AbilityOnOffensiveMultiplierHandler onOffensiveMultiplier;
+    AbilityOnMoveType onMoveType;
+    AbilityOnDefensiveMultiplierHandler onDefensiveMultiplier;
+    AbilityOnStatHandler onStat;
+    AbilityOnAccuracyHandler onAccuracy;
+    AbilityOnSwapSplitHandler onSwapSplit;
+    AbilityOnChooseOffensiveStat onChooseOffensiveStat;
+    AbilityOnChooseDefensiveStat onChooseDefensiveStat;
+    AbilityOnStab onStab;
+    AbilityOnPriority onPriority;
+    AbilityOnSwitchOut onExit;
+    AbilityOnCrit onCrit;
+    AbilityOnTypeEffectiveness onTypeEffectiveness;
+    AbilityOnCopyMove onCopyMove;
+    AbilityOnAfterTypeEffectiveness onAfterTypeEffectiveness;
+    AbilityOnModifyEffectChance onModifyEffectChance;
+    AbilityOnCanStatusType onCanStatusType;
+    AbilityOnStatusImmune onStatusImmune;
+    AbilityOnTrap onTrap;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;
@@ -204,7 +204,12 @@ typedef struct Ability {
 #undef AbilityApplyOnWithTarget
 #endif
 
-extern const Ability gAbilities[ABILITIES_COUNT];
+typedef struct AbilitiesWrapper {
+    Ability abilities[ABILITIES_COUNT];
+} AbilitiesWrapper;
+
+extern const AbilitiesWrapper gAbilitiesWrapper;
+#define gAbilities (gAbilitiesWrapper.abilities)
 
 int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag);
 int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag);

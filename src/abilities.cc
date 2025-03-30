@@ -316,13 +316,13 @@ static void RuinEffect(int ruinStat, int battler, int statId, u32 *stat, NonStac
 }
 
 #define CONTEXT None
-static const Ability None = {
+constexpr Ability None = {
     .name = $("-------"),
     .description = $("Empty ability slot."),
     .randomizerBanned = TRUE,
 };
 
-static const Ability Stench = {
+constexpr Ability Stench = {
     .name = $("Stench"),
     .description = $("Attacks have a 10% chance to\n"
                      "cause enemy to flinch."),
@@ -335,7 +335,7 @@ static const Ability Stench = {
     },
 };
 
-static const Ability Drizzle = {
+constexpr Ability Drizzle = {
     .name = $("Drizzle"),
     .description = $("Summons rain on entry.\n"
                      "Lasts 8 turns."),
@@ -351,7 +351,7 @@ static const Ability Drizzle = {
     },
 };
 
-static const Ability SpeedBoost = {
+constexpr Ability SpeedBoost = {
     .name = $("Speed Boost"),
     .description = $("Raises own Speed by one stage\n"
                      "after every turn."),
@@ -365,7 +365,7 @@ static const Ability SpeedBoost = {
     },
 };
 
-static const Ability BattleArmor = {
+constexpr Ability BattleArmor = {
     .name = $("Battle Armor"),
     .description = $("Immune to critical hits. Takes\n"
                      "20% less damage from all attacks."),
@@ -375,7 +375,7 @@ static const Ability BattleArmor = {
     .breakable = TRUE,
 };
 
-static const Ability Sturdy = {
+constexpr Ability Sturdy = {
     .name = $("Sturdy"),
     .description = $("At full HP, cannot be KO in one\n"
                      "hit, stays at 1 HP instead."),
@@ -395,14 +395,14 @@ ON_EITHER(Damp) {
     BattleScriptCall(BattleScript_StackBecameTheTypeFull);
     return TRUE;
 }
-static const Ability Damp = {
+constexpr Ability Damp = {
     .name = $("Damp"),
     .description = $("Makes foe Water-type on contact.\n"
                      "Also works on offense."),
     ON_EITHER_ABILITY(Damp),
 };
 
-static const Ability Limber = {
+constexpr Ability Limber = {
     .name = $("Limber"),
     .description = $("Immune to paralysis.\n"
                      "Takes 50% less recoil damage."),
@@ -415,7 +415,7 @@ static const Ability Limber = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability SandVeil = {
+constexpr Ability SandVeil = {
     .name = $("Sand Veil"),
     .description = $("Evasion is boosted by 1.25x\n"
                      "while a sandstorm is active."),
@@ -437,14 +437,14 @@ ON_EITHER(Static) {
     AbilityStatusEffectSafe(MOVE_EFFECT_PARALYSIS, battler, opponent);
     return TRUE;
 }
-static const Ability Static = {
+constexpr Ability Static = {
     .name = $("Static"),
     .description = $("30% chance to paralyze on\n"
                      "contact. Also works on offense."),
     ON_EITHER_ABILITY(Static),
 };
 
-static const Ability VoltAbsorb = {
+constexpr Ability VoltAbsorb = {
     .name = $("Volt Absorb"),
     .description = $("Heals 25% of max HP when hit\n"
                      "by an Electric-type move."),
@@ -455,7 +455,7 @@ static const Ability VoltAbsorb = {
     .breakable = TRUE,
 };
 
-static const Ability WaterAbsorb = {
+constexpr Ability WaterAbsorb = {
     .name = $("Water Absorb"),
     .description = $("Heals 25% of max HP when hit\n"
                      "by a Water-type move."),
@@ -466,7 +466,7 @@ static const Ability WaterAbsorb = {
     .breakable = TRUE,
 };
 
-static const Ability Oblivious = {
+constexpr Ability Oblivious = {
     .name = $("Oblivious"),
     .description = $("Immune to infatuation, Scare,\n"
                      "Intimidate and Taunt."),
@@ -479,7 +479,7 @@ static const Ability Oblivious = {
     .tauntImmune = TRUE,
 };
 
-static const Ability CloudNine = {
+constexpr Ability CloudNine = {
     .name = $("Cloud Nine"),
     .description = $("Clears weather and prevents\n"
                      "its effects."),
@@ -489,7 +489,7 @@ static const Ability CloudNine = {
     },
 };
 
-static const Ability CompoundEyes = {
+constexpr Ability CompoundEyes = {
     .name = $("Compound Eyes"),
     .description = $("Grants a 1.3x accuracy boost."),
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
@@ -498,7 +498,7 @@ static const Ability CompoundEyes = {
     },
 };
 
-static const Ability Insomnia = {
+constexpr Ability Insomnia = {
     .name = $("Insomnia"),
     .description = $("Cannot fall asleep.\n"
                      "Rest fails if used."),
@@ -510,14 +510,14 @@ static const Ability Insomnia = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability ColorChange = {
+constexpr Ability ColorChange = {
     .name = $("Color Change"),
     .description = $("Changes type to a resist or an\n"
                      "immunity before getting hit."),
     .colorChange = TRUE,
 };
 
-static const Ability Immunity = {
+constexpr Ability Immunity = {
     .name = $("Immunity"),
     .description = $("Cannot be poisoned. Halves\n"
                      "damage taken from Poison moves."),
@@ -533,7 +533,7 @@ static const Ability Immunity = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability FlashFire = {
+constexpr Ability FlashFire = {
     .name = $("Flash Fire"),
     .description = $("Powers up Fire-type moves by\n"
                      "1.5x if hit by a Fire-type move."),
@@ -548,14 +548,14 @@ static const Ability FlashFire = {
     .breakable = TRUE,
 };
 
-static const Ability ShieldDust = {
+constexpr Ability ShieldDust = {
     .name = $("Shield Dust"),
     .description = $("Immune to added move effects and\n"
                      "all entry hazards."),
     .breakable = TRUE,
 };
 
-static const Ability OwnTempo = {
+constexpr Ability OwnTempo = {
     .name = $("Own Tempo"),
     .description = $("Immune to confusion, Intimidate\n"
                      "and Scare."),
@@ -568,21 +568,21 @@ static const Ability OwnTempo = {
     .tauntImmune = TRUE,
 };
 
-static const Ability SuctionCups = {
+constexpr Ability SuctionCups = {
     .name = $("Suction Cups"),
     .description = $("Cannot be forced to switch out\n"
                      "by an enemy's move."),
     .breakable = TRUE,
 };
 
-static const Ability Intimidate = {
+constexpr Ability Intimidate = {
     .name = $("Intimidate"),
     .description = $("Lowers foes' Atk by one stage on\n"
                      "entry."),
     .onEntry = UseIntimidateClone,
 };
 
-static const Ability ShadowTag = {
+constexpr Ability ShadowTag = {
     .name = $("Shadow Tag"),
     .description = $("Opponents can't be switched out.\n"
                      "Ghosts aren't affected."),
@@ -593,7 +593,7 @@ static const Ability ShadowTag = {
     .shadowTag = TRUE,
 };
 
-static const Ability RoughSkin = {
+constexpr Ability RoughSkin = {
     .name = $("Rough Skin"),
     .description = $("Enemies lose 1/8 of max HP if\n"
                      "they use a contact move."),
@@ -609,7 +609,7 @@ static const Ability RoughSkin = {
     },
 };
 
-static const Ability WonderGuard = {
+constexpr Ability WonderGuard = {
     .name = $("Wonder Guard"),
     .description = $("Is only hit by Super-effective\n"
                      "attacks or indirect damage."),
@@ -622,7 +622,7 @@ static const Ability WonderGuard = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Levitate = {
+constexpr Ability Levitate = {
     .name = $("Levitate"),
     .description = $("Immune to Ground-type moves.\n"
                      "Ups own Flying moves by 1.25x."),
@@ -634,7 +634,7 @@ static const Ability Levitate = {
     .levitate = TRUE,
 };
 
-static const Ability EffectSpore = {
+constexpr Ability EffectSpore = {
     .name = $("Effect Spore"),
     .description = $("30% chance to inflict SLP, PARA\n"
                      "or PSN if hit by a contact move."),
@@ -670,19 +670,19 @@ static const Ability EffectSpore = {
     },
 };
 
-static const Ability Synchronize = {
+constexpr Ability Synchronize = {
     .name = $("Synchronize"),
     .description = $("Enemies inflicting status on\n"
                      "this Pokémon get same status."),
 };
 
-static const Ability ClearBody = {
+constexpr Ability ClearBody = {
     .name = $("Clear Body"),
     .description = $("Immune to stat drops."),
     .breakable = TRUE,
 };
 
-static const Ability NaturalCure = {
+constexpr Ability NaturalCure = {
     .name = $("Natural Cure"),
     .description = $("Heals status condition upon\n"
                      "switching out."),
@@ -701,7 +701,7 @@ static const Ability NaturalCure = {
     },
 };
 
-static const Ability LightningRod = {
+constexpr Ability LightningRod = {
     .name = $("Lightning Rod"),
     .description = $("Redirects Electric moves.\n"
                      "Absorbs them, ups highest Atk."),
@@ -714,14 +714,14 @@ static const Ability LightningRod = {
     .breakable = TRUE,
 };
 
-static const Ability SereneGrace = {
+constexpr Ability SereneGrace = {
     .name = $("Serene Grace"),
     .description = $("Doubles chance of secondary\n"
                      "effects on its own moves."),
     .onModifyEffectChance = +[](ON_MODIFY_EFFECT_CHANCE) { *effectChance *= 2; },
 };
 
-static const Ability SwiftSwim = {
+constexpr Ability SwiftSwim = {
     .name = $("Swift Swim"),
     .description = $("This Pokémon's Speed gets a\n"
                      "1.5x boost if rain is active."),
@@ -731,7 +731,7 @@ static const Ability SwiftSwim = {
         },
 };
 
-static const Ability Chlorophyll = {
+constexpr Ability Chlorophyll = {
     .name = $("Chlorophyll"),
     .description = $("This Pokémon's Speed gets a\n"
                      "1.5x boost if sun is active."),
@@ -741,7 +741,7 @@ static const Ability Chlorophyll = {
         },
 };
 
-static const Ability Illuminate = {
+constexpr Ability Illuminate = {
     .name = $("Illuminate"),
     .description = $("Grants a 1.2x accuracy boost."),
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
@@ -750,7 +750,7 @@ static const Ability Illuminate = {
     },
 };
 
-static const Ability Trace = {
+constexpr Ability Trace = {
     .name = $("Trace"),
     .description = $("Copies the foe's ability.\n"
                      "Does not copy innates."),
@@ -781,7 +781,7 @@ static const Ability Trace = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability HugePower = {
+constexpr Ability HugePower = {
     .name = $("Huge Power"),
     .description = $("Doubles own Attack stat.\n"
                      "Boosts raw stat, not base stat."),
@@ -800,14 +800,14 @@ ON_EITHER(PoisonPoint) {
     AbilityStatusEffectSafe(MOVE_EFFECT_POISON, battler, opponent);
     return TRUE;
 }
-static const Ability PoisonPoint = {
+constexpr Ability PoisonPoint = {
     .name = $("Poison Point"),
     .description = $("30% chance to poison on contact.\n"
                      "Also works on offense."),
     ON_EITHER_ABILITY(PoisonPoint),
 };
 
-static const Ability InnerFocus = {
+constexpr Ability InnerFocus = {
     .name = $("Inner Focus"),
     .description = $("Blocks flinch, Intimidate, Scare.\n"
                      "Focus Blast never misses."),
@@ -819,7 +819,7 @@ static const Ability InnerFocus = {
     .tauntImmune = TRUE,
 };
 
-static const Ability MagmaArmor = {
+constexpr Ability MagmaArmor = {
     .name = $("Magma Armor"),
     .description = $("Frostbite-immune. Takes 30% less\n"
                      "dmg from Water/Ice-type moves."),
@@ -835,7 +835,7 @@ static const Ability MagmaArmor = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability WaterVeil = {
+constexpr Ability WaterVeil = {
     .name = $("Water Veil"),
     .description = $("Burn-immune.\n"
                      "Casts Aqua Ring on entry."),
@@ -854,14 +854,14 @@ static const Ability WaterVeil = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability MagnetPull = {
+constexpr Ability MagnetPull = {
     .name = $("Magnet Pull"),
     .description = $("Traps opposing Steel-types.\n"
                      "Ghosts aren't affected."),
     .onTrap = +[](ABILITY_ON_TRAP) -> int { return IS_BATTLER_OF_TYPE(switchingBattler, TYPE_STEEL); },
 };
 
-static const Ability Soundproof = {
+constexpr Ability Soundproof = {
     .name = $("Soundproof"),
     .description = $("Immune to sound-based moves."),
     .onImmune = +[](ON_IMMUNE) -> int {
@@ -873,7 +873,7 @@ static const Ability Soundproof = {
     .isSoundproof = TRUE,
 };
 
-static const Ability RainDish = {
+constexpr Ability RainDish = {
     .name = $("Rain Dish"),
     .description = $("Heals 1/8 of max HP every turn\n"
                      "if rain is active."),
@@ -891,7 +891,7 @@ static const Ability RainDish = {
     },
 };
 
-static const Ability SandStream = {
+constexpr Ability SandStream = {
     .name = $("Sand Stream"),
     .description = $("Summons a sandstorm on entry.\n"
                      "Lasts 8 turns."),
@@ -907,7 +907,7 @@ static const Ability SandStream = {
     },
 };
 
-static const Ability Pressure = {
+constexpr Ability Pressure = {
     .name = $("Pressure"),
     .description = $("Doubles foe's PP usage.\n"
                      "Clears stat buffs on entry."),
@@ -928,7 +928,7 @@ static const Ability Pressure = {
     },
 };
 
-static const Ability ThickFat = {
+constexpr Ability ThickFat = {
     .name = $("Thick Fat"),
     .description = $("Takes 1/2 damage from Fire-type\n"
                      "and Ice-type attacks."),
@@ -939,7 +939,7 @@ static const Ability ThickFat = {
     .breakable = TRUE,
 };
 
-static const Ability EarlyBird = {
+constexpr Ability EarlyBird = {
     .name = $("Early Bird"),
     .description = $("Awakens twice as fast from sleep."),
 };
@@ -953,20 +953,20 @@ ON_EITHER(FlameBody) {
     AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
     return TRUE;
 }
-static const Ability FlameBody = {
+constexpr Ability FlameBody = {
     .name = $("Flame Body"),
     .description = $("30% chance to burn on contact.\n"
                      "Also works on offense."),
     ON_EITHER_ABILITY(FlameBody),
 };
 
-static const Ability RunAway = {
+constexpr Ability RunAway = {
     .name = $("Run Away"),
     .description = $("Guarantees fleeing. Raises Speed\n"
                      "if stats lowered by an enemy."),
 };
 
-static const Ability KeenEye = {
+constexpr Ability KeenEye = {
     .name = $("Keen Eye"),
     .description = $("Immune to accuracy drops.\n"
                      "Grants a 1.2x accuracy boost."),
@@ -977,7 +977,7 @@ static const Ability KeenEye = {
     .breakable = TRUE,
 };
 
-static const Ability HyperCutter = {
+constexpr Ability HyperCutter = {
     .name = $("Hyper Cutter"),
     .description = $("Enemies can't lower Atk/Sp. Atk.\n"
                      "Crit rate of contact moves: +1."),
@@ -988,7 +988,7 @@ static const Ability HyperCutter = {
     .breakable = TRUE,
 };
 
-static const Ability Pickup = {
+constexpr Ability Pickup = {
     .name = $("Pickup"),
     .description = $("Removes all hazards on entry.\n"
                      "Not immune to hazards."),
@@ -1006,7 +1006,7 @@ static const Ability Pickup = {
     },
 };
 
-static const Ability Truant = {
+constexpr Ability Truant = {
     .name = $("Truant"),
     .description = $("Can only attack every other turn.\n"
                      "Can use status moves every turn."),
@@ -1019,7 +1019,7 @@ static const Ability Truant = {
     },
 };
 
-static const Ability Hustle = {
+constexpr Ability Hustle = {
     .name = $("Hustle"),
     .description = $("0.9x accuracy.\n"
                      "Boosts damage by 1.4x."),
@@ -1039,14 +1039,14 @@ ON_EITHER(CuteCharm) {
     AbilityStatusEffectSafe(MOVE_EFFECT_ATTRACT, battler, opponent);
     return TRUE;
 }
-static const Ability CuteCharm = {
+constexpr Ability CuteCharm = {
     .name = $("Cute Charm"),
     .description = $("50% chance to attract on contact.\n"
                      "Also works on offense."),
     ON_EITHER_ABILITY(CuteCharm),
 };
 
-static const Ability Plus = {
+constexpr Ability Plus = {
     .name = $("Plus"),
     .description = $("Deals double damage if an ally\n"
                      "Pokémon has Minus or Plus."),
@@ -1058,14 +1058,14 @@ static const Ability Plus = {
         },
 };
 
-static const Ability Minus = {
+constexpr Ability Minus = {
     .name = $("Minus"),
     .description = $("Deals double damage if an ally\n"
                      "Pokémon has Minus or Plus."),
     .onOffensiveMultiplier = Plus.onOffensiveMultiplier,
 };
 
-static const Ability Forecast = {
+constexpr Ability Forecast = {
     .name = $("Forecast"),
     .description = $("Changes form with the weather.\n"
                      "Weather setting triggers attack."),
@@ -1092,13 +1092,13 @@ static const Ability Forecast = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability StickyHold = {
+constexpr Ability StickyHold = {
     .name = $("Sticky Hold"),
     .description = $("Can't lose its item."),
     .breakable = TRUE,
 };
 
-static const Ability ShedSkin = {
+constexpr Ability ShedSkin = {
     .name = $("Shed Skin"),
     .description = $("30% chance to heal its status\n"
                      "condition at the end of a turn."),
@@ -1110,7 +1110,7 @@ static const Ability ShedSkin = {
     },
 };
 
-static const Ability Guts = {
+constexpr Ability Guts = {
     .name = $("Guts"),
     .description = $("Ups Atk by 1.5x if suffering\n"
                      "from a status condition."),
@@ -1121,7 +1121,7 @@ static const Ability Guts = {
     .negatesBurnAtkDrop = TRUE,
 };
 
-static const Ability MarvelScale = {
+constexpr Ability MarvelScale = {
     .name = $("Marvel Scale"),
     .description = $("Ups Def by 1.5x if suffering\n"
                      "from a status condition."),
@@ -1132,41 +1132,41 @@ static const Ability MarvelScale = {
     .breakable = TRUE,
 };
 
-static const Ability LiquidOoze = {
+constexpr Ability LiquidOoze = {
     .name = $("Liquid Ooze"),
     .description = $("Draining causes harm to enemies\n"
                      "instead of healing them."),
 };
 
-static const Ability Overgrow = {
+constexpr Ability Overgrow = {
     .name = $("Overgrow"),
     .description = $("Boosts Grass-type moves by 1.2x,\n"
                      "or 1.5x when under 1/3 HP."),
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_GRASS),
 };
 
-static const Ability Blaze = {
+constexpr Ability Blaze = {
     .name = $("Blaze"),
     .description = $("Boosts Fire-type moves by 1.2x,\n"
                      "or 1.5x when under 1/3 HP."),
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_FIRE),
 };
 
-static const Ability Torrent = {
+constexpr Ability Torrent = {
     .name = $("Torrent"),
     .description = $("Boosts Water-type moves by 1.2x,\n"
                      "or 1.5x when under 1/3 HP."),
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_WATER),
 };
 
-static const Ability Swarm = {
+constexpr Ability Swarm = {
     .name = $("Swarm"),
     .description = $("Boosts Bug-type moves by 1.2x,\n"
                      "or 1.5x when under 1/3 HP."),
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_BUG),
 };
 
-static const Ability RockHead = {
+constexpr Ability RockHead = {
     .name = $("Rock Head"),
     .description = $("Immune to recoil damage, but not\n"
                      "immune to Explosion/crash dmg."),
@@ -1179,7 +1179,7 @@ static const Ability RockHead = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability Drought = {
+constexpr Ability Drought = {
     .name = $("Drought"),
     .description = $("Summons sun on entry.\n"
                      "Lasts 8 turns."),
@@ -1195,14 +1195,14 @@ static const Ability Drought = {
     },
 };
 
-static const Ability ArenaTrap = {
+constexpr Ability ArenaTrap = {
     .name = $("Arena Trap"),
     .description = $("Enemies can't flee. Ghosts and\n"
                      "ungrounded Pokémon are immune."),
     .onTrap = +[](ABILITY_ON_TRAP) -> int { return IsBattlerGrounded(switchingBattler); },
 };
 
-static const Ability VitalSpirit = {
+constexpr Ability VitalSpirit = {
     .name = $("Vital Spirit"),
     .description = $("Can't fall asleep. Heals status\n"
                      "after using Fighting-type moves."),
@@ -1220,7 +1220,7 @@ static const Ability VitalSpirit = {
     .tauntImmune = TRUE,
 };
 
-static const Ability WhiteSmoke = {
+constexpr Ability WhiteSmoke = {
     .name = $("White Smoke"),
     .description = $("Sets Smokescreen for 3 turns\n"
                      "on switch-in."),
@@ -1235,14 +1235,14 @@ static const Ability WhiteSmoke = {
     },
 };
 
-static const Ability PurePower = {
+constexpr Ability PurePower = {
     .name = $("Pure Power"),
     .description = $("Doubles own Attack stat.\n"
                      "Boosts raw stat, not base stat."),
     .onStat = HugePower.onStat,
 };
 
-static const Ability ShellArmor = {
+constexpr Ability ShellArmor = {
     .name = $("Shell Armor"),
     .description = $("Immune to critical hits. Takes\n"
                      "20% less damage from all attacks."),
@@ -1252,14 +1252,14 @@ static const Ability ShellArmor = {
     .breakable = TRUE,
 };
 
-static const Ability AirLock = {
+constexpr Ability AirLock = {
     .name = $("Air Lock"),
     .description = $("Clears weather and prevents\n"
                      "its effects."),
     .onEntry = CloudNine.onEntry,
 };
 
-static const Ability TangledFeet = {
+constexpr Ability TangledFeet = {
     .name = $("Tangled Feet"),
     .description = $("Doubles Evasion when confused."),
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
@@ -1271,7 +1271,7 @@ static const Ability TangledFeet = {
     .breakable = TRUE,
 };
 
-static const Ability MotorDrive = {
+constexpr Ability MotorDrive = {
     .name = $("Motor Drive"),
     .description = $("Boosts Speed instead of being\n"
                      "hit by Electric-type moves."),
@@ -1283,7 +1283,7 @@ static const Ability MotorDrive = {
     .breakable = TRUE,
 };
 
-static const Ability Rivalry = {
+constexpr Ability Rivalry = {
     .name = $("Rivalry"),
     .description = $("Deals 1.25x to same gender.\n"
                      "Takes .75x from opposite gender."),
@@ -1306,13 +1306,13 @@ static const Ability Rivalry = {
     .breakable = TRUE,
 };
 
-static const Ability Steadfast = {
+constexpr Ability Steadfast = {
     .name = $("Steadfast"),
     .description = $("Raises Speed by one stage if\n"
                      "this Pokémon flinches."),
 };
 
-static const Ability SnowCloak = {
+constexpr Ability SnowCloak = {
     .name = $("Snow Cloak"),
     .description = $("Evasion is boosted by 1.25x\n"
                      "under hail."),
@@ -1325,13 +1325,13 @@ static const Ability SnowCloak = {
     .breakable = TRUE,
 };
 
-static const Ability Gluttony = {
+constexpr Ability Gluttony = {
     .name = $("Gluttony"),
     .description = $("Eats berries early. Berries also\n"
                      "restore 1/3 of max HP."),
 };
 
-static const Ability AngerPoint = {
+constexpr Ability AngerPoint = {
     .name = $("Anger Point"),
     .description = $("Getting hit raises Atk by +1.\n"
                      "Critical hits maximize Attack."),
@@ -1350,7 +1350,7 @@ static const Ability AngerPoint = {
     },
 };
 
-static const Ability Unburden = {
+constexpr Ability Unburden = {
     .name = $("Unburden"),
     .description = $("Consuming its held item doubles\n"
                      "Speed until switched out."),
@@ -1360,7 +1360,7 @@ static const Ability Unburden = {
         },
 };
 
-static const Ability Heatproof = {
+constexpr Ability Heatproof = {
     .name = $("Heatproof"),
     .description = $("Halves damage taken from Fire-\n"
                      "type moves. Takes no burn damage."),
@@ -1372,13 +1372,13 @@ static const Ability Heatproof = {
     .negatesBurnAtkDrop = TRUE,
 };
 
-static const Ability Simple = {
+constexpr Ability Simple = {
     .name = $("Simple"),
     .description = $("Doubles all stat changes on\n"
                      "this Pokémon."),
 };
 
-static const Ability DrySkin = {
+constexpr Ability DrySkin = {
     .name = $("Dry Skin"),
     .description = $("Water/Rain heals.\n"
                      "Fire/Sun hurts."),
@@ -1400,7 +1400,7 @@ static const Ability DrySkin = {
     .breakable = TRUE,
 };
 
-static const Ability Download = {
+constexpr Ability Download = {
     .name = $("Download"),
     .description = $("Raises Atk/Sp. Atk by one stage\n"
                      "depending on opponent."),
@@ -1416,7 +1416,7 @@ static const Ability Download = {
     },
 };
 
-static const Ability IronFist = {
+constexpr Ability IronFist = {
     .name = $("Iron Fist"),
     .description = $("Boosts the power of punching\n"
                      "moves by 1.3x."),
@@ -1426,26 +1426,26 @@ static const Ability IronFist = {
         },
 };
 
-static const Ability PoisonHeal = {
+constexpr Ability PoisonHeal = {
     .name = $("Poison Heal"),
     .description = $("Restores 1/8 of max HP after\n"
                      "each turn if poisoned."),
 };
 
-static const Ability Adaptability = {
+constexpr Ability Adaptability = {
     .name = $("Adaptability"),
     .description = $("Increases STAB from 1.5x to 2x."),
     .adaptability = TRUE,
 };
 
-static const Ability SkillLink = {
+constexpr Ability SkillLink = {
     .name = $("Skill Link"),
     .description = $("Multi-hit moves always hit the\n"
                      "maximum number of times."),
     .skillLink = TRUE,
 };
 
-static const Ability Hydration = {
+constexpr Ability Hydration = {
     .name = $("Hydration"),
     .description = $("Cures own status at the end of\n"
                      "every turn in rain."),
@@ -1457,7 +1457,7 @@ static const Ability Hydration = {
     },
 };
 
-static const Ability SolarPower = {
+constexpr Ability SolarPower = {
     .name = $("Solar Power"),
     .description = $("Ups highest attacking stat\n"
                      "by 1.5x in sun."),
@@ -1468,7 +1468,7 @@ static const Ability SolarPower = {
         },
 };
 
-static const Ability QuickFeet = {
+constexpr Ability QuickFeet = {
     .name = $("Quick Feet"),
     .description = $("Ups Speed by 1.5x if suffering\n"
                      "from a status condition."),
@@ -1478,7 +1478,7 @@ static const Ability QuickFeet = {
         },
 };
 
-static const Ability Normalize = {
+constexpr Ability Normalize = {
     .name = $("Normalize"),
     .description = $("Its moves become Normal-type,\n"
                      "get 1.1x boost, ignore resists."),
@@ -1493,7 +1493,7 @@ static const Ability Normalize = {
     },
 };
 
-static const Ability Sniper = {
+constexpr Ability Sniper = {
     .name = $("Sniper"),
     .description = $("Critical hits have a 2.25x dmg\n"
                      "multiplier instead of 1.5x."),
@@ -1503,13 +1503,13 @@ static const Ability Sniper = {
         },
 };
 
-static const Ability MagicGuard = {
+constexpr Ability MagicGuard = {
     .name = $("Magic Guard"),
     .description = $("Only damaged by attacks."),
     .magicGuard = TRUE,
 };
 
-static const Ability NoGuard = {
+constexpr Ability NoGuard = {
     .name = $("No Guard"),
     .description = $("Attacks used by and on this\n"
                      "Pokémon bypass accuracy checks."),
@@ -1517,7 +1517,7 @@ static const Ability NoGuard = {
     .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
 };
 
-static const Ability Stall = {
+constexpr Ability Stall = {
     .name = $("Stall"),
     .description = $("Takes 30% less damage if it\n"
                      "hasn't moved yet."),
@@ -1528,7 +1528,7 @@ static const Ability Stall = {
     .breakable = TRUE,
 };
 
-static const Ability Technician = {
+constexpr Ability Technician = {
     .name = $("Technician"),
     .description = $("Moves with 60 BP or less get\n"
                      "a 1.5x boost."),
@@ -1538,7 +1538,7 @@ static const Ability Technician = {
         },
 };
 
-static const Ability LeafGuard = {
+constexpr Ability LeafGuard = {
     .name = $("Leaf Guard"),
     .description = $("Immune to status conditions if\n"
                      "sun is active."),
@@ -1550,27 +1550,27 @@ static const Ability LeafGuard = {
     .breakable = TRUE,
 };
 
-static const Ability Klutz = {
+constexpr Ability Klutz = {
     .name = $("Klutz"),
     .description = $("Own held item has no effect.\n"
                      "Mega Stones are unaffected."),
 };
 
-static const Ability MoldBreaker = {
+constexpr Ability MoldBreaker = {
     .name = $("Mold Breaker"),
     .description = $("Moves hit through abilities.\n"
                      "Also affects innates."),
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER); },
 };
 
-static const Ability SuperLuck = {
+constexpr Ability SuperLuck = {
     .name = $("Super Luck"),
     .description = $("Raises critical-hit ratio of own\n"
                      "moves by +1."),
     .onCrit = +[](ON_CRIT) -> int { return 1; },
 };
 
-static const Ability Aftermath = {
+constexpr Ability Aftermath = {
     .name = $("Aftermath"),
     .description = $("If faints by a contact move,\n"
                      "attacker takes 25% of max HP."),
@@ -1587,7 +1587,7 @@ static const Ability Aftermath = {
     },
 };
 
-static const Ability Anticipation = {
+constexpr Ability Anticipation = {
     .name = $("Anticipation"),
     .description = $("Senses Super-effective moves.\n"
                      "Blocks one Super-effective hit."),
@@ -1616,7 +1616,7 @@ static const Ability Anticipation = {
     .persistent = TRUE,
 };
 
-static const Ability Forewarn = {
+constexpr Ability Forewarn = {
     .name = $("Forewarn"),
     .description = $("Casts a 50 BP Future Sight on\n"
                      "entry."),
@@ -1637,7 +1637,7 @@ static const Ability Forewarn = {
     },
 };
 
-static const Ability Unaware = {
+constexpr Ability Unaware = {
     .name = $("Unaware"),
     .description = $("Ignores foes' stat changes, both\n"
                      "positive and negative ones."),
@@ -1645,7 +1645,7 @@ static const Ability Unaware = {
     .unaware = TRUE,
 };
 
-static const Ability TintedLens = {
+constexpr Ability TintedLens = {
     .name = $("Tinted Lens"),
     .description = $("Attacks deal double damage if\n"
                      "resisted."),
@@ -1655,7 +1655,7 @@ static const Ability TintedLens = {
         },
 };
 
-static const Ability Filter = {
+constexpr Ability Filter = {
     .name = $("Filter"),
     .description = $("Takes 35% less damage from\n"
                      "Super-effective moves."),
@@ -1666,7 +1666,7 @@ static const Ability Filter = {
     .breakable = TRUE,
 };
 
-static const Ability SlowStart = {
+constexpr Ability SlowStart = {
     .name = $("Slow Start"),
     .description = $("Halves Attack and Speed during\n"
                      "the first 5 turns out."),
@@ -1681,7 +1681,7 @@ static const Ability SlowStart = {
         },
 };
 
-static const Ability Scrappy = {
+constexpr Ability Scrappy = {
     .name = $("Scrappy"),
     .description = $("Normal/Fighting can hit Ghosts.\n"
                      "Immune to Intimidate/Scare."),
@@ -1695,7 +1695,7 @@ static const Ability Scrappy = {
     .tauntImmune = TRUE,
 };
 
-static const Ability StormDrain = {
+constexpr Ability StormDrain = {
     .name = $("Storm Drain"),
     .description = $("Redirects Water moves.\n"
                      "Absorbs them, ups highest Atk."),
@@ -1708,7 +1708,7 @@ static const Ability StormDrain = {
     .breakable = TRUE,
 };
 
-static const Ability IceBody = {
+constexpr Ability IceBody = {
     .name = $("Ice Body"),
     .description = $("Heals 1/8 of max HP every turn\n"
                      "in hail."),
@@ -1726,7 +1726,7 @@ static const Ability IceBody = {
     },
 };
 
-static const Ability SolidRock = {
+constexpr Ability SolidRock = {
     .name = $("Solid Rock"),
     .description = $("Takes 35% less damage from\n"
                      "Super-effective moves."),
@@ -1734,7 +1734,7 @@ static const Ability SolidRock = {
     .breakable = TRUE,
 };
 
-static const Ability SnowWarning = {
+constexpr Ability SnowWarning = {
     .name = $("Snow Warning"),
     .description = $("Summons hail on entry.\n"
                      "Lasts 8 turns."),
@@ -1750,7 +1750,7 @@ static const Ability SnowWarning = {
     },
 };
 
-static const Ability HoneyGather = {
+constexpr Ability HoneyGather = {
     .name = $("Honey Gather"),
     .description = $("Has a 50% chance to find Honey\n"
                      "each turn."),
@@ -1764,7 +1764,7 @@ static const Ability HoneyGather = {
     },
 };
 
-static const Ability Frisk = {
+constexpr Ability Frisk = {
     .name = $("Frisk"),
     .description = $("Checks foes' item and disables\n"
                      "their items for two turns."),
@@ -1783,7 +1783,7 @@ static const Ability Frisk = {
     },
 };
 
-static const Ability Reckless = {
+constexpr Ability Reckless = {
     .name = $("Reckless"),
     .description = $("Moves causing recoil damage\n"
                      "deal 1.2x more damage."),
@@ -1793,7 +1793,7 @@ static const Ability Reckless = {
         },
 };
 
-static const Ability Multitype = {
+constexpr Ability Multitype = {
     .name = $("Multitype"),
     .description = $("Held Plate item decides holder's\n"
                      "type."),
@@ -1801,7 +1801,7 @@ static const Ability Multitype = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability FlowerGift = {
+constexpr Ability FlowerGift = {
     .name = $("Flower Gift"),
     .description = $("Increases the party's SpAtk\n"
                      "and SpDef by 1.5x in Sun."),
@@ -1819,7 +1819,7 @@ static const Ability FlowerGift = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability BadDreams = {
+constexpr Ability BadDreams = {
     .name = $("Bad Dreams"),
     .description = $("Sleeping Pokémon lose 1/4 of max\n"
                      "HP at the end of each turn."),
@@ -1830,13 +1830,13 @@ static const Ability BadDreams = {
     },
 };
 
-static const Ability Pickpocket = {
+constexpr Ability Pickpocket = {
     .name = $("Pickpocket"),
     .description = $("Steals the foe's held item on\n"
                      "contact."),
 };
 
-static const Ability SheerForce = {
+constexpr Ability SheerForce = {
     .name = $("Sheer Force"),
     .description = $("Exchanges added effects on its\n"
                      "moves for 1.3x more power."),
@@ -1846,27 +1846,27 @@ static const Ability SheerForce = {
         },
 };
 
-static const Ability Contrary = {
+constexpr Ability Contrary = {
     .name = $("Contrary"),
     .description = $("Stat raises turn into stat drops\n"
                      "for this Pokémon and vice versa."),
     .breakable = TRUE,
 };
 
-static const Ability Unnerve = {
+constexpr Ability Unnerve = {
     .name = $("Unnerve"),
     .description = $("Foes can't use consumable items."),
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE); },
     .unnerve = TRUE,
 };
 
-static const Ability Defiant = {
+constexpr Ability Defiant = {
     .name = $("Defiant"),
     .description = $("Raises Attack by two stages if\n"
                      "stats are lowered by an enemy."),
 };
 
-static const Ability Defeatist = {
+constexpr Ability Defeatist = {
     .name = $("Defeatist"),
     .description = $("Halves Atk and Sp. Atk stats if\n"
                      "user is below 1/3 of max HP."),
@@ -1877,7 +1877,7 @@ static const Ability Defeatist = {
         },
 };
 
-static const Ability CursedBody = {
+constexpr Ability CursedBody = {
     .name = $("Cursed Body"),
     .description = $("30% chance to disable moves\n"
                      "if enemy makes contact."),
@@ -1897,7 +1897,7 @@ static const Ability CursedBody = {
     },
 };
 
-static const Ability Healer = {
+constexpr Ability Healer = {
     .name = $("Healer"),
     .description = $("30% chance to heal user or ally's\n"
                      "status at the end of each turn."),
@@ -1916,14 +1916,14 @@ static const Ability Healer = {
     },
 };
 
-static const Ability FriendGuard = {
+constexpr Ability FriendGuard = {
     .name = $("Friend Guard"),
     .description = $("Reduces damage that ally takes\n"
                      "by 50% in double battles."),
     .breakable = TRUE,
 };
 
-static const Ability WeakArmor = {
+constexpr Ability WeakArmor = {
     .name = $("Weak Armor"),
     .description = $("If hit by a contact attack:\n"
                      "-1 Defense and +2 Speed."),
@@ -1940,12 +1940,12 @@ static const Ability WeakArmor = {
     },
 };
 
-static const Ability HeavyMetal = {
+constexpr Ability HeavyMetal = {
     .name = $("Heavy Metal"),
     .description = $("Doubles this Pokémon's weight."),
 };
 
-static const Ability LightMetal = {
+constexpr Ability LightMetal = {
     .name = $("Light Metal"),
     .description = $("Boosts Speed by 1.3x and halves\n"
                      "this Pokémon's weight."),
@@ -1955,7 +1955,7 @@ static const Ability LightMetal = {
         },
 };
 
-static const Ability Multiscale = {
+constexpr Ability Multiscale = {
     .name = $("Multiscale"),
     .description = $("At full HP, halves damage taken\n"
                      "from attacks"),
@@ -1966,7 +1966,7 @@ static const Ability Multiscale = {
     .breakable = TRUE,
 };
 
-static const Ability ToxicBoost = {
+constexpr Ability ToxicBoost = {
     .name = $("Toxic Boost"),
     .description = $("Ups Atk by 1.5x if poisoned.\n"
                      "Immune to Poison status damage."),
@@ -1988,7 +1988,7 @@ int FlareBoostHandler(int ability, int battler, AbilityCallType callType) {
     return TRUE;
 }
 
-static const Ability FlareBoost = {
+constexpr Ability FlareBoost = {
     .name = $("Flare Boost"),
     .description = $("Ups Sp. Atk by 1.5x if burned.\n"
                      "Ignites in fog."),
@@ -2002,7 +2002,7 @@ static const Ability FlareBoost = {
     .negatesBurnAtkDrop = TRUE,
 };
 
-static const Ability Harvest = {
+constexpr Ability Harvest = {
     .name = $("Harvest"),
     .description = $("50% chance to recycle a used\n"
                      "Berry every turn, 100% in sun."),
@@ -2017,7 +2017,7 @@ static const Ability Harvest = {
     },
 };
 
-static const Ability Telepathy = {
+constexpr Ability Telepathy = {
     .name = $("Telepathy"),
     .description = $("Can't be damaged by ally attacks.\n"
                      "Doesn't damage allies with attacks.\n"),
@@ -2029,7 +2029,7 @@ static const Ability Telepathy = {
     .breakable = TRUE,
 };
 
-static const Ability Moody = {
+constexpr Ability Moody = {
     .name = $("Moody"),
     .description = $("Lowers a random stat by -1 and\n"
                      "raises another by +2 every turn."),
@@ -2063,7 +2063,7 @@ static const Ability Moody = {
     },
 };
 
-static const Ability Overcoat = {
+constexpr Ability Overcoat = {
     .name = $("Overcoat"),
     .description = $("Blocks weather dmg, powder moves.\n"
                      "20% Special damage reduction."),
@@ -2074,7 +2074,7 @@ static const Ability Overcoat = {
     .breakable = TRUE,
 };
 
-static const Ability PoisonTouch = {
+constexpr Ability PoisonTouch = {
     .name = $("Poison Touch"),
     .description = $("30% chance to poison on contact.\n"
                      "Also works on offense."),
@@ -2082,7 +2082,7 @@ static const Ability PoisonTouch = {
     .onDefender = PoisonPoint.onDefender,
 };
 
-static const Ability Regenerator = {
+constexpr Ability Regenerator = {
     .name = $("Regenerator"),
     .description = $("Heals 1/3 of max HP upon\n"
                      "switching out."),
@@ -2094,7 +2094,7 @@ static const Ability Regenerator = {
     },
 };
 
-static const Ability BigPecks = {
+constexpr Ability BigPecks = {
     .name = $("Big Pecks"),
     .description = $("Boosts the power of contact\n"
                      "moves by 1.3x."),
@@ -2104,7 +2104,7 @@ static const Ability BigPecks = {
         },
 };
 
-static const Ability SandRush = {
+constexpr Ability SandRush = {
     .name = $("Sand Rush"),
     .description = $("This Pokémon's Speed gets a\n"
                      "1.5x boost in a sandstorm."),
@@ -2114,14 +2114,14 @@ static const Ability SandRush = {
         },
 };
 
-static const Ability WonderSkin = {
+constexpr Ability WonderSkin = {
     .name = $("Wonder Skin"),
     .description = $("Blocks most damage boosting\n"
                      "and multihit abilities."),
     .fortKnox = TRUE,
 };
 
-static const Ability Analytic = {
+constexpr Ability Analytic = {
     .name = $("Analytic"),
     .description = $("Attacks get a 1.3x power boost\n"
                      "if it moves last."),
@@ -2131,7 +2131,7 @@ static const Ability Analytic = {
         },
 };
 
-static const Ability Illusion = {
+constexpr Ability Illusion = {
     .name = $("Illusion"),
     .description = $("Appears as last party slot and\n"
                      "boosts power by 1.3x until hit."),
@@ -2149,7 +2149,7 @@ static const Ability Illusion = {
         },
 };
 
-static const Ability Imposter = {
+constexpr Ability Imposter = {
     .name = $("Imposter"),
     .description = $("Transforms into the foe on\n"
                      "entry."),
@@ -2167,14 +2167,14 @@ static const Ability Imposter = {
     },
 };
 
-static const Ability Infiltrator = {
+constexpr Ability Infiltrator = {
     .name = $("Infiltrator"),
     .description = $("Own moves bypass Substitutes\n"
                      "and damage reduction screens."),
     .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType { return INFILTRATE_SCREENS | INFILTRATE_SUBSTITUTE; },
 };
 
-static const Ability Mummy = {
+constexpr Ability Mummy = {
     .name = $("Mummy"),
     .description = $("If hit, makes the attacker's ability\n"
                      "Mummy."),
@@ -2192,7 +2192,7 @@ static const Ability Mummy = {
     },
 };
 
-static const Ability Moxie = {
+constexpr Ability Moxie = {
     .name = $("Moxie"),
     .description = $("Dealing a KO raises Attack by\n"
                      "one stage."),
@@ -2200,7 +2200,7 @@ static const Ability Moxie = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Justified = {
+constexpr Ability Justified = {
     .name = $("Justified"),
     .description = $("Boosts Attack instead of being\n"
                      "hit by Dark-type moves."),
@@ -2211,7 +2211,7 @@ static const Ability Justified = {
     },
 };
 
-static const Ability Rattled = {
+constexpr Ability Rattled = {
     .name = $("Rattled"),
     .description = $("If hit by Bug, Dark or Ghost\n"
                      "move, or flinches: +1 Speed."),
@@ -2226,7 +2226,7 @@ static const Ability Rattled = {
     },
 };
 
-static const Ability MagicBounce = {
+constexpr Ability MagicBounce = {
     .name = $("Magic Bounce"),
     .description = $("Bounces back the effect of\n"
                      "status moves to their user."),
@@ -2234,7 +2234,7 @@ static const Ability MagicBounce = {
     .magicBounce = TRUE,
 };
 
-static const Ability SapSipper = {
+constexpr Ability SapSipper = {
     .name = $("Sap Sipper"),
     .description = $("Boosts highest Atk instead of\n"
                      "being hit by Grass-type moves."),
@@ -2246,7 +2246,7 @@ static const Ability SapSipper = {
     .breakable = TRUE,
 };
 
-static const Ability Prankster = {
+constexpr Ability Prankster = {
     .name = $("Prankster"),
     .description = $("Status moves have +1 priority\n"
                      "but fail on opposing Dark-types."),
@@ -2256,7 +2256,7 @@ static const Ability Prankster = {
     },
 };
 
-static const Ability SandForce = {
+constexpr Ability SandForce = {
     .name = $("Sand Force"),
     .description = $("Ups highest attacking stat\n"
                      "by 1.5x in sand."),
@@ -2267,14 +2267,14 @@ static const Ability SandForce = {
         },
 };
 
-static const Ability IronBarbs = {
+constexpr Ability IronBarbs = {
     .name = $("Iron Barbs"),
     .description = $("Enemies lose 1/8 of max HP if\n"
                      "they use a contact move."),
     .onDefender = RoughSkin.onDefender,
 };
 
-static const Ability ZenMode = {
+constexpr Ability ZenMode = {
     .name = $("Zen Mode"),
     .description = $("Transforms into Zen Mode on\n"
                      "entry until end of battle."),
@@ -2284,7 +2284,7 @@ static const Ability ZenMode = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability VictoryStar = {
+constexpr Ability VictoryStar = {
     .name = $("Victory Star"),
     .description = $("Gives 1.2x accuracy boost to\n"
                      "its own and its allies' moves."),
@@ -2295,21 +2295,21 @@ static const Ability VictoryStar = {
     .onAccuracyFor = APPLY_ON_ALLY,
 };
 
-static const Ability Turboblaze = {
+constexpr Ability Turboblaze = {
     .name = $("Turboblaze"),
     .description = $("Moves hit through abilities.\n"
                      "Adds Fire type to itself."),
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIRE); },
 };
 
-static const Ability Teravolt = {
+constexpr Ability Teravolt = {
     .name = $("Teravolt"),
     .description = $("Moves hit through abilities.\n"
                      "Adds Electric type to itself."),
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ELECTRIC); },
 };
 
-static const Ability AromaVeil = {
+constexpr Ability AromaVeil = {
     .name = $("Aroma Veil"),
     .description = $("Protects the team from infatuation,\n"
                      "heal block, and move restriction."),
@@ -2321,7 +2321,7 @@ static const Ability AromaVeil = {
     .breakable = TRUE,
 };
 
-static const Ability FlowerVeil = {
+constexpr Ability FlowerVeil = {
     .name = $("Flower Veil"),
     .description = $("Protects Grass-type allies\n"
                      "from status and stat drops."),
@@ -2334,20 +2334,20 @@ static const Ability FlowerVeil = {
     .breakable = TRUE,
 };
 
-static const Ability CheekPouch = {
+constexpr Ability CheekPouch = {
     .name = $("Cheek Pouch"),
     .description = $("This ability has no effect."),
     .randomizerBanned = TRUE,
 };
 
-static const Ability Protean = {
+constexpr Ability Protean = {
     .name = $("Protean"),
     .description = $("Changes type depending on the\n"
                      "move it's about to use."),
     .protean = TRUE,
 };
 
-static const Ability FurCoat = {
+constexpr Ability FurCoat = {
     .name = $("Fur Coat"),
     .description = $("Halves damage taken by Physical\n"
                      "moves. Does NOT double Defense."),
@@ -2358,13 +2358,13 @@ static const Ability FurCoat = {
     .breakable = TRUE,
 };
 
-static const Ability Magician = {
+constexpr Ability Magician = {
     .name = $("Magician"),
     .description = $("Steals the foe's held item after\n"
                      "using a non-contact move."),
 };
 
-static const Ability Bulletproof = {
+constexpr Ability Bulletproof = {
     .name = $("Bulletproof"),
     .description = $("Immune to projectile, ball, or\n"
                      "bomb-based moves."),
@@ -2376,13 +2376,13 @@ static const Ability Bulletproof = {
     .breakable = TRUE,
 };
 
-static const Ability Competitive = {
+constexpr Ability Competitive = {
     .name = $("Competitive"),
     .description = $("Raises Sp. Atk by two stages if\n"
                      "stats are lowered by an enemy."),
 };
 
-static const Ability StrongJaw = {
+constexpr Ability StrongJaw = {
     .name = $("Strong Jaw"),
     .description = $("Boosts the power of bite/fang\n"
                      "moves by 1.3x."),
@@ -2392,14 +2392,14 @@ static const Ability StrongJaw = {
         },
 };
 
-static const Ability Refrigerate = {
+constexpr Ability Refrigerate = {
     .name = $("Refrigerate"),
     .description = $("Normal-type moves become Ice-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_ICE),
 };
 
-static const Ability SweetVeil = {
+constexpr Ability SweetVeil = {
     .name = $("Sweet Veil"),
     .description = $("This Pokémon and its ally are\n"
                      "immune to sleep."),
@@ -2411,7 +2411,7 @@ static const Ability SweetVeil = {
     .breakable = TRUE,
 };
 
-static const Ability StanceChange = {
+constexpr Ability StanceChange = {
     .name = $("Stance Change"),
     .description = $("Turns into Blade or Shield form\n"
                      "depending on move used."),
@@ -2419,14 +2419,14 @@ static const Ability StanceChange = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability GaleWings = {
+constexpr Ability GaleWings = {
     .name = $("Gale Wings"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's Flying-type moves."),
     .onPriority = GALE_WINGS_CLONE(TYPE_FLYING),
 };
 
-static const Ability MegaLauncher = {
+constexpr Ability MegaLauncher = {
     .name = $("Mega Launcher"),
     .description = $("Boosts Beam/Pump/Cannon/Shot/\n"
                      "Gun/Pulse, etc. moves by 1.3x."),
@@ -2437,7 +2437,7 @@ static const Ability MegaLauncher = {
     .megaLauncherBoost = TRUE,
 };
 
-static const Ability GrassPelt = {
+constexpr Ability GrassPelt = {
     .name = $("Grass Pelt"),
     .description = $("This Pokémon's Defense gets a\n"
                      "1.5x boost in Grassy Terrain."),
@@ -2448,27 +2448,27 @@ static const Ability GrassPelt = {
     .breakable = TRUE,
 };
 
-static const Ability Symbiosis = {
+constexpr Ability Symbiosis = {
     .name = $("Symbiosis"),
     .description = $("Passes own item to its ally if\n"
                      "said ally consumes its item."),
 };
 
-static const Ability ToughClaws = {
+constexpr Ability ToughClaws = {
     .name = $("Tough Claws"),
     .description = $("Boosts the power of contact\n"
                      "moves by 1.3x."),
     .onOffensiveMultiplier = BigPecks.onOffensiveMultiplier,
 };
 
-static const Ability Pixilate = {
+constexpr Ability Pixilate = {
     .name = $("Pixilate"),
     .description = $("Normal-type moves become Fairy-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_FAIRY),
 };
 
-static const Ability Gooey = {
+constexpr Ability Gooey = {
     .name = $("Gooey"),
     .description = $("Lowers Speed of enemies that\n"
                      "make contact with this Pokémon."),
@@ -2483,14 +2483,14 @@ static const Ability Gooey = {
     },
 };
 
-static const Ability Aerilate = {
+constexpr Ability Aerilate = {
     .name = $("Aerilate"),
     .description = $("Normal-type moves become Flying-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_FLYING),
 };
 
-static const Ability ParentalBond = {
+constexpr Ability ParentalBond = {
     .name = $("Parental Bond"),
     .description = $("Moves hit twice. 1st hit at 100%\n"
                      "power, 2nd hit at 25%."),
@@ -2498,7 +2498,7 @@ static const Ability ParentalBond = {
     .resistsFortKnox = TRUE,
 };
 
-static const Ability DarkAura = {
+constexpr Ability DarkAura = {
     .name = $("Dark Aura"),
     .description = $("Boosts Dark moves by 1.33x for\n"
                      "all while this Pokémon is out."),
@@ -2514,7 +2514,7 @@ static const Ability DarkAura = {
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
-static const Ability FairyAura = {
+constexpr Ability FairyAura = {
     .name = $("Fairy Aura"),
     .description = $("Boosts Fairy moves by 1.33x for\n"
                      "all while this Pokémon is out."),
@@ -2530,7 +2530,7 @@ static const Ability FairyAura = {
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
-static const Ability AuraBreak = {
+constexpr Ability AuraBreak = {
     .name = $("Aura Break"),
     .description = $("Cancels aura abilities and makes\n"
                      "them 25% weaker instead."),
@@ -2538,7 +2538,7 @@ static const Ability AuraBreak = {
     .breakable = TRUE,
 };
 
-static const Ability PrimordialSea = {
+constexpr Ability PrimordialSea = {
     .name = $("Primordial Sea"),
     .description = $("Heavy Rain until switched out.\n"
                      "Fire-type moves are unusable."),
@@ -2550,7 +2550,7 @@ static const Ability PrimordialSea = {
     },
 };
 
-static const Ability DesolateLand = {
+constexpr Ability DesolateLand = {
     .name = $("Desolate Land"),
     .description = $("Intense Sun until switched out.\n"
                      "Water-type moves are unusable."),
@@ -2562,7 +2562,7 @@ static const Ability DesolateLand = {
     },
 };
 
-static const Ability DeltaStream = {
+constexpr Ability DeltaStream = {
     .name = $("Delta Stream"),
     .description = $("Strong Winds until switched out.\n"
                      "Weather-based moves not usable."),
@@ -2580,7 +2580,7 @@ static const Ability DeltaStream = {
     },
 };
 
-static const Ability Stamina = {
+constexpr Ability Stamina = {
     .name = $("Stamina"),
     .description = $("Getting hit raises Def by +1.\n"
                      "Critical hits maximize Defense."),
@@ -2599,7 +2599,7 @@ static const Ability Stamina = {
     },
 };
 
-static const Ability WimpOut = {
+constexpr Ability WimpOut = {
     .name = $("Wimp Out"),
     .description = $("At 1/2 of max HP or below,\n"
                      "instantly switches out."),
@@ -2614,14 +2614,14 @@ static const Ability WimpOut = {
     },
 };
 
-static const Ability EmergencyExit = {
+constexpr Ability EmergencyExit = {
     .name = $("Emergency Exit"),
     .description = $("At 1/2 of max HP or below,\n"
                      "instantly switches out."),
     .onDefender = WimpOut.onDefender,
 };
 
-static const Ability WaterCompaction = {
+constexpr Ability WaterCompaction = {
     .name = $("Water Compaction"),
     .description = $("Takes 1/2 dmg from Water-type\n"
                      "moves. +2 Def when hit by those."),
@@ -2641,7 +2641,7 @@ static const Ability WaterCompaction = {
     .breakable = TRUE,
 };
 
-static const Ability Merciless = {
+constexpr Ability Merciless = {
     .name = $("Merciless"),
     .description = $("100% crit if targetting slowed,\n"
                      "poisoned, paralyzed, or bleeding foes."),
@@ -2655,7 +2655,7 @@ static const Ability Merciless = {
     },
 };
 
-static const Ability ShieldsDown = {
+constexpr Ability ShieldsDown = {
     .name = $("Shields Down"),
     .description = $("At 1/2 of max HP or below,\n"
                      "transforms into Core form."),
@@ -2700,7 +2700,7 @@ static const Ability ShieldsDown = {
     .unsuppressable = TRUE,
 };
 
-static const Ability Stakeout = {
+constexpr Ability Stakeout = {
     .name = $("Stakeout"),
     .description = $("Deals double damage to opponents\n"
                      "being switched in."),
@@ -2710,7 +2710,7 @@ static const Ability Stakeout = {
         },
 };
 
-static const Ability WaterBubble = {
+constexpr Ability WaterBubble = {
     .name = $("Water Bubble"),
     .description = $("Halves Fire dmg taken, no burns,\n"
                      "doubles power of its Water moves."),
@@ -2727,7 +2727,7 @@ static const Ability WaterBubble = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability Steelworker = {
+constexpr Ability Steelworker = {
     .name = $("Steelworker"),
     .description = $("Boosts the power of Steel-type\n"
                      "moves by 1.3x."),
@@ -2737,7 +2737,7 @@ static const Ability Steelworker = {
         },
 };
 
-static const Ability Berserk = {
+constexpr Ability Berserk = {
     .name = $("Berserk"),
     .description = $("Boosts Sp. Atk by one stage when\n"
                      "at 1/2 of max HP or lower."),
@@ -2753,7 +2753,7 @@ static const Ability Berserk = {
     },
 };
 
-static const Ability SlushRush = {
+constexpr Ability SlushRush = {
     .name = $("Slush Rush"),
     .description = $("This Pokémon's Speed gets a\n"
                      "1.5x boost in hail."),
@@ -2763,7 +2763,7 @@ static const Ability SlushRush = {
         },
 };
 
-static const Ability LongReach = {
+constexpr Ability LongReach = {
     .name = $("Long Reach"),
     .description = $("Doesn't make contact. Boosts\n"
                      "Phys. non-contact moves by 1.2x."),
@@ -2773,7 +2773,7 @@ static const Ability LongReach = {
         },
 };
 
-static const Ability LiquidVoice = {
+constexpr Ability LiquidVoice = {
     .name = $("Liquid Voice"),
     .description = $("Sound moves get a 1.2x boost\n"
                      "and become Water if Normal."),
@@ -2788,7 +2788,7 @@ static const Ability LiquidVoice = {
     },
 };
 
-static const Ability Triage = {
+constexpr Ability Triage = {
     .name = $("Triage"),
     .description = $("Moves that have a healing effect\n"
                      "gain +3 priority."),
@@ -2798,14 +2798,14 @@ static const Ability Triage = {
     },
 };
 
-static const Ability Galvanize = {
+constexpr Ability Galvanize = {
     .name = $("Galvanize"),
     .description = $("Normal-type moves become Elec.-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_ELECTRIC),
 };
 
-static const Ability SurgeSurfer = {
+constexpr Ability SurgeSurfer = {
     .name = $("Surge Surfer"),
     .description = $("If Electric Terrain is active,\n"
                      "gets a 1.5x Speed boost."),
@@ -2815,7 +2815,7 @@ static const Ability SurgeSurfer = {
         },
 };
 
-static const Ability Schooling = {
+constexpr Ability Schooling = {
     .name = $("Schooling"),
     .description = $("If Lv. 20 or more: changes into\n"
                      "School form until 1/4 HP or less."),
@@ -2853,7 +2853,7 @@ static int DisguiseReformHandler(int ability, int battler, AbilityCallType callT
     BattleScriptCall(BattleScript_AttackerFormChange);
     return TRUE;
 }
-static const Ability Disguise = {
+constexpr Ability Disguise = {
     .name = $("Disguise"),
     .description = $("Protects once against an attack.\n"
                      "Restores protection in fog."),
@@ -2875,7 +2875,7 @@ static const Ability Disguise = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability BattleBond = {
+constexpr Ability BattleBond = {
     .name = $("Battle Bond"),
     .description = $("Transforms into Battle Bond form\n"
                      "after dealing a KO."),
@@ -2913,7 +2913,7 @@ static const Ability BattleBond = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability PowerConstruct = {
+constexpr Ability PowerConstruct = {
     .name = $("Power Construct"),
     .description = $("At 1/2 of max HP or below,\n"
                      "transforms into Complete form."),
@@ -2932,7 +2932,7 @@ static const Ability PowerConstruct = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Corrosion = {
+constexpr Ability Corrosion = {
     .name = $("Corrosion"),
     .description = $("Steel-types take Supereffective\n"
                      "from Poison. Can poison any type."),
@@ -2948,7 +2948,7 @@ static const Ability Corrosion = {
     },
 };
 
-static const Ability Comatose = {
+constexpr Ability Comatose = {
     .name = $("Comatose"),
     .description = $("Can move, but is always asleep.\n"
                      "Immune to status conditions."),
@@ -2965,7 +2965,7 @@ static const Ability Comatose = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability QueenlyMajesty = {
+constexpr Ability QueenlyMajesty = {
     .name = $("Queenly Majesty"),
     .description = $("Protects itself and ally from\n"
                      "priority moves."),
@@ -2980,7 +2980,7 @@ static const Ability QueenlyMajesty = {
     .breakable = TRUE,
 };
 
-static const Ability InnardsOut = {
+constexpr Ability InnardsOut = {
     .name = $("Innards Out"),
     .description = $("If KO'd, deals as much damage as\n"
                      "what the fatal attack dealt."),
@@ -2995,7 +2995,7 @@ static const Ability InnardsOut = {
     },
 };
 
-static const Ability Dancer = {
+constexpr Ability Dancer = {
     .name = $("Dancer"),
     .description = $("Copies dance moves used by\n"
                      "others."),
@@ -3005,7 +3005,7 @@ static const Ability Dancer = {
     },
 };
 
-static const Ability Battery = {
+constexpr Ability Battery = {
     .name = $("Battery"),
     .description = $("Grants a 1.3x power boost to\n"
                      "ally's Special attacks."),
@@ -3016,7 +3016,7 @@ static const Ability Battery = {
     .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
 
-static const Ability Fluffy = {
+constexpr Ability Fluffy = {
     .name = $("Fluffy"),
     .description = $("Takes 1/2 dmg from contact moves\n"
                      "but Fire moves hurt it 2x more."),
@@ -3028,7 +3028,7 @@ static const Ability Fluffy = {
     .breakable = TRUE,
 };
 
-static const Ability Dazzling = {
+constexpr Ability Dazzling = {
     .name = $("Dazzling"),
     .description = $("Protects itself and ally from\n"
                      "priority moves."),
@@ -3037,7 +3037,7 @@ static const Ability Dazzling = {
     .breakable = TRUE,
 };
 
-static const Ability SoulHeart = {
+constexpr Ability SoulHeart = {
     .name = $("Soul-Heart"),
     .description = $("KOs dealt anywhere on the field\n"
                      "raise Sp. Atk by one stage."),
@@ -3050,14 +3050,14 @@ static const Ability SoulHeart = {
     .onBattlerFaintsFor = APPLY_ON_ANY,
 };
 
-static const Ability TanglingHair = {
+constexpr Ability TanglingHair = {
     .name = $("Tangling Hair"),
     .description = $("Lowers Speed of enemies that\n"
                      "make contact with this Pokémon."),
     .onDefender = Gooey.onDefender,
 };
 
-static const Ability Receiver = {
+constexpr Ability Receiver = {
     .name = $("Receiver"),
     .description = $("In Double Battles, copies its\n"
                      "fainting partner's ability."),
@@ -3078,7 +3078,7 @@ static const Ability Receiver = {
     .onBattlerFaintsFor = APPLY_ON_ALLY,
 };
 
-static const Ability PowerOfAlchemy = {
+constexpr Ability PowerOfAlchemy = {
     .name = $("Power of Alchemy"),
     .description = $("Transmutes berries on entry.\n"
                      "Transmutes items when lost."),
@@ -3130,7 +3130,7 @@ static const Ability PowerOfAlchemy = {
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-static const Ability BeastBoost = {
+constexpr Ability BeastBoost = {
     .name = $("Beast Boost"),
     .description = $("Dealing a KO raises highest\n"
                      "calculated stat by one stage."),
@@ -3138,7 +3138,7 @@ static const Ability BeastBoost = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability RksSystem = {
+constexpr Ability RksSystem = {
     .name = $("RKS System"),
     .description = $("Held Memory determines its type.\n"
                      "Also has Protean + Adaptability."),
@@ -3148,7 +3148,7 @@ static const Ability RksSystem = {
     .adaptability = TRUE,
 };
 
-static const Ability ElectricSurge = {
+constexpr Ability ElectricSurge = {
     .name = $("Electro Surge"),
     .description = $("Casts Electric Terrain on entry.\n"
                      "Lasts 8 turns."),
@@ -3164,7 +3164,7 @@ static const Ability ElectricSurge = {
     },
 };
 
-static const Ability PsychicSurge = {
+constexpr Ability PsychicSurge = {
     .name = $("Psychic Surge"),
     .description = $("Casts Psychic Terrain on entry.\n"
                      "Lasts 8 turns."),
@@ -3176,7 +3176,7 @@ static const Ability PsychicSurge = {
     },
 };
 
-static const Ability MistySurge = {
+constexpr Ability MistySurge = {
     .name = $("Misty Surge"),
     .description = $("Casts Misty Terrain on entry.\n"
                      "Lasts 8 turns."),
@@ -3188,7 +3188,7 @@ static const Ability MistySurge = {
     },
 };
 
-static const Ability GrassySurge = {
+constexpr Ability GrassySurge = {
     .name = $("Grassy Surge"),
     .description = $("Casts Grassy Terrain on entry.\n"
                      "Lasts 8 turns."),
@@ -3200,26 +3200,26 @@ static const Ability GrassySurge = {
     },
 };
 
-static const Ability FullMetalBody = {
+constexpr Ability FullMetalBody = {
     .name = $("Full Metal Body"),
     .description = $("Immune to stat drops."),
 };
 
-static const Ability ShadowShield = {
+constexpr Ability ShadowShield = {
     .name = $("Shadow Shield"),
     .description = $("At full HP, halves damage taken\n"
                      "from attacks"),
     .onDefensiveMultiplier = Multiscale.onDefensiveMultiplier,
 };
 
-static const Ability PrismArmor = {
+constexpr Ability PrismArmor = {
     .name = $("Prism Armor"),
     .description = $("Takes 35% less damage from\n"
                      "Super-effective moves."),
     .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
 };
 
-static const Ability Neuroforce = {
+constexpr Ability Neuroforce = {
     .name = $("Neuroforce"),
     .description = $("Grants an additional 1.25x boost\n"
                      "to Super-effective moves."),
@@ -3229,7 +3229,7 @@ static const Ability Neuroforce = {
         },
 };
 
-static const Ability IntrepidSword = {
+constexpr Ability IntrepidSword = {
     .name = $("Intrepid Sword"),
     .description = $("On entry, raises Attack by one\n"
                      "stage."),
@@ -3242,7 +3242,7 @@ static const Ability IntrepidSword = {
     },
 };
 
-static const Ability DauntlessShield = {
+constexpr Ability DauntlessShield = {
     .name = $("Dauntless Shield"),
     .description = $("On entry, raises Defense by one\n"
                      "stage."),
@@ -3255,19 +3255,19 @@ static const Ability DauntlessShield = {
     },
 };
 
-static const Ability Libero = {
+constexpr Ability Libero = {
     .name = $("Libero"),
     .description = $("Before using a move, changes its\n"
                      "type to the move's type."),
     .protean = TRUE,
 };
 
-static const Ability BallFetch = {
+constexpr Ability BallFetch = {
     .name = $("Ball Fetch"),
     .description = $("No effect in battle."),
 };
 
-static const Ability CottonDown = {
+constexpr Ability CottonDown = {
     .name = $("Cotton Down"),
     .description = $("Lowers the Speed of all foes\n"
                      "by one stage when hit."),
@@ -3283,20 +3283,20 @@ static const Ability CottonDown = {
     },
 };
 
-static const Ability PropellerTail = {
+constexpr Ability PropellerTail = {
     .name = $("Propeller Tail"),
     .description = $("Isn't affected by target\n"
                      "redirection."),
 };
 
-static const Ability MirrorArmor = {
+constexpr Ability MirrorArmor = {
     .name = $("Mirror Armor"),
     .description = $("Bounces back any stat drops\n"
                      "inflicted by an enemy."),
     .breakable = TRUE,
 };
 
-static const Ability GulpMissile = {
+constexpr Ability GulpMissile = {
     .name = $("Gulp Missile"),
     .description = $("Gulps a prey after Dive/Surf.\n"
                      "If hit, shoots prey at enemy."),
@@ -3327,13 +3327,13 @@ static const Ability GulpMissile = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Stalwart = {
+constexpr Ability Stalwart = {
     .name = $("Stalwart"),
     .description = $("Isn't affected by target\n"
                      "redirection."),
 };
 
-static const Ability SteamEngine = {
+constexpr Ability SteamEngine = {
     .name = $("Steam Engine"),
     .description = $("Maximizes Speed if hit by a\n"
                      "Fire-type or Water-type attack."),
@@ -3348,7 +3348,7 @@ static const Ability SteamEngine = {
     },
 };
 
-static const Ability PunkRock = {
+constexpr Ability PunkRock = {
     .name = $("Punk Rock"),
     .description = $("Sound moves deal 1.3x more dmg.\n"
                      "Takes -50% dmg from sound moves."),
@@ -3363,7 +3363,7 @@ static const Ability PunkRock = {
     .breakable = TRUE,
 };
 
-static const Ability SandSpit = {
+constexpr Ability SandSpit = {
     .name = $("Sand Spit"),
     .description = $("If hit, summons a sandstorm that\n"
                      "lasts 8 turns."),
@@ -3381,7 +3381,7 @@ static const Ability SandSpit = {
     },
 };
 
-static const Ability IceScales = {
+constexpr Ability IceScales = {
     .name = $("Ice Scales"),
     .description = $("Halves damage taken by Special\n"
                      "moves. Does NOT double SpDef."),
@@ -3392,7 +3392,7 @@ static const Ability IceScales = {
     .breakable = TRUE,
 };
 
-static const Ability Ripen = {
+constexpr Ability Ripen = {
     .name = $("Ripen"),
     .description = $("Doubles resistance, healing and\n"
                      "stat raises provided by Berries."),
@@ -3409,7 +3409,7 @@ int IceFaceReformHandler(int ability, int battler, AbilityCallType callType) {
     BattleScriptCall(BattleScript_AttackerFormChange);
     return TRUE;
 }
-static const Ability IceFace = {
+constexpr Ability IceFace = {
     .name = $("Ice Face"),
     .description = $("Protects once against an attack.\n"
                      "Restores protection under hail."),
@@ -3421,7 +3421,7 @@ static const Ability IceFace = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability PowerSpot = {
+constexpr Ability PowerSpot = {
     .name = $("Power Spot"),
     .description = $("Grants a 1.3x boost to ally's\n"
                      "attacks."),
@@ -3487,7 +3487,7 @@ int HandleMimicry(u8 battler, int ability, AbilityCallType endType) {
 
     return FALSE;
 }
-static const Ability Mimicry = {
+constexpr Ability Mimicry = {
     .name = $("Mimicry"),
     .description = $("Changes type depending on active\n"
                      "Terrain."),
@@ -3503,7 +3503,7 @@ static const Ability Mimicry = {
     },
 };
 
-static const Ability ScreenCleaner = {
+constexpr Ability ScreenCleaner = {
     .name = $("Screen Cleaner"),
     .description = $("Clears screens and Aurora Veil\n"
                      "from both sides on entry."),
@@ -3514,7 +3514,7 @@ static const Ability ScreenCleaner = {
     },
 };
 
-static const Ability SteelySpirit = {
+constexpr Ability SteelySpirit = {
     .name = $("Steely Spirit"),
     .description = $("Boosts own & ally's Steel-type\n"
                      "moves by 1.3x."),
@@ -3525,7 +3525,7 @@ static const Ability SteelySpirit = {
     .onOffensiveMultiplierFor = APPLY_ON_ALLY,
 };
 
-static const Ability PerishBody = {
+constexpr Ability PerishBody = {
     .name = $("Perish Body"),
     .description = $("If hit, casts Perish Song."),
     .onDefender = +[](ON_DEFENDER) -> int {
@@ -3547,7 +3547,7 @@ static const Ability PerishBody = {
     },
 };
 
-static const Ability WanderingSpirit = {
+constexpr Ability WanderingSpirit = {
     .name = $("WandrngSprit"),
     .description = $("Trades ability with attacker on\n"
                      "contact."),
@@ -3577,7 +3577,7 @@ static const Ability WanderingSpirit = {
     },
 };
 
-static const Ability GorillaTactics = {
+constexpr Ability GorillaTactics = {
     .name = $("Gorilla Tactics"),
     .description = $("Raises own Atk by 1.5x, but can\n"
                      "only use the first chosen move."),
@@ -3587,13 +3587,13 @@ static const Ability GorillaTactics = {
         },
 };
 
-static const Ability NeutralizingGas = {
+constexpr Ability NeutralizingGas = {
     .name = $("Neutralizing Gas"),
     .description = $("All abilities are nullified."),
     .unsuppressable = TRUE,
 };
 
-static const Ability PastelVeil = {
+constexpr Ability PastelVeil = {
     .name = $("Pastel Veil"),
     .description = $("Casts Safeguard on entry."),
     .onEntry = +[](ON_ENTRY) -> int {
@@ -3609,7 +3609,7 @@ static const Ability PastelVeil = {
     },
 };
 
-static const Ability HungerSwitch = {
+constexpr Ability HungerSwitch = {
     .name = $("HungerSwitch"),
     .description = $("Changes between Full and Hangry\n"
                      "forms after each turn."),
@@ -3642,18 +3642,18 @@ static const Ability HungerSwitch = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability QuickDraw = {
+constexpr Ability QuickDraw = {
     .name = $("Quick Draw"),
     .description = $("30% chance to move first."),
 };
 
-static const Ability UnseenFist = {
+constexpr Ability UnseenFist = {
     .name = $("Unseen Fist"),
     .description = $("Its contact moves hit enemies,\n"
                      "even if they protect themselves."),
 };
 
-static const Ability CuriousMedicine = {
+constexpr Ability CuriousMedicine = {
     .name = $("CuriusMedicn"),
     .description = $("Resets its ally's stat changes\n"
                      "on entry."),
@@ -3669,7 +3669,7 @@ static const Ability CuriousMedicine = {
     },
 };
 
-static const Ability Transistor = {
+constexpr Ability Transistor = {
     .name = $("Transistor"),
     .description = $("Boosts the power of Electric-\n"
                      "type moves by 1.5x."),
@@ -3679,7 +3679,7 @@ static const Ability Transistor = {
         },
 };
 
-static const Ability DragonsMaw = {
+constexpr Ability DragonsMaw = {
     .name = $("Dragon's Maw"),
     .description = $("Boosts the power of Dragon-type\n"
                      "moves by 1.5x."),
@@ -3689,21 +3689,21 @@ static const Ability DragonsMaw = {
         },
 };
 
-static const Ability ChillingNeigh = {
+constexpr Ability ChillingNeigh = {
     .name = $("ChillngNeigh"),
     .description = $("KOs raise Attack by one stage."),
     .onBattlerFaints = Moxie.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability GrimNeigh = {
+constexpr Ability GrimNeigh = {
     .name = $("Grim Neigh"),
     .description = $("KOs raise Sp. Atk by one stage."),
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, STAT_SPATK); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability AsOneIceRider = {
+constexpr Ability AsOneIceRider = {
     .name = $("As One"),
     .description = $("Unnerve + Chilling Neigh."),
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE); },
@@ -3719,7 +3719,7 @@ static const Ability AsOneIceRider = {
     .unnerve = TRUE,
 };
 
-static const Ability AsOneShadowRider = {
+constexpr Ability AsOneShadowRider = {
     .name = $("As One"),
     .description = $("Unnerve + Grim Neigh."),
     .onEntry = AsOneIceRider.onEntry,
@@ -3735,14 +3735,14 @@ static const Ability AsOneShadowRider = {
     .unnerve = TRUE,
 };
 
-static const Ability Chloroplast = {
+constexpr Ability Chloroplast = {
     .name = $("Chloroplast"),
     .description = $("Weather Ball, Solar Beam/Blade,\n"
                      "Growth act as if used in sun."),
     .chloroplast = TRUE,
 };
 
-static const Ability Whiteout = {
+constexpr Ability Whiteout = {
     .name = $("Whiteout"),
     .description = $("Ups highest attacking stat\n"
                      "by 1.5x in hail."),
@@ -3753,7 +3753,7 @@ static const Ability Whiteout = {
         },
 };
 
-static const Ability Pyromancy = {
+constexpr Ability Pyromancy = {
     .name = $("Pyromancy"),
     .description = $("Moves inflict burn 5x as often."),
     .onModifyEffectChance =
@@ -3762,7 +3762,7 @@ static const Ability Pyromancy = {
         },
 };
 
-static const Ability KeenEdge = {
+constexpr Ability KeenEdge = {
     .name = $("Keen Edge"),
     .description = $("Boosts the power of slashing\n"
                      "moves by 1.3x."),
@@ -3772,7 +3772,7 @@ static const Ability KeenEdge = {
         },
 };
 
-static const Ability PrismScales = {
+constexpr Ability PrismScales = {
     .name = $("Prism Scales"),
     .description = $("Takes 30% less damage from\n"
                      "Special attacks."),
@@ -3783,7 +3783,7 @@ static const Ability PrismScales = {
     .breakable = TRUE,
 };
 
-static const Ability PowerFists = {
+constexpr Ability PowerFists = {
     .name = $("Power Fists"),
     .description = $("Iron Fist moves target Special\n"
                      "Defense and get a 1.3x boost."),
@@ -3794,7 +3794,7 @@ static const Ability PowerFists = {
     },
 };
 
-static const Ability SandSong = {
+constexpr Ability SandSong = {
     .name = $("Sand Song"),
     .description = $("Sound moves get a 1.2x boost\n"
                      "and become Ground if Normal."),
@@ -3806,7 +3806,7 @@ static const Ability SandSong = {
     },
 };
 
-static const Ability Rampage = {
+constexpr Ability Rampage = {
     .name = $("Rampage"),
     .description = $("No recharge after a KO, if it\n"
                      "usually would need to recharge."),
@@ -3819,14 +3819,14 @@ static const Ability Rampage = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Vengeance = {
+constexpr Ability Vengeance = {
     .name = $("Vengeance"),
     .description = $("Boosts Ghost-type moves by 1.2x,\n"
                      "or 1.5x when below 1/3 HP."),
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_GHOST),
 };
 
-static const Ability BlitzBoxer = {
+constexpr Ability BlitzBoxer = {
     .name = $("Blitz Boxer"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's punching moves."),
@@ -3837,7 +3837,7 @@ static const Ability BlitzBoxer = {
     },
 };
 
-static const Ability AntarcticBird = {
+constexpr Ability AntarcticBird = {
     .name = $("Antarctic Bird"),
     .description = $("Ice-type and Flying-type moves\n"
                      "get a 1.3x power boost."),
@@ -3847,14 +3847,14 @@ static const Ability AntarcticBird = {
         },
 };
 
-static const Ability Immolate = {
+constexpr Ability Immolate = {
     .name = $("Immolate"),
     .description = $("Normal-type moves become Fire-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_FIRE),
 };
 
-static const Ability Crystallize = {
+constexpr Ability Crystallize = {
     .name = $("Crystallize"),
     .description = $("Rock-type moves become Ice-type\n"
                      "moves and get a 1.1x boost."),
@@ -3869,7 +3869,7 @@ static const Ability Crystallize = {
     },
 };
 
-static const Ability Electrocytes = {
+constexpr Ability Electrocytes = {
     .name = $("Electrocytes"),
     .description = $("Boosts the power of Electric-\n"
                      "type moves by 1.25x."),
@@ -3879,7 +3879,7 @@ static const Ability Electrocytes = {
         },
 };
 
-static const Ability Aerodynamics = {
+constexpr Ability Aerodynamics = {
     .name = $("Aerodynamics"),
     .description = $("Boosts Speed instead of being\n"
                      "hit by Flying-type moves."),
@@ -3891,7 +3891,7 @@ static const Ability Aerodynamics = {
     .breakable = TRUE,
 };
 
-static const Ability ChristmasSpirit = {
+constexpr Ability ChristmasSpirit = {
     .name = $("Christmas Spirit"),
     .description = $("Takes 50% less damage if hail is\n"
                      "active."),
@@ -3902,7 +3902,7 @@ static const Ability ChristmasSpirit = {
     .breakable = TRUE,
 };
 
-static const Ability ExploitWeakness = {
+constexpr Ability ExploitWeakness = {
     .name = $("Exploit Weakness"),
     .description = $("Deals 1.25x and targets lowest\n"
                      "defense vs statused foes."),
@@ -3923,7 +3923,7 @@ static const Ability ExploitWeakness = {
     },
 };
 
-static const Ability GroundShock = {
+constexpr Ability GroundShock = {
     .name = $("Ground Shock"),
     .description = $("Target Grounds aren't immune to\n"
                      "Electric but resist it instead."),
@@ -3936,21 +3936,21 @@ static const Ability GroundShock = {
     },
 };
 
-static const Ability AncientIdol = {
+constexpr Ability AncientIdol = {
     .name = $("Ancient Idol"),
     .description = $("Uses Def and Sp. Def instead of\n"
                      "Atk and Sp. Atk when attacking."),
     .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; },
 };
 
-static const Ability MysticPower = {
+constexpr Ability MysticPower = {
     .name = $("Mystic Power"),
     .description = $("All moves gain the 1.5x power\n"
                      "boost from STAB."),
     .onStab = +[](ON_STAB) -> int { return TRUE; },
 };
 
-static const Ability Perfectionist = {
+constexpr Ability Perfectionist = {
     .name = $("Perfectionist"),
     .description = $("Move BP < 51 BP: +1 to crit rate.\n"
                      "Move BP < 26 BP: +1 priority too."),
@@ -3966,7 +3966,7 @@ static const Ability Perfectionist = {
     },
 };
 
-static const Ability GrowingTooth = {
+constexpr Ability GrowingTooth = {
     .name = $("Growing Tooth"),
     .description = $("Raises Attack by one stage after\n"
                      "using a biting move."),
@@ -3981,7 +3981,7 @@ static const Ability GrowingTooth = {
     },
 };
 
-static const Ability Inflatable = {
+constexpr Ability Inflatable = {
     .name = $("Inflatable"),
     .description = $("Ups Def and Sp. Def by one stage\n"
                      "if hit by Flying or Fire moves."),
@@ -3995,14 +3995,14 @@ static const Ability Inflatable = {
     },
 };
 
-static const Ability AuroraBorealis = {
+constexpr Ability AuroraBorealis = {
     .name = $("Aurora Borealis"),
     .description = $("Boosts the power of Ice-type\n"
                      "moves by 1.5x (due to STAB)."),
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_ICE; },
 };
 
-static const Ability Avenger = {
+constexpr Ability Avenger = {
     .name = $("Avenger"),
     .description = $("If a party Pokémon fainted last\n"
                      "turn, next move gets 1.5x boost."),
@@ -4012,7 +4012,7 @@ static const Ability Avenger = {
         },
 };
 
-static const Ability LetsRoll = {
+constexpr Ability LetsRoll = {
     .name = $("Let's Roll"),
     .description = $("Casts Defense Curl on entry."),
     .onEntry = +[](ON_ENTRY) -> int {
@@ -4025,12 +4025,12 @@ static const Ability LetsRoll = {
     },
 };
 
-static const Ability Aquatic = {
+constexpr Ability Aquatic = {
     .name = $("Aquatic"),
     .description = $("Adds Water type to itself."),
 };
 
-static const Ability LoudBang = {
+constexpr Ability LoudBang = {
     .name = $("Loud Bang"),
     .description = $("Sound-based moves have 50%\n"
                      "chance to confuse the foe."),
@@ -4044,7 +4044,7 @@ static const Ability LoudBang = {
     },
 };
 
-static const Ability LeadCoat = {
+constexpr Ability LeadCoat = {
     .name = $("Lead Coat"),
     .description = $("Takes 40% less from Phys. moves.\n"
                      "This Pokémon's Speed is 0.9x."),
@@ -4059,34 +4059,34 @@ static const Ability LeadCoat = {
     .breakable = TRUE,
 };
 
-static const Ability Amphibious = {
+constexpr Ability Amphibious = {
     .name = $("Amphibious"),
     .description = $("Boosts the power of Water-type\n"
                      "moves by 1.5x (due to STAB)."),
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
 };
 
-static const Ability Grounded = {
+constexpr Ability Grounded = {
     .name = $("Grounded"),
     .description = $("Adds Ground type to itself."),
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GROUND); },
 };
 
-static const Ability Earthbound = {
+constexpr Ability Earthbound = {
     .name = $("Earthbound"),
     .description = $("Boosts Ground-type moves by\n"
                      "1.2x, or 1.5x when under 1/3 HP."),
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_GROUND),
 };
 
-static const Ability FightingSpirit = {
+constexpr Ability FightingSpirit = {
     .name = $("Fighting Spirit"),
     .description = $("Normal-type moves become Fight.-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_FIGHTING),
 };
 
-static const Ability FelineProwess = {
+constexpr Ability FelineProwess = {
     .name = $("Feline Prowess"),
     .description = $("Doubles own Sp. Atk stat.\n"
                      "Boosts raw stat, not base stat."),
@@ -4096,7 +4096,7 @@ static const Ability FelineProwess = {
         },
 };
 
-static const Ability CoilUp = {
+constexpr Ability CoilUp = {
     .name = $("Coil Up"),
     .description = $("On entry, gives +1 priority once\n"
                      "to the first biting move used."),
@@ -4109,7 +4109,7 @@ static const Ability CoilUp = {
     },
 };
 
-static const Ability Fossilized = {
+constexpr Ability Fossilized = {
     .name = $("Fossilized"),
     .description = $("Halves dmg taken by Rock moves.\n"
                      "Boosts own Rock moves by 1.2x."),
@@ -4124,7 +4124,7 @@ static const Ability Fossilized = {
     .breakable = TRUE,
 };
 
-static const Ability MagicalDust = {
+constexpr Ability MagicalDust = {
     .name = $("Magical Dust"),
     .description = $("If hit by a contact move, gives\n"
                      "Psychic type to the attacker."),
@@ -4140,7 +4140,7 @@ static const Ability MagicalDust = {
     },
 };
 
-static const Ability Dreamcatcher = {
+constexpr Ability Dreamcatcher = {
     .name = $("Dreamcatcher"),
     .description = $("Doubles move power if anyone on\n"
                      "the field is asleep."),
@@ -4155,7 +4155,7 @@ static const Ability Dreamcatcher = {
         },
 };
 
-static const Ability Nocturnal = {
+constexpr Ability Nocturnal = {
     .name = $("Nocturnal"),
     .description = $("Boosts own Dark moves by 1.25x.\n"
                      "Takes -25% dmg from Dark/Fairy."),
@@ -4170,7 +4170,7 @@ static const Ability Nocturnal = {
     .breakable = TRUE,
 };
 
-static const Ability SelfSufficient = {
+constexpr Ability SelfSufficient = {
     .name = $("Self Sufficient"),
     .description = $("Recovers 1/16 of max HP at the\n"
                      "end of each turn."),
@@ -4187,26 +4187,26 @@ static const Ability SelfSufficient = {
     },
 };
 
-static const Ability Tectonize = {
+constexpr Ability Tectonize = {
     .name = $("Tectonize"),
     .description = $("Normal-type moves become Ground-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_GROUND),
 };
 
-static const Ability IceAge = {
+constexpr Ability IceAge = {
     .name = $("Ice Age"),
     .description = $("Adds Ice type to itself."),
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ICE); },
 };
 
-static const Ability HalfDrake = {
+constexpr Ability HalfDrake = {
     .name = $("Half Drake"),
     .description = $("Adds Dragon type to itself."),
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_DRAGON); },
 };
 
-static const Ability Liquified = {
+constexpr Ability Liquified = {
     .name = $("Liquified"),
     .description = $("Takes 1/2 dmg from contact moves\n"
                      "but Water moves hurt it 2x more."),
@@ -4218,7 +4218,7 @@ static const Ability Liquified = {
     .breakable = TRUE,
 };
 
-static const Ability Dragonfly = {
+constexpr Ability Dragonfly = {
     .name = $("Dragonfly"),
     .description = $("Adds Dragon type to itself.\n"
                      "Avoids Ground attacks."),
@@ -4227,7 +4227,7 @@ static const Ability Dragonfly = {
     .levitate = TRUE,
 };
 
-static const Ability Dragonslayer = {
+constexpr Ability Dragonslayer = {
     .name = $("Dragonslayer"),
     .description = $("Deals 1.5x damage to Dragons.\n"
                      "Takes 0.5x damage from Dragons."),
@@ -4242,7 +4242,7 @@ static const Ability Dragonslayer = {
     .breakable = TRUE,
 };
 
-static const Ability Mountaineer = {
+constexpr Ability Mountaineer = {
     .name = $("Mountaineer"),
     .description = $("Immune to Rock-type attacks and\n"
                      "Stealth Rock damage."),
@@ -4254,20 +4254,20 @@ static const Ability Mountaineer = {
     .breakable = TRUE,
 };
 
-static const Ability Hydrate = {
+constexpr Ability Hydrate = {
     .name = $("Hydrate"),
     .description = $("Normal-type moves become Water-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_WATER),
 };
 
-static const Ability Metallic = {
+constexpr Ability Metallic = {
     .name = $("Metallic"),
     .description = $("Adds Steel type to itself."),
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_STEEL); },
 };
 
-static const Ability Permafrost = {
+constexpr Ability Permafrost = {
     .name = $("Permafrost"),
     .description = $("Takes 25% less damage from\n"
                      "Super-effective moves."),
@@ -4278,7 +4278,7 @@ static const Ability Permafrost = {
     .breakable = TRUE,
 };
 
-static const Ability PrimalArmor = {
+constexpr Ability PrimalArmor = {
     .name = $("Primal Armor"),
     .description = $("Takes 50% less damage from\n"
                      "Super-effective moves."),
@@ -4289,7 +4289,7 @@ static const Ability PrimalArmor = {
     .breakable = TRUE,
 };
 
-static const Ability RagingBoxer = {
+constexpr Ability RagingBoxer = {
     .name = $("Raging Boxer"),
     .description = $("Punching moves hit twice. 1st hit\n"
                      "at 100% power, 2nd hit at 40%."),
@@ -4299,7 +4299,7 @@ static const Ability RagingBoxer = {
     },
 };
 
-static const Ability AirBlower = {
+constexpr Ability AirBlower = {
     .name = $("Air Blower"),
     .description = $("Casts a 3-turn Tailwind on entry."),
     .onEntry = +[](ON_ENTRY) -> int {
@@ -4317,7 +4317,7 @@ static const Ability AirBlower = {
     },
 };
 
-static const Ability Juggernaut = {
+constexpr Ability Juggernaut = {
     .name = $("Juggernaut"),
     .description = $("Paralysis-immune. Uses 20% of its\n"
                      "Def when using a contact move."),
@@ -4333,14 +4333,14 @@ static const Ability Juggernaut = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability ShortCircuit = {
+constexpr Ability ShortCircuit = {
     .name = $("Short Circuit"),
     .description = $("Boosts Elec.-type moves by 1.2x,\n"
                      "or 1.5x when below 1/3 HP."),
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_ELECTRIC),
 };
 
-static const Ability MajesticBird = {
+constexpr Ability MajesticBird = {
     .name = $("Majestic Bird"),
     .description = $("Boosts own Sp. Atk by 1.5x.\n"
                      "Boosts raw stat, not base stat."),
@@ -4350,26 +4350,26 @@ static const Ability MajesticBird = {
         },
 };
 
-static const Ability Phantom = {
+constexpr Ability Phantom = {
     .name = $("Phantom"),
     .description = $("Adds Ghost type to itself."),
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GHOST); },
 };
 
-static const Ability Intoxicate = {
+constexpr Ability Intoxicate = {
     .name = $("Intoxicate"),
     .description = $("Normal-type moves become Poison-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_POISON),
 };
 
-static const Ability Impenetrable = {
+constexpr Ability Impenetrable = {
     .name = $("Impenetrable"),
     .description = $("Only damaged by attacks."),
     .magicGuard = TRUE,
 };
 
-static const Ability Hypnotist = {
+constexpr Ability Hypnotist = {
     .name = $("Hypnotist"),
     .description = $("Hypnosis accuracy is 90% when\n"
                      "used by this Pokémon."),
@@ -4380,7 +4380,7 @@ static const Ability Hypnotist = {
     },
 };
 
-static const Ability Overwhelm = {
+constexpr Ability Overwhelm = {
     .name = $("Overwhelm"),
     .description = $("Hits Fairies with Dragon moves.\n"
                      "Immune to Intimidate and Scare."),
@@ -4391,14 +4391,14 @@ static const Ability Overwhelm = {
     .tauntImmune = TRUE,
 };
 
-static const Ability Scare = {
+constexpr Ability Scare = {
     .name = $("Scare"),
     .description = $("Lowers foes' Sp. Atk by one\n"
                      "stage on entry."),
     .onEntry = UseIntimidateClone,
 };
 
-static const Ability MajesticMoth = {
+constexpr Ability MajesticMoth = {
     .name = $("Majestic Moth"),
     .description = $("On entry, raises highest\n"
                      "calculated stat by one stage."),
@@ -4410,7 +4410,7 @@ static const Ability MajesticMoth = {
     },
 };
 
-static const Ability SoulEater = {
+constexpr Ability SoulEater = {
     .name = $("Soul Eater"),
     .description = $("Dealing a KO heals 1/4 of this\n"
                      "Pokémon's max HP."),
@@ -4432,14 +4432,14 @@ ON_EITHER(SoulLinker) {
     BattleScriptCall(BattleScript_AttackerSoulLinker);
     return TRUE;
 }
-static const Ability SoulLinker = {
+constexpr Ability SoulLinker = {
     .name = $("Soul Linker"),
     .description = $("Enemies take all the damage they\n"
                      "deal, same for this Pokémon."),
     ON_EITHER_ABILITY(SoulLinker),
 };
 
-static const Ability SweetDreams = {
+constexpr Ability SweetDreams = {
     .name = $("Sweet Dreams"),
     .description = $("Heals 1/8 of max HP every turn\n"
                      "if asleep. Immune to Bad Dreams."),
@@ -4456,7 +4456,7 @@ static const Ability SweetDreams = {
     },
 };
 
-static const Ability BadLuck = {
+constexpr Ability BadLuck = {
     .name = $("Bad Luck"),
     .description = $("Foes hit the lowest damage roll,\n"
                      "have 5% less acc. and can't crit."),
@@ -4470,7 +4470,7 @@ static const Ability BadLuck = {
     .breakable = TRUE,
 };
 
-static const Ability HauntedSpirit = {
+constexpr Ability HauntedSpirit = {
     .name = $("Haunted Spirit"),
     .description = $("When this Pokémon is KO'd, casts\n"
                      "a Curse on the attacker."),
@@ -4487,7 +4487,7 @@ static const Ability HauntedSpirit = {
     },
 };
 
-static const Ability ElectricBurst = {
+constexpr Ability ElectricBurst = {
     .name = $("Electric Burst"),
     .description = $("Boosts own Elec. moves by 1.35x,\n"
                      "takes 10% of dmg dealt as recoil."),
@@ -4502,7 +4502,7 @@ static const Ability ElectricBurst = {
         },
 };
 
-static const Ability RawWood = {
+constexpr Ability RawWood = {
     .name = $("Raw Wood"),
     .description = $("Halves dmg taken by Grass moves.\n"
                      "Boosts own Grass moves by 1.2x."),
@@ -4517,7 +4517,7 @@ static const Ability RawWood = {
     .breakable = TRUE,
 };
 
-static const Ability Solenoglyphs = {
+constexpr Ability Solenoglyphs = {
     .name = $("Solenoglyphs"),
     .description = $("Biting moves have a 50% chance to\n"
                      "badly poison the target."),
@@ -4531,7 +4531,7 @@ static const Ability Solenoglyphs = {
     },
 };
 
-static const Ability SpiderLair = {
+constexpr Ability SpiderLair = {
     .name = $("Spider Lair"),
     .description = $("Casts Sticky Web on entry.\n"
                      "Lasts 5 turns."),
@@ -4547,7 +4547,7 @@ static const Ability SpiderLair = {
     },
 };
 
-static const Ability FatalPrecision = {
+constexpr Ability FatalPrecision = {
     .name = $("Fatal Precision"),
     .description = $("Super-effective moves never miss\n"
                      "and get a 1.2x boost."),
@@ -4562,14 +4562,14 @@ static const Ability FatalPrecision = {
     },
 };
 
-static const Ability FortKnox = {
+constexpr Ability FortKnox = {
     .name = $("Fort Knox"),
     .description = $("Blocks most damage boosting\n"
                      "and multihit abilities."),
     .fortKnox = TRUE,
 };
 
-static const Ability Seaweed = {
+constexpr Ability Seaweed = {
     .name = $("Seaweed"),
     .description = $("Takes 1/2 dmg from Fire if Grass,\n"
                      "doubles Grass dmg on Fire-types."),
@@ -4584,14 +4584,14 @@ static const Ability Seaweed = {
     .breakable = TRUE,
 };
 
-static const Ability PsychicMind = {
+constexpr Ability PsychicMind = {
     .name = $("Psychic Mind"),
     .description = $("Boosts Psychic-type moves by\n"
                      "1.2x, or 1.5x when under 1/3 HP."),
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_PSYCHIC),
 };
 
-static const Ability PoisonAbsorb = {
+constexpr Ability PoisonAbsorb = {
     .name = $("Poison Absorb"),
     .description = $("Heals 25% of max HP when hit\n"
                      "by a Poison-type move."),
@@ -4602,7 +4602,7 @@ static const Ability PoisonAbsorb = {
     .breakable = TRUE,
 };
 
-static const Ability Scavenger = {
+constexpr Ability Scavenger = {
     .name = $("Scavenger"),
     .description = $("Dealing a KO heals 1/4 of this\n"
                      "Pokémon's max HP."),
@@ -4610,7 +4610,7 @@ static const Ability Scavenger = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability TwistedDimension = {
+constexpr Ability TwistedDimension = {
     .name = $("Twist. Dimension"),
     .description = $("Sets up Trick Room on\n"
                      "entry, lasts 3 turns."),
@@ -4625,7 +4625,7 @@ static const Ability TwistedDimension = {
     },
 };
 
-static const Ability MultiHeaded = {
+constexpr Ability MultiHeaded = {
     .name = $("Multi Headed"),
     .description = $("Hits as many times,\n"
                      "as it has heads."),
@@ -4637,7 +4637,7 @@ static const Ability MultiHeaded = {
     .resistsFortKnox = TRUE,
 };
 
-static const Ability NorthWind = {
+constexpr Ability NorthWind = {
     .name = $("North Wind"),
     .description = $("3 turns Aurora Veil on entry.\n"
                      "Immune to Hail damage."),
@@ -4657,7 +4657,7 @@ static const Ability NorthWind = {
     },
 };
 
-static const Ability Overcharge = {
+constexpr Ability Overcharge = {
     .name = $("Overcharge"),
     .description = $("Electric is super effective vs\n"
                      "Electric. Can paralyze Electric."),
@@ -4673,7 +4673,7 @@ static const Ability Overcharge = {
     },
 };
 
-static const Ability ViolentRush = {
+constexpr Ability ViolentRush = {
     .name = $("Violent Rush"),
     .description = $("Boosts Speed by 50% + Attack\n"
                      "by 20% on first turn."),
@@ -4683,14 +4683,14 @@ static const Ability ViolentRush = {
     },
 };
 
-static const Ability FlamingSoul = {
+constexpr Ability FlamingSoul = {
     .name = $("Flaming Soul"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's Fire-type moves."),
     .onPriority = GALE_WINGS_CLONE(TYPE_FIRE),
 };
 
-static const Ability SagePower = {
+constexpr Ability SagePower = {
     .name = $("Sage Power"),
     .description = $("Ups Special Attack by 50%\n"
                      "and locks move."),
@@ -4700,7 +4700,7 @@ static const Ability SagePower = {
         },
 };
 
-static const Ability BoneZone = {
+constexpr Ability BoneZone = {
     .name = $("Bone Zone"),
     .description = $("Bone moves ignore immunities and\n"
                      "deal 2x on not very effective."),
@@ -4717,7 +4717,7 @@ static const Ability BoneZone = {
         },
 };
 
-static const Ability WeatherControl = {
+constexpr Ability WeatherControl = {
     .name = $("Weather Control"),
     .description = $("Negates all weather based\n"
                      "moves from enemies."),
@@ -4725,7 +4725,7 @@ static const Ability WeatherControl = {
     .breakable = TRUE,
 };
 
-static const Ability SpeedForce = {
+constexpr Ability SpeedForce = {
     .name = $("Speed Force"),
     .description = $("Contact moves use 20% of its\n"
                      "Speed stat additionally."),
@@ -4735,7 +4735,7 @@ static const Ability SpeedForce = {
         },
 };
 
-static const Ability SeaGuardian = {
+constexpr Ability SeaGuardian = {
     .name = $("Sea Guardian"),
     .description = $("Ups highest stat by +1\n"
                      "on entry when it rains."),
@@ -4750,7 +4750,7 @@ static const Ability SeaGuardian = {
     },
 };
 
-static const Ability MoltenDown = {
+constexpr Ability MoltenDown = {
     .name = $("Molten Down"),
     .description = $("Fire-type is super effective\n"
                      "against Rock-type."),
@@ -4762,21 +4762,21 @@ static const Ability MoltenDown = {
     },
 };
 
-static const Ability HyperAggressive = {
+constexpr Ability HyperAggressive = {
     .name = $("Hyper Aggressive"),
     .description = $("Moves hit twice.\n"
                      "Second hit does 25% damage."),
     .onParentalBond = ParentalBond.onParentalBond,
 };
 
-static const Ability Flock = {
+constexpr Ability Flock = {
     .name = $("Flock"),
     .description = $("Boosts Flying-type moves by 1.2x,\n"
                      "or 1.5x when below 1/3 HP."),
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_FLYING),
 };
 
-static const Ability FieldExplorer = {
+constexpr Ability FieldExplorer = {
     .name = $("Field Explorer"),
     .description = $("Boosts field moves by 50%.\n"
                      "Cut, Surf, Strength etc."),
@@ -4786,7 +4786,7 @@ static const Ability FieldExplorer = {
         },
 };
 
-static const Ability Striker = {
+constexpr Ability Striker = {
     .name = $("Striker"),
     .description = $("Boosts the power of kicking\n"
                      "moves by 1.3x."),
@@ -4796,14 +4796,14 @@ static const Ability Striker = {
         },
 };
 
-static const Ability FrozenSoul = {
+constexpr Ability FrozenSoul = {
     .name = $("Frozen Soul"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's Ice-type moves."),
     .onPriority = GALE_WINGS_CLONE(TYPE_ICE),
 };
 
-static const Ability Predator = {
+constexpr Ability Predator = {
     .name = $("Predator"),
     .description = $("Dealing a KO heals 1/4 of this\n"
                      "Pokémon's max HP."),
@@ -4811,7 +4811,7 @@ static const Ability Predator = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Looter = {
+constexpr Ability Looter = {
     .name = $("Looter"),
     .description = $("Dealing a KO heals 1/4 of this\n"
                      "Pokémon's max HP."),
@@ -4819,7 +4819,7 @@ static const Ability Looter = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability LunarEclipse = {
+constexpr Ability LunarEclipse = {
     .name = $("Lunar Eclipse"),
     .description = $("Fairy & Dark gains STAB.\n"
                      "Hypnosis has 1.5x accuracy."),
@@ -4827,7 +4827,7 @@ static const Ability LunarEclipse = {
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_DARK || moveType == TYPE_FAIRY; },
 };
 
-static const Ability SolarFlare = {
+constexpr Ability SolarFlare = {
     .name = $("Solar Flare"),
     .description = $("Chloroplast + Immolate.\n"
                      "Fire moves gain STAB."),
@@ -4837,14 +4837,14 @@ static const Ability SolarFlare = {
     .chloroplast = TRUE,
 };
 
-static const Ability PowerCore = {
+constexpr Ability PowerCore = {
     .name = $("Power Core"),
     .description = $("The Pokémon uses +20% of its\n"
                      "Defense or SpDef during moves."),
     .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF] += 20; },
 };
 
-static const Ability SightingSystem = {
+constexpr Ability SightingSystem = {
     .name = $("Sighting System"),
     .description = $("Moves always hit. Moves last\n"
                      "for moves less than 80% accuracy."),
@@ -4856,14 +4856,14 @@ static const Ability SightingSystem = {
     },
 };
 
-static const Ability BadCompany = {
+constexpr Ability BadCompany = {
     .name = $("Bad Company"),
     .description = $("Not implemented right now.\n"
                      "Has no effect."),
     .randomizerBanned = TRUE,
 };
 
-static const Ability Opportunist = {
+constexpr Ability Opportunist = {
     .name = $("Opportunist"),
     .description = $("If target has less than 1/2 HP,\n"
                      "single-target moves get +1 prio."),
@@ -4873,7 +4873,7 @@ static const Ability Opportunist = {
     },
 };
 
-static const Ability GiantWings = {
+constexpr Ability GiantWings = {
     .name = $("Giant Wings"),
     .description = $("Boosts the power of wing, wind\n"
                      "or air-based moves by 1.3x."),
@@ -4883,7 +4883,7 @@ static const Ability GiantWings = {
         },
 };
 
-static const Ability Momentum = {
+constexpr Ability Momentum = {
     .name = $("Momentum"),
     .description = $("Contact moves use the Speed stat\n"
                      "for damage calculation."),
@@ -4893,7 +4893,7 @@ static const Ability Momentum = {
         },
 };
 
-static const Ability GripPincer = {
+constexpr Ability GripPincer = {
     .name = $("Grip Pincer"),
     .description = $("50% chance to trap. Then ignores\n"
                      "Defense & accuracy checks."),
@@ -4921,7 +4921,7 @@ static const Ability GripPincer = {
     },
 };
 
-static const Ability BigLeaves = {
+constexpr Ability BigLeaves = {
     .name = $("Big Leaves"),
     .description = $("Chloroplast + Chlorophyll + Leaf\n"
                      "Guard + Harvest + Solar Power."),
@@ -4936,7 +4936,7 @@ static const Ability BigLeaves = {
     .chloroplast = TRUE,
 };
 
-static const Ability PreciseFist = {
+constexpr Ability PreciseFist = {
     .name = $("Precise Fist"),
     .description = $("Punching moves get +1 crit\n"
                      "and 5x effect chance."),
@@ -4950,7 +4950,7 @@ static const Ability PreciseFist = {
         },
 };
 
-static const Ability Deadeye = {
+constexpr Ability Deadeye = {
     .name = $("Deadeye"),
     .description = $("Never misses. Arrow and cannon\n"
                      "moves hit weakest defense."),
@@ -4968,7 +4968,7 @@ static const Ability Deadeye = {
     },
 };
 
-static const Ability Artillery = {
+constexpr Ability Artillery = {
     .name = $("Artillery"),
     .description = $("Mega Launcher moves always hit.\n"
                      "Single-target now hits both foes."),
@@ -4978,14 +4978,14 @@ static const Ability Artillery = {
     },
 };
 
-static const Ability Amplifier = {
+constexpr Ability Amplifier = {
     .name = $("Amplifier"),
     .description = $("Ups sound moves by 30% and\n"
                      "makes them hit both foes."),
     .onOffensiveMultiplier = PunkRock.onOffensiveMultiplier,
 };
 
-static const Ability IceDew = {
+constexpr Ability IceDew = {
     .name = $("Ice Dew"),
     .description = $("Boosts highest Atk instead of\n"
                      "being hit by Ice-type moves."),
@@ -4997,7 +4997,7 @@ static const Ability IceDew = {
     .breakable = TRUE,
 };
 
-static const Ability SunWorship = {
+constexpr Ability SunWorship = {
     .name = $("Sun Worship"),
     .description = $("Ups highest stat by +1\n"
                      "on entry when sunny."),
@@ -5011,14 +5011,14 @@ static const Ability SunWorship = {
     },
 };
 
-static const Ability Pollinate = {
+constexpr Ability Pollinate = {
     .name = $("Pollinate"),
     .description = $("Normal-type moves become Bug-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_BUG),
 };
 
-static const Ability VolcanoRage = {
+constexpr Ability VolcanoRage = {
     .name = $("Volcano Rage"),
     .description = $("Triggers 50 BP Eruption after\n"
                      "using a Fire-type move."),
@@ -5030,7 +5030,7 @@ static const Ability VolcanoRage = {
     },
 };
 
-static const Ability ColdRebound = {
+constexpr Ability ColdRebound = {
     .name = $("Cold Rebound"),
     .description = $("Attacks with Icy Wind\n"
                      "when hit by a contact move."),
@@ -5043,27 +5043,27 @@ static const Ability ColdRebound = {
     },
 };
 
-static const Ability LowBlow = {
+constexpr Ability LowBlow = {
     .name = $("Low Blow"),
     .description = $("Attacks with 40BP Feint\n"
                      "Attack on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40); },
 };
 
-static const Ability Nosferatu = {
+constexpr Ability Nosferatu = {
     .name = $("Nosferatu"),
     .description = $("Contact moves do +20% damage\n"
                      "and heal 1/2 of damage dealt."),
 };
 
-static const Ability Spectralize = {
+constexpr Ability Spectralize = {
     .name = $("Spectralize"),
     .description = $("Normal-type moves become Ghost-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_GHOST),
 };
 
-static const Ability SpectralShroud = {
+constexpr Ability SpectralShroud = {
     .name = $("Spectral Shroud"),
     .description = $("Spectralize + 30% chance\n"
                      "to badly poison the foe."),
@@ -5080,7 +5080,7 @@ static const Ability SpectralShroud = {
     .onMoveType = Spectralize.onMoveType,
 };
 
-static const Ability Discipline = {
+constexpr Ability Discipline = {
     .name = $("Discipline"),
     .description = $("Rampage moves no longer trap you.\n"
                      "Can't be confused or intimidated."),
@@ -5093,7 +5093,7 @@ static const Ability Discipline = {
     .tauntImmune = TRUE,
 };
 
-static const Ability Thundercall = {
+constexpr Ability Thundercall = {
     .name = $("Thundercall"),
     .description = $("Triggers Smite at 20% power\n"
                      "when using an Electric move."),
@@ -5105,7 +5105,7 @@ static const Ability Thundercall = {
     },
 };
 
-static const Ability MarineApex = {
+constexpr Ability MarineApex = {
     .name = $("Marine Apex"),
     .description = $("50% more damage to Water-\n"
                      "types + Infiltrator."),
@@ -5116,7 +5116,7 @@ static const Ability MarineApex = {
         },
 };
 
-static const Ability MightyHorn = {
+constexpr Ability MightyHorn = {
     .name = $("Mighty Horn"),
     .description = $("Boosts the power of horn and\n"
                      "drill-based by 1.3x."),
@@ -5126,7 +5126,7 @@ static const Ability MightyHorn = {
         },
 };
 
-static const Ability HardenedSheath = {
+constexpr Ability HardenedSheath = {
     .name = $("Hardened Sheath"),
     .description = $("Ups Attack by +1\n"
                      "when using horn moves."),
@@ -5141,7 +5141,7 @@ static const Ability HardenedSheath = {
     },
 };
 
-static const Ability ArcticFur = {
+constexpr Ability ArcticFur = {
     .name = $("Arctic Fur"),
     .description = $("Weakens incoming physical\n"
                      "and special moves by 35%."),
@@ -5149,7 +5149,7 @@ static const Ability ArcticFur = {
     .breakable = TRUE,
 };
 
-static const Ability Lethargy = {
+constexpr Ability Lethargy = {
     .name = $("Lethargy"),
     .description = $("Damage drops 20% each turn to 20%.\n"
                      "Resets on switch-in."),
@@ -5182,7 +5182,7 @@ static const Ability Lethargy = {
         },
 };
 
-static const Ability IronBarrage = {
+constexpr Ability IronBarrage = {
     .name = $("Iron Barrage"),
     .description = $("Mega Launcher + Sighting System."),
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
@@ -5191,7 +5191,7 @@ static const Ability IronBarrage = {
     .megaLauncherBoost = TRUE,
 };
 
-static const Ability SteelBarrel = {
+constexpr Ability SteelBarrel = {
     .name = $("Steel Barrel"),
     .description = $("Immune to recoil damage, but not\n"
                      "immune to Explosion/crash dmg."),
@@ -5200,7 +5200,7 @@ static const Ability SteelBarrel = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability PyroShells = {
+constexpr Ability PyroShells = {
     .name = $("Pyro Shells"),
     .description = $("Triggers 50 BP Outburst after\n"
                      "using a Mega Launcher move."),
@@ -5212,7 +5212,7 @@ static const Ability PyroShells = {
     },
 };
 
-static const Ability FungalInfection = {
+constexpr Ability FungalInfection = {
     .name = $("Fungal Infection"),
     .description = $("Contact moves inflict\n"
                      "Leech Seed on the target."),
@@ -5229,7 +5229,7 @@ static const Ability FungalInfection = {
     },
 };
 
-static const Ability Parry = {
+constexpr Ability Parry = {
     .name = $("Parry"),
     .description = $("Counters contact with Mach\n"
                      "Punch. Takes 20% less damage."),
@@ -5243,7 +5243,7 @@ static const Ability Parry = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.8); },
 };
 
-static const Ability Scrapyard = {
+constexpr Ability Scrapyard = {
     .name = $("Scrapyard"),
     .description = $("Sets a layer of Spikes when hit\n"
                      "(contact move)."),
@@ -5257,14 +5257,14 @@ static const Ability Scrapyard = {
     },
 };
 
-static const Ability LooseQuills = {
+constexpr Ability LooseQuills = {
     .name = $("Loose Quills"),
     .description = $("Sets a layer of Spikes when hit\n"
                      "(contact move)."),
     .onDefender = Scrapyard.onDefender,
 };
 
-static const Ability ToxicDebris = {
+constexpr Ability ToxicDebris = {
     .name = $("Toxic Debris"),
     .description = $("Sets a layer of Toxic Spikes\n"
                      "when hit by contact moves."),
@@ -5278,7 +5278,7 @@ static const Ability ToxicDebris = {
     },
 };
 
-static const Ability Roundhouse = {
+constexpr Ability Roundhouse = {
     .name = $("Roundhouse"),
     .description = $("Kicks always hit.\n"
                      "Damages foes' weaker defenses."),
@@ -5299,14 +5299,14 @@ static const Ability Roundhouse = {
     },
 };
 
-static const Ability Mineralize = {
+constexpr Ability Mineralize = {
     .name = $("Mineralize"),
     .description = $("Normal-type moves become Rock-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_ROCK),
 };
 
-static const Ability LooseRocks = {
+constexpr Ability LooseRocks = {
     .name = $("Loose Rocks"),
     .description = $("Deploys Stealth Rocks\n"
                      "when hit by contact."),
@@ -5320,7 +5320,7 @@ static const Ability LooseRocks = {
     },
 };
 
-static const Ability SpinningTop = {
+constexpr Ability SpinningTop = {
     .name = $("Spinning Top"),
     .description = $("Fighting moves up speed +1\n"
                      "and clear hazards."),
@@ -5351,7 +5351,7 @@ static const Ability SpinningTop = {
     },
 };
 
-static const Ability RetributionBlow = {
+constexpr Ability RetributionBlow = {
     .name = $("Retribution Blow"),
     .description = $("Uses Hyper Beam if any foe\n"
                      "uses an stat boosting move."),
@@ -5370,7 +5370,7 @@ static const Ability RetributionBlow = {
     },
 };
 
-static const Ability Fearmonger = {
+constexpr Ability Fearmonger = {
     .name = $("Fearmonger"),
     .description = $("Intimidate + Scare; 10%\n"
                      "para chance on contact moves."),
@@ -5385,19 +5385,19 @@ static const Ability Fearmonger = {
     },
 };
 
-static const Ability KingsWrath = {
+constexpr Ability KingsWrath = {
     .name = $("King's Wrath"),
     .description = $("Lowering any stats on its\n"
                      "side raises Atk and Def."),
 };
 
-static const Ability QueensMourning = {
+constexpr Ability QueensMourning = {
     .name = $("Queen's Mourning"),
     .description = $("Lowering any stats on its\n"
                      "side raises SpAtk and SpDef."),
 };
 
-static const Ability ToxicSpill = {
+constexpr Ability ToxicSpill = {
     .name = $("Toxic Spill"),
     .description = $("Non-Poison-types take 1/8 dmg\n"
                      "every turn when on field."),
@@ -5448,7 +5448,7 @@ static const Ability ToxicSpill = {
     },
 };
 
-static const Ability DesertCloak = {
+constexpr Ability DesertCloak = {
     .name = $("Desert Cloak"),
     .description = $("Protects its side from status\n"
                      "and secondary effects in sand."),
@@ -5461,14 +5461,14 @@ static const Ability DesertCloak = {
     .breakable = TRUE,
 };
 
-static const Ability Draconize = {
+constexpr Ability Draconize = {
     .name = $("Draconize"),
     .description = $("Normal-type moves become Dragon-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_DRAGON),
 };
 
-static const Ability PrettyPrincess = {
+constexpr Ability PrettyPrincess = {
     .name = $("Pretty Princess"),
     .description = $("Does 50% more damage if the\n"
                      "target has any lowered stat."),
@@ -5478,14 +5478,14 @@ static const Ability PrettyPrincess = {
         },
 };
 
-static const Ability SelfRepair = {
+constexpr Ability SelfRepair = {
     .name = $("Self Repair"),
     .description = $("Self Sufficient + Natural Cure."),
     .onEndTurn = SelfSufficient.onEndTurn,
     .onExit = NaturalCure.onExit,
 };
 
-static const Ability AtomicBurst = {
+constexpr Ability AtomicBurst = {
     .name = $("Atomic Burst"),
     .description = $("When hit super-effectively,\n"
                      "triggers 50 BP Hyper Beam."),
@@ -5498,28 +5498,28 @@ static const Ability AtomicBurst = {
     },
 };
 
-static const Ability Hellblaze = {
+constexpr Ability Hellblaze = {
     .name = $("Hellblaze"),
     .description = $("Boosts Fire-type moves by 1.3x,\n"
                      "or 1.8x when below 1/3 HP."),
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_FIRE),
 };
 
-static const Ability Riptide = {
+constexpr Ability Riptide = {
     .name = $("Riptide"),
     .description = $("Boosts Water-type moves by 1.3x,\n"
                      "or 1.8x when below 1/3 HP."),
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_WATER),
 };
 
-static const Ability ForestRage = {
+constexpr Ability ForestRage = {
     .name = $("Forest Rage"),
     .description = $("Boosts Grass-type moves by 1.3x,\n"
                      "or 1.8x when below 1/3 HP."),
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_GRASS),
 };
 
-static const Ability PrimalMaw = {
+constexpr Ability PrimalMaw = {
     .name = $("Primal Maw"),
     .description = $("Biting moves hit twice.\n"
                      "2nd hit does 0.4x damage."),
@@ -5529,7 +5529,7 @@ static const Ability PrimalMaw = {
     },
 };
 
-static const Ability SweepingEdge = {
+constexpr Ability SweepingEdge = {
     .name = $("Sweeping Edge"),
     .description = $("Keen Edge moves always hit.\n"
                      "Single-target now hits both foes."),
@@ -5539,7 +5539,7 @@ static const Ability SweepingEdge = {
     },
 };
 
-static const Ability GiftedMind = {
+constexpr Ability GiftedMind = {
     .name = $("Gifted Mind"),
     .description = $("Nulls Psychic weakness;\n"
                      "status moves always hit."),
@@ -5555,7 +5555,7 @@ static const Ability GiftedMind = {
     .breakable = TRUE,
 };
 
-static const Ability HydroCircuit = {
+constexpr Ability HydroCircuit = {
     .name = $("Hydro Circuit"),
     .description = $("Electric moves +50%;\n"
                      "Water moves siphon 25% damage."),
@@ -5573,7 +5573,7 @@ static const Ability HydroCircuit = {
     .onOffensiveMultiplier = Transistor.onOffensiveMultiplier,
 };
 
-static const Ability Equinox = {
+constexpr Ability Equinox = {
     .name = $("Equinox"),
     .description = $("Boosts Atk or SpAtk to\n"
                      "match the higher value."),
@@ -5588,7 +5588,7 @@ static const Ability Equinox = {
         },
 };
 
-static const Ability Absorbant = {
+constexpr Ability Absorbant = {
     .name = $("Absorbant"),
     .description = $("Drain moves recover +50%\n"
                      "HP & apply Leech Seed."),
@@ -5605,7 +5605,7 @@ static const Ability Absorbant = {
     },
 };
 
-static const Ability Clueless = {
+constexpr Ability Clueless = {
     .name = $("Clueless"),
     .description = $("Negates Weather, Rooms\n"
                      "and Terrains."),
@@ -5613,7 +5613,7 @@ static const Ability Clueless = {
     .unsuppressable = TRUE,
 };
 
-static const Ability CheatingDeath = {
+constexpr Ability CheatingDeath = {
     .name = $("Cheating Death"),
     .description = $("Gets no damage for\n"
                      "the first two hits."),
@@ -5633,14 +5633,14 @@ static const Ability CheatingDeath = {
     .persistent = TRUE,
 };
 
-static const Ability CheapTactics = {
+constexpr Ability CheapTactics = {
     .name = $("Cheap Tactics"),
     .description = $("Attacks with Scratch\n"
                      "on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SCRATCH, 0); },
 };
 
-static const Ability Coward = {
+constexpr Ability Coward = {
     .name = $("Coward"),
     .description = $("Sets up Protect on switch-in.\n"
                      "Only works once."),
@@ -5655,14 +5655,14 @@ static const Ability Coward = {
     .persistent = TRUE,
 };
 
-static const Ability VoltRush = {
+constexpr Ability VoltRush = {
     .name = $("Volt Rush"),
     .description = $("At full HP, gives +1 priority to\n"
                      "its Electric-type moves."),
     .onPriority = GALE_WINGS_CLONE(TYPE_ELECTRIC),
 };
 
-static const Ability DuneTerror = {
+constexpr Ability DuneTerror = {
     .name = $("Dune Terror"),
     .description = $("Sand reduces damage by 35%.\n"
                      "Boosts Ground moves by 20%."),
@@ -5677,7 +5677,7 @@ static const Ability DuneTerror = {
     .breakable = TRUE,
 };
 
-static const Ability InfernalRage = {
+constexpr Ability InfernalRage = {
     .name = $("Infernal Rage"),
     .description = $("Fire-type moves are boosted\n"
                      "by 35% with 5% recoil."),
@@ -5692,7 +5692,7 @@ static const Ability InfernalRage = {
         },
 };
 
-static const Ability DualWield = {
+constexpr Ability DualWield = {
     .name = $("Dual Wield"),
     .description = $("Mega Launcher and Keen Edge\n"
                      "moves hit twice for 70% damage."),
@@ -5702,7 +5702,7 @@ static const Ability DualWield = {
     },
 };
 
-static const Ability ElementalCharge = {
+constexpr Ability ElementalCharge = {
     .name = $("Elemental Charge"),
     .description = $("20% chance to BRN/FRZ/PARA\n"
                      "with respective types."),
@@ -5733,7 +5733,7 @@ static const Ability ElementalCharge = {
     },
 };
 
-static const Ability Ambush = {
+constexpr Ability Ambush = {
     .name = $("Ambush"),
     .description = $("Guaranteed critical hit\n"
                      "on first turn."),
@@ -5743,7 +5743,7 @@ static const Ability Ambush = {
     },
 };
 
-static const Ability Atlas = {
+constexpr Ability Atlas = {
     .name = $("Atlas"),
     .description = $("Sets Gravity on entry for\n"
                      "8 turns."),
@@ -5758,7 +5758,7 @@ static const Ability Atlas = {
     },
 };
 
-static const Ability Radiance = {
+constexpr Ability Radiance = {
     .name = $("Radiance"),
     .description = $("+20% accuracy; Dark moves\n"
                      "fail when user is present."),
@@ -5772,7 +5772,7 @@ static const Ability Radiance = {
     .breakable = TRUE,
 };
 
-static const Ability JawsOfCarnage = {
+constexpr Ability JawsOfCarnage = {
     .name = $("Jaws of Carnage"),
     .description = $("Devours 1/2 of the foe\n"
                      "when defeating it."),
@@ -5788,7 +5788,7 @@ static const Ability JawsOfCarnage = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability AngelsWrath = {
+constexpr Ability AngelsWrath = {
     .name = $("Angel's Wrath"),
     .description = $("Drastically alters all\n"
                      "of the users moves."),
@@ -5925,7 +5925,7 @@ static const Ability AngelsWrath = {
     },
 };
 
-static const Ability PrismaticFur = {
+constexpr Ability PrismaticFur = {
     .name = $("Prismatic Fur"),
     .description = $("Color Change + Protean +\n"
                      "Fur Coat + Ice Scales."),
@@ -5934,7 +5934,7 @@ static const Ability PrismaticFur = {
     .colorChange = TRUE,
 };
 
-static const Ability ShockingJaws = {
+constexpr Ability ShockingJaws = {
     .name = $("Shocking Jaws"),
     .description = $("Biting moves have 50% chance\n"
                      "to paralyze the target."),
@@ -5948,7 +5948,7 @@ static const Ability ShockingJaws = {
     },
 };
 
-static const Ability FaeHunter = {
+constexpr Ability FaeHunter = {
     .name = $("Fae Hunter"),
     .description = $("Does 50% more damage to\n"
                      "Fairy-types."),
@@ -5958,7 +5958,7 @@ static const Ability FaeHunter = {
         },
 };
 
-static const Ability GravityWell = {
+constexpr Ability GravityWell = {
     .name = $("Gravity Well"),
     .description = $("Sets Gravity on entry for\n"
                      "5 turns."),
@@ -5973,7 +5973,7 @@ static const Ability GravityWell = {
     },
 };
 
-static const Ability Evaporate = {
+constexpr Ability Evaporate = {
     .name = $("Evaporate"),
     .description = $("Takes no damage and sets Mist\n"
                      "if hit by water."),
@@ -5984,7 +5984,7 @@ static const Ability Evaporate = {
     .breakable = TRUE,
 };
 
-static const Ability Lumberjack = {
+constexpr Ability Lumberjack = {
     .name = $("Lumberjack"),
     .description = $("1.5x damage to Grass types."),
     .onOffensiveMultiplier =
@@ -5993,7 +5993,7 @@ static const Ability Lumberjack = {
         },
 };
 
-static const Ability WellBakedBody = {
+constexpr Ability WellBakedBody = {
     .name = $("Well Baked Body"),
     .description = $("Boosts Defense sharply instead\n"
                      "of being hit by Fire-type moves."),
@@ -6006,7 +6006,7 @@ static const Ability WellBakedBody = {
     .absorbUp2 = TRUE,
 };
 
-static const Ability Furnace = {
+constexpr Ability Furnace = {
     .name = $("Furnace"),
     .description = $("User gains +2 Speed when\n"
                      "when hit by rocks."),
@@ -6030,7 +6030,7 @@ static const Ability Furnace = {
     },
 };
 
-static const Ability Electromorphosis = {
+constexpr Ability Electromorphosis = {
     .name = $("Electromorphosis"),
     .description = $("Charges up when getting hit."),
     .onDefender = +[](ON_DEFENDER) -> int {
@@ -6043,7 +6043,7 @@ static const Ability Electromorphosis = {
     },
 };
 
-static const Ability RockyPayload = {
+constexpr Ability RockyPayload = {
     .name = $("Rocky Payload"),
     .description = $("Boosts the power of Rock-type\n"
                      "and throwing moves by 1.5x."),
@@ -6053,7 +6053,7 @@ static const Ability RockyPayload = {
         },
 };
 
-static const Ability EarthEater = {
+constexpr Ability EarthEater = {
     .name = $("Earth Eater"),
     .description = $("Heals 25% of max HP when hit\n"
                      "by a Ground move."),
@@ -6064,20 +6064,20 @@ static const Ability EarthEater = {
     .breakable = TRUE,
 };
 
-static const Ability LingeringAroma = {
+constexpr Ability LingeringAroma = {
     .name = $("Lingering Aroma"),
     .description = $("If hit, makes the attacker's ability\n"
                      "Lingering Aroma."),
     .onDefender = Mummy.onDefender,
 };
 
-static const Ability FairyTale = {
+constexpr Ability FairyTale = {
     .name = $("Fairy Tale"),
     .description = $("Adds Fairy type to itself."),
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FAIRY); },
 };
 
-static const Ability RagingMoth = {
+constexpr Ability RagingMoth = {
     .name = $("Raging Moth"),
     .description = $("Fire moves hits twice,\n"
                      "both hits at 70% power."),
@@ -6087,14 +6087,14 @@ static const Ability RagingMoth = {
     },
 };
 
-static const Ability AdrenalineRush = {
+constexpr Ability AdrenalineRush = {
     .name = $("Adrenaline Rush"),
     .description = $("KOs raise Speed by one stage."),
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, STAT_SPEED); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Archmage = {
+constexpr Ability Archmage = {
     .name = $("Archmage"),
     .description = $("30% chance of adding a type\n"
                      "related effect to each move."),
@@ -6236,7 +6236,7 @@ static const Ability Archmage = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Cryomancy = {
+constexpr Ability Cryomancy = {
     .name = $("Cryomancy"),
     .description = $("Moves inflict frostbite\n"
                      "5x as often."),
@@ -6246,7 +6246,7 @@ static const Ability Cryomancy = {
         },
 };
 
-static const Ability PhantomPain = {
+constexpr Ability PhantomPain = {
     .name = $("Phantom Pain"),
     .description = $("Ghost type moves can hit normal\n"
                      "type pokemon for neutral damage."),
@@ -6259,34 +6259,34 @@ static const Ability PhantomPain = {
     },
 };
 
-static const Ability Purgatory = {
+constexpr Ability Purgatory = {
     .name = $("Purgatory"),
     .description = $("Boosts Ghost-type moves by 1.3x,\n"
                      "or 1.8x when below 1/3 HP."),
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_GHOST),
 };
 
-static const Ability Emanate = {
+constexpr Ability Emanate = {
     .name = $("Emanate"),
     .description = $("Normal-type moves become Psy.-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_PSYCHIC),
 };
 
-static const Ability KunoichiBlade = {
+constexpr Ability KunoichiBlade = {
     .name = $("Kunoichi's Blade"),
     .description = $("Technician + Skill Link."),
     .onOffensiveMultiplier = Technician.onOffensiveMultiplier,
     .skillLink = TRUE,
 };
 
-static const Ability MonkeyBusiness = {
+constexpr Ability MonkeyBusiness = {
     .name = $("Monkey Business"),
     .description = $("Uses Tickle on entry."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TICKLE, 0); },
 };
 
-static const Ability CombatSpecialist = {
+constexpr Ability CombatSpecialist = {
     .name = $("Combat Specialist"),
     .description = $("Boosts the power of punching and\n"
                      "kicking moves by 1.3x."),
@@ -6297,7 +6297,7 @@ static const Ability CombatSpecialist = {
         },
 };
 
-static const Ability JunglesGuard = {
+constexpr Ability JunglesGuard = {
     .name = $("Jungle's Guard"),
     .description = $("Protects Grass-type allies\n"
                      "from status and stat drops."),
@@ -6306,7 +6306,7 @@ static const Ability JunglesGuard = {
     .breakable = TRUE,
 };
 
-static const Ability HuntersHorn = {
+constexpr Ability HuntersHorn = {
     .name = $("Hunter's Horn"),
     .description = $("Boost horn moves and heals\n"
                      "1/4 HP when defeating an enemy."),
@@ -6315,7 +6315,7 @@ static const Ability HuntersHorn = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability PixiePower = {
+constexpr Ability PixiePower = {
     .name = $("Pixie Power"),
     .description = $("1.2x accuracy. Boosts Fairy\n"
                      "moves by 1.33x for all."),
@@ -6328,7 +6328,7 @@ static const Ability PixiePower = {
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
-static const Ability PlasmaLamp = {
+constexpr Ability PlasmaLamp = {
     .name = $("Plasma Lamp"),
     .description = $("Boost accuracy & power of Fire\n"
                      "& Electric type moves by 1.2x."),
@@ -6343,7 +6343,7 @@ static const Ability PlasmaLamp = {
     },
 };
 
-static const Ability MagmaEater = {
+constexpr Ability MagmaEater = {
     .name = $("Magma Eater"),
     .description = $("Predator + Molten Down."),
     .onBattlerFaints = SoulEater.onBattlerFaints,
@@ -6351,7 +6351,7 @@ static const Ability MagmaEater = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability SuperHotGoo = {
+constexpr Ability SuperHotGoo = {
     .name = $("Super Hot Goo"),
     .description = $("Inflicts burn and lowers\n"
                      "Speed on contact."),
@@ -6359,14 +6359,14 @@ static const Ability SuperHotGoo = {
     .onDefender = +[](ON_DEFENDER) -> int { return Gooey.onDefender(DELEGATE_DEFENDER) | FlameBody.onDefender(DELEGATE_DEFENDER); },
 };
 
-static const Ability Nika = {
+constexpr Ability Nika = {
     .name = $("Nika"),
     .description = $("Iron fist + Water moves\n"
                      "function normally under sun."),
     .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
 };
 
-static const Ability Archer = {
+constexpr Ability Archer = {
     .name = $("Archer"),
     .description = $("Boosts the power of arrow moves\n"
                      "by 1.3x."),
@@ -6376,13 +6376,13 @@ static const Ability Archer = {
         },
 };
 
-static const Ability ColdPlasma = {
+constexpr Ability ColdPlasma = {
     .name = $("Cold Plasma"),
     .description = $("Electric type moves now\n"
                      "inflict burn instead of paralysis."),
 };
 
-static const Ability SuperSlammer = {
+constexpr Ability SuperSlammer = {
     .name = $("Super Slammer"),
     .description = $("Boosts the power of hammer and\n"
                      "slamming moves by 1.3x."),
@@ -6392,7 +6392,7 @@ static const Ability SuperSlammer = {
         },
 };
 
-static const Ability InverseRoom = {
+constexpr Ability InverseRoom = {
     .name = $("Inversion"),
     .description = $("Sets up Inverse Room on\n"
                      "entry, lasts 3 turns."),
@@ -6407,13 +6407,13 @@ static const Ability InverseRoom = {
     },
 };
 
-static const Ability Accelerate = {
+constexpr Ability Accelerate = {
     .name = $("Accelerate"),
     .description = $("Moves that need a charge turn\n"
                      "are now used instantly."),
 };
 
-static const Ability FrostBurn = {
+constexpr Ability FrostBurn = {
     .name = $("Frost Burn"),
     .description = $("Triggers 40BP Ice Beam after\n"
                      "using a Fire-type move."),
@@ -6425,7 +6425,7 @@ static const Ability FrostBurn = {
     },
 };
 
-static const Ability ItchyDefense = {
+constexpr Ability ItchyDefense = {
     .name = $("Itchy Defense"),
     .description = $("Causes infestation when\n"
                      "hit by a contact move."),
@@ -6448,7 +6448,7 @@ static const Ability ItchyDefense = {
     },
 };
 
-static const Ability Generator = {
+constexpr Ability Generator = {
     .name = $("Generator"),
     .description = $("Charges up once on entry or\n"
                      "when electric terrain is active."),
@@ -6485,21 +6485,21 @@ static const Ability Generator = {
     .persistent = TRUE,
 };
 
-static const Ability MoonSpirit = {
+constexpr Ability MoonSpirit = {
     .name = $("Moon Spirit"),
     .description = $("Fairy & Dark gains STAB.\n"
                      "Moonlight recovers 75% HP."),
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FAIRY || moveType == TYPE_DARK; },
 };
 
-static const Ability DustCloud = {
+constexpr Ability DustCloud = {
     .name = $("Dust Cloud"),
     .description = $("Attacks with Sand Attack\n"
                      "on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SAND_ATTACK, 0); },
 };
 
-static const Ability BerserkerRage = {
+constexpr Ability BerserkerRage = {
     .name = $("Berserker Rage"),
     .description = $("Berserk + Rampage."),
     .onDefender = Berserk.onDefender,
@@ -6507,14 +6507,14 @@ static const Ability BerserkerRage = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Trickster = {
+constexpr Ability Trickster = {
     .name = $("Trickster"),
     .description = $("Uses Disable\n"
                      "on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DISABLE, 0); },
 };
 
-static const Ability SandGuard = {
+constexpr Ability SandGuard = {
     .name = $("Sand Guard"),
     .description = $("Blocks priority and reduces\n"
                      "special damage by 1/2 in sand."),
@@ -6529,13 +6529,13 @@ static const Ability SandGuard = {
     .breakable = TRUE,
 };
 
-static const Ability NaturalRecovery = {
+constexpr Ability NaturalRecovery = {
     .name = $("Natural Recovery"),
     .description = $("Natural Cure + Regenerator."),
     .onExit = +[](ON_EXIT) -> int { return NaturalCure.onExit(DELEGATE_EXIT) | Regenerator.onExit(DELEGATE_EXIT); },
 };
 
-static const Ability WindRider = {
+constexpr Ability WindRider = {
     .name = $("Wind Rider"),
     .description = $("Increases attack in tailwind or\n"
                      "when hit by wind move."),
@@ -6554,7 +6554,7 @@ static const Ability WindRider = {
     .breakable = TRUE,
 };
 
-static const Ability SoothingAroma = {
+constexpr Ability SoothingAroma = {
     .name = $("Soothing Aroma"),
     .description = $("Cures party status on entry."),
     .onEntry = +[](ON_ENTRY) -> int {
@@ -6581,14 +6581,14 @@ static const Ability SoothingAroma = {
     },
 };
 
-static const Ability PrimAndProper = {
+constexpr Ability PrimAndProper = {
     .name = $("Prim and Proper"),
     .description = $("Wonder Skin + Cute Charm."),
     .onDefender = CuteCharm.onDefender,
     .fortKnox = TRUE,
 };
 
-static const Ability SuperStrain = {
+constexpr Ability SuperStrain = {
     .name = $("Super Strain"),
     .description = $("KOs lower Attack by +1.\n"
                      "Take 25% recoil damage."),
@@ -6604,7 +6604,7 @@ static const Ability SuperStrain = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability TippingPoint = {
+constexpr Ability TippingPoint = {
     .name = $("Tipping Point"),
     .description = $("Getting hit raises SpAtk.\n"
                      "Critical hits maximize SpAtk."),
@@ -6623,7 +6623,7 @@ static const Ability TippingPoint = {
     },
 };
 
-static const Ability Enlightened = {
+constexpr Ability Enlightened = {
     .name = $("Enlightened"),
     .description = $("Emanate + Inner Focus."),
     .onOffensiveMultiplier = Emanate.onOffensiveMultiplier,
@@ -6633,7 +6633,7 @@ static const Ability Enlightened = {
     .tauntImmune = TRUE,
 };
 
-static const Ability PeacefulSlumber = {
+constexpr Ability PeacefulSlumber = {
     .name = $("Peaceful Slumber"),
     .description = $("Sweet Dreams + Self Sufficient."),
     .onEndTurn = +[](ON_END_TURN) -> int {
@@ -6643,7 +6643,7 @@ static const Ability PeacefulSlumber = {
     },
 };
 
-static const Ability Aftershock = {
+constexpr Ability Aftershock = {
     .name = $("Aftershock"),
     .description = $("Triggers Magnitude 4-7 after\n"
                      "using a damaging move."),
@@ -6664,7 +6664,7 @@ ON_EITHER(FreezingPoint) {
     AbilityStatusEffectSafe(MOVE_EFFECT_FROSTBITE, battler, opponent);
     return TRUE;
 }
-static const Ability FreezingPoint = {
+constexpr Ability FreezingPoint = {
     .name = $("Freezing Point"),
     .description = $("30% chance to get frostbitten\n"
                      "on contact."),
@@ -6684,7 +6684,7 @@ static int CryoProficiencyHail(int ability, int battler, int attacker, MoveEnum 
     }
     return FALSE;
 }
-static const Ability CryoProficiency = {
+constexpr Ability CryoProficiency = {
     .name = $("Cryo Proficiency"),
     .description = $("Triggers hail when hit. 30%\n"
                      "chance to frostbite on contact."),
@@ -6693,7 +6693,7 @@ static const Ability CryoProficiency = {
         +[](ON_DEFENDER) -> int { return FreezingPoint.onDefender(DELEGATE_DEFENDER) | CryoProficiencyHail(ability, battler, attacker, move, moveType); },
 };
 
-static const Ability ArcaneForce = {
+constexpr Ability ArcaneForce = {
     .name = $("Arcane Force"),
     .description = $("All moves gain STAB.\n"
                      "Ups “supereffective” by 10%."),
@@ -6704,14 +6704,14 @@ static const Ability ArcaneForce = {
     .onStab = MysticPower.onStab,
 };
 
-static const Ability Doombringer = {
+constexpr Ability Doombringer = {
     .name = $("Doombringer"),
     .description = $("Uses Doom Desire\n"
                      "on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DOOM_DESIRE, 0); },
 };
 
-static const Ability Wishmaker = {
+constexpr Ability Wishmaker = {
     .name = $("Wishmaker"),
     .description = $("Uses Wish on switch-in.\n"
                      "Three uses per battle."),
@@ -6726,7 +6726,7 @@ static const Ability Wishmaker = {
     .persistent = TRUE,
 };
 
-static const Ability YukiOnna = {
+constexpr Ability YukiOnna = {
     .name = $("Yuki Onna"),
     .description = $("Scare + Intimidate.\n"
                      "30% chance to infatuate on hit."),
@@ -6740,20 +6740,20 @@ static const Ability YukiOnna = {
     },
 };
 
-static const Ability Suppress = {
+constexpr Ability Suppress = {
     .name = $("Suppress"),
     .description = $("Casts Torment on entry."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TORMENT, 0); },
 };
 
-static const Ability Refrigerator = {
+constexpr Ability Refrigerator = {
     .name = $("Refrigerator"),
     .description = $("Filter + Illuminate."),
     .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
     .onAccuracy = Illuminate.onAccuracy,
 };
 
-static const Ability HeavenAsunder = {
+constexpr Ability HeavenAsunder = {
     .name = $("Heaven Asunder"),
     .description = $("Spacial Rend always crits.\n"
                      "Ups crit level by +1."),
@@ -6764,7 +6764,7 @@ static const Ability HeavenAsunder = {
         },
 };
 
-static const Ability PurifyingWaters = {
+constexpr Ability PurifyingWaters = {
     .name = $("Purifying Waters"),
     .description = $("Hydration + Water Veil."),
     .onEntry = WaterVeil.onEntry,
@@ -6774,14 +6774,14 @@ static const Ability PurifyingWaters = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability Seaborne = {
+constexpr Ability Seaborne = {
     .name = $("Seaborne"),
     .description = $("Drizzle + Swift Swim."),
     .onEntry = Drizzle.onEntry,
     .onStat = SwiftSwim.onStat,
 };
 
-static const Ability HighTide = {
+constexpr Ability HighTide = {
     .name = $("High Tide"),
     .description = $("Triggers 50 BP Surf after\n"
                      "using a Water-type move."),
@@ -6793,14 +6793,14 @@ static const Ability HighTide = {
     },
 };
 
-static const Ability ChangeOfHeart = {
+constexpr Ability ChangeOfHeart = {
     .name = $("Change of Heart"),
     .description = $("Uses Heart Swap\n"
                      "on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_HEART_SWAP, 0); },
 };
 
-static const Ability MysticBlades = {
+constexpr Ability MysticBlades = {
     .name = $("Mystic Blades"),
     .description = $("Keen edge moves become special\n"
                      "and deal 30% more damage."),
@@ -6812,7 +6812,7 @@ static const Ability MysticBlades = {
     },
 };
 
-static const Ability Determination = {
+constexpr Ability Determination = {
     .name = $("Determination"),
     .description = $("Ups Special Attack by 50%\n"
                      "if suffering."),
@@ -6823,14 +6823,14 @@ static const Ability Determination = {
     .negatesFrzSpatkDrop = TRUE,
 };
 
-static const Ability Fertilize = {
+constexpr Ability Fertilize = {
     .name = $("Fertilize"),
     .description = $("Normal-type moves become Grass-\n"
                      "type moves and get a 1.1x boost."),
     ATE_ABILITY(TYPE_GRASS),
 };
 
-static const Ability PureLove = {
+constexpr Ability PureLove = {
     .name = $("Pure Love"),
     .description = $("Infatuates on contact.\n"
                      "Heal 25% damage vs infatuated."),
@@ -6849,26 +6849,26 @@ static const Ability PureLove = {
     .canInfatuateAny = TRUE,
 };
 
-static const Ability Fighter = {
+constexpr Ability Fighter = {
     .name = $("Fighter"),
     .description = $("Boosts Fight.-type moves by 1.2x,\n"
                      "or 1.5x when below 1/3 HP."),
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_FIGHTING),
 };
 
-static const Ability MyceliumMight = {
+constexpr Ability MyceliumMight = {
     .name = $("Mycelium Might"),
     .description = $("Status moves ignore immunities\n"
                      "but go last."),
 };
 
-static const Ability Telekinetic = {
+constexpr Ability Telekinetic = {
     .name = $("Telekinetic"),
     .description = $("Casts Telekinesis on entry."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TELEKINESIS, 0); },
 };
 
-static const Ability Combustion = {
+constexpr Ability Combustion = {
     .name = $("Combustion"),
     .description = $("Boosts the power of Fire-type\n"
                      "moves by 1.5x."),
@@ -6878,7 +6878,7 @@ static const Ability Combustion = {
         },
 };
 
-static const Ability PonyPower = {
+constexpr Ability PonyPower = {
     .name = $("Blade's Essence"),
     .description = $("Keen Edge + Mystic Blades."),
     .onOffensiveMultiplier =
@@ -6889,13 +6889,13 @@ static const Ability PonyPower = {
     .onSwapSplit = MysticBlades.onSwapSplit,
 };
 
-static const Ability PowderBurst = {
+constexpr Ability PowderBurst = {
     .name = $("Powder Burst"),
     .description = $("Casts Powder on entry."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_POWDER, 0); },
 };
 
-static const Ability Retriever = {
+constexpr Ability Retriever = {
     .name = $("Retriever"),
     .description = $("Retrieves item on switch-out."),
     .onExit = +[](ON_EXIT) -> int {
@@ -6917,13 +6917,13 @@ static const Ability Retriever = {
     },
 };
 
-static const Ability MonsterMash = {
+constexpr Ability MonsterMash = {
     .name = $("Monster Mash"),
     .description = $("Casts Trick-or-Treat on entry."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TRICK_OR_TREAT, 0); },
 };
 
-static const Ability TwoStep = {
+constexpr Ability TwoStep = {
     .name = $("Two Step"),
     .description = $("Triggers 50BP Revelation Dance\n"
                      "after using a Dance move."),
@@ -6935,7 +6935,7 @@ static const Ability TwoStep = {
     },
 };
 
-static const Ability Spiteful = {
+constexpr Ability Spiteful = {
     .name = $("Spiteful"),
     .description = $("Reduces attacker's PP\n"
                      "on contact."),
@@ -6950,7 +6950,7 @@ static const Ability Spiteful = {
     },
 };
 
-static const Ability Fortitude = {
+constexpr Ability Fortitude = {
     .name = $("Fortitude"),
     .description = $("Boosts SpDef +1 when hit.\n"
                      "Maxes SpDef on crit."),
@@ -6969,34 +6969,34 @@ static const Ability Fortitude = {
     },
 };
 
-static const Ability Devourer = {
+constexpr Ability Devourer = {
     .name = $("Devourer"),
     .description = $("Strong Jaw + Primal Maw."),
     .onParentalBond = PrimalMaw.onParentalBond,
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
-static const Ability PhantomThief = {
+constexpr Ability PhantomThief = {
     .name = $("Phantom Thief"),
     .description = $("Attacks with 40BP Spectral Thief\n"
                      "on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SPECTRAL_THIEF, 40); },
 };
 
-static const Ability EarlyGrave = {
+constexpr Ability EarlyGrave = {
     .name = $("Early Grave"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's Ghost-type moves."),
     .onPriority = GALE_WINGS_CLONE(TYPE_GHOST),
 };
 
-static const Ability Grappler = {
+constexpr Ability Grappler = {
     .name = $("Grappler"),
     .description = $("Trapping moves last 6 turns.\n"
                      "Trapping deals 1/6 HP."),
 };
 
-static const Ability BassBoosted = {
+constexpr Ability BassBoosted = {
     .name = $("Bass Boosted"),
     .description = $("Amplifier + Punk Rock."),
     .onOffensiveMultiplier =
@@ -7008,7 +7008,7 @@ static const Ability BassBoosted = {
     .breakable = TRUE,
 };
 
-static const Ability FlamingJaws = {
+constexpr Ability FlamingJaws = {
     .name = $("Flaming Jaws"),
     .description = $("Biting moves have 50% chance\n"
                      "to burn the target."),
@@ -7022,27 +7022,27 @@ static const Ability FlamingJaws = {
     },
 };
 
-static const Ability MonsterHunter = {
+constexpr Ability MonsterHunter = {
     .name = $("Monster Hunter"),
     .description = $("Deals 1.5x more damage to\n"
                      "Dark-types."),
 };
 
-static const Ability CrownedSword = {
+constexpr Ability CrownedSword = {
     .name = $("Crowned Sword"),
     .description = $("Intrepid Sword + Anger Point."),
     .onEntry = IntrepidSword.onEntry,
     .onDefender = AngerPoint.onDefender,
 };
 
-static const Ability CrownedShield = {
+constexpr Ability CrownedShield = {
     .name = $("Crowned Shield"),
     .description = $("Dauntless Shield + Stamina."),
     .onEntry = DauntlessShield.onEntry,
     .onDefender = Stamina.onDefender,
 };
 
-static const Ability BerserkDna = {
+constexpr Ability BerserkDna = {
     .name = $("Berserk DNA"),
     .description = $("Sharply ups highest attacking stat\n"
                      "but confuses on entry."),
@@ -7058,7 +7058,7 @@ static const Ability BerserkDna = {
     },
 };
 
-static const Ability CrownedKing = {
+constexpr Ability CrownedKing = {
     .name = $("Crowned King"),
     .description = $("Unnerve + Grim Neigh +\n"
                      "Chilling Neigh."),
@@ -7072,7 +7072,7 @@ static const Ability CrownedKing = {
     .unnerve = TRUE,
 };
 
-static const Ability SnapTrapWhenHit = {
+constexpr Ability SnapTrapWhenHit = {
     .name = $("Clap Trap"),
     .description = $("Counters contact with\n"
                      "50BP Snap Trap."),
@@ -7085,20 +7085,20 @@ static const Ability SnapTrapWhenHit = {
     },
 };
 
-static const Ability Permanence = {
+constexpr Ability Permanence = {
     .name = $("Permanence"),
     .description = $("Foes can't heal in any way."),
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_PERMANENCE); },
 };
 
-static const Ability Hubris = {
+constexpr Ability Hubris = {
     .name = $("Hubris"),
     .description = $("KOs raise SpAtk by one stage."),
     .onBattlerFaints = GrimNeigh.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability CosmicDaze = {
+constexpr Ability CosmicDaze = {
     .name = $("Cosmic Daze"),
     .description = $("2x damage vs confused. Enemies\n"
                      "take 2x confusion damage."),
@@ -7108,7 +7108,7 @@ static const Ability CosmicDaze = {
         },
 };
 
-static const Ability MindsEye = {
+constexpr Ability MindsEye = {
     .name = $("Mind's Eye"),
     .description = $("Hits Ghost-type Pokémon.\n"
                      "Accuracy can't be lowered."),
@@ -7116,7 +7116,7 @@ static const Ability MindsEye = {
     .breakable = TRUE,
 };
 
-static const Ability BloodPrice = {
+constexpr Ability BloodPrice = {
     .name = $("Blood Price"),
     .description = $("Does 30% more damage but\n"
                      "lose 10% HP when attacking."),
@@ -7142,14 +7142,14 @@ ON_EITHER(SpikeArmor) {
     AbilityStatusEffectSafe(MOVE_EFFECT_BLEED, battler, opponent);
     return TRUE;
 }
-static const Ability SpikeArmor = {
+constexpr Ability SpikeArmor = {
     .name = $("Spike Armor"),
     .description = $("30% chance to bleed\n"
                      "on contact or offense."),
     ON_EITHER_ABILITY(SpikeArmor),
 };
 
-static const Ability VoodooPower = {
+constexpr Ability VoodooPower = {
     .name = $("Voodoo Power"),
     .description = $("30% chance to bleed when\n"
                      "hit by special attacks."),
@@ -7164,7 +7164,7 @@ static const Ability VoodooPower = {
     },
 };
 
-static const Ability ChromeCoat = {
+constexpr Ability ChromeCoat = {
     .name = $("Chrome Coat"),
     .description = $("Reduces special damage taken by\n"
                      "40%, but decreases Speed by 10%."),
@@ -7176,7 +7176,7 @@ static const Ability ChromeCoat = {
     .breakable = TRUE,
 };
 
-static const Ability Banshee = {
+constexpr Ability Banshee = {
     .name = $("Banshee"),
     .description = $("Sound moves get a 1.2x boost\n"
                      "and become Ghost if Normal."),
@@ -7188,14 +7188,14 @@ static const Ability Banshee = {
     },
 };
 
-static const Ability WebSpinner = {
+constexpr Ability WebSpinner = {
     .name = $("Web Spinner"),
     .description = $("Uses String Shot\n"
                      "on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_STRING_SHOT, 0); },
 };
 
-static const Ability ShowdownMode = {
+constexpr Ability ShowdownMode = {
     .name = $("Showdown Mode"),
     .description = $("Ambush + Violent Rush."),
     .onEntry = +[](ON_ENTRY) -> int {
@@ -7204,7 +7204,7 @@ static const Ability ShowdownMode = {
     },
 };
 
-static const Ability SeedSower = {
+constexpr Ability SeedSower = {
     .name = $("Seed Sower"),
     .description = $("Sets Grassy Terrain when hit.\n"
                      "Heals party status when it does."),
@@ -7217,7 +7217,7 @@ static const Ability SeedSower = {
     },
 };
 
-static const Ability Airborne = {
+constexpr Ability Airborne = {
     .name = $("Airborne"),
     .description = $("Boosts own & ally's Flying-type\n"
                      "moves by 1.3x."),
@@ -7228,7 +7228,7 @@ static const Ability Airborne = {
     .onOffensiveMultiplierFor = APPLY_ON_ALLY,
 };
 
-static const Ability Parroting = {
+constexpr Ability Parroting = {
     .name = $("Parroting"),
     .description = $("Copies sound moves used by\n"
                      "others. Immune to sound."),
@@ -7241,7 +7241,7 @@ static const Ability Parroting = {
     .isSoundproof = TRUE,
 };
 
-static const Ability SaltCircle = {
+constexpr Ability SaltCircle = {
     .name = $("Salt Circle"),
     .description = $("Prevents opposing pokemon\n"
                      "from fleeing on entry."),
@@ -7267,7 +7267,7 @@ static const Ability SaltCircle = {
     },
 };
 
-static const Ability PurifyingSalt = {
+constexpr Ability PurifyingSalt = {
     .name = $("Purifying Salt"),
     .description = $("Immune to status conditions.\n"
                      "Take 1/2 damage from Ghost."),
@@ -7324,7 +7324,7 @@ int ProtosynthesisHandler(int ability, int battler, AbilityCallType callType) {
     }
     return FALSE;
 }
-static const Ability Protosynthesis = {
+constexpr Ability Protosynthesis = {
     .name = $("Protosynthesis"),
     .description = $("Boosts highest stat in Sun\n"
                      "or with Booster Energy."),
@@ -7382,7 +7382,7 @@ int QuarkDriveHandler(int ability, int battler, AbilityCallType callType) {
     }
     return FALSE;
 }
-static const Ability QuarkDrive = {
+constexpr Ability QuarkDrive = {
     .name = $("Quark Drive"),
     .description = $("Boosts highest stat in Electric\n"
                      "Terrain or with Booster Energy."),
@@ -7391,7 +7391,7 @@ static const Ability QuarkDrive = {
     .onStat = Protosynthesis.onStat,
 };
 
-static const Ability WindPower = {
+constexpr Ability WindPower = {
     .name = $("Wind Power"),
     .description = $("Charges up when hit by wind\n"
                      "moves or Tailwind starts."),
@@ -7406,7 +7406,7 @@ static const Ability WindPower = {
     },
 };
 
-static const Ability Impulse = {
+constexpr Ability Impulse = {
     .name = $("Impulse"),
     .description = $("Non-contact moves use the\n"
                      "Speed stat for damage."),
@@ -7416,7 +7416,7 @@ static const Ability Impulse = {
         },
 };
 
-static const Ability TerminalVelocity = {
+constexpr Ability TerminalVelocity = {
     .name = $("Terminal Velocity"),
     .description = $("Special moves use 20% of its\n"
                      "Speed stat additionally."),
@@ -7426,13 +7426,13 @@ static const Ability TerminalVelocity = {
         },
 };
 
-static const Ability GuardDog = {
+constexpr Ability GuardDog = {
     .name = $("Guard Dog"),
     .description = $("Can't be forced out.\n"
                      "Inverts Intimidate effects."),
 };
 
-static const Ability AngerShell = {
+constexpr Ability AngerShell = {
     .name = $("Anger Shell"),
     .description = $("Applies Shell Smash when\n"
                      "reduced below 1/2 HP."),
@@ -7447,7 +7447,7 @@ static const Ability AngerShell = {
     },
 };
 
-static const Ability Egoist = {
+constexpr Ability Egoist = {
     .name = $("Egoist"),
     .description = $("Raises its own stats when\n"
                      "foes raise theirs."),
@@ -7470,13 +7470,13 @@ static const Ability Egoist = {
     },
 };
 
-static const Ability Subdue = {
+constexpr Ability Subdue = {
     .name = $("Subdue"),
     .description = $("Doubles stat drop effects\n"
                      "used by this pokemon."),
 };
 
-static const Ability ReadiedAction = {
+constexpr Ability ReadiedAction = {
     .name = $("Readied Action"),
     .description = $("Doubles attack on\n"
                      "first turn."),
@@ -7486,14 +7486,14 @@ static const Ability ReadiedAction = {
     },
 };
 
-static const Ability DarkGaleWings = {
+constexpr Ability DarkGaleWings = {
     .name = $("Stygian Rush"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's Dark-type moves."),
     .onPriority = GALE_WINGS_CLONE(TYPE_DARK),
 };
 
-static const Ability GuiltTrip = {
+constexpr Ability GuiltTrip = {
     .name = $("Guilt Trip"),
     .description = $("Sharply lowers attacker's Attack\n"
                      "and SpAtk when fainting."),
@@ -7507,14 +7507,14 @@ static const Ability GuiltTrip = {
     },
 };
 
-static const Ability WaterGaleWings = {
+constexpr Ability WaterGaleWings = {
     .name = $("Tidal Rush"),
     .description = $("At full HP, gives +1 priority to\n"
                      "this Pokémon's Water-type moves."),
     .onPriority = GALE_WINGS_CLONE(TYPE_WATER),
 };
 
-static const Ability ZeroToHero = {
+constexpr Ability ZeroToHero = {
     .name = $("Zero To Hero"),
     .description = $("Changes forms after\n"
                      "switching out."),
@@ -7536,7 +7536,7 @@ static const Ability ZeroToHero = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Costar = {
+constexpr Ability Costar = {
     .name = $("Costar"),
     .description = $("Copies its ally's stat changes\n"
                      "on switch-in."),
@@ -7556,7 +7556,7 @@ static const Ability Costar = {
     },
 };
 
-static const Ability Commander = {
+constexpr Ability Commander = {
     .name = $("Commander"),
     .description = $("Hops inside an allied Dondozo.\n"
                      "Boosts its ally but can't act."),
@@ -7578,20 +7578,20 @@ static const Ability Commander = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability EjectPackAbility = {
+constexpr Ability EjectPackAbility = {
     .name = $("Tactical Retreat"),
     .description = $("Flees when stats are lowered."),
     .persistent = TRUE,
 };
 
-static const Ability VengefulSpirit = {
+constexpr Ability VengefulSpirit = {
     .name = $("Vengeful Spirit"),
     .description = $("Haunted Spirit + Vengeance."),
     .onDefender = HauntedSpirit.onDefender,
     .onOffensiveMultiplier = Vengeance.onOffensiveMultiplier,
 };
 
-static const Ability CudChew = {
+constexpr Ability CudChew = {
     .name = $("Cud Chew"),
     .description = $("Eats berries again at the\n"
                      "end of the next turn."),
@@ -7613,7 +7613,7 @@ static const Ability CudChew = {
     },
 };
 
-static const Ability ArmorTail = {
+constexpr Ability ArmorTail = {
     .name = $("Armor Tail"),
     .description = $("Protects itself and ally from\n"
                      "priority moves."),
@@ -7622,7 +7622,7 @@ static const Ability ArmorTail = {
     .breakable = TRUE,
 };
 
-static const Ability MindCrush = {
+constexpr Ability MindCrush = {
     .name = $("Mind Crunch"),
     .description = $("Biting moves use SpAtk and\n"
                      "deal 30% more damage."),
@@ -7633,7 +7633,7 @@ static const Ability MindCrush = {
         },
 };
 
-static const Ability SupremeOverlord = {
+constexpr Ability SupremeOverlord = {
     .name = $("Supreme Overlord"),
     .description = $("Each fainted ally increases\n"
                      "Attack and SpAtk by 10%."),
@@ -7648,7 +7648,7 @@ static const Ability SupremeOverlord = {
         },
 };
 
-static const Ability IllWill = {
+constexpr Ability IllWill = {
     .name = $("Ill Will"),
     .description = $("Deletes the PP of the move\n"
                      "that faints this Pokemon."),
@@ -7668,7 +7668,7 @@ static const Ability IllWill = {
     },
 };
 
-static const Ability FireScales = {
+constexpr Ability FireScales = {
     .name = $("Fire Scales"),
     .description = $("Halves damage taken by Special\n"
                      "moves. Does NOT double SpDef."),
@@ -7676,7 +7676,7 @@ static const Ability FireScales = {
     .breakable = TRUE,
 };
 
-static const Ability WatchYourStep = {
+constexpr Ability WatchYourStep = {
     .name = $("Watch Your Step"),
     .description = $("Spreads two layers of\n"
                      "Spikes on switch-in."),
@@ -7691,7 +7691,7 @@ static const Ability WatchYourStep = {
     },
 };
 
-static const Ability RapidResponse = {
+constexpr Ability RapidResponse = {
     .name = $("Rapid Response"),
     .description = $("Boosts Speed by 50% + SpAtk\n"
                      "by 20% on first turn."),
@@ -7701,7 +7701,7 @@ static const Ability RapidResponse = {
     },
 };
 
-static const Ability DoubleIronBarbs = {
+constexpr Ability DoubleIronBarbs = {
     .name = $("Sharp Edges"),
     .description = $("1/6 HP damage when touched."),
     .onDefender = +[](ON_DEFENDER) -> int {
@@ -7717,7 +7717,7 @@ static const Ability DoubleIronBarbs = {
     },
 };
 
-static const Ability ThermalExchange = {
+constexpr Ability ThermalExchange = {
     .name = $("Thermal Exchange"),
     .description = $("Ups Attack when hit by Fire.\n"
                      "Immune to burn."),
@@ -7738,7 +7738,7 @@ static const Ability ThermalExchange = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability GoodAsGold = {
+constexpr Ability GoodAsGold = {
     .name = $("Good As Gold"),
     .description = $("Immune to all Status moves,\n"
                      "unless whole field is affected."),
@@ -7750,7 +7750,7 @@ static const Ability GoodAsGold = {
     .breakable = TRUE,
 };
 
-static const Ability SharingIsCaring = {
+constexpr Ability SharingIsCaring = {
     .name = $("Sharing Is Caring"),
     .description = $("Stat changes are shared\n"
                      "between all battlers."),
@@ -7766,7 +7766,7 @@ static const Ability SharingIsCaring = {
     },
 };
 
-static const Ability TabletsOfRuin = {
+constexpr Ability TabletsOfRuin = {
     .name = $("Tablets Of Ruin"),
     .description = $("Lowers the Attack of\n"
                      "other Pokemon by 25%."),
@@ -7775,7 +7775,7 @@ static const Ability TabletsOfRuin = {
     .ruinStat = STAT_ATK,
 };
 
-static const Ability SwordOfRuin = {
+constexpr Ability SwordOfRuin = {
     .name = $("Sword Of Ruin"),
     .description = $("Lowers the Defense of\n"
                      "other Pokemon by 25%."),
@@ -7784,7 +7784,7 @@ static const Ability SwordOfRuin = {
     .ruinStat = STAT_DEF,
 };
 
-static const Ability VesselOfRuin = {
+constexpr Ability VesselOfRuin = {
     .name = $("Vessel Of Ruin"),
     .description = $("Lowers the Special Attack of\n"
                      "other Pokemon by 25%."),
@@ -7793,7 +7793,7 @@ static const Ability VesselOfRuin = {
     .ruinStat = STAT_SPATK,
 };
 
-static const Ability BeadsOfRuin = {
+constexpr Ability BeadsOfRuin = {
     .name = $("Beads Of Ruin"),
     .description = $("Lowers the Special Defense\n"
                      "of other Pokemon by 25%."),
@@ -7802,7 +7802,7 @@ static const Ability BeadsOfRuin = {
     .ruinStat = STAT_DEF,
 };
 
-static const Ability PermafrostClone = {
+constexpr Ability PermafrostClone = {
     .name = $("Thick Skin"),
     .description = $("Takes 25% less damage from\n"
                      "Super-effective moves."),
@@ -7810,7 +7810,7 @@ static const Ability PermafrostClone = {
     .breakable = TRUE,
 };
 
-static const Ability Gallantry = {
+constexpr Ability Gallantry = {
     .name = $("Gallantry"),
     .description = $("Gets no damage for\n"
                      "first hit."),
@@ -7825,7 +7825,7 @@ static const Ability Gallantry = {
     .persistent = TRUE,
 };
 
-static const Ability OrichalcumPulse = {
+constexpr Ability OrichalcumPulse = {
     .name = $("Orichalcum Pulse"),
     .description = $("Summons sun on entry.\n"
                      "Raises Atk by 1.33x in sun."),
@@ -7837,7 +7837,7 @@ static const Ability OrichalcumPulse = {
         },
 };
 
-static const Ability SunBasking = {
+constexpr Ability SunBasking = {
     .name = $("Sun Basking"),
     .description = $("Blocks priority and reduces\n"
                      "physical damage by 1/2 in sun."),
@@ -7852,7 +7852,7 @@ static const Ability SunBasking = {
     .breakable = TRUE,
 };
 
-static const Ability WingedKing = {
+constexpr Ability WingedKing = {
     .name = $("Winged King"),
     .description = $("Ups “supereffective” by 33%."),
     .onOffensiveMultiplier =
@@ -7861,7 +7861,7 @@ static const Ability WingedKing = {
         },
 };
 
-static const Ability HadronEngine = {
+constexpr Ability HadronEngine = {
     .name = $("Hadron Engine"),
     .description = $("Field becomes Electric.\n"
                      "+33% SpAtk in Electric Terrain."),
@@ -7872,26 +7872,26 @@ static const Ability HadronEngine = {
         },
 };
 
-static const Ability IronSerpent = {
+constexpr Ability IronSerpent = {
     .name = $("Iron Serpent"),
     .description = $("Ups “supereffective” by 33%."),
     .onOffensiveMultiplier = WingedKing.onOffensiveMultiplier,
 };
 
-static const Ability WeatherDoubleBoost = {
+constexpr Ability WeatherDoubleBoost = {
     .name = $("Catastrophe"),
     .description = $("Sun boosts Water.\n"
                      "Rain boosts Fire."),
 };
 
-static const Ability SweepingEdgePlus = {
+constexpr Ability SweepingEdgePlus = {
     .name = $("Blademaster"),
     .description = $("Sweeping Edge + Keen Edge."),
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
     .onAccuracy = SweepingEdge.onAccuracy,
 };
 
-static const Ability CelestialBlessing = {
+constexpr Ability CelestialBlessing = {
     .name = $("Celestial Blessing"),
     .description = $("Recovers 1/12 of its health each\n"
                      "turn under Misty Terrain."),
@@ -7909,14 +7909,14 @@ static const Ability CelestialBlessing = {
     },
 };
 
-static const Ability MinionControl = {
+constexpr Ability MinionControl = {
     .name = $("Minion Control"),
     .description = $("Moves hit an extra time for\n"
                      "each healthy party member."),
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType { return PARENTAL_BOND_MINION_CONTROL; },
 };
 
-static const Ability MoltenBlades = {
+constexpr Ability MoltenBlades = {
     .name = $("Molten Blades"),
     .description = $("Keen Edge + Keen Edge moves\n"
                      "have a 20% chance to burn."),
@@ -7931,7 +7931,7 @@ static const Ability MoltenBlades = {
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
 };
 
-static const Ability HauntingFrenzy = {
+constexpr Ability HauntingFrenzy = {
     .name = $("Haunting Frenzy"),
     .description = $("20% chance to flinch the\n"
                      "opponent. +1 speed on kill."),
@@ -7946,7 +7946,7 @@ static const Ability HauntingFrenzy = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability NoiseCancel = {
+constexpr Ability NoiseCancel = {
     .name = $("Noise Cancel"),
     .description = $("Protects the party from sound-\n"
                      "based moves."),
@@ -7956,7 +7956,7 @@ static const Ability NoiseCancel = {
     .isSoundproof = TRUE,
 };
 
-static const Ability RadioJam = {
+constexpr Ability RadioJam = {
     .name = $("Radio Jam"),
     .description = $("Sound-based moves have a 20%\n"
                      "chance to inflict disable."),
@@ -7970,7 +7970,7 @@ static const Ability RadioJam = {
     },
 };
 
-static const Ability Ole = {
+constexpr Ability Ole = {
     .name = $("Olé!"),
     .description = $("20% chance to evade single-\n"
                      "target moves."),
@@ -7989,14 +7989,14 @@ static const Ability Ole = {
     .onAccuracyFor = APPLY_ON_TARGET,
 };
 
-static const Ability Malicious = {
+constexpr Ability Malicious = {
     .name = $("Malicious"),
     .description = $("Lowers the foe's highest\n"
                      "Attack and Defense stat."),
     .onEntry = UseIntimidateClone,
 };
 
-static const Ability DeadPower = {
+constexpr Ability DeadPower = {
     .name = $("Dead Power"),
     .description = $("1.5x Attack boost. 20% chance\n"
                      "to curse on contact moves."),
@@ -8014,7 +8014,7 @@ static const Ability DeadPower = {
         },
 };
 
-static const Ability BrawlingWyvern = {
+constexpr Ability BrawlingWyvern = {
     .name = $("Brawling Wyvern"),
     .description = $("No guard + Dragon type\n"
                      "moves become punching moves."),
@@ -8022,7 +8022,7 @@ static const Ability BrawlingWyvern = {
     .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
 };
 
-static const Ability MythicalArrows = {
+constexpr Ability MythicalArrows = {
     .name = $("Mythical Arrows"),
     .description = $("Arrow moves become special\n"
                      "and deal 30% more damage."),
@@ -8034,7 +8034,7 @@ static const Ability MythicalArrows = {
     },
 };
 
-static const Ability Lawnmower = {
+constexpr Ability Lawnmower = {
     .name = $("Lawnmower"),
     .description = $("Removes terrain on switch-in.\n"
                      "Stat up if terrain removed."),
@@ -8046,7 +8046,7 @@ static const Ability Lawnmower = {
     },
 };
 
-static const Ability Flourish = {
+constexpr Ability Flourish = {
     .name = $("Flourish"),
     .description = $("Boosts Grass moves by 50% in\n"
                      "grassy terrain."),
@@ -8056,7 +8056,7 @@ static const Ability Flourish = {
         },
 };
 
-static const Ability DesertSpirit = {
+constexpr Ability DesertSpirit = {
     .name = $("Desert Spirit"),
     .description = $("Summons sand on entry. Ground\n"
                      "moves hit airborne in sand."),
@@ -8069,14 +8069,14 @@ static const Ability DesertSpirit = {
         },
 };
 
-static const Ability Contempt = {
+constexpr Ability Contempt = {
     .name = $("Contempt"),
     .description = $("Ignores opposing stat changes.\n"
                      "Boosts Attack when stat lowered."),
     .unaware = TRUE,
 };
 
-static const Ability Aerialist = {
+constexpr Ability Aerialist = {
     .name = $("Aerialist"),
     .description = $("Levitate + Flock."),
     .onOffensiveMultiplier =
@@ -8088,7 +8088,7 @@ static const Ability Aerialist = {
     .levitate = TRUE,
 };
 
-static const Ability TeraShell = {
+constexpr Ability TeraShell = {
     .name = $("Tera Shell"),
     .description = $("All hits will be not very effective\n"
                      "while at full HP."),
@@ -8100,7 +8100,7 @@ static const Ability TeraShell = {
     .breakable = TRUE,
 };
 
-static const Ability ToxicChain = {
+constexpr Ability ToxicChain = {
     .name = $("Toxic Chain"),
     .description = $("Moves have a 30% chance to\n"
                      "badly poison the foe."),
@@ -8113,7 +8113,7 @@ static const Ability ToxicChain = {
     },
 };
 
-static const Ability ParasiticSpores = {
+constexpr Ability ParasiticSpores = {
     .name = $("Parasitic Spores"),
     .description = $("Deals 1/8 HP damage to non-\n"
                      "Ghost. Spreads on contact."),
@@ -8125,7 +8125,7 @@ static const Ability ParasiticSpores = {
     },
 };
 
-static const Ability PoisonPuppeteer = {
+constexpr Ability PoisonPuppeteer = {
     .name = $("Poison Puppeteer"),
     .description = $("Poison also inflicts confusion."),
     .onReactive = +[](ON_REACTIVE) -> int {
@@ -8139,7 +8139,7 @@ static const Ability PoisonPuppeteer = {
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-static const Ability Entrance = {
+constexpr Ability Entrance = {
     .name = $("Entrance"),
     .description = $("Confusion also inflicts\n"
                      "infatuation."),
@@ -8148,7 +8148,7 @@ static const Ability Entrance = {
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-static const Ability Rejection = {
+constexpr Ability Rejection = {
     .name = $("Rejection"),
     .description = $("Applies Quash on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int {
@@ -8160,7 +8160,7 @@ static const Ability Rejection = {
     },
 };
 
-static const Ability AppleEnlightenment = {
+constexpr Ability AppleEnlightenment = {
     .name = $("Apple Enlightenment"),
     .description = $("Fur coat + Magic Guard."),
     .onDefensiveMultiplier = FurCoat.onDefensiveMultiplier,
@@ -8168,20 +8168,20 @@ static const Ability AppleEnlightenment = {
     .magicGuard = TRUE,
 };
 
-static const Ability BalloonBomber = {
+constexpr Ability BalloonBomber = {
     .name = $("Balloon Bomb"),
     .description = $("Aftermath + Inflatable"),
     .onDefender = +[](ON_DEFENDER) -> int { return Aftermath.onDefender(DELEGATE_DEFENDER) || Inflatable.onDefender(DELEGATE_DEFENDER); },
 };
 
-static const Ability FlamingMaw = {
+constexpr Ability FlamingMaw = {
     .name = $("Flaming Maw"),
     .description = $("Strong Jaw + Flaming Jaws"),
     .onAttacker = FlamingJaws.onAttacker,
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
-static const Ability Demolitionist = {
+constexpr Ability Demolitionist = {
     .name = $("Demolitionist"),
     .description = $("Readied Action + Ignores Protect\n"
                      "+ screens break on readied turn"),
@@ -8200,7 +8200,7 @@ static const Ability Demolitionist = {
     },
 };
 
-static const Ability RockhardWill = {
+constexpr Ability RockhardWill = {
     .name = $("Rockhard Will"),
     .description = $("Boosts Rock-type moves by 1.2x,\n"
                      "or 1.5x when under 1/3 HP."),
@@ -8216,13 +8216,13 @@ ON_EITHER(FragrantDaze) {
     AbilityStatusEffectSafe(MOVE_EFFECT_CONFUSION, battler, opponent);
     return TRUE;
 }
-static const Ability FragrantDaze = {
+constexpr Ability FragrantDaze = {
     .name = $("Fragrant Daze"),
     .description = $("30% chance to confuse on contact."),
     ON_EITHER_ABILITY(FragrantDaze),
 };
 
-static const Ability LowVisibility = {
+constexpr Ability LowVisibility = {
     .name = $("Low Visibility"),
     .description = $("Summons Eerie Fog on entry."),
     .onEntry = +[](ON_ENTRY) -> int {
@@ -8237,7 +8237,7 @@ static const Ability LowVisibility = {
     },
 };
 
-static const Ability OldMariner = {
+constexpr Ability OldMariner = {
     .name = $("Old Mariner"),
     .description = $("Seaweed + Water STAB."),
     .onOffensiveMultiplier = Seaweed.onOffensiveMultiplier,
@@ -8246,7 +8246,7 @@ static const Ability OldMariner = {
     .breakable = TRUE,
 };
 
-static const Ability Ectoplasm = {
+constexpr Ability Ectoplasm = {
     .name = $("Ectoplasm"),
     .description = $("Ups highest attacking stat\n"
                      "by 1.5x in fog."),
@@ -8257,7 +8257,7 @@ static const Ability Ectoplasm = {
         },
 };
 
-static const Ability BeautifulMusic = {
+constexpr Ability BeautifulMusic = {
     .name = $("Beautiful Music"),
     .description = $("Sound-based moves have 50% chance\n"
                      "to infatuate the foe."),
@@ -8271,13 +8271,13 @@ static const Ability BeautifulMusic = {
     },
 };
 
-static const Ability Surprise = {
+constexpr Ability Surprise = {
     .name = $("Surprise!"),
     .description = $("Astonishes enemy priority users\n"
                      "in fog."),
 };
 
-static const Ability SnowSong = {
+constexpr Ability SnowSong = {
     .name = $("Snow Song"),
     .description = $("Sound moves get a 1.2x boost\n"
                      "and become Ice if Normal."),
@@ -8289,7 +8289,7 @@ static const Ability SnowSong = {
     },
 };
 
-static const Ability GreaterSpirit = {
+constexpr Ability GreaterSpirit = {
     .name = $("Greater Spirit"),
     .description = $("Ups highest stat by +1\n"
                      "on entry in fog."),
@@ -8303,7 +8303,7 @@ static const Ability GreaterSpirit = {
     },
 };
 
-static const Ability Resonance = {
+constexpr Ability Resonance = {
     .name = $("Resonance"),
     .description = $("Sound moves have a 30%\n"
                      "chance to cause bleeding."),
@@ -8317,7 +8317,7 @@ static const Ability Resonance = {
     },
 };
 
-static const Ability EtherealRush = {
+constexpr Ability EtherealRush = {
     .name = $("Ethereal Rush"),
     .description = $("This Pokémon's Speed gets a\n"
                      "1.5x boost in fog."),
@@ -8327,14 +8327,14 @@ static const Ability EtherealRush = {
         },
 };
 
-static const Ability CuteAntecedence = {
+constexpr Ability CuteAntecedence = {
     .name = $("Pretty Privilege"),
     .description = $("At full HP, gives +1 priority to\n"
                      "its Fairy-type moves."),
     .onPriority = GALE_WINGS_CLONE(TYPE_FAIRY),
 };
 
-static const Ability RecurringNightmare = {
+constexpr Ability RecurringNightmare = {
     .name = $("Shallow Grave"),
     .description = $("Revives at 25% HP once after\n"
                      "fainting in fog."),
@@ -8352,14 +8352,14 @@ ON_EITHER(MenacingSituation) {
     BattleScriptCall(BattleScript_AbilitySetFear);
     return TRUE;
 }
-static const Ability MenacingSituation = {
+constexpr Ability MenacingSituation = {
     .name = $("Menacing Situation"),
     .description = $("20% chance to Fear on contact.\n"
                      "Also works on offense."),
     ON_EITHER_ABILITY(MenacingSituation),
 };
 
-static const Ability ShinyLightning = {
+constexpr Ability ShinyLightning = {
     .name = $("Shiny Lightning"),
     .description = $("Grants a 1.2x accuracy boost.\n"
                      "Thunder never misses."),
@@ -8370,14 +8370,14 @@ static const Ability ShinyLightning = {
     },
 };
 
-static const Ability Terrify = {
+constexpr Ability Terrify = {
     .name = $("Terrify"),
     .description = $("Lowers foes' Sp. Atk by two\n"
                      "stages on entry."),
     .onEntry = UseIntimidateClone,
 };
 
-static const Ability IceDownfall = {
+constexpr Ability IceDownfall = {
     .name = $("Ice Downfall"),
     .description = $("Counters contact with\n"
                      "60BP Icicle Crash."),
@@ -8390,7 +8390,7 @@ static const Ability IceDownfall = {
     },
 };
 
-static const Ability LastStand = {
+constexpr Ability LastStand = {
     .name = $("Last Stand"),
     .description = $("Def and SpDef increase as\n"
                      "HP drops. Max 1.6x."),
@@ -8402,7 +8402,7 @@ static const Ability LastStand = {
     .breakable = TRUE,
 };
 
-static const Ability PyroclasticFlow = {
+constexpr Ability PyroclasticFlow = {
     .name = $("Pyroclastic Flow"),
     .description = $("Molten Down + Corrosion."),
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
@@ -8411,7 +8411,7 @@ static const Ability PyroclasticFlow = {
     .onCanStatusType = Corrosion.onCanStatusType,
 };
 
-static const Ability BloodBath = {
+constexpr Ability BloodBath = {
     .name = $("Blood Bath"),
     .description = $("Immune to bleed. Inflict fear\n"
                      "when inflicting bleed."),
@@ -8428,7 +8428,7 @@ static const Ability BloodBath = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability BattleAura = {
+constexpr Ability BattleAura = {
     .name = $("Battle Aura"),
     .description = $("Sharply increases the critical\n"
                      "hit rate for all while on the field."),
@@ -8436,7 +8436,7 @@ static const Ability BattleAura = {
     .onCritFor = APPLY_ON_ANY,
 };
 
-static const Ability Bloodlust = {
+constexpr Ability Bloodlust = {
     .name = $("Bloodlust"),
     .description = $("Blood Bath + Soul Eater."),
     .onReactive = BloodBath.onReactive,
@@ -8453,7 +8453,7 @@ static const Ability Bloodlust = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability PiercingSolo = {
+constexpr Ability PiercingSolo = {
     .name = $("Piercing Solo"),
     .description = $("Sound moves cause bleeding."),
     .onAttacker = +[](ON_ATTACKER) -> int {
@@ -8465,14 +8465,14 @@ static const Ability PiercingSolo = {
     },
 };
 
-static const Ability Rhythmic = {
+constexpr Ability Rhythmic = {
     .name = $("Rhythmic"),
     .description = $("Deals 10% more damage for\n"
                      "each repeated move use."),
     .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battler]); },
 };
 
-static const Ability ChunkyBassLine = {
+constexpr Ability ChunkyBassLine = {
     .name = $("Chunky Bass Line"),
     .description = $("Triggers a 40BP Earthquake\n"
                      "after using a sound move."),
@@ -8484,7 +8484,7 @@ static const Ability ChunkyBassLine = {
     },
 };
 
-static const Ability DualHammer = {
+constexpr Ability DualHammer = {
     .name = $("Jackhammer"),
     .description = $("Super Slammer moves hit twice\n"
                      "for 70% damage."),
@@ -8494,7 +8494,7 @@ static const Ability DualHammer = {
     },
 };
 
-static const Ability DentingBlows = {
+constexpr Ability DentingBlows = {
     .name = $("Denting Blows"),
     .description = $("Hammer moves lower Defense."),
     .onAttacker = +[](ON_ATTACKER) -> int {
@@ -8510,7 +8510,7 @@ static const Ability DentingBlows = {
     },
 };
 
-static const Ability IceColdHunter = {
+constexpr Ability IceColdHunter = {
     .name = $("Ice Cold Hunter"),
     .description = $("Ice-type moves hit twice in hail."),
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
@@ -8520,7 +8520,7 @@ static const Ability IceColdHunter = {
     },
 };
 
-static const Ability SoulCrusher = {
+constexpr Ability SoulCrusher = {
     .name = $("Soul Crusher"),
     .description = $("Hammer moves hit SpDef\n"
                      "and get a 1.1x power boost."),
@@ -8534,7 +8534,7 @@ static const Ability SoulCrusher = {
     },
 };
 
-static const Ability ArcFlash = {
+constexpr Ability ArcFlash = {
     .name = $("Arc Flash"),
     .description = $("50% chance to burn when hit or\n"
                      "paralyze when dealing damage."),
@@ -8555,7 +8555,7 @@ static const Ability ArcFlash = {
     },
 };
 
-static const Ability Unicorn = {
+constexpr Ability Unicorn = {
     .name = $("Unicorn"),
     .description = $("Mighty Horn + Dazzling."),
     .onImmune = QueenlyMajesty.onImmune,
@@ -8563,7 +8563,7 @@ static const Ability Unicorn = {
     .onImmuneFor = APPLY_ON_ALLY,
 };
 
-static const Ability OnTheProwl = {
+constexpr Ability OnTheProwl = {
     .name = $("On the Prowl"),
     .description = $("+1 priority for the first turn.\n"
                      "Negative priority becomes +0."),
@@ -8573,7 +8573,7 @@ static const Ability OnTheProwl = {
     },
 };
 
-static const Ability Pretentious = {
+constexpr Ability Pretentious = {
     .name = $("Pretentious"),
     .description = $("Dealing a KO raises Crit by\n"
                      "one stage."),
@@ -8587,7 +8587,7 @@ static const Ability Pretentious = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability VenoblazePincers = {
+constexpr Ability VenoblazePincers = {
     .name = $("Venoblaze Pincers"),
     .description = $("1.2x boost to physical moves and\n"
                      "20% chance to Burn or Poison."),
@@ -8615,7 +8615,7 @@ static const Ability VenoblazePincers = {
         },
 };
 
-static const Ability EternalBlessing = {
+constexpr Ability EternalBlessing = {
     .name = $("Eternal Blessing"),
     .description = $("Celestial Blessing + Regenerator."),
     .onEndTurn = CelestialBlessing.onEndTurn,
@@ -8623,7 +8623,7 @@ static const Ability EternalBlessing = {
     .persistent = TRUE,
 };
 
-static const Ability SugarRush = {
+constexpr Ability SugarRush = {
     .name = $("Sugar Rush"),
     .description = $("Gluttony + eats foe's berry when\n"
                      "hitting with contact move."),
@@ -8633,7 +8633,7 @@ static const Ability SugarRush = {
     },
 };
 
-static const Ability PeacefulRest = {
+constexpr Ability PeacefulRest = {
     .name = $("Rest in Peace"),
     .description = $("Heals 1/8 of max HP every turn\n"
                      "in fog."),
@@ -8651,7 +8651,7 @@ static const Ability PeacefulRest = {
     },
 };
 
-static const Ability WhiteNoise = {
+constexpr Ability WhiteNoise = {
     .name = $("White Noise"),
     .description = $("Static + Rest in Peace."),
     .onEndTurn = PeacefulRest.onEndTurn,
@@ -8659,7 +8659,7 @@ static const Ability WhiteNoise = {
     .onDefender = Static.onDefender,
 };
 
-static const Ability SmokeyManeuvers = {
+constexpr Ability SmokeyManeuvers = {
     .name = $("Smokey Maneuvers"),
     .description = $("Evasion is boosted by 1.25x\n"
                      "in fog."),
@@ -8672,13 +8672,13 @@ static const Ability SmokeyManeuvers = {
     .breakable = TRUE,
 };
 
-static const Ability Tag = {
+constexpr Ability Tag = {
     .name = $("Tag"),
     .description = $("Attacks switching opponents\n"
                      "with a 20BP Pursuit."),
 };
 
-static const Ability PowerMetal = {
+constexpr Ability PowerMetal = {
     .name = $("Power Metal"),
     .description = $("Sound moves get a 1.2x boost\n"
                      "and become Steel if Normal."),
@@ -8690,14 +8690,14 @@ static const Ability PowerMetal = {
     },
 };
 
-static const Ability PowerEdge = {
+constexpr Ability PowerEdge = {
     .name = $("Power Edge"),
     .description = $("Keen Edge moves target Special\n"
                      "Defense and get a 1.3x boost."),
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
 };
 
-static const Ability Superconductor = {
+constexpr Ability Superconductor = {
     .name = $("Superconductor"),
     .description = $("Steel-type moves become Electric\n"
                      "-type moves and get a 1.1x boost."),
@@ -8712,7 +8712,7 @@ static const Ability Superconductor = {
     },
 };
 
-static const Ability UltraInstinct = {
+constexpr Ability UltraInstinct = {
     .name = $("Ultra Instinct"),
     .description = $("Counters contact with Vacuum\n"
                      "Wave. Takes 20% less damage."),
@@ -8726,7 +8726,7 @@ static const Ability UltraInstinct = {
     .onDefensiveMultiplier = Parry.onDefensiveMultiplier,
 };
 
-static const Ability UnlockedPotential = {
+constexpr Ability UnlockedPotential = {
     .name = $("Unlocked Potential"),
     .description = $("Inner Focus + Berserk."),
     .onDefender = Berserk.onDefender,
@@ -8734,7 +8734,7 @@ static const Ability UnlockedPotential = {
     .tauntImmune = TRUE,
 };
 
-static const Ability HigherRank = {
+constexpr Ability HigherRank = {
     .name = $("Higher Rank"),
     .description = $("Priority moves get a 1.2x boost."),
     .onOffensiveMultiplier =
@@ -8743,7 +8743,7 @@ static const Ability HigherRank = {
         },
 };
 
-static const Ability FuneralPyre = {
+constexpr Ability FuneralPyre = {
     .name = $("Funeral Pyre"),
     .description = $("Non-Ghost and Dark-types\n"
                      "take 1/4 damage every turn."),
@@ -8765,7 +8765,7 @@ static const Ability FuneralPyre = {
     },
 };
 
-static const Ability FlameBubble = {
+constexpr Ability FlameBubble = {
     .name = $("Flame Bubble"),
     .description = $("Water Bubble + Flaming Soul."),
     .onOffensiveMultiplier = WaterBubble.onOffensiveMultiplier,
@@ -8776,28 +8776,28 @@ static const Ability FlameBubble = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability ElementalVortex = {
+constexpr Ability ElementalVortex = {
     .name = $("Elemental Vortex"),
     .description = $("Flash Fire + Water Absorb."),
     .onAbsorb = +[](ON_ABSORB) -> int { return WaterAbsorb.onAbsorb(DELEGATE_ABSORB) || FlashFire.onAbsorb(DELEGATE_ABSORB); },
     .onOffensiveMultiplier = FlashFire.onOffensiveMultiplier,
 };
 
-static const Ability SnowyWrath = {
+constexpr Ability SnowyWrath = {
     .name = $("Snowy Wrath"),
     .description = $("Snow Warning + Cryomancy."),
     .onEntry = SnowWarning.onEntry,
     .onModifyEffectChance = Cryomancy.onModifyEffectChance,
 };
 
-static const Ability PatternChange = {
+constexpr Ability PatternChange = {
     .name = $("Pattern Change"),
     .description = $("Changes type depending on the\n"
                      "move it's about to use."),
     .protean = TRUE,
 };
 
-static const Ability NoTurningBack = {
+constexpr Ability NoTurningBack = {
     .name = $("No Turning Back"),
     .description = $("Boosts all stats but can't retreat\n"
                      "when below 1/2 max HP."),
@@ -8812,7 +8812,7 @@ static const Ability NoTurningBack = {
     },
 };
 
-static const Ability FlammableCoat = {
+constexpr Ability FlammableCoat = {
     .name = $("Flammable Coat"),
     .description = $("Changes forms when using or\n"
                      "hit by a Fire-type move."),
@@ -8831,14 +8831,14 @@ static const Ability FlammableCoat = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability DracoMorale = {
+constexpr Ability DracoMorale = {
     .name = $("Draco Morale"),
     .description = $("Uses Dragon Cheer\n"
                      "on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DRAGON_CHEER, 0); },
 };
 
-static const Ability BadOmen = {
+constexpr Ability BadOmen = {
     .name = $("Bad Omen"),
     .description = $("Foes min roll and may miss.\n"
                      "Takes 1/4 damage from crits."),
@@ -8851,7 +8851,7 @@ static const Ability BadOmen = {
     .breakable = TRUE,
 };
 
-static const Ability MoshPit = {
+constexpr Ability MoshPit = {
     .name = $("Mosh Pit"),
     .description = $("Ally's attacks get a 1.25x boost.\n"
                      "1.5x if attack causes recoil."),
@@ -8879,7 +8879,7 @@ ON_EITHER(BloodStain) {
     DisableSwitchInAbility(opponent, ability);
     return TRUE;
 }
-static const Ability BloodStain = {
+constexpr Ability BloodStain = {
     .name = $("Blood Stain"),
     .description = $("Bleeds if not immune. Can't get\n"
                      "other status. Spreads on contact."),
@@ -8893,7 +8893,7 @@ static const Ability BloodStain = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability BloodStigma = {
+constexpr Ability BloodStigma = {
     .name = $("Blood Stigma"),
     .description = $("Immune to status. Gets a 50%\n"
                      "boost vs bleeding foes."),
@@ -8909,14 +8909,14 @@ static const Ability BloodStigma = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability MaximumAcceleration = {
+constexpr Ability MaximumAcceleration = {
     .name = $("Max Acceleration"),
     .description = $("Moves use the Speed stat\n"
                      "for damage calculations."),
     .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *atkStatToUse = STAT_SPEED; },
 };
 
-static const Ability Sidewinder = {
+constexpr Ability Sidewinder = {
     .name = $("Sidewinder"),
     .description = $("First biting move each entry gets\n"
                      "+1 priority. Resets on KO."),
@@ -8931,15 +8931,15 @@ static const Ability Sidewinder = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Petrify = {
+constexpr Ability Petrify = {
     .name = $("Petrify"),
     .description = $("Clears stat buffs then lowers\n"
                      "speed by one stage on entry."),
     .onEntry = +[](ON_ENTRY) -> int {
         int loweredStats = 0;
-        int intimidated = UseIntimidateClone(battler, ability);
+        int intimidated = UseIntimidateClone(ability, battler);
         for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
-            if (!IsBattlerAlive(i)) continue;
+            FILTER(IsBattlerAlive(i))
             loweredStats |= TryResetBattlerStatChanges(i, RESET_STAT_BUFFS);
         }
 
@@ -8950,7 +8950,7 @@ static const Ability Petrify = {
     },
 };
 
-static const Ability Fluffiest = {
+constexpr Ability Fluffiest = {
     .name = $("Fluffiest"),
     .description = $("Quarters contact damage taken.\n"
                      "4x weak to fire."),
@@ -8962,7 +8962,7 @@ static const Ability Fluffiest = {
     .breakable = TRUE,
 };
 
-static const Ability WayOfPrecision = {
+constexpr Ability WayOfPrecision = {
     .name = $("Way of Precision"),
     .description = $("Inner Focus + Precise Fist."),
     .onAccuracy = InnerFocus.onAccuracy,
@@ -8972,7 +8972,7 @@ static const Ability WayOfPrecision = {
     .tauntImmune = TRUE,
 };
 
-static const Ability WayOfSwiftness = {
+constexpr Ability WayOfSwiftness = {
     .name = $("Way of Swiftness"),
     .description = $("Pretentious + Swift Swim."),
     .onBattlerFaints = Pretentious.onBattlerFaints,
@@ -8980,7 +8980,7 @@ static const Ability WayOfSwiftness = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability AtomicPunch = {
+constexpr Ability AtomicPunch = {
     .name = $("Atomic Punch"),
     .description = $("Iron Fist + Steelworker."),
     .onOffensiveMultiplier =
@@ -8990,7 +8990,7 @@ static const Ability AtomicPunch = {
         },
 };
 
-static const Ability IronGiant = {
+constexpr Ability IronGiant = {
     .name = $("Iron Giant"),
     .description = $("Heatproof + Juggernaut."),
     .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
@@ -9004,7 +9004,7 @@ static const Ability IronGiant = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability MasterHand = {
+constexpr Ability MasterHand = {
     .name = $("Master Hand"),
     .description = $("Mega Launcher + Rampage."),
     .onBattlerFaints = Rampage.onBattlerFaints,
@@ -9013,26 +9013,26 @@ static const Ability MasterHand = {
     .megaLauncherBoost = TRUE,
 };
 
-static const Ability FinalBlow = {
+constexpr Ability FinalBlow = {
     .name = $("Final Blow"),
     .description = $("Unseen Fist + Fatal Precision."),
     .onOffensiveMultiplier = FatalPrecision.onOffensiveMultiplier,
     .onAccuracy = FatalPrecision.onAccuracy,
 };
 
-static const Ability Hospitality = {
+constexpr Ability Hospitality = {
     .name = $("Hospitality"),
     .description = $("Heals partner for 25% of its max\n"
                      "HP on switch-in."),
 };
 
-static const Ability ButterUp = {
+constexpr Ability ButterUp = {
     .name = $("Butter Up"),
     .description = $("Hospitality + Soothing Aroma"),
     .onEntry = +[](ON_ENTRY) -> int { return Hospitality.onEntry(DELEGATE_ENTRY) | SoothingAroma.onEntry(DELEGATE_ENTRY); },
 };
 
-static const Ability VitalityStrike = {
+constexpr Ability VitalityStrike = {
     .name = $("Vitality Strike"),
     .description = $("Heals for 10% of the damage\n"
                      "dealt by punching moves."),
@@ -9049,7 +9049,7 @@ static const Ability VitalityStrike = {
     },
 };
 
-static const Ability HugeWings = {
+constexpr Ability HugeWings = {
     .name = $("Imposing Wings"),
     .description = $("Giant Wings + Levitate."),
     .onOffensiveMultiplier =
@@ -9061,7 +9061,7 @@ static const Ability HugeWings = {
     .levitate = TRUE,
 };
 
-static const Ability SwordOfDamnation = {
+constexpr Ability SwordOfDamnation = {
     .name = $("Sword of Damnation"),
     .description = $("Unaware + Sword of Ruin."),
     .onStat = SwordOfRuin.onStat,
@@ -9070,7 +9070,7 @@ static const Ability SwordOfDamnation = {
     .unaware = TRUE,
 };
 
-static const Ability RestrainingOrder = {
+constexpr Ability RestrainingOrder = {
     .name = $("Restraining Order"),
     .description = $("Forces the attacker out when\n"
                      "hit, once each switch-in."),
@@ -9086,7 +9086,7 @@ static const Ability RestrainingOrder = {
     },
 };
 
-static const Ability AssassinsTools = {
+constexpr Ability AssassinsTools = {
     .name = $("Assassin's Tools"),
     .description = $("Contact moves have a 30%\n"
                      "chance to PSN, PRLZ, or BLD."),
@@ -9114,7 +9114,7 @@ static const Ability AssassinsTools = {
     },
 };
 
-static const Ability Frostmaw = {
+constexpr Ability Frostmaw = {
     .name = $("Frostmaw"),
     .description = $("Biting moves have a 50% chance\n"
                      "to inflict frostbite."),
@@ -9128,7 +9128,7 @@ static const Ability Frostmaw = {
     },
 };
 
-static const Ability Patchwork = {
+constexpr Ability Patchwork = {
     .name = $("Patchwork"),
     .description = $("Disguise + curses the opponent\n"
                      "when its Disguise breaks."),
@@ -9156,7 +9156,7 @@ static const Ability Patchwork = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability BlindRage = {
+constexpr Ability BlindRage = {
     .name = $("Blind Rage"),
     .description = $("Scrappy + Mold Breaker."),
     .onEntry = MoldBreaker.onEntry,
@@ -9164,14 +9164,14 @@ static const Ability BlindRage = {
     .tauntImmune = TRUE,
 };
 
-static const Ability Slipstream = {
+constexpr Ability Slipstream = {
     .name = $("Slipstream"),
     .description = $("Moves use 20% of its Speed\n"
                      "stat additionally."),
     .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPEED] += 20; },
 };
 
-static const Ability ApexPredator = {
+constexpr Ability ApexPredator = {
     .name = $("Apex Predator"),
     .description = $("Tough Claws + Predator."),
     .onBattlerFaints = SoulEater.onBattlerFaints,
@@ -9179,7 +9179,7 @@ static const Ability ApexPredator = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability DragonsRitual = {
+constexpr Ability DragonsRitual = {
     .name = $("Dragon's Ritual"),
     .description = $("Dealing a KO raises Attack and\n"
                      "Speed by one stage."),
@@ -9191,7 +9191,7 @@ static const Ability DragonsRitual = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability PinnacleBlade = {
+constexpr Ability PinnacleBlade = {
     .name = $("Pinnacle Blade"),
     .description = $("Slashing moves always hit and\n"
                      "break protection and barriers."),
@@ -9227,7 +9227,7 @@ static const Ability PinnacleBlade = {
     },
 };
 
-static const Ability Energized = {
+constexpr Ability Energized = {
     .name = $("Energized"),
     .description = $("Generator + charges up on KO\n"
                      "with an Electric-type move."),
@@ -9244,7 +9244,7 @@ static const Ability Energized = {
     .persistent = TRUE,
 };
 
-static const Ability ColorSpectrum = {
+constexpr Ability ColorSpectrum = {
     .name = $("Color Spectrum"),
     .description = $("Same-type attacks get a 1.2x\n"
                      "boost. Changes type each turn."),
@@ -9267,7 +9267,7 @@ static const Ability ColorSpectrum = {
         },
 };
 
-static const Ability SteelBeetle = {
+constexpr Ability SteelBeetle = {
     .name = $("Steel Beetle"),
     .description = $("Raging Boxer + Pollinate."),
     .onParentalBond = RagingBoxer.onParentalBond,
@@ -9275,7 +9275,7 @@ static const Ability SteelBeetle = {
     .onMoveType = Pollinate.onMoveType,
 };
 
-static const Ability FromTheShadows = {
+constexpr Ability FromTheShadows = {
     .name = $("From the Shadows"),
     .description = $("Attacks trap and have a 20%\n"
                      "flinch chance when moving first."),
@@ -9295,7 +9295,7 @@ static const Ability FromTheShadows = {
     },
 };
 
-static const Ability RagePoint = {
+constexpr Ability RagePoint = {
     .name = $("Rage Point"),
     .description = $("Gets a 1.5x boost while statused.\n"
                      "Raises offenses when crit."),
@@ -9315,7 +9315,7 @@ static const Ability RagePoint = {
     .negatesFrzSpatkDrop = TRUE,
 };
 
-static const Ability HotCoals = {
+constexpr Ability HotCoals = {
     .name = $("Hot Coals"),
     .description = $("Sets a trap that burns the next\n"
                      "foe that switches in."),
@@ -9327,7 +9327,7 @@ static const Ability HotCoals = {
     },
 };
 
-static const Ability TerastalTreasure = {
+constexpr Ability TerastalTreasure = {
     .name = $("Terastal Treasure"),
     .description = $("Reduces damage taken by 40%,\n"
                      "but lowers speed by 20%."),
@@ -9339,7 +9339,7 @@ static const Ability TerastalTreasure = {
     .breakable = TRUE,
 };
 
-static const Ability ShockingMaw = {
+constexpr Ability ShockingMaw = {
     .name = $("Shocking Maw"),
     .description = $("Strong Jaw + Bite moves have\n"
                      "50% paralysis chance."),
@@ -9347,13 +9347,13 @@ static const Ability ShockingMaw = {
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
-static const Ability GleamEyes = {
+constexpr Ability GleamEyes = {
     .name = $("Gleam Eyes"),
     .description = $("Frisk + Scare."),
-    .onEntry = +[](ON_ENTRY) -> int { return UseIntimidateClone(battler, ability) | Frisk.onEntry(DELEGATE_ENTRY); },
+    .onEntry = +[](ON_ENTRY) -> int { return UseIntimidateClone(ability, battler) | Frisk.onEntry(DELEGATE_ENTRY); },
 };
 
-static const Ability RousedFangs = {
+constexpr Ability RousedFangs = {
     .name = $("Megabite"),
     .description = $("Biting moves use SpAtk and\n"
                      "deal 30% more damage."),
@@ -9361,7 +9361,7 @@ static const Ability RousedFangs = {
     .onChooseOffensiveStat = MindCrush.onChooseOffensiveStat,
 };
 
-static const Ability DreamState = {
+constexpr Ability DreamState = {
     .name = $("Dream State"),
     .description = $("Immune to critical hits. Takes\n"
                      "20% less damage from all attacks."),
@@ -9371,13 +9371,13 @@ static const Ability DreamState = {
     .breakable = TRUE,
 };
 
-static const Ability DreamWhimsy = {
+constexpr Ability DreamWhimsy = {
     .name = $("Dream Whimsy"),
     .description = $("Uses Yawn on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_YAWN, 0); },
 };
 
-static const Ability LunarAffinity = {
+constexpr Ability LunarAffinity = {
     .name = $("Lunar Affinity"),
     .description = $("Copies lunar moves used by\n"
                      "others."),
@@ -9387,7 +9387,7 @@ static const Ability LunarAffinity = {
     },
 };
 
-static const Ability FlameShield = {
+constexpr Ability FlameShield = {
     .name = $("Flame Shield"),
     .description = $("Takes 35% less damage from\n"
                      "Super-effective moves."),
@@ -9395,7 +9395,7 @@ static const Ability FlameShield = {
     .breakable = TRUE,
 };
 
-static const Ability AquaticDweller = {
+constexpr Ability AquaticDweller = {
     .name = $("Aquatic Dweller"),
     .description = $("Boosts the power of Water-type\n"
                      "moves by 1.5x."),
@@ -9406,13 +9406,13 @@ static const Ability AquaticDweller = {
         },
 };
 
-static const Ability ApplePie = {
+constexpr Ability ApplePie = {
     .name = $("Apple Pie"),
     .description = $("Self Sufficient + Ripen."),
     .onEndTurn = SelfSufficient.onEndTurn,
 };
 
-static const Ability Hover = {
+constexpr Ability Hover = {
     .name = $("Hover"),
     .description = $("Adds Psychic type to itself.\n"
                      "Avoids Ground attacks."),
@@ -9421,7 +9421,7 @@ static const Ability Hover = {
     .levitate = TRUE,
 };
 
-static const Ability Depravity = {
+constexpr Ability Depravity = {
     .name = $("Depravity"),
     .description = $("Merciless + Overcharge."),
     .onCrit = Merciless.onCrit,
@@ -9429,14 +9429,14 @@ static const Ability Depravity = {
     .onCanStatusType = Overcharge.onCanStatusType,
 };
 
-static const Ability Wildfire = {
+constexpr Ability Wildfire = {
     .name = $("Wildfire"),
     .description = $("Attacks with Fire Spin\n"
                      "on entry."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_FIRE_SPIN, 0); },
 };
 
-static const Ability JumpScare = {
+constexpr Ability JumpScare = {
     .name = $("Jumpscare"),
     .description = $("Attacks with Astonish on first\n"
                      "switch-in."),
@@ -9447,13 +9447,13 @@ static const Ability JumpScare = {
     .persistent = TRUE,
 };
 
-static const Ability TarToss = {
+constexpr Ability TarToss = {
     .name = $("Tar Toss"),
     .description = $("Uses Tar Shot on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TAR_SHOT, 0); },
 };
 
-static const Ability StunShock = {
+constexpr Ability StunShock = {
     .name = $("Stun Shock"),
     .description = $("Attacks have a 60% chance to\n"
                      "Paralyze or Poison."),
@@ -9473,7 +9473,7 @@ static const Ability StunShock = {
     },
 };
 
-static const Ability RagingGoddess = {
+constexpr Ability RagingGoddess = {
     .name = $("Raging Goddess"),
     .description = $("Rampage + Hyper Aggressive."),
     .onBattlerFaints = Rampage.onBattlerFaints,
@@ -9481,7 +9481,7 @@ static const Ability RagingGoddess = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Whiplash = {
+constexpr Ability Whiplash = {
     .name = $("Whiplash"),
     .description = $("Physical attacks lower defense."),
     .onAttacker = +[](ON_ATTACKER) -> int {
@@ -9497,7 +9497,7 @@ static const Ability Whiplash = {
     },
 };
 
-static const Ability SupersweetSyrup = {
+constexpr Ability SupersweetSyrup = {
     .name = $("Supersweet Syrup"),
     .description = $("Can't lose its item. Disables foe's\n"
                      "item for 2 turns on contact."),
@@ -9516,13 +9516,13 @@ static const Ability SupersweetSyrup = {
     .breakable = TRUE,
 };
 
-static const Ability LuckyHalo = {
+constexpr Ability LuckyHalo = {
     .name = $("Lucky Halo"),
     .description = $("Negates self stat drops. Survives\n"
                      "the first hit that would KO it."),
 };
 
-static const Ability TrashHeap = {
+constexpr Ability TrashHeap = {
     .name = $("Trash Heap"),
     .description = $("Corrosion + Toxic Spill."),
     .onEntry = ToxicSpill.onEntry,
@@ -9532,7 +9532,7 @@ static const Ability TrashHeap = {
     .onCanStatusType = Corrosion.onCanStatusType,
 };
 
-static const Ability SludgyMix = {
+constexpr Ability SludgyMix = {
     .name = $("Sludgy Mix"),
     .description = $("Intoxicate + Punk Rock."),
     .onOffensiveMultiplier =
@@ -9543,14 +9543,14 @@ static const Ability SludgyMix = {
     .onMoveType = Intoxicate.onMoveType,
 };
 
-static const Ability Overwatch = {
+constexpr Ability Overwatch = {
     .name = $("Overwatch"),
     .description = $("On the Prowl + Stakeout."),
     .onEntry = OnTheProwl.onEntry,
     .onOffensiveMultiplier = Stakeout.onOffensiveMultiplier,
 };
 
-static const Ability WindRage = {
+constexpr Ability WindRage = {
     .name = $("Wind Rage"),
     .description = $("Uses Defog on switch-in. Air-\n"
                      "based moves get a 1.3x boost."),
@@ -9558,7 +9558,7 @@ static const Ability WindRage = {
     .onOffensiveMultiplier = GiantWings.onOffensiveMultiplier,
 };
 
-static const Ability VictoryBomb = {
+constexpr Ability VictoryBomb = {
     .name = $("Victory Bomb"),
     .description = $("Attacks with a 100BP Fire-type\n"
                      "Explosion on fainting."),
@@ -9575,7 +9575,7 @@ static const Ability VictoryBomb = {
     },
 };
 
-static const Ability RazorSharp = {
+constexpr Ability RazorSharp = {
     .name = $("Razor Sharp"),
     .description = $("Critical hits also inflict bleeding."),
     .onAttacker = +[](ON_ATTACKER) -> int {
@@ -9587,7 +9587,7 @@ static const Ability RazorSharp = {
     },
 };
 
-static const Ability ToTheBone = {
+constexpr Ability ToTheBone = {
     .name = $("To The Bone"),
     .description = $("Critical hits get a 1.5x boost and\n"
                      "inflict bleeding."),
@@ -9595,7 +9595,7 @@ static const Ability ToTheBone = {
     .onOffensiveMultiplier = Sniper.onOffensiveMultiplier,
 };
 
-static const Ability BladeDance = {
+constexpr Ability BladeDance = {
     .name = $("Blade Dance"),
     .description = $("Triggers 50 BP Leaf Blade after\n"
                      "using a dance move."),
@@ -9607,7 +9607,7 @@ static const Ability BladeDance = {
     },
 };
 
-static const Ability Taekkyeon = {
+constexpr Ability Taekkyeon = {
     .name = $("Taekkyeon"),
     .description = $("All attacks are dances."),
 };
@@ -9626,7 +9626,7 @@ int ApeShiftHandler(int battler, AbilityCallType callType) {
     BattleScriptCall(BattleScript_StackBattlerFormChange);
     return TRUE;
 }
-static const Ability ApeShift = {
+constexpr Ability ApeShift = {
     .name = $("Ape Shift"),
     .description = $("Transforms when below 50% HP,\n"
                      "curing status and always critting."),
@@ -9640,7 +9640,7 @@ static const Ability ApeShift = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability KnowYourPlace = {
+constexpr Ability KnowYourPlace = {
     .name = $("Know Your Place"),
     .description = $("Contact attacks make foes move\n"
                      "last for 5 turns."),
@@ -9655,7 +9655,7 @@ static const Ability KnowYourPlace = {
     },
 };
 
-static const Ability DeepCuts = {
+constexpr Ability DeepCuts = {
     .name = $("Deep Cuts"),
     .description = $("Slashing moves have a 50%\n"
                      "chance to inflict bleeding."),
@@ -9669,7 +9669,7 @@ static const Ability DeepCuts = {
     },
 };
 
-static const Ability LifeSteal = {
+constexpr Ability LifeSteal = {
     .name = $("Life Steal"),
     .description = $("Steals 1/10 HP from foes each\n"
                      "turn."),
@@ -9689,7 +9689,7 @@ static const Ability LifeSteal = {
     },
 };
 
-static const Ability RudeAwakening = {
+constexpr Ability RudeAwakening = {
     .name = $("Rude Awakening"),
     .description = $("Raises all stats becomes immune\n"
                      "to sleep after waking up."),
@@ -9701,7 +9701,7 @@ static const Ability RudeAwakening = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability TeraformZero = {
+constexpr Ability TeraformZero = {
     .name = $("Teraform Zero"),
     .description = $("Tera Shell + clears weather and\n"
                      "terrain on first entry."),
@@ -9717,7 +9717,7 @@ static const Ability TeraformZero = {
     .breakable = TRUE,
 };
 
-static const Ability SetAblaze = {
+constexpr Ability SetAblaze = {
     .name = $("Set Ablaze"),
     .description = $("Inflicting burn also inflicts fear."),
     .onReactive = BloodBath.onReactive,
@@ -9725,7 +9725,7 @@ static const Ability SetAblaze = {
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-static const Ability Breakwater = {
+constexpr Ability Breakwater = {
     .name = $("Breakwater"),
     .description = $("Swift Swim + Stall."),
     .onDefensiveMultiplier = Stall.onDefensiveMultiplier,
@@ -9733,7 +9733,7 @@ static const Ability Breakwater = {
     .breakable = TRUE,
 };
 
-static const Ability MagicalFists = {
+constexpr Ability MagicalFists = {
     .name = $("Magical Fists"),
     .description = $("Punching moves use Special\n"
                      "Attack and get a 1.3x boost."),
@@ -9744,7 +9744,7 @@ static const Ability MagicalFists = {
         },
 };
 
-static const Ability Cutthroat = {
+constexpr Ability Cutthroat = {
     .name = $("Cutthroat"),
     .description = $("The first slicing move used on\n"
                      "each entry in gets +1 priority."),
@@ -9756,21 +9756,21 @@ static const Ability Cutthroat = {
     },
 };
 
-static const Ability SandBender = {
+constexpr Ability SandBender = {
     .name = $("Sand Bender"),
     .description = $("Sand Stream + Sand Force."),
     .onEntry = SandStream.onEntry,
     .onStat = SandForce.onStat,
 };
 
-static const Ability SandPit = {
+constexpr Ability SandPit = {
     .name = $("Sand Pit"),
     .description = $("Attacks with 20BP Sand Tomb\n"
                      "on switch-in."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SAND_TOMB, 20); },
 };
 
-static const Ability DesolateSun = {
+constexpr Ability DesolateSun = {
     .name = $("Desolate Sun"),
     .description = $("Desolate Land + Earth Eater."),
     .randomizerBanned = TRUE,
@@ -9784,14 +9784,14 @@ ON_EITHER(Daybreak) {
     AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
     return TRUE;
 }
-static const Ability Daybreak = {
+constexpr Ability Daybreak = {
     .name = $("Daybreak"),
     .description = $("Burns the foe on contact.\n"
                      "Also works on offense."),
     ON_EITHER_ABILITY(Daybreak),
 };
 
-static const Ability EnergySiphon = {
+constexpr Ability EnergySiphon = {
     .name = $("Energy Siphon"),
     .description = $("Heals the user for 1/4\n"
                      "of the damage they deal."),
@@ -9807,7 +9807,7 @@ static const Ability EnergySiphon = {
     },
 };
 
-static const Ability Reservoir = {
+constexpr Ability Reservoir = {
     .name = $("Reservoir"),
     .description = $("Water Absorb + Storm Drain."),
     .onAbsorb = +[](ON_ABSORB) -> int {
@@ -9822,7 +9822,7 @@ static const Ability Reservoir = {
 static int NeurotoxinCondition(int battler, int target) {
     return CanLowerStat(target, STAT_ATK) || CanLowerStat(target, STAT_SPATK) || CanLowerStat(target, STAT_SPEED);
 }
-static const Ability Neurotoxin = {
+constexpr Ability Neurotoxin = {
     .name = $("Neurotoxin"),
     .description = $("Inflicting poison also lowers\n"
                      "Attack, SpAtk, and Speed."),
@@ -9831,7 +9831,7 @@ static const Ability Neurotoxin = {
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-static const Ability EnergizedHorns = {
+constexpr Ability EnergizedHorns = {
     .name = $("Energy Horns"),
     .description = $("Mighty horn moves become special\n"
                      "and deal 30% more damage."),
@@ -9843,7 +9843,7 @@ static const Ability EnergizedHorns = {
     },
 };
 
-static const Ability SpiderLairUpgrade = {
+constexpr Ability SpiderLairUpgrade = {
     .name = $("Rising Dough"),
     .description = $("Casts Sticky Web on entry.\n"
                      "Lasts 7 turns."),
@@ -9859,7 +9859,7 @@ static const Ability SpiderLairUpgrade = {
     },
 };
 
-static const Ability CrustCoat = {
+constexpr Ability CrustCoat = {
     .name = $("Crust Coat"),
     .description = $("Immune to critical hits. Takes\n"
                      "20% less damage from all attacks."),
@@ -9869,7 +9869,7 @@ static const Ability CrustCoat = {
     .breakable = TRUE,
 };
 
-static const Ability Puffy = {
+constexpr Ability Puffy = {
     .name = $("Puffy"),
     .description = $("Takes 1/2 dmg from contact moves\n"
                      "but Fire moves hurt it 2x more."),
@@ -9877,14 +9877,14 @@ static const Ability Puffy = {
     .breakable = TRUE,
 };
 
-static const Ability BalloonBlitz = {
+constexpr Ability BalloonBlitz = {
     .name = $("Balloon Blitz"),
     .description = $("Inflatable + Hyper Aggressive."),
     .onDefender = Inflatable.onDefender,
     .onParentalBond = ParentalBond.onParentalBond,
 };
 
-static const Ability StrikerPixilate = {
+constexpr Ability StrikerPixilate = {
     .name = $("Twinkle Toes"),
     .description = $("Boosts the power of kicking\n"
                      "moves by 1.3x + Pixilate."),
@@ -9897,7 +9897,7 @@ static const Ability StrikerPixilate = {
 };
 
 // 2.6
-static const Ability DoomBlast = {
+constexpr Ability DoomBlast = {
     .name = $("Doom Blast"),
     .description = $("Boosts own Dark moves by 1.35x,\n"
                      "takes 10% of dmg dealt as recoil."),
@@ -9912,7 +9912,7 @@ static const Ability DoomBlast = {
         },
 };
 
-static const Ability Bruteforce = {
+constexpr Ability Bruteforce = {
     .name = $("Brute Force"),
     .description = $("Rock Head + Reckless"),
     .onOffensiveMultiplier = Reckless.onOffensiveMultiplier,
@@ -9921,7 +9921,7 @@ static const Ability Bruteforce = {
     .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability FaradayCage = {
+constexpr Ability FaradayCage = {
     .name = $("Faraday Cage"),
     .description = $("Shell Armor + 50BP Thunder\n"
                      "Cage when hit by contact."),
@@ -9938,7 +9938,7 @@ static const Ability FaradayCage = {
     .breakable = TRUE,
 };
 
-static const Ability AcidicSlime = {
+constexpr Ability AcidicSlime = {
     .name = $("Acidic Slime"),
     .description = $("Corrosion + Poison STAB."),
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
@@ -9946,7 +9946,7 @@ static const Ability AcidicSlime = {
     .onCanStatusType = Corrosion.onCanStatusType,
 };
 
-static const Ability RoseGarden = {
+constexpr Ability RoseGarden = {
     .name = $("Rose Garden"),
     .description = $("Spreads two layers of\n"
                      "Toxic Spikes on switch-in."),
@@ -9962,7 +9962,7 @@ static const Ability RoseGarden = {
     },
 };
 
-static const Ability Qigong = {
+constexpr Ability Qigong = {
     .name = $("Qigong"),
     .description = $("Always hits. Fighting Spirit\n"
                      "+ Rampage."),
@@ -9973,7 +9973,7 @@ static const Ability Qigong = {
     .onBattlerFaintsFor = Rampage.onBattlerFaintsFor,
 };
 
-static const Ability ConjurerOfDeceit = {
+constexpr Ability ConjurerOfDeceit = {
     .name = $("Conjurer Of Deceit"),
     .description = $("Magic Guard + Magic Bounce"),
     .breakable = TRUE,
@@ -9981,7 +9981,7 @@ static const Ability ConjurerOfDeceit = {
     .magicBounce = TRUE,
 };
 
-static const Ability DeepFreeze = {
+constexpr Ability DeepFreeze = {
     .name = $("Deep Freeze"),
     .description = $("Boosts Water and Ice by 1.25x.\n"
                      "Halves Fire damage taken."),
@@ -9996,7 +9996,7 @@ static const Ability DeepFreeze = {
     .breakable = TRUE,
 };
 
-static const Ability SoulDevourer = {
+constexpr Ability SoulDevourer = {
     .name = $("Soul Devourer"),
     .description = $("Soul Eater + Phantom Pain"),
     .onBattlerFaints = SoulEater.onBattlerFaints,
@@ -10004,13 +10004,13 @@ static const Ability SoulDevourer = {
     .onBattlerFaintsFor = SoulEater.onBattlerFaintsFor,
 };
 
-static const Ability ChampionsEntrance = {
+constexpr Ability ChampionsEntrance = {
     .name = $("Champion's Entrance"),
     .description = $("Intimidate + Violent Rush"),
     .onEntry = +[](ON_ENTRY) -> int { return Intimidate.onEntry(DELEGATE_ENTRY) | ViolentRush.onEntry(DELEGATE_ENTRY); },
 };
 
-static const Ability Presto = {
+constexpr Ability Presto = {
     .name = $("Presto"),
     .description = $("Sound moves get +1 priority\n"
                      "at full HP."),
@@ -10021,27 +10021,27 @@ static const Ability Presto = {
     },
 };
 
-static const Ability Samba = {
+constexpr Ability Samba = {
     .name = $("Samba"),
     .description = $("Striker + Dancer"),
     .onOffensiveMultiplier = Striker.onOffensiveMultiplier,
     .onCopyMove = Dancer.onCopyMove,
 };
 
-static const Ability JunshiSanda = {
+constexpr Ability JunshiSanda = {
     .name = $("JunshiSanda"),
     .description = $("Punching or Kicking moves count as\n"
                      "both Punching and Kicking moves."),
 };
 
-static const Ability Gladiator = {
+constexpr Ability Gladiator = {
     .name = $("Gladiator"),
     .description = $("Boosts Fighting-type moves by 1.3x,\n"
                      "or 1.8x when below 1/3 HP."),
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_FIGHTING),
 };
 
-static const Ability ForsakenHeart = {
+constexpr Ability ForsakenHeart = {
     .name = $("Forsaken Heart"),
     .description = $("KOs dealt anywhere on the field\n"
                      "raise Attack by one stage."),
@@ -10054,7 +10054,7 @@ static const Ability ForsakenHeart = {
     .onBattlerFaintsFor = APPLY_ON_ANY,
 };
 
-static const Ability Relentless = {
+constexpr Ability Relentless = {
     .name = $("Relentless"),
     .description = $("Exploit Weakness + Merciless"),
     .onOffensiveMultiplier = ExploitWeakness.onOffensiveMultiplier,
@@ -10062,7 +10062,7 @@ static const Ability Relentless = {
     .onCrit = Merciless.onCrit,
 };
 
-static const Ability Soothsayer = {
+constexpr Ability Soothsayer = {
     .name = $("Soothsayer"),
     .description = $("Resists all attacks for three\n"
                      "turns on first entry."),
@@ -10087,7 +10087,7 @@ static const Ability Soothsayer = {
     .persistent = TRUE,
 };
 
-static const Ability CorruptedMind = {
+constexpr Ability CorruptedMind = {
     .name = $("Corrupted Mind"),
     .description = $("Psychic-type moves deal\n"
                      "Super-effective damage."),
@@ -10098,7 +10098,7 @@ static const Ability CorruptedMind = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability FlameCoat = {
+constexpr Ability FlameCoat = {
     .name = $("Flame Coat"),
     .description = $("Non-Fire-types take 1/8 dmg\n"
                      "every turn when on field."),
@@ -10121,7 +10121,7 @@ static const Ability FlameCoat = {
     },
 };
 
-static const Ability UnownPower = {
+constexpr Ability UnownPower = {
     .name = $("Unown Power"),
     .description = $("Mystic Power + Hidden and Secret\n"
                      "Power hit Super-effectively."),
@@ -10133,7 +10133,7 @@ static const Ability UnownPower = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability SuperScope = {
+constexpr Ability SuperScope = {
     .name = $("Super Scope"),
     .description = $("Mega Launcher + Artillery."),
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
@@ -10141,7 +10141,7 @@ static const Ability SuperScope = {
     .megaLauncherBoost = TRUE,
 };
 
-static const Ability VenomCrown = {
+constexpr Ability VenomCrown = {
     .name = $("Venom Crown"),
     .description = $("Poison Point + Mighty Horn."),
     ON_EITHER_ABILITY(PoisonPoint),
@@ -10149,7 +10149,7 @@ static const Ability VenomCrown = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability BlightScale = {
+constexpr Ability BlightScale = {
     .name = $("Blight Scale"),
     .description = $("Multiscale + Poison Point"),
     ON_EITHER_ABILITY(PoisonPoint),
@@ -10158,7 +10158,7 @@ static const Ability BlightScale = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Gunman = {
+constexpr Ability Gunman = {
     .name = $("Gunman"),
     .description = $("Mega Launcher + Status moves are\n"
                      "Mega Launcher moves."),
@@ -10166,19 +10166,19 @@ static const Ability Gunman = {
     .megaLauncherBoost = TRUE,
 };
 
-static const Ability HuntersMark = {
+constexpr Ability HuntersMark = {
     .name = $("Hunter's Mark"),
     .description = $("Attacks with 40BP Spirit Shackle\n"
                      "when foes try to switch."),
 };
 
-static const Ability Hemolysis = {
+constexpr Ability Hemolysis = {
     .name = $("Hemolysis"),
     .description = $("Poisoned foes lose all stat buffs\n"
                      "and can't heal."),
 };
 
-static const Ability Caretaker = {
+constexpr Ability Caretaker = {
     .name = $("Caretaker"),
     .description = $("Healer + Friend Guard."),
     .onEndTurn = +[](ON_END_TURN) -> int {
@@ -10196,13 +10196,13 @@ static const Ability Caretaker = {
     },
 };
 
-static const Ability PoseidonsDominion = {
+constexpr Ability PoseidonsDominion = {
     .name = $("Poseidon's Dominion"),
     .description = $("Attacks with Whirlpool on entry."),
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_WHIRLPOOL, 0); },
 };
 
-static const Ability DualShadow = {
+constexpr Ability DualShadow = {
     .name = $("Two-Faced"),
     .description = $("Hunger Switch + Elec and Dark\n"
                      "deal 1.35x with 10% recoil."),
@@ -10220,7 +10220,7 @@ static const Ability DualShadow = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Lullaby = {
+constexpr Ability Lullaby = {
     .name = $("Lullaby"),
     .description = $("Sing accuracy is 90% when\n"
                      "used by this Pokémon."),
@@ -10231,7 +10231,7 @@ static const Ability Lullaby = {
     },
 };
 
-static const Ability CryoArchitect = {
+constexpr Ability CryoArchitect = {
     .name = $("Cryo Architect"),
     .description = $("Boosts Attack and Def when\n"
                      "hit by Water or Ice."),
@@ -10277,7 +10277,7 @@ static const Ability CryoArchitect = {
     },
 };
 
-static const Ability GlacialRage = {
+constexpr Ability GlacialRage = {
     .name = $("Glacial Rage"),
     .description = $("Triggers 50 BP Blizzard after\n"
                      "using a Ice-type move."),
@@ -10289,13 +10289,13 @@ static const Ability GlacialRage = {
     },
 };
 
-static const Ability ImmovableObject = {
+constexpr Ability ImmovableObject = {
     .name = $("Immovable Object"),
     .description = $("Impenetrable + Sturdy."),
     .magicGuard = TRUE,
 };
 
-static const Ability FrenziedPhantom = {
+constexpr Ability FrenziedPhantom = {
     .name = $("Frenzied Phantom"),
     .description = $("Hyper Aggressive +\n"
                      "Shadow Tag."),
@@ -10304,798 +10304,896 @@ static const Ability FrenziedPhantom = {
     .shadowTag = TRUE,
 };
 
-const Ability gAbilities[] = {
-    [ABILITY_NONE] = None,
-    [ABILITY_STENCH] = Stench,
-    [ABILITY_DRIZZLE] = Drizzle,
-    [ABILITY_SPEED_BOOST] = SpeedBoost,
-    [ABILITY_BATTLE_ARMOR] = BattleArmor,
-    [ABILITY_STURDY] = Sturdy,
-    [ABILITY_DAMP] = Damp,
-    [ABILITY_LIMBER] = Limber,
-    [ABILITY_SAND_VEIL] = SandVeil,
-    [ABILITY_STATIC] = Static,
-    [ABILITY_VOLT_ABSORB] = VoltAbsorb,
-    [ABILITY_WATER_ABSORB] = WaterAbsorb,
-    [ABILITY_OBLIVIOUS] = Oblivious,
-    [ABILITY_CLOUD_NINE] = CloudNine,
-    [ABILITY_COMPOUND_EYES] = CompoundEyes,
-    [ABILITY_INSOMNIA] = Insomnia,
-    [ABILITY_COLOR_CHANGE] = ColorChange,
-    [ABILITY_IMMUNITY] = Immunity,
-    [ABILITY_FLASH_FIRE] = FlashFire,
-    [ABILITY_SHIELD_DUST] = ShieldDust,
-    [ABILITY_OWN_TEMPO] = OwnTempo,
-    [ABILITY_SUCTION_CUPS] = SuctionCups,
-    [ABILITY_INTIMIDATE] = Intimidate,
-    [ABILITY_SHADOW_TAG] = ShadowTag,
-    [ABILITY_ROUGH_SKIN] = RoughSkin,
-    [ABILITY_WONDER_GUARD] = WonderGuard,
-    [ABILITY_LEVITATE] = Levitate,
-    [ABILITY_EFFECT_SPORE] = EffectSpore,
-    [ABILITY_SYNCHRONIZE] = Synchronize,
-    [ABILITY_CLEAR_BODY] = ClearBody,
-    [ABILITY_NATURAL_CURE] = NaturalCure,
-    [ABILITY_LIGHTNING_ROD] = LightningRod,
-    [ABILITY_SERENE_GRACE] = SereneGrace,
-    [ABILITY_SWIFT_SWIM] = SwiftSwim,
-    [ABILITY_CHLOROPHYLL] = Chlorophyll,
-    [ABILITY_ILLUMINATE] = Illuminate,
-    [ABILITY_TRACE] = Trace,
-    [ABILITY_HUGE_POWER] = HugePower,
-    [ABILITY_POISON_POINT] = PoisonPoint,
-    [ABILITY_INNER_FOCUS] = InnerFocus,
-    [ABILITY_MAGMA_ARMOR] = MagmaArmor,
-    [ABILITY_WATER_VEIL] = WaterVeil,
-    [ABILITY_MAGNET_PULL] = MagnetPull,
-    [ABILITY_SOUNDPROOF] = Soundproof,
-    [ABILITY_RAIN_DISH] = RainDish,
-    [ABILITY_SAND_STREAM] = SandStream,
-    [ABILITY_PRESSURE] = Pressure,
-    [ABILITY_THICK_FAT] = ThickFat,
-    [ABILITY_EARLY_BIRD] = EarlyBird,
-    [ABILITY_FLAME_BODY] = FlameBody,
-    [ABILITY_RUN_AWAY] = RunAway,
-    [ABILITY_KEEN_EYE] = KeenEye,
-    [ABILITY_HYPER_CUTTER] = HyperCutter,
-    [ABILITY_PICKUP] = Pickup,
-    [ABILITY_TRUANT] = Truant,
-    [ABILITY_HUSTLE] = Hustle,
-    [ABILITY_CUTE_CHARM] = CuteCharm,
-    [ABILITY_PLUS] = Plus,
-    [ABILITY_MINUS] = Minus,
-    [ABILITY_FORECAST] = Forecast,
-    [ABILITY_STICKY_HOLD] = StickyHold,
-    [ABILITY_SHED_SKIN] = ShedSkin,
-    [ABILITY_GUTS] = Guts,
-    [ABILITY_MARVEL_SCALE] = MarvelScale,
-    [ABILITY_LIQUID_OOZE] = LiquidOoze,
-    [ABILITY_OVERGROW] = Overgrow,
-    [ABILITY_BLAZE] = Blaze,
-    [ABILITY_TORRENT] = Torrent,
-    [ABILITY_SWARM] = Swarm,
-    [ABILITY_ROCK_HEAD] = RockHead,
-    [ABILITY_DROUGHT] = Drought,
-    [ABILITY_ARENA_TRAP] = ArenaTrap,
-    [ABILITY_VITAL_SPIRIT] = VitalSpirit,
-    [ABILITY_WHITE_SMOKE] = WhiteSmoke,
-    [ABILITY_PURE_POWER] = PurePower,
-    [ABILITY_SHELL_ARMOR] = ShellArmor,
-    [ABILITY_AIR_LOCK] = AirLock,
-    [ABILITY_TANGLED_FEET] = TangledFeet,
-    [ABILITY_MOTOR_DRIVE] = MotorDrive,
-    [ABILITY_RIVALRY] = Rivalry,
-    [ABILITY_STEADFAST] = Steadfast,
-    [ABILITY_SNOW_CLOAK] = SnowCloak,
-    [ABILITY_GLUTTONY] = Gluttony,
-    [ABILITY_ANGER_POINT] = AngerPoint,
-    [ABILITY_UNBURDEN] = Unburden,
-    [ABILITY_HEATPROOF] = Heatproof,
-    [ABILITY_SIMPLE] = Simple,
-    [ABILITY_DRY_SKIN] = DrySkin,
-    [ABILITY_DOWNLOAD] = Download,
-    [ABILITY_IRON_FIST] = IronFist,
-    [ABILITY_POISON_HEAL] = PoisonHeal,
-    [ABILITY_ADAPTABILITY] = Adaptability,
-    [ABILITY_SKILL_LINK] = SkillLink,
-    [ABILITY_HYDRATION] = Hydration,
-    [ABILITY_SOLAR_POWER] = SolarPower,
-    [ABILITY_QUICK_FEET] = QuickFeet,
-    [ABILITY_NORMALIZE] = Normalize,
-    [ABILITY_SNIPER] = Sniper,
-    [ABILITY_MAGIC_GUARD] = MagicGuard,
-    [ABILITY_NO_GUARD] = NoGuard,
-    [ABILITY_STALL] = Stall,
-    [ABILITY_TECHNICIAN] = Technician,
-    [ABILITY_LEAF_GUARD] = LeafGuard,
-    [ABILITY_KLUTZ] = Klutz,
-    [ABILITY_MOLD_BREAKER] = MoldBreaker,
-    [ABILITY_SUPER_LUCK] = SuperLuck,
-    [ABILITY_AFTERMATH] = Aftermath,
-    [ABILITY_ANTICIPATION] = Anticipation,
-    [ABILITY_FOREWARN] = Forewarn,
-    [ABILITY_UNAWARE] = Unaware,
-    [ABILITY_TINTED_LENS] = TintedLens,
-    [ABILITY_FILTER] = Filter,
-    [ABILITY_SLOW_START] = SlowStart,
-    [ABILITY_SCRAPPY] = Scrappy,
-    [ABILITY_STORM_DRAIN] = StormDrain,
-    [ABILITY_ICE_BODY] = IceBody,
-    [ABILITY_SOLID_ROCK] = SolidRock,
-    [ABILITY_SNOW_WARNING] = SnowWarning,
-    [ABILITY_HONEY_GATHER] = HoneyGather,
-    [ABILITY_FRISK] = Frisk,
-    [ABILITY_RECKLESS] = Reckless,
-    [ABILITY_MULTITYPE] = Multitype,
-    [ABILITY_FLOWER_GIFT] = FlowerGift,
-    [ABILITY_BAD_DREAMS] = BadDreams,
-    [ABILITY_PICKPOCKET] = Pickpocket,
-    [ABILITY_SHEER_FORCE] = SheerForce,
-    [ABILITY_CONTRARY] = Contrary,
-    [ABILITY_UNNERVE] = Unnerve,
-    [ABILITY_DEFIANT] = Defiant,
-    [ABILITY_DEFEATIST] = Defeatist,
-    [ABILITY_CURSED_BODY] = CursedBody,
-    [ABILITY_HEALER] = Healer,
-    [ABILITY_FRIEND_GUARD] = FriendGuard,
-    [ABILITY_WEAK_ARMOR] = WeakArmor,
-    [ABILITY_HEAVY_METAL] = HeavyMetal,
-    [ABILITY_LIGHT_METAL] = LightMetal,
-    [ABILITY_MULTISCALE] = Multiscale,
-    [ABILITY_TOXIC_BOOST] = ToxicBoost,
-    [ABILITY_FLARE_BOOST] = FlareBoost,
-    [ABILITY_HARVEST] = Harvest,
-    [ABILITY_TELEPATHY] = Telepathy,
-    [ABILITY_MOODY] = Moody,
-    [ABILITY_OVERCOAT] = Overcoat,
-    [ABILITY_POISON_TOUCH] = PoisonTouch,
-    [ABILITY_REGENERATOR] = Regenerator,
-    [ABILITY_BIG_PECKS] = BigPecks,
-    [ABILITY_SAND_RUSH] = SandRush,
-    [ABILITY_WONDER_SKIN] = WonderSkin,
-    [ABILITY_ANALYTIC] = Analytic,
-    [ABILITY_ILLUSION] = Illusion,
-    [ABILITY_IMPOSTER] = Imposter,
-    [ABILITY_INFILTRATOR] = Infiltrator,
-    [ABILITY_MUMMY] = Mummy,
-    [ABILITY_MOXIE] = Moxie,
-    [ABILITY_JUSTIFIED] = Justified,
-    [ABILITY_RATTLED] = Rattled,
-    [ABILITY_MAGIC_BOUNCE] = MagicBounce,
-    [ABILITY_SAP_SIPPER] = SapSipper,
-    [ABILITY_PRANKSTER] = Prankster,
-    [ABILITY_SAND_FORCE] = SandForce,
-    [ABILITY_IRON_BARBS] = IronBarbs,
-    [ABILITY_ZEN_MODE] = ZenMode,
-    [ABILITY_VICTORY_STAR] = VictoryStar,
-    [ABILITY_TURBOBLAZE] = Turboblaze,
-    [ABILITY_TERAVOLT] = Teravolt,
-    [ABILITY_AROMA_VEIL] = AromaVeil,
-    [ABILITY_FLOWER_VEIL] = FlowerVeil,
-    [ABILITY_CHEEK_POUCH] = CheekPouch,
-    [ABILITY_PROTEAN] = Protean,
-    [ABILITY_FUR_COAT] = FurCoat,
-    [ABILITY_MAGICIAN] = Magician,
-    [ABILITY_BULLETPROOF] = Bulletproof,
-    [ABILITY_COMPETITIVE] = Competitive,
-    [ABILITY_STRONG_JAW] = StrongJaw,
-    [ABILITY_REFRIGERATE] = Refrigerate,
-    [ABILITY_SWEET_VEIL] = SweetVeil,
-    [ABILITY_STANCE_CHANGE] = StanceChange,
-    [ABILITY_GALE_WINGS] = GaleWings,
-    [ABILITY_MEGA_LAUNCHER] = MegaLauncher,
-    [ABILITY_GRASS_PELT] = GrassPelt,
-    [ABILITY_SYMBIOSIS] = Symbiosis,
-    [ABILITY_TOUGH_CLAWS] = ToughClaws,
-    [ABILITY_PIXILATE] = Pixilate,
-    [ABILITY_GOOEY] = Gooey,
-    [ABILITY_AERILATE] = Aerilate,
-    [ABILITY_PARENTAL_BOND] = ParentalBond,
-    [ABILITY_DARK_AURA] = DarkAura,
-    [ABILITY_FAIRY_AURA] = FairyAura,
-    [ABILITY_AURA_BREAK] = AuraBreak,
-    [ABILITY_PRIMORDIAL_SEA] = PrimordialSea,
-    [ABILITY_DESOLATE_LAND] = DesolateLand,
-    [ABILITY_DELTA_STREAM] = DeltaStream,
-    [ABILITY_STAMINA] = Stamina,
-    [ABILITY_WIMP_OUT] = WimpOut,
-    [ABILITY_EMERGENCY_EXIT] = EmergencyExit,
-    [ABILITY_WATER_COMPACTION] = WaterCompaction,
-    [ABILITY_MERCILESS] = Merciless,
-    [ABILITY_SHIELDS_DOWN] = ShieldsDown,
-    [ABILITY_STAKEOUT] = Stakeout,
-    [ABILITY_WATER_BUBBLE] = WaterBubble,
-    [ABILITY_STEELWORKER] = Steelworker,
-    [ABILITY_BERSERK] = Berserk,
-    [ABILITY_SLUSH_RUSH] = SlushRush,
-    [ABILITY_LONG_REACH] = LongReach,
-    [ABILITY_LIQUID_VOICE] = LiquidVoice,
-    [ABILITY_TRIAGE] = Triage,
-    [ABILITY_GALVANIZE] = Galvanize,
-    [ABILITY_SURGE_SURFER] = SurgeSurfer,
-    [ABILITY_SCHOOLING] = Schooling,
-    [ABILITY_DISGUISE] = Disguise,
-    [ABILITY_BATTLE_BOND] = BattleBond,
-    [ABILITY_POWER_CONSTRUCT] = PowerConstruct,
-    [ABILITY_CORROSION] = Corrosion,
-    [ABILITY_COMATOSE] = Comatose,
-    [ABILITY_QUEENLY_MAJESTY] = QueenlyMajesty,
-    [ABILITY_INNARDS_OUT] = InnardsOut,
-    [ABILITY_DANCER] = Dancer,
-    [ABILITY_BATTERY] = Battery,
-    [ABILITY_FLUFFY] = Fluffy,
-    [ABILITY_DAZZLING] = Dazzling,
-    [ABILITY_SOUL_HEART] = SoulHeart,
-    [ABILITY_TANGLING_HAIR] = TanglingHair,
-    [ABILITY_RECEIVER] = Receiver,
-    [ABILITY_POWER_OF_ALCHEMY] = PowerOfAlchemy,
-    [ABILITY_BEAST_BOOST] = BeastBoost,
-    [ABILITY_RKS_SYSTEM] = RksSystem,
-    [ABILITY_ELECTRIC_SURGE] = ElectricSurge,
-    [ABILITY_PSYCHIC_SURGE] = PsychicSurge,
-    [ABILITY_MISTY_SURGE] = MistySurge,
-    [ABILITY_GRASSY_SURGE] = GrassySurge,
-    [ABILITY_FULL_METAL_BODY] = FullMetalBody,
-    [ABILITY_SHADOW_SHIELD] = ShadowShield,
-    [ABILITY_PRISM_ARMOR] = PrismArmor,
-    [ABILITY_NEUROFORCE] = Neuroforce,
-    [ABILITY_INTREPID_SWORD] = IntrepidSword,
-    [ABILITY_DAUNTLESS_SHIELD] = DauntlessShield,
-    [ABILITY_LIBERO] = Libero,
-    [ABILITY_BALL_FETCH] = BallFetch,
-    [ABILITY_COTTON_DOWN] = CottonDown,
-    [ABILITY_PROPELLER_TAIL] = PropellerTail,
-    [ABILITY_MIRROR_ARMOR] = MirrorArmor,
-    [ABILITY_GULP_MISSILE] = GulpMissile,
-    [ABILITY_STALWART] = Stalwart,
-    [ABILITY_STEAM_ENGINE] = SteamEngine,
-    [ABILITY_PUNK_ROCK] = PunkRock,
-    [ABILITY_SAND_SPIT] = SandSpit,
-    [ABILITY_ICE_SCALES] = IceScales,
-    [ABILITY_RIPEN] = Ripen,
-    [ABILITY_ICE_FACE] = IceFace,
-    [ABILITY_POWER_SPOT] = PowerSpot,
-    [ABILITY_MIMICRY] = Mimicry,
-    [ABILITY_SCREEN_CLEANER] = ScreenCleaner,
-    [ABILITY_STEELY_SPIRIT] = SteelySpirit,
-    [ABILITY_PERISH_BODY] = PerishBody,
-    [ABILITY_WANDERING_SPIRIT] = WanderingSpirit,
-    [ABILITY_GORILLA_TACTICS] = GorillaTactics,
-    [ABILITY_NEUTRALIZING_GAS] = NeutralizingGas,
-    [ABILITY_PASTEL_VEIL] = PastelVeil,
-    [ABILITY_HUNGER_SWITCH] = HungerSwitch,
-    [ABILITY_QUICK_DRAW] = QuickDraw,
-    [ABILITY_UNSEEN_FIST] = UnseenFist,
-    [ABILITY_CURIOUS_MEDICINE] = CuriousMedicine,
-    [ABILITY_TRANSISTOR] = Transistor,
-    [ABILITY_DRAGONS_MAW] = DragonsMaw,
-    [ABILITY_CHILLING_NEIGH] = ChillingNeigh,
-    [ABILITY_GRIM_NEIGH] = GrimNeigh,
-    [ABILITY_AS_ONE_ICE_RIDER] = AsOneIceRider,
-    [ABILITY_AS_ONE_SHADOW_RIDER] = AsOneShadowRider,
-    [ABILITY_CHLOROPLAST] = Chloroplast,
-    [ABILITY_WHITEOUT] = Whiteout,
-    [ABILITY_PYROMANCY] = Pyromancy,
-    [ABILITY_KEEN_EDGE] = KeenEdge,
-    [ABILITY_PRISM_SCALES] = PrismScales,
-    [ABILITY_POWER_FISTS] = PowerFists,
-    [ABILITY_SAND_SONG] = SandSong,
-    [ABILITY_RAMPAGE] = Rampage,
-    [ABILITY_VENGEANCE] = Vengeance,
-    [ABILITY_BLITZ_BOXER] = BlitzBoxer,
-    [ABILITY_ANTARCTIC_BIRD] = AntarcticBird,
-    [ABILITY_IMMOLATE] = Immolate,
-    [ABILITY_CRYSTALLIZE] = Crystallize,
-    [ABILITY_ELECTROCYTES] = Electrocytes,
-    [ABILITY_AERODYNAMICS] = Aerodynamics,
-    [ABILITY_CHRISTMAS_SPIRIT] = ChristmasSpirit,
-    [ABILITY_EXPLOIT_WEAKNESS] = ExploitWeakness,
-    [ABILITY_GROUND_SHOCK] = GroundShock,
-    [ABILITY_ANCIENT_IDOL] = AncientIdol,
-    [ABILITY_MYSTIC_POWER] = MysticPower,
-    [ABILITY_PERFECTIONIST] = Perfectionist,
-    [ABILITY_GROWING_TOOTH] = GrowingTooth,
-    [ABILITY_INFLATABLE] = Inflatable,
-    [ABILITY_AURORA_BOREALIS] = AuroraBorealis,
-    [ABILITY_AVENGER] = Avenger,
-    [ABILITY_LETS_ROLL] = LetsRoll,
-    [ABILITY_AQUATIC] = Aquatic,
-    [ABILITY_LOUD_BANG] = LoudBang,
-    [ABILITY_LEAD_COAT] = LeadCoat,
-    [ABILITY_AMPHIBIOUS] = Amphibious,
-    [ABILITY_GROUNDED] = Grounded,
-    [ABILITY_EARTHBOUND] = Earthbound,
-    [ABILITY_FIGHT_SPIRIT] = FightingSpirit,
-    [ABILITY_FELINE_PROWESS] = FelineProwess,
-    [ABILITY_COIL_UP] = CoilUp,
-    [ABILITY_FOSSILIZED] = Fossilized,
-    [ABILITY_MAGICAL_DUST] = MagicalDust,
-    [ABILITY_DREAMCATCHER] = Dreamcatcher,
-    [ABILITY_NOCTURNAL] = Nocturnal,
-    [ABILITY_SELF_SUFFICIENT] = SelfSufficient,
-    [ABILITY_TECTONIZE] = Tectonize,
-    [ABILITY_ICE_AGE] = IceAge,
-    [ABILITY_HALF_DRAKE] = HalfDrake,
-    [ABILITY_LIQUIFIED] = Liquified,
-    [ABILITY_DRAGONFLY] = Dragonfly,
-    [ABILITY_DRAGONSLAYER] = Dragonslayer,
-    [ABILITY_MOUNTAINEER] = Mountaineer,
-    [ABILITY_HYDRATE] = Hydrate,
-    [ABILITY_METALLIC] = Metallic,
-    [ABILITY_PERMAFROST] = Permafrost,
-    [ABILITY_PRIMAL_ARMOR] = PrimalArmor,
-    [ABILITY_RAGING_BOXER] = RagingBoxer,
-    [ABILITY_AIR_BLOWER] = AirBlower,
-    [ABILITY_JUGGERNAUT] = Juggernaut,
-    [ABILITY_SHORT_CIRCUIT] = ShortCircuit,
-    [ABILITY_MAJESTIC_BIRD] = MajesticBird,
-    [ABILITY_PHANTOM] = Phantom,
-    [ABILITY_INTOXICATE] = Intoxicate,
-    [ABILITY_IMPENETRABLE] = Impenetrable,
-    [ABILITY_HYPNOTIST] = Hypnotist,
-    [ABILITY_OVERWHELM] = Overwhelm,
-    [ABILITY_SCARE] = Scare,
-    [ABILITY_MAJESTIC_MOTH] = MajesticMoth,
-    [ABILITY_SOUL_EATER] = SoulEater,
-    [ABILITY_SOUL_LINKER] = SoulLinker,
-    [ABILITY_SWEET_DREAMS] = SweetDreams,
-    [ABILITY_BAD_LUCK] = BadLuck,
-    [ABILITY_HAUNTED_SPIRIT] = HauntedSpirit,
-    [ABILITY_ELECTRIC_BURST] = ElectricBurst,
-    [ABILITY_RAW_WOOD] = RawWood,
-    [ABILITY_SOLENOGLYPHS] = Solenoglyphs,
-    [ABILITY_SPIDER_LAIR] = SpiderLair,
-    [ABILITY_FATAL_PRECISION] = FatalPrecision,
-    [ABILITY_FORT_KNOX] = FortKnox,
-    [ABILITY_SEAWEED] = Seaweed,
-    [ABILITY_PSYCHIC_MIND] = PsychicMind,
-    [ABILITY_POISON_ABSORB] = PoisonAbsorb,
-    [ABILITY_SCAVENGER] = Scavenger,
-    [ABILITY_TWISTED_DIMENSION] = TwistedDimension,
-    [ABILITY_MULTI_HEADED] = MultiHeaded,
-    [ABILITY_NORTH_WIND] = NorthWind,
-    [ABILITY_OVERCHARGE] = Overcharge,
-    [ABILITY_VIOLENT_RUSH] = ViolentRush,
-    [ABILITY_FLAMING_SOUL] = FlamingSoul,
-    [ABILITY_SAGE_POWER] = SagePower,
-    [ABILITY_BONE_ZONE] = BoneZone,
-    [ABILITY_WEATHER_CONTROL] = WeatherControl,
-    [ABILITY_SPEED_FORCE] = SpeedForce,
-    [ABILITY_SEA_GUARDIAN] = SeaGuardian,
-    [ABILITY_MOLTEN_DOWN] = MoltenDown,
-    [ABILITY_HYPER_AGGRESSIVE] = HyperAggressive,
-    [ABILITY_FLOCK] = Flock,
-    [ABILITY_FIELD_EXPLORER] = FieldExplorer,
-    [ABILITY_STRIKER] = Striker,
-    [ABILITY_FROZEN_SOUL] = FrozenSoul,
-    [ABILITY_PREDATOR] = Predator,
-    [ABILITY_LOOTER] = Looter,
-    [ABILITY_LUNAR_ECLIPSE] = LunarEclipse,
-    [ABILITY_SOLAR_FLARE] = SolarFlare,
-    [ABILITY_POWER_CORE] = PowerCore,
-    [ABILITY_SIGHTING_SYSTEM] = SightingSystem,
-    [ABILITY_BAD_COMPANY] = BadCompany,
-    [ABILITY_OPPORTUNIST] = Opportunist,
-    [ABILITY_GIANT_WINGS] = GiantWings,
-    [ABILITY_MOMENTUM] = Momentum,
-    [ABILITY_GRIP_PINCER] = GripPincer,
-    [ABILITY_BIG_LEAVES] = BigLeaves,
-    [ABILITY_PRECISE_FIST] = PreciseFist,
-    [ABILITY_DEADEYE] = Deadeye,
-    [ABILITY_ARTILLERY] = Artillery,
-    [ABILITY_AMPLIFIER] = Amplifier,
-    [ABILITY_ICE_DEW] = IceDew,
-    [ABILITY_SUN_WORSHIP] = SunWorship,
-    [ABILITY_POLLINATE] = Pollinate,
-    [ABILITY_VOLCANO_RAGE] = VolcanoRage,
-    [ABILITY_COLD_REBOUND] = ColdRebound,
-    [ABILITY_LOW_BLOW] = LowBlow,
-    [ABILITY_NOSFERATU] = Nosferatu,
-    [ABILITY_SPECTRAL_SHROUD] = SpectralShroud,
-    [ABILITY_DISCIPLINE] = Discipline,
-    [ABILITY_THUNDERCALL] = Thundercall,
-    [ABILITY_MARINE_APEX] = MarineApex,
-    [ABILITY_MIGHTY_HORN] = MightyHorn,
-    [ABILITY_HARDENED_SHEATH] = HardenedSheath,
-    [ABILITY_ARCTIC_FUR] = ArcticFur,
-    [ABILITY_SPECTRALIZE] = Spectralize,
-    [ABILITY_LETHARGY] = Lethargy,
-    [ABILITY_IRON_BARRAGE] = IronBarrage,
-    [ABILITY_STEEL_BARREL] = SteelBarrel,
-    [ABILITY_PYRO_SHELLS] = PyroShells,
-    [ABILITY_FUNGAL_INFECTION] = FungalInfection,
-    [ABILITY_PARRY] = Parry,
-    [ABILITY_SCRAPYARD] = Scrapyard,
-    [ABILITY_LOOSE_QUILLS] = LooseQuills,
-    [ABILITY_TOXIC_DEBRIS] = ToxicDebris,
-    [ABILITY_ROUNDHOUSE] = Roundhouse,
-    [ABILITY_MINERALIZE] = Mineralize,
-    [ABILITY_LOOSE_ROCKS] = LooseRocks,
-    [ABILITY_SPINNING_TOP] = SpinningTop,
-    [ABILITY_RETRIBUTION_BLOW] = RetributionBlow,
-    [ABILITY_FEARMONGER] = Fearmonger,
-    [ABILITY_KINGS_WRATH] = KingsWrath,
-    [ABILITY_QUEENS_MOURNING] = QueensMourning,
-    [ABILITY_TOXIC_SPILL] = ToxicSpill,
-    [ABILITY_DESERT_CLOAK] = DesertCloak,
-    [ABILITY_DRACONIZE] = Draconize,
-    [ABILITY_PRETTY_PRINCESS] = PrettyPrincess,
-    [ABILITY_SELF_REPAIR] = SelfRepair,
-    [ABILITY_ATOMIC_BURST] = AtomicBurst,
-    [ABILITY_HELLBLAZE] = Hellblaze,
-    [ABILITY_RIPTIDE] = Riptide,
-    [ABILITY_FOREST_RAGE] = ForestRage,
-    [ABILITY_PRIMAL_MAW] = PrimalMaw,
-    [ABILITY_SWEEPING_EDGE] = SweepingEdge,
-    [ABILITY_GIFTED_MIND] = GiftedMind,
-    [ABILITY_HYDRO_CIRCUIT] = HydroCircuit,
-    [ABILITY_EQUINOX] = Equinox,
-    [ABILITY_ABSORBANT] = Absorbant,
-    [ABILITY_CLUELESS] = Clueless,
-    [ABILITY_CHEATING_DEATH] = CheatingDeath,
-    [ABILITY_CHEAP_TACTICS] = CheapTactics,
-    [ABILITY_COWARD] = Coward,
-    [ABILITY_VOLT_RUSH] = VoltRush,
-    [ABILITY_DUNE_TERROR] = DuneTerror,
-    [ABILITY_INFERNAL_RAGE] = InfernalRage,
-    [ABILITY_DUAL_WIELD] = DualWield,
-    [ABILITY_ELEMENTAL_CHARGE] = ElementalCharge,
-    [ABILITY_AMBUSH] = Ambush,
-    [ABILITY_ATLAS] = Atlas,
-    [ABILITY_RADIANCE] = Radiance,
-    [ABILITY_JAWS_OF_CARNAGE] = JawsOfCarnage,
-    [ABILITY_ANGELS_WRATH] = AngelsWrath,
-    [ABILITY_PRISMATIC_FUR] = PrismaticFur,
-    [ABILITY_SHOCKING_JAWS] = ShockingJaws,
-    [ABILITY_FAE_HUNTER] = FaeHunter,
-    [ABILITY_GRAVITY_WELL] = GravityWell,
-    [ABILITY_EVAPORATE] = Evaporate,
-    [ABILITY_LUMBERJACK] = Lumberjack,
-    [ABILITY_WELL_BAKED_BODY] = WellBakedBody,
-    [ABILITY_FURNACE] = Furnace,
-    [ABILITY_ELECTROMORPHOSIS] = Electromorphosis,
-    [ABILITY_ROCKY_PAYLOAD] = RockyPayload,
-    [ABILITY_EARTH_EATER] = EarthEater,
-    [ABILITY_LINGERING_AROMA] = LingeringAroma,
-    [ABILITY_FAIRY_TALE] = FairyTale,
-    [ABILITY_RAGING_MOTH] = RagingMoth,
-    [ABILITY_ADRENALINE_RUSH] = AdrenalineRush,
-    [ABILITY_ARCHMAGE] = Archmage,
-    [ABILITY_CRYOMANCY] = Cryomancy,
-    [ABILITY_PHANTOM_PAIN] = PhantomPain,
-    [ABILITY_PURGATORY] = Purgatory,
-    [ABILITY_EMANATE] = Emanate,
-    [ABILITY_KUNOICHI_BLADE] = KunoichiBlade,
-    [ABILITY_MONKEY_BUSINESS] = MonkeyBusiness,
-    [ABILITY_COMBAT_SPECIALIST] = CombatSpecialist,
-    [ABILITY_JUNGLES_GUARD] = JunglesGuard,
-    [ABILITY_HUNTERS_HORN] = HuntersHorn,
-    [ABILITY_PIXIE_POWER] = PixiePower,
-    [ABILITY_PLASMA_LAMP] = PlasmaLamp,
-    [ABILITY_MAGMA_EATER] = MagmaEater,
-    [ABILITY_SUPER_HOT_GOO] = SuperHotGoo,
-    [ABILITY_NIKA] = Nika,
-    [ABILITY_ARCHER] = Archer,
-    [ABILITY_COLD_PLASMA] = ColdPlasma,
-    [ABILITY_SUPER_SLAMMER] = SuperSlammer,
-    [ABILITY_INVERSE_ROOM] = InverseRoom,
-    [ABILITY_ACCELERATE] = Accelerate,
-    [ABILITY_FROST_BURN] = FrostBurn,
-    [ABILITY_ITCHY_DEFENSE] = ItchyDefense,
-    [ABILITY_GENERATOR] = Generator,
-    [ABILITY_MOON_SPIRIT] = MoonSpirit,
-    [ABILITY_DUST_CLOUD] = DustCloud,
-    [ABILITY_BERSERKER_RAGE] = BerserkerRage,
-    [ABILITY_TRICKSTER] = Trickster,
-    [ABILITY_SAND_GUARD] = SandGuard,
-    [ABILITY_NATURAL_RECOVERY] = NaturalRecovery,
-    [ABILITY_WIND_RIDER] = WindRider,
-    [ABILITY_SOOTHING_AROMA] = SoothingAroma,
-    [ABILITY_PRIM_AND_PROPER] = PrimAndProper,
-    [ABILITY_SUPER_STRAIN] = SuperStrain,
-    [ABILITY_TIPPING_POINT] = TippingPoint,
-    [ABILITY_ENLIGHTENED] = Enlightened,
-    [ABILITY_PEACEFUL_SLUMBER] = PeacefulSlumber,
-    [ABILITY_AFTERSHOCK] = Aftershock,
-    [ABILITY_FREEZING_POINT] = FreezingPoint,
-    [ABILITY_CRYO_PROFICIENCY] = CryoProficiency,
-    [ABILITY_ARCANE_FORCE] = ArcaneForce,
-    [ABILITY_DOOMBRINGER] = Doombringer,
-    [ABILITY_WISHMAKER] = Wishmaker,
-    [ABILITY_YUKI_ONNA] = YukiOnna,
-    [ABILITY_SUPPRESS] = Suppress,
-    [ABILITY_REFRIGERATOR] = Refrigerator,
-    [ABILITY_HEAVEN_ASUNDER] = HeavenAsunder,
-    [ABILITY_PURIFYING_WATERS] = PurifyingWaters,
-    [ABILITY_SEABORNE] = Seaborne,
-    [ABILITY_HIGH_TIDE] = HighTide,
-    [ABILITY_CHANGE_OF_HEART] = ChangeOfHeart,
-    [ABILITY_MYSTIC_BLADES] = MysticBlades,
-    [ABILITY_DETERMINATION] = Determination,
-    [ABILITY_FERTILIZE] = Fertilize,
-    [ABILITY_PURE_LOVE] = PureLove,
-    [ABILITY_FIGHTER] = Fighter,
-    [ABILITY_MYCELIUM_MIGHT] = MyceliumMight,
-    [ABILITY_TELEKINETIC] = Telekinetic,
-    [ABILITY_COMBUSTION] = Combustion,
-    [ABILITY_PONY_POWER] = PonyPower,
-    [ABILITY_POWDER_BURST] = PowderBurst,
-    [ABILITY_RETRIEVER] = Retriever,
-    [ABILITY_MONSTER_MASH] = MonsterMash,
-    [ABILITY_TWO_STEP] = TwoStep,
-    [ABILITY_SPITEFUL] = Spiteful,
-    [ABILITY_FORTITUDE] = Fortitude,
-    [ABILITY_DEVOURER] = Devourer,
-    [ABILITY_PHANTOM_THIEF] = PhantomThief,
-    [ABILITY_EARLY_GRAVE] = EarlyGrave,
-    [ABILITY_GRAPPLER] = Grappler,
-    [ABILITY_BASS_BOOSTED] = BassBoosted,
-    [ABILITY_FLAMING_JAWS] = FlamingJaws,
-    [ABILITY_MONSTER_HUNTER] = MonsterHunter,
-    [ABILITY_CROWNED_SWORD] = CrownedSword,
-    [ABILITY_CROWNED_SHIELD] = CrownedShield,
-    [ABILITY_BERSERK_DNA] = BerserkDna,
-    [ABILITY_CROWNED_KING] = CrownedKing,
-    [ABILITY_SNAP_TRAP_WHEN_HIT] = SnapTrapWhenHit,
-    [ABILITY_PERMANENCE] = Permanence,
-    [ABILITY_HUBRIS] = Hubris,
-    [ABILITY_COSMIC_DAZE] = CosmicDaze,
-    [ABILITY_MINDS_EYE] = MindsEye,
-    [ABILITY_BLOOD_PRICE] = BloodPrice,
-    [ABILITY_SPIKE_ARMOR] = SpikeArmor,
-    [ABILITY_VOODOO_POWER] = VoodooPower,
-    [ABILITY_CHROME_COAT] = ChromeCoat,
-    [ABILITY_BANSHEE] = Banshee,
-    [ABILITY_WEB_SPINNER] = WebSpinner,
-    [ABILITY_SHOWDOWN_MODE] = ShowdownMode,
-    [ABILITY_SEED_SOWER] = SeedSower,
-    [ABILITY_AIRBORNE] = Airborne,
-    [ABILITY_PARROTING] = Parroting,
-    [ABILITY_SALT_CIRCLE] = SaltCircle,
-    [ABILITY_PURIFYING_SALT] = PurifyingSalt,
-    [ABILITY_PROTOSYNTHESIS] = Protosynthesis,
-    [ABILITY_QUARK_DRIVE] = QuarkDrive,
-    [ABILITY_WIND_POWER] = WindPower,
-    [ABILITY_IMPULSE] = Impulse,
-    [ABILITY_TERMINAL_VELOCITY] = TerminalVelocity,
-    [ABILITY_GUARD_DOG] = GuardDog,
-    [ABILITY_ANGER_SHELL] = AngerShell,
-    [ABILITY_EGOIST] = Egoist,
-    [ABILITY_SUBDUE] = Subdue,
-    [ABILITY_READIED_ACTION] = ReadiedAction,
-    [ABILITY_DARK_GALE_WINGS] = DarkGaleWings,
-    [ABILITY_GUILT_TRIP] = GuiltTrip,
-    [ABILITY_WATER_GALE_WINGS] = WaterGaleWings,
-    [ABILITY_ZERO_TO_HERO] = ZeroToHero,
-    [ABILITY_COSTAR] = Costar,
-    [ABILITY_COMMANDER] = Commander,
-    [ABILITY_EJECT_PACK_ABILITY] = EjectPackAbility,
-    [ABILITY_VENGEFUL_SPIRIT] = VengefulSpirit,
-    [ABILITY_CUD_CHEW] = CudChew,
-    [ABILITY_ARMOR_TAIL] = ArmorTail,
-    [ABILITY_MIND_CRUSH] = MindCrush,
-    [ABILITY_SUPREME_OVERLORD] = SupremeOverlord,
-    [ABILITY_ILL_WILL] = IllWill,
-    [ABILITY_FIRE_SCALES] = FireScales,
-    [ABILITY_WATCH_YOUR_STEP] = WatchYourStep,
-    [ABILITY_RAPID_RESPONSE] = RapidResponse,
-    [ABILITY_DOUBLE_IRON_BARBS] = DoubleIronBarbs,
-    [ABILITY_THERMAL_EXCHANGE] = ThermalExchange,
-    [ABILITY_GOOD_AS_GOLD] = GoodAsGold,
-    [ABILITY_SHARING_IS_CARING] = SharingIsCaring,
-    [ABILITY_TABLETS_OF_RUIN] = TabletsOfRuin,
-    [ABILITY_SWORD_OF_RUIN] = SwordOfRuin,
-    [ABILITY_VESSEL_OF_RUIN] = VesselOfRuin,
-    [ABILITY_BEADS_OF_RUIN] = BeadsOfRuin,
-    [ABILITY_PERMAFROST_CLONE] = PermafrostClone,
-    [ABILITY_GALLANTRY] = Gallantry,
-    [ABILITY_ORICHALCUM_PULSE] = OrichalcumPulse,
-    [ABILITY_SUN_BASKING] = SunBasking,
-    [ABILITY_WINGED_KING] = WingedKing,
-    [ABILITY_HADRON_ENGINE] = HadronEngine,
-    [ABILITY_IRON_SERPENT] = IronSerpent,
-    [ABILITY_WEATHER_DOUBLE_BOOST] = WeatherDoubleBoost,
-    [ABILITY_SWEEPING_EDGE_PLUS] = SweepingEdgePlus,
-    [ABILITY_CELESTIAL_BLESSING] = CelestialBlessing,
-    [ABILITY_MINION_CONTROL] = MinionControl,
-    [ABILITY_MOLTEN_BLADES] = MoltenBlades,
-    [ABILITY_HAUNTING_FRENZY] = HauntingFrenzy,
-    [ABILITY_NOISE_CANCEL] = NoiseCancel,
-    [ABILITY_RADIO_JAM] = RadioJam,
-    [ABILITY_OLE] = Ole,
-    [ABILITY_MALICIOUS] = Malicious,
-    [ABILITY_DEAD_POWER] = DeadPower,
-    [ABILITY_BRAWLING_WYVERN] = BrawlingWyvern,
-    [ABILITY_MYTHICAL_ARROWS] = MythicalArrows,
-    [ABILITY_LAWNMOWER] = Lawnmower,
-    [ABILITY_FLOURISH] = Flourish,
-    [ABILITY_DESERT_SPIRIT] = DesertSpirit,
-    [ABILITY_CONTEMPT] = Contempt,
-    [ABILITY_AERIALIST] = Aerialist,
-    [ABILITY_TERA_SHELL] = TeraShell,
-    [ABILITY_TOXIC_CHAIN] = ToxicChain,
-    [ABILITY_PARASITIC_SPORES] = ParasiticSpores,
-    [ABILITY_POISON_PUPPETEER] = PoisonPuppeteer,
-    [ABILITY_ENTRANCE] = Entrance,
-    [ABILITY_REJECTION] = Rejection,
-    [ABILITY_APPLE_ENLIGHTENMENT] = AppleEnlightenment,
-    [ABILITY_BALLOON_BOMBER] = BalloonBomber,
-    [ABILITY_FLAMING_MAW] = FlamingMaw,
-    [ABILITY_DEMOLITIONIST] = Demolitionist,
-    [ABILITY_ROCKHARD_WILL] = RockhardWill,
-    [ABILITY_FRAGRANT_DAZE] = FragrantDaze,
-    [ABILITY_LOW_VISIBILITY] = LowVisibility,
-    [ABILITY_OLD_MARINER] = OldMariner,
-    [ABILITY_ECTOPLASM] = Ectoplasm,
-    [ABILITY_BEAUTIFUL_MUSIC] = BeautifulMusic,
-    [ABILITY_SURPRISE] = Surprise,
-    [ABILITY_SNOW_SONG] = SnowSong,
-    [ABILITY_GREATER_SPIRIT] = GreaterSpirit,
-    [ABILITY_RESONANCE] = Resonance,
-    [ABILITY_ETHEREAL_RUSH] = EtherealRush,
-    [ABILITY_CUTE_ANTECEDENCE] = CuteAntecedence,
-    [ABILITY_RECURRING_NIGHTMARE] = RecurringNightmare,
-    [ABILITY_MENACING_SITUATION] = MenacingSituation,
-    [ABILITY_SHINY_LIGHTNING] = ShinyLightning,
-    [ABILITY_TERRIFY] = Terrify,
-    [ABILITY_ICE_DOWNFALL] = IceDownfall,
-    [ABILITY_LAST_STAND] = LastStand,
-    [ABILITY_PYROCLASTIC_FLOW] = PyroclasticFlow,
-    [ABILITY_BLOOD_BATH] = BloodBath,
-    [ABILITY_BATTLE_AURA] = BattleAura,
-    [ABILITY_BLOODLUST] = Bloodlust,
-    [ABILITY_PIERCING_SOLO] = PiercingSolo,
-    [ABILITY_RHYTHMIC] = Rhythmic,
-    [ABILITY_CHUNKY_BASS_LINE] = ChunkyBassLine,
-    [ABILITY_DUAL_HAMMER] = DualHammer,
-    [ABILITY_DENTING_BLOWS] = DentingBlows,
-    [ABILITY_ICE_COLD_HUNTER] = IceColdHunter,
-    [ABILITY_SOUL_CRUSHER] = SoulCrusher,
-    [ABILITY_ARC_FLASH] = ArcFlash,
-    [ABILITY_UNICORN] = Unicorn,
-    [ABILITY_ON_THE_PROWL] = OnTheProwl,
-    [ABILITY_PRETENTIOUS] = Pretentious,
-    [ABILITY_VENOBLAZE_PINCERS] = VenoblazePincers,
-    [ABILITY_ETERNAL_BLESSING] = EternalBlessing,
-    [ABILITY_SUGAR_RUSH] = SugarRush,
-    [ABILITY_PEACEFUL_REST] = PeacefulRest,
-    [ABILITY_WHITE_NOISE] = WhiteNoise,
-    [ABILITY_SMOKEY_MANEUVERS] = SmokeyManeuvers,
-    [ABILITY_TAG] = Tag,
-    [ABILITY_POWER_METAL] = PowerMetal,
-    [ABILITY_POWER_EDGE] = PowerEdge,
-    [ABILITY_SUPERCONDUCTOR] = Superconductor,
-    [ABILITY_ULTRA_INSTINCT] = UltraInstinct,
-    [ABILITY_UNLOCKED_POTENTIAL] = UnlockedPotential,
-    [ABILITY_HIGHER_RANK] = HigherRank,
-    [ABILITY_FUNERAL_PYRE] = FuneralPyre,
-    [ABILITY_FLAME_BUBBLE] = FlameBubble,
-    [ABILITY_ELEMENTAL_VORTEX] = ElementalVortex,
-    [ABILITY_SNOWY_WRATH] = SnowyWrath,
-    [ABILITY_PATTERN_CHANGE] = PatternChange,
-    [ABILITY_NO_TURNING_BACK] = NoTurningBack,
-    [ABILITY_FLAMMABLE_COAT] = FlammableCoat,
-    [ABILITY_DRACO_MORALE] = DracoMorale,
-    [ABILITY_BAD_OMEN] = BadOmen,
-    [ABILITY_MOSH_PIT] = MoshPit,
-    [ABILITY_BLOOD_STAIN] = BloodStain,
-    [ABILITY_BLOOD_STIGMA] = BloodStigma,
-    [ABILITY_MAXIMUM_ACCELERATION] = MaximumAcceleration,
-    [ABILITY_SIDEWINDER] = Sidewinder,
-    [ABILITY_PETRIFY] = Petrify,
-    [ABILITY_FLUFFIEST] = Fluffiest,
-    [ABILITY_WAY_OF_PRECISION] = WayOfPrecision,
-    [ABILITY_WAY_OF_SWIFTNESS] = WayOfSwiftness,
-    [ABILITY_ATOMIC_PUNCH] = AtomicPunch,
-    [ABILITY_IRON_GIANT] = IronGiant,
-    [ABILITY_MASTER_HAND] = MasterHand,
-    [ABILITY_FINAL_BLOW] = FinalBlow,
-    [ABILITY_HOSPITALITY] = Hospitality,
-    [ABILITY_BUTTER_UP] = ButterUp,
-    [ABILITY_VITALITY_STRIKE] = VitalityStrike,
-    [ABILITY_HUGE_WINGS] = HugeWings,
-    [ABILITY_SWORD_OF_DAMNATION] = SwordOfDamnation,
-    [ABILITY_RESTRAINING_ORDER] = RestrainingOrder,
-    [ABILITY_ASSASSINS_TOOLS] = AssassinsTools,
-    [ABILITY_FROSTMAW] = Frostmaw,
-    [ABILITY_PATCHWORK] = Patchwork,
-    [ABILITY_BLIND_RAGE] = BlindRage,
-    [ABILITY_SLIPSTREAM] = Slipstream,
-    [ABILITY_APEX_PREDATOR] = ApexPredator,
-    [ABILITY_DRAGONS_RITUAL] = DragonsRitual,
-    [ABILITY_PINNACLE_BLADE] = PinnacleBlade,
-    [ABILITY_ENERGIZED] = Energized,
-    [ABILITY_COLOR_SPECTRUM] = ColorSpectrum,
-    [ABILITY_STEEL_BEETLE] = SteelBeetle,
-    [ABILITY_FROM_THE_SHADOWS] = FromTheShadows,
-    [ABILITY_RAGE_POINT] = RagePoint,
-    [ABILITY_HOT_COALS] = HotCoals,
-    [ABILITY_TERASTAL_TREASURE] = TerastalTreasure,
-    [ABILITY_SHOCKING_MAW] = ShockingMaw,
-    [ABILITY_GLEAM_EYES] = GleamEyes,
-    [ABILITY_ROUSED_FANGS] = RousedFangs,
-    [ABILITY_DREAM_STATE] = DreamState,
-    [ABILITY_DREAM_WHIMSY] = DreamWhimsy,
-    [ABILITY_LUNAR_AFFINITY] = LunarAffinity,
-    [ABILITY_FLAME_SHIELD] = FlameShield,
-    [ABILITY_AQUATIC_DWELLER] = AquaticDweller,
-    [ABILITY_APPLE_PIE] = ApplePie,
-    [ABILITY_HOVER] = Hover,
-    [ABILITY_DEPRAVITY] = Depravity,
-    [ABILITY_WILDFIRE] = Wildfire,
-    [ABILITY_JUMP_SCARE] = JumpScare,
-    [ABILITY_TAR_TOSS] = TarToss,
-    [ABILITY_STUN_SHOCK] = StunShock,
-    [ABILITY_RAGING_GODDESS] = RagingGoddess,
-    [ABILITY_WHIPLASH] = Whiplash,
-    [ABILITY_SUPERSWEET_SYRUP] = SupersweetSyrup,
-    [ABILITY_LUCKY_HALO] = LuckyHalo,
-    [ABILITY_TRASH_HEAP] = TrashHeap,
-    [ABILITY_SLUDGY_MIX] = SludgyMix,
-    [ABILITY_OVERWATCH] = Overwatch,
-    [ABILITY_WIND_RAGE] = WindRage,
-    [ABILITY_VICTORY_BOMB] = VictoryBomb,
-    [ABILITY_RAZOR_SHARP] = RazorSharp,
-    [ABILITY_TO_THE_BONE] = ToTheBone,
-    [ABILITY_BLADE_DANCE] = BladeDance,
-    [ABILITY_TAEKKYEON] = Taekkyeon,
-    [ABILITY_APE_SHIFT] = ApeShift,
-    [ABILITY_KNOW_YOUR_PLACE] = KnowYourPlace,
-    [ABILITY_DEEP_CUTS] = DeepCuts,
-    [ABILITY_LIFE_STEAL] = LifeSteal,
-    [ABILITY_RUDE_AWAKENING] = RudeAwakening,
-    [ABILITY_TERAFORM_ZERO] = TeraformZero,
-    [ABILITY_SET_ABLAZE] = SetAblaze,
-    [ABILITY_BREAKWATER] = Breakwater,
-    [ABILITY_MAGICAL_FISTS] = MagicalFists,
-    [ABILITY_CUTTHROAT] = Cutthroat,
-    [ABILITY_SAND_BENDER] = SandBender,
-    [ABILITY_SAND_PIT] = SandPit,
-    [ABILITY_DESOLATE_SUN] = DesolateSun,
-    [ABILITY_DAYBREAK] = Daybreak,
-    [ABILITY_ENERGY_SIPHON] = EnergySiphon,
-    [ABILITY_RESERVOIR] = Reservoir,
-    [ABILITY_NEUROTOXIN] = Neurotoxin,
-    [ABILITY_ENERGIZED_HORNS] = EnergizedHorns,
-    [ABILITY_SPIDER_LAIR_UPGRADE] = SpiderLairUpgrade,
-    [ABILITY_CRUST_COAT] = CrustCoat,
-    [ABILITY_PUFFY] = Puffy,
-    [ABILITY_BALLOON_BLITZ] = BalloonBlitz,
-    [ABILITY_STRIKER_PIXILATE] = StrikerPixilate,
-    [ABILITY_DOOM_BLAST] = DoomBlast,
-    [ABILITY_BRUTEFORCE] = Bruteforce,
-    [ABILITY_FARADAY_CAGE] = FaradayCage,
-    [ABILITY_ACIDIC_SLIME] = AcidicSlime,
-    [ABILITY_ROSE_GARDEN] = RoseGarden,
-    [ABILITY_QIGONG] = Qigong,
-    [ABILITY_CONJOURER_OF_DECEIT] = ConjurerOfDeceit,
-    [ABILITY_DEEP_FREEZE] = DeepFreeze,
-    [ABILITY_SOUL_DEVOURER] = SoulDevourer,
-    [ABILITY_CHAMPIONS_ENTRANCE] = ChampionsEntrance,
-    [ABILITY_PRESTO] = Presto,
-    [ABILITY_SAMBA] = Samba,
-    [ABILITY_JUNSHI_SANDA] = JunshiSanda,
-    [ABILITY_GLADIATOR] = Gladiator,
-    [ABILITY_FORSAKEN_HEART] = ForsakenHeart,
-    [ABILITY_RELENTLESS] = Relentless,
-    [ABILITY_SOOTHSAYER] = Soothsayer,
-    [ABILITY_CORRUPTED_MIND] = CorruptedMind,
-    [ABILITY_FLAME_COAT] = FlameCoat,
-    [ABILITY_UNOWN_POWER] = UnownPower,
-    [ABILITY_SUPER_SCOPE] = SuperScope,
-    [ABILITY_VENOM_CROWN] = VenomCrown,
-    [ABILITY_BLIGHT_SCALE] = BlightScale,
-    [ABILITY_GUNMAN] = Gunman,
-    [ABILITY_HUNTERS_MARK] = HuntersMark,
-    [ABILITY_HEMOLYSIS] = Hemolysis,
-    [ABILITY_CARETAKER] = Caretaker,
-    [ABILITY_POSEIDONS_DOMINION] = PoseidonsDominion,
-    [ABILITY_DUAL_SHADOW] = DualShadow,
-    [ABILITY_LULLABY] = Lullaby,
-    [ABILITY_CRYO_ARCHITECT] = CryoArchitect,
-    [ABILITY_GLACIAL_RAGE] = GlacialRage,
-    [ABILITY_IMMOVABLE_OBJECT] = ImmovableObject,
-    [ABILITY_FRENZIED_PHANTOM] = FrenziedPhantom,
+typedef struct AbilityKVPair {
+    u16 key;
+    Ability ability;
+} AbilityKVPair;
+
+constexpr AbilityKVPair sAbilities[] = {
+    {ABILITY_NONE, None},
+    {ABILITY_STENCH, Stench},
+    {ABILITY_DRIZZLE, Drizzle},
+    {ABILITY_SPEED_BOOST, SpeedBoost},
+    {ABILITY_BATTLE_ARMOR, BattleArmor},
+    {ABILITY_STURDY, Sturdy},
+    {ABILITY_DAMP, Damp},
+    {ABILITY_LIMBER, Limber},
+    {ABILITY_SAND_VEIL, SandVeil},
+    {ABILITY_STATIC, Static},
+    {ABILITY_VOLT_ABSORB, VoltAbsorb},
+    {ABILITY_WATER_ABSORB, WaterAbsorb},
+    {ABILITY_OBLIVIOUS, Oblivious},
+    {ABILITY_CLOUD_NINE, CloudNine},
+    {ABILITY_COMPOUND_EYES, CompoundEyes},
+    {ABILITY_INSOMNIA, Insomnia},
+    {ABILITY_COLOR_CHANGE, ColorChange},
+    {ABILITY_IMMUNITY, Immunity},
+    {ABILITY_FLASH_FIRE, FlashFire},
+    {ABILITY_SHIELD_DUST, ShieldDust},
+    {ABILITY_OWN_TEMPO, OwnTempo},
+    {ABILITY_SUCTION_CUPS, SuctionCups},
+    {ABILITY_INTIMIDATE, Intimidate},
+    {ABILITY_SHADOW_TAG, ShadowTag},
+    {ABILITY_ROUGH_SKIN, RoughSkin},
+    {ABILITY_WONDER_GUARD, WonderGuard},
+    {ABILITY_LEVITATE, Levitate},
+    {ABILITY_EFFECT_SPORE, EffectSpore},
+    {ABILITY_SYNCHRONIZE, Synchronize},
+    {ABILITY_CLEAR_BODY, ClearBody},
+    {ABILITY_NATURAL_CURE, NaturalCure},
+    {ABILITY_LIGHTNING_ROD, LightningRod},
+    {ABILITY_SERENE_GRACE, SereneGrace},
+    {ABILITY_SWIFT_SWIM, SwiftSwim},
+    {ABILITY_CHLOROPHYLL, Chlorophyll},
+    {ABILITY_ILLUMINATE, Illuminate},
+    {ABILITY_TRACE, Trace},
+    {ABILITY_HUGE_POWER, HugePower},
+    {ABILITY_POISON_POINT, PoisonPoint},
+    {ABILITY_INNER_FOCUS, InnerFocus},
+    {ABILITY_MAGMA_ARMOR, MagmaArmor},
+    {ABILITY_WATER_VEIL, WaterVeil},
+    {ABILITY_MAGNET_PULL, MagnetPull},
+    {ABILITY_SOUNDPROOF, Soundproof},
+    {ABILITY_RAIN_DISH, RainDish},
+    {ABILITY_SAND_STREAM, SandStream},
+    {ABILITY_PRESSURE, Pressure},
+    {ABILITY_THICK_FAT, ThickFat},
+    {ABILITY_EARLY_BIRD, EarlyBird},
+    {ABILITY_FLAME_BODY, FlameBody},
+    {ABILITY_RUN_AWAY, RunAway},
+    {ABILITY_KEEN_EYE, KeenEye},
+    {ABILITY_HYPER_CUTTER, HyperCutter},
+    {ABILITY_PICKUP, Pickup},
+    {ABILITY_TRUANT, Truant},
+    {ABILITY_HUSTLE, Hustle},
+    {ABILITY_CUTE_CHARM, CuteCharm},
+    {ABILITY_PLUS, Plus},
+    {ABILITY_MINUS, Minus},
+    {ABILITY_FORECAST, Forecast},
+    {ABILITY_STICKY_HOLD, StickyHold},
+    {ABILITY_SHED_SKIN, ShedSkin},
+    {ABILITY_GUTS, Guts},
+    {ABILITY_MARVEL_SCALE, MarvelScale},
+    {ABILITY_LIQUID_OOZE, LiquidOoze},
+    {ABILITY_OVERGROW, Overgrow},
+    {ABILITY_BLAZE, Blaze},
+    {ABILITY_TORRENT, Torrent},
+    {ABILITY_SWARM, Swarm},
+    {ABILITY_ROCK_HEAD, RockHead},
+    {ABILITY_DROUGHT, Drought},
+    {ABILITY_ARENA_TRAP, ArenaTrap},
+    {ABILITY_VITAL_SPIRIT, VitalSpirit},
+    {ABILITY_WHITE_SMOKE, WhiteSmoke},
+    {ABILITY_PURE_POWER, PurePower},
+    {ABILITY_SHELL_ARMOR, ShellArmor},
+    {ABILITY_AIR_LOCK, AirLock},
+    {ABILITY_TANGLED_FEET, TangledFeet},
+    {ABILITY_MOTOR_DRIVE, MotorDrive},
+    {ABILITY_RIVALRY, Rivalry},
+    {ABILITY_STEADFAST, Steadfast},
+    {ABILITY_SNOW_CLOAK, SnowCloak},
+    {ABILITY_GLUTTONY, Gluttony},
+    {ABILITY_ANGER_POINT, AngerPoint},
+    {ABILITY_UNBURDEN, Unburden},
+    {ABILITY_HEATPROOF, Heatproof},
+    {ABILITY_SIMPLE, Simple},
+    {ABILITY_DRY_SKIN, DrySkin},
+    {ABILITY_DOWNLOAD, Download},
+    {ABILITY_IRON_FIST, IronFist},
+    {ABILITY_POISON_HEAL, PoisonHeal},
+    {ABILITY_ADAPTABILITY, Adaptability},
+    {ABILITY_SKILL_LINK, SkillLink},
+    {ABILITY_HYDRATION, Hydration},
+    {ABILITY_SOLAR_POWER, SolarPower},
+    {ABILITY_QUICK_FEET, QuickFeet},
+    {ABILITY_NORMALIZE, Normalize},
+    {ABILITY_SNIPER, Sniper},
+    {ABILITY_MAGIC_GUARD, MagicGuard},
+    {ABILITY_NO_GUARD, NoGuard},
+    {ABILITY_STALL, Stall},
+    {ABILITY_TECHNICIAN, Technician},
+    {ABILITY_LEAF_GUARD, LeafGuard},
+    {ABILITY_KLUTZ, Klutz},
+    {ABILITY_MOLD_BREAKER, MoldBreaker},
+    {ABILITY_SUPER_LUCK, SuperLuck},
+    {ABILITY_AFTERMATH, Aftermath},
+    {ABILITY_ANTICIPATION, Anticipation},
+    {ABILITY_FOREWARN, Forewarn},
+    {ABILITY_UNAWARE, Unaware},
+    {ABILITY_TINTED_LENS, TintedLens},
+    {ABILITY_FILTER, Filter},
+    {ABILITY_SLOW_START, SlowStart},
+    {ABILITY_SCRAPPY, Scrappy},
+    {ABILITY_STORM_DRAIN, StormDrain},
+    {ABILITY_ICE_BODY, IceBody},
+    {ABILITY_SOLID_ROCK, SolidRock},
+    {ABILITY_SNOW_WARNING, SnowWarning},
+    {ABILITY_HONEY_GATHER, HoneyGather},
+    {ABILITY_FRISK, Frisk},
+    {ABILITY_RECKLESS, Reckless},
+    {ABILITY_MULTITYPE, Multitype},
+    {ABILITY_FLOWER_GIFT, FlowerGift},
+    {ABILITY_BAD_DREAMS, BadDreams},
+    {ABILITY_PICKPOCKET, Pickpocket},
+    {ABILITY_SHEER_FORCE, SheerForce},
+    {ABILITY_CONTRARY, Contrary},
+    {ABILITY_UNNERVE, Unnerve},
+    {ABILITY_DEFIANT, Defiant},
+    {ABILITY_DEFEATIST, Defeatist},
+    {ABILITY_CURSED_BODY, CursedBody},
+    {ABILITY_HEALER, Healer},
+    {ABILITY_FRIEND_GUARD, FriendGuard},
+    {ABILITY_WEAK_ARMOR, WeakArmor},
+    {ABILITY_HEAVY_METAL, HeavyMetal},
+    {ABILITY_LIGHT_METAL, LightMetal},
+    {ABILITY_MULTISCALE, Multiscale},
+    {ABILITY_TOXIC_BOOST, ToxicBoost},
+    {ABILITY_FLARE_BOOST, FlareBoost},
+    {ABILITY_HARVEST, Harvest},
+    {ABILITY_TELEPATHY, Telepathy},
+    {ABILITY_MOODY, Moody},
+    {ABILITY_OVERCOAT, Overcoat},
+    {ABILITY_POISON_TOUCH, PoisonTouch},
+    {ABILITY_REGENERATOR, Regenerator},
+    {ABILITY_BIG_PECKS, BigPecks},
+    {ABILITY_SAND_RUSH, SandRush},
+    {ABILITY_WONDER_SKIN, WonderSkin},
+    {ABILITY_ANALYTIC, Analytic},
+    {ABILITY_ILLUSION, Illusion},
+    {ABILITY_IMPOSTER, Imposter},
+    {ABILITY_INFILTRATOR, Infiltrator},
+    {ABILITY_MUMMY, Mummy},
+    {ABILITY_MOXIE, Moxie},
+    {ABILITY_JUSTIFIED, Justified},
+    {ABILITY_RATTLED, Rattled},
+    {ABILITY_MAGIC_BOUNCE, MagicBounce},
+    {ABILITY_SAP_SIPPER, SapSipper},
+    {ABILITY_PRANKSTER, Prankster},
+    {ABILITY_SAND_FORCE, SandForce},
+    {ABILITY_IRON_BARBS, IronBarbs},
+    {ABILITY_ZEN_MODE, ZenMode},
+    {ABILITY_VICTORY_STAR, VictoryStar},
+    {ABILITY_TURBOBLAZE, Turboblaze},
+    {ABILITY_TERAVOLT, Teravolt},
+    {ABILITY_AROMA_VEIL, AromaVeil},
+    {ABILITY_FLOWER_VEIL, FlowerVeil},
+    {ABILITY_CHEEK_POUCH, CheekPouch},
+    {ABILITY_PROTEAN, Protean},
+    {ABILITY_FUR_COAT, FurCoat},
+    {ABILITY_MAGICIAN, Magician},
+    {ABILITY_BULLETPROOF, Bulletproof},
+    {ABILITY_COMPETITIVE, Competitive},
+    {ABILITY_STRONG_JAW, StrongJaw},
+    {ABILITY_REFRIGERATE, Refrigerate},
+    {ABILITY_SWEET_VEIL, SweetVeil},
+    {ABILITY_STANCE_CHANGE, StanceChange},
+    {ABILITY_GALE_WINGS, GaleWings},
+    {ABILITY_MEGA_LAUNCHER, MegaLauncher},
+    {ABILITY_GRASS_PELT, GrassPelt},
+    {ABILITY_SYMBIOSIS, Symbiosis},
+    {ABILITY_TOUGH_CLAWS, ToughClaws},
+    {ABILITY_PIXILATE, Pixilate},
+    {ABILITY_GOOEY, Gooey},
+    {ABILITY_AERILATE, Aerilate},
+    {ABILITY_PARENTAL_BOND, ParentalBond},
+    {ABILITY_DARK_AURA, DarkAura},
+    {ABILITY_FAIRY_AURA, FairyAura},
+    {ABILITY_AURA_BREAK, AuraBreak},
+    {ABILITY_PRIMORDIAL_SEA, PrimordialSea},
+    {ABILITY_DESOLATE_LAND, DesolateLand},
+    {ABILITY_DELTA_STREAM, DeltaStream},
+    {ABILITY_STAMINA, Stamina},
+    {ABILITY_WIMP_OUT, WimpOut},
+    {ABILITY_EMERGENCY_EXIT, EmergencyExit},
+    {ABILITY_WATER_COMPACTION, WaterCompaction},
+    {ABILITY_MERCILESS, Merciless},
+    {ABILITY_SHIELDS_DOWN, ShieldsDown},
+    {ABILITY_STAKEOUT, Stakeout},
+    {ABILITY_WATER_BUBBLE, WaterBubble},
+    {ABILITY_STEELWORKER, Steelworker},
+    {ABILITY_BERSERK, Berserk},
+    {ABILITY_SLUSH_RUSH, SlushRush},
+    {ABILITY_LONG_REACH, LongReach},
+    {ABILITY_LIQUID_VOICE, LiquidVoice},
+    {ABILITY_TRIAGE, Triage},
+    {ABILITY_GALVANIZE, Galvanize},
+    {ABILITY_SURGE_SURFER, SurgeSurfer},
+    {ABILITY_SCHOOLING, Schooling},
+    {ABILITY_DISGUISE, Disguise},
+    {ABILITY_BATTLE_BOND, BattleBond},
+    {ABILITY_POWER_CONSTRUCT, PowerConstruct},
+    {ABILITY_CORROSION, Corrosion},
+    {ABILITY_COMATOSE, Comatose},
+    {ABILITY_QUEENLY_MAJESTY, QueenlyMajesty},
+    {ABILITY_INNARDS_OUT, InnardsOut},
+    {ABILITY_DANCER, Dancer},
+    {ABILITY_BATTERY, Battery},
+    {ABILITY_FLUFFY, Fluffy},
+    {ABILITY_DAZZLING, Dazzling},
+    {ABILITY_SOUL_HEART, SoulHeart},
+    {ABILITY_TANGLING_HAIR, TanglingHair},
+    {ABILITY_RECEIVER, Receiver},
+    {ABILITY_POWER_OF_ALCHEMY, PowerOfAlchemy},
+    {ABILITY_BEAST_BOOST, BeastBoost},
+    {ABILITY_RKS_SYSTEM, RksSystem},
+    {ABILITY_ELECTRIC_SURGE, ElectricSurge},
+    {ABILITY_PSYCHIC_SURGE, PsychicSurge},
+    {ABILITY_MISTY_SURGE, MistySurge},
+    {ABILITY_GRASSY_SURGE, GrassySurge},
+    {ABILITY_FULL_METAL_BODY, FullMetalBody},
+    {ABILITY_SHADOW_SHIELD, ShadowShield},
+    {ABILITY_PRISM_ARMOR, PrismArmor},
+    {ABILITY_NEUROFORCE, Neuroforce},
+    {ABILITY_INTREPID_SWORD, IntrepidSword},
+    {ABILITY_DAUNTLESS_SHIELD, DauntlessShield},
+    {ABILITY_LIBERO, Libero},
+    {ABILITY_BALL_FETCH, BallFetch},
+    {ABILITY_COTTON_DOWN, CottonDown},
+    {ABILITY_PROPELLER_TAIL, PropellerTail},
+    {ABILITY_MIRROR_ARMOR, MirrorArmor},
+    {ABILITY_GULP_MISSILE, GulpMissile},
+    {ABILITY_STALWART, Stalwart},
+    {ABILITY_STEAM_ENGINE, SteamEngine},
+    {ABILITY_PUNK_ROCK, PunkRock},
+    {ABILITY_SAND_SPIT, SandSpit},
+    {ABILITY_ICE_SCALES, IceScales},
+    {ABILITY_RIPEN, Ripen},
+    {ABILITY_ICE_FACE, IceFace},
+    {ABILITY_POWER_SPOT, PowerSpot},
+    {ABILITY_MIMICRY, Mimicry},
+    {ABILITY_SCREEN_CLEANER, ScreenCleaner},
+    {ABILITY_STEELY_SPIRIT, SteelySpirit},
+    {ABILITY_PERISH_BODY, PerishBody},
+    {ABILITY_WANDERING_SPIRIT, WanderingSpirit},
+    {ABILITY_GORILLA_TACTICS, GorillaTactics},
+    {ABILITY_NEUTRALIZING_GAS, NeutralizingGas},
+    {ABILITY_PASTEL_VEIL, PastelVeil},
+    {ABILITY_HUNGER_SWITCH, HungerSwitch},
+    {ABILITY_QUICK_DRAW, QuickDraw},
+    {ABILITY_UNSEEN_FIST, UnseenFist},
+    {ABILITY_CURIOUS_MEDICINE, CuriousMedicine},
+    {ABILITY_TRANSISTOR, Transistor},
+    {ABILITY_DRAGONS_MAW, DragonsMaw},
+    {ABILITY_CHILLING_NEIGH, ChillingNeigh},
+    {ABILITY_GRIM_NEIGH, GrimNeigh},
+    {ABILITY_AS_ONE_ICE_RIDER, AsOneIceRider},
+    {ABILITY_AS_ONE_SHADOW_RIDER, AsOneShadowRider},
+    {ABILITY_CHLOROPLAST, Chloroplast},
+    {ABILITY_WHITEOUT, Whiteout},
+    {ABILITY_PYROMANCY, Pyromancy},
+    {ABILITY_KEEN_EDGE, KeenEdge},
+    {ABILITY_PRISM_SCALES, PrismScales},
+    {ABILITY_POWER_FISTS, PowerFists},
+    {ABILITY_SAND_SONG, SandSong},
+    {ABILITY_RAMPAGE, Rampage},
+    {ABILITY_VENGEANCE, Vengeance},
+    {ABILITY_BLITZ_BOXER, BlitzBoxer},
+    {ABILITY_ANTARCTIC_BIRD, AntarcticBird},
+    {ABILITY_IMMOLATE, Immolate},
+    {ABILITY_CRYSTALLIZE, Crystallize},
+    {ABILITY_ELECTROCYTES, Electrocytes},
+    {ABILITY_AERODYNAMICS, Aerodynamics},
+    {ABILITY_CHRISTMAS_SPIRIT, ChristmasSpirit},
+    {ABILITY_EXPLOIT_WEAKNESS, ExploitWeakness},
+    {ABILITY_GROUND_SHOCK, GroundShock},
+    {ABILITY_ANCIENT_IDOL, AncientIdol},
+    {ABILITY_MYSTIC_POWER, MysticPower},
+    {ABILITY_PERFECTIONIST, Perfectionist},
+    {ABILITY_GROWING_TOOTH, GrowingTooth},
+    {ABILITY_INFLATABLE, Inflatable},
+    {ABILITY_AURORA_BOREALIS, AuroraBorealis},
+    {ABILITY_AVENGER, Avenger},
+    {ABILITY_LETS_ROLL, LetsRoll},
+    {ABILITY_AQUATIC, Aquatic},
+    {ABILITY_LOUD_BANG, LoudBang},
+    {ABILITY_LEAD_COAT, LeadCoat},
+    {ABILITY_AMPHIBIOUS, Amphibious},
+    {ABILITY_GROUNDED, Grounded},
+    {ABILITY_EARTHBOUND, Earthbound},
+    {ABILITY_FIGHT_SPIRIT, FightingSpirit},
+    {ABILITY_FELINE_PROWESS, FelineProwess},
+    {ABILITY_COIL_UP, CoilUp},
+    {ABILITY_FOSSILIZED, Fossilized},
+    {ABILITY_MAGICAL_DUST, MagicalDust},
+    {ABILITY_DREAMCATCHER, Dreamcatcher},
+    {ABILITY_NOCTURNAL, Nocturnal},
+    {ABILITY_SELF_SUFFICIENT, SelfSufficient},
+    {ABILITY_TECTONIZE, Tectonize},
+    {ABILITY_ICE_AGE, IceAge},
+    {ABILITY_HALF_DRAKE, HalfDrake},
+    {ABILITY_LIQUIFIED, Liquified},
+    {ABILITY_DRAGONFLY, Dragonfly},
+    {ABILITY_DRAGONSLAYER, Dragonslayer},
+    {ABILITY_MOUNTAINEER, Mountaineer},
+    {ABILITY_HYDRATE, Hydrate},
+    {ABILITY_METALLIC, Metallic},
+    {ABILITY_PERMAFROST, Permafrost},
+    {ABILITY_PRIMAL_ARMOR, PrimalArmor},
+    {ABILITY_RAGING_BOXER, RagingBoxer},
+    {ABILITY_AIR_BLOWER, AirBlower},
+    {ABILITY_JUGGERNAUT, Juggernaut},
+    {ABILITY_SHORT_CIRCUIT, ShortCircuit},
+    {ABILITY_MAJESTIC_BIRD, MajesticBird},
+    {ABILITY_PHANTOM, Phantom},
+    {ABILITY_INTOXICATE, Intoxicate},
+    {ABILITY_IMPENETRABLE, Impenetrable},
+    {ABILITY_HYPNOTIST, Hypnotist},
+    {ABILITY_OVERWHELM, Overwhelm},
+    {ABILITY_SCARE, Scare},
+    {ABILITY_MAJESTIC_MOTH, MajesticMoth},
+    {ABILITY_SOUL_EATER, SoulEater},
+    {ABILITY_SOUL_LINKER, SoulLinker},
+    {ABILITY_SWEET_DREAMS, SweetDreams},
+    {ABILITY_BAD_LUCK, BadLuck},
+    {ABILITY_HAUNTED_SPIRIT, HauntedSpirit},
+    {ABILITY_ELECTRIC_BURST, ElectricBurst},
+    {ABILITY_RAW_WOOD, RawWood},
+    {ABILITY_SOLENOGLYPHS, Solenoglyphs},
+    {ABILITY_SPIDER_LAIR, SpiderLair},
+    {ABILITY_FATAL_PRECISION, FatalPrecision},
+    {ABILITY_FORT_KNOX, FortKnox},
+    {ABILITY_SEAWEED, Seaweed},
+    {ABILITY_PSYCHIC_MIND, PsychicMind},
+    {ABILITY_POISON_ABSORB, PoisonAbsorb},
+    {ABILITY_SCAVENGER, Scavenger},
+    {ABILITY_TWISTED_DIMENSION, TwistedDimension},
+    {ABILITY_MULTI_HEADED, MultiHeaded},
+    {ABILITY_NORTH_WIND, NorthWind},
+    {ABILITY_OVERCHARGE, Overcharge},
+    {ABILITY_VIOLENT_RUSH, ViolentRush},
+    {ABILITY_FLAMING_SOUL, FlamingSoul},
+    {ABILITY_SAGE_POWER, SagePower},
+    {ABILITY_BONE_ZONE, BoneZone},
+    {ABILITY_WEATHER_CONTROL, WeatherControl},
+    {ABILITY_SPEED_FORCE, SpeedForce},
+    {ABILITY_SEA_GUARDIAN, SeaGuardian},
+    {ABILITY_MOLTEN_DOWN, MoltenDown},
+    {ABILITY_HYPER_AGGRESSIVE, HyperAggressive},
+    {ABILITY_FLOCK, Flock},
+    {ABILITY_FIELD_EXPLORER, FieldExplorer},
+    {ABILITY_STRIKER, Striker},
+    {ABILITY_FROZEN_SOUL, FrozenSoul},
+    {ABILITY_PREDATOR, Predator},
+    {ABILITY_LOOTER, Looter},
+    {ABILITY_LUNAR_ECLIPSE, LunarEclipse},
+    {ABILITY_SOLAR_FLARE, SolarFlare},
+    {ABILITY_POWER_CORE, PowerCore},
+    {ABILITY_SIGHTING_SYSTEM, SightingSystem},
+    {ABILITY_BAD_COMPANY, BadCompany},
+    {ABILITY_OPPORTUNIST, Opportunist},
+    {ABILITY_GIANT_WINGS, GiantWings},
+    {ABILITY_MOMENTUM, Momentum},
+    {ABILITY_GRIP_PINCER, GripPincer},
+    {ABILITY_BIG_LEAVES, BigLeaves},
+    {ABILITY_PRECISE_FIST, PreciseFist},
+    {ABILITY_DEADEYE, Deadeye},
+    {ABILITY_ARTILLERY, Artillery},
+    {ABILITY_AMPLIFIER, Amplifier},
+    {ABILITY_ICE_DEW, IceDew},
+    {ABILITY_SUN_WORSHIP, SunWorship},
+    {ABILITY_POLLINATE, Pollinate},
+    {ABILITY_VOLCANO_RAGE, VolcanoRage},
+    {ABILITY_COLD_REBOUND, ColdRebound},
+    {ABILITY_LOW_BLOW, LowBlow},
+    {ABILITY_NOSFERATU, Nosferatu},
+    {ABILITY_SPECTRAL_SHROUD, SpectralShroud},
+    {ABILITY_DISCIPLINE, Discipline},
+    {ABILITY_THUNDERCALL, Thundercall},
+    {ABILITY_MARINE_APEX, MarineApex},
+    {ABILITY_MIGHTY_HORN, MightyHorn},
+    {ABILITY_HARDENED_SHEATH, HardenedSheath},
+    {ABILITY_ARCTIC_FUR, ArcticFur},
+    {ABILITY_SPECTRALIZE, Spectralize},
+    {ABILITY_LETHARGY, Lethargy},
+    {ABILITY_IRON_BARRAGE, IronBarrage},
+    {ABILITY_STEEL_BARREL, SteelBarrel},
+    {ABILITY_PYRO_SHELLS, PyroShells},
+    {ABILITY_FUNGAL_INFECTION, FungalInfection},
+    {ABILITY_PARRY, Parry},
+    {ABILITY_SCRAPYARD, Scrapyard},
+    {ABILITY_LOOSE_QUILLS, LooseQuills},
+    {ABILITY_TOXIC_DEBRIS, ToxicDebris},
+    {ABILITY_ROUNDHOUSE, Roundhouse},
+    {ABILITY_MINERALIZE, Mineralize},
+    {ABILITY_LOOSE_ROCKS, LooseRocks},
+    {ABILITY_SPINNING_TOP, SpinningTop},
+    {ABILITY_RETRIBUTION_BLOW, RetributionBlow},
+    {ABILITY_FEARMONGER, Fearmonger},
+    {ABILITY_KINGS_WRATH, KingsWrath},
+    {ABILITY_QUEENS_MOURNING, QueensMourning},
+    {ABILITY_TOXIC_SPILL, ToxicSpill},
+    {ABILITY_DESERT_CLOAK, DesertCloak},
+    {ABILITY_DRACONIZE, Draconize},
+    {ABILITY_PRETTY_PRINCESS, PrettyPrincess},
+    {ABILITY_SELF_REPAIR, SelfRepair},
+    {ABILITY_ATOMIC_BURST, AtomicBurst},
+    {ABILITY_HELLBLAZE, Hellblaze},
+    {ABILITY_RIPTIDE, Riptide},
+    {ABILITY_FOREST_RAGE, ForestRage},
+    {ABILITY_PRIMAL_MAW, PrimalMaw},
+    {ABILITY_SWEEPING_EDGE, SweepingEdge},
+    {ABILITY_GIFTED_MIND, GiftedMind},
+    {ABILITY_HYDRO_CIRCUIT, HydroCircuit},
+    {ABILITY_EQUINOX, Equinox},
+    {ABILITY_ABSORBANT, Absorbant},
+    {ABILITY_CLUELESS, Clueless},
+    {ABILITY_CHEATING_DEATH, CheatingDeath},
+    {ABILITY_CHEAP_TACTICS, CheapTactics},
+    {ABILITY_COWARD, Coward},
+    {ABILITY_VOLT_RUSH, VoltRush},
+    {ABILITY_DUNE_TERROR, DuneTerror},
+    {ABILITY_INFERNAL_RAGE, InfernalRage},
+    {ABILITY_DUAL_WIELD, DualWield},
+    {ABILITY_ELEMENTAL_CHARGE, ElementalCharge},
+    {ABILITY_AMBUSH, Ambush},
+    {ABILITY_ATLAS, Atlas},
+    {ABILITY_RADIANCE, Radiance},
+    {ABILITY_JAWS_OF_CARNAGE, JawsOfCarnage},
+    {ABILITY_ANGELS_WRATH, AngelsWrath},
+    {ABILITY_PRISMATIC_FUR, PrismaticFur},
+    {ABILITY_SHOCKING_JAWS, ShockingJaws},
+    {ABILITY_FAE_HUNTER, FaeHunter},
+    {ABILITY_GRAVITY_WELL, GravityWell},
+    {ABILITY_EVAPORATE, Evaporate},
+    {ABILITY_LUMBERJACK, Lumberjack},
+    {ABILITY_WELL_BAKED_BODY, WellBakedBody},
+    {ABILITY_FURNACE, Furnace},
+    {ABILITY_ELECTROMORPHOSIS, Electromorphosis},
+    {ABILITY_ROCKY_PAYLOAD, RockyPayload},
+    {ABILITY_EARTH_EATER, EarthEater},
+    {ABILITY_LINGERING_AROMA, LingeringAroma},
+    {ABILITY_FAIRY_TALE, FairyTale},
+    {ABILITY_RAGING_MOTH, RagingMoth},
+    {ABILITY_ADRENALINE_RUSH, AdrenalineRush},
+    {ABILITY_ARCHMAGE, Archmage},
+    {ABILITY_CRYOMANCY, Cryomancy},
+    {ABILITY_PHANTOM_PAIN, PhantomPain},
+    {ABILITY_PURGATORY, Purgatory},
+    {ABILITY_EMANATE, Emanate},
+    {ABILITY_KUNOICHI_BLADE, KunoichiBlade},
+    {ABILITY_MONKEY_BUSINESS, MonkeyBusiness},
+    {ABILITY_COMBAT_SPECIALIST, CombatSpecialist},
+    {ABILITY_JUNGLES_GUARD, JunglesGuard},
+    {ABILITY_HUNTERS_HORN, HuntersHorn},
+    {ABILITY_PIXIE_POWER, PixiePower},
+    {ABILITY_PLASMA_LAMP, PlasmaLamp},
+    {ABILITY_MAGMA_EATER, MagmaEater},
+    {ABILITY_SUPER_HOT_GOO, SuperHotGoo},
+    {ABILITY_NIKA, Nika},
+    {ABILITY_ARCHER, Archer},
+    {ABILITY_COLD_PLASMA, ColdPlasma},
+    {ABILITY_SUPER_SLAMMER, SuperSlammer},
+    {ABILITY_INVERSE_ROOM, InverseRoom},
+    {ABILITY_ACCELERATE, Accelerate},
+    {ABILITY_FROST_BURN, FrostBurn},
+    {ABILITY_ITCHY_DEFENSE, ItchyDefense},
+    {ABILITY_GENERATOR, Generator},
+    {ABILITY_MOON_SPIRIT, MoonSpirit},
+    {ABILITY_DUST_CLOUD, DustCloud},
+    {ABILITY_BERSERKER_RAGE, BerserkerRage},
+    {ABILITY_TRICKSTER, Trickster},
+    {ABILITY_SAND_GUARD, SandGuard},
+    {ABILITY_NATURAL_RECOVERY, NaturalRecovery},
+    {ABILITY_WIND_RIDER, WindRider},
+    {ABILITY_SOOTHING_AROMA, SoothingAroma},
+    {ABILITY_PRIM_AND_PROPER, PrimAndProper},
+    {ABILITY_SUPER_STRAIN, SuperStrain},
+    {ABILITY_TIPPING_POINT, TippingPoint},
+    {ABILITY_ENLIGHTENED, Enlightened},
+    {ABILITY_PEACEFUL_SLUMBER, PeacefulSlumber},
+    {ABILITY_AFTERSHOCK, Aftershock},
+    {ABILITY_FREEZING_POINT, FreezingPoint},
+    {ABILITY_CRYO_PROFICIENCY, CryoProficiency},
+    {ABILITY_ARCANE_FORCE, ArcaneForce},
+    {ABILITY_DOOMBRINGER, Doombringer},
+    {ABILITY_WISHMAKER, Wishmaker},
+    {ABILITY_YUKI_ONNA, YukiOnna},
+    {ABILITY_SUPPRESS, Suppress},
+    {ABILITY_REFRIGERATOR, Refrigerator},
+    {ABILITY_HEAVEN_ASUNDER, HeavenAsunder},
+    {ABILITY_PURIFYING_WATERS, PurifyingWaters},
+    {ABILITY_SEABORNE, Seaborne},
+    {ABILITY_HIGH_TIDE, HighTide},
+    {ABILITY_CHANGE_OF_HEART, ChangeOfHeart},
+    {ABILITY_MYSTIC_BLADES, MysticBlades},
+    {ABILITY_DETERMINATION, Determination},
+    {ABILITY_FERTILIZE, Fertilize},
+    {ABILITY_PURE_LOVE, PureLove},
+    {ABILITY_FIGHTER, Fighter},
+    {ABILITY_MYCELIUM_MIGHT, MyceliumMight},
+    {ABILITY_TELEKINETIC, Telekinetic},
+    {ABILITY_COMBUSTION, Combustion},
+    {ABILITY_PONY_POWER, PonyPower},
+    {ABILITY_POWDER_BURST, PowderBurst},
+    {ABILITY_RETRIEVER, Retriever},
+    {ABILITY_MONSTER_MASH, MonsterMash},
+    {ABILITY_TWO_STEP, TwoStep},
+    {ABILITY_SPITEFUL, Spiteful},
+    {ABILITY_FORTITUDE, Fortitude},
+    {ABILITY_DEVOURER, Devourer},
+    {ABILITY_PHANTOM_THIEF, PhantomThief},
+    {ABILITY_EARLY_GRAVE, EarlyGrave},
+    {ABILITY_GRAPPLER, Grappler},
+    {ABILITY_BASS_BOOSTED, BassBoosted},
+    {ABILITY_FLAMING_JAWS, FlamingJaws},
+    {ABILITY_MONSTER_HUNTER, MonsterHunter},
+    {ABILITY_CROWNED_SWORD, CrownedSword},
+    {ABILITY_CROWNED_SHIELD, CrownedShield},
+    {ABILITY_BERSERK_DNA, BerserkDna},
+    {ABILITY_CROWNED_KING, CrownedKing},
+    {ABILITY_SNAP_TRAP_WHEN_HIT, SnapTrapWhenHit},
+    {ABILITY_PERMANENCE, Permanence},
+    {ABILITY_HUBRIS, Hubris},
+    {ABILITY_COSMIC_DAZE, CosmicDaze},
+    {ABILITY_MINDS_EYE, MindsEye},
+    {ABILITY_BLOOD_PRICE, BloodPrice},
+    {ABILITY_SPIKE_ARMOR, SpikeArmor},
+    {ABILITY_VOODOO_POWER, VoodooPower},
+    {ABILITY_CHROME_COAT, ChromeCoat},
+    {ABILITY_BANSHEE, Banshee},
+    {ABILITY_WEB_SPINNER, WebSpinner},
+    {ABILITY_SHOWDOWN_MODE, ShowdownMode},
+    {ABILITY_SEED_SOWER, SeedSower},
+    {ABILITY_AIRBORNE, Airborne},
+    {ABILITY_PARROTING, Parroting},
+    {ABILITY_SALT_CIRCLE, SaltCircle},
+    {ABILITY_PURIFYING_SALT, PurifyingSalt},
+    {ABILITY_PROTOSYNTHESIS, Protosynthesis},
+    {ABILITY_QUARK_DRIVE, QuarkDrive},
+    {ABILITY_WIND_POWER, WindPower},
+    {ABILITY_IMPULSE, Impulse},
+    {ABILITY_TERMINAL_VELOCITY, TerminalVelocity},
+    {ABILITY_GUARD_DOG, GuardDog},
+    {ABILITY_ANGER_SHELL, AngerShell},
+    {ABILITY_EGOIST, Egoist},
+    {ABILITY_SUBDUE, Subdue},
+    {ABILITY_READIED_ACTION, ReadiedAction},
+    {ABILITY_DARK_GALE_WINGS, DarkGaleWings},
+    {ABILITY_GUILT_TRIP, GuiltTrip},
+    {ABILITY_WATER_GALE_WINGS, WaterGaleWings},
+    {ABILITY_ZERO_TO_HERO, ZeroToHero},
+    {ABILITY_COSTAR, Costar},
+    {ABILITY_COMMANDER, Commander},
+    {ABILITY_EJECT_PACK_ABILITY, EjectPackAbility},
+    {ABILITY_VENGEFUL_SPIRIT, VengefulSpirit},
+    {ABILITY_CUD_CHEW, CudChew},
+    {ABILITY_ARMOR_TAIL, ArmorTail},
+    {ABILITY_MIND_CRUSH, MindCrush},
+    {ABILITY_SUPREME_OVERLORD, SupremeOverlord},
+    {ABILITY_ILL_WILL, IllWill},
+    {ABILITY_FIRE_SCALES, FireScales},
+    {ABILITY_WATCH_YOUR_STEP, WatchYourStep},
+    {ABILITY_RAPID_RESPONSE, RapidResponse},
+    {ABILITY_DOUBLE_IRON_BARBS, DoubleIronBarbs},
+    {ABILITY_THERMAL_EXCHANGE, ThermalExchange},
+    {ABILITY_GOOD_AS_GOLD, GoodAsGold},
+    {ABILITY_SHARING_IS_CARING, SharingIsCaring},
+    {ABILITY_TABLETS_OF_RUIN, TabletsOfRuin},
+    {ABILITY_SWORD_OF_RUIN, SwordOfRuin},
+    {ABILITY_VESSEL_OF_RUIN, VesselOfRuin},
+    {ABILITY_BEADS_OF_RUIN, BeadsOfRuin},
+    {ABILITY_PERMAFROST_CLONE, PermafrostClone},
+    {ABILITY_GALLANTRY, Gallantry},
+    {ABILITY_ORICHALCUM_PULSE, OrichalcumPulse},
+    {ABILITY_SUN_BASKING, SunBasking},
+    {ABILITY_WINGED_KING, WingedKing},
+    {ABILITY_HADRON_ENGINE, HadronEngine},
+    {ABILITY_IRON_SERPENT, IronSerpent},
+    {ABILITY_WEATHER_DOUBLE_BOOST, WeatherDoubleBoost},
+    {ABILITY_SWEEPING_EDGE_PLUS, SweepingEdgePlus},
+    {ABILITY_CELESTIAL_BLESSING, CelestialBlessing},
+    {ABILITY_MINION_CONTROL, MinionControl},
+    {ABILITY_MOLTEN_BLADES, MoltenBlades},
+    {ABILITY_HAUNTING_FRENZY, HauntingFrenzy},
+    {ABILITY_NOISE_CANCEL, NoiseCancel},
+    {ABILITY_RADIO_JAM, RadioJam},
+    {ABILITY_OLE, Ole},
+    {ABILITY_MALICIOUS, Malicious},
+    {ABILITY_DEAD_POWER, DeadPower},
+    {ABILITY_BRAWLING_WYVERN, BrawlingWyvern},
+    {ABILITY_MYTHICAL_ARROWS, MythicalArrows},
+    {ABILITY_LAWNMOWER, Lawnmower},
+    {ABILITY_FLOURISH, Flourish},
+    {ABILITY_DESERT_SPIRIT, DesertSpirit},
+    {ABILITY_CONTEMPT, Contempt},
+    {ABILITY_AERIALIST, Aerialist},
+    {ABILITY_TERA_SHELL, TeraShell},
+    {ABILITY_TOXIC_CHAIN, ToxicChain},
+    {ABILITY_PARASITIC_SPORES, ParasiticSpores},
+    {ABILITY_POISON_PUPPETEER, PoisonPuppeteer},
+    {ABILITY_ENTRANCE, Entrance},
+    {ABILITY_REJECTION, Rejection},
+    {ABILITY_APPLE_ENLIGHTENMENT, AppleEnlightenment},
+    {ABILITY_BALLOON_BOMBER, BalloonBomber},
+    {ABILITY_FLAMING_MAW, FlamingMaw},
+    {ABILITY_DEMOLITIONIST, Demolitionist},
+    {ABILITY_ROCKHARD_WILL, RockhardWill},
+    {ABILITY_FRAGRANT_DAZE, FragrantDaze},
+    {ABILITY_LOW_VISIBILITY, LowVisibility},
+    {ABILITY_OLD_MARINER, OldMariner},
+    {ABILITY_ECTOPLASM, Ectoplasm},
+    {ABILITY_BEAUTIFUL_MUSIC, BeautifulMusic},
+    {ABILITY_SURPRISE, Surprise},
+    {ABILITY_SNOW_SONG, SnowSong},
+    {ABILITY_GREATER_SPIRIT, GreaterSpirit},
+    {ABILITY_RESONANCE, Resonance},
+    {ABILITY_ETHEREAL_RUSH, EtherealRush},
+    {ABILITY_CUTE_ANTECEDENCE, CuteAntecedence},
+    {ABILITY_RECURRING_NIGHTMARE, RecurringNightmare},
+    {ABILITY_MENACING_SITUATION, MenacingSituation},
+    {ABILITY_SHINY_LIGHTNING, ShinyLightning},
+    {ABILITY_TERRIFY, Terrify},
+    {ABILITY_ICE_DOWNFALL, IceDownfall},
+    {ABILITY_LAST_STAND, LastStand},
+    {ABILITY_PYROCLASTIC_FLOW, PyroclasticFlow},
+    {ABILITY_BLOOD_BATH, BloodBath},
+    {ABILITY_BATTLE_AURA, BattleAura},
+    {ABILITY_BLOODLUST, Bloodlust},
+    {ABILITY_PIERCING_SOLO, PiercingSolo},
+    {ABILITY_RHYTHMIC, Rhythmic},
+    {ABILITY_CHUNKY_BASS_LINE, ChunkyBassLine},
+    {ABILITY_DUAL_HAMMER, DualHammer},
+    {ABILITY_DENTING_BLOWS, DentingBlows},
+    {ABILITY_ICE_COLD_HUNTER, IceColdHunter},
+    {ABILITY_SOUL_CRUSHER, SoulCrusher},
+    {ABILITY_ARC_FLASH, ArcFlash},
+    {ABILITY_UNICORN, Unicorn},
+    {ABILITY_ON_THE_PROWL, OnTheProwl},
+    {ABILITY_PRETENTIOUS, Pretentious},
+    {ABILITY_VENOBLAZE_PINCERS, VenoblazePincers},
+    {ABILITY_ETERNAL_BLESSING, EternalBlessing},
+    {ABILITY_SUGAR_RUSH, SugarRush},
+    {ABILITY_PEACEFUL_REST, PeacefulRest},
+    {ABILITY_WHITE_NOISE, WhiteNoise},
+    {ABILITY_SMOKEY_MANEUVERS, SmokeyManeuvers},
+    {ABILITY_TAG, Tag},
+    {ABILITY_POWER_METAL, PowerMetal},
+    {ABILITY_POWER_EDGE, PowerEdge},
+    {ABILITY_SUPERCONDUCTOR, Superconductor},
+    {ABILITY_ULTRA_INSTINCT, UltraInstinct},
+    {ABILITY_UNLOCKED_POTENTIAL, UnlockedPotential},
+    {ABILITY_HIGHER_RANK, HigherRank},
+    {ABILITY_FUNERAL_PYRE, FuneralPyre},
+    {ABILITY_FLAME_BUBBLE, FlameBubble},
+    {ABILITY_ELEMENTAL_VORTEX, ElementalVortex},
+    {ABILITY_SNOWY_WRATH, SnowyWrath},
+    {ABILITY_PATTERN_CHANGE, PatternChange},
+    {ABILITY_NO_TURNING_BACK, NoTurningBack},
+    {ABILITY_FLAMMABLE_COAT, FlammableCoat},
+    {ABILITY_DRACO_MORALE, DracoMorale},
+    {ABILITY_BAD_OMEN, BadOmen},
+    {ABILITY_MOSH_PIT, MoshPit},
+    {ABILITY_BLOOD_STAIN, BloodStain},
+    {ABILITY_BLOOD_STIGMA, BloodStigma},
+    {ABILITY_MAXIMUM_ACCELERATION, MaximumAcceleration},
+    {ABILITY_SIDEWINDER, Sidewinder},
+    {ABILITY_PETRIFY, Petrify},
+    {ABILITY_FLUFFIEST, Fluffiest},
+    {ABILITY_WAY_OF_PRECISION, WayOfPrecision},
+    {ABILITY_WAY_OF_SWIFTNESS, WayOfSwiftness},
+    {ABILITY_ATOMIC_PUNCH, AtomicPunch},
+    {ABILITY_IRON_GIANT, IronGiant},
+    {ABILITY_MASTER_HAND, MasterHand},
+    {ABILITY_FINAL_BLOW, FinalBlow},
+    {ABILITY_HOSPITALITY, Hospitality},
+    {ABILITY_BUTTER_UP, ButterUp},
+    {ABILITY_VITALITY_STRIKE, VitalityStrike},
+    {ABILITY_HUGE_WINGS, HugeWings},
+    {ABILITY_SWORD_OF_DAMNATION, SwordOfDamnation},
+    {ABILITY_RESTRAINING_ORDER, RestrainingOrder},
+    {ABILITY_ASSASSINS_TOOLS, AssassinsTools},
+    {ABILITY_FROSTMAW, Frostmaw},
+    {ABILITY_PATCHWORK, Patchwork},
+    {ABILITY_BLIND_RAGE, BlindRage},
+    {ABILITY_SLIPSTREAM, Slipstream},
+    {ABILITY_APEX_PREDATOR, ApexPredator},
+    {ABILITY_DRAGONS_RITUAL, DragonsRitual},
+    {ABILITY_PINNACLE_BLADE, PinnacleBlade},
+    {ABILITY_ENERGIZED, Energized},
+    {ABILITY_COLOR_SPECTRUM, ColorSpectrum},
+    {ABILITY_STEEL_BEETLE, SteelBeetle},
+    {ABILITY_FROM_THE_SHADOWS, FromTheShadows},
+    {ABILITY_RAGE_POINT, RagePoint},
+    {ABILITY_HOT_COALS, HotCoals},
+    {ABILITY_TERASTAL_TREASURE, TerastalTreasure},
+    {ABILITY_SHOCKING_MAW, ShockingMaw},
+    {ABILITY_GLEAM_EYES, GleamEyes},
+    {ABILITY_ROUSED_FANGS, RousedFangs},
+    {ABILITY_DREAM_STATE, DreamState},
+    {ABILITY_DREAM_WHIMSY, DreamWhimsy},
+    {ABILITY_LUNAR_AFFINITY, LunarAffinity},
+    {ABILITY_FLAME_SHIELD, FlameShield},
+    {ABILITY_AQUATIC_DWELLER, AquaticDweller},
+    {ABILITY_APPLE_PIE, ApplePie},
+    {ABILITY_HOVER, Hover},
+    {ABILITY_DEPRAVITY, Depravity},
+    {ABILITY_WILDFIRE, Wildfire},
+    {ABILITY_JUMP_SCARE, JumpScare},
+    {ABILITY_TAR_TOSS, TarToss},
+    {ABILITY_STUN_SHOCK, StunShock},
+    {ABILITY_RAGING_GODDESS, RagingGoddess},
+    {ABILITY_WHIPLASH, Whiplash},
+    {ABILITY_SUPERSWEET_SYRUP, SupersweetSyrup},
+    {ABILITY_LUCKY_HALO, LuckyHalo},
+    {ABILITY_TRASH_HEAP, TrashHeap},
+    {ABILITY_SLUDGY_MIX, SludgyMix},
+    {ABILITY_OVERWATCH, Overwatch},
+    {ABILITY_WIND_RAGE, WindRage},
+    {ABILITY_VICTORY_BOMB, VictoryBomb},
+    {ABILITY_RAZOR_SHARP, RazorSharp},
+    {ABILITY_TO_THE_BONE, ToTheBone},
+    {ABILITY_BLADE_DANCE, BladeDance},
+    {ABILITY_TAEKKYEON, Taekkyeon},
+    {ABILITY_APE_SHIFT, ApeShift},
+    {ABILITY_KNOW_YOUR_PLACE, KnowYourPlace},
+    {ABILITY_DEEP_CUTS, DeepCuts},
+    {ABILITY_LIFE_STEAL, LifeSteal},
+    {ABILITY_RUDE_AWAKENING, RudeAwakening},
+    {ABILITY_TERAFORM_ZERO, TeraformZero},
+    {ABILITY_SET_ABLAZE, SetAblaze},
+    {ABILITY_BREAKWATER, Breakwater},
+    {ABILITY_MAGICAL_FISTS, MagicalFists},
+    {ABILITY_CUTTHROAT, Cutthroat},
+    {ABILITY_SAND_BENDER, SandBender},
+    {ABILITY_SAND_PIT, SandPit},
+    {ABILITY_DESOLATE_SUN, DesolateSun},
+    {ABILITY_DAYBREAK, Daybreak},
+    {ABILITY_ENERGY_SIPHON, EnergySiphon},
+    {ABILITY_RESERVOIR, Reservoir},
+    {ABILITY_NEUROTOXIN, Neurotoxin},
+    {ABILITY_ENERGIZED_HORNS, EnergizedHorns},
+    {ABILITY_SPIDER_LAIR_UPGRADE, SpiderLairUpgrade},
+    {ABILITY_CRUST_COAT, CrustCoat},
+    {ABILITY_PUFFY, Puffy},
+    {ABILITY_BALLOON_BLITZ, BalloonBlitz},
+    {ABILITY_STRIKER_PIXILATE, StrikerPixilate},
+    {ABILITY_DOOM_BLAST, DoomBlast},
+    {ABILITY_BRUTEFORCE, Bruteforce},
+    {ABILITY_FARADAY_CAGE, FaradayCage},
+    {ABILITY_ACIDIC_SLIME, AcidicSlime},
+    {ABILITY_ROSE_GARDEN, RoseGarden},
+    {ABILITY_QIGONG, Qigong},
+    {ABILITY_CONJOURER_OF_DECEIT, ConjurerOfDeceit},
+    {ABILITY_DEEP_FREEZE, DeepFreeze},
+    {ABILITY_SOUL_DEVOURER, SoulDevourer},
+    {ABILITY_CHAMPIONS_ENTRANCE, ChampionsEntrance},
+    {ABILITY_PRESTO, Presto},
+    {ABILITY_SAMBA, Samba},
+    {ABILITY_JUNSHI_SANDA, JunshiSanda},
+    {ABILITY_GLADIATOR, Gladiator},
+    {ABILITY_FORSAKEN_HEART, ForsakenHeart},
+    {ABILITY_RELENTLESS, Relentless},
+    {ABILITY_SOOTHSAYER, Soothsayer},
+    {ABILITY_CORRUPTED_MIND, CorruptedMind},
+    {ABILITY_FLAME_COAT, FlameCoat},
+    {ABILITY_UNOWN_POWER, UnownPower},
+    {ABILITY_SUPER_SCOPE, SuperScope},
+    {ABILITY_VENOM_CROWN, VenomCrown},
+    {ABILITY_BLIGHT_SCALE, BlightScale},
+    {ABILITY_GUNMAN, Gunman},
+    {ABILITY_HUNTERS_MARK, HuntersMark},
+    {ABILITY_HEMOLYSIS, Hemolysis},
+    {ABILITY_CARETAKER, Caretaker},
+    {ABILITY_POSEIDONS_DOMINION, PoseidonsDominion},
+    {ABILITY_DUAL_SHADOW, DualShadow},
+    {ABILITY_LULLABY, Lullaby},
+    {ABILITY_CRYO_ARCHITECT, CryoArchitect},
+    {ABILITY_GLACIAL_RAGE, GlacialRage},
+    {ABILITY_IMMOVABLE_OBJECT, ImmovableObject},
+    {ABILITY_FRENZIED_PHANTOM, FrenziedPhantom},
 };
+
+template <int N>
+consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKVPair second[N]) {
+    AbilitiesWrapper newWrapper = wrapper;
+    bool assigned[ABILITIES_COUNT] = {0};
+    for (int i = 0; i < N; i++) {
+        auto val = second[i];
+        if (assigned[val.key]) {
+            return (AbilitiesWrapper){0};
+        }
+        assigned[val.key] = true;
+#define __OVERWRITE_ARRAY_VAL(field) .field = val.ability.field ? val.ability.field : wrapper.abilities[val.key].field
+
+        newWrapper.abilities[val.key] = (Ability){
+            __OVERWRITE_ARRAY_VAL(name),
+            __OVERWRITE_ARRAY_VAL(description),
+            __OVERWRITE_ARRAY_VAL(onEntry),
+            __OVERWRITE_ARRAY_VAL(onAbsorb),
+            __OVERWRITE_ARRAY_VAL(onImmune),
+            __OVERWRITE_ARRAY_VAL(onInfiltrate),
+            __OVERWRITE_ARRAY_VAL(onDisguise),
+            __OVERWRITE_ARRAY_VAL(onWeather),
+            __OVERWRITE_ARRAY_VAL(onTerrain),
+            __OVERWRITE_ARRAY_VAL(onEndTurn),
+            __OVERWRITE_ARRAY_VAL(onAttacker),
+            __OVERWRITE_ARRAY_VAL(onDefender),
+            __OVERWRITE_ARRAY_VAL(onRecoil),
+            __OVERWRITE_ARRAY_VAL(onReactive),
+            __OVERWRITE_ARRAY_VAL(onBattlerFaints),
+            __OVERWRITE_ARRAY_VAL(onParentalBond),
+            __OVERWRITE_ARRAY_VAL(onOffensiveMultiplier),
+            __OVERWRITE_ARRAY_VAL(onMoveType),
+            __OVERWRITE_ARRAY_VAL(onDefensiveMultiplier),
+            __OVERWRITE_ARRAY_VAL(onStat),
+            __OVERWRITE_ARRAY_VAL(onAccuracy),
+            __OVERWRITE_ARRAY_VAL(onSwapSplit),
+            __OVERWRITE_ARRAY_VAL(onChooseOffensiveStat),
+            __OVERWRITE_ARRAY_VAL(onChooseDefensiveStat),
+            __OVERWRITE_ARRAY_VAL(onStab),
+            __OVERWRITE_ARRAY_VAL(onPriority),
+            __OVERWRITE_ARRAY_VAL(onExit),
+            __OVERWRITE_ARRAY_VAL(onCrit),
+            __OVERWRITE_ARRAY_VAL(onTypeEffectiveness),
+            __OVERWRITE_ARRAY_VAL(onCopyMove),
+            __OVERWRITE_ARRAY_VAL(onAfterTypeEffectiveness),
+            __OVERWRITE_ARRAY_VAL(onModifyEffectChance),
+            __OVERWRITE_ARRAY_VAL(onCanStatusType),
+            __OVERWRITE_ARRAY_VAL(onStatusImmune),
+            __OVERWRITE_ARRAY_VAL(onTrap),
+            __OVERWRITE_ARRAY_VAL(onImmuneFor),
+            __OVERWRITE_ARRAY_VAL(onBattlerFaintsFor),
+            __OVERWRITE_ARRAY_VAL(onOffensiveMultiplierFor),
+            __OVERWRITE_ARRAY_VAL(onAccuracyFor),
+            __OVERWRITE_ARRAY_VAL(onStatFor),
+            __OVERWRITE_ARRAY_VAL(onCritFor),
+            __OVERWRITE_ARRAY_VAL(onAfterTypeEffectivenessFor),
+            __OVERWRITE_ARRAY_VAL(onStatusImmuneFor),
+            __OVERWRITE_ARRAY_VAL(redirectType),
+            __OVERWRITE_ARRAY_VAL(ruinStat),
+            __OVERWRITE_ARRAY_VAL(noDamageHits),
+            __OVERWRITE_ARRAY_VAL(breakable),
+            __OVERWRITE_ARRAY_VAL(unsuppressable),
+            __OVERWRITE_ARRAY_VAL(persistent),
+            __OVERWRITE_ARRAY_VAL(randomizerBanned),
+            __OVERWRITE_ARRAY_VAL(unaware),
+            __OVERWRITE_ARRAY_VAL(absorbUp2),
+            __OVERWRITE_ARRAY_VAL(isSoundproof),
+            __OVERWRITE_ARRAY_VAL(magicGuard),
+            __OVERWRITE_ARRAY_VAL(noRecoil),
+            __OVERWRITE_ARRAY_VAL(halfRecoil),
+            __OVERWRITE_ARRAY_VAL(chloroplast),
+            __OVERWRITE_ARRAY_VAL(skillLink),
+            __OVERWRITE_ARRAY_VAL(resistsFortKnox),
+            __OVERWRITE_ARRAY_VAL(fortKnox),
+            __OVERWRITE_ARRAY_VAL(protean),
+            __OVERWRITE_ARRAY_VAL(colorChange),
+            __OVERWRITE_ARRAY_VAL(adaptability),
+            __OVERWRITE_ARRAY_VAL(magicBounce),
+            __OVERWRITE_ARRAY_VAL(levitate),
+            __OVERWRITE_ARRAY_VAL(megaLauncherBoost),
+            __OVERWRITE_ARRAY_VAL(unnerve),
+            __OVERWRITE_ARRAY_VAL(negatesBurnAtkDrop),
+            __OVERWRITE_ARRAY_VAL(negatesFrzSpatkDrop),
+            __OVERWRITE_ARRAY_VAL(canInfatuateAny),
+            __OVERWRITE_ARRAY_VAL(removesStatusOnImmunity),
+            __OVERWRITE_ARRAY_VAL(tauntImmune),
+            __OVERWRITE_ARRAY_VAL(shadowTag),
+        };
+    }
+    return newWrapper;
+}
+
+const AbilitiesWrapper gAbilitiesWrapper = mergeArrays<ARRAY_COUNT(sAbilities)>((AbilitiesWrapper){0}, sAbilities);
 
 #pragma GCC diagnostic pop
