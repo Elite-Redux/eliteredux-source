@@ -10304,6 +10304,12 @@ constexpr Ability FrenziedPhantom = {
     .shadowTag = TRUE,
 };
 
+constexpr Ability DNAScramble = {
+    .name = $("DNA Scramble"),
+    .description = $("Changes into Attack, Speed, or\n"
+        "Defense form based on move used."),
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
