@@ -3918,9 +3918,7 @@ int AbilityHealMonStatus(u8 battler, u16 ability) {
     return TRUE;
 }
 
-bool8 CanMoveHaveExtraFlinchChance(MoveEnum move) {
-    return gBattleMoves[move].flags & FLAG_KINGS_ROCK_AFFECTED;
-}
+bool8 CanMoveHaveExtraFlinchChance(MoveEnum move) { return gBattleMoves[move].flags & FLAG_KINGS_ROCK_AFFECTED; }
 
 int WasMoveSuccessful() { return !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && gBattlerAttacker != gBattlerTarget; }
 
@@ -4930,8 +4928,7 @@ bool32 CanBleed(u8 battlerId) {
 
     if (IsStatusImmune(battlerId, CHECK_BLEED)) return FALSE;
 
-    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ROCK) || IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
-        return FALSE;
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ROCK) || IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) return FALSE;
     return TRUE;
 }
 
@@ -6899,7 +6896,7 @@ u16 CalculateAbilityMultipliers(
 
     if (!hasFortKnox) {
         for (int sourceBattler = 0; sourceBattler < gBattlersCount; sourceBattler++) {
-            FILTER(IsBattlerAlive(sourceBattler))
+            FILTER(battlerAtk == sourceBattler || IsBattlerAlive(sourceBattler))
             ON_ABILITY(
                 sourceBattler,
                 FALSE,
@@ -7065,7 +7062,8 @@ int IgnoresFrostbiteSpatkDrop(int battler) {
     return FALSE;
 }
 
-u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, MoveEnum move, bool8 isAttack, bool8 isCrit, bool8 isUnaware, bool8 calculatingSecondary) {
+u32 CalculateStat(
+    u8 battler, u8 statEnum, u8 secondaryStat[NUM_STATS], MoveEnum move, bool8 isAttack, bool8 isCrit, bool8 isUnaware, bool8 calculatingSecondary) {
     u32 statBase = 0;
     u8 statStage = gBattleMons[battler].statStages[statEnum];
     u8 extraStatLevel = 0;
@@ -7132,7 +7130,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, MoveEnum move, bool
 
     NonStackingState flags = 0;
     for (int sourceBattler = 0; sourceBattler < gBattlersCount; sourceBattler++) {
-        FILTER(IsBattlerAlive(sourceBattler))
+        FILTER(sourceBattler == battler || IsBattlerAlive(sourceBattler))
         ON_ABILITY(sourceBattler,
                    TRUE,
                    gAbilities[ability].onStat && IsApplyOnFlagAppropriate(battler, sourceBattler, gAbilities[ability].onStatFor),
@@ -7150,16 +7148,23 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, MoveEnum move, bool
 
     if (!BenefitsFromStatBuffs(battler)) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
-    if (!calculatingSecondary) {
-        if (secondaryStat == statEnum && statEnum != STAT_SPEED)
-            statBase = statBase * 6 / 5;
-        else if (secondaryStat == statEnum && statEnum == STAT_SPEED) {
+    if (!calculatingSecondary && secondaryStat) {
+        if (statEnum != STAT_SPEED && secondaryStat[statEnum]) {
+            statBase = statBase * (100 + secondaryStat[statEnum]) / 100;
+        }
+
+        for (int i = STAT_ATK; i < NUM_STATS; i++) {
+            FILTER(i != statEnum)
+            FILTER(secondaryStat[i])
+            statBase += CalculateStat(battler, i, 0, move, isAttack, isCrit, isUnaware, TRUE) * secondaryStat[i] / 100;
+        }
+
+        if (statEnum == STAT_SPEED && secondaryStat[STAT_SPEED]) {
             statBase *= gStatStageRatios[statStage][0];
             statBase /= gStatStageRatios[statStage][1];
-            statBase += CalculateStat(battler, secondaryStat, 0, move, isAttack, isCrit, isUnaware, TRUE) / 5;
+            statBase += CalculateStat(battler, STAT_SPEED, 0, move, isAttack, isCrit, isUnaware, TRUE) * secondaryStat[STAT_SPEED] / 100;
             return statBase;
-        } else if (secondaryStat)
-            statBase += CalculateStat(battler, secondaryStat, 0, move, isAttack, isCrit, isUnaware, TRUE) / 5;
+        }
     }
 
     statBase *= gStatStageRatios[statStage][0];
@@ -7173,7 +7178,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, MoveEnum move, bool
 
 static u32 CalcAttackStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 isCrit, bool32 updateFlags) {
     u8 atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_ATK : STAT_SPATK;
-    u8 secondaryAtkStatToUse = 0;
+    u8 secondaryAtkStatToUse[NUM_STATS] = {0};
     u8 statBattler = battlerAtk;
     // Calculates Highest Attack Stat after stat boosts
     bool8 isUnaware = IsUnaware(battlerDef);
@@ -7191,7 +7196,7 @@ static u32 CalcAttackStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
         ON_ABILITY(battlerAtk,
                    FALSE,
                    gAbilities[ability].onChooseOffensiveStat,
-                   gAbilities[ability].onChooseOffensiveStat(battlerAtk, move, isCrit, isUnaware, &atkStatToUse, &secondaryAtkStatToUse))
+                   gAbilities[ability].onChooseOffensiveStat(battlerAtk, move, isCrit, isUnaware, &atkStatToUse, secondaryAtkStatToUse))
     }
 
     atkStat = CalculateStat(statBattler, atkStatToUse, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
@@ -7520,8 +7525,8 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
     }
 
     // target's ally's abilities
-    if (BATTLER_HAS_ABILITY(BATTLE_PARTNER(battlerDef), ABILITY_FRIEND_GUARD)) MulModifier(&finalModifier, UQ_4_12(0.5));
-    if (BATTLER_HAS_ABILITY(BATTLE_PARTNER(battlerDef), ABILITY_CARETAKER)) MulModifier(&finalModifier, UQ_4_12(0.5));  // was 0.75
+    if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_FRIEND_GUARD, TRUE)) MulModifier(&finalModifier, UQ_4_12(0.5));
+    if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_CARETAKER, TRUE)) MulModifier(&finalModifier, UQ_4_12(0.5));  // was 0.75
 
     // attacker's hold effect
     switch (GetBattlerHoldEffect(battlerAtk, TRUE)) {
@@ -7836,6 +7841,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u
 
     for (int i = 0; i < gBattlersCount; i++) {
         int battler = (battlerDef + i) % gBattlersCount;
+        FILTER(battler == battlerDef || battler == battlerAtk || IsBattlerAlive(battler))
         ON_ABILITY(battler,
                    TRUE,
                    gAbilities[ability].onAfterTypeEffectiveness &&
@@ -8904,7 +8910,7 @@ int TestImmunityAbilitiesOnly(int battler, int attacker, MoveEnum move, int move
 int TestImmunityAbilities(int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript, u8 *overrideBattler, u16 *abilityPopup) {
     for (int i = 0; i < gBattlersCount; i++) {
         int testBattler = (battler + i) % gBattlersCount;
-        FILTER(IsBattlerAlive(testBattler))
+        FILTER(testBattler == attacker || testBattler == battler || IsBattlerAlive(testBattler))
 
         ON_ABILITY(
             testBattler,

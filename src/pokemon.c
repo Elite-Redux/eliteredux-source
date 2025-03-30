@@ -8930,44 +8930,84 @@ u16 getBaseSpeciesFromMega(u16 species) {
             return SPECIES_BUTTERFREE;
         case SPECIES_BEEDRILL_MEGA:
             return SPECIES_BEEDRILL;
+        case SPECIES_BEEDRILL_MEGA_REDUX:
+            return SPECIES_BEEDRILL_REDUX;
         case SPECIES_PIDGEOT_MEGA:
             return SPECIES_PIDGEOT;
         case SPECIES_ARBOK_MEGA:
             return SPECIES_ARBOK;
-        case SPECIES_PIKACHU_PARTNER_MEGA:
-            return SPECIES_PIKACHU_PARTNER;
+        case SPECIES_SANDSLASH_MEGA:
+            return SPECIES_SANDSLASH;
+        case SPECIES_NIDOQUEEN_MEGA:
+            return SPECIES_NIDOQUEEN;
+        case SPECIES_NIDOKING_MEGA:
+            return SPECIES_NIDOKING;
         case SPECIES_WIGGLYTUFF_MEGA:
             return SPECIES_WIGGLYTUFF;
         case SPECIES_WIGGLYTUFF_MEGA_X:
             return SPECIES_WIGGLYTUFF;
+        case SPECIES_CROBAT_MEGA:
+            return SPECIES_CROBAT;
         case SPECIES_MEOWTH_PARTNER_MEGA:
             return SPECIES_MEOWTH_PARTNER;
         case SPECIES_ARCANINE_MEGA_REDUX:
             return SPECIES_ARCANINE_REDUX;
         case SPECIES_ALAKAZAM_MEGA:
             return SPECIES_ALAKAZAM;
+        case SPECIES_ALAKAZAM_MEGA_REDUX:
+            return SPECIES_ALAKAZAM_REDUX;
         case SPECIES_MACHAMP_MEGA:
             return SPECIES_MACHAMP;
+        case SPECIES_MACHAMP_MEGA_REDUX:
+            return SPECIES_MACHAMP_REDUX;
         case SPECIES_RAPIDASH_MEGA:
             return SPECIES_RAPIDASH;
+        case SPECIES_RAPIDASH_MEGA_GALARIAN:
+            return SPECIES_RAPIDASH_GALARIAN;
         case SPECIES_SLOWBRO_MEGA:
             return SPECIES_SLOWBRO;
+        case SPECIES_SLOWKING_MEGA:
+            return SPECIES_SLOWKING;
+        case SPECIES_MAGNEZONE_MEGA:
+            return SPECIES_MAGNEZONE;
         case SPECIES_DEWGONG_MEGA:
             return SPECIES_DEWGONG;
         case SPECIES_GENGAR_MEGA:
             return SPECIES_GENGAR;
         case SPECIES_GENGAR_MEGA_X:
             return SPECIES_GENGAR;
+        case SPECIES_STEELIX_MEGA:
+            return SPECIES_STEELIX;
         case SPECIES_KINGLER_MEGA:
             return SPECIES_KINGLER;
         case SPECIES_KANGASKHAN_MEGA:
             return SPECIES_KANGASKHAN;
+        case SPECIES_KANGASKHAN_PARTNER_MEGA:
+            return SPECIES_KANGASKHAN_PARTNER;
+        case SPECIES_KANGASKHAN_PARTNER_MEGA_B:
+            return SPECIES_KANGASKHAN_PARTNER;
+        case SPECIES_KANGASKHAN_PARTNER_MEGA_C:
+            return SPECIES_KANGASKHAN_PARTNER;
+        case SPECIES_KINGDRA_MEGA:
+            return SPECIES_KINGDRA;
+        case SPECIES_KINGDRA_MEGA_Y:
+            return SPECIES_KINGDRA;
+        case SPECIES_KINGDRA_PARTNER_MEGA:
+            return SPECIES_KINGDRA_PARTNER;
+        case SPECIES_KINGDRA_PARTNER_MEGA_B:
+            return SPECIES_KINGDRA_PARTNER_B;
+        case SPECIES_KINGDRA_PARTNER_MEGA_C:
+            return SPECIES_KINGDRA_PARTNER_C;
         case SPECIES_PINSIR_MEGA:
             return SPECIES_PINSIR;
         case SPECIES_GYARADOS_MEGA:
             return SPECIES_GYARADOS;
+        case SPECIES_GYARADEATH_MEGA_X:
+            return SPECIES_GYARADEATH;
         case SPECIES_GYARADOS_MEGA_Y:
             return SPECIES_GYARADOS;
+        case SPECIES_GYARADEATH_MEGA_Y:
+            return SPECIES_GYARADEATH;
         case SPECIES_LAPRAS_MEGA:
             return SPECIES_LAPRAS;
         case SPECIES_LAPRAS_MEGA_X:
@@ -8976,62 +9016,142 @@ u16 getBaseSpeciesFromMega(u16 species) {
             return SPECIES_EEVEE_PARTNER;
         case SPECIES_AERODACTYL_MEGA:
             return SPECIES_AERODACTYL;
+        case SPECIES_DRAGONITE_MEGA:
+            return SPECIES_DRAGONITE;
+        case SPECIES_DRAGONITE_PARTNER_MEGA:
+            return SPECIES_DRAGONITE_PARTNER;
+        case SPECIES_DRAGONITE_PARTNER_MEGA_B:
+            return SPECIES_DRAGONITE_PARTNER_B;
+        case SPECIES_DRAGONITE_PARTNER_MEGA_C:
+            return SPECIES_DRAGONITE_PARTNER_C;
         case SPECIES_MEWTWO_MEGA_X:
             return SPECIES_MEWTWO;
         case SPECIES_MEWTWO_MEGA_Y:
             return SPECIES_MEWTWO;
+        case SPECIES_MEGANIUM_MEGA:
+            return SPECIES_MEGANIUM;
+        case SPECIES_TYPHLOSION_MEGA:
+            return SPECIES_TYPHLOSION;
+        case SPECIES_TYPHLOSION_HISUIAN_MEGA:
+            return SPECIES_TYPHLOSION_HISUIAN;
+        case SPECIES_FERALIGATR_MEGA_X:
+            return SPECIES_FERALIGATR;
+        case SPECIES_FERALIGATR_MEGA_Y:
+            return SPECIES_FERALIGATR;
+        case SPECIES_LANTURN_MEGA:
+            return SPECIES_LANTURN;
+        case SPECIES_PIKACHU_PARTNER_MEGA:
+            return SPECIES_PIKACHU_PARTNER;
+        case SPECIES_CLEFABLE_REDUX_MEGA:
+            return SPECIES_CLEFABLE_REDUX;
         case SPECIES_AMPHAROS_MEGA:
             return SPECIES_AMPHAROS;
-        case SPECIES_STEELIX_MEGA:
-            return SPECIES_STEELIX;
-        case SPECIES_SCIZOR_MEGA:
-            return SPECIES_SCIZOR;
+        case SPECIES_AMPHAROS_PARTNER_MEGA:
+            return SPECIES_AMPHAROS_PARTNER;
+        case SPECIES_AMPHAROS_PARTNER_MEGA_B:
+            return SPECIES_AMPHAROS_PARTNER_B;
+        case SPECIES_AMPHAROS_PARTNER_MEGA_C:
+            return SPECIES_AMPHAROS_PARTNER_B;
+        case SPECIES_QUAGSIRE_MEGA:
+            return SPECIES_QUAGSIRE;
+        case SPECIES_GRANBULL_MEGA:
+            return SPECIES_GRANBULL;
+        case SPECIES_SHUCKLE_MEGA:
+            return SPECIES_SHUCKLE;
         case SPECIES_HERACROSS_MEGA:
             return SPECIES_HERACROSS;
+        case SPECIES_WEAVILE_REDUX_MEGA:
+            return SPECIES_WEAVILE_REDUX;
         case SPECIES_URSALUNA_MEGA:
             return SPECIES_URSALUNA;
+        case SPECIES_SKARMORY_MEGA:
+            return SPECIES_SKARMORY;
+        case SPECIES_SKARMORY_MEGA_REDUX:
+            return SPECIES_SKARMORY_REDUX;
         case SPECIES_HOUNDOOM_MEGA:
             return SPECIES_HOUNDOOM;
-        case SPECIES_KINGDRA_MEGA:
-            return SPECIES_KINGDRA;
+        case SPECIES_HOUNDOOM_MEGA_REDUX:
+            return SPECIES_HOUNDOOM_REDUX;
+        case SPECIES_HITMONCHAN_MEGA:
+            return SPECIES_HITMONCHAN;
+        case SPECIES_HITMONLEE_MEGA:
+            return SPECIES_HITMONLEE;
+        case SPECIES_HITMONTOP_MEGA:
+            return SPECIES_HITMONTOP;
+        case SPECIES_HITMONCHAN_PARTNER_MEGA:
+            return SPECIES_HITMONCHAN_PARTNER;
+        case SPECIES_HITMONCHAN_PARTNER_MEGA_B:
+            return SPECIES_HITMONCHAN_PARTNER_B;
+        case SPECIES_HITMONCHAN_PARTNER_MEGA_C:
+            return SPECIES_HITMONCHAN_PARTNER_B;
         case SPECIES_TYRANITAR_MEGA:
             return SPECIES_TYRANITAR;
+        case SPECIES_TYRANITAR_MEGA_REDUX:
+            return SPECIES_TYRANITAR_REDUX;
         case SPECIES_SCEPTILE_MEGA:
             return SPECIES_SCEPTILE;
         case SPECIES_BLAZIKEN_MEGA:
             return SPECIES_BLAZIKEN;
         case SPECIES_SWAMPERT_MEGA:
             return SPECIES_SWAMPERT;
-        case SPECIES_CASCOON_PRIMAL:
-            return SPECIES_CASCOON;
-        case SPECIES_SABLEYE_MEGA:
-            return SPECIES_SABLEYE;
-        case SPECIES_MILOTIC_MEGA:
-            return SPECIES_MILOTIC;
-        case SPECIES_SHARPEDO_MEGA:
-            return SPECIES_SHARPEDO;
-        case SPECIES_FLYGON_MEGA:
-            return SPECIES_FLYGON;
-        case SPECIES_MANECTRIC_MEGA:
-            return SPECIES_MANECTRIC;
-        case SPECIES_CAMERUPT_MEGA:
-            return SPECIES_CAMERUPT;
-        case SPECIES_GLALIE_MEGA:
-            return SPECIES_GLALIE;
-        case SPECIES_MAWILE_MEGA:
-            return SPECIES_MAWILE;
-        case SPECIES_MEDICHAM_MEGA:
-            return SPECIES_MEDICHAM;
-        case SPECIES_ALTARIA_MEGA:
-            return SPECIES_ALTARIA;
-        case SPECIES_ABSOL_MEGA:
-            return SPECIES_ABSOL;
-        case SPECIES_BANETTE_MEGA:
-            return SPECIES_BANETTE;
-        case SPECIES_AGGRON_MEGA:
-            return SPECIES_AGGRON;
         case SPECIES_GARDEVOIR_MEGA:
             return SPECIES_GARDEVOIR;
+        case SPECIES_GALLADE_MEGA:
+            return SPECIES_GALLADE;
+        case SPECIES_BRELOOM_MEGA:
+            return SPECIES_BRELOOM;
+        case SPECIES_SLAKING_MEGA:
+            return SPECIES_SLAKING;
+        case SPECIES_SHEDINJA_MEGA:
+            return SPECIES_SHEDINJA;
+        case SPECIES_SABLEYE_MEGA:
+            return SPECIES_SABLEYE;
+        case SPECIES_SABLEYE_MEGA_REDUX:
+            return SPECIES_SABLEYE_REDUX;
+        case SPECIES_MAWILE_MEGA:
+            return SPECIES_MAWILE;
+        case SPECIES_MAWILE_MEGA_REDUX:
+            return SPECIES_MAWILE_REDUX;
+        case SPECIES_MAWILE_REDUX_B_MEGA:
+            return SPECIES_MAWILE_REDUX_B;
+        case SPECIES_AGGRON_MEGA:
+            return SPECIES_AGGRON;
+        case SPECIES_MEDICHAM_MEGA:
+            return SPECIES_MEDICHAM;
+        case SPECIES_MANECTRIC_MEGA:
+            return SPECIES_MANECTRIC;
+        case SPECIES_ROSERADE_MEGA:
+            return SPECIES_ROSERADE;
+        case SPECIES_SWALOT_MEGA:
+            return SPECIES_SWALOT;
+        case SPECIES_SHARPEDO_MEGA:
+            return SPECIES_SHARPEDO;
+        case SPECIES_CAMERUPT_MEGA:
+            return SPECIES_CAMERUPT;
+        case SPECIES_FLYGON_REDUX_B_MEGA:
+            return SPECIES_FLYGON_REDUX_B;
+        case SPECIES_FLYGON_MEGA:
+            return SPECIES_FLYGON;
+        case SPECIES_FLYGON_REDUX_MEGA:
+            return SPECIES_FLYGON_REDUX;
+        case SPECIES_ALTARIA_MEGA:
+            return SPECIES_ALTARIA;
+        case SPECIES_MILOTIC_MEGA:
+            return SPECIES_MILOTIC;
+        case SPECIES_BANETTE_MEGA:
+            return SPECIES_BANETTE;
+        case SPECIES_ABSOL_MEGA:
+            return SPECIES_ABSOL;
+        case SPECIES_GLALIE_MEGA:
+            return SPECIES_GLALIE;
+        case SPECIES_FROSLASS_MEGA:
+            return SPECIES_FROSLASS;
+        case SPECIES_GLALIE_REDUX_MEGA:
+            return SPECIES_GLALIE_REDUX;
+        case SPECIES_FROSLASS_REDUX_MEGA:
+            return SPECIES_FROSLASS_REDUX;
+        case SPECIES_RELICANTH_MEGA:
+            return SPECIES_RELICANTH;
         case SPECIES_SALAMENCE_MEGA:
             return SPECIES_SALAMENCE;
         case SPECIES_METAGROSS_MEGA:
@@ -9040,32 +9160,90 @@ u16 getBaseSpeciesFromMega(u16 species) {
             return SPECIES_LATIAS;
         case SPECIES_LATIOS_MEGA:
             return SPECIES_LATIOS;
-        case SPECIES_KYOGRE_PRIMAL:
-            return SPECIES_KYOGRE;
-        case SPECIES_GROUDON_PRIMAL:
-            return SPECIES_GROUDON;
         case SPECIES_RAYQUAZA_MEGA:
             return SPECIES_RAYQUAZA;
+        case SPECIES_TORTERRA_MEGA:
+            return SPECIES_TORTERRA;
+        case SPECIES_TORTERRA_REDUX_MEGA:
+            return SPECIES_TORTERRA_REDUX;
+        case SPECIES_INFERNAPE_MEGA:
+            return SPECIES_INFERNAPE;
+        case SPECIES_INFERNAPE_REDUX_MEGA:
+            return SPECIES_INFERNAPE_REDUX;
+        case SPECIES_EMPOLEON_MEGA:
+            return SPECIES_EMPOLEON;
+        case SPECIES_EMPOLEON_REDUX_MEGA:
+            return SPECIES_EMPOLEON_REDUX;
+        case SPECIES_LUXRAY_MEGA:
+            return SPECIES_LUXRAY;
         case SPECIES_LOPUNNY_MEGA:
             return SPECIES_LOPUNNY;
         case SPECIES_GARCHOMP_MEGA:
             return SPECIES_GARCHOMP;
+        case SPECIES_GARCHOMP_MEGA_REDUX:
+            return SPECIES_GARCHOMP_REDUX;
+        case SPECIES_SNORLAX_MEGA:
+            return SPECIES_SNORLAX;
         case SPECIES_LUCARIO_MEGA:
             return SPECIES_LUCARIO;
         case SPECIES_LUCARIO_MEGA_Y:
             return SPECIES_LUCARIO;
+        case SPECIES_ABOMASNOW_SANTA:
+            return SPECIES_ABOMASNOW;
         case SPECIES_ABOMASNOW_MEGA:
             return SPECIES_ABOMASNOW;
-        case SPECIES_GALLADE_MEGA:
-            return SPECIES_GALLADE;
+        case SPECIES_SERPERIOR_MEGA:
+            return SPECIES_SERPERIOR;
+        case SPECIES_EMBOAR_MEGA:
+            return SPECIES_EMBOAR;
+        case SPECIES_SAMUROTT_HISUIAN_MEGA:
+            return SPECIES_SAMUROTT_HISUIAN;
         case SPECIES_AUDINO_MEGA:
             return SPECIES_AUDINO;
+        case SPECIES_KROOKODILE_MEGA:
+            return SPECIES_KROOKODILE;
         case SPECIES_GARBODOR_MEGA:
             return SPECIES_GARBODOR;
+        case SPECIES_REUNICLUS_REDUX_MEGA:
+            return SPECIES_REUNICLUS_REDUX;
+        case SPECIES_JELLICENT_MEGA:
+            return SPECIES_JELLICENT;
+        case SPECIES_HAXORUS_MEGA:
+            return SPECIES_HAXORUS;
+        case SPECIES_MIENSHAO_MEGA:
+            return SPECIES_MIENSHAO;
+        case SPECIES_KINGAMBIT_REDUX_MEGA:
+            return SPECIES_KINGAMBIT_REDUX;
+        case SPECIES_HYDREIGON_REDUX_MEGA:
+            return SPECIES_HYDREIGON_REDUX;
+        case SPECIES_AEGISLASH_REDUX_MEGA:
+            return SPECIES_AEGISLASH_REDUX;
+        case SPECIES_YVELTAL_MEGA:
+            return SPECIES_YVELTAL;
         case SPECIES_DIANCIE_MEGA:
             return SPECIES_DIANCIE;
+        case SPECIES_DECIDUEYE_MEGA:
+            return SPECIES_DECIDUEYE;
+        case SPECIES_DECIDUEYE_HISUIAN_MEGA:
+            return SPECIES_DECIDUEYE_HISUIAN;
+        case SPECIES_INCINEROAR_MEGA:
+            return SPECIES_INCINEROAR;
+        case SPECIES_PRIMARINA_MEGA:
+            return SPECIES_PRIMARINA;
+        case SPECIES_TOUCANNON_MEGA:
+            return SPECIES_TOUCANNON;
+        case SPECIES_ORICORIO_MEGA:
+            return SPECIES_ORICORIO;
+        case SPECIES_RIBOMBEE_REDUX_MEGA:
+            return SPECIES_RIBOMBEE_REDUX;
+        case SPECIES_RIBOMBEE_MEGA:
+            return SPECIES_RIBOMBEE;
+        case SPECIES_TSAREENA_REDUX_MEGA:
+            return SPECIES_TSAREENA_REDUX;
         case SPECIES_GOLISOPOD_MEGA:
             return SPECIES_GOLISOPOD;
+        case SPECIES_BRUXISH_MEGA:
+            return SPECIES_BRUXISH;
         case SPECIES_MELMETAL_MEGA:
             return SPECIES_MELMETAL;
         case SPECIES_RILLABOOM_MEGA:
@@ -9086,6 +9264,10 @@ u16 getBaseSpeciesFromMega(u16 species) {
             return SPECIES_SANDACONDA;
         case SPECIES_TOXTRICITY_MEGA:
             return SPECIES_TOXTRICITY;
+        case SPECIES_TOXTRICITY_REDUX_MEGA:
+            return SPECIES_TOXTRICITY_REDUX;
+        case SPECIES_TOXTRICITY_REDUX_FUZZ_MEGA:
+            return SPECIES_TOXTRICITY_REDUX_FUZZ;
         case SPECIES_CENTISKORCH_MEGA:
             return SPECIES_CENTISKORCH;
         case SPECIES_HATTERENE_MEGA:
@@ -9096,214 +9278,83 @@ u16 getBaseSpeciesFromMega(u16 species) {
             return SPECIES_ALCREMIE;
         case SPECIES_COPPERAJAH_MEGA:
             return SPECIES_COPPERAJAH;
-        case SPECIES_ETERNATUS_ETERNAMAX:
-            return SPECIES_ETERNATUS;
+        case SPECIES_DRACOVISH_MEGA:
+            return SPECIES_DRACOVISH;
+        case SPECIES_DURALUDON_PARTNER_MEGA:
+            return SPECIES_DURALUDON_PARTNER;
         case SPECIES_URSHIFU_MEGA:
             return SPECIES_URSHIFU;
         case SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA:
             return SPECIES_URSHIFU_RAPID_STRIKE_STYLE;
-        case SPECIES_RAPIDASH_MEGA_GALARIAN:
-            return SPECIES_RAPIDASH_GALARIAN;
-        case SPECIES_NECROZMA_ULTRA:
-            return SPECIES_NECROZMA_DUSK_MANE;
-        case SPECIES_HITMONCHAN_MEGA:
-            return SPECIES_HITMONCHAN;
-        case SPECIES_HITMONLEE_MEGA:
-            return SPECIES_HITMONLEE;
-        case SPECIES_HITMONTOP_MEGA:
-            return SPECIES_HITMONTOP;
-        case SPECIES_CROBAT_MEGA:
-            return SPECIES_CROBAT;
-        case SPECIES_SKARMORY_MEGA:
-            return SPECIES_SKARMORY;
-        case SPECIES_BRUXISH_MEGA:
-            return SPECIES_BRUXISH;
-        case SPECIES_TORTERRA_MEGA:
-            return SPECIES_TORTERRA;
-        case SPECIES_INFERNAPE_MEGA:
-            return SPECIES_INFERNAPE;
-        case SPECIES_EMPOLEON_MEGA:
-            return SPECIES_EMPOLEON;
-        case SPECIES_SHUCKLE_MEGA:
-            return SPECIES_SHUCKLE;
-        case SPECIES_RELICANTH_MEGA:
-            return SPECIES_RELICANTH;
-        case SPECIES_QUAGSIRE_MEGA:
-            return SPECIES_QUAGSIRE;
-        case SPECIES_JELLICENT_MEGA:
-            return SPECIES_JELLICENT;
-        case SPECIES_TOUCANNON_MEGA:
-            return SPECIES_TOUCANNON;
-        case SPECIES_DRAGONITE_MEGA:
-            return SPECIES_DRAGONITE;
-        case SPECIES_BRELOOM_MEGA:
-            return SPECIES_BRELOOM;
-        case SPECIES_SLAKING_MEGA:
-            return SPECIES_SLAKING;
-        case SPECIES_FERALIGATR_MEGA_X:
-            return SPECIES_FERALIGATR;
-        case SPECIES_FERALIGATR_MEGA_Y:
-            return SPECIES_FERALIGATR;
-        case SPECIES_GRANBULL_MEGA:
-            return SPECIES_GRANBULL;
-        case SPECIES_HAXORUS_MEGA:
-            return SPECIES_HAXORUS;
-        case SPECIES_LUXRAY_MEGA:
-            return SPECIES_LUXRAY;
-        case SPECIES_NIDOKING_MEGA:
-            return SPECIES_NIDOKING;
-        case SPECIES_NIDOQUEEN_MEGA:
-            return SPECIES_NIDOQUEEN;
-        case SPECIES_SANDSLASH_MEGA:
-            return SPECIES_SANDSLASH;
-        case SPECIES_TYPHLOSION_MEGA:
-            return SPECIES_TYPHLOSION;
-        case SPECIES_MEGANIUM_MEGA:
-            return SPECIES_MEGANIUM;
-        case SPECIES_KROOKODILE_MEGA:
-            return SPECIES_KROOKODILE;
-        case SPECIES_MAGNEZONE_MEGA:
-            return SPECIES_MAGNEZONE;
-        case SPECIES_SHEDINJA_MEGA:
-            return SPECIES_SHEDINJA;
-        case SPECIES_SWALOT_MEGA:
-            return SPECIES_SWALOT;
-        case SPECIES_LANTURN_MEGA:
-            return SPECIES_LANTURN;
-        case SPECIES_SLOWKING_MEGA:
-            return SPECIES_SLOWKING;
-        case SPECIES_RIBOMBEE_MEGA:
-            return SPECIES_RIBOMBEE;
-        case SPECIES_TINKATON_MEGA:
-            return SPECIES_TINKATON;
+        case SPECIES_MEOWSCARADA_MEGA:
+            return SPECIES_MEOWSCARADA;
+        case SPECIES_SKELEDIRGE_MEGA:
+            return SPECIES_SKELEDIRGE;
+        case SPECIES_QUAQUAVAL_MEGA:
+            return SPECIES_QUAQUAVAL;
         case SPECIES_FIDOUGH_PARTNER_MEGA:
             return SPECIES_FIDOUGH_PARTNER;
-        case SPECIES_AEGISLASH_REDUX_MEGA:
-            return SPECIES_AEGISLASH_REDUX;
-        case SPECIES_ALAKAZAM_MEGA_REDUX:
-            return SPECIES_ALAKAZAM_REDUX;
-        case SPECIES_BEEDRILL_MEGA_REDUX:
-            return SPECIES_BEEDRILL_REDUX;
-        case SPECIES_MACHAMP_MEGA_REDUX:
-            return SPECIES_MACHAMP_REDUX;
-        case SPECIES_SKARMORY_MEGA_REDUX:
-            return SPECIES_SKARMORY_REDUX;
-        case SPECIES_REUNICLUS_REDUX_MEGA:
-            return SPECIES_REUNICLUS_REDUX;
-        case SPECIES_GARCHOMP_MEGA_REDUX:
-            return SPECIES_GARCHOMP_REDUX;
-        case SPECIES_HYDREIGON_REDUX_MEGA:
-            return SPECIES_HYDREIGON_REDUX;
-        case SPECIES_KINGAMBIT_REDUX_MEGA:
-            return SPECIES_KINGAMBIT_REDUX;
-        case SPECIES_MAWILE_MEGA_REDUX:
-            return SPECIES_MAWILE_REDUX;
-        case SPECIES_SABLEYE_MEGA_REDUX:
-            return SPECIES_SABLEYE_REDUX;
-        case SPECIES_HOUNDOOM_MEGA_REDUX:
-            return SPECIES_HOUNDOOM_REDUX;
-        case SPECIES_FROSLASS_MEGA:
-            return SPECIES_FROSLASS;
-        case SPECIES_DIALGA_ORIGIN:
-            return SPECIES_DIALGA;
-        case SPECIES_PALKIA_ORIGIN:
-            return SPECIES_PALKIA;
-        case SPECIES_GIRATINA_ORIGIN:
-            return SPECIES_GIRATINA;
-        case SPECIES_ZAMAZENTA_CROWNED_SHIELD:
-            return SPECIES_ZAMAZENTA;
-        case SPECIES_ZACIAN_CROWNED_SWORD:
-            return SPECIES_ZACIAN;
-        case SPECIES_TYRANITAR_MEGA_REDUX:
-            return SPECIES_TYRANITAR_REDUX;
-        case SPECIES_DURALUDON_PARTNER_MEGA:
-            return SPECIES_DURALUDON_PARTNER;
-        case SPECIES_TORTERRA_REDUX_MEGA:
-            return SPECIES_TORTERRA_REDUX;
-        case SPECIES_INFERNAPE_REDUX_MEGA:
-            return SPECIES_INFERNAPE_REDUX;
-        case SPECIES_EMPOLEON_REDUX_MEGA:
-            return SPECIES_EMPOLEON_REDUX;
-        case SPECIES_TSAREENA_REDUX_MEGA:
-            return SPECIES_TSAREENA_REDUX;
-        case SPECIES_TOXTRICITY_REDUX_MEGA:
-            return SPECIES_TOXTRICITY_REDUX;
-        case SPECIES_TOXTRICITY_REDUX_FUZZ_MEGA:
-            return SPECIES_TOXTRICITY_REDUX_FUZZ;
-        case SPECIES_FLYGON_REDUX_MEGA:
-            return SPECIES_FLYGON_REDUX;
-        case SPECIES_CLEFABLE_REDUX_MEGA:
-            return SPECIES_CLEFABLE_REDUX;
-        case SPECIES_GLALIE_REDUX_MEGA:
-            return SPECIES_GLALIE_REDUX;
-        case SPECIES_FROSLASS_REDUX_MEGA:
-            return SPECIES_FROSLASS_REDUX;
-        case SPECIES_GYARADEATH_MEGA_X:
-            return SPECIES_GYARADEATH;
-        case SPECIES_GYARADEATH_MEGA_Y:
-            return SPECIES_GYARADEATH;
+        case SPECIES_TINKATON_MEGA:
+            return SPECIES_TINKATON;
+        case SPECIES_CHIEN_PAO_MEGA:
+            return SPECIES_CHIEN_PAO;
         case SPECIES_CORMOTH_MEGA:
             return SPECIES_CORMOTH;
         case SPECIES_POPCORM_MEGA:
             return SPECIES_POPCORM;
         case SPECIES_AMPHYBUZZ_MEGA:
             return SPECIES_AMPHYBUZZ;
-        case SPECIES_TERAPAGOS_STELLAR:
-            return SPECIES_TERAPAGOS;
-        case SPECIES_ORICORIO_MEGA:
-            return SPECIES_ORICORIO;
-        case SPECIES_CHIEN_PAO_MEGA:
-            return SPECIES_CHIEN_PAO;
-        case SPECIES_DRACOVISH_MEGA:
-            return SPECIES_DRACOVISH;
-        case SPECIES_RIBOMBEE_REDUX_MEGA:
-            return SPECIES_RIBOMBEE_REDUX;
-        case SPECIES_WEAVILE_REDUX_MEGA:
-            return SPECIES_WEAVILE_REDUX;
-        case SPECIES_FLYGON_REDUX_B_MEGA:
-            return SPECIES_FLYGON_REDUX_B;
-        case SPECIES_SNORLAX_MEGA:
-            return SPECIES_SNORLAX;
-        case SPECIES_SNORLAX_PRIMAL:
-            return SPECIES_SNORLAX;
-        case SPECIES_VICTINI_PRIMAL:
-            return SPECIES_VICTINI;
-        case SPECIES_MAWILE_REDUX_B_MEGA:
-            return SPECIES_MAWILE_REDUX_B;
+        case SPECIES_SCIZOR_MEGA:
+            return SPECIES_SCIZOR;
+        case SPECIES_WEAVILE_MEGA:
+            return SPECIES_WEAVILE;
+        case SPECIES_SAMUROTT_MEGA:
+            return SPECIES_SAMUROTT;
+        case SPECIES_ARCANINE_MEGA:
+            return SPECIES_ARCANINE;
+        case SPECIES_GOODRA_MEGA:
+            return SPECIES_GOODRA;
+        case SPECIES_SLOWBRO_MEGA_GALARIAN:
+            return SPECIES_SLOWBRO_GALARIAN;
+        case SPECIES_SLOWKING_MEGA_GALARIAN:
+            return SPECIES_SLOWKING_GALARIAN;
         case SPECIES_WIGGLYTUFF_PRIMAL:
             return SPECIES_WIGGLYTUFF_APEX;
-        case SPECIES_HITMONCHAN_PARTNER_MEGA:
-            return SPECIES_HITMONCHAN_PARTNER;
-        case SPECIES_HITMONCHAN_PARTNER_MEGA_B:
-            return SPECIES_HITMONCHAN_PARTNER_B;
-        case SPECIES_HITMONCHAN_PARTNER_MEGA_C:
-            return SPECIES_HITMONCHAN_PARTNER_B;
-        case SPECIES_AMPHAROS_PARTNER_MEGA:
-            return SPECIES_AMPHAROS_PARTNER;
-        case SPECIES_AMPHAROS_PARTNER_MEGA_B:
-            return SPECIES_AMPHAROS_PARTNER_B;
-        case SPECIES_AMPHAROS_PARTNER_MEGA_C:
-            return SPECIES_AMPHAROS_PARTNER_B;
-        case SPECIES_KANGASKHAN_PARTNER_MEGA:
-            return SPECIES_KANGASKHAN_PARTNER;
-        case SPECIES_KANGASKHAN_PARTNER_MEGA_B:
-            return SPECIES_KANGASKHAN_PARTNER;
-        case SPECIES_KANGASKHAN_PARTNER_MEGA_C:
-            return SPECIES_KANGASKHAN_PARTNER;
-        case SPECIES_DRAGONITE_PARTNER_MEGA:
-            return SPECIES_DRAGONITE_PARTNER;
-        case SPECIES_DRAGONITE_PARTNER_MEGA_B:
-            return SPECIES_DRAGONITE_PARTNER_B;
-        case SPECIES_DRAGONITE_PARTNER_MEGA_C:
-            return SPECIES_DRAGONITE_PARTNER_C;
-        case SPECIES_KINGDRA_PARTNER_MEGA:
-            return SPECIES_KINGDRA_PARTNER;
-        case SPECIES_KINGDRA_PARTNER_MEGA_B:
-            return SPECIES_KINGDRA_PARTNER_B;
-        case SPECIES_KINGDRA_PARTNER_MEGA_C:
-            return SPECIES_KINGDRA_PARTNER_C;
+        case SPECIES_ESPEON_GALAXY:
+            return SPECIES_ESPEON;
+        case SPECIES_CASCOON_PRIMAL:
+            return SPECIES_CASCOON;
+        case SPECIES_KYOGRE_PRIMAL:
+            return SPECIES_KYOGRE;
+        case SPECIES_GROUDON_PRIMAL:
+            return SPECIES_GROUDON;
+        case SPECIES_SNORLAX_PRIMAL:
+            return SPECIES_SNORLAX;
+        case SPECIES_DIALGA_ORIGIN:
+            return SPECIES_DIALGA;
+        case SPECIES_PALKIA_ORIGIN:
+            return SPECIES_PALKIA;
+        case SPECIES_GIRATINA_ORIGIN:
+            return SPECIES_GIRATINA;
+        case SPECIES_VICTINI_PRIMAL:
+            return SPECIES_VICTINI;
+        case SPECIES_MIMIKYU_RAYQUAZA:
+            return SPECIES_MIMIKYU_APEX;
+        case SPECIES_MIMIKYU_RAYQUAZA_BUSTED:
+            return SPECIES_MIMIKYU_APEX_BUSTED;
+        case SPECIES_NECROZMA_ULTRA:
+            return SPECIES_NECROZMA_DUSK_MANE;
+        case SPECIES_ZACIAN_CROWNED_SWORD:
+            return SPECIES_ZACIAN;
+        case SPECIES_ZAMAZENTA_CROWNED_SHIELD:
+            return SPECIES_ZAMAZENTA;
+        case SPECIES_ETERNATUS_ETERNAMAX:
+            return SPECIES_ETERNATUS;
+        case SPECIES_TERAPAGOS_STELLAR:
+            return SPECIES_TERAPAGOS;
+        default:
+            return SPECIES_NONE;
     }
-    return SPECIES_NONE;
 }
 
 u16 GetFormShiftSpecies(u16 species) {

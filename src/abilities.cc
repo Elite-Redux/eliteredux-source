@@ -90,7 +90,8 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_ACCURACY ability, battler, target, move, moveType, accuracy
 #define ON_SWAP_SPLIT int battler, MoveEnum move
 #define DELEGATE_SWAP_SPLIT battler, move
-#define ON_CHOOSE_OFFENSIVE_STAT int battler, MoveEnum move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 *secondaryAtkStatToUse
+#define ON_CHOOSE_OFFENSIVE_STAT \
+    int battler, MoveEnum move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 secondaryAtkStatToUse[NUM_STATS]
 #define DELEGATE_CHOOSE_OFFENSIVE_STAT battler, move, ignoreOffensiveStatDrops, targetUnaware, atkStatToUse, secondaryAtkStatToUse
 #define ON_CHOOSE_DEFENSIVE_STAT int battler, int target, MoveEnum move, int ignoreDefensiveStatBoosts, int battlerUnaware
 #define DELEGATE_CHOOSE_DEFENSIVE_STAT battler, target, move, ignoreDefensiveStatBoosts, battlerUnaware
@@ -2018,11 +2019,13 @@ static const Ability Harvest = {
 
 static const Ability Telepathy = {
     .name = $("Telepathy"),
-    .description = $("Can't be damaged by ally attacks."),
+    .description = $("Can't be damaged by ally attacks.\n"
+                     "Doesn't damage allies with attacks.\n"),
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
             if (target == BATTLE_PARTNER(battler) && gBattleMoves[move].power) *mod = 0;
         },
+    .onAfterTypeEffectivenessFor = APPLY_ON_ATTACKER_OR_TARGET,
     .breakable = TRUE,
 };
 
@@ -2124,7 +2127,7 @@ static const Ability Analytic = {
                      "if it moves last."),
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber && move != MOVE_FUTURE_SIGHT && move != MOVE_DOOM_DESIRE) MUL(1.3);
+            if (GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber && gBattleMoves[move].effect != EFFECT_FUTURE_SIGHT) MUL(1.3);
         },
 };
 
@@ -2177,7 +2180,7 @@ static const Ability Mummy = {
                      "Mummy."),
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
-        CHECK_NOT(BattlerHasAbility(attacker, ability, FALSE))
+        CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
         CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
@@ -3465,7 +3468,14 @@ int HandleMimicry(u8 battler, int ability, AbilityCallType endType) {
             if (!state.active) {
                 SetAbilityStateAs(battler,
                                   ability,
-                                  (AbilityStates){.mimicryState = {.type1 = gBattleMons[battler].type1, .type2 = gBattleMons[battler].type2, .active = TRUE}});
+                                  (AbilityStates){
+                                      .mimicryState =
+                                          {
+                                              .type1 = gBattleMons[battler].type1,
+                                              .type2 = gBattleMons[battler].type2,
+                                              .active = TRUE,
+                                          },
+                                  });
             }
             SET_BATTLER_TYPE(battler, moveType);
             PREPARE_TYPE_BUFFER(gBattleTextBuff2, moveType);
@@ -3544,7 +3554,7 @@ static const Ability WanderingSpirit = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(GetBattlerAbility(battler) == ability)
-        CHECK_NOT(BattlerHasAbility(attacker, ability, FALSE))
+        CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
         CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
@@ -4313,7 +4323,7 @@ static const Ability Juggernaut = {
                      "Def when using a contact move."),
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *secondaryAtkStatToUse = STAT_DEF;
+            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) secondaryAtkStatToUse[STAT_DEF] += 20;
         },
     .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_PARALYSIS)
@@ -4721,7 +4731,7 @@ static const Ability SpeedForce = {
                      "Speed stat additionally."),
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *secondaryAtkStatToUse = STAT_SPEED;
+            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) secondaryAtkStatToUse[STAT_SPEED] += 20;
         },
 };
 
@@ -4831,7 +4841,7 @@ static const Ability PowerCore = {
     .name = $("Power Core"),
     .description = $("The Pokémon uses +20% of its\n"
                      "Defense or SpDef during moves."),
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *secondaryAtkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; },
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF] += 20; },
 };
 
 static const Ability SightingSystem = {
@@ -7412,7 +7422,7 @@ static const Ability TerminalVelocity = {
                      "Speed stat additionally."),
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (IS_MOVE_SPECIAL(move)) *secondaryAtkStatToUse = STAT_SPEED;
+            if (IS_MOVE_SPECIAL(move)) secondaryAtkStatToUse[STAT_SPEED] += 20;
         },
 };
 
@@ -8858,9 +8868,8 @@ static const Ability MoshPit = {
 ON_EITHER(BloodStain) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-    CHECK_NOT(BATTLER_HAS_ABILITY(opponent, ABILITY_BLOOD_STAIN))
     CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(opponent)))
-    CHECK_NOT(BattlerHasAbility(battler, ability, FALSE))
+    CHECK_NOT(HasAbilityIgnoringSuppression(opponent, ability))
     CHECK_NOT(DoesBattlerHaveAbilityShield(opponent))
 
     UpdateAbilityStateIndicesForNewAbility(opponent, ability);
@@ -9159,7 +9168,7 @@ static const Ability Slipstream = {
     .name = $("Slipstream"),
     .description = $("Moves use 20% of its Speed\n"
                      "stat additionally."),
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *secondaryAtkStatToUse = STAT_SPEED; },
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPEED] += 20; },
 };
 
 static const Ability ApexPredator = {
