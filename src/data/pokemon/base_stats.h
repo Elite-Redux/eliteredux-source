@@ -2976,12 +2976,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_GEODUDE_ALOLAN] =
     {
-    .baseHP        = 40,
-    .baseAttack    = 80,
-    .baseDefense   = 100,
-    .baseSpeed     = 20,
-    .baseSpAttack  = 30,
-    .baseSpDefense = 30,
+    .baseHP         = 40,
+    .baseAttack     = 80,
+    .baseDefense    = 75,
+    .baseSpeed      = 35,
+    .baseSpAttack   = 30,
+    .baseSpDefense  = 40,
     .type1 = TYPE_ROCK,
     .type2 = TYPE_ELECTRIC,
     .catchRate = 255,
@@ -3031,12 +3031,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_GRAVELER_ALOLAN] =
     {
-    .baseHP        = 55,
-    .baseAttack    = 95,
-    .baseDefense   = 115,
-    .baseSpeed     = 35,
-    .baseSpAttack  = 45,
-    .baseSpDefense = 45,
+    .baseHP         = 55,
+    .baseAttack     = 95,
+    .baseDefense    = 90,
+    .baseSpeed      = 45,
+    .baseSpAttack   = 45,
+    .baseSpDefense  = 60,
     .type1 = TYPE_ROCK,
     .type2 = TYPE_ELECTRIC,
     .catchRate = 120,
@@ -14741,7 +14741,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_BURMY_ETERNA] =
     {
-    .baseHP         = 205,
+    .baseHP         = 210,
     .baseAttack     = 79,
     .baseDefense    = 205,
     .baseSpeed      = 86,
@@ -16196,7 +16196,7 @@ const struct BaseStats gBaseStats[] =
     .eggGroup1 = EGG_GROUP_WATER_2,
     .eggGroup2 = EGG_GROUP_WATER_2,
     .abilities      = {ABILITY_PROTEAN, ABILITY_STORM_DRAIN, ABILITY_DAZZLING},
-    .innates        = {ABILITY_HUGE_WINGS, ABILITY_SERENE_GRACE, ABILITY_TECHNICIAN},
+    .innates        = {ABILITY_HUGE_WINGS, ABILITY_SERENE_GRACE, ABILITY_ILLUMINATE},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
     .tier = 0,
