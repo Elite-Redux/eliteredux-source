@@ -11101,6 +11101,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_GLACIAL_RAGE, GlacialRage},
     {ABILITY_IMMOVABLE_OBJECT, ImmovableObject},
     {ABILITY_FRENZIED_PHANTOM, FrenziedPhantom},
+    {ABILITY_DNA_SCRAMBLE, DNAScramble}
 };
 
 template <int N>
