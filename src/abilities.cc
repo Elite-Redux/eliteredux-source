@@ -119,6 +119,8 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_ON_STATUS_IMMUNE int battler, target, ability, status
 #define ABILITY_ON_TRAP int switchingBattler
 #define DELEGATE_ON_TRAP switchingBattler
+#define ABILITY_ON_BEFORE_ATTACK int battler, int attacker, int ability, MoveEnum move, int moveType
+#define DELEGATE_ON_BEFORE_ATTACK battler, attacker, ability, move, moveType
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -465,7 +467,30 @@ constexpr Ability Insomnia = {
 };
 
 constexpr Ability ColorChange = {
-    .colorChange = TRUE,
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        CHECK(battler != attacker)
+        CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
+
+        u32 bestType = gBattleMons[gBattlerTarget].type1;
+        u16 bestModifier = GetTypeModifier(moveType, bestType, attacker, battler);
+
+        for (int currentType = TYPE_NORMAL; currentType < NUMBER_OF_MON_TYPES; ++currentType) {
+            u16 currentModifier = GetTypeModifier(moveType, currentType, attacker, battler);
+            if (currentModifier < bestModifier) {
+                bestModifier = currentModifier;
+                bestType = currentType;
+            }
+            if (bestModifier == UQ_4_12(0.0)) break;
+        }
+
+        CHECK_NOT(IS_BATTLER_OF_TYPE(battler, bestType))
+
+        SET_BATTLER_TYPE(battler, bestType);
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, bestType);
+        BattleScriptCall(BattleScript_ColorChangeActivates);
+        return TRUE;
+    },
+    .onBeforeAttackFor = APPLY_ON_TARGET,
 };
 
 constexpr Ability Immunity = {
@@ -1814,7 +1839,15 @@ constexpr Ability CheekPouch = {
 };
 
 constexpr Ability Protean = {
-    .protean = TRUE,
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
+        CHECK_NOT(IS_BATTLER_OF_TYPE(battler, moveType))
+        CHECK(move != MOVE_STRUGGLE)
+        SET_BATTLER_TYPE(gBattlerAttacker, moveType);
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
+        BattleScriptCall(BattleScript_ProteanActivates);
+        return TRUE;
+    },
 };
 
 constexpr Ability FurCoat = {
@@ -1855,6 +1888,37 @@ constexpr Ability SweetVeil = {
 };
 
 constexpr Ability StanceChange = {
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        int newSpecies = SPECIES_NONE;
+        switch (gBattleMons[battler].species) {
+            default:
+                return FALSE;
+            case SPECIES_AEGISLASH:  // Shield -> Blade
+                if (gBattleMoves[move].power > 0) newSpecies = SPECIES_AEGISLASH_BLADE;
+                break;
+            case SPECIES_AEGISLASH_BLADE:  // Blade -> Shield
+                if (move == MOVE_KINGS_SHIELD) newSpecies = SPECIES_AEGISLASH;
+                break;
+            case SPECIES_AEGISLASH_BLADE_REDUX:  // Special -> Physical
+                if (gBattleMoves[move].split == SPLIT_PHYSICAL && !gBattleMoves[move].arrowBased) newSpecies = SPECIES_AEGISLASH_REDUX;
+                break;
+            case SPECIES_AEGISLASH_BLADE_REDUX_MEGA:  // Special -> Physical
+                if (gBattleMoves[move].split == SPLIT_PHYSICAL && !gBattleMoves[move].arrowBased) newSpecies = SPECIES_AEGISLASH_REDUX_MEGA;
+                break;
+            case SPECIES_AEGISLASH_REDUX:  // Physical -> Special
+                if (gBattleMoves[move].split == SPLIT_SPECIAL || gBattleMoves[move].arrowBased) newSpecies = SPECIES_AEGISLASH_BLADE_REDUX;
+                break;
+            case SPECIES_AEGISLASH_REDUX_MEGA:  // Physical -> Special
+                if (gBattleMoves[move].split == SPLIT_SPECIAL || gBattleMoves[move].arrowBased) newSpecies = SPECIES_AEGISLASH_BLADE_REDUX_MEGA;
+                break;
+        }
+        CHECK(newSpecies)
+
+        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+        gBattleMons[battler].species = newSpecies;
+        BattleScriptCall(BattleScript_AttackerFormChange);
+        return TRUE;
+    },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
@@ -2432,9 +2496,9 @@ constexpr Ability BeastBoost = {
 };
 
 constexpr Ability RksSystem = {
+    .onBeforeAttack = Protean.onBeforeAttack,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    .protean = TRUE,
     .adaptability = TRUE,
 };
 
@@ -2514,7 +2578,7 @@ constexpr Ability DauntlessShield = {
 };
 
 constexpr Ability Libero = {
-    .protean = TRUE,
+    .onBeforeAttack = Protean.onBeforeAttack,
 };
 
 constexpr Ability CottonDown = {
@@ -4564,8 +4628,11 @@ constexpr Ability AngelsWrath = {
 
 constexpr Ability PrismaticFur = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.5); },
-    .protean = TRUE,
-    .colorChange = TRUE,
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        if (battler == attacker && Protean.onBeforeAttack(DELEGATE_ON_BEFORE_ATTACK)) return TRUE;
+        return ColorChange.onBeforeAttack(DELEGATE_ON_BEFORE_ATTACK);
+    },
+    .onBeforeAttackFor = APPLY_ON_ATTACKER_OR_TARGET,
 };
 
 constexpr Ability ShockingJaws = {
@@ -6774,7 +6841,7 @@ constexpr Ability SnowyWrath = {
 };
 
 constexpr Ability PatternChange = {
-    .protean = TRUE,
+    .onBeforeAttack = Protean.onBeforeAttack,
 };
 
 constexpr Ability NoTurningBack = {
@@ -6799,6 +6866,16 @@ constexpr Ability FlammableCoat = {
         UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_LUMBERING_SLOTH_ENGULFED);
         gBattleMons[battler].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
         BattleScriptCall(BattleScript_TargetFormChange);
+        return TRUE;
+    },
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        CHECK(moveType == TYPE_FIRE)
+        CHECK(gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH)
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
+
+        UpdateAbilityStateIndicesForNewSpecies(gBattlerAttacker, SPECIES_LUMBERING_SLOTH_ENGULFED);
+        gBattleMons[gBattlerAttacker].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
+        BattleScriptCall(BattleScript_AttackerFormChange);
         return TRUE;
     },
     .unsuppressable = TRUE,
@@ -7954,14 +8031,47 @@ constexpr Ability FrenziedPhantom = {
 };
 
 constexpr Ability DNAScramble = {
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        int newSpecies = SPECIES_NONE;
+        switch (gBattleMons[battler].species) {
+            default:
+                return FALSE;
+            case SPECIES_DEOXYS:
+                if (gBattleMoves[move].power > 0)
+                    newSpecies = SPECIES_DEOXYS_ATTACK;
+                else if (move == MOVE_RECOVER)
+                    newSpecies = SPECIES_DEOXYS_DEFENSE;
+                else if (gBattleMoves[move].split == SPLIT_STATUS)
+                    newSpecies = SPECIES_DEOXYS_SPEED;
+                break;
+            case SPECIES_DEOXYS_ATTACK:
+                if (move == MOVE_RECOVER)
+                    newSpecies = SPECIES_DEOXYS_DEFENSE;
+                else if (gBattleMoves[move].split == SPLIT_STATUS)
+                    newSpecies = SPECIES_DEOXYS_SPEED;
+                break;
+            case SPECIES_DEOXYS_DEFENSE:
+                if (gBattleMoves[move].power > 0)
+                    newSpecies = SPECIES_DEOXYS_ATTACK;
+                else if (move != MOVE_RECOVER && gBattleMoves[move].split == SPLIT_STATUS)
+                    newSpecies = SPECIES_DEOXYS_SPEED;
+                break;
+            case SPECIES_DEOXYS_SPEED:
+                if (gBattleMoves[move].power > 0)
+                    newSpecies = SPECIES_DEOXYS_ATTACK;
+                else if (move == MOVE_RECOVER)
+                    newSpecies = SPECIES_DEOXYS_DEFENSE;
+                break;
+        }
+        CHECK(newSpecies)
+
+        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+        gBattleMons[battler].species = newSpecies;
+        BattleScriptCall(BattleScript_AttackerFormChange);
+        return TRUE;
+    },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-};
-
-constexpr Ability DNAScramble = {
-    .name = $("DNA Scramble"),
-    .description = $("Changes into Attack, Speed, or\n"
-        "Defense form based on move used."),
 };
 
 typedef struct AbilityKVPair {
@@ -8720,7 +8830,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_GLACIAL_RAGE, GlacialRage},
     {ABILITY_IMMOVABLE_OBJECT, ImmovableObject},
     {ABILITY_FRENZIED_PHANTOM, FrenziedPhantom},
-    {ABILITY_DNA_SCRAMBLE, FrenziedPhantom},
+    {ABILITY_DNA_SCRAMBLE, DNAScramble},
 };
 
 template <int N>
@@ -8771,6 +8881,7 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(onCanStatusType),
             __OVERWRITE_ARRAY_VAL(onStatusImmune),
             __OVERWRITE_ARRAY_VAL(onTrap),
+            __OVERWRITE_ARRAY_VAL(onBeforeAttack),
             __OVERWRITE_ARRAY_VAL(onImmuneFor),
             __OVERWRITE_ARRAY_VAL(onBattlerFaintsFor),
             __OVERWRITE_ARRAY_VAL(onOffensiveMultiplierFor),
@@ -8779,6 +8890,7 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(onCritFor),
             __OVERWRITE_ARRAY_VAL(onAfterTypeEffectivenessFor),
             __OVERWRITE_ARRAY_VAL(onStatusImmuneFor),
+            __OVERWRITE_ARRAY_VAL(onBeforeAttackFor),
             __OVERWRITE_ARRAY_VAL(redirectType),
             __OVERWRITE_ARRAY_VAL(ruinStat),
             __OVERWRITE_ARRAY_VAL(noDamageHits),
@@ -8796,8 +8908,6 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(skillLink),
             __OVERWRITE_ARRAY_VAL(resistsFortKnox),
             __OVERWRITE_ARRAY_VAL(fortKnox),
-            __OVERWRITE_ARRAY_VAL(protean),
-            __OVERWRITE_ARRAY_VAL(colorChange),
             __OVERWRITE_ARRAY_VAL(adaptability),
             __OVERWRITE_ARRAY_VAL(magicBounce),
             __OVERWRITE_ARRAY_VAL(levitate),

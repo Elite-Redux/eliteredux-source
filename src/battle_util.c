@@ -3055,9 +3055,8 @@ enum {
     CANCELLER_MULTIHIT_MOVES,
     CANCELLER_SKY_DROP,
     CANCELLER_QUICK_GUARD,
-    CANCELLER_END,
     CANCELLER_PSYCHIC_TERRAIN,
-    CANCELLER_END2,
+    CANCELLER_END,
 };
 
 u8 AtkCanceller_UnableToUseMove(void) {
@@ -3403,11 +3402,21 @@ u8 AtkCanceller_UnableToUseMove(void) {
                 }
                 PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1 + (gTurnStructs[gBattlerAttacker].multiHitCounter >= 10), 0)
                 break;
+            case CANCELLER_PSYCHIC_TERRAIN:
+                if (IsBattlerTerrainAffected(gBattlerTarget, STATUS_FIELD_PSYCHIC_TERRAIN) && !gProcessingExtraAttacks &&
+                    GetChosenMovePriority(gBattlerAttacker, gBattlerTarget) > 0 && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget)) {
+                    CancelMultiTurnMoves(gBattlerAttacker);
+                    gBattlescriptCurrInstr = BattleScript_MoveUsedPsychicTerrainPrevents;
+                    gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                    effect = 1;
+                }
+                gBattleStruct->atkCancellerTracker++;
+                break;
             case CANCELLER_END:
                 break;
         }
 
-    } while (gBattleStruct->atkCancellerTracker != CANCELLER_END && gBattleStruct->atkCancellerTracker != CANCELLER_END2 && effect == 0);
+    } while (gBattleStruct->atkCancellerTracker < CANCELLER_END && effect == 0);
 
     if (effect == 1) {
         gRoundStructs[gBattlerAttacker].attackCancelled = TRUE;
@@ -3447,38 +3456,6 @@ MultihitType GetMultihitType(int battler, MoveEnum move) {
     }
 
     return MULTIHIT_SINGLE;
-}
-
-// After Protean Activation.
-u8 AtkCanceller_UnableToUseMove2(void) {
-    u8 effect = 0;
-
-    do {
-        switch (gBattleStruct->atkCancellerTracker) {
-            case CANCELLER_END:
-                gBattleStruct->atkCancellerTracker++;
-                break;
-            case CANCELLER_PSYCHIC_TERRAIN:
-                if (IsBattlerTerrainAffected(gBattlerTarget, STATUS_FIELD_PSYCHIC_TERRAIN) && !gProcessingExtraAttacks &&
-                    GetChosenMovePriority(gBattlerAttacker, gBattlerTarget) > 0 && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget)) {
-                    CancelMultiTurnMoves(gBattlerAttacker);
-                    gBattlescriptCurrInstr = BattleScript_MoveUsedPsychicTerrainPrevents;
-                    gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-                    effect = 1;
-                }
-                gBattleStruct->atkCancellerTracker++;
-                break;
-            case CANCELLER_END2:
-                break;
-        }
-
-    } while (gBattleStruct->atkCancellerTracker != CANCELLER_END2 && effect == 0);
-
-    if (effect == 1) {
-        gRoundStructs[gBattlerAttacker].attackCancelled = TRUE;
-    }
-
-    return effect;
 }
 
 bool8 HasNoMonsToSwitch(u8 battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2) {

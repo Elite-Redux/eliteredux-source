@@ -945,68 +945,6 @@ static bool32 NoTargetPresent(MoveEnum move) {
     return FALSE;
 }
 
-static bool32 TryAegiFormChange(void) {
-    u16 newSpecies = 0;
-    // Only Aegislash with Stance Change can transform, transformed mons cannot.
-    if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_STANCE_CHANGE) || gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED) return FALSE;
-
-    switch (gBattleMons[gBattlerAttacker].species) {
-        default:
-            return FALSE;
-        case SPECIES_AEGISLASH:  // Shield -> Blade
-            if (gBattleMoves[gCurrentMove].power > 0) newSpecies = SPECIES_AEGISLASH_BLADE;
-            break;
-        case SPECIES_AEGISLASH_BLADE:  // Blade -> Shield
-            if (gCurrentMove == MOVE_KINGS_SHIELD) newSpecies = SPECIES_AEGISLASH;
-            break;
-        case SPECIES_AEGISLASH_BLADE_REDUX:  // Special -> Physical
-            if (gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL && !gBattleMoves[gCurrentMove].arrowBased) newSpecies = SPECIES_AEGISLASH_REDUX;
-            break;
-        case SPECIES_AEGISLASH_BLADE_REDUX_MEGA:  // Special -> Physical
-            if (gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL && !gBattleMoves[gCurrentMove].arrowBased) newSpecies = SPECIES_AEGISLASH_REDUX_MEGA;
-            break;
-        case SPECIES_AEGISLASH_REDUX:  // Physical -> Special
-            if (gBattleMoves[gCurrentMove].split == SPLIT_SPECIAL || gBattleMoves[gCurrentMove].arrowBased) newSpecies = SPECIES_AEGISLASH_BLADE_REDUX;
-            break;
-        case SPECIES_AEGISLASH_REDUX_MEGA:  // Physical -> Special
-            if (gBattleMoves[gCurrentMove].split == SPLIT_SPECIAL || gBattleMoves[gCurrentMove].arrowBased) newSpecies = SPECIES_AEGISLASH_BLADE_REDUX_MEGA;
-            break;
-    }
-
-    if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DNA_SCRAMBLE) || gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED) return FALSE;
-
-    switch (gBattleMons[gBattlerAttacker].species) {
-        default:
-            return FALSE;
-        case SPECIES_DEOXYS:
-            if (gBattleMoves[gCurrentMove].power > 0) newSpecies = SPECIES_DEOXYS_ATTACK;
-            if (gCurrentMove == MOVE_RECOVER) newSpecies = SPECIES_DEOXYS_DEFENSE;
-            if ((gBattleMoves[gCurrentMove].split == SPLIT_STATUS) && !(gCurrentMove == MOVE_RECOVER)) newSpecies = SPECIES_DEOXYS_SPEED;
-            break;
-        case SPECIES_DEOXYS_ATTACK:
-            if (gCurrentMove == MOVE_RECOVER) newSpecies = SPECIES_DEOXYS_DEFENSE;
-            if ((gBattleMoves[gCurrentMove].split == SPLIT_STATUS) && !(gCurrentMove == MOVE_RECOVER)) newSpecies = SPECIES_DEOXYS_SPEED;
-            break;
-        case SPECIES_DEOXYS_DEFENSE:
-            if (gBattleMoves[gCurrentMove].power > 0) newSpecies = SPECIES_DEOXYS_ATTACK;
-            if ((gBattleMoves[gCurrentMove].split == SPLIT_STATUS) && !(gCurrentMove == MOVE_RECOVER)) newSpecies = SPECIES_DEOXYS_SPEED;
-            break;
-        case SPECIES_DEOXYS_SPEED:
-            if (gBattleMoves[gCurrentMove].power > 0) newSpecies = SPECIES_DEOXYS_ATTACK;
-            if (gCurrentMove == MOVE_RECOVER) newSpecies = SPECIES_DEOXYS_DEFENSE;
-            break;
-    }
-
-    if (!newSpecies) return FALSE;
-    gBattleScripting.abilityPopupOverwrite = ABILITY_STANCE_CHANGE;
-
-    UpdateAbilityStateIndicesForNewSpecies(gBattlerAttacker, newSpecies);
-    gBattleMons[gBattlerAttacker].species = newSpecies;
-    BattleScriptCall(BattleScript_AttackerFormChange);
-    BattleScriptCall(BattleScript_AbilityPopUp);
-    return TRUE;
-}
-
 bool8 PartyIsMaxLevel(void) {
     int i;
 
@@ -1044,16 +982,6 @@ MultihitType GetParentalBondType(int battler, int target, MoveEnum move, int mov
 int HasFortKnox(int battler) {
     RETURN_ABILITY_IF_FLAG(battler, FALSE, fortKnox)
     return FALSE;
-}
-
-static int HasProtean(int battler) {
-    RETURN_ABILITY_IF_FLAG(battler, FALSE, protean)
-    return ABILITY_NONE;
-}
-
-static int HasColorChange(int battler) {
-    RETURN_ABILITY_IF_FLAG(battler, FALSE, colorChange)
-    return ABILITY_NONE;
 }
 
 int GetParentalBondCount(int battler, MultihitType parentalBondType) {
@@ -1125,9 +1053,7 @@ static void Cmd_attackcanceler(void) {
         gBattlescriptCurrInstr = BattleScript_MoveEnd;
         return;
     }
-#if (B_STANCE_CHANGE_FAIL <= GEN_6)
-    if (TryAegiFormChange()) return;
-#endif
+    
     if (AtkCanceller_UnableToUseMove()) return;
 
     if (!gTurnStructs[gBattlerAttacker].multiHitCounter) {
@@ -1139,41 +1065,6 @@ static void Cmd_attackcanceler(void) {
             PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
         }
     }
-
-    int ability;
-    if ((ability = HasProtean(gBattlerAttacker)) && !IS_BATTLER_OF_TYPE(gBattlerAttacker, moveType) && gCurrentMove != MOVE_STRUGGLE) {
-        gBattleScripting.abilityPopupOverwrite = ability;
-        SET_BATTLER_TYPE(gBattlerAttacker, moveType);
-        PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
-        gBattlerAbility = gBattlerAttacker;
-        BattleScriptCall(BattleScript_ProteanActivates);
-        return;
-    }
-
-    if ((ability = HasColorChange(gBattlerTarget)) && gBattlerAttacker != gBattlerTarget && CheckAndSetOncePerTurnAbility(gBattlerTarget, ability)) {
-        u32 bestType = gBattleMons[gBattlerTarget].type1;
-        u16 bestModifier = GetTypeModifier(moveType, bestType, gBattlerAttacker, gBattlerTarget);
-
-        for (int currentType = TYPE_NORMAL; currentType < NUMBER_OF_MON_TYPES; ++currentType) {
-            u16 currentModifier = GetTypeModifier(moveType, currentType, gBattlerAttacker, gBattlerTarget);
-            if (currentModifier < bestModifier) {
-                bestModifier = currentModifier;
-                bestType = currentType;
-            }
-            if (bestModifier == UQ_4_12(0.0)) break;
-        }
-
-        if (gBattleMons[gBattlerTarget].type1 != bestType) {
-            gBattleScripting.abilityPopupOverwrite = ability;
-            SET_BATTLER_TYPE(gBattlerTarget, bestType);
-            PREPARE_TYPE_BUFFER(gBattleTextBuff1, bestType);
-            gBattlerAbility = gBattlerTarget;
-            BattleScriptCall(BattleScript_ColorChangeActivates);
-            return;
-        }
-    }
-
-    if (AtkCanceller_UnableToUseMove2()) return;
 
     if (AbilityBattleEffects(ABILITYEFFECT_MOVES_BLOCK, gBattlerTarget, 0, 0, 0)) {
         CancelMultiTurnMoves(gBattlerAttacker);
@@ -1189,19 +1080,30 @@ static void Cmd_attackcanceler(void) {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         return;
     }
-#if (B_STANCE_CHANGE_FAIL >= GEN_7)
-    if (TryAegiFormChange()) return;
-#endif
 
-    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_FLAMMABLE_COAT) && moveType == TYPE_FIRE &&
-        gBattleMons[gBattlerAttacker].species == SPECIES_LUMBERING_SLOTH && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED)) {
-        gBattleScripting.abilityPopupOverwrite = ABILITY_FLAMMABLE_COAT;
-        UpdateAbilityStateIndicesForNewSpecies(gBattlerAttacker, SPECIES_LUMBERING_SLOTH_ENGULFED);
-        gBattleMons[gBattlerAttacker].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
-        BattleScriptCall(BattleScript_AttackerFormChange);
-        BattleScriptCall(BattleScript_AbilityPopUp);
-        return;
-    }
+    ON_ABILITY(
+        gBattlerAttacker,
+        FALSE,
+        gAbilities[ability].onBeforeAttack &&
+            IsTargettedApplyOnFlagAppropriate(gBattlerAttacker, gBattlerAttacker, gBattlerAttacker, gBattlerTarget, gAbilities[ability].onBeforeAttackFor),
+        gStackBattler1 = gBattlerAttacker;
+        gBattleScripting.abilityPopupOverwrite = ability;
+        if (gAbilities[ability].onBeforeAttack(gBattlerAttacker, gBattlerAttacker, ability, gCurrentMove, moveType)) {
+            BattleScriptCall(BattleScript_AbilityPopUpStack);
+            return;
+        })
+
+    ON_ABILITY(
+        gBattlerTarget,
+        FALSE,
+        gAbilities[ability].onBeforeAttack &&
+            IsTargettedApplyOnFlagAppropriate(gBattlerAttacker, gBattlerTarget, gBattlerAttacker, gBattlerTarget, gAbilities[ability].onBeforeAttackFor),
+        gStackBattler1 = gBattlerTarget;
+        gBattleScripting.abilityPopupOverwrite = ability;
+        if (gAbilities[ability].onBeforeAttack(gBattlerTarget, gBattlerAttacker, ability, gCurrentMove, moveType)) {
+            BattleScriptCall(BattleScript_AbilityPopUpStack);
+            return;
+        })
 
     gHitMarker &= ~(HITMARKER_x800000);
     if (!(gHitMarker & HITMARKER_OBEYS) && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)) {
@@ -1503,8 +1405,7 @@ static void Cmd_ppreduce(void) {
 
     if (gHitMarker & HITMARKER_NO_ATTACKSTRING) return;
 
-    if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRESSURE) && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_PRESSURE))
-        ppToDeduct++;
+    if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRESSURE) && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_PRESSURE)) ppToDeduct++;
 
     if ((gBattleMoves[gCurrentMove].effect == EFFECT_SPIT_UP || gBattleMoves[gCurrentMove].effect == EFFECT_SWALLOW)) {
         while (ppToDeduct) {

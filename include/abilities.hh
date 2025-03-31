@@ -102,6 +102,7 @@ typedef enum {
 typedef int (*AbilityOnCanStatusType)(int battler, MoveEnum move, StatusCheckEnum status);
 typedef int (*AbilityOnStatusImmune)(int battler, int target, int ability, StatusCheckEnum status);
 typedef int (*AbilityOnTrap)(int escapingBattler);
+typedef int (*AbilityOnBeforeAttack)(int battler, int attacker, int ability, MoveEnum move, int moveType);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -160,6 +161,7 @@ typedef struct Ability {
     AbilityOnCanStatusType onCanStatusType;
     AbilityOnStatusImmune onStatusImmune;
     AbilityOnTrap onTrap;
+    AbilityOnBeforeAttack onBeforeAttack;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;
@@ -168,6 +170,7 @@ typedef struct Ability {
     AbilityApplyOnWithTarget onCritFor:5;
     AbilityApplyOnWithTarget onAfterTypeEffectivenessFor:5;
     AbilityApplyOn onStatusImmuneFor:3;
+    AbilityApplyOnWithTarget onBeforeAttackFor:5;
     u16 redirectType:5;
     u16 ruinStat:3;
     u16 noDamageHits:2;
@@ -185,8 +188,6 @@ typedef struct Ability {
     u16 skillLink:1;
     u16 resistsFortKnox:1;
     u16 fortKnox:1;
-    u16 protean:1;
-    u16 colorChange:1;
     u16 adaptability:1;
     u16 magicBounce:1;
     u16 levitate:1;
@@ -209,7 +210,7 @@ typedef struct AbilitiesWrapper {
 } AbilitiesWrapper;
 
 extern const AbilitiesWrapper gAbilitiesWrapper;
-#define gAbilities (gAbilitiesWrapper.abilities)
+#define gAbilities gAbilitiesWrapper.abilities
 
 int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag);
 int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag);
