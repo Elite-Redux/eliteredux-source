@@ -354,7 +354,7 @@ struct WishFutureKnock
 
 struct AI_SavedBattleMon
 {
-    u16 ability;
+    AbilityEnum ability;
     u16 moves[MAX_MON_MOVES];
     u16 heldItem;
     u16 species;    
@@ -365,7 +365,7 @@ struct AI_SavedBattleMon
 
 struct AiLogicData
 {
-    u16 abilities[MAX_BATTLERS_COUNT];
+    AbilityEnum abilities[MAX_BATTLERS_COUNT];
     u16 items[MAX_BATTLERS_COUNT];
     u16 holdEffects[MAX_BATTLERS_COUNT];
     u8 holdEffectParams[MAX_BATTLERS_COUNT];
@@ -616,7 +616,7 @@ typedef enum
 
 struct ExtraAttackActionStruct
 {
-    u16 ability;
+    AbilityEnum ability;
     u16 move;
     u8 movePower;
     u8 attacker:2;

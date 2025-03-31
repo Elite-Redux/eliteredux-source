@@ -5112,7 +5112,7 @@ u8 GetMonsStateToDoubles_2(void) {
 }
 
 u16 GetAbilityBySpecies(u16 species, u8 abilityNum) {
-    int ability;
+    AbilityEnum ability;
     if (abilityNum < NUM_ABILITY_SLOTS)
         ability = gBaseStats[species].abilities[abilityNum];
     else
@@ -7648,7 +7648,7 @@ u16 GetFormChangeTargetSpecies(struct Pokemon *mon, u16 method, u32 arg) {
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     const struct FormChange *formChanges = gFormChangeTablePointers[species];
     u16 heldItem;
-    u32 ability;
+    AbilityEnum ability;
 
     if (formChanges != NULL) {
         heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
@@ -7913,7 +7913,7 @@ u16 getRandomSpecies(void) {
     return species;
 }
 
-bool8 SpeciesHasInnate(u16 species, u16 ability, u8 level, u32 personality, bool8 disablerandomizer, bool8 isEnemyMon) {
+bool8 SpeciesHasInnate(u16 species, AbilityEnum ability, u8 level, u32 personality, bool8 disablerandomizer, bool8 isEnemyMon) {
     u16 innate1 = gBaseStats[species].innates[0];
     u16 innate2 = gBaseStats[species].innates[1];
     u16 innate3 = gBaseStats[species].innates[2];
@@ -7963,7 +7963,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
 
 // #define BALANCE_RANDOMIZER_ABILITIES
 
-u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
+u16 RandomizeAbility(AbilityEnum ability, u16 species, u32 personality) {
     if (gSaveBlock2Ptr->abilityRandomizedMode == 1 && !gAbilities[ability].randomizerBanned) {
         // Only Randomize if you have the Ability Randomized Mode Enabled
         // Exclude form change abilities from being randomized and other mons can't get them either
@@ -8017,7 +8017,7 @@ int GetMonInnate(struct Pokemon *mon, int slot, int disableRandomizer) {
     return innate;
 }
 
-bool8 MonHasInnate(struct Pokemon *mon, u16 ability, bool8 disableRandomizer) {
+bool8 MonHasInnate(struct Pokemon *mon, AbilityEnum ability, bool8 disableRandomizer) {
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     u8 level = GetMonData(mon, MON_DATA_LEVEL, NULL);
@@ -8025,7 +8025,7 @@ bool8 MonHasInnate(struct Pokemon *mon, u16 ability, bool8 disableRandomizer) {
     return SpeciesHasInnate(species, ability, level, personality, disableRandomizer, disableRandomizer);
 }
 
-bool8 BoxMonHasInnate(struct BoxPokemon *boxmon, u16 ability, bool8 disableRandomizer) {
+bool8 BoxMonHasInnate(struct BoxPokemon *boxmon, AbilityEnum ability, bool8 disableRandomizer) {
     u16 species = GetBoxMonData(boxmon, MON_DATA_SPECIES, NULL);
     u32 personality = GetBoxMonData(boxmon, MON_DATA_PERSONALITY, NULL);
     u8 level = GetBoxMonData(boxmon, MON_DATA_LEVEL, NULL);
@@ -8033,7 +8033,7 @@ bool8 BoxMonHasInnate(struct BoxPokemon *boxmon, u16 ability, bool8 disableRando
     return SpeciesHasInnate(species, ability, level, personality, disableRandomizer, disableRandomizer);
 }
 
-u8 GetSpeciesInnateNum(u16 species, u16 ability, u8 level, u32 personality, bool8 disablerandomizer) {
+u8 GetSpeciesInnateNum(u16 species, AbilityEnum ability, u8 level, u32 personality, bool8 disablerandomizer) {
     u16 innate1 = gBaseStats[species].innates[0];
     u16 innate2 = gBaseStats[species].innates[1];
     u16 innate3 = gBaseStats[species].innates[2];

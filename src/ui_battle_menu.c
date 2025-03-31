@@ -1548,7 +1548,7 @@ static void PrintAbilityTab() {
     u16 innate1 = gBaseStats[species].innates[0];
     u16 innate2 = gBaseStats[species].innates[1];
     u16 innate3 = gBaseStats[species].innates[2];
-    u16 ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
+    AbilityEnum ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
     u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
     bool8 isEnemyMon = GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_OPPONENT;
 

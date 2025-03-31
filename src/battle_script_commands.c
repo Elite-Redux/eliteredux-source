@@ -976,10 +976,10 @@ MultihitType GetParentalBondType(int battler, int target, MoveEnum move, int mov
                int result = gAbilities[ability].onParentalBond(battler, move, moveType);
                if (result) return result)
 
-    return ABILITY_NONE;
+    return MULTIHIT_SINGLE;
 }
 
-int HasFortKnox(int battler) {
+AbilityEnum HasFortKnox(int battler) {
     RETURN_ABILITY_IF_FLAG(battler, FALSE, fortKnox)
     return FALSE;
 }
@@ -2194,7 +2194,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
     bool32 mirrorArmorReflected = BattlerHasAbility(gBattlerTarget, ABILITY_MIRROR_ARMOR, TRUE);
     u32 flags = 0;
     bool16 ignoreTypeImmunities = gBattleScripting.moveEffect & MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES;
-    int ability;
+    AbilityEnum ability;
 
     gBattleScripting.moveEffect &= ~MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES;
 
@@ -3128,7 +3128,7 @@ static void Cmd_jumpifstatus2(void) {
 static void Cmd_jumpifability(void) {
     u32 battlerId;
     bool32 hasAbility = FALSE;
-    u32 ability = T2_READ_16(gBattlescriptCurrInstr + 2);
+    AbilityEnum ability = T2_READ_16(gBattlescriptCurrInstr + 2);
 
     switch (gBattlescriptCurrInstr[1]) {
         default:
@@ -4103,7 +4103,7 @@ static int CanPickpocket(int target, int attackerStealing) {
     int stealer = attackerStealing ? gBattlerAttacker : target;
     int stolen = attackerStealing ? target : gBattlerAttacker;
     int makesContact = IsMoveMakingContact(gCurrentMove, gBattlerAttacker);
-    int ability = makesContact ? ABILITY_PICKPOCKET : ABILITY_MAGICIAN;
+    AbilityEnum ability = makesContact ? ABILITY_PICKPOCKET : ABILITY_MAGICIAN;
     if (!BATTLER_DAMAGED(target)) return FALSE;
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT) return FALSE;
     if (!BATTLER_HAS_ABILITY(stealer, ability)) return FALSE;
@@ -4749,7 +4749,7 @@ static void Cmd_moveend(void) {
                 gBattleScripting.moveendState++;
                 break;
             case MOVEEND_PICKPOCKET: {
-                int ability;
+                AbilityEnum ability;
                 int checkOffense = gBattleMons[gBattlerAttacker].item == ITEM_NONE;
                 u8 thieves[4] = {0};
                 int thiefCount = 0;
@@ -5427,7 +5427,7 @@ static void Cmd_switchineffects(void) {
     // Neutralizing Gas announces itself before hazards
     if (!gFieldTimers.neutralizingGas && BattlerHasAbility(gActiveBattler, ABILITY_NEUTRALIZING_GAS, FALSE)) {
         for (i = 0; i < gBattlersCount; i++) {
-            u16 abilities[TOTAL_ABILITY_COUNT];
+            AbilityEnum abilities[TOTAL_ABILITY_COUNT];
             u8 j = 0;
             if (DoesBattlerHaveAbilityShield(i)) continue;
             ARRAY_COPY(abilities, gBattleMons[i].abilities)
@@ -5957,7 +5957,7 @@ static void Cmd_setgravity(void) {
 }
 
 static void TryCheekPouch(u32 battlerId, u32 itemId) {
-    int ability;
+    AbilityEnum ability;
     if (ItemId_GetPocket(itemId) == POCKET_BERRIES &&
         ((ability = BattlerHasAbility(battlerId, ABILITY_GLUTTONY, FALSE)) || (ability = BattlerHasAbility(battlerId, ABILITY_SUGAR_RUSH, FALSE))) &&
         CanBattlerHeal(battlerId) && gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]] &&
@@ -6559,7 +6559,7 @@ u32 IsAbilityStatusProtected(u32 battler, StatusCheckEnum status) {
 }
 
 u32 JumpIfStandardStatusBlocking(u32 battler, bool32 affectsUser, StatusCheckEnum status) {
-    u16 ability;
+    AbilityEnum ability;
     if (!affectsUser && gBattleMons[gActiveBattler].status1)
         gBattlescriptCurrInstr = BattleScript_ButItFailed;
     else if (!affectsUser && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
@@ -8773,7 +8773,7 @@ static void Cmd_various(void) {
             break;
         case VARIOUS_JUMP_IF_ABILITY_STATE: {
             int type = READ_8_INC;
-            int ability = READ_16_INC;
+            AbilityEnum ability = READ_16_INC;
             int state = READ_32_INC;
             ptr = READ_PTR_INC;
             REQUIRE(BattlerHasAbility(gActiveBattler, ability, TRUE))
@@ -8811,7 +8811,7 @@ static void Cmd_various(void) {
             break;
         }
         case VARIOUS_SET_ABILITY_STATE: {
-            int ability = READ_16_INC;
+            AbilityEnum ability = READ_16_INC;
             int state = READ_32_INC;
             ptr = READ_PTR_INC;
             if (!BattlerHasAbility(gActiveBattler, ability, TRUE) || GetAbilityState(gActiveBattler, ability) == state) {
@@ -8822,7 +8822,7 @@ static void Cmd_various(void) {
             break;
         }
         case VARIOUS_DO_INTIMIDATE: {
-            u16 ability = gBattleScripting.abilityPopupOverwrite;
+            AbilityEnum ability = gBattleScripting.abilityPopupOverwrite;
             u8 numAbility = 0;
             int immunityAbility = IsBattlerImmuneToLowerStatsFromIntimidateClone(gActiveBattler);
 
@@ -8882,7 +8882,7 @@ static void Cmd_various(void) {
             break;
         case VARIOUS_JUMP_IF_CONSUMABLE_BLOCKED: {
             ptr = READ_PTR_INC;
-            int ability = IsUnnerveAbilityOnOpposingSide(gActiveBattler);
+            AbilityEnum ability = IsUnnerveAbilityOnOpposingSide(gActiveBattler);
             REQUIRE(ability)
             SetActiveAbilityPopupOverride(ability);
             gBattleScripting.battlerPopupOverwrite = IsAbilityOnOpposingSide(gActiveBattler, ability) - 1;
@@ -8891,7 +8891,7 @@ static void Cmd_various(void) {
         }
         case VARIOUS_CHECK_STATUS_MOVE_IMMUNITY: {
             ptr = READ_PTR_INC;
-            int ability = ABILITY_NONE;
+            AbilityEnum ability = ABILITY_NONE;
             switch (READ_16_INC) {
                 case MOVE_ATTRACT:
                     ability = IsAbilityStatusProtected(gActiveBattler, CHECK_INFATUATE);
@@ -9299,7 +9299,7 @@ bool8 UproarWakeUpCheck(u8 battlerId) {
 
 static void Cmd_jumpifcantmakeasleep(void) {
     const u8* jumpPtr = READ_PTR_INC;
-    int ability;
+    AbilityEnum ability;
 
     if (UproarWakeUpCheck(gBattlerTarget)) {
         gBattlescriptCurrInstr = jumpPtr;
@@ -9530,7 +9530,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
     bool32 affectsUser = (flags & MOVE_EFFECT_AFFECTS_USER);
     bool8 dontSetBuffers = flags & STAT_BUFF_DONT_SET_BUFFERS;
     int updateMoveEffect;
-    int ability;
+    AbilityEnum ability;
 
     SetStatChanger(statId, statValue);
 
@@ -10122,7 +10122,7 @@ static void Cmd_setlightscreen(void) {
     gBattlescriptCurrInstr++;
 }
 
-u16 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler) {
+AbilityEnum IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler) {
     if (BattlerHasAbility(battler, ABILITY_GUARD_DOG, FALSE)) return FALSE;
 
     RETURN_ABILITY_IF_FLAG(battler, FALSE, tauntImmune)
@@ -10192,7 +10192,7 @@ static void Cmd_jumpifabilityonside(void)  // King's wrath + intimidate
 {
     u32 battlerId = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     bool32 hasAbility = FALSE;
-    u32 ability = T2_READ_16(gBattlescriptCurrInstr + 2);
+    AbilityEnum ability = T2_READ_16(gBattlescriptCurrInstr + 2);
     u32 abilityBattlerId = 0;
     int opposite = T1_READ_8(gBattlescriptCurrInstr + 8);
 
@@ -10984,7 +10984,7 @@ static void Cmd_healpartystatus(void) {
                 if (gBattlerPartyIndexes[gBattlerAttacker] == i || gBattlerPartyIndexes[BATTLE_PARTNER(gBattlerAttacker)] == i) {
                     healMon = !IsSoundproof(i);
                 } else {
-                    u16 ability = GetAbilityBySpecies(species, abilityNum);
+                    AbilityEnum ability = GetAbilityBySpecies(species, abilityNum);
                     healMon = ability != ABILITY_SOUNDPROOF && ability != ABILITY_NOISE_CANCEL && ability != ABILITY_PARROTING &&
                               !MonHasInnate(&party[i], ABILITY_SOUNDPROOF, FALSE) && !MonHasInnate(&party[i], ABILITY_NOISE_CANCEL, FALSE) &&
                               !MonHasInnate(&party[i], ABILITY_PARROTING, FALSE);
@@ -12143,7 +12143,7 @@ u16 GetSecretPowerMoveEffect(void) {
 static void Cmd_pickup(void) {
     s32 i;
     u16 species, heldItem;
-    u16 ability;
+    AbilityEnum ability;
     u8 lvlDivBy10 = 0;
 
     if (InBattlePike()) {
@@ -13190,7 +13190,7 @@ bool8 IsMoveAffectedByParentalBond(MoveEnum move, u8 battlerId) {
 
 void CheckForBadEggs(void) {}
 
-void SetBattlerAffectedFlag(int attacker, int target, int ability) {
+void SetBattlerAffectedFlag(int attacker, int target, AbilityEnum ability) {
     if (attacker == target) return;
     if (!IsBattlerAlive(attacker)) return;
 
@@ -13198,7 +13198,7 @@ void SetBattlerAffectedFlag(int attacker, int target, int ability) {
     SetAbilityState(attacker, ability, flag | (1 << target));
 }
 
-void ClearBattlerAffectedFlag(int attacker, int target, int ability) {
+void ClearBattlerAffectedFlag(int attacker, int target, AbilityEnum ability) {
     int flag = GetAbilityState(attacker, ability);
     SetAbilityState(attacker, ability, flag & ~(1 << target));
 }

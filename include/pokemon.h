@@ -9,6 +9,7 @@
 #include "constants/map_groups.h"
 #include "tmhm_struct.h"
 #include "constants/battle_move_effects.h"
+#include "constants/abilities.h"
 
 #define GET_BASE_SPECIES_ID(speciesId) (GetFormSpeciesId(speciesId, 0))
 
@@ -170,7 +171,7 @@ struct BattlePokemon {
         u16 stats[5];
     } __attribute__((packed, aligned(2)));
     MoveEnum moves[MAX_MON_MOVES];
-    u16 abilities[TOTAL_ABILITY_COUNT];
+    AbilityEnum abilities[TOTAL_ABILITY_COUNT];
     u16 hp;
     u16 maxHP;
     u16 item;
@@ -224,7 +225,7 @@ typedef struct BaseStats {
     /* 0x13 */ u8 growthRate;
     /* 0x14 */ u8 eggGroup1;
     /* 0x15 */ u8 eggGroup2;
-    /* 0x16 */ u16 abilities[NUM_ABILITY_SLOTS];
+    /* 0x16 */ AbilityEnum abilities[NUM_ABILITY_SLOTS];
     /* 0x19 */ u8 safariZoneFleeRate;
     /* 0x1A */ u8 bodyColor:7;
     u8 noFlip:1;
@@ -519,13 +520,13 @@ u8 GetLevelCap(void);
 u16 getShinyOdds(void);
 u16 getRandomSpecies(void);
 int GetMonInnate(struct Pokemon *mon, int slot, int disableRandomizer);
-bool8 MonHasInnate(struct Pokemon *mon, u16 ability, bool8 disableRandomizer);
-bool8 BoxMonHasInnate(struct BoxPokemon *boxmon, u16 ability, bool8 disableRandomizer);
-bool8 SpeciesHasInnate(u16 species, u16 ability, u8 level, u32 personality, bool8 disablerandomizer, bool8 isEnemyMon);
+bool8 MonHasInnate(struct Pokemon *mon, AbilityEnum ability, bool8 disableRandomizer);
+bool8 BoxMonHasInnate(struct BoxPokemon *boxmon, AbilityEnum ability, bool8 disableRandomizer);
+bool8 SpeciesHasInnate(u16 species, AbilityEnum ability, u8 level, u32 personality, bool8 disablerandomizer, bool8 isEnemyMon);
 u16 RandomizeInnate(u16 innate, u16 species, u32 personality);
-u16 RandomizeAbility(u16 ability, u16 species, u32 personality);
+u16 RandomizeAbility(AbilityEnum ability, u16 species, u32 personality);
 u8 RandomizeType(u8 type, u16 species, u32 personality, bool8 isFirstType);
-u8 GetSpeciesInnateNum(u16 species, u16 ability, u8 level, u32 personality, bool8 disablerandomizer);
+u8 GetSpeciesInnateNum(u16 species, AbilityEnum ability, u8 level, u32 personality, bool8 disablerandomizer);
 void CreateShinyMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 nature);
 u16 getNumberOfUniqueDefeatedTrainers(void);
 bool8 enablePokemonChanges(void);

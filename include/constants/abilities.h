@@ -1,6 +1,6 @@
 #pragma once
 
-#if USE_GENERATED_SPECIES
+#if USE_GENERATED_SPECIES || USE_GENERATED_ABILITIES
 #include "generated/constants/abilities.h"
 #else
 

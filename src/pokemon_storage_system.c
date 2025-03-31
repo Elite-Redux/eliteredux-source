@@ -7176,7 +7176,7 @@ void SetArceusFormPSS(struct BoxPokemon *boxMon)
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
     u16 forme;
     u8 abilityNum = GetBoxMonData(boxMon, MON_DATA_ABILITY_NUM);
-    u16 ability = GetAbilityBySpecies(species, abilityNum);
+    AbilityEnum ability = GetAbilityBySpecies(species, abilityNum);
 
     if (GET_BASE_SPECIES_ID(species) == SPECIES_ARCEUS && (ability == ABILITY_MULTITYPE  || BoxMonHasInnate(boxMon, ABILITY_MULTITYPE, FALSE)))
     {

@@ -1626,21 +1626,21 @@ u8 GetImprisonedMovesCount(u8 battlerId, MoveEnum move) {
     return imprisonedMoves;
 }
 
-int GetOncePerTurnAbilityCounter(int battler, int ability) {
+int GetOncePerTurnAbilityCounter(int battler, AbilityEnum ability) {
     int index = GetAbilityIndex(battler, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return -1;
 
     return gTurnStructs[battler].turnAbilityTriggers[index];
 }
 
-void SetOncePerTurnAbilityCounter(int battler, int ability, int value) {
+void SetOncePerTurnAbilityCounter(int battler, AbilityEnum ability, int value) {
     int index = GetAbilityIndex(battler, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return;
 
     gTurnStructs[battler].turnAbilityTriggers[index] = value;
 }
 
-int CheckAndSetOncePerTurnAbility(int battler, int ability) {
+int CheckAndSetOncePerTurnAbility(int battler, AbilityEnum ability) {
     int index = GetAbilityIndex(battler, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return FALSE;
 
@@ -3610,7 +3610,7 @@ bool32 SetPermanentWeather(u32 weatherEnumId) {
     return FALSE;
 }
 
-bool8 UseOutOfTurnAttack(u8 battler, u8 target, u16 ability, MoveEnum move, u8 movePower) {
+bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum move, u8 movePower) {
     if (gBattlerAttacker == battler) return FALSE;
     if (gTurnStructs[battler].dancerUsedMove) return FALSE;
     if (gBattleMons[battler].status1 & STATUS1_SLEEP) return FALSE;
@@ -3774,13 +3774,13 @@ bool32 TryPrimalReversion(u8 battlerId, int useReturn) {
     return FALSE;
 }
 
-void DisableSwitchInAbility(u8 battlerId, u16 ability) {
+void DisableSwitchInAbility(u8 battlerId, AbilityEnum ability) {
     int index = GetAbilityIndex(battlerId, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return;
     gVolatileStructs[battlerId].switchInAbilityDone[index] = TRUE;
 }
 
-bool8 CheckAndSetSwitchInAbility(u8 battlerId, u16 ability) {
+bool8 CheckAndSetSwitchInAbility(u8 battlerId, AbilityEnum ability) {
     int index = GetAbilityIndex(battlerId, ability, FALSE);
     if (index == TOTAL_ABILITY_COUNT) return FALSE;
 
@@ -3794,45 +3794,45 @@ bool8 CheckAndSetSwitchInAbility(u8 battlerId, u16 ability) {
     return FALSE;
 }
 
-s8 GetSingleUseAbilityCounter(u8 battler, u16 ability) {
+s8 GetSingleUseAbilityCounter(u8 battler, AbilityEnum ability) {
     int index = GetAbilityIndex(battler, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return -1;
 
     return gBattleStruct->singleuseability[gBattlerPartyIndexes[battler]][index][GetBattlerSide(battler)];
 }
 
-void SetSingleUseAbilityCounter(u8 battler, u16 ability, u8 value) {
+void SetSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value) {
     int index = GetAbilityIndex(battler, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return;
 
     gBattleStruct->singleuseability[gBattlerPartyIndexes[battler]][index][GetBattlerSide(battler)] = value;
 }
 
-void IncrementSingleUseAbilityCounter(u8 battler, u16 ability, u8 value) {
+void IncrementSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value) {
     SetSingleUseAbilityCounter(battler, ability, GetSingleUseAbilityCounter(battler, ability) + value);
 }
 
-AbilityStates GetAbilityStateAs(u8 battler, u16 ability) { return (AbilityStates){.intValue = GetAbilityState(battler, ability)}; }
+AbilityStates GetAbilityStateAs(u8 battler, AbilityEnum ability) { return (AbilityStates){.intValue = GetAbilityState(battler, ability)}; }
 
-u32 GetAbilityState(u8 battler, u16 ability) {
+u32 GetAbilityState(u8 battler, AbilityEnum ability) {
     int index = GetAbilityIndex(battler, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return 0;
 
     return gVolatileStructs[battler].abilityState[index];
 }
 
-void SetAbilityStateAs(u8 battler, u16 ability, AbilityStates value) { SetAbilityState(battler, ability, value.intValue); }
+void SetAbilityStateAs(u8 battler, AbilityEnum ability, AbilityStates value) { SetAbilityState(battler, ability, value.intValue); }
 
-void SetAbilityState(u8 battler, u16 ability, u32 value) {
+void SetAbilityState(u8 battler, AbilityEnum ability, u32 value) {
     int index = GetAbilityIndex(battler, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return;
 
     gVolatileStructs[battler].abilityState[index] = value;
 }
 
-void IncrementAbilityState(u8 battler, u16 ability, u32 value) { SetAbilityState(battler, ability, GetAbilityState(battler, ability) + value); }
+void IncrementAbilityState(u8 battler, AbilityEnum ability, u32 value) { SetAbilityState(battler, ability, GetAbilityState(battler, ability) + value); }
 
-bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower) {
+bool8 UseEntryMove(u8 battler, AbilityEnum ability, u16 extraMove, u8 movePower) {
     int target = gBattlersCount;
     u8 i;
     u8 opposingBattler = BATTLE_OPPOSITE(battler);
@@ -3859,7 +3859,7 @@ bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower) {
     return FALSE;
 }
 
-u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, u8 movePower) {
+u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, u16 extraMove, u8 movePower) {
     if (!CanUseExtraMove(battler, target)) return FALSE;
     if (!CheckAndSetOncePerTurnAbility(battler, ability)) return FALSE;
 
@@ -3875,7 +3875,7 @@ u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, 
     return FALSE;
 }
 
-int AbilityHealMonStatus(u8 battler, u16 ability) {
+int AbilityHealMonStatus(u8 battler, AbilityEnum ability) {
     if (!(gBattleMons[battler].status1 & STATUS1_ANY)) return FALSE;
 
     if (gBattleMons[battler].status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON)) StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
@@ -3903,7 +3903,7 @@ int DidMoveHit() { return WasMoveSuccessful() && TARGET_TURN_DAMAGED; }
 
 int ShouldApplyOnHitAffect(int applyTo) { return DidMoveHit() && IsBattlerAlive(applyTo); }
 
-int UseIntimidateClone(int abilityToCheck, int battler) {
+int UseIntimidateClone(AbilityEnum abilityToCheck, int battler) {
     u8 numAbility;
 
     for (numAbility = 0; numAbility < NUM_INTIMIDATE_CLONES; numAbility++) {
@@ -4173,7 +4173,7 @@ bool8 TryToSetFieldEffect(u8 battler) {
     return FALSE;
 }
 
-u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, MoveEnum moveArg) {
+u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg, MoveEnum moveArg) {
     u8 effect = 0;
     u32 moveType, move;
     u32 i;
@@ -4552,7 +4552,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, MoveEnu
                     effect++;
 
                     for (i = 0; i < gBattlersCount; i++) {
-                        u16 abilities[TOTAL_ABILITY_COUNT];
+                        AbilityEnum abilities[TOTAL_ABILITY_COUNT];
                         u8 j = 0;
                         if (DoesBattlerHaveAbilityShield(i)) continue;
                         ARRAY_COPY(abilities, gBattleMons[i].abilities)
@@ -4632,11 +4632,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, MoveEnu
     return effect;
 }
 
-bool32 IsUnsuppressableAbility(u32 ability) { return gAbilities[ability].unsuppressable; }
+bool32 IsUnsuppressableAbility(AbilityEnum ability) { return gAbilities[ability].unsuppressable; }
 
-int IsPersistentOrUnsuppressableAbility(int ability) { return gAbilities[ability].unsuppressable || gAbilities[ability].persistent; }
+int IsPersistentOrUnsuppressableAbility(AbilityEnum ability) { return gAbilities[ability].unsuppressable || gAbilities[ability].persistent; }
 
-u32 IsAbilityOnSide(u32 battlerId, u32 ability) {
+u32 IsAbilityOnSide(u32 battlerId, AbilityEnum ability) {
     if (BATTLER_HAS_ABILITY_AND_ALIVE(battlerId, ability, TRUE))
         return battlerId + 1;
     else if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerId), ability, TRUE))
@@ -4645,9 +4645,9 @@ u32 IsAbilityOnSide(u32 battlerId, u32 ability) {
         return 0;
 }
 
-u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability) { return IsAbilityOnSide(BATTLE_OPPOSITE(battlerId), ability); }
+u32 IsAbilityOnOpposingSide(u32 battlerId, AbilityEnum ability) { return IsAbilityOnSide(BATTLE_OPPOSITE(battlerId), ability); }
 
-u32 IsAbilityOnField(u32 ability) {
+u32 IsAbilityOnField(AbilityEnum ability) {
     u32 i;
 
     for (i = 0; i < gBattlersCount; i++) {
@@ -4658,7 +4658,7 @@ u32 IsAbilityOnField(u32 ability) {
     return 0;
 }
 
-u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability) {
+u32 IsAbilityOnFieldExcept(u32 battlerId, AbilityEnum ability) {
     u32 i;
 
     for (i = 0; i < gBattlersCount; i++) {
@@ -6159,7 +6159,7 @@ u32 GetMoveTarget(MoveEnum move, u8 setTarget) {
                 targetBattler = SetRandomTarget(gBattlerAttacker);
                 if (!HasRedirectionAbility(gBattlerAttacker, targetBattler, move, gBattleMoves[move].type)) {
                     int opposite = BATTLE_OPPOSITE(gBattlerAttacker);
-                    int ability = 0;
+                    AbilityEnum ability = 0;
                     if (!IsBattlerAlive(opposite) || !(ability = HasRedirectionAbility(gBattlerAttacker, opposite, move, gBattleMoves[move].type)))
                         opposite = BATTLE_PARTNER(opposite);
                     if (ability || (IsBattlerAlive(opposite) && (ability = HasRedirectionAbility(gBattlerAttacker, opposite, move, gBattleMoves[move].type)))) {
@@ -6428,7 +6428,7 @@ static int CheckGroundingEffects(u8 battlerId) {
     return FALSE;
 }
 
-static int CheckLevitatingEffects(u8 battlerId) {
+static AbilityEnum CheckLevitatingEffects(u8 battlerId) {
     if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
         return TRUE;
     else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
@@ -7029,12 +7029,12 @@ u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk,
     return ApplyModifier(modifier, actualPower);
 }
 
-int IgnoresBurnAtkDrop(int battler) {
+AbilityEnum IgnoresBurnAtkDrop(int battler) {
     RETURN_ABILITY_IF_FLAG(battler, FALSE, negatesBurnAtkDrop)
     return FALSE;
 }
 
-int IgnoresFrostbiteSpatkDrop(int battler) {
+AbilityEnum IgnoresFrostbiteSpatkDrop(int battler) {
     RETURN_ABILITY_IF_FLAG(battler, FALSE, negatesFrzSpatkDrop)
     return FALSE;
 }
@@ -8195,7 +8195,7 @@ bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId) {
     s32 i, id;
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u32 personality = GetMonData(mon, MON_DATA_SPECIES, NULL);
-    u16 ability = RandomizeAbility(GetMonAbility(mon), species, personality);
+    AbilityEnum ability = RandomizeAbility(GetMonAbility(mon), species, personality);
     bool8 isEnemyMon = GetBattlerSide(battlerId) == B_SIDE_OPPONENT;
 
     gBattleStruct->illusion[battlerId].set = 1;
@@ -8281,7 +8281,7 @@ bool32 TryRemoveScreens(u8 battler) {
     return removed;
 }
 
-bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId) {
+AbilityEnum IsUnnerveAbilityOnOpposingSide(u8 battlerId) {
     int opponent = BATTLE_OPPOSITE(battlerId);
     if (IsBattlerAlive(opponent)) {
         RETURN_ABILITY_IF_FLAG(BATTLE_OPPOSITE(battlerId), FALSE, unnerve)
@@ -8317,12 +8317,12 @@ bool32 CanFling(u8 battlerId) {
 }
 
 // ability checks
-bool32 IsRolePlayBannedAbilityAtk(u16 ability) {
+bool32 IsRolePlayBannedAbilityAtk(AbilityEnum ability) {
     if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     return FALSE;
 }
 
-bool32 IsRolePlayBannedAbility(u16 ability) {
+bool32 IsRolePlayBannedAbility(AbilityEnum ability) {
     u32 i;
     if (!ability) return TRUE;
     if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
@@ -8332,17 +8332,17 @@ bool32 IsRolePlayBannedAbility(u16 ability) {
     return FALSE;
 }
 
-bool32 IsWorrySeedBannedAbility(u16 ability) {
+bool32 IsWorrySeedBannedAbility(AbilityEnum ability) {
     if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     return FALSE;
 }
 
-bool32 IsGastroAcidBannedAbility(u16 ability) {
+bool32 IsGastroAcidBannedAbility(AbilityEnum ability) {
     if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     return FALSE;
 }
 
-bool32 IsEntrainmentBannedAbilityAttacker(u16 ability) {
+bool32 IsEntrainmentBannedAbilityAttacker(AbilityEnum ability) {
     u32 i;
     if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     for (i = 0; i < ARRAY_COUNT(sSkillSwapBannedAbilities); i++) {
@@ -8351,7 +8351,7 @@ bool32 IsEntrainmentBannedAbilityAttacker(u16 ability) {
     return FALSE;
 }
 
-bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability) {
+bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(AbilityEnum ability) {
     u32 i;
     if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     for (i = 0; i < ARRAY_COUNT(sEntrainmentTargetSimpleBeamBannedAbilities); i++) {
@@ -8854,7 +8854,7 @@ void MakePlayerTeamAsleep(void) {
     }
 }
 
-int IsMagicGuardProtected(int battler) {
+AbilityEnum IsMagicGuardProtected(int battler) {
     RETURN_ABILITY_IF_FLAG(battler, FALSE, magicGuard)
     if (isMagicRoomActive()) return TRUE;
 
@@ -8875,9 +8875,9 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, MoveEnum move, int moveT
     return FALSE;
 }
 
-static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
-static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
-static int HandleImmunityAbilityAs(int ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
+static int HandleAnyImmunityAbilityAs(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
+static int HandleAlliedImmunityAbilityAs(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
+static int HandleImmunityAbilityAs(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
 
 int TestImmunityAbilitiesOnly(int battler, int attacker, MoveEnum move, int moveType) {
     int ignored;
@@ -8932,13 +8932,13 @@ int IsBloodStainAffected(int battler) {
     return BATTLER_HAS_ABILITY(battler, ABILITY_BLOOD_STAIN);
 }
 
-int IsUnaware(int battler) {
+AbilityEnum IsUnaware(int battler) {
     RETURN_ABILITY_IF_FLAG(battler, TRUE, unaware)
     return FALSE;
 }
 
 int HandleAttackerAbility(int abilityNumber, int battler, int target, MoveEnum move) {
-    int ability, moveType;
+    AbilityEnum ability, moveType;
 
     if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
     abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
@@ -8975,7 +8975,7 @@ int CheckHalfHpAbility(int battlerDef, int battlerAtk) {
 }
 
 int HandleDefenderAbility(int abilityNumber, int battler, int attacker, MoveEnum move) {
-    int ability, moveType;
+    AbilityEnum ability, moveType;
 
     if (battler >= gBattlersCount) return FALSE;
 
@@ -9025,7 +9025,7 @@ int HandleMiscAbilityMoveEffects(int battler, int opponent, MoveEnum move) {
 }
 
 int HandleSwitchInAbility(int abilityNumber, int battler) {
-    int ability;
+    AbilityEnum ability;
 
     if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
     abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
@@ -9124,7 +9124,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
         return TRUE;
 
 int HandleEndTurnAbility(int abilityNumber, int battler) {
-    int ability;
+    AbilityEnum ability;
 
     if (!IsBattlerAlive(battler)) return FALSE;
 
@@ -9166,7 +9166,7 @@ int HasAnyStatusOrAbility(int battler) {
     return FALSE;
 }
 
-int IsSuppressed(int battler, int ability, int checkMoldBreaker) {
+int IsSuppressed(int battler, AbilityEnum ability, int checkMoldBreaker) {
     if ((checkMoldBreaker && battler != gBattlerAttacker && gHitMarker & HITMARKER_MOLD_BREAKER && gAbilities[ability].breakable) ||
         ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability))) {
         return !DoesBattlerHaveAbilityShield(battler);
@@ -9175,15 +9175,15 @@ int IsSuppressed(int battler, int ability, int checkMoldBreaker) {
     return FALSE;
 }
 
-int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker) {
-    int ability = gBattleMons[battler].abilities[abilityNumber];
+AbilityEnum GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker) {
+    AbilityEnum ability = gBattleMons[battler].abilities[abilityNumber];
 
     if (IsSuppressed(battler, ability, checkMoldBreaker)) return ABILITY_NONE;
 
     return ability;
 }
 
-int BattlerHasAbility(int battler, int ability, int checkMoldBreaker) {
+AbilityEnum BattlerHasAbility(int battler, AbilityEnum ability, int checkMoldBreaker) {
     if (GetAbilityIndex(battler, ability, checkMoldBreaker) != TOTAL_ABILITY_COUNT) return ability;
 
     return FALSE;
@@ -9202,7 +9202,7 @@ void RepopulateAbilities(int battler) {
         gBattleMons[battler].abilities[0] = RandomizeAbility(GetBattlerAbility(battler), gBattleMons[battler].species, gBattleMons[battler].personality);
 }
 
-int GetAbilityIndex(int battler, int ability, int checkMoldBreaker) {
+int GetAbilityIndex(int battler, AbilityEnum ability, int checkMoldBreaker) {
     int i;
 
     for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
@@ -9215,7 +9215,7 @@ int GetAbilityIndex(int battler, int ability, int checkMoldBreaker) {
     return i;
 }
 
-int HasAbilityIgnoringSuppression(int battler, int ability) {
+int HasAbilityIgnoringSuppression(int battler, AbilityEnum ability) {
     int i;
     for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
         if (gBattleMons[battler].abilities[i] == ability) return TRUE;
@@ -9223,22 +9223,22 @@ int HasAbilityIgnoringSuppression(int battler, int ability) {
     return FALSE;
 }
 
-void ReplaceAbility(int battler, int ability) { gBattleMons[battler].abilities[0] = ability; }
+void ReplaceAbility(int battler, AbilityEnum ability) { gBattleMons[battler].abilities[0] = ability; }
 
-int GetBattlerAbility(int battler) { return gBattleMons[battler].abilities[0]; }
+AbilityEnum GetBattlerAbility(int battler) { return gBattleMons[battler].abilities[0]; }
 
-int IsStickyHold(int battler) {
-    int ability = BattlerHasAbility(battler, ABILITY_STICKY_HOLD, TRUE);
+AbilityEnum IsStickyHold(int battler) {
+    AbilityEnum ability = BattlerHasAbility(battler, ABILITY_STICKY_HOLD, TRUE);
     if (!ability) ability = BattlerHasAbility(battler, ABILITY_SUPERSWEET_SYRUP, TRUE);
     return ability;
 }
 
-int HasChloroplast(int battler) {
+AbilityEnum HasChloroplast(int battler) {
     RETURN_ABILITY_IF_FLAG(battler, FALSE, chloroplast)
     return FALSE;
 }
 
-int HasRedirectionAbility(int battlerAtk, int battlerDef, MoveEnum move, int type) {
+AbilityEnum HasRedirectionAbility(int battlerAtk, int battlerDef, MoveEnum move, int type) {
     if (!type) return ABILITY_NONE;
     if (battlerAtk == battlerDef) return ABILITY_NONE;
     if (gBattleMoves[move].effect == EFFECT_SNIPE_SHOT) return ABILITY_NONE;
@@ -9251,7 +9251,7 @@ int CanRaiseStat(int battler, int stat) { return CompareStat(battler, stat, MAX_
 
 int CanLowerStat(int battler, int stat) { return CompareStat(battler, stat, MIN_STAT_STAGE, CMP_GREATER_THAN); }
 
-int HasSkillLink(int battler) {
+AbilityEnum HasSkillLink(int battler) {
     RETURN_ABILITY_IF_FLAG(battler, FALSE, skillLink)
     return FALSE;
 }

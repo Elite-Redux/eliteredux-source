@@ -19,7 +19,7 @@
 // TODO: Gym Skill
 // TODO: Commander
 
-int ScoreIntimidate(int battlerDef, int stat, int change, int ability, int both)
+int ScoreIntimidate(int battlerDef, int stat, int change, AbilityEnum ability, int both)
 {
     int score = 0;
     int statActual = stat;
@@ -45,7 +45,7 @@ int GetHpFormChangeSpecies(int battler, struct AiData* aiData)
     return SPECIES_NONE;
 }
 
-int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct MoveState* moveState, struct AiData* aiData)
+int ScoreAttackAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int move, int moveType, struct MoveState* moveState, struct AiData* aiData)
 {
     int score = 0;
 
@@ -385,7 +385,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
 
 #define REQUIRE_HALF_HP
 
-int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct MoveState* moveState, struct AiData* aiData)
+int ScoreDefenseAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int move, int moveType, struct MoveState* moveState, struct AiData* aiData)
 {
     int i, score = 0;
 
@@ -695,7 +695,7 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
 }
 
 // battlerAtk: battler with ability
-int ScoreEitherAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct MoveState* moveState, struct AiData* aiData)
+int ScoreEitherAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int move, int moveType, struct MoveState* moveState, struct AiData* aiData)
 {
     switch (ability)
     {
@@ -749,7 +749,7 @@ int ScoreEitherAbility(int ability, int battlerAtk, int battlerDef, int move, in
     return 0;
 }
 
-int ScoreSwitchInFormShift(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct AiData* aiData)
+int ScoreSwitchInFormShift(AbilityEnum ability, int battlerAtk, int battlerDef, int move, int moveType, struct AiData* aiData)
 {
     int score;
 
@@ -799,7 +799,7 @@ int ScoreSwitchInFormShift(int ability, int battlerAtk, int battlerDef, int move
     return 0;
 }
 
-int ScoreSwitchInAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct AiData* aiData)
+int ScoreSwitchInAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int move, int moveType, struct AiData* aiData)
 {
     int score;
 
