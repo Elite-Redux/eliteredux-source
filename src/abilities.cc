@@ -7954,6 +7954,11 @@ constexpr Ability FrenziedPhantom = {
 };
 
 constexpr Ability DNAScramble = {
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
+};
+
+constexpr Ability DNAScramble = {
     .name = $("DNA Scramble"),
     .description = $("Changes into Attack, Speed, or\n"
         "Defense form based on move used."),
@@ -8715,6 +8720,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_GLACIAL_RAGE, GlacialRage},
     {ABILITY_IMMOVABLE_OBJECT, ImmovableObject},
     {ABILITY_FRENZIED_PHANTOM, FrenziedPhantom},
+    {ABILITY_DNA_SCRAMBLE, FrenziedPhantom},
 };
 
 template <int N>
