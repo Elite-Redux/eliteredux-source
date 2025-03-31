@@ -812,7 +812,7 @@
 #define ABILITY_CRYO_ARCHITECT 787 // Boosts attack and def from ice and water
 #define ABILITY_GLACIAL_RAGE 788 // Triggers 50 BP Blizzard after using a Ice-type move.
 #define ABILITY_IMMOVABLE_OBJECT 789 // Impenetrable + Sturdy
-#define ABILITY_FRENZIED_PHANTOM 790 // HA + Shadow Tag
+#define ABILITY_FRENZIED_PHANTOM 790 // Ha + Shadow Tag
 #define ABILITY_DNA_SCRAMBLE 791 // Changes into Attack, Speed, or Defense form based on move used.
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_DNA_SCRAMBLE + 1)
