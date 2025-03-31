@@ -7914,9 +7914,9 @@ u16 getRandomSpecies(void) {
 }
 
 bool8 SpeciesHasInnate(u16 species, AbilityEnum ability, u8 level, u32 personality, bool8 disablerandomizer, bool8 isEnemyMon) {
-    u16 innate1 = gBaseStats[species].innates[0];
-    u16 innate2 = gBaseStats[species].innates[1];
-    u16 innate3 = gBaseStats[species].innates[2];
+    AbilityEnum innate1 = gBaseStats[species].innates[0];
+    AbilityEnum innate2 = gBaseStats[species].innates[1];
+    AbilityEnum innate3 = gBaseStats[species].innates[2];
 
     if (!disablerandomizer) {
         innate1 = RandomizeInnate(gBaseStats[species].innates[0], species, personality);
@@ -8034,9 +8034,9 @@ bool8 BoxMonHasInnate(struct BoxPokemon *boxmon, AbilityEnum ability, bool8 disa
 }
 
 u8 GetSpeciesInnateNum(u16 species, AbilityEnum ability, u8 level, u32 personality, bool8 disablerandomizer) {
-    u16 innate1 = gBaseStats[species].innates[0];
-    u16 innate2 = gBaseStats[species].innates[1];
-    u16 innate3 = gBaseStats[species].innates[2];
+    AbilityEnum innate1 = gBaseStats[species].innates[0];
+    AbilityEnum innate2 = gBaseStats[species].innates[1];
+    AbilityEnum innate3 = gBaseStats[species].innates[2];
 
     if (!disablerandomizer) {
         innate1 = RandomizeInnate(gBaseStats[species].innates[0], species, personality);

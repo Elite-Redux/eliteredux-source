@@ -300,7 +300,7 @@ static void PrintStatusTab(void);
 static void PrintDamageCalulatorTab(void);
 static void Task_MenuWaitFadeIn(u8 taskId);
 static void Task_MenuMain(u8 taskId);
-static void PrintMoveInfo(u16 move, u8 x, u8 y, u8 moveIdx);
+static void PrintMoveInfo(MoveEnum move, u8 x, u8 y, u8 moveIdx);
 
 static u8 ShowSpeciesIcon(u8 num);
 static u8 ShowSpeciesIconSpeed(u8 battler, u8 x, u8 y);
@@ -1545,9 +1545,9 @@ static void PrintAbilityTab() {
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
     u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
-    u16 innate1 = gBaseStats[species].innates[0];
-    u16 innate2 = gBaseStats[species].innates[1];
-    u16 innate3 = gBaseStats[species].innates[2];
+    AbilityEnum innate1 = gBaseStats[species].innates[0];
+    AbilityEnum innate2 = gBaseStats[species].innates[1];
+    AbilityEnum innate3 = gBaseStats[species].innates[2];
     AbilityEnum ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
     u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
     bool8 isEnemyMon = GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_OPPONENT;
@@ -1734,7 +1734,7 @@ const u8 gText_Boost_False[] = _("False");
 
 const u8 gText_Move_Type_TwoTypedMoves[] = _("{STR_VAR_1}/{STR_VAR_2}");
 
-static void PrintMoveInfo(u16 move, u8 x, u8 y, u8 moveIdx) {
+static void PrintMoveInfo(MoveEnum move, u8 x, u8 y, u8 moveIdx) {
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
     bool8 isEnemyMon = GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_OPPONENT;
@@ -3424,7 +3424,7 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
     u8 i;
     struct Pokemon *party, *targetParty;
     u16 targetCurrentHp = gBattleMons[target].hp;
-    u16 move = gBattleMons[battler].moves[moveIndex];
+    MoveEnum move = gBattleMons[battler].moves[moveIndex];
     const s8 *natureMod;
     int ignored, immune;
 
@@ -3553,7 +3553,7 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx) {
     u16 targetMaxHp = gBattleMons[target].maxHP;
     u16 targetCurrentHp = gBattleMons[target].hp;
     u16 targetHeldItem = gBattleMons[target].item;
-    u16 move = gBattleMons[battler].moves[moveIdx];
+    MoveEnum move = gBattleMons[battler].moves[moveIdx];
     struct DamageCalculation *damageCalculation;
 
     // Sets move type depending on the mon ability/stats
@@ -3649,7 +3649,7 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx) {
 
 void PrintDamageCalculationExported(u8 battler, u8 target, u8 moveIdx) {
     u32 minDamage, maxDamage;
-    u16 move = gBattleMons[battler].moves[moveIdx];
+    MoveEnum move = gBattleMons[battler].moves[moveIdx];
     struct DamageCalculation *damageCalculation;
 
     // Sets move type depending on the mon ability/stats
@@ -5266,15 +5266,15 @@ static void PrintToWindow(u8 windowId, u8 colorIdx) {
     u8 i, j;
     u8 x, y, x2, y2;
     u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
-    u16 innate1 = gBaseStats[species].innates[0];
-    u16 innate2 = gBaseStats[species].innates[1];
-    u16 innate3 = gBaseStats[species].innates[2];
+    AbilityEnum innate1 = gBaseStats[species].innates[0];
+    AbilityEnum innate2 = gBaseStats[species].innates[1];
+    AbilityEnum innate3 = gBaseStats[species].innates[2];
     u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
     u8 gender = GetGenderFromSpeciesAndPersonality(gBattleMons[sMenuDataPtr->battlerId].species, gBattleMons[sMenuDataPtr->battlerId].personality);
     u8 statStage;
     bool8 statStageUp = FALSE;
     bool8 isEnemyMon = GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_OPPONENT;
-    u8 move = MOVE_NONE;
+    MoveEnum move = MOVE_NONE;
 
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
 

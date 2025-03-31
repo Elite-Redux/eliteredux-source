@@ -43,7 +43,7 @@ struct TrainerMonNoItemCustomMoves
     u16 iv;
     u8 lvl;
     u16 species;
-    u16 moves[MAX_MON_MOVES];
+    MoveEnum moves[MAX_MON_MOVES];
     u8 evs[NUM_STATS];
     u8 nature;
 };
@@ -55,7 +55,7 @@ struct TrainerMonItemCustomMoves
     u16 heldItem;
     u8 ability;
     u8 spread;
-    u16 moves[MAX_MON_MOVES];
+    MoveEnum moves[MAX_MON_MOVES];
     u8 hpType;
     u8 evs[NUM_STATS];
     u8 nature;
