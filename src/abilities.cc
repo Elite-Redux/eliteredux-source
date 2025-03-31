@@ -48,7 +48,7 @@ ENUM_OR(MoveEffectEnum)
 #define __COMBINE(val1, val2) val1##val2
 #define COMBINE(val1, val2) __COMBINE(val1, val2)
 
-#define ON_ENTRY int ability, int battler
+#define ON_ENTRY AbilityEnum ability, int battler
 #define DELEGATE_ENTRY ability, battler
 #define ON_ABSORB int battler, MoveEnum move, int moveType, int *statId
 #define DELEGATE_ABSORB battler, move, moveType, statId
@@ -58,27 +58,27 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_INFILTRATE battler, move
 #define ON_DISGUISE int battler, int testOnly
 #define DELEGATE_DISGUISE battler, testOnly
-#define ON_WEATHER int ability, int battler
+#define ON_WEATHER AbilityEnum ability, int battler
 #define DELEGATE_WEATHER ability, battler
-#define ON_TERRAIN int ability, int battler
+#define ON_TERRAIN AbilityEnum ability, int battler
 #define DELEGATE_TERRAIN ability, battler
-#define ON_END_TURN int ability, int battler
+#define ON_END_TURN AbilityEnum ability, int battler
 #define DELEGATE_END_TURN ability, battler
-#define ON_ATTACKER int ability, int battler, int target, MoveEnum move, int moveType
+#define ON_ATTACKER AbilityEnum ability, int battler, int target, MoveEnum move, int moveType
 #define DELEGATE_ATTACKER ability, battler, target, move, moveType
-#define ON_DEFENDER int ability, int battler, int attacker, MoveEnum move, int moveType
+#define ON_DEFENDER AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType
 #define DELEGATE_DEFENDER ability, battler, attacker, move, moveType
-#define ON_EITHER(name) static int name##OnEither(int ability, int battler, int opponent, MoveEnum move, int moveType)
+#define ON_EITHER(name) static int name##OnEither(AbilityEnum ability, int battler, int opponent, MoveEnum move, int moveType)
 #define ON_EITHER_ABILITY(name) .onAttacker = name##OnEither, .onDefender = name##OnEither
 #define ON_RECOIL int damage, int battler, int moveType
 #define DELEGATE_RECOIL damage, battler, moveType
-#define ON_REACTIVE int ability, int battler, AbilityCallType callType
+#define ON_REACTIVE AbilityEnum ability, int battler, AbilityCallType callType
 #define DELEGATE_REACTIVE ability, battler
-#define ON_BATTLER_FAINTS int ability, int battler, int attacker, int fainted, MoveEnum move, int moveType
+#define ON_BATTLER_FAINTS AbilityEnum ability, int battler, int attacker, int fainted, MoveEnum move, int moveType
 #define DELEGATE_BATTLER_FAINTS ability, battler, attacker, fainted, move, moveType
 #define ON_PARENTAL_BOND int battler, MoveEnum move, int moveType
 #define DELEGATE_PARENTAL_BOND battler, move, moveType
-#define ON_STAT int ability, int battler, int statId, u32 *stat, NonStackingState *flags
+#define ON_STAT AbilityEnum ability, int battler, int statId, u32 *stat, NonStackingState *flags
 #define DELEGATE_STAT ability, battler, statId, stat, flags
 #define ON_OFFENSIVE_MULTIPLIER \
     int battler, int target, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, u16 *modifier
@@ -86,7 +86,7 @@ ENUM_OR(MoveEffectEnum)
 #define ON_DEFENSIVE_MULTIPLIER \
     int battler, int attacker, MoveEnum move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
 #define DELEGATE_DEFENSIVE_MULTIPLIER battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier
-#define ON_ACCURACY int ability, int battler, int target, MoveEnum move, int moveType, int *accuracy
+#define ON_ACCURACY AbilityEnum ability, int battler, int target, MoveEnum move, int moveType, int *accuracy
 #define DELEGATE_ACCURACY ability, battler, target, move, moveType, accuracy
 #define ON_SWAP_SPLIT int battler, MoveEnum move
 #define DELEGATE_SWAP_SPLIT battler, move
@@ -99,26 +99,28 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_STAB moveType
 #define ON_PRIORITY int battler, int target, MoveEnum move
 #define DELEGATE_PRIORITY battler, target, move
-#define ON_MOVE_TYPE int ability, MoveEnum move, int moveType, u8 *ateBoost
+#define ON_MOVE_TYPE AbilityEnum ability, MoveEnum move, int moveType, u8 *ateBoost
 #define DELEGATE_MOVE_TYPE ability, move, moveType, ateBoost
-#define ON_EXIT int ability, int battler
+#define ON_EXIT AbilityEnum ability, int battler
 #define DELEGATE_EXIT ability, battler
 #define ON_CRIT int battler, int target, MoveEnum move
 #define DELEGATE_CRIT battler, target, move
 #define ON_TYPE_EFFECTIVENESS int defType, MoveEnum move, int moveType, u16 *mod
 #define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
-#define ON_COPY_MOVE int ability, int battler, int attacker, int target, MoveEnum move
+#define ON_COPY_MOVE AbilityEnum ability, int battler, int attacker, int target, MoveEnum move
 #define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
-#define ON_AFTER_TYPE_EFFECTIVENESS int battler, int ability, int target, MoveEnum move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
+#define ON_AFTER_TYPE_EFFECTIVENESS int battler, AbilityEnum ability, int target, MoveEnum move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
 #define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
 #define ON_MODIFY_EFFECT_CHANCE int battler, MoveEnum move, MoveEffectEnum moveEffect, int *effectChance
 #define DELEGATE_MODIFY_EFFECT_CHANCE battler, move, moveEffect, effectChance
 #define ABILITY_ON_CAN_STATUS_TYPE int battler, MoveEnum move, StatusCheckEnum status
 #define DELEGATE_ON_CAN_STATUS_TYPE battler, move, status
-#define ABILITY_ON_STATUS_IMMUNE int battler, int target, int ability, StatusCheckEnum status
+#define ABILITY_ON_STATUS_IMMUNE int battler, int target, AbilityEnum ability, StatusCheckEnum status
 #define DELEGATE_ON_STATUS_IMMUNE int battler, target, ability, status
 #define ABILITY_ON_TRAP int switchingBattler
 #define DELEGATE_ON_TRAP switchingBattler
+#define ABILITY_ON_BEFORE_ATTACK int battler, int attacker, AbilityEnum ability, MoveEnum move, int moveType
+#define DELEGATE_ON_BEFORE_ATTACK battler, attacker, ability, move, moveType
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -201,7 +203,7 @@ static int SwitchInAnnounce(int message) {
     return TRUE;
 }
 
-static int TryTransformAttacker(int ability, int battler, AbilityCallType callType) {
+static int TryTransformAttacker(AbilityEnum ability, int battler, AbilityCallType callType) {
     CHECK(ShouldChangeFormHpBased(battler))
     CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
@@ -242,7 +244,7 @@ static int AbilityStatusEffectSafe(MoveEffectEnum effect, int attacker, int targ
     return TRUE;
 }
 
-static int PoisonPuppeteerClone(int ability, int battler, int (*predicate)(int battler, int target), const u8 *callback) {
+static int PoisonPuppeteerClone(AbilityEnum ability, int battler, int (*predicate)(int battler, int target), const u8 *callback) {
     int flag = GetAbilityState(battler, ability);
     if (!flag) return FALSE;
     int any = FALSE;
@@ -465,7 +467,30 @@ constexpr Ability Insomnia = {
 };
 
 constexpr Ability ColorChange = {
-    .colorChange = TRUE,
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        CHECK(battler != attacker)
+        CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
+
+        u32 bestType = gBattleMons[gBattlerTarget].type1;
+        u16 bestModifier = GetTypeModifier(moveType, bestType, attacker, battler);
+
+        for (int currentType = TYPE_NORMAL; currentType < NUMBER_OF_MON_TYPES; ++currentType) {
+            u16 currentModifier = GetTypeModifier(moveType, currentType, attacker, battler);
+            if (currentModifier < bestModifier) {
+                bestModifier = currentModifier;
+                bestType = currentType;
+            }
+            if (bestModifier == UQ_4_12(0.0)) break;
+        }
+
+        CHECK_NOT(IS_BATTLER_OF_TYPE(battler, bestType))
+
+        SET_BATTLER_TYPE(battler, bestType);
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, bestType);
+        BattleScriptCall(BattleScript_ColorChangeActivates);
+        return TRUE;
+    },
+    .onBeforeAttackFor = APPLY_ON_TARGET,
 };
 
 constexpr Ability Immunity = {
@@ -646,7 +671,7 @@ constexpr Ability Illuminate = {
 constexpr Ability Trace = {
     .onEntry = +[](ON_ENTRY) -> int {
         int target = BATTLE_OPPOSITE(battler);
-        int newAbility = GetBattlerAbility(target);
+        auto newAbility = GetBattlerAbility(target);
         if (!IsBattlerAlive(target) || IsRolePlayBannedAbility(newAbility)) {
             target = BATTLE_PARTNER(target);
             CHECK(IsBattlerAlive(target))
@@ -1538,7 +1563,7 @@ constexpr Ability ToxicBoost = {
         },
 };
 
-int FlareBoostHandler(int ability, int battler, AbilityCallType callType) {
+int FlareBoostHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
     CHECK(CanBeBurned(battler))
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
@@ -1814,7 +1839,15 @@ constexpr Ability CheekPouch = {
 };
 
 constexpr Ability Protean = {
-    .protean = TRUE,
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
+        CHECK_NOT(IS_BATTLER_OF_TYPE(battler, moveType))
+        CHECK(move != MOVE_STRUGGLE)
+        SET_BATTLER_TYPE(gBattlerAttacker, moveType);
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
+        BattleScriptCall(BattleScript_ProteanActivates);
+        return TRUE;
+    },
 };
 
 constexpr Ability FurCoat = {
@@ -1855,6 +1888,37 @@ constexpr Ability SweetVeil = {
 };
 
 constexpr Ability StanceChange = {
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        int newSpecies = SPECIES_NONE;
+        switch (gBattleMons[battler].species) {
+            default:
+                return FALSE;
+            case SPECIES_AEGISLASH:  // Shield -> Blade
+                if (gBattleMoves[move].power > 0) newSpecies = SPECIES_AEGISLASH_BLADE;
+                break;
+            case SPECIES_AEGISLASH_BLADE:  // Blade -> Shield
+                if (move == MOVE_KINGS_SHIELD) newSpecies = SPECIES_AEGISLASH;
+                break;
+            case SPECIES_AEGISLASH_BLADE_REDUX:  // Special -> Physical
+                if (gBattleMoves[move].split == SPLIT_PHYSICAL && !gBattleMoves[move].arrowBased) newSpecies = SPECIES_AEGISLASH_REDUX;
+                break;
+            case SPECIES_AEGISLASH_BLADE_REDUX_MEGA:  // Special -> Physical
+                if (gBattleMoves[move].split == SPLIT_PHYSICAL && !gBattleMoves[move].arrowBased) newSpecies = SPECIES_AEGISLASH_REDUX_MEGA;
+                break;
+            case SPECIES_AEGISLASH_REDUX:  // Physical -> Special
+                if (gBattleMoves[move].split == SPLIT_SPECIAL || gBattleMoves[move].arrowBased) newSpecies = SPECIES_AEGISLASH_BLADE_REDUX;
+                break;
+            case SPECIES_AEGISLASH_REDUX_MEGA:  // Physical -> Special
+                if (gBattleMoves[move].split == SPLIT_SPECIAL || gBattleMoves[move].arrowBased) newSpecies = SPECIES_AEGISLASH_BLADE_REDUX_MEGA;
+                break;
+        }
+        CHECK(newSpecies)
+
+        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+        gBattleMons[battler].species = newSpecies;
+        BattleScriptCall(BattleScript_AttackerFormChange);
+        return TRUE;
+    },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
@@ -2172,7 +2236,7 @@ constexpr Ability Schooling = {
     .randomizerBanned = TRUE,
 };
 
-static int DisguiseReformHandler(int ability, int battler, AbilityCallType callType) {
+static int DisguiseReformHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
     int newSpecies;
     switch (gBattleMons[battler].species) {
         case SPECIES_MIMIKYU_BUSTED:
@@ -2361,7 +2425,7 @@ constexpr Ability TanglingHair = {
 
 constexpr Ability Receiver = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        int allyAbility = GetBattlerAbility(fainted);
+        AbilityEnum allyAbility = GetBattlerAbility(fainted);
         CHECK_NOT(IsRolePlayBannedAbility(allyAbility))
         CHECK_NOT(HasAbilityIgnoringSuppression(battler, allyAbility))
         int index = GetAbilityIndex(battler, ability, FALSE);
@@ -2432,9 +2496,9 @@ constexpr Ability BeastBoost = {
 };
 
 constexpr Ability RksSystem = {
+    .onBeforeAttack = Protean.onBeforeAttack,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    .protean = TRUE,
     .adaptability = TRUE,
 };
 
@@ -2514,7 +2578,7 @@ constexpr Ability DauntlessShield = {
 };
 
 constexpr Ability Libero = {
-    .protean = TRUE,
+    .onBeforeAttack = Protean.onBeforeAttack,
 };
 
 constexpr Ability CottonDown = {
@@ -2609,7 +2673,7 @@ constexpr Ability IceScales = {
     .breakable = TRUE,
 };
 
-int IceFaceReformHandler(int ability, int battler, AbilityCallType callType) {
+int IceFaceReformHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
     CHECK(gBattleMons[battler].species == SPECIES_EISCUE_NOICE_FACE)
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
     CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
@@ -2634,7 +2698,7 @@ constexpr Ability PowerSpot = {
     .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
 
-int HandleMimicry(u8 battler, int ability, AbilityCallType endType) {
+int HandleMimicry(u8 battler, AbilityEnum ability, AbilityCallType endType) {
     u32 moveType = 0;
 
     switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
@@ -4129,8 +4193,8 @@ constexpr Ability ToxicSpill = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         if (ability) {
             CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
-            u16 sourceAbilities[] = {ABILITY_TOXIC_SPILL, ABILITY_TRASH_HEAP};
-            for (u16 sourceAbility : sourceAbilities) {
+            AbilityEnum sourceAbilities[] = {ABILITY_TOXIC_SPILL, ABILITY_TRASH_HEAP};
+            for (auto sourceAbility : sourceAbilities) {
                 int source = IsAbilityOnField(sourceAbility);
                 FILTER(source)
                 CHECK(sourceAbility == ability)
@@ -4564,8 +4628,11 @@ constexpr Ability AngelsWrath = {
 
 constexpr Ability PrismaticFur = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.5); },
-    .protean = TRUE,
-    .colorChange = TRUE,
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        if (battler == attacker && Protean.onBeforeAttack(DELEGATE_ON_BEFORE_ATTACK)) return TRUE;
+        return ColorChange.onBeforeAttack(DELEGATE_ON_BEFORE_ATTACK);
+    },
+    .onBeforeAttackFor = APPLY_ON_ATTACKER_OR_TARGET,
 };
 
 constexpr Ability ShockingJaws = {
@@ -5156,7 +5223,7 @@ constexpr Ability FreezingPoint = {
     ON_EITHER_ABILITY(FreezingPoint),
 };
 
-static int CryoProficiencyHail(int ability, int battler, int attacker, MoveEnum move, int moveType) {
+static int CryoProficiencyHail(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType) {
     CHECK(ShouldApplyOnHitAffect(battler))
     CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY)
     if (gBattleWeather & WEATHER_PRIMAL_ANY) {
@@ -5610,7 +5677,7 @@ constexpr Ability PurifyingSalt = {
     .removesStatusOnImmunity = TRUE,
 };
 
-int ProtosynthesisHandler(int ability, int battler, AbilityCallType callType) {
+int ProtosynthesisHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
     ParadoxBoost state = GetAbilityStateAs(battler, ability).paradoxBoost;
 
     if (state.source == PARADOX_BOOST_NOT_ACTIVE && IsWeatherActive(WEATHER_SUN_ANY)) {
@@ -5665,7 +5732,7 @@ constexpr Ability Protosynthesis = {
         },
 };
 
-int QuarkDriveHandler(int ability, int battler, AbilityCallType callType) {
+int QuarkDriveHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
     ParadoxBoost state = GetAbilityStateAs(battler, ability).paradoxBoost;
 
     if (state.source == PARADOX_BOOST_NOT_ACTIVE && IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) {
@@ -6774,7 +6841,7 @@ constexpr Ability SnowyWrath = {
 };
 
 constexpr Ability PatternChange = {
-    .protean = TRUE,
+    .onBeforeAttack = Protean.onBeforeAttack,
 };
 
 constexpr Ability NoTurningBack = {
@@ -6799,6 +6866,16 @@ constexpr Ability FlammableCoat = {
         UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_LUMBERING_SLOTH_ENGULFED);
         gBattleMons[battler].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
         BattleScriptCall(BattleScript_TargetFormChange);
+        return TRUE;
+    },
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        CHECK(moveType == TYPE_FIRE)
+        CHECK(gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH)
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
+
+        UpdateAbilityStateIndicesForNewSpecies(gBattlerAttacker, SPECIES_LUMBERING_SLOTH_ENGULFED);
+        gBattleMons[gBattlerAttacker].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
+        BattleScriptCall(BattleScript_AttackerFormChange);
         return TRUE;
     },
     .unsuppressable = TRUE,
@@ -7954,9 +8031,47 @@ constexpr Ability FrenziedPhantom = {
 };
 
 constexpr Ability DNAScramble = {
-    .name = $("DNA Scramble"),
-    .description = $("Changes into Attack, Speed, or\n"
-        "Defense form based on move used."),
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        int newSpecies = SPECIES_NONE;
+        switch (gBattleMons[battler].species) {
+            default:
+                return FALSE;
+            case SPECIES_DEOXYS:
+                if (gBattleMoves[move].power > 0)
+                    newSpecies = SPECIES_DEOXYS_ATTACK;
+                else if (move == MOVE_RECOVER)
+                    newSpecies = SPECIES_DEOXYS_DEFENSE;
+                else if (gBattleMoves[move].split == SPLIT_STATUS)
+                    newSpecies = SPECIES_DEOXYS_SPEED;
+                break;
+            case SPECIES_DEOXYS_ATTACK:
+                if (move == MOVE_RECOVER)
+                    newSpecies = SPECIES_DEOXYS_DEFENSE;
+                else if (gBattleMoves[move].split == SPLIT_STATUS)
+                    newSpecies = SPECIES_DEOXYS_SPEED;
+                break;
+            case SPECIES_DEOXYS_DEFENSE:
+                if (gBattleMoves[move].power > 0)
+                    newSpecies = SPECIES_DEOXYS_ATTACK;
+                else if (move != MOVE_RECOVER && gBattleMoves[move].split == SPLIT_STATUS)
+                    newSpecies = SPECIES_DEOXYS_SPEED;
+                break;
+            case SPECIES_DEOXYS_SPEED:
+                if (gBattleMoves[move].power > 0)
+                    newSpecies = SPECIES_DEOXYS_ATTACK;
+                else if (move == MOVE_RECOVER)
+                    newSpecies = SPECIES_DEOXYS_DEFENSE;
+                break;
+        }
+        CHECK(newSpecies)
+
+        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+        gBattleMons[battler].species = newSpecies;
+        BattleScriptCall(BattleScript_AttackerFormChange);
+        return TRUE;
+    },
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 typedef struct AbilityKVPair {
@@ -8715,6 +8830,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_GLACIAL_RAGE, GlacialRage},
     {ABILITY_IMMOVABLE_OBJECT, ImmovableObject},
     {ABILITY_FRENZIED_PHANTOM, FrenziedPhantom},
+    {ABILITY_DNA_SCRAMBLE, DNAScramble},
 };
 
 template <int N>
@@ -8765,6 +8881,7 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(onCanStatusType),
             __OVERWRITE_ARRAY_VAL(onStatusImmune),
             __OVERWRITE_ARRAY_VAL(onTrap),
+            __OVERWRITE_ARRAY_VAL(onBeforeAttack),
             __OVERWRITE_ARRAY_VAL(onImmuneFor),
             __OVERWRITE_ARRAY_VAL(onBattlerFaintsFor),
             __OVERWRITE_ARRAY_VAL(onOffensiveMultiplierFor),
@@ -8773,6 +8890,7 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(onCritFor),
             __OVERWRITE_ARRAY_VAL(onAfterTypeEffectivenessFor),
             __OVERWRITE_ARRAY_VAL(onStatusImmuneFor),
+            __OVERWRITE_ARRAY_VAL(onBeforeAttackFor),
             __OVERWRITE_ARRAY_VAL(redirectType),
             __OVERWRITE_ARRAY_VAL(ruinStat),
             __OVERWRITE_ARRAY_VAL(noDamageHits),
@@ -8790,8 +8908,6 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(skillLink),
             __OVERWRITE_ARRAY_VAL(resistsFortKnox),
             __OVERWRITE_ARRAY_VAL(fortKnox),
-            __OVERWRITE_ARRAY_VAL(protean),
-            __OVERWRITE_ARRAY_VAL(colorChange),
             __OVERWRITE_ARRAY_VAL(adaptability),
             __OVERWRITE_ARRAY_VAL(magicBounce),
             __OVERWRITE_ARRAY_VAL(levitate),

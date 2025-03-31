@@ -2774,7 +2774,7 @@ static void PopulateAbilities(u16* abilities)
     }
 }
 
-static int HasAbility(int ability, u16* abilities)
+static int HasAbility(AbilityEnum ability, u16* abilities)
 {
     return abilities[0] == ability || abilities[1] == ability || abilities[2] == ability || abilities[3] == ability;
 }
@@ -2898,7 +2898,7 @@ static void GenerateMoveReplaceList(u8 keyPress) {
             {
             u16 boostedMoves[TUTOR_COUNT + 1] = {0};
             u16 otherMoves[TUTOR_COUNT + 1] = {0};
-            u16 abilities[6] = {0};
+            AbilityEnum abilities[6] = {0};
             for (i = 0; i < TUTOR_COUNT; i++)
             {
                 newMove = GetTutorMove(i);
@@ -5242,7 +5242,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
 	u8 level = sum->level;
 	u8 x, y, i;
     bool8 isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2; //checks if you are looking into the summary screen for the enemy
-    u16 abilities[4] = {0};
+    AbilityEnum abilities[4] = {0};
     bool8 testInnateLock = FALSE;
 
     PopulateAbilities(abilities);

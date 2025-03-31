@@ -31,7 +31,7 @@ enum {
 };
 
 struct IntimidateCloneData {
-    u16 ability;
+    AbilityEnum ability;
     u8 statsLowered[3];    // atk, def, speed
     u8 numStatsLowered:2;  // 1 - 3
     bool8 targetBoth:1;
@@ -80,15 +80,15 @@ void StealTargetItem(u8 battlerStealer, u8 battlerItem);
 void RemoveItem(u8 battler);
 u8 GetCatchingBattler(void);
 u32 IsDesertCloakProtected(u32 battler);
-u8 getStatToLowerFromIntimidateClone(u16 ability, u8 num);
-u16 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler);
+u8 getStatToLowerFromIntimidateClone(AbilityEnum ability, u8 num);
+AbilityEnum IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler);
 void SetStatChanger(u8 statId, s8 change);
 s8 ChangeStatBuffsImplicit(s8 statValue, u32 statId, u32 flags, const u8* BS_ptr);
 s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS_ptr);
 u8 GetFirstFaintedPartyIndex(u8 battler);
 void SetCudChew(u32 battlerId, u32 itemId);
-void SetBattlerAffectedFlag(int attacker, int target, int ability);
-void ClearBattlerAffectedFlag(int attacker, int target, int ability);
+void SetBattlerAffectedFlag(int attacker, int target, AbilityEnum ability);
+void ClearBattlerAffectedFlag(int attacker, int target, AbilityEnum ability);
 int GetWeatherChangeMultistringChooser(int weather);
 int ShouldSetMoldBreaker(int battler, MoveEnum move);
 int EatTargetBerry(int battler, int target);
@@ -97,7 +97,7 @@ int UpdateBattlerItem(int battler, int newItem);
 int Infiltrates(int battler, MoveEnum move, InfiltrateType type);
 int SetEncore(int target);
 bool32 HasAttackerFaintedTarget(void);
-int HasFortKnox(int battler);
+AbilityEnum HasFortKnox(int battler);
 
 extern void (*const gBattleScriptingCommandsTable[])(void);
 extern const u8 gBattlePalaceNatureToMoveGroupLikelihood[NUM_NATURES][4];

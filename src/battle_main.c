@@ -5030,7 +5030,7 @@ u8 GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer) {
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     u8 abilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM, NULL);
-    u16 ability = GetAbilityBySpecies(species, abilityNum);
+    AbilityEnum ability = GetAbilityBySpecies(species, abilityNum);
     u8 type1 = gBaseStats[species].type1;
     u8 type2 = gBaseStats[species].type2;
 

@@ -7101,7 +7101,7 @@ void SetArceusForm(struct Pokemon *mon) {
     u16 species = GetMonData(mon, MON_DATA_SPECIES);
     u16 forme;
     u8 abilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM);
-    u16 ability = GetAbilityBySpecies(species, abilityNum);
+    AbilityEnum ability = GetAbilityBySpecies(species, abilityNum);
 
     if (GET_BASE_SPECIES_ID(species) == SPECIES_ARCEUS && (ability == ABILITY_MULTITYPE || MonHasInnate(mon, ABILITY_MULTITYPE, FALSE))) {
         forme = GetArceusForm(mon);

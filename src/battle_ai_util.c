@@ -1042,7 +1042,7 @@ bool32 CanTargetFaintAiWithMod(u8 battlerDef, u8 battlerAtk, s32 hpMod, s32 dmgM
     return FALSE;
 }
 
-bool32 AI_IsAbilityOnSide(u32 battlerId, u32 ability) {
+bool32 AI_IsAbilityOnSide(u32 battlerId, AbilityEnum ability) {
     if (BattlerHasAbility(battlerId, ability, FALSE))
         return TRUE;
     else if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerId), ability, FALSE))
@@ -1999,7 +1999,7 @@ struct Pokemon *GetPartyBattlerPartyData(u8 battlerId, u8 switchBattler) {
 
 static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler) {
     struct Pokemon *mon = GetPartyBattlerPartyData(currBattler, switchBattler);
-    u16 ability = GetMonAbility(mon);  // we know our own party data
+    AbilityEnum ability = GetMonAbility(mon);  // we know our own party data
     u16 holdEffect = ItemId_GetHoldEffect(GetMonData(mon, MON_DATA_HELD_ITEM));
     u32 flags =
         gSideStatuses[GetBattlerSide(currBattler)] & (SIDE_STATUS_SPIKES | SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_STICKY_WEB | SIDE_STATUS_TOXIC_SPIKES);
@@ -2672,12 +2672,12 @@ bool32 SideHasMoveSplit(u8 battlerId, u8 split) {
     return FALSE;
 }
 
-bool32 IsAbilityOfRating(u16 ability, s8 rating) {
+bool32 IsAbilityOfRating(AbilityEnum ability, s8 rating) {
     if (sAiAbilityRatings[ability] >= rating) return TRUE;
     return FALSE;
 }
 
-s8 GetAbilityRating(u16 ability) { return sAiAbilityRatings[ability]; }
+s8 GetAbilityRating(AbilityEnum ability) { return sAiAbilityRatings[ability]; }
 
 static const u16 sRecycleEncouragedItems[] = {
     ITEM_CHESTO_BERRY,

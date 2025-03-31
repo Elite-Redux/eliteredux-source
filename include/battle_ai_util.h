@@ -54,9 +54,9 @@ bool32 IsRecycleEncouragedItem(u16 item);
 bool32 ShouldRestoreHpBerry(u8 battlerAtk, u16 item);
 bool32 IsStatBoostingBerry(u16 item);
 bool32 CanKnockOffItem(u8 battler, u16 item);
-bool32 IsAbilityOfRating(u16 ability, s8 rating);
-s8 GetAbilityRating(u16 ability);
-bool32 AI_IsAbilityOnSide(u32 battlerId, u32 ability);
+bool32 IsAbilityOfRating(AbilityEnum ability, s8 rating);
+s8 GetAbilityRating(AbilityEnum ability);
+bool32 AI_IsAbilityOnSide(u32 battlerId, AbilityEnum ability);
 bool32 AI_MoveMakesContact(int battler, u32 holdEffect, u16 move);
 
 // stat stage checks

@@ -103,7 +103,7 @@ struct AiData {
 };
 
 struct DisguiseSimulation {
-    int ability;
+    AbilityEnum ability;
 };
 
 int GetAiDecision(int battler);

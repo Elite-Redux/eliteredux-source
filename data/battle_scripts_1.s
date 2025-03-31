@@ -10639,7 +10639,6 @@ BattleScript_StickyHoldActivates::
 	return
 
 BattleScript_ColorChangeActivates::
-	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNCHANGEDTYPEWITH
 	waitmessage B_WAIT_TIME_LONG
 	return
@@ -10655,7 +10654,6 @@ BattleScript_MimicryEnds::
 	return
 
 BattleScript_ProteanActivates::
-	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNCHANGEDTYPE
 	waitmessage B_WAIT_TIME_LONG
 	return
