@@ -4056,11 +4056,11 @@ u8 GetLevelFromBoxMonExp(struct BoxPokemon *boxMon) {
     return level - 1;
 }
 
-u16 GiveMoveToMon(struct Pokemon *mon, u16 move) {
+u16 GiveMoveToMon(struct Pokemon *mon, MoveEnum move) {
     s32 i;
     struct BoxPokemon *boxMon = &mon->box;
     for (i = 0; i < MAX_MON_MOVES; i++) {
-        u16 existingMove = GetBoxMonData(boxMon, MON_DATA_MOVE1 + i, NULL);
+        MoveEnum existingMove = GetBoxMonData(boxMon, MON_DATA_MOVE1 + i, NULL);
         if (!existingMove) {
             SetBoxMonData(boxMon, MON_DATA_MOVE1 + i, &move);
             SetMonData(mon, MON_DATA_PP1 + i, &gBattleMoves[move].pp);
@@ -4071,10 +4071,10 @@ u16 GiveMoveToMon(struct Pokemon *mon, u16 move) {
     return MON_HAS_MAX_MOVES;
 }
 
-u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move) {
+u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, MoveEnum move) {
     s32 i;
     for (i = 0; i < MAX_MON_MOVES; i++) {
-        u16 existingMove = GetBoxMonData(boxMon, MON_DATA_MOVE1 + i, NULL);
+        MoveEnum existingMove = GetBoxMonData(boxMon, MON_DATA_MOVE1 + i, NULL);
         if (existingMove == MOVE_NONE) {
             SetBoxMonData(boxMon, MON_DATA_MOVE1 + i, &move);
             return move;
@@ -4084,7 +4084,7 @@ u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move) {
     return MON_HAS_MAX_MOVES;
 }
 
-u16 GiveMoveToBattleMon(struct BattlePokemon *mon, u16 move) {
+u16 GiveMoveToBattleMon(struct BattlePokemon *mon, MoveEnum move) {
     s32 i;
 
     for (i = 0; i < MAX_MON_MOVES; i++) {
@@ -4098,12 +4098,12 @@ u16 GiveMoveToBattleMon(struct BattlePokemon *mon, u16 move) {
     return 0xFFFF;
 }
 
-void SetMonMoveSlot(struct Pokemon *mon, u16 move, u8 slot) {
+void SetMonMoveSlot(struct Pokemon *mon, MoveEnum move, u8 slot) {
     SetMonData(mon, MON_DATA_MOVE1 + slot, &move);
     SetMonData(mon, MON_DATA_PP1 + slot, &gBattleMoves[move].pp);
 }
 
-void SetBattleMonMoveSlot(struct BattlePokemon *mon, u16 move, u8 slot) {
+void SetBattleMonMoveSlot(struct BattlePokemon *mon, MoveEnum move, u8 slot) {
     mon->moves[slot] = move;
     mon->pp[slot] = gBattleMoves[move].pp;
 }
@@ -4182,9 +4182,9 @@ u16 MonTryLearningNewEvolutionMove(struct Pokemon *mon, bool8 firstMove) {
     return 0;
 }
 
-void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move) {
+void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, MoveEnum move) {
     s32 i;
-    u16 moves[MAX_MON_MOVES];
+    MoveEnum moves[MAX_MON_MOVES];
     u8 pp[MAX_MON_MOVES];
     u8 ppBonuses;
 
@@ -4206,9 +4206,9 @@ void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move) {
     SetMonData(mon, MON_DATA_PP_BONUSES, &ppBonuses);
 }
 
-void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move) {
+void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, MoveEnum move) {
     s32 i;
-    u16 moves[MAX_MON_MOVES];
+    MoveEnum moves[MAX_MON_MOVES];
     u8 pp[MAX_MON_MOVES];
     u8 ppBonuses;
 
@@ -7934,10 +7934,10 @@ bool8 SpeciesHasInnate(u16 species, AbilityEnum ability, u8 level, u32 personali
         return FALSE;
 }
 
-u16 RandomizeMoves(u16 moves, u16 species, u32 personality) {
+MoveEnum RandomizeMoves(MoveEnum moves, u16 species, u32 personality) {
     if (gSaveBlock2Ptr->moveRandomizedMode == 1 && moves != MOVE_NONE) {
         u32 randomizedMoveSeed = moves ^ ISO_RANDOMIZE1(species) ^ personality;
-        u16 randomizedMove;
+        MoveEnum randomizedMove;
         do {
             randomizedMove = RandRangeDeterministic(1, MOVES_COUNT - 1, &randomizedMoveSeed);
         } while (gBattleMoves[randomizedMove].effect == EFFECT_PLACEHOLDER || randomizedMove == MOVE_DARK_VOID);
@@ -7947,12 +7947,12 @@ u16 RandomizeMoves(u16 moves, u16 species, u32 personality) {
         return moves;
 }
 
-u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
+AbilityEnum RandomizeInnate(AbilityEnum innate, u16 species, u32 personality) {
     if (gSaveBlock2Ptr->innaterandomizedMode == 1 && !gAbilities[innate].randomizerBanned) {
         // Only Randomize if you have the Innate Randomized Mode Enabled
         // Exclude form change abilities from being randomized and other mons can't get them either
         u32 randomizedInnateSeed = (innate ^ ISO_RANDOMIZE1(species) ^ personality);
-        u16 randomizedInnate;
+        AbilityEnum randomizedInnate;
         do {
             randomizedInnate = RandRangeDeterministic(1, ABILITIES_COUNT - 1, &randomizedInnateSeed);
         } while (gAbilities[randomizedInnate].randomizerBanned);
@@ -7963,12 +7963,12 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
 
 // #define BALANCE_RANDOMIZER_ABILITIES
 
-u16 RandomizeAbility(AbilityEnum ability, u16 species, u32 personality) {
+AbilityEnum RandomizeAbility(AbilityEnum ability, u16 species, u32 personality) {
     if (gSaveBlock2Ptr->abilityRandomizedMode == 1 && !gAbilities[ability].randomizerBanned) {
         // Only Randomize if you have the Ability Randomized Mode Enabled
         // Exclude form change abilities from being randomized and other mons can't get them either
         u32 randomizedAbilitySeed = ability ^ ISO_RANDOMIZE1(species) ^ personality;
-        u16 randomizedAbility;
+        AbilityEnum randomizedAbility;
         do {
             randomizedAbility = RandRangeDeterministic(1, ABILITIES_COUNT - 1, &randomizedAbilitySeed);
         } while (gAbilities[randomizedAbility].randomizerBanned);
@@ -7992,12 +7992,12 @@ u8 RandomizeType(u8 type, u16 species, u32 personality, bool8 isFirstType) {
         return type;
 }
 
-int GetMonInnate(struct Pokemon *mon, int slot, int disableRandomizer) {
+AbilityEnum GetMonInnate(struct Pokemon *mon, int slot, int disableRandomizer) {
     int species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     int personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     int level = GetMonData(mon, MON_DATA_LEVEL, NULL);
 
-    int innate = gBaseStats[species].innates[slot];
+    AbilityEnum innate = gBaseStats[species].innates[slot];
 
     if (!disableRandomizer) {
         innate = RandomizeInnate(innate, species, personality);
