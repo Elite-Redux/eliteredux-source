@@ -28,22 +28,23 @@ protobuf-kotlin.jar:
 preproc.jar: $(PREPROC_SRCS) protobuf-java.jar
 	find src/preproc -name '*.kt' | xargs  kotlinc -cp protobuf-java.jar  -include-runtime -d preproc.jar && exit 
 
+DEPSETS := $(foreach proto,$(PROTO_SRCS),$(addprefix timestamp/depsets/,$(proto)))
+
 define BUILD_PROTO
-DEPS := $(shell grep -oPs '\S+\.proto(?=\\)' protodep/$1.protodep.txt)
 timestamp/depsets/$1: ../../proto/$1 protoc
 	@perl -pi.bak -e 'BEGIN{$$$$counter=1000000;} s/\@NEXT/$$$$counter++/ge' ../../proto/$1
 	@rm -f ../../proto/$1.bak
 	@mkdir -p timestamp/depsets
 	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --descriptor_set_out=timestamp/depsets/$1 --experimental_allow_proto3_optional && exit
 
-protodep/$1.protodep.txt: timestamp/depsets/$1 protoc ../../proto/$1 $$(DEPS) preproc.jar protobuf-java.jar
+timestamp/protodep/$1.protodep.txt: $$(DEPSETS) protoc ../../proto/$1 $$(DEPS) preproc.jar protobuf-java.jar
 	java -cp preproc.jar:protobuf-java.jar preproc.ProtoProcessor ../../proto/$1 timestamp/depsets/$1 && exit
-	@mkdir -p protodep
-	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --kotlin_out=src --dependency_out=protodep/$1.protodep.txt --experimental_allow_proto3_optional && exit
+	@mkdir -p timestamp/protodep
+	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --kotlin_out=src --dependency_out=timestamp/protodep/$1.protodep.txt --descriptor_set_out=timestamp/depsets/$1 --experimental_allow_proto3_optional && exit
 endef
 $(foreach proto,$(PROTO_SRCS),$(eval $(call BUILD_PROTO,$(proto))))
 
-protodep: $(addsuffix .protodep.txt,$(addprefix protodep/,$(PROTO_SRCS)))
+protodep: $(addsuffix .protodep.txt,$(addprefix timestamp/protodep/,$(PROTO_SRCS)))
 
 protos: protodep
 
