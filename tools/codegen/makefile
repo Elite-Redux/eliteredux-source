@@ -28,7 +28,8 @@ protobuf-kotlin.jar:
 preproc.jar: $(PREPROC_SRCS) protobuf-java.jar
 	find src/preproc -name '*.kt' | xargs  kotlinc -cp protobuf-java.jar  -include-runtime -d preproc.jar && exit 
 
-DEPSETS := $(foreach proto,$(PROTO_SRCS),$(addprefix timestamp/depsets/,$(proto)))
+DEPSETS := $(addprefix timestamp/depsets/,$(PROTO_SRCS))
+PROTODEP := $(addsuffix .protodep.txt,$(addprefix timestamp/protodep/,$(PROTO_SRCS)))
 
 define BUILD_PROTO
 timestamp/depsets/$1: ../../proto/$1 protoc
@@ -40,15 +41,13 @@ timestamp/depsets/$1: ../../proto/$1 protoc
 timestamp/protodep/$1.protodep.txt: $$(DEPSETS) protoc ../../proto/$1 $$(DEPS) preproc.jar protobuf-java.jar
 	java -cp preproc.jar:protobuf-java.jar preproc.ProtoProcessor ../../proto/$1 timestamp/depsets/$1 && exit
 	@mkdir -p timestamp/protodep
-	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --kotlin_out=src --dependency_out=timestamp/protodep/$1.protodep.txt --descriptor_set_out=timestamp/depsets/$1 --experimental_allow_proto3_optional && exit
+	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --kotlin_out=src --dependency_out=timestamp/protodep/$1.protodep.txt --experimental_allow_proto3_optional && exit
 endef
 $(foreach proto,$(PROTO_SRCS),$(eval $(call BUILD_PROTO,$(proto))))
 
-protodep: $(addsuffix .protodep.txt,$(addprefix timestamp/protodep/,$(PROTO_SRCS)))
+protos: $(PROTODEP)
 
-protos: protodep
-
-codegen.jar: protobuf-java.jar $(JAVA_SRCS) protodep
+codegen.jar: protobuf-java.jar $(JAVA_SRCS) $(PROTODEP)
 	@rm -rf javabuild
 	find src/er -name '*.java' | xargs  javac -cp "protobuf-java.jar:protobufkt.jar" -d javabuild && exit
 	@jar cf codegen.jar -C javabuild . && exit
@@ -113,7 +112,6 @@ regenerate: removegenerated generated
 
 cleanlocal: removegenerated
 	rm -rf javabuild
-	rm -rf protodep
 	rm -f protoc
 	rm -f protoc.zip
 	rm -rf ../../generated
