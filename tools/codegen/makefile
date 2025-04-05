@@ -91,6 +91,7 @@ $(eval $(call GENERATE, include/generated/data/pokemon/reverse_mega_map.h, rever
 $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_entries.h, pokedexentries))
 $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_orders.h, pokedexorders))
 $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_numbers.h, pokedexnumbers))
+$(eval $(call GENERATE, include/generated/data/pokemon/randomizer_banned.h, randomizerbanned))
 
 $(eval $(call GENERATE, include/generated/constants/moves.h, moves))
 $(eval $(call GENERATE, include/generated/data/text/move_names.h, movenames))

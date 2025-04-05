@@ -52,6 +52,7 @@ object FileGenerator {
         "pokedexentries" to PokedexEntriesGenerator,
         "pokedexorders" to PokedexOrdersGenerator,
         "pokedexnumbers" to PokedexNumbersMapGenerator,
+        "randomizerbanned" to RandomizerBannedGenerator,
     )
 
     @JvmStatic
