@@ -2346,7 +2346,7 @@ static void ChangePageTask(u8 taskId) {
 
 static void PopulateAbilities(u16 *abilities) {
     int isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2;
-    int species = sMonSummaryScreen->summary.species;
+    SpeciesEnum species = sMonSummaryScreen->summary.species;
     int personality = sMonSummaryScreen->summary.pid;
 
     abilities[0] = GetAbilityBySpecies(sMonSummaryScreen->summary.species, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));

@@ -2260,7 +2260,7 @@ static int DisguiseReformHandler(AbilityEnum ability, int battler, AbilityCallTy
 }
 constexpr Ability Disguise = {
     .onEntry = +[](ON_ENTRY) -> int { return DisguiseReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
-    .onDisguise = +[](ON_DISGUISE) -> int {
+    .onDisguise = +[](ON_DISGUISE) -> SpeciesEnum {
         switch (gBattleMons[battler].species) {
             case SPECIES_MIMIKYU:
                 return SPECIES_MIMIKYU_BUSTED;
@@ -2613,7 +2613,7 @@ constexpr Ability GulpMissile = {
     },
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
-        int species = gBattleMons[battler].species;
+        SpeciesEnum species = gBattleMons[battler].species;
         CHECK(species == SPECIES_CRAMORANT_GORGING || species == SPECIES_CRAMORANT_GULPING)
         UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_CRAMORANT);
         gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
@@ -2686,7 +2686,7 @@ int IceFaceReformHandler(AbilityEnum ability, int battler, AbilityCallType callT
 }
 constexpr Ability IceFace = {
     .onEntry = +[](ON_ENTRY) -> int { return IceFaceReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
-    .onDisguise = +[](ON_DISGUISE) -> int { return gBattleMons[battler].species == SPECIES_EISCUE ? SPECIES_EISCUE_NOICE_FACE : SPECIES_NONE; },
+    .onDisguise = +[](ON_DISGUISE) -> SpeciesEnum { return gBattleMons[battler].species == SPECIES_EISCUE ? SPECIES_EISCUE_NOICE_FACE : SPECIES_NONE; },
     .onWeather = +[](ON_WEATHER) -> int { return IceFaceReformHandler(ability, battler, ABILITY_BS_CALL); },
     .breakable = TRUE,
     .unsuppressable = TRUE,
@@ -7132,8 +7132,8 @@ constexpr Ability Frostmaw = {
 
 constexpr Ability Patchwork = {
     .onEntry = Disguise.onEntry,
-    .onDisguise = +[](ON_DISGUISE) -> int {
-        int species = Disguise.onDisguise(DELEGATE_DISGUISE);
+    .onDisguise = +[](ON_DISGUISE) -> SpeciesEnum {
+        SpeciesEnum species = Disguise.onDisguise(DELEGATE_DISGUISE);
         if (species && !testOnly) {
             SetOncePerTurnAbilityCounter(battler, ABILITY_PATCHWORK, gBattlerAttacker + 1);
         }

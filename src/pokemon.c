@@ -5897,7 +5897,7 @@ u8 *sub_806F4F8(u8 id, u8 arg1) {
     }
 }
 
-u16 GetFormSpeciesId(u16 speciesId, u8 formId) {
+SpeciesEnum GetFormSpeciesId(SpeciesEnum speciesId, u8 formId) {
     if (gFormSpeciesIdTables[speciesId] != NULL)
         return gFormSpeciesIdTables[speciesId][formId];
     else
@@ -5913,7 +5913,7 @@ const SpeciesEnum *GetFormSpeciesTable(SpeciesEnum speciesId) {
 
 bool8 SpeciesHasDifferentForms(SpeciesEnum speciesId) { return gFormSpeciesIdTables[speciesId] != NULL; }
 
-u8 GetFormIdFromFormSpeciesId(u16 formSpeciesId) {
+u8 GetFormIdFromFormSpeciesId(SpeciesEnum formSpeciesId) {
     u8 targetFormId = 0;
 
     if (gFormSpeciesIdTables[formSpeciesId] != NULL) {
@@ -5976,7 +5976,7 @@ static void ShuffleStatArray(u8 *statArray) {
 }
 
 // returns SPECIES_NONE if no form change is possible
-u16 GetFormChangeTargetSpecies(struct Pokemon *mon, u16 method, u32 arg) {
+SpeciesEnum GetFormChangeTargetSpecies(struct Pokemon *mon, u16 method, u32 arg) {
     u32 i;
     u16 targetSpecies = SPECIES_NONE;
     SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -6327,7 +6327,7 @@ u8 RandomizeType(u8 type, SpeciesEnum species, u32 personality, bool8 isFirstTyp
 }
 
 AbilityEnum GetMonInnate(struct Pokemon *mon, int slot, int disableRandomizer) {
-    int species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     int personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     int level = GetMonData(mon, MON_DATA_LEVEL, NULL);
 

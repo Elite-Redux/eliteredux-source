@@ -36,7 +36,7 @@ int ScoreIntimidate(int battlerDef, int stat, int change, AbilityEnum ability, i
     return score;
 }
 
-int GetHpFormChangeSpecies(int battler, struct AiData* aiData) { return SPECIES_NONE; }
+SpeciesEnum GetHpFormChangeSpecies(int battler, struct AiData* aiData) { return SPECIES_NONE; }
 
 int ScoreAttackAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int move, int moveType, struct MoveState* moveState, struct AiData* aiData) {
     int score = 0;
@@ -402,7 +402,7 @@ int ScoreDefenseAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int
             return AI_SCORE_REPLACE_ABILITY(battlerAtk, ability) + AI_SCORE_REPLACE_ABILITY(battlerDef, GetBattlerAbility(battlerAtk));
 
         case ABILITY_GULP_MISSILE: {
-            int species = gBattleMons[battlerDef].species;
+            SpeciesEnum species = gBattleMons[battlerDef].species;
             REQUIRE(species == SPECIES_CRAMORANT_GORGING || species == SPECIES_CRAMORANT_GULPING)
             // TODO: Score turning back into normal cramorant
             return AI_SCORE_LOSE_HP(battlerAtk, 25) +
@@ -598,7 +598,7 @@ int ScoreDefenseAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int
         case ABILITY_APE_SHIFT:
             score = ScoreAttackAbility(ABILITY_ANGER_POINT, battlerAtk, battlerDef, move, moveType, moveState, aiData);
             {
-                int species = GetHpFormChangeSpecies(battlerAtk, aiData);
+                SpeciesEnum species = GetHpFormChangeSpecies(battlerAtk, aiData);
                 if (species == SPECIES_SLAKING_MEGA_APE_SHIFT) score += AI_SCORE_CURE_STATUS(battlerAtk);
                 return score + AI_SCORE_FORM_CHANGE(battlerAtk, species);
             }
@@ -769,7 +769,7 @@ int ScoreSwitchInFormShift(AbilityEnum ability, int battlerAtk, int battlerDef, 
             return 0;
 
         case ABILITY_APE_SHIFT: {
-            int species = GetHpFormChangeSpecies(battlerAtk, aiData);
+            SpeciesEnum species = GetHpFormChangeSpecies(battlerAtk, aiData);
             if (species == SPECIES_SLAKING_MEGA_APE_SHIFT) score += AI_SCORE_CURE_STATUS(battlerAtk);
             return score + AI_SCORE_FORM_CHANGE(battlerAtk, species);
         }

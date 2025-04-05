@@ -7946,7 +7946,7 @@ static void Cmd_various(void) {
             for (i = 0; i < gBattlersCount; i++) gStatuses4[i] |= STATUS4_PLASMA_FISTS;
             break;
         case VARIOUS_JUMP_IF_SPECIES: {
-            int species = READ_16_INC;
+            SpeciesEnum species = READ_16_INC;
             ptr = READ_PTR_INC;
             if (gBattleMons[gActiveBattler].species == species) gBattlescriptCurrInstr = ptr;
         }

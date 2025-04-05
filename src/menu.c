@@ -2137,12 +2137,12 @@ void sub_819A080(const struct Bitmap *src, struct Bitmap *dst, u16 srcX, u16 src
     }
 }
 
-void sub_819A25C(u8 palOffset, u16 speciesId)
+void sub_819A25C(u8 palOffset, SpeciesEnum speciesId)
 {
     LoadPalette(GetValidMonIconPalettePtr(speciesId), palOffset, 0x20);
 }
 
-void sub_819A27C(u8 windowId, u16 speciesId, u32 personality, u16 x, u16 y)
+void sub_819A27C(u8 windowId, SpeciesEnum speciesId, u32 personality, u16 x, u16 y)
 {
     BlitBitmapToWindow(windowId, GetMonIconPtr(speciesId, personality), x, y, 32, 32);
 }

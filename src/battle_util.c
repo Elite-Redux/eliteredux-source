@@ -3666,7 +3666,7 @@ const HpTransformation gHpTransformations[] = {
 
 bool32 ShouldChangeFormHpBased(u32 battler) {
     u32 i;
-    int species = gBattleMons[battler].species;
+    SpeciesEnum species = gBattleMons[battler].species;
 
     if (gBattleMons[battler].status2 & STATUS2_TRANSFORMED) return FALSE;
     if (!IsBattlerAlive(battler)) return FALSE;
@@ -5173,7 +5173,7 @@ static bool32 GetMentalHerbEffect(u8 battlerId) {
 }
 
 static int CanUseHoney(int battler) {
-    int species = GET_BASE_SPECIES_ID(gBattleMons[battler].spDefense);
+    SpeciesEnum species = GET_BASE_SPECIES_ID(gBattleMons[battler].spDefense);
     switch (species) {
         case SPECIES_COMBEE:
         case SPECIES_VESPIQUEN:
@@ -7860,7 +7860,7 @@ u16 CalcTypeEffectivenessMultiplier(MoveEnum move, u8 moveType, u8 battlerAtk, u
     return modifier;
 }
 
-u16 CalcPartyMonTypeEffectivenessMultiplier(MoveEnum move, u16 speciesDef, u16 abilityDef, u8 battlerDef) {
+u16 CalcPartyMonTypeEffectivenessMultiplier(MoveEnum move, SpeciesEnum speciesDef, u16 abilityDef, u8 battlerDef) {
     u16 modifier = UQ_4_12(1.0);
     u8 moveType = gBattleMoves[move].type;
 
@@ -7954,7 +7954,7 @@ bool32 IsPartnerMonFromSameTrainer(u8 battlerId) {
         return TRUE;
 }
 
-u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId) {
+SpeciesEnum GetMegaEvolutionSpecies(SpeciesEnum preEvoSpecies, u16 heldItemId) {
     u32 i;
 
     for (i = 0; gEvolutionTable[preEvoSpecies][i].method; i++) {
@@ -7964,7 +7964,7 @@ u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId) {
     return SPECIES_NONE;
 }
 
-u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId) {
+SpeciesEnum GetPrimalReversionSpecies(SpeciesEnum preEvoSpecies, u16 heldItemId) {
     u32 i;
 
     for (i = 0; gEvolutionTable[preEvoSpecies][i].method; i++) {
@@ -7974,7 +7974,7 @@ u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId) {
     return SPECIES_NONE;
 }
 
-u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, MoveEnum moveId1, MoveEnum moveId2, MoveEnum moveId3, MoveEnum moveId4) {
+SpeciesEnum GetWishMegaEvolutionSpecies(SpeciesEnum preEvoSpecies, MoveEnum moveId1, MoveEnum moveId2, MoveEnum moveId3, MoveEnum moveId4) {
     u32 i, par;
 
     for (i = 0; gEvolutionTable[preEvoSpecies][i].method; i++) {
@@ -8720,7 +8720,7 @@ u8 TranslateStatId(u8 statId, u8 battlerId) {
 
 bool32 IsAlly(u32 battlerAtk, u32 battlerDef) { return (GetBattlerSide(battlerAtk) == GetBattlerSide(battlerDef)); }
 
-u16 GetInnateInSlot(int level, SpeciesEnum species, u8 position, u32 personality, u8 isPlayer) {
+AbilityEnum GetInnateInSlot(int level, SpeciesEnum species, u8 position, u32 personality, u8 isPlayer) {
     if (isPlayer) {
         switch (position) {
             case 0:
