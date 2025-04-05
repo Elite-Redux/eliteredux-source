@@ -5,6 +5,10 @@ ifeq (compare,$(MAKECMDGOALS))
   COMPARE := 1
 endif
 
+ifeq (keeptemps,$(MAKECMDGOALS))
+  KEEP_TEMPS := 1
+endif
+
 # don't use dkP's base_tools anymore
 # because the redefinition of $(CC) conflicts
 # with when we want to use $(CC) to preprocess files
@@ -235,6 +239,8 @@ endif
 
 # For contributors to make sure a change didn't affect the contents of the ROM.
 compare: all
+
+keeptemps: all
 
 clean: mostlyclean clean-tools
 

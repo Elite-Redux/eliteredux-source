@@ -1,6 +1,5 @@
 package er.gfx
 
-import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.SPECIES_LIST
@@ -31,8 +30,6 @@ object ImageGenerator : Generator {
     }
 
     override fun generate(writer: OutputStreamWriter) {
-        writer.appendLine(header)
-
         printImageTable(writer, "__sFrontPic_", "gMonFrontPicTable") { it.visuals.front.path }
         printImageTable(writer, "__sFrontPicFemale_", "gMonFrontPicTableFemale") { it.visuals.female.front }
         printImageTable(writer, "__sBackPic_", "gMonBackPicTable") { it.visuals.back.path }

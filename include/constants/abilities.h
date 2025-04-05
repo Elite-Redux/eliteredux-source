@@ -1,5 +1,8 @@
-#ifndef GUARD_CONSTANTS_ABILITIES_H
-#define GUARD_CONSTANTS_ABILITIES_H
+#pragma once
+
+#if USE_GENERATED_SPECIES || USE_GENERATED_ABILITIES
+#include "generated/constants/abilities.h"
+#else
 
 #define ABILITY_NONE 0 // Empty ability slot.
 #define ABILITY_STENCH 1 // Attacks have a 10% chance to cause enemy to flinch.
@@ -57,7 +60,7 @@
 #define ABILITY_PICKUP 53 // Removes all hazards on entry. Not immune to hazards.
 #define ABILITY_TRUANT 54 // Can only attack every other turn. Can use status moves every turn.
 #define ABILITY_HUSTLE 55 // 0.9x accuracy. Raises Atk & SpAtk by 1.4x.
-#define ABILITY_CUTE_CHARM 56 // 30% chance to charm attacker on contact, which halves its power.
+#define ABILITY_CUTE_CHARM 56 // 50% chance to attract on contact. Also works on offense.
 #define ABILITY_PLUS 57 // Deals double damage if an ally Pokémon has Minus or Plus.
 #define ABILITY_MINUS 58 // Deals double damage if an ally Pokémon has Minus or Plus.
 #define ABILITY_FORECAST 59 // Changes form with the weather. Weather setting triggers attack.
@@ -134,7 +137,7 @@
 #define ABILITY_PICKPOCKET 124 // Steals the foe's held item on contact.
 #define ABILITY_SHEER_FORCE 125 // Exchanges added effects on its moves for 1.3x more power.
 #define ABILITY_CONTRARY 126 // Stat raises turn into stat drops for this Pokémon and vice versa.
-#define ABILITY_UNNERVE 127 // Foes can't eat Berries as long as this Pokémon is in battle.
+#define ABILITY_UNNERVE 127 // Foes can't use consumable items.
 #define ABILITY_DEFIANT 128 // Raises Attack by two stages if stats are lowered by an enemy.
 #define ABILITY_DEFEATIST 129 // Halves Atk and Sp. Atk stats if user is below 1/3 of max HP.
 #define ABILITY_CURSED_BODY 130 // 30% chance to disable moves if enemy makes contact.
@@ -154,7 +157,7 @@
 #define ABILITY_REGENERATOR 144 // Heals 1/3 of max HP upon switching out.
 #define ABILITY_BIG_PECKS 145 // Boosts the power of contact moves by 1.3x.
 #define ABILITY_SAND_RUSH 146 // This Pokémon's Speed gets a 1.5x boost in a sandstorm.
-#define ABILITY_WONDER_SKIN 147 // Opposing status moves have their accuracy halved.
+#define ABILITY_WONDER_SKIN 147 // Blocks most damage boosting and multihit abilities.
 #define ABILITY_ANALYTIC 148 // Attacks get a 1.3x power boost if it moves last.
 #define ABILITY_ILLUSION 149 // Appears as last party slot and boosts power by 1.3x until hit.
 #define ABILITY_IMPOSTER 150 // Transforms into the foe on entry.
@@ -332,7 +335,7 @@
 #define ABILITY_HALF_DRAKE 310 // Adds Dragon type to itself.
 #define ABILITY_LIQUIFIED 311 // Takes 1/2 dmg from contact moves but Water moves hurt it 2x more.
 #define ABILITY_DRAGONFLY 312 // Adds Dragon type to itself. Avoids Ground attacks.
-#define ABILITY_DRAGONSLAYER 313 // Deals 1.5x damage to Dragons. Takes .5x damage from Dragons.
+#define ABILITY_DRAGONSLAYER 313 // Deals 1.5x damage to Dragons. Takes 0.5x damage from Dragons.
 #define ABILITY_MOUNTAINEER 314 // Immune to Rock-type attacks and Stealth Rock damage.
 #define ABILITY_HYDRATE 315 // Normal-type moves become Water- type moves and get a 1.1x boost.
 #define ABILITY_METALLIC 316 // Adds Steel type to itself.
@@ -406,7 +409,7 @@
 #define ABILITY_LOW_BLOW 384 // Attacks with 40BP Feint Attack on switch-in.
 #define ABILITY_NOSFERATU 385 // Contact moves do +20% damage and heal 1/2 of damage dealt.
 #define ABILITY_SPECTRAL_SHROUD 386 // Spectralize + 30% chance to badly poison the foe.
-#define ABILITY_DISCIPLINE 387 // Rampage moves no longer trap you. Can't be confused or intimidated.
+#define ABILITY_DISCIPLINE 387 // You can switch during lock-in moves. Immune to confusion/intimidate.
 #define ABILITY_THUNDERCALL 388 // Triggers Smite at 20% power when using an Electric move.
 #define ABILITY_MARINE_APEX 389 // 50% more damage to Water- types + Infiltrator.
 #define ABILITY_MIGHTY_HORN 390 // Boosts the power of horn and drill-based by 1.3x.
@@ -457,7 +460,7 @@
 #define ABILITY_AMBUSH 435 // Guaranteed critical hit on first turn.
 #define ABILITY_ATLAS 436 // Sets Gravity on entry for 8 turns.
 #define ABILITY_RADIANCE 437 // +20% accuracy; Dark moves fail when user is present.
-#define ABILITY_JAWS_OF_CARNAGE 438 // Devours 1/2 of the foe when defeating it.
+#define ABILITY_JAWS_OF_CARNAGE 438 // Heals 1/2 HP when KO'ing with a biting move. 1/4 HP otherwise.
 #define ABILITY_ANGELS_WRATH 439 // Drastically alters all of the users moves.
 #define ABILITY_PRISMATIC_FUR 440 // Color Change + Protean + Fur Coat + Ice Scales.
 #define ABILITY_SHOCKING_JAWS 441 // Biting moves have 50% chance to paralyze the target.
@@ -516,7 +519,7 @@
 #define ABILITY_ARCANE_FORCE 494 // All moves gain STAB. Ups “supereffective” by 10%.
 #define ABILITY_DOOMBRINGER 495 // Uses Doom Desire on switch-in.
 #define ABILITY_WISHMAKER 496 // Uses Wish on switch-in. Three uses per battle.
-#define ABILITY_YUKI_ONNA 497 // Scare + Intimidate. 10% chance to infatuate on hit.
+#define ABILITY_YUKI_ONNA 497 // Scare + Intimidate. 30% chance to infatuate on hit.
 #define ABILITY_SUPPRESS 498 // Casts Torment on entry.
 #define ABILITY_REFRIGERATOR 499 // Filter + Illuminate.
 #define ABILITY_HEAVEN_ASUNDER 500 // Spacial Rend always crits. Ups crit level by +1.
@@ -575,7 +578,7 @@
 #define ABILITY_GUARD_DOG 553 // Can't be forced out. Inverts Intimidate effects.
 #define ABILITY_ANGER_SHELL 554 // Applies Shell Smash when reduced below 1/2 HP.
 #define ABILITY_EGOIST 555 // Raises its own stats when foes raise theirs.
-#define ABILITY_SUBDUE 556 // Doubles the power of stat dropping moves.
+#define ABILITY_SUBDUE 556 // Doubles stat drop effects used by this pokemon.
 #define ABILITY_READIED_ACTION 557 // Doubles attack on first turn.
 #define ABILITY_DARK_GALE_WINGS 558 // At full HP, gives +1 priority to this Pokémon's Dark-type moves.
 #define ABILITY_GUILT_TRIP 559 // Sharply lowers attacker's Attack and SpAtk when fainting.
@@ -616,7 +619,7 @@
 #define ABILITY_HAUNTING_FRENZY 594 // 20% chance to flinch the opponent. +1 speed on kill.
 #define ABILITY_NOISE_CANCEL 595 // Protects the party from sound- based moves.
 #define ABILITY_RADIO_JAM 596 // Sound-based moves have a 20% chance to inflict disable.
-#define ABILITY_OLE 597 // 30% chance to evade single- target moves.
+#define ABILITY_OLE 597 // 20% chance to evade single- target moves.
 #define ABILITY_MALICIOUS 598 // Lowers the foe's highest Attack and Defense stat.
 #define ABILITY_DEAD_POWER 599 // 1.5x Attack boost. 20% chance to curse on contact moves.
 #define ABILITY_BRAWLING_WYVERN 600 // No guard + Dragon type moves become punching moves.
@@ -645,7 +648,7 @@
 #define ABILITY_SURPRISE 623 // Astonishes enemy priority users in fog.
 #define ABILITY_SNOW_SONG 624 // Sound moves get a 1.2x boost and become Ice if Normal.
 #define ABILITY_GREATER_SPIRIT 625 // Ups highest stat by +1 on entry in fog.
-#define ABILITY_RESONANCE 626 // Sound moves cause the target to  bleed.
+#define ABILITY_RESONANCE 626 // Sound moves have a 30% bleed chance.
 #define ABILITY_ETHEREAL_RUSH 627 // This Pokémon's Speed gets a 1.5x boost in fog.
 #define ABILITY_CUTE_ANTECEDENCE 628 // At full HP, gives +1 priority to its Fairy-type moves.
 #define ABILITY_RECURRING_NIGHTMARE 629 // Revives at 25% HP once after fainting in fog.
@@ -658,7 +661,7 @@
 #define ABILITY_BLOOD_BATH 636 // Immune to bleed. Inflict fear when inflicting bleed.
 #define ABILITY_BATTLE_AURA 637 // Sharply increases the critical hit rate for all while on the field.
 #define ABILITY_BLOODLUST 638 // Blood Bath + Soul Eater.
-#define ABILITY_PIERCING_SOLO 639 // Sound moves have a 30% chance to cause bleeding.
+#define ABILITY_PIERCING_SOLO 639 // Sound moves cause bleeding.
 #define ABILITY_RHYTHMIC 640 // Deals 10% more damage for each repeated move use.
 #define ABILITY_CHUNKY_BASS_LINE 641 // Triggers a 40BP Earthquake after using a sound move.
 #define ABILITY_DUAL_HAMMER 642 // Super Slammer moves hit twice for 70% damage.
@@ -685,7 +688,7 @@
 #define ABILITY_FUNERAL_PYRE 663 // Non-Ghost and Dark-types take 1/4 damage every turn.
 #define ABILITY_FLAME_BUBBLE 664 // Water Bubble + Flaming Soul.
 #define ABILITY_ELEMENTAL_VORTEX 665 // Flash Fire + Water Absorb.
-#define ABILITY_SNOWY_WRATH 666 // Snow Warning + Whiteout.
+#define ABILITY_SNOWY_WRATH 666 // Snow Warning + Cryomancy.
 #define ABILITY_PATTERN_CHANGE 667 // Changes type depending on the move it's about to use.
 #define ABILITY_NO_TURNING_BACK 668 // Boosts all stats but can't retreat when below 1/2 max HP.
 #define ABILITY_FLAMMABLE_COAT 669 // Changes forms when using or hit by a Fire-type move.
@@ -709,7 +712,7 @@
 #define ABILITY_VITALITY_STRIKE 687 // Heals for 10% of the damage dealt by punching moves.
 #define ABILITY_HUGE_WINGS 688 // Giant Wings + Levitate.
 #define ABILITY_SWORD_OF_DAMNATION 689 // Unaware + Sword of Ruin.
-#define ABILITY_RESTRAINING_ORDER 690 // Forces the attacker when hit once each switch-in.
+#define ABILITY_RESTRAINING_ORDER 690 // Forces the attacker out when hit     once each switch-in.
 #define ABILITY_ASSASSINS_TOOLS 691 // Contact moves have a 30% chance to PSN, PRLZ, or BLD.
 #define ABILITY_FROSTMAW 692 // Biting moves have a 50% chance to inflict frostbite.
 #define ABILITY_PATCHWORK 693 // Disguise + curses the opponent when its Disguise breaks.
@@ -736,12 +739,12 @@
 #define ABILITY_APPLE_PIE 714 // Self Sufficient + Ripen.
 #define ABILITY_HOVER 715 // Adds Psychic type to itself. Avoids Ground attacks.
 #define ABILITY_DEPRAVITY 716 // Merciless + Overcharge.
-#define ABILITY_WILDFIRE 717 // Attacks with 20BP Fire Spin when hit by a contact move.
+#define ABILITY_WILDFIRE 717 // Attacks with Fire Spin on entry.
 #define ABILITY_JUMP_SCARE 718 // Attacks with Astonish on first switch-in.
 #define ABILITY_TAR_TOSS 719 // Uses Tar Shot on switch-in.
 #define ABILITY_STUN_SHOCK 720 // Attacks have a 60% chance to Paralyze or Poison.
 #define ABILITY_RAGING_GODDESS 721 // Rampage + Hyper Aggressive.
-#define ABILITY_WHIPLASH 722 // Physical attacks have a 50% chance to lower Defense.
+#define ABILITY_WHIPLASH 722 // Physical attacks lower Defense.
 #define ABILITY_SUPERSWEET_SYRUP 723 // Can't lose its item. Disables foe's item for 2 turns on contact.
 #define ABILITY_LUCKY_HALO 724 // Negates self stat drops. Survives the first hit that would KO it.
 #define ABILITY_TRASH_HEAP 725 // Corrosion + Toxic Spill.
@@ -769,15 +772,50 @@
 #define ABILITY_DAYBREAK 747 // Burns the foe on contact. Also works on offense.
 #define ABILITY_ENERGY_SIPHON 748 // Heals the user for 1/4 of the damage they deal.
 #define ABILITY_RESERVOIR 749 // Water Absorb + Storm Drain.
-#define ABILITY_NEUROTOXIN 750 // Inflicting poison also lowers Attack, Defense, and Speed.
+#define ABILITY_NEUROTOXIN 750 // Inflicting poison also lowers Attack, SpAtk, and Speed.
 #define ABILITY_ENERGIZED_HORNS 751 // Mighty horn moves become special and deal 30% more damage.
 #define ABILITY_SPIDER_LAIR_UPGRADE 752 // Casts Sticky Web on entry. Lasts 7 turns.
 #define ABILITY_CRUST_COAT 753 // Immune to critical hits. Takes 20% less damage from all attacks.
 #define ABILITY_PUFFY 754 // Takes 1/2 dmg from contact moves but Fire moves hurt it 2x more.
 #define ABILITY_BALLOON_BLITZ 755 // Inflatable + Hyper Aggressive.
 #define ABILITY_STRIKER_PIXILATE 756 // Striker + Pixilate.
+#define ABILITY_DOOM_BLAST 757 // Boosts own Dark moves by 1.35x, takes 10% of dmg dealt as recoil.
+#define ABILITY_BRUTEFORCE 758 // Rock Head + Reckless.
+#define ABILITY_FARADAY_CAGE 759 // Shell Armor + 50BP Thunder Cage when hit by contact.
+#define ABILITY_ACIDIC_SLIME 760 // Corrosion + Poison STAB.
+#define ABILITY_ROSE_GARDEN 761 // Sets 2 layers of Toxic Spikes on entry.
+#define ABILITY_QIGONG 762 // Always hits. Fighting Spirit + Rampage.
+#define ABILITY_CONJOURER_OF_DECEIT 763 // Magic Guard + Magic Bounce.
+#define ABILITY_DEEP_FREEZE 764 // Boosts water and ice by 25% and halves fire damage taken
+#define ABILITY_SOUL_DEVOURER 765 // Phantom Pain + Soul Eater.
+#define ABILITY_CHAMPIONS_ENTRANCE 766 // Intimidate + Violent Rush.
+#define ABILITY_PRESTO 767 // At full HP, gives +1 priority to this Pokémon's Sound-based moves.
+#define ABILITY_SAMBA 768 // Striker + Dancer.
+#define ABILITY_JUNSHI_SANDA 769 // Punching or Kicking moves count as both Punching and Kicking moves.
+#define ABILITY_GLADIATOR 770 // Boosts Fighting-type moves by 1.3x, or 1.8x when below 1/3 HP.
+#define ABILITY_FORSAKEN_HEART 771 // KOs dealt anywhere on the field raise Attack by one stage.
+#define ABILITY_RELENTLESS 772 // Exploit Weakness + Merciless.
+#define ABILITY_SOOTHSAYER 773 // All hits will be not very effective for 5 turns against this Pokemon.
+#define ABILITY_CORRUPTED_MIND 774 // Psychic moves used by this Pokemon always hit super-effectively.
+#define ABILITY_FLAME_COAT 775 // Non-Fire-types take 1/8 dmg every turn when on field + Flash Fire.
+#define ABILITY_UNOWN_POWER 776 // Mystic Power + Hidden and Secret Power hit Super-effectively.
+#define ABILITY_SUPER_SCOPE 777 // Mega Launcher + Artillery.
+#define ABILITY_VENOM_CROWN 778 // Mighty Horn + Poison Point.
+#define ABILITY_BLIGHT_SCALE 779 // Multiscale + Poison Point.
+#define ABILITY_GUNMAN 780 // Mega Launcher + All moves are Mega Launcher boosted.
+#define ABILITY_HUNTERS_MARK 781 // Attacks switching foes with 40BP Spirit Shackle.
+#define ABILITY_HEMOLYSIS 782 // Poisoned foes can't heal and lose all stat buffs.
+#define ABILITY_CARETAKER 783 // Healer + Friend Guard.
+#define ABILITY_POSEIDONS_DOMINION 784 // Uses Whirlpool on entry.
+#define ABILITY_DUAL_SHADOW 785 // Changes form each turn. boosts elec/dark moves by 35% with 10% recoil.
+#define ABILITY_LULLABY 786 // Sing accuracy is 90% when used by this Pokémon.
+#define ABILITY_CRYO_ARCHITECT 787 // Boosts attack and def from ice and water
+#define ABILITY_GLACIAL_RAGE 788 // Triggers 50 BP Blizzard after using a Ice-type move.
+#define ABILITY_IMMOVABLE_OBJECT 789 // Impenetrable + Sturdy
+#define ABILITY_FRENZIED_PHANTOM 790 // Ha + Shadow Tag
+#define ABILITY_DNA_SCRAMBLE 791 // Changes into Attack, Speed, or Defense form based on move used.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_STRIKER_PIXILATE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_DNA_SCRAMBLE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

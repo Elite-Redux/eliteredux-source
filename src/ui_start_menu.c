@@ -65,25 +65,24 @@
 #include "constants/songs.h"
 #include "constants/rgb.h"
 #include "naming_screen.h"
-
-#define VAR_START_MENU_CURSOR_Y VAR_TEMP_0
-#define VAR_START_MENU_CURSOR_X VAR_TEMP_1
+#include "mgba_printf/mgba.h"
+#include "mgba_printf/mini_printf.h"
 
 // Menu actions
 enum
 {
     START_MENU_ACTION_POKEDEX,
-    START_MENU_ACTION_POKEMON,
-	START_MENU_ACTION_PLAYER,
-    START_MENU_ACTION_BAG,
     START_MENU_ACTION_DEXNAV,
+	START_MENU_ACTION_PC,
+    START_MENU_ACTION_POKEMON,
+    START_MENU_ACTION_BAG,
+	START_MENU_ACTION_PLAYER,
     START_MENU_ACTION_POKENAV,
 	START_MENU_ACTION_GUIDE,
 	START_MENU_ACTION_OPTIONS,
 	#ifdef DEBUG_BUILD
     START_MENU_ACTION_DEBUG,
     #endif
-	START_MENU_ACTION_PC,
     START_MENU_ACTION_SAVE,
     START_MENU_ACTION_EXIT,
     NUM_START_MENU_ACTIONS,
@@ -115,6 +114,8 @@ struct MenuResources
 	u8 CurrentMessage;
 	u16 bgTilemapBuffers[NUM_START_MENU_BACKGROUNDS][0x400];
 	u8 spriteIDs[NUM_START_MENU_SPRITES];
+	u8 MenuOptions[NUM_START_MENU_ACTIONS];
+	u8 actionNumber;
 };
 
 enum WindowIds
@@ -131,6 +132,155 @@ enum MessagesIds
 	MESSAGE_CANT_CHANGE_TIME,
 	MESSAGE_STEPS_RESET,
 	NUM_MESSAGES,
+};
+
+#define START_MENU_ACTION_NAME_LENGTH 20
+#define MAX_START_MENU_ACTION_DESCRIPTION_LENGTH 100
+#define MAX_SHOWN_START_MENU_ROWS 5
+#define MAX_SHOWN_START_MENU_OPTIONS MAX_SHOWN_START_MENU_ROWS * 2
+
+#define FLAG_NONE 0
+
+struct StartMenuActionData
+{
+    const u8 title[START_MENU_ACTION_NAME_LENGTH];
+    const u8 description[MAX_START_MENU_ACTION_DESCRIPTION_LENGTH];
+	u16 flag;
+};
+
+static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS] = {
+    [START_MENU_ACTION_POKEDEX] =
+    {
+        .title = _("Pokedex"),
+        .description = _(
+			"Open a database of all\n"
+			"the Pokémon you have\n"
+			"seen and all their\n"
+			"information."
+		),
+		.flag = FLAG_SYS_POKEDEX_GET,
+    },
+	[START_MENU_ACTION_PLAYER] =
+    {
+        .title = _("{PLAYER}."),
+        .description = _(
+			"See all your Trainer\n"
+			"information, money,\n"
+			"battle points, etc."
+		),
+		.flag = FLAG_NONE,
+    },
+	[START_MENU_ACTION_POKEMON] =
+    {
+        .title = _("Pokemon"),
+        .description = _(
+			"Organize your Pokémon\n"
+			"party, see their stats,\n"
+			"change their moves\n"
+			"or even evolve them."
+		),
+		.flag = FLAG_SYS_POKEMON_GET,
+    },
+	[START_MENU_ACTION_PC] =
+    {
+        .title = _("Use the PC"),
+        .description = _(
+			"Open the Pokemon\n"
+			"Storage System without\n"
+			"having to go to any\n"
+			"Pokemon Center."
+		),
+		.flag = FLAG_SYS_POKEMON_GET,
+    },
+	[START_MENU_ACTION_BAG] =
+    {
+        .title = _("Inventory"),
+        .description = _(
+			"Organize your Inventory,\n"
+			"use your items or\n"
+			"power up your Pokémon\n"
+			"party."
+		),
+		.flag = FLAG_NONE,
+    },
+	[START_MENU_ACTION_OPTIONS] =
+    {
+        .title = _("Settings"),
+        .description = _(
+			"Change your settings,\n"
+			"character colors,\n"
+			"bike type or disable\n"
+			"stuff you don't like."
+		),
+		.flag = FLAG_NONE,
+    },
+	[START_MENU_ACTION_POKENAV] =
+    {
+        .title = _("PokeNav"),
+        .description = _(
+			"Change your settings,\n"
+			"character colors,\n"
+			"bike type or disable\n"
+			"stuff you don't like."
+		),
+		.flag = FLAG_SYS_POKENAV_GET,
+    },
+	[START_MENU_ACTION_GUIDE] =
+    {
+        .title = _("Information"),
+        .description = _(
+			"See some in-game,\n"
+			"changes and tips to\n"
+			"make your adventure\n"
+			"easier."
+		),
+		.flag = FLAG_NONE,
+    },
+	[START_MENU_ACTION_DEXNAV] =
+    {
+        .title = _("DexNav"),
+        .description = _(
+			"Search for nearby\n"
+			"Pokémon, chain them,\n"
+			"or just see the list\n"
+			"of available Pokémon."
+		),
+		.flag = FLAG_SYS_DEXNAV_GET,
+    },
+	#ifdef DEBUG_BUILD
+	[START_MENU_ACTION_DEBUG] =
+    {
+        .title = _("Debug"),
+        .description = _(
+			"Open some developer\n"
+			"options that let you\n"
+			"cheat anything into\n"
+			"the game."
+		),
+		.flag = FLAG_NONE,
+    },
+    #endif
+	[START_MENU_ACTION_SAVE] =
+    {
+        .title = _("Save"),
+        .description = _(
+			"Save your game with\n"
+			"a complete record of\n"
+			"your progress to take\n"
+			"a break."
+		),
+		.flag = FLAG_NONE,
+    },
+	[START_MENU_ACTION_EXIT] =
+    {
+        .title = _("Exit"),
+        .description = _(
+			"Exit this menu and\n"
+			"continue your Pokémon\n"
+			"adventure!"
+		),
+		.flag = FLAG_NONE,
+    },
 };
 
 //==========EWRAM==========//
@@ -283,6 +433,7 @@ void Task_OpenStartMenuFromStartMenu(u8 taskId)
 void Menu_Start_Init(MainCallback callback)
 {
 	u8 i;
+	u8 j = 0;
 	if ((sMenuDataPtr = AllocZeroed(sizeof(struct MenuResources))) == NULL)
     {
         SetMainCallback2(callback);
@@ -293,14 +444,23 @@ void Menu_Start_Init(MainCallback callback)
     sMenuDataPtr->gfxLoadState = 0;
     sMenuDataPtr->savedCallback = callback;
 	
-	sMenuDataPtr->cursorRowY = VarGet(VAR_START_MENU_CURSOR_Y);
-	sMenuDataPtr->FirstItem  = VarGet(VAR_START_MENU_CURSOR_X);
+	sMenuDataPtr->cursorRowY = gSaveBlock2Ptr->start_cursorRowY;
+	sMenuDataPtr->FirstItem  = gSaveBlock2Ptr->start_FirstItem;
 	
 	sMenuDataPtr->KonamiCodeState = 0;
 	//setCorrectSeason();
 
 	for(i = 0; i < NUM_START_MENU_SPRITES; i++)
 		sMenuDataPtr->spriteIDs[i] = 0xFF;
+
+	for(i = 0; i < NUM_START_MENU_ACTIONS; i++){
+		if(FlagGet(StartMenuActions[i].flag) || StartMenuActions[i].flag == FLAG_NONE){
+			sMenuDataPtr->MenuOptions[j] = i;
+			j++;
+		}
+	}
+
+	sMenuDataPtr->actionNumber = j;
 
     SetMainCallback2(Menu_RunSetup);
 }
@@ -355,7 +515,7 @@ static void SpriteCallback_Inventory_UpArrow(struct Sprite *sprite)
 
 static void SpriteCallback_Inventory_DownArrow(struct Sprite *sprite)
 {
-    u8 numitems = NUM_START_MENU_ACTIONS;
+    u8 numitems = sMenuDataPtr->actionNumber;
     sprite->data[0] += 8;
 
     if(sMenuDataPtr->cursorRowY >= numitems -1) //Because of the Exit Button
@@ -768,6 +928,9 @@ const u8 sStartMenu_IconGfx_Pokemon[]   	 = INCBIN_U8("graphics/ui_menus/start_m
 const u8 sStartMenu_IconGfx_PokeNav[]   	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_pokenav.4bpp");
 const u8 sStartMenu_IconGfx_Save[]   	 	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_save.4bpp");
 const u8 sStartMenu_IconGfx_Skills[]   		 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_skills.4bpp");
+const u8 sStartMenu_IconGfx_Use_PC[]   		 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_pss.4bpp");
+const u8 sStartMenu_IconGfx_Info[]   		 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_info.4bpp");
+const u8 sStartMenu_IconGfx_Debug[]   		 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_debug.4bpp");
 
 const u8 sStartMenu_IconGfx_Achievements_Selected[]  = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_achievements_selected.4bpp");
 const u8 sStartMenu_IconGfx_Bag_Selected[]   		 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_bag_selected.4bpp");
@@ -780,6 +943,9 @@ const u8 sStartMenu_IconGfx_Pokemon_Selected[]   	 = INCBIN_U8("graphics/ui_menu
 const u8 sStartMenu_IconGfx_PokeNav_Selected[]   	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_pokenav_selected.4bpp");
 const u8 sStartMenu_IconGfx_Save_Selected[]   	 	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_save_selected.4bpp");
 const u8 sStartMenu_IconGfx_Skills_Selected[]   	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_skills_selected.4bpp");
+const u8 sStartMenu_IconGfx_Use_PC_Selected[]   	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_pss_selected.4bpp");
+const u8 sStartMenu_IconGfx_Info_Selected[]   	 	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_info_selected.4bpp");
+const u8 sStartMenu_IconGfx_Debug_Selected[]   	 	 = INCBIN_U8("graphics/ui_menus/start_menu/icons/icon_debug_selected.4bpp");
 
 static const u8 sStartMenuHeldItem_Gfx[]   		 = INCBIN_U8("graphics/ui_menus/start_menu/icons/held_item.4bpp");
 static const u8 sStartMenuStatus_Burn_Gfx[]      = INCBIN_U8("graphics/ui_menus/start_menu/icons/status_burn.4bpp");
@@ -787,140 +953,6 @@ static const u8 sStartMenuStatus_Poison_Gfx[]    = INCBIN_U8("graphics/ui_menus/
 static const u8 sStartMenuStatus_Freeze_Gfx[]    = INCBIN_U8("graphics/ui_menus/start_menu/icons/status_freeze.4bpp");
 static const u8 sStartMenuStatus_Paralysis_Gfx[] = INCBIN_U8("graphics/ui_menus/start_menu/icons/status_paralysis.4bpp");
 static const u8 sStartMenuStatus_Sleep_Gfx[]     = INCBIN_U8("graphics/ui_menus/start_menu/icons/status_sleep.4bpp");
-
-#define START_MENU_ACTION_NAME_LENGTH 20
-#define MAX_START_MENU_ACTION_DESCRIPTION_LENGTH 100
-#define MAX_SHOWN_START_MENU_ROWS 5
-#define MAX_SHOWN_START_MENU_OPTIONS MAX_SHOWN_START_MENU_ROWS * 2
-
-struct StartMenuActionData
-{
-    const u8 title[START_MENU_ACTION_NAME_LENGTH];
-    const u8 description[MAX_START_MENU_ACTION_DESCRIPTION_LENGTH];
-};
-
-static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS] = {
-    [START_MENU_ACTION_POKEDEX] =
-    {
-        .title = _("Pokedex"),
-        .description = _(
-			"Open a database of all\n"
-			"the Pokémon you have\n"
-			"seen and all their\n"
-			"information."
-		),
-    },
-	[START_MENU_ACTION_PLAYER] =
-    {
-        .title = _("{PLAYER}."),
-        .description = _(
-			"See all your Trainer\n"
-			"information, money,\n"
-			"battle points, etc."
-		),
-    },
-	[START_MENU_ACTION_POKEMON] =
-    {
-        .title = _("Pokemon"),
-        .description = _(
-			"Organize your Pokémon\n"
-			"party, see their stats,\n"
-			"change their moves\n"
-			"or even evolve them."
-		),
-    },
-	[START_MENU_ACTION_PC] =
-    {
-        .title = _("Use the PC"),
-        .description = _(
-			"See all your completed\n"
-			"Achievements, get your\n"
-			"rewards or see what you\n"
-			"need to complete."
-		),
-    },
-	[START_MENU_ACTION_BAG] =
-    {
-        .title = _("Inventory"),
-        .description = _(
-			"Organize your Inventory,\n"
-			"use your items or\n"
-			"power up your Pokémon\n"
-			"party."
-		),
-    },
-	[START_MENU_ACTION_OPTIONS] =
-    {
-        .title = _("Settings"),
-        .description = _(
-			"Change your settings,\n"
-			"character colors,\n"
-			"bike type or disable\n"
-			"stuff you don't like."
-		),
-    },
-	[START_MENU_ACTION_POKENAV] =
-    {
-        .title = _("PokeNav"),
-        .description = _(
-			"Change your settings,\n"
-			"character colors,\n"
-			"bike type or disable\n"
-			"stuff you don't like."
-		),
-    },
-	[START_MENU_ACTION_GUIDE] =
-    {
-        .title = _("Information"),
-        .description = _(
-			"Change your settings,\n"
-			"character colors,\n"
-			"bike type or disable\n"
-			"stuff you don't like."
-		),
-    },
-	[START_MENU_ACTION_DEXNAV] =
-    {
-        .title = _("DexNav"),
-        .description = _(
-			"Search for nearby\n"
-			"Pokémon, chain them,\n"
-			"or just see the list\n"
-			"of available Pokémon."
-		),
-    },
-	#ifdef DEBUG_BUILD
-	[START_MENU_ACTION_DEBUG] =
-    {
-        .title = _("Debug"),
-        .description = _(
-			"Power Up your trainer\n"
-			"skills to give you an\n"
-			"advantage in your\n"
-			"adventure."
-		),
-    },
-    #endif
-	[START_MENU_ACTION_SAVE] =
-    {
-        .title = _("Save"),
-        .description = _(
-			"Save your game with\n"
-			"a complete record of\n"
-			"your progress to take\n"
-			"a break."
-		),
-    },
-	[START_MENU_ACTION_EXIT] =
-    {
-        .title = _("Exit"),
-        .description = _(
-			"Exit this menu and\n"
-			"continue your Pokémon\n"
-			"adventure!"
-		),
-    },
-};
 
 //Saving Stuff
 enum
@@ -986,15 +1018,15 @@ static const struct StringList MonthList[MONTH_DEC + 1] = {
 };
 
 static const struct StringList DayNames[32] = {
-    [1] = _("1st"),
-    [2] = _("2nd"),
-    [3] = _("3rd"),
-    [4] = _("4th"),
-    [5] = _("5th"),
-    [6] = _("6th"),
-    [7] = _("7th"),
-    [8] = _("8th"),
-    [9] = _("9th"),
+    [1]  = _("1st"),
+    [2]  = _("2nd"),
+    [3]  = _("3rd"),
+    [4]  = _("4th"),
+    [5]  = _("5th"),
+    [6]  = _("6th"),
+    [7]  = _("7th"),
+    [8]  = _("8th"),
+    [9]  = _("9th"),
     [10] = _("10th"),
     [11] = _("11th"),
     [12] = _("12th"),
@@ -1033,7 +1065,7 @@ const u8 sText_Help_Bar_Disable[] = _("Disable");
 const u8 sText_Help_Bar_Use[]     = _("Use");
 const u8 sText_Help_Bar_Unmount[] = _("Dismount");
 
-const u8 sText_Help_Bar[]         = _("{START_BUTTON} Save {L_BUTTON} {STR_VAR_2} Bike {R_BUTTON} {STR_VAR_1} Auto Run");
+const u8 sText_Help_Bar[]         = _("{START_BUTTON} Save {L_BUTTON} {STR_VAR_2} Repel {R_BUTTON} {STR_VAR_1} Auto Run");
 const u8 sText_Help_Bar_No_Bike[] = _("{START_BUTTON} Save {R_BUTTON} {STR_VAR_1} Auto Run");
 
 const u8 sText_Message_Test[] = _(
@@ -1095,27 +1127,20 @@ const u8 sText_Message_TrainerInfo[] = _(
 
 #define GFX_STATUS_MINUS_X 3
 
+u8 getCurrentOptionIndex(u8 num){
+	return sMenuDataPtr->MenuOptions[num];
+}
+
 static void PrintToWindow(void)
 {
 	u8 windowId = WINDOW_1;
 	u8 i, j, x, y, x2, y2;
 	u8 strArray[16]; //For the Player Name
-	//const u8 *SelectedOption;
-	//const u8 *SelectedOption2;
-	//const u8 *Weekday;
-	//const u8 *CurrentSeason;
-	//const u8 *MonthName;
-	//const u8 *DayName;
-	
-	//u16 steps    = VarGet(VAR_FARAWAY_ISLAND_STEP_COUNTER);
-	//u8 season    = getCurrentSeason();
 	u8 hours     = gLocalTime.hours;
 	u8 minutes   = gLocalTime.minutes;
 	u8 font      = FONT_SMALL_NARROW;
 	u8 fontColor = FONT_BLACK_2;
-    //u16 year     = RtcGetCurrentYear();
-    //u8 month     = RtcGetCurrentMonth();
-    //u8 day       = RtcGetCurrentDay();
+	bool8 isRepelEnabled = gSaveBlock2Ptr->permanentRepel;
 	
 	FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
 
@@ -1138,11 +1163,11 @@ static void PrintToWindow(void)
 		if(j == START_MENU_ACTION_PLAYER)
 			StringCopy(&strArray[0], gSaveBlock2Ptr->playerName);
 		else
-			StringCopy(&strArray[0], StartMenuActions[j].title);
+			StringCopy(&strArray[0], StartMenuActions[getCurrentOptionIndex(j)].title);
 		
 		AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, &strArray[0]);
 
-		switch(j){
+		switch(getCurrentOptionIndex(j)){
 			case START_MENU_ACTION_POKEDEX:
 				if(j == sMenuDataPtr->cursorRowY)
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Pokedex_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
@@ -1175,16 +1200,16 @@ static void PrintToWindow(void)
 			break;
 			case START_MENU_ACTION_PC:
 				if(j == sMenuDataPtr->cursorRowY)
-					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Achievements_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
+					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Use_PC_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 				else
-					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Achievements, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
+					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Use_PC, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 			break;
 			#ifdef DEBUG_BUILD
 			case START_MENU_ACTION_DEBUG:
 				if(j == sMenuDataPtr->cursorRowY)
-					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Skills_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
+					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Debug_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 				else
-					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Skills, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
+					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Debug, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 			break;
     		#endif
 			case START_MENU_ACTION_POKENAV:
@@ -1200,6 +1225,11 @@ static void PrintToWindow(void)
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Options, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
 			break;
 			case START_MENU_ACTION_GUIDE:
+				if(j == sMenuDataPtr->cursorRowY)
+					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Info_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
+				else
+					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Info, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
+			break;
 			case START_MENU_ACTION_SAVE:
 				if(j == sMenuDataPtr->cursorRowY)
 					BlitBitmapToWindow(windowId, sStartMenu_IconGfx_Save_Selected, (x * 8) - EXTRA_SPACE_FOR_ICONS, (y * 8), 24, 24);
@@ -1217,14 +1247,6 @@ static void PrintToWindow(void)
 		y = y + EXTRA_SPACE_BETWEEN_OPTIONS_Y;
 	}
 	
-	//if(gLocalTime.dayOfWeek >= NUM_DAYS_OF_THE_WEEK)
-	//	RtcSetDayOfWeek(0);
-
-	//Weekday       = DaysOfTheWeek[0].string;
-	//CurrentSeason = SeasonList[season].string;
-	//MonthName     = MonthList[month].string;
-	//DayName       = DayNames[day].string;
-	
 	//Help Bar
 	x = 0;
     y = 18;
@@ -1235,15 +1257,12 @@ static void PrintToWindow(void)
 	else
 		StringCopy(gStringVar1, sText_Help_Bar_Disable);
 
-	if((gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_MACH_BIKE) || (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_ACRO_BIKE))
-		StringCopy(gStringVar2, sText_Help_Bar_Unmount);
+	if(!isRepelEnabled)
+		StringCopy(gStringVar2, sText_Help_Bar_Enable);
 	else
-		StringCopy(gStringVar2, sText_Help_Bar_Use);
+		StringCopy(gStringVar2, sText_Help_Bar_Disable);
 
-	if(CanUseBikeFromStartMenu())
-		StringExpandPlaceholders(gStringVar4, sText_Help_Bar);
-	else
-		StringExpandPlaceholders(gStringVar4, sText_Help_Bar_No_Bike);
+	StringExpandPlaceholders(gStringVar4, sText_Help_Bar);
 	AddTextPrinterParameterized4(windowId, font, (x*8)+4, (y*8), 0, 0, sMenuWindowFontColors[FONT_WHITE_2], 0xFF, gStringVar4);
 	
 	//Current Option Description
@@ -1251,10 +1270,11 @@ static void PrintToWindow(void)
     y  = 12;
 	x2 = 0;
 	y2 = 4;
+
 	switch(sMenuDataPtr->CurrentMessage){
 		case MESSAGE_HELP_BAR:
 			if(sMenuDataPtr->cursorRowY != START_MENU_ACTION_PLAYER)
-				StringCopy(gStringVar4, StartMenuActions[sMenuDataPtr->cursorRowY].description);
+				StringCopy(gStringVar4, StartMenuActions[getCurrentOptionIndex(sMenuDataPtr->cursorRowY)].description);
 			else{
 				u32 defeats      = 0 + VarGet(VAR_TIMES_WHITED_OUT);
 				u32 battlepoints = gSaveBlock2Ptr->frontier.battlePoints;
@@ -1289,31 +1309,6 @@ static void PrintToWindow(void)
 	x = 0;
     y = 0;
 	x2 = 4;
-	
-	//Date
-	/*StringCopy(gStringVar1, Weekday);
-	StringCopy(gStringVar2, DayName);
-	StringExpandPlaceholders(gStringVar4, DateDisplay1);
-
-	StringCopy(gStringVar1, gStringVar4);
-	StringCopy(gStringVar2, MonthName);
-	ConvertIntToDecimalStringN(gStringVar3, year, STR_CONV_MODE_LEFT_ALIGN, 4);
-	StringExpandPlaceholders(gStringVar4, MonthString);
-
-	StringCopy(gStringVar1, gStringVar4);
-
-	//Time
-	ConvertIntToDecimalStringN(gStringVar1, hours, STR_CONV_MODE_LEFT_ALIGN, 2);
-	ConvertIntToDecimalStringN(gStringVar2, minutes, STR_CONV_MODE_LEFT_ALIGN, 2);
-
-	if(minutes >= 10)
-		StringExpandPlaceholders(gStringVar4, TimeDisplay);
-	else
-		StringExpandPlaceholders(gStringVar4, TimeDisplay2);
-
-	StringCopy(gStringVar1, gStringVar4);
-	StringCopy(gStringVar2, CurrentSeason);
-	StringExpandPlaceholders(gStringVar4, SeasonDisplay);*/
 
 	StringCopy(gStringVar1, gText_SavingVersionNum);
 	StringExpandPlaceholders(gStringVar4, sEliteReduxTitle);
@@ -1328,14 +1323,11 @@ static void PrintToWindow(void)
     for(i = 0; i < PARTY_SIZE; i++){
         if(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE){
         	u32 currentStatus = GetAilmentFromStatus(GetMonData(&gPlayerParty[i], MON_DATA_STATUS));
-            //u16 maxHP = GetMonData(&gPlayerParty[i], MON_DATA_MAX_HP);
-            //u16 currentHP = GetMonData(&gPlayerParty[i], MON_DATA_HP);
 
             BlitBitmapToWindow(windowId, GetBarGfx(GetHPEggCyclePercent(i)), (x + x2) - ICON_STARTING_X2, (y + y2), 24, 8);
 			
 			if(GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM) != ITEM_NONE)
 				BlitBitmapToWindow(windowId, sStartMenuHeldItem_Gfx, (x + x2) - ICON_STARTING_X2 - 4, (y + y2) - 8, 8, 8);
-				//BlitBitmapToWindow(windowId, sStartMenuHeldItem_Gfx, (x + x2) - ICON_STARTING_X2 - 4, (y + y2) - 8, 8, 8);
 
 			switch(currentStatus){
 				case AILMENT_BRN:
@@ -1345,7 +1337,7 @@ static void PrintToWindow(void)
 					BlitBitmapToWindow(windowId, sStartMenuStatus_Paralysis_Gfx, (x + x2) - ICON_STARTING_X2 + 20, (y + y2) - 8, 8, 8);
 				break;
 				case AILMENT_FRZ:
-				//case AILMENT_FSB:
+				case AILMENT_FSB:
 					BlitBitmapToWindow(windowId, sStartMenuStatus_Freeze_Gfx, (x + x2) - ICON_STARTING_X2 + 20, (y + y2) - 8, 8, 8);
 				break;
 				case AILMENT_PSN:
@@ -1576,12 +1568,12 @@ static bool8 QuestMenuCallback(void)
 
 static void PressedDownButton(){
     u8 halfScreen = (MAX_SHOWN_START_MENU_ROWS) / 2;
-    u8 finalhalfScreen = NUM_START_MENU_ACTIONS - halfScreen;
+    u8 finalhalfScreen = sMenuDataPtr->actionNumber - halfScreen;
 
     if(sMenuDataPtr->cursorRowY < halfScreen){
         sMenuDataPtr->cursorRowY++;
     }
-	else if(sMenuDataPtr->cursorRowY >= (NUM_START_MENU_ACTIONS - 1)){ 
+	else if(sMenuDataPtr->cursorRowY >= (sMenuDataPtr->actionNumber - 1)){ 
 		//If you are in the last option go to the first one
 		sMenuDataPtr->cursorRowY = 0;
 		sMenuDataPtr->FirstItem = 0;
@@ -1597,7 +1589,7 @@ static void PressedDownButton(){
 
 static void PressedUpButton(){
     u8 halfScreen = (MAX_SHOWN_START_MENU_ROWS) / 2;
-    u8 finalhalfScreen = NUM_START_MENU_ACTIONS - halfScreen;
+    u8 finalhalfScreen = sMenuDataPtr->actionNumber - halfScreen;
 
     if(sMenuDataPtr->cursorRowY > halfScreen && sMenuDataPtr->cursorRowY <= (finalhalfScreen - 1)){
         sMenuDataPtr->cursorRowY--;
@@ -1605,8 +1597,8 @@ static void PressedUpButton(){
     }
 	else if(sMenuDataPtr->cursorRowY == 0){ 
 		//If you are in the first option go to the last one
-		sMenuDataPtr->cursorRowY = NUM_START_MENU_ACTIONS - 1;
-		sMenuDataPtr->FirstItem = NUM_START_MENU_ACTIONS - MAX_SHOWN_START_MENU_ROWS;
+		sMenuDataPtr->cursorRowY = sMenuDataPtr->actionNumber - 1;
+		sMenuDataPtr->FirstItem = sMenuDataPtr->actionNumber - MAX_SHOWN_START_MENU_ROWS;
     }
     else{
         sMenuDataPtr->cursorRowY--;
@@ -1776,8 +1768,8 @@ static void Task_MenuMain(u8 taskId)
 {
 	sMenuDataPtr->CurrentMessage = MESSAGE_HELP_BAR;
 
-	VarSet(VAR_START_MENU_CURSOR_Y, sMenuDataPtr->cursorRowY);
-	VarSet(VAR_START_MENU_CURSOR_X, sMenuDataPtr->FirstItem);
+	gSaveBlock2Ptr->start_cursorRowY = sMenuDataPtr->cursorRowY;
+	gSaveBlock2Ptr->start_FirstItem  = sMenuDataPtr->FirstItem;
 	
 	if (JOY_NEW(B_BUTTON))
     {
@@ -1788,7 +1780,7 @@ static void Task_MenuMain(u8 taskId)
 	
 	if (JOY_NEW(A_BUTTON))
     {
-		switch(sMenuDataPtr->cursorRowY)
+		switch(getCurrentOptionIndex(sMenuDataPtr->cursorRowY))
 		{
 			case START_MENU_ACTION_POKEDEX:
 				PlaySE(SE_SELECT);
@@ -1877,15 +1869,8 @@ static void Task_MenuMain(u8 taskId)
 	}
 	
 	if (JOY_NEW(L_BUTTON)){
-		if(CanUseBikeFromStartMenu()){
-			PlaySE(SE_SELECT);
-			BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-			gTasks[taskId].func = Task_MenuTurnOff_Bike;
-		}
-		else{
-			PlaySE(SE_BOO);
-			sMenuDataPtr->CurrentMessage = MESSAGE_CANT_USE_BIKE;
-		}
+		PlaySE(SE_SELECT);
+		gSaveBlock2Ptr->permanentRepel = !gSaveBlock2Ptr->permanentRepel;
 		PrintToWindow();
 	}
 	

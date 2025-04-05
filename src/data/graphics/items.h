@@ -1711,6 +1711,10 @@ const u32 gItemIconPalette_Meowthite[] = INCBIN_U32("graphics/items/icon_palette
 const u32 gItemIconPalette_VenusauriteX[]  = INCBIN_U32("graphics/items/icon_palettes/venusaurite.gbapal.lz");
 const u32 gItemIconPalette_BlastoisiniteX[]  = INCBIN_U32("graphics/items/icon_palettes/blastoisinite.gbapal.lz");
 const u32 gItemIconPalette_Yveltalite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIcon_PhantomMeteor[] = INCBIN_U32("graphics/items/icons/meteorite.4bpp.lz");
+const u32 gItemIconPalette_PhantomMeteor[] = INCBIN_U32("graphics/items/icon_palettes/meteorite.gbapal.lz");
+const u32 gItemIcon_KingdraniteY[] = INCBIN_U32("graphics/items/icons/kingdranite.4bpp.lz");
+const u32 gItemIconPalette_KingdraniteY[] = INCBIN_U32("graphics/items/icon_palettes/kingdranite.gbapal.lz");
 
 // Gen 7 Items
 
@@ -2047,6 +2051,9 @@ const u32 gItemIconPalette_BoosterEnergy[] = INCBIN_U32("graphics/items/icon_pal
 // Custom Items
 const u32 gItemIcon_TrainingBand[] = INCBIN_U32("graphics/items/icons/focus_sash.4bpp.lz");
 const u32 gItemIconPalette_TrainingBand[] = INCBIN_U32("graphics/items/icon_palettes/training_band.gbapal.lz");
+
+const u32 gItemIcon_SwirlyGlasses[] = INCBIN_U32("graphics/items/icons/swirly_glasses.4bpp.lz");
+const u32 gItemIconPalette_SwirlyGlasses[] = INCBIN_U32("graphics/items/icon_palettes/swirly_glasses.gbapal.lz");
 
 // Poké Ball Summary Icons
 const u32 gBallIcon_Poke[] = INCBIN_U32("graphics/summary_screen/ball_icons/poke.4bpp.lz");

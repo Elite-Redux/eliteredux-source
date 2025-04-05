@@ -626,6 +626,7 @@ static bool32 AI_GetIfCrit(u32 move, u8 battlerAtk, u8 battlerDef) {
     bool32 isCrit;
 
     switch (CalcCritChanceStage(battlerAtk, battlerDef, move, FALSE)) {
+        case -2:
         case -1:
         case 0:
         default:
@@ -645,7 +646,6 @@ static bool32 AI_GetIfCrit(u32 move, u8 battlerAtk, u8 battlerDef) {
             else
                 isCrit = FALSE;
             break;
-        case -2:
         case 3:
         case 4:
             isCrit = TRUE;
@@ -1043,7 +1043,7 @@ bool32 CanTargetFaintAiWithMod(u8 battlerDef, u8 battlerAtk, s32 hpMod, s32 dmgM
     return FALSE;
 }
 
-bool32 AI_IsAbilityOnSide(u32 battlerId, u32 ability) {
+bool32 AI_IsAbilityOnSide(u32 battlerId, AbilityEnum ability) {
     if (BattlerHasAbility(battlerId, ability, FALSE))
         return TRUE;
     else if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerId), ability, FALSE))
@@ -1186,7 +1186,7 @@ bool32 IsMoveEncouragedToHit(u8 battlerAtk, u8 battlerDef, u16 move) {
 
     if (IsSemiInvulnerable(battlerDef, move)) return FALSE;
 
-    if (BattlerHasAbility(battlerAtk, ABILITY_ARTILLERY, FALSE) && gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) return TRUE;
+    if ((BattlerHasAbility(battlerAtk, ABILITY_ARTILLERY, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_SUPER_SCOPE, FALSE)) && IsMegaLauncherBoosted(battlerAtk, move)) return TRUE;
 
     if ((BattlerHasAbility(battlerAtk, ABILITY_SWEEPING_EDGE, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_SWEEPING_EDGE_PLUS, FALSE)) &&
         gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
@@ -2000,7 +2000,7 @@ struct Pokemon *GetPartyBattlerPartyData(u8 battlerId, u8 switchBattler) {
 
 static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler) {
     struct Pokemon *mon = GetPartyBattlerPartyData(currBattler, switchBattler);
-    u16 ability = GetMonAbility(mon);  // we know our own party data
+    AbilityEnum ability = GetMonAbility(mon);  // we know our own party data
     u16 holdEffect = ItemId_GetHoldEffect(GetMonData(mon, MON_DATA_HELD_ITEM));
     u32 flags =
         gSideStatuses[GetBattlerSide(currBattler)] & (SIDE_STATUS_SPIKES | SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_STICKY_WEB | SIDE_STATUS_TOXIC_SPIKES);
@@ -2014,12 +2014,14 @@ static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler) {
         MonHasInnate(mon, ABILITY_APPLE_ENLIGHTENMENT, isEnemyMon) || holdEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS)
         return FALSE;
 
-    if (!(flags & SIDE_STATUS_STEALTH_ROCK) && !IsGravityActive() && holdEffect != HOLD_EFFECT_IRON_BALL &&
-        (ability == ABILITY_LEVITATE || MonHasInnate(mon, ABILITY_LEVITATE, isEnemyMon) || ability == ABILITY_AERIALIST ||
-         MonHasInnate(mon, ABILITY_AERIALIST, isEnemyMon) || ability == ABILITY_DRAGONFLY || MonHasInnate(mon, ABILITY_DRAGONFLY, isEnemyMon) ||
-         ability == ABILITY_HOVER || MonHasInnate(mon, ABILITY_HOVER, isEnemyMon) || holdEffect == HOLD_EFFECT_AIR_BALLOON ||
-         gBaseStats[species].type1 == TYPE_FLYING || gBaseStats[species].type2 == TYPE_FLYING))
-        return FALSE;
+    if (!(flags & SIDE_STATUS_STEALTH_ROCK) && !IsGravityActive() && holdEffect != HOLD_EFFECT_IRON_BALL) {
+        if (holdEffect == HOLD_EFFECT_AIR_BALLOON) return FALSE;
+        if (gBaseStats[species].type1 == TYPE_FLYING || gBaseStats[species].type2 == TYPE_FLYING) return FALSE;
+        if (gAbilities[ability].levitate) return FALSE;
+        for (int i = 0; i < NUM_INNATE_PER_SPECIES; i++) {
+            if (gAbilities[GetMonInnate(mon, i, isEnemyMon)].levitate) return FALSE;
+        }
+    }
 
     if (flags & (SIDE_STATUS_SPIKES | SIDE_STATUS_STEALTH_ROCK) && GetMonData(mon, MON_DATA_HP) < (GetMonData(mon, MON_DATA_MAX_HP) / 8)) return TRUE;
 
@@ -2060,16 +2062,18 @@ bool32 ShouldPivot(u8 battlerAtk, u8 battlerDef, u16 move, u8 moveIndex) {
                     // attacker can kill target in two hits (theoretically)
                     if (CanTargetFaintAi(battlerDef, battlerAtk)) return PIVOT;  // Won't get the two turns, pivot
 
-                    if (!IS_MOVE_STATUS(move) && (shouldSwitch || (AtMaxHp(battlerDef) && (AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH ||
-                                                                                           BattlerHasAbility(battlerDef, ABILITY_STURDY, TRUE) ||
-                                                                                           BattlerHasAbility(battlerDef, ABILITY_MULTISCALE, TRUE) ||
-                                                                                           BattlerHasAbility(battlerDef, ABILITY_SHADOW_SHIELD, TRUE)))))
+                    if (!IS_MOVE_STATUS(move) &&
+                        (shouldSwitch || (AtMaxHp(battlerDef) &&
+                                          ((AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH && !IsUnnerveAbilityOnOpposingSide(battlerDef)) ||
+                                           BattlerHasAbility(battlerDef, ABILITY_STURDY, TRUE) || BattlerHasAbility(battlerDef, ABILITY_MULTISCALE, TRUE) ||
+                                           BattlerHasAbility(battlerDef, ABILITY_SHADOW_SHIELD, TRUE)))))
                         return PIVOT;  // pivot to break sash/sturdy/multiscale
                 } else if (!hasStatBoost) {
                     if (!IS_MOVE_STATUS(move) &&
                         (AtMaxHp(battlerDef) &&
-                         (AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH || BattlerHasAbility(battlerDef, ABILITY_STURDY, TRUE) ||
-                          BattlerHasAbility(battlerDef, ABILITY_MULTISCALE, TRUE) || BattlerHasAbility(battlerDef, ABILITY_SHADOW_SHIELD, TRUE))))
+                         ((AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH && !IsUnnerveAbilityOnOpposingSide(battlerDef)) ||
+                          BattlerHasAbility(battlerDef, ABILITY_STURDY, TRUE) || BattlerHasAbility(battlerDef, ABILITY_MULTISCALE, TRUE) ||
+                          BattlerHasAbility(battlerDef, ABILITY_SHADOW_SHIELD, TRUE))))
                         return PIVOT;  // pivot to break sash/sturdy/multiscale
 
                     if (shouldSwitch) return PIVOT;
@@ -2103,7 +2107,7 @@ bool32 ShouldPivot(u8 battlerAtk, u8 battlerDef, u16 move, u8 moveIndex) {
                     if (IS_MOVE_STATUS(move) &&
                         (shouldSwitch  // Damaging move
                                        //&& (switchScore >= SWITCHING_INCREASE_RESIST_ALL_MOVES + SWITCHING_INCREASE_KO_FOE //remove hazards
-                         || (AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH && AtMaxHp(battlerDef))))
+                         || (AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH && !IsUnnerveAbilityOnOpposingSide(battlerDef) && AtMaxHp(battlerDef))))
                         return DONT_PIVOT;  // Pivot to break the sash
                     else
                         return CAN_TRY_PIVOT;
@@ -2188,7 +2192,7 @@ bool32 AI_CanSleep(u8 battler) { return CanSleep(battler); }
 bool32 AI_CanPutToSleep(u8 battlerAtk, u8 battlerDef, u16 move, u16 partnerMove) { return CanSleep(battlerDef); }
 
 bool32 ShouldPoisonSelf(u8 battler) {
-    if (CanBePoisoned(battler, battler) &&
+    if (CanBePoisoned(battler, battler, MOVE_NONE) &&
         (BattlerHasAbility(battler, ABILITY_POISON_HEAL, FALSE) || BattlerHasAbility(battler, ABILITY_MARVEL_SCALE, FALSE) ||
          BattlerHasAbility(battler, ABILITY_QUICK_FEET, FALSE) || IsMagicGuardProtected(battler) || HasMoveEffect(battler, EFFECT_FACADE) ||
          HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT) || (BattlerHasAbility(battler, ABILITY_TOXIC_BOOST, FALSE) && HasMoveWithSplit(battler, SPLIT_PHYSICAL)) ||
@@ -2197,7 +2201,7 @@ bool32 ShouldPoisonSelf(u8 battler) {
     else
         return FALSE;
 }
-bool32 AI_CanPoison(u8 battlerAtk, u8 battlerDef, u16 move, u16 partnerMove) { return CanBePoisoned(battlerAtk, battlerDef); }
+bool32 AI_CanPoison(u8 battlerAtk, u8 battlerDef, u16 move, u16 partnerMove) { return CanBePoisoned(battlerAtk, battlerDef, move); }
 
 bool32 AI_CanParalyze(u8 battlerAtk, u8 battlerDef, u16 move, u16 partnerMove) {
     if (!CanBeParalyzed(battlerAtk, battlerDef) || AI_GetMoveEffectiveness(move, battlerAtk, battlerDef) == AI_EFFECTIVENESS_x0 ||
@@ -2365,7 +2369,7 @@ bool32 ShouldAbsorb(u8 battlerAtk, u8 battlerDef, u16 move, s32 damage) {
         u8 healPercent = (gBattleMoves[move].argument == 0) ? 50 : gBattleMoves[move].argument;
         s32 healDmg = (healPercent * damage) / 100;
 
-        if (BATTLER_HEALING_BLOCKED(battlerAtk)) healDmg = 0;
+        if (!CanBattlerHeal(battlerAtk)) healDmg = 0;
 
         if (CanTargetFaintAi(battlerDef, battlerAtk) && !CanTargetFaintAiWithMod(battlerDef, battlerAtk, healDmg, 0))
             return TRUE;  // target can faint attacker unless they heal
@@ -2384,7 +2388,7 @@ bool32 ShouldRecover(u8 battlerAtk, u8 battlerDef, u16 move, u8 healPercent) {
         // using item or user going first
         s32 damage = AI_DATA->simulatedDmg[battlerAtk][battlerDef][AI_THINKING_STRUCT->movesetIndex];
         s32 healAmount = (healPercent * damage) / 100;
-        if (BATTLER_HEALING_BLOCKED(battlerAtk)) healAmount = 0;
+        if (!CanBattlerHeal(battlerAtk)) healAmount = 0;
 
         if (CanTargetFaintAi(battlerDef, battlerAtk) && !CanTargetFaintAiWithMod(battlerDef, battlerAtk, healAmount, 0))
             return TRUE;  // target can faint attacker unless they heal
@@ -2669,12 +2673,12 @@ bool32 SideHasMoveSplit(u8 battlerId, u8 split) {
     return FALSE;
 }
 
-bool32 IsAbilityOfRating(u16 ability, s8 rating) {
+bool32 IsAbilityOfRating(AbilityEnum ability, s8 rating) {
     if (sAiAbilityRatings[ability] >= rating) return TRUE;
     return FALSE;
 }
 
-s8 GetAbilityRating(u16 ability) { return sAiAbilityRatings[ability]; }
+s8 GetAbilityRating(AbilityEnum ability) { return sAiAbilityRatings[ability]; }
 
 static const u16 sRecycleEncouragedItems[] = {
     ITEM_CHESTO_BERRY,

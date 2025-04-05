@@ -577,6 +577,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Daisy),
         .party = {.ItemCustomMoves = sParty_Daisy},
+        .partySizeInsane = ARRAY_COUNT(sParty_DaisyInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_DaisyInsane},
     },
 
     [TRAINER_ROSE_1] =
@@ -2035,6 +2037,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Alannah),
         .party = {.ItemCustomMoves = sParty_Alannah},
+        .partySizeInsane = ARRAY_COUNT(sParty_AlannahInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_AlannahInsane},
     },
 
     [TRAINER_WINSTON_1] =
@@ -2135,6 +2139,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Elmer),
         .party = {.ItemCustomMoves = sParty_Elmer},
+        .partySizeInsane = ARRAY_COUNT(sParty_ElmerInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_ElmerInsane},
     },
 
     [TRAINER_STEVE_1] =
@@ -2253,6 +2259,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Roman),
         .party = {.ItemCustomMoves = sParty_Roman},
+        .partySizeInsane = ARRAY_COUNT(sParty_RomanInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_RomanInsane},
     },
 
     [TRAINER_LUIS] =
@@ -2409,6 +2417,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Nolen),
         .party = {.ItemCustomMoves = sParty_Nolen},
+        .partySizeInsane = ARRAY_COUNT(sParty_NolenInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_NolenInsane},
     },
 
     [TRAINER_STAN] =
@@ -2423,6 +2433,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Stan),
         .party = {.ItemCustomMoves = sParty_Stan},
+        .partySizeInsane = ARRAY_COUNT(sParty_StanInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_StanInsane},
     },
 
     [TRAINER_BARRY] =
@@ -2647,6 +2659,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Martin),
         .party = {.ItemCustomMoves = sParty_Martin},
+        .partySizeInsane = ARRAY_COUNT(sParty_MartinInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_MartinInsane},
     },
 
     [TRAINER_TAKAO] =
@@ -3381,6 +3395,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Derek),
         .party = {.ItemCustomMoves = sParty_Derek},
+        .partySizeInsane = ARRAY_COUNT(sParty_DerekInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_DerekInsane},
     },
 
     [TRAINER_JEFFREY_2] =
@@ -3615,6 +3631,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Jaclyn),
         .party = {.ItemCustomMoves = sParty_Jaclyn},
+        .partySizeInsane = ARRAY_COUNT(sParty_JaclynInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_JaclynInsane},
     },
 
     [TRAINER_HANNAH] =
@@ -4241,6 +4259,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_StevenMossdeep),
         .party = {.ItemCustomMoves = sParty_StevenMossdeep},
+        .partySizeInsane = ARRAY_COUNT(sParty_StevenmossdeepInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_StevenmossdeepInsane},
     },
 
     [TRAINER_KATE_AND_JOY] =
@@ -4271,6 +4291,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_AnnaAndMeg1),
         .party = {.ItemCustomMoves = sParty_AnnaAndMeg1},
+        .partySizeInsane = ARRAY_COUNT(sParty_Annaandmeg1Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Annaandmeg1Insane},
     },
 
     [TRAINER_ANNA_AND_MEG_2] =
@@ -4357,6 +4379,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Miguel1),
         .party = {.ItemCustomMoves = sParty_Miguel1},
+        .partySizeInsane = ARRAY_COUNT(sParty_Miguel1Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Miguel1Insane},
     },
 
     [TRAINER_COLTON] =
@@ -5055,6 +5079,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Andrew),
         .party = {.ItemCustomMoves = sParty_Andrew},
+        .partySizeInsane = ARRAY_COUNT(sParty_AndrewInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_AndrewInsane},
     },
 
     [TRAINER_IVAN] =
@@ -5281,6 +5307,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Jacob),
         .party = {.ItemCustomMoves = sParty_Jacob},
+        .partySizeInsane = ARRAY_COUNT(sParty_JacobInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_JacobInsane},
     },
 
     [TRAINER_ANTHONY] =
@@ -5295,6 +5323,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Anthony),
         .party = {.ItemCustomMoves = sParty_Anthony},
+        .partySizeInsane = ARRAY_COUNT(sParty_AnthonyInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_AnthonyInsane},
     },
 
     [TRAINER_BENJAMIN_1] =
@@ -5309,6 +5339,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Benjamin1),
         .party = {.ItemCustomMoves = sParty_Benjamin1},
+        .partySizeInsane = ARRAY_COUNT(sParty_Benjamin1Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Benjamin1Insane},
     },
 
     [TRAINER_BENJAMIN_2] =
@@ -5379,6 +5411,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Abigail1),
         .party = {.ItemCustomMoves = sParty_Abigail1},
+        .partySizeInsane = ARRAY_COUNT(sParty_Abigail1Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Abigail1Insane},
     },
 
     [TRAINER_JASMINE] =
@@ -5393,6 +5427,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Jasmine),
         .party = {.ItemCustomMoves = sParty_Jasmine},
+        .partySizeInsane = ARRAY_COUNT(sParty_JasmineInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_JasmineInsane},
     },
 
     [TRAINER_ABIGAIL_2] =
@@ -5463,6 +5499,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Dylan1),
         .party = {.ItemCustomMoves = sParty_Dylan1},
+        .partySizeInsane = ARRAY_COUNT(sParty_Dylan1Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Dylan1Insane},
     },
 
     [TRAINER_DYLAN_2] =
@@ -5533,6 +5571,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Maria1),
         .party = {.ItemCustomMoves = sParty_Maria1},
+        .partySizeInsane = ARRAY_COUNT(sParty_Maria1Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Maria1Insane},
     },
 
     [TRAINER_MARIA_2] =
@@ -6019,6 +6059,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Presley),
         .party = {.ItemCustomMoves = sParty_Presley},
+        .partySizeInsane = ARRAY_COUNT(sParty_PresleyInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_PresleyInsane},
     },
 
     [TRAINER_EDWARDO] =
@@ -6715,6 +6757,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Tanya),
         .party = {.ItemCustomMoves = sParty_Tanya},
+        .partySizeInsane = ARRAY_COUNT(sParty_TanyaInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_TanyaInsane},
     },
 
     [TRAINER_SHARON] =
@@ -6729,6 +6773,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Sharon),
         .party = {.ItemCustomMoves = sParty_Sharon},
+        .partySizeInsane = ARRAY_COUNT(sParty_SharonInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_SharonInsane},
     },
 
     [TRAINER_NIKKI] =
@@ -7149,6 +7195,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_AmyAndLiv1),
         .party = {.ItemCustomMoves = sParty_AmyAndLiv1},
+        .partySizeInsane = ARRAY_COUNT(sParty_Amyandliv1Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Amyandliv1Insane},
     },
 
     [TRAINER_AMY_AND_LIV_2] =
@@ -7307,6 +7355,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Ernest1),
         .party = {.ItemCustomMoves = sParty_Ernest1},
+        .partySizeInsane = ARRAY_COUNT(sParty_Ernest1Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Ernest1Insane},
     },
 
     [TRAINER_DWAYNE] =
@@ -7509,6 +7559,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Auron),
         .party = {.ItemCustomMoves = sParty_Auron},
+        .partySizeInsane = ARRAY_COUNT(sParty_AuronInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_AuronInsane},
     },
 
     [TRAINER_KELVIN] =
@@ -7985,6 +8037,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Isaac1),
         .party = {.ItemCustomMoves = sParty_Isaac1},
+        .partySizeInsane = ARRAY_COUNT(sParty_Isaac1Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Isaac1Insane},
     },
 
     [TRAINER_DAVIS] =
@@ -8083,6 +8137,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Lydia1),
         .party = {.ItemCustomMoves = sParty_Lydia1},
+        .partySizeInsane = ARRAY_COUNT(sParty_Lydia1Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Lydia1Insane},
     },
 
     [TRAINER_HALLE] =
@@ -8417,6 +8473,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_LucyLavaridge),
         .party = {.ItemCustomMoves = sParty_LucyLavaridge},
+        .partySizeInsane = ARRAY_COUNT(sParty_LucylavaridgeInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_LucylavaridgeInsane},
     },
 
     [TRAINER_GRUNT_MT_PYRE_4] =
@@ -8841,6 +8899,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Isabella),
         .party = {.ItemCustomMoves = sParty_Isabella},
+        .partySizeInsane = ARRAY_COUNT(sParty_IsabellaInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_IsabellaInsane},
     },
 
     [TRAINER_GRUNT_WEATHER_INST_5] =
@@ -9419,6 +9479,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_SpenserFortree),
         .party = {.ItemCustomMoves = sParty_SpenserFortree},
+        .partySizeInsane = ARRAY_COUNT(sParty_SpenserfortreeInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_SpenserfortreeInsane},
     },
 
     [TRAINER_ARCHIE_SLATEPORT] =
@@ -10073,6 +10135,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_KimAndIris),
         .party = {.ItemCustomMoves = sParty_KimAndIris},
+        .partySizeInsane = ARRAY_COUNT(sParty_KimandirisInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_KimandirisInsane},
     },
 
     [TRAINER_TYRA_AND_IVY] =
@@ -10429,6 +10493,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Marcos),
         .party = {.ItemCustomMoves = sParty_Marcos},
+        .partySizeInsane = ARRAY_COUNT(sParty_MarcosInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_MarcosInsane},
     },
 
     [TRAINER_RHETT] =
@@ -10443,6 +10509,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Rhett),
         .party = {.ItemCustomMoves = sParty_Rhett},
+        .partySizeInsane = ARRAY_COUNT(sParty_RhettInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_RhettInsane},
     },
 
     [TRAINER_TYRON] =
@@ -10947,6 +11015,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Pete),
         .party = {.ItemCustomMoves = sParty_Pete},
+        .partySizeInsane = ARRAY_COUNT(sParty_PeteInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_PeteInsane},
     },
 
     [TRAINER_ISABELLE] =
@@ -11243,6 +11313,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Melina),
         .party = {.ItemCustomMoves = sParty_Melina},
+        .partySizeInsane = ARRAY_COUNT(sParty_MelinaInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_MelinaInsane},
     },
 
     [TRAINER_BRANDI] =
@@ -11257,6 +11329,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Brandi),
         .party = {.ItemCustomMoves = sParty_Brandi},
+        .partySizeInsane = ARRAY_COUNT(sParty_BrandiInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_BrandiInsane},
     },
 
     [TRAINER_AISHA] =
@@ -11271,6 +11345,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Aisha),
         .party = {.ItemCustomMoves = sParty_Aisha},
+        .partySizeInsane = ARRAY_COUNT(sParty_AishaInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_AishaInsane},
     },
 
     [TRAINER_MAKAYLA] =
@@ -12790,6 +12866,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_TyphlosioniteAshenWoods),
         .party = {.ItemCustomMoves = sParty_TyphlosioniteAshenWoods},
+        .partySizeInsane = ARRAY_COUNT(sParty_TyphlosioniteashenwoodsInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_TyphlosioniteashenwoodsInsane},
     },
 
     [TRAINER_KROOKODILENITE_ROUTE111_RUINS_EXTERIOR] = // KROOKODILENITE
@@ -12820,6 +12898,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE | AI_FLAG_SETUP_FIRST_TURN,
         .partySize = ARRAY_COUNT(sParty_Shedinjite_AbandonedShip_HiddenFloorRooms),
         .party = {.ItemCustomMoves = sParty_Shedinjite_AbandonedShip_HiddenFloorRooms},
+        .partySizeInsane = ARRAY_COUNT(sParty_ShedinjiteAbandonedshipHiddenfloorroomsInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_ShedinjiteAbandonedshipHiddenfloorroomsInsane},
     },
 
     [TRAINER_CROBATITE_DEWFORD_MANOR] = // Crobatite
@@ -12862,6 +12942,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_NidoMegas_Route116Rusturf),
         .party = {.ItemCustomMoves = sParty_NidoMegas_Route116Rusturf},
+        .partySizeInsane = ARRAY_COUNT(sParty_NidomegasRoute116rusturfInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_NidomegasRoute116rusturfInsane},
     },
 
     [TRAINER_DRAGONITENITE_SAGE_1] = // Dragonitenite
@@ -12967,6 +13049,8 @@ const struct Trainer gTrainers[] = {
         .partySize = ARRAY_COUNT(sParty_Granbullite_Route123),
         .party = {.ItemCustomMoves = sParty_Granbullite_Route123},
         .trainerFlag = FLAG_TRAINER_GRANBULLITE_ROUTE123,
+        .partySizeInsane = ARRAY_COUNT(sParty_GranbulliteRoute123Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_GranbulliteRoute123Insane},
     },
 
     [TRAINER_CALVIN_E4] =

@@ -38,6 +38,7 @@ class __EnumHack {
     inline enumType operator|(enumType a, enumType b) { return static_cast<enumType>(static_cast<int>(a) | static_cast<int>(b)); }
 
 ENUM_OR(InfiltrateType)
+ENUM_OR(MoveEffectEnum)
 
 #define CHECK(effect) \
     if (!(effect)) return __EnumHack();
@@ -47,59 +48,79 @@ ENUM_OR(InfiltrateType)
 #define __COMBINE(val1, val2) val1##val2
 #define COMBINE(val1, val2) __COMBINE(val1, val2)
 
-#define ON_ENTRY int ability, int battler
+#define ON_ENTRY AbilityEnum ability, int battler
 #define DELEGATE_ENTRY ability, battler
-#define ON_ABSORB int battler, int move, int moveType, int *statId
+#define ON_ABSORB int battler, MoveEnum move, int moveType, int *statId
 #define DELEGATE_ABSORB battler, move, moveType, statId
-#define ON_IMMUNE int battler, int attacker, int move, int moveType, const u8 **immunityScript
+#define ON_IMMUNE int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript
 #define DELEGATE_IMMUNE battler, attacker, move, moveType, immunityScript
-#define ON_INFILTRATE int battler, int move
+#define ON_INFILTRATE int battler, MoveEnum move
 #define DELEGATE_INFILTRATE battler, move
 #define ON_DISGUISE int battler, int testOnly
 #define DELEGATE_DISGUISE battler, testOnly
-#define ON_WEATHER int ability, int battler
+#define ON_WEATHER AbilityEnum ability, int battler
 #define DELEGATE_WEATHER ability, battler
-#define ON_TERRAIN int ability, int battler
+#define ON_TERRAIN AbilityEnum ability, int battler
 #define DELEGATE_TERRAIN ability, battler
-#define ON_END_TURN int ability, int battler
+#define ON_END_TURN AbilityEnum ability, int battler
 #define DELEGATE_END_TURN ability, battler
-#define ON_ATTACKER int ability, int battler, int target, int move, int moveType
+#define ON_ATTACKER AbilityEnum ability, int battler, int target, MoveEnum move, int moveType
 #define DELEGATE_ATTACKER ability, battler, target, move, moveType
-#define ON_DEFENDER int ability, int battler, int attacker, int move, int moveType
+#define ON_DEFENDER AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType
 #define DELEGATE_DEFENDER ability, battler, attacker, move, moveType
-#define ON_EITHER(name) static int name##OnEither(int ability, int battler, int opponent, int move, int moveType)
+#define ON_EITHER(name) static int name##OnEither(AbilityEnum ability, int battler, int opponent, MoveEnum move, int moveType)
 #define ON_EITHER_ABILITY(name) .onAttacker = name##OnEither, .onDefender = name##OnEither
 #define ON_RECOIL int damage, int battler, int moveType
 #define DELEGATE_RECOIL damage, battler, moveType
-#define ON_REACTIVE int ability, int battler, AbilityCallType callType
+#define ON_REACTIVE AbilityEnum ability, int battler, AbilityCallType callType
 #define DELEGATE_REACTIVE ability, battler
-#define ON_BATTLER_FAINTS int ability, int battler, int attacker, int fainted, int move, int moveType
+#define ON_BATTLER_FAINTS AbilityEnum ability, int battler, int attacker, int fainted, MoveEnum move, int moveType
 #define DELEGATE_BATTLER_FAINTS ability, battler, attacker, fainted, move, moveType
-#define ON_PARENTAL_BOND int battler, int move, int moveType
+#define ON_PARENTAL_BOND int battler, MoveEnum move, int moveType
 #define DELEGATE_PARENTAL_BOND battler, move, moveType
-#define ON_STAT int ability, int battler, int statId, u32 *stat, NonStackingState *flags
+#define ON_STAT AbilityEnum ability, int battler, int statId, u32 *stat, NonStackingState *flags
 #define DELEGATE_STAT ability, battler, statId, stat, flags
 #define ON_OFFENSIVE_MULTIPLIER \
-    int battler, int target, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, u16 *modifier
+    int battler, int target, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, u16 *modifier
 #define DELEGATE_OFFENSIVE_MULTIPLIER battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier
-#define ON_DEFENSIVE_MULTIPLIER int battler, int attacker, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
+#define ON_DEFENSIVE_MULTIPLIER \
+    int battler, int attacker, MoveEnum move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
 #define DELEGATE_DEFENSIVE_MULTIPLIER battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier
-#define ON_ACCURACY int ability, int battler, int target, int move, int moveType, int *accuracy
+#define ON_ACCURACY AbilityEnum ability, int battler, int target, MoveEnum move, int moveType, int *accuracy
 #define DELEGATE_ACCURACY ability, battler, target, move, moveType, accuracy
-#define ON_SWAP_SPLIT int battler, int move
+#define ON_SWAP_SPLIT int battler, MoveEnum move
 #define DELEGATE_SWAP_SPLIT battler, move
-#define ON_CHOOSE_OFFENSIVE_STAT int battler, int move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 *secondaryAtkStatToUse
+#define ON_CHOOSE_OFFENSIVE_STAT \
+    int battler, MoveEnum move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 secondaryAtkStatToUse[NUM_STATS]
 #define DELEGATE_CHOOSE_OFFENSIVE_STAT battler, move, ignoreOffensiveStatDrops, targetUnaware, atkStatToUse, secondaryAtkStatToUse
-#define ON_CHOOSE_DEFENSIVE_STAT int battler, int target, int move, int ignoreDefensiveStatBoosts, int battlerUnaware
+#define ON_CHOOSE_DEFENSIVE_STAT int battler, int target, MoveEnum move, int ignoreDefensiveStatBoosts, int battlerUnaware
 #define DELEGATE_CHOOSE_DEFENSIVE_STAT battler, target, move, ignoreDefensiveStatBoosts, battlerUnaware
 #define ON_STAB int moveType
 #define DELEGATE_STAB moveType
-#define ON_PRIORITY int battler, int target, int move
+#define ON_PRIORITY int battler, int target, MoveEnum move
 #define DELEGATE_PRIORITY battler, target, move
-#define ON_MOVE_TYPE int ability, int move, int moveType, u8 *ateBoost
+#define ON_MOVE_TYPE AbilityEnum ability, MoveEnum move, int moveType, u8 *ateBoost
 #define DELEGATE_MOVE_TYPE ability, move, moveType, ateBoost
-#define ON_EXIT int ability, int battler
+#define ON_EXIT AbilityEnum ability, int battler
 #define DELEGATE_EXIT ability, battler
+#define ON_CRIT int battler, int target, MoveEnum move
+#define DELEGATE_CRIT battler, target, move
+#define ON_TYPE_EFFECTIVENESS int defType, MoveEnum move, int moveType, u16 *mod
+#define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
+#define ON_COPY_MOVE AbilityEnum ability, int battler, int attacker, int target, MoveEnum move
+#define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
+#define ON_AFTER_TYPE_EFFECTIVENESS int battler, AbilityEnum ability, int target, MoveEnum move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
+#define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
+#define ON_MODIFY_EFFECT_CHANCE int battler, MoveEnum move, MoveEffectEnum moveEffect, int *effectChance
+#define DELEGATE_MODIFY_EFFECT_CHANCE battler, move, moveEffect, effectChance
+#define ABILITY_ON_CAN_STATUS_TYPE int battler, MoveEnum move, StatusCheckEnum status
+#define DELEGATE_ON_CAN_STATUS_TYPE battler, move, status
+#define ABILITY_ON_STATUS_IMMUNE int battler, int target, AbilityEnum ability, StatusCheckEnum status
+#define DELEGATE_ON_STATUS_IMMUNE int battler, target, ability, status
+#define ABILITY_ON_TRAP int switchingBattler
+#define DELEGATE_ON_TRAP switchingBattler
+#define ABILITY_ON_BEFORE_ATTACK int battler, int attacker, AbilityEnum ability, MoveEnum move, int moveType
+#define DELEGATE_ON_BEFORE_ATTACK battler, attacker, ability, move, moveType
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -156,7 +177,7 @@ typedef enum {
     FOLLOWUP_ALLOW_FAILED,
     FOLLOWUP_ALLOW_SELF,
 } FollowupType;
-static int AdjustFollowupMoveTarget(int battler, int *target, int move, FollowupType type) {
+static int AdjustFollowupMoveTarget(int battler, int *target, MoveEnum move, FollowupType type) {
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT && type != FOLLOWUP_ALLOW_FAILED) return FALSE;
 
     switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
@@ -182,9 +203,9 @@ static int SwitchInAnnounce(int message) {
     return TRUE;
 }
 
-static int TryTransformAttacker(int ability, int battler, AbilityCallType callType) {
+static int TryTransformAttacker(AbilityEnum ability, int battler, AbilityCallType callType) {
     CHECK(ShouldChangeFormHpBased(battler))
-    CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+    CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
     InsertCorrectEndType(callType);
     BattleScriptCall(BattleScript_AttackerFormChange);
@@ -200,21 +221,21 @@ static int AddBattlerType(int battler, int type) {
     return TRUE;
 }
 
-static int AbilityStatusEffect(int effect) {
+static int AbilityStatusEffect(MoveEffectEnum effect) {
     gBattleScripting.moveEffect = effect;
     BattleScriptCall(BattleScript_AbilityStatusEffect);
     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
     return TRUE;
 }
 
-static int AbilityStatusEffectDirect(int effect) {
+static int AbilityStatusEffectDirect(MoveEffectEnum effect) {
     gBattleScripting.moveEffect = effect;
     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
     SetMoveEffect(FALSE, FALSE);
     return FALSE;
 }
 
-static int AbilityStatusEffectSafe(int effect, int attacker, int target) {
+static int AbilityStatusEffectSafe(MoveEffectEnum effect, int attacker, int target) {
     gBattleScripting.moveEffect = effect;
     gStackBattler1 = attacker;
     gStackBattler2 = target;
@@ -223,7 +244,7 @@ static int AbilityStatusEffectSafe(int effect, int attacker, int target) {
     return TRUE;
 }
 
-static int PoisonPuppeteerClone(int ability, int battler, int (*predicate)(int battler, int target), const u8 *callback) {
+static int PoisonPuppeteerClone(AbilityEnum ability, int battler, int (*predicate)(int battler, int target), const u8 *callback) {
     int flag = GetAbilityState(battler, ability);
     if (!flag) return FALSE;
     int any = FALSE;
@@ -297,16 +318,11 @@ static void RuinEffect(int ruinStat, int battler, int statId, u32 *stat, NonStac
 }
 
 #define CONTEXT None
-static const Ability None = {
-    .name = $("-------"),
-    .description = $("Empty ability slot."),
+constexpr Ability None = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Stench = {
-    .name = $("Stench"),
-    .description = $("Attacks have a 10% chance to\n"
-                     "cause enemy to flinch."),
+constexpr Ability Stench = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanMoveHaveExtraFlinchChance(move))
@@ -316,10 +332,7 @@ static const Ability Stench = {
     },
 };
 
-static const Ability Drizzle = {
-    .name = $("Drizzle"),
-    .description = $("Summons rain on entry.\n"
-                     "Lasts 8 turns."),
+constexpr Ability Drizzle = {
     .onEntry = +[](ON_ENTRY) -> int {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
@@ -332,32 +345,25 @@ static const Ability Drizzle = {
     },
 };
 
-static const Ability SpeedBoost = {
-    .name = $("Speed Boost"),
-    .description = $("Raises own Speed by one stage\n"
-                     "after every turn."),
+constexpr Ability SpeedBoost = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
 
-        BattleScriptPushCursorAndCallback(BattleScript_SpeedBoostActivates);
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         gBattleScripting.battler = battler;
         return TRUE;
     },
 };
 
-static const Ability BattleArmor = {
-    .name = $("Battle Armor"),
-    .description = $("Immune to critical hits. Takes\n"
-                     "20% less damage from all attacks."),
+constexpr Ability BattleArmor = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.8); },
+    .onCrit = +[](ON_CRIT) { return NEVER_CRIT; },
+    .onCritFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
-static const Ability Sturdy = {
-    .name = $("Sturdy"),
-    .description = $("At full HP, cannot be KO in one\n"
-                     "hit, stays at 1 HP instead."),
+constexpr Ability Sturdy = {
     .breakable = TRUE,
 };
 
@@ -374,25 +380,21 @@ ON_EITHER(Damp) {
     BattleScriptCall(BattleScript_StackBecameTheTypeFull);
     return TRUE;
 }
-static const Ability Damp = {
-    .name = $("Damp"),
-    .description = $("Makes foe Water-type on contact.\n"
-                     "Also works on offense."),
+constexpr Ability Damp = {
     ON_EITHER_ABILITY(Damp),
 };
 
-static const Ability Limber = {
-    .name = $("Limber"),
-    .description = $("Immune to paralysis.\n"
-                     "Takes 50% less recoil damage."),
+constexpr Ability Limber = {
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_PARALYSIS)
+        return TRUE;
+    },
     .breakable = TRUE,
     .halfRecoil = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability SandVeil = {
-    .name = $("Sand Veil"),
-    .description = $("Evasion is boosted by 1.25x\n"
-                     "while a sandstorm is active."),
+constexpr Ability SandVeil = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(IsBattlerWeatherAffected(target, WEATHER_SANDSTORM_ANY));
         *accuracy /= 1.25;
@@ -411,17 +413,11 @@ ON_EITHER(Static) {
     AbilityStatusEffectSafe(MOVE_EFFECT_PARALYSIS, battler, opponent);
     return TRUE;
 }
-static const Ability Static = {
-    .name = $("Static"),
-    .description = $("30% chance to paralyze on\n"
-                     "contact. Also works on offense."),
+constexpr Ability Static = {
     ON_EITHER_ABILITY(Static),
 };
 
-static const Ability VoltAbsorb = {
-    .name = $("Volt Absorb"),
-    .description = $("Heals 25% of max HP when hit\n"
-                     "by an Electric-type move."),
+constexpr Ability VoltAbsorb = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_ELECTRIC)
         return ABSORB_RESULT_HEAL;
@@ -429,10 +425,7 @@ static const Ability VoltAbsorb = {
     .breakable = TRUE,
 };
 
-static const Ability WaterAbsorb = {
-    .name = $("Water Absorb"),
-    .description = $("Heals 25% of max HP when hit\n"
-                     "by a Water-type move."),
+constexpr Ability WaterAbsorb = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_WATER)
         return ABSORB_RESULT_HEAL;
@@ -440,61 +433,80 @@ static const Ability WaterAbsorb = {
     .breakable = TRUE,
 };
 
-static const Ability Oblivious = {
-    .name = $("Oblivious"),
-    .description = $("Immune to infatuation, Scare,\n"
-                     "Intimidate and Taunt."),
+constexpr Ability Oblivious = {
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & (CHECK_INFATUATE | CHECK_RESTRICTING))
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+    .tauntImmune = TRUE,
 };
 
-static const Ability CloudNine = {
-    .name = $("Cloud Nine"),
-    .description = $("Clears weather and prevents\n"
-                     "its effects."),
+constexpr Ability CloudNine = {
     .onEntry = +[](ON_ENTRY) -> int {
         BattleScriptPushCursorAndCallback(BattleScript_AnnounceAirLockCloudNine);
         return TRUE;
     },
 };
 
-static const Ability CompoundEyes = {
-    .name = $("Compound Eyes"),
-    .description = $("Grants a 1.3x accuracy boost."),
+constexpr Ability CompoundEyes = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         *accuracy *= 1.3;
         return ACCURACY_MULTIPLICATIVE;
     },
 };
 
-static const Ability Insomnia = {
-    .name = $("Insomnia"),
-    .description = $("Cannot fall asleep.\n"
-                     "Rest fails if used."),
+constexpr Ability Insomnia = {
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_SLEEP)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability ColorChange = {
-    .name = $("Color Change"),
-    .description = $("Changes type to a resist or an\n"
-                     "immunity before getting hit."),
-    .colorChange = TRUE,
+constexpr Ability ColorChange = {
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        CHECK(battler != attacker)
+        CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
+
+        u32 bestType = gBattleMons[gBattlerTarget].type1;
+        u16 bestModifier = GetTypeModifier(moveType, bestType, attacker, battler);
+
+        for (int currentType = TYPE_NORMAL; currentType < NUMBER_OF_MON_TYPES; ++currentType) {
+            u16 currentModifier = GetTypeModifier(moveType, currentType, attacker, battler);
+            if (currentModifier < bestModifier) {
+                bestModifier = currentModifier;
+                bestType = currentType;
+            }
+            if (bestModifier == UQ_4_12(0.0)) break;
+        }
+
+        CHECK_NOT(IS_BATTLER_OF_TYPE(battler, bestType))
+
+        SET_BATTLER_TYPE(battler, bestType);
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, bestType);
+        BattleScriptCall(BattleScript_ColorChangeActivates);
+        return TRUE;
+    },
+    .onBeforeAttackFor = APPLY_ON_TARGET,
 };
 
-static const Ability Immunity = {
-    .name = $("Immunity"),
-    .description = $("Cannot be poisoned. Halves\n"
-                     "damage taken from Poison moves."),
+constexpr Ability Immunity = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_POISON) RESISTANCE(.5);
         },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_POISON)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability FlashFire = {
-    .name = $("Flash Fire"),
-    .description = $("Powers up Fire-type moves by\n"
-                     "1.5x if hit by a Fire-type move."),
+constexpr Ability FlashFire = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_FIRE)
         return ABSORB_RESULT_FLASH_FIRE;
@@ -506,44 +518,37 @@ static const Ability FlashFire = {
     .breakable = TRUE,
 };
 
-static const Ability ShieldDust = {
-    .name = $("Shield Dust"),
-    .description = $("Immune to added move effects and\n"
-                     "all entry hazards."),
+constexpr Ability ShieldDust = {
     .breakable = TRUE,
 };
 
-static const Ability OwnTempo = {
-    .name = $("Own Tempo"),
-    .description = $("Immune to confusion, Intimidate\n"
-                     "and Scare."),
+constexpr Ability OwnTempo = {
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_CONFUSION)
+        return TRUE;
+    },
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+    .tauntImmune = TRUE,
+};
+
+constexpr Ability SuctionCups = {
     .breakable = TRUE,
 };
 
-static const Ability SuctionCups = {
-    .name = $("Suction Cups"),
-    .description = $("Cannot be forced to switch out\n"
-                     "by an enemy's move."),
-    .breakable = TRUE,
-};
-
-static const Ability Intimidate = {
-    .name = $("Intimidate"),
-    .description = $("Lowers foes' Atk by one stage on\n"
-                     "entry."),
+constexpr Ability Intimidate = {
     .onEntry = UseIntimidateClone,
 };
 
-static const Ability ShadowTag = {
-    .name = $("Shadow Tag"),
-    .description = $("Opponents can't be switched out.\n"
-                     "Ghosts aren't affected."),
+constexpr Ability ShadowTag = {
+    .onTrap = +[](ABILITY_ON_TRAP) -> int {
+        ON_ABILITY(switchingBattler, FALSE, gAbilities[ability].shadowTag, return FALSE)
+        return TRUE;
+    },
+    .shadowTag = TRUE,
 };
 
-static const Ability RoughSkin = {
-    .name = $("Rough Skin"),
-    .description = $("Enemies lose 1/8 of max HP if\n"
-                     "they use a contact move."),
+constexpr Ability RoughSkin = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsMagicGuardProtected(attacker))
@@ -556,29 +561,26 @@ static const Ability RoughSkin = {
     },
 };
 
-static const Ability WonderGuard = {
-    .name = $("Wonder Guard"),
-    .description = $("Is only hit by Super-effective\n"
-                     "attacks or indirect damage."),
+constexpr Ability WonderGuard = {
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (*mod < UQ_4_12(2.0)) *mod = 0;
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-static const Ability Levitate = {
-    .name = $("Levitate"),
-    .description = $("Immune to Ground-type moves.\n"
-                     "Ups own Flying moves by 1.25x."),
+constexpr Ability Levitate = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FLYING) MUL(1.25);
         },
     .breakable = TRUE,
+    .levitate = TRUE,
 };
 
-static const Ability EffectSpore = {
-    .name = $("Effect Spore"),
-    .description = $("30% chance to inflict SLP, PARA\n"
-                     "or PSN if hit by a contact move."),
+constexpr Ability EffectSpore = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -590,7 +592,7 @@ static const Ability EffectSpore = {
 
         switch (Random() % 3) {
             case 0:
-                CHECK(CanBePoisoned(battler, attacker))
+                CHECK(CanBePoisoned(battler, attacker, MOVE_NONE))
 
                 AbilityStatusEffect(MOVE_EFFECT_POISON | MOVE_EFFECT_AFFECTS_USER);
                 return TRUE;
@@ -611,22 +613,11 @@ static const Ability EffectSpore = {
     },
 };
 
-static const Ability Synchronize = {
-    .name = $("Synchronize"),
-    .description = $("Enemies inflicting status on\n"
-                     "this Pokémon get same status."),
-};
-
-static const Ability ClearBody = {
-    .name = $("Clear Body"),
-    .description = $("Immune to stat drops."),
+constexpr Ability ClearBody = {
     .breakable = TRUE,
 };
 
-static const Ability NaturalCure = {
-    .name = $("Natural Cure"),
-    .description = $("Heals status condition upon\n"
-                     "switching out."),
+constexpr Ability NaturalCure = {
     .onExit = +[](ON_EXIT) -> int {
         CHECK(IsBattlerAlive(battler))
         CHECK(gBattleMons[battler].status1 & STATUS1_ANY)
@@ -642,10 +633,7 @@ static const Ability NaturalCure = {
     },
 };
 
-static const Ability LightningRod = {
-    .name = $("Lightning Rod"),
-    .description = $("Redirects Electric moves.\n"
-                     "Absorbs them, ups highest Atk."),
+constexpr Ability LightningRod = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_ELECTRIC);
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -655,48 +643,35 @@ static const Ability LightningRod = {
     .breakable = TRUE,
 };
 
-static const Ability SereneGrace = {
-    .name = $("Serene Grace"),
-    .description = $("Doubles chance of secondary\n"
-                     "effects on its own moves."),
+constexpr Ability SereneGrace = {
+    .onModifyEffectChance = +[](ON_MODIFY_EFFECT_CHANCE) { *effectChance *= 2; },
 };
 
-static const Ability SwiftSwim = {
-    .name = $("Swift Swim"),
-    .description = $("This Pokémon's Speed gets a\n"
-                     "1.5x boost if rain is active."),
+constexpr Ability SwiftSwim = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat *= 1.5;
         },
 };
 
-static const Ability Chlorophyll = {
-    .name = $("Chlorophyll"),
-    .description = $("This Pokémon's Speed gets a\n"
-                     "1.5x boost if sun is active."),
+constexpr Ability Chlorophyll = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat *= 1.5;
         },
 };
 
-static const Ability Illuminate = {
-    .name = $("Illuminate"),
-    .description = $("Grants a 1.2x accuracy boost."),
+constexpr Ability Illuminate = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
     },
 };
 
-static const Ability Trace = {
-    .name = $("Trace"),
-    .description = $("Copies the foe's ability.\n"
-                     "Does not copy innates."),
+constexpr Ability Trace = {
     .onEntry = +[](ON_ENTRY) -> int {
         int target = BATTLE_OPPOSITE(battler);
-        int newAbility = GetBattlerAbility(target);
+        auto newAbility = GetBattlerAbility(target);
         if (!IsBattlerAlive(target) || IsRolePlayBannedAbility(newAbility)) {
             target = BATTLE_PARTNER(target);
             CHECK(IsBattlerAlive(target))
@@ -721,10 +696,7 @@ static const Ability Trace = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability HugePower = {
-    .name = $("Huge Power"),
-    .description = $("Doubles own Attack stat.\n"
-                     "Boosts raw stat, not base stat."),
+constexpr Ability HugePower = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_ATK) *stat *= 2;
@@ -733,46 +705,40 @@ static const Ability HugePower = {
 
 ON_EITHER(PoisonPoint) {
     CHECK(ShouldApplyOnHitAffect(opponent))
-    CHECK(CanBePoisoned(battler, opponent))
+    CHECK(CanBePoisoned(battler, opponent, MOVE_NONE))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK(Random() % 100 < 30)
 
     AbilityStatusEffectSafe(MOVE_EFFECT_POISON, battler, opponent);
     return TRUE;
 }
-static const Ability PoisonPoint = {
-    .name = $("Poison Point"),
-    .description = $("30% chance to poison on contact.\n"
-                     "Also works on offense."),
+constexpr Ability PoisonPoint = {
     ON_EITHER_ABILITY(PoisonPoint),
 };
 
-static const Ability InnerFocus = {
-    .name = $("Inner Focus"),
-    .description = $("Blocks flinch, Intimidate, Scare.\n"
-                     "Focus Blast never misses."),
+constexpr Ability InnerFocus = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(move == MOVE_FOCUS_BLAST)
         return ACCURACY_ALWAYS_HITS;
     },
     .breakable = TRUE,
+    .tauntImmune = TRUE,
 };
 
-static const Ability MagmaArmor = {
-    .name = $("Magma Armor"),
-    .description = $("Frostbite-immune. Takes 30% less\n"
-                     "dmg from Water/Ice-type moves."),
+constexpr Ability MagmaArmor = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_WATER || moveType == TYPE_ICE) RESISTANCE(.7);
         },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_FROSTBITE)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability WaterVeil = {
-    .name = $("Water Veil"),
-    .description = $("Burn-immune.\n"
-                     "Casts Aqua Ring on entry."),
+constexpr Ability WaterVeil = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gStatuses3[battler] & STATUS3_AQUA_RING)
 
@@ -780,18 +746,19 @@ static const Ability WaterVeil = {
         BattleScriptPushCursorAndCallback(BattleScript_BattlerEnvelopedItselfInAVeil);
         return TRUE;
     },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_BURN)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability MagnetPull = {
-    .name = $("Magnet Pull"),
-    .description = $("Traps opposing Steel-types.\n"
-                     "Ghosts aren't affected."),
+constexpr Ability MagnetPull = {
+    .onTrap = +[](ABILITY_ON_TRAP) -> int { return IS_BATTLER_OF_TYPE(switchingBattler, TYPE_STEEL); },
 };
 
-static const Ability Soundproof = {
-    .name = $("Soundproof"),
-    .description = $("Immune to sound-based moves."),
+constexpr Ability Soundproof = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(gBattleMoves[move].flags & FLAG_SOUND)
         CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
@@ -801,13 +768,10 @@ static const Ability Soundproof = {
     .isSoundproof = TRUE,
 };
 
-static const Ability RainDish = {
-    .name = $("Rain Dish"),
-    .description = $("Heals 1/8 of max HP every turn\n"
-                     "if rain is active."),
+constexpr Ability RainDish = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
@@ -819,10 +783,7 @@ static const Ability RainDish = {
     },
 };
 
-static const Ability SandStream = {
-    .name = $("Sand Stream"),
-    .description = $("Summons a sandstorm on entry.\n"
-                     "Lasts 8 turns."),
+constexpr Ability SandStream = {
     .onEntry = +[](ON_ENTRY) -> int {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
@@ -835,10 +796,7 @@ static const Ability SandStream = {
     },
 };
 
-static const Ability Pressure = {
-    .name = $("Pressure"),
-    .description = $("Doubles foe's PP usage.\n"
-                     "Clears stat buffs on entry."),
+constexpr Ability Pressure = {
     .onEntry = +[](ON_ENTRY) -> int {
         int loweredStats = 0;
         for (int i = 0; i < gBattlersCount; i++) {
@@ -856,20 +814,12 @@ static const Ability Pressure = {
     },
 };
 
-static const Ability ThickFat = {
-    .name = $("Thick Fat"),
-    .description = $("Takes 1/2 damage from Fire-type\n"
-                     "and Ice-type attacks."),
+constexpr Ability ThickFat = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.5);
         },
     .breakable = TRUE,
-};
-
-static const Ability EarlyBird = {
-    .name = $("Early Bird"),
-    .description = $("Awakens twice as fast from sleep."),
 };
 
 ON_EITHER(FlameBody) {
@@ -881,23 +831,11 @@ ON_EITHER(FlameBody) {
     AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
     return TRUE;
 }
-static const Ability FlameBody = {
-    .name = $("Flame Body"),
-    .description = $("30% chance to burn on contact.\n"
-                     "Also works on offense."),
+constexpr Ability FlameBody = {
     ON_EITHER_ABILITY(FlameBody),
 };
 
-static const Ability RunAway = {
-    .name = $("Run Away"),
-    .description = $("Guarantees fleeing. Raises Speed\n"
-                     "if stats lowered by an enemy."),
-};
-
-static const Ability KeenEye = {
-    .name = $("Keen Eye"),
-    .description = $("Immune to accuracy drops.\n"
-                     "Grants a 1.2x accuracy boost."),
+constexpr Ability KeenEye = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
@@ -905,17 +843,15 @@ static const Ability KeenEye = {
     .breakable = TRUE,
 };
 
-static const Ability HyperCutter = {
-    .name = $("Hyper Cutter"),
-    .description = $("Enemies can't lower Atk/Sp. Atk.\n"
-                     "Crit rate of contact moves: +1."),
+constexpr Ability HyperCutter = {
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(IsMoveMakingContact(move, battler))
+        return 1;
+    },
     .breakable = TRUE,
 };
 
-static const Ability Pickup = {
-    .name = $("Pickup"),
-    .description = $("Removes all hazards on entry.\n"
-                     "Not immune to hazards."),
+constexpr Ability Pickup = {
     .onEntry = +[](ON_ENTRY) -> int {
         int side = GetBattlerSide(battler);
         CHECK(gSideStatuses[side] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[side].hotCoals || gSideTimers[side].caltrops)
@@ -930,10 +866,7 @@ static const Ability Pickup = {
     },
 };
 
-static const Ability Truant = {
-    .name = $("Truant"),
-    .description = $("Can only attack every other turn.\n"
-                     "Can use status moves every turn."),
+constexpr Ability Truant = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         if (GetAbilityState(battler, ability))
             SetAbilityState(battler, ability, FALSE);
@@ -943,10 +876,7 @@ static const Ability Truant = {
     },
 };
 
-static const Ability Hustle = {
-    .name = $("Hustle"),
-    .description = $("0.9x accuracy.\n"
-                     "Boosts damage by 1.4x."),
+constexpr Ability Hustle = {
     .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MUL(1.4); },
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK_NOT(IS_MOVE_STATUS(move)) *accuracy *= .9;
@@ -954,26 +884,20 @@ static const Ability Hustle = {
     },
 };
 
-static const Ability CuteCharm = {
-    .name = $("Cute Charm"),
-    .description = $("30% chance to charm attacker on\n"
-                     "contact, which halves its power."),
-    .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
-        CHECK(IsMoveMakingContact(move, attacker))
-        CHECK(CanInfatuate(battler, attacker))
-        CHECK(Random() % 100 < 30)
+ON_EITHER(CuteCharm) {
+    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+    CHECK(CanInfatuate(battler, opponent))
+    CHECK(Random() % 100 < 50)
 
-        gBattleMons[attacker].status2 |= STATUS2_INFATUATED_WITH(battler);
-        BattleScriptCall(BattleScript_CuteCharmActivates);
-        return TRUE;
-    },
+    AbilityStatusEffectSafe(MOVE_EFFECT_ATTRACT, battler, opponent);
+    return TRUE;
+}
+constexpr Ability CuteCharm = {
+    ON_EITHER_ABILITY(CuteCharm),
 };
 
-static const Ability Plus = {
-    .name = $("Plus"),
-    .description = $("Deals double damage if an ally\n"
-                     "Pokémon has Minus or Plus."),
+constexpr Ability Plus = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             int partner = BATTLE_PARTNER(battler);
@@ -982,17 +906,11 @@ static const Ability Plus = {
         },
 };
 
-static const Ability Minus = {
-    .name = $("Minus"),
-    .description = $("Deals double damage if an ally\n"
-                     "Pokémon has Minus or Plus."),
+constexpr Ability Minus = {
     .onOffensiveMultiplier = Plus.onOffensiveMultiplier,
 };
 
-static const Ability Forecast = {
-    .name = $("Forecast"),
-    .description = $("Changes form with the weather.\n"
-                     "Weather setting triggers attack."),
+constexpr Ability Forecast = {
     .onEntry = +[](ON_ENTRY) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onWeather = +[](ON_WEATHER) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_CALL); },
     .onEndTurn = +[](ON_END_TURN) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
@@ -1016,16 +934,11 @@ static const Ability Forecast = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability StickyHold = {
-    .name = $("Sticky Hold"),
-    .description = $("Can't lose its item."),
+constexpr Ability StickyHold = {
     .breakable = TRUE,
 };
 
-static const Ability ShedSkin = {
-    .name = $("Shed Skin"),
-    .description = $("30% chance to heal its status\n"
-                     "condition at the end of a turn."),
+constexpr Ability ShedSkin = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(Random() % 100 < 30)
 
@@ -1034,20 +947,15 @@ static const Ability ShedSkin = {
     },
 };
 
-static const Ability Guts = {
-    .name = $("Guts"),
-    .description = $("Ups Atk by 1.5x if suffering\n"
-                     "from a status condition."),
+constexpr Ability Guts = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (HasAnyStatusOrAbility(battler) && IS_MOVE_PHYSICAL(move)) MUL(1.5);
         },
+    .negatesBurnAtkDrop = TRUE,
 };
 
-static const Ability MarvelScale = {
-    .name = $("Marvel Scale"),
-    .description = $("Ups Def by 1.5x if suffering\n"
-                     "from a status condition."),
+constexpr Ability MarvelScale = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_DEF && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
@@ -1055,51 +963,33 @@ static const Ability MarvelScale = {
     .breakable = TRUE,
 };
 
-static const Ability LiquidOoze = {
-    .name = $("Liquid Ooze"),
-    .description = $("Draining causes harm to enemies\n"
-                     "instead of healing them."),
-};
-
-static const Ability Overgrow = {
-    .name = $("Overgrow"),
-    .description = $("Boosts Grass-type moves by 1.2x,\n"
-                     "or 1.5x when under 1/3 HP."),
+constexpr Ability Overgrow = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_GRASS),
 };
 
-static const Ability Blaze = {
-    .name = $("Blaze"),
-    .description = $("Boosts Fire-type moves by 1.2x,\n"
-                     "or 1.5x when under 1/3 HP."),
+constexpr Ability Blaze = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_FIRE),
 };
 
-static const Ability Torrent = {
-    .name = $("Torrent"),
-    .description = $("Boosts Water-type moves by 1.2x,\n"
-                     "or 1.5x when under 1/3 HP."),
+constexpr Ability Torrent = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_WATER),
 };
 
-static const Ability Swarm = {
-    .name = $("Swarm"),
-    .description = $("Boosts Bug-type moves by 1.2x,\n"
-                     "or 1.5x when under 1/3 HP."),
+constexpr Ability Swarm = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_BUG),
 };
 
-static const Ability RockHead = {
-    .name = $("Rock Head"),
-    .description = $("Immune to recoil damage, but not\n"
-                     "immune to Explosion/crash dmg."),
+constexpr Ability RockHead = {
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_CONFUSION)
+        return TRUE;
+    },
+    .breakable = TRUE,
     .noRecoil = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability Drought = {
-    .name = $("Drought"),
-    .description = $("Summons sun on entry.\n"
-                     "Lasts 8 turns."),
+constexpr Ability Drought = {
     .onEntry = +[](ON_ENTRY) -> int {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
@@ -1112,28 +1002,26 @@ static const Ability Drought = {
     },
 };
 
-static const Ability ArenaTrap = {
-    .name = $("Arena Trap"),
-    .description = $("Enemies can't flee. Ghosts and\n"
-                     "ungrounded Pokémon are immune."),
+constexpr Ability ArenaTrap = {
+    .onTrap = +[](ABILITY_ON_TRAP) -> int { return IsBattlerGrounded(switchingBattler); },
 };
 
-static const Ability VitalSpirit = {
-    .name = $("Vital Spirit"),
-    .description = $("Can't fall asleep. Heals status\n"
-                     "after using Fighting-type moves."),
+constexpr Ability VitalSpirit = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(moveType == TYPE_FIGHTING)
         CHECK(AbilityHealMonStatus(battler, ability));
         return TRUE;
     },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_SLEEP)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+    .tauntImmune = TRUE,
 };
 
-static const Ability WhiteSmoke = {
-    .name = $("White Smoke"),
-    .description = $("Sets Smokescreen for 3 turns\n"
-                     "on switch-in."),
+constexpr Ability WhiteSmoke = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideTimers[GET_BATTLER_SIDE(battler)].smokescreenTimer)
 
@@ -1145,31 +1033,22 @@ static const Ability WhiteSmoke = {
     },
 };
 
-static const Ability PurePower = {
-    .name = $("Pure Power"),
-    .description = $("Doubles own Attack stat.\n"
-                     "Boosts raw stat, not base stat."),
+constexpr Ability PurePower = {
     .onStat = HugePower.onStat,
 };
 
-static const Ability ShellArmor = {
-    .name = $("Shell Armor"),
-    .description = $("Immune to critical hits. Takes\n"
-                     "20% less damage from all attacks."),
+constexpr Ability ShellArmor = {
     .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .onCrit = BattleArmor.onCrit,
+    .onCritFor = BattleArmor.onCritFor,
     .breakable = TRUE,
 };
 
-static const Ability AirLock = {
-    .name = $("Air Lock"),
-    .description = $("Clears weather and prevents\n"
-                     "its effects."),
+constexpr Ability AirLock = {
     .onEntry = CloudNine.onEntry,
 };
 
-static const Ability TangledFeet = {
-    .name = $("Tangled Feet"),
-    .description = $("Doubles Evasion when confused."),
+constexpr Ability TangledFeet = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(gBattleMons[target].status2 & STATUS2_CONFUSION);
         *accuracy /= 2;
@@ -1179,10 +1058,7 @@ static const Ability TangledFeet = {
     .breakable = TRUE,
 };
 
-static const Ability MotorDrive = {
-    .name = $("Motor Drive"),
-    .description = $("Boosts Speed instead of being\n"
-                     "hit by Electric-type moves."),
+constexpr Ability MotorDrive = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_ELECTRIC);
         *statId = STAT_SPEED;
@@ -1191,10 +1067,7 @@ static const Ability MotorDrive = {
     .breakable = TRUE,
 };
 
-static const Ability Rivalry = {
-    .name = $("Rivalry"),
-    .description = $("Deals 1.25x to same gender.\n"
-                     "Takes .75x from opposite gender."),
+constexpr Ability Rivalry = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, gBattleMons[battler].personality);
@@ -1214,16 +1087,7 @@ static const Ability Rivalry = {
     .breakable = TRUE,
 };
 
-static const Ability Steadfast = {
-    .name = $("Steadfast"),
-    .description = $("Raises Speed by one stage if\n"
-                     "this Pokémon flinches."),
-};
-
-static const Ability SnowCloak = {
-    .name = $("Snow Cloak"),
-    .description = $("Evasion is boosted by 1.25x\n"
-                     "under hail."),
+constexpr Ability SnowCloak = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(IsBattlerWeatherAffected(target, WEATHER_HAIL_ANY));
         *accuracy /= 1.25;
@@ -1233,16 +1097,7 @@ static const Ability SnowCloak = {
     .breakable = TRUE,
 };
 
-static const Ability Gluttony = {
-    .name = $("Gluttony"),
-    .description = $("Eats berries early. Berries also\n"
-                     "restore 1/3 of max HP."),
-};
-
-static const Ability AngerPoint = {
-    .name = $("Anger Point"),
-    .description = $("Getting hit raises Atk by +1.\n"
-                     "Critical hits maximize Attack."),
+constexpr Ability AngerPoint = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_ATK))
@@ -1258,37 +1113,23 @@ static const Ability AngerPoint = {
     },
 };
 
-static const Ability Unburden = {
-    .name = $("Unburden"),
-    .description = $("Consuming its held item doubles\n"
-                     "Speed until switched out."),
+constexpr Ability Unburden = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && GetAbilityState(battler, ability)) *stat *= 2;
         },
 };
 
-static const Ability Heatproof = {
-    .name = $("Heatproof"),
-    .description = $("Halves damage taken from Fire-\n"
-                     "type moves. Takes no burn damage."),
+constexpr Ability Heatproof = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE) RESISTANCE(.5);
         },
     .breakable = TRUE,
+    .negatesBurnAtkDrop = TRUE,
 };
 
-static const Ability Simple = {
-    .name = $("Simple"),
-    .description = $("Doubles all stat changes on\n"
-                     "this Pokémon."),
-};
-
-static const Ability DrySkin = {
-    .name = $("Dry Skin"),
-    .description = $("Water/Rain heals.\n"
-                     "Fire/Sun hurts."),
+constexpr Ability DrySkin = {
     .onAbsorb = WaterAbsorb.onAbsorb,
     .onEndTurn = +[](ON_END_TURN) -> int {
         if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && !IsMagicGuardProtected(battler)) {
@@ -1307,10 +1148,7 @@ static const Ability DrySkin = {
     .breakable = TRUE,
 };
 
-static const Ability Download = {
-    .name = $("Download"),
-    .description = $("Raises Atk/Sp. Atk by one stage\n"
-                     "depending on opponent."),
+constexpr Ability Download = {
     .onEntry = +[](ON_ENTRY) -> int {
         gBattlerTarget = BATTLE_OPPOSITE(battler);
         if (!IsBattlerAlive(battler)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
@@ -1323,39 +1161,22 @@ static const Ability Download = {
     },
 };
 
-static const Ability IronFist = {
-    .name = $("Iron Fist"),
-    .description = $("Boosts the power of punching\n"
-                     "moves by 1.3x."),
+constexpr Ability IronFist = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (IS_IRON_FIST(battler, move)) MUL(1.3);
+            if (IsIronFistBoosted(battler, move)) MUL(1.3);
         },
 };
 
-static const Ability PoisonHeal = {
-    .name = $("Poison Heal"),
-    .description = $("Restores 1/8 of max HP after\n"
-                     "each turn if poisoned."),
-};
-
-static const Ability Adaptability = {
-    .name = $("Adaptability"),
-    .description = $("Increases STAB from 1.5x to 2x."),
+constexpr Ability Adaptability = {
     .adaptability = TRUE,
 };
 
-static const Ability SkillLink = {
-    .name = $("Skill Link"),
-    .description = $("Multi-hit moves always hit the\n"
-                     "maximum number of times."),
+constexpr Ability SkillLink = {
     .skillLink = TRUE,
 };
 
-static const Ability Hydration = {
-    .name = $("Hydration"),
-    .description = $("Cures own status at the end of\n"
-                     "every turn in rain."),
+constexpr Ability Hydration = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
@@ -1364,10 +1185,7 @@ static const Ability Hydration = {
     },
 };
 
-static const Ability SolarPower = {
-    .name = $("Solar Power"),
-    .description = $("Ups highest attacking stat\n"
-                     "by 1.5x in sun."),
+constexpr Ability SolarPower = {
     .onStat =
         +[](ON_STAT) {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
@@ -1375,55 +1193,42 @@ static const Ability SolarPower = {
         },
 };
 
-static const Ability QuickFeet = {
-    .name = $("Quick Feet"),
-    .description = $("Ups Speed by 1.5x if suffering\n"
-                     "from a status condition."),
+constexpr Ability QuickFeet = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
         },
 };
 
-static const Ability Normalize = {
-    .name = $("Normalize"),
-    .description = $("Its moves become Normal-type,\n"
-                     "get 1.1x boost, ignore resists."),
+constexpr Ability Normalize = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
         },
     .onMoveType = +[](ON_MOVE_TYPE) -> int { return TYPE_NORMAL + 1; },
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_NORMAL) CHECK(*mod) CHECK(*mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
+        return TRUE;
+    },
 };
 
-static const Ability Sniper = {
-    .name = $("Sniper"),
-    .description = $("Critical hits have a 2.25x dmg\n"
-                     "multiplier instead of 1.5x."),
+constexpr Ability Sniper = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (isCrit) MUL(1.5);
         },
 };
 
-static const Ability MagicGuard = {
-    .name = $("Magic Guard"),
-    .description = $("Only damaged by attacks."),
+constexpr Ability MagicGuard = {
     .magicGuard = TRUE,
 };
 
-static const Ability NoGuard = {
-    .name = $("No Guard"),
-    .description = $("Attacks used by and on this\n"
-                     "Pokémon bypass accuracy checks."),
+constexpr Ability NoGuard = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority { return ACCURACY_ALWAYS_HITS; },
     .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
 };
 
-static const Ability Stall = {
-    .name = $("Stall"),
-    .description = $("Takes 30% less damage if it\n"
-                     "hasn't moved yet."),
+constexpr Ability Stall = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (gCurrentTurnActionNumber < GetBattlerTurnOrderNum(battler)) MUL(.7);
@@ -1431,46 +1236,31 @@ static const Ability Stall = {
     .breakable = TRUE,
 };
 
-static const Ability Technician = {
-    .name = $("Technician"),
-    .description = $("Moves with 60 BP or less get\n"
-                     "a 1.5x boost."),
+constexpr Ability Technician = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (basePower <= 60) MUL(1.5);
         },
 };
 
-static const Ability LeafGuard = {
-    .name = $("Leaf Guard"),
-    .description = $("Immune to status conditions if\n"
-                     "sun is active."),
+constexpr Ability LeafGuard = {
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
+        return TRUE;
+    },
     .breakable = TRUE,
 };
 
-static const Ability Klutz = {
-    .name = $("Klutz"),
-    .description = $("Own held item has no effect.\n"
-                     "Mega Stones are unaffected."),
-};
-
-static const Ability MoldBreaker = {
-    .name = $("Mold Breaker"),
-    .description = $("Moves hit through abilities.\n"
-                     "Also affects innates."),
+constexpr Ability MoldBreaker = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER); },
 };
 
-static const Ability SuperLuck = {
-    .name = $("Super Luck"),
-    .description = $("Raises critical-hit ratio of own\n"
-                     "moves by +1."),
+constexpr Ability SuperLuck = {
+    .onCrit = +[](ON_CRIT) -> int { return 1; },
 };
 
-static const Ability Aftermath = {
-    .name = $("Aftermath"),
-    .description = $("If faints by a contact move,\n"
-                     "attacker takes 25% of max HP."),
+constexpr Ability Aftermath = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
@@ -1484,10 +1274,7 @@ static const Ability Aftermath = {
     },
 };
 
-static const Ability Anticipation = {
-    .name = $("Anticipation"),
-    .description = $("Senses Super-effective moves.\n"
-                     "Blocks one Super-effective hit."),
+constexpr Ability Anticipation = {
     .onEntry = +[](ON_ENTRY) -> int {
         int side = GetBattlerSide(battler);
         int any = FALSE;
@@ -1495,7 +1282,7 @@ static const Ability Anticipation = {
         for (int i = 0; i < gBattlersCount; i++) {
             if (IsBattlerAlive(i) && side != GetBattlerSide(i)) {
                 for (int j = 0; j < MAX_MON_MOVES; j++) {
-                    int move = gBattleMons[i].moves[j];
+                    MoveEnum move = gBattleMons[i].moves[j];
                     int moveType = gBattleMoves[move].type;
                     if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0)) {
                         any = TRUE;
@@ -1513,10 +1300,7 @@ static const Ability Anticipation = {
     .persistent = TRUE,
 };
 
-static const Ability Forewarn = {
-    .name = $("Forewarn"),
-    .description = $("Casts a 50 BP Future Sight on\n"
-                     "entry."),
+constexpr Ability Forewarn = {
     .onEntry = +[](ON_ENTRY) -> int {
         gBattlerTarget = BATTLE_OPPOSITE(battler);
         if (!IsBattlerAlive(gBattlerTarget) || gWishFutureKnock.futureSightCounter[gBattlerTarget]) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
@@ -1525,7 +1309,7 @@ static const Ability Forewarn = {
 
         gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)] |= SIDE_STATUS_FUTUREATTACK;
         gWishFutureKnock.futureSightMove[gBattlerTarget] = MOVE_FUTURE_SIGHT;
-        gWishFutureKnock.futureSightPower[gBattlerTarget] = 50;
+        gWishFutureKnock.futureSightPower[gBattlerTarget] = 80;
         gWishFutureKnock.futureSightAttacker[gBattlerTarget] = battler;
         gWishFutureKnock.futureSightCounter[gBattlerTarget] = 3;
 
@@ -1534,28 +1318,19 @@ static const Ability Forewarn = {
     },
 };
 
-static const Ability Unaware = {
-    .name = $("Unaware"),
-    .description = $("Ignores foes' stat changes, both\n"
-                     "positive and negative ones."),
+constexpr Ability Unaware = {
     .breakable = TRUE,
     .unaware = TRUE,
 };
 
-static const Ability TintedLens = {
-    .name = $("Tinted Lens"),
-    .description = $("Attacks deal double damage if\n"
-                     "resisted."),
+constexpr Ability TintedLens = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (typeEffectivenessMultiplier <= UQ_4_12(.5)) RESISTANCE(2);
         },
 };
 
-static const Ability Filter = {
-    .name = $("Filter"),
-    .description = $("Takes 35% less damage from\n"
-                     "Super-effective moves."),
+constexpr Ability Filter = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
@@ -1563,10 +1338,7 @@ static const Ability Filter = {
     .breakable = TRUE,
 };
 
-static const Ability SlowStart = {
-    .name = $("Slow Start"),
-    .description = $("Halves Attack and Speed during\n"
-                     "the first 5 turns out."),
+constexpr Ability SlowStart = {
     .onEntry = +[](ON_ENTRY) -> int {
         gVolatileStructs[battler].slowStartTimer = 5;
         return SwitchInAnnounce(B_MSG_SWITCHIN_SLOWSTART);
@@ -1578,16 +1350,18 @@ static const Ability SlowStart = {
         },
 };
 
-static const Ability Scrappy = {
-    .name = $("Scrappy"),
-    .description = $("Normal/Fighting can hit Ghosts.\n"
-                     "Immune to Intimidate/Scare."),
+constexpr Ability Scrappy = {
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING)
+        CHECK(defType == TYPE_GHOST)
+        CHECK_NOT(*mod)
+        *mod = UQ_4_12(1.0);
+        return TRUE;
+    },
+    .tauntImmune = TRUE,
 };
 
-static const Ability StormDrain = {
-    .name = $("Storm Drain"),
-    .description = $("Redirects Water moves.\n"
-                     "Absorbs them, ups highest Atk."),
+constexpr Ability StormDrain = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_WATER);
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -1597,13 +1371,10 @@ static const Ability StormDrain = {
     .breakable = TRUE,
 };
 
-static const Ability IceBody = {
-    .name = $("Ice Body"),
-    .description = $("Heals 1/8 of max HP every turn\n"
-                     "in hail."),
+constexpr Ability IceBody = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
 
@@ -1615,18 +1386,12 @@ static const Ability IceBody = {
     },
 };
 
-static const Ability SolidRock = {
-    .name = $("Solid Rock"),
-    .description = $("Takes 35% less damage from\n"
-                     "Super-effective moves."),
+constexpr Ability SolidRock = {
     .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-static const Ability SnowWarning = {
-    .name = $("Snow Warning"),
-    .description = $("Summons hail on entry.\n"
-                     "Lasts 8 turns."),
+constexpr Ability SnowWarning = {
     .onEntry = +[](ON_ENTRY) -> int {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
@@ -1639,10 +1404,7 @@ static const Ability SnowWarning = {
     },
 };
 
-static const Ability HoneyGather = {
-    .name = $("Honey Gather"),
-    .description = $("Has a 50% chance to find Honey\n"
-                     "each turn."),
+constexpr Ability HoneyGather = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(gBattleMons[battler].item)
         CHECK(Random() % 2)
@@ -1653,13 +1415,10 @@ static const Ability HoneyGather = {
     },
 };
 
-static const Ability Frisk = {
-    .name = $("Frisk"),
-    .description = $("Checks foes' item and disables\n"
-                     "their items for two turns."),
+constexpr Ability Frisk = {
     .onEntry = +[](ON_ENTRY) -> int {
         int any = FALSE;
-        for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2) {
+        for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
             FILTER(IsBattlerAlive(i))
             FILTER(gBattleMons[i].item)
             any = TRUE;
@@ -1672,28 +1431,19 @@ static const Ability Frisk = {
     },
 };
 
-static const Ability Reckless = {
-    .name = $("Reckless"),
-    .description = $("Moves causing recoil damage\n"
-                     "deal 1.2x more damage."),
+constexpr Ability Reckless = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
         },
 };
 
-static const Ability Multitype = {
-    .name = $("Multitype"),
-    .description = $("Held Plate item decides holder's\n"
-                     "type."),
+constexpr Ability Multitype = {
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-static const Ability FlowerGift = {
-    .name = $("Flower Gift"),
-    .description = $("Increases the party's SpAtk\n"
-                     "and SpDef by 1.5x in Sun."),
+constexpr Ability FlowerGift = {
     .onEntry = Forecast.onEntry,
     .onWeather = Forecast.onWeather,
     .onEndTurn = Forecast.onEndTurn,
@@ -1708,10 +1458,7 @@ static const Ability FlowerGift = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability BadDreams = {
-    .name = $("Bad Dreams"),
-    .description = $("Sleeping Pokémon lose 1/4 of max\n"
-                     "HP at the end of each turn."),
+constexpr Ability BadDreams = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         gBattleScripting.abilityPopupOverwrite = ability;
         BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
@@ -1719,46 +1466,23 @@ static const Ability BadDreams = {
     },
 };
 
-static const Ability Pickpocket = {
-    .name = $("Pickpocket"),
-    .description = $("Steals the foe's held item on\n"
-                     "contact."),
-};
-
-static const Ability SheerForce = {
-    .name = $("Sheer Force"),
-    .description = $("Exchanges added effects on its\n"
-                     "moves for 1.3x more power."),
+constexpr Ability SheerForce = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST) MUL(1.3);
         },
 };
 
-static const Ability Contrary = {
-    .name = $("Contrary"),
-    .description = $("Stat raises turn into stat drops\n"
-                     "for this Pokémon and vice versa."),
+constexpr Ability Contrary = {
     .breakable = TRUE,
 };
 
-static const Ability Unnerve = {
-    .name = $("Unnerve"),
-    .description = $("Foes can't eat Berries as long\n"
-                     "as this Pokémon is in battle."),
+constexpr Ability Unnerve = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE); },
+    .unnerve = TRUE,
 };
 
-static const Ability Defiant = {
-    .name = $("Defiant"),
-    .description = $("Raises Attack by two stages if\n"
-                     "stats are lowered by an enemy."),
-};
-
-static const Ability Defeatist = {
-    .name = $("Defeatist"),
-    .description = $("Halves Atk and Sp. Atk stats if\n"
-                     "user is below 1/3 of max HP."),
+constexpr Ability Defeatist = {
     .onStat =
         +[](ON_STAT) {
             if (statId != STAT_ATK && statId != STAT_SPATK) return;
@@ -1766,15 +1490,12 @@ static const Ability Defeatist = {
         },
 };
 
-static const Ability CursedBody = {
-    .name = $("Cursed Body"),
-    .description = $("30% chance to disable moves\n"
-                     "if enemy makes contact."),
+constexpr Ability CursedBody = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(gVolatileStructs[attacker].disabledMove)
         CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(IsAbilityOnSide(attacker, ABILITY_AROMA_VEIL))
+        CHECK_NOT(IsAbilityStatusProtected(attacker, CHECK_RESTRICTING))
         CHECK(gBattleMons[attacker].pp[gChosenMovePos])
         CHECK(Random() % 100 < 30)
 
@@ -1786,10 +1507,7 @@ static const Ability CursedBody = {
     },
 };
 
-static const Ability Healer = {
-    .name = $("Healer"),
-    .description = $("30% chance to heal user or ally's\n"
-                     "status at the end of each turn."),
+constexpr Ability Healer = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(Random() % 100 < 30)
 
@@ -1805,17 +1523,11 @@ static const Ability Healer = {
     },
 };
 
-static const Ability FriendGuard = {
-    .name = $("Friend Guard"),
-    .description = $("Reduces damage that ally takes\n"
-                     "by 50% in double battles."),
+constexpr Ability FriendGuard = {
     .breakable = TRUE,
 };
 
-static const Ability WeakArmor = {
-    .name = $("Weak Armor"),
-    .description = $("If hit by a contact attack:\n"
-                     "-1 Defense and +2 Speed."),
+constexpr Ability WeakArmor = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(IS_MOVE_PHYSICAL(move))
@@ -1829,25 +1541,14 @@ static const Ability WeakArmor = {
     },
 };
 
-static const Ability HeavyMetal = {
-    .name = $("Heavy Metal"),
-    .description = $("Doubles this Pokémon's weight."),
-};
-
-static const Ability LightMetal = {
-    .name = $("Light Metal"),
-    .description = $("Boosts Speed by 1.3x and halves\n"
-                     "this Pokémon's weight."),
+constexpr Ability LightMetal = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED) *stat *= 1.3;
         },
 };
 
-static const Ability Multiscale = {
-    .name = $("Multiscale"),
-    .description = $("At full HP, halves damage taken\n"
-                     "from attacks"),
+constexpr Ability Multiscale = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (BATTLER_MAX_HP(battler)) MUL(.5);
@@ -1855,17 +1556,14 @@ static const Ability Multiscale = {
     .breakable = TRUE,
 };
 
-static const Ability ToxicBoost = {
-    .name = $("Toxic Boost"),
-    .description = $("Ups Atk by 1.5x if poisoned.\n"
-                     "Immune to Poison status damage."),
+constexpr Ability ToxicBoost = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMons[battler].status1 & STATUS1_PSN_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
         },
 };
 
-int FlareBoostHandler(int ability, int battler, AbilityCallType callType) {
+int FlareBoostHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
     CHECK(CanBeBurned(battler))
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
@@ -1877,10 +1575,7 @@ int FlareBoostHandler(int ability, int battler, AbilityCallType callType) {
     return TRUE;
 }
 
-static const Ability FlareBoost = {
-    .name = $("Flare Boost"),
-    .description = $("Ups Sp. Atk by 1.5x if burned.\n"
-                     "Ignites in fog."),
+constexpr Ability FlareBoost = {
     .onEntry = +[](ON_ENTRY) -> int { return FlareBoostHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onWeather = +[](ON_WEATHER) -> int { return FlareBoostHandler(ability, battler, ABILITY_BS_CALL); },
     .onStat =
@@ -1888,12 +1583,10 @@ static const Ability FlareBoost = {
             if (statId != STAT_SPATK) return;
             if (gBattleMons[battler].status1 & STATUS1_BURN) *stat *= 1.5;
         },
+    .negatesBurnAtkDrop = TRUE,
 };
 
-static const Ability Harvest = {
-    .name = $("Harvest"),
-    .description = $("50% chance to recycle a used\n"
-                     "Berry every turn, 100% in sun."),
+constexpr Ability Harvest = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(gBattleMons[battler].item)
         CHECK_NOT(gBattleStruct->changedItems[battler])
@@ -1905,16 +1598,16 @@ static const Ability Harvest = {
     },
 };
 
-static const Ability Telepathy = {
-    .name = $("Telepathy"),
-    .description = $("Can't be damaged by ally attacks."),
+constexpr Ability Telepathy = {
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (target == BATTLE_PARTNER(battler) && gBattleMoves[move].power) *mod = 0;
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_ATTACKER_OR_TARGET,
     .breakable = TRUE,
 };
 
-static const Ability Moody = {
-    .name = $("Moody"),
-    .description = $("Lowers a random stat by -1 and\n"
-                     "raises another by +2 every turn."),
+constexpr Ability Moody = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2);
         int validToRaise = 0, validToLower = 0;
@@ -1945,10 +1638,7 @@ static const Ability Moody = {
     },
 };
 
-static const Ability Overcoat = {
-    .name = $("Overcoat"),
-    .description = $("Blocks weather dmg, powder moves.\n"
-                     "20% Special damage reduction."),
+constexpr Ability Overcoat = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IS_MOVE_SPECIAL(move)) MUL(.8);
@@ -1956,72 +1646,46 @@ static const Ability Overcoat = {
     .breakable = TRUE,
 };
 
-static const Ability PoisonTouch = {
-    .name = $("Poison Touch"),
-    .description = $("30% chance to poison on contact.\n"
-                     "Also works on offense."),
+constexpr Ability PoisonTouch = {
     .onAttacker = PoisonPoint.onAttacker,
     .onDefender = PoisonPoint.onDefender,
 };
 
-static const Ability Regenerator = {
-    .name = $("Regenerator"),
-    .description = $("Heals 1/3 of max HP upon\n"
-                     "switching out."),
+constexpr Ability Regenerator = {
     .onExit = +[](ON_EXIT) -> int {
-        CHECK(IsBattlerAlive(battler)) CHECK(BATTLER_MAX_HP(battler));
+        CHECK(IsBattlerAlive(battler))
+        CHECK_NOT(BATTLER_MAX_HP(battler))
         BattleScriptCall(BattleScript_RegeneratorExits);
         return FALSE;
     },
 };
 
-static const Ability BigPecks = {
-    .name = $("Big Pecks"),
-    .description = $("Boosts the power of contact\n"
-                     "moves by 1.3x."),
+constexpr Ability BigPecks = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IsMoveMakingContact(move, battler)) MUL(1.3);
         },
 };
 
-static const Ability SandRush = {
-    .name = $("Sand Rush"),
-    .description = $("This Pokémon's Speed gets a\n"
-                     "1.5x boost in a sandstorm."),
+constexpr Ability SandRush = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat *= 1.5;
         },
 };
 
-static const Ability WonderSkin = {
-    .name = $("Wonder Skin"),
-    .description = $("Opposing status moves have\n"
-                     "their accuracy halved."),
-    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-        CHECK(IS_MOVE_STATUS(move));
-        *accuracy /= 2;
-        return ACCURACY_MULTIPLICATIVE;
-    },
-    .onAccuracyFor = APPLY_ON_TARGET,
-    .breakable = TRUE,
+constexpr Ability WonderSkin = {
+    .fortKnox = TRUE,
 };
 
-static const Ability Analytic = {
-    .name = $("Analytic"),
-    .description = $("Attacks get a 1.3x power boost\n"
-                     "if it moves last."),
+constexpr Ability Analytic = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber && move != MOVE_FUTURE_SIGHT && move != MOVE_DOOM_DESIRE) MUL(1.3);
+            if (GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber && gBattleMoves[move].effect != EFFECT_FUTURE_SIGHT) MUL(1.3);
         },
 };
 
-static const Ability Illusion = {
-    .name = $("Illusion"),
-    .description = $("Appears as last party slot and\n"
-                     "boosts power by 1.3x until hit."),
+constexpr Ability Illusion = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(gBattleStruct->illusion[battler].on)
@@ -2036,10 +1700,7 @@ static const Ability Illusion = {
         },
 };
 
-static const Ability Imposter = {
-    .name = $("Imposter"),
-    .description = $("Transforms into the foe on\n"
-                     "entry."),
+constexpr Ability Imposter = {
     .onEntry = +[](ON_ENTRY) -> int {
         gBattlerTarget = BATTLE_OPPOSITE(battler);
         if (!IsBattlerAlive(gBattlerTarget)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
@@ -2054,20 +1715,14 @@ static const Ability Imposter = {
     },
 };
 
-static const Ability Infiltrator = {
-    .name = $("Infiltrator"),
-    .description = $("Own moves bypass Substitutes\n"
-                     "and damage reduction screens."),
+constexpr Ability Infiltrator = {
     .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType { return INFILTRATE_SCREENS | INFILTRATE_SUBSTITUTE; },
 };
 
-static const Ability Mummy = {
-    .name = $("Mummy"),
-    .description = $("If hit, makes the attacker's ability\n"
-                     "Mummy."),
+constexpr Ability Mummy = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
-        CHECK_NOT(BattlerHasAbility(attacker, ability, FALSE))
+        CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
         CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
@@ -2079,18 +1734,12 @@ static const Ability Mummy = {
     },
 };
 
-static const Ability Moxie = {
-    .name = $("Moxie"),
-    .description = $("Dealing a KO raises Attack by\n"
-                     "one stage."),
+constexpr Ability Moxie = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, STAT_ATK); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Justified = {
-    .name = $("Justified"),
-    .description = $("Boosts Attack instead of being\n"
-                     "hit by Dark-type moves."),
+constexpr Ability Justified = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_DARK);
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -2098,10 +1747,7 @@ static const Ability Justified = {
     },
 };
 
-static const Ability Rattled = {
-    .name = $("Rattled"),
-    .description = $("If hit by Bug, Dark or Ghost\n"
-                     "move, or flinches: +1 Speed."),
+constexpr Ability Rattled = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_DARK || moveType == TYPE_BUG || moveType == TYPE_GHOST)
@@ -2113,17 +1759,12 @@ static const Ability Rattled = {
     },
 };
 
-static const Ability MagicBounce = {
-    .name = $("Magic Bounce"),
-    .description = $("Bounces back the effect of\n"
-                     "status moves to their user."),
+constexpr Ability MagicBounce = {
     .breakable = TRUE,
+    .magicBounce = TRUE,
 };
 
-static const Ability SapSipper = {
-    .name = $("Sap Sipper"),
-    .description = $("Boosts highest Atk instead of\n"
-                     "being hit by Grass-type moves."),
+constexpr Ability SapSipper = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_GRASS);
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -2132,20 +1773,14 @@ static const Ability SapSipper = {
     .breakable = TRUE,
 };
 
-static const Ability Prankster = {
-    .name = $("Prankster"),
-    .description = $("Status moves have +1 priority\n"
-                     "but fail on opposing Dark-types."),
+constexpr Ability Prankster = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(IS_MOVE_STATUS(move))
         return 1;
     },
 };
 
-static const Ability SandForce = {
-    .name = $("Sand Force"),
-    .description = $("Ups highest attacking stat\n"
-                     "by 1.5x in sand."),
+constexpr Ability SandForce = {
     .onStat =
         +[](ON_STAT) {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
@@ -2153,27 +1788,18 @@ static const Ability SandForce = {
         },
 };
 
-static const Ability IronBarbs = {
-    .name = $("Iron Barbs"),
-    .description = $("Enemies lose 1/8 of max HP if\n"
-                     "they use a contact move."),
+constexpr Ability IronBarbs = {
     .onDefender = RoughSkin.onDefender,
 };
 
-static const Ability ZenMode = {
-    .name = $("Zen Mode"),
-    .description = $("Transforms into Zen Mode on\n"
-                     "entry until end of battle."),
+constexpr Ability ZenMode = {
     .onEntry = Forecast.onEntry,
     .onEndTurn = Forecast.onEndTurn,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-static const Ability VictoryStar = {
-    .name = $("Victory Star"),
-    .description = $("Gives 1.2x accuracy boost to\n"
-                     "its own and its allies' moves."),
+constexpr Ability VictoryStar = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
@@ -2181,51 +1807,50 @@ static const Ability VictoryStar = {
     .onAccuracyFor = APPLY_ON_ALLY,
 };
 
-static const Ability Turboblaze = {
-    .name = $("Turboblaze"),
-    .description = $("Moves hit through abilities.\n"
-                     "Adds Fire type to itself."),
+constexpr Ability Turboblaze = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIRE); },
 };
 
-static const Ability Teravolt = {
-    .name = $("Teravolt"),
-    .description = $("Moves hit through abilities.\n"
-                     "Adds Electric type to itself."),
+constexpr Ability Teravolt = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ELECTRIC); },
 };
 
-static const Ability AromaVeil = {
-    .name = $("Aroma Veil"),
-    .description = $("Immune to Encore, Attract, Taunt,\n"
-                     "Torment, Disable, Heal Block."),
+constexpr Ability AromaVeil = {
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & (CHECK_INFATUATE | CHECK_RESTRICTING | CHECK_HEAL_BLOCK))
+        return TRUE;
+    },
+    .onStatusImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
-static const Ability FlowerVeil = {
-    .name = $("Flower Veil"),
-    .description = $("Grass-types on this Pokémon's\n"
-                     "side are immune to stat drops."),
+constexpr Ability FlowerVeil = {
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        CHECK(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
+        return TRUE;
+    },
+    .onStatusImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
-static const Ability CheekPouch = {
-    .name = $("Cheek Pouch"),
-    .description = $("This ability has no effect."),
+constexpr Ability CheekPouch = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Protean = {
-    .name = $("Protean"),
-    .description = $("Changes type depending on the\n"
-                     "move it's about to use."),
-    .protean = TRUE,
+constexpr Ability Protean = {
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
+        CHECK_NOT(IS_BATTLER_OF_TYPE(battler, moveType))
+        CHECK(move != MOVE_STRUGGLE)
+        SET_BATTLER_TYPE(gBattlerAttacker, moveType);
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
+        BattleScriptCall(BattleScript_ProteanActivates);
+        return TRUE;
+    },
 };
 
-static const Ability FurCoat = {
-    .name = $("Fur Coat"),
-    .description = $("Halves damage taken by Physical\n"
-                     "moves. Does NOT double Defense."),
+constexpr Ability FurCoat = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IS_MOVE_PHYSICAL(move)) MUL(.5);
@@ -2233,16 +1858,7 @@ static const Ability FurCoat = {
     .breakable = TRUE,
 };
 
-static const Ability Magician = {
-    .name = $("Magician"),
-    .description = $("Steals the foe's held item after\n"
-                     "using a non-contact move."),
-};
-
-static const Ability Bulletproof = {
-    .name = $("Bulletproof"),
-    .description = $("Immune to projectile, ball, or\n"
-                     "bomb-based moves."),
+constexpr Ability Bulletproof = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(gBattleMoves[move].flags & FLAG_BALLISTIC)
         CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
@@ -2251,65 +1867,75 @@ static const Ability Bulletproof = {
     .breakable = TRUE,
 };
 
-static const Ability Competitive = {
-    .name = $("Competitive"),
-    .description = $("Raises Sp. Atk by two stages if\n"
-                     "stats are lowered by an enemy."),
-};
-
-static const Ability StrongJaw = {
-    .name = $("Strong Jaw"),
-    .description = $("Boosts the power of bite/fang\n"
-                     "moves by 1.3x."),
+constexpr Ability StrongJaw = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) MUL(1.3);
         },
 };
 
-static const Ability Refrigerate = {
-    .name = $("Refrigerate"),
-    .description = $("Normal-type moves become Ice-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Refrigerate = {
     ATE_ABILITY(TYPE_ICE),
 };
 
-static const Ability SweetVeil = {
-    .name = $("Sweet Veil"),
-    .description = $("This Pokémon and its ally are\n"
-                     "immune to sleep."),
+constexpr Ability SweetVeil = {
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_SLEEP)
+        return TRUE;
+    },
+    .onStatusImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
-static const Ability StanceChange = {
-    .name = $("Stance Change"),
-    .description = $("Turns into Blade or Shield form\n"
-                     "depending on move used."),
+constexpr Ability StanceChange = {
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        int newSpecies = SPECIES_NONE;
+        switch (gBattleMons[battler].species) {
+            default:
+                return FALSE;
+            case SPECIES_AEGISLASH:  // Shield -> Blade
+                if (gBattleMoves[move].power > 0) newSpecies = SPECIES_AEGISLASH_BLADE;
+                break;
+            case SPECIES_AEGISLASH_BLADE:  // Blade -> Shield
+                if (move == MOVE_KINGS_SHIELD) newSpecies = SPECIES_AEGISLASH;
+                break;
+            case SPECIES_AEGISLASH_BLADE_REDUX:  // Special -> Physical
+                if (gBattleMoves[move].split == SPLIT_PHYSICAL && !gBattleMoves[move].arrowBased) newSpecies = SPECIES_AEGISLASH_REDUX;
+                break;
+            case SPECIES_AEGISLASH_BLADE_REDUX_MEGA:  // Special -> Physical
+                if (gBattleMoves[move].split == SPLIT_PHYSICAL && !gBattleMoves[move].arrowBased) newSpecies = SPECIES_AEGISLASH_REDUX_MEGA;
+                break;
+            case SPECIES_AEGISLASH_REDUX:  // Physical -> Special
+                if (gBattleMoves[move].split == SPLIT_SPECIAL || gBattleMoves[move].arrowBased) newSpecies = SPECIES_AEGISLASH_BLADE_REDUX;
+                break;
+            case SPECIES_AEGISLASH_REDUX_MEGA:  // Physical -> Special
+                if (gBattleMoves[move].split == SPLIT_SPECIAL || gBattleMoves[move].arrowBased) newSpecies = SPECIES_AEGISLASH_BLADE_REDUX_MEGA;
+                break;
+        }
+        CHECK(newSpecies)
+
+        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+        gBattleMons[battler].species = newSpecies;
+        BattleScriptCall(BattleScript_AttackerFormChange);
+        return TRUE;
+    },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-static const Ability GaleWings = {
-    .name = $("Gale Wings"),
-    .description = $("At full HP, gives +1 priority to\n"
-                     "this Pokémon's Flying-type moves."),
+constexpr Ability GaleWings = {
     .onPriority = GALE_WINGS_CLONE(TYPE_FLYING),
 };
 
-static const Ability MegaLauncher = {
-    .name = $("Mega Launcher"),
-    .description = $("Boosts Beam/Pump/Cannon/Shot/\n"
-                     "Gun/Pulse, etc. moves by 1.3x."),
+constexpr Ability MegaLauncher = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.3);
+            if (IsMegaLauncherBoosted(battler, move)) MUL(1.3);
         },
+    .megaLauncherBoost = TRUE,
 };
 
-static const Ability GrassPelt = {
-    .name = $("Grass Pelt"),
-    .description = $("This Pokémon's Defense gets a\n"
-                     "1.5x boost in Grassy Terrain."),
+constexpr Ability GrassPelt = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_DEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
@@ -2317,30 +1943,15 @@ static const Ability GrassPelt = {
     .breakable = TRUE,
 };
 
-static const Ability Symbiosis = {
-    .name = $("Symbiosis"),
-    .description = $("Passes own item to its ally if\n"
-                     "said ally consumes its item."),
-};
-
-static const Ability ToughClaws = {
-    .name = $("Tough Claws"),
-    .description = $("Boosts the power of contact\n"
-                     "moves by 1.3x."),
+constexpr Ability ToughClaws = {
     .onOffensiveMultiplier = BigPecks.onOffensiveMultiplier,
 };
 
-static const Ability Pixilate = {
-    .name = $("Pixilate"),
-    .description = $("Normal-type moves become Fairy-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Pixilate = {
     ATE_ABILITY(TYPE_FAIRY),
 };
 
-static const Ability Gooey = {
-    .name = $("Gooey"),
-    .description = $("Lowers Speed of enemies that\n"
-                     "make contact with this Pokémon."),
+constexpr Ability Gooey = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(StatLowerableOrMirrorArmor(attacker, STAT_SPEED))
@@ -2352,25 +1963,16 @@ static const Ability Gooey = {
     },
 };
 
-static const Ability Aerilate = {
-    .name = $("Aerilate"),
-    .description = $("Normal-type moves become Flying-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Aerilate = {
     ATE_ABILITY(TYPE_FLYING),
 };
 
-static const Ability ParentalBond = {
-    .name = $("Parental Bond"),
-    .description = $("Moves hit twice. 1st hit at 100%\n"
-                     "power, 2nd hit at 25%."),
+constexpr Ability ParentalBond = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType { return PARENTAL_BOND_HYPER_AGGRESSIVE; },
     .resistsFortKnox = TRUE,
 };
 
-static const Ability DarkAura = {
-    .name = $("Dark Aura"),
-    .description = $("Boosts Dark moves by 1.33x for\n"
-                     "all while this Pokémon is out."),
+constexpr Ability DarkAura = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_DARKAURA); },
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
@@ -2383,10 +1985,7 @@ static const Ability DarkAura = {
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
-static const Ability FairyAura = {
-    .name = $("Fairy Aura"),
-    .description = $("Boosts Fairy moves by 1.33x for\n"
-                     "all while this Pokémon is out."),
+constexpr Ability FairyAura = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_FAIRYAURA); },
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
@@ -2399,18 +1998,12 @@ static const Ability FairyAura = {
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
-static const Ability AuraBreak = {
-    .name = $("Aura Break"),
-    .description = $("Cancels aura abilities and makes\n"
-                     "them 25% weaker instead."),
+constexpr Ability AuraBreak = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_AURABREAK); },
     .breakable = TRUE,
 };
 
-static const Ability PrimordialSea = {
-    .name = $("Primordial Sea"),
-    .description = $("Heavy Rain until switched out.\n"
-                     "Fire-type moves are unusable."),
+constexpr Ability PrimordialSea = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN_PRIMAL, TRUE))
 
@@ -2419,10 +2012,7 @@ static const Ability PrimordialSea = {
     },
 };
 
-static const Ability DesolateLand = {
-    .name = $("Desolate Land"),
-    .description = $("Intense Sun until switched out.\n"
-                     "Water-type moves are unusable."),
+constexpr Ability DesolateLand = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_SUN_PRIMAL, TRUE))
 
@@ -2431,10 +2021,7 @@ static const Ability DesolateLand = {
     },
 };
 
-static const Ability DeltaStream = {
-    .name = $("Delta Stream"),
-    .description = $("Strong Winds until switched out.\n"
-                     "Weather-based moves not usable."),
+constexpr Ability DeltaStream = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_STRONG_WINDS, TRUE))
 
@@ -2449,10 +2036,7 @@ static const Ability DeltaStream = {
     },
 };
 
-static const Ability Stamina = {
-    .name = $("Stamina"),
-    .description = $("Getting hit raises Def by +1.\n"
-                     "Critical hits maximize Defense."),
+constexpr Ability Stamina = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_DEF))
@@ -2468,10 +2052,7 @@ static const Ability Stamina = {
     },
 };
 
-static const Ability WimpOut = {
-    .name = $("Wimp Out"),
-    .description = $("At 1/2 of max HP or below,\n"
-                     "instantly switches out."),
+constexpr Ability WimpOut = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(CheckHalfHpAbility(battler, attacker))
         CHECK_NOT(TestSheerForceFlag(attacker, gCurrentMove))
@@ -2483,17 +2064,11 @@ static const Ability WimpOut = {
     },
 };
 
-static const Ability EmergencyExit = {
-    .name = $("Emergency Exit"),
-    .description = $("At 1/2 of max HP or below,\n"
-                     "instantly switches out."),
+constexpr Ability EmergencyExit = {
     .onDefender = WimpOut.onDefender,
 };
 
-static const Ability WaterCompaction = {
-    .name = $("Water Compaction"),
-    .description = $("Takes 1/2 dmg from Water-type\n"
-                     "moves. +2 Def when hit by those."),
+constexpr Ability WaterCompaction = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_WATER)
@@ -2510,23 +2085,25 @@ static const Ability WaterCompaction = {
     .breakable = TRUE,
 };
 
-static const Ability Merciless = {
-    .name = $("Merciless"),
-    .description = $("100% crit if targetting slowed,\n"
-                     "poisoned, paralyzed, or bleeding foes."),
+constexpr Ability Merciless = {
+    .onCrit = +[](ON_CRIT) -> int {
+        if (gBattleMons[target].status1 & STATUS1_PSN_ANY) return ALWAYS_CRIT;
+        if (gBattleMons[target].status1 & STATUS1_PARALYSIS) return ALWAYS_CRIT;
+        if (gBattleMons[target].status1 & STATUS1_BLEED) return ALWAYS_CRIT;
+        if (gBattleMons[target].statStages[STAT_SPEED] < DEFAULT_STAT_STAGE) return ALWAYS_CRIT;
+        if (GetBattlerHoldEffect(target, TRUE) == HOLD_EFFECT_IRON_BALL) return ALWAYS_CRIT;
+        return 0;
+    },
 };
 
-static const Ability ShieldsDown = {
-    .name = $("Shields Down"),
-    .description = $("At 1/2 of max HP or below,\n"
-                     "transforms into Core form."),
+constexpr Ability ShieldsDown = {
     .onEntry = Forecast.onEntry,
     .onEndTurn = Forecast.onEndTurn,
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(IsBattlerAlive(battler))
         CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
         CHECK(gBattleMoves[move].effect == EFFECT_SHELL_SMASH)
-        CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
         int i;
         for (i = 0; i < ARRAY_COUNT(gHpTransformations); i++) {
@@ -2542,45 +2119,54 @@ static const Ability ShieldsDown = {
         }
         return FALSE;
     },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        switch (gBattleMons[battler].species) {
+            case SPECIES_MINIOR:
+            case SPECIES_MINIOR_METEOR_ORANGE:
+            case SPECIES_MINIOR_METEOR_YELLOW:
+            case SPECIES_MINIOR_METEOR_GREEN:
+            case SPECIES_MINIOR_METEOR_BLUE:
+            case SPECIES_MINIOR_METEOR_INDIGO:
+            case SPECIES_MINIOR_METEOR_VIOLET:
+                return TRUE;
+
+            default:
+                return FALSE;
+        }
+    },
     .unsuppressable = TRUE,
 };
 
-static const Ability Stakeout = {
-    .name = $("Stakeout"),
-    .description = $("Deals double damage to opponents\n"
-                     "being switched in."),
+constexpr Ability Stakeout = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gVolatileStructs[target].isFirstTurn == 2) MUL(2.0);
         },
 };
 
-static const Ability WaterBubble = {
-    .name = $("Water Bubble"),
-    .description = $("Halves Fire dmg taken, no burns,\n"
-                     "doubles power of its Water moves."),
+constexpr Ability WaterBubble = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_WATER) MUL(2.0);
         },
     .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_BURN)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability Steelworker = {
-    .name = $("Steelworker"),
-    .description = $("Boosts the power of Steel-type\n"
-                     "moves by 1.3x."),
+constexpr Ability Steelworker = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_STEEL) MUL(1.3);
         },
 };
 
-static const Ability Berserk = {
-    .name = $("Berserk"),
-    .description = $("Boosts Sp. Atk by one stage when\n"
-                     "at 1/2 of max HP or lower."),
+constexpr Ability Berserk = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(CheckHalfHpAbility(battler, attacker))
         CHECK_NOT(GetAbilityState(battler, ability))
@@ -2593,30 +2179,21 @@ static const Ability Berserk = {
     },
 };
 
-static const Ability SlushRush = {
-    .name = $("Slush Rush"),
-    .description = $("This Pokémon's Speed gets a\n"
-                     "1.5x boost in hail."),
+constexpr Ability SlushRush = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
         },
 };
 
-static const Ability LongReach = {
-    .name = $("Long Reach"),
-    .description = $("Doesn't make contact. Boosts\n"
-                     "Phys. non-contact moves by 1.2x."),
+constexpr Ability LongReach = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_MOVE_PHYSICAL(move) && !(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) MUL(1.2);
         },
 };
 
-static const Ability LiquidVoice = {
-    .name = $("Liquid Voice"),
-    .description = $("Sound moves get a 1.2x boost\n"
-                     "and become Water if Normal."),
+constexpr Ability LiquidVoice = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.2);
@@ -2628,37 +2205,25 @@ static const Ability LiquidVoice = {
     },
 };
 
-static const Ability Triage = {
-    .name = $("Triage"),
-    .description = $("Moves that have a healing effect\n"
-                     "gain +3 priority."),
+constexpr Ability Triage = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(IsHealingMoveEffect(gBattleMoves[move].effect))
         return 3;
     },
 };
 
-static const Ability Galvanize = {
-    .name = $("Galvanize"),
-    .description = $("Normal-type moves become Elec.-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Galvanize = {
     ATE_ABILITY(TYPE_ELECTRIC),
 };
 
-static const Ability SurgeSurfer = {
-    .name = $("Surge Surfer"),
-    .description = $("If Electric Terrain is active,\n"
-                     "gets a 1.5x Speed boost."),
+constexpr Ability SurgeSurfer = {
     .onStat =
         +[](ON_STAT) {
-            if (statId == STAT_SPEED && IsWeatherActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat *= 1.5;
+            if (statId == STAT_SPEED && IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat *= 1.5;
         },
 };
 
-static const Ability Schooling = {
-    .name = $("Schooling"),
-    .description = $("If Lv. 20 or more: changes into\n"
-                     "School form until 1/4 HP or less."),
+constexpr Ability Schooling = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gBattleMons[battler].level >= 20)
         return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
@@ -2671,7 +2236,7 @@ static const Ability Schooling = {
     .randomizerBanned = TRUE,
 };
 
-static int DisguiseReformHandler(int ability, int battler, AbilityCallType callType) {
+static int DisguiseReformHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
     int newSpecies;
     switch (gBattleMons[battler].species) {
         case SPECIES_MIMIKYU_BUSTED:
@@ -2685,7 +2250,7 @@ static int DisguiseReformHandler(int ability, int battler, AbilityCallType callT
             return FALSE;
     }
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
-    CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+    CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
     InsertCorrectEndType(callType);
     UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
@@ -2693,10 +2258,7 @@ static int DisguiseReformHandler(int ability, int battler, AbilityCallType callT
     BattleScriptCall(BattleScript_AttackerFormChange);
     return TRUE;
 }
-static const Ability Disguise = {
-    .name = $("Disguise"),
-    .description = $("Protects once against an attack.\n"
-                     "Restores protection in fog."),
+constexpr Ability Disguise = {
     .onEntry = +[](ON_ENTRY) -> int { return DisguiseReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onDisguise = +[](ON_DISGUISE) -> int {
         switch (gBattleMons[battler].species) {
@@ -2715,15 +2277,20 @@ static const Ability Disguise = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability BattleBond = {
-    .name = $("Battle Bond"),
-    .description = $("Transforms into Battle Bond form\n"
-                     "after dealing a KO."),
+constexpr Ability BattleBond = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         int newSpecies = 0;
         switch (gBattleMons[battler].species) {
             case SPECIES_GRENINJA_BATTLE_BOND:
                 newSpecies = SPECIES_GRENINJA_ASH;
+                break;
+
+            case SPECIES_CHESNAUGHT_BATTLE_BOND:
+                newSpecies = SPECIES_CHESNAUGHT_CLEMONT;
+                break;
+
+            case SPECIES_DELPHOX_BATTLE_BOND:
+                newSpecies = SPECIES_DELPHOX_SERENA;
                 break;
 
             case SPECIES_DARMANITAN_REDUX_BOND:
@@ -2745,14 +2312,11 @@ static const Ability BattleBond = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability PowerConstruct = {
-    .name = $("Power Construct"),
-    .description = $("At 1/2 of max HP or below,\n"
-                     "transforms into Complete form."),
+constexpr Ability PowerConstruct = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(gBattleMons[battler].species == SPECIES_ZYGARDE || gBattleMons[battler].species == SPECIES_ZYGARDE_10)
         CHECK(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
-        CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
         gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
         UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_ZYGARDE_COMPLETE);
@@ -2764,28 +2328,34 @@ static const Ability PowerConstruct = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Corrosion = {
-    .name = $("Corrosion"),
-    .description = $("Steel-types take Supereffective\n"
-                     "from Poison. Can poison any type."),
+constexpr Ability Corrosion = {
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_POISON)
+        CHECK(defType == TYPE_STEEL)
+        *mod = UQ_4_12(2.0);
+        return TRUE;
+    },
+    .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
+        CHECK(status & CHECK_POISON)
+        return TRUE;
+    },
 };
 
-static const Ability Comatose = {
-    .name = $("Comatose"),
-    .description = $("Can move, but is always asleep.\n"
-                     "Immune to status conditions."),
+constexpr Ability Comatose = {
     .onEntry = +[](ON_ENTRY) -> int {
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
         BattleScriptPushCursorAndCallback(BattleScript_AnnounceStatusAbility);
         return TRUE;
     },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        return TRUE;
+    },
     .unsuppressable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability QueenlyMajesty = {
-    .name = $("Queenly Majesty"),
-    .description = $("Protects itself and ally from\n"
-                     "priority moves."),
+constexpr Ability QueenlyMajesty = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK_NOT(gProcessingExtraAttacks)
         CHECK(GetBattlerSide(attacker) != GetBattlerSide(battler))
@@ -2797,10 +2367,7 @@ static const Ability QueenlyMajesty = {
     .breakable = TRUE,
 };
 
-static const Ability InnardsOut = {
-    .name = $("Innards Out"),
-    .description = $("If KO'd, deals as much damage as\n"
-                     "what the fatal attack dealt."),
+constexpr Ability InnardsOut = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
@@ -2812,16 +2379,14 @@ static const Ability InnardsOut = {
     },
 };
 
-static const Ability Dancer = {
-    .name = $("Dancer"),
-    .description = $("Copies dance moves used by\n"
-                     "others."),
+constexpr Ability Dancer = {
+    .onCopyMove = +[](ON_COPY_MOVE) -> int {
+        CHECK(IsDance(attacker, move))
+        return UseOutOfTurnAttack(battler, target, ability, move, 0);
+    },
 };
 
-static const Ability Battery = {
-    .name = $("Battery"),
-    .description = $("Grants a 1.3x power boost to\n"
-                     "ally's Special attacks."),
+constexpr Ability Battery = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_MOVE_SPECIAL(move)) MUL(1.3);
@@ -2829,10 +2394,7 @@ static const Ability Battery = {
     .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
 
-static const Ability Fluffy = {
-    .name = $("Fluffy"),
-    .description = $("Takes 1/2 dmg from contact moves\n"
-                     "but Fire moves hurt it 2x more."),
+constexpr Ability Fluffy = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE) RESISTANCE(2.0);
@@ -2841,19 +2403,13 @@ static const Ability Fluffy = {
     .breakable = TRUE,
 };
 
-static const Ability Dazzling = {
-    .name = $("Dazzling"),
-    .description = $("Protects itself and ally from\n"
-                     "priority moves."),
+constexpr Ability Dazzling = {
     .onImmune = QueenlyMajesty.onImmune,
     .onImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
-static const Ability SoulHeart = {
-    .name = $("Soul-Heart"),
-    .description = $("KOs dealt anywhere on the field\n"
-                     "raise Sp. Atk by one stage."),
+constexpr Ability SoulHeart = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(ChangeStatBuffs(battler, 1, STAT_SPATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
 
@@ -2863,19 +2419,13 @@ static const Ability SoulHeart = {
     .onBattlerFaintsFor = APPLY_ON_ANY,
 };
 
-static const Ability TanglingHair = {
-    .name = $("Tangling Hair"),
-    .description = $("Lowers Speed of enemies that\n"
-                     "make contact with this Pokémon."),
+constexpr Ability TanglingHair = {
     .onDefender = Gooey.onDefender,
 };
 
-static const Ability Receiver = {
-    .name = $("Receiver"),
-    .description = $("In Double Battles, copies its\n"
-                     "fainting partner's ability."),
+constexpr Ability Receiver = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        int allyAbility = GetBattlerAbility(fainted);
+        AbilityEnum allyAbility = GetBattlerAbility(fainted);
         CHECK_NOT(IsRolePlayBannedAbility(allyAbility))
         CHECK_NOT(HasAbilityIgnoringSuppression(battler, allyAbility))
         int index = GetAbilityIndex(battler, ability, FALSE);
@@ -2891,13 +2441,10 @@ static const Ability Receiver = {
     .onBattlerFaintsFor = APPLY_ON_ALLY,
 };
 
-static const Ability PowerOfAlchemy = {
-    .name = $("Power of Alchemy"),
-    .description = $("Transmutes berries on entry.\n"
-                     "Transmutes items when lost."),
+constexpr Ability PowerOfAlchemy = {
     .onEntry = +[](ON_ENTRY) -> int {
         int any = FALSE;
-        for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2) {
+        for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
             FILTER(IsBattlerAlive(i))
             FILTER(ItemId_GetPocket(GetBattlerHoldEffect(i, FALSE)) == POCKET_BERRIES)
             any = TRUE;
@@ -2943,28 +2490,19 @@ static const Ability PowerOfAlchemy = {
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-static const Ability BeastBoost = {
-    .name = $("Beast Boost"),
-    .description = $("Dealing a KO raises highest\n"
-                     "calculated stat by one stage."),
+constexpr Ability BeastBoost = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, GetHighestStatId(battler, FALSE)); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability RksSystem = {
-    .name = $("RKS System"),
-    .description = $("Held Memory determines its type.\n"
-                     "Also has Protean + Adaptability."),
+constexpr Ability RksSystem = {
+    .onBeforeAttack = Protean.onBeforeAttack,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    .protean = TRUE,
     .adaptability = TRUE,
 };
 
-static const Ability ElectricSurge = {
-    .name = $("Electro Surge"),
-    .description = $("Casts Electric Terrain on entry.\n"
-                     "Lasts 8 turns."),
+constexpr Ability ElectricSurge = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -2977,10 +2515,7 @@ static const Ability ElectricSurge = {
     },
 };
 
-static const Ability PsychicSurge = {
-    .name = $("Psychic Surge"),
-    .description = $("Casts Psychic Terrain on entry.\n"
-                     "Lasts 8 turns."),
+constexpr Ability PsychicSurge = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -2989,10 +2524,7 @@ static const Ability PsychicSurge = {
     },
 };
 
-static const Ability MistySurge = {
-    .name = $("Misty Surge"),
-    .description = $("Casts Misty Terrain on entry.\n"
-                     "Lasts 8 turns."),
+constexpr Ability MistySurge = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -3001,10 +2533,7 @@ static const Ability MistySurge = {
     },
 };
 
-static const Ability GrassySurge = {
-    .name = $("Grassy Surge"),
-    .description = $("Casts Grassy Terrain on entry.\n"
-                     "Lasts 8 turns."),
+constexpr Ability GrassySurge = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -3013,39 +2542,22 @@ static const Ability GrassySurge = {
     },
 };
 
-static const Ability FullMetalBody = {
-    .name = $("Full Metal Body"),
-    .description = $("Immune to stat drops."),
-};
-
-static const Ability ShadowShield = {
-    .name = $("Shadow Shield"),
-    .description = $("At full HP, halves damage taken\n"
-                     "from attacks"),
+constexpr Ability ShadowShield = {
     .onDefensiveMultiplier = Multiscale.onDefensiveMultiplier,
 };
 
-static const Ability PrismArmor = {
-    .name = $("Prism Armor"),
-    .description = $("Takes 35% less damage from\n"
-                     "Super-effective moves."),
+constexpr Ability PrismArmor = {
     .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
 };
 
-static const Ability Neuroforce = {
-    .name = $("Neuroforce"),
-    .description = $("Grants an additional 1.25x boost\n"
-                     "to Super-effective moves."),
+constexpr Ability Neuroforce = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.25);
         },
 };
 
-static const Ability IntrepidSword = {
-    .name = $("Intrepid Sword"),
-    .description = $("On entry, raises Attack by one\n"
-                     "stage."),
+constexpr Ability IntrepidSword = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(CanRaiseStat(battler, STAT_ATK))
 
@@ -3055,10 +2567,7 @@ static const Ability IntrepidSword = {
     },
 };
 
-static const Ability DauntlessShield = {
-    .name = $("Dauntless Shield"),
-    .description = $("On entry, raises Defense by one\n"
-                     "stage."),
+constexpr Ability DauntlessShield = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(CanRaiseStat(battler, STAT_DEF))
 
@@ -3068,53 +2577,30 @@ static const Ability DauntlessShield = {
     },
 };
 
-static const Ability Libero = {
-    .name = $("Libero"),
-    .description = $("Before using a move, changes its\n"
-                     "type to the move's type."),
-    .protean = TRUE,
+constexpr Ability Libero = {
+    .onBeforeAttack = Protean.onBeforeAttack,
 };
 
-static const Ability BallFetch = {
-    .name = $("Ball Fetch"),
-    .description = $("No effect in battle."),
-};
-
-static const Ability CottonDown = {
-    .name = $("Cotton Down"),
-    .description = $("Lowers the Speed of all foes\n"
-                     "by one stage when hit."),
+constexpr Ability CottonDown = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit());
         gStackBattler1 = BATTLE_OPPOSITE(battler);
         CHECK(IsBattlerAlive(gStackBattler1) || IsBattlerAlive(BATTLE_PARTNER(gStackBattler1)))
 
         gEffectBattler = battler;
-        gStackBattler1 = BATTLE_OPPOSITE(GetBattlerSide(battler));
+        gStackBattler1 = GetOppositeSide(battler);
         BattleScriptCall(BattleScript_CottonDownActivates);
         return TRUE;
     },
 };
 
-static const Ability PropellerTail = {
-    .name = $("Propeller Tail"),
-    .description = $("Isn't affected by target\n"
-                     "redirection."),
-};
-
-static const Ability MirrorArmor = {
-    .name = $("Mirror Armor"),
-    .description = $("Bounces back any stat drops\n"
-                     "inflicted by an enemy."),
+constexpr Ability MirrorArmor = {
     .breakable = TRUE,
 };
 
-static const Ability GulpMissile = {
-    .name = $("Gulp Missile"),
-    .description = $("Gulps a prey after Dive/Surf.\n"
-                     "If hit, shoots prey at enemy."),
+constexpr Ability GulpMissile = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
         CHECK(gBattleMons[battler].species == SPECIES_CRAMORANT)
         CHECK(((gCurrentMove == MOVE_SURF || gCurrentMove == MOVE_TRIPLE_DIVE) && TARGET_TURN_DAMAGED) || gStatuses3[battler] & STATUS3_UNDERWATER ||
               (gCurrentMove == MOVE_DIVE && gBattleScripting.acceleratedTwoTurn))
@@ -3129,27 +2615,18 @@ static const Ability GulpMissile = {
         CHECK(ShouldApplyOnHitAffect(attacker))
         int species = gBattleMons[battler].species;
         CHECK(species == SPECIES_CRAMORANT_GORGING || species == SPECIES_CRAMORANT_GULPING)
-        gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = species;
         UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_CRAMORANT);
         gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         BattleScriptCall(species == SPECIES_CRAMORANT_GORGING ? BattleScript_GulpMissileGorging : BattleScript_GulpMissileGulping);
+        gBattleMons[battler].species = SPECIES_CRAMORANT;
         return TRUE;
     },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-static const Ability Stalwart = {
-    .name = $("Stalwart"),
-    .description = $("Isn't affected by target\n"
-                     "redirection."),
-};
-
-static const Ability SteamEngine = {
-    .name = $("Steam Engine"),
-    .description = $("Maximizes Speed if hit by a\n"
-                     "Fire-type or Water-type attack."),
+constexpr Ability SteamEngine = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_SPEED))
@@ -3161,10 +2638,7 @@ static const Ability SteamEngine = {
     },
 };
 
-static const Ability PunkRock = {
-    .name = $("Punk Rock"),
-    .description = $("Sound moves deal 1.3x more dmg.\n"
-                     "Takes -50% dmg from sound moves."),
+constexpr Ability PunkRock = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.3);
@@ -3176,10 +2650,7 @@ static const Ability PunkRock = {
     .breakable = TRUE,
 };
 
-static const Ability SandSpit = {
-    .name = $("Sand Spit"),
-    .description = $("If hit, summons a sandstorm that\n"
-                     "lasts 8 turns."),
+constexpr Ability SandSpit = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_SANDSTORM_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
             BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
@@ -3194,10 +2665,7 @@ static const Ability SandSpit = {
     },
 };
 
-static const Ability IceScales = {
-    .name = $("Ice Scales"),
-    .description = $("Halves damage taken by Special\n"
-                     "moves. Does NOT double SpDef."),
+constexpr Ability IceScales = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IS_MOVE_SPECIAL(move)) MUL(.5);
@@ -3205,16 +2673,10 @@ static const Ability IceScales = {
     .breakable = TRUE,
 };
 
-static const Ability Ripen = {
-    .name = $("Ripen"),
-    .description = $("Doubles resistance, healing and\n"
-                     "stat raises provided by Berries."),
-};
-
-int IceFaceReformHandler(int ability, int battler, AbilityCallType callType) {
+int IceFaceReformHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
     CHECK(gBattleMons[battler].species == SPECIES_EISCUE_NOICE_FACE)
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
-    CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+    CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
     InsertCorrectEndType(callType);
     UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_EISCUE);
@@ -3222,10 +2684,7 @@ int IceFaceReformHandler(int ability, int battler, AbilityCallType callType) {
     BattleScriptCall(BattleScript_AttackerFormChange);
     return TRUE;
 }
-static const Ability IceFace = {
-    .name = $("Ice Face"),
-    .description = $("Protects once against an attack.\n"
-                     "Restores protection under hail."),
+constexpr Ability IceFace = {
     .onEntry = +[](ON_ENTRY) -> int { return IceFaceReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onDisguise = +[](ON_DISGUISE) -> int { return gBattleMons[battler].species == SPECIES_EISCUE ? SPECIES_EISCUE_NOICE_FACE : SPECIES_NONE; },
     .onWeather = +[](ON_WEATHER) -> int { return IceFaceReformHandler(ability, battler, ABILITY_BS_CALL); },
@@ -3234,31 +2693,83 @@ static const Ability IceFace = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability PowerSpot = {
-    .name = $("Power Spot"),
-    .description = $("Grants a 1.3x boost to ally's\n"
-                     "attacks."),
+constexpr Ability PowerSpot = {
     .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MUL(1.3); },
     .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
 
-static const Ability Mimicry = {
-    .name = $("Mimicry"),
-    .description = $("Changes type depending on active\n"
-                     "Terrain."),
+int HandleMimicry(u8 battler, AbilityEnum ability, AbilityCallType endType) {
+    u32 moveType = 0;
+
+    switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
+        case STATUS_FIELD_ELECTRIC_TERRAIN:
+            moveType = TYPE_ELECTRIC;
+            break;
+        case STATUS_FIELD_MISTY_TERRAIN:
+            moveType = TYPE_FAIRY;
+            break;
+        case STATUS_FIELD_GRASSY_TERRAIN:
+            moveType = TYPE_GRASS;
+            break;
+        case STATUS_FIELD_PSYCHIC_TERRAIN:
+            moveType = TYPE_PSYCHIC;
+            break;
+        default:
+            moveType = 0;
+            break;
+    }
+
+    gStackBattler1 = battler;
+
+    if (!moveType) {
+        MimicryState state = GetAbilityStateAs(battler, ability).mimicryState;
+        if (state.active) {
+            SetAbilityState(battler, ability, 0);
+            gBattleMons[battler].type1 = state.type1;
+            gBattleMons[battler].type2 = state.type2;
+            InsertCorrectEndType(endType);
+            BattleScriptCall(BattleScript_MimicryEnds);
+            return TRUE;
+        }
+    } else {
+        if (!IS_BATTLER_OF_TYPE(battler, moveType)) {
+            MimicryState state = GetAbilityStateAs(battler, ability).mimicryState;
+            if (!state.active) {
+                SetAbilityStateAs(battler,
+                                  ability,
+                                  (AbilityStates){
+                                      .mimicryState =
+                                          {
+                                              .type1 = gBattleMons[battler].type1,
+                                              .type2 = gBattleMons[battler].type2,
+                                              .active = TRUE,
+                                          },
+                                  });
+            }
+            SET_BATTLER_TYPE(battler, moveType);
+            PREPARE_TYPE_BUFFER(gBattleTextBuff2, moveType);
+            InsertCorrectEndType(endType);
+            BattleScriptCall(BattleScript_MimicryActivates);
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+constexpr Ability Mimicry = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsBattlerAlive(battler))
-        CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
-        TryToApplyMimicry(battler, FALSE);
-        return TRUE;
+        return HandleMimicry(battler, ability, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+    },
+    .onTerrain = +[](ON_TERRAIN) -> int {
+        CHECK(IsBattlerAlive(battler))
+
+        return HandleMimicry(battler, ability, ABILITY_BS_CALL);
     },
 };
 
-static const Ability ScreenCleaner = {
-    .name = $("Screen Cleaner"),
-    .description = $("Clears screens and Aurora Veil\n"
-                     "from both sides on entry."),
+constexpr Ability ScreenCleaner = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryRemoveScreens(battler))
 
@@ -3266,10 +2777,7 @@ static const Ability ScreenCleaner = {
     },
 };
 
-static const Ability SteelySpirit = {
-    .name = $("Steely Spirit"),
-    .description = $("Boosts own & ally's Steel-type\n"
-                     "moves by 1.3x."),
+constexpr Ability SteelySpirit = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_STEEL) MUL(1.3);
@@ -3277,9 +2785,7 @@ static const Ability SteelySpirit = {
     .onOffensiveMultiplierFor = APPLY_ON_ALLY,
 };
 
-static const Ability PerishBody = {
-    .name = $("Perish Body"),
-    .description = $("If hit, casts Perish Song."),
+constexpr Ability PerishBody = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(IsBattlerAlive(attacker))
@@ -3299,14 +2805,11 @@ static const Ability PerishBody = {
     },
 };
 
-static const Ability WanderingSpirit = {
-    .name = $("WandrngSprit"),
-    .description = $("Trades ability with attacker on\n"
-                     "contact."),
+constexpr Ability WanderingSpirit = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(GetBattlerAbility(battler) == ability)
-        CHECK_NOT(BattlerHasAbility(attacker, ability, FALSE))
+        CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
         CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
@@ -3329,25 +2832,18 @@ static const Ability WanderingSpirit = {
     },
 };
 
-static const Ability GorillaTactics = {
-    .name = $("Gorilla Tactics"),
-    .description = $("Raises own Atk by 1.5x, but can\n"
-                     "only use the first chosen move."),
+constexpr Ability GorillaTactics = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_MOVE_PHYSICAL(move)) MUL(1.5);
         },
 };
 
-static const Ability NeutralizingGas = {
-    .name = $("Neutralizing Gas"),
-    .description = $("All abilities are nullified."),
+constexpr Ability NeutralizingGas = {
     .unsuppressable = TRUE,
 };
 
-static const Ability PastelVeil = {
-    .name = $("Pastel Veil"),
-    .description = $("Casts Safeguard on entry."),
+constexpr Ability PastelVeil = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD)
 
@@ -3361,10 +2857,7 @@ static const Ability PastelVeil = {
     },
 };
 
-static const Ability HungerSwitch = {
-    .name = $("HungerSwitch"),
-    .description = $("Changes between Full and Hangry\n"
-                     "forms after each turn."),
+constexpr Ability HungerSwitch = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED) int newSpecies;
         switch (gBattleMons[battler].species) {
@@ -3373,6 +2866,12 @@ static const Ability HungerSwitch = {
                 break;
             case SPECIES_MORPEKO_HANGRY:
                 newSpecies = SPECIES_MORPEKO;
+                break;
+            case SPECIES_MORPEKYLL:
+                newSpecies = SPECIES_MORPEKYLL_HANGRY;
+                break;
+            case SPECIES_MORPEKYLL_HANGRY:
+                newSpecies = SPECIES_MORPEKYLL;
                 break;
 
             default:
@@ -3388,21 +2887,7 @@ static const Ability HungerSwitch = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability QuickDraw = {
-    .name = $("Quick Draw"),
-    .description = $("30% chance to move first."),
-};
-
-static const Ability UnseenFist = {
-    .name = $("Unseen Fist"),
-    .description = $("Its contact moves hit enemies,\n"
-                     "even if they protect themselves."),
-};
-
-static const Ability CuriousMedicine = {
-    .name = $("CuriusMedicn"),
-    .description = $("Resets its ally's stat changes\n"
-                     "on entry."),
+constexpr Ability CuriousMedicine = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsDoubleBattle())
         CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
@@ -3415,43 +2900,31 @@ static const Ability CuriousMedicine = {
     },
 };
 
-static const Ability Transistor = {
-    .name = $("Transistor"),
-    .description = $("Boosts the power of Electric-\n"
-                     "type moves by 1.5x."),
+constexpr Ability Transistor = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ELECTRIC) MUL(1.5);
         },
 };
 
-static const Ability DragonsMaw = {
-    .name = $("Dragon's Maw"),
-    .description = $("Boosts the power of Dragon-type\n"
-                     "moves by 1.5x."),
+constexpr Ability DragonsMaw = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_DRAGON) MUL(1.5);
         },
 };
 
-static const Ability ChillingNeigh = {
-    .name = $("ChillngNeigh"),
-    .description = $("KOs raise Attack by one stage."),
+constexpr Ability ChillingNeigh = {
     .onBattlerFaints = Moxie.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability GrimNeigh = {
-    .name = $("Grim Neigh"),
-    .description = $("KOs raise Sp. Atk by one stage."),
+constexpr Ability GrimNeigh = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, STAT_SPATK); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability AsOneIceRider = {
-    .name = $("As One"),
-    .description = $("Unnerve + Chilling Neigh."),
+constexpr Ability AsOneIceRider = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE); },
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(ChillingNeigh.onBattlerFaints(DELEGATE_BATTLER_FAINTS))
@@ -3462,11 +2935,10 @@ static const Ability AsOneIceRider = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    .unnerve = TRUE,
 };
 
-static const Ability AsOneShadowRider = {
-    .name = $("As One"),
-    .description = $("Unnerve + Grim Neigh."),
+constexpr Ability AsOneShadowRider = {
     .onEntry = AsOneIceRider.onEntry,
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(GrimNeigh.onBattlerFaints(DELEGATE_BATTLER_FAINTS))
@@ -3477,19 +2949,14 @@ static const Ability AsOneShadowRider = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    .unnerve = TRUE,
 };
 
-static const Ability Chloroplast = {
-    .name = $("Chloroplast"),
-    .description = $("Weather Ball, Solar Beam/Blade,\n"
-                     "Growth act as if used in sun."),
+constexpr Ability Chloroplast = {
     .chloroplast = TRUE,
 };
 
-static const Ability Whiteout = {
-    .name = $("Whiteout"),
-    .description = $("Ups highest attacking stat\n"
-                     "by 1.5x in hail."),
+constexpr Ability Whiteout = {
     .onStat =
         +[](ON_STAT) {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
@@ -3497,25 +2964,21 @@ static const Ability Whiteout = {
         },
 };
 
-static const Ability Pyromancy = {
-    .name = $("Pyromancy"),
-    .description = $("Moves inflict burn 5x as often."),
+constexpr Ability Pyromancy = {
+    .onModifyEffectChance =
+        +[](ON_MODIFY_EFFECT_CHANCE) {
+            if (moveEffect == MOVE_EFFECT_BURN) *effectChance *= 5;
+        },
 };
 
-static const Ability KeenEdge = {
-    .name = $("Keen Edge"),
-    .description = $("Boosts the power of slashing\n"
-                     "moves by 1.3x."),
+constexpr Ability KeenEdge = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) MUL(1.3);
         },
 };
 
-static const Ability PrismScales = {
-    .name = $("Prism Scales"),
-    .description = $("Takes 30% less damage from\n"
-                     "Special attacks."),
+constexpr Ability PrismScales = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IS_MOVE_SPECIAL(move)) MUL(.7);
@@ -3523,21 +2986,15 @@ static const Ability PrismScales = {
     .breakable = TRUE,
 };
 
-static const Ability PowerFists = {
-    .name = $("Power Fists"),
-    .description = $("Iron Fist moves target Special\n"
-                     "Defense and get a 1.3x boost."),
+constexpr Ability PowerFists = {
     .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(IS_IRON_FIST(battler, move))
+        CHECK(IsIronFistBoosted(battler, move))
         return STAT_SPDEF;
     },
 };
 
-static const Ability SandSong = {
-    .name = $("Sand Song"),
-    .description = $("Sound moves get a 1.2x boost\n"
-                     "and become Ground if Normal."),
+constexpr Ability SandSong = {
     .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
     .onMoveType = +[](ON_MOVE_TYPE) -> int {
         CHECK(moveType == TYPE_NORMAL)
@@ -3546,10 +3003,7 @@ static const Ability SandSong = {
     },
 };
 
-static const Ability Rampage = {
-    .name = $("Rampage"),
-    .description = $("No recharge after a KO, if it\n"
-                     "usually would need to recharge."),
+constexpr Ability Rampage = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         SetAbilityState(battler, ability, TRUE);
         gVolatileStructs[battler].rechargeTimer = 0;
@@ -3559,45 +3013,30 @@ static const Ability Rampage = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Vengeance = {
-    .name = $("Vengeance"),
-    .description = $("Boosts Ghost-type moves by 1.2x,\n"
-                     "or 1.5x when below 1/3 HP."),
+constexpr Ability Vengeance = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_GHOST),
 };
 
-static const Ability BlitzBoxer = {
-    .name = $("Blitz Boxer"),
-    .description = $("At full HP, gives +1 priority to\n"
-                     "this Pokémon's punching moves."),
+constexpr Ability BlitzBoxer = {
     .onPriority = +[](ON_PRIORITY) -> int {
-        CHECK(IS_IRON_FIST(battler, move))
+        CHECK(IsIronFistBoosted(battler, move))
         CHECK(BATTLER_MAX_HP(battler));
         return 1;
     },
 };
 
-static const Ability AntarcticBird = {
-    .name = $("Antarctic Bird"),
-    .description = $("Ice-type and Flying-type moves\n"
-                     "get a 1.3x power boost."),
+constexpr Ability AntarcticBird = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FLYING || moveType == TYPE_ICE) MUL(1.3);
         },
 };
 
-static const Ability Immolate = {
-    .name = $("Immolate"),
-    .description = $("Normal-type moves become Fire-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Immolate = {
     ATE_ABILITY(TYPE_FIRE),
 };
 
-static const Ability Crystallize = {
-    .name = $("Crystallize"),
-    .description = $("Rock-type moves become Ice-type\n"
-                     "moves and get a 1.1x boost."),
+constexpr Ability Crystallize = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ICE && gBattleStruct->ateBoost[battler]) MUL(1.1);
@@ -3609,20 +3048,14 @@ static const Ability Crystallize = {
     },
 };
 
-static const Ability Electrocytes = {
-    .name = $("Electrocytes"),
-    .description = $("Boosts the power of Electric-\n"
-                     "type moves by 1.25x."),
+constexpr Ability Electrocytes = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ELECTRIC) MUL(1.25);
         },
 };
 
-static const Ability Aerodynamics = {
-    .name = $("Aerodynamics"),
-    .description = $("Boosts Speed instead of being\n"
-                     "hit by Flying-type moves."),
+constexpr Ability Aerodynamics = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_FLYING);
         *statId = STAT_SPEED;
@@ -3631,10 +3064,7 @@ static const Ability Aerodynamics = {
     .breakable = TRUE,
 };
 
-static const Ability ChristmasSpirit = {
-    .name = $("Christmas Spirit"),
-    .description = $("Takes 50% less damage if hail is\n"
-                     "active."),
+constexpr Ability ChristmasSpirit = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) MUL(.5);
@@ -3642,51 +3072,56 @@ static const Ability ChristmasSpirit = {
     .breakable = TRUE,
 };
 
-static const Ability ExploitWeakness = {
-    .name = $("Exploit Weakness"),
-    .description = $("Moves are 1.25x stronger on foes\n"
-                     "affected by a status condition."),
+constexpr Ability ExploitWeakness = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (HasAnyStatusOrAbility(target)) MUL(1.25);
         },
+    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
+        CHECK(HasAnyStatusOrAbility(target))
+        u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+        u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+        if (def < spDef)
+            return STAT_DEF;
+        else if (spDef < def)
+            return STAT_SPDEF;
+        else
+            return 0;
+    },
 };
 
-static const Ability GroundShock = {
-    .name = $("Ground Shock"),
-    .description = $("Target Grounds aren't immune to\n"
-                     "Electric but resist it instead."),
+constexpr Ability GroundShock = {
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_ELECTRIC)
+        CHECK(defType == TYPE_GROUND)
+        CHECK_NOT(*mod)
+        *mod = UQ_4_12(.5);
+        return TRUE;
+    },
 };
 
-static const Ability AncientIdol = {
-    .name = $("Ancient Idol"),
-    .description = $("Uses Def and Sp. Def instead of\n"
-                     "Atk and Sp. Atk when attacking."),
+constexpr Ability AncientIdol = {
     .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; },
 };
 
-static const Ability MysticPower = {
-    .name = $("Mystic Power"),
-    .description = $("All moves gain the 1.5x power\n"
-                     "boost from STAB."),
+constexpr Ability MysticPower = {
     .onStab = +[](ON_STAB) -> int { return TRUE; },
 };
 
-static const Ability Perfectionist = {
-    .name = $("Perfectionist"),
-    .description = $("Move BP < 51 BP: +1 to crit rate.\n"
-                     "Move BP < 26 BP: +1 priority too."),
+constexpr Ability Perfectionist = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(gBattleMoves[move].power <= 25)
         CHECK(gBattleMoves[move].power);
         return 1;
     },
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(gBattleMoves[move].power <= 50)
+        CHECK(gBattleMoves[move].power)
+        return 1;
+    },
 };
 
-static const Ability GrowingTooth = {
-    .name = $("Growing Tooth"),
-    .description = $("Raises Attack by one stage after\n"
-                     "using a biting move."),
+constexpr Ability GrowingTooth = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
@@ -3698,10 +3133,7 @@ static const Ability GrowingTooth = {
     },
 };
 
-static const Ability Inflatable = {
-    .name = $("Inflatable"),
-    .description = $("Ups Def and Sp. Def by one stage\n"
-                     "if hit by Flying or Fire moves."),
+constexpr Ability Inflatable = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_DEF) || CanRaiseStat(battler, STAT_SPDEF))
@@ -3712,26 +3144,18 @@ static const Ability Inflatable = {
     },
 };
 
-static const Ability AuroraBorealis = {
-    .name = $("Aurora Borealis"),
-    .description = $("Boosts the power of Ice-type\n"
-                     "moves by 1.5x (due to STAB)."),
+constexpr Ability AuroraBorealis = {
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_ICE; },
 };
 
-static const Ability Avenger = {
-    .name = $("Avenger"),
-    .description = $("If a party Pokémon fainted last\n"
-                     "turn, next move gets 1.5x boost."),
+constexpr Ability Avenger = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gSideTimers[GET_BATTLER_SIDE(battler)].retaliateTimer) MUL(1.5);
         },
 };
 
-static const Ability LetsRoll = {
-    .name = $("Let's Roll"),
-    .description = $("Casts Defense Curl on entry."),
+constexpr Ability LetsRoll = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(CanRaiseStat(battler, STAT_DEF))
 
@@ -3742,15 +3166,7 @@ static const Ability LetsRoll = {
     },
 };
 
-static const Ability Aquatic = {
-    .name = $("Aquatic"),
-    .description = $("Adds Water type to itself."),
-};
-
-static const Ability LoudBang = {
-    .name = $("Loud Bang"),
-    .description = $("Sound-based moves have 50%\n"
-                     "chance to confuse the foe."),
+constexpr Ability LoudBang = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeConfused(target))
@@ -3761,10 +3177,7 @@ static const Ability LoudBang = {
     },
 };
 
-static const Ability LeadCoat = {
-    .name = $("Lead Coat"),
-    .description = $("Takes 40% less from Phys. moves.\n"
-                     "This Pokémon's Speed is 0.9x."),
+constexpr Ability LeadCoat = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IS_MOVE_PHYSICAL(move)) MUL(.6);
@@ -3776,47 +3189,30 @@ static const Ability LeadCoat = {
     .breakable = TRUE,
 };
 
-static const Ability Amphibious = {
-    .name = $("Amphibious"),
-    .description = $("Boosts the power of Water-type\n"
-                     "moves by 1.5x (due to STAB)."),
+constexpr Ability Amphibious = {
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
 };
 
-static const Ability Grounded = {
-    .name = $("Grounded"),
-    .description = $("Adds Ground type to itself."),
+constexpr Ability Grounded = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GROUND); },
 };
 
-static const Ability Earthbound = {
-    .name = $("Earthbound"),
-    .description = $("Boosts Ground-type moves by\n"
-                     "1.2x, or 1.5x when under 1/3 HP."),
+constexpr Ability Earthbound = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_GROUND),
 };
 
-static const Ability FightSpirit = {
-    .name = $("Fighting Spirit"),
-    .description = $("Normal-type moves become Fight.-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability FightingSpirit = {
     ATE_ABILITY(TYPE_FIGHTING),
 };
 
-static const Ability FelineProwess = {
-    .name = $("Feline Prowess"),
-    .description = $("Doubles own Sp. Atk stat.\n"
-                     "Boosts raw stat, not base stat."),
+constexpr Ability FelineProwess = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPATK) *stat *= 2;
         },
 };
 
-static const Ability CoilUp = {
-    .name = $("Coil Up"),
-    .description = $("On entry, gives +1 priority once\n"
-                     "to the first biting move used."),
+constexpr Ability CoilUp = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gStatuses4[battler] & STATUS4_COILED)
 
@@ -3826,10 +3222,7 @@ static const Ability CoilUp = {
     },
 };
 
-static const Ability Fossilized = {
-    .name = $("Fossilized"),
-    .description = $("Halves dmg taken by Rock moves.\n"
-                     "Boosts own Rock moves by 1.2x."),
+constexpr Ability Fossilized = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ROCK) MUL(1.2);
@@ -3841,10 +3234,7 @@ static const Ability Fossilized = {
     .breakable = TRUE,
 };
 
-static const Ability MagicalDust = {
-    .name = $("Magical Dust"),
-    .description = $("If hit by a contact move, gives\n"
-                     "Psychic type to the attacker."),
+constexpr Ability MagicalDust = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -3857,10 +3247,7 @@ static const Ability MagicalDust = {
     },
 };
 
-static const Ability Dreamcatcher = {
-    .name = $("Dreamcatcher"),
-    .description = $("Doubles move power if anyone on\n"
-                     "the field is asleep."),
+constexpr Ability Dreamcatcher = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             for (int i = 0; i < gBattlersCount; i++) {
@@ -3872,10 +3259,7 @@ static const Ability Dreamcatcher = {
         },
 };
 
-static const Ability Nocturnal = {
-    .name = $("Nocturnal"),
-    .description = $("Boosts own Dark moves by 1.25x.\n"
-                     "Takes -25% dmg from Dark/Fairy."),
+constexpr Ability Nocturnal = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_DARK) MUL(1.25);
@@ -3887,13 +3271,10 @@ static const Ability Nocturnal = {
     .breakable = TRUE,
 };
 
-static const Ability SelfSufficient = {
-    .name = $("Self Sufficient"),
-    .description = $("Recovers 1/16 of max HP at the\n"
-                     "end of each turn."),
+constexpr Ability SelfSufficient = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
 
         gBattleMoveDamage = gBattleMons[battler].maxHP / 16;
@@ -3904,29 +3285,19 @@ static const Ability SelfSufficient = {
     },
 };
 
-static const Ability Tectonize = {
-    .name = $("Tectonize"),
-    .description = $("Normal-type moves become Ground-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Tectonize = {
     ATE_ABILITY(TYPE_GROUND),
 };
 
-static const Ability IceAge = {
-    .name = $("Ice Age"),
-    .description = $("Adds Ice type to itself."),
+constexpr Ability IceAge = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ICE); },
 };
 
-static const Ability HalfDrake = {
-    .name = $("Half Drake"),
-    .description = $("Adds Dragon type to itself."),
+constexpr Ability HalfDrake = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_DRAGON); },
 };
 
-static const Ability Liquified = {
-    .name = $("Liquified"),
-    .description = $("Takes 1/2 dmg from contact moves\n"
-                     "but Water moves hurt it 2x more."),
+constexpr Ability Liquified = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_WATER) RESISTANCE(2);
@@ -3935,18 +3306,13 @@ static const Ability Liquified = {
     .breakable = TRUE,
 };
 
-static const Ability Dragonfly = {
-    .name = $("Dragonfly"),
-    .description = $("Adds Dragon type to itself.\n"
-                     "Avoids Ground attacks."),
+constexpr Ability Dragonfly = {
     .onEntry = HalfDrake.onEntry,
     .breakable = TRUE,
+    .levitate = TRUE,
 };
 
-static const Ability Dragonslayer = {
-    .name = $("Dragonslayer"),
-    .description = $("Deals 1.5x damage to Dragons.\n"
-                     "Takes .5x damage from Dragons."),
+constexpr Ability Dragonslayer = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_BATTLER_OF_TYPE(target, TYPE_DRAGON)) RESISTANCE(1.5);
@@ -3958,30 +3324,24 @@ static const Ability Dragonslayer = {
     .breakable = TRUE,
 };
 
-static const Ability Mountaineer = {
-    .name = $("Mountaineer"),
-    .description = $("Immune to Rock-type attacks and\n"
-                     "Stealth Rock damage."),
+constexpr Ability Mountaineer = {
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (moveType == TYPE_ROCK) *mod = 0;
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
-static const Ability Hydrate = {
-    .name = $("Hydrate"),
-    .description = $("Normal-type moves become Water-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Hydrate = {
     ATE_ABILITY(TYPE_WATER),
 };
 
-static const Ability Metallic = {
-    .name = $("Metallic"),
-    .description = $("Adds Steel type to itself."),
+constexpr Ability Metallic = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_STEEL); },
 };
 
-static const Ability Permafrost = {
-    .name = $("Permafrost"),
-    .description = $("Takes 25% less damage from\n"
-                     "Super-effective moves."),
+constexpr Ability Permafrost = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.75);
@@ -3989,10 +3349,7 @@ static const Ability Permafrost = {
     .breakable = TRUE,
 };
 
-static const Ability PrimalArmor = {
-    .name = $("Primal Armor"),
-    .description = $("Takes 50% less damage from\n"
-                     "Super-effective moves."),
+constexpr Ability PrimalArmor = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.5);
@@ -4000,19 +3357,14 @@ static const Ability PrimalArmor = {
     .breakable = TRUE,
 };
 
-static const Ability RagingBoxer = {
-    .name = $("Raging Boxer"),
-    .description = $("Punching moves hit twice. 1st hit\n"
-                     "at 100% power, 2nd hit at 40%."),
+constexpr Ability RagingBoxer = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
-        CHECK(IS_IRON_FIST(battler, move))
+        CHECK(IsIronFistBoosted(battler, move))
         return PARENTAL_BOND_PRIMAL_MAW;
     },
 };
 
-static const Ability AirBlower = {
-    .name = $("Air Blower"),
-    .description = $("Casts a 3-turn Tailwind on entry."),
+constexpr Ability AirBlower = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND) int side = GetBattlerSide(battler);
         gSideTimers[side].started.tailwind = TRUE;
@@ -4028,57 +3380,43 @@ static const Ability AirBlower = {
     },
 };
 
-static const Ability Juggernaut = {
-    .name = $("Juggernaut"),
-    .description = $("Paralysis-immune. Uses 20% of its\n"
-                     "Def when using a contact move."),
+constexpr Ability Juggernaut = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *secondaryAtkStatToUse = STAT_DEF;
+            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) secondaryAtkStatToUse[STAT_DEF] += 20;
         },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_PARALYSIS)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability ShortCircuit = {
-    .name = $("Short Circuit"),
-    .description = $("Boosts Elec.-type moves by 1.2x,\n"
-                     "or 1.5x when below 1/3 HP."),
+constexpr Ability ShortCircuit = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_ELECTRIC),
 };
 
-static const Ability MajesticBird = {
-    .name = $("Majestic Bird"),
-    .description = $("Boosts own Sp. Atk by 1.5x.\n"
-                     "Boosts raw stat, not base stat."),
+constexpr Ability MajesticBird = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPATK) *stat *= 1.5;
         },
 };
 
-static const Ability Phantom = {
-    .name = $("Phantom"),
-    .description = $("Adds Ghost type to itself."),
+constexpr Ability Phantom = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GHOST); },
 };
 
-static const Ability Intoxicate = {
-    .name = $("Intoxicate"),
-    .description = $("Normal-type moves become Poison-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Intoxicate = {
     ATE_ABILITY(TYPE_POISON),
 };
 
-static const Ability Impenetrable = {
-    .name = $("Impenetrable"),
-    .description = $("Only damaged by attacks."),
+constexpr Ability Impenetrable = {
     .magicGuard = TRUE,
 };
 
-static const Ability Hypnotist = {
-    .name = $("Hypnotist"),
-    .description = $("Hypnosis accuracy is 90% when\n"
-                     "used by this Pokémon."),
+constexpr Ability Hypnotist = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(move == MOVE_HYPNOSIS);
         *accuracy *= 1.5;
@@ -4086,23 +3424,19 @@ static const Ability Hypnotist = {
     },
 };
 
-static const Ability Overwhelm = {
-    .name = $("Overwhelm"),
-    .description = $("Hits Fairies with Dragon moves.\n"
-                     "Immune to Intimidate and Scare."),
+constexpr Ability Overwhelm = {
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_DRAGON) CHECK(defType == TYPE_FAIRY) CHECK_NOT(*mod) *mod = UQ_4_12(1.0);
+        return TRUE;
+    },
+    .tauntImmune = TRUE,
 };
 
-static const Ability Scare = {
-    .name = $("Scare"),
-    .description = $("Lowers foes' Sp. Atk by one\n"
-                     "stage on entry."),
+constexpr Ability Scare = {
     .onEntry = UseIntimidateClone,
 };
 
-static const Ability MajesticMoth = {
-    .name = $("Majestic Moth"),
-    .description = $("On entry, raises highest\n"
-                     "calculated stat by one stage."),
+constexpr Ability MajesticMoth = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(ChangeStatBuffs(battler, 1, GetHighestStatId(battler, TRUE), MOVE_EFFECT_AFFECTS_USER, NULL))
 
@@ -4111,12 +3445,11 @@ static const Ability MajesticMoth = {
     },
 };
 
-static const Ability SoulEater = {
-    .name = $("Soul Eater"),
-    .description = $("Dealing a KO heals 1/4 of this\n"
-                     "Pokémon's max HP."),
+constexpr Ability SoulEater = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        CHECK_NOT(BATTLER_MAX_HP(battler)) CHECK_NOT(BATTLER_HEALING_BLOCKED(battler)) BattleScriptCall(BattleScript_HandleSoulEaterEffect);
+        CHECK_NOT(BATTLER_MAX_HP(battler));
+        CHECK(CanBattlerHeal(battler));
+        BattleScriptCall(BattleScript_HandleSoulEaterEffect);
         return TRUE;
     },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
@@ -4131,20 +3464,14 @@ ON_EITHER(SoulLinker) {
     BattleScriptCall(BattleScript_AttackerSoulLinker);
     return TRUE;
 }
-static const Ability SoulLinker = {
-    .name = $("Soul Linker"),
-    .description = $("Enemies take all the damage they\n"
-                     "deal, same for this Pokémon."),
+constexpr Ability SoulLinker = {
     ON_EITHER_ABILITY(SoulLinker),
 };
 
-static const Ability SweetDreams = {
-    .name = $("Sweet Dreams"),
-    .description = $("Heals 1/8 of max HP every turn\n"
-                     "if asleep. Immune to Bad Dreams."),
+constexpr Ability SweetDreams = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
 
         gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
@@ -4155,22 +3482,18 @@ static const Ability SweetDreams = {
     },
 };
 
-static const Ability BadLuck = {
-    .name = $("Bad Luck"),
-    .description = $("Foes hit the lowest damage roll,\n"
-                     "have 5% less acc. and can't crit."),
+constexpr Ability BadLuck = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         *accuracy *= .95;
         return ACCURACY_MULTIPLICATIVE;
     },
+    .onCrit = +[](ON_CRIT) -> int { return NEVER_CRIT; },
     .onAccuracyFor = APPLY_ON_FOE,
+    .onCritFor = APPLY_ON_FOE,
     .breakable = TRUE,
 };
 
-static const Ability HauntedSpirit = {
-    .name = $("Haunted Spirit"),
-    .description = $("When this Pokémon is KO'd, casts\n"
-                     "a Curse on the attacker."),
+constexpr Ability HauntedSpirit = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
@@ -4184,10 +3507,7 @@ static const Ability HauntedSpirit = {
     },
 };
 
-static const Ability ElectricBurst = {
-    .name = $("Electric Burst"),
-    .description = $("Boosts own Elec. moves by 1.35x,\n"
-                     "takes 10% of dmg dealt as recoil."),
+constexpr Ability ElectricBurst = {
     .onRecoil = +[](ON_RECOIL) -> int {
         CHECK(moveType == TYPE_ELECTRIC);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -4199,10 +3519,7 @@ static const Ability ElectricBurst = {
         },
 };
 
-static const Ability RawWood = {
-    .name = $("Raw Wood"),
-    .description = $("Halves dmg taken by Grass moves.\n"
-                     "Boosts own Grass moves by 1.2x."),
+constexpr Ability RawWood = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GRASS) MUL(1.2);
@@ -4214,13 +3531,10 @@ static const Ability RawWood = {
     .breakable = TRUE,
 };
 
-static const Ability Solenoglyphs = {
-    .name = $("Solenoglyphs"),
-    .description = $("Biting moves have a 50% chance to\n"
-                     "badly poison the target."),
+constexpr Ability Solenoglyphs = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(CanBePoisoned(battler, target))
+        CHECK(CanBePoisoned(battler, target, MOVE_NONE))
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(Random() % 2)
 
@@ -4228,14 +3542,11 @@ static const Ability Solenoglyphs = {
     },
 };
 
-static const Ability SpiderLair = {
-    .name = $("Spider Lair"),
-    .description = $("Casts Sticky Web on entry.\n"
-                     "Lasts 5 turns."),
+constexpr Ability SpiderLair = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
-        int side = BATTLE_OPPOSITE(battler);
+        int side = GetOppositeSide(battler);
         gSideTimers[side].started.spiderWeb = TRUE;
         gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
         gSideTimers[side].stickyWebTimer = 5;
@@ -4244,10 +3555,7 @@ static const Ability SpiderLair = {
     },
 };
 
-static const Ability FatalPrecision = {
-    .name = $("Fatal Precision"),
-    .description = $("Super-effective moves never miss\n"
-                     "and get a 1.2x boost."),
+constexpr Ability FatalPrecision = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.2);
@@ -4259,17 +3567,11 @@ static const Ability FatalPrecision = {
     },
 };
 
-static const Ability FortKnox = {
-    .name = $("Fort Knox"),
-    .description = $("Blocks most damage boosting\n"
-                     "and multihit abilities."),
+constexpr Ability FortKnox = {
     .fortKnox = TRUE,
 };
 
-static const Ability Seaweed = {
-    .name = $("Seaweed"),
-    .description = $("Takes 1/2 dmg from Fire if Grass,\n"
-                     "doubles Grass dmg on Fire-types."),
+constexpr Ability Seaweed = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(target, TYPE_FIRE)) RESISTANCE(2);
@@ -4281,17 +3583,11 @@ static const Ability Seaweed = {
     .breakable = TRUE,
 };
 
-static const Ability PsychicMind = {
-    .name = $("Psychic Mind"),
-    .description = $("Boosts Psychic-type moves by\n"
-                     "1.2x, or 1.5x when under 1/3 HP."),
+constexpr Ability PsychicMind = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_PSYCHIC),
 };
 
-static const Ability PoisonAbsorb = {
-    .name = $("Poison Absorb"),
-    .description = $("Heals 25% of max HP when hit\n"
-                     "by a Poison-type move."),
+constexpr Ability PoisonAbsorb = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_POISON)
         return ABSORB_RESULT_HEAL;
@@ -4299,18 +3595,12 @@ static const Ability PoisonAbsorb = {
     .breakable = TRUE,
 };
 
-static const Ability Scavenger = {
-    .name = $("Scavenger"),
-    .description = $("Dealing a KO heals 1/4 of this\n"
-                     "Pokémon's max HP."),
+constexpr Ability Scavenger = {
     .onBattlerFaints = SoulEater.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability TwistedDimension = {
-    .name = $("Twist. Dimension"),
-    .description = $("Sets up Trick Room on\n"
-                     "entry, lasts 3 turns."),
+constexpr Ability TwistedDimension = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
 
@@ -4322,23 +3612,16 @@ static const Ability TwistedDimension = {
     },
 };
 
-static const Ability MultiHeaded = {
-    .name = $("Multi Headed"),
-    .description = $("Hits as many times,\n"
-                     "as it has heads."),
-    .onParentalBond =
-        +[](int battler, int move, int moveType) {
-            if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
-            if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
-            return MULTIHIT_SINGLE;
-        },
+constexpr Ability MultiHeaded = {
+    .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
+        if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
+        if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
+        return MULTIHIT_SINGLE;
+    },
     .resistsFortKnox = TRUE,
 };
 
-static const Ability NorthWind = {
-    .name = $("North Wind"),
-    .description = $("3 turns Aurora Veil on entry.\n"
-                     "Immune to Hail damage."),
+constexpr Ability NorthWind = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_AURORA_VEIL)
 
@@ -4355,67 +3638,64 @@ static const Ability NorthWind = {
     },
 };
 
-static const Ability Overcharge = {
-    .name = $("Overcharge"),
-    .description = $("Electric is super effective vs\n"
-                     "Electric. Can paralyze Electric."),
+constexpr Ability Overcharge = {
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_ELECTRIC)
+        CHECK(defType == TYPE_ELECTRIC)
+        *mod = UQ_4_12(2.0);
+        return TRUE;
+    },
+    .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
+        CHECK(status & CHECK_PARALYSIS)
+        return TRUE;
+    },
 };
 
-static const Ability ViolentRush = {
-    .name = $("Violent Rush"),
-    .description = $("Boosts Speed by 50% + Attack\n"
-                     "by 20% on first turn."),
+constexpr Ability ViolentRush = {
     .onEntry = +[](ON_ENTRY) -> int {
         gVolatileStructs[battler].violentRush = gVolatileStructs[battler].started.violentRush = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_VIOLENT_RUSH);
     },
 };
 
-static const Ability FlamingSoul = {
-    .name = $("Flaming Soul"),
-    .description = $("At full HP, gives +1 priority to\n"
-                     "this Pokémon's Fire-type moves."),
+constexpr Ability FlamingSoul = {
     .onPriority = GALE_WINGS_CLONE(TYPE_FIRE),
 };
 
-static const Ability SagePower = {
-    .name = $("Sage Power"),
-    .description = $("Ups Special Attack by 50%\n"
-                     "and locks move."),
+constexpr Ability SagePower = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_MOVE_SPECIAL(move)) MUL(1.5);
         },
 };
 
-static const Ability BoneZone = {
-    .name = $("Bone Zone"),
-    .description = $("Bone moves ignore immunities and\n"
-                     "deal 2x on not very effective."),
+constexpr Ability BoneZone = {
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (*mod >= UQ_4_12(1.0)) return;
+            if (*mod == 0) {
+                *mod = UQ_4_12(1.0);
+                if (mod1) MulModifier(mod, mod1);
+                if (mod2) MulModifier(mod, mod2);
+                if (mod3) MulModifier(mod, mod3);
+            }
+            if (*mod < UQ_4_12(1.0)) MulModifier(mod, UQ_4_12(2.0));
+        },
 };
 
-static const Ability WeatherControl = {
-    .name = $("Weather Control"),
-    .description = $("Negates all weather based\n"
-                     "moves from enemies."),
+constexpr Ability WeatherControl = {
     .onImmune = DeltaStream.onImmune,
     .breakable = TRUE,
 };
 
-static const Ability SpeedForce = {
-    .name = $("Speed Force"),
-    .description = $("Contact moves use 20% of its\n"
-                     "Speed stat additionally."),
+constexpr Ability SpeedForce = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *secondaryAtkStatToUse = STAT_SPEED;
+            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) secondaryAtkStatToUse[STAT_SPEED] += 20;
         },
 };
 
-static const Ability SeaGuardian = {
-    .name = $("Sea Guardian"),
-    .description = $("Ups highest stat by +1\n"
-                     "on entry when it rains."),
+constexpr Ability SeaGuardian = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
@@ -4427,98 +3707,68 @@ static const Ability SeaGuardian = {
     },
 };
 
-static const Ability MoltenDown = {
-    .name = $("Molten Down"),
-    .description = $("Fire-type is super effective\n"
-                     "against Rock-type."),
+constexpr Ability MoltenDown = {
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_FIRE)
+        CHECK(defType == TYPE_ROCK)
+        *mod = UQ_4_12(2.0);
+        return TRUE;
+    },
 };
 
-static const Ability HyperAggressive = {
-    .name = $("Hyper Aggressive"),
-    .description = $("Moves hit twice.\n"
-                     "Second hit does 25% damage."),
+constexpr Ability HyperAggressive = {
     .onParentalBond = ParentalBond.onParentalBond,
 };
 
-static const Ability Flock = {
-    .name = $("Flock"),
-    .description = $("Boosts Flying-type moves by 1.2x,\n"
-                     "or 1.5x when below 1/3 HP."),
+constexpr Ability Flock = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_FLYING),
 };
 
-static const Ability FieldExplorer = {
-    .name = $("Field Explorer"),
-    .description = $("Boosts field moves by 50%.\n"
-                     "Cut, Surf, Strength etc."),
+constexpr Ability FieldExplorer = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.5);
         },
 };
 
-static const Ability Striker = {
-    .name = $("Striker"),
-    .description = $("Boosts the power of kicking\n"
-                     "moves by 1.3x."),
+constexpr Ability Striker = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) MUL(1.3);
+            if (IsStrikerBoosted(battler, move)) MUL(1.3);
         },
 };
 
-static const Ability FrozenSoul = {
-    .name = $("Frozen Soul"),
-    .description = $("At full HP, gives +1 priority to\n"
-                     "this Pokémon's Ice-type moves."),
+constexpr Ability FrozenSoul = {
     .onPriority = GALE_WINGS_CLONE(TYPE_ICE),
 };
 
-static const Ability Predator = {
-    .name = $("Predator"),
-    .description = $("Dealing a KO heals 1/4 of this\n"
-                     "Pokémon's max HP."),
+constexpr Ability Predator = {
     .onBattlerFaints = SoulEater.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Looter = {
-    .name = $("Looter"),
-    .description = $("Dealing a KO heals 1/4 of this\n"
-                     "Pokémon's max HP."),
+constexpr Ability Looter = {
     .onBattlerFaints = SoulEater.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability LunarEclipse = {
-    .name = $("Lunar Eclipse"),
-    .description = $("Fairy & Dark gains STAB.\n"
-                     "Hypnosis has 1.5x accuracy."),
+constexpr Ability LunarEclipse = {
     .onAccuracy = Hypnotist.onAccuracy,
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_DARK || moveType == TYPE_FAIRY; },
 };
 
-static const Ability SolarFlare = {
-    .name = $("Solar Flare"),
-    .description = $("Chloroplast + Immolate.\n"
-                     "Fire moves gain STAB."),
+constexpr Ability SolarFlare = {
     .onOffensiveMultiplier = Immolate.onOffensiveMultiplier,
-    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FIRE; },
     .onMoveType = Immolate.onMoveType,
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FIRE; },
     .chloroplast = TRUE,
 };
 
-static const Ability PowerCore = {
-    .name = $("Power Core"),
-    .description = $("The Pokémon uses +20% of its\n"
-                     "Defense or SpDef during moves."),
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *secondaryAtkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; },
+constexpr Ability PowerCore = {
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF] += 20; },
 };
 
-static const Ability SightingSystem = {
-    .name = $("Sighting System"),
-    .description = $("Moves always hit. Moves last\n"
-                     "for moves less than 80% accuracy."),
+constexpr Ability SightingSystem = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority { return ACCURACY_HITS_IF_POSSIBLE; },
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(gBattleMoves[move].accuracy)
@@ -4527,47 +3777,32 @@ static const Ability SightingSystem = {
     },
 };
 
-static const Ability BadCompany = {
-    .name = $("Bad Company"),
-    .description = $("Not implemented right now.\n"
-                     "Has no effect."),
+constexpr Ability BadCompany = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Opportunist = {
-    .name = $("Opportunist"),
-    .description = $("If target has less than 1/2 HP,\n"
-                     "single-target moves get +1 prio."),
+constexpr Ability Opportunist = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(gBattleMons[target].hp <= gBattleMons[target].maxHP / 2)
         return 1;
     },
 };
 
-static const Ability GiantWings = {
-    .name = $("Giant Wings"),
-    .description = $("Boosts the power of wing, wind\n"
-                     "or air-based moves by 1.3x."),
+constexpr Ability GiantWings = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].airBased) MUL(1.3);
         },
 };
 
-static const Ability Momentum = {
-    .name = $("Momentum"),
-    .description = $("Contact moves use the Speed stat\n"
-                     "for damage calculation."),
+constexpr Ability Momentum = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
             if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *atkStatToUse = STAT_SPEED;
         },
 };
 
-static const Ability GripPincer = {
-    .name = $("Grip Pincer"),
-    .description = $("50% chance to trap. Then ignores\n"
-                     "Defense & accuracy checks."),
+constexpr Ability GripPincer = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(gBattlerTarget))
         CHECK(IsBattlerAlive(battler))
@@ -4592,33 +3827,33 @@ static const Ability GripPincer = {
     },
 };
 
-static const Ability BigLeaves = {
-    .name = $("Big Leaves"),
-    .description = $("Chloroplast + Chlorophyll + Leaf\n"
-                     "Guard + Harvest + Solar Power."),
+constexpr Ability BigLeaves = {
     .onEndTurn = Harvest.onEndTurn,
     .onStat =
         +[](ON_STAT) {
             SolarPower.onStat(DELEGATE_STAT);
             Chlorophyll.onStat(DELEGATE_STAT);
         },
+    .onStatusImmune = LeafGuard.onStatusImmune,
     .breakable = TRUE,
     .chloroplast = TRUE,
 };
 
-static const Ability PreciseFist = {
-    .name = $("Precise Fist"),
-    .description = $("Punching moves get +1 crit\n"
-                     "and 5x effect chance."),
+constexpr Ability PreciseFist = {
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(IsIronFistBoosted(battler, move))
+        return 1;
+    },
+    .onModifyEffectChance =
+        +[](ON_MODIFY_EFFECT_CHANCE) {
+            if (IsIronFistBoosted(battler, move)) *effectChance *= 5;
+        },
 };
 
-static const Ability Deadeye = {
-    .name = $("Deadeye"),
-    .description = $("Never misses. Arrow and cannon\n"
-                     "moves hit weakest defense."),
+constexpr Ability Deadeye = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority { return ACCURACY_HITS_IF_POSSIBLE; },
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].arrowBased)
+        CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].arrowBased)
         u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
         u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
         if (def < spDef)
@@ -4630,27 +3865,18 @@ static const Ability Deadeye = {
     },
 };
 
-static const Ability Artillery = {
-    .name = $("Artillery"),
-    .description = $("Mega Launcher moves always hit.\n"
-                     "Single-target now hits both foes."),
+constexpr Ability Artillery = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-        CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
+        CHECK(IsMegaLauncherBoosted(battler, move))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
 };
 
-static const Ability Amplifier = {
-    .name = $("Amplifier"),
-    .description = $("Ups sound moves by 30% and\n"
-                     "makes them hit both foes."),
+constexpr Ability Amplifier = {
     .onOffensiveMultiplier = PunkRock.onOffensiveMultiplier,
 };
 
-static const Ability IceDew = {
-    .name = $("Ice Dew"),
-    .description = $("Boosts highest Atk instead of\n"
-                     "being hit by Ice-type moves."),
+constexpr Ability IceDew = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_ICE);
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -4659,10 +3885,7 @@ static const Ability IceDew = {
     .breakable = TRUE,
 };
 
-static const Ability SunWorship = {
-    .name = $("Sun Worship"),
-    .description = $("Ups highest stat by +1\n"
-                     "on entry when sunny."),
+constexpr Ability SunWorship = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
 
@@ -4673,17 +3896,11 @@ static const Ability SunWorship = {
     },
 };
 
-static const Ability Pollinate = {
-    .name = $("Pollinate"),
-    .description = $("Normal-type moves become Bug-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Pollinate = {
     ATE_ABILITY(TYPE_BUG),
 };
 
-static const Ability VolcanoRage = {
-    .name = $("Volcano Rage"),
-    .description = $("Triggers 50 BP Eruption after\n"
-                     "using a Fire-type move."),
+constexpr Ability VolcanoRage = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(moveType == TYPE_FIRE)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -4692,10 +3909,7 @@ static const Ability VolcanoRage = {
     },
 };
 
-static const Ability ColdRebound = {
-    .name = $("Cold Rebound"),
-    .description = $("Attacks with Icy Wind\n"
-                     "when hit by a contact move."),
+constexpr Ability ColdRebound = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -4705,33 +3919,18 @@ static const Ability ColdRebound = {
     },
 };
 
-static const Ability LowBlow = {
-    .name = $("Low Blow"),
-    .description = $("Attacks with 40BP Feint\n"
-                     "Attack on switch-in."),
+constexpr Ability LowBlow = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40); },
 };
 
-static const Ability Nosferatu = {
-    .name = $("Nosferatu"),
-    .description = $("Contact moves do +20% damage\n"
-                     "and heal 1/2 of damage dealt."),
-};
-
-static const Ability Spectralize = {
-    .name = $("Spectralize"),
-    .description = $("Normal-type moves become Ghost-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Spectralize = {
     ATE_ABILITY(TYPE_GHOST),
 };
 
-static const Ability SpectralShroud = {
-    .name = $("Spectral Shroud"),
-    .description = $("Spectralize + 30% chance\n"
-                     "to badly poison the foe."),
+constexpr Ability SpectralShroud = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(CanBePoisoned(battler, target))
+        CHECK(CanBePoisoned(battler, target, MOVE_NONE))
         CHECK(gBattleStruct->ateBoost[battler])
         CHECK(moveType == TYPE_GHOST)
         CHECK(Random() % 100 < 30)
@@ -4742,16 +3941,17 @@ static const Ability SpectralShroud = {
     .onMoveType = Spectralize.onMoveType,
 };
 
-static const Ability Discipline = {
-    .name = $("Discipline"),
-    .description = $("Rampage moves no longer trap you.\n"
-                     "Can't be confused or intimidated."),
+constexpr Ability Discipline = {
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_CONFUSION)
+        return TRUE;
+    },
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+    .tauntImmune = TRUE,
 };
 
-static const Ability Thundercall = {
-    .name = $("Thundercall"),
-    .description = $("Triggers Smite at 20% power\n"
-                     "when using an Electric move."),
+constexpr Ability Thundercall = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(moveType == TYPE_ELECTRIC)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -4760,10 +3960,7 @@ static const Ability Thundercall = {
     },
 };
 
-static const Ability MarineApex = {
-    .name = $("Marine Apex"),
-    .description = $("50% more damage to Water-\n"
-                     "types + Infiltrator."),
+constexpr Ability MarineApex = {
     .onInfiltrate = Infiltrator.onInfiltrate,
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
@@ -4771,20 +3968,14 @@ static const Ability MarineApex = {
         },
 };
 
-static const Ability MightyHorn = {
-    .name = $("Mighty Horn"),
-    .description = $("Boosts the power of horn and\n"
-                     "drill-based by 1.3x."),
+constexpr Ability MightyHorn = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].hornBased) MUL(1.3);
         },
 };
 
-static const Ability HardenedSheath = {
-    .name = $("Hardened Sheath"),
-    .description = $("Ups Attack by +1\n"
-                     "when using horn moves."),
+constexpr Ability HardenedSheath = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(gBattleMoves[move].hornBased)
@@ -4796,18 +3987,12 @@ static const Ability HardenedSheath = {
     },
 };
 
-static const Ability ArcticFur = {
-    .name = $("Arctic Fur"),
-    .description = $("Weakens incoming physical\n"
-                     "and special moves by 35%."),
+constexpr Ability ArcticFur = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.65); },
     .breakable = TRUE,
 };
 
-static const Ability Lethargy = {
-    .name = $("Lethargy"),
-    .description = $("Damage drops 20% each turn to 20%.\n"
-                     "Resets on switch-in."),
+constexpr Ability Lethargy = {
     .onEntry = +[](ON_ENTRY) -> int {
         TryResetBattlerStatChanges(battler, RESET_ALL_STATS);
         gVolatileStructs[battler].slowStartTimer = 5;
@@ -4837,37 +4022,29 @@ static const Ability Lethargy = {
         },
 };
 
-static const Ability IronBarrage = {
-    .name = $("Iron Barrage"),
-    .description = $("Mega Launcher + Sighting System."),
+constexpr Ability IronBarrage = {
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
     .onAccuracy = SightingSystem.onAccuracy,
     .onPriority = SightingSystem.onPriority,
+    .megaLauncherBoost = TRUE,
 };
 
-static const Ability SteelBarrel = {
-    .name = $("Steel Barrel"),
-    .description = $("Immune to recoil damage, but not\n"
-                     "immune to Explosion/crash dmg."),
+constexpr Ability SteelBarrel = {
+    .onStatusImmune = RockHead.onStatusImmune,
     .noRecoil = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability PyroShells = {
-    .name = $("Pyro Shells"),
-    .description = $("Triggers 50 BP Outburst after\n"
-                     "using a Mega Launcher move."),
+constexpr Ability PyroShells = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
+        CHECK(IsMegaLauncherBoosted(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_OUTBURST, 50);
     },
 };
 
-static const Ability FungalInfection = {
-    .name = $("Fungal Infection"),
-    .description = $("Contact moves inflict\n"
-                     "Leech Seed on the target."),
+constexpr Ability FungalInfection = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
@@ -4881,10 +4058,7 @@ static const Ability FungalInfection = {
     },
 };
 
-static const Ability Parry = {
-    .name = $("Parry"),
-    .description = $("Counters contact with Mach\n"
-                     "Punch. Takes 20% less damage."),
+constexpr Ability Parry = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -4895,10 +4069,7 @@ static const Ability Parry = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.8); },
 };
 
-static const Ability Scrapyard = {
-    .name = $("Scrapyard"),
-    .description = $("Sets a layer of Spikes when hit\n"
-                     "(contact move)."),
+constexpr Ability Scrapyard = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(IsMoveMakingContact(move, attacker))
@@ -4909,17 +4080,11 @@ static const Ability Scrapyard = {
     },
 };
 
-static const Ability LooseQuills = {
-    .name = $("Loose Quills"),
-    .description = $("Sets a layer of Spikes when hit\n"
-                     "(contact move)."),
+constexpr Ability LooseQuills = {
     .onDefender = Scrapyard.onDefender,
 };
 
-static const Ability ToxicDebris = {
-    .name = $("Toxic Debris"),
-    .description = $("Sets a layer of Toxic Spikes\n"
-                     "when hit by contact moves."),
+constexpr Ability ToxicDebris = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(IsMoveMakingContact(move, attacker))
@@ -4930,16 +4095,13 @@ static const Ability ToxicDebris = {
     },
 };
 
-static const Ability Roundhouse = {
-    .name = $("Roundhouse"),
-    .description = $("Kicks always hit.\n"
-                     "Damages foes' weaker defenses."),
+constexpr Ability Roundhouse = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-        CHECK(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
+        CHECK(IsStrikerBoosted(battler, move))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
+        CHECK(IsStrikerBoosted(battler, move))
         u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
         u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
         if (def < spDef)
@@ -4951,17 +4113,11 @@ static const Ability Roundhouse = {
     },
 };
 
-static const Ability Mineralize = {
-    .name = $("Mineralize"),
-    .description = $("Normal-type moves become Rock-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Mineralize = {
     ATE_ABILITY(TYPE_ROCK),
 };
 
-static const Ability LooseRocks = {
-    .name = $("Loose Rocks"),
-    .description = $("Deploys Stealth Rocks\n"
-                     "when hit by contact."),
+constexpr Ability LooseRocks = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(IsMoveMakingContact(move, attacker))
@@ -4972,10 +4128,7 @@ static const Ability LooseRocks = {
     },
 };
 
-static const Ability SpinningTop = {
-    .name = $("Spinning Top"),
-    .description = $("Fighting moves up speed +1\n"
-                     "and clear hazards."),
+constexpr Ability SpinningTop = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_FIGHTING)
@@ -4986,16 +4139,16 @@ static const Ability SpinningTop = {
             gSideTimers[GetBattlerSide(battler)].caltrops) {
             gSideStatuses[GetBattlerSide(battler)] &=
                 ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_STICKY_WEB);
-            gSideTimers[GetBattlerSide(battler)].hotCoals = TRUE;
-            gSideTimers[GetBattlerSide(battler)].caltrops = TRUE;
+            gSideTimers[GetBattlerSide(battler)].hotCoals = FALSE;
+            gSideTimers[GetBattlerSide(battler)].caltrops = FALSE;
             BattleScriptCall(BattleScript_AnnounceRemovedHazards);
             gBattleScripting.battler = battler;
             any = TRUE;
         }
 
         if (ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL)) {
-            BattleScriptCall(BattleScript_AnnounceAbilitySpeedBoost);
             gBattleScripting.battler = battler;
+            BattleScriptCall(BattleScript_AttackBoostActivates);
             any = TRUE;
         }
 
@@ -5003,16 +4156,23 @@ static const Ability SpinningTop = {
     },
 };
 
-static const Ability RetributionBlow = {
-    .name = $("Retribution Blow"),
-    .description = $("Uses Hyper Beam if any foe\n"
-                     "uses an stat boosting move."),
+constexpr Ability RetributionBlow = {
+    .onReactive = +[](ON_REACTIVE) -> int {
+        CHECK_NOT(gTurnStructs[battler].dancerUsedMove)
+        CHECK(IsBattlerAlive(gBattlerAttacker))
+        CHECK(gCurrentTurnActionNumber < gBattlersCount || gProcessingExtraAttacks)
+        CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
+        for (int stat = STAT_ATK; stat < NUM_STATS; stat++) {
+            if (gBattleStruct->statChangesToCheck[gBattlerAttacker][stat - 1] > 0) {
+                UseOutOfTurnAttack(battler, gBattlerAttacker, ability, MOVE_HYPER_BEAM, 0);
+                return FALSE;
+            }
+        }
+        return FALSE;
+    },
 };
 
-static const Ability Fearmonger = {
-    .name = $("Fearmonger"),
-    .description = $("Intimidate + Scare; 10%\n"
-                     "para chance on contact moves."),
+constexpr Ability Fearmonger = {
     .onEntry = UseIntimidateClone,
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
@@ -5024,67 +4184,81 @@ static const Ability Fearmonger = {
     },
 };
 
-static const Ability KingsWrath = {
-    .name = $("King's Wrath"),
-    .description = $("Lowering any stats on its\n"
-                     "side raises Atk and Def."),
-};
-
-static const Ability QueensMourning = {
-    .name = $("Queen's Mourning"),
-    .description = $("Lowering any stats on its\n"
-                     "side raises SpAtk and SpDef."),
-};
-
-static const Ability ToxicSpill = {
-    .name = $("Toxic Spill"),
-    .description = $("Non-Poison-types take 1/8 dmg\n"
-                     "every turn when on field."),
+constexpr Ability ToxicSpill = {
     .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
         BattleScriptPushCursorAndCallback(BattleScript_BattlerAnnouncedToxicSpill);
         return TRUE;
     },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        if (ability) {
+            CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
+            AbilityEnum sourceAbilities[] = {ABILITY_TOXIC_SPILL, ABILITY_TRASH_HEAP};
+            for (auto sourceAbility : sourceAbilities) {
+                int source = IsAbilityOnField(sourceAbility);
+                FILTER(source)
+                CHECK(sourceAbility == ability)
+                CHECK(source - 1 == battler)
+            }
+        }
+
+        int any = FALSE;
+        for (int target = 0; target < gBattlersCount; target++) {
+            FILTER(IsBattlerAlive(target))
+
+            if (BATTLER_HAS_ABILITY(target, ABILITY_POISON_HEAL)) {
+                FILTER_NOT(BATTLER_MAX_HP(target))
+                FILTER(CanBattlerHeal(target))
+                gStackBattler1 = target;
+                BattleScriptExecute(BattleScript_ToxicWasteHeal);
+                any = TRUE;
+                continue;
+            }
+
+            FILTER_NOT(IS_BATTLER_OF_TYPE(target, TYPE_POISON))
+            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(BATTLER_HAS_ABILITY(battler, ABILITY_TOXIC_BOOST))
+
+            gStackBattler1 = target;
+            BattleScriptExecute(BattleScript_ToxicWasteTurnDmg);
+            any = TRUE;
+        }
+        return any;
+    },
     .onExit = +[](ON_EXIT) -> int {
+        CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
         BattleScriptCall(BattleScript_TheToxicWasHasDissapeared);
         return TRUE;
     },
 };
 
-static const Ability DesertCloak = {
-    .name = $("Desert Cloak"),
-    .description = $("Protects its side from status\n"
-                     "and secondary effects in sand."),
+constexpr Ability DesertCloak = {
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
+        return TRUE;
+    },
+    .onStatusImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
-static const Ability Draconize = {
-    .name = $("Draconize"),
-    .description = $("Normal-type moves become Dragon-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Draconize = {
     ATE_ABILITY(TYPE_DRAGON),
 };
 
-static const Ability PrettyPrincess = {
-    .name = $("Pretty Princess"),
-    .description = $("Does 50% more damage if the\n"
-                     "target has any lowered stat."),
+constexpr Ability PrettyPrincess = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (!IsUnaware(battler) && HasAnyLoweredStat(target)) MUL(1.5);
         },
 };
 
-static const Ability SelfRepair = {
-    .name = $("Self Repair"),
-    .description = $("Self Sufficient + Natural Cure."),
+constexpr Ability SelfRepair = {
     .onEndTurn = SelfSufficient.onEndTurn,
     .onExit = NaturalCure.onExit,
 };
 
-static const Ability AtomicBurst = {
-    .name = $("Atomic Burst"),
-    .description = $("When hit super-effectively,\n"
-                     "triggers 50 BP Hyper Beam."),
+constexpr Ability AtomicBurst = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
@@ -5094,66 +4268,50 @@ static const Ability AtomicBurst = {
     },
 };
 
-static const Ability Hellblaze = {
-    .name = $("Hellblaze"),
-    .description = $("Boosts Fire-type moves by 1.3x,\n"
-                     "or 1.8x when below 1/3 HP."),
+constexpr Ability Hellblaze = {
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_FIRE),
 };
 
-static const Ability Riptide = {
-    .name = $("Riptide"),
-    .description = $("Boosts Water-type moves by 1.3x,\n"
-                     "or 1.8x when below 1/3 HP."),
+constexpr Ability Riptide = {
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_WATER),
 };
 
-static const Ability ForestRage = {
-    .name = $("Forest Rage"),
-    .description = $("Boosts Grass-type moves by 1.3x,\n"
-                     "or 1.8x when below 1/3 HP."),
-    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_WATER),
+constexpr Ability ForestRage = {
+    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_GRASS),
 };
 
-static const Ability PrimalMaw = {
-    .name = $("Primal Maw"),
-    .description = $("Biting moves hit twice.\n"
-                     "2nd hit does 0.4x damage."),
+constexpr Ability PrimalMaw = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         return PARENTAL_BOND_PRIMAL_MAW;
     },
 };
 
-static const Ability SweepingEdge = {
-    .name = $("Sweeping Edge"),
-    .description = $("Keen Edge moves always hit.\n"
-                     "Single-target now hits both foes."),
+constexpr Ability SweepingEdge = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
         return ACCURACY_HITS_IF_POSSIBLE;
     },
 };
 
-static const Ability GiftedMind = {
-    .name = $("Gifted Mind"),
-    .description = $("Nulls Psychic weakness;\n"
-                     "status moves always hit."),
+constexpr Ability GiftedMind = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(IS_MOVE_STATUS(move))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (moveType == TYPE_BUG || moveType == TYPE_GHOST || moveType == TYPE_DARK) *mod = 0;
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
-static const Ability HydroCircuit = {
-    .name = $("Hydro Circuit"),
-    .description = $("Electric moves +50%;\n"
-                     "Water moves siphon 25% damage."),
+constexpr Ability HydroCircuit = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(moveType == TYPE_WATER)
 
         gBattleMoveDamage = -gHpDealt / 4;
@@ -5164,10 +4322,7 @@ static const Ability HydroCircuit = {
     .onOffensiveMultiplier = Transistor.onOffensiveMultiplier,
 };
 
-static const Ability Equinox = {
-    .name = $("Equinox"),
-    .description = $("Boosts Atk or SpAtk to\n"
-                     "match the higher value."),
+constexpr Ability Equinox = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
             int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
@@ -5179,10 +4334,7 @@ static const Ability Equinox = {
         },
 };
 
-static const Ability Absorbant = {
-    .name = $("Absorbant"),
-    .description = $("Drain moves recover +50%\n"
-                     "HP & apply Leech Seed."),
+constexpr Ability Absorbant = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
@@ -5196,18 +4348,12 @@ static const Ability Absorbant = {
     },
 };
 
-static const Ability Clueless = {
-    .name = $("Clueless"),
-    .description = $("Negates Weather, Rooms\n"
-                     "and Terrains."),
+constexpr Ability Clueless = {
     .onEntry = CloudNine.onEntry,
     .unsuppressable = TRUE,
 };
 
-static const Ability CheatingDeath = {
-    .name = $("Cheating Death"),
-    .description = $("Gets no damage for\n"
-                     "the first two hits."),
+constexpr Ability CheatingDeath = {
     .onEntry = +[](ON_ENTRY) -> int {
         int uses = 2 - GetSingleUseAbilityCounter(battler, ability);
         CHECK(uses)
@@ -5224,17 +4370,11 @@ static const Ability CheatingDeath = {
     .persistent = TRUE,
 };
 
-static const Ability CheapTactics = {
-    .name = $("Cheap Tactics"),
-    .description = $("Attacks with Scratch\n"
-                     "on switch-in."),
+constexpr Ability CheapTactics = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SCRATCH, 0); },
 };
 
-static const Ability Coward = {
-    .name = $("Coward"),
-    .description = $("Sets up Protect on switch-in.\n"
-                     "Only works once."),
+constexpr Ability Coward = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
 
@@ -5246,17 +4386,11 @@ static const Ability Coward = {
     .persistent = TRUE,
 };
 
-static const Ability VoltRush = {
-    .name = $("Volt Rush"),
-    .description = $("At full HP, gives +1 priority to\n"
-                     "its Electric-type moves."),
+constexpr Ability VoltRush = {
     .onPriority = GALE_WINGS_CLONE(TYPE_ELECTRIC),
 };
 
-static const Ability DuneTerror = {
-    .name = $("Dune Terror"),
-    .description = $("Sand reduces damage by 35%.\n"
-                     "Boosts Ground moves by 20%."),
+constexpr Ability DuneTerror = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GROUND) MUL(1.2);
@@ -5268,10 +4402,7 @@ static const Ability DuneTerror = {
     .breakable = TRUE,
 };
 
-static const Ability InfernalRage = {
-    .name = $("Infernal Rage"),
-    .description = $("Fire-type moves are boosted\n"
-                     "by 35% with 5% recoil."),
+constexpr Ability InfernalRage = {
     .onRecoil = +[](ON_RECOIL) -> int {
         CHECK(moveType == TYPE_FIRE);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -5283,20 +4414,14 @@ static const Ability InfernalRage = {
         },
 };
 
-static const Ability DualWield = {
-    .name = $("Dual Wield"),
-    .description = $("Mega Launcher and Keen Edge\n"
-                     "moves hit twice for 70% damage."),
+constexpr Ability DualWield = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
-        CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
+        CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
         return PARENTAL_BOND_DUAL_WIELD;
     },
 };
 
-static const Ability ElementalCharge = {
-    .name = $("Elemental Charge"),
-    .description = $("20% chance to BRN/FRZ/PARA\n"
-                     "with respective types."),
+constexpr Ability ElementalCharge = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(Random() % 100 < 20)
@@ -5324,16 +4449,14 @@ static const Ability ElementalCharge = {
     },
 };
 
-static const Ability Ambush = {
-    .name = $("Ambush"),
-    .description = $("Guaranteed critical hit\n"
-                     "on first turn."),
+constexpr Ability Ambush = {
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(gVolatileStructs[battler].isFirstTurn)
+        return ALWAYS_CRIT;
+    },
 };
 
-static const Ability Atlas = {
-    .name = $("Atlas"),
-    .description = $("Sets Gravity on entry for\n"
-                     "8 turns."),
+constexpr Ability Atlas = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
 
@@ -5345,10 +4468,7 @@ static const Ability Atlas = {
     },
 };
 
-static const Ability Radiance = {
-    .name = $("Radiance"),
-    .description = $("+20% accuracy; Dark moves\n"
-                     "fail when user is present."),
+constexpr Ability Radiance = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(moveType == TYPE_DARK);
         *immunityScript = BattleScript_RadianceProtected;
@@ -5359,13 +4479,10 @@ static const Ability Radiance = {
     .breakable = TRUE,
 };
 
-static const Ability JawsOfCarnage = {
-    .name = $("Jaws of Carnage"),
-    .description = $("Devours 1/2 of the foe\n"
-                     "when defeating it."),
+constexpr Ability JawsOfCarnage = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         if (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST)
             BattleScriptCall(BattleScript_HandleJawsOfCarnageEffect);
         else
@@ -5375,22 +4492,23 @@ static const Ability JawsOfCarnage = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability AngelsWrath = {
-    .name = $("Angel's Wrath"),
-    .description = $("Drastically alters all\n"
-                     "of the users moves."),
+constexpr Ability AngelsWrath = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         switch (move) {
             case MOVE_TACKLE: {
                 CHECK(ShouldApplyOnHitAffect(target))
-                CHECK(gVolatileStructs[target].encoreTimer)
-                CHECK(gVolatileStructs[target].disableTimer)
+                CHECK(!IsAbilityStatusProtected(target, CHECK_RESTRICTING))
+                CHECK(!gVolatileStructs[target].encoreTimer || !gVolatileStructs[target].disableTimer)
 
-                gVolatileStructs[target].encoreTimer = 2;
-                gVolatileStructs[target].encoredMove = gBattleMons[target].moves[0];
+                if (!gVolatileStructs[target].encoreTimer) {
+                    gVolatileStructs[target].encoreTimer = 2;
+                    gVolatileStructs[target].encoredMove = gBattleMons[target].moves[0];
+                }
 
-                gVolatileStructs[target].disableTimer = gVolatileStructs[target].disableTimerStartValue = 2;
-                gVolatileStructs[target].disabledMove = gBattleMons[target].moves[0];
+                if (!gVolatileStructs[target].disableTimer) {
+                    gVolatileStructs[target].disableTimer = gVolatileStructs[target].disableTimerStartValue = 2;
+                    gVolatileStructs[target].disabledMove = gBattleMons[target].moves[0];
+                }
 
                 BattleScriptCall(BattleScript_AngelsWrath_Effect_Tackle);
                 return TRUE;
@@ -5461,7 +4579,7 @@ static const Ability AngelsWrath = {
             case MOVE_BUG_BITE: {
                 CHECK(ShouldApplyOnHitAffect(battler))
                 CHECK_NOT(BATTLER_MAX_HP(battler))
-                CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+                CHECK(CanBattlerHeal(battler))
 
                 gBattleMoveDamage = -gHpDealt;
                 if (!gBattleMoveDamage) gBattleMoveDamage = -1;
@@ -5483,21 +4601,41 @@ static const Ability AngelsWrath = {
                 return ACCURACY_NO_RESULT;
         }
     },
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        if (move == MOVE_POISON_STING) {
+            CHECK(defType == TYPE_STEEL)
+            *mod = UQ_4_12(2.0);
+            return TRUE;
+        }
+
+        if (move == MOVE_ELECTROWEB) {
+            CHECK(defType == TYPE_GROUND)
+            *mod = UQ_4_12(2.0);
+            return TRUE;
+        }
+        return FALSE;
+    },
+    .onModifyEffectChance =
+        +[](ON_MODIFY_EFFECT_CHANCE) {
+            if (move == MOVE_POISON_STING) *effectChance = 100;
+        },
+    .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
+        CHECK(status & CHECK_POISON)
+        CHECK(move == MOVE_POISON_STING)
+        return TRUE;
+    },
 };
 
-static const Ability PrismaticFur = {
-    .name = $("Prismatic Fur"),
-    .description = $("Color Change + Protean +\n"
-                     "Fur Coat + Ice Scales."),
+constexpr Ability PrismaticFur = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.5); },
-    .protean = TRUE,
-    .colorChange = TRUE,
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        if (battler == attacker && Protean.onBeforeAttack(DELEGATE_ON_BEFORE_ATTACK)) return TRUE;
+        return ColorChange.onBeforeAttack(DELEGATE_ON_BEFORE_ATTACK);
+    },
+    .onBeforeAttackFor = APPLY_ON_ATTACKER_OR_TARGET,
 };
 
-static const Ability ShockingJaws = {
-    .name = $("Shocking Jaws"),
-    .description = $("Biting moves have 50% chance\n"
-                     "to paralyze the target."),
+constexpr Ability ShockingJaws = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeParalyzed(battler, target))
@@ -5508,20 +4646,14 @@ static const Ability ShockingJaws = {
     },
 };
 
-static const Ability FaeHunter = {
-    .name = $("Fae Hunter"),
-    .description = $("Does 50% more damage to\n"
-                     "Fairy-types."),
+constexpr Ability FaeHunter = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_BATTLER_OF_TYPE(target, TYPE_FAIRY)) RESISTANCE(1.5);
         },
 };
 
-static const Ability GravityWell = {
-    .name = $("Gravity Well"),
-    .description = $("Sets Gravity on entry for\n"
-                     "5 turns."),
+constexpr Ability GravityWell = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
 
@@ -5533,10 +4665,7 @@ static const Ability GravityWell = {
     },
 };
 
-static const Ability Evaporate = {
-    .name = $("Evaporate"),
-    .description = $("Takes no damage and sets Mist\n"
-                     "if hit by water."),
+constexpr Ability Evaporate = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_WATER)
         return ABSORB_RESULT_EVAPORATE;
@@ -5544,19 +4673,14 @@ static const Ability Evaporate = {
     .breakable = TRUE,
 };
 
-static const Ability Lumberjack = {
-    .name = $("Lumberjack"),
-    .description = $("1.5x damage to Grass types."),
+constexpr Ability Lumberjack = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) RESISTANCE(1.5);
         },
 };
 
-static const Ability WellBakedBody = {
-    .name = $("Well Baked Body"),
-    .description = $("Boosts Defense sharply instead\n"
-                     "of being hit by Fire-type moves."),
+constexpr Ability WellBakedBody = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_FIRE);
         *statId = STAT_DEF;
@@ -5566,10 +4690,7 @@ static const Ability WellBakedBody = {
     .absorbUp2 = TRUE,
 };
 
-static const Ability Furnace = {
-    .name = $("Furnace"),
-    .description = $("User gains +2 Speed when\n"
-                     "when hit by rocks."),
+constexpr Ability Furnace = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
         CHECK(gSideTimers[GetBattlerSide(battler)].stealthRockType == TYPE_ROCK)
@@ -5590,9 +4711,7 @@ static const Ability Furnace = {
     },
 };
 
-static const Ability Electromorphosis = {
-    .name = $("Electromorphosis"),
-    .description = $("Charges up when getting hit."),
+constexpr Ability Electromorphosis = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
@@ -5603,20 +4722,14 @@ static const Ability Electromorphosis = {
     },
 };
 
-static const Ability RockyPayload = {
-    .name = $("Rocky Payload"),
-    .description = $("Boosts the power of Rock-type\n"
-                     "and throwing moves by 1.5x."),
+constexpr Ability RockyPayload = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ROCK || gBattleMoves[move].throwingBased) MUL(1.5);
         },
 };
 
-static const Ability EarthEater = {
-    .name = $("Earth Eater"),
-    .description = $("Heals 25% of max HP when hit\n"
-                     "by a Ground move."),
+constexpr Ability EarthEater = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_GROUND)
         return ABSORB_RESULT_HEAL;
@@ -5624,40 +4737,27 @@ static const Ability EarthEater = {
     .breakable = TRUE,
 };
 
-static const Ability LingeringAroma = {
-    .name = $("Lingering Aroma"),
-    .description = $("If hit, makes the attacker's ability\n"
-                     "Lingering Aroma."),
+constexpr Ability LingeringAroma = {
     .onDefender = Mummy.onDefender,
 };
 
-static const Ability FairyTale = {
-    .name = $("Fairy Tale"),
-    .description = $("Adds Fairy type to itself."),
+constexpr Ability FairyTale = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FAIRY); },
 };
 
-static const Ability RagingMoth = {
-    .name = $("Raging Moth"),
-    .description = $("Fire moves hits twice,\n"
-                     "both hits at 70% power."),
+constexpr Ability RagingMoth = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
         CHECK(moveType == TYPE_FIRE)
         return PARENTAL_BOND_DUAL_WIELD;
     },
 };
 
-static const Ability AdrenalineRush = {
-    .name = $("Adrenaline Rush"),
-    .description = $("KOs raise Speed by one stage."),
+constexpr Ability AdrenalineRush = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, STAT_SPEED); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Archmage = {
-    .name = $("Archmage"),
-    .description = $("30% chance of adding a type\n"
-                     "related effect to each move."),
+constexpr Ability Archmage = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(DidMoveHit())
         CHECK_NOT(IS_MOVE_STATUS(move))
@@ -5666,7 +4766,7 @@ static const Ability Archmage = {
         switch (moveType) {
             case TYPE_POISON:
                 CHECK(IsBattlerAlive(target))
-                CHECK(CanBePoisoned(battler, target))
+                CHECK(CanBePoisoned(battler, target, MOVE_NONE))
 
                 AbilityStatusEffect(MOVE_EFFECT_TOXIC);
                 return TRUE;
@@ -5724,8 +4824,7 @@ static const Ability Archmage = {
             case TYPE_NORMAL:
                 CHECK(IsBattlerAlive(target))
                 CHECK_NOT(gVolatileStructs[target].encoreTimer)
-                CHECK_NOT(IsAbilityOnSide(target, ABILITY_AROMA_VEIL))
-                CHECK_NOT(BATTLER_HAS_ABILITY(target, ABILITY_OBLIVIOUS))
+                CHECK_NOT(IsAbilityStatusProtected(target, CHECK_RESTRICTING))
                 CHECK(SetEncore(target))
 
                 BattleScriptCall(BattleScript_Archmage_Effect_Type_Normal);
@@ -5797,49 +4896,41 @@ static const Ability Archmage = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Cryomancy = {
-    .name = $("Cryomancy"),
-    .description = $("Moves inflict frostbite\n"
-                     "5x as often."),
+constexpr Ability Cryomancy = {
+    .onModifyEffectChance =
+        +[](ON_MODIFY_EFFECT_CHANCE) {
+            if (moveEffect == MOVE_EFFECT_FROSTBITE) *effectChance *= 5;
+        },
 };
 
-static const Ability PhantomPain = {
-    .name = $("Phantom Pain"),
-    .description = $("Ghost type moves can hit normal\n"
-                     "type pokemon for neutral damage."),
+constexpr Ability PhantomPain = {
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_GHOST)
+        CHECK(defType == TYPE_NORMAL)
+        CHECK_NOT(*mod)
+        *mod = UQ_4_12(1.0);
+        return TRUE;
+    },
 };
 
-static const Ability Purgatory = {
-    .name = $("Purgatory"),
-    .description = $("Boosts Ghost-type moves by 1.3x,\n"
-                     "or 1.8x when below 1/3 HP."),
+constexpr Ability Purgatory = {
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_GHOST),
 };
 
-static const Ability Emanate = {
-    .name = $("Emanate"),
-    .description = $("Normal-type moves become Psy.-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Emanate = {
     ATE_ABILITY(TYPE_PSYCHIC),
 };
 
-static const Ability KunoichiBlade = {
-    .name = $("Kunoichi's Blade"),
-    .description = $("Technician + Skill Link."),
+constexpr Ability KunoichiBlade = {
     .onOffensiveMultiplier = Technician.onOffensiveMultiplier,
     .skillLink = TRUE,
 };
 
-static const Ability MonkeyBusiness = {
-    .name = $("Monkey Business"),
-    .description = $("Uses Tickle on entry."),
+constexpr Ability MonkeyBusiness = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TICKLE, 0); },
 };
 
-static const Ability CombatSpecialist = {
-    .name = $("Combat Specialist"),
-    .description = $("Boosts the power of punching and\n"
-                     "kicking moves by 1.3x."),
+constexpr Ability CombatSpecialist = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             IronFist.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
@@ -5847,26 +4938,19 @@ static const Ability CombatSpecialist = {
         },
 };
 
-static const Ability JunglesGuard = {
-    .name = $("Jungle's Guard"),
-    .description = $("Grass-types on user side: immune\n"
-                     "to status/stat drops from enemy."),
+constexpr Ability JunglesGuard = {
+    .onStatusImmune = FlowerVeil.onStatusImmune,
+    .onStatusImmuneFor = FlowerVeil.onStatusImmuneFor,
     .breakable = TRUE,
 };
 
-static const Ability HuntersHorn = {
-    .name = $("Hunter's Horn"),
-    .description = $("Boost horn moves and heals\n"
-                     "1/4 HP when defeating an enemy."),
+constexpr Ability HuntersHorn = {
     .onBattlerFaints = SoulEater.onBattlerFaints,
     .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability PixiePower = {
-    .name = $("Pixie Power"),
-    .description = $("1.2x accuracy. Boosts Fairy\n"
-                     "moves by 1.33x for all."),
+constexpr Ability PixiePower = {
     .onEntry = FairyAura.onEntry,
     .onOffensiveMultiplier = FairyAura.onOffensiveMultiplier,
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
@@ -5876,10 +4960,7 @@ static const Ability PixiePower = {
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
-static const Ability PlasmaLamp = {
-    .name = $("Plasma Lamp"),
-    .description = $("Boost accuracy & power of Fire\n"
-                     "& Electric type moves by 1.2x."),
+constexpr Ability PlasmaLamp = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC) MUL(1.2);
@@ -5891,58 +4972,36 @@ static const Ability PlasmaLamp = {
     },
 };
 
-static const Ability MagmaEater = {
-    .name = $("Magma Eater"),
-    .description = $("Predator + Molten Down."),
+constexpr Ability MagmaEater = {
     .onBattlerFaints = SoulEater.onBattlerFaints,
+    .onTypeEffectiveness = MoltenDown.onTypeEffectiveness,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability SuperHotGoo = {
-    .name = $("Super Hot Goo"),
-    .description = $("Inflicts burn and lowers\n"
-                     "Speed on contact."),
+constexpr Ability SuperHotGoo = {
     .onAttacker = FlameBody.onAttacker,
     .onDefender = +[](ON_DEFENDER) -> int { return Gooey.onDefender(DELEGATE_DEFENDER) | FlameBody.onDefender(DELEGATE_DEFENDER); },
 };
 
-static const Ability Nika = {
-    .name = $("Nika"),
-    .description = $("Iron fist + Water moves\n"
-                     "function normally under sun."),
+constexpr Ability Nika = {
     .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
 };
 
-static const Ability Archer = {
-    .name = $("Archer"),
-    .description = $("Boosts the power of arrow moves\n"
-                     "by 1.3x."),
+constexpr Ability Archer = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].arrowBased) MUL(1.3);
         },
 };
 
-static const Ability ColdPlasma = {
-    .name = $("Cold Plasma"),
-    .description = $("Electric type moves now\n"
-                     "inflict burn instead of paralysis."),
-};
-
-static const Ability SuperSlammer = {
-    .name = $("Super Slammer"),
-    .description = $("Boosts the power of hammer and\n"
-                     "slamming moves by 1.3x."),
+constexpr Ability SuperSlammer = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].hammerBased) MUL(1.3);
         },
 };
 
-static const Ability InverseRoom = {
-    .name = $("Inversion"),
-    .description = $("Sets up Inverse Room on\n"
-                     "entry, lasts 3 turns."),
+constexpr Ability InverseRoom = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)
 
@@ -5954,16 +5013,7 @@ static const Ability InverseRoom = {
     },
 };
 
-static const Ability Accelerate = {
-    .name = $("Accelerate"),
-    .description = $("Moves that need a charge turn\n"
-                     "are now used instantly."),
-};
-
-static const Ability FrostBurn = {
-    .name = $("Frost Burn"),
-    .description = $("Triggers 40BP Ice Beam after\n"
-                     "using a Fire-type move."),
+constexpr Ability FrostBurn = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(moveType == TYPE_FIRE)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -5972,10 +5022,7 @@ static const Ability FrostBurn = {
     },
 };
 
-static const Ability ItchyDefense = {
-    .name = $("Itchy Defense"),
-    .description = $("Causes infestation when\n"
-                     "hit by a contact move."),
+constexpr Ability ItchyDefense = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -5995,10 +5042,7 @@ static const Ability ItchyDefense = {
     },
 };
 
-static const Ability Generator = {
-    .name = $("Generator"),
-    .description = $("Charges up once on entry or\n"
-                     "when electric terrain is active."),
+constexpr Ability Generator = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
@@ -6029,41 +5073,28 @@ static const Ability Generator = {
         SetSingleUseAbilityCounter(battler, ability, FALSE);
         return FALSE;
     },
+    .persistent = TRUE,
 };
 
-static const Ability MoonSpirit = {
-    .name = $("Moon Spirit"),
-    .description = $("Fairy & Dark gains STAB.\n"
-                     "Moonlight recovers 75% HP."),
+constexpr Ability MoonSpirit = {
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FAIRY || moveType == TYPE_DARK; },
 };
 
-static const Ability DustCloud = {
-    .name = $("Dust Cloud"),
-    .description = $("Attacks with Sand Attack\n"
-                     "on switch-in."),
+constexpr Ability DustCloud = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SAND_ATTACK, 0); },
 };
 
-static const Ability BerserkerRage = {
-    .name = $("Berserker Rage"),
-    .description = $("Berserk + Rampage."),
+constexpr Ability BerserkerRage = {
     .onDefender = Berserk.onDefender,
     .onBattlerFaints = Rampage.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Trickster = {
-    .name = $("Trickster"),
-    .description = $("Uses Disable\n"
-                     "on switch-in."),
+constexpr Ability Trickster = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DISABLE, 0); },
 };
 
-static const Ability SandGuard = {
-    .name = $("Sand Guard"),
-    .description = $("Blocks priority and reduces\n"
-                     "special damage by 1/2 in sand."),
+constexpr Ability SandGuard = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY));
         return QueenlyMajesty.onImmune(DELEGATE_IMMUNE);
@@ -6075,16 +5106,11 @@ static const Ability SandGuard = {
     .breakable = TRUE,
 };
 
-static const Ability NaturalRecovery = {
-    .name = $("Natural Recovery"),
-    .description = $("Natural Cure + Regenerator."),
+constexpr Ability NaturalRecovery = {
     .onExit = +[](ON_EXIT) -> int { return NaturalCure.onExit(DELEGATE_EXIT) | Regenerator.onExit(DELEGATE_EXIT); },
 };
 
-static const Ability WindRider = {
-    .name = $("Wind Rider"),
-    .description = $("Increases attack in tailwind or\n"
-                     "when hit by wind move."),
+constexpr Ability WindRider = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
         CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
@@ -6100,9 +5126,7 @@ static const Ability WindRider = {
     .breakable = TRUE,
 };
 
-static const Ability SoothingAroma = {
-    .name = $("Soothing Aroma"),
-    .description = $("Cures party status on entry."),
+constexpr Ability SoothingAroma = {
     .onEntry = +[](ON_ENTRY) -> int {
         int anyStatus = FALSE;
         struct Pokemon *party;
@@ -6127,18 +5151,12 @@ static const Ability SoothingAroma = {
     },
 };
 
-static const Ability PrimAndProper = {
-    .name = $("Prim and Proper"),
-    .description = $("Wonder Skin + Cute Charm."),
+constexpr Ability PrimAndProper = {
     .onDefender = CuteCharm.onDefender,
-    .onAccuracy = WonderSkin.onAccuracy,
-    .onAccuracyFor = APPLY_ON_TARGET,
+    .fortKnox = TRUE,
 };
 
-static const Ability SuperStrain = {
-    .name = $("Super Strain"),
-    .description = $("KOs lower Attack by +1.\n"
-                     "Take 25% recoil damage."),
+constexpr Ability SuperStrain = {
     .onRecoil = +[](ON_RECOIL) -> int {
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_STRAIN;
         return max(damage / 4, 1);
@@ -6151,10 +5169,7 @@ static const Ability SuperStrain = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability TippingPoint = {
-    .name = $("Tipping Point"),
-    .description = $("Getting hit raises SpAtk.\n"
-                     "Critical hits maximize SpAtk."),
+constexpr Ability TippingPoint = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_SPATK))
@@ -6170,18 +5185,15 @@ static const Ability TippingPoint = {
     },
 };
 
-static const Ability Enlightened = {
-    .name = $("Enlightened"),
-    .description = $("Emanate + Inner Focus."),
+constexpr Ability Enlightened = {
     .onOffensiveMultiplier = Emanate.onOffensiveMultiplier,
-    .onAccuracy = InnerFocus.onAccuracy,
     .onMoveType = Emanate.onMoveType,
+    .onAccuracy = InnerFocus.onAccuracy,
     .breakable = TRUE,
+    .tauntImmune = TRUE,
 };
 
-static const Ability PeacefulSlumber = {
-    .name = $("Peaceful Slumber"),
-    .description = $("Sweet Dreams + Self Sufficient."),
+constexpr Ability PeacefulSlumber = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         if (!SweetDreams.onEndTurn(DELEGATE_END_TURN)) return SelfSufficient.onEndTurn(DELEGATE_END_TURN);
         gBattleMoveDamage -= gBattleMons[battler].maxHP / 16;
@@ -6189,10 +5201,7 @@ static const Ability PeacefulSlumber = {
     },
 };
 
-static const Ability Aftershock = {
-    .name = $("Aftershock"),
-    .description = $("Triggers Magnitude 4-7 after\n"
-                     "using a damaging move."),
+constexpr Ability Aftershock = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(gBattleMoves[move].power)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -6210,14 +5219,11 @@ ON_EITHER(FreezingPoint) {
     AbilityStatusEffectSafe(MOVE_EFFECT_FROSTBITE, battler, opponent);
     return TRUE;
 }
-static const Ability FreezingPoint = {
-    .name = $("Freezing Point"),
-    .description = $("30% chance to get frostbitten\n"
-                     "on contact."),
+constexpr Ability FreezingPoint = {
     ON_EITHER_ABILITY(FreezingPoint),
 };
 
-static int CryoProficiencyHail(int ability, int battler, int attacker, int move, int moveType) {
+static int CryoProficiencyHail(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType) {
     CHECK(ShouldApplyOnHitAffect(battler))
     CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY)
     if (gBattleWeather & WEATHER_PRIMAL_ANY) {
@@ -6230,19 +5236,13 @@ static int CryoProficiencyHail(int ability, int battler, int attacker, int move,
     }
     return FALSE;
 }
-static const Ability CryoProficiency = {
-    .name = $("Cryo Proficiency"),
-    .description = $("Triggers hail when hit. 30%\n"
-                     "chance to frostbite on contact."),
+constexpr Ability CryoProficiency = {
     .onAttacker = FreezingPoint.onAttacker,
     .onDefender =
         +[](ON_DEFENDER) -> int { return FreezingPoint.onDefender(DELEGATE_DEFENDER) | CryoProficiencyHail(ability, battler, attacker, move, moveType); },
 };
 
-static const Ability ArcaneForce = {
-    .name = $("Arcane Force"),
-    .description = $("All moves gain STAB.\n"
-                     "Ups “supereffective” by 10%."),
+constexpr Ability ArcaneForce = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
@@ -6250,17 +5250,11 @@ static const Ability ArcaneForce = {
     .onStab = MysticPower.onStab,
 };
 
-static const Ability Doombringer = {
-    .name = $("Doombringer"),
-    .description = $("Uses Doom Desire\n"
-                     "on switch-in."),
+constexpr Ability Doombringer = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DOOM_DESIRE, 0); },
 };
 
-static const Ability Wishmaker = {
-    .name = $("Wishmaker"),
-    .description = $("Uses Wish on switch-in.\n"
-                     "Three uses per battle."),
+constexpr Ability Wishmaker = {
     .onEntry = +[](ON_ENTRY) -> int {
         int counter = GetSingleUseAbilityCounter(battler, ability);
         CHECK(counter < 3)
@@ -6272,57 +5266,48 @@ static const Ability Wishmaker = {
     .persistent = TRUE,
 };
 
-static const Ability YukiOnna = {
-    .name = $("Yuki Onna"),
-    .description = $("Scare + Intimidate.\n"
-                     "10% chance to infatuate on hit."),
+constexpr Ability YukiOnna = {
     .onEntry = UseIntimidateClone,
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanInfatuate(battler, target))
-        CHECK(Random() % 100 < 10)
+        CHECK(Random() % 100 < 30)
 
         return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
     },
 };
 
-static const Ability Suppress = {
-    .name = $("Suppress"),
-    .description = $("Casts Torment on entry."),
+constexpr Ability Suppress = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TORMENT, 0); },
 };
 
-static const Ability Refrigerator = {
-    .name = $("Refrigerator"),
-    .description = $("Filter + Illuminate."),
+constexpr Ability Refrigerator = {
     .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
     .onAccuracy = Illuminate.onAccuracy,
 };
 
-static const Ability HeavenAsunder = {
-    .name = $("Heaven Asunder"),
-    .description = $("Spacial Rend always crits.\n"
-                     "Ups crit level by +1."),
+constexpr Ability HeavenAsunder = {
+    .onCrit =
+        +[](ON_CRIT) {
+            if (move == MOVE_SPACIAL_REND) return ALWAYS_CRIT;
+            return 1;
+        },
 };
 
-static const Ability PurifyingWaters = {
-    .name = $("Purifying Waters"),
-    .description = $("Hydration + Water Veil."),
+constexpr Ability PurifyingWaters = {
     .onEntry = WaterVeil.onEntry,
     .onEndTurn = Hydration.onEndTurn,
+    .onStatusImmune = WaterVeil.onStatusImmune,
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability Seaborne = {
-    .name = $("Seaborne"),
-    .description = $("Drizzle + Swift Swim."),
+constexpr Ability Seaborne = {
     .onEntry = Drizzle.onEntry,
     .onStat = SwiftSwim.onStat,
 };
 
-static const Ability HighTide = {
-    .name = $("High Tide"),
-    .description = $("Triggers 50 BP Surf after\n"
-                     "using a Water-type move."),
+constexpr Ability HighTide = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(moveType == TYPE_WATER)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -6331,17 +5316,11 @@ static const Ability HighTide = {
     },
 };
 
-static const Ability ChangeOfHeart = {
-    .name = $("Change of Heart"),
-    .description = $("Uses Heart Swap\n"
-                     "on switch-in."),
+constexpr Ability ChangeOfHeart = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_HEART_SWAP, 0); },
 };
 
-static const Ability MysticBlades = {
-    .name = $("Mystic Blades"),
-    .description = $("Keen edge moves become special\n"
-                     "and deal 30% more damage."),
+constexpr Ability MysticBlades = {
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
     .onSwapSplit = +[](ON_SWAP_SPLIT) -> int {
         CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
@@ -6350,31 +5329,23 @@ static const Ability MysticBlades = {
     },
 };
 
-static const Ability Determination = {
-    .name = $("Determination"),
-    .description = $("Ups Special Attack by 50%\n"
-                     "if suffering."),
+constexpr Ability Determination = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (HasAnyStatusOrAbility(battler) && IS_MOVE_SPECIAL(move)) MUL(1.5);
         },
+    .negatesFrzSpatkDrop = TRUE,
 };
 
-static const Ability Fertilize = {
-    .name = $("Fertilize"),
-    .description = $("Normal-type moves become Grass-\n"
-                     "type moves and get a 1.1x boost."),
+constexpr Ability Fertilize = {
     ATE_ABILITY(TYPE_GRASS),
 };
 
-static const Ability PureLove = {
-    .name = $("Pure Love"),
-    .description = $("Infatuates on contact.\n"
-                     "Heal 25% damage vs infatuated."),
+constexpr Ability PureLove = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gBattleMons[target].status2 & STATUS2_INFATUATION)
 
         gBattleMoveDamage = -gHpDealt / 4;
@@ -6383,40 +5354,25 @@ static const Ability PureLove = {
         return TRUE;
     },
     .onDefender = CuteCharm.onDefender,
+    .canInfatuateAny = TRUE,
 };
 
-static const Ability Fighter = {
-    .name = $("Fighter"),
-    .description = $("Boosts Fight.-type moves by 1.2x,\n"
-                     "or 1.5x when below 1/3 HP."),
+constexpr Ability Fighter = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_FIGHTING),
 };
 
-static const Ability MyceliumMight = {
-    .name = $("Mycelium Might"),
-    .description = $("Status moves ignore immunities\n"
-                     "but go last."),
-};
-
-static const Ability Telekinetic = {
-    .name = $("Telekinetic"),
-    .description = $("Casts Telekinesis on entry."),
+constexpr Ability Telekinetic = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TELEKINESIS, 0); },
 };
 
-static const Ability Combustion = {
-    .name = $("Combustion"),
-    .description = $("Boosts the power of Fire-type\n"
-                     "moves by 1.5x."),
+constexpr Ability Combustion = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE) MUL(1.5);
         },
 };
 
-static const Ability PonyPower = {
-    .name = $("Blade's Essence"),
-    .description = $("Keen Edge + Mystic Blades."),
+constexpr Ability PonyPower = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             KeenEdge.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
@@ -6425,15 +5381,11 @@ static const Ability PonyPower = {
     .onSwapSplit = MysticBlades.onSwapSplit,
 };
 
-static const Ability PowderBurst = {
-    .name = $("Powder Burst"),
-    .description = $("Casts Powder on entry."),
+constexpr Ability PowderBurst = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_POWDER, 0); },
 };
 
-static const Ability Retriever = {
-    .name = $("Retriever"),
-    .description = $("Retrieves item on switch-out."),
+constexpr Ability Retriever = {
     .onExit = +[](ON_EXIT) -> int {
         CHECK(IsBattlerAlive(battler))
         CHECK_NOT(gBattleMons[battler].item)
@@ -6453,16 +5405,11 @@ static const Ability Retriever = {
     },
 };
 
-static const Ability MonsterMash = {
-    .name = $("Monster Mash"),
-    .description = $("Casts Trick-or-Treat on entry."),
+constexpr Ability MonsterMash = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TRICK_OR_TREAT, 0); },
 };
 
-static const Ability TwoStep = {
-    .name = $("Two Step"),
-    .description = $("Triggers 50BP Revelation Dance\n"
-                     "after using a Dance move."),
+constexpr Ability TwoStep = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(IsDance(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
@@ -6471,10 +5418,7 @@ static const Ability TwoStep = {
     },
 };
 
-static const Ability Spiteful = {
-    .name = $("Spiteful"),
-    .description = $("Reduces attacker's PP\n"
-                     "on contact."),
+constexpr Ability Spiteful = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(move != MOVE_STRUGGLE)
@@ -6486,10 +5430,7 @@ static const Ability Spiteful = {
     },
 };
 
-static const Ability Fortitude = {
-    .name = $("Fortitude"),
-    .description = $("Boosts SpDef +1 when hit.\n"
-                     "Maxes SpDef on crit."),
+constexpr Ability Fortitude = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_SPDEF))
@@ -6505,36 +5446,20 @@ static const Ability Fortitude = {
     },
 };
 
-static const Ability Devourer = {
-    .name = $("Devourer"),
-    .description = $("Strong Jaw + Primal Maw."),
+constexpr Ability Devourer = {
     .onParentalBond = PrimalMaw.onParentalBond,
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
-static const Ability PhantomThief = {
-    .name = $("Phantom Thief"),
-    .description = $("Attacks with 40BP Spectral Thief\n"
-                     "on switch-in."),
+constexpr Ability PhantomThief = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SPECTRAL_THIEF, 40); },
 };
 
-static const Ability EarlyGrave = {
-    .name = $("Early Grave"),
-    .description = $("At full HP, gives +1 priority to\n"
-                     "this Pokémon's Ghost-type moves."),
+constexpr Ability EarlyGrave = {
     .onPriority = GALE_WINGS_CLONE(TYPE_GHOST),
 };
 
-static const Ability Grappler = {
-    .name = $("Grappler"),
-    .description = $("Trapping moves last 6 turns.\n"
-                     "Trapping deals 1/6 HP."),
-};
-
-static const Ability BassBoosted = {
-    .name = $("Bass Boosted"),
-    .description = $("Amplifier + Punk Rock."),
+constexpr Ability BassBoosted = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             Amplifier.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
@@ -6544,10 +5469,7 @@ static const Ability BassBoosted = {
     .breakable = TRUE,
 };
 
-static const Ability FlamingJaws = {
-    .name = $("Flaming Jaws"),
-    .description = $("Biting moves have 50% chance\n"
-                     "to burn the target."),
+constexpr Ability FlamingJaws = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeBurned(target))
@@ -6558,30 +5480,17 @@ static const Ability FlamingJaws = {
     },
 };
 
-static const Ability MonsterHunter = {
-    .name = $("Monster Hunter"),
-    .description = $("Deals 1.5x more damage to\n"
-                     "Dark-types."),
-};
-
-static const Ability CrownedSword = {
-    .name = $("Crowned Sword"),
-    .description = $("Intrepid Sword + Anger Point."),
+constexpr Ability CrownedSword = {
     .onEntry = IntrepidSword.onEntry,
     .onDefender = AngerPoint.onDefender,
 };
 
-static const Ability CrownedShield = {
-    .name = $("Crowned Shield"),
-    .description = $("Dauntless Shield + Stamina."),
+constexpr Ability CrownedShield = {
     .onEntry = DauntlessShield.onEntry,
     .onDefender = Stamina.onDefender,
 };
 
-static const Ability BerserkDna = {
-    .name = $("Berserk DNA"),
-    .description = $("Sharply ups highest attacking stat\n"
-                     "but confuses on entry."),
+constexpr Ability BerserkDna = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE))) if (CanBeConfused(battler)) {
             gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
@@ -6594,10 +5503,7 @@ static const Ability BerserkDna = {
     },
 };
 
-static const Ability CrownedKing = {
-    .name = $("Crowned King"),
-    .description = $("Unnerve + Grim Neigh +\n"
-                     "Chilling Neigh."),
+constexpr Ability CrownedKing = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); },
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         return AsOneShadowRider.onBattlerFaints(DELEGATE_BATTLER_FAINTS) | AsOneIceRider.onBattlerFaints(DELEGATE_BATTLER_FAINTS);
@@ -6605,12 +5511,10 @@ static const Ability CrownedKing = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    .unnerve = TRUE,
 };
 
-static const Ability SnapTrapWhenHit = {
-    .name = $("Clap Trap"),
-    .description = $("Counters contact with\n"
-                     "50BP Snap Trap."),
+constexpr Ability SnapTrapWhenHit = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -6620,39 +5524,28 @@ static const Ability SnapTrapWhenHit = {
     },
 };
 
-static const Ability Permanence = {
-    .name = $("Permanence"),
-    .description = $("Foes can't heal in any way."),
+constexpr Ability Permanence = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_PERMANENCE); },
 };
 
-static const Ability Hubris = {
-    .name = $("Hubris"),
-    .description = $("KOs raise SpAtk by one stage."),
+constexpr Ability Hubris = {
     .onBattlerFaints = GrimNeigh.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability CosmicDaze = {
-    .name = $("Cosmic Daze"),
-    .description = $("2x damage vs confused. Enemies\n"
-                     "take 2x confusion damage."),
+constexpr Ability CosmicDaze = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMons[target].status2 & STATUS2_CONFUSION) MUL(2);
         },
 };
 
-static const Ability MindsEye = {
-    .name = $("Mind's Eye"),
-    .description = $("Hits Ghost-type Pokémon.\n"
-                     "Accuracy can't be lowered."),
+constexpr Ability MindsEye = {
+    .onTypeEffectiveness = Scrappy.onTypeEffectiveness,
+    .breakable = TRUE,
 };
 
-static const Ability BloodPrice = {
-    .name = $("Blood Price"),
-    .description = $("Does 30% more damage but\n"
-                     "lose 10% HP when attacking."),
+constexpr Ability BloodPrice = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(IS_MOVE_STATUS(gLastResultingMoves[battler]))
         CHECK_NOT(IsMagicGuardProtected(battler))
@@ -6675,17 +5568,11 @@ ON_EITHER(SpikeArmor) {
     AbilityStatusEffectSafe(MOVE_EFFECT_BLEED, battler, opponent);
     return TRUE;
 }
-static const Ability SpikeArmor = {
-    .name = $("Spike Armor"),
-    .description = $("30% chance to bleed\n"
-                     "on contact or offense."),
+constexpr Ability SpikeArmor = {
     ON_EITHER_ABILITY(SpikeArmor),
 };
 
-static const Ability VoodooPower = {
-    .name = $("Voodoo Power"),
-    .description = $("30% chance to bleed when\n"
-                     "hit by special attacks."),
+constexpr Ability VoodooPower = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IS_MOVE_SPECIAL(move))
@@ -6697,10 +5584,7 @@ static const Ability VoodooPower = {
     },
 };
 
-static const Ability ChromeCoat = {
-    .name = $("Chrome Coat"),
-    .description = $("Reduces special damage taken by\n"
-                     "40%, but decreases Speed by 10%."),
+constexpr Ability ChromeCoat = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IS_MOVE_SPECIAL(move)) MUL(.6);
@@ -6709,10 +5593,7 @@ static const Ability ChromeCoat = {
     .breakable = TRUE,
 };
 
-static const Ability Banshee = {
-    .name = $("Banshee"),
-    .description = $("Sound moves get a 1.2x boost\n"
-                     "and become Ghost if Normal."),
+constexpr Ability Banshee = {
     .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
     .onMoveType = +[](ON_MOVE_TYPE) -> int {
         CHECK(moveType == TYPE_NORMAL)
@@ -6721,26 +5602,18 @@ static const Ability Banshee = {
     },
 };
 
-static const Ability WebSpinner = {
-    .name = $("Web Spinner"),
-    .description = $("Uses String Shot\n"
-                     "on switch-in."),
+constexpr Ability WebSpinner = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_STRING_SHOT, 0); },
 };
 
-static const Ability ShowdownMode = {
-    .name = $("Showdown Mode"),
-    .description = $("Ambush + Violent Rush."),
+constexpr Ability ShowdownMode = {
     .onEntry = +[](ON_ENTRY) -> int {
         gVolatileStructs[battler].showdownMode = gVolatileStructs[battler].started.showdownMode = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_SHOWDOWN_MODE);
     },
 };
 
-static const Ability SeedSower = {
-    .name = $("Seed Sower"),
-    .description = $("Sets Grassy Terrain when hit.\n"
-                     "Heals party status when it does."),
+constexpr Ability SeedSower = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
@@ -6750,10 +5623,7 @@ static const Ability SeedSower = {
     },
 };
 
-static const Ability Airborne = {
-    .name = $("Airborne"),
-    .description = $("Boosts own & ally's Flying-type\n"
-                     "moves by 1.3x."),
+constexpr Ability Airborne = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FLYING) MUL(1.3);
@@ -6761,19 +5631,17 @@ static const Ability Airborne = {
     .onOffensiveMultiplierFor = APPLY_ON_ALLY,
 };
 
-static const Ability Parroting = {
-    .name = $("Parroting"),
-    .description = $("Copies sound moves used by\n"
-                     "others. Immune to sound."),
+constexpr Ability Parroting = {
     .onImmune = Soundproof.onImmune,
+    .onCopyMove = +[](ON_COPY_MOVE) -> int {
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        return UseOutOfTurnAttack(battler, target, ability, move, 0);
+    },
     .breakable = TRUE,
     .isSoundproof = TRUE,
 };
 
-static const Ability SaltCircle = {
-    .name = $("Salt Circle"),
-    .description = $("Prevents opposing pokemon\n"
-                     "from fleeing on entry."),
+constexpr Ability SaltCircle = {
     .onEntry = +[](ON_ENTRY) -> int {
         int anyBlocked = FALSE;
         gBattlerTarget = BATTLE_OPPOSITE(battler);
@@ -6796,18 +5664,20 @@ static const Ability SaltCircle = {
     },
 };
 
-static const Ability PurifyingSalt = {
-    .name = $("Purifying Salt"),
-    .description = $("Immune to status conditions.\n"
-                     "Take 1/2 damage from Ghost."),
+constexpr Ability PurifyingSalt = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GHOST) RESISTANCE(.5);
         },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-int ProtosynthesisHandler(int ability, int battler, AbilityCallType callType) {
+int ProtosynthesisHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
     ParadoxBoost state = GetAbilityStateAs(battler, ability).paradoxBoost;
 
     if (state.source == PARADOX_BOOST_NOT_ACTIVE && IsWeatherActive(WEATHER_SUN_ANY)) {
@@ -6848,10 +5718,7 @@ int ProtosynthesisHandler(int ability, int battler, AbilityCallType callType) {
     }
     return FALSE;
 }
-static const Ability Protosynthesis = {
-    .name = $("Protosynthesis"),
-    .description = $("Boosts highest stat in Sun\n"
-                     "or with Booster Energy."),
+constexpr Ability Protosynthesis = {
     .onEntry = +[](ON_ENTRY) -> int { return ProtosynthesisHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onWeather = +[](ON_WEATHER) -> int { return ProtosynthesisHandler(ability, battler, ABILITY_BS_CALL); },
     .onStat =
@@ -6865,7 +5732,7 @@ static const Ability Protosynthesis = {
         },
 };
 
-int QuarkDriveHandler(int ability, int battler, AbilityCallType callType) {
+int QuarkDriveHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
     ParadoxBoost state = GetAbilityStateAs(battler, ability).paradoxBoost;
 
     if (state.source == PARADOX_BOOST_NOT_ACTIVE && IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) {
@@ -6906,19 +5773,13 @@ int QuarkDriveHandler(int ability, int battler, AbilityCallType callType) {
     }
     return FALSE;
 }
-static const Ability QuarkDrive = {
-    .name = $("Quark Drive"),
-    .description = $("Boosts highest stat in Electric\n"
-                     "Terrain or with Booster Energy."),
+constexpr Ability QuarkDrive = {
     .onEntry = +[](ON_ENTRY) -> int { return QuarkDriveHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onTerrain = +[](ON_TERRAIN) -> int { return QuarkDriveHandler(ability, battler, ABILITY_BS_CALL); },
     .onStat = Protosynthesis.onStat,
 };
 
-static const Ability WindPower = {
-    .name = $("Wind Power"),
-    .description = $("Charges up when hit by wind\n"
-                     "moves or Tailwind starts."),
+constexpr Ability WindPower = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(gBattleMoves[move].airBased)
@@ -6930,36 +5791,21 @@ static const Ability WindPower = {
     },
 };
 
-static const Ability Impulse = {
-    .name = $("Impulse"),
-    .description = $("Non-contact moves use the\n"
-                     "Speed stat for damage."),
+constexpr Ability Impulse = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
             if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) *atkStatToUse = STAT_SPEED;
         },
 };
 
-static const Ability TerminalVelocity = {
-    .name = $("Terminal Velocity"),
-    .description = $("Special moves use 20% of its\n"
-                     "Speed stat additionally."),
+constexpr Ability TerminalVelocity = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (IS_MOVE_SPECIAL(move)) *secondaryAtkStatToUse = STAT_SPEED;
+            if (IS_MOVE_SPECIAL(move)) secondaryAtkStatToUse[STAT_SPEED] += 20;
         },
 };
 
-static const Ability GuardDog = {
-    .name = $("Guard Dog"),
-    .description = $("Can't be forced out.\n"
-                     "Inverts Intimidate effects."),
-};
-
-static const Ability AngerShell = {
-    .name = $("Anger Shell"),
-    .description = $("Applies Shell Smash when\n"
-                     "reduced below 1/2 HP."),
+constexpr Ability AngerShell = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(CheckHalfHpAbility(battler, attacker))
         CHECK_NOT(GetAbilityState(battler, ability))
@@ -6971,13 +5817,10 @@ static const Ability AngerShell = {
     },
 };
 
-static const Ability Egoist = {
-    .name = $("Egoist"),
-    .description = $("Raises its own stats when\n"
-                     "foes raise theirs."),
+constexpr Ability Egoist = {
     .onReactive = +[](ON_REACTIVE) -> int {
         CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
-        for (int opponent = BATTLE_OPPOSITE(GetBattlerSide(battler)); opponent < gBattlersCount; opponent += 2) {
+        for (int opponent = GetOppositeSide(battler); opponent < gBattlersCount; opponent += 2) {
             for (int stat = STAT_ATK; stat < ARRAY_COUNT(gBattleStruct->statChangesToCheck[opponent]); stat++) {
                 if (gBattleStruct->statChangesToCheck[opponent][stat - 1] > 0) {
                     if (gBattleStruct->statStageCheckState == STAT_STAGE_CHECK_NEEDED) {
@@ -6994,33 +5837,18 @@ static const Ability Egoist = {
     },
 };
 
-static const Ability Subdue = {
-    .name = $("Subdue"),
-    .description = $("Doubles the power of\n"
-                     "stat dropping moves."),
-};
-
-static const Ability ReadiedAction = {
-    .name = $("Readied Action"),
-    .description = $("Doubles attack on\n"
-                     "first turn."),
+constexpr Ability ReadiedAction = {
     .onEntry = +[](ON_ENTRY) -> int {
         gVolatileStructs[battler].readiedAction = gVolatileStructs[battler].started.readiedAction = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_READIED_ACTION);
     },
 };
 
-static const Ability DarkGaleWings = {
-    .name = $("Stygian Rush"),
-    .description = $("At full HP, gives +1 priority to\n"
-                     "this Pokémon's Dark-type moves."),
+constexpr Ability DarkGaleWings = {
     .onPriority = GALE_WINGS_CLONE(TYPE_DARK),
 };
 
-static const Ability GuiltTrip = {
-    .name = $("Guilt Trip"),
-    .description = $("Sharply lowers attacker's Attack\n"
-                     "and SpAtk when fainting."),
+constexpr Ability GuiltTrip = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
@@ -7031,20 +5859,14 @@ static const Ability GuiltTrip = {
     },
 };
 
-static const Ability WaterGaleWings = {
-    .name = $("Tidal Rush"),
-    .description = $("At full HP, gives +1 priority to\n"
-                     "this Pokémon's Water-type moves."),
+constexpr Ability WaterGaleWings = {
     .onPriority = GALE_WINGS_CLONE(TYPE_WATER),
 };
 
-static const Ability ZeroToHero = {
-    .name = $("Zero To Hero"),
-    .description = $("Changes forms after\n"
-                     "switching out."),
+constexpr Ability ZeroToHero = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gBattleMons[battler].species == SPECIES_PALAFIN)
-        CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
         CHECK(GetSingleUseAbilityCounter(battler, ability))
 
         UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_PALAFIN_HERO);
@@ -7060,10 +5882,7 @@ static const Ability ZeroToHero = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability Costar = {
-    .name = $("Costar"),
-    .description = $("Copies its ally's stat changes\n"
-                     "on switch-in."),
+constexpr Ability Costar = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
 
@@ -7080,10 +5899,7 @@ static const Ability Costar = {
     },
 };
 
-static const Ability Commander = {
-    .name = $("Commander"),
-    .description = $("Hops inside an allied Dondozo.\n"
-                     "Boosts its ally but can't act."),
+constexpr Ability Commander = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(GetAbilityState(battler, ability))
 
@@ -7102,23 +5918,16 @@ static const Ability Commander = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability EjectPackAbility = {
-    .name = $("Tactical Retreat"),
-    .description = $("Flees when stats are lowered."),
+constexpr Ability EjectPackAbility = {
     .persistent = TRUE,
 };
 
-static const Ability VengefulSpirit = {
-    .name = $("Vengeful Spirit"),
-    .description = $("Haunted Spirit + Vengeance."),
+constexpr Ability VengefulSpirit = {
     .onDefender = HauntedSpirit.onDefender,
     .onOffensiveMultiplier = Vengeance.onOffensiveMultiplier,
 };
 
-static const Ability CudChew = {
-    .name = $("Cud Chew"),
-    .description = $("Eats berries again at the\n"
-                     "end of the next turn."),
+constexpr Ability CudChew = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CudChewState state = GetAbilityStateAs(battler, ability).cudChewState;
         if (state.setThisTurn) {
@@ -7137,19 +5946,13 @@ static const Ability CudChew = {
     },
 };
 
-static const Ability ArmorTail = {
-    .name = $("Armor Tail"),
-    .description = $("Protects itself and ally from\n"
-                     "priority moves."),
+constexpr Ability ArmorTail = {
     .onImmune = QueenlyMajesty.onImmune,
     .onImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
-static const Ability MindCrush = {
-    .name = $("Mind Crunch"),
-    .description = $("Biting moves use SpAtk and\n"
-                     "deal 30% more damage."),
+constexpr Ability MindCrush = {
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
@@ -7157,10 +5960,7 @@ static const Ability MindCrush = {
         },
 };
 
-static const Ability SupremeOverlord = {
-    .name = $("Supreme Overlord"),
-    .description = $("Each fainted ally increases\n"
-                     "Attack and SpAtk by 10%."),
+constexpr Ability SupremeOverlord = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gFaintedMonCount[GetBattlerSide(battler)])
 
@@ -7172,10 +5972,7 @@ static const Ability SupremeOverlord = {
         },
 };
 
-static const Ability IllWill = {
-    .name = $("Ill Will"),
-    .description = $("Deletes the PP of the move\n"
-                     "that faints this Pokemon."),
+constexpr Ability IllWill = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(move != MOVE_STRUGGLE)
@@ -7185,27 +5982,21 @@ static const Ability IllWill = {
 
         gBattleMons[attacker].pp[gChosenMovePos] = 0;
         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove)
-        gActiveBattler = battler;
-        BtlController_EmitSetMonData(0, gChosenMovePos + REQUEST_PPMOVE1_BATTLE, 0, 1, &gBattleMons[battler].pp[gChosenMovePos]);
+        gActiveBattler = attacker;
+        BtlController_EmitSetMonData(0, gChosenMovePos + REQUEST_PPMOVE1_BATTLE, 0, 1, &gBattleMons[attacker].pp[gChosenMovePos]);
         BattleScriptCall(BattleScript_IllWillTakesPp);
         return TRUE;
     },
 };
 
-static const Ability FireScales = {
-    .name = $("Fire Scales"),
-    .description = $("Halves damage taken by Special\n"
-                     "moves. Does NOT double SpDef."),
+constexpr Ability FireScales = {
     .onDefensiveMultiplier = IceScales.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-static const Ability WatchYourStep = {
-    .name = $("Watch Your Step"),
-    .description = $("Spreads two layers of\n"
-                     "Spikes on switch-in."),
+constexpr Ability WatchYourStep = {
     .onEntry = +[](ON_ENTRY) -> int {
-        u8 targetSide = GetBattlerSide(BATTLE_OPPOSITE(battler));
+        u8 targetSide = GetOppositeSide(battler);
         CHECK(gSideTimers[targetSide].spikesAmount < 3)
 
         gSideTimers[targetSide].spikesAmount = min(gSideTimers[targetSide].spikesAmount + 2, 3);
@@ -7215,19 +6006,14 @@ static const Ability WatchYourStep = {
     },
 };
 
-static const Ability RapidResponse = {
-    .name = $("Rapid Response"),
-    .description = $("Boosts Speed by 50% + SpAtk\n"
-                     "by 20% on first turn."),
+constexpr Ability RapidResponse = {
     .onEntry = +[](ON_ENTRY) -> int {
         gVolatileStructs[battler].rapidResponse = gVolatileStructs[battler].started.rapidResponse = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_RAPID_RESPONSE);
     },
 };
 
-static const Ability DoubleIronBarbs = {
-    .name = $("Sharp Edges"),
-    .description = $("1/6 HP damage when touched."),
+constexpr Ability DoubleIronBarbs = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsMagicGuardProtected(attacker))
@@ -7241,10 +6027,7 @@ static const Ability DoubleIronBarbs = {
     },
 };
 
-static const Ability ThermalExchange = {
-    .name = $("Thermal Exchange"),
-    .description = $("Ups Attack when hit by Fire.\n"
-                     "Immune to burn."),
+constexpr Ability ThermalExchange = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_FIRE)
@@ -7254,13 +6037,15 @@ static const Ability ThermalExchange = {
         BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
         return TRUE;
     },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_BURN)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability GoodAsGold = {
-    .name = $("Good As Gold"),
-    .description = $("Immune to all Status moves,\n"
-                     "unless whole field is affected."),
+constexpr Ability GoodAsGold = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(battler != attacker) CHECK(IS_MOVE_STATUS(move));
         *immunityScript = BattleScript_SoundproofProtected;
@@ -7269,10 +6054,7 @@ static const Ability GoodAsGold = {
     .breakable = TRUE,
 };
 
-static const Ability SharingIsCaring = {
-    .name = $("Sharing Is Caring"),
-    .description = $("Stat changes are shared\n"
-                     "between all battlers."),
+constexpr Ability SharingIsCaring = {
     .onReactive = +[](ON_REACTIVE) -> int {
         CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
         CHECK(IsAbilityOnField(ability) - 1 == battler)
@@ -7285,54 +6067,36 @@ static const Ability SharingIsCaring = {
     },
 };
 
-static const Ability TabletsOfRuin = {
-    .name = $("Tablets Of Ruin"),
-    .description = $("Lowers the Attack of\n"
-                     "other Pokemon by 25%."),
+constexpr Ability TabletsOfRuin = {
     .onStat = +[](ON_STAT) { RuinEffect(STAT_ATK, battler, statId, stat, flags); },
     .onStatFor = APPLY_ON_OTHER,
     .ruinStat = STAT_ATK,
 };
 
-static const Ability SwordOfRuin = {
-    .name = $("Sword Of Ruin"),
-    .description = $("Lowers the Defense of\n"
-                     "other Pokemon by 25%."),
+constexpr Ability SwordOfRuin = {
     .onStat = +[](ON_STAT) { RuinEffect(STAT_DEF, battler, statId, stat, flags); },
     .onStatFor = APPLY_ON_OTHER,
     .ruinStat = STAT_DEF,
 };
 
-static const Ability VesselOfRuin = {
-    .name = $("Vessel Of Ruin"),
-    .description = $("Lowers the Special Attack of\n"
-                     "other Pokemon by 25%."),
+constexpr Ability VesselOfRuin = {
     .onStat = +[](ON_STAT) { RuinEffect(STAT_SPATK, battler, statId, stat, flags); },
     .onStatFor = APPLY_ON_OTHER,
     .ruinStat = STAT_SPATK,
 };
 
-static const Ability BeadsOfRuin = {
-    .name = $("Beads Of Ruin"),
-    .description = $("Lowers the Special Defense\n"
-                     "of other Pokemon by 25%."),
+constexpr Ability BeadsOfRuin = {
     .onStat = +[](ON_STAT) { RuinEffect(STAT_DEF, battler, statId, stat, flags); },
     .onStatFor = APPLY_ON_OTHER,
     .ruinStat = STAT_DEF,
 };
 
-static const Ability PermafrostClone = {
-    .name = $("Thick Skin"),
-    .description = $("Takes 25% less damage from\n"
-                     "Super-effective moves."),
+constexpr Ability PermafrostClone = {
     .onDefensiveMultiplier = Permafrost.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-static const Ability Gallantry = {
-    .name = $("Gallantry"),
-    .description = $("Gets no damage for\n"
-                     "first hit."),
+constexpr Ability Gallantry = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
 
@@ -7344,10 +6108,7 @@ static const Ability Gallantry = {
     .persistent = TRUE,
 };
 
-static const Ability OrichalcumPulse = {
-    .name = $("Orichalcum Pulse"),
-    .description = $("Summons sun on entry.\n"
-                     "Raises Atk by 1.33x in sun."),
+constexpr Ability OrichalcumPulse = {
     .onEntry = Drought.onEntry,
     .onStat =
         +[](ON_STAT) {
@@ -7356,10 +6117,7 @@ static const Ability OrichalcumPulse = {
         },
 };
 
-static const Ability SunBasking = {
-    .name = $("Sun Basking"),
-    .description = $("Blocks priority and reduces\n"
-                     "physical damage by 1/2 in sun."),
+constexpr Ability SunBasking = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY));
         return QueenlyMajesty.onImmune(DELEGATE_IMMUNE);
@@ -7371,19 +6129,14 @@ static const Ability SunBasking = {
     .breakable = TRUE,
 };
 
-static const Ability WingedKing = {
-    .name = $("Winged King"),
-    .description = $("Ups “supereffective” by 33%."),
+constexpr Ability WingedKing = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.33);
         },
 };
 
-static const Ability HadronEngine = {
-    .name = $("Hadron Engine"),
-    .description = $("Field becomes Electric.\n"
-                     "+33% SpAtk in Electric Terrain."),
+constexpr Ability HadronEngine = {
     .onEntry = ElectricSurge.onEntry,
     .onStat =
         +[](ON_STAT) {
@@ -7391,32 +6144,19 @@ static const Ability HadronEngine = {
         },
 };
 
-static const Ability IronSerpent = {
-    .name = $("Iron Serpent"),
-    .description = $("Ups “supereffective” by 33%."),
+constexpr Ability IronSerpent = {
     .onOffensiveMultiplier = WingedKing.onOffensiveMultiplier,
 };
 
-static const Ability WeatherDoubleBoost = {
-    .name = $("Catastrophe"),
-    .description = $("Sun boosts Water.\n"
-                     "Rain boosts Fire."),
-};
-
-static const Ability SweepingEdgePlus = {
-    .name = $("Blademaster"),
-    .description = $("Sweeping Edge + Keen Edge."),
+constexpr Ability SweepingEdgePlus = {
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
     .onAccuracy = SweepingEdge.onAccuracy,
 };
 
-static const Ability CelestialBlessing = {
-    .name = $("Celestial Blessing"),
-    .description = $("Recovers 1/12 of its health each\n"
-                     "turn under Misty Terrain."),
+constexpr Ability CelestialBlessing = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
 
@@ -7428,17 +6168,11 @@ static const Ability CelestialBlessing = {
     },
 };
 
-static const Ability MinionControl = {
-    .name = $("Minion Control"),
-    .description = $("Moves hit an extra time for\n"
-                     "each healthy party member."),
+constexpr Ability MinionControl = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType { return PARENTAL_BOND_MINION_CONTROL; },
 };
 
-static const Ability MoltenBlades = {
-    .name = $("Molten Blades"),
-    .description = $("Keen Edge + Keen Edge moves\n"
-                     "have a 20% chance to burn."),
+constexpr Ability MoltenBlades = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeBurned(target))
@@ -7450,10 +6184,7 @@ static const Ability MoltenBlades = {
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
 };
 
-static const Ability HauntingFrenzy = {
-    .name = $("Haunting Frenzy"),
-    .description = $("20% chance to flinch the\n"
-                     "opponent. +1 speed on kill."),
+constexpr Ability HauntingFrenzy = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanMoveHaveExtraFlinchChance(move))
@@ -7465,20 +6196,14 @@ static const Ability HauntingFrenzy = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability NoiseCancel = {
-    .name = $("Noise Cancel"),
-    .description = $("Protects the party from sound-\n"
-                     "based moves."),
+constexpr Ability NoiseCancel = {
     .onImmune = Soundproof.onImmune,
     .onImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
     .isSoundproof = TRUE,
 };
 
-static const Ability RadioJam = {
-    .name = $("Radio Jam"),
-    .description = $("Sound-based moves have a 20%\n"
-                     "chance to inflict disable."),
+constexpr Ability RadioJam = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeDisabled(target))
@@ -7489,16 +6214,13 @@ static const Ability RadioJam = {
     },
 };
 
-static const Ability Ole = {
-    .name = $("Olé!"),
-    .description = $("30% chance to evade single-\n"
-                     "target moves."),
+constexpr Ability Ole = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
             case MOVE_TARGET_SELECTED:
             case MOVE_TARGET_USER_OR_SELECTED:
             case MOVE_TARGET_RANDOM:
-                *accuracy *= .7;
+                *accuracy *= .8;
                 return ACCURACY_MULTIPLICATIVE;
 
             default:
@@ -7508,17 +6230,11 @@ static const Ability Ole = {
     .onAccuracyFor = APPLY_ON_TARGET,
 };
 
-static const Ability Malicious = {
-    .name = $("Malicious"),
-    .description = $("Lowers the foe's highest\n"
-                     "Attack and Defense stat."),
+constexpr Ability Malicious = {
     .onEntry = UseIntimidateClone,
 };
 
-static const Ability DeadPower = {
-    .name = $("Dead Power"),
-    .description = $("1.5x Attack boost. 20% chance\n"
-                     "to curse on contact moves."),
+constexpr Ability DeadPower = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(gBattleMons[target].status2 & STATUS2_CURSED)
@@ -7533,18 +6249,12 @@ static const Ability DeadPower = {
         },
 };
 
-static const Ability BrawlingWyvern = {
-    .name = $("Brawling Wyvern"),
-    .description = $("No guard + Dragon type\n"
-                     "moves become punching moves."),
+constexpr Ability BrawlingWyvern = {
     .onAccuracy = NoGuard.onAccuracy,
     .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
 };
 
-static const Ability MythicalArrows = {
-    .name = $("Mythical Arrows"),
-    .description = $("Arrow moves become special\n"
-                     "and deal 30% more damage."),
+constexpr Ability MythicalArrows = {
     .onOffensiveMultiplier = Archer.onOffensiveMultiplier,
     .onSwapSplit = +[](ON_SWAP_SPLIT) -> int {
         CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
@@ -7553,10 +6263,7 @@ static const Ability MythicalArrows = {
     },
 };
 
-static const Ability Lawnmower = {
-    .name = $("Lawnmower"),
-    .description = $("Removes terrain on switch-in.\n"
-                     "Stat up if terrain removed."),
+constexpr Ability Lawnmower = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
@@ -7565,65 +6272,57 @@ static const Ability Lawnmower = {
     },
 };
 
-static const Ability Flourish = {
-    .name = $("Flourish"),
-    .description = $("Boosts Grass moves by 50% in\n"
-                     "grassy terrain."),
+constexpr Ability Flourish = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GRASS && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) MUL(1.5);
         },
 };
 
-static const Ability DesertSpirit = {
-    .name = $("Desert Spirit"),
-    .description = $("Summons sand on entry. Ground\n"
-                     "moves hit airborne in sand."),
+constexpr Ability DesertSpirit = {
     .onEntry = SandStream.onEntry,
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (*mod == 0 && !IsBattlerGrounded(target) && moveType == TYPE_GROUND && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) {
+                *mod = UQ_4_12(1.0);
+            }
+        },
 };
 
-static const Ability Contempt = {
-    .name = $("Contempt"),
-    .description = $("Ignores opposing stat changes.\n"
-                     "Boosts Attack when stat lowered."),
+constexpr Ability Contempt = {
     .unaware = TRUE,
 };
 
-static const Ability Aerialist = {
-    .name = $("Aerialist"),
-    .description = $("Levitate + Flock."),
+constexpr Ability Aerialist = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             Levitate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
             Flock.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
     .breakable = TRUE,
+    .levitate = TRUE,
 };
 
-static const Ability TeraShell = {
-    .name = $("Tera Shell"),
-    .description = $("All hits will be not very effective\n"
-                     "while at full HP."),
+constexpr Ability TeraShell = {
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (*mod >= UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
-static const Ability ToxicChain = {
-    .name = $("Toxic Chain"),
-    .description = $("Moves have a 30% chance to\n"
-                     "badly poison the foe."),
+constexpr Ability ToxicChain = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(CanBePoisoned(battler, target))
+        CHECK(CanBePoisoned(battler, target, MOVE_NONE))
         CHECK(Random() % 100 < 30)
 
         return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
     },
 };
 
-static const Ability ParasiticSpores = {
-    .name = $("Parasitic Spores"),
-    .description = $("Deals 1/8 HP damage to non-\n"
-                     "Ghost. Spreads on contact."),
+constexpr Ability ParasiticSpores = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gVolatileStructs[battler].parasiticSpores)
 
@@ -7632,9 +6331,7 @@ static const Ability ParasiticSpores = {
     },
 };
 
-static const Ability PoisonPuppeteer = {
-    .name = $("Poison Puppeteer"),
-    .description = $("Poison also inflicts confusion."),
+constexpr Ability PoisonPuppeteer = {
     .onReactive = +[](ON_REACTIVE) -> int {
         return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) -> int { return CanBeConfused(target); }, BattleScript_PoisonPuppeteer);
     },
@@ -7646,18 +6343,13 @@ static const Ability PoisonPuppeteer = {
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-static const Ability Entrance = {
-    .name = $("Entrance"),
-    .description = $("Confusion also inflicts\n"
-                     "infatuation."),
+constexpr Ability Entrance = {
     .onReactive = +[](ON_REACTIVE) -> int { return PoisonPuppeteerClone(ability, battler, CanInfatuate, BattleScript_Entrance); },
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-static const Ability Rejection = {
-    .name = $("Rejection"),
-    .description = $("Applies Quash on switch-in."),
+constexpr Ability Rejection = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gFieldTimers.quashTimer)
 
@@ -7667,31 +6359,22 @@ static const Ability Rejection = {
     },
 };
 
-static const Ability AppleEnlightenment = {
-    .name = $("Apple Enlightenment"),
-    .description = $("Fur coat + Magic Guard."),
+constexpr Ability AppleEnlightenment = {
     .onDefensiveMultiplier = FurCoat.onDefensiveMultiplier,
     .breakable = TRUE,
     .magicGuard = TRUE,
 };
 
-static const Ability BalloonBomber = {
-    .name = $("Balloon Bomb"),
-    .description = $("Aftermath + Inflatable"),
+constexpr Ability BalloonBomber = {
     .onDefender = +[](ON_DEFENDER) -> int { return Aftermath.onDefender(DELEGATE_DEFENDER) || Inflatable.onDefender(DELEGATE_DEFENDER); },
 };
 
-static const Ability FlamingMaw = {
-    .name = $("Flaming Maw"),
-    .description = $("Strong Jaw + Flaming Jaws"),
+constexpr Ability FlamingMaw = {
     .onAttacker = FlamingJaws.onAttacker,
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
-static const Ability Demolitionist = {
-    .name = $("Demolitionist"),
-    .description = $("Readied Action + Ignores Protect\n"
-                     "+ screens break on readied turn"),
+constexpr Ability Demolitionist = {
     .onEntry = ReadiedAction.onEntry,
     .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType {
         if (gVolatileStructs[battler].readiedAction && !IS_MOVE_STATUS(move)) return INFILTRATE_BREAK_SCREENS;
@@ -7707,10 +6390,7 @@ static const Ability Demolitionist = {
     },
 };
 
-static const Ability RockhardWill = {
-    .name = $("Rockhard Will"),
-    .description = $("Boosts Rock-type moves by 1.2x,\n"
-                     "or 1.5x when under 1/3 HP."),
+constexpr Ability RockhardWill = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_ROCK),
 };
 
@@ -7723,15 +6403,11 @@ ON_EITHER(FragrantDaze) {
     AbilityStatusEffectSafe(MOVE_EFFECT_CONFUSION, battler, opponent);
     return TRUE;
 }
-static const Ability FragrantDaze = {
-    .name = $("Fragrant Daze"),
-    .description = $("30% chance to confuse on contact."),
+constexpr Ability FragrantDaze = {
     ON_EITHER_ABILITY(FragrantDaze),
 };
 
-static const Ability LowVisibility = {
-    .name = $("Low Visibility"),
-    .description = $("Summons Eerie Fog on entry."),
+constexpr Ability LowVisibility = {
     .onEntry = +[](ON_ENTRY) -> int {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_BadOmensActivates);
@@ -7744,19 +6420,14 @@ static const Ability LowVisibility = {
     },
 };
 
-static const Ability OldMariner = {
-    .name = $("Old Mariner"),
-    .description = $("Seaweed + Water STAB."),
+constexpr Ability OldMariner = {
     .onOffensiveMultiplier = Seaweed.onOffensiveMultiplier,
     .onDefensiveMultiplier = Seaweed.onDefensiveMultiplier,
     .onStab = Amphibious.onStab,
     .breakable = TRUE,
 };
 
-static const Ability Ectoplasm = {
-    .name = $("Ectoplasm"),
-    .description = $("Ups highest attacking stat\n"
-                     "by 1.5x in fog."),
+constexpr Ability Ectoplasm = {
     .onStat =
         +[](ON_STAT) {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
@@ -7764,10 +6435,7 @@ static const Ability Ectoplasm = {
         },
 };
 
-static const Ability BeautifulMusic = {
-    .name = $("Beautiful Music"),
-    .description = $("Sound-based moves have 50% chance\n"
-                     "to infatuate the foe."),
+constexpr Ability BeautifulMusic = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(Random() % 2)
@@ -7778,16 +6446,7 @@ static const Ability BeautifulMusic = {
     },
 };
 
-static const Ability Surprise = {
-    .name = $("Surprise!"),
-    .description = $("Astonishes enemy priority users\n"
-                     "in fog."),
-};
-
-static const Ability SnowSong = {
-    .name = $("Snow Song"),
-    .description = $("Sound moves get a 1.2x boost\n"
-                     "and become Ice if Normal."),
+constexpr Ability SnowSong = {
     .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
     .onMoveType = +[](ON_MOVE_TYPE) -> int {
         CHECK(moveType == TYPE_NORMAL)
@@ -7796,10 +6455,7 @@ static const Ability SnowSong = {
     },
 };
 
-static const Ability GreaterSpirit = {
-    .name = $("Greater Spirit"),
-    .description = $("Ups highest stat by +1\n"
-                     "on entry in fog."),
+constexpr Ability GreaterSpirit = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
@@ -7810,40 +6466,29 @@ static const Ability GreaterSpirit = {
     },
 };
 
-static const Ability Resonance = {
-    .name = $("Resonance"),
-    .description = $("Sound moves cause the target to\n"
-                     "bleed."),
+constexpr Ability Resonance = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
         CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(Random() % 100 < 50)
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     },
 };
 
-static const Ability EtherealRush = {
-    .name = $("Ethereal Rush"),
-    .description = $("This Pokémon's Speed gets a\n"
-                     "1.5x boost in fog."),
+constexpr Ability EtherealRush = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
         },
 };
 
-static const Ability CuteAntecedence = {
-    .name = $("Cute Antecedence"),
-    .description = $("At full HP, gives +1 priority to\n"
-                     "its Fairy-type moves."),
+constexpr Ability CuteAntecedence = {
     .onPriority = GALE_WINGS_CLONE(TYPE_FAIRY),
 };
 
-static const Ability RecurringNightmare = {
-    .name = $("Shallow Grave"),
-    .description = $("Revives at 25% HP once after\n"
-                     "fainting in fog."),
+constexpr Ability RecurringNightmare = {
     .persistent = TRUE,
 };
 
@@ -7858,17 +6503,11 @@ ON_EITHER(MenacingSituation) {
     BattleScriptCall(BattleScript_AbilitySetFear);
     return TRUE;
 }
-static const Ability MenacingSituation = {
-    .name = $("Menacing Situation"),
-    .description = $("20% chance to Fear on contact.\n"
-                     "Also works on offense."),
+constexpr Ability MenacingSituation = {
     ON_EITHER_ABILITY(MenacingSituation),
 };
 
-static const Ability ShinyLightning = {
-    .name = $("Shiny Lightning"),
-    .description = $("Grants a 1.2x accuracy boost.\n"
-                     "Thunder never misses."),
+constexpr Ability ShinyLightning = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         if (move == MOVE_THUNDER) return ACCURACY_HITS_IF_POSSIBLE;
         *accuracy *= 1.2;
@@ -7876,17 +6515,11 @@ static const Ability ShinyLightning = {
     },
 };
 
-static const Ability Terrify = {
-    .name = $("Terrify"),
-    .description = $("Lowers foes' Sp. Atk by two\n"
-                     "stages on entry."),
+constexpr Ability Terrify = {
     .onEntry = UseIntimidateClone,
 };
 
-static const Ability IceDownfall = {
-    .name = $("Ice Downfall"),
-    .description = $("Counters contact with\n"
-                     "60BP Icicle Crash."),
+constexpr Ability IceDownfall = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -7896,10 +6529,7 @@ static const Ability IceDownfall = {
     },
 };
 
-static const Ability LastStand = {
-    .name = $("Last Stand"),
-    .description = $("Def and SpDef increase as\n"
-                     "HP drops. Max 1.6x."),
+constexpr Ability LastStand = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_DEF || statId == STAT_SPDEF)
@@ -7908,32 +6538,33 @@ static const Ability LastStand = {
     .breakable = TRUE,
 };
 
-static const Ability PyroclasticFlow = {
-    .name = $("Pyroclastic Flow"),
-    .description = $("Molten Down + Corrosion."),
+constexpr Ability PyroclasticFlow = {
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        return MoltenDown.onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS) || Corrosion.onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS);
+    },
+    .onCanStatusType = Corrosion.onCanStatusType,
 };
 
-static const Ability BloodBath = {
-    .name = $("Blood Bath"),
-    .description = $("Immune to bleed. Inflict fear\n"
-                     "when inflicting bleed."),
+constexpr Ability BloodBath = {
     .onReactive = +[](ON_REACTIVE) -> int {
         return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) -> int { return !gVolatileStructs[target].fear; }, BattleScript_Bloodlust);
     },
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_BLEED)
+        return TRUE;
+    },
     .onBattlerFaintsFor = APPLY_ON_OTHER,
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability BattleAura = {
-    .name = $("Battle Aura"),
-    .description = $("Sharply increases the critical\n"
-                     "hit rate for all while on the field."),
+constexpr Ability BattleAura = {
+    .onCrit = +[](ON_CRIT) -> int { return 2; },
+    .onCritFor = APPLY_ON_ANY,
 };
 
-static const Ability Bloodlust = {
-    .name = $("Bloodlust"),
-    .description = $("Blood Bath + Soul Eater."),
+constexpr Ability Bloodlust = {
     .onReactive = BloodBath.onReactive,
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         int result = 0;
@@ -7942,35 +6573,27 @@ static const Ability Bloodlust = {
         }
         return result | BloodBath.onBattlerFaints(DELEGATE_BATTLER_FAINTS);
     },
+    .onStatusImmune = BloodBath.onStatusImmune,
     .onBattlerFaintsFor = APPLY_ON_ANY,
     .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability PiercingSolo = {
-    .name = $("Piercing Solo"),
-    .description = $("Sound moves have a 30%\n"
-                     "chance to cause bleeding."),
+constexpr Ability PiercingSolo = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
         CHECK(gBattleMoves[move].flags & FLAG_SOUND)
-        CHECK(Random() % 100 < 30)
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     },
 };
 
-static const Ability Rhythmic = {
-    .name = $("Rhythmic"),
-    .description = $("Deals 10% more damage for\n"
-                     "each repeated move use."),
+constexpr Ability Rhythmic = {
     .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battler]); },
 };
 
-static const Ability ChunkyBassLine = {
-    .name = $("Chunky Bass Line"),
-    .description = $("Triggers a 40BP Earthquake\n"
-                     "after using a sound move."),
+constexpr Ability ChunkyBassLine = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(gBattleMoves[move].flags & FLAG_SOUND)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -7979,19 +6602,14 @@ static const Ability ChunkyBassLine = {
     },
 };
 
-static const Ability DualHammer = {
-    .name = $("Jackhammer"),
-    .description = $("Super Slammer moves hit twice\n"
-                     "for 70% damage."),
+constexpr Ability DualHammer = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
         CHECK(gBattleMoves[move].hammerBased)
         return PARENTAL_BOND_DUAL_WIELD;
     },
 };
 
-static const Ability DentingBlows = {
-    .name = $("Denting Blows"),
-    .description = $("Hammer moves lower Defense."),
+constexpr Ability DentingBlows = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(gBattleMoves[move].hammerBased)
@@ -8005,9 +6623,7 @@ static const Ability DentingBlows = {
     },
 };
 
-static const Ability IceColdHunter = {
-    .name = $("Ice Cold Hunter"),
-    .description = $("Ice-type moves hit twice in hail."),
+constexpr Ability IceColdHunter = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
         CHECK(moveType == TYPE_ICE)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
@@ -8015,10 +6631,7 @@ static const Ability IceColdHunter = {
     },
 };
 
-static const Ability SoulCrusher = {
-    .name = $("Soul Crusher"),
-    .description = $("Hammer moves hit SpDef\n"
-                     "and get a 1.1x power boost."),
+constexpr Ability SoulCrusher = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].hammerBased) MUL(1.1);
@@ -8029,10 +6642,7 @@ static const Ability SoulCrusher = {
     },
 };
 
-static const Ability ArcFlash = {
-    .name = $("Arc Flash"),
-    .description = $("50% chance to burn when hit or\n"
-                     "paralyze when dealing damage."),
+constexpr Ability ArcFlash = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeParalyzed(battler, target))
@@ -8050,28 +6660,20 @@ static const Ability ArcFlash = {
     },
 };
 
-static const Ability Unicorn = {
-    .name = $("Unicorn"),
-    .description = $("Mighty Horn + Dazzling."),
+constexpr Ability Unicorn = {
     .onImmune = QueenlyMajesty.onImmune,
     .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
     .onImmuneFor = APPLY_ON_ALLY,
 };
 
-static const Ability OnTheProwl = {
-    .name = $("On the Prowl"),
-    .description = $("+1 priority for the first turn.\n"
-                     "Negative priority becomes +0."),
+constexpr Ability OnTheProwl = {
     .onEntry = +[](ON_ENTRY) -> int {
         gVolatileStructs[battler].onTheProwl = gVolatileStructs[battler].started.onTheProwl = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_ON_THE_PROWL);
     },
 };
 
-static const Ability Pretentious = {
-    .name = $("Pretentious"),
-    .description = $("Dealing a KO raises Crit by\n"
-                     "one stage."),
+constexpr Ability Pretentious = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(gVolatileStructs[battler].critBoost < 3);
         gVolatileStructs[battler].critBoost++;
@@ -8082,10 +6684,7 @@ static const Ability Pretentious = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability VenoblazePincers = {
-    .name = $("Venoblaze Pincers"),
-    .description = $("1.2x boost to physical moves and\n"
-                     "20% chance to Burn or Poison."),
+constexpr Ability VenoblazePincers = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(IS_MOVE_PHYSICAL(move))
@@ -8098,7 +6697,7 @@ static const Ability VenoblazePincers = {
                 return TRUE;
 
             case 1:
-                CHECK(CanBePoisoned(battler, target))
+                CHECK(CanBePoisoned(battler, target, MOVE_NONE))
                 AbilityStatusEffect(MOVE_EFFECT_TOXIC);
                 return TRUE;
         }
@@ -8110,31 +6709,23 @@ static const Ability VenoblazePincers = {
         },
 };
 
-static const Ability EternalBlessing = {
-    .name = $("Eternal Blessing"),
-    .description = $("Celestial Blessing + Regenerator."),
+constexpr Ability EternalBlessing = {
     .onEndTurn = CelestialBlessing.onEndTurn,
     .onExit = Regenerator.onExit,
     .persistent = TRUE,
 };
 
-static const Ability SugarRush = {
-    .name = $("Sugar Rush"),
-    .description = $("Gluttony + eats foe's berry when\n"
-                     "hitting with contact move."),
+constexpr Ability SugarRush = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler)) CHECK(IsMoveMakingContact(move, battler)) CHECK(EatTargetBerry(battler, target));
         return TRUE;
     },
 };
 
-static const Ability PeacefulRest = {
-    .name = $("Rest in Peace"),
-    .description = $("Heals 1/8 of max HP every turn\n"
-                     "in fog."),
+constexpr Ability PeacefulRest = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
@@ -8146,18 +6737,13 @@ static const Ability PeacefulRest = {
     },
 };
 
-static const Ability WhiteNoise = {
-    .name = $("White Noise"),
-    .description = $("Static + Rest in Peace."),
+constexpr Ability WhiteNoise = {
     .onEndTurn = PeacefulRest.onEndTurn,
     .onAttacker = Static.onAttacker,
     .onDefender = Static.onDefender,
 };
 
-static const Ability SmokeyManeuvers = {
-    .name = $("Smokey Maneuvers"),
-    .description = $("Evasion is boosted by 1.25x\n"
-                     "in fog."),
+constexpr Ability SmokeyManeuvers = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(IsBattlerWeatherAffected(target, WEATHER_FOG_ANY));
         *accuracy /= 1.25;
@@ -8167,16 +6753,7 @@ static const Ability SmokeyManeuvers = {
     .breakable = TRUE,
 };
 
-static const Ability Tag = {
-    .name = $("Tag"),
-    .description = $("Attacks switching opponents\n"
-                     "with a 20BP Pursuit."),
-};
-
-static const Ability PowerMetal = {
-    .name = $("Power Metal"),
-    .description = $("Sound moves get a 1.2x boost\n"
-                     "and become Steel if Normal."),
+constexpr Ability PowerMetal = {
     .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
     .onMoveType = +[](ON_MOVE_TYPE) -> int {
         CHECK(moveType == TYPE_NORMAL)
@@ -8185,17 +6762,11 @@ static const Ability PowerMetal = {
     },
 };
 
-static const Ability PowerEdge = {
-    .name = $("Power Edge"),
-    .description = $("Keen Edge moves target Special\n"
-                     "Defense and get a 1.3x boost."),
+constexpr Ability PowerEdge = {
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
 };
 
-static const Ability Superconductor = {
-    .name = $("Superconductor"),
-    .description = $("Steel-type moves become Electric\n"
-                     "-type moves and get a 1.1x boost."),
+constexpr Ability Superconductor = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
@@ -8207,10 +6778,7 @@ static const Ability Superconductor = {
     },
 };
 
-static const Ability UltraInstinct = {
-    .name = $("Ultra Instinct"),
-    .description = $("Counters contact with Vacuum\n"
-                     "Wave. Takes 20% less damage."),
+constexpr Ability UltraInstinct = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -8221,62 +6789,62 @@ static const Ability UltraInstinct = {
     .onDefensiveMultiplier = Parry.onDefensiveMultiplier,
 };
 
-static const Ability UnlockedPotential = {
-    .name = $("Unlocked Potential"),
-    .description = $("Inner Focus + Berserk."),
+constexpr Ability UnlockedPotential = {
     .onDefender = Berserk.onDefender,
     .onAccuracy = InnerFocus.onAccuracy,
+    .tauntImmune = TRUE,
 };
 
-static const Ability HigherRank = {
-    .name = $("Higher Rank"),
-    .description = $("Priority moves get a 1.2x boost."),
+constexpr Ability HigherRank = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (GetMovePriority(battler, move, target) > 0) MUL(1.2);
         },
 };
 
-static const Ability FuneralPyre = {
-    .name = $("Funeral Pyre"),
-    .description = $("Non-Ghost and Dark-types\n"
-                     "take 1/4 damage every turn."),
+constexpr Ability FuneralPyre = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE); },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(IsAbilityOnField(ability) - 1 == battler)
+
+        int any = FALSE;
+        for (int target = 0; target < gBattlersCount; target++) {
+            FILTER(IsBattlerAlive(target))
+            FILTER_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GHOST) || IS_BATTLER_OF_TYPE(target, TYPE_DARK))
+            FILTER_NOT(IsMagicGuardProtected(target))
+
+            gStackBattler1 = target;
+            BattleScriptExecute(BattleScript_FuneralPyreDamage);
+            any = TRUE;
+        }
+        return any;
+    },
 };
 
-static const Ability FlameBubble = {
-    .name = $("Flame Bubble"),
-    .description = $("Water Bubble + Flaming Soul."),
+constexpr Ability FlameBubble = {
     .onOffensiveMultiplier = WaterBubble.onOffensiveMultiplier,
     .onDefensiveMultiplier = WaterBubble.onDefensiveMultiplier,
     .onPriority = FlamingSoul.onPriority,
+    .onStatusImmune = WaterBubble.onStatusImmune,
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability ElementalVortex = {
-    .name = $("Elemental Vortex"),
-    .description = $("Flash Fire + Water Absorb."),
+constexpr Ability ElementalVortex = {
     .onAbsorb = +[](ON_ABSORB) -> int { return WaterAbsorb.onAbsorb(DELEGATE_ABSORB) || FlashFire.onAbsorb(DELEGATE_ABSORB); },
     .onOffensiveMultiplier = FlashFire.onOffensiveMultiplier,
 };
 
-static const Ability SnowyWrath = {
-    .name = $("Snowy Wrath"),
-    .description = $("Snow Warning + Whiteout."),
+constexpr Ability SnowyWrath = {
     .onEntry = SnowWarning.onEntry,
-    .onStat = Whiteout.onStat,
+    .onModifyEffectChance = Cryomancy.onModifyEffectChance,
 };
 
-static const Ability PatternChange = {
-    .name = $("Pattern Change"),
-    .description = $("Changes type depending on the\n"
-                     "move it's about to use."),
-    .protean = TRUE,
+constexpr Ability PatternChange = {
+    .onBeforeAttack = Protean.onBeforeAttack,
 };
 
-static const Ability NoTurningBack = {
-    .name = $("No Turning Back"),
-    .description = $("Boosts all stats but can't retreat\n"
-                     "when below 1/2 max HP."),
+constexpr Ability NoTurningBack = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(CheckHalfHpAbility(battler, attacker))
         CHECK_NOT(GetAbilityState(battler, ability))
@@ -8288,10 +6856,7 @@ static const Ability NoTurningBack = {
     },
 };
 
-static const Ability FlammableCoat = {
-    .name = $("Flammable Coat"),
-    .description = $("Changes forms when using or\n"
-                     "hit by a Fire-type move."),
+constexpr Ability FlammableCoat = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_FIRE)
@@ -8303,21 +6868,25 @@ static const Ability FlammableCoat = {
         BattleScriptCall(BattleScript_TargetFormChange);
         return TRUE;
     },
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        CHECK(moveType == TYPE_FIRE)
+        CHECK(gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH)
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
+
+        UpdateAbilityStateIndicesForNewSpecies(gBattlerAttacker, SPECIES_LUMBERING_SLOTH_ENGULFED);
+        gBattleMons[gBattlerAttacker].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
+        BattleScriptCall(BattleScript_AttackerFormChange);
+        return TRUE;
+    },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-static const Ability DracoMorale = {
-    .name = $("Draco Morale"),
-    .description = $("Uses Dragon Cheer\n"
-                     "on switch-in."),
+constexpr Ability DracoMorale = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DRAGON_CHEER, 0); },
 };
 
-static const Ability BadOmen = {
-    .name = $("Bad Omen"),
-    .description = $("Foes min roll and may miss.\n"
-                     "Takes 1/4 damage from crits."),
+constexpr Ability BadOmen = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (isCrit) MUL(.25);
@@ -8327,10 +6896,7 @@ static const Ability BadOmen = {
     .breakable = TRUE,
 };
 
-static const Ability MoshPit = {
-    .name = $("Mosh Pit"),
-    .description = $("Ally's attacks get a 1.25x boost.\n"
-                     "1.5x if attack causes recoil."),
+constexpr Ability MoshPit = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
@@ -8344,9 +6910,8 @@ static const Ability MoshPit = {
 ON_EITHER(BloodStain) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-    CHECK_NOT(BATTLER_HAS_ABILITY(opponent, ABILITY_BLOOD_STAIN))
     CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(opponent)))
-    CHECK_NOT(BattlerHasAbility(battler, ability, FALSE))
+    CHECK_NOT(HasAbilityIgnoringSuppression(opponent, ability))
     CHECK_NOT(DoesBattlerHaveAbilityShield(opponent))
 
     UpdateAbilityStateIndicesForNewAbility(opponent, ability);
@@ -8356,37 +6921,35 @@ ON_EITHER(BloodStain) {
     DisableSwitchInAbility(opponent, ability);
     return TRUE;
 }
-static const Ability BloodStain = {
-    .name = $("Blood Stain"),
-    .description = $("Bleeds if not immune. Can't get\n"
-                     "other status. Spreads on contact."),
+constexpr Ability BloodStain = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_BLOOD_STAIN); },
     ON_EITHER_ABILITY(BloodStain),
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        return TRUE;
+    },
     .unsuppressable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability BloodStigma = {
-    .name = $("Blood Stigma"),
-    .description = $("Immune to status. Gets a 50%\n"
-                     "boost vs bleeding foes."),
+constexpr Ability BloodStigma = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMons[target].status1 & STATUS1_BLEED || IsBloodStainAffected(target)) MUL(1.5);
         },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        return TRUE;
+    },
     .unsuppressable = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability MaximumAcceleration = {
-    .name = $("Max Acceleration"),
-    .description = $("Moves use the Speed stat\n"
-                     "for damage calculations."),
+constexpr Ability MaximumAcceleration = {
     .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *atkStatToUse = STAT_SPEED; },
 };
 
-static const Ability Sidewinder = {
-    .name = $("Sidewinder"),
-    .description = $("First biting move each entry gets\n"
-                     "+1 priority. Resets on KO."),
+constexpr Ability Sidewinder = {
     .onEntry = CoilUp.onEntry,
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST || !(gStatuses4[battler] & STATUS4_COILED))
@@ -8398,15 +6961,12 @@ static const Ability Sidewinder = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Petrify = {
-    .name = $("Petrify"),
-    .description = $("Clears stat buffs then lowers\n"
-                     "speed by one stage on entry."),
+constexpr Ability Petrify = {
     .onEntry = +[](ON_ENTRY) -> int {
         int loweredStats = 0;
-        int intimidated = UseIntimidateClone(battler, ability);
-        for (int i = BATTLE_OPPOSITE(GET_BATTLER_SIDE(battler)); i < gBattlersCount; i += 2) {
-            if (!IsBattlerAlive(i)) continue;
+        int intimidated = UseIntimidateClone(ability, battler);
+        for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
+            FILTER(IsBattlerAlive(i))
             loweredStats |= TryResetBattlerStatChanges(i, RESET_STAT_BUFFS);
         }
 
@@ -8417,10 +6977,7 @@ static const Ability Petrify = {
     },
 };
 
-static const Ability Fluffiest = {
-    .name = $("Fluffiest"),
-    .description = $("Quarters contact damage taken.\n"
-                     "4x weak to fire."),
+constexpr Ability Fluffiest = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE) RESISTANCE(2.0);
@@ -8429,24 +6986,21 @@ static const Ability Fluffiest = {
     .breakable = TRUE,
 };
 
-static const Ability WayOfPrecision = {
-    .name = $("Way of Precision"),
-    .description = $("Inner Focus + Precise Fist."),
+constexpr Ability WayOfPrecision = {
     .onAccuracy = InnerFocus.onAccuracy,
+    .onCrit = PreciseFist.onCrit,
+    .onModifyEffectChance = PreciseFist.onModifyEffectChance,
     .breakable = TRUE,
+    .tauntImmune = TRUE,
 };
 
-static const Ability WayOfSwiftness = {
-    .name = $("Way of Swiftness"),
-    .description = $("Pretentious + Swift Swim."),
+constexpr Ability WayOfSwiftness = {
     .onBattlerFaints = Pretentious.onBattlerFaints,
     .onStat = SwiftSwim.onStat,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability AtomicPunch = {
-    .name = $("Atomic Punch"),
-    .description = $("Iron Fist + Steelworker."),
+constexpr Ability AtomicPunch = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             IronFist.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
@@ -8454,50 +7008,53 @@ static const Ability AtomicPunch = {
         },
 };
 
-static const Ability IronGiant = {
-    .name = $("Iron Giant"),
-    .description = $("Heatproof + Juggernaut."),
+constexpr Ability IronGiant = {
     .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
     .onChooseOffensiveStat = Juggernaut.onChooseOffensiveStat,
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_PARALYSIS)
+        return TRUE;
+    },
     .breakable = TRUE,
+    .negatesBurnAtkDrop = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability MasterHand = {
-    .name = $("Master Hand"),
-    .description = $("Mega Launcher + Rampage."),
+constexpr Ability MasterHand = {
     .onBattlerFaints = Rampage.onBattlerFaints,
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .megaLauncherBoost = TRUE,
 };
 
-static const Ability FinalBlow = {
-    .name = $("Final Blow"),
-    .description = $("Unseen Fist + Fatal Precision."),
+constexpr Ability FinalBlow = {
     .onOffensiveMultiplier = FatalPrecision.onOffensiveMultiplier,
     .onAccuracy = FatalPrecision.onAccuracy,
 };
 
-static const Ability Hospitality = {
-    .name = $("Hospitality"),
-    .description = $("Heals partner for 25% of its max\n"
-                     "HP on switch-in."),
+constexpr Ability Hospitality = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        gBattlerTarget = BATTLE_PARTNER(battler);
+        CHECK(IsBattlerAlive(gBattlerTarget))
+        CHECK_NOT(BATTLER_MAX_HP(gBattlerTarget))
+
+        gBattleMoveDamage = -gBattleMons[gBattlerTarget].maxHP / 4;
+        if (!gBattleMoveDamage) gBattleMoveDamage = -1;
+        BattleScriptPushCursorAndCallback(BattleScript_Hospitality_AfterPopup);
+        return TRUE;
+    },
 };
 
-static const Ability ButterUp = {
-    .name = $("Butter Up"),
-    .description = $("Hospitality + Soothing Aroma"),
+constexpr Ability ButterUp = {
     .onEntry = +[](ON_ENTRY) -> int { return Hospitality.onEntry(DELEGATE_ENTRY) | SoothingAroma.onEntry(DELEGATE_ENTRY); },
 };
 
-static const Ability VitalityStrike = {
-    .name = $("Vitality Strike"),
-    .description = $("Heals for 10% of the damage\n"
-                     "dealt by punching moves."),
+constexpr Ability VitalityStrike = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
-        CHECK(IS_IRON_FIST(battler, move))
+        CHECK(CanBattlerHeal(battler))
+        CHECK(IsIronFistBoosted(battler, move))
 
         gBattleMoveDamage = -gHpDealt / 10;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
@@ -8506,30 +7063,24 @@ static const Ability VitalityStrike = {
     },
 };
 
-static const Ability HugeWings = {
-    .name = $("Huge Wings"),
-    .description = $("Giant Wings + Levitate."),
+constexpr Ability HugeWings = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             GiantWings.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
             Levitate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
     .breakable = TRUE,
+    .levitate = TRUE,
 };
 
-static const Ability SwordOfDamnation = {
-    .name = $("Sword of Damnation"),
-    .description = $("Unaware + Sword of Ruin."),
+constexpr Ability SwordOfDamnation = {
     .onStat = SwordOfRuin.onStat,
     .onStatFor = APPLY_ON_OTHER,
     .ruinStat = STAT_DEF,
     .unaware = TRUE,
 };
 
-static const Ability RestrainingOrder = {
-    .name = $("Restraining Order"),
-    .description = $("Forces the attacker when hit\n"
-                     "once each switch-in."),
+constexpr Ability RestrainingOrder = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
         CHECK(ShouldApplyOnHitAffect(battler))
@@ -8542,17 +7093,14 @@ static const Ability RestrainingOrder = {
     },
 };
 
-static const Ability AssassinsTools = {
-    .name = $("Assassin's Tools"),
-    .description = $("Contact moves have a 30%\n"
-                     "chance to PSN, PRLZ, or BLD."),
+constexpr Ability AssassinsTools = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(IsMoveMakingContact(move, battler))
 
         switch (Random() % 3) {
             case 0:
-                CHECK(CanBePoisoned(battler, target));
+                CHECK(CanBePoisoned(battler, target, MOVE_NONE));
                 AbilityStatusEffect(MOVE_EFFECT_POISON);
                 return TRUE;
 
@@ -8570,10 +7118,7 @@ static const Ability AssassinsTools = {
     },
 };
 
-static const Ability Frostmaw = {
-    .name = $("Frostmaw"),
-    .description = $("Biting moves have a 50% chance\n"
-                     "to inflict frostbite."),
+constexpr Ability Frostmaw = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanGetFrostbite(target))
@@ -8584,21 +7129,19 @@ static const Ability Frostmaw = {
     },
 };
 
-static const Ability Patchwork = {
-    .name = $("Patchwork"),
-    .description = $("Disguise + curses the opponent\n"
-                     "when its Disguise breaks."),
+constexpr Ability Patchwork = {
     .onEntry = Disguise.onEntry,
     .onDisguise = +[](ON_DISGUISE) -> int {
         int species = Disguise.onDisguise(DELEGATE_DISGUISE);
         if (species && !testOnly) {
-            SetOncePerTurnAbilityCounter(battler, ABILITY_PATCHWORK, gBattlerAttacker);
+            SetOncePerTurnAbilityCounter(battler, ABILITY_PATCHWORK, gBattlerAttacker + 1);
         }
         return species;
     },
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(GetSingleUseAbilityCounter(battler, ability))
-        SetSingleUseAbilityCounter(battler, ability, 0);
+        int triggeringBattler = GetOncePerTurnAbilityCounter(battler, ability) - 1;
+        CHECK(triggeringBattler == attacker)
+        SetOncePerTurnAbilityCounter(battler, ability, 0);
 
         CHECK(IsBattlerAlive(attacker))
         CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED)
@@ -8611,31 +7154,23 @@ static const Ability Patchwork = {
     .randomizerBanned = TRUE,
 };
 
-static const Ability BlindRage = {
-    .name = $("Blind Rage"),
-    .description = $("Scrappy + Mold Breaker."),
+constexpr Ability BlindRage = {
     .onEntry = MoldBreaker.onEntry,
+    .onTypeEffectiveness = Scrappy.onTypeEffectiveness,
+    .tauntImmune = TRUE,
 };
 
-static const Ability Slipstream = {
-    .name = $("Slipstream"),
-    .description = $("Moves use 20% of its Speed\n"
-                     "stat additionally."),
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *secondaryAtkStatToUse = STAT_SPEED; },
+constexpr Ability Slipstream = {
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPEED] += 20; },
 };
 
-static const Ability ApexPredator = {
-    .name = $("Apex Predator"),
-    .description = $("Tough Claws + Predator."),
+constexpr Ability ApexPredator = {
     .onBattlerFaints = SoulEater.onBattlerFaints,
     .onOffensiveMultiplier = ToughClaws.onOffensiveMultiplier,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability DragonsRitual = {
-    .name = $("Dragon's Ritual"),
-    .description = $("Dealing a KO raises Attack and\n"
-                     "Speed by one stage."),
+constexpr Ability DragonsRitual = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN) || CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
         BattleScriptCall(BattleScript_DragonsRitual);
@@ -8644,10 +7179,7 @@ static const Ability DragonsRitual = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability PinnacleBlade = {
-    .name = $("Pinnacle Blade"),
-    .description = $("Slashing moves always hit and\n"
-                     "break protection and barriers."),
+constexpr Ability PinnacleBlade = {
     .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType {
         return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : INFILTRATE_NONE;
     },
@@ -8680,10 +7212,7 @@ static const Ability PinnacleBlade = {
     },
 };
 
-static const Ability Energized = {
-    .name = $("Energized"),
-    .description = $("Generator + charges up on KO\n"
-                     "with an Electric-type move."),
+constexpr Ability Energized = {
     .onEntry = Generator.onEntry,
     .onTerrain = Generator.onTerrain,
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
@@ -8697,10 +7226,7 @@ static const Ability Energized = {
     .persistent = TRUE,
 };
 
-static const Ability ColorSpectrum = {
-    .name = $("Color Spectrum"),
-    .description = $("Same-type attacks get a 1.2x\n"
-                     "boost. Changes type each turn."),
+constexpr Ability ColorSpectrum = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         int newType;
         do {
@@ -8720,18 +7246,13 @@ static const Ability ColorSpectrum = {
         },
 };
 
-static const Ability SteelBeetle = {
-    .name = $("Steel Beetle"),
-    .description = $("Raging Boxer + Pollinate."),
+constexpr Ability SteelBeetle = {
     .onParentalBond = RagingBoxer.onParentalBond,
     .onOffensiveMultiplier = Pollinate.onOffensiveMultiplier,
     .onMoveType = Pollinate.onMoveType,
 };
 
-static const Ability FromTheShadows = {
-    .name = $("From the Shadows"),
-    .description = $("Attacks trap and have a 20%\n"
-                     "flinch chance when moving first."),
+constexpr Ability FromTheShadows = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(GetBattlerTurnOrderNum(target) >= gCurrentTurnActionNumber)
@@ -8748,10 +7269,7 @@ static const Ability FromTheShadows = {
     },
 };
 
-static const Ability RagePoint = {
-    .name = $("Rage Point"),
-    .description = $("Gets a 1.5x boost while statused.\n"
-                     "Raises offenses when crit."),
+constexpr Ability RagePoint = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(gIsCriticalHit)
@@ -8764,12 +7282,11 @@ static const Ability RagePoint = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (HasAnyStatusOrAbility(battler)) MUL(1.5);
         },
+    .negatesBurnAtkDrop = TRUE,
+    .negatesFrzSpatkDrop = TRUE,
 };
 
-static const Ability HotCoals = {
-    .name = $("Hot Coals"),
-    .description = $("Sets a trap that burns the next\n"
-                     "foe that switches in."),
+constexpr Ability HotCoals = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals)
 
@@ -8778,10 +7295,7 @@ static const Ability HotCoals = {
     },
 };
 
-static const Ability TerastalTreasure = {
-    .name = $("Terastal Treasure"),
-    .description = $("Reduces damage taken by 40%,\n"
-                     "but lowers speed by 20%."),
+constexpr Ability TerastalTreasure = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.6); },
     .onStat =
         +[](ON_STAT) {
@@ -8790,60 +7304,44 @@ static const Ability TerastalTreasure = {
     .breakable = TRUE,
 };
 
-static const Ability ShockingMaw = {
-    .name = $("Shocking Maw"),
-    .description = $("Strong Jaw + Bite moves have\n"
-                     "50% paralysis chance."),
+constexpr Ability ShockingMaw = {
     .onAttacker = ShockingJaws.onAttacker,
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
-static const Ability GleamEyes = {
-    .name = $("Gleam Eyes"),
-    .description = $("Frisk + Scare."),
-    .onEntry = +[](ON_ENTRY) -> int { return UseIntimidateClone(battler, ability) | Frisk.onEntry(DELEGATE_ENTRY); },
+constexpr Ability GleamEyes = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseIntimidateClone(ability, battler) | Frisk.onEntry(DELEGATE_ENTRY); },
 };
 
-static const Ability RousedFangs = {
-    .name = $("Megabite"),
-    .description = $("Biting moves use SpAtk and\n"
-                     "deal 30% more damage."),
+constexpr Ability RousedFangs = {
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
     .onChooseOffensiveStat = MindCrush.onChooseOffensiveStat,
 };
 
-static const Ability DreamState = {
-    .name = $("Dream State"),
-    .description = $("Immune to critical hits. Takes\n"
-                     "20% less damage from all attacks."),
+constexpr Ability DreamState = {
     .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .onCrit = BattleArmor.onCrit,
+    .onCritFor = BattleArmor.onCritFor,
     .breakable = TRUE,
 };
 
-static const Ability DreamWhimsy = {
-    .name = $("Dream Whimsy"),
-    .description = $("Uses Yawn on switch-in."),
+constexpr Ability DreamWhimsy = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_YAWN, 0); },
 };
 
-static const Ability LunarAffinity = {
-    .name = $("Lunar Affinity"),
-    .description = $("Copies lunar moves used by\n"
-                     "others."),
+constexpr Ability LunarAffinity = {
+    .onCopyMove = +[](ON_COPY_MOVE) -> int {
+        CHECK(gBattleMoves[move].lunar)
+        return UseOutOfTurnAttack(battler, target, ability, move, 0);
+    },
 };
 
-static const Ability FlameShield = {
-    .name = $("Flame Shield"),
-    .description = $("Takes 35% less damage from\n"
-                     "Super-effective moves."),
+constexpr Ability FlameShield = {
     .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-static const Ability AquaticDweller = {
-    .name = $("Aquatic Dweller"),
-    .description = $("Boosts the power of Water-type\n"
-                     "moves by 1.5x."),
+constexpr Ability AquaticDweller = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_WATER); },
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
@@ -8851,62 +7349,43 @@ static const Ability AquaticDweller = {
         },
 };
 
-static const Ability ApplePie = {
-    .name = $("Apple Pie"),
-    .description = $("Self Sufficient + Ripen."),
+constexpr Ability ApplePie = {
     .onEndTurn = SelfSufficient.onEndTurn,
 };
 
-static const Ability Hover = {
-    .name = $("Hover"),
-    .description = $("Adds Psychic type to itself.\n"
-                     "Avoids Ground attacks."),
+constexpr Ability Hover = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_PSYCHIC); },
     .breakable = TRUE,
+    .levitate = TRUE,
 };
 
-static const Ability Depravity = {
-    .name = $("Depravity"),
-    .description = $("Merciless + Overcharge."),
+constexpr Ability Depravity = {
+    .onCrit = Merciless.onCrit,
+    .onTypeEffectiveness = Overcharge.onTypeEffectiveness,
+    .onCanStatusType = Overcharge.onCanStatusType,
 };
 
-static const Ability Wildfire = {
-    .name = $("Wildfire"),
-    .description = $("Attacks with 20BP Fire Spin\n"
-                     "when hit by a contact move."),
-    .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
-        CHECK(IsMoveMakingContact(move, attacker))
-
-        UseOutOfTurnAttack(battler, attacker, ability, MOVE_FIRE_SPIN, 20);
-        return FALSE;
-    },
+constexpr Ability Wildfire = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_FIRE_SPIN, 0); },
 };
 
-static const Ability JumpScare = {
-    .name = $("Jumpscare"),
-    .description = $("Attacks with Astonish on first\n"
-                     "switch-in."),
+constexpr Ability JumpScare = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
         return UseEntryMove(battler, ability, MOVE_ASTONISH, 0);
     },
+    .persistent = TRUE,
 };
 
-static const Ability TarToss = {
-    .name = $("Tar Toss"),
-    .description = $("Uses Tar Shot on switch-in."),
+constexpr Ability TarToss = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TAR_SHOT, 0); },
 };
 
-static const Ability StunShock = {
-    .name = $("Stun Shock"),
-    .description = $("Attacks have a 60% chance to\n"
-                     "Paralyze or Poison."),
+constexpr Ability StunShock = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target)) CHECK(Random() % 100 < 60) switch (Random() % 2) {
             case 0:
-                CHECK(CanBePoisoned(battler, target));
+                CHECK(CanBePoisoned(battler, target, MOVE_NONE));
                 AbilityStatusEffect(MOVE_EFFECT_POISON);
                 return TRUE;
 
@@ -8919,21 +7398,15 @@ static const Ability StunShock = {
     },
 };
 
-static const Ability RagingGoddess = {
-    .name = $("Raging Goddess"),
-    .description = $("Rampage + Hyper Aggressive."),
+constexpr Ability RagingGoddess = {
     .onBattlerFaints = Rampage.onBattlerFaints,
     .onParentalBond = ParentalBond.onParentalBond,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-static const Ability Whiplash = {
-    .name = $("Whiplash"),
-    .description = $("Physical attacks have a 50%\n"
-                     "chance to lower Defense."),
+constexpr Ability Whiplash = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(Random() % 2)
         CHECK(IS_MOVE_PHYSICAL(move))
         CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
 
@@ -8945,10 +7418,7 @@ static const Ability Whiplash = {
     },
 };
 
-static const Ability SupersweetSyrup = {
-    .name = $("Supersweet Syrup"),
-    .description = $("Can't lose its item. Disables foe's\n"
-                     "item for 2 turns on contact."),
+constexpr Ability SupersweetSyrup = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -8964,22 +7434,15 @@ static const Ability SupersweetSyrup = {
     .breakable = TRUE,
 };
 
-static const Ability LuckyHalo = {
-    .name = $("Lucky Halo"),
-    .description = $("Negates self stat drops. Survives\n"
-                     "the first hit that would KO it."),
-};
-
-static const Ability TrashHeap = {
-    .name = $("Trash Heap"),
-    .description = $("Corrosion + Toxic Spill."),
+constexpr Ability TrashHeap = {
     .onEntry = ToxicSpill.onEntry,
+    .onEndTurn = ToxicSpill.onEndTurn,
     .onExit = ToxicSpill.onExit,
+    .onTypeEffectiveness = Corrosion.onTypeEffectiveness,
+    .onCanStatusType = Corrosion.onCanStatusType,
 };
 
-static const Ability SludgyMix = {
-    .name = $("Sludgy Mix"),
-    .description = $("Intoxicate + Punk Rock."),
+constexpr Ability SludgyMix = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             Intoxicate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
@@ -8988,25 +7451,17 @@ static const Ability SludgyMix = {
     .onMoveType = Intoxicate.onMoveType,
 };
 
-static const Ability Overwatch = {
-    .name = $("Overwatch"),
-    .description = $("On the Prowl + Stakeout."),
+constexpr Ability Overwatch = {
     .onEntry = OnTheProwl.onEntry,
     .onOffensiveMultiplier = Stakeout.onOffensiveMultiplier,
 };
 
-static const Ability WindRage = {
-    .name = $("Wind Rage"),
-    .description = $("Uses Defog on switch-in. Air-\n"
-                     "based moves get a 1.3x boost."),
+constexpr Ability WindRage = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DEFOG, 0); },
     .onOffensiveMultiplier = GiantWings.onOffensiveMultiplier,
 };
 
-static const Ability VictoryBomb = {
-    .name = $("Victory Bomb"),
-    .description = $("Attacks with a 100BP Fire-type\n"
-                     "Explosion on fainting."),
+constexpr Ability VictoryBomb = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK_NOT(IsBattlerAlive(battler))
 
@@ -9020,9 +7475,7 @@ static const Ability VictoryBomb = {
     },
 };
 
-static const Ability RazorSharp = {
-    .name = $("Razor Sharp"),
-    .description = $("Critical hits also inflict bleeding."),
+constexpr Ability RazorSharp = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
@@ -9032,18 +7485,12 @@ static const Ability RazorSharp = {
     },
 };
 
-static const Ability ToTheBone = {
-    .name = $("To The Bone"),
-    .description = $("Critical hits get a 1.5x boost and\n"
-                     "inflict bleeding."),
+constexpr Ability ToTheBone = {
     .onAttacker = RazorSharp.onAttacker,
     .onOffensiveMultiplier = Sniper.onOffensiveMultiplier,
 };
 
-static const Ability BladeDance = {
-    .name = $("Blade Dance"),
-    .description = $("Triggers 50 BP Leaf Blade after\n"
-                     "using a dance move."),
+constexpr Ability BladeDance = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(IsDance(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
@@ -9052,13 +7499,8 @@ static const Ability BladeDance = {
     },
 };
 
-static const Ability Taekkyeon = {
-    .name = $("Taekkyeon"),
-    .description = $("All attacks are dances."),
-};
-
 int ApeShiftHandler(int battler, AbilityCallType callType) {
-    CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+    CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
     CHECK(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
     CHECK(ShouldChangeFormHpBased(battler))
 
@@ -9071,20 +7513,18 @@ int ApeShiftHandler(int battler, AbilityCallType callType) {
     BattleScriptCall(BattleScript_StackBattlerFormChange);
     return TRUE;
 }
-static const Ability ApeShift = {
-    .name = $("Ape Shift"),
-    .description = $("Transforms when below 50% HP,\n"
-                     "curing status and always critting."),
+constexpr Ability ApeShift = {
     .onEntry = +[](ON_ENTRY) -> int { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onEndTurn = +[](ON_END_TURN) -> int { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onDefender = +[](ON_DEFENDER) -> int { return ApeShiftHandler(battler, ABILITY_BS_CALL); },
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
+        return ALWAYS_CRIT;
+    },
     .randomizerBanned = TRUE,
 };
 
-static const Ability KnowYourPlace = {
-    .name = $("Know Your Place"),
-    .description = $("Contact attacks make foes move\n"
-                     "last for 5 turns."),
+constexpr Ability KnowYourPlace = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(gVolatileStructs[target].dazed)
@@ -9096,10 +7536,7 @@ static const Ability KnowYourPlace = {
     },
 };
 
-static const Ability DeepCuts = {
-    .name = $("Deep Cuts"),
-    .description = $("Slashing moves have a 50%\n"
-                     "chance to inflict bleeding."),
+constexpr Ability DeepCuts = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
@@ -9110,22 +7547,33 @@ static const Ability DeepCuts = {
     },
 };
 
-static const Ability LifeSteal = {
-    .name = $("Life Steal"),
-    .description = $("Steals 1/10 HP from foes each\n"
-                     "turn."),
+constexpr Ability LifeSteal = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        int any = FALSE;
+        for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
+            FILTER(IsBattlerAlive(target))
+            FILTER_NOT(IsMagicGuardProtected(target))
+
+            gStackBattler1 = battler;
+            gStackBattler2 = target;
+            gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE;
+            BattleScriptExecute(BattleScript_AbilityDrainsHp);
+            any = TRUE;
+        }
+        return any;
+    },
 };
 
-static const Ability RudeAwakening = {
-    .name = $("Rude Awakening"),
-    .description = $("Raises all stats becomes immune\n"
-                     "to sleep after waking up."),
+constexpr Ability RudeAwakening = {
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_SLEEP)
+        CHECK(GetAbilityState(battler, ability))
+        return TRUE;
+    },
+    .removesStatusOnImmunity = TRUE,
 };
 
-static const Ability TeraformZero = {
-    .name = $("Teraform Zero"),
-    .description = $("Tera Shell + clears weather and\n"
-                     "terrain on first entry."),
+constexpr Ability TeraformZero = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(!GetSingleUseAbilityCounter(battler, ability));
         SetSingleUseAbilityCounter(battler, ability, TRUE);
@@ -9133,40 +7581,32 @@ static const Ability TeraformZero = {
         BattleScriptPushCursorAndCallback(BattleScript_TeraformZero);
         return TRUE;
     },
+    .onAfterTypeEffectiveness = TeraShell.onAfterTypeEffectiveness,
+    .onAfterTypeEffectivenessFor = TeraShell.onAfterTypeEffectivenessFor,
     .breakable = TRUE,
 };
 
-static const Ability SetAblaze = {
-    .name = $("Set Ablaze"),
-    .description = $("Inflicting burn also inflicts fear."),
+constexpr Ability SetAblaze = {
     .onReactive = BloodBath.onReactive,
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-static const Ability Breakwater = {
-    .name = $("Breakwater"),
-    .description = $("Swift Swim + Stall."),
+constexpr Ability Breakwater = {
     .onDefensiveMultiplier = Stall.onDefensiveMultiplier,
     .onStat = SwiftSwim.onStat,
     .breakable = TRUE,
 };
 
-static const Ability MagicalFists = {
-    .name = $("Magical Fists"),
-    .description = $("Punching moves use Special\n"
-                     "Attack and get a 1.3x boost."),
+constexpr Ability MagicalFists = {
     .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (IS_IRON_FIST(battler, move)) *atkStatToUse = STAT_SPATK;
+            if (IsIronFistBoosted(battler, move)) *atkStatToUse = STAT_SPATK;
         },
 };
 
-static const Ability Cutthroat = {
-    .name = $("Cutthroat"),
-    .description = $("The first slicing move used on\n"
-                     "each entry in gets +1 priority."),
+constexpr Ability Cutthroat = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gStatuses4[battler] & STATUS4_CUTTHROAT)
 
@@ -9175,23 +7615,16 @@ static const Ability Cutthroat = {
     },
 };
 
-static const Ability SandBender = {
-    .name = $("Sand Bender"),
-    .description = $("Sand Stream + Sand Force."),
+constexpr Ability SandBender = {
     .onEntry = SandStream.onEntry,
     .onStat = SandForce.onStat,
 };
 
-static const Ability SandPit = {
-    .name = $("Sand Pit"),
-    .description = $("Attacks with 20BP Sand Tomb\n"
-                     "on switch-in."),
+constexpr Ability SandPit = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SAND_TOMB, 20); },
 };
 
-static const Ability DesolateSun = {
-    .name = $("Desolate Sun"),
-    .description = $("Desolate Land + Earth Eater."),
+constexpr Ability DesolateSun = {
     .randomizerBanned = TRUE,
 };
 
@@ -9203,21 +7636,15 @@ ON_EITHER(Daybreak) {
     AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
     return TRUE;
 }
-static const Ability Daybreak = {
-    .name = $("Daybreak"),
-    .description = $("Burns the foe on contact.\n"
-                     "Also works on offense."),
+constexpr Ability Daybreak = {
     ON_EITHER_ABILITY(Daybreak),
 };
 
-static const Ability EnergySiphon = {
-    .name = $("Energy Siphon"),
-    .description = $("Heals the user for 1/4\n"
-                     "of the damage they deal."),
+constexpr Ability EnergySiphon = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+        CHECK(CanBattlerHeal(battler))
 
         gBattleMoveDamage = -gHpDealt / 4;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
@@ -9226,9 +7653,7 @@ static const Ability EnergySiphon = {
     },
 };
 
-static const Ability Reservoir = {
-    .name = $("Reservoir"),
-    .description = $("Water Absorb + Storm Drain."),
+constexpr Ability Reservoir = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_WATER);
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -9239,21 +7664,15 @@ static const Ability Reservoir = {
 };
 
 static int NeurotoxinCondition(int battler, int target) {
-    return CanLowerStat(target, STAT_ATK) || CanLowerStat(target, STAT_DEF) || CanLowerStat(target, STAT_SPEED);
+    return CanLowerStat(target, STAT_ATK) || CanLowerStat(target, STAT_SPATK) || CanLowerStat(target, STAT_SPEED);
 }
-static const Ability Neurotoxin = {
-    .name = $("Neurotoxin"),
-    .description = $("Inflicting poison also lowers\n"
-                     "Attack, Defense, and Speed."),
+constexpr Ability Neurotoxin = {
     .onReactive = +[](ON_REACTIVE) -> int { return PoisonPuppeteerClone(ability, battler, NeurotoxinCondition, BattleScript_Neurotoxin); },
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-static const Ability EnergizedHorns = {
-    .name = $("Energy Horns"),
-    .description = $("Mighty horn moves become special\n"
-                     "and deal 30% more damage."),
+constexpr Ability EnergizedHorns = {
     .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
     .onSwapSplit = +[](ON_SWAP_SPLIT) -> int {
         CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
@@ -9262,14 +7681,11 @@ static const Ability EnergizedHorns = {
     },
 };
 
-static const Ability SpiderLairUpgrade = {
-    .name = $("Rising Dough"),
-    .description = $("Casts Sticky Web on entry.\n"
-                     "Lasts 7 turns."),
+constexpr Ability SpiderLairUpgrade = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
-        int side = BATTLE_OPPOSITE(battler);
+        int side = GetOppositeSide(battler);
         gSideTimers[side].started.spiderWeb = TRUE;
         gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
         gSideTimers[side].stickyWebTimer = 7;
@@ -9278,33 +7694,24 @@ static const Ability SpiderLairUpgrade = {
     },
 };
 
-static const Ability CrustCoat = {
-    .name = $("Crust Coat"),
-    .description = $("Immune to critical hits. Takes\n"
-                     "20% less damage from all attacks."),
+constexpr Ability CrustCoat = {
     .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .onCrit = BattleArmor.onCrit,
+    .onCritFor = BattleArmor.onCritFor,
     .breakable = TRUE,
 };
 
-static const Ability Puffy = {
-    .name = $("Puffy"),
-    .description = $("Takes 1/2 dmg from contact moves\n"
-                     "but Fire moves hurt it 2x more."),
+constexpr Ability Puffy = {
     .onDefensiveMultiplier = Fluffy.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-static const Ability BalloonBlitz = {
-    .name = $("Balloon Blitz"),
-    .description = $("Inflatable + Hyper Aggressive."),
+constexpr Ability BalloonBlitz = {
     .onDefender = Inflatable.onDefender,
     .onParentalBond = ParentalBond.onParentalBond,
 };
 
-static const Ability StrikerPixilate = {
-    .name = $("StrikerPixilate"),
-    .description = $("Boosts the power of kicking\n"
-                     "moves by 1.3x + Pixilate."),
+constexpr Ability StrikerPixilate = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             Striker.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
@@ -9313,764 +7720,1213 @@ static const Ability StrikerPixilate = {
     .onMoveType = Pixilate.onMoveType,
 };
 
-const Ability gAbilities[] = {
-    [ABILITY_NONE] = None,
-    [ABILITY_STENCH] = Stench,
-    [ABILITY_DRIZZLE] = Drizzle,
-    [ABILITY_SPEED_BOOST] = SpeedBoost,
-    [ABILITY_BATTLE_ARMOR] = BattleArmor,
-    [ABILITY_STURDY] = Sturdy,
-    [ABILITY_DAMP] = Damp,
-    [ABILITY_LIMBER] = Limber,
-    [ABILITY_SAND_VEIL] = SandVeil,
-    [ABILITY_STATIC] = Static,
-    [ABILITY_VOLT_ABSORB] = VoltAbsorb,
-    [ABILITY_WATER_ABSORB] = WaterAbsorb,
-    [ABILITY_OBLIVIOUS] = Oblivious,
-    [ABILITY_CLOUD_NINE] = CloudNine,
-    [ABILITY_COMPOUND_EYES] = CompoundEyes,
-    [ABILITY_INSOMNIA] = Insomnia,
-    [ABILITY_COLOR_CHANGE] = ColorChange,
-    [ABILITY_IMMUNITY] = Immunity,
-    [ABILITY_FLASH_FIRE] = FlashFire,
-    [ABILITY_SHIELD_DUST] = ShieldDust,
-    [ABILITY_OWN_TEMPO] = OwnTempo,
-    [ABILITY_SUCTION_CUPS] = SuctionCups,
-    [ABILITY_INTIMIDATE] = Intimidate,
-    [ABILITY_SHADOW_TAG] = ShadowTag,
-    [ABILITY_ROUGH_SKIN] = RoughSkin,
-    [ABILITY_WONDER_GUARD] = WonderGuard,
-    [ABILITY_LEVITATE] = Levitate,
-    [ABILITY_EFFECT_SPORE] = EffectSpore,
-    [ABILITY_SYNCHRONIZE] = Synchronize,
-    [ABILITY_CLEAR_BODY] = ClearBody,
-    [ABILITY_NATURAL_CURE] = NaturalCure,
-    [ABILITY_LIGHTNING_ROD] = LightningRod,
-    [ABILITY_SERENE_GRACE] = SereneGrace,
-    [ABILITY_SWIFT_SWIM] = SwiftSwim,
-    [ABILITY_CHLOROPHYLL] = Chlorophyll,
-    [ABILITY_ILLUMINATE] = Illuminate,
-    [ABILITY_TRACE] = Trace,
-    [ABILITY_HUGE_POWER] = HugePower,
-    [ABILITY_POISON_POINT] = PoisonPoint,
-    [ABILITY_INNER_FOCUS] = InnerFocus,
-    [ABILITY_MAGMA_ARMOR] = MagmaArmor,
-    [ABILITY_WATER_VEIL] = WaterVeil,
-    [ABILITY_MAGNET_PULL] = MagnetPull,
-    [ABILITY_SOUNDPROOF] = Soundproof,
-    [ABILITY_RAIN_DISH] = RainDish,
-    [ABILITY_SAND_STREAM] = SandStream,
-    [ABILITY_PRESSURE] = Pressure,
-    [ABILITY_THICK_FAT] = ThickFat,
-    [ABILITY_EARLY_BIRD] = EarlyBird,
-    [ABILITY_FLAME_BODY] = FlameBody,
-    [ABILITY_RUN_AWAY] = RunAway,
-    [ABILITY_KEEN_EYE] = KeenEye,
-    [ABILITY_HYPER_CUTTER] = HyperCutter,
-    [ABILITY_PICKUP] = Pickup,
-    [ABILITY_TRUANT] = Truant,
-    [ABILITY_HUSTLE] = Hustle,
-    [ABILITY_CUTE_CHARM] = CuteCharm,
-    [ABILITY_PLUS] = Plus,
-    [ABILITY_MINUS] = Minus,
-    [ABILITY_FORECAST] = Forecast,
-    [ABILITY_STICKY_HOLD] = StickyHold,
-    [ABILITY_SHED_SKIN] = ShedSkin,
-    [ABILITY_GUTS] = Guts,
-    [ABILITY_MARVEL_SCALE] = MarvelScale,
-    [ABILITY_LIQUID_OOZE] = LiquidOoze,
-    [ABILITY_OVERGROW] = Overgrow,
-    [ABILITY_BLAZE] = Blaze,
-    [ABILITY_TORRENT] = Torrent,
-    [ABILITY_SWARM] = Swarm,
-    [ABILITY_ROCK_HEAD] = RockHead,
-    [ABILITY_DROUGHT] = Drought,
-    [ABILITY_ARENA_TRAP] = ArenaTrap,
-    [ABILITY_VITAL_SPIRIT] = VitalSpirit,
-    [ABILITY_WHITE_SMOKE] = WhiteSmoke,
-    [ABILITY_PURE_POWER] = PurePower,
-    [ABILITY_SHELL_ARMOR] = ShellArmor,
-    [ABILITY_AIR_LOCK] = AirLock,
-    [ABILITY_TANGLED_FEET] = TangledFeet,
-    [ABILITY_MOTOR_DRIVE] = MotorDrive,
-    [ABILITY_RIVALRY] = Rivalry,
-    [ABILITY_STEADFAST] = Steadfast,
-    [ABILITY_SNOW_CLOAK] = SnowCloak,
-    [ABILITY_GLUTTONY] = Gluttony,
-    [ABILITY_ANGER_POINT] = AngerPoint,
-    [ABILITY_UNBURDEN] = Unburden,
-    [ABILITY_HEATPROOF] = Heatproof,
-    [ABILITY_SIMPLE] = Simple,
-    [ABILITY_DRY_SKIN] = DrySkin,
-    [ABILITY_DOWNLOAD] = Download,
-    [ABILITY_IRON_FIST] = IronFist,
-    [ABILITY_POISON_HEAL] = PoisonHeal,
-    [ABILITY_ADAPTABILITY] = Adaptability,
-    [ABILITY_SKILL_LINK] = SkillLink,
-    [ABILITY_HYDRATION] = Hydration,
-    [ABILITY_SOLAR_POWER] = SolarPower,
-    [ABILITY_QUICK_FEET] = QuickFeet,
-    [ABILITY_NORMALIZE] = Normalize,
-    [ABILITY_SNIPER] = Sniper,
-    [ABILITY_MAGIC_GUARD] = MagicGuard,
-    [ABILITY_NO_GUARD] = NoGuard,
-    [ABILITY_STALL] = Stall,
-    [ABILITY_TECHNICIAN] = Technician,
-    [ABILITY_LEAF_GUARD] = LeafGuard,
-    [ABILITY_KLUTZ] = Klutz,
-    [ABILITY_MOLD_BREAKER] = MoldBreaker,
-    [ABILITY_SUPER_LUCK] = SuperLuck,
-    [ABILITY_AFTERMATH] = Aftermath,
-    [ABILITY_ANTICIPATION] = Anticipation,
-    [ABILITY_FOREWARN] = Forewarn,
-    [ABILITY_UNAWARE] = Unaware,
-    [ABILITY_TINTED_LENS] = TintedLens,
-    [ABILITY_FILTER] = Filter,
-    [ABILITY_SLOW_START] = SlowStart,
-    [ABILITY_SCRAPPY] = Scrappy,
-    [ABILITY_STORM_DRAIN] = StormDrain,
-    [ABILITY_ICE_BODY] = IceBody,
-    [ABILITY_SOLID_ROCK] = SolidRock,
-    [ABILITY_SNOW_WARNING] = SnowWarning,
-    [ABILITY_HONEY_GATHER] = HoneyGather,
-    [ABILITY_FRISK] = Frisk,
-    [ABILITY_RECKLESS] = Reckless,
-    [ABILITY_MULTITYPE] = Multitype,
-    [ABILITY_FLOWER_GIFT] = FlowerGift,
-    [ABILITY_BAD_DREAMS] = BadDreams,
-    [ABILITY_PICKPOCKET] = Pickpocket,
-    [ABILITY_SHEER_FORCE] = SheerForce,
-    [ABILITY_CONTRARY] = Contrary,
-    [ABILITY_UNNERVE] = Unnerve,
-    [ABILITY_DEFIANT] = Defiant,
-    [ABILITY_DEFEATIST] = Defeatist,
-    [ABILITY_CURSED_BODY] = CursedBody,
-    [ABILITY_HEALER] = Healer,
-    [ABILITY_FRIEND_GUARD] = FriendGuard,
-    [ABILITY_WEAK_ARMOR] = WeakArmor,
-    [ABILITY_HEAVY_METAL] = HeavyMetal,
-    [ABILITY_LIGHT_METAL] = LightMetal,
-    [ABILITY_MULTISCALE] = Multiscale,
-    [ABILITY_TOXIC_BOOST] = ToxicBoost,
-    [ABILITY_FLARE_BOOST] = FlareBoost,
-    [ABILITY_HARVEST] = Harvest,
-    [ABILITY_TELEPATHY] = Telepathy,
-    [ABILITY_MOODY] = Moody,
-    [ABILITY_OVERCOAT] = Overcoat,
-    [ABILITY_POISON_TOUCH] = PoisonTouch,
-    [ABILITY_REGENERATOR] = Regenerator,
-    [ABILITY_BIG_PECKS] = BigPecks,
-    [ABILITY_SAND_RUSH] = SandRush,
-    [ABILITY_WONDER_SKIN] = WonderSkin,
-    [ABILITY_ANALYTIC] = Analytic,
-    [ABILITY_ILLUSION] = Illusion,
-    [ABILITY_IMPOSTER] = Imposter,
-    [ABILITY_INFILTRATOR] = Infiltrator,
-    [ABILITY_MUMMY] = Mummy,
-    [ABILITY_MOXIE] = Moxie,
-    [ABILITY_JUSTIFIED] = Justified,
-    [ABILITY_RATTLED] = Rattled,
-    [ABILITY_MAGIC_BOUNCE] = MagicBounce,
-    [ABILITY_SAP_SIPPER] = SapSipper,
-    [ABILITY_PRANKSTER] = Prankster,
-    [ABILITY_SAND_FORCE] = SandForce,
-    [ABILITY_IRON_BARBS] = IronBarbs,
-    [ABILITY_ZEN_MODE] = ZenMode,
-    [ABILITY_VICTORY_STAR] = VictoryStar,
-    [ABILITY_TURBOBLAZE] = Turboblaze,
-    [ABILITY_TERAVOLT] = Teravolt,
-    [ABILITY_AROMA_VEIL] = AromaVeil,
-    [ABILITY_FLOWER_VEIL] = FlowerVeil,
-    [ABILITY_CHEEK_POUCH] = CheekPouch,
-    [ABILITY_PROTEAN] = Protean,
-    [ABILITY_FUR_COAT] = FurCoat,
-    [ABILITY_MAGICIAN] = Magician,
-    [ABILITY_BULLETPROOF] = Bulletproof,
-    [ABILITY_COMPETITIVE] = Competitive,
-    [ABILITY_STRONG_JAW] = StrongJaw,
-    [ABILITY_REFRIGERATE] = Refrigerate,
-    [ABILITY_SWEET_VEIL] = SweetVeil,
-    [ABILITY_STANCE_CHANGE] = StanceChange,
-    [ABILITY_GALE_WINGS] = GaleWings,
-    [ABILITY_MEGA_LAUNCHER] = MegaLauncher,
-    [ABILITY_GRASS_PELT] = GrassPelt,
-    [ABILITY_SYMBIOSIS] = Symbiosis,
-    [ABILITY_TOUGH_CLAWS] = ToughClaws,
-    [ABILITY_PIXILATE] = Pixilate,
-    [ABILITY_GOOEY] = Gooey,
-    [ABILITY_AERILATE] = Aerilate,
-    [ABILITY_PARENTAL_BOND] = ParentalBond,
-    [ABILITY_DARK_AURA] = DarkAura,
-    [ABILITY_FAIRY_AURA] = FairyAura,
-    [ABILITY_AURA_BREAK] = AuraBreak,
-    [ABILITY_PRIMORDIAL_SEA] = PrimordialSea,
-    [ABILITY_DESOLATE_LAND] = DesolateLand,
-    [ABILITY_DELTA_STREAM] = DeltaStream,
-    [ABILITY_STAMINA] = Stamina,
-    [ABILITY_WIMP_OUT] = WimpOut,
-    [ABILITY_EMERGENCY_EXIT] = EmergencyExit,
-    [ABILITY_WATER_COMPACTION] = WaterCompaction,
-    [ABILITY_MERCILESS] = Merciless,
-    [ABILITY_SHIELDS_DOWN] = ShieldsDown,
-    [ABILITY_STAKEOUT] = Stakeout,
-    [ABILITY_WATER_BUBBLE] = WaterBubble,
-    [ABILITY_STEELWORKER] = Steelworker,
-    [ABILITY_BERSERK] = Berserk,
-    [ABILITY_SLUSH_RUSH] = SlushRush,
-    [ABILITY_LONG_REACH] = LongReach,
-    [ABILITY_LIQUID_VOICE] = LiquidVoice,
-    [ABILITY_TRIAGE] = Triage,
-    [ABILITY_GALVANIZE] = Galvanize,
-    [ABILITY_SURGE_SURFER] = SurgeSurfer,
-    [ABILITY_SCHOOLING] = Schooling,
-    [ABILITY_DISGUISE] = Disguise,
-    [ABILITY_BATTLE_BOND] = BattleBond,
-    [ABILITY_POWER_CONSTRUCT] = PowerConstruct,
-    [ABILITY_CORROSION] = Corrosion,
-    [ABILITY_COMATOSE] = Comatose,
-    [ABILITY_QUEENLY_MAJESTY] = QueenlyMajesty,
-    [ABILITY_INNARDS_OUT] = InnardsOut,
-    [ABILITY_DANCER] = Dancer,
-    [ABILITY_BATTERY] = Battery,
-    [ABILITY_FLUFFY] = Fluffy,
-    [ABILITY_DAZZLING] = Dazzling,
-    [ABILITY_SOUL_HEART] = SoulHeart,
-    [ABILITY_TANGLING_HAIR] = TanglingHair,
-    [ABILITY_RECEIVER] = Receiver,
-    [ABILITY_POWER_OF_ALCHEMY] = PowerOfAlchemy,
-    [ABILITY_BEAST_BOOST] = BeastBoost,
-    [ABILITY_RKS_SYSTEM] = RksSystem,
-    [ABILITY_ELECTRIC_SURGE] = ElectricSurge,
-    [ABILITY_PSYCHIC_SURGE] = PsychicSurge,
-    [ABILITY_MISTY_SURGE] = MistySurge,
-    [ABILITY_GRASSY_SURGE] = GrassySurge,
-    [ABILITY_FULL_METAL_BODY] = FullMetalBody,
-    [ABILITY_SHADOW_SHIELD] = ShadowShield,
-    [ABILITY_PRISM_ARMOR] = PrismArmor,
-    [ABILITY_NEUROFORCE] = Neuroforce,
-    [ABILITY_INTREPID_SWORD] = IntrepidSword,
-    [ABILITY_DAUNTLESS_SHIELD] = DauntlessShield,
-    [ABILITY_LIBERO] = Libero,
-    [ABILITY_BALL_FETCH] = BallFetch,
-    [ABILITY_COTTON_DOWN] = CottonDown,
-    [ABILITY_PROPELLER_TAIL] = PropellerTail,
-    [ABILITY_MIRROR_ARMOR] = MirrorArmor,
-    [ABILITY_GULP_MISSILE] = GulpMissile,
-    [ABILITY_STALWART] = Stalwart,
-    [ABILITY_STEAM_ENGINE] = SteamEngine,
-    [ABILITY_PUNK_ROCK] = PunkRock,
-    [ABILITY_SAND_SPIT] = SandSpit,
-    [ABILITY_ICE_SCALES] = IceScales,
-    [ABILITY_RIPEN] = Ripen,
-    [ABILITY_ICE_FACE] = IceFace,
-    [ABILITY_POWER_SPOT] = PowerSpot,
-    [ABILITY_MIMICRY] = Mimicry,
-    [ABILITY_SCREEN_CLEANER] = ScreenCleaner,
-    [ABILITY_STEELY_SPIRIT] = SteelySpirit,
-    [ABILITY_PERISH_BODY] = PerishBody,
-    [ABILITY_WANDERING_SPIRIT] = WanderingSpirit,
-    [ABILITY_GORILLA_TACTICS] = GorillaTactics,
-    [ABILITY_NEUTRALIZING_GAS] = NeutralizingGas,
-    [ABILITY_PASTEL_VEIL] = PastelVeil,
-    [ABILITY_HUNGER_SWITCH] = HungerSwitch,
-    [ABILITY_QUICK_DRAW] = QuickDraw,
-    [ABILITY_UNSEEN_FIST] = UnseenFist,
-    [ABILITY_CURIOUS_MEDICINE] = CuriousMedicine,
-    [ABILITY_TRANSISTOR] = Transistor,
-    [ABILITY_DRAGONS_MAW] = DragonsMaw,
-    [ABILITY_CHILLING_NEIGH] = ChillingNeigh,
-    [ABILITY_GRIM_NEIGH] = GrimNeigh,
-    [ABILITY_AS_ONE_ICE_RIDER] = AsOneIceRider,
-    [ABILITY_AS_ONE_SHADOW_RIDER] = AsOneShadowRider,
-    [ABILITY_CHLOROPLAST] = Chloroplast,
-    [ABILITY_WHITEOUT] = Whiteout,
-    [ABILITY_PYROMANCY] = Pyromancy,
-    [ABILITY_KEEN_EDGE] = KeenEdge,
-    [ABILITY_PRISM_SCALES] = PrismScales,
-    [ABILITY_POWER_FISTS] = PowerFists,
-    [ABILITY_SAND_SONG] = SandSong,
-    [ABILITY_RAMPAGE] = Rampage,
-    [ABILITY_VENGEANCE] = Vengeance,
-    [ABILITY_BLITZ_BOXER] = BlitzBoxer,
-    [ABILITY_ANTARCTIC_BIRD] = AntarcticBird,
-    [ABILITY_IMMOLATE] = Immolate,
-    [ABILITY_CRYSTALLIZE] = Crystallize,
-    [ABILITY_ELECTROCYTES] = Electrocytes,
-    [ABILITY_AERODYNAMICS] = Aerodynamics,
-    [ABILITY_CHRISTMAS_SPIRIT] = ChristmasSpirit,
-    [ABILITY_EXPLOIT_WEAKNESS] = ExploitWeakness,
-    [ABILITY_GROUND_SHOCK] = GroundShock,
-    [ABILITY_ANCIENT_IDOL] = AncientIdol,
-    [ABILITY_MYSTIC_POWER] = MysticPower,
-    [ABILITY_PERFECTIONIST] = Perfectionist,
-    [ABILITY_GROWING_TOOTH] = GrowingTooth,
-    [ABILITY_INFLATABLE] = Inflatable,
-    [ABILITY_AURORA_BOREALIS] = AuroraBorealis,
-    [ABILITY_AVENGER] = Avenger,
-    [ABILITY_LETS_ROLL] = LetsRoll,
-    [ABILITY_AQUATIC] = Aquatic,
-    [ABILITY_LOUD_BANG] = LoudBang,
-    [ABILITY_LEAD_COAT] = LeadCoat,
-    [ABILITY_AMPHIBIOUS] = Amphibious,
-    [ABILITY_GROUNDED] = Grounded,
-    [ABILITY_EARTHBOUND] = Earthbound,
-    [ABILITY_FIGHT_SPIRIT] = FightSpirit,
-    [ABILITY_FELINE_PROWESS] = FelineProwess,
-    [ABILITY_COIL_UP] = CoilUp,
-    [ABILITY_FOSSILIZED] = Fossilized,
-    [ABILITY_MAGICAL_DUST] = MagicalDust,
-    [ABILITY_DREAMCATCHER] = Dreamcatcher,
-    [ABILITY_NOCTURNAL] = Nocturnal,
-    [ABILITY_SELF_SUFFICIENT] = SelfSufficient,
-    [ABILITY_TECTONIZE] = Tectonize,
-    [ABILITY_ICE_AGE] = IceAge,
-    [ABILITY_HALF_DRAKE] = HalfDrake,
-    [ABILITY_LIQUIFIED] = Liquified,
-    [ABILITY_DRAGONFLY] = Dragonfly,
-    [ABILITY_DRAGONSLAYER] = Dragonslayer,
-    [ABILITY_MOUNTAINEER] = Mountaineer,
-    [ABILITY_HYDRATE] = Hydrate,
-    [ABILITY_METALLIC] = Metallic,
-    [ABILITY_PERMAFROST] = Permafrost,
-    [ABILITY_PRIMAL_ARMOR] = PrimalArmor,
-    [ABILITY_RAGING_BOXER] = RagingBoxer,
-    [ABILITY_AIR_BLOWER] = AirBlower,
-    [ABILITY_JUGGERNAUT] = Juggernaut,
-    [ABILITY_SHORT_CIRCUIT] = ShortCircuit,
-    [ABILITY_MAJESTIC_BIRD] = MajesticBird,
-    [ABILITY_PHANTOM] = Phantom,
-    [ABILITY_INTOXICATE] = Intoxicate,
-    [ABILITY_IMPENETRABLE] = Impenetrable,
-    [ABILITY_HYPNOTIST] = Hypnotist,
-    [ABILITY_OVERWHELM] = Overwhelm,
-    [ABILITY_SCARE] = Scare,
-    [ABILITY_MAJESTIC_MOTH] = MajesticMoth,
-    [ABILITY_SOUL_EATER] = SoulEater,
-    [ABILITY_SOUL_LINKER] = SoulLinker,
-    [ABILITY_SWEET_DREAMS] = SweetDreams,
-    [ABILITY_BAD_LUCK] = BadLuck,
-    [ABILITY_HAUNTED_SPIRIT] = HauntedSpirit,
-    [ABILITY_ELECTRIC_BURST] = ElectricBurst,
-    [ABILITY_RAW_WOOD] = RawWood,
-    [ABILITY_SOLENOGLYPHS] = Solenoglyphs,
-    [ABILITY_SPIDER_LAIR] = SpiderLair,
-    [ABILITY_FATAL_PRECISION] = FatalPrecision,
-    [ABILITY_FORT_KNOX] = FortKnox,
-    [ABILITY_SEAWEED] = Seaweed,
-    [ABILITY_PSYCHIC_MIND] = PsychicMind,
-    [ABILITY_POISON_ABSORB] = PoisonAbsorb,
-    [ABILITY_SCAVENGER] = Scavenger,
-    [ABILITY_TWISTED_DIMENSION] = TwistedDimension,
-    [ABILITY_MULTI_HEADED] = MultiHeaded,
-    [ABILITY_NORTH_WIND] = NorthWind,
-    [ABILITY_OVERCHARGE] = Overcharge,
-    [ABILITY_VIOLENT_RUSH] = ViolentRush,
-    [ABILITY_FLAMING_SOUL] = FlamingSoul,
-    [ABILITY_SAGE_POWER] = SagePower,
-    [ABILITY_BONE_ZONE] = BoneZone,
-    [ABILITY_WEATHER_CONTROL] = WeatherControl,
-    [ABILITY_SPEED_FORCE] = SpeedForce,
-    [ABILITY_SEA_GUARDIAN] = SeaGuardian,
-    [ABILITY_MOLTEN_DOWN] = MoltenDown,
-    [ABILITY_HYPER_AGGRESSIVE] = HyperAggressive,
-    [ABILITY_FLOCK] = Flock,
-    [ABILITY_FIELD_EXPLORER] = FieldExplorer,
-    [ABILITY_STRIKER] = Striker,
-    [ABILITY_FROZEN_SOUL] = FrozenSoul,
-    [ABILITY_PREDATOR] = Predator,
-    [ABILITY_LOOTER] = Looter,
-    [ABILITY_LUNAR_ECLIPSE] = LunarEclipse,
-    [ABILITY_SOLAR_FLARE] = SolarFlare,
-    [ABILITY_POWER_CORE] = PowerCore,
-    [ABILITY_SIGHTING_SYSTEM] = SightingSystem,
-    [ABILITY_BAD_COMPANY] = BadCompany,
-    [ABILITY_OPPORTUNIST] = Opportunist,
-    [ABILITY_GIANT_WINGS] = GiantWings,
-    [ABILITY_MOMENTUM] = Momentum,
-    [ABILITY_GRIP_PINCER] = GripPincer,
-    [ABILITY_BIG_LEAVES] = BigLeaves,
-    [ABILITY_PRECISE_FIST] = PreciseFist,
-    [ABILITY_DEADEYE] = Deadeye,
-    [ABILITY_ARTILLERY] = Artillery,
-    [ABILITY_AMPLIFIER] = Amplifier,
-    [ABILITY_ICE_DEW] = IceDew,
-    [ABILITY_SUN_WORSHIP] = SunWorship,
-    [ABILITY_POLLINATE] = Pollinate,
-    [ABILITY_VOLCANO_RAGE] = VolcanoRage,
-    [ABILITY_COLD_REBOUND] = ColdRebound,
-    [ABILITY_LOW_BLOW] = LowBlow,
-    [ABILITY_NOSFERATU] = Nosferatu,
-    [ABILITY_SPECTRAL_SHROUD] = SpectralShroud,
-    [ABILITY_DISCIPLINE] = Discipline,
-    [ABILITY_THUNDERCALL] = Thundercall,
-    [ABILITY_MARINE_APEX] = MarineApex,
-    [ABILITY_MIGHTY_HORN] = MightyHorn,
-    [ABILITY_HARDENED_SHEATH] = HardenedSheath,
-    [ABILITY_ARCTIC_FUR] = ArcticFur,
-    [ABILITY_SPECTRALIZE] = Spectralize,
-    [ABILITY_LETHARGY] = Lethargy,
-    [ABILITY_IRON_BARRAGE] = IronBarrage,
-    [ABILITY_STEEL_BARREL] = SteelBarrel,
-    [ABILITY_PYRO_SHELLS] = PyroShells,
-    [ABILITY_FUNGAL_INFECTION] = FungalInfection,
-    [ABILITY_PARRY] = Parry,
-    [ABILITY_SCRAPYARD] = Scrapyard,
-    [ABILITY_LOOSE_QUILLS] = LooseQuills,
-    [ABILITY_TOXIC_DEBRIS] = ToxicDebris,
-    [ABILITY_ROUNDHOUSE] = Roundhouse,
-    [ABILITY_MINERALIZE] = Mineralize,
-    [ABILITY_LOOSE_ROCKS] = LooseRocks,
-    [ABILITY_SPINNING_TOP] = SpinningTop,
-    [ABILITY_RETRIBUTION_BLOW] = RetributionBlow,
-    [ABILITY_FEARMONGER] = Fearmonger,
-    [ABILITY_KINGS_WRATH] = KingsWrath,
-    [ABILITY_QUEENS_MOURNING] = QueensMourning,
-    [ABILITY_TOXIC_SPILL] = ToxicSpill,
-    [ABILITY_DESERT_CLOAK] = DesertCloak,
-    [ABILITY_DRACONIZE] = Draconize,
-    [ABILITY_PRETTY_PRINCESS] = PrettyPrincess,
-    [ABILITY_SELF_REPAIR] = SelfRepair,
-    [ABILITY_ATOMIC_BURST] = AtomicBurst,
-    [ABILITY_HELLBLAZE] = Hellblaze,
-    [ABILITY_RIPTIDE] = Riptide,
-    [ABILITY_FOREST_RAGE] = ForestRage,
-    [ABILITY_PRIMAL_MAW] = PrimalMaw,
-    [ABILITY_SWEEPING_EDGE] = SweepingEdge,
-    [ABILITY_GIFTED_MIND] = GiftedMind,
-    [ABILITY_HYDRO_CIRCUIT] = HydroCircuit,
-    [ABILITY_EQUINOX] = Equinox,
-    [ABILITY_ABSORBANT] = Absorbant,
-    [ABILITY_CLUELESS] = Clueless,
-    [ABILITY_CHEATING_DEATH] = CheatingDeath,
-    [ABILITY_CHEAP_TACTICS] = CheapTactics,
-    [ABILITY_COWARD] = Coward,
-    [ABILITY_VOLT_RUSH] = VoltRush,
-    [ABILITY_DUNE_TERROR] = DuneTerror,
-    [ABILITY_INFERNAL_RAGE] = InfernalRage,
-    [ABILITY_DUAL_WIELD] = DualWield,
-    [ABILITY_ELEMENTAL_CHARGE] = ElementalCharge,
-    [ABILITY_AMBUSH] = Ambush,
-    [ABILITY_ATLAS] = Atlas,
-    [ABILITY_RADIANCE] = Radiance,
-    [ABILITY_JAWS_OF_CARNAGE] = JawsOfCarnage,
-    [ABILITY_ANGELS_WRATH] = AngelsWrath,
-    [ABILITY_PRISMATIC_FUR] = PrismaticFur,
-    [ABILITY_SHOCKING_JAWS] = ShockingJaws,
-    [ABILITY_FAE_HUNTER] = FaeHunter,
-    [ABILITY_GRAVITY_WELL] = GravityWell,
-    [ABILITY_EVAPORATE] = Evaporate,
-    [ABILITY_LUMBERJACK] = Lumberjack,
-    [ABILITY_WELL_BAKED_BODY] = WellBakedBody,
-    [ABILITY_FURNACE] = Furnace,
-    [ABILITY_ELECTROMORPHOSIS] = Electromorphosis,
-    [ABILITY_ROCKY_PAYLOAD] = RockyPayload,
-    [ABILITY_EARTH_EATER] = EarthEater,
-    [ABILITY_LINGERING_AROMA] = LingeringAroma,
-    [ABILITY_FAIRY_TALE] = FairyTale,
-    [ABILITY_RAGING_MOTH] = RagingMoth,
-    [ABILITY_ADRENALINE_RUSH] = AdrenalineRush,
-    [ABILITY_ARCHMAGE] = Archmage,
-    [ABILITY_CRYOMANCY] = Cryomancy,
-    [ABILITY_PHANTOM_PAIN] = PhantomPain,
-    [ABILITY_PURGATORY] = Purgatory,
-    [ABILITY_EMANATE] = Emanate,
-    [ABILITY_KUNOICHI_BLADE] = KunoichiBlade,
-    [ABILITY_MONKEY_BUSINESS] = MonkeyBusiness,
-    [ABILITY_COMBAT_SPECIALIST] = CombatSpecialist,
-    [ABILITY_JUNGLES_GUARD] = JunglesGuard,
-    [ABILITY_HUNTERS_HORN] = HuntersHorn,
-    [ABILITY_PIXIE_POWER] = PixiePower,
-    [ABILITY_PLASMA_LAMP] = PlasmaLamp,
-    [ABILITY_MAGMA_EATER] = MagmaEater,
-    [ABILITY_SUPER_HOT_GOO] = SuperHotGoo,
-    [ABILITY_NIKA] = Nika,
-    [ABILITY_ARCHER] = Archer,
-    [ABILITY_COLD_PLASMA] = ColdPlasma,
-    [ABILITY_SUPER_SLAMMER] = SuperSlammer,
-    [ABILITY_INVERSE_ROOM] = InverseRoom,
-    [ABILITY_ACCELERATE] = Accelerate,
-    [ABILITY_FROST_BURN] = FrostBurn,
-    [ABILITY_ITCHY_DEFENSE] = ItchyDefense,
-    [ABILITY_GENERATOR] = Generator,
-    [ABILITY_MOON_SPIRIT] = MoonSpirit,
-    [ABILITY_DUST_CLOUD] = DustCloud,
-    [ABILITY_BERSERKER_RAGE] = BerserkerRage,
-    [ABILITY_TRICKSTER] = Trickster,
-    [ABILITY_SAND_GUARD] = SandGuard,
-    [ABILITY_NATURAL_RECOVERY] = NaturalRecovery,
-    [ABILITY_WIND_RIDER] = WindRider,
-    [ABILITY_SOOTHING_AROMA] = SoothingAroma,
-    [ABILITY_PRIM_AND_PROPER] = PrimAndProper,
-    [ABILITY_SUPER_STRAIN] = SuperStrain,
-    [ABILITY_TIPPING_POINT] = TippingPoint,
-    [ABILITY_ENLIGHTENED] = Enlightened,
-    [ABILITY_PEACEFUL_SLUMBER] = PeacefulSlumber,
-    [ABILITY_AFTERSHOCK] = Aftershock,
-    [ABILITY_FREEZING_POINT] = FreezingPoint,
-    [ABILITY_CRYO_PROFICIENCY] = CryoProficiency,
-    [ABILITY_ARCANE_FORCE] = ArcaneForce,
-    [ABILITY_DOOMBRINGER] = Doombringer,
-    [ABILITY_WISHMAKER] = Wishmaker,
-    [ABILITY_YUKI_ONNA] = YukiOnna,
-    [ABILITY_SUPPRESS] = Suppress,
-    [ABILITY_REFRIGERATOR] = Refrigerator,
-    [ABILITY_HEAVEN_ASUNDER] = HeavenAsunder,
-    [ABILITY_PURIFYING_WATERS] = PurifyingWaters,
-    [ABILITY_SEABORNE] = Seaborne,
-    [ABILITY_HIGH_TIDE] = HighTide,
-    [ABILITY_CHANGE_OF_HEART] = ChangeOfHeart,
-    [ABILITY_MYSTIC_BLADES] = MysticBlades,
-    [ABILITY_DETERMINATION] = Determination,
-    [ABILITY_FERTILIZE] = Fertilize,
-    [ABILITY_PURE_LOVE] = PureLove,
-    [ABILITY_FIGHTER] = Fighter,
-    [ABILITY_MYCELIUM_MIGHT] = MyceliumMight,
-    [ABILITY_TELEKINETIC] = Telekinetic,
-    [ABILITY_COMBUSTION] = Combustion,
-    [ABILITY_PONY_POWER] = PonyPower,
-    [ABILITY_POWDER_BURST] = PowderBurst,
-    [ABILITY_RETRIEVER] = Retriever,
-    [ABILITY_MONSTER_MASH] = MonsterMash,
-    [ABILITY_TWO_STEP] = TwoStep,
-    [ABILITY_SPITEFUL] = Spiteful,
-    [ABILITY_FORTITUDE] = Fortitude,
-    [ABILITY_DEVOURER] = Devourer,
-    [ABILITY_PHANTOM_THIEF] = PhantomThief,
-    [ABILITY_EARLY_GRAVE] = EarlyGrave,
-    [ABILITY_GRAPPLER] = Grappler,
-    [ABILITY_BASS_BOOSTED] = BassBoosted,
-    [ABILITY_FLAMING_JAWS] = FlamingJaws,
-    [ABILITY_MONSTER_HUNTER] = MonsterHunter,
-    [ABILITY_CROWNED_SWORD] = CrownedSword,
-    [ABILITY_CROWNED_SHIELD] = CrownedShield,
-    [ABILITY_BERSERK_DNA] = BerserkDna,
-    [ABILITY_CROWNED_KING] = CrownedKing,
-    [ABILITY_SNAP_TRAP_WHEN_HIT] = SnapTrapWhenHit,
-    [ABILITY_PERMANENCE] = Permanence,
-    [ABILITY_HUBRIS] = Hubris,
-    [ABILITY_COSMIC_DAZE] = CosmicDaze,
-    [ABILITY_MINDS_EYE] = MindsEye,
-    [ABILITY_BLOOD_PRICE] = BloodPrice,
-    [ABILITY_SPIKE_ARMOR] = SpikeArmor,
-    [ABILITY_VOODOO_POWER] = VoodooPower,
-    [ABILITY_CHROME_COAT] = ChromeCoat,
-    [ABILITY_BANSHEE] = Banshee,
-    [ABILITY_WEB_SPINNER] = WebSpinner,
-    [ABILITY_SHOWDOWN_MODE] = ShowdownMode,
-    [ABILITY_SEED_SOWER] = SeedSower,
-    [ABILITY_AIRBORNE] = Airborne,
-    [ABILITY_PARROTING] = Parroting,
-    [ABILITY_SALT_CIRCLE] = SaltCircle,
-    [ABILITY_PURIFYING_SALT] = PurifyingSalt,
-    [ABILITY_PROTOSYNTHESIS] = Protosynthesis,
-    [ABILITY_QUARK_DRIVE] = QuarkDrive,
-    [ABILITY_WIND_POWER] = WindPower,
-    [ABILITY_IMPULSE] = Impulse,
-    [ABILITY_TERMINAL_VELOCITY] = TerminalVelocity,
-    [ABILITY_GUARD_DOG] = GuardDog,
-    [ABILITY_ANGER_SHELL] = AngerShell,
-    [ABILITY_EGOIST] = Egoist,
-    [ABILITY_SUBDUE] = Subdue,
-    [ABILITY_READIED_ACTION] = ReadiedAction,
-    [ABILITY_DARK_GALE_WINGS] = DarkGaleWings,
-    [ABILITY_GUILT_TRIP] = GuiltTrip,
-    [ABILITY_WATER_GALE_WINGS] = WaterGaleWings,
-    [ABILITY_ZERO_TO_HERO] = ZeroToHero,
-    [ABILITY_COSTAR] = Costar,
-    [ABILITY_COMMANDER] = Commander,
-    [ABILITY_EJECT_PACK_ABILITY] = EjectPackAbility,
-    [ABILITY_VENGEFUL_SPIRIT] = VengefulSpirit,
-    [ABILITY_CUD_CHEW] = CudChew,
-    [ABILITY_ARMOR_TAIL] = ArmorTail,
-    [ABILITY_MIND_CRUSH] = MindCrush,
-    [ABILITY_SUPREME_OVERLORD] = SupremeOverlord,
-    [ABILITY_ILL_WILL] = IllWill,
-    [ABILITY_FIRE_SCALES] = FireScales,
-    [ABILITY_WATCH_YOUR_STEP] = WatchYourStep,
-    [ABILITY_RAPID_RESPONSE] = RapidResponse,
-    [ABILITY_DOUBLE_IRON_BARBS] = DoubleIronBarbs,
-    [ABILITY_THERMAL_EXCHANGE] = ThermalExchange,
-    [ABILITY_GOOD_AS_GOLD] = GoodAsGold,
-    [ABILITY_SHARING_IS_CARING] = SharingIsCaring,
-    [ABILITY_TABLETS_OF_RUIN] = TabletsOfRuin,
-    [ABILITY_SWORD_OF_RUIN] = SwordOfRuin,
-    [ABILITY_VESSEL_OF_RUIN] = VesselOfRuin,
-    [ABILITY_BEADS_OF_RUIN] = BeadsOfRuin,
-    [ABILITY_PERMAFROST_CLONE] = PermafrostClone,
-    [ABILITY_GALLANTRY] = Gallantry,
-    [ABILITY_ORICHALCUM_PULSE] = OrichalcumPulse,
-    [ABILITY_SUN_BASKING] = SunBasking,
-    [ABILITY_WINGED_KING] = WingedKing,
-    [ABILITY_HADRON_ENGINE] = HadronEngine,
-    [ABILITY_IRON_SERPENT] = IronSerpent,
-    [ABILITY_WEATHER_DOUBLE_BOOST] = WeatherDoubleBoost,
-    [ABILITY_SWEEPING_EDGE_PLUS] = SweepingEdgePlus,
-    [ABILITY_CELESTIAL_BLESSING] = CelestialBlessing,
-    [ABILITY_MINION_CONTROL] = MinionControl,
-    [ABILITY_MOLTEN_BLADES] = MoltenBlades,
-    [ABILITY_HAUNTING_FRENZY] = HauntingFrenzy,
-    [ABILITY_NOISE_CANCEL] = NoiseCancel,
-    [ABILITY_RADIO_JAM] = RadioJam,
-    [ABILITY_OLE] = Ole,
-    [ABILITY_MALICIOUS] = Malicious,
-    [ABILITY_DEAD_POWER] = DeadPower,
-    [ABILITY_BRAWLING_WYVERN] = BrawlingWyvern,
-    [ABILITY_MYTHICAL_ARROWS] = MythicalArrows,
-    [ABILITY_LAWNMOWER] = Lawnmower,
-    [ABILITY_FLOURISH] = Flourish,
-    [ABILITY_DESERT_SPIRIT] = DesertSpirit,
-    [ABILITY_CONTEMPT] = Contempt,
-    [ABILITY_AERIALIST] = Aerialist,
-    [ABILITY_TERA_SHELL] = TeraShell,
-    [ABILITY_TOXIC_CHAIN] = ToxicChain,
-    [ABILITY_PARASITIC_SPORES] = ParasiticSpores,
-    [ABILITY_POISON_PUPPETEER] = PoisonPuppeteer,
-    [ABILITY_ENTRANCE] = Entrance,
-    [ABILITY_REJECTION] = Rejection,
-    [ABILITY_APPLE_ENLIGHTENMENT] = AppleEnlightenment,
-    [ABILITY_BALLOON_BOMBER] = BalloonBomber,
-    [ABILITY_FLAMING_MAW] = FlamingMaw,
-    [ABILITY_DEMOLITIONIST] = Demolitionist,
-    [ABILITY_ROCKHARD_WILL] = RockhardWill,
-    [ABILITY_FRAGRANT_DAZE] = FragrantDaze,
-    [ABILITY_LOW_VISIBILITY] = LowVisibility,
-    [ABILITY_OLD_MARINER] = OldMariner,
-    [ABILITY_ECTOPLASM] = Ectoplasm,
-    [ABILITY_BEAUTIFUL_MUSIC] = BeautifulMusic,
-    [ABILITY_SURPRISE] = Surprise,
-    [ABILITY_SNOW_SONG] = SnowSong,
-    [ABILITY_GREATER_SPIRIT] = GreaterSpirit,
-    [ABILITY_RESONANCE] = Resonance,
-    [ABILITY_ETHEREAL_RUSH] = EtherealRush,
-    [ABILITY_CUTE_ANTECEDENCE] = CuteAntecedence,
-    [ABILITY_RECURRING_NIGHTMARE] = RecurringNightmare,
-    [ABILITY_MENACING_SITUATION] = MenacingSituation,
-    [ABILITY_SHINY_LIGHTNING] = ShinyLightning,
-    [ABILITY_TERRIFY] = Terrify,
-    [ABILITY_ICE_DOWNFALL] = IceDownfall,
-    [ABILITY_LAST_STAND] = LastStand,
-    [ABILITY_PYROCLASTIC_FLOW] = PyroclasticFlow,
-    [ABILITY_BLOOD_BATH] = BloodBath,
-    [ABILITY_BATTLE_AURA] = BattleAura,
-    [ABILITY_BLOODLUST] = Bloodlust,
-    [ABILITY_PIERCING_SOLO] = PiercingSolo,
-    [ABILITY_RHYTHMIC] = Rhythmic,
-    [ABILITY_CHUNKY_BASS_LINE] = ChunkyBassLine,
-    [ABILITY_DUAL_HAMMER] = DualHammer,
-    [ABILITY_DENTING_BLOWS] = DentingBlows,
-    [ABILITY_ICE_COLD_HUNTER] = IceColdHunter,
-    [ABILITY_SOUL_CRUSHER] = SoulCrusher,
-    [ABILITY_ARC_FLASH] = ArcFlash,
-    [ABILITY_UNICORN] = Unicorn,
-    [ABILITY_ON_THE_PROWL] = OnTheProwl,
-    [ABILITY_PRETENTIOUS] = Pretentious,
-    [ABILITY_VENOBLAZE_PINCERS] = VenoblazePincers,
-    [ABILITY_ETERNAL_BLESSING] = EternalBlessing,
-    [ABILITY_SUGAR_RUSH] = SugarRush,
-    [ABILITY_PEACEFUL_REST] = PeacefulRest,
-    [ABILITY_WHITE_NOISE] = WhiteNoise,
-    [ABILITY_SMOKEY_MANEUVERS] = SmokeyManeuvers,
-    [ABILITY_TAG] = Tag,
-    [ABILITY_POWER_METAL] = PowerMetal,
-    [ABILITY_POWER_EDGE] = PowerEdge,
-    [ABILITY_SUPERCONDUCTOR] = Superconductor,
-    [ABILITY_ULTRA_INSTINCT] = UltraInstinct,
-    [ABILITY_UNLOCKED_POTENTIAL] = UnlockedPotential,
-    [ABILITY_HIGHER_RANK] = HigherRank,
-    [ABILITY_FUNERAL_PYRE] = FuneralPyre,
-    [ABILITY_FLAME_BUBBLE] = FlameBubble,
-    [ABILITY_ELEMENTAL_VORTEX] = ElementalVortex,
-    [ABILITY_SNOWY_WRATH] = SnowyWrath,
-    [ABILITY_PATTERN_CHANGE] = PatternChange,
-    [ABILITY_NO_TURNING_BACK] = NoTurningBack,
-    [ABILITY_FLAMMABLE_COAT] = FlammableCoat,
-    [ABILITY_DRACO_MORALE] = DracoMorale,
-    [ABILITY_BAD_OMEN] = BadOmen,
-    [ABILITY_MOSH_PIT] = MoshPit,
-    [ABILITY_BLOOD_STAIN] = BloodStain,
-    [ABILITY_BLOOD_STIGMA] = BloodStigma,
-    [ABILITY_MAXIMUM_ACCELERATION] = MaximumAcceleration,
-    [ABILITY_SIDEWINDER] = Sidewinder,
-    [ABILITY_PETRIFY] = Petrify,
-    [ABILITY_FLUFFIEST] = Fluffiest,
-    [ABILITY_WAY_OF_PRECISION] = WayOfPrecision,
-    [ABILITY_WAY_OF_SWIFTNESS] = WayOfSwiftness,
-    [ABILITY_ATOMIC_PUNCH] = AtomicPunch,
-    [ABILITY_IRON_GIANT] = IronGiant,
-    [ABILITY_MASTER_HAND] = MasterHand,
-    [ABILITY_FINAL_BLOW] = FinalBlow,
-    [ABILITY_HOSPITALITY] = Hospitality,
-    [ABILITY_BUTTER_UP] = ButterUp,
-    [ABILITY_VITALITY_STRIKE] = VitalityStrike,
-    [ABILITY_HUGE_WINGS] = HugeWings,
-    [ABILITY_SWORD_OF_DAMNATION] = SwordOfDamnation,
-    [ABILITY_RESTRAINING_ORDER] = RestrainingOrder,
-    [ABILITY_ASSASSINS_TOOLS] = AssassinsTools,
-    [ABILITY_FROSTMAW] = Frostmaw,
-    [ABILITY_PATCHWORK] = Patchwork,
-    [ABILITY_BLIND_RAGE] = BlindRage,
-    [ABILITY_SLIPSTREAM] = Slipstream,
-    [ABILITY_APEX_PREDATOR] = ApexPredator,
-    [ABILITY_DRAGONS_RITUAL] = DragonsRitual,
-    [ABILITY_PINNACLE_BLADE] = PinnacleBlade,
-    [ABILITY_ENERGIZED] = Energized,
-    [ABILITY_COLOR_SPECTRUM] = ColorSpectrum,
-    [ABILITY_STEEL_BEETLE] = SteelBeetle,
-    [ABILITY_FROM_THE_SHADOWS] = FromTheShadows,
-    [ABILITY_RAGE_POINT] = RagePoint,
-    [ABILITY_HOT_COALS] = HotCoals,
-    [ABILITY_TERASTAL_TREASURE] = TerastalTreasure,
-    [ABILITY_SHOCKING_MAW] = ShockingMaw,
-    [ABILITY_GLEAM_EYES] = GleamEyes,
-    [ABILITY_ROUSED_FANGS] = RousedFangs,
-    [ABILITY_DREAM_STATE] = DreamState,
-    [ABILITY_DREAM_WHIMSY] = DreamWhimsy,
-    [ABILITY_LUNAR_AFFINITY] = LunarAffinity,
-    [ABILITY_FLAME_SHIELD] = FlameShield,
-    [ABILITY_AQUATIC_DWELLER] = AquaticDweller,
-    [ABILITY_APPLE_PIE] = ApplePie,
-    [ABILITY_HOVER] = Hover,
-    [ABILITY_DEPRAVITY] = Depravity,
-    [ABILITY_WILDFIRE] = Wildfire,
-    [ABILITY_JUMP_SCARE] = JumpScare,
-    [ABILITY_TAR_TOSS] = TarToss,
-    [ABILITY_STUN_SHOCK] = StunShock,
-    [ABILITY_RAGING_GODDESS] = RagingGoddess,
-    [ABILITY_WHIPLASH] = Whiplash,
-    [ABILITY_SUPERSWEET_SYRUP] = SupersweetSyrup,
-    [ABILITY_LUCKY_HALO] = LuckyHalo,
-    [ABILITY_TRASH_HEAP] = TrashHeap,
-    [ABILITY_SLUDGY_MIX] = SludgyMix,
-    [ABILITY_OVERWATCH] = Overwatch,
-    [ABILITY_WIND_RAGE] = WindRage,
-    [ABILITY_VICTORY_BOMB] = VictoryBomb,
-    [ABILITY_RAZOR_SHARP] = RazorSharp,
-    [ABILITY_TO_THE_BONE] = ToTheBone,
-    [ABILITY_BLADE_DANCE] = BladeDance,
-    [ABILITY_TAEKKYEON] = Taekkyeon,
-    [ABILITY_APE_SHIFT] = ApeShift,
-    [ABILITY_KNOW_YOUR_PLACE] = KnowYourPlace,
-    [ABILITY_DEEP_CUTS] = DeepCuts,
-    [ABILITY_LIFE_STEAL] = LifeSteal,
-    [ABILITY_RUDE_AWAKENING] = RudeAwakening,
-    [ABILITY_TERAFORM_ZERO] = TeraformZero,
-    [ABILITY_SET_ABLAZE] = SetAblaze,
-    [ABILITY_BREAKWATER] = Breakwater,
-    [ABILITY_MAGICAL_FISTS] = MagicalFists,
-    [ABILITY_CUTTHROAT] = Cutthroat,
-    [ABILITY_SAND_BENDER] = SandBender,
-    [ABILITY_SAND_PIT] = SandPit,
-    [ABILITY_DESOLATE_SUN] = DesolateSun,
-    [ABILITY_DAYBREAK] = Daybreak,
-    [ABILITY_ENERGY_SIPHON] = EnergySiphon,
-    [ABILITY_RESERVOIR] = Reservoir,
-    [ABILITY_NEUROTOXIN] = Neurotoxin,
-    [ABILITY_ENERGIZED_HORNS] = EnergizedHorns,
-    [ABILITY_SPIDER_LAIR_UPGRADE] = SpiderLairUpgrade,
-    [ABILITY_CRUST_COAT] = CrustCoat,
-    [ABILITY_PUFFY] = Puffy,
-    [ABILITY_BALLOON_BLITZ] = BalloonBlitz,
-    [ABILITY_STRIKER_PIXILATE] = StrikerPixilate,
+// 2.6
+constexpr Ability DoomBlast = {
+    .onRecoil = +[](ON_RECOIL) -> int {
+        CHECK(moveType == TYPE_DARK);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
+        return max(damage / 20, 1);
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_DARK) MUL(1.35);
+        },
 };
+
+constexpr Ability Bruteforce = {
+    .onOffensiveMultiplier = Reckless.onOffensiveMultiplier,
+    .onStatusImmune = RockHead.onStatusImmune,
+    .noRecoil = TRUE,
+    .removesStatusOnImmunity = TRUE,
+};
+
+constexpr Ability FaradayCage = {
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_THUNDER_CAGE, 50);
+        return FALSE;
+    },
+    .onDefensiveMultiplier = ShellArmor.onDefensiveMultiplier,
+    .onCrit = ShellArmor.onCrit,
+    .onCritFor = ShellArmor.onCritFor,
+    .breakable = TRUE,
+};
+
+constexpr Ability AcidicSlime = {
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
+    .onTypeEffectiveness = Corrosion.onTypeEffectiveness,
+    .onCanStatusType = Corrosion.onCanStatusType,
+};
+
+constexpr Ability RoseGarden = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        u8 targetSide = GetOppositeSide(battler);
+        CHECK(gSideTimers[targetSide].toxicSpikesAmount < 2)
+
+        gSideTimers[targetSide].toxicSpikesAmount = 2;
+        gSideStatuses[targetSide] |= SIDE_STATUS_TOXIC_SPIKES;
+        gBattlerTarget = targetSide;
+        BattleScriptPushCursorAndCallback(BattleScript_RoseGarden);
+        return TRUE;
+    },
+};
+
+constexpr Ability Qigong = {
+    .onBattlerFaints = Rampage.onBattlerFaints,
+    .onOffensiveMultiplier = FightingSpirit.onOffensiveMultiplier,
+    .onMoveType = FightingSpirit.onMoveType,
+    .onAccuracy = +[](ON_ACCURACY) { return ACCURACY_ALWAYS_HITS; },
+    .onBattlerFaintsFor = Rampage.onBattlerFaintsFor,
+};
+
+constexpr Ability ConjurerOfDeceit = {
+    .breakable = TRUE,
+    .magicGuard = TRUE,
+    .magicBounce = TRUE,
+};
+
+constexpr Ability DeepFreeze = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_WATER || moveType == TYPE_ICE) MUL(1.25);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIRE) RESISTANCE(.5);
+        },
+    .breakable = TRUE,
+};
+
+constexpr Ability SoulDevourer = {
+    .onBattlerFaints = SoulEater.onBattlerFaints,
+    .onTypeEffectiveness = PhantomPain.onTypeEffectiveness,
+    .onBattlerFaintsFor = SoulEater.onBattlerFaintsFor,
+};
+
+constexpr Ability ChampionsEntrance = {
+    .onEntry = +[](ON_ENTRY) -> int { return Intimidate.onEntry(DELEGATE_ENTRY) | ViolentRush.onEntry(DELEGATE_ENTRY); },
+};
+
+constexpr Ability Presto = {
+    .onPriority = +[](ON_PRIORITY) -> int {
+        CHECK(BATTLER_MAX_HP(battler))
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        return 1;
+    },
+};
+
+constexpr Ability Samba = {
+    .onOffensiveMultiplier = Striker.onOffensiveMultiplier,
+    .onCopyMove = Dancer.onCopyMove,
+};
+
+constexpr Ability Gladiator = {
+    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_FIGHTING),
+};
+
+constexpr Ability ForsakenHeart = {
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
+
+        BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
+        return TRUE;
+    },
+    .onBattlerFaintsFor = APPLY_ON_ANY,
+};
+
+constexpr Ability Relentless = {
+    .onOffensiveMultiplier = ExploitWeakness.onOffensiveMultiplier,
+    .onChooseDefensiveStat = ExploitWeakness.onChooseDefensiveStat,
+    .onCrit = Merciless.onCrit,
+};
+
+constexpr Ability Soothsayer = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(!GetSingleUseAbilityCounter(battler, ability))
+        SetSingleUseAbilityCounter(battler, ability, TRUE);
+        SetAbilityState(battler, ability, 3);
+        return SwitchInAnnounce(B_MSG_SWITCHIN_SOOTHSAYER);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        int counter = GetAbilityState(battler, ability);
+        if (counter) SetAbilityState(battler, ability, counter - 1);
+        return FALSE;
+    },
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (!GetAbilityState(battler, ability)) return;
+            if (*mod >= UQ_4_12(1.0)) *mod = UQ_4_12(0.5);
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
+    .persistent = TRUE,
+};
+
+constexpr Ability CorruptedMind = {
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (*mod < UQ_4_12(2.0) && moveType == TYPE_PSYCHIC) *mod = UQ_4_12(2.0);
+        },
+    .randomizerBanned = TRUE,
+};
+
+constexpr Ability FlameCoat = {
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_FIRE_COAT); },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(IsAbilityOnField(ability) - 1 == battler)
+
+        int any = FALSE;
+        for (int target = 0; target < gBattlersCount; target++) {
+            FILTER(IsBattlerAlive(target))
+            FILTER_NOT(IS_BATTLER_OF_TYPE(target, TYPE_FIRE))
+            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(BATTLER_HAS_ABILITY(target, ABILITY_FLARE_BOOST))
+
+            gStackBattler1 = target;
+            BattleScriptExecute(BattleScript_FireCoatDamage);
+            any = TRUE;
+        }
+        return any;
+    },
+};
+
+constexpr Ability UnownPower = {
+    .onStab = +[](ON_STAB) -> int { return TRUE; },
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (*mod < UQ_4_12(2.0) && (move == MOVE_HIDDEN_POWER || move == MOVE_SECRET_POWER)) *mod = UQ_4_12(2.0);
+        },
+    .randomizerBanned = TRUE,
+};
+
+constexpr Ability SuperScope = {
+    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+    .onAccuracy = Artillery.onAccuracy,
+    .megaLauncherBoost = TRUE,
+};
+
+constexpr Ability VenomCrown = {
+    ON_EITHER_ABILITY(PoisonPoint),
+    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
+    .randomizerBanned = TRUE,
+};
+
+constexpr Ability BlightScale = {
+    ON_EITHER_ABILITY(PoisonPoint),
+    .onDefensiveMultiplier = Multiscale.onDefensiveMultiplier,
+    .breakable = TRUE,
+    .randomizerBanned = TRUE,
+};
+
+constexpr Ability Gunman = {
+    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+    .megaLauncherBoost = TRUE,
+};
+
+constexpr Ability Caretaker = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(Random() % 100 < 30)
+
+        if (IsBattlerAlive(BATTLE_PARTNER(battler)) && gBattleMons[BATTLE_PARTNER(battler)].status1 & STATUS1_ANY) {
+            gEffectBattler = battler;
+            gBattleScripting.battler = BATTLE_PARTNER(battler);
+            BattleScriptPushCursorAndCallback(BattleScript_HealerActivates);
+            return TRUE;
+        } else if (IsBattlerAlive(battler) && gBattleMons[battler].status1 & STATUS1_ANY) {
+            if (AbilityHealMonStatus(battler, ability)) return TRUE;
+        }
+        return FALSE;
+    },
+};
+
+constexpr Ability PoseidonsDominion = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_WHIRLPOOL, 0); },
+};
+
+constexpr Ability DualShadow = {
+    .onEndTurn = HungerSwitch.onEndTurn,
+    .onRecoil = +[](ON_RECOIL) -> int {
+        CHECK(moveType == TYPE_ELECTRIC || moveType == TYPE_DARK);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
+        return max(damage / 10, 1);
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ELECTRIC || moveType == TYPE_DARK) MUL(1.35);
+        },
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
+};
+
+constexpr Ability Lullaby = {
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(move == MOVE_SING);
+        *accuracy *= 1.5;
+        return ACCURACY_MULTIPLICATIVE;
+    },
+};
+
+constexpr Ability CryoArchitect = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        int abilityState = GetAbilityState(battler, ability);
+        CHECK(abilityState)
+
+        int activate = abilityState & 1;
+        SetAbilityState(battler, ability, abilityState >> 1);
+
+        CHECK(activate)
+        CHECK(CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_LESS_THAN))
+
+        SetStatChanger(STAT_DEF, 1);
+        gBattleScripting.battler = battler;
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+        return TRUE;
+    },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(moveType == TYPE_WATER || moveType == TYPE_ICE)
+
+        int any = FALSE;
+
+        if (CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_LESS_THAN)) {
+            if (moveType == TYPE_WATER) {
+                int abilityState = GetAbilityState(battler, ability);
+                abilityState |= 1 << 1;
+                SetAbilityState(battler, ability, abilityState);
+            } else {
+                SetStatChanger(STAT_DEF, 1);
+                BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+                any = TRUE;
+            }
+        }
+
+        if (CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)) {
+            SetStatChanger(STAT_ATK, 1);
+            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+            any = TRUE;
+        }
+        return any;
+    },
+};
+
+constexpr Ability GlacialRage = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(moveType == TYPE_ICE)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_BLIZZARD, 50);
+    },
+};
+
+constexpr Ability ImmovableObject = {
+    .magicGuard = TRUE,
+};
+
+constexpr Ability FrenziedPhantom = {
+    .onParentalBond = ParentalBond.onParentalBond,
+    .onTrap = ShadowTag.onTrap,
+    .shadowTag = TRUE,
+};
+
+constexpr Ability DNAScramble = {
+    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+        int newSpecies = SPECIES_NONE;
+        switch (gBattleMons[battler].species) {
+            default:
+                return FALSE;
+            case SPECIES_DEOXYS:
+                if (gBattleMoves[move].power > 0)
+                    newSpecies = SPECIES_DEOXYS_ATTACK;
+                else if (move == MOVE_RECOVER)
+                    newSpecies = SPECIES_DEOXYS_DEFENSE;
+                else if (gBattleMoves[move].split == SPLIT_STATUS)
+                    newSpecies = SPECIES_DEOXYS_SPEED;
+                break;
+            case SPECIES_DEOXYS_ATTACK:
+                if (move == MOVE_RECOVER)
+                    newSpecies = SPECIES_DEOXYS_DEFENSE;
+                else if (gBattleMoves[move].split == SPLIT_STATUS)
+                    newSpecies = SPECIES_DEOXYS_SPEED;
+                break;
+            case SPECIES_DEOXYS_DEFENSE:
+                if (gBattleMoves[move].power > 0)
+                    newSpecies = SPECIES_DEOXYS_ATTACK;
+                else if (move != MOVE_RECOVER && gBattleMoves[move].split == SPLIT_STATUS)
+                    newSpecies = SPECIES_DEOXYS_SPEED;
+                break;
+            case SPECIES_DEOXYS_SPEED:
+                if (gBattleMoves[move].power > 0)
+                    newSpecies = SPECIES_DEOXYS_ATTACK;
+                else if (move == MOVE_RECOVER)
+                    newSpecies = SPECIES_DEOXYS_DEFENSE;
+                break;
+        }
+        CHECK(newSpecies)
+
+        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+        gBattleMons[battler].species = newSpecies;
+        BattleScriptCall(BattleScript_AttackerFormChange);
+        return TRUE;
+    },
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
+};
+
+typedef struct AbilityKVPair {
+    u16 key;
+    Ability ability;
+} AbilityKVPair;
+
+constexpr AbilityKVPair sAbilities[] = {
+    {ABILITY_NONE, None},
+    {ABILITY_STENCH, Stench},
+    {ABILITY_DRIZZLE, Drizzle},
+    {ABILITY_SPEED_BOOST, SpeedBoost},
+    {ABILITY_BATTLE_ARMOR, BattleArmor},
+    {ABILITY_STURDY, Sturdy},
+    {ABILITY_DAMP, Damp},
+    {ABILITY_LIMBER, Limber},
+    {ABILITY_SAND_VEIL, SandVeil},
+    {ABILITY_STATIC, Static},
+    {ABILITY_VOLT_ABSORB, VoltAbsorb},
+    {ABILITY_WATER_ABSORB, WaterAbsorb},
+    {ABILITY_OBLIVIOUS, Oblivious},
+    {ABILITY_CLOUD_NINE, CloudNine},
+    {ABILITY_COMPOUND_EYES, CompoundEyes},
+    {ABILITY_INSOMNIA, Insomnia},
+    {ABILITY_COLOR_CHANGE, ColorChange},
+    {ABILITY_IMMUNITY, Immunity},
+    {ABILITY_FLASH_FIRE, FlashFire},
+    {ABILITY_SHIELD_DUST, ShieldDust},
+    {ABILITY_OWN_TEMPO, OwnTempo},
+    {ABILITY_SUCTION_CUPS, SuctionCups},
+    {ABILITY_INTIMIDATE, Intimidate},
+    {ABILITY_SHADOW_TAG, ShadowTag},
+    {ABILITY_ROUGH_SKIN, RoughSkin},
+    {ABILITY_WONDER_GUARD, WonderGuard},
+    {ABILITY_LEVITATE, Levitate},
+    {ABILITY_EFFECT_SPORE, EffectSpore},
+    {ABILITY_CLEAR_BODY, ClearBody},
+    {ABILITY_NATURAL_CURE, NaturalCure},
+    {ABILITY_LIGHTNING_ROD, LightningRod},
+    {ABILITY_SERENE_GRACE, SereneGrace},
+    {ABILITY_SWIFT_SWIM, SwiftSwim},
+    {ABILITY_CHLOROPHYLL, Chlorophyll},
+    {ABILITY_ILLUMINATE, Illuminate},
+    {ABILITY_TRACE, Trace},
+    {ABILITY_HUGE_POWER, HugePower},
+    {ABILITY_POISON_POINT, PoisonPoint},
+    {ABILITY_INNER_FOCUS, InnerFocus},
+    {ABILITY_MAGMA_ARMOR, MagmaArmor},
+    {ABILITY_WATER_VEIL, WaterVeil},
+    {ABILITY_MAGNET_PULL, MagnetPull},
+    {ABILITY_SOUNDPROOF, Soundproof},
+    {ABILITY_RAIN_DISH, RainDish},
+    {ABILITY_SAND_STREAM, SandStream},
+    {ABILITY_PRESSURE, Pressure},
+    {ABILITY_THICK_FAT, ThickFat},
+    {ABILITY_FLAME_BODY, FlameBody},
+    {ABILITY_KEEN_EYE, KeenEye},
+    {ABILITY_HYPER_CUTTER, HyperCutter},
+    {ABILITY_PICKUP, Pickup},
+    {ABILITY_TRUANT, Truant},
+    {ABILITY_HUSTLE, Hustle},
+    {ABILITY_CUTE_CHARM, CuteCharm},
+    {ABILITY_PLUS, Plus},
+    {ABILITY_MINUS, Minus},
+    {ABILITY_FORECAST, Forecast},
+    {ABILITY_STICKY_HOLD, StickyHold},
+    {ABILITY_SHED_SKIN, ShedSkin},
+    {ABILITY_GUTS, Guts},
+    {ABILITY_MARVEL_SCALE, MarvelScale},
+    {ABILITY_OVERGROW, Overgrow},
+    {ABILITY_BLAZE, Blaze},
+    {ABILITY_TORRENT, Torrent},
+    {ABILITY_SWARM, Swarm},
+    {ABILITY_ROCK_HEAD, RockHead},
+    {ABILITY_DROUGHT, Drought},
+    {ABILITY_ARENA_TRAP, ArenaTrap},
+    {ABILITY_VITAL_SPIRIT, VitalSpirit},
+    {ABILITY_WHITE_SMOKE, WhiteSmoke},
+    {ABILITY_PURE_POWER, PurePower},
+    {ABILITY_SHELL_ARMOR, ShellArmor},
+    {ABILITY_AIR_LOCK, AirLock},
+    {ABILITY_TANGLED_FEET, TangledFeet},
+    {ABILITY_MOTOR_DRIVE, MotorDrive},
+    {ABILITY_RIVALRY, Rivalry},
+    {ABILITY_SNOW_CLOAK, SnowCloak},
+    {ABILITY_ANGER_POINT, AngerPoint},
+    {ABILITY_UNBURDEN, Unburden},
+    {ABILITY_HEATPROOF, Heatproof},
+    {ABILITY_DRY_SKIN, DrySkin},
+    {ABILITY_DOWNLOAD, Download},
+    {ABILITY_IRON_FIST, IronFist},
+    {ABILITY_ADAPTABILITY, Adaptability},
+    {ABILITY_SKILL_LINK, SkillLink},
+    {ABILITY_HYDRATION, Hydration},
+    {ABILITY_SOLAR_POWER, SolarPower},
+    {ABILITY_QUICK_FEET, QuickFeet},
+    {ABILITY_NORMALIZE, Normalize},
+    {ABILITY_SNIPER, Sniper},
+    {ABILITY_MAGIC_GUARD, MagicGuard},
+    {ABILITY_NO_GUARD, NoGuard},
+    {ABILITY_STALL, Stall},
+    {ABILITY_TECHNICIAN, Technician},
+    {ABILITY_LEAF_GUARD, LeafGuard},
+    {ABILITY_MOLD_BREAKER, MoldBreaker},
+    {ABILITY_SUPER_LUCK, SuperLuck},
+    {ABILITY_AFTERMATH, Aftermath},
+    {ABILITY_ANTICIPATION, Anticipation},
+    {ABILITY_FOREWARN, Forewarn},
+    {ABILITY_UNAWARE, Unaware},
+    {ABILITY_TINTED_LENS, TintedLens},
+    {ABILITY_FILTER, Filter},
+    {ABILITY_SLOW_START, SlowStart},
+    {ABILITY_SCRAPPY, Scrappy},
+    {ABILITY_STORM_DRAIN, StormDrain},
+    {ABILITY_ICE_BODY, IceBody},
+    {ABILITY_SOLID_ROCK, SolidRock},
+    {ABILITY_SNOW_WARNING, SnowWarning},
+    {ABILITY_HONEY_GATHER, HoneyGather},
+    {ABILITY_FRISK, Frisk},
+    {ABILITY_RECKLESS, Reckless},
+    {ABILITY_MULTITYPE, Multitype},
+    {ABILITY_FLOWER_GIFT, FlowerGift},
+    {ABILITY_BAD_DREAMS, BadDreams},
+    {ABILITY_SHEER_FORCE, SheerForce},
+    {ABILITY_CONTRARY, Contrary},
+    {ABILITY_UNNERVE, Unnerve},
+    {ABILITY_DEFEATIST, Defeatist},
+    {ABILITY_CURSED_BODY, CursedBody},
+    {ABILITY_HEALER, Healer},
+    {ABILITY_FRIEND_GUARD, FriendGuard},
+    {ABILITY_WEAK_ARMOR, WeakArmor},
+    {ABILITY_LIGHT_METAL, LightMetal},
+    {ABILITY_MULTISCALE, Multiscale},
+    {ABILITY_TOXIC_BOOST, ToxicBoost},
+    {ABILITY_FLARE_BOOST, FlareBoost},
+    {ABILITY_HARVEST, Harvest},
+    {ABILITY_TELEPATHY, Telepathy},
+    {ABILITY_MOODY, Moody},
+    {ABILITY_OVERCOAT, Overcoat},
+    {ABILITY_POISON_TOUCH, PoisonTouch},
+    {ABILITY_REGENERATOR, Regenerator},
+    {ABILITY_BIG_PECKS, BigPecks},
+    {ABILITY_SAND_RUSH, SandRush},
+    {ABILITY_WONDER_SKIN, WonderSkin},
+    {ABILITY_ANALYTIC, Analytic},
+    {ABILITY_ILLUSION, Illusion},
+    {ABILITY_IMPOSTER, Imposter},
+    {ABILITY_INFILTRATOR, Infiltrator},
+    {ABILITY_MUMMY, Mummy},
+    {ABILITY_MOXIE, Moxie},
+    {ABILITY_JUSTIFIED, Justified},
+    {ABILITY_RATTLED, Rattled},
+    {ABILITY_MAGIC_BOUNCE, MagicBounce},
+    {ABILITY_SAP_SIPPER, SapSipper},
+    {ABILITY_PRANKSTER, Prankster},
+    {ABILITY_SAND_FORCE, SandForce},
+    {ABILITY_IRON_BARBS, IronBarbs},
+    {ABILITY_ZEN_MODE, ZenMode},
+    {ABILITY_VICTORY_STAR, VictoryStar},
+    {ABILITY_TURBOBLAZE, Turboblaze},
+    {ABILITY_TERAVOLT, Teravolt},
+    {ABILITY_AROMA_VEIL, AromaVeil},
+    {ABILITY_FLOWER_VEIL, FlowerVeil},
+    {ABILITY_CHEEK_POUCH, CheekPouch},
+    {ABILITY_PROTEAN, Protean},
+    {ABILITY_FUR_COAT, FurCoat},
+    {ABILITY_BULLETPROOF, Bulletproof},
+    {ABILITY_STRONG_JAW, StrongJaw},
+    {ABILITY_REFRIGERATE, Refrigerate},
+    {ABILITY_SWEET_VEIL, SweetVeil},
+    {ABILITY_STANCE_CHANGE, StanceChange},
+    {ABILITY_GALE_WINGS, GaleWings},
+    {ABILITY_MEGA_LAUNCHER, MegaLauncher},
+    {ABILITY_GRASS_PELT, GrassPelt},
+    {ABILITY_TOUGH_CLAWS, ToughClaws},
+    {ABILITY_PIXILATE, Pixilate},
+    {ABILITY_GOOEY, Gooey},
+    {ABILITY_AERILATE, Aerilate},
+    {ABILITY_PARENTAL_BOND, ParentalBond},
+    {ABILITY_DARK_AURA, DarkAura},
+    {ABILITY_FAIRY_AURA, FairyAura},
+    {ABILITY_AURA_BREAK, AuraBreak},
+    {ABILITY_PRIMORDIAL_SEA, PrimordialSea},
+    {ABILITY_DESOLATE_LAND, DesolateLand},
+    {ABILITY_DELTA_STREAM, DeltaStream},
+    {ABILITY_STAMINA, Stamina},
+    {ABILITY_WIMP_OUT, WimpOut},
+    {ABILITY_EMERGENCY_EXIT, EmergencyExit},
+    {ABILITY_WATER_COMPACTION, WaterCompaction},
+    {ABILITY_MERCILESS, Merciless},
+    {ABILITY_SHIELDS_DOWN, ShieldsDown},
+    {ABILITY_STAKEOUT, Stakeout},
+    {ABILITY_WATER_BUBBLE, WaterBubble},
+    {ABILITY_STEELWORKER, Steelworker},
+    {ABILITY_BERSERK, Berserk},
+    {ABILITY_SLUSH_RUSH, SlushRush},
+    {ABILITY_LONG_REACH, LongReach},
+    {ABILITY_LIQUID_VOICE, LiquidVoice},
+    {ABILITY_TRIAGE, Triage},
+    {ABILITY_GALVANIZE, Galvanize},
+    {ABILITY_SURGE_SURFER, SurgeSurfer},
+    {ABILITY_SCHOOLING, Schooling},
+    {ABILITY_DISGUISE, Disguise},
+    {ABILITY_BATTLE_BOND, BattleBond},
+    {ABILITY_POWER_CONSTRUCT, PowerConstruct},
+    {ABILITY_CORROSION, Corrosion},
+    {ABILITY_COMATOSE, Comatose},
+    {ABILITY_QUEENLY_MAJESTY, QueenlyMajesty},
+    {ABILITY_INNARDS_OUT, InnardsOut},
+    {ABILITY_DANCER, Dancer},
+    {ABILITY_BATTERY, Battery},
+    {ABILITY_FLUFFY, Fluffy},
+    {ABILITY_DAZZLING, Dazzling},
+    {ABILITY_SOUL_HEART, SoulHeart},
+    {ABILITY_TANGLING_HAIR, TanglingHair},
+    {ABILITY_RECEIVER, Receiver},
+    {ABILITY_POWER_OF_ALCHEMY, PowerOfAlchemy},
+    {ABILITY_BEAST_BOOST, BeastBoost},
+    {ABILITY_RKS_SYSTEM, RksSystem},
+    {ABILITY_ELECTRIC_SURGE, ElectricSurge},
+    {ABILITY_PSYCHIC_SURGE, PsychicSurge},
+    {ABILITY_MISTY_SURGE, MistySurge},
+    {ABILITY_GRASSY_SURGE, GrassySurge},
+    {ABILITY_SHADOW_SHIELD, ShadowShield},
+    {ABILITY_PRISM_ARMOR, PrismArmor},
+    {ABILITY_NEUROFORCE, Neuroforce},
+    {ABILITY_INTREPID_SWORD, IntrepidSword},
+    {ABILITY_DAUNTLESS_SHIELD, DauntlessShield},
+    {ABILITY_LIBERO, Libero},
+    {ABILITY_COTTON_DOWN, CottonDown},
+    {ABILITY_MIRROR_ARMOR, MirrorArmor},
+    {ABILITY_GULP_MISSILE, GulpMissile},
+    {ABILITY_STEAM_ENGINE, SteamEngine},
+    {ABILITY_PUNK_ROCK, PunkRock},
+    {ABILITY_SAND_SPIT, SandSpit},
+    {ABILITY_ICE_SCALES, IceScales},
+    {ABILITY_ICE_FACE, IceFace},
+    {ABILITY_POWER_SPOT, PowerSpot},
+    {ABILITY_MIMICRY, Mimicry},
+    {ABILITY_SCREEN_CLEANER, ScreenCleaner},
+    {ABILITY_STEELY_SPIRIT, SteelySpirit},
+    {ABILITY_PERISH_BODY, PerishBody},
+    {ABILITY_WANDERING_SPIRIT, WanderingSpirit},
+    {ABILITY_GORILLA_TACTICS, GorillaTactics},
+    {ABILITY_NEUTRALIZING_GAS, NeutralizingGas},
+    {ABILITY_PASTEL_VEIL, PastelVeil},
+    {ABILITY_HUNGER_SWITCH, HungerSwitch},
+    {ABILITY_CURIOUS_MEDICINE, CuriousMedicine},
+    {ABILITY_TRANSISTOR, Transistor},
+    {ABILITY_DRAGONS_MAW, DragonsMaw},
+    {ABILITY_CHILLING_NEIGH, ChillingNeigh},
+    {ABILITY_GRIM_NEIGH, GrimNeigh},
+    {ABILITY_AS_ONE_ICE_RIDER, AsOneIceRider},
+    {ABILITY_AS_ONE_SHADOW_RIDER, AsOneShadowRider},
+    {ABILITY_CHLOROPLAST, Chloroplast},
+    {ABILITY_WHITEOUT, Whiteout},
+    {ABILITY_PYROMANCY, Pyromancy},
+    {ABILITY_KEEN_EDGE, KeenEdge},
+    {ABILITY_PRISM_SCALES, PrismScales},
+    {ABILITY_POWER_FISTS, PowerFists},
+    {ABILITY_SAND_SONG, SandSong},
+    {ABILITY_RAMPAGE, Rampage},
+    {ABILITY_VENGEANCE, Vengeance},
+    {ABILITY_BLITZ_BOXER, BlitzBoxer},
+    {ABILITY_ANTARCTIC_BIRD, AntarcticBird},
+    {ABILITY_IMMOLATE, Immolate},
+    {ABILITY_CRYSTALLIZE, Crystallize},
+    {ABILITY_ELECTROCYTES, Electrocytes},
+    {ABILITY_AERODYNAMICS, Aerodynamics},
+    {ABILITY_CHRISTMAS_SPIRIT, ChristmasSpirit},
+    {ABILITY_EXPLOIT_WEAKNESS, ExploitWeakness},
+    {ABILITY_GROUND_SHOCK, GroundShock},
+    {ABILITY_ANCIENT_IDOL, AncientIdol},
+    {ABILITY_MYSTIC_POWER, MysticPower},
+    {ABILITY_PERFECTIONIST, Perfectionist},
+    {ABILITY_GROWING_TOOTH, GrowingTooth},
+    {ABILITY_INFLATABLE, Inflatable},
+    {ABILITY_AURORA_BOREALIS, AuroraBorealis},
+    {ABILITY_AVENGER, Avenger},
+    {ABILITY_LETS_ROLL, LetsRoll},
+    {ABILITY_LOUD_BANG, LoudBang},
+    {ABILITY_LEAD_COAT, LeadCoat},
+    {ABILITY_AMPHIBIOUS, Amphibious},
+    {ABILITY_GROUNDED, Grounded},
+    {ABILITY_EARTHBOUND, Earthbound},
+    {ABILITY_FIGHT_SPIRIT, FightingSpirit},
+    {ABILITY_FELINE_PROWESS, FelineProwess},
+    {ABILITY_COIL_UP, CoilUp},
+    {ABILITY_FOSSILIZED, Fossilized},
+    {ABILITY_MAGICAL_DUST, MagicalDust},
+    {ABILITY_DREAMCATCHER, Dreamcatcher},
+    {ABILITY_NOCTURNAL, Nocturnal},
+    {ABILITY_SELF_SUFFICIENT, SelfSufficient},
+    {ABILITY_TECTONIZE, Tectonize},
+    {ABILITY_ICE_AGE, IceAge},
+    {ABILITY_HALF_DRAKE, HalfDrake},
+    {ABILITY_LIQUIFIED, Liquified},
+    {ABILITY_DRAGONFLY, Dragonfly},
+    {ABILITY_DRAGONSLAYER, Dragonslayer},
+    {ABILITY_MOUNTAINEER, Mountaineer},
+    {ABILITY_HYDRATE, Hydrate},
+    {ABILITY_METALLIC, Metallic},
+    {ABILITY_PERMAFROST, Permafrost},
+    {ABILITY_PRIMAL_ARMOR, PrimalArmor},
+    {ABILITY_RAGING_BOXER, RagingBoxer},
+    {ABILITY_AIR_BLOWER, AirBlower},
+    {ABILITY_JUGGERNAUT, Juggernaut},
+    {ABILITY_SHORT_CIRCUIT, ShortCircuit},
+    {ABILITY_MAJESTIC_BIRD, MajesticBird},
+    {ABILITY_PHANTOM, Phantom},
+    {ABILITY_INTOXICATE, Intoxicate},
+    {ABILITY_IMPENETRABLE, Impenetrable},
+    {ABILITY_HYPNOTIST, Hypnotist},
+    {ABILITY_OVERWHELM, Overwhelm},
+    {ABILITY_SCARE, Scare},
+    {ABILITY_MAJESTIC_MOTH, MajesticMoth},
+    {ABILITY_SOUL_EATER, SoulEater},
+    {ABILITY_SOUL_LINKER, SoulLinker},
+    {ABILITY_SWEET_DREAMS, SweetDreams},
+    {ABILITY_BAD_LUCK, BadLuck},
+    {ABILITY_HAUNTED_SPIRIT, HauntedSpirit},
+    {ABILITY_ELECTRIC_BURST, ElectricBurst},
+    {ABILITY_RAW_WOOD, RawWood},
+    {ABILITY_SOLENOGLYPHS, Solenoglyphs},
+    {ABILITY_SPIDER_LAIR, SpiderLair},
+    {ABILITY_FATAL_PRECISION, FatalPrecision},
+    {ABILITY_FORT_KNOX, FortKnox},
+    {ABILITY_SEAWEED, Seaweed},
+    {ABILITY_PSYCHIC_MIND, PsychicMind},
+    {ABILITY_POISON_ABSORB, PoisonAbsorb},
+    {ABILITY_SCAVENGER, Scavenger},
+    {ABILITY_TWISTED_DIMENSION, TwistedDimension},
+    {ABILITY_MULTI_HEADED, MultiHeaded},
+    {ABILITY_NORTH_WIND, NorthWind},
+    {ABILITY_OVERCHARGE, Overcharge},
+    {ABILITY_VIOLENT_RUSH, ViolentRush},
+    {ABILITY_FLAMING_SOUL, FlamingSoul},
+    {ABILITY_SAGE_POWER, SagePower},
+    {ABILITY_BONE_ZONE, BoneZone},
+    {ABILITY_WEATHER_CONTROL, WeatherControl},
+    {ABILITY_SPEED_FORCE, SpeedForce},
+    {ABILITY_SEA_GUARDIAN, SeaGuardian},
+    {ABILITY_MOLTEN_DOWN, MoltenDown},
+    {ABILITY_HYPER_AGGRESSIVE, HyperAggressive},
+    {ABILITY_FLOCK, Flock},
+    {ABILITY_FIELD_EXPLORER, FieldExplorer},
+    {ABILITY_STRIKER, Striker},
+    {ABILITY_FROZEN_SOUL, FrozenSoul},
+    {ABILITY_PREDATOR, Predator},
+    {ABILITY_LOOTER, Looter},
+    {ABILITY_LUNAR_ECLIPSE, LunarEclipse},
+    {ABILITY_SOLAR_FLARE, SolarFlare},
+    {ABILITY_POWER_CORE, PowerCore},
+    {ABILITY_SIGHTING_SYSTEM, SightingSystem},
+    {ABILITY_BAD_COMPANY, BadCompany},
+    {ABILITY_OPPORTUNIST, Opportunist},
+    {ABILITY_GIANT_WINGS, GiantWings},
+    {ABILITY_MOMENTUM, Momentum},
+    {ABILITY_GRIP_PINCER, GripPincer},
+    {ABILITY_BIG_LEAVES, BigLeaves},
+    {ABILITY_PRECISE_FIST, PreciseFist},
+    {ABILITY_DEADEYE, Deadeye},
+    {ABILITY_ARTILLERY, Artillery},
+    {ABILITY_AMPLIFIER, Amplifier},
+    {ABILITY_ICE_DEW, IceDew},
+    {ABILITY_SUN_WORSHIP, SunWorship},
+    {ABILITY_POLLINATE, Pollinate},
+    {ABILITY_VOLCANO_RAGE, VolcanoRage},
+    {ABILITY_COLD_REBOUND, ColdRebound},
+    {ABILITY_LOW_BLOW, LowBlow},
+    {ABILITY_SPECTRAL_SHROUD, SpectralShroud},
+    {ABILITY_DISCIPLINE, Discipline},
+    {ABILITY_THUNDERCALL, Thundercall},
+    {ABILITY_MARINE_APEX, MarineApex},
+    {ABILITY_MIGHTY_HORN, MightyHorn},
+    {ABILITY_HARDENED_SHEATH, HardenedSheath},
+    {ABILITY_ARCTIC_FUR, ArcticFur},
+    {ABILITY_SPECTRALIZE, Spectralize},
+    {ABILITY_LETHARGY, Lethargy},
+    {ABILITY_IRON_BARRAGE, IronBarrage},
+    {ABILITY_STEEL_BARREL, SteelBarrel},
+    {ABILITY_PYRO_SHELLS, PyroShells},
+    {ABILITY_FUNGAL_INFECTION, FungalInfection},
+    {ABILITY_PARRY, Parry},
+    {ABILITY_SCRAPYARD, Scrapyard},
+    {ABILITY_LOOSE_QUILLS, LooseQuills},
+    {ABILITY_TOXIC_DEBRIS, ToxicDebris},
+    {ABILITY_ROUNDHOUSE, Roundhouse},
+    {ABILITY_MINERALIZE, Mineralize},
+    {ABILITY_LOOSE_ROCKS, LooseRocks},
+    {ABILITY_SPINNING_TOP, SpinningTop},
+    {ABILITY_RETRIBUTION_BLOW, RetributionBlow},
+    {ABILITY_FEARMONGER, Fearmonger},
+    {ABILITY_TOXIC_SPILL, ToxicSpill},
+    {ABILITY_DESERT_CLOAK, DesertCloak},
+    {ABILITY_DRACONIZE, Draconize},
+    {ABILITY_PRETTY_PRINCESS, PrettyPrincess},
+    {ABILITY_SELF_REPAIR, SelfRepair},
+    {ABILITY_ATOMIC_BURST, AtomicBurst},
+    {ABILITY_HELLBLAZE, Hellblaze},
+    {ABILITY_RIPTIDE, Riptide},
+    {ABILITY_FOREST_RAGE, ForestRage},
+    {ABILITY_PRIMAL_MAW, PrimalMaw},
+    {ABILITY_SWEEPING_EDGE, SweepingEdge},
+    {ABILITY_GIFTED_MIND, GiftedMind},
+    {ABILITY_HYDRO_CIRCUIT, HydroCircuit},
+    {ABILITY_EQUINOX, Equinox},
+    {ABILITY_ABSORBANT, Absorbant},
+    {ABILITY_CLUELESS, Clueless},
+    {ABILITY_CHEATING_DEATH, CheatingDeath},
+    {ABILITY_CHEAP_TACTICS, CheapTactics},
+    {ABILITY_COWARD, Coward},
+    {ABILITY_VOLT_RUSH, VoltRush},
+    {ABILITY_DUNE_TERROR, DuneTerror},
+    {ABILITY_INFERNAL_RAGE, InfernalRage},
+    {ABILITY_DUAL_WIELD, DualWield},
+    {ABILITY_ELEMENTAL_CHARGE, ElementalCharge},
+    {ABILITY_AMBUSH, Ambush},
+    {ABILITY_ATLAS, Atlas},
+    {ABILITY_RADIANCE, Radiance},
+    {ABILITY_JAWS_OF_CARNAGE, JawsOfCarnage},
+    {ABILITY_ANGELS_WRATH, AngelsWrath},
+    {ABILITY_PRISMATIC_FUR, PrismaticFur},
+    {ABILITY_SHOCKING_JAWS, ShockingJaws},
+    {ABILITY_FAE_HUNTER, FaeHunter},
+    {ABILITY_GRAVITY_WELL, GravityWell},
+    {ABILITY_EVAPORATE, Evaporate},
+    {ABILITY_LUMBERJACK, Lumberjack},
+    {ABILITY_WELL_BAKED_BODY, WellBakedBody},
+    {ABILITY_FURNACE, Furnace},
+    {ABILITY_ELECTROMORPHOSIS, Electromorphosis},
+    {ABILITY_ROCKY_PAYLOAD, RockyPayload},
+    {ABILITY_EARTH_EATER, EarthEater},
+    {ABILITY_LINGERING_AROMA, LingeringAroma},
+    {ABILITY_FAIRY_TALE, FairyTale},
+    {ABILITY_RAGING_MOTH, RagingMoth},
+    {ABILITY_ADRENALINE_RUSH, AdrenalineRush},
+    {ABILITY_ARCHMAGE, Archmage},
+    {ABILITY_CRYOMANCY, Cryomancy},
+    {ABILITY_PHANTOM_PAIN, PhantomPain},
+    {ABILITY_PURGATORY, Purgatory},
+    {ABILITY_EMANATE, Emanate},
+    {ABILITY_KUNOICHI_BLADE, KunoichiBlade},
+    {ABILITY_MONKEY_BUSINESS, MonkeyBusiness},
+    {ABILITY_COMBAT_SPECIALIST, CombatSpecialist},
+    {ABILITY_JUNGLES_GUARD, JunglesGuard},
+    {ABILITY_HUNTERS_HORN, HuntersHorn},
+    {ABILITY_PIXIE_POWER, PixiePower},
+    {ABILITY_PLASMA_LAMP, PlasmaLamp},
+    {ABILITY_MAGMA_EATER, MagmaEater},
+    {ABILITY_SUPER_HOT_GOO, SuperHotGoo},
+    {ABILITY_NIKA, Nika},
+    {ABILITY_ARCHER, Archer},
+    {ABILITY_SUPER_SLAMMER, SuperSlammer},
+    {ABILITY_INVERSE_ROOM, InverseRoom},
+    {ABILITY_FROST_BURN, FrostBurn},
+    {ABILITY_ITCHY_DEFENSE, ItchyDefense},
+    {ABILITY_GENERATOR, Generator},
+    {ABILITY_MOON_SPIRIT, MoonSpirit},
+    {ABILITY_DUST_CLOUD, DustCloud},
+    {ABILITY_BERSERKER_RAGE, BerserkerRage},
+    {ABILITY_TRICKSTER, Trickster},
+    {ABILITY_SAND_GUARD, SandGuard},
+    {ABILITY_NATURAL_RECOVERY, NaturalRecovery},
+    {ABILITY_WIND_RIDER, WindRider},
+    {ABILITY_SOOTHING_AROMA, SoothingAroma},
+    {ABILITY_PRIM_AND_PROPER, PrimAndProper},
+    {ABILITY_SUPER_STRAIN, SuperStrain},
+    {ABILITY_TIPPING_POINT, TippingPoint},
+    {ABILITY_ENLIGHTENED, Enlightened},
+    {ABILITY_PEACEFUL_SLUMBER, PeacefulSlumber},
+    {ABILITY_AFTERSHOCK, Aftershock},
+    {ABILITY_FREEZING_POINT, FreezingPoint},
+    {ABILITY_CRYO_PROFICIENCY, CryoProficiency},
+    {ABILITY_ARCANE_FORCE, ArcaneForce},
+    {ABILITY_DOOMBRINGER, Doombringer},
+    {ABILITY_WISHMAKER, Wishmaker},
+    {ABILITY_YUKI_ONNA, YukiOnna},
+    {ABILITY_SUPPRESS, Suppress},
+    {ABILITY_REFRIGERATOR, Refrigerator},
+    {ABILITY_HEAVEN_ASUNDER, HeavenAsunder},
+    {ABILITY_PURIFYING_WATERS, PurifyingWaters},
+    {ABILITY_SEABORNE, Seaborne},
+    {ABILITY_HIGH_TIDE, HighTide},
+    {ABILITY_CHANGE_OF_HEART, ChangeOfHeart},
+    {ABILITY_MYSTIC_BLADES, MysticBlades},
+    {ABILITY_DETERMINATION, Determination},
+    {ABILITY_FERTILIZE, Fertilize},
+    {ABILITY_PURE_LOVE, PureLove},
+    {ABILITY_FIGHTER, Fighter},
+    {ABILITY_TELEKINETIC, Telekinetic},
+    {ABILITY_COMBUSTION, Combustion},
+    {ABILITY_PONY_POWER, PonyPower},
+    {ABILITY_POWDER_BURST, PowderBurst},
+    {ABILITY_RETRIEVER, Retriever},
+    {ABILITY_MONSTER_MASH, MonsterMash},
+    {ABILITY_TWO_STEP, TwoStep},
+    {ABILITY_SPITEFUL, Spiteful},
+    {ABILITY_FORTITUDE, Fortitude},
+    {ABILITY_DEVOURER, Devourer},
+    {ABILITY_PHANTOM_THIEF, PhantomThief},
+    {ABILITY_EARLY_GRAVE, EarlyGrave},
+    {ABILITY_BASS_BOOSTED, BassBoosted},
+    {ABILITY_FLAMING_JAWS, FlamingJaws},
+    {ABILITY_CROWNED_SWORD, CrownedSword},
+    {ABILITY_CROWNED_SHIELD, CrownedShield},
+    {ABILITY_BERSERK_DNA, BerserkDna},
+    {ABILITY_CROWNED_KING, CrownedKing},
+    {ABILITY_SNAP_TRAP_WHEN_HIT, SnapTrapWhenHit},
+    {ABILITY_PERMANENCE, Permanence},
+    {ABILITY_HUBRIS, Hubris},
+    {ABILITY_COSMIC_DAZE, CosmicDaze},
+    {ABILITY_MINDS_EYE, MindsEye},
+    {ABILITY_BLOOD_PRICE, BloodPrice},
+    {ABILITY_SPIKE_ARMOR, SpikeArmor},
+    {ABILITY_VOODOO_POWER, VoodooPower},
+    {ABILITY_CHROME_COAT, ChromeCoat},
+    {ABILITY_BANSHEE, Banshee},
+    {ABILITY_WEB_SPINNER, WebSpinner},
+    {ABILITY_SHOWDOWN_MODE, ShowdownMode},
+    {ABILITY_SEED_SOWER, SeedSower},
+    {ABILITY_AIRBORNE, Airborne},
+    {ABILITY_PARROTING, Parroting},
+    {ABILITY_SALT_CIRCLE, SaltCircle},
+    {ABILITY_PURIFYING_SALT, PurifyingSalt},
+    {ABILITY_PROTOSYNTHESIS, Protosynthesis},
+    {ABILITY_QUARK_DRIVE, QuarkDrive},
+    {ABILITY_WIND_POWER, WindPower},
+    {ABILITY_IMPULSE, Impulse},
+    {ABILITY_TERMINAL_VELOCITY, TerminalVelocity},
+    {ABILITY_ANGER_SHELL, AngerShell},
+    {ABILITY_EGOIST, Egoist},
+    {ABILITY_READIED_ACTION, ReadiedAction},
+    {ABILITY_DARK_GALE_WINGS, DarkGaleWings},
+    {ABILITY_GUILT_TRIP, GuiltTrip},
+    {ABILITY_WATER_GALE_WINGS, WaterGaleWings},
+    {ABILITY_ZERO_TO_HERO, ZeroToHero},
+    {ABILITY_COSTAR, Costar},
+    {ABILITY_COMMANDER, Commander},
+    {ABILITY_EJECT_PACK_ABILITY, EjectPackAbility},
+    {ABILITY_VENGEFUL_SPIRIT, VengefulSpirit},
+    {ABILITY_CUD_CHEW, CudChew},
+    {ABILITY_ARMOR_TAIL, ArmorTail},
+    {ABILITY_MIND_CRUSH, MindCrush},
+    {ABILITY_SUPREME_OVERLORD, SupremeOverlord},
+    {ABILITY_ILL_WILL, IllWill},
+    {ABILITY_FIRE_SCALES, FireScales},
+    {ABILITY_WATCH_YOUR_STEP, WatchYourStep},
+    {ABILITY_RAPID_RESPONSE, RapidResponse},
+    {ABILITY_DOUBLE_IRON_BARBS, DoubleIronBarbs},
+    {ABILITY_THERMAL_EXCHANGE, ThermalExchange},
+    {ABILITY_GOOD_AS_GOLD, GoodAsGold},
+    {ABILITY_SHARING_IS_CARING, SharingIsCaring},
+    {ABILITY_TABLETS_OF_RUIN, TabletsOfRuin},
+    {ABILITY_SWORD_OF_RUIN, SwordOfRuin},
+    {ABILITY_VESSEL_OF_RUIN, VesselOfRuin},
+    {ABILITY_BEADS_OF_RUIN, BeadsOfRuin},
+    {ABILITY_PERMAFROST_CLONE, PermafrostClone},
+    {ABILITY_GALLANTRY, Gallantry},
+    {ABILITY_ORICHALCUM_PULSE, OrichalcumPulse},
+    {ABILITY_SUN_BASKING, SunBasking},
+    {ABILITY_WINGED_KING, WingedKing},
+    {ABILITY_HADRON_ENGINE, HadronEngine},
+    {ABILITY_IRON_SERPENT, IronSerpent},
+    {ABILITY_SWEEPING_EDGE_PLUS, SweepingEdgePlus},
+    {ABILITY_CELESTIAL_BLESSING, CelestialBlessing},
+    {ABILITY_MINION_CONTROL, MinionControl},
+    {ABILITY_MOLTEN_BLADES, MoltenBlades},
+    {ABILITY_HAUNTING_FRENZY, HauntingFrenzy},
+    {ABILITY_NOISE_CANCEL, NoiseCancel},
+    {ABILITY_RADIO_JAM, RadioJam},
+    {ABILITY_OLE, Ole},
+    {ABILITY_MALICIOUS, Malicious},
+    {ABILITY_DEAD_POWER, DeadPower},
+    {ABILITY_BRAWLING_WYVERN, BrawlingWyvern},
+    {ABILITY_MYTHICAL_ARROWS, MythicalArrows},
+    {ABILITY_LAWNMOWER, Lawnmower},
+    {ABILITY_FLOURISH, Flourish},
+    {ABILITY_DESERT_SPIRIT, DesertSpirit},
+    {ABILITY_CONTEMPT, Contempt},
+    {ABILITY_AERIALIST, Aerialist},
+    {ABILITY_TERA_SHELL, TeraShell},
+    {ABILITY_TOXIC_CHAIN, ToxicChain},
+    {ABILITY_PARASITIC_SPORES, ParasiticSpores},
+    {ABILITY_POISON_PUPPETEER, PoisonPuppeteer},
+    {ABILITY_ENTRANCE, Entrance},
+    {ABILITY_REJECTION, Rejection},
+    {ABILITY_APPLE_ENLIGHTENMENT, AppleEnlightenment},
+    {ABILITY_BALLOON_BOMBER, BalloonBomber},
+    {ABILITY_FLAMING_MAW, FlamingMaw},
+    {ABILITY_DEMOLITIONIST, Demolitionist},
+    {ABILITY_ROCKHARD_WILL, RockhardWill},
+    {ABILITY_FRAGRANT_DAZE, FragrantDaze},
+    {ABILITY_LOW_VISIBILITY, LowVisibility},
+    {ABILITY_OLD_MARINER, OldMariner},
+    {ABILITY_ECTOPLASM, Ectoplasm},
+    {ABILITY_BEAUTIFUL_MUSIC, BeautifulMusic},
+    {ABILITY_SNOW_SONG, SnowSong},
+    {ABILITY_GREATER_SPIRIT, GreaterSpirit},
+    {ABILITY_RESONANCE, Resonance},
+    {ABILITY_ETHEREAL_RUSH, EtherealRush},
+    {ABILITY_CUTE_ANTECEDENCE, CuteAntecedence},
+    {ABILITY_RECURRING_NIGHTMARE, RecurringNightmare},
+    {ABILITY_MENACING_SITUATION, MenacingSituation},
+    {ABILITY_SHINY_LIGHTNING, ShinyLightning},
+    {ABILITY_TERRIFY, Terrify},
+    {ABILITY_ICE_DOWNFALL, IceDownfall},
+    {ABILITY_LAST_STAND, LastStand},
+    {ABILITY_PYROCLASTIC_FLOW, PyroclasticFlow},
+    {ABILITY_BLOOD_BATH, BloodBath},
+    {ABILITY_BATTLE_AURA, BattleAura},
+    {ABILITY_BLOODLUST, Bloodlust},
+    {ABILITY_PIERCING_SOLO, PiercingSolo},
+    {ABILITY_RHYTHMIC, Rhythmic},
+    {ABILITY_CHUNKY_BASS_LINE, ChunkyBassLine},
+    {ABILITY_DUAL_HAMMER, DualHammer},
+    {ABILITY_DENTING_BLOWS, DentingBlows},
+    {ABILITY_ICE_COLD_HUNTER, IceColdHunter},
+    {ABILITY_SOUL_CRUSHER, SoulCrusher},
+    {ABILITY_ARC_FLASH, ArcFlash},
+    {ABILITY_UNICORN, Unicorn},
+    {ABILITY_ON_THE_PROWL, OnTheProwl},
+    {ABILITY_PRETENTIOUS, Pretentious},
+    {ABILITY_VENOBLAZE_PINCERS, VenoblazePincers},
+    {ABILITY_ETERNAL_BLESSING, EternalBlessing},
+    {ABILITY_SUGAR_RUSH, SugarRush},
+    {ABILITY_PEACEFUL_REST, PeacefulRest},
+    {ABILITY_WHITE_NOISE, WhiteNoise},
+    {ABILITY_SMOKEY_MANEUVERS, SmokeyManeuvers},
+    {ABILITY_POWER_METAL, PowerMetal},
+    {ABILITY_POWER_EDGE, PowerEdge},
+    {ABILITY_SUPERCONDUCTOR, Superconductor},
+    {ABILITY_ULTRA_INSTINCT, UltraInstinct},
+    {ABILITY_UNLOCKED_POTENTIAL, UnlockedPotential},
+    {ABILITY_HIGHER_RANK, HigherRank},
+    {ABILITY_FUNERAL_PYRE, FuneralPyre},
+    {ABILITY_FLAME_BUBBLE, FlameBubble},
+    {ABILITY_ELEMENTAL_VORTEX, ElementalVortex},
+    {ABILITY_SNOWY_WRATH, SnowyWrath},
+    {ABILITY_PATTERN_CHANGE, PatternChange},
+    {ABILITY_NO_TURNING_BACK, NoTurningBack},
+    {ABILITY_FLAMMABLE_COAT, FlammableCoat},
+    {ABILITY_DRACO_MORALE, DracoMorale},
+    {ABILITY_BAD_OMEN, BadOmen},
+    {ABILITY_MOSH_PIT, MoshPit},
+    {ABILITY_BLOOD_STAIN, BloodStain},
+    {ABILITY_BLOOD_STIGMA, BloodStigma},
+    {ABILITY_MAXIMUM_ACCELERATION, MaximumAcceleration},
+    {ABILITY_SIDEWINDER, Sidewinder},
+    {ABILITY_PETRIFY, Petrify},
+    {ABILITY_FLUFFIEST, Fluffiest},
+    {ABILITY_WAY_OF_PRECISION, WayOfPrecision},
+    {ABILITY_WAY_OF_SWIFTNESS, WayOfSwiftness},
+    {ABILITY_ATOMIC_PUNCH, AtomicPunch},
+    {ABILITY_IRON_GIANT, IronGiant},
+    {ABILITY_MASTER_HAND, MasterHand},
+    {ABILITY_FINAL_BLOW, FinalBlow},
+    {ABILITY_HOSPITALITY, Hospitality},
+    {ABILITY_BUTTER_UP, ButterUp},
+    {ABILITY_VITALITY_STRIKE, VitalityStrike},
+    {ABILITY_HUGE_WINGS, HugeWings},
+    {ABILITY_SWORD_OF_DAMNATION, SwordOfDamnation},
+    {ABILITY_RESTRAINING_ORDER, RestrainingOrder},
+    {ABILITY_ASSASSINS_TOOLS, AssassinsTools},
+    {ABILITY_FROSTMAW, Frostmaw},
+    {ABILITY_PATCHWORK, Patchwork},
+    {ABILITY_BLIND_RAGE, BlindRage},
+    {ABILITY_SLIPSTREAM, Slipstream},
+    {ABILITY_APEX_PREDATOR, ApexPredator},
+    {ABILITY_DRAGONS_RITUAL, DragonsRitual},
+    {ABILITY_PINNACLE_BLADE, PinnacleBlade},
+    {ABILITY_ENERGIZED, Energized},
+    {ABILITY_COLOR_SPECTRUM, ColorSpectrum},
+    {ABILITY_STEEL_BEETLE, SteelBeetle},
+    {ABILITY_FROM_THE_SHADOWS, FromTheShadows},
+    {ABILITY_RAGE_POINT, RagePoint},
+    {ABILITY_HOT_COALS, HotCoals},
+    {ABILITY_TERASTAL_TREASURE, TerastalTreasure},
+    {ABILITY_SHOCKING_MAW, ShockingMaw},
+    {ABILITY_GLEAM_EYES, GleamEyes},
+    {ABILITY_ROUSED_FANGS, RousedFangs},
+    {ABILITY_DREAM_STATE, DreamState},
+    {ABILITY_DREAM_WHIMSY, DreamWhimsy},
+    {ABILITY_LUNAR_AFFINITY, LunarAffinity},
+    {ABILITY_FLAME_SHIELD, FlameShield},
+    {ABILITY_AQUATIC_DWELLER, AquaticDweller},
+    {ABILITY_APPLE_PIE, ApplePie},
+    {ABILITY_HOVER, Hover},
+    {ABILITY_DEPRAVITY, Depravity},
+    {ABILITY_WILDFIRE, Wildfire},
+    {ABILITY_JUMP_SCARE, JumpScare},
+    {ABILITY_TAR_TOSS, TarToss},
+    {ABILITY_STUN_SHOCK, StunShock},
+    {ABILITY_RAGING_GODDESS, RagingGoddess},
+    {ABILITY_WHIPLASH, Whiplash},
+    {ABILITY_SUPERSWEET_SYRUP, SupersweetSyrup},
+    {ABILITY_TRASH_HEAP, TrashHeap},
+    {ABILITY_SLUDGY_MIX, SludgyMix},
+    {ABILITY_OVERWATCH, Overwatch},
+    {ABILITY_WIND_RAGE, WindRage},
+    {ABILITY_VICTORY_BOMB, VictoryBomb},
+    {ABILITY_RAZOR_SHARP, RazorSharp},
+    {ABILITY_TO_THE_BONE, ToTheBone},
+    {ABILITY_BLADE_DANCE, BladeDance},
+    {ABILITY_APE_SHIFT, ApeShift},
+    {ABILITY_KNOW_YOUR_PLACE, KnowYourPlace},
+    {ABILITY_DEEP_CUTS, DeepCuts},
+    {ABILITY_LIFE_STEAL, LifeSteal},
+    {ABILITY_RUDE_AWAKENING, RudeAwakening},
+    {ABILITY_TERAFORM_ZERO, TeraformZero},
+    {ABILITY_SET_ABLAZE, SetAblaze},
+    {ABILITY_BREAKWATER, Breakwater},
+    {ABILITY_MAGICAL_FISTS, MagicalFists},
+    {ABILITY_CUTTHROAT, Cutthroat},
+    {ABILITY_SAND_BENDER, SandBender},
+    {ABILITY_SAND_PIT, SandPit},
+    {ABILITY_DESOLATE_SUN, DesolateSun},
+    {ABILITY_DAYBREAK, Daybreak},
+    {ABILITY_ENERGY_SIPHON, EnergySiphon},
+    {ABILITY_RESERVOIR, Reservoir},
+    {ABILITY_NEUROTOXIN, Neurotoxin},
+    {ABILITY_ENERGIZED_HORNS, EnergizedHorns},
+    {ABILITY_SPIDER_LAIR_UPGRADE, SpiderLairUpgrade},
+    {ABILITY_CRUST_COAT, CrustCoat},
+    {ABILITY_PUFFY, Puffy},
+    {ABILITY_BALLOON_BLITZ, BalloonBlitz},
+    {ABILITY_STRIKER_PIXILATE, StrikerPixilate},
+    {ABILITY_DOOM_BLAST, DoomBlast},
+    {ABILITY_BRUTEFORCE, Bruteforce},
+    {ABILITY_FARADAY_CAGE, FaradayCage},
+    {ABILITY_ACIDIC_SLIME, AcidicSlime},
+    {ABILITY_ROSE_GARDEN, RoseGarden},
+    {ABILITY_QIGONG, Qigong},
+    {ABILITY_CONJOURER_OF_DECEIT, ConjurerOfDeceit},
+    {ABILITY_DEEP_FREEZE, DeepFreeze},
+    {ABILITY_SOUL_DEVOURER, SoulDevourer},
+    {ABILITY_CHAMPIONS_ENTRANCE, ChampionsEntrance},
+    {ABILITY_PRESTO, Presto},
+    {ABILITY_SAMBA, Samba},
+    {ABILITY_GLADIATOR, Gladiator},
+    {ABILITY_FORSAKEN_HEART, ForsakenHeart},
+    {ABILITY_RELENTLESS, Relentless},
+    {ABILITY_SOOTHSAYER, Soothsayer},
+    {ABILITY_CORRUPTED_MIND, CorruptedMind},
+    {ABILITY_FLAME_COAT, FlameCoat},
+    {ABILITY_UNOWN_POWER, UnownPower},
+    {ABILITY_SUPER_SCOPE, SuperScope},
+    {ABILITY_VENOM_CROWN, VenomCrown},
+    {ABILITY_BLIGHT_SCALE, BlightScale},
+    {ABILITY_GUNMAN, Gunman},
+    {ABILITY_CARETAKER, Caretaker},
+    {ABILITY_POSEIDONS_DOMINION, PoseidonsDominion},
+    {ABILITY_DUAL_SHADOW, DualShadow},
+    {ABILITY_LULLABY, Lullaby},
+    {ABILITY_CRYO_ARCHITECT, CryoArchitect},
+    {ABILITY_GLACIAL_RAGE, GlacialRage},
+    {ABILITY_IMMOVABLE_OBJECT, ImmovableObject},
+    {ABILITY_FRENZIED_PHANTOM, FrenziedPhantom},
+    {ABILITY_DNA_SCRAMBLE, DNAScramble},
+};
+
+template <int N>
+consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKVPair second[N]) {
+    AbilitiesWrapper newWrapper = wrapper;
+    bool assigned[ABILITIES_COUNT] = {0};
+    for (int i = 0; i < N; i++) {
+        auto val = second[i];
+        if (assigned[val.key]) {
+            return (AbilitiesWrapper){0};
+        }
+        assigned[val.key] = true;
+#define __OVERWRITE_ARRAY_VAL(field) .field = val.ability.field ? val.ability.field : wrapper.abilities[val.key].field
+
+        newWrapper.abilities[val.key] = (Ability){
+            __OVERWRITE_ARRAY_VAL(name),
+            __OVERWRITE_ARRAY_VAL(description),
+            __OVERWRITE_ARRAY_VAL(onEntry),
+            __OVERWRITE_ARRAY_VAL(onAbsorb),
+            __OVERWRITE_ARRAY_VAL(onImmune),
+            __OVERWRITE_ARRAY_VAL(onInfiltrate),
+            __OVERWRITE_ARRAY_VAL(onDisguise),
+            __OVERWRITE_ARRAY_VAL(onWeather),
+            __OVERWRITE_ARRAY_VAL(onTerrain),
+            __OVERWRITE_ARRAY_VAL(onEndTurn),
+            __OVERWRITE_ARRAY_VAL(onAttacker),
+            __OVERWRITE_ARRAY_VAL(onDefender),
+            __OVERWRITE_ARRAY_VAL(onRecoil),
+            __OVERWRITE_ARRAY_VAL(onReactive),
+            __OVERWRITE_ARRAY_VAL(onBattlerFaints),
+            __OVERWRITE_ARRAY_VAL(onParentalBond),
+            __OVERWRITE_ARRAY_VAL(onOffensiveMultiplier),
+            __OVERWRITE_ARRAY_VAL(onMoveType),
+            __OVERWRITE_ARRAY_VAL(onDefensiveMultiplier),
+            __OVERWRITE_ARRAY_VAL(onStat),
+            __OVERWRITE_ARRAY_VAL(onAccuracy),
+            __OVERWRITE_ARRAY_VAL(onSwapSplit),
+            __OVERWRITE_ARRAY_VAL(onChooseOffensiveStat),
+            __OVERWRITE_ARRAY_VAL(onChooseDefensiveStat),
+            __OVERWRITE_ARRAY_VAL(onStab),
+            __OVERWRITE_ARRAY_VAL(onPriority),
+            __OVERWRITE_ARRAY_VAL(onExit),
+            __OVERWRITE_ARRAY_VAL(onCrit),
+            __OVERWRITE_ARRAY_VAL(onTypeEffectiveness),
+            __OVERWRITE_ARRAY_VAL(onCopyMove),
+            __OVERWRITE_ARRAY_VAL(onAfterTypeEffectiveness),
+            __OVERWRITE_ARRAY_VAL(onModifyEffectChance),
+            __OVERWRITE_ARRAY_VAL(onCanStatusType),
+            __OVERWRITE_ARRAY_VAL(onStatusImmune),
+            __OVERWRITE_ARRAY_VAL(onTrap),
+            __OVERWRITE_ARRAY_VAL(onBeforeAttack),
+            __OVERWRITE_ARRAY_VAL(onImmuneFor),
+            __OVERWRITE_ARRAY_VAL(onBattlerFaintsFor),
+            __OVERWRITE_ARRAY_VAL(onOffensiveMultiplierFor),
+            __OVERWRITE_ARRAY_VAL(onAccuracyFor),
+            __OVERWRITE_ARRAY_VAL(onStatFor),
+            __OVERWRITE_ARRAY_VAL(onCritFor),
+            __OVERWRITE_ARRAY_VAL(onAfterTypeEffectivenessFor),
+            __OVERWRITE_ARRAY_VAL(onStatusImmuneFor),
+            __OVERWRITE_ARRAY_VAL(onBeforeAttackFor),
+            __OVERWRITE_ARRAY_VAL(redirectType),
+            __OVERWRITE_ARRAY_VAL(ruinStat),
+            __OVERWRITE_ARRAY_VAL(noDamageHits),
+            __OVERWRITE_ARRAY_VAL(breakable),
+            __OVERWRITE_ARRAY_VAL(unsuppressable),
+            __OVERWRITE_ARRAY_VAL(persistent),
+            __OVERWRITE_ARRAY_VAL(randomizerBanned),
+            __OVERWRITE_ARRAY_VAL(unaware),
+            __OVERWRITE_ARRAY_VAL(absorbUp2),
+            __OVERWRITE_ARRAY_VAL(isSoundproof),
+            __OVERWRITE_ARRAY_VAL(magicGuard),
+            __OVERWRITE_ARRAY_VAL(noRecoil),
+            __OVERWRITE_ARRAY_VAL(halfRecoil),
+            __OVERWRITE_ARRAY_VAL(chloroplast),
+            __OVERWRITE_ARRAY_VAL(skillLink),
+            __OVERWRITE_ARRAY_VAL(resistsFortKnox),
+            __OVERWRITE_ARRAY_VAL(fortKnox),
+            __OVERWRITE_ARRAY_VAL(adaptability),
+            __OVERWRITE_ARRAY_VAL(magicBounce),
+            __OVERWRITE_ARRAY_VAL(levitate),
+            __OVERWRITE_ARRAY_VAL(megaLauncherBoost),
+            __OVERWRITE_ARRAY_VAL(unnerve),
+            __OVERWRITE_ARRAY_VAL(negatesBurnAtkDrop),
+            __OVERWRITE_ARRAY_VAL(negatesFrzSpatkDrop),
+            __OVERWRITE_ARRAY_VAL(canInfatuateAny),
+            __OVERWRITE_ARRAY_VAL(removesStatusOnImmunity),
+            __OVERWRITE_ARRAY_VAL(tauntImmune),
+            __OVERWRITE_ARRAY_VAL(shadowTag),
+        };
+    }
+    return newWrapper;
+}
+
+#include "generated/data/abilities/ability_text.hh"
+
+const AbilitiesWrapper gAbilitiesWrapper =
+    mergeArrays<ARRAY_COUNT(sAbilities)>(mergeArrays<ARRAY_COUNT(sAbilityText)>((AbilitiesWrapper){0}, sAbilityText), sAbilities);
 
 #pragma GCC diagnostic pop

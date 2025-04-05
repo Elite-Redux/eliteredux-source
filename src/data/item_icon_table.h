@@ -645,6 +645,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_MELMETALITE]   = {gItemIcon_Melmetalite, gItemIconPalette_Melmetalite},
     [ITEM_DYNAMAX_ORB]   = {gItemIcon_PurprleOrb, gItemIconPalette_PurprleOrb},
     [ITEM_TERA_ORB]   = {gItemIcon_TeraOrb, gItemIconPalette_TeraOrb},
+    [ITEM_KINGDRANITE_Y]     = {gItemIcon_Kingdranite,     gItemIconPalette_Kingdranite},
     
     [ITEM_HITMONCHANITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_HITMONLEENITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonlite},
@@ -710,8 +711,29 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_SENZU]           = {gItemIcon_Senzu, gItemIconPalette_Senzu},
     [ITEM_DURALUDITE]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_FIDOUGHITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+        //3.0 CUTOFF
+    [ITEM_WEAVILEITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_SERPERIORITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_EMBOARITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_SAMUROTTITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_SAMUROTTITE_H]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_DECIDUITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_DECIDUITE_H]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_INCINERITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_MEOWSCARADITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_PRIMARINITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_QUAQUAVITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_SKELEDIRGEITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_TYPHLOSIONITE_H]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_MIENSHAOITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_GOODRITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_SLOWBRONITE_G]   = {gItemIcon_Slowbronite,     gItemIconPalette_Slowbronite},
+    [ITEM_SLOWKINGITE_G]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_ARCANITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_ROSERADEITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
 
     //Monotype Mega Stones
+    [ITEM_PHANTOM_METEOR] = {gItemIcon_Meteorite, gItemIconPalette_Meteorite},
     [ITEM_GALACTIC_ORB]   = {gItemIcon_PurprleOrb, gItemIconPalette_PurprleOrb},
     [ITEM_CHIEN_PAOITE]     = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_DRACOVISHITE]     = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
@@ -861,6 +883,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_TRAINING_BAND] = {gItemIcon_TrainingBand, gItemIconPalette_TrainingBand},
     [ITEM_CANDY_BOX] = {gItemIcon_OaksParcel, gItemIconPalette_OaksParcel},
     [ITEM_INFINITE_REPEL] = {gItemIcon_Repel, gItemIconPalette_InfiniteRepel},
+    [ITEM_SWIRLY_GLASSES] = {gItemIcon_SwirlyGlasses, gItemIconPalette_SwirlyGlasses},
 };
 
 // RHH's Poké Ball order

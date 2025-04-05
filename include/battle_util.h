@@ -78,10 +78,6 @@
 #define BATTLER_HAS_ABILITY_AND_ALIVE(battlerId, ability, checkMoldBreaker) \
     (IsBattlerAlive(battlerId) && BattlerHasAbility(battlerId, ability, checkMoldBreaker))
 
-#define BATTLER_HEALING_BLOCKED(battlerId)                                                                                                                     \
-    (gStatuses3[battlerId] & STATUS3_HEAL_BLOCK || gBattleMons[battlerId].status1 & STATUS1_BLEED || IsAbilityOnOpposingSide(battlerId, ABILITY_PERMANENCE) || \
-     IsBloodStainAffected(battlerId))
-
 enum MiscMoveEffects {
     MISC_EFFECT_SUPEREFFECTIVE_BOOST = 1,
     MISC_EFFECT_FAINTED_MON_BOOST,
@@ -138,10 +134,17 @@ typedef struct {
     bool8 activating:1;
 } CudChewState;
 
+typedef struct {
+    u8 type1:5;
+    u8 type2:5;
+    u8 active:1;
+} MimicryState;
+
 typedef union AbilityStates {
     ParadoxBoost paradoxBoost;
     StatCopyState statCopyState;
     CudChewState cudChewState;
+    MimicryState mimicryState;
     u32 intValue;
 } AbilityStates;
 
@@ -149,15 +152,11 @@ typedef union AbilityStates {
 #define ABILITY_SUPPRESSION_ABILITY (1 << 15)
 #define ABILITY_SUPPRESSION_MASK (ABILITY_SUPPRESSION_ABILITY | ABILITY_SUPPRESSION_PERSISTENT)
 
-#define IS_IRON_FIST(attacker, moveToCheck)                    \
-    (gBattleMoves[moveToCheck].flags & FLAG_IRON_FIST_BOOST || \
-     (BATTLER_HAS_ABILITY(attacker, ABILITY_BRAWLING_WYVERN) && IS_MOVE_TYPE(moveToCheck, TYPE_DRAGON)))
-
 extern const struct TypePower gNaturalGiftTable[];
 extern const u16 gPercentToModifier[];
-extern const u16 gHpTransformations[9][4];
+extern const u16 gHpTransformations[10][4];
 
-int GetAbilityIndex(int battler, int ability, int checkMoldBreaker);
+int GetAbilityIndex(int battler, AbilityEnum ability, int checkMoldBreaker);
 s32 CountUsablePartyMons(u8 battlerId);
 void HandleAction_ThrowBall(void);
 void HandleAction_ShowBattleInfo(void);
@@ -180,7 +179,7 @@ void HandleAction_NothingIsFainted(void);
 void HandleAction_ActionFinished(void);
 u8 GetBattlerForBattleScript(u8 caseId);
 bool8 IsSleepDisabled(u8 battlerId);
-bool8 IsSleepClauseDisablingMove(u8 battlerId, u16 move);
+bool8 IsSleepClauseDisablingMove(u8 battlerId, MoveEnum move);
 u16 GetParentalBondMultiplier(MultihitType parentalBondType, int turn);
 void MarkAllBattlersForControllerExec(void);  // unused
 bool32 IsBattlerMarkedForControllerExec(u8 battlerId);
@@ -201,7 +200,7 @@ void ReadActiveScriptInitialStackState();
 u8 TrySetCantSelectMoveBattleScript(void);
 u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check);
 bool8 AreAllMovesUnusable(void);
-u8 GetImprisonedMovesCount(u8 battlerId, u16 move);
+u8 GetImprisonedMovesCount(u8 battlerId, MoveEnum move);
 u8 DoFieldEndTurnEffects(void);
 s32 GetDrainedBigRootHp(u32 battler, s32 hp);
 u8 DoBattlerEndTurnEffects(void);
@@ -209,32 +208,31 @@ bool8 HandleWishPerishSongOnTurnEnd(void);
 bool8 HandleFaintedMonActions(void);
 void TryClearRageAndFuryCutter(void);
 u8 AtkCanceller_UnableToUseMove(void);
-u8 AtkCanceller_UnableToUseMove2(void);
 bool8 HasNoMonsToSwitch(u8 battlerId, u8 r1, u8 r2);
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility);
 bool32 SetPermanentWeather(u32 weatherEnumId);
-u8 AbilityBattleEffects(u8 caseID, u8 battlerId, u16 ability, u8 extraArg, u16 moveArg);
-int HandleAttackerAbility(int abilityNumber, int battler, int target, int move);
-int HandleDefenderAbility(int abilityNumber, int battler, int attacker, int move);
-int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int move);
-int HandleMiscAbilityMoveEffects(int battler, int opponent, int move);
+u8 AbilityBattleEffects(u8 caseID, u8 battlerId, AbilityEnum ability, u8 extraArg, MoveEnum moveArg);
+int HandleAttackerAbility(int abilityNumber, int battler, int target, MoveEnum move);
+int HandleDefenderAbility(int abilityNumber, int battler, int attacker, MoveEnum move);
+int HandleAttackerOrDefenderAbility(AbilityEnum ability, int battler, int opponent, MoveEnum move);
+int HandleMiscAbilityMoveEffects(int battler, int opponent, MoveEnum move);
 int HandleSwitchInAbility(int abilityNumber, int battler);
 int HandleEndTurnAbility(int abilityNumber, int battler);
 int WasMoveSuccessful();
 int DidMoveHit();
 int ShouldApplyOnHitAffect(int applyTo);
-void ReplaceAbility(int battler, int ability);
-int HasAbilityIgnoringSuppression(int battler, int ability);
-int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker);
-int IsSuppressed(int battler, int ability, int checkMoldBreaker);
-int AbilityHealMonStatus(u8 battler, u16 ability);
+void ReplaceAbility(int battler, AbilityEnum ability);
+int HasAbilityIgnoringSuppression(int battler, AbilityEnum ability);
+AbilityEnum GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker);
+int IsSuppressed(int battler, AbilityEnum ability, int checkMoldBreaker);
+int AbilityHealMonStatus(u8 battler, AbilityEnum ability);
 int CheckHalfHpAbility(int battlerDef, int battlerAtk);
-bool8 UseOutOfTurnAttack(u8 battler, u8 target, u16 ability, u16 move, u8 movePower);
-u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, u8 movePower);
+bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum move, u8 movePower);
+u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, u16 extraMove, u8 movePower);
 
 #define ON_ABILITY(battler, checkMoldBreaker, condition, callback)   \
     for (int idx = TOTAL_ABILITY_COUNT - 1; idx >= 0; idx--) {       \
-        int ability = gBattleMons[battler].abilities[idx];           \
+        AbilityEnum ability = gBattleMons[battler].abilities[idx];           \
         FILTER(condition)                                            \
         FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker)) \
         callback;                                                    \
@@ -242,13 +240,13 @@ u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, 
 
 #define RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, flag) ON_ABILITY(battler, checkMoldBreaker, gAbilities[ability].flag, return ability)
 
-void GetAllBattlerAbilities(u16* abilities, int battler, int battlerAtk);
-u32 IsAbilityOnSide(u32 battlerId, u32 ability);
-u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability);
-u32 IsAbilityOnField(u32 ability);
-u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability);
+void GetAllBattlerAbilities(AbilityEnum* abilities, int battler, int battlerAtk);
+u32 IsAbilityOnSide(u32 battlerId, AbilityEnum ability);
+u32 IsAbilityOnOpposingSide(u32 battlerId, AbilityEnum ability);
+u32 IsAbilityOnField(AbilityEnum ability);
+u32 IsAbilityOnFieldExcept(u32 battlerId, AbilityEnum ability);
 u32 IsAbilityPreventingEscape(u32 battlerId);
-bool32 IsBattlerProtected(u8 battlerId, u16 move);
+bool32 IsBattlerProtected(u8 battlerId, MoveEnum move);
 bool32 CanBattlerEscape(u32 battlerId);  // no ability check
 void BattleScriptExecute(const u8* BS_ptr);
 void BattleScriptPushCursorAndCallback(const u8* BS_ptr);
@@ -256,28 +254,28 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn);
 void ClearFuryCutterDestinyBondGrudge(u8 battlerId);
 void HandleAction_RunBattleScript(void);
 u32 SetRandomTarget(u32 battlerId);
-u32 GetMoveTarget(u16 move, u8 setTarget);
+u32 GetMoveTarget(MoveEnum move, u8 setTarget);
 u8 IsMonDisobedient(void);
 bool8 IsItemNegated(u8 battlerId);
 u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating);
 u32 GetBattlerHoldEffectParam(u8 battlerId);
-bool32 IsMoveMakingContact(u16 move, u8 battlerAtk);
+bool32 IsMoveMakingContact(MoveEnum move, u8 battlerAtk);
 bool32 IsBattlerGrounded(u8 battlerId);
 bool32 IsBattlerGroundedIgnoreType(u8 battlerId);
 bool32 IsBattlerAlive(u8 battlerId);
-u8 GetBattleMonMoveSlot(struct BattlePokemon* battleMon, u16 move);
+u8 GetBattleMonMoveSlot(struct BattlePokemon* battleMon, MoveEnum move);
 u32 GetBattlerWeight(u8 battlerId);
-s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags);
-s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, u16* typeEffectivenessModifier);
-u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags);
-int CalcMoveDamageAi(int move, int battlerAtk, int battlerDef, u8* moveType, int fixedBasePower, struct MoveState* moveState);
-u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
-u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef, u8 leveldef);
+s32 CalculateMoveDamage(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8* moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags);
+s32 CalculateMoveDamageAndEffectiveness(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8* moveType, u16* typeEffectivenessModifier);
+u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags);
+int CalcMoveDamageAi(MoveEnum move, int battlerAtk, int battlerDef, u8* moveType, int fixedBasePower, struct MoveState* moveState);
+u16 CalcTypeEffectivenessMultiplier(MoveEnum move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
+u16 CalcPartyMonTypeEffectivenessMultiplier(MoveEnum move, u16 speciesDef, u16 abilityDef, u8 leveldef);
 u16 GetTypeModifier(int atkType, int defType, int miracleEyeAtk, int miracleEyeDef);
 s32 GetStealthHazardDamage(u8 hazardType, u8 battlerId);
 u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId);
 u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId);
-u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, u16 moveId1, u16 moveId2, u16 moveId3, u16 moveId4);
+u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, MoveEnum moveId1, MoveEnum moveId2, MoveEnum moveId3, MoveEnum moveId4);
 bool32 CanMegaEvolve(u8 battlerId);
 void UndoMegaEvolution(u32 monId);
 void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut);
@@ -288,15 +286,15 @@ struct Pokemon* GetIllusionMonPtr(u32 battlerId);
 void ClearIllusionMon(u32 battlerId);
 bool32 SetIllusionMon(struct Pokemon* mon, u32 battlerId);
 void TryPreemptiveActions();
-u8 GetBattleMoveSplit(u32 moveId);
-bool32 TestMoveFlags(u16 move, u32 flag);
+u8 GetBattleMoveSplit(MoveEnum moveId);
+bool32 TestMoveFlags(MoveEnum move, u32 flag);
 struct Pokemon* GetBattlerPartyData(u8 battlerId);
 bool32 CanFling(u8 battlerId);
 bool32 IsTelekinesisBannedSpecies(u16 species);
 bool32 IsHealBlockPreventingMove(u8 battler, u32 move);
 bool32 HasEnoughHpToEatBerry(u32 battlerId, u32 hpFraction, u32 itemId);
 void SortBattlersBySpeed(u8* battlers, bool8 slowToFast);
-bool32 TestSheerForceFlag(u8 battler, u16 move);
+bool32 TestSheerForceFlag(u8 battler, MoveEnum move);
 void TryRestoreStolenItems(void);
 bool32 CanStealItem(u8 battlerStealing, u8 battlerItem, u16 item);
 void TrySaveExchangedItem(u8 battlerId, u16 stolenItem);
@@ -308,15 +306,11 @@ int StatLowerableOrMirrorArmor(int battler, int stat);
 bool32 TryRoomService(u8 battlerId);
 void BufferStatChange(u8 battlerId, u8 statId, u8 stringId);
 void DoBurmyFormChange(u32 monId);
-bool32 BlocksPrankster(u16 move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget);
+bool32 BlocksPrankster(MoveEnum move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget);
 u16 GetUsedHeldItem(u8 battler);
 bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags);
-void TryToApplyMimicry(u8 battlerId, bool8 various);
-void TryToRevertMimicry(void);
-void RestoreBattlerOriginalTypes(u8 battlerId);
-bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId);
-u8 GetBattleMoveTargetFlags(u16 moveId, u16 ability);
-u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler);
+bool8 IsMoveAffectedByParentalBond(MoveEnum move, u8 battlerId);
+u8 GetBattlerBattleMoveTargetFlags(MoveEnum moveId, u8 battler);
 bool32 ShouldChangeFormHpBased(u32 battler);
 u32 CountBattlerStatIncreases(u8 battlerId, bool32 countEvasionAcc);
 int CountBattlerStatDecreases(int battler);
@@ -328,32 +322,33 @@ bool8 isMagicRoomActive(void);
 bool8 isWonderRoomActive(void);
 bool32 TryPrimalReversion(u8 battlerId, int useReturn);
 bool8 HasAnyLoweredStat(u8 battler);
-u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isAttack, bool8 isCrit, bool8 isUnaware, bool8 calculatingSecondary);
-bool8 CheckAndSetSwitchInAbility(u8 battlerId, u16 ability);
-s8 GetSingleUseAbilityCounter(u8 battler, u16 ability);
-void SetSingleUseAbilityCounter(u8 battler, u16 ability, u8 value);
-void IncrementSingleUseAbilityCounter(u8 battler, u16 ability, u8 value);
-u32 GetAbilityState(u8 battler, u16 ability);
-void SetAbilityState(u8 battler, u16 ability, u32 value);
-AbilityStates GetAbilityStateAs(u8 battler, u16 ability);
-void SetAbilityStateAs(u8 battler, u16 ability, AbilityStates value);
-void IncrementAbilityState(u8 battler, u16 ability, u32 value);
+u32 CalculateStat(
+    u8 battler, u8 statEnum, u8 secondaryStat[NUM_STATS], MoveEnum move, bool8 isAttack, bool8 isCrit, bool8 isUnaware, bool8 calculatingSecondary);
+bool8 CheckAndSetSwitchInAbility(u8 battlerId, AbilityEnum ability);
+s8 GetSingleUseAbilityCounter(u8 battler, AbilityEnum ability);
+void SetSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value);
+void IncrementSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value);
+u32 GetAbilityState(u8 battler, AbilityEnum ability);
+void SetAbilityState(u8 battler, AbilityEnum ability, u32 value);
+AbilityStates GetAbilityStateAs(u8 battler, AbilityEnum ability);
+void SetAbilityStateAs(u8 battler, AbilityEnum ability, AbilityStates value);
+void IncrementAbilityState(u8 battler, AbilityEnum ability, u32 value);
 int GetHighestStatIdExcept(int battlerId, int includeStatStages, int exclude);
 u8 GetHighestStatId(u8 battlerId, u8 includeStatStages);
 u8 GetHighestAttackingStatId(u8 battlerId, u8 includeStatStages);
-bool8 CanMoveHaveExtraFlinchChance(u16 move);
+bool8 CanMoveHaveExtraFlinchChance(MoveEnum move);
 u8 GetHighestDefendingStatId(u8 battlerId, u8 includeStatStages);
 u8 TranslateStatId(u8 statId, u8 battlerId);
 bool32 IsAlly(u32 battlerAtk, u32 battlerDef);
 void UpdateAbilityStateIndices(u8 battler, u16 newAbilities[]);
 void UpdateAbilityStateIndicesForNewAbility(u8 battler, u16 newAbility);
 void UpdateAbilityStateIndicesForNewSpecies(u8 battler, u16 newSpecies);
-bool32 IsUnsuppressableAbility(u32 ability);
-int IsPersistentOrUnsuppressableAbility(int ability);
+bool32 IsUnsuppressableAbility(AbilityEnum ability);
+int IsPersistentOrUnsuppressableAbility(AbilityEnum ability);
 bool8 CanBeDisabled(u8 battlerId);
 bool8 DoesBattlerHaveAbilityShield(u8 battlerId);
 u16 IsSoundproof(u8 battlerId);
-int BattlerHasAbility(int battler, int ability, int checkMoldBreaker);
+AbilityEnum BattlerHasAbility(int battler, AbilityEnum ability, int checkMoldBreaker);
 u8 GetTurnBattler();
 void ReadActiveScriptInitialStackState();
 void SetActiveMultistringChooser(u8 messageId);
@@ -362,58 +357,67 @@ void SetActiveStackBattler(u8 battler, u8 number);
 void SetActiveStatChanger(int stat, s8 change);
 u16 GetInnateInSlot(int level, u16 species, u8 position, u32 personality, u8 isPlayer);
 void ClearMiscTurnFlags();
-u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move);
-bool32 IsHealingMoveEffect(u16 effect);
-int IsMagicGuardProtected(int battler);
+u8 StabMultiplierInHalves(u8 battler, u8 moveType, MoveEnum move);
+bool32 IsHealingMoveEffect(MoveBehaviorEnum effect);
+AbilityEnum IsMagicGuardProtected(int battler);
 #define ABSORB_RESULT_HEAL 1 << 0
 #define ABSORB_RESULT_STAT 1 << 1
 #define ABSORB_RESULT_FLASH_FIRE 1 << 2
 #define ABSORB_RESULT_EVAPORATE 1 << 3
-int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, int move, int moveType);
-int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int* statId, u16* ability);
+int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, MoveEnum move, int moveType);
+int TestAbsorbingAbilities(int battler, int battlerAtk, MoveEnum move, int moveType, int* statId, u16* ability);
 u16 CalculateAbilityMultipliers(
-    int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier);
-int TestImmunityAbilitiesOnly(int battler, int attacker, int move, int moveType);
-int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8** immunityScript, u8* overrideBattler, u16* abilityPopup);
+    int battlerAtk, int battlerDef, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier);
+int TestImmunityAbilitiesOnly(int battler, int attacker, MoveEnum move, int moveType);
+int TestImmunityAbilities(int battler, int attacker, MoveEnum move, int moveType, const u8** immunityScript, u8* overrideBattler, u16* abilityPopup);
 #define MUL_MODIFIER(modifier, val) MulModifier(modifier, UQ_4_12(val))
 u16 DivideModifier(u16 mod1, u16 mod2);
 void MulModifier(u16* modifier, u16 val);
 u32 ApplyModifier(u16 modifier, u32 val);
+int CanBattlerHeal(int battler);
+int BenefitsFromStatBuffs(int battler);
 int IsBloodStainAffected(int battler);
-int IsUnaware(int battler);
-int GetOncePerTurnAbilityCounter(int battler, int ability);
-void SetOncePerTurnAbilityCounter(int battler, int ability, int value);
+AbilityEnum IsUnaware(int battler);
+int GetOncePerTurnAbilityCounter(int battler, AbilityEnum ability);
+void SetOncePerTurnAbilityCounter(int battler, AbilityEnum ability, int value);
 int HasRipenEffect(int battler);
-int IsDance(int attacker, int move);
+int IsDance(int attacker, MoveEnum move);
 int HasAnyStatusOrAbility(int battler);
 void RepopulateAbilities(int battler);
-int GetBattlerAbility(int battler);
-void HandleFollowupAttackAbilities(int battler, int target, int move);
-int CheckAndSetOncePerTurnAbility(int battler, int ability);
-int IsStickyHold(int battler);
-int HasChloroplast(int battler);
-int HasRedirectionAbility(int battlerAtk, int battlerDef, int move, int type);
+AbilityEnum GetBattlerAbility(int battler);
+void HandleFollowupAttackAbilities(int battler, int target, MoveEnum move);
+int CheckAndSetOncePerTurnAbility(int battler, AbilityEnum ability);
+AbilityEnum IsStickyHold(int battler);
+AbilityEnum HasChloroplast(int battler);
+AbilityEnum HasRedirectionAbility(int battlerAtk, int battlerDef, MoveEnum move, int type);
 int CanRaiseStat(int battler, int stat);
 int CanLowerStat(int battler, int stat);
-bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower);
-int UseIntimidateClone(int abilityToCheck, int battler);
+bool8 UseEntryMove(u8 battler, AbilityEnum ability, u16 extraMove, u8 movePower);
+int UseIntimidateClone(AbilityEnum abilityToCheck, int battler);
 bool32 TryRemoveScreens(u8 battler);
-void DisableSwitchInAbility(u8 battlerId, u16 ability);
+void DisableSwitchInAbility(u8 battlerId, AbilityEnum ability);
 bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8* timer);
-int HasSkillLink(int battler);
+AbilityEnum HasSkillLink(int battler);
+int IsMegaLauncherBoosted(int battler, MoveEnum move);
+int IsIronFistBoosted(int battler, MoveEnum move);
+int IsStrikerBoosted(int battler, MoveEnum move);
+AbilityEnum IsUnnerveAbilityOnOpposingSide(u8 battlerId);
+AbilityEnum IgnoresBurnAtkDrop(int battler);
+AbilityEnum IgnoresFrostbiteSpatkDrop(int battler);
+int IsStatusImmune(u8 battlerId, StatusCheckEnum status);
 
-MultihitType GetMultihitType(int battler, int move);
+MultihitType GetMultihitType(int battler, MoveEnum move);
 
 // Ability checks
-bool32 IsRolePlayBannedAbilityAtk(u16 ability);
-bool32 IsRolePlayBannedAbility(u16 ability);
-bool32 IsWorrySeedBannedAbility(u16 ability);
-bool32 IsGastroAcidBannedAbility(u16 ability);
-bool32 IsEntrainmentBannedAbilityAttacker(u16 ability);
-bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability);
+bool32 IsRolePlayBannedAbilityAtk(AbilityEnum ability);
+bool32 IsRolePlayBannedAbility(AbilityEnum ability);
+bool32 IsWorrySeedBannedAbility(AbilityEnum ability);
+bool32 IsGastroAcidBannedAbility(AbilityEnum ability);
+bool32 IsEntrainmentBannedAbilityAttacker(AbilityEnum ability);
+bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(AbilityEnum ability);
 
 bool32 CanSleep(u8 battlerId);
-bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget);
+bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget, MoveEnum move);
 bool32 CanBeBurned(u8 battlerId);
 bool32 CanBeParalyzed(u8 battlerAttacker, u8 battlerTarget);
 bool32 CanBeParalyzedIgnoreType(u8 battlerAttacker, u8 battlerTarget);
@@ -428,13 +432,13 @@ int IsWeatherActive(int weather);
 u8 getMonotypeChampType(void);
 
 // Move checks
-bool8 IsTwoStrikesMove(u16 move);
+bool8 IsTwoStrikesMove(MoveEnum move);
 
-u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u16 typeEffectivenessModifier, bool32 isCrit, bool32 updateFlags);
-void MulByTypeEffectiveness(u16* modifier, u16 move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities);
+u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveType, u16 typeEffectivenessModifier, bool32 isCrit, bool32 updateFlags);
+void MulByTypeEffectiveness(u16* modifier, MoveEnum move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities);
 
 u32 GetIllusionMonSpecies(u32 battlerId);
-s32 DoMoveDamageCalcBattleMenu(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, bool32 isCrit, u8 randomFactor, u16* typeEffectivenessModifier);
+s32 DoMoveDamageCalcBattleMenu(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8* moveType, bool32 isCrit, u8 randomFactor, u16* typeEffectivenessModifier);
 
 // Monotype funcs
 bool8 IsBattlerCursed(u8 battler);

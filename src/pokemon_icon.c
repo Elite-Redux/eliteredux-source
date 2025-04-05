@@ -26,8 +26,8 @@ static u8 CreateMonIconSprite(struct MonIconSpriteTemplate *, s16, s16, u8);
 
 // .rodata
 
-#if USE_GENERATED
-// #include "generated/data/pokemon_graphics/icons.h"
+#if USE_GENERATED_SPECIES
+#include "generated/data/pokemon_graphics/icons.h"
 #else
 const u8 *const gMonIconTable[] =
 {
@@ -1191,6 +1191,8 @@ const u8 *const gMonIconTable[] =
     [SPECIES_SOLROCK_SYSTEM] = gMonIcon_Solrock_System,
     [SPECIES_DARKRAI_NIGHTMARE] = gMonIcon_Darkrai_Nightmare,
     [SPECIES_ESPEON_GALAXY] = gMonIcon_Espeon_Galaxy,
+    [SPECIES_MIMIKYU_APEX] = gMonIcon_MimikyuApex,
+    [SPECIES_MIMIKYU_APEX_BUSTED] = gMonIcon_MimikyuApex,
     [SPECIES_MIMIKYU_RAYQUAZA] = gMonIcon_Mimikyu_Rayquaza,
     [SPECIES_MIMIKYU_RAYQUAZA_BUSTED] = gMonIcon_Mimikyu_RayquazaBusted,
     [SPECIES_BEWEAR_ANGRY] = gMonIcon_Bewear_Angry,
@@ -1790,6 +1792,46 @@ const u8 *const gMonIconTable[] =
     [SPECIES_KINGDRA_PARTNER_MEGA] = gMonIcon_KingdraMega,
     [SPECIES_KINGDRA_PARTNER_MEGA_B] = gMonIcon_KingdraMega,
     [SPECIES_KINGDRA_PARTNER_MEGA_C] = gMonIcon_KingdraMega,
+
+    //3.0 CUTOFF
+    [SPECIES_IRON_VOCA] = gMonIcon_IronVoca,
+    [SPECIES_WEAVILE_MEGA] = gMonIcon_WeavileMega,
+    [SPECIES_HAPPINY_REDUX] = gMonIcon_HappinyRedux,
+    [SPECIES_CHANSEY_REDUX] = gMonIcon_ChanseyRedux,
+    [SPECIES_BLISSEY_REDUX] = gMonIcon_BlisseyRedux,
+    [SPECIES_DEWPIDER_REDUX] = gMonIcon_DewpiderRedux,
+    [SPECIES_ARAQUANID_REDUX] = gMonIcon_AraquanidRedux,
+    [SPECIES_FROSTULA] = gMonIcon_Frostula,
+    [SPECIES_CHESNAUGHT_BATTLE_BOND] = gMonIcon_Chesnaught,
+    [SPECIES_CHESNAUGHT_CLEMONT] = gMonIcon_ChesnaughtClemont,
+    [SPECIES_DELPHOX_BATTLE_BOND] = gMonIcon_Delphox,
+    [SPECIES_DELPHOX_SERENA] = gMonIcon_DelphoxSerena,
+    [SPECIES_SERPERIOR_MEGA] = gMonIcon_SerperiorMega,
+    [SPECIES_EMBOAR_MEGA] = gMonIcon_EmboarMega,
+    [SPECIES_SAMUROTT_MEGA] = gMonIcon_SamurottMega,
+    [SPECIES_MORPEKYLL] = gMonIcon_Morpekyll,
+    [SPECIES_LYCANROC_ECLIPSE] = gMonIcon_LycanrocEclipse,
+    [SPECIES_LYCANROC_TWILIGHT] = gMonIcon_LycanrocTwilight,
+    [SPECIES_SPIRITOMB_REDUX] = gMonIcon_Spiritomb_Redux,
+    [SPECIES_DECIDUEYE_MEGA] = gMonIcon_DecidueyeMega,
+    [SPECIES_DECIDUEYE_HISUIAN_MEGA] = gMonIcon_DecidueyeHisuianMega,
+    [SPECIES_INCINEROAR_MEGA] = gMonIcon_IncineroarMega,
+    [SPECIES_MEOWSCARADA_MEGA] = gMonIcon_MeowscaradaMega,
+    [SPECIES_PRIMARINA_MEGA] = gMonIcon_PrimarinaMega,
+    [SPECIES_QUAQUAVAL_MEGA] = gMonIcon_QuaquavalMega,
+    [SPECIES_SAMUROTT_HISUIAN_MEGA] = gMonIcon_SamurottHisuianMega,
+    [SPECIES_SKELEDIRGE_MEGA] = gMonIcon_SkeledirgeMega,
+    [SPECIES_TYPHLOSION_HISUIAN_MEGA] = gMonIcon_TyphlosionHisuianMega,
+    [SPECIES_UNOWN_REVELATION] = gMonIcon_UnownRevelation,
+    //[SPECIES_TOXAPEX_MEGA] = gMonIcon_ToxapexMega,
+    [SPECIES_ARCANINE_MEGA] = gMonIcon_ArcanineMega,
+    [SPECIES_GOODRA_MEGA] = gMonIcon_GoodraMega,
+    [SPECIES_SLOWBRO_MEGA_GALARIAN] = gMonIcon_SlowbroGalarianMega,
+    [SPECIES_SLOWKING_MEGA_GALARIAN] = gMonIcon_SlowkingGalarianMega,
+    [SPECIES_ROSERADE_MEGA] = gMonIcon_RoseradeMega,
+    [SPECIES_MIENSHAO_MEGA] = gMonIcon_MienshaoMega,
+
+    [SPECIES_MORPEKYLL_HANGRY] = gMonIcon_MorpekyllHangry,
 
 };
 
@@ -3419,6 +3461,8 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_SOLROCK_SYSTEM] = 0,
     [SPECIES_DARKRAI_NIGHTMARE] = 0,
     [SPECIES_ESPEON_GALAXY] = 2,
+    [SPECIES_MIMIKYU_APEX] = 0,
+    [SPECIES_MIMIKYU_APEX_BUSTED] = 0,
     [SPECIES_MIMIKYU_RAYQUAZA] = 1,
     [SPECIES_MIMIKYU_RAYQUAZA_BUSTED] = 1,
     [SPECIES_BEWEAR_ANGRY] = 0,
@@ -3463,6 +3507,37 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_HYDROAR] = 3,
     [SPECIES_HYDROAR_F] = 3,
     [SPECIES_EGG] = 1,
+    //3.0 CUTOFF
+    [SPECIES_IRON_VOCA] = 0,
+    [SPECIES_WEAVILE_MEGA] = 0,
+    [SPECIES_HAPPINY_REDUX] = 0,
+    [SPECIES_CHANSEY_REDUX] = 0,
+    [SPECIES_BLISSEY_REDUX] = 0,
+    [SPECIES_CHESNAUGHT_BATTLE_BOND] = 1,
+    [SPECIES_CHESNAUGHT_CLEMONT] = 4,
+    [SPECIES_DELPHOX_SERENA] = 0,
+    [SPECIES_SERPERIOR_MEGA] = 1,
+    [SPECIES_EMBOAR_MEGA] = 0,
+    [SPECIES_SAMUROTT_MEGA] = 3,
+    [SPECIES_SPIRITOMB_REDUX] = 2,
+    [SPECIES_LYCANROC_TWILIGHT] = 2,
+    [SPECIES_LYCANROC_ECLIPSE] = 2,
+    [SPECIES_DECIDUEYE_MEGA] = 1,
+    [SPECIES_DECIDUEYE_HISUIAN_MEGA] = 0,
+    [SPECIES_INCINEROAR_MEGA] = 3,
+    [SPECIES_MEOWSCARADA_MEGA] = 1,
+    [SPECIES_PRIMARINA_MEGA] = 0,
+    [SPECIES_QUAQUAVAL_MEGA] = 3,
+    [SPECIES_SAMUROTT_HISUIAN_MEGA] = 0,
+    [SPECIES_SKELEDIRGE_MEGA] = 0,
+    [SPECIES_TYPHLOSION_HISUIAN_MEGA] = 1,
+    [SPECIES_UNOWN_REVELATION] = 0,
+    //[SPECIES_TOXAPEX_MEGA] = 1,
+    [SPECIES_GOODRA_MEGA] = 0,
+    [SPECIES_ARCANINE_MEGA] = 0,
+    [SPECIES_ROSERADE_MEGA] = 1,
+    [SPECIES_MIENSHAO_MEGA] = 1,
+    [SPECIES_FROSTULA] = 3,
 };
 
 const u8 gMonIconPaletteIndicesFemale[] =

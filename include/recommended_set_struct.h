@@ -24,7 +24,7 @@ struct Variation
 struct RecommendedLearnset
 {
     const u8 description[MAX_RECOMMENDED_LEARNSET_DESCRIPTION];
-    u16 ability;
+    AbilityEnum ability;
     u16 item;
     u16 moves[MAX_MON_MOVES];
     struct Variation variations[3];

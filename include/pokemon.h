@@ -8,6 +8,8 @@
 #include "constants/pokemon_config.h"
 #include "constants/map_groups.h"
 #include "tmhm_struct.h"
+#include "constants/battle_move_effects.h"
+#include "constants/abilities.h"
 
 #define GET_BASE_SPECIES_ID(speciesId) (GetFormSpeciesId(speciesId, 0))
 
@@ -168,8 +170,8 @@ struct BattlePokemon {
         } __attribute__((packed, aligned(2)));
         u16 stats[5];
     } __attribute__((packed, aligned(2)));
-    u16 moves[MAX_MON_MOVES];
-    u16 abilities[TOTAL_ABILITY_COUNT];
+    MoveEnum moves[MAX_MON_MOVES];
+    AbilityEnum abilities[TOTAL_ABILITY_COUNT];
     u16 hp;
     u16 maxHP;
     u16 item;
@@ -223,12 +225,12 @@ typedef struct BaseStats {
     /* 0x13 */ u8 growthRate;
     /* 0x14 */ u8 eggGroup1;
     /* 0x15 */ u8 eggGroup2;
-    /* 0x16 */ u16 abilities[NUM_ABILITY_SLOTS];
+    /* 0x16 */ AbilityEnum abilities[NUM_ABILITY_SLOTS];
     /* 0x19 */ u8 safariZoneFleeRate;
     /* 0x1A */ u8 bodyColor:7;
     u8 noFlip:1;
     u8 flags;
-    /* 0x16 */ u16 innates[NUM_INNATE_PER_SPECIES];
+    /* 0x16 */ AbilityEnum innates[NUM_INNATE_PER_SPECIES];
     /* 0x15 */ u16 shopPrice;
     u8 tier;
     u8 numShinies:2;  // 1 if it has a rare, 2 if it has legendary, 3 if it has both
@@ -246,7 +248,7 @@ typedef enum {
 #include "constants/battle_config.h"
 struct BattleMove {
     u32 flags;
-    u16 effect;
+    MoveBehaviorEnum effect;
     u16 target;
     u16 argument;
     u8 power;
@@ -362,18 +364,18 @@ void CalculateMonStats(struct Pokemon *mon);
 void BoxMonToMon(const struct BoxPokemon *src, struct Pokemon *dest);
 u8 GetLevelFromMonExp(struct Pokemon *mon);
 u8 GetLevelFromBoxMonExp(struct BoxPokemon *boxMon);
-u16 GiveMoveToMon(struct Pokemon *mon, u16 move);
-u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
-u16 GiveMoveToBattleMon(struct BattlePokemon *mon, u16 move);
-void SetMonMoveSlot(struct Pokemon *mon, u16 move, u8 slot);
-void SetBattleMonMoveSlot(struct BattlePokemon *mon, u16 move, u8 slot);
+u16 GiveMoveToMon(struct Pokemon *mon, MoveEnum move);
+u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, MoveEnum move);
+u16 GiveMoveToBattleMon(struct BattlePokemon *mon, MoveEnum move);
+void SetMonMoveSlot(struct Pokemon *mon, MoveEnum move, u8 slot);
+void SetBattleMonMoveSlot(struct BattlePokemon *mon, MoveEnum move, u8 slot);
 void GiveMonInitialMoveset(struct Pokemon *mon);
 void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon);
 u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove);
 u16 MonTryLearningNewEvolutionMove(struct Pokemon *mon, bool8 firstMove);
-void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move);
-void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
-u16 RandomizeMoves(u16 moves, u16 species, u32 personality);
+void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, MoveEnum move);
+void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, MoveEnum move);
+MoveEnum RandomizeMoves(MoveEnum moves, u16 species, u32 personality);
 
 u8 CountAliveMonsInBattle(u8 caseId);
 #define BATTLE_ALIVE_EXCEPT_ACTIVE 0
@@ -517,14 +519,14 @@ u16 GetFormChangeTargetSpecies(struct Pokemon *mon, u16 method, u32 arg);
 u8 GetLevelCap(void);
 u16 getShinyOdds(void);
 u16 getRandomSpecies(void);
-int GetMonInnate(struct Pokemon *mon, int slot, int disableRandomizer);
-bool8 MonHasInnate(struct Pokemon *mon, u16 ability, bool8 disableRandomizer);
-bool8 BoxMonHasInnate(struct BoxPokemon *boxmon, u16 ability, bool8 disableRandomizer);
-bool8 SpeciesHasInnate(u16 species, u16 ability, u8 level, u32 personality, bool8 disablerandomizer, bool8 isEnemyMon);
-u16 RandomizeInnate(u16 innate, u16 species, u32 personality);
-u16 RandomizeAbility(u16 ability, u16 species, u32 personality);
+AbilityEnum GetMonInnate(struct Pokemon *mon, int slot, int disableRandomizer);
+bool8 MonHasInnate(struct Pokemon *mon, AbilityEnum ability, bool8 disableRandomizer);
+bool8 BoxMonHasInnate(struct BoxPokemon *boxmon, AbilityEnum ability, bool8 disableRandomizer);
+bool8 SpeciesHasInnate(u16 species, AbilityEnum ability, u8 level, u32 personality, bool8 disablerandomizer, bool8 isEnemyMon);
+AbilityEnum RandomizeInnate(AbilityEnum innate, u16 species, u32 personality);
+AbilityEnum RandomizeAbility(AbilityEnum ability, u16 species, u32 personality);
 u8 RandomizeType(u8 type, u16 species, u32 personality, bool8 isFirstType);
-u8 GetSpeciesInnateNum(u16 species, u16 ability, u8 level, u32 personality, bool8 disablerandomizer);
+u8 GetSpeciesInnateNum(u16 species, AbilityEnum ability, u8 level, u32 personality, bool8 disablerandomizer);
 void CreateShinyMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 nature);
 u16 getNumberOfUniqueDefeatedTrainers(void);
 bool8 enablePokemonChanges(void);

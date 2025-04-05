@@ -1961,11 +1961,6 @@
 	.macro tryendneutralizinggas battler:req
 	various \battler, VARIOUS_TRY_END_NEUTRALIZING_GAS
 	.endm
-
-	.macro trytoapplymimicry battler:req, ptr:req
-	various \battler, VARIOUS_TRY_TO_APPLY_MIMICRY
-	.4byte \ptr
-	.endm
 	
 	.macro trynoretreat battler:req, ptr:req
 	various \battler, VARIOUS_TRY_NO_RETREAT
@@ -2423,9 +2418,21 @@
 	.byte \fraction
 	.endm
 
+	.macro jumpifconsumableblocked battler:req, ptr:req
+	various \battler, VARIOUS_JUMP_IF_CONSUMABLE_BLOCKED
+	.4byte \ptr
+	.endm
+
+	.macro jumpifabilitystatusimmunity battler:req, move:req, ptr:req
+	various \battler, VARIOUS_CHECK_STATUS_MOVE_IMMUNITY
+	.4byte \ptr
+	.2byte \move
+	.endm
+
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr
+	jumpifconsumableblocked BS_ATTACKER, \ptr
 	call BattleScript_PowerHerbActivation
 twoturnmoveacceleratecheck_\@:
 	setbyte sACCELERATED_TWO_TURN, 1
@@ -2477,6 +2484,10 @@ checkstatbuffonlowered_none_\@:
 	jumpifability \battler, ABILITY_BLOOD_STAIN, jumpifhealingblocked_blockedbyability_\@
 	jumpifhealingblocked_nobloodstain_\@:
 	jumpifabilityonside \battler, ABILITY_PERMANENCE, jumpifhealingblocked_blockedbyability_\@, TRUE
+	jumpifstatus \battler, STATUS1_POISON_ANY, jumpifhealingblocked_poisoned_\@
+	goto jumpifhealingblocked_notblocked_\@
+	jumpifhealingblocked_poisoned_\@:
+	jumpifabilityonside \battler, ABILITY_HEMOLYSIS, jumpifhealingblocked_blockedbyability_\@, TRUE
 	goto jumpifhealingblocked_notblocked_\@
 	jumpifhealingblocked_blockedbyability_\@:
 	call BattleScript_AbilityPopUp

@@ -439,8 +439,8 @@ u16 GetSilvallyForm(struct Pokemon *mon);
 u16 GetGiratinaForm(struct Pokemon *mon);
 
 // static const data
-#if USE_GENERATED
-// #include "generated/data/pokemon/tutor_learnsets.h"
+#if USE_GENERATED_SPECIES
+#include "generated/data/pokemon/tutor_learnsets.h"
 #else
 #include "data/pokemon/tutor_learnsets.h"
 #endif
@@ -1831,8 +1831,8 @@ bool32 CanLearnTutorMove(u16 species, u8 tutor)  // note the change to bool32
         return 0;
     }
 
-    #if USE_GENERATED
-    // return gTutorLearnsets[species]->bits[tutor / 16] & (1 << (tutor % 16));
+    #if USE_GENERATED_SPECIES
+    return gTutorLearnsets[species]->bits[tutor / 16] & (1 << (tutor % 16));
     #else
     return gTutorLearnsets[species].bits[tutor / 16] & (1 << (tutor % 16));
     #endif
@@ -2676,6 +2676,10 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId) {
 
     if (!InBattlePike()) {
         if (GetMonData(&mons[1], MON_DATA_SPECIES) != SPECIES_NONE) AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SWITCH);
+
+        if (GetMonData(&mons[slotId], MON_DATA_SPECIES) != SPECIES_NONE && enablePokemonChanges())
+            AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MOVES);
+
         if (ItemIsMail(GetMonData(&mons[slotId], MON_DATA_HELD_ITEM)))
             AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MAIL);
         else
@@ -2850,7 +2854,12 @@ static void CB2_ShowPokemonSummaryScreen(void) {
         UpdatePartyToBattleOrder();
         ShowPokemonSummaryScreen(SUMMARY_MODE_LOCK_MOVES, gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuFromSummaryScreen);
     } else {
-        ShowPokemonSummaryScreen(SUMMARY_MODE_NORMAL, gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuFromSummaryScreen);
+        if(FlagGet(FLAG_SYS_OPEN_MOVE_MENU_FROM_PARTY_SCREEN)){
+            ShowPokemonSummaryScreen(SUMMARY_MODE_MOVE_LEARNER, gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuFromSummaryScreen);
+            FlagClear(FLAG_SYS_OPEN_MOVE_MENU_FROM_PARTY_SCREEN);
+        }
+        else
+            ShowPokemonSummaryScreen(SUMMARY_MODE_NORMAL, gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuFromSummaryScreen);
     }
 }
 
@@ -2863,10 +2872,8 @@ void CB2_ReturnToPartyMenuFromSummaryScreen(void) {
 
 static void CursorCb_ChangeMoves(u8 taskId) {
     PlaySE(SE_SELECT);
-    VarSet(VAR_PARTY_MENU_TUTOR_STATE, MOVE_TUTOR_LEVEL_UP_MOVES);
-    gLastViewedMonIndex = gPartyMenu.slotId;
-    VarSet(VAR_0x8004, gPartyMenu.slotId);
-    TeachMoveRelearnerMove();
+    FlagSet(FLAG_SYS_OPEN_MOVE_MENU_FROM_PARTY_SCREEN);
+    sPartyMenuInternal->exitCallback = CB2_ShowPokemonSummaryScreen;
     Task_ClosePartyMenu(taskId);
 }
 
@@ -7094,7 +7101,7 @@ void SetArceusForm(struct Pokemon *mon) {
     u16 species = GetMonData(mon, MON_DATA_SPECIES);
     u16 forme;
     u8 abilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM);
-    u16 ability = GetAbilityBySpecies(species, abilityNum);
+    AbilityEnum ability = GetAbilityBySpecies(species, abilityNum);
 
     if (GET_BASE_SPECIES_ID(species) == SPECIES_ARCEUS && (ability == ABILITY_MULTITYPE || MonHasInnate(mon, ABILITY_MULTITYPE, FALSE))) {
         forme = GetArceusForm(mon);

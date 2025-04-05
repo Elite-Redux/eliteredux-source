@@ -1,6 +1,5 @@
 package er.gfx
 
-import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.SPECIES_LIST
@@ -11,7 +10,6 @@ object CoordsGenerator : Generator {
     override fun generate(writer: OutputStreamWriter) {
         writer.appendLine(
             """
-            |$header
             |const struct MonCoords gMonFrontPicCoords[] = {
             |$IND${SPECIES_LIST.joinToString("\n$IND") { 
                 val mon = if (it.hasReuseVisuals()) SPECIES_MAP[it.reuseVisuals]!! else it

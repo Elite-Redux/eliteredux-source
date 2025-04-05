@@ -1,6 +1,5 @@
 package er.data
 
-import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.REAL_SPECIES_COUNT
@@ -15,7 +14,6 @@ object BaseStatsGenerator : Generator {
     override fun generate(writer: OutputStreamWriter) {
         writer.appendLine(
             """
-            |$header
             |#define PERCENT_FEMALE(percent) min(254, ((percent * 255) / 100))
             |
             |const BaseStats gBaseStats[$REAL_SPECIES_COUNT] = {""".trimMargin()
@@ -58,7 +56,7 @@ object BaseStatsGenerator : Generator {
                 } else {
                     dex.eggGroup.name
                 }
-                if (dex.hasBodyColor()) lines += ".bodyColor = BODY_COLOR_${dex.bodyColor}"
+                if (dex.hasBodyColor()) lines += ".bodyColor = ${dex.bodyColor}"
             }
             if (species.noFlip) lines += ".noFlip = TRUE"
             if (species.tier > 0) lines += ".tier = ${species.tier}"

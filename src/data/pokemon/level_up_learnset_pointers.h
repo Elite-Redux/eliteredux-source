@@ -111,6 +111,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_CUBONE] = sCuboneLevelUpLearnset,
     [SPECIES_MAROWAK] = sMarowakLevelUpLearnset,
     [SPECIES_HITMONLEE] = sHitmonleeLevelUpLearnset,
+    [SPECIES_HITMONLEE_MEGA] = sHitmonleeLevelUpLearnset,
     [SPECIES_HITMONCHAN] = sHitmonchanLevelUpLearnset,
     [SPECIES_HITMONCHAN_PARTNER] = sHitmonchanLevelUpLearnset,
     [SPECIES_HITMONCHAN_PARTNER_B] = sHitmonchanLevelUpLearnset,
@@ -1340,12 +1341,12 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_STUNFISK_GALARIAN] = sStunfiskGalarianLevelUpLearnset,
     // Misc Forms
     // Cosplay Pikachu
-    [SPECIES_PIKACHU_COSPLAY] = sPikachuLevelUpLearnset,
-    [SPECIES_PIKACHU_ROCK_STAR] = sPikachuLevelUpLearnset,
-    [SPECIES_PIKACHU_BELLE] = sPikachuLevelUpLearnset,
-    [SPECIES_PIKACHU_POP_STAR] = sPikachuLevelUpLearnset,
-    [SPECIES_PIKACHU_PH_D] = sPikachuLevelUpLearnset,
-    [SPECIES_PIKACHU_LIBRE] = sPikachuLevelUpLearnset,
+    [SPECIES_PIKACHU_COSPLAY] = sPikachuCosplayLevelUpLearnset,
+    [SPECIES_PIKACHU_ROCK_STAR] = sPikachuRockStarLevelUpLearnset,
+    [SPECIES_PIKACHU_BELLE] = sPikachuBelleLevelUpLearnset,
+    [SPECIES_PIKACHU_POP_STAR] = sPikachuPopStarLevelUpLearnset,
+    [SPECIES_PIKACHU_PH_D] = sPikachuPhDLevelUpLearnset,
+    [SPECIES_PIKACHU_LIBRE] = sPikachuLibreLevelUpLearnset,
     // Cap Pikachu
     [SPECIES_PIKACHU_ORIGINAL_CAP] = sPikachuLevelUpLearnset,
     [SPECIES_PIKACHU_HOENN_CAP] = sPikachuLevelUpLearnset,
@@ -1438,6 +1439,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_DARUMAKA_REDUX] = sDarumakaReduxLevelUpLearnset,
     [SPECIES_DARMANITAN_REDUX] = sDarmanitanReduxLevelUpLearnset,
     [SPECIES_DARMANITAN_REDUX_BOND] = sDarmanitanReduxLevelUpLearnset,
+    [SPECIES_DARMANITAN_REDUX_BLUNDER] = sDarmanitanReduxLevelUpLearnset,
     [SPECIES_DARMANITAN_REDUX_AURA] = sDarmanitanReduxLevelUpLearnset,
     // Deerling
     [SPECIES_DEERLING_SUMMER] = sDeerlingLevelUpLearnset,
@@ -1542,6 +1544,8 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     // Lycanroc
     [SPECIES_LYCANROC_MIDNIGHT] = sLycanrocMidnightLevelUpLearnset,
     [SPECIES_LYCANROC_DUSK] = sLycanrocDuskLevelUpLearnset,
+    [SPECIES_LYCANROC_ECLIPSE] = sLycanrocEclipseLevelUpLearnset,
+    [SPECIES_LYCANROC_TWILIGHT] = sLycanrocTwilightLevelUpLearnset,
     // Wishiwashi
     [SPECIES_WISHIWASHI_SCHOOL] = sWishiwashiLevelUpLearnset,
     // Silvally
@@ -1631,7 +1635,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_CASCOON_PRIMAL] = sCascoonLevelUpLearnset,
 
     [SPECIES_KINGAMBIT_REDUX] = sKingambit_ReduxLevelUpLearnset,
-    [SPECIES_TYRANITAR_MEGA_REDUX] = sTyranitar_Mega_ReduxLevelUpLearnset,
+    [SPECIES_TYRANITAR_MEGA_REDUX] = sTyranitar_ReduxLevelUpLearnset,
     [SPECIES_URSALUNA_MEGA] = sUrsaluna_MegaLevelUpLearnset,
     [SPECIES_IRON_EXO] = sIron_ExoLevelUpLearnset,
     [SPECIES_SCIZOR_REDUX] = sScizor_ReduxLevelUpLearnset,
@@ -1661,6 +1665,8 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_WEAVILE_REDUX_MEGA] = sWeavile_ReduxLevelUpLearnset,
     [SPECIES_ABOMASNOW_SANTA] = sAbomasnow_SantaLevelUpLearnset,
     [SPECIES_BEWEAR_ANGRY] = sBewearAngryLevelUpLearnset,
+    [SPECIES_MIMIKYU_APEX] = sMimikyu_RayquazaLevelUpLearnset,
+    [SPECIES_MIMIKYU_APEX_BUSTED] = sMimikyu_RayquazaLevelUpLearnset,
     [SPECIES_MIMIKYU_RAYQUAZA] = sMimikyu_RayquazaLevelUpLearnset,
     [SPECIES_MIMIKYU_RAYQUAZA_BUSTED] = sMimikyu_RayquazaLevelUpLearnset,
     [SPECIES_ESPEON_GALAXY] = sEspeonLevelUpLearnset,
@@ -1782,5 +1788,40 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_SNORLAX_MEGA] = sSnorlaxLevelUpLearnset,
 
     //PARTNER POKEMON
-    
+    //3.0 CUTOFF
+    [SPECIES_IRON_VOCA] = sIronVocaLevelUpLearnset,
+    [SPECIES_WEAVILE_MEGA] = sWeavileLevelUpLearnset,
+    [SPECIES_HAPPINY_REDUX] = sHappinyReduxLevelUpLearnset,
+    [SPECIES_CHANSEY_REDUX] = sChanseyReduxLevelUpLearnset,
+    [SPECIES_BLISSEY_REDUX] = sBlisseyReduxLevelUpLearnset,
+    [SPECIES_DEWPIDER_REDUX] = sDewpiderReduxLevelUpLearnset,
+    [SPECIES_ARAQUANID_REDUX] = sAraquanidReduxLevelUpLearnset,
+    [SPECIES_FROSTULA] = sFrostulaLevelUpLearnset,
+    [SPECIES_CHESNAUGHT_BATTLE_BOND] = sChesnaughtLevelUpLearnset,
+    [SPECIES_CHESNAUGHT_CLEMONT] = sChesnaughtLevelUpLearnset,
+    [SPECIES_DELPHOX_BATTLE_BOND] = sDelphoxLevelUpLearnset,
+    [SPECIES_DELPHOX_SERENA] = sDelphoxLevelUpLearnset,
+    [SPECIES_SERPERIOR_MEGA] = sSerperiorLevelUpLearnset,
+    [SPECIES_EMBOAR_MEGA] = sEmboarLevelUpLearnset,
+    [SPECIES_SAMUROTT_MEGA] = sSamurottLevelUpLearnset,
+    [SPECIES_SPIRITOMB_REDUX] = sSpiritombReduxLevelUpLearnset,
+    [SPECIES_MORPEKYLL] = sMorpekyllLevelUpLearnset,
+    [SPECIES_MORPEKYLL_HANGRY] = sMorpekyllLevelUpLearnset,
+    [SPECIES_DECIDUEYE_MEGA] = sDecidueyeLevelUpLearnset,
+    [SPECIES_DECIDUEYE_HISUIAN_MEGA] = sDecidueyeHisuianLevelUpLearnset,
+    [SPECIES_INCINEROAR_MEGA] = sIncineroarLevelUpLearnset,
+    [SPECIES_MEOWSCARADA_MEGA] = sMeowscaradaLevelUpLearnset,
+    [SPECIES_PRIMARINA_MEGA] = sPrimarinaLevelUpLearnset,
+    [SPECIES_SAMUROTT_HISUIAN_MEGA] = sSamurottHisuianLevelUpLearnset,
+    [SPECIES_SKELEDIRGE_MEGA] = sSkeledirgeLevelUpLearnset,
+    [SPECIES_TYPHLOSION_HISUIAN_MEGA] = sTyphlosionHisuianLevelUpLearnset,
+    [SPECIES_QUAQUAVAL_MEGA] = sQuaquavalLevelUpLearnset,
+    [SPECIES_ROSERADE_MEGA] = sRoseradeLevelUpLearnset,
+    [SPECIES_ARCANINE_MEGA] = sArcanineLevelUpLearnset,
+    [SPECIES_SLOWBRO_MEGA_GALARIAN] = sSlowbroGalarianLevelUpLearnset,
+    [SPECIES_SLOWKING_MEGA_GALARIAN] = sSlowkingGalarianLevelUpLearnset,
+    //[SPECIES_TOXAPEX_MEGA] = sToxapexLevelUpLearnset,
+    [SPECIES_UNOWN_REVELATION] = sUnownLevelUpLearnset,
+    [SPECIES_GOODRA_MEGA] = sGoodraLevelUpLearnset,
+    [SPECIES_MIENSHAO_MEGA] = sMienshaoLevelUpLearnset,
 };

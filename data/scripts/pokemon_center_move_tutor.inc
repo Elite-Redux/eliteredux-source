@@ -363,10 +363,13 @@ PKMN_Center_EventScript_Mystery_Gift::
 PKMN_Center_Mystery_Gift_EventScript_TakeCare::
 	switch VAR_TEMP_1
 	case SPECIES_GRENINJA_BATTLE_BOND, PKMN_Center_EventScript_SetflagGreninja
+	case SPECIES_DELPHOX_BATTLE_BOND, PKMN_Center_EventScript_SetflagDelphox
+	case SPECIES_CHESNAUGHT_BATTLE_BOND, PKMN_Center_EventScript_SetflagChesnaught
 	case SPECIES_ZYGARDE_10, PKMN_Center_EventScript_SetflagZygarde10
 	case SPECIES_ZYGARDE_10_POWER_CONSTRUCT, PKMN_Center_EventScript_SetflagZygarde10PowerConstruct
 	case SPECIES_MELOETTA, PKMN_Center_EventScript_SetflagMeloetta
 	case SPECIES_SILVALLY, PKMN_Center_Eventscript_SetflagSilvally
+	case SPECIES_CALYREX, PKMN_Center_Eventscript_SetflagCalyrex
 	case SPECIES_TERAPAGOS, PKMN_Center_EventScript_SetflagTerapagos
 	case SPECIES_CHI_YU, PKMN_Center_EventScript_SetflagChiYu
 	case SPECIES_WO_CHIEN, PKMN_Center_EventScript_SetflagWoChien
@@ -390,6 +393,16 @@ PKMN_Center_Mystery_Gift_EventScript_TakeCare::
 
 PKMN_Center_EventScript_SetflagGreninja::
 	setflag FLAG_RECEIVED_ASH_GRENINJA
+	releaseall
+	end
+
+PKMN_Center_EventScript_SetflagDelphox::
+	setflag FLAG_RECEIVED_SERENA_DELPHOX
+	releaseall
+	end
+
+PKMN_Center_EventScript_SetflagChesnaught::
+	setflag FLAG_RECEIVED_CLEMONT_CHESNAUGHT
 	releaseall
 	end
 
@@ -475,6 +488,11 @@ PKMN_Center_EventScript_SetflagEnamorus::
 
 PKMN_Center_EventScript_SetflagMeloetta::
 	setflag FLAG_RECEIVED_MELOETTA
+	releaseall
+	end
+
+PKMN_Center_Eventscript_SetflagCalyrex::
+	setflag FLAG_RECEIVED_CALYREX
 	releaseall
 	end
 

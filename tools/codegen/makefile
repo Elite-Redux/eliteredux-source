@@ -2,14 +2,21 @@ KT_SRCS := $(wildcard src/er/*.kt src/er/*/*.kt src/er/*/*/*.kt)
 PREPROC_SRCS := $(wildcard src/preproc/*.kt src/preproc/*/*.kt src/preproc/*/*/*.kt)
 JAVA_SRCS := $(wildcard src/er/*.java src/er/*/*.java src/er/*/*/*.java)
 PROTOS := ../../proto
-PROTO_SRCS := $(subst ../../proto/,,$(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto $(PROTOS)/*/*/*.proto))
+PROTO_SRCS := $(subst ../../proto/,,$(wildcard $(PROTOS)/*.proto $(PROTOS)/*/*.proto))
 TEXTPROTO_SRCS := $(wildcard $(PROTOS)/*.textproto $(PROTOS)/*/*.textproto $(PROTOS)/*/*/*.textproto)
 
 all: timestamp/generated
 	@:
 
+OS :=$(shell uname)
+ifeq ($(OS),Darwin)
+	TARGET := osx
+else
+	TARGET := linux
+endif
+
 protoc:
-	if [ ! -f protoc.zip ]; then wget -O protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-linux-x86_64.zip -q && exit; fi
+	if [ ! -f protoc.zip ]; then wget -O protoc.zip "https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-$(TARGET)-x86_64.zip" -q && exit; fi
 	@unzip -p protoc.zip bin/protoc > protoc && exit
 
 protobuf-java.jar:
@@ -21,26 +28,26 @@ protobuf-kotlin.jar:
 preproc.jar: $(PREPROC_SRCS) protobuf-java.jar
 	find src/preproc -name '*.kt' | xargs  kotlinc -cp protobuf-java.jar  -include-runtime -d preproc.jar && exit 
 
+DEPSETS := $(addprefix timestamp/depsets/,$(PROTO_SRCS))
+PROTODEP := $(addsuffix .protodep.txt,$(addprefix timestamp/protodep/,$(PROTO_SRCS)))
+
 define BUILD_PROTO
-DEPS := $(shell grep -oPs '\S+\.proto(?=\\)' protodep/$1.protodep.txt)
 timestamp/depsets/$1: ../../proto/$1 protoc
 	@perl -pi.bak -e 'BEGIN{$$$$counter=1000000;} s/\@NEXT/$$$$counter++/ge' ../../proto/$1
 	@rm -f ../../proto/$1.bak
 	@mkdir -p timestamp/depsets
 	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --descriptor_set_out=timestamp/depsets/$1 --experimental_allow_proto3_optional && exit
 
-protodep/$1.protodep.txt: timestamp/depsets/$1 protoc ../../proto/$1 $$(DEPS) preproc.jar protobuf-java.jar
+timestamp/protodep/$1.protodep.txt: $$(DEPSETS) protoc ../../proto/$1 $$(DEPS) preproc.jar protobuf-java.jar
 	java -cp preproc.jar:protobuf-java.jar preproc.ProtoProcessor ../../proto/$1 timestamp/depsets/$1 && exit
-	@mkdir -p protodep
-	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --kotlin_out=src --dependency_out=protodep/$1.protodep.txt --experimental_allow_proto3_optional && exit
+	@mkdir -p timestamp/protodep
+	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --kotlin_out=src --dependency_out=timestamp/protodep/$1.protodep.txt --experimental_allow_proto3_optional && exit
 endef
 $(foreach proto,$(PROTO_SRCS),$(eval $(call BUILD_PROTO,$(proto))))
 
-protodep: $(addsuffix .protodep.txt,$(addprefix protodep/,$(PROTO_SRCS)))
+protos: $(PROTODEP)
 
-protos: protodep
-
-codegen.jar: protobuf-java.jar $(JAVA_SRCS) protodep
+codegen.jar: protobuf-java.jar $(JAVA_SRCS) $(PROTODEP)
 	@rm -rf javabuild
 	find src/er -name '*.java' | xargs  javac -cp "protobuf-java.jar:protobufkt.jar" -d javabuild && exit
 	@jar cf codegen.jar -C javabuild . && exit
@@ -68,7 +75,7 @@ ALL_GENERATED += ../../$(strip $1)
 endef
 
 $(eval $(call GENERATE, include/generated/constants/abilities.h, abilities))
-$(eval $(call GENERATE, include/generated/constants/moves.h, moves))
+
 $(eval $(call GENERATE, include/generated/constants/species.h, species))
 $(eval $(call GENERATE, include/generated/data/pokemon/base_stats.h, basestats))
 $(eval $(call GENERATE, include/generated/data/pokemon/evolution.h, evos))
@@ -80,6 +87,18 @@ $(eval $(call GENERATE, include/generated/data/pokemon_graphics/icons.h, icons))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/pics.h, monpics))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/coordinates.h, coords))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/palettes.h, monpals))
+$(eval $(call GENERATE, include/generated/data/pokemon/reverse_mega_map.h, reversemegamap))
+
+$(eval $(call GENERATE, include/generated/constants/moves.h, moves))
+$(eval $(call GENERATE, include/generated/data/text/move_names.h, movenames))
+$(eval $(call GENERATE, include/generated/data/text/move_descriptions.h, movedescriptions))
+$(eval $(call GENERATE, include/generated/constants/battle_move_effects.h, movebehaviors))
+$(eval $(call GENERATE, include/generated/constants/move_effects.h, moveeffects))
+$(eval $(call GENERATE, include/generated/data/battle_moves.h, battlemoves))
+
+$(eval $(call GENERATE, include/generated/data/abilities/ability_text.hh, abilitytext))
+
+$(eval $(call GENERATE, include/generated/data/text/help_articles.h, helparticles))
 
 timestamp/generated: $(ALL_GENERATED)
 	@touch timestamp/generated
@@ -93,7 +112,6 @@ regenerate: removegenerated generated
 
 cleanlocal: removegenerated
 	rm -rf javabuild
-	rm -rf protodep
 	rm -f protoc
 	rm -f protoc.zip
 	rm -rf ../../generated
@@ -102,6 +120,8 @@ cleanlocal: removegenerated
 	rm -f codegenkt.jar
 	rm -rf out/depsets
 	rm -rf out/descriptors
+	rm -f src/er/proto/*.java
+	rm -f src/er/proto/*.kt
 
 clean: cleanlocal
 	rm -f *.jar

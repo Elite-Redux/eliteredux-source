@@ -2345,6 +2345,25 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_KINGDRA_PARTNER_MEGA:
         case SPECIES_KINGDRA_PARTNER_MEGA_B:
         case SPECIES_KINGDRA_PARTNER_MEGA_C:
+        case SPECIES_SAMUROTT_MEGA:
+        case SPECIES_EMBOAR_MEGA:
+        case SPECIES_SERPERIOR_MEGA:
+        case SPECIES_QUAQUAVAL_MEGA:
+        case SPECIES_MEOWSCARADA_MEGA:
+        case SPECIES_SKELEDIRGE_MEGA:
+        case SPECIES_SAMUROTT_HISUIAN_MEGA:
+        case SPECIES_DECIDUEYE_HISUIAN_MEGA:
+        case SPECIES_TYPHLOSION_HISUIAN_MEGA:
+        case SPECIES_GOODRA_MEGA:
+        case SPECIES_ROSERADE_MEGA:
+        case SPECIES_ARCANINE_MEGA:
+        case SPECIES_MIENSHAO_MEGA:
+        case SPECIES_WEAVILE_MEGA:
+        case SPECIES_SLOWKING_MEGA_GALARIAN:
+        case SPECIES_SLOWBRO_MEGA_GALARIAN:
+        case SPECIES_DECIDUEYE_MEGA:
+        case SPECIES_INCINEROAR_MEGA:
+        case SPECIES_PRIMARINA_MEGA:
             isMega = TRUE;
             if (DrawMegaSymbolBeforeName)
                 StringCopy(gDisplayedStringBattle, gText_MegaSymbolBefore);
@@ -3304,7 +3323,7 @@ static void PrintBattlerOnAbilityPopUp(u8 battlerId, u8 spriteId1, u8 spriteId2)
                         2, 7, 1);
 }
 
-static void PrintAbilityOnAbilityPopUp(u32 ability, u8 spriteId1, u8 spriteId2)
+static void PrintAbilityOnAbilityPopUp(AbilityEnum ability, u8 spriteId1, u8 spriteId2)
 {
     PrintOnAbilityPopUp(gAbilities[ability].name,
                         (void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32) + 256,
@@ -3427,7 +3446,7 @@ static void RestoreOverwrittenPixels(u8 *tiles)
     Free(buffer);
 }
 
-void CreateAbilityPopUp(u8 battlerId, u32 ability, bool32 isDoubleBattle)
+void CreateAbilityPopUp(u8 battlerId, AbilityEnum ability, bool32 isDoubleBattle)
 {
     const s16 (*coords)[2];
     u8 spriteId1, spriteId2, battlerPosition, taskId;
@@ -3509,7 +3528,7 @@ void UpdateAbilityPopup(u8 battlerId)
 {
     u8 spriteId1 = gBattleStruct->abilityPopUpSpriteIds[battlerId][0];
     u8 spriteId2 = gBattleStruct->abilityPopUpSpriteIds[battlerId][1];
-    u16 ability = (gBattleScripting.abilityPopupOverwrite != 0) ? gBattleScripting.abilityPopupOverwrite : GetBattlerAbility(battlerId);
+    AbilityEnum ability = (gBattleScripting.abilityPopupOverwrite != 0) ? gBattleScripting.abilityPopupOverwrite : GetBattlerAbility(battlerId);
     
     PrintAbilityOnAbilityPopUp(ability, spriteId1, spriteId2);
     RestoreOverwrittenPixels((void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32));

@@ -343,6 +343,7 @@ SECTIONS {
         src/mgba_printf/mgba.o(.text);
         src/ui_intro_options.o(.text);
         src/ui_start_menu.o(.text);
+        src/ui_information_menu.o(.text);
         src/ui_battle_menu.o(.text);
         src/mgba_printf/mini_printf.o(.text);
         src/quests.o(.text);
@@ -721,6 +722,7 @@ SECTIONS {
         src/tx_registered_items_menu.o(.rodata);
         src/ui_intro_options.o(.rodata);
         src/ui_start_menu.o(.rodata);
+        src/ui_information_menu.o(.rodata);
         src/ui_battle_menu.o(.rodata);
         src/mgba_printf/mgba.o(.rodata);
         src/quests.o(.rodata);
@@ -1644,6 +1646,7 @@ SECTIONS {
         *libc.a(.data);
         src/ui_intro_options.o(.data);
         src/ui_start_menu.o(.data);
+        src/ui_information_menu.o(.data);
         src/ui_battle_menu.o(.data);
         *libc.a:syscalls.o(.rodata);
         src/libisagbprn.o(.rodata);

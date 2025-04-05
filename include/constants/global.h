@@ -201,6 +201,7 @@
 #define SEASON_AUTUMN 2
 #define SEASON_WINTER 3
 
+//General UI Stuff
 #define MENU_COLOR_BLUE   0
 #define MENU_COLOR_RED    1
 #define MENU_COLOR_YELLOW 2

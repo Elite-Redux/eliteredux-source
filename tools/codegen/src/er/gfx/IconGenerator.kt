@@ -1,6 +1,5 @@
 package er.gfx
 
-import er.FileGenerator.header
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.SPECIES_COUNT
@@ -24,7 +23,6 @@ object IconGenerator : Generator {
         }.filter { it.first != icon {} }
         val (iconIds, speciesIconIds) = iconInfo.createDedupMaps()
 
-        writer.appendLine(header)
         writer.appendLine(iconIds.entries.joinToString("\n") {
             "const u8 $ICON_PREFIX${it.value}[] = INCBIN_U8(\"graphics/pokemon/${it.key.path}.4bpp\");"
         })

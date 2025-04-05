@@ -121,8 +121,8 @@ void ConfigureMoves(int battlerAtk, int unusableMoves, struct AiData* aiData) {
                 break;
 
             case MOVE_TARGET_OPPONENTS_FIELD:
-                if (SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_OPPOSITE(battlerAtk)), moveNum, aiData)) break;
-                SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk))), moveNum, aiData);
+                if (SetMoveVs(battlerAtk, GetOppositeSide(battlerAtk), moveNum, aiData)) break;
+                SetMoveVs(battlerAtk, BATTLE_PARTNER(GetOppositeSide(battlerAtk)), moveNum, aiData);
                 break;
 
             case MOVE_TARGET_USER_OR_SELECTED:

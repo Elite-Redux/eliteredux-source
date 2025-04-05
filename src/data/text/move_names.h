@@ -1,3 +1,10 @@
+#ifndef GUARD_MOVE_NAMES_H
+#define GUARD_MOVE_NAMES_H
+
+#if USE_GENERATED_MOVES
+#include "generated/data/text/move_names.h"
+#else
+
 const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
 {
     [MOVE_NONE] = _("-"),
@@ -804,7 +811,7 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_BLACK_MAGIC] = _("Black Magic"),
     [MOVE_FLAME_TONGUE] = _("Flame Tongue"),
     [MOVE_BLAZING_ARROW] = _("BlazingArrow"),
-    [MOVE_ROCKET_PUNCH] = _("Rocket Punch"),
+    [MOVE_ROCKET_PUNCH] = _("Rocket Shot"),
     [MOVE_WEB_SHOT] = _("Web Shot"),
     [MOVE_AURA_FORCE] = _("Aura Force"),
     [MOVE_DRAKE_MISSILE] = _("DracoMissile"),
@@ -832,12 +839,12 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_SHED_TAIL] = _("Shed Tail"),
     [MOVE_BERRY_SMASH] = _("Berry Smash"),
     [MOVE_HYDRO_STEAM] = _("Hydro Steam"),
-    [MOVE_SUPERHOT_FLAME] = _("SuperhotFlme"),
+    [MOVE_SUPERHOT_FLAME] = _("Super Flame"),
     [MOVE_TRIPLE_ARROWS] = _("Triple Arrow"),
     [MOVE_DOUBLE_LARIAT] = _("DoubleLariat"),
     [MOVE_LEECH_BLADE] = _("Leech Blade"),
     [MOVE_YGGDRASIL_FORCE] = _("YggdrasilFrc"),
-    [MOVE_DRAIN_BRAIN] = _("Drain Brain"),
+    [MOVE_DRAIN_BRAIN] = _("Brain Drain"),
     [MOVE_PSYCHOKINETIC_SLAM] = _("PsychokinSlm"),
     [MOVE_ESPER_WING] = _("Esper Wing"),
     [MOVE_MORTAL_SPIN] = _("Mortal Spin"),
@@ -999,6 +1006,8 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_ONI_FIST] = _("Oni Fist"),
     [MOVE_INSECT_IMPACT] = _("InsectImpact"),
     [MOVE_LIGHTNING_BULLET] = _("LghtngBullet"),
+    [MOVE_METALLIC_MELODY] = _("MetalcMelody"),
+    [MOVE_BLUE_MOON] = _("Blue Moon"),
 };
 
 // Second table with longer move names for places where they fit.
@@ -1809,10 +1818,10 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_BLACK_MAGIC] = _("Black Magic"),
     [MOVE_FLAME_TONGUE] = _("Flame Tongue"),
     [MOVE_BLAZING_ARROW] = _("Blazing Arrow"),
-    [MOVE_ROCKET_PUNCH] = _("Rocket Punch"),
+    [MOVE_ROCKET_PUNCH] = _("Rocket Shot"),
     [MOVE_WEB_SHOT] = _("Web Shot"),
     [MOVE_AURA_FORCE] = _("Aura Force"),
-    [MOVE_DRAKE_MISSILE] = _("Drake Missile"),
+    [MOVE_DRAKE_MISSILE] = _("Draco Missile"),
     [MOVE_LOTUS_SHOWER] = _("Lotus Shower"),
     [MOVE_JAGGED_HORNS] = _("Jagged Horns"),
     [MOVE_BLOOD_SHOT] = _("Blood Shot"),
@@ -1837,7 +1846,7 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_SHED_TAIL] = _("Shed Tail"),
     [MOVE_BERRY_SMASH] = _("Berry Smash"),
     [MOVE_HYDRO_STEAM] = _("Hydro Steam"),
-    [MOVE_SUPERHOT_FLAME] = _("Superhot Flame"),
+    [MOVE_SUPERHOT_FLAME] = _("Boiling Flame"),
     [MOVE_TRIPLE_ARROWS] = _("Triple Arrows"),
     [MOVE_DOUBLE_LARIAT] = _("Double Lariat"),
     [MOVE_LEECH_BLADE] = _("Leech Blade"),
@@ -2004,4 +2013,8 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_ONI_FIST] = _("Oni Fist"),
     [MOVE_INSECT_IMPACT] = _("Insect Impact"),
     [MOVE_LIGHTNING_BULLET] = _("Lightning Bullet"),
+    [MOVE_METALLIC_MELODY] = _("Metallic Melody"),
+    [MOVE_BLUE_MOON] = _("Blue Moon"),
 };
+#endif
+#endif

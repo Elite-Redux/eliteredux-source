@@ -874,7 +874,7 @@ static void PutAiInfoText(struct BattleDebugMenu *data)
     {
         if (GET_BATTLER_SIDE(i) == B_SIDE_PLAYER && IsBattlerAlive(i))
         {
-            u16 ability = GetBattlerAbility(i);
+            AbilityEnum ability = GetBattlerAbility(i);
             u16 holdEffect = AI_GetHoldEffect(i);
             u16 item = gBattleMons[i].item;
             u8 x = (i == B_POSITION_PLAYER_LEFT) ? 83 + (i) * 75 : 83 + (i-1) * 75;

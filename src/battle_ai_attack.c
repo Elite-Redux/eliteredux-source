@@ -34,7 +34,7 @@ int CheckPowder(int battlerAtk, int move) {
 // int ScoreDamage(int battlerAtk, int battlerDef, int move, u8* moveType, u16* effectiveness, struct MoveState* moveState, struct AiData* aiData)
 // {
 //     int damage, ignored, absorption, statId;
-//     u16 ability;
+//     AbilityEnum ability;
 //     // TODO: Handle fixed damage
 //     damage = CalculateMoveDamageAndEffectiveness(move, battlerAtk, battlerDef, moveType, effectiveness);
 //     switch (absorption)
@@ -1913,7 +1913,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
 int CheckImmunities(int battlerAtk, int battlerDef, int move, int moveType, int effectiveness, int* score, struct MoveState* moveState) {
     int statId, absorbing;
-    u16 ability;
+    AbilityEnum ability;
     if (effectiveness == -1) {
         effectiveness = CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, FALSE);
     }

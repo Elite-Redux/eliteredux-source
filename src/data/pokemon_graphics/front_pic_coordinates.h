@@ -6067,6 +6067,16 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  6
     },
+    [SPECIES_MIMIKYU_APEX] =
+    {
+        .size = 0x45,
+        .y_offset = 12,
+    },
+    [SPECIES_MIMIKYU_APEX_BUSTED] =
+    {
+        .size = 0x45,
+        .y_offset = 12,
+    },
     [SPECIES_MIMIKYU_RAYQUAZA] =
     {
         .size = 0,
@@ -8367,6 +8377,192 @@ const struct MonCoords gMonFrontPicCoords[] =
         .y_offset = 3,
     },
     [SPECIES_CASCOON_PRIMAL] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    //3.0 CUTOFFS
+    [SPECIES_IRON_VOCA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_WEAVILE_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_HAPPINY_REDUX] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_CHANSEY_REDUX] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_BLISSEY_REDUX] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_DEWPIDER_REDUX] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_ARAQUANID_REDUX] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_FROSTULA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_CHESNAUGHT_BATTLE_BOND] =
+    {
+        .size = 0x45,
+        .y_offset = 4,
+    },
+    [SPECIES_DELPHOX_BATTLE_BOND] =
+    {
+        .size = 0x45,
+        .y_offset = 0,
+    },
+    [SPECIES_CHESNAUGHT_CLEMONT] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_DELPHOX_SERENA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_SERPERIOR_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_EMBOAR_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_SAMUROTT_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_MORPEKYLL] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_LYCANROC_ECLIPSE] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_LYCANROC_TWILIGHT] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_SPIRITOMB_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_MORPEKYLL_HANGRY] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_DECIDUEYE_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_DECIDUEYE_HISUIAN_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_INCINEROAR_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 2,
+    },
+    [SPECIES_MEOWSCARADA_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_PRIMARINA_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_QUAQUAVAL_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_SAMUROTT_HISUIAN_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 4,
+    },
+    [SPECIES_SKELEDIRGE_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 3,
+    },
+    [SPECIES_TYPHLOSION_HISUIAN_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 2,
+    },
+    [SPECIES_UNOWN_REVELATION] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_GOODRA_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 3,
+    },
+    [SPECIES_ARCANINE_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 3,
+    },
+    /*[SPECIES_TOXAPEX_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 3,
+    },*/
+    [SPECIES_SLOWBRO_MEGA_GALARIAN] =
+    {
+        .size = 0x88,
+        .y_offset = 3,
+    },
+    [SPECIES_SLOWKING_MEGA_GALARIAN] =
+    {
+        .size = 0x88,
+        .y_offset = 3,
+    },
+    [SPECIES_ROSERADE_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_MIENSHAO_MEGA] =
     {
         .size = 0x88,
         .y_offset = 0,

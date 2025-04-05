@@ -515,7 +515,7 @@ static const u8 sText_ForewarnActivates[] = _("Ability alerted {B_SCR_ACTIVE_NAM
 static const u8 sText_IceBodyHpGain[] = _("{B_ATK_NAME_WITH_PREFIX}'s Ice Body\nhealed it a little bit!");
 static const u8 sText_SnowWarningHail[] = _("It started to hail!");
 static const u8 sText_FriskActivates[] = _("{B_ATK_NAME_WITH_PREFIX} frisked {B_DEF_NAME_WITH_PREFIX} and\nfound its {B_LAST_ITEM}!");
-static const u8 sText_UnnerveEnters[] = _("The opposing team is too nervous\nto eat Berries!");
+static const u8 sText_UnnerveEnters[] = _("The opposing team is too nervous\nto use items!");
 static const u8 sText_HarvestBerry[] = _("{B_ATK_NAME_WITH_PREFIX} harvested\nits {B_LAST_ITEM}!");
 static const u8 sText_LastAbilityRaisedBuff1[] = _("{B_ATK_NAME_WITH_PREFIX}'s ability\nraised its {B_STAT_CHANGER}!");
 static const u8 sText_MagicBounceActivates[] = _("The {B_DEF_NAME_WITH_PREFIX} bounced the\n{B_ATK_NAME_WITH_PREFIX} back!");
@@ -648,7 +648,7 @@ static const u8 sText_AbilityAllowsOnlyMove[] = _("{B_ATK_NAME_WITH_PREFIX} can 
 static const u8 sText_SwappedAbilities[] = _("{B_DEF_NAME_WITH_PREFIX} swapped Abilities\nwith its target!");
 static const u8 sText_PastelVeilProtected[] = _("{B_DEF_NAME_WITH_PREFIX} is protected\nby a pastel veil!");
 static const u8 sText_PastelVeilEnters[] = _("{B_DEF_NAME_WITH_PREFIX} was cured\nof its poisoning!");
-static const u8 sText_BattlerTypeChangedTo[] = _("{B_BUFF1}'s type\nchanged to {B_BUFF2}!");
+static const u8 sText_BattlerTypeChangedTo[] = _("{B_STACK_1_NAME_WITH_PREFIX}'s type\nchanged to {B_BUFF2}!");
 static const u8 sText_BothCanNoLongerEscape[] = _("Neither POKéMON can run away!");
 static const u8 sText_CantEscapeDueToUsedMove[] = _("{B_ATK_NAME_WITH_PREFIX} can no longer escape\nbecause it used {B_CURRENT_MOVE}!");
 static const u8 sText_PkmnBecameWeakerToFire[] = _("{B_DEF_NAME_WITH_PREFIX} became\nweaker to fire!");
@@ -769,7 +769,7 @@ static const u8 sText_OverflowingWithSpacePower[] = _("{B_ATK_NAME_WITH_PREFIX} 
 static const u8 sText_PlayerGotBP[] = _("{B_PLAYER_NAME} got {B_BUFF1} Battle Point(s)\nfor winning!\p");
 static const u8 sText_CantUseTwiceInARow[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s can't use\n{B_CURRENT_MOVE} twice in a row!\p");
 static const u8 sText_AttackerLostElectricType[] = _("{B_ATK_NAME_WITH_PREFIX} used up\nall its electricity!");
-static const u8 sText_HeavySpikesScattered[] = _("Spikes were rain down on\nthe opponent's side!");
+static const u8 sText_HeavySpikesScattered[] = _("Spikes rain down on\nthe opponent's side!");
 static const u8 sText_PkmnAlreadyType[] = _("{B_ATK_NAME_WITH_PREFIX} couldn't\nchange its type!");
 static const u8 sText_PkmnCutHPRaisedStats[] = _("{B_ATK_NAME_WITH_PREFIX} cut its own HP\nand raised its stats!");
 static const u8 sText_PkmnAfflictedBySaltCure[] = _("{B_ATK_NAME_WITH_PREFIX} is hurt\nby Salt Cure!");
@@ -914,6 +914,10 @@ static const u8 sText_Cutthroat[] = _("{B_ATK_NAME_WITH_PREFIX} readies\ntheir b
 static const u8 sText_ItemStatProtected[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_LAST_ITEM}\nprevents its stats from lowering!");
 static const u8 sText_StackChangedTypeTo[] = _("{B_STACK_1_NAME_WITH_PREFIX}'s type\nchanged to {B_BUFF1}!");
 static const u8 sText_StackRegainedHealth[] = _("{B_STACK_1_NAME_WITH_PREFIX} regained\nhealth!");
+static const u8 sText_FireCoatDamage[] = _("{B_ATK_NAME_WITH_PREFIX} is scorched\nby the flames!");
+static const u8 sText_FireCoatStart[] = _("Flames engulf the battlefield!");
+static const u8 sText_Soothsayer[] = _("{B_ATK_NAME_WITH_PREFIX} peers\ninto the future!");
+static const u8 sText_RoseGarden[] = _("Toxic spikes rain down on\nthe opponent's side!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1072,6 +1076,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_MimicryEnds[] = _("{B_STACK_1_NAME_WITH_PREFIX}'s type\nreturns to normal!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1927,6 +1932,11 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ITEM_STAT_PROTECTED - 12] = sText_ItemStatProtected,
     [STRINGID_STACKTYPECHANGEDTO - 12] = sText_StackChangedTypeTo,
     [STRINGID_STACKREGAINEDHEALTH - 12] = sText_StackRegainedHealth,
+    [STRINGID_FIRECOATDAMAGE - 12] = sText_FireCoatDamage,
+    [STRINGID_FIRECOATSTART - 12] = sText_FireCoatStart,
+    [STRINGID_SOOTHSAYER - 12] = sText_Soothsayer,
+    [STRINGID_ROSEGARDEN - 12] = sText_RoseGarden,
+    [STRINGID_MIMICRYENDS - 12] = sText_MimicryEnds,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2018,6 +2028,8 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_HOT_COALS] = STRINGID_HOT_COALS_SET,
     [B_MSG_SWITCHIN_BLOOD_STAIN] = STRINGID_BLOOD_STAIN_ANNOUNCE,
     [B_MSG_SWITCHIN_CUTTHROAT] = STRINGID_CUTTHROAT,
+    [B_MSG_SWITCHIN_FIRE_COAT] = STRINGID_FIRECOATSTART,
+    [B_MSG_SWITCHIN_SOOTHSAYER] = STRINGID_SOOTHSAYER,
 };
 
 const u16 gParadoxBoostSourceIds[] = 

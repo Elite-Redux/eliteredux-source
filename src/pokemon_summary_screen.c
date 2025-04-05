@@ -1258,6 +1258,12 @@ void ShowPokemonSummaryScreen(u8 mode, void *mons, u8 monIndex, u8 maxMonIndex, 
             sMonSummaryScreen->trueMaxPageIndex = PSS_PAGE_BATTLE_MOVES;
         sMonSummaryScreen->lockMonFlag = TRUE;
         break;
+    case SUMMARY_MODE_MOVE_LEARNER:    // Index limiters aren't actually used in this case, but we'll keep them for clarity
+        sMonSummaryScreen->trueMinPageIndex = PSS_PAGE_BATTLE_MOVES;
+        sMonSummaryScreen->trueMaxPageIndex = PSS_PAGE_BATTLE_MOVES;
+        sMonSummaryScreen->lockMonFlag = FALSE;
+        sMonSummaryScreen->replaceMoveMode = TRUE;
+        break;
     }
 
     sMonSummaryScreen->minPageIndex = sMonSummaryScreen->trueMinPageIndex;
@@ -1420,7 +1426,7 @@ static bool8 LoadGraphics(void)
         gMain.state++;
         break;
     case 23:
-        if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+        if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE || sMonSummaryScreen->mode == SUMMARY_MODE_MOVE_LEARNER)
         {
             SetSpriteInvisibility(SPRITE_ARR_ID_MON, TRUE);
             SetSpriteInvisibility(SPRITE_ARR_ID_ITEM, TRUE);
@@ -1432,7 +1438,18 @@ static bool8 LoadGraphics(void)
         gMain.state++;
         break;
     case 24:
-        if (sMonSummaryScreen->mode != SUMMARY_MODE_SELECT_MOVE)
+        if(sMonSummaryScreen->mode == SUMMARY_MODE_MOVE_LEARNER)
+        {
+            LZDecompressWram(gSummaryScreenPageNewMoveTilemap, sMonSummaryScreen->bgTilemapBufferPage);
+            SetBgTilemapBuffer(2, sMonSummaryScreen->bgTilemapBufferPage);
+            ScheduleBgCopyTilemapToVram(2);
+            DoScheduledBgTilemapCopiesToVram();
+            PrintInfoBar(sMonSummaryScreen->currPageIndex, TRUE);
+            PrintMoveDetails(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex], FALSE);
+            ChangeBgX(1, 0, 0);
+            CreateTask(SwitchToMoveReplaceMenu, 0);
+        }
+        else if (sMonSummaryScreen->mode != SUMMARY_MODE_SELECT_MOVE)
         {
             LZDecompressWram(sPageTilemaps[sMonSummaryScreen->currPageIndex], sMonSummaryScreen->bgTilemapBufferPage);
             SetBgTilemapBuffer(2, sMonSummaryScreen->bgTilemapBufferPage);
@@ -2757,7 +2774,7 @@ static void PopulateAbilities(u16* abilities)
     }
 }
 
-static int HasAbility(int ability, u16* abilities)
+static int HasAbility(AbilityEnum ability, u16* abilities)
 {
     return abilities[0] == ability || abilities[1] == ability || abilities[2] == ability || abilities[3] == ability;
 }
@@ -2881,7 +2898,7 @@ static void GenerateMoveReplaceList(u8 keyPress) {
             {
             u16 boostedMoves[TUTOR_COUNT + 1] = {0};
             u16 otherMoves[TUTOR_COUNT + 1] = {0};
-            u16 abilities[6] = {0};
+            AbilityEnum abilities[6] = {0};
             for (i = 0; i < TUTOR_COUNT; i++)
             {
                 newMove = GetTutorMove(i);
@@ -3476,7 +3493,11 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
         }
     }
     else if (JOY_NEW(B_BUTTON)) {
-        if (sMonSummaryScreen->replaceMoveMode) {
+        if(sMonSummaryScreen->mode == SUMMARY_MODE_MOVE_LEARNER){
+            PlaySE(SE_SELECT);
+            BeginCloseSummaryScreen(taskId);
+        }
+        else if (sMonSummaryScreen->replaceMoveMode) {
             sMonSummaryScreen->moveReplaceMoveNum = 0;
             sMonSummaryScreen->replaceMoveMode = FALSE;
             PrintMoveInfoFromReplaceTab();
@@ -5221,7 +5242,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
 	u8 level = sum->level;
 	u8 x, y, i;
     bool8 isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2; //checks if you are looking into the summary screen for the enemy
-    u16 abilities[4] = {0};
+    AbilityEnum abilities[4] = {0};
     bool8 testInnateLock = FALSE;
 
     PopulateAbilities(abilities);
@@ -5244,7 +5265,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
     DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[0]].name);
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
 	// Description ---------------------------------------------------------------------------------------------------
-	DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[0]]);
+	DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[0]].description);
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
 
 	// Innates
@@ -5261,7 +5282,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[1]].name);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Description ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[1]]);
+                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[1]].description);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
                     }
                     else {
@@ -5289,7 +5310,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[2]].name);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Description ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[2]]);
+                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[2]].description);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
                     }
                     else {
@@ -5317,7 +5338,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[3]].name);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Description ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[3]]);
+                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[3]].description);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
                     }
                     else {

@@ -183,10 +183,10 @@ EWRAM_DATA struct BattlePokemon gBattleMons[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gBattlerSpriteIds[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gCurrMovePos = 0;
 EWRAM_DATA u8 gChosenMovePos = 0;
-EWRAM_DATA u16 gCurrentMove = 0;
-EWRAM_DATA u16 gTempMove = 0;
-EWRAM_DATA u16 gChosenMove = 0;
-EWRAM_DATA u16 gCalledMove = 0;
+EWRAM_DATA MoveEnum gCurrentMove = 0;
+EWRAM_DATA MoveEnum gTempMove = 0;
+EWRAM_DATA MoveEnum gChosenMove = 0;
+EWRAM_DATA MoveEnum gCalledMove = 0;
 EWRAM_DATA s32 gBattleMoveDamage = 0;
 EWRAM_DATA s32 gHpDealt = 0;
 EWRAM_DATA s32 gTakenDmg[MAX_BATTLERS_COUNT] = {0};
@@ -465,8 +465,6 @@ const struct TrainerBall gTrainerBallTable[] = {
     {TRAINER_CLASS_MONOTYPE_CHAMPION, ITEM_ULTRA_BALL},
     {0xFF, ITEM_POKE_BALL},
 };
-
-#include "data/text/abilities.h"
 
 static void (*const sTurnActionsFuncsTable[])(void) = {
     [B_ACTION_USE_MOVE] = HandleAction_UseMove,
@@ -1682,7 +1680,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     u8 DoubleReady = GetMonsStateToDoubles() == PLAYER_HAS_TWO_USABLE_MONS;
     u8 enemyPartySize = gTrainers[trainerNum].partySize;
 
-    u16 move = 1;
+    MoveEnum move = 1;
     u16 species = 1;
 
     if (DoubleReady && (gSaveBlock2Ptr->doubleBattleMode == TRUE || gTrainers[trainerNum].doubleBattle)) {
@@ -4294,12 +4292,12 @@ u16 GetChosenMove(u32 battlerId) {
 u16 IsMyceliumMightActive(u32 battlerId) { return battlerId == gBattlerAttacker && gHitMarker & HITMARKER_MYCELIUM_MIGHT; }
 
 s8 GetChosenMovePriority(u32 battlerId, u32 target) {
-    u16 move = GetChosenMove(battlerId);
+    MoveEnum move = GetChosenMove(battlerId);
 
     return GetMovePriority(battlerId, move, target);
 }
 
-s8 GetMovePriority(u32 battlerId, u16 move, u32 target) {
+s8 GetMovePriority(u32 battlerId, MoveEnum move, u32 target) {
     s8 priority;
 
     priority = gBattleMoves[move].priority;
@@ -4448,7 +4446,7 @@ static void SetActionsAndBattlersTurnOrder(void) {
             gRoundStructs[i].quickDraw = TRUE;
         else if (GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_QUICK_CLAW && (Random() % 100) < GetBattlerHoldEffectParam(i))
             gRoundStructs[i].usedCustapBerry = TRUE;
-        else if (!IsAbilityOnOpposingSide(i, ABILITY_UNNERVE) && GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_CUSTAP_BERRY &&
+        else if (!IsUnnerveAbilityOnOpposingSide(i) && GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_CUSTAP_BERRY &&
                  HasEnoughHpToEatBerry(i, 4, gBattleMons[i].item))
             gRoundStructs[i].usedCustapBerry = TRUE;
     }
@@ -5025,14 +5023,14 @@ void RunBattleScriptCommands(void) {
     if (gBattleControllerExecFlags == 0) gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
 }
 
-u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
+u8 GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer) {
     u32 moveType = gBattleMoves[move].type;
     u16 item = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
     u16 holdEffect = ItemId_GetHoldEffect(item);
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     u8 abilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM, NULL);
-    u16 ability = GetAbilityBySpecies(species, abilityNum);
+    AbilityEnum ability = GetAbilityBySpecies(species, abilityNum);
     u8 type1 = gBaseStats[species].type1;
     u8 type2 = gBaseStats[species].type2;
 
@@ -5109,7 +5107,7 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
     return gBattleMoves[move].type;
 }
 
-static int GetMoveTypeInternal(int move, int battlerAtk, u8 *ateBoost, s8 *realType) {
+static int GetMoveTypeInternal(MoveEnum move, int battlerAtk, u8 *ateBoost, s8 *realType) {
     switch (move) {
         case MOVE_STRUGGLE:
             return TYPE_NORMAL;
@@ -5207,12 +5205,12 @@ static int GetMoveTypeInternal(int move, int battlerAtk, u8 *ateBoost, s8 *realT
     return moveType;
 }
 
-u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk) {
+u8 GetTypeBeforeUsingMove(MoveEnum move, u8 battlerAtk) {
     s8 ignored;
     return GetMoveTypeInternal(move, battlerAtk, &ignored, &ignored);
 }
 
-void ApplyTypeOverrideInformation(int move, int battlerAtk, int moveType, int ateBoost) {
+void ApplyTypeOverrideInformation(MoveEnum move, int battlerAtk, int moveType, int ateBoost) {
     gBattleStruct->ateBoost[battlerAtk] = ateBoost;
 
     if (moveType >= 0)
@@ -5223,7 +5221,8 @@ void ApplyTypeOverrideInformation(int move, int battlerAtk, int moveType, int at
     }
 
     // Check if a gem should activate.
-    if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_GEMS && moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item)) {
+    if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_GEMS && moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item) &&
+        !IsUnnerveAbilityOnOpposingSide(battlerAtk)) {
         gTurnStructs[battlerAtk].gemParam = GetBattlerHoldEffectParam(battlerAtk);
         gTurnStructs[battlerAtk].gemBoost = TRUE;
     } else {
@@ -5231,7 +5230,7 @@ void ApplyTypeOverrideInformation(int move, int battlerAtk, int moveType, int at
     }
 }
 
-void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk) {
+void SetTypeBeforeUsingMove(MoveEnum move, u8 battlerAtk) {
     u32 moveType;
     s8 realType = -2;
 
@@ -5246,7 +5245,8 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk) {
         gBattleStruct->dynamicMoveType = 0;
 
     // Check if a gem should activate.
-    if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_GEMS && moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item)) {
+    if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_GEMS && moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item) &&
+        !IsUnnerveAbilityOnOpposingSide(battlerAtk)) {
         gTurnStructs[battlerAtk].gemParam = GetBattlerHoldEffectParam(battlerAtk);
         gTurnStructs[battlerAtk].gemBoost = TRUE;
     } else {

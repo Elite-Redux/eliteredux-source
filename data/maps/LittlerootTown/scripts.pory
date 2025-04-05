@@ -1961,9 +1961,9 @@ script LittlerootTown_EventScript_LegendaryNPC {
 		additem(ITEM_CHILL_DRIVE)
 		additem(ITEM_DOUSE_DRIVE)
 		additem(ITEM_DYNAMAX_ORB)
-		additem(ITEM_MELMETALITE) 
 		additem(ITEM_TERA_ORB)
 		additem(ITEM_ULTRANECROZIUM_P)
+		additem(ITEM_URSHIFITE)
 		playfanfare(MUS_OBTAIN_ITEM)
 		msgbox(format("{PLAYER} received legendary artifacts from the Sage!"))
 		waitmessage

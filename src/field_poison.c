@@ -123,7 +123,7 @@ s32 DoPoisonFieldEffect(void)
     struct Pokemon *pokemon = gPlayerParty;
     u32 numPoisoned = 0;
     u32 numSurvived = 0;
-    u32 ability;
+    AbilityEnum ability;
     for (i = 0; i < PARTY_SIZE; i++)
     {
         ability = GetMonAbility(&gPlayerParty[i]);

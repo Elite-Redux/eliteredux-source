@@ -5,33 +5,34 @@
 extern "C" {
 #endif
 
-#include "constants/abilities.h"
 #include "global.h"
+#include "constants/battle.h"
+#include "constants/abilities.h"
 
-typedef int (*AbilityOnEntryHandler)(int ability, int battler);
-typedef int (*AbilityOnAbsorbHandler)(int battler, int move, int moveType, int* statId);
-typedef int (*AbilityOnImmuneHandler)(int battler, int attacker, int move, int moveType, const u8** immunityScript);
+typedef int (*AbilityOnEntryHandler)(AbilityEnum ability, int battler);
+typedef int (*AbilityOnAbsorbHandler)(int battler, MoveEnum move, int moveType, int* statId);
+typedef int (*AbilityOnImmuneHandler)(int battler, int attacker, MoveEnum move, int moveType, const u8** immunityScript);
 typedef enum {
     INFILTRATE_NONE = 0,
     INFILTRATE_SCREENS = 1 << 0,
     INFILTRATE_SUBSTITUTE = 1 << 1,
     INFILTRATE_BREAK_SCREENS = 1 << 2,
 } InfiltrateType;
-typedef InfiltrateType (*AbilityOnInfiltrateHandler)(int battler, int move);
+typedef InfiltrateType (*AbilityOnInfiltrateHandler)(int battler, MoveEnum move);
 typedef int (*AbilityOnDisguiseHandler)(int battler, int checkOnly);
-typedef int (*AbilityOnWeatherHandler)(int ability, int battler);
-typedef int (*AbilityOnTerrainHandler)(int ability, int battler);
-typedef int (*AbilityOnEndTurnHandler)(int ability, int battler);
-typedef int (*AbilityOnAttackerHandler)(int ability, int battler, int target, int move, int moveType);
-typedef int (*AbilityOnDefenderHandler)(int ability, int battler, int attacker, int move, int moveType);
+typedef int (*AbilityOnWeatherHandler)(AbilityEnum ability, int battler);
+typedef int (*AbilityOnTerrainHandler)(AbilityEnum ability, int battler);
+typedef int (*AbilityOnEndTurnHandler)(AbilityEnum ability, int battler);
+typedef int (*AbilityOnAttackerHandler)(AbilityEnum ability, int battler, int target, MoveEnum move, int moveType);
+typedef int (*AbilityOnDefenderHandler)(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType);
 typedef int (*AbilityOnRecoilHandler)(int damage, int battler, int moveType);
 typedef enum {
     ABILITY_BS_PUSH_CURSOR_AND_CALLBACK,
     ABILITY_BS_CALL,
     ABILITY_BS_EXECUTE,
 } AbilityCallType;
-typedef int (*AbilityOnReactiveHandler)(int ability, int battler, AbilityCallType callType);
-typedef int (*AbilityOnBattlerFaintsHandler)(int ability, int battler, int attacker, int fainted, int move, int moveType);
+typedef int (*AbilityOnReactiveHandler)(AbilityEnum ability, int battler, AbilityCallType callType);
+typedef int (*AbilityOnBattlerFaintsHandler)(AbilityEnum ability, int battler, int attacker, int fainted, MoveEnum move, int moveType);
 typedef enum {
     MULTIHIT_SINGLE,
     MULTIHIT_TWO_TO_FIVE,
@@ -51,16 +52,16 @@ typedef enum {
     PARENTAL_BOND_THREE_HEADED,
     PARENTAL_BOND_ICE_COLD_HUNTER,
 } MultihitType;
-typedef MultihitType (*AbilityOnParentalBondHandler)(int battler, int move, int moveType);
+typedef MultihitType (*AbilityOnParentalBondHandler)(int battler, MoveEnum move, int moveType);
 typedef void (*AbilityOnOffensiveMultiplierHandler)(
-    int battler, int target, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistance, u16* modifier);
+    int battler, int target, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistance, u16* modifier);
 typedef void (*AbilityOnDefensiveMultiplierHandler)(
-    int battler, int attacker, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier);
+    int battler, int attacker, MoveEnum move, int moveType, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier);
 typedef enum NonStackingState {
     NON_STACKING_NONE = 0,
     NON_STACKING_RUIN = 1 << 0,
 } NonStackingState;
-typedef void (*AbilityOnStatHandler)(int ability, int battler, int statId, u32* stat, NonStackingState* flags);
+typedef void (*AbilityOnStatHandler)(AbilityEnum ability, int battler, int statId, u32* stat, NonStackingState* flags);
 typedef enum {
     ACCURACY_NO_RESULT = 0,
     ACCURACY_MULTIPLICATIVE,
@@ -68,15 +69,40 @@ typedef enum {
     ACCURACY_ALWAYS_MISSES,
     ACCURACY_ALWAYS_HITS,
 } AccuracyPriority;
-typedef AccuracyPriority (*AbilityOnAccuracyHandler)(int ability, int battler, int target, int move, int moveType, int* accuracy);
-typedef int (*AbilityOnSwapSplitHandler)(int battler, int move);
+typedef AccuracyPriority (*AbilityOnAccuracyHandler)(AbilityEnum ability, int battler, int target, MoveEnum move, int moveType, int* accuracy);
+typedef int (*AbilityOnSwapSplitHandler)(int battler, MoveEnum move);
 typedef void (*AbilityOnChooseOffensiveStat)(
-    int battler, int move, int ignoreOffensiveStatDrops, int targetUnaware, u8* atkStatToUse, u8* secondaryAtkStatToUse);
-typedef int (*AbilityOnChooseDefensiveStat)(int battler, int target, int move, int ignoreDefensiveStatBoosts, int battlerUnaware);
+    int battler, MoveEnum move, int ignoreOffensiveStatDrops, int targetUnaware, u8* atkStatToUse, u8 secondaryAtkStatToUse[NUM_STATS]);
+typedef int (*AbilityOnChooseDefensiveStat)(int battler, int target, MoveEnum move, int ignoreDefensiveStatBoosts, int battlerUnaware);
 typedef int (*AbilityOnStab)(int moveType);
-typedef int (*AbilityOnPriority)(int battler, int target, int move);
-typedef int (*AbilityOnMoveType)(int ability, int move, int moveType, u8* ateBoost);
-typedef int (*AbilityOnSwitchOut)(int ability, int battler);
+typedef int (*AbilityOnPriority)(int battler, int target, MoveEnum move);
+typedef int (*AbilityOnMoveType)(AbilityEnum ability, MoveEnum move, int moveType, u8* ateBoost);
+typedef int (*AbilityOnSwitchOut)(AbilityEnum ability, int battler);
+typedef int (*AbilityOnCrit)(int battler, int target, MoveEnum move);
+#define NEVER_CRIT -2
+#define ALWAYS_CRIT 3
+typedef int (*AbilityOnTypeEffectiveness)(int defType, MoveEnum move, int moveType, u16* mod);
+typedef int (*AbilityOnCopyMove)(AbilityEnum ability, int battler, int attacker, int target, MoveEnum move);
+typedef void (*AbilityOnAfterTypeEffectiveness)(int battler, AbilityEnum ability, int target, MoveEnum move, int moveType, u16* mod, u16 mod1, u16 mod2, u16 mod3);
+typedef void (*AbilityOnModifyEffectChance)(int battler, MoveEnum move, MoveEffectEnum moveEffect, int* effectChance);
+typedef enum {
+    CHECK_NONE = 0,
+    CHECK_SLEEP = 1,
+    CHECK_POISON = 1 << 1,
+    CHECK_BURN = 1 << 2,
+    CHECK_PARALYSIS = 1 << 3,
+    CHECK_FROSTBITE = 1 << 4,
+    CHECK_BLEED = 1 << 5,
+    CHECK_STATUS1 = CHECK_SLEEP | CHECK_POISON | CHECK_BURN | CHECK_PARALYSIS | CHECK_FROSTBITE | CHECK_BLEED,
+    CHECK_CONFUSION = 1 << 6,
+    CHECK_INFATUATE = 1 << 7,
+    CHECK_RESTRICTING = 1 << 8,
+    CHECK_HEAL_BLOCK = 1 << 9,
+} StatusCheckEnum;
+typedef int (*AbilityOnCanStatusType)(int battler, MoveEnum move, StatusCheckEnum status);
+typedef int (*AbilityOnStatusImmune)(int battler, int target, AbilityEnum ability, StatusCheckEnum status);
+typedef int (*AbilityOnTrap)(int escapingBattler);
+typedef int (*AbilityOnBeforeAttack)(int battler, int attacker, AbilityEnum ability, MoveEnum move, int moveType);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -102,36 +128,49 @@ typedef enum {
 typedef struct Ability {
     const u8* name;
     const u8* description;
-    const AbilityOnEntryHandler onEntry;
-    const AbilityOnAbsorbHandler onAbsorb;
-    const AbilityOnImmuneHandler onImmune;
-    const AbilityOnInfiltrateHandler onInfiltrate;
-    const AbilityOnDisguiseHandler onDisguise;
-    const AbilityOnWeatherHandler onWeather;
-    const AbilityOnTerrainHandler onTerrain;
-    const AbilityOnEndTurnHandler onEndTurn;
-    const AbilityOnAttackerHandler onAttacker;
-    const AbilityOnDefenderHandler onDefender;
-    const AbilityOnRecoilHandler onRecoil;
-    const AbilityOnReactiveHandler onReactive;
-    const AbilityOnBattlerFaintsHandler onBattlerFaints;
-    const AbilityOnParentalBondHandler onParentalBond;
-    const AbilityOnOffensiveMultiplierHandler onOffensiveMultiplier;
-    const AbilityOnDefensiveMultiplierHandler onDefensiveMultiplier;
-    const AbilityOnStatHandler onStat;
-    const AbilityOnAccuracyHandler onAccuracy;
-    const AbilityOnSwapSplitHandler onSwapSplit;
-    const AbilityOnChooseOffensiveStat onChooseOffensiveStat;
-    const AbilityOnChooseDefensiveStat onChooseDefensiveStat;
-    const AbilityOnStab onStab;
-    const AbilityOnPriority onPriority;
-    const AbilityOnMoveType onMoveType;
-    const AbilityOnSwitchOut onExit;
+    AbilityOnEntryHandler onEntry;
+    AbilityOnAbsorbHandler onAbsorb;
+    AbilityOnImmuneHandler onImmune;
+    AbilityOnInfiltrateHandler onInfiltrate;
+    AbilityOnDisguiseHandler onDisguise;
+    AbilityOnWeatherHandler onWeather;
+    AbilityOnTerrainHandler onTerrain;
+    AbilityOnEndTurnHandler onEndTurn;
+    AbilityOnAttackerHandler onAttacker;
+    AbilityOnDefenderHandler onDefender;
+    AbilityOnRecoilHandler onRecoil;
+    AbilityOnReactiveHandler onReactive;
+    AbilityOnBattlerFaintsHandler onBattlerFaints;
+    AbilityOnParentalBondHandler onParentalBond;
+    AbilityOnOffensiveMultiplierHandler onOffensiveMultiplier;
+    AbilityOnMoveType onMoveType;
+    AbilityOnDefensiveMultiplierHandler onDefensiveMultiplier;
+    AbilityOnStatHandler onStat;
+    AbilityOnAccuracyHandler onAccuracy;
+    AbilityOnSwapSplitHandler onSwapSplit;
+    AbilityOnChooseOffensiveStat onChooseOffensiveStat;
+    AbilityOnChooseDefensiveStat onChooseDefensiveStat;
+    AbilityOnStab onStab;
+    AbilityOnPriority onPriority;
+    AbilityOnSwitchOut onExit;
+    AbilityOnCrit onCrit;
+    AbilityOnTypeEffectiveness onTypeEffectiveness;
+    AbilityOnCopyMove onCopyMove;
+    AbilityOnAfterTypeEffectiveness onAfterTypeEffectiveness;
+    AbilityOnModifyEffectChance onModifyEffectChance;
+    AbilityOnCanStatusType onCanStatusType;
+    AbilityOnStatusImmune onStatusImmune;
+    AbilityOnTrap onTrap;
+    AbilityOnBeforeAttack onBeforeAttack;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;
     AbilityApplyOnWithTarget onAccuracyFor:5;
     AbilityApplyOn onStatFor:3;
+    AbilityApplyOnWithTarget onCritFor:5;
+    AbilityApplyOnWithTarget onAfterTypeEffectivenessFor:5;
+    AbilityApplyOn onStatusImmuneFor:3;
+    AbilityApplyOnWithTarget onBeforeAttackFor:5;
     u16 redirectType:5;
     u16 ruinStat:3;
     u16 noDamageHits:2;
@@ -149,16 +188,29 @@ typedef struct Ability {
     u16 skillLink:1;
     u16 resistsFortKnox:1;
     u16 fortKnox:1;
-    u16 protean:1;
-    u16 colorChange:1;
     u16 adaptability:1;
+    u16 magicBounce:1;
+    u16 levitate:1;
+    u16 megaLauncherBoost:1;
+    u16 unnerve:1;
+    u16 negatesBurnAtkDrop:1;
+    u16 negatesFrzSpatkDrop:1;
+    u16 canInfatuateAny:1;
+    u16 removesStatusOnImmunity:1;
+    u16 tauntImmune:1;
+    u16 shadowTag:1;
 } Ability;
 
 #ifdef __cplusplus
 #undef AbilityApplyOnWithTarget
 #endif
 
-extern const Ability gAbilities[ABILITIES_COUNT];
+typedef struct AbilitiesWrapper {
+    Ability abilities[ABILITIES_COUNT];
+} AbilitiesWrapper;
+
+extern const AbilitiesWrapper gAbilitiesWrapper;
+#define gAbilities gAbilitiesWrapper.abilities
 
 int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag);
 int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag);

@@ -46,6 +46,7 @@
 #include "text_window.h"
 #include "trainer_card.h"
 #include "window.h"
+#include "ui_start_menu.h"
 #include "ui_intro_options.h"
 #include "ui_start_menu.h"
 #include "ui_battle_menu.h"
@@ -299,14 +300,9 @@ static void BuildStartMenuActions(void)
     }
     else
     {
-	    calledMenuAction = gSaveBlock2Ptr->startMenuOptionToOpen;
+        calledMenuAction = gSaveBlock2Ptr->startMenuOptionToOpen;
         gSaveBlock2Ptr->startMenuOptionToOpen = 0;
         BuildNormalStartMenu();
-        /*#if defined(TX_DEBUG_SYSTEM_ENABLE) && TX_DEBUG_SYSTEM_IN_MENU
-			BuildDebugStartMenu();
-		#else
-			BuildNormalStartMenu();
-		#endif*/
     }
 }
 
@@ -320,7 +316,7 @@ static void BuildNormalStartMenu(void)
     bool8 disablePC = FALSE;
     canSave = TRUE;
 
-	switch(calledMenuAction){
+    switch(calledMenuAction){
         case MENU_ACTION_SAVE:
             InitSave();
             gMenuCallback = StartMenuSaveCallback;
@@ -776,7 +772,6 @@ static bool8 HandleStartMenuInput(void)
 
                 return FALSE;
             }
-
             if (JOY_NEW(START_BUTTON | B_BUTTON))
             {
                 RemoveExtraStartMenuWindows();
