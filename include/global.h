@@ -186,17 +186,6 @@
     f;                       \
 })
 
-#define STRINGLIST_MAX_LENGHT       20
-#define STRINGLIST_LONG_MAX_LENGHT  75
-struct StringList
-{
-    const u8 string[STRINGLIST_MAX_LENGHT];
-};
-struct StringList_Long
-{
-    const u8 string[STRINGLIST_LONG_MAX_LENGHT];
-};
-
 // Branch defines: Used by other branches to detect each other.
 // Each define must be here for each of RHH's branch you have pulled.
 // e.g. If you have both the battle_engine and pokemon_expansion branch,
@@ -217,6 +206,7 @@ struct StringList_Long
 
 #define STRINGLIST_MAX_LENGHT 20
 #define STRINGLIST_LONG_MAX_LENGHT 75
+
 struct StringList
 {
     const u8 string[STRINGLIST_MAX_LENGHT];
