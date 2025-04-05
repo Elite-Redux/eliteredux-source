@@ -49,6 +49,10 @@ object FileGenerator {
         "battlemoves" to BattleMovesGenerator,
         "reversemegamap" to ReverseMegaMappingGenerator,
         "abilitytext" to AbilityTextGenerator,
+        "pokedexentries" to PokedexEntriesGenerator,
+        "pokedexorders" to PokedexOrdersGenerator,
+        "pokedexnumbers" to PokedexNumbersMapGenerator,
+        "randomizerbanned" to RandomizerBannedGenerator,
     )
 
     @JvmStatic

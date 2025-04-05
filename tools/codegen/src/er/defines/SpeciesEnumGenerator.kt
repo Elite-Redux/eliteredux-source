@@ -3,12 +3,13 @@ package er.defines
 import er.Generator
 import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.GeneratorUtils.SPECIES_COUNT
-import er.proto.SpeciesEnum
+import er.GeneratorUtils.SPECIES_LIST
+import er.proto.Species.RandomizeBanned.SPECIES_HIDDEN
 import java.io.OutputStreamWriter
 
 object SpeciesEnumGenerator : Generator {
     override fun generate(writer: OutputStreamWriter) {
-        val species = SpeciesEnum.entries.filter { it != SpeciesEnum.UNRECOGNIZED }
+        val species = SPECIES_LIST.filter { it.randomizerBanned != SPECIES_HIDDEN }.map { it.id }
         writer.appendLine(
             """
             |// Max possible number of species

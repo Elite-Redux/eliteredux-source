@@ -8,10 +8,8 @@ import com.google.protobuf.GeneratedMessage.GeneratedExtension
 import com.google.protobuf.ProtocolMessageEnum
 import com.google.protobuf.TextFormat
 import er.FileGenerator.IND
-import er.proto.AbilityList
-import er.proto.MoveList
-import er.proto.SpeciesEnum
-import er.proto.SpeciesList
+import er.proto.*
+import er.proto.Species.RandomizeBanned.SPECIES_HIDDEN
 import java.io.File
 import java.io.OutputStreamWriter
 
@@ -34,7 +32,10 @@ object GeneratorUtils {
     }
 
     val SPECIES_LIST by lazy {
-        TextFormat.parse(File("../../proto/SpeciesList.textproto").readText(), SpeciesList::class.java).speciesList
+        TextFormat.parse(
+            File("../../proto/SpeciesList.textproto").readText(),
+            SpeciesList::class.java
+        ).speciesList.filter { it.randomizerBanned != SPECIES_HIDDEN }
     }
 
     val NO_EGG_LIST by lazy {

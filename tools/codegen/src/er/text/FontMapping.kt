@@ -39,7 +39,7 @@ object FontMapping {
                 curLength + pieceLength > maxLength
             ) {
                 append("\\n")
-                curLength = pieceLength
+                curLength = piece.trim().sumOf { it.width(font, true) }
                 append(piece.trim())
             } else {
                 append(piece)

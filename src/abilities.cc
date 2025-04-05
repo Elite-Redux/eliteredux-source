@@ -7034,11 +7034,11 @@ constexpr Ability FinalBlow = {
 
 constexpr Ability Hospitality = {
     .onEntry = +[](ON_ENTRY) -> int {
-        int partner = BATTLE_PARTNER(battler);
-        CHECK(IsBattlerAlive(partner))
-        CHECK_NOT(BATTLER_MAX_HP(partner))
+        gBattlerTarget = BATTLE_PARTNER(battler);
+        CHECK(IsBattlerAlive(gBattlerTarget))
+        CHECK_NOT(BATTLER_MAX_HP(gBattlerTarget))
 
-        gBattleMoveDamage = -gBattleMons[partner].maxHP / 4;
+        gBattleMoveDamage = -gBattleMons[gBattlerTarget].maxHP / 4;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptPushCursorAndCallback(BattleScript_Hospitality_AfterPopup);
         return TRUE;
