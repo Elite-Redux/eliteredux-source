@@ -1,5 +1,4 @@
 {
-  "layouts_table_label": "gMapLayouts",
   "group_order": [
     "gMapGroup_TownsAndRoutes",
     "gMapGroup_IndoorLittleroot",
@@ -626,7 +625,10 @@
     "NavelRock_Down11",
     "NavelRock_Bottom",
     "TrainerHill_Elevator",
-    "DebugMap"
+    "DebugMap",
+    "Route111_SunhollowRuins",
+    "Route111_Desert",
+    "Route111_SunhollowRuins_Museum"
   ],
   "gMapGroup_IndoorRoute104Prototype": [
     "Route104_Prototype",

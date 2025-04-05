@@ -1188,3 +1188,9 @@ Common_Text_ClydeAskResetTrainers::
 	.include "data/maps/VictoryRoadCRoom/scripts.inc"
 
 	.include "data/maps/VictoryRoadFroom/scripts.inc"
+
+	.include "data/maps/Route111_SunhollowRuins/scripts.inc"
+
+	.include "data/maps/Route111_Desert/scripts.inc"
+
+	.include "data/maps/Route111_SunhollowRuins_Museum/scripts.inc"

@@ -565,3 +565,11 @@ gMetatiles_SecretDungeons::
 	.align 1
 gMetatileAttributes_SecretDungeons::
 	.incbin "data/tilesets/secondary/secretdungeons/metatile_attributes.bin"
+
+	.align 1
+gMetatiles_Sunhollow_Ruins::
+	.incbin "data/tilesets/secondary/sunhollow_ruins/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_Sunhollow_Ruins::
+	.incbin "data/tilesets/secondary/sunhollow_ruins/metatile_attributes.bin"

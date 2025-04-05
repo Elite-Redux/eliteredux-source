@@ -595,6 +595,9 @@
 #define MAP_NAVEL_ROCK_BOTTOM                               (87 | (27 << 8))
 #define MAP_TRAINER_HILL_ELEVATOR                           (88 | (27 << 8))
 #define MAP_DEBUG_MAP                                       (89 | (27 << 8))
+#define MAP_ROUTE111_SUNHOLLOW_RUINS                        (90 | (27 << 8))
+#define MAP_ROUTE111_DESERT                                 (91 | (27 << 8))
+#define MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM                 (92 | (27 << 8))
 
 // gMapGroup_IndoorRoute104Prototype
 #define MAP_ROUTE104_PROTOTYPE                          (0 | (28 << 8))

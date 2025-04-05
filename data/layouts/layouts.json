@@ -4800,6 +4800,36 @@
       "secondary_tileset": "gTileset_MeteorFalls",
       "border_filepath": "data/layouts/VictoryRoadFroom/border.bin",
       "blockdata_filepath": "data/layouts/VictoryRoadFroom/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_SUNHOLLOW_RUINS",
+      "name": "Route111_SunhollowRuins_Layout",
+      "width": 80,
+      "height": 40,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Sunhollow_Ruins",
+      "border_filepath": "data/layouts/Route111_SunhollowRuins/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_SunhollowRuins/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_DESERT",
+      "name": "Route111_Desert_Layout",
+      "width": 80,
+      "height": 60,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Sunhollow_Ruins",
+      "border_filepath": "data/layouts/Route111_Desert/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_Desert/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_SUNHOLLOW_RUINS_MUSEUM",
+      "name": "Route111_SunhollowRuins_Museum_Layout",
+      "width": 20,
+      "height": 80,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_BattlePyramid",
+      "border_filepath": "data/layouts/Route111_SunhollowRuins_Museum/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_SunhollowRuins_Museum/map.bin"
     }
   ]
 }
