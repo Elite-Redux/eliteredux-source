@@ -1,12 +1,12 @@
 package er.defines
 
 import er.Generator
-import er.proto.AbilityEnum
+import er.GeneratorUtils.ABILITIES_LIST
 import java.io.OutputStreamWriter
 
 object AbilitiesEnumGenerator : Generator {
     override fun generate(writer: OutputStreamWriter) {
-        val abilities = AbilityEnum.entries.filter { it != AbilityEnum.UNRECOGNIZED }
+        val abilities = ABILITIES_LIST.map { it.id }
         val abilityCount = abilities.maxOf { it.number } + 1
         writer.appendLine(
             """

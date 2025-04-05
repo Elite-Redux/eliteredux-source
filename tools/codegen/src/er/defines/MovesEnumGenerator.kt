@@ -1,12 +1,12 @@
 package er.defines
 
 import er.Generator
-import er.proto.MoveEnum
+import er.GeneratorUtils.MOVES_LIST
 import java.io.OutputStreamWriter
 
 object MovesEnumGenerator : Generator {
     override fun generate(writer: OutputStreamWriter) {
-        val moves = MoveEnum.entries.filter { it != MoveEnum.UNRECOGNIZED }
+        val moves = MOVES_LIST.map { it.id }
         val movesCount = moves.maxOf { it.number } + 1
         writer.appendLine(
             """
