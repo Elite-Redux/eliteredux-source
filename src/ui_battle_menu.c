@@ -1284,7 +1284,7 @@ static void PrintStatsTab() {
     u8 x, y, x2, y2;
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
-    u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
+    SpeciesEnum species = gBattleMons[sMenuDataPtr->battlerId].species;
     u8 gender = GetGenderFromSpeciesAndPersonality(gBattleMons[sMenuDataPtr->battlerId].species, gBattleMons[sMenuDataPtr->battlerId].personality);
     u8 statStage;
     bool8 statStageUp = FALSE;
@@ -1544,7 +1544,7 @@ static void PrintAbilityTab() {
     u8 x, y, x2, y2;
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
-    u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
+    SpeciesEnum species = gBattleMons[sMenuDataPtr->battlerId].species;
     AbilityEnum innate1 = gBaseStats[species].innates[0];
     AbilityEnum innate2 = gBaseStats[species].innates[1];
     AbilityEnum innate3 = gBaseStats[species].innates[2];
@@ -2551,7 +2551,7 @@ static void PrintStatusTab(void) {
                 printedInfo = TRUE;
                 break;
             case STATUS_INFO_TRANSFORMED: {
-                u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
+                SpeciesEnum species = gBattleMons[sMenuDataPtr->battlerId].species;
 
                 StringCopy(gStringVar1, gSpeciesNames[species]);
                 StringExpandPlaceholders(gStringVar4, sText_Title_Status_Transformed);
@@ -2620,7 +2620,7 @@ static void PrintStatusTab(void) {
                 break;
             case STATUS_INFO_LEECHSEED: {
                 u8 seedUser = gStatuses3[sMenuDataPtr->battlerId] & STATUS3_LEECHSEED_BATTLER;
-                u16 species = gBattleMons[seedUser].species;
+                SpeciesEnum species = gBattleMons[seedUser].species;
 
                 StringCopy(gStringVar1, gSpeciesNames[species]);
                 StringExpandPlaceholders(gStringVar4, sText_Title_Status_Leech_Seed_Target);
@@ -5265,7 +5265,7 @@ static void PrintSpeedTab(void) {
 static void PrintToWindow(u8 windowId, u8 colorIdx) {
     u8 i, j;
     u8 x, y, x2, y2;
-    u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
+    SpeciesEnum species = gBattleMons[sMenuDataPtr->battlerId].species;
     AbilityEnum innate1 = gBaseStats[species].innates[0];
     AbilityEnum innate2 = gBaseStats[species].innates[1];
     AbilityEnum innate3 = gBaseStats[species].innates[2];
@@ -5529,7 +5529,7 @@ static void DestroyBattleMenuSprite(u8 spriteArrayId) {
 }
 
 static u8 ShowSpeciesIcon(u8 num) {
-    u16 species = gBattleMons[num].species;
+    SpeciesEnum species = gBattleMons[num].species;
     u16 personality = gBattleMons[num].personality;
     LoadMonIconPalette(species);
 
@@ -5586,7 +5586,7 @@ static void FreeSpeciesIconSprite(u8 battler) {
 }
 
 static u8 ShowSpeciesIconSpeed(u8 battler, u8 x, u8 y) {
-    u16 species = gBattleMons[battler].species;
+    SpeciesEnum species = gBattleMons[battler].species;
     u32 personality = gBattleMons[battler].personality;
     LoadMonIconPalette(species);
 
@@ -5625,7 +5625,7 @@ static u8 ShowSpeciesIconSpeed(u8 battler, u8 x, u8 y) {
 
 static u8 ShowSpeciesIconParty(u8 num, bool8 isEnemyParty, u8 x, u8 y) {
     struct Pokemon *party = NULL;
-    u16 species;
+    SpeciesEnum species;
     u32 personality;
     u8 spriteId;
 
@@ -5871,7 +5871,7 @@ static void PrintPage(void) {
 
 static void StartSummaryScreen(u8 taskId) {
     u8 currMonId = sMenuDataPtr->partyMenuSelectorID_X + (sMenuDataPtr->partyMenuSelectorID_Y * PARTY_TAB_NUM_MONS_X);
-    u16 species;
+    SpeciesEnum species;
     u8 partyCount;
     u8 value = 2;
     bool8 isEnemyMon = FALSE;
@@ -5919,7 +5919,7 @@ static void StartSummaryScreen(u8 taskId) {
 static void StartSummaryScreenForSpecificMon(u8 taskId) {
     u8 battler = sMenuDataPtr->battlerId;
     u8 currMonId = gBattlerPartyIndexes[battler];
-    u16 species;
+    SpeciesEnum species;
     u8 partyCount = 0;
     u8 value = 2;
     bool8 isEnemyMon = FALSE;

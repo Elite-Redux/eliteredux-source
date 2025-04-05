@@ -323,7 +323,7 @@ struct BerryCrush
 
 struct ApprenticeMon
 {
-    u16 species;
+    SpeciesEnum species;
     u16 moves[MAX_MON_MOVES];
     u16 item;
 };
@@ -346,7 +346,7 @@ struct Apprentice
 
 struct BattleTowerPokemon
 {
-    u16 species;
+    SpeciesEnum species;
     u16 heldItem;
     u16 moves[MAX_MON_MOVES];
     u8 level;
@@ -649,7 +649,7 @@ struct SecretBaseParty
 {
     u32 personality[PARTY_SIZE];
     u16 moves[PARTY_SIZE * MAX_MON_MOVES];
-    u16 species[PARTY_SIZE];
+    SpeciesEnum species[PARTY_SIZE];
     u16 heldItems[PARTY_SIZE];
     u8 levels[PARTY_SIZE];
     u8 EVs[PARTY_SIZE];
@@ -702,7 +702,7 @@ struct Roamer
 {
     /*0x00*/ u32 ivs;
     /*0x04*/ u32 personality;
-    /*0x08*/ u16 species;
+    /*0x08*/ SpeciesEnum species;
     /*0x0A*/ u16 hp;
     /*0x0C*/ u8 level;
     /*0x0D*/ u8 status;
@@ -744,7 +744,7 @@ struct MailStruct
     /*0x00*/ u16 words[MAIL_WORDS_COUNT];
     /*0x12*/ u8 playerName[PLAYER_NAME_LENGTH + 1];
     /*0x1A*/ u8 trainerId[TRAINER_ID_LENGTH];
-    /*0x1E*/ u16 species;
+    /*0x1E*/ SpeciesEnum species;
     /*0x20*/ u16 itemId;
 };
 
@@ -858,7 +858,7 @@ struct ContestWinner
 {
     u32 personality;
     u32 trainerId;
-    u16 species;
+    SpeciesEnum species;
     u8 contestCategory;
     u8 monName[POKEMON_NAME_LENGTH + 1];
     u8 trainerName[PLAYER_NAME_LENGTH + 1];

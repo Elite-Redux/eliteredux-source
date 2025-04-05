@@ -658,7 +658,7 @@ void StartGroudonKyogreBattle(void)
 void StartRegiBattle(void)
 {
     u8 transitionId;
-    u16 species;
+    SpeciesEnum species;
 
     ScriptContext2_Enable();
     gMain.savedCallback = CB2_EndScriptedWildBattle;

@@ -21,7 +21,7 @@ struct MonCoords {
 struct TrainerMonNoItemDefaultMoves {
     u16 iv;
     u8 lvl;
-    u16 species;
+    SpeciesEnum species;
     u8 evs[NUM_STATS];
     u8 nature;
 };
@@ -29,7 +29,7 @@ struct TrainerMonNoItemDefaultMoves {
 struct TrainerMonItemDefaultMoves {
     u16 iv;
     u8 lvl;
-    u16 species;
+    SpeciesEnum species;
     u16 heldItem;
     u8 evs[NUM_STATS];
     u8 nature;
@@ -38,7 +38,7 @@ struct TrainerMonItemDefaultMoves {
 struct TrainerMonNoItemCustomMoves {
     u16 iv;
     u8 lvl;
-    u16 species;
+    SpeciesEnum species;
     MoveEnum moves[MAX_MON_MOVES];
     u8 evs[NUM_STATS];
     u8 nature;
@@ -46,7 +46,7 @@ struct TrainerMonNoItemCustomMoves {
 
 struct TrainerMonItemCustomMoves {
     s8 lvl;
-    u16 species;
+    SpeciesEnum species;
     u16 heldItem;
     u8 ability;
     u8 spread;

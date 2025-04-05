@@ -1129,7 +1129,7 @@ static void Debug_RefreshListMenu(u8 taskId) {
     // Copy item names for all entries but the last (which is Cancel)
     for (i = 0; i < totalItems; i++) {
         if (sDebugMenuListData->listId == 1 && sDebugBattleData->submenu > 1) {
-            u16 species;
+            SpeciesEnum species;
             if (i == 6) {
                 name = sDebugText_Continue;
                 StringCopy(&sDebugMenuListData->itemNames[0][0], name);
@@ -1504,7 +1504,7 @@ static void DebugAction_Util_ResetRandomizeFlags(u8 taskId) {
 
 static void DebugAction_Util_ResetParty(u8 taskId) {
     u8 i, j;
-    u16 species = SPECIES_BULBASAUR;
+    SpeciesEnum species = SPECIES_BULBASAUR;
     u16 oldSpecies = SPECIES_NONE;
 
     // Party Mons
@@ -2168,7 +2168,7 @@ static void DebugAction_FlagsVars_PokedexFlags_All(u8 taskId) {
 }
 static void DebugAction_FlagsVars_PokedexFlags_Reset(u8 taskId) {
     int boxId, boxPosition, partyId;
-    u16 species;
+    SpeciesEnum species;
 
     // Reset Pokedex to emtpy
     memset(&gSaveBlock1Ptr->dexCaught, 0, sizeof(gSaveBlock1Ptr->dexCaught));
@@ -2754,7 +2754,7 @@ static void DebugAction_Give_Pokemon_SelectLevel(u8 taskId) {
 }
 // If complex
 static void DebugAction_Give_Pokemon_SelectShiny(u8 taskId) {
-    u16 species = sDebugMonData->mon_speciesId;
+    SpeciesEnum species = sDebugMonData->mon_speciesId;
     u8 numShinies = gBaseStats[species].numShinies;
     ;
 
@@ -3142,7 +3142,7 @@ static void DebugAction_Give_Pokemon_ComplexCreateMon(u8 taskId)  // https://git
     u16 moves[4];
     u8 IVs[6];
     u8 iv_val;
-    u16 species = sDebugMonData->mon_speciesId;
+    SpeciesEnum species = sDebugMonData->mon_speciesId;
     u8 level = sDebugMonData->mon_level;
     u8 isShiny = sDebugMonData->isShiny;  // Shiny: no 0, yes 1
     u8 nature = sDebugMonData->mon_natureId;

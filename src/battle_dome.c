@@ -77,11 +77,11 @@ struct TourneyTreeLineSection
 // This file's functions.
 static u8 GetDomeTrainerMonIvs(u16 trainerId);
 static void SwapDomeTrainers(int id1, int id2, u16 *statsArray);
-static void CalcDomeMonStats(u16 species, int level, int ivs, u8 evBits, u8 nature, int *stats);
+static void CalcDomeMonStats(SpeciesEnum species, int level, int ivs, u8 evBits, u8 nature, int *stats);
 static void CreateDomeOpponentMons(u16 tournamentTrainerId);
 static int SelectOpponentMonsUsingPersonality(u16 tournamentTrainerId, bool8 arg1);
 static int SelectOpponentMonsUsingOtId(u16 tournamentTrainerId, bool8 arg1);
-static int GetTypeEffectivenessPoints(int move, int species, int arg2);
+static int GetTypeEffectivenessPoints(MoveEnum move, SpeciesEnum species, int arg2);
 static int SelectOpponentMonsFromParty(int *arr, bool8 arg1);
 static void Task_ShowTourneyInfoCard(u8 taskId);
 static void Task_HandleInfoCardInput(u8 taskId);
@@ -2449,7 +2449,7 @@ static void InitDomeTrainers(void)
     stats[statIndex] = (u8) ModifyStatByNature(nature, stats[statIndex], statIndex);        \
 }
 
-static void CalcDomeMonStats(u16 species, int level, int ivs, u8 evBits, u8 nature, int *stats)
+static void CalcDomeMonStats(SpeciesEnum species, int level, int ivs, u8 evBits, u8 nature, int *stats)
 {
     int i, count;
     u8 bits;
@@ -2734,7 +2734,7 @@ static int SelectOpponentMonsFromParty(int *partyMovePoints, bool8 allowRandom)
 #define TYPE_x4     80
 
 // arg2 is either 2, a personality, or an OTID
-static int GetTypeEffectivenessPoints(int move, int targetSpecies, int arg2)
+static int GetTypeEffectivenessPoints(MoveEnum move, SpeciesEnum targetSpecies, int arg2)
 {
     int defType1, defType2, defAbility, moveType;
     int typePower = TYPE_x1;

@@ -662,7 +662,7 @@ static void ReshowReleaseMon(void);
 static bool8 ResetReleaseMonSpritePtr(void);
 static void SetMovingMonPriority(u8);
 static void SpriteCB_HeldMon(struct Sprite *);
-static struct Sprite *CreateMonIconSprite(u16, u32, s16, s16, u8, u8);
+static struct Sprite *CreateMonIconSprite(SpeciesEnum, u32, s16, s16, u8, u8);
 static void DestroyBoxMonIcon(struct Sprite *);
 
 // Pokémon data
@@ -867,7 +867,7 @@ static void ShowLevelUpWindow(s8);
 static void ShowEvolveWindow(s8);
 static void UpdateCloseBoxButtonTilemap(bool8);
 static void PrintMessage(u8 id);
-static void LoadDisplayMonGfx(u16, u32);
+static void LoadDisplayMonGfx(SpeciesEnum, u32);
 static void SpriteCB_DisplayMonMosaic(struct Sprite *);
 static void SetPartySlotTilemap(u8, bool8);
 
@@ -4059,7 +4059,7 @@ static void CreateDisplayMonSprite(void)
     }
 }
 
-static void LoadDisplayMonGfx(u16 species, u32 pid)
+static void LoadDisplayMonGfx(SpeciesEnum species, u32 pid)
 {
     bool8 isAlpha = FALSE;
     if (sStorage->displayMonSprite == NULL)
@@ -4726,7 +4726,7 @@ static u8 GetMonIconPriorityByCursorPos(void)
 static void CreateMovingMonIcon(void)
 {
     u32 personality = GetMonData(&sStorage->movingMon, MON_DATA_PERSONALITY);
-    u16 species = GetMonData(&sStorage->movingMon, MON_DATA_SPECIES2);
+    SpeciesEnum species = GetMonData(&sStorage->movingMon, MON_DATA_SPECIES2);
     u8 priority = GetMonIconPriorityByCursorPos();
 
     sStorage->movingMonSprite = CreateMonIconSprite(species, personality, 0, 0, priority, 7);
@@ -4737,7 +4737,7 @@ static void InitBoxMonSprites(u8 boxId)
 {
     u8 boxPosition;
     u16 i, j, count;
-    u16 species;
+    SpeciesEnum species;
     u32 personality;
 
     count = 0;
@@ -4776,7 +4776,7 @@ static void InitBoxMonSprites(u8 boxId)
 
 static void CreateBoxMonIconAtPos(u8 boxPosition)
 {
-    u16 species = GetCurrentBoxMonData(boxPosition, MON_DATA_SPECIES2);
+    SpeciesEnum species = GetCurrentBoxMonData(boxPosition, MON_DATA_SPECIES2);
 
     if (species != SPECIES_NONE)
     {
@@ -5035,7 +5035,7 @@ static void SetBoxMonIconObjMode(u8 boxPosition, u8 objMode)
 static void CreatePartyMonsSprites(bool8 visible)
 {
     u16 i, count;
-    u16 species = GetMonData(&gPlayerParty[0], MON_DATA_SPECIES2);
+    SpeciesEnum species = GetMonData(&gPlayerParty[0], MON_DATA_SPECIES2);
     u32 personality = GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY);
 
     sStorage->partySprites[0] = CreateMonIconSprite(species, personality, 104, 64, 1, 12);
@@ -5067,7 +5067,7 @@ static void CreatePartyMonsSprites(bool8 visible)
 
 static bool8 CreatePartyMonSprite(u8 partyId)
 {
-    u16 species = GetMonData(&gPlayerParty[partyId], MON_DATA_SPECIES2);
+    SpeciesEnum species = GetMonData(&gPlayerParty[partyId], MON_DATA_SPECIES2);
     u32 personality = GetMonData(&gPlayerParty[partyId], MON_DATA_PERSONALITY);
 
     if (species != SPECIES_NONE)
@@ -5387,7 +5387,7 @@ static void SpriteCB_HeldMon(struct Sprite *sprite)
     sprite->y = sStorage->cursorSprite->y + sStorage->cursorSprite->y2 + 4;
 }
 
-static u16 TryLoadMonIconTiles(u16 species, u32 personality)
+static u16 TryLoadMonIconTiles(SpeciesEnum species, u32 personality)
 {
     u16 i, offset;
 
@@ -5427,7 +5427,7 @@ static u16 TryLoadMonIconTiles(u16 species, u32 personality)
     return offset;
 }
 
-static void RemoveSpeciesFromIconList(u16 species)
+static void RemoveSpeciesFromIconList(SpeciesEnum species)
 {
     u16 i;
     bool8 hasFemale = FALSE;
@@ -5452,7 +5452,7 @@ static void RemoveSpeciesFromIconList(u16 species)
     }
 }
 
-static struct Sprite *CreateMonIconSprite(u16 species, u32 personality, s16 x, s16 y, u8 oamPriority, u8 subpriority)
+static struct Sprite *CreateMonIconSprite(SpeciesEnum species, u32 personality, s16 x, s16 y, u8 oamPriority, u8 subpriority)
 {
     u16 tileNum;
     u8 spriteId;
@@ -7057,7 +7057,7 @@ s16 CompactPartySlots(void)
 
     for (i = 0, last = 0; i < PARTY_SIZE; i++)
     {
-        u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
+        SpeciesEnum species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
         if (species != SPECIES_NONE)
         {
             if (i != last)
@@ -7173,7 +7173,7 @@ static void ReshowDisplayMon(void)
 
 void SetArceusFormPSS(struct BoxPokemon *boxMon)
 {
-    u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
+    SpeciesEnum species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
     u16 forme;
     u8 abilityNum = GetBoxMonData(boxMon, MON_DATA_ABILITY_NUM);
     AbilityEnum ability = GetAbilityBySpecies(species, abilityNum);
@@ -8085,7 +8085,7 @@ static u8 SetSelectionMenuTexts(void)
 
 static bool8 SetMenuTexts_Mon(void)
 {
-    u16 species = GetSpeciesAtCursorPosition();
+    SpeciesEnum species = GetSpeciesAtCursorPosition();
     struct Pokemon pokemon;
     u8 pos = GetCursorPosition();
     u8 boxId = StorageGetCurrentBox();
@@ -8914,7 +8914,7 @@ static void MultiMove_DeselectRow(u8 row, u8 minColumn, u8 maxColumn)
 static void MultiMove_SetIconToBg(u8 x, u8 y)
 {
     u8 position = x + (IN_BOX_COLUMNS * y);
-    u16 species = GetCurrentBoxMonData(position, MON_DATA_SPECIES2);
+    SpeciesEnum species = GetCurrentBoxMonData(position, MON_DATA_SPECIES2);
     u32 personality = GetCurrentBoxMonData(position, MON_DATA_PERSONALITY);
 
     if (species != SPECIES_NONE)
@@ -8939,7 +8939,7 @@ static void MultiMove_SetIconToBg(u8 x, u8 y)
 static void MultiMove_ClearIconFromBg(u8 x, u8 y)
 {
     u8 position = x + (IN_BOX_COLUMNS * y);
-    u16 species = GetCurrentBoxMonData(position, MON_DATA_SPECIES2);
+    SpeciesEnum species = GetCurrentBoxMonData(position, MON_DATA_SPECIES2);
 
     if (species != SPECIES_NONE)
     {
@@ -9969,7 +9969,7 @@ void CopyBoxMonAt(u8 boxId, u8 boxPosition, struct BoxPokemon *dst)
         *dst = gPokemonStoragePtr->boxes[boxId][boxPosition];
 }
 
-void CreateBoxMonAt(u8 boxId, u8 boxPosition, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 personality, u8 otIDType, u32 otID)
+void CreateBoxMonAt(u8 boxId, u8 boxPosition, SpeciesEnum species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 personality, u8 otIDType, u32 otID)
 {
     if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
     {
@@ -10568,7 +10568,7 @@ static void UnkUtil_DmaRun(struct UnkUtilData *data)
 void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
 {
     u8 pos = GetCursorPosition();
-    u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
+    SpeciesEnum species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
     u32 pid = GetBoxMonData(boxMon, MON_DATA_PERSONALITY);
     u8 isShiny = GetBoxMonData(boxMon, MON_DATA_IS_SHINY);
 
@@ -10585,7 +10585,7 @@ void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
 void UpdateSpeciesSpritePSS_Mon(struct Pokemon *mon)
 {
     u8 pos = GetCursorPosition();
-    u16 species = GetMonData(mon, MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES);
     u32 pid = GetMonData(mon, MON_DATA_PERSONALITY);
     u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
 

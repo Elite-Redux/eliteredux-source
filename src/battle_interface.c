@@ -2139,7 +2139,7 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
     u32 windowId, spriteTileNum;
     u8 *windowTileData;
     u8 gender;
-    u16 species = GetMonData(mon, MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES);
     struct Pokemon *illusionMon = GetIllusionMonPtr(gSprites[healthboxSpriteId].hMain_Battler);
     bool8 nicknamed = TRUE;
     bool8 isMega = FALSE;
@@ -2723,7 +2723,7 @@ void UpdateHealthboxAttribute(u8 healthboxSpriteId, struct Pokemon *mon, u8 elem
         isDoubles = IsDoubleBattle();
         if (!isDoubles && (elementId == HEALTHBOX_EXP_BAR || elementId == HEALTHBOX_ALL))
         {
-            u16 species;
+            SpeciesEnum species;
             u32 exp, currLevelExp;
             s32 currExpBarValue, maxExpBarValue;
             u8 level;

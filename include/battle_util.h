@@ -154,7 +154,13 @@ typedef union AbilityStates {
 
 extern const struct TypePower gNaturalGiftTable[];
 extern const u16 gPercentToModifier[];
-extern const u16 gHpTransformations[10][4];
+typedef struct {
+    AbilityEnum ability;
+    SpeciesEnum highHpSpecies;
+    SpeciesEnum lowHpSpecies;
+    u8 hpFraction;
+} HpTransformation;
+extern const HpTransformation gHpTransformations[10];
 
 int GetAbilityIndex(int battler, AbilityEnum ability, int checkMoldBreaker);
 s32 CountUsablePartyMons(u8 battlerId);
@@ -232,7 +238,7 @@ u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, u16 ext
 
 #define ON_ABILITY(battler, checkMoldBreaker, condition, callback)   \
     for (int idx = TOTAL_ABILITY_COUNT - 1; idx >= 0; idx--) {       \
-        AbilityEnum ability = gBattleMons[battler].abilities[idx];           \
+        AbilityEnum ability = gBattleMons[battler].abilities[idx];   \
         FILTER(condition)                                            \
         FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker)) \
         callback;                                                    \
@@ -290,7 +296,7 @@ u8 GetBattleMoveSplit(MoveEnum moveId);
 bool32 TestMoveFlags(MoveEnum move, u32 flag);
 struct Pokemon* GetBattlerPartyData(u8 battlerId);
 bool32 CanFling(u8 battlerId);
-bool32 IsTelekinesisBannedSpecies(u16 species);
+bool32 IsTelekinesisBannedSpecies(SpeciesEnum species);
 bool32 IsHealBlockPreventingMove(u8 battler, u32 move);
 bool32 HasEnoughHpToEatBerry(u32 battlerId, u32 hpFraction, u32 itemId);
 void SortBattlersBySpeed(u8* battlers, bool8 slowToFast);
@@ -355,7 +361,7 @@ void SetActiveMultistringChooser(u8 messageId);
 void SetActiveAbilityPopupOverride(u16 messageId);
 void SetActiveStackBattler(u8 battler, u8 number);
 void SetActiveStatChanger(int stat, s8 change);
-u16 GetInnateInSlot(int level, u16 species, u8 position, u32 personality, u8 isPlayer);
+u16 GetInnateInSlot(int level, SpeciesEnum species, u8 position, u32 personality, u8 isPlayer);
 void ClearMiscTurnFlags();
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, MoveEnum move);
 bool32 IsHealingMoveEffect(MoveBehaviorEnum effect);

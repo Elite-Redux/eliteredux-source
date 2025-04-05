@@ -1889,7 +1889,7 @@ constexpr Ability SweetVeil = {
 
 constexpr Ability StanceChange = {
     .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
-        int newSpecies = SPECIES_NONE;
+        SpeciesEnum newSpecies = SPECIES_NONE;
         switch (gBattleMons[battler].species) {
             default:
                 return FALSE;
@@ -2107,13 +2107,13 @@ constexpr Ability ShieldsDown = {
 
         int i;
         for (i = 0; i < ARRAY_COUNT(gHpTransformations); i++) {
-            if (gHpTransformations[i][0] == ability && gBattleMons[battler].species == gHpTransformations[i][1]) break;
+            if (gHpTransformations[i].ability == ability && gBattleMons[battler].species == gHpTransformations[i].highHpSpecies) break;
         }
 
         if (i < ARRAY_COUNT(gHpTransformations)) {
-            UpdateAbilityStateIndicesForNewSpecies(battler, gHpTransformations[i][2]);
+            UpdateAbilityStateIndicesForNewSpecies(battler, gHpTransformations[i].lowHpSpecies);
             SetAbilityState(battler, ability, TRUE);
-            gBattleMons[battler].species = gHpTransformations[i][2];
+            gBattleMons[battler].species = gHpTransformations[i].lowHpSpecies;
             BattleScriptCall(BattleScript_AttackerFormChange);
             return TRUE;
         }
@@ -2237,7 +2237,7 @@ constexpr Ability Schooling = {
 };
 
 static int DisguiseReformHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
-    int newSpecies;
+    SpeciesEnum newSpecies;
     switch (gBattleMons[battler].species) {
         case SPECIES_MIMIKYU_BUSTED:
             newSpecies = SPECIES_MIMIKYU;
@@ -2279,7 +2279,7 @@ constexpr Ability Disguise = {
 
 constexpr Ability BattleBond = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        int newSpecies = 0;
+        SpeciesEnum newSpecies = SPECIES_NONE;
         switch (gBattleMons[battler].species) {
             case SPECIES_GRENINJA_BATTLE_BOND:
                 newSpecies = SPECIES_GRENINJA_ASH;
@@ -2605,7 +2605,7 @@ constexpr Ability GulpMissile = {
         CHECK(((gCurrentMove == MOVE_SURF || gCurrentMove == MOVE_TRIPLE_DIVE) && TARGET_TURN_DAMAGED) || gStatuses3[battler] & STATUS3_UNDERWATER ||
               (gCurrentMove == MOVE_DIVE && gBattleScripting.acceleratedTwoTurn))
 
-        u16 newSpecies = gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2 ? SPECIES_CRAMORANT_GORGING : SPECIES_CRAMORANT_GULPING;
+        SpeciesEnum newSpecies = gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2 ? SPECIES_CRAMORANT_GORGING : SPECIES_CRAMORANT_GULPING;
         UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
         gBattleMons[battler].species = newSpecies;
         BattleScriptCall(BattleScript_AttackerFormChange);
@@ -2859,7 +2859,8 @@ constexpr Ability PastelVeil = {
 
 constexpr Ability HungerSwitch = {
     .onEndTurn = +[](ON_END_TURN) -> int {
-        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED) int newSpecies;
+        SpeciesEnum newSpecies;
+        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
         switch (gBattleMons[battler].species) {
             case SPECIES_MORPEKO:
                 newSpecies = SPECIES_MORPEKO_HANGRY;
@@ -8032,7 +8033,7 @@ constexpr Ability FrenziedPhantom = {
 
 constexpr Ability DNAScramble = {
     .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
-        int newSpecies = SPECIES_NONE;
+        SpeciesEnum newSpecies = SPECIES_NONE;
         switch (gBattleMons[battler].species) {
             default:
                 return FALSE;

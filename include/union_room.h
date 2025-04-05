@@ -140,7 +140,7 @@ struct UnionRoomTrade
     u8 filler1;
     u16 playerSpecies;
     u16 playerLevel;
-    u16 species;
+    SpeciesEnum species;
     u16 level;
     u16 filler2;
     u32 personality;

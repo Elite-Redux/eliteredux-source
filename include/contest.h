@@ -86,7 +86,7 @@ enum {
 
 struct ContestPokemon
 {
-    u16 species;
+    SpeciesEnum species;
     u8 nickname[POKEMON_NAME_LENGTH + 1];
     u8 trainerName[PLAYER_NAME_LENGTH + 1];
     u16 trainerGfxId;
@@ -121,7 +121,7 @@ struct ContestTempSave
 
 struct ContestMoveAnimData
 {
-    u16 species;
+    SpeciesEnum species;
     u16 targetSpecies;
     bool8 hasTargetAnim:1;
     u8 contestant;
@@ -339,7 +339,7 @@ void SetContestants(u8 contestType, u8 rank);
 void SetLinkAIContestants(u8 contestType, u8 rank, bool32 isPostgame);
 u8 GetContestEntryEligibility(struct Pokemon *pkmn);
 void CalculateRound1Points(u8 contestCategory);
-bool8 IsSpeciesNotUnown(u16 species);
+bool8 IsSpeciesNotUnown(SpeciesEnum species);
 bool8 Contest_IsMonsTurnDisabled(u8 a);
 void SaveLinkContestResults(void);
 void SortContestants(bool8 a);

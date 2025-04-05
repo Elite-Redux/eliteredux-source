@@ -363,7 +363,7 @@ static void VBlankCB_ContestPainting(void)
     TransferPlttBuffer();
 }
 
-static void InitContestMonPixels(u16 species, u8 whichSprite)
+static void InitContestMonPixels(SpeciesEnum species, u8 whichSprite)
 {
     u8 isShiny = FALSE;
     bool8 isAlpha = FALSE;

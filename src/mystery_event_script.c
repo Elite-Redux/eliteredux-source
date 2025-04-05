@@ -305,7 +305,7 @@ bool8 MEScrCmd_givepokemon(struct ScriptContext *ctx)
 {
     struct MailStruct mail;
     struct Pokemon pokemon;
-    u16 species;
+    SpeciesEnum species;
     u16 heldItem;
     u32 data = ScriptReadWord(ctx) - ctx->data[1] + ctx->data[0];
     void *pokemonPtr = (void *)data;

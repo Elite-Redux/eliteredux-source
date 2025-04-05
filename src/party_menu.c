@@ -199,14 +199,14 @@ static void DisplayPartyPokemonDataToTeachMove(u8, u8);
 static u8 CanMonLearnTMTutor(struct Pokemon *, u8);
 static void DisplayPartyPokemonBarDetail(u8, const u8 *, u8, const u8 *);
 static void DisplayPartyPokemonLevel(u8, struct PartyMenuBox *);
-static void DisplayPartyPokemonGender(u8, u16, u8 *, struct PartyMenuBox *);
+static void DisplayPartyPokemonGender(u8, SpeciesEnum, u8 *, struct PartyMenuBox *);
 static void DisplayPartyPokemonHP(u16, struct PartyMenuBox *);
 static void DisplayPartyPokemonMaxHP(u16, struct PartyMenuBox *);
 static void DisplayPartyPokemonHPBar(u16, u16, struct PartyMenuBox *);
-static void CreatePartyMonIconSpriteParameterized(u16, u32, struct PartyMenuBox *, u8);
-static void CreatePartyMonHeldItemSpriteParameterized(u16, u16, struct PartyMenuBox *);
-static void CreatePartyMonPokeballSpriteParameterized(u16, struct PartyMenuBox *);
-static void CreatePartyMonStatusSpriteParameterized(u16, u8, struct PartyMenuBox *);
+static void CreatePartyMonIconSpriteParameterized(SpeciesEnum, u32, struct PartyMenuBox *, u8);
+static void CreatePartyMonHeldItemSpriteParameterized(SpeciesEnum, u16, struct PartyMenuBox *);
+static void CreatePartyMonPokeballSpriteParameterized(SpeciesEnum, struct PartyMenuBox *);
+static void CreatePartyMonStatusSpriteParameterized(SpeciesEnum, u8, struct PartyMenuBox *);
 // These next 4 functions are essentially redundant with the above 4
 // The only difference is that rather than receive the data directly they retrieve it from the mon struct
 static void CreatePartyMonHeldItemSprite(struct Pokemon *, struct PartyMenuBox *);
@@ -1139,7 +1139,7 @@ static void HandleChooseMonSelection(u8 taskId, s8 *slotPtr) {
                 break;
             case PARTY_ACTION_CHOOSE_FAINTED_MON: {
                 u8 partyId = GetPartyIdFromBattleSlot((u8)*slotPtr);
-                u16 species = GetMonData(&gPlayerParty[*slotPtr], MON_DATA_SPECIES2);
+                SpeciesEnum species = GetMonData(&gPlayerParty[*slotPtr], MON_DATA_SPECIES2);
                 if (GetMonData(&gPlayerParty[*slotPtr], MON_DATA_HP) > 0 || species == SPECIES_EGG || species == SPECIES_NONE ||
                     ((gBattleTypeFlags & BATTLE_TYPE_MULTI) && partyId >= (PARTY_SIZE / 2))) {
                     // Can't select if egg, alive, or doesn't belong to you
@@ -1515,7 +1515,7 @@ static s8 GetNewSlotDoubleLayout(s8 slotId, s8 movementDir) {
 
 u8 *GetMonNickname(struct Pokemon *mon, u8 *dest) {
     bool8 nicknamed = isMonNicknamed(mon);
-    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES, NULL);
 
     if (nicknamed) {
         GetMonData(mon, MON_DATA_NICKNAME, dest);
@@ -1823,7 +1823,7 @@ u8 CanMonLearnTMTutor(struct Pokemon *mon, u8 tutor) {
         return CAN_LEARN_MOVE;
 }
 
-bool32 CanLearnTutorMove(u16 species, u8 tutor)  // note the change to bool32
+bool32 CanLearnTutorMove(SpeciesEnum species, u8 tutor)  // note the change to bool32
 {
     if (species == SPECIES_EGG) {
         return 0;
@@ -2072,7 +2072,7 @@ static void DisplayPartyPokemonGenderNidoranCheck(struct Pokemon *mon, struct Pa
     DisplayPartyPokemonGender(GetMonGender(mon), GetMonData(mon, MON_DATA_SPECIES), nickname, menuBox);
 }
 
-static void DisplayPartyPokemonGender(u8 gender, u16 species, u8 *nickname, struct PartyMenuBox *menuBox) {
+static void DisplayPartyPokemonGender(u8 gender, SpeciesEnum species, u8 *nickname, struct PartyMenuBox *menuBox) {
     u8 palNum = GetWindowAttribute(menuBox->windowId, WINDOW_PALETTE_NUM) * 16;
 
     if (species == SPECIES_NONE) return;
@@ -2261,7 +2261,7 @@ static u8 DisplaySelectionWindow(u8 windowType) {
     u8 i, j;
     u8 font = FONT_SMALL_NARROW;
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
-    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES, NULL);
 
     switch (windowType) {
         case SELECTWINDOW_ACTIONS:
@@ -2529,7 +2529,7 @@ static void SetPartyMonLearnMoveSelectionActions(struct Pokemon *mons, u8 slotId
 
 static void SetPartyMonHeldItemSelectionActions(struct Pokemon *mons, u8 slotId) {
     u32 i, j = 0;
-    u16 species = GetMonData(&mons[slotId], MON_DATA_SPECIES, NULL);
+    SpeciesEnum species = GetMonData(&mons[slotId], MON_DATA_SPECIES, NULL);
     u16 helditem = GetMonData(&mons[slotId], MON_DATA_HELD_ITEM, NULL);
     u16 megaStones[3] = {0};
 
@@ -2662,7 +2662,7 @@ void BeginFormChangeScene(u8 taskId, u16 targetSpecies) {
 
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId) {
     u8 i;
-    u16 species = GetMonData(&mons[slotId], MON_DATA_SPECIES, NULL);
+    SpeciesEnum species = GetMonData(&mons[slotId], MON_DATA_SPECIES, NULL);
     u8 level = GetMonData(&mons[slotId], MON_DATA_LEVEL, NULL);
     u8 levelCap = GetLevelCap();
     u16 targetSpecies;
@@ -3177,7 +3177,7 @@ static void CursorCb_Give(u8 taskId) {
 
 static void GiveMegaStone(int taskId, int itemCount) {
     u8 i;
-    u16 species = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES, NULL);
+    SpeciesEnum species = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES, NULL);
     u16 helditem = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_HELD_ITEM, NULL);
     u16 megaEvoItem = 0;
 
@@ -3684,7 +3684,7 @@ static void CursorCb_Store(u8 taskId) {
 // Register mon for the Trading Board in Union Room
 static void CursorCb_Register(u8 taskId) {
     u16 species2 = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES2);
-    u16 species = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES);
     u8 isEventLegal = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_EVENT_LEGAL);
 
     switch (CanRegisterMonForTradingBoard(*(struct GFtgtGnameSub *)GetHostRFUtgtGname(), species2, species, isEventLegal)) {
@@ -3709,7 +3709,7 @@ static void CursorCb_Register(u8 taskId) {
 
 static void CursorCb_Trade1(u8 taskId) {
     u16 species2 = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES2);
-    u16 species = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES);
     u8 isEventLegal = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_EVENT_LEGAL);
     u32 stringId = GetUnionRoomTradeMessageId(*(struct GFtgtGnameSub *)GetHostRFUtgtGname(),
                                               gPartnerTgtGnameSub,
@@ -3982,7 +3982,7 @@ static void CreatePartyMonIconSprite(struct Pokemon *mon, struct PartyMenuBox *m
     UpdatePartyMonHPBar(menuBox->monSpriteId, mon);
 }
 
-static void CreatePartyMonIconSpriteParameterized(u16 species, u32 pid, struct PartyMenuBox *menuBox, u8 priority) {
+static void CreatePartyMonIconSpriteParameterized(SpeciesEnum species, u32 pid, struct PartyMenuBox *menuBox, u8 priority) {
     if (species != SPECIES_NONE) {
         menuBox->monSpriteId = CreateMonIcon(species, SpriteCB_MonIcon, menuBox->spriteCoords[0], menuBox->spriteCoords[1], 4, pid);
         gSprites[menuBox->monSpriteId].oam.priority = priority;
@@ -4049,7 +4049,7 @@ static void CreatePartyMonHeldItemSprite(struct Pokemon *mon, struct PartyMenuBo
     }
 }
 
-static void CreatePartyMonHeldItemSpriteParameterized(u16 species, u16 item, struct PartyMenuBox *menuBox) {
+static void CreatePartyMonHeldItemSpriteParameterized(SpeciesEnum species, u16 item, struct PartyMenuBox *menuBox) {
     if (species != SPECIES_NONE) {
         menuBox->itemSpriteId = CreateSprite(&sSpriteTemplate_HeldItem, menuBox->spriteCoords[2], menuBox->spriteCoords[3], 0);
         gSprites[menuBox->itemSpriteId].oam.priority = 0;
@@ -4127,7 +4127,7 @@ static void CreatePartyMonPokeballSprite(struct Pokemon *mon, struct PartyMenuBo
         menuBox->pokeballSpriteId = CreateSprite(&sSpriteTemplate_MenuPokeball, menuBox->spriteCoords[6], menuBox->spriteCoords[7], 8);
 }
 
-static void CreatePartyMonPokeballSpriteParameterized(u16 species, struct PartyMenuBox *menuBox) {
+static void CreatePartyMonPokeballSpriteParameterized(SpeciesEnum species, struct PartyMenuBox *menuBox) {
     if (species != SPECIES_NONE) {
         menuBox->pokeballSpriteId = CreateSprite(&sSpriteTemplate_MenuPokeball, menuBox->spriteCoords[6], menuBox->spriteCoords[7], 8);
         gSprites[menuBox->pokeballSpriteId].oam.priority = 0;
@@ -4176,7 +4176,7 @@ static void CreatePartyMonStatusSprite(struct Pokemon *mon, struct PartyMenuBox 
     }
 }
 
-static void CreatePartyMonStatusSpriteParameterized(u16 species, u8 status, struct PartyMenuBox *menuBox) {
+static void CreatePartyMonStatusSpriteParameterized(SpeciesEnum species, u8 status, struct PartyMenuBox *menuBox) {
     if (species != SPECIES_NONE) {
         menuBox->statusSpriteId = CreateSprite(&sSpriteTemplate_StatusIcons, menuBox->spriteCoords[4], menuBox->spriteCoords[5], 0);
         UpdatePartyMonAilmentGfx(status, menuBox);
@@ -6163,7 +6163,7 @@ static u8 GetPartySlotEntryStatus(s8 slot) {
 
 static bool8 GetBattleEntryEligibility(struct Pokemon *mon) {
     u16 i = 0;
-    u16 species;
+    SpeciesEnum species;
 
     if (GetMonData(mon, MON_DATA_IS_EGG) || GetMonData(mon, MON_DATA_LEVEL) > GetBattleEntryLevelCap() ||
         (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(BATTLE_FRONTIER_BATTLE_PYRAMID_LOBBY) &&
@@ -6205,7 +6205,7 @@ static u8 CheckBattleEntriesAndGetMessage(void) {
 
     maxBattlers = GetMaxBattleEntries();
     for (i = 0; i < maxBattlers - 1; i++) {
-        u16 species = GetMonData(&party[order[i] - 1], MON_DATA_SPECIES);
+        SpeciesEnum species = GetMonData(&party[order[i] - 1], MON_DATA_SPECIES);
         u16 item = GetMonData(&party[order[i] - 1], MON_DATA_HELD_ITEM);
         for (j = i + 1; j < maxBattlers; j++) {
             if (species == GetMonData(&party[order[j] - 1], MON_DATA_SPECIES)) return PARTY_MSG_MONS_CANT_BE_SAME;
@@ -6989,7 +6989,7 @@ void CursorCb_MoveItem(u8 taskId) {
     }
 }
 
-void DoItemFormChange(u16 newSpecies) {
+void DoItemFormChange(SpeciesEnum newSpecies) {
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
 
     PlaySE(SE_USE_ITEM);
@@ -7085,7 +7085,7 @@ void ItemUseCB_TypeGems(u8 taskId, TaskFunc task) {
 #undef tOldFunc
 
 void SetArceusForm(struct Pokemon *mon) {
-    u16 species = GetMonData(mon, MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES);
     u16 forme;
     u8 abilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM);
     AbilityEnum ability = GetAbilityBySpecies(species, abilityNum);

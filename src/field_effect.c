@@ -903,7 +903,7 @@ u8 AddNewGameBirchObject(s16 x, s16 y, u8 subpriority)
     return CreateSprite(&sSpriteTemplate_NewGameBirch, x, y, subpriority);
 }
 
-u8 CreateMonSprite_PicBox(u16 species, s16 x, s16 y, u8 subpriority)
+u8 CreateMonSprite_PicBox(SpeciesEnum species, s16 x, s16 y, u8 subpriority)
 {
     u8 isShiny = FALSE;
     bool8 isAlpha = FALSE;
@@ -915,7 +915,7 @@ u8 CreateMonSprite_PicBox(u16 species, s16 x, s16 y, u8 subpriority)
         return spriteId;
 }
 
-u8 CreateMonSprite_FieldMove(u16 species, u32 otId, u32 personality, s16 x, s16 y, u8 subpriority)
+u8 CreateMonSprite_FieldMove(SpeciesEnum species, u32 otId, u32 personality, s16 x, s16 y, u8 subpriority)
 {
     u8 isShiny = FALSE;
     bool8 isAlpha = FALSE;

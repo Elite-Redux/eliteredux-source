@@ -27,7 +27,7 @@
 
 // this file's functions
 static void ClearDaycareMonMail(struct DaycareMail *mail);
-static void SetInitialEggData(struct Pokemon *mon, u16 species, struct DayCare *daycare);
+static void SetInitialEggData(struct Pokemon *mon, SpeciesEnum species, struct DayCare *daycare);
 static u8 GetDaycareCompatibilityScore(struct DayCare *daycare);
 static void DaycarePrintMonInfo(u8 windowId, u32 daycareSlotId, u8 y);
 static void TransferEggMoves(struct DayCare *daycare);
@@ -199,7 +199,7 @@ static void ApplyDaycareExperience(struct Pokemon *mon) {
 }
 
 static u16 TakeSelectedPokemonFromDaycare(struct DaycareMon *daycareMon) {
-    u16 species;
+    SpeciesEnum species;
     u16 newSpecies;
     struct Pokemon pokemon;
 
@@ -235,7 +235,7 @@ static u16 TakeSelectedPokemonFromDaycare(struct DaycareMon *daycareMon) {
 }
 
 static u16 TakeSelectedPokemonMonFromDaycareShiftSlots(struct DayCare *daycare, u8 slotId) {
-    u16 species;
+    SpeciesEnum species;
     if (DoMonsShareEggGroup(daycare)) {
         TransferEggMoves(daycare);
     }
@@ -324,7 +324,7 @@ static void ClearAllDaycareData(struct DayCare *daycare) {
 // Determines what the species of an Egg would be based on the given species.
 // It determines this by working backwards through the evolution chain of the
 // given species.
-u16 GetEggSpecies(u16 species) {
+u16 GetEggSpecies(SpeciesEnum species) {
     int i, j, k;
     bool8 found;
 
@@ -540,9 +540,9 @@ static void InheritIVs(struct Pokemon *egg, struct DayCare *daycare) {
 
 // Counts the number of egg moves a pokemon learns and stores the moves in
 // the given array.
-u8 GetEggMoves(u16 species, u16 *eggMoves) { return 0; }
-u8 GetEggMovesSpecies(u16 species, u16 *eggMoves) { return 0; }
-bool8 SpeciesCanLearnEggMove(u16 species, u16 move)  // Move search PokedexPlus HGSS_Ui
+u8 GetEggMoves(SpeciesEnum species, u16 *eggMoves) { return 0; }
+u8 GetEggMovesSpecies(SpeciesEnum species, u16 *eggMoves) { return 0; }
+bool8 SpeciesCanLearnEggMove(SpeciesEnum species, u16 move)  // Move search PokedexPlus HGSS_Ui
 {
     return 0;
 }
@@ -608,7 +608,7 @@ static void BuildEggMoveset(struct Pokemon *egg, struct BoxPokemon *father, stru
     u16 numSharedParentMoves;
     u32 numLevelUpMoves;
     u16 numEggMoves;
-    u16 species;
+    SpeciesEnum species;
     u16 i, j;
 
     numSharedParentMoves = 0;
@@ -788,7 +788,7 @@ static void GiveVoltTackleIfLightBall(struct Pokemon *mon, struct DayCare *dayca
 
 static u16 DetermineEggSpeciesAndParentSlots(struct DayCare *daycare, u8 *parentSlots) {
     u16 i;
-    u16 species[DAYCARE_MON_COUNT];
+    SpeciesEnum species[DAYCARE_MON_COUNT];
     u16 eggSpecies;
 
     for (i = 0; i < DAYCARE_MON_COUNT; i++) {
@@ -832,7 +832,7 @@ static u16 DetermineEggSpeciesAndParentSlots(struct DayCare *daycare, u8 *parent
 
 static void _GiveEggFromDaycare(struct DayCare *daycare) {
     struct Pokemon egg;
-    u16 species;
+    SpeciesEnum species;
     u8 parentSlots[DAYCARE_MON_COUNT];
     bool8 isEgg;
 
@@ -854,7 +854,7 @@ static void _GiveEggFromDaycare(struct DayCare *daycare) {
     RemoveEggFromDayCare(daycare);
 }
 
-void CreateEgg(struct Pokemon *mon, u16 species, bool8 setHotSpringsLocation) {
+void CreateEgg(struct Pokemon *mon, SpeciesEnum species, bool8 setHotSpringsLocation) {
     u8 metLevel;
     u16 ball;
     u8 language;
@@ -881,7 +881,7 @@ void CreateEgg(struct Pokemon *mon, u16 species, bool8 setHotSpringsLocation) {
     SetMonData(mon, MON_DATA_IS_EGG, &isEgg);
 }
 
-static void SetInitialEggData(struct Pokemon *mon, u16 species, struct DayCare *daycare) {
+static void SetInitialEggData(struct Pokemon *mon, SpeciesEnum species, struct DayCare *daycare) {
     u32 personality;
     u16 ball;
     u8 metLevel;
@@ -1021,7 +1021,7 @@ static bool8 EggGroupsOverlap(u16 *eggGroups1, u16 *eggGroups2) {
 static bool8 DoMonsShareEggGroup(struct DayCare *daycare) {
     u8 i;
     u16 eggGroups[DAYCARE_MON_COUNT][EGG_GROUPS_PER_MON];
-    u16 species[DAYCARE_MON_COUNT];
+    SpeciesEnum species[DAYCARE_MON_COUNT];
 
     for (i = 0; i < DAYCARE_MON_COUNT; i++) {
         species[i] = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES);
@@ -1038,7 +1038,7 @@ static bool8 DoMonsShareEggGroup(struct DayCare *daycare) {
 static u8 GetDaycareCompatibilityScore(struct DayCare *daycare) {
     u32 i;
     u16 eggGroups[DAYCARE_MON_COUNT][EGG_GROUPS_PER_MON];
-    u16 species[DAYCARE_MON_COUNT];
+    SpeciesEnum species[DAYCARE_MON_COUNT];
     u32 trainerIds[DAYCARE_MON_COUNT];
     u32 genders[DAYCARE_MON_COUNT];
 

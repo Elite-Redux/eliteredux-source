@@ -59,7 +59,7 @@ void HealPlayerParty(void)
     }
 }
 
-u8 ScriptGiveMon(u16 species, u8 level, u16 item, u32 unused1, u32 unused2, u8 unused3)
+u8 ScriptGiveMon(SpeciesEnum species, u8 level, u16 item, u32 unused1, u32 unused2, u8 unused3)
 {
     u16 nationalDexNum;
     int sentToPc;
@@ -84,7 +84,7 @@ u8 ScriptGiveMon(u16 species, u8 level, u16 item, u32 unused1, u32 unused2, u8 u
     return sentToPc;
 }
 
-u8 ScriptGiveEgg(u16 species)
+u8 ScriptGiveEgg(SpeciesEnum species)
 {
     struct Pokemon mon;
     u8 isEgg;
@@ -118,7 +118,7 @@ static bool8 CheckPartyMonHasHeldItem(u16 item)
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
+        SpeciesEnum species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
         if (species != SPECIES_NONE && species != SPECIES_EGG && GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM) == item)
             return TRUE;
     }
@@ -134,7 +134,7 @@ bool8 DoesPartyHaveEnigmaBerry(void)
     return hasItem;
 }
 
-void CreateScriptedWildMon(u16 species, u8 level, u16 item)
+void CreateScriptedWildMon(SpeciesEnum species, u8 level, u16 item)
 {
     u8 heldItem[2];
 
@@ -246,7 +246,7 @@ void ReducePlayerPartyToSelectedMons(void)
     CalculatePlayerPartyCount();
 }
 
-u8 ScriptGiveCustomMon(u16 species, u8 level, u16 item, u8 ball, u8 nature, u8 abilityNum, u8 *evs, u8 *ivs, u16 *moves, u8 isShiny)
+u8 ScriptGiveCustomMon(SpeciesEnum species, u8 level, u16 item, u8 ball, u8 nature, u8 abilityNum, u8 *evs, u8 *ivs, u16 *moves, u8 isShiny)
 {
     u16 nationalDexNum;
     int sentToPc;

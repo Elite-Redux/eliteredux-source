@@ -6202,7 +6202,7 @@ static void PutMonIconOnLvlUpBox(void) {
     struct SpriteSheet iconSheet;
     struct SpritePalette iconPalSheet;
 
-    u16 species = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPECIES);
     u32 personality = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_PERSONALITY);
 
     const u8* iconPtr = GetMonIconPtr(species, personality);
@@ -10975,7 +10975,7 @@ static void Cmd_healpartystatus(void) {
         // Because the above MULTISTRING_CHOOSER are ORd, if both are set then it will be B_MSG_BELL_BOTH_SOUNDPROOF
 
         for (i = 0; i < PARTY_SIZE; i++) {
-            u16 species = GetMonData(&party[i], MON_DATA_SPECIES2);
+            SpeciesEnum species = GetMonData(&party[i], MON_DATA_SPECIES2);
             u8 abilityNum = GetMonData(&party[i], MON_DATA_ABILITY_NUM);
 
             if (species != SPECIES_NONE && species != SPECIES_EGG) {
@@ -12142,7 +12142,7 @@ u16 GetSecretPowerMoveEffect(void) {
 
 static void Cmd_pickup(void) {
     s32 i;
-    u16 species, heldItem;
+    SpeciesEnum species, heldItem;
     AbilityEnum ability;
     u8 lvlDivBy10 = 0;
 
@@ -12778,7 +12778,7 @@ static void Cmd_givecaughtmon(void) {
 }
 
 static void Cmd_trysetcaughtmondexflags(void) {
-    u16 species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[GetCatchingBattler()]], MON_DATA_SPECIES, NULL);
+    SpeciesEnum species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[GetCatchingBattler()]], MON_DATA_SPECIES, NULL);
     u32 personality = GetMonData(&gEnemyParty[gBattlerPartyIndexes[GetCatchingBattler()]], MON_DATA_PERSONALITY, NULL);
 
     if (GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT)) {
@@ -12790,7 +12790,7 @@ static void Cmd_trysetcaughtmondexflags(void) {
 }
 
 static void Cmd_displaydexinfo(void) {
-    u16 species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[GetCatchingBattler()]], MON_DATA_SPECIES, NULL);
+    SpeciesEnum species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[GetCatchingBattler()]], MON_DATA_SPECIES, NULL);
     u16 dexnum = SpeciesToNationalPokedexNum(species);
     u32 otId = gBattleMons[GetCatchingBattler()].otId;
     u32 personality = gBattleMons[GetCatchingBattler()].personality;
@@ -13017,7 +13017,7 @@ static const u16 sTelekinesisBanList[] = {
 #endif
 };
 
-bool32 IsTelekinesisBannedSpecies(u16 species) {
+bool32 IsTelekinesisBannedSpecies(SpeciesEnum species) {
     u32 i;
 
     for (i = 0; i < ARRAY_COUNT(sTelekinesisBanList); i++) {

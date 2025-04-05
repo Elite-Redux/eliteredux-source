@@ -401,7 +401,7 @@ static void SetStructPtr(u8 taskId, void *ptr) {
 #define VAL_U16 0
 static void PrintDigitChars(struct PokemonDebugMenu *data) {
     s32 i;
-    u16 species = data->modifyArrows.currValue;
+    SpeciesEnum species = data->modifyArrows.currValue;
     u8 text[MODIFY_DIGITS_MAX + POKEMON_NAME_LENGTH + 8];
     bool8 hasGenderDifferences = SpeciesHasGenderDifference[species];
     bool8 isPlaceHolderMon = isSpeciesPlaceholderMon(species);
@@ -592,7 +592,7 @@ static void UpdateBattlerValue(struct PokemonDebugMenu *data) {
 }
 
 // Sprite functions
-static const u32 *GetMonSpritePalStructCustom(u16 species, bool8 isFemale, u8 isShiny) {
+static const u32 *GetMonSpritePalStructCustom(SpeciesEnum species, bool8 isFemale, u8 isShiny) {
     if (isSpeciesPlaceholderMon(species)) species = SPECIES_NONE;
 
     if (isShiny != SHINY_NONE) {
@@ -608,7 +608,7 @@ static const u32 *GetMonSpritePalStructCustom(u16 species, bool8 isFemale, u8 is
     }
 }
 
-static void BattleLoadOpponentMonSpriteGfxCustom(u16 species, bool8 isFemale, u8 isShiny, u8 battlerId) {
+static void BattleLoadOpponentMonSpriteGfxCustom(SpeciesEnum species, bool8 isFemale, u8 isShiny, u8 battlerId) {
     const void *lzPaletteData;
     u16 paletteOffset = 0x100 + battlerId * 16;
     ;
@@ -633,7 +633,7 @@ static void BattleLoadOpponentMonSpriteGfxCustom(u16 species, bool8 isFemale, u8
 }
 
 static void SetConstSpriteValues(struct PokemonDebugMenu *data) {
-    u16 species = data->currentmonId;
+    SpeciesEnum species = data->currentmonId;
     data->constSpriteValues.frontPicCoords = gMonFrontPicCoords[species].y_offset;
     data->constSpriteValues.frontElevation = gEnemyMonElevation[species];
     data->constSpriteValues.backPicCoords = gMonBackPicCoords[species].y_offset;
@@ -645,7 +645,7 @@ static void ResetOffsetSpriteValues(struct PokemonDebugMenu *data) {
     data->offsetsSpriteValues.offset_front_elevation = 0;
 }
 
-static u8 GetBattlerSpriteFinal_YCustom(u16 species, s8 offset_picCoords, s8 offset_elevation) {
+static u8 GetBattlerSpriteFinal_YCustom(SpeciesEnum species, s8 offset_picCoords, s8 offset_elevation) {
     u16 offset;
     u8 y;
 
@@ -680,7 +680,7 @@ static void SpriteCB_EnemyShadowCustom(struct Sprite *shadowSprite) {
     shadowSprite->x2 = battlerSprite->x2;
 }
 
-static void LoadAndCreateEnemyShadowSpriteCustom(struct PokemonDebugMenu *data, u16 species) {
+static void LoadAndCreateEnemyShadowSpriteCustom(struct PokemonDebugMenu *data, SpeciesEnum species) {
     u8 x, y;
     bool8 invisible = FALSE;
 
@@ -847,7 +847,7 @@ void CB2_Debug_Pokemon(void) {
     u8 taskId;
     const struct CompressedSpritePalette *palette;
     struct PokemonDebugMenu *data;
-    u16 species;
+    SpeciesEnum species;
     s16 offset_y;
     u8 front_x = sBattlerCoordsDebug[0][1].x;
     u8 front_y;
@@ -1018,7 +1018,7 @@ static void ResetBGs_Debug_Menu(u16 a) {
 }
 
 static void ApplyOffsetSpriteValues(struct PokemonDebugMenu *data) {
-    u16 species = data->currentmonId;
+    SpeciesEnum species = data->currentmonId;
     // Back
     gSprites[data->backspriteId].y = DEBUG_MON_BACK_Y + gMonBackPicCoords[species].y_offset + data->offsetsSpriteValues.offset_back_picCoords;
     // Front
@@ -1104,7 +1104,7 @@ static void UpdateSubmenuOneOptionValue(u8 taskId, bool8 increment) {
 
 static void UpdateSubmenuTwoOptionValue(u8 taskId, bool8 increment) {
     struct PokemonDebugMenu *data = GetStructPtr(taskId);
-    u16 species = data->currentmonId;
+    SpeciesEnum species = data->currentmonId;
     u8 option = data->submenuYpos[2];
     s8 offset;
     u8 y;
@@ -1353,7 +1353,7 @@ static void Handle_Input_Debug_Pokemon(u8 taskId) {
 
 static void ReloadPokemonSprites(struct PokemonDebugMenu *data) {
     const struct CompressedSpritePalette *palette;
-    u16 species = data->currentmonId;
+    SpeciesEnum species = data->currentmonId;
     s16 offset_y;
     u8 front_x = sBattlerCoordsDebug[0][1].x;
     u8 front_y;

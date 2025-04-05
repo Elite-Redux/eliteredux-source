@@ -139,7 +139,7 @@ static EWRAM_DATA struct PokemonSummaryScreenData {
     /*0x08*/ struct Sprite *markingsSprite;
     /*0x0C*/ struct Pokemon currentMon;
     /*0x70*/ struct PokeSummary {
-        u16 species;
+        SpeciesEnum species;
         u16 species2;
         u8 isEgg;
         u8 level;
@@ -2444,7 +2444,9 @@ enum {
 
 static void GenerateMoveReplaceList(u8 keyPress) {
     u32 personality;
-    u16 species, newMove, i;
+    SpeciesEnum species;
+    MoveEnum newMove;
+    int i;
     u8 level, moveLevel;
     int expectedSplit;
 
@@ -4734,7 +4736,7 @@ const u8 gText_EVO_PRIMAL_REVERSION[] = _("Primal Reversion holding a\n{STR_VAR_
 const u8 gText_EVO_MOVE_MEGA_EVOLUTION[] = _("Mega Evolve knowing\n{STR_VAR_2}");
 
 const u8 gText_Eeveevolution[] = _("Any Eeveelution");
-static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 personality) {
+static bool8 PrintMonEvolution(SpeciesEnum species, u8 num, u8 y, bool8 gender, u32 personality) {
     u8 i = num;
     bool8 skipPrintingEvo = FALSE;
     const struct MapHeader *mapHeader;
@@ -5179,7 +5181,7 @@ const u8 gText_Pokeball[] = _("Poké Ball: {R_BUTTON} {STR_VAR_1} {L_BUTTON}");
 static void BufferMonPokemonEvolutionData(void) {
     struct PokeSummary *sum = &sMonSummaryScreen->summary;
     struct Pokemon *mon = &sMonSummaryScreen->currentMon;
-    u16 species = sum->species;
+    SpeciesEnum species = sum->species;
     u32 personality = sum->pid;
     u8 gender = GetMonGender(mon);
     u8 y, i;
@@ -5931,7 +5933,7 @@ static u8 LoadMonGfxAndSprite(struct Pokemon *mon, s16 *state) {
 
 static void PlayMonCry(void) {
     struct PokeSummary *summary = &sMonSummaryScreen->summary;
-    u16 species = summary->species;
+    SpeciesEnum species = summary->species;
     if (!summary->isEgg) {
         if (ShouldPlayNormalMonCry(&sMonSummaryScreen->currentMon) == TRUE)
             PlayCry3(species, 0, 0);
@@ -6306,7 +6308,7 @@ static void ConfigureExpBarSprites(void) {
     u32 exp;
     u32 totalExpToNextLevel;
     u32 curExpToNextLevel;
-    u16 species;
+    SpeciesEnum species;
     s64 v0;
     s64 v1;
     u8 animNum;

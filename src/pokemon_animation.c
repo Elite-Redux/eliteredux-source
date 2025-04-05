@@ -1266,7 +1266,7 @@ static void SetPosForRotation(struct Sprite *sprite, u16 index, s16 amplitudeX, 
     sprite->y2 = yAdder + amplitudeY;
 }
 
-u8 GetSpeciesBackAnimSet(u16 species)
+u8 GetSpeciesBackAnimSet(SpeciesEnum species)
 {
     if (sSpeciesToBackAnimSet[species] != BACK_ANIM_NONE)
         return sSpeciesToBackAnimSet[species] - 1;

@@ -307,7 +307,7 @@ bool8 IsBGMStopped(void)
     return FALSE;
 }
 
-void PlayCry1(u16 species, s8 pan)
+void PlayCry1(SpeciesEnum species, s8 pan)
 {
     m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 85);
     PlayCryInternal(species, pan, CRY_VOLUME, 10, 0);
@@ -315,12 +315,12 @@ void PlayCry1(u16 species, s8 pan)
     RestoreBGMVolumeAfterPokemonCry();
 }
 
-void PlayCry2(u16 species, s8 pan, s8 volume, u8 priority)
+void PlayCry2(SpeciesEnum species, s8 pan, s8 volume, u8 priority)
 {
     PlayCryInternal(species, pan, volume, priority, 0);
 }
 
-void PlayCry3(u16 species, s8 pan, u8 mode)
+void PlayCry3(SpeciesEnum species, s8 pan, u8 mode)
 {
     if (mode == 1)
     {
@@ -335,7 +335,7 @@ void PlayCry3(u16 species, s8 pan, u8 mode)
     }
 }
 
-void PlayCry4(u16 species, s8 pan, u8 mode)
+void PlayCry4(SpeciesEnum species, s8 pan, u8 mode)
 {
     if (mode == 1)
     {
@@ -349,7 +349,7 @@ void PlayCry4(u16 species, s8 pan, u8 mode)
     }
 }
 
-void PlayCry6(u16 species, s8 pan, u8 mode) // not present in R/S
+void PlayCry6(SpeciesEnum species, s8 pan, u8 mode) // not present in R/S
 {
     if (mode == 1)
     {
@@ -363,7 +363,7 @@ void PlayCry6(u16 species, s8 pan, u8 mode) // not present in R/S
     }
 }
 
-void PlayCry5(u16 species, u8 mode)
+void PlayCry5(SpeciesEnum species, u8 mode)
 {
     m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 85);
     PlayCryInternal(species, 0, CRY_VOLUME, 10, mode);
@@ -371,7 +371,7 @@ void PlayCry5(u16 species, u8 mode)
     RestoreBGMVolumeAfterPokemonCry();
 }
 
-void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
+void PlayCryInternal(SpeciesEnum species, s8 pan, s8 volume, u8 priority, u8 mode)
 {
     bool32 v0;
     u32 release;

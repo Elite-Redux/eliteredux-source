@@ -116,7 +116,7 @@ static const struct SpriteSheet sSpriteSheet_MoveEffectMons[] = {
 
 u8 GetBattlerSpriteCoord(u8 battlerId, u8 coordType) {
     u8 retVal;
-    u16 species;
+    SpeciesEnum species;
     struct Pokemon *mon, *illusionMon;
     struct BattleSpriteInfo *spriteInfo;
 
@@ -164,7 +164,7 @@ u8 GetBattlerSpriteCoord(u8 battlerId, u8 coordType) {
     return retVal;
 }
 
-u8 GetBattlerYDelta(u8 battlerId, u16 species) {
+u8 GetBattlerYDelta(u8 battlerId, SpeciesEnum species) {
     u32 personality;
     struct BattleSpriteInfo *spriteInfo;
     u8 ret;
@@ -214,7 +214,7 @@ u8 GetBattlerYDelta(u8 battlerId, u16 species) {
     return ret;
 }
 
-u8 GetBattlerElevation(u8 battlerId, u16 species) {
+u8 GetBattlerElevation(u8 battlerId, SpeciesEnum species) {
     u8 ret = 0;
     if (GetBattlerSide(battlerId) == B_SIDE_OPPONENT) {
         if (!IsContest()) {
@@ -229,7 +229,7 @@ u8 GetBattlerElevation(u8 battlerId, u16 species) {
     return ret;
 }
 
-u8 GetBattlerSpriteFinal_Y(u8 battlerId, u16 species, bool8 a3) {
+u8 GetBattlerSpriteFinal_Y(u8 battlerId, SpeciesEnum species, bool8 a3) {
     u16 offset;
     u8 y;
 
@@ -248,7 +248,7 @@ u8 GetBattlerSpriteFinal_Y(u8 battlerId, u16 species, bool8 a3) {
 }
 
 u8 GetBattlerSpriteCoord2(u8 battlerId, u8 coordType) {
-    u16 species;
+    SpeciesEnum species;
     struct BattleSpriteInfo *spriteInfo;
 
     if (coordType == BATTLER_COORD_Y_PIC_OFFSET || coordType == BATTLER_COORD_Y_PIC_OFFSET_DEFAULT) {
@@ -285,7 +285,7 @@ u8 GetSubstituteSpriteDefault_Y(u8 battlerId) {
 }
 
 u8 GetBattlerYCoordWithElevation(u8 battlerId) {
-    u16 species;
+    SpeciesEnum species;
     u8 y;
     struct BattleSpriteInfo *spriteInfo;
 
@@ -1529,7 +1529,7 @@ void SetBattlerSpriteYOffsetFromOtherYScale(u8 spriteId, u8 otherSpriteId) {
 static u16 GetBattlerYDeltaFromSpriteId(u8 spriteId) {
     struct BattleSpriteInfo *spriteInfo;
     u8 battlerId = gSprites[spriteId].data[0];
-    u16 species;
+    SpeciesEnum species;
     u16 i;
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++) {
@@ -1692,7 +1692,7 @@ u8 GetBattlerSpriteBGPriorityRank(u8 battlerId) {
 }
 
 // Create pokemon sprite to be used for a move animation effect (e.g. Role Play / Snatch)
-u8 CreateAdditionalMonSpriteForMoveAnim(u16 species, bool8 isBackpic, u8 id, s16 x, s16 y, u8 subpriority, u32 personality, u32 trainerId, u32 battlerId) {
+u8 CreateAdditionalMonSpriteForMoveAnim(SpeciesEnum species, bool8 isBackpic, u8 id, s16 x, s16 y, u8 subpriority, u32 personality, u32 trainerId, u32 battlerId) {
     u8 spriteId;
     u16 sheet = LoadSpriteSheet(&sSpriteSheet_MoveEffectMons[id]);
     u16 palette = AllocSpritePalette(sSpriteTemplate_MoveEffectMons[id].paletteTag);
@@ -1726,7 +1726,7 @@ u8 CreateAdditionalMonSpriteForMoveAnim(u16 species, bool8 isBackpic, u8 id, s16
 void DestroySpriteAndFreeResources_(struct Sprite *sprite) { DestroySpriteAndFreeResources(sprite); }
 
 s16 GetBattlerSpriteCoordAttr(u8 battlerId, u8 attr) {
-    u16 species;
+    SpeciesEnum species;
     u32 personality;
     int ret;
     const struct MonCoords *coords;

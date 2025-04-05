@@ -1415,7 +1415,7 @@ static void WallyHandlePlayFanfareOrBGM(void)
 
 static void WallyHandleFaintingCry(void)
 {
-    u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
 
     PlayCry1(species, 25);
     WallyBufferExecCompleted();
@@ -1460,7 +1460,7 @@ static void WallyHandleIntroTrainerBallThrow(void)
 
 static void StartSendOutAnim(u8 battlerId)
 {
-    u16 species;
+    SpeciesEnum species;
 
     gBattleSpritesDataPtr->battlerData[battlerId].transformSpecies = 0;
     gBattlerPartyIndexes[battlerId] = gBattleResources->bufferA[battlerId][1];

@@ -69,7 +69,7 @@ u16 sTV_SecretBaseVisitMovesTemp[8];
 u8 sTV_DecorationsBuffer[DECOR_MAX_SECRET_BASE];
 struct {
     u8 level;
-    u16 species;
+    SpeciesEnum species;
     u16 move;
 } sTV_SecretBaseVisitMonsTemp[10];
 
@@ -118,7 +118,7 @@ static bool8 TryMixNormalTVShow(TVShow *, TVShow *, u8);
 static bool8 TryMixRecordMixTVShow(TVShow *, TVShow *, u8);
 static bool8 TryMixOutbreakTVShow(TVShow *, TVShow *, u8);
 static void DeactivateShow(u8 showIdx);
-static void DeactivateShowIfNotSeenSpecies(u16, u8);
+static void DeactivateShowIfNotSeenSpecies(SpeciesEnum, u8);
 static void SetMixedPokeNews(PokeNews player1[POKE_NEWS_COUNT], PokeNews player2[POKE_NEWS_COUNT], PokeNews player3[POKE_NEWS_COUNT], PokeNews player4[POKE_NEWS_COUNT]);
 static void ClearInvalidPokeNews(void);
 static void ClearPokeNewsIfGameNotComplete(void);
@@ -191,7 +191,7 @@ static void DoTVShowSafariFanClub(void);
 static void DoTVShowLilycoveContestLady(void);
 
 static const struct {
-    u16 species;
+    SpeciesEnum species;
     u16 moves[MAX_MON_MOVES];
     u8 level;
     u8 location;
@@ -1786,7 +1786,7 @@ static void TryPutFishingAdviceOnAir(void)
     }
 }
 
-void SetPokemonAnglerSpecies(u16 species)
+void SetPokemonAnglerSpecies(SpeciesEnum species)
 {
     sPokemonAnglerSpecies = species;
 }
@@ -2193,7 +2193,7 @@ void TryPutLotteryWinnerReportOnAir(void)
     }
 }
 
-void TryPutBattleSeminarOnAir(u16 foeSpecies, u16 species, u8 moveIdx, const u16 *movePtr, u16 betterMove)
+void TryPutBattleSeminarOnAir(u16 foeSpecies, SpeciesEnum species, u8 moveIdx, const u16 *movePtr, u16 betterMove)
 {
     TVShow *show;
     u8 i;
@@ -3044,7 +3044,7 @@ static void CompactTVShowArray(TVShow *shows)
 
 static u16 GetRandomDifferentSpeciesAndNameSeenByPlayer(u8 varIdx, u16 passedSpecies)
 {
-    u16 species;
+    SpeciesEnum species;
 
     species = GetRandomDifferentSpeciesSeenByPlayer(passedSpecies);
     StringCopy(gTVStringVarPtrs[varIdx], gSpeciesNames[species]);
@@ -3053,7 +3053,7 @@ static u16 GetRandomDifferentSpeciesAndNameSeenByPlayer(u8 varIdx, u16 passedSpe
 
 static u16 GetRandomDifferentSpeciesSeenByPlayer(u16 passedSpecies)
 {
-    u16 species;
+    SpeciesEnum species;
     u16 initSpecies;
 
     species = (Random() % (NUM_SPECIES - 1)) + 1;
@@ -3153,7 +3153,7 @@ static u8 GetRandomNameRaterStateFromName(TVShow *show)
     return nameSum & 7;
 }
 
-static void GetNicknameSubstring(u8 varIdx, u8 whichPosition, u8 charParam, u16 whichString, u16 species, TVShow *show)
+static void GetNicknameSubstring(u8 varIdx, u8 whichPosition, u8 charParam, u16 whichString, SpeciesEnum species, TVShow *show)
 {
     u8 buff[16];
     u8 i;
@@ -3293,7 +3293,7 @@ void BufferMonNickname(void)
 {
     struct Pokemon *mon = &gPlayerParty[gSpecialVar_0x8004];
     bool8 nicknamed = isMonNicknamed(mon);
-    u16 species = GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES, NULL);
+    SpeciesEnum species = GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES, NULL);
     
     if (nicknamed) {
         GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_NICKNAME, gStringVar1);
@@ -3613,7 +3613,7 @@ static s8 FindInactiveShowInArray(TVShow *tvShows)
 static void DeactivateShowsWithUnseenSpecies(void)
 {
     u16 i;
-    u16 species;
+    SpeciesEnum species;
 
     for (i = 0; i < LAST_TVSHOW_IDX; i++)
     {
@@ -3759,7 +3759,7 @@ static void DeactivateShow(u8 showIdx)
     gSaveBlock1Ptr->tvShows[showIdx].common.active = FALSE;
 }
 
-static void DeactivateShowIfNotSeenSpecies(u16 species, u8 showIdx)
+static void DeactivateShowIfNotSeenSpecies(SpeciesEnum species, u8 showIdx)
 {
     if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_SEEN))
         gSaveBlock1Ptr->tvShows[showIdx].common.active = FALSE;

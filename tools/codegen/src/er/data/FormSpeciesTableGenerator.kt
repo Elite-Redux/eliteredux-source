@@ -28,6 +28,6 @@ object FormSpeciesTableGenerator : Generator {
             |""".trimMargin()
         })
 
-        speciesIds.printLookupTable("const u16 *const gFormSpeciesIdTables[$REAL_SPECIES_COUNT]", PREFIX, writer)
+        speciesIds.printLookupTable("const SpeciesEnum *const gFormSpeciesIdTables[$REAL_SPECIES_COUNT]", PREFIX, writer)
     }
 }

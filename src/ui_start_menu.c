@@ -895,7 +895,7 @@ static u8 ShowSpeciesIcon(u8 slot, u8 x, u8 y)
 {
     struct Pokemon *mon = &gPlayerParty[slot];
     u8 SpriteID       = 0xFF;
-	u16 species       = GetMonData(mon, MON_DATA_SPECIES);
+	SpeciesEnum species       = GetMonData(mon, MON_DATA_SPECIES);
 	u32 personality   = GetMonData(mon, MON_DATA_PERSONALITY);
     //u16 currentHP     = GetMonData(mon, MON_DATA_HP);
     //u32 currentStatus = GetAilmentFromStatus(GetMonData(mon, MON_DATA_STATUS));

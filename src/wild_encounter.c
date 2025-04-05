@@ -300,7 +300,7 @@ static u8 PickWildMonNature(void) {
     return Random() % NUM_NATURES;
 }
 
-void CreateWildMon(u16 species, u8 level, int useRandomizer) {
+void CreateWildMon(SpeciesEnum species, u8 level, int useRandomizer) {
     bool32 checkCuteCharm;
 
     ZeroEnemyPartyMons();
@@ -380,7 +380,7 @@ u16 MaybeFindSpecialMon(u8 area) {
 bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 flags) {
     u8 wildMonIndex = 0;
     u8 level;
-    u16 species;
+    SpeciesEnum species;
     u16 loc = gSaveBlock1Ptr->location.mapNum;
     u16 locG = gSaveBlock1Ptr->location.mapGroup;
     if (gSaveBlock2Ptr->nuzlockeCaptures && IsRouteEncountered(loc, locG)) {
@@ -671,7 +671,7 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
 
 static u16 GenerateFishingWildMon(const struct WildPokemonInfo *wildMonInfo, u8 rod) {
     u8 level = ChooseWildMonLevel();
-    u16 species = MaybeFindSpecialMon(WILD_AREA_FISHING);
+    SpeciesEnum species = MaybeFindSpecialMon(WILD_AREA_FISHING);
 
     if (!species) species = wildMonInfo->wildPokemon[ChooseWildMonIndex_Fishing(rod)].species;
 
@@ -1020,7 +1020,7 @@ bool8 DoesCurrentMapHaveFishingMons(void) {
 }
 
 void FishingWildEncounter(u8 rod) {
-    u16 species;
+    SpeciesEnum species;
 
     if (CheckFeebas() == TRUE) {
         u8 level = ChooseWildMonLevel();

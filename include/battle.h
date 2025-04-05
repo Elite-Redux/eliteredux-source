@@ -357,7 +357,7 @@ struct AI_SavedBattleMon
     AbilityEnum ability;
     u16 moves[MAX_MON_MOVES];
     u16 heldItem;
-    u16 species;    
+    SpeciesEnum species;    
     u8 type1;
     u8 type2;
     u8 type3;

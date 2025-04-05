@@ -18,7 +18,7 @@ struct AnimStatsChangeData
     u8 battler2;
     u8 higherPriority;
     s16 data[8];
-    u16 species;
+    SpeciesEnum species;
 };
 
 static EWRAM_DATA struct AnimStatsChangeData *sAnimStatsChangeData = {0};
@@ -273,7 +273,7 @@ static void AnimMonTrace(struct Sprite *sprite)
 // Only used by Curse for non-Ghost mons
 void AnimTask_DrawFallingWhiteLinesOnAttacker(u8 taskId)
 {
-    u16 species;
+    SpeciesEnum species;
     int spriteId, newSpriteId;
     u16 var0;
     BgCnt bg1Cnt;
@@ -771,7 +771,7 @@ void AnimTask_SetAllNonAttackersInvisiblity(u8 taskId)
 
 void StartMonScrollingBgMask(u8 taskId, int unused, u16 scrollSpeed, u8 battler, bool8 includePartner, u8 numFadeSteps, u8 fadeStepDelay, u8 duration, const u32 *gfx, const u32 *tilemap, const u32 *palette)
 {
-    u16 species;
+    SpeciesEnum species;
     u8 spriteId, spriteId2;
     vBgCnt bg1Cnt;
     struct BattleAnimBgData animBgData;

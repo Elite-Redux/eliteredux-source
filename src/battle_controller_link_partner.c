@@ -292,7 +292,7 @@ static void FreeMonSpriteAfterFaintAnim(void)
 {
     if (gSprites[gBattlerSpriteIds[gActiveBattler]].y + gSprites[gBattlerSpriteIds[gActiveBattler]].y2 > DISPLAY_HEIGHT)
     {
-        u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
+        SpeciesEnum species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
 
         BattleGfxSfxDummy2(species);
         FreeOamMatrix(gSprites[gBattlerSpriteIds[gActiveBattler]].oam.matrixNum);
@@ -1011,7 +1011,7 @@ static void LinkPartnerHandleSetRawMonData(void)
 
 static void LinkPartnerHandleLoadMonSprite(void)
 {
-    u16 species;
+    SpeciesEnum species;
 
     BattleLoadPlayerMonSpriteGfx(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler);
     species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
@@ -1039,7 +1039,7 @@ static void LinkPartnerHandleSwitchInAnim(void)
 
 static void StartSendOutAnim(u8 battlerId, bool8 dontClearSubstituteBit)
 {
-    u16 species;
+    SpeciesEnum species;
 
     ClearTemporarySpeciesSpriteData(battlerId, dontClearSubstituteBit);
     gBattlerPartyIndexes[battlerId] = gBattleResources->bufferA[battlerId][1];
@@ -1512,7 +1512,7 @@ static void LinkPartnerHandlePlayFanfareOrBGM(void)
 
 static void LinkPartnerHandleFaintingCry(void)
 {
-    u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
 
     PlayCry3(species, -25, 5);
     LinkPartnerBufferExecCompleted();

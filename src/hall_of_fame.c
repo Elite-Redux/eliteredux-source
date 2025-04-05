@@ -47,7 +47,7 @@ struct HallofFameMon {
     u32 isShiny:1;  // ToFix
     u32 isAlpha:1;
     u32 personality;
-    u16 species;
+    SpeciesEnum species;
     u8 lvl;
     u8 nick[POKEMON_NAME_LENGTH];
 };
@@ -299,8 +299,8 @@ void CB2_DoHallOfFameScreenDontSaveData(void) {
 u16 getHallofFameSpecies(u8 num) {
     u8 i, j;
     u16 item = GetMonData(&gPlayerParty[num], MON_DATA_HELD_ITEM);
-    u16 species = GetMonData(&gPlayerParty[num], MON_DATA_SPECIES);
-    // u16 species = GetMonData(&gPlayerParty[num], MON_DATA_SPECIES2);
+    SpeciesEnum species = GetMonData(&gPlayerParty[num], MON_DATA_SPECIES);
+    // SpeciesEnum species = GetMonData(&gPlayerParty[num], MON_DATA_SPECIES2);
 
     for (i = 0; gEvolutionTable[species][i].method; i++) {
         REQUIRE(gEvolutionTable[species][i].method)

@@ -1174,7 +1174,7 @@ static const u8 *const *const sPartnerApprenticeTextTables[NUM_APPRENTICES] =
 
 struct
 {
-    u16 species;
+    SpeciesEnum species;
     u8 fixedIV;
     u8 level;
     u8 nature;
@@ -2909,7 +2909,7 @@ static void LoadMultiPartnerCandidatesData(void)
 static void GetPotentialPartnerMoveAndSpecies(u16 trainerId, u16 monId)
 {
     u16 move = 0;
-    u16 species = 0;
+    SpeciesEnum species = 0;
     SetFacilityPtrsGetLevel();
 
     if (trainerId != TRAINER_EREADER)

@@ -826,7 +826,7 @@ static void Task_PlayCryWhenReleasedFromBall(u8 taskId)
 {
     u8 wantedCry = gTasks[taskId].tCryTaskWantedCry;
     s8 pan = gTasks[taskId].tCryTaskPan;
-    u16 species = gTasks[taskId].tCryTaskSpecies;
+    SpeciesEnum species = gTasks[taskId].tCryTaskSpecies;
     u8 battlerId = gTasks[taskId].tCryTaskBattler;
     u8 monSpriteId = gTasks[taskId].tCryTaskMonSpriteId;
     struct Pokemon *mon = (void*)(u32)((gTasks[taskId].tCryTaskMonPtr1 << 16) | (u16)(gTasks[taskId].tCryTaskMonPtr2));
@@ -1174,7 +1174,7 @@ static u8 LaunchBallFadeMonTaskForPokeball(bool8 unFadeLater, u8 battlerId, u32 
 }
 
 // Pokeball in Birch intro, and when receiving via trade
-void CreatePokeballSpriteToReleaseMon(u8 monSpriteId, u8 battlerId, u8 x, u8 y, u8 oamPriority, u8 subpriortiy, u8 g, u32 h, u16 species)
+void CreatePokeballSpriteToReleaseMon(u8 monSpriteId, u8 battlerId, u8 x, u8 y, u8 oamPriority, u8 subpriortiy, u8 g, u32 h, SpeciesEnum species)
 {
     u8 spriteId;
 

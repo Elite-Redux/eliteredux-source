@@ -1475,7 +1475,7 @@ bool8 ScrCmd_drawboxtext(struct ScriptContext *ctx)
 
 bool8 ScrCmd_showmonpic(struct ScriptContext *ctx)
 {
-    u16 species = VarGet(ScriptReadHalfword(ctx));
+    SpeciesEnum species = VarGet(ScriptReadHalfword(ctx));
     u8 x = ScriptReadByte(ctx);
     u8 y = ScriptReadByte(ctx);
 
@@ -1577,7 +1577,7 @@ bool8 ScrCmd_vmessage(struct ScriptContext *ctx)
 bool8 ScrCmd_bufferspeciesname(struct ScriptContext *ctx)
 {
     u8 stringVarIndex = ScriptReadByte(ctx);
-    u16 species = VarGet(ScriptReadHalfword(ctx));
+    SpeciesEnum species = VarGet(ScriptReadHalfword(ctx));
 
     StringCopy(sScriptStringVars[stringVarIndex], gSpeciesNames[species]);
     return FALSE;
@@ -1708,7 +1708,7 @@ bool8 ScrCmd_bufferboxname(struct ScriptContext *ctx)
 
 bool8 ScrCmd_givemon(struct ScriptContext *ctx)
 {
-    u16 species = VarGet(ScriptReadHalfword(ctx));
+    SpeciesEnum species = VarGet(ScriptReadHalfword(ctx));
     u16 level = VarGet(ScriptReadHalfword(ctx));
     u16 item = VarGet(ScriptReadHalfword(ctx));
     u32 unkParam1 = ScriptReadWord(ctx);
@@ -1724,7 +1724,7 @@ bool8 ScrCmd_givemon(struct ScriptContext *ctx)
 
 bool8 ScrCmd_giveegg(struct ScriptContext *ctx)
 {
-    u16 species = VarGet(ScriptReadHalfword(ctx));
+    SpeciesEnum species = VarGet(ScriptReadHalfword(ctx));
 
     gSpecialVar_Result = ScriptGiveEgg(species);
     return FALSE;
@@ -1748,7 +1748,7 @@ bool8 ScrCmd_checkpartymove(struct ScriptContext *ctx)
     gSpecialVar_Result = PARTY_SIZE;
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
+        SpeciesEnum species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
         if (!species)
             break;
         if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && MonKnowsMove(&gPlayerParty[i], moveId) == TRUE)
@@ -1949,7 +1949,7 @@ bool8 ScrCmd_cleartrainerflag(struct ScriptContext *ctx)
 
 bool8 ScrCmd_setwildbattle(struct ScriptContext *ctx)
 {
-    u16 species = ScriptReadHalfword(ctx);
+    SpeciesEnum species = ScriptReadHalfword(ctx);
     u16 level = VarGet(ScriptReadHalfword(ctx));
     u16 item = ScriptReadHalfword(ctx);
     u16 species2 = ScriptReadHalfword(ctx);
@@ -2121,7 +2121,7 @@ bool8 ScrCmd_checkplayergender(struct ScriptContext *ctx)
 
 bool8 ScrCmd_playmoncry(struct ScriptContext *ctx)
 {
-    u16 species = VarGet(ScriptReadHalfword(ctx));
+    SpeciesEnum species = VarGet(ScriptReadHalfword(ctx));
     u16 mode = VarGet(ScriptReadHalfword(ctx));
 
     PlayCry5(species, mode);
@@ -2779,7 +2779,7 @@ bool8 ScrCmd_giveBattleItems(struct ScriptContext *ctx)
 
 bool8 ScrCmd_givecustommon(struct ScriptContext *ctx)
 {
-    u16 species = ScriptReadHalfword(ctx);
+    SpeciesEnum species = ScriptReadHalfword(ctx);
     u8 level = ScriptReadByte(ctx);
     u16 item = ScriptReadHalfword(ctx);
     u8 ball = ScriptReadByte(ctx);
@@ -2861,7 +2861,7 @@ bool8 ScrCmd_checkpartyfortypeornumber(struct ScriptContext *ctx)
     u16 number  = ScriptReadHalfword(ctx);
     u8 partySize = CalculatePlayerPartyCount();
     u8 i, type1, type2;
-    u16 species;
+    SpeciesEnum species;
 
     if (partySize != number && number != 0) {
         gSpecialVar_Result = FALSE;
@@ -2886,7 +2886,7 @@ bool8 ScrCmd_checkpartyfortypeornumber(struct ScriptContext *ctx)
 
 bool8 ScrCmd_setwildbattlewithcustommoves(struct ScriptContext *ctx)
 {
-    u16 species    = ScriptReadHalfword(ctx);
+    SpeciesEnum species    = ScriptReadHalfword(ctx);
     u8  level      = ScriptReadByte(ctx);
     u16 item       = ScriptReadHalfword(ctx);
     u16 move1      = ScriptReadHalfword(ctx);

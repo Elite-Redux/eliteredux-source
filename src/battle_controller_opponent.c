@@ -1147,7 +1147,7 @@ static void OpponentHandleSetRawMonData(void)
 
 static void OpponentHandleLoadMonSprite(void)
 {
-    u16 species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
 
     BattleLoadOpponentMonSpriteGfx(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler);
     SetMultiuseSpriteTemplateToPokemon(species, GetBattlerPosition(gActiveBattler));
@@ -1178,7 +1178,7 @@ static void OpponentHandleSwitchInAnim(void)
 
 static void StartSendOutAnim(u8 battlerId, bool8 dontClearSubstituteBit)
 {
-    u16 species;
+    SpeciesEnum species;
 
     ClearTemporarySpeciesSpriteData(battlerId, dontClearSubstituteBit);
     gBattlerPartyIndexes[battlerId] = gBattleResources->bufferA[battlerId][1];
@@ -1862,7 +1862,7 @@ static void OpponentHandlePlayFanfareOrBGM(void)
 
 static void OpponentHandleFaintingCry(void)
 {
-    u16 species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
 
     PlayCry3(species, 25, 5);
     OpponentBufferExecCompleted();

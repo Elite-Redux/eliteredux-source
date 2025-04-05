@@ -939,7 +939,7 @@ static void PrintRibbonsMonListIndex(struct PokenavSub14 *structPtr)
 
 static void ResetSpritesAndDrawMonFrontPic(struct PokenavSub14 *structPtr)
 {
-    u16 species;
+    SpeciesEnum species;
     u32 personality, otId;
 
     GetMonSpeciesPersonalityOtId(&species, &personality, &otId);
@@ -958,7 +958,7 @@ static void DestroyRibbonsMonFrontPic(struct PokenavSub14 *structPtr)
 // x is given as either MON_SPRITE_X_ON or MON_SPRITE_X_OFF (but ignored and MON_SPRITE_X_ON is used)
 static u16 DrawRibbonsMonFrontPic(s32 x, s32 y)
 {
-    u16 species, spriteId;
+    SpeciesEnum species, spriteId;
     u32 personality, otId;
     u8 isShiny = FALSE;
     bool8 isAlpha = FALSE;

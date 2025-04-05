@@ -2823,7 +2823,7 @@ void AnimTask_RolePlaySilhouette(u8 taskId) {
     u8 isBackPic;
     u32 personality;
     u32 otId;
-    u16 species;
+    SpeciesEnum species;
     s16 xOffset;
     u32 priority;
     u8 spriteId;
@@ -4343,7 +4343,7 @@ void AnimTask_SnatchOpposingMonMove(u8 taskId) {
     u8 spriteId, spriteId2;
     int personality;
     int otId;
-    u16 species;
+    SpeciesEnum species;
     u8 subpriority;
     bool8 isBackPic;
     s16 x;

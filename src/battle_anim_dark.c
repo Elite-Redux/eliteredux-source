@@ -897,7 +897,7 @@ void AnimClawSlash(struct Sprite *sprite)
 // Custom color argument is used in MOVE_POISON_TAIL to make the mon turn purplish/pinkish as if became cloaked in poison.
 void AnimTask_MetallicShine(u8 taskId)
 {
-    u16 species;
+    SpeciesEnum species;
     u8 spriteId;
     u8 newSpriteId;
     u16 paletteNum;

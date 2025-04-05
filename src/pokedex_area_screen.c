@@ -48,7 +48,7 @@ struct PokeDexAreaScreen
     /*0x004*/ MainCallback prev; // unused
     /*0x008*/ MainCallback next; // unused
     /*0x00C*/ u16 state; // unused
-    /*0x00E*/ u16 species;
+    /*0x00E*/ SpeciesEnum species;
     /*0x010*/ struct PokeDexAreaScreenMapIdentity overworldAreasWithMons[0x40];
     /*0x110*/ u16 numOverworldAreas;
     /*0x112*/ u16 numSpecialAreas;
@@ -74,13 +74,13 @@ struct PokeDexAreaScreen
 
 static EWRAM_DATA struct PokeDexAreaScreen *sPokedexAreaScreen = NULL;
 
-static void FindMapsWithMon(u16);
+static void FindMapsWithMon(SpeciesEnum);
 static void BuildAreaGlowTilemap(void);
 static void SetAreaHasMon(u16, u16);
 static void SetSpecialMapHasMon(u16, u16);
 static u16 GetRegionMapSectionId(u8, u8);
-static bool8 MapHasMon(const struct WildPokemonHeader *, u16);
-static bool8 MonListHasMon(const struct WildPokemonInfo *, u16, u16);
+static bool8 MapHasMon(const struct WildPokemonHeader *, SpeciesEnum);
+static bool8 MonListHasMon(const struct WildPokemonInfo *, SpeciesEnum, u16);
 static void DoAreaGlow(void);
 static void Task_ShowPokedexAreaScreen(u8);
 static void CreateAreaMarkerSprites(void);
@@ -330,7 +330,7 @@ static bool8 DrawAreaGlow(void)
     return TRUE;
 }
 
-static void FindMapsWithMon(u16 species)
+static void FindMapsWithMon(SpeciesEnum species)
 {
     u16 i;
     struct Roamer *roamer;
@@ -453,7 +453,7 @@ static u16 GetRegionMapSectionId(u8 mapGroup, u8 mapNum)
     return Overworld_GetMapHeaderByGroupAndId(mapGroup, mapNum)->regionMapSectionId;
 }
 
-static bool8 MapHasMon(const struct WildPokemonHeader *info, u16 species)
+static bool8 MapHasMon(const struct WildPokemonHeader *info, SpeciesEnum species)
 {
     if (GetRegionMapSectionId(info->mapGroup, info->mapNum) == MAPSEC_ALTERING_CAVE)
     {
@@ -475,7 +475,7 @@ static bool8 MapHasMon(const struct WildPokemonHeader *info, u16 species)
     return FALSE;
 }
 
-static bool8 MonListHasMon(const struct WildPokemonInfo *info, u16 species, u16 size)
+static bool8 MonListHasMon(const struct WildPokemonInfo *info, SpeciesEnum species, u16 size)
 {
     u16 i;
     if (info != NULL)
@@ -639,7 +639,7 @@ static void DoAreaGlow(void)
 
 #define tState data[0]
 
-void ShowPokedexAreaScreen(u16 species, u8 *screenSwitchState)
+void ShowPokedexAreaScreen(SpeciesEnum species, u8 *screenSwitchState)
 {
     u8 taskId;
 

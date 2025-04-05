@@ -14,7 +14,7 @@ struct TrainerBall {
 };
 
 struct UnknownPokemonStruct4 {
-    /*0x00*/ u16 species;
+    /*0x00*/ SpeciesEnum species;
     /*0x02*/ u16 heldItem;
     /*0x04*/ u8 nickname[POKEMON_NAME_LENGTH + 1];
     /*0x0F*/ u8 level;
@@ -100,7 +100,7 @@ void SetTypeBeforeUsingMove(MoveEnum move, u8 battlerAtk);
 u8 GetTypeBeforeUsingMove(MoveEnum move, u8 battlerAtk);
 void ApplyTypeOverrideInformation(MoveEnum move, int battlerAtk, int moveType, int ateBoost);
 s32 GetHighestLevelInPlayerParty(void);
-u16 selectMoves(u16 species, u8 i, u16 atk, u16 spAtk);
+u16 selectMoves(SpeciesEnum species, u8 i, u16 atk, u16 spAtk);
 u8 GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer);
 bool32 IsWildMonSmart(void);
 void RecalculateMoveOrder(int from, int ignoreChosenMove);
