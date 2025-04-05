@@ -78,15 +78,13 @@
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/weather.h"
-#include "constants/species.h"
-#include "data/pokemon/form_species_tables.h"
+#include "generated/constants/species.h"
 #include "constants/abilities.h"
 #include "constants/hold_effects.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
 #include "tmhm_struct.h"
 #include "abilities.hh"
-// #include "data/pokemon/form_species_table_pointers.h"
 
 #define PARTY_PAL_SELECTED (1 << 0)
 #define PARTY_PAL_FAINTED (1 << 1)
@@ -1831,11 +1829,11 @@ bool32 CanLearnTutorMove(u16 species, u8 tutor)  // note the change to bool32
         return 0;
     }
 
-    #if USE_GENERATED_SPECIES
+#if USE_GENERATED_SPECIES
     return gTutorLearnsets[species]->bits[tutor / 16] & (1 << (tutor % 16));
-    #else
+#else
     return gTutorLearnsets[species].bits[tutor / 16] & (1 << (tutor % 16));
-    #endif
+#endif
 }
 
 static void InitPartyMenuWindows(u8 layout) {
@@ -2305,7 +2303,7 @@ static u8 DisplaySelectionWindow(u8 windowType) {
             u16 megaEvoItem = ITEM_NONE;
             int skip = sPartyMenuInternal->actions[i] - MENU_MEGA_STONE;
 
-            for (j = 0; j < EVOS_PER_MON && gEvolutionTable[species][j].method; j++) {
+            for (j = 0; gEvolutionTable[species][j].method; j++) {
                 if (gEvolutionTable[species][j].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][j].method == EVO_PRIMAL_REVERSION) {
                     if (skip) {
                         skip--;
@@ -2485,7 +2483,7 @@ static void SetPartyMonFormChangeSelectionActions(struct Pokemon *mons, u8 slotI
     u32 species = GetMonData(&mons[slotId], MON_DATA_SPECIES, NULL);
 
     // Add Forms to action list
-    for (i = 0; i < EVOS_PER_MON; i++) {
+    for (i = 0; gFormChangeTable[species][i].method; i++) {
         targetspecies = GetFormChangeForMon(&mons[slotId], i);
 
         if (targetspecies != SPECIES_NONE && targetspecies != species) {
@@ -2501,7 +2499,7 @@ static void SetPartyMonEvolutionSelectionActions(struct Pokemon *mons, u8 slotId
     u32 species = GetMonData(&mons[slotId], MON_DATA_SPECIES, NULL);
 
     // Add Evolutions to action list
-    for (i = 0; i < EVOS_PER_MON; i++) {
+    for (i = 0; gEvolutionTable[species][i].method; i++) {
         targetspecies = GetEvolutionForMon(&mons[slotId], i);
 
         if (targetspecies != SPECIES_NONE && targetspecies != species) {
@@ -2547,7 +2545,7 @@ static void SetPartyMonHeldItemSelectionActions(struct Pokemon *mons, u8 slotId)
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_GIVE);
     }
 
-    for (i = 0; i < EVOS_PER_MON && gEvolutionTable[species][i].method && j < ARRAY_COUNT(megaStones); i++) {
+    for (i = 0; gEvolutionTable[species][i].method; i++) {
         if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][i].method == EVO_PRIMAL_REVERSION) {
             megaStones[j++] = gEvolutionTable[species][i].param;
         }
@@ -2560,7 +2558,7 @@ static void SetPartyMonHeldItemSelectionActions(struct Pokemon *mons, u8 slotId)
     // Give Mega Stone
     if (megaStones[1] && CheckBagHasItem(megaStones[1], 1) && helditem != megaStones[1])
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MEGA_STONE_2);
-        
+
     // Give Mega Stone
     if (megaStones[2] && CheckBagHasItem(megaStones[2], 1) && helditem != megaStones[2])
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MEGA_STONE_3);
@@ -2692,7 +2690,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId) {
 
         // Evolution
         if (allowChanges) {
-            for (i = 0; i < EVOS_PER_MON; i++) {
+            for (i = 0; gEvolutionTable[species][i].method; i++) {
                 targetSpecies = GetEvolutionForMon(&mons[slotId], i);
 
                 if (targetSpecies != SPECIES_NONE && targetSpecies != species) {
@@ -2704,7 +2702,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId) {
 
         // Form change
         if (allowChanges && VarGet(FLAG_BADGE02_GET)) {
-            for (i = 0; i < EVOS_PER_MON; i++) {
+            for (i = 0; i < gFormChangeTable[species][i].method; i++) {
                 targetSpecies = GetFormChangeForMon(&mons[slotId], i);
 
                 if (targetSpecies != SPECIES_NONE && targetSpecies != species) {
@@ -2854,11 +2852,10 @@ static void CB2_ShowPokemonSummaryScreen(void) {
         UpdatePartyToBattleOrder();
         ShowPokemonSummaryScreen(SUMMARY_MODE_LOCK_MOVES, gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuFromSummaryScreen);
     } else {
-        if(FlagGet(FLAG_SYS_OPEN_MOVE_MENU_FROM_PARTY_SCREEN)){
+        if (FlagGet(FLAG_SYS_OPEN_MOVE_MENU_FROM_PARTY_SCREEN)) {
             ShowPokemonSummaryScreen(SUMMARY_MODE_MOVE_LEARNER, gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuFromSummaryScreen);
             FlagClear(FLAG_SYS_OPEN_MOVE_MENU_FROM_PARTY_SCREEN);
-        }
-        else
+        } else
             ShowPokemonSummaryScreen(SUMMARY_MODE_NORMAL, gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuFromSummaryScreen);
     }
 }
@@ -3184,7 +3181,7 @@ static void GiveMegaStone(int taskId, int itemCount) {
     u16 helditem = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_HELD_ITEM, NULL);
     u16 megaEvoItem = 0;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
+    for (i = 0; gEvolutionTable[species][i].method; i++) {
         if (itemCount-- > 0) continue;
 
         if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][i].method == EVO_PRIMAL_REVERSION) {
@@ -3941,13 +3938,8 @@ static bool8 SetUpFieldMove_Fly(void) {
 }
 
 void CB2_ReturnToPartyMenuFromFlyMap(void) {
-    InitPartyMenu(PARTY_MENU_TYPE_FIELD,
-                  PARTY_LAYOUT_SINGLE,
-                  PARTY_ACTION_CHOOSE_MON,
-                  TRUE,
-                  PARTY_MSG_CHOOSE_MON,
-                  Task_HandleChooseMonInput,
-                  CB2_ReturnToUIMenu);
+    InitPartyMenu(
+        PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_CHOOSE_MON, TRUE, PARTY_MSG_CHOOSE_MON, Task_HandleChooseMonInput, CB2_ReturnToUIMenu);
 }
 
 static void FieldCallback_Waterfall(void) {
@@ -5721,7 +5713,7 @@ void ItemUseCB_Nectar(u8 taskId, TaskFunc task) {
 
     currSpecies = GetMonData(mon, MON_DATA_SPECIES);
     secondaryId = ItemId_GetSecondaryId(gSpecialVar_ItemId);
-    newSpecies = sOricorioFormSpeciesIdTable[secondaryId];
+    newSpecies = gFormSpeciesIdTables[SPECIES_ORICORIO][secondaryId];
 
     PlaySE(SE_SELECT);
     if (gSpeciesToNationalPokedexNum[currSpecies - 1] != SPECIES_ORICORIO || (newSpecies == currSpecies)) {
@@ -5976,13 +5968,8 @@ static void TryTutorSelectedMon(u8 taskId) {
 }
 
 void CB2_PartyMenuFromStartMenu(void) {
-    InitPartyMenu(PARTY_MENU_TYPE_FIELD,
-                  PARTY_LAYOUT_SINGLE,
-                  PARTY_ACTION_CHOOSE_MON,
-                  FALSE,
-                  PARTY_MSG_CHOOSE_MON,
-                  Task_HandleChooseMonInput,
-                  CB2_ReturnToUIMenu);
+    InitPartyMenu(
+        PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_CHOOSE_MON, FALSE, PARTY_MSG_CHOOSE_MON, Task_HandleChooseMonInput, CB2_ReturnToUIMenu);
 }
 
 // Giving an item by selecting Give from the bag menu

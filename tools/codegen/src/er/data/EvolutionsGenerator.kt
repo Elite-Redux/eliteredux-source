@@ -48,7 +48,7 @@ object EvolutionsGenerator : Generator {
 
         writer.appendLine(evoIds.entries.joinToString("\n") {
             """
-            |static const Evolution *const $EVO_PREFIX${it.value} = {
+            |static const Evolution *const $EVO_PREFIX${it.value} = (const Evolution[]) {
             |$IND${it.key.joinToString("\n$IND") { evo -> "$evo," }}
             |${IND}0};
             |""".trimMargin()
@@ -66,12 +66,12 @@ object EvolutionsGenerator : Generator {
 
         writer.appendLine(formIds.entries.joinToString("\n") {
             """
-            |static const Evolution *const $FORM_PREFX${it.value} = {
+            |static const Evolution *const $FORM_PREFX${it.value} = (const Evolution[]) {
             |$IND${
                 it.key.joinToString("\n$IND") { id ->
                     when (SPECIES_MAP[id]!!.formShiftGender) {
                         Species.Gender.MALE -> "{EVO_FORM_SHIFT_GENDER, MON_MALE, $id},"
-                        Species.Gender.FEMALE -> "{EVO_FORM_SHIFT_GENDER, FEMALE_MALE, $id},"
+                        Species.Gender.FEMALE -> "{EVO_FORM_SHIFT_GENDER, MON_FEMALE, $id},"
                         else -> "{EVO_FORM_SHIFT, 1, $id},"
                     }
                 }

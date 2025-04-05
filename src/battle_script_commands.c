@@ -1053,7 +1053,7 @@ static void Cmd_attackcanceler(void) {
         gBattlescriptCurrInstr = BattleScript_MoveEnd;
         return;
     }
-    
+
     if (AtkCanceller_UnableToUseMove()) return;
 
     if (!gTurnStructs[gBattlerAttacker].multiHitCounter) {
@@ -7927,7 +7927,7 @@ static void Cmd_various(void) {
             bool8 canDoPrimalReversion = FALSE;
             ptr = READ_PTR_INC;
 
-            for (i = 0; i < EVOS_PER_MON; i++) {
+            for (i = 0; gEvolutionTable[gBattleMons[gActiveBattler].species][i].method; i++) {
                 if (gEvolutionTable[gBattleMons[gActiveBattler].species][i].method == EVO_PRIMAL_REVERSION &&
                     gEvolutionTable[gBattleMons[gActiveBattler].species][i].param == gBattleMons[gActiveBattler].item)
                     canDoPrimalReversion = TRUE;
@@ -12563,7 +12563,7 @@ static void Cmd_handleballthrow(void) {
 #endif
                     break;
                 case ITEM_MOON_BALL:
-                    for (i = 0; i < EVOS_PER_MON; i++) {
+                    for (i = 0; gEvolutionTable[gBattleMons[gBattlerTarget].species][i].method; i++) {
                         if (gEvolutionTable[gBattleMons[gBattlerTarget].species][i].method == EVO_ITEM &&
                             gEvolutionTable[gBattleMons[gBattlerTarget].species][i].param == ITEM_MOON_STONE)
                             ballMultiplier = 40;

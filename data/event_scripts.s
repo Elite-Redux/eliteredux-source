@@ -45,7 +45,7 @@
 #include "constants/script_menu.h"
 #include "constants/secret_bases.h"
 #include "constants/songs.h"
-#include "constants/species.h"
+#include "generated/constants/species.h"
 #include "constants/trade.h"
 #include "constants/trainer_hill.h"
 #include "constants/trainers.h"

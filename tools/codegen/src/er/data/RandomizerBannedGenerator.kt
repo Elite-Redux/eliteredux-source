@@ -5,6 +5,7 @@ import er.Generator
 import er.GeneratorUtils.SPECIES_LIST
 import er.proto.Species
 import er.proto.Species.RandomizeBanned.*
+import er.proto.SpeciesEnum
 import java.io.OutputStreamWriter
 
 object RandomizerBannedGenerator : Generator {
@@ -15,13 +16,14 @@ object RandomizerBannedGenerator : Generator {
         species.megaList.isNotEmpty() -> "FALSE"
         species.primalList.isNotEmpty() -> "FALSE"
         species.hasFormShiftOf() -> "FALSE"
+        species.id == SpeciesEnum.SPECIES_NONE -> "FALSE"
         else -> "TRUE"
     }
 
     override fun generate(writer: OutputStreamWriter) {
         writer.appendLine(
             """
-            |int isSpeciesRandomizerAllowed(SpeciesEnum species, int allowLegendaries, int allowParadox) {
+            |int IsSpeciesRandomizerAllowed(SpeciesEnum species, int allowLegendaries, int allowParadox) {
             |${IND}switch (species) {
             |$IND$IND${
                 SPECIES_LIST.joinToString("\n$IND$IND") { "case ${it.id}: return ${randomizerCondition(it)};" }

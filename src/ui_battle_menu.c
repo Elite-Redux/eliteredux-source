@@ -40,7 +40,7 @@
 #include "util.h"
 #include "event_data.h"
 #include "constants/abilities.h"
-#include "constants/species.h"
+#include "generated/constants/species.h"
 #include "constants/items.h"
 #include "constants/field_weather.h"
 #include "constants/songs.h"

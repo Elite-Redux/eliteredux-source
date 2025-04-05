@@ -14,7 +14,7 @@
 #include "constants/hold_effects.h"
 #include "constants/items.h"
 #include "constants/moves.h"
-#include "constants/species.h"
+#include "generated/constants/species.h"
 #include "global.h"
 #include "item.h"
 #include "mgba_printf/mgba.h"
@@ -1297,7 +1297,9 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
         CASE_AND_LABEL(EFFECT_FLOWER_SHIELD)
         if (!IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS)) return AI_SCORE_IMMUNE;
-        { return AI_SCORE_DEFENSE_UP(battlerAtk, 1); }
+        {
+            return AI_SCORE_DEFENSE_UP(battlerAtk, 1);
+        }
 
         CASE_AND_LABEL(EFFECT_HIT_PREVENT_ESCAPE)
         AI_CALC_DAMAGE;

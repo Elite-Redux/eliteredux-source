@@ -2,7 +2,7 @@
 #define GUARD_POKEMON_H
 
 #include "constants/pokemon.h"
-#include "constants/species.h"
+#include "generated/constants/species.h"
 #include "sprite.h"
 #include "constants/region_map_sections.h"
 #include "constants/pokemon_config.h"
@@ -200,6 +200,12 @@ struct RawStatsLevel {
     u8 extraSpeedLevel;
 };
 
+#define F_ULTRA_BEAST   (1 << 0)
+#define F_ALOLAN_FORM   (1 << 1)
+#define F_GALARIAN_FORM (1 << 2)
+#define F_TWO_HEADED    (1 << 3)
+#define F_THREE_HEADED  (1 << 4)
+
 typedef struct BaseStats {
     /* 0x00 */ u8 baseHP;
     /* 0x01 */ u8 baseAttack;
@@ -326,8 +332,8 @@ extern const u8 gFacilityClassToTrainerClass[];
 extern const struct BaseStats gBaseStats[];
 extern const u8 *const gItemEffectTable[];
 extern const u32 gExperienceTables[][MAX_LEVEL + 1];
-extern const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON];
-extern const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON];
+extern const struct Evolution *const gEvolutionTable[REAL_SPECIES_COUNT];
+extern const struct Evolution *const gFormChangeTable[REAL_SPECIES_COUNT];
 extern const struct LevelUpMove *const gLevelUpLearnsets[];
 extern const u8 gPPUpGetMask[];
 extern const u8 gPPUpSetMask[];
@@ -337,6 +343,7 @@ extern const u16 gLinkPlayerFacilityClasses[];
 extern const struct SpriteTemplate gBattlerSpriteTemplates[];
 extern const s8 gNatureStatTable[][5];
 extern const u16 gSpeciesToNationalPokedexNum[NUM_SPECIES];
+extern const u16 *const gFormSpeciesIdTables[REAL_SPECIES_COUNT];
 
 void ZeroBoxMonData(struct BoxPokemon *boxMon);
 void ZeroMonData(struct Pokemon *mon);
@@ -543,10 +550,11 @@ bool8 isBoxMonNicknamed(struct BoxPokemon *boxMon);
 bool8 CheckBoxMonForBadChecksum(u8 box, u8 slot);
 bool8 isSpeciesPlaceholderMon(u16 species);
 bool8 IsEeveelution(u16 species);
-u16 getBaseSpeciesFromMega(u16 species);
+u16 GetBaseSpeciesFromMega(u16 species);
 u16 getLearnsetMon(u16 species);
 u16 GetFormShiftSpecies(u16 species);
-const u8 *GetSpeciesLongName(u16 species);
+const u8 *const GetSpeciesLongName(SpeciesEnum species);
+const u8 *SaveSpeciesWithSurname(SpeciesEnum species);
 u16 GetRandomSpeciesFromPool(u8 id);
 const u16 *GetFormSpeciesTable(u16 speciesId);
 bool8 SpeciesHasDifferentForms(u16 speciesId);

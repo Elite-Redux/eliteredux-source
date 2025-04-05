@@ -8,7 +8,7 @@ import java.io.OutputStreamWriter
 object ReverseMegaMappingGenerator : Generator {
     override fun generate(writer: OutputStreamWriter) {
         writer.appendLine("""
-            |u16 baseSpeciesForMega(u16 megaSpecies) {
+            |u16 GetBaseSpeciesFromMega(u16 megaSpecies) {
             |${IND}switch (megaSpecies) {
             |$IND$IND${SPECIES_LIST.filter { it.megaList.isNotEmpty() }.joinToString("\n$IND$IND") { "case ${it.id}: return ${it.megaList.first().from};" }}
             |$IND$IND${SPECIES_LIST.filter { it.primalList.isNotEmpty() }.joinToString("\n$IND$IND") { "case ${it.id}: return ${it.primalList.first().from};" }}

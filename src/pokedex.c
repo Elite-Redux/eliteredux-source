@@ -48,7 +48,7 @@
 #include "constants/party_menu.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
-#include "constants/species.h"
+#include "generated/constants/species.h"
 #include "tmhm_struct.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
@@ -543,7 +543,7 @@ static const struct SpritePalette sStatBarSpritePal[] = //{sStatBarPalette, TAG_
 
 
 // const rom data
-#include "data/pokemon/pokedex_orders.h"
+#include "generated/data/pokemon/pokedex_orders.h"
 
 static const struct OamData sOamData_ScrollBar =
 {
@@ -4788,6 +4788,9 @@ u16 GetHoennPokedexCount(u8 caseID)
     return count;
 }
 
+#define KANTO_DEX_COUNT SPECIES_MEW
+#define JOHTO_DEX_COUNT SPECIES_CELEBI
+
 u16 GetKantoPokedexCount(u8 caseID)
 {
     u16 count = 0;
@@ -7474,7 +7477,7 @@ static u8 PrintEvolutionTargetSpeciesAndMethod(u8 taskId, u16 species, u8 depth,
     StringCopy(gStringVar1, gSpeciesNames[species]);
 
     //Calculate number of possible direct evolutions (e.g. Eevee has 5 but torchic has 1)
-    for (i = 0; i < EVOS_PER_MON; i++)
+    for (i = 0; gEvolutionTable[species][i].method; i++)
     {
         #ifndef POKEMON_EXPANSION
             if (gEvolutionTable[species][i].method != 0)

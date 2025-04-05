@@ -25,7 +25,7 @@
 #include "constants/moves.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
-#include "constants/species.h"
+#include "generated/constants/species.h"
 #include "constants/trainers.h"
 #include "constants/weather.h"
 #include "data.h"
@@ -7231,7 +7231,7 @@ static u32 CalcAttackStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
 static bool32 CanEvolve(u32 species) {
     u32 i;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
+    for (i = 0; gEvolutionTable[species][i].method; i++) {
         if (gEvolutionTable[species][i].method && gEvolutionTable[species][i].method != EVO_MEGA_EVOLUTION &&
             gEvolutionTable[species][i].method != EVO_MOVE_MEGA_EVOLUTION && gEvolutionTable[species][i].method != EVO_PRIMAL_REVERSION)
             return TRUE;
@@ -7957,7 +7957,7 @@ bool32 IsPartnerMonFromSameTrainer(u8 battlerId) {
 u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId) {
     u32 i;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
+    for (i = 0; gEvolutionTable[preEvoSpecies][i].method; i++) {
         if (gEvolutionTable[preEvoSpecies][i].method == EVO_MEGA_EVOLUTION && gEvolutionTable[preEvoSpecies][i].param == heldItemId)
             return gEvolutionTable[preEvoSpecies][i].targetSpecies;
     }
@@ -7967,7 +7967,7 @@ u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId) {
 u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId) {
     u32 i;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
+    for (i = 0; gEvolutionTable[preEvoSpecies][i].method; i++) {
         if (gEvolutionTable[preEvoSpecies][i].method == EVO_PRIMAL_REVERSION && gEvolutionTable[preEvoSpecies][i].param == heldItemId)
             return gEvolutionTable[preEvoSpecies][i].targetSpecies;
     }
@@ -7977,7 +7977,7 @@ u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId) {
 u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, MoveEnum moveId1, MoveEnum moveId2, MoveEnum moveId3, MoveEnum moveId4) {
     u32 i, par;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
+    for (i = 0; gEvolutionTable[preEvoSpecies][i].method; i++) {
         if (gEvolutionTable[preEvoSpecies][i].method == EVO_MOVE_MEGA_EVOLUTION) {
             par = gEvolutionTable[preEvoSpecies][i].param;
             if (par == moveId1 || par == moveId2 || par == moveId3 || par == moveId4) return gEvolutionTable[preEvoSpecies][i].targetSpecies;

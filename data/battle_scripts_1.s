@@ -11,7 +11,7 @@
 #include "constants/game_stat.h"
 #include "constants/trainers.h"
 #include "constants/battle_config.h"
-#include "constants/species.h"
+#include "generated/constants/species.h"
 	.include "asm/macros.inc"
 	.include "asm/macros/battle_script.inc"
 	.include "constants/constants.inc"

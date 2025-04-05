@@ -22,7 +22,7 @@ object FormSpeciesTableGenerator : Generator {
 
         writer.appendLine(formIds.entries.joinToString("\n") {
             """
-            |const SpeciesEnum[] $PREFIX${it.value} = {
+            |static const SpeciesEnum $PREFIX${it.value}[] = {
             |$IND${it.key.joinToString("\n$IND") { id -> "$id," }}
             |${IND}0};
             |""".trimMargin()

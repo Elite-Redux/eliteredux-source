@@ -8,7 +8,7 @@
 #include "constants/global.h"
 #include "constants/flags.h"
 #include "constants/vars.h"
-#include "constants/species.h"
+#include "generated/constants/species.h"
 #include "constants/berry.h"
 #include "constants/expansion_branches.h"
 
@@ -208,6 +208,9 @@ struct StringList_Long
 
 #define ROUND_BITS_TO_BYTES(numBits)(((numBits) / 8) + (((numBits) % 8) ? 1 : 0))
 
+#define HOENN_DEX_COUNT 212
+#define NATIONAL_DEX_COUNT 1500
+#define POKEMON_SLOTS_NUMBER (NATIONAL_DEX_COUNT + 1)
 #define DEX_FLAGS_NO (ROUND_BITS_TO_BYTES(POKEMON_SLOTS_NUMBER))
 #define NUM_FLAG_BYTES (ROUND_BITS_TO_BYTES(FLAGS_COUNT))
 

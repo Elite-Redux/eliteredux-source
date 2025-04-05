@@ -13,7 +13,7 @@ object SpeciesEnumGenerator : Generator {
         writer.appendLine(
             """
             |// Max possible number of species
-            |#define SPECIES_COUNT $SPECIES_COUNT
+            |#define NUM_SPECIES $SPECIES_COUNT
             |// Max number of non-egg mons
             |#define REAL_SPECIES_COUNT $REAL_SPECIES_COUNT
             |
