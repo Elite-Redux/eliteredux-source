@@ -164,7 +164,7 @@ static void Task_BeginEvolutionScene(u8 taskId) {
     }
 }
 
-void BeginEvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, bool8 canStopEvo, u8 partyId) {
+void BeginEvolutionScene(struct Pokemon* mon, SpeciesEnum postEvoSpecies, bool8 canStopEvo, u8 partyId) {
     u8 taskId = CreateTask(Task_BeginEvolutionScene, 0);
     gTasks[taskId].tState = 0;
     gTasks[taskId].tPostEvoSpecies = postEvoSpecies;
@@ -173,9 +173,9 @@ void BeginEvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, bool8 canStopE
     SetMainCallback2(CB2_BeginEvolutionScene);
 }
 
-void EvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, bool8 canStopEvo, u8 partyId) {
+void EvolutionScene(struct Pokemon* mon, SpeciesEnum postEvoSpecies, bool8 canStopEvo, u8 partyId) {
     u8 name[20];
-    u16 currSpecies;
+    SpeciesEnum currSpecies;
     u32 personality;
     const struct CompressedSpritePalette* pokePal;
     u8 ID, isShiny;
@@ -421,7 +421,7 @@ static void CB2_TradeEvolutionSceneLoadGraphics(void) {
     }
 }
 
-void TradeEvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, u8 preEvoSpriteId, u8 partyId) {
+void TradeEvolutionScene(struct Pokemon* mon, SpeciesEnum postEvoSpecies, u8 preEvoSpriteId, u8 partyId) {
     u8 name[20];
     u16 currSpecies;
     u32 personality;

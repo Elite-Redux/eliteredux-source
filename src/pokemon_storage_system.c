@@ -47,6 +47,7 @@
 #include "constants/hold_effects.h"
 #include "mgba_printf/mini_printf.h"
 #include "mgba_printf/mgba.h"
+#include "pokedex.h"
 
 /*
     NOTE: This file is large. Some general groups of functions have
@@ -4418,7 +4419,7 @@ static void Task_EvolveMon(u8 taskId)
     u8 i;
     u8 pos = GetCursorPosition();
     u8 boxId = StorageGetCurrentBox();
-    u16 targetSpecies = SPECIES_NONE;
+    SpeciesEnum targetSpecies = SPECIES_NONE;
     u8 numEvo = 0;
     u8 targetNumEvo = 0;
 
@@ -4469,6 +4470,9 @@ static void Task_EvolveMon(u8 taskId)
                 SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
                 UpdateSpeciesSpritePSS(&gPokemonStoragePtr->boxes[boxId][pos]);
             }
+
+            GetSetPokedexFlag(SpeciesToNationalPokedexNum(targetSpecies), FLAG_SET_CAUGHT);
+            GetSetPokedexFlag(SpeciesToNationalPokedexNum(targetSpecies), FLAG_SET_SEEN);
 
             //BeginEvolutionScene(&pokemon, targetSpecies, FALSE, pos);
             RefreshDisplayMon();
