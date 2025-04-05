@@ -1825,6 +1825,8 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_SLOWKING_MEGA_GALARIAN] = _("Slowking"),
     [SPECIES_ROSERADE_MEGA] = _("Roserade"),
     [SPECIES_MIENSHAO_MEGA] = _("Mienshao"),
+    [SPECIES_DUDUDUNSPARCE] = _("Dududunsprce"),
+    [SPECIES_DUDUDUNSPARCE_MEGA] = _("Dududunsprce"),
 
     // PARTNER POKEMON
     [SPECIES_PIKACHU_PARTNER] = _("Pikachu"),

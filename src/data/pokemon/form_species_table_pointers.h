@@ -1223,6 +1223,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_ROSERADE_MEGA] = sRoseradeFormSpeciesIdTable,
     [SPECIES_MIENSHAO] = sMienshaoFormSpeciesIdTable,
     [SPECIES_MIENSHAO_MEGA] = sMienshaoFormSpeciesIdTable,
+    [SPECIES_DUDUDUNSPARCE] = sDududunsparceFormSpeciesIdTable,
+    [SPECIES_DUDUDUNSPARCE_MEGA] = sDududunsparceFormSpeciesIdTable,
 
     [SPECIES_SPIRITOMB_REDUX] = sSpiritombFormSpeciesIdTable,
 

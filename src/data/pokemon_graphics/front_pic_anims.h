@@ -18786,6 +18786,26 @@ static const union AnimCmd *const sAnims_MIENSHAO_MEGA[] = {
     sAnim_MIENSHAO_MEGA_1,
 };
 
+static const union AnimCmd sAnim_DUDUDUNSPARCE_1[] = {
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_DUDUDUNSPARCE[] = {
+    sAnim_GeneralFrame0,
+    sAnim_DUDUDUNSPARCE_1,
+};
+
+static const union AnimCmd sAnim_DUDUDUNSPARCE_MEGA_1[] = {
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_DUDUDUNSPARCE_MEGA[] = {
+    sAnim_GeneralFrame0,
+    sAnim_DUDUDUNSPARCE_MEGA_1,
+};
+
 #define ANIM_CMD(name) [SPECIES_##name] = sAnims_##name
 #define ANIM_CMD_FULL(name, anims) [SPECIES_##name] = anims
 
@@ -20507,6 +20527,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] = {
     ANIM_CMD(SLOWBRO_MEGA_GALARIAN),
     ANIM_CMD(ROSERADE_MEGA),
     ANIM_CMD(MIENSHAO_MEGA),
+    ANIM_CMD(DUDUDUNSPARCE),
+    ANIM_CMD(DUDUDUNSPARCE_MEGA),
 };
 
 #undef ANIM_CMD

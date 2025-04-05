@@ -8519,6 +8519,18 @@ const u32 gMonPalette_MienshaoMega[]           = INCBIN_U32("graphics/pokemon/mi
 const u32 gMonShinyPalette_MienshaoMega[]      = INCBIN_U32("graphics/pokemon/mienshao/mega/shiny.gbapal.lz");
 const u8  gMonIcon_MienshaoMega[]              = INCBIN_U8("graphics/pokemon/mienshao/mega/icon.4bpp");
 
+const u32 gMonFrontPic_Dududunsparce[]          = INCBIN_U32("graphics/pokemon/dududunsparce/front.4bpp.lz");
+const u32 gMonBackPic_Dududunsparce[]           = INCBIN_U32("graphics/pokemon/dududunsparce/back.4bpp.lz");
+const u32 gMonPalette_Dududunsparce[]           = INCBIN_U32("graphics/pokemon/dududunsparce/normal.gbapal.lz");
+const u32 gMonShinyPalette_Dududunsparce[]      = INCBIN_U32("graphics/pokemon/dududunsparce/shiny.gbapal.lz");
+const u8  gMonIcon_Dududunsparce[]              = INCBIN_U8("graphics/pokemon/dududunsparce/icon.4bpp");
+
+const u32 gMonFrontPic_DududunsparceMega[]          = INCBIN_U32("graphics/pokemon/dududunsparce/mega/front.4bpp.lz");
+const u32 gMonBackPic_DududunsparceMega[]           = INCBIN_U32("graphics/pokemon/dududunsparce/mega/back.4bpp.lz");
+const u32 gMonPalette_DududunsparceMega[]           = INCBIN_U32("graphics/pokemon/dududunsparce/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_DududunsparceMega[]      = INCBIN_U32("graphics/pokemon/dududunsparce/mega/shiny.gbapal.lz");
+const u8  gMonIcon_DududunsparceMega[]              = INCBIN_U8("graphics/pokemon/dududunsparce/mega/icon.4bpp");
+
 //PARTNER POKEMON
 
 const u32 gMonFrontPic_AmauraPartner[]          = INCBIN_U32("graphics/pokemon/amaura/front.4bpp.lz");

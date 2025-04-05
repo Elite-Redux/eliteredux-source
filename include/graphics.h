@@ -11569,6 +11569,16 @@ extern const u32 gMonBackPic_MienshaoMega[];
 extern const u32 gMonPalette_MienshaoMega[];
 extern const u32 gMonShinyPalette_MienshaoMega[];
 extern const u8  gMonIcon_MienshaoMega[];
+extern const u32 gMonFrontPic_Dududunsparce[];
+extern const u32 gMonBackPic_Dududunsparce[];
+extern const u32 gMonPalette_Dududunsparce[];
+extern const u32 gMonShinyPalette_Dududunsparce[];
+extern const u8  gMonIcon_Dududunsparce[];
+extern const u32 gMonFrontPic_DududunsparceMega[];
+extern const u32 gMonBackPic_DududunsparceMega[];
+extern const u32 gMonPalette_DududunsparceMega[];
+extern const u32 gMonShinyPalette_DududunsparceMega[];
+extern const u8  gMonIcon_DududunsparceMega[];
 //3.0 CUTOFF END
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
