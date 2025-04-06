@@ -3,7 +3,7 @@
 #include "battle_anim.h"
 #include "battle_util.h"
 #include "bg.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "constants/battle_anim.h"
 #include "constants/hold_effects.h"
 #include "constants/rgb.h"

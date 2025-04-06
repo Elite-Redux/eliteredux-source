@@ -2,7 +2,7 @@
 #define GUARD_TMHM_STRUCT_H
 
 #include "global.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 
 #define ALL_TMS \
 TM_DECORATOR(MOVE_PROTECT)

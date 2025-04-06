@@ -73,13 +73,13 @@
 #include "constants/item_effects.h"
 #include "constants/items.h"
 #include "constants/maps.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/party_menu.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/weather.h"
 #include "generated/constants/species.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "constants/hold_effects.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
@@ -437,11 +437,7 @@ u16 GetSilvallyForm(struct Pokemon *mon);
 u16 GetGiratinaForm(struct Pokemon *mon);
 
 // static const data
-#if USE_GENERATED_SPECIES
 #include "generated/data/pokemon/tutor_learnsets.h"
-#else
-#include "data/pokemon/tutor_learnsets.h"
-#endif
 #include "data/party_menu.h"
 
 // code
@@ -1829,11 +1825,7 @@ bool32 CanLearnTutorMove(SpeciesEnum species, u8 tutor)  // note the change to b
         return 0;
     }
 
-#if USE_GENERATED_SPECIES
     return gTutorLearnsets[species]->bits[tutor / 16] & (1 << (tutor % 16));
-#else
-    return gTutorLearnsets[species].bits[tutor / 16] & (1 << (tutor % 16));
-#endif
 }
 
 static void InitPartyMenuWindows(u8 layout) {

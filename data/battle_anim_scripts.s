@@ -3,7 +3,7 @@
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/sound.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/pokemon.h"
 #include "constants/items.h"
 #include "constants/battle_config.h"

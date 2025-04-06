@@ -43,7 +43,7 @@
 #include "constants/maps.h"
 #include "constants/metatile_behaviors.h"
 #include "constants/metatile_labels.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/region_map_sections.h"
 #include "constants/script_menu.h"
 

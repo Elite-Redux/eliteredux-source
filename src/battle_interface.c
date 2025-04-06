@@ -34,7 +34,7 @@
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
 #include "battle_events.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "abilities.hh"
 
 enum

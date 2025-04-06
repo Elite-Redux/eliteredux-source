@@ -24,7 +24,7 @@
 #include "m4a.h"
 #include "window.h"
 #include "graphics.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "daycare.h"
 #include "overworld.h"
 #include "scanline_effect.h"

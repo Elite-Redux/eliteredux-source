@@ -7,7 +7,7 @@ extern "C" {
 
 #include "global.h"
 #include "constants/battle.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 
 typedef int (*AbilityOnEntryHandler)(AbilityEnum ability, int battler);
 typedef int (*AbilityOnAbsorbHandler)(int battler, MoveEnum move, int moveType, int* statId);

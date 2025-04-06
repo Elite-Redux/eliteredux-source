@@ -25,7 +25,7 @@
 #include "constants/battle_frontier.h"
 #include "constants/frontier_util.h"
 #include "constants/items.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/rgb.h"
 
 // This file's functions.

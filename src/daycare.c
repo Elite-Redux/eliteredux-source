@@ -22,7 +22,7 @@
 #include "overworld.h"
 #include "item.h"
 #include "constants/items.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/region_map_sections.h"
 
 // this file's functions

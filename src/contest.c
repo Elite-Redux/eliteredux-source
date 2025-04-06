@@ -41,7 +41,7 @@
 #include "contest_ai.h"
 #include "constants/event_objects.h"
 #include "constants/items.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 

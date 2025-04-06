@@ -4,7 +4,7 @@
 #include "random.h"
 #include "contest_ai.h"
 #include "contest_effect.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 
 extern const u8 *gAIScriptPtr;
 extern const u8 *gContestAI_ScriptsTable[];

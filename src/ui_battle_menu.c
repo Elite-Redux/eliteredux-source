@@ -39,7 +39,7 @@
 #include "overworld.h"
 #include "util.h"
 #include "event_data.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "generated/constants/species.h"
 #include "constants/items.h"
 #include "constants/field_weather.h"

@@ -15,7 +15,7 @@
 #include "util.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 
 static void AnimWoodHammerHammer(struct Sprite *);
 static void AnimWoodHammerHammer_WaitForPunch(struct Sprite *);

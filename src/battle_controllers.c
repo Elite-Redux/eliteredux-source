@@ -15,8 +15,8 @@
 #include "recorded_battle.h"
 #include "task.h"
 #include "util.h"
-#include "constants/abilities.h"
-#include "constants/moves.h"
+#include "generated/constants/abilities.h"
+#include "generated/constants/moves.h"
 
 //==========EWRAM==========//
 static EWRAM_DATA u8 sLinkSendTaskId = 0;

@@ -1,4 +1,4 @@
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 
 const u16 gEasyChatGroup_Move2[] = {
     MOVE_ACID,

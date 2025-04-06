@@ -50,7 +50,7 @@
 #include "task.h"
 #include "pokemon_summary_screen.h"
 #include "wild_encounter.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "constants/battle_frontier.h"
 #include "constants/flags.h"
 #include "constants/items.h"

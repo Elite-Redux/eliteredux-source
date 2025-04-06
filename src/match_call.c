@@ -26,7 +26,7 @@
 #include "task.h"
 #include "wild_encounter.h"
 #include "window.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "constants/battle_frontier.h"
 #include "constants/event_objects.h"
 #include "constants/maps.h"

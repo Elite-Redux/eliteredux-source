@@ -1,7 +1,7 @@
 #ifndef GUARD_DATA_H
 #define GUARD_DATA_H
 
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 
 #define SPECIES_SHINY_TAG 5000
 

@@ -3,7 +3,7 @@
 #include "constants/items.h"
 #include "constants/map_scripts.h"
 #include "constants/mevent.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/region_map_sections.h"
 #include "constants/songs.h"
 #include "generated/constants/species.h"

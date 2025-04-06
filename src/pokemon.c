@@ -41,14 +41,14 @@
 #include "trainer_hill.h"
 #include "util.h"
 #include "quests.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "constants/battle_frontier.h"
-#include "constants/battle_move_effects.h"
+#include "generated/constants/battle_move_effects.h"
 #include "constants/hold_effects.h"
 #include "constants/item_effects.h"
 #include "constants/items.h"
 #include "constants/layouts.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/songs.h"
 #include "constants/party_menu.h"
 #include "generated/constants/species.h"
@@ -85,7 +85,71 @@ EWRAM_DATA struct SpriteTemplate gMultiuseSpriteTemplate = {0};
 EWRAM_DATA struct Unknown_806F160_Struct *gUnknown_020249B4[2] = {NULL};
 
 // const rom data
-#include "data/battle_moves.h"
+#include "generated/data/battle_moves.h"
+
+const struct IntimidateCloneData gIntimidateCloneData[] = {
+    {
+        .ability = ABILITY_INTIMIDATE,
+        .numStatsLowered = 1,
+        .statsLowered = {STAT_ATK, 0, 0},
+        .targetBoth = TRUE,
+    },
+    {
+        .ability = ABILITY_SCARE,
+        .numStatsLowered = 1,
+        .statsLowered = {STAT_SPATK, 0, 0},
+        .targetBoth = TRUE,
+    },
+    {
+        .ability = ABILITY_FEARMONGER,
+        .numStatsLowered = 2,
+        .statsLowered = {STAT_ATK, STAT_SPATK, 0},
+        .targetBoth = TRUE,
+    },
+    {
+        .ability = ABILITY_YUKI_ONNA,
+        .numStatsLowered = 2,
+        .statsLowered = {STAT_ATK, STAT_SPATK, 0},
+        .targetBoth = TRUE,
+    },
+    {
+        .ability = ABILITY_MONKEY_BUSINESS,
+        .numStatsLowered = 2,
+        .statsLowered = {STAT_ATK, STAT_DEF, 0},
+        .targetBoth = FALSE,
+    },
+    {
+        .ability = ABILITY_MALICIOUS,
+        .numStatsLowered = 2,
+        .statsLowered = {STAT_HIGHEST_ATTACKING | STAT_USE_STAT_BOOSTS_IN_CALC, STAT_HIGHEST_DEFENDING | STAT_USE_STAT_BOOSTS_IN_CALC, 0},
+        .targetBoth = TRUE,
+    },
+    {
+        .ability = ABILITY_TERRIFY,
+        .numStatsLowered = 1,
+        .statsLowered = {STAT_SPATK, 0, 0},
+        .statChange = 2,
+        .targetBoth = TRUE,
+    },
+    {
+        .ability = ABILITY_PETRIFY,
+        .numStatsLowered = 1,
+        .statsLowered = {STAT_SPEED, 0, 0},
+        .targetBoth = TRUE,
+    },
+    {
+        .ability = ABILITY_GLEAM_EYES,
+        .numStatsLowered = 1,
+        .statsLowered = {STAT_SPATK, 0, 0},
+        .targetBoth = TRUE,
+    },
+    {
+        .ability = ABILITY_CHAMPIONS_ENTRANCE,
+        .numStatsLowered = 1,
+        .statsLowered = {STAT_ATK, 0, 0},
+        .targetBoth = TRUE,
+    },
+};
 
 // Used in an unreferenced function in RS.
 // Unreferenced here and in FRLG.

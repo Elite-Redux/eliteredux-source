@@ -4,7 +4,7 @@
 #include "data.h"
 #include "graphics.h"
 #include "constants/items.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/trainers.h"
 #include "constants/battle_ai.h"
 #include "constants/spreads.h"
@@ -312,15 +312,9 @@ const union AnimCmd *const gAnims_MonPic[] = {
     sAnim_MonPic_3,
 };
 
-#if USE_GENERATED_SPECIES
 #define SPECIES_SPRITE(species, sprite) [species] = {sprite, MON_PIC_SIZE, species}
 #define SPECIES_PAL(species, pal) [species] = {pal, species}
 #define SPECIES_SHINY_PAL(species, pal) [species] = {pal, species + SPECIES_SHINY_TAG}
-#else
-#define SPECIES_SPRITE(species, sprite) [SPECIES_##species] = {sprite, MON_PIC_SIZE, SPECIES_##species}
-#define SPECIES_PAL(species, pal) [SPECIES_##species] = {pal, SPECIES_##species}
-#define SPECIES_SHINY_PAL(species, pal) [SPECIES_##species] = {pal, SPECIES_##species + SPECIES_SHINY_TAG}
-#endif
 
 const bool8 SpeciesHasGenderDifference[NUM_SPECIES] = {
     [SPECIES_EEVEE] = TRUE,
@@ -333,20 +327,9 @@ const bool8 SpeciesHasGenderDifference[NUM_SPECIES] = {
     [SPECIES_PYROAR] = TRUE,
 };
 
-#if USE_GENERATED_SPECIES
 #include "generated/data/pokemon_graphics/coordinates.h"
 #include "generated/data/pokemon_graphics/palettes.h"
 #include "generated/data/pokemon_graphics/pics.h"
-#else
-#include "data/pokemon_graphics/front_pic_coordinates.h"
-#include "data/pokemon_graphics/back_pic_coordinates.h"
-
-#include "data/pokemon_graphics/front_pic_table.h"
-#include "data/pokemon_graphics/back_pic_table.h"
-
-#include "data/pokemon_graphics/palette_table.h"
-#include "data/pokemon_graphics/shiny_palette_table.h"
-#endif
 
 #include "data/trainer_graphics/front_pic_tables.h"
 #include "data/trainer_graphics/back_pic_tables.h"
@@ -360,4 +343,4 @@ const bool8 SpeciesHasGenderDifference[NUM_SPECIES] = {
 #include "data/text/trainer_class_names.h"
 #include "data/trainers.h"
 #include "generated/data/text/species_names.h"
-#include "data/text/move_names.h"
+#include "generated/data/text/move_names.h"

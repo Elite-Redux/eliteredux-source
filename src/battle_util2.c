@@ -7,7 +7,7 @@
 #include "trainer_hill.h"
 #include "party_menu.h"
 #include "event_data.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "random.h"
 #include "battle_scripts.h"
 #include "constants/battle_string_ids.h"

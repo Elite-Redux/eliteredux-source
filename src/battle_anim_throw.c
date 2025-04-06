@@ -19,7 +19,7 @@
 #include "util.h"
 #include "data.h"
 #include "constants/items.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
 #include "mgba_printf/mgba.h"

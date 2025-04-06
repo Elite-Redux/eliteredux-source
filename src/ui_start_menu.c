@@ -107,7 +107,7 @@ struct MenuResources {
     MainCallback savedCallback;  // determines callback to run when we exit. e.g. where do we want to go after closing the menu
     u8 gfxLoadState;
     u8 cursorRowY;
-    u8 FirstItem;
+    s8 FirstItem;
     u8 KonamiCodeState;
     u8 CurrentMessage;
     u16 bgTilemapBuffers[NUM_START_MENU_BACKGROUNDS][0x400];

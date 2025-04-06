@@ -34,7 +34,7 @@
 #include "constants/items.h"
 #include "constants/trainers.h"
 #include "constants/event_objects.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/easy_chat.h"
 
 extern const u8 MossdeepCity_SpaceCenter_2F_EventScript_MaxieTrainer[];

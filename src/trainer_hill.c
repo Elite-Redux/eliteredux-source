@@ -27,7 +27,7 @@
 #include "constants/event_objects.h"
 #include "constants/items.h"
 #include "constants/layouts.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/maps.h"
 #include "constants/trainers.h"
 #include "constants/easy_chat.h"

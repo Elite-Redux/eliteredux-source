@@ -61,7 +61,7 @@
 #include "ui_start_menu.h"
 #include "wild_encounter.h"
 #include "frontier_util.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "constants/layouts.h"
 #include "constants/map_types.h"
 #include "constants/maps.h"

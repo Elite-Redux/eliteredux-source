@@ -2,13 +2,13 @@
 #include "abilities.hh"
 
 extern "C" {
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "battle.h"
 #include "battle_anim.h"
 #include "battle_controllers.h"
 #include "battle_scripts.h"
 #include "battle_util.h"
-#include "constants/battle_move_effects.h"
+#include "generated/constants/battle_move_effects.h"
 #include "constants/battle_script_commands.h"
 #include "constants/battle_string_ids.h"
 #include "constants/hold_effects.h"

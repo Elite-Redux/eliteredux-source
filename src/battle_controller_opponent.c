@@ -32,7 +32,7 @@
 #include "constants/hold_effects.h"
 #include "constants/battle_anim.h"
 #include "constants/items.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/party_menu.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"

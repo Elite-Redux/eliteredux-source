@@ -56,7 +56,7 @@
 #include "constants/field_effects.h"
 #include "constants/items.h"
 #include "constants/songs.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "constants/rgb.h"
 #include "constants/region_map_sections.h"
 #include "gba/m4a_internal.h"

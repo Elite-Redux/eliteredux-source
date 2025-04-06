@@ -28,7 +28,7 @@
 #include "constants/pokemon.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 
 /* Summary of Apprentice, because (as of writing at least) it's not very well documented online
  *

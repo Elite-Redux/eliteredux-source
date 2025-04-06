@@ -46,13 +46,13 @@
 #include "constants/battle_config.h"
 #include "constants/flags.h"
 #include "constants/items.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/party_menu.h"
 #include "constants/region_map_sections.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
-#include "constants/abilities.h"
-#include "constants/battle_move_effects.h"
+#include "generated/constants/abilities.h"
+#include "generated/constants/battle_move_effects.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
 #include "recommended_set_struct.h"
@@ -367,7 +367,7 @@ static void UpdateTypeIcon(u16 move);
 static u8 ShowMoveTypeIcon(u16 move);
 
 // const rom data
-#include "data/text/move_descriptions.h"
+#include "generated/data/text/move_descriptions.h"
 #include "data/text/nature_names.h"
 #include "data/text/characteristics.h"
 #include "data/text/met_locations.h"

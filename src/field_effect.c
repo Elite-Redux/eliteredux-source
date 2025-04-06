@@ -30,7 +30,7 @@
 #include "constants/field_effects.h"
 #include "constants/event_object_movement.h"
 #include "constants/metatile_behaviors.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 

@@ -15,21 +15,6 @@ struct StatFractions {
     u8 divisor;
 };
 
-// Intimidate Clone Data
-enum {
-    I_CLONE_INTIMIDATE,
-    I_CLONE_SCARE,
-    I_CLONE_FEARMONGER,
-    I_CLONE_YUKI_ONNA,
-    I_CLONE_MONKEY_BUSSINESS,
-    I_CLONE_MALICIOUS,
-    I_CLONE_TERRIFY,
-    I_CLONE_PETRIFY,
-    I_CLONE_GLEAM_EYES,
-    I_CLONE_CHAMPIONS_ENTRANCE,
-    NUM_INTIMIDATE_CLONES
-};
-
 struct IntimidateCloneData {
     AbilityEnum ability;
     u8 statsLowered[3];    // atk, def, speed
@@ -38,6 +23,7 @@ struct IntimidateCloneData {
     u8 statChange:4;
 };
 
+#define NUM_INTIMIDATE_CLONES 10
 extern const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES];
 
 int GetParentalBondCount(int battler, MultihitType parentalBondType);

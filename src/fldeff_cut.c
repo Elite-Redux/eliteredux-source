@@ -17,7 +17,7 @@
 #include "sprite.h"
 #include "task.h"
 #include "trig.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "constants/event_objects.h"
 #include "constants/field_effects.h"
 #include "constants/songs.h"

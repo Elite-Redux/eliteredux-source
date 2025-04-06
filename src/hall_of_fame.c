@@ -36,7 +36,7 @@
 #include "constants/rgb.h"
 #include "constants/items.h"
 #include "generated/constants/species.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "battle_setup.h"
 
 #define HALL_OF_FAME_MAX_TEAMS 30

@@ -12,7 +12,7 @@
 #include "trainer_hill.h"
 #include "constants/easy_chat.h"
 #include "constants/trainers.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/items.h"
 #include "constants/trainer_hill.h"
 

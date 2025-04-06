@@ -43,7 +43,7 @@
 #include "constants/map_types.h"
 #include "constants/metatile_behaviors.h"
 #include "constants/metatile_labels.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/secret_bases.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"

@@ -12,7 +12,7 @@
 #include "random.h"
 #include "util.h"
 #include "pokemon.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "pokemon_storage_system.h"
 #include "task.h"
 #include "sprite.h"
@@ -27,8 +27,8 @@
 #include "constants/battle_config.h"
 #include "constants/rgb.h"
 #include "constants/battle_palace.h"
-#include "constants/abilities.h"
-#include "constants/battle_move_effects.h"
+#include "generated/constants/abilities.h"
+#include "generated/constants/battle_move_effects.h"
 #include "mgba_printf/mgba.h"
 
 extern struct MusicPlayerInfo gMPlayInfo_SE1;

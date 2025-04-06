@@ -9,7 +9,7 @@
 #include "sound.h"
 #include "trig.h"
 #include "util.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "item_icon.h"
 
 static void AnimPoltergeistItem(struct Sprite *sprite);

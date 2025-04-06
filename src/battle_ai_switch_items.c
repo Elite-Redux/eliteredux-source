@@ -10,12 +10,12 @@
 #include "pokemon.h"
 #include "random.h"
 #include "util.h"
-#include "constants/abilities.h"
+#include "generated/constants/abilities.h"
 #include "constants/battle_ai.h"
 #include "constants/item_effects.h"
 #include "constants/items.h"
 #include "constants/hold_effects.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 
 // this file's functions
 static bool8 HasSuperEffectiveMoveAgainstOpponents(bool8 noRng);

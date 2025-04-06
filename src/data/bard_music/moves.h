@@ -1,7 +1,7 @@
 #ifndef GUARD_DATA_BARD_MUSIC_MOVES_H
 #define GUARD_DATA_BARD_MUSIC_MOVES_H
 
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 
 const u16 gNumBardWords_Moves = MOVES_COUNT;
 
