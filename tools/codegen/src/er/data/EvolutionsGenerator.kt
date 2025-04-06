@@ -21,8 +21,8 @@ object EvolutionsGenerator : Generator {
     }
 
     override fun generate(writer: OutputStreamWriter) {
-        val megas = SPECIES_LIST.flatMap { it.megaList }.groupBy { it.from }
-        val primals = SPECIES_LIST.flatMap { it.primalList }.groupBy { it.from }
+        val megas = SPECIES_LIST.flatMap { it.megaList.map { mega -> mega to it.id } }.groupBy { it.first.from }
+        val primals = SPECIES_LIST.flatMap { it.primalList.map { primal -> primal to it.id } }.groupBy { it.first.from }
 
         val (evoIds, speciesEvoIds) = NO_EGG_LIST.map { species ->
             species.evoList.map {
@@ -36,13 +36,13 @@ object EvolutionsGenerator : Generator {
                     }, it.level.toString(), it.to
                 )
             } + megas[species.id].orEmpty().map {
-                if (it.hasMove()) {
-                    Evo("EVO_MOVE_MEGA_EVOLUTION", it.move.toString(), it.from)
+                if (it.first.hasMove()) {
+                    Evo("EVO_MOVE_MEGA_EVOLUTION", it.first.move.toString(), it.second)
                 } else {
-                    Evo("EVO_MEGA_EVOLUTION", it.item.toString(), it.from)
+                    Evo("EVO_MEGA_EVOLUTION", it.first.item.toString(), it.second)
                 }
             } + primals[species.id].orEmpty().map {
-                Evo("EVO_PRIMAL_REVERSION", it.item.toString(), it.from)
+                Evo("EVO_PRIMAL_REVERSION", it.first.item.toString(), it.second)
             }.toSet() to species.id
         }.createDedupMaps()
 
