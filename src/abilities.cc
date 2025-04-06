@@ -3298,6 +3298,10 @@ constexpr Ability HalfDrake = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_DRAGON); },
 };
 
+constexpr Ability Aquatic = {
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_WATER); },
+};
+
 constexpr Ability Liquified = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
@@ -7343,7 +7347,7 @@ constexpr Ability FlameShield = {
 };
 
 constexpr Ability AquaticDweller = {
-    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_WATER); },
+    .onEntry = Aquatic.onEntry,
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_WATER) MUL(1.5);
@@ -8832,6 +8836,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_IMMOVABLE_OBJECT, ImmovableObject},
     {ABILITY_FRENZIED_PHANTOM, FrenziedPhantom},
     {ABILITY_DNA_SCRAMBLE, DNAScramble},
+    {ABILITY_AQUATIC, Aquatic},
 };
 
 template <int N>

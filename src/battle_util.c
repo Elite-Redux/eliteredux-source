@@ -7816,6 +7816,12 @@ static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u
         if (immunityAbility == TRUE) immunityAbility = ABILITY_NONE;
     }
 
+    // Thousand Arrows ignores type modifiers for flying mons
+    if (!IsBattlerGrounded(battlerDef) && gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING && moveType == TYPE_GROUND &&
+        modifier == UQ_4_12(0)) {
+        modifier = UQ_4_12(1.0);
+    }
+
     for (int i = 0; i < gBattlersCount; i++) {
         int battler = (battlerDef + i) % gBattlersCount;
         FILTER(battler == battlerDef || battler == battlerAtk || IsBattlerAlive(battler))
@@ -7826,12 +7832,6 @@ static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u
                    int wasImmune = modifier == 0;
                    gAbilities[ability].onAfterTypeEffectiveness(battler, ability, battlerDef, move, moveType, &modifier, modifier1, modifier2, modifier3);
                    if (!wasImmune && !modifier) immunityAbility = ability)
-    }
-
-    // Thousand Arrows ignores type modifiers for flying mons
-    if (!IsBattlerGrounded(battlerDef) && gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING && moveType == TYPE_GROUND &&
-        modifier == UQ_4_12(0)) {
-        modifier = UQ_4_12(1.0);
     }
 
     if (recordAbilities && immunityAbility && !modifier) {

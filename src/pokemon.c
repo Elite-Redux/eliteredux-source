@@ -7121,7 +7121,7 @@ u32 getMask(s8 loc, s8 locG) {
 
     return 0;
 }
-bool8 isSpeciesPlaceholderMon(SpeciesEnum species) { return IsSpeciesRandomizerAllowed(species, TRUE, TRUE); }
+bool8 isSpeciesPlaceholderMon(SpeciesEnum species) { return ((u16)species) >= REAL_SPECIES_COUNT || !gEvolutionTable[species]; }
 
 bool8 IsEeveelution(SpeciesEnum species) {
     switch (species) {
