@@ -33,7 +33,7 @@ PROTODEP := $(addsuffix .protodep.txt,$(addprefix timestamp/protodep/,$(PROTO_SR
 
 define BUILD_PROTO
 timestamp/depsets/$1: ../../proto/$1 protoc
-	@perl -pi.bak -e 'BEGIN{$$$$counter=1000000;} s/\@NEXT/$$$$counter++/ge' ../../proto/$1
+	@perl -pi.bak -e 'BEGIN{$$$$counter=10000000;} s/\@NEXT/$$$$counter++/ge' ../../proto/$1
 	@rm -f ../../proto/$1.bak
 	@mkdir -p timestamp/depsets
 	./protoc ../../proto/$1 --proto_path=../../proto --java_out=src --descriptor_set_out=timestamp/depsets/$1 --experimental_allow_proto3_optional && exit
@@ -57,7 +57,7 @@ codegenkt.jar: protoc protobuf-java.jar codegen.jar protobuf-kotlin.jar $(KT_SRC
 
 define PREPROC_TEXTPROTO
 $1: $2 preproc.jar protobuf-java.jar codegen.jar protoc
-	@perl -pi.bak -e 'BEGIN{$$$$counter=1000000;} s/\@NEXT/$$$$counter++/ge' $2
+	@perl -pi.bak -e 'BEGIN{$$$$counter=10000000;} s/\@NEXT/$$$$counter++/ge' $2
 	@mkdir -p bin
 	@./protoc ../../proto/$3.proto --encode=er.$3 --proto_path="../../proto/" --experimental_allow_proto3_optional < $2 > bin/$3.binpb && exit
 	java -cp preproc.jar:protobuf-java.jar:codegen.jar preproc.TextprotoProcessor $2 bin/$3.binpb && exit
@@ -101,6 +101,7 @@ $(eval $(call GENERATE, include/generated/data/text/move_descriptions.h, movedes
 $(eval $(call GENERATE, include/generated/constants/battle_move_effects.h, movebehaviors))
 $(eval $(call GENERATE, include/generated/constants/move_effects.h, moveeffects))
 $(eval $(call GENERATE, include/generated/data/battle_moves.h, battlemoves))
+$(eval $(call GENERATE, include/generated/data/all_tutors.h, tutors))
 
 $(eval $(call GENERATE, include/generated/data/abilities/ability_text.hh, abilitytext))
 

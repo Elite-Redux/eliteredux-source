@@ -32,14 +32,14 @@ object TextprotoProcessor {
         }.groupBy({ it.first }, { it.second })
 
         val toUpdate =
-            allValues.mapValues { (_, values) -> values.filter { it >= 1E6 } }.filterValues { it.isNotEmpty() }
+            allValues.mapValues { (_, values) -> values.filter { it >= 1E7 } }.filterValues { it.isNotEmpty() }
 
         if (toUpdate.isEmpty()) return
         val replacements: Map<Int, Int> = toUpdate.flatMap { (descriptor, values) ->
             values.zip(
                 allValues[descriptor]!!.firstFree(
                     values.size,
-                    allValues[descriptor]?.min()?.takeIf { it < 1E6 } ?: 1))
+                    allValues[descriptor]?.min()?.takeIf { it < 1E7 } ?: 1))
         }.toMap()
 
         val lines = file.readText().replace(BIG_INT) { replacements[it.value.toInt()]?.toString() ?: it.value }

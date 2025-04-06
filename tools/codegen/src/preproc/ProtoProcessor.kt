@@ -15,7 +15,7 @@ object ProtoProcessor {
     private fun DescriptorProto.firstFree(n: Int) =
         fieldList.map { it.number }.firstFree(n, 1)
 
-    val BIG_INT = """(\d{6,})""".toRegex()
+    val BIG_INT = """(\d{7,})""".toRegex()
 
     @JvmStatic
     fun main(args: Array<String>) {
@@ -35,7 +35,7 @@ object ProtoProcessor {
     }
 
     private fun checkMessage(descriptor: DescriptorProto): List<Pair<Int, Int>> =
-        descriptor.fieldList.filter { it.number >= 1E6 }.map { it.number }
+        descriptor.fieldList.filter { it.number >= 1E7 }.map { it.number }
             .let { it.zip(descriptor.firstFree(it.size)) } + descriptor.nestedTypeList.flatMap { checkMessage(it) } + descriptor.enumTypeList.flatMap {
             checkEnum(
                 it
@@ -43,6 +43,6 @@ object ProtoProcessor {
         }
 
     private fun checkEnum(descriptor: EnumDescriptorProto) =
-        descriptor.valueList.filter { it.number >= 1E6 }.map { it.number }
+        descriptor.valueList.filter { it.number >= 1E7 }.map { it.number }
             .let { it.zip(descriptor.firstFree(it.size)) }
 }

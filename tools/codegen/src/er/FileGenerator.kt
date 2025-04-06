@@ -10,6 +10,7 @@ import er.gfx.PaletteGenerator
 import er.move.BattleMovesGenerator
 import er.move.MoveDescriptionGenerator
 import er.move.MoveNameGenerator
+import er.move.TutorGenerator
 import er.text.ArticlesGenerator
 import java.io.File
 import java.io.OutputStreamWriter
@@ -56,6 +57,7 @@ object FileGenerator {
         "randomizerbanned" to RandomizerBannedGenerator,
         "longnames" to SpeciesLongNameGenerator,
         "speciesanims" to SpeciesAnimationGenerator,
+        "tutors" to TutorGenerator,
     )
 
     @JvmStatic
