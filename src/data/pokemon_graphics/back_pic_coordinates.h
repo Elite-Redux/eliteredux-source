@@ -8652,12 +8652,12 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_DUDUDUNSPARCE] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 11,
     },
     [SPECIES_DUDUDUNSPARCE_MEGA] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 11,
     },
 
 };

@@ -8570,12 +8570,12 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_DUDUDUNSPARCE] =
     {
         .size = 0x88,
-        .y_offset = 0,
+        .y_offset = 6,
     },
     [SPECIES_DUDUDUNSPARCE_MEGA] =
     {
         .size = 0x88,
-        .y_offset = 0,
+        .y_offset = 4,
     },
 
     // Egg
