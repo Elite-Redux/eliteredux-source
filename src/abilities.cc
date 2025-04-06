@@ -6061,14 +6061,21 @@ constexpr Ability GoodAsGold = {
 
 constexpr Ability SharingIsCaring = {
     .onReactive = +[](ON_REACTIVE) -> int {
-        CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
-        CHECK(IsAbilityOnField(ability) - 1 == battler)
-        if (gBattleStruct->statStageCheckState == STAT_STAGE_CHECK_NEEDED) {
-            InsertCorrectEndType(callType);
-            BattleScriptCall(BattleScript_PerformCopyStatEffects);
+        switch (gBattleStruct->statStageCheckState) {
+            default:
+                return FALSE;
+
+            case STAT_STAGE_CHECK_IN_PROGRESS:
+                SetAbilityStateAs(battler, ability, (AbilityStates){.statCopyState = (StatCopyState){.inProgress = TRUE}});
+                return FALSE;
+
+            case STAT_STAGE_CHECK_NEEDED:
+                InsertCorrectEndType(callType);
+                BattleScriptCall(BattleScript_PerformCopyStatEffects);
+                gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_IN_PROGRESS;
+                SetAbilityStateAs(battler, ability, (AbilityStates){.statCopyState = (StatCopyState){.inProgress = TRUE}});
+                return TRUE;
         }
-        SetAbilityStateAs(battler, ability, (AbilityStates){.statCopyState = (StatCopyState){.inProgress = TRUE}});
-        return TRUE;
     },
 };
 
