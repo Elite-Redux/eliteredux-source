@@ -100,9 +100,9 @@ static void PrintContestantMonName(u8);
 static void PrintContestantMonNameWithColor(u8, u8);
 static u8 CreateJudgeSprite(void);
 static u8 CreateJudgeSpeechBubbleSprite(void);
-static u8 CreateContestantSprite(u16, u32, u32, u32);
+static u8 CreateContestantSprite(SpeciesEnum, u32, u32, u32);
 static void PrintContestMoveDescription(u16);
-static u16 SanitizeSpecies(u16);
+static u16 SanitizeSpecies(SpeciesEnum);
 static void ContestClearGeneralTextWindow(void);
 static u16 GetChosenContestMove(u8);
 static void GetAllChosenMoves(void);
@@ -3117,7 +3117,7 @@ static u8 CreateJudgeSpeechBubbleSprite(void)
     return spriteId;
 }
 
-static u8 CreateContestantSprite(u16 species, u32 otId, u32 personality, u32 index)
+static u8 CreateContestantSprite(SpeciesEnum species, u32 otId, u32 personality, u32 index)
 {
     u8 spriteId;
     u8 isShiny = FALSE;
@@ -3144,7 +3144,7 @@ static u8 CreateContestantSprite(u16 species, u32 otId, u32 personality, u32 ind
     return spriteId;
 }
 
-bool8 IsSpeciesNotUnown(u16 species)
+bool8 IsSpeciesNotUnown(SpeciesEnum species)
 {
     if (species == SPECIES_UNOWN)
         return FALSE;
@@ -5295,7 +5295,7 @@ static u16 SanitizeMove(u16 move)
     return move;
 }
 
-static u16 SanitizeSpecies(u16 species)
+static u16 SanitizeSpecies(SpeciesEnum species)
 {
     if (species >= NUM_SPECIES)
         species = SPECIES_NONE;
@@ -5306,7 +5306,7 @@ static void SetMoveSpecificAnimData(u8 contestant)
 {
     s32 i;
     u16 move = SanitizeMove(eContestantStatus[contestant].currMove);
-    u16 species = SanitizeSpecies(gContestMons[contestant].species);
+    SpeciesEnum species = SanitizeSpecies(gContestMons[contestant].species);
     u8 targetContestant;
 
     memset(&gContestResources->moveAnim->species, 0, 20);

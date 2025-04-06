@@ -3065,7 +3065,7 @@ static void Task_GiveExpToMon(u8 taskId) {
     if (IsDoubleBattle() == TRUE || monId != gBattlerPartyIndexes[battlerId])  // Give exp without moving the expbar.
     {
         struct Pokemon *mon = &gPlayerParty[monId];
-        u16 species = GetMonData(mon, MON_DATA_SPECIES);
+        SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES);
         u8 level = GetMonData(mon, MON_DATA_LEVEL);
         u32 currExp = GetMonData(mon, MON_DATA_EXP);
         u32 nextLvlExp = gExperienceTables[gBaseStats[species].growthRate][level + 1];
@@ -3102,7 +3102,7 @@ static void Task_PrepareToGiveExpWithExpBar(u8 taskId) {
     u8 battlerId = gTasks[taskId].tExpTask_battler;
     struct Pokemon *mon = &gPlayerParty[monIndex];
     u8 level = GetMonData(mon, MON_DATA_LEVEL);
-    u16 species = GetMonData(mon, MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES);
     u32 exp = GetMonData(mon, MON_DATA_EXP);
     u32 currLvlExp = gExperienceTables[gBaseStats[species].growthRate][level];
     u32 expToNextLvl;
@@ -3129,7 +3129,7 @@ static void Task_GiveExpWithExpBar(u8 taskId) {
         {
             u8 level;
             s32 currExp;
-            u16 species;
+            SpeciesEnum species;
             s32 expOnNextLvl;
 
             m4aSongNumStop(SE_EXP);
@@ -3199,7 +3199,7 @@ static void DestroyExpTaskAndCompleteOnInactiveTextPrinter(u8 taskId) {
 
 static void FreeMonSpriteAfterFaintAnim(void) {
     if (gSprites[gBattlerSpriteIds[gActiveBattler]].y + gSprites[gBattlerSpriteIds[gActiveBattler]].y2 > DISPLAY_HEIGHT) {
-        u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
+        SpeciesEnum species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
 
         BattleGfxSfxDummy2(species);
         FreeOamMatrix(gSprites[gBattlerSpriteIds[gActiveBattler]].oam.matrixNum);
@@ -4018,7 +4018,7 @@ static void PlayerHandleSwitchInAnim(void) {
 }
 
 static void StartSendOutAnim(u8 battlerId, bool8 dontClearSubstituteBit) {
-    u16 species;
+    SpeciesEnum species;
 
     ClearTemporarySpeciesSpriteData(battlerId, dontClearSubstituteBit);
     gBattlerPartyIndexes[battlerId] = gBattleResources->bufferA[battlerId][1];
@@ -4625,7 +4625,7 @@ static void PlayerHandlePlayFanfareOrBGM(void) {
 }
 
 static void PlayerHandleFaintingCry(void) {
-    u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
 
     PlayCry3(species, -25, 5);
     PlayerBufferExecCompleted();

@@ -225,7 +225,7 @@ static bool8 FindMonThatAbsorbsOpponentsMove(void)
 
     for (i = firstId; i < lastId; i++)
     {
-        u16 species;
+        SpeciesEnum species;
         u16 monAbility;
         u8 j;
 
@@ -452,7 +452,7 @@ static bool8 FindMonWithFlagsAndSuperEffective(u16 flags, u8 moduloPercent)
 
     for (i = firstId; i < lastId; i++)
     {
-        u16 species;
+        SpeciesEnum species;
         u16 monAbility;
         u8 level;
 
@@ -545,7 +545,7 @@ static u32 CalculateHazardDamage(void)
 static u8 PredictFoesMoveType(u32 opposingBattler)
 {
     int i;
-    u16 species = gBattleMons[gActiveBattler].species;
+    SpeciesEnum species = gBattleMons[gActiveBattler].species;
     u32 typeDmg1 = UQ_4_12(1.0), typeDmg2 = UQ_4_12(1.0), typeDmg3, bestTypeDmg = UQ_4_12(1.0);
     u16 *moves = GetMovesArray(opposingBattler);
 
@@ -812,7 +812,7 @@ static u32 GetBestMonDefensive(struct Pokemon *party, int firstId, int lastId, u
     //     {
     //         if (!(gBitTable[i] & invalidMons) && !(gBitTable[i] & bits))
     //         {
-    //             u16 species = GetMonData(&party[i], MON_DATA_SPECIES);
+    //             SpeciesEnum species = GetMonData(&party[i], MON_DATA_SPECIES);
     //             u32 typeDmg = UQ_4_12(1.0);
 
     //             u8 defType1 = gBaseStats[species].type1;
@@ -886,7 +886,7 @@ static u32 GetBestMonOffensive(struct Pokemon *party, int firstId, int lastId, u
         {
             if (!(gBitTable[i] & invalidMons) && !(gBitTable[i] & bits))
             {
-                u16 species = GetMonData(&party[i], MON_DATA_SPECIES);
+                SpeciesEnum species = GetMonData(&party[i], MON_DATA_SPECIES);
                 u32 typeDmg = UQ_4_12(1.0);
 
                 u8 atkType1 = gBaseStats[species].type1;

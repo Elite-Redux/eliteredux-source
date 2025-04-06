@@ -906,7 +906,7 @@ static void CreateLearnableMovesList(void)
         StringCopy10(gStringVar1, nickname);
     }
     else {
-        u16 species = GetMonData(&gPlayerParty[sMoveRelearnerStruct->partyMon], MON_DATA_SPECIES, NULL);
+        SpeciesEnum species = GetMonData(&gPlayerParty[sMoveRelearnerStruct->partyMon], MON_DATA_SPECIES, NULL);
         StringCopy(gStringVar1, gSpeciesNames[species]);
     }
     sMoveRelearnerStruct->menuItems[sMoveRelearnerStruct->numMenuChoices].name = gText_Cancel;

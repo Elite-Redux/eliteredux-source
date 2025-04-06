@@ -1286,7 +1286,7 @@ bool8 CheckLeadMonTough(void)
 void IsGrassTypeInParty(void)
 {
     u8 i;
-    u16 species;
+    SpeciesEnum species;
     struct Pokemon *pokemon;
     for (i = 0; i < PARTY_SIZE; i++)
     {
@@ -5616,7 +5616,7 @@ void Bag_ChoosePokeBall(void)
 // Gets a fossil item from gSpecialVar_0x8008 and stores the species it becomes in gSpecialVar_0x8006
 void FossilToSpecies(void)
 {
-    u16 species = SPECIES_NONE;
+    SpeciesEnum species = SPECIES_NONE;
     u16 item = gSpecialVar_0x8008;
 
     switch (item)
@@ -5725,7 +5725,7 @@ u8 CountRotomInParty (void)
 // gSpecialVar_0x8008: Rotom's initial special move (set by RotomForgetSpecialMove)
 
 // Takes a Rotom form as input and returns its special move
-u16 RotomFormToMove (u16 species)
+u16 RotomFormToMove (SpeciesEnum species)
 {
     return MOVE_NONE;
 }

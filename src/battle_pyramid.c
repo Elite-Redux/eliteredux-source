@@ -44,7 +44,7 @@ extern const u16 gUnknown_08D856C8[][16];
 
 struct PyramidWildMon
 {
-    u16 species;
+    SpeciesEnum species;
     u8 lvl;
     u8 abilityNum;
     u16 moves[MAX_MON_MOVES];

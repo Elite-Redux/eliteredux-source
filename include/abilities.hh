@@ -19,7 +19,7 @@ typedef enum {
     INFILTRATE_BREAK_SCREENS = 1 << 2,
 } InfiltrateType;
 typedef InfiltrateType (*AbilityOnInfiltrateHandler)(int battler, MoveEnum move);
-typedef int (*AbilityOnDisguiseHandler)(int battler, int checkOnly);
+typedef SpeciesEnum (*AbilityOnDisguiseHandler)(int battler, int checkOnly);
 typedef int (*AbilityOnWeatherHandler)(AbilityEnum ability, int battler);
 typedef int (*AbilityOnTerrainHandler)(AbilityEnum ability, int battler);
 typedef int (*AbilityOnEndTurnHandler)(AbilityEnum ability, int battler);

@@ -14,7 +14,7 @@
 #include "constants/hold_effects.h"
 #include "constants/items.h"
 #include "constants/moves.h"
-#include "constants/species.h"
+#include "generated/constants/species.h"
 #include "global.h"
 #include "item.h"
 #include "mgba_printf/mgba.h"

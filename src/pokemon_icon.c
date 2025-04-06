@@ -3671,7 +3671,7 @@ const u16 sSpriteImageSizes[3][4] =
     },
 };
 
-u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority, u32 personality)
+u8 CreateMonIcon(SpeciesEnum species, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority, u32 personality)
 {
     u8 spriteId;
     struct MonIconSpriteTemplate iconTemplate =
@@ -3696,7 +3696,7 @@ u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u
     return spriteId;
 }
 
-u8 CreateMonIconNoPersonality(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority)
+u8 CreateMonIconNoPersonality(SpeciesEnum species, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority)
 {
     u8 spriteId;
     struct MonIconSpriteTemplate iconTemplate =
@@ -3717,7 +3717,7 @@ u8 CreateMonIconNoPersonality(u16 species, void (*callback)(struct Sprite *), s1
     return spriteId;
 }
 
-u16 GetIconSpecies(u16 species, u32 personality)
+u16 GetIconSpecies(SpeciesEnum species, u32 personality)
 {
     u16 result;
 
@@ -3744,7 +3744,7 @@ u16 GetUnownLetterByPersonality(u32 personality)
         return GET_UNOWN_LETTER(personality);
 }
 
-u16 GetIconSpeciesNoPersonality(u16 species)
+u16 GetIconSpeciesNoPersonality(SpeciesEnum species)
 {
     u16 value;
 
@@ -3762,7 +3762,7 @@ u16 GetIconSpeciesNoPersonality(u16 species)
     }
 }
 
-const u8 *GetMonIconPtr(u16 species, u32 personality)
+const u8 *GetMonIconPtr(SpeciesEnum species, u32 personality)
 {
     return GetMonIconTiles(GetIconSpecies(species, personality), personality);
 }
@@ -3791,7 +3791,7 @@ void LoadMonIconPalettesTinted(void)
 }  
 
 // unused
-void SafeLoadMonIconPalette(u16 species)
+void SafeLoadMonIconPalette(SpeciesEnum species)
 {
     u8 palIndex;
     if (species > NUM_SPECIES)
@@ -3801,14 +3801,14 @@ void SafeLoadMonIconPalette(u16 species)
         LoadSpritePalette(&gMonIconPaletteTable[palIndex]);
 }
 
-void LoadMonIconPalette(u16 species)
+void LoadMonIconPalette(SpeciesEnum species)
 {
     u8 palIndex = gMonIconPaletteIndices[species];
     if (IndexOfSpritePaletteTag(gMonIconPaletteTable[palIndex].tag) == 0xFF)
         LoadSpritePalette(&gMonIconPaletteTable[palIndex]);
 }
 
-void LoadGenderedMonIconPalette(u16 species, u32 personality)
+void LoadGenderedMonIconPalette(SpeciesEnum species, u32 personality)
 {
     u8 palIndex;
 
@@ -3830,7 +3830,7 @@ void FreeMonIconPalettes(void)
 }
 
 // unused
-void SafeFreeMonIconPalette(u16 species)
+void SafeFreeMonIconPalette(SpeciesEnum species)
 {
     u8 palIndex;
     if (species > NUM_SPECIES)
@@ -3839,7 +3839,7 @@ void SafeFreeMonIconPalette(u16 species)
     FreeSpritePaletteByTag(gMonIconPaletteTable[palIndex].tag);
 }
 
-void FreeMonIconPalette(u16 species)
+void FreeMonIconPalette(SpeciesEnum species)
 {
     u8 palIndex;
     palIndex = gMonIconPaletteIndices[species];
@@ -3851,7 +3851,7 @@ void SpriteCB_MonIcon(struct Sprite *sprite)
     UpdateMonIconFrame(sprite);
 }
 
-const u8* GetMonIconTiles(u16 species, u32 personality)
+const u8* GetMonIconTiles(SpeciesEnum species, u32 personality)
 {
     const u8* iconSprite = gMonIconTable[species];
     if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
@@ -3878,19 +3878,19 @@ void sub_80D304C(u16 offset)
     }
 }
 
-u8 GetValidMonIconPalIndex(u16 species)
+u8 GetValidMonIconPalIndex(SpeciesEnum species)
 {
     if (species > NUM_SPECIES)
         species = INVALID_ICON_SPECIES;
     return gMonIconPaletteIndices[species];
 }
 
-u8 GetMonIconPaletteIndexFromSpecies(u16 species)
+u8 GetMonIconPaletteIndexFromSpecies(SpeciesEnum species)
 {
     return gMonIconPaletteIndices[species];
 }
 
-const u16* GetValidMonIconPalettePtr(u16 species)
+const u16* GetValidMonIconPalettePtr(SpeciesEnum species)
 {
     if (species > NUM_SPECIES)
         species = INVALID_ICON_SPECIES;

@@ -4078,7 +4078,7 @@ void nullsub_14(u8 windowId, u32 itemId, u8 y)
 static void TradeBoardPrintItemInfo(u8 windowId, u8 y, struct GFtgtGname * gname, const u8 * uname, u8 colorIdx)
 {
     u8 levelStr[4];
-    u16 species = gname->species;
+    SpeciesEnum species = gname->species;
     u8 type = gname->type;
     u8 level = gname->level;
 
@@ -4226,7 +4226,7 @@ static void GetURoomActivityStartMsg(u8 *dst, u8 acitivty)
 static s32 GetChatLeaderActionRequestMessage(u8 *dst, u32 gender, u16 *activityData, struct WirelessLink_URoom *uroom)
 {
     s32 result = 0;
-    u16 species = SPECIES_NONE;
+    SpeciesEnum species = SPECIES_NONE;
     s32 i;
 
     switch (activityData[0])
@@ -4362,7 +4362,7 @@ static void RegisterTradeMon(u32 monId, struct UnionRoomTrade *trade)
 static u32 GetPartyPositionOfRegisteredMon(struct UnionRoomTrade *trade, u8 multiplayerId)
 {
     u16 response = 0;
-    u16 species;
+    SpeciesEnum species;
     u32 personality;
     u32 cur_personality;
     u16 cur_species;

@@ -26,7 +26,7 @@ struct BattleFrontierTrainer
 
 struct FacilityMon
 {
-    u16 species;
+    SpeciesEnum species;
     u16 moves[MAX_MON_MOVES];
     u16 itemTableId;
     u8 evSpread;

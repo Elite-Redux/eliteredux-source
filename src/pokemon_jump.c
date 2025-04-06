@@ -158,7 +158,7 @@ enum {
 
 struct PokemonJump_MonInfo
 {
-    u16 species;
+    SpeciesEnum species;
     u32 otId;
     u32 personality;
 };
@@ -276,7 +276,7 @@ struct PokemonJump
 
 struct PokemonJumpMons
 {
-    u16 species;
+    SpeciesEnum species;
     u16 jumpType;
 };
 
@@ -284,7 +284,7 @@ static void InitGame(struct PokemonJump *);
 static void ResetForNewGame(struct PokemonJump *);
 static void InitPlayerAndJumpTypes(void);
 static void ResetPlayersForNewGame(void);
-static s16 GetPokemonJumpSpeciesIdx(u16 species);
+static s16 GetPokemonJumpSpeciesIdx(SpeciesEnum species);
 static void InitJumpMonInfo(struct PokemonJump_MonInfo *, struct Pokemon *);
 static void CB2_PokemonJump(void);
 static void Task_StartPokemonJump(u8);
@@ -642,7 +642,7 @@ static void ResetPlayersForNewGame(void)
     }
 }
 
-static s16 GetPokemonJumpSpeciesIdx(u16 species)
+static s16 GetPokemonJumpSpeciesIdx(SpeciesEnum species)
 {
     u32 i;
     for (i = 0; i < ARRAY_COUNT(sPokeJumpMons); i++)
@@ -2342,7 +2342,7 @@ static u8 *GetPokeJumpPlayerName(u8 multiplayerId)
     return sPokemonJump->players[multiplayerId].name;
 }
 
-bool32 IsSpeciesAllowedInPokemonJump(u16 species)
+bool32 IsSpeciesAllowedInPokemonJump(SpeciesEnum species)
 {
     return GetPokemonJumpSpeciesIdx(species) > -1;
 }
@@ -2355,7 +2355,7 @@ void IsPokemonJumpSpeciesInParty(void)
     {
         if (GetMonData(&gPlayerParty[i], MON_DATA_SANITY_HAS_SPECIES))
         {
-            u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
+            SpeciesEnum species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
             if (IsSpeciesAllowedInPokemonJump(species))
             {
                 gSpecialVar_Result = TRUE;
@@ -3930,7 +3930,7 @@ static void Task_UpdateBonus(u8 taskId)
 struct MonInfoPacket
 {
     u8 id;
-    u16 species;
+    SpeciesEnum species;
     u32 personality;
     u32 otId;
 };

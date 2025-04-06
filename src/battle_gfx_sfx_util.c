@@ -544,7 +544,7 @@ void BattleLoadOpponentMonSpriteGfx(struct Pokemon *mon, u8 battlerId) { BattleL
 
 void BattleLoadPlayerMonSpriteGfx(struct Pokemon *mon, u8 battlerId) { BattleLoadMonSpriteGfx(mon, battlerId, FALSE); }
 
-void BattleGfxSfxDummy2(u16 species) {}
+void BattleGfxSfxDummy2(SpeciesEnum species) {}
 
 void DecompressTrainerFrontPic(u16 frontPicId, u8 battlerId) {
     u8 position = GetBattlerPosition(battlerId);
@@ -975,7 +975,7 @@ void SpriteCB_EnemyShadow(struct Sprite *shadowSprite) {
 
 void SpriteCB_SetInvisible(struct Sprite *sprite) { sprite->invisible = TRUE; }
 
-void SetBattlerShadowSpriteCallback(u8 battlerId, u16 species) {
+void SetBattlerShadowSpriteCallback(u8 battlerId, SpeciesEnum species) {
     // The player's shadow is never seen.
     if (GetBattlerSide(battlerId) == B_SIDE_PLAYER || gBattleScripting.monCaught) return;
 

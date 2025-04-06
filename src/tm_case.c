@@ -1099,7 +1099,7 @@ static void SpriteCb_MonIcon(struct Sprite *sprite)
 static void DrawPartyMonIcons(void)
 {
     u8 i;
-    u16 species;
+    SpeciesEnum species;
     u8 icon_x = 0;
     u8 icon_y = 0;
 

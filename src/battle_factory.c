@@ -318,7 +318,7 @@ static void SetPerformedRentalSwap(void)
 static void GenerateOpponentMons(void)
 {
     int i, j, k;
-    u16 species[FRONTIER_PARTY_SIZE_6];
+    SpeciesEnum species[FRONTIER_PARTY_SIZE_6];
     u16 heldItems[FRONTIER_PARTY_SIZE_6];
     int firstMonId = 0;
     u16 trainerId = 0;
@@ -529,7 +529,7 @@ static void GenerateInitialRentalMons(void)
     u8 rentalRank;
     u16 monId;
     u16 currSpecies;
-    u16 species[PARTY_SIZE * 2];
+    SpeciesEnum species[PARTY_SIZE * 2];
     u16 monIds[PARTY_SIZE * 2];
 
     gFacilityTrainers = gBattleFrontierTrainers;
@@ -752,7 +752,7 @@ u8 GetFactoryMonFixedIV(u8 arg0, u8 arg1)
 void FillFactoryBrainParty(void)
 {
     int i, j, k;
-    u16 species[getPartySize()];
+    SpeciesEnum species[getPartySize()];
     u16 heldItems[getPartySize()];
     u8 friendship;
     int monLevel;

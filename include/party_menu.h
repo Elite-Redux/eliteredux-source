@@ -103,14 +103,14 @@ void MoveDeleterForgetMove(void);
 void BufferMoveDeleterNicknameAndMove(void);
 void GetNumMovesSelectedMonHas(void);
 void MoveDeleterChooseMoveToForget(void);
-void DoItemFormChange (u16 newSpecies);
+void DoItemFormChange (SpeciesEnum newSpecies);
 void CB2_ReturnToPartyMenuFromSummaryScreen(void);
 void CB2_ShowPartyMenuForItemUseTMCase(void);
 
 void Task_IronPill(u8 taskId);
 void ItemUseCB_IronPill(u8 taskId, TaskFunc task);
 
-bool32 CanLearnTutorMove(u16, u8);
+bool32 CanLearnTutorMove(SpeciesEnum, u8);
 
 extern const struct SpriteSheet sSpriteSheet_HeldItem;
 extern const struct SpritePalette sSpritePalette_HeldItem;

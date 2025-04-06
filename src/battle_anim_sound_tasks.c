@@ -134,7 +134,7 @@ static void SoundTask_LoopSEAdjustPanning_Step(u8 taskId)
 
 void SoundTask_PlayCryHighPitch(u8 taskId)
 {
-    u16 species = 0;
+    SpeciesEnum species = 0;
     s8 pan = BattleAnimAdjustPanning(SOUND_PAN_ATTACKER);
     if (IsContest())
     {
@@ -180,7 +180,7 @@ void SoundTask_PlayCryHighPitch(u8 taskId)
 
 void SoundTask_PlayDoubleCry(u8 taskId)
 {
-    u16 species = 0;
+    SpeciesEnum species = 0;
     s8 pan = BattleAnimAdjustPanning(SOUND_PAN_ATTACKER);
     if (IsContest())
     {
@@ -239,7 +239,7 @@ void SoundTask_PlayDoubleCry(u8 taskId)
 
 static void SoundTask_PlayDoubleCry_Step(u8 taskId)
 {
-    u16 species = gTasks[taskId].data[1];
+    SpeciesEnum species = gTasks[taskId].data[1];
     s8 pan = gTasks[taskId].data[2];
 
     if (gTasks[taskId].data[9] < 2)
@@ -282,7 +282,7 @@ void SoundTask_WaitForCry(u8 taskId)
 
 void SoundTask_PlayCryWithEcho(u8 taskId)
 {
-    u16 species;
+    SpeciesEnum species;
     s8 pan;
 
     gTasks[taskId].data[10] = gBattleAnimArgs[0];
@@ -304,7 +304,7 @@ void SoundTask_PlayCryWithEcho(u8 taskId)
 
 static void SoundTask_PlayCryWithEcho_Step(u8 taskId)
 {
-    u16 species = gTasks[taskId].data[1];
+    SpeciesEnum species = gTasks[taskId].data[1];
     s8 pan = gTasks[taskId].data[2];
 
     switch (gTasks[taskId].data[9])
@@ -340,7 +340,7 @@ static void SoundTask_PlayCryWithEcho_Step(u8 taskId)
 // task start
 void SoundTask_PlayCryMegaEvolution(u8 taskId)
 {
-    u16 species;
+    SpeciesEnum species;
 
     if (IsContest())
         species = gContestResources->moveAnim->species;
@@ -358,7 +358,7 @@ void SoundTask_PlayCryMegaEvolution(u8 taskId)
 static void SoundTask_PlayCryMegaEvolution_Step(u8 taskId)
 {
     s8 pan = BattleAnimAdjustPanning(SOUND_PAN_ATTACKER);
-    u16 species = gTasks[taskId].data[1];
+    SpeciesEnum species = gTasks[taskId].data[1];
 
     PlayCry3(species, pan, 0);
     DestroyAnimVisualTask(taskId);

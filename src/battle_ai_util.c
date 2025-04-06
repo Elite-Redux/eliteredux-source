@@ -2004,7 +2004,7 @@ static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler) {
     u32 flags =
         gSideStatuses[GetBattlerSide(currBattler)] & (SIDE_STATUS_SPIKES | SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_STICKY_WEB | SIDE_STATUS_TOXIC_SPIKES);
     bool8 isEnemyMon = GetBattlerSide(currBattler) == B_SIDE_OPPONENT;
-    u16 species = GetMonData(mon, MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES);
 
     if (flags == 0) return FALSE;
 

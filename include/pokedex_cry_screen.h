@@ -14,7 +14,7 @@ extern u8 gDexCryScreenState;
 
 bool8 LoadCryWaveformWindow(struct CryScreenWindow*, u8);
 void UpdateCryWaveformWindow(u8);
-void CryScreenPlayButton(u16);
+void CryScreenPlayButton(SpeciesEnum);
 bool8 LoadCryMeter(struct CryScreenWindow*, u8);
 void FreeCryScreen(void);
 

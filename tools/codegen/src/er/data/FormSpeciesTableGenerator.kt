@@ -22,12 +22,12 @@ object FormSpeciesTableGenerator : Generator {
 
         writer.appendLine(formIds.entries.joinToString("\n") {
             """
-            |const SpeciesEnum[] $PREFIX${it.value} = {
+            |static const SpeciesEnum $PREFIX${it.value}[] = {
             |$IND${it.key.joinToString("\n$IND") { id -> "$id," }}
             |${IND}0};
             |""".trimMargin()
         })
 
-        speciesIds.printLookupTable("const u16 *const gFormSpeciesIdTables[$REAL_SPECIES_COUNT]", PREFIX, writer)
+        speciesIds.printLookupTable("const SpeciesEnum *const gFormSpeciesIdTables[$REAL_SPECIES_COUNT]", PREFIX, writer)
     }
 }

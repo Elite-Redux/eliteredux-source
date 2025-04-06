@@ -32,7 +32,7 @@ typedef union // size = 0x24
     struct {
         /*0x00*/ u8 kind;
         /*0x01*/ bool8 active;
-        /*0x02*/ u16 species;
+        /*0x02*/ SpeciesEnum species;
         /*0x04*/ u16 words[6];
         /*0x10*/ u8 playerName[PLAYER_NAME_LENGTH + 1];
         /*0x18*/ u8 language;
@@ -42,7 +42,7 @@ typedef union // size = 0x24
     struct {
         /*0x00*/ u8 kind;
         /*0x01*/ bool8 active;
-        /*0x02*/ u16 species;
+        /*0x02*/ SpeciesEnum species;
         /*0x04*/ u16 words[6];
         /*0x10*/ u8 playerName[PLAYER_NAME_LENGTH + 1];
         /*0x18*/ u8 language;
@@ -52,7 +52,7 @@ typedef union // size = 0x24
     struct {
         /*0x00*/ u8 kind;
         /*0x01*/ bool8 active;
-        /*0x02*/ u16 species;
+        /*0x02*/ SpeciesEnum species;
         /*0x04*/ u8 friendshipHighNybble:4;
         /*0x04*/ u8 questionAsked:4;
         /*0x05*/ u8 playerName[PLAYER_NAME_LENGTH + 1];
@@ -69,7 +69,7 @@ typedef union // size = 0x24
         /*0x00*/ u8 kind;
         /*0x01*/ bool8 active;
         /*0x02*/ u16 words[2];
-        /*0x06*/ u16 species;
+        /*0x06*/ SpeciesEnum species;
         /*0x08*/ u8 pad_08[3];
         /*0x0b*/ u8 name[12];
         /*0x17*/ u8 language;
@@ -79,7 +79,7 @@ typedef union // size = 0x24
     struct {
         /*0x00*/ u8 kind;
         /*0x01*/ bool8 active;
-        /*0x02*/ u16 species;
+        /*0x02*/ SpeciesEnum species;
         /*0x04*/ u8 pokemonName[POKEMON_NAME_LENGTH + 1];
         /*0x0F*/ u8 trainerName[11];
         /*0x1A*/ u8 random;
@@ -93,7 +93,7 @@ typedef union // size = 0x24
     struct {
         /*0x00*/ u8 kind;
         /*0x01*/ bool8 active;
-        /*0x02*/ u16 species;
+        /*0x02*/ SpeciesEnum species;
         /*0x04*/ u16 words[2];
         /*0x08*/ u8 pokemonNickname[POKEMON_NAME_LENGTH + 1];
         /*0x13*/ u8 contestCategory:3;
@@ -110,7 +110,7 @@ typedef union // size = 0x24
         /*0x00*/ u8 kind;
         /*0x01*/ bool8 active;
         /*0x02*/ u8 trainerName[PLAYER_NAME_LENGTH + 1];
-        /*0x0A*/ u16 species;
+        /*0x0A*/ SpeciesEnum species;
         /*0x0C*/ u8 pokemonName[8];
         /*0x14*/ u16 defeatedSpecies;
         /*0x16*/ u16 numFights;
@@ -202,7 +202,7 @@ typedef union // size = 0x24
         /*0x03*/ u8 language2;
         /*0x04*/ u8 nickname[POKEMON_NAME_LENGTH + 1];
         /*0x0F*/ u8 ball;
-        /*0x10*/ u16 species;
+        /*0x10*/ SpeciesEnum species;
         /*0x12*/ u8 nBallsUsed;
         /*0x13*/ u8 playerName[PLAYER_NAME_LENGTH + 1];
     } pokemonToday;
@@ -226,7 +226,7 @@ typedef union // size = 0x24
         /*0x01*/ bool8 active;
         /*0x02*/ u8 language;
         /*0x03*/ u8 pad03[9];
-        /*0x0c*/ u16 species;
+        /*0x0c*/ SpeciesEnum species;
         /*0x0e*/ u16 species2;
         /*0x10*/ u8 nBallsUsed;
         /*0x11*/ u8 outcome;
@@ -240,7 +240,7 @@ typedef union // size = 0x24
         /*0x01*/ bool8 active;
         /*0x02*/ u8 nBites;
         /*0x03*/ u8 nFails;
-        /*0x04*/ u16 species;
+        /*0x04*/ SpeciesEnum species;
         /*0x06*/ u8 language;
         /*0x07*/ u8 pad07[12];
         /*0x13*/ u8 playerName[PLAYER_NAME_LENGTH + 1];
@@ -253,7 +253,7 @@ typedef union // size = 0x24
         /*0x02*/ u16 numPokeCaught;
         /*0x04*/ u16 caughtPoke;
         /*0x06*/ u16 steps;
-        /*0x08*/ u16 species;
+        /*0x08*/ SpeciesEnum species;
         /*0x0a*/ u8 location;
         /*0x0b*/ u8 language;
         /*0x0c*/ u8 pad0c[7];
@@ -336,7 +336,7 @@ typedef union // size = 0x24
         /*0x02*/ u8 avgLevel;
         /*0x03*/ u8 nDecorations;
         /*0x04*/ u8 decorations[4];
-        /*0x08*/ u16 species;
+        /*0x08*/ SpeciesEnum species;
         /*0x0a*/ u16 move;
         /*0x0c*/ u8 language;
         /*0x0d*/ u8 filler_0d[6];
@@ -360,7 +360,7 @@ typedef union // size = 0x24
         /*0x01*/ bool8 active;
         /*0x02*/ u16 move;
         /*0x04*/ u16 foeSpecies;
-        /*0x06*/ u16 species;
+        /*0x06*/ SpeciesEnum species;
         /*0x08*/ u16 otherMoves[3];
         /*0x0e*/ u16 betterMove;
         /*0x10*/ u8 nOtherMoves;
@@ -452,7 +452,7 @@ typedef union // size = 0x24
         /*0x02*/ u8 var02;
         /*0x03*/ u8 var03;
         /*0x04*/ u16 moves[MAX_MON_MOVES];
-        /*0x0C*/ u16 species;
+        /*0x0C*/ SpeciesEnum species;
         /*0x0E*/ u16 var0E;
         /*0x10*/ u8 locationMapNum;
         /*0x11*/ u8 locationMapGroup;

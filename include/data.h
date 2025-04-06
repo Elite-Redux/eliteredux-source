@@ -11,47 +11,42 @@ enum {
     BATTLER_AFFINE_RETURN,
 };
 
-struct MonCoords
-{
+struct MonCoords {
     // This would use a bitfield, but some function
     // uses it as a u8 and casting won't match.
-    u8 size; // u8 width:4, height:4;
+    u8 size;  // u8 width:4, height:4;
     u8 y_offset;
 };
 
-struct TrainerMonNoItemDefaultMoves
-{
+struct TrainerMonNoItemDefaultMoves {
     u16 iv;
     u8 lvl;
-    u16 species;
+    SpeciesEnum species;
     u8 evs[NUM_STATS];
     u8 nature;
 };
 
-struct TrainerMonItemDefaultMoves
-{
+struct TrainerMonItemDefaultMoves {
     u16 iv;
     u8 lvl;
-    u16 species;
+    SpeciesEnum species;
     u16 heldItem;
     u8 evs[NUM_STATS];
     u8 nature;
 };
 
-struct TrainerMonNoItemCustomMoves
-{
+struct TrainerMonNoItemCustomMoves {
     u16 iv;
     u8 lvl;
-    u16 species;
+    SpeciesEnum species;
     MoveEnum moves[MAX_MON_MOVES];
     u8 evs[NUM_STATS];
     u8 nature;
 };
 
-struct TrainerMonItemCustomMoves
-{
+struct TrainerMonItemCustomMoves {
     s8 lvl;
-    u16 species;
+    SpeciesEnum species;
     u16 heldItem;
     u8 ability;
     u8 spread;
@@ -63,19 +58,17 @@ struct TrainerMonItemCustomMoves
     bool8 isAlpha;
 };
 
-union TrainerMonPtr
-{
+union TrainerMonPtr {
     const struct TrainerMonNoItemDefaultMoves *NoItemDefaultMoves;
     const struct TrainerMonNoItemCustomMoves *NoItemCustomMoves;
     const struct TrainerMonItemDefaultMoves *ItemDefaultMoves;
     const struct TrainerMonItemCustomMoves *ItemCustomMoves;
 };
 
-struct Trainer
-{
+struct Trainer {
     /*0x00*/ u8 partyFlags;
     /*0x01*/ u8 trainerClass;
-    /*0x02*/ u8 encounterMusic_gender; // last bit is gender
+    /*0x02*/ u8 encounterMusic_gender;  // last bit is gender
     /*0x03*/ u8 trainerPic;
     /*0x04*/ u8 trainerName[12];
     /*0x10*/ u16 items[4];
@@ -92,7 +85,7 @@ struct Trainer
     /*0x2F*/ u16 trainerFlag;
 };
 
-#define TRAINER_ENCOUNTER_MUSIC(trainer)((gTrainers[trainer].encounterMusic_gender & 0x7F))
+#define TRAINER_ENCOUNTER_MUSIC(trainer) ((gTrainers[trainer].encounterMusic_gender & 0x7F))
 
 extern const u16 gMinigameDigits_Pal[];
 extern const u32 gMinigameDigits_Gfx[];
@@ -131,7 +124,7 @@ extern const struct CompressedSpriteSheet gTrainerFrontPicTable[];
 extern const struct CompressedSpritePalette gTrainerFrontPicPaletteTable[];
 extern const union AnimCmd *const *const gTrainerBackAnimsPtrTable[];
 extern const struct MonCoords gTrainerBackPicCoords[];
-extern const struct CompressedSpriteSheet gTrainerBackPicTable[]; // functionally unused
+extern const struct CompressedSpriteSheet gTrainerBackPicTable[];  // functionally unused
 extern const struct CompressedSpritePalette gTrainerBackPicPaletteTable[];
 
 extern const u8 gEnemyMonElevation[NUM_SPECIES];
@@ -143,8 +136,8 @@ extern const bool8 SpeciesHasGenderDifference[NUM_SPECIES];
 
 extern const struct Trainer gTrainers[];
 extern const u8 gTrainerClassNames[][13];
-extern const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1];
+extern const u8 *const gSpeciesNames[];
 extern const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1];
 extern const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1];
 
-#endif // GUARD_DATA_H
+#endif  // GUARD_DATA_H

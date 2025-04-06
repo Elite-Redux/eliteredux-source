@@ -78,7 +78,7 @@ enum {
 
 struct InGameTrade {
     /*0x00*/ u8 nickname[POKEMON_NAME_LENGTH + 1];
-    /*0x0C*/ u16 species;
+    /*0x0C*/ SpeciesEnum species;
     /*0x0E*/ u8 ivs[NUM_STATS];
     /*0x14*/ u8 abilityNum;
     /*0x18*/ u32 otId;
@@ -1100,7 +1100,7 @@ static bool8 BufferTradeParties(void)
         for (i = 0, mon = gEnemyParty; i < PARTY_SIZE; mon++, i++)
         {
             u8 name[POKEMON_NAME_LENGTH + 1];
-            u16 species = GetMonData(mon, MON_DATA_SPECIES);
+            SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES);
 
             if (species != SPECIES_NONE)
             {
@@ -2437,7 +2437,7 @@ s32 GetGameProgressForLinkTrade(void)
     return TRADE_BOTH_PLAYERS_READY;
 }
 
-static bool32 IsDeoxysOrMewUntradable(u16 species, bool8 isEventLegal)
+static bool32 IsDeoxysOrMewUntradable(SpeciesEnum species, bool8 isEventLegal)
 {
     if (species == SPECIES_DEOXYS || species == SPECIES_MEW)
     {
@@ -2518,7 +2518,7 @@ int GetUnionRoomTradeMessageId(struct GFtgtGnameSub rfuPlayer, struct GFtgtGname
     return UR_TRADE_MSG_NONE;
 }
 
-int CanRegisterMonForTradingBoard(struct GFtgtGnameSub rfuPlayer, u16 species2, u16 species, u8 isEventLegal)
+int CanRegisterMonForTradingBoard(struct GFtgtGnameSub rfuPlayer, SpeciesEnum species2, SpeciesEnum species, u8 isEventLegal)
 {
     bool8 hasNationalDex = rfuPlayer.hasNationalDex;
 
@@ -2747,7 +2747,7 @@ static void LoadTradeMonPic(u8 whichParty, u8 state)
 {
     int pos = 0;
     struct Pokemon *mon = NULL;
-    u16 species;
+    SpeciesEnum species;
     u32 personality;
 
     if (whichParty == TRADE_PLAYER)
@@ -3069,7 +3069,7 @@ static void UpdatePokedexForReceivedMon(u8 partyIdx)
 
     if (!GetMonData(mon, MON_DATA_IS_EGG))
     {
-        u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+        SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES, NULL);
         u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
         species = SpeciesToNationalPokedexNum(species);
         GetSetPokedexFlag(species, FLAG_SET_SEEN);

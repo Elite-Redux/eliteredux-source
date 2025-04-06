@@ -25,7 +25,7 @@
 #include "constants/moves.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
-#include "constants/species.h"
+#include "generated/constants/species.h"
 #include "constants/trainers.h"
 #include "constants/weather.h"
 #include "data.h"
@@ -97,7 +97,7 @@ static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] = {
 u8 CalcBeatUpPower(void) {
     struct Pokemon *party;
     u8 basePower;
-    u16 species;
+    SpeciesEnum species;
 
     if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
         party = gPlayerParty;
@@ -3651,7 +3651,7 @@ bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer) {
 }
 
 // Ability,     form >, form <=, hp divided
-const u16 gHpTransformations[][4] = {
+const HpTransformation gHpTransformations[] = {
     {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR, SPECIES_MINIOR_CORE_RED, 2},
     {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_BLUE, SPECIES_MINIOR_CORE_BLUE, 2},
     {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_GREEN, SPECIES_MINIOR_CORE_GREEN, 2},
@@ -3666,27 +3666,27 @@ const u16 gHpTransformations[][4] = {
 
 bool32 ShouldChangeFormHpBased(u32 battler) {
     u32 i;
-    int species = gBattleMons[battler].species;
+    SpeciesEnum species = gBattleMons[battler].species;
 
     if (gBattleMons[battler].status2 & STATUS2_TRANSFORMED) return FALSE;
     if (!IsBattlerAlive(battler)) return FALSE;
 
     for (i = 0; i < ARRAY_COUNT(gHpTransformations); i++) {
-        if (BattlerHasAbility(battler, gHpTransformations[i][0], FALSE)) {
-            if (gHpTransformations[i][0] == ABILITY_SCHOOLING && gBattleMons[battler].level < 20) continue;
-            if (species == gHpTransformations[i][2] && gBattleMons[battler].hp > gBattleMons[battler].maxHP / gHpTransformations[i][3]) {
-                if (gHpTransformations[i][0] == ABILITY_SHIELDS_DOWN && GetAbilityState(battler, ABILITY_SHIELDS_DOWN)) {
+        if (BattlerHasAbility(battler, gHpTransformations[i].ability, FALSE)) {
+            if (gHpTransformations[i].ability == ABILITY_SCHOOLING && gBattleMons[battler].level < 20) continue;
+            if (species == gHpTransformations[i].lowHpSpecies && gBattleMons[battler].hp > gBattleMons[battler].maxHP / gHpTransformations[i].hpFraction) {
+                if (gHpTransformations[i].ability == ABILITY_SHIELDS_DOWN && GetAbilityState(battler, ABILITY_SHIELDS_DOWN)) {
                     return FALSE;
                 }
-                gBattleScripting.abilityPopupOverwrite = gHpTransformations[i][0];
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, gHpTransformations[i][1]);
-                gBattleMons[battler].species = gHpTransformations[i][1];
+                gBattleScripting.abilityPopupOverwrite = gHpTransformations[i].ability;
+                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, gHpTransformations[i].highHpSpecies);
+                gBattleMons[battler].species = gHpTransformations[i].highHpSpecies;
                 return TRUE;
             }
-            if (species == gHpTransformations[i][1] && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / gHpTransformations[i][3]) {
-                gBattleScripting.abilityPopupOverwrite = gHpTransformations[i][0];
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, gHpTransformations[i][2]);
-                gBattleMons[battler].species = gHpTransformations[i][2];
+            if (species == gHpTransformations[i].highHpSpecies && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / gHpTransformations[i].hpFraction) {
+                gBattleScripting.abilityPopupOverwrite = gHpTransformations[i].ability;
+                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, gHpTransformations[i].lowHpSpecies);
+                gBattleMons[battler].species = gHpTransformations[i].lowHpSpecies;
                 return TRUE;
             }
         }
@@ -5173,7 +5173,7 @@ static bool32 GetMentalHerbEffect(u8 battlerId) {
 }
 
 static int CanUseHoney(int battler) {
-    int species = GET_BASE_SPECIES_ID(gBattleMons[battler].spDefense);
+    SpeciesEnum species = GET_BASE_SPECIES_ID(gBattleMons[battler].spDefense);
     switch (species) {
         case SPECIES_COMBEE:
         case SPECIES_VESPIQUEN:
@@ -7231,7 +7231,7 @@ static u32 CalcAttackStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
 static bool32 CanEvolve(u32 species) {
     u32 i;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
+    for (i = 0; gEvolutionTable[species][i].method; i++) {
         if (gEvolutionTable[species][i].method && gEvolutionTable[species][i].method != EVO_MEGA_EVOLUTION &&
             gEvolutionTable[species][i].method != EVO_MOVE_MEGA_EVOLUTION && gEvolutionTable[species][i].method != EVO_PRIMAL_REVERSION)
             return TRUE;
@@ -7816,6 +7816,12 @@ static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u
         if (immunityAbility == TRUE) immunityAbility = ABILITY_NONE;
     }
 
+    // Thousand Arrows ignores type modifiers for flying mons
+    if (!IsBattlerGrounded(battlerDef) && gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING && moveType == TYPE_GROUND &&
+        modifier == UQ_4_12(0)) {
+        modifier = UQ_4_12(1.0);
+    }
+
     for (int i = 0; i < gBattlersCount; i++) {
         int battler = (battlerDef + i) % gBattlersCount;
         FILTER(battler == battlerDef || battler == battlerAtk || IsBattlerAlive(battler))
@@ -7826,12 +7832,6 @@ static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u
                    int wasImmune = modifier == 0;
                    gAbilities[ability].onAfterTypeEffectiveness(battler, ability, battlerDef, move, moveType, &modifier, modifier1, modifier2, modifier3);
                    if (!wasImmune && !modifier) immunityAbility = ability)
-    }
-
-    // Thousand Arrows ignores type modifiers for flying mons
-    if (!IsBattlerGrounded(battlerDef) && gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING && moveType == TYPE_GROUND &&
-        modifier == UQ_4_12(0)) {
-        modifier = UQ_4_12(1.0);
     }
 
     if (recordAbilities && immunityAbility && !modifier) {
@@ -7860,7 +7860,7 @@ u16 CalcTypeEffectivenessMultiplier(MoveEnum move, u8 moveType, u8 battlerAtk, u
     return modifier;
 }
 
-u16 CalcPartyMonTypeEffectivenessMultiplier(MoveEnum move, u16 speciesDef, u16 abilityDef, u8 battlerDef) {
+u16 CalcPartyMonTypeEffectivenessMultiplier(MoveEnum move, SpeciesEnum speciesDef, u16 abilityDef, u8 battlerDef) {
     u16 modifier = UQ_4_12(1.0);
     u8 moveType = gBattleMoves[move].type;
 
@@ -7954,30 +7954,30 @@ bool32 IsPartnerMonFromSameTrainer(u8 battlerId) {
         return TRUE;
 }
 
-u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId) {
+SpeciesEnum GetMegaEvolutionSpecies(SpeciesEnum preEvoSpecies, u16 heldItemId) {
     u32 i;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
+    for (i = 0; gEvolutionTable[preEvoSpecies][i].method; i++) {
         if (gEvolutionTable[preEvoSpecies][i].method == EVO_MEGA_EVOLUTION && gEvolutionTable[preEvoSpecies][i].param == heldItemId)
             return gEvolutionTable[preEvoSpecies][i].targetSpecies;
     }
     return SPECIES_NONE;
 }
 
-u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId) {
+SpeciesEnum GetPrimalReversionSpecies(SpeciesEnum preEvoSpecies, u16 heldItemId) {
     u32 i;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
+    for (i = 0; gEvolutionTable[preEvoSpecies][i].method; i++) {
         if (gEvolutionTable[preEvoSpecies][i].method == EVO_PRIMAL_REVERSION && gEvolutionTable[preEvoSpecies][i].param == heldItemId)
             return gEvolutionTable[preEvoSpecies][i].targetSpecies;
     }
     return SPECIES_NONE;
 }
 
-u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, MoveEnum moveId1, MoveEnum moveId2, MoveEnum moveId3, MoveEnum moveId4) {
+SpeciesEnum GetWishMegaEvolutionSpecies(SpeciesEnum preEvoSpecies, MoveEnum moveId1, MoveEnum moveId2, MoveEnum moveId3, MoveEnum moveId4) {
     u32 i, par;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
+    for (i = 0; gEvolutionTable[preEvoSpecies][i].method; i++) {
         if (gEvolutionTable[preEvoSpecies][i].method == EVO_MOVE_MEGA_EVOLUTION) {
             par = gEvolutionTable[preEvoSpecies][i].param;
             if (par == moveId1 || par == moveId2 || par == moveId3 || par == moveId4) return gEvolutionTable[preEvoSpecies][i].targetSpecies;
@@ -8050,7 +8050,7 @@ bool32 CanMegaEvolve(u8 battlerId) {
 }
 
 void UndoMegaEvolution(u32 monId) {
-    u16 species = GetMonData(&gPlayerParty[monId], MON_DATA_SPECIES);
+    SpeciesEnum species = GetMonData(&gPlayerParty[monId], MON_DATA_SPECIES);
     u16 baseSpecies = gBattleStruct->mega.playerBaseSpecies[monId];
     bool8 multibattle = VarGet(VAR_0x8004) == SPECIAL_BATTLE_MULTI;
 
@@ -8084,7 +8084,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
 {
     u32 i, currSpecies;
     struct Pokemon *party = (side == B_SIDE_PLAYER) ? gPlayerParty : gEnemyParty;
-    static const u16 species[][3] = {
+    static const SpeciesEnum species[][3] = {
         // Changed Form ID                      Default Form ID               Should change on switch
         {SPECIES_MIMIKYU_BUSTED, SPECIES_MIMIKYU, FALSE},
         {SPECIES_MIMIKYU_RAYQUAZA_BUSTED, SPECIES_MIMIKYU_RAYQUAZA, FALSE},
@@ -8145,7 +8145,7 @@ bool32 DoBattlersShareType(u32 battler1, u32 battler2) {
 }
 
 bool32 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId) {
-    u16 species = gBattleMons[battlerId].species;
+    SpeciesEnum species = gBattleMons[battlerId].species;
     u16 holdEffect = ItemId_GetHoldEffect(itemId);
 
     // Mail can be stolen now
@@ -8193,7 +8193,7 @@ void ClearIllusionMon(u32 battlerId){ZERO(gBattleStruct -> illusion[battlerId])}
 bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId) {
     struct Pokemon *party, *partnerMon;
     s32 i, id;
-    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u32 personality = GetMonData(mon, MON_DATA_SPECIES, NULL);
     AbilityEnum ability = RandomizeAbility(GetMonAbility(mon), species, personality);
     bool8 isEnemyMon = GetBattlerSide(battlerId) == B_SIDE_OPPONENT;
@@ -8720,7 +8720,7 @@ u8 TranslateStatId(u8 statId, u8 battlerId) {
 
 bool32 IsAlly(u32 battlerAtk, u32 battlerDef) { return (GetBattlerSide(battlerAtk) == GetBattlerSide(battlerDef)); }
 
-u16 GetInnateInSlot(int level, u16 species, u8 position, u32 personality, u8 isPlayer) {
+AbilityEnum GetInnateInSlot(int level, SpeciesEnum species, u8 position, u32 personality, u8 isPlayer) {
     if (isPlayer) {
         switch (position) {
             case 0:
@@ -8752,7 +8752,7 @@ void UpdateAbilityStateIndicesForNewSpecies(u8 battler, u16 newSpecies) {
 }
 
 void UpdateAbilityStateIndicesForNewAbility(u8 battler, u16 newAbility) {
-    u16 species = gBattleMons[battler].species;
+    SpeciesEnum species = gBattleMons[battler].species;
     u32 personality = gBattleMons[battler].personality;
     bool8 isPlayer = GetBattlerSide(battler) == B_SIDE_PLAYER;
     int level = gBattleMons[battler].level;
@@ -8770,7 +8770,7 @@ void UpdateAbilityStateIndices(u8 battler, u16 newAbilities[]) {
     u8 switchInAbilityDone[NUM_INNATE_PER_SPECIES + 1] = {0};
     u8 turnAbilityTriggers[NUM_INNATE_PER_SPECIES + 1] = {0};
     u32 abilityState[NUM_INNATE_PER_SPECIES + 1] = {0};
-    u16 species = gBattleMons[battler].species;
+    SpeciesEnum species = gBattleMons[battler].species;
     u32 personality = gBattleMons[battler].personality;
     bool8 isPlayer = GetBattlerSide(battler) == B_SIDE_PLAYER;
     int level = gBattleMons[battler].level;

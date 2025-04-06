@@ -5,7 +5,7 @@ extern u8 *const gTVStringVarPtrs[3];
 
 void ClearTVShowData(void);
 void TryPutBreakingNewsOnAir(void);
-void TryPutBattleSeminarOnAir(u16 foeSpecies, u16 species, u8 moveIdx, const u16 *movePtr, u16 betterMove);
+void TryPutBattleSeminarOnAir(u16 foeSpecies, SpeciesEnum species, u8 moveIdx, const u16 *movePtr, u16 betterMove);
 void TryPutFrontierTVShowOnAir(u16 winStreak, u8 facility);
 void DoTVShow(void);
 void DoTVShowInSearchOfTrainers(void);
@@ -39,7 +39,7 @@ void IncrementDailyBerryBlender(void);
 void SanitizeTVShowsForRuby(TVShow *shows);
 void TryPutSafariFanClubOnAir(u8 nMonsCaught, u8 nPkblkUsed);
 bool8 Put3CheersForPokeblocksOnTheAir(const u8 *partnersName, u8 flavor, u8 unused, u8 sheen, u8 language);
-void SetPokemonAnglerSpecies(u16 species);
+void SetPokemonAnglerSpecies(SpeciesEnum species);
 void UpdateTVShowsPerDay(u16 days);
 void TryPutPokemonTodayOnAir(void);
 void TryPutSecretBaseVisitOnAir(void);

@@ -11,7 +11,7 @@ struct WildPokemon
 {
     u8 minLevel;
     u8 maxLevel;
-    u16 species;
+    SpeciesEnum species;
 };
 
 struct WildPokemonInfo
@@ -53,7 +53,7 @@ bool8 TryDoDoubleWildBattle(void);
 void HoneyWildEncounter(void);
 u16 GetCurrentMapWildMonHeaderId(void);
 
-void CreateWildMon(u16 species, u8 level, int useRandomizer);
+void CreateWildMon(SpeciesEnum species, u8 level, int useRandomizer);
 u16 GetCurrentMapWildMonHeaderId(void);
 u8 ChooseWildMonIndex_Land(void);
 u8 ChooseWildMonIndex_WaterRock(void);

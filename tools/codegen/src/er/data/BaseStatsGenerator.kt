@@ -41,7 +41,7 @@ object BaseStatsGenerator : Generator {
             }
             if (species.innateList.isNotEmpty()) {
                 require(species.innateList.size <= 3) { "Too many innates for ${species.id}" }
-                lines += ".innates = {${species.abilityList.joinToString()}}"
+                lines += ".innates = {${species.innateList.joinToString()}}"
             }
             val dex =
                 if (species.formOf != SpeciesEnum.SPECIES_NONE) {

@@ -50,7 +50,7 @@ struct EggHatchData
     u8 windowId;
     u8 unused_9;
     u8 unused_A;
-    u16 species;
+    SpeciesEnum species;
     u8 textColor[3];
 };
 
@@ -294,7 +294,7 @@ static const s16 sEggShardVelocities[][2] =
 
 static void CreateHatchedMon(struct Pokemon *egg, struct Pokemon *temp)
 {
-    u16 species;
+    SpeciesEnum species;
     u32 personality, pokerus, ball;
     u8 i, friendship, language, gameMet, markings, isEventLegal, ability;
     u16 moves[MAX_MON_MOVES];
@@ -430,7 +430,7 @@ static u8 EggHatchCreateMonSprite(u8 a0, u8 switchID, u8 pokeID, u16* speciesLoc
     {
     case 0:
         {
-            u16 species = GetMonData(mon, MON_DATA_SPECIES);
+            SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES);
             u32 pid = GetMonData(mon, MON_DATA_PERSONALITY);
             HandleLoadSpecialPokePic(&gMonFrontPicTable[species],
                                      gMonSpritesGfxPtr->sprites.ptr[(a0 * 2) + 1],
@@ -611,7 +611,7 @@ static void Task_EggHatchPlayBGM(u8 taskID)
 
 static void CB2_EggHatch_1(void)
 {
-    u16 species;
+    SpeciesEnum species;
     u8 gender;
     u32 personality;
 
