@@ -3,7 +3,6 @@
 #include "battle_tower.h"
 #include "easy_chat.h"
 #include "event_data.h"
-#include "mail.h"
 #include "mystery_event_script.h"
 #include "pokedex.h"
 #include "pokemon.h"
@@ -306,7 +305,6 @@ bool8 MEScrCmd_givepokemon(struct ScriptContext *ctx)
     struct MailStruct mail;
     struct Pokemon pokemon;
     SpeciesEnum species;
-    u16 heldItem;
     u32 data = ScriptReadWord(ctx) - ctx->data[1] + ctx->data[0];
     void *pokemonPtr = (void *)data;
     void *mailPtr = (void *)(data + sizeof(struct Pokemon));
@@ -336,9 +334,6 @@ bool8 MEScrCmd_givepokemon(struct ScriptContext *ctx)
             GetSetPokedexFlag(pokedexNum, FLAG_SET_CAUGHT);
         }
 
-        heldItem = GetMonData(&gPlayerParty[PARTY_SIZE - 1], MON_DATA_HELD_ITEM);
-        if (ItemIsMail(heldItem))
-            GiveMailToMon2(&gPlayerParty[PARTY_SIZE - 1], &mail);
         CompactPartySlots();
         CalculatePlayerPartyCount();
         StringExpandPlaceholders(gStringVar4, gText_MysteryGiftSentOver);

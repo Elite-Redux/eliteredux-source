@@ -370,9 +370,6 @@ PetalburgCity_Gym_EventScript_ShouldGiveEnigmaBerry:: @ 8204DCE
 	checkitem ITEM_ENIGMA_BERRY, 1
 	compare VAR_RESULT, TRUE
 	goto_if_eq PetalburgCity_Gym_EventScript_DontGiveEnigmaBerry
-	checkpcitem ITEM_ENIGMA_BERRY, 1
-	compare VAR_RESULT, TRUE
-	goto_if_eq PetalburgCity_Gym_EventScript_DontGiveEnigmaBerry
 	compare VAR_ENIGMA_BERRY_AVAILABLE, 0
 	goto_if_eq PetalburgCity_Gym_EventScript_DontGiveEnigmaBerry
 	msgbox PetalburgCity_Gym_Text_GiveEnigmaBerry, MSGBOX_DEFAULT

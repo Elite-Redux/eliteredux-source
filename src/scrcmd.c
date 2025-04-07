@@ -503,9 +503,6 @@ bool8 ScrCmd_additem(struct ScriptContext *ctx)
     if (AddBagItem(itemId, (u16)quantity)) {
         gSpecialVar_Result = 1; //Bag
     }
-    else if (AddPCItem(itemId, (u16)quantity)) {
-        gSpecialVar_Result = 2; //PC
-    }
     else {
         gSpecialVar_Result = 0; //Failed
     }
@@ -550,19 +547,11 @@ bool8 ScrCmd_checkitemtype(struct ScriptContext *ctx)
 
 bool8 ScrCmd_addpcitem(struct ScriptContext *ctx)
 {
-    u16 itemId = VarGet(ScriptReadHalfword(ctx));
-    u16 quantity = VarGet(ScriptReadHalfword(ctx));
-
-    gSpecialVar_Result = AddPCItem(itemId, quantity);
     return FALSE;
 }
 
 bool8 ScrCmd_checkpcitem(struct ScriptContext *ctx)
 {
-    u16 itemId = VarGet(ScriptReadHalfword(ctx));
-    u16 quantity = VarGet(ScriptReadHalfword(ctx));
-
-    gSpecialVar_Result = CheckPCHasItem(itemId, quantity);
     return FALSE;
 }
 

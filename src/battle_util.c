@@ -35,7 +35,6 @@
 #include "international_string_util.h"
 #include "item.h"
 #include "link.h"
-#include "mail.h"
 #include "malloc.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"

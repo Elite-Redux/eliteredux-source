@@ -916,7 +916,7 @@ static void ReceiveGiftItem(u16 *item, u8 which)
 {
     if (which != 0 && *item != ITEM_NONE && GetPocketByItemId(*item) == POCKET_KEY_ITEMS)
     {
-        if (!CheckBagHasItem(*item, 1) && !CheckPCHasItem(*item, 1) && AddBagItem(*item, 1))
+        if (!CheckBagHasItem(*item, 1) && AddBagItem(*item, 1))
         {
             VarSet(VAR_TEMP_1, *item);
             StringCopy(gStringVar1, gLinkPlayers[0].name);

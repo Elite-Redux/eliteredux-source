@@ -76,7 +76,6 @@ void ItemUseCB_FormChange_ConsumedOnUse(u8 taskId, TaskFunc task);
 u8 GetItemEffectType(u16 item);
 void CB2_PartyMenuFromStartMenu(void);
 void CB2_ChooseMonToGiveItem(void);
-void ChooseMonToGiveMailFromMailbox(void);
 void InitChooseHalfPartyForBattle(u8 unused);
 void ClearSelectedPartyOrder(void);
 void ChooseMonForTradingBoard(u8 menuType, MainCallback callback);

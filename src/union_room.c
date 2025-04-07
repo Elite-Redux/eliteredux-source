@@ -1472,7 +1472,6 @@ static void Task_StartUnionRoomTrade(u8 taskId)
     case 3:
         if (GetBlockReceivedStatus() == 3)
         {
-            memcpy(gTradeMail, gBlockRecvBuffer[GetMultiplayerId() ^ 1], sizeof(struct MailStruct) * PARTY_SIZE);
             ResetBlockReceivedFlags();
             gSelectedTradeMonPositions[TRADE_PLAYER] = monId;
             gSelectedTradeMonPositions[TRADE_PARTNER] = PARTY_SIZE;

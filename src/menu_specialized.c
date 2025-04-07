@@ -12,7 +12,6 @@
 #include "menu_specialized.h"
 #include "move_relearner.h"
 #include "palette.h"
-#include "player_pc.h"
 #include "pokemon_summary_screen.h"
 #include "pokemon_storage_system.h"
 #include "scanline_effect.h"
@@ -29,10 +28,6 @@
 
 extern const struct CompressedSpriteSheet gMonFrontPicTable[];
 
-EWRAM_DATA static u8 sMailboxWindowIds[MAILBOXWIN_COUNT] = {0};
-EWRAM_DATA static struct ListMenuItem *sMailboxList = NULL;
-
-static void MailboxMenu_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu *list);
 static void sub_81D24A4(struct ConditionGraph *a0);
 static void sub_81D2634(struct ConditionGraph *a0);
 static void MoveRelearnerCursorCallback(s32 itemIndex, bool8 onInit, struct ListMenu *list);
@@ -40,37 +35,6 @@ static void nullsub_79(void);
 static void SetNextConditionSparkle(struct Sprite *sprite);
 static void SpriteCB_ConditionSparkle(struct Sprite *sprite);
 static void ShowAllConditionSparkles(struct Sprite *sprite);
-
-static const struct WindowTemplate sWindowTemplates_MailboxMenu[MAILBOXWIN_COUNT] =
-{
-    [MAILBOXWIN_TITLE] = {
-        .bg = 0,
-        .tilemapLeft = 1,
-        .tilemapTop = 1,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 15,
-        .baseBlock = 0x8
-    },
-    [MAILBOXWIN_LIST] = {
-        .bg = 0,
-        .tilemapLeft = 21,
-        .tilemapTop = 1,
-        .width = 8,
-        .height = 18,
-        .paletteNum = 15,
-        .baseBlock = 0x18
-    },
-    [MAILBOXWIN_OPTIONS] = {
-        .bg = 0,
-        .tilemapLeft = 1,
-        .tilemapTop = 1,
-        .width = 11,
-        .height = 8,
-        .paletteNum = 15,
-        .baseBlock = 0x18
-    }
-};
 
 static const u8 sPlayerNameTextColors[] =
 {
@@ -206,119 +170,6 @@ static const struct ListMenuTemplate sMoveRelearnerMovesListTemplate =
     .fontId = 1,
     .cursorKind = 0
 };
-
-bool8 MailboxMenu_Alloc(u8 count)
-{
-    u8 i;
-
-    // + 1 to count for 'Cancel'
-    sMailboxList = Alloc((count + 1) * sizeof(*sMailboxList));
-    if (sMailboxList == NULL)
-        return FALSE;
-
-    for (i = 0; i < ARRAY_COUNT(sMailboxWindowIds); i++)
-        sMailboxWindowIds[i] = WINDOW_NONE;
-
-    return TRUE;
-}
-
-u8 MailboxMenu_AddWindow(u8 windowIdx)
-{
-    if (sMailboxWindowIds[windowIdx] == WINDOW_NONE)
-    {
-        if (windowIdx == MAILBOXWIN_OPTIONS)
-        {
-            struct WindowTemplate spriteTemplate = sWindowTemplates_MailboxMenu[windowIdx];
-            spriteTemplate.width = GetMaxWidthInMenuTable(&gMailboxMailOptions[0], 4);
-            sMailboxWindowIds[windowIdx] = AddWindow(&spriteTemplate);
-        }
-        else // MAILBOXWIN_TITLE or MAILBOXWIN_LIST
-        {
-            sMailboxWindowIds[windowIdx] = AddWindow(&sWindowTemplates_MailboxMenu[windowIdx]);
-        }
-        SetStandardWindowBorderStyle(sMailboxWindowIds[windowIdx], 0);
-    }
-    return sMailboxWindowIds[windowIdx];
-}
-
-void MailboxMenu_RemoveWindow(u8 windowIdx)
-{
-    ClearStdWindowAndFrameToTransparent(sMailboxWindowIds[windowIdx], 0);
-    ClearWindowTilemap(sMailboxWindowIds[windowIdx]);
-    RemoveWindow(sMailboxWindowIds[windowIdx]);
-    sMailboxWindowIds[windowIdx] = WINDOW_NONE;
-}
-
-// Unused
-static u8 MailboxMenu_GetWindowId(u8 windowIdx)
-{
-    return sMailboxWindowIds[windowIdx];
-}
-
-static void MailboxMenu_ItemPrintFunc(u8 windowId, u32 itemId, u8 y)
-{
-    u8 buffer[30];
-    u16 length;
-
-    if (itemId == LIST_CANCEL)
-        return;
-
-    StringCopy(buffer, gSaveBlock1Ptr->mail[PARTY_SIZE + itemId].playerName);
-    ConvertInternationalPlayerName(buffer);
-    length = StringLength(buffer);
-    if (length < PLAYER_NAME_LENGTH - 1)
-        ConvertInternationalString(buffer, LANGUAGE_JAPANESE);
-    AddTextPrinterParameterized4(windowId, 1, 8, y, 0, 0, sPlayerNameTextColors, -1, buffer);
-}
-
-u8 MailboxMenu_CreateList(struct PlayerPCItemPageStruct *page)
-{
-    u16 i;
-    for (i = 0; i < page->count; i++)
-    {
-        sMailboxList[i].name = sEmptyItemName;
-        sMailboxList[i].id = i;
-    }
-
-    sMailboxList[i].name = gText_Cancel2;
-    sMailboxList[i].id = LIST_CANCEL;
-
-    gMultiuseListMenuTemplate.items = sMailboxList;
-    gMultiuseListMenuTemplate.totalItems = page->count + 1;
-    gMultiuseListMenuTemplate.windowId = sMailboxWindowIds[MAILBOXWIN_LIST];
-    gMultiuseListMenuTemplate.header_X = 0;
-    gMultiuseListMenuTemplate.item_X = 8;
-    gMultiuseListMenuTemplate.cursor_X = 0;
-    gMultiuseListMenuTemplate.maxShowed = 8;
-    gMultiuseListMenuTemplate.upText_Y = 9;
-    gMultiuseListMenuTemplate.cursorPal = 2;
-    gMultiuseListMenuTemplate.fillValue = 1;
-    gMultiuseListMenuTemplate.cursorShadowPal = 3;
-    gMultiuseListMenuTemplate.moveCursorFunc = MailboxMenu_MoveCursorFunc;
-    gMultiuseListMenuTemplate.itemPrintFunc = MailboxMenu_ItemPrintFunc;
-    gMultiuseListMenuTemplate.fontId = 1;
-    gMultiuseListMenuTemplate.cursorKind = 0;
-    gMultiuseListMenuTemplate.lettersSpacing = 0;
-    gMultiuseListMenuTemplate.itemVerticalPadding = 0;
-    gMultiuseListMenuTemplate.scrollMultiple = LIST_NO_MULTIPLE_SCROLL;
-    return ListMenuInit(&gMultiuseListMenuTemplate, page->itemsAbove, page->cursorPos);
-}
-
-static void MailboxMenu_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu *list)
-{
-    if (onInit != TRUE)
-        PlaySE(SE_SELECT);
-}
-
-void MailboxMenu_AddScrollArrows(struct PlayerPCItemPageStruct *page)
-{
-    page->scrollIndicatorTaskId = AddScrollIndicatorArrowPairParameterized(2, 0xC8, 12, 0x94, page->count - page->pageItems + 1, 0x6E, 0x6E, &page->itemsAbove);
-}
-
-void MailboxMenu_Free(void)
-{
-    Free(sMailboxList);
-}
 
 void InitConditionGraphData(struct ConditionGraph *graph)
 {

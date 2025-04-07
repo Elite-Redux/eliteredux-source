@@ -264,8 +264,6 @@ gSpecials::
 	def_special ValidateEReaderTrainer
 	def_special GetBestBattleTowerStreak
 	def_special ReducePlayerPartyToSelectedMons
-	def_special BedroomPC
-	def_special PlayerPC
 	def_special FieldShowRegionMap
 	def_special GetInGameTradeSpeciesInfo
 	def_special CreateInGameTradePokemon

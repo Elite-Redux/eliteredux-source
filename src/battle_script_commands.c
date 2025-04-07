@@ -38,7 +38,6 @@
 #include "global.h"
 #include "item.h"
 #include "m4a.h"
-#include "mail.h"
 #include "main.h"
 #include "menu_specialized.h"
 #include "mgba_printf/mgba.h"
