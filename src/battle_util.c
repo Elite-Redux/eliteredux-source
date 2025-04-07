@@ -234,33 +234,6 @@ void HandleAction_UseMove(void) {
     if (IsAffectedByFollowMe(gBattlerAttacker, side, gCurrentMove) && GetBattlerBattleMoveTargetFlags(gCurrentMove, gBattlerAttacker) == MOVE_TARGET_SELECTED &&
         GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gSideTimers[side].followmeTarget)) {
         gBattlerTarget = gSideTimers[side].followmeTarget;
-    } else if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gSideTimers[side].followmeTimer == 0 &&
-               (gBattleMoves[gCurrentMove].power != 0 || GetBattlerBattleMoveTargetFlags(gCurrentMove, gBattlerAttacker) != MOVE_TARGET_USER) &&
-               !HasRedirectionAbility(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType)) {
-        int partner = BATTLE_PARTNER(gBattlerTarget);
-        if (IsBattlerAlive(partner) &&
-            (gTurnStructs[gActiveBattler].redirectedAbility = HasRedirectionAbility(gBattlerAttacker, partner, gCurrentMove, moveType))) {
-            gBattlerTarget = gActiveBattler = partner;
-        } else {
-            if (GetBattlerBattleMoveTargetFlags(gChosenMove, gBattlerAttacker) & MOVE_TARGET_RANDOM) {
-                if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER) {
-                    if (Random() & 1)
-                        gBattlerTarget = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
-                    else
-                        gBattlerTarget = GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
-                } else {
-                    if (Random() & 1)
-                        gBattlerTarget = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
-                    else
-                        gBattlerTarget = GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT);
-                }
-            } else if (GetBattlerBattleMoveTargetFlags(gChosenMove, gBattlerAttacker) & MOVE_TARGET_FOES_AND_ALLY) {
-                for (gBattlerTarget = 0; gBattlerTarget < gBattlersCount; gBattlerTarget++) {
-                    if (gBattlerTarget == gBattlerAttacker) continue;
-                    if (IsBattlerAlive(gBattlerTarget)) break;
-                }
-            }
-        }
     } else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && GetBattlerBattleMoveTargetFlags(gChosenMove, gBattlerAttacker) & MOVE_TARGET_RANDOM) {
         if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER) {
             if (Random() & 1)
@@ -297,6 +270,30 @@ void HandleAction_UseMove(void) {
                 gBattlerTarget = GetBattlerAtPosition(GetBattlerPosition(gBattlerAttacker) ^ BIT_SIDE);
                 if (!IsBattlerAlive(gBattlerTarget) || GetAbilityState(gBattlerTarget, ABILITY_COMMANDER) >= COMMANDER_ACTIVE)
                     gBattlerTarget = GetBattlerAtPosition(GetBattlerPosition(gBattlerTarget) ^ BIT_FLANK);
+            }
+        }
+    }
+
+    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && gSideTimers[side].followmeTimer == 0 &&
+        (gBattleMoves[gCurrentMove].power != 0 || !(GetBattlerBattleMoveTargetFlags(gCurrentMove, gBattlerAttacker) & (MOVE_TARGET_USER | MOVE_TARGET_ALLY))) &&
+        !HasRedirectionAbility(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType)) {
+        if (GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker)) {
+            int target = BATTLE_OPPOSITE(gBattlerAttacker);
+            if (IsBattlerAlive(target) &&
+                (gTurnStructs[gActiveBattler].redirectedAbility = HasRedirectionAbility(gBattlerAttacker, target, gCurrentMove, moveType))) {
+                gBattlerTarget = gActiveBattler = target;
+            } else {
+                target = BATTLE_PARTNER(target);
+                if (IsBattlerAlive(target) &&
+                    (gTurnStructs[gActiveBattler].redirectedAbility = HasRedirectionAbility(gBattlerAttacker, target, gCurrentMove, moveType))) {
+                    gBattlerTarget = gActiveBattler = target;
+                }
+            }
+        } else {
+            int partner = BATTLE_PARTNER(gBattlerTarget);
+            if (IsBattlerAlive(partner) &&
+                (gTurnStructs[gActiveBattler].redirectedAbility = HasRedirectionAbility(gBattlerAttacker, partner, gCurrentMove, moveType))) {
+                gBattlerTarget = gActiveBattler = partner;
             }
         }
     }
