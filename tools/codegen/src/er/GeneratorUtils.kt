@@ -43,21 +43,11 @@ object GeneratorUtils {
     }
 
     val SPECIES_COUNT by lazy {
-        SpeciesEnum.entries.filter {
-            when (it) {
-                SpeciesEnum.UNRECOGNIZED, SpeciesEnum.SPECIES_NONE -> false
-                else -> true
-            }
-        }.maxOf { it.number } + 1
+        SPECIES_LIST.maxOf { it.id.number } + 1
     }
 
     val REAL_SPECIES_COUNT by lazy {
-        SpeciesEnum.entries.filter {
-            when (it) {
-                SpeciesEnum.UNRECOGNIZED, SpeciesEnum.SPECIES_NONE, SpeciesEnum.SPECIES_EGG -> false
-                else -> true
-            }
-        }.maxOf { it.number } + 1
+        NO_EGG_LIST.maxOf { it.id.number } + 1
     }
 
     val SPECIES_MAP by lazy {
