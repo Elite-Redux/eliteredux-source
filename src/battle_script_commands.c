@@ -4332,6 +4332,9 @@ static void Cmd_moveend(void) {
 
                 if (!gBattleMoveDamage) break;
 
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_COSMIC_DAZE))
+                    gBattleMoveDamage *= 2;
+
                 ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].halfRecoil, gBattleMoveDamage = max(1, gBattleMoveDamage / 2))
 
                 ReadActiveScriptInitialStackState();
