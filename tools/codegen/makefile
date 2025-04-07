@@ -75,27 +75,33 @@ ALL_GENERATED += ../../$(strip $1)
 endef
 
 $(eval $(call GENERATE, include/generated/constants/abilities.h, abilities))
-
 $(eval $(call GENERATE, include/generated/constants/species.h, species))
-$(eval $(call GENERATE, include/generated/data/pokemon/base_stats.h, basestats))
-$(eval $(call GENERATE, include/generated/data/pokemon/evolution.h, evos))
+$(eval $(call GENERATE, include/generated/constants/moves.h, moves))
+
 $(eval $(call GENERATE, include/generated/data/text/species_names.h, speciesnames))
 $(eval $(call GENERATE, include/generated/data/text/species_long_names.h, longnames))
+
+$(eval $(call GENERATE, include/generated/data/pokemon/base_stats.h, basestats))
+$(eval $(call GENERATE, include/generated/data/pokemon/evolution.h, evos))
 $(eval $(call GENERATE, include/generated/data/pokemon/tutor_learnsets.h, tutorlearnsets))
 $(eval $(call GENERATE, include/generated/data/pokemon/level_up_learnset_pointers.h, leveluplearnsets))
 $(eval $(call GENERATE, include/generated/data/pokemon/form_species_table_pointers.h, forms))
-$(eval $(call GENERATE, include/generated/data/pokemon_graphics/icons.h, icons))
-$(eval $(call GENERATE, include/generated/data/pokemon_graphics/pics.h, monpics))
-$(eval $(call GENERATE, include/generated/data/pokemon_graphics/coordinates.h, coords))
-$(eval $(call GENERATE, include/generated/data/pokemon_graphics/palettes.h, monpals))
-$(eval $(call GENERATE, include/generated/data/pokemon_graphics/front_pic_anims.h, speciesanims))
+$(eval $(call GENERATE, include/generated/data/pokemon/undo_form_change.h, undoforms))
 $(eval $(call GENERATE, include/generated/data/pokemon/reverse_mega_map.h, reversemegamap))
 $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_entries.h, pokedexentries))
 $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_orders.h, pokedexorders))
 $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_numbers.h, pokedexnumbers))
 $(eval $(call GENERATE, include/generated/data/pokemon/randomizer_banned.h, randomizerbanned))
 
-$(eval $(call GENERATE, include/generated/constants/moves.h, moves))
+$(eval $(call GENERATE, include/generated/data/pokemon_graphics/icons.h, icons))
+$(eval $(call GENERATE, include/generated/data/pokemon_graphics/pics.h, monpics))
+$(eval $(call GENERATE, include/generated/data/pokemon_graphics/coordinates.h, coords))
+$(eval $(call GENERATE, include/generated/data/pokemon_graphics/palettes.h, monpals))
+$(eval $(call GENERATE, include/generated/data/pokemon_graphics/front_pic_anims.h, speciesanims))
+$(eval $(call GENERATE, include/generated/data/pokemon_graphics/front_anim_ids.h, frontanimids))
+$(eval $(call GENERATE, include/generated/data/pokemon_graphics/back_anim_ids.h, backanimids))
+
+
 $(eval $(call GENERATE, include/generated/data/text/move_names.h, movenames))
 $(eval $(call GENERATE, include/generated/data/text/move_descriptions.h, movedescriptions))
 $(eval $(call GENERATE, include/generated/constants/battle_move_effects.h, movebehaviors))

@@ -10,13 +10,14 @@ import java.io.OutputStreamWriter
 
 object RandomizerBannedGenerator : Generator {
     private fun randomizerCondition(species: Species) = when {
-        species.randomizerBanned == LEGENDARY -> "allowLegendaries"
-        species.randomizerBanned == PARADOX -> "allowParadox"
-        species.randomizerBanned != BANNED_NONE -> "FALSE"
         species.megaList.isNotEmpty() -> "FALSE"
         species.primalList.isNotEmpty() -> "FALSE"
         species.hasFormShiftOf() -> "FALSE"
+        species.hasBattleForm() -> "FALSE"
         species.id == SpeciesEnum.SPECIES_NONE -> "FALSE"
+        species.randomizerBanned == LEGENDARY -> "allowLegendaries"
+        species.randomizerBanned == PARADOX -> "allowParadox"
+        species.randomizerBanned != BANNED_NONE -> "FALSE"
         else -> "TRUE"
     }
 

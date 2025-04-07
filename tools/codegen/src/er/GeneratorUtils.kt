@@ -54,6 +54,8 @@ object GeneratorUtils {
         SPECIES_LIST.associateBy { it.id }
     }
 
+    fun Species.resolveVisuals(): Visuals = if (hasReuseVisuals()) SPECIES_MAP[reuseVisuals]!!.resolveVisuals() else this.visuals
+
     /**
      * Takes a list of key-value pairs and creates a set of mappings of keys/values to a shared index value.
      */

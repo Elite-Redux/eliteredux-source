@@ -3,10 +3,7 @@ package er
 import er.ability.AbilityTextGenerator
 import er.data.*
 import er.defines.*
-import er.gfx.CoordsGenerator
-import er.gfx.IconGenerator
-import er.gfx.ImageGenerator
-import er.gfx.PaletteGenerator
+import er.gfx.*
 import er.move.BattleMovesGenerator
 import er.move.MoveDescriptionGenerator
 import er.move.MoveNameGenerator
@@ -58,6 +55,9 @@ object FileGenerator {
         "longnames" to SpeciesLongNameGenerator,
         "speciesanims" to SpeciesAnimationGenerator,
         "tutors" to TutorGenerator,
+        "undoforms" to UndoFormChangeGenerator,
+        "frontanimids" to FrontAnimIdsGenerator,
+        "backanimids" to BackAnimIdsGenerator,
     )
 
     @JvmStatic

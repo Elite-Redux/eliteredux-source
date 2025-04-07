@@ -6870,7 +6870,7 @@ constexpr Ability NoTurningBack = {
 
 constexpr Ability FlammableCoat = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitAffect(battler) || (gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
         CHECK(moveType == TYPE_FIRE)
         CHECK(gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH)
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)

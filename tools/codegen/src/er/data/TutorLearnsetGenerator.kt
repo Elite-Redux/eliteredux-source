@@ -18,11 +18,12 @@ object TutorLearnsetGenerator : Generator {
     fun findLearnsetForSpecies(species: Species): Learnset =
         when {
             species.id == SpeciesEnum.SPECIES_NONE -> species.learnset
+            species.megaList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.megaList.first().from]!!)
+            species.primalList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.primalList.first().from]!!)
+            species.hasBattleForm() -> findLearnsetForSpecies(SPECIES_MAP[species.battleForm.of]!!)
             species.hasLearnset() -> species.learnset
             species.usesLearnset != SpeciesEnum.SPECIES_NONE -> findLearnsetForSpecies(SPECIES_MAP[species.usesLearnset]!!)
             species.formShiftOf != SpeciesEnum.SPECIES_NONE -> findLearnsetForSpecies(SPECIES_MAP[species.formShiftOf]!!)
-            species.megaList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.megaList.first().from]!!)
-            species.primalList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.primalList.first().from]!!)
             else -> findLearnsetForSpecies(SPECIES_MAP[species.formOf]!!)
         }
 

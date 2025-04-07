@@ -8079,50 +8079,18 @@ void UndoMegaEvolution(u32 monId) {
     }
 }
 
+#include "generated/data/pokemon/undo_form_change.h"
+
 void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
 // || gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED check for transformed mon before reverting
 {
     u32 i, currSpecies;
     struct Pokemon *party = (side == B_SIDE_PLAYER) ? gPlayerParty : gEnemyParty;
-    static const SpeciesEnum species[][3] = {
-        // Changed Form ID                      Default Form ID               Should change on switch
-        {SPECIES_MIMIKYU_BUSTED, SPECIES_MIMIKYU, FALSE},
-        {SPECIES_MIMIKYU_RAYQUAZA_BUSTED, SPECIES_MIMIKYU_RAYQUAZA, FALSE},
-        {SPECIES_GRENINJA_ASH, SPECIES_GRENINJA_BATTLE_BOND, FALSE},
-        {SPECIES_DELPHOX_SERENA, SPECIES_DELPHOX_BATTLE_BOND, FALSE},
-        {SPECIES_CHESNAUGHT_CLEMONT, SPECIES_CHESNAUGHT_BATTLE_BOND, FALSE},
-        {SPECIES_EISCUE_NOICE_FACE, SPECIES_EISCUE, FALSE},
-        {SPECIES_PALAFIN_HERO, SPECIES_PALAFIN, FALSE},
-        {SPECIES_SLAKING_MEGA_APE_SHIFT, SPECIES_SLAKING_MEGA, FALSE},
-        {SPECIES_CHERRIM_SUNSHINE, SPECIES_CHERRIM, TRUE},
-        {SPECIES_MINIOR_CORE_RED, SPECIES_MINIOR, TRUE},
-        {SPECIES_MINIOR_CORE_BLUE, SPECIES_MINIOR_METEOR_BLUE, TRUE},
-        {SPECIES_MINIOR_CORE_GREEN, SPECIES_MINIOR_METEOR_GREEN, TRUE},
-        {SPECIES_MINIOR_CORE_INDIGO, SPECIES_MINIOR_METEOR_INDIGO, TRUE},
-        {SPECIES_MINIOR_CORE_ORANGE, SPECIES_MINIOR_METEOR_ORANGE, TRUE},
-        {SPECIES_MINIOR_CORE_VIOLET, SPECIES_MINIOR_METEOR_VIOLET, TRUE},
-        {SPECIES_MINIOR_CORE_YELLOW, SPECIES_MINIOR_METEOR_YELLOW, TRUE},
-        {SPECIES_AEGISLASH_BLADE, SPECIES_AEGISLASH, TRUE},
-        {SPECIES_AEGISLASH_BLADE_REDUX, SPECIES_AEGISLASH_REDUX, TRUE},
-        {SPECIES_AEGISLASH_BLADE_REDUX_MEGA, SPECIES_AEGISLASH_REDUX_MEGA, TRUE},
-        {SPECIES_WISHIWASHI_SCHOOL, SPECIES_WISHIWASHI, TRUE},
-        {SPECIES_UNOWN_REVELATION, SPECIES_UNOWN, TRUE},
-        {SPECIES_CRAMORANT_GORGING, SPECIES_CRAMORANT, TRUE},
-        {SPECIES_CRAMORANT_GULPING, SPECIES_CRAMORANT, TRUE},
-        {SPECIES_MORPEKO_HANGRY, SPECIES_MORPEKO, TRUE},
-        {SPECIES_MORPEKYLL_HANGRY, SPECIES_MORPEKYLL, TRUE},
-        {SPECIES_CASTFORM_RAINY, SPECIES_CASTFORM, TRUE},
-        {SPECIES_CASTFORM_SNOWY, SPECIES_CASTFORM, TRUE},
-        {SPECIES_CASTFORM_SUNNY, SPECIES_CASTFORM, TRUE},
-        {SPECIES_CASTFORM_SANDY, SPECIES_CASTFORM, TRUE},
-        {SPECIES_CASTFORM_FOGGY, SPECIES_CASTFORM, TRUE},
-        {SPECIES_LUMBERING_SLOTH_ENGULFED, SPECIES_LUMBERING_SLOTH, TRUE},
-    };
 
     currSpecies = GetMonData(&party[monId], MON_DATA_SPECIES, NULL);
-    for (i = 0; i < ARRAY_COUNT(species); i++) {
-        if (currSpecies == species[i][0] && (!isSwitchingOut || species[i][2] == TRUE)) {
-            SetMonData(&party[monId], MON_DATA_SPECIES, &species[i][1]);
+    for (i = 0; i < ARRAY_COUNT(gUndoFormChangeTable); i++) {
+        if (currSpecies == gUndoFormChangeTable[i][0] && (!isSwitchingOut || gUndoFormChangeTable[i][2] == TRUE)) {
+            SetMonData(&party[monId], MON_DATA_SPECIES, &gUndoFormChangeTable[i][1]);
             CalculateMonStats(&party[monId]);
             break;
         }
