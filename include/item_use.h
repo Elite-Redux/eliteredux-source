@@ -46,7 +46,7 @@ void ItemUseOutOfBattle_PrisonBottle(u8 taskId);
 void ItemUseOutOfBattle_NSolarizer(u8 taskId);
 void ItemUseOutOfBattle_NLunarizer(u8 taskId);
 void ItemUseOutOfBattle_TypeGems(u8 taskId);
-void ItemUseOutOfBattle_TmCase(u8);
+// void ItemUseOutOfBattle_TmCase(u8);
 u8 CanUseDigOrEscapeRopeOnCurMap(void);
 u8 CheckIfItemIsTMHMOrEvolutionStone(u16 itemId);
 u32 CanThrowBall(void);

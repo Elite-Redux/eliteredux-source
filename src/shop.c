@@ -88,7 +88,6 @@ static void ExitBuyMenu(u8 taskId);
 static void Task_ExitBuyMenu(u8 taskId);
 static void BuyMenuTryMakePurchase(u8 taskId);
 static void BuyMenuReturnToItemList(u8 taskId);
-static void Task_BuyHowManyDialogueInit(u8 taskId);
 static void BuyMenuConfirmPurchase(u8 taskId);
 static void BuyMenuPrintItemQuantityAndPrice(u8 taskId);
 static void Task_BuyHowManyDialogueHandleInput(u8 taskId);
@@ -1009,7 +1008,7 @@ static void BuyMenuPrintPriceInList(u8 windowId, u32 itemId, u8 y)
                 else {
                     if ((ItemId_GetPocket(itemId) == POCKET_TM_HM) && (CheckBagHasItem(itemId, 1) == TRUE))
                     {
-                        StringCopy(gStringVar1, gText_ShopPurchasedTMPrice);
+                        StringCopy(gStringVar1, gText_ShopPurchasedItemPrice);
                         StringExpandPlaceholders(gStringVar4, gText_StrVar1);
                     }
                     else
@@ -1503,9 +1502,9 @@ static void Task_BuyMenu(u8 taskId)
                 //Not Enough Money
                 if (!IsEnoughMoney(&money, sShopData->totalCost))
                 {
-                    if ((ItemId_GetPocket(itemId) == POCKET_TM_HM) && (CheckBagHasItem(itemId, 1) == TRUE))
+                    if (CheckBagHasItem(itemId, 1) == TRUE)
                     {
-                        BuyMenuDisplayMessage(taskId, gText_ShopAlreadyHaveTM, BuyMenuReturnToItemList);
+                        BuyMenuDisplayMessage(taskId, gText_ShopAlreadyHaveItem, BuyMenuReturnToItemList);
                     }
                     else
                     {
@@ -1515,25 +1514,18 @@ static void Task_BuyMenu(u8 taskId)
                 else {
                     if (sMartInfo.martType == MART_TYPE_NORMAL) {
                         CopyItemName(itemId, gStringVar1);
-                        if (ItemId_GetPocket(itemId) == POCKET_TM_HM)
-                        {
                             if ((CheckBagHasItem(itemId, 1) == TRUE))
                             {
-                                BuyMenuDisplayMessage(taskId, gText_ShopAlreadyHaveTM, BuyMenuReturnToItemList);
+                                BuyMenuDisplayMessage(taskId, gText_ShopAlreadyHaveItem, BuyMenuReturnToItemList);
                             }
                             else
                             {
                                 tItemCount = 1;
                                 ConvertIntToDecimalStringN(gStringVar2, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
-                                StringCopy(gStringVar4, gMoveNamesLong[ItemIdToBattleMoveId(itemId)]);
+                                CopyItemName(itemId, gStringVar1);
                                 StringExpandPlaceholders(gStringVar4, gText_YouWantedVar1ThatllBeVar2);
                                 BuyMenuDisplayMessage(taskId, gStringVar4, BuyMenuConfirmPurchase);
                             }
-                        }
-                        else
-                        {
-                            BuyMenuDisplayMessage(taskId, gText_Var1CertainlyHowMany, Task_BuyHowManyDialogueInit);
-                        }
                     }
                     else if (sMartInfo.martType == MART_TYPE_DECOR || sMartInfo.martType == MART_TYPE_DECOR2) {
                         StringCopy(gStringVar1, gDecorations[itemId].name);
@@ -1554,9 +1546,9 @@ static void Task_BuyMenu(u8 taskId)
                     //Not enough BP
                     if (sMartInfo.martType == MART_TYPE_NORMAL)
                     {
-                        if ((ItemId_GetPocket(itemId) == POCKET_TM_HM) && (CheckBagHasItem(itemId, 1) == TRUE))
+                        if (CheckBagHasItem(itemId, 1) == TRUE)
                         {
-                            BuyMenuDisplayMessage(taskId, gText_ShopAlreadyHaveTM, BuyMenuReturnToItemList);
+                            BuyMenuDisplayMessage(taskId, gText_ShopAlreadyHaveItem, BuyMenuReturnToItemList);
                         }
                         else
                         {
@@ -1597,94 +1589,6 @@ static void Task_BuyMenu(u8 taskId)
                 //ToDo
             }
             break;
-        }
-    }
-}
-
-static void Task_BuyHowManyDialogueInit(u8 taskId)
-{
-    s16 *data = gTasks[taskId].data;
-
-    u16 quantityInBag = CountTotalItemQuantityInBag(tItemId);
-    u16 maxQuantity = 0;
-
-    DrawStdFrameWithCustomTileAndPalette(3, FALSE, 1, 13);
-    ConvertIntToDecimalStringN(gStringVar1, quantityInBag, STR_CONV_MODE_RIGHT_ALIGN, MAX_ITEM_DIGITS + 1);
-    StringExpandPlaceholders(gStringVar4, gText_InBagVar1);
-    BuyMenuPrint(3, gStringVar4, 0, 1, 0, 0);
-    tItemCount = 1;
-    DrawStdFrameWithCustomTileAndPalette(4, FALSE, 1, 13);
-    BuyMenuPrintItemQuantityAndPrice(taskId);
-    ScheduleBgCopyTilemapToVram(0);
-
-    switch (VarGet(VAR_SHOP_MONEY_TYPE)) {
-        case MART_MONEY_TYPE_NORMAL:
-            maxQuantity = GetMoney(&gSaveBlock1Ptr->money) / sShopData->totalCost;
-        break;
-        case MART_MONEY_TYPE_BATTLE_POINTS:
-            maxQuantity = gSaveBlock2Ptr->frontier.battlePoints / sShopData->totalCost;
-        break;
-        case MART_MONEY_TYPE_CASINO_COINS:
-            maxQuantity = gSaveBlock1Ptr->coins / sShopData->totalCost;
-        break;
-    }
-
-    if (maxQuantity > 99)
-    {
-        sShopData->maxQuantity = 99;
-    }
-    else
-    {
-        sShopData->maxQuantity = maxQuantity;
-    }
-
-    gTasks[taskId].func = Task_BuyHowManyDialogueHandleInput;
-}
-
-static void Task_BuyHowManyDialogueHandleInput(u8 taskId)
-{
-    s16 *data = gTasks[taskId].data;
-
-    if (AdjustQuantityAccordingToDPadInput(&tItemCount, sShopData->maxQuantity) == TRUE)
-    {
-        if (VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_BATTLE_POINTS) {
-            u16 price = ItemId_GetBPPrice(tItemId);
-            if (price == 0 && (ItemId_GetPocket(tItemId) == POCKET_MEGA_STONES))
-                price = DEFAULT_MEGA_STONE_PRICE;
-            else if (price == 0)
-                price = DEFAULT_ITEM_PRICE;
-                    
-            sShopData->totalCost = price * tItemCount;
-        }
-        else {
-            sShopData->totalCost = (ItemId_GetPrice(tItemId) >> GetPriceReduction(POKENEWS_SLATEPORT)) * tItemCount;
-        }
-
-        BuyMenuPrintItemQuantityAndPrice(taskId);
-    }
-    else
-    {
-        if (JOY_NEW(A_BUTTON))
-        {
-            PlaySE(SE_SELECT);
-            ClearStdWindowAndFrameToTransparent(4, 0);
-            ClearStdWindowAndFrameToTransparent(3, 0);
-            ClearWindowTilemap(4);
-            ClearWindowTilemap(3);
-            PutWindowTilemap(1);
-            CopyItemName(tItemId, gStringVar1);
-            ConvertIntToDecimalStringN(gStringVar2, tItemCount, STR_CONV_MODE_LEFT_ALIGN, BAG_ITEM_CAPACITY_DIGITS);
-            ConvertIntToDecimalStringN(gStringVar3, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
-            BuyMenuDisplayMessage(taskId, gText_Var1AndYouWantedVar2, BuyMenuConfirmPurchase);
-        }
-        else if (JOY_NEW(B_BUTTON))
-        {
-            PlaySE(SE_SELECT);
-            ClearStdWindowAndFrameToTransparent(4, 0);
-            ClearStdWindowAndFrameToTransparent(3, 0);
-            ClearWindowTilemap(4);
-            ClearWindowTilemap(3);
-            BuyMenuReturnToItemList(taskId);
         }
     }
 }

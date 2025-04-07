@@ -3482,7 +3482,7 @@ static bool32 ResetVineGfx(void)
 
 static void PrintPrizeMessage(u16 itemId, u16 quantity)
 {
-    CopyItemNameHandlePlural(itemId, sPokemonJumpGfx->itemName, quantity);
+    CopyItemName(itemId, sPokemonJumpGfx->itemName);
     ConvertIntToDecimalStringN(sPokemonJumpGfx->itemQuantityStr, quantity, STR_CONV_MODE_LEFT_ALIGN, 1);
     DynamicPlaceholderTextUtil_Reset();
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, sPokemonJumpGfx->itemName);

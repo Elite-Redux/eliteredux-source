@@ -993,7 +993,6 @@ void CB2_ReturnFromCableClubBattle(void)
     gBattleTypeFlags &= ~BATTLE_TYPE_LINK_IN_BATTLE;
     Overworld_ResetMapMusic();
     LoadPlayerParty();
-    SavePlayerBag();
     UpdateTrainerFansAfterLinkBattle();
 
     if (gSpecialVar_0x8004 == USING_SINGLE_BATTLE || gSpecialVar_0x8004 == USING_DOUBLE_BATTLE)
@@ -1029,7 +1028,6 @@ void CleanupLinkRoomState(void)
      || gSpecialVar_0x8004 == USING_BATTLE_TOWER)
     {
         LoadPlayerParty();
-        SavePlayerBag();
     }
     SetWarpDestinationToDynamicWarp(0x7F);
 }
