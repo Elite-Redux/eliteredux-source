@@ -23,6 +23,18 @@ object GeneratorUtils {
     fun <T> FieldDescriptor.getOption(extension: GeneratedExtension<FieldOptions, T>): T =
         toProto().options.getExtension(extension)
 
+    val ITEMS_LIST_PROTO by lazy {
+        TextFormat.parse(File("../../proto/ItemList.textproto").readText(), ItemList::class.java)
+    }
+
+    val ITEMS_LIST by lazy {
+        ITEMS_LIST_PROTO.itemList
+    }
+
+    val MEGA_FLAGS_LIST by lazy {
+        ITEMS_LIST_PROTO.megaList
+    }
+
     val ABILITIES_LIST by lazy {
         TextFormat.parse(File("../../proto/AbilityList.textproto").readText(), AbilityList::class.java).abilityList
     }
