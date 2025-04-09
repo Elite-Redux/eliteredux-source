@@ -4649,7 +4649,6 @@ static void CheckQuickClaw_CustapBerryActivation(void) {
                 !(gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP) && !(gRoundStructs[gActiveBattler].noValidMoves)) {
                 if (gRoundStructs[gActiveBattler].usedCustapBerry) {
                     gStackBattler1 = gActiveBattler;
-                    gRoundStructs[gActiveBattler].usedCustapBerry = FALSE;
                     gLastUsedItem = gBattleMons[gActiveBattler].item;
                     PREPARE_ITEM_BUFFER(gBattleTextBuff1, gLastUsedItem);
                     if (GetBattlerHoldEffect(gActiveBattler, FALSE) == HOLD_EFFECT_CUSTAP_BERRY) {
