@@ -26,8 +26,8 @@ static bool8 CheckPyramidBagHasSpace(u16 itemId, u16 count);
 #include "data/text/item_descriptions.h"
 #include "data/items.h"
 
-const u16 *const gItemsForPocket[POCKETS_COUNT] = {0};
-const u16 gItemCountsForPocket[POCKETS_COUNT] = {0};
+const u16 *const gItemsForPocket[POCKETS_COUNT + 1] = {0};
+const u16 gItemCountsForPocket[POCKETS_COUNT + 1] = {0};
 
 // code
 static u16 GetBagItemQuantity(u16 *quantity) { return gSaveBlock2Ptr->encryptionKey ^ *quantity; }
@@ -50,31 +50,18 @@ void GetBerryCountString(u8 *dst, const u8 *berryName, u32 quantity) {
     StringCopy(txtPtr + 1, berryString);
 }
 
-#define MEGA_BIT_FLAG (1 << 14)
-#define ITEM_BUCKET(item) gSaveBlock1Ptr->itemFlags[(item) / 32]
-#define MEGA_BUCKET(item) gSaveBlock1Ptr->megaFlags[((item) & ~MEGA_BIT_FLAG) / 32]
-#define ITEM_BIT(item) (1 << ((item) % 32))
+#define ITEM_BUCKET(item) gSaveBlock1Ptr->itemFlags[(item) / 16]
+#define ITEM_BIT(item) (1 << ((item) % 16))
 int HasItem(u16 item) {
-    if (item & MEGA_BIT_FLAG)
-        return (MEGA_BUCKET(item) & ITEM_BIT(item)) != 0;
-    else
-        return (ITEM_BUCKET(item) & ITEM_BIT(item)) != 0;
+    return (ITEM_BUCKET(item) & ITEM_BIT(item)) != 0;
 }
 
 void SetItem(u16 item) {
-    if (item & MEGA_BIT_FLAG) {
-        // TODO: Add appropriate stone based on mega flag
-        MEGA_BUCKET(item) |= ITEM_BIT(item);
-    }
-    else
-        ITEM_BUCKET(item) |= ITEM_BIT(item);
+    ITEM_BUCKET(item) |= ITEM_BIT(item);
 }
 
 void ClearItem(u16 item) {
-    if (item & MEGA_BIT_FLAG)
-        MEGA_BUCKET(item) &= ~ITEM_BIT(item);
-    else
-        ITEM_BUCKET(item) &= ~ITEM_BIT(item);
+    ITEM_BUCKET(item) &= ~ITEM_BIT(item);
 }
 
 bool8 IsBagPocketNonEmpty(u8 pocket) {
@@ -220,7 +207,6 @@ void MoveItemSlotInList(struct ItemSlot *itemSlots_, u32 from, u32 to_) {
 
 void ClearBag(void) {
     ZERO(gSaveBlock1Ptr->itemFlags)
-    ZERO(gSaveBlock1Ptr->megaFlags)
 }
 
 static bool8 CheckPyramidBagHasItem(u16 itemId, u16 count) {

@@ -58,6 +58,7 @@ object FileGenerator {
         "undoforms" to UndoFormChangeGenerator,
         "frontanimids" to FrontAnimIdsGenerator,
         "backanimids" to BackAnimIdsGenerator,
+        "itemids" to ItemEnumGenerator,
     )
 
     @JvmStatic

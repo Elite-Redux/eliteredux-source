@@ -80,7 +80,7 @@
 
 #define DEBUG_BUILD
 #define DEBUG_POKEMON_MENU TRUE
-#define CURRENT_GAME_VERSION 1046
+#define CURRENT_GAME_VERSION 1047
 
 #define PRINT_BATTLE_SCRIPT_TRACING FALSE
 
@@ -1179,8 +1179,7 @@ struct SaveBlock1 {
             struct ItemSlot bagPocket_Battle[BAG_BATTLE_COUNT];
             struct ItemSlot bagPocket_MegaStones[BAG_MEGASTONES_COUNT];
         };
-        u32 itemFlags[(2 << 11) / 32];
-        u32 megaFlags[(2 << 11) / 32];
+        u16 itemFlags[(2 << 11) / 16];
     };
     struct Pokeblock pokeblocks[POKEBLOCKS_COUNT];
     u16 berryBlenderRecords[3];

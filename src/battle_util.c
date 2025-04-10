@@ -360,8 +360,7 @@ void HandleAction_UseItem(void) {
 
     gLastUsedItem = gBattleResources->bufferB[gBattlerAttacker][1] | (gBattleResources->bufferB[gBattlerAttacker][2] << 8);
 
-    if (gLastUsedItem <= LAST_BALL_INDEX)  // is ball
-    {
+    if (ItemId_GetPocket(gLastUsedItem) == POCKET_POKE_BALLS) {
         gBattlescriptCurrInstr = gBattlescriptsForBallThrow[gLastUsedItem];
     } else if (gLastUsedItem == ITEM_POKE_DOLL || gLastUsedItem == ITEM_FLUFFY_TAIL) {
         gBattlescriptCurrInstr = gBattlescriptsForRunningByItem[0];
@@ -6930,32 +6929,8 @@ u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk,
             if (gTurnStructs[battlerAtk].gemBoost && gBattleMons[battlerAtk].item)
                 MulModifier(&modifier, UQ_4_12(1.0) + gPercentToModifier[gTurnStructs[battlerAtk].gemParam]);
             break;
-        case HOLD_EFFECT_BUG_POWER:
-        case HOLD_EFFECT_STEEL_POWER:
-        case HOLD_EFFECT_GROUND_POWER:
-        case HOLD_EFFECT_ROCK_POWER:
-        case HOLD_EFFECT_GRASS_POWER:
-        case HOLD_EFFECT_DARK_POWER:
-        case HOLD_EFFECT_FIGHTING_POWER:
-        case HOLD_EFFECT_ELECTRIC_POWER:
-        case HOLD_EFFECT_WATER_POWER:
-        case HOLD_EFFECT_FLYING_POWER:
-        case HOLD_EFFECT_POISON_POWER:
-        case HOLD_EFFECT_ICE_POWER:
-        case HOLD_EFFECT_GHOST_POWER:
-        case HOLD_EFFECT_PSYCHIC_POWER:
-        case HOLD_EFFECT_FIRE_POWER:
-        case HOLD_EFFECT_DRAGON_POWER:
-        case HOLD_EFFECT_NORMAL_POWER:
-        case HOLD_EFFECT_FAIRY_POWER:
-            for (i = 0; i < ARRAY_COUNT(sHoldEffectToType); i++) {
-                if (holdEffectAtk == sHoldEffectToType[i][0]) {
-                    if (moveType == sHoldEffectToType[i][1]) MulModifier(&modifier, holdEffectModifier);
-                    break;
-                }
-            }
-            break;
         case HOLD_EFFECT_PLATE:
+        case HOLD_EFFECT_TYPE_POWER:
             if (moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item)) MulModifier(&modifier, holdEffectModifier);
             break;
     }

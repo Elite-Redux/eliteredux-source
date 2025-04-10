@@ -57,11 +57,11 @@ codegenkt.jar: protoc protobuf-java.jar codegen.jar protobuf-kotlin.jar $(KT_SRC
 
 define PREPROC_TEXTPROTO
 $1: $2 preproc.jar protobuf-java.jar codegen.jar protoc
+	@mkdir -p timestamp/preproc/items
+	@mkdir -p bin/items
 	@perl -pi.bak -e 'BEGIN{$$$$counter=10000000;} s/\@NEXT/$$$$counter++/ge' $2
-	@mkdir -p bin
-	@./protoc ../../proto/$3.proto --encode=er.$3 --proto_path="../../proto/" --experimental_allow_proto3_optional < $2 > bin/$3.binpb && exit
+	@./protoc ../../proto/$$(patsubst items/%,ItemList,$3).proto --encode=er.$$(patsubst items/%,ItemList,$3) --proto_path="../../proto/" --experimental_allow_proto3_optional < $2 > bin/$3.binpb && exit
 	java -cp preproc.jar:protobuf-java.jar:codegen.jar preproc.TextprotoProcessor $2 bin/$3.binpb && exit
-	@mkdir -p timestamp/preproc
 	@touch $1
 endef
 TEXTPROTO_PREPROC := $(patsubst ../../proto/%.textproto,timestamp/preproc/%,$(TEXTPROTO_SRCS))
@@ -77,6 +77,7 @@ endef
 $(eval $(call GENERATE, include/generated/constants/abilities.h, abilities))
 $(eval $(call GENERATE, include/generated/constants/species.h, species))
 $(eval $(call GENERATE, include/generated/constants/moves.h, moves))
+$(eval $(call GENERATE, include/generated/constants/items.h, itemids))
 
 $(eval $(call GENERATE, include/generated/data/text/species_names.h, speciesnames))
 $(eval $(call GENERATE, include/generated/data/text/species_long_names.h, longnames))

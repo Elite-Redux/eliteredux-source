@@ -2023,7 +2023,7 @@ static void HandleInputChooseActionPlayer(void) {
             !(gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]) && !(gBattleTypeFlags & BATTLE_TYPE_MULTI)) {
             if (gBattleResources->bufferA[gActiveBattler][1] == B_ACTION_USE_ITEM) {
                 // Add item to bag if it is a ball
-                if (itemId <= LAST_BALL_INDEX)
+                if (ItemId_GetPocket(itemId) == POCKET_POKE_BALLS)
                     AddBagItem(itemId, 1);
                 else
                     return;
