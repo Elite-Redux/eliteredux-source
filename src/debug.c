@@ -3259,7 +3259,7 @@ static void DebugAction_Give_DayCareEgg(u8 taskId) { TriggerPendingDaycareEgg();
 // *******************************
 // Actions Fill
 static void FillPocket(int pocket) {
-    for (u16 item = 0; item < gItemCountsForPocket[pocket]; item++)
+    for (u16 item = 0; item < gItemCountsForPocket[pocket - 1]; item++)
         AddBagItem(item, 1);
 
 }

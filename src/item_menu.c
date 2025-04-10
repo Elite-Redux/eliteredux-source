@@ -864,7 +864,7 @@ static void BagMenu_MoveCursorCallback(s32 itemIndex, bool8 onInit, struct ListM
     if (gBagMenu->toSwapPos == NOT_SWAPPING) {
         RemoveBagItemIconSprite(gBagMenu->itemIconSlot ^ 1);
         if (itemIndex != LIST_CANCEL)
-            AddBagItemIconSprite(BagGetItemIdByPocketPosition(gBagPosition.pocket + 1, itemIndex), gBagMenu->itemIconSlot);
+            AddBagItemIconSprite(BagGetItemIdByPocketPosition(gBagPosition.pocket, itemIndex), gBagMenu->itemIconSlot);
         else
             AddBagItemIconSprite(-1, gBagMenu->itemIconSlot);
         gBagMenu->itemIconSlot ^= 1;
@@ -884,7 +884,7 @@ static void BagMenu_ItemPrintCallback(u8 windowId, u32 itemIndex, u8 y) {
                 BagMenu_PrintCursorAtPos(y, COLORID_NONE);
         }
 
-        itemId = BagGetItemIdByPocketPosition(gBagPosition.pocket + 1, itemIndex);
+        itemId = BagGetItemIdByPocketPosition(gBagPosition.pocket, itemIndex);
 
         // if (itemId >= ITEM_HM01_CUT && itemId <= ITEM_HM08_DIVE) BlitBitmapToWindow(windowId, gBagMenuHMIcon_Gfx, 8, y - 1, 16, 16);
 
@@ -906,7 +906,7 @@ static void BagMenu_ItemPrintCallback(u8 windowId, u32 itemIndex, u8 y) {
 static void PrintItemDescription(int itemIndex) {
     const u8* str;
     if (itemIndex != LIST_CANCEL) {
-        str = ItemId_GetDescription(BagGetItemIdByPocketPosition(gBagPosition.pocket + 1, itemIndex));
+        str = ItemId_GetDescription(BagGetItemIdByPocketPosition(gBagPosition.pocket, itemIndex));
     } else {
         // Print 'Cancel' description
         StringCopy(gStringVar1, gBagMenu_ReturnToStrings[gBagPosition.location]);
@@ -1113,7 +1113,7 @@ static void Task_BagMenu_HandleInput(u8 taskId) {
                 BagDestroyPocketScrollArrowPair();
                 BagMenu_PrintCursor(tListTaskId, COLORID_GRAY_CURSOR);
                 tListPosition = listPosition;
-                gSpecialVar_ItemId = BagGetItemIdByPocketPosition(gBagPosition.pocket + 1, listPosition);
+                gSpecialVar_ItemId = BagGetItemIdByPocketPosition(gBagPosition.pocket, listPosition);
                 sContextMenuFuncs[gBagPosition.location](taskId);
                 break;
         }
@@ -1980,7 +1980,7 @@ void ItemMenu_Register(u8 taskId) {
     BagDestroyPocketScrollArrowPair();
     BagMenu_PrintCursor(tListTaskId, COLORID_GRAY_CURSOR);
     tListPosition = listPosition;
-    gSpecialVar_ItemId = BagGetItemIdByPocketPosition(gBagPosition.pocket + 1, listPosition);
+    gSpecialVar_ItemId = BagGetItemIdByPocketPosition(gBagPosition.pocket, listPosition);
     sContextMenuFuncs[gBagPosition.location](taskId);
 }
 
@@ -2017,7 +2017,7 @@ static void ItemMenu_RegisterList(u8 taskId) {
 static void ItemMenu_Deselect(u8 taskId) {
     s16* data = gTasks[taskId].data;
     int listPosition = ListMenu_ProcessInput(tListTaskId);
-    u16 itemId = BagGetItemIdByPocketPosition(gBagPosition.pocket + 1, listPosition);
+    u16 itemId = BagGetItemIdByPocketPosition(gBagPosition.pocket, listPosition);
 
     ResetRegisteredItem(itemId);
 

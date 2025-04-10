@@ -798,12 +798,12 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
                         for (int i = 0; i <= POCKETS_COUNT; i++) {
                             int size = 0;
                             struct ItemSlot* items = NULL;
-                            #define POCKET_SIZE_ITEMS(pocket, bag) case pocket: size = ARRAY_COUNT(bag); items = &bag; break;
+                            #define POCKET_SIZE_ITEMS(pocket, bag) case pocket: size = ARRAY_COUNT(bag); items = bag; break;
                             switch (i)
                             {
                                 case POCKET_NONE:
                                     size = ARRAY_COUNT(gSaveblock1.pcItems);
-                                    items = &gSaveblock1.pcItems;
+                                    items = gSaveblock1.pcItems;
                                     break;
                                     
                                 POCKET_SIZE_ITEMS(POCKET_BATTLE, gSaveblock1.bagPocket_Battle)

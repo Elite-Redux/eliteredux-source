@@ -112,6 +112,9 @@ $(eval $(call GENERATE, include/generated/data/all_tutors.h, tutors))
 
 $(eval $(call GENERATE, include/generated/data/abilities/ability_text.hh, abilitytext))
 
+$(eval $(call GENERATE, include/generated/data/item/pockets.h, pockets))
+$(eval $(call GENERATE, include/generated/data/item/items.h, itemdata))
+
 $(eval $(call GENERATE, include/generated/data/text/help_articles.h, helparticles))
 
 timestamp/generated: $(ALL_GENERATED)

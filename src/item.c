@@ -15,6 +15,7 @@
 #include "battle_pyramid_bag.h"
 #include "constants/items.h"
 #include "constants/hold_effects.h"
+#include "mgba_printf/mgba.h"
 
 extern u16 gUnknown_0203CF30[];
 
@@ -24,10 +25,9 @@ static bool8 CheckPyramidBagHasSpace(u16 itemId, u16 count);
 
 // rodata
 #include "data/text/item_descriptions.h"
-#include "data/items.h"
+#include "generated/data/item/items.h"
 
-const u16 *const gItemsForPocket[POCKETS_COUNT + 1] = {0};
-const u16 gItemCountsForPocket[POCKETS_COUNT + 1] = {0};
+#include "generated/data/item/pockets.h"
 
 // code
 static u16 GetBagItemQuantity(u16 *quantity) { return gSaveBlock2Ptr->encryptionKey ^ *quantity; }
@@ -83,8 +83,8 @@ bool8 CheckBagHasItem(u16 itemId, u16 count) {
 }
 
 bool8 HasAtLeastOneBerry(void) {
-    int itemCount = gItemCountsForPocket[POCKET_BERRIES];
-    const u16* items = gItemsForPocket[POCKET_BERRIES];
+    int itemCount = gItemCountsForPocket[POCKET_BERRIES - 1];
+    const u16* items = gItemsForPocket[POCKET_BERRIES - 1];
 
     for (int i = 0; i < itemCount; i++) {
         if (CheckBagHasItem(items[i], 1) == TRUE) {
@@ -148,13 +148,16 @@ void SwapRegisteredBike(void) {
         gSaveBlock1Ptr->registeredItems[pos_MACH].itemId = ITEM_ACRO_BIKE;
 }
 
-u16 BagGetItemIdByPocketPosition(u8 pocketId, u16 pocketPos) {
-    int count = gItemCountsForPocket[pocketId - 1];
-    const u16* items = gItemsForPocket[pocketId - 1];
-    for (int i = 0; i < count; i++) {
-        if (HasItem(items[i]) && !(pocketPos--)) return items[i];
-    }
-    return 0;
+ItemEnum BagGetItemIdByPocketPosition(u8 pocketId, u16 pocketPos) {
+    int count = gItemCountsForPocket[pocketId];
+    // const u16* items = gItemsForPocket[pocketId];
+    if (pocketPos < count) return gItemsForPocket[pocketId][pocketPos];
+    else return ITEM_NONE;
+    // for (int i = 0; i < count; i++) {
+    //     MGBA_PRINT_VALUES(pocketId, pocketPos, items[i], HasItem(items[i]), pocketPos)
+    //     if (HasItem(items[i]) && !(pocketPos--)) return items[i];
+    // }
+    // return 0;
  }
 
 static void SwapItemSlots(struct ItemSlot *a, struct ItemSlot *b) {

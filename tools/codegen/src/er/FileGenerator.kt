@@ -4,6 +4,8 @@ import er.ability.AbilityTextGenerator
 import er.data.*
 import er.defines.*
 import er.gfx.*
+import er.item.ItemGenerator
+import er.item.PocketGenerator
 import er.move.BattleMovesGenerator
 import er.move.MoveDescriptionGenerator
 import er.move.MoveNameGenerator
@@ -59,6 +61,8 @@ object FileGenerator {
         "frontanimids" to FrontAnimIdsGenerator,
         "backanimids" to BackAnimIdsGenerator,
         "itemids" to ItemEnumGenerator,
+        "pockets" to PocketGenerator,
+        "itemdata" to ItemGenerator,
     )
 
     @JvmStatic

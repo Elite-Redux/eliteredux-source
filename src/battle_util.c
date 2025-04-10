@@ -5375,7 +5375,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_SEEDS:
-                        switch (GetBattlerHoldEffectParam(battlerId)) {
+                        switch (ItemId_GetSecondaryId(gBattleMons[battlerId].item)) {
                             case HOLD_EFFECT_PARAM_ELECTRIC_TERRAIN:
                                 effect = TryHandleSeed(battlerId, STATUS_FIELD_ELECTRIC_TERRAIN, STAT_DEF, gLastUsedItem, TRUE);
                                 break;
@@ -7501,7 +7501,7 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
     switch (GetBattlerHoldEffect(battlerDef, TRUE)) {
         // berries reducing dmg
         case HOLD_EFFECT_RESIST_BERRY:
-            if (moveType == GetBattlerHoldEffectParam(battlerDef) && (moveType == TYPE_NORMAL || typeEffectivenessModifier >= UQ_4_12(2.0)) &&
+            if (moveType == ItemId_GetSecondaryId(gBattleMons[battlerDef].item) && (moveType == TYPE_NORMAL || typeEffectivenessModifier >= UQ_4_12(2.0)) &&
                 !IsUnnerveAbilityOnOpposingSide(battlerDef)) {
                 if (HasRipenEffect(battlerDef))
                     MulModifier(&finalModifier, UQ_4_12(0.25));

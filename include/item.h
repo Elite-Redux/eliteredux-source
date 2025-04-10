@@ -6,9 +6,8 @@
 
 typedef void (*ItemUseFunc)(u8);
 
-struct Item
-{
-    u8 name[ITEM_NAME_LENGTH];
+struct Item {
+    const u8 *name;
     u16 itemId;
     u32 price;
     u8 bpPrice;
@@ -25,8 +24,7 @@ struct Item
     u8 secondaryId;
 };
 
-struct BagPocket
-{
+struct BagPocket {
     struct ItemSlot *itemSlots;
     u8 capacity;
 };
@@ -44,10 +42,10 @@ bool8 AddBagItem(u16 itemId, u16 count);
 bool8 RemoveBagItem(u16 itemId, u16 count);
 u8 GetPocketByItemId(u16 itemId);
 void SwapRegisteredBike(void);
-u16 BagGetItemIdByPocketPosition(u8 pocketId, u16 pocketPos);
+ItemEnum BagGetItemIdByPocketPosition(u8 pocketId, u16 pocketPos);
 void CompactItemsInBagPocket(struct BagPocket *bagPocket);
 void SortBerriesOrTMHMs(struct BagPocket *bagPocket);
-void MoveItemSlotInList(struct ItemSlot* itemSlots_, u32 from, u32 to_);
+void MoveItemSlotInList(struct ItemSlot *itemSlots_, u32 from, u32 to_);
 void ClearBag(void);
 bool8 AddPyramidBagItem(u16 itemId, u16 count);
 bool8 RemovePyramidBagItem(u16 itemId, u16 count);
@@ -71,4 +69,4 @@ int HasItem(u16 item);
 void SetItem(u16 item);
 void ClearItem(u16 item);
 
-#endif // GUARD_ITEM_H
+#endif  // GUARD_ITEM_H

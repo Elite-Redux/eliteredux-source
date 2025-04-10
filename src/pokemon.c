@@ -3550,7 +3550,8 @@ u16 ModifyStatByNature(u8 nature, u16 n, u8 statIndex) {
       gTrainers[gTrainerBattleOpponent_A].trainerClass == TRAINER_CLASS_LEADER || gTrainers[gTrainerBattleOpponent_A].trainerClass == TRAINER_CLASS_CHAMPION))
 
 void AdjustFriendship(struct Pokemon *mon, u8 event) {
-    SpeciesEnum species, heldItem;
+    SpeciesEnum species;
+    ItemEnum heldItem;
     u8 holdEffect;
 
     if (ShouldSkipFriendshipChange()) return;

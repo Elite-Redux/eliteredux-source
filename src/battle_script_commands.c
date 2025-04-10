@@ -12144,8 +12144,9 @@ u16 GetSecretPowerMoveEffect(void) {
 
 static void Cmd_pickup(void) {
     s32 i;
-    SpeciesEnum species, heldItem;
+    SpeciesEnum species;
     AbilityEnum ability;
+    ItemEnum heldItem;
     u8 lvlDivBy10 = 0;
 
     if (InBattlePike()) {

@@ -1954,7 +1954,7 @@ void ObjectEventInteractionRemoveBerryTree(void)
 
 bool8 PlayerHasBerries(void)
 {
-    return IsBagPocketNonEmpty(POCKET_BERRIES);
+    return IsBagPocketNonEmpty(POCKET_BERRIES - 1);
 }
 
 // Berry tree growth is frozen at their initial stage (usually, fully grown) until the player has seen the tree
