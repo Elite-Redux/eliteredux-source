@@ -824,7 +824,7 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
                         }
 
                         ARRAY_COPY(gSaveblock1.itemFlags, newItems);
-                        gSaveblock1.defaultPokeball = ITEM_POKE_BALL;
+                        gSaveblock1.defaultPokeball = ITEM_NONE;
                     }
 
                     //Updating Version

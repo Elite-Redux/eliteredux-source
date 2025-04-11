@@ -258,7 +258,7 @@ bool8 FlagGet(u16 id)
 
 u8 GetDefaultPokeball() {
     if (!gSaveBlock1Ptr->defaultPokeball) {
-        gSaveBlock1Ptr->defaultPokeball = Random() % (LAST_BALL_INDEX - FIRST_BALL_INDEX + 1) + FIRST_BALL_INDEX;
+        return Random() % (LAST_BALL_INDEX - FIRST_BALL_INDEX + 1) + FIRST_BALL_INDEX;
     }
 
     return gSaveBlock1Ptr->defaultPokeball;
