@@ -2,7 +2,6 @@
 #define GUARD_MENU_SPECIALIZED_H
 
 #include "sprite.h"
-#include "player_pc.h"
 #include "list_menu.h"
 #include "pokemon.h"
 #include "constants/berry.h"
@@ -14,14 +13,6 @@
 #define TAG_CONDITION_SPARKLE          104
 
 #define MAX_CONDITION_SPARKLES 10
-
-// Window IDs for the Player PC Mailbox
-enum {
-    MAILBOXWIN_TITLE,
-    MAILBOXWIN_LIST,
-    MAILBOXWIN_OPTIONS,
-    MAILBOXWIN_COUNT
-};
 
 struct UnknownSubStruct_81D1ED4
 {
@@ -43,12 +34,6 @@ struct ConditionGraph
     /*0x355*/ u8 state;
 };
 
-bool8 MailboxMenu_Alloc(u8 count);
-u8 MailboxMenu_AddWindow(u8 windowIdx);
-u8 MailboxMenu_CreateList(struct PlayerPCItemPageStruct *page);
-void MailboxMenu_AddScrollArrows(struct PlayerPCItemPageStruct *page);
-void MailboxMenu_Free(void);
-void MailboxMenu_RemoveWindow(u8 windowIdx);
 void InitConditionGraphData(struct ConditionGraph *graph);
 void sub_81D2108(struct ConditionGraph *graph);
 void SetConditionGraphIOWindows(u8 bg);

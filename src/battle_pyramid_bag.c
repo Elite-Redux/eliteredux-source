@@ -15,7 +15,6 @@
 #include "item_menu.h"
 #include "item_use.h"
 #include "list_menu.h"
-#include "mail.h"
 #include "main.h"
 #include "malloc.h"
 #include "menu.h"
@@ -1088,8 +1087,7 @@ static void BagAction_UseOnField(u8 taskId)
 
     if (pocketId == POCKET_KEY_ITEMS
         || pocketId == POCKET_POKE_BALLS
-        || pocketId == POCKET_TM_HM
-        || ItemIsMail(gSpecialVar_ItemId) == TRUE)
+        || pocketId == POCKET_TM_HM)
     {
         CloseMenuActionWindow();
         DisplayItemMessageInBattlePyramid(taskId, gText_DadsAdvice, Task_CloseBattlePyramidBagMessage);
@@ -1245,11 +1243,7 @@ static void Task_TossItem(u8 taskId)
 static void BagAction_Give(u8 taskId)
 {
     CloseMenuActionWindow();
-    if (ItemIsMail(gSpecialVar_ItemId) == TRUE)
-    {
-        DisplayItemMessageInBattlePyramid(taskId, gText_CantWriteMail, Task_WaitCloseErrorMessage);
-    }
-    else if (!ItemId_GetImportance(gSpecialVar_ItemId))
+    if (!ItemId_GetImportance(gSpecialVar_ItemId))
     {
         gPyramidBagMenu->newScreenCallback = CB2_ChooseMonToGiveItem;
         CloseBattlePyramidBag(taskId);

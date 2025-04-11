@@ -264,8 +264,6 @@ gSpecials::
 	def_special ValidateEReaderTrainer
 	def_special GetBestBattleTowerStreak
 	def_special ReducePlayerPartyToSelectedMons
-	def_special BedroomPC
-	def_special PlayerPC
 	def_special FieldShowRegionMap
 	def_special GetInGameTradeSpeciesInfo
 	def_special CreateInGameTradePokemon
@@ -345,7 +343,6 @@ gSpecials::
 	def_special IsSelectedMonEgg
 	def_special TryInitBattleTowerAwardManObjectEvent
 	def_special MoveOutOfSecretBaseFromOutside
-	def_special LoadPlayerBag
 	def_special Script_FadeOutMapMusic
 	def_special SetPacifidlogTMReceivedDay
 	def_special GetDaysUntilPacifidlogTMAvailable

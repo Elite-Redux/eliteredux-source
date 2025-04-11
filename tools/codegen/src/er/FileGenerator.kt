@@ -4,6 +4,7 @@ import er.ability.AbilityTextGenerator
 import er.data.*
 import er.defines.*
 import er.gfx.*
+import er.item.*
 import er.move.BattleMovesGenerator
 import er.move.MoveDescriptionGenerator
 import er.move.MoveNameGenerator
@@ -58,6 +59,14 @@ object FileGenerator {
         "undoforms" to UndoFormChangeGenerator,
         "frontanimids" to FrontAnimIdsGenerator,
         "backanimids" to BackAnimIdsGenerator,
+        "itemids" to ItemEnumGenerator,
+        "pockets" to PocketGenerator,
+        "itemdata" to ItemGenerator,
+        "itemgfx" to ItemGfxGenerator,
+        "nursejoy" to NurseJoyMegasGenerator,
+        "legendarysage" to LegendarySageMegasGenerator,
+        "adoptioncenteritems" to AdoptionCenterMegasGenerator,
+        "megahints" to MegaHintGenerator,
     )
 
     @JvmStatic

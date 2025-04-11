@@ -11,7 +11,6 @@
 #include "link.h"
 #include "string_util.h"
 #include "sound.h"
-#include "mail.h"
 #include "overworld.h"
 #include "decompress.h"
 #include "constants/songs.h"
@@ -398,8 +397,6 @@ bool8 IsHoldingItemAllowed(u16 itemId)
 bool8 IsWritingMailAllowed(u16 itemId)
 {
     if (IsUpdateLinkStateCBActive() != TRUE && InUnionRoom() != TRUE)
-        return TRUE;
-    else if (ItemIsMail(itemId) != TRUE)
         return TRUE;
     else
         return FALSE;

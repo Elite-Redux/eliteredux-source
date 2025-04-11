@@ -5,6 +5,7 @@ extern u8 *gItemIconDecompressionBuffer;
 extern u8 *gItemIcon4x4Buffer;
 
 extern const struct SpriteTemplate gItemIconSpriteTemplate;
+extern const u32 *const gItemIconTable[ITEMS_COUNT + 1][2];
 
 bool8 AllocItemIconTemporaryBuffers(void);
 void FreeItemIconTemporaryBuffers(void);
@@ -14,4 +15,4 @@ u8 AddCustomItemIconSprite(const struct SpriteTemplate *customSpriteTemplate, u1
 const void *GetItemIconPicOrPalette(u16 itemId, u8 which);
 u8 AddBallIconSprite(u16 tilesTag, u16 paletteTag, u8 ballId);
 
-#endif //GUARD_ITEM_ICON_H
+#endif  // GUARD_ITEM_ICON_H

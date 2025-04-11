@@ -32,19 +32,23 @@ object FontMapping {
     }
 
     fun breakString(string: String, font: Font, maxLength: Int, maxLines: Int) = buildString {
+        fun String.pixelLength() =
+            replace("{PKMN}", "").sumOf { it.width(font, true) } + ("\\{PKMN}".toRegex().findAll(this)
+                .count() * (font.widths.entries[0x53] + font.widths.entries[0x54]))
+
         var curLength = 0
         string.split("""((?= )|(?<=-)|(?=\n))""".toRegex()).forEach { piece ->
-            val pieceLength = piece.sumOf { it.width(font, true) }
-            if (piece.startsWith("\n") ||
-                curLength + pieceLength > maxLength
-            ) {
-                append("\\n")
-                curLength = piece.trim().sumOf { it.width(font, true) }
-                append(piece.trim())
-            } else {
-                append(piece)
-                curLength += pieceLength
-            }
+            val pieceLength = piece.pixelLength()
+                if (piece.startsWith("\n") ||
+                    curLength + pieceLength > maxLength
+                ) {
+                    append("\\n")
+                    curLength = piece.trim().pixelLength()
+                    append(piece.trim())
+                } else {
+                    append(piece)
+                    curLength += pieceLength
+                }
         }
     }.also { result ->
         check(result.split("\\n").size <= maxLines) {

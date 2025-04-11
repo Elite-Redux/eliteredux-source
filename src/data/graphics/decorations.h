@@ -1,3 +1,6 @@
+const u32 gItemIcon_QuestionMark[] = INCBIN_U32("graphics/items/icons/question_mark.4bpp.lz");
+const u32 gItemIconPalette_QuestionMark[] = INCBIN_U32("graphics/items/icon_palettes/question_mark.gbapal.lz");
+
 const u32 gDecorIcon_HeavyDesk[] = INCBIN_U32("graphics/decorations/heavy_desk.4bpp.lz");
 const u32 gDecorIconPalette_HeavyDesk[] = INCBIN_U32("graphics/decorations/heavy_desk.gbapal.lz");
 

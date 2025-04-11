@@ -1963,7 +1963,7 @@ static void HandleInputChooseActionPlayer(void) {
         if (!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)) &&
             CanThrowBall() == 0 && FlagGet(FLAG_SYS_DEXNAV_GET)) {
             gBattle_BG1_Y = 160;
-            gLastThrownBall = gLastUsedItem = ITEM_POKE_BALL;
+            gLastThrownBall = gLastUsedItem = GetDefaultPokeball();
             BtlController_EmitTwoReturnValues(1, B_ACTION_THROW_BALL, 0);
             PlayerBufferExecCompleted();
         }
@@ -2023,7 +2023,7 @@ static void HandleInputChooseActionPlayer(void) {
             !(gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]) && !(gBattleTypeFlags & BATTLE_TYPE_MULTI)) {
             if (gBattleResources->bufferA[gActiveBattler][1] == B_ACTION_USE_ITEM) {
                 // Add item to bag if it is a ball
-                if (itemId <= LAST_BALL_INDEX)
+                if (ItemId_GetPocket(itemId) == POCKET_POKE_BALLS)
                     AddBagItem(itemId, 1);
                 else
                     return;

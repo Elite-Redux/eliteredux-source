@@ -23,6 +23,22 @@ object GeneratorUtils {
     fun <T> FieldDescriptor.getOption(extension: GeneratedExtension<FieldOptions, T>): T =
         toProto().options.getExtension(extension)
 
+    val ITEMS_LIST by lazy {
+        (Pocket.entries.filter { it != Pocket.POCKET_NONE && it != Pocket.UNRECOGNIZED }.map {
+            it.name.removePrefix("POCKET_").split("_")
+                .joinToString("") { s -> s.lowercase().replaceFirstChar { c -> c.uppercaseChar() } }
+        } + "Unused").flatMap {
+            if (File("../../proto/items/${it}List.textproto").exists()) {
+                TextFormat.parse(
+                    File("../../proto/items/${it}List.textproto").readText(),
+                    ItemList::class.java
+                ).itemList
+            } else {
+                emptyList()
+            }
+        }
+    }
+
     val ABILITIES_LIST by lazy {
         TextFormat.parse(File("../../proto/AbilityList.textproto").readText(), AbilityList::class.java).abilityList
     }
@@ -54,7 +70,8 @@ object GeneratorUtils {
         SPECIES_LIST.associateBy { it.id }
     }
 
-    fun Species.resolveVisuals(): Visuals = if (hasReuseVisuals()) SPECIES_MAP[reuseVisuals]!!.resolveVisuals() else this.visuals
+    fun Species.resolveVisuals(): Visuals =
+        if (hasReuseVisuals()) SPECIES_MAP[reuseVisuals]!!.resolveVisuals() else this.visuals
 
     /**
      * Takes a list of key-value pairs and creates a set of mappings of keys/values to a shared index value.

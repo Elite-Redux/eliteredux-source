@@ -1659,8 +1659,7 @@ const struct Item gItems[] =
         .description = sFabMailDesc,
         .pocket = POCKET_ITEMS,
         .type = ITEM_USE_MAIL,
-        .fieldUseFunc = ItemUseOutOfBattle_Mail,
-        .secondaryId = ITEM_TO_MAIL(ITEM_FAB_MAIL),
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
 
     [ITEM_RETRO_MAIL] =
@@ -1671,8 +1670,7 @@ const struct Item gItems[] =
         .description = sRetroMailDesc,
         .pocket = POCKET_ITEMS,
         .type = ITEM_USE_MAIL,
-        .fieldUseFunc = ItemUseOutOfBattle_Mail,
-        .secondaryId = ITEM_TO_MAIL(ITEM_RETRO_MAIL),
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
 
 // Berries

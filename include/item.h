@@ -6,9 +6,8 @@
 
 typedef void (*ItemUseFunc)(u8);
 
-struct Item
-{
-    u8 name[ITEM_NAME_LENGTH];
+struct Item {
+    const u8 *name;
     u16 itemId;
     u32 price;
     u8 bpPrice;
@@ -25,41 +24,30 @@ struct Item
     u8 secondaryId;
 };
 
-struct BagPocket
-{
+struct BagPocket {
     struct ItemSlot *itemSlots;
     u8 capacity;
 };
 
-extern struct BagPocket gBagPockets[];
+extern const u16 *const gItemsForPocket[POCKETS_COUNT];
+extern const u16 gItemCountsForPocket[POCKETS_COUNT];
 
-void ApplyNewEncryptionKeyToBagItems(u32 newKey);
-void ApplyNewEncryptionKeyToBagItems_(u32 newKey);
-void SetBagItemsPointers(void);
 void CopyItemName(u16 itemId, u8 *dst);
-void CopyItemNameHandlePlural(u16 itemId, u8 *dst, u32 quantity);
 void GetBerryCountString(u8 *dst, const u8 *berryName, u32 quantity);
 bool8 IsBagPocketNonEmpty(u8 pocket);
 bool8 CheckBagHasItem(u16 itemId, u16 count);
 bool8 HasAtLeastOneBerry(void);
 bool8 CheckBagHasSpace(u16 itemId, u16 count);
+int UsingBattlePyramidBag();
 bool8 AddBagItem(u16 itemId, u16 count);
 bool8 RemoveBagItem(u16 itemId, u16 count);
 u8 GetPocketByItemId(u16 itemId);
-void ClearItemSlots(struct ItemSlot *itemSlots, u8 itemCount);
-u8 CountUsedPCItemSlots(void);
-bool8 CheckPCHasItem(u16 itemId, u16 count);
-bool8 AddPCItem(u16 itemId, u16 count);
-void RemovePCItem(u8 index, u16 count);
-void CompactPCItems(void);
 void SwapRegisteredBike(void);
-u16 BagGetItemIdByPocketPosition(u8 pocketId, u16 pocketPos);
-u16 BagGetQuantityByPocketPosition(u8 pocketId, u16 pocketPos);
+ItemEnum BagGetItemIdByPocketPosition(u8 pocketId, u16 pocketPos);
 void CompactItemsInBagPocket(struct BagPocket *bagPocket);
 void SortBerriesOrTMHMs(struct BagPocket *bagPocket);
-void MoveItemSlotInList(struct ItemSlot* itemSlots_, u32 from, u32 to_);
+void MoveItemSlotInList(struct ItemSlot *itemSlots_, u32 from, u32 to_);
 void ClearBag(void);
-u16 CountTotalItemQuantityInBag(u16 itemId);
 bool8 AddPyramidBagItem(u16 itemId, u16 count);
 bool8 RemovePyramidBagItem(u16 itemId, u16 count);
 const u8 *ItemId_GetName(u16 itemId);
@@ -78,5 +66,8 @@ u8 ItemId_GetBattleUsage(u16 itemId);
 ItemUseFunc ItemId_GetBattleFunc(u16 itemId);
 u8 ItemId_GetSecondaryId(u16 itemId);
 bool32 IsPinchBerryItemEffect(u16 holdEffect);
+int HasItem(u16 item);
+void SetItem(u16 item);
+void ClearItem(u16 item);
 
-#endif // GUARD_ITEM_H
+#endif  // GUARD_ITEM_H

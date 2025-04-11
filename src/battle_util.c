@@ -35,7 +35,6 @@
 #include "international_string_util.h"
 #include "item.h"
 #include "link.h"
-#include "mail.h"
 #include "malloc.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
@@ -361,8 +360,7 @@ void HandleAction_UseItem(void) {
 
     gLastUsedItem = gBattleResources->bufferB[gBattlerAttacker][1] | (gBattleResources->bufferB[gBattlerAttacker][2] << 8);
 
-    if (gLastUsedItem <= LAST_BALL_INDEX)  // is ball
-    {
+    if (ItemId_GetPocket(gLastUsedItem) == POCKET_POKE_BALLS) {
         gBattlescriptCurrInstr = gBattlescriptsForBallThrow[gLastUsedItem];
     } else if (gLastUsedItem == ITEM_POKE_DOLL || gLastUsedItem == ITEM_FLUFFY_TAIL) {
         gBattlescriptCurrInstr = gBattlescriptsForRunningByItem[0];
@@ -5377,7 +5375,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_SEEDS:
-                        switch (GetBattlerHoldEffectParam(battlerId)) {
+                        switch (ItemId_GetSecondaryId(gBattleMons[battlerId].item)) {
                             case HOLD_EFFECT_PARAM_ELECTRIC_TERRAIN:
                                 effect = TryHandleSeed(battlerId, STATUS_FIELD_ELECTRIC_TERRAIN, STAT_DEF, gLastUsedItem, TRUE);
                                 break;
@@ -6931,32 +6929,8 @@ u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk,
             if (gTurnStructs[battlerAtk].gemBoost && gBattleMons[battlerAtk].item)
                 MulModifier(&modifier, UQ_4_12(1.0) + gPercentToModifier[gTurnStructs[battlerAtk].gemParam]);
             break;
-        case HOLD_EFFECT_BUG_POWER:
-        case HOLD_EFFECT_STEEL_POWER:
-        case HOLD_EFFECT_GROUND_POWER:
-        case HOLD_EFFECT_ROCK_POWER:
-        case HOLD_EFFECT_GRASS_POWER:
-        case HOLD_EFFECT_DARK_POWER:
-        case HOLD_EFFECT_FIGHTING_POWER:
-        case HOLD_EFFECT_ELECTRIC_POWER:
-        case HOLD_EFFECT_WATER_POWER:
-        case HOLD_EFFECT_FLYING_POWER:
-        case HOLD_EFFECT_POISON_POWER:
-        case HOLD_EFFECT_ICE_POWER:
-        case HOLD_EFFECT_GHOST_POWER:
-        case HOLD_EFFECT_PSYCHIC_POWER:
-        case HOLD_EFFECT_FIRE_POWER:
-        case HOLD_EFFECT_DRAGON_POWER:
-        case HOLD_EFFECT_NORMAL_POWER:
-        case HOLD_EFFECT_FAIRY_POWER:
-            for (i = 0; i < ARRAY_COUNT(sHoldEffectToType); i++) {
-                if (holdEffectAtk == sHoldEffectToType[i][0]) {
-                    if (moveType == sHoldEffectToType[i][1]) MulModifier(&modifier, holdEffectModifier);
-                    break;
-                }
-            }
-            break;
         case HOLD_EFFECT_PLATE:
+        case HOLD_EFFECT_TYPE_POWER:
             if (moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item)) MulModifier(&modifier, holdEffectModifier);
             break;
     }
@@ -7527,7 +7501,7 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
     switch (GetBattlerHoldEffect(battlerDef, TRUE)) {
         // berries reducing dmg
         case HOLD_EFFECT_RESIST_BERRY:
-            if (moveType == GetBattlerHoldEffectParam(battlerDef) && (moveType == TYPE_NORMAL || typeEffectivenessModifier >= UQ_4_12(2.0)) &&
+            if (moveType == ItemId_GetSecondaryId(gBattleMons[battlerDef].item) && (moveType == TYPE_NORMAL || typeEffectivenessModifier >= UQ_4_12(2.0)) &&
                 !IsUnnerveAbilityOnOpposingSide(battlerDef)) {
                 if (HasRipenEffect(battlerDef))
                     MulModifier(&finalModifier, UQ_4_12(0.25));

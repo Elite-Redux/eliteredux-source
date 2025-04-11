@@ -2063,6 +2063,8 @@ u8 GiveMonToPlayer(struct Pokemon *mon) {
         if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) == SPECIES_NONE) break;
     }
 
+    if (!UsingBattlePyramidBag()) AddBagItem(mon->box.heldItem, 1);
+
     if (i >= PARTY_SIZE) return SendMonToPC(mon);
 
     CopyMon(&gPlayerParty[i], mon, sizeof(*mon));
@@ -3550,7 +3552,8 @@ u16 ModifyStatByNature(u8 nature, u16 n, u8 statIndex) {
       gTrainers[gTrainerBattleOpponent_A].trainerClass == TRAINER_CLASS_LEADER || gTrainers[gTrainerBattleOpponent_A].trainerClass == TRAINER_CLASS_CHAMPION))
 
 void AdjustFriendship(struct Pokemon *mon, u8 event) {
-    SpeciesEnum species, heldItem;
+    SpeciesEnum species;
+    ItemEnum heldItem;
     u8 holdEffect;
 
     if (ShouldSkipFriendshipChange()) return;

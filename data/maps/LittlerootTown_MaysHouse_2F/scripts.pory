@@ -314,14 +314,7 @@ LittlerootTown_MaysHouse_2F_EventScript_CheckRivalsPC:: @ 81F956C
 	end
 
 LittlerootTown_MaysHouse_2F_EventScript_CheckPlayersPC:: @ 81F9576
-	setvar VAR_0x8004, 2
-	special DoPCTurnOnEffect
-	playse SE_PC_ON
-	msgbox gText_PlayerHouseBootPC, MSGBOX_DEFAULT
-	special BedroomPC
-	waitstate
-	releaseall
-	end
+	goto EventScript_PC
 
 LittlerootTown_MaysHouse_2F_EventScript_TurnOffPlayerPC:: @ 81F958F
 	setvar VAR_0x8004, 2

@@ -22,7 +22,6 @@
 #include "metatile_behavior.h"
 #include "overworld.h"
 #include "palette.h"
-#include "player_pc.h"
 #include "script.h"
 #include "secret_base.h"
 #include "sound.h"
@@ -671,10 +670,6 @@ static void DecorationMenuAction_Cancel(u8 taskId)
     {
         ScriptContext1_SetupScript(SecretBase_EventScript_PCCancel);
         DestroyTask(taskId);
-    }
-    else
-    {
-        ReshowPlayerPC(taskId);
     }
 }
 

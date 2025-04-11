@@ -2705,7 +2705,7 @@ static void CB2_EndBlenderGame(void)
         SendContinuePromptResponse(&gSendCmd[BLENDER_COMM_INPUT_STATE]);
         if (sBerryBlender->yesNoAnswer == 0)
         {
-            if (IsBagPocketNonEmpty(POCKET_BERRIES) == FALSE)
+            if (IsBagPocketNonEmpty(POCKET_BERRIES - 1) == FALSE)
             {
                 // No berries
                 sBerryBlender->playAgainState = CANT_PLAY_NO_BERRIES;

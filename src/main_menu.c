@@ -745,12 +745,6 @@ static void UpdateBoxMon(struct BoxPokemon* boxMon)
     ARRAY_COPY(boxMon->nickname, old.nickname)
 }
 
-#define UPDATE_QUICK_STREAM(move) \
-{ \
-    if (move == 865) move = MOVE_WATER_GUN; \
-    if (move > 865) move--; \
-}
-
 static void Task_MainMenuCheckSaveFile(u8 taskId)
 {
     s16* data = gTasks[taskId].data;
@@ -781,48 +775,56 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
             else if (VarGet(VAR_SAVE_VERSION) <= CURRENT_GAME_VERSION) {
                 //No problems
                 if (VarGet(VAR_SAVE_VERSION) < CURRENT_GAME_VERSION) {
-                    if (VarGet(VAR_SAVE_VERSION) <= 1042)
+                    if (VarGet(VAR_SAVE_VERSION) <= 1046)
                     {
                         int i, j;
+                        u16 newItems[ARRAY_COUNT(gSaveblock1.itemFlags)] = {0};
 
                         for (i = 0; i < gSaveBlock1Ptr->playerPartyCount; i++)
                         {
-                            UpdateBoxMon(&gSaveBlock1Ptr->playerParty[i].box);
+                            u16 item = gSaveBlock1Ptr->playerParty[i].box.heldItem;
+                            if (item) newItems[item / 16] |= 1 << (item % 16);
                         }
-                        LoadPlayerParty();
                         
-                        for (i = 0; i < ARRAY_COUNT(gPokemonStoragePtr->boxes); i++)
+                        for (int i = 0; i < ARRAY_COUNT(gPokemonStoragePtr->boxes); i++)
                         {
-                            for (j = 0; j < ARRAY_COUNT(gPokemonStoragePtr->boxes[i]); j++)
+                            for (int j = 0; j < ARRAY_COUNT(gPokemonStoragePtr->boxes[i]); j++)
                             {
-                                UpdateBoxMon(&gPokemonStoragePtr->boxes[i][j]);
+                                u16 item = gPokemonStoragePtr->boxes[i][j].heldItem;
+                                if (item) newItems[item / 16] |= 1 << (item % 16);
                             }
                         }
-                    }
 
-                    if (VarGet(VAR_SAVE_VERSION) <= 1045)
-                    {
-                        int i, j;
-
-                        for (i = 0; i < gSaveBlock1Ptr->playerPartyCount; i++)
-                        {
-                            UPDATE_QUICK_STREAM(gSaveBlock1Ptr->playerParty[i].box.move1)
-                            UPDATE_QUICK_STREAM(gSaveBlock1Ptr->playerParty[i].box.move2)
-                            UPDATE_QUICK_STREAM(gSaveBlock1Ptr->playerParty[i].box.move3)
-                            UPDATE_QUICK_STREAM(gSaveBlock1Ptr->playerParty[i].box.move4)
-                        }
-                        LoadPlayerParty();
-                        
-                        for (i = 0; i < ARRAY_COUNT(gPokemonStoragePtr->boxes); i++)
-                        {
-                            for (j = 0; j < ARRAY_COUNT(gPokemonStoragePtr->boxes[i]); j++)
+                        for (int i = 0; i <= POCKETS_COUNT; i++) {
+                            int size = 0;
+                            struct ItemSlot* items = NULL;
+                            #define POCKET_SIZE_ITEMS(pocket, bag) case pocket: size = ARRAY_COUNT(bag); items = bag; break;
+                            switch (i)
                             {
-                                UPDATE_QUICK_STREAM(gPokemonStoragePtr->boxes[i][j].move1)
-                                UPDATE_QUICK_STREAM(gPokemonStoragePtr->boxes[i][j].move2)
-                                UPDATE_QUICK_STREAM(gPokemonStoragePtr->boxes[i][j].move3)
-                                UPDATE_QUICK_STREAM(gPokemonStoragePtr->boxes[i][j].move4)
+                                case POCKET_NONE:
+                                    size = ARRAY_COUNT(gSaveblock1.pcItems);
+                                    items = gSaveblock1.pcItems;
+                                    break;
+                                    
+                                POCKET_SIZE_ITEMS(POCKET_BATTLE, gSaveblock1.bagPocket_Battle)
+                                POCKET_SIZE_ITEMS(POCKET_BERRIES, gSaveblock1.bagPocket_Berries)
+                                POCKET_SIZE_ITEMS(POCKET_ITEMS, gSaveblock1.bagPocket_Items)
+                                POCKET_SIZE_ITEMS(POCKET_KEY_ITEMS, gSaveblock1.bagPocket_KeyItems)
+                                POCKET_SIZE_ITEMS(POCKET_POKE_BALLS, gSaveblock1.bagPocket_PokeBalls)
+                                POCKET_SIZE_ITEMS(POCKET_MEDICINE, gSaveblock1.bagPocket_Medicine)
+                                POCKET_SIZE_ITEMS(POCKET_MEGA_STONES, gSaveblock1.bagPocket_MegaStones)
+                                POCKET_SIZE_ITEMS(POCKET_TM_HM, gSaveblock1.bagPocket_TMHM)
                             }
+
+                            for (j = 0; j < size; j++) {
+                                u16 item = items[j].itemId;
+                                if (item && items[j].quantity) newItems[item / 16] |= 1 << (item % 16);;
+                            }
+                            memset(items, 0, size);
                         }
+
+                        ARRAY_COPY(gSaveblock1.itemFlags, newItems);
+                        gSaveblock1.defaultPokeball = ITEM_NONE;
                     }
 
                     //Updating Version

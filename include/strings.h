@@ -1185,8 +1185,8 @@ extern const u8 gText_ThrowInPremierBalls[];
 extern const u8 gText_ShopBuy[];
 extern const u8 gText_ShopSell[];
 extern const u8 gText_ShopQuit[];
-extern const u8 gText_ShopAlreadyHaveTM[];
-extern const u8 gText_ShopPurchasedTMPrice[];
+extern const u8 gText_ShopAlreadyHaveItem[];
+extern const u8 gText_ShopPurchasedItemPrice[];
 
 extern const u8 gText_OhABite[];
 extern const u8 gText_PokemonOnHook[];

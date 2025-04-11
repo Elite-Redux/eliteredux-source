@@ -23,7 +23,6 @@
 #include "coins.h"
 #include "text.h"
 #include "overworld.h"
-#include "mail.h"
 #include "battle_records.h"
 #include "item.h"
 #include "pokedex.h"
@@ -40,7 +39,6 @@
 #include "pokemon_jump.h"
 #include "decoration_inventory.h"
 #include "secret_base.h"
-#include "player_pc.h"
 #include "field_specials.h"
 #include "berry_powder.h"
 #include "mevent.h"
@@ -175,7 +173,6 @@ void NewGameInitData(void)
     ResetPokedex();
     ClearFrontierRecord();
     ClearSav1();
-    ClearMailData();
     gSaveBlock2Ptr->specialSaveWarpFlags = 0;
     InitPlayerTrainerId();
     PlayTimeCounter_Reset();
@@ -202,7 +199,6 @@ void NewGameInitData(void)
     gSaveBlock1Ptr->registeredItemSelect = 0;
     //gSaveBlock1Ptr->registeredItem = 0;
     ClearBag();
-    NewGameInitPCItems();
     TxRegItemsMenu_RegisteredItemsMenuNewGame();
     ClearPokeblocks();
     ClearDecorationInventories();

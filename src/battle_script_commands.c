@@ -38,7 +38,6 @@
 #include "global.h"
 #include "item.h"
 #include "m4a.h"
-#include "mail.h"
 #include "main.h"
 #include "menu_specialized.h"
 #include "mgba_printf/mgba.h"
@@ -12145,8 +12144,9 @@ u16 GetSecretPowerMoveEffect(void) {
 
 static void Cmd_pickup(void) {
     s32 i;
-    SpeciesEnum species, heldItem;
+    SpeciesEnum species;
     AbilityEnum ability;
+    ItemEnum heldItem;
     u8 lvlDivBy10 = 0;
 
     if (InBattlePike()) {
@@ -12790,6 +12790,9 @@ static void Cmd_trysetcaughtmondexflags(void) {
         HandleSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_SET_CAUGHT, personality);
         gBattlescriptCurrInstr += 5;
     }
+
+    ItemEnum item = GetMonData(&gEnemyParty[gBattlerPartyIndexes[GetCatchingBattler()]], MON_DATA_HELD_ITEM, NULL);
+    if (!UsingBattlePyramidBag()) AddBagItem(item, 1);
 }
 
 static void Cmd_displaydexinfo(void) {

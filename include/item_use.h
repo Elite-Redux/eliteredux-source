@@ -1,7 +1,7 @@
 #ifndef GUARD_ITEM_USE_H
 #define GUARD_ITEM_USE_H
 
-void ItemUseOutOfBattle_Mail(u8);
+void ItemUseOutOfBattle_PokeBall(u8);
 void ItemUseOutOfBattle_Bike(u8);
 void ItemUseOutOfBattle_Rod(u8);
 void ItemUseOutOfBattle_Itemfinder(u8);
@@ -47,7 +47,7 @@ void ItemUseOutOfBattle_PrisonBottle(u8 taskId);
 void ItemUseOutOfBattle_NSolarizer(u8 taskId);
 void ItemUseOutOfBattle_NLunarizer(u8 taskId);
 void ItemUseOutOfBattle_TypeGems(u8 taskId);
-void ItemUseOutOfBattle_TmCase(u8);
+// void ItemUseOutOfBattle_TmCase(u8);
 u8 CanUseDigOrEscapeRopeOnCurMap(void);
 u8 CheckIfItemIsTMHMOrEvolutionStone(u16 itemId);
 u32 CanThrowBall(void);
