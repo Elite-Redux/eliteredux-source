@@ -4,6 +4,7 @@ import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.ITEMS_LIST
 import er.GeneratorUtils.createDedupMaps
+import er.proto.Item
 import er.proto.Pocket
 import er.text.FontMapping.Font.SMALL_NARROW
 import er.text.FontMapping.breakString
@@ -21,7 +22,7 @@ object MegaHintGenerator : Generator {
     )
 
     private const val NURSE_JOY = "Talk to Nurse Joy."
-    private const val ADOPTION_CENTER = "Purchase from an Adoption Center."
+    private fun adoptionCenterHint(item: Item) = "Purchase ${item.name} from an Adoption Center."
     private const val LEGENDARY_SAGE = "Talk to the legendary sage in Littleroot Town."
     private const val UNKNOWN = "Unknown unlock method."
 
@@ -32,7 +33,7 @@ object MegaHintGenerator : Generator {
         val (stringsToIds, itemEnumToIds) = ITEMS_LIST.filter { it.grouping == Pocket.POCKET_MEGA_STONES }.map {
             when {
                 it.talkToNurseJoy -> NURSE_JOY
-                it.adoptionCenter -> ADOPTION_CENTER
+                it.adoptionCenter -> adoptionCenterHint(it)
                 it.talkToLegendarySage -> LEGENDARY_SAGE
                 it.uniqueMegaLocation.isNotBlank() -> it.uniqueMegaLocation
                 else -> UNKNOWN
