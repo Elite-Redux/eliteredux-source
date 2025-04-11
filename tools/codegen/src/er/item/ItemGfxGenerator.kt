@@ -18,9 +18,12 @@ object ItemGfxGenerator : Generator {
             """
             |${iconMap.entries.joinToString("\n") { """static const u32 $ICON_PREFIX${it.value}[] = INCBIN_U32("graphics/items/icons/${it.key}.4bpp.lz");""" }}
             |${paletteMap.entries.joinToString("\n") { """static const u32 $PALETTE_PREFIX${it.value}[] = INCBIN_U32("graphics/items/icon_palettes/${it.key}.gbapal.lz");""" }}
+            |const u32 gItemIcon_ReturnToFieldArrow[] = INCBIN_U32("graphics/items/icons/return_to_field_arrow.4bpp.lz");
+            |const u32 gItemIconPalette_ReturnToFieldArrow[] = INCBIN_U32("graphics/items/icon_palettes/return_to_field_arrow.gbapal.lz");
             |
             |const u32 *const gItemIconTable[][2] = {
             |${ITEMS_LIST.joinToString("\n") { "$IND[${it.id}] = {$ICON_PREFIX${idIconMap[it.id]}, $PALETTE_PREFIX${idPaletteMap[it.id]}}," }}
+            |$IND[ITEM_FIELD_ARROW] = {gItemIcon_ReturnToFieldArrow, gItemIconPalette_ReturnToFieldArrow},
             |};
             |
             |const u32 *const gBallIconTable[][2] = {
