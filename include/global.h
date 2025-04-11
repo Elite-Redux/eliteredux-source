@@ -1179,7 +1179,10 @@ struct SaveBlock1 {
             struct ItemSlot bagPocket_Battle[BAG_BATTLE_COUNT];
             struct ItemSlot bagPocket_MegaStones[BAG_MEGASTONES_COUNT];
         };
-        u16 itemFlags[(2 << 11) / 16];
+        struct {
+            u8 defaultPokeball;
+            u16 itemFlags[(2 << 11) / 16];
+        };
     };
     struct Pokeblock pokeblocks[POKEBLOCKS_COUNT];
     u16 berryBlenderRecords[3];

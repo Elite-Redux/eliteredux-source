@@ -2063,6 +2063,8 @@ u8 GiveMonToPlayer(struct Pokemon *mon) {
         if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) == SPECIES_NONE) break;
     }
 
+    if (!UsingBattlePyramidBag()) AddBagItem(mon->box.heldItem, 1);
+
     if (i >= PARTY_SIZE) return SendMonToPC(mon);
 
     CopyMon(&gPlayerParty[i], mon, sizeof(*mon));

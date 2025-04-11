@@ -263,25 +263,25 @@ static const struct MenuAction sItemMenuActions[] = {[ACTION_USE] = {gMenuText_U
 
 // these are all 2D arrays with a width of 2 but are represented as 1D arrays
 // ACTION_DUMMY is used to represent blank spaces
-static const u8 sContextMenuItems_ItemsPocket[] = {ACTION_USE, ACTION_GIVE, ACTION_CANCEL};
+static const u8 sContextMenuItems_ItemsPocket[] = {ACTION_USE, ACTION_GIVE, ACTION_DUMMY, ACTION_CANCEL};
 
-static const u8 sContextMenuItems_MedicinePocket[] = {ACTION_USE, ACTION_GIVE, ACTION_CANCEL};
+static const u8 sContextMenuItems_MedicinePocket[] = {ACTION_USE, ACTION_GIVE, ACTION_DUMMY, ACTION_CANCEL};
 
-static const u8 sContextMenuItems_BattlePocket[] = {ACTION_USE, ACTION_GIVE, ACTION_CANCEL};
+static const u8 sContextMenuItems_BattlePocket[] = {ACTION_USE, ACTION_GIVE, ACTION_DUMMY, ACTION_CANCEL};
 
 static const u8 sContextMenuItems_KeyItemsPocket[] = {ACTION_USE, ACTION_REGISTER, ACTION_DUMMY, ACTION_CANCEL};
 
 // tx_registered_items_menu
 static const u8 sContextMenuItems_RegisterKeyItem[] = {ACTION_SELECT_BUTTON, ACTION_L_BUTTON, ACTION_DUMMY, ACTION_CANCEL};
 
-static const u8 sContextMenuItems_BallsPocket[] = {ACTION_GIVE, ACTION_DUMMY, ACTION_CANCEL};
+static const u8 sContextMenuItems_BallsPocket[] = {ACTION_USE, ACTION_GIVE, ACTION_DUMMY, ACTION_CANCEL};
 
 static const u8 sContextMenuItems_TmHmPocket[] = {
     ACTION_USE,
     ACTION_CANCEL,
 };
 
-static const u8 sContextMenuItems_BerriesPocket[] = {ACTION_USE, ACTION_DUMMY, ACTION_GIVE, ACTION_CHECK_TAG, ACTION_CANCEL};
+static const u8 sContextMenuItems_BerriesPocket[] = {ACTION_USE, ACTION_GIVE, ACTION_CHECK_TAG, ACTION_CANCEL};
 
 static const u8 sContextMenuItems_MegaStonesPocket[] = {
     ACTION_GIVE,

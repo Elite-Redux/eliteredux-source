@@ -191,6 +191,15 @@ u8 CheckIfItemIsTMHMOrEvolutionStone(u16 itemId)
         return 0;
 }
 
+static const u8 sMadePokeballDefault[] = _("Made {STR_VAR_1}s the default ball!{PAUSE_UNTIL_PRESS}");
+
+void ItemUseOutOfBattle_PokeBall(u8 taskId) {
+    gSaveBlock1Ptr->defaultPokeball = gSpecialVar_ItemId;
+    StringCopy(gStringVar1, ItemId_GetName(gSpecialVar_ItemId));
+    StringExpandPlaceholders(gStringVar4, sMadePokeballDefault);
+    DisplayItemMessage(taskId, 1, gStringVar4, CloseItemMessage);
+}
+
 void ItemUseOutOfBattle_Bike(u8 taskId)
 {
     s16* data = gTasks[taskId].data;

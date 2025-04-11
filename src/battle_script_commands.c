@@ -12790,6 +12790,9 @@ static void Cmd_trysetcaughtmondexflags(void) {
         HandleSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_SET_CAUGHT, personality);
         gBattlescriptCurrInstr += 5;
     }
+
+    ItemEnum item = GetMonData(&gEnemyParty[gBattlerPartyIndexes[GetCatchingBattler()]], MON_DATA_HELD_ITEM, NULL);
+    if (!UsingBattlePyramidBag()) AddBagItem(item, 1);
 }
 
 static void Cmd_displaydexinfo(void) {

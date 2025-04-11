@@ -78,7 +78,7 @@ bool8 IsBagPocketNonEmpty(u8 pocket) {
 
 bool8 CheckBagHasItem(u16 itemId, u16 count) {
     if (ItemId_GetPocket(itemId) == 0) return FALSE;
-    if (InBattlePyramid() || FlagGet(FLAG_STORING_ITEMS_IN_PYRAMID_BAG) == TRUE) return CheckPyramidBagHasItem(itemId, count);
+    if (UsingBattlePyramidBag()) return CheckPyramidBagHasItem(itemId, count);
     return HasItem(itemId);
 }
 
@@ -99,18 +99,22 @@ bool8 HasAtLeastOneBerry(void) {
 bool8 CheckBagHasSpace(u16 itemId, u16 count) {
     if (ItemId_GetPocket(itemId) == POCKET_NONE) return FALSE;
 
-    if (InBattlePyramid() || FlagGet(FLAG_STORING_ITEMS_IN_PYRAMID_BAG) == TRUE) {
+    if (UsingBattlePyramidBag()) {
         return CheckPyramidBagHasSpace(itemId, count);
     }
 
     return TRUE;
 }
 
+int UsingBattlePyramidBag() {
+    return InBattlePyramid() || FlagGet(FLAG_STORING_ITEMS_IN_PYRAMID_BAG) == TRUE;
+}
+
 bool8 AddBagItem(u16 itemId, u16 count) {
     if (ItemId_GetPocket(itemId) == POCKET_NONE) return FALSE;
 
     // check Battle Pyramid Bag
-    if (InBattlePyramid() || FlagGet(FLAG_STORING_ITEMS_IN_PYRAMID_BAG) == TRUE) {
+    if (UsingBattlePyramidBag()) {
         return AddPyramidBagItem(itemId, count);
     } else {
         SetItem(itemId);
@@ -122,7 +126,7 @@ bool8 RemoveBagItem(u16 itemId, u16 count) {
     if (ItemId_GetPocket(itemId) == POCKET_NONE || itemId == ITEM_NONE) return FALSE;
 
     // check Battle Pyramid Bag
-    if (InBattlePyramid() || FlagGet(FLAG_STORING_ITEMS_IN_PYRAMID_BAG) == TRUE) {
+    if (UsingBattlePyramidBag()) {
         return RemovePyramidBagItem(itemId, count);
     } else {
         return HasItem(itemId);

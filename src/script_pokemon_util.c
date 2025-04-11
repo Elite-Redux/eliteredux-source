@@ -70,6 +70,7 @@ u8 ScriptGiveMon(SpeciesEnum species, u8 level, u16 item, u32 unused1, u32 unuse
     heldItem[0] = item;
     heldItem[1] = item >> 8;
     SetMonData(&mon, MON_DATA_HELD_ITEM, heldItem);
+    SetMonData(&mon, MON_DATA_POKEBALL, &gSaveBlock1Ptr->defaultPokeball);
     sentToPc = GiveMonToPlayer(&mon);
     nationalDexNum = SpeciesToNationalPokedexNum(species);
 
@@ -304,6 +305,8 @@ u8 ScriptGiveCustomMon(SpeciesEnum species, u8 level, u16 item, u8 ball, u8 natu
     //ball
     if (ball <= POKEBALL_COUNT)
         SetMonData(&mon, MON_DATA_POKEBALL, &ball);
+    else
+        SetMonData(&mon, MON_DATA_POKEBALL, &gSaveBlock1Ptr->defaultPokeball);
 
     //item
     heldItem[0] = item;
@@ -311,25 +314,7 @@ u8 ScriptGiveCustomMon(SpeciesEnum species, u8 level, u16 item, u8 ball, u8 natu
     SetMonData(&mon, MON_DATA_HELD_ITEM, heldItem);
 
     // give player the mon
-    //sentToPc = GiveMonToPlayer(&mon);
-    SetMonData(&mon, MON_DATA_OT_NAME, gSaveBlock2Ptr->playerName);
-    SetMonData(&mon, MON_DATA_OT_GENDER, &gSaveBlock2Ptr->playerGender);
-    for (i = 0; i < PARTY_SIZE; i++)
-    {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) == SPECIES_NONE)
-            break;
-    }
-
-    if (i >= PARTY_SIZE)
-    {
-        sentToPc = SendMonToPC(&mon);
-    }
-    else
-    {
-        sentToPc = MON_GIVEN_TO_PARTY;
-        CopyMon(&gPlayerParty[i], &mon, sizeof(mon));
-        gPlayerPartyCount = i + 1;
-    }
+    sentToPc = GiveMonToPlayer(&mon);
 
     nationalDexNum = SpeciesToNationalPokedexNum(species); 
     switch (sentToPc)
