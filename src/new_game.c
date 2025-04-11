@@ -199,7 +199,7 @@ void NewGameInitData(void)
     gSaveBlock1Ptr->registeredItemSelect = 0;
     //gSaveBlock1Ptr->registeredItem = 0;
     ClearBag();
-    gSaveBlock1Ptr->defaultPokeball = ITEM_POKE_BALL;
+    gSaveBlock1Ptr->defaultPokeball = 0;
     TxRegItemsMenu_RegisteredItemsMenuNewGame();
     ClearPokeblocks();
     ClearDecorationInventories();

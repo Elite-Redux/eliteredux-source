@@ -1,6 +1,8 @@
 #include "global.h"
 #include "event_data.h"
 #include "pokedex.h"
+#include "random.h"
+#include "constants/items.h"
 
 #define NUM_SPECIAL_FLAGS (SPECIAL_FLAGS_END - SPECIAL_FLAGS_START + 1)
 #define NUM_TEMP_FLAGS    (TEMP_FLAGS_END - TEMP_FLAGS_START + 1)
@@ -252,4 +254,12 @@ bool8 FlagGet(u16 id)
         return FALSE;
 
     return TRUE;
+}
+
+u8 GetDefaultPokeball() {
+    if (!gSaveBlock1Ptr->defaultPokeball) {
+        gSaveBlock1Ptr->defaultPokeball = Random() % (LAST_BALL_INDEX - FIRST_BALL_INDEX + 1) + FIRST_BALL_INDEX;
+    }
+
+    return gSaveBlock1Ptr->defaultPokeball;
 }
