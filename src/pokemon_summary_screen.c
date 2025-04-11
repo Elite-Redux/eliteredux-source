@@ -4731,6 +4731,24 @@ static void PrintEvolutionData(void) {
 #define EVOLUTION_METHOD_LINE_SPACING 0
 #define EVO_SCREEN_LVL_DIGITS 2
 
+#include "generated/data/megas/hints.h"
+
+const u8 *GetMegaHint(ItemEnum megaStone) {
+    if (HasItem(megaStone)) return NULL;
+    int isOkay = FALSE;
+    int flag;
+    if (FromLegendarySage(megaStone) && gSaveBlock2Ptr->encounterRandomizedLegendaryMode)
+        isOkay = TRUE;
+    else if (!(flag = GetBadgeFlag(megaStone)))
+        isOkay = TRUE;
+    else
+        isOkay = FlagGet(flag);
+
+    if (!isOkay && flag) return GetBadgeString(megaStone);
+
+    return GetMegaHintString(megaStone);
+}
+
 const u8 gText_EVO_MEGA_EVOLUTION[] = _("Mega Evolve holding a\n{STR_VAR_2}");
 const u8 gText_EVO_PRIMAL_REVERSION[] = _("Primal Reversion holding a\n{STR_VAR_2}");
 const u8 gText_EVO_MOVE_MEGA_EVOLUTION[] = _("Mega Evolve knowing\n{STR_VAR_2}");
@@ -5138,10 +5156,19 @@ static bool8 PrintMonEvolution(SpeciesEnum species, u8 num, u8 y, bool8 gender, 
             PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
             // Evolution Method
             item = gEvolutionTable[species][i].param;  // item
-            CopyItemName(item, gStringVar2);           // item
-            StringExpandPlaceholders(gStringVar4, gText_EVO_MEGA_EVOLUTION);
-            PrintSmallTextOnWindow(
-                PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
+            {
+                const u8 *hint = GetMegaHint(item);
+                if (!hint) {
+                    CopyItemName(item, gStringVar2);  // item
+                    StringExpandPlaceholders(gStringVar4, gText_EVO_MEGA_EVOLUTION);
+                }
+                PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT,
+                                       hint ? hint : gStringVar4,
+                                       EVOLUTION_METHOD_X,
+                                       y + EVOLUTION_METHOD_Y,
+                                       EVOLUTION_METHOD_LINE_SPACING,
+                                       PSS_COLOR_WHITE_BLACK_SHADOW);
+            }
             break;
         case EVO_MOVE_MEGA_EVOLUTION:
             // Target Species
@@ -5160,10 +5187,19 @@ static bool8 PrintMonEvolution(SpeciesEnum species, u8 num, u8 y, bool8 gender, 
             SaveSpeciesWithSurname(targetSpecies);
             PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);  // Evolution Method
             item = gEvolutionTable[species][i].param;                                                                                      // item
-            CopyItemName(item, gStringVar2);                                                                                               // item
-            StringExpandPlaceholders(gStringVar4, gText_EVO_PRIMAL_REVERSION);
-            PrintSmallTextOnWindow(
-                PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
+            {
+                const u8 *hint = GetMegaHint(item);
+                if (!hint) {
+                    CopyItemName(item, gStringVar2);  // item
+                    StringExpandPlaceholders(gStringVar4, gText_EVO_PRIMAL_REVERSION);
+                }
+                PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT,
+                                       hint ? hint : gStringVar4,
+                                       EVOLUTION_METHOD_X,
+                                       y + EVOLUTION_METHOD_Y,
+                                       EVOLUTION_METHOD_LINE_SPACING,
+                                       PSS_COLOR_WHITE_BLACK_SHADOW);
+            }
             break;
         default:
             // Target Species

@@ -2,6 +2,8 @@
 #define GUARD_CONSTANTS_ITEMS_H
 
 #include "generated/constants/items.h"
+#include "generated/data/megas/legendary_sage.h"
+#include "generated/data/megas/adoption_center.h"
 
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 

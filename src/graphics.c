@@ -1,4 +1,5 @@
 #include "global.h"
+#include "item_icon.h"
 
 const u32 gBattleTextboxTiles[]   = INCBIN_U32("graphics/ui_menus/battle_interface/vanilla/textbox.4bpp.lz");
 const u32 gBattleTextboxTilemap[] = INCBIN_U32("graphics/ui_menus/battle_interface/vanilla/textbox_map.bin.lz");
@@ -1752,7 +1753,6 @@ const u32 gPokeblockFeedBg_Tilemap[] = INCBIN_U32("graphics/interface/pokeblock_
 
 #include "data/graphics/berries.h"
 #include "data/graphics/rayquaza_scene.h"
-#include "data/graphics/items.h"
 #include "data/graphics/decorations.h"
 
 const u32 gBattleAnimSpritePal_Shock3[] = INCBIN_U32("graphics/battle_anims/sprites/shock_3.gbapal.lz");
