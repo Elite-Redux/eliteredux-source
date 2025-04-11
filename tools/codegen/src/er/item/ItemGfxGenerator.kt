@@ -26,7 +26,7 @@ object ItemGfxGenerator : Generator {
             |const u32 *const gBallIconTable[][2] = {
             |${
                 ITEMS_LIST.filter { it.grouping == Pocket.POCKET_POKE_BALLS }.joinToString("\n") {
-                    "$IND[${it.id}] = " +
+                    "$IND[BALL_${it.id.toString().removeSuffix("_BALL").removePrefix("ITEM_")}] = " +
                             """{(const u32[]) INCBIN_U32("graphics/summary_screen/ball_icons/${it.image.removeSuffix("_ball")}.4bpp.lz"),""" +
                             """ (const u32[]) INCBIN_U32("graphics/summary_screen/ball_icons/${it.image.removeSuffix("_ball")}.gbapal.lz")},"""
                 }
