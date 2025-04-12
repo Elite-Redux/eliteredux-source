@@ -5129,7 +5129,6 @@ static bool32 GetMentalHerbEffect(u8 battlerId) {
         StringCopy(gBattleTextBuff1, gStatusConditionString_LoveJpn);
         ret = TRUE;
     }
-#if B_MENTAL_HERB >= GEN_5
     // Check taunt
     if (gVolatileStructs[battlerId].tauntTimer != 0) {
         gVolatileStructs[battlerId].tauntTimer = gVolatileStructs[battlerId].tauntTimer2 = 0;
@@ -5163,7 +5162,6 @@ static bool32 GetMentalHerbEffect(u8 battlerId) {
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_MENTALHERBCURE_DISABLE;
         ret = TRUE;
     }
-#endif
     return ret;
 }
 
