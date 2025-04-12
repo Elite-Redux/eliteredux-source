@@ -116,6 +116,7 @@ $(eval $(call GENERATE, include/generated/data/abilities/ability_text.hh, abilit
 $(eval $(call GENERATE, include/generated/data/item/pockets.h, pockets))
 $(eval $(call GENERATE, include/generated/data/item/items.h, itemdata))
 $(eval $(call GENERATE, include/generated/data/item/item_graphics.h, itemgfx))
+$(eval $(call GENERATE, include/generated/data/item/natural_gift.h, naturalgift))
 $(eval $(call GENERATE, include/generated/data/megas/nurse_joy.h, nursejoy))
 $(eval $(call GENERATE, include/generated/data/megas/legendary_sage.h, legendarysage))
 $(eval $(call GENERATE, include/generated/data/megas/adoption_center.h, adoptioncenteritems))

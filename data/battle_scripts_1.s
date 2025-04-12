@@ -3419,7 +3419,8 @@ BattleScript_EffectNaturalGift:
 	waitmessage B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	seteffectwithchance
+	setmoveeffect MOVE_EFFECT_NATURAL_GIFT
+	seteffectsecondary
 	jumpifmovehadnoeffect BattleScript_EffectNaturalGiftEnd
 	removeitem BS_ATTACKER
 BattleScript_EffectNaturalGiftEnd:

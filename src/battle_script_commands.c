@@ -2907,6 +2907,11 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     REQUIRE(gTurnStructs[gBattlerAttacker].multiHitsUsed >= 2)
                     SET_MOVE_EFFECT_AS(MOVE_EFFECT_CONFUSION | affectsUser)
                     break;
+                case MOVE_EFFECT_NATURAL_GIFT:
+                    ItemEnum item = gBattleMons[gBattlerAttacker].item;
+                    REQUIRE(ItemId_GetPocket(item) == POCKET_BERRIES)
+                    SET_MOVE_EFFECT_AS(gNaturalGiftTable[item - FIRST_BERRY_INDEX].effect)
+                    break;
             }
         }
     }

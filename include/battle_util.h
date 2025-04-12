@@ -93,11 +93,11 @@ enum MiscMoveEffects {
 };
 
 // for Natural Gift and Fling
-struct TypePower {
+typedef struct TypePower {
     u8 type;
     u8 power;
     u16 effect;
-};
+} TypePower;
 
 typedef enum {
     COMMANDER_NOT_ACTIVE = 0,
@@ -436,6 +436,7 @@ bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
 int IsTerrainActive(int terrainFlag);
 int IsWeatherActive(int weather);
 u8 getMonotypeChampType(void);
+int NaturalGiftPriority(ItemEnum item);
 
 // Move checks
 bool8 IsTwoStrikesMove(MoveEnum move);

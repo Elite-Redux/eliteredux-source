@@ -629,7 +629,7 @@ static void CB2_InitBattleInternal(void) {
 
 #define BUFFER_PARTY_VS_SCREEN_STATUS(party, flags, i)                                   \
     for ((i) = 0; (i) < PARTY_SIZE; (i)++) {                                             \
-        SpeciesEnum species = GetMonData(&(party)[(i)], MON_DATA_SPECIES2);                      \
+        SpeciesEnum species = GetMonData(&(party)[(i)], MON_DATA_SPECIES2);              \
         u16 hp = GetMonData(&(party)[(i)], MON_DATA_HP);                                 \
         u32 status = GetMonData(&(party)[(i)], MON_DATA_STATUS);                         \
                                                                                          \
@@ -4312,6 +4312,8 @@ s8 GetMovePriority(u32 battlerId, MoveEnum move, u32 target) {
 
     if (gBattleMoves[move].effect == EFFECT_THIEF && !gBattleMons[battlerId].item && gBattleMons[target].item) priority++;
 
+    if (gBattleMoves[move].effect == EFFECT_NATURAL_GIFT) priority += NaturalGiftPriority(gBattleMons[battlerId].item);
+
     if ((gStatuses4[battlerId] & STATUS4_COILED) && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)) {
         priority++;
     }
@@ -5057,36 +5059,42 @@ u8 GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer) {
 
     if (move == MOVE_TERA_STARSTORM && (type1 == TYPE_STELLAR || type2 == TYPE_STELLAR)) return TYPE_STELLAR;
 
-    if (gBattleMoves[move].effect == EFFECT_MISC_HIT) {
-        if (gBattleMoves[move].argument == MISC_EFFECT_IVY_CUDGEL) {
-            switch (species) {
-                // TODO: Add type changing based on Ogrepon form.
+    switch (gBattleMoves[move].effect) {
+        case EFFECT_HIDDEN_POWER:
+            return GetMonData(mon, MON_DATA_HP_TYPE, NULL);
+        case EFFECT_FLING:
+            if (ItemId_GetHoldEffect(item) == HOLD_EFFECT_GEMS) return ItemId_GetSecondaryId(item);
+            break;
+        case EFFECT_CHANGE_TYPE_ON_ITEM:
+            if (holdEffect == gBattleMoves[move].argument) return ItemId_GetSecondaryId(item);
+            break;
+        case EFFECT_REVELATION_DANCE:
+        case EFFECT_SPIT_UP:
+            if (type1 != TYPE_MYSTERY)
+                return type1;
+            else if (type2 != TYPE_MYSTERY)
+                return type2;
+            break;
+        case EFFECT_SYNCHRONOISE:
+            if (gBattleMoves[move].argument == MISC_EFFECT_IVY_CUDGEL) {
+                switch (species) {
+                    case SPECIES_OGERPON_HEARTHFLAME_MASK:
+                        return TYPE_FIRE;
+                    case SPECIES_OGERPON_WELLSPRING_MASK:
+                        return TYPE_WATER;
+                    case SPECIES_OGERPON_CORNERSTONE_MASK:
+                        return TYPE_ROCK;
+                }
             }
-        }
-    } else if (gBattleMoves[move].effect == EFFECT_HIDDEN_POWER) {
-        return GetMonData(mon, MON_DATA_HP_TYPE, NULL);
-    } else if (gBattleMoves[move].effect == EFFECT_FLING && ItemId_GetHoldEffect(item) == HOLD_EFFECT_GEMS) {
-        return ItemId_GetSecondaryId(item);
-    } else if (gBattleMoves[move].effect == EFFECT_CHANGE_TYPE_ON_ITEM) {
-        if (holdEffect == gBattleMoves[move].argument) return ItemId_GetSecondaryId(item);
-    } else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE || gBattleMoves[move].effect == EFFECT_SPIT_UP) {
-        if (type1 != TYPE_MYSTERY)
-            return type1;
-        else if (type2 != TYPE_MYSTERY)
-            return type2;
-    } else if (gBattleMoves[move].effect == EFFECT_SYNCHRONOISE) {
-        if (type2 != TYPE_MYSTERY)
-            return type2;
-        else if (type1 != TYPE_MYSTERY)
-            return type1;
-    } else if (gBattleMoves[move].effect == EFFECT_NATURAL_GIFT) {
-        if (ItemId_GetPocket(item) == POCKET_BERRIES) return gNaturalGiftTable[ITEM_TO_BERRY(item)].type;
-    }
 
-    if (gBattleMoves[move].effect == EFFECT_FLING) {
-        if (holdEffect == HOLD_EFFECT_GEMS) {
-            return ItemId_GetHoldEffectParam(item);
-        }
+            if (type2 != TYPE_MYSTERY)
+                return type2;
+            else if (type1 != TYPE_MYSTERY)
+                return type1;
+            break;
+        case EFFECT_NATURAL_GIFT:
+            if (ItemId_GetPocket(item) == POCKET_BERRIES) return gNaturalGiftTable[item - FIRST_BERRY_INDEX].type;
+            break;
     }
 
     if (gAbilities[ability].onMoveType) {
@@ -5163,6 +5171,17 @@ static int GetMoveTypeInternal(MoveEnum move, int battlerAtk, u8 *ateBoost, s8 *
                 return gBattleMons[battlerAtk].type3;
 
         case EFFECT_SYNCHRONOISE:
+            if (gBattleMoves[move].argument == MISC_EFFECT_IVY_CUDGEL) {
+                switch (gBattleMons[battlerAtk].species) {
+                    case SPECIES_OGERPON_HEARTHFLAME_MASK:
+                        return TYPE_FIRE;
+                    case SPECIES_OGERPON_WELLSPRING_MASK:
+                        return TYPE_WATER;
+                    case SPECIES_OGERPON_CORNERSTONE_MASK:
+                        return TYPE_ROCK;
+                }
+            }
+
             if (gBattleMons[battlerAtk].type2 != TYPE_MYSTERY)
                 return gBattleMons[battlerAtk].type2;
             else if (gBattleMons[battlerAtk].type1 != TYPE_MYSTERY)
@@ -5172,7 +5191,7 @@ static int GetMoveTypeInternal(MoveEnum move, int battlerAtk, u8 *ateBoost, s8 *
 
         case EFFECT_NATURAL_GIFT:
             REQUIRE(ItemId_GetPocket(gBattleMons[battlerAtk].item) == POCKET_BERRIES)
-            return gNaturalGiftTable[ITEM_TO_BERRY(gBattleMons[battlerAtk].item)].type;
+            return gNaturalGiftTable[gBattleMons[battlerAtk].item - FIRST_BERRY_INDEX].type;
 
         case EFFECT_TERRAIN_PULSE:
             REQUIRE(IsBattlerTerrainAffected(battlerAtk, STATUS_FIELD_TERRAIN_ANY))
