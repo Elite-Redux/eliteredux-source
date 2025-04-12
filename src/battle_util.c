@@ -5290,11 +5290,6 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_CURE_FRZ:
-                        if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_FREEZE && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
-                            gBattleMons[battlerId].status1 &= ~(STATUS1_FREEZE);
-                            BattleScriptExecute(BattleScript_BerryCureFrzEnd2);
-                            effect = ITEM_STATUS_CHANGE;
-                        }
                         if (gBattleMons[battlerId].status1 & STATUS1_FROSTBITE && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~STATUS1_FROSTBITE;
                             BattleScriptCall(BattleScript_BerryCureFsbRet);
@@ -5577,11 +5572,6 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_CURE_FRZ:
-                        if (gBattleMons[battlerId].status1 & STATUS1_FREEZE && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
-                            gBattleMons[battlerId].status1 &= ~(STATUS1_FREEZE);
-                            BattleScriptExecute(BattleScript_BerryCureFrzEnd2);
-                            effect = ITEM_STATUS_CHANGE;
-                        }
                         if (gBattleMons[battlerId].status1 & STATUS1_FROSTBITE && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
                             gBattleMons[battlerId].status1 &= ~STATUS1_FROSTBITE;
                             BattleScriptExecute(BattleScript_BerryCureFsbEnd2);
@@ -5748,9 +5738,9 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_CURE_FRZ:
-                        if (gBattleMons[battlerId].status1 & STATUS1_FREEZE && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
-                            gBattleMons[battlerId].status1 &= ~(STATUS1_FREEZE);
-                            BattleScriptCall(BattleScript_BerryCureFrzRet);
+                        if (gBattleMons[battlerId].status1 & STATUS1_FROSTBITE && !IsUnnerveAbilityOnOpposingSide(battlerId)) {
+                            gBattleMons[battlerId].status1 &= ~STATUS1_FROSTBITE;
+                            BattleScriptCall(BattleScript_BerryCureFsbRet);
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
