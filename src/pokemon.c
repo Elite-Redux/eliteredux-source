@@ -1374,7 +1374,7 @@ u8 GetGenderFromSpeciesAndPersonality(SpeciesEnum species, u32 personality) {
             return gBaseStats[species].genderRatio;
     }
 
-    if (gBaseStats[species].genderRatio > (personality & 0xFF))
+    if (gBaseStats[species].genderRatio > ((personality + (GET_BASE_SPECIES_ID(species) == SPECIES_SYLVEON)) & 0xFF))
         return MON_FEMALE;
     else
         return MON_MALE;
@@ -4165,12 +4165,12 @@ const u32 *GetMonFrontSpritePal(struct Pokemon *mon) {
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
 
     if (isShiny) {
-        if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
+        if (SpeciesHasGenderDifference(species) && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return gMonShinyPaletteTableFemale[species].data;
         else
             return GetShinySpritePal(species, isShiny);
     } else {
-        if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
+        if (SpeciesHasGenderDifference(species) && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return gMonPaletteTableFemale[species].data;
         else
             return gMonPaletteTable[species].data;
@@ -4179,12 +4179,12 @@ const u32 *GetMonFrontSpritePal(struct Pokemon *mon) {
 
 const u32 *GetMonSpritePal(SpeciesEnum species, u32 personality, u8 isShiny) {
     if (isShiny != SHINY_NONE) {
-        if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
+        if (SpeciesHasGenderDifference(species) && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return gMonShinyPaletteTableFemale[species].data;
         else
             return GetShinySpritePal(species, isShiny);
     } else {
-        if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
+        if (SpeciesHasGenderDifference(species) && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return gMonPaletteTableFemale[species].data;
         else
             return gMonPaletteTable[species].data;
@@ -4202,12 +4202,12 @@ const struct CompressedSpritePalette *GetMonSpritePalStructFromOtIdPersonality(S
     if (isSpeciesPlaceholderMon(species)) species = SPECIES_NONE;
 
     if (isShiny != SHINY_NONE) {
-        if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
+        if (SpeciesHasGenderDifference(species) && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return &gMonShinyPaletteTableFemale[species];
         else
             return GetShinySpritePalAddr(species, isShiny);
     } else {
-        if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
+        if (SpeciesHasGenderDifference(species) && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return &gMonPaletteTableFemale[species];
         else
             return &gMonPaletteTable[species];

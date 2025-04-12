@@ -2,16 +2,17 @@ package er.gfx
 
 import er.FileGenerator.IND
 import er.Generator
+import er.GeneratorUtils
+import er.GeneratorUtils.LookupTable
 import er.GeneratorUtils.SPECIES_COUNT
 import er.GeneratorUtils.SPECIES_LIST
 import er.GeneratorUtils.SPECIES_MAP
-import er.GeneratorUtils.createDedupMaps
-import er.GeneratorUtils.printLookupTable
+import er.GeneratorUtils.printLookupTables
+import er.GeneratorUtils.resolveVisuals
 import er.proto.VisualsKt.icon
 import java.io.OutputStreamWriter
 
 object IconGenerator : Generator {
-    private const val ICON_PREFIX = "__sIcon_"
     override fun generate(writer: OutputStreamWriter) {
         val iconInfo = SPECIES_LIST.map {
             val id = when {
@@ -19,29 +20,21 @@ object IconGenerator : Generator {
                 it.visuals.hasReuseIcon() -> it.visuals.reuseIcon
                 else -> it.id
             }
-            checkNotNull(SPECIES_MAP[id]) { "$id $it" }.visuals.icon to it.id
-        }.filter { it.first != icon {} }
-        val (iconIds, speciesIconIds) = iconInfo.createDedupMaps()
+            it.id to checkNotNull(SPECIES_MAP[id]) { "$id $it" }.visuals.icon
+        }.filter { it.second != icon {} }
 
-        writer.appendLine(iconIds.entries.joinToString("\n") {
-            "const u8 $ICON_PREFIX${it.value}[] = INCBIN_U8(\"graphics/pokemon/${it.key.path}.4bpp\");"
-        })
-        speciesIconIds.printLookupTable("const u8 *const gMonIconTable[$SPECIES_COUNT]", ICON_PREFIX, writer)
+        val femaleIcons = SPECIES_LIST.map { it.id to it.resolveVisuals() }.filter { it.second.hasFemale() }
+            .map { it.first to if (it.second.female.hasIcon()) it.second.female.icon else it.second.icon }
+
+        printLookupTables(writer, GeneratorUtils.PrintMode.FILE, "__sMonIcon_", {name, path -> "u8 $name[] = INCBIN_U8(\"graphics/pokemon/$path.4bpp\")"},
+            LookupTable("u8 *const gMonIconTable[$SPECIES_COUNT]", iconInfo.map { it.first to it.second.path }),
+            LookupTable("u8 *const gMonIconTableFemale[$SPECIES_COUNT]", femaleIcons.map { it.first to it.second.path })
+        )
 
         writer.appendLine(
             """
             |const u8 gMonIconPaletteIndices[] = {
-            |$IND${iconInfo.joinToString("\n$IND") { "[${it.second}] = ${it.first.palette}," }}
-            |};
-            |""".trimMargin()
-        )
-
-        val femaleIcons = SPECIES_LIST.map { it.id to it.visuals.female.icon }.filter { it.second.path.isNotBlank() }
-
-        writer.appendLine(
-            """
-            |const u8 *const gMonIconTableFemale[$SPECIES_COUNT] = {
-            |$IND${femaleIcons.joinToString("\n$IND") { "[${it.first}] = (const u8[]) INCBIN_U8(\"graphics/pokemon/${it.second.path}.4bpp\")," }}
+            |$IND${iconInfo.joinToString("\n$IND") { "[${it.first}] = ${it.second.palette}," }}
             |};
             |
             |const u8 gMonIconPaletteIndicesFemale[] = {

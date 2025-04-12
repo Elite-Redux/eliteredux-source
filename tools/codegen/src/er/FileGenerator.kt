@@ -67,6 +67,7 @@ object FileGenerator {
         "legendarysage" to LegendarySageMegasGenerator,
         "adoptioncenteritems" to AdoptionCenterMegasGenerator,
         "megahints" to MegaHintGenerator,
+        "gendergraphics" to GenderedGraphicsGenerator,
     )
 
     @JvmStatic

@@ -1,55 +1,45 @@
 package er.gfx
 
-import er.FileGenerator.IND
 import er.Generator
+import er.GeneratorUtils
+import er.GeneratorUtils.LookupTable
 import er.GeneratorUtils.SPECIES_LIST
-import er.GeneratorUtils.createDedupMaps
+import er.GeneratorUtils.printLookupTables
 import er.GeneratorUtils.resolveVisuals
-import er.proto.Visuals
 import java.io.OutputStreamWriter
 
 object PaletteGenerator : Generator {
-    private fun printTable(
-        writer: OutputStreamWriter,
-        tableName: String,
-        pal: String,
-        prefix: String,
-        transform: (Visuals) -> String
-    ) {
-        val (paletteIds, speciesIds) = SPECIES_LIST.map {
-            transform(it.resolveVisuals()) to it.id
-        }.filter { it.first.isNotBlank() }.createDedupMaps()
-
-        writer.appendLine(paletteIds.entries.joinToString("\n") {
-            """const u32 $prefix${it.value}[] = INCBIN_U32("graphics/pokemon/${it.key}.gbapal.lz");"""
-        })
-
-        writer.appendLine(
-            """
-            |const struct CompressedSpritePalette $tableName[] = {
-            |$IND${speciesIds.entries.joinToString("\n$IND") { "$pal(${it.key}, $prefix${it.value})," }}
-            |};
-            |""".trimMargin()
-        )
-    }
-
     override fun generate(writer: OutputStreamWriter) {
-        printTable(writer, "gMonPaletteTable", "SPECIES_PAL", "__sPalette_") { it.palette }
-        printTable(writer, "gMonPaletteTableFemale", "SPECIES_PAL", "__sPaletteFemale_") { it.female.palette }
-        printTable(writer, "gMonShinyPaletteTable", "SPECIES_SHINY_PAL", "__sPaletteShiny_") { it.shiny }
-        printTable(writer, "gMonRareShinyPaletteTable", "SPECIES_SHINY_PAL", "__sPaletteShinyRare_") { it.rare }
-        printTable(
+        printLookupTables(
             writer,
-            "gMonLegendaryShinyPaletteTable",
-            "SPECIES_SHINY_PAL",
-            "__sPaletteShinyLegendary_"
-        ) { it.legendary }
-        printTable(
-            writer,
-            "gMonShinyPaletteTableFemale",
-            "SPECIES_SHINY_PAL",
-            "__sPaletteShinyFemale_"
-        ) { it.female.shiny }
+            GeneratorUtils.PrintMode.FILE,
+            "__sPalette_",
+            { name, file -> """u32 $name[] = INCBIN_U32("graphics/pokemon/$file.gbapal.lz")""" },
+            LookupTable(
+                "struct CompressedSpritePalette gMonPaletteTable[]",
+                SPECIES_LIST.map { it.id to it.resolveVisuals().palette }) { id, name -> "SPECIES_PAL($id, $name)" },
+            LookupTable(
+                "struct CompressedSpritePalette gMonShinyPaletteTable[]",
+                SPECIES_LIST.map { it.id to it.resolveVisuals().shiny }) { id, name -> "SPECIES_SHINY_PAL($id, $name)" },
+            LookupTable(
+                "struct CompressedSpritePalette gMonRareShinyPaletteTable[]",
+                SPECIES_LIST.map { it.id to it.resolveVisuals().rare }) { id, name -> "SPECIES_SHINY_PAL($id, $name)" },
+            LookupTable(
+                "struct CompressedSpritePalette gMonLegendaryShinyPaletteTable[]",
+                SPECIES_LIST.map { it.id to it.resolveVisuals().legendary }) { id, name -> "SPECIES_SHINY_PAL($id, $name)" },
+            LookupTable(
+                "struct CompressedSpritePalette gMonPaletteTableFemale[]",
+                SPECIES_LIST.map {
+                    it.id to it.resolveVisuals().takeIf { v -> v.hasFemale() }
+                        ?.let { v -> v.female.palette.ifEmpty { v.palette } }
+                }) { id, name -> "SPECIES_PAL($id, $name)" },
+            LookupTable(
+                "struct CompressedSpritePalette gMonShinyPaletteTableFemale[]",
+                SPECIES_LIST.map {
+                    it.id to it.resolveVisuals().takeIf { v -> v.hasFemale() }
+                        ?.let { v -> v.female.shiny.ifEmpty { v.shiny } }
+                }) { id, name -> "SPECIES_SHINY_PAL($id, $name)" },
+        )
     }
 
 }

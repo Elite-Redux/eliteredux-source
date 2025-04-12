@@ -14,14 +14,6 @@ import java.io.File
 import java.io.OutputStreamWriter
 
 object GeneratorUtils {
-    fun <T> ProtocolMessageEnum.getOption(extension: GeneratedExtension<EnumValueOptions, T>): T =
-        valueDescriptor.getOption(extension)
-
-    fun <T> EnumValueDescriptor.getOption(extension: GeneratedExtension<EnumValueOptions, T>): T =
-        options.getExtension(extension)
-
-    fun <T> FieldDescriptor.getOption(extension: GeneratedExtension<FieldOptions, T>): T =
-        toProto().options.getExtension(extension)
 
     val ITEMS_LIST by lazy {
         (Pocket.entries.filter { it != Pocket.POCKET_NONE && it != Pocket.UNRECOGNIZED }.map {
@@ -73,6 +65,18 @@ object GeneratorUtils {
     fun Species.resolveVisuals(): Visuals =
         if (hasReuseVisuals()) SPECIES_MAP[reuseVisuals]!!.resolveVisuals() else this.visuals
 
+    fun <T> ProtocolMessageEnum.getOption(extension: GeneratedExtension<EnumValueOptions, T>): T =
+        valueDescriptor.getOption(extension)
+
+    fun <T> EnumValueDescriptor.getOption(extension: GeneratedExtension<EnumValueOptions, T>): T =
+        options.getExtension(extension)
+
+    fun <T> FieldDescriptor.getOption(extension: GeneratedExtension<FieldOptions, T>): T =
+        toProto().options.getExtension(extension)
+
+    fun String.fileID() =
+        lowercase().replace("[^a-z0-9_]".toRegex()) { "E${it.value.replace("\\", "/").single().code}" }
+
     /**
      * Takes a list of key-value pairs and creates a set of mappings of keys/values to a shared index value.
      */
@@ -94,5 +98,50 @@ object GeneratorUtils {
             |};
             |""".trimMargin()
         )
+    }
+
+    enum class PrintMode { FILE, STRING }
+
+    /**
+     * Lookup table definition for deduping
+     *
+     * @param signature signature for the table to print, will have const prepended and '= {' appended
+     * @param data list of keys to string values
+     * @param entryFunction transforms a key plus dedup entry name to a table entry. Has indentation prepended and ',' appended.
+     */
+    data class LookupTable<T>(
+        val signature: String,
+        val data: List<Pair<T, String?>>,
+        val entryFunction: (T, String) -> String = { key, name -> "[$key] = $name" }
+    )
+
+    /**
+     * Prints a set of lookup tables to string values with deduplicated strings.
+     *
+     * @param mode whether the string value is a filepath or a display string
+     * @param prefix prefix of the static dedup entries
+     * @param valueFunction method that generates the dedup entry, (field, string) -> code. Will be prepended with static const and appended with ;.
+     * @param tables table entries to include. Entries included across tables will be deduped.
+     */
+    fun <T> printLookupTables(
+        writer: OutputStreamWriter,
+        mode: PrintMode,
+        prefix: String,
+        valueFunction: (String, String) -> String,
+        vararg tables: LookupTable<T>
+    ) {
+        fun String.dedupEntry() = prefix + if (mode == PrintMode.FILE) fileID() else TODO("String mode not implemented")
+
+        tables.asSequence().flatMap { it.data }.map { it.second }.filterNotNull().filter { it.isNotBlank() }
+            .associateBy { it.dedupEntry() }.entries.forEach {
+                writer.appendLine("static const ${valueFunction(it.key, it.value)};")
+            }
+
+        for (table in tables) {
+            writer.appendLine("const ${table.signature} = {")
+            table.data.filter { !it.second.isNullOrBlank() }
+                .forEach { writer.appendLine("$IND${table.entryFunction(it.first, it.second!!.dedupEntry())},") }
+            writer.appendLine("};\n")
+        }
     }
 }

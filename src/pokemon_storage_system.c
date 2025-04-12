@@ -4547,7 +4547,7 @@ static u16 TryLoadMonIconTiles(SpeciesEnum species, u32 personality) {
     u16 i, offset;
 
     // Treat female mons as a seperate species as they may have a different icon than males
-    if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE) species |= 0x8000;  // 1 << 15
+    if (SpeciesHasGenderDifference(species) && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE) species |= 0x8000;  // 1 << 15
 
     // Search icon list for this species
     for (i = 0; i < MAX_MON_ICONS; i++) {
@@ -4600,7 +4600,7 @@ static struct Sprite *CreateMonIconSprite(SpeciesEnum species, u32 personality, 
     struct SpriteTemplate spriteTemplate = sSpriteTemplate_MonIcon;
 
     species = GetIconSpecies(species, personality);
-    if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE) {
+    if (SpeciesHasGenderDifference(species) && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE) {
         spriteTemplate.paletteTag = PALTAG_MON_ICON_0 + gMonIconPaletteIndicesFemale[species];
     } else {
         spriteTemplate.paletteTag = PALTAG_MON_ICON_0 + gMonIconPaletteIndices[species];

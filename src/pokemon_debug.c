@@ -338,7 +338,7 @@ static void PrintInstructionsOnWindow(struct PokemonDebugMenu *data) {
     u8 textInstructionsSubmenuOneGender[] = _("{START_BUTTON} Shiny {SELECT_BUTTON} Gender\n{B_BUTTON} Back  {A_BUTTON} Submenu 2$");
     u8 textInstructionsSubmenuTwo[] = _("{START_BUTTON} Shiny\n{B_BUTTON} Back$");
     u8 textInstructionsSubmenuTwoGender[] = _("{START_BUTTON} Shiny {SELECT_BUTTON} Gender\n{B_BUTTON} Back$");
-    bool8 hasGenderDifferences = SpeciesHasGenderDifference[data->currentmonId];
+    bool8 hasGenderDifferences = SpeciesHasGenderDifference(data->currentmonId);
     bool8 hasForms = SpeciesHasDifferentForms(data->currentmonId);
 
     u8 textBottom[] = _("BACK:\nFRONT:\nBG:$");
@@ -403,7 +403,7 @@ static void PrintDigitChars(struct PokemonDebugMenu *data) {
     s32 i;
     SpeciesEnum species = data->modifyArrows.currValue;
     u8 text[MODIFY_DIGITS_MAX + POKEMON_NAME_LENGTH + 8];
-    bool8 hasGenderDifferences = SpeciesHasGenderDifference[species];
+    bool8 hasGenderDifferences = SpeciesHasGenderDifference(species);
     bool8 isPlaceHolderMon = isSpeciesPlaceholderMon(species);
 
     if (isPlaceHolderMon) species = SPECIES_NONE;
@@ -596,12 +596,12 @@ static const u32 *GetMonSpritePalStructCustom(SpeciesEnum species, bool8 isFemal
     if (isSpeciesPlaceholderMon(species)) species = SPECIES_NONE;
 
     if (isShiny != SHINY_NONE) {
-        if (SpeciesHasGenderDifference[species] && isFemale)
+        if (SpeciesHasGenderDifference(species) && isFemale)
             return gMonShinyPaletteTableFemale[species].data;
         else
             return gMonShinyPaletteTable[species].data;
     } else {
-        if (SpeciesHasGenderDifference[species] && isFemale)
+        if (SpeciesHasGenderDifference(species) && isFemale)
             return gMonPaletteTableFemale[species].data;
         else
             return gMonPaletteTable[species].data;
@@ -616,12 +616,12 @@ static void BattleLoadOpponentMonSpriteGfxCustom(SpeciesEnum species, bool8 isFe
     if (isSpeciesPlaceholderMon(species)) species = SPECIES_NONE;
 
     if (isShiny != SHINY_NONE) {
-        if (SpeciesHasGenderDifference[species] && isFemale)
+        if (SpeciesHasGenderDifference(species) && isFemale)
             lzPaletteData = gMonShinyPaletteTableFemale[species].data;
         else
             lzPaletteData = gMonShinyPaletteTable[species].data;
     } else {
-        if (SpeciesHasGenderDifference[species] && isFemale)
+        if (SpeciesHasGenderDifference(species) && isFemale)
             lzPaletteData = gMonPaletteTableFemale[species].data;
         else
             lzPaletteData = gMonPaletteTable[species].data;
@@ -1190,7 +1190,7 @@ static void Handle_Input_Debug_Pokemon(u8 taskId) {
     struct Sprite *Backsprite = &gSprites[data->backspriteId];
     u8 delay = 0;      // ToDo gSpeciesInfo[data->currentmonId].frontAnimDelay
     u8 animation = 0;  // To Do sMonFrontAnimIdsTable[data->currentmonId];
-    bool8 hasGenderDifferences = SpeciesHasGenderDifference[data->currentmonId];
+    bool8 hasGenderDifferences = SpeciesHasGenderDifference(data->currentmonId);
     bool8 hasForms = SpeciesHasDifferentForms(data->currentmonId);
 
     if (JOY_NEW(L_BUTTON) && (Backsprite->callback == SpriteCallbackDummy)) {

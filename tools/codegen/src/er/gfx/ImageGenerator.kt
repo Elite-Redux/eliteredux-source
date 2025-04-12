@@ -1,42 +1,38 @@
 package er.gfx
 
-import er.FileGenerator.IND
 import er.Generator
+import er.GeneratorUtils
+import er.GeneratorUtils.LookupTable
 import er.GeneratorUtils.SPECIES_LIST
-import er.GeneratorUtils.createDedupMaps
+import er.GeneratorUtils.printLookupTables
 import er.GeneratorUtils.resolveVisuals
-import er.proto.Visuals
 import java.io.OutputStreamWriter
 
 object ImageGenerator : Generator {
-    private fun printImageTable(
-        writer: OutputStreamWriter,
-        prefix: String,
-        tableName: String,
-        transform: (Visuals) -> String
-    ) {
-        val (imageIds, speciesIds) = SPECIES_LIST.map {
-            transform(it.resolveVisuals()) to it.id
-        }.filter { it.first.isNotBlank() }.createDedupMaps()
-
-        writer.appendLine(imageIds.entries.joinToString("\n") {
-            """const u32 $prefix${it.value}[] = INCBIN_U32("graphics/pokemon/${it.key}.4bpp.lz");"""
-        })
-
-        writer.appendLine(
-            """
-            |const struct CompressedSpriteSheet $tableName[] = {
-            |$IND${speciesIds.entries.joinToString("\n$IND") { "SPECIES_SPRITE(${it.key}, $prefix${it.value})," }}
-            |};
-            |""".trimMargin()
-        )
-
-    }
-
     override fun generate(writer: OutputStreamWriter) {
-        printImageTable(writer, "__sFrontPic_", "gMonFrontPicTable") { it.front.path }
-        printImageTable(writer, "__sFrontPicFemale_", "gMonFrontPicTableFemale") { it.female.front }
-        printImageTable(writer, "__sBackPic_", "gMonBackPicTable") { it.back.path }
-        printImageTable(writer, "__sBackPicFemale_", "gMonBackPicTableFemale") { it.female.back }
+        printLookupTables(
+            writer,
+            GeneratorUtils.PrintMode.FILE,
+            "__sMonImage_",
+            { name, file -> """u32 $name[] = INCBIN_U32("graphics/pokemon/$file.4bpp.lz")""" },
+            LookupTable(
+                "struct CompressedSpriteSheet gMonFrontPicTable[]",
+                SPECIES_LIST.map { it.id to it.resolveVisuals().front.path }) { id, name -> "SPECIES_SPRITE($id, $name)" },
+            LookupTable(
+                "struct CompressedSpriteSheet gMonFrontPicTableFemale[]",
+                SPECIES_LIST.map {
+                    it.id to it.resolveVisuals().takeIf { v -> v.hasFemale() }
+                        ?.let { v -> v.female.front.ifEmpty { v.front.path } }
+                }) { id, name -> "SPECIES_SPRITE($id, $name)" },
+            LookupTable(
+                "struct CompressedSpriteSheet gMonBackPicTable[]",
+                SPECIES_LIST.map { it.id to it.resolveVisuals().back.path }) { id, name -> "SPECIES_SPRITE($id, $name)" },
+            LookupTable(
+                "struct CompressedSpriteSheet gMonBackPicTableFemale[]",
+                SPECIES_LIST.map {
+                    it.id to it.resolveVisuals().takeIf { v -> v.hasFemale() }
+                        ?.let { v -> v.female.back.ifEmpty { v.back.path } }
+                }) { id, name -> "SPECIES_SPRITE($id, $name)" },
+        )
     }
 }

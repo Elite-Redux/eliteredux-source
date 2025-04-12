@@ -101,6 +101,7 @@ $(eval $(call GENERATE, include/generated/data/pokemon_graphics/palettes.h, monp
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/front_pic_anims.h, speciesanims))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/front_anim_ids.h, frontanimids))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/back_anim_ids.h, backanimids))
+$(eval $(call GENERATE, include/generated/data/pokemon_graphics/gendered_graphics.h, gendergraphics))
 
 
 $(eval $(call GENERATE, include/generated/data/text/move_names.h, movenames))

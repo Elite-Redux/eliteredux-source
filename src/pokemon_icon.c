@@ -140,7 +140,7 @@ u8 CreateMonIcon(SpeciesEnum species, void (*callback)(struct Sprite *), s16 x, 
 
     if (species > NUM_SPECIES)
         iconTemplate.paletteTag = POKE_ICON_BASE_PAL_TAG;
-    else if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
+    else if (SpeciesHasGenderDifference(species) && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
         iconTemplate.paletteTag = POKE_ICON_BASE_PAL_TAG + gMonIconPaletteIndicesFemale[species];
 
     spriteId = CreateMonIconSprite(&iconTemplate, x, y, subpriority);
@@ -230,7 +230,7 @@ void LoadMonIconPalette(SpeciesEnum species) {
 void LoadGenderedMonIconPalette(SpeciesEnum species, u32 personality) {
     u8 palIndex;
 
-    if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
+    if (SpeciesHasGenderDifference(species) && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
         palIndex = gMonIconPaletteIndicesFemale[species];
     else
         palIndex = gMonIconPaletteIndices[species];
@@ -263,7 +263,7 @@ void SpriteCB_MonIcon(struct Sprite *sprite) { UpdateMonIconFrame(sprite); }
 
 const u8 *GetMonIconTiles(SpeciesEnum species, u32 personality) {
     const u8 *iconSprite = gMonIconTable[species];
-    if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE) {
+    if (SpeciesHasGenderDifference(species) && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE) {
         iconSprite = gMonIconTableFemale[species];
     }
     return iconSprite;
