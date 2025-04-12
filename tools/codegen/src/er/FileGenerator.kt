@@ -69,6 +69,7 @@ object FileGenerator {
         "megahints" to MegaHintGenerator,
         "gendergraphics" to GenderedGraphicsGenerator,
         "naturalgift" to NaturalGiftGenerator,
+        "holdeffect" to HoldEffectGenerator
     )
 
     @JvmStatic

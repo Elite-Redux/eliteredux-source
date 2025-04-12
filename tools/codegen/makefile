@@ -103,7 +103,7 @@ $(eval $(call GENERATE, include/generated/data/pokemon_graphics/front_anim_ids.h
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/back_anim_ids.h, backanimids))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/gendered_graphics.h, gendergraphics))
 
-
+$(eval $(call GENERATE, include/generated/constants/hold_effects.h, holdeffect))
 $(eval $(call GENERATE, include/generated/data/text/move_names.h, movenames))
 $(eval $(call GENERATE, include/generated/data/text/move_descriptions.h, movedescriptions))
 $(eval $(call GENERATE, include/generated/constants/battle_move_effects.h, movebehaviors))

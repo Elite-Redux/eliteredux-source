@@ -10,20 +10,20 @@ object MoveBehaviorGenerator : Generator {
         val effectsCount = effects.maxOf { it.number } + 1
         writer.appendLine(
             """
-                |#define NUM_BATTLE_MOVE_EFFECTS $effectsCount
-                |
-                |#ifdef __assembly__
-                |
-                |${effects.joinToString("\n") { "#define ${it.name} ${it.number}" }}
-                |
-                |#else
-                |
-                |typedef enum MoveBehaviorEnum {
-                |${effects.joinToString("\n") { "    ${it.name} = ${it.number}," }}
-                |} MoveBehaviorEnum;
-                |
-                |#endif
-                |""".trimMargin()
+            |#define NUM_BATTLE_MOVE_EFFECTS $effectsCount
+            |
+            |#ifdef __assembly__
+            |
+            |${effects.joinToString("\n") { "#define ${it.name} ${it.number}" }}
+            |
+            |#else
+            |
+            |typedef enum MoveBehaviorEnum {
+            |${effects.joinToString("\n") { "    ${it.name} = ${it.number}," }}
+            |} MoveBehaviorEnum;
+            |
+            |#endif
+            |""".trimMargin()
         )
     }
 }
