@@ -25,7 +25,7 @@ object EvolutionsGenerator : Generator {
         val primals = SPECIES_LIST.flatMap { it.primalList.map { primal -> primal to it.id } }.groupBy { it.first.from }
 
         val (evoIds, speciesEvoIds) = NO_EGG_LIST.map { species ->
-            species.evoList.map {
+            species.evoList.filter { it.to in SPECIES_MAP }.map {
                 Evo(
                     when {
                         it.gender == Species.Gender.MALE -> "EVO_LEVEL_MALE"
