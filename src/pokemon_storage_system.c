@@ -1075,6 +1075,7 @@ static const struct WindowTemplate sYesNoWindowTemplate = {
 };
 
 #define MAX_LEVEL_UP_OPTIONS 6
+#define MAX_EVO_OPTIONS 7
 static const struct WindowTemplate sLevelUpWindowTemplate = {
     .bg = 0,
     .tilemapLeft = 20,
@@ -1088,9 +1089,9 @@ static const struct WindowTemplate sLevelUpWindowTemplate = {
 static const struct WindowTemplate sEvolutionWindowTemplate = {
     .bg = 0,
     .tilemapLeft = 15,
-    .tilemapTop = 3,
+    .tilemapTop = 1,
     .width = 14,
-    .height = MAX_LEVEL_UP_OPTIONS * 2,
+    .height = MAX_EVO_OPTIONS * 2,
     .paletteNum = 15,
     .baseBlock = 0x5C,
 };
@@ -3760,7 +3761,7 @@ static void Task_EvolveMon(u8 taskId) {
                     else
                         BoxMonToMon(&gPokemonStoragePtr->boxes[boxId][pos], &pokemon);
 
-                    for (i = 0; i < MAX_LEVEL_UP_OPTIONS; i++) {
+                    for (i = 0; i < MAX_EVO_OPTIONS && gEvolutionTable[pokemon.box.species][i].method; i++) {
                         targetSpecies = GetEvolutionForMon(&pokemon, i);
                         if (targetSpecies != SPECIES_NONE) {
                             if (numEvo == Menu_ProcessInputNoWrapClearOnChoose()) targetNumEvo = i;
@@ -3902,7 +3903,7 @@ void CreateEvolveMenu(const struct WindowTemplate *window, u16 baseTileNum, u8 p
     else
         BoxMonToMon(&gPokemonStoragePtr->boxes[boxId][pos], &pokemon);
 
-    for (i = 0; i < MAX_LEVEL_UP_OPTIONS; i++) {
+    for (i = 0; i < MAX_EVO_OPTIONS && gEvolutionTable[pokemon.box.species][i].method; i++) {
         targetSpecies = GetEvolutionForMon(&pokemon, i);
         if (targetSpecies != SPECIES_NONE) {
             AddTextPrinterParameterized(windowId, FONT_NORMAL, SaveSpeciesWithSurname(targetSpecies), 8, (numEvolutions * 16) + 1, TEXT_SPEED_FF, NULL);

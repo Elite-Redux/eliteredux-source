@@ -6163,7 +6163,7 @@ u8 getNumofAvailableEvos(struct Pokemon *mon) {
     u8 i;
     u8 count = 0;
 
-    for (i = 0; i < EVOS_PER_MON; i++) {
+    for (i = 0; gEvolutionTable[mon->box.species][i].method; i++) {
         if (GetEvolutionForMon(mon, i) != SPECIES_NONE) count++;
     }
 
