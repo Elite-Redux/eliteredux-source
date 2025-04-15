@@ -192,8 +192,10 @@ const void *GetItemIconPicOrPalette(u16 itemId, u8 which)
         itemId = ITEM_FIELD_ARROW;
     else if (itemId >= ITEMS_COUNT)
         itemId = 0;
+    
+    const void* ret = gItemIconTable[itemId][which];
 
-    return gItemIconTable[itemId][which];
+    return ret ? ret : gItemIconTable[0][which];
 }
 
 u8 AddBallIconSprite(u16 tilesTag, u16 paletteTag, u8 ballId)
