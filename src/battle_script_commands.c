@@ -6806,8 +6806,12 @@ static void Cmd_various(void) {
                 if (gBattleStruct->stolenStats[0] & gBitTable[i]) {
                     gBattleStruct->stolenStats[0] &= ~(gBitTable[i]);
                     SET_STATCHANGER(i, gBattleStruct->stolenStats[i], FALSE);
-                    if (ChangeStatBuffsImplicit(
-                            GET_STAT_BUFF_VALUE_WITH_SIGN(gBattleScripting.statChanger), i, MOVE_EFFECT_CERTAIN | MOVE_EFFECT_AFFECTS_USER, NULL)) {
+                    if (ChangeStatBuffs(gActiveBattler,
+                                        GET_STAT_BUFF_VALUE_WITH_SIGN(gBattleScripting.statChanger),
+                                        i,
+                                        MOVE_EFFECT_CERTAIN | MOVE_EFFECT_AFFECTS_USER,
+                                        NULL)) {
+                        gBattlescriptCurrInstr = runAgain;
                         BattleScriptCall(BattleScript_StatUpMsg);
                         return;
                     }
