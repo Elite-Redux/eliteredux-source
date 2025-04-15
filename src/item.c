@@ -52,21 +52,15 @@ void GetBerryCountString(u8 *dst, const u8 *berryName, u32 quantity) {
 
 #define ITEM_BUCKET(item) gSaveBlock1Ptr->itemFlags[(item) / 16]
 #define ITEM_BIT(item) (1 << ((item) % 16))
-int HasItem(u16 item) {
-    return (ITEM_BUCKET(item) & ITEM_BIT(item)) != 0;
-}
+int HasItem(u16 item) { return (ITEM_BUCKET(item) & ITEM_BIT(item)) != 0; }
 
-void SetItem(u16 item) {
-    ITEM_BUCKET(item) |= ITEM_BIT(item);
-}
+void SetItem(u16 item) { ITEM_BUCKET(item) |= ITEM_BIT(item); }
 
-void ClearItem(u16 item) {
-    ITEM_BUCKET(item) &= ~ITEM_BIT(item);
-}
+void ClearItem(u16 item) { ITEM_BUCKET(item) &= ~ITEM_BIT(item); }
 
 bool8 IsBagPocketNonEmpty(u8 pocket) {
     int itemCount = gItemCountsForPocket[pocket];
-    const u16* items = gItemsForPocket[pocket];
+    const u16 *items = gItemsForPocket[pocket];
 
     for (int i = 0; i < itemCount; i++) {
         FILTER(HasItem(items[i]))
@@ -84,7 +78,7 @@ bool8 CheckBagHasItem(u16 itemId, u16 count) {
 
 bool8 HasAtLeastOneBerry(void) {
     int itemCount = gItemCountsForPocket[POCKET_BERRIES - 1];
-    const u16* items = gItemsForPocket[POCKET_BERRIES - 1];
+    const u16 *items = gItemsForPocket[POCKET_BERRIES - 1];
 
     for (int i = 0; i < itemCount; i++) {
         if (CheckBagHasItem(items[i], 1) == TRUE) {
@@ -106,9 +100,7 @@ bool8 CheckBagHasSpace(u16 itemId, u16 count) {
     return TRUE;
 }
 
-int UsingBattlePyramidBag() {
-    return InBattlePyramid() || FlagGet(FLAG_STORING_ITEMS_IN_PYRAMID_BAG) == TRUE;
-}
+int UsingBattlePyramidBag() { return InBattlePyramid() || FlagGet(FLAG_STORING_ITEMS_IN_PYRAMID_BAG) == TRUE; }
 
 bool8 AddBagItem(u16 itemId, u16 count) {
     if (ItemId_GetPocket(itemId) == POCKET_NONE) return FALSE;
@@ -155,14 +147,16 @@ void SwapRegisteredBike(void) {
 ItemEnum BagGetItemIdByPocketPosition(u8 pocketId, u16 pocketPos) {
     int count = gItemCountsForPocket[pocketId];
     // const u16* items = gItemsForPocket[pocketId];
-    if (pocketPos < count) return gItemsForPocket[pocketId][pocketPos];
-    else return ITEM_NONE;
+    if (pocketPos < count)
+        return gItemsForPocket[pocketId][pocketPos];
+    else
+        return ITEM_NONE;
     // for (int i = 0; i < count; i++) {
     //     MGBA_PRINT_VALUES(pocketId, pocketPos, items[i], HasItem(items[i]), pocketPos)
     //     if (HasItem(items[i]) && !(pocketPos--)) return items[i];
     // }
     // return 0;
- }
+}
 
 static void SwapItemSlots(struct ItemSlot *a, struct ItemSlot *b) {
     struct ItemSlot temp;
@@ -212,9 +206,7 @@ void MoveItemSlotInList(struct ItemSlot *itemSlots_, u32 from, u32 to_) {
     }
 }
 
-void ClearBag(void) {
-    ZERO(gSaveBlock1Ptr->itemFlags)
-}
+void ClearBag(void) { ZERO(gSaveBlock1Ptr->itemFlags) }
 
 static bool8 CheckPyramidBagHasItem(u16 itemId, u16 count) {
     u16 *items = gSaveBlock2Ptr->frontier.pyramidBag.itemId[gSaveBlock2Ptr->frontier.lvlMode];
@@ -360,7 +352,10 @@ static u16 SanitizeItemId(u16 itemId) {
         return itemId;
 }
 
-const u8 *ItemId_GetName(u16 itemId) { return gItems[SanitizeItemId(itemId)].name; }
+const u8 *ItemId_GetName(u16 itemId) {
+    const u8 *name = gItems[SanitizeItemId(itemId)].name;
+    return name ? name : gItems[0].name;
+}
 
 u16 ItemId_GetId(u16 itemId) { return gItems[SanitizeItemId(itemId)].itemId; }
 
