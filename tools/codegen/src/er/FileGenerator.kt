@@ -64,7 +64,7 @@ object FileGenerator {
         "itemdata" to ItemGenerator,
         "itemgfx" to ItemGfxGenerator,
         "nursejoy" to NurseJoyMegasGenerator,
-        "legendarysage" to LegendarySageMegasGenerator,
+        "legendarysage" to LegendarySageItemsGenerator,
         "adoptioncenteritems" to AdoptionCenterMegasGenerator,
         "megahints" to MegaHintGenerator,
         "gendergraphics" to GenderedGraphicsGenerator,
