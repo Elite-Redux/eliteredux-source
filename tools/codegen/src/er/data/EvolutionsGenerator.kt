@@ -29,7 +29,7 @@ object EvolutionsGenerator : Generator {
                 Evo(
                     when {
                         it.gender == Species.Gender.MALE -> "EVO_LEVEL_MALE"
-                        it.gender == Species.Gender.FEMALE -> "EVO_LEVEL_MALE"
+                        it.gender == Species.Gender.FEMALE -> "EVO_LEVEL_FEMALE"
                         species.id == SpeciesEnum.SPECIES_SHEDINJA -> "EVO_LEVEL_SHEDINJA"
                         species.id == SpeciesEnum.SPECIES_NINJASK -> "EVO_LEVEL_NINJASK"
                         else -> "EVO_LEVEL"
