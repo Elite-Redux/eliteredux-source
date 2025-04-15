@@ -43,7 +43,7 @@ object GeneratorUtils {
         TextFormat.parse(
             File("../../proto/SpeciesList.textproto").readText(),
             SpeciesList::class.java
-        ).speciesList.filter { it.randomizerBanned != SPECIES_HIDDEN }
+        ).speciesList.filter { it.randomizerBanned != SPECIES_HIDDEN && it.spe > 0 }
     }
 
     val NO_EGG_LIST by lazy {
