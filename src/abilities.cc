@@ -2553,7 +2553,7 @@ constexpr Ability PrismArmor = {
 constexpr Ability Neuroforce = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.25);
+            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.35);
         },
 };
 
