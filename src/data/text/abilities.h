@@ -217,7 +217,7 @@ static const u8 sAbilityElectricSurgeDescription[] = _("Casts Electric Terrain o
 static const u8 sAbilityPsychicSurgeDescription[] = _("Casts Psychic Terrain on entry.\nLasts 8 turns.");
 static const u8 sAbilityMistySurgeDescription[] = _("Casts Misty Terrain on entry.\nLasts 8 turns.");
 static const u8 sAbilityGrassySurgeDescription[] = _("Casts Grassy Terrain on entry.\nLasts 8 turns.");
-static const u8 sAbilityNeuroforceDescription[] = _("Grants an additional 1.25x boost\nto Super-effective moves.");
+static const u8 sAbilityNeuroforceDescription[] = _("Grants an additional 1.35x boost\nto Super-effective moves.");
 static const u8 sAbilityIntrepidSwordDescription[] = _("On entry, raises Attack by one\nstage.");
 static const u8 sAbilityDauntlessShieldDescription[] = _("On entry, raises Defense by one\nstage.");
 static const u8 sAbilityLiberoDescription[] = _("Before using a move, changes its\ntype to the move's type.");
@@ -646,7 +646,7 @@ static const u8 sAbilityBadOmenDescription[] = _("Foes min roll and may miss.\nT
 static const u8 sAbilityMoshPitDescription[] = _("Ally's attacks get a 1.25x boost.\n1.5x if attack causes recoil.");
 static const u8 sAbilityBloodStainDescription[] = _("Bleeds if not immune. Can't get\nother status. Spreads on contact.");
 static const u8 sAbilityBloodStigmaDescription[] = _("Immune to status. Gets a 50%\nboost vs bleeding foes.");
-static const u8 sAbilityMaximumAccelerationDescription[] = _("Moves use the Speed stat\nfor damage calculations.");
+static const u8 sAbilityMaximumAccelerationDescription[] = _("Speed Boost + Slipstream.");
 static const u8 sAbilitySidewinderDescription[] = _("First biting move each entry gets\n+1 priority. Resets on KO.");
 static const u8 sAbilityPetrifyDescription[] = _("Clears stat buffs then lowers\nspeed by one stage on entry.");
 static const u8 sAbilityFluffiestDescription[] = _("Quarters contact damage taken.\n4x weak to fire.");
@@ -758,6 +758,7 @@ static const u8 sAbilityGlacialRageDescription[] = _("Triggers 50 BP Blizzard af
 static const u8 sAbilityImmovableObjectDescription[] = _("Impenetrable + Sturdy");
 static const u8 sAbilityFrenziedPhantomDescription[] = _("Hyper Aggressive +\nShadow Tag.");
 static const u8 sAbilityDNAScrambleDescription[] = _("Changes into Attack, Speed, or\nDefense form based on move used.")
+static const u8 sAbilityMetallicJawsDescription[] = _("Metallic + Primal Maw.")
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1553,6 +1554,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_IMMOVABLE_OBJECT] = _("Immovable Object"),
     [ABILITY_FRENZIED_PHANTOM] = _("Frenzied Phantom"),
     [ABILITY_DNA_SCRAMBLE] = _("DNA Scramble")
+    [ABILITY_METALLIC_JAWS] = _("Metallic Jaws")
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2349,4 +2351,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_IMMOVABLE_OBJECT] = sAbilityImmovableObjectDescription,
     [ABILITY_FRENZIED_PHANTOM] = sAbilityFrenziedPhantomDescription,
     [ABILITY_DNA_SCRAMBLE] = sAbilityDNAScrambleDescription,
+    [ABILITY_METALLIC_JAWS] = sAbilityMetallicJawsDescription,
 };

@@ -2553,7 +2553,7 @@ constexpr Ability PrismArmor = {
 constexpr Ability Neuroforce = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.25);
+            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.35);
         },
 };
 
@@ -8086,6 +8086,11 @@ constexpr Ability DNAScramble = {
     .randomizerBanned = TRUE,
 };
 
+constexpr Ability MetallicJaws = {
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_STEEL); },
+    .onParentalBond = PrimalMaw.onParentalBond,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -8844,6 +8849,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_FRENZIED_PHANTOM, FrenziedPhantom},
     {ABILITY_DNA_SCRAMBLE, DNAScramble},
     {ABILITY_AQUATIC, Aquatic},
+    {ABILITY_METALLIC_JAWS, MetallicJaws},
 };
 
 template <int N>
