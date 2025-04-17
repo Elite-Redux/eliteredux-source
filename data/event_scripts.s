@@ -1194,3 +1194,5 @@ Common_Text_ClydeAskResetTrainers::
 	.include "data/maps/Route111_Desert/scripts.inc"
 
 	.include "data/maps/Route111_SunhollowRuins_Museum/scripts.inc"
+
+	.include "data/maps/Route111_Cave/scripts.inc"

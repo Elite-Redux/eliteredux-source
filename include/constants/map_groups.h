@@ -425,6 +425,7 @@
 #define MAP_METEOR_FALLS_JIRACHIS_ROOM               (124 | (24 << 8))
 #define MAP_ALTERING_CAVE_1F                         (125 | (24 << 8))
 #define MAP_ALTERING_CAVE_B1F                        (126 | (24 << 8))
+#define MAP_ROUTE111_CAVE                            (127 | (24 << 8))
 
 // gMapGroup_Dungeons2
 #define MAP_VERDANTURF_MEADOW            (0 | (25 << 8))

@@ -4804,8 +4804,8 @@
     {
       "id": "LAYOUT_ROUTE111_SUNHOLLOW_RUINS",
       "name": "Route111_SunhollowRuins_Layout",
-      "width": 80,
-      "height": 40,
+      "width": 75,
+      "height": 50,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Sunhollow_Ruins",
       "border_filepath": "data/layouts/Route111_SunhollowRuins/border.bin",
@@ -4830,6 +4830,16 @@
       "secondary_tileset": "gTileset_BattlePyramid",
       "border_filepath": "data/layouts/Route111_SunhollowRuins_Museum/border.bin",
       "blockdata_filepath": "data/layouts/Route111_SunhollowRuins_Museum/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_CAVE",
+      "name": "Route111_Cave_Layout",
+      "width": 51,
+      "height": 40,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_MirageTower",
+      "border_filepath": "data/layouts/Route111_Cave/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_Cave/map.bin"
     }
   ]
 }

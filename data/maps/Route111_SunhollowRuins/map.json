@@ -15,7 +15,7 @@
   "connections": [
     {
       "map": "MAP_ROUTE111_DESERT",
-      "offset": 0,
+      "offset": -16,
       "direction": "down"
     }
   ],
