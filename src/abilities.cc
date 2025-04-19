@@ -7877,9 +7877,15 @@ constexpr Ability Soothsayer = {
 };
 
 constexpr Ability CorruptedMind = {
-    .onAfterTypeEffectiveness =
-        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
-            if (*mod < UQ_4_12(2.0) && moveType == TYPE_PSYCHIC) *mod = UQ_4_12(2.0);
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        if (*mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
+        return FALSE;
+    },
+    .onModifyEffectChance =
+        +[](ON_MODIFY_EFFECT_CHANCE) {
+            int type;
+            GET_MOVE_TYPE(move, type)
+            if (type == TYPE_PSYCHIC) *effectChance *= 1.4;
         },
     .randomizerBanned = TRUE,
 };
@@ -8092,10 +8098,11 @@ constexpr Ability MetallicJaws = {
 };
 
 constexpr Ability Calculative = {
-    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) {
-        Analytic.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-        Neuroforce.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            Analytic.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Neuroforce.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+        },
 };
 
 typedef struct AbilityKVPair {
