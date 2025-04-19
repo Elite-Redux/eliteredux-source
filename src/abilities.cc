@@ -8091,6 +8091,13 @@ constexpr Ability MetallicJaws = {
     .onParentalBond = PrimalMaw.onParentalBond,
 };
 
+constexpr Ability Calculative = {
+    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) {
+        Analytic.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+        Neuroforce.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+    },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -8850,6 +8857,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_DNA_SCRAMBLE, DNAScramble},
     {ABILITY_AQUATIC, Aquatic},
     {ABILITY_METALLIC_JAWS, MetallicJaws},
+    {ABILITY_CALCULATIVE, Calculative},
 };
 
 template <int N>
