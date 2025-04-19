@@ -24,7 +24,6 @@ static bool8 CheckPyramidBagHasItem(u16 itemId, u16 count);
 static bool8 CheckPyramidBagHasSpace(u16 itemId, u16 count);
 
 // rodata
-#include "data/text/item_descriptions.h"
 #include "generated/data/item/items.h"
 
 #include "generated/data/item/pockets.h"

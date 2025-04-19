@@ -226,7 +226,7 @@ Debug_Script_6::
 	additem ITEM_PIKANITE
 	additem ITEM_MEOWTHITE
 	additem ITEM_EEVITE
-	additem ITEM_DUDUNITE
+	additem ITEM_DUDUDUNITE
 	end
 
 Debug_Script_7::

@@ -50,7 +50,7 @@ protos: $(PROTODEP)
 codegen.jar: protobuf-java.jar $(JAVA_SRCS) $(PROTODEP)
 	@rm -rf javabuild
 	find src/er -name '*.java' | xargs  javac -cp "protobuf-java.jar:protobufkt.jar" -d javabuild && exit
-	@jar cf codegen.jar -C javabuild . && exit
+	jar cf codegen.jar -C javabuild . && exit
 
 codegenkt.jar: protoc protobuf-java.jar codegen.jar protobuf-kotlin.jar $(KT_SRCS)
 	find src/er -name '*.kt' | xargs  kotlinc -cp "protobuf-java.jar:protobuf-kotlin.jar:codegen.jar" -include-runtime -d codegenkt.jar && exit
@@ -60,7 +60,7 @@ $1: $2 preproc.jar protobuf-java.jar codegen.jar protoc
 	@mkdir -p timestamp/preproc/items
 	@mkdir -p bin/items
 	@perl -pi.bak -e 'BEGIN{$$$$counter=10000000;} s/\@NEXT/$$$$counter++/ge' $2
-	@./protoc ../../proto/$$(patsubst items/%,ItemList,$3).proto --encode=er.$$(patsubst items/%,ItemList,$3) --proto_path="../../proto/" --experimental_allow_proto3_optional < $2 > bin/$3.binpb && exit
+	./protoc ../../proto/$$(patsubst items/%,ItemList,$3).proto --encode=er.$$(patsubst items/%,ItemList,$3) --proto_path="../../proto/" --experimental_allow_proto3_optional < $2 > bin/$3.binpb && exit
 	java -cp preproc.jar:protobuf-java.jar:codegen.jar preproc.TextprotoProcessor $2 bin/$3.binpb && exit
 	@touch $1
 endef
