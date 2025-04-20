@@ -1026,7 +1026,8 @@ static void Cmd_attackcanceler(void) {
     GET_MOVE_TYPE(gCurrentMove, moveType);
 
     if (gBattleMoves[gCurrentMove].type2) {
-        CalculateMoveDamage(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, 1, FALSE, TRUE, TRUE);
+        u16 typeEffectiveness;
+        CalculateMoveDamageAndEffectiveness(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, &typeEffectiveness);
         gBattleStruct->dynamicMoveType = moveType | 0x80;
     }
 
@@ -1515,6 +1516,22 @@ static void Cmd_critcalc(void) {
     gBattlescriptCurrInstr++;
 }
 
+u8 MakeCritRoll() {
+    return Random() % 24;
+}
+
+void SetCritFlag(int attacker, int target, MoveEnum move, u16 typeEffectiveness, u8 critRoll) {
+    int critChance = GetInverseCritChance(attacker, target, move);
+    if (gBattleTypeFlags & (BATTLE_TYPE_WALLY_TUTORIAL | BATTLE_TYPE_FIRST_BATTLE))
+        gIsCriticalHit = FALSE;
+    else if (critChance <= NEVER_CRIT)
+        gIsCriticalHit = FALSE;
+    else if (critChance >= ALWAYS_CRIT)
+        gIsCriticalHit = TRUE;
+    else
+        gIsCriticalHit = !(critRoll % critChance);
+}
+
 static void Cmd_damagecalc(void) {
     u8 moveType;
     u8 movePower = 0;
@@ -1530,7 +1547,7 @@ static void Cmd_damagecalc(void) {
     }
 
     GET_MOVE_TYPE(gCurrentMove, moveType);
-    gBattleMoveDamage = CalculateMoveDamage(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, movePower, gIsCriticalHit, TRUE, TRUE);
+    gBattleMoveDamage = CalculateMoveDamage(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, movePower, MakeCritRoll(), TRUE, TRUE);
     gBattleStruct->dynamicMoveType = moveType | 0x80;
 
     gBattlescriptCurrInstr++;
@@ -11448,6 +11465,8 @@ static void Cmd_trydobeatup(void) {
             PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerAttacker, gBattleCommunication[0])
 
             gBattlescriptCurrInstr += 9;
+
+            SetCritFlag(gBattlerAttacker, gBattlerTarget, gCurrentMove, UQ_4_12(1.0), MakeCritRoll());
 
             gBattleMoveDamage = gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].baseAttack;
             gBattleMoveDamage *= gBattleMoves[gCurrentMove].power;

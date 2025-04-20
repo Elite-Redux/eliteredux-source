@@ -552,7 +552,6 @@ BattleScript_EffectSteelBeam::
 	attackstring
 	ppreduce
 	accuracycheck BattleScript_SteelBeamMiss, ACC_CURR_MOVE
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -711,7 +710,6 @@ BattleScript_EffectPhotonGeyser:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	photongeysercheck
@@ -756,7 +754,6 @@ BattleScript_EffectOctolock:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -895,7 +892,6 @@ BattleScript_EffectPlasmaFists:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -921,7 +917,6 @@ BattleScript_EffectSparklySwirl:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -947,7 +942,6 @@ BattleScript_EffectFreezyFrost:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -973,7 +967,6 @@ BattleScript_EffectSappySeed:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -1000,7 +993,6 @@ BattleScript_EffectBaddyBad:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -1026,7 +1018,6 @@ BattleScript_EffectGlitzyGlow:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -1116,7 +1107,6 @@ BattleScript_EffectRemoveTerrain:
 	attackstring
 	ppreduce
 	jumpifword CMP_NO_COMMON_BITS, gFieldStatuses, STATUS_FIELD_TERRAIN_ANY, BattleScript_ButItFailed
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -1160,7 +1150,6 @@ BattleScript_EffectClearWeatherAndTerrainHit::
 	attackcanceler
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -1191,7 +1180,6 @@ BattleScript_EffectRemoveTerrainNoFail:
 	attackcanceler
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -1285,7 +1273,6 @@ BattleScript_EffectRelicSong:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -1327,7 +1314,6 @@ BattleScript_BurnUpWorks:
 	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
 	setmoveeffect MOVE_EFFECT_BURN_UP
 	seteffectwithchance
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -1956,7 +1942,6 @@ BattleScript_SynchronoiseLoop:
 	movevaluescleanup
 	jumpifcantusesynchronoise BattleScript_SynchronoiseNoEffect
 	accuracycheck BattleScript_SynchronoiseMissed, ACC_CURR_MOVE
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -1993,7 +1978,6 @@ BattleScript_EffectSmackDown:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -2109,7 +2093,6 @@ BattleScript_EffectFinalGambit:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	typecalc
 	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
 	dmgtocurrattackerhp
@@ -2137,7 +2120,6 @@ BattleScript_EffectHitSwitchTarget:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -3220,7 +3202,6 @@ BattleScript_EffectHitEscape:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -3246,7 +3227,6 @@ BattleScript_EffectGhastlyEcho:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -3313,7 +3293,6 @@ BattleScript_HitFromAtkString::
 	attackstring
 	ppreduce
 BattleScript_HitFromCritCalc::
-	critcalc
 	damagecalc
 	adjustdamage
 BattleScript_HitFromAtkAnimation::
@@ -3341,7 +3320,6 @@ BattleScript_EffectTripleArrows::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -3372,7 +3350,6 @@ BattleScript_HitFromAtkStringFast::
 	attackstring
 	ppreduce
 BattleScript_FastHitFromCritCalc::
-	critcalc
 	damagecalc
 	adjustdamage
 BattleScript_FastHitFromAtkAnimation::
@@ -3405,7 +3382,6 @@ BattleScript_EffectNaturalGift:
 	ppreduce
 	jumpifnotberry BS_ATTACKER, BattleScript_ButItFailed
 	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -3631,7 +3607,6 @@ BattleScript_EffectAbsorb::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -3697,7 +3672,6 @@ BattleScript_EffectMatchaGotcha::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -3865,7 +3839,6 @@ BattleScript_HitFromAtkStringReturn::
 	attackstring
 	ppreduce
 BattleScript_HitFromCritCalcReturn::
-	critcalc
 	damagecalc
 	adjustdamage
 BattleScript_HitFromAtkAnimationReturn::
@@ -3901,7 +3874,6 @@ BattleScript_ExplosionDoAnimStartLoop:
 	waitanimation
 BattleScript_ExplosionLoop:
 	movevaluescleanup
-	critcalc
 	damagecalc
 	adjustdamage
 	accuracycheck BattleScript_ExplosionMissed, ACC_CURR_MOVE
@@ -4182,7 +4154,6 @@ BattleScript_MultiHitLoop::
 BattleScript_DoMultiHit::
 	movevaluescleanup
 	copyhword sMOVE_EFFECT, sMULTIHIT_EFFECT
-	critcalc
 	damagecalc
 	jumpifmovehadnoeffect BattleScript_MultiHitNoMoreHits
 	adjustdamage
@@ -4271,7 +4242,6 @@ BattleScript_EffectFlinchWithStatus:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -4296,7 +4266,6 @@ BattleScript_DoubleSimpleEffect::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -5251,7 +5220,6 @@ BattleScript_EffectEerieSpell::
 	ppreduce
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	attackstring
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -5658,7 +5626,6 @@ BattleScript_EffectFuryCutter:
 	accuracycheck BattleScript_FuryCutterHit, ACC_CURR_MOVE
 BattleScript_FuryCutterHit:
 	handlefurycutter
-	critcalc
 	damagecalc
 	jumpifmovehadnoeffect BattleScript_FuryCutterHit
 	adjustdamage
@@ -5835,7 +5802,6 @@ BattleScript_EffectRapidSpin::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -5901,7 +5867,6 @@ BattleScript_EffectMortalSpin::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -6212,7 +6177,6 @@ BattleScript_BeatUpLoop::
 	movevaluescleanup
 	trydobeatup BattleScript_BeatUpEnd, BattleScript_ButItFailed
 	printstring STRINGID_PKMNATTACK
-	critcalc
 	jumpifbyte CMP_NOT_EQUAL, gIsCriticalHit, TRUE, BattleScript_BeatUpAttack
 	manipulatedamage DMG_DOUBLED
 BattleScript_BeatUpAttack::
@@ -6282,7 +6246,6 @@ BattleScript_SkyDrop_TurnTwo:
 	clearstatusfromeffect BS_ATTACKER
 	orword gHitMarker, HITMARKER_NO_PPDEDUCT
 	jumpifmove MOVE_SEISMIC_TOSS, BattleScript_SkyDrop_SeismicToss
-	critcalc
 	damagecalc
 	goto BattleScript_SkyDrop_DoDamage
 BattleScript_SkyDrop_SeismicToss:
@@ -6840,7 +6803,6 @@ BattleScript_EffectBrickBreak::
 	attackstring
 	ppreduce
 	removelightscreenreflect
-	critcalc
 	damagecalc
 	adjustdamage
 	jumpifbyte CMP_EQUAL, sB_ANIM_TURN, 0, BattleScript_BrickBreakAnim
@@ -7687,7 +7649,6 @@ BattleScript_PursuitDmgOnSwitchOut::
 	pause B_WAIT_TIME_SHORT
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -8486,7 +8447,6 @@ BattleScript_MonTookFutureAttack::
 BattleScript_CheckDoomDesireMiss::
 	accuracycheck BattleScript_FutureAttackMiss, MOVE_DOOM_DESIRE
 BattleScript_FutureAttackAnimate::
-	critcalc
 	damagecalc
 	adjustdamage
 	jumpifmovehadnoeffect BattleScript_DoFutureAttackResult
@@ -12819,7 +12779,6 @@ BattleScript_EffectRipAndTear::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -12899,7 +12858,6 @@ BattleScript_EffectTrepidation::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -12923,7 +12881,6 @@ BattleScript_EffectChipAway:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation
@@ -12948,7 +12905,6 @@ BattleScript_EffectTerrorCharge::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	critcalc
 	damagecalc
 	adjustdamage
 	attackanimation

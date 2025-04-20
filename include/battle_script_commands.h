@@ -84,6 +84,10 @@ int Infiltrates(int battler, MoveEnum move, InfiltrateType type);
 int SetEncore(int target);
 bool32 HasAttackerFaintedTarget(void);
 AbilityEnum HasFortKnox(int battler);
+#define CRIT_ROLL_ALWAYS 0
+#define CRIT_ROLL_ONLY_IF_GUARANTEED 1
+u8 MakeCritRoll();
+void SetCritFlag(int attacker, int target, MoveEnum move, u16 typeEffectiveness, u8 critRoll);
 
 extern void (*const gBattleScriptingCommandsTable[])(void);
 extern const u8 gBattlePalaceNatureToMoveGroupLikelihood[NUM_NATURES][4];

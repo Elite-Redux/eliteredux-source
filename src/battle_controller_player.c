@@ -1535,7 +1535,7 @@ void PrintBattleWindow_MoveSelection(void) {
     gHitMarker |= (ShouldSetMoldBreaker(gActiveBattler, move) && HITMARKER_MOLD_BREAKER);
     SetTypeBeforeUsingMove(move, gActiveBattler);
     GET_MOVE_TYPE(move, moveType);
-    maxDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
+    maxDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MAX_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
     immune = !typeEffectivenessMultiplier || TestAbsorbingAbilitiesOnly(target, gActiveBattler, move, moveType) ||
              TestImmunityAbilitiesOnly(target, gActiveBattler, move, moveType);
     x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION;  // Default
@@ -1789,7 +1789,7 @@ void PrintBattleWindow_MoveSelection(void) {
             if (!isStatusMove && move != MOVE_NONE) {
                 s16 percentage;
                 u16 targetCurrentHp = gBattleMons[target].hp;
-                u16 minDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
+                u16 minDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MIN_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
                 u16 heldItem = gBattleMons[target].item;
 
                 if (immune) minDamage = maxDamage = 0;

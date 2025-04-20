@@ -3439,8 +3439,8 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
     GET_MOVE_TYPE(move, moveType);
 
     // Max and Min Damage
-    minDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR, (u16 *)&ignored);
-    maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR, (u16 *)&ignored);
+    minDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MIN_DAMAGE_FACTOR, (u16 *)&ignored);
+    maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MAX_DAMAGE_FACTOR, (u16 *)&ignored);
 
     immune = TestImmunityAbilitiesOnly(target, battler, move, moveType);
     if (!immune) immune = TestAbsorbingAbilitiesOnly(target, battler, move, moveType);
@@ -3473,7 +3473,7 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
     hits2KO++;
 
     for (i = 0; i < MIN_DAMAGE_FACTOR; i++) {
-        tempdamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR - i, (u16 *)&ignored);
+        tempdamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MIN_DAMAGE_FACTOR - i, (u16 *)&ignored);
 
         if (tempdamage * hits2KO >= targetCurrentHp) {
             break;
@@ -5245,7 +5245,7 @@ static void PrintSpeedTab(void) {
                         u8 moveType = gBattleMoves[move].type;
                         SetTypeBeforeUsingMove(move, battlertoCheck);
                         GET_MOVE_TYPE(move, moveType);
-                        moveDamage = CalculateMoveDamage(move, battlertoCheck, target, &moveType, 0, FALSE, FALSE, FALSE);
+                        moveDamage = CalculateMoveDamage(move, battlertoCheck, target, &moveType, 0, CRIT_ROLL_ONLY_IF_GUARANTEED, FALSE, FALSE);
                         gSwapDamageCategory = FALSE;
                         if (targetCurrentHp <= moveDamage) BlitBitmapToWindow(windowId, sCheck, (x * 8) + x2, (y * 8), 8, 8);
                     }
