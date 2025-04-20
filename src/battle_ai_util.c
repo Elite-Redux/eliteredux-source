@@ -625,7 +625,7 @@ bool32 MovesWithSplitUnusable(u32 attacker, u32 target, u32 split) {
 static bool32 AI_GetIfCrit(u32 move, u8 battlerAtk, u8 battlerDef) {
     bool32 isCrit;
 
-    switch (CalcCritChanceStage(battlerAtk, battlerDef, move, FALSE)) {
+    switch (CalcCritChanceStage(battlerAtk, battlerDef, move, UQ_4_12(1.0))) {
         case -2:
         case -1:
         case 0:
@@ -671,7 +671,7 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness)
     GET_MOVE_TYPE(move, moveType);
 
     if (gBattleMoves[move].power) {
-        critChance = GetInverseCritChance(battlerAtk, battlerDef, move);
+        critChance = GetInverseCritChance(battlerAtk, battlerDef, move, UQ_4_12(1.0));
         normalDmg = CalculateMoveDamage(move, battlerAtk, battlerDef, &moveType, 0, CRIT_ROLL_ONLY_IF_GUARANTEED, FALSE, FALSE);
         critDmg = CalculateMoveDamage(move, battlerAtk, battlerDef, &moveType, 0, CRIT_ROLL_ALWAYS, FALSE, FALSE);
         gSwapDamageCategory = FALSE;

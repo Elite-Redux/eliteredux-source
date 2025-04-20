@@ -1027,7 +1027,10 @@ static void Cmd_attackcanceler(void) {
 
     if (gBattleMoves[gCurrentMove].type2) {
         u16 typeEffectiveness;
+        int isMoldBreakerActive = gHitMarker & HITMARKER_MOLD_BREAKER;
+        if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DEADLY_PRECISION)) gHitMarker |= HITMARKER_MOLD_BREAKER;
         CalculateMoveDamageAndEffectiveness(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, &typeEffectiveness);
+        if (!isMoldBreakerActive && typeEffectiveness < UQ_4_12(2.0)) gHitMarker &= ~HITMARKER_MOLD_BREAKER;
         gBattleStruct->dynamicMoveType = moveType | 0x80;
     }
 
@@ -1451,7 +1454,7 @@ static const u8 sCriticalHitChance[] = {16, 8, 4, 3, 2};  // Gens 2,3,4,5
 #define BENEFITS_FROM_LEEK(battler, holdEffect)                                                                     \
     ((holdEffect == HOLD_EFFECT_LEEK) && (GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_FARFETCHD || \
                                           gBattleMons[battler].species == SPECIES_FARFETCHD_GALARIAN || gBattleMons[battler].species == SPECIES_SIRFETCHD))
-s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, MoveEnum move, bool32 recordAbility) {
+s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, MoveEnum move, u16 typeEffectiveness) {
     u32 holdEffectAtk = GetBattlerHoldEffect(battlerAtk, TRUE);
 
     if (gSideStatuses[battlerDef] & SIDE_STATUS_LUCKY_CHANT || gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT) {
@@ -1464,7 +1467,7 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, MoveEnum move, bool32 reco
         ON_ABILITY(battler,
                    TRUE,
                    gAbilities[ability].onCrit && IsTargettedApplyOnFlagAppropriate(battlerAtk, battler, battlerAtk, battlerDef, gAbilities[ability].onCritFor),
-                   int result = gAbilities[ability].onCrit(battler, battlerDef, move);
+                   int result = gAbilities[ability].onCrit(battler, battlerDef, move, typeEffectiveness);
                    if (result == NEVER_CRIT) return NEVER_CRIT;
                    critChance += result)
     }
@@ -1490,8 +1493,8 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, MoveEnum move, bool32 reco
 }
 #undef BENEFITS_FROM_LEEK
 
-s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
-    s32 critChanceIndex = CalcCritChanceStage(battlerAtk, battlerDef, move, FALSE);
+s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, MoveEnum move, u16 typeEffectiveness) {
+    s32 critChanceIndex = CalcCritChanceStage(battlerAtk, battlerDef, move, typeEffectiveness);
     if (critChanceIndex <= NEVER_CRIT)
         return -1;
     else
@@ -1499,7 +1502,7 @@ s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
 }
 
 static void Cmd_critcalc(void) {
-    s32 critChance = CalcCritChanceStage(gBattlerAttacker, gBattlerTarget, gCurrentMove, TRUE);
+    s32 critChance = CalcCritChanceStage(gBattlerAttacker, gBattlerTarget, gCurrentMove, UQ_4_12(1.0));
     gPotentialItemEffectBattler = gBattlerAttacker;
 
     if (gBattleTypeFlags & (BATTLE_TYPE_WALLY_TUTORIAL | BATTLE_TYPE_FIRST_BATTLE))
@@ -1521,7 +1524,7 @@ u8 MakeCritRoll() {
 }
 
 void SetCritFlag(int attacker, int target, MoveEnum move, u16 typeEffectiveness, u8 critRoll) {
-    int critChance = GetInverseCritChance(attacker, target, move);
+    int critChance = GetInverseCritChance(attacker, target, move, typeEffectiveness);
     if (gBattleTypeFlags & (BATTLE_TYPE_WALLY_TUTORIAL | BATTLE_TYPE_FIRST_BATTLE))
         gIsCriticalHit = FALSE;
     else if (critChance <= NEVER_CRIT)

@@ -29,8 +29,8 @@ extern const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLON
 int GetParentalBondCount(int battler, MultihitType parentalBondType);
 MultihitType GetParentalBondType(int battler, int target, MoveEnum move, int moveType);
 void CheckForBadEggs(void);
-s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, MoveEnum move, bool32 recordAbility);
-s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, MoveEnum move);
+s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, MoveEnum move, u16 typeEffectiveness);
+s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, MoveEnum move, u16 typeEffectiveness);
 u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveState* moveState);
 u8 GetBattlerTurnOrderNum(u8 battlerId);
 bool32 NoAliveMonsForEitherParty(void);

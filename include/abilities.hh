@@ -78,7 +78,7 @@ typedef int (*AbilityOnStab)(int moveType);
 typedef int (*AbilityOnPriority)(int battler, int target, MoveEnum move);
 typedef int (*AbilityOnMoveType)(AbilityEnum ability, MoveEnum move, int moveType, u8* ateBoost);
 typedef int (*AbilityOnSwitchOut)(AbilityEnum ability, int battler);
-typedef int (*AbilityOnCrit)(int battler, int target, MoveEnum move);
+typedef int (*AbilityOnCrit)(int battler, int target, MoveEnum move, u16 typeEffectiveness);
 #define NEVER_CRIT -2
 #define ALWAYS_CRIT 3
 typedef int (*AbilityOnTypeEffectiveness)(int defType, MoveEnum move, int moveType, u16* mod);

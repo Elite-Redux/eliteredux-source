@@ -103,8 +103,8 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_MOVE_TYPE ability, move, moveType, ateBoost
 #define ON_EXIT AbilityEnum ability, int battler
 #define DELEGATE_EXIT ability, battler
-#define ON_CRIT int battler, int target, MoveEnum move
-#define DELEGATE_CRIT battler, target, move
+#define ON_CRIT int battler, int target, MoveEnum move, u16 typeEffectiveness
+#define DELEGATE_CRIT battler, target, move, typeEffectiveness
 #define ON_TYPE_EFFECTIVENESS int defType, MoveEnum move, int moveType, u16 *mod
 #define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
 #define ON_COPY_MOVE AbilityEnum ability, int battler, int attacker, int target, MoveEnum move
@@ -3561,14 +3561,14 @@ constexpr Ability SpiderLair = {
 };
 
 constexpr Ability FatalPrecision = {
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.2);
-        },
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK_NOT(IS_MOVE_STATUS(move))
         CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, TRUE) >= UQ_4_12(2.0))
         return ACCURACY_HITS_IF_POSSIBLE;
+    },
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK (typeEffectiveness >= UQ_4_12(2.0))
+        return ALWAYS_CRIT;
     },
 };
 
@@ -7040,8 +7040,8 @@ constexpr Ability MasterHand = {
 };
 
 constexpr Ability FinalBlow = {
-    .onOffensiveMultiplier = FatalPrecision.onOffensiveMultiplier,
     .onAccuracy = FatalPrecision.onAccuracy,
+    .onCrit = FatalPrecision.onCrit,
 };
 
 constexpr Ability Hospitality = {
