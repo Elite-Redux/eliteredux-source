@@ -5707,7 +5707,7 @@ u8 CountRotomInParty (void)
     for (i = 0; i < partyCount; i++)
     {
         species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
-        if (gSpeciesToNationalPokedexNum[species - 1] == SPECIES_ROTOM)
+        if (gSpeciesToNationalPokedexNum[species] == SPECIES_ROTOM)
         {
             gSpecialVar_0x8004 = i;
             rotomCount++;

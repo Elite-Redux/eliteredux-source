@@ -3367,63 +3367,51 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
 }
 
 u16 HoennPokedexNumToSpecies(u16 hoennNum) {
-    SpeciesEnum species;
+    if (!hoennNum) return SPECIES_NONE;
 
-    if (!hoennNum) return 0;
+    for (SpeciesEnum species = 1; species < NUM_SPECIES; species++) {
+        if (gSpeciesToHoennPokedexNum[species] == hoennNum) return species;
+    }
 
-    species = 0;
-
-    while (species < (NUM_SPECIES - 1) && gSpeciesToHoennPokedexNum[species] != hoennNum) species++;
-
-    if (species == NUM_SPECIES - 1) return 0;
-
-    return species + 1;
+    return SPECIES_NONE;
 }
 
 u16 NationalPokedexNumToSpecies(u16 nationalNum) {
-    SpeciesEnum species;
+    if (!nationalNum) return SPECIES_NONE;
 
-    if (!nationalNum) return 0;
+    for (SpeciesEnum species = 1; species < NUM_SPECIES; species++) {
+        if (gSpeciesToNationalPokedexNum[species] == nationalNum) return species;
+    }
 
-    species = 0;
-
-    while (species < (NUM_SPECIES - 1) && gSpeciesToNationalPokedexNum[species] != nationalNum) species++;
-
-    if (species == NUM_SPECIES - 1) return 0;
-
-    return species + 1;
+    return SPECIES_NONE;
 }
 
 u16 NationalToHoennOrder(u16 nationalNum) {
-    u16 hoennNum;
-
     if (!nationalNum) return 0;
 
-    hoennNum = 0;
+    for (int hoennNum = 1; hoennNum < ARRAY_COUNT(gHoennToNationalOrder); hoennNum++) {
+        if (gHoennToNationalOrder[hoennNum] == nationalNum) return hoennNum;
+    }
 
-    while (hoennNum < (HOENN_DEX_COUNT - 1) && gHoennToNationalOrder[hoennNum] != nationalNum) hoennNum++;
-
-    if (hoennNum >= HOENN_DEX_COUNT - 1) return 0;
-
-    return hoennNum + 1;
+    return 0;
 }
 
 u16 SpeciesToNationalPokedexNum(SpeciesEnum species) {
     if (!species) return 0;
 
-    return gSpeciesToNationalPokedexNum[GET_BASE_SPECIES_ID(species) - 1];
+    return gSpeciesToNationalPokedexNum[GET_BASE_SPECIES_ID(species)];
 }
 
 u16 SpeciesToHoennPokedexNum(SpeciesEnum species) {
     if (!species) return 0;
 
-    return gSpeciesToHoennPokedexNum[GET_BASE_SPECIES_ID(species) - 1];
+    return gSpeciesToHoennPokedexNum[GET_BASE_SPECIES_ID(species)];
 }
 
 u16 HoennToNationalOrder(u16 hoennNum) {
-    if (!hoennNum || hoennNum >= HOENN_DEX_COUNT) return 0;
+    if (hoennNum > ARRAY_COUNT(gHoennToNationalOrder)) return 0;
 
-    return gHoennToNationalOrder[hoennNum - 1];
+    return gHoennToNationalOrder[hoennNum];
 }
 
 #define DRAW_SPINDA_SPOTS                                                                               \

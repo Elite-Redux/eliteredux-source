@@ -2421,7 +2421,7 @@ bool8 ScrCmd_checkPartyHasSpecies(struct ScriptContext *ctx)
     for (i = 0; i < partyCount; i++)
     {
         partySpecies = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
-        if (gSpeciesToNationalPokedexNum[partySpecies - 1] == wantedSpecies)
+        if (gSpeciesToNationalPokedexNum[partySpecies] == wantedSpecies)
         {
             gSpecialVar_Result = TRUE;
         }
@@ -2437,7 +2437,7 @@ bool8 ScrCmd_isChosenMonSpecies(struct ScriptContext *ctx)
     u16 chosenSpecies = GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES2, NULL);
 
     gSpecialVar_Result = FALSE;
-    if (gSpeciesToNationalPokedexNum[chosenSpecies - 1] == wantedSpecies)
+    if (gSpeciesToNationalPokedexNum[chosenSpecies] == wantedSpecies)
     {
         gSpecialVar_Result = TRUE;
     }
