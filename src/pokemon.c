@@ -5985,28 +5985,28 @@ const u8 *SaveSpeciesWithSurname(SpeciesEnum species) {
     switch (regionType) {
         case REGION_ALOLA:
             StringCopy(gStringVar1, gText_Alolan);
-            StringCopy(gStringVar2, speciesName);
-            StringExpandPlaceholders(regionOutput, gText_Subname12);
+            StringCopy(gStringVar3, speciesName);
+            StringExpandPlaceholders(regionOutput, gText_Subname13);
             break;
         case REGION_GALAR:
             StringCopy(gStringVar1, gText_Galarian);
-            StringCopy(gStringVar2, speciesName);
-            StringExpandPlaceholders(regionOutput, gText_Subname12);
+            StringCopy(gStringVar3, speciesName);
+            StringExpandPlaceholders(regionOutput, gText_Subname13);
             break;
         case REGION_HISUI:
             StringCopy(gStringVar1, gText_Hisuian);
-            StringCopy(gStringVar2, speciesName);
-            StringExpandPlaceholders(regionOutput, gText_Subname12);
+            StringCopy(gStringVar3, speciesName);
+            StringExpandPlaceholders(regionOutput, gText_Subname13);
             break;
         case REGION_PALDEA:
             StringCopy(gStringVar1, gText_Paldean);
-            StringCopy(gStringVar2, speciesName);
-            StringExpandPlaceholders(regionOutput, gText_Subname12);
+            StringCopy(gStringVar3, speciesName);
+            StringExpandPlaceholders(regionOutput, gText_Subname13);
             break;
         case REGION_REDUX:
             StringCopy(gStringVar1, speciesName);
-            StringCopy(gStringVar2, gText_Redux);
-            StringExpandPlaceholders(regionOutput, gText_Subname12);
+            StringCopy(gStringVar3, gText_Redux);
+            StringExpandPlaceholders(regionOutput, gText_Subname13);
             break;
 
         default:

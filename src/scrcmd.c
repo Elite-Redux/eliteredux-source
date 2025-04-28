@@ -2492,12 +2492,12 @@ bool8 ScrCmd_giveBattleItems(struct ScriptContext *ctx)
         AddBagItem(gNurseJoyItems[i], 1);
     }
 
-    for (i = 0; i < gItemCountsForPocket[POCKET_TM_HM]; i++) {
-        AddBagItem(gItemsForPocket[POCKET_TM_HM][i], 1);
+    for (i = 0; i < gItemCountsForPocket[POCKET_TM_HM - 1]; i++) {
+        AddBagItem(gItemsForPocket[POCKET_TM_HM - 1][i], 1);
     }
 
-    for (i = 0; i < gItemCountsForPocket[POCKET_POKE_BALLS]; i++) {
-        AddBagItem(gItemsForPocket[POCKET_POKE_BALLS][i], 1);
+    for (i = 0; i < gItemCountsForPocket[POCKET_POKE_BALLS - 1]; i++) {
+        AddBagItem(gItemsForPocket[POCKET_POKE_BALLS - 1][i], 1);
     }
     return TRUE;
 }
