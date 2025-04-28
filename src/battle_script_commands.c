@@ -1525,14 +1525,10 @@ u8 MakeCritRoll() {
 
 void SetCritFlag(int attacker, int target, MoveEnum move, u16 typeEffectiveness, u8 critRoll) {
     int critChance = GetInverseCritChance(attacker, target, move, typeEffectiveness);
-    if (gBattleTypeFlags & (BATTLE_TYPE_WALLY_TUTORIAL | BATTLE_TYPE_FIRST_BATTLE))
+    if (critChance <= NEVER_CRIT)
         gIsCriticalHit = FALSE;
-    else if (critChance <= NEVER_CRIT)
-        gIsCriticalHit = FALSE;
-    else if (critChance >= ALWAYS_CRIT)
-        gIsCriticalHit = TRUE;
     else
-        gIsCriticalHit = !(critRoll % critChance);
+        gIsCriticalHit = !(critRoll % critChance);    
 }
 
 static void Cmd_damagecalc(void) {
