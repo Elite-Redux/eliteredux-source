@@ -793,7 +793,7 @@ static u16 DetermineEggSpeciesAndParentSlots(struct DayCare *daycare, u8 *parent
     }
 
     // Rotom can only breed with Ditto, and should hatch in its base form
-    if (gSpeciesToNationalPokedexNum[species[parentSlots[1]] - 1] == SPECIES_ROTOM) {
+    if (gSpeciesToNationalPokedexNum[species[parentSlots[1]]] == SPECIES_ROTOM) {
         eggSpecies = SPECIES_ROTOM;
     }
 

@@ -5519,7 +5519,7 @@ void ItemUseCB_Nectar(u8 taskId, TaskFunc task) {
     newSpecies = gFormSpeciesIdTables[SPECIES_ORICORIO][secondaryId];
 
     PlaySE(SE_SELECT);
-    if (gSpeciesToNationalPokedexNum[currSpecies - 1] != SPECIES_ORICORIO || (newSpecies == currSpecies)) {
+    if (gSpeciesToNationalPokedexNum[currSpecies] != SPECIES_ORICORIO || (newSpecies == currSpecies)) {
         gPartyMenuUseExitCallback = FALSE;
         DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
         ScheduleBgCopyTilemapToVram(2);
