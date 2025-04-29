@@ -34018,7 +34018,7 @@ static const struct TrainerMonItemCustomMoves sParty_Sidney[] = { // Marriland P
     {
     .lvl = 0,
     .species = SPECIES_SCRAFTY_MEGA,
-    .heldItem = ITEM_NONE,
+    .heldItem = ITEM_LIFE_ORB,
     .ability = 0,
     .evs = {3, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
