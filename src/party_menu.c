@@ -2263,12 +2263,12 @@ static u8 DisplaySelectionWindow(u8 windowType) {
             u16 megaEvoItem = ITEM_NONE;
             int skip = sPartyMenuInternal->actions[i] - MENU_MEGA_STONE;
 
-            for (j = 0; gEvolutionTable[species][j].method; j++) {
-                if (gEvolutionTable[species][j].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][j].method == EVO_PRIMAL_REVERSION) {
+            for (j = 0; gFormChangeTable[species][j].method; j++) {
+                if (gFormChangeTable[species][j].method == EVO_MEGA_EVOLUTION || gFormChangeTable[species][j].method == EVO_PRIMAL_REVERSION) {
                     if (skip) {
                         skip--;
                     } else {
-                        megaEvoItem = gEvolutionTable[species][j].param;
+                        megaEvoItem = gFormChangeTable[species][j].param;
                         break;
                     }
                 }
@@ -2309,8 +2309,7 @@ static u8 DisplaySelectionWindow(u8 windowType) {
                                          sFontColorTable[fontColorsId],
                                          0,
                                          SaveSpeciesWithSurname(targetspecies));
-        } else if ((IsEeveelution(species) || species == SPECIES_NECROZMA_DUSK_MANE || species == SPECIES_NECROZMA_DAWN_WINGS) &&
-                   sPartyMenuInternal->actions[i] == MENU_SUB_EVOLUTION) {
+        } else if (gEvolutionTable[species][0].method == EVO_DEEVOLUTION && sPartyMenuInternal->actions[i] == MENU_SUB_EVOLUTION) {
             AddTextPrinterParameterized4(
                 sPartyMenuInternal->windowId[0], font, cursorDimension, (i * 16) + 1, fontAttribute, 0, sFontColorTable[fontColorsId], 0, gText_De_Evolution);
         } else
@@ -2504,9 +2503,9 @@ static void SetPartyMonHeldItemSelectionActions(struct Pokemon *mons, u8 slotId)
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_GIVE);
     }
 
-    for (i = 0; gEvolutionTable[species][i].method; i++) {
-        if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][i].method == EVO_PRIMAL_REVERSION) {
-            megaStones[j++] = gEvolutionTable[species][i].param;
+    for (i = 0; gFormChangeTable[species][i].method; i++) {
+        if (gFormChangeTable[species][i].method == EVO_MEGA_EVOLUTION || gFormChangeTable[species][i].method == EVO_PRIMAL_REVERSION) {
+            megaStones[j++] = gFormChangeTable[species][i].param;
         }
     }
 
@@ -3137,11 +3136,11 @@ static void GiveMegaStone(int taskId, int itemCount) {
     u16 helditem = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_HELD_ITEM, NULL);
     u16 megaEvoItem = 0;
 
-    for (i = 0; gEvolutionTable[species][i].method; i++) {
+    for (i = 0; gFormChangeTable[species][i].method; i++) {
         if (itemCount-- > 0) continue;
 
-        if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][i].method == EVO_PRIMAL_REVERSION) {
-            megaEvoItem = gEvolutionTable[species][i].param;
+        if (gFormChangeTable[species][i].method == EVO_MEGA_EVOLUTION || gFormChangeTable[species][i].method == EVO_PRIMAL_REVERSION) {
+            megaEvoItem = gFormChangeTable[species][i].param;
             break;
         }
     }
@@ -5787,15 +5786,13 @@ static void TryGiveItemOrMailToSelectedMon(u8 taskId) {
     sPartyMenuItemId = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_HELD_ITEM);
     if (sPartyMenuItemId == ITEM_NONE) {
         GiveItemOrMailToSelectedMon(taskId);
-    }  else {
+    } else {
         DisplayAlreadyHoldingItemSwitchMessage(&gPlayerParty[gPartyMenu.slotId], sPartyMenuItemId, TRUE);
         gTasks[taskId].func = Task_SwitchItemsFromBagYesNo;
     }
 }
 
-static void GiveItemOrMailToSelectedMon(u8 taskId) {
-    GiveItemToSelectedMon(taskId);
-}
+static void GiveItemOrMailToSelectedMon(u8 taskId) { GiveItemToSelectedMon(taskId); }
 
 static void GiveItemToSelectedMon(u8 taskId) {
     u16 item;
@@ -5836,7 +5833,7 @@ static void Task_HandleSwitchItemsFromBagYesNoInput(u8 taskId) {
                 BufferBagFullCantTakeItemMessage(sPartyMenuItemId);
                 DisplayPartyMenuMessage(gStringVar4, FALSE);
                 gTasks[taskId].func = Task_UpdateHeldItemSpriteAndClosePartyMenu;
-            }  else {
+            } else {
                 GiveItemToMon(&gPlayerParty[gPartyMenu.slotId], item);
                 DisplaySwitchedHeldItemMessage(item, sPartyMenuItemId, TRUE);
                 gTasks[taskId].func = Task_UpdateHeldItemSpriteAndClosePartyMenu;
@@ -5852,9 +5849,7 @@ static void Task_HandleSwitchItemsFromBagYesNoInput(u8 taskId) {
 }
 
 // TODO: Nuke this
-static void RemoveItemToGiveFromBag(u16 item) {
-    RemoveBagItem(item, 1);
-}
+static void RemoveItemToGiveFromBag(u16 item) { RemoveBagItem(item, 1); }
 
 void InitChooseHalfPartyForBattle(u8 unused) {
     ClearSelectedPartyOrder();

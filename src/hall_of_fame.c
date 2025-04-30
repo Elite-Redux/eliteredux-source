@@ -302,16 +302,15 @@ u16 getHallofFameSpecies(u8 num) {
     SpeciesEnum species = GetMonData(&gPlayerParty[num], MON_DATA_SPECIES);
     // SpeciesEnum species = GetMonData(&gPlayerParty[num], MON_DATA_SPECIES2);
 
-    for (i = 0; gEvolutionTable[species][i].method; i++) {
-        REQUIRE(gEvolutionTable[species][i].method)
+    for (i = 0; gFormChangeTable[species][i].method; i++) {
 
-        if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][i].method == EVO_PRIMAL_REVERSION) {
-            if (gEvolutionTable[species][i].param == item) return gEvolutionTable[species][i].targetSpecies;
+        if (gFormChangeTable[species][i].method == EVO_MEGA_EVOLUTION || gFormChangeTable[species][i].method == EVO_PRIMAL_REVERSION) {
+            if (gFormChangeTable[species][i].param == item) return gFormChangeTable[species][i].targetSpecies;
         }
 
-        if (gEvolutionTable[species][i].method == EVO_MOVE_MEGA_EVOLUTION) {
+        if (gFormChangeTable[species][i].method == EVO_MOVE_MEGA_EVOLUTION) {
             for (j = 0; j < MAX_MON_MOVES; j++) {
-                if (GetMonData(&gPlayerParty[num], MON_DATA_MOVE1 + j) == gEvolutionTable[species][i].param) return gEvolutionTable[species][i].targetSpecies;
+                if (GetMonData(&gPlayerParty[num], MON_DATA_MOVE1 + j) == gFormChangeTable[species][i].param) return gFormChangeTable[species][i].targetSpecies;
             }
         }
     }

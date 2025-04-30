@@ -2454,7 +2454,7 @@ static void GenerateMoveReplaceList(u8 keyPress) {
     sMonSummaryScreen->numMenuChoices = 0;
     newMove = MOVE_NONE;
 
-    species = getLearnsetMon(sMonSummaryScreen->summary.species2);
+    species = sMonSummaryScreen->summary.species2;
     level = sMonSummaryScreen->summary.level;
     personality = sMonSummaryScreen->summary.pid;
 
@@ -2717,9 +2717,9 @@ static void PrintMoveReplaceTab(void) {
             if (moveNum == GetMonData(mon, MON_DATA_MOVE1 + j, 0)) hasMonMove = TRUE;
         }
 
-        if (moveNum == MOVE_SKETCH && !hasMonMove && getLearnsetMon(sMonSummaryScreen->summary.species2) != SPECIES_SMEARGLE) {
+        if (moveNum == MOVE_SKETCH && !hasMonMove && sMonSummaryScreen->summary.species2 != SPECIES_SMEARGLE) {
             int k, level = sMonSummaryScreen->summary.level, personality = sMonSummaryScreen->summary.pid,
-                   species = getLearnsetMon(sMonSummaryScreen->summary.species2);
+                   species = sMonSummaryScreen->summary.species2;
             int foundAll = FALSE;
             u16 moves[4];
             ARRAY_COPY(moves, sMonSummaryScreen->summary.moves)
@@ -5149,13 +5149,26 @@ static bool8 PrintMonEvolution(SpeciesEnum species, u8 num, u8 y, bool8 gender, 
             PrintSmallTextOnWindow(
                 PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
             break;
+        default:
+            skipPrintingEvo = TRUE;
+            break;
+    }
+
+    return !skipPrintingEvo;
+}
+
+int PrintMonForm(SpeciesEnum species, u8 num, u8 y) {
+    SpeciesEnum targetSpecies;
+    ItemEnum item;
+
+    switch (gFormChangeTable[species][num].method) {
         case EVO_MEGA_EVOLUTION:
             // Target Species
-            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+            targetSpecies = gFormChangeTable[species][num].targetSpecies;
             SaveSpeciesWithSurname(targetSpecies);
             PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
             // Evolution Method
-            item = gEvolutionTable[species][i].param;  // item
+            item = gFormChangeTable[species][num].param;  // item
             {
                 const u8 *hint = GetMegaHint(item);
                 if (!hint) {
@@ -5169,24 +5182,24 @@ static bool8 PrintMonEvolution(SpeciesEnum species, u8 num, u8 y, bool8 gender, 
                                        EVOLUTION_METHOD_LINE_SPACING,
                                        PSS_COLOR_WHITE_BLACK_SHADOW);
             }
-            break;
+            return TRUE;
         case EVO_MOVE_MEGA_EVOLUTION:
             // Target Species
-            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+            targetSpecies = gFormChangeTable[species][num].targetSpecies;
             SaveSpeciesWithSurname(targetSpecies);
             PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
             // Evolution Method
-            StringCopy(gStringVar2, gMoveNames[gEvolutionTable[species][i].param]);
+            StringCopy(gStringVar2, gMoveNames[gFormChangeTable[species][num].param]);
             StringExpandPlaceholders(gStringVar4, gText_EVO_MOVE_MEGA_EVOLUTION);
             PrintSmallTextOnWindow(
                 PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
-            break;
+            return TRUE;
         case EVO_PRIMAL_REVERSION:
             // Target Species
-            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+            targetSpecies = gFormChangeTable[species][num].targetSpecies;
             SaveSpeciesWithSurname(targetSpecies);
             PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);  // Evolution Method
-            item = gEvolutionTable[species][i].param;                                                                                      // item
+            item = gFormChangeTable[species][num].param;                                                                                   // item
             {
                 const u8 *hint = GetMegaHint(item);
                 if (!hint) {
@@ -5200,17 +5213,10 @@ static bool8 PrintMonEvolution(SpeciesEnum species, u8 num, u8 y, bool8 gender, 
                                        EVOLUTION_METHOD_LINE_SPACING,
                                        PSS_COLOR_WHITE_BLACK_SHADOW);
             }
-            break;
-        default:
-            // Target Species
-            targetSpecies = gEvolutionTable[species][i].targetSpecies;
-            SaveSpeciesWithSurname(targetSpecies);
-            PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);  // Evolution Method
-            // Failsafe
-            break;
+            return TRUE;
     }
 
-    return !skipPrintingEvo;
+    return FALSE;
 }
 
 const u8 gText_Pokeball[] = _("Poké Ball: {R_BUTTON} {STR_VAR_1} {L_BUTTON}");
@@ -5224,14 +5230,21 @@ static void BufferMonPokemonEvolutionData(void) {
     u8 times = 0;
     u16 pokeball = GetMonData(mon, MON_DATA_POKEBALL, NULL);
     u16 actualSpecies = species;
-    u16 formSpecies = GetFormShiftSpecies(species);
+    u16 megas = 0;
     y = 4;
-
-    if (formSpecies) species = formSpecies;
 
     // Calculate number of possible direct evolutions (e.g. Eevee has 8 but torchic has 1)
     for (i = 0; gEvolutionTable[species][i].method; i++) {
-        if (gEvolutionTable[species][i].method != 0 && gEvolutionTable[species][i].targetSpecies != actualSpecies) times = i + 1;
+        if (gEvolutionTable[species][i].method != EVO_DEEVOLUTION && gEvolutionTable[species][i].targetSpecies != actualSpecies) times = i + 1;
+    }
+
+    for (i = 0; gFormChangeTable[species][i].method; i++) {
+        switch (gFormChangeTable[species][i].method) {
+            case EVO_MEGA_EVOLUTION:
+            case EVO_MOVE_MEGA_EVOLUTION:
+            case EVO_PRIMAL_REVERSION:
+                megas = i + 1;
+        }
     }
 
     // If there are no evolutions print text
@@ -5248,10 +5261,14 @@ static void BufferMonPokemonEvolutionData(void) {
             if (PrintMonEvolution(species, i, y, gender, personality)) {
                 if (species == SPECIES_FURFROU)  // Tons of evolutions
                     y += 16;
-                else if (species == SPECIES_CHARIZARD || species == SPECIES_MEWTWO)  // Extra Megas
-                    y += 32;
                 else
                     y += 24;
+            }
+        }
+
+        for (i = 0; i < megas; i++) {
+            if (PrintMonForm(species, i, y)) {
+                y += 24;
             }
         }
     }

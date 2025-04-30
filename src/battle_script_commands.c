@@ -7954,9 +7954,9 @@ static void Cmd_various(void) {
             bool8 canDoPrimalReversion = FALSE;
             ptr = READ_PTR_INC;
 
-            for (i = 0; gEvolutionTable[gBattleMons[gActiveBattler].species][i].method; i++) {
-                if (gEvolutionTable[gBattleMons[gActiveBattler].species][i].method == EVO_PRIMAL_REVERSION &&
-                    gEvolutionTable[gBattleMons[gActiveBattler].species][i].param == gBattleMons[gActiveBattler].item)
+            for (i = 0; gFormChangeTable[gBattleMons[gActiveBattler].species][i].method; i++) {
+                if (gFormChangeTable[gBattleMons[gActiveBattler].species][i].method == EVO_PRIMAL_REVERSION &&
+                    gFormChangeTable[gBattleMons[gActiveBattler].species][i].param == gBattleMons[gActiveBattler].item)
                     canDoPrimalReversion = TRUE;
             }
 
