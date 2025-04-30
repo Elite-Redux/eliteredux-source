@@ -5248,7 +5248,7 @@ static void BufferMonPokemonEvolutionData(void) {
     }
 
     // If there are no evolutions print text
-    if (times == 0)  // || isEnemyMon
+    if (times + megas == 0)  // || isEnemyMon
     {
         StringCopy(gStringVar1, gSpeciesNames[species]);  // mon name
         StringExpandPlaceholders(gStringVar4, gText_EVO_NONE);
@@ -5268,7 +5268,7 @@ static void BufferMonPokemonEvolutionData(void) {
 
         for (i = 0; i < megas; i++) {
             if (PrintMonForm(species, i, y)) {
-                y += 24;
+                y += 32;
             }
         }
     }
