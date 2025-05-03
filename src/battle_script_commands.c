@@ -1525,7 +1525,7 @@ u8 MakeCritRoll() {
 
 void SetCritFlag(int attacker, int target, MoveEnum move, u16 typeEffectiveness, u8 critRoll) {
     int critChance = GetInverseCritChance(attacker, target, move, typeEffectiveness);
-    if (critChance <= NEVER_CRIT)
+    if (critChance <= 0)
         gIsCriticalHit = FALSE;
     else
         gIsCriticalHit = !(critRoll % critChance);    
