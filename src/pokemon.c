@@ -1200,8 +1200,6 @@ void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) {
     u32 personality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL);
     s32 i;
 
-    species = getLearnsetMon(species);
-
     for (i = 0; gLevelUpLearnsets[species][i].move != LEVEL_UP_END; i++) {
         if (gLevelUpLearnsets[species][i].level > level) break;
 
@@ -1215,8 +1213,6 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) {
     SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u8 level = GetMonData(mon, MON_DATA_LEVEL, NULL);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
-
-    species = getLearnsetMon(species);
 
     // since you can learn more than one move per level
     // the game needs to know whether you decided to
@@ -1243,8 +1239,6 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) {
 u16 MonTryLearningNewEvolutionMove(struct Pokemon *mon, bool8 firstMove) {
     SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u8 level = GetMonData(mon, MON_DATA_LEVEL, NULL);
-
-    species = getLearnsetMon(species);
 
     // since you can learn more than one move per level
     // the game needs to know whether you decided to
@@ -3367,63 +3361,51 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
 }
 
 u16 HoennPokedexNumToSpecies(u16 hoennNum) {
-    SpeciesEnum species;
+    if (!hoennNum) return SPECIES_NONE;
 
-    if (!hoennNum) return 0;
+    for (SpeciesEnum species = 1; species < NUM_SPECIES; species++) {
+        if (gSpeciesToHoennPokedexNum[species] == hoennNum) return species;
+    }
 
-    species = 0;
-
-    while (species < (NUM_SPECIES - 1) && gSpeciesToHoennPokedexNum[species] != hoennNum) species++;
-
-    if (species == NUM_SPECIES - 1) return 0;
-
-    return species + 1;
+    return SPECIES_NONE;
 }
 
 u16 NationalPokedexNumToSpecies(u16 nationalNum) {
-    SpeciesEnum species;
+    if (!nationalNum) return SPECIES_NONE;
 
-    if (!nationalNum) return 0;
+    for (SpeciesEnum species = 1; species < NUM_SPECIES; species++) {
+        if (gSpeciesToNationalPokedexNum[species] == nationalNum) return species;
+    }
 
-    species = 0;
-
-    while (species < (NUM_SPECIES - 1) && gSpeciesToNationalPokedexNum[species] != nationalNum) species++;
-
-    if (species == NUM_SPECIES - 1) return 0;
-
-    return species + 1;
+    return SPECIES_NONE;
 }
 
 u16 NationalToHoennOrder(u16 nationalNum) {
-    u16 hoennNum;
-
     if (!nationalNum) return 0;
 
-    hoennNum = 0;
+    for (int hoennNum = 1; hoennNum < ARRAY_COUNT(gHoennToNationalOrder); hoennNum++) {
+        if (gHoennToNationalOrder[hoennNum] == nationalNum) return hoennNum;
+    }
 
-    while (hoennNum < (HOENN_DEX_COUNT - 1) && gHoennToNationalOrder[hoennNum] != nationalNum) hoennNum++;
-
-    if (hoennNum >= HOENN_DEX_COUNT - 1) return 0;
-
-    return hoennNum + 1;
+    return 0;
 }
 
 u16 SpeciesToNationalPokedexNum(SpeciesEnum species) {
     if (!species) return 0;
 
-    return gSpeciesToNationalPokedexNum[GET_BASE_SPECIES_ID(species) - 1];
+    return gSpeciesToNationalPokedexNum[GET_BASE_SPECIES_ID(species)];
 }
 
 u16 SpeciesToHoennPokedexNum(SpeciesEnum species) {
     if (!species) return 0;
 
-    return gSpeciesToHoennPokedexNum[GET_BASE_SPECIES_ID(species) - 1];
+    return gSpeciesToHoennPokedexNum[GET_BASE_SPECIES_ID(species)];
 }
 
 u16 HoennToNationalOrder(u16 hoennNum) {
-    if (!hoennNum || hoennNum >= HOENN_DEX_COUNT) return 0;
+    if (hoennNum > ARRAY_COUNT(gHoennToNationalOrder)) return 0;
 
-    return gHoennToNationalOrder[hoennNum - 1];
+    return gHoennToNationalOrder[hoennNum];
 }
 
 #define DRAW_SPINDA_SPOTS                                                                               \
@@ -3797,8 +3779,6 @@ u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves, bool8 disableLearned) 
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
     int i, j = 0, k;
 
-    species = getLearnsetMon(species);
-
     if (disableLearned) {
         for (i = 0; i < MAX_MON_MOVES; i++) learnedMoves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
     }
@@ -3830,8 +3810,6 @@ u8 GetLevelUpMovesBySpecies(SpeciesEnum species, u16 *moves) {
     u8 numMoves = 0;
     int i;
 
-    species = getLearnsetMon(species);
-
     for (i = 0; i < MAX_LEVEL_UP_MOVES && gLevelUpLearnsets[species][i].move != LEVEL_UP_END; i++) moves[numMoves++] = gLevelUpLearnsets[species][i].move;
 
     return numMoves;
@@ -3846,8 +3824,6 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon) {
     int i, j, k;
 
     if (species == SPECIES_EGG) return 0;
-
-    species = getLearnsetMon(species);
 
     for (i = 0; i < MAX_MON_MOVES; i++) learnedMoves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
 
@@ -5893,52 +5869,6 @@ bool8 IsEeveelution(SpeciesEnum species) {
     }
 }
 
-SpeciesEnum getLearnsetMon(SpeciesEnum species) {
-    SpeciesEnum baseSpecies = GetFormShiftSpecies(species);
-    switch (species) {
-        case SPECIES_URSALUNA_BLOODMOON:
-        case SPECIES_POLARTIC_BLUEMOON:
-            return species;
-    }
-    switch (baseSpecies) {
-        // Deoxys, Wormadam, and Burmy forms have different learnsets
-        case SPECIES_NONE:
-        case SPECIES_DEOXYS:
-        case SPECIES_WORMADAM:
-        case SPECIES_BURMY:
-            return species;
-
-        default:
-            return baseSpecies;
-    }
-}
-
-#include "generated/data/pokemon/reverse_mega_map.h"
-
-SpeciesEnum GetFormShiftSpecies(SpeciesEnum species) {
-    bool8 canMegaEvolve = gSaveBlock2Ptr->permanentMegaMode && CheckBagHasItem(ITEM_MEGA_BRACELET, 1) &&
-                          FlagGet(FLAG_SYS_RECEIVED_KEYSTONE);  // Check if the player has the Mega Bracelet and the Keystone
-    SpeciesEnum baseSpecies;
-    u8 i;
-
-    if (gFormChangeTable[species][0].method == EVO_FORM_SHIFT || gFormChangeTable[species][0].method == EVO_FORM_SHIFT_GENDER) {
-        baseSpecies = species;
-    } else {
-        baseSpecies = GetFormSpeciesId(species, 0);
-    }
-
-    for (i = 0; gFormChangeTable[baseSpecies][i].method; i++) {
-        if (gFormChangeTable[baseSpecies][i].targetSpecies == species) return baseSpecies;
-    }
-
-    if (canMegaEvolve) {  // Permanent mega mode only
-        SpeciesEnum notMegaSpecies = GetBaseSpeciesFromMega(species);
-        if (notMegaSpecies != SPECIES_NONE && notMegaSpecies != species) return notMegaSpecies;
-    }
-
-    return SPECIES_NONE;
-}
-
 typedef enum {
     MEGA_NONE,
     MEGA_MEGA_UNSPECIFIED,
@@ -5997,28 +5927,28 @@ const u8 *SaveSpeciesWithSurname(SpeciesEnum species) {
     switch (regionType) {
         case REGION_ALOLA:
             StringCopy(gStringVar1, gText_Alolan);
-            StringCopy(gStringVar2, speciesName);
-            StringExpandPlaceholders(regionOutput, gText_Subname12);
+            StringCopy(gStringVar3, speciesName);
+            StringExpandPlaceholders(regionOutput, gText_Subname13);
             break;
         case REGION_GALAR:
             StringCopy(gStringVar1, gText_Galarian);
-            StringCopy(gStringVar2, speciesName);
-            StringExpandPlaceholders(regionOutput, gText_Subname12);
+            StringCopy(gStringVar3, speciesName);
+            StringExpandPlaceholders(regionOutput, gText_Subname13);
             break;
         case REGION_HISUI:
             StringCopy(gStringVar1, gText_Hisuian);
-            StringCopy(gStringVar2, speciesName);
-            StringExpandPlaceholders(regionOutput, gText_Subname12);
+            StringCopy(gStringVar3, speciesName);
+            StringExpandPlaceholders(regionOutput, gText_Subname13);
             break;
         case REGION_PALDEA:
             StringCopy(gStringVar1, gText_Paldean);
-            StringCopy(gStringVar2, speciesName);
-            StringExpandPlaceholders(regionOutput, gText_Subname12);
+            StringCopy(gStringVar3, speciesName);
+            StringExpandPlaceholders(regionOutput, gText_Subname13);
             break;
         case REGION_REDUX:
             StringCopy(gStringVar1, speciesName);
-            StringCopy(gStringVar2, gText_Redux);
-            StringExpandPlaceholders(regionOutput, gText_Subname12);
+            StringCopy(gStringVar3, gText_Redux);
+            StringExpandPlaceholders(regionOutput, gText_Subname13);
             break;
 
         default:
@@ -6107,54 +6037,36 @@ SpeciesEnum GetRandomSpeciesFromPool(u8 id) {
 }
 
 SpeciesEnum GetFormChangeForMon(struct Pokemon *mon, u8 num) {
-    u8 i;
     SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES, NULL);
-    u16 heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
-    SpeciesEnum actualSpecies = species;
-    u16 formShiftSpecies = GetFormShiftSpecies(species);
-    bool8 canMegaEvolve = gSaveBlock2Ptr->permanentMegaMode && CheckBagHasItem(ITEM_MEGA_BRACELET, 1) &&
-                          FlagGet(FLAG_SYS_RECEIVED_KEYSTONE);  // Check if the player has the Mega Bracelet and the Keystone
-    SpeciesEnum notMegaSpecies = GetBaseSpeciesFromMega(species);
 
-    if (formShiftSpecies) species = formShiftSpecies;
-
-    i = num;
-
-    // if (!FlagGet(FLAG_BADGE02_GET))
-    //     return SPECIES_NONE;
-
-    switch (gFormChangeTable[species][i].method) {
+    switch (gFormChangeTable[species][num].method) {
         case EVO_FORM_SHIFT:
-            if (gFormChangeTable[species][i].targetSpecies != actualSpecies) return gFormChangeTable[species][i].targetSpecies;
+            return gFormChangeTable[species][num].targetSpecies;
             break;
         case EVO_FORM_SHIFT_GENDER:
-            if (gFormChangeTable[species][i].targetSpecies != actualSpecies && GetMonGender(mon) == gFormChangeTable[species][i].param)
-                return gFormChangeTable[species][i].targetSpecies;
+            REQUIRE(GetMonGender(mon) == gFormChangeTable[species][num].param)
+            return gFormChangeTable[species][num].targetSpecies;
+            break;
+        case EVO_MEGA_EVOLUTION:
+        case EVO_PRIMAL_REVERSION:
+            REQUIRE(gSaveBlock2Ptr->permanentMegaMode && CheckBagHasItem(ITEM_MEGA_BRACELET, 1) && FlagGet(FLAG_SYS_RECEIVED_KEYSTONE))
+            REQUIRE(gFormChangeTable[species][num].param == GetMonData(mon, MON_DATA_HELD_ITEM, NULL) ||
+                    CheckBagHasItem(gFormChangeTable[species][num].param, 1))
+            return gFormChangeTable[species][num].targetSpecies;
+            break;
+        case EVO_MOVE_MEGA_EVOLUTION:
+            REQUIRE(gSaveBlock2Ptr->permanentMegaMode && CheckBagHasItem(ITEM_MEGA_BRACELET, 1) && FlagGet(FLAG_SYS_RECEIVED_KEYSTONE))
+            u8 i;
+            for (i = 0; i < MAX_MON_MOVES; i++) {
+                if (GetMonData(mon, MON_DATA_MOVE1, 0) == gFormChangeTable[species][num].param) break;
+            }
+            REQUIRE(i < MAX_MON_MOVES)
+            return gFormChangeTable[species][num].targetSpecies;
+            break;
+        case EVO_UNMEGA:
+            return gFormChangeTable[species][num].targetSpecies;
             break;
     }
-
-    if (canMegaEvolve && notMegaSpecies == SPECIES_NONE)  // Permanent mega mode only
-    {
-        switch (gEvolutionTable[species][i].method) {
-            case EVO_MEGA_EVOLUTION:
-            case EVO_PRIMAL_REVERSION:
-                if (gEvolutionTable[species][i].param == heldItem ||
-                    CheckBagHasItem(gEvolutionTable[species][i].param, 1))  // Check if the mon holds the evolution item or the player has it in the bag
-                    return gEvolutionTable[species][i].targetSpecies;
-                break;
-            case EVO_MOVE_MEGA_EVOLUTION: {
-                u16 move1 = GetMonData(mon, MON_DATA_MOVE1, 0);
-                u16 move2 = GetMonData(mon, MON_DATA_MOVE2, 0);
-                u16 move3 = GetMonData(mon, MON_DATA_MOVE3, 0);
-                u16 move4 = GetMonData(mon, MON_DATA_MOVE4, 0);
-
-                if (gEvolutionTable[species][i].param == move1 || gEvolutionTable[species][i].param == move2 || gEvolutionTable[species][i].param == move3 ||
-                    gEvolutionTable[species][i].param == move4)  // Check if the mon has the evolution move
-                    return gEvolutionTable[species][i].targetSpecies;
-            } break;
-        }
-    } else if (num == 0 && notMegaSpecies != SPECIES_NONE)
-        return notMegaSpecies;
 
     return SPECIES_NONE;
 }
@@ -6183,12 +6095,10 @@ SpeciesEnum GetEvolutionForMon(struct Pokemon *mon, u8 num) {
 
     i = num;
 
-    // Eevee is handled similar to evolution but will be handled separately, I need to add an special animation for de-evolution
-    if (IsEeveelution(species) && num == 0) return SPECIES_EEVEE;
-
-    if ((species == SPECIES_NECROZMA_DUSK_MANE || species == SPECIES_NECROZMA_DAWN_WINGS) && num == 0) return SPECIES_NECROZMA;
-
     switch (gEvolutionTable[species][i].method) {
+        case EVO_DEEVOLUTION:
+            return gEvolutionTable[species][i].targetSpecies;
+            break;
         case EVO_FRIENDSHIP:
             if (friendship >= 220) return gEvolutionTable[species][i].targetSpecies;
             break;

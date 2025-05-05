@@ -361,9 +361,6 @@
 #define F_SUMMARY_SCREEN_FLIP_SPRITE 0x80
 
 // Evolution types
-#define EVO_MEGA_EVOLUTION                0xffff // Not an actual evolution, used to temporarily mega evolve in battle.
-#define EVO_MOVE_MEGA_EVOLUTION           0xfffe // Mega Evolution that checks for a move instead of held item.
-#define EVO_PRIMAL_REVERSION              0xfffd // Not an actual evolution, used to undergo primal reversion in battle.
 #define EVO_FRIENDSHIP                    1      // Pokémon levels up with friendship ≥ 220
 #define EVO_FRIENDSHIP_DAY                2      // Pokémon levels up during the day with friendship ≥ 220
 #define EVO_FRIENDSHIP_NIGHT              3      // Pokémon levels up at night with friendship ≥ 220
@@ -397,12 +394,17 @@
 #define EVO_TRADE_SPECIFIC_MON            31     // Pokémon is traded for a specified Pokémon
 #define EVO_SPECIFIC_MAP                  32     // Pokémon levels up on specified map
 #define EVO_ITEM_HOLD                     33     // Pokémon levels up, holds specified item
+#define EVO_DEEVOLUTION                   34     // Can de-evolve (eg Eeveelutions)
 
 #define EVOS_PER_MON 10
 
 //Form Change Methods
-#define EVO_FORM_SHIFT                    34     // Normal Form Change
-#define EVO_FORM_SHIFT_GENDER             35     // Form Change by gender
+#define EVO_FORM_SHIFT                    100     // Normal Form Change
+#define EVO_FORM_SHIFT_GENDER             101     // Form Change by gender
+#define EVO_MEGA_EVOLUTION                102 // Not an actual evolution, used to temporarily mega evolve in battle.
+#define EVO_MOVE_MEGA_EVOLUTION           103 // Mega Evolution that checks for a move instead of held item.
+#define EVO_PRIMAL_REVERSION              104 // Not an actual evolution, used to undergo primal reversion in battle.
+#define EVO_UNMEGA                        105 // Species that a mega evo reverts to
 
 // Evolution 'modes,' for GetEvolutionTargetSpecies
 #define EVO_MODE_NORMAL     0

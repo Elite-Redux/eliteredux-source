@@ -1525,14 +1525,10 @@ u8 MakeCritRoll() {
 
 void SetCritFlag(int attacker, int target, MoveEnum move, u16 typeEffectiveness, u8 critRoll) {
     int critChance = GetInverseCritChance(attacker, target, move, typeEffectiveness);
-    if (gBattleTypeFlags & (BATTLE_TYPE_WALLY_TUTORIAL | BATTLE_TYPE_FIRST_BATTLE))
+    if (critChance <= 0)
         gIsCriticalHit = FALSE;
-    else if (critChance <= NEVER_CRIT)
-        gIsCriticalHit = FALSE;
-    else if (critChance >= ALWAYS_CRIT)
-        gIsCriticalHit = TRUE;
     else
-        gIsCriticalHit = !(critRoll % critChance);
+        gIsCriticalHit = !(critRoll % critChance);    
 }
 
 static void Cmd_damagecalc(void) {
@@ -7958,9 +7954,9 @@ static void Cmd_various(void) {
             bool8 canDoPrimalReversion = FALSE;
             ptr = READ_PTR_INC;
 
-            for (i = 0; gEvolutionTable[gBattleMons[gActiveBattler].species][i].method; i++) {
-                if (gEvolutionTable[gBattleMons[gActiveBattler].species][i].method == EVO_PRIMAL_REVERSION &&
-                    gEvolutionTable[gBattleMons[gActiveBattler].species][i].param == gBattleMons[gActiveBattler].item)
+            for (i = 0; gFormChangeTable[gBattleMons[gActiveBattler].species][i].method; i++) {
+                if (gFormChangeTable[gBattleMons[gActiveBattler].species][i].method == EVO_PRIMAL_REVERSION &&
+                    gFormChangeTable[gBattleMons[gActiveBattler].species][i].param == gBattleMons[gActiveBattler].item)
                     canDoPrimalReversion = TRUE;
             }
 

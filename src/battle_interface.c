@@ -1713,7 +1713,7 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon) {
             if (DrawMegaSymbolBeforeName) StringCopy(gDisplayedStringBattle, gText_CascoonSymbolBefore);
             break;
         default:
-            if (GetBaseSpeciesFromMega(species)) {
+            if (gFormChangeTable[species][0].method == EVO_UNMEGA) {
                 isMega = TRUE;
                 if (DrawMegaSymbolBeforeName) StringCopy(gDisplayedStringBattle, gText_MegaSymbolBefore);
             } else {

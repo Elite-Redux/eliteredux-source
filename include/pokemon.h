@@ -551,8 +551,6 @@ bool8 CheckBoxMonForBadChecksum(u8 box, u8 slot);
 bool8 isSpeciesPlaceholderMon(SpeciesEnum species);
 bool8 IsEeveelution(SpeciesEnum species);
 SpeciesEnum GetBaseSpeciesFromMega(SpeciesEnum species);
-SpeciesEnum getLearnsetMon(SpeciesEnum species);
-SpeciesEnum GetFormShiftSpecies(SpeciesEnum species);
 const u8 *const GetSpeciesLongName(SpeciesEnum species);
 const u8 *SaveSpeciesWithSurname(SpeciesEnum species);
 SpeciesEnum GetRandomSpeciesFromPool(u8 id);

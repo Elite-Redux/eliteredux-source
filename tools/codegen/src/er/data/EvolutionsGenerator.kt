@@ -16,33 +16,43 @@ object EvolutionsGenerator : Generator {
     private const val EVO_PREFIX = "__sEvoList_"
     private const val FORM_PREFX = "__sFormList_"
 
-    private data class Evo(val method: String, val condition: String, val to: SpeciesEnum) {
+    private data class Evo(val method: EvoOrFormType, val condition: String, val to: SpeciesEnum) {
         override fun toString() = "{$method, $condition, $to}"
     }
 
-    override fun generate(writer: OutputStreamWriter) {
-        val megas = SPECIES_LIST.flatMap { it.megaList.map { mega -> mega to it.id } }.groupBy { it.first.from }
-        val primals = SPECIES_LIST.flatMap { it.primalList.map { primal -> primal to it.id } }.groupBy { it.first.from }
+    private enum class EvoOrFormType {
+        EVO_FORM_SHIFT,
+        EVO_FORM_SHIFT_GENDER,
+        EVO_MEGA_EVOLUTION,
+        EVO_PRIMAL_REVERSION,
+        EVO_MOVE_MEGA_EVOLUTION,
+        EVO_LEVEL_MALE,
+        EVO_LEVEL_FEMALE,
+        EVO_LEVEL_SHEDINJA,
+        EVO_LEVEL_NINJASK,
+        EVO_LEVEL,
+        EVO_DEEVOLUTION,
+        EVO_UNMEGA,
+    }
 
+    override fun generate(writer: OutputStreamWriter) {
+
+        val deevos = SPECIES_LIST.filter { it.allowDeevolutionTo }
+            .flatMap { species -> species.evoList.map { it.to to species.id } }.toMap()
+            .mapValues { Evo(EvoOrFormType.EVO_DEEVOLUTION, "TRUE", it.value) }
+
+        // De-evolutions are expected to come first
         val (evoIds, speciesEvoIds) = NO_EGG_LIST.map { species ->
-            species.evoList.filter { it.to in SPECIES_MAP }.map {
+            listOfNotNull(deevos[species.id]) + species.evoList.filter { it.to in SPECIES_MAP }.map {
                 Evo(
                     when {
-                        it.gender == Species.Gender.MALE -> "EVO_LEVEL_MALE"
-                        it.gender == Species.Gender.FEMALE -> "EVO_LEVEL_FEMALE"
-                        species.id == SpeciesEnum.SPECIES_SHEDINJA -> "EVO_LEVEL_SHEDINJA"
-                        species.id == SpeciesEnum.SPECIES_NINJASK -> "EVO_LEVEL_NINJASK"
-                        else -> "EVO_LEVEL"
+                        it.gender == Species.Gender.MALE -> EvoOrFormType.EVO_LEVEL_MALE
+                        it.gender == Species.Gender.FEMALE -> EvoOrFormType.EVO_LEVEL_FEMALE
+                        species.id == SpeciesEnum.SPECIES_SHEDINJA -> EvoOrFormType.EVO_LEVEL_SHEDINJA
+                        species.id == SpeciesEnum.SPECIES_NINJASK -> EvoOrFormType.EVO_LEVEL_NINJASK
+                        else -> EvoOrFormType.EVO_LEVEL
                     }, it.level.toString(), it.to
                 )
-            } + megas[species.id].orEmpty().map {
-                if (it.first.hasMove()) {
-                    Evo("EVO_MOVE_MEGA_EVOLUTION", it.first.move.toString(), it.second)
-                } else {
-                    Evo("EVO_MEGA_EVOLUTION", it.first.item.toString(), it.second)
-                }
-            } + primals[species.id].orEmpty().map {
-                Evo("EVO_PRIMAL_REVERSION", it.first.item.toString(), it.second)
             }.toSet() to species.id
         }.createDedupMaps()
 
@@ -54,28 +64,66 @@ object EvolutionsGenerator : Generator {
             |""".trimMargin()
         })
 
-        speciesEvoIds.printLookupTable("const Evolution *const gEvolutionTable[$REAL_SPECIES_COUNT]", EVO_PREFIX, writer)
+        speciesEvoIds.printLookupTable(
+            "const Evolution *const gEvolutionTable[$REAL_SPECIES_COUNT]",
+            EVO_PREFIX,
+            writer
+        )
+
+        val megas = SPECIES_LIST.flatMap { it.megaList.map { mega -> mega to it.id } }.groupBy { it.first.from }
+            .mapValues { (_, values) ->
+                values.map { (mega, to) ->
+                    if (mega.hasMove()) {
+                        Evo(EvoOrFormType.EVO_MOVE_MEGA_EVOLUTION, mega.move.toString(), to)
+                    } else {
+                        Evo(EvoOrFormType.EVO_MEGA_EVOLUTION, mega.item.toString(), to)
+                    }
+                }
+            }
+        val primals = SPECIES_LIST.flatMap { it.primalList.map { primal -> primal to it.id } }.groupBy { it.first.from }
+            .mapValues { (_, values) ->
+                values.map { (primal, to) ->
+                    Evo(
+                        EvoOrFormType.EVO_PRIMAL_REVERSION,
+                        primal.item.toString(),
+                        to
+                    )
+                }
+            }
 
         val reverseForms =
-            NO_EGG_LIST.map { it.formShiftOf to it.id }.groupBy({ it.first }, { it.second }) - SpeciesEnum.SPECIES_NONE
+            (NO_EGG_LIST.map { it.formShiftOf to it.id }
+                .groupBy({ it.first }, { it.second }) - SpeciesEnum.SPECIES_NONE).mapValues { (base, forms) ->
+                listOf(Evo(EvoOrFormType.EVO_FORM_SHIFT, "TRUE", base)) +
+                        forms.map {
+                            when (SPECIES_MAP[it]!!.formShiftGender) {
+                                Species.Gender.MALE -> Evo(EvoOrFormType.EVO_FORM_SHIFT_GENDER, "MON_MALE", it)
+                                Species.Gender.FEMALE -> Evo(EvoOrFormType.EVO_FORM_SHIFT_GENDER, "MON_FEMALE", it)
+                                else -> Evo(EvoOrFormType.EVO_FORM_SHIFT, "TRUE", it)
+                            }
+                        }
+            }
 
-        val (formIds, speciesFormIds) = NO_EGG_LIST.map { species ->
-            val id = if (species.hasFormShiftOf()) species.formShiftOf else species.id
-            reverseForms[id]?.let { listOf(id) + it }.orEmpty() to species.id
-        }.createDedupMaps()
+        val allForms = NO_EGG_LIST.map {
+            val formId = if (it.hasFormShiftOf()) it.formShiftOf else it.id
+            val unmega =
+                listOfNotNull((it.megaList.map { m -> m.from } + it.primalList.map { p -> p.from }).firstOrNull()).map { from ->
+                    Evo(
+                        EvoOrFormType.EVO_UNMEGA,
+                        "TRUE",
+                        from
+                    )
+                }
+            // Unmegas are expected to come first
+            (unmega + reverseForms[formId].orEmpty() + megas[it.id].orEmpty() + primals[it.id].orEmpty()) to it.id
+        }
+
+        val (formIds, speciesFormIds) = allForms.createDedupMaps()
 
         writer.appendLine(formIds.entries.joinToString("\n") {
             """
             |static const Evolution *const $FORM_PREFX${it.value} = (const Evolution[]) {
-            |$IND${
-                it.key.joinToString("\n$IND") { id ->
-                    when (SPECIES_MAP[id]!!.formShiftGender) {
-                        Species.Gender.MALE -> "{EVO_FORM_SHIFT_GENDER, MON_MALE, $id},"
-                        Species.Gender.FEMALE -> "{EVO_FORM_SHIFT_GENDER, MON_FEMALE, $id},"
-                        else -> "{EVO_FORM_SHIFT, 1, $id},"
-                    }
-                }
-            }
+            |$IND${it.key.joinToString("\n$IND") { evo -> "$evo," }}
             |${IND}0};
             |""".trimMargin()
         })

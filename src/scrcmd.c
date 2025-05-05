@@ -2421,7 +2421,7 @@ bool8 ScrCmd_checkPartyHasSpecies(struct ScriptContext *ctx)
     for (i = 0; i < partyCount; i++)
     {
         partySpecies = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
-        if (gSpeciesToNationalPokedexNum[partySpecies - 1] == wantedSpecies)
+        if (gSpeciesToNationalPokedexNum[partySpecies] == wantedSpecies)
         {
             gSpecialVar_Result = TRUE;
         }
@@ -2437,7 +2437,7 @@ bool8 ScrCmd_isChosenMonSpecies(struct ScriptContext *ctx)
     u16 chosenSpecies = GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES2, NULL);
 
     gSpecialVar_Result = FALSE;
-    if (gSpeciesToNationalPokedexNum[chosenSpecies - 1] == wantedSpecies)
+    if (gSpeciesToNationalPokedexNum[chosenSpecies] == wantedSpecies)
     {
         gSpecialVar_Result = TRUE;
     }
@@ -2492,12 +2492,12 @@ bool8 ScrCmd_giveBattleItems(struct ScriptContext *ctx)
         AddBagItem(gNurseJoyItems[i], 1);
     }
 
-    for (i = 0; i < gItemCountsForPocket[POCKET_TM_HM]; i++) {
-        AddBagItem(gItemsForPocket[POCKET_TM_HM][i], 1);
+    for (i = 0; i < gItemCountsForPocket[POCKET_TM_HM - 1]; i++) {
+        AddBagItem(gItemsForPocket[POCKET_TM_HM - 1][i], 1);
     }
 
-    for (i = 0; i < gItemCountsForPocket[POCKET_POKE_BALLS]; i++) {
-        AddBagItem(gItemsForPocket[POCKET_POKE_BALLS][i], 1);
+    for (i = 0; i < gItemCountsForPocket[POCKET_POKE_BALLS - 1]; i++) {
+        AddBagItem(gItemsForPocket[POCKET_POKE_BALLS - 1][i], 1);
     }
     return TRUE;
 }

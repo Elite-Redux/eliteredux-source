@@ -7139,8 +7139,7 @@ static bool32 CanEvolve(u32 species) {
     u32 i;
 
     for (i = 0; gEvolutionTable[species][i].method; i++) {
-        if (gEvolutionTable[species][i].method && gEvolutionTable[species][i].method != EVO_MEGA_EVOLUTION &&
-            gEvolutionTable[species][i].method != EVO_MOVE_MEGA_EVOLUTION && gEvolutionTable[species][i].method != EVO_PRIMAL_REVERSION)
+        if (gEvolutionTable[species][i].method)
             return TRUE;
     }
     return FALSE;
@@ -7866,9 +7865,9 @@ bool32 IsPartnerMonFromSameTrainer(u8 battlerId) {
 SpeciesEnum GetMegaEvolutionSpecies(SpeciesEnum preEvoSpecies, u16 heldItemId) {
     u32 i;
 
-    for (i = 0; gEvolutionTable[preEvoSpecies][i].method; i++) {
-        if (gEvolutionTable[preEvoSpecies][i].method == EVO_MEGA_EVOLUTION && gEvolutionTable[preEvoSpecies][i].param == heldItemId)
-            return gEvolutionTable[preEvoSpecies][i].targetSpecies;
+    for (i = 0; gFormChangeTable[preEvoSpecies][i].method; i++) {
+        if (gFormChangeTable[preEvoSpecies][i].method == EVO_MEGA_EVOLUTION && gFormChangeTable[preEvoSpecies][i].param == heldItemId)
+            return gFormChangeTable[preEvoSpecies][i].targetSpecies;
     }
     return SPECIES_NONE;
 }
@@ -7876,9 +7875,9 @@ SpeciesEnum GetMegaEvolutionSpecies(SpeciesEnum preEvoSpecies, u16 heldItemId) {
 SpeciesEnum GetPrimalReversionSpecies(SpeciesEnum preEvoSpecies, u16 heldItemId) {
     u32 i;
 
-    for (i = 0; gEvolutionTable[preEvoSpecies][i].method; i++) {
-        if (gEvolutionTable[preEvoSpecies][i].method == EVO_PRIMAL_REVERSION && gEvolutionTable[preEvoSpecies][i].param == heldItemId)
-            return gEvolutionTable[preEvoSpecies][i].targetSpecies;
+    for (i = 0; gFormChangeTable[preEvoSpecies][i].method; i++) {
+        if (gFormChangeTable[preEvoSpecies][i].method == EVO_PRIMAL_REVERSION && gFormChangeTable[preEvoSpecies][i].param == heldItemId)
+            return gFormChangeTable[preEvoSpecies][i].targetSpecies;
     }
     return SPECIES_NONE;
 }
@@ -7886,9 +7885,9 @@ SpeciesEnum GetPrimalReversionSpecies(SpeciesEnum preEvoSpecies, u16 heldItemId)
 SpeciesEnum GetWishMegaEvolutionSpecies(SpeciesEnum preEvoSpecies, MoveEnum moveId1, MoveEnum moveId2, MoveEnum moveId3, MoveEnum moveId4) {
     u32 i, par;
 
-    for (i = 0; gEvolutionTable[preEvoSpecies][i].method; i++) {
-        if (gEvolutionTable[preEvoSpecies][i].method == EVO_MOVE_MEGA_EVOLUTION) {
-            par = gEvolutionTable[preEvoSpecies][i].param;
+    for (i = 0; gFormChangeTable[preEvoSpecies][i].method; i++) {
+        if (gFormChangeTable[preEvoSpecies][i].method == EVO_MOVE_MEGA_EVOLUTION) {
+            par = gFormChangeTable[preEvoSpecies][i].param;
             if (par == moveId1 || par == moveId2 || par == moveId3 || par == moveId4) return gEvolutionTable[preEvoSpecies][i].targetSpecies;
         }
     }
