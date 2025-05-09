@@ -65,6 +65,7 @@
 #define MAP_UNDERWATER_ROUTE125 (56 | (0 << 8))
 #define MAP_RUSTURF_TUNNEL_2F   (57 | (0 << 8))
 #define MAP_LEGENDARY_DOMAIN    (58 | (0 << 8))
+#define MAP_ROUTE111_TUNNEL2    (59 | (0 << 8))
 
 // gMapGroup_IndoorLittleroot
 #define MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F    (0 | (1 << 8))
@@ -441,6 +442,7 @@
 #define MAP_COLD_CREVICE                 (10 | (25 << 8))
 #define MAP_VICTORY_ROAD_CROOM           (11 | (25 << 8))
 #define MAP_VICTORY_ROAD_FROOM           (12 | (25 << 8))
+#define MAP_ROUTE111_TUNNEL              (13 | (25 << 8))
 
 // gMapGroup_IndoorDynamic
 #define MAP_SECRET_BASE_RED_CAVE1    (0 | (26 << 8))

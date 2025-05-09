@@ -95,7 +95,8 @@
     "Underwater_Route105",
     "Underwater_Route125",
     "RusturfTunnel_2F",
-    "LegendaryDomain"
+    "LegendaryDomain",
+    "Route111_Tunnel2"
   ],
   "gMapGroup_IndoorLittleroot": [
     "LittlerootTown_BrendansHouse_1F",
@@ -471,7 +472,8 @@
     "VictoryRoadUrshifus",
     "ColdCrevice",
     "VictoryRoadCRoom",
-    "VictoryRoadFroom"
+    "VictoryRoadFroom",
+    "Route111_Tunnel"
   ],
   "gMapGroup_IndoorDynamic": [
     "SecretBase_RedCave1",

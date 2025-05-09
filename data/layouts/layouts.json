@@ -4840,6 +4840,26 @@
       "secondary_tileset": "gTileset_MirageTower",
       "border_filepath": "data/layouts/Route111_Cave/border.bin",
       "blockdata_filepath": "data/layouts/Route111_Cave/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_TUNNEL",
+      "name": "Route111_Tunnel_Layout",
+      "width": 80,
+      "height": 60,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_MirageTower",
+      "border_filepath": "data/layouts/Route111_Tunnel/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_Tunnel/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_TUNNEL2",
+      "name": "Route111_Tunnel2_Layout",
+      "width": 75,
+      "height": 50,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/Route111_Tunnel2/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_Tunnel2/map.bin"
     }
   ]
 }
