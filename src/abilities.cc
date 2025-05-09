@@ -8105,6 +8105,38 @@ constexpr Ability Calculative = {
         },
 };
 
+constexpr Ability EmbodyAspect = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(CanRaiseStat(battler, STAT_SPEED))
+
+        SetStatChanger(STAT_SPEED, 1);
+        BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
+        return TRUE;
+    },
+};
+
+constexpr Ability EmbodyAspectHearthflame = {
+    .onEntry = IntrepidSword.onEntry,
+};
+
+constexpr Ability EmbodyAspectCornerstone = {
+    .onEntry = DauntlessShield.onEntry,
+};
+
+constexpr Ability EmbodyAspectWellspring = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(CanRaiseStat(battler, STAT_SPDEF))
+
+        SetStatChanger(STAT_SPDEF, 1);
+        BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
+        return TRUE;
+    },
+};
+
+constexpr Ability RockhardShaft = {
+    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_ROCK),
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -8865,6 +8897,11 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_AQUATIC, Aquatic},
     {ABILITY_METALLIC_JAWS, MetallicJaws},
     {ABILITY_CALCULATIVE, Calculative},
+    {ABILITY_EMBODY_ASPECT, EmbodyAspect},
+    {ABILITY_EMBODY_ASPECT_HEARTHFLAME, EmbodyAspect},
+    {ABILITY_EMBODY_ASPECT_CORNERSTONE, EmbodyAspectCornerstone},
+    {ABILITY_EMBODY_ASPECT_WELLSPRING, EmbodyAspectWellspring},
+    {ABILITY_ROCKHARD_SHAFT, RockhardShaft},
 };
 
 template <int N>

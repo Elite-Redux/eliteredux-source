@@ -5078,11 +5078,19 @@ u8 GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer) {
         case EFFECT_SYNCHRONOISE:
             if (gBattleMoves[move].argument == MISC_EFFECT_IVY_CUDGEL) {
                 switch (species) {
+                    case SPECIES_OGERPON:
+                        return TYPE_GRASS;
                     case SPECIES_OGERPON_HEARTHFLAME_MASK:
                         return TYPE_FIRE;
                     case SPECIES_OGERPON_WELLSPRING_MASK:
                         return TYPE_WATER;
                     case SPECIES_OGERPON_CORNERSTONE_MASK:
+                        return TYPE_ROCK;
+                    case SPECIES_OGERPON_HEARTHFLAME_MASK_MEGA:
+                        return TYPE_FIRE;
+                    case SPECIES_OGERPON_WELLSPRING_MASK_MEGA:
+                        return TYPE_WATER;
+                    case SPECIES_OGERPON_CORNERSTONE_MASK_MEGA:
                         return TYPE_ROCK;
                 }
             }
