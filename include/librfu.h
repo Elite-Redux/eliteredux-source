@@ -324,6 +324,9 @@ struct STWIStatus
     vu8 sending;
 };
 
+#define STWI_CALLBACKM_2(param1, param2) (((void (*)(u8, vu16))gSTWIStatus->callbackM)(param1, param2))
+#define STWI_CALLBACKM_3(param1, param2, param3) (((void (*)(u8, vu16, struct STWIStatus*))gSTWIStatus->callbackM)(param1, param2, param3))
+
 // This struct is used as u8 array in SDK. 
 struct RfuIntrStruct
 {
