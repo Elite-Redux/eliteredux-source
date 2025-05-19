@@ -4648,7 +4648,7 @@ u32 IsAbilityPreventingEscape(u32 battlerId) {
     if (ItemId_GetHoldEffect(gBattleMons[battlerId].item) == HOLD_EFFECT_SHED_SHELL) return 0;
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) return 0;
     for (int opponent = GetOppositeSide(battlerId); opponent < gBattlersCount; opponent += 2) {
-        ON_ABILITY(opponent, FALSE, gAbilities[ability].onTrap, if (gAbilities[ability].onTrap(battlerId)) return ability)
+        ON_ABILITY(opponent, FALSE, gAbilities[ability].onTrap, if (gAbilities[ability].onTrap(battlerId)) return opponent + 1)
     }
     return 0;
 }
