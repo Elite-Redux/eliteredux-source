@@ -6302,7 +6302,7 @@ u32 GetBattlerHoldEffectParam(u8 battlerId) {
 }
 
 bool32 IsMoveMakingContact(MoveEnum move, u8 battlerAtk) {
-    if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) {
+    if (!gBattleMoves[move].contact) {
         if (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)
             return TRUE;
         else
@@ -6334,7 +6334,7 @@ bool32 IsBattlerProtected(u8 battlerId, MoveEnum move) {
     else if (gRoundStructs[battlerId].mindReader && GetTotalAccuracy(gBattlerAttacker, battlerId, move, NULL) < 101)
         return TRUE;
     else if ((BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_UNSEEN_FIST) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_FINAL_BLOW)) &&
-             (gBattleMoves[move].flags & FLAG_MAKES_CONTACT || (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)))
+             (gBattleMoves[move].contact || (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)))
         return FALSE;
     else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DEMOLITIONIST) && gVolatileStructs[gBattlerAttacker].readiedAction)
         return FALSE;
