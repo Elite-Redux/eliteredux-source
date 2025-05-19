@@ -1885,7 +1885,7 @@ static void PrintMoveInfo(MoveEnum move, u8 x, u8 y, u8 moveIdx) {
         break;*/
         case MOVE_MODE_AFFECTED_1:
             // Makes Contact
-            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+            if (gBattleMoves[move].contact)
                 StringCopy(gStringVar4, gText_Makes_Contact_True);
             else
                 StringCopy(gStringVar4, gText_Makes_Contact_False);

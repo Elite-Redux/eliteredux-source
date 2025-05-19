@@ -2190,7 +2190,7 @@ constexpr Ability SlushRush = {
 constexpr Ability LongReach = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (IS_MOVE_PHYSICAL(move) && !(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) MUL(1.2);
+            if (IS_MOVE_PHYSICAL(move) && !gBattleMoves[move].contact) MUL(1.2);
         },
 };
 
@@ -3394,7 +3394,7 @@ constexpr Ability AirBlower = {
 constexpr Ability Juggernaut = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) secondaryAtkStatToUse[STAT_DEF] += 20;
+            if (gBattleMoves[move].contact) secondaryAtkStatToUse[STAT_DEF] += 20;
         },
     .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_PARALYSIS)
@@ -3703,7 +3703,7 @@ constexpr Ability WeatherControl = {
 constexpr Ability SpeedForce = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) secondaryAtkStatToUse[STAT_SPEED] += 20;
+            if (gBattleMoves[move].contact) secondaryAtkStatToUse[STAT_SPEED] += 20;
         },
 };
 
@@ -3810,7 +3810,7 @@ constexpr Ability GiantWings = {
 constexpr Ability Momentum = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *atkStatToUse = STAT_SPEED;
+            if (gBattleMoves[move].contact) *atkStatToUse = STAT_SPEED;
         },
 };
 
@@ -4215,6 +4215,7 @@ constexpr Ability ToxicSpill = {
                 FILTER(source)
                 CHECK(sourceAbility == ability)
                 CHECK(source - 1 == battler)
+                break;
             }
         }
 
@@ -5826,7 +5827,7 @@ constexpr Ability WindPower = {
 constexpr Ability Impulse = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) *atkStatToUse = STAT_SPEED;
+            if (!(gBattleMoves[move].contact)) *atkStatToUse = STAT_SPEED;
         },
 };
 

@@ -5508,7 +5508,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode) {
             PosX = PosX + 16;
             PrintSmallTextOnWindow(windowId, gText_Contact, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
 
-            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+            if (gBattleMoves[move].contact)
                 PrintSmallTextOnWindow(windowId, gText_Effect_ContactYes, MOVE_EFFECT_Y, PosX, 0, 0);
             else
                 PrintSmallTextOnWindow(windowId, gText_Effect_ContactNo, MOVE_EFFECT_Y, PosX, 0, 0);

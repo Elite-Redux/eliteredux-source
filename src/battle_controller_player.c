@@ -1745,7 +1745,7 @@ void PrintBattleWindow_MoveSelection(void) {
             y++;
 
             // Contact
-            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+            if (gBattleMoves[move].contact)
                 StringCopy(gStringVar1, sText_Yes);
             else
                 StringCopy(gStringVar1, sText_No);

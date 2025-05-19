@@ -4640,7 +4640,7 @@ u32 IsAbilityPreventingEscape(u32 battlerId) {
     if (ItemId_GetHoldEffect(gBattleMons[battlerId].item) == HOLD_EFFECT_SHED_SHELL) return 0;
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) return 0;
     for (int opponent = GetOppositeSide(battlerId); opponent < gBattlersCount; opponent += 2) {
-        ON_ABILITY(opponent, FALSE, gAbilities[ability].onTrap, if (gAbilities[ability].onTrap(battlerId)) return ability)
+        ON_ABILITY(opponent, FALSE, gAbilities[ability].onTrap, if (gAbilities[ability].onTrap(battlerId)) return opponent + 1)
     }
     return 0;
 }
@@ -6294,7 +6294,7 @@ u32 GetBattlerHoldEffectParam(u8 battlerId) {
 }
 
 bool32 IsMoveMakingContact(MoveEnum move, u8 battlerAtk) {
-    if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) {
+    if (!gBattleMoves[move].contact) {
         if (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)
             return TRUE;
         else
@@ -6326,7 +6326,7 @@ bool32 IsBattlerProtected(u8 battlerId, MoveEnum move) {
     else if (gRoundStructs[battlerId].mindReader && GetTotalAccuracy(gBattlerAttacker, battlerId, move, NULL) < 101)
         return TRUE;
     else if ((BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_UNSEEN_FIST) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_FINAL_BLOW)) &&
-             (gBattleMoves[move].flags & FLAG_MAKES_CONTACT || (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)))
+             (gBattleMoves[move].contact || (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)))
         return FALSE;
     else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DEMOLITIONIST) && gVolatileStructs[gBattlerAttacker].readiedAction)
         return FALSE;
