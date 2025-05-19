@@ -280,10 +280,6 @@ static int MoxieClone(int battler, int stat) {
 }
 
 #define ATE_ABILITY(type)                                                       \
-    .onOffensiveMultiplier =                                                    \
-        +[](ON_OFFENSIVE_MULTIPLIER) {                                          \
-            if (moveType == type && gBattleStruct->ateBoost[battler]) MUL(1.1); \
-        },                                                                      \
     .onMoveType = +[](ON_MOVE_TYPE) -> int {                                    \
         CHECK(moveType == TYPE_NORMAL)                                          \
         *ateBoost = TRUE;                                                       \
@@ -1244,9 +1240,10 @@ constexpr Ability Technician = {
 };
 
 constexpr Ability LeafGuard = {
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
-        CHECK(status & CHECK_STATUS1)
+    .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
+
+        CHECK(AbilityHealMonStatus(battler, ability));
         return TRUE;
     },
     .breakable = TRUE,
@@ -1345,7 +1342,7 @@ constexpr Ability SlowStart = {
     },
     .onStat =
         +[](ON_STAT) {
-            if (statId != STAT_ATK && statId != STAT_SPEED) return;
+            if (statId != STAT_ATK && statId != STAT_SPATK && statId != STAT_SPEED) return;
             if (gVolatileStructs[battler].slowStartTimer) *stat /= 2;
         },
 };
@@ -1770,6 +1767,7 @@ constexpr Ability SapSipper = {
         *statId = GetHighestAttackingStatId(battler, TRUE);
         return ABSORB_RESULT_STAT;
     },
+    .redirectType = TYPE_GRASS,
     .breakable = TRUE,
 };
 
@@ -1876,6 +1874,7 @@ constexpr Ability StrongJaw = {
 
 constexpr Ability Refrigerate = {
     ATE_ABILITY(TYPE_ICE),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_ICE; },
 };
 
 constexpr Ability SweetVeil = {
@@ -1949,6 +1948,7 @@ constexpr Ability ToughClaws = {
 
 constexpr Ability Pixilate = {
     ATE_ABILITY(TYPE_FAIRY),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FAIRY; },
 };
 
 constexpr Ability Gooey = {
@@ -1965,6 +1965,7 @@ constexpr Ability Gooey = {
 
 constexpr Ability Aerilate = {
     ATE_ABILITY(TYPE_FLYING),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FLYING; },
 };
 
 constexpr Ability ParentalBond = {
@@ -2160,9 +2161,9 @@ constexpr Ability WaterBubble = {
 };
 
 constexpr Ability Steelworker = {
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (moveType == TYPE_STEEL) MUL(1.3);
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_GHOST || moveType == TYPE_DARK) RESISTANCE(.5);
         },
 };
 
@@ -2214,6 +2215,7 @@ constexpr Ability Triage = {
 
 constexpr Ability Galvanize = {
     ATE_ABILITY(TYPE_ELECTRIC),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_ELECTRIC; },
 };
 
 constexpr Ability SurgeSurfer = {
@@ -3035,6 +3037,7 @@ constexpr Ability AntarcticBird = {
 
 constexpr Ability Immolate = {
     ATE_ABILITY(TYPE_FIRE),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FIRE; },
 };
 
 constexpr Ability Crystallize = {
@@ -3204,6 +3207,7 @@ constexpr Ability Earthbound = {
 
 constexpr Ability FightingSpirit = {
     ATE_ABILITY(TYPE_FIGHTING),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FIGHTING; },
 };
 
 constexpr Ability FelineProwess = {
@@ -3288,6 +3292,7 @@ constexpr Ability SelfSufficient = {
 
 constexpr Ability Tectonize = {
     ATE_ABILITY(TYPE_GROUND),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_GROUND; },
 };
 
 constexpr Ability IceAge = {
@@ -3340,6 +3345,7 @@ constexpr Ability Mountaineer = {
 
 constexpr Ability Hydrate = {
     ATE_ABILITY(TYPE_WATER),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
 };
 
 constexpr Ability Metallic = {
@@ -3349,7 +3355,7 @@ constexpr Ability Metallic = {
 constexpr Ability Permafrost = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.75);
+            if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
         },
     .breakable = TRUE,
 };
@@ -3415,6 +3421,7 @@ constexpr Ability Phantom = {
 
 constexpr Ability Intoxicate = {
     ATE_ABILITY(TYPE_POISON),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_POISON; },
 };
 
 constexpr Ability Impenetrable = {
@@ -3887,6 +3894,7 @@ constexpr Ability IceDew = {
         *statId = GetHighestAttackingStatId(battler, TRUE);
         return ABSORB_RESULT_STAT;
     },
+    .redirectType = TYPE_ICE,
     .breakable = TRUE,
 };
 
@@ -3903,6 +3911,7 @@ constexpr Ability SunWorship = {
 
 constexpr Ability Pollinate = {
     ATE_ABILITY(TYPE_BUG),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_BUG; },
 };
 
 constexpr Ability VolcanoRage = {
@@ -3930,6 +3939,7 @@ constexpr Ability LowBlow = {
 
 constexpr Ability Spectralize = {
     ATE_ABILITY(TYPE_GHOST),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_GHOST; },
 };
 
 constexpr Ability SpectralShroud = {
@@ -4120,6 +4130,7 @@ constexpr Ability Roundhouse = {
 
 constexpr Ability Mineralize = {
     ATE_ABILITY(TYPE_ROCK),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_ROCK; },
 };
 
 constexpr Ability LooseRocks = {
@@ -4249,6 +4260,7 @@ constexpr Ability DesertCloak = {
 
 constexpr Ability Draconize = {
     ATE_ABILITY(TYPE_DRAGON),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_DRAGON; },
 };
 
 constexpr Ability PrettyPrincess = {
@@ -4265,12 +4277,15 @@ constexpr Ability SelfRepair = {
 
 constexpr Ability AtomicBurst = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
-        CHECK(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
-        UseOutOfTurnAttack(battler, attacker, ability, MOVE_HYPER_BEAM, 50);
-        return FALSE;
+        gStatuses3[battler] |= STATUS3_CHARGED_UP;
+        BattleScriptCall(BattleScript_ElectromorphosisActivates);
+        return TRUE;
     },
+    ATE_ABILITY(TYPE_ELECTRIC),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_ELECTRIC; },
 };
 
 constexpr Ability Hellblaze = {
@@ -4656,6 +4671,11 @@ constexpr Ability FaeHunter = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_BATTLER_OF_TYPE(target, TYPE_FAIRY)) RESISTANCE(1.5);
         },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(attacker, TYPE_FAIRY)) MUL(.5);
+        },
+    .breakable = TRUE,
 };
 
 constexpr Ability GravityWell = {
@@ -4683,6 +4703,11 @@ constexpr Ability Lumberjack = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) RESISTANCE(1.5);
         },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(attacker, TYPE_GRASS)) MUL(.5);
+        },
+    .breakable = TRUE,
 };
 
 constexpr Ability WellBakedBody = {
@@ -4924,6 +4949,7 @@ constexpr Ability Purgatory = {
 
 constexpr Ability Emanate = {
     ATE_ABILITY(TYPE_PSYCHIC),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_PSYCHIC; },
 };
 
 constexpr Ability KunoichiBlade = {
@@ -5344,6 +5370,7 @@ constexpr Ability Determination = {
 
 constexpr Ability Fertilize = {
     ATE_ABILITY(TYPE_GRASS),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_GRASS; },
 };
 
 constexpr Ability PureLove = {
@@ -6673,9 +6700,9 @@ constexpr Ability ArcFlash = {
 };
 
 constexpr Ability Unicorn = {
-    .onImmune = QueenlyMajesty.onImmune,
     .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
-    .onImmuneFor = APPLY_ON_ALLY,
+    ATE_ABILITY(TYPE_FAIRY),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FAIRY; },
 };
 
 constexpr Ability OnTheProwl = {
@@ -6728,10 +6755,7 @@ constexpr Ability EternalBlessing = {
 };
 
 constexpr Ability SugarRush = {
-    .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler)) CHECK(IsMoveMakingContact(move, battler)) CHECK(EatTargetBerry(battler, target));
-        return TRUE;
-    },
+    .onStat = Unburden.onStat
 };
 
 constexpr Ability PeacefulRest = {
@@ -6903,8 +6927,6 @@ constexpr Ability BadOmen = {
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (isCrit) MUL(.25);
         },
-    .onAccuracy = BadLuck.onAccuracy,
-    .onAccuracyFor = APPLY_ON_FOE,
     .breakable = TRUE,
 };
 
@@ -6958,7 +6980,15 @@ constexpr Ability BloodStigma = {
 };
 
 constexpr Ability MaximumAcceleration = {
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *atkStatToUse = STAT_SPEED; },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+        CHECK(ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
+
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+        gBattleScripting.battler = battler;
+        return TRUE;
+    },
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPEED] += 20; },
 };
 
 constexpr Ability Sidewinder = {
@@ -7016,8 +7046,8 @@ constexpr Ability AtomicPunch = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             IronFist.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            Steelworker.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-        },
+            SteelySpirit.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+        },  
 };
 
 constexpr Ability IronGiant = {
@@ -8137,6 +8167,25 @@ constexpr Ability RockhardShaft = {
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_ROCK),
 };
 
+constexpr Ability HuntersMark = {
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority { return ACCURACY_HITS_IF_POSSIBLE; },
+    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
+        CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].arrowBased)
+        u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+        u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+        if (def < spDef)
+            return STAT_DEF;
+        else if (spDef < def)
+            return STAT_SPDEF;
+        else
+            return 0;
+    },
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(gVolatileStructs[battler].isFirstTurn)
+        return ALWAYS_CRIT;
+    },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -8885,6 +8934,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_VENOM_CROWN, VenomCrown},
     {ABILITY_BLIGHT_SCALE, BlightScale},
     {ABILITY_GUNMAN, Gunman},
+    {ABILITY_HUNTERS_MARK, HuntersMark},
     {ABILITY_CARETAKER, Caretaker},
     {ABILITY_POSEIDONS_DOMINION, PoseidonsDominion},
     {ABILITY_DUAL_SHADOW, DualShadow},
