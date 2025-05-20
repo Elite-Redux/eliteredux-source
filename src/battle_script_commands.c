@@ -4035,7 +4035,7 @@ static void PlayStatChangeAnimation(int battler, int statsToCheck, int flags, in
                         statAnimId = startingStatAnimId + currStat;
                         changeableStatsCount++;
                     }
-                } else if (!BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) && !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) &&
+                } else if (!BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) && !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) && !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LIMBER) &&
                            !(!(flags & MOVE_EFFECT_AFFECTS_USER) &&
                              (gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer ||
                               (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_KEEN_EYE) && currStat == STAT_ACC) ||

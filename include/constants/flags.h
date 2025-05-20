@@ -1538,6 +1538,7 @@
 #define FLAG_SYS_OPEN_MOVE_MENU_FROM_PARTY_SCREEN                   3097
 #define FLAG_RECEIVED_CALYREX                                       3098
 #define FLAG_RECEIVED_FIDOUGH_PARTNER                               3099
+#define FLAG_RECEIVED_OGERPON                                       3100
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 

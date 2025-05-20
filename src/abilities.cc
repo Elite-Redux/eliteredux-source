@@ -2161,10 +2161,12 @@ constexpr Ability WaterBubble = {
 };
 
 constexpr Ability Steelworker = {
+    ATE_ABILITY(TYPE_STEEL),
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GHOST || moveType == TYPE_DARK) RESISTANCE(.5);
         },
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_STEEL; },
 };
 
 constexpr Ability Berserk = {
@@ -5117,7 +5119,19 @@ constexpr Ability DustCloud = {
 };
 
 constexpr Ability BerserkerRage = {
-    .onDefender = Berserk.onDefender,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(CanRaiseStat(battler, STAT_SPATK))
+
+        if (gIsCriticalHit) {
+            SetStatChanger(STAT_SPATK, 12);
+            BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
+        } else {
+            SetStatChanger(STAT_SPATK, 1);
+            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
+        }
+        return TRUE;
+    },
     .onBattlerFaints = Rampage.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
@@ -5511,6 +5525,18 @@ constexpr Ability FlamingJaws = {
 
         return AbilityStatusEffect(MOVE_EFFECT_BURN);
     },
+};
+
+constexpr Ability MonsterHunter = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(target, TYPE_DARK)) RESISTANCE(1.5);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(attacker, TYPE_DARK)) MUL(.5);
+        },
+    .breakable = TRUE,
 };
 
 constexpr Ability CrownedSword = {
@@ -6479,7 +6505,6 @@ constexpr Ability BeautifulMusic = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(Random() % 2)
-        CHECK(CanInfatuate(battler, target))
         CHECK(gBattleMoves[move].flags & FLAG_SOUND)
 
         return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
@@ -6878,6 +6903,12 @@ constexpr Ability SnowyWrath = {
 };
 
 constexpr Ability PatternChange = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(Random() % 100 < 30)
+
+        CHECK(AbilityHealMonStatus(battler, ability));
+        return TRUE;
+    },
     .onBeforeAttack = Protean.onBeforeAttack,
 };
 
@@ -8187,6 +8218,218 @@ constexpr Ability HuntersMark = {
     },
 };
 
+constexpr Ability Deviate = {
+    ATE_ABILITY(TYPE_DARK),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_DARK; },
+};
+
+constexpr Ability SunsBounty = {
+    .onEndTurn = Harvest.onEndTurn,
+    .onStatusImmune = LeafGuard.onStatusImmune,
+    .breakable = TRUE,
+};
+
+constexpr Ability RiteOfSpring = {
+    .onStat =
+        +[](ON_STAT) {
+            SolarPower.onStat(DELEGATE_STAT);
+            Chlorophyll.onStat(DELEGATE_STAT);
+        },
+    .breakable = TRUE,
+};
+
+    constexpr Ability Headstrong = {
+        .onEntry = +[](ON_ENTRY) -> int {
+            CHECK(CanRaiseStat(battler, STAT_SPDEF))
+
+            SetStatChanger(STAT_SPDEF, 1);
+            BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
+            return TRUE;
+        },
+        .breakable = TRUE,
+    };
+
+    constexpr Ability Firefighter = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(target, TYPE_FIRE)) RESISTANCE(1.5);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(attacker, TYPE_FIRE)) MUL(.5);
+        },
+    .breakable = TRUE,
+};
+
+constexpr Ability SepiaLens = {
+        .onImmune = +[](ON_IMMUNE) -> int {
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY));
+        return QueenlyMajesty.onImmune(DELEGATE_IMMUNE);
+    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (typeEffectivenessMultiplier <= UQ_4_12(.5)) RESISTANCE(2);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_SPECIAL(move) && IsBattlerWeatherAffected(attacker, WEATHER_SANDSTORM_ANY)) MUL(.5);
+        },
+        .breakable = TRUE,
+    };
+
+constexpr Ability SuperSniper = {
+        .onOffensiveMultiplier = Sniper.onOffensiveMultiplier,
+    };
+
+constexpr Ability WoodlandCurse = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_FORESTS_CURSE, 0); },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_GRASS))
+
+        gBattleMons[attacker].type3 = TYPE_GRASS;
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMons[attacker].type3);
+        BattleScriptCall(BattleScript_AttackerBecameTheType);
+        return TRUE;
+    },
+};
+
+constexpr Ability Malodor = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Blur = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Elude = {
+    .breakable = TRUE,
+};
+
+constexpr Ability DrakeOfRage= {
+    .onBattlerFaints = Rampage.onBattlerFaints,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (typeEffectivenessMultiplier <= UQ_4_12(.5)) RESISTANCE(2);
+        },
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+};
+
+constexpr Ability Reverbate = {
+    .breakable = TRUE,
+};
+
+constexpr Ability MixedMartialArts = {
+    .breakable = TRUE,
+};
+
+constexpr Ability StrategicPause = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Overrule = {
+    .breakable = TRUE,
+};
+
+constexpr Ability MentalPollution = {
+    .breakable = TRUE,
+};
+
+constexpr Ability MadnessEnhancement = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Tentalock = {
+    .breakable = TRUE,
+};
+
+constexpr Ability SerpentBind = {
+    .breakable = TRUE,
+};
+
+constexpr Ability SoulTap = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Scarecrow = {
+    .onEntry = UseIntimidateClone,
+    .onCrit = +[](ON_CRIT) -> int { return NEVER_CRIT; },
+    .onAccuracyFor = APPLY_ON_FOE,
+    .onCritFor = APPLY_ON_FOE,
+    .breakable = TRUE,
+};
+
+constexpr Ability OminousShroud = {
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GHOST); },
+    .onDefensiveMultiplier = Multiscale.onDefensiveMultiplier,
+    .breakable = TRUE,
+};
+
+constexpr Ability ChillingPresence = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_ICY_WIND, 10); },
+};
+
+constexpr Ability Frostbind = {
+    .breakable = TRUE,
+};
+
+constexpr Ability TenderAffection = {
+    ON_EITHER_ABILITY(CuteCharm),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FAIRY; },
+    .breakable = TRUE,
+};
+
+constexpr Ability GlacialGhost = {
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
+        },
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(IsBattlerWeatherAffected(target, WEATHER_HAIL_ANY));
+        *accuracy /= 1.25;
+        return ACCURACY_MULTIPLICATIVE;
+    },
+    .onAccuracyFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
+};
+
+constexpr Ability WonderScale = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(Random() % 100 < 30)
+
+        CHECK(AbilityHealMonStatus(battler, ability));
+        return TRUE;
+    },
+    .fortKnox = TRUE,
+};
+
+constexpr Ability Overzealous = {
+    .breakable = TRUE,
+};
+
+constexpr Ability StainlessSteel = {
+    ATE_ABILITY(TYPE_STEEL),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_STEEL; },
+    .fortKnox = TRUE,
+};
+
+constexpr Ability TemporalRupture = {
+    .breakable = TRUE,
+};
+
+constexpr Ability GrassFlute = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Hemotoxin  = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Harukaze = {
+    .breakable = TRUE,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -8689,6 +8932,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_EARLY_GRAVE, EarlyGrave},
     {ABILITY_BASS_BOOSTED, BassBoosted},
     {ABILITY_FLAMING_JAWS, FlamingJaws},
+    {ABILITY_MONSTER_HUNTER, MonsterHunter},
     {ABILITY_CROWNED_SWORD, CrownedSword},
     {ABILITY_CROWNED_SHIELD, CrownedShield},
     {ABILITY_BERSERK_DNA, BerserkDna},
@@ -8953,6 +9197,40 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_EMBODY_ASPECT_CORNERSTONE, EmbodyAspectCornerstone},
     {ABILITY_EMBODY_ASPECT_WELLSPRING, EmbodyAspectWellspring},
     {ABILITY_ROCKHARD_SHAFT, RockhardShaft},
+    {ABILITY_DEVIATE, Deviate},
+    {ABILITY_SUNS_BOUNTY, SunsBounty},
+    {ABILITY_RITE_OF_SPRING, RiteOfSpring},
+    {ABILITY_HEADSTRONG, Headstrong},
+    {ABILITY_FIREFIGHTER, Firefighter},
+    {ABILITY_SEPIA_LENS, SepiaLens},
+    {ABILITY_SUPER_SNIPER, SuperSniper},
+    {ABILITY_WOODLAND_CURSE, WoodlandCurse},
+    {ABILITY_MALODOR, Malodor},
+    {ABILITY_BLUR, Blur},
+    {ABILITY_ELUDE, Elude},
+    {ABILITY_DRAKE_OF_RAGE, DrakeOfRage},
+    {ABILITY_REVERBATE, Reverbate},
+    {ABILITY_MIXED_MARTIAL_ARTS, MixedMartialArts},
+    {ABILITY_STRATEGIC_PAUSE, StrategicPause},
+    {ABILITY_OVERRULE, Overrule},
+    {ABILITY_MENTAL_POLLUTION, MentalPollution},
+    {ABILITY_MADNESS_ENHANCEMENT, MadnessEnhancement},
+    {ABILITY_TENTALOCK, Tentalock},
+    {ABILITY_SERPENT_BIND, SerpentBind},
+    {ABILITY_SOUL_TAP, SoulTap},
+    {ABILITY_SCARECROW, Scarecrow},
+    {ABILITY_OMINOUS_SHROUD, OminousShroud},
+    {ABILITY_CHILLING_PRESENCE, ChillingPresence},
+    {ABILITY_FROSTBIND, Frostbind},
+    {ABILITY_GLACIAL_GHOST, GlacialGhost},
+    {ABILITY_TENDER_AFFECTION, TenderAffection},
+    {ABILITY_WONDER_SCALE, WonderScale},
+    {ABILITY_OVERZEALOUS, Overzealous},
+    {ABILITY_STAINLESS_STEEL, StainlessSteel},
+    {ABILITY_TEMPORAL_RUPTURE, TemporalRupture},
+    {ABILITY_GRASS_FLUTE, GrassFlute},
+    {ABILITY_HEMOTOXIN, Hemotoxin},
+    {ABILITY_HARUKAZE, Harukaze},
 };
 
 template <int N>

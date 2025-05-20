@@ -6731,7 +6731,7 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
                     if (IsBattlerTerrainAffected(battlerAtk, STATUS_FIELD_ELECTRIC_TERRAIN)) basePower = basePower * 3 / 2;
                     break;
                 case MISC_EFFECT_TOOK_DAMAGE_BOOST:
-                    basePower += 20 * min(3, gBattleStruct->timesDamaged[gBattlerPartyIndexes[battlerAtk]][GetBattlerSide(battlerAtk)]);
+                    basePower += 20 * min(6, gBattleStruct->timesDamaged[gBattlerPartyIndexes[battlerAtk]][GetBattlerSide(battlerAtk)]);
                     break;
                 case MISC_EFFECT_DOUBLE_DAMAGE:
                     basePower *= 1 + ((Random() % 100) < gBattleMoves[move].secondaryEffectChance);
