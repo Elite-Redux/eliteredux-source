@@ -3281,7 +3281,7 @@ u8 AtkCanceller_UnableToUseMove(void) {
                     !IsMyceliumMightActive(gBattlerAttacker))  // Rage Powder targets the user
                 {
                     if ((B_POWDER_GRASS >= GEN_6 && IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS)) ||
-                        BattlerHasAbility(gBattlerTarget, ABILITY_OVERCOAT, TRUE)) {
+                        BattlerHasAbility(gBattlerTarget, ABILITY_OVERCOAT || ABILITY_GUARDIAN_COAT, TRUE)) {
                         gBattlerAbility = gBattlerTarget;
                         effect = 1;
                     } else if (GetBattlerHoldEffect(gBattlerTarget, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES) {

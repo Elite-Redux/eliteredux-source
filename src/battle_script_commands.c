@@ -10258,7 +10258,7 @@ static void Cmd_weatherdamage(void) {
             if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ROCK) && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND) &&
                 !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_STEEL) && !IsAbilityOnSide(gBattlerAttacker, ABILITY_DESERT_CLOAK) &&
                 !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SAND_VEIL) && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SAND_FORCE) &&
-                !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SAND_RUSH) && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_OVERCOAT) &&
+                !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SAND_RUSH) && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_OVERCOAT) && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_GUARDIAN_COAT) &&
                 !(gStatuses3[gBattlerAttacker] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER)) &&
                 GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES) {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;

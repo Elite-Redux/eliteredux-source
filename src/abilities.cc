@@ -582,6 +582,7 @@ constexpr Ability EffectSpore = {
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_GRASS))
         CHECK_NOT(BATTLER_HAS_ABILITY(attacker, ABILITY_OVERCOAT))
+        CHECK_NOT(BATTLER_HAS_ABILITY(attacker, ABILITY_GUARDIAN_COAT))
         CHECK_NOT(BATTLER_HAS_ABILITY(attacker, ABILITY_EFFECT_SPORE))
         CHECK(GetBattlerHoldEffect(attacker, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES)
         CHECK(Random() % 100 < 30)
@@ -7416,7 +7417,6 @@ constexpr Ability FlameShield = {
 };
 
 constexpr Ability AquaticDweller = {
-    .onEntry = Aquatic.onEntry,
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_WATER) MUL(1.5);
@@ -8430,6 +8430,156 @@ constexpr Ability Harukaze = {
     .breakable = TRUE,
 };
 
+constexpr Ability ToxicSurge = {
+    .breakable = TRUE,
+};
+
+constexpr Ability PoisonQuills = {
+    .onDefender = RoughSkin.onDefender,
+    .breakable = TRUE,
+};
+
+constexpr Ability DraconicMight = {
+    .onEntry = HalfDrake.onEntry,
+    ATE_ABILITY(TYPE_DRAGON),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_DRAGON; },
+    .breakable = TRUE,
+};
+
+constexpr Ability AtlanticRuler = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_WATER) MUL(1.5);
+        },
+    .onStat = SwiftSwim.onStat,
+    .breakable = TRUE,
+};
+
+constexpr Ability Biofilm = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Chokehold = {
+    .breakable = TRUE,
+};
+
+constexpr Ability GuardianCoat = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_MOVE_PHYSICAL(move)) MUL(.8);
+        },
+    .breakable = TRUE,
+};
+
+constexpr Ability NeutralizingFog = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DEFOG, 0); },
+};
+
+constexpr Ability Festivities = {
+    .breakable = TRUE,
+};
+
+constexpr Ability FeyFlight = {
+    .onEntry = FairyTale.onEntry,
+    .breakable = TRUE,
+    .levitate = TRUE,
+};
+
+constexpr Ability BestOffense = {
+    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
+    .onSwapSplit = MysticBlades.onSwapSplit,
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPDEF] += 20; },
+};
+
+constexpr Ability Impaler = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBleed(target))
+        CHECK(gBattleMoves[move].hornBased);
+        CHECK(Random() % 100 < 30)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+    },
+    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
+};
+
+constexpr Ability MagusBlades = {
+    .onParentalBond = DualWield.onParentalBond,
+    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
+    .onSwapSplit = MysticBlades.onSwapSplit,
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPDEF] += 20; },
+};
+
+constexpr Ability LightningBorn = {
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ELECTRIC); },
+};
+
+constexpr Ability Superheavy = {
+    .breakable = TRUE,
+};
+
+constexpr Ability WorldSerpent = {
+    .onAttacker = GripPincer.onAttacker,
+    .onOffensiveMultiplier = LongReach.onOffensiveMultiplier,
+    .onAccuracy = GripPincer.onAccuracy,
+};
+
+constexpr Ability LuckyWings = {
+    .onOffensiveMultiplier = GiantWings.onOffensiveMultiplier,
+    .onModifyEffectChance = +[](ON_MODIFY_EFFECT_CHANCE) { *effectChance *= 2; },
+};
+
+constexpr Ability Komodo = {
+    .onEntry = HalfDrake.onEntry,
+    .onAttacker = ToxicChain.onAttacker,
+};
+
+constexpr Ability Envenom = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBePoisoned(battler, target, MOVE_NONE))
+        CHECK(Random() % 100 < 30)
+
+        return AbilityStatusEffect(MOVE_EFFECT_POISON);
+    },
+};
+
+constexpr Ability PurpleHaze = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_POISON_GAS, 20);
+    },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_POISON_GAS, 20);
+        return FALSE;
+    },
+};
+
+constexpr Ability GnashingCannon = {
+    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+    .onChooseOffensiveStat =
+        +[](ON_CHOOSE_OFFENSIVE_STAT) {
+            if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) *atkStatToUse = STAT_SPATK;
+        },
+};
+
+constexpr Ability HyperCleanse = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_POISON) RESISTANCE(.5);
+        },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        return TRUE;
+    },
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -9231,6 +9381,28 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_GRASS_FLUTE, GrassFlute},
     {ABILITY_HEMOTOXIN, Hemotoxin},
     {ABILITY_HARUKAZE, Harukaze},
+    {ABILITY_TOXIC_SURGE, ToxicSurge},
+    {ABILITY_ATLANTIC_RULER, AtlanticRuler},
+    {ABILITY_BIOFILM, Biofilm},
+    {ABILITY_CHOKEHOLD, Chokehold},
+    {ABILITY_GUARDIAN_COAT, GuardianCoat},
+    {ABILITY_NEUTRALIZING_FOG, NeutralizingFog},
+    {ABILITY_POISON_QUILLS, PoisonQuills},
+    {ABILITY_DRACONIC_MIGHT, DraconicMight},
+    {ABILITY_FESTIVITIES, Festivities},
+    {ABILITY_FEY_FLIGHT, FeyFlight},
+    {ABILITY_BEST_OFFENSE, BestOffense},
+    {ABILITY_IMPALER, Impaler},
+    {ABILITY_MAGUS_BLADES, MagusBlades},
+    {ABILITY_LIGHTNING_BORN, LightningBorn},
+    {ABILITY_SUPERHEAVY, Superheavy},
+    {ABILITY_WORLD_SERPENT, WorldSerpent},
+    {ABILITY_LUCKY_WINGS, LuckyWings},
+    {ABILITY_KOMODO, Komodo},
+    {ABILITY_ENVENOM, Envenom},
+    {ABILITY_PURPLE_HAZE, PurpleHaze},
+    {ABILITY_GNASHING_CANNON, GnashingCannon},
+    {ABILITY_HYPER_CLEANSE, HyperCleanse},
 };
 
 template <int N>
