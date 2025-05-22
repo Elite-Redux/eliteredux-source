@@ -5,19 +5,94 @@
   "music": "MUS_DUMMY",
   "region_map_section": "MAPSEC_ROUTE_111",
   "requires_flash": false,
-  "weather": "WEATHER_NONE",
+  "weather": "WEATHER_SHADE",
   "map_type": "MAP_TYPE_NONE",
   "allow_cycling": false,
   "allow_escaping": false,
   "allow_running": false,
   "show_map_name": true,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": 0,
+  "connections": [
+    {
+      "map": "MAP_ROUTE111_TUNNEL2",
+      "offset": 16,
+      "direction": "up"
+    }
+  ],
   "object_events": [
 
   ],
   "warp_events": [
-
+    {
+      "x": 9,
+      "y": 51,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_TUNNEL",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 65,
+      "y": 52,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_DESERT",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 47,
+      "y": 40,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_DESERT",
+      "dest_warp_id": "2"
+    },
+    {
+      "x": 21,
+      "y": 34,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_DESERT",
+      "dest_warp_id": "3"
+    },
+    {
+      "x": 11,
+      "y": 33,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_DESERT",
+      "dest_warp_id": "4"
+    },
+    {
+      "x": 33,
+      "y": 23,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_DESERT",
+      "dest_warp_id": "5"
+    },
+    {
+      "x": 13,
+      "y": 15,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_DESERT",
+      "dest_warp_id": "6"
+    },
+    {
+      "x": 22,
+      "y": 14,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_DESERT",
+      "dest_warp_id": "7"
+    },
+    {
+      "x": 55,
+      "y": 12,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_DESERT",
+      "dest_warp_id": "8"
+    },
+    {
+      "x": 77,
+      "y": 10,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_DESERT",
+      "dest_warp_id": "9"
+    }
   ],
   "coord_events": [
 

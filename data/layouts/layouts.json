@@ -4857,7 +4857,7 @@
       "width": 75,
       "height": 50,
       "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_Petalburg",
+      "secondary_tileset": "gTileset_MirageTower",
       "border_filepath": "data/layouts/Route111_Tunnel2/border.bin",
       "blockdata_filepath": "data/layouts/Route111_Tunnel2/map.bin"
     }
