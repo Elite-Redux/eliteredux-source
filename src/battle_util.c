@@ -115,7 +115,7 @@ bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move) {
         BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PROPELLER_TAIL) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_STALWART))
         return FALSE;
 
-    if (gSideTimers[defSide].followmePowder && !IsAffectedByPowder(battlerAtk, GetBattlerHoldEffect(battlerAtk, TRUE))) return FALSE;
+    if (gSideTimers[defSide].followmePowder && !IsPowderImmune(battlerAtk, TRUE)) return FALSE;
 
     return TRUE;
 }
@@ -3025,6 +3025,14 @@ enum {
     CANCELLER_END,
 };
 
+u16 IsPowderImmune(int battler, int checkMoldBreaker) {
+    if (checkMoldBreaker && IsMyceliumMightActive(gBattlerAttacker))
+    if (IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)) return TRUE;
+    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES) return TRUE;
+    RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, powderImmune)
+    return FALSE;
+}
+
 u8 AtkCanceller_UnableToUseMove(void) {
     u8 effect = 0;
     s32 *bideDmg = &gBattleScripting.bideDmg;
@@ -3290,7 +3298,11 @@ u8 AtkCanceller_UnableToUseMove(void) {
                         effect = 1;
                     }
 
-                    if (effect) gBattlescriptCurrInstr = BattleScript_PowderMoveNoEffect;
+                    if (IsPowderImmune(gBattlerTarget, TRUE)) {
+                        gBattlerAbility = gBattlerTarget;
+                        effect = 1;
+                        gBattlescriptCurrInstr = BattleScript_PowderMoveNoEffect;
+                    }
                 }
                 gBattleStruct->atkCancellerTracker++;
                 break;

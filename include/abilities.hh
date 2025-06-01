@@ -143,14 +143,14 @@ typedef struct Ability {
     AbilityOnBattlerFaintsHandler onBattlerFaints;
     AbilityOnParentalBondHandler onParentalBond;
     AbilityOnOffensiveMultiplierHandler onOffensiveMultiplier;
-    AbilityOnMoveType onMoveType;
     AbilityOnDefensiveMultiplierHandler onDefensiveMultiplier;
+    AbilityOnMoveType onMoveType;
+    AbilityOnStab onStab;
     AbilityOnStatHandler onStat;
     AbilityOnAccuracyHandler onAccuracy;
     AbilityOnSwapSplitHandler onSwapSplit;
     AbilityOnChooseOffensiveStat onChooseOffensiveStat;
     AbilityOnChooseDefensiveStat onChooseDefensiveStat;
-    AbilityOnStab onStab;
     AbilityOnPriority onPriority;
     AbilityOnSwitchOut onExit;
     AbilityOnCrit onCrit;
@@ -171,6 +171,7 @@ typedef struct Ability {
     AbilityApplyOnWithTarget onAfterTypeEffectivenessFor:5;
     AbilityApplyOn onStatusImmuneFor:3;
     AbilityApplyOnWithTarget onBeforeAttackFor:5;
+    AbilityApplyOn onModifyEffectChanceFor:3;
     u16 redirectType:5;
     u16 ruinStat:3;
     u16 noDamageHits:2;
@@ -199,6 +200,10 @@ typedef struct Ability {
     u16 removesStatusOnImmunity:1;
     u16 tauntImmune:1;
     u16 shadowTag:1;
+    u16 foesMinRoll:1;
+    u16 powderImmune:1;
+    u16 sandImmune:1;
+    u16 hailImmune:1;
 } Ability;
 
 #ifdef __cplusplus

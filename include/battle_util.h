@@ -411,6 +411,7 @@ AbilityEnum IsUnnerveAbilityOnOpposingSide(u8 battlerId);
 AbilityEnum IgnoresBurnAtkDrop(int battler);
 AbilityEnum IgnoresFrostbiteSpatkDrop(int battler);
 int IsStatusImmune(u8 battlerId, StatusCheckEnum status);
+u16 IsPowderImmune(int battler, int checkMoldBreaker);
 
 MultihitType GetMultihitType(int battler, MoveEnum move);
 

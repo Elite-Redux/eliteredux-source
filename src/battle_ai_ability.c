@@ -550,11 +550,7 @@ int ScoreDefenseAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int
 
         case ABILITY_EFFECT_SPORE:
             REQUIRE(moveState->contact)
-            REQUIRE_NOT(IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GRASS))
-            REQUIRE_NOT(BattlerHasAbility(battlerAtk, ABILITY_OVERCOAT, FALSE))
-            REQUIRE_NOT(BattlerHasAbility(battlerAtk, ABILITY_GUARDIAN_COAT, FALSE))
-            REQUIRE_NOT(BattlerHasAbility(battlerAtk, ABILITY_EFFECT_SPORE, FALSE))
-            REQUIRE(GetBattlerHoldEffect(battlerAtk, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES)
+            REQUIRE_NOT(IsPowderImmune(battlerAtk, FALSE))
             return AI_SCORE_ADJUST(10, AI_SCORE_PARALYSIS(battlerAtk) + AI_SCORE_POISON_MOVE(battlerAtk) + AI_SCORE_PARALYSIS(battlerAtk));
 
         case ABILITY_INFLATABLE:

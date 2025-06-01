@@ -190,8 +190,7 @@ int CheckCancelled(int battlerAtk, int battlerDef, int move, struct MoveState* m
     }
 
     if (gBattleMoves[move].flags & FLAG_POWDER && battlerAtk != battlerDef && !BattlerHasAbility(battlerAtk, ABILITY_MYCELIUM_MIGHT, FALSE)) {
-        if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS)) return TRUE;
-        if (GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES) return TRUE;
+        if (IsPowderImmune(battlerDef, TRUE)) return TRUE;
     }
 
     return FALSE;

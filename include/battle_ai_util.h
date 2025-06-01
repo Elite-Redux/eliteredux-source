@@ -76,7 +76,6 @@ bool32 ShouldLowerAccuracy(u8 battlerAtk, u8 battlerDef);
 bool32 ShouldLowerEvasion(u8 battlerAtk, u8 battlerDef);
 
 // move checks
-bool32 IsAffectedByPowder(u8 battler, u16 holdEffect);
 bool32 MovesWithSplitUnusable(u32 attacker, u32 target, u32 split);
 s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness);
 u8 GetMoveDamageResult(u16 move);
