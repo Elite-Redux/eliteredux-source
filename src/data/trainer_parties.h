@@ -30155,8 +30155,7 @@ static const struct TrainerMonItemCustomMoves sParty_TateAndLiza1Insane[] = { //
     .zeroSpeedIvs = TRUE,
     .evs = {96, 0, 0, 252, 160, 0},
     .nature = NATURE_QUIET,
-    .moves = MOVE_EXPANDING_FORCE, MOVE_PSYCHIC, MOVE_AURA_SPHERE, MOVE_HIDDEN_POWER,
-    .hpType = TYPE_GHOST,
+    .moves = MOVE_EXPANDING_FORCE, MOVE_GLITZY_GLOW, MOVE_AURA_SPHERE, MOVE_THUNDERBOLT
     },
     {
     .lvl = 0,
@@ -30166,7 +30165,7 @@ static const struct TrainerMonItemCustomMoves sParty_TateAndLiza1Insane[] = { //
     .zeroSpeedIvs = TRUE,
     .evs = {248, 0, 252, 0, 8, 0},
     .nature = NATURE_QUIET,
-    .moves = MOVE_REFLECT, MOVE_LIGHT_SCREEN, MOVE_HYPER_VOICE, MOVE_INSTRUCT
+    .moves = MOVE_BARRIER, MOVE_EXPANDING_FORCE, MOVE_HYPER_VOICE, MOVE_INSTRUCT
     },
     {
     .lvl = 0,
@@ -30176,7 +30175,7 @@ static const struct TrainerMonItemCustomMoves sParty_TateAndLiza1Insane[] = { //
     .zeroSpeedIvs = TRUE,
     .evs = {252, 252, 0, 0, 4, 0},
     .nature = NATURE_BRAVE,
-    .moves = MOVE_GLACIAL_LANCE, MOVE_ZEN_HEADBUTT, MOVE_DOUBLE_KICK, MOVE_HIGH_HORSEPOWER
+    .moves = MOVE_GLACIAL_LANCE, MOVE_KINETIC_BARRAGE, MOVE_DOUBLE_KICK, MOVE_HORN_LEECH
     },
     {
     .lvl = 0,
@@ -30184,7 +30183,7 @@ static const struct TrainerMonItemCustomMoves sParty_TateAndLiza1Insane[] = { //
     .heldItem = ITEM_SLOWBRONITE,
     .ability = 1,
     .zeroSpeedIvs = TRUE,
-    .evs = {252, 0, 4, 0, 252, 0},
+    .evs = {188, 0, 0, 132, 188, 0},
     .nature = NATURE_SASSY,
     .moves = MOVE_AMNESIA, MOVE_HEAL_PULSE, MOVE_EXPANDING_FORCE, MOVE_SCALD
     },
@@ -30194,7 +30193,7 @@ static const struct TrainerMonItemCustomMoves sParty_TateAndLiza1Insane[] = { //
     .heldItem = ITEM_SLOWKINGITE,
     .ability = 1,
     .zeroSpeedIvs = TRUE,
-    .evs = {252, 0, 252, 0, 4, 0},
+    .evs = {188, 0, 188, 132, 0, 0},
     .nature = NATURE_RELAXED,
     .moves = MOVE_EXPANDING_FORCE, MOVE_PSYCHIC, MOVE_CALM_MIND, MOVE_HYPNOSIS
     }
@@ -43278,7 +43277,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt40Insane[] = {
     .ability = 1,
     .evs = {252, 252, 4, 0, 0, 0},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_SPIRIT_BREAK, MOVE_FAKE_OUT, MOVE_DOUBLE_LARIAT, MOVE_BLACK_MAGIC
+    .moves = MOVE_MEGA_KICK, MOVE_FAKE_OUT, MOVE_HIGH_JUMP_KICK, MOVE_AXE_KICK
     }
 };
 
