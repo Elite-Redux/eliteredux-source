@@ -8558,6 +8558,11 @@ constexpr Ability HyperCleanse = {
     .removesStatusOnImmunity = TRUE,
 };
 
+constexpr Ability MoltenCoat = {
+    ATE_ABILITY(TYPE_ROCK),
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_ROCK; },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -9381,6 +9386,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_PURPLE_HAZE, PurpleHaze},
     {ABILITY_GNASHING_CANNON, GnashingCannon},
     {ABILITY_HYPER_CLEANSE, HyperCleanse},
+    {ABILITY_MOLTEN_COAT, MoltenCoat},
 };
 
 template <int N>
