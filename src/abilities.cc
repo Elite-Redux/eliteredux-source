@@ -518,6 +518,7 @@ constexpr Ability FlashFire = {
 
 constexpr Ability ShieldDust = {
     .breakable = TRUE,
+    .powderImmune = TRUE,
 };
 
 constexpr Ability OwnTempo = {
