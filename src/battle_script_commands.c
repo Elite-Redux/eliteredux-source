@@ -1519,16 +1519,14 @@ static void Cmd_critcalc(void) {
     gBattlescriptCurrInstr++;
 }
 
-u8 MakeCritRoll() {
-    return Random() % 24;
-}
+u8 MakeCritRoll() { return Random() % 24; }
 
 void SetCritFlag(int attacker, int target, MoveEnum move, u16 typeEffectiveness, u8 critRoll) {
     int critChance = GetInverseCritChance(attacker, target, move, typeEffectiveness);
     if (critChance <= 0)
         gIsCriticalHit = FALSE;
     else
-        gIsCriticalHit = !(critRoll % critChance);    
+        gIsCriticalHit = !(critRoll % critChance);
 }
 
 static void Cmd_damagecalc(void) {
@@ -2939,7 +2937,14 @@ void SetMoveEffect(bool32 primary, u32 certain) {
 int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChance) {
     if (moveEffect == MOVE_EFFECT_FLINCH && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) return 0;
 
-    ON_ABILITY(battler, FALSE, gAbilities[ability].onModifyEffectChance, gAbilities[ability].onModifyEffectChance(battler, move, moveEffect, &baseChance))
+    for (int i = 0; i < gBattlersCount; i++) {
+        int abilityBattler = (battler + i) % gBattlersCount;
+        FILTER(IsBattlerAlive(abilityBattler))
+        ON_ABILITY(abilityBattler,
+                   TRUE,
+                   gAbilities[ability].onModifyEffectChance && IsApplyOnFlagAppropriate(battler, abilityBattler, gAbilities[0].onModifyEffectChanceFor),
+                   gAbilities[ability].onModifyEffectChance(battler, move, moveEffect, &baseChance))
+    }
 
     if (gSideTimers[GetBattlerSide(battler)].rainbowTimer) baseChance *= 2;
 
@@ -4035,7 +4040,8 @@ static void PlayStatChangeAnimation(int battler, int statsToCheck, int flags, in
                         statAnimId = startingStatAnimId + currStat;
                         changeableStatsCount++;
                     }
-                } else if (!BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) && !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) && !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LIMBER) &&
+                } else if (!BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) && !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) &&
+                           !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LIMBER) &&
                            !(!(flags & MOVE_EFFECT_AFFECTS_USER) &&
                              (gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer ||
                               (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_KEEN_EYE) && currStat == STAT_ACC) ||
@@ -10250,28 +10256,40 @@ static void Cmd_setsandstorm(void) {
     gBattlescriptCurrInstr++;
 }
 
+int IsSandImmune(int battler) {
+    if (IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)) return TRUE;
+    if (IS_BATTLER_OF_TYPE(battler, TYPE_GROUND)) return TRUE;
+    if (IS_BATTLER_OF_TYPE(battler, TYPE_STEEL)) return TRUE;
+    if (gStatuses3[battler] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER)) return TRUE;
+    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES) return TRUE;
+    if (IsMagicGuardProtected(battler)) return TRUE;
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, sandImmune)
+    if (IsBattlerAlive(BATTLE_PARTNER(battler)) && BattlerHasAbility(battler, ABILITY_DESERT_CLOAK, FALSE)) return TRUE;
+    return FALSE;
+}
+
+int IsHailImmune(int battler) {
+    if (IS_BATTLER_OF_TYPE(battler, TYPE_ICE)) return TRUE;
+    if (gStatuses3[battler] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER)) return TRUE;
+    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES) return TRUE;
+    if (IsMagicGuardProtected(battler)) return TRUE;
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, hailImmune)
+    return FALSE;
+}
+
 static void Cmd_weatherdamage(void) {
     gBattleMoveDamage = 0;
     if (IsBattlerAlive(gBattlerAttacker) && WEATHER_HAS_EFFECT  // Sandstorm damage
         && !(IsMagicGuardProtected(gBattlerAttacker))) {
         if (gBattleWeather & WEATHER_SANDSTORM_ANY) {
-            if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ROCK) && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND) &&
-                !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_STEEL) && !IsAbilityOnSide(gBattlerAttacker, ABILITY_DESERT_CLOAK) &&
-                !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SAND_VEIL) && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SAND_FORCE) &&
-                !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SAND_RUSH) && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_OVERCOAT) && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_GUARDIAN_COAT) &&
-                !(gStatuses3[gBattlerAttacker] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER)) &&
-                GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES) {
+            if (!IsSandImmune(gBattlerAttacker)) {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                 if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
             }
         }
         if (gBattleWeather & WEATHER_HAIL_ANY)  // Hail damage
         {
-            if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ICE) && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SNOW_CLOAK) &&
-                !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_OVERCOAT) && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_AURORA_BOREALIS) &&
-                !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_ICE_BODY) && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SLUSH_RUSH) &&
-                !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_NORTH_WIND) && !(gStatuses3[gBattlerAttacker] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER)) &&
-                GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES) {
+            if (!IsHailImmune(gBattlerAttacker)) {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                 if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
             }
@@ -12290,7 +12308,7 @@ int Infiltrates(int battler, MoveEnum move, InfiltrateType type) {
 
 bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
     if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE)) return FALSE;
-    if (gBattleMoves[move].flags & FLAG_SOUND && B_SOUND_SUBSTITUTE >= GEN_6) return FALSE;
+    if (IsSoundMove(battlerAtk, move)) return FALSE;
     if (gBattleMoves[move].flags & FLAG_HIT_IN_SUBSTITUTE) return FALSE;
 
     if (Infiltrates(battlerAtk, move, INFILTRATE_SUBSTITUTE)) return FALSE;

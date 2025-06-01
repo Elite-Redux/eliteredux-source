@@ -2718,8 +2718,7 @@ static void PrintMoveReplaceTab(void) {
         }
 
         if (moveNum == MOVE_SKETCH && !hasMonMove && sMonSummaryScreen->summary.species2 != SPECIES_SMEARGLE) {
-            int k, level = sMonSummaryScreen->summary.level, personality = sMonSummaryScreen->summary.pid,
-                   species = sMonSummaryScreen->summary.species2;
+            int k, level = sMonSummaryScreen->summary.level, personality = sMonSummaryScreen->summary.pid, species = sMonSummaryScreen->summary.species2;
             int foundAll = FALSE;
             u16 moves[4];
             ARRAY_COPY(moves, sMonSummaryScreen->summary.moves)
@@ -5596,13 +5595,13 @@ if (gBattleMoves[move].flags & FLAG_TWO_STRIKES)
             // Based -------------------------------------------------------------------------------------------
             PosX = PosX + 16;
             PrintSmallTextOnWindow(windowId, gText_Effect_Based_Type, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
-            if ((gBattleMoves[move].flags & FLAG_WEATHER_BASED))
+            if (gBattleMoves[move].flags & FLAG_WEATHER_BASED)
                 StringCopy(gStringVar1, gText_Effect_Boost_Type_Weather);
-            else if ((gBattleMoves[move].flags & FLAG_FIELD_BASED))
+            else if (gBattleMoves[move].flags & FLAG_FIELD_BASED)
                 StringCopy(gStringVar1, gText_Effect_Boost_Type_Field);
-            else if ((gBattleMoves[move].flags & FLAG_BONE_BASED))
+            else if (gBattleMoves[move].flags & FLAG_BONE_BASED)
                 StringCopy(gStringVar1, gText_Effect_Boost_Type_Bone);
-            else if ((gBattleMoves[move].flags & FLAG_SOUND))
+            else if (gBattleMoves[move].flags & FLAG_SOUND)
                 StringCopy(gStringVar1, gText_Effect_Boost_Type_Sound);
             else
                 StringCopy(gStringVar1, gText_ThreeDashes);

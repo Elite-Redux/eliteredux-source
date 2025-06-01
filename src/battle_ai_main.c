@@ -506,7 +506,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
     if (!(gBattleMoves[move].target & MOVE_TARGET_USER)) {
         // handle negative checks on non-user target
         // check powder moves
-        if (TestMoveFlags(move, FLAG_POWDER) && !IsAffectedByPowder(battlerDef, AI_DATA->holdEffects[battlerDef])) {
+        if (TestMoveFlags(move, FLAG_POWDER) && !IsPowderImmune(battlerDef, TRUE)) {
             RETURN_SCORE_MINUS(20);
         }
 
@@ -3451,7 +3451,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
             break;
         case EFFECT_FOLLOW_ME:
             if (isDoubleBattle && move != MOVE_SPOTLIGHT && !IsBattlerIncapacitated(battlerDef) &&
-                (move != MOVE_RAGE_POWDER || IsAffectedByPowder(battlerDef, AI_DATA->holdEffects[battlerDef]))  // Rage Powder doesn't affect powder immunities
+                (move != MOVE_RAGE_POWDER || IsPowderImmune(battlerDef, TRUE))  // Rage Powder doesn't affect powder immunities
                 && IsBattlerAlive(BATTLE_PARTNER(battlerAtk))) {
                 u16 predictedMoveOnPartner = gLastMoves[BATTLE_PARTNER(battlerAtk)];
                 if (predictedMoveOnPartner != MOVE_NONE && !IS_MOVE_STATUS(predictedMoveOnPartner)) score += 3;

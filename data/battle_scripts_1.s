@@ -3043,6 +3043,14 @@ BattleScript_EffectGastroAcid:
 	waitmessage 1
 	goto BattleScript_MoveEnd
 
+BattleScript_StackAbilitySuppressedMessage:
+	savetargettostack4
+	copybyte gBattlerTarget, gStackBattler1
+	printstring STRINGID_PKMNSABILITYSUPPRESSED
+	waitmessage B_WAIT_TIME_LONG
+	readtargetfromstack4
+	return
+
 BattleScript_EffectToxicSpikes:
 	attackcanceler
 	attackstring

@@ -595,14 +595,6 @@ bool32 IsTruantMonVulnerable(u32 battlerAI, u32 opposingBattler) {
     return FALSE;
 }
 
-// move checks
-bool32 IsAffectedByPowder(u8 battler, u16 holdEffect) {
-    if ((B_POWDER_GRASS >= GEN_6 && IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)) || BATTLER_HAS_ABILITY(battler, ABILITY_OVERCOAT) ||
-        AI_GetHoldEffect(battler) == HOLD_EFFECT_SAFETY_GOGGLES)
-        return FALSE;
-    return TRUE;
-}
-
 // This function checks if all physical/special moves are either unusable or unreasonable to use.
 // Consider a pokemon boosting their attack against a ghost pokemon having only normal-type physical attacks.
 bool32 MovesWithSplitUnusable(u32 attacker, u32 target, u32 split) {
@@ -1185,7 +1177,9 @@ bool32 IsMoveEncouragedToHit(u8 battlerAtk, u8 battlerDef, u16 move) {
 
     if (IsSemiInvulnerable(battlerDef, move)) return FALSE;
 
-    if ((BattlerHasAbility(battlerAtk, ABILITY_ARTILLERY, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_SUPER_SCOPE, FALSE)) && IsMegaLauncherBoosted(battlerAtk, move)) return TRUE;
+    if ((BattlerHasAbility(battlerAtk, ABILITY_ARTILLERY, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_SUPER_SCOPE, FALSE)) &&
+        IsMegaLauncherBoosted(battlerAtk, move))
+        return TRUE;
 
     if ((BattlerHasAbility(battlerAtk, ABILITY_SWEEPING_EDGE, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_SWEEPING_EDGE_PLUS, FALSE)) &&
         gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
@@ -1222,11 +1216,7 @@ bool32 ShouldSetSandstorm(u8 battler, u16 holdEffect) {
     else if (gBattleWeather & (WEATHER_SANDSTORM_ANY | WEATHER_PRIMAL_ANY))
         return FALSE;
 
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_SAND_VEIL) || BATTLER_HAS_ABILITY(battler, ABILITY_SAND_RUSH) ||
-        BATTLER_HAS_ABILITY(battler, ABILITY_SAND_FORCE) || BATTLER_HAS_ABILITY(battler, ABILITY_OVERCOAT) || IsMagicGuardProtected(battler) ||
-        holdEffect == HOLD_EFFECT_SAFETY_GOGGLES || IS_BATTLER_OF_TYPE(battler, TYPE_ROCK) || IS_BATTLER_OF_TYPE(battler, TYPE_STEEL) ||
-        IS_BATTLER_OF_TYPE(battler, TYPE_GROUND) || HasMoveEffect(battler, EFFECT_SHORE_UP) ||
-        (!HasChloroplast(battler) && HasMoveEffect(battler, EFFECT_WEATHER_BALL))) {
+    if (IsSandImmune(battler) || HasMoveEffect(battler, EFFECT_SHORE_UP) || (!HasChloroplast(battler) && HasMoveEffect(battler, EFFECT_WEATHER_BALL))) {
         return TRUE;
     }
     return FALSE;
@@ -1238,10 +1228,8 @@ bool32 ShouldSetHail(u8 battler, u16 holdEffect) {
     else if (gBattleWeather & (WEATHER_HAIL_ANY | WEATHER_PRIMAL_ANY))
         return FALSE;
 
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_SNOW_CLOAK) || BATTLER_HAS_ABILITY(battler, ABILITY_ICE_BODY) || BATTLER_HAS_ABILITY(battler, ABILITY_FORECAST) ||
-        BATTLER_HAS_ABILITY(battler, ABILITY_SLUSH_RUSH) || IsMagicGuardProtected(battler) || BATTLER_HAS_ABILITY(battler, ABILITY_OVERCOAT) ||
-        holdEffect == HOLD_EFFECT_SAFETY_GOGGLES || IS_BATTLER_OF_TYPE(battler, TYPE_ICE) || HasMove(battler, MOVE_BLIZZARD) ||
-        HasMoveEffect(battler, EFFECT_AURORA_VEIL) || (!HasChloroplast(battler) && HasMoveEffect(battler, EFFECT_WEATHER_BALL))) {
+    if (IsHailImmune(battler) || HasMove(battler, MOVE_BLIZZARD) || HasMoveEffect(battler, EFFECT_AURORA_VEIL) ||
+        (!HasChloroplast(battler) && HasMoveEffect(battler, EFFECT_WEATHER_BALL))) {
         return TRUE;
     }
     return FALSE;
@@ -1908,36 +1896,21 @@ static u32 GetBleedDamage(u8 battlerId) {
     return damage;
 }
 
-static bool32 BattlerAffectedBySandstorm(u8 battlerId) {
-    if (!IS_BATTLER_OF_TYPE(battlerId, TYPE_ROCK) && !IS_BATTLER_OF_TYPE(battlerId, TYPE_GROUND) && !IS_BATTLER_OF_TYPE(battlerId, TYPE_STEEL) &&
-        !BattlerHasAbility(battlerId, ABILITY_SAND_VEIL, TRUE) && !BattlerHasAbility(battlerId, ABILITY_SAND_FORCE, TRUE) &&
-        !BattlerHasAbility(battlerId, ABILITY_SAND_RUSH, TRUE) && !BattlerHasAbility(battlerId, ABILITY_OVERCOAT, TRUE))
-        return TRUE;
-    return FALSE;
-}
+static bool32 BattlerAffectedBySandstorm(u8 battlerId) { return !IsSandImmune(battlerId); }
 
-static bool32 BattlerAffectedByHail(u8 battlerId) {
-    if (!IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE) && !BattlerHasAbility(battlerId, ABILITY_SNOW_CLOAK, TRUE) &&
-        !BattlerHasAbility(battlerId, ABILITY_OVERCOAT, TRUE) && !BattlerHasAbility(battlerId, ABILITY_ICE_BODY, TRUE))
-        return TRUE;
-    return FALSE;
-}
+static bool32 BattlerAffectedByHail(u8 battlerId) { return !IsHailImmune(battlerId); }
 
 static u32 GetWeatherDamage(u8 battlerId) {
-    u32 holdEffect = AI_GetHoldEffect(battlerId);
     u32 damage = 0;
     if (!AI_WeatherHasEffect()) return 0;
 
     if (gBattleWeather & WEATHER_SANDSTORM_ANY) {
-        if (BattlerAffectedBySandstorm(battlerId) && !(gStatuses3[battlerId] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER)) &&
-            holdEffect != HOLD_EFFECT_SAFETY_GOGGLES) {
+        if (BattlerAffectedBySandstorm(battlerId)) {
             damage = gBattleMons[battlerId].maxHP / 16;
             if (damage == 0) damage = 1;
         }
-    }
-    if ((gBattleWeather & WEATHER_HAIL_ANY) && !BattlerHasAbility(battlerId, ABILITY_ICE_BODY, FALSE)) {
-        if (BattlerAffectedByHail(battlerId) && !(gStatuses3[battlerId] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER)) &&
-            holdEffect != HOLD_EFFECT_SAFETY_GOGGLES) {
+    } else if (gBattleWeather & WEATHER_HAIL_ANY) {
+        if (BattlerAffectedByHail(battlerId)) {
             damage = gBattleMons[battlerId].maxHP / 16;
             if (damage == 0) damage = 1;
         }
@@ -2922,7 +2895,6 @@ void IncreaseBleedScore(u8 battlerAtk, u8 battlerDef, u16 move, s16 *score) {
 }
 
 bool32 AI_MoveMakesContact(int battler, u32 holdEffect, u16 move) {
-    if (gBattleMoves[move].contact && BattlerHasAbility(battler, ABILITY_LONG_REACH, FALSE) && holdEffect != HOLD_EFFECT_PROTECTIVE_PADS)
-        return TRUE;
+    if (gBattleMoves[move].contact && BattlerHasAbility(battler, ABILITY_LONG_REACH, FALSE) && holdEffect != HOLD_EFFECT_PROTECTIVE_PADS) return TRUE;
     return FALSE;
 }

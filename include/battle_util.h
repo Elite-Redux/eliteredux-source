@@ -268,6 +268,7 @@ u32 GetBattlerHoldEffectParam(u8 battlerId);
 bool32 IsMoveMakingContact(MoveEnum move, u8 battlerAtk);
 bool32 IsBattlerGrounded(u8 battlerId);
 bool32 IsBattlerGroundedIgnoreType(u8 battlerId);
+int IsSoundMove(int battler, MoveEnum move);
 bool32 IsBattlerAlive(u8 battlerId);
 u8 GetBattleMonMoveSlot(struct BattlePokemon* battleMon, MoveEnum move);
 u32 GetBattlerWeight(u8 battlerId);
@@ -411,6 +412,7 @@ AbilityEnum IsUnnerveAbilityOnOpposingSide(u8 battlerId);
 AbilityEnum IgnoresBurnAtkDrop(int battler);
 AbilityEnum IgnoresFrostbiteSpatkDrop(int battler);
 int IsStatusImmune(u8 battlerId, StatusCheckEnum status);
+u16 IsPowderImmune(int battler, int checkMoldBreaker);
 
 MultihitType GetMultihitType(int battler, MoveEnum move);
 

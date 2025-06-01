@@ -115,7 +115,7 @@ bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move) {
         BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PROPELLER_TAIL) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_STALWART))
         return FALSE;
 
-    if (gSideTimers[defSide].followmePowder && !IsAffectedByPowder(battlerAtk, GetBattlerHoldEffect(battlerAtk, TRUE))) return FALSE;
+    if (gSideTimers[defSide].followmePowder && !IsPowderImmune(battlerAtk, TRUE)) return FALSE;
 
     return TRUE;
 }
@@ -127,8 +127,8 @@ u8 GetBattlerBattleMoveTargetFlags(MoveEnum moveId, u8 battler) {
     else if ((BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE) || BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE_PLUS)) &&
              (gBattleMoves[moveId].flags & FLAG_KEEN_EDGE_BOOST) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
         return MOVE_TARGET_BOTH;
-    else if ((BATTLER_HAS_ABILITY(battler, ABILITY_AMPLIFIER) || BATTLER_HAS_ABILITY(battler, ABILITY_BASS_BOOSTED)) &&
-             (gBattleMoves[moveId].flags & FLAG_SOUND) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
+    else if ((BATTLER_HAS_ABILITY(battler, ABILITY_AMPLIFIER) || BATTLER_HAS_ABILITY(battler, ABILITY_BASS_BOOSTED)) && (IsSoundMove(battler, moveId)) &&
+             gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
         return MOVE_TARGET_BOTH;
     else if (gBattleMoves[moveId].effect == EFFECT_EXPANDING_FORCE && GetCurrentTerrain() == STATUS_FIELD_PSYCHIC_TERRAIN)
         return MOVE_TARGET_BOTH;
@@ -1379,7 +1379,7 @@ u8 TrySetCantSelectMoveBattleScript(void) {
         }
     }
 
-    if (gVolatileStructs[gActiveBattler].throatChopTimer != 0 && gBattleMoves[move].flags & FLAG_SOUND) {
+    if (gVolatileStructs[gActiveBattler].throatChopTimer != 0 && IsSoundMove(gActiveBattler, move)) {
         gCurrentMove = move;
         if (gBattleTypeFlags & BATTLE_TYPE_PALACE) {
             gPalaceSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveThroatChopInPalace;
@@ -1543,7 +1543,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check) {
         FILTER_NOT(IsGravityPreventingMove(gBattleMons[battlerId].moves[i]))
         FILTER_NOT(IsHealBlockPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
         FILTER_NOT(IsBelchPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
-        FILTER_NOT(gVolatileStructs[battlerId].throatChopTimer && gBattleMoves[gBattleMons[battlerId].moves[i]].flags & FLAG_SOUND)
+        FILTER_NOT(gVolatileStructs[battlerId].throatChopTimer && IsSoundMove(battlerId, gBattleMons[battlerId].moves[i]))
         FILTER_NOT(gBattleMons[battlerId].moves[i] == MOVE_STUFF_CHEEKS && ItemId_GetPocket(gBattleMons[gActiveBattler].item) != POCKET_BERRIES)
         FILTER_NOT(BattlerHasAbility(battlerId, ABILITY_DISCIPLINE, FALSE) && *choicedMove != 0 && *choicedMove != 0xFFFF &&
                    *choicedMove != gBattleMons[battlerId].moves[i])
@@ -3025,6 +3025,14 @@ enum {
     CANCELLER_END,
 };
 
+u16 IsPowderImmune(int battler, int checkMoldBreaker) {
+    if (checkMoldBreaker && IsMyceliumMightActive(gBattlerAttacker))
+        if (IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)) return TRUE;
+    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES) return TRUE;
+    RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, powderImmune)
+    return FALSE;
+}
+
 u8 AtkCanceller_UnableToUseMove(void) {
     u8 effect = 0;
     s32 *bideDmg = &gBattleScripting.bideDmg;
@@ -3290,7 +3298,11 @@ u8 AtkCanceller_UnableToUseMove(void) {
                         effect = 1;
                     }
 
-                    if (effect) gBattlescriptCurrInstr = BattleScript_PowderMoveNoEffect;
+                    if (IsPowderImmune(gBattlerTarget, TRUE)) {
+                        gBattlerAbility = gBattlerTarget;
+                        effect = 1;
+                        gBattlescriptCurrInstr = BattleScript_PowderMoveNoEffect;
+                    }
                 }
                 gBattleStruct->atkCancellerTracker++;
                 break;
@@ -3308,7 +3320,7 @@ u8 AtkCanceller_UnableToUseMove(void) {
                 gBattleStruct->atkCancellerTracker++;
                 break;
             case CANCELLER_THROAT_CHOP:
-                if (gVolatileStructs[gBattlerAttacker].throatChopTimer && gBattleMoves[gCurrentMove].flags & FLAG_SOUND) {
+                if (gVolatileStructs[gBattlerAttacker].throatChopTimer && IsSoundMove(gBattlerAttacker, gCurrentMove)) {
                     gRoundStructs[gBattlerAttacker].usedThroatChopPreventedMove = TRUE;
                     CancelMultiTurnMoves(gBattlerAttacker);
                     gBattlescriptCurrInstr = BattleScript_MoveUsedIsThroatChopPrevented;
@@ -4920,7 +4932,9 @@ bool32 HasEnoughHpToEatBerry(u32 battlerId, u32 hpFraction, u32 itemId) {
     return FALSE;
 }
 
-int HasRipenEffect(int battler) { return BATTLER_HAS_ABILITY(battler, ABILITY_RIPEN) || BATTLER_HAS_ABILITY(battler, ABILITY_APPLE_PIE) || BATTLER_HAS_ABILITY(battler, ABILITY_SUGAR_RUSH); }
+int HasRipenEffect(int battler) {
+    return BATTLER_HAS_ABILITY(battler, ABILITY_RIPEN) || BATTLER_HAS_ABILITY(battler, ABILITY_APPLE_PIE) || BATTLER_HAS_ABILITY(battler, ABILITY_SUGAR_RUSH);
+}
 
 static u8 HealConfuseBerry(u32 battlerId, u32 itemId, u8 flavorId, bool32 end2) {
     if (HasEnoughHpToEatBerry(battlerId, 4, itemId)) {
@@ -7131,8 +7145,7 @@ static bool32 CanEvolve(u32 species) {
     u32 i;
 
     for (i = 0; gEvolutionTable[species][i].method; i++) {
-        if (gEvolutionTable[species][i].method)
-            return TRUE;
+        if (gEvolutionTable[species][i].method) return TRUE;
     }
     return FALSE;
 }
@@ -7205,11 +7218,17 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
                               (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BattlerHasAbility(battlerAtk, ABILITY_GRIP_PINCER, FALSE));
     u8 isUnaware = IsUnaware(battlerAtk);
 
-    ON_ABILITY(battlerAtk,
-               FALSE,
-               gAbilities[ability].onChooseDefensiveStat,
-               defStatToUse = gAbilities[ability].onChooseDefensiveStat(battlerAtk, battlerDef, move, noPositiveStatStages, isUnaware);
-               if (!defStatToUse) break)
+    for (int i = 0; i < gBattlersCount && !defStatToUse; i++) {
+        int abilityBattler = (battlerAtk + i) % gBattlersCount;
+        FILTER(IsBattlerAlive(abilityBattler))
+
+        ON_ABILITY(abilityBattler,
+                   FALSE,
+                   gAbilities[ability].onChooseDefensiveStat &&
+                       IsTargettedApplyOnFlagAppropriate(battlerAtk, abilityBattler, battlerAtk, battlerDef, gAbilities[ability].onChooseDefensiveStatFor),
+                   defStatToUse = gAbilities[ability].onChooseDefensiveStat(battlerAtk, battlerDef, move, noPositiveStatStages, isUnaware);
+                   if (!defStatToUse) break)
+    }
 
     if (!defStatToUse) {
         if (gBattleMoves[move].splitFlag == HITS_SPDEF) {
@@ -9140,5 +9159,11 @@ int IsIronFistBoosted(int battler, MoveEnum move) {
 int IsStrikerBoosted(int battler, MoveEnum move) {
     if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) return TRUE;
     if (gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST && BattlerHasAbility(battler, ABILITY_JUNSHI_SANDA, FALSE)) return TRUE;
+    return FALSE;
+}
+
+int IsSoundMove(int battler, MoveEnum move) {
+    if (gBattleMoves[move].flags & FLAG_SOUND) return TRUE;
+    if (gBattleMoves[move].type == TYPE_NORMAL && BattlerHasAbility(battler, ABILITY_REVERBATE, FALSE)) return TRUE;
     return FALSE;
 }

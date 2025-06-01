@@ -23,7 +23,7 @@ struct IntimidateCloneData {
     u8 statChange:4;
 };
 
-#define NUM_INTIMIDATE_CLONES 10
+#define NUM_INTIMIDATE_CLONES 11
 extern const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES];
 
 int GetParentalBondCount(int battler, MultihitType parentalBondType);
@@ -88,6 +88,8 @@ AbilityEnum HasFortKnox(int battler);
 #define CRIT_ROLL_ONLY_IF_GUARANTEED 1
 u8 MakeCritRoll();
 void SetCritFlag(int attacker, int target, MoveEnum move, u16 typeEffectiveness, u8 critRoll);
+int IsSandImmune(int battler);
+int IsHailImmune(int battler);
 
 extern void (*const gBattleScriptingCommandsTable[])(void);
 extern const u8 gBattlePalaceNatureToMoveGroupLikelihood[NUM_NATURES][4];
