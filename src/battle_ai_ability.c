@@ -106,11 +106,11 @@ int ScoreAttackAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int 
             return AI_SCORE_ATTACK_UP(battlerAtk, 1);
 
         case ABILITY_LOUD_BANG:
-            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
+            REQUIRE(IsSoundMove(battlerAtk, move))
             return AI_SCORE_ADJUST(50, AI_SCORE_CONFUSION(battlerDef));
 
         case ABILITY_PIERCING_SOLO:
-            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
+            REQUIRE(IsSoundMove(battlerAtk, move))
             return AI_SCORE_ADJUST(30, AI_SCORE_BLEED(battlerDef));
 
         case ABILITY_TO_THE_BONE:
@@ -132,11 +132,11 @@ int ScoreAttackAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int 
             return AI_SCORE_ADJUST(50, AI_SCORE_STAT(battlerDef, STAT_DEF, -1));
 
         case ABILITY_BEAUTIFUL_MUSIC:
-            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
+            REQUIRE(IsSoundMove(battlerAtk, move))
             return AI_SCORE_ADJUST(50, AI_SCORE_ATTRACT(battlerAtk, battlerDef));
 
         case ABILITY_RESONANCE:
-            REQUIRE((gBattleMoves[move].flags & FLAG_SOUND))
+            REQUIRE(IsSoundMove(battlerAtk, move))
             return AI_SCORE_BLEED(battlerDef);
 
         case ABILITY_TOXIC_CHAIN:
@@ -253,7 +253,7 @@ int ScoreAttackAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int 
             return AI_SCORE_ADJUST(50, AI_SCORE_PARALYSIS(battlerDef));
 
         case ABILITY_RADIO_JAM:
-            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
+            REQUIRE(IsSoundMove(battlerAtk, move))
             return AI_SCORE_ADJUST(20, AI_SCORE_DISABLE(battlerDef));
 
         case ABILITY_DEMOLITIONIST:

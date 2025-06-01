@@ -464,11 +464,11 @@ void PrintShortcutButton(u8 windowId, u8 button, u8 x, u8 y, u8 x2, u8 y2) {
     u8 theme = getBattleInterfaceTheme();
     bool8 isTrainerBattle = FALSE;
 
-    if(button == 0)
+    if (button == 0)
         option = BATTLE_ACTION_WIKI;
     else
         option = button - 1;
-    
+
     switch (option) {
         case BATTLE_ACTION_FIGHT:
             if (theme == THEME_DARK)
@@ -1535,7 +1535,8 @@ void PrintBattleWindow_MoveSelection(void) {
     if (ShouldSetMoldBreaker(gActiveBattler, move)) gHitMarker |= HITMARKER_MOLD_BREAKER;
     SetTypeBeforeUsingMove(move, gActiveBattler);
     GET_MOVE_TYPE(move, moveType);
-    maxDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MAX_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
+    maxDamage =
+        DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MAX_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
     immune = !typeEffectivenessMultiplier || TestAbsorbingAbilitiesOnly(target, gActiveBattler, move, moveType) ||
              TestImmunityAbilitiesOnly(target, gActiveBattler, move, moveType);
     x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION;  // Default
@@ -1729,13 +1730,13 @@ void PrintBattleWindow_MoveSelection(void) {
             y++;
 
             // Based
-            if ((gBattleMoves[move].flags & FLAG_WEATHER_BASED))
+            if (gBattleMoves[move].flags & FLAG_WEATHER_BASED)
                 StringCopy(gStringVar1, sText_Effect_Boost_Type_Weather);
-            else if ((gBattleMoves[move].flags & FLAG_FIELD_BASED))
+            else if (gBattleMoves[move].flags & FLAG_FIELD_BASED)
                 StringCopy(gStringVar1, sText_Effect_Boost_Type_Field);
-            else if ((gBattleMoves[move].flags & FLAG_BONE_BASED))
+            else if (gBattleMoves[move].flags & FLAG_BONE_BASED)
                 StringCopy(gStringVar1, sText_Effect_Boost_Type_Bone);
-            else if ((gBattleMoves[move].flags & FLAG_SOUND))
+            else if (gBattleMoves[move].flags & FLAG_SOUND)
                 StringCopy(gStringVar1, sText_Effect_Boost_Type_Sound);
             else
                 StringCopy(gStringVar1, sText_Target_Nothing);
@@ -1789,7 +1790,8 @@ void PrintBattleWindow_MoveSelection(void) {
             if (!isStatusMove && move != MOVE_NONE) {
                 s16 percentage;
                 u16 targetCurrentHp = gBattleMons[target].hp;
-                u16 minDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MIN_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
+                u16 minDamage = DoMoveDamageCalcBattleMenu(
+                    move, gActiveBattler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MIN_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
                 u16 heldItem = gBattleMons[target].item;
 
                 if (immune) minDamage = maxDamage = 0;
@@ -1968,11 +1970,11 @@ static void HandleInputChooseActionPlayer(void) {
             PlayerBufferExecCompleted();
         }
     } else if (JOY_NEW(L_BUTTON)) {
-        if(shortcutButton == 0)
+        if (shortcutButton == 0)
             shortcutButton = BATTLE_ACTION_WIKI;
         else
             shortcutButton--;
-        
+
         switch (shortcutButton) {
             case BATTLE_ACTION_FIGHT:
                 PlaySE(SE_SELECT);

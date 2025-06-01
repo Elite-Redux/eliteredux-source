@@ -16,6 +16,7 @@ extern const u8 BattleScript_AlreadyAtFullHp[];
 extern const u8 BattleScript_PresentHealTarget[];
 extern const u8 BattleScript_MoveUsedMustRecharge[];
 extern const u8 BattleScript_FaintAttacker[];
+extern const u8 BattleScript_StackAbilitySuppressedMessage[];
 extern const u8 BattleScript_FaintTarget[];
 extern const u8 BattleScript_GiveExp[];
 extern const u8 BattleScript_HandleFaintedMon[];
@@ -705,10 +706,10 @@ extern const u8 BattleScript_ExtraSkillSteadySpecial[];
 extern const u8 BattleScript_ExtraSkillSteadySpedef[];
 extern const u8 BattleScript_ExtraSkillSteadySpeed[];
 extern const u8 BattleScript_ExtraSkillSteadyAccuracy[];
-extern const u8 BattleScript_ExtraSkillSteadyCrit[]; //not implemented yet
+extern const u8 BattleScript_ExtraSkillSteadyCrit[];  // not implemented yet
 
 extern const u8 BattleScript_ExtraSkillPosture[];
-extern const u8 BattleScript_ExtraSkillPostureCrit[]; //not implemented yet
+extern const u8 BattleScript_ExtraSkillPostureCrit[];  // not implemented yet
 
 extern const u8 BattleScript_ExtraSkillLastStand[];
 extern const u8 BattleScript_ExtraSkillSubstitute[];
@@ -732,11 +733,10 @@ extern const u8 BattleScript_ExtraSkillForesight[];
 extern const u8 BattleScript_ExtraSkillLeechSeed[];
 extern const u8 BattleScript_ExtraSkillMagnetRise[];
 
-extern const u8 BattleScript_ExtraSkillPermaNightmare[]; // not implemented fully yet, missing anim
+extern const u8 BattleScript_ExtraSkillPermaNightmare[];  // not implemented fully yet, missing anim
 extern const u8 BattleScript_ExtraSkillPermaHealBlock[];
 extern const u8 BattleScript_ExtraSkillPermaWideGuard[];
 
 extern const u8 BattleScript_ExtraSkillCopyStats[];
 
-
-#endif // GUARD_BATTLE_SCRIPTS_H
+#endif  // GUARD_BATTLE_SCRIPTS_H

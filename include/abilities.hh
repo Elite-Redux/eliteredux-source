@@ -83,7 +83,8 @@ typedef int (*AbilityOnCrit)(int battler, int target, MoveEnum move, u16 typeEff
 #define ALWAYS_CRIT 3
 typedef int (*AbilityOnTypeEffectiveness)(int defType, MoveEnum move, int moveType, u16* mod);
 typedef int (*AbilityOnCopyMove)(AbilityEnum ability, int battler, int attacker, int target, MoveEnum move);
-typedef void (*AbilityOnAfterTypeEffectiveness)(int battler, AbilityEnum ability, int target, MoveEnum move, int moveType, u16* mod, u16 mod1, u16 mod2, u16 mod3);
+typedef void (*AbilityOnAfterTypeEffectiveness)(
+    int battler, AbilityEnum ability, int target, MoveEnum move, int moveType, u16* mod, u16 mod1, u16 mod2, u16 mod3);
 typedef void (*AbilityOnModifyEffectChance)(int battler, MoveEnum move, MoveEffectEnum moveEffect, int* effectChance);
 typedef enum {
     CHECK_NONE = 0,
@@ -165,13 +166,14 @@ typedef struct Ability {
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;
-    AbilityApplyOnWithTarget onAccuracyFor:5;
     AbilityApplyOn onStatFor:3;
+    AbilityApplyOnWithTarget onAccuracyFor:5;
+    AbilityApplyOnWithTarget onChooseDefensiveStatFor:5;
     AbilityApplyOnWithTarget onCritFor:5;
     AbilityApplyOnWithTarget onAfterTypeEffectivenessFor:5;
+    AbilityApplyOn onModifyEffectChanceFor:3;
     AbilityApplyOn onStatusImmuneFor:3;
     AbilityApplyOnWithTarget onBeforeAttackFor:5;
-    AbilityApplyOn onModifyEffectChanceFor:3;
     u16 redirectType:5;
     u16 ruinStat:3;
     u16 noDamageHits:2;

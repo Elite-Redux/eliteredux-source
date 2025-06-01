@@ -757,7 +757,7 @@ constexpr Ability MagnetPull = {
 
 constexpr Ability Soundproof = {
     .onImmune = +[](ON_IMMUNE) -> int {
-        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(IsSoundMove(attacker, move))
         CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
         return TRUE;
     },
@@ -2205,7 +2205,7 @@ constexpr Ability LongReach = {
 constexpr Ability LiquidVoice = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.2);
+            if (IsSoundMove(battler, move)) MUL(1.2);
         },
     .onMoveType = +[](ON_MOVE_TYPE) -> int {
         CHECK(moveType == TYPE_NORMAL)
@@ -2650,11 +2650,11 @@ constexpr Ability SteamEngine = {
 constexpr Ability PunkRock = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.3);
+            if (IsSoundMove(battler, move)) MUL(1.3);
         },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(.5);
+            if (IsSoundMove(attacker, move)) MUL(.5);
         },
     .breakable = TRUE,
 };
@@ -3185,7 +3185,7 @@ constexpr Ability LoudBang = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeConfused(target))
-        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(IsSoundMove(battler, move))
         CHECK(Random() % 2)
 
         return AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
@@ -5700,7 +5700,7 @@ constexpr Ability Airborne = {
 constexpr Ability Parroting = {
     .onImmune = Soundproof.onImmune,
     .onCopyMove = +[](ON_COPY_MOVE) -> int {
-        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(IsSoundMove(attacker, move))
         return UseOutOfTurnAttack(battler, target, ability, move, 0);
     },
     .breakable = TRUE,
@@ -6280,7 +6280,7 @@ constexpr Ability RadioJam = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeDisabled(target))
-        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(IsSoundMove(battler, move))
         CHECK(Random() % 100 < 20)
 
         return AbilityStatusEffect(MOVE_EFFECT_DISABLE);
@@ -6513,7 +6513,7 @@ constexpr Ability BeautifulMusic = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(Random() % 2)
-        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(IsSoundMove(battler, move))
 
         return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
     },
@@ -6543,7 +6543,7 @@ constexpr Ability Resonance = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
-        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(IsSoundMove(battler, move))
         CHECK(Random() % 100 < 50)
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
@@ -6656,7 +6656,7 @@ constexpr Ability PiercingSolo = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
-        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(IsSoundMove(battler, move))
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     },
@@ -6668,7 +6668,7 @@ constexpr Ability Rhythmic = {
 
 constexpr Ability ChunkyBassLine = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(IsSoundMove(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_EARTHQUAKE, 40);
@@ -7892,7 +7892,7 @@ constexpr Ability ChampionsEntrance = {
 constexpr Ability Presto = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(BATTLER_MAX_HP(battler))
-        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(IsSoundMove(battler, move))
         return 1;
     },
 };
@@ -8283,28 +8283,39 @@ constexpr Ability WoodlandCurse = {
 };
 
 constexpr Ability Malodor = {
-    .breakable = TRUE,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(gStatuses3[attacker] & STATUS3_GASTRO_ACID)
+
+        gStatuses3[attacker] |= STATUS3_GASTRO_ACID;
+        BattleScriptCall(BattleScript_StackAbilitySuppressedMessage);
+        return TRUE;
+    },
 };
 
 constexpr Ability Blur = {
+    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
+        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+        return STAT_SPEED;
+    },
+    .onChooseDefensiveStatFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
 constexpr Ability Elude = {
+    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
+        CHECK_NOT(IsMoveMakingContact(move, gBattlerAttacker))
+        return STAT_SPEED;
+    },
+    .onChooseDefensiveStatFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
 constexpr Ability DrakeOfRage = {
     .onBattlerFaints = Rampage.onBattlerFaints,
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (typeEffectivenessMultiplier <= UQ_4_12(.5)) RESISTANCE(2);
-        },
+    .onOffensiveMultiplier = TintedLens.onOffensiveMultiplier,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
-};
-
-constexpr Ability Reverbate = {
-    .breakable = TRUE,
 };
 
 constexpr Ability MixedMartialArts = {
@@ -8418,14 +8429,10 @@ constexpr Ability PoisonQuills = {
 constexpr Ability DraconicMight = {
     .onEntry = HalfDrake.onEntry,
     ATE_ABILITY(TYPE_DRAGON),
-    .breakable = TRUE,
 };
 
 constexpr Ability AtlanticRuler = {
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (moveType == TYPE_WATER) MUL(1.5);
-        },
+    .onOffensiveMultiplier = AquaticDweller.onOffensiveMultiplier,
     .onStat = SwiftSwim.onStat,
     .breakable = TRUE,
 };
@@ -8504,7 +8511,7 @@ constexpr Ability WorldSerpent = {
 
 constexpr Ability LuckyWings = {
     .onOffensiveMultiplier = GiantWings.onOffensiveMultiplier,
-    .onModifyEffectChance = +[](ON_MODIFY_EFFECT_CHANCE) { *effectChance *= 2; },
+    .onModifyEffectChance = SereneGrace.onModifyEffectChance,
 };
 
 constexpr Ability Komodo = {
@@ -8538,11 +8545,12 @@ constexpr Ability PurpleHaze = {
 };
 
 constexpr Ability GnashingCannon = {
-    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
-    .onChooseOffensiveStat =
-        +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) *atkStatToUse = STAT_SPATK;
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            MegaLauncher.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            MindCrush.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
+    .onChooseOffensiveStat = MindCrush.onChooseOffensiveStat,
 };
 
 constexpr Ability HyperCleanse = {
@@ -8559,8 +8567,16 @@ constexpr Ability HyperCleanse = {
 };
 
 constexpr Ability MoltenCoat = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(moveType == TYPE_ROCK)
+        CHECK(CanBeBurned(target))
+        CHECK(Random() % 2)
+
+        AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, target);
+        return TRUE;
+    },
     ATE_ABILITY(TYPE_ROCK),
-    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_ROCK; },
 };
 
 typedef struct AbilityKVPair {
@@ -9342,7 +9358,6 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_BLUR, Blur},
     {ABILITY_ELUDE, Elude},
     {ABILITY_DRAKE_OF_RAGE, DrakeOfRage},
-    {ABILITY_REVERBATE, Reverbate},
     {ABILITY_MIXED_MARTIAL_ARTS, MixedMartialArts},
     {ABILITY_STRATEGIC_PAUSE, StrategicPause},
     {ABILITY_OVERRULE, Overrule},
@@ -9441,13 +9456,14 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(onImmuneFor),
             __OVERWRITE_ARRAY_VAL(onBattlerFaintsFor),
             __OVERWRITE_ARRAY_VAL(onOffensiveMultiplierFor),
-            __OVERWRITE_ARRAY_VAL(onAccuracyFor),
             __OVERWRITE_ARRAY_VAL(onStatFor),
+            __OVERWRITE_ARRAY_VAL(onAccuracyFor),
+            __OVERWRITE_ARRAY_VAL(onChooseDefensiveStatFor),
             __OVERWRITE_ARRAY_VAL(onCritFor),
             __OVERWRITE_ARRAY_VAL(onAfterTypeEffectivenessFor),
+            __OVERWRITE_ARRAY_VAL(onModifyEffectChanceFor),
             __OVERWRITE_ARRAY_VAL(onStatusImmuneFor),
             __OVERWRITE_ARRAY_VAL(onBeforeAttackFor),
-            __OVERWRITE_ARRAY_VAL(onModifyEffectChanceFor),
             __OVERWRITE_ARRAY_VAL(redirectType),
             __OVERWRITE_ARRAY_VAL(ruinStat),
             __OVERWRITE_ARRAY_VAL(noDamageHits),

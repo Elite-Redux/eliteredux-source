@@ -12308,7 +12308,7 @@ int Infiltrates(int battler, MoveEnum move, InfiltrateType type) {
 
 bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
     if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE)) return FALSE;
-    if (gBattleMoves[move].flags & FLAG_SOUND && B_SOUND_SUBSTITUTE >= GEN_6) return FALSE;
+    if (IsSoundMove(battlerAtk, move)) return FALSE;
     if (gBattleMoves[move].flags & FLAG_HIT_IN_SUBSTITUTE) return FALSE;
 
     if (Infiltrates(battlerAtk, move, INFILTRATE_SUBSTITUTE)) return FALSE;
