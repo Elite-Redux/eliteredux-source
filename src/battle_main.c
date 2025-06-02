@@ -5144,6 +5144,7 @@ static int GetMoveTypeInternal(MoveEnum move, int battlerAtk, u8 *ateBoost, s8 *
 
         case MOVE_WEATHER_BALL:
             if (HasChloroplast(battlerAtk)) return TYPE_FIRE;
+            if (HasAuroraBorealis(battlerAtk)) return TYPE_ICE;
             REQUIRE(IsWeatherActive(WEATHER_ANY))
             if (gBattleWeather & WEATHER_RAIN_ANY) return TYPE_WATER;
             if (gBattleWeather & WEATHER_SUN_ANY) return TYPE_FIRE;

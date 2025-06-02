@@ -1210,13 +1210,17 @@ bool32 IsMoveEncouragedToHit(u8 battlerAtk, u8 battlerDef, u16 move) {
     return FALSE;
 }
 
+int HasWeatherBallAndNoForcedTyping(int battler) {
+    return !HasChloroplast(battler) && !HasAuroraBorealis(battler) && HasMoveEffect(battler, EFFECT_WEATHER_BALL);
+}
+
 bool32 ShouldSetSandstorm(u8 battler, u16 holdEffect) {
     if (!AI_WeatherHasEffect())
         return FALSE;
     else if (gBattleWeather & (WEATHER_SANDSTORM_ANY | WEATHER_PRIMAL_ANY))
         return FALSE;
 
-    if (IsSandImmune(battler) || HasMoveEffect(battler, EFFECT_SHORE_UP) || (!HasChloroplast(battler) && HasMoveEffect(battler, EFFECT_WEATHER_BALL))) {
+    if (IsSandImmune(battler) || HasMoveEffect(battler, EFFECT_SHORE_UP) || HasWeatherBallAndNoForcedTyping(battler)) {
         return TRUE;
     }
     return FALSE;
@@ -1228,8 +1232,8 @@ bool32 ShouldSetHail(u8 battler, u16 holdEffect) {
     else if (gBattleWeather & (WEATHER_HAIL_ANY | WEATHER_PRIMAL_ANY))
         return FALSE;
 
-    if (IsHailImmune(battler) || HasMove(battler, MOVE_BLIZZARD) || HasMoveEffect(battler, EFFECT_AURORA_VEIL) ||
-        (!HasChloroplast(battler) && HasMoveEffect(battler, EFFECT_WEATHER_BALL))) {
+    if (IsHailImmune(battler) || (!HasAuroraBorealis(battler) && (HasMove(battler, MOVE_BLIZZARD) || HasMoveEffect(battler, EFFECT_AURORA_VEIL))) ||
+        HasWeatherBallAndNoForcedTyping(battler)) {
         return TRUE;
     }
     return FALSE;
@@ -1241,11 +1245,10 @@ bool32 ShouldSetRain(u8 battlerAtk, u16 holdEffect) {
     else if (gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_PRIMAL_ANY))
         return FALSE;
 
-    if (holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA &&
-        (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SWIFT_SWIM) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FORECAST) ||
-         BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HYDRATION) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_RAIN_DISH) ||
-         BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DRY_SKIN) || HasMoveEffect(battlerAtk, EFFECT_THUNDER) || HasMoveEffect(battlerAtk, EFFECT_HURRICANE) ||
-         (!HasChloroplast(battlerAtk) && HasMoveEffect(battlerAtk, EFFECT_WEATHER_BALL)) || HasMoveWithType(battlerAtk, TYPE_WATER))) {
+    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SWIFT_SWIM) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FORECAST) ||
+        BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HYDRATION) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_RAIN_DISH) ||
+        BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DRY_SKIN) || HasMoveEffect(battlerAtk, EFFECT_THUNDER) || HasMoveEffect(battlerAtk, EFFECT_HURRICANE) ||
+        HasWeatherBallAndNoForcedTyping(battlerAtk) || HasMoveWithType(battlerAtk, TYPE_WATER)) {
         return TRUE;
     }
     return FALSE;
@@ -1257,13 +1260,13 @@ bool32 ShouldSetSun(u8 battlerAtk, u16 holdEffect) {
     else if (gBattleWeather & (WEATHER_SUN_ANY | WEATHER_PRIMAL_ANY))
         return FALSE;
 
-    if (holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA &&
-        (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CHLOROPHYLL) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FLOWER_GIFT) ||
-         BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FORECAST) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_LEAF_GUARD) ||
-         BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SOLAR_POWER) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HARVEST) || HasMoveWithType(battlerAtk, TYPE_FIRE) ||
-         (!HasChloroplast(battlerAtk) &&
-          (HasMoveEffect(battlerAtk, EFFECT_SOLARBEAM) || HasMoveEffect(battlerAtk, EFFECT_MORNING_SUN) || HasMoveEffect(battlerAtk, EFFECT_SYNTHESIS) ||
-           HasMoveEffect(battlerAtk, EFFECT_MOONLIGHT) || HasMoveEffect(battlerAtk, EFFECT_WEATHER_BALL) || HasMoveEffect(battlerAtk, EFFECT_GROWTH))))) {
+    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CHLOROPHYLL) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FLOWER_GIFT) ||
+        BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FORECAST) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_LEAF_GUARD) ||
+        BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SOLAR_POWER) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HARVEST) || HasMoveWithType(battlerAtk, TYPE_FIRE) ||
+        (!HasChloroplast(battlerAtk) &&
+         (HasMoveEffect(battlerAtk, EFFECT_SOLARBEAM) || HasMoveEffect(battlerAtk, EFFECT_MORNING_SUN) || HasMoveEffect(battlerAtk, EFFECT_SYNTHESIS) ||
+          HasMoveEffect(battlerAtk, EFFECT_MOONLIGHT) || HasMoveEffect(battlerAtk, EFFECT_GROWTH))) ||
+        HasWeatherBallAndNoForcedTyping(battlerAtk)) {
         return TRUE;
     }
     return FALSE;

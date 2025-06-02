@@ -6585,7 +6585,7 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
                 basePower *= 2;
             break;
         case EFFECT_WEATHER_BALL:
-            if (HasChloroplast(battlerAtk))
+            if (HasChloroplast(battlerAtk) || HasAuroraBorealis(battlerAtk))
                 basePower *= 2;
             else if (gBattleWeather & WEATHER_ANY && WEATHER_HAS_EFFECT)
                 basePower *= 2;
@@ -9122,6 +9122,11 @@ AbilityEnum IsStickyHold(int battler) {
 
 AbilityEnum HasChloroplast(int battler) {
     RETURN_ABILITY_IF_FLAG(battler, FALSE, chloroplast)
+    return FALSE;
+}
+
+AbilityEnum HasAuroraBorealis(int battler) {
+    if (BattlerHasAbility(battler, ABILITY_AURORA_BOREALIS, FALSE)) return ABILITY_AURORA_BOREALIS;
     return FALSE;
 }
 
