@@ -956,7 +956,7 @@ constexpr Ability Guts = {
 constexpr Ability MarvelScale = {
     .onStat =
         +[](ON_STAT) {
-            if (statId == STAT_DEF && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
+            if ((statId == STAT_DEF || statId == STAT_SPDEF) && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
         },
     .breakable = TRUE,
 };
@@ -1249,7 +1249,6 @@ constexpr Ability LeafGuard = {
         CHECK(AbilityHealMonStatus(battler, ability));
         return TRUE;
     },
-    .breakable = TRUE,
 };
 
 constexpr Ability MoldBreaker = {
@@ -2167,11 +2166,13 @@ constexpr Ability WaterBubble = {
 };
 
 constexpr Ability Steelworker = {
-    .onDefensiveMultiplier =
-        +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (moveType == TYPE_GHOST || moveType == TYPE_DARK) RESISTANCE(.5);
-        },
     ATE_ABILITY(TYPE_STEEL),
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (moveType == TYPE_DARK || moveType == TYPE_GHOST) *mod /= 2;
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
 };
 
 constexpr Ability Berserk = {
@@ -3207,6 +3208,10 @@ constexpr Ability LeadCoat = {
 
 constexpr Ability Amphibious = {
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
+    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_DRENCH)
+        return TRUE;
+    },
 };
 
 constexpr Ability Grounded = {
@@ -3850,14 +3855,12 @@ constexpr Ability GripPincer = {
 };
 
 constexpr Ability BigLeaves = {
-    .onEndTurn = Harvest.onEndTurn,
+    .onEndTurn = +[](ON_END_TURN) -> int { return Harvest.onEndTurn(DELEGATE_END_TURN) | LeafGuard.onEndTurn(DELEGATE_END_TURN); },
     .onStat =
         +[](ON_STAT) {
             SolarPower.onStat(DELEGATE_STAT);
             Chlorophyll.onStat(DELEGATE_STAT);
         },
-    .onStatusImmune = LeafGuard.onStatusImmune,
-    .breakable = TRUE,
     .chloroplast = TRUE,
 };
 
@@ -6518,6 +6521,7 @@ constexpr Ability BeautifulMusic = {
 
         return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
     },
+    .canInfatuateAny = TRUE,
 };
 
 constexpr Ability SnowSong = {
@@ -7018,16 +7022,13 @@ constexpr Ability BloodStigma = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability MaximumAcceleration = {
-    .onEndTurn = +[](ON_END_TURN) -> int {
-        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-        CHECK(ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
-
-        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
-        gBattleScripting.battler = battler;
-        return TRUE;
-    },
+constexpr Ability Slipstream = {
     .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPEED] += 20; },
+};
+
+constexpr Ability MaximumAcceleration = {
+    .onEndTurn = SpeedBoost.onEndTurn,
+    .onChooseOffensiveStat = Slipstream.onChooseOffensiveStat,
 };
 
 constexpr Ability Sidewinder = {
@@ -7239,10 +7240,6 @@ constexpr Ability BlindRage = {
     .onEntry = MoldBreaker.onEntry,
     .onTypeEffectiveness = Scrappy.onTypeEffectiveness,
     .tauntImmune = TRUE,
-};
-
-constexpr Ability Slipstream = {
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPEED] += 20; },
 };
 
 constexpr Ability ApexPredator = {
@@ -8218,9 +8215,7 @@ constexpr Ability Deviate = {
 };
 
 constexpr Ability SunsBounty = {
-    .onEndTurn = Harvest.onEndTurn,
-    .onStatusImmune = LeafGuard.onStatusImmune,
-    .breakable = TRUE,
+    .onEndTurn = +[](ON_END_TURN) -> int { return Harvest.onEndTurn(DELEGATE_END_TURN) | LeafGuard.onEndTurn(DELEGATE_END_TURN); },
 };
 
 constexpr Ability RiteOfSpring = {
@@ -8229,7 +8224,6 @@ constexpr Ability RiteOfSpring = {
             SolarPower.onStat(DELEGATE_STAT);
             Chlorophyll.onStat(DELEGATE_STAT);
         },
-    .breakable = TRUE,
 };
 
 constexpr Ability Headstrong = {
@@ -8324,11 +8318,19 @@ constexpr Ability MixedMartialArts = {
 };
 
 constexpr Ability StrategicPause = {
-    .breakable = TRUE,
+    .onOffensiveMultiplier = Analytic.onOffensiveMultiplier,
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber)
+        CHECK(gBattleMoves[move].effect != EFFECT_FUTURE_SIGHT)
+        return 2;
+    },
 };
 
 constexpr Ability Overrule = {
-    .breakable = TRUE,
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (gIsCriticalHit && *mod && *mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
+        },
 };
 
 constexpr Ability MentalPollution = {
@@ -8535,13 +8537,6 @@ constexpr Ability PurpleHaze = {
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_POISON_GAS, 20);
-    },
-    .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
-        CHECK(IsMoveMakingContact(move, attacker))
-
-        UseOutOfTurnAttack(battler, attacker, ability, MOVE_POISON_GAS, 20);
-        return FALSE;
     },
 };
 

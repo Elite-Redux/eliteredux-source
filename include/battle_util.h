@@ -396,6 +396,7 @@ void HandleFollowupAttackAbilities(int battler, int target, MoveEnum move);
 int CheckAndSetOncePerTurnAbility(int battler, AbilityEnum ability);
 AbilityEnum IsStickyHold(int battler);
 AbilityEnum HasChloroplast(int battler);
+AbilityEnum HasAuroraBorealis(int battler);
 AbilityEnum HasRedirectionAbility(int battlerAtk, int battlerDef, MoveEnum move, int type);
 int CanRaiseStat(int battler, int stat);
 int CanLowerStat(int battler, int stat);

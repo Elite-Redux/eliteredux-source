@@ -99,6 +99,7 @@ typedef enum {
     CHECK_INFATUATE = 1 << 7,
     CHECK_RESTRICTING = 1 << 8,
     CHECK_HEAL_BLOCK = 1 << 9,
+    CHECK_DRENCH = 1 << 10,
 } StatusCheckEnum;
 typedef int (*AbilityOnCanStatusType)(int battler, MoveEnum move, StatusCheckEnum status);
 typedef int (*AbilityOnStatusImmune)(int battler, int target, AbilityEnum ability, StatusCheckEnum status);

@@ -1260,7 +1260,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
         else if (IsBattlerWeatherAffected(battlerDef, WEATHER_RAIN_ANY) &&
                  (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
             prio = ACCURACY_HITS_IF_POSSIBLE;
-        else if (IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY) &&
+        else if ((IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY) || HasAuroraBorealis(battlerAtk)) &&
                  (gBattleMoves[move].effect == EFFECT_FREEZE_DRY || move == MOVE_SHEER_COLD || move == MOVE_BLIZZARD))
             prio = ACCURACY_HITS_IF_POSSIBLE;
         else if (IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY) && (move == MOVE_EERIE_SPELL || move == MOVE_VEXING_VOID))
@@ -7675,7 +7675,8 @@ static void Cmd_various(void) {
             }
             break;
         case VARIOUS_SET_AURORA_VEIL:
-            if (gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_AURORA_VEIL || !(WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_HAIL_ANY)) {
+            if (gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_AURORA_VEIL ||
+                !(IsBattlerWeatherAffected(gActiveBattler, WEATHER_HAIL_ANY) || HasAuroraBorealis(gActiveBattler))) {
                 gMoveResultFlags |= MOVE_RESULT_MISSED;
                 SetActiveMultistringChooser(B_MSG_SIDE_STATUS_FAILED);
             } else {
@@ -11407,7 +11408,7 @@ static void Cmd_recoverbasedonsunlight(void) {
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP * 3 / 4;
         } else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) || HasChloroplast(gBattlerAttacker)) {
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP * 2 / 3;
-        } else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_RAIN_ANY))
+        } else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_FOG_ANY | WEATHER_HAIL_ANY))
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
         else  // not sunny weather
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;

@@ -4686,22 +4686,24 @@ static void AnimRecycle_Step(struct Sprite *sprite) {
 }
 
 void AnimTask_GetWeather(u8 taskId) {
-    bool32 utilityUmbrellaAffected = GetBattlerHoldEffect(gBattleAnimAttacker, TRUE) == HOLD_EFFECT_UTILITY_UMBRELLA;
-    bool8 hasChloroplast = HasChloroplast(gBattleAnimAttacker);
+    int hasChloroplast = HasChloroplast(gBattleAnimAttacker);
+    int hasAuroraBorealis = HasAuroraBorealis(gBattleAnimAttacker);
+
+    DestroyAnimVisualTask(taskId);
 
     gBattleAnimArgs[ARG_RET_ID] = ANIM_WEATHER_NONE;
-    if (hasChloroplast || (gWeatherMoveAnim & WEATHER_SUN_ANY && !utilityUmbrellaAffected))
+    if (!hasChloroplast && !hasAuroraBorealis && !WEATHER_HAS_EFFECT)
+        return;
+    if (hasChloroplast || gWeatherMoveAnim & WEATHER_SUN_ANY)
         gBattleAnimArgs[ARG_RET_ID] = ANIM_WEATHER_SUN;
-    else if (gWeatherMoveAnim & WEATHER_RAIN_ANY && !utilityUmbrellaAffected)
+    else if (gWeatherMoveAnim & WEATHER_RAIN_ANY)
         gBattleAnimArgs[ARG_RET_ID] = ANIM_WEATHER_RAIN;
     else if (gWeatherMoveAnim & WEATHER_SANDSTORM_ANY)
         gBattleAnimArgs[ARG_RET_ID] = ANIM_WEATHER_SANDSTORM;
-    else if (gWeatherMoveAnim & WEATHER_HAIL_ANY)
+    else if (hasAuroraBorealis || gWeatherMoveAnim & WEATHER_HAIL_ANY)
         gBattleAnimArgs[ARG_RET_ID] = ANIM_WEATHER_HAIL;
     else if (gWeatherMoveAnim & WEATHER_FOG_ANY)
         gBattleAnimArgs[ARG_RET_ID] = ANIM_WEATHER_FOG;
-
-    DestroyAnimVisualTask(taskId);
 }
 
 // Squishes the mon sprite vertically, and shakes it back and forth.
