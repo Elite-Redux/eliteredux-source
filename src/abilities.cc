@@ -9407,6 +9407,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_GNASHING_CANNON, GnashingCannon},
     {ABILITY_HYPER_CLEANSE, HyperCleanse},
     {ABILITY_MOLTEN_COAT, MoltenCoat},
+    {ABILITY_ROYAL_DECREE, RoyalDecree},
 };
 
 template <int N>
