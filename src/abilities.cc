@@ -3849,7 +3849,7 @@ constexpr Ability GripPincer = {
 };
 
 constexpr Ability BigLeaves = {
-    .onEndTurn = +[](ON_END_TURN) -> int { Harvest.onEndTurn(DELEGATE_END_TURN) | LeafGuard.onEndTurn(DELEGATE_END_TURN); },
+    .onEndTurn = +[](ON_END_TURN) -> int { return Harvest.onEndTurn(DELEGATE_END_TURN) | LeafGuard.onEndTurn(DELEGATE_END_TURN); },
     .onStat =
         +[](ON_STAT) {
             SolarPower.onStat(DELEGATE_STAT);
@@ -6515,6 +6515,7 @@ constexpr Ability BeautifulMusic = {
 
         return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
     },
+    .canInfatuateAny = TRUE,
 };
 
 constexpr Ability SnowSong = {
@@ -7015,6 +7016,10 @@ constexpr Ability BloodStigma = {
     .removesStatusOnImmunity = TRUE,
 };
 
+constexpr Ability Slipstream = {
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPEED] += 20; },
+};
+
 constexpr Ability MaximumAcceleration = {
     .onEndTurn = SpeedBoost.onEndTurn,
     .onChooseOffensiveStat = Slipstream.onChooseOffensiveStat,
@@ -7229,10 +7234,6 @@ constexpr Ability BlindRage = {
     .onEntry = MoldBreaker.onEntry,
     .onTypeEffectiveness = Scrappy.onTypeEffectiveness,
     .tauntImmune = TRUE,
-};
-
-constexpr Ability Slipstream = {
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPEED] += 20; },
 };
 
 constexpr Ability ApexPredator = {
@@ -8208,7 +8209,7 @@ constexpr Ability Deviate = {
 };
 
 constexpr Ability SunsBounty = {
-    .onEndTurn = +[](ON_END_TURN) -> int { Harvest.onEndTurn(DELEGATE_END_TURN) | LeafGuard.onEndTurn(DELEGATE_END_TURN); },
+    .onEndTurn = +[](ON_END_TURN) -> int { return Harvest.onEndTurn(DELEGATE_END_TURN) | LeafGuard.onEndTurn(DELEGATE_END_TURN); },
 };
 
 constexpr Ability RiteOfSpring = {
