@@ -8580,6 +8580,15 @@ constexpr Ability MoltenCoat = {
     ATE_ABILITY(TYPE_ROCK),
 };
 
+constexpr Ability RoyalDecree = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
+        return UseEntryMove(battler, ability, MOVE_GLARE, 0);
+    },
+    .onImmune = QueenlyMajesty.onImmune,
+    .breakable = TRUE,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
