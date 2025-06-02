@@ -1249,7 +1249,6 @@ constexpr Ability LeafGuard = {
         CHECK(AbilityHealMonStatus(battler, ability));
         return TRUE;
     },
-    .breakable = TRUE,
 };
 
 constexpr Ability MoldBreaker = {
@@ -3850,14 +3849,12 @@ constexpr Ability GripPincer = {
 };
 
 constexpr Ability BigLeaves = {
-    .onEndTurn = Harvest.onEndTurn,
+    .onEndTurn = +[](ON_END_TURN) -> int { Harvest.onEndTurn(DELEGATE_END_TURN) | LeafGuard.onEndTurn(DELEGATE_END_TURN); },
     .onStat =
         +[](ON_STAT) {
             SolarPower.onStat(DELEGATE_STAT);
             Chlorophyll.onStat(DELEGATE_STAT);
         },
-    .onStatusImmune = LeafGuard.onStatusImmune,
-    .breakable = TRUE,
     .chloroplast = TRUE,
 };
 
@@ -7019,15 +7016,8 @@ constexpr Ability BloodStigma = {
 };
 
 constexpr Ability MaximumAcceleration = {
-    .onEndTurn = +[](ON_END_TURN) -> int {
-        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-        CHECK(ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
-
-        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
-        gBattleScripting.battler = battler;
-        return TRUE;
-    },
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPEED] += 20; },
+    .onEndTurn = SpeedBoost.onEndTurn,
+    .onChooseOffensiveStat = Slipstream.onChooseOffensiveStat,
 };
 
 constexpr Ability Sidewinder = {
@@ -8218,9 +8208,7 @@ constexpr Ability Deviate = {
 };
 
 constexpr Ability SunsBounty = {
-    .onEndTurn = Harvest.onEndTurn,
-    .onStatusImmune = LeafGuard.onStatusImmune,
-    .breakable = TRUE,
+    .onEndTurn = +[](ON_END_TURN) -> int { Harvest.onEndTurn(DELEGATE_END_TURN) | LeafGuard.onEndTurn(DELEGATE_END_TURN); },
 };
 
 constexpr Ability RiteOfSpring = {
