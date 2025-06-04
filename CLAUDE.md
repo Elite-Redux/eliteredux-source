@@ -137,3 +137,6 @@ Detailed documentation about specific systems can be found in the `knowledge/` d
 - Single file with all data in one location
 - Separate files only for sprite/palette files
 - Textproto-based codegen and unified abilities file in `abilities.cc` is the main configuration method
+
+## Memory: Learning and Knowledge Management
+- When you learn new stuff, especially when you had to search a lot to understand how something works and is connected, don't hesitate to write into CLAUDE.md so next time it will be much faster > like training the AI so it gets better and better!
