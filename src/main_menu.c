@@ -526,6 +526,8 @@ static const struct MenuAction sMenuActions_Difficulty[] = {
     {gText_BirchEasyMode,  NULL},
     {gText_BirchAceMode,   NULL},
     {gText_BirchEliteMode, NULL},
+    {gText_BirchHellMode,  NULL},
+    {gText_BirchInsanityMode, NULL}, // Add Hell mode option
 };
 
 static const struct MenuAction sMenuActions_LevelCaps[] = {

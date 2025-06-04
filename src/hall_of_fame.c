@@ -920,6 +920,8 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2) {
     static const u8 easyModeAsteriscText[] = _("{COLOR LIGHT_GREEN}{SHADOW GREEN}Easy{SUM_DOWN}");
     static const u8 aceModeAsteriscText[] = _("{COLOR LIGHT_BLUE}{SHADOW BLUE}Ace{SUM_DOWN}");
     static const u8 eliteModeAsteriscText[] = _("{COLOR LIGHT_BLUE}{SHADOW RED}Elite{SUM_DOWN}");
+    static const u8 hellModeText[] = _("{COLOR RED}{SHADOW DARK_GRAY}Hell");
+    static const u8 hellModeAsteriscText[] = _("{COLOR RED}{SHADOW DARK_GRAY}Hell{SUM_DOWN}");
 
     static const u8 RandomizerModeText[] = _("Random Modes: {STR_VAR_1}{STR_VAR_2}{STR_VAR_3}$");
     static const u8 FullRandomizerModeText[] = _("Random Modes: Full Randomizer");
@@ -970,6 +972,12 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2) {
             else
                 StringCopy(gStringVar1, eliteModeText);
             break;
+       case DIFFICULTY_HELL:
+           if (FlagGet(FLAG_SYS_UPPED_DIFFICULTY))
+               StringCopy(gStringVar1, hellModeAsteriscText);
+           else
+               StringCopy(gStringVar1, hellModeText);
+           break;
     }
 
     // Level Caps

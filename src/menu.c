@@ -2230,6 +2230,9 @@ void BufferSaveMenuText(u8 textId, u8 *dest, u8 color)
                 case DIFFICULTY_ELITE:
                     StringCopy(string, gText_SavingEliteMode);
                     break;
+                case DIFFICULTY_HELL:
+                    StringCopy(string, gText_SavingHellMode);
+                    break;
             }
             break;
     }
