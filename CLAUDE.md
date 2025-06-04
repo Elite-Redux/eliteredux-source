@@ -43,6 +43,7 @@ Many data files in this project are extremely large (e.g., `src/data/trainers.h`
    - Create a Python script to make the necessary changes
    - Run the script and verify the output
    - This approach is more reliable than direct editing
+   - **IMPORTANT**: Put python scripts in the correct folder(s) in tools > create new folders like trainer_tools (we got this already)
 
 2. **Read files strategically**:
    - Use grep/search to find specific sections
@@ -123,3 +124,16 @@ Detailed documentation about specific systems can be found in the `knowledge/` d
 - **difficulty_system.md** - How the 4-tier difficulty system works
 - **adding_trainers.md** - Guide for adding new trainers and parties
 - **hell_mode_implementation.md** - Process for implementing Hell Mode
+
+## Memory: Ability and Data Management
+- Abilities are now added in `abilities.cc` and `abilitylist.textproto`, not manually via multiple .c and .h files
+- `abilities.cc` contains code definitions
+- `abilitylist.textproto` currently holds names, descriptions, and ability effects
+- `specieslist.textproto` contains Pokemon data
+- `battle_util` is still used occasionally
+- These files are crucial for project development
+
+## Memory: Data Storage Strategy
+- Single file with all data in one location
+- Separate files only for sprite/palette files
+- Textproto-based codegen and unified abilities file in `abilities.cc` is the main configuration method
