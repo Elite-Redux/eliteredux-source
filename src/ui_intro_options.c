@@ -479,7 +479,7 @@ const struct OptionData Intro_Options[NUM_INTRO_OPTIONS] = {
         .optionDescription = { 
             _("Trainers have no EVs, but you can have them.\nBag use in battles is disabled.\nThe Set battle style is enforced."),
             _("Same teams as Easy Mode, but additionally:\nEvery single Trainer has custom EVs.\nThis is the normal difficulty."),
-            _("In addition to Ace Mode: Innates have\nto be unlocked for you and the AI.\nMuch harder teams. Only for Pros!"),
+            _("In addition to Ace Mode: AI has all\ninnates; you must unlock them. Much\nharder teams. Only for Pros!"),
             _("In addition to Elite Mode: Smarter AI\nwhich uses illegal movesets/abilities.\nPure suffering awaits!"),
             },
         .numOptions = 4,
