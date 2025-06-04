@@ -8584,6 +8584,67 @@ constexpr Ability RoyalDecree = {
     .breakable = TRUE,
 };
 
+constexpr Ability BreezyNeigh = {
+    .onBattlerFaints = AdrenalineRush.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+};
+
+constexpr Ability Dreamscape = {
+    .onEntry = Comatose.onEntry,
+    .onOffensiveMultiplier = Dreamcatcher.onOffensiveMultiplier,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPATK) *stat *= 1.2;
+        },
+    .onStatusImmune = Comatose.onStatusImmune,
+    .unsuppressable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+};
+
+constexpr Ability HasteMakesWaste = {
+    .onOffensiveMultiplier = Analytic.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Stall.onDefensiveMultiplier,
+    .breakable = TRUE,
+};
+
+constexpr Ability HungryMaws = {
+    .onBattlerFaints = JawsOfCarnage.onBattlerFaints,
+    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+};
+
+constexpr Ability ThermalSlide = {
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY || WEATHER_HAIL_ANY)) *stat *= 1.5;
+        },
+};
+
+constexpr Ability Thermomancy = {
+    .onModifyEffectChance =
+        +[](ON_MODIFY_EFFECT_CHANCE) {
+            if (moveEffect == MOVE_EFFECT_BURN || MOVE_EFFECT_FROSTBITE) *effectChance *= 5;
+        },
+};
+
+constexpr Ability Chuckster = {
+    .breakable = TRUE,
+};
+
+constexpr Ability HeatSink = {
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_FIRE);
+        *statId = GetHighestAttackingStatId(battler, TRUE);
+        return ABSORB_RESULT_STAT;
+    },
+    .redirectType = TYPE_FIRE,
+    .breakable = TRUE,
+};
+
+constexpr Ability RelicStone = {
+    .breakable = TRUE,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -9408,6 +9469,15 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_HYPER_CLEANSE, HyperCleanse},
     {ABILITY_MOLTEN_COAT, MoltenCoat},
     {ABILITY_ROYAL_DECREE, RoyalDecree},
+    {ABILITY_BREEZY_NEIGH, BreezyNeigh},
+    {ABILITY_DREAMSCAPE, Dreamscape},
+    {ABILITY_HASTE_MAKES_WASTE, HasteMakesWaste},
+    {ABILITY_HUNGRY_MAWS, HungryMaws},
+    {ABILITY_THERMAL_SLIDE, ThermalSlide},
+    {ABILITY_THERMOMANCY, Thermomancy},
+    {ABILITY_CHUCKSTER, Chuckster},
+    {ABILITY_HEAT_SINK, HeatSink},
+    {ABILITY_RELIC_STONE, RelicStone},
 };
 
 template <int N>
