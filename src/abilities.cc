@@ -8364,8 +8364,7 @@ constexpr Ability Scarecrow = {
 
 constexpr Ability OminousShroud = {
     .onEntry = Phantom.onEntry,
-    .onDefensiveMultiplier = Multiscale.onDefensiveMultiplier,
-    .breakable = TRUE,
+    .onDefensiveMultiplier = ShadowShield.onDefensiveMultiplier,
 };
 
 constexpr Ability ChillingPresence = {
@@ -8373,7 +8372,11 @@ constexpr Ability ChillingPresence = {
 };
 
 constexpr Ability Frostbind = {
-    .breakable = TRUE,
+    .onReactive = +[](ON_REACTIVE) -> int {
+        return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) { return (int)CanGetFrostbite(battler); }, BattleScript_Frostbind);
+    },
+    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
 constexpr Ability TenderAffection = {
@@ -8581,6 +8584,7 @@ constexpr Ability RoyalDecree = {
         return UseEntryMove(battler, ability, MOVE_GLARE, 0);
     },
     .onImmune = QueenlyMajesty.onImmune,
+    .onImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
