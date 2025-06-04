@@ -381,6 +381,7 @@ extern const u8 BattleScript_SpikyShieldEffect[];
 extern const u8 BattleScript_PoisonPuppeteer[];
 extern const u8 BattleScript_Bloodlust[];
 extern const u8 BattleScript_Entrance[];
+extern const u8 BattleScript_Frostbind[];
 extern const u8 BattleScript_KingsShieldEffect[];
 extern const u8 BattleScript_FlowerVeilProtectsRet[];
 extern const u8 BattleScript_SweetVeilProtectsRet[];

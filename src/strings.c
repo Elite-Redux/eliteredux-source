@@ -60,6 +60,7 @@ const u8 gText_BirchGirl[] = _("Girl");
 const u8 gText_BirchEasyMode[] = _("Easy");
 const u8 gText_BirchAceMode[] = _("Ace");
 const u8 gText_BirchEliteMode[] = _("Elite");
+const u8 gText_BirchHellMode[] = _("Hell");
 const u8 gText_BirchInsanityMode[] = _("Insanity"); // unused
 const u8 gText_BirchDefaultCaps[] = _("Easy Caps"); // Default
 const u8 gText_BirchMoreCaps[] = _("More Caps");
@@ -1681,6 +1682,7 @@ const u8 gText_SavingTime[] = _("Time");
 const u8 gText_SavingEasyMode[] = _("Easy Mode");
 const u8 gText_SavingAceMode[] = _("Ace Mode");
 const u8 gText_SavingEliteMode[] = _("Elite Mode");
+const u8 gText_SavingHellMode[] = _("Hell Mode");
 const u8 gText_SavingNormalMode[] = _("Normal Mode"); // not used
 #ifdef DEBUG_BUILD
 const u8 gText_SavingVersionNum[] = _("v2.5 Debug");

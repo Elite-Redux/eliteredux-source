@@ -2457,11 +2457,21 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                 gHitMarker |= HITMARKER_SYNCHRONISE_EFFECT;
             }
 
-            if (gBattleScripting.moveEffect == MOVE_EFFECT_POISON || gBattleScripting.moveEffect == MOVE_EFFECT_TOXIC) {
-                SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_POISON_PUPPETEER);
-                SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_NEUROTOXIN);
-            } else if (gBattleScripting.moveEffect == MOVE_EFFECT_BURN)
-                SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_SET_ABLAZE);
+            switch (gBattleScripting.moveEffect) {
+                case MOVE_EFFECT_POISON:
+                case MOVE_EFFECT_TOXIC:
+                    SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_POISON_PUPPETEER);
+                    SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_NEUROTOXIN);
+                    break;
+
+                case MOVE_EFFECT_BURN:
+                    SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_SET_ABLAZE);
+                    break;
+
+                case MOVE_EFFECT_FROSTBITE:
+                    SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_FROSTBIND);
+                    break;
+            }
             return;
         } else if (statusChanged == FALSE) {
             gBattleScripting.moveEffect = 0;
