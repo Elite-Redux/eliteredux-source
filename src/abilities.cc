@@ -80,9 +80,10 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_PARENTAL_BOND battler, move, moveType
 #define ON_STAT AbilityEnum ability, int battler, int statId, u32 *stat, NonStackingState *flags
 #define DELEGATE_STAT ability, battler, statId, stat, flags
-#define ON_OFFENSIVE_MULTIPLIER \
-    int battler, int target, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, u16 *modifier
-#define DELEGATE_OFFENSIVE_MULTIPLIER battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier
+#define ON_OFFENSIVE_MULTIPLIER                                                                                                                             \
+    int battler, AbilityEnum ability, int target, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, \
+        u16 *modifier
+#define DELEGATE_OFFENSIVE_MULTIPLIER battler, ability, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier
 #define ON_DEFENSIVE_MULTIPLIER \
     int battler, int attacker, MoveEnum move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
 #define DELEGATE_DEFENSIVE_MULTIPLIER battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier
@@ -121,6 +122,8 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_ON_TRAP switchingBattler
 #define ABILITY_ON_BEFORE_ATTACK int battler, int attacker, AbilityEnum ability, MoveEnum move, int moveType
 #define DELEGATE_ON_BEFORE_ATTACK battler, attacker, ability, move, moveType
+#define ON_PREEMPT_ACTION u8 battler, AbilityEnum ability, u8 turnBattler
+#define DELEGATE_PREEMPT_ACTION battler, ability, turnBattler
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -4289,7 +4292,7 @@ constexpr Ability SelfRepair = {
     .onExit = NaturalCure.onExit,
 };
 
-constexpr Ability AtomicBurst = {
+constexpr Ability Electromorphosis = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
@@ -4298,6 +4301,10 @@ constexpr Ability AtomicBurst = {
         BattleScriptCall(BattleScript_ElectromorphosisActivates);
         return TRUE;
     },
+};
+
+constexpr Ability AtomicBurst = {
+    .onDefender = Electromorphosis.onDefender,
     ATE_ABILITY(TYPE_ELECTRIC),
 };
 
@@ -4755,17 +4762,6 @@ constexpr Ability Furnace = {
     },
 };
 
-constexpr Ability Electromorphosis = {
-    .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
-        CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
-
-        gStatuses3[battler] |= STATUS3_CHARGED_UP;
-        BattleScriptCall(BattleScript_ElectromorphosisActivates);
-        return TRUE;
-    },
-};
-
 constexpr Ability RockyPayload = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
@@ -5128,7 +5124,7 @@ constexpr Ability DustCloud = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SAND_ATTACK, 0); },
 };
 
-constexpr Ability BerserkerRage = {
+constexpr Ability TippingPoint = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_SPATK))
@@ -5142,6 +5138,10 @@ constexpr Ability BerserkerRage = {
         }
         return TRUE;
     },
+};
+
+constexpr Ability BerserkerRage = {
+    .onDefender = TippingPoint.onDefender,
     .onBattlerFaints = Rampage.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
@@ -5224,22 +5224,6 @@ constexpr Ability SuperStrain = {
         return TRUE;
     },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
-};
-
-constexpr Ability TippingPoint = {
-    .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
-        CHECK(CanRaiseStat(battler, STAT_SPATK))
-
-        if (gIsCriticalHit) {
-            SetStatChanger(STAT_SPATK, 12);
-            BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
-        } else {
-            SetStatChanger(STAT_SPATK, 1);
-            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-        }
-        return TRUE;
-    },
 };
 
 constexpr Ability Enlightened = {
@@ -8258,7 +8242,44 @@ constexpr Ability SepiaLens = {
 };
 
 constexpr Ability SuperSniper = {
-    .onOffensiveMultiplier = Sniper.onOffensiveMultiplier,
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            Sniper.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ability) {
+                MUL(0.5);
+            }
+        },
+    .onPreemptAction = +[](ON_PREEMPT_ACTION) -> int {
+        CHECK(gCurrentActionFuncId == B_ACTION_SWITCH)
+        CHECK(gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] == B_ACTION_USE_MOVE)
+
+        MoveEnum move = GetChosenMove(battler);
+        int targetFlag = GetBattlerBattleMoveTargetFlags(move, battler);
+
+        switch (targetFlag) {
+            case MOVE_TARGET_SELECTED:
+                CHECK(gBattleStruct->moveTarget[battler] == turnBattler)
+                break;
+
+            case MOVE_TARGET_BOTH:
+            case MOVE_TARGET_FOES_AND_ALLY:
+                break;
+
+            case MOVE_TARGET_RANDOM:
+            default:
+                return FALSE;
+        }
+
+        gQueuedExtraAttackData[++gQueuedAttackCount] = (ExtraAttackActionStruct){
+            .ability = ability,
+            .move = move,
+            .attacker = battler,
+            .target = turnBattler,
+            .movePos = gBattleStruct->chosenMovePositions[battler],
+        };
+        gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] = B_ACTION_FINISHED;
+        return TRUE;
+    },
 };
 
 ON_EITHER(WoodlandCurse) {
@@ -8382,7 +8403,6 @@ constexpr Ability Frostbind = {
 constexpr Ability TenderAffection = {
     ON_EITHER_ABILITY(CuteCharm),
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FAIRY; },
-    .breakable = TRUE,
 };
 
 constexpr Ability GlacialGhost = {
@@ -8586,6 +8606,53 @@ constexpr Ability RoyalDecree = {
     .onImmune = QueenlyMajesty.onImmune,
     .onImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
+};
+
+constexpr Ability Tag = {
+    .onPreemptAction = +[](ON_PREEMPT_ACTION) -> int {
+        CHECK(gCurrentActionFuncId == B_ACTION_SWITCH)
+        gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+            .ability = ability,
+            .move = MOVE_PURSUIT,
+            .movePower = 20,
+            .attacker = battler,
+            .target = turnBattler,
+        };
+
+        return TRUE;
+    },
+};
+
+constexpr Ability Surprise = {
+    .onPreemptAction = +[](ON_PREEMPT_ACTION) -> int {
+        CHECK(gCurrentActionFuncId == B_ACTION_USE_MOVE)
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+
+        MoveEnum move = GetChosenMove(turnBattler);
+        int targetFlag = GetBattlerBattleMoveTargetFlags(move, turnBattler);
+
+        switch (targetFlag) {
+            case MOVE_TARGET_BOTH:
+            case MOVE_TARGET_RANDOM:
+            case MOVE_TARGET_FOES_AND_ALLY:
+                break;
+
+            case MOVE_TARGET_SELECTED:
+                CHECK(GetBattlerSide(gBattleStruct->moveTarget[turnBattler]) == GetBattlerSide(battler))
+                break;
+
+            default:
+                return FALSE;
+        }
+        gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+            .ability = ability,
+            .move = MOVE_ASTONISH,
+            .attacker = battler,
+            .target = turnBattler,
+        };
+
+        return TRUE;
+    },
 };
 
 typedef struct AbilityKVPair {

@@ -617,7 +617,7 @@ typedef enum
 struct ExtraAttackActionStruct
 {
     AbilityEnum ability;
-    u16 move;
+    MoveEnum move;
     u8 movePower;
     u8 attacker:2;
     u8 target:2;
