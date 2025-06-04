@@ -82,6 +82,10 @@ struct Trainer {
     /*0x24*/ union TrainerMonPtr partyDouble;
     /*0x20*/ u8 partySizeInsaneDouble;
     /*0x28*/ union TrainerMonPtr partyInsaneDouble;
+    /*0x20*/ u8 partySizeHell;
+    /*0x28*/ union TrainerMonPtr partyHell;
+    /*0x20*/ u8 partySizeHellDouble;
+    /*0x28*/ union TrainerMonPtr partyHellDouble;
     /*0x2F*/ u16 trainerFlag;
 };
 

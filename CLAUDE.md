@@ -116,3 +116,10 @@ Proto files are a compilation tool that helps generate some of this data, but de
 - The `upcoming` branch is the active development branch
 - Many files are auto-generated - be careful about which files to edit
 - When in doubt about file size, check before attempting to read/edit directly
+
+## Knowledge Base
+
+Detailed documentation about specific systems can be found in the `knowledge/` directory:
+- **difficulty_system.md** - How the 4-tier difficulty system works
+- **adding_trainers.md** - Guide for adding new trainers and parties
+- **hell_mode_implementation.md** - Process for implementing Hell Mode

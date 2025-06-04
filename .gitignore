@@ -59,6 +59,7 @@ dd_lazy_utils/ # doubledot stuff
 *.ups
 generated/
 output.txt
+<<<<<<< Updated upstream
 rg
 gh_2.74.0_linux_amd64/share/man/man1/gh.1
 gh_2.74.0_linux_amd64/share/man/man1/gh-workflow.1
@@ -269,7 +270,4 @@ gh_2.74.0_linux_amd64/LICENSE
 gh_2.74.0_linux_amd64/bin/gh
 gh.tar.gz
 .claude/settings.local.json
-add_placeholder_parties.py
-add_hell_parties.py
 .roomodes
-update_trainer_links.py

@@ -301,6 +301,7 @@ extern const u8 gText_SavingEasyMode[];
 extern const u8 gText_SavingNormalMode[];
 extern const u8 gText_SavingAceMode[];
 extern const u8 gText_SavingEliteMode[];
+extern const u8 gText_SavingHellMode[];
 extern const u8 gText_SavingVersionNum[];
 
 // Battle pyramid menu texts
@@ -360,6 +361,8 @@ extern const u8 gText_Pie_NormalMode[];
 extern const u8 gText_Pie_HardMode[];
 extern const u8 gText_Pie_ChallengeMode[];
 extern const u8 gText_Pie_EliteMode[];
+extern const u8 gText_Pie_HellModeDesc[];
+extern const u8 gText_Pie_HellMode[];  // Added Hell mode string declaration
 
 extern const u8 gText_Pie_LevelCaps[];
 extern const u8 gText_Pie_StandardCaps[];
@@ -391,6 +394,7 @@ extern const u8 gText_BirchGirl[];
 extern const u8 gText_BirchEasyMode[];
 extern const u8 gText_BirchAceMode[];
 extern const u8 gText_BirchEliteMode[];
+extern const u8 gText_BirchHellMode[];
 extern const u8 gText_BirchInsanityMode[];
 extern const u8 gText_BirchDefaultCaps[];
 extern const u8 gText_BirchMoreCaps[];
