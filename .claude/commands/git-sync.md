@@ -15,7 +15,7 @@ Steps:
      * Is concise but descriptive
      * Reflects the actual nature of the changes, not just file names
 4. Handle git operations:
-   - Pull with rebase to get latest changes
+   - Pull latest changes (regular merge, not rebase)
    - Resolve any conflicts intelligently if possible
    - Push to remote
 5. Provide helpful feedback throughout
