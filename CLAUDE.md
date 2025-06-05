@@ -146,3 +146,39 @@ Detailed documentation about specific systems can be found in the `knowledge/` d
 
 ## Memory: Learning and Knowledge Management
 - When you learn new stuff, especially when you had to search a lot to understand how something works and is connected, don't hesitate to write into CLAUDE.md so next time it will be much faster > like training the AI so it gets better and better!
+
+## In-Game Wiki System
+
+The in-game wiki provides comprehensive help content accessible from the Start Menu or during battles (L button by default).
+
+### Wiki Content Structure
+- **Content Source**: `docs/er-wiki-google-docs.md` - Markdown file containing all wiki content
+- **Parser Tool**: `tools/wiki_tools/parse_wiki_markdown.py` - Converts markdown to protobuf format
+- **Protobuf Data**: `proto/HelpArticles.textproto` - Generated wiki content in protobuf format
+- **Generated Code**: `include/generated/data/text/help_articles.h` - C header with final wiki data
+
+### Adding/Updating Wiki Content
+1. Edit `docs/er-wiki-google-docs.md` following the existing format:
+   - Categories: `## Category Name`
+   - Entries: `### Entry Title`
+   - Content lines: `* Content here` (9 lines per page max, 5 pages per entry max)
+   - Blank lines: Just `*`
+
+2. Run the parser:
+   ```bash
+   python3 tools/wiki_tools/parse_wiki_markdown.py
+   ```
+
+3. Rebuild the codegen tools:
+   ```bash
+   make clean
+   make tools/codegen
+   ```
+
+4. Build the ROM as usual
+
+### Important Notes
+- The GBA font system has limited character support - avoid special characters
+- Keep text concise due to display constraints (46 characters per line approx)
+- The parser automatically cleans problematic characters (accents, curly quotes, etc.)
+- Wiki can be accessed from Start Menu > Wiki or during battles with L button
