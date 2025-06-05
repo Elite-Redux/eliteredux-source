@@ -142,6 +142,7 @@ void InformationMenu_Init(MainCallback callback) {
     sMenuDataPtr->gfxLoadState = 0;
     sMenuDataPtr->currentTab = 0;
     sMenuDataPtr->savedCallback = callback;
+    sMenuDataPtr->entryIdx = 0;  // Explicitly set initial entry
 
     SetMainCallback2(Menu_RunSetup);
 }
@@ -156,6 +157,7 @@ void InformationMenu_Init_From_Battle(MainCallback callback) {
     sMenuDataPtr->gfxLoadState = 0;
     sMenuDataPtr->currentTab = 0;
     sMenuDataPtr->savedCallback = callback;
+    sMenuDataPtr->entryIdx = 0;  // Explicitly set initial entry
 
     SetMainCallback2(Menu_RunSetup);
 }
@@ -650,6 +652,7 @@ static void Task_MenuMain(u8 taskId) {
 
             sMenuDataPtr->selectorPosY = 0;
             sMenuDataPtr->selectorOffset = 0;
+            sMenuDataPtr->entryIdx = 0;
             LoadTabPalette();
             PrintToWindow();
         }
@@ -662,6 +665,7 @@ static void Task_MenuMain(u8 taskId) {
                 sMenuDataPtr->currentTab = numTabs - 1;
             sMenuDataPtr->selectorPosY = 0;
             sMenuDataPtr->selectorOffset = 0;
+            sMenuDataPtr->entryIdx = 0;
             LoadTabPalette();
             PrintToWindow();
         }
