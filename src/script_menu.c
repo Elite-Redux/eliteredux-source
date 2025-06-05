@@ -818,28 +818,30 @@ const u8 gText_TutorialLearnMoves[] = _("Learn moves");                 // from 
 const u8 gText_TutorialHealing[] = _("Auto-Healing");                   // before battle
 const u8 gText_TutorialLeveling[] = _("Leveling");                      // Candy Box
 const u8 gText_TutorialEvolutions[] = _("Evolutions");                  // Check Pokédex
+const u8 gText_TutorialReadWiki[] = _("Read the Wiki");                 // Start Menu Wiki
 const u8 gText_TutorialExit[] = _("Exit");                              // Exit
 // --------------------------------------------------------------------------------------------------------------------
 
 // Sets of multichoices.
 static const struct ListMenuItem sTutorialNPCOptions[] = {
     {gText_TutorialTalkToNurseJoy, 0},
-    {gText_TutorialPokemonChanges, 1},
-    {gText_TutorialAbilityChanges, 2},
-    {gText_TutorialMoveChanges, 3},
-    {gText_TutorialQOLChanges, 4},
-    {gText_TutorialBattleChanges, 5},
-    {gText_TutorialBattleUIChanges, 6},
-    {gText_TutorialCatchingPokemon, 7},
-    {gText_TutorialSwitchAbility, 8},
-    {gText_TutorialSwitchNature, 9},
-    {gText_TutorialSwitchHiddenPower, 10},
-    {gText_TutorialSetEVs, 11},
-    {gText_TutorialLearnMoves, 12},
-    {gText_TutorialHealing, 13},
-    {gText_TutorialLeveling, 14},
-    {gText_TutorialEvolutions, 15},
-    {gText_TutorialExit, 16},
+    {gText_TutorialReadWiki, 1},
+    {gText_TutorialPokemonChanges, 2},
+    {gText_TutorialAbilityChanges, 3},
+    {gText_TutorialMoveChanges, 4},
+    {gText_TutorialQOLChanges, 5},
+    {gText_TutorialBattleChanges, 6},
+    {gText_TutorialBattleUIChanges, 7},
+    {gText_TutorialCatchingPokemon, 8},
+    {gText_TutorialSwitchAbility, 9},
+    {gText_TutorialSwitchNature, 10},
+    {gText_TutorialSwitchHiddenPower, 11},
+    {gText_TutorialSetEVs, 12},
+    {gText_TutorialLearnMoves, 13},
+    {gText_TutorialHealing, 14},
+    {gText_TutorialLeveling, 15},
+    {gText_TutorialEvolutions, 16},
+    {gText_TutorialExit, 17},
 };
 
 // Table of your multichoice sets.
