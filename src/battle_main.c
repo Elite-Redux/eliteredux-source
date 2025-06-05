@@ -4281,7 +4281,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType) {
     return speed;
 }
 
-u16 GetChosenMove(u32 battlerId) {
+MoveEnum GetChosenMove(u32 battlerId) {
     if (gProcessingExtraAttacks) return gQueuedExtraAttackData[0].move;
     if (gRoundStructs[battlerId].noValidMoves)
         return MOVE_STRUGGLE;

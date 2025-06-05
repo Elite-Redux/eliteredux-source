@@ -209,10 +209,9 @@ static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS]
     [START_MENU_ACTION_GUIDE] =
         {
             .title = _("Information"),
-            .description = _("See some in-game,\n"
-                             "changes and tips to\n"
-                             "make your adventure\n"
-                             "easier."),
+            .description = _("In-game guides for\n"
+                             "abilities, features\n"
+                             "and game mechanics."),
             .flag = FLAG_NONE,
         },
     [START_MENU_ACTION_DEXNAV] =

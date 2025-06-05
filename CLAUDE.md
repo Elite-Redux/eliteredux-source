@@ -105,11 +105,16 @@ Proto files are a compilation tool that helps generate some of this data, but de
 
 ## Critical Rules
 
-1. **NEVER autocommit or push to GitHub without explicit approval**
+1. **NEVER autocommit or push to GitHub unless explicitly requested by the user**
 2. **Always use `make clean` when encountering compilation errors**
 3. **Use Python scripts for editing large files (15k+ lines)**
 4. **Test changes thoroughly before committing**
 5. **DO NOT run `make modern` or other build commands** - the output is too large for the context window. Instead, inform the user when they need to build
+6. **ALWAYS consider text length limits** - GBA UI elements have fixed sizes. Keep text concise to prevent overflow:
+   - Start Menu descriptions: ~20 characters per line
+   - Dialog boxes: Check line breaks and total length
+   - Menu items: Keep names short and clear
+   - Test in-game or count characters when editing UI text
 
 ## Important Notes
 
@@ -124,6 +129,7 @@ Detailed documentation about specific systems can be found in the `knowledge/` d
 - **difficulty_system.md** - How the 4-tier difficulty system works
 - **adding_trainers.md** - Guide for adding new trainers and parties
 - **hell_mode_implementation.md** - Process for implementing Hell Mode
+- **wiki_system.md** - In-game Wiki system structure and content editing
 
 ## Memory: Ability and Data Management
 - Abilities are now added in `abilities.cc` and `abilitylist.textproto`, not manually via multiple .c and .h files
