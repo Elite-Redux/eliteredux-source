@@ -46,15 +46,33 @@ cd agbcc
 cd ..
 
 # Build the ROM
-# Replace X with number of CPU cores (e.g., -j24 for 24 cores)
+# Replace X with number of CPU cores (e.g., -j24 for 24 cores, -j10 for Mac M4 Pro)
 # Note: Both 'make' and 'make modern' build with modern GCC - they are equivalent
 make -jX
 # OR
 make modern -jX
 
-# If you encounter compilation errors, clean first:
-make clean
+# macOS Build Instructions (TESTED AND WORKING!)
+# See knowledge/macos_compilation.md for complete guide
+# Key commands:
+xattr -d com.apple.quarantine tools/poryscript/poryscript  # Remove security warning (one-time)
+make mostlyclean  # NEVER use 'make clean' - it removes tools!
+make -j4          # Use -j4 to avoid memory issues with poryscript
+
+# If you encounter compilation errors:
+# Option 1: Use mostlyclean (preserves tools)
+make mostlyclean
 make -jX
+
+# Option 2: Use the provided scripts
+./scripts/clean_build.sh  # Cleans ROM files, keeps tools
+./scripts/smart_build.sh  # Auto-builds tools if needed, then ROM
+./scripts/smart_build.sh 10  # Specify core count
+
+# Option 3: Full clean (removes everything including tools)
+make clean  # This removes tools too - avoid unless necessary
+make tools  # Rebuild tools
+make -jX    # Build ROM
 # Note: 'make clean' may show errors about missing 'clean' targets in some tool subdirectories
 # These errors are harmless - the important ROM files are cleaned successfully
 # Alternative: Use 'make mostlyclean' to avoid the tool cleaning errors entirely
@@ -128,11 +146,19 @@ Proto files are a compilation tool that helps generate some of this data, but de
 
 ## Development Workflow
 
+### Compilation Workflow
+1. **Claude Code should NOT run make commands** - they produce too much output
+2. **User runs builds** and provides error logs if needed
+3. **Claude Code provides**:
+   - Clear instructions on what commands to run
+   - Help interpreting error messages
+   - Fixes for compilation issues
+
 ### Making Game Data Changes
 1. Edit the appropriate `.h` or `.c` file directly
 2. For large files, use Python scripts to make changes
-3. Run `make clean` if encountering errors
-4. Rebuild with `make -jX` or `make modern -jX` (both are equivalent)
+3. Tell user to run `make clean` if errors are expected
+4. Tell user to rebuild with `make -jX` or `make modern -jX` (both are equivalent)
 
 ### Common File Locations
 - **Trainers**: `src/data/trainers.h`, `src/data/trainer_parties.h`
@@ -151,11 +177,18 @@ Proto files are a compilation tool that helps generate some of this data, but de
 ## Critical Rules
 
 1. **NEVER autocommit or push to GitHub unless explicitly requested by the user**
-2. **Always use `make clean` when encountering compilation errors** (ignore harmless 'No rule to make target' errors from tool subdirectories)
+2. **Always use `make mostlyclean` when encountering compilation errors** (NOT `make clean` which removes tools!)
 3. **Use Python scripts for editing large files (15k+ lines)**
 4. **Test changes thoroughly before committing**
-5. **DO NOT run `make` or `make modern` or other build commands** - the output is too large for the context window. Instead, inform the user when they need to build
-6. **ALWAYS consider text length limits** - GBA UI elements have fixed sizes. Keep text concise to prevent overflow:
+5. **DO NOT run `make`, `make modern`, or other compilation commands** - the output is too large for the context window and wastes tokens. Instead:
+   - Tell the user when they need to build and what command to use
+   - Let the user run builds and provide error logs if compilation fails
+   - For small compilation tasks (single tool builds), consider if output will be manageable first
+6. **macOS Build Issues**: If user reports "tools/scaninc/scaninc: No such file or directory":
+   - They used `make clean` instead of `make mostlyclean`
+   - Solution: `make tools` then `make -j4`
+   - Remind them to ALWAYS use `make mostlyclean`
+7. **ALWAYS consider text length limits** - GBA UI elements have fixed sizes. Keep text concise to prevent overflow:
    - Start Menu descriptions: ~20 characters per line
    - Dialog boxes: Check line breaks and total length
    - Menu items: Keep names short and clear
@@ -172,6 +205,7 @@ Proto files are a compilation tool that helps generate some of this data, but de
 ## Knowledge Base
 
 Detailed documentation about specific systems can be found in the `knowledge/` directory:
+- **macos_compilation.md** - Complete guide for building on macOS, including troubleshooting
 - **difficulty_system.md** - How the 4-tier difficulty system works
 - **adding_trainers.md** - Guide for adding new trainers and parties
 - **hell_mode_implementation.md** - Process for implementing Hell Mode
@@ -192,6 +226,12 @@ Detailed documentation about specific systems can be found in the `knowledge/` d
 
 ## Memory: Learning and Knowledge Management
 - When you learn new stuff, especially when you had to search a lot to understand how something works and is connected, don't hesitate to write into CLAUDE.md so next time it will be much faster > like training the AI so it gets better and better!
+- **IMPORTANT**: Create detailed documentation in the `knowledge/` directory for complex topics:
+  - Platform-specific guides (e.g., `macos_compilation.md`)
+  - System implementations (existing: `difficulty_system.md`, `wiki_system.md`, etc.)
+  - Problem solutions and workarounds
+  - This helps future sessions and other developers
+- Update CLAUDE.md with quick references that link to these detailed guides
 
 ## In-Game Wiki System
 
