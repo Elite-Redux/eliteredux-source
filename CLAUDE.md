@@ -13,13 +13,19 @@ cd agbcc
 ./install.sh ../eliteredux-source
 cd ..
 
-# Build with modern GCC (recommended)
+# Build the ROM
 # Replace X with number of CPU cores (e.g., -j24 for 24 cores)
+# Note: Both 'make' and 'make modern' build with modern GCC - they are equivalent
+make -jX
+# OR
 make modern -jX
 
 # If you encounter compilation errors, clean first:
 make clean
-make modern -jX
+make -jX
+# Note: 'make clean' may show errors about missing 'clean' targets in some tool subdirectories
+# These errors are harmless - the important ROM files are cleaned successfully
+# Alternative: Use 'make mostlyclean' to avoid the tool cleaning errors entirely
 
 # Compare build against original ROM
 make compare
@@ -31,7 +37,7 @@ make compare
 make tools
 
 # Clean and rebuild tools
-make clean-tools
+make clean-tools  # May show 'No rule to make target' errors - these are harmless
 make tools
 ```
 
@@ -43,7 +49,8 @@ Many data files in this project are extremely large (e.g., `src/data/trainers.h`
    - Create a Python script to make the necessary changes
    - Run the script and verify the output
    - This approach is more reliable than direct editing
-   - **IMPORTANT**: Put python scripts in the correct folder(s) in tools > create new folders like trainer_tools (we got this already)
+   - **IMPORTANT**: Put python scripts in the `scripts/` directory (not in `tools/`)
+   - Example directories: `scripts/trainer_tools/`, `scripts/wiki_tools/`
 
 2. **Read files strategically**:
    - Use grep/search to find specific sections
@@ -93,7 +100,7 @@ Proto files are a compilation tool that helps generate some of this data, but de
 1. Edit the appropriate `.h` or `.c` file directly
 2. For large files, use Python scripts to make changes
 3. Run `make clean` if encountering errors
-4. Rebuild with `make modern -jX`
+4. Rebuild with `make -jX` or `make modern -jX` (both are equivalent)
 
 ### Common File Locations
 - **Trainers**: `src/data/trainers.h`, `src/data/trainer_parties.h`
@@ -103,13 +110,19 @@ Proto files are a compilation tool that helps generate some of this data, but de
 - **Items**: Item data headers
 - **Strings**: `src/strings.c` and various other locations
 
+### Script Organization
+- **Python Scripts**: All Python scripts go in `scripts/` directory
+- **Trainer Scripts**: `scripts/trainer_tools/`
+- **Wiki Scripts**: `scripts/wiki_tools/`
+- **Never put Python scripts in `tools/`** - that directory is only for C programs that need compilation
+
 ## Critical Rules
 
 1. **NEVER autocommit or push to GitHub unless explicitly requested by the user**
-2. **Always use `make clean` when encountering compilation errors**
+2. **Always use `make clean` when encountering compilation errors** (ignore harmless 'No rule to make target' errors from tool subdirectories)
 3. **Use Python scripts for editing large files (15k+ lines)**
 4. **Test changes thoroughly before committing**
-5. **DO NOT run `make modern` or other build commands** - the output is too large for the context window. Instead, inform the user when they need to build
+5. **DO NOT run `make` or `make modern` or other build commands** - the output is too large for the context window. Instead, inform the user when they need to build
 6. **ALWAYS consider text length limits** - GBA UI elements have fixed sizes. Keep text concise to prevent overflow:
    - Start Menu descriptions: ~20 characters per line
    - Dialog boxes: Check line breaks and total length
@@ -118,10 +131,11 @@ Proto files are a compilation tool that helps generate some of this data, but de
 
 ## Important Notes
 
-- Always use `make modern -jX` for development (better warnings/errors)
+- Both `make -jX` and `make modern -jX` are equivalent and build with modern GCC (better warnings/errors)
 - The `upcoming` branch is the active development branch
 - Many files are auto-generated - be careful about which files to edit
 - When in doubt about file size, check before attempting to read/edit directly
+- The build system attempts to compile all directories under `tools/` - use `scripts/` for Python scripts instead
 
 ## Knowledge Base
 
@@ -153,7 +167,7 @@ The in-game wiki provides comprehensive help content accessible from the Start M
 
 ### Wiki Content Structure
 - **Content Source**: `docs/er-wiki-google-docs.md` - Markdown file containing all wiki content
-- **Parser Tool**: `tools/wiki_tools/parse_wiki_markdown.py` - Converts markdown to protobuf format
+- **Parser Tool**: `scripts/wiki_tools/parse_wiki_markdown.py` - Converts markdown to protobuf format
 - **Protobuf Data**: `proto/HelpArticles.textproto` - Generated wiki content in protobuf format
 - **Generated Code**: `include/generated/data/text/help_articles.h` - C header with final wiki data
 
@@ -166,7 +180,7 @@ The in-game wiki provides comprehensive help content accessible from the Start M
 
 2. Run the parser:
    ```bash
-   python3 tools/wiki_tools/parse_wiki_markdown.py
+   python3 scripts/wiki_tools/parse_wiki_markdown.py
    ```
 
 3. Rebuild the codegen tools:
