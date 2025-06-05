@@ -2,6 +2,26 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Quick Commands
+
+### Git Sync Tool
+```bash
+# Smart git sync - automatically pulls, commits, and pushes changes
+scripts/gs
+# OR
+python3 scripts/gitsync.py
+
+# What it does:
+# 1. Checks git status
+# 2. Stashes uncommitted changes if needed  
+# 3. Pulls and rebases latest changes
+# 4. Re-applies stashed changes
+# 5. Creates smart commit with descriptive message
+# 6. Pushes to remote
+
+# The tool handles common scenarios intelligently and provides clear feedback
+```
+
 ## Build Commands
 
 ### Building the ROM

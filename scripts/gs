@@ -1,0 +1,3 @@
+#!/bin/bash
+# Quick alias for git sync
+python3 "$(dirname "$0")/gitsync.py" "$@"
