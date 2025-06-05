@@ -4,23 +4,35 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Quick Commands
 
-### Git Sync Tool
-```bash
-# Smart git sync - automatically pulls, commits, and pushes changes
-scripts/gs
-# OR
-python3 scripts/gitsync.py
-
-# What it does:
-# 1. Checks git status
-# 2. Stashes uncommitted changes if needed  
-# 3. Pulls and rebases latest changes
-# 4. Re-applies stashed changes
-# 5. Creates smart commit with descriptive message
-# 6. Pushes to remote
-
-# The tool handles common scenarios intelligently and provides clear feedback
+### Git Sync (Claude Code Slash Command) - RECOMMENDED
 ```
+/project:git-sync
+```
+This AI-powered slash command will:
+- Analyze your actual code changes to understand what was modified
+- Create intelligent, contextual commit messages (not just file lists)
+- Handle pull, commit, and push operations automatically
+- Use conventional commit format (feat:, fix:, docs:, etc.) when appropriate
+
+Example commit messages the AI might generate:
+- `feat: Add Wiki tutorial entry to Littleroot NPC after Talk to Nurse Joy`
+- `fix: Correct tutorial menu case numbering after Wiki insertion`
+- `refactor: Move trainer tools from tools/ to scripts/ directory`
+
+You also have a personal version available across all projects:
+```
+/user:git-sync
+```
+
+### Build ROM (Claude Code Slash Command)
+```
+/project:build
+```
+Intelligently builds the ROM, handling common issues like:
+- Running `make clean` if needed
+- Adjusting CPU core count
+- Providing specific error guidance
+- Confirming successful builds
 
 ## Build Commands
 
