@@ -174,21 +174,35 @@ Proto files are a compilation tool that helps generate some of this data, but de
 - **Wiki Scripts**: `scripts/wiki_tools/`
 - **Never put Python scripts in `tools/`** - that directory is only for C programs that need compilation
 
+### Project Planning and Organization
+- **Plans Directory**: Complex tasks and projects should have planning documents in `plans/`
+- **Format**: Use markdown files (`.md`) for planning documents
+- **Organization**: For large multi-file projects, create a subfolder (e.g., `plans/extended_ability_descriptions/`)
+- **Master Plan**: Large projects should have a `MASTER_PLAN.md` that links to other documents
+- **Content**: Include overview, requirements, implementation steps, and progress tracking
+- **When to use**: For any multi-step project that requires coordination or tracking
+- **Continuation**: When told to "continue working on X", check `plans/X/` folder first
+
 ## Critical Rules
 
 1. **NEVER autocommit or push to GitHub unless explicitly requested by the user**
-2. **Always use `make mostlyclean` when encountering compilation errors** (NOT `make clean` which removes tools!)
-3. **Use Python scripts for editing large files (15k+ lines)**
-4. **Test changes thoroughly before committing**
-5. **DO NOT run `make`, `make modern`, or other compilation commands** - the output is too large for the context window and wastes tokens. Instead:
+2. **NEVER hallucinate or make up facts** - When writing game content (ability descriptions, wiki entries, etc.):
+   - Look up exact mechanics in the code (abilities.cc, battle scripts, etc.)
+   - Verify percentages, damage calculations, and interactions
+   - If unsure about an effect, search the codebase first
+   - Player-facing text must be 100% accurate
+3. **Always use `make mostlyclean` when encountering compilation errors** (NOT `make clean` which removes tools!)
+4. **Use Python scripts for editing large files (15k+ lines)**
+5. **Test changes thoroughly before committing**
+6. **DO NOT run `make`, `make modern`, or other compilation commands** - the output is too large for the context window and wastes tokens. Instead:
    - Tell the user when they need to build and what command to use
    - Let the user run builds and provide error logs if compilation fails
    - For small compilation tasks (single tool builds), consider if output will be manageable first
-6. **macOS Build Issues**: If user reports "tools/scaninc/scaninc: No such file or directory":
+7. **macOS Build Issues**: If user reports "tools/scaninc/scaninc: No such file or directory":
    - They used `make clean` instead of `make mostlyclean`
    - Solution: `make tools` then `make -j4`
    - Remind them to ALWAYS use `make mostlyclean`
-7. **ALWAYS consider text length limits** - GBA UI elements have fixed sizes. Keep text concise to prevent overflow:
+8. **ALWAYS consider text length limits** - GBA UI elements have fixed sizes. Keep text concise to prevent overflow:
    - Start Menu descriptions: ~20 characters per line
    - Dialog boxes: Check line breaks and total length
    - Menu items: Keep names short and clear

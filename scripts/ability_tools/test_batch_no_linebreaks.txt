@@ -1,0 +1,51 @@
+# Test Batch - Extended Ability Descriptions (No Manual Line Breaks)
+
+Since codegen handles automatic text wrapping, we can write continuous text without \n.
+
+## Weather Abilities (High Priority)
+
+### ABILITY_DRIZZLE
+Current: "Summons rain on entry. Lasts 8 turns."
+Extended: "Summons rain on entry. Lasts 8 turns. Rain increases Water-type move power by 50% and decreases Fire-type move power by 50%. Thunder and Hurricane have 100% accuracy. Removes harsh sunlight and sandstorm if active."
+
+### ABILITY_DROUGHT  
+Current: "Summons harsh sun on entry. Lasts 8 turns."
+Extended: "Summons harsh sun on entry. Lasts 8 turns. Sun increases Fire-type move power by 50% and decreases Water-type move power by 50%. Solar Beam and Solar Blade charge instantly. Growth boosts Attack and Special Attack by 2 stages. Synthesis, Morning Sun, and Moonlight heal 2/3 max HP."
+
+### ABILITY_SAND_STREAM
+Current: "Summons a sandstorm on entry. Lasts 8 turns."
+Extended: "Summons a sandstorm on entry. Lasts 8 turns. Sandstorm damages all Pokemon except Rock, Ground, and Steel types for 1/16 max HP each turn. Rock-type Pokemon receive a 50% Special Defense boost during sandstorm. Shore Up heals 2/3 max HP in sandstorm."
+
+## Stat Modification Abilities
+
+### ABILITY_INTIMIDATE
+Current: "Lowers foes' Atk by one stage on entry."
+Extended: "Lowers foes' Attack by one stage on entry. Affects all opposing Pokemon in Double Battles. Blocked by Clear Body, White Smoke, Hyper Cutter, Full Metal Body, and similar abilities. Inner Focus also blocks this effect. Own Tempo prevents the stat drop from Intimidate."
+
+### ABILITY_SPEED_BOOST
+Current: "Raises own Speed by one stage after every turn."
+Extended: "Raises own Speed by one stage after every turn. Activates at the end of each turn, including the first turn this Pokemon is active. Speed can increase up to +6 stages maximum. Baton Pass transfers accumulated Speed boosts to the recipient. Protect and Detect do not prevent Speed Boost from activating."
+
+## Damage Calculation
+
+### ABILITY_HUGE_POWER
+Current: "Doubles own Attack stat. Boosts raw stat, not base stat."
+Extended: "Doubles own Attack stat. Boosts raw stat, not base stat. This effectively doubles physical damage output. The boost applies after all other stat modifications including Choice Band, stat stages, and burn. Does not affect Special Attack. Skill Swap can transfer this ability's effect."
+
+### ABILITY_ADAPTABILITY
+Current: "STAB boost increased from 1.5x to 2x."
+Extended: "STAB boost increased from 1.5x to 2x. When using moves matching the user's type, damage is multiplied by 2x instead of the normal 1.5x. Dual-typed Pokemon benefit on moves matching either type. Flying Press gains boosted STAB if the user is Flying or Fighting type. Type-changing moves like Hidden Power still receive STAB if they match the user's type."
+
+## Elite Redux Custom
+
+### ABILITY_BATTLE_ARMOR
+Current: "Immune to critical hits. Takes 20% less damage from attacks."
+Extended: "Immune to critical hits. Takes 20% less damage from attacks. Completely prevents critical hits from landing regardless of the opponent's critical hit ratio or moves like Storm Throw. The 20% damage reduction applies to all direct damage moves but does not reduce damage from status conditions, weather, entry hazards, or recoil. Stacks multiplicatively with other damage reduction effects."
+
+### ABILITY_DAMP
+Current: "Makes foe Water-type on contact. Also works on offense."
+Extended: "Makes foe Water-type on contact. Also works on offense. Changes the target to pure Water-type when making contact, either when attacking with a contact move or being hit by a contact move. Overrides all existing types including dual types. The type change is permanent until the target switches out. Great synergy with Electric and Grass moves. Type change occurs before damage calculation."
+
+### ABILITY_LIMBER
+Current: "Immune to paralysis. Takes 50% less recoil damage."
+Extended: "Immune to paralysis. Takes 50% less recoil damage. Cannot be paralyzed by any means including Thunder Wave, Static, or Effect Spore. If paralyzed when gaining this ability, paralysis is cured. Recoil damage from moves like Double-Edge, Flare Blitz, Head Smash, and Wild Charge is halved. Does not affect Struggle recoil, Life Orb damage, or other forms of self-damage like Curse or Substitute."
