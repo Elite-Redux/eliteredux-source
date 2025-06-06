@@ -2960,8 +2960,8 @@ static void PrintMoveReplaceTab(void)
                 hasMonMove = TRUE;
         }
 
-        if (moveNum == MOVE_SKETCH && !hasMonMove && getLearnsetMon(sMonSummaryScreen->summary.species2) != SPECIES_SMEARGLE) {
-            int k, level = sMonSummaryScreen->summary.level, personality = sMonSummaryScreen->summary.pid, species = getLearnsetMon(sMonSummaryScreen->summary.species2);
+        if (moveNum == MOVE_SKETCH && !hasMonMove && sMonSummaryScreen->summary.species2 != SPECIES_SMEARGLE) {
+            int k, level = sMonSummaryScreen->summary.level, personality = sMonSummaryScreen->summary.pid, species = sMonSummaryScreen->summary.species2;
             int foundAll = FALSE;
             u16 moves[4];
             ARRAY_COPY(moves, sMonSummaryScreen->summary.moves)
@@ -5083,7 +5083,9 @@ static void BufferMonPokemonExpandedAbilityAndInnates(void)
 
     // Main Ability Description
     // TODO: Integrate with codegen extended descriptions
-    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, _("Extended ability descriptions\ncoming soon!\n\nThis feature will show detailed\ninformation about abilities."));
+    // Temporary placeholder text for extended descriptions
+    static const u8 sExtendedDescPlaceholder[] = _("Extended ability descriptions\ncoming soon!\n\nThis feature will show detailed\ninformation about abilities.");
+    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sExtendedDescPlaceholder);
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
     
     ScheduleBgCopyTilemapToVram(0);
