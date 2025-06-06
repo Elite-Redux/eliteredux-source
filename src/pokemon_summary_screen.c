@@ -51,8 +51,8 @@
 #include "constants/region_map_sections.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
-#include "constants/abilities.h"
 #include "generated/constants/abilities.h"
+#include "abilities.hh"
 #include "constants/battle_move_effects.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
@@ -5082,10 +5082,8 @@ static void BufferMonPokemonExpandedAbilityAndInnates(void)
     PrintTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, offset, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
 
 	// Main Ability Description
-    if(gAbilityTextData[abilityToShow].hasBeenDefined == TRUE)
-	    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityTextData[abilityToShow].expandedDescription);
-    else
-	    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilityToShow]);
+    // TODO: Integrate with codegen extended descriptions
+    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, _("Extended ability descriptions\ncoming soon!\n\nThis feature will show detailed\ninformation about abilities."));
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
     
     ScheduleBgCopyTilemapToVram(0);
@@ -5151,7 +5149,7 @@ static void PrintAbilityDetails(u16 abilityId, u8 *x, u8 *y, const u8 *title, u8
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, *x, *y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
 
     if (!unlockLevel)
-        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilityId]);
+        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilityId].description);
     else{
         ConvertIntToDecimalStringN(gStringVar1, unlockLevel, STR_CONV_MODE_LEFT_ALIGN, 3);
         StringExpandPlaceholders(gStringVar4, sText_InnateUnlock);

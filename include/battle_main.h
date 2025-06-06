@@ -124,8 +124,6 @@ extern const struct OamData gOamData_BattleSpritePlayerSide;
 extern const u8 gTypeNames[NUMBER_OF_MON_TYPES][TYPE_NAME_LENGTH + 1];
 extern const struct TrainerMoney gTrainerMoneyTable[];
 extern const struct TrainerBall gTrainerBallTable[];
-extern const u8 *const gAbilityDescriptionPointers[];
-extern const struct AbilityTextData gAbilityTextData[];
 
 extern const u8 gStatusConditionString_PoisonJpn[8];
 extern const u8 gStatusConditionString_SleepJpn[8];
