@@ -75,6 +75,7 @@
 #include "util.h"
 #include "wild_encounter.h"
 #include "window.h"
+#include "constants/abilities.h"
 
 extern struct MusicPlayerInfo gMPlayInfo_SE1;
 extern struct MusicPlayerInfo gMPlayInfo_SE2;
