@@ -53,7 +53,7 @@
 #include "constants/songs.h"
 #include "generated/constants/abilities.h"
 #include "abilities.hh"
-#include "constants/battle_move_effects.h"
+#include "generated/constants/battle_move_effects.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
 #include "recommended_set_struct.h"
