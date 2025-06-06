@@ -2678,7 +2678,7 @@ static void GenerateMoveReplaceList(u8 keyPress) {
     sMonSummaryScreen->numMenuChoices = 0;
     newMove = MOVE_NONE;
 
-    species     = getLearnsetMon(sMonSummaryScreen->summary.species2);
+    species     = sMonSummaryScreen->summary.species2;
     level       = sMonSummaryScreen->summary.level;
     personality = sMonSummaryScreen->summary.pid;
 
@@ -5081,7 +5081,7 @@ static void BufferMonPokemonExpandedAbilityAndInnates(void)
     offset = GetStringCenterAlignXOffset(font, gStringVar4, ABILITY_NAME_COLUMN_SIZE);
     PrintTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, offset, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
 
-	// Main Ability Description
+    // Main Ability Description
     // TODO: Integrate with codegen extended descriptions
     DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, _("Extended ability descriptions\ncoming soon!\n\nThis feature will show detailed\ninformation about abilities."));
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
@@ -5204,7 +5204,7 @@ const u8 gText_Dusk[] = _("(Dusk Form)");
 const u8 gText_X[] = _("X");
 const u8 gText_Y[] = _("Y");
 
-const u8* SaveSpeciesWithSurname(u16 species) {
+const u8* SaveSpeciesWithSurname(SpeciesEnum species) {
     if (species == SPECIES_CHARIZARD_MEGA_X || species == SPECIES_MEWTWO_MEGA_X) { //Mega X
         StringCopy(gStringVar1, gText_Mega);
         StringCopy(gStringVar2, gSpeciesNames[species]);
@@ -5227,11 +5227,12 @@ const u8* SaveSpeciesWithSurname(u16 species) {
         StringCopy(gStringVar2, gSpeciesNames[species]);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else if (species >= CUSTOM_MEGA_START && species <= LAST_CUSTOM_MEGA) { //Custom Mega
-        StringCopy(gStringVar1, gText_Mega);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    }
+    // TODO: Handle custom mega species range
+    // else if (species >= CUSTOM_MEGA_START && species <= LAST_CUSTOM_MEGA) { //Custom Mega
+    //     StringCopy(gStringVar1, gText_Mega);
+    //     StringCopy(gStringVar2, gSpeciesNames[species]);
+    //     StringExpandPlaceholders(gStringVar4, gText_Subname);
+    // }
     else if (species == SPECIES_NECROZMA_ULTRA) { //Ultra Necrozma
         StringCopy(gStringVar1, gText_Ultra);
         StringCopy(gStringVar2, gSpeciesNames[species]);
@@ -5710,10 +5711,11 @@ static void BufferMonPokemonEvolutionData(void)
     u8 times = 0;
     u16 pokeball = GetMonData(mon, MON_DATA_POKEBALL, NULL);
     u16 actualSpecies = species;
-    u16 formSpecies = GetFormShiftSpecies(species);
+    // TODO: Handle form species for evolutions
+    // u16 formSpecies = GetFormShiftSpecies(species);
 	y = 4;
 
-    if (formSpecies) species = formSpecies;
+    // if (formSpecies) species = formSpecies;
 
     //Calculate number of possible direct evolutions (e.g. Eevee has 8 but torchic has 1)
     for (i = 0; i < EVOS_PER_MON; i++)
