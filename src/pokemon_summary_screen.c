@@ -5193,98 +5193,23 @@ const u8 gText_EVO_MOVE_MEGA_EVOLUTION[] = _("Mega Evolve knowing\n{STR_VAR_2}")
 
 const u8 gText_Subname[] = _("{STR_VAR_1} {STR_VAR_2}");
 const u8 gText_Subname2[] = _("{STR_VAR_1} {STR_VAR_2} {STR_VAR_3}");
-const u8 gText_Mega[] = _("Mega");
-const u8 gText_Primal[] = _("Primal");
-const u8 gText_Ultra[] = _("Ultra");
-const u8 gText_Alolan[] = _("Alolan");
-const u8 gText_Galarian[] = _("Galarian");
-const u8 gText_Hisuian[] = _("Hisuian");
-const u8 gText_Redux[] = _("Redux");
+// These strings are already defined in pokemon.c
+extern const u8 gText_Mega[];
+extern const u8 gText_Primal[];
+extern const u8 gText_Ultra[];
+extern const u8 gText_Alolan[];
+extern const u8 gText_Galarian[];
+extern const u8 gText_Hisuian[];
+extern const u8 gText_Redux[];
+extern const u8 gText_X[];
+extern const u8 gText_Y[];
+
+// Local strings for this file
 const u8 gText_Midday[] = _("(Midday Form)");
 const u8 gText_Midnight[] = _("(Midnight Form)");
 const u8 gText_Dusk[] = _("(Dusk Form)");
-const u8 gText_X[] = _("X");
-const u8 gText_Y[] = _("Y");
 
-const u8* SaveSpeciesWithSurname(SpeciesEnum species) {
-    if (species == SPECIES_CHARIZARD_MEGA_X || species == SPECIES_MEWTWO_MEGA_X) { //Mega X
-        StringCopy(gStringVar1, gText_Mega);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
-        StringCopy(gStringVar3, gText_X);
-        StringExpandPlaceholders(gStringVar4, gText_Subname2);
-    }
-    else if (species == SPECIES_CHARIZARD_MEGA_Y || species == SPECIES_MEWTWO_MEGA_Y) { //Mega Y
-        StringCopy(gStringVar1, gText_Mega);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
-        StringCopy(gStringVar3, gText_Y);
-        StringExpandPlaceholders(gStringVar4, gText_Subname2);
-    }
-    else if (species >= SPECIES_VENUSAUR_MEGA && species <= SPECIES_RAYQUAZA_MEGA) { //Megas
-        StringCopy(gStringVar1, gText_Mega);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    }
-    else if (species == SPECIES_KYOGRE_PRIMAL || species == SPECIES_GROUDON_PRIMAL || species == SPECIES_CASCOON_PRIMAL) { //Primals
-        StringCopy(gStringVar1, gText_Primal);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    }
-    // TODO: Handle custom mega species range
-    // else if (species >= CUSTOM_MEGA_START && species <= LAST_CUSTOM_MEGA) { //Custom Mega
-    //     StringCopy(gStringVar1, gText_Mega);
-    //     StringCopy(gStringVar2, gSpeciesNames[species]);
-    //     StringExpandPlaceholders(gStringVar4, gText_Subname);
-    // }
-    else if (species == SPECIES_NECROZMA_ULTRA) { //Ultra Necrozma
-        StringCopy(gStringVar1, gText_Ultra);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    }
-    else if (species >= SPECIES_RATTATA_ALOLAN && species <= SPECIES_MAROWAK_ALOLAN) { //Alolan
-        StringCopy(gStringVar1, gText_Alolan);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    }
-    else if (species >= SPECIES_MEOWTH_GALARIAN && species <= SPECIES_STUNFISK_GALARIAN) { //Galarian
-        StringCopy(gStringVar1, gText_Galarian);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    }
-    else if (species >= SPECIES_QWILFISH_HISUIAN && species <= SPECIES_ZOROARK_HISUIAN) { //Hisuian
-        StringCopy(gStringVar1, gText_Hisuian);
-        StringCopy(gStringVar2, gSpeciesNames[species]);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    }
-    else if (species >= SPECIES_INFERNAPE_REDUX && species <= SPECIES_SCIZOR_REDUX) { //Redux
-        StringCopy(gStringVar2, gText_Redux);
-        StringCopy(gStringVar1, gSpeciesNames[species]);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    }
-    else if (species == SPECIES_LYCANROC) { //Midday Lycanroc
-        StringCopy(gStringVar1, gSpeciesNames[species]);
-        StringCopy(gStringVar2, gText_Midday);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    }
-    else if (species == SPECIES_LYCANROC_MIDNIGHT) { //Midnight Lycanroc
-        StringCopy(gStringVar1, gSpeciesNames[species]);
-        StringCopy(gStringVar2, gText_Midnight);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    }
-    else if (species == SPECIES_LYCANROC_DUSK) { //Dusk Lycanroc
-        StringCopy(gStringVar1, gSpeciesNames[species]);
-        StringCopy(gStringVar2, gText_Dusk);
-        StringExpandPlaceholders(gStringVar4, gText_Subname);
-    }
-    else {//Normal
-        const u8* longName = GetSpeciesLongName(species);
-        if (longName)
-            StringCopy(gStringVar4, longName);
-        else
-            StringCopy(gStringVar4, gSpeciesNames[species]);
-    }
-
-    return gStringVar4;
-}
+// SaveSpeciesWithSurname is already defined in pokemon.c
 
 const u8 gText_Eeveevolution[] = _("Any Eeveelution");
 static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 personality) {
@@ -5363,6 +5288,7 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
         break;
     case EVO_ITEM:
         //Target Species
+        targetSpecies = gEvolutionTable[species][i].targetSpecies;
         SaveSpeciesWithSurname(targetSpecies);
         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         //Evolution Method
