@@ -373,7 +373,7 @@ static void UpdateTypeIcon(u16 move);
 static u8 ShowMoveTypeIcon(u16 move);
 
 // const rom data
-#include "data/text/move_descriptions.h"
+#include "generated/data/text/move_descriptions.h"
 #include "data/text/nature_names.h"
 #include "data/text/characteristics.h"
 #include "data/text/met_locations.h"
