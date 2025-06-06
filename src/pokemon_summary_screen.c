@@ -46,7 +46,7 @@
 #include "constants/battle_config.h"
 #include "constants/flags.h"
 #include "constants/items.h"
-#include "constants/moves.h"
+#include "generated/constants/moves.h"
 #include "constants/party_menu.h"
 #include "constants/region_map_sections.h"
 #include "constants/rgb.h"
