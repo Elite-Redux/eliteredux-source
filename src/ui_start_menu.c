@@ -208,7 +208,7 @@ static const struct StartMenuActionData StartMenuActions[NUM_START_MENU_ACTIONS]
         },
     [START_MENU_ACTION_GUIDE] =
         {
-            .title = _("Information"),
+            .title = _("Wiki"),
             .description = _("In-game guides for\n"
                              "abilities, features\n"
                              "and game mechanics."),

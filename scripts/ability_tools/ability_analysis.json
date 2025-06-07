@@ -1,0 +1,47 @@
+{
+  "total_abilities": 867,
+  "sentence_patterns": {
+    "conditional": 58,
+    "article_start": 10,
+    "action_verb_start": 66
+  },
+  "length_stats": {
+    "min": 14,
+    "max": 67,
+    "avg": 46.02652825836217,
+    "common_range": "38-56"
+  },
+  "common_phrases": {
+    "move": 307,
+    "type": 125,
+    "boost": 125,
+    "damage": 101,
+    "stat": 84,
+    "turn": 60,
+    "immune": 39,
+    "power": 36,
+    "STAB": 29,
+    "resist": 9,
+    "reduce": 8,
+    "increase": 5,
+    "prevent": 3,
+    "super effective": 3,
+    "decrease": 1
+  },
+  "number_formats": {
+    "1": 256,
+    "5x": 59,
+    "2x": 37,
+    "30%": 34,
+    "3x": 34,
+    "20%": 33,
+    "50%": 33,
+    "2": 32,
+    "3": 26,
+    "8": 20
+  },
+  "voice_analysis": {
+    "active": 790,
+    "passive": 77
+  }
+}

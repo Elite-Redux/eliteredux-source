@@ -2,6 +2,38 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Quick Commands
+
+### Git Sync (Claude Code Slash Command) - RECOMMENDED
+```
+/project:git-sync
+```
+This AI-powered slash command will:
+- Analyze your actual code changes to understand what was modified
+- Create intelligent, contextual commit messages (not just file lists)
+- Handle pull, commit, and push operations automatically
+- Use conventional commit format (feat:, fix:, docs:, etc.) when appropriate
+
+Example commit messages the AI might generate:
+- `feat: Add Wiki tutorial entry to Littleroot NPC after Talk to Nurse Joy`
+- `fix: Correct tutorial menu case numbering after Wiki insertion`
+- `refactor: Move trainer tools from tools/ to scripts/ directory`
+
+You also have a personal version available across all projects:
+```
+/user:git-sync
+```
+
+### Build ROM (Claude Code Slash Command)
+```
+/project:build
+```
+Intelligently builds the ROM, handling common issues like:
+- Running `make clean` if needed
+- Adjusting CPU core count
+- Providing specific error guidance
+- Confirming successful builds
+
 ## Build Commands
 
 ### Building the ROM
@@ -13,13 +45,37 @@ cd agbcc
 ./install.sh ../eliteredux-source
 cd ..
 
-# Build with modern GCC (recommended)
-# Replace X with number of CPU cores (e.g., -j24 for 24 cores)
+# Build the ROM
+# Replace X with number of CPU cores (e.g., -j24 for 24 cores, -j10 for Mac M4 Pro)
+# Note: Both 'make' and 'make modern' build with modern GCC - they are equivalent
+make -jX
+# OR
 make modern -jX
 
-# If you encounter compilation errors, clean first:
-make clean
-make modern -jX
+# macOS Build Instructions (TESTED AND WORKING!)
+# See knowledge/macos_compilation.md for complete guide
+# Key commands:
+xattr -d com.apple.quarantine tools/poryscript/poryscript  # Remove security warning (one-time)
+make mostlyclean  # NEVER use 'make clean' - it removes tools!
+make -j4          # Use -j4 to avoid memory issues with poryscript
+
+# If you encounter compilation errors:
+# Option 1: Use mostlyclean (preserves tools)
+make mostlyclean
+make -jX
+
+# Option 2: Use the provided scripts
+./scripts/clean_build.sh  # Cleans ROM files, keeps tools
+./scripts/smart_build.sh  # Auto-builds tools if needed, then ROM
+./scripts/smart_build.sh 10  # Specify core count
+
+# Option 3: Full clean (removes everything including tools)
+make clean  # This removes tools too - avoid unless necessary
+make tools  # Rebuild tools
+make -jX    # Build ROM
+# Note: 'make clean' may show errors about missing 'clean' targets in some tool subdirectories
+# These errors are harmless - the important ROM files are cleaned successfully
+# Alternative: Use 'make mostlyclean' to avoid the tool cleaning errors entirely
 
 # Compare build against original ROM
 make compare
@@ -31,7 +87,7 @@ make compare
 make tools
 
 # Clean and rebuild tools
-make clean-tools
+make clean-tools  # May show 'No rule to make target' errors - these are harmless
 make tools
 ```
 
@@ -43,7 +99,8 @@ Many data files in this project are extremely large (e.g., `src/data/trainers.h`
    - Create a Python script to make the necessary changes
    - Run the script and verify the output
    - This approach is more reliable than direct editing
-   - **IMPORTANT**: Put python scripts in the correct folder(s) in tools > create new folders like trainer_tools (we got this already)
+   - **IMPORTANT**: Put python scripts in the `scripts/` directory (not in `tools/`)
+   - Example directories: `scripts/trainer_tools/`, `scripts/wiki_tools/`
 
 2. **Read files strategically**:
    - Use grep/search to find specific sections
@@ -89,11 +146,19 @@ Proto files are a compilation tool that helps generate some of this data, but de
 
 ## Development Workflow
 
+### Compilation Workflow
+1. **Claude Code should NOT run make commands** - they produce too much output
+2. **User runs builds** and provides error logs if needed
+3. **Claude Code provides**:
+   - Clear instructions on what commands to run
+   - Help interpreting error messages
+   - Fixes for compilation issues
+
 ### Making Game Data Changes
 1. Edit the appropriate `.h` or `.c` file directly
 2. For large files, use Python scripts to make changes
-3. Run `make clean` if encountering errors
-4. Rebuild with `make modern -jX`
+3. Tell user to run `make clean` if errors are expected
+4. Tell user to rebuild with `make -jX` or `make modern -jX` (both are equivalent)
 
 ### Common File Locations
 - **Trainers**: `src/data/trainers.h`, `src/data/trainer_parties.h`
@@ -103,14 +168,41 @@ Proto files are a compilation tool that helps generate some of this data, but de
 - **Items**: Item data headers
 - **Strings**: `src/strings.c` and various other locations
 
+### Script Organization
+- **Python Scripts**: All Python scripts go in `scripts/` directory
+- **Trainer Scripts**: `scripts/trainer_tools/`
+- **Wiki Scripts**: `scripts/wiki_tools/`
+- **Never put Python scripts in `tools/`** - that directory is only for C programs that need compilation
+
+### Project Planning and Organization
+- **Plans Directory**: Complex tasks and projects should have planning documents in `plans/`
+- **Format**: Use markdown files (`.md`) for planning documents
+- **Organization**: For large multi-file projects, create a subfolder (e.g., `plans/extended_ability_descriptions/`)
+- **Master Plan**: Large projects should have a `MASTER_PLAN.md` that links to other documents
+- **Content**: Include overview, requirements, implementation steps, and progress tracking
+- **When to use**: For any multi-step project that requires coordination or tracking
+- **Continuation**: When told to "continue working on X", check `plans/X/` folder first
+
 ## Critical Rules
 
 1. **NEVER autocommit or push to GitHub unless explicitly requested by the user**
-2. **Always use `make clean` when encountering compilation errors**
-3. **Use Python scripts for editing large files (15k+ lines)**
-4. **Test changes thoroughly before committing**
-5. **DO NOT run `make modern` or other build commands** - the output is too large for the context window. Instead, inform the user when they need to build
-6. **ALWAYS consider text length limits** - GBA UI elements have fixed sizes. Keep text concise to prevent overflow:
+2. **NEVER hallucinate or make up facts** - When writing game content (ability descriptions, wiki entries, etc.):
+   - Look up exact mechanics in the code (abilities.cc, battle scripts, etc.)
+   - Verify percentages, damage calculations, and interactions
+   - If unsure about an effect, search the codebase first
+   - Player-facing text must be 100% accurate
+3. **Always use `make mostlyclean` when encountering compilation errors** (NOT `make clean` which removes tools!)
+4. **Use Python scripts for editing large files (15k+ lines)**
+5. **Test changes thoroughly before committing**
+6. **DO NOT run `make`, `make modern`, or other compilation commands** - the output is too large for the context window and wastes tokens. Instead:
+   - Tell the user when they need to build and what command to use
+   - Let the user run builds and provide error logs if compilation fails
+   - For small compilation tasks (single tool builds), consider if output will be manageable first
+7. **macOS Build Issues**: If user reports "tools/scaninc/scaninc: No such file or directory":
+   - They used `make clean` instead of `make mostlyclean`
+   - Solution: `make tools` then `make -j4`
+   - Remind them to ALWAYS use `make mostlyclean`
+8. **ALWAYS consider text length limits** - GBA UI elements have fixed sizes. Keep text concise to prevent overflow:
    - Start Menu descriptions: ~20 characters per line
    - Dialog boxes: Check line breaks and total length
    - Menu items: Keep names short and clear
@@ -118,14 +210,16 @@ Proto files are a compilation tool that helps generate some of this data, but de
 
 ## Important Notes
 
-- Always use `make modern -jX` for development (better warnings/errors)
+- Both `make -jX` and `make modern -jX` are equivalent and build with modern GCC (better warnings/errors)
 - The `upcoming` branch is the active development branch
 - Many files are auto-generated - be careful about which files to edit
 - When in doubt about file size, check before attempting to read/edit directly
+- The build system attempts to compile all directories under `tools/` - use `scripts/` for Python scripts instead
 
 ## Knowledge Base
 
 Detailed documentation about specific systems can be found in the `knowledge/` directory:
+- **macos_compilation.md** - Complete guide for building on macOS, including troubleshooting
 - **difficulty_system.md** - How the 4-tier difficulty system works
 - **adding_trainers.md** - Guide for adding new trainers and parties
 - **hell_mode_implementation.md** - Process for implementing Hell Mode
@@ -146,3 +240,45 @@ Detailed documentation about specific systems can be found in the `knowledge/` d
 
 ## Memory: Learning and Knowledge Management
 - When you learn new stuff, especially when you had to search a lot to understand how something works and is connected, don't hesitate to write into CLAUDE.md so next time it will be much faster > like training the AI so it gets better and better!
+- **IMPORTANT**: Create detailed documentation in the `knowledge/` directory for complex topics:
+  - Platform-specific guides (e.g., `macos_compilation.md`)
+  - System implementations (existing: `difficulty_system.md`, `wiki_system.md`, etc.)
+  - Problem solutions and workarounds
+  - This helps future sessions and other developers
+- Update CLAUDE.md with quick references that link to these detailed guides
+
+## In-Game Wiki System
+
+The in-game wiki provides comprehensive help content accessible from the Start Menu or during battles (L button by default).
+
+### Wiki Content Structure
+- **Content Source**: `docs/er-wiki-google-docs.md` - Markdown file containing all wiki content
+- **Parser Tool**: `scripts/wiki_tools/parse_wiki_markdown.py` - Converts markdown to protobuf format
+- **Protobuf Data**: `proto/HelpArticles.textproto` - Generated wiki content in protobuf format
+- **Generated Code**: `include/generated/data/text/help_articles.h` - C header with final wiki data
+
+### Adding/Updating Wiki Content
+1. Edit `docs/er-wiki-google-docs.md` following the existing format:
+   - Categories: `## Category Name`
+   - Entries: `### Entry Title`
+   - Content lines: `* Content here` (9 lines per page max, 5 pages per entry max)
+   - Blank lines: Just `*`
+
+2. Run the parser:
+   ```bash
+   python3 scripts/wiki_tools/parse_wiki_markdown.py
+   ```
+
+3. Rebuild the codegen tools:
+   ```bash
+   make clean
+   make tools/codegen
+   ```
+
+4. Build the ROM as usual
+
+### Important Notes
+- The GBA font system has limited character support - avoid special characters
+- Keep text concise due to display constraints (46 characters per line approx)
+- The parser automatically cleans problematic characters (accents, curly quotes, etc.)
+- Wiki can be accessed from Start Menu > Wiki or during battles with L button
