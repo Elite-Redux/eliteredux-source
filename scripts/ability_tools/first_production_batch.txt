@@ -1,0 +1,73 @@
+# First Production Batch - Weather Abilities
+
+## ABILITY_DRIZZLE
+
+### Current Description
+"Summons rain on entry. Lasts 8 turns."
+
+### Code Verification Needed
+- [ ] Check weather duration in battle scripts
+- [ ] Verify damage multipliers (50%?)
+- [ ] Check move accuracy changes (Thunder, Hurricane)
+- [ ] Verify if it overrides other weather
+
+### Extended Description Draft
+```
+Summons rain weather when this Pokemon enters battle. Lasts 8 turns.
+
+Rain effects:
+- Water moves: +50% power
+- Fire moves: -50% power  
+- Thunder & Hurricane: 100% accuracy
+- Solar Beam: 2 turns to charge
+
+Removes sun, sand, hail, and snow.
+```
+
+### Character Count: ~200 (with empty lines)
+
+---
+
+## ABILITY_DROUGHT
+
+### Current Description
+"Summons harsh sun on entry. Lasts 8 turns."
+
+### Code Verification Needed
+- [ ] Verify all sun effects
+- [ ] Check healing move boosts
+- [ ] Confirm Water-type damage reduction
+- [ ] Check interaction with weather abilities
+
+### Extended Description Draft
+```
+Summons harsh sunlight when this Pokemon enters battle. Lasts 8 turns.
+
+Sun effects:
+- Fire moves: +50% power
+- Water moves: -50% power
+- Solar Beam/Blade: Instant
+- Growth: +2 Atk & Sp.Atk
+- Synthesis/Morning Sun: Heal 2/3
+
+Removes rain, sand, hail, and snow.
+```
+
+### Character Count: ~240 (with empty lines)
+
+---
+
+## Tracking Template
+
+| Ability | Current Desc | Extended Written | Code Verified | Char Count |
+|---------|--------------|------------------|---------------|------------|
+| DRIZZLE | 38 chars | ✓ | ⏳ | ~200 |
+| DROUGHT | 42 chars | ✓ | ⏳ | ~240 |
+| SAND_STREAM | | | | |
+| SNOW_WARNING | | | | |
+| PRIMORDIAL_SEA | | | | |
+| DESOLATE_LAND | | | | |
+| DELTA_STREAM | | | | |
+| ELECTRIC_SURGE | | | | |
+| GRASSY_SURGE | | | | |
+| PSYCHIC_SURGE | | | | |

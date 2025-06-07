@@ -142,6 +142,7 @@ void InformationMenu_Init(MainCallback callback) {
     sMenuDataPtr->gfxLoadState = 0;
     sMenuDataPtr->currentTab = 0;
     sMenuDataPtr->savedCallback = callback;
+    sMenuDataPtr->entryIdx = 0;  // Explicitly set initial entry
 
     SetMainCallback2(Menu_RunSetup);
 }
@@ -156,6 +157,7 @@ void InformationMenu_Init_From_Battle(MainCallback callback) {
     sMenuDataPtr->gfxLoadState = 0;
     sMenuDataPtr->currentTab = 0;
     sMenuDataPtr->savedCallback = callback;
+    sMenuDataPtr->entryIdx = 0;  // Explicitly set initial entry
 
     SetMainCallback2(Menu_RunSetup);
 }
@@ -457,8 +459,16 @@ static void PrintToWindow(void) {
     u8 entryIdx = sMenuDataPtr->entryIdx;
     u8 pageIdx = sMenuDataPtr->pageIdx;
     u8 offset = sMenuDataPtr->selectorOffset;
-    u8 numPages = gHelpArticles[currentTab].entries[entryIdx].numPages;
+    u8 numPages = 0;
     u8 numEntries = min(MAX_ENTRIES_ON_SCREEN, getCurrentTabEntries());
+    
+    // Validate bounds before accessing arrays
+    if (currentTab >= ARRAY_COUNT(gHelpArticles))
+        return;
+    
+    if (entryIdx < gHelpArticles[currentTab].numEntries)
+        numPages = gHelpArticles[currentTab].entries[entryIdx].numPages;
+    
     u8 infoTitleFontColor = FONT_BLACK_2;
     u8 helpBarFontColor = FONT_WHITE_2;
     u8 titleFontColor = FONT_BLACK;
@@ -476,6 +486,10 @@ static void PrintToWindow(void) {
 
     if (!sMenuDataPtr->isEntryOpen) {
         for (i = 0; i < numEntries; i++) {
+            // Validate bounds before accessing
+            if (offset + i >= gHelpArticles[currentTab].numEntries)
+                break;
+                
             y = SPACE_BETWEEN_INFORMATION_START + (SPACE_BETWEEN_INFORMATION_OPTIONS * i);
             AddTextPrinterParameterized4(
                 windowId, fontTitle, x, y, 0, 0, sMenuWindowFontColors[titleFontColor], 0xFF, gHelpArticles[currentTab].entries[offset + i].title);
@@ -489,6 +503,13 @@ static void PrintToWindow(void) {
         y = INFORMATION_HELP_BAR_Y;
         AddTextPrinterParameterized4(windowId, fontTitle, 8, y, 0, 0, sMenuWindowFontColors[helpBarFontColor], 0xFF, sText_Help_Bar_Information);
     } else {
+        // Double-check bounds for safety
+        if (entryIdx >= gHelpArticles[currentTab].numEntries)
+            return;
+            
+        if (pageIdx >= numPages && numPages > 0)
+            pageIdx = numPages - 1;
+            
         x = (2 * 8);
         y = (3 * 8);
         AddTextPrinterParameterized4(
@@ -600,6 +621,9 @@ static void Task_MenuMain(u8 taskId) {
 
     if (sMenuDataPtr->isEntryOpen) {
         u8 numPages = gHelpArticles[currentTab].entries[entryIdx].numPages;
+        
+        if (numPages == 0)
+            numPages = 1;
         if (JOY_NEW(DPAD_RIGHT)) {
             PlaySE(SE_SELECT);
             if (sMenuDataPtr->pageIdx < numPages - 1)
@@ -628,6 +652,7 @@ static void Task_MenuMain(u8 taskId) {
 
             sMenuDataPtr->selectorPosY = 0;
             sMenuDataPtr->selectorOffset = 0;
+            sMenuDataPtr->entryIdx = 0;
             LoadTabPalette();
             PrintToWindow();
         }
@@ -640,6 +665,7 @@ static void Task_MenuMain(u8 taskId) {
                 sMenuDataPtr->currentTab = numTabs - 1;
             sMenuDataPtr->selectorPosY = 0;
             sMenuDataPtr->selectorOffset = 0;
+            sMenuDataPtr->entryIdx = 0;
             LoadTabPalette();
             PrintToWindow();
         }

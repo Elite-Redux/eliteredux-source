@@ -1,0 +1,20 @@
+# Extended Ability Descriptions Draft
+
+This file contains draft extended descriptions for abilities.
+These will be integrated into the codegen system once the technical setup is complete.
+
+## Format Guidelines
+- Keep descriptions concise but informative
+- Include exact percentages and mechanics
+- Explain interactions with other abilities/moves
+- Use consistent terminology
+
+## Abilities
+
+### ABILITY_ADAPTABILITY
+Extended: "Increases the power of moves that match the user's type by 33% instead of the usual 50% STAB bonus. This results in a 2x multiplier for same-type moves."
+
+### ABILITY_AERILATE
+Extended: "Normal-type moves become Flying-type and receive a 20% power boost. This allows Normal moves to benefit from STAB and hit through immunities."
+
+[Additional abilities to be added...]

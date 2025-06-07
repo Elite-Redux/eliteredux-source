@@ -709,35 +709,9 @@ void HandleAction_TryFinish(void) {
 
 void TryPreemptiveActions() {
     int battler = gBattlerByTurnOrder[gCurrentTurnActionNumber];
-    if (gCurrentActionFuncId == B_ACTION_USE_MOVE) {
-        MoveEnum move = GetChosenMove(battler);
-        int target = GetMoveTarget(move, FALSE);
-        int targetFlag = GetBattlerBattleMoveTargetFlags(move, battler);
-        int surpriser = 0;
-        if ((targetFlag == MOVE_TARGET_FOES_AND_ALLY || GetBattlerSide(target) != GetBattlerSide(battler)) && GetMovePriority(battler, move, target) > 0 &&
-            IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY) && (surpriser = IsAbilityOnOpposingSide(battler, ABILITY_SURPRISE))) {
-            gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
-                .ability = ABILITY_SURPRISE,
-                .attacker = surpriser - 1,
-                .move = MOVE_ASTONISH,
-                .target = battler,
-            };
-        }
-    }
 
-    if (gCurrentActionFuncId == B_ACTION_SWITCH) {
-        int i;
-        for (i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
-            if (BATTLER_HAS_ABILITY(i, ABILITY_TAG)) {
-                gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
-                    .ability = ABILITY_TAG,
-                    .attacker = i,
-                    .move = MOVE_PURSUIT,
-                    .target = battler,
-                    .movePower = 20,
-                };
-            }
-        }
+    for (u8 opponent = GetOppositeSide(battler); opponent < gBattlersCount; opponent += 2) {
+        ON_ABILITY(opponent, TRUE, gAbilities[ability].onPreemptAction, gAbilities[ability].onPreemptAction(opponent, ability, battler))
     }
 
     if (gQueuedAttackCount) {
@@ -6816,7 +6790,7 @@ u16 CalculateAbilityMultipliers(
                 FALSE,
                 gAbilities[ability].onOffensiveMultiplier && IsApplyOnFlagAppropriate(battlerAtk, sourceBattler, gAbilities[ability].onOffensiveMultiplierFor),
                 gAbilities[ability].onOffensiveMultiplier(
-                    battlerAtk, battlerDef, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier))
+                    battlerAtk, ability, battlerDef, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier))
         }
     }
 
