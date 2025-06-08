@@ -8716,6 +8716,18 @@ constexpr Ability RelicStone = {
     .breakable = TRUE,
 };
 
+constexpr Ability Supercell = {
+    .onEntry = Drizzle.onEntry,
+};
+
+constexpr Ability LightningAspect = {
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_ELECTRIC)
+        return ABSORB_RESULT_HEAL;
+    },
+    .breakable = TRUE,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -9549,6 +9561,8 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_CHUCKSTER, Chuckster},
     {ABILITY_HEAT_SINK, HeatSink},
     {ABILITY_RELIC_STONE, RelicStone},
+    {ABILITY_SUPERCELL, Supercell},
+    {ABILITY_LIGHTNING_ASPECT, LightningAspect},
 };
 
 template <int N>
