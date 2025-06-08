@@ -8432,7 +8432,13 @@ constexpr Ability TemporalRupture = {
 };
 
 constexpr Ability GrassFlute = {
-    .breakable = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(IsSoundMove(battler, move))
+        CHECK_NOT(gVolatileStructs[target].fear)
+
+        return AbilityStatusEffect(MOVE_EFFECT_FEAR);
+    },
 };
 
 constexpr Ability Hemotoxin = {
