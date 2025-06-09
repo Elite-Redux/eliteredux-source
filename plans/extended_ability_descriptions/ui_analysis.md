@@ -11,10 +11,12 @@ Based on screenshots analyzed on [current date].
 ## Extended Description Display Constraints
 
 ### Text Area Dimensions
-- **Lines available**: 10-15 lines (based on empty space in screenshots)
-- **Characters per line**: ~32-35 characters
-- **Total capacity**: 350-525 characters possible
-- **Recommended usage**: 5-8 lines with empty lines for readability
+- **Total visible lines**: 14 (including blank lines)
+- **Recommended blank lines**: 3 (for readability)
+- **Usable text lines**: 11
+- **Characters per line**: 30 (GBA UI physical limit)
+- **Absolute character ceiling**: 330 (11 × 30)
+- **Practical target**: 280-300 characters total (to account for word-wrap)
 
 ### Observed Examples
 
@@ -47,10 +49,11 @@ charmander.
 
 ## Recommendations for Extended Descriptions
 
-- **Target length**: 3-5 lines (100-175 characters)
-- **Maximum tested**: 5 lines (up to ~175 characters)
-- **Style**: Complete sentences, detailed mechanics
+- **Target length**: 280-300 characters total
+- **Line usage**: 9-11 lines of text (leaving 3 blank for readability)
+- **Style**: Complete sentences, detailed mechanics, but more concise than originally planned
 - **No manual formatting** - Let codegen handle wrapping
+- **Key constraint**: Must fit within GBA UI's physical display limits
 
 ## Notes
 - The UI is already fully implemented and working

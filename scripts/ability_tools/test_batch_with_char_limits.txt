@@ -1,6 +1,6 @@
 # Test Batch - Extended Descriptions with Character Limits
 
-Based on UI analysis: ~32-35 chars per line, 5+ lines available = ~160-175 chars total
+Based on UI analysis: 30 chars per line, 11 usable lines = 280-300 chars practical limit
 
 ## Examples Within Limits
 
@@ -18,10 +18,10 @@ Based on UI analysis: ~32-35 chars per line, 5+ lines available = ~160-175 chars
 
 ## Character Count Guidelines
 
-- **Minimum useful**: ~80 characters (2-3 lines)
-- **Optimal range**: 120-160 characters (4-5 lines)  
-- **Maximum tested**: ~175 characters (5 lines)
-- **Avoid exceeding**: 175 characters
+- **Minimum useful**: ~150 characters (5 lines)
+- **Optimal range**: 280-300 characters (9-10 lines)  
+- **Maximum safe**: 300 characters (10 lines)
+- **Absolute ceiling**: 330 characters (11 lines)
 
 ## Writing Tips
 

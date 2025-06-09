@@ -2,26 +2,34 @@
 
 ## MASTER PLAN - Start Here
 
-**For new sessions**: When continuing work on extended ability descriptions, start by reading this file and checking the project structure below.
+**For new sessions**: When continuing work on extended ability descriptions, start by reading this file.
+
+## Quick Reference
+- **Total abilities**: 867+ (growing daily)
+- **UI constraints**: 11 usable lines, 30 chars/line, 280-300 chars total
+- **Text wrapping**: Automatic by codegen (no manual line breaks)
+- **Storage**: `knowledge/extended_ability_descriptions/`
+- **Current status**: Ready to start writing content
 
 ## Overview
 Implement extended ability descriptions for Elite Redux. The UI has been created by BelialClover (Riolu), but the system needs to be integrated with codegen and populated with actual descriptions.
 
 ## Project Structure
-This task has multiple components organized as follows:
 
 ### Planning Documents (`/plans/extended_ability_descriptions/`)
-- **MASTER_PLAN.md** (this file) - Start here, contains overview and links
-- **extended_ability_descriptions_summary.md** - Quick facts and current status
-- **extended_ability_descriptions_technical.md** - Technical implementation details
-- **codegen_integration_steps.md** - Specific steps for codegen integration
-- **extended_descriptions_next_steps.md** - Immediate action items
+- **MASTER_PLAN.md** (this file) - Complete project overview and guide
+- **ui_analysis.md** - UI constraints and display specifications
+
+### Storage Structure (`/knowledge/`)
+- **abilities/** - Detailed mechanical documentation (Discord-friendly)
+- **extended_ability_descriptions/** - Extended descriptions for in-game use
+  - `extended_descriptions.txt` - Implementation-ready descriptions
+  - `progress.md` - Tracking completion status
+  - `writing_patterns.md` - Verified patterns for consistent writing
 
 ### Scripts and Data (`/scripts/ability_tools/`)
-- **Analysis scripts** - Style analysis, categorization
-- **test_batch_extended_descriptions.txt** - Test batch of 10 abilities
-- **ability_style_guide.md** - Writing guidelines from analysis
-- **batch_processing_plan.md** - 39 batches organized by category
+- Analysis scripts for style and categorization
+- Test batches and writing guidelines
 - Generated JSON files with categorized data
 
 ## Scope
@@ -50,7 +58,7 @@ According to Mawootad, three components are needed:
 ### 2. Field Generation
 - Add field generation to codegen (similar to normal ability descriptions)
 - Determine pixel count and line limit for the UI
-- **No manual line breaks needed** - codegen handles automatic text wrapping
+- **No manual line breaks needed** - codegen handles all text wrapping automatically
 - Consider clone abilities handling
 
 ### 3. Output
@@ -60,20 +68,28 @@ According to Mawootad, three components are needed:
 ## Content Requirements
 
 ### Extended Description Guidelines
-- **Length**: TBD (need to determine based on UI constraints)
-- **Format**: Detailed explanation of ability mechanics
+- **Length**: 350-525 characters (10-15 lines at ~32-35 chars/line)
+- **Format**: Continuous text, no manual line breaks
+- **Writing style** (from analysis of 867 abilities):
+  - 91% active voice (start with verbs)
+  - Use "50%" format, not "50 percent"
+  - Common terms: move, type, boost, damage, stat, turn
+  - Structure: Main effect first, then conditions
 - **Content**: Should include:
   - Exact effects and percentages
   - Interaction with other abilities
   - Special conditions or exceptions
-  - Battle scenarios where it's useful
+  - Comparisons to similar abilities (e.g., "unlike Parental Bond")
 
 ### Batch Processing Strategy
-1. **Revised batch size**: 10 abilities per batch (~87 batches total)
-2. **Verification required**: Look up each ability in code
-3. **Pattern documentation**: Track learned patterns to speed up similar abilities
+1. **Batch size**: 10 abilities per batch (~87 batches total)
+2. **Verification required**: Use `/project:analyze-ability` for each ability
+3. **Pattern documentation**: Update ability_patterns_learned.md as you go
 4. **No guessing**: 100% accuracy required, verify all mechanics
-5. **Workflow**: Use lookup_ability.py script for efficient searching
+5. **Priority order**:
+   - Weather/terrain abilities (high competitive impact)
+   - Elite Redux custom abilities (unique to ER)
+   - Original Pokemon abilities (following patterns)
 
 ## Implementation Steps
 
@@ -135,7 +151,7 @@ According to Mawootad, three components are needed:
 - [ ] Create validation scripts
 - [ ] Set up quick reference for common patterns
 
-## Current Task Status (Jan 2025)
+## Current Task Status (June 2025)
 
 ### Completed
 - ✅ Style analysis complete (867 abilities analyzed)
@@ -144,11 +160,11 @@ According to Mawootad, three components are needed:
 - ✅ Lookup script created for verification workflow
 - ✅ Pattern documentation system established
 
-### ⚠️ CRITICAL DISCOVERY (Jan 2025)
-- **UI code is in branch**: `SummaryScreenChanges` (GitHub)
-- **Status**: Never merged into upcoming branch
-- **Age**: 6 months old - expect merge conflicts
-- **Action Required**: Commit current work, then merge branch
+### ✅ UI Update (June 2025)
+- **UI implementation**: Riolu will code fresh implementation
+- **Branch**: Will be implemented directly in upcoming branch
+- **Status**: No old branch merge needed
+- **Action**: Focus on content creation while UI is being coded
 
 ### ✅ Discovered via UI Screenshots
 - Display shows **10-15 lines available** (huge popup window)
@@ -164,33 +180,27 @@ According to Mawootad, three components are needed:
 - 🟢 Can use empty lines for better readability
 - 🟢 Proto integration can happen in parallel
 
-## Immediate Next Steps (UPDATED - Branch Merge Required First)
+## Immediate Next Steps
 
-1. **URGENT - Commit Current Work** 🚨:
-   - Commit and push 35+ modified files
-   - Use clear commit message describing all changes
-   - Ensure upcoming branch is up to date
-
-2. **Merge SummaryScreenChanges Branch** 🔀:
-   - Fetch and merge the 6-month-old UI branch
-   - Resolve expected merge conflicts carefully
-   - Test that UI still functions after merge
-   - Document any significant changes found
-
-3. **THEN Start Writing Abilities**:
+1. **Start Writing Extended Descriptions** ✍️:
    - Begin with weather abilities (high impact)
    - Verify each ability in code
-   - Use empty lines for readability
-   - Track progress in first_production_batch.txt
+   - Write continuous text (no manual line breaks)
+   - Track progress in extended_descriptions.txt
 
-4. **Proto Integration** (after merge):
-   - Examine merged UI code structure
+2. **Proto Integration** (Riolu will handle):
    - Add `extended_description` field to proto
    - Update codegen to generate the field
-   - Connect to Riolu's UI implementation
+   - Connect to new UI implementation
+
+3. **Content Creation Workflow**:
+   - Use `/project:analyze-ability` for mechanics
+   - Write 350-525 character descriptions
+   - Store in `knowledge/extended_ability_descriptions/`
+   - Update progress tracker
 
 ## Resources & References
-- Discord discussion: Darky & Mawootad (Jan 2025)
+- Discord discussion: Darky & Mawootad (June 2025)
 - Related files:
   - `src/abilities.cc`
   - `proto/AbilityList.textproto`
