@@ -6405,6 +6405,9 @@ static void HandleTerrainMove(u32 moveEffect) {
         case B_MSG_TERRAINBECOMESPSYCHIC:
             moveEffect = EFFECT_PSYCHIC_TERRAIN;
             break;
+        case B_MSG_TERRAINBECOMESTOXIC:
+            moveEffect = EFFECT_TOXIC_TERRAIN;
+            break;
     }
 
     switch (moveEffect) {
@@ -6423,6 +6426,10 @@ static void HandleTerrainMove(u32 moveEffect) {
         case EFFECT_PSYCHIC_TERRAIN:
             statusFlag = STATUS_FIELD_PSYCHIC_TERRAIN, timer = &gFieldTimers.terrainTimer;
             SetActiveMultistringChooser(B_MSG_TERRAINBECOMESPSYCHIC);
+            break;
+        case EFFECT_TOXIC_TERRAIN:
+            statusFlag = STATUS_FIELD_TOXIC_TERRAIN, timer = &gFieldTimers.terrainTimer;
+            SetActiveMultistringChooser(B_MSG_TERRAINBECOMESTOXIC);
             break;
     }
 
@@ -7771,6 +7778,9 @@ static void Cmd_various(void) {
                     case HOLD_EFFECT_PARAM_PSYCHIC_TERRAIN:
                         TryHandleSeed(gActiveBattler, STATUS_FIELD_PSYCHIC_TERRAIN, STAT_SPDEF, item, FALSE);
                         break;
+                    case HOLD_EFFECT_PARAM_TOXIC_TERRAIN:
+                        TryHandleSeed(gActiveBattler, STATUS_FIELD_TOXIC_TERRAIN, STAT_SPDEF, item, FALSE);
+                        break;
                 }
             }
             return;
@@ -7857,8 +7867,11 @@ static void Cmd_various(void) {
                 case STATUS_FIELD_PSYCHIC_TERRAIN:
                     SetActiveMultistringChooser(B_MSG_PSYCHICTERRAINENDS);
                     break;
+                case STATUS_FIELD_TOXIC_TERRAIN:
+                    SetActiveMultistringChooser(B_MSG_TOXICTERRAINENDS);
+                    break;
                 default:
-                    SetActiveMultistringChooser(B_MSG_PSYCHICTERRAINENDS + 1);  // failsafe
+                    SetActiveMultistringChooser(B_MSG_TOXICTERRAINENDS + 1);  // failsafe
                     break;
             }
             gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;  // remove the terrain
@@ -12092,110 +12105,7 @@ static void Cmd_jumpifhasnohp(void) {
 }
 
 static void Cmd_getsecretpowereffect(void) {
-    gBattleScripting.moveEffect = GetSecretPowerMoveEffect();
     gBattlescriptCurrInstr++;
-}
-
-u16 GetSecretPowerMoveEffect(void) {
-    MoveEffectEnum moveEffect;
-    u32 fieldTerrain = gFieldStatuses & STATUS_FIELD_TERRAIN_ANY;
-    if (fieldTerrain) {
-        switch (fieldTerrain) {
-            case STATUS_FIELD_MISTY_TERRAIN:
-                moveEffect = MOVE_EFFECT_SP_ATK_MINUS_1;
-                break;
-            case STATUS_FIELD_GRASSY_TERRAIN:
-                moveEffect = MOVE_EFFECT_SLEEP;
-                break;
-            case STATUS_FIELD_ELECTRIC_TERRAIN:
-                moveEffect = MOVE_EFFECT_PARALYSIS;
-                break;
-            case STATUS_FIELD_PSYCHIC_TERRAIN:
-                moveEffect = MOVE_EFFECT_SPD_MINUS_1;
-                break;
-            default:
-                moveEffect = MOVE_EFFECT_PARALYSIS;
-                break;
-        }
-    } else {
-        switch (gBattleTerrain) {
-            case BATTLE_TERRAIN_GRASS:
-#if B_SECRET_POWER_EFFECT >= GEN_4
-                moveEffect = MOVE_EFFECT_SLEEP;
-#else
-                moveEffect = MOVE_EFFECT_POISON;
-#endif
-                break;
-            case BATTLE_TERRAIN_LONG_GRASS:
-                moveEffect = MOVE_EFFECT_SLEEP;
-                break;
-            case BATTLE_TERRAIN_SAND:
-                moveEffect = MOVE_EFFECT_ACC_MINUS_1;
-                break;
-            case BATTLE_TERRAIN_UNDERWATER:
-#if B_SECRET_POWER_EFFECT >= GEN_6
-                moveEffect = MOVE_EFFECT_ATK_MINUS_1;
-#else
-                moveEffect = MOVE_EFFECT_DEF_MINUS_1;
-#endif
-                break;
-            case BATTLE_TERRAIN_WATER:
-                moveEffect = MOVE_EFFECT_ATK_MINUS_1;
-                break;
-            case BATTLE_TERRAIN_POND:
-#if B_SECRET_POWER_EFFECT >= GEN_4
-                moveEffect = MOVE_EFFECT_ATK_MINUS_1;
-#else
-                moveEffect = MOVE_EFFECT_SPD_MINUS_1;
-#endif
-                break;
-            case BATTLE_TERRAIN_MOUNTAIN:
-#if B_SECRET_POWER_EFFECT >= GEN_5
-                moveEffect = MOVE_EFFECT_ACC_MINUS_1;
-#elif B_SECRET_POWER_EFFECT == GEN_4
-                moveEffect = MOVE_EFFECT_FLINCH;
-#else
-                moveEffect = MOVE_EFFECT_CONFUSION;
-#endif
-                break;
-            case BATTLE_TERRAIN_CAVE:
-            case BATTLE_TERRAIN_BURIAL_GROUND:
-            case BATTLE_TERRAIN_SPACE:
-                moveEffect = MOVE_EFFECT_FLINCH;
-                break;
-            case BATTLE_TERRAIN_SOARING:
-            case BATTLE_TERRAIN_SKY_PILLAR:
-            case BATTLE_TERRAIN_MARSH:
-            case BATTLE_TERRAIN_SWAMP:
-                moveEffect = MOVE_EFFECT_SPD_MINUS_1;
-                break;
-            case BATTLE_TERRAIN_PUDDLE:
-#if B_SECRET_POWER_EFFECT >= GEN_5
-                moveEffect = MOVE_EFFECT_SPD_MINUS_1;
-#else
-                moveEffect = MOVE_EFFECT_ACC_MINUS_1;
-#endif
-                break;
-            case BATTLE_TERRAIN_SNOW:
-            case BATTLE_TERRAIN_ICE:
-#if B_USE_FROSTBITE == TRUE
-                moveEffect = MOVE_EFFECT_FROSTBITE;
-#else
-                moveEffect = MOVE_EFFECT_FREEZE;
-#endif
-                break;
-            case BATTLE_TERRAIN_VOLCANO:
-                moveEffect = MOVE_EFFECT_BURN;
-                break;
-            case BATTLE_TERRAIN_ULTRA_SPACE:
-                moveEffect = MOVE_EFFECT_DEF_MINUS_1;
-                break;
-            default:
-                moveEffect = MOVE_EFFECT_PARALYSIS;
-                break;
-        }
-    }
-    return moveEffect;
 }
 
 static void Cmd_pickup(void) {
@@ -12395,6 +12305,9 @@ static void Cmd_settypetoterrain(void) {
             break;
         case STATUS_FIELD_PSYCHIC_TERRAIN:
             terrainType = TYPE_PSYCHIC;
+            break;
+        case STATUS_FIELD_TOXIC_TERRAIN:
+            terrainType = TYPE_POISON;
             break;
         default:
             terrainType = sTerrainToType[gBattleTerrain];

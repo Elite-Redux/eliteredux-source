@@ -3772,6 +3772,7 @@ const u8 sText_Title_Field_Terrain_Electric[] = _("Electric");
 const u8 sText_Title_Field_Terrain_Psychic[] = _("Psychic");
 const u8 sText_Title_Field_Terrain_Misty[] = _("Misty");
 const u8 sText_Title_Field_Terrain_Grassy[] = _("Grassy");
+const u8 sText_Title_Field_Terrain_Toxic[] = _("Toxic");
 
 const u8 sText_Title_Field_Terrain_Description_Electric[] =
     _("Pokémon on the ground won't fall\n"
@@ -3789,6 +3790,11 @@ const u8 sText_Title_Field_Terrain_Description_Grassy[] =
     _("Increases the power of Grass-type\n"
       "moves, Restores 1/16 HP to all\n"
       "Pokémon on the ground each turn.");
+const u8 sText_Title_Field_Terrain_Description_Toxic[] =
+    _("Increases the power of Poison-type\n"
+      "moves and deals 1/16 HP to grounded\n"
+      "Pokémon vulnerable to poison.");
+
 // Rooms
 const u8 sText_Title_Field_Trick_Room[] = _("Trick Room");
 const u8 sText_Title_Field_Room_Description_Trick[] =
@@ -3970,6 +3976,8 @@ static void PrintFieldTab(void) {
                     StringCopy(gStringVar1, sText_Title_Field_Terrain_Misty);
                 else if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN)
                     StringCopy(gStringVar1, sText_Title_Field_Terrain_Psychic);
+                else if (gFieldStatuses & STATUS_FIELD_TOXIC_TERRAIN)
+                    StringCopy(gStringVar1, sText_Title_Field_Terrain_Toxic);
                 else
                     StringCopy(gStringVar1, sText_Title_Field_None);
 
@@ -4012,6 +4020,8 @@ static void PrintFieldTab(void) {
                         StringCopy(gStringVar1, sText_Title_Field_Terrain_Description_Misty);
                     else if ((gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN))
                         StringCopy(gStringVar1, sText_Title_Field_Terrain_Description_Psychic);
+                    else if ((gFieldStatuses & STATUS_FIELD_TOXIC_TERRAIN))
+                        StringCopy(gStringVar1, sText_Title_Field_Terrain_Description_Toxic);
 
                     AddTextPrinterParameterized4(
                         windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);

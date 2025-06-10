@@ -3586,7 +3586,7 @@ bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum mo
 
 bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer) {
     if (!(gFieldStatuses & statusFlag)) {
-        gFieldStatuses &= ~(STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_GRASSY_TERRAIN | STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_PSYCHIC_TERRAIN);
+        gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;
         gFieldStatuses |= statusFlag;
         gFieldTimers.started.terrain = TRUE;
 
@@ -4031,6 +4031,9 @@ bool8 TryToSetFieldEffect(u8 battler) {
                         break;
                     case STATUS_FIELD_PSYCHIC_TERRAIN:
                         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESPSYCHIC;
+                        break;
+                    case STATUS_FIELD_TOXIC_TERRAIN:
+                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESTOXIC;
                         break;
                 }
                 BattleScriptPushCursorAndCallback(BattleScript_OverworldTerrain);
@@ -5339,6 +5342,9 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                                 break;
                             case HOLD_EFFECT_PARAM_PSYCHIC_TERRAIN:
                                 effect = TryHandleSeed(battlerId, STATUS_FIELD_PSYCHIC_TERRAIN, STAT_SPDEF, gLastUsedItem, TRUE);
+                                break;
+                            case HOLD_EFFECT_PARAM_TOXIC_TERRAIN:
+                                effect = TryHandleSeed(battlerId, STATUS_FIELD_TOXIC_TERRAIN, STAT_SPDEF, gLastUsedItem, TRUE);
                                 break;
                         }
                         break;
@@ -6900,18 +6906,32 @@ u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk,
     if (gVolatileStructs[battlerDef].fear) MulModifier(&modifier, UQ_4_12(1.5));
     if (gRoundStructs[battlerDef].safePassage) MulModifier(&modifier, UQ_4_12(.65));
 
-    if (GetCurrentTerrain() == STATUS_FIELD_GRASSY_TERRAIN && moveType == TYPE_GRASS && IsBattlerGrounded(battlerAtk) &&
-        !(gStatuses3[battlerAtk] & STATUS3_SEMI_INVULNERABLE))
-        MulModifier(&modifier, (B_TERRAIN_TYPE_BOOST >= GEN_8) ? UQ_4_12(1.3) : UQ_4_12(1.5));
-    if (GetCurrentTerrain() == STATUS_FIELD_ELECTRIC_TERRAIN && moveType == TYPE_ELECTRIC && IsBattlerGrounded(battlerAtk) &&
-        !(gStatuses3[battlerAtk] & STATUS3_SEMI_INVULNERABLE))
-        MulModifier(&modifier, (B_TERRAIN_TYPE_BOOST >= GEN_8) ? UQ_4_12(1.3) : UQ_4_12(1.5));
-    if (GetCurrentTerrain() == STATUS_FIELD_PSYCHIC_TERRAIN && moveType == TYPE_PSYCHIC && IsBattlerGrounded(battlerAtk) &&
-        !(gStatuses3[battlerAtk] & STATUS3_SEMI_INVULNERABLE))
-        MulModifier(&modifier, (B_TERRAIN_TYPE_BOOST >= GEN_8) ? UQ_4_12(1.3) : UQ_4_12(1.5));
-    if (GetCurrentTerrain() == STATUS_FIELD_MISTY_TERRAIN && moveType == TYPE_FAIRY && IsBattlerGrounded(battlerAtk) &&
-        !(gStatuses3[battlerAtk] & STATUS3_SEMI_INVULNERABLE))
-        MulModifier(&modifier, (B_TERRAIN_TYPE_BOOST >= GEN_8) ? UQ_4_12(1.3) : UQ_4_12(1.5));
+    if (IsBattlerTerrainAffected(battlerAtk, STATUS_FIELD_TERRAIN_ANY)) {
+        int terrainType = -1;
+        switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
+            case STATUS_FIELD_ELECTRIC_TERRAIN:
+                terrainType = TYPE_ELECTRIC;
+                break;
+
+            case STATUS_FIELD_PSYCHIC_TERRAIN:
+                terrainType = TYPE_PSYCHIC;
+                break;
+
+            case STATUS_FIELD_GRASSY_TERRAIN:
+                terrainType = TYPE_GRASS;
+                break;
+
+            case STATUS_FIELD_MISTY_TERRAIN:
+                terrainType = TYPE_FAIRY;
+                break;
+
+            case STATUS_FIELD_TOXIC_TERRAIN:
+                terrainType = TYPE_POISON;
+                break;
+        }
+
+        if (terrainType == moveType) MUL_MODIFIER(&modifier, 1.3);
+    }
 
     return ApplyModifier(modifier, actualPower);
 }
@@ -8439,18 +8459,9 @@ bool8 HasAnyLoweredStat(u8 battler) {
 }
 
 s32 GetCurrentTerrain(void) {
-    if (!TERRAIN_HAS_EFFECT)
-        return 0;
-    else if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN)
-        return STATUS_FIELD_MISTY_TERRAIN;
-    else if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN)
-        return STATUS_FIELD_PSYCHIC_TERRAIN;
-    else if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
-        return STATUS_FIELD_ELECTRIC_TERRAIN;
-    else if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
-        return STATUS_FIELD_GRASSY_TERRAIN;
-    else
-        return 0;
+    if (!TERRAIN_HAS_EFFECT) return 0;
+
+    return gFieldStatuses & STATUS_FIELD_TERRAIN_ANY;
 }
 
 bool8 IsTrickRoomActive(void) {

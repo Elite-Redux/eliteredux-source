@@ -5216,6 +5216,9 @@ static int GetMoveTypeInternal(MoveEnum move, int battlerAtk, u8 *ateBoost, s8 *
 
                 case STATUS_FIELD_PSYCHIC_TERRAIN:
                     return TYPE_PSYCHIC;
+
+                case STATUS_FIELD_TOXIC_TERRAIN:
+                    return TYPE_POISON;
             }
             break;
     }
@@ -5914,6 +5917,9 @@ void HandleMonoChampSpecialEffects(void) {
                     break;
                 case STATUS_FIELD_PSYCHIC_TERRAIN:
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESPSYCHIC;
+                    break;
+                case STATUS_FIELD_TOXIC_TERRAIN:
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESTOXIC;
                     break;
             }
         }
