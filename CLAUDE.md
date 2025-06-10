@@ -186,7 +186,11 @@ Proto files are a compilation tool that helps generate some of this data, but de
 ## Critical Rules
 
 1. **NEVER autocommit or push to GitHub unless explicitly requested by the user**
-2. **NEVER hallucinate or make up facts** - When writing game content (ability descriptions, wiki entries, etc.):
+2. **NEVER take shortcuts or make assumptions** - Always verify file existence:
+   - Don't assume a file doesn't exist - use search tools first
+   - Don't create new files without checking for existing ones
+   - When in doubt, search thoroughly before creating
+3. **NEVER hallucinate or make up facts** - When writing game content (ability descriptions, wiki entries, etc.):
    - Look up exact mechanics in the code (abilities.cc, battle scripts, etc.)
    - Verify percentages, damage calculations, and interactions
    - If unsure about an effect, search the codebase first
