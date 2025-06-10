@@ -1,6 +1,6 @@
 # Extended Descriptions with Empty Lines for Readability
 
-With 10-15 lines available, we can use empty lines to improve readability!
+With 11 usable lines (280-300 char limit), we can use a few empty lines to improve readability!
 
 ## Format Examples
 
