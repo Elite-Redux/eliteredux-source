@@ -2,3 +2,6 @@
 	path = proto
 	url = https://github.com/Elite-Redux/er-config.git
 	branch = upcoming
+[submodule "eliteredux-darky"]
+	path = eliteredux-darky
+	url = https://github.com/darkyy92/eliteredux-darky.git
