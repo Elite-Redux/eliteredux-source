@@ -123,6 +123,8 @@ $(eval $(call GENERATE, include/generated/data/megas/adoption_center.h, adoption
 $(eval $(call GENERATE, include/generated/data/megas/hints.h, megahints))
 $(eval $(call GENERATE, include/generated/constants/hold_effects.h, holdeffect))
 
+$(eval $(call GENERATE, include/generated/data/trainers.h, trainerparties))
+
 $(eval $(call GENERATE, include/generated/data/text/help_articles.h, helparticles))
 
 timestamp/generated: $(ALL_GENERATED)

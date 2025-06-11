@@ -7,6 +7,7 @@ import er.gfx.*
 import er.item.*
 import er.move.*
 import er.text.ArticlesGenerator
+import er.trainer.TrainerPartyGenerator
 import java.io.File
 import java.io.OutputStreamWriter
 
@@ -74,6 +75,7 @@ object FileGenerator {
         "naturalgift" to NaturalGiftGenerator,
         "holdeffect" to HoldEffectGenerator,
         "moveanims" to MoveAnimPointersGenerator,
+        "trainerparties" to TrainerPartyGenerator,
     )
 
     @JvmStatic
