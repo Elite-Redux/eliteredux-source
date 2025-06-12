@@ -103,13 +103,13 @@ $(eval $(call GENERATE, include/generated/data/pokemon_graphics/front_anim_ids.h
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/back_anim_ids.h, backanimids))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/gendered_graphics.h, gendergraphics))
 
-$(eval $(call GENERATE, include/generated/constants/hold_effects.h, holdeffect))
 $(eval $(call GENERATE, include/generated/data/text/move_names.h, movenames))
 $(eval $(call GENERATE, include/generated/data/text/move_descriptions.h, movedescriptions))
 $(eval $(call GENERATE, include/generated/constants/battle_move_effects.h, movebehaviors))
 $(eval $(call GENERATE, include/generated/constants/move_effects.h, moveeffects))
 $(eval $(call GENERATE, include/generated/data/battle_moves.h, battlemoves))
 $(eval $(call GENERATE, include/generated/data/all_tutors.h, tutors))
+$(eval $(call GENERATE, asm/generated/macros/move_anim_pointers.inc, moveanims))
 
 $(eval $(call GENERATE, include/generated/data/abilities/ability_text.hh, abilitytext))
 
@@ -121,6 +121,9 @@ $(eval $(call GENERATE, include/generated/data/megas/nurse_joy.h, nursejoy))
 $(eval $(call GENERATE, include/generated/data/megas/legendary_sage.h, legendarysage))
 $(eval $(call GENERATE, include/generated/data/megas/adoption_center.h, adoptioncenteritems))
 $(eval $(call GENERATE, include/generated/data/megas/hints.h, megahints))
+$(eval $(call GENERATE, include/generated/constants/hold_effects.h, holdeffect))
+
+$(eval $(call GENERATE, include/generated/data/trainers.h, trainerparties))
 
 $(eval $(call GENERATE, include/generated/data/text/help_articles.h, helparticles))
 

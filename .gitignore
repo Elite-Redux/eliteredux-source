@@ -67,3 +67,9 @@ gh.tar.gz
 desktop.ini
 build-log.txt
 poryscript-mac/
+.claude/
+knowledge/
+scripts/
+plans/
+
+CLAUDE.md

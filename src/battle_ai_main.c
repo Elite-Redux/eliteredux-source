@@ -1942,6 +1942,10 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             if (PartnerMoveEffectIsTerrain(BATTLE_PARTNER(battlerAtk), AI_DATA->partnerMove) || GetCurrentTerrain() == STATUS_FIELD_MISTY_TERRAIN) score -= 20;
             if (!TERRAIN_HAS_EFFECT) score -= 20;
             break;
+        case EFFECT_TOXIC_TERRAIN:
+            if (PartnerMoveEffectIsTerrain(BATTLE_PARTNER(battlerAtk), AI_DATA->partnerMove) || GetCurrentTerrain() == STATUS_FIELD_TOXIC_TERRAIN) score -= 20;
+            if (!TERRAIN_HAS_EFFECT) score -= 20;
+            break;
         case EFFECT_PLEDGE:
             if (isDoubleBattle && gBattleMons[BATTLE_PARTNER(battlerAtk)].hp > 0) {
                 if (AI_DATA->partnerMove != MOVE_NONE && gBattleMoves[AI_DATA->partnerMove].effect == EFFECT_PLEDGE &&

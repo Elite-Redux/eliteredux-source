@@ -8432,7 +8432,13 @@ constexpr Ability TemporalRupture = {
 };
 
 constexpr Ability GrassFlute = {
-    .breakable = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(IsSoundMove(battler, move))
+        CHECK_NOT(gVolatileStructs[target].fear)
+
+        return AbilityStatusEffect(MOVE_EFFECT_FEAR);
+    },
 };
 
 constexpr Ability Hemotoxin = {
@@ -8448,8 +8454,10 @@ constexpr Ability ToxicSurge = {
 };
 
 constexpr Ability PoisonQuills = {
-    .onDefender = RoughSkin.onDefender,
-    .breakable = TRUE,
+    .onAttacker = PoisonPoint.onAttacker,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        return RoughSkin.onDefender(DELEGATE_DEFENDER) | PoisonPoint.onDefender(DELEGATE_DEFENDER);
+    },
 };
 
 constexpr Ability DraconicMight = {
@@ -8662,11 +8670,10 @@ constexpr Ability BreezyNeigh = {
 
 constexpr Ability Dreamscape = {
     .onEntry = Comatose.onEntry,
-    .onOffensiveMultiplier = Dreamcatcher.onOffensiveMultiplier,
-    .onStat =
-        +[](ON_STAT) {
-            if (statId == STAT_SPATK) *stat *= 1.2;
-        },
+    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) {
+        Dreamcatcher.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+        MUL(1.2);
+    },
     .onStatusImmune = Comatose.onStatusImmune,
     .unsuppressable = TRUE,
     .removesStatusOnImmunity = TRUE,
@@ -8687,15 +8694,15 @@ constexpr Ability HungryMaws = {
 constexpr Ability ThermalSlide = {
     .onStat =
         +[](ON_STAT) {
-            if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY || WEATHER_HAIL_ANY)) *stat *= 1.5;
+            if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY | WEATHER_HAIL_ANY)) *stat *= 1.5;
         },
 };
 
 constexpr Ability Thermomancy = {
-    .onModifyEffectChance =
-        +[](ON_MODIFY_EFFECT_CHANCE) {
-            if (moveEffect == MOVE_EFFECT_BURN || MOVE_EFFECT_FROSTBITE) *effectChance *= 5;
-        },
+    .onModifyEffectChance = +[](ON_MODIFY_EFFECT_CHANCE) {
+        Cryomancy.onModifyEffectChance(DELEGATE_MODIFY_EFFECT_CHANCE);
+        Pyromancy.onModifyEffectChance(DELEGATE_MODIFY_EFFECT_CHANCE);
+    }
 };
 
 constexpr Ability Chuckster = {
@@ -8717,13 +8724,16 @@ constexpr Ability RelicStone = {
 };
 
 constexpr Ability Supercell = {
-    .onEntry = Drizzle.onEntry,
+    .onEntry = +[](ON_ENTRY) -> int {
+        return ElectricSurge.onEntry(DELEGATE_ENTRY) | Drizzle.onEntry(DELEGATE_ENTRY);
+    },
 };
 
 constexpr Ability LightningAspect = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_ELECTRIC)
-        return ABSORB_RESULT_HEAL;
+        *statId = GetHighestAttackingStatId(battler, TRUE);
+        return ABSORB_RESULT_STAT;
     },
     .breakable = TRUE,
 };

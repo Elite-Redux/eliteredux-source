@@ -61,7 +61,6 @@ int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChan
 bool32 TryResetBattlerStatChanges(u8 battler, s8 comparison);
 bool32 CanCamouflage(u8 battlerId);
 u16 GetNaturePowerMove(void);
-u16 GetSecretPowerMoveEffect(void);
 void StealTargetItem(u8 battlerStealer, u8 battlerItem);
 void RemoveItem(u8 battler);
 u8 GetCatchingBattler(void);

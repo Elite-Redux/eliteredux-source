@@ -1584,6 +1584,10 @@
 	setterrainwithoverride \ptr, B_MSG_TERRAINBECOMESPSYCHIC
 	.endm
 
+	.macro setpoisonterrain ptr:req
+	setterrainwithoverride \ptr, B_MSG_TERRAINBECOMESTOXIC
+	.endm
+
 	.macro trymefirst ptr:req
 	various BS_ATTACKER, VARIOUS_TRY_ME_FIRST
 	.4byte \ptr

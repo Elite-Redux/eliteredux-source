@@ -15,6 +15,10 @@ import java.io.OutputStreamWriter
 
 object GeneratorUtils {
 
+    val TRAINERS_LIST by lazy {
+        TextFormat.parse(File("../../proto/TrainerList.textproto").readText(), TrainerList::class.java).trainerList
+    }
+
     val ITEMS_LIST by lazy {
         (Pocket.entries.filter { it != Pocket.POCKET_NONE && it != Pocket.UNRECOGNIZED }.map {
             it.name.removePrefix("POCKET_").split("_")
