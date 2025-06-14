@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Elite Redux Discord
+    url: http://discord.elite-redux.com
+    about: Join our Discord community for general discussions and support
+  - name: Elite Redux Wiki
+    url: https://wiki.elite-redux.com
+    about: Check the wiki for game guides and information
+  - name: Elite Redux Pokédex
+    url: http://dex.elite-redux.com
+    about: Browse Pokémon data and statistics
