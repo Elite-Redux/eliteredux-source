@@ -2524,36 +2524,44 @@ constexpr Ability ElectricSurge = {
             DisableSwitchInAbility(i, ABILITY_GENERATOR);
             DisableSwitchInAbility(i, ABILITY_ENERGIZED);
         }
-        BattleScriptPushCursorAndCallback(BattleScript_ElectricSurgeActivates);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESELECTRIC;
+        BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
         return TRUE;
     },
+    .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
 constexpr Ability PsychicSurge = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
 
-        BattleScriptPushCursorAndCallback(BattleScript_PsychicSurgeActivates);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESPSYCHIC;
+        BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
         return TRUE;
     },
+    .allowTerrainIfAirborne = TERRAIN_PSYCHIC,
 };
 
 constexpr Ability MistySurge = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
 
-        BattleScriptPushCursorAndCallback(BattleScript_MistySurgeActivates);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESMISTY;
+        BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
         return TRUE;
     },
+    .allowTerrainIfAirborne = TERRAIN_MISTY,
 };
 
 constexpr Ability GrassySurge = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
 
-        BattleScriptPushCursorAndCallback(BattleScript_GrassySurgeActivates);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESGRASSY;
+        BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
         return TRUE;
     },
+    .allowTerrainIfAirborne = TERRAIN_GRASSY,
 };
 
 constexpr Ability ShadowShield = {
@@ -5675,6 +5683,7 @@ constexpr Ability SeedSower = {
         BattleScriptCall(BattleScript_SeedSower);
         return TRUE;
     },
+    .allowTerrainIfAirborne = TERRAIN_GRASSY,
 };
 
 constexpr Ability Airborne = {
@@ -6203,6 +6212,7 @@ constexpr Ability HadronEngine = {
         +[](ON_STAT) {
             if (statId == STAT_SPATK && IsBattlerTerrainAffected(battler, STATUS_FIELD_ELECTRIC_TERRAIN)) *stat = *stat * 4 / 3;
         },
+    .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
 constexpr Ability IronSerpent = {
@@ -8479,7 +8489,14 @@ constexpr Ability Harukaze = {
 };
 
 constexpr Ability ToxicSurge = {
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_TOXIC_TERRAIN, &gFieldTimers.terrainTimer))
+
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESTOXIC;
+        BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
+        return TRUE;
+    },
+    .allowTerrainIfAirborne = TERRAIN_TOXIC,
 };
 
 constexpr Ability PoisonQuills = {
@@ -8754,6 +8771,7 @@ constexpr Ability RelicStone = {
 
 constexpr Ability Supercell = {
     .onEntry = +[](ON_ENTRY) -> int { return ElectricSurge.onEntry(DELEGATE_ENTRY) | Drizzle.onEntry(DELEGATE_ENTRY); },
+    .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
 constexpr Ability LightningAspect = {
@@ -9663,6 +9681,7 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(onStatusImmuneFor),
             __OVERWRITE_ARRAY_VAL(onBeforeAttackFor),
             __OVERWRITE_ARRAY_VAL(setStateOnEffect),
+            __OVERWRITE_ARRAY_VAL(allowTerrainIfAirborne),
             __OVERWRITE_ARRAY_VAL(redirectType),
             __OVERWRITE_ARRAY_VAL(ruinStat),
             __OVERWRITE_ARRAY_VAL(noDamageHits),

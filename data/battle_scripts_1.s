@@ -10366,36 +10366,15 @@ BattleScript_OnTerrainChangedLoop::
 	readattackerfromstack3
 	return
 
-BattleScript_ElectricSurgeActivates::
-	printstring STRINGID_TERRAINBECOMESELECTRIC
-	waitmessage B_WAIT_TIME_LONG
-	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
-	call BattleScript_OnTerrainChanged
-	end3
-
-BattleScript_MistySurgeActivatesRet::
-	printstring STRINGID_TERRAINBECOMESMISTY
+BattleScript_SurgeActivatesRet::
+	printfromtable gTerrainStringIds
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
 	call BattleScript_OnTerrainChanged
 	return
 
-BattleScript_MistySurgeActivates::
-	call BattleScript_MistySurgeActivatesRet
-	end3
-
-BattleScript_GrassySurgeActivates::
-	printstring STRINGID_TERRAINBECOMESGRASSY
-	waitmessage B_WAIT_TIME_LONG
-	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
-	call BattleScript_OnTerrainChanged
-	end3
-
-BattleScript_PsychicSurgeActivates::
-	printstring STRINGID_TERRAINBECOMESPSYCHIC
-	waitmessage B_WAIT_TIME_LONG
-	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
-	call BattleScript_OnTerrainChanged
+BattleScript_SurgeActivates::
+	call BattleScript_SurgeActivatesRet
 	end3
 
 BattleScript_BadDreamsActivates::

@@ -124,6 +124,15 @@ typedef enum {
     APPLY_ON_ATTACKER_OR_TARGET = APPLY_ON_ATTACKER | APPLY_ON_TARGET,
 } AbilityApplyOnWithTarget;
 
+typedef enum {
+    TERRAIN_NONE = 0,
+    TERRAIN_GRASSY = 1,
+    TERRAIN_ELECTRIC = 2,
+    TERRAIN_PSYCHIC = 3,
+    TERRAIN_MISTY = 4,
+    TERRAIN_TOXIC = 5,
+} TerrainType;
+
 #ifdef __cplusplus
 #define AbilityApplyOnWithTarget int
 #endif
@@ -178,6 +187,7 @@ typedef struct Ability {
     AbilityApplyOn onStatusImmuneFor:3;
     AbilityApplyOnWithTarget onBeforeAttackFor:5;
     MoveEffectEnum setStateOnEffect;
+    TerrainType allowTerrainIfAirborne:3;
     u16 redirectType:5;
     u16 ruinStat:3;
     u16 noDamageHits:2;
