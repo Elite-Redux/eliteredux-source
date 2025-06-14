@@ -16,6 +16,7 @@ extern const u8 BattleScript_AlreadyAtFullHp[];
 extern const u8 BattleScript_PresentHealTarget[];
 extern const u8 BattleScript_MoveUsedMustRecharge[];
 extern const u8 BattleScript_FaintAttacker[];
+extern const u8 BattleScript_SuppressStack2Ability[];
 extern const u8 BattleScript_StackAbilitySuppressedMessage[];
 extern const u8 BattleScript_FaintTarget[];
 extern const u8 BattleScript_GiveExp[];

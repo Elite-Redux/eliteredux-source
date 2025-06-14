@@ -177,6 +177,7 @@ typedef struct Ability {
     AbilityApplyOn onModifyEffectChanceFor:3;
     AbilityApplyOn onStatusImmuneFor:3;
     AbilityApplyOnWithTarget onBeforeAttackFor:5;
+    MoveEffectEnum setStateOnEffect;
     u16 redirectType:5;
     u16 ruinStat:3;
     u16 noDamageHits:2;

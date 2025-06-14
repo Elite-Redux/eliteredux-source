@@ -2201,6 +2201,12 @@ bool8 IsPreventableSecondaryEffect(u8 moveEffect) {
     }
 }
 
+void SetOnMoveEffectReactionFlags(int attacker, int target, MoveEffectEnum moveEffect) {
+    int effect = moveEffect == MOVE_EFFECT_TOXIC ? MOVE_EFFECT_POISON : moveEffect;
+
+    ON_ABILITY(attacker, FALSE, gAbilities[ability].setStateOnEffect == effect, SetBattlerAffectedFlag(attacker, target, ability))
+}
+
 void SetMoveEffect(bool32 primary, u32 certain) {
     s32 i, byTwo = 0, affectsUser = 0;
     bool32 statusChanged = FALSE;
@@ -2457,21 +2463,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                 gHitMarker |= HITMARKER_SYNCHRONISE_EFFECT;
             }
 
-            switch (gBattleScripting.moveEffect) {
-                case MOVE_EFFECT_POISON:
-                case MOVE_EFFECT_TOXIC:
-                    SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_POISON_PUPPETEER);
-                    SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_NEUROTOXIN);
-                    break;
-
-                case MOVE_EFFECT_BURN:
-                    SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_SET_ABLAZE);
-                    break;
-
-                case MOVE_EFFECT_FROSTBITE:
-                    SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_FROSTBIND);
-                    break;
-            }
+            SetOnMoveEffectReactionFlags(gBattleScripting.battler, gEffectBattler, gBattleScripting.moveEffect);
             return;
         } else if (statusChanged == FALSE) {
             gBattleScripting.moveEffect = 0;
@@ -2550,7 +2542,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     break;
                 case MOVE_EFFECT_CONFUSION:
                     if (CanBeConfused(gEffectBattler)) {
-                        SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_ENTRANCE);
+                        SetOnMoveEffectReactionFlags(gBattleScripting.battler, gEffectBattler, MOVE_EFFECT_CONFUSION);
                         gBattleMons[gEffectBattler].status2 |= STATUS2_CONFUSION_TURN(((Random()) % 4) + 2);  // 2-5 turns
 
                         BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
@@ -8122,8 +8114,7 @@ static void Cmd_various(void) {
         case VARIOUS_SET_FEAR:
             gStatuses4[gActiveBattler] |= STATUS4_FEAR;
             gVolatileStructs[gActiveBattler].fear = gVolatileStructs[gActiveBattler].started.fear = TRUE;
-            SetBattlerAffectedFlag(gBattlerAttacker, gActiveBattler, ABILITY_BLOOD_BATH);
-            SetBattlerAffectedFlag(gBattlerAttacker, gActiveBattler, ABILITY_BLOODLUST);
+            SetOnMoveEffectReactionFlags(gBattleScripting.battler, gEffectBattler, MOVE_EFFECT_FEAR);
             break;
         case VARIOUS_ON_WEATHER_CHANGE:
             ON_ABILITY(
@@ -8686,13 +8677,10 @@ static void Cmd_various(void) {
                             gBattleMons[gActiveBattler].status1 |= STATUS1_POISON;
 
                         if (gBattlerAttacker == gActiveBattler) {
-                            SetBattlerAffectedFlag(BATTLE_OPPOSITE(gActiveBattler), gActiveBattler, ABILITY_POISON_PUPPETEER);
-                            SetBattlerAffectedFlag(BATTLE_OPPOSITE(gActiveBattler), gActiveBattler, ABILITY_NEUROTOXIN);
-                            SetBattlerAffectedFlag(BATTLE_OPPOSITE(BATTLE_PARTNER(gActiveBattler)), gActiveBattler, ABILITY_POISON_PUPPETEER);
-                            SetBattlerAffectedFlag(BATTLE_OPPOSITE(BATTLE_PARTNER(gActiveBattler)), gActiveBattler, ABILITY_NEUROTOXIN);
+                            SetOnMoveEffectReactionFlags(BATTLE_OPPOSITE(gActiveBattler), gActiveBattler, MOVE_EFFECT_POISON);
+                            SetOnMoveEffectReactionFlags(BATTLE_OPPOSITE(BATTLE_PARTNER(gActiveBattler)), gActiveBattler, MOVE_EFFECT_POISON);
                         } else {
-                            SetBattlerAffectedFlag(gBattlerAttacker, gActiveBattler, ABILITY_POISON_PUPPETEER);
-                            SetBattlerAffectedFlag(gBattlerAttacker, gActiveBattler, ABILITY_NEUROTOXIN);
+                            SetOnMoveEffectReactionFlags(gBattlerAttacker, gActiveBattler, MOVE_EFFECT_POISON);
                         }
 
                         BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
@@ -8724,10 +8712,10 @@ static void Cmd_various(void) {
                     REQUIRE(CanBeBurned(gActiveBattler))
 
                     if (gBattlerAttacker == gActiveBattler) {
-                        SetBattlerAffectedFlag(BATTLE_OPPOSITE(gActiveBattler), gActiveBattler, ABILITY_SET_ABLAZE);
-                        SetBattlerAffectedFlag(BATTLE_OPPOSITE(BATTLE_PARTNER(gActiveBattler)), gActiveBattler, ABILITY_SET_ABLAZE);
+                        SetOnMoveEffectReactionFlags(BATTLE_OPPOSITE(gActiveBattler), gActiveBattler, MOVE_EFFECT_BURN);
+                        SetOnMoveEffectReactionFlags(BATTLE_OPPOSITE(BATTLE_PARTNER(gActiveBattler)), gActiveBattler, MOVE_EFFECT_BURN);
                     } else {
-                        SetBattlerAffectedFlag(gBattlerAttacker, gActiveBattler, ABILITY_SET_ABLAZE);
+                        SetOnMoveEffectReactionFlags(gBattlerAttacker, gActiveBattler, MOVE_EFFECT_BURN);
                     }
 
                     gBattleMons[gActiveBattler].status1 |= STATUS1_BURN;
@@ -12104,9 +12092,7 @@ static void Cmd_jumpifhasnohp(void) {
         gBattlescriptCurrInstr += 6;
 }
 
-static void Cmd_getsecretpowereffect(void) {
-    gBattlescriptCurrInstr++;
-}
+static void Cmd_getsecretpowereffect(void) { gBattlescriptCurrInstr++; }
 
 static void Cmd_pickup(void) {
     s32 i;
