@@ -1078,6 +1078,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_ToxicTerrainDamages[] = _("{B_STACK_1_NAME_WITH_PREFIX} was damaged\nby the toxic terrain!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1940,6 +1941,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_MIMICRYENDS - 12] = sText_MimicryEnds,
     [STRINGID_TERRAINBECOMESTOXIC - 12] = sText_TerrainBecomesToxic,
     [STRINGID_TOXICTERRAINENDS - 12] = sText_ToxicTerrainEnds,
+    [STRINGID_TOXICTERRAINDAMAGES - 12] = sText_ToxicTerrainDamages,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

@@ -330,6 +330,11 @@ constexpr Ability Stench = {
 
         return AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
     },
+    .toxicTerrainImmune = TRUE,
+};
+
+constexpr Ability PoisonHeal = {
+    .toxicTerrainImmune = TRUE,
 };
 
 constexpr Ability Drizzle = {
@@ -3629,6 +3634,19 @@ constexpr Ability PoisonAbsorb = {
         CHECK(moveType == TYPE_POISON)
         return ABSORB_RESULT_HEAL;
     },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK(CanBattlerHeal(battler))
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+        CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN))
+
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        gBattleMoveDamage *= -1;
+        BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
+        return TRUE;
+    },
+    .redirectType = TYPE_POISON,
     .breakable = TRUE,
 };
 
@@ -8516,6 +8534,10 @@ constexpr Ability AtlanticRuler = {
 };
 
 constexpr Ability Biofilm = {
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPDEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN)) *stat *= 1.5;
+        },
     .breakable = TRUE,
 };
 
@@ -9618,6 +9640,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_RELIC_STONE, RelicStone},
     {ABILITY_SUPERCELL, Supercell},
     {ABILITY_LIGHTNING_ASPECT, LightningAspect},
+    {ABILITY_POISON_HEAL, PoisonHeal},
 };
 
 template <int N>
@@ -9714,6 +9737,7 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(powderImmune),
             __OVERWRITE_ARRAY_VAL(sandImmune),
             __OVERWRITE_ARRAY_VAL(hailImmune),
+            __OVERWRITE_ARRAY_VAL(toxicTerrainImmune),
         };
     }
     return newWrapper;
