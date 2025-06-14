@@ -1,0 +1,114 @@
+name: Ability Review
+description: Report errors or suggest improvements for ability descriptions
+title: "[Ability Review] "
+labels: ["ability-review", "documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve the Elite Redux Ability Codex! 
+        This template helps us track and review ability documentation feedback.
+        
+        ⚠️ **IMPORTANT**: Extended ability descriptions have a strict 280-300 character limit due to GBA hardware constraints. This cannot be exceeded!
+
+  - type: input
+    id: ability-name
+    attributes:
+      label: Ability Name
+      description: Name of the ability you're reviewing
+      placeholder: e.g., Speed Boost
+    validations:
+      required: true
+
+  - type: input
+    id: ability-id
+    attributes:
+      label: Ability ID
+      description: Numeric ID of the ability
+      placeholder: e.g., 3
+    validations:
+      required: true
+
+  - type: input
+    id: source-file
+    attributes:
+      label: Source File
+      description: The source file path (auto-filled from codex)
+      placeholder: e.g., knowledge/abilities/3_speed_boost.md
+    validations:
+      required: false
+
+  - type: input
+    id: codex-url
+    attributes:
+      label: Codex URL
+      description: Link to the ability page you're reviewing
+      placeholder: https://codex.elite-redux.com/abilities/3_speed_boost.html
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: issue-type
+    attributes:
+      label: Issue Type
+      description: What type of issue are you reporting? (Check all that apply)
+      options:
+        - label: Factual error in description
+        - label: Unclear or confusing explanation
+        - label: Missing important information
+        - label: Grammar/spelling error
+        - label: Mechanical explanation incorrect
+        - label: Extended description character count issue (MUST be 280-300 chars - GBA hardware limit)
+        - label: Other (please specify in description)
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Issue Description
+      description: Describe the issue or suggested improvement in detail
+      placeholder: |
+        Please describe:
+        - What is incorrect or unclear?
+        - What should it say instead?
+        - Why is this change needed?
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested-changes
+    attributes:
+      label: Suggested Changes
+      description: If you have specific text suggestions, provide them here
+      placeholder: |
+        Current text: "..."
+        Suggested text: "..."
+        
+        Or provide specific corrections/additions.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any additional information that might be helpful
+      placeholder: |
+        - References to game mechanics
+        - Links to relevant documentation
+        - Screenshots or examples
+        - Testing results
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Review Checklist
+      description: Please confirm the following
+      options:
+        - label: I have checked that this issue doesn't already exist
+          required: true
+        - label: I have provided specific details about the problem
+          required: true
+        - label: This issue is about Elite Redux ability documentation (not base game mechanics)
+          required: true
