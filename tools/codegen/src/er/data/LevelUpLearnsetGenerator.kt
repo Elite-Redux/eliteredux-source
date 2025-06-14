@@ -5,8 +5,8 @@ import er.Generator
 import er.GeneratorUtils.NO_EGG_LIST
 import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.GeneratorUtils.createDedupMaps
+import er.GeneratorUtils.findLearnsetForSpecies
 import er.GeneratorUtils.printLookupTable
-import er.data.TutorLearnsetGenerator.findLearnsetForSpecies
 import er.proto.MoveEnum
 import er.proto.Species.Learnset
 import java.io.OutputStreamWriter

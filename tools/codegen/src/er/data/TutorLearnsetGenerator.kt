@@ -6,6 +6,8 @@ import er.GeneratorUtils.NO_EGG_LIST
 import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.GeneratorUtils.SPECIES_MAP
 import er.GeneratorUtils.createDedupMaps
+import er.GeneratorUtils.expandLearnset
+import er.GeneratorUtils.findLearnsetForSpecies
 import er.GeneratorUtils.printLookupTable
 import er.proto.MoveEnum
 import er.proto.Species
@@ -15,35 +17,6 @@ import er.proto.SpeciesEnum
 import java.io.OutputStreamWriter
 
 object TutorLearnsetGenerator : Generator {
-    fun findLearnsetForSpecies(species: Species): Learnset =
-        when {
-            species.id == SpeciesEnum.SPECIES_NONE -> species.learnset
-            species.megaList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.megaList.first().from]!!)
-            species.primalList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.primalList.first().from]!!)
-            species.hasBattleForm() -> findLearnsetForSpecies(SPECIES_MAP[species.battleForm.of]!!)
-            species.hasLearnset() -> species.learnset
-            species.usesLearnset != SpeciesEnum.SPECIES_NONE -> findLearnsetForSpecies(SPECIES_MAP[species.usesLearnset]!!)
-            species.formShiftOf != SpeciesEnum.SPECIES_NONE -> findLearnsetForSpecies(SPECIES_MAP[species.formShiftOf]!!)
-            else -> findLearnsetForSpecies(SPECIES_MAP[species.formOf]!!)
-        }
-
-    private fun expandLearnset(learnset: Learnset, species: Species) =
-        UNIVERSAL_TUTORS + UNIVERSAL_ATTACKS.takeIf { learnset.universalTutors != UniversalTutors.NO_ATTACKS }
-            .orEmpty() + listOfNotNull(MoveEnum.MOVE_ATTRACT.takeIf { !species.genderless }) + learnset.tutorList
-
-    private val UNIVERSAL_TUTORS = listOf(
-        MoveEnum.MOVE_ENDURE,
-        MoveEnum.MOVE_HELPING_HAND,
-        MoveEnum.MOVE_PROTECT,
-        MoveEnum.MOVE_REST,
-        MoveEnum.MOVE_SLEEP_TALK,
-        MoveEnum.MOVE_SUBSTITUTE,
-    )
-    private val UNIVERSAL_ATTACKS = listOf(
-        MoveEnum.MOVE_HIDDEN_POWER,
-        MoveEnum.MOVE_SECRET_POWER,
-        MoveEnum.MOVE_RETURN,
-    )
 
     private const val PREFIX = "__sTutorMoveset_"
 
