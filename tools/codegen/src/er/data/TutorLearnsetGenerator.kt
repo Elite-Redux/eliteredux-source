@@ -22,7 +22,7 @@ object TutorLearnsetGenerator : Generator {
 
     private fun learnsetString(id: Int, learnset: List<MoveEnum>): String = """
         |static const TutorUnion $PREFIX$id = { .fields = {
-        |$IND${learnset.joinToString("\n$IND") { ".TUTOR_BIT_FIELD(${it}) = TRUE," }}
+        |$IND${learnset.distinct().joinToString("\n$IND") { ".TUTOR_BIT_FIELD(${it}) = TRUE," }}
         |${IND}}};
         |""".trimMargin()
 
