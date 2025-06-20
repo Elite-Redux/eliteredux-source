@@ -60331,10 +60331,6 @@ static const struct TrainerMonItemCustomMoves sParty_Diana5[] = {
     },
     {
     .lvl = 40,
-    .species = SPECIES_VILEPLUME,
-    },
-    {
-    .lvl = 40,
     .species = SPECIES_ALTARIA,
     }
 };
@@ -60343,10 +60339,6 @@ static const struct TrainerMonItemCustomMoves sParty_Diana5Hell[] = {
     {
     .lvl = 40,
     .species = SPECIES_BRELOOM,
-    },
-    {
-    .lvl = 40,
-    .species = SPECIES_VILEPLUME,
     },
     {
     .lvl = 40,

@@ -182,7 +182,7 @@ SkyPillar_Outside_Text_GotToGoBackForSootopolis: @ 823953A
 script SkyPillar_Outside_Text_Gauntlet{
 	lock
 	faceplayer
-	if (flag(FLAG_BADGE07_GET)) { // Checking if the player has the badge
+	if (flag(FLAG_BADGE06_GET)) { // Checking if the player has the badge
 		//cleartrainerflag(TRAINER_DRAGONITENITE_SAGE_2) // Only For testing
 		if (!flag(FLAG_OBTAINED_DRAGONITENITE)) { // asking for battle
 			msgbox(format("Does thou seek might, young seeker? Display thine prowess unto us, and thee shall be endowed with strength unparalleled."), MSGBOX_YESNO)

@@ -8738,6 +8738,62 @@ constexpr Ability LightningAspect = {
     .breakable = TRUE,
 };
 
+constexpr Ability FireAspect = {
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_FIRE)
+        return ABSORB_RESULT_HEAL;
+    },
+    .breakable = TRUE,
+};
+
+constexpr Ability BlisteringSun = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        return DesolateLand.onEntry(DELEGATE_ENTRY) | AirBlower.onEntry(DELEGATE_ENTRY);
+    },
+};
+
+constexpr Ability MoltenCore = {
+    .onEntry = Furnace.onEntry,
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_ROCK)
+        return ABSORB_RESULT_HEAL;
+    },
+    .onDefender = Furnace.onDefender,
+    .breakable = TRUE,
+};
+
+constexpr Ability AurorasGale = {
+    .onEntry = NorthWind.onEntry,
+    .onStat = MajesticBird.onStat,
+    .hailImmune = TRUE,
+};
+
+constexpr Ability WinterThrone = {
+    .breakable = TRUE,
+};
+
+constexpr Ability IcePlumes = {
+    .onDefensiveMultiplier = IceScales.onDefensiveMultiplier,
+    .breakable = TRUE,
+};
+
+constexpr Ability PropellerTail = {
+    .onStat = SwiftSwim.onStat,
+};
+
+constexpr Ability EnergyTap = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK(CanBattlerHeal(battler))
+
+        gBattleMoveDamage = -gHpDealt / 8;
+        if (!gBattleMoveDamage) gBattleMoveDamage = -1;
+        BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
+        return TRUE;
+    },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -8966,6 +9022,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_DAUNTLESS_SHIELD, DauntlessShield},
     {ABILITY_LIBERO, Libero},
     {ABILITY_COTTON_DOWN, CottonDown},
+    {ABILITY_PROPELLER_TAIL, PropellerTail},
     {ABILITY_MIRROR_ARMOR, MirrorArmor},
     {ABILITY_GULP_MISSILE, GulpMissile},
     {ABILITY_STEAM_ENGINE, SteamEngine},
@@ -9573,6 +9630,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_RELIC_STONE, RelicStone},
     {ABILITY_SUPERCELL, Supercell},
     {ABILITY_LIGHTNING_ASPECT, LightningAspect},
+    {ABILITY_ENERGY_TAP, EnergyTap},
 };
 
 template <int N>
