@@ -132,6 +132,8 @@ u8 GetBattlerBattleMoveTargetFlags(MoveEnum moveId, u8 battler) {
         return MOVE_TARGET_BOTH;
     else if (gBattleMoves[moveId].effect == EFFECT_EXPANDING_FORCE && GetCurrentTerrain() == STATUS_FIELD_PSYCHIC_TERRAIN)
         return MOVE_TARGET_BOTH;
+    else if (gBattleMoves[moveId].effect == EFFECT_TOXIC_THREAD && IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN))
+        return MOVE_TARGET_BOTH;
 
     switch (moveId) {
         case MOVE_RAIN_DANCE:
