@@ -47,12 +47,12 @@ enum {
     STR_FRONTIER_STREAK,
     STR_NONE = -1,
 };
-#define STRS_NORMAL_MSG      {STR_TRAINER_NAME, STR_NONE,             STR_NONE}
-#define STRS_WILD_BATTLE     {STR_TRAINER_NAME, STR_SPECIES_IN_ROUTE, STR_NONE}
-#define STRS_BATTLE_NEGATIVE {STR_TRAINER_NAME, STR_NONE,             STR_NONE}
+#define STRS_NORMAL_MSG {STR_TRAINER_NAME, STR_NONE, STR_NONE}
+#define STRS_WILD_BATTLE {STR_TRAINER_NAME, STR_SPECIES_IN_ROUTE, STR_NONE}
+#define STRS_BATTLE_NEGATIVE {STR_TRAINER_NAME, STR_NONE, STR_NONE}
 #define STRS_BATTLE_POSITIVE {STR_TRAINER_NAME, STR_SPECIES_IN_PARTY, STR_NONE}
-#define STRS_BATTLE_REQUEST  {STR_TRAINER_NAME, STR_MAP_NAME,         STR_NONE}
-#define STRS_FRONTIER        {STR_TRAINER_NAME, STR_FACILITY_NAME,    STR_FRONTIER_STREAK}
+#define STRS_BATTLE_REQUEST {STR_TRAINER_NAME, STR_MAP_NAME, STR_NONE}
+#define STRS_FRONTIER {STR_TRAINER_NAME, STR_FACILITY_NAME, STR_FRONTIER_STREAK}
 
 #define NUM_STRVARS_IN_MSG 3
 
@@ -84,16 +84,14 @@ enum {
     REQ_TOPIC_DIFF_ROUTE,
 };
 
-struct MatchCallState
-{
+struct MatchCallState {
     u32 minutes;
     u16 trainerId;
     u8 stepCounter;
     bool8 triggeredFromScript;
 };
 
-struct MatchCallTrainerTextInfo
-{
+struct MatchCallTrainerTextInfo {
     u16 trainerId;
     u16 unused;
     u16 battleTopicTextIds[3];
@@ -103,20 +101,17 @@ struct MatchCallTrainerTextInfo
     u16 differentRouteMatchCallTextId;
 };
 
-struct MatchCallText
-{
+struct MatchCallText {
     const u8 *text;
     s8 stringVarFuncIds[NUM_STRVARS_IN_MSG];
 };
 
-struct MultiTrainerMatchCallText
-{
+struct MultiTrainerMatchCallText {
     u16 trainerId;
     const u8 *text;
 };
 
-struct BattleFrontierStreakInfo
-{
+struct BattleFrontierStreakInfo {
     u16 facilityId;
     u16 streak;
 };
@@ -162,8 +157,7 @@ static void PopulateBattleFrontierStreak(int, u8 *);
 
 #define TEXT_ID(topic, id) (((topic) << 8) | ((id) & 0xFF))
 
-static const struct MatchCallTrainerTextInfo sMatchCallTrainers[] =
-{
+static const struct MatchCallTrainerTextInfo sMatchCallTrainers[] = {
     {
         .trainerId = TRAINER_ROSE_1,
         .unused = 0,
@@ -267,7 +261,7 @@ static const struct MatchCallTrainerTextInfo sMatchCallTrainers[] =
         .trainerId = TRAINER_THALIA_1,
         .unused = 0,
         // Thalia and Sawyer are the only ones who use different msg ids for their battle topics
-        .battleTopicTextIds = { TEXT_ID(B_TOPIC_WILD, 8), TEXT_ID(B_TOPIC_NEGATIVE, 10), TEXT_ID(B_TOPIC_POSITIVE, 10) },
+        .battleTopicTextIds = {TEXT_ID(B_TOPIC_WILD, 8), TEXT_ID(B_TOPIC_NEGATIVE, 10), TEXT_ID(B_TOPIC_POSITIVE, 10)},
         .generalTextId = TEXT_ID(GEN_TOPIC_PERSONAL, 14),
         .battleFrontierRecordStreakTextIndex = 10,
         .sameRouteMatchCallTextId = TEXT_ID(REQ_TOPIC_SAME_ROUTE, 8),
@@ -727,7 +721,7 @@ static const struct MatchCallTrainerTextInfo sMatchCallTrainers[] =
         .trainerId = TRAINER_SAWYER_1,
         .unused = 0,
         // Thalia and Sawyer are the only ones who use different msg ids for their battle topics
-        .battleTopicTextIds = { TEXT_ID(B_TOPIC_WILD, 15), TEXT_ID(B_TOPIC_NEGATIVE, 3), TEXT_ID(B_TOPIC_POSITIVE, 3) },
+        .battleTopicTextIds = {TEXT_ID(B_TOPIC_WILD, 15), TEXT_ID(B_TOPIC_NEGATIVE, 3), TEXT_ID(B_TOPIC_POSITIVE, 3)},
         .generalTextId = TEXT_ID(GEN_TOPIC_PERSONAL, 1),
         .battleFrontierRecordStreakTextIndex = 3,
         .sameRouteMatchCallTextId = TEXT_ID(REQ_TOPIC_SAME_ROUTE, 3),
@@ -744,301 +738,281 @@ static const struct MatchCallTrainerTextInfo sMatchCallTrainers[] =
     },
 };
 
-static const struct MatchCallText sMatchCallWildBattleTexts[] =
-{
-    { .text = MatchCall_WildBattleText1,  .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText2,  .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText3,  .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText4,  .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText5,  .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText6,  .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText7,  .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText8,  .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText9,  .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText10, .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText11, .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText12, .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText13, .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText14, .stringVarFuncIds = STRS_WILD_BATTLE },
-    { .text = MatchCall_WildBattleText15, .stringVarFuncIds = STRS_WILD_BATTLE },
+static const struct MatchCallText sMatchCallWildBattleTexts[] = {
+    {.text = MatchCall_WildBattleText1, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText2, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText3, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText4, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText5, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText6, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText7, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText8, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText9, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText10, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText11, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText12, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText13, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText14, .stringVarFuncIds = STRS_WILD_BATTLE},
+    {.text = MatchCall_WildBattleText15, .stringVarFuncIds = STRS_WILD_BATTLE},
 };
 
-static const struct MatchCallText sMatchCallNegativeBattleTexts[] =
-{
-    { .text = MatchCall_NegativeBattleText1,  .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
-    { .text = MatchCall_NegativeBattleText2,  .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
-    { .text = MatchCall_NegativeBattleText3,  .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
-    { .text = MatchCall_NegativeBattleText4,  .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
-    { .text = MatchCall_NegativeBattleText5,  .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
-    { .text = MatchCall_NegativeBattleText6,  .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
-    { .text = MatchCall_NegativeBattleText7,  .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
-    { .text = MatchCall_NegativeBattleText8,  .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
-    { .text = MatchCall_NegativeBattleText9,  .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
-    { .text = MatchCall_NegativeBattleText10, .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
-    { .text = MatchCall_NegativeBattleText11, .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
-    { .text = MatchCall_NegativeBattleText12, .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
-    { .text = MatchCall_NegativeBattleText13, .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
-    { .text = MatchCall_NegativeBattleText14, .stringVarFuncIds = STRS_BATTLE_NEGATIVE },
+static const struct MatchCallText sMatchCallNegativeBattleTexts[] = {
+    {.text = MatchCall_NegativeBattleText1, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
+    {.text = MatchCall_NegativeBattleText2, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
+    {.text = MatchCall_NegativeBattleText3, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
+    {.text = MatchCall_NegativeBattleText4, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
+    {.text = MatchCall_NegativeBattleText5, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
+    {.text = MatchCall_NegativeBattleText6, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
+    {.text = MatchCall_NegativeBattleText7, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
+    {.text = MatchCall_NegativeBattleText8, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
+    {.text = MatchCall_NegativeBattleText9, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
+    {.text = MatchCall_NegativeBattleText10, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
+    {.text = MatchCall_NegativeBattleText11, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
+    {.text = MatchCall_NegativeBattleText12, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
+    {.text = MatchCall_NegativeBattleText13, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
+    {.text = MatchCall_NegativeBattleText14, .stringVarFuncIds = STRS_BATTLE_NEGATIVE},
 };
 
-static const struct MatchCallText sMatchCallPositiveBattleTexts[] =
-{
-    { .text = MatchCall_PositiveBattleText1,  .stringVarFuncIds = STRS_BATTLE_POSITIVE },
-    { .text = MatchCall_PositiveBattleText2,  .stringVarFuncIds = STRS_BATTLE_POSITIVE },
-    { .text = MatchCall_PositiveBattleText3,  .stringVarFuncIds = STRS_BATTLE_POSITIVE },
-    { .text = MatchCall_PositiveBattleText4,  .stringVarFuncIds = STRS_BATTLE_POSITIVE },
-    { .text = MatchCall_PositiveBattleText5,  .stringVarFuncIds = STRS_BATTLE_POSITIVE },
-    { .text = MatchCall_PositiveBattleText6,  .stringVarFuncIds = STRS_BATTLE_POSITIVE },
-    { .text = MatchCall_PositiveBattleText7,  .stringVarFuncIds = STRS_BATTLE_POSITIVE },
-    { .text = MatchCall_PositiveBattleText8,  .stringVarFuncIds = STRS_BATTLE_POSITIVE },
-    { .text = MatchCall_PositiveBattleText9,  .stringVarFuncIds = STRS_BATTLE_POSITIVE },
-    { .text = MatchCall_PositiveBattleText10, .stringVarFuncIds = STRS_BATTLE_POSITIVE },
-    { .text = MatchCall_PositiveBattleText11, .stringVarFuncIds = STRS_BATTLE_POSITIVE },
-    { .text = MatchCall_PositiveBattleText12, .stringVarFuncIds = STRS_BATTLE_POSITIVE },
-    { .text = MatchCall_PositiveBattleText13, .stringVarFuncIds = STRS_BATTLE_POSITIVE },
-    { .text = MatchCall_PositiveBattleText14, .stringVarFuncIds = STRS_BATTLE_POSITIVE },
+static const struct MatchCallText sMatchCallPositiveBattleTexts[] = {
+    {.text = MatchCall_PositiveBattleText1, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
+    {.text = MatchCall_PositiveBattleText2, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
+    {.text = MatchCall_PositiveBattleText3, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
+    {.text = MatchCall_PositiveBattleText4, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
+    {.text = MatchCall_PositiveBattleText5, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
+    {.text = MatchCall_PositiveBattleText6, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
+    {.text = MatchCall_PositiveBattleText7, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
+    {.text = MatchCall_PositiveBattleText8, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
+    {.text = MatchCall_PositiveBattleText9, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
+    {.text = MatchCall_PositiveBattleText10, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
+    {.text = MatchCall_PositiveBattleText11, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
+    {.text = MatchCall_PositiveBattleText12, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
+    {.text = MatchCall_PositiveBattleText13, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
+    {.text = MatchCall_PositiveBattleText14, .stringVarFuncIds = STRS_BATTLE_POSITIVE},
 };
 
-static const struct MatchCallText sMatchCallSameRouteBattleRequestTexts[] =
-{
-    { .text = MatchCall_SameRouteBattleRequestText1,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_SameRouteBattleRequestText2,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_SameRouteBattleRequestText3,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_SameRouteBattleRequestText4,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_SameRouteBattleRequestText5,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_SameRouteBattleRequestText6,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_SameRouteBattleRequestText7,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_SameRouteBattleRequestText8,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_SameRouteBattleRequestText9,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_SameRouteBattleRequestText10, .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_SameRouteBattleRequestText11, .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_SameRouteBattleRequestText12, .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_SameRouteBattleRequestText13, .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_SameRouteBattleRequestText14, .stringVarFuncIds = STRS_BATTLE_REQUEST },
+static const struct MatchCallText sMatchCallSameRouteBattleRequestTexts[] = {
+    {.text = MatchCall_SameRouteBattleRequestText1, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_SameRouteBattleRequestText2, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_SameRouteBattleRequestText3, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_SameRouteBattleRequestText4, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_SameRouteBattleRequestText5, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_SameRouteBattleRequestText6, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_SameRouteBattleRequestText7, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_SameRouteBattleRequestText8, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_SameRouteBattleRequestText9, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_SameRouteBattleRequestText10, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_SameRouteBattleRequestText11, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_SameRouteBattleRequestText12, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_SameRouteBattleRequestText13, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_SameRouteBattleRequestText14, .stringVarFuncIds = STRS_BATTLE_REQUEST},
 };
 
-static const struct MatchCallText sMatchCallDifferentRouteBattleRequestTexts[] =
-{
-    { .text = MatchCall_DifferentRouteBattleRequestText1,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_DifferentRouteBattleRequestText2,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_DifferentRouteBattleRequestText3,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_DifferentRouteBattleRequestText4,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_DifferentRouteBattleRequestText5,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_DifferentRouteBattleRequestText6,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_DifferentRouteBattleRequestText7,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_DifferentRouteBattleRequestText8,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_DifferentRouteBattleRequestText9,  .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_DifferentRouteBattleRequestText10, .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_DifferentRouteBattleRequestText11, .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_DifferentRouteBattleRequestText12, .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_DifferentRouteBattleRequestText13, .stringVarFuncIds = STRS_BATTLE_REQUEST },
-    { .text = MatchCall_DifferentRouteBattleRequestText14, .stringVarFuncIds = STRS_BATTLE_REQUEST },
+static const struct MatchCallText sMatchCallDifferentRouteBattleRequestTexts[] = {
+    {.text = MatchCall_DifferentRouteBattleRequestText1, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_DifferentRouteBattleRequestText2, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_DifferentRouteBattleRequestText3, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_DifferentRouteBattleRequestText4, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_DifferentRouteBattleRequestText5, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_DifferentRouteBattleRequestText6, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_DifferentRouteBattleRequestText7, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_DifferentRouteBattleRequestText8, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_DifferentRouteBattleRequestText9, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_DifferentRouteBattleRequestText10, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_DifferentRouteBattleRequestText11, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_DifferentRouteBattleRequestText12, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_DifferentRouteBattleRequestText13, .stringVarFuncIds = STRS_BATTLE_REQUEST},
+    {.text = MatchCall_DifferentRouteBattleRequestText14, .stringVarFuncIds = STRS_BATTLE_REQUEST},
 };
 
-static const struct MatchCallText sMatchCallPersonalizedTexts[] =
-{
-    { .text = MatchCall_PersonalizedText1,  .stringVarFuncIds = { STR_TRAINER_NAME, STR_MAP_NAME, STR_NONE } },
-    { .text = MatchCall_PersonalizedText2,  .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText3,  .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText4,  .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText5,  .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText6,  .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText7,  .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText8,  .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText9,  .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText10, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText11, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText12, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText13, .stringVarFuncIds = { STR_TRAINER_NAME, STR_SPECIES_IN_ROUTE, STR_NONE } },
-    { .text = MatchCall_PersonalizedText14, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText15, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText16, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText17, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText18, .stringVarFuncIds = { STR_TRAINER_NAME, STR_SPECIES_IN_PARTY, STR_NONE } },
-    { .text = MatchCall_PersonalizedText19, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText20, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText21, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText22, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText23, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText24, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText25, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText26, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText27, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText28, .stringVarFuncIds = { STR_TRAINER_NAME, STR_SPECIES_IN_PARTY, STR_NONE } },
-    { .text = MatchCall_PersonalizedText29, .stringVarFuncIds = { STR_TRAINER_NAME, STR_SPECIES_IN_PARTY, STR_NONE } },
-    { .text = MatchCall_PersonalizedText30, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText31, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText32, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText33, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText34, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText35, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText36, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText37, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText38, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText39, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText40, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText41, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText42, .stringVarFuncIds = { STR_TRAINER_NAME, STR_SPECIES_IN_PARTY, STR_NONE } },
-    { .text = MatchCall_PersonalizedText43, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText44, .stringVarFuncIds = { STR_TRAINER_NAME, STR_SPECIES_IN_PARTY, STR_NONE } },
-    { .text = MatchCall_PersonalizedText45, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText46, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText47, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText48, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText49, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText50, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText51, .stringVarFuncIds = { STR_TRAINER_NAME, STR_MAP_NAME, STR_NONE } },
-    { .text = MatchCall_PersonalizedText52, .stringVarFuncIds = { STR_TRAINER_NAME, STR_SPECIES_IN_PARTY, STR_NONE } },
-    { .text = MatchCall_PersonalizedText53, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText54, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText55, .stringVarFuncIds = { STR_TRAINER_NAME, STR_MAP_NAME, STR_NONE } },
-    { .text = MatchCall_PersonalizedText56, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText57, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText58, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText59, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText60, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText61, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText62, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText63, .stringVarFuncIds = STRS_NORMAL_MSG },
-    { .text = MatchCall_PersonalizedText64, .stringVarFuncIds = STRS_NORMAL_MSG },
+static const struct MatchCallText sMatchCallPersonalizedTexts[] = {
+    {.text = MatchCall_PersonalizedText1, .stringVarFuncIds = {STR_TRAINER_NAME, STR_MAP_NAME, STR_NONE}},
+    {.text = MatchCall_PersonalizedText2, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText3, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText4, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText5, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText6, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText7, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText8, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText9, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText10, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText11, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText12, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText13, .stringVarFuncIds = {STR_TRAINER_NAME, STR_SPECIES_IN_ROUTE, STR_NONE}},
+    {.text = MatchCall_PersonalizedText14, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText15, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText16, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText17, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText18, .stringVarFuncIds = {STR_TRAINER_NAME, STR_SPECIES_IN_PARTY, STR_NONE}},
+    {.text = MatchCall_PersonalizedText19, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText20, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText21, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText22, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText23, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText24, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText25, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText26, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText27, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText28, .stringVarFuncIds = {STR_TRAINER_NAME, STR_SPECIES_IN_PARTY, STR_NONE}},
+    {.text = MatchCall_PersonalizedText29, .stringVarFuncIds = {STR_TRAINER_NAME, STR_SPECIES_IN_PARTY, STR_NONE}},
+    {.text = MatchCall_PersonalizedText30, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText31, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText32, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText33, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText34, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText35, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText36, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText37, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText38, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText39, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText40, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText41, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText42, .stringVarFuncIds = {STR_TRAINER_NAME, STR_SPECIES_IN_PARTY, STR_NONE}},
+    {.text = MatchCall_PersonalizedText43, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText44, .stringVarFuncIds = {STR_TRAINER_NAME, STR_SPECIES_IN_PARTY, STR_NONE}},
+    {.text = MatchCall_PersonalizedText45, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText46, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText47, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText48, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText49, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText50, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText51, .stringVarFuncIds = {STR_TRAINER_NAME, STR_MAP_NAME, STR_NONE}},
+    {.text = MatchCall_PersonalizedText52, .stringVarFuncIds = {STR_TRAINER_NAME, STR_SPECIES_IN_PARTY, STR_NONE}},
+    {.text = MatchCall_PersonalizedText53, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText54, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText55, .stringVarFuncIds = {STR_TRAINER_NAME, STR_MAP_NAME, STR_NONE}},
+    {.text = MatchCall_PersonalizedText56, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText57, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText58, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText59, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText60, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText61, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText62, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText63, .stringVarFuncIds = STRS_NORMAL_MSG},
+    {.text = MatchCall_PersonalizedText64, .stringVarFuncIds = STRS_NORMAL_MSG},
 };
 
-static const struct MatchCallText sMatchCallBattleFrontierStreakTexts[] =
-{
-    { .text = MatchCall_BattleFrontierStreakText1,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierStreakText2,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierStreakText3,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierStreakText4,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierStreakText5,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierStreakText6,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierStreakText7,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierStreakText8,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierStreakText9,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierStreakText10, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierStreakText11, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierStreakText12, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierStreakText13, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierStreakText14, .stringVarFuncIds = STRS_FRONTIER },
+static const struct MatchCallText sMatchCallBattleFrontierStreakTexts[] = {
+    {.text = MatchCall_BattleFrontierStreakText1, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierStreakText2, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierStreakText3, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierStreakText4, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierStreakText5, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierStreakText6, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierStreakText7, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierStreakText8, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierStreakText9, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierStreakText10, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierStreakText11, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierStreakText12, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierStreakText13, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierStreakText14, .stringVarFuncIds = STRS_FRONTIER},
 };
 
-static const struct MatchCallText sMatchCallBattleFrontierRecordStreakTexts[] =
-{
-    { .text = MatchCall_BattleFrontierRecordStreakText1,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierRecordStreakText2,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierRecordStreakText3,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierRecordStreakText4,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierRecordStreakText5,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierRecordStreakText6,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierRecordStreakText7,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierRecordStreakText8,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierRecordStreakText9,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierRecordStreakText10, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierRecordStreakText11, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierRecordStreakText12, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierRecordStreakText13, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleFrontierRecordStreakText14, .stringVarFuncIds = STRS_FRONTIER },
+static const struct MatchCallText sMatchCallBattleFrontierRecordStreakTexts[] = {
+    {.text = MatchCall_BattleFrontierRecordStreakText1, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierRecordStreakText2, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierRecordStreakText3, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierRecordStreakText4, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierRecordStreakText5, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierRecordStreakText6, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierRecordStreakText7, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierRecordStreakText8, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierRecordStreakText9, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierRecordStreakText10, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierRecordStreakText11, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierRecordStreakText12, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierRecordStreakText13, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleFrontierRecordStreakText14, .stringVarFuncIds = STRS_FRONTIER},
 };
 
-static const struct MatchCallText sMatchCallBattleDomeTexts[] =
-{
-    { .text = MatchCall_BattleDomeText1,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleDomeText2,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleDomeText3,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleDomeText4,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleDomeText5,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleDomeText6,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleDomeText7,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleDomeText8,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleDomeText9,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleDomeText10, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleDomeText11, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleDomeText12, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleDomeText13, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattleDomeText14, .stringVarFuncIds = STRS_FRONTIER },
+static const struct MatchCallText sMatchCallBattleDomeTexts[] = {
+    {.text = MatchCall_BattleDomeText1, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleDomeText2, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleDomeText3, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleDomeText4, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleDomeText5, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleDomeText6, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleDomeText7, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleDomeText8, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleDomeText9, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleDomeText10, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleDomeText11, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleDomeText12, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleDomeText13, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattleDomeText14, .stringVarFuncIds = STRS_FRONTIER},
 };
 
-static const struct MatchCallText sMatchCallBattlePikeTexts[] =
-{
-    { .text = MatchCall_BattlePikeText1,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePikeText2,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePikeText3,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePikeText4,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePikeText5,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePikeText6,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePikeText7,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePikeText8,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePikeText9,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePikeText10, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePikeText11, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePikeText12, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePikeText13, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePikeText14, .stringVarFuncIds = STRS_FRONTIER },
+static const struct MatchCallText sMatchCallBattlePikeTexts[] = {
+    {.text = MatchCall_BattlePikeText1, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePikeText2, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePikeText3, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePikeText4, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePikeText5, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePikeText6, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePikeText7, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePikeText8, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePikeText9, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePikeText10, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePikeText11, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePikeText12, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePikeText13, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePikeText14, .stringVarFuncIds = STRS_FRONTIER},
 };
 
-static const struct MatchCallText sMatchCallBattlePyramidTexts[] =
-{
-    { .text = MatchCall_BattlePyramidText1,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePyramidText2,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePyramidText3,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePyramidText4,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePyramidText5,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePyramidText6,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePyramidText7,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePyramidText8,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePyramidText9,  .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePyramidText10, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePyramidText11, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePyramidText12, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePyramidText13, .stringVarFuncIds = STRS_FRONTIER },
-    { .text = MatchCall_BattlePyramidText14, .stringVarFuncIds = STRS_FRONTIER },
+static const struct MatchCallText sMatchCallBattlePyramidTexts[] = {
+    {.text = MatchCall_BattlePyramidText1, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePyramidText2, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePyramidText3, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePyramidText4, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePyramidText5, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePyramidText6, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePyramidText7, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePyramidText8, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePyramidText9, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePyramidText10, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePyramidText11, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePyramidText12, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePyramidText13, .stringVarFuncIds = STRS_FRONTIER},
+    {.text = MatchCall_BattlePyramidText14, .stringVarFuncIds = STRS_FRONTIER},
 };
 
-static const struct MatchCallText *const sMatchCallBattleTopics[] =
-{
-    [B_TOPIC_WILD - 1]     = sMatchCallWildBattleTexts,
+static const struct MatchCallText *const sMatchCallBattleTopics[] = {
+    [B_TOPIC_WILD - 1] = sMatchCallWildBattleTexts,
     [B_TOPIC_NEGATIVE - 1] = sMatchCallNegativeBattleTexts,
     [B_TOPIC_POSITIVE - 1] = sMatchCallPositiveBattleTexts,
 };
 
-static const struct MatchCallText *const sMatchCallBattleRequestTopics[] =
-{
+static const struct MatchCallText *const sMatchCallBattleRequestTopics[] = {
     [REQ_TOPIC_SAME_ROUTE - 1] = sMatchCallSameRouteBattleRequestTexts,
     [REQ_TOPIC_DIFF_ROUTE - 1] = sMatchCallDifferentRouteBattleRequestTexts,
 };
 
-static const struct MatchCallText *const sMatchCallGeneralTopics[] =
-{
-    [GEN_TOPIC_PERSONAL - 1]      = sMatchCallPersonalizedTexts,
-    [GEN_TOPIC_STREAK - 1]        = sMatchCallBattleFrontierStreakTexts,
+static const struct MatchCallText *const sMatchCallGeneralTopics[] = {
+    [GEN_TOPIC_PERSONAL - 1] = sMatchCallPersonalizedTexts,
+    [GEN_TOPIC_STREAK - 1] = sMatchCallBattleFrontierStreakTexts,
     [GEN_TOPIC_STREAK_RECORD - 1] = sMatchCallBattleFrontierRecordStreakTexts,
-    [GEN_TOPIC_B_DOME - 1]        = sMatchCallBattleDomeTexts,
-    [GEN_TOPIC_B_PIKE - 1]        = sMatchCallBattlePikeTexts,
-    [GEN_TOPIC_B_PYRAMID - 1]     = sMatchCallBattlePyramidTexts,
+    [GEN_TOPIC_B_DOME - 1] = sMatchCallBattleDomeTexts,
+    [GEN_TOPIC_B_PIKE - 1] = sMatchCallBattlePikeTexts,
+    [GEN_TOPIC_B_PYRAMID - 1] = sMatchCallBattlePyramidTexts,
 };
 
 extern const u8 gBirchDexRatingText_AreYouCurious[];
 extern const u8 gBirchDexRatingText_SoYouveSeenAndCaught[];
 extern const u8 gBirchDexRatingText_OnANationwideBasis[];
 
-void InitMatchCallCounters(void)
-{
+void InitMatchCallCounters(void) {
     RtcCalcLocalTime();
     sMatchCallState.minutes = GetCurrentTotalMinutes(&gLocalTime) + 10;
     sMatchCallState.stepCounter = 0;
 }
 
-static u32 GetCurrentTotalMinutes(struct Time *time)
-{
-    return time->days * 24 * 60 + time->hours * 60 + time->minutes;
-}
+static u32 GetCurrentTotalMinutes(struct Time *time) { return time->days * 24 * 60 + time->hours * 60 + time->minutes; }
 
-static bool32 UpdateMatchCallMinutesCounter(void)
-{
+static bool32 UpdateMatchCallMinutesCounter(void) {
     int curMinutes;
     RtcCalcLocalTime();
     curMinutes = GetCurrentTotalMinutes(&gLocalTime);
-    if (sMatchCallState.minutes > curMinutes || curMinutes - sMatchCallState.minutes > 9)
-    {
+    if (sMatchCallState.minutes > curMinutes || curMinutes - sMatchCallState.minutes > 9) {
         sMatchCallState.minutes = curMinutes;
         return TRUE;
     }
@@ -1046,89 +1020,68 @@ static bool32 UpdateMatchCallMinutesCounter(void)
     return FALSE;
 }
 
-static bool32 CheckMatchCallChance(void)
-{
+static bool32 CheckMatchCallChance(void) {
     int callChance = 1;
-    if (!GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG) && GetMonAbility(&gPlayerParty[0]) == ABILITY_LIGHTNING_ROD)
-        callChance = 2;
-    
-    if (Random() % 10 < callChance * 3) 
+    if (!GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG) && GetMonAbility(&gPlayerParty[0]) == ABILITY_LIGHTNING_ROD) callChance = 2;
+
+    if (Random() % 10 < callChance * 3)
         return TRUE;
     else
         return FALSE;
 }
 
-static bool32 MapAllowsMatchCall(void)
-{
-    if (!Overworld_MapTypeAllowsTeleportAndFly(gMapHeader.mapType) || gMapHeader.regionMapSectionId == MAPSEC_SAFARI_ZONE)
-        return FALSE;
-    
-    if (gMapHeader.regionMapSectionId == MAPSEC_SOOTOPOLIS_CITY
-     && FlagGet(FLAG_HIDE_SOOTOPOLIS_CITY_RAYQUAZA) == TRUE
-     && FlagGet(FLAG_NEVER_SET_0x0DC) == FALSE)
+static bool32 MapAllowsMatchCall(void) {
+    if (!Overworld_MapTypeAllowsTeleportAndFly(gMapHeader.mapType) || gMapHeader.regionMapSectionId == MAPSEC_SAFARI_ZONE) return FALSE;
+
+    if (gMapHeader.regionMapSectionId == MAPSEC_SOOTOPOLIS_CITY && FlagGet(FLAG_HIDE_SOOTOPOLIS_CITY_RAYQUAZA) == TRUE &&
+        FlagGet(FLAG_NEVER_SET_0x0DC) == FALSE)
         return FALSE;
 
-    if (gMapHeader.regionMapSectionId == MAPSEC_MT_CHIMNEY
-     && FlagGet(FLAG_MET_ARCHIE_METEOR_FALLS) == TRUE
-     && FlagGet(FLAG_DEFEATED_EVIL_TEAM_MT_CHIMNEY) == FALSE)
+    if (gMapHeader.regionMapSectionId == MAPSEC_MT_CHIMNEY && FlagGet(FLAG_MET_ARCHIE_METEOR_FALLS) == TRUE &&
+        FlagGet(FLAG_DEFEATED_EVIL_TEAM_MT_CHIMNEY) == FALSE)
         return FALSE;
 
     return TRUE;
 }
 
-static bool32 UpdateMatchCallStepCounter(void)
-{
-    if (++sMatchCallState.stepCounter >= 10)
-    {
+static bool32 UpdateMatchCallStepCounter(void) {
+    if (++sMatchCallState.stepCounter >= 10) {
         sMatchCallState.stepCounter = 0;
         return TRUE;
-    }
-    else
-    {
+    } else {
         return FALSE;
     }
 }
 
-static bool32 SelectMatchCallTrainer(void)
-{
+static bool32 SelectMatchCallTrainer(void) {
     u32 matchCallId;
     u32 numRegistered = GetNumRegisteredNPCs();
-    if (numRegistered == 0)
-        return FALSE;
+    if (numRegistered == 0) return FALSE;
 
     sMatchCallState.trainerId = GetActiveMatchCallTrainerId(Random() % numRegistered);
     sMatchCallState.triggeredFromScript = FALSE;
-    if (sMatchCallState.trainerId == REMATCH_TABLE_ENTRIES)
-        return FALSE;
+    if (sMatchCallState.trainerId == REMATCH_TABLE_ENTRIES) return FALSE;
 
     matchCallId = GetTrainerMatchCallId(sMatchCallState.trainerId);
-    if (GetRematchTrainerLocation(matchCallId) == gMapHeader.regionMapSectionId && !TrainerIsEligibleForRematch(matchCallId))
-        return FALSE;
+    if (GetRematchTrainerLocation(matchCallId) == gMapHeader.regionMapSectionId && !TrainerIsEligibleForRematch(matchCallId)) return FALSE;
 
     return TRUE;
 }
 
-static u32 GetNumRegisteredNPCs(void)
-{
+static u32 GetNumRegisteredNPCs(void) {
     u32 i, count;
-    for (i = 0, count = 0; i < REMATCH_SPECIAL_TRAINER_START; i++)
-    {
-        if (FlagGet(FLAG_MATCH_CALL_REGISTERED + i))
-            count++;
+    for (i = 0, count = 0; i < REMATCH_SPECIAL_TRAINER_START; i++) {
+        if (FlagGet(FLAG_MATCH_CALL_REGISTERED + i)) count++;
     }
 
     return count;
 }
 
-static u32 GetActiveMatchCallTrainerId(u32 activeMatchCallId)
-{
+static u32 GetActiveMatchCallTrainerId(u32 activeMatchCallId) {
     u32 i;
-    for (i = 0; i < REMATCH_SPECIAL_TRAINER_START; i++)
-    {
-        if (FlagGet(FLAG_MATCH_CALL_REGISTERED + i))
-        {
-            if (!activeMatchCallId)
-                return gRematchTable[i].trainerIds[0];
+    for (i = 0; i < REMATCH_SPECIAL_TRAINER_START; i++) {
+        if (FlagGet(FLAG_MATCH_CALL_REGISTERED + i)) {
+            if (!activeMatchCallId) return gRematchTable[i].trainerIds[0];
 
             activeMatchCallId--;
         }
@@ -1146,36 +1099,24 @@ static u32 GetActiveMatchCallTrainerId(u32 activeMatchCallId)
     - If in a valid outdoor map (not Safari Zone, not underwater, not Mt Chimney with Team Magma, not Sootopolis with legendaries)
     - If an eligible trainer to call the player is selected
 */
-bool32 TryStartMatchCall(void)
-{
-    if (FlagGet(FLAG_HAS_MATCH_CALL)
-        && UpdateMatchCallStepCounter()
-        && UpdateMatchCallMinutesCounter()
-        && CheckMatchCallChance()
-        && MapAllowsMatchCall()
-        && SelectMatchCallTrainer())
-    {
+bool32 TryStartMatchCall(void) {
+    if (FlagGet(FLAG_HAS_MATCH_CALL) && UpdateMatchCallStepCounter() && UpdateMatchCallMinutesCounter() && CheckMatchCallChance() && MapAllowsMatchCall() &&
+        SelectMatchCallTrainer()) {
         return FALSE;
     }
 
     return FALSE;
 }
 
-void StartMatchCallFromScript(const u8 *message)
-{
+void StartMatchCallFromScript(const u8 *message) {
     sMatchCallState.triggeredFromScript = TRUE;
     StartMatchCall();
 }
 
-bool32 IsMatchCallTaskActive(void)
-{
-    return FuncIsActiveTask(ExecuteMatchCall);
-}
+bool32 IsMatchCallTaskActive(void) { return FuncIsActiveTask(ExecuteMatchCall); }
 
-static void StartMatchCall(void)
-{
-    if (!sMatchCallState.triggeredFromScript)
-    {
+static void StartMatchCall(void) {
+    if (!sMatchCallState.triggeredFromScript) {
         ScriptContext2_Enable();
         FreezeObjectEvents();
         PlayerFreeze();
@@ -1193,12 +1134,11 @@ static const u32 sPokenavIcon_Gfx[] = INCBIN_U32("graphics/pokenav/icon.4bpp.lz"
 
 static const u8 sText_PokenavCallEllipsis[] = _("………………\p");
 
-#define tState      data[0]
-#define tWindowId   data[2]
+#define tState data[0]
+#define tWindowId data[2]
 #define tIconTaskId data[5]
 
-static bool32 (*const sMatchCallTaskFuncs[])(u8) =
-{
+static bool32 (*const sMatchCallTaskFuncs[])(u8) = {
     MatchCall_LoadGfx,
     MatchCall_DrawWindow,
     MatchCall_ReadyIntro,
@@ -1209,51 +1149,36 @@ static bool32 (*const sMatchCallTaskFuncs[])(u8) =
     MatchCall_EndCall,
 };
 
-static void ExecuteMatchCall(u8 taskId)
-{
+static void ExecuteMatchCall(u8 taskId) {
     s16 *data = gTasks[taskId].data;
-    if (sMatchCallTaskFuncs[tState](taskId))
-    {
+    if (sMatchCallTaskFuncs[tState](taskId)) {
         tState++;
-        data[1] = 0; // Never read
-        if ((u16)tState > 7)
-            DestroyTask(taskId);
+        data[1] = 0;  // Never read
+        if ((u16)tState > 7) DestroyTask(taskId);
     }
 }
 
-static const struct WindowTemplate sMatchCallTextWindow =
-{
-    .bg = 0,
-    .tilemapLeft = 1,
-    .tilemapTop = 15,
-    .width = 28,
-    .height = 4,
-    .paletteNum = 15,
-    .baseBlock = 0x200
-};
+static const struct WindowTemplate sMatchCallTextWindow = {
+    .bg = 0, .tilemapLeft = 1, .tilemapTop = 15, .width = 28, .height = 4, .paletteNum = 15, .baseBlock = 0x200};
 
-#define TILE_MC_WINDOW    0x270
+#define TILE_MC_WINDOW 0x270
 #define TILE_POKENAV_ICON 0x279
 
-static bool32 MatchCall_LoadGfx(u8 taskId)
-{
+static bool32 MatchCall_LoadGfx(u8 taskId) {
     s16 *data = gTasks[taskId].data;
     tWindowId = AddWindow(&sMatchCallTextWindow);
-    if (tWindowId == WINDOW_NONE)
-    {
+    if (tWindowId == WINDOW_NONE) {
         DestroyTask(taskId);
         return FALSE;
     }
 
-    if (LoadBgTiles(0, sMatchCallWindow_Gfx, sizeof(sMatchCallWindow_Gfx), TILE_MC_WINDOW) == 0xFFFF)
-    {
+    if (LoadBgTiles(0, sMatchCallWindow_Gfx, sizeof(sMatchCallWindow_Gfx), TILE_MC_WINDOW) == 0xFFFF) {
         RemoveWindow(tWindowId);
         DestroyTask(taskId);
         return FALSE;
     }
 
-    if (!DecompressAndCopyTileDataToVram(0, sPokenavIcon_Gfx, 0, TILE_POKENAV_ICON, 0))
-    {
+    if (!DecompressAndCopyTileDataToVram(0, sPokenavIcon_Gfx, 0, TILE_POKENAV_ICON, 0)) {
         RemoveWindow(tWindowId);
         DestroyTask(taskId);
         return FALSE;
@@ -1266,11 +1191,9 @@ static bool32 MatchCall_LoadGfx(u8 taskId)
     return TRUE;
 }
 
-static bool32 MatchCall_DrawWindow(u8 taskId)
-{
+static bool32 MatchCall_DrawWindow(u8 taskId) {
     s16 *data = gTasks[taskId].data;
-    if (FreeTempTileDataBuffersIfPossible())
-        return FALSE;
+    if (FreeTempTileDataBuffersIfPossible()) return FALSE;
 
     PutWindowTilemap(tWindowId);
     DrawMatchCallTextBoxBorder_Internal(tWindowId, TILE_MC_WINDOW, 14);
@@ -1281,11 +1204,9 @@ static bool32 MatchCall_DrawWindow(u8 taskId)
     return TRUE;
 }
 
-static bool32 MatchCall_ReadyIntro(u8 taskId)
-{
+static bool32 MatchCall_ReadyIntro(u8 taskId) {
     s16 *data = gTasks[taskId].data;
-    if (!IsDma3ManagerBusyWithBgCopy())
-    {
+    if (!IsDma3ManagerBusyWithBgCopy()) {
         // Note that "..." is not printed yet, just readied
         InitMatchCallTextPrinter(tWindowId, sText_PokenavCallEllipsis);
         return TRUE;
@@ -1294,10 +1215,8 @@ static bool32 MatchCall_ReadyIntro(u8 taskId)
     return FALSE;
 }
 
-static bool32 MatchCall_SlideWindowIn(u8 taskId)
-{
-    if (ChangeBgY(0, 0x600, 1) >= 0)
-    {
+static bool32 MatchCall_SlideWindowIn(u8 taskId) {
+    if (ChangeBgY(0, 0x600, 1) >= 0) {
         ChangeBgY(0, 0, 0);
         return TRUE;
     }
@@ -1305,16 +1224,13 @@ static bool32 MatchCall_SlideWindowIn(u8 taskId)
     return FALSE;
 }
 
-static bool32 MatchCall_PrintIntro(u8 taskId)
-{
+static bool32 MatchCall_PrintIntro(u8 taskId) {
     s16 *data = gTasks[taskId].data;
-    if (!RunMatchCallTextPrinter(tWindowId))
-    {
+    if (!RunMatchCallTextPrinter(tWindowId)) {
         FillWindowPixelBuffer(tWindowId, PIXEL_FILL(8));
-        
+
         // Ready the message
-        if (!sMatchCallState.triggeredFromScript)
-            SelectMatchCallMessage(sMatchCallState.trainerId, gStringVar4);
+        if (!sMatchCallState.triggeredFromScript) SelectMatchCallMessage(sMatchCallState.trainerId, gStringVar4);
         InitMatchCallTextPrinter(tWindowId, gStringVar4);
         return TRUE;
     }
@@ -1322,11 +1238,9 @@ static bool32 MatchCall_PrintIntro(u8 taskId)
     return FALSE;
 }
 
-static bool32 MatchCall_PrintMessage(u8 taskId)
-{
+static bool32 MatchCall_PrintMessage(u8 taskId) {
     s16 *data = gTasks[taskId].data;
-    if (!RunMatchCallTextPrinter(tWindowId) && !IsSEPlaying() && JOY_NEW(A_BUTTON | B_BUTTON))
-    {
+    if (!RunMatchCallTextPrinter(tWindowId) && !IsSEPlaying() && JOY_NEW(A_BUTTON | B_BUTTON)) {
         FillWindowPixelBuffer(tWindowId, PIXEL_FILL(8));
         CopyWindowToVram(tWindowId, 2);
         PlaySE(SE_POKENAV_HANG_UP);
@@ -1336,11 +1250,9 @@ static bool32 MatchCall_PrintMessage(u8 taskId)
     return FALSE;
 }
 
-static bool32 MatchCall_SlideWindowOut(u8 taskId)
-{
+static bool32 MatchCall_SlideWindowOut(u8 taskId) {
     s16 *data = gTasks[taskId].data;
-    if (ChangeBgY(0, 0x600, 2) <= -0x2000)
-    {
+    if (ChangeBgY(0, 0x600, 2) <= -0x2000) {
         FillBgTilemapBufferRect_Palette0(0, 0, 0, 14, 30, 6);
         DestroyTask(tIconTaskId);
         RemoveWindow(tWindowId);
@@ -1351,14 +1263,11 @@ static bool32 MatchCall_SlideWindowOut(u8 taskId)
     return FALSE;
 }
 
-static bool32 MatchCall_EndCall(u8 taskId)
-{
+static bool32 MatchCall_EndCall(u8 taskId) {
     u8 playerObjectId;
-    if (!IsDma3ManagerBusyWithBgCopy() && !IsSEPlaying())
-    {
+    if (!IsDma3ManagerBusyWithBgCopy() && !IsSEPlaying()) {
         ChangeBgY(0, 0, 0);
-        if (!sMatchCallState.triggeredFromScript)
-        {
+        if (!sMatchCallState.triggeredFromScript) {
             LoadMessageBoxAndBorderGfx();
             playerObjectId = GetObjectEventIdByLocalIdAndMap(OBJ_EVENT_ID_PLAYER, 0, 0);
             ObjectEventClearHeldMovementIfFinished(&gObjectEvents[playerObjectId]);
@@ -1373,8 +1282,7 @@ static bool32 MatchCall_EndCall(u8 taskId)
     return FALSE;
 }
 
-static void DrawMatchCallTextBoxBorder_Internal(u32 windowId, u32 tileOffset, u32 paletteId)
-{
+static void DrawMatchCallTextBoxBorder_Internal(u32 windowId, u32 tileOffset, u32 paletteId) {
     int bg, x, y, width, height;
     int tileNum;
 
@@ -1395,8 +1303,7 @@ static void DrawMatchCallTextBoxBorder_Internal(u32 windowId, u32 tileOffset, u3
     FillBgTilemapBufferRect_Palette0(bg, ((paletteId << 12) & 0xF000) | (tileNum + 7), x + width, y + height, 1, 1);
 }
 
-static void InitMatchCallTextPrinter(int windowId, const u8 *str)
-{
+static void InitMatchCallTextPrinter(int windowId, const u8 *str) {
     struct TextPrinterTemplate printerTemplate;
     printerTemplate.currentChar = str;
     printerTemplate.windowId = windowId;
@@ -1416,8 +1323,7 @@ static void InitMatchCallTextPrinter(int windowId, const u8 *str)
     AddTextPrinter(&printerTemplate, GetPlayerTextSpeedDelay(), NULL);
 }
 
-static bool32 RunMatchCallTextPrinter(int windowId)
-{
+static bool32 RunMatchCallTextPrinter(int windowId) {
     if (JOY_HELD(A_BUTTON))
         gTextFlags.canABSpeedUpPrint = TRUE;
     else
@@ -1427,18 +1333,15 @@ static bool32 RunMatchCallTextPrinter(int windowId)
     return IsTextPrinterActive(windowId);
 }
 
-#define tTimer     data[0]
+#define tTimer data[0]
 #define tSpinStage data[1]
-#define tTileNum   data[2]
+#define tTileNum data[2]
 
-static void Task_SpinPokenavIcon(u8 taskId)
-{
+static void Task_SpinPokenavIcon(u8 taskId) {
     s16 *data = gTasks[taskId].data;
-    if (++tTimer > 8)
-    {
+    if (++tTimer > 8) {
         tTimer = 0;
-        if (++tSpinStage > 7)
-            tSpinStage = 0;
+        if (++tSpinStage > 7) tSpinStage = 0;
 
         tTileNum = (tSpinStage * 16) + TILE_POKENAV_ICON;
         WriteSequenceToBgTilemapBuffer(0, tTileNum | ~0xFFF, 1, 15, 4, 4, 17, 1);
@@ -1450,28 +1353,23 @@ static void Task_SpinPokenavIcon(u8 taskId)
 #undef tSpinStage
 #undef tTileNum
 
-static bool32 TrainerIsEligibleForRematch(int matchCallId)
-{
-    #ifndef FREE_MATCH_CALL
+static bool32 TrainerIsEligibleForRematch(int matchCallId) {
+#ifndef FREE_MATCH_CALL
     return gSaveBlock1Ptr->trainerRematches[matchCallId] > 0;
-    #else
+#else
     return TRUE;
-    #endif
+#endif
 }
 
-static u16 GetRematchTrainerLocation(int matchCallId)
-{
+static u16 GetRematchTrainerLocation(int matchCallId) {
     const struct MapHeader *mapHeader = Overworld_GetMapHeaderByGroupAndId(gRematchTable[matchCallId].mapGroup, gRematchTable[matchCallId].mapNum);
     return mapHeader->regionMapSectionId;
 }
 
-static u32 GetNumRematchTrainersFought(void)
-{
+static u32 GetNumRematchTrainersFought(void) {
     u32 i, count;
-    for (i = 0, count = 0; i < REMATCH_SPECIAL_TRAINER_START; i++)
-    {
-        if (HasTrainerBeenFought(gRematchTable[i].trainerIds[0]))
-            count++;
+    for (i = 0, count = 0; i < REMATCH_SPECIAL_TRAINER_START; i++) {
+        if (HasTrainerBeenFought(gRematchTable[i].trainerIds[0])) count++;
     }
 
     return count;
@@ -1480,16 +1378,12 @@ static u32 GetNumRematchTrainersFought(void)
 // Look through the rematch table for trainers that have been defeated once before.
 // Return the index into the rematch table of the nth defeated trainer,
 // or REMATCH_TABLE_ENTRIES if fewer than n rematch trainers have been defeated.
-static u32 GetNthRematchTrainerFought(int n)
-{
+static u32 GetNthRematchTrainerFought(int n) {
     u32 i, count;
 
-    for (i = 0, count = 0; i < REMATCH_TABLE_ENTRIES; i++)
-    {
-        if (HasTrainerBeenFought(gRematchTable[i].trainerIds[0]))
-        {
-            if (count == n)
-                return i;
+    for (i = 0, count = 0; i < REMATCH_TABLE_ENTRIES; i++) {
+        if (HasTrainerBeenFought(gRematchTable[i].trainerIds[0])) {
+            if (count == n) return i;
 
             count++;
         }
@@ -1498,8 +1392,7 @@ static u32 GetNthRematchTrainerFought(int n)
     return REMATCH_TABLE_ENTRIES;
 }
 
-bool32 SelectMatchCallMessage(int trainerId, u8 *str)
-{
+bool32 SelectMatchCallMessage(int trainerId, u8 *str) {
     u32 matchCallId;
     const struct MatchCallText *matchCallText;
     bool32 retVal = FALSE;
@@ -1509,27 +1402,20 @@ bool32 SelectMatchCallMessage(int trainerId, u8 *str)
 
     // If the player is on the same route as the trainer
     // and they can be rematched, they will always request a battle
-    if (TrainerIsEligibleForRematch(matchCallId)
-     && GetRematchTrainerLocation(matchCallId) == gMapHeader.regionMapSectionId)
-    {
+    if (TrainerIsEligibleForRematch(matchCallId) && GetRematchTrainerLocation(matchCallId) == gMapHeader.regionMapSectionId) {
         matchCallText = GetSameRouteMatchCallText(matchCallId, str);
     }
     // If the player is not on the same route as the trainer
     // and they can be rematched, there is a random chance for
     // the trainer to request a battle
-    else if (ShouldTrainerRequestBattle(matchCallId))
-    {
+    else if (ShouldTrainerRequestBattle(matchCallId)) {
         matchCallText = GetDifferentRouteMatchCallText(matchCallId, str);
         retVal = TRUE;
         UpdateRematchIfDefeated(matchCallId);
-    }
-    else if (Random() % 3)
-    {
+    } else if (Random() % 3) {
         // Message talking about a battle the NPC had
         matchCallText = GetBattleMatchCallText(matchCallId, str);
-    }
-    else
-    {
+    } else {
         // Message talking about something else
         matchCallText = GetGeneralMatchCallText(matchCallId, str);
     }
@@ -1538,11 +1424,9 @@ bool32 SelectMatchCallMessage(int trainerId, u8 *str)
     return retVal;
 }
 
-static int GetTrainerMatchCallId(int trainerId)
-{
+static int GetTrainerMatchCallId(int trainerId) {
     int i = 0;
-    while (1)
-    {
+    while (1) {
         if (sMatchCallTrainers[i].trainerId == trainerId)
             return i;
         else
@@ -1550,8 +1434,7 @@ static int GetTrainerMatchCallId(int trainerId)
     }
 }
 
-static const struct MatchCallText *GetSameRouteMatchCallText(int matchCallId, u8 *str)
-{
+static const struct MatchCallText *GetSameRouteMatchCallText(int matchCallId, u8 *str) {
     u16 textId = sMatchCallTrainers[matchCallId].sameRouteMatchCallTextId;
     int mask = 0xFF;
     u32 topic = (textId >> 8) - 1;
@@ -1559,8 +1442,7 @@ static const struct MatchCallText *GetSameRouteMatchCallText(int matchCallId, u8
     return &sMatchCallBattleRequestTopics[topic][id];
 }
 
-static const struct MatchCallText *GetDifferentRouteMatchCallText(int matchCallId, u8 *str)
-{
+static const struct MatchCallText *GetDifferentRouteMatchCallText(int matchCallId, u8 *str) {
     u16 textId = sMatchCallTrainers[matchCallId].differentRouteMatchCallTextId;
     int mask = 0xFF;
     u32 topic = (textId >> 8) - 1;
@@ -1568,15 +1450,13 @@ static const struct MatchCallText *GetDifferentRouteMatchCallText(int matchCallI
     return &sMatchCallBattleRequestTopics[topic][id];
 }
 
-static const struct MatchCallText *GetBattleMatchCallText(int matchCallId, u8 *str)
-{
+static const struct MatchCallText *GetBattleMatchCallText(int matchCallId, u8 *str) {
     int mask;
     u32 textId, topic, id;
-    
+
     topic = Random() % 3;
     textId = sMatchCallTrainers[matchCallId].battleTopicTextIds[topic];
-    if (!textId)
-        SpriteCallbackDummy(NULL); // leftover debugging ???
+    if (!textId) SpriteCallbackDummy(NULL);  // leftover debugging ???
 
     mask = 0xFF;
     topic = (textId >> 8) - 1;
@@ -1584,33 +1464,25 @@ static const struct MatchCallText *GetBattleMatchCallText(int matchCallId, u8 *s
     return &sMatchCallBattleTopics[topic][id];
 }
 
-static const struct MatchCallText *GetGeneralMatchCallText(int matchCallId, u8 *str)
-{
+static const struct MatchCallText *GetGeneralMatchCallText(int matchCallId, u8 *str) {
     int i;
     int count;
     u32 topic, id;
     u16 rand;
 
     rand = Random();
-    if (!(rand & 1))
-    {
-        for (count = 0, i = 0; i < NUM_FRONTIER_FACILITIES; i++)
-        {
-            if (GetFrontierStreakInfo(i, &topic) > 1)
-                count++;
+    if (!(rand & 1)) {
+        for (count = 0, i = 0; i < NUM_FRONTIER_FACILITIES; i++) {
+            if (GetFrontierStreakInfo(i, &topic) > 1) count++;
         }
 
-        if (count)
-        {
+        if (count) {
             count = Random() % count;
-            for (i = 0; i < NUM_FRONTIER_FACILITIES; i++)
-            {
+            for (i = 0; i < NUM_FRONTIER_FACILITIES; i++) {
                 sBattleFrontierStreakInfo.streak = GetFrontierStreakInfo(i, &topic);
-                if (sBattleFrontierStreakInfo.streak < 2)
-                    continue;
+                if (sBattleFrontierStreakInfo.streak < 2) continue;
 
-                if (!count)
-                    break;
+                if (!count) break;
 
                 count--;
             }
@@ -1626,57 +1498,45 @@ static const struct MatchCallText *GetGeneralMatchCallText(int matchCallId, u8 *
     return &sMatchCallGeneralTopics[topic][id];
 }
 
-static void BuildMatchCallString(int matchCallId, const struct MatchCallText *matchCallText, u8 *str)
-{
+static void BuildMatchCallString(int matchCallId, const struct MatchCallText *matchCallText, u8 *str) {
     PopulateMatchCallStringVars(matchCallId, matchCallText->stringVarFuncIds);
     StringExpandPlaceholders(str, matchCallText->text);
 }
 
-static u8 *const sMatchCallTextStringVars[] = { gStringVar1, gStringVar2, gStringVar3 };
+static u8 *const sMatchCallTextStringVars[] = {gStringVar1, gStringVar2, gStringVar3};
 
-static void PopulateMatchCallStringVars(int matchCallId, const s8 *stringVarFuncIds)
-{
+static void PopulateMatchCallStringVars(int matchCallId, const s8 *stringVarFuncIds) {
     int i;
-    for (i = 0; i < NUM_STRVARS_IN_MSG; i++)
-    {
-        if (stringVarFuncIds[i] >= 0)
-            PopulateMatchCallStringVar(matchCallId, stringVarFuncIds[i], sMatchCallTextStringVars[i]);
+    for (i = 0; i < NUM_STRVARS_IN_MSG; i++) {
+        if (stringVarFuncIds[i] >= 0) PopulateMatchCallStringVar(matchCallId, stringVarFuncIds[i], sMatchCallTextStringVars[i]);
     }
 }
 
-static void (*const sPopulateMatchCallStringVarFuncs[])(int, u8 *) =
-{
-    [STR_TRAINER_NAME]     = PopulateTrainerName,
-    [STR_MAP_NAME]         = PopulateMapName,
+static void (*const sPopulateMatchCallStringVarFuncs[])(int, u8 *) = {
+    [STR_TRAINER_NAME] = PopulateTrainerName,
+    [STR_MAP_NAME] = PopulateMapName,
     [STR_SPECIES_IN_ROUTE] = PopulateSpeciesFromTrainerLocation,
     [STR_SPECIES_IN_PARTY] = PopulateSpeciesFromTrainerParty,
-    [STR_FACILITY_NAME]    = PopulateBattleFrontierFacilityName,
-    [STR_FRONTIER_STREAK]  = PopulateBattleFrontierStreak,
+    [STR_FACILITY_NAME] = PopulateBattleFrontierFacilityName,
+    [STR_FRONTIER_STREAK] = PopulateBattleFrontierStreak,
 };
 
-static void PopulateMatchCallStringVar(int matchCallId, int funcId, u8 *destStr)
-{
-    sPopulateMatchCallStringVarFuncs[funcId](matchCallId, destStr);
-}
+static void PopulateMatchCallStringVar(int matchCallId, int funcId, u8 *destStr) { sPopulateMatchCallStringVarFuncs[funcId](matchCallId, destStr); }
 
-static const struct MultiTrainerMatchCallText sMultiTrainerMatchCallTexts[] =
-{
-    { .trainerId = TRAINER_KIRA_AND_DAN_1, .text = gText_Kira },
-    { .trainerId = TRAINER_AMY_AND_LIV_1,  .text = gText_Amy },
-    { .trainerId = TRAINER_JOHN_AND_JAY_1, .text = gText_John },
-    { .trainerId = TRAINER_LILA_AND_ROY_1, .text = gText_Roy },
-    { .trainerId = TRAINER_GABBY_AND_TY_1, .text = gText_Gabby },
-    { .trainerId = TRAINER_ANNA_AND_MEG_1, .text = gText_Anna },
+static const struct MultiTrainerMatchCallText sMultiTrainerMatchCallTexts[] = {
+    {.trainerId = TRAINER_KIRA_AND_DAN_1, .text = gText_Kira},
+    {.trainerId = TRAINER_AMY_AND_LIV_1, .text = gText_Amy},
+    {.trainerId = TRAINER_JOHN_AND_JAY_1, .text = gText_John},
+    {.trainerId = TRAINER_LILA_AND_ROY_1, .text = gText_Roy},
+    {.trainerId = TRAINER_GABBY_AND_TY_1, .text = gText_Gabby},
+    {.trainerId = TRAINER_ANNA_AND_MEG_1, .text = gText_Anna},
 };
 
-static void PopulateTrainerName(int matchCallId, u8 *destStr)
-{
+static void PopulateTrainerName(int matchCallId, u8 *destStr) {
     u32 i;
     u16 trainerId = sMatchCallTrainers[matchCallId].trainerId;
-    for (i = 0; i < ARRAY_COUNT(sMultiTrainerMatchCallTexts); i++)
-    {
-        if (sMultiTrainerMatchCallTexts[i].trainerId == trainerId)
-        {
+    for (i = 0; i < ARRAY_COUNT(sMultiTrainerMatchCallTexts); i++) {
+        if (sMultiTrainerMatchCallTexts[i].trainerId == trainerId) {
             StringCopy(destStr, sMultiTrainerMatchCallTexts[i].text);
             return;
         }
@@ -1685,13 +1545,9 @@ static void PopulateTrainerName(int matchCallId, u8 *destStr)
     StringCopy(destStr, gTrainers[trainerId].trainerName);
 }
 
-static void PopulateMapName(int matchCallId, u8 *destStr)
-{
-    GetMapName(destStr, GetRematchTrainerLocation(matchCallId), 0);
-}
+static void PopulateMapName(int matchCallId, u8 *destStr) { GetMapName(destStr, GetRematchTrainerLocation(matchCallId), 0); }
 
-static u8 GetLandEncounterSlot(void)
-{
+static u8 GetLandEncounterSlot(void) {
     int rand = Random() % 100;
     if (rand < 20)
         return 0;
@@ -1719,8 +1575,7 @@ static u8 GetLandEncounterSlot(void)
         return 11;
 }
 
-static u8 GetWaterEncounterSlot(void)
-{
+static u8 GetWaterEncounterSlot(void) {
     int rand = Random() % 100;
     if (rand < 60)
         return 0;
@@ -1734,43 +1589,35 @@ static u8 GetWaterEncounterSlot(void)
         return 4;
 }
 
-static void PopulateSpeciesFromTrainerLocation(int matchCallId, u8 *destStr)
-{
+static void PopulateSpeciesFromTrainerLocation(int matchCallId, u8 *destStr) {
     SpeciesEnum species[2];
     int numSpecies;
     u8 slot;
     int i = 0;
 
-    if (gWildMonHeaders[i].mapGroup != MAP_GROUP(UNDEFINED)) // ??? This check is nonsense.
+    if (gWildMonHeaders[i].mapGroup != MAP_GROUP(UNDEFINED))  // ??? This check is nonsense.
     {
-        while (gWildMonHeaders[i].mapGroup != MAP_GROUP(UNDEFINED))
-        {
-            if (gWildMonHeaders[i].mapGroup == gRematchTable[matchCallId].mapGroup
-             && gWildMonHeaders[i].mapNum == gRematchTable[matchCallId].mapNum)
-                break;
+        while (gWildMonHeaders[i].mapGroup != MAP_GROUP(UNDEFINED)) {
+            if (gWildMonHeaders[i].mapGroup == gRematchTable[matchCallId].mapGroup && gWildMonHeaders[i].mapNum == gRematchTable[matchCallId].mapNum) break;
 
             i++;
         }
 
-        if (gWildMonHeaders[i].mapGroup != MAP_GROUP(UNDEFINED))
-        {
+        if (gWildMonHeaders[i].mapGroup != MAP_GROUP(UNDEFINED)) {
             numSpecies = 0;
-            if (gWildMonHeaders[i].landMonsInfo)
-            {
+            if (gWildMonHeaders[i].landMonsInfo) {
                 slot = GetLandEncounterSlot();
                 species[numSpecies] = gWildMonHeaders[i].landMonsInfo->wildPokemon[slot].species;
                 numSpecies++;
             }
 
-            if (gWildMonHeaders[i].waterMonsInfo)
-            {
+            if (gWildMonHeaders[i].waterMonsInfo) {
                 slot = GetWaterEncounterSlot();
                 species[numSpecies] = gWildMonHeaders[i].waterMonsInfo->wildPokemon[slot].species;
                 numSpecies++;
             }
 
-            if (numSpecies)
-            {
+            if (numSpecies) {
                 StringCopy(destStr, gSpeciesNames[species[Random() % numSpecies]]);
                 return;
             }
@@ -1780,39 +1627,20 @@ static void PopulateSpeciesFromTrainerLocation(int matchCallId, u8 *destStr)
     destStr[0] = EOS;
 }
 
-static void PopulateSpeciesFromTrainerParty(int matchCallId, u8 *destStr)
-{
+static void PopulateSpeciesFromTrainerParty(int matchCallId, u8 *destStr) {
     u16 trainerId;
-    union TrainerMonPtr party;
     u8 monId;
     const u8 *speciesName;
 
     trainerId = GetLastBeatenRematchTrainerId(sMatchCallTrainers[matchCallId].trainerId);
-    party = gTrainers[trainerId].party;
     monId = Random() % gTrainers[trainerId].partySize;
 
-    switch (gTrainers[trainerId].partyFlags)
-    {
-    case 0:
-    default:
-        speciesName = gSpeciesNames[party.NoItemDefaultMoves[monId].species];
-        break;
-    case F_TRAINER_PARTY_CUSTOM_MOVESET:
-        speciesName = gSpeciesNames[party.NoItemCustomMoves[monId].species];
-        break;
-    case F_TRAINER_PARTY_HELD_ITEM:
-        speciesName = gSpeciesNames[party.ItemDefaultMoves[monId].species];
-        break;
-    case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
-        speciesName = gSpeciesNames[party.ItemCustomMoves[monId].species];
-        break;
-    }
+    speciesName = gSpeciesNames[gTrainers[trainerId].party[monId].species];
 
     StringCopy(destStr, speciesName);
 }
 
-static const u8 *const sBattleFrontierFacilityNames[] =
-{
+static const u8 *const sBattleFrontierFacilityNames[] = {
     gText_BattleTower2,
     gText_BattleDome,
     gText_BattlePalace,
@@ -1822,26 +1650,22 @@ static const u8 *const sBattleFrontierFacilityNames[] =
     gText_BattlePyramid,
 };
 
-static void PopulateBattleFrontierFacilityName(int matchCallId, u8 *destStr)
-{
+static void PopulateBattleFrontierFacilityName(int matchCallId, u8 *destStr) {
     StringCopy(destStr, sBattleFrontierFacilityNames[sBattleFrontierStreakInfo.facilityId]);
 }
 
-static void PopulateBattleFrontierStreak(int matchCallId, u8 *destStr)
-{
+static void PopulateBattleFrontierStreak(int matchCallId, u8 *destStr) {
     int i = 0;
     int streak = sBattleFrontierStreakInfo.streak;
-    while (streak != 0)
-    {
+    while (streak != 0) {
         streak /= 10;
         i++;
     }
-    
+
     ConvertIntToDecimalStringN(destStr, sBattleFrontierStreakInfo.streak, STR_CONV_MODE_LEFT_ALIGN, i);
 }
 
-static const u16 sBadgeFlags[NUM_BADGES] =
-{
+static const u16 sBadgeFlags[NUM_BADGES] = {
     FLAG_BADGE01_GET,
     FLAG_BADGE02_GET,
     FLAG_BADGE03_GET,
@@ -1852,30 +1676,25 @@ static const u16 sBadgeFlags[NUM_BADGES] =
     FLAG_BADGE08_GET,
 };
 
-static int GetNumOwnedBadges(void)
-{
+static int GetNumOwnedBadges(void) {
     u32 i;
 
-    for (i = 0; i < NUM_BADGES; i++)
-    {
-        if (!FlagGet(sBadgeFlags[i]))
-            break;
+    for (i = 0; i < NUM_BADGES; i++) {
+        if (!FlagGet(sBadgeFlags[i])) break;
     }
 
     return i;
 }
 
 // Whether or not a trainer calling the player from a different route should request a battle
-static bool32 ShouldTrainerRequestBattle(int matchCallId)
-{
+static bool32 ShouldTrainerRequestBattle(int matchCallId) {
     int dayCount;
     int otId;
     u16 dewfordRand;
     int numRematchTrainersFought;
     int max, rand, n;
 
-    if (GetNumOwnedBadges() < 5)
-        return FALSE;
+    if (GetNumOwnedBadges() < 5) return FALSE;
 
     dayCount = RtcGetLocalDayCount();
     otId = GetTrainerId(gSaveBlock2Ptr->playerTrainerId) & 0xFFFF;
@@ -1885,151 +1704,106 @@ static bool32 ShouldTrainerRequestBattle(int matchCallId)
     max = (numRematchTrainersFought * 13) / 10;
     rand = ((dayCount ^ dewfordRand) + (dewfordRand ^ GetGameStat(GAME_STAT_TRAINER_BATTLES))) ^ otId;
     n = rand % max;
-    if (n < numRematchTrainersFought)
-    {
-        if (GetNthRematchTrainerFought(n) == matchCallId)
-            return TRUE;
+    if (n < numRematchTrainersFought) {
+        if (GetNthRematchTrainerFought(n) == matchCallId) return TRUE;
     }
 
     return FALSE;
 }
 
-static u16 GetFrontierStreakInfo(u16 facilityId, u32 *topicTextId)
-{
+static u16 GetFrontierStreakInfo(u16 facilityId, u32 *topicTextId) {
     int i;
     int j;
     u16 streak = 0;
 
-    switch (facilityId)
-    {
-    case FRONTIER_FACILITY_DOME:
-        for (i = 0; i < 2; i++)
-        {
-            for (j = 0; j < 2; j++)
-            {
-                if (streak < gSaveBlock2Ptr->frontier.domeRecordWinStreaks[i][j])
-                    streak = gSaveBlock2Ptr->frontier.domeRecordWinStreaks[i][j];
+    switch (facilityId) {
+        case FRONTIER_FACILITY_DOME:
+            for (i = 0; i < 2; i++) {
+                for (j = 0; j < 2; j++) {
+                    if (streak < gSaveBlock2Ptr->frontier.domeRecordWinStreaks[i][j]) streak = gSaveBlock2Ptr->frontier.domeRecordWinStreaks[i][j];
+                }
             }
-        }
-        *topicTextId = GEN_TOPIC_B_DOME - 1;
-        break;
-    #ifdef BUGFIX
-    case FRONTIER_FACILITY_PIKE:
-    #else
-    case FRONTIER_FACILITY_FACTORY:
-    #endif
-        for (i = 0; i < 2; i++)
-        {
-            if (streak < gSaveBlock2Ptr->frontier.pikeRecordStreaks[i])
-                streak = gSaveBlock2Ptr->frontier.pikeRecordStreaks[i];
-        }
-        *topicTextId = GEN_TOPIC_B_PIKE - 1;
-        break;
-    case FRONTIER_FACILITY_TOWER:
-        for (i = 0; i < 4; i++)
-        {
-            for (j = 0; j < 2; j++)
-            {
-                if (streak < gSaveBlock2Ptr->frontier.towerRecordWinStreaks[i][j])
-                    streak = gSaveBlock2Ptr->frontier.towerRecordWinStreaks[i][j];
+            *topicTextId = GEN_TOPIC_B_DOME - 1;
+            break;
+#ifdef BUGFIX
+        case FRONTIER_FACILITY_PIKE:
+#else
+        case FRONTIER_FACILITY_FACTORY:
+#endif
+            for (i = 0; i < 2; i++) {
+                if (streak < gSaveBlock2Ptr->frontier.pikeRecordStreaks[i]) streak = gSaveBlock2Ptr->frontier.pikeRecordStreaks[i];
             }
-        }
-        *topicTextId = GEN_TOPIC_STREAK_RECORD - 1;
-        break;
-    case FRONTIER_FACILITY_PALACE:
-        for (i = 0; i < 2; i++)
-        {
-            for (j = 0; j < 2; j++)
-            {
-                if (streak < gSaveBlock2Ptr->frontier.palaceRecordWinStreaks[i][j])
-                    streak = gSaveBlock2Ptr->frontier.palaceRecordWinStreaks[i][j];
+            *topicTextId = GEN_TOPIC_B_PIKE - 1;
+            break;
+        case FRONTIER_FACILITY_TOWER:
+            for (i = 0; i < 4; i++) {
+                for (j = 0; j < 2; j++) {
+                    if (streak < gSaveBlock2Ptr->frontier.towerRecordWinStreaks[i][j]) streak = gSaveBlock2Ptr->frontier.towerRecordWinStreaks[i][j];
+                }
             }
-        }
-        *topicTextId = GEN_TOPIC_STREAK_RECORD - 1;
-        break;
-    #ifdef BUGFIX
-    case FRONTIER_FACILITY_FACTORY:
-    #else
-    case FRONTIER_FACILITY_PIKE:
-    #endif
-        for (i = 0; i < 2; i++)
-        {
-            for (j = 0; j < 2; j++)
-            {
-                if (streak < gSaveBlock2Ptr->frontier.factoryRecordWinStreaks[i][j])
-                    streak = gSaveBlock2Ptr->frontier.factoryRecordWinStreaks[i][j];
+            *topicTextId = GEN_TOPIC_STREAK_RECORD - 1;
+            break;
+        case FRONTIER_FACILITY_PALACE:
+            for (i = 0; i < 2; i++) {
+                for (j = 0; j < 2; j++) {
+                    if (streak < gSaveBlock2Ptr->frontier.palaceRecordWinStreaks[i][j]) streak = gSaveBlock2Ptr->frontier.palaceRecordWinStreaks[i][j];
+                }
             }
-        }
-        *topicTextId = GEN_TOPIC_STREAK_RECORD - 1;
-        break;
-    case FRONTIER_FACILITY_ARENA:
-        for (i = 0; i < 2; i++)
-        {
-            if (streak < gSaveBlock2Ptr->frontier.arenaRecordStreaks[i])
-                streak = gSaveBlock2Ptr->frontier.arenaRecordStreaks[i];
-        }
-        *topicTextId = GEN_TOPIC_STREAK_RECORD - 1;
-        break;
-    case FRONTIER_FACILITY_PYRAMID:
-        for (i = 0; i < 2; i++)
-        {
-            if (streak < gSaveBlock2Ptr->frontier.pyramidRecordStreaks[i])
-                streak = gSaveBlock2Ptr->frontier.pyramidRecordStreaks[i];
-        }
-        *topicTextId = GEN_TOPIC_B_PYRAMID - 1;
-        break;
+            *topicTextId = GEN_TOPIC_STREAK_RECORD - 1;
+            break;
+#ifdef BUGFIX
+        case FRONTIER_FACILITY_FACTORY:
+#else
+        case FRONTIER_FACILITY_PIKE:
+#endif
+            for (i = 0; i < 2; i++) {
+                for (j = 0; j < 2; j++) {
+                    if (streak < gSaveBlock2Ptr->frontier.factoryRecordWinStreaks[i][j]) streak = gSaveBlock2Ptr->frontier.factoryRecordWinStreaks[i][j];
+                }
+            }
+            *topicTextId = GEN_TOPIC_STREAK_RECORD - 1;
+            break;
+        case FRONTIER_FACILITY_ARENA:
+            for (i = 0; i < 2; i++) {
+                if (streak < gSaveBlock2Ptr->frontier.arenaRecordStreaks[i]) streak = gSaveBlock2Ptr->frontier.arenaRecordStreaks[i];
+            }
+            *topicTextId = GEN_TOPIC_STREAK_RECORD - 1;
+            break;
+        case FRONTIER_FACILITY_PYRAMID:
+            for (i = 0; i < 2; i++) {
+                if (streak < gSaveBlock2Ptr->frontier.pyramidRecordStreaks[i]) streak = gSaveBlock2Ptr->frontier.pyramidRecordStreaks[i];
+            }
+            *topicTextId = GEN_TOPIC_B_PYRAMID - 1;
+            break;
     }
 
     return streak;
 }
 
-static u8 GetPokedexRatingLevel(u16 numSeen)
-{
-    if (numSeen < 10)
-        return 0;
-    if (numSeen < 20)
-        return 1;
-    if (numSeen < 30)
-        return 2;
-    if (numSeen < 40)
-        return 3;
-    if (numSeen < 50)
-        return 4;
-    if (numSeen < 60)
-        return 5;
-    if (numSeen < 70)
-        return 6;
-    if (numSeen < 80)
-        return 7;
-    if (numSeen < 90)
-        return 8;
-    if (numSeen < 100)
-        return 9;
-    if (numSeen < 110)
-        return 10;
-    if (numSeen < 120)
-        return 11;
-    if (numSeen < 130)
-        return 12;
-    if (numSeen < 140)
-        return 13;
-    if (numSeen < 150)
-        return 14;
-    if (numSeen < 160)
-        return 15;
-    if (numSeen < 170)
-        return 16;
-    if (numSeen < 180)
-        return 17;
-    if (numSeen < 190)
-        return 18;
-    if (numSeen < 200)
-        return 19;
-    
-    if (GetSetPokedexFlag(SpeciesToNationalPokedexNum(SPECIES_DEOXYS), FLAG_GET_CAUGHT))
-        numSeen--;
-    if (GetSetPokedexFlag(SpeciesToNationalPokedexNum(SPECIES_JIRACHI), FLAG_GET_CAUGHT))
-        numSeen--;
+static u8 GetPokedexRatingLevel(u16 numSeen) {
+    if (numSeen < 10) return 0;
+    if (numSeen < 20) return 1;
+    if (numSeen < 30) return 2;
+    if (numSeen < 40) return 3;
+    if (numSeen < 50) return 4;
+    if (numSeen < 60) return 5;
+    if (numSeen < 70) return 6;
+    if (numSeen < 80) return 7;
+    if (numSeen < 90) return 8;
+    if (numSeen < 100) return 9;
+    if (numSeen < 110) return 10;
+    if (numSeen < 120) return 11;
+    if (numSeen < 130) return 12;
+    if (numSeen < 140) return 13;
+    if (numSeen < 150) return 14;
+    if (numSeen < 160) return 15;
+    if (numSeen < 170) return 16;
+    if (numSeen < 180) return 17;
+    if (numSeen < 190) return 18;
+    if (numSeen < 200) return 19;
+
+    if (GetSetPokedexFlag(SpeciesToNationalPokedexNum(SPECIES_DEOXYS), FLAG_GET_CAUGHT)) numSeen--;
+    if (GetSetPokedexFlag(SpeciesToNationalPokedexNum(SPECIES_JIRACHI), FLAG_GET_CAUGHT)) numSeen--;
 
     if (numSeen < 200)
         return 19;
@@ -2037,40 +1811,22 @@ static u8 GetPokedexRatingLevel(u16 numSeen)
         return 20;
 }
 
-static const u8 *const sBirchDexRatingTexts[] =
-{
-    gBirchDexRatingText_LessThan10,
-    gBirchDexRatingText_LessThan20,
-    gBirchDexRatingText_LessThan30,
-    gBirchDexRatingText_LessThan40,
-    gBirchDexRatingText_LessThan50,
-    gBirchDexRatingText_LessThan60,
-    gBirchDexRatingText_LessThan70,
-    gBirchDexRatingText_LessThan80,
-    gBirchDexRatingText_LessThan90,
-    gBirchDexRatingText_LessThan100,
-    gBirchDexRatingText_LessThan110,
-    gBirchDexRatingText_LessThan120,
-    gBirchDexRatingText_LessThan130,
-    gBirchDexRatingText_LessThan140,
-    gBirchDexRatingText_LessThan150,
-    gBirchDexRatingText_LessThan160,
-    gBirchDexRatingText_LessThan170,
-    gBirchDexRatingText_LessThan180,
-    gBirchDexRatingText_LessThan190,
-    gBirchDexRatingText_LessThan200,
+static const u8 *const sBirchDexRatingTexts[] = {
+    gBirchDexRatingText_LessThan10,   gBirchDexRatingText_LessThan20,  gBirchDexRatingText_LessThan30,  gBirchDexRatingText_LessThan40,
+    gBirchDexRatingText_LessThan50,   gBirchDexRatingText_LessThan60,  gBirchDexRatingText_LessThan70,  gBirchDexRatingText_LessThan80,
+    gBirchDexRatingText_LessThan90,   gBirchDexRatingText_LessThan100, gBirchDexRatingText_LessThan110, gBirchDexRatingText_LessThan120,
+    gBirchDexRatingText_LessThan130,  gBirchDexRatingText_LessThan140, gBirchDexRatingText_LessThan150, gBirchDexRatingText_LessThan160,
+    gBirchDexRatingText_LessThan170,  gBirchDexRatingText_LessThan180, gBirchDexRatingText_LessThan190, gBirchDexRatingText_LessThan200,
     gBirchDexRatingText_DexCompleted,
 };
 
-void BufferPokedexRatingForMatchCall(u8 *destStr)
-{
+void BufferPokedexRatingForMatchCall(u8 *destStr) {
     int numSeen, numCaught;
     u8 *str;
     u8 dexRatingLevel;
 
     u8 *buffer = Alloc(sizeof(gStringVar4));
-    if (!buffer)
-    {
+    if (!buffer) {
         destStr[0] = EOS;
         return;
     }
@@ -2087,8 +1843,7 @@ void BufferPokedexRatingForMatchCall(u8 *destStr)
     StringCopy(str, sBirchDexRatingTexts[dexRatingLevel]);
     str = StringExpandPlaceholders(destStr, buffer);
 
-    if (IsNationalPokedexEnabled())
-    {
+    if (IsNationalPokedexEnabled()) {
         *(str++) = CHAR_PROMPT_CLEAR;
         numSeen = GetNationalPokedexCount(FLAG_GET_SEEN);
         numCaught = GetNationalPokedexCount(FLAG_GET_CAUGHT);
@@ -2100,14 +1855,10 @@ void BufferPokedexRatingForMatchCall(u8 *destStr)
     Free(buffer);
 }
 
-void LoadMatchCallWindowGfx(u32 windowId, u32 destOffset, u32 paletteId)
-{
+void LoadMatchCallWindowGfx(u32 windowId, u32 destOffset, u32 paletteId) {
     u8 bg = GetWindowAttribute(windowId, WINDOW_BG);
     LoadBgTiles(bg, sMatchCallWindow_Gfx, 0x100, destOffset);
     LoadPalette(sMatchCallWindow_Pal, paletteId << 4, sizeof(sMatchCallWindow_Pal));
 }
 
-void DrawMatchCallTextBoxBorder(u32 windowId, u32 tileOffset, u32 paletteId)
-{
-    DrawMatchCallTextBoxBorder_Internal(windowId, tileOffset, paletteId);
-}
+void DrawMatchCallTextBoxBorder(u32 windowId, u32 tileOffset, u32 paletteId) { DrawMatchCallTextBoxBorder_Internal(windowId, tileOffset, paletteId); }

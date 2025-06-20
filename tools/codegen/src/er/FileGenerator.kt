@@ -76,6 +76,8 @@ object FileGenerator {
         "holdeffect" to HoldEffectGenerator,
         "moveanims" to MoveAnimPointersGenerator,
         "trainerparties" to TrainerPartyGenerator,
+        "trainerids" to TrainerEnumGenerator,
+        "trainerfields" to TrainerMiscEnumsGenerator,
     )
 
     @JvmStatic

@@ -85,8 +85,7 @@ object TrainerPartyGenerator : Generator {
     }
 
     override fun generate(writer: OutputStreamWriter) {
-        val allParties = TRAINERS_LIST.flatMap { listOf(it.ace.monList, it.elite.monList, it.hell.monList) }
-            .filter { it.isNotEmpty() }.distinct()
+        val allParties = TRAINERS_LIST.flatMap { listOf(it.ace.monList, it.elite.monList, it.hell.monList) }.distinct()
 
         for (party in allParties) {
             writer.appendLine(
@@ -110,12 +109,13 @@ object TrainerPartyGenerator : Generator {
                         |$IND$IND.nature = $nature,
                         |$IND$IND.evs = {$hpEv, $atkEv, $defEv, $spatkEv, $spdefEv, $speEv},
                         |$IND$IND.moves = {${moveList.joinToString()}},
-                        |$IND$IND.ironPill = ${if (ironPill) "TRUE" else "FALSE"},
+                        |$IND$IND.zeroSpeedIvs = ${if (ironPill) "TRUE" else "FALSE"},
                         |$IND$IND.hpType = ${hiddenPowerType.takeIf { it != Type.TYPE_NONE } ?: Type.TYPE_NORMAL},
                         |$IND},""".trimMargin()
                     )
                 }
             }
+            if (party.isEmpty()) writer.append("0")
             writer.appendLine("};")
         }
 
@@ -152,11 +152,11 @@ object TrainerPartyGenerator : Generator {
                     |$IND$IND.trainerName = $("$name"),
                     |$IND$IND.doubleBattle = ${if (forcedDouble) "TRUE" else "FALSE"},
                     |$IND$IND.partySize = ${ace.monList.size},
-                    |$IND$IND.party = {.ItemCustomMoves = __sParty_${ace.monList.hashCode().toUInt()}},
+                    |$IND$IND.party = __sParty_${ace.monList.hashCode().toUInt()},
                     |$IND$IND.partySizeInsane = ${actualElite.size},
-                    |$IND$IND.partyInsane = {.ItemCustomMoves = __sParty_${actualElite.hashCode().toUInt()}},
+                    |$IND$IND.partyInsane = __sParty_${actualElite.hashCode().toUInt()},
                     |$IND$IND.partySizeHell = ${actualHell.size},
-                    |$IND$IND.partyHell = {.ItemCustomMoves = __sParty_${actualHell.hashCode().toUInt()}},
+                    |$IND$IND.partyHell = __sParty_${actualHell.hashCode().toUInt()},
                     |$IND$IND.aiFlags = $flags,
                     |$IND},
                 """.trimMargin()

@@ -44,7 +44,7 @@ struct TrainerMonNoItemCustomMoves {
     u8 nature;
 };
 
-struct TrainerMonItemCustomMoves {
+typedef struct TrainerMonItemCustomMoves {
     s8 lvl;
     SpeciesEnum species;
     u16 heldItem;
@@ -56,36 +56,23 @@ struct TrainerMonItemCustomMoves {
     u8 nature;
     bool8 zeroSpeedIvs;
     bool8 isAlpha;
-};
-
-union TrainerMonPtr {
-    const struct TrainerMonNoItemDefaultMoves *NoItemDefaultMoves;
-    const struct TrainerMonNoItemCustomMoves *NoItemCustomMoves;
-    const struct TrainerMonItemDefaultMoves *ItemDefaultMoves;
-    const struct TrainerMonItemCustomMoves *ItemCustomMoves;
-};
+} TrainerMonItemCustomMoves;
 
 struct Trainer {
     /*0x00*/ u8 partyFlags;
     /*0x01*/ u8 trainerClass;
     /*0x02*/ u8 encounterMusic_gender;  // last bit is gender
     /*0x03*/ u8 trainerPic;
-    /*0x04*/ u8 trainerName[12];
+    /*0x04*/ const u8 *trainerName;
     /*0x10*/ u16 items[4];
     /*0x18*/ bool8 doubleBattle;
     /*0x1C*/ u32 aiFlags;
     /*0x20*/ u8 partySize;
-    /*0x24*/ union TrainerMonPtr party;
+    /*0x24*/ const TrainerMonItemCustomMoves * party;
     /*0x20*/ u8 partySizeInsane;
-    /*0x28*/ union TrainerMonPtr partyInsane;
-    /*0x20*/ u8 partySizeDouble;
-    /*0x24*/ union TrainerMonPtr partyDouble;
-    /*0x20*/ u8 partySizeInsaneDouble;
-    /*0x28*/ union TrainerMonPtr partyInsaneDouble;
+    /*0x28*/ const TrainerMonItemCustomMoves * partyInsane;
     /*0x20*/ u8 partySizeHell;
-    /*0x28*/ union TrainerMonPtr partyHell;
-    /*0x20*/ u8 partySizeHellDouble;
-    /*0x28*/ union TrainerMonPtr partyHellDouble;
+    /*0x28*/ const TrainerMonItemCustomMoves * partyHell;
     /*0x2F*/ u16 trainerFlag;
 };
 

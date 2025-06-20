@@ -5740,31 +5740,15 @@ static u32 GetTrainerMoneyToGive(u16 trainerId) {
     if (trainerId == TRAINER_SECRET_BASE) {
         moneyReward = 20 * gBattleResources->secretBase->party.levels[0] * gBattleStruct->moneyMultiplier;
     } else {
-        switch (gTrainers[trainerId].partyFlags) {
-            case 0: {
-                const struct TrainerMonNoItemDefaultMoves* party = gTrainers[trainerId].party.NoItemDefaultMoves;
-                lastMonLevel = party[gTrainers[trainerId].partySize - 1].lvl;
-            } break;
-            case F_TRAINER_PARTY_CUSTOM_MOVESET: {
-                const struct TrainerMonNoItemCustomMoves* party = gTrainers[trainerId].party.NoItemCustomMoves;
-                lastMonLevel = party[gTrainers[trainerId].partySize - 1].lvl;
-            } break;
-            case F_TRAINER_PARTY_HELD_ITEM: {
-                const struct TrainerMonItemDefaultMoves* party = gTrainers[trainerId].party.ItemDefaultMoves;
-                lastMonLevel = party[gTrainers[trainerId].partySize - 1].lvl;
-            } break;
-            case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM: {
-                const struct TrainerMonItemCustomMoves* party = gTrainers[trainerId].party.ItemCustomMoves;
-                lastMonLevel = GetHighestLevelInPlayerParty();
+        const struct TrainerMonItemCustomMoves* party = gTrainers[trainerId].party;
+        lastMonLevel = GetHighestLevelInPlayerParty();
 
-                if (lastMonLevel + party[gTrainers[trainerId].partySize - 1].lvl < 1) {
-                    lastMonLevel = 1;
-                } else if (lastMonLevel + party[gTrainers[trainerId].partySize - 1].lvl > 100) {
-                    lastMonLevel = 100;
-                } else {
-                    lastMonLevel += party[gTrainers[trainerId].partySize - 1].lvl;
-                }
-            } break;
+        if (lastMonLevel + party[gTrainers[trainerId].partySize - 1].lvl < 1) {
+            lastMonLevel = 1;
+        } else if (lastMonLevel + party[gTrainers[trainerId].partySize - 1].lvl > 100) {
+            lastMonLevel = 100;
+        } else {
+            lastMonLevel += party[gTrainers[trainerId].partySize - 1].lvl;
         }
 
         for (; gTrainerMoneyTable[i].classId != 0xFF; i++) {
