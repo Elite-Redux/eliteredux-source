@@ -6900,6 +6900,7 @@ u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk,
     switch (gBattleMoves[move].effect) {
         case EFFECT_DOUBLE_DMG_IF_STATUS1:
             if (gBattleMons[battlerDef].status1 & (gBattleMoves[move].argument)) MulModifier(&modifier, UQ_4_12(2.0));
+            else if (gBattleMoves[move].argument & STATUS1_PSN_ANY && IsPoisonedForMove(battlerDef)) MUL_MODIFIER(&modifier, 2.0);
             break;
         case EFFECT_FACADE:
             if (gBattleMons[battlerAtk].status1 & (STATUS1_BURN | STATUS1_PSN_ANY | STATUS1_PARALYSIS | STATUS1_FROSTBITE | STATUS1_BLEED) ||
@@ -6910,7 +6911,7 @@ u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk,
             if (gBattleMons[battlerDef].hp <= (gBattleMons[battlerDef].maxHP / 2)) MulModifier(&modifier, UQ_4_12(2.0));
             break;
         case EFFECT_VENOSHOCK:
-            if (gBattleMons[battlerDef].status1 & STATUS1_PSN_ANY) MulModifier(&modifier, UQ_4_12(2.0));
+            if (IsPoisonedForMove(battlerDef)) MulModifier(&modifier, UQ_4_12(2.0));
             break;
         case EFFECT_RETALIATE:
             if (gSideTimers[atkSide].retaliateTimer == 1) MulModifier(&modifier, UQ_4_12(2.0));
@@ -9195,4 +9196,8 @@ int IsSoundMove(int battler, MoveEnum move) {
     if (gBattleMoves[move].flags & FLAG_SOUND) return TRUE;
     if (gBattleMoves[move].type == TYPE_NORMAL && BattlerHasAbility(battler, ABILITY_REVERBATE, FALSE)) return TRUE;
     return FALSE;
+}
+
+int IsPoisonedForMove(int battler) {
+    return gBattleMons[battler].status1 & STATUS1_POISON_ANY || IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN);
 }
