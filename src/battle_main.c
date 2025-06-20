@@ -1682,10 +1682,19 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     MoveEnum move = 1;
     SpeciesEnum species = 1;
 
-    if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partySizeInsane)
-        enemyPartySize = gTrainers[trainerNum].partySizeInsane;
-    else
-        enemyPartySize = gTrainers[trainerNum].partySize;
+    switch (difficultySetting) {
+        case DIFFICULTY_HELL:
+            enemyPartySize = gTrainers[trainerNum].partySizeHell;
+            break;
+
+        case DIFFICULTY_ELITE:
+            enemyPartySize = gTrainers[trainerNum].partySizeInsane;
+            break;
+
+        default:
+            enemyPartySize = gTrainers[trainerNum].partySize;
+            break;
+    }
 
     // Double Battle Mode
     if (DoubleReady && enemyPartySize >= 2 && gSaveBlock2Ptr->doubleBattleMode == TRUE)
@@ -1725,10 +1734,19 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
             for (j = 0; gTrainers[trainerNum].trainerName[j] != EOS; j++) nameHash += gTrainers[trainerNum].trainerName[j];
 
             const struct TrainerMonItemCustomMoves *partyData;
-            if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partySizeInsane)
-                partyData = gTrainers[trainerNum].partyInsane;
-            else
-                partyData = gTrainers[trainerNum].party;
+            switch (difficultySetting) {
+                case DIFFICULTY_HELL:
+                    partyData = gTrainers[trainerNum].partyHell;
+                    break;
+
+                case DIFFICULTY_ELITE:
+                    partyData = gTrainers[trainerNum].partyInsane;
+                    break;
+
+                default:
+                    partyData = gTrainers[trainerNum].party;
+                    break;
+            }
 
             for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; j++) nameHash += gSpeciesNames[partyData[i].species][j];
 
