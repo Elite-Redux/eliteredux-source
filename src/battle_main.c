@@ -1669,7 +1669,6 @@ static void sub_8038538(struct Sprite *sprite) {
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 firstTrainer) {
     u32 nameHash = 0;
     u32 personalityValue;
-    u8 fixedIV;
     s32 i, j = 0;
     u8 monsCount;
     u8 level;
@@ -1683,25 +1682,18 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     MoveEnum move = 1;
     SpeciesEnum species = 1;
 
-    if (DoubleReady && (gSaveBlock2Ptr->doubleBattleMode == TRUE || gTrainers[trainerNum].doubleBattle)) {
-        // This is a copy from the code below to calculate the number of Pokemon per trainer
-        // In doubles if you are on elite mode the game will try to use a Double Elite Party if there is no exclusive party it uses the
-        // Elite Single Party if there is Elite Single Party it will try to use Double Normal Party if there is no Normal Double Party it will try to
-        // use the Signle Normal Party
-        if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partySizeInsaneDouble != 0)
-            enemyPartySize = gTrainers[trainerNum].partySizeInsaneDouble;
-        else if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partySizeInsane != 0)
+    switch (difficultySetting) {
+        case DIFFICULTY_HELL:
+            enemyPartySize = gTrainers[trainerNum].partySizeHell;
+            break;
+
+        case DIFFICULTY_ELITE:
             enemyPartySize = gTrainers[trainerNum].partySizeInsane;
-        else if (gTrainers[trainerNum].partySizeDouble != 0)
-            enemyPartySize = gTrainers[trainerNum].partySizeDouble;
-        else
+            break;
+
+        default:
             enemyPartySize = gTrainers[trainerNum].partySize;
-    } else {
-        // In singles if you are on elite mode the game will try to use an Elite Party if there is no exclusive party it uses the normal one
-        if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partySizeInsane != 0)
-            enemyPartySize = gTrainers[trainerNum].partySizeInsane;
-        else
-            enemyPartySize = gTrainers[trainerNum].partySize;
+            break;
     }
 
     // Double Battle Mode
@@ -1741,253 +1733,109 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
             for (j = 0; gTrainers[trainerNum].trainerName[j] != EOS; j++) nameHash += gTrainers[trainerNum].trainerName[j];
 
-            switch (gTrainers[trainerNum].partyFlags) {
-                case 0: {
-                    const struct TrainerMonNoItemDefaultMoves *partyData = gTrainers[trainerNum].party.NoItemDefaultMoves;
-
-                    for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; j++) nameHash += gSpeciesNames[partyData[i].species][j];
-
-                    personalityValue += nameHash << 8;
-                    fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
-                    CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
-
-                    // Sets Pokemon Nature
-                    SetMonData(&party[i], MON_DATA_NATURE, &partyData[i].nature);
-
-                    // Sets EVs to fully customized spreads if difficulty is Hard or higher
-                    if (difficultySetting > DIFFICULTY_EASY) {
-                        for (j = 0; j < NUM_STATS; j++) {
-                            switch (j) {
-                                case 0:
-                                    SetMonData(&party[i], MON_DATA_HP_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 1:
-                                    SetMonData(&party[i], MON_DATA_ATK_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 2:
-                                    SetMonData(&party[i], MON_DATA_DEF_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 3:
-                                    SetMonData(&party[i], MON_DATA_SPATK_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 4:
-                                    SetMonData(&party[i], MON_DATA_SPDEF_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 5:
-                                    SetMonData(&party[i], MON_DATA_SPEED_EV, &partyData[i].evs[j]);
-                                    break;
-                            }
-                        }
-                    }
-
-                    CalculateMonStats(&party[i]);
-
+            const struct TrainerMonItemCustomMoves *partyData;
+            switch (difficultySetting) {
+                case DIFFICULTY_HELL:
+                    partyData = gTrainers[trainerNum].partyHell;
                     break;
-                }
-                case F_TRAINER_PARTY_CUSTOM_MOVESET: {
-                    const struct TrainerMonNoItemCustomMoves *partyData = gTrainers[trainerNum].party.NoItemCustomMoves;
 
-                    for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; j++) nameHash += gSpeciesNames[partyData[i].species][j];
-
-                    personalityValue += nameHash << 8;
-                    fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
-                    CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
-
-                    for (j = 0; j < MAX_MON_MOVES; j++) {
-                        SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
-                        pp = CalculatePPWithBonus(GetMonData(&party[i], MON_DATA_MOVE1 + j, NULL), GetMonData(&party[i], MON_DATA_PP_BONUSES, NULL), j);
-                        SetMonData(&party[i], MON_DATA_PP1 + j, &pp);
-                    }
-
-                    // Sets Pokemon Nature
-                    SetMonData(&party[i], MON_DATA_NATURE, &partyData[i].nature);
-
-                    // Sets EVs to fully customized spreads if difficulty is Hard or higher
-                    if (difficultySetting > DIFFICULTY_EASY) {
-                        for (j = 0; j < NUM_STATS; j++) {
-                            switch (j) {
-                                case 0:
-                                    SetMonData(&party[i], MON_DATA_HP_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 1:
-                                    SetMonData(&party[i], MON_DATA_ATK_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 2:
-                                    SetMonData(&party[i], MON_DATA_DEF_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 3:
-                                    SetMonData(&party[i], MON_DATA_SPATK_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 4:
-                                    SetMonData(&party[i], MON_DATA_SPDEF_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 5:
-                                    SetMonData(&party[i], MON_DATA_SPEED_EV, &partyData[i].evs[j]);
-                                    break;
-                            }
-                        }
-                    }
-
-                    CalculateMonStats(&party[i]);
-
+                case DIFFICULTY_ELITE:
+                    partyData = gTrainers[trainerNum].partyInsane;
                     break;
-                }
-                case F_TRAINER_PARTY_HELD_ITEM: {
-                    const struct TrainerMonItemDefaultMoves *partyData = gTrainers[trainerNum].party.ItemDefaultMoves;
 
-                    for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; j++) nameHash += gSpeciesNames[partyData[i].species][j];
-
-                    personalityValue += nameHash << 8;
-                    fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
-                    CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
-
-                    SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
-
-                    // Sets Pokemon Nature
-                    SetMonData(&party[i], MON_DATA_NATURE, &partyData[i].nature);
-
-                    // Sets EVs to fully customized spreads if difficulty is Hard or higher
-                    if (difficultySetting > DIFFICULTY_EASY) {
-                        for (j = 0; j < NUM_STATS; j++) {
-                            switch (j) {
-                                case 0:
-                                    SetMonData(&party[i], MON_DATA_HP_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 1:
-                                    SetMonData(&party[i], MON_DATA_ATK_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 2:
-                                    SetMonData(&party[i], MON_DATA_DEF_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 3:
-                                    SetMonData(&party[i], MON_DATA_SPATK_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 4:
-                                    SetMonData(&party[i], MON_DATA_SPDEF_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 5:
-                                    SetMonData(&party[i], MON_DATA_SPEED_EV, &partyData[i].evs[j]);
-                                    break;
-                            }
-                        }
-                    }
-
-                    CalculateMonStats(&party[i]);
-
+                default:
+                    partyData = gTrainers[trainerNum].party;
                     break;
-                }
-                case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM: {
-                    const struct TrainerMonItemCustomMoves *partyData;
-                    if (isDoubleBattle && gSaveBlock2Ptr->doubleBattleMode == TRUE) {
-                        // In doubles if you are on elite mode the game will try to use a Double Elite Party if there is no exclusive party it uses the
-                        // Elite Single Party if there is Elite Single Party it will try to use Double Normal Party if there is no Normal Double Party it will
-                        // try to use the Signle Normal Party
-                        if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partyInsaneDouble.ItemCustomMoves != 0)
-                            partyData = gTrainers[trainerNum].partyInsaneDouble.ItemCustomMoves;
-                        else if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partyInsane.ItemCustomMoves != 0)
-                            partyData = gTrainers[trainerNum].partyInsane.ItemCustomMoves;
-                        else if (gTrainers[trainerNum].partyDouble.ItemCustomMoves != 0)
-                            partyData = gTrainers[trainerNum].partyDouble.ItemCustomMoves;
-                        else
-                            partyData = gTrainers[trainerNum].party.ItemCustomMoves;
-                    } else {
-                        // In singles if you are on elite mode the game will try to use an Elite Party if there is no exclusive party it uses the normal one
-                        if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partyInsane.ItemCustomMoves != 0)
-                            partyData = gTrainers[trainerNum].partyInsane.ItemCustomMoves;
-                        else
-                            partyData = gTrainers[trainerNum].party.ItemCustomMoves;
-                    }
+            }
 
-                    for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; j++) nameHash += gSpeciesNames[partyData[i].species][j];
+            for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; j++) nameHash += gSpeciesNames[partyData[i].species][j];
 
-                    personalityValue += nameHash << 8;
+            personalityValue += nameHash << 8;
 
-                    level = GetHighestLevelInPlayerParty();
-                    if (level + partyData[i].lvl > 100) {
-                        level = 100;
-                    } else if (level + partyData[i].lvl < 1) {
-                        level = 1;
-                    } else {
-                        level = level + partyData[i].lvl;
-                    }
+            level = GetHighestLevelInPlayerParty();
+            if (level + partyData[i].lvl > 100) {
+                level = 100;
+            } else if (level + partyData[i].lvl < 1) {
+                level = 1;
+            } else {
+                level = level + partyData[i].lvl;
+            }
 
 #ifdef DEBUG_BUILD
-                    if (FlagGet(FLAG_DEBUG_GODMODE)) level = 1;
+            if (FlagGet(FLAG_DEBUG_GODMODE)) level = 1;
 #endif
 
-                    if (trainerNum == TRAINER_OLDPLAYER) {
-                        species = Random() % 500;
-                        CreateMon(&party[i], species, level, 31, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
-                    } else
-                        CreateMon(&party[i], partyData[i].species, level, 31, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+            if (trainerNum == TRAINER_OLDPLAYER) {
+                species = Random() % 500;
+                CreateMon(&party[i], species, level, 31, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+            } else
+                CreateMon(&party[i], partyData[i].species, level, 31, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
-                    // Sets Pokemon Nature
-                    SetMonData(&party[i], MON_DATA_NATURE, &partyData[i].nature);
+            // Sets Pokemon Nature
+            SetMonData(&party[i], MON_DATA_NATURE, &partyData[i].nature);
 
-                    SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
+            SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
 
-                    SetMonData(&party[i], MON_DATA_SPEED_DOWN, &partyData[i].zeroSpeedIvs);
+            SetMonData(&party[i], MON_DATA_SPEED_DOWN, &partyData[i].zeroSpeedIvs);
 
-                    SetMonData(&party[i], MON_DATA_IS_ALPHA, &partyData[i].isAlpha);
+            SetMonData(&party[i], MON_DATA_IS_ALPHA, &partyData[i].isAlpha);
 
-                    SetMonData(&party[i], MON_DATA_HP_TYPE, &partyData[i].hpType);
+            SetMonData(&party[i], MON_DATA_HP_TYPE, &partyData[i].hpType);
 
 #ifdef DEBUG_BUILD
-                    if (FlagGet(FLAG_SYS_AUTOWIN)) SetTrainerFlag(trainerNum);
+            if (FlagGet(FLAG_SYS_AUTOWIN)) SetTrainerFlag(trainerNum);
 #endif
 
-                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &partyData[i].ability);
+            SetMonData(&party[i], MON_DATA_ABILITY_NUM, &partyData[i].ability);
 
-                    // Sets EVs to fully customized spreads if difficulty is Hard or higher
-                    if (difficultySetting > DIFFICULTY_EASY) {
-                        for (j = 0; j < NUM_STATS; j++) {
-                            switch (j) {
-                                case 0:
-                                    SetMonData(&party[i], MON_DATA_HP_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 1:
-                                    SetMonData(&party[i], MON_DATA_ATK_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 2:
-                                    SetMonData(&party[i], MON_DATA_DEF_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 3:
-                                    SetMonData(&party[i], MON_DATA_SPATK_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 4:
-                                    SetMonData(&party[i], MON_DATA_SPDEF_EV, &partyData[i].evs[j]);
-                                    break;
-                                case 5:
-                                    SetMonData(&party[i], MON_DATA_SPEED_EV, &partyData[i].evs[j]);
-                                    break;
-                            }
-                        }
+            // Sets EVs to fully customized spreads if difficulty is Hard or higher
+            if (difficultySetting > DIFFICULTY_EASY) {
+                for (j = 0; j < NUM_STATS; j++) {
+                    switch (j) {
+                        case 0:
+                            SetMonData(&party[i], MON_DATA_HP_EV, &partyData[i].evs[j]);
+                            break;
+                        case 1:
+                            SetMonData(&party[i], MON_DATA_ATK_EV, &partyData[i].evs[j]);
+                            break;
+                        case 2:
+                            SetMonData(&party[i], MON_DATA_DEF_EV, &partyData[i].evs[j]);
+                            break;
+                        case 3:
+                            SetMonData(&party[i], MON_DATA_SPATK_EV, &partyData[i].evs[j]);
+                            break;
+                        case 4:
+                            SetMonData(&party[i], MON_DATA_SPDEF_EV, &partyData[i].evs[j]);
+                            break;
+                        case 5:
+                            SetMonData(&party[i], MON_DATA_SPEED_EV, &partyData[i].evs[j]);
+                            break;
                     }
-
-                    CalculateMonStats(&party[i]);  // called twice; fix in future
-
-                    if (trainerNum == TRAINER_OLDPLAYER) {
-                        for (j = 0; j < MAX_MON_MOVES; j++) {
-                            move = selectMoves(species, j, GetMonData(&party[i], MON_DATA_ATK, NULL), GetMonData(&party[i], MON_DATA_SPATK, NULL));
-                            SetMonData(&party[i], MON_DATA_MOVE1 + j, &move);
-                            pp = CalculatePPWithBonus(GetMonData(&party[i], MON_DATA_MOVE1 + j, NULL), GetMonData(&party[i], MON_DATA_PP_BONUSES, NULL), j);
-                            SetMonData(&party[i], MON_DATA_PP1 + j, &pp);
-                        }
-                    } else {
-                        for (j = 0; j < MAX_MON_MOVES; j++) {
-                            SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
-                            pp = CalculatePPWithBonus(GetMonData(&party[i], MON_DATA_MOVE1 + j, NULL), GetMonData(&party[i], MON_DATA_PP_BONUSES, NULL), j);
-                            SetMonData(&party[i], MON_DATA_PP1 + j, &pp);
-                        }
-                    }
-                    // Set max friendship if trainer mon knows Return /  Added Veevee Volley and Pika Papow to the list
-                    if (MonKnowsMove(&party[i], MOVE_RETURN) || MonKnowsMove(&party[i], MOVE_VEEVEE_VOLLEY) || MonKnowsMove(&party[i], MOVE_PIKA_PAPOW)) {
-                        friendship = MAX_FRIENDSHIP;
-                        SetMonData(&party[i], MON_DATA_FRIENDSHIP, &friendship);
-                    }
-                    break;
                 }
             }
+
+            CalculateMonStats(&party[i]);  // called twice; fix in future
+
+            if (trainerNum == TRAINER_OLDPLAYER) {
+                for (j = 0; j < MAX_MON_MOVES; j++) {
+                    move = selectMoves(species, j, GetMonData(&party[i], MON_DATA_ATK, NULL), GetMonData(&party[i], MON_DATA_SPATK, NULL));
+                    SetMonData(&party[i], MON_DATA_MOVE1 + j, &move);
+                    pp = CalculatePPWithBonus(GetMonData(&party[i], MON_DATA_MOVE1 + j, NULL), GetMonData(&party[i], MON_DATA_PP_BONUSES, NULL), j);
+                    SetMonData(&party[i], MON_DATA_PP1 + j, &pp);
+                }
+            } else {
+                for (j = 0; j < MAX_MON_MOVES; j++) {
+                    SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
+                    pp = CalculatePPWithBonus(GetMonData(&party[i], MON_DATA_MOVE1 + j, NULL), GetMonData(&party[i], MON_DATA_PP_BONUSES, NULL), j);
+                    SetMonData(&party[i], MON_DATA_PP1 + j, &pp);
+                }
+            }
+            // Set max friendship if trainer mon knows Return /  Added Veevee Volley and Pika Papow to the list
+            if (MonKnowsMove(&party[i], MOVE_RETURN) || MonKnowsMove(&party[i], MOVE_VEEVEE_VOLLEY) || MonKnowsMove(&party[i], MOVE_PIKA_PAPOW)) {
+                friendship = MAX_FRIENDSHIP;
+                SetMonData(&party[i], MON_DATA_FRIENDSHIP, &friendship);
+            }
+
             for (j = 0; gTrainerBallTable[j].classId != 0xFF; j++) {
                 if (gTrainerBallTable[j].classId == gTrainers[trainerNum].trainerClass) break;
             }

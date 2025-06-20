@@ -78,6 +78,8 @@ $(eval $(call GENERATE, include/generated/constants/abilities.h, abilities))
 $(eval $(call GENERATE, include/generated/constants/species.h, species))
 $(eval $(call GENERATE, include/generated/constants/moves.h, moves))
 $(eval $(call GENERATE, include/generated/constants/items.h, itemids))
+$(eval $(call GENERATE, include/generated/constants/trainer_ids.h, trainerids))
+$(eval $(call GENERATE, include/generated/constants/trainer_field_enums.h, trainerfields))
 
 $(eval $(call GENERATE, include/generated/data/text/species_names.h, speciesnames))
 $(eval $(call GENERATE, include/generated/data/text/species_long_names.h, longnames))

@@ -132,6 +132,8 @@ u8 GetBattlerBattleMoveTargetFlags(MoveEnum moveId, u8 battler) {
         return MOVE_TARGET_BOTH;
     else if (gBattleMoves[moveId].effect == EFFECT_EXPANDING_FORCE && GetCurrentTerrain() == STATUS_FIELD_PSYCHIC_TERRAIN)
         return MOVE_TARGET_BOTH;
+    else if (gBattleMoves[moveId].effect == EFFECT_TOXIC_THREAD && IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN))
+        return MOVE_TARGET_BOTH;
 
     switch (moveId) {
         case MOVE_RAIN_DANCE:
@@ -1617,6 +1619,7 @@ enum {
     ENDTURN_MISTY_TERRAIN,
     ENDTURN_GRASSY_TERRAIN,
     ENDTURN_PSYCHIC_TERRAIN,
+    ENDTURN_TOXIC_TERRAIN,
     ENDTURN_ION_DELUGE,
     ENDTURN_FAIRY_LOCK,
     ENDTURN_RETALIATE,
@@ -1629,6 +1632,11 @@ enum {
     ENDTURN_MISC_SIDE_TIMERS,
     ENDTURN_FIELD_COUNT,
 };
+
+AbilityEnum AbilityBlocksToxicTerrain(int battler) {
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, toxicTerrainImmune)
+    return ABILITY_NONE;
+}
 
 u8 DoFieldEndTurnEffects(void) {
     u8 effect = 0;
@@ -1941,7 +1949,8 @@ u8 DoFieldEndTurnEffects(void) {
                 if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN &&
                     (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && !gFieldTimers.started.terrain && --gFieldTimers.terrainTimer == 0)) {
                     gFieldStatuses &= ~(STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_TERRAIN_PERMANENT);
-                    BattleScriptExecute(BattleScript_ElectricTerrainEnds);
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_ELECTRICTERRAINENDS;
+                    BattleScriptExecute(BattleScript_TerrainEnds);
                     effect++;
                 }
                 gBattleStruct->turnCountersTracker++;
@@ -1950,7 +1959,8 @@ u8 DoFieldEndTurnEffects(void) {
                 if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN &&
                     (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && !gFieldTimers.started.terrain && --gFieldTimers.terrainTimer == 0)) {
                     gFieldStatuses &= ~(STATUS_FIELD_MISTY_TERRAIN);
-                    BattleScriptExecute(BattleScript_MistyTerrainEnds);
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_MISTYTERRAINENDS;
+                    BattleScriptExecute(BattleScript_TerrainEnds);
                     effect++;
                 }
                 gBattleStruct->turnCountersTracker++;
@@ -1959,6 +1969,8 @@ u8 DoFieldEndTurnEffects(void) {
                 if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN) {
                     if (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && !gFieldTimers.started.terrain && --gFieldTimers.terrainTimer == 0) {
                         gFieldStatuses &= ~(STATUS_FIELD_GRASSY_TERRAIN);
+                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_GRASSYTERRAINENDS;
+                        BattleScriptExecute(BattleScript_TerrainEnds);
                     }
                     BattleScriptExecute(BattleScript_GrassyTerrainHeals);
                     effect++;
@@ -1969,8 +1981,32 @@ u8 DoFieldEndTurnEffects(void) {
                 if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN &&
                     (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && !gFieldTimers.started.terrain && --gFieldTimers.terrainTimer == 0)) {
                     gFieldStatuses &= ~(STATUS_FIELD_PSYCHIC_TERRAIN);
-                    BattleScriptExecute(BattleScript_PsychicTerrainEnds);
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PSYCHICTERRAINENDS;
+                    BattleScriptExecute(BattleScript_TerrainEnds);
                     effect++;
+                }
+                gBattleStruct->turnCountersTracker++;
+                break;
+            case ENDTURN_TOXIC_TERRAIN:
+                if (gFieldStatuses & STATUS_FIELD_TOXIC_TERRAIN) {
+                    if (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && !gFieldTimers.started.terrain && !IsAbilityOnField(ABILITY_STENCH) &&
+                        --gFieldTimers.terrainTimer == 0) {
+                        gFieldStatuses &= ~(STATUS_FIELD_TOXIC_TERRAIN);
+                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TOXICTERRAINENDS;
+                        BattleScriptExecute(BattleScript_TerrainEnds);
+                        effect = TRUE;
+                    }
+                    for (i = 0; i < gBattlersCount; i++) {
+                        FILTER(IsBattlerAlive(i))
+                        FILTER_NOT(IsMagicGuardProtected(i))
+                        FILTER(IsBattlerTerrainAffected(i, STATUS_FIELD_TOXIC_TERRAIN))
+                        FILTER_NOT(AbilityBlocksToxicTerrain(i))
+                        FILTER_NOT(IS_BATTLER_OF_TYPE(i, TYPE_POISON))
+                        FILTER_NOT(IS_BATTLER_OF_TYPE(i, TYPE_STEEL))
+                        gStackBattler1 = i;
+                        BattleScriptExecute(BattleScript_ToxicTerrainDamages);
+                        effect = TRUE;
+                    }
                 }
                 gBattleStruct->turnCountersTracker++;
                 break;
@@ -4690,23 +4726,26 @@ bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag) {
 
     if (IsBattlerGrounded(battlerId)) return TRUE;
 
-    if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN) {
-        if (BattlerHasAbility(battlerId, ABILITY_HADRON_ENGINE, FALSE)) return TRUE;
-        if (BattlerHasAbility(battlerId, ABILITY_ELECTRIC_SURGE, FALSE)) return TRUE;
+    TerrainType type = TYPE_NONE;
+    switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
+        case STATUS_FIELD_TOXIC_TERRAIN:
+            type = TERRAIN_TOXIC;
+            break;
+        case STATUS_FIELD_MISTY_TERRAIN:
+            type = TERRAIN_MISTY;
+            break;
+        case STATUS_FIELD_GRASSY_TERRAIN:
+            type = TERRAIN_GRASSY;
+            break;
+        case STATUS_FIELD_ELECTRIC_TERRAIN:
+            type = TERRAIN_ELECTRIC;
+            break;
+        case STATUS_FIELD_PSYCHIC_TERRAIN:
+            type = TERRAIN_PSYCHIC;
+            break;
     }
 
-    if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN) {
-        if (BattlerHasAbility(battlerId, ABILITY_GRASSY_SURGE, FALSE)) return TRUE;
-        if (BattlerHasAbility(battlerId, ABILITY_SEED_SOWER, FALSE)) return TRUE;
-    }
-
-    if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN) {
-        if (BattlerHasAbility(battlerId, ABILITY_MISTY_SURGE, FALSE)) return TRUE;
-    }
-
-    if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN) {
-        if (BattlerHasAbility(battlerId, ABILITY_PSYCHIC_SURGE, FALSE)) return TRUE;
-    }
+    ON_ABILITY(battlerId, FALSE, gAbilities[ability].allowTerrainIfAirborne == type, return TRUE)
 
     return FALSE;
 }
@@ -6861,6 +6900,7 @@ u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk,
     switch (gBattleMoves[move].effect) {
         case EFFECT_DOUBLE_DMG_IF_STATUS1:
             if (gBattleMons[battlerDef].status1 & (gBattleMoves[move].argument)) MulModifier(&modifier, UQ_4_12(2.0));
+            else if (gBattleMoves[move].argument & STATUS1_PSN_ANY && IsPoisonedForMove(battlerDef)) MUL_MODIFIER(&modifier, 2.0);
             break;
         case EFFECT_FACADE:
             if (gBattleMons[battlerAtk].status1 & (STATUS1_BURN | STATUS1_PSN_ANY | STATUS1_PARALYSIS | STATUS1_FROSTBITE | STATUS1_BLEED) ||
@@ -6871,7 +6911,7 @@ u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk,
             if (gBattleMons[battlerDef].hp <= (gBattleMons[battlerDef].maxHP / 2)) MulModifier(&modifier, UQ_4_12(2.0));
             break;
         case EFFECT_VENOSHOCK:
-            if (gBattleMons[battlerDef].status1 & STATUS1_PSN_ANY) MulModifier(&modifier, UQ_4_12(2.0));
+            if (IsPoisonedForMove(battlerDef)) MulModifier(&modifier, UQ_4_12(2.0));
             break;
         case EFFECT_RETALIATE:
             if (gSideTimers[atkSide].retaliateTimer == 1) MulModifier(&modifier, UQ_4_12(2.0));
@@ -9156,4 +9196,8 @@ int IsSoundMove(int battler, MoveEnum move) {
     if (gBattleMoves[move].flags & FLAG_SOUND) return TRUE;
     if (gBattleMoves[move].type == TYPE_NORMAL && BattlerHasAbility(battler, ABILITY_REVERBATE, FALSE)) return TRUE;
     return FALSE;
+}
+
+int IsPoisonedForMove(int battler) {
+    return gBattleMons[battler].status1 & STATUS1_POISON_ANY || IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN);
 }

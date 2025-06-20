@@ -9,6 +9,8 @@ import com.google.protobuf.ProtocolMessageEnum
 import com.google.protobuf.TextFormat
 import er.FileGenerator.IND
 import er.proto.*
+import er.proto.Species.Learnset
+import er.proto.Species.Learnset.UniversalTutors
 import er.proto.Species.RandomizeBanned.SPECIES_HIDDEN
 import java.io.File
 import java.io.OutputStreamWriter
@@ -65,6 +67,27 @@ object GeneratorUtils {
     val SPECIES_MAP by lazy {
         SPECIES_LIST.associateBy { it.id }
     }
+
+    fun findLearnsetForSpecies(species: Species): Learnset =
+        when {
+            species.id == SpeciesEnum.SPECIES_NONE -> species.learnset
+            species.megaList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.megaList.first().from]!!)
+            species.primalList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.primalList.first().from]!!)
+            species.hasBattleForm() -> findLearnsetForSpecies(SPECIES_MAP[species.battleForm.of]!!)
+            species.hasLearnset() -> species.learnset
+            species.usesLearnset != SpeciesEnum.SPECIES_NONE -> findLearnsetForSpecies(SPECIES_MAP[species.usesLearnset]!!)
+            species.formShiftOf != SpeciesEnum.SPECIES_NONE -> findLearnsetForSpecies(SPECIES_MAP[species.formShiftOf]!!)
+            else -> findLearnsetForSpecies(SPECIES_MAP[species.formOf]!!)
+        }
+
+    fun expandLearnset(learnset: Learnset, species: Species) =
+        UNIVERSAL_TUTORS + UNIVERSAL_ATTACKS.takeIf { learnset.universalTutors != UniversalTutors.NO_ATTACKS }
+            .orEmpty() + UNIVERSAL_GENDERED.takeIf { !species.genderless }.orEmpty() + learnset.tutorList
+
+    private val UNIVERSAL_TUTORS = MOVES_LIST.filter { it.tutor == TutorType.TUTOR_UNIVERSAL_STATUS }.map { it.id }
+    private val UNIVERSAL_ATTACKS = MOVES_LIST.filter { it.tutor == TutorType.TUTOR_UNIVERSAL_ATTACK }.map { it.id }
+    private val UNIVERSAL_GENDERED =
+        MOVES_LIST.filter { it.tutor == TutorType.TUTOR_UNIVERSAL_STATUS_GENDERED }.map { it.id }
 
     fun Species.resolveVisuals(): Visuals =
         if (hasReuseVisuals()) SPECIES_MAP[reuseVisuals]!!.resolveVisuals() else this.visuals

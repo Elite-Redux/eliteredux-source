@@ -440,6 +440,7 @@ int IsTerrainActive(int terrainFlag);
 int IsWeatherActive(int weather);
 u8 getMonotypeChampType(void);
 int NaturalGiftPriority(ItemEnum item);
+int IsPoisonedForMove(int battler);
 
 // Move checks
 bool8 IsTwoStrikesMove(MoveEnum move);

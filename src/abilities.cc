@@ -330,6 +330,11 @@ constexpr Ability Stench = {
 
         return AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
     },
+    .toxicTerrainImmune = TRUE,
+};
+
+constexpr Ability PoisonHeal = {
+    .toxicTerrainImmune = TRUE,
 };
 
 constexpr Ability Drizzle = {
@@ -2524,36 +2529,44 @@ constexpr Ability ElectricSurge = {
             DisableSwitchInAbility(i, ABILITY_GENERATOR);
             DisableSwitchInAbility(i, ABILITY_ENERGIZED);
         }
-        BattleScriptPushCursorAndCallback(BattleScript_ElectricSurgeActivates);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESELECTRIC;
+        BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
         return TRUE;
     },
+    .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
 constexpr Ability PsychicSurge = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
 
-        BattleScriptPushCursorAndCallback(BattleScript_PsychicSurgeActivates);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESPSYCHIC;
+        BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
         return TRUE;
     },
+    .allowTerrainIfAirborne = TERRAIN_PSYCHIC,
 };
 
 constexpr Ability MistySurge = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
 
-        BattleScriptPushCursorAndCallback(BattleScript_MistySurgeActivates);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESMISTY;
+        BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
         return TRUE;
     },
+    .allowTerrainIfAirborne = TERRAIN_MISTY,
 };
 
 constexpr Ability GrassySurge = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
 
-        BattleScriptPushCursorAndCallback(BattleScript_GrassySurgeActivates);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESGRASSY;
+        BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
         return TRUE;
     },
+    .allowTerrainIfAirborne = TERRAIN_GRASSY,
 };
 
 constexpr Ability ShadowShield = {
@@ -3621,6 +3634,19 @@ constexpr Ability PoisonAbsorb = {
         CHECK(moveType == TYPE_POISON)
         return ABSORB_RESULT_HEAL;
     },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK(CanBattlerHeal(battler))
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+        CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN))
+
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        gBattleMoveDamage *= -1;
+        BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
+        return TRUE;
+    },
+    .redirectType = TYPE_POISON,
     .breakable = TRUE,
 };
 
@@ -5675,6 +5701,7 @@ constexpr Ability SeedSower = {
         BattleScriptCall(BattleScript_SeedSower);
         return TRUE;
     },
+    .allowTerrainIfAirborne = TERRAIN_GRASSY,
 };
 
 constexpr Ability Airborne = {
@@ -6203,6 +6230,7 @@ constexpr Ability HadronEngine = {
         +[](ON_STAT) {
             if (statId == STAT_SPATK && IsBattlerTerrainAffected(battler, STATUS_FIELD_ELECTRIC_TERRAIN)) *stat = *stat * 4 / 3;
         },
+    .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
 constexpr Ability IronSerpent = {
@@ -6403,12 +6431,14 @@ constexpr Ability PoisonPuppeteer = {
         return NO_ANNOUNCE;
     },
     .onBattlerFaintsFor = APPLY_ON_OTHER,
+    .setStateOnEffect = MOVE_EFFECT_POISON,
 };
 
 constexpr Ability Entrance = {
     .onReactive = +[](ON_REACTIVE) -> int { return PoisonPuppeteerClone(ability, battler, CanInfatuate, BattleScript_Entrance); },
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
+    .setStateOnEffect = MOVE_EFFECT_CONFUSION,
 };
 
 constexpr Ability Rejection = {
@@ -6617,6 +6647,7 @@ constexpr Ability BloodBath = {
         return TRUE;
     },
     .onBattlerFaintsFor = APPLY_ON_OTHER,
+    .setStateOnEffect = MOVE_EFFECT_BLEED,
     .breakable = TRUE,
     .removesStatusOnImmunity = TRUE,
 };
@@ -7651,6 +7682,7 @@ constexpr Ability SetAblaze = {
     .onReactive = BloodBath.onReactive,
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
+    .setStateOnEffect = MOVE_EFFECT_BURN,
 };
 
 constexpr Ability Breakwater = {
@@ -7732,6 +7764,7 @@ constexpr Ability Neurotoxin = {
     .onReactive = +[](ON_REACTIVE) -> int { return PoisonPuppeteerClone(ability, battler, NeurotoxinCondition, BattleScript_Neurotoxin); },
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
+    .setStateOnEffect = MOVE_EFFECT_POISON,
 };
 
 constexpr Ability EnergizedHorns = {
@@ -8371,7 +8404,21 @@ constexpr Ability SerpentBind = {
 };
 
 constexpr Ability SoulTap = {
-    .breakable = TRUE,
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+        int any = FALSE;
+        for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
+            FILTER(IsBattlerAlive(target))
+            FILTER_NOT(IsMagicGuardProtected(target))
+
+            gStackBattler1 = battler;
+            gStackBattler2 = target;
+            gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE;
+            BattleScriptExecute(BattleScript_AbilityDrainsHp);
+            any = TRUE;
+        }
+        return any;
+    },
 };
 
 constexpr Ability Scarecrow = {
@@ -8398,6 +8445,7 @@ constexpr Ability Frostbind = {
     },
     .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
+    .setStateOnEffect = MOVE_EFFECT_FROSTBITE,
 };
 
 constexpr Ability TenderAffection = {
@@ -8442,7 +8490,16 @@ constexpr Ability GrassFlute = {
 };
 
 constexpr Ability Hemotoxin = {
-    .breakable = TRUE,
+    .onReactive = +[](ON_REACTIVE) -> int {
+        return PoisonPuppeteerClone(
+            ability,
+            battler,
+            [](int battler, int target) -> int { return !(gStatuses3[target] & STATUS3_GASTRO_ACID); },
+            BattleScript_StackAbilitySuppressedMessage);
+    },
+    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+    .onBattlerFaintsFor = PoisonPuppeteer.onBattlerFaintsFor,
+    .setStateOnEffect = MOVE_EFFECT_POISON,
 };
 
 constexpr Ability Harukaze = {
@@ -8450,14 +8507,19 @@ constexpr Ability Harukaze = {
 };
 
 constexpr Ability ToxicSurge = {
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_TOXIC_TERRAIN, &gFieldTimers.terrainTimer))
+
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESTOXIC;
+        BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
+        return TRUE;
+    },
+    .allowTerrainIfAirborne = TERRAIN_TOXIC,
 };
 
 constexpr Ability PoisonQuills = {
     .onAttacker = PoisonPoint.onAttacker,
-    .onDefender = +[](ON_DEFENDER) -> int {
-        return RoughSkin.onDefender(DELEGATE_DEFENDER) | PoisonPoint.onDefender(DELEGATE_DEFENDER);
-    },
+    .onDefender = +[](ON_DEFENDER) -> int { return RoughSkin.onDefender(DELEGATE_DEFENDER) | PoisonPoint.onDefender(DELEGATE_DEFENDER); },
 };
 
 constexpr Ability DraconicMight = {
@@ -8472,6 +8534,10 @@ constexpr Ability AtlanticRuler = {
 };
 
 constexpr Ability Biofilm = {
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPDEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN)) *stat *= 1.5;
+        },
     .breakable = TRUE,
 };
 
@@ -8670,10 +8736,11 @@ constexpr Ability BreezyNeigh = {
 
 constexpr Ability Dreamscape = {
     .onEntry = Comatose.onEntry,
-    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) {
-        Dreamcatcher.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-        MUL(1.2);
-    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            Dreamcatcher.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            MUL(1.2);
+        },
     .onStatusImmune = Comatose.onStatusImmune,
     .unsuppressable = TRUE,
     .removesStatusOnImmunity = TRUE,
@@ -8699,10 +8766,11 @@ constexpr Ability ThermalSlide = {
 };
 
 constexpr Ability Thermomancy = {
-    .onModifyEffectChance = +[](ON_MODIFY_EFFECT_CHANCE) {
-        Cryomancy.onModifyEffectChance(DELEGATE_MODIFY_EFFECT_CHANCE);
-        Pyromancy.onModifyEffectChance(DELEGATE_MODIFY_EFFECT_CHANCE);
-    }
+    .onModifyEffectChance =
+        +[](ON_MODIFY_EFFECT_CHANCE) {
+            Cryomancy.onModifyEffectChance(DELEGATE_MODIFY_EFFECT_CHANCE);
+            Pyromancy.onModifyEffectChance(DELEGATE_MODIFY_EFFECT_CHANCE);
+        },
 };
 
 constexpr Ability Chuckster = {
@@ -8724,9 +8792,8 @@ constexpr Ability RelicStone = {
 };
 
 constexpr Ability Supercell = {
-    .onEntry = +[](ON_ENTRY) -> int {
-        return ElectricSurge.onEntry(DELEGATE_ENTRY) | Drizzle.onEntry(DELEGATE_ENTRY);
-    },
+    .onEntry = +[](ON_ENTRY) -> int { return ElectricSurge.onEntry(DELEGATE_ENTRY) | Drizzle.onEntry(DELEGATE_ENTRY); },
+    .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
 constexpr Ability LightningAspect = {
@@ -9630,6 +9697,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_RELIC_STONE, RelicStone},
     {ABILITY_SUPERCELL, Supercell},
     {ABILITY_LIGHTNING_ASPECT, LightningAspect},
+    {ABILITY_POISON_HEAL, PoisonHeal},
     {ABILITY_ENERGY_TAP, EnergyTap},
 };
 
@@ -9693,6 +9761,8 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(onModifyEffectChanceFor),
             __OVERWRITE_ARRAY_VAL(onStatusImmuneFor),
             __OVERWRITE_ARRAY_VAL(onBeforeAttackFor),
+            __OVERWRITE_ARRAY_VAL(setStateOnEffect),
+            __OVERWRITE_ARRAY_VAL(allowTerrainIfAirborne),
             __OVERWRITE_ARRAY_VAL(redirectType),
             __OVERWRITE_ARRAY_VAL(ruinStat),
             __OVERWRITE_ARRAY_VAL(noDamageHits),
@@ -9725,6 +9795,7 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(powderImmune),
             __OVERWRITE_ARRAY_VAL(sandImmune),
             __OVERWRITE_ARRAY_VAL(hailImmune),
+            __OVERWRITE_ARRAY_VAL(toxicTerrainImmune),
         };
     }
     return newWrapper;
