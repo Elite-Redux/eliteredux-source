@@ -920,6 +920,7 @@ static const u8 sText_RoseGarden[] = _("Toxic spikes rain down on\nthe opponent'
 static const u8 sText_MimicryEnds[] = _("{B_STACK_1_NAME_WITH_PREFIX}'s type\nreturns to normal!");
 static const u8 sText_TerrainBecomesToxic[] = _("Toxic sludge covers the battlefield!");
 static const u8 sText_ToxicTerrainEnds[] = _("The sludge disappeared\nfrom the battlefield.");
+static const u8 sText_ToxicTerrainDamages[] = _("{B_STACK_1_NAME_WITH_PREFIX} was damaged\nby the toxic terrain!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1078,7 +1079,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_ToxicTerrainDamages[] = _("{B_STACK_1_NAME_WITH_PREFIX} was damaged\nby the toxic terrain!");
+static const u8 sText_AbsorbStealthRocks[] = _("{B_ATK_NAME_WITH_PREFIX} absorbs\nthe Stealth Rocks!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1942,6 +1943,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_TERRAINBECOMESTOXIC - 12] = sText_TerrainBecomesToxic,
     [STRINGID_TOXICTERRAINENDS - 12] = sText_ToxicTerrainEnds,
     [STRINGID_TOXICTERRAINDAMAGES - 12] = sText_ToxicTerrainDamages,
+    [STRINGID_ABSORB_STEALTH_ROCKS - 12] = sText_AbsorbStealthRocks,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2037,6 +2039,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_CUTTHROAT] = STRINGID_CUTTHROAT,
     [B_MSG_SWITCHIN_FIRE_COAT] = STRINGID_FIRECOATSTART,
     [B_MSG_SWITCHIN_SOOTHSAYER] = STRINGID_SOOTHSAYER,
+    [B_MSG_SWITCHIN_MOLTEN_CORE] = STRINGID_ABSORB_STEALTH_ROCKS,
 };
 
 const u16 gParadoxBoostSourceIds[] = 

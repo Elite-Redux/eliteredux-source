@@ -221,6 +221,7 @@ typedef struct Ability {
     u16 sandImmune:1;
     u16 hailImmune:1;
     u16 toxicTerrainImmune:1;
+    u16 stealthRockImmune:1;
 } Ability;
 
 #ifdef __cplusplus

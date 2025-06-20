@@ -3372,6 +3372,7 @@ constexpr Ability Mountaineer = {
         },
     .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
+    .stealthRockImmune = TRUE,
 };
 
 constexpr Ability Hydrate = {
@@ -8814,19 +8815,7 @@ constexpr Ability FireAspect = {
 };
 
 constexpr Ability BlisteringSun = {
-    .onEntry = +[](ON_ENTRY) -> int {
-        return DesolateLand.onEntry(DELEGATE_ENTRY) | AirBlower.onEntry(DELEGATE_ENTRY);
-    },
-};
-
-constexpr Ability MoltenCore = {
-    .onEntry = Furnace.onEntry,
-    .onAbsorb = +[](ON_ABSORB) -> int {
-        CHECK(moveType == TYPE_ROCK)
-        return ABSORB_RESULT_HEAL;
-    },
-    .onDefender = Furnace.onDefender,
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int { return DesolateLand.onEntry(DELEGATE_ENTRY) | AirBlower.onEntry(DELEGATE_ENTRY); },
 };
 
 constexpr Ability AurorasGale = {
@@ -8859,6 +8848,24 @@ constexpr Ability EnergyTap = {
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
     },
+};
+
+constexpr Ability MoltenCore = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        Furnace.onEntry(DELEGATE_ENTRY);
+
+        CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
+        gSideStatuses[GetBattlerSide(battler)] &= ~SIDE_STATUS_STEALTH_ROCK;
+        return SwitchInAnnounce(B_MSG_SWITCHIN_MOLTEN_CORE);
+    },
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_ROCK)
+        *statId = STAT_SPEED;
+        return ABSORB_RESULT_STAT;
+    },
+    .breakable = TRUE,
+    .absorbUp2 = TRUE,
+    .stealthRockImmune = TRUE,
 };
 
 typedef struct AbilityKVPair {
@@ -9796,6 +9803,7 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(sandImmune),
             __OVERWRITE_ARRAY_VAL(hailImmune),
             __OVERWRITE_ARRAY_VAL(toxicTerrainImmune),
+            __OVERWRITE_ARRAY_VAL(stealthRockImmune),
         };
     }
     return newWrapper;
