@@ -2184,6 +2184,7 @@ BattleScript_EffectVenomDrench:
 	attackstring
 	ppreduce
 	jumpifstatus BS_TARGET, STATUS1_PSN_ANY, BattleScript_EffectVenomDrenchCanBeUsed
+	jumpifterrainaffected BS_TARGET, STATUS_FIELD_TOXIC_TERRAIN, BattleScript_EffectVenomDrenchCanBeUsed
 	goto BattleScript_ButItFailed
 BattleScript_EffectVenomDrenchCanBeUsed:
 	jumpifstat BS_TARGET, CMP_GREATER_THAN, STAT_ATK, MIN_STAT_STAGE, BattleScript_VenomDrenchDoMoveAnim
