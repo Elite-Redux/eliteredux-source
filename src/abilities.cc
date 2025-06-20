@@ -6928,12 +6928,7 @@ constexpr Ability SnowyWrath = {
 };
 
 constexpr Ability PatternChange = {
-    .onEndTurn = +[](ON_END_TURN) -> int {
-        CHECK(Random() % 100 < 30)
-
-        CHECK(AbilityHealMonStatus(battler, ability));
-        return TRUE;
-    },
+    .onEndTurn = ShedSkin.onEndTurn,
     .onBeforeAttack = Protean.onBeforeAttack,
 };
 
