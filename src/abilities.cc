@@ -966,7 +966,6 @@ constexpr Ability MarvelScale = {
         +[](ON_STAT) {
             if ((statId == STAT_DEF || statId == STAT_SPDEF) && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
         },
-    .breakable = TRUE,
 };
 
 constexpr Ability Overgrow = {
@@ -1954,7 +1953,6 @@ constexpr Ability GrassPelt = {
         +[](ON_STAT) {
             if (statId == STAT_DEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
         },
-    .breakable = TRUE,
 };
 
 constexpr Ability ToughClaws = {
@@ -8350,7 +8348,6 @@ constexpr Ability Blur = {
         return STAT_SPEED;
     },
     .onChooseDefensiveStatFor = APPLY_ON_TARGET,
-    .breakable = TRUE,
 };
 
 constexpr Ability Elude = {
@@ -8359,7 +8356,6 @@ constexpr Ability Elude = {
         return STAT_SPEED;
     },
     .onChooseDefensiveStatFor = APPLY_ON_TARGET,
-    .breakable = TRUE,
 };
 
 constexpr Ability DrakeOfRage = {
@@ -8539,7 +8535,6 @@ constexpr Ability Biofilm = {
         +[](ON_STAT) {
             if (statId == STAT_SPDEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN)) *stat *= 1.5;
         },
-    .breakable = TRUE,
 };
 
 constexpr Ability Chokehold = {

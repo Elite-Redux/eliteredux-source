@@ -7313,6 +7313,7 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
 
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, MoveEnum move) {
     if (move == MOVE_STRUGGLE) return 2;
+    if (IsAbilityOnFieldExcept(battler, ABILITY_RELIC_STONE)) return 2;
     int isStab = IS_BATTLER_OF_TYPE(battler, moveType);
     if (!isStab) {
         ON_ABILITY(battler, FALSE, gAbilities[ability].onStab, isStab = gAbilities[ability].onStab(moveType); if (isStab) break)
