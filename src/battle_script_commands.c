@@ -8648,8 +8648,8 @@ static void Cmd_various(void) {
                     REQUIRE(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_TOXIC_SPIKES)
                     REQUIRE(IsBattlerGrounded(gActiveBattler))
 
-                    if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_POISON))  // Absorb the toxic spikes.
-                    {
+                    if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_POISON) || BattlerHasAbility(gActiveBattler, ABILITY_IMMUNITY, TRUE)) {
+                        // Absorb the toxic spikes.
                         gSideStatuses[GetBattlerSide(gActiveBattler)] &= ~(SIDE_STATUS_TOXIC_SPIKES);
                         gSideTimers[GetBattlerSide(gActiveBattler)].toxicSpikesAmount = 0;
                         BattleScriptCall(BattleScript_ToxicSpikesAbsorbed);

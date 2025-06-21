@@ -106,6 +106,14 @@ typedef int (*AbilityOnStatusImmune)(int battler, int target, AbilityEnum abilit
 typedef int (*AbilityOnTrap)(int escapingBattler);
 typedef int (*AbilityOnBeforeAttack)(int battler, int attacker, AbilityEnum ability, MoveEnum move, int moveType);
 typedef int (*AbilityOnPreemptAction)(u8 battler, AbilityEnum ability, u8 turnBattler);
+typedef enum MoveFlag {
+    MOVE_FLAG_PUNCH = 1,
+    MOVE_FLAG_KICK,
+    MOVE_FLAG_SOUND,
+    MOVE_FLAG_MEGA_LAUNCHER,
+    MOVE_FLAG_DANCE,
+} MoveFlag;
+typedef int (*AbilityOnModifyMoveFlags)(int battler, MoveEnum move, MoveFlag flag);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -175,6 +183,7 @@ typedef struct Ability {
     AbilityOnTrap onTrap;
     AbilityOnBeforeAttack onBeforeAttack;
     AbilityOnPreemptAction onPreemptAction;
+    AbilityOnModifyMoveFlags onModifyMoveFlags;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;
@@ -237,6 +246,7 @@ extern const AbilitiesWrapper gAbilitiesWrapper;
 
 int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag);
 int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag);
+int DoesMoveMatchFlag(int battler, MoveEnum move, MoveFlag flag);
 
 #ifdef __cplusplus
 }

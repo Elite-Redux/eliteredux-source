@@ -124,6 +124,8 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_ON_BEFORE_ATTACK battler, attacker, ability, move, moveType
 #define ON_PREEMPT_ACTION u8 battler, AbilityEnum ability, u8 turnBattler
 #define DELEGATE_PREEMPT_ACTION battler, ability, turnBattler
+#define ON_MODIFY_MOVE_FLAGS int battler, MoveEnum move, MoveFlag flag
+#define DELEGATE_MODIFY_MOVE_FLAGS battler, move, flag
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -317,6 +319,33 @@ static void RuinEffect(int ruinStat, int battler, int statId, u32 *stat, NonStac
     *flags = static_cast<NonStackingState>(static_cast<int>(*flags) | static_cast<int>(NON_STACKING_RUIN));
 }
 
+int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS) {
+    switch (flag) {
+        case MOVE_FLAG_DANCE:
+            if (gBattleMoves[flag].flags & FLAG_DANCE) return TRUE;
+            break;
+        case MOVE_FLAG_KICK:
+            if (gBattleMoves[flag].flags & FLAG_STRIKER_BOOST) return TRUE;
+            break;
+        case MOVE_FLAG_MEGA_LAUNCHER:
+            if (gBattleMoves[flag].flags & FLAG_MEGA_LAUNCHER_BOOST) return TRUE;
+            break;
+        case MOVE_FLAG_PUNCH:
+            if (gBattleMoves[flag].flags & FLAG_IRON_FIST_BOOST) return TRUE;
+            break;
+        case MOVE_FLAG_SOUND:
+            if (gBattleMoves[flag].flags & FLAG_SOUND) return TRUE;
+            break;
+
+        default:
+            return FALSE;
+            break;
+    }
+
+    ON_ABILITY(battler, FALSE, gAbilities[ability].onModifyMoveFlags, if (gAbilities[ability].onModifyMoveFlags(DELEGATE_MODIFY_MOVE_FLAGS)) return TRUE)
+    return FALSE;
+}
+
 #define CONTEXT None
 constexpr Ability None = {
     .randomizerBanned = TRUE,
@@ -505,7 +534,7 @@ constexpr Ability Immunity = {
             if (moveType == TYPE_POISON) RESISTANCE(.5);
         },
     .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
-        CHECK(status & CHECK_POISON)
+        CHECK(status & (CHECK_STATUS1 & ~CHECK_SLEEP))
         return TRUE;
     },
     .breakable = TRUE,
@@ -6339,7 +6368,25 @@ constexpr Ability DeadPower = {
 
 constexpr Ability BrawlingWyvern = {
     .onAccuracy = NoGuard.onAccuracy,
+    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
+        CHECK(flag == MOVE_FLAG_PUNCH)
+        CHECK(IS_MOVE_TYPE(move, TYPE_DRAGON))
+        return TRUE;
+    },
     .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
+};
+
+constexpr Ability JunshiSanda = {
+    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
+        switch (flag) {
+            case MOVE_FLAG_PUNCH:
+                return gBattleMoves[move].flags & FLAG_STRIKER_BOOST;
+            case MOVE_FLAG_KICK:
+                return gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST;
+            default:
+                return FALSE;
+        }
+    },
 };
 
 constexpr Ability MythicalArrows = {
@@ -8018,6 +8065,11 @@ constexpr Ability BlightScale = {
 
 constexpr Ability Gunman = {
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
+        CHECK(flag == MOVE_FLAG_MEGA_LAUNCHER)
+        CHECK(IS_MOVE_STATUS(move))
+        return TRUE;
+    },
     .megaLauncherBoost = TRUE,
 };
 
@@ -8360,7 +8412,11 @@ constexpr Ability DrakeOfRage = {
 };
 
 constexpr Ability MixedMartialArts = {
-    .breakable = TRUE,
+    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
+        CHECK(flag == MOVE_FLAG_PUNCH || flag == MOVE_FLAG_KICK)
+        CHECK(gBattleMoves[move].type == TYPE_NORMAL)
+        return TRUE;
+    },
 };
 
 constexpr Ability StrategicPause = {
@@ -8552,7 +8608,16 @@ constexpr Ability NeutralizingFog = {
 };
 
 constexpr Ability Festivities = {
-    .breakable = TRUE,
+    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
+        switch (flag) {
+            case MOVE_FLAG_DANCE:
+                return gBattleMoves[move].flags & FLAG_SOUND;
+            case MOVE_FLAG_SOUND:
+                return gBattleMoves[move].flags & FLAG_DANCE;
+            default:
+                return FALSE;
+        }
+    },
 };
 
 constexpr Ability FeyFlight = {
@@ -8856,6 +8921,22 @@ constexpr Ability MoltenCore = {
     .breakable = TRUE,
     .absorbUp2 = TRUE,
     .stealthRockImmune = TRUE,
+};
+
+constexpr Ability Reverberate = {
+    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
+        CHECK(flag == MOVE_FLAG_SOUND)
+        CHECK(gBattleMoves[move].type == TYPE_NORMAL)
+        return TRUE;
+    },
+};
+
+constexpr Ability Taekkyeon = {
+    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
+        CHECK(flag == MOVE_FLAG_DANCE)
+        CHECK_NOT(IS_MOVE_STATUS(move))
+        return TRUE;
+    },
 };
 
 typedef struct AbilityKVPair {
@@ -9696,6 +9777,9 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_LIGHTNING_ASPECT, LightningAspect},
     {ABILITY_POISON_HEAL, PoisonHeal},
     {ABILITY_ENERGY_TAP, EnergyTap},
+    {ABILITY_JUNSHI_SANDA, JunshiSanda},
+    {ABILITY_REVERBATE, Reverberate},
+    {ABILITY_TAEKKYEON, Taekkyeon},
 };
 
 template <int N>
@@ -9747,6 +9831,8 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(onStatusImmune),
             __OVERWRITE_ARRAY_VAL(onTrap),
             __OVERWRITE_ARRAY_VAL(onBeforeAttack),
+            __OVERWRITE_ARRAY_VAL(onPreemptAction),
+            __OVERWRITE_ARRAY_VAL(onModifyMoveFlags),
             __OVERWRITE_ARRAY_VAL(onImmuneFor),
             __OVERWRITE_ARRAY_VAL(onBattlerFaintsFor),
             __OVERWRITE_ARRAY_VAL(onOffensiveMultiplierFor),
