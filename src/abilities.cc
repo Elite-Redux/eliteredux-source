@@ -346,6 +346,38 @@ int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS) {
     return FALSE;
 }
 
+static int UseTurnAttackAsPursuit(ON_PREEMPT_ACTION) {
+        CHECK(gCurrentActionFuncId == B_ACTION_SWITCH)
+        CHECK(gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] == B_ACTION_USE_MOVE)
+
+        MoveEnum move = GetChosenMove(battler);
+        int targetFlag = GetBattlerBattleMoveTargetFlags(move, battler);
+
+        switch (targetFlag) {
+            case MOVE_TARGET_SELECTED:
+                CHECK(gBattleStruct->moveTarget[battler] == turnBattler)
+                break;
+
+            case MOVE_TARGET_BOTH:
+            case MOVE_TARGET_FOES_AND_ALLY:
+                break;
+
+            case MOVE_TARGET_RANDOM:
+            default:
+                return FALSE;
+        }
+
+        gQueuedExtraAttackData[++gQueuedAttackCount] = (ExtraAttackActionStruct){
+            .ability = ability,
+            .move = move,
+            .attacker = battler,
+            .target = turnBattler,
+            .movePos = gBattleStruct->chosenMovePositions[battler],
+        };
+        gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] = B_ACTION_FINISHED;
+        return TRUE;
+    }
+
 #define CONTEXT None
 constexpr Ability None = {
     .randomizerBanned = TRUE,
@@ -3316,11 +3348,16 @@ constexpr Ability Dreamcatcher = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             for (int i = 0; i < gBattlersCount; i++) {
                 if (IsBattlerAlive(i) && gBattleMons[i].status1 & STATUS1_SLEEP) {
+                    FILTER_NOT(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ability && gQueuedExtraAttackData[0].target == i)
                     MUL(2.0);
                     return;
                 }
             }
         },
+    .onPreemptAction = +[](ON_PREEMPT_ACTION) -> int {
+        CHECK(gBattleMons[turnBattler].status1 & STATUS1_SLEEP)
+        return UseTurnAttackAsPursuit(DELEGATE_PREEMPT_ACTION);
+    },
 };
 
 constexpr Ability Nocturnal = {
@@ -8328,37 +8365,7 @@ constexpr Ability SuperSniper = {
                 MUL(0.5);
             }
         },
-    .onPreemptAction = +[](ON_PREEMPT_ACTION) -> int {
-        CHECK(gCurrentActionFuncId == B_ACTION_SWITCH)
-        CHECK(gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] == B_ACTION_USE_MOVE)
-
-        MoveEnum move = GetChosenMove(battler);
-        int targetFlag = GetBattlerBattleMoveTargetFlags(move, battler);
-
-        switch (targetFlag) {
-            case MOVE_TARGET_SELECTED:
-                CHECK(gBattleStruct->moveTarget[battler] == turnBattler)
-                break;
-
-            case MOVE_TARGET_BOTH:
-            case MOVE_TARGET_FOES_AND_ALLY:
-                break;
-
-            case MOVE_TARGET_RANDOM:
-            default:
-                return FALSE;
-        }
-
-        gQueuedExtraAttackData[++gQueuedAttackCount] = (ExtraAttackActionStruct){
-            .ability = ability,
-            .move = move,
-            .attacker = battler,
-            .target = turnBattler,
-            .movePos = gBattleStruct->chosenMovePositions[battler],
-        };
-        gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] = B_ACTION_FINISHED;
-        return TRUE;
-    },
+    .onPreemptAction = UseTurnAttackAsPursuit,
 };
 
 ON_EITHER(WoodlandCurse) {
@@ -8798,6 +8805,7 @@ constexpr Ability Dreamscape = {
             MUL(1.2);
         },
     .onStatusImmune = Comatose.onStatusImmune,
+    .onPreemptAction = Dreamcatcher.onPreemptAction,
     .unsuppressable = TRUE,
     .removesStatusOnImmunity = TRUE,
 };
