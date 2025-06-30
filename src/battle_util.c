@@ -9068,8 +9068,7 @@ int HandleEndTurnAbility(int abilityNumber, int battler) {
 }
 
 int IsDance(int attacker, MoveEnum move) {
-    if (gBattleMoves[move].flags & FLAG_DANCE) return TRUE;
-    return !IS_MOVE_STATUS(move) && BattlerHasAbility(attacker, ABILITY_TAEKKYEON, FALSE);
+    return DoesMoveMatchFlag(attacker, move, MOVE_FLAG_DANCE);
 }
 
 int HasAnyStatusOrAbility(int battler) {
@@ -9175,28 +9174,19 @@ AbilityEnum HasSkillLink(int battler) {
 }
 
 int IsMegaLauncherBoosted(int battler, MoveEnum move) {
-    if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) return TRUE;
-    if (IS_MOVE_STATUS(move) || BattlerHasAbility(battler, ABILITY_GUNMAN, FALSE)) return TRUE;
-    return FALSE;
+    return DoesMoveMatchFlag(battler, move, MOVE_FLAG_MEGA_LAUNCHER);
 }
 
 int IsIronFistBoosted(int battler, MoveEnum move) {
-    if (gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST) return TRUE;
-    if (IS_MOVE_TYPE(move, TYPE_DRAGON) && BattlerHasAbility(battler, ABILITY_BRAWLING_WYVERN, FALSE)) return TRUE;
-    if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST && BattlerHasAbility(battler, ABILITY_JUNSHI_SANDA, FALSE)) return TRUE;
-    return FALSE;
+    return DoesMoveMatchFlag(battler, move, MOVE_FLAG_PUNCH);
 }
 
 int IsStrikerBoosted(int battler, MoveEnum move) {
-    if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) return TRUE;
-    if (gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST && BattlerHasAbility(battler, ABILITY_JUNSHI_SANDA, FALSE)) return TRUE;
-    return FALSE;
+    return DoesMoveMatchFlag(battler, move, MOVE_FLAG_KICK);
 }
 
 int IsSoundMove(int battler, MoveEnum move) {
-    if (gBattleMoves[move].flags & FLAG_SOUND) return TRUE;
-    if (gBattleMoves[move].type == TYPE_NORMAL && BattlerHasAbility(battler, ABILITY_REVERBATE, FALSE)) return TRUE;
-    return FALSE;
+    return DoesMoveMatchFlag(battler, move, MOVE_FLAG_DANCE);
 }
 
 int IsPoisonedForMove(int battler) {
