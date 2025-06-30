@@ -1,0 +1,57 @@
+name: Regenerate Ability Files
+on:
+  push:
+    paths:
+      - 'eliteredux-darky/knowledge/abilities/*.md'
+    branches:
+      - upcoming
+      - main
+  workflow_dispatch:
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+          
+      - name: Regenerate progress.md
+        run: |
+          cd eliteredux-darky
+          python3 scripts/ability_tools/generate_progress.py
+          
+      - name: Regenerate status API
+        run: |
+          cd eliteredux-darky  
+          python3 scripts/ability_tools/generate_status_api.py
+          
+      - name: Extract approved descriptions
+        run: |
+          cd eliteredux-darky
+          python3 scripts/ability_tools/extract_approved_descriptions.py
+          
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'Auto-regenerate ability files after approval'
+          commit_options: '--no-verify'
+          file_pattern: |
+            eliteredux-darky/knowledge/extended_ability_descriptions/progress.md
+            eliteredux-darky/knowledge/extended_ability_descriptions/extended_descriptions.txt
+            eliteredux-darky/codex/docs/.vitepress/ability-status.json
+          commit_user_name: Elite Redux Bot
+          commit_user_email: bot@elite-redux.com
+          commit_author: Elite Redux Bot <bot@elite-redux.com>
