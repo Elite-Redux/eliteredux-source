@@ -8947,6 +8947,14 @@ constexpr Ability Taekkyeon = {
     },
 };
 
+constexpr Ability SludgeSpit = {
+    .breakable = TRUE,
+};
+
+constexpr Ability SwampThing = {
+    .breakable = TRUE,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -9788,6 +9796,8 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_JUNSHI_SANDA, JunshiSanda},
     {ABILITY_REVERBATE, Reverberate},
     {ABILITY_TAEKKYEON, Taekkyeon},
+    {ABILITY_SLUDGE_SPIT, SludgeSpit},
+    {ABILITY_SWAMP_THING, SwampThing},
 };
 
 template <int N>
