@@ -9815,6 +9815,7 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
         newWrapper.abilities[val.key] = (Ability){
             __OVERWRITE_ARRAY_VAL(name),
             __OVERWRITE_ARRAY_VAL(description),
+            __OVERWRITE_ARRAY_VAL(expandedDescription),
             __OVERWRITE_ARRAY_VAL(onEntry),
             __OVERWRITE_ARRAY_VAL(onAbsorb),
             __OVERWRITE_ARRAY_VAL(onImmune),
