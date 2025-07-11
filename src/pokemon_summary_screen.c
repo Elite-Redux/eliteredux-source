@@ -5177,10 +5177,9 @@ static void BufferMonPokemonExpandedAbilityAndInnates(void)
     PrintTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, offset, y + 2, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
 
 	// Main Ability Description 
-    //Uncomment after Mawoo makes the changes to the text generation for abilities
-    /*if(gAbilities[abilityToShow].expandedDescription != NULL)
+    if(gAbilities[abilityToShow].expandedDescription != NULL)
 	    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilityToShow].expandedDescription);
-    else*/
+    else
 	    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilityToShow].description);
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 20), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
 }
