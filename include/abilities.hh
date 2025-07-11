@@ -148,6 +148,7 @@ typedef enum {
 typedef struct Ability {
     const u8* name;
     const u8* description;
+    const u8* expandedDescription;
     AbilityOnEntryHandler onEntry;
     AbilityOnAbsorbHandler onAbsorb;
     AbilityOnImmuneHandler onImmune;
