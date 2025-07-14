@@ -8955,6 +8955,10 @@ constexpr Ability SwampThing = {
     .breakable = TRUE,
 };
 
+constexpr Ability FrostyPrescence = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_MIST, 0); },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -9798,6 +9802,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_TAEKKYEON, Taekkyeon},
     {ABILITY_SLUDGE_SPIT, SludgeSpit},
     {ABILITY_SWAMP_THING, SwampThing},
+    {ABILITY_FROSTY_PRESCENCE, FrostyPrescence},
 };
 
 template <int N>
