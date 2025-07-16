@@ -40383,7 +40383,7 @@ static const struct TrainerMonItemCustomMoves sParty_MattMtPyreInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_CRABONINATION,
+    .species = SPECIES_CRABRUISER_REDUX,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 2,
     .evs = {252, 252, 0, 0, 4, 0},
@@ -40440,7 +40440,7 @@ static const struct TrainerMonItemCustomMoves sParty_MattMtPyreHell[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_CRABONINATION,
+    .species = SPECIES_CRABRUISER_REDUX,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 2,
     .evs = {252, 252, 0, 0, 4, 0},
@@ -43300,7 +43300,7 @@ static const struct TrainerMonItemCustomMoves sParty_MattInsane[] = { // Aqua Hi
     },
     {
     .lvl = 0,
-    .species = SPECIES_CRABONINATION,
+    .species = SPECIES_CRABRUISER_REDUX,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 2,
     .evs = {252, 252, 0, 0, 4, 0},
@@ -43357,7 +43357,7 @@ static const struct TrainerMonItemCustomMoves sParty_MattHell[] = { // Aqua Hide
     },
     {
     .lvl = 0,
-    .species = SPECIES_CRABONINATION,
+    .species = SPECIES_CRABRUISER_REDUX,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 2,
     .evs = {252, 252, 0, 0, 4, 0},
@@ -63206,7 +63206,7 @@ static const struct TrainerMonItemCustomMoves sParty_VinegarHell[] = {
 static const struct TrainerMonItemCustomMoves sParty_Salsa[] = {
     {
     .lvl = 0,
-    .species = SPECIES_CRABONINATION,
+    .species = SPECIES_CRABRUISER_REDUX,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 1,
     .evs = {252, 252, 0, 0, 4, 0},
@@ -63263,7 +63263,7 @@ static const struct TrainerMonItemCustomMoves sParty_Salsa[] = {
 static const struct TrainerMonItemCustomMoves sParty_SalsaHell[] = {
     {
     .lvl = 0,
-    .species = SPECIES_CRABONINATION,
+    .species = SPECIES_CRABRUISER_REDUX,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 1,
     .evs = {252, 252, 0, 0, 4, 0},
