@@ -319,6 +319,9 @@ u16 getHallofFameSpecies(u8 num) {
         case SPECIES_WISHIWASHI:
             return SPECIES_WISHIWASHI_SCHOOL;
 
+        case SPECIES_WISPYWASPY:
+            return SPECIES_WISPYWASPY_HIVEMIND;
+
         case SPECIES_UNOWN:
             return SPECIES_UNOWN_REVELATION;
 
