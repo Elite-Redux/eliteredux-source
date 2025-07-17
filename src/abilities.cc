@@ -8955,6 +8955,20 @@ constexpr Ability SwampThing = {
     .breakable = TRUE,
 };
 
+constexpr Ability FrostyPrescence = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_MIST, 0); },
+};
+
+constexpr Ability ChillingPellets = {
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_ICICLE_SPEAR, 13);
+        return FALSE;
+    },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -9798,6 +9812,8 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_TAEKKYEON, Taekkyeon},
     {ABILITY_SLUDGE_SPIT, SludgeSpit},
     {ABILITY_SWAMP_THING, SwampThing},
+    {ABILITY_FROSTY_PRESCENCE, FrostyPrescence},
+    {ABILITY_CHILLING_PELLETS, ChillingPellets},
 };
 
 template <int N>
@@ -9815,6 +9831,7 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
         newWrapper.abilities[val.key] = (Ability){
             __OVERWRITE_ARRAY_VAL(name),
             __OVERWRITE_ARRAY_VAL(description),
+            __OVERWRITE_ARRAY_VAL(expandedDescription),
             __OVERWRITE_ARRAY_VAL(onEntry),
             __OVERWRITE_ARRAY_VAL(onAbsorb),
             __OVERWRITE_ARRAY_VAL(onImmune),

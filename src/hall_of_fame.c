@@ -319,6 +319,9 @@ u16 getHallofFameSpecies(u8 num) {
         case SPECIES_WISHIWASHI:
             return SPECIES_WISHIWASHI_SCHOOL;
 
+        case SPECIES_WISPYWASPY:
+            return SPECIES_WISPYWASPY_HIVEMIND;
+
         case SPECIES_UNOWN:
             return SPECIES_UNOWN_REVELATION;
 
@@ -904,7 +907,7 @@ static void Task_HofPC_ExitOnButtonPress(u8 taskId) {
 static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2) {
     u8 numModes = 0;
     static const u8 gText_WelcomeToHOF[] =
-        _("Elite Redux v2.6A - {STR_VAR_1} Mode{COLOR WHITE}{SHADOW DARK_GRAY}, {STR_VAR_2} Caps\n{COLOR WHITE}{SHADOW DARK_GRAY}{STR_VAR_3}");
+        _("Elite Redux v2.65A - {STR_VAR_1} Mode{COLOR WHITE}{SHADOW DARK_GRAY}, {STR_VAR_2} Caps\n{COLOR WHITE}{SHADOW DARK_GRAY}{STR_VAR_3}");
     static const u8 sText_WinsLossesText[] = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}");
     static const u8 sText_WinsLossesLockedText[] =
         _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}      {COLOR LIGHT_RED}{SHADOW RED}Locked Mode{COLOR WHITE}{SHADOW DARK_GRAY}");
