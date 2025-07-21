@@ -53,8 +53,8 @@ object TrainerPartyGenerator : Generator {
         Nature.UNRECOGNIZED -> error("Unrecognized nature")
     }
 
-    private fun <T> MutableList<T>.addIf(condition: Boolean, output: () -> T) {
-        if (condition) add(output())
+    private inline fun <T> MutableList<T>.addIfNot(condition: Boolean, output: () -> T) {
+        if (!condition) add(output())
     }
 
     fun TrainerMon.validate() = buildList {
@@ -65,25 +65,25 @@ object TrainerPartyGenerator : Generator {
                     possibleMoves,
                     SPECIES_MAP[species]!!
                 ) + possibleMoves.levelList.flatMap { it.moveList }).toSet()
-            addIf(invalidMoves.isEmpty()) { "Invalid moves: $invalidMoves\n$this" }
+            addIfNot(invalidMoves.isEmpty()) { "Invalid moves: $invalidMoves\n$this" }
 
-            addIf(((hpEv / 4) + (atkEv / 4) + (defEv / 4) + (spatkEv / 4) + (spdefEv / 4) + (speEv / 4)) == 508 / 4) {
+            addIfNot(((hpEv / 4) + (atkEv / 4) + (defEv / 4) + (spatkEv / 4) + (spdefEv / 4) + (speEv / 4)) == 508 / 4) {
                 "Invalid EV total\n$this"
             }
 
-            addIf(item != ItemEnum.ITEM_NONE) { "Missing item\n$this" }
+            addIfNot(item != ItemEnum.ITEM_NONE) { "Missing item\n$this" }
 
             when (getNegativeNatureStat(nature)) {
                 NEUTRAL -> add("Neutral nature\n$this")
-                ATK -> addIf(atkEv < 4) { "Positive EV for negative nature\n$this" }
-                DEF -> addIf(defEv < 4) { "Positive EV for negative nature\n$this" }
-                SPATK -> addIf(spatkEv < 4) { "Positive EV for negative nature\n$this" }
-                SPDEF -> addIf(spdefEv < 4) { "Positive EV for negative nature\n$this" }
-                SPE -> addIf(speEv < 4) { "Positive EV for negative nature\n$this" }
+                ATK -> addIfNot(atkEv < 4) { "Positive EV for negative nature\n$this" }
+                DEF -> addIfNot(defEv < 4) { "Positive EV for negative nature\n$this" }
+                SPATK -> addIfNot(spatkEv < 4) { "Positive EV for negative nature\n$this" }
+                SPDEF -> addIfNot(spdefEv < 4) { "Positive EV for negative nature\n$this" }
+                SPE -> addIfNot(speEv < 4) { "Positive EV for negative nature\n$this" }
             }
 
             if (ironPill) {
-                addIf(getNegativeNatureStat(nature) == SPE) { "Iron pill should use negative speed nature\n$this" }
+                addIfNot(getNegativeNatureStat(nature) == SPE) { "Iron pill should use negative speed nature\n$this" }
             }
         }
     }
@@ -110,7 +110,7 @@ object TrainerPartyGenerator : Generator {
                         )
 
                         val abilityIndex = SPECIES_MAP[species]!!.abilityList.indexOf(ability)
-                            .also { addIf(it > -1) { "Mon $species does not have ability $ability, partyHash: ${party.hashCode().toUInt()}" } }
+                            .also { addIfNot(it > -1) { "Mon $species does not have ability $ability, partyHash: ${party.hashCode().toUInt()}" } }
 
                         if (abilityIndex >= 0) {
                             writer.appendLine()
