@@ -3223,7 +3223,10 @@ u8 AtkCanceller_UnableToUseMove(void) {
                 gBattleStruct->atkCancellerTracker++;
                 break;
             case CANCELLER_PARALYSED:  // paralysis
-                if (!gProcessingExtraAttacks && (gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS) && (Random() % 4) == 0) {
+                //Paralyzed enemies will always move but will still have a speed penalty
+                bool8 disableParalysisCancel = gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL && GET_BATTLER_SIDE(gBattlerAttacker) != B_SIDE_PLAYER;
+
+                if (!gProcessingExtraAttacks && (gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS) && (Random() % 4) == 0 && !disableParalysisCancel) {
                     gRoundStructs[gBattlerAttacker].prlzImmobility = TRUE;
                     // This is removed in Emerald for some reason
                     // CancelMultiTurnMoves(gBattlerAttacker);
