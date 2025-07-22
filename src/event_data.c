@@ -265,6 +265,5 @@ u8 GetDefaultPokeball() {
 }
 
 u8 getCurrentSeason(void){
-    return SEASON_SPRING;
-    //return gSaveBlock2Ptr->season;
+    return gSaveBlock2Ptr->season;
 }

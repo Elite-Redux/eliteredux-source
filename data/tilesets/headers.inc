@@ -1156,3 +1156,7 @@ gTileset_Sunhollow_Ruins::
 	.4byte gMetatiles_Sunhollow_Ruins
 	.4byte gMetatileAttributes_Sunhollow_Ruins
 	.4byte NULL @ animation callback
+	.4byte NULL @ PalOverrides
+	.4byte NULL @ Summer_Palette
+	.4byte NULL @ Autumn_Palette
+	.4byte NULL @ Winter_Palette
