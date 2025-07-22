@@ -8903,12 +8903,13 @@ static void Cmd_various(void) {
                 }
             }
         } break;
-        case VARIOUS_HP_FRACTION_TO_DAMAGE:
+        case VARIOUS_HP_FRACTION_TO_DAMAGE:{
             int fraction = READ_8_INC;
             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / fraction;
             if (gBattleMoveDamage > gBattleMons[gActiveBattler].hp) gBattleMoveDamage = gBattleMons[gActiveBattler].hp;
             if (!gBattleMoveDamage) gBattleMoveDamage = 1;
             break;
+        }
         case VARIOUS_JUMP_IF_CONSUMABLE_BLOCKED: {
             ptr = READ_PTR_INC;
             AbilityEnum ability = IsUnnerveAbilityOnOpposingSide(gActiveBattler);

@@ -4845,7 +4845,6 @@ static void PlayerHandleBattleInGameWikiMenu(void) {
     InformationMenu_Init_From_Battle(ReshowBattleScreenAfterMenu);
     gBattlerControllerFuncs[gActiveBattler] = WaitForDebug;
 }
-
 static void PlayerCmdEnd(void) {}
 
 static void ChangeMoveDisplayMode() {}

@@ -53,6 +53,7 @@
 #include "constants/union_room.h"
 #include "constants/vars.h"
 #include "constants/weather.h"
+#include "constants/day_night.h"
 #include "constants/quests.h"
 #include "constants/battle_events.h"
 	.include "asm/macros.inc"
@@ -1187,3 +1188,15 @@ Common_Text_ClydeAskResetTrainers::
 	.include "data/maps/VictoryRoadCRoom/scripts.inc"
 
 	.include "data/maps/VictoryRoadFroom/scripts.inc"
+
+	.include "data/maps/Route111_SunhollowRuins/scripts.inc"
+
+	.include "data/maps/Route111_Desert/scripts.inc"
+
+	.include "data/maps/Route111_SunhollowRuins_Museum/scripts.inc"
+
+	.include "data/maps/Route111_Cave/scripts.inc"
+
+	.include "data/maps/Route111_Tunnel/scripts.inc"
+
+	.include "data/maps/Route111_Tunnel2/scripts.inc"

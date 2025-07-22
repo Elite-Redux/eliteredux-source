@@ -22,14 +22,14 @@
       "y": 3,
       "elevation": 0,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 23
+      "dest_warp_id": "23"
     },
     {
       "x": 36,
       "y": 2,
       "elevation": 0,
       "dest_map": "MAP_SANDSTREWN_RUINS_2F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [

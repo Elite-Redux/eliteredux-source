@@ -34,14 +34,14 @@
       "y": 12,
       "elevation": 0,
       "dest_map": "MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL",
-      "dest_warp_id": 2
+      "dest_warp_id": "2"
     },
     {
       "x": 132,
       "y": 15,
       "elevation": 0,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 24
+      "dest_warp_id": "24"
     }
   ],
   "coord_events": [

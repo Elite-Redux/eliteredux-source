@@ -1242,7 +1242,7 @@ static u8 GetPostBattleDirectionHintTextIndex(int *hintType, u8 minDistanceForEx
     {
         for (x = 0; x < 32; x++)
         {
-            if ((map[x] & METATILE_ID_MASK) == FLOOR_EXIT_METATILE)
+            if ((map[x] & MAPGRID_METATILE_ID_MASK) == FLOOR_EXIT_METATILE)
             {
                 x += 7 - gObjectEvents[gSelectedObjectEvent].initialCoords.x;
                 y += 7 - gObjectEvents[gSelectedObjectEvent].initialCoords.y;
@@ -1548,7 +1548,7 @@ void GenerateBattlePyramidFloorLayout(u16 *backupMapData, bool8 setPlayerPositio
         {
             for (x = 0; x < mapLayout->width; x++)
             {
-                if ((layoutMap[x] & METATILE_ID_MASK) != FLOOR_EXIT_METATILE)
+                if ((layoutMap[x] & MAPGRID_METATILE_ID_MASK) != FLOOR_EXIT_METATILE)
                 {
                     map[x] = layoutMap[x];
                 }
@@ -1559,7 +1559,7 @@ void GenerateBattlePyramidFloorLayout(u16 *backupMapData, bool8 setPlayerPositio
                         gSaveBlock1Ptr->pos.x = (mapLayout->width * (i % 4)) + x;
                         gSaveBlock1Ptr->pos.y = (mapLayout->height * (i / 4)) + y;
                     }
-                    map[x] = (layoutMap[x] & 0xFC00) | FLOOR_WALKABLE_METATILE;
+                    map[x] = (layoutMap[x] & (MAPGRID_ELEVATION_MASK | MAPGRID_COLLISION_MASK)) | FLOOR_WALKABLE_METATILE;
                 }
                 else
                 {
