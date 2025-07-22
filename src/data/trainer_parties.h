@@ -30599,7 +30599,7 @@ static const struct TrainerMonItemCustomMoves sParty_Norman1Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_BEWARDEN,
+    .species = SPECIES_BEWARDEN_REDUX,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 0,
     .evs = {124, 252, 0, 0, 132, 0},
@@ -30656,7 +30656,7 @@ static const struct TrainerMonItemCustomMoves sParty_Norman1Hell[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_BEWARDEN,
+    .species = SPECIES_BEWARDEN_REDUX,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 0,
     .evs = {124, 252, 0, 0, 132, 0},
@@ -67964,7 +67964,7 @@ static const struct TrainerMonItemCustomMoves sParty_AlexiaInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_BEWARDEN,
+    .species = SPECIES_BEWARDEN_REDUX,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 0,
     .evs = {0, 252, 128, 0, 128, 0},
@@ -68021,7 +68021,7 @@ static const struct TrainerMonItemCustomMoves sParty_AlexiaHell[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_BEWARDEN,
+    .species = SPECIES_BEWARDEN_REDUX,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 0,
     .evs = {0, 252, 128, 0, 128, 0},
