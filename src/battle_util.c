@@ -3224,7 +3224,7 @@ u8 AtkCanceller_UnableToUseMove(void) {
                 break;
             case CANCELLER_PARALYSED:  // paralysis
                 //Paralyzed enemies will always move but will still have a speed penalty
-                bool8 disableParalysisCancel = gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL && GET_BATTLER_SIDE(gBattlerAttacker) != B_SIDE_PLAYER;
+                bool8 disableParalysisCancel = (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL && GET_BATTLER_SIDE(gBattlerAttacker) != B_SIDE_PLAYER);
 
                 if (!gProcessingExtraAttacks && (gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS) && (Random() % 4) == 0 && !disableParalysisCancel) {
                     gRoundStructs[gBattlerAttacker].prlzImmobility = TRUE;
