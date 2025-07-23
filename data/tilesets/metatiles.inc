@@ -573,3 +573,11 @@ gMetatiles_Sunhollow_Ruins::
 	.align 1
 gMetatileAttributes_Sunhollow_Ruins::
 	.incbin "data/tilesets/secondary/sunhollow_ruins/metatile_attributes.bin"
+
+	.align 1
+gMetatiles_Petalburg_Woods::
+	.incbin "data/tilesets/secondary/petalburg_woods/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_Petalburg_Woods::
+	.incbin "data/tilesets/secondary/petalburg_woods/metatile_attributes.bin"

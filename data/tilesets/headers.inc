@@ -1160,3 +1160,17 @@ gTileset_Sunhollow_Ruins::
 	.4byte NULL @ Summer_Palette
 	.4byte NULL @ Autumn_Palette
 	.4byte NULL @ Winter_Palette
+
+	.align 2
+gTileset_Petalburg_Woods::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0 @ padding
+	.4byte gTilesetTiles_Petalburg_Woods
+	.4byte gTilesetPalettes_Petalburg_Woods
+	.4byte gMetatiles_Petalburg_Woods
+	.4byte gMetatileAttributes_Petalburg_Woods
+	.4byte NULL @ animation callback
+	.4byte NULL @ Summer_Palette
+	.4byte NULL @ Autumn_Palette
+	.4byte NULL @ Winter_Palette

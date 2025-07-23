@@ -1347,7 +1347,7 @@
       "width": 48,
       "height": 44,
       "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_Rustboro",
+      "secondary_tileset": "gTileset_Petalburg_Woods",
       "border_filepath": "data/layouts/PetalburgWoods/border.bin",
       "blockdata_filepath": "data/layouts/PetalburgWoods/map.bin"
     },
@@ -1357,7 +1357,7 @@
       "width": 48,
       "height": 44,
       "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_Rustboro",
+      "secondary_tileset": "gTileset_Petalburg_Woods",
       "border_filepath": "data/layouts/PetalburgWoods_2/border.bin",
       "blockdata_filepath": "data/layouts/PetalburgWoods_2/map.bin"
     },
@@ -1367,7 +1367,7 @@
       "width": 48,
       "height": 44,
       "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_Rustboro",
+      "secondary_tileset": "gTileset_Petalburg_Woods",
       "border_filepath": "data/layouts/PetalburgWoods_3/border.bin",
       "blockdata_filepath": "data/layouts/PetalburgWoods_3/map.bin"
     },
@@ -4647,7 +4647,7 @@
       "width": 20,
       "height": 20,
       "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_Rustboro",
+      "secondary_tileset": "gTileset_Petalburg_Woods",
       "border_filepath": "data/layouts/PetalburgWoods_BreloomRoom/border.bin",
       "blockdata_filepath": "data/layouts/PetalburgWoods_BreloomRoom/map.bin"
     },
