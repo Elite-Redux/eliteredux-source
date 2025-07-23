@@ -1,6 +1,7 @@
 #include "global.h"
 #include "battle_pyramid.h"
 #include "bg.h"
+#include "event_data.h"
 #include "fieldmap.h"
 #include "fldeff.h"
 #include "fldeff_misc.h"
@@ -16,6 +17,7 @@
 #include "tv.h"
 #include "constants/rgb.h"
 #include "constants/metatile_behaviors.h"
+#include "day_night.h"
 
 struct ConnectionFlags
 {
@@ -58,7 +60,7 @@ static bool8 IsCoordInIncomingConnectingMap(int coord, int srcMax, int destMax, 
     i = (x + 1) & 1;                                                                                \
     i += ((y + 1) & 1) * 2;                                                                         \
                                                                                                     \
-    gMapHeader.mapLayout->border[i] | METATILE_COLLISION_MASK;                                      \
+    gMapHeader.mapLayout->border[i] | MAPGRID_COLLISION_MASK;                                      \
 })
 
 #define AreCoordsWithinMapGridBounds(x, y) (x >= 0 && x < gBackupMapLayout.width && y >= 0 && y < gBackupMapLayout.height)
@@ -89,13 +91,13 @@ void InitMapFromSavedGame(void)
 
 void InitBattlePyramidMap(bool8 setPlayerPosition)
 {
-    CpuFastFill(METATILE_ID_UNDEFINED << 16 | METATILE_ID_UNDEFINED, gBackupMapData, sizeof(gBackupMapData));
+    CpuFastFill(MAPGRID_UNDEFINED, gBackupMapData, sizeof(gBackupMapData));
     GenerateBattlePyramidFloorLayout(gBackupMapData, setPlayerPosition);
 }
 
 void InitTrainerHillMap(void)
 {
-    CpuFastFill(METATILE_ID_UNDEFINED << 16 | METATILE_ID_UNDEFINED, gBackupMapData, sizeof(gBackupMapData));
+    CpuFastFill(MAPGRID_UNDEFINED, gBackupMapData, sizeof(gBackupMapData));
     GenerateTrainerHillFloorLayout(gBackupMapData);
 }
 
@@ -105,7 +107,7 @@ static void InitMapLayoutData(struct MapHeader *mapHeader)
     int width;
     int height;
     mapLayout = mapHeader->mapLayout;
-    CpuFastFill16(METATILE_ID_UNDEFINED, gBackupMapData, sizeof(gBackupMapData));
+    CpuFastFill16(MAPGRID_UNDEFINED, gBackupMapData, sizeof(gBackupMapData));
     gBackupMapLayout.map = gBackupMapData;
     width = mapLayout->width + 15;
     gBackupMapLayout.width = width;
@@ -344,55 +346,56 @@ static void FillEastConnection(struct MapHeader const *mapHeader, struct MapHead
     }
 }
 
-u8 MapGridGetZCoordAt(int x, int y)
+u8 MapGridGetElevationAt(int x, int y)
 {
     u16 block = MapGridGetTileAt(x, y);
 
-    if (block == METATILE_ID_UNDEFINED)
+    if (block == MAPGRID_UNDEFINED)
         return 0;
 
-    return block >> METATILE_ELEVATION_SHIFT;
+    return block >> MAPGRID_ELEVATION_SHIFT;
 }
 
 bool8 MapGridIsImpassableAt(int x, int y)
 {
     u16 block = MapGridGetTileAt(x, y);
 
-    if (block == METATILE_ID_UNDEFINED)
+    if (block == MAPGRID_UNDEFINED)
         return TRUE;
 
-    return (block & METATILE_COLLISION_MASK) >> METATILE_COLLISION_SHIFT;
+    return (block & MAPGRID_COLLISION_MASK) >> MAPGRID_COLLISION_SHIFT;
 }
 
 u32 MapGridGetMetatileIdAt(int x, int y)
 {
     u16 block = MapGridGetTileAt(x, y);
 
-    if (block == METATILE_ID_UNDEFINED)
-        return MapGridGetBorderTileAt(x, y) & METATILE_ID_MASK;
+    if (block == MAPGRID_UNDEFINED)
+        return MapGridGetBorderTileAt(x, y) & MAPGRID_METATILE_ID_MASK;
 
-    return block & METATILE_ID_MASK;
+    return block & MAPGRID_METATILE_ID_MASK;
 }
 
 u32 MapGridGetMetatileBehaviorAt(int x, int y)
 {
     u16 metatile = MapGridGetMetatileIdAt(x, y);
-    return GetBehaviorByMetatileId(metatile) & METATILE_BEHAVIOR_MASK;
+    return GetMetatileAttributesById(metatile) & METATILE_ATTR_BEHAVIOR_MASK;
 }
 
 u8 MapGridGetMetatileLayerTypeAt(int x, int y)
 {
     u16 metatile = MapGridGetMetatileIdAt(x, y);
-    return (GetBehaviorByMetatileId(metatile) & METATILE_ELEVATION_MASK) >> METATILE_ELEVATION_SHIFT;
+    return (GetMetatileAttributesById(metatile) & METATILE_ATTR_LAYER_MASK) >> METATILE_ATTR_LAYER_SHIFT;
 }
 
 void MapGridSetMetatileIdAt(int x, int y, u16 metatile)
 {
     int i;
-    if (AreCoordsWithinMapGridBounds(x, y))
+    if (x >= 0 && x < gBackupMapLayout.width
+     && y >= 0 && y < gBackupMapLayout.height)
     {
         i = x + y * gBackupMapLayout.width;
-        gBackupMapLayout.map[i] = (gBackupMapLayout.map[i] & METATILE_ELEVATION_MASK) | (metatile & ~METATILE_ELEVATION_MASK);
+        gBackupMapLayout.map[i] = (gBackupMapLayout.map[i] & MAPGRID_ELEVATION_MASK) | (metatile & ~MAPGRID_ELEVATION_MASK);
     }
 }
 
@@ -406,7 +409,7 @@ void MapGridSetMetatileEntryAt(int x, int y, u16 metatile)
     }
 }
 
-u16 GetBehaviorByMetatileId(u16 metatile)
+u16 GetMetatileAttributesById(u16 metatile)
 {
     u16 *attributes;
     if (metatile < NUM_METATILES_IN_PRIMARY)
@@ -567,7 +570,7 @@ static void MoveMapViewToBackup(u8 direction)
 
 int GetMapBorderIdAt(int x, int y)
 {
-    if (MapGridGetTileAt(x, y) == METATILE_ID_UNDEFINED)
+    if (MapGridGetTileAt(x, y) == MAPGRID_UNDEFINED)
         return CONNECTION_INVALID;
 
     if (x >= (gBackupMapLayout.width - 8))
@@ -819,9 +822,9 @@ void MapGridSetMetatileImpassabilityAt(int x, int y, bool32 impassable)
     if (AreCoordsWithinMapGridBounds(x, y))
     {
         if (impassable)
-            gBackupMapLayout.map[x + gBackupMapLayout.width * y] |= METATILE_COLLISION_MASK;
+            gBackupMapLayout.map[x + gBackupMapLayout.width * y] |= MAPGRID_COLLISION_MASK;
         else
-            gBackupMapLayout.map[x + gBackupMapLayout.width * y] &= ~METATILE_COLLISION_MASK;
+            gBackupMapLayout.map[x + gBackupMapLayout.width * y] &= ~MAPGRID_COLLISION_MASK;
     }
 }
 
@@ -835,7 +838,7 @@ static bool8 SkipCopyingMetatileFromSavedMap(u16* mapMetatilePtr, u16 mapWidth, 
     else
         mapMetatilePtr += mapWidth;
 
-    if (IsLargeBreakableDecoration(*mapMetatilePtr & METATILE_ID_MASK, yMode) == TRUE)
+    if (IsLargeBreakableDecoration(*mapMetatilePtr & MAPGRID_METATILE_ID_MASK, yMode) == TRUE)
         return TRUE;
     return FALSE;
 }
@@ -875,23 +878,93 @@ static void FieldmapUnkDummy(void)
 void LoadTilesetPalette(struct Tileset const *tileset, u16 destOffset, u16 size)
 {
     u16 black = RGB_BLACK;
+    u8 season = getCurrentSeason();
 
     if (tileset)
     {
         if (tileset->isSecondary == FALSE)
         {
+            gPaletteOverrides[0] = tileset->paletteOverrides;
             LoadPalette(&black, destOffset, 2);
-            LoadPalette(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+            switch(season){
+                default:
+                case SEASON_SPRING:
+                    LoadPaletteDayNight(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+                break;
+                case SEASON_SUMMER:
+                    if(tileset->palettes_summer != NULL)
+                        LoadPalette(((u16*)tileset->palettes_summer) + 1, destOffset + 1, size - 2);
+                    else
+                        LoadPaletteDayNight(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+                break;
+                case SEASON_AUTUMN:
+                    if(tileset->palettes_autumn != NULL)
+                        LoadPaletteDayNight(((u16*)tileset->palettes_autumn) + 1, destOffset + 1, size - 2);
+                    else
+                        LoadPaletteDayNight(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+                break;
+                case SEASON_WINTER:
+                    if(tileset->palettes_winter != NULL)
+                        LoadPaletteDayNight(((u16*)tileset->palettes_winter) + 1, destOffset + 1, size - 2);
+                    else
+                        LoadPaletteDayNight(((u16*)tileset->palettes) + 1, destOffset + 1, size - 2);
+                break;
+            }
+
             FieldmapPaletteDummy(destOffset + 1, (size - 2) >> 1);
         }
         else if (tileset->isSecondary == TRUE)
         {
-            LoadPalette(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+            switch(season){
+                case SEASON_SPRING:
+                    LoadPaletteDayNight(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                break;
+                case SEASON_SUMMER:
+                    if(tileset->palettes_summer != NULL)
+                        LoadPaletteDayNight(((u16*)tileset->palettes_summer) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                    else
+                        LoadPaletteDayNight(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                break;
+                case SEASON_AUTUMN:
+                    if(tileset->palettes_autumn != NULL)
+                        LoadPaletteDayNight(((u16*)tileset->palettes_autumn) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                    else
+                        LoadPaletteDayNight(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                break;
+                case SEASON_WINTER:
+                    if(tileset->palettes_winter != NULL)
+                        LoadPaletteDayNight(((u16*)tileset->palettes_winter) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                    else
+                        LoadPaletteDayNight(((u16*)tileset->palettes) + (NUM_PALS_IN_PRIMARY * 16), destOffset, size);
+                break;
+            }
             FieldmapPaletteDummy(destOffset, size >> 1);
         }
         else
         {
-            LoadCompressedPalette((u32*)tileset->palettes, destOffset, size);
+            switch(season){
+                case SEASON_SPRING:
+                    LoadCompressedPalette((u32*)tileset->palettes, destOffset, size);
+                break;
+                case SEASON_SUMMER:
+                    if(tileset->palettes_summer != NULL)
+                        LoadCompressedPalette((u32*)tileset->palettes_summer, destOffset, size);
+                    else
+                        LoadCompressedPalette((u32*)tileset->palettes, destOffset, size);
+                break;
+                case SEASON_AUTUMN:
+                    if(tileset->palettes_autumn != NULL)
+                        LoadCompressedPalette((u32*)tileset->palettes_autumn, destOffset, size);
+                    else
+                        LoadCompressedPalette((u32*)tileset->palettes, destOffset, size);
+                break;
+                case SEASON_WINTER:
+                    if(tileset->palettes_winter != NULL)
+                        LoadCompressedPalette((u32*)tileset->palettes_winter, destOffset, size);
+                    else
+                        LoadCompressedPalette((u32*)tileset->palettes, destOffset, size);
+                break;
+            }
             FieldmapPaletteDummy(destOffset, size >> 1);
         }
     }

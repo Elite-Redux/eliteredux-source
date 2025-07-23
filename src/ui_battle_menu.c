@@ -1844,11 +1844,20 @@ static void PrintMoveInfo(MoveEnum move, u8 x, u8 y, u8 moveIdx) {
             y++;
             // PP
             ConvertIntToDecimalStringN(gStringVar1, gBattleMons[sMenuDataPtr->battlerId].pp[moveIdx], STR_CONV_MODE_LEFT_ALIGN, 2);  // Current PP
-            ConvertIntToDecimalStringN(
-                gStringVar2,
-                CalculatePPWithBonus(move, GetMonData(&party[gBattlerPartyIndexes[sMenuDataPtr->battlerId]], MON_DATA_PP_BONUSES, NULL), moveIdx),
-                STR_CONV_MODE_LEFT_ALIGN,
-                2);  // Max PP
+            if(GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_PLAYER){
+                ConvertIntToDecimalStringN(
+                    gStringVar2,
+                    CalculatePPWithBonusPlayer(move, GetMonData(&party[gBattlerPartyIndexes[sMenuDataPtr->battlerId]], MON_DATA_PP_BONUSES, NULL), moveIdx),
+                    STR_CONV_MODE_LEFT_ALIGN,
+                    2);  // Max PP
+            }
+            else{
+                ConvertIntToDecimalStringN(
+                    gStringVar2,
+                    CalculatePPWithBonus(move, GetMonData(&party[gBattlerPartyIndexes[sMenuDataPtr->battlerId]], MON_DATA_PP_BONUSES, NULL), moveIdx),
+                    STR_CONV_MODE_LEFT_ALIGN,
+                    2);  // Max PP
+            }
             StringExpandPlaceholders(gStringVar4, gText_CurrentPP);
             AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gStringVar4);
             // Stab

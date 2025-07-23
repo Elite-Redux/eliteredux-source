@@ -1,0 +1,41 @@
+{
+  "id": "MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM",
+  "name": "Route111_SunhollowRuins_Museum",
+  "layout": "LAYOUT_ROUTE111_SUNHOLLOW_RUINS_MUSEUM",
+  "music": "MUS_ROUTE110",
+  "region_map_section": "MAPSEC_ROUTE_111",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_TOWN",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": 0,
+  "object_events": [
+
+  ],
+  "warp_events": [
+    {
+      "x": 10,
+      "y": 73,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_SUNHOLLOW_RUINS",
+      "dest_warp_id": "4"
+    },
+    {
+      "x": 9,
+      "y": 73,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_SUNHOLLOW_RUINS",
+      "dest_warp_id": "4"
+    }
+  ],
+  "coord_events": [
+
+  ],
+  "bg_events": [
+
+  ]
+}

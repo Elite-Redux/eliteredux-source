@@ -196,6 +196,12 @@
 #define BATTLE_BOX_YES_NO_Y     0
 #define BATTLE_BOX_YES_NO_WIDTH 4
 
+//Seasons
+#define SEASON_SPRING 0
+#define SEASON_SUMMER 1
+#define SEASON_AUTUMN 2
+#define SEASON_WINTER 3
+
 //General UI Stuff
 #define MENU_COLOR_BLUE   0
 #define MENU_COLOR_RED    1
@@ -224,5 +230,9 @@
 #define MENU_ACTION_QUEST_MENU      17
 #define MENU_ACTION_EXIT            18
 #define NUM_MENU_ACTIONS            19
+
+//Hell mode configuration
+
+#define HELL_MODE_TYPE_EFFECTIVENESS_CHANGE            TRUE //(possibly? clashes with above somewhat) Super-effective damage is reduced from 2x to 1.5x, and 4x to 2x
 
 #endif // GUARD_CONSTANTS_GLOBAL_H

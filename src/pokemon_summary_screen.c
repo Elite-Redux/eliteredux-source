@@ -1323,6 +1323,7 @@ static void CopyMonToSummaryStruct(struct Pokemon *mon) {
 static bool8 ExtractMonDataToSummaryStruct(struct Pokemon *mon) {
     u32 i;
     struct PokeSummary *sum = &sMonSummaryScreen->summary;
+    bool8 isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2;
     // Spread the data extraction over multiple frames.
     switch (sMonSummaryScreen->switchCounter) {
         case 0:
@@ -1342,11 +1343,15 @@ static bool8 ExtractMonDataToSummaryStruct(struct Pokemon *mon) {
 
             break;
         case 1:
+            sum->ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES);
+
             for (i = 0; i < MAX_MON_MOVES; i++) {
                 sum->moves[i] = GetMonData(mon, MON_DATA_MOVE1 + i);
                 sum->pp[i] = GetMonData(mon, MON_DATA_PP1 + i);
+                
+                if(!isEnemyMon && sum->pp[i] > CalculatePPWithBonusPlayer(sum->moves[i], sum->ppBonuses, i))
+                    sum->pp[i] = CalculatePPWithBonusPlayer(sum->moves[i], sum->ppBonuses, i);
             }
-            sum->ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES);
             break;
         case 2: {
             u8 Nature = GetMonData(mon, MON_DATA_NATURE);
@@ -3505,7 +3510,7 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId) {
 
                 // Restore PP
                 ppBonuses = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP_BONUSES);
-                ppNum = CalculatePPWithBonus(moveToLearn, ppBonuses, moveToReplace);
+                ppNum = CalculatePPWithBonusPlayer(moveToLearn, ppBonuses, moveToReplace); //Can only replace Player's mons
 
                 if (!sMonSummaryScreen->isBoxMon) SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_PP1 + moveToReplace, &ppNum);
 
@@ -3570,7 +3575,7 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId) {
 
                 // Restore PP
                 ppBonuses = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP_BONUSES);
-                ppNum = CalculatePPWithBonus(moveToLearn, ppBonuses, moveToReplace);
+                ppNum = CalculatePPWithBonusPlayer(moveToLearn, ppBonuses, moveToReplace);  //Can only replace Player's mons
 
                 if (!sMonSummaryScreen->isBoxMon) SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_PP1 + moveToReplace, &ppNum);
 
@@ -5080,9 +5085,14 @@ static void PrintBattleMovesFromReplaceMenu(void) {
 static void PrintMoveNameAndPP(u8 moveIndex) {
     u32 pp, color = 0, x;
     struct PokeSummary *summary = &sMonSummaryScreen->summary;
+    bool8 isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2; //checks if you are looking into the summary screen for the enemy
 
     if (summary->moves[moveIndex] != MOVE_NONE) {
-        pp = CalculatePPWithBonus(summary->moves[moveIndex], summary->ppBonuses, moveIndex);
+        if(!isEnemyMon)
+            pp = CalculatePPWithBonusPlayer(summary->moves[moveIndex], summary->ppBonuses, moveIndex);
+        else
+            pp = CalculatePPWithBonus(summary->moves[moveIndex], summary->ppBonuses, moveIndex);
+
         PrintNarrowTextOnWindow(PSS_LABEL_PANE_RIGHT, gMoveNamesLong[summary->moves[moveIndex]], 64, moveIndex * 29, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
         ConvertIntToDecimalStringN(gStringVar1, summary->pp[moveIndex], STR_CONV_MODE_LEFT_ALIGN, 2);
         ConvertIntToDecimalStringN(gStringVar2, pp, STR_CONV_MODE_LEFT_ALIGN, 2);

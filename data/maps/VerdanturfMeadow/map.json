@@ -14,9 +14,9 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "up",
+      "map": "MAP_VERDANTURF_TOWN",
       "offset": 2,
-      "map": "MAP_VERDANTURF_TOWN"
+      "direction": "up"
     }
   ],
   "object_events": [

@@ -651,7 +651,7 @@ static bool8 DexNavPickTile(u8 environment, u8 areaX, u8 areaY, bool8 smallScan)
                 case ENCOUNTER_TYPE_LAND:
                     if (MetatileBehavior_IsLandWildEncounter(tileBehaviour)) {
                         if (currMapType == MAP_TYPE_UNDERGROUND) {                                                              // inside (cave)
-                            if (IsZCoordMismatchAt(gObjectEvents[gPlayerAvatar.spriteId].currentElevation, topX, topY)) break;  // occurs at same z coord
+                            if (IsElevationMismatchAt(gObjectEvents[gPlayerAvatar.spriteId].currentElevation, topX, topY)) break;  // occurs at same z coord
 
                             // Check if it's possible to find a mon there
                             if (!MapGridIsImpassableAt(topX, topY)) {
@@ -667,7 +667,7 @@ static bool8 DexNavPickTile(u8 environment, u8 areaX, u8 areaY, bool8 smallScan)
                     break;
                 case ENCOUNTER_TYPE_WATER:
                     if (MetatileBehavior_IsSurfableWaterOrUnderwater(tileBehaviour)) {
-                        if (IsZCoordMismatchAt(gObjectEvents[gPlayerAvatar.spriteId].currentElevation, topX, topY)) break;
+                        if (IsElevationMismatchAt(gObjectEvents[gPlayerAvatar.spriteId].currentElevation, topX, topY)) break;
 
                         // Check if it's possible to find a mon there
                         if (!MapGridIsImpassableAt(topX, topY)) {

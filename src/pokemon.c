@@ -63,6 +63,8 @@
 #include "script_pokemon_util.h"
 #include "tmhm_struct.h"
 #include "abilities.hh"
+#include "day_night.h"
+#include "constants/day_night.h"
 
 struct SpeciesItem {
     SpeciesEnum species;
@@ -2288,6 +2290,29 @@ void GetSpeciesName(u8 *name, SpeciesEnum species) {
     name[i] = EOS;
 }
 
+#define HELL_MODE_REDUCED_PP_FOR_SLEEPING_MOVES 2
+u8 CalculatePPWithBonusPlayer(u16 move, u8 ppBonuses, u8 moveIndex) {
+    bool8 isHellMode = gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL;
+    u8 basePP = gBattleMoves[move].pp;
+
+    if(isHellMode){
+        //Sleep-inflicting moves have 2 PP (for the player)
+        //Rest and Sleep Talk reduced to 2 PP (for the player)
+        switch(gBattleMoves[move].effect){
+            case EFFECT_SLEEP_HIT:
+            case EFFECT_SLEEP:
+            case EFFECT_SNORE:
+            case EFFECT_REST:
+            case EFFECT_SLEEP_TALK:
+                return HELL_MODE_REDUCED_PP_FOR_SLEEPING_MOVES;
+            break;
+        }
+        return basePP; //Player's moves are not PP Maxed (ie: Fire Blast PP is 5 instead of 8 for the player only)
+    }
+
+    return basePP + ((basePP * 20 * ((gPPUpGetMask[moveIndex] & ppBonuses) >> (2 * moveIndex))) / 100);
+}
+
 u8 CalculatePPWithBonus(u16 move, u8 ppBonuses, u8 moveIndex) {
     u8 basePP = gBattleMoves[move].pp;
     return basePP + ((basePP * 20 * ((gPPUpGetMask[moveIndex] & ppBonuses) >> (2 * moveIndex))) / 100);
@@ -3201,23 +3226,23 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
                         break;
                     case EVO_FRIENDSHIP_DAY:
                         RtcCalcLocalTime();
-                        if (IsCurrentlyDay() < NIGHT_START && friendship >= 160) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (GetCurrentTimeOfDay() != TIME_NIGHT && friendship >= 160) targetSpecies = gEvolutionTable[species][i].targetSpecies;
                         break;
                     case EVO_LEVEL_DAY:
                         RtcCalcLocalTime();
-                        if (IsCurrentlyDay() && gEvolutionTable[species][i].param <= level) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (GetCurrentTimeOfDay() != TIME_NIGHT && gEvolutionTable[species][i].param <= level) targetSpecies = gEvolutionTable[species][i].targetSpecies;
                         break;
                     case EVO_FRIENDSHIP_NIGHT:
                         RtcCalcLocalTime();
-                        if (!IsCurrentlyDay() && friendship >= 160) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (GetCurrentTimeOfDay() == TIME_NIGHT && friendship >= 160) targetSpecies = gEvolutionTable[species][i].targetSpecies;
                         break;
                     case EVO_LEVEL_NIGHT:
                         RtcCalcLocalTime();
-                        if (!IsCurrentlyDay() && gEvolutionTable[species][i].param <= level) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (GetCurrentTimeOfDay() == TIME_NIGHT && gEvolutionTable[species][i].param <= level) targetSpecies = gEvolutionTable[species][i].targetSpecies;
                         break;
                     case EVO_ITEM_HOLD_NIGHT:
                         RtcCalcLocalTime();
-                        if (!IsCurrentlyDay() && heldItem == gEvolutionTable[species][i].param) {
+                        if (GetCurrentTimeOfDay() == TIME_NIGHT && heldItem == gEvolutionTable[species][i].param) {
                             heldItem = 0;
                             SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
                             targetSpecies = gEvolutionTable[species][i].targetSpecies;
@@ -3225,7 +3250,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
                         break;
                     case EVO_ITEM_HOLD_DAY:
                         RtcCalcLocalTime();
-                        if (IsCurrentlyDay() && heldItem == gEvolutionTable[species][i].param) {
+                        if (GetCurrentTimeOfDay() != TIME_NIGHT && heldItem == gEvolutionTable[species][i].param) {
                             heldItem = 0;
                             SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
                             targetSpecies = gEvolutionTable[species][i].targetSpecies;

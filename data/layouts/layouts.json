@@ -1347,7 +1347,7 @@
       "width": 48,
       "height": 44,
       "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_Rustboro",
+      "secondary_tileset": "gTileset_Petalburg_Woods",
       "border_filepath": "data/layouts/PetalburgWoods/border.bin",
       "blockdata_filepath": "data/layouts/PetalburgWoods/map.bin"
     },
@@ -1357,7 +1357,7 @@
       "width": 48,
       "height": 44,
       "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_Rustboro",
+      "secondary_tileset": "gTileset_Petalburg_Woods",
       "border_filepath": "data/layouts/PetalburgWoods_2/border.bin",
       "blockdata_filepath": "data/layouts/PetalburgWoods_2/map.bin"
     },
@@ -1367,7 +1367,7 @@
       "width": 48,
       "height": 44,
       "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_Rustboro",
+      "secondary_tileset": "gTileset_Petalburg_Woods",
       "border_filepath": "data/layouts/PetalburgWoods_3/border.bin",
       "blockdata_filepath": "data/layouts/PetalburgWoods_3/map.bin"
     },
@@ -4647,7 +4647,7 @@
       "width": 20,
       "height": 20,
       "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_Rustboro",
+      "secondary_tileset": "gTileset_Petalburg_Woods",
       "border_filepath": "data/layouts/PetalburgWoods_BreloomRoom/border.bin",
       "blockdata_filepath": "data/layouts/PetalburgWoods_BreloomRoom/map.bin"
     },
@@ -4800,6 +4800,66 @@
       "secondary_tileset": "gTileset_MeteorFalls",
       "border_filepath": "data/layouts/VictoryRoadFroom/border.bin",
       "blockdata_filepath": "data/layouts/VictoryRoadFroom/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_SUNHOLLOW_RUINS",
+      "name": "Route111_SunhollowRuins_Layout",
+      "width": 75,
+      "height": 50,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Sunhollow_Ruins",
+      "border_filepath": "data/layouts/Route111_SunhollowRuins/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_SunhollowRuins/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_DESERT",
+      "name": "Route111_Desert_Layout",
+      "width": 80,
+      "height": 60,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Sunhollow_Ruins",
+      "border_filepath": "data/layouts/Route111_Desert/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_Desert/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_SUNHOLLOW_RUINS_MUSEUM",
+      "name": "Route111_SunhollowRuins_Museum_Layout",
+      "width": 20,
+      "height": 80,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_BattlePyramid",
+      "border_filepath": "data/layouts/Route111_SunhollowRuins_Museum/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_SunhollowRuins_Museum/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_CAVE",
+      "name": "Route111_Cave_Layout",
+      "width": 51,
+      "height": 40,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_MirageTower",
+      "border_filepath": "data/layouts/Route111_Cave/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_Cave/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_TUNNEL",
+      "name": "Route111_Tunnel_Layout",
+      "width": 80,
+      "height": 60,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_MirageTower",
+      "border_filepath": "data/layouts/Route111_Tunnel/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_Tunnel/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_TUNNEL2",
+      "name": "Route111_Tunnel2_Layout",
+      "width": 75,
+      "height": 50,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_MirageTower",
+      "border_filepath": "data/layouts/Route111_Tunnel2/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_Tunnel2/map.bin"
     }
   ]
 }

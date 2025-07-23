@@ -1,0 +1,75 @@
+{
+  "id": "MAP_ROUTE111_TUNNEL2",
+  "name": "Route111_Tunnel2",
+  "layout": "LAYOUT_ROUTE111_TUNNEL2",
+  "music": "MUS_DUMMY",
+  "region_map_section": "MAPSEC_ROUTE_111",
+  "requires_flash": false,
+  "weather": "WEATHER_SHADE",
+  "map_type": "MAP_TYPE_NONE",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": false,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_ROUTE111_TUNNEL",
+      "offset": -16,
+      "direction": "down"
+    }
+  ],
+  "object_events": [
+
+  ],
+  "warp_events": [
+    {
+      "x": 71,
+      "y": 32,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_SUNHOLLOW_RUINS",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 36,
+      "y": 8,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_SUNHOLLOW_RUINS",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 28,
+      "y": 20,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_SUNHOLLOW_RUINS",
+      "dest_warp_id": "2"
+    },
+    {
+      "x": 51,
+      "y": 19,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_SUNHOLLOW_RUINS",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 17,
+      "y": 14,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_SUNHOLLOW_RUINS",
+      "dest_warp_id": "4"
+    },
+    {
+      "x": 10,
+      "y": 32,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_TUNNEL2",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [
+
+  ],
+  "bg_events": [
+
+  ]
+}

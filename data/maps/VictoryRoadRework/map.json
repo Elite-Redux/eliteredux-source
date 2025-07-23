@@ -268,56 +268,56 @@
       "y": 58,
       "elevation": 0,
       "dest_map": "MAP_EVER_GRANDE_CITY",
-      "dest_warp_id": 2
+      "dest_warp_id": "2"
     },
     {
       "x": 28,
       "y": 1,
       "elevation": 0,
       "dest_map": "MAP_EVER_GRANDE_CITY",
-      "dest_warp_id": 3
+      "dest_warp_id": "3"
     },
     {
       "x": 26,
       "y": 13,
       "elevation": 0,
       "dest_map": "MAP_VICTORY_ROAD_URSHIFUS",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 23,
       "y": 2,
       "elevation": 0,
       "dest_map": "MAP_VICTORY_ROAD_URSHIFUS",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 52,
       "y": 43,
       "elevation": 0,
       "dest_map": "MAP_VICTORY_ROAD_REWORK",
-      "dest_warp_id": 5
+      "dest_warp_id": "5"
     },
     {
       "x": 54,
       "y": 32,
       "elevation": 0,
       "dest_map": "MAP_VICTORY_ROAD_REWORK",
-      "dest_warp_id": 4
+      "dest_warp_id": "4"
     },
     {
       "x": 55,
       "y": 1,
       "elevation": 0,
       "dest_map": "MAP_VICTORY_ROAD_CROOM",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 32,
       "y": 2,
       "elevation": 0,
       "dest_map": "MAP_VICTORY_ROAD_FROOM",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [

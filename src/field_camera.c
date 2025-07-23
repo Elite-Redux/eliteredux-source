@@ -248,7 +248,7 @@ static void DrawMetatile(s32 metatileLayerType, u16 *metatiles, u16 offset)
 {
     switch (metatileLayerType)
     {
-    case 2: // LAYER_TYPE_
+    case METATILE_LAYER_TYPE_SPLIT:
         // Draw metatile's bottom layer to the bottom background layer.
         gBGTilemapBuffers3[offset] = metatiles[0];
         gBGTilemapBuffers3[offset + 1] = metatiles[1];
@@ -267,7 +267,7 @@ static void DrawMetatile(s32 metatileLayerType, u16 *metatiles, u16 offset)
         gBGTilemapBuffers2[offset + 0x20] = metatiles[6];
         gBGTilemapBuffers2[offset + 0x21] = metatiles[7];
         break;
-    case 1:  // LAYER_TYPE_COVERED_BY_OBJECTS
+    case METATILE_LAYER_TYPE_COVERED:
         // Draw metatile's bottom layer to the bottom background layer.
         gBGTilemapBuffers3[offset] = metatiles[0];
         gBGTilemapBuffers3[offset + 1] = metatiles[1];
@@ -286,7 +286,7 @@ static void DrawMetatile(s32 metatileLayerType, u16 *metatiles, u16 offset)
         gBGTilemapBuffers2[offset + 0x20] = 0;
         gBGTilemapBuffers2[offset + 0x21] = 0;
         break;
-    case 0: // LAYER_TYPE_NORMAL
+    case METATILE_LAYER_TYPE_NORMAL:
         // Draw garbage to the bottom background layer.
         gBGTilemapBuffers3[offset] = 0x3014;
         gBGTilemapBuffers3[offset + 1] = 0x3014;

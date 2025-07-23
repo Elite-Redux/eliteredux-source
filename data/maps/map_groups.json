@@ -1,5 +1,4 @@
 {
-  "layouts_table_label": "gMapLayouts",
   "group_order": [
     "gMapGroup_TownsAndRoutes",
     "gMapGroup_IndoorLittleroot",
@@ -96,7 +95,8 @@
     "Underwater_Route105",
     "Underwater_Route125",
     "RusturfTunnel_2F",
-    "LegendaryDomain"
+    "LegendaryDomain",
+    "Route111_Tunnel2"
   ],
   "gMapGroup_IndoorLittleroot": [
     "LittlerootTown_BrendansHouse_1F",
@@ -456,7 +456,8 @@
     "CaveOfOrigin_DianciesRoom",
     "MeteorFalls_JirachisRoom",
     "AlteringCave_1F",
-    "AlteringCave_B1F"
+    "AlteringCave_B1F",
+    "Route111_Cave"
   ],
   "gMapGroup_Dungeons2": [
     "VerdanturfMeadow",
@@ -471,7 +472,8 @@
     "VictoryRoadUrshifus",
     "ColdCrevice",
     "VictoryRoadCRoom",
-    "VictoryRoadFroom"
+    "VictoryRoadFroom",
+    "Route111_Tunnel"
   ],
   "gMapGroup_IndoorDynamic": [
     "SecretBase_RedCave1",
@@ -626,7 +628,10 @@
     "NavelRock_Down11",
     "NavelRock_Bottom",
     "TrainerHill_Elevator",
-    "DebugMap"
+    "DebugMap",
+    "Route111_SunhollowRuins",
+    "Route111_Desert",
+    "Route111_SunhollowRuins_Museum"
   ],
   "gMapGroup_IndoorRoute104Prototype": [
     "Route104_Prototype",

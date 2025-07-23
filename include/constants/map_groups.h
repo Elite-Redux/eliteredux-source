@@ -65,6 +65,7 @@
 #define MAP_UNDERWATER_ROUTE125 (56 | (0 << 8))
 #define MAP_RUSTURF_TUNNEL_2F   (57 | (0 << 8))
 #define MAP_LEGENDARY_DOMAIN    (58 | (0 << 8))
+#define MAP_ROUTE111_TUNNEL2    (59 | (0 << 8))
 
 // gMapGroup_IndoorLittleroot
 #define MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F    (0 | (1 << 8))
@@ -425,6 +426,7 @@
 #define MAP_METEOR_FALLS_JIRACHIS_ROOM               (124 | (24 << 8))
 #define MAP_ALTERING_CAVE_1F                         (125 | (24 << 8))
 #define MAP_ALTERING_CAVE_B1F                        (126 | (24 << 8))
+#define MAP_ROUTE111_CAVE                            (127 | (24 << 8))
 
 // gMapGroup_Dungeons2
 #define MAP_VERDANTURF_MEADOW            (0 | (25 << 8))
@@ -440,6 +442,7 @@
 #define MAP_COLD_CREVICE                 (10 | (25 << 8))
 #define MAP_VICTORY_ROAD_CROOM           (11 | (25 << 8))
 #define MAP_VICTORY_ROAD_FROOM           (12 | (25 << 8))
+#define MAP_ROUTE111_TUNNEL              (13 | (25 << 8))
 
 // gMapGroup_IndoorDynamic
 #define MAP_SECRET_BASE_RED_CAVE1    (0 | (26 << 8))
@@ -595,6 +598,9 @@
 #define MAP_NAVEL_ROCK_BOTTOM                               (87 | (27 << 8))
 #define MAP_TRAINER_HILL_ELEVATOR                           (88 | (27 << 8))
 #define MAP_DEBUG_MAP                                       (89 | (27 << 8))
+#define MAP_ROUTE111_SUNHOLLOW_RUINS                        (90 | (27 << 8))
+#define MAP_ROUTE111_DESERT                                 (91 | (27 << 8))
+#define MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM                 (92 | (27 << 8))
 
 // gMapGroup_IndoorRoute104Prototype
 #define MAP_ROUTE104_PROTOTYPE                          (0 | (28 << 8))
