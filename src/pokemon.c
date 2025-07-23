@@ -2290,6 +2290,29 @@ void GetSpeciesName(u8 *name, SpeciesEnum species) {
     name[i] = EOS;
 }
 
+#define HELL_MODE_REDUCED_PP_FOR_SLEEPING_MOVES 2
+u8 CalculatePPWithBonusPlayer(u16 move, u8 ppBonuses, u8 moveIndex) {
+    bool8 isHellMode = gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL;
+    u8 basePP = gBattleMoves[move].pp;
+
+    if(isHellMode){
+        //Sleep-inflicting moves have 2 PP (for the player)
+        //Rest and Sleep Talk reduced to 2 PP (for the player)
+        switch(gBattleMoves[move].effect){
+            case EFFECT_SLEEP_HIT:
+            case EFFECT_SLEEP:
+            case EFFECT_SNORE:
+            case EFFECT_REST:
+            case EFFECT_SLEEP_TALK:
+                return HELL_MODE_REDUCED_PP_FOR_SLEEPING_MOVES;
+            break;
+        }
+        return basePP; //Player's moves are not PP Maxed (ie: Fire Blast PP is 5 instead of 8 for the player only)
+    }
+
+    return basePP + ((basePP * 20 * ((gPPUpGetMask[moveIndex] & ppBonuses) >> (2 * moveIndex))) / 100);
+}
+
 u8 CalculatePPWithBonus(u16 move, u8 ppBonuses, u8 moveIndex) {
     u8 basePP = gBattleMoves[move].pp;
     return basePP + ((basePP * 20 * ((gPPUpGetMask[moveIndex] & ppBonuses) >> (2 * moveIndex))) / 100);

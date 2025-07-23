@@ -7041,7 +7041,11 @@ static void Cmd_various(void) {
             break;
         case VARIOUS_RESTORE_PP:
             for (i = 0; i < 4; i++) {
-                gBattleMons[gActiveBattler].pp[i] = CalculatePPWithBonus(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
+                if(GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+                    gBattleMons[gActiveBattler].pp[i] = CalculatePPWithBonusPlayer(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
+                else
+                    gBattleMons[gActiveBattler].pp[i] = CalculatePPWithBonus(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
+
                 data[i] = gBattleMons[gActiveBattler].pp[i];
             }
             data[i] = gBattleMons[gActiveBattler].ppBonuses;

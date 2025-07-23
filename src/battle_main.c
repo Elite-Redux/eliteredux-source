@@ -3602,7 +3602,10 @@ static void HandleTurnActionSelectionState(void) {
                                 ARRAY_COPY(moveInfo.currentPp, gBattleMons[gActiveBattler].pp)
 
                                 for (i = 0; i < MAX_MON_MOVES; i++) {
-                                    moveInfo.maxPp[i] = CalculatePPWithBonus(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
+                                    if(GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+                                        moveInfo.maxPp[i] = CalculatePPWithBonusPlayer(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
+                                    else
+                                        moveInfo.maxPp[i] = CalculatePPWithBonus(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
                                 }
 
                                 BtlController_EmitChooseMove(0, (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) != 0, FALSE, &moveInfo);

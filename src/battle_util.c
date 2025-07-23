@@ -5433,8 +5433,13 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                                 if (move && changedPP == 0) break;
                             }
                             if (i != MAX_MON_MOVES) {
-                                u8 maxPP = CalculatePPWithBonus(move, ppBonuses, i);
+                                u8 maxPP;
                                 u8 ppRestored = GetBattlerHoldEffectParam(battlerId);
+
+                                if(GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+                                    maxPP = CalculatePPWithBonusPlayer(move, ppBonuses, i);
+                                else
+                                    maxPP = CalculatePPWithBonus(move, ppBonuses, i);
 
                                 if (HasRipenEffect(battlerId)) {
                                     ppRestored *= 2;
