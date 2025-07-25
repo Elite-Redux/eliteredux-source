@@ -192,7 +192,7 @@ static bool8 Phase2_Blackhole2_Func2(struct Task *task);
 static bool8 Phase2_RectangularSpiral_Func1(struct Task *task);
 static bool8 Phase2_RectangularSpiral_Func2(struct Task *task);
 static bool8 Phase2_RectangularSpiral_Func3(struct Task *task);
-static bool8 Phase2_FrontierLogoWiggle_Func1(struct Task *task);
+static bool8 FrontierLogoWave_Init(struct Task *task);
 static bool8 Phase2_FrontierLogoWiggle_Func2(struct Task *task);
 static bool8 Phase2_FrontierLogoWave_Func1(struct Task *task);
 static bool8 Phase2_FrontierLogoWave_Func2(struct Task *task);
@@ -248,9 +248,9 @@ static bool8 sub_814A228(s16 *a0, bool8 a1, bool8 a2);
 static void SetTrainerPicSlideTable(s16 spriteId, s16 arrId);
 static void IncrementTrainerPicState(s16 spriteId);
 static s16 IsTrainerPicSlideDone(s16 spriteId);
-static bool8 Phase1_TransitionAll_Func1(struct Task *task);
-static bool8 Phase1_TransitionAll_Func2(struct Task *task);
-static bool8 IsPhase1Done(void);
+static bool8 TransitionIntro_FadeToGray(struct Task *task);
+static bool8 TransitionIntro_FadeFromGray(struct Task *task);
+static bool8 IsIntroTaskDone(void);
 static bool16 sub_8149048(const s16 * const *arg0, struct StructRectangularSpiral *arg1);
 static void sub_814713C(struct Sprite *sprite);
 static void SpriteCb_TrainerPic(struct Sprite *sprite);
@@ -711,8 +711,8 @@ static const s16 sUnknown_085C8E16[] = {8, 4, 2, 1, 1, 1, 0};
 
 static const TransitionStateFunc sPhase1_TransitionAll_Funcs[] =
 {
-    Phase1_TransitionAll_Func1,
-    Phase1_TransitionAll_Func2
+    TransitionIntro_FadeToGray,
+    TransitionIntro_FadeFromGray
 };
 
 static const struct SpriteFrameImage sSpriteImage_Pokeball[] =
@@ -857,7 +857,7 @@ static const u16 sMugshotsTilemap[] = INCBIN_U16("graphics/battle_transitions/el
 
 static const TransitionStateFunc sPhase2_FrontierLogoWiggle_Funcs[] =
 {
-    Phase2_FrontierLogoWiggle_Func1,
+    FrontierLogoWave_Init,
     Phase2_FrontierLogoWiggle_Func2,
     Phase2_BigPokeball_Func3,
     Phase2_BigPokeball_Func4,
@@ -1032,7 +1032,7 @@ static void Phase1Task_TransitionAll(u8 taskId)
         gTasks[taskId].tState++;
         CreatePhase1Task(0, 0, 3, 2, 2); // creates a sub-task for this sub-task
     }
-    else if (IsPhase1Done())
+    else if (IsIntroTaskDone())
     {
         DestroyTask(taskId);
     }
@@ -1244,7 +1244,7 @@ static void Phase2Task_Kyogre(u8 taskId)
     while (sPhase2_Kyogre_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static void sub_814669C(struct Task *task)
+static void InitPatternWeaveTransition(struct Task *task)
 {
     s32 i;
 
@@ -1261,6 +1261,7 @@ static void sub_814669C(struct Task *task)
     sTransitionStructPtr->WIN0V = DISPLAY_HEIGHT;
     sTransitionStructPtr->BLDCNT = BLDCNT_TGT1_BG0 | BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_ALL;
     sTransitionStructPtr->BLDALPHA = BLDALPHA_BLEND(task->tData2, task->tData1);
+    UpdateShadowColor(0x3DEF); // force shadows to gray
 
     for (i = 0; i < 160; i++)
     {
@@ -1275,7 +1276,7 @@ static bool8 Phase2_Aqua_Func1(struct Task *task)
     u16 *tilemap, *tileset;
 
     task->tFrames = 60;
-    sub_814669C(task);
+    InitPatternWeaveTransition(task);
     GetBg0TilesDst(&tilemap, &tileset);
     CpuFill16(0, tilemap, 0x800);
     LZ77UnCompVram(sTeamAqua_Tileset, tileset);
@@ -1290,7 +1291,7 @@ static bool8 Phase2_Magma_Func1(struct Task *task)
     u16 *tilemap, *tileset;
 
     task->tFrames = 60;
-    sub_814669C(task);
+    InitPatternWeaveTransition(task);
     GetBg0TilesDst(&tilemap, &tileset);
     CpuFill16(0, tilemap, 0x800);
     LZ77UnCompVram(sTeamMagma_Tileset, tileset);
@@ -1305,7 +1306,7 @@ static bool8 Phase2_Regi_Func1(struct Task *task)
     u16 *tilemap, *tileset;
 
     task->tFrames = 60;
-    sub_814669C(task);
+    InitPatternWeaveTransition(task);
     GetBg0TilesDst(&tilemap, &tileset);
     CpuFill16(0, tilemap, 0x800);
     CpuCopy16(sRegis_Tileset, tileset, 0x2000);
@@ -1318,7 +1319,7 @@ static bool8 Phase2_BigPokeball_Func1(struct Task *task)
 {
     u16 *tilemap, *tileset;
 
-    sub_814669C(task);
+    InitPatternWeaveTransition(task);
     GetBg0TilesDst(&tilemap, &tileset);
     CpuFill16(0, tilemap, 0x800);
     CpuCopy16(sBigPokeball_Tileset, tileset, 0x580);
@@ -3599,7 +3600,10 @@ static void VBlankCB_Phase2_Shards(void)
 #define tData5      data[5]
 #define tData6      data[6]
 #define tData7      data[7]
+#define tBldCntSaved           data[8]
+#define tShadowColor           data[9]
 
+//static void CreateIntroTask(s16 fadeToGrayDelay, s16 fadeFromGrayDelay, s16 numFades, s16 fadeToGrayIncrement, s16 fadeFromGrayIncrement)
 static void CreatePhase1Task(s16 a0, s16 a1, s16 a2, s16 a3, s16 a4)
 {
     u8 taskId = CreateTask(TransitionPhase1_Task_RunFuncs, 3);
@@ -3611,7 +3615,7 @@ static void CreatePhase1Task(s16 a0, s16 a1, s16 a2, s16 a3, s16 a4)
     gTasks[taskId].tData6 = a0;
 }
 
-static bool8 IsPhase1Done(void)
+static bool8 IsIntroTaskDone(void)
 {
     if (FindTaskIdByFunc(TransitionPhase1_Task_RunFuncs) == TASK_NONE)
         return TRUE;
@@ -3619,38 +3623,60 @@ static bool8 IsPhase1Done(void)
         return FALSE;
 }
 
+//void Task_BattleTransition_Intro(u8 taskId)
 void TransitionPhase1_Task_RunFuncs(u8 taskId)
 {
     while (sPhase1_TransitionAll_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
-static bool8 Phase1_TransitionAll_Func1(struct Task *task)
+static bool8 TransitionIntro_FadeToGray(struct Task *task)
 {
+    u8 paletteNum = IndexOfSpritePaletteTag(TAG_WEATHER_START);
+    u16 index = (paletteNum+16)*16+9; // SHADOW_COLOR_INDEX
+
     if (task->tData6 == 0 || --task->tData6 == 0)
     {
         task->tData6 = task->tData1;
         task->tData7 += task->tData4;
         if (task->tData7 > 16)
             task->tData7 = 16;
+        if (paletteNum < 16)
+            task->tShadowColor = gPlttBufferFaded[index];
         BlendPalettes(PALETTES_ALL, task->tData7, 0x2D6B);
+        if (paletteNum < 16)
+            gPlttBufferFaded[index] = task->tShadowColor;
     }
-    if (task->tData7 > 15)
+    if (task->tData7 >= 16)
     {
+        // Fade to gray complete, start fade back
+        // Save BLDCNT and turn off targets temporarily
+        task->tBldCntSaved = GetGpuReg(REG_OFFSET_BLDCNT);
+        SetGpuReg(REG_OFFSET_BLDCNT, task->tBldCntSaved & ~BLDCNT_TGT2_BG_ALL);
+        if (paletteNum < 16)
+            gPlttBufferFaded[index] = RGB(11, 11, 11);
         task->tState++;
         task->tData6 = task->tData2;
     }
     return FALSE;
 }
 
-static bool8 Phase1_TransitionAll_Func2(struct Task *task)
+static bool8 TransitionIntro_FadeFromGray(struct Task *task)
 {
     if (task->tData6 == 0 || --task->tData6 == 0)
     {
+        u8 paletteNum = IndexOfSpritePaletteTag(TAG_WEATHER_START);
         task->tData6 = task->tData2;
         task->tData7 -= task->tData5;
         if (task->tData7 < 0)
             task->tData7 = 0;
         BlendPalettes(PALETTES_ALL, task->tData7, 0x2D6B);
+        // Restore BLDCNT
+        SetGpuReg(REG_OFFSET_BLDCNT, task->tBldCntSaved);
+        if (paletteNum < 16) {
+            u16 index = (paletteNum+16)*16+9; // SHADOW_COLOR_INDEX
+            gPlttBufferFaded[index] = task->tShadowColor;
+        }
+        
     }
     if (task->tData7 == 0)
     {
@@ -3672,6 +3698,8 @@ static bool8 Phase1_TransitionAll_Func2(struct Task *task)
 #undef tData5
 #undef tData6
 #undef tData7
+#undef tBldCntSaved
+#undef tShadowColor
 
 static void InitTransitionStructVars(void)
 {
@@ -3848,15 +3876,17 @@ static bool8 sub_814A228(s16 *data, bool8 a1, bool8 a2)
 #define tData6      data[6]
 #define tData7      data[7]
 
-static bool8 Phase2_FrontierLogoWiggle_Func1(struct Task *task)
+static bool8 FrontierLogoWave_Init(struct Task *task)
 {
     u16 *tilemap, *tileset;
 
-    sub_814669C(task);
+    InitPatternWeaveTransition(task);
     GetBg0TilesDst(&tilemap, &tileset);
     CpuFill16(0, tilemap, 0x800);
     LZ77UnCompVram(sFrontierLogo_Tileset, tileset);
     LoadPalette(sFrontierLogo_Palette, 0xF0, 0x20);
+    //sTransitionData->cameraY = 0;
+    UpdateShadowColor(0x3DEF); // force shadows to gray
 
     task->tState++;
     return FALSE;
