@@ -67,6 +67,8 @@ EWRAM_DATA struct PaletteFadeControl gPaletteFade = {0};
 static EWRAM_DATA u32 sPlttBufferTransferPending = 0;
 EWRAM_DATA u8 gPaletteDecompressionBuffer[PLTT_DECOMP_BUFFER_SIZE] = {0};
 
+static EWRAM_DATA u32 sPlttPreviousUpdateResult = 0; // Fast Battle Speed
+
 static const struct PaletteStructTemplate gDummyPaletteStructTemplate = {
     .uid = 0xFFFF,
     .pst_field_B_5 = 1
@@ -296,6 +298,8 @@ u8 UpdatePaletteFade(void)
     u8 result;
     u8 dummy = 0;
 
+    sPlttPreviousUpdateResult = PALETTE_FADE_STATUS_LOADING;
+
     if (sPlttBufferTransferPending)
         return PALETTE_FADE_STATUS_LOADING;
 
@@ -307,8 +311,14 @@ u8 UpdatePaletteFade(void)
         result = UpdateHardwarePaletteFade();
 
     sPlttBufferTransferPending = gPaletteFade.multipurpose1 | dummy;
+    sPlttPreviousUpdateResult = result;
 
     return result;
+}
+
+u32 PrevPaletteFadeResult(void)
+{
+    return sPlttPreviousUpdateResult;
 }
 
 void ResetPaletteFade(void)

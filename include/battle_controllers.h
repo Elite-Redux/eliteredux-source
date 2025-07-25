@@ -295,4 +295,7 @@ void SetControllerToLinkPartner(void);
 
 void ReshowNewBattleMenuAfterMenu(void);
 
+// Battle Speed Up (Credit to Pokabbie)
+u32 Rogue_GetBattleSpeedScale(bool32 forHealthbar);
+
 #endif // GUARD_BATTLE_CONTROLLERS_H
