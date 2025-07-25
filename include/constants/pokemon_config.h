@@ -18,4 +18,16 @@
 #define P_UPDATED_EGG_GROUPS    GEN_8 // Since Gen 8, certain Pokémon have gained new egg groups.
 #define P_SHEDINJA_BALL         GEN_8 // Since Gen 4, Shedinja requires a Poké Ball for its evolution. In Gen 3, Shedinja inherits Nincada's Ball.
 
+//Innate Disable Configuration
+#define P_DISABLE_FIRST_DIFFICULTY DIFFICULTY_HELL //First difficulty that disables Innate until a certain level requirement is met
+
+//Elite Mode - Unused in-game because Hell mode is the first mode with disabled innates
+#define INNATE_1_LEVEL_ELITE 1
+#define INNATE_2_LEVEL_ELITE 17
+#define INNATE_3_LEVEL_ELITE 24
+//Hell Mode
+#define INNATE_1_LEVEL_HELL 10
+#define INNATE_2_LEVEL_HELL 17 
+#define INNATE_3_LEVEL_HELL 24
+
 #endif // GUARD_CONSTANTS_POKEMON_CONFIG_H

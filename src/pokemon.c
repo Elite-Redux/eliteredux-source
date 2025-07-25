@@ -5018,11 +5018,11 @@ bool8 SpeciesHasInnate(SpeciesEnum species, AbilityEnum ability, u8 level, u32 p
         innate3 = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
     }
 
-    if (innate1 == ability && (level >= INNATE_1_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
+    if (innate1 == ability && (isEnemyMon || !CanDisableInnates() || level >= getInnateDisableLevel(SPECIES_INNATE_NUM_1)))
         return TRUE;
-    else if (innate2 == ability && (level >= INNATE_2_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
+    else if (innate2 == ability && (isEnemyMon || !CanDisableInnates() || level >= getInnateDisableLevel(SPECIES_INNATE_NUM_2)))
         return TRUE;
-    else if (innate3 == ability && (level >= INNATE_3_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
+    else if (innate3 == ability && (isEnemyMon || !CanDisableInnates() || level >= getInnateDisableLevel(SPECIES_INNATE_NUM_3)))
         return TRUE;
     else
         return FALSE;
@@ -5093,20 +5093,12 @@ AbilityEnum GetMonInnate(struct Pokemon *mon, int slot, int disableRandomizer) {
 
     AbilityEnum innate = gBaseStats[species].innates[slot];
 
-    if (!disableRandomizer) {
+    if (!disableRandomizer)
         innate = RandomizeInnate(innate, species, personality);
-    }
 
-    if (!disableRandomizer && gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE) {
-        switch (slot) {
-            case 0:
-                return level >= INNATE_1_LEVEL ? innate : ABILITY_NONE;
-            case 1:
-                return level >= INNATE_2_LEVEL ? innate : ABILITY_NONE;
-            case 2:
-                return level >= INNATE_3_LEVEL ? innate : ABILITY_NONE;
-        }
-    }
+    //Disable Innate if it does not meet the level requirments
+    if (!disableRandomizer && (CanDisableInnates() && level < getInnateDisableLevel(slot)))
+        return ABILITY_NONE;
 
     return innate;
 }
@@ -6294,4 +6286,36 @@ bool8 isShinyVariantUnlocked(SpeciesEnum species, u8 variant) {
         return FALSE;
     else
         return TRUE;
+}
+
+bool8 CanDisableInnates(void){
+    return (gSaveBlock2Ptr->gameDifficulty >= P_DISABLE_FIRST_DIFFICULTY);
+}
+
+u8 getInnateDisableLevel(u8 innateNum){
+    if(CanDisableInnates()){
+        switch(innateNum){
+            default://Fallback
+            case SPECIES_INNATE_NUM_1:
+                if(gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE)
+                    return INNATE_1_LEVEL_ELITE;
+                else
+                    return INNATE_1_LEVEL_HELL;
+            break;
+            case SPECIES_INNATE_NUM_2:
+                if(gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE)
+                    return INNATE_2_LEVEL_ELITE;
+                else
+                    return INNATE_2_LEVEL_HELL;
+            break;
+            case SPECIES_INNATE_NUM_3:
+                if(gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE)
+                    return INNATE_3_LEVEL_ELITE;
+                else
+                    return INNATE_3_LEVEL_HELL;
+            break;
+        }
+    }
+    
+    return 0;
 }

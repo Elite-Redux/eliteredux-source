@@ -1741,11 +1741,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
         case DIFFICULTY_HELL:
             enemyPartySize = gTrainers[trainerNum].partySizeHell;
             break;
-
         case DIFFICULTY_ELITE:
             enemyPartySize = gTrainers[trainerNum].partySizeInsane;
             break;
-
         default:
             enemyPartySize = gTrainers[trainerNum].partySize;
             break;
@@ -1793,11 +1791,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 case DIFFICULTY_HELL:
                     partyData = gTrainers[trainerNum].partyHell;
                     break;
-
                 case DIFFICULTY_ELITE:
                     partyData = gTrainers[trainerNum].partyInsane;
                     break;
-
                 default:
                     partyData = gTrainers[trainerNum].party;
                     break;
@@ -3689,18 +3685,17 @@ static void HandleTurnActionSelectionState(void) {
                                 return;
                             }
 #endif
-                            if (gBattleTypeFlags &
-                                    (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER_NO_PYRAMID | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_RECORDED_LINK) ||
-                                (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_EASY && (gBattleTypeFlags & BATTLE_TYPE_TRAINER)) ||
-                                (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE && (gBattleTypeFlags & BATTLE_TYPE_TRAINER)) ||
-                                (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ACE && (gBattleTypeFlags & BATTLE_TYPE_TRAINER))) {
+                            if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER_NO_PYRAMID | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_TRAINER)){
+                                //Can't use items in Link Battles or any Trainer battle at all
                                 RecordedBattle_ClearBattlerAction(gActiveBattler, 1);
                                 gSelectionBattleScripts[gActiveBattler] = BattleScript_ActionSelectionItemsCantBeUsed;
                                 gBattleCommunication[gActiveBattler] = STATE_SELECTION_SCRIPT;
                                 *(gBattleStruct->selectionScriptFinished + gActiveBattler) = FALSE;
                                 *(gBattleStruct->stateIdAfterSelScript + gActiveBattler) = STATE_BEFORE_ACTION_CHOSEN;
                                 return;
-                            } else {
+                            } 
+                            else 
+                            {
                                 BtlController_EmitChooseItem(0, gBattleStruct->battlerPartyOrders[gActiveBattler]);
                                 MarkBattlerForControllerExec(gActiveBattler);
                             }

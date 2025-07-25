@@ -563,4 +563,7 @@ SpeciesEnum GetEvolutionForMon(struct Pokemon *mon, u8 num);
 SpeciesEnum GetFormChangeForMon(struct Pokemon *mon, u8 num);
 u8 getNumofAvailableEvos(struct Pokemon *mon);
 
+bool8 CanDisableInnates(void);
+bool8 getInnateDisableLevel(u8 innateNum);
+
 #endif  // GUARD_POKEMON_H
