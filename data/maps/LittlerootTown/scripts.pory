@@ -2204,12 +2204,20 @@ script PKMN_Center_EventScript_Lower_Difficulty{
 		switch(var(VAR_RESULT)){
 			case YES:
 				checkSaveblockValue(SAVEBLOCK_DIFFICULTY)
-				if(var(VAR_RESULT) == DIFFICULTY_ELITE){
+				if(var(VAR_RESULT) == DIFFICULTY_HELL){
+					//Hell Mode -> Elite Mode
+					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_ELITE)
+					playfanfare(MUS_OBTAIN_ITEM)
+					message(format("The difficulty became Elite."))
+				}
+				elif(var(VAR_RESULT) == DIFFICULTY_ELITE){
+					//Elite Mode -> Ace Mode
 					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_ACE)
 					playfanfare(MUS_OBTAIN_ITEM)
 					message(format("The difficulty became Ace."))
 				}
 				else{
+					//Ace Mode -> Easy Mode
 					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_EASY)
 					playfanfare(MUS_OBTAIN_ITEM)
 					message(format("The difficulty became Easy."))
@@ -2234,20 +2242,28 @@ script PKMN_Center_EventScript_Lower_Difficulty{
 
 script PKMN_Center_EventScript_Up_Difficulty{
 	checkSaveblockValue(SAVEBLOCK_DIFFICULTY)
-	if(var(VAR_RESULT) != DIFFICULTY_ELITE){
+	if(var(VAR_RESULT) != DIFFICULTY_HELL){
 		msgbox(format("Do you want to up the difficulty?"), MSGBOX_YESNO)
 		switch(var(VAR_RESULT)){
 			case YES:
 				checkSaveblockValue(SAVEBLOCK_DIFFICULTY)
 				if(var(VAR_RESULT) == DIFFICULTY_EASY){
+					//Easy Mode -> Ace Mode
 					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_ACE)
 					playfanfare(MUS_OBTAIN_ITEM)
 					message(format("The difficulty became Ace."))
 				}
-				else{
+				elif(var(VAR_RESULT) == DIFFICULTY_ACE){
+					//Ace Mode -> Elite Mode
 					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_ELITE)
 					playfanfare(MUS_OBTAIN_ITEM)
 					message(format("The difficulty became Elite."))
+				}
+				else{
+					//Elite Mode -> Hell Mode
+					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_HELL)
+					playfanfare(MUS_OBTAIN_ITEM)
+					message(format("The difficulty became Hell."))
 				}
 				setflag(FLAG_SYS_UPPED_DIFFICULTY)
 				waitmessage

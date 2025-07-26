@@ -1468,6 +1468,7 @@ SlateportCity_Text_GretaDefeated:
 	.string "You'd better do some serious training;\n"
 	.string "no halfhearted rematch allowed!$"
 `
+
 text SlateportCity_Text_Got_Gengar{
 	format("{PLAYER} got a {COLOR BLUE}Gengar{COLOR DARK_GRAY} as a gift!")
 }

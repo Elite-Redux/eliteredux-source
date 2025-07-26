@@ -2,6 +2,7 @@
 #include "option_plus_menu.h"
 #include "main.h"
 #include "menu.h"
+#include "event_data.h"
 #include "scanline_effect.h"
 #include "palette.h"
 #include "sprite.h"
@@ -29,6 +30,7 @@ enum
 // Menu items
 enum
 {
+    MENUITEM_MAIN_BATTLE_SPEED,
     MENUITEM_MAIN_TEXTSPEED,
     MENUITEM_MAIN_HPBARSPEED,
     MENUITEM_MAIN_BATTLESCENE,
@@ -176,6 +178,7 @@ static void ReDrawAll(void);
 static void DrawChoices_TextSpeed(int selection, int y);
 static void DrawChoices_BarSpeed(int selection, int y);
 static void DrawChoices_BattleScene(int selection, int y);
+static void DrawChoices_BattleSpeed(int selection, int y);
 static void DrawChoices_PermanentRepel(int selection, int y);
 static void DrawChoices_EnableDisableCustom(int selection, int y);
 static void DrawChoices_AskForNickname(int selection, int y);
@@ -222,6 +225,7 @@ static struct // MENU_MAIN
     int (*processInput)(int selection);
 } const sItemFunctionsMain[MENUITEM_MAIN_COUNT] =
 {
+    [MENUITEM_MAIN_BATTLE_SPEED] = {DrawChoices_BattleSpeed, ProcessInput_Options_Four},
     [MENUITEM_MAIN_TEXTSPEED]    = {DrawChoices_TextSpeed,   ProcessInput_Options_Four},
     [MENUITEM_MAIN_HPBARSPEED]   = {DrawChoices_BarSpeed,    ProcessInput_Options_Four},
     [MENUITEM_MAIN_BATTLESCENE]  = {DrawChoices_BattleScene, ProcessInput_Options_Two},
@@ -261,6 +265,7 @@ static struct // MENU_CUSTOM
 };
 
 // Menu left side option names text
+static const u8 sText_Battle_Speed[]     = _("Battle Speed");
 static const u8 sText_HpBar[]            = _("HP BAR");
 static const u8 sText_ExpBar[]           = _("EXP BAR");
 static const u8 sText_AutoRun[]          = _("Auto Run");
@@ -286,13 +291,14 @@ const u8 gText_OptionMatchCalls[] = _("OVERWORLD CALLS");    //tx_optionsPlus
 const u8 gText_OptionMenuSave[]   = _("SAVE");
 static const u8 *const sOptionMenuItemsNamesMain[MENUITEM_MAIN_COUNT] =
 {
-    [MENUITEM_MAIN_TEXTSPEED]   = gText_TextSpeed,
-    [MENUITEM_MAIN_HPBARSPEED]  = sText_HpBar,
-    [MENUITEM_MAIN_BATTLESCENE] = gText_BattleScene,
-    [MENUITEM_MAIN_SOUND]       = gText_Sound,
-    [MENUITEM_MAIN_BUTTONMODE]  = gText_ButtonMode,
-    [MENUITEM_MAIN_FRAMETYPE]   = gText_Frame,
-    [MENUITEM_MAIN_CANCEL]      = gText_OptionMenuSave,
+    [MENUITEM_MAIN_BATTLE_SPEED] = sText_Battle_Speed,
+    [MENUITEM_MAIN_TEXTSPEED]    = gText_TextSpeed,
+    [MENUITEM_MAIN_HPBARSPEED]   = sText_HpBar,
+    [MENUITEM_MAIN_BATTLESCENE]  = gText_BattleScene,
+    [MENUITEM_MAIN_SOUND]        = gText_Sound,
+    [MENUITEM_MAIN_BUTTONMODE]   = gText_ButtonMode,
+    [MENUITEM_MAIN_FRAMETYPE]    = gText_Frame,
+    [MENUITEM_MAIN_CANCEL]       = gText_OptionMenuSave,
 };
 
 static const u8 *const sOptionMenuItemsNamesCustom[MENUITEM_CUSTOM_COUNT] =
@@ -338,6 +344,7 @@ static bool8 CheckConditions(int selection)
     case MENU_MAIN:
         switch (selection)
         {
+        case MENUITEM_MAIN_BATTLE_SPEED:    return TRUE;
         case MENUITEM_MAIN_TEXTSPEED:       return TRUE;
         case MENUITEM_MAIN_HPBARSPEED:      return TRUE;
         case MENUITEM_MAIN_BATTLESCENE:     return TRUE;
@@ -382,6 +389,7 @@ static bool8 CheckConditions(int selection)
 // Descriptions
 static const u8 sText_Empty[]                   = _("");
 static const u8 sText_Desc_Save[]               = _("Save your settings.");
+static const u8 sText_Desc_BattleSpeed[]        = _("Choose one of the four Battle\nspeeds.");
 static const u8 sText_Desc_TextSpeed[]          = _("Choose one of the four text-display\nspeeds.");
 static const u8 sText_Desc_HPBarSpeed[]         = _("Choose one of the four HP Bar\nspeeds.");
 static const u8 sText_Desc_BattleScene_On[]     = _("Show the POKéMON battle animations.");
@@ -398,13 +406,14 @@ static const u8 sText_Desc_UnitSystemMetric[]   = _("Display BERRY and POKéMON 
 static const u8 sText_Desc_FrameType[]          = _("Choose the frame surrounding the\nwindows.");
 static const u8 *const sOptionMenuItemDescriptionsMain[MENUITEM_MAIN_COUNT][3] =
 {
-    [MENUITEM_MAIN_TEXTSPEED]   = {sText_Desc_TextSpeed,            sText_Empty,                sText_Empty},
-    [MENUITEM_MAIN_HPBARSPEED]  = {sText_Desc_HPBarSpeed,           sText_Empty,                sText_Empty},
-    [MENUITEM_MAIN_BATTLESCENE] = {sText_Desc_BattleScene_On,       sText_Desc_BattleScene_Off, sText_Empty},
-    [MENUITEM_MAIN_SOUND]       = {sText_Desc_SoundMono,            sText_Desc_SoundStereo,     sText_Empty},
-    [MENUITEM_MAIN_BUTTONMODE]  = {sText_Desc_ButtonMode,           sText_Desc_ButtonMode_LR,   sText_Desc_ButtonMode_LA},
-    [MENUITEM_MAIN_FRAMETYPE]   = {sText_Desc_FrameType,            sText_Empty,                sText_Empty},
-    [MENUITEM_MAIN_CANCEL]      = {sText_Desc_Save,                 sText_Empty,                sText_Empty},
+    [MENUITEM_MAIN_BATTLE_SPEED] = {sText_Desc_BattleSpeed,          sText_Empty,                sText_Empty},
+    [MENUITEM_MAIN_TEXTSPEED]    = {sText_Desc_TextSpeed,            sText_Empty,                sText_Empty},
+    [MENUITEM_MAIN_HPBARSPEED]   = {sText_Desc_HPBarSpeed,           sText_Empty,                sText_Empty},
+    [MENUITEM_MAIN_BATTLESCENE]  = {sText_Desc_BattleScene_On,       sText_Desc_BattleScene_Off, sText_Empty},
+    [MENUITEM_MAIN_SOUND]        = {sText_Desc_SoundMono,            sText_Desc_SoundStereo,     sText_Empty},
+    [MENUITEM_MAIN_BUTTONMODE]   = {sText_Desc_ButtonMode,           sText_Desc_ButtonMode_LR,   sText_Desc_ButtonMode_LA},
+    [MENUITEM_MAIN_FRAMETYPE]    = {sText_Desc_FrameType,            sText_Empty,                sText_Empty},
+    [MENUITEM_MAIN_CANCEL]       = {sText_Desc_Save,                 sText_Empty,                sText_Empty},
 };
 
 // Custom
@@ -487,7 +496,8 @@ static const u8 *const sOptionMenuItemDescriptionsCustom[MENUITEM_CUSTOM_COUNT][
 static const u8 sText_Desc_Disabled_Textspeed[]     = _("Only active if xyz.");
 static const u8 *const sOptionMenuItemDescriptionsDisabledMain[MENUITEM_MAIN_COUNT] =
 {
-    [MENUITEM_MAIN_TEXTSPEED]         = sText_Desc_Disabled_Textspeed,
+    [MENUITEM_MAIN_BATTLE_SPEED]      = sText_Empty,
+    [MENUITEM_MAIN_TEXTSPEED]         = sText_Empty,
     [MENUITEM_MAIN_HPBARSPEED]        = sText_Empty,
     [MENUITEM_MAIN_BATTLESCENE]       = sText_Empty,
     [MENUITEM_MAIN_SOUND]             = sText_Empty,
@@ -536,7 +546,7 @@ static const u8 *const OptionTextDescription(void)
         if (!CheckConditions(menuItem))
             return sOptionMenuItemDescriptionsDisabledMain[menuItem];
         selection = sOptions->sel[menuItem];
-        if (menuItem == MENUITEM_MAIN_TEXTSPEED || menuItem == MENUITEM_MAIN_FRAMETYPE || menuItem == MENUITEM_MAIN_HPBARSPEED)
+        if (menuItem == MENUITEM_MAIN_TEXTSPEED || menuItem == MENUITEM_MAIN_FRAMETYPE || menuItem == MENUITEM_MAIN_HPBARSPEED || menuItem == MENUITEM_MAIN_BATTLE_SPEED)
             selection = 0;
         return sOptionMenuItemDescriptionsMain[menuItem][selection];
     case MENU_CUSTOM:
@@ -758,12 +768,14 @@ void CB2_InitOptionPlusMenu(void)
         break;
     case 6:
         sOptions = AllocZeroed(sizeof(*sOptions));
-        sOptions->sel[MENUITEM_MAIN_TEXTSPEED]   = gSaveBlock2Ptr->optionsTextSpeed;
-        sOptions->sel[MENUITEM_MAIN_HPBARSPEED]  = gSaveBlock2Ptr->optionsHpBarSpeed;
-        sOptions->sel[MENUITEM_MAIN_BATTLESCENE] = gSaveBlock2Ptr->optionsBattleSceneOff;
-        sOptions->sel[MENUITEM_MAIN_SOUND]       = gSaveBlock2Ptr->optionsSound;
-        sOptions->sel[MENUITEM_MAIN_BUTTONMODE]  = gSaveBlock2Ptr->optionsButtonMode;
-        sOptions->sel[MENUITEM_MAIN_FRAMETYPE]   = gSaveBlock2Ptr->optionsWindowFrameType;
+        
+        sOptions->sel[MENUITEM_MAIN_BATTLE_SPEED] = VarGet(VAR_BATTLE_SPEED);
+        sOptions->sel[MENUITEM_MAIN_TEXTSPEED]    = gSaveBlock2Ptr->optionsTextSpeed;
+        sOptions->sel[MENUITEM_MAIN_HPBARSPEED]   = gSaveBlock2Ptr->optionsHpBarSpeed;
+        sOptions->sel[MENUITEM_MAIN_BATTLESCENE]  = gSaveBlock2Ptr->optionsBattleSceneOff;
+        sOptions->sel[MENUITEM_MAIN_SOUND]        = gSaveBlock2Ptr->optionsSound;
+        sOptions->sel[MENUITEM_MAIN_BUTTONMODE]   = gSaveBlock2Ptr->optionsButtonMode;
+        sOptions->sel[MENUITEM_MAIN_FRAMETYPE]    = gSaveBlock2Ptr->optionsWindowFrameType;
         
         sOptions->sel_custom[MENUITEM_CUSTOM_BATTLE_UI_THEME]     = gSaveBlock2Ptr->battleInterfaceTheme;
         sOptions->sel_custom[MENUITEM_CUSTOM_START_MENU_COLOR]    = gSaveBlock2Ptr->startMenuPaletteNum;
@@ -962,6 +974,7 @@ static void Task_OptionMenuProcessInput(u8 taskId)
 
 static void Task_OptionMenuSave(u8 taskId)
 {
+    VarSet(VAR_BATTLE_SPEED, sOptions->sel[MENUITEM_MAIN_BATTLE_SPEED]);
     gSaveBlock2Ptr->optionsTextSpeed        = sOptions->sel[MENUITEM_MAIN_TEXTSPEED];
     gSaveBlock2Ptr->optionsHpBarSpeed       = sOptions->sel[MENUITEM_MAIN_HPBARSPEED];
     gSaveBlock2Ptr->optionsBattleSceneOff   = sOptions->sel[MENUITEM_MAIN_BATTLESCENE];
@@ -1230,6 +1243,36 @@ static void DrawChoices_TextSpeed(int selection, int y)
 {
     bool8 active = CheckConditions(MENUITEM_MAIN_TEXTSPEED);
     DrawChoices_Options_Four(sTextSpeedStrings, selection, y, active);
+}
+
+const u8 gText_Options_Battle_Speed_0[] = _("Normal Speed");
+const u8 gText_Options_Battle_Speed_1[] = _("Battle Speed x2");
+const u8 gText_Options_Battle_Speed_2[] = _("Battle Speed x3");
+const u8 gText_Options_Battle_Speed_3[] = _("Battle Speed x4");
+const u8 gText_Options_Battle_Speed_4[] = _("Disabled Animations");
+
+static void DrawChoices_BattleSpeed(int selection, int y)
+{
+    bool8 active = CheckConditions(MENUITEM_MAIN_BATTLESCENE);
+
+    switch(selection){
+        default:
+        case OPTIONS_BATTLE_SCENE_1X:
+            DrawOptionMenuChoice(gText_Options_Battle_Speed_0, 104, y, 1, active);
+        break;
+        case OPTIONS_BATTLE_SCENE_2X:
+            DrawOptionMenuChoice(gText_Options_Battle_Speed_1, 104, y, 1, active);
+        break;
+        case OPTIONS_BATTLE_SCENE_3X:
+            DrawOptionMenuChoice(gText_Options_Battle_Speed_2, 104, y, 1, active);
+        break;
+        case OPTIONS_BATTLE_SCENE_4X:
+            DrawOptionMenuChoice(gText_Options_Battle_Speed_3, 104, y, 1, active);
+        break;
+        case OPTIONS_BATTLE_SCENE_DISABLED:
+            DrawOptionMenuChoice(gText_Options_Battle_Speed_4, 104, y, 1, active);
+        break;
+    }
 }
 
 static void DrawChoices_BarSpeed(int selection, int y)

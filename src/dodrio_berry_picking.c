@@ -36,7 +36,7 @@
 
 // Difficulty increases as berries are eaten. The rate of new berries increases and the types of berries changes
 // When the max difficulty is reached it starts again from the beginning
-#define NUM_DIFFICULTIES 7
+#define NUM_DODRIO_BERRY_PICKING_DIFFICULTIES 7
 
 #define MAX_FALL_DIST 10 // The number of times a berry needs to fall before hitting the ground
 #define EAT_FALL_DIST 7 // The number of times a berry needs to fall to be available to eat
@@ -586,7 +586,7 @@ static const u8 sTreeBorderXPos[MAX_RFU_PLAYERS] = {8, 5, 8, 11, 15};
 
 // The number of berries eaten needed to progress to the next difficulty
 ALIGNED(4)
-static const u8 sDifficultyThresholds[NUM_DIFFICULTIES] = {5, 10, 20, 30, 50, 70, 100};
+static const u8 sDifficultyThresholds[NUM_DODRIO_BERRY_PICKING_DIFFICULTIES] = {5, 10, 20, 30, 50, 70, 100};
 
 ALIGNED(4)
 static const u8 sPrizeBerryIds[][10] =
@@ -1918,7 +1918,7 @@ static void HandlePickBerries(void)
         if (sGame->berryState[column] == BERRYSTATE_PICKED)
         {
             s32 delayRemaining;
-            u8 playerIdPicked, delayStage = sGame->difficulty[GetPlayerIdAtColumn(column)] / NUM_DIFFICULTIES;
+            u8 playerIdPicked, delayStage = sGame->difficulty[GetPlayerIdAtColumn(column)] / NUM_DODRIO_BERRY_PICKING_DIFFICULTIES;
             if (delayStage >= ARRAY_COUNT(sBerryFallDelays) - 1)
                 delayStage = ARRAY_COUNT(sBerryFallDelays) - 1;
 
@@ -2080,7 +2080,7 @@ static void UpdateFallingBerries(void)
             {
                 // Berry is still falling
                 u8 delay;
-                delayStage = sGame->difficulty[GetPlayerIdAtColumn(i)] / NUM_DIFFICULTIES;
+                delayStage = sGame->difficulty[GetPlayerIdAtColumn(i)] / NUM_DODRIO_BERRY_PICKING_DIFFICULTIES;
                 if (delayStage >= ARRAY_COUNT(sBerryFallDelays) - 1)
                     delayStage = ARRAY_COUNT(sBerryFallDelays) - 1;
 
@@ -2303,7 +2303,7 @@ static bool32 ReadyToEndGame_Member(void)
 
 static void TryIncrementDifficulty(u8 playerId)
 {
-    u8 threshold = sDifficultyThresholds[sGame->difficulty[playerId] % NUM_DIFFICULTIES] + (sGame->difficulty[playerId] / NUM_DIFFICULTIES) * 100;
+    u8 threshold = sDifficultyThresholds[sGame->difficulty[playerId] % NUM_DODRIO_BERRY_PICKING_DIFFICULTIES] + (sGame->difficulty[playerId] / NUM_DODRIO_BERRY_PICKING_DIFFICULTIES) * 100;
     if (sGame->berriesEaten[playerId] >= threshold)
         sGame->difficulty[playerId]++;
 }
@@ -2347,7 +2347,7 @@ static u8 GetNewBerryId(u8 playerId, u8 column)
 static u8 GetNewBerryIdByDifficulty(u8 difficulty, u8 column)
 {
     u8 prevBerryId = sGame->prevBerryIds[column];
-    switch (difficulty % NUM_DIFFICULTIES)
+    switch (difficulty % NUM_DODRIO_BERRY_PICKING_DIFFICULTIES)
     {
     default: return BERRY_BLUE;
     case 0:  return BERRY_BLUE;

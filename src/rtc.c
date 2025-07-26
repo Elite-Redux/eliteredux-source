@@ -294,6 +294,26 @@ void RtcCalcLocalTime(void)
     RtcCalcTimeDifference(&sRtc, &gLocalTime, &gSaveBlock2Ptr->localTimeOffset);
 }
 
+void RtcGetRawInfoFast(struct SiiRtcInfo *rtc)
+{
+    RtcGetStatus(rtc);
+    SiiRtcGetTime(rtc);
+}
+
+void RtcGetInfoFast(struct SiiRtcInfo *rtc)
+{
+    if (sErrorStatus & RTC_ERR_FLAG_MASK)
+        *rtc = sRtcDummy;
+    else
+        RtcGetRawInfoFast(rtc);
+}
+
+/*void RtcCalcLocalTimeFast(void)
+{
+    RtcGetInfoFast(&sRtc);
+    RtcCalcTimeDifference(&sRtc, &gLocalTime, &gSaveBlock2Ptr->localTimeOffset);
+}*/
+
 void RtcInitLocalTimeOffset(s32 hour, s32 minute)
 {
     RtcCalcLocalTimeOffset(0, hour, minute, 0);
@@ -369,4 +389,20 @@ bool8 IsCurrentlyDusk(void)
 		return TRUE;
 	else
 		return FALSE;
+}
+
+void RtcCalcLocalTimeFast(void)
+{
+    if (sErrorStatus & RTC_ERR_FLAG_MASK)
+    {
+        sRtc = sRtcDummy;
+    }
+    else
+    {
+        RtcGetStatus(&sRtc);
+        RtcDisableInterrupts();
+        SiiRtcGetTime(&sRtc);
+        RtcRestoreInterrupts();
+    }
+    RtcCalcTimeDifference(&sRtc, &gLocalTime, &gSaveBlock2Ptr->localTimeOffset);
 }

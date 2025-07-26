@@ -119,6 +119,13 @@
 #define OPTIONS_BATTLE_STYLE_SHIFT 0
 #define OPTIONS_BATTLE_STYLE_SET 1
 
+#define OPTIONS_BATTLE_SCENE_1X         0
+#define OPTIONS_BATTLE_SCENE_2X         1
+#define OPTIONS_BATTLE_SCENE_3X         2
+#define OPTIONS_BATTLE_SCENE_4X         3
+#define OPTIONS_BATTLE_SCENE_DISABLED   4
+#define OPTIONS_BATTLE_SCENE_COUNT      5
+
 #define DIR_NONE        0
 #define DIR_SOUTH       1
 #define DIR_NORTH       2
@@ -133,6 +140,7 @@
 #define DIFFICULTY_ACE         1
 #define DIFFICULTY_ELITE       2
 #define DIFFICULTY_HELL        3
+#define NUM_DIFFICULTIES       4
 
 #define LEVEL_CAPS_EASY        0
 #define LEVEL_CAPS_MORE        1
@@ -196,6 +204,12 @@
 #define BATTLE_BOX_YES_NO_Y     0
 #define BATTLE_BOX_YES_NO_WIDTH 4
 
+//Seasons
+#define SEASON_SPRING 0
+#define SEASON_SUMMER 1
+#define SEASON_AUTUMN 2
+#define SEASON_WINTER 3
+
 //General UI Stuff
 #define MENU_COLOR_BLUE   0
 #define MENU_COLOR_RED    1
@@ -224,5 +238,9 @@
 #define MENU_ACTION_QUEST_MENU      17
 #define MENU_ACTION_EXIT            18
 #define NUM_MENU_ACTIONS            19
+
+//Hell mode configuration
+
+#define HELL_MODE_TYPE_EFFECTIVENESS_CHANGE            TRUE //(possibly? clashes with above somewhat) Super-effective damage is reduced from 2x to 1.5x, and 4x to 2x
 
 #endif // GUARD_CONSTANTS_GLOBAL_H

@@ -7,6 +7,8 @@
 #include "constants/rgb.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
+#include "day_night.h"
+#include "constants/day_night.h"
 
 enum
 {
@@ -65,6 +67,8 @@ EWRAM_DATA struct PaletteFadeControl gPaletteFade = {0};
 static EWRAM_DATA u32 sPlttBufferTransferPending = 0;
 EWRAM_DATA u8 gPaletteDecompressionBuffer[PLTT_DECOMP_BUFFER_SIZE] = {0};
 
+static EWRAM_DATA u32 sPlttPreviousUpdateResult = 0; // Fast Battle Speed
+
 static const struct PaletteStructTemplate gDummyPaletteStructTemplate = {
     .uid = 0xFFFF,
     .pst_field_B_5 = 1
@@ -82,9 +86,7 @@ static const u8 sRoundedDownGrayscaleMap[] = {
 
 void LoadCompressedPalette(const u32 *src, u16 offset, u16 size)
 {
-    LZDecompressWram(src, gPaletteDecompressionBuffer);
-    CpuCopy16(gPaletteDecompressionBuffer, gPlttBufferUnfaded + offset, size);
-    CpuCopy16(gPaletteDecompressionBuffer, gPlttBufferFaded + offset, size);
+    LoadCompressedPalette_HandleDayNight(src, offset, size, FALSE);
 }
 
 static const u16 sCosTable[] = {
@@ -269,8 +271,7 @@ void LoadHueShiftedMonPalette(const u32 *src, u16 offset, u16 size, u32 personal
 
 void LoadPalette(const void *src, u16 offset, u16 size)
 {
-    CpuCopy16(src, gPlttBufferUnfaded + offset, size);
-    CpuCopy16(src, gPlttBufferFaded + offset, size);
+    LoadPalette_HandleDayNight(src, offset, size, FALSE);
 }
 
 void FillPalette(u16 value, u16 offset, u16 size)
@@ -297,6 +298,8 @@ u8 UpdatePaletteFade(void)
     u8 result;
     u8 dummy = 0;
 
+    sPlttPreviousUpdateResult = PALETTE_FADE_STATUS_LOADING;
+
     if (sPlttBufferTransferPending)
         return PALETTE_FADE_STATUS_LOADING;
 
@@ -308,8 +311,14 @@ u8 UpdatePaletteFade(void)
         result = UpdateHardwarePaletteFade();
 
     sPlttBufferTransferPending = gPaletteFade.multipurpose1 | dummy;
+    sPlttPreviousUpdateResult = result;
 
     return result;
+}
+
+u32 PrevPaletteFadeResult(void)
+{
+    return sPlttPreviousUpdateResult;
 }
 
 void ResetPaletteFade(void)

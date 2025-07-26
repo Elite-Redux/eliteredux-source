@@ -30,7 +30,7 @@ static const struct SpriteFrameImage sPicTable_ShadowExtraLarge[] = {
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowSmall = {
     .tileTag = 0xFFFF,
-    .paletteTag = 0xFFFF,
+    .paletteTag = TAG_WEATHER_START,
     .oam = &gObjectEventBaseOam_8x8,
     .anims = sAnimTable_Shadow,
     .images = sPicTable_ShadowSmall,
@@ -40,7 +40,7 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowSmall = {
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowMedium = {
     .tileTag = 0xFFFF,
-    .paletteTag = 0xFFFF,
+    .paletteTag = TAG_WEATHER_START,
     .oam = &gObjectEventBaseOam_16x8,
     .anims = sAnimTable_Shadow,
     .images = sPicTable_ShadowMedium,
@@ -50,7 +50,7 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowMedium = {
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowLarge = {
     .tileTag = 0xFFFF,
-    .paletteTag = 0xFFFF,
+    .paletteTag = TAG_WEATHER_START,
     .oam = &gObjectEventBaseOam_32x8,
     .anims = sAnimTable_Shadow,
     .images = sPicTable_ShadowLarge,
@@ -60,7 +60,7 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowLarge = {
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_ShadowExtraLarge = {
     .tileTag = 0xFFFF,
-    .paletteTag = 0xFFFF,
+    .paletteTag = TAG_WEATHER_START,
     .oam = &gObjectEventBaseOam_64x32,
     .anims = sAnimTable_Shadow,
     .images = sPicTable_ShadowExtraLarge,
@@ -267,7 +267,7 @@ static const union AnimCmd *const sAnimTable_Arrow[] =
 
 const struct SpriteTemplate gFieldEffectObjectTemplate_Arrow = {
     .tileTag = 0xFFFF,
-    .paletteTag = 0xFFFF,
+    .paletteTag = FLDEFF_PAL_TAG_ARROW,
     .oam = &gObjectEventBaseOam_16x16,
     .anims = sAnimTable_Arrow,
     .images = sPicTable_Arrow,
@@ -1287,6 +1287,7 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_Rayquaza = {
 };
 
 static const struct SpritePalette sSpritePalette_Unused = {gObjectEventPal_Npc3, FLDEFF_PAL_TAG_UNKNOWN};
+const struct SpritePalette gSpritePalette_ArrowEmotionsFieldEffect = {gObjectEventPal_Brendan, FLDEFF_PAL_TAG_ARROW};
 
 // cave dust
 static const struct SpriteFrameImage sPicTable_CaveDust[] = 

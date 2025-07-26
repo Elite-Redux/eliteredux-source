@@ -1749,3 +1749,43 @@ gTilesetPalettes_SecretDungeons::
 	.align 2
 gTilesetTiles_SecretDungeons::
 	.incbin "data/tilesets/secondary/secretdungeons/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_Sunhollow_Ruins::
+	.incbin "data/tilesets/secondary/sunhollow_ruins/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/sunhollow_ruins/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/sunhollow_ruins/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/sunhollow_ruins/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/sunhollow_ruins/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/sunhollow_ruins/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/sunhollow_ruins/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/sunhollow_ruins/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/sunhollow_ruins/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/sunhollow_ruins/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/sunhollow_ruins/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/sunhollow_ruins/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/sunhollow_ruins/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_Sunhollow_Ruins::
+	.incbin "data/tilesets/secondary/sunhollow_ruins/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_Petalburg_Woods::
+	.incbin "data/tilesets/secondary/petalburg_woods/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/petalburg_woods/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/petalburg_woods/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/petalburg_woods/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/petalburg_woods/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/petalburg_woods/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/petalburg_woods/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/petalburg_woods/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/petalburg_woods/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/petalburg_woods/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/petalburg_woods/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/petalburg_woods/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/petalburg_woods/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_Petalburg_Woods::
+	.incbin "data/tilesets/secondary/petalburg_woods/tiles.4bpp.lz"

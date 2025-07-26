@@ -1352,7 +1352,11 @@ void PrintBattleWindow_MoveSelection(void) {
         AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - NEGATIVE_MOVE_X, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
         // PP
         ConvertIntToDecimalStringN(gStringVar1, gBattleMons[gActiveBattler].pp[i], STR_CONV_MODE_LEFT_ALIGN, 3);   // Current PP
-        ConvertIntToDecimalStringN(gStringVar2, CalculatePPWithBonus(move, 255, 0), STR_CONV_MODE_LEFT_ALIGN, 3);  // Max PP
+        if(GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+            ConvertIntToDecimalStringN(gStringVar2, CalculatePPWithBonusPlayer(move, 255, 0), STR_CONV_MODE_LEFT_ALIGN, 3);  // Max PP
+        else
+            ConvertIntToDecimalStringN(gStringVar2, CalculatePPWithBonus(move, 255, 0), STR_CONV_MODE_LEFT_ALIGN, 3);  // Max PP
+            
         StringExpandPlaceholders(gStringVar4, sText_PP);
         AddTextPrinterParameterized4(windowId,
                                      font,
@@ -4845,7 +4849,6 @@ static void PlayerHandleBattleInGameWikiMenu(void) {
     InformationMenu_Init_From_Battle(ReshowBattleScreenAfterMenu);
     gBattlerControllerFuncs[gActiveBattler] = WaitForDebug;
 }
-
 static void PlayerCmdEnd(void) {}
 
 static void ChangeMoveDisplayMode() {}

@@ -99,56 +99,56 @@
       "y": 21,
       "elevation": 0,
       "dest_map": "MAP_ROUTE103",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 2,
       "y": 4,
       "elevation": 0,
       "dest_map": "MAP_ALTERING_CAVE_1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 5,
       "y": 15,
       "elevation": 0,
       "dest_map": "MAP_ALTERING_CAVE_1F",
-      "dest_warp_id": 2
+      "dest_warp_id": "2"
     },
     {
       "x": 10,
       "y": 2,
       "elevation": 0,
       "dest_map": "MAP_ALTERING_CAVE_1F",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 24,
       "y": 11,
       "elevation": 0,
       "dest_map": "MAP_ALTERING_CAVE_1F",
-      "dest_warp_id": 3
+      "dest_warp_id": "3"
     },
     {
       "x": 30,
       "y": 10,
       "elevation": 0,
       "dest_map": "MAP_ALTERING_CAVE_1F",
-      "dest_warp_id": 4
+      "dest_warp_id": "4"
     },
     {
       "x": 34,
       "y": 2,
       "elevation": 0,
       "dest_map": "MAP_ALTERING_CAVE_1F",
-      "dest_warp_id": 5
+      "dest_warp_id": "5"
     },
     {
       "x": 1,
       "y": 8,
       "elevation": 0,
       "dest_map": "MAP_ALTERING_CAVE_B1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [

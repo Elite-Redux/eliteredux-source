@@ -2937,7 +2937,13 @@ void SetMoveEffect(bool32 primary, u32 certain) {
 }
 
 int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChance) {
-    if (moveEffect == MOVE_EFFECT_FLINCH && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) return 0;
+    // Only the first hit can flinch from abilities similar to Parental Bond
+    if (moveEffect == MOVE_EFFECT_FLINCH && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount)
+        return 0;
+
+    //Flinch as a secondary effect will always fail on player use (excluded for moves with 100% Flinch chance such as Fake Out and First Impression)
+    if(moveEffect == MOVE_EFFECT_FLINCH && baseChance < 100 && gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL && GetBattlerSide(battler) == B_SIDE_PLAYER)
+        return 0;
 
     for (int i = 0; i < gBattlersCount; i++) {
         int abilityBattler = (battler + i) % gBattlersCount;
@@ -2954,10 +2960,10 @@ int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChan
 }
 
 static void Cmd_seteffectwithchance(void) {
+    u8 moveEffect;
     u32 percentChance = gBattleScripting.moveSecondaryEffectChance
                             ? (gBattleScripting.moveSecondaryEffectChance == 0xFF ? 0 : gBattleScripting.moveSecondaryEffectChance)
                             : gBattleMoves[gCurrentMove].secondaryEffectChance;
-    u8 moveEffect;
 
     gBattlescriptCurrInstr++;
 
@@ -2970,10 +2976,11 @@ static void Cmd_seteffectwithchance(void) {
     if (gBattleScripting.moveEffect & MOVE_EFFECT_CERTAIN && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
         gBattleScripting.moveEffect &= ~(MOVE_EFFECT_CERTAIN);
         SetMoveEffect(FALSE, MOVE_EFFECT_CERTAIN);
-    } else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MINION_CONTROL &&
-               gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) {
+    } 
+    else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MINION_CONTROL && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) {
         // No-op
-    } else if (Random() % 100 < percentChance && gBattleScripting.moveEffect && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
+    }
+    else if (Random() % 100 < percentChance && gBattleScripting.moveEffect && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
         if (percentChance >= 100)
             SetMoveEffect(FALSE, MOVE_EFFECT_CERTAIN);
         else
@@ -6600,14 +6607,18 @@ u32 JumpIfStandardStatusBlocking(u32 battler, bool32 affectsUser, StatusCheckEnu
 }
 
 static void RecalcBattlerStats(u32 battler, struct Pokemon* mon) {
-    CalculateMonStats(mon);
-    gBattleMons[battler].level = GetMonData(mon, MON_DATA_LEVEL);
-    gBattleMons[battler].hp = GetMonData(mon, MON_DATA_HP);
-    gBattleMons[battler].maxHP = GetMonData(mon, MON_DATA_MAX_HP);
-    gBattleMons[battler].attack = GetMonData(mon, MON_DATA_ATK);
-    gBattleMons[battler].defense = GetMonData(mon, MON_DATA_DEF);
-    gBattleMons[battler].speed = GetMonData(mon, MON_DATA_SPEED);
-    gBattleMons[battler].spAttack = GetMonData(mon, MON_DATA_SPATK);
+    if(GetBattlerSide(battler) == B_SIDE_PLAYER)
+        CalculateMonStatsWithoutRestoringPP(mon);
+    else
+        CalculateEnemyTrainerMonStats(mon);
+    
+    gBattleMons[battler].level     = GetMonData(mon, MON_DATA_LEVEL);
+    gBattleMons[battler].hp        = GetMonData(mon, MON_DATA_HP);
+    gBattleMons[battler].maxHP     = GetMonData(mon, MON_DATA_MAX_HP);
+    gBattleMons[battler].attack    = GetMonData(mon, MON_DATA_ATK);
+    gBattleMons[battler].defense   = GetMonData(mon, MON_DATA_DEF);
+    gBattleMons[battler].speed     = GetMonData(mon, MON_DATA_SPEED);
+    gBattleMons[battler].spAttack  = GetMonData(mon, MON_DATA_SPATK);
     gBattleMons[battler].spDefense = GetMonData(mon, MON_DATA_SPDEF);
     RepopulateAbilities(battler);
 
@@ -7041,7 +7052,11 @@ static void Cmd_various(void) {
             break;
         case VARIOUS_RESTORE_PP:
             for (i = 0; i < 4; i++) {
-                gBattleMons[gActiveBattler].pp[i] = CalculatePPWithBonus(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
+                if(GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+                    gBattleMons[gActiveBattler].pp[i] = CalculatePPWithBonusPlayer(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
+                else
+                    gBattleMons[gActiveBattler].pp[i] = CalculatePPWithBonus(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
+
                 data[i] = gBattleMons[gActiveBattler].pp[i];
             }
             data[i] = gBattleMons[gActiveBattler].ppBonuses;
@@ -8903,12 +8918,13 @@ static void Cmd_various(void) {
                 }
             }
         } break;
-        case VARIOUS_HP_FRACTION_TO_DAMAGE:
+        case VARIOUS_HP_FRACTION_TO_DAMAGE:{
             int fraction = READ_8_INC;
             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / fraction;
             if (gBattleMoveDamage > gBattleMons[gActiveBattler].hp) gBattleMoveDamage = gBattleMons[gActiveBattler].hp;
             if (!gBattleMoveDamage) gBattleMoveDamage = 1;
             break;
+        }
         case VARIOUS_JUMP_IF_CONSUMABLE_BLOCKED: {
             ptr = READ_PTR_INC;
             AbilityEnum ability = IsUnnerveAbilityOnOpposingSide(gActiveBattler);

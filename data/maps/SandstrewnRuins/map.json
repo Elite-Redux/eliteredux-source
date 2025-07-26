@@ -268,175 +268,175 @@
       "y": 132,
       "elevation": 3,
       "dest_map": "MAP_MIRAGE_TOWER_B1F",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 4,
       "y": 125,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 4
+      "dest_warp_id": "4"
     },
     {
       "x": 12,
       "y": 125,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 6
+      "dest_warp_id": "6"
     },
     {
       "x": 4,
       "y": 111,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 8
+      "dest_warp_id": "8"
     },
     {
       "x": 12,
       "y": 118,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 12,
       "y": 111,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 7
+      "dest_warp_id": "7"
     },
     {
       "x": 4,
       "y": 104,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 2
+      "dest_warp_id": "2"
     },
     {
       "x": 4,
       "y": 76,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 5
+      "dest_warp_id": "5"
     },
     {
       "x": 12,
       "y": 90,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 3
+      "dest_warp_id": "3"
     },
     {
       "x": 12,
       "y": 76,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 10
+      "dest_warp_id": "10"
     },
     {
       "x": 4,
       "y": 97,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 9
+      "dest_warp_id": "9"
     },
     {
       "x": 4,
       "y": 83,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 12
+      "dest_warp_id": "12"
     },
     {
       "x": 12,
       "y": 62,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 11
+      "dest_warp_id": "11"
     },
     {
       "x": 12,
       "y": 83,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 14
+      "dest_warp_id": "14"
     },
     {
       "x": 4,
       "y": 48,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 13
+      "dest_warp_id": "13"
     },
     {
       "x": 4,
       "y": 69,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 16
+      "dest_warp_id": "16"
     },
     {
       "x": 12,
       "y": 48,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 15
+      "dest_warp_id": "15"
     },
     {
       "x": 12,
       "y": 69,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 18
+      "dest_warp_id": "18"
     },
     {
       "x": 4,
       "y": 34,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 17
+      "dest_warp_id": "17"
     },
     {
       "x": 12,
       "y": 27,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 20
+      "dest_warp_id": "20"
     },
     {
       "x": 4,
       "y": 7,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 19
+      "dest_warp_id": "19"
     },
     {
       "x": 8,
       "y": 41,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 22
+      "dest_warp_id": "22"
     },
     {
       "x": 8,
       "y": 20,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": 21
+      "dest_warp_id": "21"
     },
     {
       "x": 13,
       "y": 2,
       "elevation": 3,
       "dest_map": "MAP_SANDSTREWN_RUINS_B1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 4,
       "y": 13,
       "elevation": 0,
       "dest_map": "MAP_DESERT_UNDERPASS",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     }
   ],
   "coord_events": [

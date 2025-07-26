@@ -10,6 +10,7 @@
 #include "sound.h"
 #include "sprite.h"
 #include "trig.h"
+#include "constants/event_objects.h"
 #include "constants/field_effects.h"
 #include "constants/songs.h"
 
@@ -32,6 +33,8 @@ static void UpdateBobbingEffect(struct ObjectEvent *, struct Sprite *, struct Sp
 static void SpriteCB_UnderwaterSurfBlob(struct Sprite *);
 static u32 ShowDisguiseFieldEffect(u8, u8, u8);
 
+u32 FldEff_Shadow(void);
+
 // Used by several field effects to determine which of a group it is
 #define sFldEff    data[1]
 
@@ -39,6 +42,13 @@ static u32 ShowDisguiseFieldEffect(u8, u8, u8);
 #define sReflectionObjEventLocalId  data[1]
 #define sReflectionVerticalOffset   data[2] 
 #define sIsStillReflection          data[7]
+
+void SetUpShadow(struct ObjectEvent *objectEvent, struct Sprite *sprite) {
+  gFieldEffectArguments[0] = objectEvent->localId;
+  gFieldEffectArguments[1] = gSaveBlock1Ptr->location.mapNum;
+  gFieldEffectArguments[2] = gSaveBlock1Ptr->location.mapGroup;
+  FldEff_Shadow();
+}
 
 void SetUpReflection(struct ObjectEvent *objectEvent, struct Sprite *sprite, bool8 stillReflection)
 {
@@ -171,6 +181,7 @@ static void UpdateObjectReflectionSprite(struct Sprite *reflectionSprite)
 #undef sIsStillReflection
 
 extern const struct SpriteTemplate *const gFieldEffectObjectTemplatePointers[];
+extern const struct SpritePalette gSpritePalette_ArrowEmotionsFieldEffect;
 
 u8 CreateWarpArrowSprite(void)
 {
@@ -188,8 +199,13 @@ u8 CreateWarpArrowSprite(void)
     return spriteId;
 }
 
+// this function is only used for the warp arrow sprite
 void SetSpriteInvisible(u8 spriteId)
 {
+    // needed in order to trick the palette system into thinking that no sprite is using that palette
+    u8 paletteNum = gSprites[spriteId].oam.paletteNum;
+    gSprites[spriteId].oam.paletteNum = 0;
+    FieldEffectFreePaletteIfUnused(paletteNum);
     gSprites[spriteId].invisible = TRUE;
 }
 
@@ -209,6 +225,7 @@ void ShowWarpArrowSprite(u8 spriteId, u8 direction, s16 x, s16 y)
         sprite->invisible = FALSE;
         sprite->data[0] = x;
         sprite->data[1] = y;
+        sprite->oam.paletteNum = LoadSpritePalette(&gSpritePalette_ArrowEmotionsFieldEffect);
         StartSpriteAnim(sprite, direction - 1);
     }
 }
@@ -233,11 +250,21 @@ u32 FldEff_Shadow(void)
     const struct ObjectEventGraphicsInfo *graphicsInfo;
     u8 spriteId;
 
+    s32 i;
+    for (i = 0; i < MAX_SPRITES; i++) {
+      // Return early if a shadow sprite already exists
+      if (gSprites[i].data[0] == gFieldEffectArguments[0] && gSprites[i].callback == UpdateShadowFieldEffect)
+        return 0;
+    }
+
     objectEventId = GetObjectEventIdByLocalIdAndMap(gFieldEffectArguments[0], gFieldEffectArguments[1], gFieldEffectArguments[2]);
     graphicsInfo = GetObjectEventGraphicsInfo(gObjectEvents[objectEventId].graphicsId);
-    spriteId = CreateSpriteAtEnd(gFieldEffectObjectTemplatePointers[sShadowEffectTemplateIds[graphicsInfo->shadowSize]], 0, 0, 0x94);
+    if (graphicsInfo->shadowSize == SHADOW_SIZE_NONE) // don't create a shadow at all
+        return 0;
+    spriteId = CreateSpriteAtEnd(gFieldEffectObjectTemplatePointers[sShadowEffectTemplateIds[graphicsInfo->shadowSize]], 0, 0, 0x94 + 1); // higher = farther back; shadows should be behind object events
     if (spriteId != MAX_SPRITES)
     {
+        gSprites[spriteId].oam.objMode = 1; // BLEND
         gSprites[spriteId].coordOffsetEnabled = TRUE;
         gSprites[spriteId].data[0] = gFieldEffectArguments[0];
         gSprites[spriteId].data[1] = gFieldEffectArguments[1];
@@ -264,12 +291,16 @@ void UpdateShadowFieldEffect(struct Sprite *sprite)
         sprite->oam.priority = linkedSprite->oam.priority;
         sprite->x = linkedSprite->x;
         sprite->y = linkedSprite->y + sprite->data[3];
-        if (!objectEvent->active || !objectEvent->hasShadow
+        sprite->invisible = linkedSprite->invisible;
+        if (!objectEvent->active
+         || objectEvent->noShadow
+         || objectEvent->inHotSprings
+         || objectEvent->inSandPile
+         || gWeatherPtr->noShadows
          || MetatileBehavior_IsPokeGrass(objectEvent->currentMetatileBehavior)
+         || MetatileBehavior_IsPuddle(objectEvent->currentMetatileBehavior)
          || MetatileBehavior_IsSurfableWaterOrUnderwater(objectEvent->currentMetatileBehavior)
-         || MetatileBehavior_IsSurfableWaterOrUnderwater(objectEvent->previousMetatileBehavior)
-         || MetatileBehavior_IsReflective(objectEvent->currentMetatileBehavior)
-         || MetatileBehavior_IsReflective(objectEvent->previousMetatileBehavior))
+         || MetatileBehavior_IsSurfableWaterOrUnderwater(objectEvent->previousMetatileBehavior))
         {
             FieldEffectStop(sprite, FLDEFF_SHADOW);
         }
@@ -417,7 +448,7 @@ u32 FldEff_LongGrass(void)
     {
         sprite = &gSprites[spriteId];
         sprite->coordOffsetEnabled = TRUE;
-        sprite->oam.priority = ZCoordToPriority(gFieldEffectArguments[2]);
+        sprite->oam.priority = ElevationToPriority(gFieldEffectArguments[2]);
         sprite->sElevation = gFieldEffectArguments[2];
         sprite->sX = gFieldEffectArguments[0];
         sprite->sY = gFieldEffectArguments[1];
@@ -1102,7 +1133,7 @@ void SynchroniseSurfPosition(struct ObjectEvent *playerObj, struct Sprite *sprit
         for (i = DIR_SOUTH; i <= DIR_EAST; i++, x = sprite->data[6], y = sprite->data[7])
         {
             MoveCoords(i, &x, &y);
-            if (MapGridGetZCoordAt(x, y) == 3)
+            if (MapGridGetElevationAt(x, y) == 3)
             {
                 sprite->data[5]++;
                 break;
@@ -1640,7 +1671,7 @@ void UpdateJumpImpactEffect(struct Sprite *sprite)
     else
     {
         UpdateObjectEventSpriteInvisibility(sprite, FALSE);
-        SetObjectSubpriorityByZCoord(sprite->sElevation, sprite, 0);
+        SetObjectSubpriorityByElevation(sprite->sElevation, sprite, 0);
     }
 }
 
@@ -1658,7 +1689,7 @@ static void UpdateGrassFieldEffectSubpriority(struct Sprite *sprite, u8 z, u8 of
     s16 var, xhi, lyhi, yhi, ylo;
     struct Sprite *linkedSprite;
 
-    SetObjectSubpriorityByZCoord(z, sprite, offset);
+    SetObjectSubpriorityByElevation(z, sprite, offset);
     for (i = 0; i < OBJECT_EVENTS_COUNT; i ++)
     {
         struct ObjectEvent *objectEvent = &gObjectEvents[i];

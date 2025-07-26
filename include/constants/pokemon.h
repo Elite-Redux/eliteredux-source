@@ -427,13 +427,12 @@
 #define MON_PIC_SIZE (64 * 64 / 2)
 
 #define NUM_ABILITY_SLOTS 3
-#define NUM_INNATE_PER_SPECIES 3
 #define TOTAL_ABILITY_COUNT 4
 
-#define INNATE_1_LEVEL 1
-#define INNATE_2_LEVEL 17 // eg. 17
-#define INNATE_3_LEVEL 24 // eg 24
-
+#define SPECIES_INNATE_NUM_1   0
+#define SPECIES_INNATE_NUM_2   1
+#define SPECIES_INNATE_NUM_3   2
+#define NUM_INNATE_PER_SPECIES 3
 
 //Move Relearner
 #define MOVE_TUTOR_LEVEL_UP_MOVES 0

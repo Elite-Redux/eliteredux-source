@@ -634,6 +634,7 @@ struct BattleStruct
     u16 wrappedMove[MAX_BATTLERS_COUNT];
     u8 moveTarget[MAX_BATTLERS_COUNT];
     u8 expGetterMonId;
+    u8 hasBattleInputStarted:1; // Speed up battle
     u8 wildVictorySong;
     u8 dynamicMoveType;
     u8 wrappedBy[MAX_BATTLERS_COUNT];

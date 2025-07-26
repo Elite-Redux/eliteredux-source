@@ -142,6 +142,24 @@ gText_Pie_EliteMode::
 	.string "So, would you like to play on\n"
 	.string "{COLOR RED}Elite Mode{COLOR DARK_GRAY}?$"
 
+@toModify
+gText_Pie_HellMode::
+	.string "Elite Mode is the hardest difficulty.\n"
+	.string "You will face much harder teams.\p"
+	.string "It also has more restrictions:\p"
+	.string "You have to unlock innates at\n"
+	.string "certain levels to use them.\p"
+	.string "The good thing about it:\n"
+	.string "The AI also has it locked.\p"
+	.string "You can't access the bag in Trainer\n"
+	.string "Battles, and the Shift battle style is\l"
+	.string "disabled.\p"
+	.string "You will experience a world of pain.\p"
+	.string "This difficulty is only recommended if\n"
+	.string "it sounds appealing to you!\p"
+	.string "So, would you like to play on\n"
+	.string "{COLOR RED}Elite Mode{COLOR DARK_GRAY}?$"
+
 gText_Pie_WhichDifficulty::
 	.string "Which difficulty would you like to\n"
 	.string "play on?$"

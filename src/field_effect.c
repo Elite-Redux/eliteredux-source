@@ -33,6 +33,7 @@
 #include "generated/constants/moves.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
+#include "day_night.h"
 
 #define subsprite_table(ptr) {.subsprites = ptr, .subspriteCount = (sizeof ptr) / (sizeof(struct Subsprite))}
 
@@ -282,6 +283,10 @@ bool8 (*const gFieldEffectScriptFuncs[])(u8 **, u32 *) =
     FieldEffectCmd_loadgfx_callnative,
     FieldEffectCmd_loadtiles_callnative,
     FieldEffectCmd_loadfadedpal_callnative,
+    // Added for day and night system
+    FieldEffectCmd_loadpaldaynight,
+    FieldEffectCmd_loadfadedpaldaynight,
+    FieldEffectCmd_loadfadedpaldaynight_callnative,
 };
 
 static const struct OamData sOam_64x64 =
@@ -1589,6 +1594,7 @@ static bool8 EscalatorWarpOut_WaitForPlayer(struct Task *task)
     if (!ObjectEventIsMovementOverridden(objectEvent) || ObjectEventClearHeldMovementIfFinished(objectEvent))
     {
         ObjectEventSetHeldMovement(objectEvent, GetFaceDirectionMovementAction(GetPlayerFacingDirection()));
+        objectEvent->noShadow = TRUE; // hide shadow for cleaner movement
         task->tState++;
         task->data[2] = 0;
         task->data[3] = 0;
@@ -1710,6 +1716,7 @@ static bool8 EscalatorWarpIn_Init(struct Task *task)
     u8 behavior;
     CameraObjectReset2();
     objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    objectEvent->noShadow = TRUE;
     ObjectEventSetHeldMovement(objectEvent, GetFaceDirectionMovementAction(DIR_EAST));
     PlayerGetDestCoords(&x, &y);
     behavior = MapGridGetMetatileBehaviorAt(x, y);
@@ -1806,6 +1813,7 @@ static bool8 EscalatorWarpIn_End(struct Task *task)
 {
     struct ObjectEvent *objectEvent;
     objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    objectEvent->noShadow = FALSE;
     if (ObjectEventClearHeldMovementIfFinished(objectEvent))
     {
         CameraObjectReset1();
@@ -1958,6 +1966,7 @@ static bool8 LavaridgeGymB1FWarpEffect_Init(struct Task *task, struct ObjectEven
     SetCameraPanningCallback(NULL);
     gPlayerAvatar.preventStep = TRUE;
     objectEvent->fixedPriority = 1;
+    objectEvent->noShadow = TRUE;
     task->data[1] = 1;
     task->data[0]++;
     return TRUE;
@@ -2150,6 +2159,7 @@ static bool8 LavaridgeGym1FWarpEffect_Init(struct Task *task, struct ObjectEvent
     CameraObjectReset2();
     gPlayerAvatar.preventStep = TRUE;
     objectEvent->fixedPriority = 1;
+    objectEvent->noShadow = TRUE;
     task->data[0]++;
     return FALSE;
 }
@@ -3300,7 +3310,7 @@ static void FlyOutFieldEffect_FlyOffWithBird(struct Task *task)
         struct ObjectEvent *objectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
         ObjectEventClearHeldMovementIfActive(objectEvent);
         objectEvent->inanimate = FALSE;
-        objectEvent->hasShadow = FALSE;
+        objectEvent->noShadow = TRUE; // TODO: Make shadow smaller instead of disappearing completely ?
         SetFlyBirdPlayerSpriteId(task->tBirdSpriteId, objectEvent->spriteId);
         CameraObjectReset2();
         task->tState++;
@@ -3521,6 +3531,7 @@ static void FlyInFieldEffect_BirdSwoopDown(struct Task *task)
         ObjectEventTurn(objectEvent, DIR_WEST);
         StartSpriteAnim(&gSprites[objectEvent->spriteId], 0x16);
         objectEvent->invisible = FALSE;
+        objectEvent->noShadow = TRUE;
         task->tBirdSpriteId = CreateFlyBirdSprite();
         StartFlyBirdSwoopDown(task->tBirdSpriteId);
         SetFlyBirdPlayerSpriteId(task->tBirdSpriteId, objectEvent->spriteId);
@@ -3936,4 +3947,41 @@ u8 FldEff_CaveDust(void)
     }
 
     return spriteId;
+}
+
+bool8 FieldEffectCmd_loadpaldaynight(u8 **script, u32 *val)
+{
+    (*script)++;
+    FieldEffectScript_LoadPaletteDayNight(script);
+    return TRUE;
+}
+
+bool8 FieldEffectCmd_loadfadedpaldaynight(u8 **script, u32 *val)
+{
+    (*script)++;
+    FieldEffectScript_LoadFadedPaletteDayNight(script);
+    return TRUE;
+}
+
+bool8 FieldEffectCmd_loadfadedpaldaynight_callnative(u8 **script, u32 *val)
+{
+    (*script)++;
+    FieldEffectScript_LoadFadedPaletteDayNight(script);
+    FieldEffectScript_CallNative(script, val);
+    return TRUE;
+}
+
+void FieldEffectScript_LoadFadedPaletteDayNight(u8 **script)
+{
+    struct SpritePalette *palette = (struct SpritePalette *)FieldEffectScript_ReadWord(script);
+    LoadSpritePaletteDayNight(palette);
+    UpdateSpritePaletteWithWeather(IndexOfSpritePaletteTag(palette->tag));
+    (*script) += 4;
+}
+
+void FieldEffectScript_LoadPaletteDayNight(u8 **script)
+{
+    struct SpritePalette *palette = (struct SpritePalette *)FieldEffectScript_ReadWord(script);
+    LoadSpritePaletteDayNight(palette);
+    (*script) += 4;
 }
