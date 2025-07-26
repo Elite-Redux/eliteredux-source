@@ -26,8 +26,12 @@
 #define INNATE_2_LEVEL_ELITE 17
 #define INNATE_3_LEVEL_ELITE 24
 //Hell Mode
-#define INNATE_1_LEVEL_HELL 10
-#define INNATE_2_LEVEL_HELL 17 
-#define INNATE_3_LEVEL_HELL 24
+#define INNATE_1_LEVEL_HELL  10
+#define INNATE_2_LEVEL_HELL  17 
+#define INNATE_3_LEVEL_HELL  24
+
+#define HELL_MODE_EXTRA_LEVELS      5                //Number of extra levels after getting the flag HELL_MODE_5_EXTRA_LEVELS_FLAG
+#define HELL_MODE_EXTRA_LEVELS_FLAG FLAG_BADGE03_GET //Flag when enabled sets all the trainer Pokémon some levels above their normal levels (defined above)
+#define HELL_MODE_0_IVS_FLAG        FLAG_BADGE05_GET //Flag when enabled sets all your Pokémon IVs to 0 (Only on Hard Mode)
 
 #endif // GUARD_CONSTANTS_POKEMON_CONFIG_H

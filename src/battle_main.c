@@ -1733,6 +1733,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     u8 isDoubleBattle = gTrainers[trainerNum].doubleBattle;
     u8 DoubleReady = GetMonsStateToDoubles() == PLAYER_HAS_TWO_USABLE_MONS;
     u8 enemyPartySize = gTrainers[trainerNum].partySize;
+    u8 extraLevels = 0;
 
     MoveEnum move = 1;
     SpeciesEnum species = 1;
@@ -1790,6 +1791,8 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
             switch (difficultySetting) {
                 case DIFFICULTY_HELL:
                     partyData = gTrainers[trainerNum].partyHell;
+                    if(FlagGet(HELL_MODE_EXTRA_LEVELS_FLAG))
+                        extraLevels = HELL_MODE_EXTRA_LEVELS;
                     break;
                 case DIFFICULTY_ELITE:
                     partyData = gTrainers[trainerNum].partyInsane;
@@ -1804,13 +1807,15 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
             personalityValue += nameHash << 8;
 
             level = GetHighestLevelInPlayerParty();
-            if (level + partyData[i].lvl > 100) {
-                level = 100;
-            } else if (level + partyData[i].lvl < 1) {
+            if (level + partyData[i].lvl < 1)
                 level = 1;
-            } else {
-                level = level + partyData[i].lvl;
-            }
+            else
+                level += partyData[i].lvl;
+
+            level += extraLevels;
+
+            if (level > MAX_LEVEL)
+                level = MAX_LEVEL;
 
 #ifdef DEBUG_BUILD
             if (FlagGet(FLAG_DEBUG_GODMODE)) level = 1;
@@ -1865,7 +1870,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 }
             }
 
-            CalculateMonStats(&party[i]);  // called twice; fix in future
+            CalculateEnemyTrainerMonStats(&party[i]);
 
             if (trainerNum == TRAINER_OLDPLAYER) {
                 for (j = 0; j < MAX_MON_MOVES; j++) {

@@ -563,6 +563,10 @@ SpeciesEnum GetEvolutionForMon(struct Pokemon *mon, u8 num);
 SpeciesEnum GetFormChangeForMon(struct Pokemon *mon, u8 num);
 u8 getNumofAvailableEvos(struct Pokemon *mon);
 
+void CalculateMonStatsWithoutRestoringPP(struct Pokemon *mon);
+void CalculateEnemyTrainerMonStats(struct Pokemon *mon);
+void CalculateMonStatsMaster(struct Pokemon *mon, bool8 shouldRestorePP, bool8 isEnemyMon);
+
 bool8 CanDisableInnates(void);
 bool8 getInnateDisableLevel(u8 innateNum);
 

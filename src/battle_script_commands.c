@@ -6600,14 +6600,18 @@ u32 JumpIfStandardStatusBlocking(u32 battler, bool32 affectsUser, StatusCheckEnu
 }
 
 static void RecalcBattlerStats(u32 battler, struct Pokemon* mon) {
-    CalculateMonStats(mon);
-    gBattleMons[battler].level = GetMonData(mon, MON_DATA_LEVEL);
-    gBattleMons[battler].hp = GetMonData(mon, MON_DATA_HP);
-    gBattleMons[battler].maxHP = GetMonData(mon, MON_DATA_MAX_HP);
-    gBattleMons[battler].attack = GetMonData(mon, MON_DATA_ATK);
-    gBattleMons[battler].defense = GetMonData(mon, MON_DATA_DEF);
-    gBattleMons[battler].speed = GetMonData(mon, MON_DATA_SPEED);
-    gBattleMons[battler].spAttack = GetMonData(mon, MON_DATA_SPATK);
+    if(GetBattlerSide(battler) == B_SIDE_PLAYER)
+        CalculateMonStatsWithoutRestoringPP(mon);
+    else
+        CalculateEnemyTrainerMonStats(mon);
+    
+    gBattleMons[battler].level     = GetMonData(mon, MON_DATA_LEVEL);
+    gBattleMons[battler].hp        = GetMonData(mon, MON_DATA_HP);
+    gBattleMons[battler].maxHP     = GetMonData(mon, MON_DATA_MAX_HP);
+    gBattleMons[battler].attack    = GetMonData(mon, MON_DATA_ATK);
+    gBattleMons[battler].defense   = GetMonData(mon, MON_DATA_DEF);
+    gBattleMons[battler].speed     = GetMonData(mon, MON_DATA_SPEED);
+    gBattleMons[battler].spAttack  = GetMonData(mon, MON_DATA_SPATK);
     gBattleMons[battler].spDefense = GetMonData(mon, MON_DATA_SPDEF);
     RepopulateAbilities(battler);
 
