@@ -2025,6 +2025,13 @@ static void Task_NewGameBirchSpeech_ChooseDifficulty(u8 taskId)
             NewGameBirchSpeech_ClearGenderWindow(5, 1);
             gTasks[taskId].func = Task_NewGameBirchSpeech_DifficultyDesc;
             break;
+        case DIFFICULTY_HELL:
+            PlaySE(SE_SELECT);
+            gSaveBlock2Ptr->gameDifficulty = DIFFICULTY_HELL;
+            gSaveBlock2Ptr->optionsBattleStyle = OPTIONS_BATTLE_STYLE_SET;
+            NewGameBirchSpeech_ClearGenderWindow(5, 1);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_DifficultyDesc;
+            break;
     }
 }
 
@@ -2043,6 +2050,9 @@ static void Task_NewGameBirchSpeech_DifficultyDesc(u8 taskId)
             break;
         case DIFFICULTY_ELITE:
             str = gText_Pie_EliteMode;
+            break;
+        case DIFFICULTY_HELL:
+            str = gText_Pie_HellMode;
             break;
     }
 

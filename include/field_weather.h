@@ -45,7 +45,8 @@ struct Weather
     s8 gammaTargetIndex;
     u8 gammaStepDelay;
     u8 gammaStepFrameCounter;
-    u16 fadeDestColor;
+    u16 fadeDestColor:15;
+    u16 noShadows:1; // Certain weathers require blend coeffs that do not work nice with shadows
     u8 palProcessingState;
     u8 fadeScreenCounter;
     bool8 readyForInit;
@@ -191,6 +192,7 @@ void Thunderstorm_Main(void);
 void Thunderstorm_InitAll(void);
 bool8 Thunderstorm_Finish(void);
 void FogHorizontal_InitVars(void);
+u8 UpdateShadowColor(u16 color);
 void FogHorizontal_Main(void);
 void FogHorizontal_InitAll(void);
 bool8 FogHorizontal_Finish(void);

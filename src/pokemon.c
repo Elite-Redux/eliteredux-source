@@ -1026,91 +1026,100 @@ void CreateEventLegalEnemyMon(void) {
         SetMonData(mon, field, &n);                                 \
     }
 
-void CalculateMonStats(struct Pokemon *mon) {
-    s32 oldMaxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
-    s32 currentHP = GetMonData(mon, MON_DATA_HP, NULL);
-    s32 hpIV = GetMonData(mon, MON_DATA_HP_IV, NULL);
-    s32 hpEV = GetMonData(mon, MON_DATA_HP_EV, NULL);
-    s32 attackIV = GetMonData(mon, MON_DATA_ATK_IV, NULL);
-    s32 attackEV = GetMonData(mon, MON_DATA_ATK_EV, NULL);
-    s32 defenseIV = GetMonData(mon, MON_DATA_DEF_IV, NULL);
-    s32 defenseEV = GetMonData(mon, MON_DATA_DEF_EV, NULL);
-    s32 speedIV = GetMonData(mon, MON_DATA_SPEED_IV, NULL);
-    s32 speedEV = GetMonData(mon, MON_DATA_SPEED_EV, NULL);
-    s32 spAttackIV = GetMonData(mon, MON_DATA_SPATK_IV, NULL);
-    s32 spAttackEV = GetMonData(mon, MON_DATA_SPATK_EV, NULL);
-    s32 spDefenseIV = GetMonData(mon, MON_DATA_SPDEF_IV, NULL);
-    s32 spDefenseEV = GetMonData(mon, MON_DATA_SPDEF_EV, NULL);
+void CalculateMonStatsWithoutRestoringPP(struct Pokemon *mon){
+    CalculateMonStatsMaster(mon, FALSE, FALSE);
+}
+
+void CalculateMonStats(struct Pokemon *mon)
+{
+    CalculateMonStatsMaster(mon, TRUE, FALSE);
+}
+
+void CalculateEnemyTrainerMonStats(struct Pokemon *mon)
+{
+    CalculateMonStatsMaster(mon, TRUE, TRUE);
+}
+
+void CalculateMonStatsMaster(struct Pokemon *mon, bool8 shouldRestorePP, bool8 isEnemyMon){
+    s32 newMaxHP, movePP, i;
+    s32 hpIV, attackIV, defenseIV, speedIV, spAttackIV, spDefenseIV;
+
     SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     s32 level = GetLevelFromMonExp(mon);
+
+    s32 oldMaxHP    = GetMonData(mon, MON_DATA_MAX_HP, NULL);
+    s32 currentHP   = GetMonData(mon, MON_DATA_HP, NULL);
+    s32 hpEV        = GetMonData(mon, MON_DATA_HP_EV, NULL);
+    s32 attackEV    = GetMonData(mon, MON_DATA_ATK_EV, NULL);
+    s32 defenseEV   = GetMonData(mon, MON_DATA_DEF_EV, NULL);
+    s32 speedEV     = GetMonData(mon, MON_DATA_SPEED_EV, NULL);
+    s32 spAttackEV  = GetMonData(mon, MON_DATA_SPATK_EV, NULL);
+    s32 spDefenseEV = GetMonData(mon, MON_DATA_SPDEF_EV, NULL);
     bool8 speedDown = GetMonData(mon, MON_DATA_SPEED_DOWN, NULL);
-    s32 newMaxHP;
-    s32 movePP, i;
+    u8 difficulty   = gSaveBlock2Ptr->gameDifficulty;
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
 
-    if (B_PERFECT_IVS == TRUE) {
-        // Ivs are Disabled
-        hpIV = MAX_IVS;
-        attackIV = MAX_IVS;
-        defenseIV = MAX_IVS;
-        spAttackIV = MAX_IVS;
-        spDefenseIV = MAX_IVS;
-        speedIV = MAX_IVS;
-    }
+    if (isEnemyMon || difficulty != DIFFICULTY_HELL || !FlagGet(HELL_MODE_0_IVS_FLAG)) // Ivs are maxed normally
+        hpIV = attackIV = defenseIV = spAttackIV = spDefenseIV = speedIV = MAX_IVS;
+    else
+        hpIV = attackIV = defenseIV = spAttackIV = spDefenseIV = speedIV = 0;
 
-    if (speedDown) speedIV = 0;
+    if (speedDown)
+        speedIV = 0;
 
-    if (!gSaveBlock2Ptr->enableEvs) {
-        // Evs are Disabled
-        hpEV = 0;
-        attackEV = 0;
-        defenseEV = 0;
-        spAttackEV = 0;
-        spDefenseEV = 0;
-        speedEV = 0;
-    }
+    if (!gSaveBlock2Ptr->enableEvs) //Evs are Disabled
+        hpEV = attackEV = defenseEV = spAttackEV = spDefenseEV = speedEV = 0;
 
     if (species == SPECIES_SHEDINJA || species == SPECIES_SHEDINJA_MEGA) {
         newMaxHP = 1;
-    } else {
+    }
+    else
+    {
         s32 n = 2 * gBaseStats[species].baseHP + hpIV;
         newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
     }
 
     gBattleScripting.levelUpHP = newMaxHP - oldMaxHP;
-    if (gBattleScripting.levelUpHP == 0) gBattleScripting.levelUpHP = 1;
+    if (gBattleScripting.levelUpHP == 0)
+        gBattleScripting.levelUpHP = 1;
 
     SetMonData(mon, MON_DATA_MAX_HP, &newMaxHP);
 
     // Set move PP
-    for (i = 0; i < MAX_MON_MOVES; i++) {
-        movePP = gBattleMoves[GetMonData(mon, MON_DATA_MOVE1 + i, NULL)].pp;
-        SetMonData(mon, MON_DATA_PP1 + i, &movePP);
+    if(shouldRestorePP){
+        for (i = 0; i < MAX_MON_MOVES; i++) {
+            movePP = gBattleMoves[GetMonData(mon, MON_DATA_MOVE1 + i, NULL)].pp;
+            SetMonData(mon, MON_DATA_PP1 + i, &movePP);
+        }
     }
+
     MonRestorePP(mon);
 
-    CALC_STAT(baseAttack, attackIV, attackEV, STAT_ATK, MON_DATA_ATK)
-    CALC_STAT(baseDefense, defenseIV, defenseEV, STAT_DEF, MON_DATA_DEF)
-    CALC_STAT(baseSpeed, speedIV, speedEV, STAT_SPEED, MON_DATA_SPEED)
-    CALC_STAT(baseSpAttack, spAttackIV, spAttackEV, STAT_SPATK, MON_DATA_SPATK)
+    CALC_STAT(baseAttack,    attackIV,    attackEV,    STAT_ATK,   MON_DATA_ATK)
+    CALC_STAT(baseDefense,   defenseIV,   defenseEV,   STAT_DEF,   MON_DATA_DEF)
+    CALC_STAT(baseSpeed,     speedIV,     speedEV,     STAT_SPEED, MON_DATA_SPEED)
+    CALC_STAT(baseSpAttack,  spAttackIV,  spAttackEV,  STAT_SPATK, MON_DATA_SPATK)
     CALC_STAT(baseSpDefense, spDefenseIV, spDefenseEV, STAT_SPDEF, MON_DATA_SPDEF)
 
-    if (species == SPECIES_SHEDINJA) {
+    if (species == SPECIES_SHEDINJA) 
+    {
         if (currentHP != 0 || oldMaxHP == 0)
             currentHP = 1;
         else
             return;
-    } else {
+    } 
+    else
+    {
         if (currentHP == 0 && oldMaxHP == 0)
             currentHP = newMaxHP;
         else if (currentHP != 0) {
-            // BUG: currentHP is unintentionally able to become <= 0 after the instruction below. This causes the pomeg berry glitch.
             currentHP += newMaxHP - oldMaxHP;
-#ifdef BUGFIX
-            if (currentHP <= 0) currentHP = 1;
-#endif
-        } else
+
+            if (currentHP <= 0) 
+                currentHP = 1;
+        }
+        else
             return;
     }
 
@@ -5018,11 +5027,11 @@ bool8 SpeciesHasInnate(SpeciesEnum species, AbilityEnum ability, u8 level, u32 p
         innate3 = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
     }
 
-    if (innate1 == ability && (level >= INNATE_1_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
+    if (innate1 == ability && (isEnemyMon || !CanDisableInnates() || level >= getInnateDisableLevel(SPECIES_INNATE_NUM_1)))
         return TRUE;
-    else if (innate2 == ability && (level >= INNATE_2_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
+    else if (innate2 == ability && (isEnemyMon || !CanDisableInnates() || level >= getInnateDisableLevel(SPECIES_INNATE_NUM_2)))
         return TRUE;
-    else if (innate3 == ability && (level >= INNATE_3_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
+    else if (innate3 == ability && (isEnemyMon || !CanDisableInnates() || level >= getInnateDisableLevel(SPECIES_INNATE_NUM_3)))
         return TRUE;
     else
         return FALSE;
@@ -5093,20 +5102,12 @@ AbilityEnum GetMonInnate(struct Pokemon *mon, int slot, int disableRandomizer) {
 
     AbilityEnum innate = gBaseStats[species].innates[slot];
 
-    if (!disableRandomizer) {
+    if (!disableRandomizer)
         innate = RandomizeInnate(innate, species, personality);
-    }
 
-    if (!disableRandomizer && gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE) {
-        switch (slot) {
-            case 0:
-                return level >= INNATE_1_LEVEL ? innate : ABILITY_NONE;
-            case 1:
-                return level >= INNATE_2_LEVEL ? innate : ABILITY_NONE;
-            case 2:
-                return level >= INNATE_3_LEVEL ? innate : ABILITY_NONE;
-        }
-    }
+    //Disable Innate if it does not meet the level requirments
+    if (!disableRandomizer && (CanDisableInnates() && level < getInnateDisableLevel(slot)))
+        return ABILITY_NONE;
 
     return innate;
 }
@@ -6294,4 +6295,36 @@ bool8 isShinyVariantUnlocked(SpeciesEnum species, u8 variant) {
         return FALSE;
     else
         return TRUE;
+}
+
+bool8 CanDisableInnates(void){
+    return (gSaveBlock2Ptr->gameDifficulty >= P_DISABLE_FIRST_DIFFICULTY);
+}
+
+u8 getInnateDisableLevel(u8 innateNum){
+    if(CanDisableInnates()){
+        switch(innateNum){
+            default://Fallback
+            case SPECIES_INNATE_NUM_1:
+                if(gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE)
+                    return INNATE_1_LEVEL_ELITE;
+                else
+                    return INNATE_1_LEVEL_HELL;
+            break;
+            case SPECIES_INNATE_NUM_2:
+                if(gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE)
+                    return INNATE_2_LEVEL_ELITE;
+                else
+                    return INNATE_2_LEVEL_HELL;
+            break;
+            case SPECIES_INNATE_NUM_3:
+                if(gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE)
+                    return INNATE_3_LEVEL_ELITE;
+                else
+                    return INNATE_3_LEVEL_HELL;
+            break;
+        }
+    }
+    
+    return 0;
 }

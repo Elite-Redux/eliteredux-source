@@ -140,6 +140,7 @@
 #define DIFFICULTY_ACE         1
 #define DIFFICULTY_ELITE       2
 #define DIFFICULTY_HELL        3
+#define NUM_DIFFICULTIES       4
 
 #define LEVEL_CAPS_EASY        0
 #define LEVEL_CAPS_MORE        1

@@ -8642,19 +8642,9 @@ u8 TranslateStatId(u8 statId, u8 battlerId) {
 bool32 IsAlly(u32 battlerAtk, u32 battlerDef) { return (GetBattlerSide(battlerAtk) == GetBattlerSide(battlerDef)); }
 
 AbilityEnum GetInnateInSlot(int level, SpeciesEnum species, u8 position, u32 personality, u8 isPlayer) {
-    if (isPlayer) {
-        switch (position) {
-            case 0:
-                if (level < INNATE_1_LEVEL && gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE) return ABILITY_NONE;
-                break;
-            case 1:
-                if (level < INNATE_2_LEVEL && gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE) return ABILITY_NONE;
-                break;
-            case 2:
-                if (level < INNATE_3_LEVEL && gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE) return ABILITY_NONE;
-                break;
-        }
-    }
+    if (isPlayer && CanDisableInnates() && level < getInnateDisableLevel(position))
+        return ABILITY_NONE;
+    
     return isPlayer ? RandomizeInnate(gBaseStats[species].innates[position], species, personality) : gBaseStats[species].innates[position];
 }
 
