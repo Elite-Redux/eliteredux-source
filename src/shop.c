@@ -265,22 +265,25 @@ static void SetShopMenuCallback(void (*callback)(void)) { sMartInfo.callback = c
 
 // 0 Badges
 static const u16 sAdoptionCenterInventory_ZeroBadges[] = {
-    SPECIES_HAPPINY_REDUX,  // testing purposes
+    SPECIES_RATTATA_REDUX,
+    SPECIES_HAPPINY_REDUX,
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
-    SPECIES_TURTWIG_REDUX,   // testing purposes
-    SPECIES_CHIMCHAR_REDUX,  // testing purposes
-    SPECIES_PIPLUP_REDUX,    // testing purposes
-    SPECIES_CLEFFA_REDUX,    // testing purposes
-    SPECIES_CORM,            // testing purposes
-    SPECIES_MARBEEP,         // testing purposes
+    SPECIES_TURTWIG_REDUX,
+    SPECIES_CHIMCHAR_REDUX,
+    SPECIES_PIPLUP_REDUX,
+    SPECIES_CLEFFA_REDUX,
+    SPECIES_CORM,
+    SPECIES_MARBEEP,
     SPECIES_NOIBAT_REDUX,
     SPECIES_NONE,
 };
 
 // 1 Badge
 static const u16 sAdoptionCenterInventory_OneBadges[] = {
+    SPECIES_BLOCLI,
+    SPECIES_RATTATA_REDUX,
     SPECIES_HAPPINY_REDUX,   // testing purposes
     SPECIES_TURTWIG_REDUX,   // testing purposes
     SPECIES_CHIMCHAR_REDUX,  // testing purposes
@@ -303,6 +306,8 @@ static const u16 sAdoptionCenterInventory_OneBadges[] = {
 
 // 2 Badges
 static const u16 sAdoptionCenterInventory_TwoBadges[] = {
+    SPECIES_RATTATA_REDUX,
+    SPECIES_KLEFKI_REDUX,
     SPECIES_HAPPINY_REDUX,    // testing purposes
     SPECIES_TURTWIG_REDUX,    // testing purposes
     SPECIES_CHIMCHAR_REDUX,   // testing purposes
@@ -330,6 +335,10 @@ static const u16 sAdoptionCenterInventory_TwoBadges[] = {
 
 // 3 Badges
 static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
+    SPECIES_SAWK_REDUX,
+    SPECIES_THROH_REDUX,
+    SPECIES_KLEFKI_REDUX,
+    SPECIES_RATTATA_REDUX,
     SPECIES_HAPPINY_REDUX,     // testing purposes
     SPECIES_DARUMAKA_REDUX,    // testing purposes
     SPECIES_GLIGAR_REDUX,      // testing purposes
@@ -373,6 +382,11 @@ static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
 
 // 4 Badges
 static const u16 sAdoptionCenterInventory_FourBadges[] = {
+    SPECIES_SAWK_REDUX,
+    SPECIES_THROH_REDUX,
+    SPECIES_KLEFKI_REDUX,
+    SPECIES_RATTATA_REDUX,
+    SPECIES_LITWICK_REDUX,
     SPECIES_HAPPINY_REDUX,     // testing purposes
     SPECIES_DARUMAKA_REDUX,    // testing purposes
     SPECIES_GLIGAR_REDUX,      // testing purposes
@@ -507,6 +521,7 @@ static const u16 sAdoptionCenterInventory_SixBadges[] = {
 
 // 7 Badges
 static const u16 sAdoptionCenterInventory_SevenBadges[] = {
+    SPECIES_LARVESTA_REDUX,     // testing purposes
     SPECIES_HAPPINY_REDUX,     // testing purposes
     SPECIES_SPIRITOMB_REDUX,   // testing purposes
     SPECIES_DARUMAKA_REDUX,    // testing purposes
@@ -554,6 +569,7 @@ static const u16 sAdoptionCenterInventory_SevenBadges[] = {
 
 // 8 Badges
 static const u16 sAdoptionCenterInventory_EightBadges[] = {
+    SPECIES_LARVESTA_REDUX,     // testing purposes
     SPECIES_HAPPINY_REDUX,     // testing purposes
     SPECIES_SPIRITOMB_REDUX,   // testing purposes
     SPECIES_DARUMAKA_REDUX,    // testing purposes
