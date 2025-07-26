@@ -2937,7 +2937,13 @@ void SetMoveEffect(bool32 primary, u32 certain) {
 }
 
 int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChance) {
-    if (moveEffect == MOVE_EFFECT_FLINCH && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) return 0;
+    // Only the first hit can flinch from abilities similar to Parental Bond
+    if (moveEffect == MOVE_EFFECT_FLINCH && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount)
+        return 0;
+
+    //Flinch as a secondary effect will always fail on player use (excluded for moves with 100% Flinch chance such as Fake Out and First Impression)
+    if(moveEffect == MOVE_EFFECT_FLINCH && baseChance < 100 && gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL && GetBattlerSide(battler) == B_SIDE_PLAYER)
+        return 0;
 
     for (int i = 0; i < gBattlersCount; i++) {
         int abilityBattler = (battler + i) % gBattlersCount;
@@ -2954,10 +2960,10 @@ int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChan
 }
 
 static void Cmd_seteffectwithchance(void) {
+    u8 moveEffect;
     u32 percentChance = gBattleScripting.moveSecondaryEffectChance
                             ? (gBattleScripting.moveSecondaryEffectChance == 0xFF ? 0 : gBattleScripting.moveSecondaryEffectChance)
                             : gBattleMoves[gCurrentMove].secondaryEffectChance;
-    u8 moveEffect;
 
     gBattlescriptCurrInstr++;
 
@@ -2970,10 +2976,11 @@ static void Cmd_seteffectwithchance(void) {
     if (gBattleScripting.moveEffect & MOVE_EFFECT_CERTAIN && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
         gBattleScripting.moveEffect &= ~(MOVE_EFFECT_CERTAIN);
         SetMoveEffect(FALSE, MOVE_EFFECT_CERTAIN);
-    } else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MINION_CONTROL &&
-               gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) {
+    } 
+    else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MINION_CONTROL && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) {
         // No-op
-    } else if (Random() % 100 < percentChance && gBattleScripting.moveEffect && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
+    }
+    else if (Random() % 100 < percentChance && gBattleScripting.moveEffect && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
         if (percentChance >= 100)
             SetMoveEffect(FALSE, MOVE_EFFECT_CERTAIN);
         else
