@@ -8969,6 +8969,199 @@ constexpr Ability ChillingPellets = {
     },
 };
 
+constexpr Ability PaintShot = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Stonecutter = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Edgelord = {
+    .onEntry = Cutthroat.onEntry,
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
+        CHECK(gBattleMoves[gCurrentMove].flags & FLAG_KEEN_EDGE_BOOST || !(gStatuses4[battler] & STATUS4_CUTTHROAT))
+        gStatuses4[battler] |= STATUS4_CUTTHROAT;
+        SetAbilityState(battler, ability, TRUE);
+        BattleScriptCall(BattleScript_BattlerCoiledUpReturnNoPopup);
+        return TRUE;
+    },
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+};
+
+constexpr Ability Warmonger = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ROCK || moveType == TYPE_STEEL || moveType == TYPE_FIGHTING) MUL(1.30);
+        },
+};
+
+constexpr Ability LocustSwarm = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Revelation = {
+    .breakable = TRUE,
+};
+
+constexpr Ability CurseOfFamine = {
+    .breakable = TRUE,
+};
+
+constexpr Ability CrystallineArmor = {
+    .breakable = TRUE,
+};
+
+constexpr Ability SoulHarvest = {
+    .breakable = TRUE,
+};
+
+constexpr Ability ThickBlubber = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.75);
+        },
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED) *stat *= .5;
+        },
+};
+
+constexpr Ability Craving = {
+    .breakable = TRUE,
+};
+
+constexpr Ability RatKing = {
+    .breakable = TRUE,
+};
+
+constexpr Ability CrispyCream = {
+    .onDefender = FlameBody.onDefender,
+};
+
+constexpr Ability DeepFried = {
+    .breakable = TRUE,
+};
+
+constexpr Ability FoodLovers = {
+    .onEntry = Hospitality.onEntry,
+};
+
+constexpr Ability LunarWrath = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(moveType == TYPE_GHOST)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_MOONGEIST_BEAM, 50);
+    },
+};
+
+constexpr Ability Spyware = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Virus = {
+    .breakable = TRUE,
+};
+
+constexpr Ability PowerLeak = {
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
+
+        BattleScriptCall(BattleScript_SeedSower);
+        return TRUE;
+    },
+    .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
+};
+
+constexpr Ability BackupPower = {
+    .persistent = TRUE,
+};
+
+constexpr Ability SandFiend = {
+    .onImmune = SandGuard.onImmune,
+    .onDefensiveMultiplier = SandGuard.onDefensiveMultiplier,
+    .onStat = SandForce.onStat,
+    .breakable = TRUE,
+    .sandImmune = TRUE,
+};
+
+constexpr Ability Moustache = {
+    .onDefender = Stamina.onDefender,
+};
+
+constexpr Ability DepthExplorer = {
+    .onOffensiveMultiplier = FieldExplorer.onOffensiveMultiplier,
+    .onAccuracy = Illuminate.onAccuracy,
+};
+
+constexpr Ability DuneVeil = {
+    .onImmune = SandGuard.onImmune,
+    .onEndTurn = SelfSufficient.onEndTurn,
+    .onDefensiveMultiplier = SandGuard.onDefensiveMultiplier,
+    .breakable = TRUE,
+    .sandImmune = TRUE,
+};
+
+constexpr Ability StrongFoundation = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_WATER || moveType == TYPE_GROUND) RESISTANCE(.50);
+        },
+};
+
+constexpr Ability FogMachine = {
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_FOG_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
+            BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
+            return NO_ANNOUNCE;
+        }
+        else if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
+            gBattleScripting.battler = battler;
+            BattleScriptCall(BattleScript_SandSpitActivates);
+            return TRUE;
+        }
+        return FALSE;
+    },
+};
+
+constexpr Ability DropBlocks = {
+    .breakable = TRUE,
+};
+
+constexpr Ability LaserDrill = {
+    .breakable = TRUE,
+};
+
+constexpr Ability LightSaber = {
+    .breakable = TRUE,
+};
+
+constexpr Ability LooseThorns = {
+    .breakable = TRUE,
+};
+
+constexpr Ability TurfWar = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Greedy = {
+    .breakable = TRUE,
+};
+
+constexpr Ability MusicalNotes = {
+    .breakable = TRUE,
+};
+
+constexpr Ability Strikeout = {
+    .breakable = TRUE,
+};
+
+constexpr Ability HomeRun = {
+    .breakable = TRUE,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -9814,6 +10007,42 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_SWAMP_THING, SwampThing},
     {ABILITY_FROSTY_PRESCENCE, FrostyPrescence},
     {ABILITY_CHILLING_PELLETS, ChillingPellets},
+    {ABILITY_PAINT_SHOT, PaintShot},
+    {ABILITY_STONECUTTER, Stonecutter},
+    {ABILITY_EDGELORD, Edgelord},
+    {ABILITY_WARMONGER, Warmonger},
+    {ABILITY_LOCUST_SWARM, LocustSwarm},
+    {ABILITY_REVELATION, Revelation},
+    {ABILITY_CURSE_OF_FAMINE, CurseOfFamine},
+    {ABILITY_CRYSTALLINE_ARMOR, CrystallineArmor},
+    {ABILITY_SOUL_HARVEST, SoulHarvest},
+    {ABILITY_THICK_BLUBBER, ThickBlubber},
+    {ABILITY_CRAVING, Craving},
+    {ABILITY_RAT_KING, RatKing},
+    {ABILITY_CRISPY_CREAM, CrispyCream},
+    {ABILITY_DEEP_FRIED, DeepFried},
+    {ABILITY_FOOD_LOVERS, FoodLovers},
+    {ABILITY_LUNAR_WRATH, LunarWrath},
+    {ABILITY_SPYWARE, Spyware},
+    {ABILITY_VIRUS, Virus},
+    {ABILITY_POWER_LEAK, PowerLeak},
+    {ABILITY_BACKUP_POWER, BackupPower},
+    {ABILITY_SAND_FIEND, SandFiend},
+    {ABILITY_MOUSTACHE, Moustache},
+    {ABILITY_DEPTH_EXPLORER, DepthExplorer},
+    {ABILITY_DUNE_VEIL, DuneVeil},
+    {ABILITY_STRONG_FOUNDATION, StrongFoundation},
+    {ABILITY_FOG_MACHINE, FogMachine},
+    {ABILITY_DROP_BLOCKS, DropBlocks},
+    {ABILITY_LASER_DRILL, LaserDrill},
+    {ABILITY_LIGHT_SABER, LightSaber},
+    {ABILITY_LOOSE_THORNS, LooseThorns},
+    {ABILITY_TURF_WAR, TurfWar},
+    {ABILITY_VIRUS, Virus},
+    {ABILITY_GREEDY, Greedy},
+    {ABILITY_MUSICAL_NOTES, MusicalNotes},
+    {ABILITY_STRIKEOUT, Strikeout},
+    {ABILITY_HOME_RUN, HomeRun},
 };
 
 template <int N>
