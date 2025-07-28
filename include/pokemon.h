@@ -569,5 +569,6 @@ void CalculateMonStatsMaster(struct Pokemon *mon, bool8 shouldRestorePP, bool8 i
 
 bool8 CanDisableInnates(void);
 bool8 getInnateDisableLevel(u8 innateNum);
+bool8 isMoveDisabled(u8 battler, u16 move);
 
 #endif  // GUARD_POKEMON_H

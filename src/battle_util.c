@@ -1481,6 +1481,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check) {
         unusableMoves |= 1 << i;
         FILTER_NOT(gBattleMoves[gBattleMons[battlerId].moves[i]].split == SPLIT_STATUS && getMonotypeChampType() == TYPE_FIGHTING &&
                    GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+        FILTER_NOT(isMoveDisabled(battlerId, gBattleMons[battlerId].moves[i]))
         FILTER_NOT(gBattleMons[battlerId].moves[i] == 0 && check & MOVE_LIMITATION_ZEROMOVE)
         if (gBattleMons[battlerId].pp[i] == 0 && check & MOVE_LIMITATION_PP) {
             int effect = gBattleMoves[gBattleMons[battlerId].moves[i]].effect;

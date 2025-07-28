@@ -6328,3 +6328,31 @@ u8 getInnateDisableLevel(u8 innateNum){
     
     return 0;
 }
+
+bool8 isMoveDisabled(u8 battler, u16 move){
+    u16 difficulty    = gSaveBlock2Ptr->gameDifficulty;
+    u16 moveEffect    = gBattleMoves[move].effect;
+    bool8 isPlayerMon = (GetBattlerSide(battler) == B_SIDE_PLAYER);
+
+    if(isPlayerMon){
+        //Player Limitations
+        switch(difficulty){
+            case DIFFICULTY_HELL:
+            {
+                //Evasion Clause enforced on the player’s side (exceptions being moves like Detect or Mind Reader)
+                switch(moveEffect){
+                    //Evasion Up Moves
+                    case EFFECT_EVASION_UP:
+                    case EFFECT_MINIMIZE:
+                    //Accuracy Down Moves
+                    case EFFECT_ACCURACY_DOWN:
+                        return TRUE;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    return FALSE;
+}
