@@ -47,6 +47,7 @@ enum
     MENUITEM_CUSTOM_START_MENU_COLOR,
     MENUITEM_CUSTOM_SHORTCUT_BUTTON,
     MENUITEM_CUSTOM_AUTO_RUN,
+    MENUITEM_CUSTOM_DAMAGE_SLIDER,
     //MENUITEM_CUSTOM_PERMANENT_REPEL,
     MENUITEM_CUSTOM_DISPLAY_DAMAGE,
     MENUITEM_CUSTOM_ASK_FOR_NICKNAME,
@@ -164,6 +165,7 @@ static int ProcessInput_Options_Three(int selection);
 static int ProcessInput_Options_Four(int selection);
 static int ProcessInput_Options_Five(int selection);
 static int ProcessInput_Options_Six(int selection);
+static int ProcessInput_Options_Ten(int selection);
 static int ProcessInput_Options_Eleven(int selection);
 static int ProcessInput_Sound(int selection);
 static int ProcessInput_FrameType(int selection);
@@ -187,6 +189,7 @@ static void DrawChoices_ButtonMode(int selection, int y);
 static void DrawChoices_BattleInterfaceTheme(int selection, int y);
 static void DrawChoices_StartMenuColor(int selection, int y);
 static void DrawChoices_BattleInterfaceShortcut(int selection, int y);
+static void DrawChoices_Damage_Slider(int selection, int y);
 static void DrawChoices_AutoRun(int selection, int y);
 static void DrawChoices_ShinyRate(int selection, int y);
 static void DrawChoices_DoubleBattleMode(int selection, int y);
@@ -245,6 +248,7 @@ static struct // MENU_CUSTOM
     [MENUITEM_CUSTOM_START_MENU_COLOR]    = {DrawChoices_StartMenuColor,           ProcessInput_Options_Five},
     [MENUITEM_CUSTOM_SHORTCUT_BUTTON]     = {DrawChoices_BattleInterfaceShortcut,  ProcessInput_Options_Six},
     [MENUITEM_CUSTOM_AUTO_RUN]            = {DrawChoices_AutoRun,                  ProcessInput_Options_Two},
+    [MENUITEM_CUSTOM_DAMAGE_SLIDER]       = {DrawChoices_Damage_Slider,            ProcessInput_Options_Six},
     //[MENUITEM_CUSTOM_PERMANENT_REPEL]   = {DrawChoices_PermanentRepel,           ProcessInput_Options_Two},
     [MENUITEM_CUSTOM_DISPLAY_DAMAGE]      = {DrawChoices_EnableDisableCustom,      ProcessInput_Options_Two},
     [MENUITEM_CUSTOM_ASK_FOR_NICKNAME]    = {DrawChoices_AskForNickname,           ProcessInput_Options_Two},
@@ -284,6 +288,7 @@ static const u8 sText_AutomaticEvo[]     = _("Auto Evolution");
 static const u8 sText_BattleUITheme[]    = _("Battle UI Skin");
 static const u8 sText_StartMenuColor[]   = _("Start Menu Color");
 static const u8 gText_ShortcutButton[]   = _("Shortcut Button");
+static const u8 gText_DamageDonePercent[]   = _("Damage Percent");
 
 //doubleBattleMode
 const u8 gText_Font[]             = _("FONT");  //tx_optionsPlus
@@ -307,6 +312,7 @@ static const u8 *const sOptionMenuItemsNamesCustom[MENUITEM_CUSTOM_COUNT] =
     [MENUITEM_CUSTOM_START_MENU_COLOR]    = sText_StartMenuColor,
     [MENUITEM_CUSTOM_SHORTCUT_BUTTON]     = gText_ShortcutButton,
     [MENUITEM_CUSTOM_AUTO_RUN]            = sText_AutoRun,
+    [MENUITEM_CUSTOM_DAMAGE_SLIDER]       = gText_DamageDonePercent,
     //[MENUITEM_CUSTOM_PERMANENT_REPEL]   = sText_PermanentRepel,
     [MENUITEM_CUSTOM_DISPLAY_DAMAGE]      = sText_DamageDone,
     [MENUITEM_CUSTOM_ASK_FOR_NICKNAME]    = sText_AskForNickname,
@@ -380,6 +386,13 @@ static bool8 CheckConditions(int selection)
         //case MENUITEM_CUSTOM_MATCHCALL:         return TRUE;
         case MENUITEM_CUSTOM_CANCEL:              return TRUE;
         case MENUITEM_CUSTOM_COUNT:               return TRUE;
+        case MENUITEM_CUSTOM_DAMAGE_SLIDER:
+            {
+                if(gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_HELL)
+                    return TRUE;
+                else
+                    return FALSE;
+            }
         }
         break;
     }
@@ -467,12 +480,15 @@ static const u8 sText_Desc_Battle_UI_Themes[]        = _("Choose the Battle UI T
 static const u8 sText_Desc_Start_Menu_Colors[]       = _("Choose the Start Menu Colors.");
 static const u8 sText_Desc_Shortcut_Button[]         = _("Choose the In-Battle Shortcut\nthat you can use with L.");
 
+static const u8 sText_Desc_DamageSlider[]            = _("Globally set damage reduction.");
+
 static const u8 *const sOptionMenuItemDescriptionsCustom[MENUITEM_CUSTOM_COUNT][2] =
 {
     [MENUITEM_CUSTOM_BATTLE_UI_THEME]     = {sText_Desc_Battle_UI_Themes,       sText_Empty},
     [MENUITEM_CUSTOM_START_MENU_COLOR]    = {sText_Desc_Start_Menu_Colors,      sText_Empty},
     [MENUITEM_CUSTOM_SHORTCUT_BUTTON]     = {sText_Desc_Shortcut_Button,        sText_Empty},
     [MENUITEM_CUSTOM_AUTO_RUN]            = {sText_Desc_AutoRun_Off,            sText_Desc_AutoRun_On},
+    [MENUITEM_CUSTOM_DAMAGE_SLIDER]       = {sText_Desc_DamageSlider,           sText_Empty},
     //[MENUITEM_CUSTOM_PERMANENT_REPEL]   = {sText_Desc_Permanent_Repel_Off,    sText_Desc_Permanent_Repel_On},
     [MENUITEM_CUSTOM_DISPLAY_DAMAGE]      = {sText_Desc_Display_Damage_Off,     sText_Desc_Display_Damage_On},
     [MENUITEM_CUSTOM_ASK_FOR_NICKNAME]    = {sText_Desc_Ask_For_Nickname_Off,   sText_Desc_Ask_For_Nickname_On},
@@ -508,12 +524,14 @@ static const u8 *const sOptionMenuItemDescriptionsDisabledMain[MENUITEM_MAIN_COU
 
 // Disabled Custom
 static const u8 sText_Desc_Disabled_BattleHPBar[]   = _("Only active if xyz.");
+static const u8 sText_Desc_Disabled_Damage_Slider[]   = _("Damage Slider is disabled in Hell Mode.");
 static const u8 *const sOptionMenuItemDescriptionsDisabledCustom[MENUITEM_CUSTOM_COUNT] =
 {
     [MENUITEM_CUSTOM_BATTLE_UI_THEME]     = sText_Empty,
     [MENUITEM_CUSTOM_START_MENU_COLOR]    = sText_Empty,
     [MENUITEM_CUSTOM_SHORTCUT_BUTTON]     = sText_Empty,
     [MENUITEM_CUSTOM_AUTO_RUN]            = sText_Empty,
+    [MENUITEM_CUSTOM_DAMAGE_SLIDER]       = sText_Desc_Disabled_Damage_Slider,
     //[MENUITEM_CUSTOM_PERMANENT_REPEL]   = sText_Empty,
     [MENUITEM_CUSTOM_DISPLAY_DAMAGE]      = sText_Empty,
     [MENUITEM_CUSTOM_ASK_FOR_NICKNAME]    = sText_Empty,
@@ -551,9 +569,9 @@ static const u8 *const OptionTextDescription(void)
         return sOptionMenuItemDescriptionsMain[menuItem][selection];
     case MENU_CUSTOM:
         if (!CheckConditions(menuItem))
-            return sOptionMenuItemDescriptionsDisabledMain[menuItem];
+            return sOptionMenuItemDescriptionsDisabledCustom[menuItem];
         selection = sOptions->sel_custom[menuItem];
-        if (menuItem == MENUITEM_CUSTOM_SHINY_RATE || menuItem == MENUITEM_CUSTOM_BATTLE_UI_THEME || menuItem == MENUITEM_CUSTOM_SHORTCUT_BUTTON || menuItem == MENUITEM_CUSTOM_START_MENU_COLOR)
+        if (menuItem == MENUITEM_CUSTOM_SHINY_RATE || menuItem == MENUITEM_CUSTOM_BATTLE_UI_THEME || menuItem == MENUITEM_CUSTOM_SHORTCUT_BUTTON || menuItem == MENUITEM_CUSTOM_START_MENU_COLOR ||  menuItem == MENUITEM_CUSTOM_DAMAGE_SLIDER)
             selection = 0;
         return sOptionMenuItemDescriptionsCustom[menuItem][selection];
     }
@@ -781,6 +799,7 @@ void CB2_InitOptionPlusMenu(void)
         sOptions->sel_custom[MENUITEM_CUSTOM_START_MENU_COLOR]    = gSaveBlock2Ptr->startMenuPaletteNum;
         sOptions->sel_custom[MENUITEM_CUSTOM_SHORTCUT_BUTTON]     = gSaveBlock2Ptr->shortcutButton;
         sOptions->sel_custom[MENUITEM_CUSTOM_AUTO_RUN]            = gSaveBlock2Ptr->autoRun;
+        sOptions->sel_custom[MENUITEM_CUSTOM_DAMAGE_SLIDER]       = gSaveBlock2Ptr->damageSliderValue;
         //sOptions->sel_custom[MENUITEM_CUSTOM_PERMANENT_REPEL]   = gSaveBlock2Ptr->permanentRepel;
         sOptions->sel_custom[MENUITEM_CUSTOM_DISPLAY_DAMAGE]      = gSaveBlock2Ptr->damageDone;
         sOptions->sel_custom[MENUITEM_CUSTOM_ASK_FOR_NICKNAME]    = gSaveBlock2Ptr->askForNickname;
@@ -986,6 +1005,7 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->startMenuPaletteNum          = sOptions->sel_custom[MENUITEM_CUSTOM_START_MENU_COLOR];
     gSaveBlock2Ptr->shortcutButton               = sOptions->sel_custom[MENUITEM_CUSTOM_SHORTCUT_BUTTON];
     gSaveBlock2Ptr->autoRun                      = sOptions->sel_custom[MENUITEM_CUSTOM_AUTO_RUN];
+    gSaveBlock2Ptr->damageSliderValue            = sOptions->sel_custom[MENUITEM_CUSTOM_DAMAGE_SLIDER];
     //gSaveBlock2Ptr->permanentRepel             = sOptions->sel_custom[MENUITEM_CUSTOM_PERMANENT_REPEL];
     gSaveBlock2Ptr->damageDone                   = sOptions->sel_custom[MENUITEM_CUSTOM_DISPLAY_DAMAGE];
     gSaveBlock2Ptr->askForNickname               = sOptions->sel_custom[MENUITEM_CUSTOM_ASK_FOR_NICKNAME];
@@ -1129,6 +1149,11 @@ static int ProcessInput_Options_Five(int selection)
 static int ProcessInput_Options_Six(int selection)
 {
     return XOptions_ProcessInput(6, selection);
+}
+
+static int ProcessInput_Options_Ten(int selection)
+{
+    return XOptions_ProcessInput(10, selection);
 }
 
 static int ProcessInput_Options_Eleven(int selection)
@@ -1446,6 +1471,37 @@ static void DrawChoices_AutoRun(int selection, int y)
 
     DrawOptionMenuChoice(gText_AutoRunDisabled, 104, y, styles[0], active);
     DrawOptionMenuChoice(gText_AutoRunEnabled, GetStringRightAlignXOffset(1, gText_AutoRunEnabled, 198), y, styles[1], active);
+}
+
+const u8 gText_DamageSliderValue_Default[]   = _("Default");
+const u8 gText_DamageSliderValue_90[]        = _("90%");
+const u8 gText_DamageSliderValue_80[]        = _("80%");
+const u8 gText_DamageSliderValue_70[]        = _("70%");
+const u8 gText_DamageSliderValue_60[]        = _("60%");
+const u8 gText_DamageSliderValue_50[]        = _("50%");
+const u8 gText_DamageSliderValue_40[]        = _("40%");
+const u8 gText_DamageSliderValue_30[]        = _("30%");
+const u8 gText_DamageSliderValue_20[]        = _("20%");
+const u8 gText_DamageSliderValue_10[]        = _("10%");
+
+static const u8 *const sDamageSliderValues[] = {
+    gText_DamageSliderValue_Default, 
+    gText_DamageSliderValue_90, 
+    gText_DamageSliderValue_80, 
+    gText_DamageSliderValue_70, 
+    gText_DamageSliderValue_60, 
+    gText_DamageSliderValue_50,
+    gText_DamageSliderValue_40, 
+    gText_DamageSliderValue_30, 
+    gText_DamageSliderValue_20, 
+    gText_DamageSliderValue_10, 
+};
+
+static void DrawChoices_Damage_Slider(int selection, int y)
+{
+    bool8 active = CheckConditions(MENUITEM_CUSTOM_DAMAGE_SLIDER);
+
+    DrawOptionMenuChoice(sDamageSliderValues[selection], 104, y, 0, active);
 }
 
 const u8 gText_Theme_Name_01[]   = _("Elite Redux Dark");

@@ -245,7 +245,7 @@
 #define VAR_TRACKCOUNT_WINS_HIGH             0x40DF // variable separated in two, high part
 #define VAR_TRACKCOUNT_WINS_LOW              0x40E0 // variable separated in two, low part
 #define VAR_BATTLE_SPEED                     0x40E1 // New Var
-#define VAR_NEVER_READ_0x40E2                0x40E2 // Var is written to, but never read
+#define VAR_DAMAGE_SLIDER_VALUE              0x40E2 // New Var
 #define VAR_NEVER_READ_0x40E3                0x40E3 // Var is written to, but never read
 #define VAR_NEVER_READ_0x40E4                0x40E4 // var is written to, but never read
 #define VAR_BATTLE_CONTROLLER_MOVE_WINDOW    0x40E5

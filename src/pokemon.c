@@ -6356,3 +6356,28 @@ bool8 isMoveDisabled(u8 battler, u16 move){
 
     return FALSE;
 }
+
+u16 GetHeldItemIfNotDuplicate(u8 partyId){
+    u8 i;
+    u16 heldItem = GetMonData(&gPlayerParty[partyId], MON_DATA_HELD_ITEM);
+
+    if(heldItem == ITEM_NONE || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_HELL)
+        return heldItem;
+
+    for(i = 0; i < PARTY_SIZE; i++){
+        u16 species   = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
+        u16 heldItem2 = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
+
+        //The first Pokémon holding the held item can keep it
+        if(i == partyId)
+            return heldItem;
+
+        if(species != SPECIES_NONE && heldItem2 == heldItem){
+            heldItem = ITEM_NONE;
+            SetMonData(&gPlayerParty[partyId], MON_DATA_HELD_ITEM, &heldItem);
+            return heldItem;
+        }
+    }
+    
+    return heldItem;
+}

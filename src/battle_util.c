@@ -7389,6 +7389,7 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
     u32 percentBoost;
     u32 defSide = GET_BATTLER_SIDE(battlerDef);
     u16 finalModifier = UQ_4_12(1.0);
+    u8 sliderValue = gSaveBlock2Ptr->damageSliderValue;
     u16 ignored;
 
     // check multiple targets in double battle
@@ -7417,6 +7418,43 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
 
         //Global-wide damage reduction (-25% applies to you and the opponent)
         dmg = ApplyModifier(UQ_4_12(0.75), dmg);
+
+        sliderValue = DAMAGE_SLIDER_VALUE_DEFAULT;
+    }
+
+    //This way it can be set in scripts when needed
+    if(VarGet(VAR_DAMAGE_SLIDER_VALUE) != DAMAGE_SLIDER_VALUE_DEFAULT)
+        sliderValue = VarGet(VAR_DAMAGE_SLIDER_VALUE);
+
+    //Damage Slider
+    switch(sliderValue){
+        case DAMAGE_SLIDER_VALUE_10_PERCENT: //10%
+            dmg = ApplyModifier(UQ_4_12(0.1), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_20_PERCENT: //20%
+            dmg = ApplyModifier(UQ_4_12(0.2), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_30_PERCENT: //30%
+            dmg = ApplyModifier(UQ_4_12(0.3), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_40_PERCENT: //40%
+            dmg = ApplyModifier(UQ_4_12(0.4), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_50_PERCENT: //50%
+            dmg = ApplyModifier(UQ_4_12(0.5), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_60_PERCENT: //60%
+            dmg = ApplyModifier(UQ_4_12(0.6), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_70_PERCENT: //70%
+            dmg = ApplyModifier(UQ_4_12(0.7), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_80_PERCENT: //80%
+            dmg = ApplyModifier(UQ_4_12(0.8), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_90_PERCENT: //90%
+            dmg = ApplyModifier(UQ_4_12(0.9), dmg);
+        break;
     }
 
 #define CHECK_WEATHER_DOUBLE_BOOST(boost, drop) (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WEATHER_DOUBLE_BOOST) ? UQ_4_12(boost) : UQ_4_12(drop))
