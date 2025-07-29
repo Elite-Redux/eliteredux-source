@@ -1412,6 +1412,28 @@ u8 TrySetCantSelectMoveBattleScript(void) {
         }
     }
 
+    //Evasion Clause
+    if(IsEvasionClauseDisablingMove(gActiveBattler, move)) {
+        gCurrentMove = move;
+        if (gBattleTypeFlags & BATTLE_TYPE_PALACE) {
+            gRoundStructs[gActiveBattler].palaceUnableToUseMove = 1;
+        } else {
+            gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingEvasionClauseNotAllowed;
+            limitations++;
+        }
+    }
+
+    //Disabled because of the disable system
+    if(isMoveDisabled(gActiveBattler, move)) {
+        gCurrentMove = move;
+        if (gBattleTypeFlags & BATTLE_TYPE_PALACE) {
+            gRoundStructs[gActiveBattler].palaceUnableToUseMove = 1;
+        } else {
+            gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingDisabledNotAllowed;
+            limitations++;
+        }
+    }
+
     gPotentialItemEffectBattler = gActiveBattler;
     if (HOLD_EFFECT_CHOICE(holdEffect) && *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != move) {
         gCurrentMove = *choicedMove;
@@ -1469,19 +1491,20 @@ u8 TrySetCantSelectMoveBattleScript(void) {
     return limitations;
 }
 
+//Seems unused?
 u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check) {
     u8 holdEffect = GetBattlerHoldEffect(battlerId, TRUE);
     u16 *choicedMove = &gBattleStruct->choicedMove[battlerId];
     s32 i;
 
     gPotentialItemEffectBattler = battlerId;
+    MGBA_PRINT_DEBUG("CheckMoveLimitations: %d", holdEffect)
 
     for (i = 0; i < MAX_MON_MOVES; i++) {
         FILTER_NOT(unusableMoves & (1 << i))
         unusableMoves |= 1 << i;
         FILTER_NOT(gBattleMoves[gBattleMons[battlerId].moves[i]].split == SPLIT_STATUS && getMonotypeChampType() == TYPE_FIGHTING &&
                    GetBattlerSide(battlerId) == B_SIDE_PLAYER)
-        FILTER_NOT(isMoveDisabled(battlerId, gBattleMons[battlerId].moves[i]))
         FILTER_NOT(gBattleMons[battlerId].moves[i] == 0 && check & MOVE_LIMITATION_ZEROMOVE)
         if (gBattleMons[battlerId].pp[i] == 0 && check & MOVE_LIMITATION_PP) {
             int effect = gBattleMoves[gBattleMons[battlerId].moves[i]].effect;
@@ -1510,7 +1533,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check) {
         FILTER_NOT(IsSleepClauseDisablingMove(battlerId, gBattleMons[battlerId].moves[i]))
         FILTER_NOT((BATTLER_HAS_ABILITY(battlerId, ABILITY_GORILLA_TACTICS) || BATTLER_HAS_ABILITY(battlerId, ABILITY_SAGE_POWER)) && *choicedMove != 0 &&
                    *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
-
+        FILTER_NOT(isMoveDisabled(battlerId, gBattleMons[battlerId].moves[i]))
         unusableMoves ^= 1 << i;
     }
     return unusableMoves;
@@ -4729,6 +4752,29 @@ bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag) {
     }
 
     ON_ABILITY(battlerId, FALSE, gAbilities[ability].allowTerrainIfAirborne == type, return TRUE)
+
+    return FALSE;
+}
+
+bool8 IsEvasionClauseDisablingMove(u8 battlerId, MoveEnum move) {
+    MoveBehaviorEnum moveEffect = gBattleMoves[move].effect;
+    bool8 isPlayerMon = (GetBattlerSide(battlerId) == B_SIDE_PLAYER);
+
+    if (gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_HELL || !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))  // Evasion Clause is only enabled for hell mode
+        return FALSE;
+
+    if(isPlayerMon){
+        //Evasion Clause enforced on the player’s side (exceptions being moves like Detect or Mind Reader)
+        switch(moveEffect){
+            //Evasion Up Moves
+            case EFFECT_EVASION_UP:
+            case EFFECT_MINIMIZE:
+            //Accuracy Down Moves - not sure if needed
+            //case EFFECT_ACCURACY_DOWN:
+                return TRUE;
+            break;
+        }
+    }
 
     return FALSE;
 }

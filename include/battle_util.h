@@ -454,4 +454,6 @@ s32 DoMoveDamageCalcBattleMenu(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8* 
 // Monotype funcs
 bool8 IsBattlerCursed(u8 battler);
 void MakePlayerTeamAsleep(void);
+
+bool8 IsEvasionClauseDisablingMove(u8 battlerId, MoveEnum move);
 #endif  // GUARD_BATTLE_UTIL_H

@@ -8579,6 +8579,14 @@ BattleScript_SelectingSleepClauseNotAllowed::
 	printselectionstring STRINGID_SLEEPCLAUSEDISABLESMOVE
 	endselectionscript
 
+BattleScript_SelectingEvasionClauseNotAllowed::
+	printselectionstring STRINGID_EVASIONCLAUSEDISABLESMOVE
+	endselectionscript
+
+BattleScript_SelectingDisabledNotAllowed::
+	printselectionstring STRINGID_DISABLESMOVE
+	endselectionscript
+
 BattleScript_SelectingNotAllowedBelch::
 	printselectionstring STRINGID_BELCHCANTSELECT
 	endselectionscript

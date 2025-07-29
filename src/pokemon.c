@@ -6330,7 +6330,7 @@ u8 getInnateDisableLevel(u8 innateNum){
 }
 
 bool8 isMoveDisabled(u8 battler, u16 move){
-    u16 difficulty    = gSaveBlock2Ptr->gameDifficulty;
+    /*u16 difficulty    = gSaveBlock2Ptr->gameDifficulty;
     u16 moveEffect    = gBattleMoves[move].effect;
     bool8 isPlayerMon = (GetBattlerSide(battler) == B_SIDE_PLAYER);
 
@@ -6352,7 +6352,7 @@ bool8 isMoveDisabled(u8 battler, u16 move){
             }
             break;
         }
-    }
+    }*/
 
     return FALSE;
 }
