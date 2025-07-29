@@ -10038,7 +10038,6 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_LIGHT_SABER, LightSaber},
     {ABILITY_LOOSE_THORNS, LooseThorns},
     {ABILITY_TURF_WAR, TurfWar},
-    {ABILITY_VIRUS, Virus},
     {ABILITY_GREEDY, Greedy},
     {ABILITY_MUSICAL_NOTES, MusicalNotes},
     {ABILITY_STRIKEOUT, Strikeout},
