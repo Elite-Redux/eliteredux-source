@@ -818,6 +818,13 @@ static void FindLinkBattleMaster(u8 numPlayers, u8 multiPlayerId) {
     }
 }
 
+static void TryToRemoveDuplicateItemsBeforeBattle(void){
+    u8 i;
+
+    for(i = 0; i < PARTY_SIZE; i++)
+        GetHeldItemIfNotDuplicate(i);
+}
+
 static void CB2_HandleStartBattle(void) {
     u8 playerMultiplayerId;
     u8 enemyMultiplayerId;
@@ -830,6 +837,8 @@ static void CB2_HandleStartBattle(void) {
     gBattleScripting.multiplayerId = playerMultiplayerId;
     enemyMultiplayerId = playerMultiplayerId ^ BIT_SIDE;
     if (!FlagGet(FLAG_SYS_DISABLE_AUTOHEAL)) HealPlayerParty();
+
+    TryToRemoveDuplicateItemsBeforeBattle();
 
     switch (gBattleCommunication[MULTIUSE_STATE]) {
         case 0:

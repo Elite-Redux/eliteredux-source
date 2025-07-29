@@ -259,7 +259,7 @@ script SkyPillar_Outside_Text_Gauntlet{
 		}
 	}
 	else { // When the player doesn't have the badge yet
-		msgbox(format("Thy worth is not proven. Vanquish the Twins of Mossdeep, and then, seeker, return to this sacred place."), MSGBOX_NPC)
+		msgbox(format("Thy worth is not proven. Defeat Winona, and then, seeker, return to us once more."), MSGBOX_NPC)
 	}
 	release
 	end	

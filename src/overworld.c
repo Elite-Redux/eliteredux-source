@@ -370,9 +370,10 @@ void DoWhiteOut(void)
     u8 numWhiteOuts = 0 + VarGet(VAR_TIMES_WHITED_OUT);
     ScriptContext2_RunNewScript(EventScript_WhiteOut);
     numWhiteOuts++;
-    VarSet(VAR_TIMES_WHITED_OUT, numWhiteOuts);
+    VarSet(VAR_TIMES_WHITED_OUT, DAMAGE_SLIDER_VALUE_DEFAULT);
     HealPlayerParty();
     VarSet(VAR_POKE_VIAL_CHARGES, VarGet(VAR_POKE_VIAL_MAX_CHARGES));
+    VarSet(VAR_DAMAGE_SLIDER_VALUE, VarGet(VAR_POKE_VIAL_MAX_CHARGES));
     Overworld_ResetStateAfterWhiteOut();
     SetWarpDestinationToLastHealLocation();
     WarpIntoMap();

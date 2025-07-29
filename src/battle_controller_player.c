@@ -3469,7 +3469,7 @@ static u32 CopyPlayerMonData(u8 monId, u8 *dst) {
     switch (gBattleResources->bufferA[gActiveBattler][1]) {
         case REQUEST_ALL_BATTLE:
             battleMon.species = GetMonData(&gPlayerParty[monId], MON_DATA_SPECIES);
-            battleMon.item = GetMonData(&gPlayerParty[monId], MON_DATA_HELD_ITEM);
+            battleMon.item = GetHeldItemIfNotDuplicate(monId);
             for (size = 0; size < MAX_MON_MOVES; size++) {
                 battleMon.moves[size] = GetMonData(&gPlayerParty[monId], MON_DATA_MOVE1 + size);
                 battleMon.pp[size] = GetMonData(&gPlayerParty[monId], MON_DATA_PP1 + size);

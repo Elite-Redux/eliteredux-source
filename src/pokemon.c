@@ -6328,3 +6328,56 @@ u8 getInnateDisableLevel(u8 innateNum){
     
     return 0;
 }
+
+bool8 isMoveDisabled(u8 battler, u16 move){
+    /*u16 difficulty    = gSaveBlock2Ptr->gameDifficulty;
+    u16 moveEffect    = gBattleMoves[move].effect;
+    bool8 isPlayerMon = (GetBattlerSide(battler) == B_SIDE_PLAYER);
+
+    if(isPlayerMon){
+        //Player Limitations
+        switch(difficulty){
+            case DIFFICULTY_HELL:
+            {
+                //Evasion Clause enforced on the player’s side (exceptions being moves like Detect or Mind Reader)
+                switch(moveEffect){
+                    //Evasion Up Moves
+                    case EFFECT_EVASION_UP:
+                    case EFFECT_MINIMIZE:
+                    //Accuracy Down Moves
+                    case EFFECT_ACCURACY_DOWN:
+                        return TRUE;
+                    break;
+                }
+            }
+            break;
+        }
+    }*/
+
+    return FALSE;
+}
+
+u16 GetHeldItemIfNotDuplicate(u8 partyId){
+    u8 i;
+    u16 heldItem = GetMonData(&gPlayerParty[partyId], MON_DATA_HELD_ITEM);
+
+    if(heldItem == ITEM_NONE || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_HELL)
+        return heldItem;
+
+    for(i = 0; i < PARTY_SIZE; i++){
+        u16 species   = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
+        u16 heldItem2 = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
+
+        //The first Pokémon holding the held item can keep it
+        if(i == partyId)
+            return heldItem;
+
+        if(species != SPECIES_NONE && heldItem2 == heldItem){
+            heldItem = ITEM_NONE;
+            SetMonData(&gPlayerParty[partyId], MON_DATA_HELD_ITEM, &heldItem);
+            return heldItem;
+        }
+    }
+    
+    return heldItem;
+}

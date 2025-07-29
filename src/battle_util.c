@@ -1412,6 +1412,28 @@ u8 TrySetCantSelectMoveBattleScript(void) {
         }
     }
 
+    //Evasion Clause
+    if(IsEvasionClauseDisablingMove(gActiveBattler, move)) {
+        gCurrentMove = move;
+        if (gBattleTypeFlags & BATTLE_TYPE_PALACE) {
+            gRoundStructs[gActiveBattler].palaceUnableToUseMove = 1;
+        } else {
+            gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingEvasionClauseNotAllowed;
+            limitations++;
+        }
+    }
+
+    //Disabled because of the disable system
+    if(isMoveDisabled(gActiveBattler, move)) {
+        gCurrentMove = move;
+        if (gBattleTypeFlags & BATTLE_TYPE_PALACE) {
+            gRoundStructs[gActiveBattler].palaceUnableToUseMove = 1;
+        } else {
+            gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingDisabledNotAllowed;
+            limitations++;
+        }
+    }
+
     gPotentialItemEffectBattler = gActiveBattler;
     if (HOLD_EFFECT_CHOICE(holdEffect) && *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != move) {
         gCurrentMove = *choicedMove;
@@ -1469,12 +1491,14 @@ u8 TrySetCantSelectMoveBattleScript(void) {
     return limitations;
 }
 
+//Seems unused?
 u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check) {
     u8 holdEffect = GetBattlerHoldEffect(battlerId, TRUE);
     u16 *choicedMove = &gBattleStruct->choicedMove[battlerId];
     s32 i;
 
     gPotentialItemEffectBattler = battlerId;
+    MGBA_PRINT_DEBUG("CheckMoveLimitations: %d", holdEffect)
 
     for (i = 0; i < MAX_MON_MOVES; i++) {
         FILTER_NOT(unusableMoves & (1 << i))
@@ -1509,7 +1533,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check) {
         FILTER_NOT(IsSleepClauseDisablingMove(battlerId, gBattleMons[battlerId].moves[i]))
         FILTER_NOT((BATTLER_HAS_ABILITY(battlerId, ABILITY_GORILLA_TACTICS) || BATTLER_HAS_ABILITY(battlerId, ABILITY_SAGE_POWER)) && *choicedMove != 0 &&
                    *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
-
+        FILTER_NOT(isMoveDisabled(battlerId, gBattleMons[battlerId].moves[i]))
         unusableMoves ^= 1 << i;
     }
     return unusableMoves;
@@ -4732,6 +4756,29 @@ bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag) {
     return FALSE;
 }
 
+bool8 IsEvasionClauseDisablingMove(u8 battlerId, MoveEnum move) {
+    MoveBehaviorEnum moveEffect = gBattleMoves[move].effect;
+    bool8 isPlayerMon = (GetBattlerSide(battlerId) == B_SIDE_PLAYER);
+
+    if (gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_HELL || !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))  // Evasion Clause is only enabled for hell mode
+        return FALSE;
+
+    if(isPlayerMon){
+        //Evasion Clause enforced on the player’s side (exceptions being moves like Detect or Mind Reader)
+        switch(moveEffect){
+            //Evasion Up Moves
+            case EFFECT_EVASION_UP:
+            case EFFECT_MINIMIZE:
+            //Accuracy Down Moves - not sure if needed
+            //case EFFECT_ACCURACY_DOWN:
+                return TRUE;
+            break;
+        }
+    }
+
+    return FALSE;
+}
+
 bool8 IsSleepDisabled(u8 battlerId) {
     // Sleep Clause
     struct Pokemon *party;
@@ -7342,6 +7389,7 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
     u32 percentBoost;
     u32 defSide = GET_BATTLER_SIDE(battlerDef);
     u16 finalModifier = UQ_4_12(1.0);
+    u8 sliderValue = gSaveBlock2Ptr->damageSliderValue;
     u16 ignored;
 
     // check multiple targets in double battle
@@ -7370,6 +7418,43 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
 
         //Global-wide damage reduction (-25% applies to you and the opponent)
         dmg = ApplyModifier(UQ_4_12(0.75), dmg);
+
+        sliderValue = DAMAGE_SLIDER_VALUE_DEFAULT;
+    }
+
+    //This way it can be set in scripts when needed
+    if(VarGet(VAR_DAMAGE_SLIDER_VALUE) != DAMAGE_SLIDER_VALUE_DEFAULT)
+        sliderValue = VarGet(VAR_DAMAGE_SLIDER_VALUE);
+
+    //Damage Slider
+    switch(sliderValue){
+        case DAMAGE_SLIDER_VALUE_10_PERCENT: //10%
+            dmg = ApplyModifier(UQ_4_12(0.1), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_20_PERCENT: //20%
+            dmg = ApplyModifier(UQ_4_12(0.2), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_30_PERCENT: //30%
+            dmg = ApplyModifier(UQ_4_12(0.3), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_40_PERCENT: //40%
+            dmg = ApplyModifier(UQ_4_12(0.4), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_50_PERCENT: //50%
+            dmg = ApplyModifier(UQ_4_12(0.5), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_60_PERCENT: //60%
+            dmg = ApplyModifier(UQ_4_12(0.6), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_70_PERCENT: //70%
+            dmg = ApplyModifier(UQ_4_12(0.7), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_80_PERCENT: //80%
+            dmg = ApplyModifier(UQ_4_12(0.8), dmg);
+        break;
+        case DAMAGE_SLIDER_VALUE_90_PERCENT: //90%
+            dmg = ApplyModifier(UQ_4_12(0.9), dmg);
+        break;
     }
 
 #define CHECK_WEATHER_DOUBLE_BOOST(boost, drop) (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WEATHER_DOUBLE_BOOST) ? UQ_4_12(boost) : UQ_4_12(drop))
