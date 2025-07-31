@@ -113,8 +113,7 @@ object TrainerPartyGenerator : Generator {
                             .also { addIfNot(it > -1) { "Mon $species does not have ability $ability, partyHash: ${party.hashCode().toUInt()}" } }
 
                         if (abilityIndex >= 0) {
-                            writer.appendLine()
-                            "$IND$IND.ability = $abilityIndex, // $ability".trimMargin()
+                            writer.appendLine("$IND$IND.ability = $abilityIndex, // $ability".trimMargin())
                         }
 
                         writer.appendLine(
