@@ -21,6 +21,10 @@ struct MusicPlayerInfo gMPlayInfo_SE2;
 struct MusicPlayerInfo gMPlayInfo_SE3;
 u8 gMPlayMemAccArea[0x10];
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
+#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+
 u32 MidiKeyToFreq(struct WaveData *wav, u8 key, u8 fineAdjust)
 {
     u32 val1;
@@ -67,9 +71,6 @@ void MPlayFadeOut(struct MusicPlayerInfo *mplayInfo, u16 speed)
         mplayInfo->ident = ID_NUMBER;
     }
 }
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
 
 void m4aSoundInit(void)
 {
@@ -202,8 +203,6 @@ void m4aMPlayAllContinue(void)
     for (i = 0; i < MAX_POKEMON_CRIES; i++)
         MPlayContinue(&gPokemonCryMusicPlayers[i]);
 }
-
-#pragma GCC diagnostic pop
 
 void m4aMPlayFadeOut(struct MusicPlayerInfo *mplayInfo, u16 speed)
 {
@@ -1498,7 +1497,7 @@ void ply_memacc(struct MusicPlayerInfo *mplayInfo, struct MusicPlayerTrack *trac
 cond_true:
     {
         // *& is required for matching
-        (*&gMPlayJumpTable[1])(mplayInfo, track);
+        ((MPlayFunc2) *&gMPlayJumpTable[1])(mplayInfo, track);
         return;
     }
 
@@ -1516,7 +1515,7 @@ void ply_xcmd(struct MusicPlayerInfo *mplayInfo, struct MusicPlayerTrack *track)
 
 void ply_xxx(struct MusicPlayerInfo *mplayInfo, struct MusicPlayerTrack *track)
 {
-    gMPlayJumpTable[0](mplayInfo, track);
+    ((MPlayFunc2)gMPlayJumpTable[0])(mplayInfo, track);
 }
 
 #define READ_XCMD_BYTE(var, n)       \
@@ -1753,3 +1752,5 @@ void SetPokemonCryPriority(u8 val)
 {
     gPokemonCrySong.priority = val;
 }
+
+#pragma GCC diagnostic pop
