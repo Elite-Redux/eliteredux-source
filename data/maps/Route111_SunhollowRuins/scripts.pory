@@ -21,7 +21,7 @@ script Route111_SunhollowRuins_EventScript_PlayerFound{
         case 10: msgbox(format("Have we met somewhere...? Eh, not important. Go on, scoot."), MSGBOX_AUTOCLOSE)
     }
     waitmessage
-    warp(MAP_ROUTE111_SUNHOLLOW_RUINS, 0xFF, 51, 49)
+    warp(MAP_ROUTE111_SUNHOLLOW_RUINS, 0xFF, 50, 43)
     release
     end
 }
