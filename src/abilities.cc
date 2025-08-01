@@ -9162,6 +9162,14 @@ constexpr Ability HomeRun = {
     .breakable = TRUE,
 };
 
+constexpr Ability Bruiser = {
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIGHTING); },
+};
+
+constexpr Ability LetsDance = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TEETER_DANCE, 0); },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10042,6 +10050,8 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_MUSICAL_NOTES, MusicalNotes},
     {ABILITY_STRIKEOUT, Strikeout},
     {ABILITY_HOME_RUN, HomeRun},
+    {ABILITY_BRUISER, Bruiser},
+    {ABILITY_LETS_DANCE, LetsDance},
 };
 
 template <int N>

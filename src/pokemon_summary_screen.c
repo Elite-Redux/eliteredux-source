@@ -1556,7 +1556,7 @@ static void Task_HandleInput(u8 taskId)
                         shouldChangeMon = FALSE;
                     }
                 break;
-                case PSS_PAGE_BATTLE_MOVES:
+                case PSS_PAGE_SKILLS:
                     if(sMonSummaryScreen->ModifyMode){
                         //Ev Changes
                         if (sMonSummaryScreen->sCurrentModifyIndex != 0)
@@ -1594,7 +1594,7 @@ static void Task_HandleInput(u8 taskId)
                         shouldChangeMon = FALSE;
                     }
                 break;
-                case PSS_PAGE_BATTLE_MOVES:
+                case PSS_PAGE_SKILLS:
                     //Ev Changes
                     if(sMonSummaryScreen->ModifyMode){
                         if (sMonSummaryScreen->sCurrentModifyIndex != 5)
