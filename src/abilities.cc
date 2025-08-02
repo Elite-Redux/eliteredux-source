@@ -9098,13 +9098,17 @@ constexpr Ability CrystallineArmor = {
 };
 
 constexpr Ability SoulHarvest = {
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != STAT_SPEED) *stat = *stat * (20 + min(5, gFaintedMonCount[GetBattlerSide(battler)])) / 20;
+        },
     .breakable = TRUE,
 };
 
 constexpr Ability ThickBlubber = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.75);
+            if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.25);
         },
     .onStat =
         +[](ON_STAT) {
@@ -9117,7 +9121,15 @@ constexpr Ability Craving = {
 };
 
 constexpr Ability RatKing = {
-    .breakable = TRUE,
+    .onStat =
+        +[](ON_STAT) {
+            const BaseStats *baseStats = &gBaseStats[gBattleMons[battler].species];
+            int bst =
+                baseStats->baseHP + baseStats->baseAttack + baseStats->baseDefense + baseStats->baseSpAttack + baseStats->baseSpDefense + baseStats->baseSpeed;
+            if (bst >= 400) return;
+            *stat *= 1.5;
+        },
+    .onStatFor = APPLY_ON_ALLY,
 };
 
 constexpr Ability CrispyCream = {
