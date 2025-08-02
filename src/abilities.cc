@@ -9033,8 +9033,8 @@ constexpr Ability PaintShot = {
 };
 
 constexpr Ability Stonecutter = {
-    .onOffensiveMultiplier = Stonecutter.onOffensiveMultiplier,
-    .onDefensiveMultiplier = Stonecutter.onOffensiveMultiplier,
+    .onOffensiveMultiplier = Fossilized.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Fossilized.onDefensiveMultiplier,
     .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
         gHitMarker |= HITMARKER_MOLD_BREAKER;
         SetTypeBeforeUsingMove(move, gActiveBattler);
@@ -9047,7 +9047,7 @@ constexpr Ability Stonecutter = {
         gHitMarker &= ~HITMARKER_MOLD_BREAKER;
         return moveType == TYPE_ROCK;
     },
-    .breakable = Stonecutter.breakable,
+    .breakable = TRUE,
 };
 
 constexpr Ability Edgelord = {
@@ -9133,13 +9133,7 @@ constexpr Ability RatKing = {
 };
 
 constexpr Ability CrispyCream = {
-    .onDefender = +[](ON_DEFENDER) -> int {
-        if (Random() % 2) {
-            FlameBody.onDefender(DELEGATE_DEFENDER);
-        } else {
-            FreezingPoint.onDefender(DELEGATE_DEFENDER);
-        }
-    },
+    .onDefender = +[](ON_DEFENDER) -> int { return Random() % 2 ? FlameBody.onDefender(DELEGATE_DEFENDER) : FreezingPoint.onDefender(DELEGATE_DEFENDER); },
 };
 
 constexpr Ability DeepFried = {
@@ -9170,15 +9164,13 @@ constexpr Ability Spyware = {
     .breakable = TRUE,
 };
 
-constexpr Ability Virus = {
-    .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(moveType == TYPE_ELECTRIC)
-        CHECK(CanBePoisoned(battler, target, move))
+constexpr Ability Virus = {.onAttacker = +[](ON_ATTACKER) -> int {
+    CHECK(ShouldApplyOnHitAffect(target))
+    CHECK(moveType == TYPE_ELECTRIC)
+    CHECK(CanBePoisoned(battler, target, move))
 
-        return AbilityStatusEffect(MOVE_EFFECT_POISON);
-    }
-};
+    return AbilityStatusEffect(MOVE_EFFECT_POISON);
+}};
 
 constexpr Ability PowerLeak = {
     .onDefender = +[](ON_DEFENDER) -> int {

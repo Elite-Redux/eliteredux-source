@@ -1164,7 +1164,6 @@ BattleScript_CurseOfFamine_Continue:
 	jumpifstatus BS_ATTACKER, STATUS1_BLEED, BattleScript_End3
 	jumpifhealingblocked BS_ATTACKER, BattleScript_End3
 	call BattleScript_HealHpOver4
-BattleScript_End3::
 	end3
 BattleScript_CurseOfFamine_SpDef:
 	setstatchanger STAT_SPDEF, 1, FALSE

@@ -956,7 +956,7 @@ bool8 PartyIsMaxLevel(void) {
 int ShouldSetMoldBreaker(int battler, MoveEnum move) {
     if (gBattleMoves[move].flags & FLAG_TARGET_ABILITY_IGNORED) return TRUE;
     if (getMonotypeChampType() == TYPE_STEEL && GetBattlerSide(battler) != B_SIDE_PLAYER) return TRUE;
-    ON_ABILITY(battler, gAbilities[ability].onMoldBreaker, FALSE, if (gAbilities[ability].onMoldBreaker(battler, move)) return TRUE)
+    ON_ABILITY(battler, FALSE, gAbilities[ability].onMoldBreaker, if (gAbilities[ability].onMoldBreaker(battler, move)) return TRUE)
     return FALSE;
 }
 
@@ -8097,7 +8097,7 @@ static void Cmd_various(void) {
             return;
         case VARIOUS_SET_DYNAMIC_TYPE:
             gBattleStruct->dynamicMoveType = 0x80 | READ_8_INC;
-            if (gBattleStruct->dynamicMoveType & (~0x80) == TYPE_MYSTERY) SetTypeBeforeUsingMove(gCurrentMove, gActiveBattler);
+            if ((gBattleStruct->dynamicMoveType & ~0x80) == TYPE_MYSTERY) SetTypeBeforeUsingMove(gCurrentMove, gActiveBattler);
             return;
         case VARIOUS_GOTO_ACTUAL_MOVE:
             gBattlescriptCurrInstr = gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect];
