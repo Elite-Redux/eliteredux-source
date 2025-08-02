@@ -6444,7 +6444,7 @@ constexpr Ability Lawnmower = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
-        BattleScriptPushCursorAndCallback(BattleScript_Lawnmower);
+        BattleScriptPushCursorAndCallback(BattleScript_CurseOfFamine);
         return TRUE;
     },
 };
@@ -8918,7 +8918,7 @@ constexpr Ability WinterThrone = {
                 FILTER_NOT(BATTLER_MAX_HP(target))
                 FILTER(CanBattlerHeal(target))
                 gStackBattler1 = target;
-                BattleScriptExecute(BattleScript_ToxicWasteHeal);
+                BattleScriptExecute(BattleScript_HealStack1HpOver8End3);
             }
 
             any = TRUE;
