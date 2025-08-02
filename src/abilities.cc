@@ -8987,7 +8987,13 @@ constexpr Ability SludgeSpit = {
 };
 
 constexpr Ability SwampThing = {
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideTimers[GetOppositeSide(battler)].swampTimer)
+
+        AbilityStatusEffectSafe(MOVE_EFFECT_SWAMP, battler, GetOppositeSide(battler));
+        InsertCorrectEndType(ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+        return TRUE;
+    },
 };
 
 constexpr Ability FrostyPrescence = {
@@ -9005,7 +9011,19 @@ constexpr Ability ChillingPellets = {
 };
 
 constexpr Ability PaintShot = {
-    .breakable = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK_NOT(IS_BATTLER_OF_TYPE(target, moveType))
+        CHECK(IsMegaLauncherBoosted(battler, move))
+
+        gBattleMons[target].type1 = moveType;
+        gBattleMons[target].type2 = moveType;
+        gBattleMons[target].type3 = TYPE_MYSTERY;
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
+        gStackBattler1 = target;
+        BattleScriptCall(BattleScript_StackBecameTheTypeFull);
+        return TRUE;
+    },
 };
 
 constexpr Ability Stonecutter = {
