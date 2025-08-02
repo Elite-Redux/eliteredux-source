@@ -126,6 +126,8 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_PREEMPT_ACTION battler, ability, turnBattler
 #define ON_MODIFY_MOVE_FLAGS int battler, MoveEnum move, MoveFlag flag
 #define DELEGATE_MODIFY_MOVE_FLAGS battler, move, flag
+#define ON_MOLD_BREAKER int battler, MoveEnum move
+#define DELEGATE_MOLD_BREAKER battler, move, moveType
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -1321,6 +1323,7 @@ constexpr Ability LeafGuard = {
 
 constexpr Ability MoldBreaker = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER); },
+    .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int { return TRUE; },
 };
 
 constexpr Ability SuperLuck = {
@@ -1883,10 +1886,12 @@ constexpr Ability VictoryStar = {
 
 constexpr Ability Turboblaze = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIRE); },
+    .onMoldBreaker = MoldBreaker.onMoldBreaker,
 };
 
 constexpr Ability Teravolt = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ELECTRIC); },
+    .onMoldBreaker = MoldBreaker.onMoldBreaker,
 };
 
 constexpr Ability AromaVeil = {
@@ -7332,6 +7337,7 @@ constexpr Ability Patchwork = {
 constexpr Ability BlindRage = {
     .onEntry = MoldBreaker.onEntry,
     .onTypeEffectiveness = Scrappy.onTypeEffectiveness,
+    .onMoldBreaker = MoldBreaker.onMoldBreaker,
     .tauntImmune = TRUE,
 };
 
@@ -9027,7 +9033,21 @@ constexpr Ability PaintShot = {
 };
 
 constexpr Ability Stonecutter = {
-    .breakable = TRUE,
+    .onOffensiveMultiplier = Stonecutter.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Stonecutter.onOffensiveMultiplier,
+    .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
+        gHitMarker |= HITMARKER_MOLD_BREAKER;
+        SetTypeBeforeUsingMove(move, gActiveBattler);
+        u8 moveType;
+        GET_MOVE_TYPE(move, moveType)
+        if (gBattleMoves[move].type2) {
+            u16 typeEffectiveness;
+            CalculateMoveDamageAndEffectiveness(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, &typeEffectiveness);
+        }
+        gHitMarker &= ~HITMARKER_MOLD_BREAKER;
+        return moveType == TYPE_ROCK;
+    },
+    .breakable = Stonecutter.breakable,
 };
 
 constexpr Ability Edgelord = {
@@ -9221,6 +9241,23 @@ constexpr Ability Bruiser = {
 
 constexpr Ability LetsDance = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TEETER_DANCE, 0); },
+};
+
+constexpr Ability MyceliumMight = {
+    .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int { return IS_MOVE_STATUS(move); },
+};
+
+constexpr Ability DeadlyPrecision = {
+    .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
+        gHitMarker |= HITMARKER_MOLD_BREAKER;
+        SetTypeBeforeUsingMove(move, gActiveBattler);
+        u8 moveType;
+        GET_MOVE_TYPE(move, moveType)
+        u16 typeEffectiveness;
+        CalculateMoveDamageAndEffectiveness(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, &typeEffectiveness);
+        gHitMarker &= ~HITMARKER_MOLD_BREAKER;
+        return typeEffectiveness >= UQ_4_12(2.0);
+    },
 };
 
 typedef struct AbilityKVPair {
@@ -10105,6 +10142,8 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_HOME_RUN, HomeRun},
     {ABILITY_BRUISER, Bruiser},
     {ABILITY_LETS_DANCE, LetsDance},
+    {ABILITY_MYCELIUM_MIGHT, MyceliumMight},
+    {ABILITY_DEADLY_PRECISION, DeadlyPrecision},
 };
 
 template <int N>
@@ -10159,6 +10198,7 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(onBeforeAttack),
             __OVERWRITE_ARRAY_VAL(onPreemptAction),
             __OVERWRITE_ARRAY_VAL(onModifyMoveFlags),
+            __OVERWRITE_ARRAY_VAL(onMoldBreaker),
             __OVERWRITE_ARRAY_VAL(onImmuneFor),
             __OVERWRITE_ARRAY_VAL(onBattlerFaintsFor),
             __OVERWRITE_ARRAY_VAL(onOffensiveMultiplierFor),
