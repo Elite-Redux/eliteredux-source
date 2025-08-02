@@ -9053,10 +9053,11 @@ constexpr Ability Stonecutter = {
 constexpr Ability Edgelord = {
     .onEntry = Cutthroat.onEntry,
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        CHECK(gBattleMoves[gCurrentMove].flags & FLAG_KEEN_EDGE_BOOST || !(gStatuses4[battler] & STATUS4_CUTTHROAT))
+        CHECK_NOT(gStatuses4[battler] & STATUS4_CUTTHROAT)
+
         gStatuses4[battler] |= STATUS4_CUTTHROAT;
-        SetAbilityState(battler, ability, TRUE);
-        BattleScriptCall(BattleScript_BattlerCoiledUpReturnNoPopup);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CUTTHROAT;
+        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsgRet);
         return TRUE;
     },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
@@ -9070,11 +9071,17 @@ constexpr Ability Warmonger = {
 };
 
 constexpr Ability LocustSwarm = {
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onEndTurn = +[](ON_END_TURN) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability Revelation = {
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onEndTurn = +[](ON_END_TURN) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability CurseOfFamine = {
