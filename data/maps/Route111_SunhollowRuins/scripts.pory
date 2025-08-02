@@ -1,2 +1,27 @@
 mapscripts Route111_SunhollowRuins_MapScripts {
+    
+}
+
+script Route111_SunhollowRuins_EventScript_PlayerFound{
+    lock
+	applymovement (OBJ_EVENT_ID_PLAYER, Common_Movement_ExclamationMark)
+	waitmovement (0)
+    random (10)
+    switch (var(VAR_RESULT)) {
+        case 0: msgbox(format("Intruder! Get out of here, we're busy."), MSGBOX_AUTOCLOSE)
+        case 1: msgbox(format("You don't need to be here, it's dangerous. Run along, kiddo."), MSGBOX_AUTOCLOSE)
+        case 2: msgbox(format("Alright, let's get you back in the tent- Wait, you're an intruder! OUT!"), MSGBOX_AUTOCLOSE)
+        case 3: msgbox(format("Team Aqua can't even fund uniforms now? Go on, get gone!"), MSGBOX_AUTOCLOSE)
+        case 4: msgbox(format("Look, I can't be bothered fighting you. Just... go away. Don't make me."), MSGBOX_AUTOCLOSE)
+        case 5: msgbox(format("AHHH! An intruder! Outoutoutoutout GET OUT OF HERE!"), MSGBOX_AUTOCLOSE)
+        case 6: msgbox(format("Can't believe kid trainers are allowed Go-Goggles... Run home, it's unsafe."), MSGBOX_AUTOCLOSE)
+        case 7: msgbox(format("RUN, RUN, IT'S- Wait, you're not Norman! Don't scare me like that, brat!"), MSGBOX_AUTOCLOSE)
+        case 8: msgbox(format("Must be hallucinating... Get lost, mirage child, I'm watching for intruders."), MSGBOX_AUTOCLOSE)
+        case 9: msgbox(format("Right before shift rotation? You messed up your timing."), MSGBOX_AUTOCLOSE)
+        case 10: msgbox(format("Have we met somewhere...? Eh, not important. Go on, scoot."), MSGBOX_AUTOCLOSE)
+    }
+    waitmessage
+    warp(MAP_ROUTE111_SUNHOLLOW_RUINS, 0xFF, 50, 43)
+    release
+    end
 }
