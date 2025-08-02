@@ -9133,15 +9133,28 @@ constexpr Ability RatKing = {
 };
 
 constexpr Ability CrispyCream = {
-    .onDefender = FlameBody.onDefender,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        if (Random() % 2) {
+            FlameBody.onDefender(DELEGATE_DEFENDER);
+        } else {
+            FreezingPoint.onDefender(DELEGATE_DEFENDER);
+        }
+    },
 };
 
 constexpr Ability DeepFried = {
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideTimers[GetOppositeSide(battler)].fireSeaTimer)
+
+        AbilityStatusEffectSafe(MOVE_EFFECT_FIRE_SEA, battler, GetOppositeSide(battler));
+        InsertCorrectEndType(ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+        return TRUE;
+    },
 };
 
 constexpr Ability FoodLovers = {
     .onEntry = Hospitality.onEntry,
+    .breakable = TRUE,
 };
 
 constexpr Ability LunarWrath = {
@@ -9158,7 +9171,13 @@ constexpr Ability Spyware = {
 };
 
 constexpr Ability Virus = {
-    .breakable = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(moveType == TYPE_ELECTRIC)
+        CHECK(CanBePoisoned(battler, target, move))
+
+        return AbilityStatusEffect(MOVE_EFFECT_POISON);
+    }
 };
 
 constexpr Ability PowerLeak = {
@@ -9166,7 +9185,8 @@ constexpr Ability PowerLeak = {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
 
-        BattleScriptCall(BattleScript_SeedSower);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESELECTRIC;
+        BattleScriptCall(BattleScript_SurgeActivatesRet);
         return TRUE;
     },
     .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
@@ -9216,7 +9236,7 @@ constexpr Ability FogMachine = {
         }
         else if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
             gBattleScripting.battler = battler;
-            BattleScriptCall(BattleScript_SandSpitActivates);
+            BattleScriptCall(BattleScript_FogStartsReturn);
             return TRUE;
         }
         return FALSE;

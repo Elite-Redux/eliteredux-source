@@ -10328,6 +10328,14 @@ BattleScript_DroughtActivates::
 	call BattleScript_OnWeatherChange
 	end3
 
+BattleScript_FogStartsReturn::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_FOG_STARTS
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_FOG_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
+	return
+
 BattleScript_BadOmensActivates::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_FOG_STARTS

@@ -173,6 +173,7 @@ extern const u8 BattleScript_ShedSkinActivates[];
 extern const u8 BattleScript_CastformChange[];
 extern const u8 BattleScript_DroughtActivates[];
 extern const u8 BattleScript_BadOmensActivates[];
+extern const u8 BattleScript_FogStartsReturn[];
 extern const u8 BattleScript_TookAttack[];
 extern const u8 BattleScript_SturdyPreventsOHKO[];
 extern const u8 BattleScript_DampStopsExplosion[];

@@ -7538,7 +7538,8 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
 
     // target's ally's abilities
     if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_FRIEND_GUARD, TRUE)) MulModifier(&finalModifier, UQ_4_12(0.5));
-    if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_CARETAKER, TRUE)) MulModifier(&finalModifier, UQ_4_12(0.5));  // was 0.75
+    if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_CARETAKER, TRUE)) MulModifier(&finalModifier, UQ_4_12(0.5));
+    if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_FOOD_LOVERS, TRUE)) MulModifier(&finalModifier, UQ_4_12(0.5));
 
     // attacker's hold effect
     switch (GetBattlerHoldEffect(battlerAtk, TRUE)) {
