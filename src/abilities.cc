@@ -347,36 +347,36 @@ int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS) {
 }
 
 static int UseTurnAttackAsPursuit(ON_PREEMPT_ACTION) {
-        CHECK(gCurrentActionFuncId == B_ACTION_SWITCH)
-        CHECK(gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] == B_ACTION_USE_MOVE)
+    CHECK(gCurrentActionFuncId == B_ACTION_SWITCH)
+    CHECK(gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] == B_ACTION_USE_MOVE)
 
-        MoveEnum move = GetChosenMove(battler);
-        int targetFlag = GetBattlerBattleMoveTargetFlags(move, battler);
+    MoveEnum move = GetChosenMove(battler);
+    int targetFlag = GetBattlerBattleMoveTargetFlags(move, battler);
 
-        switch (targetFlag) {
-            case MOVE_TARGET_SELECTED:
-                CHECK(gBattleStruct->moveTarget[battler] == turnBattler)
-                break;
+    switch (targetFlag) {
+        case MOVE_TARGET_SELECTED:
+            CHECK(gBattleStruct->moveTarget[battler] == turnBattler)
+            break;
 
-            case MOVE_TARGET_BOTH:
-            case MOVE_TARGET_FOES_AND_ALLY:
-                break;
+        case MOVE_TARGET_BOTH:
+        case MOVE_TARGET_FOES_AND_ALLY:
+            break;
 
-            case MOVE_TARGET_RANDOM:
-            default:
-                return FALSE;
-        }
-
-        gQueuedExtraAttackData[++gQueuedAttackCount] = (ExtraAttackActionStruct){
-            .ability = ability,
-            .move = move,
-            .attacker = battler,
-            .target = turnBattler,
-            .movePos = gBattleStruct->chosenMovePositions[battler],
-        };
-        gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] = B_ACTION_FINISHED;
-        return TRUE;
+        case MOVE_TARGET_RANDOM:
+        default:
+            return FALSE;
     }
+
+    gQueuedExtraAttackData[++gQueuedAttackCount] = (ExtraAttackActionStruct){
+        .ability = ability,
+        .move = move,
+        .attacker = battler,
+        .target = turnBattler,
+        .movePos = gBattleStruct->chosenMovePositions[battler],
+    };
+    gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] = B_ACTION_FINISHED;
+    return TRUE;
+}
 
 #define CONTEXT None
 constexpr Ability None = {
@@ -8874,6 +8874,14 @@ constexpr Ability FireAspect = {
         CHECK(moveType == TYPE_FIRE)
         return ABSORB_RESULT_HEAL;
     },
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(moveType == TYPE_FIRE)
+        CHECK(CanBeBurned(target))
+
+        AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, target);
+        return TRUE;
+    },
     .breakable = TRUE,
 };
 
@@ -8888,7 +8896,29 @@ constexpr Ability AurorasGale = {
 };
 
 constexpr Ability WinterThrone = {
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_WINTER_THRONE); },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(IsAbilityOnField(ability) - 1 == battler)
+
+        int any = FALSE;
+        for (int target = 0; target < gBattlersCount; target++) {
+            FILTER(IsBattlerAlive(target))
+
+            if (IS_BATTLER_OF_TYPE(target, TYPE_ICE)) {
+                FILTER_NOT(IsMagicGuardProtected(target))
+                gStackBattler1 = target;
+                BattleScriptExecute(BattleScript_FuneralPyreDamage);
+            } else {
+                FILTER_NOT(BATTLER_MAX_HP(target))
+                FILTER(CanBattlerHeal(target))
+                gStackBattler1 = target;
+                BattleScriptExecute(BattleScript_ToxicWasteHeal);
+            }
+
+            any = TRUE;
+        }
+        return any;
+    },
 };
 
 constexpr Ability IcePlumes = {
@@ -8948,7 +8978,12 @@ constexpr Ability Taekkyeon = {
 };
 
 constexpr Ability SludgeSpit = {
-    .breakable = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(gBattleMoves[move].power)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_VENOM_BOLT, 35);
+    },
 };
 
 constexpr Ability SwampThing = {

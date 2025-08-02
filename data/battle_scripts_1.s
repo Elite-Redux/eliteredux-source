@@ -9064,6 +9064,14 @@ BattleScript_FuneralPyreDamage::
 	chosenstatus2animation BS_ATTACKER, STATUS2_CURSED
 	goto BattleScript_DoTurnDmg
 
+BattleScript_WinterThroneDamage::
+	hpfractiontodamage BS_STACK_1, 8
+	copybyte gBattlerAttacker, gStackBattler1
+	printstring STRINGID_PKMNHURTBYWINTERTHRONE
+	waitmessage B_WAIT_TIME_LONG
+	chosenstatus2animation BS_ATTACKER, STATUS2_CURSED
+	goto BattleScript_DoTurnDmg
+
 BattleScript_FireCoatDamage::
 	hpfractiontodamage BS_STACK_1, 8
 	copybyte gBattlerAttacker, gStackBattler1
