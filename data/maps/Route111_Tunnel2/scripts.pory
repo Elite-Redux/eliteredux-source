@@ -1,2 +1,10 @@
 mapscripts Route111_Tunnel2_MapScripts {
 }
+
+script Route111_Tunnel2_EventScript_PyramidSageNPC {
+    lock
+    faceplayer
+    msgbox(format("I know some things."))
+    release
+    end
+}

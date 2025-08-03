@@ -53,8 +53,16 @@ typedef enum {
     PARENTAL_BOND_ICE_COLD_HUNTER,
 } MultihitType;
 typedef MultihitType (*AbilityOnParentalBondHandler)(int battler, MoveEnum move, int moveType);
-typedef void (*AbilityOnOffensiveMultiplierHandler)(
-    int battler, AbilityEnum ability, int target, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistance, u16* modifier);
+typedef void (*AbilityOnOffensiveMultiplierHandler)(int battler,
+                                                    AbilityEnum ability,
+                                                    int target,
+                                                    MoveEnum move,
+                                                    int moveType,
+                                                    int basePower,
+                                                    int typeEffectivenessMultiplier,
+                                                    int isCrit,
+                                                    u16* resistance,
+                                                    u16* modifier);
 typedef void (*AbilityOnDefensiveMultiplierHandler)(
     int battler, int attacker, MoveEnum move, int moveType, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier);
 typedef enum NonStackingState {
@@ -114,6 +122,7 @@ typedef enum MoveFlag {
     MOVE_FLAG_DANCE,
 } MoveFlag;
 typedef int (*AbilityOnModifyMoveFlags)(int battler, MoveEnum move, MoveFlag flag);
+typedef int (*AbilityOnMoldBreaker)(int battler, MoveEnum move);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -185,6 +194,7 @@ typedef struct Ability {
     AbilityOnBeforeAttack onBeforeAttack;
     AbilityOnPreemptAction onPreemptAction;
     AbilityOnModifyMoveFlags onModifyMoveFlags;
+    AbilityOnMoldBreaker onMoldBreaker;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;

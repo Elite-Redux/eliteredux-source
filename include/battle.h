@@ -767,7 +767,7 @@ struct BattleStruct
 
 #define GET_MOVE_TYPE(move, typeArg)                        \
 {                                                           \
-    if (gBattleStruct->dynamicMoveType)                     \
+    if (gBattleStruct->dynamicMoveType & 0x80)              \
         typeArg = gBattleStruct->dynamicMoveType & 0x3F;    \
     else                                                    \
         typeArg = gBattleMoves[move].type;                  \
