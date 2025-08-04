@@ -9207,7 +9207,7 @@ constexpr Ability SandFiend = {
 };
 
 constexpr Ability Moustache = {
-    .onDefender = Stamina.onDefender,
+    .onDefender = +[](ON_DEFENDER) -> int { return TanglingHair.onDefender(DELEGATE_DEFENDER) | Stamina.onDefender(DELEGATE_DEFENDER); },
 };
 
 constexpr Ability DepthExplorer = {
@@ -9246,7 +9246,13 @@ constexpr Ability FogMachine = {
 };
 
 constexpr Ability DropBlocks = {
-    .breakable = TRUE,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(gSideTimers[BATTLE_OPPOSITE(battler)].spikesAmount < 3)
+
+        BattleScriptCall(BattleScript_DefenderSetsSpikeLayer_Scrapyard);
+        return TRUE;
+    },
 };
 
 constexpr Ability LaserDrill = {
