@@ -123,6 +123,7 @@ typedef enum MoveFlag {
 } MoveFlag;
 typedef int (*AbilityOnModifyMoveFlags)(int battler, MoveEnum move, MoveFlag flag);
 typedef int (*AbilityOnMoldBreaker)(int battler, MoveEnum move);
+typedef int (*AbilityOnRevive)(int battler);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -195,6 +196,7 @@ typedef struct Ability {
     AbilityOnPreemptAction onPreemptAction;
     AbilityOnModifyMoveFlags onModifyMoveFlags;
     AbilityOnMoldBreaker onMoldBreaker;
+    AbilityOnRevive onRevive;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;

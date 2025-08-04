@@ -818,11 +818,10 @@ static void FindLinkBattleMaster(u8 numPlayers, u8 multiPlayerId) {
     }
 }
 
-static void TryToRemoveDuplicateItemsBeforeBattle(void){
+static void TryToRemoveDuplicateItemsBeforeBattle(void) {
     u8 i;
 
-    for(i = 0; i < PARTY_SIZE; i++)
-        GetHeldItemIfNotDuplicate(i);
+    for (i = 0; i < PARTY_SIZE; i++) GetHeldItemIfNotDuplicate(i);
 }
 
 static void CB2_HandleStartBattle(void) {
@@ -1598,55 +1597,44 @@ void BattleMainCB2(void) {
     u32 speedScale = Rogue_GetBattleSpeedScale(FALSE);
 
     // If we are processing a palette fade we need to temporarily fall back to 1x speed otherwise there is graphical corruption
-    if(PrevPaletteFadeResult() == PALETTE_FADE_STATUS_LOADING)
-        speedScale = 1;
+    if (PrevPaletteFadeResult() == PALETTE_FADE_STATUS_LOADING) speedScale = 1;
 
-    if (gBattleResults.caughtMonSpecies)
-        speedScale = 1;
+    if (gBattleResults.caughtMonSpecies) speedScale = 1;
 
-    if(speedScale <= 1)
-    {
+    if (speedScale <= 1) {
         // Maintain OG order for compat
         AnimateSprites();
         BuildOamBuffer();
         RunTextPrinters();
         UpdatePaletteFade();
         RunTasks();
-    }
-    else
-    {
+    } else {
         u32 s;
         u32 fadeResult;
 
         // Update select entries at higher speed
         // disable speed up during palette fades otherwise we run into issues with blending
         //(e.g. moves that change background like Psychic can get stuck or have their colours overflow)
-        for(s = 1; s < speedScale; ++s)
-        {
+        for (s = 1; s < speedScale; ++s) {
             AnimateSprites();
             RunTextPrinters();
             fadeResult = UpdatePaletteFade();
 
-            if(fadeResult == PALETTE_FADE_STATUS_LOADING)
-            {
+            if (fadeResult == PALETTE_FADE_STATUS_LOADING) {
                 // minimal final update as we've just started a fade
                 BuildOamBuffer();
                 RunTasks();
                 break;
-            }
-            else
-            {
+            } else {
                 RunTasks();
                 VBlankCB_Battle();
 
                 // Call it again to make sure everything is behaving as it should (this is crazy town now)
-                if (gMain.callback1)
-                    gMain.callback1();
+                if (gMain.callback1) gMain.callback1();
             }
         }
 
-        if (fadeResult != PALETTE_FADE_STATUS_LOADING)
-        {
+        if (fadeResult != PALETTE_FADE_STATUS_LOADING) {
             // final update
             AnimateSprites();
             BuildOamBuffer();
@@ -1800,8 +1788,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
             switch (difficultySetting) {
                 case DIFFICULTY_HELL:
                     partyData = gTrainers[trainerNum].partyHell;
-                    if(FlagGet(HELL_MODE_EXTRA_LEVELS_FLAG))
-                        extraLevels = HELL_MODE_EXTRA_LEVELS;
+                    if (FlagGet(HELL_MODE_EXTRA_LEVELS_FLAG)) extraLevels = HELL_MODE_EXTRA_LEVELS;
                     break;
                 case DIFFICULTY_ELITE:
                     partyData = gTrainers[trainerNum].partyInsane;
@@ -1823,8 +1810,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
             level += extraLevels;
 
-            if (level > MAX_LEVEL)
-                level = MAX_LEVEL;
+            if (level > MAX_LEVEL) level = MAX_LEVEL;
 
 #ifdef DEBUG_BUILD
             if (FlagGet(FLAG_DEBUG_GODMODE)) level = 1;
@@ -2664,15 +2650,9 @@ void BeginBattleIntro(void) {
     gBattleMainFunc = DoBattleIntro;
 }
 
-bool32 InBattleChoosingMoves()
-{
-    return gBattleMainFunc == HandleTurnActionSelectionState;
-}
+bool32 InBattleChoosingMoves() { return gBattleMainFunc == HandleTurnActionSelectionState; }
 
-bool32 InBattleRunningActions()
-{
-    return gBattleMainFunc == RunTurnActionsFunctions;
-}
+bool32 InBattleRunningActions() { return gBattleMainFunc == RunTurnActionsFunctions; }
 
 static void BattleMainCB1(void) {
     gBattleMainFunc();
@@ -3677,10 +3657,12 @@ static void HandleTurnActionSelectionState(void) {
                                 ARRAY_COPY(moveInfo.currentPp, gBattleMons[gActiveBattler].pp)
 
                                 for (i = 0; i < MAX_MON_MOVES; i++) {
-                                    if(GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
-                                        moveInfo.maxPp[i] = CalculatePPWithBonusPlayer(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
+                                    if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+                                        moveInfo.maxPp[i] =
+                                            CalculatePPWithBonusPlayer(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
                                     else
-                                        moveInfo.maxPp[i] = CalculatePPWithBonus(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
+                                        moveInfo.maxPp[i] =
+                                            CalculatePPWithBonus(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
                                 }
 
                                 BtlController_EmitChooseMove(0, (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) != 0, FALSE, &moveInfo);
@@ -3699,17 +3681,16 @@ static void HandleTurnActionSelectionState(void) {
                                 return;
                             }
 #endif
-                            if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER_NO_PYRAMID | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_TRAINER)){
-                                //Can't use items in Link Battles or any Trainer battle at all
+                            if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER_NO_PYRAMID | BATTLE_TYPE_EREADER_TRAINER |
+                                                    BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_TRAINER)) {
+                                // Can't use items in Link Battles or any Trainer battle at all
                                 RecordedBattle_ClearBattlerAction(gActiveBattler, 1);
                                 gSelectionBattleScripts[gActiveBattler] = BattleScript_ActionSelectionItemsCantBeUsed;
                                 gBattleCommunication[gActiveBattler] = STATE_SELECTION_SCRIPT;
                                 *(gBattleStruct->selectionScriptFinished + gActiveBattler) = FALSE;
                                 *(gBattleStruct->stateIdAfterSelScript + gActiveBattler) = STATE_BEFORE_ACTION_CHOSEN;
                                 return;
-                            } 
-                            else 
-                            {
+                            } else {
                                 BtlController_EmitChooseItem(0, gBattleStruct->battlerPartyOrders[gActiveBattler]);
                                 MarkBattlerForControllerExec(gActiveBattler);
                             }
@@ -4637,17 +4618,15 @@ static void RunTurnActionsFunctions(void) {
 static void HandleEndTurn_BattleWon(void) {
     gCurrentActionFuncId = 0;
 
-    if (GetSingleUseAbilityCounter(0, ABILITY_RECURRING_NIGHTMARE) == 1) {
-        int damage = gBattleMons[0].maxHP / 4;
-        if (!damage) damage = 1;
-        gBattleMons[0].hp = damage;
-        SetMonData(&gPlayerParty[gBattlerPartyIndexes[0]], MON_DATA_HP, &damage);
-    }
-    if (!(gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER) && GetSingleUseAbilityCounter(2, ABILITY_RECURRING_NIGHTMARE) == 1) {
-        int damage = gBattleMons[2].maxHP / 4;
-        if (!damage) damage = 1;
-        gBattleMons[2].hp = damage;
-        SetMonData(&gPlayerParty[gBattlerPartyIndexes[2]], MON_DATA_HP, &damage);
+    for (int battler = 0; battler < gBattlersCount; battler += 2) {
+        FILTER_NOT(gBattleMons[battler].hp)
+        ON_ABILITY(
+            battler, FALSE, gAbilities[ability].onRevive, if (GetSingleUseAbilityCountByIndex(battler, idx) == 1) {
+                int damage = gBattleMons[battler].maxHP / 4;
+                if (!damage) damage = 1;
+                gBattleMons[battler].hp = damage;
+                SetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_HP, &damage);
+            })
     }
 
     if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK)) {
