@@ -3019,7 +3019,6 @@ static void Cmd_clearstatusfromeffect(void) {
 
 static void Cmd_tryfaintmon(void) {
     const u8* BS_ptr;
-    int recurringNightmare = FALSE;
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
     if (gActiveBattler == gBattlerAttacker && gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ABILITY_VICTORY_BOMB) {
@@ -3027,10 +3026,19 @@ static void Cmd_tryfaintmon(void) {
         return;
     }
 
-    if (BattlerHasAbility(gActiveBattler, ABILITY_RECURRING_NIGHTMARE, TRUE) && !IsBattlerAlive(gActiveBattler) &&
-        !GetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE) && IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY)) {
-        SetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE, 1);
-        recurringNightmare = TRUE;
+    int reviveMsg = FALSE;
+    AbilityEnum reviveAbility = ABILITY_NONE;
+    if (!IsBattlerAlive(gActiveBattler)) {
+        ON_ABILITY(
+            gActiveBattler,
+            FALSE,
+            gAbilities[ability].onRevive && !GetSingleUseAbilityCountByIndex(gActiveBattler, idx),
+            reviveMsg = gAbilities[ability].onRevive(gActiveBattler);
+            if (reviveMsg) {
+                reviveAbility = ability;
+                SetSingleUseAbilityCountByIndex(gActiveBattler, idx, 1);
+                break;
+            })
     }
 
     if (gBattlescriptCurrInstr[2] != 0) {
@@ -3057,9 +3065,9 @@ static void Cmd_tryfaintmon(void) {
 
         SetActiveStackBattler(gActiveBattler, 1);
 
-        if (recurringNightmare) {
-            SetActiveMultistringChooser(B_MSG_FADE_OUT);
-            SetActiveAbilityPopupOverride(ABILITY_RECURRING_NIGHTMARE);
+        if (reviveMsg) {
+            SetActiveMultistringChooser(reviveMsg);
+            SetActiveAbilityPopupOverride(reviveAbility);
         } else
             SetActiveMultistringChooser(B_MSG_MON_FAINTED);
 
@@ -3083,8 +3091,8 @@ static void Cmd_tryfaintmon(void) {
                 BattleScriptCall(BattleScript_DestinyBondTakesLife);
                 gBattleMoveDamage = gBattleMons[battlerId].hp;
                 // Destiny Bond disables recurring nightmare
-                SetSingleUseAbilityCounter(gBattlerAttacker, ABILITY_RECURRING_NIGHTMARE, 2);
-                SetSingleUseAbilityCounter(gBattlerTarget, ABILITY_RECURRING_NIGHTMARE, 2);
+                ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].onRevive, SetSingleUseAbilityCountByIndex(gBattlerAttacker, idx, 2))
+                ON_ABILITY(gBattlerTarget, FALSE, gAbilities[ability].onRevive, SetSingleUseAbilityCountByIndex(gBattlerTarget, idx, 2))
             }
             if ((gStatuses3[gBattlerTarget] & STATUS3_GRUDGE) && !(gHitMarker & HITMARKER_GRUDGE) &&
                 GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget) && gBattleMons[gBattlerAttacker].hp != 0 && gCurrentMove != MOVE_STRUGGLE) {
@@ -8541,13 +8549,15 @@ static void Cmd_various(void) {
         }
             return;
         case VARIOUS_TRY_RECURRING_NIGHTMARE:
-            if (GetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE) == 1) {
-                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
-                if (!gBattleMoveDamage) gBattleMoveDamage = 1;
-                SetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE, 2);
-                BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[gBattleStruct->battlerPartyIndexes[gActiveBattler]], 2, &gBattleMoveDamage);
-                MarkBattlerForControllerExec(gActiveBattler);
-            }
+            ON_ABILITY(gActiveBattler,
+                       FALSE,
+                       gAbilities[ability].onRevive && GetSingleUseAbilityCountByIndex(gActiveBattler, idx) == 1,
+                       gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
+                       if (!gBattleMoveDamage) gBattleMoveDamage = 1;
+                       SetSingleUseAbilityCountByIndex(gActiveBattler, idx, 2);
+                       BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[gBattleStruct->battlerPartyIndexes[gActiveBattler]], 2, &gBattleMoveDamage);
+                       MarkBattlerForControllerExec(gActiveBattler);
+                       break;)
             break;
         case VARIOUS_SET_RANDOM:
             gBattleCommunication[MULTIUSE_STATE] = Random() % READ_8_INC;
