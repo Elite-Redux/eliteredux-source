@@ -3822,7 +3822,7 @@ s8 GetSingleUseAbilityCounter(u8 battler, AbilityEnum ability) {
     return GetSingleUseAbilityCountByIndex(battler, index);
 }
 
-s8 SetSingleUseAbilityCountByIndex(u8 battler, int index, u8 value) {
+void SetSingleUseAbilityCountByIndex(u8 battler, int index, u8 value) {
     gBattleStruct->singleuseability[gBattlerPartyIndexes[battler]][index][GetBattlerSide(battler)] = value;
 }
 
@@ -3830,7 +3830,7 @@ void SetSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value) {
     int index = GetAbilityIndex(battler, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return;
 
-    return SetSingleUseAbilityCountByIndex(battler, index, value);
+    SetSingleUseAbilityCountByIndex(battler, index, value);
 }
 
 void IncrementSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value) {
@@ -4763,7 +4763,7 @@ bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag) {
 
     if (IsBattlerGrounded(battlerId)) return TRUE;
 
-    TerrainType type = TYPE_NONE;
+    TerrainType type = TERRAIN_NONE;
     switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
         case STATUS_FIELD_TOXIC_TERRAIN:
             type = TERRAIN_TOXIC;

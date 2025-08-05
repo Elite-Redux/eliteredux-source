@@ -358,9 +358,9 @@ struct AI_SavedBattleMon
     u16 moves[MAX_MON_MOVES];
     u16 heldItem;
     SpeciesEnum species;    
-    u8 type1;
-    u8 type2;
-    u8 type3;
+    Type type1;
+    Type type2;
+    Type type3;
 };
 
 struct AiLogicData

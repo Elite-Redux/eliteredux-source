@@ -382,7 +382,6 @@ static int UseTurnAttackAsPursuit(ON_PREEMPT_ACTION) {
     return TRUE;
 }
 
-#define CONTEXT None
 constexpr Ability None = {
     .randomizerBanned = TRUE,
 };
