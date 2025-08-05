@@ -128,6 +128,8 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_MODIFY_MOVE_FLAGS battler, move, flag
 #define ON_MOLD_BREAKER int battler, MoveEnum move
 #define DELEGATE_MOLD_BREAKER battler, move, moveType
+#define ON_REVIVE int battler
+#define DELEGATE_REVIVE battler
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -6669,6 +6671,10 @@ constexpr Ability CuteAntecedence = {
 };
 
 constexpr Ability RecurringNightmare = {
+    .onRevive = +[](ON_REVIVE) -> int {
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+        return B_MSG_FADE_OUT;
+    },
     .persistent = TRUE,
 };
 
@@ -9185,6 +9191,10 @@ constexpr Ability PowerLeak = {
 };
 
 constexpr Ability BackupPower = {
+    .onRevive = +[](ON_REVIVE) -> int {
+        CHECK(IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN))
+        return B_MSG_BACKUP_POWER;
+    },
     .persistent = TRUE,
 };
 
@@ -9197,7 +9207,7 @@ constexpr Ability SandFiend = {
 };
 
 constexpr Ability Moustache = {
-    .onDefender = Stamina.onDefender,
+    .onDefender = +[](ON_DEFENDER) -> int { return TanglingHair.onDefender(DELEGATE_DEFENDER) | Stamina.onDefender(DELEGATE_DEFENDER); },
 };
 
 constexpr Ability DepthExplorer = {
@@ -9236,7 +9246,13 @@ constexpr Ability FogMachine = {
 };
 
 constexpr Ability DropBlocks = {
-    .breakable = TRUE,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(gSideTimers[BATTLE_OPPOSITE(battler)].spikesAmount < 3)
+
+        BattleScriptCall(BattleScript_DefenderSetsSpikeLayer_Scrapyard);
+        return TRUE;
+    },
 };
 
 constexpr Ability LaserDrill = {
@@ -10235,6 +10251,7 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(onPreemptAction),
             __OVERWRITE_ARRAY_VAL(onModifyMoveFlags),
             __OVERWRITE_ARRAY_VAL(onMoldBreaker),
+            __OVERWRITE_ARRAY_VAL(onRevive),
             __OVERWRITE_ARRAY_VAL(onImmuneFor),
             __OVERWRITE_ARRAY_VAL(onBattlerFaintsFor),
             __OVERWRITE_ARRAY_VAL(onOffensiveMultiplierFor),

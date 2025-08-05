@@ -414,6 +414,8 @@ AbilityEnum IgnoresBurnAtkDrop(int battler);
 AbilityEnum IgnoresFrostbiteSpatkDrop(int battler);
 int IsStatusImmune(u8 battlerId, StatusCheckEnum status);
 u16 IsPowderImmune(int battler, int checkMoldBreaker);
+s8 GetSingleUseAbilityCountByIndex(u8 battler, int index);
+s8 SetSingleUseAbilityCountByIndex(u8 battler, int index, u8 value);
 
 MultihitType GetMultihitType(int battler, MoveEnum move);
 
