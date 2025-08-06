@@ -250,12 +250,7 @@ typedef struct Ability {
 #undef AbilityApplyOnWithTarget
 #endif
 
-typedef struct AbilitiesWrapper {
-    Ability abilities[ABILITIES_COUNT];
-} AbilitiesWrapper;
-
-extern const AbilitiesWrapper gAbilitiesWrapper;
-#define gAbilities gAbilitiesWrapper.abilities
+extern const Ability* const gAbilities;
 
 int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag);
 int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag);
