@@ -1102,10 +1102,6 @@ constexpr Ability WhiteSmoke = {
     },
 };
 
-constexpr Ability PurePower = {
-    .onStat = FelineProwess.onStat,
-};
-
 constexpr Ability ShellArmor = {
     .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
     .onCrit = BattleArmor.onCrit,
@@ -3312,6 +3308,10 @@ constexpr Ability FelineProwess = {
         +[](ON_STAT) {
             if (statId == STAT_SPATK) *stat *= 2;
         },
+};
+
+constexpr Ability PurePower = {
+    .onStat = FelineProwess.onStat,
 };
 
 constexpr Ability CoilUp = {
