@@ -1,5 +1,9 @@
-
 #include "abilities.hh"
+
+#undef __SIZE_TYPE__
+#define __SIZE_TYPE__ uint32_t
+#include <cstddef>
+#include <array>
 
 extern "C" {
 #include "generated/constants/abilities.h"
@@ -26,6 +30,10 @@ extern "C" {
 #pragma GCC diagnostic error "-Wunused-function"
 
 #define NO_ANNOUNCE 2
+
+static int max(int a, int b) { return a > b ? a : b; }
+
+static int min(int a, int b) { return a < b ? a : b; }
 
 class __EnumHack {
    public:
@@ -1100,10 +1108,6 @@ constexpr Ability WhiteSmoke = {
         gSideTimers[side].smokescreenBattler = battler;
         return SwitchInAnnounce(B_MSG_SWITCHIN_WHITE_SMOKE);
     },
-};
-
-constexpr Ability PurePower = {
-    .onStat = HugePower.onStat,
 };
 
 constexpr Ability ShellArmor = {
@@ -3312,6 +3316,10 @@ constexpr Ability FelineProwess = {
         +[](ON_STAT) {
             if (statId == STAT_SPATK) *stat *= 2;
         },
+};
+
+constexpr Ability PurePower = {
+    .onStat = FelineProwess.onStat,
 };
 
 constexpr Ability CoilUp = {
@@ -10198,18 +10206,19 @@ constexpr AbilityKVPair sAbilities[] = {
 };
 
 template <int N>
-consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKVPair second[N]) {
-    AbilitiesWrapper newWrapper = wrapper;
+consteval std::array<Ability, ABILITIES_COUNT> mergeArrays(const AbilityKVPair second[N],
+                                                           std::array<Ability, ABILITIES_COUNT> wrapper = std::array<Ability, ABILITIES_COUNT>{0}) {
+    std::array<Ability, ABILITIES_COUNT> abilities = wrapper;
     bool assigned[ABILITIES_COUNT] = {0};
     for (int i = 0; i < N; i++) {
         auto val = second[i];
         if (assigned[val.key]) {
-            return (AbilitiesWrapper){0};
+            return std::array<Ability, ABILITIES_COUNT>{0};
         }
         assigned[val.key] = true;
-#define __OVERWRITE_ARRAY_VAL(field) .field = val.ability.field ? val.ability.field : wrapper.abilities[val.key].field
+#define __OVERWRITE_ARRAY_VAL(field) .field = val.ability.field ? val.ability.field : wrapper[val.key].field
 
-        newWrapper.abilities[val.key] = (Ability){
+        abilities[val.key] = (Ability){
             __OVERWRITE_ARRAY_VAL(name),
             __OVERWRITE_ARRAY_VAL(description),
             __OVERWRITE_ARRAY_VAL(expandedDescription),
@@ -10300,12 +10309,12 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(stealthRockImmune),
         };
     }
-    return newWrapper;
+    return abilities;
 }
 
 #include "generated/data/abilities/ability_text.hh"
 
-const AbilitiesWrapper gAbilitiesWrapper =
-    mergeArrays<ARRAY_COUNT(sAbilities)>(mergeArrays<ARRAY_COUNT(sAbilityText)>((AbilitiesWrapper){0}, sAbilityText), sAbilities);
+const static auto abilityData = mergeArrays<ARRAY_COUNT(sAbilities)>(sAbilities, mergeArrays<ARRAY_COUNT(sAbilityText)>(sAbilityText));
+const Ability *const gAbilities = abilityData.data();
 
 #pragma GCC diagnostic pop
