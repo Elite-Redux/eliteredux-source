@@ -297,8 +297,8 @@ class Ability {
     virtual MoveEffectEnum setStateOnEffect() { return MOVE_EFFECT_NONE; }
     virtual TerrainType allowTerrainIfAirborne() { return TERRAIN_NONE; }
     virtual Type redirectType() { return TYPE_NONE; }
-    virtual bool ruinStat() { return false; }
-    virtual bool noDamageHits() { return false; }
+    virtual int ruinStat() { return 0; }
+    virtual int noDamageHits() { return false; }
     virtual bool breakable() { return false; }
     virtual bool unsuppressable() { return false; }
     virtual bool persistent() { return false; }
