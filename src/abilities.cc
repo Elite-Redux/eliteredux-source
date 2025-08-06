@@ -1103,7 +1103,7 @@ constexpr Ability WhiteSmoke = {
 };
 
 constexpr Ability PurePower = {
-    .onStat = HugePower.onStat,
+    .onStat = FelineProwess.onStat,
 };
 
 constexpr Ability ShellArmor = {
