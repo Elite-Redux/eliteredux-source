@@ -3,44 +3,20 @@
 #include "behavior/constants.hh"
 #include "behavior/implementation_interface.hh"
 #include "behavior/ability/constants.hh"
-
-template <typename T>
-class AbilityBehavior {
-   private:
-    constexpr static Implementation impl = T();
+#include "behavior/ability/template.hh"
+#include <array>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic error "-Wunused-function"
 
-    class Breakable : public virtual Ability {
-        virtual breakable() override { return true; }
-    };
-    class RandomizerBanned : public virtual Ability {
-        virtual randomizerBanned() override { return true; }
-    };
-    class Unsuppressable : public virtual Ability {
-        virtual unsuppressable() override { return true; }
-    };
-    class Persistent : public virtual Ability {
-        virtual persistent() override { return true; }
-    };
-    class FormChange : public virtual RandomizerBanned, public virtual Unsuppressable {};
+template <typename T>
+class AbilityBehavior {
+    typedef std::array<const Ability *, ABILITIES_COUNT> AbilityPtrArray;
+    constexpr AbilityPtrArray gAbilities = generate();
 
-    template <typename T, typename U>
-    class Merged : public virtual T, public virtual U {
-        virtual void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
-            T::onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            U::onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-        }
-        virtual int onDefender(ON_DEFENDER) override { return T::onDefender(DELEGATE_DEFENDER) | U::onDefender(DELEGATE_DEFENDER); }
-        virtual int onExit(ON_EXIT) override { return T::onExit(DELEGATE_EXIT) | U::onExit(DELEGATE_EXIT); }
-        void onModifyEffectChance(ON_MODIFY_EFFECT_CHANCE) override {
-            T::onModifyEffectChance(DELEGATE_MODIFY_EFFECT_CHANCE);
-            U::onModifyEffectChance(DELEGATE_MODIFY_EFFECT_CHANCE);
-        }
-        int onEntry(ON_ENTRY) override { return T::onEntry(DELEGATE_ENTRY) | U::onEntry(DELEGATE_ENTRY); }
-        int onAbsorb(ON_ABSORB) override { return T::onAbsorb(DELEGATE_ABSORB) | U::onAbsorb(DELEGATE_ABSORB); }
-    };
+    typedef<typename T> const T *abilityAs(AbilityEnum id) { return dynamic_cast<const T *>(gAbilities[id]); }
+
+    constexpr static Implementation impl = T();
 
 #define NO_ANNOUNCE 2
 
@@ -62,22 +38,13 @@ class AbilityBehavior {
 #define CHECK_NOT(effect) \
     if (effect) return __EnumHack();
 
-    template <Type GaleWingsType>
-    class GaleWingsLike : public virtual Ability {
-        int onPriority(ON_PRIORITY) override {
-            CHECK(GetTypeBeforeUsingMove(move, battler) == GaleWingsType)
-            CHECK(BATTLER_MAX_HP(battler))
-            return 1;
-        }
-    }
 #define MUL(val) MUL_MODIFIER(modifier, val)
 #define RESISTANCE(val)                \
     {                                  \
         MUL_MODIFIER(resistance, val); \
         MUL_MODIFIER(modifier, val);   \
     }
-    static void
-    InsertCorrectEndType(AbilityCallType type) {
+    static void InsertCorrectEndType(AbilityCallType type) {
         switch (type) {
             case ABILITY_BS_EXECUTE:
                 BattleScriptExecute(BattleScript_End2);
@@ -155,15 +122,6 @@ class AbilityBehavior {
         return TRUE;
     }
 
-    static int AddBattlerType(int battler, int type) {
-        CHECK_NOT(IS_BATTLER_OF_TYPE(battler, type))
-
-        gBattleMons[battler].type3 = type;
-        PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
-        BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
-        return TRUE;
-    }
-
     static int AbilityStatusEffect(MoveEffectEnum effect) {
         gBattleScripting.moveEffect = effect;
         BattleScriptCall(BattleScript_AbilityStatusEffect);
@@ -215,26 +173,19 @@ class AbilityBehavior {
         return TRUE;
     }
 
-    static int MoxieClone(int battler, int stat) {
-        CHECK(HasAttackerFaintedTarget())
-        CHECK(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
-        BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
-        return TRUE;
-    }
-
     template <Type BoostType>
-    class AteAbility : public virtual Ability {
-        int onMoveType(ON_MOVE_TYPE) override {
+    class AteAbility : extends OnMoveType, extends OnStab {
+        ON_MOVE_TYPE {
             CHECK(moveType == TYPE_NORMAL)
             *ateBoost = TRUE;
             return BoostType + 1;
         }
-        int onStab(ON_STAB) override { return moveType == AteType; }
+        ON_STAB { return moveType == AteType; }
     };
 
     template <Type BoostType>
-    class SwarmLike : public virtual Ability {
-        int onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class SwarmLike : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (move == BoostType) {
                 if (gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 3))
                     MUL(1.5);
@@ -245,8 +196,8 @@ class AbilityBehavior {
     };
 
     template <int BoostType>
-    class BoostedSwarmLike : public virtual Ability {
-        int onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class BoostedSwarmLike : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (move == BoostType) {
                 if (gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 3))
                     MUL(1.8);
@@ -255,13 +206,6 @@ class AbilityBehavior {
             }
         }
     };
-
-    static void RuinEffect(int ruinStat, int battler, int statId, u32 *stat, NonStackingState *flags) {
-        if (statId != ruinStat) return;
-        if (*flags & NON_STACKING_RUIN) return;
-        ON_ABILITY(battler, FALSE, gAbilities[ability].ruinStat == statId, return) *stat *= .75;
-        *flags = static_cast<NonStackingState>(static_cast<int>(*flags) | static_cast<int>(NON_STACKING_RUIN));
-    }
 
     int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS) {
         switch (flag) {
@@ -322,25 +266,23 @@ class AbilityBehavior {
         return TRUE;
     }
 
-    class None : public virtual RandomizerBanned {};
+    class None : extends RandomizerBanned {};
 
-    class Stench : public virtual Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class ToxicTerrainImmune : extends Ability {};
+    class Stench : extends OnAttacker, extends ToxicTerrainImmune {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanMoveHaveExtraFlinchChance(move))
             CHECK(Random() % 100 < 10)
 
             return AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
         }
-        bool toxicTerrainImmune() override { return true; }
     };
 
-    class PoisonHeal : public virtual Ability {
-        bool toxicTerrainImmune() override { return true; }
-    };
+    class PoisonHeal : extends ToxicTerrainImmune {};
 
-    class Drizzle : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class Drizzle : extends OnEntry {
+        ON_ENTRY {
             if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE)) {
                 BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
                 return TRUE;
@@ -352,8 +294,8 @@ class AbilityBehavior {
         }
     };
 
-    class SpeedBoost : public virtual Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class SpeedBoost : extends OnEndTurn {
+        ON_END_TURN {
             CHECK(gVolatileStructs[battler].isFirstTurn != 2)
             CHECK(ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
 
@@ -363,15 +305,14 @@ class AbilityBehavior {
         }
     };
 
-    class BattleArmor : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override { MUL(.8); }
-        int onCrit override { return NEVER_CRIT; }
-        AbilityApplyOnWithTarget onCritFor() override { return APPLY_ON_TARGET; }
+    class BattleArmor : extends Breakable, extends OnDefensiveMultiplier, extends OnCrit<ApplyOnTarget::TARGET> {
+        ON_DEFENSIVE_MULTIPLIER { MUL(.8); }
+        ON_CRIT { return NEVER_CRIT; }
     };
 
-    class Sturdy : public virtual Breakable {};
+    class Sturdy : extends Breakable {};
 
-    class Damp : public virtual Ability {
+    class Damp : extends OnEither {
         ON_EITHER {
             CHECK(ShouldApplyOnHitAffect(opponent))
             CHECK(IsMoveMakingContact(move, gBattlerAttacker))
@@ -387,28 +328,26 @@ class AbilityBehavior {
         }
     };
 
-    class Limber : public virtual Breakable {
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+    class HalfRecoil : extends Ability {};
+    class RemovesStatusOnImmunity : extends OnStatusImmune<ApplyOn::SELF> {};
+
+    class Limber : extends RemovesStatusOnImmunity, extends HalfRecoil {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_PARALYSIS)
             return TRUE;
         }
-        bool halfRecoil() { return true; }
-        bool removesStatusOnImmunity() { return true; }
     };
 
-    class SandImmune : public virtual Ability {
-        AbilityApplyOnWithTarget sandImmune() override { return true; }
-    };
-    class SandVeil : public virtual Breakable, public virtual SandImmune {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class SandImmune : extends Ability {};
+    class SandVeil : extends Breakable, extends SandImmune, extends OnAccuracy<ApplyOnTarget::TARGET> {
+        ON_ACCURACY {
             CHECK(IsBattlerWeatherAffected(target, WEATHER_SANDSTORM_ANY));
             *accuracy /= 1.25;
             return ACCURACY_MULTIPLICATIVE;
         }
-        AbilityApplyOnWithTarget onAccuracyFor() override { return APPLY_ON_TARGET; }
     };
 
-    class Static : public virtual Ability {
+    class Static : extends OnEither {
         ON_EITHER {
             CHECK(ShouldApplyOnHitAffect(opponent))
             CHECK(CanBeParalyzed(battler, opponent))
@@ -420,53 +359,52 @@ class AbilityBehavior {
         }
     };
 
-    class VoltAbsorb : public virtual Breakable {
-        int onAbsorb(ON_ABSORB) override {
+    class VoltAbsorb : extends OnAbsorb {
+        ON_ABSORB {
             CHECK(moveType == TYPE_ELECTRIC)
             return ABSORB_RESULT_HEAL;
         }
     };
 
-    class WaterAbsorb : public virtual Breakable {
-        int onAbsorb(ON_ABSORB) override {
+    class WaterAbsorb : extends OnAbsorb {
+        ON_ABSORB {
             CHECK(moveType == TYPE_WATER)
             return ABSORB_RESULT_HEAL;
         }
     };
 
-    class Oblivious : public virtual Breakable {
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+    class TauntImmune : extends Breakable;
+
+    class Oblivious : extends RemovesStatusOnImmunity, extends TauntImmune {
+        ON_STATUS_IMMUNE {
             CHECK(status & (CHECK_INFATUATE | CHECK_RESTRICTING))
             return TRUE;
         }
-        bool removesStatusOnImmunity() { return true; }
-        bool tauntImmune() { return true; }
     };
 
-    class CloudNine : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class CloudNine : extends OnEntry {
+        ON_ENTRY {
             BattleScriptPushCursorAndCallback(BattleScript_AnnounceAirLockCloudNine);
             return TRUE;
         }
     };
 
-    class CompoundEyes : public virtual Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class CompoundEyes : extends OnAccuracy<> {
+        ON_ACCURACY {
             *accuracy *= 1.3;
             return ACCURACY_MULTIPLICATIVE;
         }
     };
 
-    class Insomnia : public virtual Breakable {
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+    class Insomnia : extends RemovesStatusOnImmunity {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_SLEEP)
             return TRUE;
         }
-        bool removesStatusOnImmunity() { return true; }
     };
 
-    class ColorChange : public virtual Ability {
-        int onBeforeAttack(ABILITY_ON_BEFORE_ATTACK) override {
+    class ColorChange : extends OnBeforeAttack<ApplyOnTarget::TARGET> {
+        ON_BEFORE_ATTACK {
             CHECK(battler != attacker)
             CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
 
@@ -489,47 +427,42 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_ColorChangeActivates);
             return TRUE;
         }
-        virtual AbilityApplyOnWithTarget onBeforeAttackFor() override { return APPLY_ON_TARGET; }
     };
 
-    class Immunity : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class Immunity : extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_POISON) RESISTANCE(.5);
         }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+        ON_STATUS_IMMUNE {
             CHECK(status & (CHECK_STATUS1 & ~CHECK_SLEEP))
             return TRUE;
         }
-        bool removesStatusOnImmunity() { return true; }
     };
 
-    class FlashFire : public virtual Breakable {
-        int onAbsorb(ON_ABSORB) override {
+    class FlashFire : extends OnAbsorb, extends OnOffensiveMultiplier<> {
+        ON_ABSORB {
             CHECK(moveType == TYPE_FIRE)
             return ABSORB_RESULT_FLASH_FIRE;
         }
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FIRE && gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE) MUL(1.5);
         }
     };
 
-    class ShieldDust : public virtual Breakable {
-        bool powderImmune() { return true; }
-    };
+    class PowderImmune : extends Breakable {};
+    class ShieldDust : extends PowderImmune {};
 
-    class OwnTempo : public virtual Breakable {
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+    class OwnTempo : extends RemovesStatusOnImmunity, extends TauntImmune {
+        ABILITY_ON_STATUS_IMMUNE {
             CHECK(status & CHECK_CONFUSION)
             return TRUE;
         }
-        bool removesStatusOnImmunity() { return true; }
-        bool tauntImmune() { return true; }
     };
 
-    class SuctionCups : public virtual Breakable {};
+    class SuctionCups : extends Breakable {};
 
-    class Intimidate : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class Intimidate : extends OnEntry {
+        ON_ENTRY {
             u8 numAbility;
 
             for (numAbility = 0; numAbility < NUM_INTIMIDATE_CLONES; numAbility++) {
@@ -548,16 +481,15 @@ class AbilityBehavior {
         }
     };
 
-    class ShadowTag : public virtual Ability {
-        int onTrap(ABILITY_ON_TRAP) override {
+    class ShadowTag : extends OnTrap {
+        ABILITY_ON_TRAP {
             ON_ABILITY(switchingBattler, FALSE, gAbilities[ability].shadowTag, return FALSE)
             return TRUE;
         }
-        bool shadowTag() override { return true; }
     };
 
-    class RoughSkin : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class RoughSkin : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK_NOT(IsMagicGuardProtected(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -569,24 +501,21 @@ class AbilityBehavior {
         }
     };
 
-    class WonderGuard : public virtual Breakable, public virtual RandomizerBanned {
-        void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
+    class WonderGuard : extends Breakable, extends RandomizerBanned, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET> {
+        ON_AFTER_TYPE_EFFECTIVENESS {
             if (*mod < UQ_4_12(2.0)) *mod = 0;
         }
-        AbilityApplyOnWithTarget onAfterTypeEffectivenessFor() override { return onAfterTypeEffectivenessFor; }
     };
 
-    class GroundImmune : public virtual Breakable {
-        bool levitate() { return true; }
-    };
-    class Levitate : public virtual GroundImmune {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class GroundImmune : extends Breakable {};
+    class Levitate : extends GroundImmune, extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FLYING) MUL(1.25);
         }
     };
 
-    class EffectSpore : public virtual Breakable {
-        int onDefender(ON_DEFENDER) override {
+    class EffectSpore : extends PowderImmune, extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
             CHECK_NOT(IsPowderImmune(attacker, FALSE))
@@ -613,13 +542,12 @@ class AbilityBehavior {
             }
             return FALSE;
         }
-        bool powderImmune() { return true; }
     };
 
-    class ClearBody : public virtual Breakable {};
+    class ClearBody : extends Breakable {};
 
-    class NaturalCure : public virtual Ability {
-        int onExit(ON_EXIT) override {
+    class NaturalCure : extends OnExit {
+        ON_EXIT {
             CHECK(IsBattlerAlive(battler))
             CHECK(gBattleMons[battler].status1 & STATUS1_ANY)
 
@@ -634,44 +562,39 @@ class AbilityBehavior {
         }
     };
 
-    template <Type Redirect>
-    class Redirects : public virtual Breakable {
-        Type redirectType() { return Redirect; }
-    };
-
-    class LightningRod : public virtual Redirects<TYPE_ELECTRIC> {
-        int onAbsorb(ON_ABSORB) override {
+    class LightningRod : extends Redirects<TYPE_ELECTRIC> {
+        ON_ABSORB {
             CHECK(moveType == TYPE_ELECTRIC);
             *statId = GetHighestAttackingStatId(battler, TRUE);
             return ABSORB_RESULT_STAT;
         }
     };
 
-    class SereneGrace : public virtual Ability {
-        void onModifyEffectChance(ON_MODIFY_EFFECT_CHANCE) override { *effectChance *= 2; }
+    class SereneGrace : extends OnModifyEffectChance<> {
+        ON_MODIFY_EFFECT_CHANCE { *effectChance *= 2; }
     };
 
-    class SwiftSwim : public virtual Ability {
-        void onStat(ON_STAT) override {
+    class SwiftSwim : extends OnStat<> {
+        ON_STAT {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat *= 1.5;
         }
     };
 
-    class Chlorophyll : public virtual Ability {
-        void onStat(ON_STAT) override {
+    class Chlorophyll : extends OnStat<> {
+        ON_STAT {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat *= 1.5;
         }
     };
 
-    class Illuminate : public virtual Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class Illuminate : extends OnAccuracy<> {
+        ON_ACCURACY {
             *accuracy *= 1.2;
             return ACCURACY_MULTIPLICATIVE;
         }
     };
 
-    class Trace : public virtual RandomizerBanned {
-        int onEntry(ON_ENTRY) override {
+    class Trace : extends RandomizerBanned, extends OnEntry {
+        ON_ENTRY {
             int target = BATTLE_OPPOSITE(battler);
             auto newAbility = GetBattlerAbility(target);
             if (!IsBattlerAlive(target) || IsRolePlayBannedAbility(newAbility)) {
@@ -697,13 +620,13 @@ class AbilityBehavior {
         }
     };
 
-    class HugePower : public virtual Ability {
-        void onStat(ON_STAT) override {
+    class HugePower : extends OnStat<> {
+        ON_STAT {
             if (statId == STAT_ATK) *stat *= 2;
         }
     };
 
-    class PoisonPoint : public virtual Ability {
+    class PoisonPoint : extends OnEither {
         ON_EITHER {
             CHECK(ShouldApplyOnHitAffect(opponent))
             CHECK(CanBePoisoned(battler, opponent, MOVE_NONE))
@@ -715,55 +638,51 @@ class AbilityBehavior {
         }
     };
 
-    class InnerFocus : public virtual Breakable {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class InnerFocus : extends TauntImmune, extends OnAccuracy<> {
+        ON_ACCURACY {
             CHECK(move == MOVE_FOCUS_BLAST)
             return ACCURACY_ALWAYS_HITS;
         }
-        bool tauntImmune() { return true; }
     };
 
-    class MagmaArmor : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class MagmaArmor : extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_WATER || moveType == TYPE_ICE) RESISTANCE(.7);
         }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+        ABILITY_ON_STATUS_IMMUNE {
             CHECK(status & CHECK_FROSTBITE)
             return TRUE;
         }
-        bool removesStatusOnImmunity() { return true; }
     };
 
-    class WaterVeil : public virtual Breakable {
-        int onEntry(ON_ENTRY) override {
+    class WaterVeil : extends OnEntry, extends RemovesStatusOnImmunity {
+        ON_ENTRY {
             CHECK_NOT(gStatuses3[battler] & STATUS3_AQUA_RING)
 
             gStatuses3[battler] |= STATUS3_AQUA_RING;
             BattleScriptPushCursorAndCallback(BattleScript_BattlerEnvelopedItselfInAVeil);
             return TRUE;
         }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_BURN)
             return TRUE;
         }
-        bool removesStatusOnImmunity() { return true; }
     };
 
-    class MagnetPull : public virtual Ability {
-        int onTrap(ABILITY_ON_TRAP) override { return IS_BATTLER_OF_TYPE(switchingBattler, TYPE_STEEL); }
+    class MagnetPull : extends OnTrap {
+        ABILITY_ON_TRAP { return IS_BATTLER_OF_TYPE(switchingBattler, TYPE_STEEL); }
     };
 
-    class Soundproof : public virtual Breakable {
-        int onImmune(ON_IMMUNE) override {
+    class Soundproof : extends OnImmune<> {
+        ON_IMMUNE {
             CHECK(IsSoundMove(attacker, move))
             CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
             return TRUE;
         }
-        bool isSoundproof() { return true; }
     };
 
-    class RainDish : public virtual Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class RainDish : extends OnEndTurn {
+        ON_END_TURN {
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
             CHECK(gVolatileStructs[battler].isFirstTurn != 2)
@@ -777,8 +696,8 @@ class AbilityBehavior {
         }
     };
 
-    class SandStream : public virtual SandImmune {
-        int onEntry(ON_ENTRY) override {
+    class SandStream : extends SandImmune, extends OnEntry {
+        ON_ENTRY {
             if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
                 BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
                 return TRUE;
@@ -790,8 +709,8 @@ class AbilityBehavior {
         }
     };
 
-    class Pressure : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class Pressure : extends OnEntry {
+        ON_ENTRY {
             int loweredStats = 0;
             for (int i = 0; i < gBattlersCount; i++) {
                 if (!IsBattlerAlive(i)) continue;
@@ -808,13 +727,13 @@ class AbilityBehavior {
         }
     };
 
-    class ThickFat : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class ThickFat : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.5);
         }
     };
 
-    class FlameBody : public virtual Ability {
+    class FlameBody : extends OnEither {
         ON_EITHER {
             CHECK(ShouldApplyOnHitAffect(opponent))
             CHECK(CanBeBurned(opponent))
@@ -826,22 +745,22 @@ class AbilityBehavior {
         }
     };
 
-    class KeenEye : public virtual Breakable {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class KeenEye : extends OnAccuracy<> {
+        ON_ACCURACY {
             *accuracy *= 1.2;
             return ACCURACY_MULTIPLICATIVE;
         }
     };
 
-    class HyperCutter : public virtual Breakable {
-        int onCrit(ON_CRIT) override {
+    class HyperCutter : extends Breakable, extends OnCrit<> {
+        ON_CRIT {
             CHECK(IsMoveMakingContact(move, battler))
             return 1;
         }
     };
 
-    class Pickup : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class Pickup : extends OnEntry {
+        ON_ENTRY {
             int side = GetBattlerSide(battler);
             CHECK(gSideStatuses[side] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[side].hotCoals || gSideTimers[side].caltrops)
 
@@ -855,8 +774,8 @@ class AbilityBehavior {
         }
     };
 
-    class Truant : public virtual Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class Truant : extends OnEndTurn {
+        ON_END_TURN {
             if (GetAbilityState(battler, ability))
                 SetAbilityState(battler, ability, FALSE);
             else if (gChosenMoveByBattler[battler] && !IS_MOVE_STATUS(gChosenMoveByBattler[battler]))
@@ -865,15 +784,15 @@ class AbilityBehavior {
         }
     };
 
-    class Hustle : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override { MUL(1.4); }
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class Hustle : extends OnAccuracy<>, extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER { MUL(1.4); }
+        ON_ACCURACY {
             CHECK_NOT(IS_MOVE_STATUS(move)) *accuracy *= .9;
             return ACCURACY_MULTIPLICATIVE;
         }
     };
 
-    class CuteCharm : public virtual Ability {
+    class CuteCharm : extends OnEither {
         ON_EITHER {
             CHECK(ShouldApplyOnHitAffect(opponent))
             CHECK(IsMoveMakingContact(move, gBattlerAttacker))
@@ -885,25 +804,26 @@ class AbilityBehavior {
         }
     };
 
-    class Plus : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Plus : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             int partner = BATTLE_PARTNER(battler);
             if (!IsBattlerAlive(partner)) return;
             if (BattlerHasAbility(partner, ABILITY_PLUS, FALSE) || BattlerHasAbility(partner, ABILITY_MINUS, FALSE)) MUL(2.0);
         }
     };
 
-    class Minus : public virtual Plus {};
+    class Minus : extends Plus {};
 
-    class StandardTransformation : public virtual FormChange {
-        int onEntry(ON_ENTRY) override { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-        int onEndTurn(ON_END_TURN) override { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+    class StandardTransformation : extends FormChange, extends OnEntry, extends OnEndTurn {
+        ON_ENTRY { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+        ON_END_TURN { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
     };
-    class WeatherTransformation : public virtual StandardTransformation {
-        int onWeather(ON_WEATHER) override { return TryTransformAttacker(ability, battler, ABILITY_BS_CALL); }
+    class WeatherTransformation : extends StandardTransformation, extends OnWeather {
+        ON_WEATHER { return TryTransformAttacker(ability, battler, ABILITY_BS_CALL); }
     };
-    class Forecast : public virtual WeatherTransformation {
-        int onAttacker(ON_ATTACKER) override {
+
+    class Forecast : extends WeatherTransformation, extends OnAttacker {
+        ON_ATTACKER {
             switch (move) {
                 case MOVE_SUNNY_DAY:
                 case MOVE_RAIN_DANCE:
@@ -921,10 +841,10 @@ class AbilityBehavior {
         }
     };
 
-    class StickyHold : public virtual Breakable {};
+    class StickyHold : extends Breakable {};
 
-    class ShedSkin : public virtual Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class ShedSkin : extends OnEndTurn {
+        ON_END_TURN {
             CHECK(Random() % 100 < 30)
 
             CHECK(AbilityHealMonStatus(battler, ability));
@@ -932,38 +852,37 @@ class AbilityBehavior {
         }
     };
 
-    class Guts : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class NegateBurnAtkDrop : extends Ability {};
+    class Guts : extends OnOffensiveMultiplier<>, extends NegateBurnAtkDrop {
+        ON_OFFENSIVE_MULTIPLIER {
             if (HasAnyStatusOrAbility(battler) && IS_MOVE_PHYSICAL(move)) MUL(1.5);
         }
-        bool negatesBurnAtkDrop() override { return true; }
     };
 
-    class MarvelScale : public virtual Ability {
-        void onStat(ON_STAT) override {
+    class MarvelScale : extends OnStat<> {
+        ON_STAT {
             if ((statId == STAT_DEF || statId == STAT_SPDEF) && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
         }
     };
 
-    class Overgrow : public virtual SwarmLike<TYPE_GRASS> {};
+    class Overgrow : extends SwarmLike<TYPE_GRASS> {};
 
-    class Blaze : public virtual SwarmLike<TYPE_FIRE> {};
+    class Blaze : extends SwarmLike<TYPE_FIRE> {};
 
-    class Torrent : public virtual SwarmLike<TYPE_WATER> {};
+    class Torrent : extends SwarmLike<TYPE_WATER> {};
 
-    class Swarm : public virtual SwarmLike<TYPE_BUG> {};
+    class Swarm : extends SwarmLike<TYPE_BUG> {};
 
-    class RockHead : public virtual Breakable {
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+    class NoRecoil : extends Ability {};
+    class RockHead : extends RemovesStatusOnImmunity, extends NoRecoil {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_CONFUSION)
             return TRUE;
         }
-        bool noRecoil() { return true; }
-        bool removesStatusOnImmunity() { return true; }
     };
 
-    class Drought : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class Drought : extends OnEntry {
+        ON_ENTRY {
             if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE)) {
                 BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
                 return TRUE;
@@ -975,26 +894,24 @@ class AbilityBehavior {
         }
     };
 
-    class ArenaTrap : public virtual Ability {
-        int onTrap(ABILITY_ON_TRAP) override { return IsBattlerGrounded(switchingBattler); }
+    class ArenaTrap : extends OnTrap {
+        ON_TRAP { return IsBattlerGrounded(switchingBattler); }
     };
 
-    class VitalSpirit : public virtual Breakable {
-        int onAttacker(ON_ATTACKER) override {
+    class VitalSpirit : extends OnAttacker, extends RemovesStatusOnImmunity, extends TauntImmune {
+        ON_ATTACKER {
             CHECK(moveType == TYPE_FIGHTING)
             CHECK(AbilityHealMonStatus(battler, ability));
             return TRUE;
         }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_SLEEP)
             return TRUE;
         }
-        bool removesStatusOnImmunity() { return true; }
-        bool tauntImmune() { return true; }
     };
 
-    class WhiteSmoke : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class WhiteSmoke : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gSideTimers[GET_BATTLER_SIDE(battler)].smokescreenTimer)
 
             int side = GET_BATTLER_SIDE(battler);
@@ -1005,36 +922,35 @@ class AbilityBehavior {
         }
     };
 
-    class PurePower : public virtual HugePower {};
+    class PurePower : extends HugePower {};
 
-    class ShellArmor : public virtual BattleArmor {};
+    class ShellArmor : extends BattleArmor {};
 
-    class AirLock : public virtual CloudNine {};
+    class AirLock : extends CloudNine {};
 
-    class TangledFeet : public virtual Breakable {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class TangledFeet : extends OnAccuracy<ApplyOnTarget::TARGET> {
+        ON_ACCURACY {
             CHECK(gBattleMons[target].status2 & STATUS2_CONFUSION);
             *accuracy /= 2;
             return ACCURACY_MULTIPLICATIVE;
         }
-        AbilityApplyOnWithTarget onAccuracyFor() override { return APPLY_ON_TARGET; }
     };
 
-    class MotorDrive : public virtual Breakable {
-        int onAbsorb(ON_ABSORB) override {
+    class MotorDrive : extends OnAbsorb {
+        ON_ABSORB {
             CHECK(moveType == TYPE_ELECTRIC);
             *statId = STAT_SPEED;
             return ABSORB_RESULT_STAT;
         }
     };
 
-    class Rivalry : public virtual Breakable {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Rivalry : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
+        ON_OFFENSIVE_MULTIPLIER {
             int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, gBattleMons[battler].personality);
             if (genderAtk != MON_GENDERLESS && genderAtk == GetGenderFromSpeciesAndPersonality(gBattleMons[target].species, gBattleMons[target].personality))
                 MUL(1.25);
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER {
             int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[attacker].species, gBattleMons[attacker].personality);
             if (genderAtk == MON_MALE)
                 genderAtk = MON_FEMALE;
@@ -1045,19 +961,17 @@ class AbilityBehavior {
         }
     };
 
-    class HailImmune : public virtual Ability {
-        AbilityApplyOnWithTarget hailImmune() override { return true; }
-    } class SnowCloak : public virtual Breakable, public virtual HailImmune {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class HailImmune : extends Ability {};
+    class SnowCloak : extends Breakable, extends HailImmune, extends OnAccuracy<ApplyOnTarget::TARGET> {
+        ON_ACCURACY {
             CHECK(IsBattlerWeatherAffected(target, WEATHER_HAIL_ANY));
             *accuracy /= 1.25;
             return ACCURACY_MULTIPLICATIVE;
         }
-        AbilityApplyOnWithTarget onAccuracyFor() override { return APPLY_ON_TARGET; }
     };
 
-    class AngerPoint : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class AngerPoint : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(CanRaiseStat(battler, STAT_ATK))
 
@@ -1072,21 +986,20 @@ class AbilityBehavior {
         }
     };
 
-    class Unburden : public virtual Ability {
-        void onStat(ON_STAT) override {
+    class Unburden : extends OnStat<> {
+        ON_STAT {
             if (statId == STAT_SPEED && GetAbilityState(battler, ability)) *stat *= 2;
         }
     };
 
-    class Heatproof : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class Heatproof : extends OnDefensiveMultiplier, extends NegateBurnAtkDrop {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FIRE) RESISTANCE(.5);
         }
-        bool negatesBurnAtkDrop() { return true; }
     };
 
-    class DrySkin : public virtual WaterAbsorb, public virtual RainDish {
-        int onEndTurn(ON_END_TURN) override {
+    class DrySkin : extends WaterAbsorb, extends RainDish, extends OnDefensiveMultiplier {
+        ON_END_TURN {
             if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && !IsMagicGuardProtected(battler)) {
                 gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
                 if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
@@ -1096,13 +1009,13 @@ class AbilityBehavior {
 
             return RainDish::onEndTurn(DELEGATE_END_TURN);
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FIRE) RESISTANCE(1.25);
         }
     };
 
-    class Download : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class Download : extends OnEntry {
+        ON_ENTRY {
             gBattlerTarget = BATTLE_OPPOSITE(battler);
             if (!IsBattlerAlive(battler)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
             CHECK(IsBattlerAlive(battler))
@@ -1114,22 +1027,18 @@ class AbilityBehavior {
         }
     };
 
-    class IronFist : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class IronFist : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (IsIronFistBoosted(battler, move)) MUL(1.3);
         }
     };
 
-    class Adaptability : public virtual Ability {
-        bool adaptability() override { return true; }
-    };
+    class Adaptability : extends Ability {};
 
-    class SkillLink : public virtual Ability {
-        bool skillLink() override { return true; }
-    };
+    class SkillLink : extends Ability {};
 
-    class Hydration : public virtual Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class Hydration : extends OnEndTurn {
+        ON_END_TURN {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
             CHECK(AbilityHealMonStatus(battler, ability));
@@ -1137,59 +1046,56 @@ class AbilityBehavior {
         }
     };
 
-    class SolarPower : public virtual Ability {
-        void onStat(ON_STAT) override {
+    class SolarPower : extends OnStat<> {
+        ON_STAT {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
             if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat *= 1.5;
         }
     };
 
-    class QuickFeet : public virtual Ability {
-        void onStat(ON_STAT) override {
+    class QuickFeet : extends OnStat<> {
+        ON_STAT {
             if (statId == STAT_SPEED && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
         }
     };
 
-    class Normalize : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Normalize : extends OnOffensiveMultiplier<>, extends OnMoveType, extends OnTypeEffectiveness<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
         }
-        int onMoveType(ON_MOVE_TYPE) override { return TYPE_NORMAL + 1; }
-        int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
+        ON_MOVE_TYPE { return TYPE_NORMAL + 1; }
+        ON_TYPE_EFFECTIVENESS {
             CHECK(moveType == TYPE_NORMAL) CHECK(*mod) CHECK(*mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
             return TRUE;
         }
     };
 
-    class Sniper : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Sniper : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (isCrit) MUL(1.5);
         }
     };
 
-    class MagicGuard : public virtual Ability {
-        bool magicGuard() override { return true; }
+    class MagicGuard : extends Ability {};
+
+    class NoGuard : extends OnAccuracy<ApplyOnTarget::ATTACKER_OR_TARGET> {
+        ON_ACCURACY { return ACCURACY_ALWAYS_HITS; }
     };
 
-    class NoGuard : public virtual Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override { return ACCURACY_ALWAYS_HITS; }
-        AbilityApplyOnWithTarget onAccuracyFor() override { return APPLY_ON_ATTACKER_OR_TARGET; }
-    };
-
-    class Stall : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class Stall : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (gCurrentTurnActionNumber < GetBattlerTurnOrderNum(battler)) MUL(.7);
         }
     };
 
-    class Technician : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Technician : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (basePower <= 60) MUL(1.5);
         }
     };
 
-    class LeafGuard : public virtual Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class LeafGuard : extends OnEndTurn {
+        ON_END_TURN {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
 
             CHECK(AbilityHealMonStatus(battler, ability));
@@ -1197,17 +1103,17 @@ class AbilityBehavior {
         }
     };
 
-    class MoldBreaker : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER); }
-        int onMoldBreaker(ON_MOLD_BREAKER) override { return TRUE; }
+    class MoldBreaker : extends OnEntry, extends OnMoldBreaker {
+        ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER); }
+        ON_MOLD_BREAKER { return TRUE; }
     };
 
-    class SuperLuck : public virtual Ability {
-        int onCrit(ON_CRIT) override { return 1; }
+    class SuperLuck : extends OnCrit<> {
+        ON_CRIT { return 1; }
     };
 
-    class Aftermath : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Aftermath : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK_NOT(IsBattlerAlive(battler))
             CHECK_NOT(IsMagicGuardProtected(attacker))
@@ -1220,8 +1126,8 @@ class AbilityBehavior {
         }
     };
 
-    class Anticipation : public virtual Breakable {
-        int onEntry(ON_ENTRY) override {
+    class Anticipation : extends Breakable, extends OnEntry, extends Persistent {
+        ON_ENTRY {
             int side = GetBattlerSide(battler);
             int any = FALSE;
 
@@ -1242,11 +1148,10 @@ class AbilityBehavior {
 
             return SwitchInAnnounce(B_MSG_SWITCHIN_ANTICIPATION);
         }
-        bool persistent() { return true; }
     };
 
-    class Forewarn : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class Forewarn : extends OnEntry {
+        ON_ENTRY {
             gBattlerTarget = BATTLE_OPPOSITE(battler);
             if (!IsBattlerAlive(gBattlerTarget) || gWishFutureKnock.futureSightCounter[gBattlerTarget]) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
             CHECK(IsBattlerAlive(gBattlerTarget))
@@ -1263,55 +1168,52 @@ class AbilityBehavior {
         }
     };
 
-    class Unaware : public virtual Breakable {
-        bool unaware() { return true; }
-    };
+    class Unaware : extends Breakable {};
 
-    class TintedLens : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class TintedLens : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (typeEffectivenessMultiplier <= UQ_4_12(.5)) RESISTANCE(2);
         }
     };
 
-    class Filter : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class Filter : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
         }
     };
 
-    class SlowStart : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class SlowStart : extends OnEntry, extends OnStat<> {
+        ON_ENTRY {
             gVolatileStructs[battler].slowStartTimer = 5;
             return SwitchInAnnounce(B_MSG_SWITCHIN_SLOWSTART);
         }
-        void onStat(ON_STAT) override {
+        ON_STAT {
             if (statId != STAT_ATK && statId != STAT_SPATK && statId != STAT_SPEED) return;
             if (gVolatileStructs[battler].slowStartTimer) *stat /= 2;
         }
     };
 
-    class Scrappy : public virtual Ability {
-        static int hitGhost(ON_TYPE_EFFECTIVENESS) {
+    class HitsGhost : extends OnTypeEffectiveness<> {
+        ON_TYPE_EFFECTIVENESS {
             CHECK(moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING)
             CHECK(defType == TYPE_GHOST)
             CHECK_NOT(*mod)
             *mod = UQ_4_12(1.0);
             return TRUE;
         }
-        int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override { return hitGhost(DELEGATE_TYPE_EFFECTIVENESS); }
-        bool tauntImmune() override { return true; }
     };
+    class Scrappy : extends HitsGhost, extends TauntImmune {};
 
-    class StormDrain : public virtual Ability<TYPE_WATER> {
-        int onAbsorb(ON_ABSORB) override {
+    class StormDrain : extends Redirects<TYPE_WATER> {
+        ON_ABSORB {
             CHECK(moveType == TYPE_WATER);
             *statId = GetHighestAttackingStatId(battler, TRUE);
             return ABSORB_RESULT_STAT;
         }
     };
 
-    class IceBody : public virtual HailImmune {
-        int onEndTurn(ON_END_TURN) override {
+    class IceBody : extends HailImmune, extends OnEndTurn {
+        ON_END_TURN {
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
             CHECK(gVolatileStructs[battler].isFirstTurn != 2)
@@ -1325,10 +1227,10 @@ class AbilityBehavior {
         }
     };
 
-    class SolidRock : public virtual Filter {};
+    class SolidRock : extends Filter {};
 
-    class SnowWarning : public virtual HailImmune {
-        int onEntry(ON_ENTRY) override {
+    class SnowWarning : extends HailImmune, extends OnEntry {
+        ON_ENTRY {
             if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE)) {
                 BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
                 return TRUE;
@@ -1340,8 +1242,8 @@ class AbilityBehavior {
         }
     };
 
-    class HoneyGather : public virtual Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class HoneyGather : extends OnEndTurn {
+        ON_END_TURN {
             CHECK_NOT(gBattleMons[battler].item)
             CHECK(Random() % 2)
 
@@ -1351,8 +1253,8 @@ class AbilityBehavior {
         }
     };
 
-    class Frisk : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class Frisk : extends OnEntry {
+        ON_ENTRY {
             int any = FALSE;
             for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
                 FILTER(IsBattlerAlive(i))
@@ -1367,52 +1269,50 @@ class AbilityBehavior {
         }
     };
 
-    class Reckless : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Reckless : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
         }
     };
 
-    class Multitype : public virtual FormChange {};
+    class Multitype : extends FormChange {};
 
-    class FlowerGift : public virtual WeatherTransformation, public virtual Breakable {
-        void onStat(ON_STAT) override {
+    class FlowerGift : extends WeatherTransformation, extends Breakable, extends OnStat<ApplyOn::ALLY> {
+        ON_STAT {
             if (statId != STAT_SPATK && statId != STAT_SPDEF) return;
             if (IsWeatherActive(WEATHER_SUN_ANY)) *stat *= 1.5;
         }
-        AbilityApplyOn onStatFor() override { return APPLY_ON_ALLY; }
     };
 
-    class BadDreams : public virtual Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class BadDreams : extends OnEndTurn {
+        ON_END_TURN {
             gBattleScripting.abilityPopupOverwrite = ability;
             BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
             return NO_ANNOUNCE;
         }
     };
 
-    class SheerForce : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class SheerForce : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST) MUL(1.3);
         }
     };
 
-    class Contrary : public virtual Breakable {};
+    class Contrary : extends Breakable {};
 
-    class Unnerve : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE); }
-        bool unnerve() override { return true; }
+    class Unnerve : extends OnEntry {
+        ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE); }
     };
 
-    class Defeatist : public virtual Ability {
-        void onStat(ON_STAT) override {
+    class Defeatist : extends OnStat<> {
+        ON_STAT {
             if (statId != STAT_ATK && statId != STAT_SPATK) return;
             if (gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 3) *stat /= 2;
         }
     };
 
-    class CursedBody : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class CursedBody : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK_NOT(gVolatileStructs[attacker].disabledMove)
             CHECK(IsMoveMakingContact(move, attacker))
@@ -1428,8 +1328,8 @@ class AbilityBehavior {
         }
     };
 
-    class Healer : public virtual Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class Healer : extends OnEndTurn {
+        ON_END_TURN {
             CHECK(Random() % 100 < 30)
 
             if (IsBattlerAlive(BATTLE_PARTNER(battler)) && gBattleMons[BATTLE_PARTNER(battler)].status1 & STATUS1_ANY) {
@@ -1444,10 +1344,10 @@ class AbilityBehavior {
         }
     };
 
-    class FriendGuard : public virtual Breakable {};
+    class FriendGuard : extends Breakable {};
 
-    class WeakArmor : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class WeakArmor : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(IS_MOVE_PHYSICAL(move))
             CHECK(CanRaiseStat(battler, STAT_SPEED) || CanLowerStat(battler, STAT_DEF))
@@ -1460,48 +1360,47 @@ class AbilityBehavior {
         }
     };
 
-    class LightMetal : public virtual Ability {
-        void onStat(ON_STAT) override {
+    class LightMetal : extends OnStat<> {
+        ON_STAT {
             if (statId == STAT_SPEED) *stat *= 1.3;
         }
     };
 
-    class Multiscale : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class Multiscale : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (BATTLER_MAX_HP(battler)) MUL(.5);
         }
     };
 
-    class ToxicBoost : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class ToxicBoost : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMons[battler].status1 & STATUS1_PSN_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
         }
     };
 
-    int FlareBoostHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
-        CHECK(CanBeBurned(battler))
-        CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+    class FlareBoost : extends OnEntry, extends OnWeather, extends OnStat<>, extends NegateBurnAtkDrop {
+        static int FlareBoostHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
+            CHECK(CanBeBurned(battler))
+            CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
-        InsertCorrectEndType(callType);
-        gBattleMons[battler].status1 |= STATUS1_BURN;
-        BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
-        MarkBattlerForControllerExec(battler);
-        BattleScriptCall(BattleScript_FlareBoostRet);
-        return TRUE;
-    }
+            InsertCorrectEndType(callType);
+            gBattleMons[battler].status1 |= STATUS1_BURN;
+            BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
+            MarkBattlerForControllerExec(battler);
+            BattleScriptCall(BattleScript_FlareBoostRet);
+            return TRUE;
+        }
 
-    class FlareBoost : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return FlareBoostHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-        int onWeather(ON_WEATHER) override { return FlareBoostHandler(ability, battler, ABILITY_BS_CALL); }
-        void onStat(ON_STAT) override {
+        ON_ENTRY { return FlareBoostHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+        ON_WEATHER { return FlareBoostHandler(ability, battler, ABILITY_BS_CALL); }
+        ON_STAT {
             if (statId != STAT_SPATK) return;
             if (gBattleMons[battler].status1 & STATUS1_BURN) *stat *= 1.5;
         }
-        bool negatesBurnAtkDrop() override { return true; }
     };
 
-    class Harvest : public virtual Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class Harvest : extends OnEndTurn {
+        ON_END_TURN {
             CHECK_NOT(gBattleMons[battler].item)
             CHECK_NOT(gBattleStruct->changedItems[battler])
             CHECK(ItemId_GetPocket(GetUsedHeldItem(battler)) == POCKET_BERRIES)
@@ -1512,15 +1411,14 @@ class AbilityBehavior {
         }
     };
 
-    class Telepathy : public virtual Breakable {
-        void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
+    class Telepathy : extends OnAfterTypeEffectiveness<ApplyOnTarget::ATTACKER_OR_TARGET> {
+        ON_AFTER_TYPE_EFFECTIVENESS {
             if (target == BATTLE_PARTNER(battler) && gBattleMoves[move].power) *mod = 0;
         }
-        AbilityApplyOnWithTarget onAfterTypeEffectivenessFor() override { return APPLY_ON_ATTACKER_OR_TARGET; }
     };
 
-    class Moody : public virtual Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class Moody : extends OnEndTurn {
+        ON_END_TURN {
             CHECK(gVolatileStructs[battler].isFirstTurn != 2);
             int validToRaise = 0, validToLower = 0;
 
@@ -1550,17 +1448,16 @@ class AbilityBehavior {
         }
     };
 
-    class Overcoat : public virtual Breakable, public virtual SandImmune, public virtual HailImmune {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class Overcoat : extends Breakable, extends SandImmune, extends HailImmune, extends PowderImmune, extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (IS_MOVE_SPECIAL(move)) MUL(.8);
         }
-        bool powderImmune() { return true; }
     };
 
-    class PoisonTouch : public virtual PoisonPoint {};
+    class PoisonTouch : extends PoisonPoint {};
 
-    class Regenerator : public virtual Ability {
-        int onExit(ON_EXIT) override {
+    class Regenerator : extends OnExit {
+        ON_EXIT {
             CHECK(IsBattlerAlive(battler))
             CHECK_NOT(BATTLER_MAX_HP(battler))
             BattleScriptCall(BattleScript_RegeneratorExits);
@@ -1568,30 +1465,30 @@ class AbilityBehavior {
         }
     };
 
-    class BigPecks : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class BigPecks : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (IsMoveMakingContact(move, battler)) MUL(1.3);
         }
     };
 
-    class SandRush : public virtual Ability, public virtual SandImmune {
-        void onStat(ON_STAT) override {
+    class SandRush : extends OnStat<>, extends SandImmune {
+        ON_STAT {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat *= 1.5;
         }
     };
 
-    class WonderSkin : public virtual Ability {
-        bool fortKnox() override { return true; }
-    };
+    class FortKnox : extends Ability {};
 
-    class Analytic : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class WonderSkin : extends FortKnox {};
+
+    class Analytic : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber && gBattleMoves[move].effect != EFFECT_FUTURE_SIGHT) MUL(1.3);
         }
     };
 
-    class Illusion : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Illusion : extends OnDefender, extends OnOffensiveMultiplier<> {
+        ON_DEFENDER {
             CHECK(DidMoveHit())
             CHECK(gBattleStruct->illusion[battler].on)
             CHECK_NOT(gBattleStruct->illusion[battler].broken)
@@ -1599,13 +1496,13 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_IllusionOff);
             return TRUE;
         }
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleStruct->illusion[battler].on && !gBattleStruct->illusion[battler].broken) MUL(1.3);
         }
     };
 
-    class Imposter : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class Imposter : extends OnEntry {
+        ON_ENTRY {
             gBattlerTarget = BATTLE_OPPOSITE(battler);
             if (!IsBattlerAlive(gBattlerTarget)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
             CHECK(IsBattlerAlive(gBattlerTarget))
@@ -1619,12 +1516,12 @@ class AbilityBehavior {
         }
     };
 
-    class Infiltrator : public virtual Ability {
-        InfiltrateType onInfiltrate(ON_INFILTRATE) override { return INFILTRATE_SCREENS | INFILTRATE_SUBSTITUTE; }
+    class Infiltrator : extends OnInflitrate {
+        ON_INFILTRATE { return INFILTRATE_SCREENS | INFILTRATE_SUBSTITUTE; }
     };
 
-    class Mummy : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Mummy : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -1638,21 +1535,29 @@ class AbilityBehavior {
         }
     };
 
-    class Moxie : public virtual Ability {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override { return MoxieClone(battler, STAT_ATK); }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
+    template <int Stat>
+    class MoxieClone : extends OnBattlerFaints<ApplyOnTarget::ATTACKER> {
+        ON_BATTLER_FAINTS {
+            CHECK(HasAttackerFaintedTarget())
+            int stat = Stat == STAT_HIGHEST_TOTAL ? GetHighestStatId(battler, FALSE) : Stat;
+            CHECK(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
+            BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
+            return TRUE;
+        }
     };
 
-    class Justified : public virtual Ability {
-        int onAbsorb(ON_ABSORB) override {
+    class Moxie : extends MoxieClone<STAT_ATK> {};
+
+    class Justified : extends OnAbsorb {
+        ON_ABSORB {
             CHECK(moveType == TYPE_DARK);
             *statId = GetHighestAttackingStatId(battler, TRUE);
             return ABSORB_RESULT_STAT;
         }
     };
 
-    class Rattled : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Rattled : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(moveType == TYPE_DARK || moveType == TYPE_BUG || moveType == TYPE_GHOST)
             CHECK(CanRaiseStat(battler, STAT_SPEED))
@@ -1663,73 +1568,80 @@ class AbilityBehavior {
         }
     };
 
-    class MagicBounce : public virtual Breakable {
-        bool magicBounce() { return true; }
-    };
+    class MagicBounce : extends Breakable {};
 
-    class SapSipper : public virtual Redirects<TYPE_GRASS> {
-        int onAbsorb(ON_ABSORB) override {
+    class SapSipper : extends Redirects<TYPE_GRASS> {
+        ON_ABSORB {
             CHECK(moveType == TYPE_GRASS);
             *statId = GetHighestAttackingStatId(battler, TRUE);
             return ABSORB_RESULT_STAT;
         }
     };
 
-    class Prankster : public virtual Ability {
-        int onPriority(ON_PRIORITY) override {
+    class Prankster : extends OnPriority {
+        ON_PRIORITY {
             CHECK(IS_MOVE_STATUS(move))
             return 1;
         }
     };
 
-    class SandForce : public virtual SandImmune {
-        void onStat(ON_STAT) override {
+    class SandForce : extends SandImmune, extends OnStat<> {
+        ON_STAT {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
             if (IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat *= 1.5;
         }
     };
 
-    class IronBarbs : public virtual RoughSkin {};
+    class IronBarbs : extends RoughSkin {};
 
-    class ZenMode : public virtual StandardTransformation {};
+    class ZenMode : extends StandardTransformation {};
 
-    class VictoryStar : public virtual Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class VictoryStar : extends OnAccuracy<ApplyOnTarget::ALLY> {
+        ON_ACCURACY {
             *accuracy *= 1.2;
             return ACCURACY_MULTIPLICATIVE;
         }
-        AbilityApplyOnWithTarget onAccuracyFor() override { return APPLY_ON_ALLY; }
     };
 
-    class Turboblaze : public virtual MoldBreaker {
-        int onEntry(ON_ENTRY) override { return AddBattlerType(battler, TYPE_FIRE); }
+    template <Type ExtraType>
+    class AddsType : extends OnEntry {
+        ON_ENTRY {
+            CHECK_NOT(IS_BATTLER_OF_TYPE(battler, ExtraType))
+
+            gBattleMons[battler].type3 = ExtraType;
+            PREPARE_TYPE_BUFFER(gBattleTextBuff2, ExtraType);
+            BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+            return TRUE;
+        }
     };
 
-    class Teravolt : public virtual MoldBreaker {
-        int onEntry(ON_ENTRY) override { return AddBattlerType(battler, TYPE_ELECTRIC); }
+    class Turboblaze : extends MoldBreaker, extends AddsType<TYPE_FIRE> {
+        ON_ENTRY { return AddsType<TYPE_FIRE>::onEntry(DELEGATE_ENTRY); }
     };
 
-    class AromaVeil : public virtual Breakable {
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+    class Teravolt : extends MoldBreaker, extends AddsType<TYPE_ELECTRIC> {
+        ON_ENTRY { return AddsType<TYPE_ELECTRIC>::onEntry(DELEGATE_ENTRY); }
+    };
+
+    class AromaVeil : extends OnStatusImmune<ApplyOn::ALLY> {
+        ON_STATUS_IMMUNE {
             CHECK(status & (CHECK_INFATUATE | CHECK_RESTRICTING | CHECK_HEAL_BLOCK))
             return TRUE;
         }
-        AbilityApplyOn onStatusImmuneFor() { return APPLY_ON_ALLY; }
     };
 
-    class FlowerVeil : public virtual Breakable {
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+    class FlowerVeil : extends OnStatusImmune<ApplyOn::ALLY> {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_STATUS1)
             CHECK(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
             return TRUE;
         }
-        AbilityApplyOn onStatusImmuneFor() override { return APPLY_ON_ALLY; }
     };
 
-    class CheekPouch : public virtual RandomizerBanned {};
+    class CheekPouch : extends RandomizerBanned {};
 
-    class Protean : public virtual Ability {
-        int onBeforeAttack(ABILITY_ON_BEFORE_ATTACK) override {
+    class Protean : extends OnBeforeAttack<> {
+        ON_BEFORE_ATTACK {
             CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
             CHECK_NOT(IS_BATTLER_OF_TYPE(battler, moveType))
             CHECK(move != MOVE_STRUGGLE)
@@ -1740,40 +1652,37 @@ class AbilityBehavior {
         }
     };
 
-    class FurCoat : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class FurCoat : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (IS_MOVE_PHYSICAL(move)) MUL(.5);
         }
     };
 
-    class Bulletproof : public virtual Breakable {
-        int onImmune(ON_IMMUNE) override {
+    class Bulletproof : extends OnImmune<> {
+        ON_IMMUNE {
             CHECK(gBattleMoves[move].flags & FLAG_BALLISTIC)
             CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
             return TRUE;
         }
     };
 
-    class StrongJaw : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class StrongJaw : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) MUL(1.3);
         }
     };
 
-    class Refrigerate : public virtual Ability {
-        ATE_ABILITY(TYPE_ICE),
-    };
+    class Refrigerate : extends AteAbility<TYPE_ICE> {};
 
-    class SweetVeil : public virtual Breakable {
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+    class SweetVeil : extends OnStatusImmune<ApplyOn::ALLY> {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_SLEEP)
             return TRUE;
         }
-        AbilityApplyOn onStatusImmuneFor override { return APPLY_ON_ALLY; }
     };
 
-    class StanceChange : public virtual FormChange {
-        int onBeforeAttack(ABILITY_ON_BEFORE_ATTACK) override {
+    class StanceChange : extends FormChange, extends OnBeforeAttack<> {
+        ON_BEFORE_ATTACK {
             SpeciesEnum newSpecies = SPECIES_NONE;
             switch (gBattleMons[battler].species) {
                 default:
@@ -1806,29 +1715,34 @@ class AbilityBehavior {
         }
     };
 
-    class GaleWings : public virtual GaleWingsLike<TYPE_FLYING> {};
+    template <Type GaleWingsType>
+    class GaleWingsLike : extends OnPriority {
+        ON_PRIORITY {
+            CHECK(GetTypeBeforeUsingMove(move, battler) == GaleWingsType)
+            CHECK(BATTLER_MAX_HP(battler))
+            return 1;
+        }
+    };
+    class GaleWings : extends GaleWingsLike<TYPE_FLYING> {};
 
-    class MegaLauncher : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class MegaLauncher : extends OnOffensiveMultiplier<> {
+        void ON_OFFENSIVE_MULTIPLIER {
             if (IsMegaLauncherBoosted(battler, move)) MUL(1.3);
         }
-        bool megaLauncherBoost() override { return true; }
     };
 
-    class GrassPelt : public virtual Ability {
-        void onStat(ON_STAT) override {
+    class GrassPelt : extends OnStat<> {
+        ON_STAT {
             if (statId == STAT_DEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
         }
     };
 
-    class ToughClaws : public virtual BigPecks {};
+    class ToughClaws : extends BigPecks {};
 
-    class Pixilate : public virtual Ability {
-        ATE_ABILITY(TYPE_FAIRY),
-    };
+    class Pixilate : extends AteAbility<TYPE_FAIRY> {};
 
-    class Gooey : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Gooey : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(StatLowerableOrMirrorArmor(attacker, STAT_SPEED))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -1839,48 +1753,45 @@ class AbilityBehavior {
         }
     };
 
-    class Aerilate : public virtual Ability {
+    class Aerilate : extends AteAbility<TYPE_FLYING> {
         ATE_ABILITY(TYPE_FLYING),
     };
 
-    class HyperAggressive : public virtual Ability {
-        MultihitType onParentalBond(ON_PARENTAL_BOND) override { return PARENTAL_BOND_HYPER_AGGRESSIVE; }
+    class HyperAggressive : extends OnParentalBond {
+        ON_PARENTAL_BOND { return PARENTAL_BOND_HYPER_AGGRESSIVE; }
     };
 
-    class ParentalBond : public virtual HyperAggressive {
-        bool resistsFortKnox() override { return true; }
-    };
+    class IgnoresFortKnox : extends Ability {};
+    class ParentalBond : extends HyperAggressive, extends IgnoresFortKnox {};
 
-    class DarkAura : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_DARKAURA); }
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class DarkAura : extends OnEntry, extends OnOffensiveMultiplier<ApplyOn::ANY> {
+        ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_DARKAURA); }
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType != TYPE_DARK) return;
             if (IsAbilityOnField(ABILITY_AURA_BREAK))
                 MUL(.75);
             else
                 MUL(1.33);
         }
-        AbilityApplyOn onOffensiveMultiplierFor() override { return APPLY_ON_ANY; }
     };
 
-    class FairyAura : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_FAIRYAURA); }
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class FairyAura : extends OnEntry, extends OnOffensiveMultiplier<ApplyOn::ANY> {
+        ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_FAIRYAURA); }
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType != TYPE_FAIRY) return;
             if (IsAbilityOnField(ABILITY_AURA_BREAK))
                 MUL(.75);
             else
                 MUL(1.33);
         }
-        AbilityApplyOn onOffensiveMultiplierFor() override { return APPLY_ON_ANY; }
     };
 
-    class AuraBreak : public virtual Breakable {
-        int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_AURABREAK); }
+    class AuraBreak : extends Breakable, extends OnEntry {
+        ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_AURABREAK); }
     };
 
-    class PrimordialSea : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class PrimordialSea : extends OnEntry {
+        ON_ENTRY {
             CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN_PRIMAL, TRUE))
 
             BattleScriptPushCursorAndCallback(BattleScript_PrimordialSeaActivates);
@@ -1888,8 +1799,8 @@ class AbilityBehavior {
         }
     };
 
-    class DesolateLand : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class DesolateLand : extends OnEntry {
+        ON_ENTRY {
             CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_SUN_PRIMAL, TRUE))
 
             BattleScriptPushCursorAndCallback(BattleScript_DesolateLandActivates);
@@ -1897,8 +1808,8 @@ class AbilityBehavior {
         }
     };
 
-    class WeatherControl : public virtual Breakable {
-        int onImmune(ON_IMMUNE) override {
+    class WeatherControl : extends OnImmune<> {
+        ON_IMMUNE {
             CHECK(gBattleMoves[move].flags & FLAG_WEATHER_BASED)
             CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)
             *immunityScript = BattleScript_SoundproofProtected;
@@ -1906,18 +1817,17 @@ class AbilityBehavior {
         }
     };
 
-    class DeltaStream : public virtual WeatherControl {
-        int onEntry(ON_ENTRY) override {
+    class DeltaStream : extends WeatherControl, extends OverrideBreakable, extends OnEntry {
+        ON_ENTRY {
             CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_STRONG_WINDS, TRUE))
 
             BattleScriptPushCursorAndCallback(BattleScript_DeltaStreamActivates);
             return TRUE;
         }
-        bool breakable() override { return false; }
     };
 
-    class Stamina : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Stamina : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(CanRaiseStat(battler, STAT_DEF))
 
@@ -1932,8 +1842,8 @@ class AbilityBehavior {
         }
     };
 
-    class WimpOut : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class WimpOut : extends OnDefender {
+        ON_DEFENDER {
             CHECK(CheckHalfHpAbility(battler, attacker))
             CHECK_NOT(TestSheerForceFlag(attacker, gCurrentMove))
             CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
@@ -1944,10 +1854,10 @@ class AbilityBehavior {
         }
     };
 
-    class EmergencyExit : public virtual WimpOut {};
+    class EmergencyExit : extends WimpOut {};
 
-    class WaterCompaction : public virtual Breakable {
-        int onDefender(ON_DEFENDER) override {
+    class WaterCompaction : extends OnDefensiveMultiplier, extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(moveType == TYPE_WATER)
             CHECK(CanRaiseStat(battler, STAT_DEF))
@@ -1956,13 +1866,13 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
             return TRUE;
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_WATER) RESISTANCE(.5);
         }
     };
 
-    class Merciless : public virtual Ability {
-        int onCrit(ON_CRIT) override {
+    class Merciless : extends OnCrit<> {
+        ON_CRIT {
             if (gBattleMons[target].status1 & STATUS1_PSN_ANY) return ALWAYS_CRIT;
             if (gBattleMons[target].status1 & STATUS1_PARALYSIS) return ALWAYS_CRIT;
             if (gBattleMons[target].status1 & STATUS1_BLEED) return ALWAYS_CRIT;
@@ -1972,8 +1882,8 @@ class AbilityBehavior {
         }
     };
 
-    class ShieldsDown : public virtual StandardTransformation {
-        int onAttacker(ON_ATTACKER) override {
+    class ShieldsDown : extends StandardTransformation, extends OnAttacker, extends OnStatusImmune<>, extends OverrideBreakable {
+        ON_ATTACKER {
             CHECK(IsBattlerAlive(battler))
             CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
             CHECK(gBattleMoves[move].effect == EFFECT_SHELL_SMASH)
@@ -1993,7 +1903,7 @@ class AbilityBehavior {
             }
             return FALSE;
         }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_STATUS1)
             switch (gBattleMons[battler].species) {
                 case SPECIES_MINIOR:
@@ -2009,38 +1919,35 @@ class AbilityBehavior {
                     return FALSE;
             }
         }
-        bool unsuppressable() override { return true; }
     };
 
-    class Stakeout : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Stakeout : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gVolatileStructs[target].isFirstTurn == 2) MUL(2.0);
         }
     };
 
-    class WaterBubble : public virtual Breakable {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class WaterBubble : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_WATER) MUL(2.0);
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FIRE) RESISTANCE(.5);
         }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_BURN)
             return TRUE;
         }
-        bool removesStatusOnImmunity() { return true; }
     };
 
-    class Steelworker : public virtual Breakable {
-        ATE_ABILITY(TYPE_STEEL), void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
+    class Steelworker : extends Breakable, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, extends AteAbility<TYPE_STEEL> {
+        ON_AFTER_TYPE_EFFECTIVENESS {
             if (moveType == TYPE_DARK || moveType == TYPE_GHOST) *mod /= 2;
         }
-        AbilityApplyOnWithTarget onAfterTypeEffectivenessFor() override { return onAfterTypeEffectivenessFor; }
     };
 
-    class Berserk : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Berserk : extends OnDefender {
+        ON_DEFENDER {
             CHECK(CheckHalfHpAbility(battler, attacker))
             CHECK_NOT(GetAbilityState(battler, ability))
             int stat = GetHighestAttackingStatId(battler, TRUE);
@@ -2053,59 +1960,59 @@ class AbilityBehavior {
         }
     };
 
-    class SlushRush : public virtual HailImmune {
-        void onStat(ON_STAT) override {
+    class SlushRush : extends HailImmune, extends OnStat<> {
+        ON_STAT {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
         }
     };
 
-    class LongReach : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class LongReach : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (IS_MOVE_PHYSICAL(move) && !gBattleMoves[move].contact) MUL(1.2);
         }
     };
 
     template <Type BoostType>
-    class LiquidVoiceClone : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class LiquidVoiceClone : extends OnOffensiveMultiplier<>, extends OnMoveType {
+        ON_OFFENSIVE_MULTIPLIER {
             if (IsSoundMove(battler, move)) MUL(1.2);
         }
-        int onMoveType(ON_MOVE_TYPE) override {
+        ON_MOVE_TYPE {
             CHECK(moveType == TYPE_NORMAL)
             CHECK(gBattleMoves[move].flags & FLAG_SOUND)
             return BoostType + 1;
         }
     };
-    class LiquidVoice : public virtual LiquidVoiceClone<TYPE_WATER> {};
+    class LiquidVoice : extends LiquidVoiceClone<TYPE_WATER> {};
 
-    class Triage : public virtual Ability {
-        int onPriority(ON_PRIORITY) override {
+    class Triage : extends OnPriority {
+        ON_PRIORITY {
             CHECK(IsHealingMoveEffect(gBattleMoves[move].effect))
             return 3;
         }
     };
 
-    class Galvanize : public virtual AteAbility<TYPE_ELECTRIC> {};
+    class Galvanize : extends AteAbility<TYPE_ELECTRIC> {};
 
-    class SurgeSurfer : public virtual Ability {
-        void onStat(ON_STAT) override {
+    class SurgeSurfer : extends OnStat<> {
+        ON_STAT {
             if (statId == STAT_SPEED && IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat *= 1.5;
         }
     };
 
-    class Schooling : public virtual StandardTransformation {
-        int onEntry(ON_ENTRY) override {
+    class Schooling : extends StandardTransformation {
+        ON_ENTRY {
             CHECK(gBattleMons[battler].level >= 20)
             return StandardTransformation::onEntry(DELEGATE_ENTRY);
         }
-        int onEndTurn(ON_END_TURN) override {
+        ON_END_TURN {
             CHECK(gBattleMons[battler].level >= 20)
             return StandardTransformation::onEndTurn(DELEGATE_END_TURN);
         }
     };
 
-    class Disguise : public virtual FormChange {
-        int DisguiseReformHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
+    class Disguise : extends FormChange, extends OnEntry, extends OnDisguise, extends OnWeather {
+        static int DisguiseReformHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
             SpeciesEnum newSpecies;
             switch (gBattleMons[battler].species) {
                 case SPECIES_MIMIKYU_BUSTED:
@@ -2127,8 +2034,8 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_AttackerFormChange);
             return TRUE;
         }
-        int onEntry(ON_ENTRY) override { return DisguiseReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-        SpeciesEnum onDisguise(ON_DISGUISE) override {
+        ON_ENTRY { return DisguiseReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+        ON_DISGUISE {
             switch (gBattleMons[battler].species) {
                 case SPECIES_MIMIKYU:
                     return SPECIES_MIMIKYU_BUSTED;
@@ -2139,11 +2046,11 @@ class AbilityBehavior {
                     return SPECIES_NONE;
             }
         }
-        int onWeather(ON_WEATHER) override { return DisguiseReformHandler(ability, battler, ABILITY_BS_CALL); }
+        ON_WEATHER { return DisguiseReformHandler(ability, battler, ABILITY_BS_CALL); }
     };
 
-    class BattleBond : public virtual FormChange {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+    class BattleBond : extends FormChange, extends OnBattlerFaints<ApplyOnTarget::ATTACKER> {
+        ON_BATTLER_FAINTS {
             SpeciesEnum newSpecies = SPECIES_NONE;
             switch (gBattleMons[battler].species) {
                 case SPECIES_GRENINJA_BATTLE_BOND:
@@ -2172,11 +2079,10 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_BattleBondActivatesOnMoveEndAttacker);
             return TRUE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor() override { return APPLY_ON_ATTACKER; }
     };
 
-    class PowerConstruct : public virtual FormChange {
-        int onEndTurn(ON_END_TURN) override {
+    class PowerConstruct : extends FormChange, extends OnEndTurn {
+        ON_END_TURN {
             CHECK(gBattleMons[battler].species == SPECIES_ZYGARDE || gBattleMons[battler].species == SPECIES_ZYGARDE_10)
             CHECK(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
             CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
@@ -2189,47 +2095,45 @@ class AbilityBehavior {
         }
     };
 
-    class Corrosion : public virtual Ability {
-        int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
+    class Corrosion : extends OnTypeEffectiveness<>, extends OnCanStatusType {
+        ON_TYPE_EFFECTIVENESS {
             CHECK(moveType == TYPE_POISON)
             CHECK(defType == TYPE_STEEL)
             *mod = UQ_4_12(2.0);
             return TRUE;
         }
-        int onCanStatusType(ABILITY_ON_CAN_STATUS_TYPE) override {
+        ON_CAN_STATUS_TYPE {
             CHECK(status & CHECK_POISON)
             return TRUE;
         }
     };
 
-    class Comatose : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class Comatose : extends OnEntry, extends RemovesStatusOnImmunity, extends Unsuppressable {
+        ON_ENTRY {
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
             BattleScriptPushCursorAndCallback(BattleScript_AnnounceStatusAbility);
             return TRUE;
         }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_STATUS1)
             return TRUE;
         }
-        bool unsuppressable() override { return true; }
-        bool removesStatusOnImmunity() { return true; }
     };
 
-    static int blockPriority(ON_IMMUNE) {
-        CHECK_NOT(gProcessingExtraAttacks)
-        CHECK(GetBattlerSide(attacker) != GetBattlerSide(battler))
-        CHECK(GetMovePriority(attacker, move, battler) > 0);
-        *immunityScript = BattleScript_DazzlingProtected;
-        return TRUE;
+    template <ApplyOn For = ApplyOn::SELF>
+    class BlocksPriority : extends OnImmune<For> {
+        ON_IMMUNE {
+            CHECK_NOT(gProcessingExtraAttacks)
+            CHECK(GetBattlerSide(attacker) != GetBattlerSide(battler))
+            CHECK(GetMovePriority(attacker, move, battler) > 0);
+            *immunityScript = BattleScript_DazzlingProtected;
+            return TRUE;
+        }
     };
-    class QueenlyMajesty : public virtual Breakable {
-        int onImmune(ON_IMMUNE) override { return blockPriority(DELEGATE_PRIORITY); }
-        AbilityApplyOn onImmuneFor() override { return APPLY_ON_ALLY; }
-    };
+    class QueenlyMajesty : extends BlocksPriority<ApplyOn::ALLY> {};
 
-    class InnardsOut : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class InnardsOut : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK_NOT(IsBattlerAlive(battler))
             CHECK_NOT(IsMagicGuardProtected(attacker))
@@ -2240,43 +2144,41 @@ class AbilityBehavior {
         }
     };
 
-    class Dancer : public virtual Ability {
-        int onCopyMove(ON_COPY_MOVE) override {
+    class Dancer : extends OnCopyMove {
+        ON_COPY_MOVE {
             CHECK(IsDance(attacker, move))
             return UseOutOfTurnAttack(battler, target, ability, move, 0);
         }
     };
 
-    class Battery : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Battery : extends OnOffensiveMultiplier<ApplyOn::ALLY_ONLY> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (IS_MOVE_SPECIAL(move)) MUL(1.3);
         }
-        AbilityApplyOn onOffensiveMultiplierFor() override { return APPLY_ON_ALLY_ONLY; }
     };
 
-    class Fluffy : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class Fluffy : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FIRE) RESISTANCE(2.0);
             if (IsMoveMakingContact(move, attacker)) MUL(0.5);
         }
     };
 
-    class Dazzling : public virtual QueenlyMajesty {};
+    class Dazzling : extends QueenlyMajesty {};
 
-    class SoulHeart : public virtual Ability {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+    class SoulHeart : extends OnBattlerFaints<ApplyOnTarget::ANY> {
+        ON_BATTLER_FAINTS {
             CHECK(ChangeStatBuffs(battler, 1, STAT_SPATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
 
             BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
             return TRUE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ANY; }
     };
 
-    class TanglingHair : public virtual Gooey {};
+    class TanglingHair : extends Gooey {};
 
-    class Receiver : public virtual Ability {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+    class Receiver : extends OnBattlerFaints<ApplyOnTarget::ALLY> {
+        ON_BATTLER_FAINTS {
             AbilityEnum allyAbility = GetBattlerAbility(fainted);
             CHECK_NOT(IsRolePlayBannedAbility(allyAbility))
             CHECK_NOT(HasAbilityIgnoringSuppression(battler, allyAbility))
@@ -2290,11 +2192,10 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_ReceiverActivates);
             return TRUE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ALLY; }
     };
 
-    class PowerOfAlchemy : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class PowerOfAlchemy : extends OnEntry, extends OnReactive, extends OnBattlerFaints<ApplyOnTarget::ANY> {
+        ON_ENTRY {
             int any = FALSE;
             for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
                 FILTER(IsBattlerAlive(i))
@@ -2307,7 +2208,7 @@ class AbilityBehavior {
             CHECK(any)
             return TRUE;
         }
-        int onReactive(ON_REACTIVE) override {
+        ON_REACTIVE {
             int any = FALSE;
             int state = GetAbilityState(battler, ability);
             CHECK(state)
@@ -2334,23 +2235,19 @@ class AbilityBehavior {
             SetAbilityState(battler, ABILITY_POWER_OF_ALCHEMY, 0);
             return any;
         }
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+        ON_BATTLER_FAINTS {
             int state = GetAbilityState(battler, ability);
             if (state & (3 << fainted)) SetAbilityState(battler, ability, state & ~(3 << fainted));
             return NO_ANNOUNCE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_OTHER; }
     };
 
-    class BeastBoost : public virtual Ability {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override { return MoxieClone(battler, GetHighestStatId(battler, FALSE)); }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
-    };
+    class BeastBoost : extends MoxieClone<STAT_HIGHEST_TOTAL> {};
 
-    class RksSystem : public virtual Protean, public virtual Adaptability, public virtual FormChange {};
+    class RksSystem : extends Protean, extends Adaptability, extends FormChange {};
 
-    class ElectricSurge : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class ElectricSurge : extends AllowTerrainIfAirborne<TERRAIN_ELECTRIC>, extends OnEntry {
+        ON_ENTRY {
             CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
 
             for (int i = 0; i < gBattlersCount; i++) {
@@ -2361,58 +2258,50 @@ class AbilityBehavior {
             BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
             return TRUE;
         }
-        TerrainType allowTerrainIfAirborne() override { return TERRAIN_ELECTRIC; }
     };
 
-    class PsychicSurge : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class PsychicSurge : extends AllowTerrainIfAirborne<TERRAIN_PSYCHIC>, extends OnEntry {
+        ON_ENTRY {
             CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
 
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESPSYCHIC;
             BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
             return TRUE;
         }
-        TerrainType allowTerrainIfAirborne() override { return TERRAIN_PSYCHIC; }
     };
 
-    class MistySurge : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class MistySurge : extends AllowTerrainIfAirborne<TERRAIN_MISTY>, extends OnEntry {
+        ON_ENTRY {
             CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
 
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESMISTY;
             BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
             return TRUE;
         }
-        TerrainType allowTerrainIfAirborne() override { return TERRAIN_MISTY; }
     };
 
-    class GrassySurge : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class GrassySurge : extends AllowTerrainIfAirborne<TERRAIN_GRASSY>, extends OnEntry {
+        ON_ENTRY {
             CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
 
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESGRASSY;
             BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
             return TRUE;
         }
-        TerrainType allowTerrainIfAirborne() override { return TERRAIN_GRASSY; }
     };
 
-    class ShadowShield : public virtual Multiscale {
-        bool breakable() override { return false; }
-    };
+    class ShadowShield : extends Multiscale, extends OverrideBreakable {};
 
-    class PrismArmor : public virtual Filter {
-        bool breakable() override { return false; }
-    };
+    class PrismArmor : extends Filter, extends OverrideBreakable {};
 
-    class Neuroforce : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Neuroforce : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.35);
         }
     };
 
-    class IntrepidSword : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class IntrepidSword : extends OnEntry {
+        ON_ENTRY {
             CHECK(CanRaiseStat(battler, STAT_ATK))
 
             SetStatChanger(STAT_ATK, 1);
@@ -2421,8 +2310,8 @@ class AbilityBehavior {
         }
     };
 
-    class DauntlessShield : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class DauntlessShield : extends OnEntry {
+        ON_ENTRY {
             CHECK(CanRaiseStat(battler, STAT_DEF))
 
             SetStatChanger(STAT_DEF, 1);
@@ -2431,10 +2320,10 @@ class AbilityBehavior {
         }
     };
 
-    class Libero : public virtual Protean {};
+    class Libero : extends Protean {};
 
-    class CottonDown : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class CottonDown : extends OnDefender {
+        ON_DEFENDER {
             CHECK(DidMoveHit());
             gStackBattler1 = BATTLE_OPPOSITE(battler);
             CHECK(IsBattlerAlive(gStackBattler1) || IsBattlerAlive(BATTLE_PARTNER(gStackBattler1)))
@@ -2446,10 +2335,10 @@ class AbilityBehavior {
         }
     };
 
-    class MirrorArmor : public virtual Breakable {};
+    class MirrorArmor : extends Breakable {};
 
-    class GulpMissile : public virtual FormChange {
-        int onAttacker(ON_ATTACKER) override {
+    class GulpMissile : extends FormChange, extends OnDefender, extends OnAttacker {
+        ON_ATTACKER {
             CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
             CHECK(gBattleMons[battler].species == SPECIES_CRAMORANT)
             CHECK(((gCurrentMove == MOVE_SURF || gCurrentMove == MOVE_TRIPLE_DIVE) && TARGET_TURN_DAMAGED) || gStatuses3[battler] & STATUS3_UNDERWATER ||
@@ -2461,7 +2350,7 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_AttackerFormChange);
             return TRUE;
         }
-        int onDefender(ON_DEFENDER) override {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             SpeciesEnum species = gBattleMons[battler].species;
             CHECK(species == SPECIES_CRAMORANT_GORGING || species == SPECIES_CRAMORANT_GULPING)
@@ -2474,8 +2363,8 @@ class AbilityBehavior {
         }
     };
 
-    class SteamEngine : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class SteamEngine : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(CanRaiseStat(battler, STAT_SPEED))
             CHECK(moveType == TYPE_FIRE || moveType == TYPE_WATER)
@@ -2486,20 +2375,20 @@ class AbilityBehavior {
         }
     };
 
-    class Amplifier : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Amplifier : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (IsSoundMove(battler, move)) MUL(1.3);
         }
     };
 
-    class PunkRock : public virtual Breakable, public virtual Amplifier {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class PunkRock : extends OnDefensiveMultiplier, extends Amplifier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (IsSoundMove(attacker, move)) MUL(.5);
         }
     };
 
-    class SandSpit : public virtual SandImmune {
-        int onDefender(ON_DEFENDER) override {
+    class SandSpit : extends SandImmune, extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_SANDSTORM_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
                 BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
                 return NO_ANNOUNCE;
@@ -2513,36 +2402,35 @@ class AbilityBehavior {
         }
     };
 
-    class IceScales : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class IceScales : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (IS_MOVE_SPECIAL(move)) MUL(.5);
         }
     };
 
-    int IceFaceReformHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
-        CHECK(gBattleMons[battler].species == SPECIES_EISCUE_NOICE_FACE)
-        CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
-        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
+    class IceFace : extends FormChange, extends HailImmune, extends OnEntry, extends OnDisguise, extends OnWeather {
+        static int IceFaceReformHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
+            CHECK(gBattleMons[battler].species == SPECIES_EISCUE_NOICE_FACE)
+            CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
+            CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
-        InsertCorrectEndType(callType);
-        UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_EISCUE);
-        gBattleMons[battler].species = SPECIES_EISCUE;
-        BattleScriptCall(BattleScript_AttackerFormChange);
-        return TRUE;
-    }
-    class IceFace : public virtual FormChange, public virtual HailImmune {
-        int onEntry(ON_ENTRY) override { return IceFaceReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-        SpeciesEnum onDisguise(ON_DISGUISE) override { return gBattleMons[battler].species == SPECIES_EISCUE ? SPECIES_EISCUE_NOICE_FACE : SPECIES_NONE; }
-        int onWeather(ON_WEATHER) override { return IceFaceReformHandler(ability, battler, ABILITY_BS_CALL); }
+            InsertCorrectEndType(callType);
+            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_EISCUE);
+            gBattleMons[battler].species = SPECIES_EISCUE;
+            BattleScriptCall(BattleScript_AttackerFormChange);
+            return TRUE;
+        }
+        ON_ENTRY { return IceFaceReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+        ON_DISGUISE { return gBattleMons[battler].species == SPECIES_EISCUE ? SPECIES_EISCUE_NOICE_FACE : SPECIES_NONE; }
+        ON_WEATHER { return IceFaceReformHandler(ability, battler, ABILITY_BS_CALL); }
     };
 
-    class PowerSpot : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override { MUL(1.3); }
-        AbilityApplyOn onOffensiveMultiplierFor() override { return APPLY_ON_ALLY_ONLY; }
+    class PowerSpot : extends OnOffensiveMultiplier<ApplyOn::ALLY_ONLY> {
+        ON_OFFENSIVE_MULTIPLIER { MUL(1.3); }
     };
 
-    class Mimicry : public virtual Ability {
-        int HandleMimicry(u8 battler, AbilityEnum ability, AbilityCallType endType) {
+    class Mimicry : extends OnEntry, extends OnTerrain {
+        static int HandleMimicry(u8 battler, AbilityEnum ability, AbilityCallType endType) {
             u32 moveType = 0;
 
             switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
@@ -2601,35 +2489,34 @@ class AbilityBehavior {
             return FALSE;
         }
 
-        int onEntry(ON_ENTRY) override {
+        ON_ENTRY {
             CHECK(IsBattlerAlive(battler))
 
             return HandleMimicry(battler, ability, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
         }
-        int onTerrain(ON_TERRAIN) override {
+        ON_TERRAIN {
             CHECK(IsBattlerAlive(battler))
 
             return HandleMimicry(battler, ability, ABILITY_BS_CALL);
         }
     };
 
-    class ScreenCleaner : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class ScreenCleaner : extends OnEntry {
+        ON_ENTRY {
             CHECK(TryRemoveScreens(battler))
 
             return SwitchInAnnounce(B_MSG_SWITCHIN_SCREENCLEANER);
         }
     };
 
-    class SteelySpirit : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class SteelySpirit : extends OnOffensiveMultiplier<ApplyOn::ALLY> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_STEEL) MUL(1.3);
         }
-        AbilityApplyOn onOffensiveMultiplierFor() override { return APPLY_ON_ALLY; }
     };
 
-    class PerishBody : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class PerishBody : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(IsBattlerAlive(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -2648,8 +2535,8 @@ class AbilityBehavior {
         }
     };
 
-    class WanderingSpirit : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class WanderingSpirit : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(GetBattlerAbility(battler) == ability)
             CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
@@ -2675,18 +2562,16 @@ class AbilityBehavior {
         }
     };
 
-    class GorillaTactics : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class GorillaTactics : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (IS_MOVE_PHYSICAL(move)) MUL(1.5);
         }
     };
 
-    class NeutralizingGas : public virtual Ability {
-        bool unsuppressable() override { return true; }
-    };
+    class NeutralizingGas : extends Unsuppressable {};
 
-    class PastelVeil : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class PastelVeil : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD)
 
             int side = GetBattlerSide(battler);
@@ -2699,8 +2584,8 @@ class AbilityBehavior {
         }
     };
 
-    class HungerSwitch : public virtual FormChange {
-        int onEndTurn(ON_END_TURN) override {
+    class HungerSwitch : extends FormChange, extends OnEndTurn {
+        ON_END_TURN {
             SpeciesEnum newSpecies;
             CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
             switch (gBattleMons[battler].species) {
@@ -2728,8 +2613,8 @@ class AbilityBehavior {
         }
     };
 
-    class CuriousMedicine : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class CuriousMedicine : extends OnEntry {
+        ON_ENTRY {
             CHECK(IsDoubleBattle())
             CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
             CHECK(TryResetBattlerStatChanges(BATTLE_PARTNER(battler), RESET_ALL_STATS))
@@ -2741,146 +2626,136 @@ class AbilityBehavior {
         }
     };
 
-    class Transistor : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Transistor : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_ELECTRIC) MUL(1.5);
         }
     };
 
-    class DragonsMaw : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class DragonsMaw : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_DRAGON) MUL(1.5);
         }
     };
 
-    class ChillingNeigh : public virtual Moxie {};
+    class ChillingNeigh : extends Moxie {};
 
-    class GrimNeigh : public virtual Ability {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override { return MoxieClone(battler, STAT_SPATK); }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
-    };
+    class GrimNeigh : extends MoxieClone<STAT_SPATK> {};
 
-    class AsOneIceRider : public virtual Unsuppressable, public virtual RandomizerBanned, public virtual Unnerve, public virtual ChillingNeigh {
-        int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE); }
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
-            CHECK(ChillingNeigh::onBattlerFaints(DELEGATE_BATTLER_FAINTS))
+    template <typename FaintAbility>
+    class AsOne : extends Unsuppressable, extends RandomizerBanned, extends Unnerve, extends FaintAbility {
+        ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE); }
+        ON_BATTLER_FAINTS {
+            CHECK(FaintAbility::onBattlerFaints(DELEGATE_BATTLER_FAINTS))
             gBattleScripting.abilityPopupOverwrite = ABILITY_CHILLING_NEIGH;
             BattleScriptCall(BattleScript_AbilityPopUpStack);
             return NO_ANNOUNCE;
         }
     };
 
-    class AsOneShadowRider : public virtual AsOneIceRider, public virtual GrimNeigh {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
-            CHECK(GrimNeigh::onBattlerFaints(DELEGATE_BATTLER_FAINTS))
-            gBattleScripting.abilityPopupOverwrite = ABILITY_GRIM_NEIGH;
-            BattleScriptCall(BattleScript_AbilityPopUpStack);
-            return NO_ANNOUNCE;
-        }
-    };
+    class AsOneIceRider : extends AsOne<ChillingNeigh> {};
 
-    class Chloroplast : public virtual Ability {
-        bool chloroplast() override { return true; }
-    };
+    class AsOneShadowRider : extends AsOne<GrimNeigh> {};
 
-    class Whiteout : public virtual HailImmune {
-        void onStat(ON_STAT) override {
+    class Chloroplast : extends Ability {};
+
+    class Whiteout : extends HailImmune, extends OnStat<> {
+        ON_STAT {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
             if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
         }
     };
 
-    class Pyromancy : public virtual Ability {
-        void onModifyEffectChance(ON_MODIFY_EFFECT_CHANCE) override {
+    class Pyromancy : extends OnModifyEffectChance<> {
+        ON_MODIFY_EFFECT_CHANCE {
             if (moveEffect == MOVE_EFFECT_BURN) *effectChance *= 5;
         }
     };
 
-    class KeenEdge : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class KeenEdge : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) MUL(1.3);
         }
     };
 
-    class PrismScales : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class PrismScales : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (IS_MOVE_SPECIAL(move)) MUL(.7);
         }
     };
 
-    class PowerFists : public virtual IronFist {
-        int onChooseDefensiveStat(ON_CHOOSE_DEFENSIVE_STAT) override {
+    class PowerFists : extends IronFist, extends OnChooseDefensiveStat<> {
+        ON_CHOOSE_DEFENSIVE_STAT {
             CHECK(IsIronFistBoosted(battler, move))
             return STAT_SPDEF;
         }
     };
 
-    class SandSong : public virtual LiquidVoiceClone<TYPE_GROUND> {};
+    class SandSong : extends LiquidVoiceClone<TYPE_GROUND> {};
 
-    class Rampage : public virtual Ability {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+    class Rampage : extends OnBattlerFaints<ApplyOnTarget::ATTACKER> {
+        ON_BATTLER_FAINTS {
             SetAbilityState(battler, ability, TRUE);
             gVolatileStructs[battler].rechargeTimer = 0;
             gBattleMons[battler].status2 &= ~(STATUS2_RECHARGE);
             return FALSE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
-    class Vengeance : public virtual SwarmLike<TYPE_GHOST> {};
+    class Vengeance : extends SwarmLike<TYPE_GHOST> {};
 
-    class BlitzBoxer : public virtual Ability {
-        int onPriority(ON_PRIORITY) override {
+    class BlitzBoxer : extends OnPriority {
+        ON_PRIORITY {
             CHECK(IsIronFistBoosted(battler, move))
             CHECK(BATTLER_MAX_HP(battler));
             return 1;
         }
     };
 
-    class AntarcticBird : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class AntarcticBird : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FLYING || moveType == TYPE_ICE) MUL(1.3);
         }
     };
 
-    class Immolate : public virtual AteAbility<TYPE_FIRE> {};
+    class Immolate : extends AteAbility<TYPE_FIRE> {};
 
-    class Crystallize : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Crystallize : extends OnOffensiveMultiplier<>, extends OnMoveType {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_ICE && gBattleStruct->ateBoost[battler]) MUL(1.1);
         }
-        int onMoveType(ON_MOVE_TYPE) override {
+        ON_MOVE_TYPE {
             CHECK(moveType == TYPE_ROCK)
             *ateBoost = TRUE;
             return TYPE_ICE + 1;
         }
     };
 
-    class Electrocytes : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Electrocytes : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_ELECTRIC) MUL(1.25);
         }
     };
 
-    class Aerodynamics : public virtual Breakable {
-        int onAbsorb(ON_ABSORB) override {
+    class Aerodynamics : extends OnAbsorb {
+        ON_ABSORB {
             CHECK(moveType == TYPE_FLYING);
             *statId = STAT_SPEED;
             return ABSORB_RESULT_STAT;
         }
     };
 
-    class ChristmasSpirit : public virtual Breakable, public virtual HailImmune {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class ChristmasSpirit : extends OnDefensiveMultiplier, extends HailImmune {
+        ON_DEFENSIVE_MULTIPLIER {
             if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) MUL(.5);
         }
     };
 
-    class ExploitWeakness : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class ExploitWeakness : extends OnOffensiveMultiplier<>, extends OnChooseDefensiveStat<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (HasAnyStatusOrAbility(target)) MUL(1.25);
         }
-        int onChooseDefensiveStat(ON_CHOOSE_DEFENSIVE_STAT) override {
+        ON_CHOOSE_DEFENSIVE_STAT {
             CHECK(HasAnyStatusOrAbility(target))
             u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
             u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
@@ -2893,8 +2768,8 @@ class AbilityBehavior {
         }
     };
 
-    class GroundShock : public virtual Ability {
-        int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
+    class GroundShock : extends OnTypeEffectiveness<> {
+        ON_TYPE_EFFECTIVENESS {
             CHECK(moveType == TYPE_ELECTRIC)
             CHECK(defType == TYPE_GROUND)
             CHECK_NOT(*mod)
@@ -2903,29 +2778,29 @@ class AbilityBehavior {
         }
     };
 
-    class AncientIdol : public virtual Ability {
-        void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override { *atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; }
+    class AncientIdol : extends OnChooseOffensiveStat {
+        ON_CHOOSE_OFFENSIVE_STAT { *atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; }
     };
 
-    class MysticPower : public virtual Ability {
-        int onStab(ON_STAB) override { return TRUE; }
+    class MysticPower : extends OnStab {
+        ON_STAB { return TRUE; }
     };
 
-    class Perfectionist : public virtual Ability {
-        int onPriority(ON_PRIORITY) override {
+    class Perfectionist : extends OnPriority, extends OnCrit<> {
+        ON_PRIORITY {
             CHECK(gBattleMoves[move].power <= 25)
             CHECK(gBattleMoves[move].power);
             return 1;
         }
-        int onCrit(ON_CRIT) override {
+        ON_CRIT {
             CHECK(gBattleMoves[move].power <= 50)
             CHECK(gBattleMoves[move].power)
             return 1;
         }
     };
 
-    class GrowingTooth : public virtual Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class GrowingTooth : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
             CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
@@ -2936,8 +2811,8 @@ class AbilityBehavior {
         }
     };
 
-    class Inflatable : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Inflatable : extends ON_DEFENDER {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(CanRaiseStat(battler, STAT_DEF) || CanRaiseStat(battler, STAT_SPDEF))
             CHECK(moveType == TYPE_FIRE || moveType == TYPE_FLYING);
@@ -2947,18 +2822,18 @@ class AbilityBehavior {
         }
     };
 
-    class AuroraBorealis : public virtual HailImmune {
-        int onStab(ON_STAB) override { return moveType == TYPE_ICE; }
+    class AuroraBorealis : extends HailImmune, extends OnStab {
+        ON_STAB { return moveType == TYPE_ICE; }
     };
 
-    class Avenger : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Avenger : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gSideTimers[GET_BATTLER_SIDE(battler)].retaliateTimer) MUL(1.5);
         }
     };
 
-    class LetsRoll : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class LetsRoll : extends OnEntry {
+        ON_ENTRY {
             CHECK(CanRaiseStat(battler, STAT_DEF))
 
             SetStatChanger(STAT_DEF, 1);
@@ -2968,8 +2843,8 @@ class AbilityBehavior {
         }
     };
 
-    class LoudBang : public virtual Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class LoudBang : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBeConfused(target))
             CHECK(IsSoundMove(battler, move))
@@ -2979,41 +2854,37 @@ class AbilityBehavior {
         }
     };
 
-    class LeadCoat : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class LeadCoat : extends OnDefensiveMultiplier, extends OnStat<> {
+        ON_DEFENSIVE_MULTIPLIER {
             if (IS_MOVE_PHYSICAL(move)) MUL(.6);
         }
-        void onStat(ON_STAT) override {
+        ON_STAT {
             if (statId == STAT_SPEED) *stat *= .9;
         }
     };
 
-    class Amphibious : public virtual Ability {
-        int onStab(ON_STAB) override { return moveType == TYPE_WATER; }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+    class Amphibious : extends OnStab, extends OnStatusImmune<> {
+        ON_STAB { return moveType == TYPE_WATER; }
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_DRENCH)
             return TRUE;
         }
     };
 
-    class Grounded : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return AddBattlerType(battler, TYPE_GROUND); }
-    };
+    class Grounded : extends AddsType<TYPE_GROUND> {};
 
-    class Earthbound : public virtual SwarmLike<TYPE_GROUND> {};
+    class Earthbound : extends SwarmLike<TYPE_GROUND> {};
 
-    class FightingSpirit : public virtual AteAbility<TYPE_FIGHTING> {
-        ATE_ABILITY(TYPE_FIGHTING),
-    };
+    class FightingSpirit : extends AteAbility<TYPE_FIGHTING> {};
 
-    class FelineProwess : public virtual Ability {
-        void onStat(ON_STAT) override {
+    class FelineProwess : extends OnStat<> {
+        ON_STAT {
             if (statId == STAT_SPATK) *stat *= 2;
         }
     };
 
-    class CoilUp : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class CoilUp : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gStatuses4[battler] & STATUS4_COILED)
 
             gStatuses4[battler] |= STATUS4_COILED;
@@ -3022,17 +2893,17 @@ class AbilityBehavior {
         }
     };
 
-    class Fossilized : public virtual Breakable {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Fossilized : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_ROCK) MUL(1.2);
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_ROCK) RESISTANCE(.5);
         }
     };
 
-    class MagicalDust : public virtual Ability {
-        int onDefender(ON_DEFENDER) override {
+    class MagicalDust : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
             CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_PSYCHIC))
@@ -3044,8 +2915,8 @@ class AbilityBehavior {
         }
     };
 
-    class Dreamcatcher : public virtual Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Dreamcatcher : extends OnOffensiveMultiplier<>, extends OnPreemptAction {
+        ON_OFFENSIVE_MULTIPLIER {
             for (int i = 0; i < gBattlersCount; i++) {
                 if (IsBattlerAlive(i) && gBattleMons[i].status1 & STATUS1_SLEEP) {
                     FILTER_NOT(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ability && gQueuedExtraAttackData[0].target == i)
@@ -3054,23 +2925,23 @@ class AbilityBehavior {
                 }
             }
         }
-        int onPreemptAction(ON_PREEMPT_ACTION) override {
+        ON_PREEMPT_ACTION {
             CHECK(gBattleMons[turnBattler].status1 & STATUS1_SLEEP)
             return UseTurnAttackAsPursuit(DELEGATE_PREEMPT_ACTION);
         }
     };
 
-    class Nocturnal : public virtual Breakable {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Nocturnal : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_DARK) MUL(1.25);
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_DARK || moveType == TYPE_FAIRY) RESISTANCE(.75);
         }
     };
 
-    class SelfSufficient : public virtual Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class SelfSufficient : extends OnEndTurn {
+        ON_END_TURN {
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
             CHECK(gVolatileStructs[battler].isFirstTurn != 2)
@@ -3083,77 +2954,64 @@ class AbilityBehavior {
         }
     };
 
-    class Tectonize : public virtual Ability {
-        ATE_ABILITY(TYPE_GROUND),
-    };
+    class Tectonize : extends AteAbility<TYPE_GROUND> {};
 
-    class IceAge : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return AddBattlerType(battler, TYPE_ICE); }
-    };
+    class IceAge : extends AddsType<TYPE_ICE> {};
 
-    class HalfDrake : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return AddBattlerType(battler, TYPE_DRAGON); }
-    };
+    class HalfDrake : extends AddsType<TYPE_DRAGON> {};
 
-    class Aquatic : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return AddBattlerType(battler, TYPE_WATER); }
-    };
+    class Aquatic : extends AddsType<TYPE_WATER> {};
 
-    class Liquified : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class Liquified : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_WATER) RESISTANCE(2);
             if (IsMoveMakingContact(move, attacker)) MUL(0.5);
         }
     };
 
-    class Dragonfly : public virtual HalfDrake, public virtual GroundImmune {};
+    class Dragonfly : extends HalfDrake, extends GroundImmune {};
 
-    class Dragonslayer : public virtual Breakable {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Dragonslayer : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
+        ON_OFFENSIVE_MULTIPLIER {
             if (IS_BATTLER_OF_TYPE(target, TYPE_DRAGON)) RESISTANCE(1.5);
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER {
             if (IS_BATTLER_OF_TYPE(attacker, TYPE_DRAGON)) MUL(.5);
         }
     };
 
-    class Mountaineer : public virtual Breakable {
-        void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
+    class StealthRockImmune : extends Ability {};
+    class Mountaineer : extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, extends StealthRockImmune {
+        ON_AFTER_TYPE_EFFECTIVENESS {
             if (moveType == TYPE_ROCK) *mod = 0;
         }
-        AbilityApplyOnWithTarget onAfterTypeEffectivenessFor() override { return onAfterTypeEffectivenessFor; }
-        AbilityApplyOnWithTarget stealthRockImmune() override { return true; }
     };
 
-    class Hydrate : public virtual Ability {
-        ATE_ABILITY(TYPE_WATER),
-    };
+    class Hydrate : extends AteAbility<TYPE_WATER> {};
 
-    class Metallic : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return AddBattlerType(battler, TYPE_STEEL); }
-    };
+    class Metallic : extends AddsType<TYPE_STEEL> {};
 
-    class Permafrost : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class Permafrost : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
         }
     };
 
-    class PrimalArmor : public virtual Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class PrimalArmor : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.5);
         }
     };
 
-    class RagingBoxer : public virtual Ability {
-        MultihitType onParentalBond(ON_PARENTAL_BOND) override {
+    class RagingBoxer : extends OnParentalBond {
+        ON_PARENTAL_BOND {
             CHECK(IsIronFistBoosted(battler, move))
             return PARENTAL_BOND_PRIMAL_MAW;
         }
     };
 
-    class AirBlower : public virtual Ability {
-        int onEntry(ON_ENTRY) override {
+    class AirBlower : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND) int side = GetBattlerSide(battler);
             gSideTimers[side].started.tailwind = TRUE;
             gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
@@ -3168,7 +3026,7 @@ class AbilityBehavior {
         }
     };
 
-    class Juggernaut : public virtual Breakable {
+    class Juggernaut : extends Breakable {
         void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
             if (gBattleMoves[move].contact) secondaryAtkStatToUse[STAT_DEF] += 20;
         }
@@ -3179,25 +3037,23 @@ class AbilityBehavior {
         bool removesStatusOnImmunity() { return true; }
     };
 
-    class ShortCircuit : public virtual SwarmLike<TYPE_ELECTRIC> {};
+    class ShortCircuit : extends SwarmLike<TYPE_ELECTRIC> {};
 
-    class MajesticBird : public virtual Ability {
+    class MajesticBird : extends Ability {
         void onStat(ON_STAT) override {
             if (statId == STAT_SPATK) *stat *= 1.5;
         }
     };
 
-    class Phantom : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return AddBattlerType(battler, TYPE_GHOST); }
-    };
+    class Phantom : extends AddsType<TYPE_GHOST> {};
 
-    class Intoxicate : public virtual AteAbility<TYPE_POISON> {};
+    class Intoxicate : extends AteAbility<TYPE_POISON> {};
 
-    class Impenetrable : public virtual Ability {
+    class Impenetrable : extends Ability {
         bool magicGuard() override { return true; }
     };
 
-    class Hypnotist : public virtual Ability {
+    class Hypnotist : extends Ability {
         AccuracyPriority onAccuracy(ON_ACCURACY) override {
             CHECK(move == MOVE_HYPNOSIS);
             *accuracy *= 1.5;
@@ -3205,7 +3061,7 @@ class AbilityBehavior {
         }
     };
 
-    class Overwhelm : public virtual Ability {
+    class Overwhelm : extends Ability {
         int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
             CHECK(moveType == TYPE_DRAGON) CHECK(defType == TYPE_FAIRY) CHECK_NOT(*mod) *mod = UQ_4_12(1.0);
             return TRUE;
@@ -3215,7 +3071,7 @@ class AbilityBehavior {
 
     class Scare : public Intimidate {};
 
-    class MajesticMoth : public virtual Ability {
+    class MajesticMoth : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK(ChangeStatBuffs(battler, 1, GetHighestStatId(battler, TRUE), MOVE_EFFECT_AFFECTS_USER, NULL))
 
@@ -3224,7 +3080,7 @@ class AbilityBehavior {
         }
     };
 
-    class SoulEater : public virtual Ability {
+    class SoulEater : extends Ability {
         int onBattlerFaints(ON_BATTLER_FAINTS) override {
             CHECK_NOT(BATTLER_MAX_HP(battler));
             CHECK(CanBattlerHeal(battler));
@@ -3234,7 +3090,7 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
-    class SoulLinker : public virtual Ability {
+    class SoulLinker : extends Ability {
         ON_EITHER {
             CHECK(ShouldApplyOnHitAffect(opponent))
             CHECK(IsBattlerAlive(battler))
@@ -3246,7 +3102,7 @@ class AbilityBehavior {
         }
     };
 
-    class SweetDreams : public virtual Ability {
+    class SweetDreams : extends Ability {
         int onEndTurn(ON_END_TURN) override {
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
@@ -3260,7 +3116,7 @@ class AbilityBehavior {
         }
     };
 
-    class BadLuck : public virtual Breakable {
+    class BadLuck : extends Breakable {
         int onCrit(ON_CRIT) override { return NEVER_CRIT; }
         void onModifyEffectChance(ON_MODIFY_EFFECT_CHANCE) override {
             if (*effectChance < 1) *effectChance = 0;
@@ -3269,7 +3125,7 @@ class AbilityBehavior {
         AbilityApplyOn onModifyEffectChanceFor() override { return APPLY_ON_FOE; }
     };
 
-    class HauntedSpirit : public virtual Ability {
+    class HauntedSpirit : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK_NOT(IsBattlerAlive(battler))
@@ -3283,7 +3139,7 @@ class AbilityBehavior {
         }
     };
 
-    class ElectricBurst : public virtual Ability {
+    class ElectricBurst : extends Ability {
         int onRecoil(ON_RECOIL) override {
             CHECK(moveType == TYPE_ELECTRIC);
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -3294,7 +3150,7 @@ class AbilityBehavior {
         }
     };
 
-    class RawWood : public virtual Breakable {
+    class RawWood : extends Breakable {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_GRASS) MUL(1.2);
         }
@@ -3303,7 +3159,7 @@ class AbilityBehavior {
         }
     };
 
-    class Solenoglyphs : public virtual Ability {
+    class Solenoglyphs : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBePoisoned(battler, target, MOVE_NONE))
@@ -3314,7 +3170,7 @@ class AbilityBehavior {
         }
     };
 
-    class SpiderLair : public virtual Ability {
+    class SpiderLair : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
@@ -3327,7 +3183,7 @@ class AbilityBehavior {
         }
     };
 
-    class FatalPrecision : public virtual Ability {
+    class FatalPrecision : extends Ability {
         AccuracyPriority onAccuracy(ON_ACCURACY) override {
             CHECK_NOT(IS_MOVE_STATUS(move))
             CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, TRUE) >= UQ_4_12(2.0))
@@ -3339,11 +3195,7 @@ class AbilityBehavior {
         }
     };
 
-    class FortKnox : public virtual Ability {
-        bool fortKnox() override { return true; }
-    };
-
-    class Seaweed : public virtual Breakable {
+    class Seaweed : extends Breakable {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(target, TYPE_FIRE)) RESISTANCE(2);
         }
@@ -3352,9 +3204,9 @@ class AbilityBehavior {
         }
     };
 
-    class PsychicMind : public virtual SwarmLike<TYPE_PSYCHIC> {};
+    class PsychicMind : extends SwarmLike<TYPE_PSYCHIC> {};
 
-    class PoisonAbsorb : public virtual Redirects<TYPE_POISON> {
+    class PoisonAbsorb : extends Redirects<TYPE_POISON> {
         int onAbsorb(ON_ABSORB) override {
             CHECK(moveType == TYPE_POISON)
             return ABSORB_RESULT_HEAL;
@@ -3373,9 +3225,9 @@ class AbilityBehavior {
         }
     };
 
-    class Scavenger : public virtual SoulEater {};
+    class Scavenger : extends SoulEater {};
 
-    class TwistedDimension : public virtual Ability {
+    class TwistedDimension : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
 
@@ -3387,7 +3239,7 @@ class AbilityBehavior {
         }
     };
 
-    class MultiHeaded : public virtual Ability {
+    class MultiHeaded : extends Ability {
         MultihitType onParentalBond(ON_PARENTAL_BOND) override {
             if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
             if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
@@ -3396,7 +3248,7 @@ class AbilityBehavior {
         bool resistsFortKnox() override { return true; }
     };
 
-    class NorthWind : public virtual HailImmune {
+    class NorthWind : extends HailImmune {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_AURORA_VEIL)
 
@@ -3413,7 +3265,7 @@ class AbilityBehavior {
         }
     };
 
-    class Overcharge : public virtual Ability {
+    class Overcharge : extends Ability {
         int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
             CHECK(moveType == TYPE_ELECTRIC)
             CHECK(defType == TYPE_ELECTRIC)
@@ -3426,22 +3278,22 @@ class AbilityBehavior {
         }
     };
 
-    class ViolentRush : public virtual Ability {
+    class ViolentRush : extends Ability {
         int onEntry(ON_ENTRY) override {
             gVolatileStructs[battler].violentRush = gVolatileStructs[battler].started.violentRush = TRUE;
             return SwitchInAnnounce(B_MSG_SWITCHIN_VIOLENT_RUSH);
         }
     };
 
-    class FlamingSoul : public virtual GaleWingsLike<TYPE_FIRE> {};
+    class FlamingSoul : extends GaleWingsLike<TYPE_FIRE> {};
 
-    class SagePower : public virtual Ability {
+    class SagePower : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (IS_MOVE_SPECIAL(move)) MUL(1.5);
         }
     };
 
-    class BoneZone : public virtual Ability {
+    class BoneZone : extends Ability {
         void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
             if (*mod >= UQ_4_12(1.0)) return;
             if (*mod == 0) {
@@ -3454,13 +3306,13 @@ class AbilityBehavior {
         }
     };
 
-    class SpeedForce : public virtual Ability {
+    class SpeedForce : extends Ability {
         void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
             if (gBattleMoves[move].contact) secondaryAtkStatToUse[STAT_SPEED] += 20;
         }
     };
 
-    class SeaGuardian : public virtual Ability {
+    class SeaGuardian : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
@@ -3472,7 +3324,7 @@ class AbilityBehavior {
         }
     };
 
-    class MoltenDown : public virtual Ability {
+    class MoltenDown : extends Ability {
         int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
             CHECK(moveType == TYPE_FIRE)
             CHECK(defType == TYPE_ROCK)
@@ -3481,37 +3333,37 @@ class AbilityBehavior {
         }
     };
 
-    class Flock : public virtual SwarmLike<TYPE_FLYING> {};
+    class Flock : extends SwarmLike<TYPE_FLYING> {};
 
-    class FieldExplorer : public virtual Ability {
+    class FieldExplorer : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.5);
         }
     };
 
-    class Striker : public virtual Ability {
+    class Striker : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (IsStrikerBoosted(battler, move)) MUL(1.3);
         }
     };
 
-    class FrozenSoul : public virtual GaleWingsLike<TYPE_ICE> {};
+    class FrozenSoul : extends GaleWingsLike<TYPE_ICE> {};
 
-    class Predator : public virtual SoulEater {};
+    class Predator : extends SoulEater {};
 
-    class Looter : public virtual SoulEater {};
+    class Looter : extends SoulEater {};
 
-    class LunarEclipse : public virtual Hypnotist {
+    class LunarEclipse : extends Hypnotist {
         int onStab(ON_STAB) override { return moveType == TYPE_DARK || moveType == TYPE_FAIRY; }
     };
 
-    class SolarFlare : public virtual Immolate, public virtual Chloroplast {};
+    class SolarFlare : extends Immolate, extends Chloroplast {};
 
-    class PowerCore : public virtual Ability {
+    class PowerCore : extends Ability {
         void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override { secondaryAtkStatToUse[IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF] += 20; }
     };
 
-    class SightingSystem : public virtual Ability {
+    class SightingSystem : extends Ability {
         AccuracyPriority onAccuracy(ON_ACCURACY) override { return ACCURACY_HITS_IF_POSSIBLE; }
         int onPriority(ON_PRIORITY) override {
             CHECK(gBattleMoves[move].accuracy)
@@ -3520,28 +3372,28 @@ class AbilityBehavior {
         }
     };
 
-    class BadCompany : public virtual RandomizerBanned {};
+    class BadCompany : extends RandomizerBanned {};
 
-    class Opportunist : public virtual Ability {
+    class Opportunist : extends Ability {
         int onPriority(ON_PRIORITY) override {
             CHECK(gBattleMons[target].hp <= gBattleMons[target].maxHP / 2)
             return 1;
         }
     };
 
-    class GiantWings : public virtual Ability {
+    class GiantWings : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (gBattleMoves[move].airBased) MUL(1.3);
         }
     };
 
-    class Momentum : public virtual Ability {
+    class Momentum : extends Ability {
         void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
             if (gBattleMoves[move].contact) *atkStatToUse = STAT_SPEED;
         }
     };
 
-    class GripPincer : public virtual Ability {
+    class GripPincer : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(gBattlerTarget))
             CHECK(IsBattlerAlive(battler))
@@ -3566,7 +3418,7 @@ class AbilityBehavior {
         }
     };
 
-    class BigLeaves : public virtual Harvest, public virtual LeafGuard, public virtual SolarPower, public virtual Chlorophyll, public virtual Chloroplast {
+    class BigLeaves : extends Harvest, extends LeafGuard, extends SolarPower, extends Chlorophyll, extends Chloroplast {
         int onEndTurn(ON_END_TURN) override { return Harvest::onEndTurn(DELEGATE_END_TURN) | LeafGuard::onEndTurn(DELEGATE_END_TURN); }
         void onStat(ON_STAT) override {
             SolarPower::onStat(DELEGATE_STAT);
@@ -3575,7 +3427,7 @@ class AbilityBehavior {
         bool chloroplast() override { return true; }
     };
 
-    class PreciseFist : public virtual Ability {
+    class PreciseFist : extends Ability {
         int onCrit(ON_CRIT) override {
             CHECK(IsIronFistBoosted(battler, move))
             return 1;
@@ -3585,7 +3437,7 @@ class AbilityBehavior {
         }
     };
 
-    class Deadeye : public virtual Ability {
+    class Deadeye : extends Ability {
         AccuracyPriority onAccuracy(ON_ACCURACY) override {
             CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].arrowBased)
             return ACCURACY_HITS_IF_POSSIBLE;
@@ -3603,14 +3455,14 @@ class AbilityBehavior {
         }
     };
 
-    class Artillery : public virtual Ability {
+    class Artillery : extends Ability {
         AccuracyPriority onAccuracy(ON_ACCURACY) override {
             CHECK(IsMegaLauncherBoosted(battler, move))
             return ACCURACY_HITS_IF_POSSIBLE;
         }
     };
 
-    class IceDew : public virtual Redirects<TYPE_ICE> {
+    class IceDew : extends Redirects<TYPE_ICE> {
         int onAbsorb(ON_ABSORB) override {
             CHECK(moveType == TYPE_ICE);
             *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -3618,7 +3470,7 @@ class AbilityBehavior {
         }
     };
 
-    class SunWorship : public virtual Ability {
+    class SunWorship : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
 
@@ -3629,11 +3481,11 @@ class AbilityBehavior {
         }
     };
 
-    class Pollinate : public virtual Ability {
+    class Pollinate : extends Ability {
         ATE_ABILITY(TYPE_BUG),
     };
 
-    class VolcanoRage : public virtual Ability {
+    class VolcanoRage : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(moveType == TYPE_FIRE)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -3642,7 +3494,7 @@ class AbilityBehavior {
         }
     };
 
-    class ColdRebound : public virtual Ability {
+    class ColdRebound : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -3652,15 +3504,15 @@ class AbilityBehavior {
         }
     };
 
-    class LowBlow : public virtual Ability {
+    class LowBlow : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40); }
     };
 
-    class Spectralize : public virtual Ability {
+    class Spectralize : extends Ability {
         ATE_ABILITY(TYPE_GHOST)
     };
 
-    class SpectralShroud : public virtual Spectralize {
+    class SpectralShroud : extends Spectralize {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBePoisoned(battler, target, MOVE_NONE))
@@ -3672,7 +3524,7 @@ class AbilityBehavior {
         }
     };
 
-    class Discipline : public virtual Breakable {
+    class Discipline : extends Breakable {
         int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
             CHECK(status & CHECK_CONFUSION)
             return TRUE;
@@ -3681,7 +3533,7 @@ class AbilityBehavior {
         bool tauntImmune() override { return true; }
     };
 
-    class Thundercall : public virtual Ability {
+    class Thundercall : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(moveType == TYPE_ELECTRIC)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -3690,19 +3542,19 @@ class AbilityBehavior {
         }
     };
 
-    class MarineApex : public virtual Infiltrate {
+    class MarineApex : extends Infiltrate {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (IS_BATTLER_OF_TYPE(target, TYPE_WATER)) RESISTANCE(1.5);
         }
     };
 
-    class MightyHorn : public virtual Ability {
+    class MightyHorn : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (gBattleMoves[move].hornBased) MUL(1.3);
         }
     };
 
-    class HardenedSheath : public virtual Ability {
+    class HardenedSheath : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(gBattleMoves[move].hornBased)
@@ -3714,11 +3566,11 @@ class AbilityBehavior {
         }
     };
 
-    class ArcticFur : public virtual Breakable {
+    class ArcticFur : extends Breakable {
         void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override { MUL(.65); }
     };
 
-    class Lethargy : public virtual Ability {
+    class Lethargy : extends Ability {
         int onEntry(ON_ENTRY) override {
             TryResetBattlerStatChanges(battler, RESET_ALL_STATS);
             gVolatileStructs[battler].slowStartTimer = 5;
@@ -3747,11 +3599,11 @@ class AbilityBehavior {
         }
     };
 
-    class IronBarrage : public virtual MegaLauncher, public virtual SightingSystem {};
+    class IronBarrage : extends MegaLauncher, extends SightingSystem {};
 
-    class SteelBarrel : public virtual RockHead {};
+    class SteelBarrel : extends RockHead {};
 
-    class PyroShells : public virtual Ability {
+    class PyroShells : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(IsMegaLauncherBoosted(battler, move))
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -3760,7 +3612,7 @@ class AbilityBehavior {
         }
     };
 
-    class FungalInfection : public virtual Ability {
+    class FungalInfection : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
@@ -3774,7 +3626,7 @@ class AbilityBehavior {
         }
     };
 
-    class Parry : public virtual Ability {
+    class Parry : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -3785,7 +3637,7 @@ class AbilityBehavior {
         void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override { MUL(.8); }
     };
 
-    class Scrapyard : public virtual Ability {
+    class Scrapyard : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(DidMoveHit())
             CHECK(IsMoveMakingContact(move, attacker))
@@ -3796,9 +3648,9 @@ class AbilityBehavior {
         }
     };
 
-    class LooseQuills : public virtual Scrapyard {};
+    class LooseQuills : extends Scrapyard {};
 
-    class ToxicDebris : public virtual Ability {
+    class ToxicDebris : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(DidMoveHit())
             CHECK(IsMoveMakingContact(move, attacker))
@@ -3809,7 +3661,7 @@ class AbilityBehavior {
         }
     };
 
-    class Roundhouse : public virtual Ability {
+    class Roundhouse : extends Ability {
         AccuracyPriority onAccuracy(ON_ACCURACY) override {
             CHECK(IsStrikerBoosted(battler, move))
             return ACCURACY_HITS_IF_POSSIBLE;
@@ -3827,11 +3679,11 @@ class AbilityBehavior {
         }
     };
 
-    class Mineralize : public virtual Ability {
+    class Mineralize : extends Ability {
         ATE_ABILITY(TYPE_ROCK),
     };
 
-    class LooseRocks : public virtual Ability {
+    class LooseRocks : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(DidMoveHit())
             CHECK(IsMoveMakingContact(move, attacker))
@@ -3842,7 +3694,7 @@ class AbilityBehavior {
         }
     };
 
-    class SpinningTop : public virtual Ability {
+    class SpinningTop : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(moveType == TYPE_FIGHTING)
@@ -3870,7 +3722,7 @@ class AbilityBehavior {
         }
     };
 
-    class RetributionBlow : public virtual Ability {
+    class RetributionBlow : extends Ability {
         int onReactive(ON_REACTIVE) override {
             CHECK_NOT(gTurnStructs[battler].dancerUsedMove)
             CHECK(IsBattlerAlive(gBattlerAttacker))
@@ -3897,7 +3749,7 @@ class AbilityBehavior {
         }
     };
 
-    class ToxicSpill : public virtual Ability {
+    class ToxicSpill : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
             BattleScriptPushCursorAndCallback(BattleScript_BattlerAnnouncedToxicSpill);
@@ -3946,7 +3798,7 @@ class AbilityBehavior {
         }
     };
 
-    class DesertCloak : public virtual Breakable, public virtual SandImmune {
+    class DesertCloak : extends Breakable, extends SandImmune {
         int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
             CHECK(status & CHECK_STATUS1)
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
@@ -3955,19 +3807,19 @@ class AbilityBehavior {
         AbilityApplyOn onStatusImmuneFor override { return APPLY_ON_ALLY; }
     };
 
-    class Draconize : public virtual Ability {
+    class Draconize : extends Ability {
         ATE_ABILITY(TYPE_DRAGON),
     };
 
-    class PrettyPrincess : public virtual Ability {
+    class PrettyPrincess : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (!IsUnaware(battler) && HasAnyLoweredStat(target)) MUL(1.5);
         }
     };
 
-    class SelfRepair : public virtual SelfSufficient, public virtual NaturalCure {};
+    class SelfRepair : extends SelfSufficient, extends NaturalCure {};
 
-    class Electromorphosis : public virtual Ability {
+    class Electromorphosis : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
@@ -3978,29 +3830,29 @@ class AbilityBehavior {
         }
     };
 
-    class AtomicBurst : public virtual Electromorphosis, public virtual Galvanize {};
+    class AtomicBurst : extends Electromorphosis, extends Galvanize {};
 
-    class Hellblaze : public virtual BoostedSwarmLike<TYPE_FIRE> {};
+    class Hellblaze : extends BoostedSwarmLike<TYPE_FIRE> {};
 
-    class Riptide : public virtual BoostedSwarmLike<TYPE_WATER> {};
+    class Riptide : extends BoostedSwarmLike<TYPE_WATER> {};
 
-    class ForestRage : public virtual BoostedSwarmLike<TYPE_GRASS> {};
+    class ForestRage : extends BoostedSwarmLike<TYPE_GRASS> {};
 
-    class PrimalMaw : public virtual Ability {
+    class PrimalMaw : extends Ability {
         MultihitType onParentalBond(ON_PARENTAL_BOND) override {
             CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
             return PARENTAL_BOND_PRIMAL_MAW;
         }
     };
 
-    class SweepingEdge : public virtual Ability {
+    class SweepingEdge : extends Ability {
         AccuracyPriority onAccuracy(ON_ACCURACY) override {
             CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
             return ACCURACY_HITS_IF_POSSIBLE;
         }
     };
 
-    class GiftedMind : public virtual Breakable {
+    class GiftedMind : extends Breakable {
         AccuracyPriority onAccuracy(ON_ACCURACY) override {
             CHECK(IS_MOVE_STATUS(move))
             return ACCURACY_HITS_IF_POSSIBLE;
@@ -4011,7 +3863,7 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onAfterTypeEffectivenessFor() override { return onAfterTypeEffectivenessFor; }
     };
 
-    class HydroCircuit : public virtual Transistor {
+    class HydroCircuit : extends Transistor {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(BATTLER_MAX_HP(battler))
@@ -4025,7 +3877,7 @@ class AbilityBehavior {
         }
     };
 
-    class Equinox : public virtual Ability {
+    class Equinox : extends Ability {
         void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
             int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
             int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
@@ -4036,7 +3888,7 @@ class AbilityBehavior {
         }
     };
 
-    class Absorbant : public virtual Ability {
+    class Absorbant : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
@@ -4050,10 +3902,10 @@ class AbilityBehavior {
         }
     };
 
-    class Clueless : public virtual CloudNine, public virtual Unsuppressable {};
+    class Clueless : extends CloudNine, extends Unsuppressable {};
 
     template <int N>
-    class NoDamageHits : public virtual Persistent {
+    class NoDamageHits : extends Persistent {
         int onEntry(ON_ENTRY) override {
             int uses = N - GetSingleUseAbilityCounter(battler, ability);
             CHECK(uses)
@@ -4069,13 +3921,13 @@ class AbilityBehavior {
 
         int noDamageHits() override { return N; }
     };
-    class CheatingDeath : public virtual NoDamageHits<2> {};
+    class CheatingDeath : extends NoDamageHits<2> {};
 
-    class CheapTactics : public virtual Ability {
+    class CheapTactics : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_SCRATCH, 0); }
     };
 
-    class Coward : public virtual Ability {
+    class Coward : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
 
@@ -4087,9 +3939,9 @@ class AbilityBehavior {
         bool persistent() override { return true; }
     };
 
-    class VoltRush : public virtual GaleWingsLike<TYPE_ELECTRIC> {};
+    class VoltRush : extends GaleWingsLike<TYPE_ELECTRIC> {};
 
-    class DuneTerror : public virtual Breakable, public virtual SandImmune {
+    class DuneTerror : extends Breakable, extends SandImmune {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_GROUND) MUL(1.2);
         }
@@ -4098,7 +3950,7 @@ class AbilityBehavior {
         }
     };
 
-    class InfernalRage : public virtual Ability {
+    class InfernalRage : extends Ability {
         int onRecoil(ON_RECOIL) override {
             CHECK(moveType == TYPE_FIRE);
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -4109,14 +3961,14 @@ class AbilityBehavior {
         }
     };
 
-    class DualWield : public virtual Ability {
+    class DualWield : extends Ability {
         MultihitType onParentalBond(ON_PARENTAL_BOND) override {
             CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
             return PARENTAL_BOND_DUAL_WIELD;
         }
     };
 
-    class ElementalCharge : public virtual Ability {
+    class ElementalCharge : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(Random() % 100 < 20)
@@ -4144,14 +3996,14 @@ class AbilityBehavior {
         }
     };
 
-    class Ambush : public virtual Ability {
+    class Ambush : extends Ability {
         int onCrit(ON_CRIT) override {
             CHECK(gVolatileStructs[battler].isFirstTurn)
             return ALWAYS_CRIT;
         }
     };
 
-    class Atlas : public virtual Ability {
+    class Atlas : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
 
@@ -4163,7 +4015,7 @@ class AbilityBehavior {
         }
     };
 
-    class Radiance : public virtual Ability {
+    class Radiance : extends Ability {
         int onImmune(ON_IMMUNE) override {
             CHECK(moveType == TYPE_DARK);
             *immunityScript = BattleScript_RadianceProtected;
@@ -4175,7 +4027,7 @@ class AbilityBehavior {
         }
     };
 
-    class JawsOfCarnage : public virtual Ability {
+    class JawsOfCarnage : extends Ability {
         int onBattlerFaints(ON_BATTLER_FAINTS) override {
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
@@ -4188,7 +4040,7 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
-    class AngelsWrath : public virtual Ability {
+    class AngelsWrath : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             switch (move) {
                 case MOVE_TACKLE: {
@@ -4321,7 +4173,7 @@ class AbilityBehavior {
         }
     };
 
-    class PrismaticFur : public virtual ColorChange, public virtual Protean {
+    class PrismaticFur : extends ColorChange, extends Protean {
         void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override { MUL(.5); }
         int onBeforeAttack(ABILITY_ON_BEFORE_ATTACK) override {
             if (battler == attacker)
@@ -4332,7 +4184,7 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onBeforeAttackFor() override { return APPLY_ON_ATTACKER_OR_TARGET; }
     };
 
-    class ShockingJaws : public virtual Ability {
+    class ShockingJaws : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBeParalyzed(battler, target))
@@ -4343,7 +4195,7 @@ class AbilityBehavior {
         }
     };
 
-    class FaeHunter : public virtual Breakable {
+    class FaeHunter : extends Breakable {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (IS_BATTLER_OF_TYPE(target, TYPE_FAIRY)) RESISTANCE(1.5);
         }
@@ -4352,7 +4204,7 @@ class AbilityBehavior {
         }
     };
 
-    class GravityWell : public virtual Ability {
+    class GravityWell : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
 
@@ -4364,14 +4216,14 @@ class AbilityBehavior {
         }
     };
 
-    class Evaporate : public virtual Breakable {
+    class Evaporate : extends Breakable {
         int onAbsorb(ON_ABSORB) override {
             CHECK(moveType == TYPE_WATER)
             return ABSORB_RESULT_EVAPORATE;
         }
     };
 
-    class Lumberjack : public virtual Breakable {
+    class Lumberjack : extends Breakable {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) RESISTANCE(1.5);
         }
@@ -4380,7 +4232,7 @@ class AbilityBehavior {
         }
     };
 
-    class WellBakedBody : public virtual Breakable {
+    class WellBakedBody : extends Breakable {
         int onAbsorb(ON_ABSORB) override {
             CHECK(moveType == TYPE_FIRE);
             *statId = STAT_DEF;
@@ -4389,7 +4241,7 @@ class AbilityBehavior {
         bool absorbUp2() { return true; }
     };
 
-    class Furnace : public virtual Ability {
+    class Furnace : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
             CHECK(gSideTimers[GetBattlerSide(battler)].stealthRockType == TYPE_ROCK)
@@ -4410,38 +4262,33 @@ class AbilityBehavior {
         }
     };
 
-    class RockyPayload : public virtual Ability {
+    class RockyPayload : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_ROCK || gBattleMoves[move].throwingBased) MUL(1.5);
         }
     };
 
-    class EarthEater : public virtual Breakable {
+    class EarthEater : extends Breakable {
         int onAbsorb(ON_ABSORB) override {
             CHECK(moveType == TYPE_GROUND)
             return ABSORB_RESULT_HEAL;
         }
     };
 
-    class LingeringAroma : public virtual Mummy {};
+    class LingeringAroma : extends Mummy {};
 
-    class FairyTale : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return AddBattlerType(battler, TYPE_FAIRY); }
-    };
+    class FairyTale : extends AddsType<TYPE_FAIRY> {};
 
-    class RagingMoth : public virtual Ability {
+    class RagingMoth : extends Ability {
         MultihitType onParentalBond(ON_PARENTAL_BOND) override {
             CHECK(moveType == TYPE_FIRE)
             return PARENTAL_BOND_DUAL_WIELD;
         }
     };
 
-    class AdrenalineRush : public virtual Ability {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override { return MoxieClone(battler, STAT_SPEED); }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
-    };
+    class AdrenalineRush : extends MoxieClone<STAT_SPEED> {};
 
-    class Archmage : public virtual RandomizerBanned {
+    class Archmage : extends RandomizerBanned {
         int onAttacker(ON_ATTACKER) override {
             CHECK(DidMoveHit())
             CHECK_NOT(IS_MOVE_STATUS(move))
@@ -4579,13 +4426,13 @@ class AbilityBehavior {
         }
     };
 
-    class Cryomancy : public virtual Ability {
+    class Cryomancy : extends Ability {
         void onModifyEffectChance(ON_MODIFY_EFFECT_CHANCE) override {
             if (moveEffect == MOVE_EFFECT_FROSTBITE) *effectChance *= 5;
         }
     };
 
-    class PhantomPain : public virtual Ability {
+    class PhantomPain : extends Ability {
         int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
             CHECK(moveType == TYPE_GHOST)
             CHECK(defType == TYPE_NORMAL)
@@ -4595,32 +4442,32 @@ class AbilityBehavior {
         }
     };
 
-    class Purgatory : public virtual BoostedSwarmLike<TYPE_GHOST> {};
+    class Purgatory : extends BoostedSwarmLike<TYPE_GHOST> {};
 
-    class Emanate : public virtual Ability {
+    class Emanate : extends Ability {
         ATE_ABILITY(TYPE_PSYCHIC),
     };
 
-    class KunoichiBlade : public virtual Technician, public virtual SkillLink {};
+    class KunoichiBlade : extends Technician, extends SkillLink {};
 
-    class MonkeyBusiness : public virtual Ability {
+    class MonkeyBusiness : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_TICKLE, 0); }
     };
 
-    class CombatSpecialist : public virtual Merged<IronFist, Striker> {};
+    class CombatSpecialist : extends Merged<IronFist, Striker> {};
 
-    class JunglesGuard : public virtual FlowerVeil {};
+    class JunglesGuard : extends FlowerVeil {};
 
-    class HuntersHorn : public virtual SoulEater, public virtual MightyHorn {};
+    class HuntersHorn : extends SoulEater, extends MightyHorn {};
 
-    class PixiePower : public virtual FairyAura {
+    class PixiePower : extends FairyAura {
         AccuracyPriority onAccuracy(ON_ACCURACY) override {
             *accuracy *= 1.2;
             return ACCURACY_MULTIPLICATIVE;
         }
     };
 
-    class PlasmaLamp : public virtual Ability {
+    class PlasmaLamp : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC) MUL(1.2);
         }
@@ -4631,25 +4478,25 @@ class AbilityBehavior {
         }
     };
 
-    class MagmaEater : public virtual SoulEater, public virtual MoltenDown {};
+    class MagmaEater : extends SoulEater, extends MoltenDown {};
 
-    class SuperHotGoo : public virtual Merged<Gooey, FlameBody> {};
+    class SuperHotGoo : extends Merged<Gooey, FlameBody> {};
 
-    class Nika : public virtual IronFist {};
+    class Nika : extends IronFist {};
 
-    class Archer : public virtual Ability {
+    class Archer : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (gBattleMoves[move].arrowBased) MUL(1.3);
         }
     };
 
-    class SuperSlammer : public virtual Ability {
+    class SuperSlammer : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (gBattleMoves[move].hammerBased) MUL(1.3);
         }
     };
 
-    class InverseRoom : public virtual Ability {
+    class InverseRoom : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)
 
@@ -4661,7 +4508,7 @@ class AbilityBehavior {
         }
     };
 
-    class FrostBurn : public virtual Ability {
+    class FrostBurn : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(moveType == TYPE_FIRE)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -4670,7 +4517,7 @@ class AbilityBehavior {
         }
     };
 
-    class ItchyDefense : public virtual Ability {
+    class ItchyDefense : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -4690,7 +4537,7 @@ class AbilityBehavior {
         }
     };
 
-    class Generator : public virtual Ability {
+    class Generator : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
@@ -4724,15 +4571,15 @@ class AbilityBehavior {
         bool persistent() override { return true; }
     };
 
-    class MoonSpirit : public virtual Ability {
+    class MoonSpirit : extends Ability {
         int onStab(ON_STAB) override { return moveType == TYPE_FAIRY || moveType == TYPE_DARK; }
     };
 
-    class DustCloud : public virtual Ability {
+    class DustCloud : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_SAND_ATTACK, 0); }
     };
 
-    class TippingPoint : public virtual Ability {
+    class TippingPoint : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(CanRaiseStat(battler, STAT_SPATK))
@@ -4748,13 +4595,13 @@ class AbilityBehavior {
         }
     };
 
-    class BerserkerRage : public virtual TippingPoint, public virtual Rampage {};
+    class BerserkerRage : extends TippingPoint, extends Rampage {};
 
-    class Trickster : public virtual Ability {
+    class Trickster : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_DISABLE, 0); }
     };
 
-    class SandGuard : public virtual Breakable, public virtual SandImmune {
+    class SandGuard : extends Breakable, extends SandImmune {
         int onImmune(ON_IMMUNE) override {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY));
             return blockPriority(DELEGATE_IMMUNE);
@@ -4764,9 +4611,9 @@ class AbilityBehavior {
         }
     };
 
-    class NaturalRecovery : public virtual Merged<NaturalCure, Regenerator> {};
+    class NaturalRecovery : extends Merged<NaturalCure, Regenerator> {};
 
-    class WindRider : public virtual Breakable {
+    class WindRider : extends Breakable {
         int onEntry(ON_ENTRY) override {
             CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
             CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
@@ -4781,7 +4628,7 @@ class AbilityBehavior {
         }
     };
 
-    class SoothingAroma : public virtual Ability {
+    class SoothingAroma : extends Ability {
         int onEntry(ON_ENTRY) override {
             int anyStatus = FALSE;
             struct Pokemon *party;
@@ -4806,9 +4653,9 @@ class AbilityBehavior {
         }
     };
 
-    class PrimAndProper : public virtual WonderSkin, public virtual CuteCharm {};
+    class PrimAndProper : extends WonderSkin, extends CuteCharm {};
 
-    class SuperStrain : public virtual Ability {
+    class SuperStrain : extends Ability {
         int onRecoil(ON_RECOIL) override {
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_STRAIN;
             return max(damage / 4, 1);
@@ -4821,9 +4668,9 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
-    class Enlightened : public virtual Emanate, public virtual InnerFocus {};
+    class Enlightened : extends Emanate, extends InnerFocus {};
 
-    class PeacefulSlumber : public virtual SweetDreams, public virtual SelfSufficient {
+    class PeacefulSlumber : extends SweetDreams, extends SelfSufficient {
         int onEndTurn(ON_END_TURN) override {
             if (!SweetDreams::onEndTurn(DELEGATE_END_TURN)) return SelfSufficient::onEndTurn(DELEGATE_END_TURN);
             gBattleMoveDamage -= gBattleMons[battler].maxHP / 16;
@@ -4831,7 +4678,7 @@ class AbilityBehavior {
         }
     };
 
-    class Aftershock : public virtual Ability {
+    class Aftershock : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(gBattleMoves[move].power)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -4849,11 +4696,11 @@ class AbilityBehavior {
         AbilityStatusEffectSafe(MOVE_EFFECT_FROSTBITE, battler, opponent);
         return TRUE;
     }
-    class FreezingPoint : public virtual Ability {
+    class FreezingPoint : extends Ability {
         ON_EITHER_ABILITY(FreezingPoint),
     };
 
-    class CryoProficiency : public virtual FreezingPoint, public virtaul CryoProficiency {
+    class CryoProficiency : extends FreezingPoint, public virtaul CryoProficiency {
         int CryoProficiencyHail(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType) {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY)
@@ -4872,17 +4719,17 @@ class AbilityBehavior {
         }
     };
 
-    class ArcaneForce : public virtual MysticPower {
+    class ArcaneForce : extends MysticPower {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
         }
     };
 
-    class Doombringer : public virtual Ability {
+    class Doombringer : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_DOOM_DESIRE, 0); }
     };
 
-    class Wishmaker : public virtual Ability {
+    class Wishmaker : extends Ability {
         int onEntry(ON_ENTRY) override {
             int counter = GetSingleUseAbilityCounter(battler, ability);
             CHECK(counter < 3)
@@ -4904,24 +4751,24 @@ class AbilityBehavior {
         }
     };
 
-    class Suppress : public virtual Ability {
+    class Suppress : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_TORMENT, 0); }
     };
 
-    class Refrigerator : public virtual Filter, public virtual Illuminate {};
+    class Refrigerator : extends Filter, extends Illuminate {};
 
-    class HeavenAsunder : public virtual Ability {
+    class HeavenAsunder : extends Ability {
         void onCrit(ON_CRIT) override {
             if (move == MOVE_SPACIAL_REND) return ALWAYS_CRIT;
             return 1;
         }
     };
 
-    class PurifyingWaters : public virtual WaterVeil, public virtual Hydration {};
+    class PurifyingWaters : extends WaterVeil, extends Hydration {};
 
-    class Seaborne : public virtual Drizzle, public virtual SwiftSwim {};
+    class Seaborne : extends Drizzle, extends SwiftSwim {};
 
-    class HighTide : public virtual Ability {
+    class HighTide : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(moveType == TYPE_WATER)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -4930,11 +4777,11 @@ class AbilityBehavior {
         }
     };
 
-    class ChangeOfHeart : public virtual Ability {
+    class ChangeOfHeart : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_HEART_SWAP, 0); }
     };
 
-    class MysticBlades : public virtual KeenEdge {
+    class MysticBlades : extends KeenEdge {
         int onSwapSplit(ON_SWAP_SPLIT) override {
             CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
             CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
@@ -4942,18 +4789,18 @@ class AbilityBehavior {
         }
     };
 
-    class Determination : public virtual Ability {
+    class Determination : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (HasAnyStatusOrAbility(battler) && IS_MOVE_SPECIAL(move)) MUL(1.5);
         }
         bool negatesFrzSpatkDrop() override { return true; }
     };
 
-    class Fertilize : public virtual Ability {
+    class Fertilize : extends Ability {
         ATE_ABILITY(TYPE_GRASS),
     };
 
-    class PureLove : public virtual CuteCharm {
+    class PureLove : extends CuteCharm {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(BATTLER_MAX_HP(battler))
@@ -4968,25 +4815,25 @@ class AbilityBehavior {
         bool canInfatuateAny() override { return true; }
     };
 
-    class Fighter : public virtual SwarmLike<TYPE_FIGHTING> {};
+    class Fighter : extends SwarmLike<TYPE_FIGHTING> {};
 
-    class Telekinetic : public virtual Ability {
+    class Telekinetic : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_TELEKINESIS, 0); }
     };
 
-    class Combustion : public virtual Ability {
+    class Combustion : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_FIRE) MUL(1.5);
         }
     };
 
-    class PonyPower : public virtual Merged<KeenEdge, MysticBlades> {};
+    class PonyPower : extends Merged<KeenEdge, MysticBlades> {};
 
-    class PowderBurst : public virtual Ability {
+    class PowderBurst : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_POWDER, 0); }
     };
 
-    class Retriever : public virtual Ability {
+    class Retriever : extends Ability {
         int onExit(ON_EXIT) override {
             CHECK(IsBattlerAlive(battler))
             CHECK_NOT(gBattleMons[battler].item)
@@ -5007,11 +4854,11 @@ class AbilityBehavior {
         }
     };
 
-    class MonsterMash : public virtual Ability {
+    class MonsterMash : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_TRICK_OR_TREAT, 0); }
     };
 
-    class TwoStep : public virtual Ability {
+    class TwoStep : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(IsDance(battler, move))
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
@@ -5020,7 +4867,7 @@ class AbilityBehavior {
         }
     };
 
-    class Spiteful : public virtual Ability {
+    class Spiteful : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(move != MOVE_STRUGGLE)
@@ -5032,7 +4879,7 @@ class AbilityBehavior {
         }
     };
 
-    class Fortitude : public virtual Ability {
+    class Fortitude : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(CanRaiseStat(battler, STAT_SPDEF))
@@ -5048,17 +4895,17 @@ class AbilityBehavior {
         }
     };
 
-    class Devourer : public virtual PrimalMaw, public virtual StrongJaw {};
+    class Devourer : extends PrimalMaw, extends StrongJaw {};
 
-    class PhantomThief : public virtual Ability {
+    class PhantomThief : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_SPECTRAL_THIEF, 40); }
     };
 
-    class EarlyGrave : public virtual GaleWingsLike<TYPE_GHOST> {};
+    class EarlyGrave : extends GaleWingsLike<TYPE_GHOST> {};
 
-    class BassBoosted : public virtual Merged<PunkRock, Amplifier> {};
+    class BassBoosted : extends Merged<PunkRock, Amplifier> {};
 
-    class FlamingJaws : public virtual Ability {
+    class FlamingJaws : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBeBurned(target))
@@ -5069,7 +4916,7 @@ class AbilityBehavior {
         }
     };
 
-    class MonsterHunter : public virtual Breakable {
+    class MonsterHunter : extends Breakable {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (IS_BATTLER_OF_TYPE(target, TYPE_DARK)) RESISTANCE(1.5);
         }
@@ -5078,11 +4925,11 @@ class AbilityBehavior {
         }
     };
 
-    class CrownedSword : public virtual IntrepidSword, public virtual AngerPoint {};
+    class CrownedSword : extends IntrepidSword, extends AngerPoint {};
 
-    class CrownedShield : public virtual DauntlessShield, public virtual Stamina {};
+    class CrownedShield : extends DauntlessShield, extends Stamina {};
 
-    class BerserkDna : public virtual Ability {
+    class BerserkDna : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE))) if (CanBeConfused(battler)) {
                 gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
@@ -5095,7 +4942,7 @@ class AbilityBehavior {
         }
     };
 
-    class CrownedKing : public virtual AsOneShadowRider, public virtual AsOneIceRider {
+    class CrownedKing : extends AsOneShadowRider, extends AsOneIceRider {
         int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); }
         int onBattlerFaints(ON_BATTLER_FAINTS) override {
             CHECK(ChillingNeigh::onBattlerFaints(DELEGATE_BATTLER_FAINTS) | GrimNeigh::onBattlerFaints(DELEGATE_BATTLER_FAINTS))
@@ -5105,7 +4952,7 @@ class AbilityBehavior {
         }
     };
 
-    class SnapTrapWhenHit : public virtual Ability {
+    class SnapTrapWhenHit : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -5115,23 +4962,23 @@ class AbilityBehavior {
         }
     };
 
-    class Permanence : public virtual Ability {
+    class Permanence : extends Ability {
         int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_PERMANENCE); }
     };
 
-    class Hubris : public virtual GrimNeigh {};
+    class Hubris : extends GrimNeigh {};
 
-    class CosmicDaze : public virtual Ability {
+    class CosmicDaze : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (gBattleMons[target].status2 & STATUS2_CONFUSION) MUL(2);
         }
     };
 
-    class MindsEye : public virtual Breakable {
+    class MindsEye : extends Breakable {
         int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override { return Scrappy::hitGhost(DELEGATE_TYPE_EFFECTIVENESS); }
     };
 
-    class BloodPrice : public virtual Ability {
+    class BloodPrice : extends Ability {
         int onEndTurn(ON_END_TURN) override {
             CHECK_NOT(IS_MOVE_STATUS(gLastResultingMoves[battler]))
             CHECK_NOT(IsMagicGuardProtected(battler))
@@ -5154,11 +5001,11 @@ class AbilityBehavior {
         AbilityStatusEffectSafe(MOVE_EFFECT_BLEED, battler, opponent);
         return TRUE;
     }
-    class SpikeArmor : public virtual Ability {
+    class SpikeArmor : extends Ability {
         ON_EITHER_ABILITY(SpikeArmor),
     };
 
-    class VoodooPower : public virtual Ability {
+    class VoodooPower : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IS_MOVE_SPECIAL(move))
@@ -5170,7 +5017,7 @@ class AbilityBehavior {
         }
     };
 
-    class ChromeCoat : public virtual Breakable {
+    class ChromeCoat : extends Breakable {
         void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
             if (IS_MOVE_SPECIAL(move)) MUL(.6);
         }
@@ -5181,18 +5028,18 @@ class AbilityBehavior {
 
     class Banshee : LiquidVoiceClone<TYPE_GHOST> {};
 
-    class WebSpinner : public virtual Ability {
+    class WebSpinner : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_STRING_SHOT, 0); }
     };
 
-    class ShowdownMode : public virtual Ability {
+    class ShowdownMode : extends Ability {
         int onEntry(ON_ENTRY) override {
             gVolatileStructs[battler].showdownMode = gVolatileStructs[battler].started.showdownMode = TRUE;
             return SwitchInAnnounce(B_MSG_SWITCHIN_SHOWDOWN_MODE);
         }
     };
 
-    class SeedSower : public virtual Ability {
+    class SeedSower : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
@@ -5203,21 +5050,21 @@ class AbilityBehavior {
         TerrainType allowTerrainIfAirborne() override { return TERRAIN_GRASSY; }
     };
 
-    class Airborne : public virtual Ability {
+    class Airborne : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_FLYING) MUL(1.3);
         }
         AbilityApplyOn onOffensiveMultiplierFor() override { return APPLY_ON_ALLY; }
     };
 
-    class Parroting : public virtual Soundproof {
+    class Parroting : extends Soundproof {
         int onCopyMove(ON_COPY_MOVE) override {
             CHECK(IsSoundMove(attacker, move))
             return UseOutOfTurnAttack(battler, target, ability, move, 0);
         }
     };
 
-    class SaltCircle : public virtual Ability {
+    class SaltCircle : extends Ability {
         int onEntry(ON_ENTRY) override {
             int anyBlocked = FALSE;
             gBattlerTarget = BATTLE_OPPOSITE(battler);
@@ -5240,7 +5087,7 @@ class AbilityBehavior {
         }
     };
 
-    class PurifyingSalt : public virtual Breakable {
+    class PurifyingSalt : extends Breakable {
         void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_GHOST) RESISTANCE(.5);
         }
@@ -5253,7 +5100,7 @@ class AbilityBehavior {
 
     static void paradoxBoost(ON_STAT) override {}
 
-    class Protosynthesis : public virtual Ability {
+    class Protosynthesis : extends Ability {
         int ProtosynthesisHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
             ParadoxBoost state = GetAbilityStateAs(battler, ability).paradoxBoost;
 
@@ -5301,7 +5148,7 @@ class AbilityBehavior {
         void onStat(ON_STAT) override { paradoxBoost(DELEGATE_STAT); }
     };
 
-    class QuarkDrive : public virtual Protosynthesis {
+    class QuarkDrive : extends Protosynthesis {
         int QuarkDriveHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
             ParadoxBoost state = GetAbilityStateAs(battler, ability).paradoxBoost;
 
@@ -5349,7 +5196,7 @@ class AbilityBehavior {
         void onStat(ON_STAT) override { paradoxBoost(DELEGATE_STAT); }
     };
 
-    class WindPower : public virtual Ability {
+    class WindPower : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(gBattleMoves[move].airBased)
@@ -5361,19 +5208,19 @@ class AbilityBehavior {
         }
     };
 
-    class Impulse : public virtual Ability {
+    class Impulse : extends Ability {
         void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
             if (!(gBattleMoves[move].contact)) *atkStatToUse = STAT_SPEED;
         }
     };
 
-    class TerminalVelocity : public virtual Ability {
+    class TerminalVelocity : extends Ability {
         void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
             if (IS_MOVE_SPECIAL(move)) secondaryAtkStatToUse[STAT_SPEED] += 20;
         }
     };
 
-    class AngerShell : public virtual Ability {
+    class AngerShell : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(CheckHalfHpAbility(battler, attacker))
             CHECK_NOT(GetAbilityState(battler, ability))
@@ -5385,7 +5232,7 @@ class AbilityBehavior {
         }
     };
 
-    class Egoist : public virtual Ability {
+    class Egoist : extends Ability {
         int onReactive(ON_REACTIVE) override {
             CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
             for (int opponent = GetOppositeSide(battler); opponent < gBattlersCount; opponent += 2) {
@@ -5405,16 +5252,16 @@ class AbilityBehavior {
         }
     };
 
-    class ReadiedAction : public virtual Ability {
+    class ReadiedAction : extends Ability {
         int onEntry(ON_ENTRY) override {
             gVolatileStructs[battler].readiedAction = gVolatileStructs[battler].started.readiedAction = TRUE;
             return SwitchInAnnounce(B_MSG_SWITCHIN_READIED_ACTION);
         }
     };
 
-    class DarkGaleWings : public virtual GaleWingsLike<TYPE_DARK> {};
+    class DarkGaleWings : extends GaleWingsLike<TYPE_DARK> {};
 
-    class GuiltTrip : public virtual Ability {
+    class GuiltTrip : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK_NOT(IsBattlerAlive(battler))
@@ -5425,9 +5272,9 @@ class AbilityBehavior {
         }
     };
 
-    class WaterGaleWings : public virtual GaleWingsLike<TYPE_WATER> {};
+    class WaterGaleWings : extends GaleWingsLike<TYPE_WATER> {};
 
-    class ZeroToHero : public virtual FormChange {
+    class ZeroToHero : extends FormChange {
         int onEntry(ON_ENTRY) override {
             CHECK(gBattleMons[battler].species == SPECIES_PALAFIN)
             CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
@@ -5444,7 +5291,7 @@ class AbilityBehavior {
         }
     };
 
-    class Costar : public virtual Ability {
+    class Costar : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
 
@@ -5461,7 +5308,7 @@ class AbilityBehavior {
         }
     };
 
-    class Commander : public virtual FormChange {
+    class Commander : extends FormChange {
         int onBattlerFaints(ON_BATTLER_FAINTS) override {
             CHECK(GetAbilityState(battler, ability))
 
@@ -5478,13 +5325,13 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onAccuracyFor() override { return APPLY_ON_TARGET; }
     };
 
-    class EjectPackAbility : public virtual Ability {
+    class EjectPackAbility : extends Ability {
         bool persistent() override { return true; }
     };
 
-    class VengefulSpirit : public virtual HauntedSpirit, public virtual Vengeance {};
+    class VengefulSpirit : extends HauntedSpirit, extends Vengeance {};
 
-    class CudChew : public virtual Ability {
+    class CudChew : extends Ability {
         int onEndTurn(ON_END_TURN) override {
             CudChewState state = GetAbilityStateAs(battler, ability).cudChewState;
             if (state.setThisTurn) {
@@ -5503,15 +5350,15 @@ class AbilityBehavior {
         }
     };
 
-    class ArmorTail : public virtual QueenlyMajesty {};
+    class ArmorTail : extends QueenlyMajesty {};
 
-    class MindCrush : public virtual StrongJaw {
+    class MindCrush : extends StrongJaw {
         void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
             if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) *atkStatToUse = STAT_SPATK;
         }
     };
 
-    class SupremeOverlord : public virtual Ability {
+    class SupremeOverlord : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK(gFaintedMonCount[GetBattlerSide(battler)])
 
@@ -5522,7 +5369,7 @@ class AbilityBehavior {
         }
     };
 
-    class IllWill : public virtual Ability {
+    class IllWill : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(move != MOVE_STRUGGLE)
@@ -5539,9 +5386,9 @@ class AbilityBehavior {
         }
     };
 
-    class FireScales : public virtual IceScales {};
+    class FireScales : extends IceScales {};
 
-    class WatchYourStep : public virtual Ability {
+    class WatchYourStep : extends Ability {
         int onEntry(ON_ENTRY) override {
             u8 targetSide = GetOppositeSide(battler);
             CHECK(gSideTimers[targetSide].spikesAmount < 3)
@@ -5553,14 +5400,14 @@ class AbilityBehavior {
         }
     };
 
-    class RapidResponse : public virtual Ability {
+    class RapidResponse : extends Ability {
         int onEntry(ON_ENTRY) override {
             gVolatileStructs[battler].rapidResponse = gVolatileStructs[battler].started.rapidResponse = TRUE;
             return SwitchInAnnounce(B_MSG_SWITCHIN_RAPID_RESPONSE);
         }
     };
 
-    class DoubleIronBarbs : public virtual Ability {
+    class DoubleIronBarbs : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK_NOT(IsMagicGuardProtected(attacker))
@@ -5574,7 +5421,7 @@ class AbilityBehavior {
         }
     };
 
-    class ThermalExchange : public virtual Breakable {
+    class ThermalExchange : extends Breakable {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(moveType == TYPE_FIRE)
@@ -5591,7 +5438,7 @@ class AbilityBehavior {
         bool removesStatusOnImmunity() { return true; }
     };
 
-    class GoodAsGold : public virtual Breakable {
+    class GoodAsGold : extends Breakable {
         int onImmune(ON_IMMUNE) override {
             CHECK(battler != attacker) CHECK(IS_MOVE_STATUS(move));
             *immunityScript = BattleScript_SoundproofProtected;
@@ -5599,7 +5446,7 @@ class AbilityBehavior {
         }
     };
 
-    class SharingIsCaring : public virtual Ability {
+    class SharingIsCaring : extends Ability {
         int onReactive(ON_REACTIVE) override {
             switch (gBattleStruct->statStageCheckState) {
                 default:
@@ -5619,42 +5466,54 @@ class AbilityBehavior {
         }
     };
 
-    class TabletsOfRuin : public virtual Ability {
+    template <int Stat>
+    class RuinEffect : extends Ability {
+        void onStat(ON_STAT) override {
+            if (statId != Stat) return;
+            if (*flags & NON_STACKING_RUIN) return;
+            ON_ABILITY(battler, FALSE, gAbilities[ability].ruinStat == Stat, return) *stat *= .75;
+            *flags = static_cast<NonStackingState>(static_cast<int>(*flags) | static_cast<int>(NON_STACKING_RUIN));
+        }
+        AbilityApplyOn onStatFor() override { APPLY_ON_OTHER; }
+        int ruinStat() override { return STAT_ATK; }
+    }
+
+    class TabletsOfRuin : extends Ability {
         void onStat(ON_STAT) override { RuinEffect(STAT_ATK, battler, statId, stat, flags); }
         AbilityApplyOn onStatFor() override { APPLY_ON_OTHER; }
         int ruinStat() override { return STAT_ATK; }
     };
 
-    class SwordOfRuin : public virtual Ability {
+    class SwordOfRuin : extends Ability {
         void onStat(ON_STAT) override { RuinEffect(STAT_DEF, battler, statId, stat, flags); }
         AbilityApplyOn onStatFor() override { APPLY_ON_OTHER; }
         int ruinStat() override { return STAT_DEF; }
     };
 
-    class VesselOfRuin : public virtual Ability {
+    class VesselOfRuin : extends Ability {
         void onStat(ON_STAT) override { RuinEffect(STAT_SPATK, battler, statId, stat, flags); }
         AbilityApplyOn onStatFor() override { APPLY_ON_OTHER; }
         int ruinStat() override { return STAT_SPATK; }
     };
 
-    class BeadsOfRuin : public virtual Ability {
+    class BeadsOfRuin : extends Ability {
         void onStat(ON_STAT) override { RuinEffect(STAT_DEF, battler, statId, stat, flags); }
         AbilityApplyOn onStatFor() override { APPLY_ON_OTHER; }
         int ruinStat() override { return STAT_DEF; }
     };
 
-    class PermafrostClone : public virtual Permafrost {};
+    class PermafrostClone : extends Permafrost {};
 
-    class Gallantry : public virtual NoDamageHits<1>, public virtual Breakable {};
+    class Gallantry : extends NoDamageHits<1>, extends Breakable {};
 
-    class OrichalcumPulse : public virtual Drought {
+    class OrichalcumPulse : extends Drought {
         void onStat(ON_STAT) override {
             if (statId != STAT_ATK) return;
             if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat = *stat * 4 / 3;
         }
     };
 
-    class SunBasking : public virtual Breakable {
+    class SunBasking : extends Breakable {
         int onImmune(ON_IMMUNE) override {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY));
             return blockPriority(DELEGATE_IMMUNE);
@@ -5664,23 +5523,23 @@ class AbilityBehavior {
         }
     };
 
-    class WingedKing : public virtual Ability {
+    class WingedKing : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.33);
         }
     };
 
-    class HadronEngine : public virtual ElectricSurge {
+    class HadronEngine : extends ElectricSurge {
         void onStat(ON_STAT) override {
             if (statId == STAT_SPATK && IsBattlerTerrainAffected(battler, STATUS_FIELD_ELECTRIC_TERRAIN)) *stat = *stat * 4 / 3;
         }
     };
 
-    class IronSerpent : public virtual WingedKing {};
+    class IronSerpent : extends WingedKing {};
 
-    class SweepingEdgePlus : public virtual KeenEdge, public virtual SweepingEdge {};
+    class SweepingEdgePlus : extends KeenEdge, extends SweepingEdge {};
 
-    class CelestialBlessing : public virtual Ability {
+    class CelestialBlessing : extends Ability {
         int onEndTurn(ON_END_TURN) override {
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
@@ -5695,11 +5554,11 @@ class AbilityBehavior {
         }
     };
 
-    class MinionControl : public virtual Ability {
+    class MinionControl : extends Ability {
         MultihitType onParentalBond(ON_PARENTAL_BOND) override { return PARENTAL_BOND_MINION_CONTROL; }
     };
 
-    class MoltenBlades : public virtual KeenEdge {
+    class MoltenBlades : extends KeenEdge {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBeBurned(target))
@@ -5710,7 +5569,7 @@ class AbilityBehavior {
         }
     };
 
-    class HauntingFrenzy : public virtual AdrenalineRush {
+    class HauntingFrenzy : extends AdrenalineRush {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanMoveHaveExtraFlinchChance(move))
@@ -5720,11 +5579,11 @@ class AbilityBehavior {
         }
     };
 
-    class NoiseCancel : public virtual Soundproof {
+    class NoiseCancel : extends Soundproof {
         AbilityApplyOn onImmuneFor() override { APPLY_ON_ALLY; }
     };
 
-    class RadioJam : public virtual Ability {
+    class RadioJam : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBeDisabled(target))
@@ -5735,7 +5594,7 @@ class AbilityBehavior {
         }
     };
 
-    class Ole : public virtual Ability {
+    class Ole : extends Ability {
         AccuracyPriority onAccuracy(ON_ACCURACY) override {
             switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
                 case MOVE_TARGET_SELECTED:
@@ -5753,7 +5612,7 @@ class AbilityBehavior {
 
     class Malicious : public Intimidate {};
 
-    class DeadPower : public virtual Ability {
+    class DeadPower : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK_NOT(gBattleMons[target].status2 & STATUS2_CURSED)
@@ -5767,7 +5626,7 @@ class AbilityBehavior {
         }
     };
 
-    class BrawlingWyvern : public virtual NoGuard {
+    class BrawlingWyvern : extends NoGuard {
         int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
             CHECK(flag == MOVE_FLAG_PUNCH)
             CHECK(IS_MOVE_TYPE(move, TYPE_DRAGON))
@@ -5775,7 +5634,7 @@ class AbilityBehavior {
         }
     };
 
-    class JunshiSanda : public virtual Ability {
+    class JunshiSanda : extends Ability {
         int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
             switch (flag) {
                 case MOVE_FLAG_PUNCH:
@@ -5788,7 +5647,7 @@ class AbilityBehavior {
         }
     };
 
-    class MythicalArrows : public virtual Archer {
+    class MythicalArrows : extends Archer {
         int onSwapSplit(ON_SWAP_SPLIT) override {
             CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
             CHECK(gBattleMoves[move].arrowBased);
@@ -5796,7 +5655,7 @@ class AbilityBehavior {
         }
     };
 
-    class Lawnmower : public virtual Ability {
+    class Lawnmower : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
@@ -5805,13 +5664,13 @@ class AbilityBehavior {
         }
     };
 
-    class Flourish : public virtual Ability {
+    class Flourish : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_GRASS && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) MUL(1.5);
         }
     };
 
-    class DesertSpirit : public virtual SandStream {
+    class DesertSpirit : extends SandStream {
         void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
             if (*mod == 0 && !IsBattlerGrounded(target) && moveType == TYPE_GROUND && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) {
                 *mod = UQ_4_12(1.0);
@@ -5819,20 +5678,20 @@ class AbilityBehavior {
         }
     };
 
-    class Contempt : public virtual Ability {
+    class Contempt : extends Ability {
         bool unaware() override { return true; }
     };
 
-    class Aerialist : public virtual Merged<Levitate, Flock> {};
+    class Aerialist : extends Merged<Levitate, Flock> {};
 
-    class TeraShell : public virtual Breakable {
+    class TeraShell : extends Breakable {
         void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
             if (*mod >= UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
         }
         AbilityApplyOnWithTarget onAfterTypeEffectivenessFor() override { return onAfterTypeEffectivenessFor; }
     };
 
-    class ToxicChain : public virtual Ability {
+    class ToxicChain : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBePoisoned(battler, target, MOVE_NONE))
@@ -5842,7 +5701,7 @@ class AbilityBehavior {
         }
     };
 
-    class ParasiticSpores : public virtual Ability {
+    class ParasiticSpores : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gVolatileStructs[battler].parasiticSpores)
 
@@ -5852,7 +5711,7 @@ class AbilityBehavior {
     };
 
     template <MoveEffectEnum Effect>
-    class PoisonPuppeteerLike : public virtual Ability {
+    class PoisonPuppeteerLike : extends Ability {
         int onBattlerFaints(ON_BATTLER_FAINTS) override {
             int state = GetAbilityState(battler, ability);
             if (state & (1 << fainted)) SetAbilityState(battler, ability, state ^ (1 << fainted));
@@ -5862,17 +5721,17 @@ class AbilityBehavior {
         virtual MoveEffectEnum setStateOnEffect() override { return Effect; }
     };
 
-    class PoisonPuppeteer : public virtual PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
+    class PoisonPuppeteer : extends PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
         int onReactive(ON_REACTIVE) override {
             return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) -> int { return CanBeConfused(target); }, BattleScript_PoisonPuppeteer);
         }
     };
 
-    class Entrance : public virtual PoisonPuppeteerLike<MOVE_EFFECT_CONFUSION> {
+    class Entrance : extends PoisonPuppeteerLike<MOVE_EFFECT_CONFUSION> {
         int onReactive(ON_REACTIVE) override { return PoisonPuppeteerClone(ability, battler, CanInfatuate, BattleScript_Entrance); }
     };
 
-    class Rejection : public virtual Ability {
+    class Rejection : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gFieldTimers.quashTimer)
 
@@ -5882,13 +5741,13 @@ class AbilityBehavior {
         }
     };
 
-    class AppleEnlightenment : public virtual FurCoat, public virtual MagicGuard {};
+    class AppleEnlightenment : extends FurCoat, extends MagicGuard {};
 
-    class BalloonBomber : public virtual Merged<Aftermath, Inflatable> {};
+    class BalloonBomber : extends Merged<Aftermath, Inflatable> {};
 
-    class FlamingMaw : public virtual FlamingJaws, public virtual StrongJaw {};
+    class FlamingMaw : extends FlamingJaws, extends StrongJaw {};
 
-    class Demolitionist : public virtual ReadiedAction {
+    class Demolitionist : extends ReadiedAction {
         InfiltrateType onInfiltrate(ON_INFILTRATE) override {
             if (gVolatileStructs[battler].readiedAction && !IS_MOVE_STATUS(move)) return INFILTRATE_BREAK_SCREENS;
             return INFILTRATE_NONE;
@@ -5903,7 +5762,7 @@ class AbilityBehavior {
         }
     };
 
-    class RockhardWill : public virtual SwarmLike<TYPE_ROCK> {};
+    class RockhardWill : extends SwarmLike<TYPE_ROCK> {};
 
     ON_EITHER(FragrantDaze) {
         CHECK(ShouldApplyOnHitAffect(opponent))
@@ -5914,11 +5773,11 @@ class AbilityBehavior {
         AbilityStatusEffectSafe(MOVE_EFFECT_CONFUSION, battler, opponent);
         return TRUE;
     }
-    class FragrantDaze : public virtual Ability {
+    class FragrantDaze : extends Ability {
         ON_EITHER_ABILITY(FragrantDaze),
     };
 
-    class LowVisibility : public virtual Ability {
+    class LowVisibility : extends Ability {
         int onEntry(ON_ENTRY) override {
             if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
                 BattleScriptPushCursorAndCallback(BattleScript_BadOmensActivates);
@@ -5931,16 +5790,16 @@ class AbilityBehavior {
         }
     };
 
-    class OldMariner : public virtual Seaweed, public virtual Amphibious {};
+    class OldMariner : extends Seaweed, extends Amphibious {};
 
-    class Ectoplasm : public virtual Ability {
+    class Ectoplasm : extends Ability {
         void onStat(ON_STAT) override {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
             if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
         }
     };
 
-    class BeautifulMusic : public virtual Ability {
+    class BeautifulMusic : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(Random() % 2)
@@ -5953,7 +5812,7 @@ class AbilityBehavior {
 
     class SnowSong : LiquidVoiceClone<TYPE_ICE> {};
 
-    class GreaterSpirit : public virtual Ability {
+    class GreaterSpirit : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
@@ -5964,7 +5823,7 @@ class AbilityBehavior {
         }
     };
 
-    class Resonance : public virtual Ability {
+    class Resonance : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBleed(target))
@@ -5975,15 +5834,15 @@ class AbilityBehavior {
         }
     };
 
-    class EtherealRush : public virtual Ability {
+    class EtherealRush : extends Ability {
         void onStat(ON_STAT) override {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
         }
     };
 
-    class CuteAntecedence : public virtual GaleWingsLike<TYPE_FAIRY> {};
+    class CuteAntecedence : extends GaleWingsLike<TYPE_FAIRY> {};
 
-    class RecurringNightmare : public virtual Ability {
+    class RecurringNightmare : extends Ability {
         int onRevive(ON_REVIVE) override {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
             return B_MSG_FADE_OUT;
@@ -6002,11 +5861,11 @@ class AbilityBehavior {
         BattleScriptCall(BattleScript_AbilitySetFear);
         return TRUE;
     }
-    class MenacingSituation : public virtual Ability {
+    class MenacingSituation : extends Ability {
         ON_EITHER_ABILITY(MenacingSituation),
     };
 
-    class ShinyLightning : public virtual Ability {
+    class ShinyLightning : extends Ability {
         AccuracyPriority onAccuracy(ON_ACCURACY) override {
             if (move == MOVE_THUNDER) return ACCURACY_HITS_IF_POSSIBLE;
             *accuracy *= 1.2;
@@ -6016,7 +5875,7 @@ class AbilityBehavior {
 
     class Terrify : public Intimidate {};
 
-    class IceDownfall : public virtual Ability {
+    class IceDownfall : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -6026,20 +5885,20 @@ class AbilityBehavior {
         }
     };
 
-    class LastStand : public virtual Breakable {
+    class LastStand : extends Breakable {
         void onStat(ON_STAT) override {
             if (statId == STAT_DEF || statId == STAT_SPDEF)
                 *stat = *stat + (*stat * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
         }
     };
 
-    class PyroclasticFlow : public virtual MoltenDown, public virtual Corrosion {
+    class PyroclasticFlow : extends MoltenDown, extends Corrosion {
         int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
             return MoltenDown::onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS) || Corrosion::onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS);
         }
     };
 
-    class BloodBath : public virtual PoisonPuppeteerLike<MOVE_EFFECT_BLEED>, public virtual Breakable {
+    class BloodBath : extends PoisonPuppeteerLike<MOVE_EFFECT_BLEED>, extends Breakable {
         int onReactive(ON_REACTIVE) override {
             return PoisonPuppeteerClone(
                 ability, battler, +[](int battler, int target) -> int { return !gVolatileStructs[target].fear; }, BattleScript_Bloodlust);
@@ -6051,12 +5910,12 @@ class AbilityBehavior {
         bool removesStatusOnImmunity() override { return true; }
     };
 
-    class BattleAura : public virtual Ability {
+    class BattleAura : extends Ability {
         int onCrit(ON_CRIT) override { return 2; }
         AbilityApplyOnWithTarget onCritFor() override { return APPLY_ON_ANY; }
     };
 
-    class Bloodlust : public virtual BloodBath, public virtual SoulEater {
+    class Bloodlust : extends BloodBath, extends SoulEater {
         int onBattlerFaints(ON_BATTLER_FAINTS) override {
             int result = 0;
             if (battler == attacker) {
@@ -6067,7 +5926,7 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ANY; }
     };
 
-    class PiercingSolo : public virtual Ability {
+    class PiercingSolo : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBleed(target))
@@ -6077,11 +5936,11 @@ class AbilityBehavior {
         }
     };
 
-    class Rhythmic : public virtual Ability {
+    class Rhythmic : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override { MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battler]); }
     };
 
-    class ChunkyBassLine : public virtual Ability {
+    class ChunkyBassLine : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(IsSoundMove(battler, move))
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -6090,14 +5949,14 @@ class AbilityBehavior {
         }
     };
 
-    class DualHammer : public virtual Ability {
+    class DualHammer : extends Ability {
         MultihitType onParentalBond(ON_PARENTAL_BOND) override {
             CHECK(gBattleMoves[move].hammerBased)
             return PARENTAL_BOND_DUAL_WIELD;
         }
     };
 
-    class DentingBlows : public virtual Ability {
+    class DentingBlows : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(gBattleMoves[move].hammerBased)
@@ -6111,7 +5970,7 @@ class AbilityBehavior {
         }
     };
 
-    class IceColdHunter : public virtual HailImmune {
+    class IceColdHunter : extends HailImmune {
         MultihitType onParentalBond(ON_PARENTAL_BOND) override {
             CHECK(moveType == TYPE_ICE)
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
@@ -6119,7 +5978,7 @@ class AbilityBehavior {
         }
     };
 
-    class SoulCrusher : public virtual Ability {
+    class SoulCrusher : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (gBattleMoves[move].hammerBased) MUL(1.1);
         }
@@ -6129,7 +5988,7 @@ class AbilityBehavior {
         }
     };
 
-    class ArcFlash : public virtual Ability {
+    class ArcFlash : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBeParalyzed(battler, target))
@@ -6147,16 +6006,16 @@ class AbilityBehavior {
         }
     };
 
-    class Unicorn : public virtual MightyHorn, Pixilate {};
+    class Unicorn : extends MightyHorn, Pixilate {};
 
-    class OnTheProwl : public virtual Ability {
+    class OnTheProwl : extends Ability {
         int onEntry(ON_ENTRY) override {
             gVolatileStructs[battler].onTheProwl = gVolatileStructs[battler].started.onTheProwl = TRUE;
             return SwitchInAnnounce(B_MSG_SWITCHIN_ON_THE_PROWL);
         }
     };
 
-    class Pretentious : public virtual Ability {
+    class Pretentious : extends Ability {
         int onBattlerFaints(ON_BATTLER_FAINTS) override {
             CHECK(gVolatileStructs[battler].critBoost < 3);
             gVolatileStructs[battler].critBoost++;
@@ -6167,7 +6026,7 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
-    class VenoblazePincers : public virtual Ability {
+    class VenoblazePincers : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(IS_MOVE_PHYSICAL(move))
@@ -6191,11 +6050,11 @@ class AbilityBehavior {
         }
     };
 
-    class EternalBlessing : public virtual CelestialBlessing, public virtual Regenerator {};
+    class EternalBlessing : extends CelestialBlessing, extends Regenerator {};
 
-    class SugarRush : public virtual Unburden, public virtual Ripen {};
+    class SugarRush : extends Unburden, extends Ripen {};
 
-    class PeacefulRest : public virtual Ability {
+    class PeacefulRest : extends Ability {
         int onEndTurn(ON_END_TURN) override {
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
@@ -6210,9 +6069,9 @@ class AbilityBehavior {
         }
     };
 
-    class WhiteNoise : public virtual PeacefulRest, public virtual Static {};
+    class WhiteNoise : extends PeacefulRest, extends Static {};
 
-    class SmokeyManeuvers : public virtual Breakable {
+    class SmokeyManeuvers : extends Breakable {
         AccuracyPriority onAccuracy(ON_ACCURACY) override {
             CHECK(IsBattlerWeatherAffected(target, WEATHER_FOG_ANY));
             *accuracy /= 1.25;
@@ -6223,14 +6082,14 @@ class AbilityBehavior {
 
     class PowerMetal : LiquidVoiceClone<TYPE_STEEL> {};
 
-    class PowerEdge : public virtual KeenEdge {
+    class PowerEdge : extends KeenEdge {
         int onChooseDefensiveStat(ON_CHOOSE_DEFENSIVE_STAT) override {
             CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
             return STAT_SPDEF;
         }
     };
 
-    class Superconductor : public virtual Ability {
+    class Superconductor : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
         }
@@ -6241,7 +6100,7 @@ class AbilityBehavior {
         }
     };
 
-    class UltraInstinct : public virtual Parry {
+    class UltraInstinct : extends Parry {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -6252,15 +6111,15 @@ class AbilityBehavior {
         void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override { MUL(.8); }
     };
 
-    class UnlockedPotential : public virtual Berserk, public virtual InnerFocus {};
+    class UnlockedPotential : extends Berserk, extends InnerFocus {};
 
-    class HigherRank : public virtual Ability {
+    class HigherRank : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (GetMovePriority(battler, move, target) > 0) MUL(1.2);
         }
     };
 
-    class FuneralPyre : public virtual Ability {
+    class FuneralPyre : extends Ability {
         int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE); }
         int onEndTurn(ON_END_TURN) override {
             CHECK(IsAbilityOnField(ability) - 1 == battler)
@@ -6279,15 +6138,15 @@ class AbilityBehavior {
         }
     };
 
-    class FlameBubble : public virtual WaterBubble, public virtual FlamingSoul {};
+    class FlameBubble : extends WaterBubble, extends FlamingSoul {};
 
-    class ElementalVortex : public virtual Merged<WaterAbsorb, FlashFire> {};
+    class ElementalVortex : extends Merged<WaterAbsorb, FlashFire> {};
 
-    class SnowyWrath : public virtual SnowWarning, public virtual Cryomancy {};
+    class SnowyWrath : extends SnowWarning, extends Cryomancy {};
 
-    class PatternChange : public virtual ShedSkin, public virtual Protean {};
+    class PatternChange : extends ShedSkin, extends Protean {};
 
-    class NoTurningBack : public virtual Ability {
+    class NoTurningBack : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(CheckHalfHpAbility(battler, attacker))
             CHECK_NOT(GetAbilityState(battler, ability))
@@ -6299,7 +6158,7 @@ class AbilityBehavior {
         }
     };
 
-    class FlammableCoat : public virtual FormChange {
+    class FlammableCoat : extends FormChange {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(battler) || (gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
             CHECK(moveType == TYPE_FIRE)
@@ -6323,17 +6182,17 @@ class AbilityBehavior {
         }
     };
 
-    class DracoMorale : public virtual Ability {
+    class DracoMorale : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_DRAGON_CHEER, 0); }
     };
 
-    class BadOmen : public virtual Breakable {
+    class BadOmen : extends Breakable {
         void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
             if (isCrit) MUL(.25);
         }
     };
 
-    class MoshPit : public virtual Ability {
+    class MoshPit : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
                 MUL(1.25);
@@ -6357,7 +6216,7 @@ class AbilityBehavior {
         DisableSwitchInAbility(opponent, ability);
         return TRUE;
     }
-    class BloodStain : public virtual Ability {
+    class BloodStain : extends Ability {
         int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_BLOOD_STAIN); }
         ON_EITHER_ABILITY(BloodStain), int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
             CHECK(status & CHECK_STATUS1)
@@ -6367,7 +6226,7 @@ class AbilityBehavior {
         bool removesStatusOnImmunity() { return true; }
     };
 
-    class BloodStigma : public virtual Ability {
+    class BloodStigma : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (gBattleMons[target].status1 & STATUS1_BLEED || IsBloodStainAffected(target)) MUL(2);
         }
@@ -6379,13 +6238,13 @@ class AbilityBehavior {
         bool removesStatusOnImmunity() { return true; }
     };
 
-    class Slipstream : public virtual Ability {
+    class Slipstream : extends Ability {
         void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override { secondaryAtkStatToUse[STAT_SPEED] += 20; }
     };
 
-    class MaximumAcceleration : public virtual Slipstream, public virtual SpeedBoost {};
+    class MaximumAcceleration : extends Slipstream, extends SpeedBoost {};
 
-    class Sidewinder : public virtual CoilUp {
+    class Sidewinder : extends CoilUp {
         int onBattlerFaints(ON_BATTLER_FAINTS) override {
             CHECK(gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST || !(gStatuses4[battler] & STATUS4_COILED))
             gStatuses4[battler] |= STATUS4_COILED;
@@ -6412,31 +6271,31 @@ class AbilityBehavior {
         }
     };
 
-    class Fluffiest : public virtual Breakable {
+    class Fluffiest : extends Breakable {
         void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_FIRE) RESISTANCE(2.0);
             if (IsMoveMakingContact(move, attacker)) MUL(0.5);
         }
     };
 
-    class WayOfPrecision : public virtual InnerFocus, public virtual InnerFocus {};
+    class WayOfPrecision : extends InnerFocus, extends InnerFocus {};
 
-    class WayOfSwiftness : public virtual Pretentious, public virtual SwiftSwim {};
+    class WayOfSwiftness : extends Pretentious, extends SwiftSwim {};
 
-    class AtomicPunch : public virtual IronFist {
+    class AtomicPunch : extends IronFist {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             IronFist::onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
             if (moveType == TYPE_STEEL) MUL(1.3);
         }
     };
 
-    class IronGiant : public virtual Heatproof, public virtual Juggernaut {};
+    class IronGiant : extends Heatproof, extends Juggernaut {};
 
-    class MasterHand : public virtual Rampage, public virtual MegaLauncher {};
+    class MasterHand : extends Rampage, extends MegaLauncher {};
 
-    class FinalBlow : public virtual FatalPrecision {};
+    class FinalBlow : extends FatalPrecision {};
 
-    class Hospitality : public virtual Ability {
+    class Hospitality : extends Ability {
         int onEntry(ON_ENTRY) override {
             gBattlerTarget = BATTLE_PARTNER(battler);
             CHECK(IsBattlerAlive(gBattlerTarget))
@@ -6449,9 +6308,9 @@ class AbilityBehavior {
         }
     };
 
-    class ButterUp : public virtual Merged<Hospitality, SoothingAroma> {};
+    class ButterUp : extends Merged<Hospitality, SoothingAroma> {};
 
-    class VitalityStrike : public virtual Ability {
+    class VitalityStrike : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(BATTLER_MAX_HP(battler))
@@ -6465,11 +6324,11 @@ class AbilityBehavior {
         }
     };
 
-    class HugeWings : public virtual Merged<GiantWings, Levitate> {};
+    class HugeWings : extends Merged<GiantWings, Levitate> {};
 
-    class SwordOfDamnation : public virtual SwordOfRuin, public virtual Unaware {};
+    class SwordOfDamnation : extends SwordOfRuin, extends Unaware {};
 
-    class RestrainingOrder : public virtual Ability {
+    class RestrainingOrder : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
             CHECK(ShouldApplyOnHitAffect(battler))
@@ -6482,7 +6341,7 @@ class AbilityBehavior {
         }
     };
 
-    class AssassinsTools : public virtual Ability {
+    class AssassinsTools : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(IsMoveMakingContact(move, battler))
@@ -6507,7 +6366,7 @@ class AbilityBehavior {
         }
     };
 
-    class Frostmaw : public virtual Ability {
+    class Frostmaw : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanGetFrostbite(target))
@@ -6518,7 +6377,7 @@ class AbilityBehavior {
         }
     };
 
-    class Patchwork : public virtual Disguise {
+    class Patchwork : extends Disguise {
         SpeciesEnum onDisguise(ON_DISGUISE) override {
             SpeciesEnum species = Disguise::onDisguise(DELEGATE_DISGUISE);
             if (species && !testOnly) {
@@ -6539,11 +6398,11 @@ class AbilityBehavior {
         }
     };
 
-    class BlindRage : public virtual MoldBreaker, public virtual Scrappy {};
+    class BlindRage : extends MoldBreaker, extends Scrappy {};
 
-    class ApexPredator : public virtual SoulEater, public virtual ToughClaws {};
+    class ApexPredator : extends SoulEater, extends ToughClaws {};
 
-    class DragonsRitual : public virtual Ability {
+    class DragonsRitual : extends Ability {
         int onBattlerFaints(ON_BATTLER_FAINTS) override {
             CHECK(CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN) || CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
             BattleScriptCall(BattleScript_DragonsRitual);
@@ -6552,7 +6411,7 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
-    class PinnacleBlade : public virtual Ability {
+    class PinnacleBlade : extends Ability {
         InfiltrateType onInfiltrate(ON_INFILTRATE) override {
             return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : INFILTRATE_NONE;
         }
@@ -6585,7 +6444,7 @@ class AbilityBehavior {
         }
     };
 
-    class Energized : public virtual Generator {
+    class Energized : extends Generator {
         int onBattlerFaints(ON_BATTLER_FAINTS) override {
             CHECK(moveType == TYPE_ELECTRIC);
             SetOncePerTurnAbilityCounter(battler, ability, TRUE);
@@ -6595,7 +6454,7 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
-    class ColorSpectrum : public virtual Ability {
+    class ColorSpectrum : extends Ability {
         int onEndTurn(ON_END_TURN) override {
             int newType;
             do {
@@ -6614,9 +6473,9 @@ class AbilityBehavior {
         }
     };
 
-    class SteelBeetle : public virtual RagingBoxer, public virtual Pollinate {};
+    class SteelBeetle : extends RagingBoxer, extends Pollinate {};
 
-    class FromTheShadows : public virtual Ability {
+    class FromTheShadows : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(GetBattlerTurnOrderNum(target) >= gCurrentTurnActionNumber)
@@ -6633,7 +6492,7 @@ class AbilityBehavior {
         }
     };
 
-    class RagePoint : public virtual Ability {
+    class RagePoint : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(gIsCriticalHit)
@@ -6649,7 +6508,7 @@ class AbilityBehavior {
         bool negatesFrzSpatkDrop() { return true; }
     };
 
-    class HotCoals : public virtual Ability {
+    class HotCoals : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals)
 
@@ -6658,53 +6517,51 @@ class AbilityBehavior {
         }
     };
 
-    class TerastalTreasure : public virtual Breakable {
+    class TerastalTreasure : extends Breakable {
         void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override { MUL(.6); }
         void onStat(ON_STAT) override {
             if (statId == STAT_SPEED) *stat *= .8;
         }
     };
 
-    class ShockingMaw : public virtual ShockingJaws, StrongJaw {};
+    class ShockingMaw : extends ShockingJaws, StrongJaw {};
 
-    class GleamEyes : public virtual Merged<Intimidate, Frisk> {};
+    class GleamEyes : extends Merged<Intimidate, Frisk> {};
 
-    class RousedFangs : public virtual StrongJaw, public virtual MindCrush {};
+    class RousedFangs : extends StrongJaw, extends MindCrush {};
 
-    class DreamState : public virtual BattleArmor {};
+    class DreamState : extends BattleArmor {};
 
-    class DreamWhimsy : public virtual Ability {
+    class DreamWhimsy : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_YAWN, 0); }
     };
 
-    class LunarAffinity : public virtual Ability {
+    class LunarAffinity : extends Ability {
         int onCopyMove(ON_COPY_MOVE) override {
             CHECK(gBattleMoves[move].lunar)
             return UseOutOfTurnAttack(battler, target, ability, move, 0);
         }
     };
 
-    class FlameShield : public virtual Filter {};
+    class FlameShield : extends Filter {};
 
-    class AquaticDweller : public virtual Aquatic {
+    class AquaticDweller : extends Aquatic {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_WATER) MUL(1.5);
         }
     };
 
-    class ApplePie : public virtual SelfSufficient {};
+    class ApplePie : extends SelfSufficient {};
 
-    class Hover : public virtual GroundImmune {
-        int onEntry(ON_ENTRY) override { return AddBattlerType(battler, TYPE_PSYCHIC); }
-    };
+    class Hover : extends GroundImmune, AddsType<TYPE_PSYCHIC> {};
 
-    class Depravity : public virtual Merciless, public virtual Overcharge {};
+    class Depravity : extends Merciless, extends Overcharge {};
 
-    class Wildfire : public virtual Ability {
+    class Wildfire : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_FIRE_SPIN, 0); }
     };
 
-    class JumpScare : public virtual Ability {
+    class JumpScare : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
             return UseEntryMove(battler, ability, MOVE_ASTONISH, 0);
@@ -6712,11 +6569,11 @@ class AbilityBehavior {
         bool persistent() override { return true; }
     };
 
-    class TarToss : public virtual Ability {
+    class TarToss : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_TAR_SHOT, 0); }
     };
 
-    class StunShock : public virtual Ability {
+    class StunShock : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target)) CHECK(Random() % 100 < 60) switch (Random() % 2) {
                 case 0:
@@ -6733,9 +6590,9 @@ class AbilityBehavior {
         }
     };
 
-    class RagingGoddess : public virtual Rampage, public virtual HyperAggressive {};
+    class RagingGoddess : extends Rampage, extends HyperAggressive {};
 
-    class Whiplash : public virtual Ability {
+    class Whiplash : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(IS_MOVE_PHYSICAL(move))
@@ -6749,7 +6606,7 @@ class AbilityBehavior {
         }
     };
 
-    class SupersweetSyrup : public virtual Breakable {
+    class SupersweetSyrup : extends Breakable {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -6764,17 +6621,17 @@ class AbilityBehavior {
         }
     };
 
-    class TrashHeap : public virtual ToxicSpill, public virtual Corrosion {};
+    class TrashHeap : extends ToxicSpill, extends Corrosion {};
 
-    class SludgyMix : public virtual Intoxicate, public virtual PunkRock {};
+    class SludgyMix : extends Intoxicate, extends PunkRock {};
 
-    class Overwatch : public virtual OnTheProwl, public virtual Stakeout {};
+    class Overwatch : extends OnTheProwl, extends Stakeout {};
 
-    class WindRage : public virtual GiantWings {
+    class WindRage : extends GiantWings {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_DEFOG, 0); }
     };
 
-    class VictoryBomb : public virtual Ability {
+    class VictoryBomb : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK_NOT(IsBattlerAlive(battler))
 
@@ -6788,7 +6645,7 @@ class AbilityBehavior {
         }
     };
 
-    class RazorSharp : public virtual Ability {
+    class RazorSharp : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBleed(target))
@@ -6798,9 +6655,9 @@ class AbilityBehavior {
         }
     };
 
-    class ToTheBone : public virtual RazorSharp, public virtual Sniper {};
+    class ToTheBone : extends RazorSharp, extends Sniper {};
 
-    class BladeDance : public virtual Ability {
+    class BladeDance : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(IsDance(battler, move))
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
@@ -6823,7 +6680,7 @@ class AbilityBehavior {
         BattleScriptCall(BattleScript_StackBattlerFormChange);
         return TRUE;
     }
-    class ApeShift : public virtual FormChange {
+    class ApeShift : extends FormChange {
         int onEntry(ON_ENTRY) override { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
         int onEndTurn(ON_END_TURN) override { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
         int onDefender(ON_DEFENDER) override { return ApeShiftHandler(battler, ABILITY_BS_CALL); }
@@ -6833,7 +6690,7 @@ class AbilityBehavior {
         }
     };
 
-    class KnowYourPlace : public virtual Ability {
+    class KnowYourPlace : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK_NOT(gVolatileStructs[target].dazed)
@@ -6845,7 +6702,7 @@ class AbilityBehavior {
         }
     };
 
-    class DeepCuts : public virtual Ability {
+    class DeepCuts : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBleed(target))
@@ -6856,7 +6713,7 @@ class AbilityBehavior {
         }
     };
 
-    class LifeSteal : public virtual Ability {
+    class LifeSteal : extends Ability {
         int onEndTurn(ON_END_TURN) override {
             int any = FALSE;
             for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
@@ -6873,7 +6730,7 @@ class AbilityBehavior {
         }
     };
 
-    class RudeAwakening : public virtual Ability {
+    class RudeAwakening : extends Ability {
         int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
             CHECK(status & CHECK_SLEEP)
             CHECK(GetAbilityState(battler, ability))
@@ -6882,7 +6739,7 @@ class AbilityBehavior {
         bool removesStatusOnImmunity() override { return true; }
     };
 
-    class TeraformZero : public virtual TeraShell {
+    class TeraformZero : extends TeraShell {
         int onEntry(ON_ENTRY) override {
             CHECK(!GetSingleUseAbilityCounter(battler, ability));
             SetSingleUseAbilityCounter(battler, ability, TRUE);
@@ -6892,22 +6749,22 @@ class AbilityBehavior {
         }
     };
 
-    class SetAblaze : public virtual PoisonPuppeteerLike<MOVE_EFFECT_BURN> {
+    class SetAblaze : extends PoisonPuppeteerLike<MOVE_EFFECT_BURN> {
         int onReactive(ON_REACTIVE) override {
             return PoisonPuppeteerClone(
                 ability, battler, +[](int battler, int target) -> int { return !gVolatileStructs[target].fear; }, BattleScript_Bloodlust);
         }
     };
 
-    class Breakwater : public virtual Stall, public virtual SwiftSwim {};
+    class Breakwater : extends Stall, extends SwiftSwim {};
 
-    class MagicalFists : public virtual IronFist {
+    class MagicalFists : extends IronFist {
         void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
             if (IsIronFistBoosted(battler, move)) *atkStatToUse = STAT_SPATK;
         }
     };
 
-    class Cutthroat : public virtual Ability {
+    class Cutthroat : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gStatuses4[battler] & STATUS4_CUTTHROAT)
 
@@ -6916,13 +6773,13 @@ class AbilityBehavior {
         }
     };
 
-    class SandBender : public virtual SandStream, public virtual SandForce {};
+    class SandBender : extends SandStream, extends SandForce {};
 
-    class SandPit : public virtual Ability {
+    class SandPit : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_SAND_TOMB, 20); }
     };
 
-    class DesolateSun : public virtual RandomizerBanned {};
+    class DesolateSun : extends RandomizerBanned {};
 
     ON_EITHER(Daybreak) {
         CHECK(ShouldApplyOnHitAffect(opponent))
@@ -6932,11 +6789,11 @@ class AbilityBehavior {
         AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
         return TRUE;
     }
-    class Daybreak : public virtual Ability {
+    class Daybreak : extends Ability {
         ON_EITHER_ABILITY(Daybreak),
     };
 
-    class EnergySiphon : public virtual Ability {
+    class EnergySiphon : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(BATTLER_MAX_HP(battler))
@@ -6949,16 +6806,16 @@ class AbilityBehavior {
         }
     };
 
-    class Reservoir : public virtual Merged<WaterAbsorb, StormDrain> {};
+    class Reservoir : extends Merged<WaterAbsorb, StormDrain> {};
 
     static int NeurotoxinCondition(int battler, int target) {
         return CanLowerStat(target, STAT_ATK) || CanLowerStat(target, STAT_SPATK) || CanLowerStat(target, STAT_SPEED);
     }
-    class Neurotoxin : public virtual PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
+    class Neurotoxin : extends PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
         int onReactive(ON_REACTIVE) override { return PoisonPuppeteerClone(ability, battler, NeurotoxinCondition, BattleScript_Neurotoxin); }
     };
 
-    class EnergizedHorns : public virtual MightyHorn {
+    class EnergizedHorns : extends MightyHorn {
         int onSwapSplit(ON_SWAP_SPLIT) {
             CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
             CHECK(gBattleMoves[move].hornBased);
@@ -6966,7 +6823,7 @@ class AbilityBehavior {
         }
     };
 
-    class SpiderLairUpgrade : public virtual Ability {
+    class SpiderLairUpgrade : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
@@ -6979,16 +6836,16 @@ class AbilityBehavior {
         }
     };
 
-    class CrustCoat : public virtual BattleArmor {};
+    class CrustCoat : extends BattleArmor {};
 
-    class Puffy : public virtual Fluffy {};
+    class Puffy : extends Fluffy {};
 
-    class BalloonBlitz : public virtual Inflatable, public virtual HyperAggressive {};
+    class BalloonBlitz : extends Inflatable, extends HyperAggressive {};
 
-    class StrikerPixilate : public virtual Striker, public virtual Pixilate {};
+    class StrikerPixilate : extends Striker, extends Pixilate {};
 
     // 2.6
-    class DoomBlast : public virtual Ability {
+    class DoomBlast : extends Ability {
         int onRecoil(ON_RECOIL) override {
             CHECK(moveType == TYPE_DARK);
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -6999,9 +6856,9 @@ class AbilityBehavior {
         }
     };
 
-    class Bruteforce : public virtual Reckless, public virtual RockHead {};
+    class Bruteforce : extends Reckless, extends RockHead {};
 
-    class FaradayCage : public virtual ShellArmor {
+    class FaradayCage : extends ShellArmor {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -7011,11 +6868,11 @@ class AbilityBehavior {
         }
     };
 
-    class AcidicSlime : public virtual Corrosion {
+    class AcidicSlime : extends Corrosion {
         int onStab(ON_STAB) override { return moveType == TYPE_WATER; }
     };
 
-    class RoseGarden : public virtual Ability {
+    class RoseGarden : extends Ability {
         int onEntry(ON_ENTRY) override {
             u8 targetSide = GetOppositeSide(battler);
             CHECK(gSideTimers[targetSide].toxicSpikesAmount < 2)
@@ -7028,13 +6885,13 @@ class AbilityBehavior {
         }
     };
 
-    class Qigong : public virtual Rampage, public virtual FightingSpirit {
+    class Qigong : extends Rampage, extends FightingSpirit {
         void onAccuracy(ON_ACCURACY) override { return ACCURACY_ALWAYS_HITS; }
     };
 
-    class ConjurerOfDeceit : public virtual MagicGuard, public virtual MagicBounce {};
+    class ConjurerOfDeceit : extends MagicGuard, extends MagicBounce {};
 
-    class DeepFreeze : public virtual Breakable {
+    class DeepFreeze : extends Breakable {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_WATER || moveType == TYPE_ICE) MUL(1.25);
         }
@@ -7043,13 +6900,13 @@ class AbilityBehavior {
         }
     };
 
-    class SoulDevourer : public virtual SoulEater, public virtual PhantomPain {};
+    class SoulDevourer : extends SoulEater, extends PhantomPain {};
 
-    class ChampionsEntrance : public virtual Intimidate, public virtual ViolentRush {
+    class ChampionsEntrance : extends Intimidate, extends ViolentRush {
         int onEntry(ON_ENTRY) override { return Intimidate::onEntry(DELEGATE_ENTRY) | ViolentRush::onEntry(DELEGATE_ENTRY); }
     };
 
-    class Presto : public virtual Ability {
+    class Presto : extends Ability {
         int onPriority(ON_PRIORITY) override {
             CHECK(BATTLER_MAX_HP(battler))
             CHECK(IsSoundMove(battler, move))
@@ -7057,11 +6914,11 @@ class AbilityBehavior {
         }
     };
 
-    class Samba : public virtual Striker, public virtual Dancer {};
+    class Samba : extends Striker, extends Dancer {};
 
-    class Gladiator : public virtual BoostedSwarmLike<TYPE_FIGHTING> {};
+    class Gladiator : extends BoostedSwarmLike<TYPE_FIGHTING> {};
 
-    class ForsakenHeart : public virtual Ability {
+    class ForsakenHeart : extends Ability {
         int onBattlerFaints(ON_BATTLER_FAINTS) override {
             CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
 
@@ -7071,9 +6928,9 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ANY; }
     };
 
-    class Relentless : public virtual ExploitWeakness, public virtual Merciless {};
+    class Relentless : extends ExploitWeakness, extends Merciless {};
 
-    class Soothsayer : public virtual Breakable {
+    class Soothsayer : extends Breakable {
         int onEntry(ON_ENTRY) override {
             CHECK(!GetSingleUseAbilityCounter(battler, ability))
             SetSingleUseAbilityCounter(battler, ability, TRUE);
@@ -7093,7 +6950,7 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget persistent() override { return true; }
     };
 
-    class CorruptedMind : public virtual RandomizerBanned {
+    class CorruptedMind : extends RandomizerBanned {
         int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
             CHECK(moveType == TYPE_PSYCHIC)
             if (*mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
@@ -7106,7 +6963,7 @@ class AbilityBehavior {
         }
     };
 
-    class FlameCoat : public virtual Ability {
+    class FlameCoat : extends Ability {
         int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_FIRE_COAT); }
         int onEndTurn(ON_END_TURN) override {
             CHECK(IsAbilityOnField(ability) - 1 == battler)
@@ -7126,20 +6983,20 @@ class AbilityBehavior {
         }
     };
 
-    class UnownPower : public virtual RandomizerBanned {
+    class UnownPower : extends RandomizerBanned {
         int onStab(ON_STAB) override { return TRUE; }
         void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
             if (*mod < UQ_4_12(2.0) && (move == MOVE_HIDDEN_POWER || move == MOVE_SECRET_POWER)) *mod = UQ_4_12(2.0);
         }
     };
 
-    class SuperScope : public virtual MegaLauncher, public virtual Artillery {};
+    class SuperScope : extends MegaLauncher, extends Artillery {};
 
-    class VenomCrown : public virtual PoisonPoint, public virtual MightyHorn, public virtual RandomizerBanned {};
+    class VenomCrown : extends PoisonPoint, extends MightyHorn, extends RandomizerBanned {};
 
-    class BlightScale : public virtual PoisonPoint, public virtual Multiscale, public virtual RandomizerBanned {};
+    class BlightScale : extends PoisonPoint, extends Multiscale, extends RandomizerBanned {};
 
-    class Gunman : public virtual MegaLauncher {
+    class Gunman : extends MegaLauncher {
         int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
             CHECK(flag == MOVE_FLAG_MEGA_LAUNCHER)
             CHECK(IS_MOVE_STATUS(move))
@@ -7147,7 +7004,7 @@ class AbilityBehavior {
         }
     };
 
-    class Caretaker : public virtual Ability {
+    class Caretaker : extends Ability {
         int onEndTurn(ON_END_TURN) override {
             CHECK(Random() % 100 < 30)
 
@@ -7163,11 +7020,11 @@ class AbilityBehavior {
         }
     };
 
-    class PoseidonsDominion : public virtual Ability {
+    class PoseidonsDominion : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_WHIRLPOOL, 0); }
     };
 
-    class DualShadow : public virtual HungerSwitch {
+    class DualShadow : extends HungerSwitch {
         int onRecoil(ON_RECOIL) override {
             CHECK(moveType == TYPE_ELECTRIC || moveType == TYPE_DARK);
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -7178,7 +7035,7 @@ class AbilityBehavior {
         }
     };
 
-    class Lullaby : public virtual Ability {
+    class Lullaby : extends Ability {
         AccuracyPriority onAccuracy(ON_ACCURACY) override {
             CHECK(move == MOVE_SING);
             *accuracy *= 1.5;
@@ -7186,7 +7043,7 @@ class AbilityBehavior {
         }
     };
 
-    class CryoArchitect : public virtual Ability {
+    class CryoArchitect : extends Ability {
         int onEndTurn(ON_END_TURN) override {
             int abilityState = GetAbilityState(battler, ability);
             CHECK(abilityState)
@@ -7229,7 +7086,7 @@ class AbilityBehavior {
         }
     };
 
-    class GlacialRage : public virtual Ability {
+    class GlacialRage : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(moveType == TYPE_ICE)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -7238,13 +7095,13 @@ class AbilityBehavior {
         }
     };
 
-    class ImmovableObject : public virtual Ability {
+    class ImmovableObject : extends Ability {
         bool magicGuard() override { return true; }
     };
 
-    class FrenziedPhantom : public virtual ShadowTag, public virtual HyperAggressive {};
+    class FrenziedPhantom : extends ShadowTag, extends HyperAggressive {};
 
-    class DNAScramble : public virtual FormChange {
+    class DNAScramble : extends FormChange {
         int onBeforeAttack(ABILITY_ON_BEFORE_ATTACK) override {
             SpeciesEnum newSpecies = SPECIES_NONE;
             switch (gBattleMons[battler].species) {
@@ -7286,11 +7143,11 @@ class AbilityBehavior {
         }
     };
 
-    class MetallicJaws : public virtual Metallic, public virtual PrimalMaw {};
+    class MetallicJaws : extends Metallic, extends PrimalMaw {};
 
-    class Calculative : public virtual Merged<Analytic, Neuroforce> {};
+    class Calculative : extends Merged<Analytic, Neuroforce> {};
 
-    class EmbodyAspect : public virtual Ability {
+    class EmbodyAspect : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK(CanRaiseStat(battler, STAT_SPEED))
 
@@ -7300,11 +7157,11 @@ class AbilityBehavior {
         }
     };
 
-    class EmbodyAspectHearthflame : public virtual IntrepidSword {};
+    class EmbodyAspectHearthflame : extends IntrepidSword {};
 
-    class EmbodyAspectCornerstone : public virtual DauntlessShield {};
+    class EmbodyAspectCornerstone : extends DauntlessShield {};
 
-    class EmbodyAspectWellspring : public virtual Ability {
+    class EmbodyAspectWellspring : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK(CanRaiseStat(battler, STAT_SPDEF))
 
@@ -7314,24 +7171,24 @@ class AbilityBehavior {
         }
     };
 
-    class RockhardShaft : public virtual BoostedSwarmLike<TYPE_ROCK> {};
+    class RockhardShaft : extends BoostedSwarmLike<TYPE_ROCK> {};
 
-    class HuntersMark : public virtual Deadeye, public virtual Ambush {};
+    class HuntersMark : extends Deadeye, extends Ambush {};
 
-    class Deviate : public virtual AteAbility<TYPE_DARK> {};
+    class Deviate : extends AteAbility<TYPE_DARK> {};
 
-    class SunsBounty : public virtual Harvest, public virtual LeafGuard {
+    class SunsBounty : extends Harvest, extends LeafGuard {
         int onEndTurn(ON_END_TURN) override { return Harvest::onEndTurn(DELEGATE_END_TURN) | LeafGuard::onEndTurn(DELEGATE_END_TURN); }
     };
 
-    class RiteOfSpring : public virtual SolarPower, public virtual Chlorophyll {
+    class RiteOfSpring : extends SolarPower, extends Chlorophyll {
         void onStat(ON_STAT) override {
             SolarPower::onStat(DELEGATE_STAT);
             Chlorophyll::onStat(DELEGATE_STAT);
         }
     };
 
-    class Headstrong : public virtual Breakable {
+    class Headstrong : extends Breakable {
         int onEntry(ON_ENTRY) override {
             CHECK(CanRaiseStat(battler, STAT_SPDEF))
 
@@ -7341,7 +7198,7 @@ class AbilityBehavior {
         }
     };
 
-    class Firefighter : public virtual Breakable {
+    class Firefighter : extends Breakable {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (IS_BATTLER_OF_TYPE(target, TYPE_FIRE)) RESISTANCE(1.5);
         }
@@ -7350,9 +7207,9 @@ class AbilityBehavior {
         }
     };
 
-    class SepiaLens : public virtual SandGuard, public virtual TintedLens {};
+    class SepiaLens : extends SandGuard, extends TintedLens {};
 
-    class SuperSniper : public virtual Sniper {
+    class SuperSniper : extends Sniper {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             Sniper::onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
             if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ability) {
@@ -7362,7 +7219,7 @@ class AbilityBehavior {
         int onPreemptAction(ON_PREEMPT_ACTION) override { UseTurnAttackAsPursuit(DELEGATE_PREEMPT_ACTION); }
     };
 
-    class WoodlandCurse : public virtual Ability {
+    class WoodlandCurse : extends Ability {
         ON_EITHER {
             CHECK(ShouldApplyOnHitAffect(opponent))
             CHECK(IsMoveMakingContact(move, gBattlerAttacker))
@@ -7378,7 +7235,7 @@ class AbilityBehavior {
         ON_EITHER_ABILITY(WoodlandCurse),
     };
 
-    class Malodor : public virtual Ability {
+    class Malodor : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -7390,7 +7247,7 @@ class AbilityBehavior {
         }
     };
 
-    class Blur : public virtual Ability {
+    class Blur : extends Ability {
         int onChooseDefensiveStat(ON_CHOOSE_DEFENSIVE_STAT) override {
             CHECK(IsMoveMakingContact(move, gBattlerAttacker))
             return STAT_SPEED;
@@ -7398,7 +7255,7 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onChooseDefensiveStatFor() override { return onChooseDefensiveStatFor; }
     };
 
-    class Elude : public virtual Ability {
+    class Elude : extends Ability {
         int onChooseDefensiveStat(ON_CHOOSE_DEFENSIVE_STAT) override {
             CHECK_NOT(IsMoveMakingContact(move, gBattlerAttacker))
             return STAT_SPEED;
@@ -7406,9 +7263,9 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onChooseDefensiveStatFor() override { return onChooseDefensiveStatFor; }
     };
 
-    class DrakeOfRage : public virtual Rampage, public virtual TintedLens {};
+    class DrakeOfRage : extends Rampage, extends TintedLens {};
 
-    class MixedMartialArts : public virtual Ability {
+    class MixedMartialArts : extends Ability {
         int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
             CHECK(flag == MOVE_FLAG_PUNCH || flag == MOVE_FLAG_KICK)
             CHECK(gBattleMoves[move].type == TYPE_NORMAL)
@@ -7416,7 +7273,7 @@ class AbilityBehavior {
         }
     };
 
-    class StrategicPause : public virtual Analytic {
+    class StrategicPause : extends Analytic {
         int onCrit(ON_CRIT) override {
             CHECK(GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber)
             CHECK(gBattleMoves[move].effect != EFFECT_FUTURE_SIGHT)
@@ -7424,29 +7281,29 @@ class AbilityBehavior {
         }
     };
 
-    class Overrule : public virtual Ability {
+    class Overrule : extends Ability {
         void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
             if (gIsCriticalHit && *mod && *mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
         }
     };
 
-    class MentalPollution : public virtual Ability {
+    class MentalPollution : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class MadnessEnhancement : public virtual Ability {
+    class MadnessEnhancement : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class Tentalock : public virtual Ability {
+    class Tentalock : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class SerpentBind : public virtual Ability {
+    class SerpentBind : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class SoulTap : public virtual Ability {
+    class SoulTap : extends Ability {
         int onEndTurn(ON_END_TURN) override {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
             int any = FALSE;
@@ -7464,41 +7321,41 @@ class AbilityBehavior {
         }
     };
 
-    class Scarecrow : public virtual Intimidate, public virtual BadLuck {};
+    class Scarecrow : extends Intimidate, extends BadLuck {};
 
-    class OminousShroud : public virtual Phantom, public virtual ShadowShield {};
+    class OminousShroud : extends Phantom, extends ShadowShield {};
 
-    class ChillingPresence : public virtual Ability {
+    class ChillingPresence : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_ICY_WIND, 10); }
     };
 
-    class Frostbind : public virtual PoisonPuppeteerLike<MOVE_EFFECT_FROSTBITE> {
+    class Frostbind : extends PoisonPuppeteerLike<MOVE_EFFECT_FROSTBITE> {
         int onReactive(ON_REACTIVE) override {
             return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) { return (int)CanGetFrostbite(battler); }, BattleScript_Frostbind);
         }
     };
 
-    class TenderAffection : public virtual CuteCharm {
+    class TenderAffection : extends CuteCharm {
         int onStab(ON_STAB) override { return moveType == TYPE_FAIRY; }
     };
 
-    class GlacialGhost : public virtual SlushRush, public virtual SnowCloak {};
+    class GlacialGhost : extends SlushRush, extends SnowCloak {};
 
-    class WonderScale : public virtual ShedSkin, public virtual FortKnox {};
+    class WonderScale : extends ShedSkin, extends FortKnox {};
 
-    class Overzealous : public virtual Ability {
+    class Overzealous : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class StainlessSteel : public virtual Ability {
+    class StainlessSteel : extends Ability {
         ATE_ABILITY(TYPE_STEEL), .fortKnox = TRUE,
     };
 
-    class TemporalRupture : public virtual Ability {
+    class TemporalRupture : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class GrassFlute : public virtual Ability {
+    class GrassFlute : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(IsSoundMove(battler, move))
@@ -7508,7 +7365,7 @@ class AbilityBehavior {
         }
     };
 
-    class Hemotoxin : public virtual PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
+    class Hemotoxin : extends PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
         int onReactive(ON_REACTIVE) override {
             return PoisonPuppeteerClone(
                 ability,
@@ -7518,11 +7375,11 @@ class AbilityBehavior {
         }
     };
 
-    class Harukaze : public virtual Ability {
+    class Harukaze : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class ToxicSurge : public virtual Ability {
+    class ToxicSurge : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_TOXIC_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -7533,36 +7390,36 @@ class AbilityBehavior {
         TerrainType allowTerrainIfAirborne() override { return TERRAIN_TOXIC; }
     };
 
-    class PoisonQuills : public virtual PoisonPoint, public virtual RoughSkin {
+    class PoisonQuills : extends PoisonPoint, extends RoughSkin {
         int onDefender(ON_DEFENDER) override { return RoughSkin::onDefender(DELEGATE_DEFENDER) | PoisonPoint::onDefender(DELEGATE_DEFENDER); }
     };
 
-    class DraconicMight : public virtual HalfDrake, public virtual AteAbility<TYPE_DRAGON> {};
+    class DraconicMight : extends HalfDrake, extends AteAbility<TYPE_DRAGON> {};
 
-    class AtlanticRuler : public virtual AquaticDweller, public virtual SwiftSwim {};
+    class AtlanticRuler : extends AquaticDweller, extends SwiftSwim {};
 
-    class Biofilm : public virtual Ability {
+    class Biofilm : extends Ability {
         void onStat(ON_STAT) override {
             if (statId == STAT_SPDEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN)) *stat *= 1.5;
         }
     };
 
-    class Chokehold : public virtual Ability {
+    class Chokehold : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class GuardianCoat : public virtual SandImmune, public virtual Breakable, public virtual HailImmune {
+    class GuardianCoat : extends SandImmune, extends Breakable, extends HailImmune {
         void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
             if (IS_MOVE_PHYSICAL(move)) MUL(.8);
         }
         bool powderImmune() { return true; }
     };
 
-    class NeutralizingFog : public virtual Ability {
+    class NeutralizingFog : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_DEFOG, 0); }
     };
 
-    class Festivities : public virtual Ability {
+    class Festivities : extends Ability {
         int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
             switch (flag) {
                 case MOVE_FLAG_DANCE:
@@ -7575,13 +7432,13 @@ class AbilityBehavior {
         }
     };
 
-    class FeyFlight : public virtual FairyTale, public virtual GroundImmune {};
+    class FeyFlight : extends FairyTale, extends GroundImmune {};
 
-    class BestOffense : public virtual KeenEdge, public virtual MysticBlades {
+    class BestOffense : extends KeenEdge, extends MysticBlades {
         void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override { secondaryAtkStatToUse[STAT_SPDEF] += 20; }
     };
 
-    class Impaler : public virtual MightyHorn {
+    class Impaler : extends MightyHorn {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBleed(target))
@@ -7592,23 +7449,21 @@ class AbilityBehavior {
         }
     };
 
-    class MagusBlades : public virtual DualWield, public virtual BestOffense {};
+    class MagusBlades : extends DualWield, extends BestOffense {};
 
-    class LightningBorn : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return AddBattlerType(battler, TYPE_ELECTRIC); }
-    };
+    class LightningBorn : extends AddsType<TYPE_ELECTRIC> {};
 
-    class Superheavy : public virtual Ability {
+    class Superheavy : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class WorldSerpent : public virtual GripPincer, public virtual LongReach {};
+    class WorldSerpent : extends GripPincer, extends LongReach {};
 
-    class LuckyWings : public virtual GiantWings, public virtual SereneGrace {};
+    class LuckyWings : extends GiantWings, extends SereneGrace {};
 
-    class Komodo : public virtual HalfDrake, public virtual ToxicChain {};
+    class Komodo : extends HalfDrake, extends ToxicChain {};
 
-    class Envenom : public virtual Ability {
+    class Envenom : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBePoisoned(battler, target, MOVE_NONE))
@@ -7618,7 +7473,7 @@ class AbilityBehavior {
         }
     };
 
-    class PurpleHaze : public virtual Ability {
+    class PurpleHaze : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
@@ -7626,9 +7481,9 @@ class AbilityBehavior {
         }
     };
 
-    class GnashingCannon : public virtual Merged<MegaLauncher, MindCrush> {};
+    class GnashingCannon : extends Merged<MegaLauncher, MindCrush> {};
 
-    class HyperCleanse : public virtual Ability {
+    class HyperCleanse : extends Ability {
         void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_POISON) RESISTANCE(.5);
         }
@@ -7640,7 +7495,7 @@ class AbilityBehavior {
         bool removesStatusOnImmunity() { return true; }
     };
 
-    class MoltenCoat : public virtual Ability {
+    class MoltenCoat : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(moveType == TYPE_ROCK)
@@ -7653,14 +7508,14 @@ class AbilityBehavior {
         ATE_ABILITY(TYPE_ROCK),
     };
 
-    class RoyalDecree : public virtual QueenlyMajesty {
+    class RoyalDecree : extends QueenlyMajesty {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
             return UseEntryMove(battler, ability, MOVE_GLARE, 0);
         }
     };
 
-    class Tag : public virtual Ability {
+    class Tag : extends Ability {
         int onPreemptAction(ON_PREEMPT_ACTION) override {
             CHECK(gCurrentActionFuncId == B_ACTION_SWITCH)
             gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
@@ -7675,7 +7530,7 @@ class AbilityBehavior {
         }
     };
 
-    class Surprise : public virtual Ability {
+    class Surprise : extends Ability {
         int onPreemptAction(ON_PREEMPT_ACTION) override {
             CHECK(gCurrentActionFuncId == B_ACTION_USE_MOVE)
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
@@ -7707,32 +7562,32 @@ class AbilityBehavior {
         }
     };
 
-    class BreezyNeigh : public virtual AdrenalineRush {};
+    class BreezyNeigh : extends AdrenalineRush {};
 
-    class Dreamscape : public virtual Comatose, public virtual Dreamcatcher {
+    class Dreamscape : extends Comatose, extends Dreamcatcher {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             Dreamcatcher::onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
             MUL(1.2);
         }
     };
 
-    class HasteMakesWaste : public virtual Analytic, public virtual Stall {};
+    class HasteMakesWaste : extends Analytic, extends Stall {};
 
-    class HungryMaws : public virtual JawsOfCarnage, public virtual StrongJaw {};
+    class HungryMaws : extends JawsOfCarnage, extends StrongJaw {};
 
-    class ThermalSlide : public virtual Ability {
+    class ThermalSlide : extends Ability {
         void onStat(ON_STAT) override {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY | WEATHER_HAIL_ANY)) *stat *= 1.5;
         }
     };
 
-    class Thermomancy : public virtual Merged<Cryomancy, Pyromancy> {};
+    class Thermomancy : extends Merged<Cryomancy, Pyromancy> {};
 
-    class Chuckster : public virtual Ability {
+    class Chuckster : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class HeatSink : public virtual Redirects<TYPE_FIRE> {
+    class HeatSink : extends Redirects<TYPE_FIRE> {
         int onAbsorb(ON_ABSORB) override {
             CHECK(moveType == TYPE_FIRE);
             *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -7740,13 +7595,13 @@ class AbilityBehavior {
         }
     };
 
-    class RelicStone : public virtual Ability {
+    class RelicStone : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class Supercell : public virtual Merged<ElectricSurge, Drizzle> {};
+    class Supercell : extends Merged<ElectricSurge, Drizzle> {};
 
-    class LightningAspect : public virtual Ability {
+    class LightningAspect : extends Ability {
         int onAbsorb(ON_ABSORB) override {
             CHECK(moveType == TYPE_ELECTRIC)
             *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -7755,7 +7610,7 @@ class AbilityBehavior {
         bool breakable() override { return true; }
     };
 
-    class FireAspect : public virtual Ability {
+    class FireAspect : extends Ability {
         int onAbsorb(ON_ABSORB) override {
             CHECK(moveType == TYPE_FIRE)
             return ABSORB_RESULT_HEAL;
@@ -7771,11 +7626,11 @@ class AbilityBehavior {
         bool breakable() override { return true; }
     };
 
-    class BlisteringSun : public virtual Merged<DesolateLand, AirBlower> {};
+    class BlisteringSun : extends Merged<DesolateLand, AirBlower> {};
 
-    class AurorasGale : public virtual NorthWind, public virtual MajesticBird {};
+    class AurorasGale : extends NorthWind, extends MajesticBird {};
 
-    class WinterThrone : public virtual Ability {
+    class WinterThrone : extends Ability {
         int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_WINTER_THRONE); }
         int onEndTurn(ON_END_TURN) override {
             CHECK(IsAbilityOnField(ability) - 1 == battler)
@@ -7801,11 +7656,11 @@ class AbilityBehavior {
         }
     };
 
-    class IcePlumes : public virtual IceScales {};
+    class IcePlumes : extends IceScales {};
 
-    class PropellerTail : public virtual SwiftSwim {};
+    class PropellerTail : extends SwiftSwim {};
 
-    class EnergyTap : public virtual Ability {
+    class EnergyTap : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(BATTLER_MAX_HP(battler))
@@ -7818,7 +7673,7 @@ class AbilityBehavior {
         }
     };
 
-    class MoltenCore : public virtual Furnace {
+    class MoltenCore : extends Furnace {
         int onEntry(ON_ENTRY) override {
             Furnace::onEntry(DELEGATE_ENTRY);
 
@@ -7836,7 +7691,7 @@ class AbilityBehavior {
         bool stealthRockImmune() { return true; }
     };
 
-    class Reverberate : public virtual Ability {
+    class Reverberate : extends Ability {
         int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
             CHECK(flag == MOVE_FLAG_SOUND)
             CHECK(gBattleMoves[move].type == TYPE_NORMAL)
@@ -7844,7 +7699,7 @@ class AbilityBehavior {
         }
     };
 
-    class Taekkyeon : public virtual Ability {
+    class Taekkyeon : extends Ability {
         int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
             CHECK(flag == MOVE_FLAG_DANCE)
             CHECK_NOT(IS_MOVE_STATUS(move))
@@ -7852,7 +7707,7 @@ class AbilityBehavior {
         }
     };
 
-    class SludgeSpit : public virtual Ability {
+    class SludgeSpit : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(gBattleMoves[move].power)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -7861,7 +7716,7 @@ class AbilityBehavior {
         }
     };
 
-    class SwampThing : public virtual Ability {
+    class SwampThing : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gSideTimers[GetOppositeSide(battler)].swampTimer)
 
@@ -7871,11 +7726,11 @@ class AbilityBehavior {
         }
     };
 
-    class FrostyPrescence : public virtual Ability {
+    class FrostyPrescence : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_MIST, 0); }
     };
 
-    class ChillingPellets : public virtual Ability {
+    class ChillingPellets : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -7885,7 +7740,7 @@ class AbilityBehavior {
         }
     };
 
-    class PaintShot : public virtual Ability {
+    class PaintShot : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK_NOT(IS_BATTLER_OF_TYPE(target, moveType))
@@ -7901,7 +7756,7 @@ class AbilityBehavior {
         }
     };
 
-    class Stonecutter : public virtual Fossilized {
+    class Stonecutter : extends Fossilized {
         int onMoldBreaker(ON_MOLD_BREAKER) override {
             gHitMarker |= HITMARKER_MOLD_BREAKER;
             SetTypeBeforeUsingMove(move, gActiveBattler);
@@ -7916,7 +7771,7 @@ class AbilityBehavior {
         }
     };
 
-    class Edgelord : public virtual Cutthroat {
+    class Edgelord : extends Cutthroat {
         int onBattlerFaints(ON_BATTLER_FAINTS) override {
             CHECK_NOT(gStatuses4[battler] & STATUS4_CUTTHROAT)
 
@@ -7928,17 +7783,17 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
-    class Warmonger : public virtual Ability {
+    class Warmonger : extends Ability {
         void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_ROCK || moveType == TYPE_STEEL || moveType == TYPE_FIGHTING) MUL(1.30);
         }
     };
 
-    class LocustSwarm : public virtual StandardTransformation {};
+    class LocustSwarm : extends StandardTransformation {};
 
-    class Revelation : public virtual StandardTransformation {};
+    class Revelation : extends StandardTransformation {};
 
-    class CurseOfFamine : public virtual Ability {
+    class CurseOfFamine : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
@@ -7947,18 +7802,18 @@ class AbilityBehavior {
         }
     };
 
-    class CrystallineArmor : public virtual Ability {
+    class CrystallineArmor : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class SoulHarvest : public virtual Ability {
+    class SoulHarvest : extends Ability {
         void onStat(ON_STAT) override {
             if (statId != STAT_SPEED) *stat = *stat * (20 + min(5, gFaintedMonCount[GetBattlerSide(battler)])) / 20;
         }
         bool breakable() override { return true; }
     };
 
-    class ThickBlubber : public virtual Ability {
+    class ThickBlubber : extends Ability {
         void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.25);
         }
@@ -7967,11 +7822,11 @@ class AbilityBehavior {
         }
     };
 
-    class Craving : public virtual Ability {
+    class Craving : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class RatKing : public virtual Ability {
+    class RatKing : extends Ability {
         void onStat(ON_STAT) override {
             const BaseStats *baseStats = &gBaseStats[gBattleMons[battler].species];
             int bst =
@@ -7982,11 +7837,11 @@ class AbilityBehavior {
         AbilityApplyOn onStatFor() override { APPLY_ON_ALLY; }
     };
 
-    class CrispyCream : public virtual Ability {
+    class CrispyCream : extends Ability {
         int onDefender(ON_DEFENDER) override { return Random() % 2 ? FlameBody::onEither(DELEGATE_DEFENDER) : FreezingPoint::onEither(DELEGATE_DEFENDER); }
     };
 
-    class DeepFried : public virtual Ability {
+    class DeepFried : extends Ability {
         int onEntry(ON_ENTRY) override {
             CHECK_NOT(gSideTimers[GetOppositeSide(battler)].fireSeaTimer)
 
@@ -7996,9 +7851,9 @@ class AbilityBehavior {
         }
     };
 
-    class FoodLovers : public virtual Hospitality, public virtual FriendGuard {};
+    class FoodLovers : extends Hospitality, extends FriendGuard {};
 
-    class LunarWrath : public virtual Ability {
+    class LunarWrath : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(moveType == TYPE_GHOST)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -8007,11 +7862,11 @@ class AbilityBehavior {
         }
     };
 
-    class Spyware : public virtual Ability {
+    class Spyware : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class Virus : public virtual Ability {
+    class Virus : extends Ability {
         int onAttacker(ON_ATTACKER) override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(moveType == TYPE_ELECTRIC)
@@ -8021,7 +7876,7 @@ class AbilityBehavior {
         }
     };
 
-    class PowerLeak : public virtual Ability {
+    class PowerLeak : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
@@ -8033,7 +7888,7 @@ class AbilityBehavior {
         TerrainType allowTerrainIfAirborne() override { return TERRAIN_ELECTRIC; }
     };
 
-    class BackupPower : public virtual Ability {
+    class BackupPower : extends Ability {
         int onRevive(ON_REVIVE) override {
             CHECK(IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN))
             return B_MSG_BACKUP_POWER;
@@ -8041,21 +7896,21 @@ class AbilityBehavior {
         bool persistent() override { return true; }
     };
 
-    class SandFiend : public virtual SandGuard, public virtual SandForce {};
+    class SandFiend : extends SandGuard, extends SandForce {};
 
-    class Moustache : public virtual Merged<TanglingHair, Stamina> {};
+    class Moustache : extends Merged<TanglingHair, Stamina> {};
 
-    class DepthExplorer : public virtual FieldExplorer, public virtual Illuminate {};
+    class DepthExplorer : extends FieldExplorer, extends Illuminate {};
 
-    class DuneVeil : public virtual SandGuard, public virtual SelfSufficient {};
+    class DuneVeil : extends SandGuard, extends SelfSufficient {};
 
-    class StrongFoundation : public virtual Ability {
+    class StrongFoundation : extends Ability {
         void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
             if (moveType == TYPE_WATER || moveType == TYPE_GROUND) RESISTANCE(.50);
         }
     };
 
-    class FogMachine : public virtual Ability {
+    class FogMachine : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_FOG_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
                 BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
@@ -8070,7 +7925,7 @@ class AbilityBehavior {
         }
     };
 
-    class DropBlocks : public virtual Ability {
+    class DropBlocks : extends Ability {
         int onDefender(ON_DEFENDER) override {
             CHECK(DidMoveHit())
             CHECK(gSideTimers[BATTLE_OPPOSITE(battler)].spikesAmount < 3)
@@ -8080,51 +7935,49 @@ class AbilityBehavior {
         }
     };
 
-    class LaserDrill : public virtual Ability {
+    class LaserDrill : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class LightSaber : public virtual Ability {
+    class LightSaber : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class LooseThorns : public virtual Ability {
+    class LooseThorns : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class TurfWar : public virtual Ability {
+    class TurfWar : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class Greedy : public virtual Ability {
+    class Greedy : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class MusicalNotes : public virtual Ability {
+    class MusicalNotes : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class Strikeout : public virtual Ability {
+    class Strikeout : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class HomeRun : public virtual Ability {
+    class HomeRun : extends Ability {
         bool breakable() override { return true; }
     };
 
-    class Bruiser : public virtual Ability {
-        int onEntry(ON_ENTRY) override { return AddBattlerType(battler, TYPE_FIGHTING); }
-    };
+    class Bruiser : extends AddsType<TYPE_FIGHTING> {};
 
-    class LetsDance : public virtual Ability {
+    class LetsDance : extends Ability {
         int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_TEETER_DANCE, 0); }
     };
 
-    class MyceliumMight : public virtual Ability {
+    class MyceliumMight : extends Ability {
         int onMoldBreaker(ON_MOLD_BREAKER) override { return IS_MOVE_STATUS(move); }
     };
 
-    class DeadlyPrecision : public virtual Ability {
+    class DeadlyPrecision : extends Ability {
         int onMoldBreaker(ON_MOLD_BREAKER) override {
             gHitMarker |= HITMARKER_MOLD_BREAKER;
             SetTypeBeforeUsingMove(move, gActiveBattler);
@@ -8142,886 +7995,902 @@ class AbilityBehavior {
         const *Ability ability;
     } AbilityKVPair;
 
+    template <AbilityEnum Key, typename T>
+    consteval AbilityKVPair pair() {
+        return (AbilityKVPair) {
+            key = Key;
+            ability = (T[])(T());
+        };
+    }
+
     constexpr AbilityKVPair sAbilities[] = {
-        {ABILITY_NONE, None},
-        {ABILITY_STENCH, Stench},
-        {ABILITY_DRIZZLE, Drizzle},
-        {ABILITY_SPEED_BOOST, SpeedBoost},
-        {ABILITY_BATTLE_ARMOR, BattleArmor},
-        {ABILITY_STURDY, Sturdy},
-        {ABILITY_DAMP, Damp},
-        {ABILITY_LIMBER, Limber},
-        {ABILITY_SAND_VEIL, SandVeil},
-        {ABILITY_STATIC, Static},
-        {ABILITY_VOLT_ABSORB, VoltAbsorb},
-        {ABILITY_WATER_ABSORB, WaterAbsorb},
-        {ABILITY_OBLIVIOUS, Oblivious},
-        {ABILITY_CLOUD_NINE, CloudNine},
-        {ABILITY_COMPOUND_EYES, CompoundEyes},
-        {ABILITY_INSOMNIA, Insomnia},
-        {ABILITY_COLOR_CHANGE, ColorChange},
-        {ABILITY_IMMUNITY, Immunity},
-        {ABILITY_FLASH_FIRE, FlashFire},
-        {ABILITY_SHIELD_DUST, ShieldDust},
-        {ABILITY_OWN_TEMPO, OwnTempo},
-        {ABILITY_SUCTION_CUPS, SuctionCups},
-        {ABILITY_INTIMIDATE, Intimidate},
-        {ABILITY_SHADOW_TAG, ShadowTag},
-        {ABILITY_ROUGH_SKIN, RoughSkin},
-        {ABILITY_WONDER_GUARD, WonderGuard},
-        {ABILITY_LEVITATE, Levitate},
-        {ABILITY_EFFECT_SPORE, EffectSpore},
-        {ABILITY_CLEAR_BODY, ClearBody},
-        {ABILITY_NATURAL_CURE, NaturalCure},
-        {ABILITY_LIGHTNING_ROD, LightningRod},
-        {ABILITY_SERENE_GRACE, SereneGrace},
-        {ABILITY_SWIFT_SWIM, SwiftSwim},
-        {ABILITY_CHLOROPHYLL, Chlorophyll},
-        {ABILITY_ILLUMINATE, Illuminate},
-        {ABILITY_TRACE, Trace},
-        {ABILITY_HUGE_POWER, HugePower},
-        {ABILITY_POISON_POINT, PoisonPoint},
-        {ABILITY_INNER_FOCUS, InnerFocus},
-        {ABILITY_MAGMA_ARMOR, MagmaArmor},
-        {ABILITY_WATER_VEIL, WaterVeil},
-        {ABILITY_MAGNET_PULL, MagnetPull},
-        {ABILITY_SOUNDPROOF, Soundproof},
-        {ABILITY_RAIN_DISH, RainDish},
-        {ABILITY_SAND_STREAM, SandStream},
-        {ABILITY_PRESSURE, Pressure},
-        {ABILITY_THICK_FAT, ThickFat},
-        {ABILITY_FLAME_BODY, FlameBody},
-        {ABILITY_KEEN_EYE, KeenEye},
-        {ABILITY_HYPER_CUTTER, HyperCutter},
-        {ABILITY_PICKUP, Pickup},
-        {ABILITY_TRUANT, Truant},
-        {ABILITY_HUSTLE, Hustle},
-        {ABILITY_CUTE_CHARM, CuteCharm},
-        {ABILITY_PLUS, Plus},
-        {ABILITY_MINUS, Minus},
-        {ABILITY_FORECAST, Forecast},
-        {ABILITY_STICKY_HOLD, StickyHold},
-        {ABILITY_SHED_SKIN, ShedSkin},
-        {ABILITY_GUTS, Guts},
-        {ABILITY_MARVEL_SCALE, MarvelScale},
-        {ABILITY_OVERGROW, Overgrow},
-        {ABILITY_BLAZE, Blaze},
-        {ABILITY_TORRENT, Torrent},
-        {ABILITY_SWARM, Swarm},
-        {ABILITY_ROCK_HEAD, RockHead},
-        {ABILITY_DROUGHT, Drought},
-        {ABILITY_ARENA_TRAP, ArenaTrap},
-        {ABILITY_VITAL_SPIRIT, VitalSpirit},
-        {ABILITY_WHITE_SMOKE, WhiteSmoke},
-        {ABILITY_PURE_POWER, PurePower},
-        {ABILITY_SHELL_ARMOR, ShellArmor},
-        {ABILITY_AIR_LOCK, AirLock},
-        {ABILITY_TANGLED_FEET, TangledFeet},
-        {ABILITY_MOTOR_DRIVE, MotorDrive},
-        {ABILITY_RIVALRY, Rivalry},
-        {ABILITY_SNOW_CLOAK, SnowCloak},
-        {ABILITY_ANGER_POINT, AngerPoint},
-        {ABILITY_UNBURDEN, Unburden},
-        {ABILITY_HEATPROOF, Heatproof},
-        {ABILITY_DRY_SKIN, DrySkin},
-        {ABILITY_DOWNLOAD, Download},
-        {ABILITY_IRON_FIST, IronFist},
-        {ABILITY_ADAPTABILITY, Adaptability},
-        {ABILITY_SKILL_LINK, SkillLink},
-        {ABILITY_HYDRATION, Hydration},
-        {ABILITY_SOLAR_POWER, SolarPower},
-        {ABILITY_QUICK_FEET, QuickFeet},
-        {ABILITY_NORMALIZE, Normalize},
-        {ABILITY_SNIPER, Sniper},
-        {ABILITY_MAGIC_GUARD, MagicGuard},
-        {ABILITY_NO_GUARD, NoGuard},
-        {ABILITY_STALL, Stall},
-        {ABILITY_TECHNICIAN, Technician},
-        {ABILITY_LEAF_GUARD, LeafGuard},
-        {ABILITY_MOLD_BREAKER, MoldBreaker},
-        {ABILITY_SUPER_LUCK, SuperLuck},
-        {ABILITY_AFTERMATH, Aftermath},
-        {ABILITY_ANTICIPATION, Anticipation},
-        {ABILITY_FOREWARN, Forewarn},
-        {ABILITY_UNAWARE, Unaware},
-        {ABILITY_TINTED_LENS, TintedLens},
-        {ABILITY_FILTER, Filter},
-        {ABILITY_SLOW_START, SlowStart},
-        {ABILITY_SCRAPPY, Scrappy},
-        {ABILITY_STORM_DRAIN, StormDrain},
-        {ABILITY_ICE_BODY, IceBody},
-        {ABILITY_SOLID_ROCK, SolidRock},
-        {ABILITY_SNOW_WARNING, SnowWarning},
-        {ABILITY_HONEY_GATHER, HoneyGather},
-        {ABILITY_FRISK, Frisk},
-        {ABILITY_RECKLESS, Reckless},
-        {ABILITY_MULTITYPE, Multitype},
-        {ABILITY_FLOWER_GIFT, FlowerGift},
-        {ABILITY_BAD_DREAMS, BadDreams},
-        {ABILITY_SHEER_FORCE, SheerForce},
-        {ABILITY_CONTRARY, Contrary},
-        {ABILITY_UNNERVE, Unnerve},
-        {ABILITY_DEFEATIST, Defeatist},
-        {ABILITY_CURSED_BODY, CursedBody},
-        {ABILITY_HEALER, Healer},
-        {ABILITY_FRIEND_GUARD, FriendGuard},
-        {ABILITY_WEAK_ARMOR, WeakArmor},
-        {ABILITY_LIGHT_METAL, LightMetal},
-        {ABILITY_MULTISCALE, Multiscale},
-        {ABILITY_TOXIC_BOOST, ToxicBoost},
-        {ABILITY_FLARE_BOOST, FlareBoost},
-        {ABILITY_HARVEST, Harvest},
-        {ABILITY_TELEPATHY, Telepathy},
-        {ABILITY_MOODY, Moody},
-        {ABILITY_OVERCOAT, Overcoat},
-        {ABILITY_POISON_TOUCH, PoisonTouch},
-        {ABILITY_REGENERATOR, Regenerator},
-        {ABILITY_BIG_PECKS, BigPecks},
-        {ABILITY_SAND_RUSH, SandRush},
-        {ABILITY_WONDER_SKIN, WonderSkin},
-        {ABILITY_ANALYTIC, Analytic},
-        {ABILITY_ILLUSION, Illusion},
-        {ABILITY_IMPOSTER, Imposter},
-        {ABILITY_INFILTRATOR, Infiltrator},
-        {ABILITY_MUMMY, Mummy},
-        {ABILITY_MOXIE, Moxie},
-        {ABILITY_JUSTIFIED, Justified},
-        {ABILITY_RATTLED, Rattled},
-        {ABILITY_MAGIC_BOUNCE, MagicBounce},
-        {ABILITY_SAP_SIPPER, SapSipper},
-        {ABILITY_PRANKSTER, Prankster},
-        {ABILITY_SAND_FORCE, SandForce},
-        {ABILITY_IRON_BARBS, IronBarbs},
-        {ABILITY_ZEN_MODE, ZenMode},
-        {ABILITY_VICTORY_STAR, VictoryStar},
-        {ABILITY_TURBOBLAZE, Turboblaze},
-        {ABILITY_TERAVOLT, Teravolt},
-        {ABILITY_AROMA_VEIL, AromaVeil},
-        {ABILITY_FLOWER_VEIL, FlowerVeil},
-        {ABILITY_CHEEK_POUCH, CheekPouch},
-        {ABILITY_PROTEAN, Protean},
-        {ABILITY_FUR_COAT, FurCoat},
-        {ABILITY_BULLETPROOF, Bulletproof},
-        {ABILITY_STRONG_JAW, StrongJaw},
-        {ABILITY_REFRIGERATE, Refrigerate},
-        {ABILITY_SWEET_VEIL, SweetVeil},
-        {ABILITY_STANCE_CHANGE, StanceChange},
-        {ABILITY_GALE_WINGS, GaleWings},
-        {ABILITY_MEGA_LAUNCHER, MegaLauncher},
-        {ABILITY_GRASS_PELT, GrassPelt},
-        {ABILITY_TOUGH_CLAWS, ToughClaws},
-        {ABILITY_PIXILATE, Pixilate},
-        {ABILITY_GOOEY, Gooey},
-        {ABILITY_AERILATE, Aerilate},
-        {ABILITY_PARENTAL_BOND, ParentalBond},
-        {ABILITY_DARK_AURA, DarkAura},
-        {ABILITY_FAIRY_AURA, FairyAura},
-        {ABILITY_AURA_BREAK, AuraBreak},
-        {ABILITY_PRIMORDIAL_SEA, PrimordialSea},
-        {ABILITY_DESOLATE_LAND, DesolateLand},
-        {ABILITY_DELTA_STREAM, DeltaStream},
-        {ABILITY_STAMINA, Stamina},
-        {ABILITY_WIMP_OUT, WimpOut},
-        {ABILITY_EMERGENCY_EXIT, EmergencyExit},
-        {ABILITY_WATER_COMPACTION, WaterCompaction},
-        {ABILITY_MERCILESS, Merciless},
-        {ABILITY_SHIELDS_DOWN, ShieldsDown},
-        {ABILITY_STAKEOUT, Stakeout},
-        {ABILITY_WATER_BUBBLE, WaterBubble},
-        {ABILITY_STEELWORKER, Steelworker},
-        {ABILITY_BERSERK, Berserk},
-        {ABILITY_SLUSH_RUSH, SlushRush},
-        {ABILITY_LONG_REACH, LongReach},
-        {ABILITY_LIQUID_VOICE, LiquidVoice},
-        {ABILITY_TRIAGE, Triage},
-        {ABILITY_GALVANIZE, Galvanize},
-        {ABILITY_SURGE_SURFER, SurgeSurfer},
-        {ABILITY_SCHOOLING, Schooling},
-        {ABILITY_DISGUISE, Disguise},
-        {ABILITY_BATTLE_BOND, BattleBond},
-        {ABILITY_POWER_CONSTRUCT, PowerConstruct},
-        {ABILITY_CORROSION, Corrosion},
-        {ABILITY_COMATOSE, Comatose},
-        {ABILITY_QUEENLY_MAJESTY, QueenlyMajesty},
-        {ABILITY_INNARDS_OUT, InnardsOut},
-        {ABILITY_DANCER, Dancer},
-        {ABILITY_BATTERY, Battery},
-        {ABILITY_FLUFFY, Fluffy},
-        {ABILITY_DAZZLING, Dazzling},
-        {ABILITY_SOUL_HEART, SoulHeart},
-        {ABILITY_TANGLING_HAIR, TanglingHair},
-        {ABILITY_RECEIVER, Receiver},
-        {ABILITY_POWER_OF_ALCHEMY, PowerOfAlchemy},
-        {ABILITY_BEAST_BOOST, BeastBoost},
-        {ABILITY_RKS_SYSTEM, RksSystem},
-        {ABILITY_ELECTRIC_SURGE, ElectricSurge},
-        {ABILITY_PSYCHIC_SURGE, PsychicSurge},
-        {ABILITY_MISTY_SURGE, MistySurge},
-        {ABILITY_GRASSY_SURGE, GrassySurge},
-        {ABILITY_SHADOW_SHIELD, ShadowShield},
-        {ABILITY_PRISM_ARMOR, PrismArmor},
-        {ABILITY_NEUROFORCE, Neuroforce},
-        {ABILITY_INTREPID_SWORD, IntrepidSword},
-        {ABILITY_DAUNTLESS_SHIELD, DauntlessShield},
-        {ABILITY_LIBERO, Libero},
-        {ABILITY_COTTON_DOWN, CottonDown},
-        {ABILITY_PROPELLER_TAIL, PropellerTail},
-        {ABILITY_MIRROR_ARMOR, MirrorArmor},
-        {ABILITY_GULP_MISSILE, GulpMissile},
-        {ABILITY_STEAM_ENGINE, SteamEngine},
-        {ABILITY_PUNK_ROCK, PunkRock},
-        {ABILITY_SAND_SPIT, SandSpit},
-        {ABILITY_ICE_SCALES, IceScales},
-        {ABILITY_ICE_FACE, IceFace},
-        {ABILITY_POWER_SPOT, PowerSpot},
-        {ABILITY_MIMICRY, Mimicry},
-        {ABILITY_SCREEN_CLEANER, ScreenCleaner},
-        {ABILITY_STEELY_SPIRIT, SteelySpirit},
-        {ABILITY_PERISH_BODY, PerishBody},
-        {ABILITY_WANDERING_SPIRIT, WanderingSpirit},
-        {ABILITY_GORILLA_TACTICS, GorillaTactics},
-        {ABILITY_NEUTRALIZING_GAS, NeutralizingGas},
-        {ABILITY_PASTEL_VEIL, PastelVeil},
-        {ABILITY_HUNGER_SWITCH, HungerSwitch},
-        {ABILITY_CURIOUS_MEDICINE, CuriousMedicine},
-        {ABILITY_TRANSISTOR, Transistor},
-        {ABILITY_DRAGONS_MAW, DragonsMaw},
-        {ABILITY_CHILLING_NEIGH, ChillingNeigh},
-        {ABILITY_GRIM_NEIGH, GrimNeigh},
-        {ABILITY_AS_ONE_ICE_RIDER, AsOneIceRider},
-        {ABILITY_AS_ONE_SHADOW_RIDER, AsOneShadowRider},
-        {ABILITY_CHLOROPLAST, Chloroplast},
-        {ABILITY_WHITEOUT, Whiteout},
-        {ABILITY_PYROMANCY, Pyromancy},
-        {ABILITY_KEEN_EDGE, KeenEdge},
-        {ABILITY_PRISM_SCALES, PrismScales},
-        {ABILITY_POWER_FISTS, PowerFists},
-        {ABILITY_SAND_SONG, SandSong},
-        {ABILITY_RAMPAGE, Rampage},
-        {ABILITY_VENGEANCE, Vengeance},
-        {ABILITY_BLITZ_BOXER, BlitzBoxer},
-        {ABILITY_ANTARCTIC_BIRD, AntarcticBird},
-        {ABILITY_IMMOLATE, Immolate},
-        {ABILITY_CRYSTALLIZE, Crystallize},
-        {ABILITY_ELECTROCYTES, Electrocytes},
-        {ABILITY_AERODYNAMICS, Aerodynamics},
-        {ABILITY_CHRISTMAS_SPIRIT, ChristmasSpirit},
-        {ABILITY_EXPLOIT_WEAKNESS, ExploitWeakness},
-        {ABILITY_GROUND_SHOCK, GroundShock},
-        {ABILITY_ANCIENT_IDOL, AncientIdol},
-        {ABILITY_MYSTIC_POWER, MysticPower},
-        {ABILITY_PERFECTIONIST, Perfectionist},
-        {ABILITY_GROWING_TOOTH, GrowingTooth},
-        {ABILITY_INFLATABLE, Inflatable},
-        {ABILITY_AURORA_BOREALIS, AuroraBorealis},
-        {ABILITY_AVENGER, Avenger},
-        {ABILITY_LETS_ROLL, LetsRoll},
-        {ABILITY_LOUD_BANG, LoudBang},
-        {ABILITY_LEAD_COAT, LeadCoat},
-        {ABILITY_AMPHIBIOUS, Amphibious},
-        {ABILITY_GROUNDED, Grounded},
-        {ABILITY_EARTHBOUND, Earthbound},
-        {ABILITY_FIGHT_SPIRIT, FightingSpirit},
-        {ABILITY_FELINE_PROWESS, FelineProwess},
-        {ABILITY_COIL_UP, CoilUp},
-        {ABILITY_FOSSILIZED, Fossilized},
-        {ABILITY_MAGICAL_DUST, MagicalDust},
-        {ABILITY_DREAMCATCHER, Dreamcatcher},
-        {ABILITY_NOCTURNAL, Nocturnal},
-        {ABILITY_SELF_SUFFICIENT, SelfSufficient},
-        {ABILITY_TECTONIZE, Tectonize},
-        {ABILITY_ICE_AGE, IceAge},
-        {ABILITY_HALF_DRAKE, HalfDrake},
-        {ABILITY_LIQUIFIED, Liquified},
-        {ABILITY_DRAGONFLY, Dragonfly},
-        {ABILITY_DRAGONSLAYER, Dragonslayer},
-        {ABILITY_MOUNTAINEER, Mountaineer},
-        {ABILITY_HYDRATE, Hydrate},
-        {ABILITY_METALLIC, Metallic},
-        {ABILITY_PERMAFROST, Permafrost},
-        {ABILITY_PRIMAL_ARMOR, PrimalArmor},
-        {ABILITY_RAGING_BOXER, RagingBoxer},
-        {ABILITY_AIR_BLOWER, AirBlower},
-        {ABILITY_JUGGERNAUT, Juggernaut},
-        {ABILITY_SHORT_CIRCUIT, ShortCircuit},
-        {ABILITY_MAJESTIC_BIRD, MajesticBird},
-        {ABILITY_PHANTOM, Phantom},
-        {ABILITY_INTOXICATE, Intoxicate},
-        {ABILITY_IMPENETRABLE, Impenetrable},
-        {ABILITY_HYPNOTIST, Hypnotist},
-        {ABILITY_OVERWHELM, Overwhelm},
-        {ABILITY_SCARE, Scare},
-        {ABILITY_MAJESTIC_MOTH, MajesticMoth},
-        {ABILITY_SOUL_EATER, SoulEater},
-        {ABILITY_SOUL_LINKER, SoulLinker},
-        {ABILITY_SWEET_DREAMS, SweetDreams},
-        {ABILITY_BAD_LUCK, BadLuck},
-        {ABILITY_HAUNTED_SPIRIT, HauntedSpirit},
-        {ABILITY_ELECTRIC_BURST, ElectricBurst},
-        {ABILITY_RAW_WOOD, RawWood},
-        {ABILITY_SOLENOGLYPHS, Solenoglyphs},
-        {ABILITY_SPIDER_LAIR, SpiderLair},
-        {ABILITY_FATAL_PRECISION, FatalPrecision},
-        {ABILITY_FORT_KNOX, FortKnox},
-        {ABILITY_SEAWEED, Seaweed},
-        {ABILITY_PSYCHIC_MIND, PsychicMind},
-        {ABILITY_POISON_ABSORB, PoisonAbsorb},
-        {ABILITY_SCAVENGER, Scavenger},
-        {ABILITY_TWISTED_DIMENSION, TwistedDimension},
-        {ABILITY_MULTI_HEADED, MultiHeaded},
-        {ABILITY_NORTH_WIND, NorthWind},
-        {ABILITY_OVERCHARGE, Overcharge},
-        {ABILITY_VIOLENT_RUSH, ViolentRush},
-        {ABILITY_FLAMING_SOUL, FlamingSoul},
-        {ABILITY_SAGE_POWER, SagePower},
-        {ABILITY_BONE_ZONE, BoneZone},
-        {ABILITY_WEATHER_CONTROL, WeatherControl},
-        {ABILITY_SPEED_FORCE, SpeedForce},
-        {ABILITY_SEA_GUARDIAN, SeaGuardian},
-        {ABILITY_MOLTEN_DOWN, MoltenDown},
-        {ABILITY_HYPER_AGGRESSIVE, HyperAggressive},
-        {ABILITY_FLOCK, Flock},
-        {ABILITY_FIELD_EXPLORER, FieldExplorer},
-        {ABILITY_STRIKER, Striker},
-        {ABILITY_FROZEN_SOUL, FrozenSoul},
-        {ABILITY_PREDATOR, Predator},
-        {ABILITY_LOOTER, Looter},
-        {ABILITY_LUNAR_ECLIPSE, LunarEclipse},
-        {ABILITY_SOLAR_FLARE, SolarFlare},
-        {ABILITY_POWER_CORE, PowerCore},
-        {ABILITY_SIGHTING_SYSTEM, SightingSystem},
-        {ABILITY_BAD_COMPANY, BadCompany},
-        {ABILITY_OPPORTUNIST, Opportunist},
-        {ABILITY_GIANT_WINGS, GiantWings},
-        {ABILITY_MOMENTUM, Momentum},
-        {ABILITY_GRIP_PINCER, GripPincer},
-        {ABILITY_BIG_LEAVES, BigLeaves},
-        {ABILITY_PRECISE_FIST, PreciseFist},
-        {ABILITY_DEADEYE, Deadeye},
-        {ABILITY_ARTILLERY, Artillery},
-        {ABILITY_AMPLIFIER, Amplifier},
-        {ABILITY_ICE_DEW, IceDew},
-        {ABILITY_SUN_WORSHIP, SunWorship},
-        {ABILITY_POLLINATE, Pollinate},
-        {ABILITY_VOLCANO_RAGE, VolcanoRage},
-        {ABILITY_COLD_REBOUND, ColdRebound},
-        {ABILITY_LOW_BLOW, LowBlow},
-        {ABILITY_SPECTRAL_SHROUD, SpectralShroud},
-        {ABILITY_DISCIPLINE, Discipline},
-        {ABILITY_THUNDERCALL, Thundercall},
-        {ABILITY_MARINE_APEX, MarineApex},
-        {ABILITY_MIGHTY_HORN, MightyHorn},
-        {ABILITY_HARDENED_SHEATH, HardenedSheath},
-        {ABILITY_ARCTIC_FUR, ArcticFur},
-        {ABILITY_SPECTRALIZE, Spectralize},
-        {ABILITY_LETHARGY, Lethargy},
-        {ABILITY_IRON_BARRAGE, IronBarrage},
-        {ABILITY_STEEL_BARREL, SteelBarrel},
-        {ABILITY_PYRO_SHELLS, PyroShells},
-        {ABILITY_FUNGAL_INFECTION, FungalInfection},
-        {ABILITY_PARRY, Parry},
-        {ABILITY_SCRAPYARD, Scrapyard},
-        {ABILITY_LOOSE_QUILLS, LooseQuills},
-        {ABILITY_TOXIC_DEBRIS, ToxicDebris},
-        {ABILITY_ROUNDHOUSE, Roundhouse},
-        {ABILITY_MINERALIZE, Mineralize},
-        {ABILITY_LOOSE_ROCKS, LooseRocks},
-        {ABILITY_SPINNING_TOP, SpinningTop},
-        {ABILITY_RETRIBUTION_BLOW, RetributionBlow},
-        {ABILITY_FEARMONGER, Fearmonger},
-        {ABILITY_TOXIC_SPILL, ToxicSpill},
-        {ABILITY_DESERT_CLOAK, DesertCloak},
-        {ABILITY_DRACONIZE, Draconize},
-        {ABILITY_PRETTY_PRINCESS, PrettyPrincess},
-        {ABILITY_SELF_REPAIR, SelfRepair},
-        {ABILITY_ATOMIC_BURST, AtomicBurst},
-        {ABILITY_HELLBLAZE, Hellblaze},
-        {ABILITY_RIPTIDE, Riptide},
-        {ABILITY_FOREST_RAGE, ForestRage},
-        {ABILITY_PRIMAL_MAW, PrimalMaw},
-        {ABILITY_SWEEPING_EDGE, SweepingEdge},
-        {ABILITY_GIFTED_MIND, GiftedMind},
-        {ABILITY_HYDRO_CIRCUIT, HydroCircuit},
-        {ABILITY_EQUINOX, Equinox},
-        {ABILITY_ABSORBANT, Absorbant},
-        {ABILITY_CLUELESS, Clueless},
-        {ABILITY_CHEATING_DEATH, CheatingDeath},
-        {ABILITY_CHEAP_TACTICS, CheapTactics},
-        {ABILITY_COWARD, Coward},
-        {ABILITY_VOLT_RUSH, VoltRush},
-        {ABILITY_DUNE_TERROR, DuneTerror},
-        {ABILITY_INFERNAL_RAGE, InfernalRage},
-        {ABILITY_DUAL_WIELD, DualWield},
-        {ABILITY_ELEMENTAL_CHARGE, ElementalCharge},
-        {ABILITY_AMBUSH, Ambush},
-        {ABILITY_ATLAS, Atlas},
-        {ABILITY_RADIANCE, Radiance},
-        {ABILITY_JAWS_OF_CARNAGE, JawsOfCarnage},
-        {ABILITY_ANGELS_WRATH, AngelsWrath},
-        {ABILITY_PRISMATIC_FUR, PrismaticFur},
-        {ABILITY_SHOCKING_JAWS, ShockingJaws},
-        {ABILITY_FAE_HUNTER, FaeHunter},
-        {ABILITY_GRAVITY_WELL, GravityWell},
-        {ABILITY_EVAPORATE, Evaporate},
-        {ABILITY_LUMBERJACK, Lumberjack},
-        {ABILITY_WELL_BAKED_BODY, WellBakedBody},
-        {ABILITY_FURNACE, Furnace},
-        {ABILITY_ELECTROMORPHOSIS, Electromorphosis},
-        {ABILITY_ROCKY_PAYLOAD, RockyPayload},
-        {ABILITY_EARTH_EATER, EarthEater},
-        {ABILITY_LINGERING_AROMA, LingeringAroma},
-        {ABILITY_FAIRY_TALE, FairyTale},
-        {ABILITY_RAGING_MOTH, RagingMoth},
-        {ABILITY_ADRENALINE_RUSH, AdrenalineRush},
-        {ABILITY_ARCHMAGE, Archmage},
-        {ABILITY_CRYOMANCY, Cryomancy},
-        {ABILITY_PHANTOM_PAIN, PhantomPain},
-        {ABILITY_PURGATORY, Purgatory},
-        {ABILITY_EMANATE, Emanate},
-        {ABILITY_KUNOICHI_BLADE, KunoichiBlade},
-        {ABILITY_MONKEY_BUSINESS, MonkeyBusiness},
-        {ABILITY_COMBAT_SPECIALIST, CombatSpecialist},
-        {ABILITY_JUNGLES_GUARD, JunglesGuard},
-        {ABILITY_HUNTERS_HORN, HuntersHorn},
-        {ABILITY_PIXIE_POWER, PixiePower},
-        {ABILITY_PLASMA_LAMP, PlasmaLamp},
-        {ABILITY_MAGMA_EATER, MagmaEater},
-        {ABILITY_SUPER_HOT_GOO, SuperHotGoo},
-        {ABILITY_NIKA, Nika},
-        {ABILITY_ARCHER, Archer},
-        {ABILITY_SUPER_SLAMMER, SuperSlammer},
-        {ABILITY_INVERSE_ROOM, InverseRoom},
-        {ABILITY_FROST_BURN, FrostBurn},
-        {ABILITY_ITCHY_DEFENSE, ItchyDefense},
-        {ABILITY_GENERATOR, Generator},
-        {ABILITY_MOON_SPIRIT, MoonSpirit},
-        {ABILITY_DUST_CLOUD, DustCloud},
-        {ABILITY_BERSERKER_RAGE, BerserkerRage},
-        {ABILITY_TRICKSTER, Trickster},
-        {ABILITY_SAND_GUARD, SandGuard},
-        {ABILITY_NATURAL_RECOVERY, NaturalRecovery},
-        {ABILITY_WIND_RIDER, WindRider},
-        {ABILITY_SOOTHING_AROMA, SoothingAroma},
-        {ABILITY_PRIM_AND_PROPER, PrimAndProper},
-        {ABILITY_SUPER_STRAIN, SuperStrain},
-        {ABILITY_TIPPING_POINT, TippingPoint},
-        {ABILITY_ENLIGHTENED, Enlightened},
-        {ABILITY_PEACEFUL_SLUMBER, PeacefulSlumber},
-        {ABILITY_AFTERSHOCK, Aftershock},
-        {ABILITY_FREEZING_POINT, FreezingPoint},
-        {ABILITY_CRYO_PROFICIENCY, CryoProficiency},
-        {ABILITY_ARCANE_FORCE, ArcaneForce},
-        {ABILITY_DOOMBRINGER, Doombringer},
-        {ABILITY_WISHMAKER, Wishmaker},
-        {ABILITY_YUKI_ONNA, YukiOnna},
-        {ABILITY_SUPPRESS, Suppress},
-        {ABILITY_REFRIGERATOR, Refrigerator},
-        {ABILITY_HEAVEN_ASUNDER, HeavenAsunder},
-        {ABILITY_PURIFYING_WATERS, PurifyingWaters},
-        {ABILITY_SEABORNE, Seaborne},
-        {ABILITY_HIGH_TIDE, HighTide},
-        {ABILITY_CHANGE_OF_HEART, ChangeOfHeart},
-        {ABILITY_MYSTIC_BLADES, MysticBlades},
-        {ABILITY_DETERMINATION, Determination},
-        {ABILITY_FERTILIZE, Fertilize},
-        {ABILITY_PURE_LOVE, PureLove},
-        {ABILITY_FIGHTER, Fighter},
-        {ABILITY_TELEKINETIC, Telekinetic},
-        {ABILITY_COMBUSTION, Combustion},
-        {ABILITY_PONY_POWER, PonyPower},
-        {ABILITY_POWDER_BURST, PowderBurst},
-        {ABILITY_RETRIEVER, Retriever},
-        {ABILITY_MONSTER_MASH, MonsterMash},
-        {ABILITY_TWO_STEP, TwoStep},
-        {ABILITY_SPITEFUL, Spiteful},
-        {ABILITY_FORTITUDE, Fortitude},
-        {ABILITY_DEVOURER, Devourer},
-        {ABILITY_PHANTOM_THIEF, PhantomThief},
-        {ABILITY_EARLY_GRAVE, EarlyGrave},
-        {ABILITY_BASS_BOOSTED, BassBoosted},
-        {ABILITY_FLAMING_JAWS, FlamingJaws},
-        {ABILITY_MONSTER_HUNTER, MonsterHunter},
-        {ABILITY_CROWNED_SWORD, CrownedSword},
-        {ABILITY_CROWNED_SHIELD, CrownedShield},
-        {ABILITY_BERSERK_DNA, BerserkDna},
-        {ABILITY_CROWNED_KING, CrownedKing},
-        {ABILITY_SNAP_TRAP_WHEN_HIT, SnapTrapWhenHit},
-        {ABILITY_PERMANENCE, Permanence},
-        {ABILITY_HUBRIS, Hubris},
-        {ABILITY_COSMIC_DAZE, CosmicDaze},
-        {ABILITY_MINDS_EYE, MindsEye},
-        {ABILITY_BLOOD_PRICE, BloodPrice},
-        {ABILITY_SPIKE_ARMOR, SpikeArmor},
-        {ABILITY_VOODOO_POWER, VoodooPower},
-        {ABILITY_CHROME_COAT, ChromeCoat},
-        {ABILITY_BANSHEE, Banshee},
-        {ABILITY_WEB_SPINNER, WebSpinner},
-        {ABILITY_SHOWDOWN_MODE, ShowdownMode},
-        {ABILITY_SEED_SOWER, SeedSower},
-        {ABILITY_AIRBORNE, Airborne},
-        {ABILITY_PARROTING, Parroting},
-        {ABILITY_SALT_CIRCLE, SaltCircle},
-        {ABILITY_PURIFYING_SALT, PurifyingSalt},
-        {ABILITY_PROTOSYNTHESIS, Protosynthesis},
-        {ABILITY_QUARK_DRIVE, QuarkDrive},
-        {ABILITY_WIND_POWER, WindPower},
-        {ABILITY_IMPULSE, Impulse},
-        {ABILITY_TERMINAL_VELOCITY, TerminalVelocity},
-        {ABILITY_ANGER_SHELL, AngerShell},
-        {ABILITY_EGOIST, Egoist},
-        {ABILITY_READIED_ACTION, ReadiedAction},
-        {ABILITY_DARK_GALE_WINGS, DarkGaleWings},
-        {ABILITY_GUILT_TRIP, GuiltTrip},
-        {ABILITY_WATER_GALE_WINGS, WaterGaleWings},
-        {ABILITY_ZERO_TO_HERO, ZeroToHero},
-        {ABILITY_COSTAR, Costar},
-        {ABILITY_COMMANDER, Commander},
-        {ABILITY_EJECT_PACK_ABILITY, EjectPackAbility},
-        {ABILITY_VENGEFUL_SPIRIT, VengefulSpirit},
-        {ABILITY_CUD_CHEW, CudChew},
-        {ABILITY_ARMOR_TAIL, ArmorTail},
-        {ABILITY_MIND_CRUSH, MindCrush},
-        {ABILITY_SUPREME_OVERLORD, SupremeOverlord},
-        {ABILITY_ILL_WILL, IllWill},
-        {ABILITY_FIRE_SCALES, FireScales},
-        {ABILITY_WATCH_YOUR_STEP, WatchYourStep},
-        {ABILITY_RAPID_RESPONSE, RapidResponse},
-        {ABILITY_DOUBLE_IRON_BARBS, DoubleIronBarbs},
-        {ABILITY_THERMAL_EXCHANGE, ThermalExchange},
-        {ABILITY_GOOD_AS_GOLD, GoodAsGold},
-        {ABILITY_SHARING_IS_CARING, SharingIsCaring},
-        {ABILITY_TABLETS_OF_RUIN, TabletsOfRuin},
-        {ABILITY_SWORD_OF_RUIN, SwordOfRuin},
-        {ABILITY_VESSEL_OF_RUIN, VesselOfRuin},
-        {ABILITY_BEADS_OF_RUIN, BeadsOfRuin},
-        {ABILITY_PERMAFROST_CLONE, PermafrostClone},
-        {ABILITY_GALLANTRY, Gallantry},
-        {ABILITY_ORICHALCUM_PULSE, OrichalcumPulse},
-        {ABILITY_SUN_BASKING, SunBasking},
-        {ABILITY_WINGED_KING, WingedKing},
-        {ABILITY_HADRON_ENGINE, HadronEngine},
-        {ABILITY_IRON_SERPENT, IronSerpent},
-        {ABILITY_SWEEPING_EDGE_PLUS, SweepingEdgePlus},
-        {ABILITY_CELESTIAL_BLESSING, CelestialBlessing},
-        {ABILITY_MINION_CONTROL, MinionControl},
-        {ABILITY_MOLTEN_BLADES, MoltenBlades},
-        {ABILITY_HAUNTING_FRENZY, HauntingFrenzy},
-        {ABILITY_NOISE_CANCEL, NoiseCancel},
-        {ABILITY_RADIO_JAM, RadioJam},
-        {ABILITY_OLE, Ole},
-        {ABILITY_MALICIOUS, Malicious},
-        {ABILITY_DEAD_POWER, DeadPower},
-        {ABILITY_BRAWLING_WYVERN, BrawlingWyvern},
-        {ABILITY_MYTHICAL_ARROWS, MythicalArrows},
-        {ABILITY_LAWNMOWER, Lawnmower},
-        {ABILITY_FLOURISH, Flourish},
-        {ABILITY_DESERT_SPIRIT, DesertSpirit},
-        {ABILITY_CONTEMPT, Contempt},
-        {ABILITY_AERIALIST, Aerialist},
-        {ABILITY_TERA_SHELL, TeraShell},
-        {ABILITY_TOXIC_CHAIN, ToxicChain},
-        {ABILITY_PARASITIC_SPORES, ParasiticSpores},
-        {ABILITY_POISON_PUPPETEER, PoisonPuppeteer},
-        {ABILITY_ENTRANCE, Entrance},
-        {ABILITY_REJECTION, Rejection},
-        {ABILITY_APPLE_ENLIGHTENMENT, AppleEnlightenment},
-        {ABILITY_BALLOON_BOMBER, BalloonBomber},
-        {ABILITY_FLAMING_MAW, FlamingMaw},
-        {ABILITY_DEMOLITIONIST, Demolitionist},
-        {ABILITY_ROCKHARD_WILL, RockhardWill},
-        {ABILITY_FRAGRANT_DAZE, FragrantDaze},
-        {ABILITY_LOW_VISIBILITY, LowVisibility},
-        {ABILITY_OLD_MARINER, OldMariner},
-        {ABILITY_ECTOPLASM, Ectoplasm},
-        {ABILITY_BEAUTIFUL_MUSIC, BeautifulMusic},
-        {ABILITY_SNOW_SONG, SnowSong},
-        {ABILITY_GREATER_SPIRIT, GreaterSpirit},
-        {ABILITY_RESONANCE, Resonance},
-        {ABILITY_ETHEREAL_RUSH, EtherealRush},
-        {ABILITY_CUTE_ANTECEDENCE, CuteAntecedence},
-        {ABILITY_RECURRING_NIGHTMARE, RecurringNightmare},
-        {ABILITY_MENACING_SITUATION, MenacingSituation},
-        {ABILITY_SHINY_LIGHTNING, ShinyLightning},
-        {ABILITY_TERRIFY, Terrify},
-        {ABILITY_ICE_DOWNFALL, IceDownfall},
-        {ABILITY_LAST_STAND, LastStand},
-        {ABILITY_PYROCLASTIC_FLOW, PyroclasticFlow},
-        {ABILITY_BLOOD_BATH, BloodBath},
-        {ABILITY_BATTLE_AURA, BattleAura},
-        {ABILITY_BLOODLUST, Bloodlust},
-        {ABILITY_PIERCING_SOLO, PiercingSolo},
-        {ABILITY_RHYTHMIC, Rhythmic},
-        {ABILITY_CHUNKY_BASS_LINE, ChunkyBassLine},
-        {ABILITY_DUAL_HAMMER, DualHammer},
-        {ABILITY_DENTING_BLOWS, DentingBlows},
-        {ABILITY_ICE_COLD_HUNTER, IceColdHunter},
-        {ABILITY_SOUL_CRUSHER, SoulCrusher},
-        {ABILITY_ARC_FLASH, ArcFlash},
-        {ABILITY_UNICORN, Unicorn},
-        {ABILITY_ON_THE_PROWL, OnTheProwl},
-        {ABILITY_PRETENTIOUS, Pretentious},
-        {ABILITY_VENOBLAZE_PINCERS, VenoblazePincers},
-        {ABILITY_ETERNAL_BLESSING, EternalBlessing},
-        {ABILITY_SUGAR_RUSH, SugarRush},
-        {ABILITY_PEACEFUL_REST, PeacefulRest},
-        {ABILITY_WHITE_NOISE, WhiteNoise},
-        {ABILITY_SMOKEY_MANEUVERS, SmokeyManeuvers},
-        {ABILITY_POWER_METAL, PowerMetal},
-        {ABILITY_POWER_EDGE, PowerEdge},
-        {ABILITY_SUPERCONDUCTOR, Superconductor},
-        {ABILITY_ULTRA_INSTINCT, UltraInstinct},
-        {ABILITY_UNLOCKED_POTENTIAL, UnlockedPotential},
-        {ABILITY_HIGHER_RANK, HigherRank},
-        {ABILITY_FUNERAL_PYRE, FuneralPyre},
-        {ABILITY_FLAME_BUBBLE, FlameBubble},
-        {ABILITY_ELEMENTAL_VORTEX, ElementalVortex},
-        {ABILITY_SNOWY_WRATH, SnowyWrath},
-        {ABILITY_PATTERN_CHANGE, PatternChange},
-        {ABILITY_NO_TURNING_BACK, NoTurningBack},
-        {ABILITY_FLAMMABLE_COAT, FlammableCoat},
-        {ABILITY_DRACO_MORALE, DracoMorale},
-        {ABILITY_BAD_OMEN, BadOmen},
-        {ABILITY_MOSH_PIT, MoshPit},
-        {ABILITY_BLOOD_STAIN, BloodStain},
-        {ABILITY_BLOOD_STIGMA, BloodStigma},
-        {ABILITY_MAXIMUM_ACCELERATION, MaximumAcceleration},
-        {ABILITY_SIDEWINDER, Sidewinder},
-        {ABILITY_PETRIFY, Petrify},
-        {ABILITY_FLUFFIEST, Fluffiest},
-        {ABILITY_WAY_OF_PRECISION, WayOfPrecision},
-        {ABILITY_WAY_OF_SWIFTNESS, WayOfSwiftness},
-        {ABILITY_ATOMIC_PUNCH, AtomicPunch},
-        {ABILITY_IRON_GIANT, IronGiant},
-        {ABILITY_MASTER_HAND, MasterHand},
-        {ABILITY_FINAL_BLOW, FinalBlow},
-        {ABILITY_HOSPITALITY, Hospitality},
-        {ABILITY_BUTTER_UP, ButterUp},
-        {ABILITY_VITALITY_STRIKE, VitalityStrike},
-        {ABILITY_HUGE_WINGS, HugeWings},
-        {ABILITY_SWORD_OF_DAMNATION, SwordOfDamnation},
-        {ABILITY_RESTRAINING_ORDER, RestrainingOrder},
-        {ABILITY_ASSASSINS_TOOLS, AssassinsTools},
-        {ABILITY_FROSTMAW, Frostmaw},
-        {ABILITY_PATCHWORK, Patchwork},
-        {ABILITY_BLIND_RAGE, BlindRage},
-        {ABILITY_SLIPSTREAM, Slipstream},
-        {ABILITY_APEX_PREDATOR, ApexPredator},
-        {ABILITY_DRAGONS_RITUAL, DragonsRitual},
-        {ABILITY_PINNACLE_BLADE, PinnacleBlade},
-        {ABILITY_ENERGIZED, Energized},
-        {ABILITY_COLOR_SPECTRUM, ColorSpectrum},
-        {ABILITY_STEEL_BEETLE, SteelBeetle},
-        {ABILITY_FROM_THE_SHADOWS, FromTheShadows},
-        {ABILITY_RAGE_POINT, RagePoint},
-        {ABILITY_HOT_COALS, HotCoals},
-        {ABILITY_TERASTAL_TREASURE, TerastalTreasure},
-        {ABILITY_SHOCKING_MAW, ShockingMaw},
-        {ABILITY_GLEAM_EYES, GleamEyes},
-        {ABILITY_ROUSED_FANGS, RousedFangs},
-        {ABILITY_DREAM_STATE, DreamState},
-        {ABILITY_DREAM_WHIMSY, DreamWhimsy},
-        {ABILITY_LUNAR_AFFINITY, LunarAffinity},
-        {ABILITY_FLAME_SHIELD, FlameShield},
-        {ABILITY_AQUATIC_DWELLER, AquaticDweller},
-        {ABILITY_APPLE_PIE, ApplePie},
-        {ABILITY_HOVER, Hover},
-        {ABILITY_DEPRAVITY, Depravity},
-        {ABILITY_WILDFIRE, Wildfire},
-        {ABILITY_JUMP_SCARE, JumpScare},
-        {ABILITY_TAR_TOSS, TarToss},
-        {ABILITY_STUN_SHOCK, StunShock},
-        {ABILITY_RAGING_GODDESS, RagingGoddess},
-        {ABILITY_WHIPLASH, Whiplash},
-        {ABILITY_SUPERSWEET_SYRUP, SupersweetSyrup},
-        {ABILITY_TRASH_HEAP, TrashHeap},
-        {ABILITY_SLUDGY_MIX, SludgyMix},
-        {ABILITY_OVERWATCH, Overwatch},
-        {ABILITY_WIND_RAGE, WindRage},
-        {ABILITY_VICTORY_BOMB, VictoryBomb},
-        {ABILITY_RAZOR_SHARP, RazorSharp},
-        {ABILITY_TO_THE_BONE, ToTheBone},
-        {ABILITY_BLADE_DANCE, BladeDance},
-        {ABILITY_APE_SHIFT, ApeShift},
-        {ABILITY_KNOW_YOUR_PLACE, KnowYourPlace},
-        {ABILITY_DEEP_CUTS, DeepCuts},
-        {ABILITY_LIFE_STEAL, LifeSteal},
-        {ABILITY_RUDE_AWAKENING, RudeAwakening},
-        {ABILITY_TERAFORM_ZERO, TeraformZero},
-        {ABILITY_SET_ABLAZE, SetAblaze},
-        {ABILITY_BREAKWATER, Breakwater},
-        {ABILITY_MAGICAL_FISTS, MagicalFists},
-        {ABILITY_CUTTHROAT, Cutthroat},
-        {ABILITY_SAND_BENDER, SandBender},
-        {ABILITY_SAND_PIT, SandPit},
-        {ABILITY_DESOLATE_SUN, DesolateSun},
-        {ABILITY_DAYBREAK, Daybreak},
-        {ABILITY_ENERGY_SIPHON, EnergySiphon},
-        {ABILITY_RESERVOIR, Reservoir},
-        {ABILITY_NEUROTOXIN, Neurotoxin},
-        {ABILITY_ENERGIZED_HORNS, EnergizedHorns},
-        {ABILITY_SPIDER_LAIR_UPGRADE, SpiderLairUpgrade},
-        {ABILITY_CRUST_COAT, CrustCoat},
-        {ABILITY_PUFFY, Puffy},
-        {ABILITY_BALLOON_BLITZ, BalloonBlitz},
-        {ABILITY_STRIKER_PIXILATE, StrikerPixilate},
-        {ABILITY_DOOM_BLAST, DoomBlast},
-        {ABILITY_BRUTEFORCE, Bruteforce},
-        {ABILITY_FARADAY_CAGE, FaradayCage},
-        {ABILITY_ACIDIC_SLIME, AcidicSlime},
-        {ABILITY_ROSE_GARDEN, RoseGarden},
-        {ABILITY_QIGONG, Qigong},
-        {ABILITY_CONJOURER_OF_DECEIT, ConjurerOfDeceit},
-        {ABILITY_DEEP_FREEZE, DeepFreeze},
-        {ABILITY_SOUL_DEVOURER, SoulDevourer},
-        {ABILITY_CHAMPIONS_ENTRANCE, ChampionsEntrance},
-        {ABILITY_PRESTO, Presto},
-        {ABILITY_SAMBA, Samba},
-        {ABILITY_GLADIATOR, Gladiator},
-        {ABILITY_FORSAKEN_HEART, ForsakenHeart},
-        {ABILITY_RELENTLESS, Relentless},
-        {ABILITY_SOOTHSAYER, Soothsayer},
-        {ABILITY_CORRUPTED_MIND, CorruptedMind},
-        {ABILITY_FLAME_COAT, FlameCoat},
-        {ABILITY_UNOWN_POWER, UnownPower},
-        {ABILITY_SUPER_SCOPE, SuperScope},
-        {ABILITY_VENOM_CROWN, VenomCrown},
-        {ABILITY_BLIGHT_SCALE, BlightScale},
-        {ABILITY_GUNMAN, Gunman},
-        {ABILITY_HUNTERS_MARK, HuntersMark},
-        {ABILITY_CARETAKER, Caretaker},
-        {ABILITY_POSEIDONS_DOMINION, PoseidonsDominion},
-        {ABILITY_DUAL_SHADOW, DualShadow},
-        {ABILITY_LULLABY, Lullaby},
-        {ABILITY_CRYO_ARCHITECT, CryoArchitect},
-        {ABILITY_GLACIAL_RAGE, GlacialRage},
-        {ABILITY_IMMOVABLE_OBJECT, ImmovableObject},
-        {ABILITY_FRENZIED_PHANTOM, FrenziedPhantom},
-        {ABILITY_DNA_SCRAMBLE, DNAScramble},
-        {ABILITY_AQUATIC, Aquatic},
-        {ABILITY_METALLIC_JAWS, MetallicJaws},
-        {ABILITY_CALCULATIVE, Calculative},
-        {ABILITY_EMBODY_ASPECT, EmbodyAspect},
-        {ABILITY_EMBODY_ASPECT_HEARTHFLAME, EmbodyAspect},
-        {ABILITY_EMBODY_ASPECT_CORNERSTONE, EmbodyAspectCornerstone},
-        {ABILITY_EMBODY_ASPECT_WELLSPRING, EmbodyAspectWellspring},
-        {ABILITY_ROCKHARD_SHAFT, RockhardShaft},
-        {ABILITY_DEVIATE, Deviate},
-        {ABILITY_SUNS_BOUNTY, SunsBounty},
-        {ABILITY_RITE_OF_SPRING, RiteOfSpring},
-        {ABILITY_HEADSTRONG, Headstrong},
-        {ABILITY_FIREFIGHTER, Firefighter},
-        {ABILITY_SEPIA_LENS, SepiaLens},
-        {ABILITY_SUPER_SNIPER, SuperSniper},
-        {ABILITY_WOODLAND_CURSE, WoodlandCurse},
-        {ABILITY_MALODOR, Malodor},
-        {ABILITY_BLUR, Blur},
-        {ABILITY_ELUDE, Elude},
-        {ABILITY_DRAKE_OF_RAGE, DrakeOfRage},
-        {ABILITY_MIXED_MARTIAL_ARTS, MixedMartialArts},
-        {ABILITY_STRATEGIC_PAUSE, StrategicPause},
-        {ABILITY_OVERRULE, Overrule},
-        {ABILITY_MENTAL_POLLUTION, MentalPollution},
-        {ABILITY_MADNESS_ENHANCEMENT, MadnessEnhancement},
-        {ABILITY_TENTALOCK, Tentalock},
-        {ABILITY_SERPENT_BIND, SerpentBind},
-        {ABILITY_SOUL_TAP, SoulTap},
-        {ABILITY_SCARECROW, Scarecrow},
-        {ABILITY_OMINOUS_SHROUD, OminousShroud},
-        {ABILITY_CHILLING_PRESENCE, ChillingPresence},
-        {ABILITY_FROSTBIND, Frostbind},
-        {ABILITY_GLACIAL_GHOST, GlacialGhost},
-        {ABILITY_TENDER_AFFECTION, TenderAffection},
-        {ABILITY_WONDER_SCALE, WonderScale},
-        {ABILITY_OVERZEALOUS, Overzealous},
-        {ABILITY_STAINLESS_STEEL, StainlessSteel},
-        {ABILITY_TEMPORAL_RUPTURE, TemporalRupture},
-        {ABILITY_GRASS_FLUTE, GrassFlute},
-        {ABILITY_HEMOTOXIN, Hemotoxin},
-        {ABILITY_HARUKAZE, Harukaze},
-        {ABILITY_TOXIC_SURGE, ToxicSurge},
-        {ABILITY_ATLANTIC_RULER, AtlanticRuler},
-        {ABILITY_BIOFILM, Biofilm},
-        {ABILITY_CHOKEHOLD, Chokehold},
-        {ABILITY_GUARDIAN_COAT, GuardianCoat},
-        {ABILITY_NEUTRALIZING_FOG, NeutralizingFog},
-        {ABILITY_POISON_QUILLS, PoisonQuills},
-        {ABILITY_DRACONIC_MIGHT, DraconicMight},
-        {ABILITY_FESTIVITIES, Festivities},
-        {ABILITY_FEY_FLIGHT, FeyFlight},
-        {ABILITY_BEST_OFFENSE, BestOffense},
-        {ABILITY_IMPALER, Impaler},
-        {ABILITY_MAGUS_BLADES, MagusBlades},
-        {ABILITY_LIGHTNING_BORN, LightningBorn},
-        {ABILITY_SUPERHEAVY, Superheavy},
-        {ABILITY_WORLD_SERPENT, WorldSerpent},
-        {ABILITY_LUCKY_WINGS, LuckyWings},
-        {ABILITY_KOMODO, Komodo},
-        {ABILITY_ENVENOM, Envenom},
-        {ABILITY_PURPLE_HAZE, PurpleHaze},
-        {ABILITY_GNASHING_CANNON, GnashingCannon},
-        {ABILITY_HYPER_CLEANSE, HyperCleanse},
-        {ABILITY_MOLTEN_COAT, MoltenCoat},
-        {ABILITY_ROYAL_DECREE, RoyalDecree},
-        {ABILITY_BREEZY_NEIGH, BreezyNeigh},
-        {ABILITY_DREAMSCAPE, Dreamscape},
-        {ABILITY_HASTE_MAKES_WASTE, HasteMakesWaste},
-        {ABILITY_HUNGRY_MAWS, HungryMaws},
-        {ABILITY_THERMAL_SLIDE, ThermalSlide},
-        {ABILITY_THERMOMANCY, Thermomancy},
-        {ABILITY_CHUCKSTER, Chuckster},
-        {ABILITY_HEAT_SINK, HeatSink},
-        {ABILITY_RELIC_STONE, RelicStone},
-        {ABILITY_SUPERCELL, Supercell},
-        {ABILITY_LIGHTNING_ASPECT, LightningAspect},
-        {ABILITY_POISON_HEAL, PoisonHeal},
-        {ABILITY_ENERGY_TAP, EnergyTap},
-        {ABILITY_JUNSHI_SANDA, JunshiSanda},
-        {ABILITY_REVERBATE, Reverberate},
-        {ABILITY_TAEKKYEON, Taekkyeon},
-        {ABILITY_SLUDGE_SPIT, SludgeSpit},
-        {ABILITY_SWAMP_THING, SwampThing},
-        {ABILITY_FROSTY_PRESCENCE, FrostyPrescence},
-        {ABILITY_CHILLING_PELLETS, ChillingPellets},
-        {ABILITY_PAINT_SHOT, PaintShot},
-        {ABILITY_STONECUTTER, Stonecutter},
-        {ABILITY_EDGELORD, Edgelord},
-        {ABILITY_WARMONGER, Warmonger},
-        {ABILITY_LOCUST_SWARM, LocustSwarm},
-        {ABILITY_REVELATION, Revelation},
-        {ABILITY_CURSE_OF_FAMINE, CurseOfFamine},
-        {ABILITY_CRYSTALLINE_ARMOR, CrystallineArmor},
-        {ABILITY_SOUL_HARVEST, SoulHarvest},
-        {ABILITY_THICK_BLUBBER, ThickBlubber},
-        {ABILITY_CRAVING, Craving},
-        {ABILITY_RAT_KING, RatKing},
-        {ABILITY_CRISPY_CREAM, CrispyCream},
-        {ABILITY_DEEP_FRIED, DeepFried},
-        {ABILITY_FOOD_LOVERS, FoodLovers},
-        {ABILITY_LUNAR_WRATH, LunarWrath},
-        {ABILITY_SPYWARE, Spyware},
-        {ABILITY_VIRUS, Virus},
-        {ABILITY_POWER_LEAK, PowerLeak},
-        {ABILITY_BACKUP_POWER, BackupPower},
-        {ABILITY_SAND_FIEND, SandFiend},
-        {ABILITY_MOUSTACHE, Moustache},
-        {ABILITY_DEPTH_EXPLORER, DepthExplorer},
-        {ABILITY_DUNE_VEIL, DuneVeil},
-        {ABILITY_STRONG_FOUNDATION, StrongFoundation},
-        {ABILITY_FOG_MACHINE, FogMachine},
-        {ABILITY_DROP_BLOCKS, DropBlocks},
-        {ABILITY_LASER_DRILL, LaserDrill},
-        {ABILITY_LIGHT_SABER, LightSaber},
-        {ABILITY_LOOSE_THORNS, LooseThorns},
-        {ABILITY_TURF_WAR, TurfWar},
-        {ABILITY_GREEDY, Greedy},
-        {ABILITY_MUSICAL_NOTES, MusicalNotes},
-        {ABILITY_STRIKEOUT, Strikeout},
-        {ABILITY_HOME_RUN, HomeRun},
-        {ABILITY_BRUISER, Bruiser},
-        {ABILITY_LETS_DANCE, LetsDance},
-        {ABILITY_MYCELIUM_MIGHT, MyceliumMight},
-        {ABILITY_DEADLY_PRECISION, DeadlyPrecision},
+        pair<ABILITY_NONE, None>(),
+        pair<ABILITY_STENCH, Stench>(),
+        pair<ABILITY_DRIZZLE, Drizzle>(),
+        pair<ABILITY_SPEED_BOOST, SpeedBoost>(),
+        pair<ABILITY_BATTLE_ARMOR, BattleArmor>(),
+        pair<ABILITY_STURDY, Sturdy>(),
+        pair<ABILITY_DAMP, Damp>(),
+        pair<ABILITY_LIMBER, Limber>(),
+        pair<ABILITY_SAND_VEIL, SandVeil>(),
+        pair<ABILITY_STATIC, Static>(),
+        pair<ABILITY_VOLT_ABSORB, VoltAbsorb>(),
+        pair<ABILITY_WATER_ABSORB, WaterAbsorb>(),
+        pair<ABILITY_OBLIVIOUS, Oblivious>(),
+        pair<ABILITY_CLOUD_NINE, CloudNine>(),
+        pair<ABILITY_COMPOUND_EYES, CompoundEyes>(),
+        pair<ABILITY_INSOMNIA, Insomnia>(),
+        pair<ABILITY_COLOR_CHANGE, ColorChange>(),
+        pair<ABILITY_IMMUNITY, Immunity>(),
+        pair<ABILITY_FLASH_FIRE, FlashFire>(),
+        pair<ABILITY_SHIELD_DUST, ShieldDust>(),
+        pair<ABILITY_OWN_TEMPO, OwnTempo>(),
+        pair<ABILITY_SUCTION_CUPS, SuctionCups>(),
+        pair<ABILITY_INTIMIDATE, Intimidate>(),
+        pair<ABILITY_SHADOW_TAG, ShadowTag>(),
+        pair<ABILITY_ROUGH_SKIN, RoughSkin>(),
+        pair<ABILITY_WONDER_GUARD, WonderGuard>(),
+        pair<ABILITY_LEVITATE, Levitate>(),
+        pair<ABILITY_EFFECT_SPORE, EffectSpore>(),
+        pair<ABILITY_CLEAR_BODY, ClearBody>(),
+        pair<ABILITY_NATURAL_CURE, NaturalCure>(),
+        pair<ABILITY_LIGHTNING_ROD, LightningRod>(),
+        pair<ABILITY_SERENE_GRACE, SereneGrace>(),
+        pair<ABILITY_SWIFT_SWIM, SwiftSwim>(),
+        pair<ABILITY_CHLOROPHYLL, Chlorophyll>(),
+        pair<ABILITY_ILLUMINATE, Illuminate>(),
+        pair<ABILITY_TRACE, Trace>(),
+        pair<ABILITY_HUGE_POWER, HugePower>(),
+        pair<ABILITY_POISON_POINT, PoisonPoint>(),
+        pair<ABILITY_INNER_FOCUS, InnerFocus>(),
+        pair<ABILITY_MAGMA_ARMOR, MagmaArmor>(),
+        pair<ABILITY_WATER_VEIL, WaterVeil>(),
+        pair<ABILITY_MAGNET_PULL, MagnetPull>(),
+        pair<ABILITY_SOUNDPROOF, Soundproof>(),
+        pair<ABILITY_RAIN_DISH, RainDish>(),
+        pair<ABILITY_SAND_STREAM, SandStream>(),
+        pair<ABILITY_PRESSURE, Pressure>(),
+        pair<ABILITY_THICK_FAT, ThickFat>(),
+        pair<ABILITY_FLAME_BODY, FlameBody>(),
+        pair<ABILITY_KEEN_EYE, KeenEye>(),
+        pair<ABILITY_HYPER_CUTTER, HyperCutter>(),
+        pair<ABILITY_PICKUP, Pickup>(),
+        pair<ABILITY_TRUANT, Truant>(),
+        pair<ABILITY_HUSTLE, Hustle>(),
+        pair<ABILITY_CUTE_CHARM, CuteCharm>(),
+        pair<ABILITY_PLUS, Plus>(),
+        pair<ABILITY_MINUS, Minus>(),
+        pair<ABILITY_FORECAST, Forecast>(),
+        pair<ABILITY_STICKY_HOLD, StickyHold>(),
+        pair<ABILITY_SHED_SKIN, ShedSkin>(),
+        pair<ABILITY_GUTS, Guts>(),
+        pair<ABILITY_MARVEL_SCALE, MarvelScale>(),
+        pair<ABILITY_OVERGROW, Overgrow>(),
+        pair<ABILITY_BLAZE, Blaze>(),
+        pair<ABILITY_TORRENT, Torrent>(),
+        pair<ABILITY_SWARM, Swarm>(),
+        pair<ABILITY_ROCK_HEAD, RockHead>(),
+        pair<ABILITY_DROUGHT, Drought>(),
+        pair<ABILITY_ARENA_TRAP, ArenaTrap>(),
+        pair<ABILITY_VITAL_SPIRIT, VitalSpirit>(),
+        pair<ABILITY_WHITE_SMOKE, WhiteSmoke>(),
+        pair<ABILITY_PURE_POWER, PurePower>(),
+        pair<ABILITY_SHELL_ARMOR, ShellArmor>(),
+        pair<ABILITY_AIR_LOCK, AirLock>(),
+        pair<ABILITY_TANGLED_FEET, TangledFeet>(),
+        pair<ABILITY_MOTOR_DRIVE, MotorDrive>(),
+        pair<ABILITY_RIVALRY, Rivalry>(),
+        pair<ABILITY_SNOW_CLOAK, SnowCloak>(),
+        pair<ABILITY_ANGER_POINT, AngerPoint>(),
+        pair<ABILITY_UNBURDEN, Unburden>(),
+        pair<ABILITY_HEATPROOF, Heatproof>(),
+        pair<ABILITY_DRY_SKIN, DrySkin>(),
+        pair<ABILITY_DOWNLOAD, Download>(),
+        pair<ABILITY_IRON_FIST, IronFist>(),
+        pair<ABILITY_ADAPTABILITY, Adaptability>(),
+        pair<ABILITY_SKILL_LINK, SkillLink>(),
+        pair<ABILITY_HYDRATION, Hydration>(),
+        pair<ABILITY_SOLAR_POWER, SolarPower>(),
+        pair<ABILITY_QUICK_FEET, QuickFeet>(),
+        pair<ABILITY_NORMALIZE, Normalize>(),
+        pair<ABILITY_SNIPER, Sniper>(),
+        pair<ABILITY_MAGIC_GUARD, MagicGuard>(),
+        pair<ABILITY_NO_GUARD, NoGuard>(),
+        pair<ABILITY_STALL, Stall>(),
+        pair<ABILITY_TECHNICIAN, Technician>(),
+        pair<ABILITY_LEAF_GUARD, LeafGuard>(),
+        pair<ABILITY_MOLD_BREAKER, MoldBreaker>(),
+        pair<ABILITY_SUPER_LUCK, SuperLuck>(),
+        pair<ABILITY_AFTERMATH, Aftermath>(),
+        pair<ABILITY_ANTICIPATION, Anticipation>(),
+        pair<ABILITY_FOREWARN, Forewarn>(),
+        pair<ABILITY_UNAWARE, Unaware>(),
+        pair<ABILITY_TINTED_LENS, TintedLens>(),
+        pair<ABILITY_FILTER, Filter>(),
+        pair<ABILITY_SLOW_START, SlowStart>(),
+        pair<ABILITY_SCRAPPY, Scrappy>(),
+        pair<ABILITY_STORM_DRAIN, StormDrain>(),
+        pair<ABILITY_ICE_BODY, IceBody>(),
+        pair<ABILITY_SOLID_ROCK, SolidRock>(),
+        pair<ABILITY_SNOW_WARNING, SnowWarning>(),
+        pair<ABILITY_HONEY_GATHER, HoneyGather>(),
+        pair<ABILITY_FRISK, Frisk>(),
+        pair<ABILITY_RECKLESS, Reckless>(),
+        pair<ABILITY_MULTITYPE, Multitype>(),
+        pair<ABILITY_FLOWER_GIFT, FlowerGift>(),
+        pair<ABILITY_BAD_DREAMS, BadDreams>(),
+        pair<ABILITY_SHEER_FORCE, SheerForce>(),
+        pair<ABILITY_CONTRARY, Contrary>(),
+        pair<ABILITY_UNNERVE, Unnerve>(),
+        pair<ABILITY_DEFEATIST, Defeatist>(),
+        pair<ABILITY_CURSED_BODY, CursedBody>(),
+        pair<ABILITY_HEALER, Healer>(),
+        pair<ABILITY_FRIEND_GUARD, FriendGuard>(),
+        pair<ABILITY_WEAK_ARMOR, WeakArmor>(),
+        pair<ABILITY_LIGHT_METAL, LightMetal>(),
+        pair<ABILITY_MULTISCALE, Multiscale>(),
+        pair<ABILITY_TOXIC_BOOST, ToxicBoost>(),
+        pair<ABILITY_FLARE_BOOST, FlareBoost>(),
+        pair<ABILITY_HARVEST, Harvest>(),
+        pair<ABILITY_TELEPATHY, Telepathy>(),
+        pair<ABILITY_MOODY, Moody>(),
+        pair<ABILITY_OVERCOAT, Overcoat>(),
+        pair<ABILITY_POISON_TOUCH, PoisonTouch>(),
+        pair<ABILITY_REGENERATOR, Regenerator>(),
+        pair<ABILITY_BIG_PECKS, BigPecks>(),
+        pair<ABILITY_SAND_RUSH, SandRush>(),
+        pair<ABILITY_WONDER_SKIN, WonderSkin>(),
+        pair<ABILITY_ANALYTIC, Analytic>(),
+        pair<ABILITY_ILLUSION, Illusion>(),
+        pair<ABILITY_IMPOSTER, Imposter>(),
+        pair<ABILITY_INFILTRATOR, Infiltrator>(),
+        pair<ABILITY_MUMMY, Mummy>(),
+        pair<ABILITY_MOXIE, Moxie>(),
+        pair<ABILITY_JUSTIFIED, Justified>(),
+        pair<ABILITY_RATTLED, Rattled>(),
+        pair<ABILITY_MAGIC_BOUNCE, MagicBounce>(),
+        pair<ABILITY_SAP_SIPPER, SapSipper>(),
+        pair<ABILITY_PRANKSTER, Prankster>(),
+        pair<ABILITY_SAND_FORCE, SandForce>(),
+        pair<ABILITY_IRON_BARBS, IronBarbs>(),
+        pair<ABILITY_ZEN_MODE, ZenMode>(),
+        pair<ABILITY_VICTORY_STAR, VictoryStar>(),
+        pair<ABILITY_TURBOBLAZE, Turboblaze>(),
+        pair<ABILITY_TERAVOLT, Teravolt>(),
+        pair<ABILITY_AROMA_VEIL, AromaVeil>(),
+        pair<ABILITY_FLOWER_VEIL, FlowerVeil>(),
+        pair<ABILITY_CHEEK_POUCH, CheekPouch>(),
+        pair<ABILITY_PROTEAN, Protean>(),
+        pair<ABILITY_FUR_COAT, FurCoat>(),
+        pair<ABILITY_BULLETPROOF, Bulletproof>(),
+        pair<ABILITY_STRONG_JAW, StrongJaw>(),
+        pair<ABILITY_REFRIGERATE, Refrigerate>(),
+        pair<ABILITY_SWEET_VEIL, SweetVeil>(),
+        pair<ABILITY_STANCE_CHANGE, StanceChange>(),
+        pair<ABILITY_GALE_WINGS, GaleWings>(),
+        pair<ABILITY_MEGA_LAUNCHER, MegaLauncher>(),
+        pair<ABILITY_GRASS_PELT, GrassPelt>(),
+        pair<ABILITY_TOUGH_CLAWS, ToughClaws>(),
+        pair<ABILITY_PIXILATE, Pixilate>(),
+        pair<ABILITY_GOOEY, Gooey>(),
+        pair<ABILITY_AERILATE, Aerilate>(),
+        pair<ABILITY_PARENTAL_BOND, ParentalBond>(),
+        pair<ABILITY_DARK_AURA, DarkAura>(),
+        pair<ABILITY_FAIRY_AURA, FairyAura>(),
+        pair<ABILITY_AURA_BREAK, AuraBreak>(),
+        pair<ABILITY_PRIMORDIAL_SEA, PrimordialSea>(),
+        pair<ABILITY_DESOLATE_LAND, DesolateLand>(),
+        pair<ABILITY_DELTA_STREAM, DeltaStream>(),
+        pair<ABILITY_STAMINA, Stamina>(),
+        pair<ABILITY_WIMP_OUT, WimpOut>(),
+        pair<ABILITY_EMERGENCY_EXIT, EmergencyExit>(),
+        pair<ABILITY_WATER_COMPACTION, WaterCompaction>(),
+        pair<ABILITY_MERCILESS, Merciless>(),
+        pair<ABILITY_SHIELDS_DOWN, ShieldsDown>(),
+        pair<ABILITY_STAKEOUT, Stakeout>(),
+        pair<ABILITY_WATER_BUBBLE, WaterBubble>(),
+        pair<ABILITY_STEELWORKER, Steelworker>(),
+        pair<ABILITY_BERSERK, Berserk>(),
+        pair<ABILITY_SLUSH_RUSH, SlushRush>(),
+        pair<ABILITY_LONG_REACH, LongReach>(),
+        pair<ABILITY_LIQUID_VOICE, LiquidVoice>(),
+        pair<ABILITY_TRIAGE, Triage>(),
+        pair<ABILITY_GALVANIZE, Galvanize>(),
+        pair<ABILITY_SURGE_SURFER, SurgeSurfer>(),
+        pair<ABILITY_SCHOOLING, Schooling>(),
+        pair<ABILITY_DISGUISE, Disguise>(),
+        pair<ABILITY_BATTLE_BOND, BattleBond>(),
+        pair<ABILITY_POWER_CONSTRUCT, PowerConstruct>(),
+        pair<ABILITY_CORROSION, Corrosion>(),
+        pair<ABILITY_COMATOSE, Comatose>(),
+        pair<ABILITY_QUEENLY_MAJESTY, QueenlyMajesty>(),
+        pair<ABILITY_INNARDS_OUT, InnardsOut>(),
+        pair<ABILITY_DANCER, Dancer>(),
+        pair<ABILITY_BATTERY, Battery>(),
+        pair<ABILITY_FLUFFY, Fluffy>(),
+        pair<ABILITY_DAZZLING, Dazzling>(),
+        pair<ABILITY_SOUL_HEART, SoulHeart>(),
+        pair<ABILITY_TANGLING_HAIR, TanglingHair>(),
+        pair<ABILITY_RECEIVER, Receiver>(),
+        pair<ABILITY_POWER_OF_ALCHEMY, PowerOfAlchemy>(),
+        pair<ABILITY_BEAST_BOOST, BeastBoost>(),
+        pair<ABILITY_RKS_SYSTEM, RksSystem>(),
+        pair<ABILITY_ELECTRIC_SURGE, ElectricSurge>(),
+        pair<ABILITY_PSYCHIC_SURGE, PsychicSurge>(),
+        pair<ABILITY_MISTY_SURGE, MistySurge>(),
+        pair<ABILITY_GRASSY_SURGE, GrassySurge>(),
+        pair<ABILITY_SHADOW_SHIELD, ShadowShield>(),
+        pair<ABILITY_PRISM_ARMOR, PrismArmor>(),
+        pair<ABILITY_NEUROFORCE, Neuroforce>(),
+        pair<ABILITY_INTREPID_SWORD, IntrepidSword>(),
+        pair<ABILITY_DAUNTLESS_SHIELD, DauntlessShield>(),
+        pair<ABILITY_LIBERO, Libero>(),
+        pair<ABILITY_COTTON_DOWN, CottonDown>(),
+        pair<ABILITY_PROPELLER_TAIL, PropellerTail>(),
+        pair<ABILITY_MIRROR_ARMOR, MirrorArmor>(),
+        pair<ABILITY_GULP_MISSILE, GulpMissile>(),
+        pair<ABILITY_STEAM_ENGINE, SteamEngine>(),
+        pair<ABILITY_PUNK_ROCK, PunkRock>(),
+        pair<ABILITY_SAND_SPIT, SandSpit>(),
+        pair<ABILITY_ICE_SCALES, IceScales>(),
+        pair<ABILITY_ICE_FACE, IceFace>(),
+        pair<ABILITY_POWER_SPOT, PowerSpot>(),
+        pair<ABILITY_MIMICRY, Mimicry>(),
+        pair<ABILITY_SCREEN_CLEANER, ScreenCleaner>(),
+        pair<ABILITY_STEELY_SPIRIT, SteelySpirit>(),
+        pair<ABILITY_PERISH_BODY, PerishBody>(),
+        pair<ABILITY_WANDERING_SPIRIT, WanderingSpirit>(),
+        pair<ABILITY_GORILLA_TACTICS, GorillaTactics>(),
+        pair<ABILITY_NEUTRALIZING_GAS, NeutralizingGas>(),
+        pair<ABILITY_PASTEL_VEIL, PastelVeil>(),
+        pair<ABILITY_HUNGER_SWITCH, HungerSwitch>(),
+        pair<ABILITY_CURIOUS_MEDICINE, CuriousMedicine>(),
+        pair<ABILITY_TRANSISTOR, Transistor>(),
+        pair<ABILITY_DRAGONS_MAW, DragonsMaw>(),
+        pair<ABILITY_CHILLING_NEIGH, ChillingNeigh>(),
+        pair<ABILITY_GRIM_NEIGH, GrimNeigh>(),
+        pair<ABILITY_AS_ONE_ICE_RIDER, AsOneIceRider>(),
+        pair<ABILITY_AS_ONE_SHADOW_RIDER, AsOneShadowRider>(),
+        pair<ABILITY_CHLOROPLAST, Chloroplast>(),
+        pair<ABILITY_WHITEOUT, Whiteout>(),
+        pair<ABILITY_PYROMANCY, Pyromancy>(),
+        pair<ABILITY_KEEN_EDGE, KeenEdge>(),
+        pair<ABILITY_PRISM_SCALES, PrismScales>(),
+        pair<ABILITY_POWER_FISTS, PowerFists>(),
+        pair<ABILITY_SAND_SONG, SandSong>(),
+        pair<ABILITY_RAMPAGE, Rampage>(),
+        pair<ABILITY_VENGEANCE, Vengeance>(),
+        pair<ABILITY_BLITZ_BOXER, BlitzBoxer>(),
+        pair<ABILITY_ANTARCTIC_BIRD, AntarcticBird>(),
+        pair<ABILITY_IMMOLATE, Immolate>(),
+        pair<ABILITY_CRYSTALLIZE, Crystallize>(),
+        pair<ABILITY_ELECTROCYTES, Electrocytes>(),
+        pair<ABILITY_AERODYNAMICS, Aerodynamics>(),
+        pair<ABILITY_CHRISTMAS_SPIRIT, ChristmasSpirit>(),
+        pair<ABILITY_EXPLOIT_WEAKNESS, ExploitWeakness>(),
+        pair<ABILITY_GROUND_SHOCK, GroundShock>(),
+        pair<ABILITY_ANCIENT_IDOL, AncientIdol>(),
+        pair<ABILITY_MYSTIC_POWER, MysticPower>(),
+        pair<ABILITY_PERFECTIONIST, Perfectionist>(),
+        pair<ABILITY_GROWING_TOOTH, GrowingTooth>(),
+        pair<ABILITY_INFLATABLE, Inflatable>(),
+        pair<ABILITY_AURORA_BOREALIS, AuroraBorealis>(),
+        pair<ABILITY_AVENGER, Avenger>(),
+        pair<ABILITY_LETS_ROLL, LetsRoll>(),
+        pair<ABILITY_LOUD_BANG, LoudBang>(),
+        pair<ABILITY_LEAD_COAT, LeadCoat>(),
+        pair<ABILITY_AMPHIBIOUS, Amphibious>(),
+        pair<ABILITY_GROUNDED, Grounded>(),
+        pair<ABILITY_EARTHBOUND, Earthbound>(),
+        pair<ABILITY_FIGHT_SPIRIT, FightingSpirit>(),
+        pair<ABILITY_FELINE_PROWESS, FelineProwess>(),
+        pair<ABILITY_COIL_UP, CoilUp>(),
+        pair<ABILITY_FOSSILIZED, Fossilized>(),
+        pair<ABILITY_MAGICAL_DUST, MagicalDust>(),
+        pair<ABILITY_DREAMCATCHER, Dreamcatcher>(),
+        pair<ABILITY_NOCTURNAL, Nocturnal>(),
+        pair<ABILITY_SELF_SUFFICIENT, SelfSufficient>(),
+        pair<ABILITY_TECTONIZE, Tectonize>(),
+        pair<ABILITY_ICE_AGE, IceAge>(),
+        pair<ABILITY_HALF_DRAKE, HalfDrake>(),
+        pair<ABILITY_LIQUIFIED, Liquified>(),
+        pair<ABILITY_DRAGONFLY, Dragonfly>(),
+        pair<ABILITY_DRAGONSLAYER, Dragonslayer>(),
+        pair<ABILITY_MOUNTAINEER, Mountaineer>(),
+        pair<ABILITY_HYDRATE, Hydrate>(),
+        pair<ABILITY_METALLIC, Metallic>(),
+        pair<ABILITY_PERMAFROST, Permafrost>(),
+        pair<ABILITY_PRIMAL_ARMOR, PrimalArmor>(),
+        pair<ABILITY_RAGING_BOXER, RagingBoxer>(),
+        pair<ABILITY_AIR_BLOWER, AirBlower>(),
+        pair<ABILITY_JUGGERNAUT, Juggernaut>(),
+        pair<ABILITY_SHORT_CIRCUIT, ShortCircuit>(),
+        pair<ABILITY_MAJESTIC_BIRD, MajesticBird>(),
+        pair<ABILITY_PHANTOM, Phantom>(),
+        pair<ABILITY_INTOXICATE, Intoxicate>(),
+        pair<ABILITY_IMPENETRABLE, Impenetrable>(),
+        pair<ABILITY_HYPNOTIST, Hypnotist>(),
+        pair<ABILITY_OVERWHELM, Overwhelm>(),
+        pair<ABILITY_SCARE, Scare>(),
+        pair<ABILITY_MAJESTIC_MOTH, MajesticMoth>(),
+        pair<ABILITY_SOUL_EATER, SoulEater>(),
+        pair<ABILITY_SOUL_LINKER, SoulLinker>(),
+        pair<ABILITY_SWEET_DREAMS, SweetDreams>(),
+        pair<ABILITY_BAD_LUCK, BadLuck>(),
+        pair<ABILITY_HAUNTED_SPIRIT, HauntedSpirit>(),
+        pair<ABILITY_ELECTRIC_BURST, ElectricBurst>(),
+        pair<ABILITY_RAW_WOOD, RawWood>(),
+        pair<ABILITY_SOLENOGLYPHS, Solenoglyphs>(),
+        pair<ABILITY_SPIDER_LAIR, SpiderLair>(),
+        pair<ABILITY_FATAL_PRECISION, FatalPrecision>(),
+        pair<ABILITY_FORT_KNOX, FortKnox>(),
+        pair<ABILITY_SEAWEED, Seaweed>(),
+        pair<ABILITY_PSYCHIC_MIND, PsychicMind>(),
+        pair<ABILITY_POISON_ABSORB, PoisonAbsorb>(),
+        pair<ABILITY_SCAVENGER, Scavenger>(),
+        pair<ABILITY_TWISTED_DIMENSION, TwistedDimension>(),
+        pair<ABILITY_MULTI_HEADED, MultiHeaded>(),
+        pair<ABILITY_NORTH_WIND, NorthWind>(),
+        pair<ABILITY_OVERCHARGE, Overcharge>(),
+        pair<ABILITY_VIOLENT_RUSH, ViolentRush>(),
+        pair<ABILITY_FLAMING_SOUL, FlamingSoul>(),
+        pair<ABILITY_SAGE_POWER, SagePower>(),
+        pair<ABILITY_BONE_ZONE, BoneZone>(),
+        pair<ABILITY_WEATHER_CONTROL, WeatherControl>(),
+        pair<ABILITY_SPEED_FORCE, SpeedForce>(),
+        pair<ABILITY_SEA_GUARDIAN, SeaGuardian>(),
+        pair<ABILITY_MOLTEN_DOWN, MoltenDown>(),
+        pair<ABILITY_HYPER_AGGRESSIVE, HyperAggressive>(),
+        pair<ABILITY_FLOCK, Flock>(),
+        pair<ABILITY_FIELD_EXPLORER, FieldExplorer>(),
+        pair<ABILITY_STRIKER, Striker>(),
+        pair<ABILITY_FROZEN_SOUL, FrozenSoul>(),
+        pair<ABILITY_PREDATOR, Predator>(),
+        pair<ABILITY_LOOTER, Looter>(),
+        pair<ABILITY_LUNAR_ECLIPSE, LunarEclipse>(),
+        pair<ABILITY_SOLAR_FLARE, SolarFlare>(),
+        pair<ABILITY_POWER_CORE, PowerCore>(),
+        pair<ABILITY_SIGHTING_SYSTEM, SightingSystem>(),
+        pair<ABILITY_BAD_COMPANY, BadCompany>(),
+        pair<ABILITY_OPPORTUNIST, Opportunist>(),
+        pair<ABILITY_GIANT_WINGS, GiantWings>(),
+        pair<ABILITY_MOMENTUM, Momentum>(),
+        pair<ABILITY_GRIP_PINCER, GripPincer>(),
+        pair<ABILITY_BIG_LEAVES, BigLeaves>(),
+        pair<ABILITY_PRECISE_FIST, PreciseFist>(),
+        pair<ABILITY_DEADEYE, Deadeye>(),
+        pair<ABILITY_ARTILLERY, Artillery>(),
+        pair<ABILITY_AMPLIFIER, Amplifier>(),
+        pair<ABILITY_ICE_DEW, IceDew>(),
+        pair<ABILITY_SUN_WORSHIP, SunWorship>(),
+        pair<ABILITY_POLLINATE, Pollinate>(),
+        pair<ABILITY_VOLCANO_RAGE, VolcanoRage>(),
+        pair<ABILITY_COLD_REBOUND, ColdRebound>(),
+        pair<ABILITY_LOW_BLOW, LowBlow>(),
+        pair<ABILITY_SPECTRAL_SHROUD, SpectralShroud>(),
+        pair<ABILITY_DISCIPLINE, Discipline>(),
+        pair<ABILITY_THUNDERCALL, Thundercall>(),
+        pair<ABILITY_MARINE_APEX, MarineApex>(),
+        pair<ABILITY_MIGHTY_HORN, MightyHorn>(),
+        pair<ABILITY_HARDENED_SHEATH, HardenedSheath>(),
+        pair<ABILITY_ARCTIC_FUR, ArcticFur>(),
+        pair<ABILITY_SPECTRALIZE, Spectralize>(),
+        pair<ABILITY_LETHARGY, Lethargy>(),
+        pair<ABILITY_IRON_BARRAGE, IronBarrage>(),
+        pair<ABILITY_STEEL_BARREL, SteelBarrel>(),
+        pair<ABILITY_PYRO_SHELLS, PyroShells>(),
+        pair<ABILITY_FUNGAL_INFECTION, FungalInfection>(),
+        pair<ABILITY_PARRY, Parry>(),
+        pair<ABILITY_SCRAPYARD, Scrapyard>(),
+        pair<ABILITY_LOOSE_QUILLS, LooseQuills>(),
+        pair<ABILITY_TOXIC_DEBRIS, ToxicDebris>(),
+        pair<ABILITY_ROUNDHOUSE, Roundhouse>(),
+        pair<ABILITY_MINERALIZE, Mineralize>(),
+        pair<ABILITY_LOOSE_ROCKS, LooseRocks>(),
+        pair<ABILITY_SPINNING_TOP, SpinningTop>(),
+        pair<ABILITY_RETRIBUTION_BLOW, RetributionBlow>(),
+        pair<ABILITY_FEARMONGER, Fearmonger>(),
+        pair<ABILITY_TOXIC_SPILL, ToxicSpill>(),
+        pair<ABILITY_DESERT_CLOAK, DesertCloak>(),
+        pair<ABILITY_DRACONIZE, Draconize>(),
+        pair<ABILITY_PRETTY_PRINCESS, PrettyPrincess>(),
+        pair<ABILITY_SELF_REPAIR, SelfRepair>(),
+        pair<ABILITY_ATOMIC_BURST, AtomicBurst>(),
+        pair<ABILITY_HELLBLAZE, Hellblaze>(),
+        pair<ABILITY_RIPTIDE, Riptide>(),
+        pair<ABILITY_FOREST_RAGE, ForestRage>(),
+        pair<ABILITY_PRIMAL_MAW, PrimalMaw>(),
+        pair<ABILITY_SWEEPING_EDGE, SweepingEdge>(),
+        pair<ABILITY_GIFTED_MIND, GiftedMind>(),
+        pair<ABILITY_HYDRO_CIRCUIT, HydroCircuit>(),
+        pair<ABILITY_EQUINOX, Equinox>(),
+        pair<ABILITY_ABSORBANT, Absorbant>(),
+        pair<ABILITY_CLUELESS, Clueless>(),
+        pair<ABILITY_CHEATING_DEATH, CheatingDeath>(),
+        pair<ABILITY_CHEAP_TACTICS, CheapTactics>(),
+        pair<ABILITY_COWARD, Coward>(),
+        pair<ABILITY_VOLT_RUSH, VoltRush>(),
+        pair<ABILITY_DUNE_TERROR, DuneTerror>(),
+        pair<ABILITY_INFERNAL_RAGE, InfernalRage>(),
+        pair<ABILITY_DUAL_WIELD, DualWield>(),
+        pair<ABILITY_ELEMENTAL_CHARGE, ElementalCharge>(),
+        pair<ABILITY_AMBUSH, Ambush>(),
+        pair<ABILITY_ATLAS, Atlas>(),
+        pair<ABILITY_RADIANCE, Radiance>(),
+        pair<ABILITY_JAWS_OF_CARNAGE, JawsOfCarnage>(),
+        pair<ABILITY_ANGELS_WRATH, AngelsWrath>(),
+        pair<ABILITY_PRISMATIC_FUR, PrismaticFur>(),
+        pair<ABILITY_SHOCKING_JAWS, ShockingJaws>(),
+        pair<ABILITY_FAE_HUNTER, FaeHunter>(),
+        pair<ABILITY_GRAVITY_WELL, GravityWell>(),
+        pair<ABILITY_EVAPORATE, Evaporate>(),
+        pair<ABILITY_LUMBERJACK, Lumberjack>(),
+        pair<ABILITY_WELL_BAKED_BODY, WellBakedBody>(),
+        pair<ABILITY_FURNACE, Furnace>(),
+        pair<ABILITY_ELECTROMORPHOSIS, Electromorphosis>(),
+        pair<ABILITY_ROCKY_PAYLOAD, RockyPayload>(),
+        pair<ABILITY_EARTH_EATER, EarthEater>(),
+        pair<ABILITY_LINGERING_AROMA, LingeringAroma>(),
+        pair<ABILITY_FAIRY_TALE, FairyTale>(),
+        pair<ABILITY_RAGING_MOTH, RagingMoth>(),
+        pair<ABILITY_ADRENALINE_RUSH, AdrenalineRush>(),
+        pair<ABILITY_ARCHMAGE, Archmage>(),
+        pair<ABILITY_CRYOMANCY, Cryomancy>(),
+        pair<ABILITY_PHANTOM_PAIN, PhantomPain>(),
+        pair<ABILITY_PURGATORY, Purgatory>(),
+        pair<ABILITY_EMANATE, Emanate>(),
+        pair<ABILITY_KUNOICHI_BLADE, KunoichiBlade>(),
+        pair<ABILITY_MONKEY_BUSINESS, MonkeyBusiness>(),
+        pair<ABILITY_COMBAT_SPECIALIST, CombatSpecialist>(),
+        pair<ABILITY_JUNGLES_GUARD, JunglesGuard>(),
+        pair<ABILITY_HUNTERS_HORN, HuntersHorn>(),
+        pair<ABILITY_PIXIE_POWER, PixiePower>(),
+        pair<ABILITY_PLASMA_LAMP, PlasmaLamp>(),
+        pair<ABILITY_MAGMA_EATER, MagmaEater>(),
+        pair<ABILITY_SUPER_HOT_GOO, SuperHotGoo>(),
+        pair<ABILITY_NIKA, Nika>(),
+        pair<ABILITY_ARCHER, Archer>(),
+        pair<ABILITY_SUPER_SLAMMER, SuperSlammer>(),
+        pair<ABILITY_INVERSE_ROOM, InverseRoom>(),
+        pair<ABILITY_FROST_BURN, FrostBurn>(),
+        pair<ABILITY_ITCHY_DEFENSE, ItchyDefense>(),
+        pair<ABILITY_GENERATOR, Generator>(),
+        pair<ABILITY_MOON_SPIRIT, MoonSpirit>(),
+        pair<ABILITY_DUST_CLOUD, DustCloud>(),
+        pair<ABILITY_BERSERKER_RAGE, BerserkerRage>(),
+        pair<ABILITY_TRICKSTER, Trickster>(),
+        pair<ABILITY_SAND_GUARD, SandGuard>(),
+        pair<ABILITY_NATURAL_RECOVERY, NaturalRecovery>(),
+        pair<ABILITY_WIND_RIDER, WindRider>(),
+        pair<ABILITY_SOOTHING_AROMA, SoothingAroma>(),
+        pair<ABILITY_PRIM_AND_PROPER, PrimAndProper>(),
+        pair<ABILITY_SUPER_STRAIN, SuperStrain>(),
+        pair<ABILITY_TIPPING_POINT, TippingPoint>(),
+        pair<ABILITY_ENLIGHTENED, Enlightened>(),
+        pair<ABILITY_PEACEFUL_SLUMBER, PeacefulSlumber>(),
+        pair<ABILITY_AFTERSHOCK, Aftershock>(),
+        pair<ABILITY_FREEZING_POINT, FreezingPoint>(),
+        pair<ABILITY_CRYO_PROFICIENCY, CryoProficiency>(),
+        pair<ABILITY_ARCANE_FORCE, ArcaneForce>(),
+        pair<ABILITY_DOOMBRINGER, Doombringer>(),
+        pair<ABILITY_WISHMAKER, Wishmaker>(),
+        pair<ABILITY_YUKI_ONNA, YukiOnna>(),
+        pair<ABILITY_SUPPRESS, Suppress>(),
+        pair<ABILITY_REFRIGERATOR, Refrigerator>(),
+        pair<ABILITY_HEAVEN_ASUNDER, HeavenAsunder>(),
+        pair<ABILITY_PURIFYING_WATERS, PurifyingWaters>(),
+        pair<ABILITY_SEABORNE, Seaborne>(),
+        pair<ABILITY_HIGH_TIDE, HighTide>(),
+        pair<ABILITY_CHANGE_OF_HEART, ChangeOfHeart>(),
+        pair<ABILITY_MYSTIC_BLADES, MysticBlades>(),
+        pair<ABILITY_DETERMINATION, Determination>(),
+        pair<ABILITY_FERTILIZE, Fertilize>(),
+        pair<ABILITY_PURE_LOVE, PureLove>(),
+        pair<ABILITY_FIGHTER, Fighter>(),
+        pair<ABILITY_TELEKINETIC, Telekinetic>(),
+        pair<ABILITY_COMBUSTION, Combustion>(),
+        pair<ABILITY_PONY_POWER, PonyPower>(),
+        pair<ABILITY_POWDER_BURST, PowderBurst>(),
+        pair<ABILITY_RETRIEVER, Retriever>(),
+        pair<ABILITY_MONSTER_MASH, MonsterMash>(),
+        pair<ABILITY_TWO_STEP, TwoStep>(),
+        pair<ABILITY_SPITEFUL, Spiteful>(),
+        pair<ABILITY_FORTITUDE, Fortitude>(),
+        pair<ABILITY_DEVOURER, Devourer>(),
+        pair<ABILITY_PHANTOM_THIEF, PhantomThief>(),
+        pair<ABILITY_EARLY_GRAVE, EarlyGrave>(),
+        pair<ABILITY_BASS_BOOSTED, BassBoosted>(),
+        pair<ABILITY_FLAMING_JAWS, FlamingJaws>(),
+        pair<ABILITY_MONSTER_HUNTER, MonsterHunter>(),
+        pair<ABILITY_CROWNED_SWORD, CrownedSword>(),
+        pair<ABILITY_CROWNED_SHIELD, CrownedShield>(),
+        pair<ABILITY_BERSERK_DNA, BerserkDna>(),
+        pair<ABILITY_CROWNED_KING, CrownedKing>(),
+        pair<ABILITY_SNAP_TRAP_WHEN_HIT, SnapTrapWhenHit>(),
+        pair<ABILITY_PERMANENCE, Permanence>(),
+        pair<ABILITY_HUBRIS, Hubris>(),
+        pair<ABILITY_COSMIC_DAZE, CosmicDaze>(),
+        pair<ABILITY_MINDS_EYE, MindsEye>(),
+        pair<ABILITY_BLOOD_PRICE, BloodPrice>(),
+        pair<ABILITY_SPIKE_ARMOR, SpikeArmor>(),
+        pair<ABILITY_VOODOO_POWER, VoodooPower>(),
+        pair<ABILITY_CHROME_COAT, ChromeCoat>(),
+        pair<ABILITY_BANSHEE, Banshee>(),
+        pair<ABILITY_WEB_SPINNER, WebSpinner>(),
+        pair<ABILITY_SHOWDOWN_MODE, ShowdownMode>(),
+        pair<ABILITY_SEED_SOWER, SeedSower>(),
+        pair<ABILITY_AIRBORNE, Airborne>(),
+        pair<ABILITY_PARROTING, Parroting>(),
+        pair<ABILITY_SALT_CIRCLE, SaltCircle>(),
+        pair<ABILITY_PURIFYING_SALT, PurifyingSalt>(),
+        pair<ABILITY_PROTOSYNTHESIS, Protosynthesis>(),
+        pair<ABILITY_QUARK_DRIVE, QuarkDrive>(),
+        pair<ABILITY_WIND_POWER, WindPower>(),
+        pair<ABILITY_IMPULSE, Impulse>(),
+        pair<ABILITY_TERMINAL_VELOCITY, TerminalVelocity>(),
+        pair<ABILITY_ANGER_SHELL, AngerShell>(),
+        pair<ABILITY_EGOIST, Egoist>(),
+        pair<ABILITY_READIED_ACTION, ReadiedAction>(),
+        pair<ABILITY_DARK_GALE_WINGS, DarkGaleWings>(),
+        pair<ABILITY_GUILT_TRIP, GuiltTrip>(),
+        pair<ABILITY_WATER_GALE_WINGS, WaterGaleWings>(),
+        pair<ABILITY_ZERO_TO_HERO, ZeroToHero>(),
+        pair<ABILITY_COSTAR, Costar>(),
+        pair<ABILITY_COMMANDER, Commander>(),
+        pair<ABILITY_EJECT_PACK_ABILITY, EjectPackAbility>(),
+        pair<ABILITY_VENGEFUL_SPIRIT, VengefulSpirit>(),
+        pair<ABILITY_CUD_CHEW, CudChew>(),
+        pair<ABILITY_ARMOR_TAIL, ArmorTail>(),
+        pair<ABILITY_MIND_CRUSH, MindCrush>(),
+        pair<ABILITY_SUPREME_OVERLORD, SupremeOverlord>(),
+        pair<ABILITY_ILL_WILL, IllWill>(),
+        pair<ABILITY_FIRE_SCALES, FireScales>(),
+        pair<ABILITY_WATCH_YOUR_STEP, WatchYourStep>(),
+        pair<ABILITY_RAPID_RESPONSE, RapidResponse>(),
+        pair<ABILITY_DOUBLE_IRON_BARBS, DoubleIronBarbs>(),
+        pair<ABILITY_THERMAL_EXCHANGE, ThermalExchange>(),
+        pair<ABILITY_GOOD_AS_GOLD, GoodAsGold>(),
+        pair<ABILITY_SHARING_IS_CARING, SharingIsCaring>(),
+        pair<ABILITY_TABLETS_OF_RUIN, TabletsOfRuin>(),
+        pair<ABILITY_SWORD_OF_RUIN, SwordOfRuin>(),
+        pair<ABILITY_VESSEL_OF_RUIN, VesselOfRuin>(),
+        pair<ABILITY_BEADS_OF_RUIN, BeadsOfRuin>(),
+        pair<ABILITY_PERMAFROST_CLONE, PermafrostClone>(),
+        pair<ABILITY_GALLANTRY, Gallantry>(),
+        pair<ABILITY_ORICHALCUM_PULSE, OrichalcumPulse>(),
+        pair<ABILITY_SUN_BASKING, SunBasking>(),
+        pair<ABILITY_WINGED_KING, WingedKing>(),
+        pair<ABILITY_HADRON_ENGINE, HadronEngine>(),
+        pair<ABILITY_IRON_SERPENT, IronSerpent>(),
+        pair<ABILITY_SWEEPING_EDGE_PLUS, SweepingEdgePlus>(),
+        pair<ABILITY_CELESTIAL_BLESSING, CelestialBlessing>(),
+        pair<ABILITY_MINION_CONTROL, MinionControl>(),
+        pair<ABILITY_MOLTEN_BLADES, MoltenBlades>(),
+        pair<ABILITY_HAUNTING_FRENZY, HauntingFrenzy>(),
+        pair<ABILITY_NOISE_CANCEL, NoiseCancel>(),
+        pair<ABILITY_RADIO_JAM, RadioJam>(),
+        pair<ABILITY_OLE, Ole>(),
+        pair<ABILITY_MALICIOUS, Malicious>(),
+        pair<ABILITY_DEAD_POWER, DeadPower>(),
+        pair<ABILITY_BRAWLING_WYVERN, BrawlingWyvern>(),
+        pair<ABILITY_MYTHICAL_ARROWS, MythicalArrows>(),
+        pair<ABILITY_LAWNMOWER, Lawnmower>(),
+        pair<ABILITY_FLOURISH, Flourish>(),
+        pair<ABILITY_DESERT_SPIRIT, DesertSpirit>(),
+        pair<ABILITY_CONTEMPT, Contempt>(),
+        pair<ABILITY_AERIALIST, Aerialist>(),
+        pair<ABILITY_TERA_SHELL, TeraShell>(),
+        pair<ABILITY_TOXIC_CHAIN, ToxicChain>(),
+        pair<ABILITY_PARASITIC_SPORES, ParasiticSpores>(),
+        pair<ABILITY_POISON_PUPPETEER, PoisonPuppeteer>(),
+        pair<ABILITY_ENTRANCE, Entrance>(),
+        pair<ABILITY_REJECTION, Rejection>(),
+        pair<ABILITY_APPLE_ENLIGHTENMENT, AppleEnlightenment>(),
+        pair<ABILITY_BALLOON_BOMBER, BalloonBomber>(),
+        pair<ABILITY_FLAMING_MAW, FlamingMaw>(),
+        pair<ABILITY_DEMOLITIONIST, Demolitionist>(),
+        pair<ABILITY_ROCKHARD_WILL, RockhardWill>(),
+        pair<ABILITY_FRAGRANT_DAZE, FragrantDaze>(),
+        pair<ABILITY_LOW_VISIBILITY, LowVisibility>(),
+        pair<ABILITY_OLD_MARINER, OldMariner>(),
+        pair<ABILITY_ECTOPLASM, Ectoplasm>(),
+        pair<ABILITY_BEAUTIFUL_MUSIC, BeautifulMusic>(),
+        pair<ABILITY_SNOW_SONG, SnowSong>(),
+        pair<ABILITY_GREATER_SPIRIT, GreaterSpirit>(),
+        pair<ABILITY_RESONANCE, Resonance>(),
+        pair<ABILITY_ETHEREAL_RUSH, EtherealRush>(),
+        pair<ABILITY_CUTE_ANTECEDENCE, CuteAntecedence>(),
+        pair<ABILITY_RECURRING_NIGHTMARE, RecurringNightmare>(),
+        pair<ABILITY_MENACING_SITUATION, MenacingSituation>(),
+        pair<ABILITY_SHINY_LIGHTNING, ShinyLightning>(),
+        pair<ABILITY_TERRIFY, Terrify>(),
+        pair<ABILITY_ICE_DOWNFALL, IceDownfall>(),
+        pair<ABILITY_LAST_STAND, LastStand>(),
+        pair<ABILITY_PYROCLASTIC_FLOW, PyroclasticFlow>(),
+        pair<ABILITY_BLOOD_BATH, BloodBath>(),
+        pair<ABILITY_BATTLE_AURA, BattleAura>(),
+        pair<ABILITY_BLOODLUST, Bloodlust>(),
+        pair<ABILITY_PIERCING_SOLO, PiercingSolo>(),
+        pair<ABILITY_RHYTHMIC, Rhythmic>(),
+        pair<ABILITY_CHUNKY_BASS_LINE, ChunkyBassLine>(),
+        pair<ABILITY_DUAL_HAMMER, DualHammer>(),
+        pair<ABILITY_DENTING_BLOWS, DentingBlows>(),
+        pair<ABILITY_ICE_COLD_HUNTER, IceColdHunter>(),
+        pair<ABILITY_SOUL_CRUSHER, SoulCrusher>(),
+        pair<ABILITY_ARC_FLASH, ArcFlash>(),
+        pair<ABILITY_UNICORN, Unicorn>(),
+        pair<ABILITY_ON_THE_PROWL, OnTheProwl>(),
+        pair<ABILITY_PRETENTIOUS, Pretentious>(),
+        pair<ABILITY_VENOBLAZE_PINCERS, VenoblazePincers>(),
+        pair<ABILITY_ETERNAL_BLESSING, EternalBlessing>(),
+        pair<ABILITY_SUGAR_RUSH, SugarRush>(),
+        pair<ABILITY_PEACEFUL_REST, PeacefulRest>(),
+        pair<ABILITY_WHITE_NOISE, WhiteNoise>(),
+        pair<ABILITY_SMOKEY_MANEUVERS, SmokeyManeuvers>(),
+        pair<ABILITY_POWER_METAL, PowerMetal>(),
+        pair<ABILITY_POWER_EDGE, PowerEdge>(),
+        pair<ABILITY_SUPERCONDUCTOR, Superconductor>(),
+        pair<ABILITY_ULTRA_INSTINCT, UltraInstinct>(),
+        pair<ABILITY_UNLOCKED_POTENTIAL, UnlockedPotential>(),
+        pair<ABILITY_HIGHER_RANK, HigherRank>(),
+        pair<ABILITY_FUNERAL_PYRE, FuneralPyre>(),
+        pair<ABILITY_FLAME_BUBBLE, FlameBubble>(),
+        pair<ABILITY_ELEMENTAL_VORTEX, ElementalVortex>(),
+        pair<ABILITY_SNOWY_WRATH, SnowyWrath>(),
+        pair<ABILITY_PATTERN_CHANGE, PatternChange>(),
+        pair<ABILITY_NO_TURNING_BACK, NoTurningBack>(),
+        pair<ABILITY_FLAMMABLE_COAT, FlammableCoat>(),
+        pair<ABILITY_DRACO_MORALE, DracoMorale>(),
+        pair<ABILITY_BAD_OMEN, BadOmen>(),
+        pair<ABILITY_MOSH_PIT, MoshPit>(),
+        pair<ABILITY_BLOOD_STAIN, BloodStain>(),
+        pair<ABILITY_BLOOD_STIGMA, BloodStigma>(),
+        pair<ABILITY_MAXIMUM_ACCELERATION, MaximumAcceleration>(),
+        pair<ABILITY_SIDEWINDER, Sidewinder>(),
+        pair<ABILITY_PETRIFY, Petrify>(),
+        pair<ABILITY_FLUFFIEST, Fluffiest>(),
+        pair<ABILITY_WAY_OF_PRECISION, WayOfPrecision>(),
+        pair<ABILITY_WAY_OF_SWIFTNESS, WayOfSwiftness>(),
+        pair<ABILITY_ATOMIC_PUNCH, AtomicPunch>(),
+        pair<ABILITY_IRON_GIANT, IronGiant>(),
+        pair<ABILITY_MASTER_HAND, MasterHand>(),
+        pair<ABILITY_FINAL_BLOW, FinalBlow>(),
+        pair<ABILITY_HOSPITALITY, Hospitality>(),
+        pair<ABILITY_BUTTER_UP, ButterUp>(),
+        pair<ABILITY_VITALITY_STRIKE, VitalityStrike>(),
+        pair<ABILITY_HUGE_WINGS, HugeWings>(),
+        pair<ABILITY_SWORD_OF_DAMNATION, SwordOfDamnation>(),
+        pair<ABILITY_RESTRAINING_ORDER, RestrainingOrder>(),
+        pair<ABILITY_ASSASSINS_TOOLS, AssassinsTools>(),
+        pair<ABILITY_FROSTMAW, Frostmaw>(),
+        pair<ABILITY_PATCHWORK, Patchwork>(),
+        pair<ABILITY_BLIND_RAGE, BlindRage>(),
+        pair<ABILITY_SLIPSTREAM, Slipstream>(),
+        pair<ABILITY_APEX_PREDATOR, ApexPredator>(),
+        pair<ABILITY_DRAGONS_RITUAL, DragonsRitual>(),
+        pair<ABILITY_PINNACLE_BLADE, PinnacleBlade>(),
+        pair<ABILITY_ENERGIZED, Energized>(),
+        pair<ABILITY_COLOR_SPECTRUM, ColorSpectrum>(),
+        pair<ABILITY_STEEL_BEETLE, SteelBeetle>(),
+        pair<ABILITY_FROM_THE_SHADOWS, FromTheShadows>(),
+        pair<ABILITY_RAGE_POINT, RagePoint>(),
+        pair<ABILITY_HOT_COALS, HotCoals>(),
+        pair<ABILITY_TERASTAL_TREASURE, TerastalTreasure>(),
+        pair<ABILITY_SHOCKING_MAW, ShockingMaw>(),
+        pair<ABILITY_GLEAM_EYES, GleamEyes>(),
+        pair<ABILITY_ROUSED_FANGS, RousedFangs>(),
+        pair<ABILITY_DREAM_STATE, DreamState>(),
+        pair<ABILITY_DREAM_WHIMSY, DreamWhimsy>(),
+        pair<ABILITY_LUNAR_AFFINITY, LunarAffinity>(),
+        pair<ABILITY_FLAME_SHIELD, FlameShield>(),
+        pair<ABILITY_AQUATIC_DWELLER, AquaticDweller>(),
+        pair<ABILITY_APPLE_PIE, ApplePie>(),
+        pair<ABILITY_HOVER, Hover>(),
+        pair<ABILITY_DEPRAVITY, Depravity>(),
+        pair<ABILITY_WILDFIRE, Wildfire>(),
+        pair<ABILITY_JUMP_SCARE, JumpScare>(),
+        pair<ABILITY_TAR_TOSS, TarToss>(),
+        pair<ABILITY_STUN_SHOCK, StunShock>(),
+        pair<ABILITY_RAGING_GODDESS, RagingGoddess>(),
+        pair<ABILITY_WHIPLASH, Whiplash>(),
+        pair<ABILITY_SUPERSWEET_SYRUP, SupersweetSyrup>(),
+        pair<ABILITY_TRASH_HEAP, TrashHeap>(),
+        pair<ABILITY_SLUDGY_MIX, SludgyMix>(),
+        pair<ABILITY_OVERWATCH, Overwatch>(),
+        pair<ABILITY_WIND_RAGE, WindRage>(),
+        pair<ABILITY_VICTORY_BOMB, VictoryBomb>(),
+        pair<ABILITY_RAZOR_SHARP, RazorSharp>(),
+        pair<ABILITY_TO_THE_BONE, ToTheBone>(),
+        pair<ABILITY_BLADE_DANCE, BladeDance>(),
+        pair<ABILITY_APE_SHIFT, ApeShift>(),
+        pair<ABILITY_KNOW_YOUR_PLACE, KnowYourPlace>(),
+        pair<ABILITY_DEEP_CUTS, DeepCuts>(),
+        pair<ABILITY_LIFE_STEAL, LifeSteal>(),
+        pair<ABILITY_RUDE_AWAKENING, RudeAwakening>(),
+        pair<ABILITY_TERAFORM_ZERO, TeraformZero>(),
+        pair<ABILITY_SET_ABLAZE, SetAblaze>(),
+        pair<ABILITY_BREAKWATER, Breakwater>(),
+        pair<ABILITY_MAGICAL_FISTS, MagicalFists>(),
+        pair<ABILITY_CUTTHROAT, Cutthroat>(),
+        pair<ABILITY_SAND_BENDER, SandBender>(),
+        pair<ABILITY_SAND_PIT, SandPit>(),
+        pair<ABILITY_DESOLATE_SUN, DesolateSun>(),
+        pair<ABILITY_DAYBREAK, Daybreak>(),
+        pair<ABILITY_ENERGY_SIPHON, EnergySiphon>(),
+        pair<ABILITY_RESERVOIR, Reservoir>(),
+        pair<ABILITY_NEUROTOXIN, Neurotoxin>(),
+        pair<ABILITY_ENERGIZED_HORNS, EnergizedHorns>(),
+        pair<ABILITY_SPIDER_LAIR_UPGRADE, SpiderLairUpgrade>(),
+        pair<ABILITY_CRUST_COAT, CrustCoat>(),
+        pair<ABILITY_PUFFY, Puffy>(),
+        pair<ABILITY_BALLOON_BLITZ, BalloonBlitz>(),
+        pair<ABILITY_STRIKER_PIXILATE, StrikerPixilate>(),
+        pair<ABILITY_DOOM_BLAST, DoomBlast>(),
+        pair<ABILITY_BRUTEFORCE, Bruteforce>(),
+        pair<ABILITY_FARADAY_CAGE, FaradayCage>(),
+        pair<ABILITY_ACIDIC_SLIME, AcidicSlime>(),
+        pair<ABILITY_ROSE_GARDEN, RoseGarden>(),
+        pair<ABILITY_QIGONG, Qigong>(),
+        pair<ABILITY_CONJOURER_OF_DECEIT, ConjurerOfDeceit>(),
+        pair<ABILITY_DEEP_FREEZE, DeepFreeze>(),
+        pair<ABILITY_SOUL_DEVOURER, SoulDevourer>(),
+        pair<ABILITY_CHAMPIONS_ENTRANCE, ChampionsEntrance>(),
+        pair<ABILITY_PRESTO, Presto>(),
+        pair<ABILITY_SAMBA, Samba>(),
+        pair<ABILITY_GLADIATOR, Gladiator>(),
+        pair<ABILITY_FORSAKEN_HEART, ForsakenHeart>(),
+        pair<ABILITY_RELENTLESS, Relentless>(),
+        pair<ABILITY_SOOTHSAYER, Soothsayer>(),
+        pair<ABILITY_CORRUPTED_MIND, CorruptedMind>(),
+        pair<ABILITY_FLAME_COAT, FlameCoat>(),
+        pair<ABILITY_UNOWN_POWER, UnownPower>(),
+        pair<ABILITY_SUPER_SCOPE, SuperScope>(),
+        pair<ABILITY_VENOM_CROWN, VenomCrown>(),
+        pair<ABILITY_BLIGHT_SCALE, BlightScale>(),
+        pair<ABILITY_GUNMAN, Gunman>(),
+        pair<ABILITY_HUNTERS_MARK, HuntersMark>(),
+        pair<ABILITY_CARETAKER, Caretaker>(),
+        pair<ABILITY_POSEIDONS_DOMINION, PoseidonsDominion>(),
+        pair<ABILITY_DUAL_SHADOW, DualShadow>(),
+        pair<ABILITY_LULLABY, Lullaby>(),
+        pair<ABILITY_CRYO_ARCHITECT, CryoArchitect>(),
+        pair<ABILITY_GLACIAL_RAGE, GlacialRage>(),
+        pair<ABILITY_IMMOVABLE_OBJECT, ImmovableObject>(),
+        pair<ABILITY_FRENZIED_PHANTOM, FrenziedPhantom>(),
+        pair<ABILITY_DNA_SCRAMBLE, DNAScramble>(),
+        pair<ABILITY_AQUATIC, Aquatic>(),
+        pair<ABILITY_METALLIC_JAWS, MetallicJaws>(),
+        pair<ABILITY_CALCULATIVE, Calculative>(),
+        pair<ABILITY_EMBODY_ASPECT, EmbodyAspect>(),
+        pair<ABILITY_EMBODY_ASPECT_HEARTHFLAME, EmbodyAspect>(),
+        pair<ABILITY_EMBODY_ASPECT_CORNERSTONE, EmbodyAspectCornerstone>(),
+        pair<ABILITY_EMBODY_ASPECT_WELLSPRING, EmbodyAspectWellspring>(),
+        pair<ABILITY_ROCKHARD_SHAFT, RockhardShaft>(),
+        pair<ABILITY_DEVIATE, Deviate>(),
+        pair<ABILITY_SUNS_BOUNTY, SunsBounty>(),
+        pair<ABILITY_RITE_OF_SPRING, RiteOfSpring>(),
+        pair<ABILITY_HEADSTRONG, Headstrong>(),
+        pair<ABILITY_FIREFIGHTER, Firefighter>(),
+        pair<ABILITY_SEPIA_LENS, SepiaLens>(),
+        pair<ABILITY_SUPER_SNIPER, SuperSniper>(),
+        pair<ABILITY_WOODLAND_CURSE, WoodlandCurse>(),
+        pair<ABILITY_MALODOR, Malodor>(),
+        pair<ABILITY_BLUR, Blur>(),
+        pair<ABILITY_ELUDE, Elude>(),
+        pair<ABILITY_DRAKE_OF_RAGE, DrakeOfRage>(),
+        pair<ABILITY_MIXED_MARTIAL_ARTS, MixedMartialArts>(),
+        pair<ABILITY_STRATEGIC_PAUSE, StrategicPause>(),
+        pair<ABILITY_OVERRULE, Overrule>(),
+        pair<ABILITY_MENTAL_POLLUTION, MentalPollution>(),
+        pair<ABILITY_MADNESS_ENHANCEMENT, MadnessEnhancement>(),
+        pair<ABILITY_TENTALOCK, Tentalock>(),
+        pair<ABILITY_SERPENT_BIND, SerpentBind>(),
+        pair<ABILITY_SOUL_TAP, SoulTap>(),
+        pair<ABILITY_SCARECROW, Scarecrow>(),
+        pair<ABILITY_OMINOUS_SHROUD, OminousShroud>(),
+        pair<ABILITY_CHILLING_PRESENCE, ChillingPresence>(),
+        pair<ABILITY_FROSTBIND, Frostbind>(),
+        pair<ABILITY_GLACIAL_GHOST, GlacialGhost>(),
+        pair<ABILITY_TENDER_AFFECTION, TenderAffection>(),
+        pair<ABILITY_WONDER_SCALE, WonderScale>(),
+        pair<ABILITY_OVERZEALOUS, Overzealous>(),
+        pair<ABILITY_STAINLESS_STEEL, StainlessSteel>(),
+        pair<ABILITY_TEMPORAL_RUPTURE, TemporalRupture>(),
+        pair<ABILITY_GRASS_FLUTE, GrassFlute>(),
+        pair<ABILITY_HEMOTOXIN, Hemotoxin>(),
+        pair<ABILITY_HARUKAZE, Harukaze>(),
+        pair<ABILITY_TOXIC_SURGE, ToxicSurge>(),
+        pair<ABILITY_ATLANTIC_RULER, AtlanticRuler>(),
+        pair<ABILITY_BIOFILM, Biofilm>(),
+        pair<ABILITY_CHOKEHOLD, Chokehold>(),
+        pair<ABILITY_GUARDIAN_COAT, GuardianCoat>(),
+        pair<ABILITY_NEUTRALIZING_FOG, NeutralizingFog>(),
+        pair<ABILITY_POISON_QUILLS, PoisonQuills>(),
+        pair<ABILITY_DRACONIC_MIGHT, DraconicMight>(),
+        pair<ABILITY_FESTIVITIES, Festivities>(),
+        pair<ABILITY_FEY_FLIGHT, FeyFlight>(),
+        pair<ABILITY_BEST_OFFENSE, BestOffense>(),
+        pair<ABILITY_IMPALER, Impaler>(),
+        pair<ABILITY_MAGUS_BLADES, MagusBlades>(),
+        pair<ABILITY_LIGHTNING_BORN, LightningBorn>(),
+        pair<ABILITY_SUPERHEAVY, Superheavy>(),
+        pair<ABILITY_WORLD_SERPENT, WorldSerpent>(),
+        pair<ABILITY_LUCKY_WINGS, LuckyWings>(),
+        pair<ABILITY_KOMODO, Komodo>(),
+        pair<ABILITY_ENVENOM, Envenom>(),
+        pair<ABILITY_PURPLE_HAZE, PurpleHaze>(),
+        pair<ABILITY_GNASHING_CANNON, GnashingCannon>(),
+        pair<ABILITY_HYPER_CLEANSE, HyperCleanse>(),
+        pair<ABILITY_MOLTEN_COAT, MoltenCoat>(),
+        pair<ABILITY_ROYAL_DECREE, RoyalDecree>(),
+        pair<ABILITY_BREEZY_NEIGH, BreezyNeigh>(),
+        pair<ABILITY_DREAMSCAPE, Dreamscape>(),
+        pair<ABILITY_HASTE_MAKES_WASTE, HasteMakesWaste>(),
+        pair<ABILITY_HUNGRY_MAWS, HungryMaws>(),
+        pair<ABILITY_THERMAL_SLIDE, ThermalSlide>(),
+        pair<ABILITY_THERMOMANCY, Thermomancy>(),
+        pair<ABILITY_CHUCKSTER, Chuckster>(),
+        pair<ABILITY_HEAT_SINK, HeatSink>(),
+        pair<ABILITY_RELIC_STONE, RelicStone>(),
+        pair<ABILITY_SUPERCELL, Supercell>(),
+        pair<ABILITY_LIGHTNING_ASPECT, LightningAspect>(),
+        pair<ABILITY_POISON_HEAL, PoisonHeal>(),
+        pair<ABILITY_ENERGY_TAP, EnergyTap>(),
+        pair<ABILITY_JUNSHI_SANDA, JunshiSanda>(),
+        pair<ABILITY_REVERBATE, Reverberate>(),
+        pair<ABILITY_TAEKKYEON, Taekkyeon>(),
+        pair<ABILITY_SLUDGE_SPIT, SludgeSpit>(),
+        pair<ABILITY_SWAMP_THING, SwampThing>(),
+        pair<ABILITY_FROSTY_PRESCENCE, FrostyPrescence>(),
+        pair<ABILITY_CHILLING_PELLETS, ChillingPellets>(),
+        pair<ABILITY_PAINT_SHOT, PaintShot>(),
+        pair<ABILITY_STONECUTTER, Stonecutter>(),
+        pair<ABILITY_EDGELORD, Edgelord>(),
+        pair<ABILITY_WARMONGER, Warmonger>(),
+        pair<ABILITY_LOCUST_SWARM, LocustSwarm>(),
+        pair<ABILITY_REVELATION, Revelation>(),
+        pair<ABILITY_CURSE_OF_FAMINE, CurseOfFamine>(),
+        pair<ABILITY_CRYSTALLINE_ARMOR, CrystallineArmor>(),
+        pair<ABILITY_SOUL_HARVEST, SoulHarvest>(),
+        pair<ABILITY_THICK_BLUBBER, ThickBlubber>(),
+        pair<ABILITY_CRAVING, Craving>(),
+        pair<ABILITY_RAT_KING, RatKing>(),
+        pair<ABILITY_CRISPY_CREAM, CrispyCream>(),
+        pair<ABILITY_DEEP_FRIED, DeepFried>(),
+        pair<ABILITY_FOOD_LOVERS, FoodLovers>(),
+        pair<ABILITY_LUNAR_WRATH, LunarWrath>(),
+        pair<ABILITY_SPYWARE, Spyware>(),
+        pair<ABILITY_VIRUS, Virus>(),
+        pair<ABILITY_POWER_LEAK, PowerLeak>(),
+        pair<ABILITY_BACKUP_POWER, BackupPower>(),
+        pair<ABILITY_SAND_FIEND, SandFiend>(),
+        pair<ABILITY_MOUSTACHE, Moustache>(),
+        pair<ABILITY_DEPTH_EXPLORER, DepthExplorer>(),
+        pair<ABILITY_DUNE_VEIL, DuneVeil>(),
+        pair<ABILITY_STRONG_FOUNDATION, StrongFoundation>(),
+        pair<ABILITY_FOG_MACHINE, FogMachine>(),
+        pair<ABILITY_DROP_BLOCKS, DropBlocks>(),
+        pair<ABILITY_LASER_DRILL, LaserDrill>(),
+        pair<ABILITY_LIGHT_SABER, LightSaber>(),
+        pair<ABILITY_LOOSE_THORNS, LooseThorns>(),
+        pair<ABILITY_TURF_WAR, TurfWar>(),
+        pair<ABILITY_GREEDY, Greedy>(),
+        pair<ABILITY_MUSICAL_NOTES, MusicalNotes>(),
+        pair<ABILITY_STRIKEOUT, Strikeout>(),
+        pair<ABILITY_HOME_RUN, HomeRun>(),
+        pair<ABILITY_BRUISER, Bruiser>(),
+        pair<ABILITY_LETS_DANCE, LetsDance>(),
+        pair<ABILITY_MYCELIUM_MIGHT, MyceliumMight>(),
+        pair<ABILITY_DEADLY_PRECISION, DeadlyPrecision>(),
     };
+
+    consteval AbilityPtrArray generate() {
+        AbilityPtrArray arr{0};
+        for (auto pair : sAbilities) {
+            arr[pair.key] = pair.ability;
+        }
+        return arr;
+    }
 
    public:
     ~ability_behavior();
@@ -9035,3 +8904,5 @@ class AbilityEngine {
    public:
     ~AbilityEngine();
 };
+
+#pragma GCC diagnostic pop
