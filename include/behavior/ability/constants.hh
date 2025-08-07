@@ -44,7 +44,10 @@ typedef enum {
 
 typedef enum NonStackingState {
     NON_STACKING_NONE = 0,
-    NON_STACKING_RUIN = 1 << 0,
+    NON_STACKING_RUIN_ATK = 1 << STAT_ATK,
+    NON_STACKING_RUIN_DEF = 1 << STAT_DEF,
+    NON_STACKING_RUIN_SPATK = 1 << STAT_SPATK,
+    NON_STACKING_RUIN_SPDEF = 1 << STAT_SPDEF,
 } NonStackingState;
 
 typedef enum {

@@ -12,7 +12,16 @@
 template <typename T>
 class AbilityBehavior {
     typedef std::array<const Ability *, ABILITIES_COUNT> AbilityPtrArray;
-    constexpr AbilityPtrArray gAbilities = generate();
+    static constexpr AbilityPtrArray gAbilities = generate();
+
+    template <typename T>
+    consteval std::array<const T *, ABILITIES_COUNT> abilitiesAs() {
+        std::array<const T *, ABILITIES_COUNT> arr{0};
+        for (int i = 0; i < ABILITIES_COUNT i++) {
+            arr[i] = dynamic_cast<const T *>(gAbilities[i]);
+        }
+        return arr;
+    }
 
     typedef<typename T> const T *abilityAs(AbilityEnum id) { return dynamic_cast<const T *>(gAbilities[id]); }
 
@@ -32,6 +41,7 @@ class AbilityBehavior {
 
     ENUM_OR(InfiltrateType)
     ENUM_OR(MoveEffectEnum)
+    ENUM_OR(NonStackingState)
 
 #define CHECK(effect) \
     if (!(effect)) return __EnumHack();
@@ -145,34 +155,6 @@ class AbilityBehavior {
         return TRUE;
     }
 
-    static int PoisonPuppeteerClone(AbilityEnum ability, int battler, int (*predicate)(int battler, int target), const u8 *callback) {
-        int flag = GetAbilityState(battler, ability);
-        if (!flag) return FALSE;
-        int any = FALSE;
-        int realAttacker = gBattlerAttacker;
-        gBattlerAttacker = battler;
-        SetAbilityState(battler, ability, 0);
-
-        for (int target = 0; target < gBattlersCount; target++) {
-            FILTER(flag & (1 << target))
-            FILTER(IsBattlerAlive(target))
-            FILTER(predicate(battler, target))
-
-            gStackBattler1 = gBattlerAttacker;
-            gStackBattler2 = gBattlerTarget;
-            BattleScriptCall(callback);
-            any = TRUE;
-        }
-        gBattlerAttacker = realAttacker;
-
-        CHECK(any)
-
-        gStackBattler1 = battler;
-        gBattleScripting.abilityPopupOverwrite = ability;
-        BattleScriptCall(BattleScript_AbilityPopUpStack);
-        return TRUE;
-    }
-
     template <Type BoostType>
     class AteAbility : extends OnMoveType, extends OnStab {
         ON_MOVE_TYPE {
@@ -191,18 +173,6 @@ class AbilityBehavior {
                     MUL(1.5);
                 else
                     MUL(1.2);
-            }
-        }
-    };
-
-    template <int BoostType>
-    class BoostedSwarmLike : extends OnOffensiveMultiplier<> {
-        ON_OFFENSIVE_MULTIPLIER {
-            if (move == BoostType) {
-                if (gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 3))
-                    MUL(1.8);
-                else
-                    MUL(1.3);
             }
         }
     };
@@ -359,19 +329,16 @@ class AbilityBehavior {
         }
     };
 
-    class VoltAbsorb : extends OnAbsorb {
+    template <Type Absorbed>
+    class AbsorbHeal : OnAbsorb {
         ON_ABSORB {
-            CHECK(moveType == TYPE_ELECTRIC)
+            CHECK(moveType == Absorbed)
             return ABSORB_RESULT_HEAL;
         }
     };
+    class VoltAbsorb : extends AbsorbHeal<TYPE_ELECTRIC> {};
 
-    class WaterAbsorb : extends OnAbsorb {
-        ON_ABSORB {
-            CHECK(moveType == TYPE_WATER)
-            return ABSORB_RESULT_HEAL;
-        }
-    };
+    class WaterAbsorb : extends AbsorbHeal<TYPE_WATER> {};
 
     class TauntImmune : extends Breakable;
 
@@ -562,13 +529,18 @@ class AbilityBehavior {
         }
     };
 
-    class LightningRod : extends Redirects<TYPE_ELECTRIC> {
+    template <Type Absorbed, int stat>
+    class AbsorbStatUp : OnAbsorb {
         ON_ABSORB {
             CHECK(moveType == TYPE_ELECTRIC);
-            *statId = GetHighestAttackingStatId(battler, TRUE);
+            int stat = stat == STAT_HIGHEST_ATTACKING ? GetHighestAttackingStatId(battler, TRUE) : stat;
+            *statId = STAT_SPEED;
             return ABSORB_RESULT_STAT;
         }
     };
+    template <Type Absorbed>
+    class LightningRodClone : extends Redirects<Absorbed>, extends AbsorbStatUp<Absorbed, STAT_HIGHEST_ATTACKING> {};
+    class LightningRod : LightningRodClone<TYPE_ELECTRIC> {};
 
     class SereneGrace : extends OnModifyEffectChance<> {
         ON_MODIFY_EFFECT_CHANCE { *effectChance *= 2; }
@@ -936,13 +908,7 @@ class AbilityBehavior {
         }
     };
 
-    class MotorDrive : extends OnAbsorb {
-        ON_ABSORB {
-            CHECK(moveType == TYPE_ELECTRIC);
-            *statId = STAT_SPEED;
-            return ABSORB_RESULT_STAT;
-        }
-    };
+    class MotorDrive : extends AbsorbStatUp<TYPE_ELECTRIC, STAT_SPEED> {};
 
     class Rivalry : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
         ON_OFFENSIVE_MULTIPLIER {
@@ -1204,13 +1170,7 @@ class AbilityBehavior {
     };
     class Scrappy : extends HitsGhost, extends TauntImmune {};
 
-    class StormDrain : extends Redirects<TYPE_WATER> {
-        ON_ABSORB {
-            CHECK(moveType == TYPE_WATER);
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return ABSORB_RESULT_STAT;
-        }
-    };
+    class StormDrain : extends LightningRodClone<TYPE_WATER> {};
 
     class IceBody : extends HailImmune, extends OnEndTurn {
         ON_END_TURN {
@@ -1516,7 +1476,7 @@ class AbilityBehavior {
         }
     };
 
-    class Infiltrator : extends OnInflitrate {
+    class Infiltrator : extends OnInfiltrate {
         ON_INFILTRATE { return INFILTRATE_SCREENS | INFILTRATE_SUBSTITUTE; }
     };
 
@@ -1536,7 +1496,7 @@ class AbilityBehavior {
     };
 
     template <int Stat>
-    class MoxieClone : extends OnBattlerFaints<ApplyOnTarget::ATTACKER> {
+    class MoxieClone : extends OnBattlerFaints<> {
         ON_BATTLER_FAINTS {
             CHECK(HasAttackerFaintedTarget())
             int stat = Stat == STAT_HIGHEST_TOTAL ? GetHighestStatId(battler, FALSE) : Stat;
@@ -1548,13 +1508,7 @@ class AbilityBehavior {
 
     class Moxie : extends MoxieClone<STAT_ATK> {};
 
-    class Justified : extends OnAbsorb {
-        ON_ABSORB {
-            CHECK(moveType == TYPE_DARK);
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return ABSORB_RESULT_STAT;
-        }
-    };
+    class Justified : extends AbsorbStatUp<TYPE_DARK, STAT_HIGHEST_ATTACKING> {};
 
     class Rattled : extends OnDefender {
         ON_DEFENDER {
@@ -1570,13 +1524,7 @@ class AbilityBehavior {
 
     class MagicBounce : extends Breakable {};
 
-    class SapSipper : extends Redirects<TYPE_GRASS> {
-        ON_ABSORB {
-            CHECK(moveType == TYPE_GRASS);
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return ABSORB_RESULT_STAT;
-        }
-    };
+    class SapSipper : extends LightningRodClone<TYPE_GRASS> {};
 
     class Prankster : extends OnPriority {
         ON_PRIORITY {
@@ -2049,7 +1997,7 @@ class AbilityBehavior {
         ON_WEATHER { return DisguiseReformHandler(ability, battler, ABILITY_BS_CALL); }
     };
 
-    class BattleBond : extends FormChange, extends OnBattlerFaints<ApplyOnTarget::ATTACKER> {
+    class BattleBond : extends FormChange, extends OnBattlerFaints<> {
         ON_BATTLER_FAINTS {
             SpeciesEnum newSpecies = SPECIES_NONE;
             switch (gBattleMons[battler].species) {
@@ -2300,25 +2248,19 @@ class AbilityBehavior {
         }
     };
 
-    class IntrepidSword : extends OnEntry {
+    template <int Stat>
+    class RaiseStatOnEntry : OnEntry {
         ON_ENTRY {
-            CHECK(CanRaiseStat(battler, STAT_ATK))
+            CHECK(CanRaiseStat(battler, Stat))
 
-            SetStatChanger(STAT_ATK, 1);
+            SetStatChanger(Stat, 1);
             BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
             return TRUE;
         }
     };
+    class IntrepidSword : extends RaiseStatOnEntry<STAT_ATK> {};
 
-    class DauntlessShield : extends OnEntry {
-        ON_ENTRY {
-            CHECK(CanRaiseStat(battler, STAT_DEF))
-
-            SetStatChanger(STAT_DEF, 1);
-            BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-            return TRUE;
-        }
-    };
+    class DauntlessShield : extends RaiseStatOnEntry<STAT_DEF> {};
 
     class Libero : extends Protean {};
 
@@ -2693,7 +2635,7 @@ class AbilityBehavior {
 
     class SandSong : extends LiquidVoiceClone<TYPE_GROUND> {};
 
-    class Rampage : extends OnBattlerFaints<ApplyOnTarget::ATTACKER> {
+    class Rampage : extends OnBattlerFaints<> {
         ON_BATTLER_FAINTS {
             SetAbilityState(battler, ability, TRUE);
             gVolatileStructs[battler].rechargeTimer = 0;
@@ -2737,13 +2679,7 @@ class AbilityBehavior {
         }
     };
 
-    class Aerodynamics : extends OnAbsorb {
-        ON_ABSORB {
-            CHECK(moveType == TYPE_FLYING);
-            *statId = STAT_SPEED;
-            return ABSORB_RESULT_STAT;
-        }
-    };
+    class Aerodynamics : extends AbsorbStatUp<TYPE_FLYING, STAT_SPEED> {};
 
     class ChristmasSpirit : extends OnDefensiveMultiplier, extends HailImmune {
         ON_DEFENSIVE_MULTIPLIER {
@@ -2971,14 +2907,17 @@ class AbilityBehavior {
 
     class Dragonfly : extends HalfDrake, extends GroundImmune {};
 
-    class Dragonslayer : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
+    template <Type StrongVs>
+    class TypeSlayer : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
         ON_OFFENSIVE_MULTIPLIER {
-            if (IS_BATTLER_OF_TYPE(target, TYPE_DRAGON)) RESISTANCE(1.5);
+            if (IS_BATTLER_OF_TYPE(target, StrongVs)) RESISTANCE(1.5);
         }
         ON_DEFENSIVE_MULTIPLIER {
-            if (IS_BATTLER_OF_TYPE(attacker, TYPE_DRAGON)) MUL(.5);
+            if (IS_BATTLER_OF_TYPE(attacker, StrongVs)) MUL(.5);
         }
     };
+
+    class Dragonslayer : extends TypeSlayer<TYPE_DRAGON> {};
 
     class StealthRockImmune : extends Ability {};
     class Mountaineer : extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, extends StealthRockImmune {
@@ -3026,21 +2965,20 @@ class AbilityBehavior {
         }
     };
 
-    class Juggernaut : extends Breakable {
-        void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
+    class Juggernaut : extends OnChooseOffensiveStat, extends RemovesStatusOnImmunity {
+        ON_CHOOSE_OFFENSIVE_STAT {
             if (gBattleMoves[move].contact) secondaryAtkStatToUse[STAT_DEF] += 20;
         }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_PARALYSIS)
             return TRUE;
         }
-        bool removesStatusOnImmunity() { return true; }
     };
 
     class ShortCircuit : extends SwarmLike<TYPE_ELECTRIC> {};
 
-    class MajesticBird : extends Ability {
-        void onStat(ON_STAT) override {
+    class MajesticBird : extends OnStat {
+        ON_STAT {
             if (statId == STAT_SPATK) *stat *= 1.5;
         }
     };
@@ -3049,30 +2987,27 @@ class AbilityBehavior {
 
     class Intoxicate : extends AteAbility<TYPE_POISON> {};
 
-    class Impenetrable : extends Ability {
-        bool magicGuard() override { return true; }
-    };
+    class Impenetrable : extends MagicGuard {};
 
-    class Hypnotist : extends Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class Hypnotist : extends OnAccuracy<> {
+        ON_ACCURACY {
             CHECK(move == MOVE_HYPNOSIS);
             *accuracy *= 1.5;
             return ACCURACY_MULTIPLICATIVE;
         }
     };
 
-    class Overwhelm : extends Ability {
-        int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
+    class Overwhelm : extends OnTypeEffectiveness<>, extends TauntImmune {
+        ON_TYPE_EFFECTIVENESS {
             CHECK(moveType == TYPE_DRAGON) CHECK(defType == TYPE_FAIRY) CHECK_NOT(*mod) *mod = UQ_4_12(1.0);
             return TRUE;
         }
-        bool tauntImmune() override { return true; }
     };
 
     class Scare : public Intimidate {};
 
-    class MajesticMoth : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class MajesticMoth : extends OnEntry {
+        ON_ENTRY {
             CHECK(ChangeStatBuffs(battler, 1, GetHighestStatId(battler, TRUE), MOVE_EFFECT_AFFECTS_USER, NULL))
 
             BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
@@ -3080,17 +3015,16 @@ class AbilityBehavior {
         }
     };
 
-    class SoulEater : extends Ability {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+    class SoulEater : extends OnBattlerFaints<> {
+        ON_BATTLER_FAINTS {
             CHECK_NOT(BATTLER_MAX_HP(battler));
             CHECK(CanBattlerHeal(battler));
             BattleScriptCall(BattleScript_HandleSoulEaterEffect);
             return TRUE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
-    class SoulLinker : extends Ability {
+    class SoulLinker : extends OnEither {
         ON_EITHER {
             CHECK(ShouldApplyOnHitAffect(opponent))
             CHECK(IsBattlerAlive(battler))
@@ -3102,8 +3036,8 @@ class AbilityBehavior {
         }
     };
 
-    class SweetDreams : extends Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class SweetDreams : extends OnEndTurn {
+        ON_END_TURN {
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
             CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
@@ -3116,17 +3050,15 @@ class AbilityBehavior {
         }
     };
 
-    class BadLuck : extends Breakable {
-        int onCrit(ON_CRIT) override { return NEVER_CRIT; }
-        void onModifyEffectChance(ON_MODIFY_EFFECT_CHANCE) override {
+    class BadLuck : extends Breakable, extends OnCrit<ApplyOnTarget::FOE>, extends OnModifyEffectChance<ApplyOnTarget::FOE> {
+        ON_CRIT { return NEVER_CRIT; }
+        ON_MODIFY_EFFECT_CHANCE {
             if (*effectChance < 1) *effectChance = 0;
         }
-        AbilityApplyOnWithTarget onCritFor() override { return APPLY_ON_FOE; }
-        AbilityApplyOn onModifyEffectChanceFor() override { return APPLY_ON_FOE; }
     };
 
-    class HauntedSpirit : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class HauntedSpirit : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK_NOT(IsBattlerAlive(battler))
             CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_GHOST))
@@ -3139,28 +3071,28 @@ class AbilityBehavior {
         }
     };
 
-    class ElectricBurst : extends Ability {
-        int onRecoil(ON_RECOIL) override {
+    class ElectricBurst : extends OnRecoil, extends OnOffensiveMultiplier<> {
+        ON_RECOIL {
             CHECK(moveType == TYPE_ELECTRIC);
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
             return max(damage / 20, 1);
         }
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_ELECTRIC) MUL(1.35);
         }
     };
 
-    class RawWood : extends Breakable {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class RawWood : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_GRASS) MUL(1.2);
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_GRASS) RESISTANCE(.5);
         }
     };
 
-    class Solenoglyphs : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class Solenoglyphs : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBePoisoned(battler, target, MOVE_NONE))
             CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
@@ -3170,8 +3102,8 @@ class AbilityBehavior {
         }
     };
 
-    class SpiderLair : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class SpiderLair : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
             int side = GetOppositeSide(battler);
@@ -3183,35 +3115,31 @@ class AbilityBehavior {
         }
     };
 
-    class FatalPrecision : extends Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class FatalPrecision : extends OnAccuracy<>, extends OnCrit<> {
+        ON_ACCURACY {
             CHECK_NOT(IS_MOVE_STATUS(move))
             CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, TRUE) >= UQ_4_12(2.0))
             return ACCURACY_HITS_IF_POSSIBLE;
         }
-        int onCrit(ON_CRIT) override {
+        ON_CRIT {
             CHECK(typeEffectiveness >= UQ_4_12(2.0))
             return ALWAYS_CRIT;
         }
     };
 
-    class Seaweed : extends Breakable {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Seaweed : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(target, TYPE_FIRE)) RESISTANCE(2);
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FIRE && IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)) RESISTANCE(0.5);
         }
     };
 
     class PsychicMind : extends SwarmLike<TYPE_PSYCHIC> {};
 
-    class PoisonAbsorb : extends Redirects<TYPE_POISON> {
-        int onAbsorb(ON_ABSORB) override {
-            CHECK(moveType == TYPE_POISON)
-            return ABSORB_RESULT_HEAL;
-        }
-        int onEndTurn(ON_END_TURN) override {
+    class PoisonAbsorb : extends Redirects<TYPE_POISON>, extends AbsorbHeal<TYPE_POISON>, extends OnEndTurn {
+        ON_END_TURN {
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
             CHECK(gVolatileStructs[battler].isFirstTurn != 2)
@@ -3227,8 +3155,8 @@ class AbilityBehavior {
 
     class Scavenger : extends SoulEater {};
 
-    class TwistedDimension : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class TwistedDimension : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
 
             gFieldTimers.started.trickRoom = TRUE;
@@ -3239,17 +3167,16 @@ class AbilityBehavior {
         }
     };
 
-    class MultiHeaded : extends Ability {
-        MultihitType onParentalBond(ON_PARENTAL_BOND) override {
+    class MultiHeaded : extends OnParentalBond, extends IgnoresFortKnox {
+        ON_PARENTAL_BOND {
             if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
             if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
             return MULTIHIT_SINGLE;
         }
-        bool resistsFortKnox() override { return true; }
     };
 
-    class NorthWind : extends HailImmune {
-        int onEntry(ON_ENTRY) override {
+    class NorthWind : extends HailImmune, extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_AURORA_VEIL)
 
             int side = GetBattlerSide(battler);
@@ -3265,21 +3192,21 @@ class AbilityBehavior {
         }
     };
 
-    class Overcharge : extends Ability {
-        int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
+    class Overcharge : extends OnTypeEffectiveness<>, extends OnCanStatusType {
+        ON_TYPE_EFFECTIVENESS {
             CHECK(moveType == TYPE_ELECTRIC)
             CHECK(defType == TYPE_ELECTRIC)
             *mod = UQ_4_12(2.0);
             return TRUE;
         }
-        int onCanStatusType(ABILITY_ON_CAN_STATUS_TYPE) override {
+        ON_CAN_STATUS_TYPE {
             CHECK(status & CHECK_PARALYSIS)
             return TRUE;
         }
     };
 
-    class ViolentRush : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class ViolentRush : extends OnEntry {
+        ON_ENTRY {
             gVolatileStructs[battler].violentRush = gVolatileStructs[battler].started.violentRush = TRUE;
             return SwitchInAnnounce(B_MSG_SWITCHIN_VIOLENT_RUSH);
         }
@@ -3287,14 +3214,14 @@ class AbilityBehavior {
 
     class FlamingSoul : extends GaleWingsLike<TYPE_FIRE> {};
 
-    class SagePower : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class SagePower : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (IS_MOVE_SPECIAL(move)) MUL(1.5);
         }
     };
 
-    class BoneZone : extends Ability {
-        void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
+    class BoneZone : extends OnAfterTypeEffectiveness<> {
+        ON_AFTER_TYPE_EFFECTIVENESS {
             if (*mod >= UQ_4_12(1.0)) return;
             if (*mod == 0) {
                 *mod = UQ_4_12(1.0);
@@ -3306,14 +3233,14 @@ class AbilityBehavior {
         }
     };
 
-    class SpeedForce : extends Ability {
-        void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
+    class SpeedForce : extends OnChooseOffensiveStat {
+        ON_CHOOSE_OFFENSIVE_STAT {
             if (gBattleMoves[move].contact) secondaryAtkStatToUse[STAT_SPEED] += 20;
         }
     };
 
-    class SeaGuardian : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class SeaGuardian : extends OnEntry {
+        ON_ENTRY {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
             int stat = GetHighestStatId(battler, TRUE);
@@ -3324,8 +3251,8 @@ class AbilityBehavior {
         }
     };
 
-    class MoltenDown : extends Ability {
-        int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
+    class MoltenDown : extends OnTypeEffectiveness<> {
+        ON_TYPE_EFFECTIVENESS {
             CHECK(moveType == TYPE_FIRE)
             CHECK(defType == TYPE_ROCK)
             *mod = UQ_4_12(2.0);
@@ -3335,14 +3262,14 @@ class AbilityBehavior {
 
     class Flock : extends SwarmLike<TYPE_FLYING> {};
 
-    class FieldExplorer : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class FieldExplorer : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.5);
         }
     };
 
-    class Striker : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Striker : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (IsStrikerBoosted(battler, move)) MUL(1.3);
         }
     };
@@ -3353,19 +3280,19 @@ class AbilityBehavior {
 
     class Looter : extends SoulEater {};
 
-    class LunarEclipse : extends Hypnotist {
-        int onStab(ON_STAB) override { return moveType == TYPE_DARK || moveType == TYPE_FAIRY; }
+    class LunarEclipse : extends Hypnotist, extends OnStab {
+        ON_STAB { return moveType == TYPE_DARK || moveType == TYPE_FAIRY; }
     };
 
     class SolarFlare : extends Immolate, extends Chloroplast {};
 
-    class PowerCore : extends Ability {
-        void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override { secondaryAtkStatToUse[IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF] += 20; }
+    class PowerCore : extends OnChooseOffensiveStat {
+        ON_CHOOSE_OFFENSIVE_STAT { secondaryAtkStatToUse[IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF] += 20; }
     };
 
-    class SightingSystem : extends Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override { return ACCURACY_HITS_IF_POSSIBLE; }
-        int onPriority(ON_PRIORITY) override {
+    class SightingSystem : extends OnAccuracy<>, extends OnPriority {
+        ON_ACCURACY { return ACCURACY_HITS_IF_POSSIBLE; }
+        ON_PRIORITY {
             CHECK(gBattleMoves[move].accuracy)
             CHECK(gBattleMoves[move].accuracy < 80);
             return -3;
@@ -3374,27 +3301,27 @@ class AbilityBehavior {
 
     class BadCompany : extends RandomizerBanned {};
 
-    class Opportunist : extends Ability {
-        int onPriority(ON_PRIORITY) override {
+    class Opportunist : extends OnPriority {
+        ON_PRIORITY {
             CHECK(gBattleMons[target].hp <= gBattleMons[target].maxHP / 2)
             return 1;
         }
     };
 
-    class GiantWings : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class GiantWings : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMoves[move].airBased) MUL(1.3);
         }
     };
 
-    class Momentum : extends Ability {
-        void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
+    class Momentum : extends OnChooseOffensiveStat {
+        ON_CHOOSE_OFFENSIVE_STAT {
             if (gBattleMoves[move].contact) *atkStatToUse = STAT_SPEED;
         }
     };
 
-    class GripPincer : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class GripPincer : extends OnAttacker, extends OnAccuracy<> {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(gBattlerTarget))
             CHECK(IsBattlerAlive(battler))
             CHECK(IsMoveMakingContact(move, battler))
@@ -3412,37 +3339,30 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_GripPincerActivated);
             return TRUE;
         }
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+        ON_ACCURACY {
             CHECK(gBattleMons[target].status2 & STATUS2_WRAPPED)
             return ACCURACY_ALWAYS_HITS;
         }
     };
 
-    class BigLeaves : extends Harvest, extends LeafGuard, extends SolarPower, extends Chlorophyll, extends Chloroplast {
-        int onEndTurn(ON_END_TURN) override { return Harvest::onEndTurn(DELEGATE_END_TURN) | LeafGuard::onEndTurn(DELEGATE_END_TURN); }
-        void onStat(ON_STAT) override {
-            SolarPower::onStat(DELEGATE_STAT);
-            Chlorophyll::onStat(DELEGATE_STAT);
-        }
-        bool chloroplast() override { return true; }
-    };
+    class BigLeaves : extends Harvest, extends Merged<SolarPower, Chlorophyll>, extends Merged<Harvest, LeafGuard> {};
 
-    class PreciseFist : extends Ability {
-        int onCrit(ON_CRIT) override {
+    class PreciseFist : extends OnCrit<>, extends OnModifyEffectChance<> {
+        ON_CRIT {
             CHECK(IsIronFistBoosted(battler, move))
             return 1;
         }
-        void onModifyEffectChance(ON_MODIFY_EFFECT_CHANCE) override {
+        ON_MODIFY_EFFECT_CHANCE {
             if (IsIronFistBoosted(battler, move)) *effectChance *= 5;
         }
     };
 
-    class Deadeye : extends Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class Deadeye : extends OnAccuracy<>, extends OnChooseDefensiveStat<> {
+        ON_ACCURACY {
             CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].arrowBased)
             return ACCURACY_HITS_IF_POSSIBLE;
         }
-        int onChooseDefensiveStat(ON_CHOOSE_DEFENSIVE_STAT) override {
+        ON_CHOOSE_DEFENSIVE_STAT {
             CHECK(gIsCriticalHit)
             u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
             u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
@@ -3455,23 +3375,17 @@ class AbilityBehavior {
         }
     };
 
-    class Artillery : extends Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class Artillery : extends OnAccuracy<> {
+        ON_ACCURACY {
             CHECK(IsMegaLauncherBoosted(battler, move))
             return ACCURACY_HITS_IF_POSSIBLE;
         }
     };
 
-    class IceDew : extends Redirects<TYPE_ICE> {
-        int onAbsorb(ON_ABSORB) override {
-            CHECK(moveType == TYPE_ICE);
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return ABSORB_RESULT_STAT;
-        }
-    };
+    class IceDew : extends LightningRodClone<TYPE_ICE> {};
 
-    class SunWorship : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class SunWorship : extends OnEntry {
+        ON_ENTRY {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
 
             int stat = GetHighestStatId(battler, TRUE);
@@ -3481,12 +3395,10 @@ class AbilityBehavior {
         }
     };
 
-    class Pollinate : extends Ability {
-        ATE_ABILITY(TYPE_BUG),
-    };
+    class Pollinate : extends AteAbility<TYPE_BUG> {};
 
-    class VolcanoRage : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class VolcanoRage : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(moveType == TYPE_FIRE)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
@@ -3494,8 +3406,8 @@ class AbilityBehavior {
         }
     };
 
-    class ColdRebound : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class ColdRebound : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
 
@@ -3504,16 +3416,16 @@ class AbilityBehavior {
         }
     };
 
-    class LowBlow : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40); }
+    template <MoveEnum Move, int Power = 0>
+    class SimpleEntryMove : extends OnEntry {
+        ON_ENTRY { return UseEntryMove(battler, ability, Move, Power); }
     };
+    class LowBlow : extends SimpleEntryMove<MOVE_FEINT_ATTACK, 40> {};
 
-    class Spectralize : extends Ability {
-        ATE_ABILITY(TYPE_GHOST)
-    };
+    class Spectralize : extends AteAbility<TYPE_GHOST> {};
 
-    class SpectralShroud : extends Spectralize {
-        int onAttacker(ON_ATTACKER) override {
+    class SpectralShroud : extends Spectralize, extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBePoisoned(battler, target, MOVE_NONE))
             CHECK(gBattleStruct->ateBoost[battler])
@@ -3524,17 +3436,15 @@ class AbilityBehavior {
         }
     };
 
-    class Discipline : extends Breakable {
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+    class Discipline : extends RemovesStatusOnImmunity, extends TauntImmune {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_CONFUSION)
             return TRUE;
         }
-        bool removesStatusOnImmunity() override { return true; }
-        bool tauntImmune() override { return true; }
     };
 
-    class Thundercall : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class Thundercall : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(moveType == TYPE_ELECTRIC)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
@@ -3542,20 +3452,20 @@ class AbilityBehavior {
         }
     };
 
-    class MarineApex : extends Infiltrate {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class MarineApex : extends Infiltrator, extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (IS_BATTLER_OF_TYPE(target, TYPE_WATER)) RESISTANCE(1.5);
         }
     };
 
-    class MightyHorn : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class MightyHorn : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMoves[move].hornBased) MUL(1.3);
         }
     };
 
-    class HardenedSheath : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class HardenedSheath : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(gBattleMoves[move].hornBased)
             CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
@@ -3566,18 +3476,18 @@ class AbilityBehavior {
         }
     };
 
-    class ArcticFur : extends Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override { MUL(.65); }
+    class ArcticFur : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER { MUL(.65); }
     };
 
-    class Lethargy : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class Lethargy : extends OnEntry, extends OnOffensiveMultiplier<> {
+        ON_ENTRY {
             TryResetBattlerStatChanges(battler, RESET_ALL_STATS);
             gVolatileStructs[battler].slowStartTimer = 5;
             BattleScriptPushCursorAndCallback(BattleScript_LethargyEnters);
             return TRUE;
         }
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+        ON_OFFENSIVE_MULTIPLIER {
             switch (gVolatileStructs[battler].slowStartTimer) {
                 case 0:
                 case 1:
@@ -3603,8 +3513,8 @@ class AbilityBehavior {
 
     class SteelBarrel : extends RockHead {};
 
-    class PyroShells : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class PyroShells : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(IsMegaLauncherBoosted(battler, move))
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
@@ -3612,8 +3522,8 @@ class AbilityBehavior {
         }
     };
 
-    class FungalInfection : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class FungalInfection : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
             CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
@@ -3626,19 +3536,19 @@ class AbilityBehavior {
         }
     };
 
-    class Parry : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Parry : extends OnDefender, extends OnDefensiveMultiplier, extends OverrideBreakable {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
 
             UseOutOfTurnAttack(battler, attacker, ability, MOVE_MACH_PUNCH, 0);
             return FALSE;
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override { MUL(.8); }
+        ON_DEFENSIVE_MULTIPLIER { MUL(.8); }
     };
 
-    class Scrapyard : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Scrapyard : extends OnDefender {
+        ON_DEFENDER {
             CHECK(DidMoveHit())
             CHECK(IsMoveMakingContact(move, attacker))
             CHECK(gSideTimers[BATTLE_OPPOSITE(battler)].spikesAmount < 3)
@@ -3650,8 +3560,8 @@ class AbilityBehavior {
 
     class LooseQuills : extends Scrapyard {};
 
-    class ToxicDebris : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class ToxicDebris : extends OnDefender {
+        ON_DEFENDER {
             CHECK(DidMoveHit())
             CHECK(IsMoveMakingContact(move, attacker))
             CHECK(gSideTimers[BATTLE_OPPOSITE(battler)].toxicSpikesAmount < 2)
@@ -3661,12 +3571,12 @@ class AbilityBehavior {
         }
     };
 
-    class Roundhouse : extends Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class Roundhouse : extends OnAccuracy<>, extends OnChooseDefensiveStat<> {
+        ON_ACCURACY {
             CHECK(IsStrikerBoosted(battler, move))
             return ACCURACY_HITS_IF_POSSIBLE;
         }
-        int onChooseDefensiveStat(ON_CHOOSE_DEFENSIVE_STAT) override {
+        ON_CHOOSE_DEFENSIVE_STAT {
             CHECK(IsStrikerBoosted(battler, move))
             u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
             u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
@@ -3679,12 +3589,10 @@ class AbilityBehavior {
         }
     };
 
-    class Mineralize : extends Ability {
-        ATE_ABILITY(TYPE_ROCK),
-    };
+    class Mineralize : extends AteAbility<TYPE_ROCK> {};
 
-    class LooseRocks : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class LooseRocks : extends OnDefender {
+        ON_DEFENDER {
             CHECK(DidMoveHit())
             CHECK(IsMoveMakingContact(move, attacker))
             CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STEALTH_ROCK)
@@ -3694,8 +3602,8 @@ class AbilityBehavior {
         }
     };
 
-    class SpinningTop : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class SpinningTop : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(moveType == TYPE_FIGHTING)
             CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
@@ -3722,8 +3630,8 @@ class AbilityBehavior {
         }
     };
 
-    class RetributionBlow : extends Ability {
-        int onReactive(ON_REACTIVE) override {
+    class RetributionBlow : extends OnReactive {
+        ON_REACTIVE {
             CHECK_NOT(gTurnStructs[battler].dancerUsedMove)
             CHECK(IsBattlerAlive(gBattlerAttacker))
             CHECK(gCurrentTurnActionNumber < gBattlersCount || gProcessingExtraAttacks)
@@ -3738,8 +3646,8 @@ class AbilityBehavior {
         }
     };
 
-    class Fearmonger : public Intimidate {
-        int onAttacker(ON_ATTACKER) override {
+    class Fearmonger : extends Intimidate, extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBeParalyzed(battler, target))
             CHECK(IsMoveMakingContact(move, battler))
@@ -3749,13 +3657,13 @@ class AbilityBehavior {
         }
     };
 
-    class ToxicSpill : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class ToxicSpill : extends OnEntry, extends OnEndTurn, extends OnExit {
+        ON_ENTRY {
             CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
             BattleScriptPushCursorAndCallback(BattleScript_BattlerAnnouncedToxicSpill);
             return TRUE;
         }
-        int onEndTurn(ON_END_TURN) override {
+        ON_END_TURN {
             if (ability) {
                 CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
                 AbilityEnum sourceAbilities[] = {ABILITY_TOXIC_SPILL, ABILITY_TRASH_HEAP};
@@ -3791,36 +3699,33 @@ class AbilityBehavior {
             }
             return any;
         }
-        int onExit(ON_EXIT) override {
+        ON_EXIT {
             CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
             BattleScriptCall(BattleScript_TheToxicWasHasDissapeared);
             return TRUE;
         }
     };
 
-    class DesertCloak : extends Breakable, extends SandImmune {
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+    class DesertCloak : extends OnStatusImmune<ApplyOn::ALLY>, extends SandImmune {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_STATUS1)
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
             return TRUE;
         }
-        AbilityApplyOn onStatusImmuneFor override { return APPLY_ON_ALLY; }
     };
 
-    class Draconize : extends Ability {
-        ATE_ABILITY(TYPE_DRAGON),
-    };
+    class Draconize : extends AteAbility<TYPE_DRAGON> {};
 
-    class PrettyPrincess : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class PrettyPrincess : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (!IsUnaware(battler) && HasAnyLoweredStat(target)) MUL(1.5);
         }
     };
 
     class SelfRepair : extends SelfSufficient, extends NaturalCure {};
 
-    class Electromorphosis : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Electromorphosis : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
@@ -3832,39 +3737,49 @@ class AbilityBehavior {
 
     class AtomicBurst : extends Electromorphosis, extends Galvanize {};
 
+    template <int BoostType>
+    class BoostedSwarmLike : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
+            if (move == BoostType) {
+                if (gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 3))
+                    MUL(1.8);
+                else
+                    MUL(1.3);
+            }
+        }
+    };
     class Hellblaze : extends BoostedSwarmLike<TYPE_FIRE> {};
 
     class Riptide : extends BoostedSwarmLike<TYPE_WATER> {};
 
     class ForestRage : extends BoostedSwarmLike<TYPE_GRASS> {};
 
-    class PrimalMaw : extends Ability {
-        MultihitType onParentalBond(ON_PARENTAL_BOND) override {
+    class PrimalMaw : extends OnParentalBond {
+        ON_PARENTAL_BOND {
             CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
             return PARENTAL_BOND_PRIMAL_MAW;
         }
     };
 
-    class SweepingEdge : extends Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class SweepingEdge : extends OnAccuracy<> {
+        ON_ACCURACY {
             CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
             return ACCURACY_HITS_IF_POSSIBLE;
         }
     };
 
-    class GiftedMind : extends Breakable {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class GiftedMind : extends OnAccuracy<>, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET> {
+        ON_ACCURACY {
             CHECK(IS_MOVE_STATUS(move))
             return ACCURACY_HITS_IF_POSSIBLE;
         }
-        void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
+        ON_AFTER_TYPE_EFFECTIVENESS {
             if (moveType == TYPE_BUG || moveType == TYPE_GHOST || moveType == TYPE_DARK) *mod = 0;
         }
-        AbilityApplyOnWithTarget onAfterTypeEffectivenessFor() override { return onAfterTypeEffectivenessFor; }
     };
 
-    class HydroCircuit : extends Transistor {
-        int onAttacker(ON_ATTACKER) override {
+    class HydroCircuit : extends Transistor, extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
@@ -3877,8 +3792,8 @@ class AbilityBehavior {
         }
     };
 
-    class Equinox : extends Ability {
-        void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
+    class Equinox : extends OnChooseOffensiveStat {
+        ON_CHOOSE_OFFENSIVE_STAT {
             int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
             int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
             if (atk > spAtk)
@@ -3888,8 +3803,8 @@ class AbilityBehavior {
         }
     };
 
-    class Absorbant : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class Absorbant : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
             CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
@@ -3905,8 +3820,8 @@ class AbilityBehavior {
     class Clueless : extends CloudNine, extends Unsuppressable {};
 
     template <int N>
-    class NoDamageHits : extends Persistent {
-        int onEntry(ON_ENTRY) override {
+    class NoDamageHits : extends Persistent, extends OnEntry, extends Breakable {
+        ON_ENTRY {
             int uses = N - GetSingleUseAbilityCounter(battler, ability);
             CHECK(uses)
 
@@ -3919,16 +3834,14 @@ class AbilityBehavior {
             return TRUE;
         }
 
-        int noDamageHits() override { return N; }
+        virtual int noDamageHits() override { return N; }
     };
-    class CheatingDeath : extends NoDamageHits<2> {};
+    class CheatingDeath : extends NoDamageHits<2>, extends OverrideBreakable {};
 
-    class CheapTactics : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_SCRATCH, 0); }
-    };
+    class CheapTactics : extends SimpleEntryMove<MOVE_SCRATCH> {};
 
-    class Coward : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class Coward : extends OnEntry, extends Persistent {
+        ON_ENTRY {
             CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
 
             SetSingleUseAbilityCounter(battler, ability, TRUE);
@@ -3936,40 +3849,39 @@ class AbilityBehavior {
             BattleScriptPushCursorAndCallback(BattleScript_BattlerIsProtectedForThisTurn);
             return TRUE;
         }
-        bool persistent() override { return true; }
     };
 
     class VoltRush : extends GaleWingsLike<TYPE_ELECTRIC> {};
 
-    class DuneTerror : extends Breakable, extends SandImmune {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class DuneTerror : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier, extends SandImmune {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_GROUND) MUL(1.2);
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER {
             if (IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) MUL(.65);
         }
     };
 
-    class InfernalRage : extends Ability {
-        int onRecoil(ON_RECOIL) override {
+    class InfernalRage : extends OnRecoil, extends OnOffensiveMultiplier<> {
+        ON_RECOIL {
             CHECK(moveType == TYPE_FIRE);
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
             return max(damage / 20, 1);
         }
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FIRE) MUL(1.35);
         }
     };
 
-    class DualWield : extends Ability {
-        MultihitType onParentalBond(ON_PARENTAL_BOND) override {
+    class DualWield : extends OnParentalBond {
+        ON_PARENTAL_BOND {
             CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
             return PARENTAL_BOND_DUAL_WIELD;
         }
     };
 
-    class ElementalCharge : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class ElementalCharge : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(Random() % 100 < 20)
 
@@ -3996,15 +3908,15 @@ class AbilityBehavior {
         }
     };
 
-    class Ambush : extends Ability {
-        int onCrit(ON_CRIT) override {
+    class Ambush : extends OnCrit {
+        ON_CRIT {
             CHECK(gVolatileStructs[battler].isFirstTurn)
             return ALWAYS_CRIT;
         }
     };
 
-    class Atlas : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class Atlas : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
 
             gFieldTimers.started.gravity = TRUE;
@@ -4015,20 +3927,20 @@ class AbilityBehavior {
         }
     };
 
-    class Radiance : extends Ability {
-        int onImmune(ON_IMMUNE) override {
+    class Radiance : extends OnImmune<ApplyOn::ANY>, extends OnAccuracy<> {
+        ON_IMMUNE {
             CHECK(moveType == TYPE_DARK);
             *immunityScript = BattleScript_RadianceProtected;
             return TRUE;
         }
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+        ON_ACCURACY {
             *accuracy *= 1.2;
             return ACCURACY_MULTIPLICATIVE;
         }
     };
 
-    class JawsOfCarnage : extends Ability {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+    class JawsOfCarnage : extends OnBattlerFaints<> {
+        ON_BATTLER_FAINTS {
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
             if (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST)
@@ -4037,11 +3949,10 @@ class AbilityBehavior {
                 BattleScriptCall(BattleScript_HandleSoulEaterEffect);
             return TRUE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
-    class AngelsWrath : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class AngelsWrath : extends OnAttacker, extends OnAccuracy<>, extends OnTypeEffectiveness<>, extends OnModifyEffectChance<>, extends OnCanStatusType {
+        ON_ATTACKER {
             switch (move) {
                 case MOVE_TACKLE: {
                     CHECK(ShouldApplyOnHitAffect(target))
@@ -4137,7 +4048,7 @@ class AbilityBehavior {
             }
             return FALSE;
         }
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+        ON_ACCURACY {
             switch (move) {
                 case MOVE_TACKLE:
                 case MOVE_POISON_STING:
@@ -4149,7 +4060,7 @@ class AbilityBehavior {
                     return ACCURACY_NO_RESULT;
             }
         }
-        int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
+        ON_TYPE_EFFECTIVENESS {
             if (move == MOVE_POISON_STING) {
                 CHECK(defType == TYPE_STEEL)
                 *mod = UQ_4_12(2.0);
@@ -4163,19 +4074,19 @@ class AbilityBehavior {
             }
             return FALSE;
         }
-        void onModifyEffectChance(ON_MODIFY_EFFECT_CHANCE) override {
+        ON_MODIFY_EFFECT_CHANCE {
             if (move == MOVE_POISON_STING) *effectChance = 100;
         }
-        int onCanStatusType(ABILITY_ON_CAN_STATUS_TYPE) override {
+        ON_CAN_STATUS_TYPE {
             CHECK(status & CHECK_POISON)
             CHECK(move == MOVE_POISON_STING)
             return TRUE;
         }
     };
 
-    class PrismaticFur : extends ColorChange, extends Protean {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override { MUL(.5); }
-        int onBeforeAttack(ABILITY_ON_BEFORE_ATTACK) override {
+    class PrismaticFur : extends ColorChange, extends Protean, extends OnDefensiveMultiplier, extends OverrideBreakable {
+        ON_DEFENSIVE_MULTIPLIER { MUL(.5); }
+        ON_BEFORE_ATTACK {
             if (battler == attacker)
                 return Protean::onBeforeAttack(DELEGATE_ON_BEFORE_ATTACK);
             else
@@ -4184,8 +4095,8 @@ class AbilityBehavior {
         AbilityApplyOnWithTarget onBeforeAttackFor() override { return APPLY_ON_ATTACKER_OR_TARGET; }
     };
 
-    class ShockingJaws : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class ShockingJaws : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBeParalyzed(battler, target))
             CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
@@ -4195,17 +4106,10 @@ class AbilityBehavior {
         }
     };
 
-    class FaeHunter : extends Breakable {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
-            if (IS_BATTLER_OF_TYPE(target, TYPE_FAIRY)) RESISTANCE(1.5);
-        }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
-            if (IS_BATTLER_OF_TYPE(attacker, TYPE_FAIRY)) RESISTANCE(.5);
-        }
-    };
+    class FaeHunter : extends TypeSlayer<TYPE_FAIRY> {};
 
-    class GravityWell : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class GravityWell : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
 
             gFieldTimers.started.gravity = TRUE;
@@ -4216,33 +4120,20 @@ class AbilityBehavior {
         }
     };
 
-    class Evaporate : extends Breakable {
-        int onAbsorb(ON_ABSORB) override {
+    class Evaporate : extends OnAbsorb {
+        ON_ABSORB {
             CHECK(moveType == TYPE_WATER)
             return ABSORB_RESULT_EVAPORATE;
         }
     };
 
-    class Lumberjack : extends Breakable {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
-            if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) RESISTANCE(1.5);
-        }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
-            if (IS_BATTLER_OF_TYPE(attacker, TYPE_GRASS)) RESISTANCE(.5);
-        }
-    };
+    class Lumberjack : extends TypeSlayer<TYPE_GRASS> {};
 
-    class WellBakedBody : extends Breakable {
-        int onAbsorb(ON_ABSORB) override {
-            CHECK(moveType == TYPE_FIRE);
-            *statId = STAT_DEF;
-            return ABSORB_RESULT_STAT;
-        }
-        bool absorbUp2() { return true; }
-    };
+    class AbsorbUp2 : extends Ability {};
+    class WellBakedBody : extends AbsorbStatUp<TYPE_FIRE, STAT_DEF>, extends AbsorbUp2 {};
 
-    class Furnace : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class Furnace : extends OnEntry, extends OnDefender {
+        ON_ENTRY {
             CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
             CHECK(gSideTimers[GetBattlerSide(battler)].stealthRockType == TYPE_ROCK)
             CHECK(IsBattlerAlive(battler))
@@ -4251,7 +4142,7 @@ class AbilityBehavior {
             BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
             return TRUE;
         }
-        int onDefender(ON_DEFENDER) override {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(moveType == TYPE_ROCK)
             CHECK(CanRaiseStat(battler, STAT_SPEED))
@@ -4262,25 +4153,20 @@ class AbilityBehavior {
         }
     };
 
-    class RockyPayload : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class RockyPayload : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_ROCK || gBattleMoves[move].throwingBased) MUL(1.5);
         }
     };
 
-    class EarthEater : extends Breakable {
-        int onAbsorb(ON_ABSORB) override {
-            CHECK(moveType == TYPE_GROUND)
-            return ABSORB_RESULT_HEAL;
-        }
-    };
+    class EarthEater : extends AbsorbHeal<TYPE_GROUND> {};
 
     class LingeringAroma : extends Mummy {};
 
     class FairyTale : extends AddsType<TYPE_FAIRY> {};
 
-    class RagingMoth : extends Ability {
-        MultihitType onParentalBond(ON_PARENTAL_BOND) override {
+    class RagingMoth : extends OnParentalBond {
+        ON_PARENTAL_BOND {
             CHECK(moveType == TYPE_FIRE)
             return PARENTAL_BOND_DUAL_WIELD;
         }
@@ -4288,8 +4174,8 @@ class AbilityBehavior {
 
     class AdrenalineRush : extends MoxieClone<STAT_SPEED> {};
 
-    class Archmage : extends RandomizerBanned {
-        int onAttacker(ON_ATTACKER) override {
+    class Archmage : extends RandomizerBanned, extends OnAttacker {
+        ON_ATTACKER {
             CHECK(DidMoveHit())
             CHECK_NOT(IS_MOVE_STATUS(move))
             CHECK(Random() % 100 < 30)
@@ -4426,14 +4312,14 @@ class AbilityBehavior {
         }
     };
 
-    class Cryomancy : extends Ability {
-        void onModifyEffectChance(ON_MODIFY_EFFECT_CHANCE) override {
+    class Cryomancy : extends OnModifyEffectChance<> {
+        ON_MODIFY_EFFECT_CHANCE {
             if (moveEffect == MOVE_EFFECT_FROSTBITE) *effectChance *= 5;
         }
     };
 
-    class PhantomPain : extends Ability {
-        int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
+    class PhantomPain : extends OnTypeEffectiveness<> {
+        ON_TYPE_EFFECTIVENESS {
             CHECK(moveType == TYPE_GHOST)
             CHECK(defType == TYPE_NORMAL)
             CHECK_NOT(*mod)
@@ -4444,15 +4330,11 @@ class AbilityBehavior {
 
     class Purgatory : extends BoostedSwarmLike<TYPE_GHOST> {};
 
-    class Emanate : extends Ability {
-        ATE_ABILITY(TYPE_PSYCHIC),
-    };
+    class Emanate : extends AteAbility<TYPE_PSYCHIC> {};
 
     class KunoichiBlade : extends Technician, extends SkillLink {};
 
-    class MonkeyBusiness : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_TICKLE, 0); }
-    };
+    class MonkeyBusiness : extends SimpleEntryMove<MOVE_TICKLE> {};
 
     class CombatSpecialist : extends Merged<IronFist, Striker> {};
 
@@ -4460,18 +4342,18 @@ class AbilityBehavior {
 
     class HuntersHorn : extends SoulEater, extends MightyHorn {};
 
-    class PixiePower : extends FairyAura {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class PixiePower : extends FairyAura, extends OnAccuracy<> {
+        ON_ACCURACY {
             *accuracy *= 1.2;
             return ACCURACY_MULTIPLICATIVE;
         }
     };
 
-    class PlasmaLamp : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class PlasmaLamp : extends OnOffensiveMultiplier<>, extends OnAccuracy<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC) MUL(1.2);
         }
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+        ON_ACCURACY {
             CHECK(moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC)
             *accuracy *= 1.2;
             return ACCURACY_MULTIPLICATIVE;
@@ -4484,20 +4366,20 @@ class AbilityBehavior {
 
     class Nika : extends IronFist {};
 
-    class Archer : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Archer : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMoves[move].arrowBased) MUL(1.3);
         }
     };
 
-    class SuperSlammer : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class SuperSlammer : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMoves[move].hammerBased) MUL(1.3);
         }
     };
 
-    class InverseRoom : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class InverseRoom : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)
 
             gFieldTimers.started.inverseRoom = TRUE;
@@ -4508,8 +4390,8 @@ class AbilityBehavior {
         }
     };
 
-    class FrostBurn : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class FrostBurn : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(moveType == TYPE_FIRE)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
@@ -4517,8 +4399,8 @@ class AbilityBehavior {
         }
     };
 
-    class ItchyDefense : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class ItchyDefense : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
             CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_WRAPPED)
@@ -4537,8 +4419,8 @@ class AbilityBehavior {
         }
     };
 
-    class Generator : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class Generator : extends OnEntry, extends OnTerrain, extends OnExit, extends Persistent {
+        ON_ENTRY {
             CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
             int any = FALSE;
@@ -4555,7 +4437,7 @@ class AbilityBehavior {
             BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
             return TRUE;
         }
-        int onTerrain(ON_TERRAIN) override {
+        ON_TERRAIN {
             CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
             CHECK(IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN))
 
@@ -4563,24 +4445,21 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_GeneratorActivatesRet);
             return TRUE;
         }
-        int onExit(ON_EXIT) override {
+        ON_EXIT {
             CHECK(gStatuses3[battler] & STATUS3_CHARGED_UP)
             SetSingleUseAbilityCounter(battler, ability, FALSE);
             return FALSE;
         }
-        bool persistent() override { return true; }
     };
 
-    class MoonSpirit : extends Ability {
-        int onStab(ON_STAB) override { return moveType == TYPE_FAIRY || moveType == TYPE_DARK; }
+    class MoonSpirit : extends OnStab {
+        ON_STAB { return moveType == TYPE_FAIRY || moveType == TYPE_DARK; }
     };
 
-    class DustCloud : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_SAND_ATTACK, 0); }
-    };
+    class DustCloud : extends SimpleEntryMove<MOVE_SAND_ATTACK> {};
 
-    class TippingPoint : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class TippingPoint : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(CanRaiseStat(battler, STAT_SPATK))
 
@@ -4597,39 +4476,37 @@ class AbilityBehavior {
 
     class BerserkerRage : extends TippingPoint, extends Rampage {};
 
-    class Trickster : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_DISABLE, 0); }
-    };
+    class Trickster : extends SimpleEntryMove<MOVE_DISABLE> {};
 
-    class SandGuard : extends Breakable, extends SandImmune {
-        int onImmune(ON_IMMUNE) override {
+    class SandGuard : extends OnImmune<>, extends OnDefensiveMultiplier, extends SandImmune {
+        ON_IMMUNE {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY));
             return blockPriority(DELEGATE_IMMUNE);
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER {
             if (IS_MOVE_SPECIAL(move) && IsBattlerWeatherAffected(attacker, WEATHER_SANDSTORM_ANY)) MUL(.5);
         }
     };
 
     class NaturalRecovery : extends Merged<NaturalCure, Regenerator> {};
 
-    class WindRider : extends Breakable {
-        int onEntry(ON_ENTRY) override {
+    class WindRider : extends OnEntry, extends OnAbsorb {
+        ON_ENTRY {
             CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
             CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
 
             BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityHighestAttackingStatRaiseOnSwitchIn);
             return TRUE;
         }
-        int onAbsorb(ON_ABSORB) override {
+        ON_ABSORB {
             CHECK(gBattleMoves[move].airBased)
             *statId = GetHighestAttackingStatId(battler, TRUE);
             return ABSORB_RESULT_STAT;
         }
     };
 
-    class SoothingAroma : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class SoothingAroma : extends OnEntry {
+        ON_ENTRY {
             int anyStatus = FALSE;
             struct Pokemon *party;
 
@@ -4655,31 +4532,30 @@ class AbilityBehavior {
 
     class PrimAndProper : extends WonderSkin, extends CuteCharm {};
 
-    class SuperStrain : extends Ability {
-        int onRecoil(ON_RECOIL) override {
+    class SuperStrain : extends OnRecoil, OnBattlerFaints<> {
+        ON_RECOIL {
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_STRAIN;
             return max(damage / 4, 1);
         }
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+        ON_BATTLER_FAINTS {
             CHECK(ChangeStatBuffs(battler, -1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS | MOVE_EFFECT_CERTAIN, NULL))
             BattleScriptCall(BattleScript_LowerStatOnFaintingTarget);
             return TRUE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
     class Enlightened : extends Emanate, extends InnerFocus {};
 
     class PeacefulSlumber : extends SweetDreams, extends SelfSufficient {
-        int onEndTurn(ON_END_TURN) override {
+        ON_END_TURN {
             if (!SweetDreams::onEndTurn(DELEGATE_END_TURN)) return SelfSufficient::onEndTurn(DELEGATE_END_TURN);
             gBattleMoveDamage -= gBattleMons[battler].maxHP / 16;
             return TRUE;
         }
     };
 
-    class Aftershock : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class Aftershock : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(gBattleMoves[move].power)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
@@ -4687,20 +4563,19 @@ class AbilityBehavior {
         }
     };
 
-    ON_EITHER(FreezingPoint) {
-        CHECK(ShouldApplyOnHitAffect(opponent))
-        CHECK(CanGetFrostbite(opponent))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK(Random() % 100 < 30)
+    class FreezingPoint : extends OnEither {
+        ON_EITHER {
+            CHECK(ShouldApplyOnHitAffect(opponent))
+            CHECK(CanGetFrostbite(opponent))
+            CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+            CHECK(Random() % 100 < 30)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_FROSTBITE, battler, opponent);
-        return TRUE;
-    }
-    class FreezingPoint : extends Ability {
-        ON_EITHER_ABILITY(FreezingPoint),
+            AbilityStatusEffectSafe(MOVE_EFFECT_FROSTBITE, battler, opponent);
+            return TRUE;
+        }
     };
 
-    class CryoProficiency : extends FreezingPoint, public virtaul CryoProficiency {
+    class CryoProficiency : extends FreezingPoint {
         int CryoProficiencyHail(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType) {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY)
@@ -4714,23 +4589,19 @@ class AbilityBehavior {
             }
             return FALSE;
         }
-        int onDefender(ON_DEFENDER) override {
-            return FreezingPoint::onDefender(DELEGATE_DEFENDER) | CryoProficiencyHail(ability, battler, attacker, move, moveType);
-        }
+        ON_DEFENDER { return FreezingPoint::onDefender(DELEGATE_DEFENDER) | CryoProficiencyHail(ability, battler, attacker, move, moveType); }
     };
 
-    class ArcaneForce : extends MysticPower {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class ArcaneForce : extends MysticPower, extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
         }
     };
 
-    class Doombringer : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_DOOM_DESIRE, 0); }
-    };
+    class Doombringer : extends SimpleEntryMove<MOVE_DOOM_DESIRE> {};
 
-    class Wishmaker : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class Wishmaker : extends OnEntry, extends Persistent {
+        ON_ENTRY {
             int counter = GetSingleUseAbilityCounter(battler, ability);
             CHECK(counter < 3)
             CHECK(UseEntryMove(battler, ability, MOVE_WISH, 0))
@@ -4738,11 +4609,10 @@ class AbilityBehavior {
             SetSingleUseAbilityCounter(battler, ability, counter + 1);
             return TRUE;
         }
-        bool persistent() override { return true; }
     };
 
-    class YukiOnna : public Intimidate {
-        int onAttacker(ON_ATTACKER) override {
+    class YukiOnna : public Intimidate, extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanInfatuate(battler, target))
             CHECK(Random() % 100 < 30)
@@ -4751,14 +4621,12 @@ class AbilityBehavior {
         }
     };
 
-    class Suppress : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_TORMENT, 0); }
-    };
+    class Suppress : extends SimpleEntryMove<MOVE_TORMENT> {};
 
     class Refrigerator : extends Filter, extends Illuminate {};
 
-    class HeavenAsunder : extends Ability {
-        void onCrit(ON_CRIT) override {
+    class HeavenAsunder : extends OnCrit<> {
+        ON_CRIT {
             if (move == MOVE_SPACIAL_REND) return ALWAYS_CRIT;
             return 1;
         }
@@ -4768,8 +4636,8 @@ class AbilityBehavior {
 
     class Seaborne : extends Drizzle, extends SwiftSwim {};
 
-    class HighTide : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class HighTide : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(moveType == TYPE_WATER)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
@@ -4777,31 +4645,28 @@ class AbilityBehavior {
         }
     };
 
-    class ChangeOfHeart : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_HEART_SWAP, 0); }
-    };
+    class ChangeOfHeart : extends SimpleEntryMove<MOVE_HEART_SWAP> {};
 
-    class MysticBlades : extends KeenEdge {
-        int onSwapSplit(ON_SWAP_SPLIT) override {
+    class MysticBlades : extends KeenEdge, extends OnSwapSplit {
+        ON_SWAP_SPLIT {
             CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
             CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
             return TRUE;
         }
     };
 
-    class Determination : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class NegateFrzSpatkDrop : extends Ability {};
+    class Determination : extends OnOffensiveMultiplier<>, extends NegateFrzSpatkDrop {
+        ON_OFFENSIVE_MULTIPLIER {
             if (HasAnyStatusOrAbility(battler) && IS_MOVE_SPECIAL(move)) MUL(1.5);
         }
-        bool negatesFrzSpatkDrop() override { return true; }
     };
 
-    class Fertilize : extends Ability {
-        ATE_ABILITY(TYPE_GRASS),
-    };
+    class Fertilize : extends AteAbility<TYPE_GRASS> {};
 
-    class PureLove : extends CuteCharm {
-        int onAttacker(ON_ATTACKER) override {
+    class CanInfatuateAny : extends Ability {};
+    class PureLove : extends OnDefender, extends OnAttacker, extends CanInfatuateAny {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
@@ -4812,29 +4677,25 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
             return TRUE;
         }
-        bool canInfatuateAny() override { return true; }
+        ON_DEFENDER { return CuteCharm::onEither(DELEGATE_DEFENDER); }
     };
 
     class Fighter : extends SwarmLike<TYPE_FIGHTING> {};
 
-    class Telekinetic : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_TELEKINESIS, 0); }
-    };
+    class Telekinetic : extends SimpleEntryMove<MOVE_TELEKINESIS> {};
 
-    class Combustion : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Combustion : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FIRE) MUL(1.5);
         }
     };
 
     class PonyPower : extends Merged<KeenEdge, MysticBlades> {};
 
-    class PowderBurst : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_POWDER, 0); }
-    };
+    class PowderBurst : SimpleEntryMove<MOVE_POWDER> {};
 
-    class Retriever : extends Ability {
-        int onExit(ON_EXIT) override {
+    class Retriever : extends OnExit {
+        ON_EXIT {
             CHECK(IsBattlerAlive(battler))
             CHECK_NOT(gBattleMons[battler].item)
 
@@ -4854,12 +4715,10 @@ class AbilityBehavior {
         }
     };
 
-    class MonsterMash : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_TRICK_OR_TREAT, 0); }
-    };
+    class MonsterMash : SimpleEntryMove<MOVE_TRICK_OR_TREAT> {};
 
-    class TwoStep : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class TwoStep : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(IsDance(battler, move))
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
 
@@ -4867,8 +4726,8 @@ class AbilityBehavior {
         }
     };
 
-    class Spiteful : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Spiteful : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(move != MOVE_STRUGGLE)
             CHECK(IsMoveMakingContact(move, attacker))
@@ -4879,8 +4738,8 @@ class AbilityBehavior {
         }
     };
 
-    class Fortitude : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Fortitude : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(CanRaiseStat(battler, STAT_SPDEF))
 
@@ -4897,16 +4756,14 @@ class AbilityBehavior {
 
     class Devourer : extends PrimalMaw, extends StrongJaw {};
 
-    class PhantomThief : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_SPECTRAL_THIEF, 40); }
-    };
+    class PhantomThief : SimpleEntryMove<MOVE_SPECTRAL_THIEF, 40> {};
 
     class EarlyGrave : extends GaleWingsLike<TYPE_GHOST> {};
 
     class BassBoosted : extends Merged<PunkRock, Amplifier> {};
 
-    class FlamingJaws : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class FlamingJaws : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBeBurned(target))
             CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
@@ -4916,21 +4773,14 @@ class AbilityBehavior {
         }
     };
 
-    class MonsterHunter : extends Breakable {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
-            if (IS_BATTLER_OF_TYPE(target, TYPE_DARK)) RESISTANCE(1.5);
-        }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
-            if (IS_BATTLER_OF_TYPE(attacker, TYPE_DARK)) MUL(.5);
-        }
-    };
+    class MonsterHunter : extends TypeSlayer<TYPE_DARK> {};
 
     class CrownedSword : extends IntrepidSword, extends AngerPoint {};
 
     class CrownedShield : extends DauntlessShield, extends Stamina {};
 
-    class BerserkDna : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class BerserkDna : extends OnEntry {
+        ON_ENTRY {
             CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE))) if (CanBeConfused(battler)) {
                 gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
                 BattleScriptPushCursorAndCallback(BattleScript_BerserkDNA);
@@ -4943,8 +4793,8 @@ class AbilityBehavior {
     };
 
     class CrownedKing : extends AsOneShadowRider, extends AsOneIceRider {
-        int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); }
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+        ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); }
+        ON_BATTLER_FAINTS {
             CHECK(ChillingNeigh::onBattlerFaints(DELEGATE_BATTLER_FAINTS) | GrimNeigh::onBattlerFaints(DELEGATE_BATTLER_FAINTS))
             gBattleScripting.abilityPopupOverwrite = ABILITY_CROWNED_KING;
             BattleScriptCall(BattleScript_AbilityPopUpStack);
@@ -4952,8 +4802,8 @@ class AbilityBehavior {
         }
     };
 
-    class SnapTrapWhenHit : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class SnapTrapWhenHit : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
 
@@ -4962,24 +4812,24 @@ class AbilityBehavior {
         }
     };
 
-    class Permanence : extends Ability {
-        int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_PERMANENCE); }
+    class Permanence : extends OnEntry {
+        ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_PERMANENCE); }
     };
 
     class Hubris : extends GrimNeigh {};
 
-    class CosmicDaze : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class CosmicDaze : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMons[target].status2 & STATUS2_CONFUSION) MUL(2);
         }
     };
 
-    class MindsEye : extends Breakable {
-        int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override { return Scrappy::hitGhost(DELEGATE_TYPE_EFFECTIVENESS); }
+    class MindsEye : extends Breakable, extends OnTypeEffectiveness<> {
+        ON_TYPE_EFFECTIVENESS { return Scrappy::hitGhost(DELEGATE_TYPE_EFFECTIVENESS); }
     };
 
-    class BloodPrice : extends Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class BloodPrice : extends OnEndTurn, extends OnOffensiveMultiplier<> {
+        ON_END_TURN {
             CHECK_NOT(IS_MOVE_STATUS(gLastResultingMoves[battler]))
             CHECK_NOT(IsMagicGuardProtected(battler))
             CHECK(IsBattlerAlive(battler))
@@ -4989,24 +4839,23 @@ class AbilityBehavior {
             BattleScriptPushCursorAndCallback(BattleScript_AbilitySelfDamage);
             return TRUE;
         }
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override { MUL(1.3); }
+        ON_OFFENSIVE_MULTIPLIER { MUL(1.3); }
     };
 
-    ON_EITHER(SpikeArmor) {
-        CHECK(ShouldApplyOnHitAffect(opponent))
-        CHECK(CanBleed(opponent))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK(Random() % 100 < 30)
+    class SpikeArmor : extends OnEither {
+        ON_EITHER {
+            CHECK(ShouldApplyOnHitAffect(opponent))
+            CHECK(CanBleed(opponent))
+            CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+            CHECK(Random() % 100 < 30)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_BLEED, battler, opponent);
-        return TRUE;
-    }
-    class SpikeArmor : extends Ability {
-        ON_EITHER_ABILITY(SpikeArmor),
+            AbilityStatusEffectSafe(MOVE_EFFECT_BLEED, battler, opponent);
+            return TRUE;
+        }
     };
 
-    class VoodooPower : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class VoodooPower : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IS_MOVE_SPECIAL(move))
             CHECK(CanBleed(attacker))
@@ -5017,30 +4866,28 @@ class AbilityBehavior {
         }
     };
 
-    class ChromeCoat : extends Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class ChromeCoat : extends OnDefensiveMultiplier, extends OnStat<> {
+        ON_DEFENSIVE_MULTIPLIER {
             if (IS_MOVE_SPECIAL(move)) MUL(.6);
         }
-        void onStat(ON_STAT) override {
+        ON_STAT {
             if (statId == STAT_SPEED) *stat *= .9;
         }
     };
 
     class Banshee : LiquidVoiceClone<TYPE_GHOST> {};
 
-    class WebSpinner : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_STRING_SHOT, 0); }
-    };
+    class WebSpinner : SimpleEntryMove<MOVE_STRING_SHOT> {};
 
-    class ShowdownMode : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class ShowdownMode : extends OnEntry {
+        ON_ENTRY {
             gVolatileStructs[battler].showdownMode = gVolatileStructs[battler].started.showdownMode = TRUE;
             return SwitchInAnnounce(B_MSG_SWITCHIN_SHOWDOWN_MODE);
         }
     };
 
-    class SeedSower : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class SeedSower : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -5050,22 +4897,21 @@ class AbilityBehavior {
         TerrainType allowTerrainIfAirborne() override { return TERRAIN_GRASSY; }
     };
 
-    class Airborne : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Airborne : extends OnOffensiveMultiplier<ApplyOn::ALLY> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FLYING) MUL(1.3);
         }
-        AbilityApplyOn onOffensiveMultiplierFor() override { return APPLY_ON_ALLY; }
     };
 
-    class Parroting : extends Soundproof {
-        int onCopyMove(ON_COPY_MOVE) override {
+    class Parroting : extends Soundproof, extends OnCopyMove {
+        ON_COPY_MOVE {
             CHECK(IsSoundMove(attacker, move))
             return UseOutOfTurnAttack(battler, target, ability, move, 0);
         }
     };
 
-    class SaltCircle : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class SaltCircle : extends OnEntry {
+        ON_ENTRY {
             int anyBlocked = FALSE;
             gBattlerTarget = BATTLE_OPPOSITE(battler);
 
@@ -5087,34 +4933,32 @@ class AbilityBehavior {
         }
     };
 
-    class PurifyingSalt : extends Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class PurifyingSalt : extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_GHOST) RESISTANCE(.5);
         }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_STATUS1)
             return TRUE;
         }
-        bool removesStatusOnImmunity() { return true; }
     };
 
-    static void paradoxBoost(ON_STAT) override {}
-
-    class Protosynthesis : extends Ability {
-        int ProtosynthesisHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
+    class ParadoxBoostEffect : extends OnStat<>, extends OnEntry {
+       public:
+        static int handler(AbilityEnum ability, int battler, bool weatherState, int weatherMessage, AbilityCallType callType) {
             ParadoxBoost state = GetAbilityStateAs(battler, ability).paradoxBoost;
 
-            if (state.source == PARADOX_BOOST_NOT_ACTIVE && IsWeatherActive(WEATHER_SUN_ANY)) {
+            if (state.source == PARADOX_BOOST_NOT_ACTIVE && weatherState) {
                 InsertCorrectEndType(callType);
                 ParadoxBoost boost = {.source = PARADOX_WEATHER_ACTIVE, .statId = GetHighestStatId(battler, TRUE)};
                 SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
                 SetStatChanger(boost.statId, 0);
-                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_WEATHER;
+                gBattleCommunication[MULTISTRING_CHOOSER] = weatherMessage;
                 BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
                 return TRUE;
             }
 
-            if (state.source == PARADOX_WEATHER_ACTIVE && !IsWeatherActive(WEATHER_SUN_ANY)) {
+            if (state.source == PARADOX_WEATHER_ACTIVE && !weatherState) {
                 InsertCorrectEndType(callType);
                 if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
                     // Push this first so it resolves last
@@ -5143,61 +4987,30 @@ class AbilityBehavior {
             return FALSE;
         }
 
-        int onEntry(ON_ENTRY) override { return ProtosynthesisHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-        int onWeather(ON_WEATHER) override { return ProtosynthesisHandler(ability, battler, ABILITY_BS_CALL); }
-        void onStat(ON_STAT) override { paradoxBoost(DELEGATE_STAT); }
-    };
-
-    class QuarkDrive : extends Protosynthesis {
-        int QuarkDriveHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
-            ParadoxBoost state = GetAbilityStateAs(battler, ability).paradoxBoost;
-
-            if (state.source == PARADOX_BOOST_NOT_ACTIVE && IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) {
-                InsertCorrectEndType(callType);
-                ParadoxBoost boost = {.source = PARADOX_WEATHER_ACTIVE, .statId = GetHighestStatId(battler, TRUE)};
-                SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
-                SetStatChanger(boost.statId, 0);
-                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_TERRAIN;
-                BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
-                return TRUE;
-            }
-
-            if (state.source == PARADOX_WEATHER_ACTIVE && !IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) {
-                InsertCorrectEndType(callType);
-                if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
-                    // Push this first so it resolves last
-                    ParadoxBoost boost = {.source = PARADOX_BOOSTER_ENERGY, .statId = GetHighestStatId(battler, TRUE)};
-                    SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
-                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
-                    RemoveItem(battler);
-                    SetStatChanger(boost.statId, 0);
-                    BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
-                } else
-                    SetAbilityState(battler, ability, 0);
-                BattleScriptCall(BattleScript_ParadoxBoostEnds);
-                return TRUE;
-            }
-
-            if (state.source == PARADOX_BOOST_NOT_ACTIVE && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
-                InsertCorrectEndType(callType);
-                ParadoxBoost boost = {.source = PARADOX_BOOSTER_ENERGY, .statId = GetHighestStatId(battler, TRUE)};
-                SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
-                SetStatChanger(boost.statId, 0);
-                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
-                RemoveItem(battler);
-                BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
-                return TRUE;
-            }
-            return FALSE;
+        ON_STAT {
+            ParadoxBoost boost = GetAbilityStateAs(battler, ability).paradoxBoost;
+            if (!boost.source || boost.statId != statId) return;
+            if (statId == STAT_SPEED)
+                *stat *= 1.5;
+            else
+                *stat *= 1.3;
         }
-
-        int onEntry(ON_ENTRY) override { return QuarkDriveHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-        int onTerrain(ON_TERRAIN) override { return QuarkDriveHandler(ability, battler, ABILITY_BS_CALL); }
-        void onStat(ON_STAT) override { paradoxBoost(DELEGATE_STAT); }
     };
 
-    class WindPower : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Protosynthesis : extends ParadoxBoostEffect, extends OnWeather {
+        ON_ENTRY { return handler(ability, battler, IsWeatherActive(WEATHER_SUN_ANY), B_MSG_PARADOX_BOOST_WEATHER, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+        ON_WEATHER { return handler(ability, battler, IsWeatherActive(WEATHER_SUN_ANY), B_MSG_PARADOX_BOOST_WEATHER, ABILITY_BS_CALL); }
+    };
+
+    class QuarkDrive : extends ParadoxBoostEffect, extends OnTerrain {
+        ON_ENTRY {
+            return handler(ability, battler, IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN), B_MSG_PARADOX_BOOST_TERRAIN, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+        }
+        ON_WEATHER { return handler(ability, battler, IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN), B_MSG_PARADOX_BOOST_TERRAIN, ABILITY_BS_CALL); }
+    };
+
+    class WindPower : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(gBattleMoves[move].airBased)
             CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
@@ -5208,20 +5021,20 @@ class AbilityBehavior {
         }
     };
 
-    class Impulse : extends Ability {
-        void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
+    class Impulse : extends OnChooseDefensiveStat<> {
+        ON_CHOOSE_OFFENSIVE_STAT {
             if (!(gBattleMoves[move].contact)) *atkStatToUse = STAT_SPEED;
         }
     };
 
-    class TerminalVelocity : extends Ability {
-        void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
+    class TerminalVelocity : extends OnChooseOffensiveStat {
+        ON_CHOOSE_OFFENSIVE_STAT {
             if (IS_MOVE_SPECIAL(move)) secondaryAtkStatToUse[STAT_SPEED] += 20;
         }
     };
 
-    class AngerShell : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class AngerShell : extends OnDefender {
+        ON_DEFENDER {
             CHECK(CheckHalfHpAbility(battler, attacker))
             CHECK_NOT(GetAbilityState(battler, ability))
             CHECK(CanRaiseStat(battler, STAT_ATK) || CanRaiseStat(battler, STAT_SPATK) || CanRaiseStat(battler, STAT_SPEED))
@@ -5232,8 +5045,8 @@ class AbilityBehavior {
         }
     };
 
-    class Egoist : extends Ability {
-        int onReactive(ON_REACTIVE) override {
+    class Egoist : extends OnReactive {
+        ON_REACTIVE {
             CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
             for (int opponent = GetOppositeSide(battler); opponent < gBattlersCount; opponent += 2) {
                 for (int stat = STAT_ATK; stat < ARRAY_COUNT(gBattleStruct->statChangesToCheck[opponent]); stat++) {
@@ -5252,8 +5065,8 @@ class AbilityBehavior {
         }
     };
 
-    class ReadiedAction : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class ReadiedAction : extends OnEntry {
+        ON_ENTRY {
             gVolatileStructs[battler].readiedAction = gVolatileStructs[battler].started.readiedAction = TRUE;
             return SwitchInAnnounce(B_MSG_SWITCHIN_READIED_ACTION);
         }
@@ -5261,8 +5074,8 @@ class AbilityBehavior {
 
     class DarkGaleWings : extends GaleWingsLike<TYPE_DARK> {};
 
-    class GuiltTrip : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class GuiltTrip : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK_NOT(IsBattlerAlive(battler))
             CHECK(CanLowerStat(attacker, STAT_ATK) || CanLowerStat(attacker, STAT_SPATK))
@@ -5274,8 +5087,8 @@ class AbilityBehavior {
 
     class WaterGaleWings : extends GaleWingsLike<TYPE_WATER> {};
 
-    class ZeroToHero : extends FormChange {
-        int onEntry(ON_ENTRY) override {
+    class ZeroToHero : extends FormChange, extends OnEntry, extends OnExit {
+        ON_ENTRY {
             CHECK(gBattleMons[battler].species == SPECIES_PALAFIN)
             CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
             CHECK(GetSingleUseAbilityCounter(battler, ability))
@@ -5285,14 +5098,14 @@ class AbilityBehavior {
             BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
             return TRUE;
         }
-        int onExit(ON_EXIT) override {
+        ON_EXIT {
             SetSingleUseAbilityCounter(battler, ability, TRUE);
             return FALSE;
         }
     };
 
-    class Costar : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class Costar : extends OnEntry {
+        ON_ENTRY {
             CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
 
             int anyChanged = FALSE;
@@ -5308,8 +5121,8 @@ class AbilityBehavior {
         }
     };
 
-    class Commander : extends FormChange {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+    class Commander : extends FormChange, extends OnBattlerFaints<ApplyOnTarget::ALLY>, extends OnAccuracy<ApplyOnTarget::TARGET> {
+        ON_BATTLER_FAINTS {
             CHECK(GetAbilityState(battler, ability))
 
             SetAbilityState(battler, ability, COMMANDER_NOT_ACTIVE);
@@ -5317,22 +5130,18 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_CommanderEnds);
             return TRUE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor() override { return APPLY_ON_ALLY; }
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+        ON_ACCURACY {
             CHECK(GetAbilityState(target, ability))
             return ACCURACY_ALWAYS_MISSES;
         }
-        AbilityApplyOnWithTarget onAccuracyFor() override { return APPLY_ON_TARGET; }
     };
 
-    class EjectPackAbility : extends Ability {
-        bool persistent() override { return true; }
-    };
+    class EjectPackAbility : extends Persistent {};
 
     class VengefulSpirit : extends HauntedSpirit, extends Vengeance {};
 
-    class CudChew : extends Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class CudChew : extends OnEndTurn {
+        ON_END_TURN {
             CudChewState state = GetAbilityStateAs(battler, ability).cudChewState;
             if (state.setThisTurn) {
                 SetAbilityStateAs(battler, ability, (AbilityStates){.cudChewState = {.itemId = state.itemId}});
@@ -5352,25 +5161,25 @@ class AbilityBehavior {
 
     class ArmorTail : extends QueenlyMajesty {};
 
-    class MindCrush : extends StrongJaw {
-        void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
+    class MindCrush : extends StrongJaw, extends OnChooseOffensiveStat {
+        ON_CHOOSE_OFFENSIVE_STAT {
             if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) *atkStatToUse = STAT_SPATK;
         }
     };
 
-    class SupremeOverlord : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class SupremeOverlord : extends OnEntry, extends OnStat<> {
+        ON_ENTRY {
             CHECK(gFaintedMonCount[GetBattlerSide(battler)])
 
             return SwitchInAnnounce(B_MSG_SWITCHIN_SUPREME_OVERLORD);
         }
-        void onStat(ON_STAT) override {
+        ON_STAT {
             if (statId == STAT_ATK || statId == STAT_SPATK) *stat = *stat * (10 + min(5, gFaintedMonCount[GetBattlerSide(battler)])) / 10;
         }
     };
 
-    class IllWill : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class IllWill : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(move != MOVE_STRUGGLE)
             CHECK(IsMoveMakingContact(move, attacker))
@@ -5388,8 +5197,8 @@ class AbilityBehavior {
 
     class FireScales : extends IceScales {};
 
-    class WatchYourStep : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class WatchYourStep : extends OnEntry {
+        ON_ENTRY {
             u8 targetSide = GetOppositeSide(battler);
             CHECK(gSideTimers[targetSide].spikesAmount < 3)
 
@@ -5400,15 +5209,15 @@ class AbilityBehavior {
         }
     };
 
-    class RapidResponse : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class RapidResponse : extends OnEntry {
+        ON_ENTRY {
             gVolatileStructs[battler].rapidResponse = gVolatileStructs[battler].started.rapidResponse = TRUE;
             return SwitchInAnnounce(B_MSG_SWITCHIN_RAPID_RESPONSE);
         }
     };
 
-    class DoubleIronBarbs : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class DoubleIronBarbs : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK_NOT(IsMagicGuardProtected(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
@@ -5421,8 +5230,8 @@ class AbilityBehavior {
         }
     };
 
-    class ThermalExchange : extends Breakable {
-        int onDefender(ON_DEFENDER) override {
+    class ThermalExchange : extends OnDefender, extends RemovesStatusOnImmunity {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(moveType == TYPE_FIRE)
             CHECK(CanRaiseStat(battler, STAT_ATK))
@@ -5431,23 +5240,22 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
             return TRUE;
         }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) {
             CHECK(status & CHECK_BURN)
             return TRUE;
         }
-        bool removesStatusOnImmunity() { return true; }
     };
 
-    class GoodAsGold : extends Breakable {
-        int onImmune(ON_IMMUNE) override {
+    class GoodAsGold : extends OnImmune<> {
+        ON_IMMUNE {
             CHECK(battler != attacker) CHECK(IS_MOVE_STATUS(move));
             *immunityScript = BattleScript_SoundproofProtected;
             return TRUE;
         }
     };
 
-    class SharingIsCaring : extends Ability {
-        int onReactive(ON_REACTIVE) override {
+    class SharingIsCaring : extends OnReactive {
+        ON_REACTIVE {
             switch (gBattleStruct->statStageCheckState) {
                 default:
                     return FALSE;
@@ -5467,70 +5275,50 @@ class AbilityBehavior {
     };
 
     template <int Stat>
-    class RuinEffect : extends Ability {
-        void onStat(ON_STAT) override {
+    class RuinEffect : extends OnStat<ApplyOn::OTHER> {
+        static constexpr auto ruinAbilities = abilitiesAs<RuinEffect<Stat>>();
+        ON_STAT {
             if (statId != Stat) return;
-            if (*flags & NON_STACKING_RUIN) return;
-            ON_ABILITY(battler, FALSE, gAbilities[ability].ruinStat == Stat, return) *stat *= .75;
-            *flags = static_cast<NonStackingState>(static_cast<int>(*flags) | static_cast<int>(NON_STACKING_RUIN));
+            if (*flags & Stat) return;
+            ON_ABILITY(battler, FALSE, ruinAbilities[ability], return) *stat *= .75;
+            *flags |= static_cast<NonStackingState>(1 << Stat);
         }
-        AbilityApplyOn onStatFor() override { APPLY_ON_OTHER; }
-        int ruinStat() override { return STAT_ATK; }
-    }
-
-    class TabletsOfRuin : extends Ability {
-        void onStat(ON_STAT) override { RuinEffect(STAT_ATK, battler, statId, stat, flags); }
-        AbilityApplyOn onStatFor() override { APPLY_ON_OTHER; }
-        int ruinStat() override { return STAT_ATK; }
     };
 
-    class SwordOfRuin : extends Ability {
-        void onStat(ON_STAT) override { RuinEffect(STAT_DEF, battler, statId, stat, flags); }
-        AbilityApplyOn onStatFor() override { APPLY_ON_OTHER; }
-        int ruinStat() override { return STAT_DEF; }
-    };
-
-    class VesselOfRuin : extends Ability {
-        void onStat(ON_STAT) override { RuinEffect(STAT_SPATK, battler, statId, stat, flags); }
-        AbilityApplyOn onStatFor() override { APPLY_ON_OTHER; }
-        int ruinStat() override { return STAT_SPATK; }
-    };
-
-    class BeadsOfRuin : extends Ability {
-        void onStat(ON_STAT) override { RuinEffect(STAT_DEF, battler, statId, stat, flags); }
-        AbilityApplyOn onStatFor() override { APPLY_ON_OTHER; }
-        int ruinStat() override { return STAT_DEF; }
-    };
+    class TabletsOfRuin : extends RuinEffect<STAT_ATK> {};
+    class SwordOfRuin : extends RuinEffect<STAT_DEF> {};
+    class VesselOfRuin : extends RuinEffect<STAT_SPATK> {};
+    class BeadsOfRuin : extends RuinEffect<STAT_SPEED> {};
 
     class PermafrostClone : extends Permafrost {};
 
-    class Gallantry : extends NoDamageHits<1>, extends Breakable {};
+    class Gallantry : extends NoDamageHits<1> {};
 
-    class OrichalcumPulse : extends Drought {
-        void onStat(ON_STAT) override {
+    class OrichalcumPulse : extends Drought, extends OnStat<> {
+        ON_STAT {
             if (statId != STAT_ATK) return;
             if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat = *stat * 4 / 3;
         }
     };
 
-    class SunBasking : extends Breakable {
-        int onImmune(ON_IMMUNE) override {
+    class SunBasking : extends OnImmune<>, extends OnDefensiveMultiplier {
+        ON_IMMUNE {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY));
             return blockPriority(DELEGATE_IMMUNE);
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER {
             if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && IS_MOVE_PHYSICAL(move)) MUL(.5);
         }
     };
 
-    class WingedKing : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class WingedKing : extends Ability, extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.33);
         }
     };
 
-    class HadronEngine : extends ElectricSurge {
-        void onStat(ON_STAT) override {
+    class HadronEngine : extends ElectricSurge, extends OnStat<> {
+        ON_STAT {
             if (statId == STAT_SPATK && IsBattlerTerrainAffected(battler, STATUS_FIELD_ELECTRIC_TERRAIN)) *stat = *stat * 4 / 3;
         }
     };
@@ -5539,8 +5327,8 @@ class AbilityBehavior {
 
     class SweepingEdgePlus : extends KeenEdge, extends SweepingEdge {};
 
-    class CelestialBlessing : extends Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class CelestialBlessing : extends OnEndTurn {
+        ON_END_TURN {
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
             CHECK(gVolatileStructs[battler].isFirstTurn != 2)
@@ -5554,12 +5342,12 @@ class AbilityBehavior {
         }
     };
 
-    class MinionControl : extends Ability {
-        MultihitType onParentalBond(ON_PARENTAL_BOND) override { return PARENTAL_BOND_MINION_CONTROL; }
+    class MinionControl : extends OnParentalBond {
+        ON_PARENTAL_BOND { return PARENTAL_BOND_MINION_CONTROL; }
     };
 
-    class MoltenBlades : extends KeenEdge {
-        int onAttacker(ON_ATTACKER) override {
+    class MoltenBlades : extends KeenEdge, extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBeBurned(target))
             CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
@@ -5569,8 +5357,8 @@ class AbilityBehavior {
         }
     };
 
-    class HauntingFrenzy : extends AdrenalineRush {
-        int onAttacker(ON_ATTACKER) override {
+    class HauntingFrenzy : extends AdrenalineRush, extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanMoveHaveExtraFlinchChance(move))
             CHECK(Random() % 100 < 20)
@@ -5583,8 +5371,8 @@ class AbilityBehavior {
         AbilityApplyOn onImmuneFor() override { APPLY_ON_ALLY; }
     };
 
-    class RadioJam : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class RadioJam : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBeDisabled(target))
             CHECK(IsSoundMove(battler, move))
@@ -5594,8 +5382,8 @@ class AbilityBehavior {
         }
     };
 
-    class Ole : extends Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class Ole : extends OnAccuracy<ApplyOnTarget::TARGET> {
+        ON_ACCURACY {
             switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
                 case MOVE_TARGET_SELECTED:
                 case MOVE_TARGET_USER_OR_SELECTED:
@@ -5607,13 +5395,12 @@ class AbilityBehavior {
                     return ACCURACY_NO_RESULT;
             }
         }
-        AbilityApplyOnWithTarget onAccuracyFor() override { return onAccuracyFor; }
     };
 
     class Malicious : public Intimidate {};
 
-    class DeadPower : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class DeadPower : extends OnAttacker, extends OnStat<> {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK_NOT(gBattleMons[target].status2 & STATUS2_CURSED)
             CHECK(IsMoveMakingContact(move, battler))
@@ -5621,21 +5408,21 @@ class AbilityBehavior {
 
             return AbilityStatusEffect(MOVE_EFFECT_CURSE);
         }
-        void onStat(ON_STAT) override {
+        ON_STAT {
             if (statId == STAT_ATK) *stat *= 1.5;
         }
     };
 
-    class BrawlingWyvern : extends NoGuard {
-        int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
+    class BrawlingWyvern : extends NoGuard, extends OnModifyMoveFlags {
+        ON_MODIFY_MOVE_FLAGS {
             CHECK(flag == MOVE_FLAG_PUNCH)
             CHECK(IS_MOVE_TYPE(move, TYPE_DRAGON))
             return TRUE;
         }
     };
 
-    class JunshiSanda : extends Ability {
-        int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
+    class JunshiSanda : extends OnModifyMoveFlags {
+        ON_MODIFY_MOVE_FLAGS {
             switch (flag) {
                 case MOVE_FLAG_PUNCH:
                     return gBattleMoves[move].flags & FLAG_STRIKER_BOOST;
@@ -5647,16 +5434,16 @@ class AbilityBehavior {
         }
     };
 
-    class MythicalArrows : extends Archer {
-        int onSwapSplit(ON_SWAP_SPLIT) override {
+    class MythicalArrows : extends Archer, extends OnSwapSplit {
+        ON_SWAP_SPLIT {
             CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
             CHECK(gBattleMoves[move].arrowBased);
             return TRUE;
         }
     };
 
-    class Lawnmower : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class Lawnmower : extends OnEntry {
+        ON_ENTRY {
             CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
             BattleScriptPushCursorAndCallback(BattleScript_Lawnmower);
@@ -5664,35 +5451,32 @@ class AbilityBehavior {
         }
     };
 
-    class Flourish : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Flourish : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_GRASS && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) MUL(1.5);
         }
     };
 
-    class DesertSpirit : extends SandStream {
-        void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
+    class DesertSpirit : extends SandStream, extends OnAfterTypeEffectiveness<> {
+        ON_AFTER_TYPE_EFFECTIVENESS {
             if (*mod == 0 && !IsBattlerGrounded(target) && moveType == TYPE_GROUND && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) {
                 *mod = UQ_4_12(1.0);
             }
         }
     };
 
-    class Contempt : extends Ability {
-        bool unaware() override { return true; }
-    };
+    class Contempt : extends Unaware {};
 
     class Aerialist : extends Merged<Levitate, Flock> {};
 
-    class TeraShell : extends Breakable {
-        void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
+    class TeraShell : extends Breakable, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET> {
+        ON_AFTER_TYPE_EFFECTIVENESS {
             if (*mod >= UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
         }
-        AbilityApplyOnWithTarget onAfterTypeEffectivenessFor() override { return onAfterTypeEffectivenessFor; }
     };
 
-    class ToxicChain : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class ToxicChain : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBePoisoned(battler, target, MOVE_NONE))
             CHECK(Random() % 100 < 30)
@@ -5701,8 +5485,8 @@ class AbilityBehavior {
         }
     };
 
-    class ParasiticSpores : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class ParasiticSpores : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gVolatileStructs[battler].parasiticSpores)
 
             gVolatileStructs[battler].parasiticSpores = TRUE;
@@ -5711,28 +5495,55 @@ class AbilityBehavior {
     };
 
     template <MoveEffectEnum Effect>
-    class PoisonPuppeteerLike : extends Ability {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+    class PoisonPuppeteerLike : extends OnBattlerFaints<ApplyOnTarget::ANY>, extends SetStateOnEffect<Effect>, extends OnReactive {
+       public:
+        static int PoisonPuppeteerClone(AbilityEnum ability, int battler, int (*predicate)(int battler, int target), const u8 *callback) {
+            int flag = GetAbilityState(battler, ability);
+            if (!flag) return FALSE;
+            int any = FALSE;
+            int realAttacker = gBattlerAttacker;
+            gBattlerAttacker = battler;
+            SetAbilityState(battler, ability, 0);
+
+            for (int target = 0; target < gBattlersCount; target++) {
+                FILTER(flag & (1 << target))
+                FILTER(IsBattlerAlive(target))
+                FILTER(predicate(battler, target))
+
+                gStackBattler1 = gBattlerAttacker;
+                gStackBattler2 = gBattlerTarget;
+                BattleScriptCall(callback);
+                any = TRUE;
+            }
+            gBattlerAttacker = realAttacker;
+
+            CHECK(any)
+
+            gStackBattler1 = battler;
+            gBattleScripting.abilityPopupOverwrite = ability;
+            BattleScriptCall(BattleScript_AbilityPopUpStack);
+            return TRUE;
+        }
+
+        ON_BATTLER_FAINTS {
             int state = GetAbilityState(battler, ability);
             if (state & (1 << fainted)) SetAbilityState(battler, ability, state ^ (1 << fainted));
             return NO_ANNOUNCE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_OTHER; }
-        virtual MoveEffectEnum setStateOnEffect() override { return Effect; }
     };
 
     class PoisonPuppeteer : extends PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
-        int onReactive(ON_REACTIVE) override {
+        ON_REACTIVE {
             return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) -> int { return CanBeConfused(target); }, BattleScript_PoisonPuppeteer);
         }
     };
 
     class Entrance : extends PoisonPuppeteerLike<MOVE_EFFECT_CONFUSION> {
-        int onReactive(ON_REACTIVE) override { return PoisonPuppeteerClone(ability, battler, CanInfatuate, BattleScript_Entrance); }
+        ON_REACTIVE { return PoisonPuppeteerClone(ability, battler, CanInfatuate, BattleScript_Entrance); }
     };
 
-    class Rejection : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class Rejection : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gFieldTimers.quashTimer)
 
             gFieldTimers.quashTimer = QUASH_DURATION;
@@ -5747,12 +5558,12 @@ class AbilityBehavior {
 
     class FlamingMaw : extends FlamingJaws, extends StrongJaw {};
 
-    class Demolitionist : extends ReadiedAction {
-        InfiltrateType onInfiltrate(ON_INFILTRATE) override {
+    class Demolitionist : extends ReadiedAction, extends OnInfiltrate, extends OnAttacker {
+        ON_INFILTRATE {
             if (gVolatileStructs[battler].readiedAction && !IS_MOVE_STATUS(move)) return INFILTRATE_BREAK_SCREENS;
             return INFILTRATE_NONE;
         }
-        int onAttacker(ON_ATTACKER) override {
+        ON_ATTACKER {
             CHECK(DidMoveHit())
             CHECK(gVolatileStructs[battler].readiedAction)
             int opposingSide = GetBattlerSide(target);
@@ -5763,22 +5574,20 @@ class AbilityBehavior {
     };
 
     class RockhardWill : extends SwarmLike<TYPE_ROCK> {};
+    class FragrantDaze : extends OnEither {
+        ON_EITHER {
+            CHECK(ShouldApplyOnHitAffect(opponent))
+            CHECK(CanBeConfused(opponent))
+            CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+            CHECK(Random() % 100 < 30)
 
-    ON_EITHER(FragrantDaze) {
-        CHECK(ShouldApplyOnHitAffect(opponent))
-        CHECK(CanBeConfused(opponent))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK(Random() % 100 < 30)
-
-        AbilityStatusEffectSafe(MOVE_EFFECT_CONFUSION, battler, opponent);
-        return TRUE;
-    }
-    class FragrantDaze : extends Ability {
-        ON_EITHER_ABILITY(FragrantDaze),
+            AbilityStatusEffectSafe(MOVE_EFFECT_CONFUSION, battler, opponent);
+            return TRUE;
+        }
     };
 
-    class LowVisibility : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class LowVisibility : extends OnEntry {
+        ON_ENTRY {
             if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
                 BattleScriptPushCursorAndCallback(BattleScript_BadOmensActivates);
                 return TRUE;
@@ -5792,28 +5601,27 @@ class AbilityBehavior {
 
     class OldMariner : extends Seaweed, extends Amphibious {};
 
-    class Ectoplasm : extends Ability {
-        void onStat(ON_STAT) override {
+    class Ectoplasm : extends OnStat<> {
+        ON_STAT {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
             if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
         }
     };
 
-    class BeautifulMusic : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class BeautifulMusic : extends OnAttacker, extends CanInfatuateAny {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(Random() % 2)
             CHECK(IsSoundMove(battler, move))
 
             return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
         }
-        bool canInfatuateAny() override { return true; }
     };
 
     class SnowSong : LiquidVoiceClone<TYPE_ICE> {};
 
-    class GreaterSpirit : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class GreaterSpirit : extends OnEntry {
+        ON_ENTRY {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
             int stat = GetHighestStatId(battler, TRUE);
@@ -5823,8 +5631,8 @@ class AbilityBehavior {
         }
     };
 
-    class Resonance : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class Resonance : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBleed(target))
             CHECK(IsSoundMove(battler, move))
@@ -5834,39 +5642,37 @@ class AbilityBehavior {
         }
     };
 
-    class EtherealRush : extends Ability {
-        void onStat(ON_STAT) override {
+    class EtherealRush : extends OnStat<> {
+        ON_STAT {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
         }
     };
 
     class CuteAntecedence : extends GaleWingsLike<TYPE_FAIRY> {};
 
-    class RecurringNightmare : extends Ability {
-        int onRevive(ON_REVIVE) override {
+    class RecurringNightmare : extends OnRevive {
+        ON_REVIVE {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
             return B_MSG_FADE_OUT;
         }
-        bool persistent() override { return true; }
     };
 
-    ON_EITHER(MenacingSituation) {
-        CHECK(ShouldApplyOnHitAffect(opponent))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK_NOT(gVolatileStructs[opponent].fear)
-        CHECK(Random() % 100 < 30)
+    class MenacingSituation : extends OnEither {
+        ON_EITHER {
+            CHECK(ShouldApplyOnHitAffect(opponent))
+            CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+            CHECK_NOT(gVolatileStructs[opponent].fear)
+            CHECK(Random() % 100 < 30)
 
-        gStackBattler1 = battler;
-        gStackBattler2 = opponent;
-        BattleScriptCall(BattleScript_AbilitySetFear);
-        return TRUE;
-    }
-    class MenacingSituation : extends Ability {
-        ON_EITHER_ABILITY(MenacingSituation),
+            gStackBattler1 = battler;
+            gStackBattler2 = opponent;
+            BattleScriptCall(BattleScript_AbilitySetFear);
+            return TRUE;
+        }
     };
 
-    class ShinyLightning : extends Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class ShinyLightning : extends OnAccuracy<> {
+        ON_ACCURACY {
             if (move == MOVE_THUNDER) return ACCURACY_HITS_IF_POSSIBLE;
             *accuracy *= 1.2;
             return ACCURACY_MULTIPLICATIVE;
@@ -5875,8 +5681,8 @@ class AbilityBehavior {
 
     class Terrify : public Intimidate {};
 
-    class IceDownfall : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class IceDownfall : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
 
@@ -5885,49 +5691,43 @@ class AbilityBehavior {
         }
     };
 
-    class LastStand : extends Breakable {
-        void onStat(ON_STAT) override {
+    class LastStand : extends Breakable, extends OnStat {
+        ON_STAT {
             if (statId == STAT_DEF || statId == STAT_SPDEF)
                 *stat = *stat + (*stat * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
         }
     };
 
-    class PyroclasticFlow : extends MoltenDown, extends Corrosion {
-        int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
-            return MoltenDown::onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS) || Corrosion::onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS);
-        }
-    };
+    class PyroclasticFlow : Merged<MoltenDown, Corrosion> {};
 
-    class BloodBath : extends PoisonPuppeteerLike<MOVE_EFFECT_BLEED>, extends Breakable {
-        int onReactive(ON_REACTIVE) override {
+    class BloodBath : extends PoisonPuppeteerLike<MOVE_EFFECT_BLEED>, extends RemovesStatusOnImmunity {
+        ON_REACTIVE {
             return PoisonPuppeteerClone(
                 ability, battler, +[](int battler, int target) -> int { return !gVolatileStructs[target].fear; }, BattleScript_Bloodlust);
         }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_BLEED)
             return TRUE;
         }
-        bool removesStatusOnImmunity() override { return true; }
     };
 
-    class BattleAura : extends Ability {
-        int onCrit(ON_CRIT) override { return 2; }
-        AbilityApplyOnWithTarget onCritFor() override { return APPLY_ON_ANY; }
+    class BattleAura : extends OnCrit<ApplyOnTarget::ANY> {
+        ON_CRIT { return 2; }
     };
 
     class Bloodlust : extends BloodBath, extends SoulEater {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+        ON_BATTLER_FAINTS {
             int result = 0;
             if (battler == attacker) {
                 result |= SoulEater::onBattlerFaints(DELEGATE_BATTLER_FAINTS);
             }
             return result | BloodBath::onBattlerFaints(DELEGATE_BATTLER_FAINTS);
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ANY; }
+        ApplyOnTarget onBattlerFaintsFor override { return ApplyOnTarget::ANY; }
     };
 
-    class PiercingSolo : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class PiercingSolo : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBleed(target))
             CHECK(IsSoundMove(battler, move))
@@ -5936,12 +5736,12 @@ class AbilityBehavior {
         }
     };
 
-    class Rhythmic : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override { MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battler]); }
+    class Rhythmic : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER { MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battler]); }
     };
 
-    class ChunkyBassLine : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class ChunkyBassLine : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(IsSoundMove(battler, move))
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
@@ -5949,15 +5749,15 @@ class AbilityBehavior {
         }
     };
 
-    class DualHammer : extends Ability {
-        MultihitType onParentalBond(ON_PARENTAL_BOND) override {
+    class DualHammer : extends OnParentalBond {
+        ON_PARENTAL_BOND {
             CHECK(gBattleMoves[move].hammerBased)
             return PARENTAL_BOND_DUAL_WIELD;
         }
     };
 
-    class DentingBlows : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class DentingBlows : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(gBattleMoves[move].hammerBased)
             CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
@@ -5970,33 +5770,33 @@ class AbilityBehavior {
         }
     };
 
-    class IceColdHunter : extends HailImmune {
-        MultihitType onParentalBond(ON_PARENTAL_BOND) override {
+    class IceColdHunter : extends HailImmune, extends OnParentalBond {
+        ON_PARENTAL_BOND {
             CHECK(moveType == TYPE_ICE)
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
             return PARENTAL_BOND_ICE_COLD_HUNTER;
         }
     };
 
-    class SoulCrusher : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class SoulCrusher : extends OnOffensiveMultiplier<>, extends OnChooseDefensiveStat<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMoves[move].hammerBased) MUL(1.1);
         }
-        int onChooseDefensiveStat(ON_CHOOSE_DEFENSIVE_STAT) override {
+        ON_CHOOSE_DEFENSIVE_STAT {
             CHECK(gBattleMoves[move].hammerBased)
             return STAT_SPDEF;
         }
     };
 
-    class ArcFlash : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class ArcFlash : extends OnAttacker, extends OnDefender {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBeParalyzed(battler, target))
             CHECK(Random() % 2)
 
             return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
         }
-        int onDefender(ON_DEFENDER) override {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(CanBeBurned(attacker))
             CHECK(Random() % 2)
@@ -6008,26 +5808,25 @@ class AbilityBehavior {
 
     class Unicorn : extends MightyHorn, Pixilate {};
 
-    class OnTheProwl : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class OnTheProwl : extends OnEntry {
+        ON_ENTRY {
             gVolatileStructs[battler].onTheProwl = gVolatileStructs[battler].started.onTheProwl = TRUE;
             return SwitchInAnnounce(B_MSG_SWITCHIN_ON_THE_PROWL);
         }
     };
 
-    class Pretentious : extends Ability {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+    class Pretentious : extends OnBattlerFaints<> {
+        ON_BATTLER_FAINTS {
             CHECK(gVolatileStructs[battler].critBoost < 3);
             gVolatileStructs[battler].critBoost++;
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CRIT_INCREASE_1;
             BattleScriptCall(BattleScript_AbilityBoostsCrit);
             return TRUE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
-    class VenoblazePincers : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class VenoblazePincers : extends OnAttacker, extends OnOffensiveMultiplier<> {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(IS_MOVE_PHYSICAL(move))
             CHECK(Random() % 100 < 20)
@@ -6045,17 +5844,18 @@ class AbilityBehavior {
             }
             return FALSE;
         }
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+        ON_OFFENSIVE_MULTIPLIER {
             if (IS_MOVE_PHYSICAL(move)) MUL(1.2);
         }
     };
 
     class EternalBlessing : extends CelestialBlessing, extends Regenerator {};
 
+    class Ripen : extends Ability {};
     class SugarRush : extends Unburden, extends Ripen {};
 
-    class PeacefulRest : extends Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class PeacefulRest : extends OnEndTurn {
+        ON_END_TURN {
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
             CHECK(gVolatileStructs[battler].isFirstTurn != 2)
@@ -6071,57 +5871,56 @@ class AbilityBehavior {
 
     class WhiteNoise : extends PeacefulRest, extends Static {};
 
-    class SmokeyManeuvers : extends Breakable {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class SmokeyManeuvers : extends OnAccuracy<ApplyOnTarget::TARGET> {
+        ON_ACCURACY {
             CHECK(IsBattlerWeatherAffected(target, WEATHER_FOG_ANY));
             *accuracy /= 1.25;
             return ACCURACY_MULTIPLICATIVE;
         }
-        AbilityApplyOnWithTarget onAccuracyFor() override { return onAccuracyFor; }
     };
 
     class PowerMetal : LiquidVoiceClone<TYPE_STEEL> {};
 
-    class PowerEdge : extends KeenEdge {
-        int onChooseDefensiveStat(ON_CHOOSE_DEFENSIVE_STAT) override {
+    class PowerEdge : extends KeenEdge, extends OnChooseDefensiveStat<> {
+        ON_CHOOSE_DEFENSIVE_STAT {
             CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
             return STAT_SPDEF;
         }
     };
 
-    class Superconductor : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class Superconductor : extends OnOffensiveMultiplier<>, extends OnMoveType {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
         }
-        int onMoveType(ON_MOVE_TYPE) override {
+        ON_MOVE_TYPE {
             CHECK(moveType == TYPE_STEEL)
             *ateBoost = TRUE;
             return TYPE_ELECTRIC + 1;
         }
     };
 
-    class UltraInstinct : extends Parry {
-        int onDefender(ON_DEFENDER) override {
+    class UltraInstinct : extends OnDefender, extends OnDefensiveMultiplier, extends OverrideBreakable {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
 
             UseOutOfTurnAttack(battler, attacker, ability, MOVE_VACUUM_WAVE, 0);
             return FALSE;
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override { MUL(.8); }
+        ON_DEFENSIVE_MULTIPLIER { MUL(.8); }
     };
 
     class UnlockedPotential : extends Berserk, extends InnerFocus {};
 
-    class HigherRank : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class HigherRank : extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (GetMovePriority(battler, move, target) > 0) MUL(1.2);
         }
     };
 
-    class FuneralPyre : extends Ability {
-        int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE); }
-        int onEndTurn(ON_END_TURN) override {
+    class FuneralPyre : extends OnEntry, extends OnEndTurn {
+        ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE); }
+        ON_END_TURN {
             CHECK(IsAbilityOnField(ability) - 1 == battler)
 
             int any = FALSE;
@@ -6146,8 +5945,8 @@ class AbilityBehavior {
 
     class PatternChange : extends ShedSkin, extends Protean {};
 
-    class NoTurningBack : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class NoTurningBack : extends OnDefender {
+        ON_DEFENDER {
             CHECK(CheckHalfHpAbility(battler, attacker))
             CHECK_NOT(GetAbilityState(battler, ability))
             CHECK_NOT(gVolatileStructs[battler].noRetreat || gBattleMons[battler].status2 & STATUS2_ESCAPE_PREVENTION)
@@ -6158,8 +5957,8 @@ class AbilityBehavior {
         }
     };
 
-    class FlammableCoat : extends FormChange {
-        int onDefender(ON_DEFENDER) override {
+    class FlammableCoat : extends FormChange, extends OnDefender, extends OnBeforeAttack<> {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler) || (gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
             CHECK(moveType == TYPE_FIRE)
             CHECK(gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH)
@@ -6170,7 +5969,7 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_TargetFormChange);
             return TRUE;
         }
-        int onBeforeAttack(ABILITY_ON_BEFORE_ATTACK) override {
+        ON_BEFORE_ATTACK {
             CHECK(moveType == TYPE_FIRE)
             CHECK(gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH)
             CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
@@ -6182,81 +5981,73 @@ class AbilityBehavior {
         }
     };
 
-    class DracoMorale : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_DRAGON_CHEER, 0); }
-    };
+    class DracoMorale : SimpleEntryMove<MOVE_DRAGON_CHEER> {};
 
-    class BadOmen : extends Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class BadOmen : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (isCrit) MUL(.25);
         }
     };
 
-    class MoshPit : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class MoshPit : extends OnOffensiveMultiplier<ApplyOn::ALLY_ONLY> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
                 MUL(1.25);
             else
                 MUL(1.5);
         }
-        AbilityApplyOn onOffensiveMultiplierFor() override { return APPLY_ON_ALLY_ONLY; }
     };
 
-    ON_EITHER(BloodStain) {
-        CHECK(ShouldApplyOnHitAffect(opponent))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(opponent)))
-        CHECK_NOT(HasAbilityIgnoringSuppression(opponent, ability))
-        CHECK_NOT(DoesBattlerHaveAbilityShield(opponent))
+    class BloodStain : extends OnEither, extends OnEntry, extends Unsuppressable, extends RemovesStatusOnImmunity {
+        ON_EITHER {
+            CHECK(ShouldApplyOnHitAffect(opponent))
+            CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+            CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(opponent)))
+            CHECK_NOT(HasAbilityIgnoringSuppression(opponent, ability))
+            CHECK_NOT(DoesBattlerHaveAbilityShield(opponent))
 
-        UpdateAbilityStateIndicesForNewAbility(opponent, ability);
-        ReplaceAbility(opponent, ability);
-        gStackBattler1 = opponent;
-        BattleScriptCall(BattleScript_BloodStainActivates);
-        DisableSwitchInAbility(opponent, ability);
-        return TRUE;
-    }
-    class BloodStain : extends Ability {
-        int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_BLOOD_STAIN); }
-        ON_EITHER_ABILITY(BloodStain), int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+            UpdateAbilityStateIndicesForNewAbility(opponent, ability);
+            ReplaceAbility(opponent, ability);
+            gStackBattler1 = opponent;
+            BattleScriptCall(BattleScript_BloodStainActivates);
+            DisableSwitchInAbility(opponent, ability);
+            return TRUE;
+        }
+        ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_BLOOD_STAIN); }
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_STATUS1)
             return TRUE;
         }
-        bool unsuppressable() override { return true; }
-        bool removesStatusOnImmunity() { return true; }
     };
 
-    class BloodStigma : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class BloodStigma : extends OnOffensiveMultiplier<>, extends RemovesStatusOnImmunity, extends Unsuppressable {
+        ON_OFFENSIVE_MULTIPLIER {
             if (gBattleMons[target].status1 & STATUS1_BLEED || IsBloodStainAffected(target)) MUL(2);
         }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) {
             CHECK(status & CHECK_STATUS1)
             return TRUE;
         }
-        bool unsuppressable() override { return true; }
-        bool removesStatusOnImmunity() { return true; }
     };
 
-    class Slipstream : extends Ability {
-        void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override { secondaryAtkStatToUse[STAT_SPEED] += 20; }
+    class Slipstream : extends OnChooseOffensiveStat {
+        ON_CHOOSE_OFFENSIVE_STAT { secondaryAtkStatToUse[STAT_SPEED] += 20; }
     };
 
     class MaximumAcceleration : extends Slipstream, extends SpeedBoost {};
 
-    class Sidewinder : extends CoilUp {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+    class Sidewinder : extends CoilUp, extends OnBattlerFaints<> {
+        ON_BATTLER_FAINTS {
             CHECK(gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST || !(gStatuses4[battler] & STATUS4_COILED))
             gStatuses4[battler] |= STATUS4_COILED;
             SetAbilityState(battler, ability, TRUE);
             BattleScriptCall(BattleScript_BattlerCoiledUpReturnNoPopup);
             return TRUE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
     class Petrify : public Intimidate {
-        int onEntry(ON_ENTRY) override {
+        ON_ENTRY {
             int loweredStats = 0;
             int intimidated = Intimidate::onEntry(DELEGATE_ENTRY);
             for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
@@ -6271,8 +6062,8 @@ class AbilityBehavior {
         }
     };
 
-    class Fluffiest : extends Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class Fluffiest : extends OnDefensiveMultiplier {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FIRE) RESISTANCE(2.0);
             if (IsMoveMakingContact(move, attacker)) MUL(0.5);
         }
@@ -6283,7 +6074,7 @@ class AbilityBehavior {
     class WayOfSwiftness : extends Pretentious, extends SwiftSwim {};
 
     class AtomicPunch : extends IronFist {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+        ON_OFFENSIVE_MULTIPLIER {
             IronFist::onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
             if (moveType == TYPE_STEEL) MUL(1.3);
         }
@@ -6295,8 +6086,8 @@ class AbilityBehavior {
 
     class FinalBlow : extends FatalPrecision {};
 
-    class Hospitality : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class Hospitality : extends OnEntry {
+        ON_ENTRY {
             gBattlerTarget = BATTLE_PARTNER(battler);
             CHECK(IsBattlerAlive(gBattlerTarget))
             CHECK_NOT(BATTLER_MAX_HP(gBattlerTarget))
@@ -6310,8 +6101,8 @@ class AbilityBehavior {
 
     class ButterUp : extends Merged<Hospitality, SoothingAroma> {};
 
-    class VitalityStrike : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class VitalityStrike : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
@@ -6328,8 +6119,8 @@ class AbilityBehavior {
 
     class SwordOfDamnation : extends SwordOfRuin, extends Unaware {};
 
-    class RestrainingOrder : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class RestrainingOrder : extends OnDefender {
+        ON_DEFENDER {
             CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
@@ -6341,8 +6132,8 @@ class AbilityBehavior {
         }
     };
 
-    class AssassinsTools : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class AssassinsTools : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(IsMoveMakingContact(move, battler))
 
@@ -6366,8 +6157,8 @@ class AbilityBehavior {
         }
     };
 
-    class Frostmaw : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class Frostmaw : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanGetFrostbite(target))
             CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
@@ -6377,15 +6168,15 @@ class AbilityBehavior {
         }
     };
 
-    class Patchwork : extends Disguise {
-        SpeciesEnum onDisguise(ON_DISGUISE) override {
+    class Patchwork : extends Disguise, extends OnDefender {
+        ON_DISGUISE {
             SpeciesEnum species = Disguise::onDisguise(DELEGATE_DISGUISE);
             if (species && !testOnly) {
                 SetOncePerTurnAbilityCounter(battler, ABILITY_PATCHWORK, gBattlerAttacker + 1);
             }
             return species;
         }
-        int onDefender(ON_DEFENDER) override {
+        ON_DEFENDER {
             int triggeringBattler = GetOncePerTurnAbilityCounter(battler, ability) - 1;
             CHECK(triggeringBattler == attacker)
             SetOncePerTurnAbilityCounter(battler, ability, 0);
@@ -6402,20 +6193,17 @@ class AbilityBehavior {
 
     class ApexPredator : extends SoulEater, extends ToughClaws {};
 
-    class DragonsRitual : extends Ability {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+    class DragonsRitual : extends OnBattlerFaints<> {
+        ON_BATTLER_FAINTS {
             CHECK(CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN) || CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
             BattleScriptCall(BattleScript_DragonsRitual);
             return TRUE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
-    class PinnacleBlade : extends Ability {
-        InfiltrateType onInfiltrate(ON_INFILTRATE) override {
-            return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : INFILTRATE_NONE;
-        }
-        int onAttacker(ON_ATTACKER) override {
+    class PinnacleBlade : extends OnInfiltrate, extends OnAttacker {
+        ON_INFILTRATE { return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : INFILTRATE_NONE; }
+        ON_ATTACKER {
             CHECK(DidMoveHit())
             CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
 
@@ -6444,18 +6232,17 @@ class AbilityBehavior {
         }
     };
 
-    class Energized : extends Generator {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+    class Energized : extends Generator, extends OnBattlerFaints<> {
+        ON_BATTLER_FAINTS {
             CHECK(moveType == TYPE_ELECTRIC);
             SetOncePerTurnAbilityCounter(battler, ability, TRUE);
             BattleScriptCall(BattleScript_GeneratorActivatesRet);
             return TRUE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ATTACKER; }
     };
 
-    class ColorSpectrum : extends Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class ColorSpectrum : extends OnEndTurn, extends OnOffensiveMultiplier<> {
+        ON_END_TURN {
             int newType;
             do {
                 newType = Random() % NUMBER_OF_MON_TYPES;
@@ -6468,15 +6255,15 @@ class AbilityBehavior {
             BattleScriptPushCursorAndCallback(BattleScript_AttackerBecameTheTypeFullEnd3);
             return TRUE;
         }
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+        ON_OFFENSIVE_MULTIPLIER {
             if (StabMultiplierInHalves(battler, moveType, move) > 2) MUL(1.2);
         }
     };
 
     class SteelBeetle : extends RagingBoxer, extends Pollinate {};
 
-    class FromTheShadows : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class FromTheShadows : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(GetBattlerTurnOrderNum(target) >= gCurrentTurnActionNumber)
 
@@ -6492,8 +6279,8 @@ class AbilityBehavior {
         }
     };
 
-    class RagePoint : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class RagePoint : OnDefender, extends OnOffensiveMultiplier<>, extends NegateBurnAtkDrop, extends NegateFrzSpatkDrop {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(gIsCriticalHit)
             CHECK(CanRaiseStat(battler, STAT_ATK) || CanRaiseStat(battler, STAT_SPATK))
@@ -6501,15 +6288,13 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_RagePointActivates);
             return TRUE;
         }
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+        ON_OFFENSIVE_MULTIPLIER {
             if (HasAnyStatusOrAbility(battler)) MUL(1.5);
         }
-        bool negatesBurnAtkDrop() override { return true; }
-        bool negatesFrzSpatkDrop() { return true; }
     };
 
-    class HotCoals : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class HotCoals : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals)
 
             gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals = TRUE;
@@ -6517,9 +6302,9 @@ class AbilityBehavior {
         }
     };
 
-    class TerastalTreasure : extends Breakable {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override { MUL(.6); }
-        void onStat(ON_STAT) override {
+    class TerastalTreasure : extends OnDefensiveMultiplier, extends OnStat<> {
+        ON_DEFENSIVE_MULTIPLIER { MUL(.6); }
+        ON_STAT {
             if (statId == STAT_SPEED) *stat *= .8;
         }
     };
@@ -6532,12 +6317,10 @@ class AbilityBehavior {
 
     class DreamState : extends BattleArmor {};
 
-    class DreamWhimsy : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_YAWN, 0); }
-    };
+    class DreamWhimsy : SimpleEntryMove<MOVE_YAWN> {};
 
-    class LunarAffinity : extends Ability {
-        int onCopyMove(ON_COPY_MOVE) override {
+    class LunarAffinity : extends OnCopyMove {
+        ON_COPY_MOVE {
             CHECK(gBattleMoves[move].lunar)
             return UseOutOfTurnAttack(battler, target, ability, move, 0);
         }
@@ -6545,8 +6328,8 @@ class AbilityBehavior {
 
     class FlameShield : extends Filter {};
 
-    class AquaticDweller : extends Aquatic {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class AquaticDweller : extends Aquatic, extends OnOffensiveMultiplier<> {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_WATER) MUL(1.5);
         }
     };
@@ -6557,24 +6340,19 @@ class AbilityBehavior {
 
     class Depravity : extends Merciless, extends Overcharge {};
 
-    class Wildfire : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_FIRE_SPIN, 0); }
-    };
+    class Wildfire : SimpleEntryMove<MOVE_FIRE_SPIN> {};
 
-    class JumpScare : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class JumpScare : extends OnEntry, extends Persistent {
+        ON_ENTRY {
             CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
             return UseEntryMove(battler, ability, MOVE_ASTONISH, 0);
         }
-        bool persistent() override { return true; }
     };
 
-    class TarToss : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_TAR_SHOT, 0); }
-    };
+    class TarToss : SimpleEntryMove<MOVE_TAR_SHOT> {};
 
-    class StunShock : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class StunShock : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target)) CHECK(Random() % 100 < 60) switch (Random() % 2) {
                 case 0:
                     CHECK(CanBePoisoned(battler, target, MOVE_NONE));
@@ -6592,8 +6370,8 @@ class AbilityBehavior {
 
     class RagingGoddess : extends Rampage, extends HyperAggressive {};
 
-    class Whiplash : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class Whiplash : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(IS_MOVE_PHYSICAL(move))
             CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
@@ -6606,8 +6384,8 @@ class AbilityBehavior {
         }
     };
 
-    class SupersweetSyrup : extends Breakable {
-        int onDefender(ON_DEFENDER) override {
+    class SupersweetSyrup : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
             CHECK_NOT(gStatuses3[attacker] & STATUS3_EMBARGO)
@@ -6627,26 +6405,24 @@ class AbilityBehavior {
 
     class Overwatch : extends OnTheProwl, extends Stakeout {};
 
-    class WindRage : extends GiantWings {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_DEFOG, 0); }
-    };
+    class WindRage : extends GiantWings, extends SimpleEntryMove<MOVE_DEFOG> {};
 
-    class VictoryBomb : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class VictoryBomb : extends OnDefender, extends OnMoveType {
+        ON_DEFENDER {
             CHECK_NOT(IsBattlerAlive(battler))
 
             UseOutOfTurnAttack(battler, attacker, ability, MOVE_EXPLOSION, 100);
             return FALSE;
         }
-        int onMoveType(ON_MOVE_TYPE) override {
+        ON_MOVE_TYPE {
             CHECK(gProcessingExtraAttacks)
             CHECK(gQueuedExtraAttackData[0].ability == ability)
             return TYPE_FIRE + 1;
         }
     };
 
-    class RazorSharp : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class RazorSharp : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBleed(target))
             CHECK(gIsCriticalHit)
@@ -6657,8 +6433,8 @@ class AbilityBehavior {
 
     class ToTheBone : extends RazorSharp, extends Sniper {};
 
-    class BladeDance : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class BladeDance : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(IsDance(battler, move))
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
 
@@ -6666,32 +6442,33 @@ class AbilityBehavior {
         }
     };
 
-    int ApeShiftHandler(int battler, AbilityCallType callType) {
-        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
-        CHECK(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
-        CHECK(ShouldChangeFormHpBased(battler))
+    class ApeShift : extends FormChange, extends OnEntry, extends OnEndTurn, extends OnDefender, extends OnCrit<> {
+        static int ApeShiftHandler(int battler, AbilityCallType callType) {
+            CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
+            CHECK(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
+            CHECK(ShouldChangeFormHpBased(battler))
 
-        InsertCorrectEndType(callType);
+            InsertCorrectEndType(callType);
 
-        gStackBattler1 = battler;
-        if (gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT) {
-            BattleScriptCall(BattleScript_ApeShift);
+            gStackBattler1 = battler;
+            if (gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT) {
+                BattleScriptCall(BattleScript_ApeShift);
+            }
+            BattleScriptCall(BattleScript_StackBattlerFormChange);
+            return TRUE;
         }
-        BattleScriptCall(BattleScript_StackBattlerFormChange);
-        return TRUE;
-    }
-    class ApeShift : extends FormChange {
-        int onEntry(ON_ENTRY) override { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-        int onEndTurn(ON_END_TURN) override { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
-        int onDefender(ON_DEFENDER) override { return ApeShiftHandler(battler, ABILITY_BS_CALL); }
-        int onCrit(ON_CRIT) override {
+
+        ON_ENTRY { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+        ON_END_TURN { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+        ON_DEFENDER { return ApeShiftHandler(battler, ABILITY_BS_CALL); }
+        ON_CRIT {
             CHECK(gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
             return ALWAYS_CRIT;
         }
     };
 
-    class KnowYourPlace : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class KnowYourPlace : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK_NOT(gVolatileStructs[target].dazed)
             CHECK(IsMoveMakingContact(move, battler))
@@ -6702,8 +6479,8 @@ class AbilityBehavior {
         }
     };
 
-    class DeepCuts : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class DeepCuts : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBleed(target))
             CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
@@ -6713,8 +6490,8 @@ class AbilityBehavior {
         }
     };
 
-    class LifeSteal : extends Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class LifeSteal : extends OnEndTurn {
+        ON_END_TURN {
             int any = FALSE;
             for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
                 FILTER(IsBattlerAlive(target))
@@ -6730,17 +6507,16 @@ class AbilityBehavior {
         }
     };
 
-    class RudeAwakening : extends Ability {
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+    class RudeAwakening : extends RemovesStatusOnImmunity {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_SLEEP)
             CHECK(GetAbilityState(battler, ability))
             return TRUE;
         }
-        bool removesStatusOnImmunity() override { return true; }
     };
 
-    class TeraformZero : extends TeraShell {
-        int onEntry(ON_ENTRY) override {
+    class TeraformZero : extends TeraShell, extends OnEntry {
+        ON_ENTRY {
             CHECK(!GetSingleUseAbilityCounter(battler, ability));
             SetSingleUseAbilityCounter(battler, ability, TRUE);
             CHECK(IsWeatherActive(WEATHER_ANY) || IsTerrainActive(STATUS_FIELD_TERRAIN_ANY))
@@ -6750,7 +6526,7 @@ class AbilityBehavior {
     };
 
     class SetAblaze : extends PoisonPuppeteerLike<MOVE_EFFECT_BURN> {
-        int onReactive(ON_REACTIVE) override {
+        ON_REACTIVE {
             return PoisonPuppeteerClone(
                 ability, battler, +[](int battler, int target) -> int { return !gVolatileStructs[target].fear; }, BattleScript_Bloodlust);
         }
@@ -6758,14 +6534,14 @@ class AbilityBehavior {
 
     class Breakwater : extends Stall, extends SwiftSwim {};
 
-    class MagicalFists : extends IronFist {
-        void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override {
+    class MagicalFists : extends IronFist, extends OnChooseOffensiveStat {
+        ON_CHOOSE_OFFENSIVE_STAT {
             if (IsIronFistBoosted(battler, move)) *atkStatToUse = STAT_SPATK;
         }
     };
 
-    class Cutthroat : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class Cutthroat : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gStatuses4[battler] & STATUS4_CUTTHROAT)
 
             gStatuses4[battler] |= STATUS4_CUTTHROAT;
@@ -6775,9 +6551,7 @@ class AbilityBehavior {
 
     class SandBender : extends SandStream, extends SandForce {};
 
-    class SandPit : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_SAND_TOMB, 20); }
-    };
+    class SandPit : SimpleEntryMove<MOVE_SAND_TOMB, 20> {};
 
     class DesolateSun : extends RandomizerBanned {};
 
@@ -6793,8 +6567,8 @@ class AbilityBehavior {
         ON_EITHER_ABILITY(Daybreak),
     };
 
-    class EnergySiphon : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class EnergySiphon : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
@@ -6812,7 +6586,7 @@ class AbilityBehavior {
         return CanLowerStat(target, STAT_ATK) || CanLowerStat(target, STAT_SPATK) || CanLowerStat(target, STAT_SPEED);
     }
     class Neurotoxin : extends PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
-        int onReactive(ON_REACTIVE) override { return PoisonPuppeteerClone(ability, battler, NeurotoxinCondition, BattleScript_Neurotoxin); }
+        ON_REACTIVE { return PoisonPuppeteerClone(ability, battler, NeurotoxinCondition, BattleScript_Neurotoxin); }
     };
 
     class EnergizedHorns : extends MightyHorn {
@@ -6823,8 +6597,8 @@ class AbilityBehavior {
         }
     };
 
-    class SpiderLairUpgrade : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class SpiderLairUpgrade : extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
             int side = GetOppositeSide(battler);
@@ -6845,21 +6619,21 @@ class AbilityBehavior {
     class StrikerPixilate : extends Striker, extends Pixilate {};
 
     // 2.6
-    class DoomBlast : extends Ability {
-        int onRecoil(ON_RECOIL) override {
+    class DoomBlast : extends OnRecoil, extends OnOffensiveMultiplier<> {
+        ON_RECOIL {
             CHECK(moveType == TYPE_DARK);
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
             return max(damage / 20, 1);
         }
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_DARK) MUL(1.35);
         }
     };
 
     class Bruteforce : extends Reckless, extends RockHead {};
 
-    class FaradayCage : extends ShellArmor {
-        int onDefender(ON_DEFENDER) override {
+    class FaradayCage : extends ShellArmor, extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
 
@@ -6868,12 +6642,12 @@ class AbilityBehavior {
         }
     };
 
-    class AcidicSlime : extends Corrosion {
-        int onStab(ON_STAB) override { return moveType == TYPE_WATER; }
+    class AcidicSlime : extends Corrosion, extends OnStab {
+        ON_STAB { return moveType == TYPE_WATER; }
     };
 
-    class RoseGarden : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class RoseGarden : extends OnEntry {
+        ON_ENTRY {
             u8 targetSide = GetOppositeSide(battler);
             CHECK(gSideTimers[targetSide].toxicSpikesAmount < 2)
 
@@ -6885,29 +6659,27 @@ class AbilityBehavior {
         }
     };
 
-    class Qigong : extends Rampage, extends FightingSpirit {
-        void onAccuracy(ON_ACCURACY) override { return ACCURACY_ALWAYS_HITS; }
+    class Qigong : extends Rampage, extends FightingSpirit, extends OnAccuracy<> {
+        ON_ACCURACY { return ACCURACY_ALWAYS_HITS; }
     };
 
     class ConjurerOfDeceit : extends MagicGuard, extends MagicBounce {};
 
-    class DeepFreeze : extends Breakable {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class DeepFreeze : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_WATER || moveType == TYPE_ICE) MUL(1.25);
         }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_FIRE) RESISTANCE(.5);
         }
     };
 
     class SoulDevourer : extends SoulEater, extends PhantomPain {};
 
-    class ChampionsEntrance : extends Intimidate, extends ViolentRush {
-        int onEntry(ON_ENTRY) override { return Intimidate::onEntry(DELEGATE_ENTRY) | ViolentRush::onEntry(DELEGATE_ENTRY); }
-    };
+    class ChampionsEntrance : extends Merged<Intimidate, ViolentRush> {};
 
-    class Presto : extends Ability {
-        int onPriority(ON_PRIORITY) override {
+    class Presto : extends OnPriority {
+        ON_PRIORITY {
             CHECK(BATTLER_MAX_HP(battler))
             CHECK(IsSoundMove(battler, move))
             return 1;
@@ -6918,54 +6690,51 @@ class AbilityBehavior {
 
     class Gladiator : extends BoostedSwarmLike<TYPE_FIGHTING> {};
 
-    class ForsakenHeart : extends Ability {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+    class ForsakenHeart : extends OnBattlerFaints<ApplyOnTarget::ANY> {
+        ON_BATTLER_FAINTS {
             CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
 
             BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
             return TRUE;
         }
-        AbilityApplyOnWithTarget onBattlerFaintsFor override { return APPLY_ON_ANY; }
     };
 
     class Relentless : extends ExploitWeakness, extends Merciless {};
 
-    class Soothsayer : extends Breakable {
-        int onEntry(ON_ENTRY) override {
+    class Soothsayer : extends OnEntry, extends OnEndTurn, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, extends Persistent {
+        ON_ENTRY {
             CHECK(!GetSingleUseAbilityCounter(battler, ability))
             SetSingleUseAbilityCounter(battler, ability, TRUE);
             SetAbilityState(battler, ability, 3);
             return SwitchInAnnounce(B_MSG_SWITCHIN_SOOTHSAYER);
         }
-        int onEndTurn(ON_END_TURN) override {
+        ON_END_TURN {
             int counter = GetAbilityState(battler, ability);
             if (counter) SetAbilityState(battler, ability, counter - 1);
             return FALSE;
         }
-        void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
+        ON_AFTER_TYPE_EFFECTIVENESS {
             if (!GetAbilityState(battler, ability)) return;
             if (*mod >= UQ_4_12(1.0)) *mod = UQ_4_12(0.5);
         }
-        AbilityApplyOnWithTarget onAfterTypeEffectivenessFor() override { return APPLY_ON_TARGET; }
-        AbilityApplyOnWithTarget persistent() override { return true; }
     };
 
-    class CorruptedMind : extends RandomizerBanned {
-        int onTypeEffectiveness(ON_TYPE_EFFECTIVENESS) override {
+    class CorruptedMind : extends RandomizerBanned, extends OnTypeEffectiveness<>, extends OnModifyEffectChance<> {
+        ON_TYPE_EFFECTIVENESS {
             CHECK(moveType == TYPE_PSYCHIC)
             if (*mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
             return FALSE;
         }
-        void onModifyEffectChance(ON_MODIFY_EFFECT_CHANCE) override {
+        ON_MODIFY_EFFECT_CHANCE {
             int type;
             GET_MOVE_TYPE(move, type)
             if (type == TYPE_PSYCHIC) *effectChance *= 1.4;
         }
     };
 
-    class FlameCoat : extends Ability {
-        int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_FIRE_COAT); }
-        int onEndTurn(ON_END_TURN) override {
+    class FlameCoat : extends OnEntry, extends OnEndTurn {
+        ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_FIRE_COAT); }
+        ON_END_TURN {
             CHECK(IsAbilityOnField(ability) - 1 == battler)
 
             int any = FALSE;
@@ -6983,9 +6752,9 @@ class AbilityBehavior {
         }
     };
 
-    class UnownPower : extends RandomizerBanned {
-        int onStab(ON_STAB) override { return TRUE; }
-        void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
+    class UnownPower : extends RandomizerBanned, extends OnStab, extends OnAfterTypeEffectiveness<> {
+        ON_STAB { return TRUE; }
+        ON_AFTER_TYPE_EFFECTIVENESS {
             if (*mod < UQ_4_12(2.0) && (move == MOVE_HIDDEN_POWER || move == MOVE_SECRET_POWER)) *mod = UQ_4_12(2.0);
         }
     };
@@ -6996,16 +6765,16 @@ class AbilityBehavior {
 
     class BlightScale : extends PoisonPoint, extends Multiscale, extends RandomizerBanned {};
 
-    class Gunman : extends MegaLauncher {
-        int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
+    class Gunman : extends MegaLauncher, extends OnModifyMoveFlags {
+        ON_MODIFY_MOVE_FLAGS {
             CHECK(flag == MOVE_FLAG_MEGA_LAUNCHER)
             CHECK(IS_MOVE_STATUS(move))
             return TRUE;
         }
     };
 
-    class Caretaker : extends Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class Caretaker : extends OnEndTurn, extends FriendGuard {
+        ON_END_TURN {
             CHECK(Random() % 100 < 30)
 
             if (IsBattlerAlive(BATTLE_PARTNER(battler)) && gBattleMons[BATTLE_PARTNER(battler)].status1 & STATUS1_ANY) {
@@ -7020,31 +6789,29 @@ class AbilityBehavior {
         }
     };
 
-    class PoseidonsDominion : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_WHIRLPOOL, 0); }
-    };
+    class PoseidonsDominion : SimpleEntryMove<MOVE_WHIRLPOOL> {};
 
-    class DualShadow : extends HungerSwitch {
-        int onRecoil(ON_RECOIL) override {
+    class DualShadow : extends HungerSwitch, extends OnRecoil, extends OnOffensiveMultiplier<> {
+        ON_RECOIL {
             CHECK(moveType == TYPE_ELECTRIC || moveType == TYPE_DARK);
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
             return max(damage / 10, 1);
         }
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+        ON_OFFENSIVE_MULTIPLIER {
             if (moveType == TYPE_ELECTRIC || moveType == TYPE_DARK) MUL(1.35);
         }
     };
 
-    class Lullaby : extends Ability {
-        AccuracyPriority onAccuracy(ON_ACCURACY) override {
+    class Lullaby : extends OnAccuracy<> {
+        ON_ACCURACY {
             CHECK(move == MOVE_SING);
             *accuracy *= 1.5;
             return ACCURACY_MULTIPLICATIVE;
         }
     };
 
-    class CryoArchitect : extends Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class CryoArchitect : extends OnEndTurn, extends OnDefender {
+        ON_END_TURN {
             int abilityState = GetAbilityState(battler, ability);
             CHECK(abilityState)
 
@@ -7059,7 +6826,7 @@ class AbilityBehavior {
             BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
             return TRUE;
         }
-        int onDefender(ON_DEFENDER) override {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(moveType == TYPE_WATER || moveType == TYPE_ICE)
 
@@ -7086,8 +6853,8 @@ class AbilityBehavior {
         }
     };
 
-    class GlacialRage : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class GlacialRage : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(moveType == TYPE_ICE)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
@@ -7095,14 +6862,12 @@ class AbilityBehavior {
         }
     };
 
-    class ImmovableObject : extends Ability {
-        bool magicGuard() override { return true; }
-    };
+    class ImmovableObject : extends MagicGuard, extends Sturdy {};
 
     class FrenziedPhantom : extends ShadowTag, extends HyperAggressive {};
 
-    class DNAScramble : extends FormChange {
-        int onBeforeAttack(ABILITY_ON_BEFORE_ATTACK) override {
+    class DNAScramble : extends FormChange, extends OnBeforeAttack<> {
+        ON_BEFORE_ATTACK {
             SpeciesEnum newSpecies = SPECIES_NONE;
             switch (gBattleMons[battler].species) {
                 default:
@@ -7147,29 +6912,13 @@ class AbilityBehavior {
 
     class Calculative : extends Merged<Analytic, Neuroforce> {};
 
-    class EmbodyAspect : extends Ability {
-        int onEntry(ON_ENTRY) override {
-            CHECK(CanRaiseStat(battler, STAT_SPEED))
-
-            SetStatChanger(STAT_SPEED, 1);
-            BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-            return TRUE;
-        }
-    };
+    class EmbodyAspect : extends RaiseStatOnEntry<STAT_SPEED> {};
 
     class EmbodyAspectHearthflame : extends IntrepidSword {};
 
     class EmbodyAspectCornerstone : extends DauntlessShield {};
 
-    class EmbodyAspectWellspring : extends Ability {
-        int onEntry(ON_ENTRY) override {
-            CHECK(CanRaiseStat(battler, STAT_SPDEF))
-
-            SetStatChanger(STAT_SPDEF, 1);
-            BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-            return TRUE;
-        }
-    };
+    class EmbodyAspectWellspring : extends RaiseStatOnEntry<STAT_SPDEF> {};
 
     class RockhardShaft : extends BoostedSwarmLike<TYPE_ROCK> {};
 
@@ -7177,49 +6926,27 @@ class AbilityBehavior {
 
     class Deviate : extends AteAbility<TYPE_DARK> {};
 
-    class SunsBounty : extends Harvest, extends LeafGuard {
-        int onEndTurn(ON_END_TURN) override { return Harvest::onEndTurn(DELEGATE_END_TURN) | LeafGuard::onEndTurn(DELEGATE_END_TURN); }
-    };
+    class SunsBounty : extends Merged<Harvest, LeafGuard> {};
 
-    class RiteOfSpring : extends SolarPower, extends Chlorophyll {
-        void onStat(ON_STAT) override {
-            SolarPower::onStat(DELEGATE_STAT);
-            Chlorophyll::onStat(DELEGATE_STAT);
-        }
-    };
+    class RiteOfSpring : extends Merged<SolarPower, Chlorophyll> {};
 
-    class Headstrong : extends Breakable {
-        int onEntry(ON_ENTRY) override {
-            CHECK(CanRaiseStat(battler, STAT_SPDEF))
+    class Headstrong : extends RaiseStatOnEntry<STAT_SPDEF> {};
 
-            SetStatChanger(STAT_SPDEF, 1);
-            BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-            return TRUE;
-        }
-    };
-
-    class Firefighter : extends Breakable {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
-            if (IS_BATTLER_OF_TYPE(target, TYPE_FIRE)) RESISTANCE(1.5);
-        }
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
-            if (IS_BATTLER_OF_TYPE(attacker, TYPE_FIRE)) MUL(.5);
-        }
-    };
+    class Firefighter : extends TypeSlayer<TYPE_FIRE> {};
 
     class SepiaLens : extends SandGuard, extends TintedLens {};
 
-    class SuperSniper : extends Sniper {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+    class SuperSniper : extends Sniper, extends OnPreemptAction {
+        ON_OFFENSIVE_MULTIPLIER {
             Sniper::onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
             if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ability) {
                 MUL(0.5);
             }
         }
-        int onPreemptAction(ON_PREEMPT_ACTION) override { UseTurnAttackAsPursuit(DELEGATE_PREEMPT_ACTION); }
+        ON_PREEMPT_ACTION { UseTurnAttackAsPursuit(DELEGATE_PREEMPT_ACTION); }
     };
 
-    class WoodlandCurse : extends Ability {
+    class WoodlandCurse : extends OnEither, extends SimpleEntryMove<MOVE_FORESTS_CURSE> {
         ON_EITHER {
             CHECK(ShouldApplyOnHitAffect(opponent))
             CHECK(IsMoveMakingContact(move, gBattlerAttacker))
@@ -7231,12 +6958,10 @@ class AbilityBehavior {
             BattleScriptCall(BattleScript_StackBecameTheTypeFull);
             return TRUE;
         }
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_FORESTS_CURSE, 0); }
-        ON_EITHER_ABILITY(WoodlandCurse),
     };
 
-    class Malodor : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+    class Malodor : extends OnDefender {
+        ON_DEFENDER {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
             CHECK_NOT(gStatuses3[attacker] & STATUS3_GASTRO_ACID)
@@ -7247,64 +6972,54 @@ class AbilityBehavior {
         }
     };
 
-    class Blur : extends Ability {
-        int onChooseDefensiveStat(ON_CHOOSE_DEFENSIVE_STAT) override {
+    class Blur : extends OnChooseDefensiveStat<ApplyOnTarget::TARGET> {
+        ON_CHOOSE_DEFENSIVE_STAT {
             CHECK(IsMoveMakingContact(move, gBattlerAttacker))
             return STAT_SPEED;
         }
-        AbilityApplyOnWithTarget onChooseDefensiveStatFor() override { return onChooseDefensiveStatFor; }
     };
 
-    class Elude : extends Ability {
-        int onChooseDefensiveStat(ON_CHOOSE_DEFENSIVE_STAT) override {
+    class Elude : extends OnChooseDefensiveStat<ApplyOnTarget::TARGET> {
+        ON_CHOOSE_DEFENSIVE_STAT {
             CHECK_NOT(IsMoveMakingContact(move, gBattlerAttacker))
             return STAT_SPEED;
         }
-        AbilityApplyOnWithTarget onChooseDefensiveStatFor() override { return onChooseDefensiveStatFor; }
     };
 
     class DrakeOfRage : extends Rampage, extends TintedLens {};
 
-    class MixedMartialArts : extends Ability {
-        int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
+    class MixedMartialArts : extends OnModifyMoveFlags {
+        ON_MODIFY_MOVE_FLAGS {
             CHECK(flag == MOVE_FLAG_PUNCH || flag == MOVE_FLAG_KICK)
             CHECK(gBattleMoves[move].type == TYPE_NORMAL)
             return TRUE;
         }
     };
 
-    class StrategicPause : extends Analytic {
-        int onCrit(ON_CRIT) override {
+    class StrategicPause : extends Analytic, extends OnCrit<> {
+        ON_CRIT {
             CHECK(GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber)
             CHECK(gBattleMoves[move].effect != EFFECT_FUTURE_SIGHT)
             return 2;
         }
     };
 
-    class Overrule : extends Ability {
-        void onAfterTypeEffectiveness(ON_AFTER_TYPE_EFFECTIVENESS) override {
+    class Overrule : extends extends OnAfterTypeEffectiveness<> {
+        ON_AFTER_TYPE_EFFECTIVENESS {
             if (gIsCriticalHit && *mod && *mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
         }
     };
 
-    class MentalPollution : extends Ability {
-        bool breakable() override { return true; }
-    };
+    class MentalPollution : extends NotImplemented {};
 
-    class MadnessEnhancement : extends Ability {
-        bool breakable() override { return true; }
-    };
+    class MadnessEnhancement : extends NotImplemented {};
 
-    class Tentalock : extends Ability {
-        bool breakable() override { return true; }
-    };
+    class Tentalock : extends NotImplemented {};
 
-    class SerpentBind : extends Ability {
-        bool breakable() override { return true; }
-    };
+    class SerpentBind : extends NotImplemented {};
 
-    class SoulTap : extends Ability {
-        int onEndTurn(ON_END_TURN) override {
+    class SoulTap : extends OnEndTurn {
+        ON_END_TURN {
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
             int any = FALSE;
             for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
@@ -7325,38 +7040,30 @@ class AbilityBehavior {
 
     class OminousShroud : extends Phantom, extends ShadowShield {};
 
-    class ChillingPresence : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_ICY_WIND, 10); }
-    };
+    class ChillingPresence : SimpleEntryMove<MOVE_ICY_WIND, 10> {};
 
     class Frostbind : extends PoisonPuppeteerLike<MOVE_EFFECT_FROSTBITE> {
-        int onReactive(ON_REACTIVE) override {
+        ON_REACTIVE override {
             return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) { return (int)CanGetFrostbite(battler); }, BattleScript_Frostbind);
         }
     };
 
     class TenderAffection : extends CuteCharm {
-        int onStab(ON_STAB) override { return moveType == TYPE_FAIRY; }
+        ON_STAB override { return moveType == TYPE_FAIRY; }
     };
 
     class GlacialGhost : extends SlushRush, extends SnowCloak {};
 
     class WonderScale : extends ShedSkin, extends FortKnox {};
 
-    class Overzealous : extends Ability {
-        bool breakable() override { return true; }
-    };
+    class Overzealous : extends NotImplemented {};
 
-    class StainlessSteel : extends Ability {
-        ATE_ABILITY(TYPE_STEEL), .fortKnox = TRUE,
-    };
+    class StainlessSteel : extends AteAbility<TYPE_STEEL>, extends FortKnox {};
 
-    class TemporalRupture : extends Ability {
-        bool breakable() override { return true; }
-    };
+    class TemporalRupture : extends NotImplemented {};
 
-    class GrassFlute : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class GrassFlute : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(IsSoundMove(battler, move))
             CHECK_NOT(gVolatileStructs[target].fear)
@@ -7366,7 +7073,7 @@ class AbilityBehavior {
     };
 
     class Hemotoxin : extends PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
-        int onReactive(ON_REACTIVE) override {
+        ON_REACTIVE {
             return PoisonPuppeteerClone(
                 ability,
                 battler,
@@ -7375,52 +7082,42 @@ class AbilityBehavior {
         }
     };
 
-    class Harukaze : extends Ability {
-        bool breakable() override { return true; }
-    };
+    class Harukaze : extends NotImplemented {};
 
-    class ToxicSurge : extends Ability {
-        int onEntry(ON_ENTRY) override {
+    class ToxicSurge : extends OnEntry, extends AllowTerrainIfAirborne<TERRAIN_TOXIC> {
+        ON_ENTRY {
             CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_TOXIC_TERRAIN, &gFieldTimers.terrainTimer))
 
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESTOXIC;
             BattleScriptPushCursorAndCallback(BattleScript_SurgeActivates);
             return TRUE;
         }
-        TerrainType allowTerrainIfAirborne() override { return TERRAIN_TOXIC; }
     };
 
-    class PoisonQuills : extends PoisonPoint, extends RoughSkin {
-        int onDefender(ON_DEFENDER) override { return RoughSkin::onDefender(DELEGATE_DEFENDER) | PoisonPoint::onDefender(DELEGATE_DEFENDER); }
-    };
+    class PoisonQuills : extends Merged<PoisonPoint, RoughSkin> {};
 
     class DraconicMight : extends HalfDrake, extends AteAbility<TYPE_DRAGON> {};
 
     class AtlanticRuler : extends AquaticDweller, extends SwiftSwim {};
 
-    class Biofilm : extends Ability {
-        void onStat(ON_STAT) override {
+    class Biofilm : extends OnStat<> {
+        ON_STAT {
             if (statId == STAT_SPDEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN)) *stat *= 1.5;
         }
     };
 
-    class Chokehold : extends Ability {
-        bool breakable() override { return true; }
-    };
+    class Chokehold : extends NotImplemented {};
 
-    class GuardianCoat : extends SandImmune, extends Breakable, extends HailImmune {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class GuardianCoat : extends SandImmune, extends OnDefensiveMultiplier, extends PowderImmune, extends HailImmune {
+        ON_DEFENSIVE_MULTIPLIER override {
             if (IS_MOVE_PHYSICAL(move)) MUL(.8);
         }
-        bool powderImmune() { return true; }
     };
 
-    class NeutralizingFog : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_DEFOG, 0); }
-    };
+    class NeutralizingFog : SimpleEntryMove<MOVE_DEFOG> {};
 
-    class Festivities : extends Ability {
-        int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
+    class Festivities : extends OnModifyMoveFlags {
+        ON_MODIFY_MOVE_FLAGS {
             switch (flag) {
                 case MOVE_FLAG_DANCE:
                     return gBattleMoves[move].flags & FLAG_SOUND;
@@ -7435,11 +7132,11 @@ class AbilityBehavior {
     class FeyFlight : extends FairyTale, extends GroundImmune {};
 
     class BestOffense : extends KeenEdge, extends MysticBlades {
-        void onChooseOffensiveStat(ON_CHOOSE_OFFENSIVE_STAT) override { secondaryAtkStatToUse[STAT_SPDEF] += 20; }
+        ON_CHOOSE_OFFENSIVE_STAT override { secondaryAtkStatToUse[STAT_SPDEF] += 20; }
     };
 
-    class Impaler : extends MightyHorn {
-        int onAttacker(ON_ATTACKER) override {
+    class Impaler : extends MightyHorn, extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBleed(target))
             CHECK(gBattleMoves[move].hornBased);
@@ -7453,9 +7150,7 @@ class AbilityBehavior {
 
     class LightningBorn : extends AddsType<TYPE_ELECTRIC> {};
 
-    class Superheavy : extends Ability {
-        bool breakable() override { return true; }
-    };
+    class Superheavy : extends NotImplemented {};
 
     class WorldSerpent : extends GripPincer, extends LongReach {};
 
@@ -7463,8 +7158,8 @@ class AbilityBehavior {
 
     class Komodo : extends HalfDrake, extends ToxicChain {};
 
-    class Envenom : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class Envenom : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(CanBePoisoned(battler, target, MOVE_NONE))
             CHECK(Random() % 100 < 30)
@@ -7473,8 +7168,8 @@ class AbilityBehavior {
         }
     };
 
-    class PurpleHaze : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class PurpleHaze : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
             return UseAttackerFollowUpMove(battler, target, ability, MOVE_POISON_GAS, 20);
@@ -7483,20 +7178,18 @@ class AbilityBehavior {
 
     class GnashingCannon : extends Merged<MegaLauncher, MindCrush> {};
 
-    class HyperCleanse : extends Ability {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+    class HyperCleanse : extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
+        ON_DEFENSIVE_MULTIPLIER {
             if (moveType == TYPE_POISON) RESISTANCE(.5);
         }
-        int onStatusImmune(ABILITY_ON_STATUS_IMMUNE) override {
+        ON_STATUS_IMMUNE {
             CHECK(status & CHECK_STATUS1)
             return TRUE;
         }
-        bool breakable() override { return true; }
-        bool removesStatusOnImmunity() { return true; }
     };
 
-    class MoltenCoat : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class MoltenCoat : extends OnAttacker, extends AteAbility<TYPE_ROCK> {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(moveType == TYPE_ROCK)
             CHECK(CanBeBurned(target))
@@ -7505,18 +7198,17 @@ class AbilityBehavior {
             AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, target);
             return TRUE;
         }
-        ATE_ABILITY(TYPE_ROCK),
     };
 
-    class RoyalDecree : extends QueenlyMajesty {
-        int onEntry(ON_ENTRY) override {
+    class RoyalDecree : extends QueenlyMajesty, extends OnEntry {
+        ON_ENTRY {
             CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
             return UseEntryMove(battler, ability, MOVE_GLARE, 0);
         }
     };
 
-    class Tag : extends Ability {
-        int onPreemptAction(ON_PREEMPT_ACTION) override {
+    class Tag : extends OnPreemptAction {
+        ON_PREEMPT_ACTION {
             CHECK(gCurrentActionFuncId == B_ACTION_SWITCH)
             gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
                 .ability = ability,
@@ -7530,8 +7222,8 @@ class AbilityBehavior {
         }
     };
 
-    class Surprise : extends Ability {
-        int onPreemptAction(ON_PREEMPT_ACTION) override {
+    class Surprise : extends OnPreemptAction {
+        ON_PREEMPT_ACTION {
             CHECK(gCurrentActionFuncId == B_ACTION_USE_MOVE)
             CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
@@ -7565,7 +7257,7 @@ class AbilityBehavior {
     class BreezyNeigh : extends AdrenalineRush {};
 
     class Dreamscape : extends Comatose, extends Dreamcatcher {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+        ON_OFFENSIVE_MULTIPLIER {
             Dreamcatcher::onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
             MUL(1.2);
         }
@@ -7575,47 +7267,26 @@ class AbilityBehavior {
 
     class HungryMaws : extends JawsOfCarnage, extends StrongJaw {};
 
-    class ThermalSlide : extends Ability {
-        void onStat(ON_STAT) override {
+    class ThermalSlide : extends OnStat {
+        ON_STAT {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY | WEATHER_HAIL_ANY)) *stat *= 1.5;
         }
     };
 
     class Thermomancy : extends Merged<Cryomancy, Pyromancy> {};
 
-    class Chuckster : extends Ability {
-        bool breakable() override { return true; }
-    };
+    class Chuckster : extends NotImplemented {};
 
-    class HeatSink : extends Redirects<TYPE_FIRE> {
-        int onAbsorb(ON_ABSORB) override {
-            CHECK(moveType == TYPE_FIRE);
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return ABSORB_RESULT_STAT;
-        }
-    };
+    class HeatSink : extends LightningRodClone<TYPE_FIRE> {};
 
-    class RelicStone : extends Ability {
-        bool breakable() override { return true; }
-    };
+    class RelicStone : extends NotImplemented {};
 
     class Supercell : extends Merged<ElectricSurge, Drizzle> {};
 
-    class LightningAspect : extends Ability {
-        int onAbsorb(ON_ABSORB) override {
-            CHECK(moveType == TYPE_ELECTRIC)
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return ABSORB_RESULT_STAT;
-        }
-        bool breakable() override { return true; }
-    };
+    class LightningAspect : extends AbsorbStatUp<TYPE_ELECTRIC, STAT_HIGHEST_ATTACKING> {};
 
-    class FireAspect : extends Ability {
-        int onAbsorb(ON_ABSORB) override {
-            CHECK(moveType == TYPE_FIRE)
-            return ABSORB_RESULT_HEAL;
-        }
-        int onAttacker(ON_ATTACKER) override {
+    class FireAspect : extends AbsorbHeal<TYPE_FIRE>, extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(moveType == TYPE_FIRE)
             CHECK(CanBeBurned(target))
@@ -7623,16 +7294,15 @@ class AbilityBehavior {
             AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, target);
             return TRUE;
         }
-        bool breakable() override { return true; }
     };
 
     class BlisteringSun : extends Merged<DesolateLand, AirBlower> {};
 
     class AurorasGale : extends NorthWind, extends MajesticBird {};
 
-    class WinterThrone : extends Ability {
-        int onEntry(ON_ENTRY) override { return SwitchInAnnounce(B_MSG_SWITCHIN_WINTER_THRONE); }
-        int onEndTurn(ON_END_TURN) override {
+    class WinterThrone : extends OnEntry, extends OnEndTurn {
+        ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_WINTER_THRONE); }
+        ON_END_TURN {
             CHECK(IsAbilityOnField(ability) - 1 == battler)
 
             int any = FALSE;
@@ -7660,8 +7330,8 @@ class AbilityBehavior {
 
     class PropellerTail : extends SwiftSwim {};
 
-    class EnergyTap : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+    class EnergyTap : extends OnAttacker {
+        ON_ATTACKER {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK_NOT(BATTLER_MAX_HP(battler))
             CHECK(CanBattlerHeal(battler))
@@ -7673,26 +7343,18 @@ class AbilityBehavior {
         }
     };
 
-    class MoltenCore : extends Furnace {
-        int onEntry(ON_ENTRY) override {
+    class MoltenCore : extends Furnace, extends AbsorbStatUp<TYPE_ROCK, STAT_SPEED>, extends AbsorbUp2, extends StealthRockImmune {
+        ON_ENTRY {
             Furnace::onEntry(DELEGATE_ENTRY);
 
             CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
             gSideStatuses[GetBattlerSide(battler)] &= ~SIDE_STATUS_STEALTH_ROCK;
             return SwitchInAnnounce(B_MSG_SWITCHIN_MOLTEN_CORE);
         }
-        int onAbsorb(ON_ABSORB) override {
-            CHECK(moveType == TYPE_ROCK)
-            *statId = STAT_SPEED;
-            return ABSORB_RESULT_STAT;
-        }
-        bool breakable() override { return true; }
-        bool absorbUp2() { return true; }
-        bool stealthRockImmune() { return true; }
     };
 
     class Reverberate : extends Ability {
-        int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
+        ON_MODIFY_MOVE_FLAGS override {
             CHECK(flag == MOVE_FLAG_SOUND)
             CHECK(gBattleMoves[move].type == TYPE_NORMAL)
             return TRUE;
@@ -7700,7 +7362,7 @@ class AbilityBehavior {
     };
 
     class Taekkyeon : extends Ability {
-        int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS) override {
+        ON_MODIFY_MOVE_FLAGS override {
             CHECK(flag == MOVE_FLAG_DANCE)
             CHECK_NOT(IS_MOVE_STATUS(move))
             return TRUE;
@@ -7708,7 +7370,7 @@ class AbilityBehavior {
     };
 
     class SludgeSpit : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+        ON_ATTACKER override {
             CHECK(gBattleMoves[move].power)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
@@ -7717,7 +7379,7 @@ class AbilityBehavior {
     };
 
     class SwampThing : extends Ability {
-        int onEntry(ON_ENTRY) override {
+        ON_ENTRY override {
             CHECK_NOT(gSideTimers[GetOppositeSide(battler)].swampTimer)
 
             AbilityStatusEffectSafe(MOVE_EFFECT_SWAMP, battler, GetOppositeSide(battler));
@@ -7726,12 +7388,10 @@ class AbilityBehavior {
         }
     };
 
-    class FrostyPrescence : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_MIST, 0); }
-    };
+    class FrostyPrescence : SimpleEntryMove<MOVE_MIST> {};
 
     class ChillingPellets : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+        ON_DEFENDER override {
             CHECK(ShouldApplyOnHitAffect(attacker))
             CHECK(IsMoveMakingContact(move, attacker))
 
@@ -7741,7 +7401,7 @@ class AbilityBehavior {
     };
 
     class PaintShot : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+        ON_ATTACKER override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK_NOT(IS_BATTLER_OF_TYPE(target, moveType))
             CHECK(IsMegaLauncherBoosted(battler, move))
@@ -7757,7 +7417,7 @@ class AbilityBehavior {
     };
 
     class Stonecutter : extends Fossilized {
-        int onMoldBreaker(ON_MOLD_BREAKER) override {
+        ON_MOLD_BREAKER override {
             gHitMarker |= HITMARKER_MOLD_BREAKER;
             SetTypeBeforeUsingMove(move, gActiveBattler);
             u8 moveType;
@@ -7772,7 +7432,7 @@ class AbilityBehavior {
     };
 
     class Edgelord : extends Cutthroat {
-        int onBattlerFaints(ON_BATTLER_FAINTS) override {
+        ON_BATTLER_FAINTS override {
             CHECK_NOT(gStatuses4[battler] & STATUS4_CUTTHROAT)
 
             gStatuses4[battler] |= STATUS4_CUTTHROAT;
@@ -7784,7 +7444,7 @@ class AbilityBehavior {
     };
 
     class Warmonger : extends Ability {
-        void onOffensiveMultiplier(ON_OFFENSIVE_MULTIPLIER) override {
+        ON_OFFENSIVE_MULTIPLIER override {
             if (moveType == TYPE_ROCK || moveType == TYPE_STEEL || moveType == TYPE_FIGHTING) MUL(1.30);
         }
     };
@@ -7794,7 +7454,7 @@ class AbilityBehavior {
     class Revelation : extends StandardTransformation {};
 
     class CurseOfFamine : extends Ability {
-        int onEntry(ON_ENTRY) override {
+        ON_ENTRY override {
             CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
             BattleScriptPushCursorAndCallback(BattleScript_CurseOfFamine);
@@ -7807,17 +7467,17 @@ class AbilityBehavior {
     };
 
     class SoulHarvest : extends Ability {
-        void onStat(ON_STAT) override {
+        ON_STAT override {
             if (statId != STAT_SPEED) *stat = *stat * (20 + min(5, gFaintedMonCount[GetBattlerSide(battler)])) / 20;
         }
         bool breakable() override { return true; }
     };
 
     class ThickBlubber : extends Ability {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER override {
             if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.25);
         }
-        void onStat(ON_STAT) override {
+        ON_STAT override {
             if (statId == STAT_SPEED) *stat *= .5;
         }
     };
@@ -7827,7 +7487,7 @@ class AbilityBehavior {
     };
 
     class RatKing : extends Ability {
-        void onStat(ON_STAT) override {
+        ON_STAT override {
             const BaseStats *baseStats = &gBaseStats[gBattleMons[battler].species];
             int bst =
                 baseStats->baseHP + baseStats->baseAttack + baseStats->baseDefense + baseStats->baseSpAttack + baseStats->baseSpDefense + baseStats->baseSpeed;
@@ -7838,11 +7498,11 @@ class AbilityBehavior {
     };
 
     class CrispyCream : extends Ability {
-        int onDefender(ON_DEFENDER) override { return Random() % 2 ? FlameBody::onEither(DELEGATE_DEFENDER) : FreezingPoint::onEither(DELEGATE_DEFENDER); }
+        ON_DEFENDER override { return Random() % 2 ? FlameBody::onEither(DELEGATE_DEFENDER) : FreezingPoint::onEither(DELEGATE_DEFENDER); }
     };
 
     class DeepFried : extends Ability {
-        int onEntry(ON_ENTRY) override {
+        ON_ENTRY override {
             CHECK_NOT(gSideTimers[GetOppositeSide(battler)].fireSeaTimer)
 
             AbilityStatusEffectSafe(MOVE_EFFECT_FIRE_SEA, battler, GetOppositeSide(battler));
@@ -7854,7 +7514,7 @@ class AbilityBehavior {
     class FoodLovers : extends Hospitality, extends FriendGuard {};
 
     class LunarWrath : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+        ON_ATTACKER override {
             CHECK(moveType == TYPE_GHOST)
             CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
@@ -7867,7 +7527,7 @@ class AbilityBehavior {
     };
 
     class Virus : extends Ability {
-        int onAttacker(ON_ATTACKER) override {
+        ON_ATTACKER override {
             CHECK(ShouldApplyOnHitAffect(target))
             CHECK(moveType == TYPE_ELECTRIC)
             CHECK(CanBePoisoned(battler, target, move))
@@ -7877,7 +7537,7 @@ class AbilityBehavior {
     };
 
     class PowerLeak : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+        ON_DEFENDER override {
             CHECK(ShouldApplyOnHitAffect(battler))
             CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -7889,7 +7549,7 @@ class AbilityBehavior {
     };
 
     class BackupPower : extends Ability {
-        int onRevive(ON_REVIVE) override {
+        ON_REVIVE override {
             CHECK(IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN))
             return B_MSG_BACKUP_POWER;
         }
@@ -7905,13 +7565,13 @@ class AbilityBehavior {
     class DuneVeil : extends SandGuard, extends SelfSufficient {};
 
     class StrongFoundation : extends Ability {
-        void onDefensiveMultiplier(ON_DEFENSIVE_MULTIPLIER) override {
+        ON_DEFENSIVE_MULTIPLIER override {
             if (moveType == TYPE_WATER || moveType == TYPE_GROUND) RESISTANCE(.50);
         }
     };
 
     class FogMachine : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+        ON_DEFENDER override {
             CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_FOG_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
                 BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
                 return NO_ANNOUNCE;
@@ -7926,7 +7586,7 @@ class AbilityBehavior {
     };
 
     class DropBlocks : extends Ability {
-        int onDefender(ON_DEFENDER) override {
+        ON_DEFENDER override {
             CHECK(DidMoveHit())
             CHECK(gSideTimers[BATTLE_OPPOSITE(battler)].spikesAmount < 3)
 
@@ -7969,16 +7629,14 @@ class AbilityBehavior {
 
     class Bruiser : extends AddsType<TYPE_FIGHTING> {};
 
-    class LetsDance : extends Ability {
-        int onEntry(ON_ENTRY) override { return UseEntryMove(battler, ability, MOVE_TEETER_DANCE, 0); }
-    };
+    class LetsDance : SimpleEntryMove<MOVE_TEETER_DANCE> {};
 
     class MyceliumMight : extends Ability {
-        int onMoldBreaker(ON_MOLD_BREAKER) override { return IS_MOVE_STATUS(move); }
+        ON_MOLD_BREAKER override { return IS_MOVE_STATUS(move); }
     };
 
     class DeadlyPrecision : extends Ability {
-        int onMoldBreaker(ON_MOLD_BREAKER) override {
+        ON_MOLD_BREAKER override {
             gHitMarker |= HITMARKER_MOLD_BREAKER;
             SetTypeBeforeUsingMove(move, gActiveBattler);
             u8 moveType;
@@ -8882,6 +8540,7 @@ class AbilityBehavior {
         pair<ABILITY_LETS_DANCE, LetsDance>(),
         pair<ABILITY_MYCELIUM_MIGHT, MyceliumMight>(),
         pair<ABILITY_DEADLY_PRECISION, DeadlyPrecision>(),
+        pair<ABILITY_RIPEN, Ripen>(),
     };
 
     consteval AbilityPtrArray generate() {

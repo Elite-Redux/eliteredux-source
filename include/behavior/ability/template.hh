@@ -44,7 +44,7 @@ class OnAbsorb : extends Breakable {
 #define DELEGATE_IMMUNE battler, attacker, move, moveType, immunityScript
 APPLIES_ON_BREAKABLE(Immune, ApplyOn, ON_IMMUNE)
 
-class OnInflitrate : extends Ability {
+class OnInfiltrate : extends Ability {
 #define ON_INFILTRATE virtual InfiltrateType onInfiltrate(int battler, MoveEnum move)
 #define DELEGATE_INFILTRATE battler, move
     ON_INFILTRATE = 0;
@@ -107,7 +107,9 @@ class OnReactive : extends Ability {
 
 #define ON_BATTLER_FAINTS virtual int onBattlerFaints(AbilityEnum ability, int battler, int attacker, int fainted, MoveEnum move, Type moveType)
 #define DELEGATE_BATTLER_FAINTS ability, battler, attacker, fainted, move, moveType
+#define SELF ATTACKER
 APPLIES_ON(BattlerFaints, ApplyOnTarget, ON_BATTLER_FAINTS)
+#undef SELF
 
 class OnParentalBond : extends Ability {
 #define ON_PARENTAL_BOND virtual MultihitType onParentalBond(int battler, MoveEnum move, Type moveType)
@@ -248,7 +250,7 @@ class OnMoldBreaker : extends Ability {
     ON_MOLD_BREAKER = 0;
 };
 
-class OnRevive : extends Ability {
+class OnRevive : extends Persistent {
 #define ON_REVIVE virtual int onRevive(int battler)
 #define DELEGATE_REVIVE battler
     ON_REVIVE = 0;
@@ -282,17 +284,18 @@ class Breakable : public virtual Ability {
 class OverrideBreakable : public virtual Breakable {
     virtual bool breakable() { return false; }
 };
-class RandomizerBanned : public virtual Ability {};
-class Unsuppressable : public virtual Ability {};
-class Persistent : public virtual Ability {};
-class FormChange : public virtual RandomizerBanned, public virtual Unsuppressable {};
+class RandomizerBanned : extends Ability {};
+class NotImplemented : extends RandomizerBanned {};
+class Unsuppressable : extends Ability {};
+class Persistent : extends Ability {};
+class FormChange : extends RandomizerBanned, extends Unsuppressable {};
 
-#define MERGE_OR(Name, name, ON_NAME, DELEGATE_NAME)                                 \
-    template <typename T, typename U>                                                \
-    class Merge##Name##Impl : extends T, extends U {                                 \
-        ON_NAME override { return T::name(DELEGATE_NAME) | U::name(DELEGATE_NAME); } \
-    };                                                                               \
-    template <typename T, typename U>                                                \
+#define MERGE_OPERATOR(Name, name, ON_NAME, DELEGATE_NAME, op)                        \
+    template <typename T, typename U>                                                 \
+    class Merge##Name##Impl : extends T, extends U {                                  \
+        ON_NAME override { return T::name(DELEGATE_NAME) op U::name(DELEGATE_NAME); } \
+    };                                                                                \
+    template <typename T, typename U>                                                 \
     class Merge##Name : extends std::conditional<BothAre<T, U, OnEntry>, Merge##Name##Impl<T, U>, Ability> {};
 
 #define MERGE_VOID(Name, name, ON_NAME, DELEGATE_NAME) \
@@ -306,12 +309,15 @@ class FormChange : public virtual RandomizerBanned, public virtual Unsuppressabl
     template <typename T, typename U>                  \
     class Merge##Name : extends std::conditional<BothAre<T, U, OnEntry>, Merge##Name##Impl<T, U>, Ability> {};
 
-MERGE_OR(OnEntry, onEntry, ON_ENTRY, DELEGATE_ENTRY)
+MERGE_OPERATOR(OnEntry, onEntry, ON_ENTRY, DELEGATE_ENTRY, |)
 MERGE_VOID(OnDefender, onDefender, ON_DEFENDER, DELEGATE_DEFENDER)
-MERGE_OR(OnExit, onExit, ON_EXIT, DELEGATE_EXIT)
+MERGE_OPERATOR(OnExit, onExit, ON_EXIT, DELEGATE_EXIT, |)
 MERGE_VOID(OnModifyEffectChanceBase, onModifyEffectChance, ON_MODIFY_EFFECT_CHANCE, DELEGATE_MODIFY_EFFECT_CHANCE)
-MERGE_OR(OnEntry, onEntry, ON_ENTRY, DELEGATE_ENTRY)
-MERGE_OR(OnAbsorb, onAbsorb, ON_ABSORB, DELEGATE_ABSORB)
+MERGE_OPERATOR(OnEntry, onEntry, ON_ENTRY, DELEGATE_ENTRY, |)
+MERGE_OPERATOR(OnAbsorb, onAbsorb, ON_ABSORB, DELEGATE_ABSORB, |)
+MERGE_OPERATOR(OnTypeEffectivenessBase, onTypeEffectiveness, ON_TYPE_EFFECTIVENESS, DELEGATE_TYPE_EFFECTIVENESS, ||)
+MERGE_OPERATOR(OnEndTurn, onEndTurn, ON_END_TURN, DELEGATE_END_TURN, |)
+MERGE_VOID(OnStatBase, onStat, ON_STAT, DELEGATE_STAT)
 
 template <typename T, typename U>
 class Merged : extends T,
@@ -321,4 +327,7 @@ class Merged : extends T,
                extends MergeOnExit<T, U>,
                extends MergeOnModifyEffectChanceBase<T, U>,
                extends MergeOnEntry<T, U>,
-               extends MergeOnAbsorb<T, U> {};
+               extends MergeOnAbsorb<T, U>,
+               extends MergeOnTypeEffectivenessBase<T, U>,
+               extends MergeOnEndTurn<T, U>,
+               extends MergeOnStatBase<T, U> {};
