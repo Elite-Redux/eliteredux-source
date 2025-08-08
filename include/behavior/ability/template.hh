@@ -1,7 +1,7 @@
 #include "behavior/ability/constants.hh"
 
-#define extends \
-   public       \
+#define is \
+   public  \
     virtual
 
 #define APPLIES_ON(name, applyType, ON_NAME)                    \
@@ -10,17 +10,17 @@
         virtual applyType on##name##For() const = 0;            \
     };                                                          \
     template <applyType For = applyType::SELF>                  \
-    struct On##name : extends On##name##Base {                  \
+    struct On##name : is On##name##Base {                       \
         virtual applyType on##name##For() const { return For; } \
     };
 
 #define APPLIES_ON_BREAKABLE(name, applyType, ON_NAME)          \
-    struct On##name##Base : extends Breakable {                 \
+    struct On##name##Base : is Breakable {                      \
         ON_NAME = 0;                                            \
         virtual applyType on##name##For() const = 0;            \
     };                                                          \
     template <applyType For = applyType::SELF>                  \
-    struct On##name : extends On##name##Base {                  \
+    struct On##name : is On##name##Base {                       \
         virtual applyType on##name##For() const { return For; } \
     };
 
@@ -39,10 +39,10 @@ struct OverrideBreakable : public virtual Breakable {
     virtual bool breakable() { return false; }
 };
 struct RandomizerBanned {};
-struct NotImplemented : extends RandomizerBanned {};
+struct NotImplemented : is RandomizerBanned {};
 struct Unsuppressable {};
 struct Persistent {};
-struct FormChangeAbility : extends RandomizerBanned, extends Unsuppressable {};
+struct FormChangeAbility : is RandomizerBanned, is Unsuppressable {};
 
 struct OnEntry {
 #define ON_ENTRY virtual int onEntry(AbilityEnum ability, int battler)
@@ -50,7 +50,7 @@ struct OnEntry {
     ON_ENTRY = 0;
 };
 
-struct OnAbsorb : extends Breakable {
+struct OnAbsorb : is Breakable {
 #define ON_ABSORB virtual int onAbsorb(int battler, MoveEnum move, Type moveType, int *statId)
 #define DELEGATE_ABSORB battler, move, moveType, statId
     ON_ABSORB { return 0; }
@@ -103,7 +103,7 @@ struct OnDefender {
     ON_DEFENDER = 0;
 };
 
-struct OnEither : extends OnAttacker, extends OnDefender {};
+struct OnEither : is OnAttacker, is OnDefender {};
 #define ON_EITHER                                       \
     ON_ATTACKER { return onEither(DELEGATE_ATTACKER); } \
     ON_DEFENDER { return onEither(DELEGATE_DEFENDER); } \
@@ -147,7 +147,7 @@ struct OnParentalBond {
 #define DELEGATE_OFFENSIVE_MULTIPLIER battler, ability, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier
 APPLIES_ON(OffensiveMultiplier, ApplyOn, ON_OFFENSIVE_MULTIPLIER)
 
-struct OnDefensiveMultiplier : extends Breakable {
+struct OnDefensiveMultiplier : is Breakable {
 #define ON_DEFENSIVE_MULTIPLIER         \
     virtual void onDefensiveMultiplier( \
         int battler, int attacker, MoveEnum move, Type moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier)
@@ -267,7 +267,7 @@ struct OnMoldBreaker {
     ON_MOLD_BREAKER = 0;
 };
 
-struct OnRevive : extends Persistent {
+struct OnRevive : is Persistent {
 #define ON_REVIVE virtual int onRevive(int battler)
 #define DELEGATE_REVIVE battler
     ON_REVIVE = 0;
@@ -284,11 +284,11 @@ struct AllowTerrainIfAirborne {
 };
 
 #define ENUM_WRAPPER(Name, name, type, BaseType)             \
-    struct Name##Base : extends BaseType {                   \
+    struct Name##Base : is BaseType {                        \
         virtual type name() = 0;                             \
     };                                                       \
     template <type Value>                                    \
-    struct Name : extends Name##Base {                       \
+    struct Name : is Name##Base {                            \
         virtual type name() { return static_cast<type>(0); } \
     };
 
@@ -298,22 +298,22 @@ struct Placeholder {};
 
 #define MERGE_OPERATOR(Name, name, ON_NAME, DELEGATE_NAME, op)                        \
     template <typename T, typename U>                                                 \
-    struct Merge##Name##Impl : extends T, extends U {                                 \
+    struct Merge##Name##Impl : is T, is U {                                           \
         ON_NAME override { return T::name(DELEGATE_NAME) op U::name(DELEGATE_NAME); } \
     };                                                                                \
     template <typename T, typename U>                                                 \
-    struct Merge##Name : extends std::conditional_t<BothAre<T, U, Name>, Merge##Name##Impl<T, U>, Placeholder> {};
+    struct Merge##Name : is std::conditional_t<BothAre<T, U, Name>, Merge##Name##Impl<T, U>, Placeholder> {};
 
 #define MERGE_VOID(Name, name, ON_NAME, DELEGATE_NAME) \
     template <typename T, typename U>                  \
-    struct Merge##Name##Impl : extends T, extends U {  \
+    struct Merge##Name##Impl : is T, is U {            \
         ON_NAME override {                             \
             T::name(DELEGATE_NAME);                    \
             U::name(DELEGATE_NAME);                    \
         }                                              \
     };                                                 \
     template <typename T, typename U>                  \
-    struct Merge##Name : extends std::conditional_t<BothAre<T, U, Name>, Merge##Name##Impl<T, U>, Placeholder> {};
+    struct Merge##Name : is std::conditional_t<BothAre<T, U, Name>, Merge##Name##Impl<T, U>, Placeholder> {};
 
 MERGE_OPERATOR(OnEntry, onEntry, ON_ENTRY, DELEGATE_ENTRY, |)
 MERGE_VOID(OnDefender, onDefender, ON_DEFENDER, DELEGATE_DEFENDER)
@@ -326,20 +326,20 @@ MERGE_VOID(OnStatBase, onStat, ON_STAT, DELEGATE_STAT)
 MERGE_VOID(OnOffensiveMultiplierBase, onOffensiveMultliplier, ON_OFFENSIVE_MULTIPLIER, DELEGATE_OFFENSIVE_MULTIPLIER)
 
 template <typename T, typename U>
-struct MergedRaw : extends MergeOnEntry<T, U>,
-                   extends MergeOnDefender<T, U>,
-                   extends MergeOnExit<T, U>,
-                   extends MergeOnModifyEffectChanceBase<T, U>,
-                   extends MergeOnAbsorb<T, U>,
-                   extends MergeOnTypeEffectivenessBase<T, U>,
-                   extends MergeOnEndTurn<T, U>,
-                   extends MergeOnStatBase<T, U>,
-                   extends MergeOnOffensiveMultiplierBase<T, U> {};
+struct MergedRaw : is MergeOnEntry<T, U>,
+                   is MergeOnDefender<T, U>,
+                   is MergeOnExit<T, U>,
+                   is MergeOnModifyEffectChanceBase<T, U>,
+                   is MergeOnAbsorb<T, U>,
+                   is MergeOnTypeEffectivenessBase<T, U>,
+                   is MergeOnEndTurn<T, U>,
+                   is MergeOnStatBase<T, U>,
+                   is MergeOnOffensiveMultiplierBase<T, U> {};
 
 template <AbilityEnum T, AbilityEnum U>
-struct MergedNone : extends AbilityImpl<T>, extends AbilityImpl<U> {};
+struct MergedNone : is AbilityImpl<T>, is AbilityImpl<U> {};
 
 template <AbilityEnum T, AbilityEnum U>
-struct Merged : extends std::conditional<std::is_assignable_v<AbilityImpl<T>, MergedRaw<AbilityImpl<T>, AbilityImpl<U>>>,
-                                         MergedRaw<AbilityImpl<T>, AbilityImpl<U>>,
-                                         MergedNone<T, U>> {};
+struct Merged : is std::conditional<std::is_assignable_v<AbilityImpl<T>, MergedRaw<AbilityImpl<T>, AbilityImpl<U>>>,
+                                    MergedRaw<AbilityImpl<T>, AbilityImpl<U>>,
+                                    MergedNone<T, U>> {};
