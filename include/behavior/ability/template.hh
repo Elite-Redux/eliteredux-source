@@ -24,11 +24,6 @@
         virtual applyType on##name##For() const { return For; } \
     };
 
-template <AbilityEnum Id>
-struct AbilityImpl {
-    static const AbilityImpl<Id> instance;
-};
-
 template <typename T, typename U, typename Target>
 concept BothAre = std::is_assignable_v<Target, T> && std::is_assignable_v<Target, U>;
 
@@ -43,6 +38,11 @@ struct NotImplemented : is RandomizerBanned {};
 struct Unsuppressable {};
 struct Persistent {};
 struct FormChangeAbility : is RandomizerBanned, is Unsuppressable {};
+
+template <AbilityEnum Id>
+struct AbilityImpl : is NotImplemented {
+    static const AbilityImpl<Id> instance;
+};
 
 struct OnEntry {
 #define ON_ENTRY virtual int onEntry(AbilityEnum ability, int battler)
