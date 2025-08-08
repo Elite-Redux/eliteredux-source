@@ -337,4 +337,9 @@ struct MergedRaw : extends MergeOnEntry<T, U>,
                    extends MergeOnOffensiveMultiplierBase<T, U> {};
 
 template <AbilityEnum T, AbilityEnum U>
-struct Merged : extends MergedRaw<AbilityImpl<T>, AbilityImpl<U>> {};
+struct MergedNone : extends AbilityImpl<T>, extends AbilityImpl<U> {};
+
+template <AbilityEnum T, AbilityEnum U>
+struct Merged : extends std::conditional<std::is_assignable_v<AbilityImpl<T>, MergedRaw<AbilityImpl<T>, AbilityImpl<U>>>,
+                                         MergedRaw<AbilityImpl<T>, AbilityImpl<U>>,
+                                         MergedNone<T, U>> {};
