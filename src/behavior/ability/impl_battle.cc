@@ -69,12 +69,12 @@ AbilityEnum IsSoundproof(int battler) {
             BATTLE_PARTNER(battler), +[](const AbilityImpl<ABILITY_SOUNDPROOF>* it) { return CheckApplyOn(it->onImmuneFor(), ApplyOn::ALLY); });
     return ABILITY_NONE;
 }
-AbilityEnum HasNoRecoil(int battler) { return HasAbilityOrClone<ABILITY_ROCK_HEAD>(battler); }
+AbilityEnum HasNoRecoil(int battler) { return HasAbilityOrClone<ABILITY_ROCK_HEAD>(battler, false); }
 int RecoilReductionCount(int battler) {
     int count = 0;
     for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
         auto ability = gBattleMons[battler].abilities[i];
-        FILTER(IsSuppressed(battler, ability, IsBreakable(ABILITY_LIMBER)))
+        FILTER(IsSuppressed(battler, ability, false))
         if (dispatchTo<AbilityImpl<ABILITY_LIMBER>>(ability)) return count++;
     }
     return count;
