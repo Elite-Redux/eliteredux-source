@@ -1831,7 +1831,7 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId) {
     }
 
     if (!(status & STATUS1_ANY)) {
-        if (BattlerHasAbility(battlerId, ABILITY_COMATOSE, TRUE))
+        if (HasComatose(battlerId))
             status = STATUS1_SLEEP;
         else if (IsBloodStainAffected(battlerId))
             status = STATUS1_BLEED;

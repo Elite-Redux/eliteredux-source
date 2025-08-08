@@ -738,7 +738,7 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness)
             case MULTIHIT_SINGLE:
                 break;
 
-            default:{
+            default: {
                 // Must be parental bond
                 int parentalBondCount = GetParentalBondCount(battlerAtk, multihitType);
                 int multiplier = 0;
@@ -746,8 +746,7 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness)
                     multiplier += GetParentalBondMultiplier(multihitType, i);
                 }
                 dmg = ApplyModifier(multiplier, dmg);
-            }
-            break;
+            } break;
         }
     }
 
@@ -1334,19 +1333,18 @@ void ProtectChecks(u8 battlerAtk, u8 battlerDef, u16 move, u16 predictedMove, s1
 bool32 ShouldLowerStat(u8 battler, u8 stat) {
     if ((gBattleMons[battler].statStages[stat] > MIN_STAT_STAGE && !BattlerHasAbility(battler, ABILITY_CONTRARY, TRUE)) ||
         (BattlerHasAbility(battler, ABILITY_CONTRARY, TRUE) && gBattleMons[battler].statStages[stat] < MAX_STAT_STAGE)) {
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_CLEAR_BODY) || BATTLER_HAS_ABILITY(battler, ABILITY_FULL_METAL_BODY)) return FALSE;
+        if (BlocksAllStatDrops(battler, FALSE)) return FALSE;
 
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_CLEAR_AMULET) return FALSE;
+        if (BlocksStatDropsOfType(battler, stat)) return FALSE;
 
-        if (stat == STAT_ATK && (BATTLER_HAS_ABILITY(battler, ABILITY_HYPER_CUTTER) || BATTLER_HAS_ABILITY(battler, ABILITY_DEFIANT) ||
-                                 BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT)))
-            return FALSE;
+        if (stat == STAT_ATK && (BATTLER_HAS_ABILITY(battler, ABILITY_DEFIANT) || BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT))) return FALSE;
 
         /*if (stat == STAT_DEF &&
             (BATTLER_HAS_ABILITY(battler, ABILITY_BIG_PECKS)))
             return FALSE;*/
 
-        if (stat == STAT_SPATK && (BATTLER_HAS_ABILITY(battler, ABILITY_HYPER_CUTTER) || BATTLER_HAS_ABILITY(battler, ABILITY_COMPETITIVE))) return FALSE;
+        if (stat == STAT_SPATK && BATTLER_HAS_ABILITY(battler, ABILITY_COMPETITIVE)) return FALSE;
 
         return TRUE;
     }
@@ -1402,9 +1400,8 @@ u32 CountNegativeStatStages(u8 battlerId) {
 }
 
 bool32 LoweringStatsPointlessOrBad(u8 battlerDef) {
+    if (BlocksAllStatDrops(battlerDef, FALSE)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CONTRARY)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CLEAR_BODY)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_FULL_METAL_BODY)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_RUN_AWAY)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CONTEMPT)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_DEFIANT)) return TRUE;
@@ -2039,17 +2036,16 @@ bool32 ShouldPivot(u8 battlerAtk, u8 battlerDef, u16 move, u8 moveIndex) {
                     if (CanTargetFaintAi(battlerDef, battlerAtk)) return PIVOT;  // Won't get the two turns, pivot
 
                     if (!IS_MOVE_STATUS(move) &&
-                        (shouldSwitch || (AtMaxHp(battlerDef) &&
-                                          ((AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH && !IsUnnerveAbilityOnOpposingSide(battlerDef)) ||
-                                           BattlerHasAbility(battlerDef, ABILITY_STURDY, TRUE) || BattlerHasAbility(battlerDef, ABILITY_MULTISCALE, TRUE) ||
-                                           BattlerHasAbility(battlerDef, ABILITY_SHADOW_SHIELD, TRUE)))))
+                        (shouldSwitch ||
+                         (AtMaxHp(battlerDef) &&
+                          ((AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH && !IsUnnerveAbilityOnOpposingSide(battlerDef)) || HasSturdy(battlerDef) ||
+                           BattlerHasAbility(battlerDef, ABILITY_MULTISCALE, TRUE) || BattlerHasAbility(battlerDef, ABILITY_SHADOW_SHIELD, TRUE)))))
                         return PIVOT;  // pivot to break sash/sturdy/multiscale
                 } else if (!hasStatBoost) {
                     if (!IS_MOVE_STATUS(move) &&
                         (AtMaxHp(battlerDef) &&
-                         ((AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH && !IsUnnerveAbilityOnOpposingSide(battlerDef)) ||
-                          BattlerHasAbility(battlerDef, ABILITY_STURDY, TRUE) || BattlerHasAbility(battlerDef, ABILITY_MULTISCALE, TRUE) ||
-                          BattlerHasAbility(battlerDef, ABILITY_SHADOW_SHIELD, TRUE))))
+                         ((AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_FOCUS_SASH && !IsUnnerveAbilityOnOpposingSide(battlerDef)) || HasSturdy(battlerDef) ||
+                          BattlerHasAbility(battlerDef, ABILITY_MULTISCALE, TRUE) || BattlerHasAbility(battlerDef, ABILITY_SHADOW_SHIELD, TRUE))))
                         return PIVOT;  // pivot to break sash/sturdy/multiscale
 
                     if (shouldSwitch) return PIVOT;
@@ -2169,9 +2165,9 @@ bool32 AI_CanPutToSleep(u8 battlerAtk, u8 battlerDef, u16 move, u16 partnerMove)
 
 bool32 ShouldPoisonSelf(u8 battler) {
     if (CanBePoisoned(battler, battler, MOVE_NONE) &&
-        (BattlerHasAbility(battler, ABILITY_POISON_HEAL, FALSE) || BattlerHasAbility(battler, ABILITY_MARVEL_SCALE, FALSE) ||
-         BattlerHasAbility(battler, ABILITY_QUICK_FEET, FALSE) || HasMagicGuard(battler) || HasMoveEffect(battler, EFFECT_FACADE) ||
-         HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT) || (BattlerHasAbility(battler, ABILITY_TOXIC_BOOST, FALSE) && HasMoveWithSplit(battler, SPLIT_PHYSICAL)) ||
+        (BattlerHasAbility(battler, ABILITY_POISON_HEAL, FALSE) || BattlerHasAbility(battler, ABILITY_MARVEL_SCALE, FALSE) || HasQuickFeet(battler) ||
+         HasMagicGuard(battler) || HasMoveEffect(battler, EFFECT_FACADE) || HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT) ||
+         (BattlerHasAbility(battler, ABILITY_TOXIC_BOOST, FALSE) && HasMoveWithSplit(battler, SPLIT_PHYSICAL)) ||
          (BattlerHasAbility(battler, ABILITY_GUTS, FALSE) && HasMoveWithSplit(battler, SPLIT_PHYSICAL))))
         return TRUE;  // battler can be poisoned and has move/ability that synergizes with being poisoned
     else
@@ -2192,11 +2188,11 @@ bool32 AI_CanGetFrostbite(u8 battler) { return CanGetFrostbite(battler); }
 bool32 AI_CanBleed(u8 battler) { return CanBleed(battler); }
 
 bool32 ShouldBurnSelf(u8 battler) {
-    if (CanBeBurned(battler) && (BattlerHasAbility(battler, ABILITY_QUICK_FEET, FALSE) || BattlerHasAbility(battler, ABILITY_HEATPROOF, FALSE) ||
-                                 HasMagicGuard(battler) || HasMoveEffect(battler, EFFECT_FACADE) || HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT) ||
-                                 (BattlerHasAbility(battler, ABILITY_FLARE_BOOST, FALSE) && HasMoveWithSplit(battler, SPLIT_SPECIAL)) ||
-                                 (BattlerHasAbility(battler, ABILITY_GUTS, FALSE) && HasMoveWithSplit(battler, SPLIT_PHYSICAL)) ||
-                                 (BattlerHasAbility(battler, ABILITY_DETERMINATION, FALSE) && HasMoveWithSplit(battler, SPLIT_SPECIAL))))
+    if (CanBeBurned(battler) &&
+        (HasQuickFeet(battler) || BattlerHasAbility(battler, ABILITY_HEATPROOF, FALSE) || HasMagicGuard(battler) || HasMoveEffect(battler, EFFECT_FACADE) ||
+         HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT) || (BattlerHasAbility(battler, ABILITY_FLARE_BOOST, FALSE) && HasMoveWithSplit(battler, SPLIT_SPECIAL)) ||
+         (BattlerHasAbility(battler, ABILITY_GUTS, FALSE) && HasMoveWithSplit(battler, SPLIT_PHYSICAL)) ||
+         (BattlerHasAbility(battler, ABILITY_DETERMINATION, FALSE) && HasMoveWithSplit(battler, SPLIT_SPECIAL))))
         return TRUE;
     else
         return FALSE;

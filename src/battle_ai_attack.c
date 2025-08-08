@@ -103,7 +103,7 @@ int ScoreArgument(int battlerAtk, int battlerDef, int move, struct MoveState* mo
             return AI_SCORE_SALT_CURE;
         case MOVE_EFFECT_ORDER_UP:
             if (gBattleMons[battlerAtk].species == SPECIES_DONDOZO && IsBattlerAlive(BATTLE_PARTNER(battlerAtk)) &&
-                GetAbilityState(BATTLE_PARTNER(battlerAtk), ABILITY_COMMANDER) == COMMANDER_ACTIVE) {
+                GetAbilityState(BATTLE_PARTNER(battlerAtk), ABILITY_COMMANDER)) {
                 switch (gBattleMons[BATTLE_PARTNER(battlerAtk)].species) {
                     case SPECIES_TATSUGIRI:
                     case SPECIES_TATSUGIRI_CURLY:

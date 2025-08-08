@@ -281,10 +281,18 @@ struct AbilityImpl<ABILITY_DAMP> : is OnEither {
 
 struct RemovesStatusOnImmunity : is OnStatusImmune<ApplyOn::SELF> {};
 
+template <int Stat>
+struct BlocksStatDrops : is Breakable {};
+
+struct BlocksSelfStatDrops {};
+
 template <>
-struct AbilityImpl<ABILITY_LIMBER> : is RemovesStatusOnImmunity {
+struct AbilityImpl<ABILITY_LIMBER> : is RemovesStatusOnImmunity, is BlocksSelfStatDrops {
     ON_STATUS_IMMUNE { CHECK(status & CHECK_PARALYSIS) return TRUE; }
 };
+
+template <>
+struct AbilityImpl<ABILITY_LUCKY_HALO> : is BlocksSelfStatDrops {};
 
 struct SandImmune {};
 template <>
@@ -494,6 +502,9 @@ struct AbilityImpl<ABILITY_EFFECT_SPORE> : is PowderImmune, is OnDefender {
 
 template <>
 struct AbilityImpl<ABILITY_CLEAR_BODY> : is Breakable {};
+
+template <>
+struct AbilityImpl<ABILITY_FULL_METAL_BODY> : is AbilityImpl<ABILITY_CLEAR_BODY> {};
 
 template <>
 struct AbilityImpl<ABILITY_NATURAL_CURE> : is OnExit {
@@ -713,7 +724,7 @@ struct AbilityImpl<ABILITY_FLAME_BODY> : is OnEither {
 };
 
 template <>
-struct AbilityImpl<ABILITY_KEEN_EYE> : is OnAccuracy<> {
+struct AbilityImpl<ABILITY_KEEN_EYE> : is OnAccuracy<>, is BlocksStatDrops<STAT_ACC> {
     ON_ACCURACY {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
@@ -721,7 +732,7 @@ struct AbilityImpl<ABILITY_KEEN_EYE> : is OnAccuracy<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_HYPER_CUTTER> : is Breakable, is OnCrit<> {
+struct AbilityImpl<ABILITY_HYPER_CUTTER> : is BlocksStatDrops<STAT_ATK>, is BlocksStatDrops<STAT_SPATK>, is OnCrit<> {
     ON_CRIT { CHECK(IsMoveMakingContact(move, battler)) return 1; }
 };
 
@@ -3277,7 +3288,7 @@ struct AbilityImpl<ABILITY_SWEET_DREAMS> : is OnEndTurn {
     ON_END_TURN {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
-        CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
+        CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || HasComatose(battler))
 
         gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
@@ -5200,7 +5211,7 @@ struct AbilityImpl<ABILITY_COSMIC_DAZE> : is OnOffensiveMultiplier<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_MINDS_EYE> : is Breakable, is HitsGhost {};
+struct AbilityImpl<ABILITY_MINDS_EYE> : is BlocksStatDrops<STAT_ACC>, is HitsGhost {};
 
 template <>
 struct AbilityImpl<ABILITY_BLOOD_PRICE> : is OnEndTurn, is OnOffensiveMultiplier<> {
@@ -5521,7 +5532,7 @@ struct AbilityImpl<ABILITY_COMMANDER> : is FormChangeAbility, is OnBattlerFaints
     ON_BATTLER_FAINTS {
         CHECK(GetAbilityState(battler, ability))
 
-        SetAbilityState(battler, ability, COMMANDER_NOT_ACTIVE);
+        SetAbilityState(battler, ability, 0);
         gStatuses3[battler] &= ~STATUS3_SEMI_INVULNERABLE;
         BattleScriptCall(BattleScript_CommanderEnds);
         return TRUE;

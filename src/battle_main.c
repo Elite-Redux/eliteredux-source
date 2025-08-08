@@ -75,6 +75,7 @@
 #include "util.h"
 #include "wild_encounter.h"
 #include "window.h"
+#include "behavior/ability/impl_battle.hh"
 
 extern struct MusicPlayerInfo gMPlayInfo_SE1;
 extern struct MusicPlayerInfo gMPlayInfo_SE2;
@@ -3362,7 +3363,7 @@ static void TryDoEventsBeforeFirstTurn(void) {
     for (i = 0; i < gBattlersCount; i++) {
         if (!IsBattlerAlive(i)) continue;
         // Restore Coward for the first turn
-        if (GetSingleUseAbilityCounter(i, ABILITY_COWARD) > 0) gRoundStructs[i].isProtected = TRUE;
+        if (HasCowardTriggered(i)) gRoundStructs[i].isProtected = TRUE;
     }
     TurnStructsClear();
     gCurrentTurnActionNumber = gBattlersCount;
@@ -3612,7 +3613,7 @@ static void HandleTurnActionSelectionState(void) {
                             gChosenActionByBattler[gActiveBattler] =
                                 B_ACTION_NOTHING_FAINTED;  // Not fainted, but it cannot move, because of the throwing ball.
                             gBattleCommunication[gActiveBattler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
-                        } else if (GetAbilityState(gActiveBattler, ABILITY_COMMANDER)) {
+                        } else if (GetAbilityState(gActiveBattler, ABILITY_COMMANDER )) {
                             gChosenActionByBattler[gActiveBattler] =
                                 B_ACTION_NOTHING_FAINTED;  // Not fainted, but it cannot move, because of the throwing ball.
                             gBattleCommunication[gActiveBattler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
@@ -4129,7 +4130,7 @@ static u32 GetSpeedFromAbilities(u8 battlerId, u32 speed) {
     if (gVolatileStructs[battlerId].showdownMode) speed = (speed * 150) / 100;
 
     // paralysis drop
-    if (gBattleMons[battlerId].status1 & STATUS1_PARALYSIS && !BATTLER_HAS_ABILITY(battlerId, ABILITY_QUICK_FEET))
+    if (gBattleMons[battlerId].status1 & STATUS1_PARALYSIS && !HasQuickFeet(battlerId))
         speed /= (B_PARALYSIS_SPEED >= GEN_7 ? 2 : 4);
 
     return speed;
@@ -4241,7 +4242,7 @@ s8 GetMovePriority(u32 battlerId, MoveEnum move, u32 target) {
 }
 
 #define MYCELIUM_MIGHT_AFFECTED(battler, move) \
-    (BATTLER_HAS_ABILITY(battler, ABILITY_MYCELIUM_MIGHT) && IS_MOVE_STATUS(move) && gBattleMoves[move].target != MOVE_TARGET_USER)
+    (HasMyceliumMight(battler) && IS_MOVE_STATUS(move) && gBattleMoves[move].target != MOVE_TARGET_USER)
 
 union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove) {
     union SpeedValue speedValue = {0};
@@ -4350,7 +4351,7 @@ static void SetActionsAndBattlersTurnOrder(void) {
     for (i = 0; i < gBattlersCount; i++) {
         if (!IsBattlerAlive(i))
             continue;
-        else if (BattlerHasAbility(i, ABILITY_QUICK_DRAW, TRUE) && (Random() % 100) < 30)
+        else if (HasQuickDraw(i) && (Random() % 100) < 30)
             gRoundStructs[i].quickDraw = TRUE;
         else if (GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_QUICK_CLAW && (Random() % 100) < GetBattlerHoldEffectParam(i))
             gRoundStructs[i].usedCustapBerry = TRUE;
@@ -4568,8 +4569,8 @@ static void CheckQuickClaw_CustapBerryActivation(void) {
                     }
                 } else if (gRoundStructs[gActiveBattler].quickDraw) {
                     gStackBattler1 = gBattlerAbility = gActiveBattler;
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_QUICK_DRAW;
-                    PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ABILITY_QUICK_DRAW);
+                    gBattleScripting.abilityPopupOverwrite = HasQuickDraw(gActiveBattler);
+                    PREPARE_ABILITY_BUFFER(gBattleTextBuff1, HasQuickDraw(gActiveBattler));
                     // gBattlerAbility = gActiveBattler;
                     BattleScriptExecute(BattleScript_QuickDrawActivation);
                 }

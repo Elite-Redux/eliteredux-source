@@ -3594,7 +3594,7 @@ constexpr Ability SweetDreams = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
-        CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
+        CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || HasComatose(battler))
 
         gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
@@ -6065,7 +6065,7 @@ constexpr Ability Commander = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(GetAbilityState(battler, ability))
 
-        SetAbilityState(battler, ability, COMMANDER_NOT_ACTIVE);
+        SetAbilityState(battler, ability, 0);
         gStatuses3[battler] &= ~STATUS3_SEMI_INVULNERABLE;
         BattleScriptCall(BattleScript_CommanderEnds);
         return TRUE;

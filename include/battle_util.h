@@ -101,11 +101,6 @@ typedef struct TypePower {
 } TypePower;
 
 typedef enum {
-    COMMANDER_NOT_ACTIVE = 0,
-    COMMANDER_ACTIVE,
-} CommanderState;
-
-typedef enum {
     RESTRAINING_ORDER_NOT_TRIGGERED = 0,
     RESTRAINING_ORDER_ACTIVATING,
     RESTRAINING_ORDER_DONE,
@@ -337,7 +332,9 @@ s8 GetSingleUseAbilityCounter(u8 battler, AbilityEnum ability);
 void SetSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value);
 void IncrementSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value);
 u32 GetAbilityState(u8 battler, AbilityEnum ability);
+u32 GetAbilityStateByIndex(u8 battler, int index);
 void SetAbilityState(u8 battler, AbilityEnum ability, u32 value);
+void SetAbilityStateByIndex(u8 battler, int index, u32 value);
 AbilityStates GetAbilityStateAs(u8 battler, AbilityEnum ability);
 void SetAbilityStateAs(u8 battler, AbilityEnum ability, AbilityStates value);
 void IncrementAbilityState(u8 battler, AbilityEnum ability, u32 value);

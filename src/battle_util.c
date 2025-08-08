@@ -224,7 +224,7 @@ void HandleAction_UseMove(void) {
 
     if (ShouldSetMoldBreaker(gBattlerAttacker, gChosenMove)) gHitMarker |= HITMARKER_MOLD_BREAKER;
 
-    if (BattlerHasAbility(gBattlerAttacker, ABILITY_MYCELIUM_MIGHT, FALSE)) gHitMarker |= HITMARKER_MYCELIUM_MIGHT;
+    if (HasMyceliumMight(gBattlerAttacker)) gHitMarker |= HITMARKER_MYCELIUM_MIGHT;
 
     // Set dynamic move type.
     SetTypeBeforeUsingMove(gChosenMove, gBattlerAttacker);
@@ -248,28 +248,28 @@ void HandleAction_UseMove(void) {
                 gBattlerTarget = GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT);
         }
 
-        if ((gAbsentBattlerFlags & 1 << gBattlerTarget || GetAbilityState(gBattlerTarget, ABILITY_COMMANDER) >= COMMANDER_ACTIVE) &&
+        if ((gAbsentBattlerFlags & 1 << gBattlerTarget || GetAbilityState(gBattlerTarget, ABILITY_COMMANDER)) &&
             GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget)) {
             gBattlerTarget = GetBattlerAtPosition(GetBattlerPosition(gBattlerTarget) ^ BIT_FLANK);
         }
     } else if (GetBattlerBattleMoveTargetFlags(gChosenMove, gBattlerAttacker) == MOVE_TARGET_ALLY) {
-        if (IsBattlerAlive(BATTLE_PARTNER(gBattlerAttacker)) && GetAbilityState(gBattlerTarget, ABILITY_COMMANDER) < COMMANDER_ACTIVE)
+        if (IsBattlerAlive(BATTLE_PARTNER(gBattlerAttacker)) && !GetAbilityState(gBattlerTarget, ABILITY_COMMANDER))
             gBattlerTarget = BATTLE_PARTNER(gBattlerAttacker);
         else
             gBattlerTarget = gBattlerAttacker;
     } else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && GetBattlerBattleMoveTargetFlags(gChosenMove, gBattlerAttacker) == MOVE_TARGET_FOES_AND_ALLY) {
         for (gBattlerTarget = 0; gBattlerTarget < gBattlersCount; gBattlerTarget++) {
             if (gBattlerTarget == gBattlerAttacker) continue;
-            if (GetAbilityState(gBattlerTarget, ABILITY_COMMANDER) >= COMMANDER_ACTIVE) continue;
+            if (GetAbilityState(gBattlerTarget, ABILITY_COMMANDER)) continue;
             if (IsBattlerAlive(gBattlerTarget)) break;
         }
     } else {
-        if (!IsBattlerAlive(gBattlerTarget) || GetAbilityState(gBattlerTarget, ABILITY_COMMANDER) >= COMMANDER_ACTIVE) {
+        if (!IsBattlerAlive(gBattlerTarget) || GetAbilityState(gBattlerTarget, ABILITY_COMMANDER)) {
             if (GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget)) {
                 gBattlerTarget = GetBattlerAtPosition(GetBattlerPosition(gBattlerTarget) ^ BIT_FLANK);
             } else {
                 gBattlerTarget = GetBattlerAtPosition(GetBattlerPosition(gBattlerAttacker) ^ BIT_SIDE);
-                if (!IsBattlerAlive(gBattlerTarget) || GetAbilityState(gBattlerTarget, ABILITY_COMMANDER) >= COMMANDER_ACTIVE)
+                if (!IsBattlerAlive(gBattlerTarget) || GetAbilityState(gBattlerTarget, ABILITY_COMMANDER))
                     gBattlerTarget = GetBattlerAtPosition(GetBattlerPosition(gBattlerTarget) ^ BIT_FLANK);
             }
         }
@@ -326,7 +326,7 @@ void HandleAction_UseMove(void) {
     if (gBattleTypeFlags & BATTLE_TYPE_ARENA) BattleArena_AddMindPoints(gBattlerAttacker);
 
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && IsBattlerAlive(gBattlerTarget) && GetBattlerSide(gBattlerTarget) != GetBattlerSide(gBattlerAttacker) &&
-        GetAbilityState(gBattlerTarget, ABILITY_COMMANDER) >= COMMANDER_ACTIVE) {
+        GetAbilityState(gBattlerTarget, ABILITY_COMMANDER)) {
         gBattlerTarget = GetBattlerAtPosition(GetBattlerPosition(gBattlerTarget) ^ BIT_FLANK);
     }
 
@@ -2579,9 +2579,8 @@ u8 DoBattlerEndTurnEffects(void) {
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_OCTOLOCK:
-                if (gVolatileStructs[gActiveBattler].octolock &&
-                    !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) ||
-                      GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_CLEAR_AMULET)) {
+                if (gVolatileStructs[gActiveBattler].octolock && !BlocksAllStatDrops(gActiveBattler, FALSE) &&
+                    GetBattlerHoldEffect(gActiveBattler, TRUE) != HOLD_EFFECT_CLEAR_AMULET) {
                     gBattlerTarget = gActiveBattler;
                     BattleScriptExecute(BattleScript_OctolockEndTurn);
                     effect++;
@@ -6673,7 +6672,7 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
             }
             break;
         case EFFECT_WAKE_UP_SLAP:
-            if (gBattleMons[battlerDef].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battlerDef, ABILITY_COMATOSE)) basePower *= 2;
+            if (gBattleMons[battlerDef].status1 & STATUS1_SLEEP || HasComatose(battlerDef)) basePower *= 2;
             break;
         case EFFECT_SMELLINGSALT:
             if (gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS) basePower *= 2;
@@ -9025,7 +9024,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
                 int partner = BATTLE_PARTNER(commander);
                 gStatuses3[commander] |= STATUS3_SEMI_INVULNERABLE;
                 gStatuses4[partner] |= STATUS4_COMMANDED;
-                SetAbilityState(commander, ABILITY_COMMANDER, COMMANDER_ACTIVE);
+                SetAbilityState(commander, ABILITY_COMMANDER, TRUE);
                 gBattleScripting.abilityPopupOverwrite = ABILITY_COMMANDER;
                 gStackBattler1 = commander;
                 gStackBattler2 = partner;
@@ -9143,7 +9142,7 @@ int IsDance(int attacker, MoveEnum move) { return DoesMoveMatchFlag(attacker, mo
 
 int HasAnyStatusOrAbility(int battler) {
     if (gBattleMons[battler].status1 && STATUS1_ANY) return TRUE;
-    if (BattlerHasAbility(battler, ABILITY_COMATOSE, TRUE)) return TRUE;
+    if (HasComatose(battler)) return TRUE;
     if (IsBloodStainAffected(battler)) return TRUE;
     return FALSE;
 }

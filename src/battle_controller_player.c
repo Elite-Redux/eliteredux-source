@@ -1819,7 +1819,7 @@ void PrintBattleWindow_MoveSelection(void) {
                     if (percentage > MAX_PERCENT) percentage = MAX_PERCENT;
 
                     // Focus Sash Check
-                    if ((heldItem == ITEM_FOCUS_SASH || BattlerHasAbility(target, ABILITY_STURDY, TRUE)) && percentage == MAX_PERCENT &&
+                    if ((heldItem == ITEM_FOCUS_SASH || HasSturdy(target)) && percentage == MAX_PERCENT &&
                         targetCurrentHp == gBattleMons[target].maxHP)
                         percentage = 99;
 
@@ -3350,7 +3350,7 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId, u16 moveType, u
 static u8 GetMoveTypeEffectivenessStatus(u16 moveNum, u8 targetId, u8 userId) {
     bool8 moveNullified = FALSE;
 
-    if (BattlerHasAbility(userId, ABILITY_MYCELIUM_MIGHT, TRUE) && gBattleMoves[moveNum].split == SPLIT_STATUS &&
+    if (HasMyceliumMight(userId) && gBattleMoves[moveNum].split == SPLIT_STATUS &&
         gBattleMoves[moveNum].target & !MOVE_TARGET_USER) {
         switch (gBattleMoves[moveNum].effect) {
             case EFFECT_SLEEP:
@@ -3368,7 +3368,7 @@ static u8 GetMoveTypeEffectivenessStatus(u16 moveNum, u8 targetId, u8 userId) {
         }
     }
 
-    if (BATTLER_HAS_ABILITY(targetId, ABILITY_GOOD_AS_GOLD) && IS_MOVE_STATUS(moveNum) && targetId != userId) moveNullified = TRUE;
+    if (HasGoodAsGold(targetId) && IS_MOVE_STATUS(moveNum) && targetId != userId) moveNullified = TRUE;
 
     // Move Effects
     switch (gBattleMoves[moveNum].effect) {
