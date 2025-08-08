@@ -548,7 +548,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             RETURN_SCORE_MINUS(20);
         }
 
-        if (move == MOVE_LEECH_SEED && IsMagicGuardProtected(battlerDef)) {
+        if (move == MOVE_LEECH_SEED && HasMagicGuard(battlerDef)) {
             RETURN_SCORE_MINUS(20);
         }
 
@@ -692,7 +692,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
         }  // ignore def ability check
 
         // Magic Guard
-        if (IsMagicGuardProtected(battlerDef)) {
+        if (HasMagicGuard(battlerDef)) {
             switch (moveEffect) {
                 case EFFECT_POISON:
                 case EFFECT_WILL_O_WISP:
@@ -1414,7 +1414,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             if (B_MENTAL_HERB >= GEN_5 && AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_MENTAL_HERB) score -= 6;
             break;
         case EFFECT_WILL_O_WISP:
-            if (!AI_CanBurn(battlerAtk, battlerDef, AI_DATA->partnerMove)|| IsMagicGuardProtected(battlerDef))
+            if (!AI_CanBurn(battlerAtk, battlerDef, AI_DATA->partnerMove)|| HasMagicGuard(battlerDef))
                 score -= 10;
             break;
         case EFFECT_MEMENTO:
@@ -1549,10 +1549,10 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             if (GetHealthPercentage(battlerDef) < 50) score -= 4;
             break;
         case EFFECT_RECOIL_IF_MISS:
-            if (!IsMagicGuardProtected(battlerAtk) && accuracy < 75) score -= 6;
+            if (!HasMagicGuard(battlerAtk) && accuracy < 75) score -= 6;
             break;
         case EFFECT_RECOIL_25:
-            if (!IsMagicGuardProtected(battlerAtk) && !BattlerHasAbility(battlerAtk, ABILITY_ROCK_HEAD, FALSE) &&
+            if (!HasMagicGuard(battlerAtk) && !BattlerHasAbility(battlerAtk, ABILITY_ROCK_HEAD, FALSE) &&
                 !BattlerHasAbility(battlerAtk, ABILITY_STEEL_BARREL, FALSE)) {
                 u32 recoilDmg = max(1, AI_DATA->simulatedDmg[battlerAtk][battlerDef][AI_THINKING_STRUCT->movesetIndex] / 4);
                 if (!ShouldUseRecoilMove(battlerAtk, battlerDef, recoilDmg, AI_THINKING_STRUCT->movesetIndex)) score -= 10;
@@ -1561,7 +1561,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             break;
         case EFFECT_RECOIL_33:
         case EFFECT_RECOIL_33_STATUS:
-            if (!IsMagicGuardProtected(battlerAtk) && !BattlerHasAbility(battlerAtk, ABILITY_ROCK_HEAD, FALSE) &&
+            if (!HasMagicGuard(battlerAtk) && !BattlerHasAbility(battlerAtk, ABILITY_ROCK_HEAD, FALSE) &&
                 !BattlerHasAbility(battlerAtk, ABILITY_STEEL_BARREL, FALSE)) {
                 u32 recoilDmg = max(1, AI_DATA->simulatedDmg[battlerAtk][battlerDef][AI_THINKING_STRUCT->movesetIndex] / 3);
                 if (!ShouldUseRecoilMove(battlerAtk, battlerDef, recoilDmg, AI_THINKING_STRUCT->movesetIndex)) score -= 10;
@@ -1569,7 +1569,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             }
             break;
         case EFFECT_RECOIL_50:
-            if (!IsMagicGuardProtected(battlerAtk) && !BattlerHasAbility(battlerAtk, ABILITY_ROCK_HEAD, FALSE) &&
+            if (!HasMagicGuard(battlerAtk) && !BattlerHasAbility(battlerAtk, ABILITY_ROCK_HEAD, FALSE) &&
                 !BattlerHasAbility(battlerAtk, ABILITY_STEEL_BARREL, FALSE)) {
                 u32 recoilDmg = max(1, AI_DATA->simulatedDmg[battlerAtk][battlerDef][AI_THINKING_STRUCT->movesetIndex] / 2);
                 if (!ShouldUseRecoilMove(battlerAtk, battlerDef, recoilDmg, AI_THINKING_STRUCT->movesetIndex)) score -= 10;
@@ -2600,7 +2600,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
              BattlerHasAbility(battlerAtk, ABILITY_SELF_REPAIR, TRUE)) &&
             AI_THINKING_STRUCT->aiFlags & AI_FLAG_SMART_SWITCHING && HasOnlyMovesWithSplit(battlerAtk, SPLIT_PHYSICAL, TRUE)) {
             score = 90;  // Force switch if all your attacking moves are special and you have Natural Cure or Self-Repair.
-        } else if (IS_MOVE_PHYSICAL(move) && gBattleMoves[move].effect != EFFECT_FACADE && !IgnoresBurnAtkDrop(battlerAtk)) {
+        } else if (IS_MOVE_PHYSICAL(move) && gBattleMoves[move].effect != EFFECT_FACADE && !IgnoresBurnAttackDrop(battlerAtk)) {
             score -= 2;
         }
     }
@@ -2880,7 +2880,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
         case EFFECT_MULTI_HIT:
         case EFFECT_DOUBLE_HIT:
         case EFFECT_TRIPLE_KICK:
-            if (AI_MoveMakesContact(battlerAtk, AI_DATA->holdEffects[battlerAtk], move) && !IsMagicGuardProtected(battlerAtk) &&
+            if (AI_MoveMakesContact(battlerAtk, AI_DATA->holdEffects[battlerAtk], move) && !HasMagicGuard(battlerAtk) &&
                 AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_ROCKY_HELMET)
                 score -= 2;
             break;
@@ -3018,7 +3018,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
             break;
         case EFFECT_LEECH_SEED:
             if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS) || gStatuses3[battlerDef] & STATUS3_LEECHSEED || HasMoveEffect(battlerDef, EFFECT_RAPID_SPIN) ||
-                BattlerHasAbility(battlerDef, ABILITY_LIQUID_OOZE, TRUE) || IsMagicGuardProtected(battlerDef))
+                BattlerHasAbility(battlerDef, ABILITY_LIQUID_OOZE, TRUE) || HasMagicGuard(battlerDef))
                 break;
             score += 3;
             if (!HasDamagingMove(battlerDef) || IsBattlerTrapped(battlerDef, FALSE)) score += 2;
@@ -3164,7 +3164,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
             break;
         } break;
         case EFFECT_NIGHTMARE:
-            if (!IsMagicGuardProtected(battlerDef) && !(gBattleMons[battlerDef].status2 & STATUS2_NIGHTMARE) &&
+            if (!HasMagicGuard(battlerDef) && !(gBattleMons[battlerDef].status2 & STATUS2_NIGHTMARE) &&
                 (BattlerHasAbility(battlerDef, ABILITY_COMATOSE, TRUE) || gBattleMons[battlerDef].status1 & STATUS1_SLEEP)) {
                 score += 5;
                 if (IsBattlerTrapped(battlerDef, TRUE)) score += 3;
@@ -3178,7 +3178,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
                     score++;
                 break;
             } else {
-                if (BattlerHasAbility(battlerAtk, ABILITY_CONTRARY, TRUE) || IsMagicGuardProtected(battlerDef))
+                if (BattlerHasAbility(battlerAtk, ABILITY_CONTRARY, TRUE) || HasMagicGuard(battlerDef))
                     break;
                 else if (gBattleMons[battlerAtk].statStages[STAT_ATK] < 8)
                     score += (8 - gBattleMons[battlerAtk].statStages[STAT_ATK]);
@@ -3496,7 +3496,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
                     if (!ShouldFrostbiteSelf(battlerAtk)) score += 2;
                     break;
                 case HOLD_EFFECT_BLACK_SLUDGE:
-                    if (!IS_BATTLER_OF_TYPE(battlerDef, TYPE_POISON) && !IsMagicGuardProtected(battlerDef)) score += 3;
+                    if (!IS_BATTLER_OF_TYPE(battlerDef, TYPE_POISON) && !HasMagicGuard(battlerDef)) score += 3;
                     break;
                 case HOLD_EFFECT_IRON_BALL:
                     if (!HasMoveEffect(battlerDef, EFFECT_FLING) || !IsBattlerGrounded(battlerDef)) score += 2;
@@ -3535,7 +3535,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
                                 if (ShouldFrostbiteSelf(battlerAtk)) score += 2;
                                 break;
                             case HOLD_EFFECT_BLACK_SLUDGE:
-                                if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_POISON) || IsMagicGuardProtected(battlerAtk)) score += 3;
+                                if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_POISON) || HasMagicGuard(battlerAtk)) score += 3;
                                 break;
                             case HOLD_EFFECT_IRON_BALL:
                                 if (HasMoveEffect(battlerAtk, EFFECT_FLING)) score += 2;
@@ -3927,7 +3927,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
         case EFFECT_FLAME_BURST:
             if (isDoubleBattle) {
                 if (IsBattlerAlive(BATTLE_PARTNER(battlerDef)) && GetHealthPercentage(BATTLE_PARTNER(battlerDef)) < 12 &&
-                    !IsMagicGuardProtected(BATTLE_PARTNER(battlerDef)) && !IS_BATTLER_OF_TYPE(BATTLE_PARTNER(battlerDef), TYPE_FIRE))
+                    !HasMagicGuard(BATTLE_PARTNER(battlerDef)) && !IS_BATTLER_OF_TYPE(BATTLE_PARTNER(battlerDef), TYPE_FIRE))
                     score++;
             }
             break;

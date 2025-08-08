@@ -967,7 +967,7 @@ MultihitType GetParentalBondType(int battler, int target, MoveEnum move, int mov
 
     ON_ABILITY(battler,
                FALSE,
-               gAbilities[ability].onParentalBond && (!hasFortKnox || gAbilities[ability].resistsFortKnox),
+               gAbilities[ability].onParentalBond && (!hasFortKnox || ResistsFortKnox(ability)),
                int result = gAbilities[ability].onParentalBond(battler, move, moveType);
                if (result) return result)
 
@@ -1137,11 +1137,14 @@ static void Cmd_attackcanceler(void) {
             return;
         }
 
-        ON_ABILITY(gBattlerTarget, TRUE, gAbilities[ability].magicBounce, gBattleScripting.abilityPopupOverwrite = ability;
-                   gRoundStructs[gBattlerTarget].usesBouncedMove = TRUE;
-                   gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PKMNMOVEBOUNCEDABILITY;
-                   BattleScriptCall(BattleScript_MagicCoatBounce);
-                   return)
+        AbilityEnum magicBounce = HasMagicBounce(gBattlerTarget);
+        if (magicBounce) {
+            gBattleScripting.abilityPopupOverwrite = magicBounce;
+            gRoundStructs[gBattlerTarget].usesBouncedMove = TRUE;
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PKMNMOVEBOUNCEDABILITY;
+            BattleScriptCall(BattleScript_MagicCoatBounce);
+            return;
+        }
     }
 
     for (i = 0; i < gBattlersCount; i++) {
@@ -1266,7 +1269,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
     if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_KEEN_EYE) ||
         BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MINDS_EYE))
         evasionStage = min(evasionStage, DEFAULT_STAT_STAGE);
-    else if (IsUnaware(battlerAtk))
+    else if (HasUnaware(battlerAtk))
         evasionStage = DEFAULT_STAT_STAGE;
 
     if (gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT)
@@ -2759,7 +2762,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     }
                     break;
                 case MOVE_EFFECT_FLAME_BURST:
-                    if (IsBattlerAlive(BATTLE_PARTNER(gBattlerTarget)) && !IsMagicGuardProtected(BATTLE_PARTNER(gBattlerTarget))) {
+                    if (IsBattlerAlive(BATTLE_PARTNER(gBattlerTarget)) && !HasMagicGuard(BATTLE_PARTNER(gBattlerTarget))) {
                         gBattleMoveDamage = gBattleMons[BATTLE_PARTNER(gBattlerTarget)].hp / 4;
                         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
                         gBattlescriptCurrInstr = BattleScript_MoveEffectFlameBurst;
@@ -4316,10 +4319,8 @@ static void Cmd_moveend(void) {
                 if (!IsBattlerAlive(gBattlerAttacker)) break;
                 if (!gTurnStructs[gBattlerAttacker].savedDmg) break;
                 if (gCurrentMove != MOVE_STRUGGLE) {
-                    if (IsMagicGuardProtected(gBattlerAttacker)) break;
-                    int blocked = FALSE;
-                    ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].noRecoil, blocked = TRUE; break)
-                    if (blocked) break;
+                    if (HasMagicGuard(gBattlerAttacker)) break;
+                    if (HasNoRecoil(gBattlerAttacker)) break;
                 }
 
                 switch (gBattleMoves[gCurrentMove].effect) {
@@ -4369,7 +4370,8 @@ static void Cmd_moveend(void) {
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_COSMIC_DAZE))
                     gBattleMoveDamage *= 2;
 
-                ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].halfRecoil, gBattleMoveDamage = max(1, gBattleMoveDamage / 2))
+                gBattleMoveDamage = gBattleMoveDamage >> RecoilReductionCount(gBattlerAttacker);
+                if (!gBattleMoveDamage) gBattleMoveDamage = 1;
 
                 ReadActiveScriptInitialStackState();
                 effect = TRUE;
@@ -5469,7 +5471,7 @@ static void Cmd_switchineffects(void) {
             if (DoesBattlerHaveAbilityShield(i)) continue;
             ARRAY_COPY(abilities, gBattleMons[i].abilities)
             for (j = 0; j < TOTAL_ABILITY_COUNT; j++) {
-                if (!IsPersistentOrUnsuppressableAbility(abilities[j])) abilities[j] = ABILITY_NONE;
+                if (!IsPersistentOrUnsuppressable(abilities[j])) abilities[j] = ABILITY_NONE;
             }
             UpdateAbilityStateIndices(i, abilities);
         }
@@ -6744,7 +6746,7 @@ static void Cmd_various(void) {
             return;
         case VARIOUS_GET_STAT_VALUE:
             i = READ_8_INC;
-            gBattleMoveDamage = CalculateStat(gActiveBattler, i, 0, 0, TRUE, FALSE, IsUnaware(gBattlerAttacker), FALSE);
+            gBattleMoveDamage = CalculateStat(gActiveBattler, i, 0, 0, TRUE, FALSE, HasUnaware(gBattlerAttacker), FALSE);
             return;
         case VARIOUS_JUMP_IF_FULL_HP:
             ptr = READ_PTR_INC;
@@ -7205,12 +7207,7 @@ static void Cmd_various(void) {
             } else if (BATTLER_MAX_HP(gActiveBattler)) {
                 gBattlescriptCurrInstr = ptr;
             } else {
-                int megaLauncherBoosted = FALSE;
-                if (IsMegaLauncherBoosted(gBattlerAttacker, gCurrentMove)) {
-                    ON_ABILITY(gActiveBattler, FALSE, gAbilities[ability].megaLauncherBoost, megaLauncherBoosted = TRUE; break)
-                }
-
-                if (megaLauncherBoosted)
+                if (IsMegaLauncherBoosted(gBattlerAttacker, gCurrentMove) && HasMegaLauncherBoost(gBattlerAttacker))
                     gBattleMoveDamage = -(gBattleMons[gActiveBattler].maxHP * 3 / 4);
                 else
                     gBattleMoveDamage = -(gBattleMons[gActiveBattler].maxHP / 2);
@@ -8403,7 +8400,7 @@ static void Cmd_various(void) {
             break;
         case VARIOUS_GOTO_IF_STAT_UP:
             ptr = READ_PTR_INC;
-            REQUIRE_NOT(IsUnaware(gBattlerAttacker))
+            REQUIRE_NOT(HasUnaware(gBattlerAttacker))
             REQUIRE_NOT(gBattleMons[gActiveBattler].status1 & STATUS1_BLEED)
             for (i = STAT_ATK; i < NUM_BATTLE_STATS; i++) {
                 FILTER(gBattleMons[gActiveBattler].statStages[i] > DEFAULT_STAT_STAGE)
@@ -8634,7 +8631,7 @@ static void Cmd_various(void) {
                     BattleScriptCall(BattleScript_ResolveRocks);
 
                     REQUIRE(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES)
-                    REQUIRE_NOT(IsMagicGuardProtected(gActiveBattler))
+                    REQUIRE_NOT(HasMagicGuard(gActiveBattler))
                     REQUIRE(IsBattlerGrounded(gActiveBattler))
                     REQUIRE(IsBattlerAffectedByHazards(gActiveBattler, FALSE))
 
@@ -8649,7 +8646,7 @@ static void Cmd_various(void) {
 
                     REQUIRE(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK)
                     REQUIRE(IsBattlerAffectedByHazards(gActiveBattler, gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType == TYPE_ROCK))
-                    REQUIRE_NOT(IsMagicGuardProtected(gActiveBattler))
+                    REQUIRE_NOT(HasMagicGuard(gActiveBattler))
 
                     gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STEALTH_ROCK_DAMAGED;
                     gBattleMoveDamage = GetStealthHazardDamage(gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType, gActiveBattler);
@@ -9229,7 +9226,7 @@ static void Cmd_manipulatedamage(void) {
         case DMG_RECOIL_FROM_MISS:
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
 
-            ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].halfRecoil, gBattleMoveDamage /= 2)
+            gBattleMoveDamage = gBattleMoveDamage >> RecoilReductionCount(gBattlerAttacker);
             break;
         case DMG_DOUBLED:
             gBattleMoveDamage *= 2;
@@ -9257,7 +9254,7 @@ static void Cmd_manipulatedamage(void) {
         case DMG_RECOIL_FROM_IMMUNE:
             gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 2;
 
-            ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].halfRecoil, gBattleMoveDamage /= 2)
+            gBattleMoveDamage = gBattleMoveDamage >> RecoilReductionCount(gBattlerAttacker);
             break;
         case DMG_TO_HP_FROM_ABILITY:
             gBattleMoveDamage = GetDrainedBigRootHp(gBattlerAttacker, gBattleMoveDamage);
@@ -10172,9 +10169,7 @@ static void Cmd_setlightscreen(void) {
 AbilityEnum IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler) {
     if (BattlerHasAbility(battler, ABILITY_GUARD_DOG, FALSE)) return FALSE;
 
-    RETURN_ABILITY_IF_FLAG(battler, FALSE, tauntImmune)
-
-    return FALSE;
+    return IsTauntImmune(battler);
 }
 
 #define BATTLEMACROS_SIZE 9
@@ -10276,9 +10271,8 @@ int IsSandImmune(int battler) {
     if (IS_BATTLER_OF_TYPE(battler, TYPE_STEEL)) return TRUE;
     if (gStatuses3[battler] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER)) return TRUE;
     if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES) return TRUE;
-    if (IsMagicGuardProtected(battler)) return TRUE;
-    RETURN_ABILITY_IF_FLAG(battler, FALSE, sandImmune)
-    if (IsBattlerAlive(BATTLE_PARTNER(battler)) && BattlerHasAbility(battler, ABILITY_DESERT_CLOAK, FALSE)) return TRUE;
+    if (HasMagicGuard(battler)) return TRUE;
+    return HasSandImmuneAbility(battler);
     return FALSE;
 }
 
@@ -10286,15 +10280,14 @@ int IsHailImmune(int battler) {
     if (IS_BATTLER_OF_TYPE(battler, TYPE_ICE)) return TRUE;
     if (gStatuses3[battler] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER)) return TRUE;
     if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES) return TRUE;
-    if (IsMagicGuardProtected(battler)) return TRUE;
-    RETURN_ABILITY_IF_FLAG(battler, FALSE, hailImmune)
-    return FALSE;
+    if (HasMagicGuard(battler)) return TRUE;
+    return HasHailImmuneAbility(battler);
 }
 
 static void Cmd_weatherdamage(void) {
     gBattleMoveDamage = 0;
     if (IsBattlerAlive(gBattlerAttacker) && WEATHER_HAS_EFFECT  // Sandstorm damage
-        && !(IsMagicGuardProtected(gBattlerAttacker))) {
+        && !(HasMagicGuard(gBattlerAttacker))) {
         if (gBattleWeather & WEATHER_SANDSTORM_ANY) {
             if (!IsSandImmune(gBattlerAttacker)) {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;

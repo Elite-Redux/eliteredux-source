@@ -5051,14 +5051,14 @@ MoveEnum RandomizeMoves(MoveEnum moves, SpeciesEnum species, u32 personality) {
 }
 
 AbilityEnum RandomizeInnate(AbilityEnum innate, SpeciesEnum species, u32 personality) {
-    if (gSaveBlock2Ptr->innaterandomizedMode == 1 && !gAbilities[innate].randomizerBanned) {
+    if (gSaveBlock2Ptr->innaterandomizedMode == 1 && !IsRandomizerBanned(innate)) {
         // Only Randomize if you have the Innate Randomized Mode Enabled
         // Exclude form change abilities from being randomized and other mons can't get them either
         u32 randomizedInnateSeed = (innate ^ ISO_RANDOMIZE1(species) ^ personality);
         AbilityEnum randomizedInnate;
         do {
             randomizedInnate = RandRangeDeterministic(1, ABILITIES_COUNT - 1, &randomizedInnateSeed);
-        } while (gAbilities[randomizedInnate].randomizerBanned);
+        } while (IsRandomizerBanned(randomizedInnate));
         return randomizedInnate;
     } else
         return innate;
@@ -5067,14 +5067,14 @@ AbilityEnum RandomizeInnate(AbilityEnum innate, SpeciesEnum species, u32 persona
 // #define BALANCE_RANDOMIZER_ABILITIES
 
 AbilityEnum RandomizeAbility(AbilityEnum ability, SpeciesEnum species, u32 personality) {
-    if (gSaveBlock2Ptr->abilityRandomizedMode == 1 && !gAbilities[ability].randomizerBanned) {
+    if (gSaveBlock2Ptr->abilityRandomizedMode == 1 && !IsRandomizerBanned(ability)) {
         // Only Randomize if you have the Ability Randomized Mode Enabled
         // Exclude form change abilities from being randomized and other mons can't get them either
         u32 randomizedAbilitySeed = ability ^ ISO_RANDOMIZE1(species) ^ personality;
         AbilityEnum randomizedAbility;
         do {
             randomizedAbility = RandRangeDeterministic(1, ABILITIES_COUNT - 1, &randomizedAbilitySeed);
-        } while (gAbilities[randomizedAbility].randomizerBanned);
+        } while (IsRandomizerBanned(randomizedAbility));
         return randomizedAbility;
     } else
         return ability;

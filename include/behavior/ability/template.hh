@@ -4,24 +4,24 @@
    public       \
     virtual
 
-#define APPLIES_ON(name, applyType, ON_NAME)              \
-    struct On##name##Base {           \
-        ON_NAME = 0;                                      \
-        virtual applyType on##name##For() = 0;            \
-    };                                                    \
-    template <applyType For = applyType::SELF>            \
-    struct On##name : extends On##name##Base {            \
-        virtual applyType on##name##For() { return For; } \
+#define APPLIES_ON(name, applyType, ON_NAME)                    \
+    struct On##name##Base {                                     \
+        ON_NAME = 0;                                            \
+        virtual applyType on##name##For() const = 0;            \
+    };                                                          \
+    template <applyType For = applyType::SELF>                  \
+    struct On##name : extends On##name##Base {                  \
+        virtual applyType on##name##For() const { return For; } \
     };
 
-#define APPLIES_ON_BREAKABLE(name, applyType, ON_NAME)    \
-    struct On##name##Base : extends Breakable {           \
-        ON_NAME = 0;                                      \
-        virtual applyType on##name##For() = 0;            \
-    };                                                    \
-    template <applyType For = applyType::SELF>            \
-    struct On##name : extends On##name##Base {            \
-        virtual applyType on##name##For() { return For; } \
+#define APPLIES_ON_BREAKABLE(name, applyType, ON_NAME)          \
+    struct On##name##Base : extends Breakable {                 \
+        ON_NAME = 0;                                            \
+        virtual applyType on##name##For() const = 0;            \
+    };                                                          \
+    template <applyType For = applyType::SELF>                  \
+    struct On##name : extends On##name##Base {                  \
+        virtual applyType on##name##For() const { return For; } \
     };
 
 template <AbilityEnum Id>

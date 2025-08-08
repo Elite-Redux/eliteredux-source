@@ -4,6 +4,7 @@
 #include "behavior/implementation_interface.hh"
 #include "behavior/ability/constants.hh"
 #include "behavior/ability/template.hh"
+#include "behavior/ability/impl_battle.hh"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic error "-Wunused-function"
@@ -17,11 +18,6 @@ ENUM_OR(NonStackingState)
 
 template <typename As>
 const As *dispatchTo(AbilityEnum id);
-
-#define ABILITY(ID) \
-    template <>     \
-    struct AbilityImpl<ID>
-#define INSTANCE(ID) static const AbilityImpl<ID> instance
 
 #define NO_ANNOUNCE 2
 
@@ -55,30 +51,30 @@ static void InsertCorrectEndType(AbilityCallType type) {
     }
 }
 
-int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag) {
-    switch (flag) {
-        case APPLY_ON_ATTACKER_OR_TARGET:
-            return sourceBattler == attacker || sourceBattler == target;
+// int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag) {
+//     switch (flag) {
+//         case APPLY_ON_ATTACKER_OR_TARGET:
+//             return sourceBattler == attacker || sourceBattler == target;
 
-        case APPLY_ON_ATTACKER:
-            return sourceBattler == attacker;
+//         case APPLY_ON_ATTACKER:
+//             return sourceBattler == attacker;
 
-        case APPLY_ON_TARGET:
-            return sourceBattler == target;
-    }
+//         case APPLY_ON_TARGET:
+//             return sourceBattler == target;
+//     }
 
-    return IsApplyOnFlagAppropriate(contextBattler, sourceBattler, (AbilityApplyOn)flag);
-}
+//     return IsApplyOnFlagAppropriate(contextBattler, sourceBattler, (AbilityApplyOn)flag);
+// }
 
-int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag) {
-    if (flag == APPLY_ON_SELF) return contextBattler == sourceBattler;
-    if (contextBattler == sourceBattler) return !(flag & APPLY_IGNORE_SELF);
-    if (GetBattlerSide(contextBattler) == GetBattlerSide(sourceBattler))
-        return flag & APPLY_ON_ALLY;
-    else
-        return flag & APPLY_ON_FOE;
-    return FALSE;
-}
+// int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag) {
+//     if (flag == APPLY_ON_SELF) return contextBattler == sourceBattler;
+//     if (contextBattler == sourceBattler) return !(flag & APPLY_IGNORE_SELF);
+//     if (GetBattlerSide(contextBattler) == GetBattlerSide(sourceBattler))
+//         return flag & APPLY_ON_ALLY;
+//     else
+//         return flag & APPLY_ON_FOE;
+//     return FALSE;
+// }
 
 typedef enum {
     FOLLOWUP_STANDARD,
@@ -166,34 +162,35 @@ struct SwarmLike : extends OnOffensiveMultiplier<> {
     }
 };
 
-int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS_ARGS) {
-    switch (flag) {
-        case MOVE_FLAG_DANCE:
-            if (gBattleMoves[flag].flags & FLAG_DANCE) return TRUE;
-            break;
-        case MOVE_FLAG_KICK:
-            if (gBattleMoves[flag].flags & FLAG_STRIKER_BOOST) return TRUE;
-            break;
-        case MOVE_FLAG_MEGA_LAUNCHER:
-            if (gBattleMoves[flag].flags & FLAG_MEGA_LAUNCHER_BOOST) return TRUE;
-            break;
-        case MOVE_FLAG_PUNCH:
-            if (gBattleMoves[flag].flags & FLAG_IRON_FIST_BOOST) return TRUE;
-            break;
-        case MOVE_FLAG_SOUND:
-            if (gBattleMoves[flag].flags & FLAG_SOUND) return TRUE;
-            break;
+// int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS_ARGS) {
+//     switch (flag) {
+//         case MOVE_FLAG_DANCE:
+//             if (gBattleMoves[flag].flags & FLAG_DANCE) return TRUE;
+//             break;
+//         case MOVE_FLAG_KICK:
+//             if (gBattleMoves[flag].flags & FLAG_STRIKER_BOOST) return TRUE;
+//             break;
+//         case MOVE_FLAG_MEGA_LAUNCHER:
+//             if (gBattleMoves[flag].flags & FLAG_MEGA_LAUNCHER_BOOST) return TRUE;
+//             break;
+//         case MOVE_FLAG_PUNCH:
+//             if (gBattleMoves[flag].flags & FLAG_IRON_FIST_BOOST) return TRUE;
+//             break;
+//         case MOVE_FLAG_SOUND:
+//             if (gBattleMoves[flag].flags & FLAG_SOUND) return TRUE;
+//             break;
 
-        default:
-            return FALSE;
-            break;
-    }
+//         default:
+//             return FALSE;
+//             break;
+//     }
 
-    ON_ABILITY(battler, FALSE, gAbilities[ability].onModifyMoveFlags, if (gAbilities[ability].onModifyMoveFlags(DELEGATE_MODIFY_MOVE_FLAGS)) return TRUE)
-    return FALSE;
-}
+//     ON_ABILITY(battler, FALSE, gAbilities[ability].onModifyMoveFlags, if (gAbilities[ability].onModifyMoveFlags(DELEGATE_MODIFY_MOVE_FLAGS)) return TRUE)
+//     return FALSE;
+// }
 
-ABILITY(ABILITY_NONE) : extends RandomizerBanned { INSTANCE(ABILITY_NONE); };
+template <>
+struct AbilityImpl<ABILITY_NONE> : extends RandomizerBanned {};
 
 template <int Stat>
 struct RuinEffect : extends OnStat<ApplyOn::OTHER> {
@@ -202,18 +199,22 @@ struct RuinEffect : extends OnStat<ApplyOn::OTHER> {
         if (statId != Stat) return;
         if (*flags & Stat) return;
         ON_ABILITY(battler, FALSE, dispatchTo<RuinEffect<Stat>>(ability), return) *stat *= .75;
-        *flags |= static_cast<NonStackingState>(1 << Stat);
+        *flags = *flags | static_cast<NonStackingState>(1 << Stat);
     }
 };
 
-ABILITY(ABILITY_TABLETS_OF_RUIN) : extends RuinEffect<STAT_ATK> { INSTANCE(ABILITY_TABLETS_OF_RUIN); };
-ABILITY(ABILITY_SWORD_OF_RUIN) : extends RuinEffect<STAT_DEF> { INSTANCE(ABILITY_SWORD_OF_RUIN); };
-ABILITY(ABILITY_VESSEL_OF_RUIN) : extends RuinEffect<STAT_SPATK> { INSTANCE(ABILITY_VESSEL_OF_RUIN); };
-ABILITY(ABILITY_BEADS_OF_RUIN) : extends RuinEffect<STAT_SPDEF> { INSTANCE(ABILITY_BEADS_OF_RUIN); };
+template <>
+struct AbilityImpl<ABILITY_TABLETS_OF_RUIN> : extends RuinEffect<STAT_ATK> {};
+template <>
+struct AbilityImpl<ABILITY_SWORD_OF_RUIN> : extends RuinEffect<STAT_DEF> {};
+template <>
+struct AbilityImpl<ABILITY_VESSEL_OF_RUIN> : extends RuinEffect<STAT_SPATK> {};
+template <>
+struct AbilityImpl<ABILITY_BEADS_OF_RUIN> : extends RuinEffect<STAT_SPDEF> {};
 
 struct ToxicTerrainImmune {};
-ABILITY(ABILITY_STENCH) : extends OnAttacker, extends ToxicTerrainImmune {
-    INSTANCE(ABILITY_STENCH);
+template <>
+struct AbilityImpl<ABILITY_STENCH> : extends OnAttacker, extends ToxicTerrainImmune {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanMoveHaveExtraFlinchChance(move))
@@ -223,10 +224,11 @@ ABILITY(ABILITY_STENCH) : extends OnAttacker, extends ToxicTerrainImmune {
     }
 };
 
-ABILITY(ABILITY_POISON_HEAL) : extends ToxicTerrainImmune { INSTANCE(ABILITY_POISON_HEAL); };
+template <>
+struct AbilityImpl<ABILITY_POISON_HEAL> : extends ToxicTerrainImmune {};
 
-ABILITY(ABILITY_DRIZZLE) : extends OnEntry {
-    INSTANCE(ABILITY_DRIZZLE);
+template <>
+struct AbilityImpl<ABILITY_DRIZZLE> : extends OnEntry {
     ON_ENTRY {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
@@ -239,8 +241,8 @@ ABILITY(ABILITY_DRIZZLE) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_SPEED_BOOST) : extends OnEndTurn {
-    INSTANCE(ABILITY_SPEED_BOOST);
+template <>
+struct AbilityImpl<ABILITY_SPEED_BOOST> : extends OnEndTurn {
     ON_END_TURN {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
@@ -251,16 +253,17 @@ ABILITY(ABILITY_SPEED_BOOST) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_BATTLE_ARMOR) : extends Breakable, extends OnDefensiveMultiplier, extends OnCrit<ApplyOnTarget::TARGET> {
-    INSTANCE(ABILITY_BATTLE_ARMOR);
+template <>
+struct AbilityImpl<ABILITY_BATTLE_ARMOR> : extends Breakable, extends OnDefensiveMultiplier, extends OnCrit<ApplyOnTarget::TARGET> {
     ON_DEFENSIVE_MULTIPLIER { MUL(.8); }
     ON_CRIT { return NEVER_CRIT; }
 };
 
-ABILITY(ABILITY_STURDY) : extends Breakable { INSTANCE(ABILITY_STURDY); };
+template <>
+struct AbilityImpl<ABILITY_STURDY> : extends Breakable {};
 
-ABILITY(ABILITY_DAMP) : extends OnEither {
-    INSTANCE(ABILITY_DAMP);
+template <>
+struct AbilityImpl<ABILITY_DAMP> : extends OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
@@ -276,20 +279,16 @@ ABILITY(ABILITY_DAMP) : extends OnEither {
     }
 };
 
-struct HalfRecoil {};
 struct RemovesStatusOnImmunity : extends OnStatusImmune<ApplyOn::SELF> {};
 
-ABILITY(ABILITY_LIMBER) : extends RemovesStatusOnImmunity, extends HalfRecoil {
-    INSTANCE(ABILITY_LIMBER);
-    ON_STATUS_IMMUNE {
-        CHECK(status & CHECK_PARALYSIS)
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_LIMBER> : extends RemovesStatusOnImmunity {
+    ON_STATUS_IMMUNE { CHECK(status & CHECK_PARALYSIS) return TRUE; }
 };
 
 struct SandImmune {};
-ABILITY(ABILITY_SAND_VEIL) : extends Breakable, extends SandImmune, extends OnAccuracy<ApplyOnTarget::TARGET> {
-    INSTANCE(ABILITY_SAND_VEIL);
+template <>
+struct AbilityImpl<ABILITY_SAND_VEIL> : extends Breakable, extends SandImmune, extends OnAccuracy<ApplyOnTarget::TARGET> {
     ON_ACCURACY {
         CHECK(IsBattlerWeatherAffected(target, WEATHER_SANDSTORM_ANY));
         *accuracy /= 1.25;
@@ -297,15 +296,15 @@ ABILITY(ABILITY_SAND_VEIL) : extends Breakable, extends SandImmune, extends OnAc
     }
 };
 
-ABILITY(ABILITY_STATIC) : extends OnEither {
-    INSTANCE(ABILITY_STATIC);
+template <>
+struct AbilityImpl<ABILITY_STATIC> : extends OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(CanBeParalyzed(battler, opponent))
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
         CHECK(Random() % 100 < 30)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_PARALYSIS, battler, opponent);
+            AbilityStatusEffectSafe(MOVE_EFFECT_PARALYSIS, battler, opponent);
         return TRUE;
     }
 };
@@ -317,46 +316,42 @@ struct AbsorbHeal : extends OnAbsorb {
         return ABSORB_RESULT_HEAL;
     }
 };
-ABILITY(ABILITY_VOLT_ABSORB) : extends AbsorbHeal<TYPE_ELECTRIC> { INSTANCE(ABILITY_VOLT_ABSORB); };
+template <>
+struct AbilityImpl<ABILITY_VOLT_ABSORB> : extends AbsorbHeal<TYPE_ELECTRIC> {};
 
-ABILITY(ABILITY_WATER_ABSORB) : extends AbsorbHeal<TYPE_WATER> { INSTANCE(ABILITY_WATER_ABSORB); };
+template <>
+struct AbilityImpl<ABILITY_WATER_ABSORB> : extends AbsorbHeal<TYPE_WATER> {};
 
 struct TauntImmune : extends Breakable {};
 
-ABILITY(ABILITY_OBLIVIOUS) : extends RemovesStatusOnImmunity, extends TauntImmune {
-    INSTANCE(ABILITY_OBLIVIOUS);
-    ON_STATUS_IMMUNE {
-        CHECK(status & (CHECK_INFATUATE | CHECK_RESTRICTING))
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_OBLIVIOUS> : extends RemovesStatusOnImmunity, extends TauntImmune {
+    ON_STATUS_IMMUNE { CHECK(status & (CHECK_INFATUATE | CHECK_RESTRICTING)) return TRUE; }
 };
 
-ABILITY(ABILITY_CLOUD_NINE) : extends OnEntry {
-    INSTANCE(ABILITY_CLOUD_NINE);
+template <>
+struct AbilityImpl<ABILITY_CLOUD_NINE> : extends OnEntry {
     ON_ENTRY {
         BattleScriptPushCursorAndCallback(BattleScript_AnnounceAirLockCloudNine);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_COMPOUND_EYES) : extends OnAccuracy<> {
-    INSTANCE(ABILITY_COMPOUND_EYES);
+template <>
+struct AbilityImpl<ABILITY_COMPOUND_EYES> : extends OnAccuracy<> {
     ON_ACCURACY {
         *accuracy *= 1.3;
         return ACCURACY_MULTIPLICATIVE;
     }
 };
 
-ABILITY(ABILITY_INSOMNIA) : extends RemovesStatusOnImmunity {
-    INSTANCE(ABILITY_INSOMNIA);
-    ON_STATUS_IMMUNE {
-        CHECK(status & CHECK_SLEEP)
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_INSOMNIA> : extends RemovesStatusOnImmunity {
+    ON_STATUS_IMMUNE { CHECK(status & CHECK_SLEEP) return TRUE; }
 };
 
-ABILITY(ABILITY_COLOR_CHANGE) : extends OnBeforeAttack<ApplyOnTarget::TARGET> {
-    INSTANCE(ABILITY_COLOR_CHANGE);
+template <>
+struct AbilityImpl<ABILITY_COLOR_CHANGE> : extends OnBeforeAttack<ApplyOnTarget::TARGET> {
     ON_BEFORE_ATTACK {
         CHECK(battler != attacker)
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
@@ -382,8 +377,8 @@ ABILITY(ABILITY_COLOR_CHANGE) : extends OnBeforeAttack<ApplyOnTarget::TARGET> {
     }
 };
 
-ABILITY(ABILITY_IMMUNITY) : extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
-    INSTANCE(ABILITY_IMMUNITY);
+template <>
+struct AbilityImpl<ABILITY_IMMUNITY> : extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_POISON) RESISTANCE(.5);
     }
@@ -393,32 +388,28 @@ ABILITY(ABILITY_IMMUNITY) : extends OnDefensiveMultiplier, extends RemovesStatus
     }
 };
 
-ABILITY(ABILITY_FLASH_FIRE) : extends OnAbsorb, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_FLASH_FIRE);
-    ON_ABSORB {
-        CHECK(moveType == TYPE_FIRE)
-        return ABSORB_RESULT_FLASH_FIRE;
-    }
+template <>
+struct AbilityImpl<ABILITY_FLASH_FIRE> : extends OnAbsorb, extends OnOffensiveMultiplier<> {
+    ON_ABSORB { CHECK(moveType == TYPE_FIRE) return ABSORB_RESULT_FLASH_FIRE; }
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FIRE && gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE) MUL(1.5);
     }
 };
 
 struct PowderImmune : extends Breakable {};
-ABILITY(ABILITY_SHIELD_DUST) : extends PowderImmune { INSTANCE(ABILITY_SHIELD_DUST); };
+template <>
+struct AbilityImpl<ABILITY_SHIELD_DUST> : extends PowderImmune {};
 
-ABILITY(ABILITY_OWN_TEMPO) : extends RemovesStatusOnImmunity, extends TauntImmune {
-    INSTANCE(ABILITY_OWN_TEMPO);
-    ON_STATUS_IMMUNE {
-        CHECK(status & CHECK_CONFUSION)
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_OWN_TEMPO> : extends RemovesStatusOnImmunity, extends TauntImmune {
+    ON_STATUS_IMMUNE { CHECK(status & CHECK_CONFUSION) return TRUE; }
 };
 
-ABILITY(ABILITY_SUCTION_CUPS) : extends Breakable { INSTANCE(ABILITY_SUCTION_CUPS); };
+template <>
+struct AbilityImpl<ABILITY_SUCTION_CUPS> : extends Breakable {};
 
-ABILITY(ABILITY_INTIMIDATE) : extends OnEntry {
-    INSTANCE(ABILITY_INTIMIDATE);
+template <>
+struct AbilityImpl<ABILITY_INTIMIDATE> : extends OnEntry {
     ON_ENTRY {
         u8 numAbility;
 
@@ -438,21 +429,16 @@ ABILITY(ABILITY_INTIMIDATE) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_SHADOW_TAG) : extends OnTrap {
-    INSTANCE(ABILITY_SHADOW_TAG);
-    ON_TRAP {
-        ON_ABILITY(switchingBattler, FALSE, gAbilities[ability].shadowTag, return FALSE)
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_SHADOW_TAG> : extends OnTrap {
+    ON_TRAP { ON_ABILITY(switchingBattler, FALSE, dispatchTo<AbilityImpl<ABILITY_SHADOW_TAG>>(ability), return FALSE) return TRUE; }
 };
 
-ABILITY(ABILITY_ROUGH_SKIN) : extends OnDefender {
-    INSTANCE(ABILITY_ROUGH_SKIN);
+template <>
+struct AbilityImpl<ABILITY_ROUGH_SKIN> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
-        CHECK_NOT(IsMagicGuardProtected(attacker))
-        CHECK(IsMoveMakingContact(move, attacker))
-        gBattleMoveDamage = gBattleMons[attacker].maxHP / 8;
+        CHECK_NOT(HasMagicGuard(attacker)) CHECK(IsMoveMakingContact(move, attacker)) gBattleMoveDamage = gBattleMons[attacker].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ability);
         BattleScriptCall(BattleScript_IronBarbsActivates);
@@ -460,30 +446,30 @@ ABILITY(ABILITY_ROUGH_SKIN) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_WONDER_GUARD) : extends Breakable, extends RandomizerBanned, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET> {
-    INSTANCE(ABILITY_WONDER_GUARD);
+template <>
+struct AbilityImpl<ABILITY_WONDER_GUARD> : extends Breakable, extends RandomizerBanned, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET> {
     ON_AFTER_TYPE_EFFECTIVENESS {
         if (*mod < UQ_4_12(2.0)) *mod = 0;
     }
 };
 
 struct GroundImmune : extends Breakable {};
-ABILITY(ABILITY_LEVITATE) : extends GroundImmune, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_LEVITATE);
+template <>
+struct AbilityImpl<ABILITY_LEVITATE> : extends GroundImmune, extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FLYING) MUL(1.25);
     }
 };
 
-ABILITY(ABILITY_EFFECT_SPORE) : extends PowderImmune, extends OnDefender {
-    INSTANCE(ABILITY_EFFECT_SPORE);
+template <>
+struct AbilityImpl<ABILITY_EFFECT_SPORE> : extends PowderImmune, extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IsPowderImmune(attacker, FALSE))
         CHECK(Random() % 100 < 30)
 
-        switch (Random() % 3) {
+            switch (Random() % 3) {
             case 0:
                 CHECK(CanBePoisoned(battler, attacker, MOVE_NONE))
 
@@ -506,15 +492,16 @@ ABILITY(ABILITY_EFFECT_SPORE) : extends PowderImmune, extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_CLEAR_BODY) : extends Breakable { INSTANCE(ABILITY_CLEAR_BODY); };
+template <>
+struct AbilityImpl<ABILITY_CLEAR_BODY> : extends Breakable {};
 
-ABILITY(ABILITY_NATURAL_CURE) : extends OnExit {
-    INSTANCE(ABILITY_NATURAL_CURE);
+template <>
+struct AbilityImpl<ABILITY_NATURAL_CURE> : extends OnExit {
     ON_EXIT {
         CHECK(IsBattlerAlive(battler))
         CHECK(gBattleMons[battler].status1 & STATUS1_ANY)
 
-        gActiveBattler = battler;
+            gActiveBattler = battler;
         gBattleMons[battler].status1 &= ~STATUS1_ANY;
         BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
         MarkBattlerForControllerExec(battler);
@@ -530,43 +517,44 @@ struct AbsorbStatUp : OnAbsorb {
     ON_ABSORB {
         CHECK(moveType == TYPE_ELECTRIC);
         int stat = Stat == STAT_HIGHEST_ATTACKING ? GetHighestAttackingStatId(battler, TRUE) : Stat;
-        *statId = STAT_SPEED;
+        *statId = stat;
         return ABSORB_RESULT_STAT;
     }
 };
 template <Type Absorbed>
 struct LightningRodClone : extends Redirects<Absorbed>, extends AbsorbStatUp<Absorbed, STAT_HIGHEST_ATTACKING> {};
-ABILITY(ABILITY_LIGHTNING_ROD) : LightningRodClone<TYPE_ELECTRIC> { INSTANCE(ABILITY_LIGHTNING_ROD); };
+template <>
+struct AbilityImpl<ABILITY_LIGHTNING_ROD> : LightningRodClone<TYPE_ELECTRIC> {};
 
-ABILITY(ABILITY_SERENE_GRACE) : extends OnModifyEffectChance<> {
-    INSTANCE(ABILITY_SERENE_GRACE);
+template <>
+struct AbilityImpl<ABILITY_SERENE_GRACE> : extends OnModifyEffectChance<> {
     ON_MODIFY_EFFECT_CHANCE { *effectChance *= 2; }
 };
 
-ABILITY(ABILITY_SWIFT_SWIM) : extends OnStat<> {
-    INSTANCE(ABILITY_SWIFT_SWIM);
+template <>
+struct AbilityImpl<ABILITY_SWIFT_SWIM> : extends OnStat<> {
     ON_STAT {
         if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_CHLOROPHYLL) : extends OnStat<> {
-    INSTANCE(ABILITY_CHLOROPHYLL);
+template <>
+struct AbilityImpl<ABILITY_CHLOROPHYLL> : extends OnStat<> {
     ON_STAT {
         if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_ILLUMINATE) : extends OnAccuracy<> {
-    INSTANCE(ABILITY_ILLUMINATE);
+template <>
+struct AbilityImpl<ABILITY_ILLUMINATE> : extends OnAccuracy<> {
     ON_ACCURACY {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
     }
 };
 
-ABILITY(ABILITY_TRACE) : extends RandomizerBanned, extends OnEntry {
-    INSTANCE(ABILITY_TRACE);
+template <>
+struct AbilityImpl<ABILITY_TRACE> : extends RandomizerBanned, extends OnEntry {
     ON_ENTRY {
         int target = BATTLE_OPPOSITE(battler);
         auto newAbility = GetBattlerAbility(target);
@@ -593,36 +581,31 @@ ABILITY(ABILITY_TRACE) : extends RandomizerBanned, extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_HUGE_POWER) : extends OnStat<> {
-    INSTANCE(ABILITY_HUGE_POWER);
+template <>
+struct AbilityImpl<ABILITY_HUGE_POWER> : extends OnStat<> {
     ON_STAT {
         if (statId == STAT_ATK) *stat *= 2;
     }
 };
 
-ABILITY(ABILITY_POISON_POINT) : extends OnEither {
-    INSTANCE(ABILITY_POISON_POINT);
+template <>
+struct AbilityImpl<ABILITY_POISON_POINT> : extends OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
-        CHECK(CanBePoisoned(battler, opponent, MOVE_NONE))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK(Random() % 100 < 30)
+        CHECK(CanBePoisoned(battler, opponent, MOVE_NONE)) CHECK(IsMoveMakingContact(move, gBattlerAttacker)) CHECK(Random() % 100 < 30)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_POISON, battler, opponent);
+            AbilityStatusEffectSafe(MOVE_EFFECT_POISON, battler, opponent);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_INNER_FOCUS) : extends TauntImmune, extends OnAccuracy<> {
-    INSTANCE(ABILITY_INNER_FOCUS);
-    ON_ACCURACY {
-        CHECK(move == MOVE_FOCUS_BLAST)
-        return ACCURACY_ALWAYS_HITS;
-    }
+template <>
+struct AbilityImpl<ABILITY_INNER_FOCUS> : extends TauntImmune, extends OnAccuracy<> {
+    ON_ACCURACY { CHECK(move == MOVE_FOCUS_BLAST) return ACCURACY_ALWAYS_HITS; }
 };
 
-ABILITY(ABILITY_MAGMA_ARMOR) : extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
-    INSTANCE(ABILITY_MAGMA_ARMOR);
+template <>
+struct AbilityImpl<ABILITY_MAGMA_ARMOR> : extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_WATER || moveType == TYPE_ICE) RESISTANCE(.7);
     }
@@ -632,8 +615,8 @@ ABILITY(ABILITY_MAGMA_ARMOR) : extends OnDefensiveMultiplier, extends RemovesSta
     }
 };
 
-ABILITY(ABILITY_WATER_VEIL) : extends OnEntry, extends RemovesStatusOnImmunity {
-    INSTANCE(ABILITY_WATER_VEIL);
+template <>
+struct AbilityImpl<ABILITY_WATER_VEIL> : extends OnEntry, extends RemovesStatusOnImmunity {
     ON_ENTRY {
         CHECK_NOT(gStatuses3[battler] & STATUS3_AQUA_RING)
 
@@ -647,13 +630,13 @@ ABILITY(ABILITY_WATER_VEIL) : extends OnEntry, extends RemovesStatusOnImmunity {
     }
 };
 
-ABILITY(ABILITY_MAGNET_PULL) : extends OnTrap {
-    INSTANCE(ABILITY_MAGNET_PULL);
+template <>
+struct AbilityImpl<ABILITY_MAGNET_PULL> : extends OnTrap {
     ON_TRAP { return IS_BATTLER_OF_TYPE(switchingBattler, TYPE_STEEL); }
 };
 
-ABILITY(ABILITY_SOUNDPROOF) : extends OnImmune<> {
-    INSTANCE(ABILITY_SOUNDPROOF);
+template <>
+struct AbilityImpl<ABILITY_SOUNDPROOF> : extends OnImmune<> {
     ON_IMMUNE {
         CHECK(IsSoundMove(attacker, move))
         CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
@@ -661,15 +644,13 @@ ABILITY(ABILITY_SOUNDPROOF) : extends OnImmune<> {
     }
 };
 
-ABILITY(ABILITY_RAIN_DISH) : extends OnEndTurn {
-    INSTANCE(ABILITY_RAIN_DISH);
+template <>
+struct AbilityImpl<ABILITY_RAIN_DISH> : extends OnEndTurn {
     ON_END_TURN {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK(CanBattlerHeal(battler))
-        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-        CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
+        CHECK(CanBattlerHeal(battler)) CHECK(gVolatileStructs[battler].isFirstTurn != 2) CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
-        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
@@ -677,8 +658,8 @@ ABILITY(ABILITY_RAIN_DISH) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_SAND_STREAM) : extends SandImmune, extends OnEntry {
-    INSTANCE(ABILITY_SAND_STREAM);
+template <>
+struct AbilityImpl<ABILITY_SAND_STREAM> : extends SandImmune, extends OnEntry {
     ON_ENTRY {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
@@ -691,8 +672,8 @@ ABILITY(ABILITY_SAND_STREAM) : extends SandImmune, extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_PRESSURE) : extends OnEntry {
-    INSTANCE(ABILITY_PRESSURE);
+template <>
+struct AbilityImpl<ABILITY_PRESSURE> : extends OnEntry {
     ON_ENTRY {
         int loweredStats = 0;
         for (int i = 0; i < gBattlersCount; i++) {
@@ -710,44 +691,39 @@ ABILITY(ABILITY_PRESSURE) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_THICK_FAT) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_THICK_FAT);
+template <>
+struct AbilityImpl<ABILITY_THICK_FAT> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.5);
     }
 };
 
-ABILITY(ABILITY_FLAME_BODY) : extends OnEither {
-    INSTANCE(ABILITY_FLAME_BODY);
+template <>
+struct AbilityImpl<ABILITY_FLAME_BODY> : extends OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
-        CHECK(CanBeBurned(opponent))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK(Random() % 100 < 30)
+        CHECK(CanBeBurned(opponent)) CHECK(IsMoveMakingContact(move, gBattlerAttacker)) CHECK(Random() % 100 < 30)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
+            AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_KEEN_EYE) : extends OnAccuracy<> {
-    INSTANCE(ABILITY_KEEN_EYE);
+template <>
+struct AbilityImpl<ABILITY_KEEN_EYE> : extends OnAccuracy<> {
     ON_ACCURACY {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
     }
 };
 
-ABILITY(ABILITY_HYPER_CUTTER) : extends Breakable, extends OnCrit<> {
-    INSTANCE(ABILITY_HYPER_CUTTER);
-    ON_CRIT {
-        CHECK(IsMoveMakingContact(move, battler))
-        return 1;
-    }
+template <>
+struct AbilityImpl<ABILITY_HYPER_CUTTER> : extends Breakable, extends OnCrit<> {
+    ON_CRIT { CHECK(IsMoveMakingContact(move, battler)) return 1; }
 };
 
-ABILITY(ABILITY_PICKUP) : extends OnEntry {
-    INSTANCE(ABILITY_PICKUP);
+template <>
+struct AbilityImpl<ABILITY_PICKUP> : extends OnEntry {
     ON_ENTRY {
         int side = GetBattlerSide(battler);
         CHECK(gSideStatuses[side] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[side].hotCoals || gSideTimers[side].caltrops)
@@ -762,8 +738,8 @@ ABILITY(ABILITY_PICKUP) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_TRUANT) : extends OnEndTurn {
-    INSTANCE(ABILITY_TRUANT);
+template <>
+struct AbilityImpl<ABILITY_TRUANT> : extends OnEndTurn {
     ON_END_TURN {
         if (GetAbilityState(battler, ability))
             SetAbilityState(battler, ability, FALSE);
@@ -773,8 +749,8 @@ ABILITY(ABILITY_TRUANT) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_HUSTLE) : extends OnAccuracy<>, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_HUSTLE);
+template <>
+struct AbilityImpl<ABILITY_HUSTLE> : extends OnAccuracy<>, extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER { MUL(1.4); }
     ON_ACCURACY {
         CHECK_NOT(IS_MOVE_STATUS(move)) *accuracy *= .9;
@@ -782,21 +758,19 @@ ABILITY(ABILITY_HUSTLE) : extends OnAccuracy<>, extends OnOffensiveMultiplier<> 
     }
 };
 
-ABILITY(ABILITY_CUTE_CHARM) : extends OnEither {
-    INSTANCE(ABILITY_CUTE_CHARM);
+template <>
+struct AbilityImpl<ABILITY_CUTE_CHARM> : extends OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK(CanInfatuate(battler, opponent))
-        CHECK(Random() % 100 < 50)
+        CHECK(IsMoveMakingContact(move, gBattlerAttacker)) CHECK(CanInfatuate(battler, opponent)) CHECK(Random() % 100 < 50)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_ATTRACT, battler, opponent);
+            AbilityStatusEffectSafe(MOVE_EFFECT_ATTRACT, battler, opponent);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_PLUS) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_PLUS);
+template <>
+struct AbilityImpl<ABILITY_PLUS> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         int partner = BATTLE_PARTNER(battler);
         if (!IsBattlerAlive(partner)) return;
@@ -804,7 +778,8 @@ ABILITY(ABILITY_PLUS) : extends OnOffensiveMultiplier<> {
     }
 };
 
-ABILITY(ABILITY_MINUS) : extends AbilityImpl<ABILITY_PLUS> { INSTANCE(ABILITY_MINUS); };
+template <>
+struct AbilityImpl<ABILITY_MINUS> : extends AbilityImpl<ABILITY_PLUS> {};
 
 struct StandardTransformation : extends FormChangeAbility, extends OnEntry, extends OnEndTurn {
     ON_ENTRY { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
@@ -814,8 +789,8 @@ struct WeatherTransformation : extends StandardTransformation, extends OnWeather
     ON_WEATHER { return TryTransformAttacker(ability, battler, ABILITY_BS_CALL); }
 };
 
-ABILITY(ABILITY_FORECAST) : extends WeatherTransformation, extends OnAttacker {
-    INSTANCE(ABILITY_FORECAST);
+template <>
+struct AbilityImpl<ABILITY_FORECAST> : extends WeatherTransformation, extends OnAttacker {
     ON_ATTACKER {
         switch (move) {
             case MOVE_SUNNY_DAY:
@@ -834,10 +809,11 @@ ABILITY(ABILITY_FORECAST) : extends WeatherTransformation, extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_STICKY_HOLD) : extends Breakable { INSTANCE(ABILITY_STICKY_HOLD); };
+template <>
+struct AbilityImpl<ABILITY_STICKY_HOLD> : extends Breakable {};
 
-ABILITY(ABILITY_SHED_SKIN) : extends OnEndTurn {
-    INSTANCE(ABILITY_SHED_SKIN);
+template <>
+struct AbilityImpl<ABILITY_SHED_SKIN> : extends OnEndTurn {
     ON_END_TURN {
         CHECK(Random() % 100 < 30)
 
@@ -847,39 +823,39 @@ ABILITY(ABILITY_SHED_SKIN) : extends OnEndTurn {
 };
 
 struct NegateBurnAtkDrop {};
-ABILITY(ABILITY_GUTS) : extends OnOffensiveMultiplier<>, extends NegateBurnAtkDrop {
-    INSTANCE(ABILITY_GUTS);
+template <>
+struct AbilityImpl<ABILITY_GUTS> : extends OnOffensiveMultiplier<>, extends NegateBurnAtkDrop {
     ON_OFFENSIVE_MULTIPLIER {
         if (HasAnyStatusOrAbility(battler) && IS_MOVE_PHYSICAL(move)) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_MARVEL_SCALE) : extends OnStat<> {
-    INSTANCE(ABILITY_MARVEL_SCALE);
+template <>
+struct AbilityImpl<ABILITY_MARVEL_SCALE> : extends OnStat<> {
     ON_STAT {
         if ((statId == STAT_DEF || statId == STAT_SPDEF) && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_OVERGROW) : extends SwarmLike<TYPE_GRASS> { INSTANCE(ABILITY_OVERGROW); };
+template <>
+struct AbilityImpl<ABILITY_OVERGROW> : extends SwarmLike<TYPE_GRASS> {};
 
-ABILITY(ABILITY_BLAZE) : extends SwarmLike<TYPE_FIRE> { INSTANCE(ABILITY_BLAZE); };
+template <>
+struct AbilityImpl<ABILITY_BLAZE> : extends SwarmLike<TYPE_FIRE> {};
 
-ABILITY(ABILITY_TORRENT) : extends SwarmLike<TYPE_WATER> { INSTANCE(ABILITY_TORRENT); };
+template <>
+struct AbilityImpl<ABILITY_TORRENT> : extends SwarmLike<TYPE_WATER> {};
 
-ABILITY(ABILITY_SWARM) : extends SwarmLike<TYPE_BUG> { INSTANCE(ABILITY_SWARM); };
+template <>
+struct AbilityImpl<ABILITY_SWARM> : extends SwarmLike<TYPE_BUG> {};
 
-struct NoRecoil {};
-ABILITY(ABILITY_ROCK_HEAD) : extends RemovesStatusOnImmunity, extends NoRecoil {
-    INSTANCE(ABILITY_ROCK_HEAD);
-    ON_STATUS_IMMUNE {
-        CHECK(status & CHECK_CONFUSION)
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_ROCK_HEAD> : extends RemovesStatusOnImmunity {
+    ON_STATUS_IMMUNE { CHECK(status & CHECK_CONFUSION) return TRUE; }
 };
 
-ABILITY(ABILITY_DROUGHT) : extends OnEntry {
-    INSTANCE(ABILITY_DROUGHT);
+template <>
+struct AbilityImpl<ABILITY_DROUGHT> : extends OnEntry {
     ON_ENTRY {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
@@ -892,16 +868,15 @@ ABILITY(ABILITY_DROUGHT) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_ARENA_TRAP) : extends OnTrap {
-    INSTANCE(ABILITY_ARENA_TRAP);
+template <>
+struct AbilityImpl<ABILITY_ARENA_TRAP> : extends OnTrap {
     ON_TRAP { return IsBattlerGrounded(switchingBattler); }
 };
 
-ABILITY(ABILITY_VITAL_SPIRIT) : extends OnAttacker, extends RemovesStatusOnImmunity, extends TauntImmune {
-    INSTANCE(ABILITY_VITAL_SPIRIT);
+template <>
+struct AbilityImpl<ABILITY_VITAL_SPIRIT> : extends OnAttacker, extends RemovesStatusOnImmunity, extends TauntImmune {
     ON_ATTACKER {
-        CHECK(moveType == TYPE_FIGHTING)
-        CHECK(AbilityHealMonStatus(battler, ability));
+        CHECK(moveType == TYPE_FIGHTING) CHECK(AbilityHealMonStatus(battler, ability));
         return TRUE;
     }
     ON_STATUS_IMMUNE {
@@ -910,8 +885,8 @@ ABILITY(ABILITY_VITAL_SPIRIT) : extends OnAttacker, extends RemovesStatusOnImmun
     }
 };
 
-ABILITY(ABILITY_WHITE_SMOKE) : extends OnEntry {
-    INSTANCE(ABILITY_WHITE_SMOKE);
+template <>
+struct AbilityImpl<ABILITY_WHITE_SMOKE> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gSideTimers[GET_BATTLER_SIDE(battler)].smokescreenTimer)
 
@@ -923,21 +898,24 @@ ABILITY(ABILITY_WHITE_SMOKE) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_FELINE_PROWESS) : extends OnStat<> {
-    INSTANCE(ABILITY_FELINE_PROWESS);
+template <>
+struct AbilityImpl<ABILITY_FELINE_PROWESS> : extends OnStat<> {
     ON_STAT {
         if (statId == STAT_SPATK) *stat *= 2;
     }
 };
 
-ABILITY(ABILITY_PURE_POWER) : extends AbilityImpl<ABILITY_FELINE_PROWESS> { INSTANCE(ABILITY_PURE_POWER); };
+template <>
+struct AbilityImpl<ABILITY_PURE_POWER> : extends AbilityImpl<ABILITY_FELINE_PROWESS> {};
 
-ABILITY(ABILITY_SHELL_ARMOR) : extends AbilityImpl<ABILITY_BATTLE_ARMOR> { INSTANCE(ABILITY_SHELL_ARMOR); };
+template <>
+struct AbilityImpl<ABILITY_SHELL_ARMOR> : extends AbilityImpl<ABILITY_BATTLE_ARMOR> {};
 
-ABILITY(ABILITY_AIR_LOCK) : extends AbilityImpl<ABILITY_CLOUD_NINE> { INSTANCE(ABILITY_AIR_LOCK); };
+template <>
+struct AbilityImpl<ABILITY_AIR_LOCK> : extends AbilityImpl<ABILITY_CLOUD_NINE> {};
 
-ABILITY(ABILITY_TANGLED_FEET) : extends OnAccuracy<ApplyOnTarget::TARGET> {
-    INSTANCE(ABILITY_TANGLED_FEET);
+template <>
+struct AbilityImpl<ABILITY_TANGLED_FEET> : extends OnAccuracy<ApplyOnTarget::TARGET> {
     ON_ACCURACY {
         CHECK(gBattleMons[target].status2 & STATUS2_CONFUSION);
         *accuracy /= 2;
@@ -945,10 +923,11 @@ ABILITY(ABILITY_TANGLED_FEET) : extends OnAccuracy<ApplyOnTarget::TARGET> {
     }
 };
 
-ABILITY(ABILITY_MOTOR_DRIVE) : extends AbsorbStatUp<TYPE_ELECTRIC, STAT_SPEED> { INSTANCE(ABILITY_MOTOR_DRIVE); };
+template <>
+struct AbilityImpl<ABILITY_MOTOR_DRIVE> : extends AbsorbStatUp<TYPE_ELECTRIC, STAT_SPEED> {};
 
-ABILITY(ABILITY_RIVALRY) : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_RIVALRY);
+template <>
+struct AbilityImpl<ABILITY_RIVALRY> : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
     ON_OFFENSIVE_MULTIPLIER {
         int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, gBattleMons[battler].personality);
         if (genderAtk != MON_GENDERLESS && genderAtk == GetGenderFromSpeciesAndPersonality(gBattleMons[target].species, gBattleMons[target].personality))
@@ -966,8 +945,8 @@ ABILITY(ABILITY_RIVALRY) : extends OnOffensiveMultiplier<>, extends OnDefensiveM
 };
 
 struct HailImmune {};
-ABILITY(ABILITY_SNOW_CLOAK) : extends Breakable, extends HailImmune, extends OnAccuracy<ApplyOnTarget::TARGET> {
-    INSTANCE(ABILITY_SNOW_CLOAK);
+template <>
+struct AbilityImpl<ABILITY_SNOW_CLOAK> : extends Breakable, extends HailImmune, extends OnAccuracy<ApplyOnTarget::TARGET> {
     ON_ACCURACY {
         CHECK(IsBattlerWeatherAffected(target, WEATHER_HAIL_ANY));
         *accuracy /= 1.25;
@@ -975,8 +954,8 @@ ABILITY(ABILITY_SNOW_CLOAK) : extends Breakable, extends HailImmune, extends OnA
     }
 };
 
-ABILITY(ABILITY_ANGER_POINT) : extends OnDefender {
-    INSTANCE(ABILITY_ANGER_POINT);
+template <>
+struct AbilityImpl<ABILITY_ANGER_POINT> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_ATK))
@@ -992,24 +971,24 @@ ABILITY(ABILITY_ANGER_POINT) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_UNBURDEN) : extends OnStat<> {
-    INSTANCE(ABILITY_UNBURDEN);
+template <>
+struct AbilityImpl<ABILITY_UNBURDEN> : extends OnStat<> {
     ON_STAT {
         if (statId == STAT_SPEED && GetAbilityState(battler, ability)) *stat *= 2;
     }
 };
 
-ABILITY(ABILITY_HEATPROOF) : extends OnDefensiveMultiplier, extends NegateBurnAtkDrop {
-    INSTANCE(ABILITY_HEATPROOF);
+template <>
+struct AbilityImpl<ABILITY_HEATPROOF> : extends OnDefensiveMultiplier, extends NegateBurnAtkDrop {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FIRE) RESISTANCE(.5);
     }
 };
 
-ABILITY(ABILITY_DRY_SKIN) : extends AbilityImpl<ABILITY_WATER_ABSORB>, extends AbilityImpl<ABILITY_RAIN_DISH>, extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_DRY_SKIN);
+template <>
+struct AbilityImpl<ABILITY_DRY_SKIN> : extends AbilityImpl<ABILITY_WATER_ABSORB>, extends AbilityImpl<ABILITY_RAIN_DISH>, extends OnDefensiveMultiplier {
     ON_END_TURN {
-        if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && !IsMagicGuardProtected(battler)) {
+        if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && !HasMagicGuard(battler)) {
             gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
             if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
             BattleScriptPushCursorAndCallback(BattleScript_SolarPowerActivates);
@@ -1023,8 +1002,8 @@ ABILITY(ABILITY_DRY_SKIN) : extends AbilityImpl<ABILITY_WATER_ABSORB>, extends A
     }
 };
 
-ABILITY(ABILITY_DOWNLOAD) : extends OnEntry {
-    INSTANCE(ABILITY_DOWNLOAD);
+template <>
+struct AbilityImpl<ABILITY_DOWNLOAD> : extends OnEntry {
     ON_ENTRY {
         gBattlerTarget = BATTLE_OPPOSITE(battler);
         if (!IsBattlerAlive(battler)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
@@ -1037,19 +1016,21 @@ ABILITY(ABILITY_DOWNLOAD) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_IRON_FIST) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_IRON_FIST);
+template <>
+struct AbilityImpl<ABILITY_IRON_FIST> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (IsIronFistBoosted(battler, move)) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_ADAPTABILITY) { INSTANCE(ABILITY_ADAPTABILITY); };
+template <>
+struct AbilityImpl<ABILITY_ADAPTABILITY> {};
 
-ABILITY(ABILITY_SKILL_LINK) { INSTANCE(ABILITY_SKILL_LINK); };
+template <>
+struct AbilityImpl<ABILITY_SKILL_LINK> {};
 
-ABILITY(ABILITY_HYDRATION) : extends OnEndTurn {
-    INSTANCE(ABILITY_HYDRATION);
+template <>
+struct AbilityImpl<ABILITY_HYDRATION> : extends OnEndTurn {
     ON_END_TURN {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
@@ -1058,23 +1039,23 @@ ABILITY(ABILITY_HYDRATION) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_SOLAR_POWER) : extends OnStat<> {
-    INSTANCE(ABILITY_SOLAR_POWER);
+template <>
+struct AbilityImpl<ABILITY_SOLAR_POWER> : extends OnStat<> {
     ON_STAT {
         if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
         if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_QUICK_FEET) : extends OnStat<> {
-    INSTANCE(ABILITY_QUICK_FEET);
+template <>
+struct AbilityImpl<ABILITY_QUICK_FEET> : extends OnStat<> {
     ON_STAT {
         if (statId == STAT_SPEED && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_NORMALIZE) : extends OnOffensiveMultiplier<>, extends OnMoveType, extends OnTypeEffectiveness<> {
-    INSTANCE(ABILITY_NORMALIZE);
+template <>
+struct AbilityImpl<ABILITY_NORMALIZE> : extends OnOffensiveMultiplier<>, extends OnMoveType, extends OnTypeEffectiveness<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
     }
@@ -1085,36 +1066,37 @@ ABILITY(ABILITY_NORMALIZE) : extends OnOffensiveMultiplier<>, extends OnMoveType
     }
 };
 
-ABILITY(ABILITY_SNIPER) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_SNIPER);
+template <>
+struct AbilityImpl<ABILITY_SNIPER> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (isCrit) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_MAGIC_GUARD) { INSTANCE(ABILITY_MAGIC_GUARD); };
+template <>
+struct AbilityImpl<ABILITY_MAGIC_GUARD> {};
 
-ABILITY(ABILITY_NO_GUARD) : extends OnAccuracy<ApplyOnTarget::ATTACKER_OR_TARGET> {
-    INSTANCE(ABILITY_NO_GUARD);
+template <>
+struct AbilityImpl<ABILITY_NO_GUARD> : extends OnAccuracy<ApplyOnTarget::ATTACKER_OR_TARGET> {
     ON_ACCURACY { return ACCURACY_ALWAYS_HITS; }
 };
 
-ABILITY(ABILITY_STALL) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_STALL);
+template <>
+struct AbilityImpl<ABILITY_STALL> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (gCurrentTurnActionNumber < GetBattlerTurnOrderNum(battler)) MUL(.7);
     }
 };
 
-ABILITY(ABILITY_TECHNICIAN) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_TECHNICIAN);
+template <>
+struct AbilityImpl<ABILITY_TECHNICIAN> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (basePower <= 60) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_LEAF_GUARD) : extends OnEndTurn {
-    INSTANCE(ABILITY_LEAF_GUARD);
+template <>
+struct AbilityImpl<ABILITY_LEAF_GUARD> : extends OnEndTurn {
     ON_END_TURN {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
 
@@ -1123,34 +1105,33 @@ ABILITY(ABILITY_LEAF_GUARD) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_MOLD_BREAKER) : extends OnEntry, extends OnMoldBreaker {
-    INSTANCE(ABILITY_MOLD_BREAKER);
+template <>
+struct AbilityImpl<ABILITY_MOLD_BREAKER> : extends OnEntry, extends OnMoldBreaker {
     ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER); }
     ON_MOLD_BREAKER { return TRUE; }
 };
 
-ABILITY(ABILITY_SUPER_LUCK) : extends OnCrit<> {
-    INSTANCE(ABILITY_SUPER_LUCK);
+template <>
+struct AbilityImpl<ABILITY_SUPER_LUCK> : extends OnCrit<> {
     ON_CRIT { return 1; }
 };
 
-ABILITY(ABILITY_AFTERMATH) : extends OnDefender {
-    INSTANCE(ABILITY_AFTERMATH);
+template <>
+struct AbilityImpl<ABILITY_AFTERMATH> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
-        CHECK_NOT(IsMagicGuardProtected(attacker))
-        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(HasMagicGuard(attacker)) CHECK(IsMoveMakingContact(move, attacker))
 
-        gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
+            gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
         if (!gBattleMoveDamage) gBattleMoveDamage = 1;
         BattleScriptCall(BattleScript_AftermathDmg);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_ANTICIPATION) : extends Breakable, extends OnEntry, extends Persistent {
-    INSTANCE(ABILITY_ANTICIPATION);
+template <>
+struct AbilityImpl<ABILITY_ANTICIPATION> : extends Breakable, extends OnEntry, extends Persistent {
     ON_ENTRY {
         int side = GetBattlerSide(battler);
         int any = FALSE;
@@ -1174,8 +1155,8 @@ ABILITY(ABILITY_ANTICIPATION) : extends Breakable, extends OnEntry, extends Pers
     }
 };
 
-ABILITY(ABILITY_FOREWARN) : extends OnEntry {
-    INSTANCE(ABILITY_FOREWARN);
+template <>
+struct AbilityImpl<ABILITY_FOREWARN> : extends OnEntry {
     ON_ENTRY {
         gBattlerTarget = BATTLE_OPPOSITE(battler);
         if (!IsBattlerAlive(gBattlerTarget) || gWishFutureKnock.futureSightCounter[gBattlerTarget]) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
@@ -1193,24 +1174,25 @@ ABILITY(ABILITY_FOREWARN) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_UNAWARE) : extends Breakable { INSTANCE(ABILITY_UNAWARE); };
+template <>
+struct AbilityImpl<ABILITY_UNAWARE> : extends Breakable {};
 
-ABILITY(ABILITY_TINTED_LENS) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_TINTED_LENS);
+template <>
+struct AbilityImpl<ABILITY_TINTED_LENS> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (typeEffectivenessMultiplier <= UQ_4_12(.5)) RESISTANCE(2);
     }
 };
 
-ABILITY(ABILITY_FILTER) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_FILTER);
+template <>
+struct AbilityImpl<ABILITY_FILTER> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
     }
 };
 
-ABILITY(ABILITY_SLOW_START) : extends OnEntry, extends OnStat<> {
-    INSTANCE(ABILITY_SLOW_START);
+template <>
+struct AbilityImpl<ABILITY_SLOW_START> : extends OnEntry, extends OnStat<> {
     ON_ENTRY {
         gVolatileStructs[battler].slowStartTimer = 5;
         return SwitchInAnnounce(B_MSG_SWITCHIN_SLOWSTART);
@@ -1230,19 +1212,20 @@ struct HitsGhost : extends OnTypeEffectiveness<> {
         return TRUE;
     }
 };
-ABILITY(ABILITY_SCRAPPY) : extends HitsGhost, extends TauntImmune { INSTANCE(ABILITY_SCRAPPY); };
+template <>
+struct AbilityImpl<ABILITY_SCRAPPY> : extends HitsGhost, extends TauntImmune {};
 
-ABILITY(ABILITY_STORM_DRAIN) : extends LightningRodClone<TYPE_WATER> { INSTANCE(ABILITY_STORM_DRAIN); };
+template <>
+struct AbilityImpl<ABILITY_STORM_DRAIN> : extends LightningRodClone<TYPE_WATER> {};
 
-ABILITY(ABILITY_ICE_BODY) : extends HailImmune, extends OnEndTurn {
-    INSTANCE(ABILITY_ICE_BODY);
+template <>
+struct AbilityImpl<ABILITY_ICE_BODY> : extends HailImmune, extends OnEndTurn {
     ON_END_TURN {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
-        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-        CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2) CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
 
-        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
@@ -1250,10 +1233,11 @@ ABILITY(ABILITY_ICE_BODY) : extends HailImmune, extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_SOLID_ROCK) : extends AbilityImpl<ABILITY_FILTER> { INSTANCE(ABILITY_SOLID_ROCK); };
+template <>
+struct AbilityImpl<ABILITY_SOLID_ROCK> : extends AbilityImpl<ABILITY_FILTER> {};
 
-ABILITY(ABILITY_SNOW_WARNING) : extends HailImmune, extends OnEntry {
-    INSTANCE(ABILITY_SNOW_WARNING);
+template <>
+struct AbilityImpl<ABILITY_SNOW_WARNING> : extends HailImmune, extends OnEntry {
     ON_ENTRY {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
@@ -1266,8 +1250,8 @@ ABILITY(ABILITY_SNOW_WARNING) : extends HailImmune, extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_HONEY_GATHER) : extends OnEndTurn {
-    INSTANCE(ABILITY_HONEY_GATHER);
+template <>
+struct AbilityImpl<ABILITY_HONEY_GATHER> : extends OnEndTurn {
     ON_END_TURN {
         CHECK_NOT(gBattleMons[battler].item)
         CHECK(Random() % 2)
@@ -1278,8 +1262,8 @@ ABILITY(ABILITY_HONEY_GATHER) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_FRISK) : extends OnEntry {
-    INSTANCE(ABILITY_FRISK);
+template <>
+struct AbilityImpl<ABILITY_FRISK> : extends OnEntry {
     ON_ENTRY {
         int any = FALSE;
         for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
@@ -1295,25 +1279,26 @@ ABILITY(ABILITY_FRISK) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_RECKLESS) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_RECKLESS);
+template <>
+struct AbilityImpl<ABILITY_RECKLESS> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
     }
 };
 
-ABILITY(ABILITY_MULTITYPE) : extends FormChangeAbility { INSTANCE(ABILITY_MULTITYPE); };
+template <>
+struct AbilityImpl<ABILITY_MULTITYPE> : extends FormChangeAbility {};
 
-ABILITY(ABILITY_FLOWER_GIFT) : extends WeatherTransformation, extends Breakable, extends OnStat<ApplyOn::ALLY> {
-    INSTANCE(ABILITY_FLOWER_GIFT);
+template <>
+struct AbilityImpl<ABILITY_FLOWER_GIFT> : extends WeatherTransformation, extends Breakable, extends OnStat<ApplyOn::ALLY> {
     ON_STAT {
         if (statId != STAT_SPATK && statId != STAT_SPDEF) return;
         if (IsWeatherActive(WEATHER_SUN_ANY)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_BAD_DREAMS) : extends OnEndTurn {
-    INSTANCE(ABILITY_BAD_DREAMS);
+template <>
+struct AbilityImpl<ABILITY_BAD_DREAMS> : extends OnEndTurn {
     ON_END_TURN {
         gBattleScripting.abilityPopupOverwrite = ability;
         BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
@@ -1321,39 +1306,39 @@ ABILITY(ABILITY_BAD_DREAMS) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_SHEER_FORCE) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_SHEER_FORCE);
+template <>
+struct AbilityImpl<ABILITY_SHEER_FORCE> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_CONTRARY) : extends Breakable { INSTANCE(ABILITY_CONTRARY); };
+template <>
+struct AbilityImpl<ABILITY_CONTRARY> : extends Breakable {};
 
-ABILITY(ABILITY_UNNERVE) : extends OnEntry {
-    INSTANCE(ABILITY_UNNERVE);
+template <>
+struct AbilityImpl<ABILITY_UNNERVE> : extends OnEntry {
     ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE); }
 };
 
-ABILITY(ABILITY_DEFEATIST) : extends OnStat<> {
-    INSTANCE(ABILITY_DEFEATIST);
+template <>
+struct AbilityImpl<ABILITY_DEFEATIST> : extends OnStat<> {
     ON_STAT {
         if (statId != STAT_ATK && statId != STAT_SPATK) return;
         if (gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 3) *stat /= 2;
     }
 };
 
-ABILITY(ABILITY_CURSED_BODY) : extends OnDefender {
-    INSTANCE(ABILITY_CURSED_BODY);
+template <>
+struct AbilityImpl<ABILITY_CURSED_BODY> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(gVolatileStructs[attacker].disabledMove)
-        CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(IsAbilityStatusProtected(attacker, CHECK_RESTRICTING))
-        CHECK(gBattleMons[attacker].pp[gChosenMovePos])
-        CHECK(Random() % 100 < 30)
+        CHECK(IsMoveMakingContact(move, attacker)) CHECK_NOT(IsAbilityStatusProtected(attacker, CHECK_RESTRICTING))
+            CHECK(gBattleMons[attacker].pp[gChosenMovePos]) CHECK(Random() % 100 < 30)
 
-        gVolatileStructs[attacker].disabledMove = gChosenMove;
+                gVolatileStructs[attacker]
+                    .disabledMove = gChosenMove;
         gVolatileStructs[attacker].disableTimer = 4;
         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove);
         BattleScriptCall(BattleScript_CursedBodyActivates);
@@ -1361,8 +1346,8 @@ ABILITY(ABILITY_CURSED_BODY) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_HEALER) : extends OnEndTurn {
-    INSTANCE(ABILITY_HEALER);
+template <>
+struct AbilityImpl<ABILITY_HEALER> : extends OnEndTurn {
     ON_END_TURN {
         CHECK(Random() % 100 < 30)
 
@@ -1378,46 +1363,47 @@ ABILITY(ABILITY_HEALER) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_FRIEND_GUARD) : extends Breakable { INSTANCE(ABILITY_FRIEND_GUARD); };
+template <>
+struct AbilityImpl<ABILITY_FRIEND_GUARD> : extends Breakable {};
 
-ABILITY(ABILITY_WEAK_ARMOR) : extends OnDefender {
-    INSTANCE(ABILITY_WEAK_ARMOR);
+template <>
+struct AbilityImpl<ABILITY_WEAK_ARMOR> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(IS_MOVE_PHYSICAL(move))
         CHECK(CanRaiseStat(battler, STAT_SPEED) || CanLowerStat(battler, STAT_DEF))
 
-        if (gBattleMoves[move].effect == EFFECT_HIT_ESCAPE && CanBattlerSwitch(attacker))
-            gRoundStructs[battler].disableEjectPack = TRUE;  // Set flag for target
+            if (gBattleMoves[move].effect == EFFECT_HIT_ESCAPE && CanBattlerSwitch(attacker)) gRoundStructs[battler]
+                .disableEjectPack = TRUE;  // Set flag for target
 
         BattleScriptCall(BattleScript_WeakArmorActivates);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_LIGHT_METAL) : extends OnStat<> {
-    INSTANCE(ABILITY_LIGHT_METAL);
+template <>
+struct AbilityImpl<ABILITY_LIGHT_METAL> : extends OnStat<> {
     ON_STAT {
         if (statId == STAT_SPEED) *stat *= 1.3;
     }
 };
 
-ABILITY(ABILITY_MULTISCALE) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_MULTISCALE);
+template <>
+struct AbilityImpl<ABILITY_MULTISCALE> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (BATTLER_MAX_HP(battler)) MUL(.5);
     }
 };
 
-ABILITY(ABILITY_TOXIC_BOOST) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_TOXIC_BOOST);
+template <>
+struct AbilityImpl<ABILITY_TOXIC_BOOST> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMons[battler].status1 & STATUS1_PSN_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_FLARE_BOOST) : extends OnEntry, extends OnWeather, extends OnStat<>, extends NegateBurnAtkDrop {
-    INSTANCE(ABILITY_FLARE_BOOST);
+template <>
+struct AbilityImpl<ABILITY_FLARE_BOOST> : extends OnEntry, extends OnWeather, extends OnStat<>, extends NegateBurnAtkDrop {
     static int FlareBoostHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
         CHECK(CanBeBurned(battler))
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
@@ -1438,28 +1424,27 @@ ABILITY(ABILITY_FLARE_BOOST) : extends OnEntry, extends OnWeather, extends OnSta
     }
 };
 
-ABILITY(ABILITY_HARVEST) : extends OnEndTurn {
-    INSTANCE(ABILITY_HARVEST);
+template <>
+struct AbilityImpl<ABILITY_HARVEST> : extends OnEndTurn {
     ON_END_TURN {
         CHECK_NOT(gBattleMons[battler].item)
         CHECK_NOT(gBattleStruct->changedItems[battler])
-        CHECK(ItemId_GetPocket(GetUsedHeldItem(battler)) == POCKET_BERRIES)
-        CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) || Random() % 2)
+        CHECK(ItemId_GetPocket(GetUsedHeldItem(battler)) == POCKET_BERRIES) CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) || Random() % 2)
 
-        BattleScriptPushCursorAndCallback(BattleScript_HarvestActivates);
+            BattleScriptPushCursorAndCallback(BattleScript_HarvestActivates);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_TELEPATHY) : extends OnAfterTypeEffectiveness<ApplyOnTarget::ATTACKER_OR_TARGET> {
-    INSTANCE(ABILITY_TELEPATHY);
+template <>
+struct AbilityImpl<ABILITY_TELEPATHY> : extends OnAfterTypeEffectiveness<ApplyOnTarget::ATTACKER_OR_TARGET> {
     ON_AFTER_TYPE_EFFECTIVENESS {
         if (target == BATTLE_PARTNER(battler) && gBattleMoves[move].power) *mod = 0;
     }
 };
 
-ABILITY(ABILITY_MOODY) : extends OnEndTurn {
-    INSTANCE(ABILITY_MOODY);
+template <>
+struct AbilityImpl<ABILITY_MOODY> : extends OnEndTurn {
     ON_END_TURN {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2);
         int validToRaise = 0, validToLower = 0;
@@ -1490,58 +1475,59 @@ ABILITY(ABILITY_MOODY) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_OVERCOAT) : extends Breakable, extends SandImmune, extends HailImmune, extends PowderImmune, extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_OVERCOAT);
+template <>
+struct AbilityImpl<ABILITY_OVERCOAT> : extends Breakable, extends SandImmune, extends HailImmune, extends PowderImmune, extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_SPECIAL(move)) MUL(.8);
     }
 };
 
-ABILITY(ABILITY_POISON_TOUCH) : extends AbilityImpl<ABILITY_POISON_POINT> { INSTANCE(ABILITY_POISON_TOUCH); };
+template <>
+struct AbilityImpl<ABILITY_POISON_TOUCH> : extends AbilityImpl<ABILITY_POISON_POINT> {};
 
-ABILITY(ABILITY_REGENERATOR) : extends OnExit {
-    INSTANCE(ABILITY_REGENERATOR);
+template <>
+struct AbilityImpl<ABILITY_REGENERATOR> : extends OnExit {
     ON_EXIT {
-        CHECK(IsBattlerAlive(battler))
-        CHECK_NOT(BATTLER_MAX_HP(battler))
-        BattleScriptCall(BattleScript_RegeneratorExits);
+        CHECK(IsBattlerAlive(battler)) CHECK_NOT(BATTLER_MAX_HP(battler)) BattleScriptCall(BattleScript_RegeneratorExits);
         return FALSE;
     }
 };
 
-ABILITY(ABILITY_BIG_PECKS) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_BIG_PECKS);
+template <>
+struct AbilityImpl<ABILITY_BIG_PECKS> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (IsMoveMakingContact(move, battler)) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_SAND_RUSH) : extends OnStat<>, extends SandImmune {
-    INSTANCE(ABILITY_SAND_RUSH);
+template <>
+struct AbilityImpl<ABILITY_SAND_RUSH> : extends OnStat<>, extends SandImmune {
     ON_STAT {
         if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_FORT_KNOX) { INSTANCE(ABILITY_FORT_KNOX); };
+template <>
+struct AbilityImpl<ABILITY_FORT_KNOX> {};
 
-ABILITY(ABILITY_WONDER_SKIN) : extends AbilityImpl<ABILITY_FORT_KNOX> { INSTANCE(ABILITY_WONDER_SKIN); };
+template <>
+struct AbilityImpl<ABILITY_WONDER_SKIN> : extends AbilityImpl<ABILITY_FORT_KNOX> {};
 
-ABILITY(ABILITY_ANALYTIC) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_ANALYTIC);
+template <>
+struct AbilityImpl<ABILITY_ANALYTIC> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber && gBattleMoves[move].effect != EFFECT_FUTURE_SIGHT) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_ILLUSION) : extends OnDefender, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_ILLUSION);
+template <>
+struct AbilityImpl<ABILITY_ILLUSION> : extends OnDefender, extends OnOffensiveMultiplier<> {
     ON_DEFENDER {
         CHECK(DidMoveHit())
         CHECK(gBattleStruct->illusion[battler].on)
         CHECK_NOT(gBattleStruct->illusion[battler].broken)
 
-        BattleScriptCall(BattleScript_IllusionOff);
+            BattleScriptCall(BattleScript_IllusionOff);
         return TRUE;
     }
     ON_OFFENSIVE_MULTIPLIER {
@@ -1549,8 +1535,8 @@ ABILITY(ABILITY_ILLUSION) : extends OnDefender, extends OnOffensiveMultiplier<> 
     }
 };
 
-ABILITY(ABILITY_IMPOSTER) : extends OnEntry {
-    INSTANCE(ABILITY_IMPOSTER);
+template <>
+struct AbilityImpl<ABILITY_IMPOSTER> : extends OnEntry {
     ON_ENTRY {
         gBattlerTarget = BATTLE_OPPOSITE(battler);
         if (!IsBattlerAlive(gBattlerTarget)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
@@ -1565,21 +1551,20 @@ ABILITY(ABILITY_IMPOSTER) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_INFILTRATOR) : extends OnInfiltrate {
-    INSTANCE(ABILITY_INFILTRATOR);
+template <>
+struct AbilityImpl<ABILITY_INFILTRATOR> : extends OnInfiltrate {
     ON_INFILTRATE { return INFILTRATE_SCREENS | INFILTRATE_SUBSTITUTE; }
 };
 
-ABILITY(ABILITY_MUMMY) : extends OnDefender {
-    INSTANCE(ABILITY_MUMMY);
+template <>
+struct AbilityImpl<ABILITY_MUMMY> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
-        CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
-        CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
+        CHECK(IsMoveMakingContact(move, attacker)) CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(attacker)))
+            CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
 
-        UpdateAbilityStateIndicesForNewAbility(attacker, ability);
+                UpdateAbilityStateIndicesForNewAbility(attacker, ability);
         ReplaceAbility(attacker, ability);
         BattleScriptCall(BattleScript_MummyActivates);
         return TRUE;
@@ -1597,49 +1582,52 @@ struct MoxieClone : extends OnBattlerFaints<> {
     }
 };
 
-ABILITY(ABILITY_MOXIE) : extends MoxieClone<STAT_ATK> { INSTANCE(ABILITY_MOXIE); };
+template <>
+struct AbilityImpl<ABILITY_MOXIE> : extends MoxieClone<STAT_ATK> {};
 
-ABILITY(ABILITY_JUSTIFIED) : extends AbsorbStatUp<TYPE_DARK, STAT_HIGHEST_ATTACKING> { INSTANCE(ABILITY_JUSTIFIED); };
+template <>
+struct AbilityImpl<ABILITY_JUSTIFIED> : extends AbsorbStatUp<TYPE_DARK, STAT_HIGHEST_ATTACKING> {};
 
-ABILITY(ABILITY_RATTLED) : extends OnDefender {
-    INSTANCE(ABILITY_RATTLED);
+template <>
+struct AbilityImpl<ABILITY_RATTLED> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_DARK || moveType == TYPE_BUG || moveType == TYPE_GHOST)
         CHECK(CanRaiseStat(battler, STAT_SPEED))
 
-        SetStatChanger(STAT_SPEED, 1);
+            SetStatChanger(STAT_SPEED, 1);
         BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_MAGIC_BOUNCE) : extends Breakable { INSTANCE(ABILITY_MAGIC_BOUNCE); };
+template <>
+struct AbilityImpl<ABILITY_MAGIC_BOUNCE> : extends Breakable {};
 
-ABILITY(ABILITY_SAP_SIPPER) : extends LightningRodClone<TYPE_GRASS> { INSTANCE(ABILITY_SAP_SIPPER); };
+template <>
+struct AbilityImpl<ABILITY_SAP_SIPPER> : extends LightningRodClone<TYPE_GRASS> {};
 
-ABILITY(ABILITY_PRANKSTER) : extends OnPriority {
-    INSTANCE(ABILITY_PRANKSTER);
-    ON_PRIORITY {
-        CHECK(IS_MOVE_STATUS(move))
-        return 1;
-    }
+template <>
+struct AbilityImpl<ABILITY_PRANKSTER> : extends OnPriority {
+    ON_PRIORITY { CHECK(IS_MOVE_STATUS(move)) return 1; }
 };
 
-ABILITY(ABILITY_SAND_FORCE) : extends SandImmune, extends OnStat<> {
-    INSTANCE(ABILITY_SAND_FORCE);
+template <>
+struct AbilityImpl<ABILITY_SAND_FORCE> : extends SandImmune, extends OnStat<> {
     ON_STAT {
         if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
         if (IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_IRON_BARBS) : extends AbilityImpl<ABILITY_ROUGH_SKIN> { INSTANCE(ABILITY_IRON_BARBS); };
+template <>
+struct AbilityImpl<ABILITY_IRON_BARBS> : extends AbilityImpl<ABILITY_ROUGH_SKIN> {};
 
-ABILITY(ABILITY_ZEN_MODE) : extends StandardTransformation { INSTANCE(ABILITY_ZEN_MODE); };
+template <>
+struct AbilityImpl<ABILITY_ZEN_MODE> : extends StandardTransformation {};
 
-ABILITY(ABILITY_VICTORY_STAR) : extends OnAccuracy<ApplyOnTarget::ALLY> {
-    INSTANCE(ABILITY_VICTORY_STAR);
+template <>
+struct AbilityImpl<ABILITY_VICTORY_STAR> : extends OnAccuracy<ApplyOnTarget::ALLY> {
     ON_ACCURACY {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
@@ -1658,57 +1646,49 @@ struct AddsType : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_TURBOBLAZE) : extends AbilityImpl<ABILITY_MOLD_BREAKER>, extends AddsType<TYPE_FIRE> {
-    INSTANCE(ABILITY_TURBOBLAZE);
+template <>
+struct AbilityImpl<ABILITY_TURBOBLAZE> : extends AbilityImpl<ABILITY_MOLD_BREAKER>, extends AddsType<TYPE_FIRE> {
     ON_ENTRY { return AddsType<TYPE_FIRE>::onEntry(DELEGATE_ENTRY); }
 };
 
-ABILITY(ABILITY_TERAVOLT) : extends AbilityImpl<ABILITY_MOLD_BREAKER>, extends AddsType<TYPE_ELECTRIC> {
-    INSTANCE(ABILITY_TERAVOLT);
+template <>
+struct AbilityImpl<ABILITY_TERAVOLT> : extends AbilityImpl<ABILITY_MOLD_BREAKER>, extends AddsType<TYPE_ELECTRIC> {
     ON_ENTRY { return AddsType<TYPE_ELECTRIC>::onEntry(DELEGATE_ENTRY); }
 };
 
-ABILITY(ABILITY_AROMA_VEIL) : extends OnStatusImmune<ApplyOn::ALLY> {
-    INSTANCE(ABILITY_AROMA_VEIL);
-    ON_STATUS_IMMUNE {
-        CHECK(status & (CHECK_INFATUATE | CHECK_RESTRICTING | CHECK_HEAL_BLOCK))
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_AROMA_VEIL> : extends OnStatusImmune<ApplyOn::ALLY> {
+    ON_STATUS_IMMUNE { CHECK(status & (CHECK_INFATUATE | CHECK_RESTRICTING | CHECK_HEAL_BLOCK)) return TRUE; }
 };
 
-ABILITY(ABILITY_FLOWER_VEIL) : extends OnStatusImmune<ApplyOn::ALLY> {
-    INSTANCE(ABILITY_FLOWER_VEIL);
-    ON_STATUS_IMMUNE {
-        CHECK(status & CHECK_STATUS1)
-        CHECK(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_FLOWER_VEIL> : extends OnStatusImmune<ApplyOn::ALLY> {
+    ON_STATUS_IMMUNE { CHECK(status & CHECK_STATUS1) CHECK(IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) return TRUE; }
 };
 
-ABILITY(ABILITY_CHEEK_POUCH) : extends RandomizerBanned { INSTANCE(ABILITY_CHEEK_POUCH); };
+template <>
+struct AbilityImpl<ABILITY_CHEEK_POUCH> : extends RandomizerBanned {};
 
-ABILITY(ABILITY_PROTEAN) : extends OnBeforeAttack<> {
-    INSTANCE(ABILITY_PROTEAN);
+template <>
+struct AbilityImpl<ABILITY_PROTEAN> : extends OnBeforeAttack<> {
     ON_BEFORE_ATTACK {
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
-        CHECK_NOT(IS_BATTLER_OF_TYPE(battler, moveType))
-        CHECK(move != MOVE_STRUGGLE)
-        SET_BATTLER_TYPE(gBattlerAttacker, moveType);
+        CHECK_NOT(IS_BATTLER_OF_TYPE(battler, moveType)) CHECK(move != MOVE_STRUGGLE) SET_BATTLER_TYPE(gBattlerAttacker, moveType);
         PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
         BattleScriptCall(BattleScript_ProteanActivates);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_FUR_COAT) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_FUR_COAT);
+template <>
+struct AbilityImpl<ABILITY_FUR_COAT> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_PHYSICAL(move)) MUL(.5);
     }
 };
 
-ABILITY(ABILITY_BULLETPROOF) : extends OnImmune<> {
-    INSTANCE(ABILITY_BULLETPROOF);
+template <>
+struct AbilityImpl<ABILITY_BULLETPROOF> : extends OnImmune<> {
     ON_IMMUNE {
         CHECK(gBattleMoves[move].flags & FLAG_BALLISTIC)
         CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
@@ -1716,25 +1696,23 @@ ABILITY(ABILITY_BULLETPROOF) : extends OnImmune<> {
     }
 };
 
-ABILITY(ABILITY_STRONG_JAW) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_STRONG_JAW);
+template <>
+struct AbilityImpl<ABILITY_STRONG_JAW> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_REFRIGERATE) : extends AteAbility<TYPE_ICE> { INSTANCE(ABILITY_REFRIGERATE); };
+template <>
+struct AbilityImpl<ABILITY_REFRIGERATE> : extends AteAbility<TYPE_ICE> {};
 
-ABILITY(ABILITY_SWEET_VEIL) : extends OnStatusImmune<ApplyOn::ALLY> {
-    INSTANCE(ABILITY_SWEET_VEIL);
-    ON_STATUS_IMMUNE {
-        CHECK(status & CHECK_SLEEP)
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_SWEET_VEIL> : extends OnStatusImmune<ApplyOn::ALLY> {
+    ON_STATUS_IMMUNE { CHECK(status & CHECK_SLEEP) return TRUE; }
 };
 
-ABILITY(ABILITY_STANCE_CHANGE) : extends FormChangeAbility, extends OnBeforeAttack<> {
-    INSTANCE(ABILITY_STANCE_CHANGE);
+template <>
+struct AbilityImpl<ABILITY_STANCE_CHANGE> : extends FormChangeAbility, extends OnBeforeAttack<> {
     ON_BEFORE_ATTACK {
         SpeciesEnum newSpecies = SPECIES_NONE;
         switch (gBattleMons[battler].species) {
@@ -1776,51 +1754,56 @@ struct GaleWingsLike : extends OnPriority {
         return 1;
     }
 };
-ABILITY(ABILITY_GALE_WINGS) : extends GaleWingsLike<TYPE_FLYING> { INSTANCE(ABILITY_GALE_WINGS); };
+template <>
+struct AbilityImpl<ABILITY_GALE_WINGS> : extends GaleWingsLike<TYPE_FLYING> {};
 
-ABILITY(ABILITY_MEGA_LAUNCHER) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_MEGA_LAUNCHER);
+template <>
+struct AbilityImpl<ABILITY_MEGA_LAUNCHER> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (IsMegaLauncherBoosted(battler, move)) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_GRASS_PELT) : extends OnStat<> {
-    INSTANCE(ABILITY_GRASS_PELT);
+template <>
+struct AbilityImpl<ABILITY_GRASS_PELT> : extends OnStat<> {
     ON_STAT {
         if (statId == STAT_DEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_TOUGH_CLAWS) : extends AbilityImpl<ABILITY_BIG_PECKS> { INSTANCE(ABILITY_TOUGH_CLAWS); };
+template <>
+struct AbilityImpl<ABILITY_TOUGH_CLAWS> : extends AbilityImpl<ABILITY_BIG_PECKS> {};
 
-ABILITY(ABILITY_PIXILATE) : extends AteAbility<TYPE_FAIRY> { INSTANCE(ABILITY_PIXILATE); };
+template <>
+struct AbilityImpl<ABILITY_PIXILATE> : extends AteAbility<TYPE_FAIRY> {};
 
-ABILITY(ABILITY_GOOEY) : extends OnDefender {
-    INSTANCE(ABILITY_GOOEY);
+template <>
+struct AbilityImpl<ABILITY_GOOEY> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(StatLowerableOrMirrorArmor(attacker, STAT_SPEED))
         CHECK(IsMoveMakingContact(move, attacker))
 
-        BattleScriptCall(BattleScript_GooeyActivates);
+            BattleScriptCall(BattleScript_GooeyActivates);
         gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_AERILATE) : extends AteAbility<TYPE_FLYING> { INSTANCE(ABILITY_AERILATE); };
+template <>
+struct AbilityImpl<ABILITY_AERILATE> : extends AteAbility<TYPE_FLYING> {};
 
-ABILITY(ABILITY_HYPER_AGGRESSIVE) : extends OnParentalBond {
-    INSTANCE(ABILITY_HYPER_AGGRESSIVE);
+template <>
+struct AbilityImpl<ABILITY_HYPER_AGGRESSIVE> : extends OnParentalBond {
     ON_PARENTAL_BOND { return PARENTAL_BOND_HYPER_AGGRESSIVE; }
 };
 
 struct IgnoresFortKnox {};
-ABILITY(ABILITY_PARENTAL_BOND) : extends AbilityImpl<ABILITY_HYPER_AGGRESSIVE>, extends IgnoresFortKnox { INSTANCE(ABILITY_PARENTAL_BOND); };
+template <>
+struct AbilityImpl<ABILITY_PARENTAL_BOND> : extends AbilityImpl<ABILITY_HYPER_AGGRESSIVE>, extends IgnoresFortKnox {};
 
-ABILITY(ABILITY_DARK_AURA) : extends OnEntry, extends OnOffensiveMultiplier<ApplyOn::ANY> {
-    INSTANCE(ABILITY_DARK_AURA);
+template <>
+struct AbilityImpl<ABILITY_DARK_AURA> : extends OnEntry, extends OnOffensiveMultiplier<ApplyOn::ANY> {
     ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_DARKAURA); }
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType != TYPE_DARK) return;
@@ -1831,8 +1814,8 @@ ABILITY(ABILITY_DARK_AURA) : extends OnEntry, extends OnOffensiveMultiplier<Appl
     }
 };
 
-ABILITY(ABILITY_FAIRY_AURA) : extends OnEntry, extends OnOffensiveMultiplier<ApplyOn::ANY> {
-    INSTANCE(ABILITY_FAIRY_AURA);
+template <>
+struct AbilityImpl<ABILITY_FAIRY_AURA> : extends OnEntry, extends OnOffensiveMultiplier<ApplyOn::ANY> {
     ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_FAIRYAURA); }
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType != TYPE_FAIRY) return;
@@ -1843,13 +1826,13 @@ ABILITY(ABILITY_FAIRY_AURA) : extends OnEntry, extends OnOffensiveMultiplier<App
     }
 };
 
-ABILITY(ABILITY_AURA_BREAK) : extends Breakable, extends OnEntry {
-    INSTANCE(ABILITY_AURA_BREAK);
+template <>
+struct AbilityImpl<ABILITY_AURA_BREAK> : extends Breakable, extends OnEntry {
     ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_AURABREAK); }
 };
 
-ABILITY(ABILITY_PRIMORDIAL_SEA) : extends OnEntry {
-    INSTANCE(ABILITY_PRIMORDIAL_SEA);
+template <>
+struct AbilityImpl<ABILITY_PRIMORDIAL_SEA> : extends OnEntry {
     ON_ENTRY {
         CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN_PRIMAL, TRUE))
 
@@ -1858,8 +1841,8 @@ ABILITY(ABILITY_PRIMORDIAL_SEA) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_DESOLATE_LAND) : extends OnEntry {
-    INSTANCE(ABILITY_DESOLATE_LAND);
+template <>
+struct AbilityImpl<ABILITY_DESOLATE_LAND> : extends OnEntry {
     ON_ENTRY {
         CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_SUN_PRIMAL, TRUE))
 
@@ -1868,18 +1851,17 @@ ABILITY(ABILITY_DESOLATE_LAND) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_WEATHER_CONTROL) : extends OnImmune<> {
-    INSTANCE(ABILITY_WEATHER_CONTROL);
+template <>
+struct AbilityImpl<ABILITY_WEATHER_CONTROL> : extends OnImmune<> {
     ON_IMMUNE {
         CHECK(gBattleMoves[move].flags & FLAG_WEATHER_BASED)
-        CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)
-        *immunityScript = BattleScript_SoundproofProtected;
+        CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_DELTA_STREAM) : extends AbilityImpl<ABILITY_WEATHER_CONTROL>, extends OverrideBreakable, extends OnEntry {
-    INSTANCE(ABILITY_DELTA_STREAM);
+template <>
+struct AbilityImpl<ABILITY_DELTA_STREAM> : extends AbilityImpl<ABILITY_WEATHER_CONTROL>, extends OverrideBreakable, extends OnEntry {
     ON_ENTRY {
         CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_STRONG_WINDS, TRUE))
 
@@ -1888,8 +1870,8 @@ ABILITY(ABILITY_DELTA_STREAM) : extends AbilityImpl<ABILITY_WEATHER_CONTROL>, ex
     }
 };
 
-ABILITY(ABILITY_STAMINA) : extends OnDefender {
-    INSTANCE(ABILITY_STAMINA);
+template <>
+struct AbilityImpl<ABILITY_STAMINA> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_DEF))
@@ -1905,29 +1887,29 @@ ABILITY(ABILITY_STAMINA) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_WIMP_OUT) : extends OnDefender {
-    INSTANCE(ABILITY_WIMP_OUT);
+template <>
+struct AbilityImpl<ABILITY_WIMP_OUT> : extends OnDefender {
     ON_DEFENDER {
         CHECK(CheckHalfHpAbility(battler, attacker))
         CHECK_NOT(TestSheerForceFlag(attacker, gCurrentMove))
-        CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-        CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
-        CHECK(CountUsablePartyMons(battler));
+        CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER) CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
+            CHECK(CountUsablePartyMons(battler));
         gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_EMERGENCY_EXIT;
         return FALSE;
     }
 };
 
-ABILITY(ABILITY_EMERGENCY_EXIT) : extends AbilityImpl<ABILITY_WIMP_OUT> { INSTANCE(ABILITY_EMERGENCY_EXIT); };
+template <>
+struct AbilityImpl<ABILITY_EMERGENCY_EXIT> : extends AbilityImpl<ABILITY_WIMP_OUT> {};
 
-ABILITY(ABILITY_WATER_COMPACTION) : extends OnDefensiveMultiplier, extends OnDefender {
-    INSTANCE(ABILITY_WATER_COMPACTION);
+template <>
+struct AbilityImpl<ABILITY_WATER_COMPACTION> : extends OnDefensiveMultiplier, extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_WATER)
         CHECK(CanRaiseStat(battler, STAT_DEF))
 
-        SetStatChanger(STAT_DEF, 2);
+            SetStatChanger(STAT_DEF, 2);
         BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
         return TRUE;
     }
@@ -1936,8 +1918,8 @@ ABILITY(ABILITY_WATER_COMPACTION) : extends OnDefensiveMultiplier, extends OnDef
     }
 };
 
-ABILITY(ABILITY_MERCILESS) : extends OnCrit<> {
-    INSTANCE(ABILITY_MERCILESS);
+template <>
+struct AbilityImpl<ABILITY_MERCILESS> : extends OnCrit<> {
     ON_CRIT {
         if (gBattleMons[target].status1 & STATUS1_PSN_ANY) return ALWAYS_CRIT;
         if (gBattleMons[target].status1 & STATUS1_PARALYSIS) return ALWAYS_CRIT;
@@ -1948,15 +1930,14 @@ ABILITY(ABILITY_MERCILESS) : extends OnCrit<> {
     }
 };
 
-ABILITY(ABILITY_SHIELDS_DOWN) : extends StandardTransformation, extends OnAttacker, extends OnStatusImmune<>, extends OverrideBreakable {
-    INSTANCE(ABILITY_SHIELDS_DOWN);
+template <>
+struct AbilityImpl<ABILITY_SHIELDS_DOWN> : extends StandardTransformation, extends OnAttacker, extends OnStatusImmune<>, extends OverrideBreakable {
     ON_ATTACKER {
         CHECK(IsBattlerAlive(battler))
         CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-        CHECK(gBattleMoves[move].effect == EFFECT_SHELL_SMASH)
-        CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
+        CHECK(gBattleMoves[move].effect == EFFECT_SHELL_SMASH) CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
-        int i;
+            int i;
         for (i = 0; i < ARRAY_COUNT(gHpTransformations); i++) {
             if (gHpTransformations[i].ability == ability && gBattleMons[battler].species == gHpTransformations[i].highHpSpecies) break;
         }
@@ -1988,15 +1969,15 @@ ABILITY(ABILITY_SHIELDS_DOWN) : extends StandardTransformation, extends OnAttack
     }
 };
 
-ABILITY(ABILITY_STAKEOUT) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_STAKEOUT);
+template <>
+struct AbilityImpl<ABILITY_STAKEOUT> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gVolatileStructs[target].isFirstTurn == 2) MUL(2.0);
     }
 };
 
-ABILITY(ABILITY_WATER_BUBBLE) : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
-    INSTANCE(ABILITY_WATER_BUBBLE);
+template <>
+struct AbilityImpl<ABILITY_WATER_BUBBLE> : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_WATER) MUL(2.0);
     }
@@ -2009,19 +1990,17 @@ ABILITY(ABILITY_WATER_BUBBLE) : extends OnOffensiveMultiplier<>, extends OnDefen
     }
 };
 
-ABILITY(ABILITY_STEELWORKER) : extends Breakable, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, extends AteAbility<TYPE_STEEL> {
-    INSTANCE(ABILITY_STEELWORKER);
+template <>
+struct AbilityImpl<ABILITY_STEELWORKER> : extends Breakable, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, extends AteAbility<TYPE_STEEL> {
     ON_AFTER_TYPE_EFFECTIVENESS {
         if (moveType == TYPE_DARK || moveType == TYPE_GHOST) *mod /= 2;
     }
 };
 
-ABILITY(ABILITY_BERSERK) : extends OnDefender {
-    INSTANCE(ABILITY_BERSERK);
+template <>
+struct AbilityImpl<ABILITY_BERSERK> : extends OnDefender {
     ON_DEFENDER {
-        CHECK(CheckHalfHpAbility(battler, attacker))
-        CHECK_NOT(GetAbilityState(battler, ability))
-        int stat = GetHighestAttackingStatId(battler, TRUE);
+        CHECK(CheckHalfHpAbility(battler, attacker)) CHECK_NOT(GetAbilityState(battler, ability)) int stat = GetHighestAttackingStatId(battler, TRUE);
         CHECK(CanRaiseStat(battler, stat))
 
         SetAbilityState(battler, ability, TRUE);
@@ -2031,15 +2010,15 @@ ABILITY(ABILITY_BERSERK) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_SLUSH_RUSH) : extends HailImmune, extends OnStat<> {
-    INSTANCE(ABILITY_SLUSH_RUSH);
+template <>
+struct AbilityImpl<ABILITY_SLUSH_RUSH> : extends HailImmune, extends OnStat<> {
     ON_STAT {
         if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_LONG_REACH) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_LONG_REACH);
+template <>
+struct AbilityImpl<ABILITY_LONG_REACH> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (IS_MOVE_PHYSICAL(move) && !gBattleMoves[move].contact) MUL(1.2);
     }
@@ -2056,39 +2035,35 @@ struct LiquidVoiceClone : extends OnOffensiveMultiplier<>, extends OnMoveType {
         return BoostType + 1;
     }
 };
-ABILITY(ABILITY_LIQUID_VOICE) : extends LiquidVoiceClone<TYPE_WATER> { INSTANCE(ABILITY_LIQUID_VOICE); };
+template <>
+struct AbilityImpl<ABILITY_LIQUID_VOICE> : extends LiquidVoiceClone<TYPE_WATER> {};
 
-ABILITY(ABILITY_TRIAGE) : extends OnPriority {
-    INSTANCE(ABILITY_TRIAGE);
-    ON_PRIORITY {
-        CHECK(IsHealingMoveEffect(gBattleMoves[move].effect))
-        return 3;
-    }
+template <>
+struct AbilityImpl<ABILITY_TRIAGE> : extends OnPriority {
+    ON_PRIORITY { CHECK(IsHealingMoveEffect(gBattleMoves[move].effect)) return 3; }
 };
 
-ABILITY(ABILITY_GALVANIZE) : extends AteAbility<TYPE_ELECTRIC> { INSTANCE(ABILITY_GALVANIZE); };
+template <>
+struct AbilityImpl<ABILITY_GALVANIZE> : extends AteAbility<TYPE_ELECTRIC> {};
 
-ABILITY(ABILITY_SURGE_SURFER) : extends OnStat<> {
-    INSTANCE(ABILITY_SURGE_SURFER);
+template <>
+struct AbilityImpl<ABILITY_SURGE_SURFER> : extends OnStat<> {
     ON_STAT {
         if (statId == STAT_SPEED && IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_SCHOOLING) : extends StandardTransformation {
-    INSTANCE(ABILITY_SCHOOLING);
-    ON_ENTRY {
-        CHECK(gBattleMons[battler].level >= 20)
-        return StandardTransformation::onEntry(DELEGATE_ENTRY);
-    }
+template <>
+struct AbilityImpl<ABILITY_SCHOOLING> : extends StandardTransformation {
+    ON_ENTRY { CHECK(gBattleMons[battler].level >= 20) return StandardTransformation::onEntry(DELEGATE_ENTRY); }
     ON_END_TURN {
         CHECK(gBattleMons[battler].level >= 20)
         return StandardTransformation::onEndTurn(DELEGATE_END_TURN);
     }
 };
 
-ABILITY(ABILITY_DISGUISE) : extends FormChangeAbility, extends OnEntry, extends OnDisguise, extends OnWeather {
-    INSTANCE(ABILITY_DISGUISE);
+template <>
+struct AbilityImpl<ABILITY_DISGUISE> : extends FormChangeAbility, extends OnEntry, extends OnDisguise, extends OnWeather {
     static int DisguiseReformHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
         SpeciesEnum newSpecies;
         switch (gBattleMons[battler].species) {
@@ -2126,8 +2101,8 @@ ABILITY(ABILITY_DISGUISE) : extends FormChangeAbility, extends OnEntry, extends 
     ON_WEATHER { return DisguiseReformHandler(ability, battler, ABILITY_BS_CALL); }
 };
 
-ABILITY(ABILITY_BATTLE_BOND) : extends FormChangeAbility, extends OnBattlerFaints<> {
-    INSTANCE(ABILITY_BATTLE_BOND);
+template <>
+struct AbilityImpl<ABILITY_BATTLE_BOND> : extends FormChangeAbility, extends OnBattlerFaints<> {
     ON_BATTLER_FAINTS {
         SpeciesEnum newSpecies = SPECIES_NONE;
         switch (gBattleMons[battler].species) {
@@ -2159,8 +2134,8 @@ ABILITY(ABILITY_BATTLE_BOND) : extends FormChangeAbility, extends OnBattlerFaint
     }
 };
 
-ABILITY(ABILITY_POWER_CONSTRUCT) : extends FormChangeAbility, extends OnEndTurn {
-    INSTANCE(ABILITY_POWER_CONSTRUCT);
+template <>
+struct AbilityImpl<ABILITY_POWER_CONSTRUCT> : extends FormChangeAbility, extends OnEndTurn {
     ON_END_TURN {
         CHECK(gBattleMons[battler].species == SPECIES_ZYGARDE || gBattleMons[battler].species == SPECIES_ZYGARDE_10)
         CHECK(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
@@ -2174,12 +2149,10 @@ ABILITY(ABILITY_POWER_CONSTRUCT) : extends FormChangeAbility, extends OnEndTurn 
     }
 };
 
-ABILITY(ABILITY_CORROSION) : extends OnTypeEffectiveness<>, extends OnCanStatusType {
-    INSTANCE(ABILITY_CORROSION);
+template <>
+struct AbilityImpl<ABILITY_CORROSION> : extends OnTypeEffectiveness<>, extends OnCanStatusType {
     ON_TYPE_EFFECTIVENESS {
-        CHECK(moveType == TYPE_POISON)
-        CHECK(defType == TYPE_STEEL)
-        *mod = UQ_4_12(2.0);
+        CHECK(moveType == TYPE_POISON) CHECK(defType == TYPE_STEEL) *mod = UQ_4_12(2.0);
         return TRUE;
     }
     ON_CAN_STATUS_TYPE {
@@ -2188,8 +2161,8 @@ ABILITY(ABILITY_CORROSION) : extends OnTypeEffectiveness<>, extends OnCanStatusT
     }
 };
 
-ABILITY(ABILITY_COMATOSE) : extends OnEntry, extends RemovesStatusOnImmunity, extends Unsuppressable {
-    INSTANCE(ABILITY_COMATOSE);
+template <>
+struct AbilityImpl<ABILITY_COMATOSE> : extends OnEntry, extends RemovesStatusOnImmunity, extends Unsuppressable {
     ON_ENTRY {
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
         BattleScriptPushCursorAndCallback(BattleScript_AnnounceStatusAbility);
@@ -2208,51 +2181,49 @@ static int blocksPriority(ON_IMMUNE_ARGS) {
     *immunityScript = BattleScript_DazzlingProtected;
     return TRUE;
 }
-ABILITY(ABILITY_QUEENLY_MAJESTY) : extends OnImmune<ApplyOn::ALLY> {
-    INSTANCE(ABILITY_QUEENLY_MAJESTY);
+template <>
+struct AbilityImpl<ABILITY_QUEENLY_MAJESTY> : extends OnImmune<ApplyOn::ALLY> {
     ON_IMMUNE { return blocksPriority(DELEGATE_IMMUNE); }
 };
 
-ABILITY(ABILITY_INNARDS_OUT) : extends OnDefender {
-    INSTANCE(ABILITY_INNARDS_OUT);
+template <>
+struct AbilityImpl<ABILITY_INNARDS_OUT> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
-        CHECK_NOT(IsMagicGuardProtected(attacker))
+        CHECK_NOT(HasMagicGuard(attacker))
 
-        gBattleMoveDamage = gTurnStructs[battler].dmg;
+            gBattleMoveDamage = gTurnStructs[battler].dmg;
         BattleScriptCall(BattleScript_AftermathDmg);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_DANCER) : extends OnCopyMove {
-    INSTANCE(ABILITY_DANCER);
-    ON_COPY_MOVE {
-        CHECK(IsDance(attacker, move))
-        return UseOutOfTurnAttack(battler, target, ability, move, 0);
-    }
+template <>
+struct AbilityImpl<ABILITY_DANCER> : extends OnCopyMove {
+    ON_COPY_MOVE { CHECK(IsDance(attacker, move)) return UseOutOfTurnAttack(battler, target, ability, move, 0); }
 };
 
-ABILITY(ABILITY_BATTERY) : extends OnOffensiveMultiplier<ApplyOn::ALLY_ONLY> {
-    INSTANCE(ABILITY_BATTERY);
+template <>
+struct AbilityImpl<ABILITY_BATTERY> : extends OnOffensiveMultiplier<ApplyOn::ALLY_ONLY> {
     ON_OFFENSIVE_MULTIPLIER {
         if (IS_MOVE_SPECIAL(move)) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_FLUFFY) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_FLUFFY);
+template <>
+struct AbilityImpl<ABILITY_FLUFFY> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FIRE) RESISTANCE(2.0);
         if (IsMoveMakingContact(move, attacker)) MUL(0.5);
     }
 };
 
-ABILITY(ABILITY_DAZZLING) : extends AbilityImpl<ABILITY_QUEENLY_MAJESTY> { INSTANCE(ABILITY_DAZZLING); };
+template <>
+struct AbilityImpl<ABILITY_DAZZLING> : extends AbilityImpl<ABILITY_QUEENLY_MAJESTY> {};
 
-ABILITY(ABILITY_SOUL_HEART) : extends OnBattlerFaints<ApplyOnTarget::ANY> {
-    INSTANCE(ABILITY_SOUL_HEART);
+template <>
+struct AbilityImpl<ABILITY_SOUL_HEART> : extends OnBattlerFaints<ApplyOnTarget::ANY> {
     ON_BATTLER_FAINTS {
         CHECK(ChangeStatBuffs(battler, 1, STAT_SPATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
 
@@ -2261,10 +2232,11 @@ ABILITY(ABILITY_SOUL_HEART) : extends OnBattlerFaints<ApplyOnTarget::ANY> {
     }
 };
 
-ABILITY(ABILITY_TANGLING_HAIR) : extends AbilityImpl<ABILITY_GOOEY> { INSTANCE(ABILITY_TANGLING_HAIR); };
+template <>
+struct AbilityImpl<ABILITY_TANGLING_HAIR> : extends AbilityImpl<ABILITY_GOOEY> {};
 
-ABILITY(ABILITY_RECEIVER) : extends OnBattlerFaints<ApplyOnTarget::ALLY> {
-    INSTANCE(ABILITY_RECEIVER);
+template <>
+struct AbilityImpl<ABILITY_RECEIVER> : extends OnBattlerFaints<ApplyOnTarget::ALLY> {
     ON_BATTLER_FAINTS {
         AbilityEnum allyAbility = GetBattlerAbility(fainted);
         CHECK_NOT(IsRolePlayBannedAbility(allyAbility))
@@ -2281,8 +2253,8 @@ ABILITY(ABILITY_RECEIVER) : extends OnBattlerFaints<ApplyOnTarget::ALLY> {
     }
 };
 
-ABILITY(ABILITY_POWER_OF_ALCHEMY) : extends OnEntry, extends OnReactive, extends OnBattlerFaints<ApplyOnTarget::ANY> {
-    INSTANCE(ABILITY_POWER_OF_ALCHEMY);
+template <>
+struct AbilityImpl<ABILITY_POWER_OF_ALCHEMY> : extends OnEntry, extends OnReactive, extends OnBattlerFaints<ApplyOnTarget::ANY> {
     ON_ENTRY {
         int any = FALSE;
         for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
@@ -2330,14 +2302,14 @@ ABILITY(ABILITY_POWER_OF_ALCHEMY) : extends OnEntry, extends OnReactive, extends
     }
 };
 
-ABILITY(ABILITY_BEAST_BOOST) : extends MoxieClone<STAT_HIGHEST_TOTAL> { INSTANCE(ABILITY_BEAST_BOOST); };
+template <>
+struct AbilityImpl<ABILITY_BEAST_BOOST> : extends MoxieClone<STAT_HIGHEST_TOTAL> {};
 
-ABILITY(ABILITY_RKS_SYSTEM) : extends AbilityImpl<ABILITY_PROTEAN>, extends AbilityImpl<ABILITY_ADAPTABILITY>, extends FormChangeAbility {
-    INSTANCE(ABILITY_RKS_SYSTEM);
-};
+template <>
+struct AbilityImpl<ABILITY_RKS_SYSTEM> : extends AbilityImpl<ABILITY_PROTEAN>, extends AbilityImpl<ABILITY_ADAPTABILITY>, extends FormChangeAbility {};
 
-ABILITY(ABILITY_ELECTRIC_SURGE) : extends AllowTerrainIfAirborne<TERRAIN_ELECTRIC>, extends OnEntry {
-    INSTANCE(ABILITY_ELECTRIC_SURGE);
+template <>
+struct AbilityImpl<ABILITY_ELECTRIC_SURGE> : extends AllowTerrainIfAirborne<TERRAIN_ELECTRIC>, extends OnEntry {
     ON_ENTRY {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -2351,8 +2323,8 @@ ABILITY(ABILITY_ELECTRIC_SURGE) : extends AllowTerrainIfAirborne<TERRAIN_ELECTRI
     }
 };
 
-ABILITY(ABILITY_PSYCHIC_SURGE) : extends AllowTerrainIfAirborne<TERRAIN_PSYCHIC>, extends OnEntry {
-    INSTANCE(ABILITY_PSYCHIC_SURGE);
+template <>
+struct AbilityImpl<ABILITY_PSYCHIC_SURGE> : extends AllowTerrainIfAirborne<TERRAIN_PSYCHIC>, extends OnEntry {
     ON_ENTRY {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -2362,8 +2334,8 @@ ABILITY(ABILITY_PSYCHIC_SURGE) : extends AllowTerrainIfAirborne<TERRAIN_PSYCHIC>
     }
 };
 
-ABILITY(ABILITY_MISTY_SURGE) : extends AllowTerrainIfAirborne<TERRAIN_MISTY>, extends OnEntry {
-    INSTANCE(ABILITY_MISTY_SURGE);
+template <>
+struct AbilityImpl<ABILITY_MISTY_SURGE> : extends AllowTerrainIfAirborne<TERRAIN_MISTY>, extends OnEntry {
     ON_ENTRY {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -2373,8 +2345,8 @@ ABILITY(ABILITY_MISTY_SURGE) : extends AllowTerrainIfAirborne<TERRAIN_MISTY>, ex
     }
 };
 
-ABILITY(ABILITY_GRASSY_SURGE) : extends AllowTerrainIfAirborne<TERRAIN_GRASSY>, extends OnEntry {
-    INSTANCE(ABILITY_GRASSY_SURGE);
+template <>
+struct AbilityImpl<ABILITY_GRASSY_SURGE> : extends AllowTerrainIfAirborne<TERRAIN_GRASSY>, extends OnEntry {
     ON_ENTRY {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -2384,12 +2356,14 @@ ABILITY(ABILITY_GRASSY_SURGE) : extends AllowTerrainIfAirborne<TERRAIN_GRASSY>, 
     }
 };
 
-ABILITY(ABILITY_SHADOW_SHIELD) : extends AbilityImpl<ABILITY_MULTISCALE>, extends OverrideBreakable { INSTANCE(ABILITY_SHADOW_SHIELD); };
+template <>
+struct AbilityImpl<ABILITY_SHADOW_SHIELD> : extends AbilityImpl<ABILITY_MULTISCALE>, extends OverrideBreakable {};
 
-ABILITY(ABILITY_PRISM_ARMOR) : extends AbilityImpl<ABILITY_FILTER>, extends OverrideBreakable { INSTANCE(ABILITY_PRISM_ARMOR); };
+template <>
+struct AbilityImpl<ABILITY_PRISM_ARMOR> : extends AbilityImpl<ABILITY_FILTER>, extends OverrideBreakable {};
 
-ABILITY(ABILITY_NEUROFORCE) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_NEUROFORCE);
+template <>
+struct AbilityImpl<ABILITY_NEUROFORCE> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.35);
     }
@@ -2405,14 +2379,17 @@ struct RaiseStatOnEntry : OnEntry {
         return TRUE;
     }
 };
-ABILITY(ABILITY_INTREPID_SWORD) : extends RaiseStatOnEntry<STAT_ATK> { INSTANCE(ABILITY_INTREPID_SWORD); };
+template <>
+struct AbilityImpl<ABILITY_INTREPID_SWORD> : extends RaiseStatOnEntry<STAT_ATK> {};
 
-ABILITY(ABILITY_DAUNTLESS_SHIELD) : extends RaiseStatOnEntry<STAT_DEF> { INSTANCE(ABILITY_DAUNTLESS_SHIELD); };
+template <>
+struct AbilityImpl<ABILITY_DAUNTLESS_SHIELD> : extends RaiseStatOnEntry<STAT_DEF> {};
 
-ABILITY(ABILITY_LIBERO) : extends AbilityImpl<ABILITY_PROTEAN> { INSTANCE(ABILITY_LIBERO); };
+template <>
+struct AbilityImpl<ABILITY_LIBERO> : extends AbilityImpl<ABILITY_PROTEAN> {};
 
-ABILITY(ABILITY_COTTON_DOWN) : extends OnDefender {
-    INSTANCE(ABILITY_COTTON_DOWN);
+template <>
+struct AbilityImpl<ABILITY_COTTON_DOWN> : extends OnDefender {
     ON_DEFENDER {
         CHECK(DidMoveHit());
         gStackBattler1 = BATTLE_OPPOSITE(battler);
@@ -2425,10 +2402,11 @@ ABILITY(ABILITY_COTTON_DOWN) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_MIRROR_ARMOR) : extends Breakable { INSTANCE(ABILITY_MIRROR_ARMOR); };
+template <>
+struct AbilityImpl<ABILITY_MIRROR_ARMOR> : extends Breakable {};
 
-ABILITY(ABILITY_GULP_MISSILE) : extends FormChangeAbility, extends OnDefender, extends OnAttacker {
-    INSTANCE(ABILITY_GULP_MISSILE);
+template <>
+struct AbilityImpl<ABILITY_GULP_MISSILE> : extends FormChangeAbility, extends OnDefender, extends OnAttacker {
     ON_ATTACKER {
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
         CHECK(gBattleMons[battler].species == SPECIES_CRAMORANT)
@@ -2454,35 +2432,35 @@ ABILITY(ABILITY_GULP_MISSILE) : extends FormChangeAbility, extends OnDefender, e
     }
 };
 
-ABILITY(ABILITY_STEAM_ENGINE) : extends OnDefender {
-    INSTANCE(ABILITY_STEAM_ENGINE);
+template <>
+struct AbilityImpl<ABILITY_STEAM_ENGINE> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_SPEED))
         CHECK(moveType == TYPE_FIRE || moveType == TYPE_WATER)
 
-        SetStatChanger(STAT_SPEED, 12);
+            SetStatChanger(STAT_SPEED, 12);
         BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_AMPLIFIER) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_AMPLIFIER);
+template <>
+struct AbilityImpl<ABILITY_AMPLIFIER> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (IsSoundMove(battler, move)) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_PUNK_ROCK) : extends OnDefensiveMultiplier, extends AbilityImpl<ABILITY_AMPLIFIER> {
-    INSTANCE(ABILITY_PUNK_ROCK);
+template <>
+struct AbilityImpl<ABILITY_PUNK_ROCK> : extends OnDefensiveMultiplier, extends AbilityImpl<ABILITY_AMPLIFIER> {
     ON_DEFENSIVE_MULTIPLIER {
         if (IsSoundMove(attacker, move)) MUL(.5);
     }
 };
 
-ABILITY(ABILITY_SAND_SPIT) : extends SandImmune, extends OnDefender {
-    INSTANCE(ABILITY_SAND_SPIT);
+template <>
+struct AbilityImpl<ABILITY_SAND_SPIT> : extends SandImmune, extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_SANDSTORM_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
             BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
@@ -2497,21 +2475,21 @@ ABILITY(ABILITY_SAND_SPIT) : extends SandImmune, extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_ICE_SCALES) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_ICE_SCALES);
+template <>
+struct AbilityImpl<ABILITY_ICE_SCALES> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_SPECIAL(move)) MUL(.5);
     }
 };
 
-ABILITY(ABILITY_ICE_FACE) : extends FormChangeAbility, extends HailImmune, extends OnEntry, extends OnDisguise, extends OnWeather {
-    INSTANCE(ABILITY_ICE_FACE);
+template <>
+struct AbilityImpl<ABILITY_ICE_FACE> : extends FormChangeAbility, extends HailImmune, extends OnEntry, extends OnDisguise, extends OnWeather {
     static int IceFaceReformHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
         CHECK(gBattleMons[battler].species == SPECIES_EISCUE_NOICE_FACE)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
-        InsertCorrectEndType(callType);
+            InsertCorrectEndType(callType);
         UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_EISCUE);
         gBattleMons[battler].species = SPECIES_EISCUE;
         BattleScriptCall(BattleScript_AttackerFormChange);
@@ -2522,13 +2500,13 @@ ABILITY(ABILITY_ICE_FACE) : extends FormChangeAbility, extends HailImmune, exten
     ON_WEATHER { return IceFaceReformHandler(ability, battler, ABILITY_BS_CALL); }
 };
 
-ABILITY(ABILITY_POWER_SPOT) : extends OnOffensiveMultiplier<ApplyOn::ALLY_ONLY> {
-    INSTANCE(ABILITY_POWER_SPOT);
+template <>
+struct AbilityImpl<ABILITY_POWER_SPOT> : extends OnOffensiveMultiplier<ApplyOn::ALLY_ONLY> {
     ON_OFFENSIVE_MULTIPLIER { MUL(1.3); }
 };
 
-ABILITY(ABILITY_MIMICRY) : extends OnEntry, extends OnTerrain {
-    INSTANCE(ABILITY_MIMICRY);
+template <>
+struct AbilityImpl<ABILITY_MIMICRY> : extends OnEntry, extends OnTerrain {
     static int HandleMimicry(u8 battler, AbilityEnum ability, AbilityCallType endType) {
         u32 moveType = 0;
 
@@ -2600,8 +2578,8 @@ ABILITY(ABILITY_MIMICRY) : extends OnEntry, extends OnTerrain {
     }
 };
 
-ABILITY(ABILITY_SCREEN_CLEANER) : extends OnEntry {
-    INSTANCE(ABILITY_SCREEN_CLEANER);
+template <>
+struct AbilityImpl<ABILITY_SCREEN_CLEANER> : extends OnEntry {
     ON_ENTRY {
         CHECK(TryRemoveScreens(battler))
 
@@ -2609,22 +2587,21 @@ ABILITY(ABILITY_SCREEN_CLEANER) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_STEELY_SPIRIT) : extends OnOffensiveMultiplier<ApplyOn::ALLY> {
-    INSTANCE(ABILITY_STEELY_SPIRIT);
+template <>
+struct AbilityImpl<ABILITY_STEELY_SPIRIT> : extends OnOffensiveMultiplier<ApplyOn::ALLY> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_STEEL) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_PERISH_BODY) : extends OnDefender {
-    INSTANCE(ABILITY_PERISH_BODY);
+template <>
+struct AbilityImpl<ABILITY_PERISH_BODY> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(IsBattlerAlive(attacker))
-        CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(gStatuses3[attacker] & STATUS3_PERISH_SONG)
+        CHECK(IsMoveMakingContact(move, attacker)) CHECK_NOT(gStatuses3[attacker] & STATUS3_PERISH_SONG)
 
-        if (!(gStatuses3[battler] & STATUS3_PERISH_SONG)) {
+            if (!(gStatuses3[battler] & STATUS3_PERISH_SONG)) {
             gStatuses3[battler] |= STATUS3_PERISH_SONG;
             gVolatileStructs[battler].perishSongTimer = 3;
             gVolatileStructs[battler].perishSongTimerStartValue = 3;
@@ -2637,17 +2614,15 @@ ABILITY(ABILITY_PERISH_BODY) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_WANDERING_SPIRIT) : extends OnDefender {
-    INSTANCE(ABILITY_WANDERING_SPIRIT);
+template <>
+struct AbilityImpl<ABILITY_WANDERING_SPIRIT> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(GetBattlerAbility(battler) == ability)
-        CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
-        CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
-        CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
+        CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability)) CHECK(IsMoveMakingContact(move, attacker))
+            CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(attacker))) CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
 
-        UpdateAbilityStateIndicesForNewAbility(attacker, GetBattlerAbility(attacker));
+                UpdateAbilityStateIndicesForNewAbility(attacker, GetBattlerAbility(attacker));
         UpdateAbilityStateIndicesForNewAbility(battler, ability);
         ReplaceAbility(battler, GetBattlerAbility(attacker));
         ReplaceAbility(attacker, ability);
@@ -2665,17 +2640,18 @@ ABILITY(ABILITY_WANDERING_SPIRIT) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_GORILLA_TACTICS) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_GORILLA_TACTICS);
+template <>
+struct AbilityImpl<ABILITY_GORILLA_TACTICS> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (IS_MOVE_PHYSICAL(move)) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_NEUTRALIZING_GAS) : extends Unsuppressable { INSTANCE(ABILITY_NEUTRALIZING_GAS); };
+template <>
+struct AbilityImpl<ABILITY_NEUTRALIZING_GAS> : extends Unsuppressable {};
 
-ABILITY(ABILITY_PASTEL_VEIL) : extends OnEntry {
-    INSTANCE(ABILITY_PASTEL_VEIL);
+template <>
+struct AbilityImpl<ABILITY_PASTEL_VEIL> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD)
 
@@ -2689,8 +2665,8 @@ ABILITY(ABILITY_PASTEL_VEIL) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_HUNGER_SWITCH) : extends FormChangeAbility, extends OnEndTurn {
-    INSTANCE(ABILITY_HUNGER_SWITCH);
+template <>
+struct AbilityImpl<ABILITY_HUNGER_SWITCH> : extends FormChangeAbility, extends OnEndTurn {
     ON_END_TURN {
         SpeciesEnum newSpecies;
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
@@ -2719,37 +2695,39 @@ ABILITY(ABILITY_HUNGER_SWITCH) : extends FormChangeAbility, extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_CURIOUS_MEDICINE) : extends OnEntry {
-    INSTANCE(ABILITY_CURIOUS_MEDICINE);
+template <>
+struct AbilityImpl<ABILITY_CURIOUS_MEDICINE> : extends OnEntry {
     ON_ENTRY {
         CHECK(IsDoubleBattle())
         CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
         CHECK(TryResetBattlerStatChanges(BATTLE_PARTNER(battler), RESET_ALL_STATS))
 
-        gEffectBattler = BATTLE_PARTNER(battler);
+            gEffectBattler = BATTLE_PARTNER(battler);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CURIOUS_MEDICINE;
         BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_TRANSISTOR) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_TRANSISTOR);
+template <>
+struct AbilityImpl<ABILITY_TRANSISTOR> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_ELECTRIC) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_DRAGONS_MAW) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_DRAGONS_MAW);
+template <>
+struct AbilityImpl<ABILITY_DRAGONS_MAW> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_DRAGON) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_CHILLING_NEIGH) : extends AbilityImpl<ABILITY_MOXIE> { INSTANCE(ABILITY_CHILLING_NEIGH); };
+template <>
+struct AbilityImpl<ABILITY_CHILLING_NEIGH> : extends AbilityImpl<ABILITY_MOXIE> {};
 
-ABILITY(ABILITY_GRIM_NEIGH) : extends MoxieClone<STAT_SPATK> { INSTANCE(ABILITY_GRIM_NEIGH); };
+template <>
+struct AbilityImpl<ABILITY_GRIM_NEIGH> : extends MoxieClone<STAT_SPATK> {};
 
 template <AbilityEnum FaintAbility>
 struct AsOne : extends Unsuppressable, extends RandomizerBanned, extends AbilityImpl<ABILITY_UNNERVE>, extends AbilityImpl<FaintAbility> {
@@ -2762,53 +2740,54 @@ struct AsOne : extends Unsuppressable, extends RandomizerBanned, extends Ability
     }
 };
 
-ABILITY(ABILITY_AS_ONE_ICE_RIDER) : extends AsOne<ABILITY_CHILLING_NEIGH> { INSTANCE(ABILITY_AS_ONE_ICE_RIDER); };
+template <>
+struct AbilityImpl<ABILITY_AS_ONE_ICE_RIDER> : extends AsOne<ABILITY_CHILLING_NEIGH> {};
 
-ABILITY(ABILITY_AS_ONE_SHADOW_RIDER) : extends AsOne<ABILITY_GRIM_NEIGH> { INSTANCE(ABILITY_AS_ONE_SHADOW_RIDER); };
+template <>
+struct AbilityImpl<ABILITY_AS_ONE_SHADOW_RIDER> : extends AsOne<ABILITY_GRIM_NEIGH> {};
 
-ABILITY(ABILITY_CHLOROPLAST) { INSTANCE(ABILITY_CHLOROPLAST); };
+template <>
+struct AbilityImpl<ABILITY_CHLOROPLAST> {};
 
-ABILITY(ABILITY_WHITEOUT) : extends HailImmune, extends OnStat<> {
-    INSTANCE(ABILITY_WHITEOUT);
+template <>
+struct AbilityImpl<ABILITY_WHITEOUT> : extends HailImmune, extends OnStat<> {
     ON_STAT {
         if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
         if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_PYROMANCY) : extends OnModifyEffectChance<> {
-    INSTANCE(ABILITY_PYROMANCY);
+template <>
+struct AbilityImpl<ABILITY_PYROMANCY> : extends OnModifyEffectChance<> {
     ON_MODIFY_EFFECT_CHANCE {
         if (moveEffect == MOVE_EFFECT_BURN) *effectChance *= 5;
     }
 };
 
-ABILITY(ABILITY_KEEN_EDGE) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_KEEN_EDGE);
+template <>
+struct AbilityImpl<ABILITY_KEEN_EDGE> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_PRISM_SCALES) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_PRISM_SCALES);
+template <>
+struct AbilityImpl<ABILITY_PRISM_SCALES> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_SPECIAL(move)) MUL(.7);
     }
 };
 
-ABILITY(ABILITY_POWER_FISTS) : extends AbilityImpl<ABILITY_IRON_FIST>, extends OnChooseDefensiveStat<> {
-    INSTANCE(ABILITY_POWER_FISTS);
-    ON_CHOOSE_DEFENSIVE_STAT {
-        CHECK(IsIronFistBoosted(battler, move))
-        return STAT_SPDEF;
-    }
+template <>
+struct AbilityImpl<ABILITY_POWER_FISTS> : extends AbilityImpl<ABILITY_IRON_FIST>, extends OnChooseDefensiveStat<> {
+    ON_CHOOSE_DEFENSIVE_STAT { CHECK(IsIronFistBoosted(battler, move)) return STAT_SPDEF; }
 };
 
-ABILITY(ABILITY_SAND_SONG) : extends LiquidVoiceClone<TYPE_GROUND> { INSTANCE(ABILITY_SAND_SONG); };
+template <>
+struct AbilityImpl<ABILITY_SAND_SONG> : extends LiquidVoiceClone<TYPE_GROUND> {};
 
-ABILITY(ABILITY_RAMPAGE) : extends OnBattlerFaints<> {
-    INSTANCE(ABILITY_RAMPAGE);
+template <>
+struct AbilityImpl<ABILITY_RAMPAGE> : extends OnBattlerFaints<> {
     ON_BATTLER_FAINTS {
         SetAbilityState(battler, ability, TRUE);
         gVolatileStructs[battler].rechargeTimer = 0;
@@ -2817,28 +2796,29 @@ ABILITY(ABILITY_RAMPAGE) : extends OnBattlerFaints<> {
     }
 };
 
-ABILITY(ABILITY_VENGEANCE) : extends SwarmLike<TYPE_GHOST> { INSTANCE(ABILITY_VENGEANCE); };
+template <>
+struct AbilityImpl<ABILITY_VENGEANCE> : extends SwarmLike<TYPE_GHOST> {};
 
-ABILITY(ABILITY_BLITZ_BOXER) : extends OnPriority {
-    INSTANCE(ABILITY_BLITZ_BOXER);
+template <>
+struct AbilityImpl<ABILITY_BLITZ_BOXER> : extends OnPriority {
     ON_PRIORITY {
-        CHECK(IsIronFistBoosted(battler, move))
-        CHECK(BATTLER_MAX_HP(battler));
+        CHECK(IsIronFistBoosted(battler, move)) CHECK(BATTLER_MAX_HP(battler));
         return 1;
     }
 };
 
-ABILITY(ABILITY_ANTARCTIC_BIRD) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_ANTARCTIC_BIRD);
+template <>
+struct AbilityImpl<ABILITY_ANTARCTIC_BIRD> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FLYING || moveType == TYPE_ICE) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_IMMOLATE) : extends AteAbility<TYPE_FIRE> { INSTANCE(ABILITY_IMMOLATE); };
+template <>
+struct AbilityImpl<ABILITY_IMMOLATE> : extends AteAbility<TYPE_FIRE> {};
 
-ABILITY(ABILITY_CRYSTALLIZE) : extends OnOffensiveMultiplier<>, extends OnMoveType {
-    INSTANCE(ABILITY_CRYSTALLIZE);
+template <>
+struct AbilityImpl<ABILITY_CRYSTALLIZE> : extends OnOffensiveMultiplier<>, extends OnMoveType {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_ICE && gBattleStruct->ateBoost[battler]) MUL(1.1);
     }
@@ -2849,24 +2829,25 @@ ABILITY(ABILITY_CRYSTALLIZE) : extends OnOffensiveMultiplier<>, extends OnMoveTy
     }
 };
 
-ABILITY(ABILITY_ELECTROCYTES) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_ELECTROCYTES);
+template <>
+struct AbilityImpl<ABILITY_ELECTROCYTES> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_ELECTRIC) MUL(1.25);
     }
 };
 
-ABILITY(ABILITY_AERODYNAMICS) : extends AbsorbStatUp<TYPE_FLYING, STAT_SPEED> { INSTANCE(ABILITY_AERODYNAMICS); };
+template <>
+struct AbilityImpl<ABILITY_AERODYNAMICS> : extends AbsorbStatUp<TYPE_FLYING, STAT_SPEED> {};
 
-ABILITY(ABILITY_CHRISTMAS_SPIRIT) : extends OnDefensiveMultiplier, extends HailImmune {
-    INSTANCE(ABILITY_CHRISTMAS_SPIRIT);
+template <>
+struct AbilityImpl<ABILITY_CHRISTMAS_SPIRIT> : extends OnDefensiveMultiplier, extends HailImmune {
     ON_DEFENSIVE_MULTIPLIER {
         if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) MUL(.5);
     }
 };
 
-ABILITY(ABILITY_EXPLOIT_WEAKNESS) : extends OnOffensiveMultiplier<>, extends OnChooseDefensiveStat<> {
-    INSTANCE(ABILITY_EXPLOIT_WEAKNESS);
+template <>
+struct AbilityImpl<ABILITY_EXPLOIT_WEAKNESS> : extends OnOffensiveMultiplier<>, extends OnChooseDefensiveStat<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (HasAnyStatusOrAbility(target)) MUL(1.25);
     }
@@ -2883,32 +2864,28 @@ ABILITY(ABILITY_EXPLOIT_WEAKNESS) : extends OnOffensiveMultiplier<>, extends OnC
     }
 };
 
-ABILITY(ABILITY_GROUND_SHOCK) : extends OnTypeEffectiveness<> {
-    INSTANCE(ABILITY_GROUND_SHOCK);
+template <>
+struct AbilityImpl<ABILITY_GROUND_SHOCK> : extends OnTypeEffectiveness<> {
     ON_TYPE_EFFECTIVENESS {
-        CHECK(moveType == TYPE_ELECTRIC)
-        CHECK(defType == TYPE_GROUND)
-        CHECK_NOT(*mod)
-        *mod = UQ_4_12(.5);
+        CHECK(moveType == TYPE_ELECTRIC) CHECK(defType == TYPE_GROUND) CHECK_NOT(*mod) *mod = UQ_4_12(.5);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_ANCIENT_IDOL) : extends OnChooseOffensiveStat {
-    INSTANCE(ABILITY_ANCIENT_IDOL);
+template <>
+struct AbilityImpl<ABILITY_ANCIENT_IDOL> : extends OnChooseOffensiveStat {
     ON_CHOOSE_OFFENSIVE_STAT { *atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; }
 };
 
-ABILITY(ABILITY_MYSTIC_POWER) : extends OnStab {
-    INSTANCE(ABILITY_MYSTIC_POWER);
+template <>
+struct AbilityImpl<ABILITY_MYSTIC_POWER> : extends OnStab {
     ON_STAB { return TRUE; }
 };
 
-ABILITY(ABILITY_PERFECTIONIST) : extends OnPriority, extends OnCrit<> {
-    INSTANCE(ABILITY_PERFECTIONIST);
+template <>
+struct AbilityImpl<ABILITY_PERFECTIONIST> : extends OnPriority, extends OnCrit<> {
     ON_PRIORITY {
-        CHECK(gBattleMoves[move].power <= 25)
-        CHECK(gBattleMoves[move].power);
+        CHECK(gBattleMoves[move].power <= 25) CHECK(gBattleMoves[move].power);
         return 1;
     }
     ON_CRIT {
@@ -2918,45 +2895,44 @@ ABILITY(ABILITY_PERFECTIONIST) : extends OnPriority, extends OnCrit<> {
     }
 };
 
-ABILITY(ABILITY_GROWING_TOOTH) : extends OnAttacker {
-    INSTANCE(ABILITY_GROWING_TOOTH);
+template <>
+struct AbilityImpl<ABILITY_GROWING_TOOTH> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
 
-        gBattleScripting.battler = battler;
+            gBattleScripting.battler = battler;
         BattleScriptCall(BattleScript_AttackBoostActivates);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_INFLATABLE) : extends OnDefender {
-    INSTANCE(ABILITY_INFLATABLE);
+template <>
+struct AbilityImpl<ABILITY_INFLATABLE> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
-        CHECK(CanRaiseStat(battler, STAT_DEF) || CanRaiseStat(battler, STAT_SPDEF))
-        CHECK(moveType == TYPE_FIRE || moveType == TYPE_FLYING);
+        CHECK(CanRaiseStat(battler, STAT_DEF) || CanRaiseStat(battler, STAT_SPDEF)) CHECK(moveType == TYPE_FIRE || moveType == TYPE_FLYING);
         BattleScriptCall(BattleScript_InflatableActivates);
         gBattleScripting.battler = battler;
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_AURORA_BOREALIS) : extends HailImmune, extends OnStab {
-    INSTANCE(ABILITY_AURORA_BOREALIS);
+template <>
+struct AbilityImpl<ABILITY_AURORA_BOREALIS> : extends HailImmune, extends OnStab {
     ON_STAB { return moveType == TYPE_ICE; }
 };
 
-ABILITY(ABILITY_AVENGER) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_AVENGER);
+template <>
+struct AbilityImpl<ABILITY_AVENGER> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gSideTimers[GET_BATTLER_SIDE(battler)].retaliateTimer) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_LETS_ROLL) : extends OnEntry {
-    INSTANCE(ABILITY_LETS_ROLL);
+template <>
+struct AbilityImpl<ABILITY_LETS_ROLL> : extends OnEntry {
     ON_ENTRY {
         CHECK(CanRaiseStat(battler, STAT_DEF))
 
@@ -2967,20 +2943,19 @@ ABILITY(ABILITY_LETS_ROLL) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_LOUD_BANG) : extends OnAttacker {
-    INSTANCE(ABILITY_LOUD_BANG);
+template <>
+struct AbilityImpl<ABILITY_LOUD_BANG> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeConfused(target))
-        CHECK(IsSoundMove(battler, move))
-        CHECK(Random() % 2)
+        CHECK(IsSoundMove(battler, move)) CHECK(Random() % 2)
 
-        return AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
+            return AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
     }
 };
 
-ABILITY(ABILITY_LEAD_COAT) : extends OnDefensiveMultiplier, extends OnStat<> {
-    INSTANCE(ABILITY_LEAD_COAT);
+template <>
+struct AbilityImpl<ABILITY_LEAD_COAT> : extends OnDefensiveMultiplier, extends OnStat<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_PHYSICAL(move)) MUL(.6);
     }
@@ -2989,8 +2964,8 @@ ABILITY(ABILITY_LEAD_COAT) : extends OnDefensiveMultiplier, extends OnStat<> {
     }
 };
 
-ABILITY(ABILITY_AMPHIBIOUS) : extends OnStab, extends OnStatusImmune<> {
-    INSTANCE(ABILITY_AMPHIBIOUS);
+template <>
+struct AbilityImpl<ABILITY_AMPHIBIOUS> : extends OnStab, extends OnStatusImmune<> {
     ON_STAB { return moveType == TYPE_WATER; }
     ON_STATUS_IMMUNE {
         CHECK(status & CHECK_DRENCH)
@@ -2998,14 +2973,17 @@ ABILITY(ABILITY_AMPHIBIOUS) : extends OnStab, extends OnStatusImmune<> {
     }
 };
 
-ABILITY(ABILITY_GROUNDED) : extends AddsType<TYPE_GROUND> { INSTANCE(ABILITY_GROUNDED); };
+template <>
+struct AbilityImpl<ABILITY_GROUNDED> : extends AddsType<TYPE_GROUND> {};
 
-ABILITY(ABILITY_EARTHBOUND) : extends SwarmLike<TYPE_GROUND> { INSTANCE(ABILITY_EARTHBOUND); };
+template <>
+struct AbilityImpl<ABILITY_EARTHBOUND> : extends SwarmLike<TYPE_GROUND> {};
 
-ABILITY(ABILITY_FIGHT_SPIRIT) : extends AteAbility<TYPE_FIGHTING> { INSTANCE(ABILITY_FIGHT_SPIRIT); };
+template <>
+struct AbilityImpl<ABILITY_FIGHT_SPIRIT> : extends AteAbility<TYPE_FIGHTING> {};
 
-ABILITY(ABILITY_COIL_UP) : extends OnEntry {
-    INSTANCE(ABILITY_COIL_UP);
+template <>
+struct AbilityImpl<ABILITY_COIL_UP> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gStatuses4[battler] & STATUS4_COILED)
 
@@ -3015,8 +2993,8 @@ ABILITY(ABILITY_COIL_UP) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_FOSSILIZED) : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_FOSSILIZED);
+template <>
+struct AbilityImpl<ABILITY_FOSSILIZED> : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_ROCK) MUL(1.2);
     }
@@ -3025,14 +3003,15 @@ ABILITY(ABILITY_FOSSILIZED) : extends OnOffensiveMultiplier<>, extends OnDefensi
     }
 };
 
-ABILITY(ABILITY_MAGICAL_DUST) : extends OnDefender {
-    INSTANCE(ABILITY_MAGICAL_DUST);
+template <>
+struct AbilityImpl<ABILITY_MAGICAL_DUST> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_PSYCHIC))
 
-        gBattleMons[attacker].type3 = TYPE_PSYCHIC;
+            gBattleMons[attacker]
+                .type3 = TYPE_PSYCHIC;
         PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMons[attacker].type3);
         BattleScriptCall(BattleScript_AttackerBecameTheType);
         return TRUE;
@@ -3073,13 +3052,12 @@ struct UseTurnAttackAsPursuit : OnPreemptAction {
     }
 };
 
-ABILITY(ABILITY_DREAMCATCHER) : extends OnOffensiveMultiplier<>, extends UseTurnAttackAsPursuit {
-    INSTANCE(ABILITY_DREAMCATCHER);
+template <>
+struct AbilityImpl<ABILITY_DREAMCATCHER> : extends OnOffensiveMultiplier<>, extends UseTurnAttackAsPursuit {
     ON_OFFENSIVE_MULTIPLIER {
         for (int i = 0; i < gBattlersCount; i++) {
             if (IsBattlerAlive(i) && gBattleMons[i].status1 & STATUS1_SLEEP) {
-                FILTER_NOT(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ability && gQueuedExtraAttackData[0].target == i)
-                MUL(2.0);
+                FILTER_NOT(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ability && gQueuedExtraAttackData[0].target == i) MUL(2.0);
                 return;
             }
         }
@@ -3090,8 +3068,8 @@ ABILITY(ABILITY_DREAMCATCHER) : extends OnOffensiveMultiplier<>, extends UseTurn
     }
 };
 
-ABILITY(ABILITY_NOCTURNAL) : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_NOCTURNAL);
+template <>
+struct AbilityImpl<ABILITY_NOCTURNAL> : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_DARK) MUL(1.25);
     }
@@ -3100,14 +3078,14 @@ ABILITY(ABILITY_NOCTURNAL) : extends OnOffensiveMultiplier<>, extends OnDefensiv
     }
 };
 
-ABILITY(ABILITY_SELF_SUFFICIENT) : extends OnEndTurn {
-    INSTANCE(ABILITY_SELF_SUFFICIENT);
+template <>
+struct AbilityImpl<ABILITY_SELF_SUFFICIENT> : extends OnEndTurn {
     ON_END_TURN {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
 
-        gBattleMoveDamage = gBattleMons[battler].maxHP / 16;
+            gBattleMoveDamage = gBattleMons[battler].maxHP / 16;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
@@ -3115,23 +3093,28 @@ ABILITY(ABILITY_SELF_SUFFICIENT) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_TECTONIZE) : extends AteAbility<TYPE_GROUND> { INSTANCE(ABILITY_TECTONIZE); };
+template <>
+struct AbilityImpl<ABILITY_TECTONIZE> : extends AteAbility<TYPE_GROUND> {};
 
-ABILITY(ABILITY_ICE_AGE) : extends AddsType<TYPE_ICE> { INSTANCE(ABILITY_ICE_AGE); };
+template <>
+struct AbilityImpl<ABILITY_ICE_AGE> : extends AddsType<TYPE_ICE> {};
 
-ABILITY(ABILITY_HALF_DRAKE) : extends AddsType<TYPE_DRAGON> { INSTANCE(ABILITY_HALF_DRAKE); };
+template <>
+struct AbilityImpl<ABILITY_HALF_DRAKE> : extends AddsType<TYPE_DRAGON> {};
 
-ABILITY(ABILITY_AQUATIC) : extends AddsType<TYPE_WATER> { INSTANCE(ABILITY_AQUATIC); };
+template <>
+struct AbilityImpl<ABILITY_AQUATIC> : extends AddsType<TYPE_WATER> {};
 
-ABILITY(ABILITY_LIQUIFIED) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_LIQUIFIED);
+template <>
+struct AbilityImpl<ABILITY_LIQUIFIED> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_WATER) RESISTANCE(2);
         if (IsMoveMakingContact(move, attacker)) MUL(0.5);
     }
 };
 
-ABILITY(ABILITY_DRAGONFLY) : extends AbilityImpl<ABILITY_HALF_DRAKE>, extends GroundImmune { INSTANCE(ABILITY_DRAGONFLY); };
+template <>
+struct AbilityImpl<ABILITY_DRAGONFLY> : extends AbilityImpl<ABILITY_HALF_DRAKE>, extends GroundImmune {};
 
 template <Type StrongVs>
 struct TypeSlayer : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
@@ -3143,44 +3126,44 @@ struct TypeSlayer : extends OnOffensiveMultiplier<>, extends OnDefensiveMultipli
     }
 };
 
-ABILITY(ABILITY_DRAGONSLAYER) : extends TypeSlayer<TYPE_DRAGON> { INSTANCE(ABILITY_DRAGONSLAYER); };
+template <>
+struct AbilityImpl<ABILITY_DRAGONSLAYER> : extends TypeSlayer<TYPE_DRAGON> {};
 
 struct StealthRockImmune {};
-ABILITY(ABILITY_MOUNTAINEER) : extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, extends StealthRockImmune {
-    INSTANCE(ABILITY_MOUNTAINEER);
+template <>
+struct AbilityImpl<ABILITY_MOUNTAINEER> : extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, extends StealthRockImmune {
     ON_AFTER_TYPE_EFFECTIVENESS {
         if (moveType == TYPE_ROCK) *mod = 0;
     }
 };
 
-ABILITY(ABILITY_HYDRATE) : extends AteAbility<TYPE_WATER> { INSTANCE(ABILITY_HYDRATE); };
+template <>
+struct AbilityImpl<ABILITY_HYDRATE> : extends AteAbility<TYPE_WATER> {};
 
-ABILITY(ABILITY_METALLIC) : extends AddsType<TYPE_STEEL> { INSTANCE(ABILITY_METALLIC); };
+template <>
+struct AbilityImpl<ABILITY_METALLIC> : extends AddsType<TYPE_STEEL> {};
 
-ABILITY(ABILITY_PERMAFROST) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_PERMAFROST);
+template <>
+struct AbilityImpl<ABILITY_PERMAFROST> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
     }
 };
 
-ABILITY(ABILITY_PRIMAL_ARMOR) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_PRIMAL_ARMOR);
+template <>
+struct AbilityImpl<ABILITY_PRIMAL_ARMOR> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.5);
     }
 };
 
-ABILITY(ABILITY_RAGING_BOXER) : extends OnParentalBond {
-    INSTANCE(ABILITY_RAGING_BOXER);
-    ON_PARENTAL_BOND {
-        CHECK(IsIronFistBoosted(battler, move))
-        return PARENTAL_BOND_PRIMAL_MAW;
-    }
+template <>
+struct AbilityImpl<ABILITY_RAGING_BOXER> : extends OnParentalBond {
+    ON_PARENTAL_BOND { CHECK(IsIronFistBoosted(battler, move)) return PARENTAL_BOND_PRIMAL_MAW; }
 };
 
-ABILITY(ABILITY_AIR_BLOWER) : extends OnEntry {
-    INSTANCE(ABILITY_AIR_BLOWER);
+template <>
+struct AbilityImpl<ABILITY_AIR_BLOWER> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND) int side = GetBattlerSide(battler);
         gSideTimers[side].started.tailwind = TRUE;
@@ -3196,8 +3179,8 @@ ABILITY(ABILITY_AIR_BLOWER) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_JUGGERNAUT) : extends OnChooseOffensiveStat, extends RemovesStatusOnImmunity {
-    INSTANCE(ABILITY_JUGGERNAUT);
+template <>
+struct AbilityImpl<ABILITY_JUGGERNAUT> : extends OnChooseOffensiveStat, extends RemovesStatusOnImmunity {
     ON_CHOOSE_OFFENSIVE_STAT {
         if (gBattleMoves[move].contact) secondaryAtkStatToUse[STAT_DEF] += 20;
     }
@@ -3207,23 +3190,27 @@ ABILITY(ABILITY_JUGGERNAUT) : extends OnChooseOffensiveStat, extends RemovesStat
     }
 };
 
-ABILITY(ABILITY_SHORT_CIRCUIT) : extends SwarmLike<TYPE_ELECTRIC> { INSTANCE(ABILITY_SHORT_CIRCUIT); };
+template <>
+struct AbilityImpl<ABILITY_SHORT_CIRCUIT> : extends SwarmLike<TYPE_ELECTRIC> {};
 
-ABILITY(ABILITY_MAJESTIC_BIRD) : extends OnStat<> {
-    INSTANCE(ABILITY_MAJESTIC_BIRD);
+template <>
+struct AbilityImpl<ABILITY_MAJESTIC_BIRD> : extends OnStat<> {
     ON_STAT {
         if (statId == STAT_SPATK) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_PHANTOM) : extends AddsType<TYPE_GHOST> { INSTANCE(ABILITY_PHANTOM); };
+template <>
+struct AbilityImpl<ABILITY_PHANTOM> : extends AddsType<TYPE_GHOST> {};
 
-ABILITY(ABILITY_INTOXICATE) : extends AteAbility<TYPE_POISON> { INSTANCE(ABILITY_INTOXICATE); };
+template <>
+struct AbilityImpl<ABILITY_INTOXICATE> : extends AteAbility<TYPE_POISON> {};
 
-ABILITY(ABILITY_IMPENETRABLE) : extends AbilityImpl<ABILITY_MAGIC_GUARD> { INSTANCE(ABILITY_IMPENETRABLE); };
+template <>
+struct AbilityImpl<ABILITY_IMPENETRABLE> : extends AbilityImpl<ABILITY_MAGIC_GUARD> {};
 
-ABILITY(ABILITY_HYPNOTIST) : extends OnAccuracy<> {
-    INSTANCE(ABILITY_HYPNOTIST);
+template <>
+struct AbilityImpl<ABILITY_HYPNOTIST> : extends OnAccuracy<> {
     ON_ACCURACY {
         CHECK(move == MOVE_HYPNOSIS);
         *accuracy *= 1.5;
@@ -3231,18 +3218,19 @@ ABILITY(ABILITY_HYPNOTIST) : extends OnAccuracy<> {
     }
 };
 
-ABILITY(ABILITY_OVERWHELM) : extends OnTypeEffectiveness<>, extends TauntImmune {
-    INSTANCE(ABILITY_OVERWHELM);
+template <>
+struct AbilityImpl<ABILITY_OVERWHELM> : extends OnTypeEffectiveness<>, extends TauntImmune {
     ON_TYPE_EFFECTIVENESS {
         CHECK(moveType == TYPE_DRAGON) CHECK(defType == TYPE_FAIRY) CHECK_NOT(*mod) *mod = UQ_4_12(1.0);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_SCARE) : extends AbilityImpl<ABILITY_INTIMIDATE> { INSTANCE(ABILITY_SCARE); };
+template <>
+struct AbilityImpl<ABILITY_SCARE> : extends AbilityImpl<ABILITY_INTIMIDATE> {};
 
-ABILITY(ABILITY_MAJESTIC_MOTH) : extends OnEntry {
-    INSTANCE(ABILITY_MAJESTIC_MOTH);
+template <>
+struct AbilityImpl<ABILITY_MAJESTIC_MOTH> : extends OnEntry {
     ON_ENTRY {
         CHECK(ChangeStatBuffs(battler, 1, GetHighestStatId(battler, TRUE), MOVE_EFFECT_AFFECTS_USER, NULL))
 
@@ -3251,8 +3239,8 @@ ABILITY(ABILITY_MAJESTIC_MOTH) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_SOUL_EATER) : extends OnBattlerFaints<> {
-    INSTANCE(ABILITY_SOUL_EATER);
+template <>
+struct AbilityImpl<ABILITY_SOUL_EATER> : extends OnBattlerFaints<> {
     ON_BATTLER_FAINTS {
         CHECK_NOT(BATTLER_MAX_HP(battler));
         CHECK(CanBattlerHeal(battler));
@@ -3261,27 +3249,26 @@ ABILITY(ABILITY_SOUL_EATER) : extends OnBattlerFaints<> {
     }
 };
 
-ABILITY(ABILITY_SOUL_LINKER) : extends OnEither {
-    INSTANCE(ABILITY_SOUL_LINKER);
+template <>
+struct AbilityImpl<ABILITY_SOUL_LINKER> : extends OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(IsBattlerAlive(battler))
-        CHECK_NOT(BATTLER_HAS_ABILITY(opponent, ABILITY_SOUL_LINKER))
-        CHECK(move != MOVE_PAIN_SPLIT)
+        CHECK_NOT(BATTLER_HAS_ABILITY(opponent, ABILITY_SOUL_LINKER)) CHECK(move != MOVE_PAIN_SPLIT)
 
-        BattleScriptCall(BattleScript_AttackerSoulLinker);
+            BattleScriptCall(BattleScript_AttackerSoulLinker);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_SWEET_DREAMS) : extends OnEndTurn {
-    INSTANCE(ABILITY_SWEET_DREAMS);
+template <>
+struct AbilityImpl<ABILITY_SWEET_DREAMS> : extends OnEndTurn {
     ON_END_TURN {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
         CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
 
-        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         BattleScriptPushCursorAndCallback(BattleScript_SweetDreamsActivates);
@@ -3289,31 +3276,32 @@ ABILITY(ABILITY_SWEET_DREAMS) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_BAD_LUCK) : extends Breakable, extends OnCrit<ApplyOnTarget::FOE>, extends OnModifyEffectChance<ApplyOn::FOE> {
-    INSTANCE(ABILITY_BAD_LUCK);
+struct ForcesMinRolls {};
+
+template <>
+struct AbilityImpl<ABILITY_BAD_LUCK> : extends Breakable, extends OnCrit<ApplyOnTarget::FOE>, extends OnModifyEffectChance<ApplyOn::FOE>, extends ForcesMinRolls {
     ON_CRIT { return NEVER_CRIT; }
     ON_MODIFY_EFFECT_CHANCE {
         if (*effectChance < 1) *effectChance = 0;
     }
 };
 
-ABILITY(ABILITY_HAUNTED_SPIRIT) : extends OnDefender {
-    INSTANCE(ABILITY_HAUNTED_SPIRIT);
+template <>
+struct AbilityImpl<ABILITY_HAUNTED_SPIRIT> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
-        CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_GHOST))
-        CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED)
-        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_GHOST)) CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED) CHECK(IsMoveMakingContact(move, attacker))
 
-        gBattleMons[attacker].status2 |= STATUS2_CURSED;
+            gBattleMons[attacker]
+                .status2 |= STATUS2_CURSED;
         BattleScriptCall(BattleScript_HauntedSpiritActivated);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_ELECTRIC_BURST) : extends OnRecoil, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_ELECTRIC_BURST);
+template <>
+struct AbilityImpl<ABILITY_ELECTRIC_BURST> : extends OnRecoil, extends OnOffensiveMultiplier<> {
     ON_RECOIL {
         CHECK(moveType == TYPE_ELECTRIC);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -3324,8 +3312,8 @@ ABILITY(ABILITY_ELECTRIC_BURST) : extends OnRecoil, extends OnOffensiveMultiplie
     }
 };
 
-ABILITY(ABILITY_RAW_WOOD) : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_RAW_WOOD);
+template <>
+struct AbilityImpl<ABILITY_RAW_WOOD> : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_GRASS) MUL(1.2);
     }
@@ -3334,20 +3322,19 @@ ABILITY(ABILITY_RAW_WOOD) : extends OnOffensiveMultiplier<>, extends OnDefensive
     }
 };
 
-ABILITY(ABILITY_SOLENOGLYPHS) : extends OnAttacker {
-    INSTANCE(ABILITY_SOLENOGLYPHS);
+template <>
+struct AbilityImpl<ABILITY_SOLENOGLYPHS> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
-        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-        CHECK(Random() % 2)
+        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) CHECK(Random() % 2)
 
-        return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
+            return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
     }
 };
 
-ABILITY(ABILITY_SPIDER_LAIR) : extends OnEntry {
-    INSTANCE(ABILITY_SPIDER_LAIR);
+template <>
+struct AbilityImpl<ABILITY_SPIDER_LAIR> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
@@ -3360,12 +3347,11 @@ ABILITY(ABILITY_SPIDER_LAIR) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_FATAL_PRECISION) : extends OnAccuracy<>, extends OnCrit<> {
-    INSTANCE(ABILITY_FATAL_PRECISION);
+template <>
+struct AbilityImpl<ABILITY_FATAL_PRECISION> : extends OnAccuracy<>, extends OnCrit<> {
     ON_ACCURACY {
         CHECK_NOT(IS_MOVE_STATUS(move))
-        CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, TRUE) >= UQ_4_12(2.0))
-        return ACCURACY_HITS_IF_POSSIBLE;
+        CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, TRUE) >= UQ_4_12(2.0)) return ACCURACY_HITS_IF_POSSIBLE;
     }
     ON_CRIT {
         CHECK(typeEffectiveness >= UQ_4_12(2.0))
@@ -3373,8 +3359,8 @@ ABILITY(ABILITY_FATAL_PRECISION) : extends OnAccuracy<>, extends OnCrit<> {
     }
 };
 
-ABILITY(ABILITY_SEAWEED) : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_SEAWEED);
+template <>
+struct AbilityImpl<ABILITY_SEAWEED> : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(target, TYPE_FIRE)) RESISTANCE(2);
     }
@@ -3383,17 +3369,17 @@ ABILITY(ABILITY_SEAWEED) : extends OnOffensiveMultiplier<>, extends OnDefensiveM
     }
 };
 
-ABILITY(ABILITY_PSYCHIC_MIND) : extends SwarmLike<TYPE_PSYCHIC> { INSTANCE(ABILITY_PSYCHIC_MIND); };
+template <>
+struct AbilityImpl<ABILITY_PSYCHIC_MIND> : extends SwarmLike<TYPE_PSYCHIC> {};
 
-ABILITY(ABILITY_POISON_ABSORB) : extends Redirects<TYPE_POISON>, extends AbsorbHeal<TYPE_POISON>, extends OnEndTurn {
-    INSTANCE(ABILITY_POISON_ABSORB);
+template <>
+struct AbilityImpl<ABILITY_POISON_ABSORB> : extends Redirects<TYPE_POISON>, extends AbsorbHeal<TYPE_POISON>, extends OnEndTurn {
     ON_END_TURN {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
-        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-        CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN))
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2) CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN))
 
-        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
@@ -3401,10 +3387,11 @@ ABILITY(ABILITY_POISON_ABSORB) : extends Redirects<TYPE_POISON>, extends AbsorbH
     }
 };
 
-ABILITY(ABILITY_SCAVENGER) : extends AbilityImpl<ABILITY_SOUL_EATER> { INSTANCE(ABILITY_SCAVENGER); };
+template <>
+struct AbilityImpl<ABILITY_SCAVENGER> : extends AbilityImpl<ABILITY_SOUL_EATER> {};
 
-ABILITY(ABILITY_TWISTED_DIMENSION) : extends OnEntry {
-    INSTANCE(ABILITY_TWISTED_DIMENSION);
+template <>
+struct AbilityImpl<ABILITY_TWISTED_DIMENSION> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
 
@@ -3416,8 +3403,8 @@ ABILITY(ABILITY_TWISTED_DIMENSION) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_MULTI_HEADED) : extends OnParentalBond, extends IgnoresFortKnox {
-    INSTANCE(ABILITY_MULTI_HEADED);
+template <>
+struct AbilityImpl<ABILITY_MULTI_HEADED> : extends OnParentalBond, extends IgnoresFortKnox {
     ON_PARENTAL_BOND {
         if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
         if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
@@ -3425,8 +3412,8 @@ ABILITY(ABILITY_MULTI_HEADED) : extends OnParentalBond, extends IgnoresFortKnox 
     }
 };
 
-ABILITY(ABILITY_NORTH_WIND) : extends HailImmune, extends OnEntry {
-    INSTANCE(ABILITY_NORTH_WIND);
+template <>
+struct AbilityImpl<ABILITY_NORTH_WIND> : extends HailImmune, extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_AURORA_VEIL)
 
@@ -3443,12 +3430,10 @@ ABILITY(ABILITY_NORTH_WIND) : extends HailImmune, extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_OVERCHARGE) : extends OnTypeEffectiveness<>, extends OnCanStatusType {
-    INSTANCE(ABILITY_OVERCHARGE);
+template <>
+struct AbilityImpl<ABILITY_OVERCHARGE> : extends OnTypeEffectiveness<>, extends OnCanStatusType {
     ON_TYPE_EFFECTIVENESS {
-        CHECK(moveType == TYPE_ELECTRIC)
-        CHECK(defType == TYPE_ELECTRIC)
-        *mod = UQ_4_12(2.0);
+        CHECK(moveType == TYPE_ELECTRIC) CHECK(defType == TYPE_ELECTRIC) *mod = UQ_4_12(2.0);
         return TRUE;
     }
     ON_CAN_STATUS_TYPE {
@@ -3457,25 +3442,26 @@ ABILITY(ABILITY_OVERCHARGE) : extends OnTypeEffectiveness<>, extends OnCanStatus
     }
 };
 
-ABILITY(ABILITY_VIOLENT_RUSH) : extends OnEntry {
-    INSTANCE(ABILITY_VIOLENT_RUSH);
+template <>
+struct AbilityImpl<ABILITY_VIOLENT_RUSH> : extends OnEntry {
     ON_ENTRY {
         gVolatileStructs[battler].violentRush = gVolatileStructs[battler].started.violentRush = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_VIOLENT_RUSH);
     }
 };
 
-ABILITY(ABILITY_FLAMING_SOUL) : extends GaleWingsLike<TYPE_FIRE> { INSTANCE(ABILITY_FLAMING_SOUL); };
+template <>
+struct AbilityImpl<ABILITY_FLAMING_SOUL> : extends GaleWingsLike<TYPE_FIRE> {};
 
-ABILITY(ABILITY_SAGE_POWER) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_SAGE_POWER);
+template <>
+struct AbilityImpl<ABILITY_SAGE_POWER> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (IS_MOVE_SPECIAL(move)) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_BONE_ZONE) : extends OnAfterTypeEffectiveness<> {
-    INSTANCE(ABILITY_BONE_ZONE);
+template <>
+struct AbilityImpl<ABILITY_BONE_ZONE> : extends OnAfterTypeEffectiveness<> {
     ON_AFTER_TYPE_EFFECTIVENESS {
         if (*mod >= UQ_4_12(1.0)) return;
         if (*mod == 0) {
@@ -3488,15 +3474,15 @@ ABILITY(ABILITY_BONE_ZONE) : extends OnAfterTypeEffectiveness<> {
     }
 };
 
-ABILITY(ABILITY_SPEED_FORCE) : extends OnChooseOffensiveStat {
-    INSTANCE(ABILITY_SPEED_FORCE);
+template <>
+struct AbilityImpl<ABILITY_SPEED_FORCE> : extends OnChooseOffensiveStat {
     ON_CHOOSE_OFFENSIVE_STAT {
         if (gBattleMoves[move].contact) secondaryAtkStatToUse[STAT_SPEED] += 20;
     }
 };
 
-ABILITY(ABILITY_SEA_GUARDIAN) : extends OnEntry {
-    INSTANCE(ABILITY_SEA_GUARDIAN);
+template <>
+struct AbilityImpl<ABILITY_SEA_GUARDIAN> : extends OnEntry {
     ON_ENTRY {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
@@ -3508,52 +3494,55 @@ ABILITY(ABILITY_SEA_GUARDIAN) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_MOLTEN_DOWN) : extends OnTypeEffectiveness<> {
-    INSTANCE(ABILITY_MOLTEN_DOWN);
+template <>
+struct AbilityImpl<ABILITY_MOLTEN_DOWN> : extends OnTypeEffectiveness<> {
     ON_TYPE_EFFECTIVENESS {
-        CHECK(moveType == TYPE_FIRE)
-        CHECK(defType == TYPE_ROCK)
-        *mod = UQ_4_12(2.0);
+        CHECK(moveType == TYPE_FIRE) CHECK(defType == TYPE_ROCK) *mod = UQ_4_12(2.0);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_FLOCK) : extends SwarmLike<TYPE_FLYING> { INSTANCE(ABILITY_FLOCK); };
+template <>
+struct AbilityImpl<ABILITY_FLOCK> : extends SwarmLike<TYPE_FLYING> {};
 
-ABILITY(ABILITY_FIELD_EXPLORER) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_FIELD_EXPLORER);
+template <>
+struct AbilityImpl<ABILITY_FIELD_EXPLORER> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_STRIKER) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_STRIKER);
+template <>
+struct AbilityImpl<ABILITY_STRIKER> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (IsStrikerBoosted(battler, move)) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_FROZEN_SOUL) : extends GaleWingsLike<TYPE_ICE> { INSTANCE(ABILITY_FROZEN_SOUL); };
+template <>
+struct AbilityImpl<ABILITY_FROZEN_SOUL> : extends GaleWingsLike<TYPE_ICE> {};
 
-ABILITY(ABILITY_PREDATOR) : extends AbilityImpl<ABILITY_SOUL_EATER> { INSTANCE(ABILITY_PREDATOR); };
+template <>
+struct AbilityImpl<ABILITY_PREDATOR> : extends AbilityImpl<ABILITY_SOUL_EATER> {};
 
-ABILITY(ABILITY_LOOTER) : extends AbilityImpl<ABILITY_SOUL_EATER> { INSTANCE(ABILITY_LOOTER); };
+template <>
+struct AbilityImpl<ABILITY_LOOTER> : extends AbilityImpl<ABILITY_SOUL_EATER> {};
 
-ABILITY(ABILITY_LUNAR_ECLIPSE) : extends AbilityImpl<ABILITY_HYPNOTIST>, extends OnStab {
-    INSTANCE(ABILITY_LUNAR_ECLIPSE);
+template <>
+struct AbilityImpl<ABILITY_LUNAR_ECLIPSE> : extends AbilityImpl<ABILITY_HYPNOTIST>, extends OnStab {
     ON_STAB { return moveType == TYPE_DARK || moveType == TYPE_FAIRY; }
 };
 
-ABILITY(ABILITY_SOLAR_FLARE) : extends AbilityImpl<ABILITY_IMMOLATE>, extends AbilityImpl<ABILITY_CHLOROPLAST> { INSTANCE(ABILITY_SOLAR_FLARE); };
+template <>
+struct AbilityImpl<ABILITY_SOLAR_FLARE> : extends AbilityImpl<ABILITY_IMMOLATE>, extends AbilityImpl<ABILITY_CHLOROPLAST> {};
 
-ABILITY(ABILITY_POWER_CORE) : extends OnChooseOffensiveStat {
-    INSTANCE(ABILITY_POWER_CORE);
+template <>
+struct AbilityImpl<ABILITY_POWER_CORE> : extends OnChooseOffensiveStat {
     ON_CHOOSE_OFFENSIVE_STAT { secondaryAtkStatToUse[IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF] += 20; }
 };
 
-ABILITY(ABILITY_SIGHTING_SYSTEM) : extends OnAccuracy<>, extends OnPriority {
-    INSTANCE(ABILITY_SIGHTING_SYSTEM);
+template <>
+struct AbilityImpl<ABILITY_SIGHTING_SYSTEM> : extends OnAccuracy<>, extends OnPriority {
     ON_ACCURACY { return ACCURACY_HITS_IF_POSSIBLE; }
     ON_PRIORITY {
         CHECK(gBattleMoves[move].accuracy)
@@ -3562,40 +3551,37 @@ ABILITY(ABILITY_SIGHTING_SYSTEM) : extends OnAccuracy<>, extends OnPriority {
     }
 };
 
-ABILITY(ABILITY_BAD_COMPANY) : extends RandomizerBanned { INSTANCE(ABILITY_BAD_COMPANY); };
+template <>
+struct AbilityImpl<ABILITY_BAD_COMPANY> : extends RandomizerBanned {};
 
-ABILITY(ABILITY_OPPORTUNIST) : extends OnPriority {
-    INSTANCE(ABILITY_OPPORTUNIST);
-    ON_PRIORITY {
-        CHECK(gBattleMons[target].hp <= gBattleMons[target].maxHP / 2)
-        return 1;
-    }
+template <>
+struct AbilityImpl<ABILITY_OPPORTUNIST> : extends OnPriority {
+    ON_PRIORITY { CHECK(gBattleMons[target].hp <= gBattleMons[target].maxHP / 2) return 1; }
 };
 
-ABILITY(ABILITY_GIANT_WINGS) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_GIANT_WINGS);
+template <>
+struct AbilityImpl<ABILITY_GIANT_WINGS> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMoves[move].airBased) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_MOMENTUM) : extends OnChooseOffensiveStat {
-    INSTANCE(ABILITY_MOMENTUM);
+template <>
+struct AbilityImpl<ABILITY_MOMENTUM> : extends OnChooseOffensiveStat {
     ON_CHOOSE_OFFENSIVE_STAT {
         if (gBattleMoves[move].contact) *atkStatToUse = STAT_SPEED;
     }
 };
 
-ABILITY(ABILITY_GRIP_PINCER) : extends OnAttacker, extends OnAccuracy<> {
-    INSTANCE(ABILITY_GRIP_PINCER);
+template <>
+struct AbilityImpl<ABILITY_GRIP_PINCER> : extends OnAttacker, extends OnAccuracy<> {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(gBattlerTarget))
         CHECK(IsBattlerAlive(battler))
-        CHECK(IsMoveMakingContact(move, battler))
-        CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
-        CHECK(Random() % 2)
+        CHECK(IsMoveMakingContact(move, battler)) CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED) CHECK(Random() % 2)
 
-        gBattleMons[target].status2 |= STATUS2_WRAPPED;
+            gBattleMons[target]
+                .status2 |= STATUS2_WRAPPED;
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_GRIP_CLAW)
             gVolatileStructs[target].wrapTurns = 7;
         else
@@ -3612,27 +3598,22 @@ ABILITY(ABILITY_GRIP_PINCER) : extends OnAttacker, extends OnAccuracy<> {
     }
 };
 
-ABILITY(ABILITY_BIG_LEAVES) : extends AbilityImpl<ABILITY_HARVEST>,
-                   extends Merged<ABILITY_SOLAR_POWER, ABILITY_CHLOROPHYLL>,
-                   extends Merged<ABILITY_HARVEST, ABILITY_LEAF_GUARD> { INSTANCE(ABILITY_BIG_LEAVES);};
+template <>
+struct AbilityImpl<ABILITY_BIG_LEAVES> : extends AbilityImpl<ABILITY_CHLOROPLAST>,
+                                         extends Merged<ABILITY_SOLAR_POWER, ABILITY_CHLOROPHYLL>,
+                                         extends Merged<ABILITY_HARVEST, ABILITY_LEAF_GUARD> {};
 
-ABILITY(ABILITY_PRECISE_FIST) : extends OnCrit<>, extends OnModifyEffectChance<> {
-    INSTANCE(ABILITY_PRECISE_FIST);
-    ON_CRIT {
-        CHECK(IsIronFistBoosted(battler, move))
-        return 1;
-    }
+template <>
+struct AbilityImpl<ABILITY_PRECISE_FIST> : extends OnCrit<>, extends OnModifyEffectChance<> {
+    ON_CRIT { CHECK(IsIronFistBoosted(battler, move)) return 1; }
     ON_MODIFY_EFFECT_CHANCE {
         if (IsIronFistBoosted(battler, move)) *effectChance *= 5;
     }
 };
 
-ABILITY(ABILITY_DEADEYE) : extends OnAccuracy<>, extends OnChooseDefensiveStat<> {
-    INSTANCE(ABILITY_DEADEYE);
-    ON_ACCURACY {
-        CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].arrowBased)
-        return ACCURACY_HITS_IF_POSSIBLE;
-    }
+template <>
+struct AbilityImpl<ABILITY_DEADEYE> : extends OnAccuracy<>, extends OnChooseDefensiveStat<> {
+    ON_ACCURACY { CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].arrowBased) return ACCURACY_HITS_IF_POSSIBLE; }
     ON_CHOOSE_DEFENSIVE_STAT {
         CHECK(gIsCriticalHit)
         u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
@@ -3646,18 +3627,16 @@ ABILITY(ABILITY_DEADEYE) : extends OnAccuracy<>, extends OnChooseDefensiveStat<>
     }
 };
 
-ABILITY(ABILITY_ARTILLERY) : extends OnAccuracy<> {
-    INSTANCE(ABILITY_ARTILLERY);
-    ON_ACCURACY {
-        CHECK(IsMegaLauncherBoosted(battler, move))
-        return ACCURACY_HITS_IF_POSSIBLE;
-    }
+template <>
+struct AbilityImpl<ABILITY_ARTILLERY> : extends OnAccuracy<> {
+    ON_ACCURACY { CHECK(IsMegaLauncherBoosted(battler, move)) return ACCURACY_HITS_IF_POSSIBLE; }
 };
 
-ABILITY(ABILITY_ICE_DEW) : extends LightningRodClone<TYPE_ICE> { INSTANCE(ABILITY_ICE_DEW); };
+template <>
+struct AbilityImpl<ABILITY_ICE_DEW> : extends LightningRodClone<TYPE_ICE> {};
 
-ABILITY(ABILITY_SUN_WORSHIP) : extends OnEntry {
-    INSTANCE(ABILITY_SUN_WORSHIP);
+template <>
+struct AbilityImpl<ABILITY_SUN_WORSHIP> : extends OnEntry {
     ON_ENTRY {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
 
@@ -3668,10 +3647,11 @@ ABILITY(ABILITY_SUN_WORSHIP) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_POLLINATE) : extends AteAbility<TYPE_BUG> { INSTANCE(ABILITY_POLLINATE); };
+template <>
+struct AbilityImpl<ABILITY_POLLINATE> : extends AteAbility<TYPE_BUG> {};
 
-ABILITY(ABILITY_VOLCANO_RAGE) : extends OnAttacker {
-    INSTANCE(ABILITY_VOLCANO_RAGE);
+template <>
+struct AbilityImpl<ABILITY_VOLCANO_RAGE> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(moveType == TYPE_FIRE)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -3680,8 +3660,8 @@ ABILITY(ABILITY_VOLCANO_RAGE) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_COLD_REBOUND) : extends OnDefender {
-    INSTANCE(ABILITY_COLD_REBOUND);
+template <>
+struct AbilityImpl<ABILITY_COLD_REBOUND> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -3695,33 +3675,30 @@ template <MoveEnum Move, int Power = 0>
 struct SimpleEntryMove : extends OnEntry {
     ON_ENTRY { return UseEntryMove(battler, ability, Move, Power); }
 };
-ABILITY(ABILITY_LOW_BLOW) : extends SimpleEntryMove<MOVE_FEINT_ATTACK, 40> { INSTANCE(ABILITY_LOW_BLOW); };
+template <>
+struct AbilityImpl<ABILITY_LOW_BLOW> : extends SimpleEntryMove<MOVE_FEINT_ATTACK, 40> {};
 
-ABILITY(ABILITY_SPECTRALIZE) : extends AteAbility<TYPE_GHOST> { INSTANCE(ABILITY_SPECTRALIZE); };
+template <>
+struct AbilityImpl<ABILITY_SPECTRALIZE> : extends AteAbility<TYPE_GHOST> {};
 
-ABILITY(ABILITY_SPECTRAL_SHROUD) : extends AbilityImpl<ABILITY_SPECTRALIZE>, extends OnAttacker {
-    INSTANCE(ABILITY_SPECTRAL_SHROUD);
+template <>
+struct AbilityImpl<ABILITY_SPECTRAL_SHROUD> : extends AbilityImpl<ABILITY_SPECTRALIZE>, extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
-        CHECK(gBattleStruct->ateBoost[battler])
-        CHECK(moveType == TYPE_GHOST)
-        CHECK(Random() % 100 < 30)
+        CHECK(gBattleStruct->ateBoost[battler]) CHECK(moveType == TYPE_GHOST) CHECK(Random() % 100 < 30)
 
-        return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
+            return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
     }
 };
 
-ABILITY(ABILITY_DISCIPLINE) : extends RemovesStatusOnImmunity, extends TauntImmune {
-    INSTANCE(ABILITY_DISCIPLINE);
-    ON_STATUS_IMMUNE {
-        CHECK(status & CHECK_CONFUSION)
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_DISCIPLINE> : extends RemovesStatusOnImmunity, extends TauntImmune {
+    ON_STATUS_IMMUNE { CHECK(status & CHECK_CONFUSION) return TRUE; }
 };
 
-ABILITY(ABILITY_THUNDERCALL) : extends OnAttacker {
-    INSTANCE(ABILITY_THUNDERCALL);
+template <>
+struct AbilityImpl<ABILITY_THUNDERCALL> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(moveType == TYPE_ELECTRIC)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -3730,40 +3707,40 @@ ABILITY(ABILITY_THUNDERCALL) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_MARINE_APEX) : extends AbilityImpl<ABILITY_INFILTRATOR>, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_MARINE_APEX);
+template <>
+struct AbilityImpl<ABILITY_MARINE_APEX> : extends AbilityImpl<ABILITY_INFILTRATOR>, extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (IS_BATTLER_OF_TYPE(target, TYPE_WATER)) RESISTANCE(1.5);
     }
 };
 
-ABILITY(ABILITY_MIGHTY_HORN) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_MIGHTY_HORN);
+template <>
+struct AbilityImpl<ABILITY_MIGHTY_HORN> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMoves[move].hornBased) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_HARDENED_SHEATH) : extends OnAttacker {
-    INSTANCE(ABILITY_HARDENED_SHEATH);
+template <>
+struct AbilityImpl<ABILITY_HARDENED_SHEATH> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(gBattleMoves[move].hornBased)
         CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
 
-        BattleScriptCall(BattleScript_AttackBoostActivates);
+            BattleScriptCall(BattleScript_AttackBoostActivates);
         gBattleScripting.battler = battler;
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_ARCTIC_FUR) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_ARCTIC_FUR);
+template <>
+struct AbilityImpl<ABILITY_ARCTIC_FUR> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER { MUL(.65); }
 };
 
-ABILITY(ABILITY_LETHARGY) : extends OnEntry, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_LETHARGY);
+template <>
+struct AbilityImpl<ABILITY_LETHARGY> : extends OnEntry, extends OnOffensiveMultiplier<> {
     ON_ENTRY {
         TryResetBattlerStatChanges(battler, RESET_ALL_STATS);
         gVolatileStructs[battler].slowStartTimer = 5;
@@ -3792,12 +3769,14 @@ ABILITY(ABILITY_LETHARGY) : extends OnEntry, extends OnOffensiveMultiplier<> {
     }
 };
 
-ABILITY(ABILITY_IRON_BARRAGE) : extends AbilityImpl<ABILITY_MEGA_LAUNCHER>, extends AbilityImpl<ABILITY_SIGHTING_SYSTEM> { INSTANCE(ABILITY_IRON_BARRAGE); };
+template <>
+struct AbilityImpl<ABILITY_IRON_BARRAGE> : extends AbilityImpl<ABILITY_MEGA_LAUNCHER>, extends AbilityImpl<ABILITY_SIGHTING_SYSTEM> {};
 
-ABILITY(ABILITY_STEEL_BARREL) : extends AbilityImpl<ABILITY_ROCK_HEAD> { INSTANCE(ABILITY_STEEL_BARREL); };
+template <>
+struct AbilityImpl<ABILITY_STEEL_BARREL> : extends AbilityImpl<ABILITY_ROCK_HEAD> {};
 
-ABILITY(ABILITY_PYRO_SHELLS) : extends OnAttacker {
-    INSTANCE(ABILITY_PYRO_SHELLS);
+template <>
+struct AbilityImpl<ABILITY_PYRO_SHELLS> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(IsMegaLauncherBoosted(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -3806,23 +3785,22 @@ ABILITY(ABILITY_PYRO_SHELLS) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_FUNGAL_INFECTION) : extends OnAttacker {
-    INSTANCE(ABILITY_FUNGAL_INFECTION);
+template <>
+struct AbilityImpl<ABILITY_FUNGAL_INFECTION> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
-        CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
-        CHECK(IsMoveMakingContact(move, battler))
+        CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED) CHECK(IsMoveMakingContact(move, battler))
 
-        gStatuses3[target] |= battler;
+            gStatuses3[target] |= battler;
         gStatuses3[target] |= STATUS3_LEECHSEED;
         BattleScriptCall(BattleScript_AbsorbantActivated);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_PARRY) : extends OnDefender, extends OnDefensiveMultiplier, extends OverrideBreakable {
-    INSTANCE(ABILITY_PARRY);
+template <>
+struct AbilityImpl<ABILITY_PARRY> : extends OnDefender, extends OnDefensiveMultiplier, extends OverrideBreakable {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -3833,38 +3811,36 @@ ABILITY(ABILITY_PARRY) : extends OnDefender, extends OnDefensiveMultiplier, exte
     ON_DEFENSIVE_MULTIPLIER { MUL(.8); }
 };
 
-ABILITY(ABILITY_SCRAPYARD) : extends OnDefender {
-    INSTANCE(ABILITY_SCRAPYARD);
+template <>
+struct AbilityImpl<ABILITY_SCRAPYARD> : extends OnDefender {
     ON_DEFENDER {
         CHECK(DidMoveHit())
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK(gSideTimers[BATTLE_OPPOSITE(battler)].spikesAmount < 3)
 
-        BattleScriptCall(BattleScript_DefenderSetsSpikeLayer_Scrapyard);
+            BattleScriptCall(BattleScript_DefenderSetsSpikeLayer_Scrapyard);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_LOOSE_QUILLS) : extends AbilityImpl<ABILITY_SCRAPYARD> { INSTANCE(ABILITY_LOOSE_QUILLS); };
+template <>
+struct AbilityImpl<ABILITY_LOOSE_QUILLS> : extends AbilityImpl<ABILITY_SCRAPYARD> {};
 
-ABILITY(ABILITY_TOXIC_DEBRIS) : extends OnDefender {
-    INSTANCE(ABILITY_TOXIC_DEBRIS);
+template <>
+struct AbilityImpl<ABILITY_TOXIC_DEBRIS> : extends OnDefender {
     ON_DEFENDER {
         CHECK(DidMoveHit())
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK(gSideTimers[BATTLE_OPPOSITE(battler)].toxicSpikesAmount < 2)
 
-        BattleScriptCall(BattleScript_DefenderSetsToxicSpikeLayer);
+            BattleScriptCall(BattleScript_DefenderSetsToxicSpikeLayer);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_ROUNDHOUSE) : extends OnAccuracy<>, extends OnChooseDefensiveStat<> {
-    INSTANCE(ABILITY_ROUNDHOUSE);
-    ON_ACCURACY {
-        CHECK(IsStrikerBoosted(battler, move))
-        return ACCURACY_HITS_IF_POSSIBLE;
-    }
+template <>
+struct AbilityImpl<ABILITY_ROUNDHOUSE> : extends OnAccuracy<>, extends OnChooseDefensiveStat<> {
+    ON_ACCURACY { CHECK(IsStrikerBoosted(battler, move)) return ACCURACY_HITS_IF_POSSIBLE; }
     ON_CHOOSE_DEFENSIVE_STAT {
         CHECK(IsStrikerBoosted(battler, move))
         u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
@@ -3878,28 +3854,29 @@ ABILITY(ABILITY_ROUNDHOUSE) : extends OnAccuracy<>, extends OnChooseDefensiveSta
     }
 };
 
-ABILITY(ABILITY_MINERALIZE) : extends AteAbility<TYPE_ROCK> { INSTANCE(ABILITY_MINERALIZE); };
+template <>
+struct AbilityImpl<ABILITY_MINERALIZE> : extends AteAbility<TYPE_ROCK> {};
 
-ABILITY(ABILITY_LOOSE_ROCKS) : extends OnDefender {
-    INSTANCE(ABILITY_LOOSE_ROCKS);
+template <>
+struct AbilityImpl<ABILITY_LOOSE_ROCKS> : extends OnDefender {
     ON_DEFENDER {
         CHECK(DidMoveHit())
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STEALTH_ROCK)
 
-        BattleScriptCall(BattleScript_DefenderSetsStealthRock);
+            BattleScriptCall(BattleScript_DefenderSetsStealthRock);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_SPINNING_TOP) : extends OnAttacker {
-    INSTANCE(ABILITY_SPINNING_TOP);
+template <>
+struct AbilityImpl<ABILITY_SPINNING_TOP> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_FIGHTING)
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
 
-        int any = FALSE;
+            int any = FALSE;
         if (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[GetBattlerSide(battler)].hotCoals ||
             gSideTimers[GetBattlerSide(battler)].caltrops) {
             gSideStatuses[GetBattlerSide(battler)] &=
@@ -3921,14 +3898,13 @@ ABILITY(ABILITY_SPINNING_TOP) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_RETRIBUTION_BLOW) : extends OnReactive {
-    INSTANCE(ABILITY_RETRIBUTION_BLOW);
+template <>
+struct AbilityImpl<ABILITY_RETRIBUTION_BLOW> : extends OnReactive {
     ON_REACTIVE {
         CHECK_NOT(gTurnStructs[battler].dancerUsedMove)
         CHECK(IsBattlerAlive(gBattlerAttacker))
         CHECK(gCurrentTurnActionNumber < gBattlersCount || gProcessingExtraAttacks)
-        CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
-        for (int stat = STAT_ATK; stat < NUM_STATS; stat++) {
+            CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED) for (int stat = STAT_ATK; stat < NUM_STATS; stat++) {
             if (gBattleStruct->statChangesToCheck[gBattlerAttacker][stat - 1] > 0) {
                 UseOutOfTurnAttack(battler, gBattlerAttacker, ability, MOVE_HYPER_BEAM, 0);
                 return FALSE;
@@ -3938,23 +3914,21 @@ ABILITY(ABILITY_RETRIBUTION_BLOW) : extends OnReactive {
     }
 };
 
-ABILITY(ABILITY_FEARMONGER) : extends AbilityImpl<ABILITY_INTIMIDATE>, extends OnAttacker {
-    INSTANCE(ABILITY_FEARMONGER);
+template <>
+struct AbilityImpl<ABILITY_FEARMONGER> : extends AbilityImpl<ABILITY_INTIMIDATE>, extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeParalyzed(battler, target))
-        CHECK(IsMoveMakingContact(move, battler))
-        CHECK(Random() % 100 < 10)
+        CHECK(IsMoveMakingContact(move, battler)) CHECK(Random() % 100 < 10)
 
-        return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+            return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
     }
 };
 
-ABILITY(ABILITY_TOXIC_SPILL) : extends OnEntry, extends OnEndTurn, extends OnExit {
-    INSTANCE(ABILITY_TOXIC_SPILL);
+template <>
+struct AbilityImpl<ABILITY_TOXIC_SPILL> : extends OnEntry, extends OnEndTurn, extends OnExit {
     ON_ENTRY {
-        CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
-        BattleScriptPushCursorAndCallback(BattleScript_BattlerAnnouncedToxicSpill);
+        CHECK_NOT(getMonotypeChampType() == TYPE_POISON) BattleScriptPushCursorAndCallback(BattleScript_BattlerAnnouncedToxicSpill);
         return TRUE;
     }
     ON_END_TURN {
@@ -3984,7 +3958,7 @@ ABILITY(ABILITY_TOXIC_SPILL) : extends OnEntry, extends OnEndTurn, extends OnExi
             }
 
             FILTER_NOT(IS_BATTLER_OF_TYPE(target, TYPE_POISON))
-            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(HasMagicGuard(target))
             FILTER_NOT(BATTLER_HAS_ABILITY(battler, ABILITY_TOXIC_BOOST))
 
             gStackBattler1 = target;
@@ -4000,28 +3974,26 @@ ABILITY(ABILITY_TOXIC_SPILL) : extends OnEntry, extends OnEndTurn, extends OnExi
     }
 };
 
-ABILITY(ABILITY_DESERT_CLOAK) : extends OnStatusImmune<ApplyOn::ALLY>, extends SandImmune {
-    INSTANCE(ABILITY_DESERT_CLOAK);
-    ON_STATUS_IMMUNE {
-        CHECK(status & CHECK_STATUS1)
-        CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_DESERT_CLOAK> : extends OnStatusImmune<ApplyOn::ALLY>, extends SandImmune {
+    ON_STATUS_IMMUNE { CHECK(status & CHECK_STATUS1) CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) return TRUE; }
 };
 
-ABILITY(ABILITY_DRACONIZE) : extends AteAbility<TYPE_DRAGON> { INSTANCE(ABILITY_DRACONIZE); };
+template <>
+struct AbilityImpl<ABILITY_DRACONIZE> : extends AteAbility<TYPE_DRAGON> {};
 
-ABILITY(ABILITY_PRETTY_PRINCESS) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_PRETTY_PRINCESS);
+template <>
+struct AbilityImpl<ABILITY_PRETTY_PRINCESS> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
-        if (!IsUnaware(battler) && HasAnyLoweredStat(target)) MUL(1.5);
+        if (!HasUnaware(battler) && HasAnyLoweredStat(target)) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_SELF_REPAIR) : extends AbilityImpl<ABILITY_SELF_SUFFICIENT>, extends AbilityImpl<ABILITY_NATURAL_CURE> { INSTANCE(ABILITY_SELF_REPAIR); };
+template <>
+struct AbilityImpl<ABILITY_SELF_REPAIR> : extends AbilityImpl<ABILITY_SELF_SUFFICIENT>, extends AbilityImpl<ABILITY_NATURAL_CURE> {};
 
-ABILITY(ABILITY_ELECTROMORPHOSIS) : extends OnDefender {
-    INSTANCE(ABILITY_ELECTROMORPHOSIS);
+template <>
+struct AbilityImpl<ABILITY_ELECTROMORPHOSIS> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
@@ -4032,7 +4004,8 @@ ABILITY(ABILITY_ELECTROMORPHOSIS) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_ATOMIC_BURST) : extends AbilityImpl<ABILITY_ELECTROMORPHOSIS>, extends AbilityImpl<ABILITY_GALVANIZE> { INSTANCE(ABILITY_ATOMIC_BURST); };
+template <>
+struct AbilityImpl<ABILITY_ATOMIC_BURST> : extends AbilityImpl<ABILITY_ELECTROMORPHOSIS>, extends AbilityImpl<ABILITY_GALVANIZE> {};
 
 template <int BoostType>
 struct BoostedSwarmLike : extends OnOffensiveMultiplier<> {
@@ -4045,56 +4018,49 @@ struct BoostedSwarmLike : extends OnOffensiveMultiplier<> {
         }
     }
 };
-ABILITY(ABILITY_HELLBLAZE) : extends BoostedSwarmLike<TYPE_FIRE> { INSTANCE(ABILITY_HELLBLAZE); };
+template <>
+struct AbilityImpl<ABILITY_HELLBLAZE> : extends BoostedSwarmLike<TYPE_FIRE> {};
 
-ABILITY(ABILITY_RIPTIDE) : extends BoostedSwarmLike<TYPE_WATER> { INSTANCE(ABILITY_RIPTIDE); };
+template <>
+struct AbilityImpl<ABILITY_RIPTIDE> : extends BoostedSwarmLike<TYPE_WATER> {};
 
-ABILITY(ABILITY_FOREST_RAGE) : extends BoostedSwarmLike<TYPE_GRASS> { INSTANCE(ABILITY_FOREST_RAGE); };
+template <>
+struct AbilityImpl<ABILITY_FOREST_RAGE> : extends BoostedSwarmLike<TYPE_GRASS> {};
 
-ABILITY(ABILITY_PRIMAL_MAW) : extends OnParentalBond {
-    INSTANCE(ABILITY_PRIMAL_MAW);
-    ON_PARENTAL_BOND {
-        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-        return PARENTAL_BOND_PRIMAL_MAW;
-    }
+template <>
+struct AbilityImpl<ABILITY_PRIMAL_MAW> : extends OnParentalBond {
+    ON_PARENTAL_BOND { CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) return PARENTAL_BOND_PRIMAL_MAW; }
 };
 
-ABILITY(ABILITY_SWEEPING_EDGE) : extends OnAccuracy<> {
-    INSTANCE(ABILITY_SWEEPING_EDGE);
-    ON_ACCURACY {
-        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-        return ACCURACY_HITS_IF_POSSIBLE;
-    }
+template <>
+struct AbilityImpl<ABILITY_SWEEPING_EDGE> : extends OnAccuracy<> {
+    ON_ACCURACY { CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) return ACCURACY_HITS_IF_POSSIBLE; }
 };
 
-ABILITY(ABILITY_GIFTED_MIND) : extends OnAccuracy<>, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET> {
-    INSTANCE(ABILITY_GIFTED_MIND);
-    ON_ACCURACY {
-        CHECK(IS_MOVE_STATUS(move))
-        return ACCURACY_HITS_IF_POSSIBLE;
-    }
+template <>
+struct AbilityImpl<ABILITY_GIFTED_MIND> : extends OnAccuracy<>, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET> {
+    ON_ACCURACY { CHECK(IS_MOVE_STATUS(move)) return ACCURACY_HITS_IF_POSSIBLE; }
     ON_AFTER_TYPE_EFFECTIVENESS {
         if (moveType == TYPE_BUG || moveType == TYPE_GHOST || moveType == TYPE_DARK) *mod = 0;
     }
 };
 
-ABILITY(ABILITY_HYDRO_CIRCUIT) : extends AbilityImpl<ABILITY_TRANSISTOR>, extends OnAttacker {
-    INSTANCE(ABILITY_HYDRO_CIRCUIT);
+template <>
+struct AbilityImpl<ABILITY_HYDRO_CIRCUIT> : extends AbilityImpl<ABILITY_TRANSISTOR>, extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK(CanBattlerHeal(battler))
-        CHECK(moveType == TYPE_WATER)
+        CHECK(CanBattlerHeal(battler)) CHECK(moveType == TYPE_WATER)
 
-        gBattleMoveDamage = -gHpDealt / 4;
+            gBattleMoveDamage = -gHpDealt / 4;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_EQUINOX) : extends OnChooseOffensiveStat {
-    INSTANCE(ABILITY_EQUINOX);
+template <>
+struct AbilityImpl<ABILITY_EQUINOX> : extends OnChooseOffensiveStat {
     ON_CHOOSE_OFFENSIVE_STAT {
         int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
         int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
@@ -4105,22 +4071,22 @@ ABILITY(ABILITY_EQUINOX) : extends OnChooseOffensiveStat {
     }
 };
 
-ABILITY(ABILITY_ABSORBANT) : extends OnAttacker {
-    INSTANCE(ABILITY_ABSORBANT);
+template <>
+struct AbilityImpl<ABILITY_ABSORBANT> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
-        CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
-        CHECK(gBattleMoves[move].effect == EFFECT_ABSORB || gBattleMoves[move].effect == EFFECT_DREAM_EATER)
+        CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED) CHECK(gBattleMoves[move].effect == EFFECT_ABSORB || gBattleMoves[move].effect == EFFECT_DREAM_EATER)
 
-        gStatuses3[target] |= battler;
+            gStatuses3[target] |= battler;
         gStatuses3[target] |= STATUS3_LEECHSEED;
         BattleScriptCall(BattleScript_AbsorbantActivated);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_CLUELESS) : extends AbilityImpl<ABILITY_CLOUD_NINE>, extends Unsuppressable { INSTANCE(ABILITY_CLUELESS); };
+template <>
+struct AbilityImpl<ABILITY_CLUELESS> : extends AbilityImpl<ABILITY_CLOUD_NINE>, extends Unsuppressable {};
 
 template <int N>
 struct NoDamageHits : extends Persistent, extends OnEntry, extends Breakable {
@@ -4139,12 +4105,14 @@ struct NoDamageHits : extends Persistent, extends OnEntry, extends Breakable {
 
     virtual int noDamageHits() { return N; }
 };
-ABILITY(ABILITY_CHEATING_DEATH) : extends NoDamageHits<2>, extends OverrideBreakable { INSTANCE(ABILITY_CHEATING_DEATH); };
+template <>
+struct AbilityImpl<ABILITY_CHEATING_DEATH> : extends NoDamageHits<2>, extends OverrideBreakable {};
 
-ABILITY(ABILITY_CHEAP_TACTICS) : extends SimpleEntryMove<MOVE_SCRATCH> { INSTANCE(ABILITY_CHEAP_TACTICS); };
+template <>
+struct AbilityImpl<ABILITY_CHEAP_TACTICS> : extends SimpleEntryMove<MOVE_SCRATCH> {};
 
-ABILITY(ABILITY_COWARD) : extends OnEntry, extends Persistent {
-    INSTANCE(ABILITY_COWARD);
+template <>
+struct AbilityImpl<ABILITY_COWARD> : extends OnEntry, extends Persistent {
     ON_ENTRY {
         CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
 
@@ -4155,10 +4123,11 @@ ABILITY(ABILITY_COWARD) : extends OnEntry, extends Persistent {
     }
 };
 
-ABILITY(ABILITY_VOLT_RUSH) : extends GaleWingsLike<TYPE_ELECTRIC> { INSTANCE(ABILITY_VOLT_RUSH); };
+template <>
+struct AbilityImpl<ABILITY_VOLT_RUSH> : extends GaleWingsLike<TYPE_ELECTRIC> {};
 
-ABILITY(ABILITY_DUNE_TERROR) : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier, extends SandImmune {
-    INSTANCE(ABILITY_DUNE_TERROR);
+template <>
+struct AbilityImpl<ABILITY_DUNE_TERROR> : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier, extends SandImmune {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_GROUND) MUL(1.2);
     }
@@ -4167,8 +4136,8 @@ ABILITY(ABILITY_DUNE_TERROR) : extends OnOffensiveMultiplier<>, extends OnDefens
     }
 };
 
-ABILITY(ABILITY_INFERNAL_RAGE) : extends OnRecoil, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_INFERNAL_RAGE);
+template <>
+struct AbilityImpl<ABILITY_INFERNAL_RAGE> : extends OnRecoil, extends OnOffensiveMultiplier<> {
     ON_RECOIL {
         CHECK(moveType == TYPE_FIRE);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -4179,16 +4148,16 @@ ABILITY(ABILITY_INFERNAL_RAGE) : extends OnRecoil, extends OnOffensiveMultiplier
     }
 };
 
-ABILITY(ABILITY_DUAL_WIELD) : extends OnParentalBond {
-    INSTANCE(ABILITY_DUAL_WIELD);
+template <>
+struct AbilityImpl<ABILITY_DUAL_WIELD> : extends OnParentalBond {
     ON_PARENTAL_BOND {
         CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
         return PARENTAL_BOND_DUAL_WIELD;
     }
 };
 
-ABILITY(ABILITY_ELEMENTAL_CHARGE) : extends OnAttacker {
-    INSTANCE(ABILITY_ELEMENTAL_CHARGE);
+template <>
+struct AbilityImpl<ABILITY_ELEMENTAL_CHARGE> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(Random() % 100 < 20)
@@ -4216,16 +4185,13 @@ ABILITY(ABILITY_ELEMENTAL_CHARGE) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_AMBUSH) : extends OnCrit<> {
-    INSTANCE(ABILITY_AMBUSH);
-    ON_CRIT {
-        CHECK(gVolatileStructs[battler].isFirstTurn)
-        return ALWAYS_CRIT;
-    }
+template <>
+struct AbilityImpl<ABILITY_AMBUSH> : extends OnCrit<> {
+    ON_CRIT { CHECK(gVolatileStructs[battler].isFirstTurn) return ALWAYS_CRIT; }
 };
 
-ABILITY(ABILITY_ATLAS) : extends OnEntry {
-    INSTANCE(ABILITY_ATLAS);
+template <>
+struct AbilityImpl<ABILITY_ATLAS> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
 
@@ -4237,8 +4203,8 @@ ABILITY(ABILITY_ATLAS) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_RADIANCE) : extends OnImmune<ApplyOn::ANY>, extends OnAccuracy<> {
-    INSTANCE(ABILITY_RADIANCE);
+template <>
+struct AbilityImpl<ABILITY_RADIANCE> : extends OnImmune<ApplyOn::ANY>, extends OnAccuracy<> {
     ON_IMMUNE {
         CHECK(moveType == TYPE_DARK);
         *immunityScript = BattleScript_RadianceProtected;
@@ -4250,22 +4216,19 @@ ABILITY(ABILITY_RADIANCE) : extends OnImmune<ApplyOn::ANY>, extends OnAccuracy<>
     }
 };
 
-ABILITY(ABILITY_JAWS_OF_CARNAGE) : extends OnBattlerFaints<> {
-    INSTANCE(ABILITY_JAWS_OF_CARNAGE);
+template <>
+struct AbilityImpl<ABILITY_JAWS_OF_CARNAGE> : extends OnBattlerFaints<> {
     ON_BATTLER_FAINTS {
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK(CanBattlerHeal(battler))
-        if (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST)
-            BattleScriptCall(BattleScript_HandleJawsOfCarnageEffect);
-        else
-            BattleScriptCall(BattleScript_HandleSoulEaterEffect);
+        CHECK(CanBattlerHeal(battler)) if (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST) BattleScriptCall(BattleScript_HandleJawsOfCarnageEffect);
+        else BattleScriptCall(BattleScript_HandleSoulEaterEffect);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_ANGELS_WRATH)
+template <>
+struct AbilityImpl<ABILITY_ANGELS_WRATH>
     : extends OnAttacker, extends OnAccuracy<>, extends OnTypeEffectiveness<>, extends OnModifyEffectChance<>, extends OnCanStatusType {
-    INSTANCE(ABILITY_ANGELS_WRATH);
     ON_ATTACKER {
         switch (move) {
             case MOVE_TACKLE: {
@@ -4398,9 +4361,9 @@ ABILITY(ABILITY_ANGELS_WRATH)
     }
 };
 
-ABILITY(ABILITY_PRISMATIC_FUR)
+template <>
+struct AbilityImpl<ABILITY_PRISMATIC_FUR>
     : extends AbilityImpl<ABILITY_COLOR_CHANGE>, extends AbilityImpl<ABILITY_PROTEAN>, extends OnDefensiveMultiplier, extends OverrideBreakable {
-    INSTANCE(ABILITY_PRISMATIC_FUR);
     ON_DEFENSIVE_MULTIPLIER { MUL(.5); }
     ON_BEFORE_ATTACK {
         if (battler == attacker)
@@ -4408,25 +4371,25 @@ ABILITY(ABILITY_PRISMATIC_FUR)
         else
             return AbilityImpl<ABILITY_COLOR_CHANGE>::onBeforeAttack(DELEGATE_BEFORE_ATTACK);
     }
-    ApplyOnTarget onBeforeAttackFor() override { return ApplyOnTarget::ATTACKER_OR_TARGET; }
+    ApplyOnTarget onBeforeAttackFor() const override { return ApplyOnTarget::ATTACKER_OR_TARGET; }
 };
 
-ABILITY(ABILITY_SHOCKING_JAWS) : extends OnAttacker {
-    INSTANCE(ABILITY_SHOCKING_JAWS);
+template <>
+struct AbilityImpl<ABILITY_SHOCKING_JAWS> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeParalyzed(battler, target))
-        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-        CHECK(Random() % 2)
+        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) CHECK(Random() % 2)
 
-        return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+            return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
     }
 };
 
-ABILITY(ABILITY_FAE_HUNTER) : extends TypeSlayer<TYPE_FAIRY> { INSTANCE(ABILITY_FAE_HUNTER); };
+template <>
+struct AbilityImpl<ABILITY_FAE_HUNTER> : extends TypeSlayer<TYPE_FAIRY> {};
 
-ABILITY(ABILITY_GRAVITY_WELL) : extends OnEntry {
-    INSTANCE(ABILITY_GRAVITY_WELL);
+template <>
+struct AbilityImpl<ABILITY_GRAVITY_WELL> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
 
@@ -4438,28 +4401,27 @@ ABILITY(ABILITY_GRAVITY_WELL) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_EVAPORATE) : extends OnAbsorb {
-    INSTANCE(ABILITY_EVAPORATE);
-    ON_ABSORB {
-        CHECK(moveType == TYPE_WATER)
-        return ABSORB_RESULT_EVAPORATE;
-    }
+template <>
+struct AbilityImpl<ABILITY_EVAPORATE> : extends OnAbsorb {
+    ON_ABSORB { CHECK(moveType == TYPE_WATER) return ABSORB_RESULT_EVAPORATE; }
 };
 
-ABILITY(ABILITY_LUMBERJACK) : extends TypeSlayer<TYPE_GRASS> { INSTANCE(ABILITY_LUMBERJACK); };
+template <>
+struct AbilityImpl<ABILITY_LUMBERJACK> : extends TypeSlayer<TYPE_GRASS> {};
 
 struct AbsorbUp2 {};
-ABILITY(ABILITY_WELL_BAKED_BODY) : extends AbsorbStatUp<TYPE_FIRE, STAT_DEF>, extends AbsorbUp2 { INSTANCE(ABILITY_WELL_BAKED_BODY); };
+template <>
+struct AbilityImpl<ABILITY_WELL_BAKED_BODY> : extends AbsorbStatUp<TYPE_FIRE, STAT_DEF>, extends AbsorbUp2 {};
 
-ABILITY(ABILITY_FURNACE) : extends OnEntry, extends OnDefender {
-    INSTANCE(ABILITY_FURNACE);
+template <>
+struct AbilityImpl<ABILITY_FURNACE> : extends OnEntry, extends OnDefender {
     ON_ENTRY {
         CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
         CHECK(gSideTimers[GetBattlerSide(battler)].stealthRockType == TYPE_ROCK)
         CHECK(IsBattlerAlive(battler))
         CHECK(ChangeStatBuffs(battler, 2, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
 
-        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+            BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         return TRUE;
     }
     ON_DEFENDER {
@@ -4473,37 +4435,38 @@ ABILITY(ABILITY_FURNACE) : extends OnEntry, extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_ROCKY_PAYLOAD) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_ROCKY_PAYLOAD);
+template <>
+struct AbilityImpl<ABILITY_ROCKY_PAYLOAD> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_ROCK || gBattleMoves[move].throwingBased) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_EARTH_EATER) : extends AbsorbHeal<TYPE_GROUND> { INSTANCE(ABILITY_EARTH_EATER); };
+template <>
+struct AbilityImpl<ABILITY_EARTH_EATER> : extends AbsorbHeal<TYPE_GROUND> {};
 
-ABILITY(ABILITY_LINGERING_AROMA) : extends AbilityImpl<ABILITY_MUMMY> { INSTANCE(ABILITY_LINGERING_AROMA); };
+template <>
+struct AbilityImpl<ABILITY_LINGERING_AROMA> : extends AbilityImpl<ABILITY_MUMMY> {};
 
-ABILITY(ABILITY_FAIRY_TALE) : extends AddsType<TYPE_FAIRY> { INSTANCE(ABILITY_FAIRY_TALE); };
+template <>
+struct AbilityImpl<ABILITY_FAIRY_TALE> : extends AddsType<TYPE_FAIRY> {};
 
-ABILITY(ABILITY_RAGING_MOTH) : extends OnParentalBond {
-    INSTANCE(ABILITY_RAGING_MOTH);
-    ON_PARENTAL_BOND {
-        CHECK(moveType == TYPE_FIRE)
-        return PARENTAL_BOND_DUAL_WIELD;
-    }
+template <>
+struct AbilityImpl<ABILITY_RAGING_MOTH> : extends OnParentalBond {
+    ON_PARENTAL_BOND { CHECK(moveType == TYPE_FIRE) return PARENTAL_BOND_DUAL_WIELD; }
 };
 
-ABILITY(ABILITY_ADRENALINE_RUSH) : extends MoxieClone<STAT_SPEED> { INSTANCE(ABILITY_ADRENALINE_RUSH); };
+template <>
+struct AbilityImpl<ABILITY_ADRENALINE_RUSH> : extends MoxieClone<STAT_SPEED> {};
 
-ABILITY(ABILITY_ARCHMAGE) : extends RandomizerBanned, extends OnAttacker {
-    INSTANCE(ABILITY_ARCHMAGE);
+template <>
+struct AbilityImpl<ABILITY_ARCHMAGE> : extends RandomizerBanned, extends OnAttacker {
     ON_ATTACKER {
         CHECK(DidMoveHit())
         CHECK_NOT(IS_MOVE_STATUS(move))
         CHECK(Random() % 100 < 30)
 
-        switch (moveType) {
+            switch (moveType) {
             case TYPE_POISON:
                 CHECK(IsBattlerAlive(target))
                 CHECK(CanBePoisoned(battler, target, MOVE_NONE))
@@ -4635,48 +4598,52 @@ ABILITY(ABILITY_ARCHMAGE) : extends RandomizerBanned, extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_CRYOMANCY) : extends OnModifyEffectChance<> {
-    INSTANCE(ABILITY_CRYOMANCY);
+template <>
+struct AbilityImpl<ABILITY_CRYOMANCY> : extends OnModifyEffectChance<> {
     ON_MODIFY_EFFECT_CHANCE {
         if (moveEffect == MOVE_EFFECT_FROSTBITE) *effectChance *= 5;
     }
 };
 
-ABILITY(ABILITY_PHANTOM_PAIN) : extends OnTypeEffectiveness<> {
-    INSTANCE(ABILITY_PHANTOM_PAIN);
+template <>
+struct AbilityImpl<ABILITY_PHANTOM_PAIN> : extends OnTypeEffectiveness<> {
     ON_TYPE_EFFECTIVENESS {
-        CHECK(moveType == TYPE_GHOST)
-        CHECK(defType == TYPE_NORMAL)
-        CHECK_NOT(*mod)
-        *mod = UQ_4_12(1.0);
+        CHECK(moveType == TYPE_GHOST) CHECK(defType == TYPE_NORMAL) CHECK_NOT(*mod) *mod = UQ_4_12(1.0);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_PURGATORY) : extends BoostedSwarmLike<TYPE_GHOST> { INSTANCE(ABILITY_PURGATORY); };
+template <>
+struct AbilityImpl<ABILITY_PURGATORY> : extends BoostedSwarmLike<TYPE_GHOST> {};
 
-ABILITY(ABILITY_EMANATE) : extends AteAbility<TYPE_PSYCHIC> { INSTANCE(ABILITY_EMANATE); };
+template <>
+struct AbilityImpl<ABILITY_EMANATE> : extends AteAbility<TYPE_PSYCHIC> {};
 
-ABILITY(ABILITY_KUNOICHI_BLADE) : extends AbilityImpl<ABILITY_TECHNICIAN>, extends AbilityImpl<ABILITY_SKILL_LINK> { INSTANCE(ABILITY_KUNOICHI_BLADE); };
+template <>
+struct AbilityImpl<ABILITY_KUNOICHI_BLADE> : extends AbilityImpl<ABILITY_TECHNICIAN>, extends AbilityImpl<ABILITY_SKILL_LINK> {};
 
-ABILITY(ABILITY_MONKEY_BUSINESS) : extends SimpleEntryMove<MOVE_TICKLE> { INSTANCE(ABILITY_MONKEY_BUSINESS); };
+template <>
+struct AbilityImpl<ABILITY_MONKEY_BUSINESS> : extends SimpleEntryMove<MOVE_TICKLE> {};
 
-ABILITY(ABILITY_COMBAT_SPECIALIST) : extends Merged<ABILITY_IRON_FIST, ABILITY_STRIKER> { INSTANCE(ABILITY_COMBAT_SPECIALIST); };
+template <>
+struct AbilityImpl<ABILITY_COMBAT_SPECIALIST> : extends Merged<ABILITY_IRON_FIST, ABILITY_STRIKER> {};
 
-ABILITY(ABILITY_JUNGLES_GUARD) : extends AbilityImpl<ABILITY_FLOWER_VEIL> { INSTANCE(ABILITY_JUNGLES_GUARD); };
+template <>
+struct AbilityImpl<ABILITY_JUNGLES_GUARD> : extends AbilityImpl<ABILITY_FLOWER_VEIL> {};
 
-ABILITY(ABILITY_HUNTERS_HORN) : extends AbilityImpl<ABILITY_SOUL_EATER>, extends AbilityImpl<ABILITY_MIGHTY_HORN> { INSTANCE(ABILITY_HUNTERS_HORN); };
+template <>
+struct AbilityImpl<ABILITY_HUNTERS_HORN> : extends AbilityImpl<ABILITY_SOUL_EATER>, extends AbilityImpl<ABILITY_MIGHTY_HORN> {};
 
-ABILITY(ABILITY_PIXIE_POWER) : extends AbilityImpl<ABILITY_FAIRY_AURA>, extends OnAccuracy<> {
-    INSTANCE(ABILITY_PIXIE_POWER);
+template <>
+struct AbilityImpl<ABILITY_PIXIE_POWER> : extends AbilityImpl<ABILITY_FAIRY_AURA>, extends OnAccuracy<> {
     ON_ACCURACY {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
     }
 };
 
-ABILITY(ABILITY_PLASMA_LAMP) : extends OnOffensiveMultiplier<>, extends OnAccuracy<> {
-    INSTANCE(ABILITY_PLASMA_LAMP);
+template <>
+struct AbilityImpl<ABILITY_PLASMA_LAMP> : extends OnOffensiveMultiplier<>, extends OnAccuracy<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC) MUL(1.2);
     }
@@ -4687,28 +4654,31 @@ ABILITY(ABILITY_PLASMA_LAMP) : extends OnOffensiveMultiplier<>, extends OnAccura
     }
 };
 
-ABILITY(ABILITY_MAGMA_EATER) : extends AbilityImpl<ABILITY_SOUL_EATER>, extends AbilityImpl<ABILITY_MOLTEN_DOWN> { INSTANCE(ABILITY_MAGMA_EATER); };
+template <>
+struct AbilityImpl<ABILITY_MAGMA_EATER> : extends AbilityImpl<ABILITY_SOUL_EATER>, extends AbilityImpl<ABILITY_MOLTEN_DOWN> {};
 
-ABILITY(ABILITY_SUPER_HOT_GOO) : extends Merged<ABILITY_GOOEY, ABILITY_FLAME_BODY> { INSTANCE(ABILITY_SUPER_HOT_GOO); };
+template <>
+struct AbilityImpl<ABILITY_SUPER_HOT_GOO> : extends Merged<ABILITY_GOOEY, ABILITY_FLAME_BODY> {};
 
-ABILITY(ABILITY_NIKA) : extends AbilityImpl<ABILITY_IRON_FIST> { INSTANCE(ABILITY_NIKA); };
+template <>
+struct AbilityImpl<ABILITY_NIKA> : extends AbilityImpl<ABILITY_IRON_FIST> {};
 
-ABILITY(ABILITY_ARCHER) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_ARCHER);
+template <>
+struct AbilityImpl<ABILITY_ARCHER> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMoves[move].arrowBased) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_SUPER_SLAMMER) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_SUPER_SLAMMER);
+template <>
+struct AbilityImpl<ABILITY_SUPER_SLAMMER> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMoves[move].hammerBased) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_INVERSE_ROOM) : extends OnEntry {
-    INSTANCE(ABILITY_INVERSE_ROOM);
+template <>
+struct AbilityImpl<ABILITY_INVERSE_ROOM> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)
 
@@ -4720,8 +4690,8 @@ ABILITY(ABILITY_INVERSE_ROOM) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_FROST_BURN) : extends OnAttacker {
-    INSTANCE(ABILITY_FROST_BURN);
+template <>
+struct AbilityImpl<ABILITY_FROST_BURN> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(moveType == TYPE_FIRE)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -4730,14 +4700,15 @@ ABILITY(ABILITY_FROST_BURN) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_ITCHY_DEFENSE) : extends OnDefender {
-    INSTANCE(ABILITY_ITCHY_DEFENSE);
+template <>
+struct AbilityImpl<ABILITY_ITCHY_DEFENSE> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_WRAPPED)
 
-        gBattleMons[attacker].status2 |= STATUS2_WRAPPED;
+            gBattleMons[attacker]
+                .status2 |= STATUS2_WRAPPED;
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_GRIP_CLAW)
             gVolatileStructs[attacker].wrapTurns = 7;
         else
@@ -4751,8 +4722,8 @@ ABILITY(ABILITY_ITCHY_DEFENSE) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_GENERATOR) : extends OnEntry, extends OnTerrain, extends OnExit, extends Persistent {
-    INSTANCE(ABILITY_GENERATOR);
+template <>
+struct AbilityImpl<ABILITY_GENERATOR> : extends OnEntry, extends OnTerrain, extends OnExit, extends Persistent {
     ON_ENTRY {
         CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
@@ -4785,15 +4756,16 @@ ABILITY(ABILITY_GENERATOR) : extends OnEntry, extends OnTerrain, extends OnExit,
     }
 };
 
-ABILITY(ABILITY_MOON_SPIRIT) : extends OnStab {
-    INSTANCE(ABILITY_MOON_SPIRIT);
+template <>
+struct AbilityImpl<ABILITY_MOON_SPIRIT> : extends OnStab {
     ON_STAB { return moveType == TYPE_FAIRY || moveType == TYPE_DARK; }
 };
 
-ABILITY(ABILITY_DUST_CLOUD) : extends SimpleEntryMove<MOVE_SAND_ATTACK> { INSTANCE(ABILITY_DUST_CLOUD); };
+template <>
+struct AbilityImpl<ABILITY_DUST_CLOUD> : extends SimpleEntryMove<MOVE_SAND_ATTACK> {};
 
-ABILITY(ABILITY_TIPPING_POINT) : extends OnDefender {
-    INSTANCE(ABILITY_TIPPING_POINT);
+template <>
+struct AbilityImpl<ABILITY_TIPPING_POINT> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_SPATK))
@@ -4809,12 +4781,14 @@ ABILITY(ABILITY_TIPPING_POINT) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_BERSERKER_RAGE) : extends AbilityImpl<ABILITY_TIPPING_POINT>, extends AbilityImpl<ABILITY_RAMPAGE> { INSTANCE(ABILITY_BERSERKER_RAGE); };
+template <>
+struct AbilityImpl<ABILITY_BERSERKER_RAGE> : extends AbilityImpl<ABILITY_TIPPING_POINT>, extends AbilityImpl<ABILITY_RAMPAGE> {};
 
-ABILITY(ABILITY_TRICKSTER) : extends SimpleEntryMove<MOVE_DISABLE> { INSTANCE(ABILITY_TRICKSTER); };
+template <>
+struct AbilityImpl<ABILITY_TRICKSTER> : extends SimpleEntryMove<MOVE_DISABLE> {};
 
-ABILITY(ABILITY_SAND_GUARD) : extends OnImmune<>, extends OnDefensiveMultiplier, extends SandImmune {
-    INSTANCE(ABILITY_SAND_GUARD);
+template <>
+struct AbilityImpl<ABILITY_SAND_GUARD> : extends OnImmune<>, extends OnDefensiveMultiplier, extends SandImmune {
     ON_IMMUNE {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY));
         return blocksPriority(DELEGATE_IMMUNE);
@@ -4824,10 +4798,11 @@ ABILITY(ABILITY_SAND_GUARD) : extends OnImmune<>, extends OnDefensiveMultiplier,
     }
 };
 
-ABILITY(ABILITY_NATURAL_RECOVERY) : extends Merged<ABILITY_NATURAL_CURE, ABILITY_REGENERATOR> { INSTANCE(ABILITY_NATURAL_RECOVERY); };
+template <>
+struct AbilityImpl<ABILITY_NATURAL_RECOVERY> : extends Merged<ABILITY_NATURAL_CURE, ABILITY_REGENERATOR> {};
 
-ABILITY(ABILITY_WIND_RIDER) : extends OnEntry, extends OnAbsorb {
-    INSTANCE(ABILITY_WIND_RIDER);
+template <>
+struct AbilityImpl<ABILITY_WIND_RIDER> : extends OnEntry, extends OnAbsorb {
     ON_ENTRY {
         CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
         CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
@@ -4842,8 +4817,8 @@ ABILITY(ABILITY_WIND_RIDER) : extends OnEntry, extends OnAbsorb {
     }
 };
 
-ABILITY(ABILITY_SOOTHING_AROMA) : extends OnEntry {
-    INSTANCE(ABILITY_SOOTHING_AROMA);
+template <>
+struct AbilityImpl<ABILITY_SOOTHING_AROMA> : extends OnEntry {
     ON_ENTRY {
         int anyStatus = FALSE;
         struct Pokemon *party;
@@ -4868,10 +4843,11 @@ ABILITY(ABILITY_SOOTHING_AROMA) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_PRIM_AND_PROPER) : extends AbilityImpl<ABILITY_WONDER_SKIN>, extends AbilityImpl<ABILITY_CUTE_CHARM> { INSTANCE(ABILITY_PRIM_AND_PROPER); };
+template <>
+struct AbilityImpl<ABILITY_PRIM_AND_PROPER> : extends AbilityImpl<ABILITY_WONDER_SKIN>, extends AbilityImpl<ABILITY_CUTE_CHARM> {};
 
-ABILITY(ABILITY_SUPER_STRAIN) : extends OnRecoil, OnBattlerFaints<> {
-    INSTANCE(ABILITY_SUPER_STRAIN);
+template <>
+struct AbilityImpl<ABILITY_SUPER_STRAIN> : extends OnRecoil, OnBattlerFaints<> {
     ON_RECOIL {
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_STRAIN;
         return max(damage / 4, 1);
@@ -4883,10 +4859,11 @@ ABILITY(ABILITY_SUPER_STRAIN) : extends OnRecoil, OnBattlerFaints<> {
     }
 };
 
-ABILITY(ABILITY_ENLIGHTENED) : extends AbilityImpl<ABILITY_EMANATE>, extends AbilityImpl<ABILITY_INNER_FOCUS> { INSTANCE(ABILITY_ENLIGHTENED); };
+template <>
+struct AbilityImpl<ABILITY_ENLIGHTENED> : extends AbilityImpl<ABILITY_EMANATE>, extends AbilityImpl<ABILITY_INNER_FOCUS> {};
 
-ABILITY(ABILITY_PEACEFUL_SLUMBER) : extends AbilityImpl<ABILITY_SWEET_DREAMS>, extends AbilityImpl<ABILITY_SELF_SUFFICIENT> {
-    INSTANCE(ABILITY_PEACEFUL_SLUMBER);
+template <>
+struct AbilityImpl<ABILITY_PEACEFUL_SLUMBER> : extends AbilityImpl<ABILITY_SWEET_DREAMS>, extends AbilityImpl<ABILITY_SELF_SUFFICIENT> {
     ON_END_TURN {
         if (!AbilityImpl<ABILITY_SWEET_DREAMS>::onEndTurn(DELEGATE_END_TURN)) return AbilityImpl<ABILITY_SELF_SUFFICIENT>::onEndTurn(DELEGATE_END_TURN);
         gBattleMoveDamage -= gBattleMons[battler].maxHP / 16;
@@ -4894,8 +4871,8 @@ ABILITY(ABILITY_PEACEFUL_SLUMBER) : extends AbilityImpl<ABILITY_SWEET_DREAMS>, e
     }
 };
 
-ABILITY(ABILITY_AFTERSHOCK) : extends OnAttacker {
-    INSTANCE(ABILITY_AFTERSHOCK);
+template <>
+struct AbilityImpl<ABILITY_AFTERSHOCK> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(gBattleMoves[move].power)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -4904,28 +4881,26 @@ ABILITY(ABILITY_AFTERSHOCK) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_FREEZING_POINT) : extends OnEither {
-    INSTANCE(ABILITY_FREEZING_POINT);
+template <>
+struct AbilityImpl<ABILITY_FREEZING_POINT> : extends OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(CanGetFrostbite(opponent))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK(Random() % 100 < 30)
+        CHECK(IsMoveMakingContact(move, gBattlerAttacker)) CHECK(Random() % 100 < 30)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_FROSTBITE, battler, opponent);
+            AbilityStatusEffectSafe(MOVE_EFFECT_FROSTBITE, battler, opponent);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_CRYO_PROFICIENCY) : extends AbilityImpl<ABILITY_FREEZING_POINT> {
-    INSTANCE(ABILITY_CRYO_PROFICIENCY);
+template <>
+struct AbilityImpl<ABILITY_CRYO_PROFICIENCY> : extends AbilityImpl<ABILITY_FREEZING_POINT> {
     int CryoProficiencyHail(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType) {
-        CHECK(ShouldApplyOnHitAffect(battler))
-        CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY)
-        if (gBattleWeather & WEATHER_PRIMAL_ANY) {
+        CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
             BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
             return NO_ANNOUNCE;
-        } else if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE)) {
+        }
+        else if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE)) {
             gBattleScripting.battler = battler;
             BattleScriptCall(BattleScript_CryoProficiencyActivates);
             return TRUE;
@@ -4935,17 +4910,18 @@ ABILITY(ABILITY_CRYO_PROFICIENCY) : extends AbilityImpl<ABILITY_FREEZING_POINT> 
     ON_DEFENDER { return AbilityImpl<ABILITY_FREEZING_POINT>::onDefender(DELEGATE_DEFENDER) | CryoProficiencyHail(ability, battler, attacker, move, moveType); }
 };
 
-ABILITY(ABILITY_ARCANE_FORCE) : extends AbilityImpl<ABILITY_MYSTIC_POWER>, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_ARCANE_FORCE);
+template <>
+struct AbilityImpl<ABILITY_ARCANE_FORCE> : extends AbilityImpl<ABILITY_MYSTIC_POWER>, extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
     }
 };
 
-ABILITY(ABILITY_DOOMBRINGER) : extends SimpleEntryMove<MOVE_DOOM_DESIRE> { INSTANCE(ABILITY_DOOMBRINGER); };
+template <>
+struct AbilityImpl<ABILITY_DOOMBRINGER> : extends SimpleEntryMove<MOVE_DOOM_DESIRE> {};
 
-ABILITY(ABILITY_WISHMAKER) : extends OnEntry, extends Persistent {
-    INSTANCE(ABILITY_WISHMAKER);
+template <>
+struct AbilityImpl<ABILITY_WISHMAKER> : extends OnEntry, extends Persistent {
     ON_ENTRY {
         int counter = GetSingleUseAbilityCounter(battler, ability);
         CHECK(counter < 3)
@@ -4956,35 +4932,39 @@ ABILITY(ABILITY_WISHMAKER) : extends OnEntry, extends Persistent {
     }
 };
 
-ABILITY(ABILITY_YUKI_ONNA) : extends AbilityImpl<ABILITY_INTIMIDATE>, extends OnAttacker {
-    INSTANCE(ABILITY_YUKI_ONNA);
+template <>
+struct AbilityImpl<ABILITY_YUKI_ONNA> : extends AbilityImpl<ABILITY_INTIMIDATE>, extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanInfatuate(battler, target))
         CHECK(Random() % 100 < 30)
 
-        return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
+            return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
     }
 };
 
-ABILITY(ABILITY_SUPPRESS) : extends SimpleEntryMove<MOVE_TORMENT> { INSTANCE(ABILITY_SUPPRESS); };
+template <>
+struct AbilityImpl<ABILITY_SUPPRESS> : extends SimpleEntryMove<MOVE_TORMENT> {};
 
-ABILITY(ABILITY_REFRIGERATOR) : extends AbilityImpl<ABILITY_FILTER>, extends AbilityImpl<ABILITY_ILLUMINATE> { INSTANCE(ABILITY_REFRIGERATOR); };
+template <>
+struct AbilityImpl<ABILITY_REFRIGERATOR> : extends AbilityImpl<ABILITY_FILTER>, extends AbilityImpl<ABILITY_ILLUMINATE> {};
 
-ABILITY(ABILITY_HEAVEN_ASUNDER) : extends OnCrit<> {
-    INSTANCE(ABILITY_HEAVEN_ASUNDER);
+template <>
+struct AbilityImpl<ABILITY_HEAVEN_ASUNDER> : extends OnCrit<> {
     ON_CRIT {
         if (move == MOVE_SPACIAL_REND) return ALWAYS_CRIT;
         return 1;
     }
 };
 
-ABILITY(ABILITY_PURIFYING_WATERS) : extends AbilityImpl<ABILITY_WATER_VEIL>, extends AbilityImpl<ABILITY_HYDRATION> { INSTANCE(ABILITY_PURIFYING_WATERS); };
+template <>
+struct AbilityImpl<ABILITY_PURIFYING_WATERS> : extends AbilityImpl<ABILITY_WATER_VEIL>, extends AbilityImpl<ABILITY_HYDRATION> {};
 
-ABILITY(ABILITY_SEABORNE) : extends AbilityImpl<ABILITY_DRIZZLE>, extends AbilityImpl<ABILITY_SWIFT_SWIM> { INSTANCE(ABILITY_SEABORNE); };
+template <>
+struct AbilityImpl<ABILITY_SEABORNE> : extends AbilityImpl<ABILITY_DRIZZLE>, extends AbilityImpl<ABILITY_SWIFT_SWIM> {};
 
-ABILITY(ABILITY_HIGH_TIDE) : extends OnAttacker {
-    INSTANCE(ABILITY_HIGH_TIDE);
+template <>
+struct AbilityImpl<ABILITY_HIGH_TIDE> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(moveType == TYPE_WATER)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -4993,37 +4973,37 @@ ABILITY(ABILITY_HIGH_TIDE) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_CHANGE_OF_HEART) : extends SimpleEntryMove<MOVE_HEART_SWAP> { INSTANCE(ABILITY_CHANGE_OF_HEART); };
+template <>
+struct AbilityImpl<ABILITY_CHANGE_OF_HEART> : extends SimpleEntryMove<MOVE_HEART_SWAP> {};
 
-ABILITY(ABILITY_MYSTIC_BLADES) : extends AbilityImpl<ABILITY_KEEN_EDGE>, extends OnSwapSplit {
-    INSTANCE(ABILITY_MYSTIC_BLADES);
+template <>
+struct AbilityImpl<ABILITY_MYSTIC_BLADES> : extends AbilityImpl<ABILITY_KEEN_EDGE>, extends OnSwapSplit {
     ON_SWAP_SPLIT {
-        CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
-        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
+        CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL) CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
         return TRUE;
     }
 };
 
 struct NegateFrzSpatkDrop {};
-ABILITY(ABILITY_DETERMINATION) : extends OnOffensiveMultiplier<>, extends NegateFrzSpatkDrop {
-    INSTANCE(ABILITY_DETERMINATION);
+template <>
+struct AbilityImpl<ABILITY_DETERMINATION> : extends OnOffensiveMultiplier<>, extends NegateFrzSpatkDrop {
     ON_OFFENSIVE_MULTIPLIER {
         if (HasAnyStatusOrAbility(battler) && IS_MOVE_SPECIAL(move)) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_FERTILIZE) : extends AteAbility<TYPE_GRASS> { INSTANCE(ABILITY_FERTILIZE); };
+template <>
+struct AbilityImpl<ABILITY_FERTILIZE> : extends AteAbility<TYPE_GRASS> {};
 
-struct CanInfatuateAny {};
-ABILITY(ABILITY_PURE_LOVE) : extends OnDefender, extends OnAttacker, extends CanInfatuateAny {
-    INSTANCE(ABILITY_PURE_LOVE);
+struct InfatuatesAny {};
+template <>
+struct AbilityImpl<ABILITY_PURE_LOVE> : extends OnDefender, extends OnAttacker, extends InfatuatesAny {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK(CanBattlerHeal(battler))
-        CHECK(gBattleMons[target].status2 & STATUS2_INFATUATION)
+        CHECK(CanBattlerHeal(battler)) CHECK(gBattleMons[target].status2 & STATUS2_INFATUATION)
 
-        gBattleMoveDamage = -gHpDealt / 4;
+            gBattleMoveDamage = -gHpDealt / 4;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
@@ -5031,23 +5011,27 @@ ABILITY(ABILITY_PURE_LOVE) : extends OnDefender, extends OnAttacker, extends Can
     ON_DEFENDER { return AbilityImpl<ABILITY_CUTE_CHARM>::onEither(DELEGATE_DEFENDER); }
 };
 
-ABILITY(ABILITY_FIGHTER) : extends SwarmLike<TYPE_FIGHTING> { INSTANCE(ABILITY_FIGHTER); };
+template <>
+struct AbilityImpl<ABILITY_FIGHTER> : extends SwarmLike<TYPE_FIGHTING> {};
 
-ABILITY(ABILITY_TELEKINETIC) : extends SimpleEntryMove<MOVE_TELEKINESIS> { INSTANCE(ABILITY_TELEKINETIC); };
+template <>
+struct AbilityImpl<ABILITY_TELEKINETIC> : extends SimpleEntryMove<MOVE_TELEKINESIS> {};
 
-ABILITY(ABILITY_COMBUSTION) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_COMBUSTION);
+template <>
+struct AbilityImpl<ABILITY_COMBUSTION> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FIRE) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_PONY_POWER) : extends Merged<ABILITY_KEEN_EDGE, ABILITY_MYSTIC_BLADES> { INSTANCE(ABILITY_PONY_POWER); };
+template <>
+struct AbilityImpl<ABILITY_PONY_POWER> : extends Merged<ABILITY_KEEN_EDGE, ABILITY_MYSTIC_BLADES> {};
 
-ABILITY(ABILITY_POWDER_BURST) : extends SimpleEntryMove<MOVE_POWDER> { INSTANCE(ABILITY_POWDER_BURST); };
+template <>
+struct AbilityImpl<ABILITY_POWDER_BURST> : extends SimpleEntryMove<MOVE_POWDER> {};
 
-ABILITY(ABILITY_RETRIEVER) : extends OnExit {
-    INSTANCE(ABILITY_RETRIEVER);
+template <>
+struct AbilityImpl<ABILITY_RETRIEVER> : extends OnExit {
     ON_EXIT {
         CHECK(IsBattlerAlive(battler))
         CHECK_NOT(gBattleMons[battler].item)
@@ -5067,10 +5051,11 @@ ABILITY(ABILITY_RETRIEVER) : extends OnExit {
     }
 };
 
-ABILITY(ABILITY_MONSTER_MASH) : extends SimpleEntryMove<MOVE_TRICK_OR_TREAT> { INSTANCE(ABILITY_MONSTER_MASH); };
+template <>
+struct AbilityImpl<ABILITY_MONSTER_MASH> : extends SimpleEntryMove<MOVE_TRICK_OR_TREAT> {};
 
-ABILITY(ABILITY_TWO_STEP) : extends OnAttacker {
-    INSTANCE(ABILITY_TWO_STEP);
+template <>
+struct AbilityImpl<ABILITY_TWO_STEP> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(IsDance(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
@@ -5079,21 +5064,20 @@ ABILITY(ABILITY_TWO_STEP) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_SPITEFUL) : extends OnDefender {
-    INSTANCE(ABILITY_SPITEFUL);
+template <>
+struct AbilityImpl<ABILITY_SPITEFUL> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(move != MOVE_STRUGGLE)
-        CHECK(IsMoveMakingContact(move, attacker))
-        CHECK(gBattleMons[attacker].pp[gChosenMovePos])
+        CHECK(IsMoveMakingContact(move, attacker)) CHECK(gBattleMons[attacker].pp[gChosenMovePos])
 
-        BattleScriptCall(BattleScript_AbilitySpiteful);
+            BattleScriptCall(BattleScript_AbilitySpiteful);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_FORTITUDE) : extends OnDefender {
-    INSTANCE(ABILITY_FORTITUDE);
+template <>
+struct AbilityImpl<ABILITY_FORTITUDE> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_SPDEF))
@@ -5109,34 +5093,40 @@ ABILITY(ABILITY_FORTITUDE) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_DEVOURER) : extends AbilityImpl<ABILITY_PRIMAL_MAW>, extends AbilityImpl<ABILITY_STRONG_JAW> { INSTANCE(ABILITY_DEVOURER); };
+template <>
+struct AbilityImpl<ABILITY_DEVOURER> : extends AbilityImpl<ABILITY_PRIMAL_MAW>, extends AbilityImpl<ABILITY_STRONG_JAW> {};
 
-ABILITY(ABILITY_PHANTOM_THIEF) : extends SimpleEntryMove<MOVE_SPECTRAL_THIEF, 40> { INSTANCE(ABILITY_PHANTOM_THIEF); };
+template <>
+struct AbilityImpl<ABILITY_PHANTOM_THIEF> : extends SimpleEntryMove<MOVE_SPECTRAL_THIEF, 40> {};
 
-ABILITY(ABILITY_EARLY_GRAVE) : extends GaleWingsLike<TYPE_GHOST> { INSTANCE(ABILITY_EARLY_GRAVE); };
+template <>
+struct AbilityImpl<ABILITY_EARLY_GRAVE> : extends GaleWingsLike<TYPE_GHOST> {};
 
-ABILITY(ABILITY_BASS_BOOSTED) : extends Merged<ABILITY_PUNK_ROCK, ABILITY_AMPLIFIER> { INSTANCE(ABILITY_BASS_BOOSTED); };
+template <>
+struct AbilityImpl<ABILITY_BASS_BOOSTED> : extends Merged<ABILITY_PUNK_ROCK, ABILITY_AMPLIFIER> {};
 
-ABILITY(ABILITY_FLAMING_JAWS) : extends OnAttacker {
-    INSTANCE(ABILITY_FLAMING_JAWS);
+template <>
+struct AbilityImpl<ABILITY_FLAMING_JAWS> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeBurned(target))
-        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-        CHECK(Random() % 2)
+        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) CHECK(Random() % 2)
 
-        return AbilityStatusEffect(MOVE_EFFECT_BURN);
+            return AbilityStatusEffect(MOVE_EFFECT_BURN);
     }
 };
 
-ABILITY(ABILITY_MONSTER_HUNTER) : extends TypeSlayer<TYPE_DARK> { INSTANCE(ABILITY_MONSTER_HUNTER); };
+template <>
+struct AbilityImpl<ABILITY_MONSTER_HUNTER> : extends TypeSlayer<TYPE_DARK> {};
 
-ABILITY(ABILITY_CROWNED_SWORD) : extends AbilityImpl<ABILITY_INTREPID_SWORD>, extends AbilityImpl<ABILITY_ANGER_POINT> { INSTANCE(ABILITY_CROWNED_SWORD); };
+template <>
+struct AbilityImpl<ABILITY_CROWNED_SWORD> : extends AbilityImpl<ABILITY_INTREPID_SWORD>, extends AbilityImpl<ABILITY_ANGER_POINT> {};
 
-ABILITY(ABILITY_CROWNED_SHIELD) : extends AbilityImpl<ABILITY_DAUNTLESS_SHIELD>, extends AbilityImpl<ABILITY_STAMINA> { INSTANCE(ABILITY_CROWNED_SHIELD); };
+template <>
+struct AbilityImpl<ABILITY_CROWNED_SHIELD> : extends AbilityImpl<ABILITY_DAUNTLESS_SHIELD>, extends AbilityImpl<ABILITY_STAMINA> {};
 
-ABILITY(ABILITY_BERSERK_DNA) : extends OnEntry {
-    INSTANCE(ABILITY_BERSERK_DNA);
+template <>
+struct AbilityImpl<ABILITY_BERSERK_DNA> : extends OnEntry {
     ON_ENTRY {
         CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE))) if (CanBeConfused(battler)) {
             gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
@@ -5149,8 +5139,8 @@ ABILITY(ABILITY_BERSERK_DNA) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_CROWNED_KING) : extends AbilityImpl<ABILITY_AS_ONE_ICE_RIDER>, extends AbilityImpl<ABILITY_AS_ONE_SHADOW_RIDER> {
-    INSTANCE(ABILITY_CROWNED_KING);
+template <>
+struct AbilityImpl<ABILITY_CROWNED_KING> : extends AbilityImpl<ABILITY_AS_ONE_ICE_RIDER>, extends AbilityImpl<ABILITY_AS_ONE_SHADOW_RIDER> {
     ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); }
     ON_BATTLER_FAINTS {
         CHECK(AbilityImpl<ABILITY_CHILLING_NEIGH>::onBattlerFaints(DELEGATE_BATTLER_FAINTS) |
@@ -5161,8 +5151,8 @@ ABILITY(ABILITY_CROWNED_KING) : extends AbilityImpl<ABILITY_AS_ONE_ICE_RIDER>, e
     }
 };
 
-ABILITY(ABILITY_SNAP_TRAP_WHEN_HIT) : extends OnDefender {
-    INSTANCE(ABILITY_SNAP_TRAP_WHEN_HIT);
+template <>
+struct AbilityImpl<ABILITY_SNAP_TRAP_WHEN_HIT> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -5172,30 +5162,32 @@ ABILITY(ABILITY_SNAP_TRAP_WHEN_HIT) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_PERMANENCE) : extends OnEntry {
-    INSTANCE(ABILITY_PERMANENCE);
+template <>
+struct AbilityImpl<ABILITY_PERMANENCE> : extends OnEntry {
     ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_PERMANENCE); }
 };
 
-ABILITY(ABILITY_HUBRIS) : extends AbilityImpl<ABILITY_GRIM_NEIGH> { INSTANCE(ABILITY_HUBRIS); };
+template <>
+struct AbilityImpl<ABILITY_HUBRIS> : extends AbilityImpl<ABILITY_GRIM_NEIGH> {};
 
-ABILITY(ABILITY_COSMIC_DAZE) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_COSMIC_DAZE);
+template <>
+struct AbilityImpl<ABILITY_COSMIC_DAZE> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMons[target].status2 & STATUS2_CONFUSION) MUL(2);
     }
 };
 
-ABILITY(ABILITY_MINDS_EYE) : extends Breakable, extends HitsGhost { INSTANCE(ABILITY_MINDS_EYE); };
+template <>
+struct AbilityImpl<ABILITY_MINDS_EYE> : extends Breakable, extends HitsGhost {};
 
-ABILITY(ABILITY_BLOOD_PRICE) : extends OnEndTurn, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_BLOOD_PRICE);
+template <>
+struct AbilityImpl<ABILITY_BLOOD_PRICE> : extends OnEndTurn, extends OnOffensiveMultiplier<> {
     ON_END_TURN {
         CHECK_NOT(IS_MOVE_STATUS(gLastResultingMoves[battler]))
-        CHECK_NOT(IsMagicGuardProtected(battler))
+        CHECK_NOT(HasMagicGuard(battler))
         CHECK(IsBattlerAlive(battler))
 
-        gBattleMoveDamage = gBattleMons[battler].maxHP / 10;
+            gBattleMoveDamage = gBattleMons[battler].maxHP / 10;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         BattleScriptPushCursorAndCallback(BattleScript_AbilitySelfDamage);
         return TRUE;
@@ -5203,34 +5195,32 @@ ABILITY(ABILITY_BLOOD_PRICE) : extends OnEndTurn, extends OnOffensiveMultiplier<
     ON_OFFENSIVE_MULTIPLIER { MUL(1.3); }
 };
 
-ABILITY(ABILITY_SPIKE_ARMOR) : extends OnEither {
-    INSTANCE(ABILITY_SPIKE_ARMOR);
+template <>
+struct AbilityImpl<ABILITY_SPIKE_ARMOR> : extends OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(CanBleed(opponent))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK(Random() % 100 < 30)
+        CHECK(IsMoveMakingContact(move, gBattlerAttacker)) CHECK(Random() % 100 < 30)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_BLEED, battler, opponent);
+            AbilityStatusEffectSafe(MOVE_EFFECT_BLEED, battler, opponent);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_VOODOO_POWER) : extends OnDefender {
-    INSTANCE(ABILITY_VOODOO_POWER);
+template <>
+struct AbilityImpl<ABILITY_VOODOO_POWER> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IS_MOVE_SPECIAL(move))
-        CHECK(CanBleed(attacker))
-        CHECK(Random() % 100 < 30)
+        CHECK(CanBleed(attacker)) CHECK(Random() % 100 < 30)
 
-        AbilityStatusEffect(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_BLEED);
+            AbilityStatusEffect(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_BLEED);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_CHROME_COAT) : extends OnDefensiveMultiplier, extends OnStat<> {
-    INSTANCE(ABILITY_CHROME_COAT);
+template <>
+struct AbilityImpl<ABILITY_CHROME_COAT> : extends OnDefensiveMultiplier, extends OnStat<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_SPECIAL(move)) MUL(.6);
     }
@@ -5239,20 +5229,22 @@ ABILITY(ABILITY_CHROME_COAT) : extends OnDefensiveMultiplier, extends OnStat<> {
     }
 };
 
-ABILITY(ABILITY_BANSHEE) : LiquidVoiceClone<TYPE_GHOST> { INSTANCE(ABILITY_BANSHEE); };
+template <>
+struct AbilityImpl<ABILITY_BANSHEE> : LiquidVoiceClone<TYPE_GHOST> {};
 
-ABILITY(ABILITY_WEB_SPINNER) : extends SimpleEntryMove<MOVE_STRING_SHOT> { INSTANCE(ABILITY_WEB_SPINNER); };
+template <>
+struct AbilityImpl<ABILITY_WEB_SPINNER> : extends SimpleEntryMove<MOVE_STRING_SHOT> {};
 
-ABILITY(ABILITY_SHOWDOWN_MODE) : extends OnEntry {
-    INSTANCE(ABILITY_SHOWDOWN_MODE);
+template <>
+struct AbilityImpl<ABILITY_SHOWDOWN_MODE> : extends OnEntry {
     ON_ENTRY {
         gVolatileStructs[battler].showdownMode = gVolatileStructs[battler].started.showdownMode = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_SHOWDOWN_MODE);
     }
 };
 
-ABILITY(ABILITY_SEED_SOWER) : extends OnDefender, extends AllowTerrainIfAirborne<TERRAIN_GRASSY> {
-    INSTANCE(ABILITY_SEED_SOWER);
+template <>
+struct AbilityImpl<ABILITY_SEED_SOWER> : extends OnDefender, extends AllowTerrainIfAirborne<TERRAIN_GRASSY> {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
@@ -5262,23 +5254,20 @@ ABILITY(ABILITY_SEED_SOWER) : extends OnDefender, extends AllowTerrainIfAirborne
     }
 };
 
-ABILITY(ABILITY_AIRBORNE) : extends OnOffensiveMultiplier<ApplyOn::ALLY> {
-    INSTANCE(ABILITY_AIRBORNE);
+template <>
+struct AbilityImpl<ABILITY_AIRBORNE> : extends OnOffensiveMultiplier<ApplyOn::ALLY> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FLYING) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_PARROTING) : extends AbilityImpl<ABILITY_SOUNDPROOF>, extends OnCopyMove {
-    INSTANCE(ABILITY_PARROTING);
-    ON_COPY_MOVE {
-        CHECK(IsSoundMove(attacker, move))
-        return UseOutOfTurnAttack(battler, target, ability, move, 0);
-    }
+template <>
+struct AbilityImpl<ABILITY_PARROTING> : extends AbilityImpl<ABILITY_SOUNDPROOF>, extends OnCopyMove {
+    ON_COPY_MOVE { CHECK(IsSoundMove(attacker, move)) return UseOutOfTurnAttack(battler, target, ability, move, 0); }
 };
 
-ABILITY(ABILITY_SALT_CIRCLE) : extends OnEntry {
-    INSTANCE(ABILITY_SALT_CIRCLE);
+template <>
+struct AbilityImpl<ABILITY_SALT_CIRCLE> : extends OnEntry {
     ON_ENTRY {
         int anyBlocked = FALSE;
         gBattlerTarget = BATTLE_OPPOSITE(battler);
@@ -5301,8 +5290,8 @@ ABILITY(ABILITY_SALT_CIRCLE) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_PURIFYING_SALT) : extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
-    INSTANCE(ABILITY_PURIFYING_SALT);
+template <>
+struct AbilityImpl<ABILITY_PURIFYING_SALT> : extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_GHOST) RESISTANCE(.5);
     }
@@ -5366,49 +5355,49 @@ struct ParadoxBoostEffect : extends OnStat<>, extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_PROTOSYNTHESIS) : extends ParadoxBoostEffect, extends OnWeather {
-    INSTANCE(ABILITY_PROTOSYNTHESIS);
+template <>
+struct AbilityImpl<ABILITY_PROTOSYNTHESIS> : extends ParadoxBoostEffect, extends OnWeather {
     ON_ENTRY { return handler(ability, battler, IsWeatherActive(WEATHER_SUN_ANY), B_MSG_PARADOX_BOOST_WEATHER, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
     ON_WEATHER { return handler(ability, battler, IsWeatherActive(WEATHER_SUN_ANY), B_MSG_PARADOX_BOOST_WEATHER, ABILITY_BS_CALL); }
 };
 
-ABILITY(ABILITY_QUARK_DRIVE) : extends ParadoxBoostEffect, extends OnTerrain {
-    INSTANCE(ABILITY_QUARK_DRIVE);
+template <>
+struct AbilityImpl<ABILITY_QUARK_DRIVE> : extends ParadoxBoostEffect, extends OnTerrain {
     ON_ENTRY {
         return handler(ability, battler, IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN), B_MSG_PARADOX_BOOST_TERRAIN, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
     }
     ON_TERRAIN { return handler(ability, battler, IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN), B_MSG_PARADOX_BOOST_TERRAIN, ABILITY_BS_CALL); }
 };
 
-ABILITY(ABILITY_WIND_POWER) : extends OnDefender {
-    INSTANCE(ABILITY_WIND_POWER);
+template <>
+struct AbilityImpl<ABILITY_WIND_POWER> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(gBattleMoves[move].airBased)
         CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
-        gStatuses3[battler] |= STATUS3_CHARGED_UP;
+            gStatuses3[battler] |= STATUS3_CHARGED_UP;
         BattleScriptCall(BattleScript_ElectromorphosisActivates);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_IMPULSE) : extends OnChooseOffensiveStat {
-    INSTANCE(ABILITY_IMPULSE);
+template <>
+struct AbilityImpl<ABILITY_IMPULSE> : extends OnChooseOffensiveStat {
     ON_CHOOSE_OFFENSIVE_STAT {
         if (!(gBattleMoves[move].contact)) *atkStatToUse = STAT_SPEED;
     }
 };
 
-ABILITY(ABILITY_TERMINAL_VELOCITY) : extends OnChooseOffensiveStat {
-    INSTANCE(ABILITY_TERMINAL_VELOCITY);
+template <>
+struct AbilityImpl<ABILITY_TERMINAL_VELOCITY> : extends OnChooseOffensiveStat {
     ON_CHOOSE_OFFENSIVE_STAT {
         if (IS_MOVE_SPECIAL(move)) secondaryAtkStatToUse[STAT_SPEED] += 20;
     }
 };
 
-ABILITY(ABILITY_ANGER_SHELL) : extends OnDefender {
-    INSTANCE(ABILITY_ANGER_SHELL);
+template <>
+struct AbilityImpl<ABILITY_ANGER_SHELL> : extends OnDefender {
     ON_DEFENDER {
         CHECK(CheckHalfHpAbility(battler, attacker))
         CHECK_NOT(GetAbilityState(battler, ability))
@@ -5420,8 +5409,8 @@ ABILITY(ABILITY_ANGER_SHELL) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_EGOIST) : extends OnReactive {
-    INSTANCE(ABILITY_EGOIST);
+template <>
+struct AbilityImpl<ABILITY_EGOIST> : extends OnReactive {
     ON_REACTIVE {
         CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
         for (int opponent = GetOppositeSide(battler); opponent < gBattlersCount; opponent += 2) {
@@ -5441,38 +5430,40 @@ ABILITY(ABILITY_EGOIST) : extends OnReactive {
     }
 };
 
-ABILITY(ABILITY_READIED_ACTION) : extends OnEntry {
-    INSTANCE(ABILITY_READIED_ACTION);
+template <>
+struct AbilityImpl<ABILITY_READIED_ACTION> : extends OnEntry {
     ON_ENTRY {
         gVolatileStructs[battler].readiedAction = gVolatileStructs[battler].started.readiedAction = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_READIED_ACTION);
     }
 };
 
-ABILITY(ABILITY_DARK_GALE_WINGS) : extends GaleWingsLike<TYPE_DARK> { INSTANCE(ABILITY_DARK_GALE_WINGS); };
+template <>
+struct AbilityImpl<ABILITY_DARK_GALE_WINGS> : extends GaleWingsLike<TYPE_DARK> {};
 
-ABILITY(ABILITY_GUILT_TRIP) : extends OnDefender {
-    INSTANCE(ABILITY_GUILT_TRIP);
+template <>
+struct AbilityImpl<ABILITY_GUILT_TRIP> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
         CHECK(CanLowerStat(attacker, STAT_ATK) || CanLowerStat(attacker, STAT_SPATK))
 
-        BattleScriptCall(BattleScript_GuiltTrip);
+            BattleScriptCall(BattleScript_GuiltTrip);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_WATER_GALE_WINGS) : extends GaleWingsLike<TYPE_WATER> { INSTANCE(ABILITY_WATER_GALE_WINGS); };
+template <>
+struct AbilityImpl<ABILITY_WATER_GALE_WINGS> : extends GaleWingsLike<TYPE_WATER> {};
 
-ABILITY(ABILITY_ZERO_TO_HERO) : extends FormChangeAbility, extends OnEntry, extends OnExit {
-    INSTANCE(ABILITY_ZERO_TO_HERO);
+template <>
+struct AbilityImpl<ABILITY_ZERO_TO_HERO> : extends FormChangeAbility, extends OnEntry, extends OnExit {
     ON_ENTRY {
         CHECK(gBattleMons[battler].species == SPECIES_PALAFIN)
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
         CHECK(GetSingleUseAbilityCounter(battler, ability))
 
-        UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_PALAFIN_HERO);
+            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_PALAFIN_HERO);
         gBattleMons[battler].species = SPECIES_PALAFIN_HERO;
         BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
         return TRUE;
@@ -5483,8 +5474,8 @@ ABILITY(ABILITY_ZERO_TO_HERO) : extends FormChangeAbility, extends OnEntry, exte
     }
 };
 
-ABILITY(ABILITY_COSTAR) : extends OnEntry {
-    INSTANCE(ABILITY_COSTAR);
+template <>
+struct AbilityImpl<ABILITY_COSTAR> : extends OnEntry {
     ON_ENTRY {
         CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
 
@@ -5501,8 +5492,8 @@ ABILITY(ABILITY_COSTAR) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_COMMANDER) : extends FormChangeAbility, extends OnBattlerFaints<ApplyOnTarget::ALLY>, extends OnAccuracy<ApplyOnTarget::TARGET> {
-    INSTANCE(ABILITY_COMMANDER);
+template <>
+struct AbilityImpl<ABILITY_COMMANDER> : extends FormChangeAbility, extends OnBattlerFaints<ApplyOnTarget::ALLY>, extends OnAccuracy<ApplyOnTarget::TARGET> {
     ON_BATTLER_FAINTS {
         CHECK(GetAbilityState(battler, ability))
 
@@ -5517,12 +5508,14 @@ ABILITY(ABILITY_COMMANDER) : extends FormChangeAbility, extends OnBattlerFaints<
     }
 };
 
-ABILITY(ABILITY_EJECT_PACK_ABILITY) : extends Persistent { INSTANCE(ABILITY_EJECT_PACK_ABILITY); };
+template <>
+struct AbilityImpl<ABILITY_EJECT_PACK_ABILITY> : extends Persistent {};
 
-ABILITY(ABILITY_VENGEFUL_SPIRIT) : extends AbilityImpl<ABILITY_HAUNTED_SPIRIT>, extends AbilityImpl<ABILITY_VENGEANCE> { INSTANCE(ABILITY_VENGEFUL_SPIRIT); };
+template <>
+struct AbilityImpl<ABILITY_VENGEFUL_SPIRIT> : extends AbilityImpl<ABILITY_HAUNTED_SPIRIT>, extends AbilityImpl<ABILITY_VENGEANCE> {};
 
-ABILITY(ABILITY_CUD_CHEW) : extends OnEndTurn {
-    INSTANCE(ABILITY_CUD_CHEW);
+template <>
+struct AbilityImpl<ABILITY_CUD_CHEW> : extends OnEndTurn {
     ON_END_TURN {
         CudChewState state = GetAbilityStateAs(battler, ability).cudChewState;
         if (state.setThisTurn) {
@@ -5541,17 +5534,18 @@ ABILITY(ABILITY_CUD_CHEW) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_ARMOR_TAIL) : extends AbilityImpl<ABILITY_QUEENLY_MAJESTY> { INSTANCE(ABILITY_ARMOR_TAIL); };
+template <>
+struct AbilityImpl<ABILITY_ARMOR_TAIL> : extends AbilityImpl<ABILITY_QUEENLY_MAJESTY> {};
 
-ABILITY(ABILITY_MIND_CRUSH) : extends AbilityImpl<ABILITY_STRONG_JAW>, extends OnChooseOffensiveStat {
-    INSTANCE(ABILITY_MIND_CRUSH);
+template <>
+struct AbilityImpl<ABILITY_MIND_CRUSH> : extends AbilityImpl<ABILITY_STRONG_JAW>, extends OnChooseOffensiveStat {
     ON_CHOOSE_OFFENSIVE_STAT {
         if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) *atkStatToUse = STAT_SPATK;
     }
 };
 
-ABILITY(ABILITY_SUPREME_OVERLORD) : extends OnEntry, extends OnStat<> {
-    INSTANCE(ABILITY_SUPREME_OVERLORD);
+template <>
+struct AbilityImpl<ABILITY_SUPREME_OVERLORD> : extends OnEntry, extends OnStat<> {
     ON_ENTRY {
         CHECK(gFaintedMonCount[GetBattlerSide(battler)])
 
@@ -5562,16 +5556,15 @@ ABILITY(ABILITY_SUPREME_OVERLORD) : extends OnEntry, extends OnStat<> {
     }
 };
 
-ABILITY(ABILITY_ILL_WILL) : extends OnDefender {
-    INSTANCE(ABILITY_ILL_WILL);
+template <>
+struct AbilityImpl<ABILITY_ILL_WILL> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(move != MOVE_STRUGGLE)
-        CHECK(IsMoveMakingContact(move, attacker))
-        CHECK(gBattleMons[attacker].pp[gChosenMovePos])
-        CHECK_NOT(IsBattlerAlive(battler))
+        CHECK(IsMoveMakingContact(move, attacker)) CHECK(gBattleMons[attacker].pp[gChosenMovePos]) CHECK_NOT(IsBattlerAlive(battler))
 
-        gBattleMons[attacker].pp[gChosenMovePos] = 0;
+            gBattleMons[attacker]
+                .pp[gChosenMovePos] = 0;
         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove)
         gActiveBattler = attacker;
         BtlController_EmitSetMonData(0, gChosenMovePos + REQUEST_PPMOVE1_BATTLE, 0, 1, &gBattleMons[attacker].pp[gChosenMovePos]);
@@ -5580,10 +5573,11 @@ ABILITY(ABILITY_ILL_WILL) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_FIRE_SCALES) : extends AbilityImpl<ABILITY_ICE_SCALES> { INSTANCE(ABILITY_FIRE_SCALES); };
+template <>
+struct AbilityImpl<ABILITY_FIRE_SCALES> : extends AbilityImpl<ABILITY_ICE_SCALES> {};
 
-ABILITY(ABILITY_WATCH_YOUR_STEP) : extends OnEntry {
-    INSTANCE(ABILITY_WATCH_YOUR_STEP);
+template <>
+struct AbilityImpl<ABILITY_WATCH_YOUR_STEP> : extends OnEntry {
     ON_ENTRY {
         u8 targetSide = GetOppositeSide(battler);
         CHECK(gSideTimers[targetSide].spikesAmount < 3)
@@ -5595,22 +5589,22 @@ ABILITY(ABILITY_WATCH_YOUR_STEP) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_RAPID_RESPONSE) : extends OnEntry {
-    INSTANCE(ABILITY_RAPID_RESPONSE);
+template <>
+struct AbilityImpl<ABILITY_RAPID_RESPONSE> : extends OnEntry {
     ON_ENTRY {
         gVolatileStructs[battler].rapidResponse = gVolatileStructs[battler].started.rapidResponse = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_RAPID_RESPONSE);
     }
 };
 
-ABILITY(ABILITY_DOUBLE_IRON_BARBS) : extends OnDefender {
-    INSTANCE(ABILITY_DOUBLE_IRON_BARBS);
+template <>
+struct AbilityImpl<ABILITY_DOUBLE_IRON_BARBS> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
-        CHECK_NOT(IsMagicGuardProtected(attacker))
+        CHECK_NOT(HasMagicGuard(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
-        gBattleMoveDamage = gBattleMons[attacker].maxHP / 6;
+            gBattleMoveDamage = gBattleMons[attacker].maxHP / 6;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ability);
         BattleScriptCall(BattleScript_IronBarbsActivates);
@@ -5618,14 +5612,14 @@ ABILITY(ABILITY_DOUBLE_IRON_BARBS) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_THERMAL_EXCHANGE) : extends OnDefender, extends RemovesStatusOnImmunity {
-    INSTANCE(ABILITY_THERMAL_EXCHANGE);
+template <>
+struct AbilityImpl<ABILITY_THERMAL_EXCHANGE> : extends OnDefender, extends RemovesStatusOnImmunity {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_FIRE)
         CHECK(CanRaiseStat(battler, STAT_ATK))
 
-        SetStatChanger(STAT_ATK, 1);
+            SetStatChanger(STAT_ATK, 1);
         BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
         return TRUE;
     }
@@ -5635,8 +5629,8 @@ ABILITY(ABILITY_THERMAL_EXCHANGE) : extends OnDefender, extends RemovesStatusOnI
     }
 };
 
-ABILITY(ABILITY_GOOD_AS_GOLD) : extends OnImmune<> {
-    INSTANCE(ABILITY_GOOD_AS_GOLD);
+template <>
+struct AbilityImpl<ABILITY_GOOD_AS_GOLD> : extends OnImmune<> {
     ON_IMMUNE {
         CHECK(battler != attacker) CHECK(IS_MOVE_STATUS(move));
         *immunityScript = BattleScript_SoundproofProtected;
@@ -5644,8 +5638,8 @@ ABILITY(ABILITY_GOOD_AS_GOLD) : extends OnImmune<> {
     }
 };
 
-ABILITY(ABILITY_SHARING_IS_CARING) : extends OnReactive {
-    INSTANCE(ABILITY_SHARING_IS_CARING);
+template <>
+struct AbilityImpl<ABILITY_SHARING_IS_CARING> : extends OnReactive {
     ON_REACTIVE {
         switch (gBattleStruct->statStageCheckState) {
             default:
@@ -5665,20 +5659,22 @@ ABILITY(ABILITY_SHARING_IS_CARING) : extends OnReactive {
     }
 };
 
-ABILITY(ABILITY_PERMAFROST_CLONE) : extends AbilityImpl<ABILITY_PERMAFROST> { INSTANCE(ABILITY_PERMAFROST_CLONE); };
+template <>
+struct AbilityImpl<ABILITY_PERMAFROST_CLONE> : extends AbilityImpl<ABILITY_PERMAFROST> {};
 
-ABILITY(ABILITY_GALLANTRY) : extends NoDamageHits<1> { INSTANCE(ABILITY_GALLANTRY); };
+template <>
+struct AbilityImpl<ABILITY_GALLANTRY> : extends NoDamageHits<1> {};
 
-ABILITY(ABILITY_ORICHALCUM_PULSE) : extends AbilityImpl<ABILITY_DROUGHT>, extends OnStat<> {
-    INSTANCE(ABILITY_ORICHALCUM_PULSE);
+template <>
+struct AbilityImpl<ABILITY_ORICHALCUM_PULSE> : extends AbilityImpl<ABILITY_DROUGHT>, extends OnStat<> {
     ON_STAT {
         if (statId != STAT_ATK) return;
         if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat = *stat * 4 / 3;
     }
 };
 
-ABILITY(ABILITY_SUN_BASKING) : extends OnImmune<>, extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_SUN_BASKING);
+template <>
+struct AbilityImpl<ABILITY_SUN_BASKING> : extends OnImmune<>, extends OnDefensiveMultiplier {
     ON_IMMUNE {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY));
         return blocksPriority(DELEGATE_IMMUNE);
@@ -5688,35 +5684,34 @@ ABILITY(ABILITY_SUN_BASKING) : extends OnImmune<>, extends OnDefensiveMultiplier
     }
 };
 
-ABILITY(ABILITY_WINGED_KING) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_WINGED_KING);
+template <>
+struct AbilityImpl<ABILITY_WINGED_KING> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.33);
     }
 };
 
-ABILITY(ABILITY_HADRON_ENGINE) : extends AbilityImpl<ABILITY_ELECTRIC_SURGE>, extends OnStat<> {
-    INSTANCE(ABILITY_HADRON_ENGINE);
+template <>
+struct AbilityImpl<ABILITY_HADRON_ENGINE> : extends AbilityImpl<ABILITY_ELECTRIC_SURGE>, extends OnStat<> {
     ON_STAT {
         if (statId == STAT_SPATK && IsBattlerTerrainAffected(battler, STATUS_FIELD_ELECTRIC_TERRAIN)) *stat = *stat * 4 / 3;
     }
 };
 
-ABILITY(ABILITY_IRON_SERPENT) : extends AbilityImpl<ABILITY_WINGED_KING> { INSTANCE(ABILITY_IRON_SERPENT); };
+template <>
+struct AbilityImpl<ABILITY_IRON_SERPENT> : extends AbilityImpl<ABILITY_WINGED_KING> {};
 
-ABILITY(ABILITY_SWEEPING_EDGE_PLUS) : extends AbilityImpl<ABILITY_KEEN_EDGE>, extends AbilityImpl<ABILITY_SWEEPING_EDGE> {
-    INSTANCE(ABILITY_SWEEPING_EDGE_PLUS);
-};
+template <>
+struct AbilityImpl<ABILITY_SWEEPING_EDGE_PLUS> : extends AbilityImpl<ABILITY_KEEN_EDGE>, extends AbilityImpl<ABILITY_SWEEPING_EDGE> {};
 
-ABILITY(ABILITY_CELESTIAL_BLESSING) : extends OnEndTurn {
-    INSTANCE(ABILITY_CELESTIAL_BLESSING);
+template <>
+struct AbilityImpl<ABILITY_CELESTIAL_BLESSING> : extends OnEndTurn {
     ON_END_TURN {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
-        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-        CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2) CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
 
-        gBattleMoveDamage = gBattleMons[battler].maxHP / 12;
+            gBattleMoveDamage = gBattleMons[battler].maxHP / 12;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
@@ -5724,53 +5719,51 @@ ABILITY(ABILITY_CELESTIAL_BLESSING) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_MINION_CONTROL) : extends OnParentalBond {
-    INSTANCE(ABILITY_MINION_CONTROL);
+template <>
+struct AbilityImpl<ABILITY_MINION_CONTROL> : extends OnParentalBond {
     ON_PARENTAL_BOND { return PARENTAL_BOND_MINION_CONTROL; }
 };
 
-ABILITY(ABILITY_MOLTEN_BLADES) : extends AbilityImpl<ABILITY_KEEN_EDGE>, extends OnAttacker {
-    INSTANCE(ABILITY_MOLTEN_BLADES);
+template <>
+struct AbilityImpl<ABILITY_MOLTEN_BLADES> : extends AbilityImpl<ABILITY_KEEN_EDGE>, extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeBurned(target))
-        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-        CHECK(Random() % 100 < 20)
+        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) CHECK(Random() % 100 < 20)
 
-        return AbilityStatusEffect(MOVE_EFFECT_BURN);
+            return AbilityStatusEffect(MOVE_EFFECT_BURN);
     }
 };
 
-ABILITY(ABILITY_HAUNTING_FRENZY) : extends AbilityImpl<ABILITY_ADRENALINE_RUSH>, extends OnAttacker {
-    INSTANCE(ABILITY_HAUNTING_FRENZY);
+template <>
+struct AbilityImpl<ABILITY_HAUNTING_FRENZY> : extends AbilityImpl<ABILITY_ADRENALINE_RUSH>, extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanMoveHaveExtraFlinchChance(move))
         CHECK(Random() % 100 < 20)
 
-        return AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
+            return AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
     }
 };
 
-ABILITY(ABILITY_NOISE_CANCEL) : extends AbilityImpl<ABILITY_SOUNDPROOF> {
-    INSTANCE(ABILITY_NOISE_CANCEL);
-    ApplyOn onImmuneFor() override { return ApplyOn::ALLY; }
+template <>
+struct AbilityImpl<ABILITY_NOISE_CANCEL> : extends AbilityImpl<ABILITY_SOUNDPROOF> {
+    ApplyOn onImmuneFor() const override { return ApplyOn::ALLY; }
 };
 
-ABILITY(ABILITY_RADIO_JAM) : extends OnAttacker {
-    INSTANCE(ABILITY_RADIO_JAM);
+template <>
+struct AbilityImpl<ABILITY_RADIO_JAM> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeDisabled(target))
-        CHECK(IsSoundMove(battler, move))
-        CHECK(Random() % 100 < 20)
+        CHECK(IsSoundMove(battler, move)) CHECK(Random() % 100 < 20)
 
-        return AbilityStatusEffect(MOVE_EFFECT_DISABLE);
+            return AbilityStatusEffect(MOVE_EFFECT_DISABLE);
     }
 };
 
-ABILITY(ABILITY_OLE) : extends OnAccuracy<ApplyOnTarget::TARGET> {
-    INSTANCE(ABILITY_OLE);
+template <>
+struct AbilityImpl<ABILITY_OLE> : extends OnAccuracy<ApplyOnTarget::TARGET> {
     ON_ACCURACY {
         switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
             case MOVE_TARGET_SELECTED:
@@ -5785,34 +5778,30 @@ ABILITY(ABILITY_OLE) : extends OnAccuracy<ApplyOnTarget::TARGET> {
     }
 };
 
-ABILITY(ABILITY_MALICIOUS) : extends AbilityImpl<ABILITY_INTIMIDATE> { INSTANCE(ABILITY_MALICIOUS); };
+template <>
+struct AbilityImpl<ABILITY_MALICIOUS> : extends AbilityImpl<ABILITY_INTIMIDATE> {};
 
-ABILITY(ABILITY_DEAD_POWER) : extends OnAttacker, extends OnStat<> {
-    INSTANCE(ABILITY_DEAD_POWER);
+template <>
+struct AbilityImpl<ABILITY_DEAD_POWER> : extends OnAttacker, extends OnStat<> {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(gBattleMons[target].status2 & STATUS2_CURSED)
-        CHECK(IsMoveMakingContact(move, battler))
-        CHECK(Random() % 100 < 20)
+        CHECK(IsMoveMakingContact(move, battler)) CHECK(Random() % 100 < 20)
 
-        return AbilityStatusEffect(MOVE_EFFECT_CURSE);
+            return AbilityStatusEffect(MOVE_EFFECT_CURSE);
     }
     ON_STAT {
         if (statId == STAT_ATK) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_BRAWLING_WYVERN) : extends AbilityImpl<ABILITY_NO_GUARD>, extends OnModifyMoveFlags {
-    INSTANCE(ABILITY_BRAWLING_WYVERN);
-    ON_MODIFY_MOVE_FLAGS {
-        CHECK(flag == MOVE_FLAG_PUNCH)
-        CHECK(IS_MOVE_TYPE(move, TYPE_DRAGON))
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_BRAWLING_WYVERN> : extends AbilityImpl<ABILITY_NO_GUARD>, extends OnModifyMoveFlags {
+    ON_MODIFY_MOVE_FLAGS { CHECK(flag == MOVE_FLAG_PUNCH) CHECK(IS_MOVE_TYPE(move, TYPE_DRAGON)) return TRUE; }
 };
 
-ABILITY(ABILITY_JUNSHI_SANDA) : extends OnModifyMoveFlags {
-    INSTANCE(ABILITY_JUNSHI_SANDA);
+template <>
+struct AbilityImpl<ABILITY_JUNSHI_SANDA> : extends OnModifyMoveFlags {
     ON_MODIFY_MOVE_FLAGS {
         switch (flag) {
             case MOVE_FLAG_PUNCH:
@@ -5825,17 +5814,16 @@ ABILITY(ABILITY_JUNSHI_SANDA) : extends OnModifyMoveFlags {
     }
 };
 
-ABILITY(ABILITY_MYTHICAL_ARROWS) : extends AbilityImpl<ABILITY_ARCHER>, extends OnSwapSplit {
-    INSTANCE(ABILITY_MYTHICAL_ARROWS);
+template <>
+struct AbilityImpl<ABILITY_MYTHICAL_ARROWS> : extends AbilityImpl<ABILITY_ARCHER>, extends OnSwapSplit {
     ON_SWAP_SPLIT {
-        CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
-        CHECK(gBattleMoves[move].arrowBased);
+        CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL) CHECK(gBattleMoves[move].arrowBased);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_LAWNMOWER) : extends OnEntry {
-    INSTANCE(ABILITY_LAWNMOWER);
+template <>
+struct AbilityImpl<ABILITY_LAWNMOWER> : extends OnEntry {
     ON_ENTRY {
         CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
@@ -5844,15 +5832,15 @@ ABILITY(ABILITY_LAWNMOWER) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_FLOURISH) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_FLOURISH);
+template <>
+struct AbilityImpl<ABILITY_FLOURISH> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_GRASS && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_DESERT_SPIRIT) : extends AbilityImpl<ABILITY_SAND_STREAM>, extends OnAfterTypeEffectiveness<> {
-    INSTANCE(ABILITY_DESERT_SPIRIT);
+template <>
+struct AbilityImpl<ABILITY_DESERT_SPIRIT> : extends AbilityImpl<ABILITY_SAND_STREAM>, extends OnAfterTypeEffectiveness<> {
     ON_AFTER_TYPE_EFFECTIVENESS {
         if (*mod == 0 && !IsBattlerGrounded(target) && moveType == TYPE_GROUND && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) {
             *mod = UQ_4_12(1.0);
@@ -5860,30 +5848,32 @@ ABILITY(ABILITY_DESERT_SPIRIT) : extends AbilityImpl<ABILITY_SAND_STREAM>, exten
     }
 };
 
-ABILITY(ABILITY_CONTEMPT) : extends AbilityImpl<ABILITY_UNAWARE> { INSTANCE(ABILITY_CONTEMPT); };
+template <>
+struct AbilityImpl<ABILITY_CONTEMPT> : extends AbilityImpl<ABILITY_UNAWARE> {};
 
-ABILITY(ABILITY_AERIALIST) : extends Merged<ABILITY_LEVITATE, ABILITY_FLOCK> { INSTANCE(ABILITY_AERIALIST); };
+template <>
+struct AbilityImpl<ABILITY_AERIALIST> : extends Merged<ABILITY_LEVITATE, ABILITY_FLOCK> {};
 
-ABILITY(ABILITY_TERA_SHELL) : extends Breakable, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET> {
-    INSTANCE(ABILITY_TERA_SHELL);
+template <>
+struct AbilityImpl<ABILITY_TERA_SHELL> : extends Breakable, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET> {
     ON_AFTER_TYPE_EFFECTIVENESS {
         if (*mod >= UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
     }
 };
 
-ABILITY(ABILITY_TOXIC_CHAIN) : extends OnAttacker {
-    INSTANCE(ABILITY_TOXIC_CHAIN);
+template <>
+struct AbilityImpl<ABILITY_TOXIC_CHAIN> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
         CHECK(Random() % 100 < 30)
 
-        return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
+            return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
     }
 };
 
-ABILITY(ABILITY_PARASITIC_SPORES) : extends OnEntry {
-    INSTANCE(ABILITY_PARASITIC_SPORES);
+template <>
+struct AbilityImpl<ABILITY_PARASITIC_SPORES> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gVolatileStructs[battler].parasiticSpores)
 
@@ -5930,20 +5920,20 @@ struct PoisonPuppeteerLike : extends OnBattlerFaints<ApplyOnTarget::ANY>, extend
     }
 };
 
-ABILITY(ABILITY_POISON_PUPPETEER) : extends PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
-    INSTANCE(ABILITY_POISON_PUPPETEER);
+template <>
+struct AbilityImpl<ABILITY_POISON_PUPPETEER> : extends PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
     ON_REACTIVE {
         return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) -> int { return CanBeConfused(target); }, BattleScript_PoisonPuppeteer);
     }
 };
 
-ABILITY(ABILITY_ENTRANCE) : extends PoisonPuppeteerLike<MOVE_EFFECT_CONFUSION> {
-    INSTANCE(ABILITY_ENTRANCE);
+template <>
+struct AbilityImpl<ABILITY_ENTRANCE> : extends PoisonPuppeteerLike<MOVE_EFFECT_CONFUSION> {
     ON_REACTIVE { return PoisonPuppeteerClone(ability, battler, CanInfatuate, BattleScript_Entrance); }
 };
 
-ABILITY(ABILITY_REJECTION) : extends OnEntry {
-    INSTANCE(ABILITY_REJECTION);
+template <>
+struct AbilityImpl<ABILITY_REJECTION> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gFieldTimers.quashTimer)
 
@@ -5953,16 +5943,17 @@ ABILITY(ABILITY_REJECTION) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_APPLE_ENLIGHTENMENT) : extends AbilityImpl<ABILITY_FUR_COAT>, extends AbilityImpl<ABILITY_MAGIC_GUARD> {
-    INSTANCE(ABILITY_APPLE_ENLIGHTENMENT);
-};
+template <>
+struct AbilityImpl<ABILITY_APPLE_ENLIGHTENMENT> : extends AbilityImpl<ABILITY_FUR_COAT>, extends AbilityImpl<ABILITY_MAGIC_GUARD> {};
 
-ABILITY(ABILITY_BALLOON_BOMBER) : extends Merged<ABILITY_AFTERMATH, ABILITY_INFLATABLE> { INSTANCE(ABILITY_BALLOON_BOMBER); };
+template <>
+struct AbilityImpl<ABILITY_BALLOON_BOMBER> : extends Merged<ABILITY_AFTERMATH, ABILITY_INFLATABLE> {};
 
-ABILITY(ABILITY_FLAMING_MAW) : extends AbilityImpl<ABILITY_FLAMING_JAWS>, extends AbilityImpl<ABILITY_STRONG_JAW> { INSTANCE(ABILITY_FLAMING_MAW); };
+template <>
+struct AbilityImpl<ABILITY_FLAMING_MAW> : extends AbilityImpl<ABILITY_FLAMING_JAWS>, extends AbilityImpl<ABILITY_STRONG_JAW> {};
 
-ABILITY(ABILITY_DEMOLITIONIST) : extends AbilityImpl<ABILITY_READIED_ACTION>, extends OnInfiltrate, extends OnAttacker {
-    INSTANCE(ABILITY_DEMOLITIONIST);
+template <>
+struct AbilityImpl<ABILITY_DEMOLITIONIST> : extends AbilityImpl<ABILITY_READIED_ACTION>, extends OnInfiltrate, extends OnAttacker {
     ON_INFILTRATE {
         if (gVolatileStructs[battler].readiedAction && !IS_MOVE_STATUS(move)) return INFILTRATE_BREAK_SCREENS;
         return INFILTRATE_NONE;
@@ -5977,22 +5968,22 @@ ABILITY(ABILITY_DEMOLITIONIST) : extends AbilityImpl<ABILITY_READIED_ACTION>, ex
     }
 };
 
-ABILITY(ABILITY_ROCKHARD_WILL) : extends SwarmLike<TYPE_ROCK> { INSTANCE(ABILITY_ROCKHARD_WILL); };
-ABILITY(ABILITY_FRAGRANT_DAZE) : extends OnEither {
-    INSTANCE(ABILITY_FRAGRANT_DAZE);
+template <>
+struct AbilityImpl<ABILITY_ROCKHARD_WILL> : extends SwarmLike<TYPE_ROCK> {};
+template <>
+struct AbilityImpl<ABILITY_FRAGRANT_DAZE> : extends OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(CanBeConfused(opponent))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK(Random() % 100 < 30)
+        CHECK(IsMoveMakingContact(move, gBattlerAttacker)) CHECK(Random() % 100 < 30)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_CONFUSION, battler, opponent);
+            AbilityStatusEffectSafe(MOVE_EFFECT_CONFUSION, battler, opponent);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_LOW_VISIBILITY) : extends OnEntry {
-    INSTANCE(ABILITY_LOW_VISIBILITY);
+template <>
+struct AbilityImpl<ABILITY_LOW_VISIBILITY> : extends OnEntry {
     ON_ENTRY {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_BadOmensActivates);
@@ -6005,31 +5996,33 @@ ABILITY(ABILITY_LOW_VISIBILITY) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_OLD_MARINER) : extends AbilityImpl<ABILITY_SEAWEED>, extends AbilityImpl<ABILITY_AMPHIBIOUS> { INSTANCE(ABILITY_OLD_MARINER); };
+template <>
+struct AbilityImpl<ABILITY_OLD_MARINER> : extends AbilityImpl<ABILITY_SEAWEED>, extends AbilityImpl<ABILITY_AMPHIBIOUS> {};
 
-ABILITY(ABILITY_ECTOPLASM) : extends OnStat<> {
-    INSTANCE(ABILITY_ECTOPLASM);
+template <>
+struct AbilityImpl<ABILITY_ECTOPLASM> : extends OnStat<> {
     ON_STAT {
         if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
         if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_BEAUTIFUL_MUSIC) : extends OnAttacker, extends CanInfatuateAny {
-    INSTANCE(ABILITY_BEAUTIFUL_MUSIC);
+template <>
+struct AbilityImpl<ABILITY_BEAUTIFUL_MUSIC> : extends OnAttacker, extends InfatuatesAny {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(Random() % 2)
         CHECK(IsSoundMove(battler, move))
 
-        return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
+            return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
     }
 };
 
-ABILITY(ABILITY_SNOW_SONG) : LiquidVoiceClone<TYPE_ICE> { INSTANCE(ABILITY_SNOW_SONG); };
+template <>
+struct AbilityImpl<ABILITY_SNOW_SONG> : LiquidVoiceClone<TYPE_ICE> {};
 
-ABILITY(ABILITY_GREATER_SPIRIT) : extends OnEntry {
-    INSTANCE(ABILITY_GREATER_SPIRIT);
+template <>
+struct AbilityImpl<ABILITY_GREATER_SPIRIT> : extends OnEntry {
     ON_ENTRY {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
@@ -6040,52 +6033,48 @@ ABILITY(ABILITY_GREATER_SPIRIT) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_RESONANCE) : extends OnAttacker {
-    INSTANCE(ABILITY_RESONANCE);
+template <>
+struct AbilityImpl<ABILITY_RESONANCE> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
-        CHECK(IsSoundMove(battler, move))
-        CHECK(Random() % 100 < 50)
+        CHECK(IsSoundMove(battler, move)) CHECK(Random() % 100 < 50)
 
-        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+            return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     }
 };
 
-ABILITY(ABILITY_ETHEREAL_RUSH) : extends OnStat<> {
-    INSTANCE(ABILITY_ETHEREAL_RUSH);
+template <>
+struct AbilityImpl<ABILITY_ETHEREAL_RUSH> : extends OnStat<> {
     ON_STAT {
         if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_CUTE_ANTECEDENCE) : extends GaleWingsLike<TYPE_FAIRY> { INSTANCE(ABILITY_CUTE_ANTECEDENCE); };
+template <>
+struct AbilityImpl<ABILITY_CUTE_ANTECEDENCE> : extends GaleWingsLike<TYPE_FAIRY> {};
 
-ABILITY(ABILITY_RECURRING_NIGHTMARE) : extends OnRevive {
-    INSTANCE(ABILITY_RECURRING_NIGHTMARE);
-    ON_REVIVE {
-        CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
-        return B_MSG_FADE_OUT;
-    }
+template <>
+struct AbilityImpl<ABILITY_RECURRING_NIGHTMARE> : extends OnRevive {
+    ON_REVIVE { CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) return B_MSG_FADE_OUT; }
 };
 
-ABILITY(ABILITY_MENACING_SITUATION) : extends OnEither {
-    INSTANCE(ABILITY_MENACING_SITUATION);
+template <>
+struct AbilityImpl<ABILITY_MENACING_SITUATION> : extends OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK_NOT(gVolatileStructs[opponent].fear)
-        CHECK(Random() % 100 < 30)
+        CHECK_NOT(gVolatileStructs[opponent].fear) CHECK(Random() % 100 < 30)
 
-        gStackBattler1 = battler;
+            gStackBattler1 = battler;
         gStackBattler2 = opponent;
         BattleScriptCall(BattleScript_AbilitySetFear);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_SHINY_LIGHTNING) : extends OnAccuracy<> {
-    INSTANCE(ABILITY_SHINY_LIGHTNING);
+template <>
+struct AbilityImpl<ABILITY_SHINY_LIGHTNING> : extends OnAccuracy<> {
     ON_ACCURACY {
         if (move == MOVE_THUNDER) return ACCURACY_HITS_IF_POSSIBLE;
         *accuracy *= 1.2;
@@ -6093,10 +6082,11 @@ ABILITY(ABILITY_SHINY_LIGHTNING) : extends OnAccuracy<> {
     }
 };
 
-ABILITY(ABILITY_TERRIFY) : extends AbilityImpl<ABILITY_INTIMIDATE> { INSTANCE(ABILITY_TERRIFY); };
+template <>
+struct AbilityImpl<ABILITY_TERRIFY> : extends AbilityImpl<ABILITY_INTIMIDATE> {};
 
-ABILITY(ABILITY_ICE_DOWNFALL) : extends OnDefender {
-    INSTANCE(ABILITY_ICE_DOWNFALL);
+template <>
+struct AbilityImpl<ABILITY_ICE_DOWNFALL> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -6106,18 +6096,19 @@ ABILITY(ABILITY_ICE_DOWNFALL) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_LAST_STAND) : extends Breakable, extends OnStat<> {
-    INSTANCE(ABILITY_LAST_STAND);
+template <>
+struct AbilityImpl<ABILITY_LAST_STAND> : extends Breakable, extends OnStat<> {
     ON_STAT {
         if (statId == STAT_DEF || statId == STAT_SPDEF)
             *stat = *stat + (*stat * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
     }
 };
 
-ABILITY(ABILITY_PYROCLASTIC_FLOW) : Merged<ABILITY_MOLTEN_DOWN, ABILITY_CORROSION> { INSTANCE(ABILITY_PYROCLASTIC_FLOW); };
+template <>
+struct AbilityImpl<ABILITY_PYROCLASTIC_FLOW> : Merged<ABILITY_MOLTEN_DOWN, ABILITY_CORROSION> {};
 
-ABILITY(ABILITY_BLOOD_BATH) : extends PoisonPuppeteerLike<MOVE_EFFECT_BLEED>, extends RemovesStatusOnImmunity {
-    INSTANCE(ABILITY_BLOOD_BATH);
+template <>
+struct AbilityImpl<ABILITY_BLOOD_BATH> : extends PoisonPuppeteerLike<MOVE_EFFECT_BLEED>, extends RemovesStatusOnImmunity {
     ON_REACTIVE {
         return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) -> int { return !gVolatileStructs[target].fear; }, BattleScript_Bloodlust);
     }
@@ -6127,13 +6118,13 @@ ABILITY(ABILITY_BLOOD_BATH) : extends PoisonPuppeteerLike<MOVE_EFFECT_BLEED>, ex
     }
 };
 
-ABILITY(ABILITY_BATTLE_AURA) : extends OnCrit<ApplyOnTarget::ANY> {
-    INSTANCE(ABILITY_BATTLE_AURA);
+template <>
+struct AbilityImpl<ABILITY_BATTLE_AURA> : extends OnCrit<ApplyOnTarget::ANY> {
     ON_CRIT { return 2; }
 };
 
-ABILITY(ABILITY_BLOODLUST) : extends AbilityImpl<ABILITY_BLOOD_BATH>, extends AbilityImpl<ABILITY_SOUL_EATER> {
-    INSTANCE(ABILITY_BLOODLUST);
+template <>
+struct AbilityImpl<ABILITY_BLOODLUST> : extends AbilityImpl<ABILITY_BLOOD_BATH>, extends AbilityImpl<ABILITY_SOUL_EATER> {
     ON_BATTLER_FAINTS {
         int result = 0;
         if (battler == attacker) {
@@ -6141,27 +6132,27 @@ ABILITY(ABILITY_BLOODLUST) : extends AbilityImpl<ABILITY_BLOOD_BATH>, extends Ab
         }
         return result | AbilityImpl<ABILITY_BLOOD_BATH>::onBattlerFaints(DELEGATE_BATTLER_FAINTS);
     }
-    ApplyOnTarget onBattlerFaintsFor() override { return ApplyOnTarget::ANY; }
+    ApplyOnTarget onBattlerFaintsFor() const override { return ApplyOnTarget::ANY; }
 };
 
-ABILITY(ABILITY_PIERCING_SOLO) : extends OnAttacker {
-    INSTANCE(ABILITY_PIERCING_SOLO);
+template <>
+struct AbilityImpl<ABILITY_PIERCING_SOLO> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
         CHECK(IsSoundMove(battler, move))
 
-        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+            return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     }
 };
 
-ABILITY(ABILITY_RHYTHMIC) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_RHYTHMIC);
+template <>
+struct AbilityImpl<ABILITY_RHYTHMIC> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER { MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battler]); }
 };
 
-ABILITY(ABILITY_CHUNKY_BASS_LINE) : extends OnAttacker {
-    INSTANCE(ABILITY_CHUNKY_BASS_LINE);
+template <>
+struct AbilityImpl<ABILITY_CHUNKY_BASS_LINE> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(IsSoundMove(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -6170,22 +6161,19 @@ ABILITY(ABILITY_CHUNKY_BASS_LINE) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_DUAL_HAMMER) : extends OnParentalBond {
-    INSTANCE(ABILITY_DUAL_HAMMER);
-    ON_PARENTAL_BOND {
-        CHECK(gBattleMoves[move].hammerBased)
-        return PARENTAL_BOND_DUAL_WIELD;
-    }
+template <>
+struct AbilityImpl<ABILITY_DUAL_HAMMER> : extends OnParentalBond {
+    ON_PARENTAL_BOND { CHECK(gBattleMoves[move].hammerBased) return PARENTAL_BOND_DUAL_WIELD; }
 };
 
-ABILITY(ABILITY_DENTING_BLOWS) : extends OnAttacker {
-    INSTANCE(ABILITY_DENTING_BLOWS);
+template <>
+struct AbilityImpl<ABILITY_DENTING_BLOWS> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(gBattleMoves[move].hammerBased)
         CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
 
-        int affected = GetOncePerTurnAbilityCounter(battler, ability);
+            int affected = GetOncePerTurnAbilityCounter(battler, ability);
         CHECK_NOT(affected & (1 << target))
 
         SetOncePerTurnAbilityCounter(battler, ability, affected | (1 << target));
@@ -6193,17 +6181,13 @@ ABILITY(ABILITY_DENTING_BLOWS) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_ICE_COLD_HUNTER) : extends HailImmune, extends OnParentalBond {
-    INSTANCE(ABILITY_ICE_COLD_HUNTER);
-    ON_PARENTAL_BOND {
-        CHECK(moveType == TYPE_ICE)
-        CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
-        return PARENTAL_BOND_ICE_COLD_HUNTER;
-    }
+template <>
+struct AbilityImpl<ABILITY_ICE_COLD_HUNTER> : extends HailImmune, extends OnParentalBond {
+    ON_PARENTAL_BOND { CHECK(moveType == TYPE_ICE) CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) return PARENTAL_BOND_ICE_COLD_HUNTER; }
 };
 
-ABILITY(ABILITY_SOUL_CRUSHER) : extends OnOffensiveMultiplier<>, extends OnChooseDefensiveStat<> {
-    INSTANCE(ABILITY_SOUL_CRUSHER);
+template <>
+struct AbilityImpl<ABILITY_SOUL_CRUSHER> : extends OnOffensiveMultiplier<>, extends OnChooseDefensiveStat<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMoves[move].hammerBased) MUL(1.1);
     }
@@ -6213,14 +6197,14 @@ ABILITY(ABILITY_SOUL_CRUSHER) : extends OnOffensiveMultiplier<>, extends OnChoos
     }
 };
 
-ABILITY(ABILITY_ARC_FLASH) : extends OnAttacker, extends OnDefender {
-    INSTANCE(ABILITY_ARC_FLASH);
+template <>
+struct AbilityImpl<ABILITY_ARC_FLASH> : extends OnAttacker, extends OnDefender {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeParalyzed(battler, target))
         CHECK(Random() % 2)
 
-        return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+            return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
     }
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
@@ -6232,18 +6216,19 @@ ABILITY(ABILITY_ARC_FLASH) : extends OnAttacker, extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_UNICORN) : extends AbilityImpl<ABILITY_MIGHTY_HORN>, extends AbilityImpl<ABILITY_PIXILATE> { INSTANCE(ABILITY_UNICORN); };
+template <>
+struct AbilityImpl<ABILITY_UNICORN> : extends AbilityImpl<ABILITY_MIGHTY_HORN>, extends AbilityImpl<ABILITY_PIXILATE> {};
 
-ABILITY(ABILITY_ON_THE_PROWL) : extends OnEntry {
-    INSTANCE(ABILITY_ON_THE_PROWL);
+template <>
+struct AbilityImpl<ABILITY_ON_THE_PROWL> : extends OnEntry {
     ON_ENTRY {
         gVolatileStructs[battler].onTheProwl = gVolatileStructs[battler].started.onTheProwl = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_ON_THE_PROWL);
     }
 };
 
-ABILITY(ABILITY_PRETENTIOUS) : extends OnBattlerFaints<> {
-    INSTANCE(ABILITY_PRETENTIOUS);
+template <>
+struct AbilityImpl<ABILITY_PRETENTIOUS> : extends OnBattlerFaints<> {
     ON_BATTLER_FAINTS {
         CHECK(gVolatileStructs[battler].critBoost < 3);
         gVolatileStructs[battler].critBoost++;
@@ -6253,14 +6238,14 @@ ABILITY(ABILITY_PRETENTIOUS) : extends OnBattlerFaints<> {
     }
 };
 
-ABILITY(ABILITY_VENOBLAZE_PINCERS) : extends OnAttacker, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_VENOBLAZE_PINCERS);
+template <>
+struct AbilityImpl<ABILITY_VENOBLAZE_PINCERS> : extends OnAttacker, extends OnOffensiveMultiplier<> {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(IS_MOVE_PHYSICAL(move))
         CHECK(Random() % 100 < 20)
 
-        switch (Random() % 2) {
+            switch (Random() % 2) {
             case 0:
                 CHECK(CanBeBurned(target));
                 AbilityStatusEffect(MOVE_EFFECT_BURN);
@@ -6278,22 +6263,22 @@ ABILITY(ABILITY_VENOBLAZE_PINCERS) : extends OnAttacker, extends OnOffensiveMult
     }
 };
 
-ABILITY(ABILITY_ETERNAL_BLESSING) : extends AbilityImpl<ABILITY_CELESTIAL_BLESSING>, extends AbilityImpl<ABILITY_REGENERATOR> {
-    INSTANCE(ABILITY_ETERNAL_BLESSING);
-};
+template <>
+struct AbilityImpl<ABILITY_ETERNAL_BLESSING> : extends AbilityImpl<ABILITY_CELESTIAL_BLESSING>, extends AbilityImpl<ABILITY_REGENERATOR> {};
 
-ABILITY(ABILITY_RIPEN) { INSTANCE(ABILITY_RIPEN); };
-ABILITY(ABILITY_SUGAR_RUSH) : extends AbilityImpl<ABILITY_UNBURDEN>, extends AbilityImpl<ABILITY_RIPEN> { INSTANCE(ABILITY_SUGAR_RUSH); };
+template <>
+struct AbilityImpl<ABILITY_RIPEN> {};
+template <>
+struct AbilityImpl<ABILITY_SUGAR_RUSH> : extends AbilityImpl<ABILITY_UNBURDEN>, extends AbilityImpl<ABILITY_RIPEN> {};
 
-ABILITY(ABILITY_PEACEFUL_REST) : extends OnEndTurn {
-    INSTANCE(ABILITY_PEACEFUL_REST);
+template <>
+struct AbilityImpl<ABILITY_PEACEFUL_REST> : extends OnEndTurn {
     ON_END_TURN {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
-        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
-        CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2) CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
-        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
@@ -6301,10 +6286,11 @@ ABILITY(ABILITY_PEACEFUL_REST) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_WHITE_NOISE) : extends AbilityImpl<ABILITY_PEACEFUL_REST>, extends AbilityImpl<ABILITY_STATIC> { INSTANCE(ABILITY_WHITE_NOISE); };
+template <>
+struct AbilityImpl<ABILITY_WHITE_NOISE> : extends AbilityImpl<ABILITY_PEACEFUL_REST>, extends AbilityImpl<ABILITY_STATIC> {};
 
-ABILITY(ABILITY_SMOKEY_MANEUVERS) : extends OnAccuracy<ApplyOnTarget::TARGET> {
-    INSTANCE(ABILITY_SMOKEY_MANEUVERS);
+template <>
+struct AbilityImpl<ABILITY_SMOKEY_MANEUVERS> : extends OnAccuracy<ApplyOnTarget::TARGET> {
     ON_ACCURACY {
         CHECK(IsBattlerWeatherAffected(target, WEATHER_FOG_ANY));
         *accuracy /= 1.25;
@@ -6312,18 +6298,16 @@ ABILITY(ABILITY_SMOKEY_MANEUVERS) : extends OnAccuracy<ApplyOnTarget::TARGET> {
     }
 };
 
-ABILITY(ABILITY_POWER_METAL) : LiquidVoiceClone<TYPE_STEEL> { INSTANCE(ABILITY_POWER_METAL); };
+template <>
+struct AbilityImpl<ABILITY_POWER_METAL> : LiquidVoiceClone<TYPE_STEEL> {};
 
-ABILITY(ABILITY_POWER_EDGE) : extends AbilityImpl<ABILITY_KEEN_EDGE>, extends OnChooseDefensiveStat<> {
-    INSTANCE(ABILITY_POWER_EDGE);
-    ON_CHOOSE_DEFENSIVE_STAT {
-        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-        return STAT_SPDEF;
-    }
+template <>
+struct AbilityImpl<ABILITY_POWER_EDGE> : extends AbilityImpl<ABILITY_KEEN_EDGE>, extends OnChooseDefensiveStat<> {
+    ON_CHOOSE_DEFENSIVE_STAT { CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) return STAT_SPDEF; }
 };
 
-ABILITY(ABILITY_SUPERCONDUCTOR) : extends OnOffensiveMultiplier<>, extends OnMoveType {
-    INSTANCE(ABILITY_SUPERCONDUCTOR);
+template <>
+struct AbilityImpl<ABILITY_SUPERCONDUCTOR> : extends OnOffensiveMultiplier<>, extends OnMoveType {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
     }
@@ -6334,8 +6318,8 @@ ABILITY(ABILITY_SUPERCONDUCTOR) : extends OnOffensiveMultiplier<>, extends OnMov
     }
 };
 
-ABILITY(ABILITY_ULTRA_INSTINCT) : extends OnDefender, extends OnDefensiveMultiplier, extends OverrideBreakable {
-    INSTANCE(ABILITY_ULTRA_INSTINCT);
+template <>
+struct AbilityImpl<ABILITY_ULTRA_INSTINCT> : extends OnDefender, extends OnDefensiveMultiplier, extends OverrideBreakable {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -6346,17 +6330,18 @@ ABILITY(ABILITY_ULTRA_INSTINCT) : extends OnDefender, extends OnDefensiveMultipl
     ON_DEFENSIVE_MULTIPLIER { MUL(.8); }
 };
 
-ABILITY(ABILITY_UNLOCKED_POTENTIAL) : extends AbilityImpl<ABILITY_BERSERK>, extends AbilityImpl<ABILITY_INNER_FOCUS> { INSTANCE(ABILITY_UNLOCKED_POTENTIAL); };
+template <>
+struct AbilityImpl<ABILITY_UNLOCKED_POTENTIAL> : extends AbilityImpl<ABILITY_BERSERK>, extends AbilityImpl<ABILITY_INNER_FOCUS> {};
 
-ABILITY(ABILITY_HIGHER_RANK) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_HIGHER_RANK);
+template <>
+struct AbilityImpl<ABILITY_HIGHER_RANK> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (GetMovePriority(battler, move, target) > 0) MUL(1.2);
     }
 };
 
-ABILITY(ABILITY_FUNERAL_PYRE) : extends OnEntry, extends OnEndTurn {
-    INSTANCE(ABILITY_FUNERAL_PYRE);
+template <>
+struct AbilityImpl<ABILITY_FUNERAL_PYRE> : extends OnEntry, extends OnEndTurn {
     ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE); }
     ON_END_TURN {
         CHECK(IsAbilityOnField(ability) - 1 == battler)
@@ -6365,7 +6350,7 @@ ABILITY(ABILITY_FUNERAL_PYRE) : extends OnEntry, extends OnEndTurn {
         for (int target = 0; target < gBattlersCount; target++) {
             FILTER(IsBattlerAlive(target))
             FILTER_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GHOST) || IS_BATTLER_OF_TYPE(target, TYPE_DARK))
-            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(HasMagicGuard(target))
 
             gStackBattler1 = target;
             BattleScriptExecute(BattleScript_FuneralPyreDamage);
@@ -6375,16 +6360,20 @@ ABILITY(ABILITY_FUNERAL_PYRE) : extends OnEntry, extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_FLAME_BUBBLE) : extends AbilityImpl<ABILITY_WATER_BUBBLE>, extends AbilityImpl<ABILITY_FLAMING_SOUL> { INSTANCE(ABILITY_FLAME_BUBBLE); };
+template <>
+struct AbilityImpl<ABILITY_FLAME_BUBBLE> : extends AbilityImpl<ABILITY_WATER_BUBBLE>, extends AbilityImpl<ABILITY_FLAMING_SOUL> {};
 
-ABILITY(ABILITY_ELEMENTAL_VORTEX) : extends Merged<ABILITY_WATER_ABSORB, ABILITY_FLASH_FIRE> { INSTANCE(ABILITY_ELEMENTAL_VORTEX); };
+template <>
+struct AbilityImpl<ABILITY_ELEMENTAL_VORTEX> : extends Merged<ABILITY_WATER_ABSORB, ABILITY_FLASH_FIRE> {};
 
-ABILITY(ABILITY_SNOWY_WRATH) : extends AbilityImpl<ABILITY_SNOW_WARNING>, extends AbilityImpl<ABILITY_CRYOMANCY> { INSTANCE(ABILITY_SNOWY_WRATH); };
+template <>
+struct AbilityImpl<ABILITY_SNOWY_WRATH> : extends AbilityImpl<ABILITY_SNOW_WARNING>, extends AbilityImpl<ABILITY_CRYOMANCY> {};
 
-ABILITY(ABILITY_PATTERN_CHANGE) : extends AbilityImpl<ABILITY_SHED_SKIN>, extends AbilityImpl<ABILITY_PROTEAN> { INSTANCE(ABILITY_PATTERN_CHANGE); };
+template <>
+struct AbilityImpl<ABILITY_PATTERN_CHANGE> : extends AbilityImpl<ABILITY_SHED_SKIN>, extends AbilityImpl<ABILITY_PROTEAN> {};
 
-ABILITY(ABILITY_NO_TURNING_BACK) : extends OnDefender {
-    INSTANCE(ABILITY_NO_TURNING_BACK);
+template <>
+struct AbilityImpl<ABILITY_NO_TURNING_BACK> : extends OnDefender {
     ON_DEFENDER {
         CHECK(CheckHalfHpAbility(battler, attacker))
         CHECK_NOT(GetAbilityState(battler, ability))
@@ -6396,15 +6385,15 @@ ABILITY(ABILITY_NO_TURNING_BACK) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_FLAMMABLE_COAT) : extends FormChangeAbility, extends OnDefender, extends OnBeforeAttack<> {
-    INSTANCE(ABILITY_FLAMMABLE_COAT);
+template <>
+struct AbilityImpl<ABILITY_FLAMMABLE_COAT> : extends FormChangeAbility, extends OnDefender, extends OnBeforeAttack<> {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler) || (gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
         CHECK(moveType == TYPE_FIRE)
         CHECK(gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH)
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
-        UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_LUMBERING_SLOTH_ENGULFED);
+            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_LUMBERING_SLOTH_ENGULFED);
         gBattleMons[battler].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
         BattleScriptCall(BattleScript_TargetFormChange);
         return TRUE;
@@ -6421,17 +6410,18 @@ ABILITY(ABILITY_FLAMMABLE_COAT) : extends FormChangeAbility, extends OnDefender,
     }
 };
 
-ABILITY(ABILITY_DRACO_MORALE) : extends SimpleEntryMove<MOVE_DRAGON_CHEER> { INSTANCE(ABILITY_DRACO_MORALE); };
+template <>
+struct AbilityImpl<ABILITY_DRACO_MORALE> : extends SimpleEntryMove<MOVE_DRAGON_CHEER> {};
 
-ABILITY(ABILITY_BAD_OMEN) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_BAD_OMEN);
+template <>
+struct AbilityImpl<ABILITY_BAD_OMEN> : extends OnDefensiveMultiplier, extends ForcesMinRolls {
     ON_DEFENSIVE_MULTIPLIER {
         if (isCrit) MUL(.25);
     }
 };
 
-ABILITY(ABILITY_MOSH_PIT) : extends OnOffensiveMultiplier<ApplyOn::ALLY_ONLY> {
-    INSTANCE(ABILITY_MOSH_PIT);
+template <>
+struct AbilityImpl<ABILITY_MOSH_PIT> : extends OnOffensiveMultiplier<ApplyOn::ALLY_ONLY> {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
             MUL(1.25);
@@ -6440,16 +6430,15 @@ ABILITY(ABILITY_MOSH_PIT) : extends OnOffensiveMultiplier<ApplyOn::ALLY_ONLY> {
     }
 };
 
-ABILITY(ABILITY_BLOOD_STAIN) : extends OnEither, extends OnEntry, extends Unsuppressable, extends RemovesStatusOnImmunity {
-    INSTANCE(ABILITY_BLOOD_STAIN);
+template <>
+struct AbilityImpl<ABILITY_BLOOD_STAIN> : extends OnEither, extends OnEntry, extends Unsuppressable, extends RemovesStatusOnImmunity {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(opponent)))
-        CHECK_NOT(HasAbilityIgnoringSuppression(opponent, ability))
-        CHECK_NOT(DoesBattlerHaveAbilityShield(opponent))
+        CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(opponent))) CHECK_NOT(HasAbilityIgnoringSuppression(opponent, ability))
+            CHECK_NOT(DoesBattlerHaveAbilityShield(opponent))
 
-        UpdateAbilityStateIndicesForNewAbility(opponent, ability);
+                UpdateAbilityStateIndicesForNewAbility(opponent, ability);
         ReplaceAbility(opponent, ability);
         gStackBattler1 = opponent;
         BattleScriptCall(BattleScript_BloodStainActivates);
@@ -6463,8 +6452,8 @@ ABILITY(ABILITY_BLOOD_STAIN) : extends OnEither, extends OnEntry, extends Unsupp
     }
 };
 
-ABILITY(ABILITY_BLOOD_STIGMA) : extends OnOffensiveMultiplier<>, extends RemovesStatusOnImmunity, extends Unsuppressable {
-    INSTANCE(ABILITY_BLOOD_STIGMA);
+template <>
+struct AbilityImpl<ABILITY_BLOOD_STIGMA> : extends OnOffensiveMultiplier<>, extends RemovesStatusOnImmunity, extends Unsuppressable {
     ON_OFFENSIVE_MULTIPLIER {
         if (gBattleMons[target].status1 & STATUS1_BLEED || IsBloodStainAffected(target)) MUL(2);
     }
@@ -6474,17 +6463,16 @@ ABILITY(ABILITY_BLOOD_STIGMA) : extends OnOffensiveMultiplier<>, extends Removes
     }
 };
 
-ABILITY(ABILITY_SLIPSTREAM) : extends OnChooseOffensiveStat {
-    INSTANCE(ABILITY_SLIPSTREAM);
+template <>
+struct AbilityImpl<ABILITY_SLIPSTREAM> : extends OnChooseOffensiveStat {
     ON_CHOOSE_OFFENSIVE_STAT { secondaryAtkStatToUse[STAT_SPEED] += 20; }
 };
 
-ABILITY(ABILITY_MAXIMUM_ACCELERATION) : extends AbilityImpl<ABILITY_SLIPSTREAM>, extends AbilityImpl<ABILITY_SPEED_BOOST> {
-    INSTANCE(ABILITY_MAXIMUM_ACCELERATION);
-};
+template <>
+struct AbilityImpl<ABILITY_MAXIMUM_ACCELERATION> : extends AbilityImpl<ABILITY_SLIPSTREAM>, extends AbilityImpl<ABILITY_SPEED_BOOST> {};
 
-ABILITY(ABILITY_SIDEWINDER) : extends AbilityImpl<ABILITY_COIL_UP>, extends OnBattlerFaints<> {
-    INSTANCE(ABILITY_SIDEWINDER);
+template <>
+struct AbilityImpl<ABILITY_SIDEWINDER> : extends AbilityImpl<ABILITY_COIL_UP>, extends OnBattlerFaints<> {
     ON_BATTLER_FAINTS {
         CHECK(gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST || !(gStatuses4[battler] & STATUS4_COILED))
         gStatuses4[battler] |= STATUS4_COILED;
@@ -6494,8 +6482,8 @@ ABILITY(ABILITY_SIDEWINDER) : extends AbilityImpl<ABILITY_COIL_UP>, extends OnBa
     }
 };
 
-ABILITY(ABILITY_PETRIFY) : extends AbilityImpl<ABILITY_INTIMIDATE> {
-    INSTANCE(ABILITY_PETRIFY);
+template <>
+struct AbilityImpl<ABILITY_PETRIFY> : extends AbilityImpl<ABILITY_INTIMIDATE> {
     ON_ENTRY {
         int loweredStats = 0;
         int intimidated = AbilityImpl<ABILITY_INTIMIDATE>::onEntry(DELEGATE_ENTRY);
@@ -6511,34 +6499,42 @@ ABILITY(ABILITY_PETRIFY) : extends AbilityImpl<ABILITY_INTIMIDATE> {
     }
 };
 
-ABILITY(ABILITY_FLUFFIEST) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_FLUFFIEST);
+template <>
+struct AbilityImpl<ABILITY_FLUFFIEST> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FIRE) RESISTANCE(2.0);
         if (IsMoveMakingContact(move, attacker)) MUL(0.5);
     }
 };
 
-ABILITY(ABILITY_WAY_OF_PRECISION) : extends AbilityImpl<ABILITY_INNER_FOCUS>, extends AbilityImpl<ABILITY_PRECISE_FIST> { INSTANCE(ABILITY_WAY_OF_PRECISION); };
+template <>
+struct AbilityImpl<ABILITY_WAY_OF_PRECISION> : extends AbilityImpl<ABILITY_INNER_FOCUS>, extends AbilityImpl<ABILITY_PRECISE_FIST> {};
 
-ABILITY(ABILITY_WAY_OF_SWIFTNESS) : extends AbilityImpl<ABILITY_PRETENTIOUS>, extends AbilityImpl<ABILITY_SWIFT_SWIM> { INSTANCE(ABILITY_WAY_OF_SWIFTNESS); };
+template <>
+struct AbilityImpl<ABILITY_WAY_OF_SWIFTNESS> : extends AbilityImpl<ABILITY_PRETENTIOUS>, extends AbilityImpl<ABILITY_SWIFT_SWIM> {};
 
-ABILITY(ABILITY_ATOMIC_PUNCH) : extends AbilityImpl<ABILITY_IRON_FIST> {
-    INSTANCE(ABILITY_ATOMIC_PUNCH);
+template <>
+struct AbilityImpl<ABILITY_ATOMIC_PUNCH> : extends AbilityImpl<ABILITY_IRON_FIST> {
     ON_OFFENSIVE_MULTIPLIER {
         AbilityImpl<ABILITY_IRON_FIST>::onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         if (moveType == TYPE_STEEL) MUL(1.3);
     }
 };
 
-ABILITY(ABILITY_IRON_GIANT) : extends AbilityImpl<ABILITY_HEATPROOF>, extends AbilityImpl<ABILITY_JUGGERNAUT> { INSTANCE(ABILITY_IRON_GIANT); };
+template <>
+struct AbilityImpl<ABILITY_IRON_GIANT> : extends AbilityImpl<ABILITY_HEATPROOF>, extends AbilityImpl<ABILITY_JUGGERNAUT> {};
 
-ABILITY(ABILITY_MASTER_HAND) : extends AbilityImpl<ABILITY_RAMPAGE>, extends AbilityImpl<ABILITY_MEGA_LAUNCHER> { INSTANCE(ABILITY_MASTER_HAND); };
+template <>
+struct AbilityImpl<ABILITY_MASTER_HAND> : extends AbilityImpl<ABILITY_RAMPAGE>, extends AbilityImpl<ABILITY_MEGA_LAUNCHER> {};
 
-ABILITY(ABILITY_FINAL_BLOW) : extends AbilityImpl<ABILITY_FATAL_PRECISION> { INSTANCE(ABILITY_FINAL_BLOW); };
+template <>
+struct AbilityImpl<ABILITY_UNSEEN_FIST> {};
 
-ABILITY(ABILITY_HOSPITALITY) : extends OnEntry {
-    INSTANCE(ABILITY_HOSPITALITY);
+template <>
+struct AbilityImpl<ABILITY_FINAL_BLOW> : extends AbilityImpl<ABILITY_FATAL_PRECISION>, extends AbilityImpl<ABILITY_UNSEEN_FIST> {};
+
+template <>
+struct AbilityImpl<ABILITY_HOSPITALITY> : extends OnEntry {
     ON_ENTRY {
         gBattlerTarget = BATTLE_PARTNER(battler);
         CHECK(IsBattlerAlive(gBattlerTarget))
@@ -6551,45 +6547,44 @@ ABILITY(ABILITY_HOSPITALITY) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_BUTTER_UP) : extends Merged<ABILITY_HOSPITALITY, ABILITY_SOOTHING_AROMA> { INSTANCE(ABILITY_BUTTER_UP); };
+template <>
+struct AbilityImpl<ABILITY_BUTTER_UP> : extends Merged<ABILITY_HOSPITALITY, ABILITY_SOOTHING_AROMA> {};
 
-ABILITY(ABILITY_VITALITY_STRIKE) : extends OnAttacker {
-    INSTANCE(ABILITY_VITALITY_STRIKE);
+template <>
+struct AbilityImpl<ABILITY_VITALITY_STRIKE> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK(CanBattlerHeal(battler))
-        CHECK(IsIronFistBoosted(battler, move))
+        CHECK(CanBattlerHeal(battler)) CHECK(IsIronFistBoosted(battler, move))
 
-        gBattleMoveDamage = -gHpDealt / 10;
+            gBattleMoveDamage = -gHpDealt / 10;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_HUGE_WINGS) : extends Merged<ABILITY_GIANT_WINGS, ABILITY_LEVITATE> { INSTANCE(ABILITY_HUGE_WINGS); };
+template <>
+struct AbilityImpl<ABILITY_HUGE_WINGS> : extends Merged<ABILITY_GIANT_WINGS, ABILITY_LEVITATE> {};
 
-ABILITY(ABILITY_SWORD_OF_DAMNATION) : extends AbilityImpl<ABILITY_SWORD_OF_RUIN>, extends AbilityImpl<ABILITY_UNAWARE> {
-    INSTANCE(ABILITY_SWORD_OF_DAMNATION);
-};
+template <>
+struct AbilityImpl<ABILITY_SWORD_OF_DAMNATION> : extends AbilityImpl<ABILITY_SWORD_OF_RUIN>, extends AbilityImpl<ABILITY_UNAWARE> {};
 
-ABILITY(ABILITY_RESTRAINING_ORDER) : extends OnDefender {
-    INSTANCE(ABILITY_RESTRAINING_ORDER);
+template <>
+struct AbilityImpl<ABILITY_RESTRAINING_ORDER> : extends OnDefender {
     ON_DEFENDER {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
         CHECK(ShouldApplyOnHitAffect(battler))
-        CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-        CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
-        CHECK(CountUsablePartyMons(battler))
+        CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER) CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
+            CHECK(CountUsablePartyMons(battler))
 
-        SetAbilityState(battler, ability, RESTRAINING_ORDER_ACTIVATING);
+                SetAbilityState(battler, ability, RESTRAINING_ORDER_ACTIVATING);
         return FALSE;
     }
 };
 
-ABILITY(ABILITY_ASSASSINS_TOOLS) : extends OnAttacker {
-    INSTANCE(ABILITY_ASSASSINS_TOOLS);
+template <>
+struct AbilityImpl<ABILITY_ASSASSINS_TOOLS> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(IsMoveMakingContact(move, battler))
@@ -6614,20 +6609,19 @@ ABILITY(ABILITY_ASSASSINS_TOOLS) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_FROSTMAW) : extends OnAttacker {
-    INSTANCE(ABILITY_FROSTMAW);
+template <>
+struct AbilityImpl<ABILITY_FROSTMAW> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanGetFrostbite(target))
-        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-        CHECK(Random() % 2)
+        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) CHECK(Random() % 2)
 
-        return AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
+            return AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
     }
 };
 
-ABILITY(ABILITY_PATCHWORK) : extends AbilityImpl<ABILITY_DISGUISE>, extends OnDefender {
-    INSTANCE(ABILITY_PATCHWORK);
+template <>
+struct AbilityImpl<ABILITY_PATCHWORK> : extends AbilityImpl<ABILITY_DISGUISE>, extends OnDefender {
     ON_DISGUISE {
         SpeciesEnum species = AbilityImpl<ABILITY_DISGUISE>::onDisguise(DELEGATE_DISGUISE);
         if (species && !testOnly) {
@@ -6648,12 +6642,14 @@ ABILITY(ABILITY_PATCHWORK) : extends AbilityImpl<ABILITY_DISGUISE>, extends OnDe
     }
 };
 
-ABILITY(ABILITY_BLIND_RAGE) : extends AbilityImpl<ABILITY_MOLD_BREAKER>, extends AbilityImpl<ABILITY_SCRAPPY> { INSTANCE(ABILITY_BLIND_RAGE); };
+template <>
+struct AbilityImpl<ABILITY_BLIND_RAGE> : extends AbilityImpl<ABILITY_MOLD_BREAKER>, extends AbilityImpl<ABILITY_SCRAPPY> {};
 
-ABILITY(ABILITY_APEX_PREDATOR) : extends AbilityImpl<ABILITY_SOUL_EATER>, extends AbilityImpl<ABILITY_TOUGH_CLAWS> { INSTANCE(ABILITY_APEX_PREDATOR); };
+template <>
+struct AbilityImpl<ABILITY_APEX_PREDATOR> : extends AbilityImpl<ABILITY_SOUL_EATER>, extends AbilityImpl<ABILITY_TOUGH_CLAWS> {};
 
-ABILITY(ABILITY_DRAGONS_RITUAL) : extends OnBattlerFaints<> {
-    INSTANCE(ABILITY_DRAGONS_RITUAL);
+template <>
+struct AbilityImpl<ABILITY_DRAGONS_RITUAL> : extends OnBattlerFaints<> {
     ON_BATTLER_FAINTS {
         CHECK(CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN) || CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
         BattleScriptCall(BattleScript_DragonsRitual);
@@ -6661,8 +6657,8 @@ ABILITY(ABILITY_DRAGONS_RITUAL) : extends OnBattlerFaints<> {
     }
 };
 
-ABILITY(ABILITY_PINNACLE_BLADE) : extends OnInfiltrate, extends OnAttacker {
-    INSTANCE(ABILITY_PINNACLE_BLADE);
+template <>
+struct AbilityImpl<ABILITY_PINNACLE_BLADE> : extends OnInfiltrate, extends OnAttacker {
     ON_INFILTRATE { return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : INFILTRATE_NONE; }
     ON_ATTACKER {
         CHECK(DidMoveHit())
@@ -6693,8 +6689,8 @@ ABILITY(ABILITY_PINNACLE_BLADE) : extends OnInfiltrate, extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_ENERGIZED) : extends AbilityImpl<ABILITY_GENERATOR>, extends OnBattlerFaints<> {
-    INSTANCE(ABILITY_ENERGIZED);
+template <>
+struct AbilityImpl<ABILITY_ENERGIZED> : extends AbilityImpl<ABILITY_GENERATOR>, extends OnBattlerFaints<> {
     ON_BATTLER_FAINTS {
         CHECK(moveType == TYPE_ELECTRIC);
         SetOncePerTurnAbilityCounter(battler, ability, TRUE);
@@ -6703,8 +6699,8 @@ ABILITY(ABILITY_ENERGIZED) : extends AbilityImpl<ABILITY_GENERATOR>, extends OnB
     }
 };
 
-ABILITY(ABILITY_COLOR_SPECTRUM) : extends OnEndTurn, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_COLOR_SPECTRUM);
+template <>
+struct AbilityImpl<ABILITY_COLOR_SPECTRUM> : extends OnEndTurn, extends OnOffensiveMultiplier<> {
     ON_END_TURN {
         int newType;
         do {
@@ -6723,10 +6719,11 @@ ABILITY(ABILITY_COLOR_SPECTRUM) : extends OnEndTurn, extends OnOffensiveMultipli
     }
 };
 
-ABILITY(ABILITY_STEEL_BEETLE) : extends AbilityImpl<ABILITY_RAGING_BOXER>, extends AbilityImpl<ABILITY_POLLINATE> { INSTANCE(ABILITY_STEEL_BEETLE); };
+template <>
+struct AbilityImpl<ABILITY_STEEL_BEETLE> : extends AbilityImpl<ABILITY_RAGING_BOXER>, extends AbilityImpl<ABILITY_POLLINATE> {};
 
-ABILITY(ABILITY_FROM_THE_SHADOWS) : extends OnAttacker {
-    INSTANCE(ABILITY_FROM_THE_SHADOWS);
+template <>
+struct AbilityImpl<ABILITY_FROM_THE_SHADOWS> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(GetBattlerTurnOrderNum(target) >= gCurrentTurnActionNumber)
@@ -6743,14 +6740,14 @@ ABILITY(ABILITY_FROM_THE_SHADOWS) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_RAGE_POINT) : OnDefender, extends OnOffensiveMultiplier<>, extends NegateBurnAtkDrop, extends NegateFrzSpatkDrop {
-    INSTANCE(ABILITY_RAGE_POINT);
+template <>
+struct AbilityImpl<ABILITY_RAGE_POINT> : OnDefender, extends OnOffensiveMultiplier<>, extends NegateBurnAtkDrop, extends NegateFrzSpatkDrop {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(gIsCriticalHit)
         CHECK(CanRaiseStat(battler, STAT_ATK) || CanRaiseStat(battler, STAT_SPATK))
 
-        BattleScriptCall(BattleScript_RagePointActivates);
+            BattleScriptCall(BattleScript_RagePointActivates);
         return TRUE;
     }
     ON_OFFENSIVE_MULTIPLIER {
@@ -6758,8 +6755,8 @@ ABILITY(ABILITY_RAGE_POINT) : OnDefender, extends OnOffensiveMultiplier<>, exten
     }
 };
 
-ABILITY(ABILITY_HOT_COALS) : extends OnEntry {
-    INSTANCE(ABILITY_HOT_COALS);
+template <>
+struct AbilityImpl<ABILITY_HOT_COALS> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals)
 
@@ -6768,63 +6765,72 @@ ABILITY(ABILITY_HOT_COALS) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_TERASTAL_TREASURE) : extends OnDefensiveMultiplier, extends OnStat<> {
-    INSTANCE(ABILITY_TERASTAL_TREASURE);
+template <>
+struct AbilityImpl<ABILITY_TERASTAL_TREASURE> : extends OnDefensiveMultiplier, extends OnStat<> {
     ON_DEFENSIVE_MULTIPLIER { MUL(.6); }
     ON_STAT {
         if (statId == STAT_SPEED) *stat *= .8;
     }
 };
 
-ABILITY(ABILITY_SHOCKING_MAW) : extends AbilityImpl<ABILITY_SHOCKING_JAWS>, extends AbilityImpl<ABILITY_STRONG_JAW> { INSTANCE(ABILITY_SHOCKING_MAW); };
+template <>
+struct AbilityImpl<ABILITY_SHOCKING_MAW> : extends AbilityImpl<ABILITY_SHOCKING_JAWS>, extends AbilityImpl<ABILITY_STRONG_JAW> {};
 
-ABILITY(ABILITY_GLEAM_EYES) : extends Merged<ABILITY_INTIMIDATE, ABILITY_FRISK> { INSTANCE(ABILITY_GLEAM_EYES); };
+template <>
+struct AbilityImpl<ABILITY_GLEAM_EYES> : extends Merged<ABILITY_INTIMIDATE, ABILITY_FRISK> {};
 
-ABILITY(ABILITY_ROUSED_FANGS) : extends AbilityImpl<ABILITY_STRONG_JAW>, extends AbilityImpl<ABILITY_MIND_CRUSH> { INSTANCE(ABILITY_ROUSED_FANGS); };
+template <>
+struct AbilityImpl<ABILITY_ROUSED_FANGS> : extends AbilityImpl<ABILITY_STRONG_JAW>, extends AbilityImpl<ABILITY_MIND_CRUSH> {};
 
-ABILITY(ABILITY_DREAM_STATE) : extends AbilityImpl<ABILITY_BATTLE_ARMOR> { INSTANCE(ABILITY_DREAM_STATE); };
+template <>
+struct AbilityImpl<ABILITY_DREAM_STATE> : extends AbilityImpl<ABILITY_BATTLE_ARMOR> {};
 
-ABILITY(ABILITY_DREAM_WHIMSY) : extends SimpleEntryMove<MOVE_YAWN> { INSTANCE(ABILITY_DREAM_WHIMSY); };
+template <>
+struct AbilityImpl<ABILITY_DREAM_WHIMSY> : extends SimpleEntryMove<MOVE_YAWN> {};
 
-ABILITY(ABILITY_LUNAR_AFFINITY) : extends OnCopyMove {
-    INSTANCE(ABILITY_LUNAR_AFFINITY);
-    ON_COPY_MOVE {
-        CHECK(gBattleMoves[move].lunar)
-        return UseOutOfTurnAttack(battler, target, ability, move, 0);
-    }
+template <>
+struct AbilityImpl<ABILITY_LUNAR_AFFINITY> : extends OnCopyMove {
+    ON_COPY_MOVE { CHECK(gBattleMoves[move].lunar) return UseOutOfTurnAttack(battler, target, ability, move, 0); }
 };
 
-ABILITY(ABILITY_FLAME_SHIELD) : extends AbilityImpl<ABILITY_FILTER> { INSTANCE(ABILITY_FLAME_SHIELD); };
+template <>
+struct AbilityImpl<ABILITY_FLAME_SHIELD> : extends AbilityImpl<ABILITY_FILTER> {};
 
-ABILITY(ABILITY_AQUATIC_DWELLER) : extends AbilityImpl<ABILITY_AQUATIC>, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_AQUATIC_DWELLER);
+template <>
+struct AbilityImpl<ABILITY_AQUATIC_DWELLER> : extends AbilityImpl<ABILITY_AQUATIC>, extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_WATER) MUL(1.5);
     }
 };
 
-ABILITY(ABILITY_APPLE_PIE) : extends AbilityImpl<ABILITY_SELF_SUFFICIENT> { INSTANCE(ABILITY_APPLE_PIE); };
+template <>
+struct AbilityImpl<ABILITY_APPLE_PIE> : extends AbilityImpl<ABILITY_SELF_SUFFICIENT> {};
 
-ABILITY(ABILITY_HOVER) : extends GroundImmune, AddsType<TYPE_PSYCHIC> { INSTANCE(ABILITY_HOVER); };
+template <>
+struct AbilityImpl<ABILITY_HOVER> : extends GroundImmune, AddsType<TYPE_PSYCHIC> {};
 
-ABILITY(ABILITY_DEPRAVITY) : extends AbilityImpl<ABILITY_MERCILESS>, extends AbilityImpl<ABILITY_OVERCHARGE> { INSTANCE(ABILITY_DEPRAVITY); };
+template <>
+struct AbilityImpl<ABILITY_DEPRAVITY> : extends AbilityImpl<ABILITY_MERCILESS>, extends AbilityImpl<ABILITY_OVERCHARGE> {};
 
-ABILITY(ABILITY_WILDFIRE) : extends SimpleEntryMove<MOVE_FIRE_SPIN> { INSTANCE(ABILITY_WILDFIRE); };
+template <>
+struct AbilityImpl<ABILITY_WILDFIRE> : extends SimpleEntryMove<MOVE_FIRE_SPIN> {};
 
-ABILITY(ABILITY_JUMP_SCARE) : extends OnEntry, extends Persistent {
-    INSTANCE(ABILITY_JUMP_SCARE);
+template <>
+struct AbilityImpl<ABILITY_JUMP_SCARE> : extends OnEntry, extends Persistent {
     ON_ENTRY {
         CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
         return UseEntryMove(battler, ability, MOVE_ASTONISH, 0);
     }
 };
 
-ABILITY(ABILITY_TAR_TOSS) : extends SimpleEntryMove<MOVE_TAR_SHOT> { INSTANCE(ABILITY_TAR_TOSS); };
+template <>
+struct AbilityImpl<ABILITY_TAR_TOSS> : extends SimpleEntryMove<MOVE_TAR_SHOT> {};
 
-ABILITY(ABILITY_STUN_SHOCK) : extends OnAttacker {
-    INSTANCE(ABILITY_STUN_SHOCK);
+template <>
+struct AbilityImpl<ABILITY_STUN_SHOCK> : extends OnAttacker {
     ON_ATTACKER {
-        CHECK(ShouldApplyOnHitAffect(target)) CHECK(Random() % 100 < 60) switch (Random() % 2) {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(Random() % 100 < 60) switch (Random() % 2) {
             case 0:
                 CHECK(CanBePoisoned(battler, target, MOVE_NONE));
                 AbilityStatusEffect(MOVE_EFFECT_POISON);
@@ -6839,16 +6845,17 @@ ABILITY(ABILITY_STUN_SHOCK) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_RAGING_GODDESS) : extends AbilityImpl<ABILITY_RAMPAGE>, extends AbilityImpl<ABILITY_HYPER_AGGRESSIVE> { INSTANCE(ABILITY_RAGING_GODDESS); };
+template <>
+struct AbilityImpl<ABILITY_RAGING_GODDESS> : extends AbilityImpl<ABILITY_RAMPAGE>, extends AbilityImpl<ABILITY_HYPER_AGGRESSIVE> {};
 
-ABILITY(ABILITY_WHIPLASH) : extends OnAttacker {
-    INSTANCE(ABILITY_WHIPLASH);
+template <>
+struct AbilityImpl<ABILITY_WHIPLASH> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(IS_MOVE_PHYSICAL(move))
         CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
 
-        int affected = GetOncePerTurnAbilityCounter(battler, ability);
+            int affected = GetOncePerTurnAbilityCounter(battler, ability);
         CHECK_NOT(affected & (1 << target))
 
         SetOncePerTurnAbilityCounter(battler, ability, affected | (1 << target));
@@ -6856,15 +6863,15 @@ ABILITY(ABILITY_WHIPLASH) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_SUPERSWEET_SYRUP) : extends OnDefender {
-    INSTANCE(ABILITY_SUPERSWEET_SYRUP);
+template <>
+struct AbilityImpl<ABILITY_SUPERSWEET_SYRUP> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(gStatuses3[attacker] & STATUS3_EMBARGO)
-        CHECK(gBattleMons[attacker].item)
+        CHECK_NOT(gStatuses3[attacker] & STATUS3_EMBARGO) CHECK(gBattleMons[attacker].item)
 
-        gVolatileStructs[attacker].embargoTimer = 2;
+            gVolatileStructs[attacker]
+                .embargoTimer = 2;
         gStatuses3[attacker] |= STATUS3_EMBARGO;
         gLastUsedItem = gBattleMons[attacker].item;
         BattleScriptCall(BattleScript_AnnounceAttackerItemDisabled);
@@ -6872,16 +6879,20 @@ ABILITY(ABILITY_SUPERSWEET_SYRUP) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_TRASH_HEAP) : extends AbilityImpl<ABILITY_TOXIC_SPILL>, extends AbilityImpl<ABILITY_CORROSION> { INSTANCE(ABILITY_TRASH_HEAP); };
+template <>
+struct AbilityImpl<ABILITY_TRASH_HEAP> : extends AbilityImpl<ABILITY_TOXIC_SPILL>, extends AbilityImpl<ABILITY_CORROSION> {};
 
-ABILITY(ABILITY_SLUDGY_MIX) : extends AbilityImpl<ABILITY_INTOXICATE>, extends AbilityImpl<ABILITY_PUNK_ROCK> { INSTANCE(ABILITY_SLUDGY_MIX); };
+template <>
+struct AbilityImpl<ABILITY_SLUDGY_MIX> : extends AbilityImpl<ABILITY_INTOXICATE>, extends AbilityImpl<ABILITY_PUNK_ROCK> {};
 
-ABILITY(ABILITY_OVERWATCH) : extends AbilityImpl<ABILITY_ON_THE_PROWL>, extends AbilityImpl<ABILITY_STAKEOUT> { INSTANCE(ABILITY_OVERWATCH); };
+template <>
+struct AbilityImpl<ABILITY_OVERWATCH> : extends AbilityImpl<ABILITY_ON_THE_PROWL>, extends AbilityImpl<ABILITY_STAKEOUT> {};
 
-ABILITY(ABILITY_WIND_RAGE) : extends AbilityImpl<ABILITY_GIANT_WINGS>, extends SimpleEntryMove<MOVE_DEFOG> { INSTANCE(ABILITY_WIND_RAGE); };
+template <>
+struct AbilityImpl<ABILITY_WIND_RAGE> : extends AbilityImpl<ABILITY_GIANT_WINGS>, extends SimpleEntryMove<MOVE_DEFOG> {};
 
-ABILITY(ABILITY_VICTORY_BOMB) : extends OnDefender, extends OnMoveType {
-    INSTANCE(ABILITY_VICTORY_BOMB);
+template <>
+struct AbilityImpl<ABILITY_VICTORY_BOMB> : extends OnDefender, extends OnMoveType {
     ON_DEFENDER {
         CHECK_NOT(IsBattlerAlive(battler))
 
@@ -6895,21 +6906,22 @@ ABILITY(ABILITY_VICTORY_BOMB) : extends OnDefender, extends OnMoveType {
     }
 };
 
-ABILITY(ABILITY_RAZOR_SHARP) : extends OnAttacker {
-    INSTANCE(ABILITY_RAZOR_SHARP);
+template <>
+struct AbilityImpl<ABILITY_RAZOR_SHARP> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
         CHECK(gIsCriticalHit)
 
-        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+            return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     }
 };
 
-ABILITY(ABILITY_TO_THE_BONE) : extends AbilityImpl<ABILITY_RAZOR_SHARP>, extends AbilityImpl<ABILITY_SNIPER> { INSTANCE(ABILITY_TO_THE_BONE); };
+template <>
+struct AbilityImpl<ABILITY_TO_THE_BONE> : extends AbilityImpl<ABILITY_RAZOR_SHARP>, extends AbilityImpl<ABILITY_SNIPER> {};
 
-ABILITY(ABILITY_BLADE_DANCE) : extends OnAttacker {
-    INSTANCE(ABILITY_BLADE_DANCE);
+template <>
+struct AbilityImpl<ABILITY_BLADE_DANCE> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(IsDance(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
@@ -6918,8 +6930,8 @@ ABILITY(ABILITY_BLADE_DANCE) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_APE_SHIFT) : extends FormChangeAbility, extends OnEntry, extends OnEndTurn, extends OnDefender, extends OnCrit<> {
-    INSTANCE(ABILITY_APE_SHIFT);
+template <>
+struct AbilityImpl<ABILITY_APE_SHIFT> : extends FormChangeAbility, extends OnEntry, extends OnEndTurn, extends OnDefender, extends OnCrit<> {
     static int ApeShiftHandler(int battler, AbilityCallType callType) {
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
         CHECK(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
@@ -6944,38 +6956,38 @@ ABILITY(ABILITY_APE_SHIFT) : extends FormChangeAbility, extends OnEntry, extends
     }
 };
 
-ABILITY(ABILITY_KNOW_YOUR_PLACE) : extends OnAttacker {
-    INSTANCE(ABILITY_KNOW_YOUR_PLACE);
+template <>
+struct AbilityImpl<ABILITY_KNOW_YOUR_PLACE> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(gVolatileStructs[target].dazed)
         CHECK(IsMoveMakingContact(move, battler))
 
-        gVolatileStructs[target].dazed = 5;
+            gVolatileStructs[target]
+                .dazed = 5;
         BattleScriptCall(BattleScript_TargetDazed);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_DEEP_CUTS) : extends OnAttacker {
-    INSTANCE(ABILITY_DEEP_CUTS);
+template <>
+struct AbilityImpl<ABILITY_DEEP_CUTS> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
-        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-        CHECK(Random() % 2)
+        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) CHECK(Random() % 2)
 
-        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+            return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     }
 };
 
-ABILITY(ABILITY_LIFE_STEAL) : extends OnEndTurn {
-    INSTANCE(ABILITY_LIFE_STEAL);
+template <>
+struct AbilityImpl<ABILITY_LIFE_STEAL> : extends OnEndTurn {
     ON_END_TURN {
         int any = FALSE;
         for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
             FILTER(IsBattlerAlive(target))
-            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(HasMagicGuard(target))
 
             gStackBattler1 = battler;
             gStackBattler2 = target;
@@ -6987,17 +6999,13 @@ ABILITY(ABILITY_LIFE_STEAL) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_RUDE_AWAKENING) : extends RemovesStatusOnImmunity {
-    INSTANCE(ABILITY_RUDE_AWAKENING);
-    ON_STATUS_IMMUNE {
-        CHECK(status & CHECK_SLEEP)
-        CHECK(GetAbilityState(battler, ability))
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_RUDE_AWAKENING> : extends RemovesStatusOnImmunity {
+    ON_STATUS_IMMUNE { CHECK(status & CHECK_SLEEP) CHECK(GetAbilityState(battler, ability)) return TRUE; }
 };
 
-ABILITY(ABILITY_TERAFORM_ZERO) : extends AbilityImpl<ABILITY_TERA_SHELL>, extends OnEntry {
-    INSTANCE(ABILITY_TERAFORM_ZERO);
+template <>
+struct AbilityImpl<ABILITY_TERAFORM_ZERO> : extends AbilityImpl<ABILITY_TERA_SHELL>, extends OnEntry {
     ON_ENTRY {
         CHECK(!GetSingleUseAbilityCounter(battler, ability));
         SetSingleUseAbilityCounter(battler, ability, TRUE);
@@ -7007,24 +7015,25 @@ ABILITY(ABILITY_TERAFORM_ZERO) : extends AbilityImpl<ABILITY_TERA_SHELL>, extend
     }
 };
 
-ABILITY(ABILITY_SET_ABLAZE) : extends PoisonPuppeteerLike<MOVE_EFFECT_BURN> {
-    INSTANCE(ABILITY_SET_ABLAZE);
+template <>
+struct AbilityImpl<ABILITY_SET_ABLAZE> : extends PoisonPuppeteerLike<MOVE_EFFECT_BURN> {
     ON_REACTIVE {
         return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) -> int { return !gVolatileStructs[target].fear; }, BattleScript_Bloodlust);
     }
 };
 
-ABILITY(ABILITY_BREAKWATER) : extends AbilityImpl<ABILITY_STALL>, extends AbilityImpl<ABILITY_SWIFT_SWIM> { INSTANCE(ABILITY_BREAKWATER); };
+template <>
+struct AbilityImpl<ABILITY_BREAKWATER> : extends AbilityImpl<ABILITY_STALL>, extends AbilityImpl<ABILITY_SWIFT_SWIM> {};
 
-ABILITY(ABILITY_MAGICAL_FISTS) : extends AbilityImpl<ABILITY_IRON_FIST>, extends OnChooseOffensiveStat {
-    INSTANCE(ABILITY_MAGICAL_FISTS);
+template <>
+struct AbilityImpl<ABILITY_MAGICAL_FISTS> : extends AbilityImpl<ABILITY_IRON_FIST>, extends OnChooseOffensiveStat {
     ON_CHOOSE_OFFENSIVE_STAT {
         if (IsIronFistBoosted(battler, move)) *atkStatToUse = STAT_SPATK;
     }
 };
 
-ABILITY(ABILITY_CUTTHROAT) : extends OnEntry {
-    INSTANCE(ABILITY_CUTTHROAT);
+template <>
+struct AbilityImpl<ABILITY_CUTTHROAT> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gStatuses4[battler] & STATUS4_CUTTHROAT)
 
@@ -7033,59 +7042,62 @@ ABILITY(ABILITY_CUTTHROAT) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_SAND_BENDER) : extends AbilityImpl<ABILITY_SAND_STREAM>, extends AbilityImpl<ABILITY_SAND_FORCE> { INSTANCE(ABILITY_SAND_BENDER); };
+template <>
+struct AbilityImpl<ABILITY_SAND_BENDER> : extends AbilityImpl<ABILITY_SAND_STREAM>, extends AbilityImpl<ABILITY_SAND_FORCE> {};
 
-ABILITY(ABILITY_SAND_PIT) : extends SimpleEntryMove<MOVE_SAND_TOMB, 20> { INSTANCE(ABILITY_SAND_PIT); };
+template <>
+struct AbilityImpl<ABILITY_SAND_PIT> : extends SimpleEntryMove<MOVE_SAND_TOMB, 20> {};
 
-ABILITY(ABILITY_DESOLATE_SUN) : extends RandomizerBanned { INSTANCE(ABILITY_DESOLATE_SUN); };
+template <>
+struct AbilityImpl<ABILITY_DESOLATE_SUN> : extends RandomizerBanned {};
 
-ABILITY(ABILITY_DAYBREAK) : extends OnEither {
-    INSTANCE(ABILITY_DAYBREAK);
+template <>
+struct AbilityImpl<ABILITY_DAYBREAK> : extends OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(CanBeBurned(opponent))
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
+            AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_ENERGY_SIPHON) : extends OnAttacker {
-    INSTANCE(ABILITY_ENERGY_SIPHON);
+template <>
+struct AbilityImpl<ABILITY_ENERGY_SIPHON> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
 
-        gBattleMoveDamage = -gHpDealt / 4;
+            gBattleMoveDamage = -gHpDealt / 4;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_RESERVOIR) : extends Merged<ABILITY_WATER_ABSORB, ABILITY_STORM_DRAIN> { INSTANCE(ABILITY_RESERVOIR); };
+template <>
+struct AbilityImpl<ABILITY_RESERVOIR> : extends Merged<ABILITY_WATER_ABSORB, ABILITY_STORM_DRAIN> {};
 
 static int NeurotoxinCondition(int battler, int target) {
     return CanLowerStat(target, STAT_ATK) || CanLowerStat(target, STAT_SPATK) || CanLowerStat(target, STAT_SPEED);
 }
-ABILITY(ABILITY_NEUROTOXIN) : extends PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
-    INSTANCE(ABILITY_NEUROTOXIN);
+template <>
+struct AbilityImpl<ABILITY_NEUROTOXIN> : extends PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
     ON_REACTIVE { return PoisonPuppeteerClone(ability, battler, NeurotoxinCondition, BattleScript_Neurotoxin); }
 };
 
-ABILITY(ABILITY_ENERGIZED_HORNS) : extends AbilityImpl<ABILITY_MIGHTY_HORN> {
-    INSTANCE(ABILITY_ENERGIZED_HORNS);
+template <>
+struct AbilityImpl<ABILITY_ENERGIZED_HORNS> : extends AbilityImpl<ABILITY_MIGHTY_HORN> {
     ON_SWAP_SPLIT {
-        CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
-        CHECK(gBattleMoves[move].hornBased);
+        CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL) CHECK(gBattleMoves[move].hornBased);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_SPIDER_LAIR_UPGRADE) : extends OnEntry {
-    INSTANCE(ABILITY_SPIDER_LAIR_UPGRADE);
+template <>
+struct AbilityImpl<ABILITY_SPIDER_LAIR_UPGRADE> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
@@ -7098,17 +7110,21 @@ ABILITY(ABILITY_SPIDER_LAIR_UPGRADE) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_CRUST_COAT) : extends AbilityImpl<ABILITY_BATTLE_ARMOR> { INSTANCE(ABILITY_CRUST_COAT); };
+template <>
+struct AbilityImpl<ABILITY_CRUST_COAT> : extends AbilityImpl<ABILITY_BATTLE_ARMOR> {};
 
-ABILITY(ABILITY_PUFFY) : extends AbilityImpl<ABILITY_FLUFFY> { INSTANCE(ABILITY_PUFFY); };
+template <>
+struct AbilityImpl<ABILITY_PUFFY> : extends AbilityImpl<ABILITY_FLUFFY> {};
 
-ABILITY(ABILITY_BALLOON_BLITZ) : extends AbilityImpl<ABILITY_INFLATABLE>, extends AbilityImpl<ABILITY_HYPER_AGGRESSIVE> { INSTANCE(ABILITY_BALLOON_BLITZ); };
+template <>
+struct AbilityImpl<ABILITY_BALLOON_BLITZ> : extends AbilityImpl<ABILITY_INFLATABLE>, extends AbilityImpl<ABILITY_HYPER_AGGRESSIVE> {};
 
-ABILITY(ABILITY_STRIKER_PIXILATE) : extends AbilityImpl<ABILITY_STRIKER>, extends AbilityImpl<ABILITY_PIXILATE> { INSTANCE(ABILITY_STRIKER_PIXILATE); };
+template <>
+struct AbilityImpl<ABILITY_STRIKER_PIXILATE> : extends AbilityImpl<ABILITY_STRIKER>, extends AbilityImpl<ABILITY_PIXILATE> {};
 
 // 2.6
-ABILITY(ABILITY_DOOM_BLAST) : extends OnRecoil, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_DOOM_BLAST);
+template <>
+struct AbilityImpl<ABILITY_DOOM_BLAST> : extends OnRecoil, extends OnOffensiveMultiplier<> {
     ON_RECOIL {
         CHECK(moveType == TYPE_DARK);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -7119,10 +7135,11 @@ ABILITY(ABILITY_DOOM_BLAST) : extends OnRecoil, extends OnOffensiveMultiplier<> 
     }
 };
 
-ABILITY(ABILITY_BRUTEFORCE) : extends AbilityImpl<ABILITY_RECKLESS>, extends AbilityImpl<ABILITY_ROCK_HEAD> { INSTANCE(ABILITY_BRUTEFORCE); };
+template <>
+struct AbilityImpl<ABILITY_BRUTEFORCE> : extends AbilityImpl<ABILITY_RECKLESS>, extends AbilityImpl<ABILITY_ROCK_HEAD> {};
 
-ABILITY(ABILITY_FARADAY_CAGE) : extends AbilityImpl<ABILITY_SHELL_ARMOR>, extends OnDefender {
-    INSTANCE(ABILITY_FARADAY_CAGE);
+template <>
+struct AbilityImpl<ABILITY_FARADAY_CAGE> : extends AbilityImpl<ABILITY_SHELL_ARMOR>, extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -7132,13 +7149,13 @@ ABILITY(ABILITY_FARADAY_CAGE) : extends AbilityImpl<ABILITY_SHELL_ARMOR>, extend
     }
 };
 
-ABILITY(ABILITY_ACIDIC_SLIME) : extends AbilityImpl<ABILITY_CORROSION>, extends OnStab {
-    INSTANCE(ABILITY_ACIDIC_SLIME);
+template <>
+struct AbilityImpl<ABILITY_ACIDIC_SLIME> : extends AbilityImpl<ABILITY_CORROSION>, extends OnStab {
     ON_STAB { return moveType == TYPE_WATER; }
 };
 
-ABILITY(ABILITY_ROSE_GARDEN) : extends OnEntry {
-    INSTANCE(ABILITY_ROSE_GARDEN);
+template <>
+struct AbilityImpl<ABILITY_ROSE_GARDEN> : extends OnEntry {
     ON_ENTRY {
         u8 targetSide = GetOppositeSide(battler);
         CHECK(gSideTimers[targetSide].toxicSpikesAmount < 2)
@@ -7151,17 +7168,16 @@ ABILITY(ABILITY_ROSE_GARDEN) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_QIGONG) : extends AbilityImpl<ABILITY_RAMPAGE>, extends AbilityImpl<ABILITY_FIGHT_SPIRIT>, extends OnAccuracy<> {
-    INSTANCE(ABILITY_QIGONG);
+template <>
+struct AbilityImpl<ABILITY_QIGONG> : extends AbilityImpl<ABILITY_RAMPAGE>, extends AbilityImpl<ABILITY_FIGHT_SPIRIT>, extends OnAccuracy<> {
     ON_ACCURACY { return ACCURACY_ALWAYS_HITS; }
 };
 
-ABILITY(ABILITY_CONJOURER_OF_DECEIT) : extends AbilityImpl<ABILITY_MAGIC_GUARD>, extends AbilityImpl<ABILITY_MAGIC_BOUNCE> {
-    INSTANCE(ABILITY_CONJOURER_OF_DECEIT);
-};
+template <>
+struct AbilityImpl<ABILITY_CONJOURER_OF_DECEIT> : extends AbilityImpl<ABILITY_MAGIC_GUARD>, extends AbilityImpl<ABILITY_MAGIC_BOUNCE> {};
 
-ABILITY(ABILITY_DEEP_FREEZE) : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_DEEP_FREEZE);
+template <>
+struct AbilityImpl<ABILITY_DEEP_FREEZE> : extends OnOffensiveMultiplier<>, extends OnDefensiveMultiplier {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_WATER || moveType == TYPE_ICE) MUL(1.25);
     }
@@ -7170,25 +7186,25 @@ ABILITY(ABILITY_DEEP_FREEZE) : extends OnOffensiveMultiplier<>, extends OnDefens
     }
 };
 
-ABILITY(ABILITY_SOUL_DEVOURER) : extends AbilityImpl<ABILITY_SOUL_EATER>, extends AbilityImpl<ABILITY_PHANTOM_PAIN> { INSTANCE(ABILITY_SOUL_DEVOURER); };
+template <>
+struct AbilityImpl<ABILITY_SOUL_DEVOURER> : extends AbilityImpl<ABILITY_SOUL_EATER>, extends AbilityImpl<ABILITY_PHANTOM_PAIN> {};
 
-ABILITY(ABILITY_CHAMPIONS_ENTRANCE) : extends Merged<ABILITY_INTIMIDATE, ABILITY_VIOLENT_RUSH> { INSTANCE(ABILITY_CHAMPIONS_ENTRANCE); };
+template <>
+struct AbilityImpl<ABILITY_CHAMPIONS_ENTRANCE> : extends Merged<ABILITY_INTIMIDATE, ABILITY_VIOLENT_RUSH> {};
 
-ABILITY(ABILITY_PRESTO) : extends OnPriority {
-    INSTANCE(ABILITY_PRESTO);
-    ON_PRIORITY {
-        CHECK(BATTLER_MAX_HP(battler))
-        CHECK(IsSoundMove(battler, move))
-        return 1;
-    }
+template <>
+struct AbilityImpl<ABILITY_PRESTO> : extends OnPriority {
+    ON_PRIORITY { CHECK(BATTLER_MAX_HP(battler)) CHECK(IsSoundMove(battler, move)) return 1; }
 };
 
-ABILITY(ABILITY_SAMBA) : extends AbilityImpl<ABILITY_STRIKER>, extends AbilityImpl<ABILITY_DANCER> { INSTANCE(ABILITY_SAMBA); };
+template <>
+struct AbilityImpl<ABILITY_SAMBA> : extends AbilityImpl<ABILITY_STRIKER>, extends AbilityImpl<ABILITY_DANCER> {};
 
-ABILITY(ABILITY_GLADIATOR) : extends BoostedSwarmLike<TYPE_FIGHTING> { INSTANCE(ABILITY_GLADIATOR); };
+template <>
+struct AbilityImpl<ABILITY_GLADIATOR> : extends BoostedSwarmLike<TYPE_FIGHTING> {};
 
-ABILITY(ABILITY_FORSAKEN_HEART) : extends OnBattlerFaints<ApplyOnTarget::ANY> {
-    INSTANCE(ABILITY_FORSAKEN_HEART);
+template <>
+struct AbilityImpl<ABILITY_FORSAKEN_HEART> : extends OnBattlerFaints<ApplyOnTarget::ANY> {
     ON_BATTLER_FAINTS {
         CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
 
@@ -7197,13 +7213,13 @@ ABILITY(ABILITY_FORSAKEN_HEART) : extends OnBattlerFaints<ApplyOnTarget::ANY> {
     }
 };
 
-ABILITY(ABILITY_RELENTLESS) : extends AbilityImpl<ABILITY_EXPLOIT_WEAKNESS>, extends AbilityImpl<ABILITY_MERCILESS> { INSTANCE(ABILITY_RELENTLESS); };
+template <>
+struct AbilityImpl<ABILITY_RELENTLESS> : extends AbilityImpl<ABILITY_EXPLOIT_WEAKNESS>, extends AbilityImpl<ABILITY_MERCILESS> {};
 
-ABILITY(ABILITY_SOOTHSAYER) : extends OnEntry, extends OnEndTurn, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, extends Persistent {
-    INSTANCE(ABILITY_SOOTHSAYER);
+template <>
+struct AbilityImpl<ABILITY_SOOTHSAYER> : extends OnEntry, extends OnEndTurn, extends OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, extends Persistent {
     ON_ENTRY {
-        CHECK(!GetSingleUseAbilityCounter(battler, ability))
-        SetSingleUseAbilityCounter(battler, ability, TRUE);
+        CHECK(!GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
         SetAbilityState(battler, ability, 3);
         return SwitchInAnnounce(B_MSG_SWITCHIN_SOOTHSAYER);
     }
@@ -7218,11 +7234,10 @@ ABILITY(ABILITY_SOOTHSAYER) : extends OnEntry, extends OnEndTurn, extends OnAfte
     }
 };
 
-ABILITY(ABILITY_CORRUPTED_MIND) : extends RandomizerBanned, extends OnTypeEffectiveness<>, extends OnModifyEffectChance<> {
-    INSTANCE(ABILITY_CORRUPTED_MIND);
+template <>
+struct AbilityImpl<ABILITY_CORRUPTED_MIND> : extends RandomizerBanned, extends OnTypeEffectiveness<>, extends OnModifyEffectChance<> {
     ON_TYPE_EFFECTIVENESS {
-        CHECK(moveType == TYPE_PSYCHIC)
-        if (*mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
+        CHECK(moveType == TYPE_PSYCHIC) if (*mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
         return FALSE;
     }
     ON_MODIFY_EFFECT_CHANCE {
@@ -7232,8 +7247,8 @@ ABILITY(ABILITY_CORRUPTED_MIND) : extends RandomizerBanned, extends OnTypeEffect
     }
 };
 
-ABILITY(ABILITY_FLAME_COAT) : extends OnEntry, extends OnEndTurn {
-    INSTANCE(ABILITY_FLAME_COAT);
+template <>
+struct AbilityImpl<ABILITY_FLAME_COAT> : extends OnEntry, extends OnEndTurn {
     ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_FIRE_COAT); }
     ON_END_TURN {
         CHECK(IsAbilityOnField(ability) - 1 == battler)
@@ -7242,7 +7257,7 @@ ABILITY(ABILITY_FLAME_COAT) : extends OnEntry, extends OnEndTurn {
         for (int target = 0; target < gBattlersCount; target++) {
             FILTER(IsBattlerAlive(target))
             FILTER_NOT(IS_BATTLER_OF_TYPE(target, TYPE_FIRE))
-            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(HasMagicGuard(target))
             FILTER_NOT(BATTLER_HAS_ABILITY(target, ABILITY_FLARE_BOOST))
 
             gStackBattler1 = target;
@@ -7253,35 +7268,30 @@ ABILITY(ABILITY_FLAME_COAT) : extends OnEntry, extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_UNOWN_POWER) : extends RandomizerBanned, extends OnStab, extends OnAfterTypeEffectiveness<> {
-    INSTANCE(ABILITY_UNOWN_POWER);
+template <>
+struct AbilityImpl<ABILITY_UNOWN_POWER> : extends RandomizerBanned, extends OnStab, extends OnAfterTypeEffectiveness<> {
     ON_STAB { return TRUE; }
     ON_AFTER_TYPE_EFFECTIVENESS {
         if (*mod < UQ_4_12(2.0) && (move == MOVE_HIDDEN_POWER || move == MOVE_SECRET_POWER)) *mod = UQ_4_12(2.0);
     }
 };
 
-ABILITY(ABILITY_SUPER_SCOPE) : extends AbilityImpl<ABILITY_MEGA_LAUNCHER>, extends AbilityImpl<ABILITY_ARTILLERY> { INSTANCE(ABILITY_SUPER_SCOPE); };
+template <>
+struct AbilityImpl<ABILITY_SUPER_SCOPE> : extends AbilityImpl<ABILITY_MEGA_LAUNCHER>, extends AbilityImpl<ABILITY_ARTILLERY> {};
 
-ABILITY(ABILITY_VENOM_CROWN) : extends AbilityImpl<ABILITY_POISON_POINT>, extends AbilityImpl<ABILITY_MIGHTY_HORN>, extends RandomizerBanned {
-    INSTANCE(ABILITY_VENOM_CROWN);
+template <>
+struct AbilityImpl<ABILITY_VENOM_CROWN> : extends AbilityImpl<ABILITY_POISON_POINT>, extends AbilityImpl<ABILITY_MIGHTY_HORN>, extends RandomizerBanned {};
+
+template <>
+struct AbilityImpl<ABILITY_BLIGHT_SCALE> : extends AbilityImpl<ABILITY_POISON_POINT>, extends AbilityImpl<ABILITY_MULTISCALE>, extends RandomizerBanned {};
+
+template <>
+struct AbilityImpl<ABILITY_GUNMAN> : extends AbilityImpl<ABILITY_MEGA_LAUNCHER>, extends OnModifyMoveFlags {
+    ON_MODIFY_MOVE_FLAGS { CHECK(flag == MOVE_FLAG_MEGA_LAUNCHER) CHECK(IS_MOVE_STATUS(move)) return TRUE; }
 };
 
-ABILITY(ABILITY_BLIGHT_SCALE) : extends AbilityImpl<ABILITY_POISON_POINT>, extends AbilityImpl<ABILITY_MULTISCALE>, extends RandomizerBanned {
-    INSTANCE(ABILITY_BLIGHT_SCALE);
-};
-
-ABILITY(ABILITY_GUNMAN) : extends AbilityImpl<ABILITY_MEGA_LAUNCHER>, extends OnModifyMoveFlags {
-    INSTANCE(ABILITY_GUNMAN);
-    ON_MODIFY_MOVE_FLAGS {
-        CHECK(flag == MOVE_FLAG_MEGA_LAUNCHER)
-        CHECK(IS_MOVE_STATUS(move))
-        return TRUE;
-    }
-};
-
-ABILITY(ABILITY_CARETAKER) : extends OnEndTurn, extends AbilityImpl<ABILITY_FRIEND_GUARD> {
-    INSTANCE(ABILITY_CARETAKER);
+template <>
+struct AbilityImpl<ABILITY_CARETAKER> : extends OnEndTurn, extends AbilityImpl<ABILITY_FRIEND_GUARD> {
     ON_END_TURN {
         CHECK(Random() % 100 < 30)
 
@@ -7297,10 +7307,11 @@ ABILITY(ABILITY_CARETAKER) : extends OnEndTurn, extends AbilityImpl<ABILITY_FRIE
     }
 };
 
-ABILITY(ABILITY_POSEIDONS_DOMINION) : extends SimpleEntryMove<MOVE_WHIRLPOOL> { INSTANCE(ABILITY_POSEIDONS_DOMINION); };
+template <>
+struct AbilityImpl<ABILITY_POSEIDONS_DOMINION> : extends SimpleEntryMove<MOVE_WHIRLPOOL> {};
 
-ABILITY(ABILITY_DUAL_SHADOW) : extends AbilityImpl<ABILITY_HUNGER_SWITCH>, extends OnRecoil, extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_DUAL_SHADOW);
+template <>
+struct AbilityImpl<ABILITY_DUAL_SHADOW> : extends AbilityImpl<ABILITY_HUNGER_SWITCH>, extends OnRecoil, extends OnOffensiveMultiplier<> {
     ON_RECOIL {
         CHECK(moveType == TYPE_ELECTRIC || moveType == TYPE_DARK);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -7311,8 +7322,8 @@ ABILITY(ABILITY_DUAL_SHADOW) : extends AbilityImpl<ABILITY_HUNGER_SWITCH>, exten
     }
 };
 
-ABILITY(ABILITY_LULLABY) : extends OnAccuracy<> {
-    INSTANCE(ABILITY_LULLABY);
+template <>
+struct AbilityImpl<ABILITY_LULLABY> : extends OnAccuracy<> {
     ON_ACCURACY {
         CHECK(move == MOVE_SING);
         *accuracy *= 1.5;
@@ -7320,8 +7331,8 @@ ABILITY(ABILITY_LULLABY) : extends OnAccuracy<> {
     }
 };
 
-ABILITY(ABILITY_CRYO_ARCHITECT) : extends OnEndTurn, extends OnDefender {
-    INSTANCE(ABILITY_CRYO_ARCHITECT);
+template <>
+struct AbilityImpl<ABILITY_CRYO_ARCHITECT> : extends OnEndTurn, extends OnDefender {
     ON_END_TURN {
         int abilityState = GetAbilityState(battler, ability);
         CHECK(abilityState)
@@ -7364,8 +7375,8 @@ ABILITY(ABILITY_CRYO_ARCHITECT) : extends OnEndTurn, extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_GLACIAL_RAGE) : extends OnAttacker {
-    INSTANCE(ABILITY_GLACIAL_RAGE);
+template <>
+struct AbilityImpl<ABILITY_GLACIAL_RAGE> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(moveType == TYPE_ICE)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -7374,13 +7385,14 @@ ABILITY(ABILITY_GLACIAL_RAGE) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_IMMOVABLE_OBJECT) : extends AbilityImpl<ABILITY_MAGIC_GUARD>, extends AbilityImpl<ABILITY_STURDY> { INSTANCE(ABILITY_IMMOVABLE_OBJECT); };
+template <>
+struct AbilityImpl<ABILITY_IMMOVABLE_OBJECT> : extends AbilityImpl<ABILITY_MAGIC_GUARD>, extends AbilityImpl<ABILITY_STURDY> {};
 
-ABILITY(ABILITY_FRENZIED_PHANTOM) : extends AbilityImpl<ABILITY_SHADOW_TAG>, extends AbilityImpl<ABILITY_HYPER_AGGRESSIVE> {
-    INSTANCE(ABILITY_FRENZIED_PHANTOM);
-};
+template <>
+struct AbilityImpl<ABILITY_FRENZIED_PHANTOM> : extends AbilityImpl<ABILITY_SHADOW_TAG>, extends AbilityImpl<ABILITY_HYPER_AGGRESSIVE> {};
 
-ABILITY(ABILITY_DNA_SCRAMBLE) : extends FormChangeAbility, extends OnBeforeAttack<> { INSTANCE(ABILITY_DNA_SCRAMBLE);
+template <>
+struct AbilityImpl<ABILITY_DNA_SCRAMBLE> : extends FormChangeAbility, extends OnBeforeAttack<> {
     ON_BEFORE_ATTACK {
         SpeciesEnum newSpecies = SPECIES_NONE;
         switch (gBattleMons[battler].species) {
@@ -7422,36 +7434,50 @@ ABILITY(ABILITY_DNA_SCRAMBLE) : extends FormChangeAbility, extends OnBeforeAttac
     }
 };
 
-ABILITY(ABILITY_METALLIC_JAWS) : extends AbilityImpl<ABILITY_METALLIC>, extends AbilityImpl<ABILITY_PRIMAL_MAW> { INSTANCE(ABILITY_METALLIC_JAWS); };
+template <>
+struct AbilityImpl<ABILITY_METALLIC_JAWS> : extends AbilityImpl<ABILITY_METALLIC>, extends AbilityImpl<ABILITY_PRIMAL_MAW> {};
 
-ABILITY(ABILITY_CALCULATIVE) : extends Merged<ABILITY_ANALYTIC, ABILITY_NEUROFORCE> { INSTANCE(ABILITY_CALCULATIVE); };
+template <>
+struct AbilityImpl<ABILITY_CALCULATIVE> : extends Merged<ABILITY_ANALYTIC, ABILITY_NEUROFORCE> {};
 
-ABILITY(ABILITY_EMBODY_ASPECT) : extends RaiseStatOnEntry<STAT_SPEED> { INSTANCE(ABILITY_EMBODY_ASPECT); };
+template <>
+struct AbilityImpl<ABILITY_EMBODY_ASPECT> : extends RaiseStatOnEntry<STAT_SPEED> {};
 
-ABILITY(ABILITY_EMBODY_ASPECT_HEARTHFLAME) : extends AbilityImpl<ABILITY_INTREPID_SWORD> { INSTANCE(ABILITY_EMBODY_ASPECT_HEARTHFLAME); };
+template <>
+struct AbilityImpl<ABILITY_EMBODY_ASPECT_HEARTHFLAME> : extends AbilityImpl<ABILITY_INTREPID_SWORD> {};
 
-ABILITY(ABILITY_EMBODY_ASPECT_CORNERSTONE) : extends AbilityImpl<ABILITY_DAUNTLESS_SHIELD> { INSTANCE(ABILITY_EMBODY_ASPECT_CORNERSTONE); };
+template <>
+struct AbilityImpl<ABILITY_EMBODY_ASPECT_CORNERSTONE> : extends AbilityImpl<ABILITY_DAUNTLESS_SHIELD> {};
 
-ABILITY(ABILITY_EMBODY_ASPECT_WELLSPRING) : extends RaiseStatOnEntry<STAT_SPDEF> { INSTANCE(ABILITY_EMBODY_ASPECT_WELLSPRING); };
+template <>
+struct AbilityImpl<ABILITY_EMBODY_ASPECT_WELLSPRING> : extends RaiseStatOnEntry<STAT_SPDEF> {};
 
-ABILITY(ABILITY_ROCKHARD_SHAFT) : extends BoostedSwarmLike<TYPE_ROCK> { INSTANCE(ABILITY_ROCKHARD_SHAFT); };
+template <>
+struct AbilityImpl<ABILITY_ROCKHARD_SHAFT> : extends BoostedSwarmLike<TYPE_ROCK> {};
 
-ABILITY(ABILITY_HUNTERS_MARK) : extends AbilityImpl<ABILITY_DEADEYE>, extends AbilityImpl<ABILITY_AMBUSH> { INSTANCE(ABILITY_HUNTERS_MARK); };
+template <>
+struct AbilityImpl<ABILITY_HUNTERS_MARK> : extends AbilityImpl<ABILITY_DEADEYE>, extends AbilityImpl<ABILITY_AMBUSH> {};
 
-ABILITY(ABILITY_DEVIATE) : extends AteAbility<TYPE_DARK> { INSTANCE(ABILITY_DEVIATE); };
+template <>
+struct AbilityImpl<ABILITY_DEVIATE> : extends AteAbility<TYPE_DARK> {};
 
-ABILITY(ABILITY_SUNS_BOUNTY) : extends Merged<ABILITY_HARVEST, ABILITY_LEAF_GUARD> { INSTANCE(ABILITY_SUNS_BOUNTY); };
+template <>
+struct AbilityImpl<ABILITY_SUNS_BOUNTY> : extends Merged<ABILITY_HARVEST, ABILITY_LEAF_GUARD> {};
 
-ABILITY(ABILITY_RITE_OF_SPRING) : extends Merged<ABILITY_SOLAR_POWER, ABILITY_CHLOROPHYLL> { INSTANCE(ABILITY_RITE_OF_SPRING); };
+template <>
+struct AbilityImpl<ABILITY_RITE_OF_SPRING> : extends Merged<ABILITY_SOLAR_POWER, ABILITY_CHLOROPHYLL> {};
 
-ABILITY(ABILITY_HEADSTRONG) : extends RaiseStatOnEntry<STAT_SPDEF> { INSTANCE(ABILITY_HEADSTRONG); };
+template <>
+struct AbilityImpl<ABILITY_HEADSTRONG> : extends RaiseStatOnEntry<STAT_SPDEF> {};
 
-ABILITY(ABILITY_FIREFIGHTER) : extends TypeSlayer<TYPE_FIRE> { INSTANCE(ABILITY_FIREFIGHTER); };
+template <>
+struct AbilityImpl<ABILITY_FIREFIGHTER> : extends TypeSlayer<TYPE_FIRE> {};
 
-ABILITY(ABILITY_SEPIA_LENS) : extends AbilityImpl<ABILITY_SAND_GUARD>, extends AbilityImpl<ABILITY_TINTED_LENS> { INSTANCE(ABILITY_SEPIA_LENS); };
+template <>
+struct AbilityImpl<ABILITY_SEPIA_LENS> : extends AbilityImpl<ABILITY_SAND_GUARD>, extends AbilityImpl<ABILITY_TINTED_LENS> {};
 
-ABILITY(ABILITY_SUPER_SNIPER) : extends AbilityImpl<ABILITY_SNIPER>, extends UseTurnAttackAsPursuit {
-    INSTANCE(ABILITY_SUPER_SNIPER);
+template <>
+struct AbilityImpl<ABILITY_SUPER_SNIPER> : extends AbilityImpl<ABILITY_SNIPER>, extends UseTurnAttackAsPursuit {
     ON_OFFENSIVE_MULTIPLIER {
         AbilityImpl<ABILITY_SNIPER>::onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ability) {
@@ -7460,14 +7486,15 @@ ABILITY(ABILITY_SUPER_SNIPER) : extends AbilityImpl<ABILITY_SNIPER>, extends Use
     }
 };
 
-ABILITY(ABILITY_WOODLAND_CURSE) : extends OnEither, extends SimpleEntryMove<MOVE_FORESTS_CURSE> {
-    INSTANCE(ABILITY_WOODLAND_CURSE);
+template <>
+struct AbilityImpl<ABILITY_WOODLAND_CURSE> : extends OnEither, extends SimpleEntryMove<MOVE_FORESTS_CURSE> {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
         CHECK_NOT(IS_BATTLER_OF_TYPE(opponent, TYPE_GRASS))
 
-        gBattleMons[opponent].type3 = TYPE_GRASS;
+            gBattleMons[opponent]
+                .type3 = TYPE_GRASS;
         PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMons[opponent].type3);
         gStackBattler1 = opponent;
         BattleScriptCall(BattleScript_StackBecameTheTypeFull);
@@ -7475,78 +7502,68 @@ ABILITY(ABILITY_WOODLAND_CURSE) : extends OnEither, extends SimpleEntryMove<MOVE
     }
 };
 
-ABILITY(ABILITY_MALODOR) : extends OnDefender {
-    INSTANCE(ABILITY_MALODOR);
+template <>
+struct AbilityImpl<ABILITY_MALODOR> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(gStatuses3[attacker] & STATUS3_GASTRO_ACID)
 
-        gStatuses3[attacker] |= STATUS3_GASTRO_ACID;
+            gStatuses3[attacker] |= STATUS3_GASTRO_ACID;
         BattleScriptCall(BattleScript_StackAbilitySuppressedMessage);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_BLUR) : extends OnChooseDefensiveStat<ApplyOnTarget::TARGET> {
-    INSTANCE(ABILITY_BLUR);
-    ON_CHOOSE_DEFENSIVE_STAT {
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        return STAT_SPEED;
-    }
+template <>
+struct AbilityImpl<ABILITY_BLUR> : extends OnChooseDefensiveStat<ApplyOnTarget::TARGET> {
+    ON_CHOOSE_DEFENSIVE_STAT { CHECK(IsMoveMakingContact(move, gBattlerAttacker)) return STAT_SPEED; }
 };
 
-ABILITY(ABILITY_ELUDE) : extends OnChooseDefensiveStat<ApplyOnTarget::TARGET> {
-    INSTANCE(ABILITY_ELUDE);
-    ON_CHOOSE_DEFENSIVE_STAT {
-        CHECK_NOT(IsMoveMakingContact(move, gBattlerAttacker))
-        return STAT_SPEED;
-    }
+template <>
+struct AbilityImpl<ABILITY_ELUDE> : extends OnChooseDefensiveStat<ApplyOnTarget::TARGET> {
+    ON_CHOOSE_DEFENSIVE_STAT { CHECK_NOT(IsMoveMakingContact(move, gBattlerAttacker)) return STAT_SPEED; }
 };
 
-ABILITY(ABILITY_DRAKE_OF_RAGE) : extends AbilityImpl<ABILITY_RAMPAGE>, extends AbilityImpl<ABILITY_TINTED_LENS> { INSTANCE(ABILITY_DRAKE_OF_RAGE); };
+template <>
+struct AbilityImpl<ABILITY_DRAKE_OF_RAGE> : extends AbilityImpl<ABILITY_RAMPAGE>, extends AbilityImpl<ABILITY_TINTED_LENS> {};
 
-ABILITY(ABILITY_MIXED_MARTIAL_ARTS) : extends OnModifyMoveFlags {
-    INSTANCE(ABILITY_MIXED_MARTIAL_ARTS);
-    ON_MODIFY_MOVE_FLAGS {
-        CHECK(flag == MOVE_FLAG_PUNCH || flag == MOVE_FLAG_KICK)
-        CHECK(gBattleMoves[move].type == TYPE_NORMAL)
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_MIXED_MARTIAL_ARTS> : extends OnModifyMoveFlags {
+    ON_MODIFY_MOVE_FLAGS { CHECK(flag == MOVE_FLAG_PUNCH || flag == MOVE_FLAG_KICK) CHECK(gBattleMoves[move].type == TYPE_NORMAL) return TRUE; }
 };
 
-ABILITY(ABILITY_STRATEGIC_PAUSE) : extends AbilityImpl<ABILITY_ANALYTIC>, extends OnCrit<> {
-    INSTANCE(ABILITY_STRATEGIC_PAUSE);
-    ON_CRIT {
-        CHECK(GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber)
-        CHECK(gBattleMoves[move].effect != EFFECT_FUTURE_SIGHT)
-        return 2;
-    }
+template <>
+struct AbilityImpl<ABILITY_STRATEGIC_PAUSE> : extends AbilityImpl<ABILITY_ANALYTIC>, extends OnCrit<> {
+    ON_CRIT { CHECK(GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber) CHECK(gBattleMoves[move].effect != EFFECT_FUTURE_SIGHT) return 2; }
 };
 
-ABILITY(ABILITY_OVERRULE) : extends OnAfterTypeEffectiveness<> {
-    INSTANCE(ABILITY_OVERRULE);
+template <>
+struct AbilityImpl<ABILITY_OVERRULE> : extends OnAfterTypeEffectiveness<> {
     ON_AFTER_TYPE_EFFECTIVENESS {
         if (gIsCriticalHit && *mod && *mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
     }
 };
 
-ABILITY(ABILITY_MENTAL_POLLUTION) : extends NotImplemented { INSTANCE(ABILITY_MENTAL_POLLUTION); };
+template <>
+struct AbilityImpl<ABILITY_MENTAL_POLLUTION> : extends NotImplemented {};
 
-ABILITY(ABILITY_MADNESS_ENHANCEMENT) : extends NotImplemented { INSTANCE(ABILITY_MADNESS_ENHANCEMENT); };
+template <>
+struct AbilityImpl<ABILITY_MADNESS_ENHANCEMENT> : extends NotImplemented {};
 
-ABILITY(ABILITY_TENTALOCK) : extends NotImplemented { INSTANCE(ABILITY_TENTALOCK); };
+template <>
+struct AbilityImpl<ABILITY_TENTALOCK> : extends NotImplemented {};
 
-ABILITY(ABILITY_SERPENT_BIND) : extends NotImplemented { INSTANCE(ABILITY_SERPENT_BIND); };
+template <>
+struct AbilityImpl<ABILITY_SERPENT_BIND> : extends NotImplemented {};
 
-ABILITY(ABILITY_SOUL_TAP) : extends OnEndTurn {
-    INSTANCE(ABILITY_SOUL_TAP);
+template <>
+struct AbilityImpl<ABILITY_SOUL_TAP> : extends OnEndTurn {
     ON_END_TURN {
-        CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
-        int any = FALSE;
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) int any = FALSE;
         for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
             FILTER(IsBattlerAlive(target))
-            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(HasMagicGuard(target))
 
             gStackBattler1 = battler;
             gStackBattler2 = target;
@@ -7558,47 +7575,55 @@ ABILITY(ABILITY_SOUL_TAP) : extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_SCARECROW) : extends AbilityImpl<ABILITY_INTIMIDATE>, extends AbilityImpl<ABILITY_BAD_LUCK> { INSTANCE(ABILITY_SCARECROW); };
+template <>
+struct AbilityImpl<ABILITY_SCARECROW> : extends AbilityImpl<ABILITY_INTIMIDATE>, extends AbilityImpl<ABILITY_BAD_LUCK> {};
 
-ABILITY(ABILITY_OMINOUS_SHROUD) : extends AbilityImpl<ABILITY_PHANTOM>, extends AbilityImpl<ABILITY_SHADOW_SHIELD> { INSTANCE(ABILITY_OMINOUS_SHROUD); };
+template <>
+struct AbilityImpl<ABILITY_OMINOUS_SHROUD> : extends AbilityImpl<ABILITY_PHANTOM>, extends AbilityImpl<ABILITY_SHADOW_SHIELD> {};
 
-ABILITY(ABILITY_CHILLING_PRESENCE) : extends SimpleEntryMove<MOVE_ICY_WIND, 10> { INSTANCE(ABILITY_CHILLING_PRESENCE); };
+template <>
+struct AbilityImpl<ABILITY_CHILLING_PRESENCE> : extends SimpleEntryMove<MOVE_ICY_WIND, 10> {};
 
-ABILITY(ABILITY_FROSTBIND) : extends PoisonPuppeteerLike<MOVE_EFFECT_FROSTBITE> {
-    INSTANCE(ABILITY_FROSTBIND);
+template <>
+struct AbilityImpl<ABILITY_FROSTBIND> : extends PoisonPuppeteerLike<MOVE_EFFECT_FROSTBITE> {
     ON_REACTIVE {
         return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) { return (int)CanGetFrostbite(battler); }, BattleScript_Frostbind);
     }
 };
 
-ABILITY(ABILITY_TENDER_AFFECTION) : extends AbilityImpl<ABILITY_CUTE_CHARM>, extends OnStab {
-    INSTANCE(ABILITY_TENDER_AFFECTION);
+template <>
+struct AbilityImpl<ABILITY_TENDER_AFFECTION> : extends AbilityImpl<ABILITY_CUTE_CHARM>, extends OnStab {
     ON_STAB { return moveType == TYPE_FAIRY; }
 };
 
-ABILITY(ABILITY_GLACIAL_GHOST) : extends AbilityImpl<ABILITY_SLUSH_RUSH>, extends AbilityImpl<ABILITY_SNOW_CLOAK> { INSTANCE(ABILITY_GLACIAL_GHOST); };
+template <>
+struct AbilityImpl<ABILITY_GLACIAL_GHOST> : extends AbilityImpl<ABILITY_SLUSH_RUSH>, extends AbilityImpl<ABILITY_SNOW_CLOAK> {};
 
-ABILITY(ABILITY_WONDER_SCALE) : extends AbilityImpl<ABILITY_SHED_SKIN>, extends AbilityImpl<ABILITY_FORT_KNOX> { INSTANCE(ABILITY_WONDER_SCALE); };
+template <>
+struct AbilityImpl<ABILITY_WONDER_SCALE> : extends AbilityImpl<ABILITY_SHED_SKIN>, extends AbilityImpl<ABILITY_FORT_KNOX> {};
 
-ABILITY(ABILITY_OVERZEALOUS) : extends NotImplemented { INSTANCE(ABILITY_OVERZEALOUS); };
+template <>
+struct AbilityImpl<ABILITY_OVERZEALOUS> : extends NotImplemented {};
 
-ABILITY(ABILITY_STAINLESS_STEEL) : extends AteAbility<TYPE_STEEL>, extends AbilityImpl<ABILITY_FORT_KNOX> { INSTANCE(ABILITY_STAINLESS_STEEL); };
+template <>
+struct AbilityImpl<ABILITY_STAINLESS_STEEL> : extends AteAbility<TYPE_STEEL>, extends AbilityImpl<ABILITY_FORT_KNOX> {};
 
-ABILITY(ABILITY_TEMPORAL_RUPTURE) : extends NotImplemented { INSTANCE(ABILITY_TEMPORAL_RUPTURE); };
+template <>
+struct AbilityImpl<ABILITY_TEMPORAL_RUPTURE> : extends NotImplemented {};
 
-ABILITY(ABILITY_GRASS_FLUTE) : extends OnAttacker {
-    INSTANCE(ABILITY_GRASS_FLUTE);
+template <>
+struct AbilityImpl<ABILITY_GRASS_FLUTE> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(IsSoundMove(battler, move))
         CHECK_NOT(gVolatileStructs[target].fear)
 
-        return AbilityStatusEffect(MOVE_EFFECT_FEAR);
+            return AbilityStatusEffect(MOVE_EFFECT_FEAR);
     }
 };
 
-ABILITY(ABILITY_HEMOTOXIN) : extends PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
-    INSTANCE(ABILITY_HEMOTOXIN);
+template <>
+struct AbilityImpl<ABILITY_HEMOTOXIN> : extends PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
     ON_REACTIVE {
         return PoisonPuppeteerClone(
             ability,
@@ -7608,10 +7633,11 @@ ABILITY(ABILITY_HEMOTOXIN) : extends PoisonPuppeteerLike<MOVE_EFFECT_POISON> {
     }
 };
 
-ABILITY(ABILITY_HARUKAZE) : extends NotImplemented { INSTANCE(ABILITY_HARUKAZE); };
+template <>
+struct AbilityImpl<ABILITY_HARUKAZE> : extends NotImplemented {};
 
-ABILITY(ABILITY_TOXIC_SURGE) : extends OnEntry, extends AllowTerrainIfAirborne<TERRAIN_TOXIC> {
-    INSTANCE(ABILITY_TOXIC_SURGE);
+template <>
+struct AbilityImpl<ABILITY_TOXIC_SURGE> : extends OnEntry, extends AllowTerrainIfAirborne<TERRAIN_TOXIC> {
     ON_ENTRY {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_TOXIC_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -7621,32 +7647,37 @@ ABILITY(ABILITY_TOXIC_SURGE) : extends OnEntry, extends AllowTerrainIfAirborne<T
     }
 };
 
-ABILITY(ABILITY_POISON_QUILLS) : extends Merged<ABILITY_POISON_POINT, ABILITY_ROUGH_SKIN> { INSTANCE(ABILITY_POISON_QUILLS); };
+template <>
+struct AbilityImpl<ABILITY_POISON_QUILLS> : extends Merged<ABILITY_POISON_POINT, ABILITY_ROUGH_SKIN> {};
 
-ABILITY(ABILITY_DRACONIC_MIGHT) : extends AbilityImpl<ABILITY_HALF_DRAKE>, extends AteAbility<TYPE_DRAGON> { INSTANCE(ABILITY_DRACONIC_MIGHT); };
+template <>
+struct AbilityImpl<ABILITY_DRACONIC_MIGHT> : extends AbilityImpl<ABILITY_HALF_DRAKE>, extends AteAbility<TYPE_DRAGON> {};
 
-ABILITY(ABILITY_ATLANTIC_RULER) : extends AbilityImpl<ABILITY_AQUATIC_DWELLER>, extends AbilityImpl<ABILITY_SWIFT_SWIM> { INSTANCE(ABILITY_ATLANTIC_RULER); };
+template <>
+struct AbilityImpl<ABILITY_ATLANTIC_RULER> : extends AbilityImpl<ABILITY_AQUATIC_DWELLER>, extends AbilityImpl<ABILITY_SWIFT_SWIM> {};
 
-ABILITY(ABILITY_BIOFILM) : extends OnStat<> {
-    INSTANCE(ABILITY_BIOFILM);
+template <>
+struct AbilityImpl<ABILITY_BIOFILM> : extends OnStat<> {
     ON_STAT {
         if (statId == STAT_SPDEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_CHOKEHOLD) : extends NotImplemented { INSTANCE(ABILITY_CHOKEHOLD); };
+template <>
+struct AbilityImpl<ABILITY_CHOKEHOLD> : extends NotImplemented {};
 
-ABILITY(ABILITY_GUARDIAN_COAT) : extends SandImmune, extends OnDefensiveMultiplier, extends PowderImmune, extends HailImmune {
-    INSTANCE(ABILITY_GUARDIAN_COAT);
+template <>
+struct AbilityImpl<ABILITY_GUARDIAN_COAT> : extends SandImmune, extends OnDefensiveMultiplier, extends PowderImmune, extends HailImmune {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_PHYSICAL(move)) MUL(.8);
     }
 };
 
-ABILITY(ABILITY_NEUTRALIZING_FOG) : extends SimpleEntryMove<MOVE_DEFOG> { INSTANCE(ABILITY_NEUTRALIZING_FOG); };
+template <>
+struct AbilityImpl<ABILITY_NEUTRALIZING_FOG> : extends SimpleEntryMove<MOVE_DEFOG> {};
 
-ABILITY(ABILITY_FESTIVITIES) : extends OnModifyMoveFlags {
-    INSTANCE(ABILITY_FESTIVITIES);
+template <>
+struct AbilityImpl<ABILITY_FESTIVITIES> : extends OnModifyMoveFlags {
     ON_MODIFY_MOVE_FLAGS {
         switch (flag) {
             case MOVE_FLAG_DANCE:
@@ -7659,50 +7690,55 @@ ABILITY(ABILITY_FESTIVITIES) : extends OnModifyMoveFlags {
     }
 };
 
-ABILITY(ABILITY_FEY_FLIGHT) : extends AbilityImpl<ABILITY_FAIRY_TALE>, extends GroundImmune { INSTANCE(ABILITY_FEY_FLIGHT); };
+template <>
+struct AbilityImpl<ABILITY_FEY_FLIGHT> : extends AbilityImpl<ABILITY_FAIRY_TALE>, extends GroundImmune {};
 
-ABILITY(ABILITY_BEST_OFFENSE) : extends AbilityImpl<ABILITY_KEEN_EDGE>, extends AbilityImpl<ABILITY_MYSTIC_BLADES>, extends OnChooseOffensiveStat {
-    INSTANCE(ABILITY_BEST_OFFENSE);
+template <>
+struct AbilityImpl<ABILITY_BEST_OFFENSE> : extends AbilityImpl<ABILITY_KEEN_EDGE>, extends AbilityImpl<ABILITY_MYSTIC_BLADES>, extends OnChooseOffensiveStat {
     ON_CHOOSE_OFFENSIVE_STAT { secondaryAtkStatToUse[STAT_SPDEF] += 20; }
 };
 
-ABILITY(ABILITY_IMPALER) : extends AbilityImpl<ABILITY_MIGHTY_HORN>, extends OnAttacker {
-    INSTANCE(ABILITY_IMPALER);
+template <>
+struct AbilityImpl<ABILITY_IMPALER> : extends AbilityImpl<ABILITY_MIGHTY_HORN>, extends OnAttacker {
     ON_ATTACKER {
-        CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(CanBleed(target))
-        CHECK(gBattleMoves[move].hornBased);
+        CHECK(ShouldApplyOnHitAffect(target)) CHECK(CanBleed(target)) CHECK(gBattleMoves[move].hornBased);
         CHECK(Random() % 100 < 30)
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     }
 };
 
-ABILITY(ABILITY_MAGUS_BLADES) : extends AbilityImpl<ABILITY_DUAL_WIELD>, extends AbilityImpl<ABILITY_BEST_OFFENSE> { INSTANCE(ABILITY_MAGUS_BLADES); };
+template <>
+struct AbilityImpl<ABILITY_MAGUS_BLADES> : extends AbilityImpl<ABILITY_DUAL_WIELD>, extends AbilityImpl<ABILITY_BEST_OFFENSE> {};
 
-ABILITY(ABILITY_LIGHTNING_BORN) : extends AddsType<TYPE_ELECTRIC> { INSTANCE(ABILITY_LIGHTNING_BORN); };
+template <>
+struct AbilityImpl<ABILITY_LIGHTNING_BORN> : extends AddsType<TYPE_ELECTRIC> {};
 
-ABILITY(ABILITY_SUPERHEAVY) : extends NotImplemented { INSTANCE(ABILITY_SUPERHEAVY); };
+template <>
+struct AbilityImpl<ABILITY_SUPERHEAVY> : extends NotImplemented {};
 
-ABILITY(ABILITY_WORLD_SERPENT) : extends AbilityImpl<ABILITY_GRIP_PINCER>, extends AbilityImpl<ABILITY_LONG_REACH> { INSTANCE(ABILITY_WORLD_SERPENT); };
+template <>
+struct AbilityImpl<ABILITY_WORLD_SERPENT> : extends AbilityImpl<ABILITY_GRIP_PINCER>, extends AbilityImpl<ABILITY_LONG_REACH> {};
 
-ABILITY(ABILITY_LUCKY_WINGS) : extends AbilityImpl<ABILITY_GIANT_WINGS>, extends AbilityImpl<ABILITY_SERENE_GRACE> { INSTANCE(ABILITY_LUCKY_WINGS); };
+template <>
+struct AbilityImpl<ABILITY_LUCKY_WINGS> : extends AbilityImpl<ABILITY_GIANT_WINGS>, extends AbilityImpl<ABILITY_SERENE_GRACE> {};
 
-ABILITY(ABILITY_KOMODO) : extends AbilityImpl<ABILITY_HALF_DRAKE>, extends AbilityImpl<ABILITY_TOXIC_CHAIN> { INSTANCE(ABILITY_KOMODO); };
+template <>
+struct AbilityImpl<ABILITY_KOMODO> : extends AbilityImpl<ABILITY_HALF_DRAKE>, extends AbilityImpl<ABILITY_TOXIC_CHAIN> {};
 
-ABILITY(ABILITY_ENVENOM) : extends OnAttacker {
-    INSTANCE(ABILITY_ENVENOM);
+template <>
+struct AbilityImpl<ABILITY_ENVENOM> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
         CHECK(Random() % 100 < 30)
 
-        return AbilityStatusEffect(MOVE_EFFECT_POISON);
+            return AbilityStatusEffect(MOVE_EFFECT_POISON);
     }
 };
 
-ABILITY(ABILITY_PURPLE_HAZE) : extends OnAttacker {
-    INSTANCE(ABILITY_PURPLE_HAZE);
+template <>
+struct AbilityImpl<ABILITY_PURPLE_HAZE> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
@@ -7710,10 +7746,11 @@ ABILITY(ABILITY_PURPLE_HAZE) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_GNASHING_CANNON) : extends Merged<ABILITY_MEGA_LAUNCHER, ABILITY_MIND_CRUSH> { INSTANCE(ABILITY_GNASHING_CANNON); };
+template <>
+struct AbilityImpl<ABILITY_GNASHING_CANNON> : extends Merged<ABILITY_MEGA_LAUNCHER, ABILITY_MIND_CRUSH> {};
 
-ABILITY(ABILITY_HYPER_CLEANSE) : extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
-    INSTANCE(ABILITY_HYPER_CLEANSE);
+template <>
+struct AbilityImpl<ABILITY_HYPER_CLEANSE> : extends OnDefensiveMultiplier, extends RemovesStatusOnImmunity {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_POISON) RESISTANCE(.5);
     }
@@ -7723,29 +7760,28 @@ ABILITY(ABILITY_HYPER_CLEANSE) : extends OnDefensiveMultiplier, extends RemovesS
     }
 };
 
-ABILITY(ABILITY_MOLTEN_COAT) : extends OnAttacker, extends AteAbility<TYPE_ROCK> {
-    INSTANCE(ABILITY_MOLTEN_COAT);
+template <>
+struct AbilityImpl<ABILITY_MOLTEN_COAT> : extends OnAttacker, extends AteAbility<TYPE_ROCK> {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(moveType == TYPE_ROCK)
-        CHECK(CanBeBurned(target))
-        CHECK(Random() % 2)
+        CHECK(CanBeBurned(target)) CHECK(Random() % 2)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, target);
+            AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, target);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_ROYAL_DECREE) : extends AbilityImpl<ABILITY_QUEENLY_MAJESTY>, extends OnEntry {
-    INSTANCE(ABILITY_ROYAL_DECREE);
+template <>
+struct AbilityImpl<ABILITY_ROYAL_DECREE> : extends AbilityImpl<ABILITY_QUEENLY_MAJESTY>, extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
         return UseEntryMove(battler, ability, MOVE_GLARE, 0);
     }
 };
 
-ABILITY(ABILITY_TAG) : extends OnPreemptAction {
-    INSTANCE(ABILITY_TAG);
+template <>
+struct AbilityImpl<ABILITY_TAG> : extends OnPreemptAction {
     ON_PREEMPT_ACTION {
         CHECK(gCurrentActionFuncId == B_ACTION_SWITCH)
         gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
@@ -7760,8 +7796,8 @@ ABILITY(ABILITY_TAG) : extends OnPreemptAction {
     }
 };
 
-ABILITY(ABILITY_SURPRISE) : extends OnPreemptAction {
-    INSTANCE(ABILITY_SURPRISE);
+template <>
+struct AbilityImpl<ABILITY_SURPRISE> : extends OnPreemptAction {
     ON_PREEMPT_ACTION {
         CHECK(gCurrentActionFuncId == B_ACTION_USE_MOVE)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
@@ -7793,57 +7829,68 @@ ABILITY(ABILITY_SURPRISE) : extends OnPreemptAction {
     }
 };
 
-ABILITY(ABILITY_BREEZY_NEIGH) : extends AbilityImpl<ABILITY_ADRENALINE_RUSH> { INSTANCE(ABILITY_BREEZY_NEIGH); };
+template <>
+struct AbilityImpl<ABILITY_BREEZY_NEIGH> : extends AbilityImpl<ABILITY_ADRENALINE_RUSH> {};
 
-ABILITY(ABILITY_DREAMSCAPE) : extends AbilityImpl<ABILITY_COMATOSE>, extends AbilityImpl<ABILITY_DREAMCATCHER> {
-    INSTANCE(ABILITY_DREAMSCAPE);
+template <>
+struct AbilityImpl<ABILITY_DREAMSCAPE> : extends AbilityImpl<ABILITY_COMATOSE>, extends AbilityImpl<ABILITY_DREAMCATCHER> {
     ON_OFFENSIVE_MULTIPLIER {
         AbilityImpl<ABILITY_DREAMCATCHER>::onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         MUL(1.2);
     }
 };
 
-ABILITY(ABILITY_HASTE_MAKES_WASTE) : extends AbilityImpl<ABILITY_ANALYTIC>, extends AbilityImpl<ABILITY_STALL> { INSTANCE(ABILITY_HASTE_MAKES_WASTE); };
+template <>
+struct AbilityImpl<ABILITY_HASTE_MAKES_WASTE> : extends AbilityImpl<ABILITY_ANALYTIC>, extends AbilityImpl<ABILITY_STALL> {};
 
-ABILITY(ABILITY_HUNGRY_MAWS) : extends AbilityImpl<ABILITY_JAWS_OF_CARNAGE>, extends AbilityImpl<ABILITY_STRONG_JAW> { INSTANCE(ABILITY_HUNGRY_MAWS); };
+template <>
+struct AbilityImpl<ABILITY_HUNGRY_MAWS> : extends AbilityImpl<ABILITY_JAWS_OF_CARNAGE>, extends AbilityImpl<ABILITY_STRONG_JAW> {};
 
-ABILITY(ABILITY_THERMAL_SLIDE) : extends OnStat<> {
-    INSTANCE(ABILITY_THERMAL_SLIDE);
+template <>
+struct AbilityImpl<ABILITY_THERMAL_SLIDE> : extends OnStat<> {
     ON_STAT {
         if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY | WEATHER_HAIL_ANY)) *stat *= 1.5;
     }
 };
 
-ABILITY(ABILITY_THERMOMANCY) : extends Merged<ABILITY_CRYOMANCY, ABILITY_PYROMANCY> { INSTANCE(ABILITY_THERMOMANCY); };
+template <>
+struct AbilityImpl<ABILITY_THERMOMANCY> : extends Merged<ABILITY_CRYOMANCY, ABILITY_PYROMANCY> {};
 
-ABILITY(ABILITY_CHUCKSTER) : extends NotImplemented { INSTANCE(ABILITY_CHUCKSTER); };
+template <>
+struct AbilityImpl<ABILITY_CHUCKSTER> : extends NotImplemented {};
 
-ABILITY(ABILITY_HEAT_SINK) : extends LightningRodClone<TYPE_FIRE> { INSTANCE(ABILITY_HEAT_SINK); };
+template <>
+struct AbilityImpl<ABILITY_HEAT_SINK> : extends LightningRodClone<TYPE_FIRE> {};
 
-ABILITY(ABILITY_RELIC_STONE) : extends NotImplemented { INSTANCE(ABILITY_RELIC_STONE); };
+template <>
+struct AbilityImpl<ABILITY_RELIC_STONE> : extends NotImplemented {};
 
-ABILITY(ABILITY_SUPERCELL) : extends Merged<ABILITY_ELECTRIC_SURGE, ABILITY_DRIZZLE> { INSTANCE(ABILITY_SUPERCELL); };
+template <>
+struct AbilityImpl<ABILITY_SUPERCELL> : extends Merged<ABILITY_ELECTRIC_SURGE, ABILITY_DRIZZLE> {};
 
-ABILITY(ABILITY_LIGHTNING_ASPECT) : extends AbsorbStatUp<TYPE_ELECTRIC, STAT_HIGHEST_ATTACKING> { INSTANCE(ABILITY_LIGHTNING_ASPECT); };
+template <>
+struct AbilityImpl<ABILITY_LIGHTNING_ASPECT> : extends AbsorbStatUp<TYPE_ELECTRIC, STAT_HIGHEST_ATTACKING> {};
 
-ABILITY(ABILITY_FIRE_ASPECT) : extends AbsorbHeal<TYPE_FIRE>, extends OnAttacker {
-    INSTANCE(ABILITY_FIRE_ASPECT);
+template <>
+struct AbilityImpl<ABILITY_FIRE_ASPECT> : extends AbsorbHeal<TYPE_FIRE>, extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(moveType == TYPE_FIRE)
         CHECK(CanBeBurned(target))
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, target);
+            AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, target);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_BLISTERING_SUN) : extends Merged<ABILITY_DESOLATE_LAND, ABILITY_AIR_BLOWER> { INSTANCE(ABILITY_BLISTERING_SUN); };
+template <>
+struct AbilityImpl<ABILITY_BLISTERING_SUN> : extends Merged<ABILITY_DESOLATE_LAND, ABILITY_AIR_BLOWER> {};
 
-ABILITY(ABILITY_AURORAS_GALE) : extends AbilityImpl<ABILITY_NORTH_WIND>, extends AbilityImpl<ABILITY_MAJESTIC_BIRD> { INSTANCE(ABILITY_AURORAS_GALE); };
+template <>
+struct AbilityImpl<ABILITY_AURORAS_GALE> : extends AbilityImpl<ABILITY_NORTH_WIND>, extends AbilityImpl<ABILITY_MAJESTIC_BIRD> {};
 
-ABILITY(ABILITY_WINTER_THRONE) : extends OnEntry, extends OnEndTurn {
-    INSTANCE(ABILITY_WINTER_THRONE);
+template <>
+struct AbilityImpl<ABILITY_WINTER_THRONE> : extends OnEntry, extends OnEndTurn {
     ON_ENTRY { return SwitchInAnnounce(B_MSG_SWITCHIN_WINTER_THRONE); }
     ON_END_TURN {
         CHECK(IsAbilityOnField(ability) - 1 == battler)
@@ -7853,7 +7900,7 @@ ABILITY(ABILITY_WINTER_THRONE) : extends OnEntry, extends OnEndTurn {
             FILTER(IsBattlerAlive(target))
 
             if (IS_BATTLER_OF_TYPE(target, TYPE_ICE)) {
-                FILTER_NOT(IsMagicGuardProtected(target))
+                FILTER_NOT(HasMagicGuard(target))
                 gStackBattler1 = target;
                 BattleScriptExecute(BattleScript_FuneralPyreDamage);
             } else {
@@ -7869,26 +7916,29 @@ ABILITY(ABILITY_WINTER_THRONE) : extends OnEntry, extends OnEndTurn {
     }
 };
 
-ABILITY(ABILITY_ICE_PLUMES) : extends AbilityImpl<ABILITY_ICE_SCALES> { INSTANCE(ABILITY_ICE_PLUMES); };
+template <>
+struct AbilityImpl<ABILITY_ICE_PLUMES> : extends AbilityImpl<ABILITY_ICE_SCALES> {};
 
-ABILITY(ABILITY_PROPELLER_TAIL) : extends AbilityImpl<ABILITY_SWIFT_SWIM> { INSTANCE(ABILITY_PROPELLER_TAIL); };
+template <>
+struct AbilityImpl<ABILITY_PROPELLER_TAIL> : extends AbilityImpl<ABILITY_SWIFT_SWIM> {};
 
-ABILITY(ABILITY_ENERGY_TAP) : extends OnAttacker {
-    INSTANCE(ABILITY_ENERGY_TAP);
+template <>
+struct AbilityImpl<ABILITY_ENERGY_TAP> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
 
-        gBattleMoveDamage = -gHpDealt / 8;
+            gBattleMoveDamage = -gHpDealt / 8;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
     }
 };
 
-ABILITY(ABILITY_MOLTEN_CORE) : extends AbilityImpl<ABILITY_FURNACE>, extends AbsorbStatUp<TYPE_ROCK, STAT_SPEED>, extends AbsorbUp2, extends StealthRockImmune {
-    INSTANCE(ABILITY_MOLTEN_CORE);
+template <>
+struct AbilityImpl<ABILITY_MOLTEN_CORE>
+    : extends AbilityImpl<ABILITY_FURNACE>, extends AbsorbStatUp<TYPE_ROCK, STAT_SPEED>, extends AbsorbUp2, extends StealthRockImmune {
     ON_ENTRY {
         AbilityImpl<ABILITY_FURNACE>::onEntry(DELEGATE_ENTRY);
 
@@ -7898,26 +7948,18 @@ ABILITY(ABILITY_MOLTEN_CORE) : extends AbilityImpl<ABILITY_FURNACE>, extends Abs
     }
 };
 
-ABILITY(ABILITY_REVERBATE) : extends OnModifyMoveFlags {
-    INSTANCE(ABILITY_REVERBATE);
-    ON_MODIFY_MOVE_FLAGS {
-        CHECK(flag == MOVE_FLAG_SOUND)
-        CHECK(gBattleMoves[move].type == TYPE_NORMAL)
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_REVERBATE> : extends OnModifyMoveFlags {
+    ON_MODIFY_MOVE_FLAGS { CHECK(flag == MOVE_FLAG_SOUND) CHECK(gBattleMoves[move].type == TYPE_NORMAL) return TRUE; }
 };
 
-ABILITY(ABILITY_TAEKKYEON) : extends OnModifyMoveFlags {
-    INSTANCE(ABILITY_TAEKKYEON);
-    ON_MODIFY_MOVE_FLAGS {
-        CHECK(flag == MOVE_FLAG_DANCE)
-        CHECK_NOT(IS_MOVE_STATUS(move))
-        return TRUE;
-    }
+template <>
+struct AbilityImpl<ABILITY_TAEKKYEON> : extends OnModifyMoveFlags {
+    ON_MODIFY_MOVE_FLAGS { CHECK(flag == MOVE_FLAG_DANCE) CHECK_NOT(IS_MOVE_STATUS(move)) return TRUE; }
 };
 
-ABILITY(ABILITY_SLUDGE_SPIT) : extends OnAttacker {
-    INSTANCE(ABILITY_SLUDGE_SPIT);
+template <>
+struct AbilityImpl<ABILITY_SLUDGE_SPIT> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(gBattleMoves[move].power)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -7926,8 +7968,8 @@ ABILITY(ABILITY_SLUDGE_SPIT) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_SWAMP_THING) : extends OnEntry {
-    INSTANCE(ABILITY_SWAMP_THING);
+template <>
+struct AbilityImpl<ABILITY_SWAMP_THING> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gSideTimers[GetOppositeSide(battler)].swampTimer)
 
@@ -7937,10 +7979,11 @@ ABILITY(ABILITY_SWAMP_THING) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_FROSTY_PRESCENCE) : extends SimpleEntryMove<MOVE_MIST> { INSTANCE(ABILITY_FROSTY_PRESCENCE); };
+template <>
+struct AbilityImpl<ABILITY_FROSTY_PRESCENCE> : extends SimpleEntryMove<MOVE_MIST> {};
 
-ABILITY(ABILITY_CHILLING_PELLETS) : extends OnDefender {
-    INSTANCE(ABILITY_CHILLING_PELLETS);
+template <>
+struct AbilityImpl<ABILITY_CHILLING_PELLETS> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -7950,14 +7993,15 @@ ABILITY(ABILITY_CHILLING_PELLETS) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_PAINT_SHOT) : extends OnAttacker {
-    INSTANCE(ABILITY_PAINT_SHOT);
+template <>
+struct AbilityImpl<ABILITY_PAINT_SHOT> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(IS_BATTLER_OF_TYPE(target, moveType))
         CHECK(IsMegaLauncherBoosted(battler, move))
 
-        gBattleMons[target].type1 = moveType;
+            gBattleMons[target]
+                .type1 = moveType;
         gBattleMons[target].type2 = moveType;
         gBattleMons[target].type3 = TYPE_MYSTERY;
         PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
@@ -7967,8 +8011,8 @@ ABILITY(ABILITY_PAINT_SHOT) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_STONECUTTER) : extends AbilityImpl<ABILITY_FOSSILIZED>, extends OnMoldBreaker {
-    INSTANCE(ABILITY_STONECUTTER);
+template <>
+struct AbilityImpl<ABILITY_STONECUTTER> : extends AbilityImpl<ABILITY_FOSSILIZED>, extends OnMoldBreaker {
     ON_MOLD_BREAKER {
         gHitMarker |= HITMARKER_MOLD_BREAKER;
         SetTypeBeforeUsingMove(move, gActiveBattler);
@@ -7983,8 +8027,8 @@ ABILITY(ABILITY_STONECUTTER) : extends AbilityImpl<ABILITY_FOSSILIZED>, extends 
     }
 };
 
-ABILITY(ABILITY_EDGELORD) : extends AbilityImpl<ABILITY_CUTTHROAT>, extends OnBattlerFaints<> {
-    INSTANCE(ABILITY_EDGELORD);
+template <>
+struct AbilityImpl<ABILITY_EDGELORD> : extends AbilityImpl<ABILITY_CUTTHROAT>, extends OnBattlerFaints<> {
     ON_BATTLER_FAINTS {
         CHECK_NOT(gStatuses4[battler] & STATUS4_CUTTHROAT)
 
@@ -7995,19 +8039,21 @@ ABILITY(ABILITY_EDGELORD) : extends AbilityImpl<ABILITY_CUTTHROAT>, extends OnBa
     }
 };
 
-ABILITY(ABILITY_WARMONGER) : extends OnOffensiveMultiplier<> {
-    INSTANCE(ABILITY_WARMONGER);
+template <>
+struct AbilityImpl<ABILITY_WARMONGER> : extends OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_ROCK || moveType == TYPE_STEEL || moveType == TYPE_FIGHTING) MUL(1.30);
     }
 };
 
-ABILITY(ABILITY_LOCUST_SWARM) : extends StandardTransformation { INSTANCE(ABILITY_LOCUST_SWARM); };
+template <>
+struct AbilityImpl<ABILITY_LOCUST_SWARM> : extends StandardTransformation {};
 
-ABILITY(ABILITY_REVELATION) : extends StandardTransformation { INSTANCE(ABILITY_REVELATION); };
+template <>
+struct AbilityImpl<ABILITY_REVELATION> : extends StandardTransformation {};
 
-ABILITY(ABILITY_CURSE_OF_FAMINE) : extends OnEntry {
-    INSTANCE(ABILITY_CURSE_OF_FAMINE);
+template <>
+struct AbilityImpl<ABILITY_CURSE_OF_FAMINE> : extends OnEntry {
     ON_ENTRY {
         CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
@@ -8016,17 +8062,18 @@ ABILITY(ABILITY_CURSE_OF_FAMINE) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_CRYSTALLINE_ARMOR) : extends NotImplemented { INSTANCE(ABILITY_CRYSTALLINE_ARMOR); };
+template <>
+struct AbilityImpl<ABILITY_CRYSTALLINE_ARMOR> : extends NotImplemented {};
 
-ABILITY(ABILITY_SOUL_HARVEST) : extends OnStat<>, extends Breakable {
-    INSTANCE(ABILITY_SOUL_HARVEST);
+template <>
+struct AbilityImpl<ABILITY_SOUL_HARVEST> : extends OnStat<>, extends Breakable {
     ON_STAT {
         if (statId != STAT_SPEED) *stat = *stat * (20 + min(5, gFaintedMonCount[GetBattlerSide(battler)])) / 20;
     }
 };
 
-ABILITY(ABILITY_THICK_BLUBBER) : extends OnDefensiveMultiplier, extends OnStat<> {
-    INSTANCE(ABILITY_THICK_BLUBBER);
+template <>
+struct AbilityImpl<ABILITY_THICK_BLUBBER> : extends OnDefensiveMultiplier, extends OnStat<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.25);
     }
@@ -8035,10 +8082,11 @@ ABILITY(ABILITY_THICK_BLUBBER) : extends OnDefensiveMultiplier, extends OnStat<>
     }
 };
 
-ABILITY(ABILITY_CRAVING) : extends NotImplemented { INSTANCE(ABILITY_CRAVING); };
+template <>
+struct AbilityImpl<ABILITY_CRAVING> : extends NotImplemented {};
 
-ABILITY(ABILITY_RAT_KING) : extends OnStat<ApplyOn::ALLY> {
-    INSTANCE(ABILITY_RAT_KING);
+template <>
+struct AbilityImpl<ABILITY_RAT_KING> : extends OnStat<ApplyOn::ALLY> {
     ON_STAT {
         const BaseStats *baseStats = &gBaseStats[gBattleMons[battler].species];
         int bst =
@@ -8048,15 +8096,15 @@ ABILITY(ABILITY_RAT_KING) : extends OnStat<ApplyOn::ALLY> {
     }
 };
 
-ABILITY(ABILITY_CRISPY_CREAM) : extends OnDefender {
-    INSTANCE(ABILITY_CRISPY_CREAM);
+template <>
+struct AbilityImpl<ABILITY_CRISPY_CREAM> : extends OnDefender {
     ON_DEFENDER {
         return Random() % 2 ? AbilityImpl<ABILITY_FLAME_BODY>::onEither(DELEGATE_DEFENDER) : AbilityImpl<ABILITY_FREEZING_POINT>::onEither(DELEGATE_DEFENDER);
     }
 };
 
-ABILITY(ABILITY_DEEP_FRIED) : extends OnEntry {
-    INSTANCE(ABILITY_DEEP_FRIED);
+template <>
+struct AbilityImpl<ABILITY_DEEP_FRIED> : extends OnEntry {
     ON_ENTRY {
         CHECK_NOT(gSideTimers[GetOppositeSide(battler)].fireSeaTimer)
 
@@ -8066,10 +8114,11 @@ ABILITY(ABILITY_DEEP_FRIED) : extends OnEntry {
     }
 };
 
-ABILITY(ABILITY_FOOD_LOVERS) : extends AbilityImpl<ABILITY_HOSPITALITY>, extends AbilityImpl<ABILITY_FRIEND_GUARD> { INSTANCE(ABILITY_FOOD_LOVERS); };
+template <>
+struct AbilityImpl<ABILITY_FOOD_LOVERS> : extends AbilityImpl<ABILITY_HOSPITALITY>, extends AbilityImpl<ABILITY_FRIEND_GUARD> {};
 
-ABILITY(ABILITY_LUNAR_WRATH) : extends OnAttacker {
-    INSTANCE(ABILITY_LUNAR_WRATH);
+template <>
+struct AbilityImpl<ABILITY_LUNAR_WRATH> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(moveType == TYPE_GHOST)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -8078,21 +8127,22 @@ ABILITY(ABILITY_LUNAR_WRATH) : extends OnAttacker {
     }
 };
 
-ABILITY(ABILITY_SPYWARE) : extends NotImplemented { INSTANCE(ABILITY_SPYWARE); };
+template <>
+struct AbilityImpl<ABILITY_SPYWARE> : extends NotImplemented {};
 
-ABILITY(ABILITY_VIRUS) : extends OnAttacker {
-    INSTANCE(ABILITY_VIRUS);
+template <>
+struct AbilityImpl<ABILITY_VIRUS> : extends OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(moveType == TYPE_ELECTRIC)
         CHECK(CanBePoisoned(battler, target, move))
 
-        return AbilityStatusEffect(MOVE_EFFECT_POISON);
+            return AbilityStatusEffect(MOVE_EFFECT_POISON);
     }
 };
 
-ABILITY(ABILITY_POWER_LEAK) : extends OnDefender, extends AllowTerrainIfAirborne<TERRAIN_ELECTRIC> {
-    INSTANCE(ABILITY_POWER_LEAK);
+template <>
+struct AbilityImpl<ABILITY_POWER_LEAK> : extends OnDefender, extends AllowTerrainIfAirborne<TERRAIN_ELECTRIC> {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
@@ -8104,31 +8154,32 @@ ABILITY(ABILITY_POWER_LEAK) : extends OnDefender, extends AllowTerrainIfAirborne
     TerrainType allowTerrainIfAirborne() { return TERRAIN_ELECTRIC; }
 };
 
-ABILITY(ABILITY_BACKUP_POWER) : extends OnRevive {
-    INSTANCE(ABILITY_BACKUP_POWER);
-    ON_REVIVE {
-        CHECK(IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN))
-        return B_MSG_BACKUP_POWER;
-    }
+template <>
+struct AbilityImpl<ABILITY_BACKUP_POWER> : extends OnRevive {
+    ON_REVIVE { CHECK(IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) return B_MSG_BACKUP_POWER; }
 };
 
-ABILITY(ABILITY_SAND_FIEND) : extends AbilityImpl<ABILITY_SAND_GUARD>, extends AbilityImpl<ABILITY_SAND_FORCE> { INSTANCE(ABILITY_SAND_FIEND); };
+template <>
+struct AbilityImpl<ABILITY_SAND_FIEND> : extends AbilityImpl<ABILITY_SAND_GUARD>, extends AbilityImpl<ABILITY_SAND_FORCE> {};
 
-ABILITY(ABILITY_MOUSTACHE) : extends Merged<ABILITY_TANGLING_HAIR, ABILITY_STAMINA> { INSTANCE(ABILITY_MOUSTACHE); };
+template <>
+struct AbilityImpl<ABILITY_MOUSTACHE> : extends Merged<ABILITY_TANGLING_HAIR, ABILITY_STAMINA> {};
 
-ABILITY(ABILITY_DEPTH_EXPLORER) : extends AbilityImpl<ABILITY_FIELD_EXPLORER>, extends AbilityImpl<ABILITY_ILLUMINATE> { INSTANCE(ABILITY_DEPTH_EXPLORER); };
+template <>
+struct AbilityImpl<ABILITY_DEPTH_EXPLORER> : extends AbilityImpl<ABILITY_FIELD_EXPLORER>, extends AbilityImpl<ABILITY_ILLUMINATE> {};
 
-ABILITY(ABILITY_DUNE_VEIL) : extends AbilityImpl<ABILITY_SAND_GUARD>, extends AbilityImpl<ABILITY_SELF_SUFFICIENT> { INSTANCE(ABILITY_DUNE_VEIL); };
+template <>
+struct AbilityImpl<ABILITY_DUNE_VEIL> : extends AbilityImpl<ABILITY_SAND_GUARD>, extends AbilityImpl<ABILITY_SELF_SUFFICIENT> {};
 
-ABILITY(ABILITY_STRONG_FOUNDATION) : extends OnDefensiveMultiplier {
-    INSTANCE(ABILITY_STRONG_FOUNDATION);
+template <>
+struct AbilityImpl<ABILITY_STRONG_FOUNDATION> : extends OnDefensiveMultiplier {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_WATER || moveType == TYPE_GROUND) RESISTANCE(.50);
     }
 };
 
-ABILITY(ABILITY_FOG_MACHINE) : extends OnDefender {
-    INSTANCE(ABILITY_FOG_MACHINE);
+template <>
+struct AbilityImpl<ABILITY_FOG_MACHINE> : extends OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_FOG_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
             BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
@@ -8143,8 +8194,8 @@ ABILITY(ABILITY_FOG_MACHINE) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_DROP_BLOCKS) : extends OnDefender {
-    INSTANCE(ABILITY_DROP_BLOCKS);
+template <>
+struct AbilityImpl<ABILITY_DROP_BLOCKS> : extends OnDefender {
     ON_DEFENDER {
         CHECK(DidMoveHit())
         CHECK(gSideTimers[BATTLE_OPPOSITE(battler)].spikesAmount < 3)
@@ -8154,33 +8205,43 @@ ABILITY(ABILITY_DROP_BLOCKS) : extends OnDefender {
     }
 };
 
-ABILITY(ABILITY_LASER_DRILL) : extends NotImplemented { INSTANCE(ABILITY_LASER_DRILL); };
+template <>
+struct AbilityImpl<ABILITY_LASER_DRILL> : extends NotImplemented {};
 
-ABILITY(ABILITY_LIGHT_SABER) : extends NotImplemented { INSTANCE(ABILITY_LIGHT_SABER); };
+template <>
+struct AbilityImpl<ABILITY_LIGHT_SABER> : extends NotImplemented {};
 
-ABILITY(ABILITY_LOOSE_THORNS) : extends NotImplemented { INSTANCE(ABILITY_LOOSE_THORNS); };
+template <>
+struct AbilityImpl<ABILITY_LOOSE_THORNS> : extends NotImplemented {};
 
-ABILITY(ABILITY_TURF_WAR) : extends NotImplemented { INSTANCE(ABILITY_TURF_WAR); };
+template <>
+struct AbilityImpl<ABILITY_TURF_WAR> : extends NotImplemented {};
 
-ABILITY(ABILITY_GREEDY) : extends NotImplemented { INSTANCE(ABILITY_GREEDY); };
+template <>
+struct AbilityImpl<ABILITY_GREEDY> : extends NotImplemented {};
 
-ABILITY(ABILITY_MUSICAL_NOTES) : extends NotImplemented { INSTANCE(ABILITY_MUSICAL_NOTES); };
+template <>
+struct AbilityImpl<ABILITY_MUSICAL_NOTES> : extends NotImplemented {};
 
-ABILITY(ABILITY_STRIKEOUT) : extends NotImplemented { INSTANCE(ABILITY_STRIKEOUT); };
+template <>
+struct AbilityImpl<ABILITY_STRIKEOUT> : extends NotImplemented {};
 
-ABILITY(ABILITY_HOME_RUN) : extends NotImplemented { INSTANCE(ABILITY_HOME_RUN); };
+template <>
+struct AbilityImpl<ABILITY_HOME_RUN> : extends NotImplemented {};
 
-ABILITY(ABILITY_BRUISER) : extends AddsType<TYPE_FIGHTING> { INSTANCE(ABILITY_BRUISER); };
+template <>
+struct AbilityImpl<ABILITY_BRUISER> : extends AddsType<TYPE_FIGHTING> {};
 
-ABILITY(ABILITY_LETS_DANCE) : extends SimpleEntryMove<MOVE_TEETER_DANCE> { INSTANCE(ABILITY_LETS_DANCE); };
+template <>
+struct AbilityImpl<ABILITY_LETS_DANCE> : extends SimpleEntryMove<MOVE_TEETER_DANCE> {};
 
-ABILITY(ABILITY_MYCELIUM_MIGHT) : extends OnMoldBreaker {
-    INSTANCE(ABILITY_MYCELIUM_MIGHT);
+template <>
+struct AbilityImpl<ABILITY_MYCELIUM_MIGHT> : extends OnMoldBreaker {
     ON_MOLD_BREAKER { return IS_MOVE_STATUS(move); }
 };
 
-ABILITY(ABILITY_DEADLY_PRECISION) : extends OnMoldBreaker {
-    INSTANCE(ABILITY_DEADLY_PRECISION);
+template <>
+struct AbilityImpl<ABILITY_DEADLY_PRECISION> : extends OnMoldBreaker {
     ON_MOLD_BREAKER {
         gHitMarker |= HITMARKER_MOLD_BREAKER;
         SetTypeBeforeUsingMove(move, gActiveBattler);
@@ -8193,12 +8254,21 @@ ABILITY(ABILITY_DEADLY_PRECISION) : extends OnMoldBreaker {
     }
 };
 
+static const AbilityImpl<ABILITY_CHLOROPLAST> test = AbilityImpl<ABILITY_CHLOROPLAST>();
+#define __ON_ABILITY(ABILITY) static const AbilityImpl<ABILITY> __instance##ABILITY = AbilityImpl<ABILITY>();
+OVER_ALL_ABILITIES
+#undef __ON_ABILITY
+
 template <typename As>
 inline const As *dispatchTo(AbilityEnum id) {
     switch (id) {
-#define __ON_ABILITY(ABILITY) \
-    case ABILITY:             \
-        return dynamic_cast<const As *>(AbilityImpl<ABILITY>::instance);
+#define __ON_ABILITY(ABILITY)                                 \
+    case ABILITY:                                             \
+        if (std::is_assignable_v<As, AbilityImpl<ABILITY>>) { \
+            return (const As *)&__instance##ABILITY;          \
+        } else {                                              \
+            return nullptr;                                   \
+        }
         OVER_ALL_ABILITIES
 #undef __ON_ABILITY
 
@@ -8208,14 +8278,5 @@ inline const As *dispatchTo(AbilityEnum id) {
 
     return nullptr;
 }
-
-template <typename T>
-struct AbilityEngine {
-   private:
-    constexpr static Implementation impl = T();
-
-   public:
-    ~AbilityEngine();
-};
 
 #pragma GCC diagnostic pop

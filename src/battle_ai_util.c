@@ -1925,7 +1925,7 @@ static u32 GetWeatherDamage(u8 battlerId) {
 u32 GetBattlerSecondaryDamage(u8 battlerId) {
     u32 secondaryDamage;
 
-    if (IsMagicGuardProtected(battlerId)) return FALSE;
+    if (HasMagicGuard(battlerId)) return FALSE;
 
     secondaryDamage = GetLeechSeedDamage(battlerId) + GetNightmareDamage(battlerId) + GetCurseDamage(battlerId) + GetTrapDamage(battlerId) +
                       GetPoisonDamage(battlerId) + GetWeatherDamage(battlerId);
@@ -1993,9 +1993,9 @@ static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler) {
     if (!(flags & SIDE_STATUS_STEALTH_ROCK) && !IsGravityActive() && holdEffect != HOLD_EFFECT_IRON_BALL) {
         if (holdEffect == HOLD_EFFECT_AIR_BALLOON) return FALSE;
         if (gBaseStats[species].type1 == TYPE_FLYING || gBaseStats[species].type2 == TYPE_FLYING) return FALSE;
-        if (gAbilities[ability].levitate) return FALSE;
+        if (IsGroundImmuneAbility(ability)) return FALSE;
         for (int i = 0; i < NUM_INNATE_PER_SPECIES; i++) {
-            if (gAbilities[GetMonInnate(mon, i, isEnemyMon)].levitate) return FALSE;
+            if (IsGroundImmuneAbility(GetMonInnate(mon, i, isEnemyMon))) return FALSE;
         }
     }
 
@@ -2170,7 +2170,7 @@ bool32 AI_CanPutToSleep(u8 battlerAtk, u8 battlerDef, u16 move, u16 partnerMove)
 bool32 ShouldPoisonSelf(u8 battler) {
     if (CanBePoisoned(battler, battler, MOVE_NONE) &&
         (BattlerHasAbility(battler, ABILITY_POISON_HEAL, FALSE) || BattlerHasAbility(battler, ABILITY_MARVEL_SCALE, FALSE) ||
-         BattlerHasAbility(battler, ABILITY_QUICK_FEET, FALSE) || IsMagicGuardProtected(battler) || HasMoveEffect(battler, EFFECT_FACADE) ||
+         BattlerHasAbility(battler, ABILITY_QUICK_FEET, FALSE) || HasMagicGuard(battler) || HasMoveEffect(battler, EFFECT_FACADE) ||
          HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT) || (BattlerHasAbility(battler, ABILITY_TOXIC_BOOST, FALSE) && HasMoveWithSplit(battler, SPLIT_PHYSICAL)) ||
          (BattlerHasAbility(battler, ABILITY_GUTS, FALSE) && HasMoveWithSplit(battler, SPLIT_PHYSICAL))))
         return TRUE;  // battler can be poisoned and has move/ability that synergizes with being poisoned
@@ -2193,7 +2193,7 @@ bool32 AI_CanBleed(u8 battler) { return CanBleed(battler); }
 
 bool32 ShouldBurnSelf(u8 battler) {
     if (CanBeBurned(battler) && (BattlerHasAbility(battler, ABILITY_QUICK_FEET, FALSE) || BattlerHasAbility(battler, ABILITY_HEATPROOF, FALSE) ||
-                                 IsMagicGuardProtected(battler) || HasMoveEffect(battler, EFFECT_FACADE) || HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT) ||
+                                 HasMagicGuard(battler) || HasMoveEffect(battler, EFFECT_FACADE) || HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT) ||
                                  (BattlerHasAbility(battler, ABILITY_FLARE_BOOST, FALSE) && HasMoveWithSplit(battler, SPLIT_SPECIAL)) ||
                                  (BattlerHasAbility(battler, ABILITY_GUTS, FALSE) && HasMoveWithSplit(battler, SPLIT_PHYSICAL)) ||
                                  (BattlerHasAbility(battler, ABILITY_DETERMINATION, FALSE) && HasMoveWithSplit(battler, SPLIT_SPECIAL))))
@@ -2203,7 +2203,7 @@ bool32 ShouldBurnSelf(u8 battler) {
 }
 
 bool32 ShouldFrostbiteSelf(u8 battler) {
-    if (CanGetFrostbite(battler) && (IsMagicGuardProtected(battler) || HasMoveEffect(battler, EFFECT_FACADE) || HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT) ||
+    if (CanGetFrostbite(battler) && (HasMagicGuard(battler) || HasMoveEffect(battler, EFFECT_FACADE) || HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT) ||
                                      (BattlerHasAbility(battler, ABILITY_GUTS, FALSE) && HasMoveWithSplit(battler, SPLIT_PHYSICAL)) ||
                                      (BattlerHasAbility(battler, ABILITY_DETERMINATION, FALSE) && HasMoveWithSplit(battler, SPLIT_SPECIAL))))
         return TRUE;
@@ -2721,7 +2721,7 @@ bool32 IsRecycleEncouragedItem(u16 item) {
 void IncreaseStatUpScore(u8 battlerAtk, u8 battlerDef, u8 statId, s16 *score) {
     if (CanTargetFaintAi(battlerDef, battlerAtk)) return;
 
-    if (BattlerHasAbility(battlerAtk, ABILITY_CONTRARY, TRUE) || (IsUnaware(battlerDef) && statId != STAT_SPEED)) return;
+    if (BattlerHasAbility(battlerAtk, ABILITY_CONTRARY, TRUE) || (HasUnaware(battlerDef) && statId != STAT_SPEED)) return;
 
     if (AI_DATA->hpPercents[battlerAtk] < 80 && AI_RandLessThan(128)) return;
 

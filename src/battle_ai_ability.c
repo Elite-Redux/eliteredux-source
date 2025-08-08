@@ -388,14 +388,14 @@ int ScoreDefenseAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int
         case ABILITY_LINGERING_AROMA:
         case ABILITY_MUMMY:
             REQUIRE(moveState->contact)
-            REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(battlerAtk)))
+            REQUIRE_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(battlerAtk)))
             REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerAtk))
             REQUIRE_NOT(BattlerHasAbility(battlerAtk, ability, FALSE))
             return AI_SCORE_REPLACE_ABILITY(battlerAtk, ability);
 
         case ABILITY_WANDERING_SPIRIT:
             REQUIRE(moveState->contact)
-            REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(battlerAtk)))
+            REQUIRE_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(battlerAtk)))
             REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerAtk))
             REQUIRE_NOT(BattlerHasAbility(battlerAtk, ability, FALSE))
             REQUIRE_NOT(BattlerHasAbility(battlerDef, GetBattlerAbility(battlerAtk), FALSE))
@@ -681,7 +681,7 @@ int ScoreEitherAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int 
         case ABILITY_BLOOD_STAIN:
             REQUIRE(moveState->contact)
             REQUIRE_NOT(BattlerHasAbility(battlerDef, ABILITY_BLOOD_STAIN, FALSE))
-            REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(battlerDef)))
+            REQUIRE_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(battlerDef)))
             REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerDef))
             return AI_SCORE_REPLACE_ABILITY(battlerDef, ABILITY_BLOOD_STAIN);
 

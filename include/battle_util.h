@@ -3,6 +3,7 @@
 
 #include "abilities.hh"
 #include "battle_ai_new.h"
+#include "behavior/ability/impl_battle.hh"
 
 #define MOVE_LIMITATION_ZEROMOVE (1 << 0)
 #define MOVE_LIMITATION_PP (1 << 1)
@@ -350,11 +351,8 @@ bool32 IsAlly(u32 battlerAtk, u32 battlerDef);
 void UpdateAbilityStateIndices(u8 battler, u16 newAbilities[]);
 void UpdateAbilityStateIndicesForNewAbility(u8 battler, u16 newAbility);
 void UpdateAbilityStateIndicesForNewSpecies(u8 battler, u16 newSpecies);
-bool32 IsUnsuppressableAbility(AbilityEnum ability);
-int IsPersistentOrUnsuppressableAbility(AbilityEnum ability);
 bool8 CanBeDisabled(u8 battlerId);
 bool8 DoesBattlerHaveAbilityShield(u8 battlerId);
-u16 IsSoundproof(u8 battlerId);
 AbilityEnum BattlerHasAbility(int battler, AbilityEnum ability, int checkMoldBreaker);
 u8 GetTurnBattler();
 void ReadActiveScriptInitialStackState();
@@ -366,7 +364,6 @@ AbilityEnum GetInnateInSlot(int level, SpeciesEnum species, u8 position, u32 per
 void ClearMiscTurnFlags();
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, MoveEnum move);
 bool32 IsHealingMoveEffect(MoveBehaviorEnum effect);
-AbilityEnum IsMagicGuardProtected(int battler);
 #define ABSORB_RESULT_HEAL 1 << 0
 #define ABSORB_RESULT_STAT 1 << 1
 #define ABSORB_RESULT_FLASH_FIRE 1 << 2
@@ -384,7 +381,6 @@ u32 ApplyModifier(u16 modifier, u32 val);
 int CanBattlerHeal(int battler);
 int BenefitsFromStatBuffs(int battler);
 int IsBloodStainAffected(int battler);
-AbilityEnum IsUnaware(int battler);
 int GetOncePerTurnAbilityCounter(int battler, AbilityEnum ability);
 void SetOncePerTurnAbilityCounter(int battler, AbilityEnum ability, int value);
 int HasRipenEffect(int battler);
@@ -395,7 +391,6 @@ AbilityEnum GetBattlerAbility(int battler);
 void HandleFollowupAttackAbilities(int battler, int target, MoveEnum move);
 int CheckAndSetOncePerTurnAbility(int battler, AbilityEnum ability);
 AbilityEnum IsStickyHold(int battler);
-AbilityEnum HasChloroplast(int battler);
 AbilityEnum HasAuroraBorealis(int battler);
 AbilityEnum HasRedirectionAbility(int battlerAtk, int battlerDef, MoveEnum move, int type);
 int CanRaiseStat(int battler, int stat);
@@ -405,13 +400,10 @@ int UseIntimidateClone(AbilityEnum abilityToCheck, int battler);
 bool32 TryRemoveScreens(u8 battler);
 void DisableSwitchInAbility(u8 battlerId, AbilityEnum ability);
 bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8* timer);
-AbilityEnum HasSkillLink(int battler);
 int IsMegaLauncherBoosted(int battler, MoveEnum move);
 int IsIronFistBoosted(int battler, MoveEnum move);
 int IsStrikerBoosted(int battler, MoveEnum move);
 AbilityEnum IsUnnerveAbilityOnOpposingSide(u8 battlerId);
-AbilityEnum IgnoresBurnAtkDrop(int battler);
-AbilityEnum IgnoresFrostbiteSpatkDrop(int battler);
 int IsStatusImmune(u8 battlerId, StatusCheckEnum status);
 u16 IsPowderImmune(int battler, int checkMoldBreaker);
 s8 GetSingleUseAbilityCountByIndex(u8 battler, int index);

@@ -86,6 +86,21 @@ extern "C" {
 //     MOVE_FLAG_DANCE,
 // } MoveFlag;
 
+// typedef enum {
+//     TERRAIN_NONE = 0,
+//     TERRAIN_GRASSY = 1,
+//     TERRAIN_ELECTRIC = 2,
+//     TERRAIN_PSYCHIC = 3,
+//     TERRAIN_MISTY = 4,
+//     TERRAIN_TOXIC = 5,
+// } TerrainType;
+
+int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag);
+int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag);
+int DoesMoveMatchFlag(int battler, MoveEnum move, MoveFlag flag);
+
+#ifdef __cplusplus
+
 enum class ApplyOn {
     SELF = 0,
     IGNORE_SELF = 1 << 2,
@@ -110,20 +125,5 @@ enum class ApplyOnTarget {
     TARGET = 2 << 3,
     ATTACKER_OR_TARGET = ATTACKER | TARGET,
 };
-
-// typedef enum {
-//     TERRAIN_NONE = 0,
-//     TERRAIN_GRASSY = 1,
-//     TERRAIN_ELECTRIC = 2,
-//     TERRAIN_PSYCHIC = 3,
-//     TERRAIN_MISTY = 4,
-//     TERRAIN_TOXIC = 5,
-// } TerrainType;
-
-int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag);
-int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag);
-int DoesMoveMatchFlag(int battler, MoveEnum move, MoveFlag flag);
-
-#ifdef __cplusplus
 }
 #endif

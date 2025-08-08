@@ -26,6 +26,8 @@ extern "C" {
 #include "string_util.h"
 }
 
+#include "behavior/ability/impl_battle.hh"
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic error "-Wunused-function"
 
@@ -630,7 +632,7 @@ constexpr Ability ShadowTag = {
 constexpr Ability RoughSkin = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
-        CHECK_NOT(IsMagicGuardProtected(attacker))
+        CHECK_NOT(HasMagicGuard(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         gBattleMoveDamage = gBattleMons[attacker].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
@@ -1206,7 +1208,7 @@ constexpr Ability Heatproof = {
 constexpr Ability DrySkin = {
     .onAbsorb = WaterAbsorb.onAbsorb,
     .onEndTurn = +[](ON_END_TURN) -> int {
-        if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && !IsMagicGuardProtected(battler)) {
+        if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && !HasMagicGuard(battler)) {
             gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
             if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
             BattleScriptPushCursorAndCallback(BattleScript_SolarPowerActivates);
@@ -1339,7 +1341,7 @@ constexpr Ability Aftermath = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
-        CHECK_NOT(IsMagicGuardProtected(attacker))
+        CHECK_NOT(HasMagicGuard(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
         gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
@@ -1804,7 +1806,7 @@ constexpr Ability Mummy = {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
         CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
+        CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(attacker)))
         CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
 
         UpdateAbilityStateIndicesForNewAbility(attacker, ability);
@@ -2459,7 +2461,7 @@ constexpr Ability InnardsOut = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
-        CHECK_NOT(IsMagicGuardProtected(attacker))
+        CHECK_NOT(HasMagicGuard(attacker))
 
         gBattleMoveDamage = gTurnStructs[battler].dmg;
         BattleScriptCall(BattleScript_AftermathDmg);
@@ -2909,7 +2911,7 @@ constexpr Ability WanderingSpirit = {
         CHECK(GetBattlerAbility(battler) == ability)
         CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
         CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
+        CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(attacker)))
         CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
 
         UpdateAbilityStateIndicesForNewAbility(attacker, GetBattlerAbility(attacker));
@@ -4354,7 +4356,7 @@ constexpr Ability ToxicSpill = {
             }
 
             FILTER_NOT(IS_BATTLER_OF_TYPE(target, TYPE_POISON))
-            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(HasMagicGuard(target))
             FILTER_NOT(BATTLER_HAS_ABILITY(battler, ABILITY_TOXIC_BOOST))
 
             gStackBattler1 = target;
@@ -4388,7 +4390,7 @@ constexpr Ability Draconize = {
 constexpr Ability PrettyPrincess = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (!IsUnaware(battler) && HasAnyLoweredStat(target)) MUL(1.5);
+            if (!HasUnaware(battler) && HasAnyLoweredStat(target)) MUL(1.5);
         },
 };
 
@@ -5707,7 +5709,7 @@ constexpr Ability MindsEye = {
 constexpr Ability BloodPrice = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(IS_MOVE_STATUS(gLastResultingMoves[battler]))
-        CHECK_NOT(IsMagicGuardProtected(battler))
+        CHECK_NOT(HasMagicGuard(battler))
         CHECK(IsBattlerAlive(battler))
 
         gBattleMoveDamage = gBattleMons[battler].maxHP / 10;
@@ -6176,7 +6178,7 @@ constexpr Ability RapidResponse = {
 constexpr Ability DoubleIronBarbs = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
-        CHECK_NOT(IsMagicGuardProtected(attacker))
+        CHECK_NOT(HasMagicGuard(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
         gBattleMoveDamage = gBattleMons[attacker].maxHP / 6;
@@ -7000,7 +7002,7 @@ constexpr Ability FuneralPyre = {
         for (int target = 0; target < gBattlersCount; target++) {
             FILTER(IsBattlerAlive(target))
             FILTER_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GHOST) || IS_BATTLER_OF_TYPE(target, TYPE_DARK))
-            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(HasMagicGuard(target))
 
             gStackBattler1 = target;
             BattleScriptExecute(BattleScript_FuneralPyreDamage);
@@ -7098,7 +7100,7 @@ constexpr Ability MoshPit = {
 ON_EITHER(BloodStain) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-    CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(opponent)))
+    CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(opponent)))
     CHECK_NOT(HasAbilityIgnoringSuppression(opponent, ability))
     CHECK_NOT(DoesBattlerHaveAbilityShield(opponent))
 
@@ -7741,7 +7743,7 @@ constexpr Ability LifeSteal = {
         int any = FALSE;
         for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
             FILTER(IsBattlerAlive(target))
-            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(HasMagicGuard(target))
 
             gStackBattler1 = battler;
             gStackBattler2 = target;
@@ -8080,7 +8082,7 @@ constexpr Ability FlameCoat = {
         for (int target = 0; target < gBattlersCount; target++) {
             FILTER(IsBattlerAlive(target))
             FILTER_NOT(IS_BATTLER_OF_TYPE(target, TYPE_FIRE))
-            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(HasMagicGuard(target))
             FILTER_NOT(BATTLER_HAS_ABILITY(target, ABILITY_FLARE_BOOST))
 
             gStackBattler1 = target;
@@ -8483,7 +8485,7 @@ constexpr Ability SoulTap = {
         int any = FALSE;
         for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
             FILTER(IsBattlerAlive(target))
-            FILTER_NOT(IsMagicGuardProtected(target))
+            FILTER_NOT(HasMagicGuard(target))
 
             gStackBattler1 = battler;
             gStackBattler2 = target;
@@ -8924,7 +8926,7 @@ constexpr Ability WinterThrone = {
             FILTER(IsBattlerAlive(target))
 
             if (IS_BATTLER_OF_TYPE(target, TYPE_ICE)) {
-                FILTER_NOT(IsMagicGuardProtected(target))
+                FILTER_NOT(HasMagicGuard(target))
                 gStackBattler1 = target;
                 BattleScriptExecute(BattleScript_FuneralPyreDamage);
             } else {
