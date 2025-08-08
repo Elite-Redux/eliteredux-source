@@ -24,6 +24,10 @@ object AbilitiesEnumGenerator : Generator {
             |} AbilityEnum;
             |
             |#endif
+            |
+            |#define OVER_ALL_ABILITIES \
+            |${abilities.joinToString(" \\\n") {"__ON_ABILITY($it)"}}
+            |
             |""".trimMargin()
         )
     }

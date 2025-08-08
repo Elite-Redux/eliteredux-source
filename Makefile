@@ -119,7 +119,7 @@ LIBPATH := -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libgcc.a)
 LIB := $(LIBPATH) -lc -lnosys -lgcc -L../../libagbsyscall -lagbsyscall
 endif
 
-CPPCOMPILEFLAGS := -fno-exceptions -fno-rtti $(subst -fno-toplevel-reorder,,$(subst -Wno-pointer-sign,,$(CFLAGS))) -std=gnu++20
+CPPCOMPILEFLAGS := -fno-exceptions -fno-rtti $(subst -fno-toplevel-reorder,,$(subst -Wno-pointer-sign,,$(CFLAGS))) -std=gnu++23 -Wno-inaccessible-base
 
 CPPFLAGS := -iquote include -iquote $(GFLIB_SUBDIR) -Wno-trigraphs -DMODERN=$(MODERN)
 ifneq ($(MODERN),1)
