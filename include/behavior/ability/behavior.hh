@@ -7380,7 +7380,7 @@ ABILITY(ABILITY_FRENZIED_PHANTOM) : extends AbilityImpl<ABILITY_SHADOW_TAG>, ext
     INSTANCE(ABILITY_FRENZIED_PHANTOM);
 };
 
-struct DNAScramble : extends FormChangeAbility, extends OnBeforeAttack<> {
+ABILITY(ABILITY_DNA_SCRAMBLE) : extends FormChangeAbility, extends OnBeforeAttack<> { INSTANCE(ABILITY_DNA_SCRAMBLE);
     ON_BEFORE_ATTACK {
         SpeciesEnum newSpecies = SPECIES_NONE;
         switch (gBattleMons[battler].species) {
