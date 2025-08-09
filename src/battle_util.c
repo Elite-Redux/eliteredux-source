@@ -79,20 +79,6 @@ static const u8 sPkblToEscapeFactor[][3] = {{[B_MSG_MON_CURIOUS] = 0, [B_MSG_MON
 static const u8 sGoNearCounterToCatchFactor[] = {4, 3, 2, 1};
 static const u8 sGoNearCounterToEscapeFactor[] = {4, 4, 4, 4};
 
-static const u16 sSkillSwapBannedAbilities[] = {
-    ABILITY_WONDER_GUARD,
-};
-
-static const u16 sRolePlayBannedAbilities[] = {
-    ABILITY_TRACE,
-    ABILITY_WONDER_GUARD,
-    ABILITY_RECEIVER,
-};
-
-static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] = {
-    ABILITY_TRUANT,
-};
-
 u8 CalcBeatUpPower(void) {
     struct Pokemon *party;
     u8 basePower;
@@ -112,7 +98,7 @@ u8 CalcBeatUpPower(void) {
 
 bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move) {
     if (gSideTimers[defSide].followmeTimer == 0 || gBattleMons[gSideTimers[defSide].followmeTarget].hp == 0 || gBattleMoves[move].effect == EFFECT_SNIPE_SHOT ||
-        BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PROPELLER_TAIL) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_STALWART))
+        IgnoresRedirection(battlerAtk))
         return FALSE;
 
     if (gSideTimers[defSide].followmePowder && !IsPowderImmune(battlerAtk, TRUE)) return FALSE;
@@ -121,14 +107,7 @@ bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move) {
 }
 
 u8 GetBattlerBattleMoveTargetFlags(MoveEnum moveId, u8 battler) {
-    if ((BATTLER_HAS_ABILITY(battler, ABILITY_ARTILLERY) || BATTLER_HAS_ABILITY(battler, ABILITY_SUPER_SCOPE)) && IsMegaLauncherBoosted(battler, moveId) &&
-        gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
-        return MOVE_TARGET_BOTH;
-    else if ((BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE) || BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE_PLUS)) &&
-             (gBattleMoves[moveId].flags & FLAG_KEEN_EDGE_BOOST) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
-        return MOVE_TARGET_BOTH;
-    else if ((BATTLER_HAS_ABILITY(battler, ABILITY_AMPLIFIER) || BATTLER_HAS_ABILITY(battler, ABILITY_BASS_BOOSTED)) && (IsSoundMove(battler, moveId)) &&
-             gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
+    if (AbilityMakesMoveSpread(battler, moveId))
         return MOVE_TARGET_BOTH;
     else if (gBattleMoves[moveId].effect == EFFECT_EXPANDING_FORCE && GetCurrentTerrain() == STATUS_FIELD_PSYCHIC_TERRAIN)
         return MOVE_TARGET_BOTH;
@@ -1081,7 +1060,7 @@ bool8 WasUnableToUseMove(u8 battler) {
 void PrepareStringBattle(u16 stringId, u8 battler) {
     int hasContrary, abilityBattler;
 
-    hasContrary = BATTLER_HAS_ABILITY(battler, ABILITY_CONTRARY);
+    hasContrary = HasContrary(battler);
 
     // Overwrite
     if (VarGet(VAR_TEMP_BATTLE_STRING_OVERWRITE_1) != 0) {
@@ -2559,7 +2538,7 @@ u8 DoBattlerEndTurnEffects(void) {
                         }
                         gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
 
-                        if (BATTLER_HAS_ABILITY(gBattleStruct->wrappedBy[gActiveBattler], ABILITY_GRAPPLER))
+                        if (HasGrappler(gBattleStruct->wrappedBy[gActiveBattler]))
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / ((B_BINDING_DAMAGE >= GEN_6) ? 6 : 8);
                         else if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / ((B_BINDING_DAMAGE >= GEN_6) ? 6 : 8);
@@ -5067,7 +5046,7 @@ static u8 RandomStatRaiseBerry(u32 battlerId, u32 itemId, bool32 end2) {
             i = Random() % 5;
         } while (!CanRaiseStat(battlerId, STAT_ATK + i));
 
-        stringId = (BATTLER_HAS_ABILITY(battlerId, ABILITY_CONTRARY)) ? STRINGID_STATFELL : STRINGID_STATROSE;
+        stringId = HasContrary(battlerId) ? STRINGID_STATFELL : STRINGID_STATROSE;
         gBattleTextBuff2[0] = B_BUFF_PLACEHOLDER_BEGIN;
         gBattleTextBuff2[1] = B_BUFF_STRING;
         gBattleTextBuff2[2] = STRINGID_STATSHARPLY;
@@ -7362,11 +7341,7 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, MoveEnum move) {
     if (move == MOVE_STRUGGLE) return 2;
     if (IsAbilityOnFieldExcept(battler, ABILITY_RELIC_STONE)) return 2;
-    int isStab = IS_BATTLER_OF_TYPE(battler, moveType);
-    if (!isStab) {
-        ON_ABILITY(battler, FALSE, gAbilities[ability].onStab, isStab = gAbilities[ability].onStab(moveType); if (isStab) break)
-    }
-    if (isStab) {
+    if (IS_BATTLER_OF_TYPE(battler, moveType) || GetsBonusStab(battler, moveType)) {
         if (HasAdaptability(battler)) return 4;
         return 3;
     }
@@ -8351,43 +8326,15 @@ bool32 IsRolePlayBannedAbilityAtk(AbilityEnum ability) {
     return FALSE;
 }
 
-bool32 IsRolePlayBannedAbility(AbilityEnum ability) {
-    u32 i;
-    if (!ability) return TRUE;
-    if (IsPersistentOrUnsuppressable(ability)) return TRUE;
-    for (i = 0; i < ARRAY_COUNT(sRolePlayBannedAbilities); i++) {
-        if (ability == sRolePlayBannedAbilities[i]) return TRUE;
-    }
-    return FALSE;
-}
+bool32 IsRolePlayBannedAbility(AbilityEnum ability) { return IsPersistentOrUnsuppressable(ability) || IsRolePlayBanned(ability); }
 
-bool32 IsWorrySeedBannedAbility(AbilityEnum ability) {
-    if (IsPersistentOrUnsuppressable(ability)) return TRUE;
-    return FALSE;
-}
+bool32 IsWorrySeedBannedAbility(AbilityEnum ability) { return IsPersistentOrUnsuppressable(ability); }
 
-bool32 IsGastroAcidBannedAbility(AbilityEnum ability) {
-    if (IsPersistentOrUnsuppressable(ability)) return TRUE;
-    return FALSE;
-}
+bool32 IsGastroAcidBannedAbility(AbilityEnum ability) { return IsPersistentOrUnsuppressable(ability); }
 
-bool32 IsEntrainmentBannedAbilityAttacker(AbilityEnum ability) {
-    u32 i;
-    if (IsPersistentOrUnsuppressable(ability)) return TRUE;
-    for (i = 0; i < ARRAY_COUNT(sSkillSwapBannedAbilities); i++) {
-        if (ability == sSkillSwapBannedAbilities[i]) return TRUE;
-    }
-    return FALSE;
-}
+bool32 IsEntrainmentBannedAbilityAttacker(AbilityEnum ability) { return IsPersistentOrUnsuppressable(ability) || IsSkillSwapBanned(ability); }
 
-bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(AbilityEnum ability) {
-    u32 i;
-    if (IsPersistentOrUnsuppressable(ability)) return TRUE;
-    for (i = 0; i < ARRAY_COUNT(sEntrainmentTargetSimpleBeamBannedAbilities); i++) {
-        if (ability == sEntrainmentTargetSimpleBeamBannedAbilities[i]) return TRUE;
-    }
-    return FALSE;
-}
+bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(AbilityEnum ability) { return IsPersistentOrUnsuppressable(ability) || IsSimpleBeamBanned(ability); }
 
 // Sort an array of battlers by speed
 // Useful for effects like pickpocket, eject button, red card, dancer
@@ -8451,7 +8398,7 @@ bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 stealthRock) {
     if (holdEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS) {
         ret = FALSE;
         RecordItemEffectBattle(battlerId, holdEffect);
-    } else if (BattlerHasAbility(gActiveBattler, ABILITY_SHIELD_DUST, FALSE)) {
+    } else if (HasShieldDust(gActiveBattler)) {
         ret = FALSE;
     } else if (stealthRock && IsStealthRockImmune(gActiveBattler)) {
         ret = FALSE;
@@ -8479,7 +8426,7 @@ bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind) {
 
     // Because this command is used as a way of checking if a stat can be lowered/raised,
     // we need to do some modification at run-time.
-    if (BattlerHasAbility(battlerId, ABILITY_CONTRARY, TRUE)) {
+    if (HasContrary(battlerId)) {
         if (cmpKind == CMP_GREATER_THAN)
             cmpKind = CMP_LESS_THAN;
         else if (cmpKind == CMP_LESS_THAN)
@@ -8518,7 +8465,7 @@ bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind) {
 void BufferStatChange(u8 battlerId, u8 statId, u8 stringId) {
     bool8 hasContrary = FALSE;
 
-    if (BattlerHasAbility(battlerId, ABILITY_CONTRARY, TRUE)) hasContrary = TRUE;
+    if (HasContrary(battlerId)) hasContrary = TRUE;
 
     PREPARE_STAT_BUFFER(gBattleTextBuff1, statId);
     if (stringId == STRINGID_STATFELL) {

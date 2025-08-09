@@ -2236,7 +2236,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
     // Just in case this flag is still set
     gBattleScripting.moveEffect &= ~(MOVE_EFFECT_CERTAIN);
 
-    if ((BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_SHIELD_DUST) || GetBattlerHoldEffect(gEffectBattler, TRUE) == HOLD_EFFECT_COVERT_CLOAK) &&
+    if ((HasShieldDust(gEffectBattler) || GetBattlerHoldEffect(gEffectBattler, TRUE) == HOLD_EFFECT_COVERT_CLOAK) &&
         !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD) && !primary && !affectsUser && IsPreventableSecondaryEffect(gBattleScripting.moveEffect))
         RESET_RETURN
 
@@ -2247,21 +2247,21 @@ void SetMoveEffect(bool32 primary, u32 certain) {
     if (TestSheerForceFlag(gBattlerAttacker, gCurrentMove)) RESET_RETURN
 
     if (gBattleMons[gEffectBattler].hp == 0) {
-        switch (gBattleScripting.moveEffect) {
-            case MOVE_EFFECT_PAYDAY:
-            case MOVE_EFFECT_WATER_PLEDGE:
-            case MOVE_EFFECT_FIRE_PLEDGE:
-            case MOVE_EFFECT_GRASS_PLEDGE:
-            case MOVE_EFFECT_SWAMP:
-            case MOVE_EFFECT_RAINBOW:
-            case MOVE_EFFECT_FIRE_SEA:
-            case MOVE_EFFECT_SPECTRAL_THIEF:
-                break;
+            switch (gBattleScripting.moveEffect) {
+                case MOVE_EFFECT_PAYDAY:
+                case MOVE_EFFECT_WATER_PLEDGE:
+                case MOVE_EFFECT_FIRE_PLEDGE:
+                case MOVE_EFFECT_GRASS_PLEDGE:
+                case MOVE_EFFECT_SWAMP:
+                case MOVE_EFFECT_RAINBOW:
+                case MOVE_EFFECT_FIRE_SEA:
+                case MOVE_EFFECT_SPECTRAL_THIEF:
+                    break;
 
-            default:
-                RESET_RETURN;
+                default:
+                    RESET_RETURN;
+            }
         }
-    }
 
     if (DoesSubstituteBlockMove(gBattlerAttacker, gEffectBattler, gCurrentMove) && affectsUser != MOVE_EFFECT_AFFECTS_USER) RESET_RETURN
 
@@ -2541,8 +2541,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     }
                     break;
                 case MOVE_EFFECT_FLINCH:
-                    if (!BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_INNER_FOCUS) && !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_ENLIGHTENED) &&
-                        !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_UNLOCKED_POTENTIAL) && !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_WAY_OF_PRECISION)) {
+                    if (!HasInnerFocus(gEffectBattler)) {
                         gBattleMons[gEffectBattler].status2 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
                     }
                     break;
@@ -2611,7 +2610,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     break;
                 case MOVE_EFFECT_WRAP:
                     if (!(gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED)) {
-                        bool8 hasGrappler = BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_GRAPPLER);
+                        bool8 hasGrappler = HasGrappler(gBattlerAttacker);
                         bool8 hasGripClaw = GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW;
                         gBattleMons[gEffectBattler].status2 |= STATUS2_WRAPPED;
                         if (hasGrappler && hasGripClaw)
@@ -2727,9 +2726,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     BattleScriptCall(BattleScript_AtkDefDown);
                     break;
                 case MOVE_EFFECT_DEF_SPDEF_DOWN:  // Close Combat
-                    if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_BAD_COMPANY)) {
-                        BattleScriptCall(BattleScript_DefSpDefDown);
-                    }
+                    BattleScriptCall(BattleScript_DefSpDefDown);
                     break;
                 case MOVE_EFFECT_RECOIL_HP_25:  // Struggle
                     gBattleMoveDamage = (gBattleMons[gEffectBattler].maxHP) / 4;
@@ -3006,7 +3003,7 @@ static void Cmd_clearstatusfromeffect(void) {
         if (gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM &&
             (IsBattlerWeatherAffected(gActiveBattler, WEATHER_SUN_ANY) || HasChloroplast(gActiveBattler)))
             gRoundStructs[gActiveBattler].chargingTurn = FALSE;
-        else if (BattlerHasAbility(gActiveBattler, ABILITY_ACCELERATE, FALSE))
+        else if (HasAccelerate(gActiveBattler))
             gRoundStructs[gActiveBattler].chargingTurn = FALSE;
     }
 
@@ -4022,7 +4019,7 @@ static void PlayStatChangeAnimation(int battler, int statsToCheck, int flags, in
 
     if (!rawStatChange) {
         // Handle Contrary and Simple
-        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CONTRARY)) {
+        if (HasContrary(gActiveBattler)) {
             flags ^= STAT_CHANGE_NEGATIVE;
         }
 
@@ -9588,7 +9585,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
     updateMoveEffect = flags & STAT_BUFF_UPDATE_MOVE_EFFECT;
     flags &= ~(STAT_BUFF_UPDATE_MOVE_EFFECT);
 
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_CONTRARY)) {
+    if (HasContrary(battler)) {
         statValue *= -1;
         if (updateMoveEffect) {
             gBattleScripting.moveEffect = ReverseStatChangeMoveEffect(gBattleScripting.moveEffect);
@@ -13107,7 +13104,7 @@ bool8 IsMoveAffectedByParentalBond(MoveEnum move, u8 battlerId) {
     if (gBattleMoves[move].parentalBondBanned) return FALSE;
     if (gBattleMoves[move].effect == EFFECT_SOLARBEAM && (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY) || HasChloroplast(battlerId))) return TRUE;
     if (gBattleMoves[move].effect == EFFECT_ELECTRO_SHOT && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY)) return TRUE;
-    if (gBattleMoves[move].twoTurnMove && !BattlerHasAbility(battlerId, ABILITY_ACCELERATE, FALSE)) return FALSE;
+    if (gBattleMoves[move].twoTurnMove && !HasAccelerate(battlerId)) return FALSE;
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) {
         switch (GetBattlerBattleMoveTargetFlags(move, battlerId)) {
             case MOVE_TARGET_BOTH:

@@ -1331,8 +1331,8 @@ void ProtectChecks(u8 battlerAtk, u8 battlerDef, u16 move, u16 predictedMove, s1
 
 // stat stages
 bool32 ShouldLowerStat(u8 battler, u8 stat) {
-    if ((gBattleMons[battler].statStages[stat] > MIN_STAT_STAGE && !BattlerHasAbility(battler, ABILITY_CONTRARY, TRUE)) ||
-        (BattlerHasAbility(battler, ABILITY_CONTRARY, TRUE) && gBattleMons[battler].statStages[stat] < MAX_STAT_STAGE)) {
+    if ((gBattleMons[battler].statStages[stat] > MIN_STAT_STAGE && !HasContrary(battler)) ||
+        (HasContrary(battler) && gBattleMons[battler].statStages[stat] < MAX_STAT_STAGE)) {
         if (BlocksAllStatDrops(battler, FALSE)) return FALSE;
 
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_CLEAR_AMULET) return FALSE;
@@ -1358,7 +1358,7 @@ bool32 BattlerStatCanRise(u8 battler, u8 stat) {
         (gVolatileStructs[battler].trickOrTreat || !(IS_BATTLER_OF_TYPE(battler, TYPE_GHOST) || IS_BATTLER_OF_TYPE(battler, TYPE_PSYCHIC))))
         return FALSE;
 
-    if (BattlerHasAbility(battler, ABILITY_CONTRARY, TRUE))
+    if (HasContrary(battler))
         return gBattleMons[battler].statStages[stat] > MIN_STAT_STAGE;
     else
         return gBattleMons[battler].statStages[stat] < MAX_STAT_STAGE;
@@ -1401,7 +1401,7 @@ u32 CountNegativeStatStages(u8 battlerId) {
 
 bool32 LoweringStatsPointlessOrBad(u8 battlerDef) {
     if (BlocksAllStatDrops(battlerDef, FALSE)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CONTRARY)) return TRUE;
+    if (HasContrary(battlerDef)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_RUN_AWAY)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CONTEMPT)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_DEFIANT)) return TRUE;
@@ -2233,14 +2233,13 @@ bool32 AI_CanCauseBleed(u8 battlerAtk, u8 battlerDef, u8 battlerAtkPartner, u16 
 bool32 AI_CanBeInfatuated(u8 battlerAtk, u8 battlerDef, u8 atkGender, u8 defGender) { return CanInfatuate(battlerAtk, battlerDef); }
 
 u32 ShouldTryToFlinch(u8 battlerAtk, u8 battlerDef, u16 move) {
-    if (BattlerHasAbility(battlerDef, ABILITY_INNER_FOCUS, TRUE) || BattlerHasAbility(battlerDef, ABILITY_UNLOCKED_POTENTIAL, TRUE) ||
-        DoesSubstituteBlockMove(battlerAtk, battlerDef, move) || GetWhoStrikesFirst(battlerAtk, battlerDef, TRUE) == 1)  // opponent goes first
+    if (HasInnerFocus(battlerDef) || DoesSubstituteBlockMove(battlerAtk, battlerDef, move) ||
+        GetWhoStrikesFirst(battlerAtk, battlerDef, TRUE) == 1)  // opponent goes first
     {
         return 0;  // don't try to flinch
     } else if ((gBattleMons[battlerDef].status1 & STATUS1_SLEEP) && !HasMoveEffect(battlerDef, EFFECT_SLEEP_TALK) && !HasMoveEffect(battlerDef, EFFECT_SNORE)) {
         return 0;  // don't try to flinch sleeping pokemon
-    } else if (BattlerHasAbility(battlerAtk, ABILITY_INNER_FOCUS, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_UNLOCKED_POTENTIAL, FALSE) ||
-               gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS || gBattleMons[battlerDef].status2 & STATUS2_CONFUSION) {
+    } else if (HasInnerFocus(battlerAtk) || gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS || gBattleMons[battlerDef].status2 & STATUS2_CONFUSION) {
         return 2;  // good idea to flinch
     }
     return 1;  // decent idea to flinch
@@ -2717,7 +2716,7 @@ bool32 IsRecycleEncouragedItem(u16 item) {
 void IncreaseStatUpScore(u8 battlerAtk, u8 battlerDef, u8 statId, s16 *score) {
     if (CanTargetFaintAi(battlerDef, battlerAtk)) return;
 
-    if (BattlerHasAbility(battlerAtk, ABILITY_CONTRARY, TRUE) || (HasUnaware(battlerDef) && statId != STAT_SPEED)) return;
+    if (HasContrary(battlerAtk) || (HasUnaware(battlerDef) && statId != STAT_SPEED)) return;
 
     if (AI_DATA->hpPercents[battlerAtk] < 80 && AI_RandLessThan(128)) return;
 

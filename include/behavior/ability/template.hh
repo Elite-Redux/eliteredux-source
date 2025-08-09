@@ -45,60 +45,60 @@ struct AbilityImpl : is NotImplemented {
 };
 
 struct OnEntry {
-#define ON_ENTRY virtual int onEntry(AbilityEnum ability, int battler)
+#define ON_ENTRY virtual int onEntry(AbilityEnum ability, int battler) const
 #define DELEGATE_ENTRY ability, battler
     ON_ENTRY = 0;
 };
 
 struct OnAbsorb : is Breakable {
-#define ON_ABSORB virtual int onAbsorb(int battler, MoveEnum move, Type moveType, int *statId)
+#define ON_ABSORB virtual int onAbsorb(int battler, MoveEnum move, Type moveType, int *statId) const
 #define DELEGATE_ABSORB battler, move, moveType, statId
     ON_ABSORB { return 0; }
 };
 
 #define ON_IMMUNE_ARGS int battler, int attacker, MoveEnum move, Type moveType, const u8 **immunityScript
-#define ON_IMMUNE virtual int onImmune(ON_IMMUNE_ARGS)
+#define ON_IMMUNE virtual int onImmune(ON_IMMUNE_ARGS) const
 #define DELEGATE_IMMUNE battler, attacker, move, moveType, immunityScript
 APPLIES_ON_BREAKABLE(Immune, ApplyOn, ON_IMMUNE)
 
 struct OnInfiltrate {
-#define ON_INFILTRATE virtual InfiltrateType onInfiltrate(int battler, MoveEnum move)
+#define ON_INFILTRATE virtual InfiltrateType onInfiltrate(int battler, MoveEnum move) const
 #define DELEGATE_INFILTRATE battler, move
     ON_INFILTRATE = 0;
 };
 
 struct OnDisguise {
-#define ON_DISGUISE virtual SpeciesEnum onDisguise(int battler, int testOnly)
+#define ON_DISGUISE virtual SpeciesEnum onDisguise(int battler, int testOnly) const
 #define DELEGATE_DISGUISE battler, testOnly
     ON_DISGUISE = 0;
 };
 
 struct OnWeather {
-#define ON_WEATHER virtual int onWeather(AbilityEnum ability, int battler)
+#define ON_WEATHER virtual int onWeather(AbilityEnum ability, int battler) const
 #define DELEGATE_WEATHER ability, battler
     ON_WEATHER = 0;
 };
 
 struct OnTerrain {
-#define ON_TERRAIN virtual int onTerrain(AbilityEnum ability, int battler)
+#define ON_TERRAIN virtual int onTerrain(AbilityEnum ability, int battler) const
 #define DELEGATE_TERRAIN ability, battler
     ON_TERRAIN = 0;
 };
 
 struct OnEndTurn {
-#define ON_END_TURN virtual int onEndTurn(AbilityEnum ability, int battler)
+#define ON_END_TURN virtual int onEndTurn(AbilityEnum ability, int battler) const
 #define DELEGATE_END_TURN ability, battler
     ON_END_TURN = 0;
 };
 
 struct OnAttacker {
-#define ON_ATTACKER virtual int onAttacker(AbilityEnum ability, int battler, int target, MoveEnum move, Type moveType)
+#define ON_ATTACKER virtual int onAttacker(AbilityEnum ability, int battler, int target, MoveEnum move, Type moveType) const
 #define DELEGATE_ATTACKER ability, battler, target, move, moveType
     ON_ATTACKER = 0;
 };
 
 struct OnDefender {
-#define ON_DEFENDER virtual int onDefender(AbilityEnum ability, int battler, int attacker, MoveEnum move, Type moveType)
+#define ON_DEFENDER virtual int onDefender(AbilityEnum ability, int battler, int attacker, MoveEnum move, Type moveType) const
 #define DELEGATE_DEFENDER ability, battler, attacker, move, moveType
     ON_DEFENDER = 0;
 };
@@ -110,25 +110,25 @@ struct OnEither : is OnAttacker, is OnDefender {};
     static int onEither(AbilityEnum ability, int battler, int opponent, MoveEnum move, Type moveType)
 
 struct OnRecoil {
-#define ON_RECOIL virtual int onRecoil(int damage, int battler, Type moveType)
+#define ON_RECOIL virtual int onRecoil(int damage, int battler, Type moveType) const
 #define DELEGATE_RECOIL damage, battler, moveType
     ON_RECOIL = 0;
 };
 
 struct OnReactive {
-#define ON_REACTIVE virtual int onReactive(AbilityEnum ability, int battler, AbilityCallType callType)
+#define ON_REACTIVE virtual int onReactive(AbilityEnum ability, int battler, AbilityCallType callType) const
 #define DELEGATE_REACTIVE ability, battler
     ON_REACTIVE = 0;
 };
 
-#define ON_BATTLER_FAINTS virtual int onBattlerFaints(AbilityEnum ability, int battler, int attacker, int fainted, MoveEnum move, Type moveType)
+#define ON_BATTLER_FAINTS virtual int onBattlerFaints(AbilityEnum ability, int battler, int attacker, int fainted, MoveEnum move, Type moveType) const
 #define DELEGATE_BATTLER_FAINTS ability, battler, attacker, fainted, move, moveType
 #define SELF ATTACKER
 APPLIES_ON(BattlerFaints, ApplyOnTarget, ON_BATTLER_FAINTS)
 #undef SELF
 
 struct OnParentalBond {
-#define ON_PARENTAL_BOND virtual MultihitType onParentalBond(int battler, MoveEnum move, Type moveType)
+#define ON_PARENTAL_BOND virtual MultihitType onParentalBond(int battler, MoveEnum move, Type moveType) const
 #define DELEGATE_PARENTAL_BOND battler, move, moveType
     ON_PARENTAL_BOND = 0;
 };
@@ -156,27 +156,33 @@ struct OnDefensiveMultiplier : is Breakable {
 };
 
 struct OnMoveType {
-#define ON_MOVE_TYPE virtual int onMoveType(AbilityEnum ability, MoveEnum move, Type moveType, u8 *ateBoost)
+#define ON_MOVE_TYPE virtual int onMoveType(AbilityEnum ability, MoveEnum move, Type moveType, u8 *ateBoost) const
 #define DELEGATE_MOVE_TYPE ability, move, moveType, ateBoost
     ON_MOVE_TYPE = 0;
 };
 
 struct OnStab {
-#define ON_STAB virtual int onStab(Type moveType)
+#define ON_STAB virtual int onStab(Type moveType) const
 #define DELEGATE_STAB moveType
     ON_STAB = 0;
 };
 
-#define ON_STAT virtual void onStat(AbilityEnum ability, int battler, int statId, u32 *stat, NonStackingState *flags)
+struct OnMakeSpread {
+#define ON_MAKE_SPREAD virtual int onMakeSpread(int battler, MoveEnum move) const
+#define DELEGATE_MAKE_SPREAD battler, move
+    ON_MAKE_SPREAD = 0;
+};
+
+#define ON_STAT virtual void onStat(AbilityEnum ability, int battler, int statId, u32 *stat, NonStackingState *flags) const
 #define DELEGATE_STAT ability, battler, statId, stat, flags
 APPLIES_ON(Stat, ApplyOn, ON_STAT)
 
-#define ON_ACCURACY virtual AccuracyPriority onAccuracy(AbilityEnum ability, int battler, int target, MoveEnum move, Type moveType, int *accuracy)
+#define ON_ACCURACY virtual AccuracyPriority onAccuracy(AbilityEnum ability, int battler, int target, MoveEnum move, Type moveType, int *accuracy) const
 #define DELEGATE_ACCURACY ability, battler, target, move, moveType, accuracy
 APPLIES_ON(Accuracy, ApplyOnTarget, ON_ACCURACY)
 
 struct OnSwapSplit {
-#define ON_SWAP_SPLIT virtual int onSwapSplit(int battler, MoveEnum move)
+#define ON_SWAP_SPLIT virtual int onSwapSplit(int battler, MoveEnum move) const
 #define DELEGATE_SWAP_SPLIT battler, move
     ON_SWAP_SPLIT = 0;
 };
@@ -189,32 +195,32 @@ struct OnChooseOffensiveStat {
     ON_CHOOSE_OFFENSIVE_STAT = 0;
 };
 
-#define ON_CHOOSE_DEFENSIVE_STAT virtual int onChooseDefensiveStat(int battler, int target, MoveEnum move, int ignoreDefensiveStatBoosts, int battlerUnaware)
+#define ON_CHOOSE_DEFENSIVE_STAT virtual int onChooseDefensiveStat(int battler, int target, MoveEnum move, int ignoreDefensiveStatBoosts, int battlerUnaware) const
 #define DELEGATE_CHOOSE_DEFENSIVE_STAT battler, target, move, ignoreDefensiveStatBoosts, battlerUnaware
 APPLIES_ON(ChooseDefensiveStat, ApplyOnTarget, ON_CHOOSE_DEFENSIVE_STAT)
 
 struct OnPriority {
-#define ON_PRIORITY virtual int onPriority(int battler, int target, MoveEnum move)
+#define ON_PRIORITY virtual int onPriority(int battler, int target, MoveEnum move) const
 #define DELEGATE_PRIORITY battler, target, move
     ON_PRIORITY = 0;
 };
 
 struct OnExit {
-#define ON_EXIT virtual int onExit(AbilityEnum ability, int battler)
+#define ON_EXIT virtual int onExit(AbilityEnum ability, int battler) const
 #define DELEGATE_EXIT ability, battler
     ON_EXIT = 0;
 };
 
-#define ON_CRIT virtual int onCrit(int battler, int target, MoveEnum move, u16 typeEffectiveness)
+#define ON_CRIT virtual int onCrit(int battler, int target, MoveEnum move, u16 typeEffectiveness) const
 #define DELEGATE_CRIT battler, target, move, typeEffectiveness
 APPLIES_ON(Crit, ApplyOnTarget, ON_CRIT)
 
-#define ON_TYPE_EFFECTIVENESS virtual int onTypeEffectiveness(int defType, MoveEnum move, Type moveType, u16 *mod)
+#define ON_TYPE_EFFECTIVENESS virtual int onTypeEffectiveness(int defType, MoveEnum move, Type moveType, u16 *mod) const
 #define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
 APPLIES_ON(TypeEffectiveness, ApplyOnTarget, ON_TYPE_EFFECTIVENESS)
 
 struct OnCopyMove {
-#define ON_COPY_MOVE virtual int onCopyMove(AbilityEnum ability, int battler, int attacker, int target, MoveEnum move)
+#define ON_COPY_MOVE virtual int onCopyMove(AbilityEnum ability, int battler, int attacker, int target, MoveEnum move) const
 #define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
     ON_COPY_MOVE = 0;
 };
@@ -224,51 +230,51 @@ struct OnCopyMove {
 #define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
 APPLIES_ON(AfterTypeEffectiveness, ApplyOnTarget, ON_AFTER_TYPE_EFFECTIVENESS)
 
-#define ON_MODIFY_EFFECT_CHANCE virtual void onModifyEffectChance(int battler, MoveEnum move, MoveEffectEnum moveEffect, int *effectChance)
+#define ON_MODIFY_EFFECT_CHANCE virtual void onModifyEffectChance(int battler, MoveEnum move, MoveEffectEnum moveEffect, int *effectChance) const
 #define DELEGATE_MODIFY_EFFECT_CHANCE battler, move, moveEffect, effectChance
 APPLIES_ON(ModifyEffectChance, ApplyOn, ON_MODIFY_EFFECT_CHANCE)
 
 struct OnCanStatusType {
-#define ON_CAN_STATUS_TYPE virtual int onCanStatusType(int battler, MoveEnum move, StatusCheckEnum status)
+#define ON_CAN_STATUS_TYPE virtual int onCanStatusType(int battler, MoveEnum move, StatusCheckEnum status) const
 #define DELEGATE_CAN_STATUS_TYPE battler, move, status
     ON_CAN_STATUS_TYPE = 0;
 };
 
-#define ON_STATUS_IMMUNE virtual int onStatusImmune(int battler, int target, AbilityEnum ability, StatusCheckEnum status)
+#define ON_STATUS_IMMUNE virtual int onStatusImmune(int battler, int target, AbilityEnum ability, StatusCheckEnum status) const
 #define DELEGATE_STATUS_IMMUNE int battler, target, ability, status
 APPLIES_ON_BREAKABLE(StatusImmune, ApplyOn, ON_STATUS_IMMUNE)
 
 struct OnTrap {
-#define ON_TRAP virtual int onTrap(int switchingBattler)
+#define ON_TRAP virtual int onTrap(int switchingBattler) const
 #define DELEGATE_TRAP switchingBattler
     ON_TRAP = 0;
 };
 
-#define ON_BEFORE_ATTACK virtual int onBeforeAttack(int battler, int attacker, AbilityEnum ability, MoveEnum move, Type moveType)
+#define ON_BEFORE_ATTACK virtual int onBeforeAttack(int battler, int attacker, AbilityEnum ability, MoveEnum move, Type moveType) const
 #define DELEGATE_BEFORE_ATTACK battler, attacker, ability, move, moveType
 APPLIES_ON(BeforeAttack, ApplyOnTarget, ON_BEFORE_ATTACK)
 
 struct OnPreemptAction {
-#define ON_PREEMPT_ACTION virtual int onPreemptAction(u8 battler, AbilityEnum ability, u8 turnBattler)
+#define ON_PREEMPT_ACTION virtual int onPreemptAction(u8 battler, AbilityEnum ability, u8 turnBattler) const
 #define DELEGATE_PREEMPT_ACTION battler, ability, turnBattler
     ON_PREEMPT_ACTION = 0;
 };
 
 struct OnModifyMoveFlags {
 #define ON_MODIFY_MOVE_FLAGS_ARGS int battler, MoveEnum move, MoveFlag flag
-#define ON_MODIFY_MOVE_FLAGS virtual int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS_ARGS)
+#define ON_MODIFY_MOVE_FLAGS virtual int onModifyMoveFlags(ON_MODIFY_MOVE_FLAGS_ARGS) const
 #define DELEGATE_MODIFY_MOVE_FLAGS battler, move, flag
     ON_MODIFY_MOVE_FLAGS = 0;
 };
 
 struct OnMoldBreaker {
-#define ON_MOLD_BREAKER virtual int onMoldBreaker(int battler, MoveEnum move)
+#define ON_MOLD_BREAKER virtual int onMoldBreaker(int battler, MoveEnum move) const
 #define DELEGATE_MOLD_BREAKER battler, move, moveType
     ON_MOLD_BREAKER = 0;
 };
 
 struct OnRevive : is Persistent {
-#define ON_REVIVE virtual int onRevive(int battler)
+#define ON_REVIVE virtual int onRevive(int battler) const
 #define DELEGATE_REVIVE battler
     ON_REVIVE = 0;
 };

@@ -455,8 +455,11 @@ struct AbilityImpl<ABILITY_ROUGH_SKIN> : is OnDefender {
     }
 };
 
+struct RolePlayBanned {};
+struct SkillSwapBanned : is RolePlayBanned {};
+
 template <>
-struct AbilityImpl<ABILITY_WONDER_GUARD> : is Breakable, is RandomizerBanned, is OnAfterTypeEffectiveness<ApplyOnTarget::TARGET> {
+struct AbilityImpl<ABILITY_WONDER_GUARD> : is Breakable, is RandomizerBanned, is OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, is SkillSwapBanned {
     ON_AFTER_TYPE_EFFECTIVENESS {
         if (*mod < UQ_4_12(2.0)) *mod = 0;
     }
@@ -566,7 +569,7 @@ struct AbilityImpl<ABILITY_ILLUMINATE> : is OnAccuracy<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_TRACE> : is RandomizerBanned, is OnEntry {
+struct AbilityImpl<ABILITY_TRACE> : is RandomizerBanned, is OnEntry, is RolePlayBanned {
     ON_ENTRY {
         int target = BATTLE_OPPOSITE(battler);
         auto newAbility = GetBattlerAbility(target);
@@ -608,7 +611,7 @@ struct AbilityImpl<ABILITY_POISON_POINT> : is OnEither {
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
         CHECK(Random() % 100 < 30)
 
-            AbilityStatusEffectSafe(MOVE_EFFECT_POISON, battler, opponent);
+        AbilityStatusEffectSafe(MOVE_EFFECT_POISON, battler, opponent);
         return TRUE;
     }
 };
@@ -666,7 +669,7 @@ struct AbilityImpl<ABILITY_RAIN_DISH> : is OnEndTurn {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
-            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
@@ -722,7 +725,7 @@ struct AbilityImpl<ABILITY_FLAME_BODY> : is OnEither {
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
         CHECK(Random() % 100 < 30)
 
-            AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
+        AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
         return TRUE;
     }
 };
@@ -784,7 +787,7 @@ struct AbilityImpl<ABILITY_CUTE_CHARM> : is OnEither {
         CHECK(CanInfatuate(battler, opponent))
         CHECK(Random() % 100 < 50)
 
-            AbilityStatusEffectSafe(MOVE_EFFECT_ATTRACT, battler, opponent);
+        AbilityStatusEffectSafe(MOVE_EFFECT_ATTRACT, battler, opponent);
         return TRUE;
     }
 };
@@ -1358,10 +1361,10 @@ struct AbilityImpl<ABILITY_CURSED_BODY> : is OnDefender {
         CHECK_NOT(gVolatileStructs[attacker].disabledMove)
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IsAbilityStatusProtected(attacker, CHECK_RESTRICTING))
-        CHECK(gBattleMons[attacker].pp[gChosenMovePos]) CHECK(Random() % 100 < 30)
+        CHECK(gBattleMons[attacker].pp[gChosenMovePos])
+        CHECK(Random() % 100 < 30)
 
-            gVolatileStructs[attacker]
-                .disabledMove = gChosenMove;
+        gVolatileStructs[attacker].disabledMove = gChosenMove;
         gVolatileStructs[attacker].disableTimer = 4;
         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove);
         BattleScriptCall(BattleScript_CursedBodyActivates);
@@ -1589,7 +1592,7 @@ struct AbilityImpl<ABILITY_MUMMY> : is OnDefender {
         CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(attacker)))
         CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
 
-            UpdateAbilityStateIndicesForNewAbility(attacker, ability);
+        UpdateAbilityStateIndicesForNewAbility(attacker, ability);
         ReplaceAbility(attacker, ability);
         BattleScriptCall(BattleScript_MummyActivates);
         return TRUE;
@@ -1694,8 +1697,10 @@ struct AbilityImpl<ABILITY_FLOWER_VEIL> : is OnStatusImmune<ApplyOn::ALLY> {
 template <>
 struct AbilityImpl<ABILITY_CHEEK_POUCH> : is RandomizerBanned {};
 
+struct AlwaysStab {};
+
 template <>
-struct AbilityImpl<ABILITY_PROTEAN> : is OnBeforeAttack<> {
+struct AbilityImpl<ABILITY_PROTEAN> : is OnBeforeAttack<>, is AlwaysStab {
     ON_BEFORE_ATTACK {
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
         CHECK_NOT(IS_BATTLER_OF_TYPE(battler, moveType)) CHECK(move != MOVE_STRUGGLE) SET_BATTLER_TYPE(gBattlerAttacker, moveType);
@@ -2262,7 +2267,7 @@ template <>
 struct AbilityImpl<ABILITY_TANGLING_HAIR> : is AbilityImpl<ABILITY_GOOEY> {};
 
 template <>
-struct AbilityImpl<ABILITY_RECEIVER> : is OnBattlerFaints<ApplyOnTarget::ALLY> {
+struct AbilityImpl<ABILITY_RECEIVER> : is OnBattlerFaints<ApplyOnTarget::ALLY>, is RolePlayBanned {
     ON_BATTLER_FAINTS {
         AbilityEnum allyAbility = GetBattlerAbility(fainted);
         CHECK_NOT(IsRolePlayBannedAbility(allyAbility))
@@ -2472,10 +2477,11 @@ struct AbilityImpl<ABILITY_STEAM_ENGINE> : is OnDefender {
 };
 
 template <>
-struct AbilityImpl<ABILITY_AMPLIFIER> : is OnOffensiveMultiplier<> {
+struct AbilityImpl<ABILITY_AMPLIFIER> : is OnOffensiveMultiplier<>, is OnMakeSpread {
     ON_OFFENSIVE_MULTIPLIER {
         if (IsSoundMove(battler, move)) MUL(1.3);
     }
+    ON_MAKE_SPREAD { return IsSoundMove(battler, move); }
 };
 
 template <>
@@ -2648,9 +2654,10 @@ struct AbilityImpl<ABILITY_WANDERING_SPIRIT> : is OnDefender {
         CHECK(GetBattlerAbility(battler) == ability)
         CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
         CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(attacker))) CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
+        CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(attacker)))
+        CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
 
-            UpdateAbilityStateIndicesForNewAbility(attacker, GetBattlerAbility(attacker));
+        UpdateAbilityStateIndicesForNewAbility(attacker, GetBattlerAbility(attacker));
         UpdateAbilityStateIndicesForNewAbility(battler, ability);
         ReplaceAbility(battler, GetBattlerAbility(attacker));
         ReplaceAbility(attacker, ability);
@@ -2906,7 +2913,7 @@ struct AbilityImpl<ABILITY_ANCIENT_IDOL> : is OnChooseOffensiveStat {
 };
 
 template <>
-struct AbilityImpl<ABILITY_MYSTIC_POWER> : is OnStab {
+struct AbilityImpl<ABILITY_MYSTIC_POWER> : is OnStab, is AlwaysStab {
     ON_STAB { return TRUE; }
 };
 
@@ -3324,8 +3331,7 @@ struct AbilityImpl<ABILITY_HAUNTED_SPIRIT> : is OnDefender {
         CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED)
         CHECK(IsMoveMakingContact(move, attacker))
 
-            gBattleMons[attacker]
-                .status2 |= STATUS2_CURSED;
+        gBattleMons[attacker].status2 |= STATUS2_CURSED;
         BattleScriptCall(BattleScript_HauntedSpiritActivated);
         return TRUE;
     }
@@ -3615,8 +3621,7 @@ struct AbilityImpl<ABILITY_GRIP_PINCER> : is OnAttacker, is OnAccuracy<> {
         CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
         CHECK(Random() % 2)
 
-            gBattleMons[target]
-                .status2 |= STATUS2_WRAPPED;
+        gBattleMons[target].status2 |= STATUS2_WRAPPED;
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_GRIP_CLAW)
             gVolatileStructs[target].wrapTurns = 7;
         else
@@ -3662,8 +3667,9 @@ struct AbilityImpl<ABILITY_DEADEYE> : is OnAccuracy<>, is OnChooseDefensiveStat<
 };
 
 template <>
-struct AbilityImpl<ABILITY_ARTILLERY> : is OnAccuracy<> {
+struct AbilityImpl<ABILITY_ARTILLERY> : is OnAccuracy<>, is OnMakeSpread {
     ON_ACCURACY { CHECK(IsMegaLauncherBoosted(battler, move)) return ACCURACY_HITS_IF_POSSIBLE; }
+    ON_MAKE_SPREAD { return IsMegaLauncherBoosted(battler, move); }
 };
 
 template <>
@@ -3724,7 +3730,7 @@ struct AbilityImpl<ABILITY_SPECTRAL_SHROUD> : is AbilityImpl<ABILITY_SPECTRALIZE
         CHECK(moveType == TYPE_GHOST)
         CHECK(Random() % 100 < 30)
 
-            return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
+        return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
     }
 };
 
@@ -4071,8 +4077,9 @@ struct AbilityImpl<ABILITY_PRIMAL_MAW> : is OnParentalBond {
 };
 
 template <>
-struct AbilityImpl<ABILITY_SWEEPING_EDGE> : is OnAccuracy<> {
+struct AbilityImpl<ABILITY_SWEEPING_EDGE> : is OnAccuracy<>, is OnMakeSpread {
     ON_ACCURACY { CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) return ACCURACY_HITS_IF_POSSIBLE; }
+    ON_MAKE_SPREAD { return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST; }
 };
 
 template <>
@@ -4935,7 +4942,7 @@ struct AbilityImpl<ABILITY_FREEZING_POINT> : is OnEither {
 
 template <>
 struct AbilityImpl<ABILITY_CRYO_PROFICIENCY> : is AbilityImpl<ABILITY_FREEZING_POINT> {
-    int CryoProficiencyHail(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType) {
+    static int CryoProficiencyHail(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType) {
         CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
             BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
             return NO_ANNOUNCE;
@@ -5610,8 +5617,7 @@ struct AbilityImpl<ABILITY_ILL_WILL> : is OnDefender {
         CHECK(gBattleMons[attacker].pp[gChosenMovePos])
         CHECK_NOT(IsBattlerAlive(battler))
 
-            gBattleMons[attacker]
-                .pp[gChosenMovePos] = 0;
+        gBattleMons[attacker].pp[gChosenMovePos] = 0;
         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove)
         gActiveBattler = attacker;
         BtlController_EmitSetMonData(0, gChosenMovePos + REQUEST_PPMOVE1_BATTLE, 0, 1, &gBattleMons[attacker].pp[gChosenMovePos]);
@@ -6494,7 +6500,7 @@ struct AbilityImpl<ABILITY_BLOOD_STAIN> : is OnEither, is OnEntry, is Unsuppress
         CHECK_NOT(HasAbilityIgnoringSuppression(opponent, ability))
         CHECK_NOT(DoesBattlerHaveAbilityShield(opponent))
 
-            UpdateAbilityStateIndicesForNewAbility(opponent, ability);
+        UpdateAbilityStateIndicesForNewAbility(opponent, ability);
         ReplaceAbility(opponent, ability);
         gStackBattler1 = opponent;
         BattleScriptCall(BattleScript_BloodStainActivates);
@@ -6636,7 +6642,7 @@ struct AbilityImpl<ABILITY_RESTRAINING_ORDER> : is OnDefender {
         CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
         CHECK(CountUsablePartyMons(battler))
 
-            SetAbilityState(battler, ability, RESTRAINING_ORDER_ACTIVATING);
+        SetAbilityState(battler, ability, RESTRAINING_ORDER_ACTIVATING);
         return FALSE;
     }
 };
@@ -7328,8 +7334,7 @@ struct AbilityImpl<ABILITY_FLAME_COAT> : is OnEntry, is OnEndTurn {
 };
 
 template <>
-struct AbilityImpl<ABILITY_UNOWN_POWER> : is RandomizerBanned, is OnStab, is OnAfterTypeEffectiveness<> {
-    ON_STAB { return TRUE; }
+struct AbilityImpl<ABILITY_UNOWN_POWER> : is RandomizerBanned, is AbilityImpl<ABILITY_MYSTIC_POWER>, is OnAfterTypeEffectiveness<> {
     ON_AFTER_TYPE_EFFECTIVENESS {
         if (*mod < UQ_4_12(2.0) && (move == MOVE_HIDDEN_POWER || move == MOVE_SECRET_POWER)) *mod = UQ_4_12(2.0);
     }
@@ -7979,7 +7984,10 @@ template <>
 struct AbilityImpl<ABILITY_ICE_PLUMES> : is AbilityImpl<ABILITY_ICE_SCALES> {};
 
 template <>
-struct AbilityImpl<ABILITY_PROPELLER_TAIL> : is AbilityImpl<ABILITY_SWIFT_SWIM> {};
+struct AbilityImpl<ABILITY_STALWART> {};
+
+template <>
+struct AbilityImpl<ABILITY_PROPELLER_TAIL> : is AbilityImpl<ABILITY_SWIFT_SWIM>, is AbilityImpl<ABILITY_STALWART> {};
 
 template <>
 struct AbilityImpl<ABILITY_ENERGY_TAP> : is OnAttacker {

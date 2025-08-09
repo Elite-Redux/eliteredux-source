@@ -48,18 +48,23 @@ int GetAvailableAnticipationIndex(int target);
 int IsPressureAffected(int battler);
 void SetUnburdenState(int battler, u32 value);
 u32 GetUnburdenState(int battler);
-
 AbilityEnum HasMirrorArmor(int battler);
 AbilityEnum HasShieldDust(int battler);
 AbilityEnum HasInnerFocus(int battler);
 AbilityEnum HasGrappler(int battler);
-AbilityEnum HasBadCompany(int battler);
-AbilityEnum HasMinionControl(int battler);
 AbilityEnum HasAccelerate(int battler);
 AbilityEnum HasContrary(int battler);
 AbilityEnum HasClearBody(int battler);
 AbilityEnum BlocksAllStatDrops(int battler, int fromSelf);
 AbilityEnum BlocksStatDropsOfType(int battler, int stat);
+int IsSkillSwapBanned(AbilityEnum ability);
+int IsRolePlayBanned(AbilityEnum ability);
+int IsSimpleBeamBanned(AbilityEnum ability);
+AbilityEnum IgnoresRedirection(int battler);
+AbilityEnum AbilityMakesMoveSpread(int battler, MoveEnum move);
+int IsAlwaysStab(AbilityEnum ability);
+int AbilityGetsBonusStab(AbilityEnum ability, Type type);
+int GetsBonusStab(int battler, Type type);
 
 #ifdef __cplusplus
 }

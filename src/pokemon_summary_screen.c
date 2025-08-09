@@ -2915,41 +2915,13 @@ static int IsStab(u16 *abilities, int type) {
             RandomizeType(gBaseStats[sMonSummaryScreen->summary.species].type2, sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid, FALSE);
     }
 
-    // Everything has stab so don't promote anything
-    // Omni-stab
-    if (HasAbility(ABILITY_MYSTIC_POWER, abilities)) return FALSE;
-    if (HasAbility(ABILITY_ARCANE_FORCE, abilities)) return FALSE;
-
-    // Protean
-    if (HasAbility(ABILITY_PROTEAN, abilities)) return FALSE;
-    if (HasAbility(ABILITY_LIBERO, abilities)) return FALSE;
-    if (HasAbility(ABILITY_PATTERN_CHANGE, abilities)) return FALSE;
-    if (HasAbility(ABILITY_RKS_SYSTEM, abilities)) return FALSE;
-    if (HasAbility(ABILITY_COLOR_CHANGE, abilities)) return FALSE;
-
-#define CHECK_ABILITY(ability, checkType) \
-    if (checkType == type && HasAbility(ability, abilities)) return TRUE;
-    // Stab granting abilities
-    CHECK_ABILITY(ABILITY_LUNAR_ECLIPSE, TYPE_FAIRY)
-    CHECK_ABILITY(ABILITY_LUNAR_ECLIPSE, TYPE_DARK)
-    CHECK_ABILITY(ABILITY_MOON_SPIRIT, TYPE_FAIRY)
-    CHECK_ABILITY(ABILITY_MOON_SPIRIT, TYPE_DARK)
-    CHECK_ABILITY(ABILITY_SOLAR_FLARE, TYPE_FIRE)
-    CHECK_ABILITY(ABILITY_AURORA_BOREALIS, TYPE_ICE)
-    CHECK_ABILITY(ABILITY_AMPHIBIOUS, TYPE_WATER)
-
-    // Type changing abilities
-    CHECK_ABILITY(ABILITY_PHANTOM, TYPE_GHOST)
-    CHECK_ABILITY(ABILITY_AQUATIC, TYPE_WATER)
-    CHECK_ABILITY(ABILITY_GROUNDED, TYPE_GROUND)
-    CHECK_ABILITY(ABILITY_FAIRY_TALE, TYPE_FAIRY)
-    CHECK_ABILITY(ABILITY_ICE_AGE, TYPE_ICE)
-    CHECK_ABILITY(ABILITY_HALF_DRAKE, TYPE_DRAGON)
-    CHECK_ABILITY(ABILITY_METALLIC, TYPE_STEEL)
-    CHECK_ABILITY(ABILITY_DRAGONFLY, TYPE_DRAGON)
-    CHECK_ABILITY(ABILITY_TERAVOLT, TYPE_ELECTRIC)
-    CHECK_ABILITY(ABILITY_TURBOBLAZE, TYPE_FIRE)
-#undef CHECK_ABILITY
+    for (int i = 0; i < 4; i++) {
+        if (IsAlwaysStab(abilities[0])) return FALSE;
+    }
+    
+    for (int i = 0; i < 4; i++) {
+        if (AbilityGetsBonusStab(abilities[0], type)) return TRUE;
+    }
 
     if (abilities[4] == type) return TRUE;
     return abilities[5] == type;

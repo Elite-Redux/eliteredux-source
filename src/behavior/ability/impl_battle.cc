@@ -10,6 +10,18 @@ extern "C" {
 ENUM_AND(ApplyOn)
 ENUM_AND(ApplyOnTarget)
 
+template <typename T, typename Func>
+AbilityEnum HasAbilityWithTagMatchingCondition(int battler, Func predicate, bool checkMoldBreaker = std::is_assignable_v<Breakable, T>) {
+    for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
+        auto ability = gBattleMons[battler].abilities[i];
+        const auto ptr = dispatchTo<T>(ability);
+        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
+        FILTER(ptr && predicate(ptr))
+        return ability;
+    }
+    return ABILITY_NONE;
+}
+
 template <typename T>
 AbilityEnum HasAbilityWithTag(int battler, bool checkMoldBreaker = std::is_assignable_v<Breakable, T>) {
     for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
@@ -26,18 +38,9 @@ AbilityEnum HasAbilityOrClone(int battler, bool checkMoldBreaker = std::is_assig
     return HasAbilityWithTag<AbilityImpl<Id>>(battler, checkMoldBreaker);
 }
 
-template <AbilityEnum Id>
-AbilityEnum HasAbilityOrCloneMatchingCondition(int battler,
-                                               bool (*predicate)(const AbilityImpl<Id>*),
-                                               bool checkMoldBreaker = std::is_assignable_v<Breakable, AbilityImpl<Id>>) {
-    for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
-        auto ability = gBattleMons[battler].abilities[i];
-        const auto ptr = dispatchTo<AbilityImpl<Id>>(ability);
-        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
-        FILTER(ptr && predicate(ptr))
-        return ability;
-    }
-    return ABILITY_NONE;
+template <AbilityEnum Id, typename Func>
+AbilityEnum HasAbilityOrCloneMatchingCondition(int battler, Func predicate, bool checkMoldBreaker = std::is_assignable_v<Breakable, AbilityImpl<Id>>) {
+    return HasAbilityWithTagMatchingCondition<AbilityImpl<Id>>(battler, predicate, checkMoldBreaker);
 }
 
 inline bool CheckApplyOn(ApplyOn actual, ApplyOn expected) {
@@ -74,7 +77,8 @@ void SetSharedAbilityState(int battler, u32 state) {
 template <AbilityEnum Id>
 int IsAbilityOnOppositeSide(int battler) {
     if (IsBattlerAlive(BATTLE_OPPOSITE(battler)) && HasAbilityOrClone<Id>(BATTLE_OPPOSITE(battler))) return BATTLE_OPPOSITE(battler) + 1;
-    if (IsBattlerAlive(BATTLE_OPPOSITE(BATTLE_PARTNER(battler))) && HasAbilityOrClone<Id>(BATTLE_OPPOSITE(BATTLE_PARTNER(battler)))) return BATTLE_OPPOSITE(BATTLE_PARTNER(battler)) + 1;
+    if (IsBattlerAlive(BATTLE_OPPOSITE(BATTLE_PARTNER(battler))) && HasAbilityOrClone<Id>(BATTLE_OPPOSITE(BATTLE_PARTNER(battler))))
+        return BATTLE_OPPOSITE(BATTLE_PARTNER(battler)) + 1;
     return 0;
 }
 
@@ -89,7 +93,7 @@ AbilityEnum IsSoundproof(int battler) {
     if (baseIsSoundproof) return baseIsSoundproof;
     if (IsBattlerAlive(BATTLE_PARTNER(battler)))
         return HasAbilityOrCloneMatchingCondition<ABILITY_SOUNDPROOF>(
-            BATTLE_PARTNER(battler), +[](const AbilityImpl<ABILITY_SOUNDPROOF>* it) { return CheckApplyOn(it->onImmuneFor(), ApplyOn::ALLY); });
+            BATTLE_PARTNER(battler), [](const AbilityImpl<ABILITY_SOUNDPROOF>* it) { return CheckApplyOn(it->onImmuneFor(), ApplyOn::ALLY); });
     return ABILITY_NONE;
 }
 AbilityEnum HasNoRecoil(int battler) { return HasAbilityOrClone<ABILITY_ROCK_HEAD>(battler, false); }
@@ -156,9 +160,9 @@ int GetAvailableAnticipationIndex(int target) {
     }
     return -1;
 }
-int IsPressureAffected(int battler) { 
+int IsPressureAffected(int battler) {
     CHECK_NOT(HasAbilityOrClone<ABILITY_PRESSURE>(battler));
-    return IsAbilityOnOppositeSide<ABILITY_PRESSURE>(battler); 
+    return IsAbilityOnOppositeSide<ABILITY_PRESSURE>(battler);
 }
 u32 GetUnburdenState(int battler) { return GetSharedAbilityState<ABILITY_UNBURDEN>(battler); }
 void SetUnburdenState(int battler, u32 value) { SetSharedAbilityState<ABILITY_UNBURDEN>(battler, value); }
@@ -166,8 +170,6 @@ AbilityEnum HasMirrorArmor(int battler) { return HasAbilityOrClone<ABILITY_MIRRO
 AbilityEnum HasShieldDust(int battler) { return HasAbilityOrClone<ABILITY_SHIELD_DUST>(battler); }
 AbilityEnum HasInnerFocus(int battler) { return HasAbilityOrClone<ABILITY_INNER_FOCUS>(battler); }
 AbilityEnum HasGrappler(int battler) { return HasAbilityOrClone<ABILITY_GRAPPLER>(battler); }
-AbilityEnum HasBadCompany(int battler) { return HasAbilityOrClone<ABILITY_BAD_COMPANY>(battler); }
-AbilityEnum HasMinionControl(int battler) { return HasAbilityOrClone<ABILITY_MINION_CONTROL>(battler); }
 AbilityEnum HasAccelerate(int battler) { return HasAbilityOrClone<ABILITY_ACCELERATE>(battler); }
 AbilityEnum HasContrary(int battler) { return HasAbilityOrClone<ABILITY_CONTRARY>(battler); }
 AbilityEnum HasClearBody(int battler) { return HasAbilityOrClone<ABILITY_CLEAR_BODY>(battler); }
@@ -193,4 +195,22 @@ AbilityEnum BlocksStatDropsOfType(int battler, int stat) {
             return IgnoresEvasion(battler);
     }
     return ABILITY_NONE;
+}
+
+int IsSkillSwapBanned(AbilityEnum ability) { return dispatchTo<SkillSwapBanned>(ability) != nullptr; }
+int IsRolePlayBanned(AbilityEnum ability) { return dispatchTo<RolePlayBanned>(ability) != nullptr; }
+int IsSimpleBeamBanned(AbilityEnum ability) { return dispatchTo<AbilityImpl<ABILITY_TRUANT>>(ability) != nullptr; }
+AbilityEnum IgnoresRedirection(int battler) { return HasAbilityOrClone<ABILITY_STALWART>(battler); }
+AbilityEnum AbilityMakesMoveSpread(int battler, MoveEnum move) {
+    CHECK(gBattleMoves[move].target == MOVE_TARGET_SELECTED)
+    return HasAbilityWithTagMatchingCondition<OnMakeSpread>(battler, [&](const OnMakeSpread* ability) -> bool { return ability->onMakeSpread(battler, move); });
+}
+int IsAlwaysStab(AbilityEnum ability) { return dispatchTo<AlwaysStab>(ability) != nullptr; }
+int AbilityGetsBonusStab(AbilityEnum ability, Type type) {
+    auto ptr = dispatchTo<OnStab>(ability);
+    if (!ptr) return FALSE;
+    return ptr->onStab(type);
+}
+int GetsBonusStab(int battler, Type type) {
+    return HasAbilityWithTagMatchingCondition<OnStab>(battler, [&](const OnStab* ability) -> bool { return ability->onStab(type); });
 }
