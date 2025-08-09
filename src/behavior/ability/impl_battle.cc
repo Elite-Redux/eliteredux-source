@@ -2,6 +2,7 @@
 
 extern "C" {
 #include "global.h"
+#include "battle_util.h"
 }
 #define ENUM_AND(enumType) \
     inline enumType operator&(enumType a, enumType b) { return static_cast<enumType>(static_cast<int>(a) | static_cast<int>(b)); }
@@ -9,21 +10,13 @@ extern "C" {
 ENUM_AND(ApplyOn)
 ENUM_AND(ApplyOnTarget)
 
-// void onAbility(int battler, bool checkMoldBreaker, bool (*predicate)(AbilityEnum)) {
-//     for (int idx = TOTAL_ABILITY_COUNT - 1; idx >= 0; idx--) {
-//         AbilityEnum ability = gBattleMons[battler].abilities[idx];
-//         FILTER(predicate(ability))
-//         FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
-//         callback;
-//     }
-// }
-
 template <typename T>
 AbilityEnum HasAbilityWithTag(int battler, bool checkMoldBreaker = std::is_assignable_v<Breakable, T>) {
     for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
         auto ability = gBattleMons[battler].abilities[i];
-        FILTER(IsSuppressed(battler, ability, checkMoldBreaker))
-        if (dispatchTo<T>(ability)) return ability;
+        FILTER(dispatchTo<T>(ability))
+        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
+        return ability;
     }
     return ABILITY_NONE;
 }
@@ -39,8 +32,8 @@ AbilityEnum HasAbilityOrCloneMatchingCondition(int battler,
                                                bool checkMoldBreaker = std::is_assignable_v<Breakable, AbilityImpl<Id>>) {
     for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
         auto ability = gBattleMons[battler].abilities[i];
-        FILTER(IsSuppressed(battler, ability, checkMoldBreaker))
         const auto ptr = dispatchTo<AbilityImpl<Id>>(ability);
+        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
         FILTER(ptr && predicate(ptr))
         return ability;
     }
@@ -59,17 +52,30 @@ template <AbilityEnum Id>
 int GetAbilityOrCloneIndex(int battler, bool checkMoldBreaker = std::is_assignable_v<Breakable, AbilityImpl<Id>>) {
     for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
         auto ability = gBattleMons[battler].abilities[i];
-        FILTER(IsSuppressed(battler, ability, checkMoldBreaker))
         FILTER(dispatchTo<AbilityImpl<Id>>(ability))
+        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
         return i;
     }
     return -1;
 }
 
 template <AbilityEnum Id>
-AbilityEnum GetSharedAbilityState(int battler) {
+u32 GetSharedAbilityState(int battler) {
     int idx = GetAbilityOrCloneIndex<Id>(battler);
     return idx >= 0 ? GetAbilityStateByIndex(battler, idx) : 0;
+}
+
+template <AbilityEnum Id>
+void SetSharedAbilityState(int battler, u32 state) {
+    int idx = GetAbilityOrCloneIndex<Id>(battler);
+    SetAbilityStateByIndex(battler, idx, state);
+}
+
+template <AbilityEnum Id>
+int IsAbilityOnOppositeSide(int battler) {
+    if (IsBattlerAlive(BATTLE_OPPOSITE(battler)) && HasAbilityOrClone<Id>(BATTLE_OPPOSITE(battler))) return BATTLE_OPPOSITE(battler) + 1;
+    if (IsBattlerAlive(BATTLE_OPPOSITE(BATTLE_PARTNER(battler))) && HasAbilityOrClone<Id>(BATTLE_OPPOSITE(BATTLE_PARTNER(battler)))) return BATTLE_OPPOSITE(BATTLE_PARTNER(battler)) + 1;
+    return 0;
 }
 
 AbilityEnum HasChloroplast(int battler) { return HasAbilityOrClone<ABILITY_CHLOROPLAST>(battler); }
@@ -91,8 +97,9 @@ int RecoilReductionCount(int battler) {
     int count = 0;
     for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
         auto ability = gBattleMons[battler].abilities[i];
-        FILTER(IsSuppressed(battler, ability, false))
-        if (dispatchTo<AbilityImpl<ABILITY_LIMBER>>(ability)) return count++;
+        FILTER(dispatchTo<AbilityImpl<ABILITY_LIMBER>>(ability))
+        FILTER_NOT(IsSuppressed(battler, ability, false))
+        count++;
     }
     return count;
 }
@@ -138,12 +145,23 @@ int HasCowardTriggered(int battler) {
 }
 AbilityEnum HasQuickFeet(int battler) { return HasAbilityOrClone<ABILITY_QUICK_FEET>(battler); }
 AbilityEnum HasQuickDraw(int battler) { return HasAbilityOrClone<ABILITY_QUICK_DRAW>(battler); }
-AbilityEnum IgnoresEvasion(int battler) {return HasAbilityWithTag<BlocksStatDrops<STAT_ACC>>(battler); }
-AbilityEnum HasAnticipation(int battler) { return HasAbilityOrClone<ABILITY_ANTICIPATION>(battler); }
-AbilityEnum HasPressure(int battler) { return HasAbilityOrClone<ABILITY_PRESSURE>(battler); }
-AbilityEnum HasLuckyHalo(int battler) { return HasAbilityOrClone<ABILITY_LUCKY_HALO>(battler); }
-AbilityEnum HasPowerOfAlchemy(int battler) { return HasAbilityOrClone<ABILITY_POWER_OF_ALCHEMY>(battler); }
-AbilityEnum HasUnburden(int battler) { return HasAbilityOrClone<ABILITY_UNBURDEN>(battler); }
+AbilityEnum IgnoresEvasion(int battler) { return HasAbilityWithTag<BlocksStatDrops<STAT_ACC>>(battler); }
+int GetAvailableAnticipationIndex(int target) {
+    for (int i = ARRAY_COUNT(gBattleMons[target].abilities); i--;) {
+        auto ability = gBattleMons[target].abilities[i];
+        FILTER(dispatchTo<AbilityImpl<ABILITY_ANTICIPATION>>(ability))
+        FILTER_NOT(IsSuppressed(target, ability, std::is_assignable_v<Breakable, AbilityImpl<ABILITY_ANTICIPATION>>))
+        FILTER_NOT(GetSingleUseAbilityCountByIndex(target, i))
+        return i;
+    }
+    return -1;
+}
+int IsPressureAffected(int battler) { 
+    CHECK_NOT(HasAbilityOrClone<ABILITY_PRESSURE>(battler));
+    return IsAbilityOnOppositeSide<ABILITY_PRESSURE>(battler); 
+}
+u32 GetUnburdenState(int battler) { return GetSharedAbilityState<ABILITY_UNBURDEN>(battler); }
+void SetUnburdenState(int battler, u32 value) { SetSharedAbilityState<ABILITY_UNBURDEN>(battler, value); }
 AbilityEnum HasMirrorArmor(int battler) { return HasAbilityOrClone<ABILITY_MIRROR_ARMOR>(battler); }
 AbilityEnum HasShieldDust(int battler) { return HasAbilityOrClone<ABILITY_SHIELD_DUST>(battler); }
 AbilityEnum HasInnerFocus(int battler) { return HasAbilityOrClone<ABILITY_INNER_FOCUS>(battler); }

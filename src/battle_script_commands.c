@@ -1355,10 +1355,10 @@ static void Cmd_accuracycheck(void) {
         accuracy = GetTotalAccuracy(gBattlerAttacker, gBattlerTarget, move, NULL);
 
         // final calculation
-        if (accuracy <= 100 && BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_ANTICIPATION) && !GetSingleUseAbilityCounter(gBattlerTarget, ABILITY_ANTICIPATION) &&
-            CalcTypeEffectivenessMultiplier(move, type, gBattlerAttacker, gBattlerTarget, TRUE) >= UQ_4_12(2.0)) {
-            SetSingleUseAbilityCounter(gBattlerTarget, ABILITY_ANTICIPATION, TRUE);
-            gBattleScripting.abilityPopupOverwrite = ABILITY_ANTICIPATION;
+        int idx = GetAvailableAnticipationIndex(gBattlerTarget);
+        if (accuracy <= 100 && idx >= 0 && CalcTypeEffectivenessMultiplier(move, type, gBattlerAttacker, gBattlerTarget, TRUE) >= UQ_4_12(2.0)) {
+            SetSingleUseAbilityCountByIndex(gBattlerTarget, idx, TRUE);
+            gBattleScripting.abilityPopupOverwrite = gBattleMons[gBattlerTarget].abilities[idx];
             gMoveResultFlags |= MOVE_RESULT_MISSED;
             gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG;
         } else if ((Random() % 100) >= accuracy) {
@@ -1402,7 +1402,7 @@ static void Cmd_ppreduce(void) {
 
     if (gHitMarker & HITMARKER_NO_ATTACKSTRING) return;
 
-    if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRESSURE) && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_PRESSURE)) ppToDeduct++;
+    if (IsPressureAffected(gBattlerAttacker)) ppToDeduct++;
 
     if ((gBattleMoves[gCurrentMove].effect == EFFECT_SPIT_UP || gBattleMoves[gCurrentMove].effect == EFFECT_SWALLOW)) {
         while (ppToDeduct) {
@@ -1600,7 +1600,7 @@ static void Cmd_adjustdamage(void) {
         gBattleScripting.abilityPopupOverwrite = HasSturdy(gBattlerTarget);
     } else if (gTurnStructs[gBattlerTarget].haloed) {
         gMoveResultFlags |= MOVE_RESULT_STURDIED;
-        gBattleScripting.abilityPopupOverwrite = HasLuckyHalo(gBattlerTarget);
+        gBattleScripting.abilityPopupOverwrite = ABILITY_LUCKY_HALO;
     }
 
 END:
@@ -2107,9 +2107,9 @@ int UpdateBattlerItem(int battler, int newItem) {
     int alchemyBattler;
     if (oldItem == newItem) return 0;
     if (oldItem == ITEM_NONE)
-        SetAbilityState(battler, ABILITY_UNBURDEN, FALSE);
+        SetUnburdenState(battler, FALSE);
     else if (newItem == ITEM_NONE)
-        SetAbilityState(battler, ABILITY_UNBURDEN, TRUE);
+        SetUnburdenState(battler, TRUE);
 
     if (newItem == ITEM_NONE && oldItem != ITEM_BIG_NUGGET && (alchemyBattler = IsAbilityOnField(ABILITY_POWER_OF_ALCHEMY)))
         SetPowerOfAlchemyState(alchemyBattler - 1, battler, oldItem);
@@ -2202,7 +2202,7 @@ void SetOnMoveEffectReactionFlags(int attacker, int target, MoveEffectEnum moveE
 void SetMoveEffect(bool32 primary, u32 certain) {
     s32 i, byTwo = 0, affectsUser = 0;
     bool32 statusChanged = FALSE;
-    bool32 mirrorArmorReflected = BattlerHasAbility(gBattlerTarget, ABILITY_MIRROR_ARMOR, TRUE);
+    bool32 mirrorArmorReflected = HasMirrorArmor(gBattlerTarget);
     u32 flags = 0;
     bool16 ignoreTypeImmunities = gBattleScripting.moveEffect & MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES;
     AbilityEnum ability;
@@ -9696,16 +9696,16 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
                 BattleScriptCall(BattleScript_AbilityNoSpecificStatLoss);
             }
             return 0;
-        } else if (BATTLER_HAS_ABILITY(battler, ABILITY_MIRROR_ARMOR) && !affectsUser && gBattlerAttacker != gBattlerTarget && battler == gBattlerTarget) {
+        } else if (HasMirrorArmor(battler) && !affectsUser && gBattlerAttacker != gBattlerTarget && battler == gBattlerTarget) {
             if (flags == STAT_BUFF_ALLOW_PTR) {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_MIRROR_ARMOR;
+                gBattleScripting.abilityPopupOverwrite = HasMirrorArmor(battler);
                 SET_STATCHANGER_WITH_SIGN(statId, statValue);
                 gBattleScripting.battler = battler;
                 gBattlerAbility = battler;
                 BattleScriptPush(BS_ptr);
                 gBattlescriptCurrInstr = BattleScript_MirrorArmorReflect;
             } else if (updateMoveEffect && !gTurnStructs[battler].statLowered) {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_MIRROR_ARMOR;
+                gBattleScripting.abilityPopupOverwrite = HasMirrorArmor(battler);
                 SET_STATCHANGER_WITH_SIGN(statId, statValue);
                 gBattleScripting.battler = battler;
                 gBattlerAbility = battler;

@@ -44,12 +44,11 @@ int HasCowardTriggered(int battler);
 AbilityEnum HasQuickFeet(int battler);
 AbilityEnum HasQuickDraw(int battler);
 AbilityEnum IgnoresEvasion(int battler);
+int GetAvailableAnticipationIndex(int target);
+int IsPressureAffected(int battler);
+void SetUnburdenState(int battler, u32 value);
+u32 GetUnburdenState(int battler);
 
-AbilityEnum HasAnticipation(int battler);
-AbilityEnum HasPressure(int battler);
-AbilityEnum HasLuckyHalo(int battler);
-AbilityEnum HasPowerOfAlchemy(int battler);
-AbilityEnum HasUnburden(int battler);
 AbilityEnum HasMirrorArmor(int battler);
 AbilityEnum HasShieldDust(int battler);
 AbilityEnum HasInnerFocus(int battler);

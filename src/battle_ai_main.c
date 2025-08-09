@@ -709,8 +709,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             }
         }
 
-        if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_ANTICIPATION) && !GetSingleUseAbilityCounter(battlerDef, ABILITY_ANTICIPATION) &&
-            CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, TRUE) >= UQ_4_12(2.0) &&
+        if (GetAvailableAnticipationIndex(battlerDef) >= 0 && CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, TRUE) >= UQ_4_12(2.0) &&
             GetTotalAccuracy(battlerAtk, battlerDef, move, NULL) <= 100)
             RETURN_SCORE_MINUS(5);
 
@@ -1414,8 +1413,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             if (B_MENTAL_HERB >= GEN_5 && AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_MENTAL_HERB) score -= 6;
             break;
         case EFFECT_WILL_O_WISP:
-            if (!AI_CanBurn(battlerAtk, battlerDef, AI_DATA->partnerMove)|| HasMagicGuard(battlerDef))
-                score -= 10;
+            if (!AI_CanBurn(battlerAtk, battlerDef, AI_DATA->partnerMove) || HasMagicGuard(battlerDef)) score -= 10;
             break;
         case EFFECT_MEMENTO:
             if (CountUsablePartyMons(battlerAtk) == 0 || DoesPartnerHaveSameMoveEffect(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove))

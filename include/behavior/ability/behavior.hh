@@ -26,6 +26,7 @@ struct __EnumHack {
     operator int() const { return 0; }
     operator AccuracyPriority() const { return ACCURACY_NO_RESULT; }
     operator MultihitType() const { return MULTIHIT_SINGLE; }
+    operator AbilityEnum() const { return ABILITY_NONE; }
 };
 
 #define CHECK(effect) \
@@ -604,7 +605,8 @@ struct AbilityImpl<ABILITY_POISON_POINT> : is OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(CanBePoisoned(battler, opponent, MOVE_NONE))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker)) CHECK(Random() % 100 < 30)
+        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+        CHECK(Random() % 100 < 30)
 
             AbilityStatusEffectSafe(MOVE_EFFECT_POISON, battler, opponent);
         return TRUE;
@@ -661,7 +663,8 @@ struct AbilityImpl<ABILITY_RAIN_DISH> : is OnEndTurn {
     ON_END_TURN {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
-        CHECK(gVolatileStructs[battler].isFirstTurn != 2) CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
             gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
@@ -716,7 +719,8 @@ struct AbilityImpl<ABILITY_FLAME_BODY> : is OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(CanBeBurned(opponent))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker)) CHECK(Random() % 100 < 30)
+        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+        CHECK(Random() % 100 < 30)
 
             AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
         return TRUE;
@@ -777,7 +781,8 @@ struct AbilityImpl<ABILITY_CUTE_CHARM> : is OnEither {
     ON_EITHER {
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK(CanInfatuate(battler, opponent)) CHECK(Random() % 100 < 50)
+        CHECK(CanInfatuate(battler, opponent))
+        CHECK(Random() % 100 < 50)
 
             AbilityStatusEffectSafe(MOVE_EFFECT_ATTRACT, battler, opponent);
         return TRUE;
@@ -989,7 +994,7 @@ struct AbilityImpl<ABILITY_ANGER_POINT> : is OnDefender {
 template <>
 struct AbilityImpl<ABILITY_UNBURDEN> : is OnStat<> {
     ON_STAT {
-        if (statId == STAT_SPEED && GetAbilityState(battler, ability)) *stat *= 2;
+        if (statId == STAT_SPEED && GetUnburdenState(battler)) *stat *= 2;
     }
 };
 
@@ -1139,7 +1144,7 @@ struct AbilityImpl<ABILITY_AFTERMATH> : is OnDefender {
         CHECK_NOT(HasMagicGuard(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
-            gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
+        gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
         if (!gBattleMoveDamage) gBattleMoveDamage = 1;
         BattleScriptCall(BattleScript_AftermathDmg);
         return TRUE;
@@ -1242,7 +1247,7 @@ struct AbilityImpl<ABILITY_ICE_BODY> : is HailImmune, is OnEndTurn {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
 
-            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
@@ -1352,7 +1357,8 @@ struct AbilityImpl<ABILITY_CURSED_BODY> : is OnDefender {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(gVolatileStructs[attacker].disabledMove)
         CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(IsAbilityStatusProtected(attacker, CHECK_RESTRICTING)) CHECK(gBattleMons[attacker].pp[gChosenMovePos]) CHECK(Random() % 100 < 30)
+        CHECK_NOT(IsAbilityStatusProtected(attacker, CHECK_RESTRICTING))
+        CHECK(gBattleMons[attacker].pp[gChosenMovePos]) CHECK(Random() % 100 < 30)
 
             gVolatileStructs[attacker]
                 .disabledMove = gChosenMove;
@@ -1449,7 +1455,7 @@ struct AbilityImpl<ABILITY_HARVEST> : is OnEndTurn {
         CHECK(ItemId_GetPocket(GetUsedHeldItem(battler)) == POCKET_BERRIES)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) || Random() % 2)
 
-            BattleScriptPushCursorAndCallback(BattleScript_HarvestActivates);
+        BattleScriptPushCursorAndCallback(BattleScript_HarvestActivates);
         return TRUE;
     }
 };
@@ -1580,7 +1586,8 @@ struct AbilityImpl<ABILITY_MUMMY> : is OnDefender {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
         CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(attacker))) CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
+        CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(attacker)))
+        CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
 
             UpdateAbilityStateIndicesForNewAbility(attacker, ability);
         ReplaceAbility(attacker, ability);
@@ -1956,7 +1963,7 @@ struct AbilityImpl<ABILITY_SHIELDS_DOWN> : is StandardTransformation, is OnAttac
         CHECK(gBattleMoves[move].effect == EFFECT_SHELL_SMASH)
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
-            int i;
+        int i;
         for (i = 0; i < ARRAY_COUNT(gHpTransformations); i++) {
             if (gHpTransformations[i].ability == ability && gBattleMons[battler].species == gHpTransformations[i].highHpSpecies) break;
         }
@@ -2621,7 +2628,7 @@ struct AbilityImpl<ABILITY_PERISH_BODY> : is OnDefender {
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(gStatuses3[attacker] & STATUS3_PERISH_SONG)
 
-            if (!(gStatuses3[battler] & STATUS3_PERISH_SONG)) {
+        if (!(gStatuses3[battler] & STATUS3_PERISH_SONG)) {
             gStatuses3[battler] |= STATUS3_PERISH_SONG;
             gVolatileStructs[battler].perishSongTimer = 3;
             gVolatileStructs[battler].perishSongTimerStartValue = 3;
@@ -2640,10 +2647,10 @@ struct AbilityImpl<ABILITY_WANDERING_SPIRIT> : is OnDefender {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(GetBattlerAbility(battler) == ability)
         CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
-        CHECK(IsMoveMakingContact(move, attacker)) CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(attacker)))
-            CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(attacker))) CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
 
-                UpdateAbilityStateIndicesForNewAbility(attacker, GetBattlerAbility(attacker));
+            UpdateAbilityStateIndicesForNewAbility(attacker, GetBattlerAbility(attacker));
         UpdateAbilityStateIndicesForNewAbility(battler, ability);
         ReplaceAbility(battler, GetBattlerAbility(attacker));
         ReplaceAbility(attacker, ability);
@@ -2972,7 +2979,7 @@ struct AbilityImpl<ABILITY_LOUD_BANG> : is OnAttacker {
         CHECK(IsSoundMove(battler, move))
         CHECK(Random() % 2)
 
-            return AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
+        return AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
     }
 };
 
@@ -3278,7 +3285,7 @@ struct AbilityImpl<ABILITY_SOUL_LINKER> : is OnEither {
         CHECK_NOT(BATTLER_HAS_ABILITY(opponent, ABILITY_SOUL_LINKER))
         CHECK(move != MOVE_PAIN_SPLIT)
 
-            BattleScriptCall(BattleScript_AttackerSoulLinker);
+        BattleScriptCall(BattleScript_AttackerSoulLinker);
         return TRUE;
     }
 };
@@ -3314,7 +3321,8 @@ struct AbilityImpl<ABILITY_HAUNTED_SPIRIT> : is OnDefender {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
         CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_GHOST))
-        CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED) CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED)
+        CHECK(IsMoveMakingContact(move, attacker))
 
             gBattleMons[attacker]
                 .status2 |= STATUS2_CURSED;
@@ -3353,7 +3361,7 @@ struct AbilityImpl<ABILITY_SOLENOGLYPHS> : is OnAttacker {
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(Random() % 2)
 
-            return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
+        return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
     }
 };
 
@@ -3404,7 +3412,7 @@ struct AbilityImpl<ABILITY_POISON_ABSORB> : is Redirects<TYPE_POISON>, is Absorb
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN))
 
-            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
@@ -3604,7 +3612,8 @@ struct AbilityImpl<ABILITY_GRIP_PINCER> : is OnAttacker, is OnAccuracy<> {
         CHECK(ShouldApplyOnHitAffect(gBattlerTarget))
         CHECK(IsBattlerAlive(battler))
         CHECK(IsMoveMakingContact(move, battler))
-        CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED) CHECK(Random() % 2)
+        CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
+        CHECK(Random() % 2)
 
             gBattleMons[target]
                 .status2 |= STATUS2_WRAPPED;
@@ -3712,7 +3721,8 @@ struct AbilityImpl<ABILITY_SPECTRAL_SHROUD> : is AbilityImpl<ABILITY_SPECTRALIZE
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
         CHECK(gBattleStruct->ateBoost[battler])
-        CHECK(moveType == TYPE_GHOST) CHECK(Random() % 100 < 30)
+        CHECK(moveType == TYPE_GHOST)
+        CHECK(Random() % 100 < 30)
 
             return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
     }
@@ -3819,7 +3829,7 @@ struct AbilityImpl<ABILITY_FUNGAL_INFECTION> : is OnAttacker {
         CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
         CHECK(IsMoveMakingContact(move, battler))
 
-            gStatuses3[target] |= battler;
+        gStatuses3[target] |= battler;
         gStatuses3[target] |= STATUS3_LEECHSEED;
         BattleScriptCall(BattleScript_AbsorbantActivated);
         return TRUE;
@@ -3949,7 +3959,7 @@ struct AbilityImpl<ABILITY_FEARMONGER> : is AbilityImpl<ABILITY_INTIMIDATE>, is 
         CHECK(IsMoveMakingContact(move, battler))
         CHECK(Random() % 100 < 10)
 
-            return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+        return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
     }
 };
 
@@ -4081,7 +4091,7 @@ struct AbilityImpl<ABILITY_HYDRO_CIRCUIT> : is AbilityImpl<ABILITY_TRANSISTOR>, 
         CHECK(CanBattlerHeal(battler))
         CHECK(moveType == TYPE_WATER)
 
-            gBattleMoveDamage = -gHpDealt / 4;
+        gBattleMoveDamage = -gHpDealt / 4;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
@@ -4108,7 +4118,7 @@ struct AbilityImpl<ABILITY_ABSORBANT> : is OnAttacker {
         CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
         CHECK(gBattleMoves[move].effect == EFFECT_ABSORB || gBattleMoves[move].effect == EFFECT_DREAM_EATER)
 
-            gStatuses3[target] |= battler;
+        gStatuses3[target] |= battler;
         gStatuses3[target] |= STATUS3_LEECHSEED;
         BattleScriptCall(BattleScript_AbsorbantActivated);
         return TRUE;
@@ -4411,7 +4421,7 @@ struct AbilityImpl<ABILITY_SHOCKING_JAWS> : is OnAttacker {
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(Random() % 2)
 
-            return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+        return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
     }
 };
 
@@ -4918,7 +4928,7 @@ struct AbilityImpl<ABILITY_FREEZING_POINT> : is OnEither {
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
         CHECK(Random() % 100 < 30)
 
-            AbilityStatusEffectSafe(MOVE_EFFECT_FROSTBITE, battler, opponent);
+        AbilityStatusEffectSafe(MOVE_EFFECT_FROSTBITE, battler, opponent);
         return TRUE;
     }
 };
@@ -5034,7 +5044,7 @@ struct AbilityImpl<ABILITY_PURE_LOVE> : is OnDefender, is OnAttacker, is Infatua
         CHECK(CanBattlerHeal(battler))
         CHECK(gBattleMons[target].status2 & STATUS2_INFATUATION)
 
-            gBattleMoveDamage = -gHpDealt / 4;
+        gBattleMoveDamage = -gHpDealt / 4;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
@@ -5103,7 +5113,7 @@ struct AbilityImpl<ABILITY_SPITEFUL> : is OnDefender {
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK(gBattleMons[attacker].pp[gChosenMovePos])
 
-            BattleScriptCall(BattleScript_AbilitySpiteful);
+        BattleScriptCall(BattleScript_AbilitySpiteful);
         return TRUE;
     }
 };
@@ -5145,7 +5155,7 @@ struct AbilityImpl<ABILITY_FLAMING_JAWS> : is OnAttacker {
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(Random() % 2)
 
-            return AbilityStatusEffect(MOVE_EFFECT_BURN);
+        return AbilityStatusEffect(MOVE_EFFECT_BURN);
     }
 };
 
@@ -5236,7 +5246,7 @@ struct AbilityImpl<ABILITY_SPIKE_ARMOR> : is OnEither {
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
         CHECK(Random() % 100 < 30)
 
-            AbilityStatusEffectSafe(MOVE_EFFECT_BLEED, battler, opponent);
+        AbilityStatusEffectSafe(MOVE_EFFECT_BLEED, battler, opponent);
         return TRUE;
     }
 };
@@ -5249,7 +5259,7 @@ struct AbilityImpl<ABILITY_VOODOO_POWER> : is OnDefender {
         CHECK(CanBleed(attacker))
         CHECK(Random() % 100 < 30)
 
-            AbilityStatusEffect(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_BLEED);
+        AbilityStatusEffect(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_BLEED);
         return TRUE;
     }
 };
@@ -5597,7 +5607,8 @@ struct AbilityImpl<ABILITY_ILL_WILL> : is OnDefender {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(move != MOVE_STRUGGLE)
         CHECK(IsMoveMakingContact(move, attacker))
-        CHECK(gBattleMons[attacker].pp[gChosenMovePos]) CHECK_NOT(IsBattlerAlive(battler))
+        CHECK(gBattleMons[attacker].pp[gChosenMovePos])
+        CHECK_NOT(IsBattlerAlive(battler))
 
             gBattleMons[attacker]
                 .pp[gChosenMovePos] = 0;
@@ -5748,7 +5759,7 @@ struct AbilityImpl<ABILITY_CELESTIAL_BLESSING> : is OnEndTurn {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
 
-            gBattleMoveDamage = gBattleMons[battler].maxHP / 12;
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 12;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
@@ -5769,7 +5780,7 @@ struct AbilityImpl<ABILITY_MOLTEN_BLADES> : is AbilityImpl<ABILITY_KEEN_EDGE>, i
         CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
         CHECK(Random() % 100 < 20)
 
-            return AbilityStatusEffect(MOVE_EFFECT_BURN);
+        return AbilityStatusEffect(MOVE_EFFECT_BURN);
     }
 };
 
@@ -5797,7 +5808,7 @@ struct AbilityImpl<ABILITY_RADIO_JAM> : is OnAttacker {
         CHECK(IsSoundMove(battler, move))
         CHECK(Random() % 100 < 20)
 
-            return AbilityStatusEffect(MOVE_EFFECT_DISABLE);
+        return AbilityStatusEffect(MOVE_EFFECT_DISABLE);
     }
 };
 
@@ -5828,7 +5839,7 @@ struct AbilityImpl<ABILITY_DEAD_POWER> : is OnAttacker, is OnStat<> {
         CHECK(IsMoveMakingContact(move, battler))
         CHECK(Random() % 100 < 20)
 
-            return AbilityStatusEffect(MOVE_EFFECT_CURSE);
+        return AbilityStatusEffect(MOVE_EFFECT_CURSE);
     }
     ON_STAT {
         if (statId == STAT_ATK) *stat *= 1.5;
@@ -6018,7 +6029,7 @@ struct AbilityImpl<ABILITY_FRAGRANT_DAZE> : is OnEither {
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
         CHECK(Random() % 100 < 30)
 
-            AbilityStatusEffectSafe(MOVE_EFFECT_CONFUSION, battler, opponent);
+        AbilityStatusEffectSafe(MOVE_EFFECT_CONFUSION, battler, opponent);
         return TRUE;
     }
 };
@@ -6082,7 +6093,7 @@ struct AbilityImpl<ABILITY_RESONANCE> : is OnAttacker {
         CHECK(IsSoundMove(battler, move))
         CHECK(Random() % 100 < 50)
 
-            return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     }
 };
 
@@ -6109,7 +6120,7 @@ struct AbilityImpl<ABILITY_MENACING_SITUATION> : is OnEither {
         CHECK_NOT(gVolatileStructs[opponent].fear)
         CHECK(Random() % 100 < 30)
 
-            gStackBattler1 = battler;
+        gStackBattler1 = battler;
         gStackBattler2 = opponent;
         BattleScriptCall(BattleScript_AbilitySetFear);
         return TRUE;
@@ -6322,7 +6333,7 @@ struct AbilityImpl<ABILITY_PEACEFUL_REST> : is OnEndTurn {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
-            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
@@ -6480,7 +6491,8 @@ struct AbilityImpl<ABILITY_BLOOD_STAIN> : is OnEither, is OnEntry, is Unsuppress
         CHECK(ShouldApplyOnHitAffect(opponent))
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
         CHECK_NOT(IsPersistentOrUnsuppressable(GetBattlerAbility(opponent)))
-        CHECK_NOT(HasAbilityIgnoringSuppression(opponent, ability)) CHECK_NOT(DoesBattlerHaveAbilityShield(opponent))
+        CHECK_NOT(HasAbilityIgnoringSuppression(opponent, ability))
+        CHECK_NOT(DoesBattlerHaveAbilityShield(opponent))
 
             UpdateAbilityStateIndicesForNewAbility(opponent, ability);
         ReplaceAbility(opponent, ability);
@@ -6602,7 +6614,7 @@ struct AbilityImpl<ABILITY_VITALITY_STRIKE> : is OnAttacker {
         CHECK(CanBattlerHeal(battler))
         CHECK(IsIronFistBoosted(battler, move))
 
-            gBattleMoveDamage = -gHpDealt / 10;
+        gBattleMoveDamage = -gHpDealt / 10;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
@@ -6621,7 +6633,8 @@ struct AbilityImpl<ABILITY_RESTRAINING_ORDER> : is OnDefender {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-        CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA) CHECK(CountUsablePartyMons(battler))
+        CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
+        CHECK(CountUsablePartyMons(battler))
 
             SetAbilityState(battler, ability, RESTRAINING_ORDER_ACTIVATING);
         return FALSE;
@@ -6662,7 +6675,7 @@ struct AbilityImpl<ABILITY_FROSTMAW> : is OnAttacker {
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(Random() % 2)
 
-            return AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
+        return AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
     }
 };
 
@@ -6917,8 +6930,7 @@ struct AbilityImpl<ABILITY_SUPERSWEET_SYRUP> : is OnDefender {
         CHECK_NOT(gStatuses3[attacker] & STATUS3_EMBARGO)
         CHECK(gBattleMons[attacker].item)
 
-            gVolatileStructs[attacker]
-                .embargoTimer = 2;
+        gVolatileStructs[attacker].embargoTimer = 2;
         gStatuses3[attacker] |= STATUS3_EMBARGO;
         gLastUsedItem = gBattleMons[attacker].item;
         BattleScriptCall(BattleScript_AnnounceAttackerItemDisabled);
@@ -7024,7 +7036,7 @@ struct AbilityImpl<ABILITY_DEEP_CUTS> : is OnAttacker {
         CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
         CHECK(Random() % 2)
 
-            return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     }
 };
 
@@ -7814,7 +7826,7 @@ struct AbilityImpl<ABILITY_MOLTEN_COAT> : is OnAttacker, is AteAbility<TYPE_ROCK
         CHECK(CanBeBurned(target))
         CHECK(Random() % 2)
 
-            AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, target);
+        AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, target);
         return TRUE;
     }
 };
@@ -8108,7 +8120,9 @@ struct AbilityImpl<ABILITY_CURSE_OF_FAMINE> : is OnEntry {
 };
 
 template <>
-struct AbilityImpl<ABILITY_CRYSTALLINE_ARMOR> : is NotImplemented {};
+struct AbilityImpl<ABILITY_CRYSTALLINE_ARMOR> : is AbilityImpl<ABILITY_MIRROR_ARMOR>, is OnCrit<ApplyOnTarget::TARGET> {
+    ON_CRIT { return NEVER_CRIT; }
+};
 
 template <>
 struct AbilityImpl<ABILITY_SOUL_HARVEST> : is OnStat<>, is Breakable {

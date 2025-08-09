@@ -3832,12 +3832,16 @@ void IncrementSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value)
 
 AbilityStates GetAbilityStateAs(u8 battler, AbilityEnum ability) { return (AbilityStates){.intValue = GetAbilityState(battler, ability)}; }
 
+u32 GetAbilityStateByIndex(u8 battler, int index) { return gVolatileStructs[battler].abilityState[index]; }
+
 u32 GetAbilityState(u8 battler, AbilityEnum ability) {
     int index = GetAbilityIndex(battler, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return 0;
 
-    return gVolatileStructs[battler].abilityState[index];
+    return GetAbilityStateByIndex(battler, index);
 }
+
+void SetAbilityStateByIndex(u8 battler, int index, u32 value) { gVolatileStructs[battler].abilityState[index] = value; }
 
 void SetAbilityStateAs(u8 battler, AbilityEnum ability, AbilityStates value) { SetAbilityState(battler, ability, value.intValue); }
 
@@ -3845,7 +3849,7 @@ void SetAbilityState(u8 battler, AbilityEnum ability, u32 value) {
     int index = GetAbilityIndex(battler, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return;
 
-    gVolatileStructs[battler].abilityState[index] = value;
+    SetAbilityStateByIndex(battler, index, value);
 }
 
 void IncrementAbilityState(u8 battler, AbilityEnum ability, u32 value) { SetAbilityState(battler, ability, GetAbilityState(battler, ability) + value); }
@@ -8465,7 +8469,7 @@ bool32 TestSheerForceFlag(u8 battler, MoveEnum move) {
 int StatLowerableOrMirrorArmor(int battler, int stat) {
     if (CanLowerStat(battler, stat)) return TRUE;
 
-    return BATTLER_HAS_ABILITY(battler, ABILITY_MIRROR_ARMOR);
+    return HasMirrorArmor(battler);
 }
 
 // This function is the body of "jumpifstat", but can be used dynamically in a function
