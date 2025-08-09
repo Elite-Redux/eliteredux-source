@@ -147,13 +147,11 @@ struct OnParentalBond {
 #define DELEGATE_OFFENSIVE_MULTIPLIER battler, ability, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier
 APPLIES_ON(OffensiveMultiplier, ApplyOn, ON_OFFENSIVE_MULTIPLIER)
 
-struct OnDefensiveMultiplier : is Breakable {
 #define ON_DEFENSIVE_MULTIPLIER         \
     virtual void onDefensiveMultiplier( \
-        int battler, int attacker, MoveEnum move, Type moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier)
+        int battler, int attacker, MoveEnum move, Type moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier) const
 #define DELEGATE_DEFENSIVE_MULTIPLIER battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier
-    ON_DEFENSIVE_MULTIPLIER = 0;
-};
+APPLIES_ON_BREAKABLE(DefensiveMultiplier, ApplyOn, ON_DEFENSIVE_MULTIPLIER)
 
 struct OnMoveType {
 #define ON_MOVE_TYPE virtual int onMoveType(AbilityEnum ability, MoveEnum move, Type moveType, u8 *ateBoost) const

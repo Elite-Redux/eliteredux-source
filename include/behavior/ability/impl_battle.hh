@@ -65,6 +65,10 @@ AbilityEnum AbilityMakesMoveSpread(int battler, MoveEnum move);
 int IsAlwaysStab(AbilityEnum ability);
 int AbilityGetsBonusStab(AbilityEnum ability, Type type);
 int GetsBonusStab(int battler, Type type);
+int PerformOnEntry(int battler, AbilityEnum ability);
+int TestAbsorbingAbilities(int battler, MoveEnum move, Type moveType, AbilityEnum* absorbingAbility, int* statId);
+int TestAllImmunityAbilities(int battler, int attacker, MoveEnum move, Type moveType, const u8** immunityScript, u8* overrideBattler, u16* abilityPopup);
+void CalcDefensiveMultipliers(int battler, int attacker, MoveEnum move, Type moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier);
 
 #ifdef __cplusplus
 }

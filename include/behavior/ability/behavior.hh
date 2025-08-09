@@ -27,6 +27,7 @@ struct __EnumHack {
     operator AccuracyPriority() const { return ACCURACY_NO_RESULT; }
     operator MultihitType() const { return MULTIHIT_SINGLE; }
     operator AbilityEnum() const { return ABILITY_NONE; }
+    operator bool() const { return false; }
 };
 
 #define CHECK(effect) \
@@ -255,7 +256,7 @@ struct AbilityImpl<ABILITY_SPEED_BOOST> : is OnEndTurn {
 };
 
 template <>
-struct AbilityImpl<ABILITY_BATTLE_ARMOR> : is Breakable, is OnDefensiveMultiplier, is OnCrit<ApplyOnTarget::TARGET> {
+struct AbilityImpl<ABILITY_BATTLE_ARMOR> : is Breakable, is OnDefensiveMultiplier<>, is OnCrit<ApplyOnTarget::TARGET> {
     ON_DEFENSIVE_MULTIPLIER { MUL(.8); }
     ON_CRIT { return NEVER_CRIT; }
 };
@@ -387,7 +388,7 @@ struct AbilityImpl<ABILITY_COLOR_CHANGE> : is OnBeforeAttack<ApplyOnTarget::TARG
 };
 
 template <>
-struct AbilityImpl<ABILITY_IMMUNITY> : is OnDefensiveMultiplier, is RemovesStatusOnImmunity {
+struct AbilityImpl<ABILITY_IMMUNITY> : is OnDefensiveMultiplier<>, is RemovesStatusOnImmunity {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_POISON) RESISTANCE(.5);
     }
@@ -528,7 +529,7 @@ struct AbilityImpl<ABILITY_NATURAL_CURE> : is OnExit {
 };
 
 template <Type Absorbed, int Stat>
-struct AbsorbStatUp : OnAbsorb {
+struct AbsorbStatUp : is OnAbsorb {
     ON_ABSORB {
         CHECK(moveType == TYPE_ELECTRIC);
         int stat = Stat == STAT_HIGHEST_ATTACKING ? GetHighestAttackingStatId(battler, TRUE) : Stat;
@@ -622,7 +623,7 @@ struct AbilityImpl<ABILITY_INNER_FOCUS> : is TauntImmune, is OnAccuracy<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_MAGMA_ARMOR> : is OnDefensiveMultiplier, is RemovesStatusOnImmunity {
+struct AbilityImpl<ABILITY_MAGMA_ARMOR> : is OnDefensiveMultiplier<>, is RemovesStatusOnImmunity {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_WATER || moveType == TYPE_ICE) RESISTANCE(.7);
     }
@@ -711,7 +712,7 @@ struct AbilityImpl<ABILITY_PRESSURE> : is OnEntry {
 };
 
 template <>
-struct AbilityImpl<ABILITY_THICK_FAT> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_THICK_FAT> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.5);
     }
@@ -950,7 +951,7 @@ template <>
 struct AbilityImpl<ABILITY_MOTOR_DRIVE> : is AbsorbStatUp<TYPE_ELECTRIC, STAT_SPEED> {};
 
 template <>
-struct AbilityImpl<ABILITY_RIVALRY> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_RIVALRY> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, gBattleMons[battler].personality);
         if (genderAtk != MON_GENDERLESS && genderAtk == GetGenderFromSpeciesAndPersonality(gBattleMons[target].species, gBattleMons[target].personality))
@@ -1002,14 +1003,14 @@ struct AbilityImpl<ABILITY_UNBURDEN> : is OnStat<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_HEATPROOF> : is OnDefensiveMultiplier, is NegateBurnAtkDrop {
+struct AbilityImpl<ABILITY_HEATPROOF> : is OnDefensiveMultiplier<>, is NegateBurnAtkDrop {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FIRE) RESISTANCE(.5);
     }
 };
 
 template <>
-struct AbilityImpl<ABILITY_DRY_SKIN> : is AbilityImpl<ABILITY_WATER_ABSORB>, is AbilityImpl<ABILITY_RAIN_DISH>, is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_DRY_SKIN> : is AbilityImpl<ABILITY_WATER_ABSORB>, is AbilityImpl<ABILITY_RAIN_DISH>, is OnDefensiveMultiplier<> {
     ON_END_TURN {
         if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && !HasMagicGuard(battler)) {
             gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
@@ -1105,7 +1106,7 @@ struct AbilityImpl<ABILITY_NO_GUARD> : is OnAccuracy<ApplyOnTarget::ATTACKER_OR_
 };
 
 template <>
-struct AbilityImpl<ABILITY_STALL> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_STALL> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (gCurrentTurnActionNumber < GetBattlerTurnOrderNum(battler)) MUL(.7);
     }
@@ -1209,7 +1210,7 @@ struct AbilityImpl<ABILITY_TINTED_LENS> : is OnOffensiveMultiplier<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_FILTER> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_FILTER> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
     }
@@ -1390,7 +1391,11 @@ struct AbilityImpl<ABILITY_HEALER> : is OnEndTurn {
 };
 
 template <>
-struct AbilityImpl<ABILITY_FRIEND_GUARD> : is Breakable {};
+struct AbilityImpl<ABILITY_FRIEND_GUARD> : is OnDefensiveMultiplier<ApplyOn::ALLY_ONLY> {
+    ON_DEFENSIVE_MULTIPLIER {
+        MUL(.5);
+    }
+};
 
 template <>
 struct AbilityImpl<ABILITY_WEAK_ARMOR> : is OnDefender {
@@ -1415,7 +1420,7 @@ struct AbilityImpl<ABILITY_LIGHT_METAL> : is OnStat<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_MULTISCALE> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_MULTISCALE> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (BATTLER_MAX_HP(battler)) MUL(.5);
     }
@@ -1503,7 +1508,7 @@ struct AbilityImpl<ABILITY_MOODY> : is OnEndTurn {
 };
 
 template <>
-struct AbilityImpl<ABILITY_OVERCOAT> : is Breakable, is SandImmune, is HailImmune, is PowderImmune, is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_OVERCOAT> : is Breakable, is SandImmune, is HailImmune, is PowderImmune, is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_SPECIAL(move)) MUL(.8);
     }
@@ -1711,7 +1716,7 @@ struct AbilityImpl<ABILITY_PROTEAN> : is OnBeforeAttack<>, is AlwaysStab {
 };
 
 template <>
-struct AbilityImpl<ABILITY_FUR_COAT> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_FUR_COAT> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_PHYSICAL(move)) MUL(.5);
     }
@@ -1933,7 +1938,7 @@ template <>
 struct AbilityImpl<ABILITY_EMERGENCY_EXIT> : is AbilityImpl<ABILITY_WIMP_OUT> {};
 
 template <>
-struct AbilityImpl<ABILITY_WATER_COMPACTION> : is OnDefensiveMultiplier, is OnDefender {
+struct AbilityImpl<ABILITY_WATER_COMPACTION> : is OnDefensiveMultiplier<>, is OnDefender {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_WATER)
@@ -2008,7 +2013,7 @@ struct AbilityImpl<ABILITY_STAKEOUT> : is OnOffensiveMultiplier<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_WATER_BUBBLE> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier, is RemovesStatusOnImmunity {
+struct AbilityImpl<ABILITY_WATER_BUBBLE> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier<>, is RemovesStatusOnImmunity {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_WATER) MUL(2.0);
     }
@@ -2243,7 +2248,7 @@ struct AbilityImpl<ABILITY_BATTERY> : is OnOffensiveMultiplier<ApplyOn::ALLY_ONL
 };
 
 template <>
-struct AbilityImpl<ABILITY_FLUFFY> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_FLUFFY> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FIRE) RESISTANCE(2.0);
         if (IsMoveMakingContact(move, attacker)) MUL(0.5);
@@ -2485,7 +2490,7 @@ struct AbilityImpl<ABILITY_AMPLIFIER> : is OnOffensiveMultiplier<>, is OnMakeSpr
 };
 
 template <>
-struct AbilityImpl<ABILITY_PUNK_ROCK> : is OnDefensiveMultiplier, is AbilityImpl<ABILITY_AMPLIFIER> {
+struct AbilityImpl<ABILITY_PUNK_ROCK> : is OnDefensiveMultiplier<>, is AbilityImpl<ABILITY_AMPLIFIER> {
     ON_DEFENSIVE_MULTIPLIER {
         if (IsSoundMove(attacker, move)) MUL(.5);
     }
@@ -2508,7 +2513,7 @@ struct AbilityImpl<ABILITY_SAND_SPIT> : is SandImmune, is OnDefender {
 };
 
 template <>
-struct AbilityImpl<ABILITY_ICE_SCALES> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_ICE_SCALES> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_SPECIAL(move)) MUL(.5);
     }
@@ -2807,7 +2812,7 @@ struct AbilityImpl<ABILITY_KEEN_EDGE> : is OnOffensiveMultiplier<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_PRISM_SCALES> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_PRISM_SCALES> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_SPECIAL(move)) MUL(.7);
     }
@@ -2875,7 +2880,7 @@ template <>
 struct AbilityImpl<ABILITY_AERODYNAMICS> : is AbsorbStatUp<TYPE_FLYING, STAT_SPEED> {};
 
 template <>
-struct AbilityImpl<ABILITY_CHRISTMAS_SPIRIT> : is OnDefensiveMultiplier, is HailImmune {
+struct AbilityImpl<ABILITY_CHRISTMAS_SPIRIT> : is OnDefensiveMultiplier<>, is HailImmune {
     ON_DEFENSIVE_MULTIPLIER {
         if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) MUL(.5);
     }
@@ -2991,7 +2996,7 @@ struct AbilityImpl<ABILITY_LOUD_BANG> : is OnAttacker {
 };
 
 template <>
-struct AbilityImpl<ABILITY_LEAD_COAT> : is OnDefensiveMultiplier, is OnStat<> {
+struct AbilityImpl<ABILITY_LEAD_COAT> : is OnDefensiveMultiplier<>, is OnStat<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_PHYSICAL(move)) MUL(.6);
     }
@@ -3030,7 +3035,7 @@ struct AbilityImpl<ABILITY_COIL_UP> : is OnEntry {
 };
 
 template <>
-struct AbilityImpl<ABILITY_FOSSILIZED> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_FOSSILIZED> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_ROCK) MUL(1.2);
     }
@@ -3104,7 +3109,7 @@ struct AbilityImpl<ABILITY_DREAMCATCHER> : is OnOffensiveMultiplier<>, is UseTur
 };
 
 template <>
-struct AbilityImpl<ABILITY_NOCTURNAL> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_NOCTURNAL> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_DARK) MUL(1.25);
     }
@@ -3141,7 +3146,7 @@ template <>
 struct AbilityImpl<ABILITY_AQUATIC> : is AddsType<TYPE_WATER> {};
 
 template <>
-struct AbilityImpl<ABILITY_LIQUIFIED> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_LIQUIFIED> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_WATER) RESISTANCE(2);
         if (IsMoveMakingContact(move, attacker)) MUL(0.5);
@@ -3152,7 +3157,7 @@ template <>
 struct AbilityImpl<ABILITY_DRAGONFLY> : is AbilityImpl<ABILITY_HALF_DRAKE>, is GroundImmune {};
 
 template <Type StrongVs>
-struct TypeSlayer : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier {
+struct TypeSlayer : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (IS_BATTLER_OF_TYPE(target, StrongVs)) RESISTANCE(1.5);
     }
@@ -3179,14 +3184,14 @@ template <>
 struct AbilityImpl<ABILITY_METALLIC> : is AddsType<TYPE_STEEL> {};
 
 template <>
-struct AbilityImpl<ABILITY_PERMAFROST> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_PERMAFROST> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
     }
 };
 
 template <>
-struct AbilityImpl<ABILITY_PRIMAL_ARMOR> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_PRIMAL_ARMOR> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.5);
     }
@@ -3350,7 +3355,7 @@ struct AbilityImpl<ABILITY_ELECTRIC_BURST> : is OnRecoil, is OnOffensiveMultipli
 };
 
 template <>
-struct AbilityImpl<ABILITY_RAW_WOOD> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_RAW_WOOD> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_GRASS) MUL(1.2);
     }
@@ -3398,7 +3403,7 @@ struct AbilityImpl<ABILITY_FATAL_PRECISION> : is OnAccuracy<>, is OnCrit<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_SEAWEED> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_SEAWEED> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(target, TYPE_FIRE)) RESISTANCE(2);
     }
@@ -3777,7 +3782,7 @@ struct AbilityImpl<ABILITY_HARDENED_SHEATH> : is OnAttacker {
 };
 
 template <>
-struct AbilityImpl<ABILITY_ARCTIC_FUR> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_ARCTIC_FUR> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER { MUL(.65); }
 };
 
@@ -3843,7 +3848,7 @@ struct AbilityImpl<ABILITY_FUNGAL_INFECTION> : is OnAttacker {
 };
 
 template <>
-struct AbilityImpl<ABILITY_PARRY> : is OnDefender, is OnDefensiveMultiplier, is OverrideBreakable {
+struct AbilityImpl<ABILITY_PARRY> : is OnDefender, is OnDefensiveMultiplier<>, is OverrideBreakable {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -4174,7 +4179,7 @@ template <>
 struct AbilityImpl<ABILITY_VOLT_RUSH> : is GaleWingsLike<TYPE_ELECTRIC> {};
 
 template <>
-struct AbilityImpl<ABILITY_DUNE_TERROR> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier, is SandImmune {
+struct AbilityImpl<ABILITY_DUNE_TERROR> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier<>, is SandImmune {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_GROUND) MUL(1.2);
     }
@@ -4409,7 +4414,7 @@ struct AbilityImpl<ABILITY_ANGELS_WRATH> : is OnAttacker, is OnAccuracy<>, is On
 
 template <>
 struct AbilityImpl<ABILITY_PRISMATIC_FUR>
-    : is AbilityImpl<ABILITY_COLOR_CHANGE>, is AbilityImpl<ABILITY_PROTEAN>, is OnDefensiveMultiplier, is OverrideBreakable {
+    : is AbilityImpl<ABILITY_COLOR_CHANGE>, is AbilityImpl<ABILITY_PROTEAN>, is OnDefensiveMultiplier<>, is OverrideBreakable {
     ON_DEFENSIVE_MULTIPLIER { MUL(.5); }
     ON_BEFORE_ATTACK {
         if (battler == attacker)
@@ -4834,7 +4839,7 @@ template <>
 struct AbilityImpl<ABILITY_TRICKSTER> : is SimpleEntryMove<MOVE_DISABLE> {};
 
 template <>
-struct AbilityImpl<ABILITY_SAND_GUARD> : is OnImmune<>, is OnDefensiveMultiplier, is SandImmune {
+struct AbilityImpl<ABILITY_SAND_GUARD> : is OnImmune<>, is OnDefensiveMultiplier<>, is SandImmune {
     ON_IMMUNE {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY));
         return blocksPriority(DELEGATE_IMMUNE);
@@ -5272,7 +5277,7 @@ struct AbilityImpl<ABILITY_VOODOO_POWER> : is OnDefender {
 };
 
 template <>
-struct AbilityImpl<ABILITY_CHROME_COAT> : is OnDefensiveMultiplier, is OnStat<> {
+struct AbilityImpl<ABILITY_CHROME_COAT> : is OnDefensiveMultiplier<>, is OnStat<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_SPECIAL(move)) MUL(.6);
     }
@@ -5343,7 +5348,7 @@ struct AbilityImpl<ABILITY_SALT_CIRCLE> : is OnEntry {
 };
 
 template <>
-struct AbilityImpl<ABILITY_PURIFYING_SALT> : is OnDefensiveMultiplier, is RemovesStatusOnImmunity {
+struct AbilityImpl<ABILITY_PURIFYING_SALT> : is OnDefensiveMultiplier<>, is RemovesStatusOnImmunity {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_GHOST) RESISTANCE(.5);
     }
@@ -5727,7 +5732,7 @@ struct AbilityImpl<ABILITY_ORICHALCUM_PULSE> : is AbilityImpl<ABILITY_DROUGHT>, 
 };
 
 template <>
-struct AbilityImpl<ABILITY_SUN_BASKING> : is OnImmune<>, is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_SUN_BASKING> : is OnImmune<>, is OnDefensiveMultiplier<> {
     ON_IMMUNE {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY));
         return blocksPriority(DELEGATE_IMMUNE);
@@ -6380,7 +6385,7 @@ struct AbilityImpl<ABILITY_SUPERCONDUCTOR> : is OnOffensiveMultiplier<>, is OnMo
 };
 
 template <>
-struct AbilityImpl<ABILITY_ULTRA_INSTINCT> : is OnDefender, is OnDefensiveMultiplier, is OverrideBreakable {
+struct AbilityImpl<ABILITY_ULTRA_INSTINCT> : is OnDefender, is OnDefensiveMultiplier<>, is OverrideBreakable {
     ON_DEFENDER {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -6475,7 +6480,7 @@ template <>
 struct AbilityImpl<ABILITY_DRACO_MORALE> : is SimpleEntryMove<MOVE_DRAGON_CHEER> {};
 
 template <>
-struct AbilityImpl<ABILITY_BAD_OMEN> : is OnDefensiveMultiplier, is ForcesMinRolls {
+struct AbilityImpl<ABILITY_BAD_OMEN> : is OnDefensiveMultiplier<>, is ForcesMinRolls {
     ON_DEFENSIVE_MULTIPLIER {
         if (isCrit) MUL(.25);
     }
@@ -6562,7 +6567,7 @@ struct AbilityImpl<ABILITY_PETRIFY> : is AbilityImpl<ABILITY_INTIMIDATE> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_FLUFFIEST> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_FLUFFIEST> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FIRE) RESISTANCE(2.0);
         if (IsMoveMakingContact(move, attacker)) MUL(0.5);
@@ -6831,7 +6836,7 @@ struct AbilityImpl<ABILITY_HOT_COALS> : is OnEntry {
 };
 
 template <>
-struct AbilityImpl<ABILITY_TERASTAL_TREASURE> : is OnDefensiveMultiplier, is OnStat<> {
+struct AbilityImpl<ABILITY_TERASTAL_TREASURE> : is OnDefensiveMultiplier<>, is OnStat<> {
     ON_DEFENSIVE_MULTIPLIER { MUL(.6); }
     ON_STAT {
         if (statId == STAT_SPEED) *stat *= .8;
@@ -7242,7 +7247,7 @@ template <>
 struct AbilityImpl<ABILITY_CONJOURER_OF_DECEIT> : is AbilityImpl<ABILITY_MAGIC_GUARD>, is AbilityImpl<ABILITY_MAGIC_BOUNCE> {};
 
 template <>
-struct AbilityImpl<ABILITY_DEEP_FREEZE> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_DEEP_FREEZE> : is OnOffensiveMultiplier<>, is OnDefensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_WATER || moveType == TYPE_ICE) MUL(1.25);
     }
@@ -7730,7 +7735,7 @@ template <>
 struct AbilityImpl<ABILITY_CHOKEHOLD> : is NotImplemented {};
 
 template <>
-struct AbilityImpl<ABILITY_GUARDIAN_COAT> : is SandImmune, is OnDefensiveMultiplier, is PowderImmune, is HailImmune {
+struct AbilityImpl<ABILITY_GUARDIAN_COAT> : is SandImmune, is OnDefensiveMultiplier<>, is PowderImmune, is HailImmune {
     ON_DEFENSIVE_MULTIPLIER {
         if (IS_MOVE_PHYSICAL(move)) MUL(.8);
     }
@@ -7813,7 +7818,7 @@ template <>
 struct AbilityImpl<ABILITY_GNASHING_CANNON> : is Merged<ABILITY_MEGA_LAUNCHER, ABILITY_MIND_CRUSH> {};
 
 template <>
-struct AbilityImpl<ABILITY_HYPER_CLEANSE> : is OnDefensiveMultiplier, is RemovesStatusOnImmunity {
+struct AbilityImpl<ABILITY_HYPER_CLEANSE> : is OnDefensiveMultiplier<>, is RemovesStatusOnImmunity {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_POISON) RESISTANCE(.5);
     }
@@ -8140,7 +8145,7 @@ struct AbilityImpl<ABILITY_SOUL_HARVEST> : is OnStat<>, is Breakable {
 };
 
 template <>
-struct AbilityImpl<ABILITY_THICK_BLUBBER> : is OnDefensiveMultiplier, is OnStat<> {
+struct AbilityImpl<ABILITY_THICK_BLUBBER> : is OnDefensiveMultiplier<>, is OnStat<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.25);
     }
@@ -8239,7 +8244,7 @@ template <>
 struct AbilityImpl<ABILITY_DUNE_VEIL> : is AbilityImpl<ABILITY_SAND_GUARD>, is AbilityImpl<ABILITY_SELF_SUFFICIENT> {};
 
 template <>
-struct AbilityImpl<ABILITY_STRONG_FOUNDATION> : is OnDefensiveMultiplier {
+struct AbilityImpl<ABILITY_STRONG_FOUNDATION> : is OnDefensiveMultiplier<> {
     ON_DEFENSIVE_MULTIPLIER {
         if (moveType == TYPE_WATER || moveType == TYPE_GROUND) RESISTANCE(.50);
     }

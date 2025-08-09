@@ -4275,7 +4275,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
                 int statId;
                 int any = FALSE;
 
-                effect = TestAbsorbingAbilities(battler, gBattlerAttacker, move, moveType, &statId, &gBattleScripting.abilityPopupOverwrite);
+                effect = TestAbsorbingAbilities(battler, move, moveType, &gBattleScripting.abilityPopupOverwrite, &statId);
 
                 if (effect) {
                     if (gBattleMoves[gCurrentMove].effect == EFFECT_RECOIL_IF_MISS) {
@@ -6874,11 +6874,7 @@ u16 CalculateAbilityMultipliers(
         }
     }
 
-    ON_ABILITY(battlerDef,
-               TRUE,
-               gAbilities[ability].onDefensiveMultiplier,
-               gAbilities[ability].onDefensiveMultiplier(
-                   battlerDef, battlerAtk, move, moveType, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier))
+    CalcDefensiveMultipliers(battlerDef, battlerAtk, move, moveType, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier);
 
     return multiplier;
 }
@@ -7520,11 +7516,6 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
                     GetParentalBondMultiplier(gTurnStructs[battlerAtk].parentalBondTrigger,
                                               gTurnStructs[battlerAtk].parentalBondInitialCount - gTurnStructs[battlerAtk].parentalBondOn));
     }
-
-    // target's ally's abilities
-    if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_FRIEND_GUARD, TRUE)) MulModifier(&finalModifier, UQ_4_12(0.5));
-    if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_CARETAKER, TRUE)) MulModifier(&finalModifier, UQ_4_12(0.5));
-    if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_FOOD_LOVERS, TRUE)) MulModifier(&finalModifier, UQ_4_12(0.5));
 
     // attacker's hold effect
     switch (GetBattlerHoldEffect(battlerAtk, TRUE)) {
@@ -8803,16 +8794,7 @@ void MakePlayerTeamAsleep(void) {
 
 int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, MoveEnum move, int moveType) {
     int ignored;
-    return TestAbsorbingAbilities(target, gActiveBattler, move, moveType, &ignored, (u16 *)&ignored);
-}
-
-int TestAbsorbingAbilities(int battler, int battlerAtk, MoveEnum move, int moveType, int *statId, u16 *absorbingAbility) {
-    ON_ABILITY(
-        battler, TRUE, gAbilities[ability].onAbsorb, int result = gAbilities[ability].onAbsorb(battler, move, moveType, statId); if (result) {
-            *absorbingAbility = ability;
-            return result;
-        })
-    return FALSE;
+    return TestAbsorbingAbilities(target, move, moveType, (u16 *)&ignored, &ignored);
 }
 
 static int HandleAnyImmunityAbilityAs(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
@@ -8820,26 +8802,13 @@ static int HandleAlliedImmunityAbilityAs(AbilityEnum ability, int battler, int a
 static int HandleImmunityAbilityAs(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
 
 int TestImmunityAbilitiesOnly(int battler, int attacker, MoveEnum move, int moveType) {
-    int ignored;
+    int ignored = 0;
     return TestImmunityAbilities(battler, attacker, move, moveType, (const u8 **)&ignored, (u8 *)&ignored, (u16 *)&ignored);
 }
 
 int TestImmunityAbilities(int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript, u8 *overrideBattler, u16 *abilityPopup) {
-    for (int i = 0; i < gBattlersCount; i++) {
-        int testBattler = (battler + i) % gBattlersCount;
-        FILTER(testBattler == attacker || testBattler == battler || IsBattlerAlive(testBattler))
-
-        ON_ABILITY(
-            testBattler,
-            TRUE,
-            gAbilities[ability].onImmune && IsApplyOnFlagAppropriate(battler, testBattler, gAbilities[ability].onImmuneFor),
-            if (gAbilities[ability].onImmune(battler, attacker, move, moveType, immunityScript)) {
-                *abilityPopup = ability;
-
-                if (testBattler != battler) *overrideBattler = testBattler;
-                return TRUE;
-            })
-    }
+    int result = TestAllImmunityAbilities(battler, attacker, move, moveType, immunityScript, overrideBattler, abilityPopup);
+    if (result) return result;
 
     if (BlocksPrankster(move, attacker, battler, TRUE) && !(gBattleMoves[move].flags & FLAG_MAGIC_COAT_AFFECTED && !gRoundStructs[attacker].usesBouncedMove &&
                                                             BATTLER_HAS_ABILITY(battler, ABILITY_MAGIC_BOUNCE))) {
@@ -9031,25 +9000,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
     }
 
     ability = gBattleMons[battler].abilities[abilityNumber];
-    AbilityOnEntryHandler handler = gAbilities[ability].onEntry;
-    if (!handler) return FALSE;
-
-    if (IsSuppressed(battler, ability, FALSE)) return FALSE;
-
-    switch (ability) {
-        case ABILITY_TRACE:
-            break;
-
-        default:
-            if (!CheckAndSetSwitchInAbility(battler, ability)) return FALSE;
-    }
-
-    gBattleScripting.abilityPopupOverwrite = ability;
-    gBattlerAbility = gBattleScripting.battler = battler;
-
-    int result = handler(ability, battler);
-    if (result & 1) BattleScriptCall(BattleScript_AbilityPopUp);
-    return result;
+    return PerformOnEntry(battler, ability);
 }
 
 #define ANNOUNCE_SIMPLE_ABILITY(abilityToAnnounce, announceMessage)         \

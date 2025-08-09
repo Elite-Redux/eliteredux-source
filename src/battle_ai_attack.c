@@ -1929,7 +1929,7 @@ int CheckImmunities(int battlerAtk, int battlerDef, int move, int moveType, int 
         *score = 0;
         return TRUE;
     }
-    if ((absorbing = TestAbsorbingAbilities(battlerDef, battlerAtk, move, moveType, &statId, &ability))) {
+    if ((absorbing = TestAbsorbingAbilities(battlerDef, move, moveType, &ability, &statId))) {
         moveState->cancelled = TRUE;
         switch (absorbing) {
             case 1:

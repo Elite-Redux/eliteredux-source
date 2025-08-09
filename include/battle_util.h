@@ -366,7 +366,6 @@ bool32 IsHealingMoveEffect(MoveBehaviorEnum effect);
 #define ABSORB_RESULT_FLASH_FIRE 1 << 2
 #define ABSORB_RESULT_EVAPORATE 1 << 3
 int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, MoveEnum move, int moveType);
-int TestAbsorbingAbilities(int battler, int battlerAtk, MoveEnum move, int moveType, int* statId, u16* ability);
 u16 CalculateAbilityMultipliers(
     int battlerAtk, int battlerDef, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier);
 int TestImmunityAbilitiesOnly(int battler, int attacker, MoveEnum move, int moveType);
