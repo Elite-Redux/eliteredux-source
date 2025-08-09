@@ -381,3 +381,33 @@ int PerformOnAttacker(int battler, int target, AbilityEnum ability, MoveEnum mov
     return PerformOnGeneric<OnAttacker>(
         battler, ability, [&](const OnAttacker* impl) -> int { return impl->onAttacker(ability, battler, target, move, moveType); });
 }
+
+int PerformOnDefender(int battler, int attacker, AbilityEnum ability, MoveEnum move, Type moveType) {
+    return PerformOnGeneric<OnDefender>(
+        battler, ability, [&](const OnDefender* impl) -> int { return impl->onDefender(ability, battler, attacker, move, moveType); });
+}
+
+void HandleRecoilAbilities(int battler, int moveDamage, Type moveType) {
+    HasAbilityWithTagMatchingCondition<OnRecoil>(battler, [&](const OnRecoil* impl, auto ability) -> bool {
+        int damage = impl->onRecoil(moveDamage, battler, moveType);
+        CHECK(damage)
+        if (!gBattleMoveDamage) BattleScriptCall(BattleScript_MoveEffectRecoil);
+        gBattleScripting.abilityPopupOverwrite = ability;
+        BattleScriptCall(BattleScript_AbilityPopUp);
+        gBattleMoveDamage += damage;
+        return false;
+    });
+}
+
+int HandleAllOnReactive(AbilityCallType callType) {
+    bool any = false;
+    for (int i = 0; i < gBattlersCount; i++) {
+        FILTER(IsBattlerAlive(i))
+        HasAbilityWithTagMatchingCondition<OnReactive>(i, [&](const OnReactive* impl, auto ability) -> bool {
+            CHECK(impl->onReactive(ability, i, callType))
+            any = true;
+            return false;
+        });
+    }
+    return any;
+}

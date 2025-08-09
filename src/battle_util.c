@@ -4613,10 +4613,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
                 }
             }
 
-            for (int i = 0; i < gBattlersCount; i++) {
-                FILTER(IsBattlerAlive(i))
-                ON_ABILITY(i, FALSE, gAbilities[ability].onReactive, effect += gAbilities[ability].onReactive(ability, i, extraArg))
-            }
+            effect = HandleAllOnReactive(extraArg);
 
             if (gBattleStruct->statStageCheckState == STAT_STAGE_CHECK_NEEDED) {
                 gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_NOT_NEEDED;
@@ -8868,7 +8865,8 @@ int CheckHalfHpAbility(int battlerDef, int battlerAtk) {
 }
 
 int HandleDefenderAbility(int abilityNumber, int battler, int attacker, MoveEnum move) {
-    AbilityEnum ability, moveType;
+    AbilityEnum ability;
+    Type moveType;
 
     if (battler >= gBattlersCount) return FALSE;
 
@@ -8883,21 +8881,7 @@ int HandleDefenderAbility(int abilityNumber, int battler, int attacker, MoveEnum
     }
 
     ability = gBattleMons[battler].abilities[abilityNumber];
-
-    if (!gAbilities[ability].onDefender) return FALSE;
-
-    if (IsSuppressed(battler, ability, TRUE)) return FALSE;
-
-    gBattleScripting.abilityPopupOverwrite = ability;
-    int result = gAbilities[ability].onDefender(ability, battler, attacker, move, moveType);
-
-    if (!result) return FALSE;
-
-    if (result & 1) {
-        BattleScriptCall(BattleScript_AbilityPopUp);
-    }
-
-    return TRUE;
+    return PerformOnDefender(battler, attacker, ability, move, moveType);
 }
 
 int HandleMiscAbilityMoveEffects(int battler, int opponent, MoveEnum move) {

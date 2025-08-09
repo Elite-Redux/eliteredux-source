@@ -78,6 +78,9 @@ void HandleOnTerrain(int battler);
 int InvokeToxicWasteForMonotypeChamp();
 int PerformOnEndTurn(int battler, AbilityEnum ability);
 int PerformOnAttacker(int battler, int target, AbilityEnum ability, MoveEnum move, Type moveType);
+int PerformOnDefender(int battler, int attacker, AbilityEnum ability, MoveEnum move, Type moveType);
+void HandleRecoilAbilities(int battler, int moveDamage, Type moveType);
+int HandleAllOnReactive(AbilityCallType callType);
 
 #ifdef __cplusplus
 }

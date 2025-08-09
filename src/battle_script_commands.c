@@ -4330,15 +4330,7 @@ static void Cmd_moveend(void) {
                     BattleScriptCall(BattleScript_MoveEffectRecoil);
                 }
 
-                ON_ABILITY(gBattlerAttacker,
-                           FALSE,
-                           gAbilities[ability].onRecoil,
-                           int damage = gAbilities[ability].onRecoil(gTurnStructs[gBattlerAttacker].savedDmg, gBattlerAttacker, moveType);
-                           FILTER(damage);
-                           if (!gBattleMoveDamage) BattleScriptCall(BattleScript_MoveEffectRecoil);
-                           gBattleScripting.abilityPopupOverwrite = ability;
-                           BattleScriptCall(BattleScript_AbilityPopUp);
-                           gBattleMoveDamage += damage;)
+                HandleRecoilAbilities(gBattlerAttacker, gTurnStructs[gBattlerAttacker].savedDmg, moveType);
 
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION) {
                     if (!gBattleMoveDamage) {
