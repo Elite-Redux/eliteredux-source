@@ -2349,7 +2349,7 @@ u8 DoBattlerEndTurnEffects(void) {
                 effect++;
                 break;
             case ENDTURN_TOXIC_WASTE_DAMAGE:
-                if (getMonotypeChampType() == TYPE_POISON) effect = gAbilities[ABILITY_TOXIC_SPILL].onEndTurn(ABILITY_NONE, MAX_BATTLERS_COUNT);
+                if (getMonotypeChampType() == TYPE_POISON) effect = InvokeToxicWasteForMonotypeChamp();
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_POISON:  // poison
@@ -8842,7 +8842,8 @@ int IsBloodStainAffected(int battler) {
 }
 
 int HandleAttackerAbility(int abilityNumber, int battler, int target, MoveEnum move) {
-    AbilityEnum ability, moveType;
+    AbilityEnum ability;
+    Type moveType;
 
     if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
     abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
@@ -8855,19 +8856,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, MoveEnum m
     }
 
     ability = gBattleMons[battler].abilities[abilityNumber];
-
-    if (!gAbilities[ability].onAttacker) return FALSE;
-
-    if (IsSuppressed(battler, ability, FALSE)) return FALSE;
-
-    gBattleScripting.abilityPopupOverwrite = ability;
-    int result = gAbilities[ability].onAttacker(ability, battler, target, move, moveType);
-
-    if (result & 1) {
-        BattleScriptCall(BattleScript_AbilityPopUp);
-    }
-
-    return result;
+    return PerformOnAttacker(battler, target, ability, move, moveType);
 }
 
 int CheckHalfHpAbility(int battlerDef, int battlerAtk) {
@@ -9010,8 +8999,6 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
         return TRUE;
 
 int HandleEndTurnAbility(int abilityNumber, int battler) {
-    AbilityEnum ability;
-
     if (!IsBattlerAlive(battler)) return FALSE;
 
     if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
@@ -9024,20 +9011,7 @@ int HandleEndTurnAbility(int abilityNumber, int battler) {
         return FALSE;
     }
 
-    ability = gBattleMons[battler].abilities[abilityNumber];
-
-    if (!gAbilities[ability].onEndTurn) return FALSE;
-
-    if (IsSuppressed(battler, ability, FALSE)) return FALSE;
-
-    gBattleScripting.abilityPopupOverwrite = ability;
-    int result = gAbilities[ability].onEndTurn(ability, battler);
-    if (!result) return FALSE;
-
-    if (result & 1) {
-        BattleScriptCall(BattleScript_AbilityPopUp);
-    }
-    return TRUE;
+    return PerformOnEndTurn(battler, gBattleMons[battler].abilities[abilityNumber]);
 }
 
 int IsDance(int attacker, MoveEnum move) { return DoesMoveMatchFlag(attacker, move, MOVE_FLAG_DANCE); }

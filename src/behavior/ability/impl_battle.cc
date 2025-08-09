@@ -11,20 +11,30 @@ extern "C" {
 ENUM_AND(ApplyOn)
 ENUM_AND(ApplyOnTarget)
 
+template <typename T>
+consteval bool IsBreakable() {
+    return std::is_assignable_v<Breakable, T> && !std::is_assignable_v<OverrideBreakable, T>;
+}
+
+template <AbilityEnum Id>
+consteval bool IsBreakable() {
+    return IsBreakable<AbilityImpl<Id>>();
+}
+
 template <typename T, typename Func>
-AbilityEnum HasAbilityWithTagMatchingCondition(int battler, Func predicate, bool checkMoldBreaker = std::is_assignable_v<Breakable, T>) {
+AbilityEnum HasAbilityWithTagMatchingCondition(int battler, Func predicate, bool checkMoldBreaker = IsBreakable<T>()) {
     for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
-        auto ability = gBattleMons[battler].abilities[i];
-        const auto ptr = dispatchTo<T>(ability);
+        AbilityEnum ability = gBattleMons[battler].abilities[i];
+        const T* ptr = dispatchTo<T>(ability);
         FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
-        FILTER(ptr && predicate(ptr))
+        FILTER(ptr && predicate(ptr, ability))
         return ability;
     }
     return ABILITY_NONE;
 }
 
 template <typename T>
-AbilityEnum HasAbilityWithTag(int battler, bool checkMoldBreaker = std::is_assignable_v<Breakable, T>) {
+AbilityEnum HasAbilityWithTag(int battler, bool checkMoldBreaker = IsBreakable<T>()) {
     for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
         auto ability = gBattleMons[battler].abilities[i];
         FILTER(dispatchTo<T>(ability))
@@ -35,12 +45,12 @@ AbilityEnum HasAbilityWithTag(int battler, bool checkMoldBreaker = std::is_assig
 }
 
 template <AbilityEnum Id>
-AbilityEnum HasAbilityOrClone(int battler, bool checkMoldBreaker = std::is_assignable_v<Breakable, AbilityImpl<Id>>) {
+AbilityEnum HasAbilityOrClone(int battler, bool checkMoldBreaker = IsBreakable<Id>()) {
     return HasAbilityWithTag<AbilityImpl<Id>>(battler, checkMoldBreaker);
 }
 
 template <AbilityEnum Id, typename Func>
-AbilityEnum HasAbilityOrCloneMatchingCondition(int battler, Func predicate, bool checkMoldBreaker = std::is_assignable_v<Breakable, AbilityImpl<Id>>) {
+AbilityEnum HasAbilityOrCloneMatchingCondition(int battler, Func predicate, bool checkMoldBreaker = IsBreakable<Id>()) {
     return HasAbilityWithTagMatchingCondition<AbilityImpl<Id>>(battler, predicate, checkMoldBreaker);
 }
 
@@ -53,7 +63,7 @@ inline bool CheckApplyOn(ApplyOn actual, ApplyOn expected) {
 }
 
 template <AbilityEnum Id>
-int GetAbilityOrCloneIndex(int battler, bool checkMoldBreaker = std::is_assignable_v<Breakable, AbilityImpl<Id>>) {
+int GetAbilityOrCloneIndex(int battler, bool checkMoldBreaker = IsBreakable<Id>()) {
     for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
         auto ability = gBattleMons[battler].abilities[i];
         FILTER(dispatchTo<AbilityImpl<Id>>(ability))
@@ -94,7 +104,7 @@ AbilityEnum IsSoundproof(int battler) {
     if (baseIsSoundproof) return baseIsSoundproof;
     if (IsBattlerAlive(BATTLE_PARTNER(battler)))
         return HasAbilityOrCloneMatchingCondition<ABILITY_SOUNDPROOF>(
-            BATTLE_PARTNER(battler), [](const AbilityImpl<ABILITY_SOUNDPROOF>* it) { return CheckApplyOn(it->onImmuneFor(), ApplyOn::ALLY); });
+            BATTLE_PARTNER(battler), [](const AbilityImpl<ABILITY_SOUNDPROOF>* it, auto&) { return CheckApplyOn(it->onImmuneFor(), ApplyOn::ALLY); });
     return ABILITY_NONE;
 }
 AbilityEnum HasNoRecoil(int battler) { return HasAbilityOrClone<ABILITY_ROCK_HEAD>(battler, false); }
@@ -155,7 +165,7 @@ int GetAvailableAnticipationIndex(int target) {
     for (int i = ARRAY_COUNT(gBattleMons[target].abilities); i--;) {
         auto ability = gBattleMons[target].abilities[i];
         FILTER(dispatchTo<AbilityImpl<ABILITY_ANTICIPATION>>(ability))
-        FILTER_NOT(IsSuppressed(target, ability, std::is_assignable_v<Breakable, AbilityImpl<ABILITY_ANTICIPATION>>))
+        FILTER_NOT(IsSuppressed(target, ability, IsBreakable<ABILITY_ANTICIPATION>()))
         FILTER_NOT(GetSingleUseAbilityCountByIndex(target, i))
         return i;
     }
@@ -204,7 +214,8 @@ int IsSimpleBeamBanned(AbilityEnum ability) { return dispatchTo<AbilityImpl<ABIL
 AbilityEnum IgnoresRedirection(int battler) { return HasAbilityOrClone<ABILITY_STALWART>(battler); }
 AbilityEnum AbilityMakesMoveSpread(int battler, MoveEnum move) {
     CHECK(gBattleMoves[move].target == MOVE_TARGET_SELECTED)
-    return HasAbilityWithTagMatchingCondition<OnMakeSpread>(battler, [&](const OnMakeSpread* ability) -> bool { return ability->onMakeSpread(battler, move); });
+    return HasAbilityWithTagMatchingCondition<OnMakeSpread>(battler,
+                                                            [&](const OnMakeSpread* impl, auto&) -> auto { return impl->onMakeSpread(battler, move); });
 }
 int IsAlwaysStab(AbilityEnum ability) { return dispatchTo<AlwaysStab>(ability) != nullptr; }
 int AbilityGetsBonusStab(AbilityEnum ability, Type type) {
@@ -213,35 +224,18 @@ int AbilityGetsBonusStab(AbilityEnum ability, Type type) {
     return ptr->onStab(type);
 }
 int GetsBonusStab(int battler, Type type) {
-    return HasAbilityWithTagMatchingCondition<OnStab>(battler, [&](const OnStab* ability) -> bool { return ability->onStab(type); });
+    return HasAbilityWithTagMatchingCondition<OnStab>(battler, [&](const OnStab* impl, auto&) -> auto { return impl->onStab(type); });
 }
-int PerformOnEntry(int battler, AbilityEnum ability) {
-    auto ptr = dispatchTo<OnEntry>(ability);
-    CHECK(ptr)
-    CHECK(!IsSuppressed(battler, ability, false))
-    if (!dispatchTo<AbilityImpl<ABILITY_TRACE>>(ability)) {
-        CHECK(CheckAndSetSwitchInAbility(battler, ability))
-    }
 
-    gBattleScripting.abilityPopupOverwrite = ability;
-    gBattlerAbility = gBattleScripting.battler = battler;
-
-    int result = ptr->onEntry(ability, battler);
-    if (result & 1) BattleScriptCall(BattleScript_AbilityPopUp);
-    return result;
-}
 int TestAbsorbingAbilities(int battler, MoveEnum move, Type moveType, AbilityEnum* absorbingAbility, int* statId) {
     int result = 0;
     *absorbingAbility = HasAbilityWithTagMatchingCondition<OnAbsorb>(
-        battler, [&](const OnAbsorb* ability) -> bool { return (result = ability->onAbsorb(battler, move, moveType, statId)); });
+        battler, [&](const OnAbsorb* impl, auto&) -> auto { return (result = impl->onAbsorb(battler, move, moveType, statId)); });
     return result;
 }
 
 template <typename T, typename Result, typename Func, typename ForSelector>
-std::tuple<AbilityEnum, Result, u8> TestAllBattlers(u8 battler,
-                                                    ForSelector selector,
-                                                    Func transform,
-                                                    bool checkMoldBreaker = std::is_assignable_v<Breakable, T>) {
+std::tuple<AbilityEnum, Result, u8> TestAllBattlers(u8 battler, ForSelector selector, Func transform, bool checkMoldBreaker = IsBreakable<T>()) {
     for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
         auto ability = gBattleMons[battler].abilities[i];
         const auto ptr = dispatchTo<T>(ability);
@@ -293,8 +287,8 @@ std::tuple<AbilityEnum, Result, u8> TestAllBattlers(u8 battler,
 int TestAllImmunityAbilities(int battler, int attacker, MoveEnum move, Type moveType, const u8** immunityScript, u8* overrideBattler, u16* abilityPopup) {
     auto [ability, result, from] = TestAllBattlers<OnImmuneBase, int>(
         battler,
-        [](const OnImmuneBase* ability) -> ApplyOn { return ability->onImmuneFor(); },
-        [&](const OnImmuneBase* ability, AbilityEnum _) -> int { return ability->onImmune(battler, attacker, move, moveType, immunityScript); });
+        [](const OnImmuneBase* impl) -> auto { return impl->onImmuneFor(); },
+        [&](const OnImmuneBase* impl, auto&) -> auto { return impl->onImmune(battler, attacker, move, moveType, immunityScript); });
 
     if (result) {
         *abilityPopup = ability;
@@ -307,9 +301,83 @@ void CalcDefensiveMultipliers(
     int battler, int attacker, MoveEnum move, Type moveType, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier) {
     TestAllBattlers<OnDefensiveMultiplierBase, bool>(
         battler,
-        [](const OnDefensiveMultiplierBase* ability) -> ApplyOn { return ability->onDefensiveMultiplierFor(); },
-        [&](const OnDefensiveMultiplierBase* ability, AbilityEnum _) -> bool {
-            ability->onDefensiveMultiplier(battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier);
+        [](const OnDefensiveMultiplierBase* impl) -> auto { return impl->onDefensiveMultiplierFor(); },
+        [&](const OnDefensiveMultiplierBase* impl, auto&) -> auto {
+            impl->onDefensiveMultiplier(battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier);
             return false;
         });
+}
+
+AbilityEnum Infiltrates(int battler, MoveEnum move, InfiltrateType type) {
+    return HasAbilityWithTagMatchingCondition<OnInfiltrate>(battler,
+                                                            [&](const OnInfiltrate* impl, auto&) -> auto { return impl->onInfiltrate(battler, move) & type; });
+}
+
+AbilityEnum DoesDisguiseBlockMoveInternal(int target, MoveEnum move, SpeciesEnum* newSpecies, int testOnly) {
+    SpeciesEnum resultSpecies;
+    CHECK_NOT(gBattleMons[target].status2 & STATUS2_TRANSFORMED)
+    CHECK_NOT(IS_MOVE_STATUS(move))
+    CHECK_NOT(gHitMarker & HITMARKER_IGNORE_DISGUISE && move != MOVE_SUCKER_PUNCH);
+    AbilityEnum ability = HasAbilityWithTagMatchingCondition<OnDisguise>(
+        target, [&](const OnDisguise* impl, auto&) -> auto { return (resultSpecies = impl->onDisguise(target, testOnly)); });
+    if (ability && newSpecies) *newSpecies = resultSpecies;
+    return ability;
+}
+AbilityEnum TestDoesDisguiseBlockMove(int target, MoveEnum move) { return DoesDisguiseBlockMoveInternal(target, move, nullptr, TRUE); }
+AbilityEnum DoesDisguiseBlockMove(int target, MoveEnum move, SpeciesEnum* newSpecies) { return DoesDisguiseBlockMoveInternal(target, move, newSpecies, FALSE); }
+
+void HandleOnWeather(int battler) {
+    HasAbilityWithTagMatchingCondition<OnWeather>(battler, [&](const OnWeather* impl, auto ability) -> auto {
+        if (impl->onWeather(ability, battler)) {
+            gBattlerAbility = battler;
+            gBattleScripting.abilityPopupOverwrite = ability;
+            BattleScriptCall(BattleScript_AbilityPopUp);
+        }
+        return false;
+    });
+}
+void HandleOnTerrain(int battler) {
+    HasAbilityWithTagMatchingCondition<OnTerrain>(battler, [&](const OnTerrain* impl, auto ability) -> auto {
+        if (impl->onTerrain(ability, battler)) {
+            gBattlerAbility = battler;
+            gBattleScripting.abilityPopupOverwrite = ability;
+            BattleScriptCall(BattleScript_AbilityPopUp);
+        }
+        return false;
+    });
+}
+int InvokeToxicWasteForMonotypeChamp() {
+    return dispatchTo<AbilityImpl<ABILITY_TOXIC_SPILL>>(ABILITY_TOXIC_SPILL)->onEndTurn(ABILITY_NONE, MAX_BATTLERS_COUNT);
+}
+
+template <typename T, typename Func>
+int PerformOnGeneric(int battler, AbilityEnum ability, Func predicate) {
+    auto ptr = dispatchTo<T>(ability);
+    CHECK(ptr)
+    CHECK(!IsSuppressed(battler, ability, IsBreakable<T>()))
+
+    gBattleScripting.abilityPopupOverwrite = ability;
+    int result = predicate(ptr);
+
+    if (result & 1) BattleScriptCall(BattleScript_AbilityPopUp);
+    return result;
+}
+
+int PerformOnEntry(int battler, AbilityEnum ability) {
+    return PerformOnGeneric<OnEntry>(battler, ability, [&](const OnEntry* impl) -> int {
+        if (!dispatchTo<AbilityImpl<ABILITY_TRACE>>(ability)) {
+            CHECK(CheckAndSetSwitchInAbility(battler, ability))
+        }
+        gBattlerAbility = gBattleScripting.battler = battler;
+        return impl->onEntry(ability, battler);
+    });
+}
+
+int PerformOnEndTurn(int battler, AbilityEnum ability) {
+    return PerformOnGeneric<OnEndTurn>(battler, ability, [&](const OnEndTurn* impl) -> int { return impl->onEndTurn(ability, battler); });
+}
+
+int PerformOnAttacker(int battler, int target, AbilityEnum ability, MoveEnum move, Type moveType) {
+    return PerformOnGeneric<OnAttacker>(
+        battler, ability, [&](const OnAttacker* impl) -> int { return impl->onAttacker(ability, battler, target, move, moveType); });
 }

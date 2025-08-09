@@ -1560,7 +1560,7 @@ static void Cmd_adjustdamage(void) {
     GET_MOVE_TYPE(gCurrentMove, moveType);
 
     if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove)) goto END;
-    if (DoesDisguiseBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove)) goto END;
+    if (TestDoesDisguiseBlockMove(gBattlerTarget, gCurrentMove)) goto END;
     if (RemainingNoDamageHits(gBattlerTarget) > 0) goto END;
     if (gBattleMons[gBattlerTarget].hp > gBattleMoveDamage) goto END;
 
@@ -1748,7 +1748,7 @@ static void Cmd_healthbarupdate(void) {
             }
 
             FlagSet(FLAG_SYS_DISABLE_DAMAGE_DONE);
-        } else if (gBattleMoveDamage < 0 || !DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove)) {
+        } else if (gBattleMoveDamage < 0 || !TestDoesDisguiseBlockMove(gActiveBattler, gCurrentMove)) {
             s16 healthValue = min(gBattleMoveDamage, 10000);  // Max damage (10000) not present in R/S, ensures that huge damage values don't change sign
 
             if (!(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE) && !(gMoveResultFlags & MOVE_RESULT_ONE_HIT_KO) && !(gMoveResultFlags & MOVE_RESULT_FOE_ENDURED) &&
@@ -1778,6 +1778,8 @@ void IncrementTimesTookDamage(u8 battler) {
 
 static void Cmd_datahpupdate(void) {
     int battlerType;
+    SpeciesEnum newSpecies = SPECIES_NONE;
+    AbilityEnum ability;
 
     if (gBattleControllerExecFlags) return;
 
@@ -1806,14 +1808,11 @@ static void Cmd_datahpupdate(void) {
             if (RemainingNoDamageHits(gActiveBattler) <= 0) {
                 BattleScriptCall(BattleScript_BattlerCanNoLongerEndureHits);
             }
-        } else if (gBattleMoveDamage > 0 && DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove)) {
-            ON_ABILITY(gActiveBattler, TRUE, gAbilities[ability].onDisguise, int newSpecies = gAbilities[ability].onDisguise(gActiveBattler, FALSE);
-                       FILTER(newSpecies);
-                       gBattleScripting.abilityPopupOverwrite = ability;
-                       UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
-                       gBattleMons[gActiveBattler].species = newSpecies;
-                       BattleScriptCall(BattleScript_TargetFormChange);
-                       break;)
+        } else if (gBattleMoveDamage > 0 && (ability = DoesDisguiseBlockMove(gActiveBattler, gCurrentMove, &newSpecies))) {
+            gBattleScripting.abilityPopupOverwrite = ability;
+            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
+            gBattleMons[gActiveBattler].species = newSpecies;
+            BattleScriptCall(BattleScript_TargetFormChange);
         } else {
             gHitMarker &= ~(HITMARKER_IGNORE_SUBSTITUTE);
             if (gBattleMoveDamage < 0)  // hp goes up
@@ -2247,21 +2246,21 @@ void SetMoveEffect(bool32 primary, u32 certain) {
     if (TestSheerForceFlag(gBattlerAttacker, gCurrentMove)) RESET_RETURN
 
     if (gBattleMons[gEffectBattler].hp == 0) {
-            switch (gBattleScripting.moveEffect) {
-                case MOVE_EFFECT_PAYDAY:
-                case MOVE_EFFECT_WATER_PLEDGE:
-                case MOVE_EFFECT_FIRE_PLEDGE:
-                case MOVE_EFFECT_GRASS_PLEDGE:
-                case MOVE_EFFECT_SWAMP:
-                case MOVE_EFFECT_RAINBOW:
-                case MOVE_EFFECT_FIRE_SEA:
-                case MOVE_EFFECT_SPECTRAL_THIEF:
-                    break;
+        switch (gBattleScripting.moveEffect) {
+            case MOVE_EFFECT_PAYDAY:
+            case MOVE_EFFECT_WATER_PLEDGE:
+            case MOVE_EFFECT_FIRE_PLEDGE:
+            case MOVE_EFFECT_GRASS_PLEDGE:
+            case MOVE_EFFECT_SWAMP:
+            case MOVE_EFFECT_RAINBOW:
+            case MOVE_EFFECT_FIRE_SEA:
+            case MOVE_EFFECT_SPECTRAL_THIEF:
+                break;
 
-                default:
-                    RESET_RETURN;
-            }
+            default:
+                RESET_RETURN;
         }
+    }
 
     if (DoesSubstituteBlockMove(gBattlerAttacker, gEffectBattler, gCurrentMove) && affectsUser != MOVE_EFFECT_AFFECTS_USER) RESET_RETURN
 
@@ -8098,20 +8097,10 @@ static void Cmd_various(void) {
             SetOnMoveEffectReactionFlags(gBattleScripting.battler, gEffectBattler, MOVE_EFFECT_FEAR);
             break;
         case VARIOUS_ON_WEATHER_CHANGE:
-            ON_ABILITY(
-                gActiveBattler, FALSE, gAbilities[ability].onWeather, if (gAbilities[ability].onWeather(ability, gActiveBattler)) {
-                    gBattlerAbility = gActiveBattler;
-                    gBattleScripting.abilityPopupOverwrite = ability;
-                    BattleScriptCall(BattleScript_AbilityPopUp);
-                })
+            HandleOnWeather(gActiveBattler);
             return;
         case VARIOUS_ON_TERRAIN_CHANGE:
-            ON_ABILITY(
-                gActiveBattler, FALSE, gAbilities[ability].onTerrain, if (gAbilities[ability].onTerrain(ability, gActiveBattler)) {
-                    gBattlerAbility = gActiveBattler;
-                    gBattleScripting.abilityPopupOverwrite = ability;
-                    BattleScriptCall(BattleScript_AbilityPopUp);
-                })
+            HandleOnTerrain(gActiveBattler);
             return;
         case VARIOUS_GET_BATTLER:
             gBattleScripting.battler = gActiveBattler;
@@ -12183,12 +12172,6 @@ static void Cmd_settypebasedhalvers(void)  // water and mud sport
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 }
 
-int Infiltrates(int battler, MoveEnum move, InfiltrateType type) {
-    ON_ABILITY(battler, FALSE, gAbilities[ability].onInfiltrate, if (gAbilities[ability].onInfiltrate(battler, move) & type) return TRUE)
-
-    return FALSE;
-}
-
 bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
     if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE)) return FALSE;
     if (IsSoundMove(battlerAtk, move)) return FALSE;
@@ -12212,16 +12195,6 @@ u16 GetNoDamageAbility(u8 battler) {
         battler, TRUE, gAbilities[ability].noDamageHits, if (gAbilities[ability].noDamageHits > GetSingleUseAbilityCounter(battler, ability)) return ability)
 
     return ABILITY_NONE;
-}
-
-bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
-    ON_ABILITY(battlerDef, TRUE, gAbilities[ability].onDisguise, FILTER(gAbilities[ability].onDisguise(battlerDef, TRUE));
-               FILTER_NOT(gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED);
-               FILTER_NOT(IS_MOVE_STATUS(move));
-               FILTER_NOT(gHitMarker & HITMARKER_IGNORE_DISGUISE && move != MOVE_SUCKER_PUNCH);
-               return TRUE;)
-
-    return FALSE;
 }
 
 static void Cmd_jumpifsubstituteblocks(void) {

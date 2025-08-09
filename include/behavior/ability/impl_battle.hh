@@ -68,7 +68,16 @@ int GetsBonusStab(int battler, Type type);
 int PerformOnEntry(int battler, AbilityEnum ability);
 int TestAbsorbingAbilities(int battler, MoveEnum move, Type moveType, AbilityEnum* absorbingAbility, int* statId);
 int TestAllImmunityAbilities(int battler, int attacker, MoveEnum move, Type moveType, const u8** immunityScript, u8* overrideBattler, u16* abilityPopup);
-void CalcDefensiveMultipliers(int battler, int attacker, MoveEnum move, Type moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier);
+void CalcDefensiveMultipliers(
+    int battler, int attacker, MoveEnum move, Type moveType, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier);
+AbilityEnum Infiltrates(int battler, MoveEnum move, InfiltrateType type);
+AbilityEnum TestDoesDisguiseBlockMove(int target, MoveEnum move);
+AbilityEnum DoesDisguiseBlockMove(int target, MoveEnum move, SpeciesEnum* newSpecies);
+void HandleOnWeather(int battler);
+void HandleOnTerrain(int battler);
+int InvokeToxicWasteForMonotypeChamp();
+int PerformOnEndTurn(int battler, AbilityEnum ability);
+int PerformOnAttacker(int battler, int target, AbilityEnum ability, MoveEnum move, Type moveType);
 
 #ifdef __cplusplus
 }
