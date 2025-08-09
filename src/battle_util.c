@@ -6860,15 +6860,7 @@ u16 CalculateAbilityMultipliers(
     int hasFortKnox = HasFortKnox(battlerDef);
 
     if (!hasFortKnox) {
-        for (int sourceBattler = 0; sourceBattler < gBattlersCount; sourceBattler++) {
-            FILTER(battlerAtk == sourceBattler || IsBattlerAlive(sourceBattler))
-            ON_ABILITY(
-                sourceBattler,
-                FALSE,
-                gAbilities[ability].onOffensiveMultiplier && IsApplyOnFlagAppropriate(battlerAtk, sourceBattler, gAbilities[ability].onOffensiveMultiplierFor),
-                gAbilities[ability].onOffensiveMultiplier(
-                    battlerAtk, ability, battlerDef, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier))
-        }
+        CalcOffensiveMultipliers(battlerAtk, battlerDef, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier);
     }
 
     CalcDefensiveMultipliers(battlerDef, battlerAtk, move, moveType, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier);

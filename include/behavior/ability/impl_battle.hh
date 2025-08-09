@@ -82,6 +82,12 @@ int PerformOnDefender(int battler, int attacker, AbilityEnum ability, MoveEnum m
 void HandleRecoilAbilities(int battler, int moveDamage, Type moveType);
 int HandleAllOnReactive(AbilityCallType callType);
 void HandleOnBattlerFaints(int attacker, int fainted, MoveEnum move, Type moveType);
+MultihitType HandleParentalBond(int battler, int hasFortKnox, MoveEnum move, Type moveType);
+void CalcOffensiveMultipliers(
+    int battler, int target, MoveEnum move, Type moveType, int basePower, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier);
+int OnMoveTypeSingleAbility(AbilityEnum ability, MoveEnum move, Type moveType);
+int OnMoveTypeForBattler(int battler, MoveEnum move, Type moveType, u8* ateBoost);
+
 
 #ifdef __cplusplus
 }

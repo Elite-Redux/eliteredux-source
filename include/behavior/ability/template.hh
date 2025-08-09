@@ -141,7 +141,7 @@ struct OnParentalBond {
                                        int typeEffectivenessMultiplier, \
                                        int isCrit,                      \
                                        u16 *resistance,                 \
-                                       u16 *modifier)
+                                       u16 *modifier) const
 #define DELEGATE_OFFENSIVE_MULTIPLIER battler, ability, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier
 APPLIES_ON(OffensiveMultiplier, ApplyOn, ON_OFFENSIVE_MULTIPLIER)
 

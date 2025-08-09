@@ -965,13 +965,7 @@ MultihitType GetParentalBondType(int battler, int target, MoveEnum move, int mov
 
     int hasFortKnox = HasFortKnox(target);
 
-    ON_ABILITY(battler,
-               FALSE,
-               gAbilities[ability].onParentalBond && (!hasFortKnox || ResistsFortKnox(ability)),
-               int result = gAbilities[ability].onParentalBond(battler, move, moveType);
-               if (result) return result)
-
-    return MULTIHIT_SINGLE;
+    return HandleParentalBond(battler, hasFortKnox, move, moveType);
 }
 
 AbilityEnum HasFortKnox(int battler) {

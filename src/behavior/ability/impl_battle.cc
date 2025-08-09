@@ -395,6 +395,17 @@ int TestAllImmunityAbilities(int battler, int attacker, MoveEnum move, Type move
     return result;
 }
 
+void CalcOffensiveMultipliers(
+    int battler, int target, MoveEnum move, Type moveType, int basePower, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier) {
+    TestAllBattlers<OnOffensiveMultiplierBase, bool>(
+        battler,
+        [](const OnOffensiveMultiplierBase* impl) -> auto { return impl->onOffensiveMultiplierFor(); },
+        [&](const OnOffensiveMultiplierBase* impl, auto ability) -> bool {
+            impl->onOffensiveMultiplier(battler, ability, target, move, moveType, basePower, typeEffectivenessModifier, isCrit, resistance, modifier);
+            return false;
+        });
+}
+
 void CalcDefensiveMultipliers(
     int battler, int attacker, MoveEnum move, Type moveType, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier) {
     TestAllBattlers<OnDefensiveMultiplierBase, bool>(
@@ -523,4 +534,27 @@ void HandleOnBattlerFaints(int attacker, int fainted, MoveEnum move, Type moveTy
             }
             return false;
         });
+}
+
+MultihitType HandleParentalBond(int battler, int hasFortKnox, MoveEnum move, Type moveType) {
+    MultihitType bondType = MULTIHIT_SINGLE;
+    HasAbilityWithTagMatchingCondition<OnParentalBond>(battler, [&](const OnParentalBond* impl, AbilityEnum ability) -> MultihitType {
+        CHECK(!hasFortKnox || dispatchTo<IgnoresFortKnox>(ability))
+        return impl->onParentalBond(battler, move, moveType);
+    });
+    return bondType;
+}
+
+int OnMoveTypeSingleAbility(AbilityEnum ability, MoveEnum move, Type moveType) {
+    auto ptr = dispatchTo<OnMoveType>(ability);
+    CHECK(ptr)
+    u8 _;
+    return ptr->onMoveType(ability, move, moveType, &_);
+}
+
+int OnMoveTypeForBattler(int battler, MoveEnum move, Type moveType, u8* ateBoost) {
+    int result = 0;
+    HasAbilityWithTagMatchingCondition<OnMoveType>(
+        battler, [&](const OnMoveType* impl, auto ability) -> auto { return impl->onMoveType(ability, move, moveType, ateBoost); });
+    return result;
 }

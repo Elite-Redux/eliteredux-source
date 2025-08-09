@@ -3613,7 +3613,7 @@ static void HandleTurnActionSelectionState(void) {
                             gChosenActionByBattler[gActiveBattler] =
                                 B_ACTION_NOTHING_FAINTED;  // Not fainted, but it cannot move, because of the throwing ball.
                             gBattleCommunication[gActiveBattler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
-                        } else if (GetAbilityState(gActiveBattler, ABILITY_COMMANDER )) {
+                        } else if (GetAbilityState(gActiveBattler, ABILITY_COMMANDER)) {
                             gChosenActionByBattler[gActiveBattler] =
                                 B_ACTION_NOTHING_FAINTED;  // Not fainted, but it cannot move, because of the throwing ball.
                             gBattleCommunication[gActiveBattler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
@@ -4130,8 +4130,7 @@ static u32 GetSpeedFromAbilities(u8 battlerId, u32 speed) {
     if (gVolatileStructs[battlerId].showdownMode) speed = (speed * 150) / 100;
 
     // paralysis drop
-    if (gBattleMons[battlerId].status1 & STATUS1_PARALYSIS && !HasQuickFeet(battlerId))
-        speed /= (B_PARALYSIS_SPEED >= GEN_7 ? 2 : 4);
+    if (gBattleMons[battlerId].status1 & STATUS1_PARALYSIS && !HasQuickFeet(battlerId)) speed /= (B_PARALYSIS_SPEED >= GEN_7 ? 2 : 4);
 
     return speed;
 }
@@ -4241,8 +4240,7 @@ s8 GetMovePriority(u32 battlerId, MoveEnum move, u32 target) {
     return priority;
 }
 
-#define MYCELIUM_MIGHT_AFFECTED(battler, move) \
-    (HasMyceliumMight(battler) && IS_MOVE_STATUS(move) && gBattleMoves[move].target != MOVE_TARGET_USER)
+#define MYCELIUM_MIGHT_AFFECTED(battler, move) (HasMyceliumMight(battler) && IS_MOVE_STATUS(move) && gBattleMoves[move].target != MOVE_TARGET_USER)
 
 union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove) {
     union SpeedValue speedValue = {0};
@@ -5010,17 +5008,12 @@ u8 GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer) {
             break;
     }
 
-    if (gAbilities[ability].onMoveType) {
-        u8 unused;
-        int result = gAbilities[ability].onMoveType(ability, move, moveType, &unused);
-        if (result) return result - 1;
-    }
+    int result = OnMoveTypeSingleAbility(ability, move, moveType);
+    if (result) return result - 1;
 
     for (int i = 0; i < NUM_INNATE_PER_SPECIES; i++) {
-        u8 unused;
         int innate = GetMonInnate(mon, i, disableRandomizer);
-        FILTER(gAbilities[innate].onMoveType)
-        int result = gAbilities[innate].onMoveType(innate, move, moveType, &unused);
+        result = OnMoveTypeSingleAbility(innate, move, moveType);
         if (result) return result - 1;
     }
 
@@ -5133,8 +5126,8 @@ static int GetMoveTypeInternal(MoveEnum move, int battlerAtk, u8 *ateBoost, s8 *
     if ((gFieldStatuses & STATUS_FIELD_ION_DELUGE && moveType == TYPE_NORMAL) || gStatuses4[battlerAtk] & STATUS4_ELECTRIFIED) return TYPE_ELECTRIC;
     if (gStatuses4[battlerAtk] & STATUS4_PLASMA_FISTS && moveType == TYPE_NORMAL) return TYPE_ELECTRIC;
 
-    ON_ABILITY(battlerAtk, FALSE, gAbilities[ability].onMoveType, int newType = gAbilities[ability].onMoveType(ability, move, moveType, ateBoost);
-               if (newType) return newType - 1;)
+    int newType = OnMoveTypeForBattler(battlerAtk, move, moveType, ateBoost);
+    if (newType) return newType - 1;
 
     *realType = -1;
     return moveType;
