@@ -123,9 +123,7 @@ struct OnReactive {
 
 #define ON_BATTLER_FAINTS virtual int onBattlerFaints(AbilityEnum ability, int battler, int attacker, int fainted, MoveEnum move, Type moveType) const
 #define DELEGATE_BATTLER_FAINTS ability, battler, attacker, fainted, move, moveType
-#define SELF ATTACKER
 APPLIES_ON(BattlerFaints, ApplyOnTarget, ON_BATTLER_FAINTS)
-#undef SELF
 
 struct OnParentalBond {
 #define ON_PARENTAL_BOND virtual MultihitType onParentalBond(int battler, MoveEnum move, Type moveType) const

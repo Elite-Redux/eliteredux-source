@@ -81,6 +81,7 @@ int PerformOnAttacker(int battler, int target, AbilityEnum ability, MoveEnum mov
 int PerformOnDefender(int battler, int attacker, AbilityEnum ability, MoveEnum move, Type moveType);
 void HandleRecoilAbilities(int battler, int moveDamage, Type moveType);
 int HandleAllOnReactive(AbilityCallType callType);
+void HandleOnBattlerFaints(int attacker, int fainted, MoveEnum move, Type moveType);
 
 #ifdef __cplusplus
 }

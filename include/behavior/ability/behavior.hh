@@ -2272,7 +2272,7 @@ template <>
 struct AbilityImpl<ABILITY_TANGLING_HAIR> : is AbilityImpl<ABILITY_GOOEY> {};
 
 template <>
-struct AbilityImpl<ABILITY_RECEIVER> : is OnBattlerFaints<ApplyOnTarget::ALLY>, is RolePlayBanned {
+struct AbilityImpl<ABILITY_RECEIVER> : is OnBattlerFaints<ApplyOnTarget::ALLY_IS_TARGET>, is RolePlayBanned {
     ON_BATTLER_FAINTS {
         AbilityEnum allyAbility = GetBattlerAbility(fainted);
         CHECK_NOT(IsRolePlayBannedAbility(allyAbility))
@@ -5550,7 +5550,7 @@ struct AbilityImpl<ABILITY_COSTAR> : is OnEntry {
 };
 
 template <>
-struct AbilityImpl<ABILITY_COMMANDER> : is FormChangeAbility, is OnBattlerFaints<ApplyOnTarget::ALLY>, is OnAccuracy<ApplyOnTarget::TARGET> {
+struct AbilityImpl<ABILITY_COMMANDER> : is FormChangeAbility, is OnBattlerFaints<ApplyOnTarget::ALLY_IS_TARGET>, is OnAccuracy<ApplyOnTarget::TARGET> {
     ON_BATTLER_FAINTS {
         CHECK(GetAbilityState(battler, ability))
 

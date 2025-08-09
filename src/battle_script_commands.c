@@ -7047,19 +7047,7 @@ static void Cmd_various(void) {
             REQUIRE_NOT(NoAliveMonsForEitherParty())
             int moveType;
             GET_MOVE_TYPE(gCurrentMove, moveType)
-            for (int i = 0; i < gBattlersCount; i++) {
-                FILTER(IsBattlerAlive(i))
-                ON_ABILITY(
-                    i,
-                    FALSE,
-                    gAbilities[ability].onBattlerFaints &&
-                        IsTargettedApplyOnFlagAppropriate(gActiveBattler, i, gBattlerAttacker, gActiveBattler, gAbilities[ability].onBattlerFaintsFor),
-                    gStackBattler1 = i;
-                    if (gAbilities[ability].onBattlerFaints(ability, i, gBattlerAttacker, gActiveBattler, gCurrentMove, moveType) & 1) {
-                        gBattleScripting.abilityPopupOverwrite = ability;
-                        BattleScriptCall(BattleScript_AbilityPopUpStack);
-                    })
-            }
+            HandleOnBattlerFaints(gBattlerAttacker, gActiveBattler, gCurrentMove, moveType);
             ReadActiveScriptInitialStackState();
             break;
         case VARIOUS_TRY_ACTIVATE_SUPER_STRAIN:  // and variants
@@ -7074,19 +7062,7 @@ static void Cmd_various(void) {
             break;
         case VARIOUS_ON_FAINTED_BY_OTHER:
             REQUIRE_NOT(NoAliveMonsForEitherParty())
-            for (int i = 0; i < gBattlersCount; i++) {
-                FILTER(IsBattlerAlive(i))
-                ON_ABILITY(
-                    i,
-                    FALSE,
-                    gAbilities[ability].onBattlerFaints &&
-                        IsTargettedApplyOnFlagAppropriate(gActiveBattler, i, MAX_BATTLERS_COUNT, gActiveBattler, gAbilities[ability].onBattlerFaintsFor),
-                    gStackBattler1 = i;
-                    if (gAbilities[ability].onBattlerFaints(ability, i, MAX_BATTLERS_COUNT, gActiveBattler, 0, 0) & 1) {
-                        gBattleScripting.abilityPopupOverwrite = ability;
-                        BattleScriptCall(BattleScript_AbilityPopUpStack);
-                    })
-            }
+            HandleOnBattlerFaints(gActiveBattler, gActiveBattler, MOVE_NONE, TYPE_NONE);
             ReadActiveScriptInitialStackState();
             break;
         case VARIOUS_TRY_ACTIVATE_FELL_STINGER:
