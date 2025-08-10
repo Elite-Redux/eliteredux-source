@@ -1443,16 +1443,8 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, MoveEnum move, u16 typeEff
         return NEVER_CRIT;
     }
 
-    int critChance = 0;
-
-    for (int battler = 0; battler < gBattlersCount; battler++) {
-        ON_ABILITY(battler,
-                   TRUE,
-                   gAbilities[ability].onCrit && IsTargettedApplyOnFlagAppropriate(battlerAtk, battler, battlerAtk, battlerDef, gAbilities[ability].onCritFor),
-                   int result = gAbilities[ability].onCrit(battler, battlerDef, move, typeEffectiveness);
-                   if (result == NEVER_CRIT) return NEVER_CRIT;
-                   critChance += result)
-    }
+    int critChance = CalculateCritModifier(battlerAtk, battlerDef, move, typeEffectiveness);
+    if (critChance == NEVER_CRIT) return NEVER_CRIT;
 
     // Always Critical
     if (gStatuses3[battlerAtk] & STATUS3_LASER_FOCUS || gBattleMoves[move].effect == EFFECT_ALWAYS_CRIT || (gBattleMoves[move].alwaysCrit) ||

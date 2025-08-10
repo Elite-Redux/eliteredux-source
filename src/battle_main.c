@@ -4202,13 +4202,11 @@ s8 GetChosenMovePriority(u32 battlerId, u32 target) {
 }
 
 s8 GetMovePriority(u32 battlerId, MoveEnum move, u32 target) {
-    s8 priority;
-
-    priority = gBattleMoves[move].priority;
+    s8 priority = gBattleMoves[move].priority;
 
     if (gFieldTimers.quashTimer) return min(-4, priority);
 
-    ON_ABILITY(battlerId, FALSE, gAbilities[ability].onPriority, priority += gAbilities[ability].onPriority(battlerId, target, move))
+    priority += CalculatePriorityModifier(battlerId, target, move);
 
     if (gBattleMoves[move].effect == EFFECT_GRASSY_GLIDE && IsBattlerTerrainAffected(battlerId, STATUS_FIELD_GRASSY_TERRAIN)) {
         priority++;

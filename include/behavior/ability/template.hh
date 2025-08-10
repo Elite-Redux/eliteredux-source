@@ -186,12 +186,13 @@ struct OnSwapSplit {
 struct OnChooseOffensiveStat {
 #define ON_CHOOSE_OFFENSIVE_STAT        \
     virtual void onChooseOffensiveStat( \
-        int battler, MoveEnum move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 secondaryAtkStatToUse[NUM_STATS])
+        int battler, MoveEnum move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 secondaryAtkStatToUse[NUM_STATS]) const
 #define DELEGATE_CHOOSE_OFFENSIVE_STAT battler, move, ignoreOffensiveStatDrops, targetUnaware, atkStatToUse, secondaryAtkStatToUse
     ON_CHOOSE_OFFENSIVE_STAT = 0;
 };
 
-#define ON_CHOOSE_DEFENSIVE_STAT virtual int onChooseDefensiveStat(int battler, int target, MoveEnum move, int ignoreDefensiveStatBoosts, int battlerUnaware) const
+#define ON_CHOOSE_DEFENSIVE_STAT \
+    virtual int onChooseDefensiveStat(int battler, int target, MoveEnum move, int ignoreDefensiveStatBoosts, int battlerUnaware) const
 #define DELEGATE_CHOOSE_DEFENSIVE_STAT battler, target, move, ignoreDefensiveStatBoosts, battlerUnaware
 APPLIES_ON(ChooseDefensiveStat, ApplyOnTarget, ON_CHOOSE_DEFENSIVE_STAT)
 
@@ -211,9 +212,11 @@ struct OnExit {
 #define DELEGATE_CRIT battler, target, move, typeEffectiveness
 APPLIES_ON(Crit, ApplyOnTarget, ON_CRIT)
 
+struct OnTypeEffectiveness {
 #define ON_TYPE_EFFECTIVENESS virtual int onTypeEffectiveness(int defType, MoveEnum move, Type moveType, u16 *mod) const
 #define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
-APPLIES_ON(TypeEffectiveness, ApplyOnTarget, ON_TYPE_EFFECTIVENESS)
+    ON_TYPE_EFFECTIVENESS = 0;
+};
 
 struct OnCopyMove {
 #define ON_COPY_MOVE virtual int onCopyMove(AbilityEnum ability, int battler, int attacker, int target, MoveEnum move) const
@@ -322,7 +325,7 @@ MERGE_VOID(OnDefender, onDefender, ON_DEFENDER, DELEGATE_DEFENDER)
 MERGE_OPERATOR(OnExit, onExit, ON_EXIT, DELEGATE_EXIT, |)
 MERGE_VOID(OnModifyEffectChanceBase, onModifyEffectChance, ON_MODIFY_EFFECT_CHANCE, DELEGATE_MODIFY_EFFECT_CHANCE)
 MERGE_OPERATOR(OnAbsorb, onAbsorb, ON_ABSORB, DELEGATE_ABSORB, |)
-MERGE_OPERATOR(OnTypeEffectivenessBase, onTypeEffectiveness, ON_TYPE_EFFECTIVENESS, DELEGATE_TYPE_EFFECTIVENESS, ||)
+MERGE_OPERATOR(OnTypeEffectiveness, onTypeEffectiveness, ON_TYPE_EFFECTIVENESS, DELEGATE_TYPE_EFFECTIVENESS, ||)
 MERGE_OPERATOR(OnEndTurn, onEndTurn, ON_END_TURN, DELEGATE_END_TURN, |)
 MERGE_VOID(OnStatBase, onStat, ON_STAT, DELEGATE_STAT)
 MERGE_VOID(OnOffensiveMultiplierBase, onOffensiveMultliplier, ON_OFFENSIVE_MULTIPLIER, DELEGATE_OFFENSIVE_MULTIPLIER)
@@ -333,7 +336,7 @@ struct MergedRaw : is MergeOnEntry<T, U>,
                    is MergeOnExit<T, U>,
                    is MergeOnModifyEffectChanceBase<T, U>,
                    is MergeOnAbsorb<T, U>,
-                   is MergeOnTypeEffectivenessBase<T, U>,
+                   is MergeOnTypeEffectiveness<T, U>,
                    is MergeOnEndTurn<T, U>,
                    is MergeOnStatBase<T, U>,
                    is MergeOnOffensiveMultiplierBase<T, U> {};

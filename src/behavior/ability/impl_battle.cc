@@ -585,3 +585,55 @@ AccuracyPriority CalculateAccuracyFromAbilities(int attacker, int target, MoveEn
         });
     return result;
 }
+
+AbilityEnum ShouldSwapSplit(int battler, MoveEnum move) {
+    return HasAbilityWithTagMatchingCondition<OnSwapSplit>(battler, [&](const OnSwapSplit* impl, auto&) -> bool { return impl->onSwapSplit(battler, move); });
+}
+
+void HandleChooseOffensiveStat(int battler, MoveEnum move, int isCrit, int isUnaware, u8* atkStatToUse, u8 secondaryAttackStatToUse[NUM_STATS]) {
+    HasAbilityWithTagMatchingCondition<OnChooseOffensiveStat>(battler, [&](const OnChooseOffensiveStat* impl, auto&) -> bool {
+        impl->onChooseOffensiveStat(battler, move, isCrit, isUnaware, atkStatToUse, secondaryAttackStatToUse);
+        return false;
+    });
+}
+
+int HandleChooseDefensiveStat(int battlerAtk, int battlerDef, MoveEnum move, int noPositiveStatStages, int isUnaware) {
+    auto [_, result, __] = TestAllBattlersWithAttacker<OnChooseDefensiveStatBase, int>(
+        battlerAtk,
+        battlerDef,
+        true,
+        [](const OnChooseDefensiveStatBase* impl) -> auto { return impl->onChooseDefensiveStatFor(); },
+        [&](const OnChooseDefensiveStatBase* impl, auto&, auto&) -> int {
+            return impl->onChooseDefensiveStat(battlerAtk, battlerDef, move, noPositiveStatStages, isUnaware);
+        });
+    return result;
+}
+
+int CalculatePriorityModifier(int battlerAtk, int battlerDef, MoveEnum move) {
+    int prio = 0;
+    HasAbilityWithTagMatchingCondition<OnPriority>(battlerAtk, [&](const OnPriority* impl, auto&) -> auto {
+        prio += impl->onPriority(battlerAtk, battlerDef, move);
+        return false;
+    });
+    return prio;
+}
+
+int CalculateCritModifier(int battlerAtk, int battlerDef, MoveEnum move, u16 typeEffectiveness) {
+    int mod = 0;
+    auto [_, result, __] = TestAllBattlersWithAttacker<OnCritBase, int>(
+        battlerAtk,
+        battlerDef,
+        true,
+        [](const OnCritBase* impl) -> auto { return impl->onCritFor(); },
+        [&](const OnCritBase* impl, auto&, u8 battler) -> int {
+            int newMod = impl->onCrit(battler, battlerDef, move, typeEffectiveness);
+            mod += newMod;
+            return newMod == NEVER_CRIT;
+        });
+    return result == NEVER_CRIT ? NEVER_CRIT : mod;
+}
+
+int TryChangeTypeEffectiveness(int battler, Type defType, MoveEnum move, Type moveType, u16* modifier) {
+    return HasAbilityWithTagMatchingCondition<OnTypeEffectiveness>(
+        battler, [&](const OnTypeEffectiveness* impl, auto&) -> auto { return impl->onTypeEffectiveness(defType, move, moveType, modifier); });
+}

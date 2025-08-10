@@ -89,7 +89,12 @@ int OnMoveTypeSingleAbility(AbilityEnum ability, MoveEnum move, Type moveType);
 int OnMoveTypeForBattler(int battler, MoveEnum move, Type moveType, u8* ateBoost);
 void CalculateStatsFromAbilities(int battler, int statId, u32* stat);
 AccuracyPriority CalculateAccuracyFromAbilities(int attacker, int target, MoveEnum move, Type moveType, int* accuracy);
-
+AbilityEnum ShouldSwapSplit(int battler, MoveEnum move);
+void HandleChooseOffensiveStat(int battler, MoveEnum move, int isCrit, int isUnaware, u8* atkStatToUse, u8 secondaryAttackStatToUse[NUM_STATS]);
+int HandleChooseDefensiveStat(int battlerAtk, int battlerDef, MoveEnum move, int noPositiveStatStages, int isUnaware);
+int CalculatePriorityModifier(int battlerAtk, int battlerDef, MoveEnum move);
+int CalculateCritModifier(int battlerAtk, int battlerDef, MoveEnum move, u16 typeEffectiveness);
+int TryChangeTypeEffectiveness(int battler, Type defType, MoveEnum move, Type moveType, u16* modifier);
 
 #ifdef __cplusplus
 }

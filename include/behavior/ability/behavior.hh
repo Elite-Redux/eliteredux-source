@@ -1079,7 +1079,7 @@ struct AbilityImpl<ABILITY_QUICK_FEET> : is OnStat<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_NORMALIZE> : is OnOffensiveMultiplier<>, is OnMoveType, is OnTypeEffectiveness<> {
+struct AbilityImpl<ABILITY_NORMALIZE> : is OnOffensiveMultiplier<>, is OnMoveType, is OnTypeEffectiveness {
     ON_OFFENSIVE_MULTIPLIER {
         if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
     }
@@ -1228,7 +1228,7 @@ struct AbilityImpl<ABILITY_SLOW_START> : is OnEntry, is OnStat<> {
     }
 };
 
-struct HitsGhost : is OnTypeEffectiveness<> {
+struct HitsGhost : is OnTypeEffectiveness {
     ON_TYPE_EFFECTIVENESS {
         CHECK(moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING)
         CHECK(defType == TYPE_GHOST)
@@ -2186,7 +2186,7 @@ struct AbilityImpl<ABILITY_POWER_CONSTRUCT> : is FormChangeAbility, is OnEndTurn
 };
 
 template <>
-struct AbilityImpl<ABILITY_CORROSION> : is OnTypeEffectiveness<>, is OnCanStatusType {
+struct AbilityImpl<ABILITY_CORROSION> : is OnTypeEffectiveness, is OnCanStatusType {
     ON_TYPE_EFFECTIVENESS {
         CHECK(moveType == TYPE_POISON) CHECK(defType == TYPE_STEEL) *mod = UQ_4_12(2.0);
         return TRUE;
@@ -2905,7 +2905,7 @@ struct AbilityImpl<ABILITY_EXPLOIT_WEAKNESS> : is OnOffensiveMultiplier<>, is On
 };
 
 template <>
-struct AbilityImpl<ABILITY_GROUND_SHOCK> : is OnTypeEffectiveness<> {
+struct AbilityImpl<ABILITY_GROUND_SHOCK> : is OnTypeEffectiveness {
     ON_TYPE_EFFECTIVENESS {
         CHECK(moveType == TYPE_ELECTRIC) CHECK(defType == TYPE_GROUND) CHECK_NOT(*mod) *mod = UQ_4_12(.5);
         return TRUE;
@@ -3259,7 +3259,7 @@ struct AbilityImpl<ABILITY_HYPNOTIST> : is OnAccuracy<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_OVERWHELM> : is OnTypeEffectiveness<>, is TauntImmune {
+struct AbilityImpl<ABILITY_OVERWHELM> : is OnTypeEffectiveness, is TauntImmune {
     ON_TYPE_EFFECTIVENESS {
         CHECK(moveType == TYPE_DRAGON) CHECK(defType == TYPE_FAIRY) CHECK_NOT(*mod) *mod = UQ_4_12(1.0);
         return TRUE;
@@ -3475,7 +3475,7 @@ struct AbilityImpl<ABILITY_NORTH_WIND> : is HailImmune, is OnEntry {
 };
 
 template <>
-struct AbilityImpl<ABILITY_OVERCHARGE> : is OnTypeEffectiveness<>, is OnCanStatusType {
+struct AbilityImpl<ABILITY_OVERCHARGE> : is OnTypeEffectiveness, is OnCanStatusType {
     ON_TYPE_EFFECTIVENESS {
         CHECK(moveType == TYPE_ELECTRIC) CHECK(defType == TYPE_ELECTRIC) *mod = UQ_4_12(2.0);
         return TRUE;
@@ -3539,7 +3539,7 @@ struct AbilityImpl<ABILITY_SEA_GUARDIAN> : is OnEntry {
 };
 
 template <>
-struct AbilityImpl<ABILITY_MOLTEN_DOWN> : is OnTypeEffectiveness<> {
+struct AbilityImpl<ABILITY_MOLTEN_DOWN> : is OnTypeEffectiveness {
     ON_TYPE_EFFECTIVENESS {
         CHECK(moveType == TYPE_FIRE) CHECK(defType == TYPE_ROCK) *mod = UQ_4_12(2.0);
         return TRUE;
@@ -4279,7 +4279,7 @@ struct AbilityImpl<ABILITY_JAWS_OF_CARNAGE> : is OnBattlerFaints<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_ANGELS_WRATH> : is OnAttacker, is OnAccuracy<>, is OnTypeEffectiveness<>, is OnModifyEffectChance<>, is OnCanStatusType {
+struct AbilityImpl<ABILITY_ANGELS_WRATH> : is OnAttacker, is OnAccuracy<>, is OnTypeEffectiveness, is OnModifyEffectChance<>, is OnCanStatusType {
     ON_ATTACKER {
         switch (move) {
             case MOVE_TACKLE: {
@@ -4658,7 +4658,7 @@ struct AbilityImpl<ABILITY_CRYOMANCY> : is OnModifyEffectChance<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_PHANTOM_PAIN> : is OnTypeEffectiveness<> {
+struct AbilityImpl<ABILITY_PHANTOM_PAIN> : is OnTypeEffectiveness {
     ON_TYPE_EFFECTIVENESS {
         CHECK(moveType == TYPE_GHOST) CHECK(defType == TYPE_NORMAL) CHECK_NOT(*mod) *mod = UQ_4_12(1.0);
         return TRUE;
@@ -7305,7 +7305,7 @@ struct AbilityImpl<ABILITY_SOOTHSAYER> : is OnEntry, is OnEndTurn, is OnAfterTyp
 };
 
 template <>
-struct AbilityImpl<ABILITY_CORRUPTED_MIND> : is RandomizerBanned, is OnTypeEffectiveness<>, is OnModifyEffectChance<> {
+struct AbilityImpl<ABILITY_CORRUPTED_MIND> : is RandomizerBanned, is OnTypeEffectiveness, is OnModifyEffectChance<> {
     ON_TYPE_EFFECTIVENESS {
         CHECK(moveType == TYPE_PSYCHIC) if (*mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
         return FALSE;

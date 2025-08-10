@@ -7122,10 +7122,7 @@ static u32 CalcAttackStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
     } else if (gBattleMoves[move].effect == EFFECT_BODY_PRESS) {
         atkStatToUse = STAT_DEF;
     } else {
-        ON_ABILITY(battlerAtk,
-                   FALSE,
-                   gAbilities[ability].onChooseOffensiveStat,
-                   gAbilities[ability].onChooseOffensiveStat(battlerAtk, move, isCrit, isUnaware, &atkStatToUse, secondaryAtkStatToUse))
+        HandleChooseOffensiveStat(battlerAtk, move, isCrit, isUnaware, &atkStatToUse, secondaryAtkStatToUse);
     }
 
     atkStat = CalculateStat(statBattler, atkStatToUse, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
@@ -7192,9 +7189,7 @@ static bool32 CanEvolve(u32 species) {
 void SetSwapDamageCategory(int battler, int target, MoveEnum move) {
     switch (gBattleMoves[move].splitFlag) {
         default:
-            gSwapDamageCategory = FALSE;
-            ON_ABILITY(battler, FALSE, gAbilities[ability].onSwapSplit, gSwapDamageCategory = gAbilities[ability].onSwapSplit(battler, move);
-                       if (gSwapDamageCategory) break)
+            gSwapDamageCategory = ShouldSwapSplit(battler, move) != ABILITY_NONE;
             break;
 
         case USE_HIGHEST_OFFENSE: {
@@ -7257,17 +7252,7 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
                               (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BattlerHasAbility(battlerAtk, ABILITY_GRIP_PINCER, FALSE));
     u8 isUnaware = HasUnaware(battlerAtk);
 
-    for (int i = 0; i < gBattlersCount && !defStatToUse; i++) {
-        int abilityBattler = (battlerAtk + i) % gBattlersCount;
-        FILTER(IsBattlerAlive(abilityBattler))
-
-        ON_ABILITY(abilityBattler,
-                   FALSE,
-                   gAbilities[ability].onChooseDefensiveStat &&
-                       IsTargettedApplyOnFlagAppropriate(battlerAtk, abilityBattler, battlerAtk, battlerDef, gAbilities[ability].onChooseDefensiveStatFor),
-                   defStatToUse = gAbilities[ability].onChooseDefensiveStat(battlerAtk, battlerDef, move, noPositiveStatStages, isUnaware);
-                   if (!defStatToUse) break)
-    }
+    defStatToUse = HandleChooseDefensiveStat(battlerAtk, battlerDef, move, noPositiveStatStages, isUnaware);
 
     if (!defStatToUse) {
         if (gBattleMoves[move].splitFlag == HITS_SPDEF) {
@@ -7690,12 +7675,7 @@ int CalcMoveDamageAi(MoveEnum move, int battlerAtk, int battlerDef, u8 *moveType
 void MulByTypeEffectiveness(u16 *modifier, MoveEnum move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities) {
     u16 mod = GetTypeModifier(moveType, defType, battlerAtk, battlerDef);
 
-    int abilityModified = FALSE;
-    ON_ABILITY(
-        battlerAtk, FALSE, gAbilities[ability].onTypeEffectiveness, if (gAbilities[ability].onTypeEffectiveness(defType, move, moveType, &mod)) {
-            abilityModified = TRUE;
-            break;
-        })
+    int abilityModified = TryChangeTypeEffectiveness(battlerAtk, defType, move, moveType, modifier);
 
     if (!abilityModified) {
         if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET) {
