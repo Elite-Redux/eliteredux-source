@@ -4119,9 +4119,7 @@ void SwapTurnOrder(u8 id1, u8 id2) {
 }
 
 static u32 GetSpeedFromAbilities(u8 battlerId, u32 speed) {
-    NonStackingState flags = 0;
-
-    ON_ABILITY(battlerId, FALSE, gAbilities[ability].onStat, gAbilities[ability].onStat(ability, battlerId, STAT_SPEED, &speed, &flags))
+    CalculateStatsFromAbilities(battlerId, STAT_SPEED, &speed);
 
     if (gVolatileStructs[battlerId].violentRush) speed = (speed * 150) / 100;
 

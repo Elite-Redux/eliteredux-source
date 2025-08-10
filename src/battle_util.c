@@ -7064,14 +7064,7 @@ u32 CalculateStat(
             break;
     }
 
-    NonStackingState flags = 0;
-    for (int sourceBattler = 0; sourceBattler < gBattlersCount; sourceBattler++) {
-        FILTER(sourceBattler == battler || IsBattlerAlive(sourceBattler))
-        ON_ABILITY(sourceBattler,
-                   TRUE,
-                   gAbilities[ability].onStat && IsApplyOnFlagAppropriate(battler, sourceBattler, gAbilities[ability].onStatFor),
-                   gAbilities[ability].onStat(ability, battler, statEnum, &statBase, &flags))
-    }
+    CalculateStatsFromAbilities(battler, statEnum, &statBase);
 
     if (isUnaware)
         statStage = DEFAULT_STAT_STAGE;

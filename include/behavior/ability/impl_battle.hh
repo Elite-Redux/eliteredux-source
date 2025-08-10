@@ -87,6 +87,8 @@ void CalcOffensiveMultipliers(
     int battler, int target, MoveEnum move, Type moveType, int basePower, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier);
 int OnMoveTypeSingleAbility(AbilityEnum ability, MoveEnum move, Type moveType);
 int OnMoveTypeForBattler(int battler, MoveEnum move, Type moveType, u8* ateBoost);
+void CalculateStatsFromAbilities(int battler, int statId, u32* stat);
+AccuracyPriority CalculateAccuracyFromAbilities(int attacker, int target, MoveEnum move, Type moveType, int* accuracy);
 
 
 #ifdef __cplusplus

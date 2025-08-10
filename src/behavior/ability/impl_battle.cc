@@ -303,8 +303,8 @@ std::tuple<AbilityEnum, Result, u8> TestAllBattlers(u8 battler, ForSelector sele
 
 template <typename T, typename Result, typename Func, typename ForSelector>
 std::tuple<AbilityEnum, Result, u8> TestAllBattlersWithAttacker(
-    u8 attacker, u8 target, ForSelector selector, Func transform, bool checkMoldBreaker = IsBreakable<T>()) {
-    if (IsBattlerAlive(attacker)) {
+    u8 attacker, u8 target, bool allowDeadAttacker, ForSelector selector, Func transform, bool checkMoldBreaker = IsBreakable<T>()) {
+    if (allowDeadAttacker || IsBattlerAlive(attacker)) {
         for (int i = ARRAY_COUNT(gBattleMons[attacker].abilities); i--;) {
             auto ability = gBattleMons[attacker].abilities[i];
             const auto ptr = dispatchTo<T>(ability);
@@ -525,6 +525,7 @@ void HandleOnBattlerFaints(int attacker, int fainted, MoveEnum move, Type moveTy
     TestAllBattlersWithAttacker<OnBattlerFaintsBase, bool>(
         attacker,
         fainted,
+        false,
         [](const OnBattlerFaintsBase* impl) -> ApplyOnTarget { return impl->onBattlerFaintsFor(); },
         [&](const OnBattlerFaintsBase* impl, AbilityEnum ability, auto abilityBattler) -> bool {
             int result = impl->onBattlerFaints(ability, abilityBattler, attacker, fainted, move, moveType);
@@ -556,5 +557,31 @@ int OnMoveTypeForBattler(int battler, MoveEnum move, Type moveType, u8* ateBoost
     int result = 0;
     HasAbilityWithTagMatchingCondition<OnMoveType>(
         battler, [&](const OnMoveType* impl, auto ability) -> auto { return impl->onMoveType(ability, move, moveType, ateBoost); });
+    return result;
+}
+
+void CalculateStatsFromAbilities(int battler, int statId, u32* stat) {
+    NonStackingState flags = NON_STACKING_NONE;
+    TestAllBattlers<OnStatBase, bool>(
+        battler,
+        [](const OnStatBase* impl) -> auto { return impl->onStatFor(); },
+        [&](const OnStatBase* impl, auto ability) -> bool {
+            impl->onStat(ability, battler, statId, stat, &flags);
+            return false;
+        });
+}
+
+AccuracyPriority CalculateAccuracyFromAbilities(int attacker, int target, MoveEnum move, Type moveType, int* accuracy) {
+    AccuracyPriority result = ACCURACY_NO_RESULT;
+    TestAllBattlersWithAttacker<OnAccuracyBase, bool>(
+        attacker,
+        target,
+        true,
+        [](const OnAccuracyBase* impl) -> auto { return impl->onAccuracyFor(); },
+        [&](const OnAccuracyBase* impl, auto ability, auto&) -> bool {
+            AccuracyPriority newResult = impl->onAccuracy(ability, attacker, target, move, moveType, accuracy);
+            result = max(newResult, result);
+            return result == ACCURACY_ALWAYS_HITS;
+        });
     return result;
 }

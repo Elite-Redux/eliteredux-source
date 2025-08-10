@@ -1281,15 +1281,9 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
     moveAcc *= gAccuracyStageRatios[buff].dividend;
     moveAcc /= gAccuracyStageRatios[buff].divisor;
 
-    for (int sourceBattler = 0; sourceBattler < gBattlersCount; sourceBattler++) {
-        FILTER(sourceBattler == battlerAtk || sourceBattler == battlerDef || IsBattlerAlive(sourceBattler))
-        ON_ABILITY(sourceBattler,
-                   TRUE,
-                   gAbilities[ability].onAccuracy &&
-                       IsTargettedApplyOnFlagAppropriate(battlerAtk, sourceBattler, battlerAtk, battlerDef, gAbilities[ability].onAccuracyFor),
-                   int result = gAbilities[ability].onAccuracy(ability, battlerAtk, battlerDef, move, moveType, &moveAcc);
-                   prio = max(prio, result))
-    }
+    AccuracyPriority newPrio = CalculateAccuracyFromAbilities(battlerAtk, battlerDef, move, moveType, &moveAcc);
+    prio = max(prio, newPrio);
+    
     switch (prio) {
         case ACCURACY_ALWAYS_HITS:
         case ACCURACY_HITS_IF_POSSIBLE:
