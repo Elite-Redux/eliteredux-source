@@ -1283,7 +1283,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
 
     AccuracyPriority newPrio = CalculateAccuracyFromAbilities(battlerAtk, battlerDef, move, moveType, &moveAcc);
     prio = max(prio, newPrio);
-    
+
     switch (prio) {
         case ACCURACY_ALWAYS_HITS:
         case ACCURACY_HITS_IF_POSSIBLE:
@@ -2912,14 +2912,7 @@ int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChan
     if (moveEffect == MOVE_EFFECT_FLINCH && baseChance < 100 && gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL && GetBattlerSide(battler) == B_SIDE_PLAYER)
         return 0;
 
-    for (int i = 0; i < gBattlersCount; i++) {
-        int abilityBattler = (battler + i) % gBattlersCount;
-        FILTER(IsBattlerAlive(abilityBattler))
-        ON_ABILITY(abilityBattler,
-                   TRUE,
-                   gAbilities[ability].onModifyEffectChance && IsApplyOnFlagAppropriate(battler, abilityBattler, gAbilities[0].onModifyEffectChanceFor),
-                   gAbilities[ability].onModifyEffectChance(battler, move, moveEffect, &baseChance))
-    }
+    HandleOnEffectChance(battler, move, moveEffect, &baseChance);
 
     if (gSideTimers[GetBattlerSide(battler)].rainbowTimer) baseChance *= 2;
 
@@ -6388,18 +6381,12 @@ static void HandleTerrainMove(u32 moveEffect) {
 
 bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget, MoveEnum move) {
     if (!IS_BATTLER_OF_TYPE(battlerTarget, TYPE_POISON) && !IS_BATTLER_OF_TYPE(battlerTarget, TYPE_STEEL)) return TRUE;
-    ON_ABILITY(
-        battlerAttacker, FALSE, gAbilities[ability].onCanStatusType, if (gAbilities[ability].onCanStatusType(battlerAttacker, move, CHECK_POISON)) return TRUE)
-    return FALSE;
+    return AbilityAllowsPoison(battlerAttacker, move);
 }
 
 bool32 CanParalyzeType(u8 battlerAttacker, u8 battlerTarget) {
     if (!IS_BATTLER_OF_TYPE(battlerTarget, TYPE_ELECTRIC)) return TRUE;
-    ON_ABILITY(battlerAttacker,
-               FALSE,
-               gAbilities[ability].onCanStatusType,
-               if (gAbilities[ability].onCanStatusType(battlerAttacker, MOVE_NONE, CHECK_PARALYSIS)) return TRUE)
-    return FALSE;
+    return AbilityAllowsParalysis(battlerAttacker);
 }
 
 bool32 CanUseLastResort(u8 battlerId) {
@@ -6527,20 +6514,6 @@ bool32 IsShieldsDownProtected(u32 battler) {
                 return ABILITY_SHIELDS_DOWN;
             break;
     }
-    return FALSE;
-}
-
-u32 IsAbilityStatusProtected(u32 battler, StatusCheckEnum status) {
-    ON_ABILITY(battler,
-               TRUE,
-               gAbilities[ability].onStatusImmune && IsApplyOnFlagAppropriate(battler, battler, gAbilities[ability].onStatusImmuneFor),
-               if (gAbilities[ability].onStatusImmune(battler, battler, ability, status)) return ability)
-    int partner = BATTLE_PARTNER(battler);
-    if (!IsBattlerAlive(partner)) return FALSE;
-    ON_ABILITY(partner,
-               TRUE,
-               gAbilities[ability].onStatusImmune && IsApplyOnFlagAppropriate(partner, battler, gAbilities[ability].onStatusImmuneFor),
-               if (gAbilities[ability].onStatusImmune(partner, battler, ability, status)) return ability)
     return FALSE;
 }
 

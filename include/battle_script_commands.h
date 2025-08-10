@@ -52,7 +52,6 @@ bool32 CanUseLastResort(u8 battlerId);
 u32 IsFlowerVeilProtected(u32 battler);
 u32 IsLeafGuardProtected(u32 battler);
 bool32 IsShieldsDownProtected(u32 battler);
-u32 IsAbilityStatusProtected(u32 battler, StatusCheckEnum status);
 int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChance);
 #define RESET_ALL_STATS 0
 #define RESET_STAT_BUFFS 1

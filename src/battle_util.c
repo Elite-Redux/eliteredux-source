@@ -4374,16 +4374,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
                     status = CHECK_RESTRICTING;
 
                 if (status) {
-                    int immunityAbility = ABILITY_NONE;
-
-                    ON_ABILITY(
-                        battler,
-                        FALSE,
-                        RemovesStatusAtTurnEnd(ability) && gAbilities[ability].onStatusImmune,
-                        if (gAbilities[ability].onStatusImmune(battler, battler, ability, status)) {
-                            immunityAbility = ability;
-                            break;
-                        })
+                    int immunityAbility = HandleRemovesStatusAtTurnEnd(battler, status);
 
                     if (immunityAbility) {
                         gBattleScripting.abilityPopupOverwrite = immunityAbility;

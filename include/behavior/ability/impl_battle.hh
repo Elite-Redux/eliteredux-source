@@ -98,6 +98,11 @@ int TryChangeTypeEffectiveness(int battler, Type defType, MoveEnum move, Type mo
 int HandleCopyMove(int battler, int battlerAtk, int battlerDef, MoveEnum move);
 AbilityEnum HandleOnAfterTypeEffectiveness(
     int battlerAtk, int battlerDef, MoveEnum move, Type moveType, u16* modifier, u16 modifier1, u16 modifier2, u16 modifier3);
+void HandleOnEffectChance(int battler, MoveEnum move, MoveEffectEnum moveEffect, int* baseChance);
+AbilityEnum AbilityAllowsPoison(int battler, MoveEnum move);
+AbilityEnum AbilityAllowsParalysis(int battler);
+AbilityEnum IsAbilityStatusProtected(int battler, StatusCheckEnum status);
+AbilityEnum HandleRemovesStatusAtTurnEnd(int statusedBattler, StatusCheckEnum status);
 
 #ifdef __cplusplus
 }

@@ -252,57 +252,44 @@ int TestAbsorbingAbilities(int battler, MoveEnum move, Type moveType, AbilityEnu
 }
 
 template <typename T, typename Result, typename Func, typename ForSelector>
-std::tuple<AbilityEnum, Result, u8> TestAllBattlers(u8 battler, ForSelector selector, Func transform, bool checkMoldBreaker = IsBreakable<T>()) {
+inline std::tuple<AbilityEnum, Result, u8> TestAllBattlersInternal(u8 battler, ApplyOn flags, ForSelector selector, Func transform, bool checkMoldBreaker) {
     for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
         auto ability = gBattleMons[battler].abilities[i];
         const auto ptr = dispatchTo<T>(ability);
         FILTER(ptr)
-        FILTER(CheckApplyOn(selector(ptr), ApplyOn::SELF))
+        FILTER(CheckApplyOn(selector(ptr), flags))
         FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
-        Result result = transform(ptr, ability);
+        Result result = transform(ptr, ability, battler);
         if (result) return std::tuple(ability, result, battler);
-    }
-    u8 ally = BATTLE_PARTNER(battler);
-    if (IsBattlerAlive(ally)) {
-        for (int i = ARRAY_COUNT(gBattleMons[ally].abilities); i--;) {
-            auto ability = gBattleMons[ally].abilities[i];
-            const auto ptr = dispatchTo<T>(ability);
-            FILTER(ptr)
-            FILTER(CheckApplyOn(selector(ptr), ApplyOn::ALLY))
-            FILTER_NOT(IsSuppressed(ally, ability, checkMoldBreaker))
-            Result result = transform(ptr, ability);
-            if (result) return std::tuple(ability, result, ally);
-        }
-    }
-    u8 opponent = BATTLE_OPPOSITE(battler);
-    if (IsBattlerAlive(opponent)) {
-        for (int i = ARRAY_COUNT(gBattleMons[opponent].abilities); i--;) {
-            auto ability = gBattleMons[opponent].abilities[i];
-            const auto ptr = dispatchTo<T>(ability);
-            FILTER(ptr)
-            FILTER(CheckApplyOn(selector(ptr), ApplyOn::FOE))
-            FILTER_NOT(IsSuppressed(opponent, ability, checkMoldBreaker))
-            Result result = transform(ptr, ability);
-            if (result) return std::tuple(ability, result, opponent);
-        }
-    }
-    opponent = BATTLE_PARTNER(opponent);
-    if (IsBattlerAlive(opponent)) {
-        for (int i = ARRAY_COUNT(gBattleMons[opponent].abilities); i--;) {
-            auto ability = gBattleMons[opponent].abilities[i];
-            const auto ptr = dispatchTo<T>(ability);
-            FILTER(ptr)
-            FILTER(CheckApplyOn(selector(ptr), ApplyOn::FOE))
-            FILTER_NOT(IsSuppressed(opponent, ability, checkMoldBreaker))
-            Result result = transform(ptr, ability);
-            if (result) return std::tuple(ability, result, opponent);
-        }
     }
     return std::tuple(ABILITY_NONE, Result(), 0);
 }
 
 template <typename T, typename Result, typename Func, typename ForSelector>
-inline std::tuple<AbilityEnum, Result, u8> TestAllBattlersWithAttackerInternal(u8 battler, ApplyOnTarget flags, ForSelector selector, Func transform, bool checkMoldBreaker) {
+std::tuple<AbilityEnum, Result, u8> TestAllBattlers(u8 battler, ForSelector selector, Func transform, bool checkMoldBreaker = IsBreakable<T>()) {
+    auto result = TestAllBattlersInternal<T, Result>(battler, ApplyOn::SELF, selector, transform, checkMoldBreaker);
+    if (std::get<1>(result)) return result;
+    u8 ally = BATTLE_PARTNER(battler);
+    if (IsBattlerAlive(ally)) {
+        result = TestAllBattlersInternal<T, Result>(ally, ApplyOn::ALLY, selector, transform, checkMoldBreaker);
+        if (std::get<1>(result)) return result;
+    }
+    u8 opponent = BATTLE_OPPOSITE(battler);
+    if (IsBattlerAlive(opponent)) {
+        result = TestAllBattlersInternal<T, Result>(opponent, ApplyOn::FOE, selector, transform, checkMoldBreaker);
+        if (std::get<1>(result)) return result;
+    }
+    opponent = BATTLE_PARTNER(opponent);
+    if (IsBattlerAlive(opponent)) {
+        result = TestAllBattlersInternal<T, Result>(opponent, ApplyOn::FOE, selector, transform, checkMoldBreaker);
+        if (std::get<1>(result)) return result;
+    }
+    return std::tuple(ABILITY_NONE, Result(), 0);
+}
+
+template <typename T, typename Result, typename Func, typename ForSelector>
+inline std::tuple<AbilityEnum, Result, u8> TestAllBattlersWithAttackerInternal(
+    u8 battler, ApplyOnTarget flags, ForSelector selector, Func transform, bool checkMoldBreaker) {
     for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
         auto ability = gBattleMons[battler].abilities[i];
         const auto ptr = dispatchTo<T>(ability);
@@ -367,7 +354,7 @@ int TestAllImmunityAbilities(int battler, int attacker, MoveEnum move, Type move
     auto [ability, result, from] = TestAllBattlers<OnImmuneBase, int>(
         battler,
         [](const OnImmuneBase* impl) -> auto { return impl->onImmuneFor(); },
-        [&](const OnImmuneBase* impl, auto&) -> auto { return impl->onImmune(battler, attacker, move, moveType, immunityScript); });
+        [&](const OnImmuneBase* impl, auto&, auto&) -> auto { return impl->onImmune(battler, attacker, move, moveType, immunityScript); });
 
     if (result) {
         *abilityPopup = ability;
@@ -381,7 +368,7 @@ void CalcOffensiveMultipliers(
     TestAllBattlers<OnOffensiveMultiplierBase, bool>(
         battler,
         [](const OnOffensiveMultiplierBase* impl) -> auto { return impl->onOffensiveMultiplierFor(); },
-        [&](const OnOffensiveMultiplierBase* impl, auto ability) -> bool {
+        [&](const OnOffensiveMultiplierBase* impl, auto ability, auto&) -> bool {
             impl->onOffensiveMultiplier(battler, ability, target, move, moveType, basePower, typeEffectivenessModifier, isCrit, resistance, modifier);
             return false;
         });
@@ -392,7 +379,7 @@ void CalcDefensiveMultipliers(
     TestAllBattlers<OnDefensiveMultiplierBase, bool>(
         battler,
         [](const OnDefensiveMultiplierBase* impl) -> auto { return impl->onDefensiveMultiplierFor(); },
-        [&](const OnDefensiveMultiplierBase* impl, auto&) -> auto {
+        [&](const OnDefensiveMultiplierBase* impl, auto&, auto&) -> auto {
             impl->onDefensiveMultiplier(battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier);
             return false;
         });
@@ -546,7 +533,7 @@ void CalculateStatsFromAbilities(int battler, int statId, u32* stat) {
     TestAllBattlers<OnStatBase, bool>(
         battler,
         [](const OnStatBase* impl) -> auto { return impl->onStatFor(); },
-        [&](const OnStatBase* impl, auto ability) -> bool {
+        [&](const OnStatBase* impl, auto ability, auto&) -> bool {
             impl->onStat(ability, battler, statId, stat, &flags);
             return false;
         });
@@ -638,4 +625,38 @@ AbilityEnum HandleOnAfterTypeEffectiveness(
         return false;
     });
     return immunityAbility;
+}
+
+void HandleOnEffectChance(int battler, MoveEnum move, MoveEffectEnum moveEffect, int* baseChance) {
+    TestAllBattlers<OnModifyEffectChanceBase, bool>(
+        battler,
+        [](const OnModifyEffectChanceBase* impl) -> auto { return impl->onModifyEffectChanceFor(); },
+        [&](const OnModifyEffectChanceBase* impl, auto&, auto&) -> auto {
+            impl->onModifyEffectChance(battler, move, moveEffect, baseChance);
+            return false;
+        });
+}
+
+template <StatusCheckEnum Check>
+AbilityEnum HandleCanStatusType(int battler, MoveEnum move) {
+    return HasAbilityWithTagMatchingCondition<OnCanStatusType>(
+        battler, [&](const OnCanStatusType* impl, auto&) -> auto { return impl->onCanStatusType(battler, move, Check); });
+}
+
+AbilityEnum AbilityAllowsPoison(int battler, MoveEnum move) { return HandleCanStatusType<CHECK_POISON>(battler, move); }
+
+AbilityEnum AbilityAllowsParalysis(int battler) { return HandleCanStatusType<CHECK_PARALYSIS>(battler, MOVE_NONE); }
+
+AbilityEnum IsAbilityStatusProtected(int statusedBattler, StatusCheckEnum status) {
+    auto [ability, _, __] = TestAllBattlers<OnStatusImmuneBase, int>(
+        statusedBattler,
+        [](const OnStatusImmuneBase* impl) -> auto { return impl->onStatusImmuneFor(); },
+        [&](const OnStatusImmuneBase* impl, auto ability, auto battler) -> auto { return impl->onStatusImmune(battler, statusedBattler, ability, status); });
+    return ability;
+}
+
+AbilityEnum HandleRemovesStatusAtTurnEnd(int statusedBattler, StatusCheckEnum status) {
+    return HasAbilityWithTagMatchingCondition<RemovesStatusOnImmunity>(statusedBattler, [&](const RemovesStatusOnImmunity* impl, auto ability) -> auto {
+        return impl->onStatusImmune(statusedBattler, statusedBattler, ability, status);
+    });
 }
