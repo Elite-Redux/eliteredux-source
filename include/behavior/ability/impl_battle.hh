@@ -95,6 +95,9 @@ int HandleChooseDefensiveStat(int battlerAtk, int battlerDef, MoveEnum move, int
 int CalculatePriorityModifier(int battlerAtk, int battlerDef, MoveEnum move);
 int CalculateCritModifier(int battlerAtk, int battlerDef, MoveEnum move, u16 typeEffectiveness);
 int TryChangeTypeEffectiveness(int battler, Type defType, MoveEnum move, Type moveType, u16* modifier);
+int HandleCopyMove(int battler, int battlerAtk, int battlerDef, MoveEnum move);
+AbilityEnum HandleOnAfterTypeEffectiveness(
+    int battlerAtk, int battlerDef, MoveEnum move, Type moveType, u16* modifier, u16 modifier1, u16 modifier2, u16 modifier3);
 
 #ifdef __cplusplus
 }

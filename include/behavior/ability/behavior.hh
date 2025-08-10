@@ -460,8 +460,8 @@ struct RolePlayBanned {};
 struct SkillSwapBanned : is RolePlayBanned {};
 
 template <>
-struct AbilityImpl<ABILITY_WONDER_GUARD> : is Breakable, is RandomizerBanned, is OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, is SkillSwapBanned {
-    ON_AFTER_TYPE_EFFECTIVENESS {
+struct AbilityImpl<ABILITY_WONDER_GUARD> : is Breakable, is RandomizerBanned, is OnDefenderAfterTypeEffectiveness, is SkillSwapBanned {
+    ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS {
         if (*mod < UQ_4_12(2.0)) *mod = 0;
     }
 };
@@ -1469,9 +1469,15 @@ struct AbilityImpl<ABILITY_HARVEST> : is OnEndTurn {
 };
 
 template <>
-struct AbilityImpl<ABILITY_TELEPATHY> : is OnAfterTypeEffectiveness<ApplyOnTarget::ATTACKER_OR_TARGET> {
-    ON_AFTER_TYPE_EFFECTIVENESS {
-        if (target == BATTLE_PARTNER(battler) && gBattleMoves[move].power) *mod = 0;
+struct AbilityImpl<ABILITY_TELEPATHY> : is OnDefenderAfterTypeEffectiveness, is OnAttackerAfterTypeEffectiveness {
+    static void immuneIfAlly(int attacker, int target, MoveEnum move, u16* mod) {
+        if (target == BATTLE_PARTNER(attacker) && gBattleMoves[move].power) *mod = 0;
+    }
+    ON_ATTACKER_AFTER_TYPE_EFFECTIVENESS {
+        immuneIfAlly(battler, target, move, mod);
+    }
+    ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS {
+        immuneIfAlly(attacker, battler, move, mod);
     }
 };
 
@@ -2027,8 +2033,8 @@ struct AbilityImpl<ABILITY_WATER_BUBBLE> : is OnOffensiveMultiplier<>, is OnDefe
 };
 
 template <>
-struct AbilityImpl<ABILITY_STEELWORKER> : is Breakable, is OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, is AteAbility<TYPE_STEEL> {
-    ON_AFTER_TYPE_EFFECTIVENESS {
+struct AbilityImpl<ABILITY_STEELWORKER> : is Breakable, is OnDefenderAfterTypeEffectiveness, is AteAbility<TYPE_STEEL> {
+    ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS {
         if (moveType == TYPE_DARK || moveType == TYPE_GHOST) *mod /= 2;
     }
 };
@@ -3171,8 +3177,8 @@ struct AbilityImpl<ABILITY_DRAGONSLAYER> : is TypeSlayer<TYPE_DRAGON> {};
 
 struct StealthRockImmune {};
 template <>
-struct AbilityImpl<ABILITY_MOUNTAINEER> : is OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, is StealthRockImmune {
-    ON_AFTER_TYPE_EFFECTIVENESS {
+struct AbilityImpl<ABILITY_MOUNTAINEER> : is OnDefenderAfterTypeEffectiveness, is StealthRockImmune {
+    ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS {
         if (moveType == TYPE_ROCK) *mod = 0;
     }
 };
@@ -3505,8 +3511,8 @@ struct AbilityImpl<ABILITY_SAGE_POWER> : is OnOffensiveMultiplier<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_BONE_ZONE> : is OnAfterTypeEffectiveness<> {
-    ON_AFTER_TYPE_EFFECTIVENESS {
+struct AbilityImpl<ABILITY_BONE_ZONE> : is OnAttackerAfterTypeEffectiveness {
+    ON_ATTACKER_AFTER_TYPE_EFFECTIVENESS {
         if (*mod >= UQ_4_12(1.0)) return;
         if (*mod == 0) {
             *mod = UQ_4_12(1.0);
@@ -4088,9 +4094,9 @@ struct AbilityImpl<ABILITY_SWEEPING_EDGE> : is OnAccuracy<>, is OnMakeSpread {
 };
 
 template <>
-struct AbilityImpl<ABILITY_GIFTED_MIND> : is OnAccuracy<>, is OnAfterTypeEffectiveness<ApplyOnTarget::TARGET> {
+struct AbilityImpl<ABILITY_GIFTED_MIND> : is OnAccuracy<>, is OnDefenderAfterTypeEffectiveness {
     ON_ACCURACY { CHECK(IS_MOVE_STATUS(move)) return ACCURACY_HITS_IF_POSSIBLE; }
-    ON_AFTER_TYPE_EFFECTIVENESS {
+    ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS {
         if (moveType == TYPE_BUG || moveType == TYPE_GHOST || moveType == TYPE_DARK) *mod = 0;
     }
 };
@@ -5902,8 +5908,8 @@ struct AbilityImpl<ABILITY_FLOURISH> : is OnOffensiveMultiplier<> {
 };
 
 template <>
-struct AbilityImpl<ABILITY_DESERT_SPIRIT> : is AbilityImpl<ABILITY_SAND_STREAM>, is OnAfterTypeEffectiveness<> {
-    ON_AFTER_TYPE_EFFECTIVENESS {
+struct AbilityImpl<ABILITY_DESERT_SPIRIT> : is AbilityImpl<ABILITY_SAND_STREAM>, is OnAttackerAfterTypeEffectiveness {
+    ON_ATTACKER_AFTER_TYPE_EFFECTIVENESS {
         if (*mod == 0 && !IsBattlerGrounded(target) && moveType == TYPE_GROUND && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) {
             *mod = UQ_4_12(1.0);
         }
@@ -5917,8 +5923,8 @@ template <>
 struct AbilityImpl<ABILITY_AERIALIST> : is Merged<ABILITY_LEVITATE, ABILITY_FLOCK> {};
 
 template <>
-struct AbilityImpl<ABILITY_TERA_SHELL> : is Breakable, is OnAfterTypeEffectiveness<ApplyOnTarget::TARGET> {
-    ON_AFTER_TYPE_EFFECTIVENESS {
+struct AbilityImpl<ABILITY_TERA_SHELL> : is Breakable, is OnDefenderAfterTypeEffectiveness {
+    ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS {
         if (*mod >= UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
     }
 };
@@ -7287,7 +7293,7 @@ template <>
 struct AbilityImpl<ABILITY_RELENTLESS> : is AbilityImpl<ABILITY_EXPLOIT_WEAKNESS>, is AbilityImpl<ABILITY_MERCILESS> {};
 
 template <>
-struct AbilityImpl<ABILITY_SOOTHSAYER> : is OnEntry, is OnEndTurn, is OnAfterTypeEffectiveness<ApplyOnTarget::TARGET>, is Persistent {
+struct AbilityImpl<ABILITY_SOOTHSAYER> : is OnEntry, is OnEndTurn, is OnDefenderAfterTypeEffectiveness, is Persistent {
     ON_ENTRY {
         CHECK(!GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
         SetAbilityState(battler, ability, 3);
@@ -7298,7 +7304,7 @@ struct AbilityImpl<ABILITY_SOOTHSAYER> : is OnEntry, is OnEndTurn, is OnAfterTyp
         if (counter) SetAbilityState(battler, ability, counter - 1);
         return FALSE;
     }
-    ON_AFTER_TYPE_EFFECTIVENESS {
+    ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS {
         if (!GetAbilityState(battler, ability)) return;
         if (*mod >= UQ_4_12(1.0)) *mod = UQ_4_12(0.5);
     }
@@ -7339,8 +7345,8 @@ struct AbilityImpl<ABILITY_FLAME_COAT> : is OnEntry, is OnEndTurn {
 };
 
 template <>
-struct AbilityImpl<ABILITY_UNOWN_POWER> : is RandomizerBanned, is AbilityImpl<ABILITY_MYSTIC_POWER>, is OnAfterTypeEffectiveness<> {
-    ON_AFTER_TYPE_EFFECTIVENESS {
+struct AbilityImpl<ABILITY_UNOWN_POWER> : is RandomizerBanned, is AbilityImpl<ABILITY_MYSTIC_POWER>, is OnAttackerAfterTypeEffectiveness {
+    ON_ATTACKER_AFTER_TYPE_EFFECTIVENESS {
         if (*mod < UQ_4_12(2.0) && (move == MOVE_HIDDEN_POWER || move == MOVE_SECRET_POWER)) *mod = UQ_4_12(2.0);
     }
 };
@@ -7607,8 +7613,8 @@ struct AbilityImpl<ABILITY_STRATEGIC_PAUSE> : is AbilityImpl<ABILITY_ANALYTIC>, 
 };
 
 template <>
-struct AbilityImpl<ABILITY_OVERRULE> : is OnAfterTypeEffectiveness<> {
-    ON_AFTER_TYPE_EFFECTIVENESS {
+struct AbilityImpl<ABILITY_OVERRULE> : is OnAttackerAfterTypeEffectiveness {
+    ON_ATTACKER_AFTER_TYPE_EFFECTIVENESS {
         if (gIsCriticalHit && *mod && *mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
     }
 };

@@ -4346,11 +4346,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
             break;
 
         case ABILITYEFFECT_MOVE_END_OTHER:  // Abilities that activate on *another* battler's moveend: Dancer, Soul-Heart, Receiver, Symbiosis
-            u8 target = GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker) ? gBattlerTarget : BATTLE_OPPOSITE(battler);
-            ON_ABILITY(battler,
-                       FALSE,
-                       gAbilities[ability].onCopyMove,
-                       REQUIRE_NOT(gAbilities[ability].onCopyMove(ability, battler, gBattlerAttacker, target, gCurrentMove)))
+            HandleCopyMove(battler, gBattlerAttacker, gBattlerTarget, gCurrentMove);
 
             break;
         case ABILITYEFFECT_IMMUNITY:  // 5
@@ -7797,6 +7793,9 @@ static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u
         modifier == UQ_4_12(0)) {
         modifier = UQ_4_12(1.0);
     }
+
+    AbilityEnum newImmunityAbility = HandleOnAfterTypeEffectiveness(battlerAtk, battlerDef, move, moveType, &modifier, modifier1, modifier2, modifier3);
+    if (!immunityAbility) immunityAbility = newImmunityAbility;
 
     for (int i = 0; i < gBattlersCount; i++) {
         int battler = (battlerDef + i) % gBattlersCount;

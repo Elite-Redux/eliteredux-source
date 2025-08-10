@@ -302,81 +302,62 @@ std::tuple<AbilityEnum, Result, u8> TestAllBattlers(u8 battler, ForSelector sele
 }
 
 template <typename T, typename Result, typename Func, typename ForSelector>
+inline std::tuple<AbilityEnum, Result, u8> TestAllBattlersWithAttackerInternal(u8 battler, ApplyOnTarget flags, ForSelector selector, Func transform, bool checkMoldBreaker) {
+    for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
+        auto ability = gBattleMons[battler].abilities[i];
+        const auto ptr = dispatchTo<T>(ability);
+        FILTER(ptr)
+        FILTER(CheckApplyOnWithTarget(selector(ptr), flags))
+        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
+        Result result = transform(ptr, ability, battler);
+        if (result) return std::tuple(ability, result, battler);
+    }
+    return std::tuple(ABILITY_NONE, Result(), 0);
+}
+
+template <typename T, typename Result, typename Func, typename ForSelector>
 std::tuple<AbilityEnum, Result, u8> TestAllBattlersWithAttacker(
-    u8 attacker, u8 target, bool allowDeadAttacker, ForSelector selector, Func transform, bool checkMoldBreaker = IsBreakable<T>()) {
+    u8 attacker, u8 target, ForSelector selector, Func transform, bool allowDeadAttacker = true, bool checkMoldBreaker = IsBreakable<T>()) {
     if (allowDeadAttacker || IsBattlerAlive(attacker)) {
-        for (int i = ARRAY_COUNT(gBattleMons[attacker].abilities); i--;) {
-            auto ability = gBattleMons[attacker].abilities[i];
-            const auto ptr = dispatchTo<T>(ability);
-            FILTER(ptr)
-            FILTER(CheckApplyOnWithTarget(selector(ptr), attacker == target ? ApplyOnTarget::ATTACKER_OR_TARGET : ApplyOnTarget::SELF))
-            FILTER_NOT(IsSuppressed(attacker, ability, checkMoldBreaker))
-            Result result = transform(ptr, ability, attacker);
-            if (result) return std::tuple(ability, result, attacker);
-        }
+        auto flags = attacker == target ? ApplyOnTarget::ATTACKER_OR_TARGET : ApplyOnTarget::SELF;
+        auto ret = TestAllBattlersWithAttackerInternal<T, Result>(attacker, flags, selector, transform, checkMoldBreaker);
+        if (std::get<1>(ret)) return ret;
     }
     if (attacker != target) {
         u8 battler = target;
         if (IsBattlerAlive(battler)) {
-            for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
-                auto ability = gBattleMons[battler].abilities[i];
-                const auto ptr = dispatchTo<T>(ability);
-                FILTER(ptr)
-                FILTER(CheckApplyOnWithTarget(selector(ptr),
-                                              ApplyOnTarget::TARGET | (BATTLE_PARTNER(attacker) == battler ? ApplyOnTarget::ALLY : ApplyOnTarget::FOE)))
-                FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
-                Result result = transform(ptr, ability, battler);
-                if (result) return std::tuple(ability, result, battler);
-            }
+            auto flags = ApplyOnTarget::TARGET | (BATTLE_PARTNER(attacker) == battler ? ApplyOnTarget::ALLY : ApplyOnTarget::FOE);
+            auto ret = TestAllBattlersWithAttackerInternal<T, Result>(battler, flags, selector, transform, checkMoldBreaker);
+            if (std::get<1>(ret)) return ret;
         }
     }
     u8 ally = BATTLE_PARTNER(attacker);
     if (ally != attacker && ally != target) {
         u8 battler = ally;
         if (IsBattlerAlive(battler)) {
-            for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
-                auto ability = gBattleMons[battler].abilities[i];
-                const auto ptr = dispatchTo<T>(ability);
-                FILTER(ptr)
-                FILTER(CheckApplyOnWithTarget(selector(ptr), battler == target ? ApplyOnTarget::ALLY | ApplyOnTarget::ALLY_IS_TARGET : ApplyOnTarget::ALLY))
-                FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
-                Result result = transform(ptr, ability, battler);
-                if (result) return std::tuple(ability, result, battler);
-            }
+            auto flags = battler == target ? ApplyOnTarget::ALLY | ApplyOnTarget::ALLY_IS_TARGET : ApplyOnTarget::ALLY;
+            auto ret = TestAllBattlersWithAttackerInternal<T, Result>(battler, flags, selector, transform, checkMoldBreaker);
+            if (std::get<1>(ret)) return ret;
         }
     }
     u8 opponent = BATTLE_OPPOSITE(attacker);
     if (opponent != attacker && opponent != target) {
         u8 battler = opponent;
         if (IsBattlerAlive(battler)) {
-            for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
-                auto ability = gBattleMons[battler].abilities[i];
-                const auto ptr = dispatchTo<T>(ability);
-                FILTER(ptr)
-                FILTER(CheckApplyOnWithTarget(selector(ptr),
-                                              GetBattlerSide(opponent) == GetBattlerSide(target) ? ApplyOnTarget::FOE | ApplyOnTarget::ALLY_IS_TARGET
-                                                                                                 : ApplyOnTarget::FOE | ApplyOnTarget::FOE_IS_TARGET))
-                FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
-                Result result = transform(ptr, ability, battler);
-                if (result) return std::tuple(ability, result, battler);
-            }
+            auto flags = GetBattlerSide(opponent) == GetBattlerSide(target) ? ApplyOnTarget::FOE | ApplyOnTarget::ALLY_IS_TARGET
+                                                                            : ApplyOnTarget::FOE | ApplyOnTarget::FOE_IS_TARGET;
+            auto ret = TestAllBattlersWithAttackerInternal<T, Result>(battler, flags, selector, transform, checkMoldBreaker);
+            if (std::get<1>(ret)) return ret;
         }
     }
     opponent = BATTLE_PARTNER(opponent);
     if (opponent != attacker && opponent != target) {
         u8 battler = opponent;
         if (IsBattlerAlive(battler)) {
-            for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
-                auto ability = gBattleMons[battler].abilities[i];
-                const auto ptr = dispatchTo<T>(ability);
-                FILTER(ptr)
-                FILTER(CheckApplyOnWithTarget(selector(ptr),
-                                              GetBattlerSide(opponent) == GetBattlerSide(target) ? ApplyOnTarget::FOE | ApplyOnTarget::ALLY_IS_TARGET
-                                                                                                 : ApplyOnTarget::FOE | ApplyOnTarget::FOE_IS_TARGET))
-                FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
-                Result result = transform(ptr, ability, battler);
-                if (result) return std::tuple(ability, result, battler);
-            }
+            auto flags = GetBattlerSide(opponent) == GetBattlerSide(target) ? ApplyOnTarget::FOE | ApplyOnTarget::ALLY_IS_TARGET
+                                                                            : ApplyOnTarget::FOE | ApplyOnTarget::FOE_IS_TARGET;
+            auto ret = TestAllBattlersWithAttackerInternal<T, Result>(battler, flags, selector, transform, checkMoldBreaker);
+            if (std::get<1>(ret)) return ret;
         }
     }
     return std::tuple(ABILITY_NONE, Result(), 0);
@@ -525,7 +506,6 @@ void HandleOnBattlerFaints(int attacker, int fainted, MoveEnum move, Type moveTy
     TestAllBattlersWithAttacker<OnBattlerFaintsBase, bool>(
         attacker,
         fainted,
-        false,
         [](const OnBattlerFaintsBase* impl) -> ApplyOnTarget { return impl->onBattlerFaintsFor(); },
         [&](const OnBattlerFaintsBase* impl, AbilityEnum ability, auto abilityBattler) -> bool {
             int result = impl->onBattlerFaints(ability, abilityBattler, attacker, fainted, move, moveType);
@@ -534,7 +514,8 @@ void HandleOnBattlerFaints(int attacker, int fainted, MoveEnum move, Type moveTy
                 BattleScriptCall(BattleScript_AbilityPopUpStack);
             }
             return false;
-        });
+        },
+        /* allowDeadAttacker= */ false);
 }
 
 MultihitType HandleParentalBond(int battler, int hasFortKnox, MoveEnum move, Type moveType) {
@@ -576,7 +557,6 @@ AccuracyPriority CalculateAccuracyFromAbilities(int attacker, int target, MoveEn
     TestAllBattlersWithAttacker<OnAccuracyBase, bool>(
         attacker,
         target,
-        true,
         [](const OnAccuracyBase* impl) -> auto { return impl->onAccuracyFor(); },
         [&](const OnAccuracyBase* impl, auto ability, auto&) -> bool {
             AccuracyPriority newResult = impl->onAccuracy(ability, attacker, target, move, moveType, accuracy);
@@ -601,7 +581,6 @@ int HandleChooseDefensiveStat(int battlerAtk, int battlerDef, MoveEnum move, int
     auto [_, result, __] = TestAllBattlersWithAttacker<OnChooseDefensiveStatBase, int>(
         battlerAtk,
         battlerDef,
-        true,
         [](const OnChooseDefensiveStatBase* impl) -> auto { return impl->onChooseDefensiveStatFor(); },
         [&](const OnChooseDefensiveStatBase* impl, auto&, auto&) -> int {
             return impl->onChooseDefensiveStat(battlerAtk, battlerDef, move, noPositiveStatStages, isUnaware);
@@ -623,7 +602,6 @@ int CalculateCritModifier(int battlerAtk, int battlerDef, MoveEnum move, u16 typ
     auto [_, result, __] = TestAllBattlersWithAttacker<OnCritBase, int>(
         battlerAtk,
         battlerDef,
-        true,
         [](const OnCritBase* impl) -> auto { return impl->onCritFor(); },
         [&](const OnCritBase* impl, auto&, u8 battler) -> int {
             int newMod = impl->onCrit(battler, battlerDef, move, typeEffectiveness);
@@ -636,4 +614,28 @@ int CalculateCritModifier(int battlerAtk, int battlerDef, MoveEnum move, u16 typ
 int TryChangeTypeEffectiveness(int battler, Type defType, MoveEnum move, Type moveType, u16* modifier) {
     return HasAbilityWithTagMatchingCondition<OnTypeEffectiveness>(
         battler, [&](const OnTypeEffectiveness* impl, auto&) -> auto { return impl->onTypeEffectiveness(defType, move, moveType, modifier); });
+}
+
+int HandleCopyMove(int battler, int battlerAtk, int battlerDef, MoveEnum move) {
+    int target = GetBattlerSide(battler) == GetBattlerSide(battlerDef) ? BATTLE_OPPOSITE(battler) : battlerDef;
+    return HasAbilityWithTagMatchingCondition<OnCopyMove>(
+        battler, [&](const OnCopyMove* impl, auto ability) -> auto { return impl->onCopyMove(ability, battler, battlerAtk, target, move); });
+}
+
+AbilityEnum HandleOnAfterTypeEffectiveness(
+    int battlerAtk, int battlerDef, MoveEnum move, Type moveType, u16* modifier, u16 modifier1, u16 modifier2, u16 modifier3) {
+    AbilityEnum immunityAbility = ABILITY_NONE;
+    HasAbilityWithTagMatchingCondition<OnDefenderAfterTypeEffectiveness>(battlerDef, [&](const OnDefenderAfterTypeEffectiveness* impl, auto ability) -> auto {
+        int wasImmune = !*modifier;
+        impl->onDefenderAfterTypeEffectiveness(battlerDef, ability, battlerAtk, move, moveType, modifier);
+        if (!wasImmune && !*modifier) immunityAbility = ability;
+        return false;
+    });
+    HasAbilityWithTagMatchingCondition<OnAttackerAfterTypeEffectiveness>(battlerDef, [&](const OnAttackerAfterTypeEffectiveness* impl, auto ability) -> auto {
+        int wasImmune = !*modifier;
+        impl->onAttackerAfterTypeEffectiveness(battlerAtk, battlerDef, move, moveType, modifier, modifier1, modifier2, modifier3);
+        if (!wasImmune && !*modifier) immunityAbility = ability;
+        return false;
+    });
+    return immunityAbility;
 }

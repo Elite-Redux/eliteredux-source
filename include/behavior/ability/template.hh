@@ -224,10 +224,19 @@ struct OnCopyMove {
     ON_COPY_MOVE = 0;
 };
 
-#define ON_AFTER_TYPE_EFFECTIVENESS \
-    virtual void onAfterTypeEffectiveness(int battler, AbilityEnum ability, int target, MoveEnum move, Type moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3)
-#define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
-APPLIES_ON(AfterTypeEffectiveness, ApplyOnTarget, ON_AFTER_TYPE_EFFECTIVENESS)
+struct OnAttackerAfterTypeEffectiveness {
+#define ON_ATTACKER_AFTER_TYPE_EFFECTIVENESS \
+    virtual void onAttackerAfterTypeEffectiveness(int battler, int target, MoveEnum move, Type moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3) const
+#define DELEGATE_ATTACKER_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
+ON_ATTACKER_AFTER_TYPE_EFFECTIVENESS = 0;
+};
+
+struct OnDefenderAfterTypeEffectiveness {
+#define ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS \
+    virtual void onDefenderAfterTypeEffectiveness(int battler, AbilityEnum ability, int attacker, MoveEnum move, Type moveType, u16 *mod) const
+#define DELEGATE_DEFENDER_AFTER_TYPE_EFFECTIVENESS battler, ability, attacker, move, moveType, mod
+ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS = 0;
+};
 
 #define ON_MODIFY_EFFECT_CHANCE virtual void onModifyEffectChance(int battler, MoveEnum move, MoveEffectEnum moveEffect, int *effectChance) const
 #define DELEGATE_MODIFY_EFFECT_CHANCE battler, move, moveEffect, effectChance
