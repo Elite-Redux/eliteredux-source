@@ -1509,6 +1509,9 @@ u32 GetBoxMonDataInternal(struct BoxPokemon *boxMon, s32 field, u8 *data) {
     u32 retVal = 0;
 
     switch (field) {
+        case MON_DATA_IS_DISABLED:
+            retVal = boxMon->isDisabled;
+            break;
         case MON_DATA_PERSONALITY:
             retVal = boxMon->personality;
             break;
@@ -1849,6 +1852,9 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg) {
     const u8 *data = dataArg;
 
     switch (field) {
+        case MON_DATA_IS_DISABLED:
+            SET8(boxMon->isDisabled);
+            break;
         case MON_DATA_PERSONALITY:
             SET32(boxMon->personality);
             break;
@@ -2065,18 +2071,28 @@ void CopyMon(void *dest, void *src, size_t size) { memcpy(dest, src, size); }
 
 u8 GiveMonToPlayer(struct Pokemon *mon) {
     s32 i;
+    u32 caughtLocation = GetCurrentRegionMapSectionId();
+    bool8 nuzlockeRulesEnabled = AreNuzlockeRulesEnabled();
+    bool8 hasAlreadyCaughtInArea = GetNuzlockeCaughtFlag(caughtLocation) && nuzlockeRulesEnabled;
 
-    SetMonData(mon, MON_DATA_OT_NAME, gSaveBlock2Ptr->playerName);
-    SetMonData(mon, MON_DATA_OT_GENDER, &gSaveBlock2Ptr->playerGender);
-    SetMonData(mon, MON_DATA_OT_ID, gSaveBlock2Ptr->playerTrainerId);
+    SetMonData(mon, MON_DATA_OT_NAME,     gSaveBlock2Ptr->playerName);
+    SetMonData(mon, MON_DATA_OT_GENDER,   &gSaveBlock2Ptr->playerGender);
+    SetMonData(mon, MON_DATA_OT_ID,       gSaveBlock2Ptr->playerTrainerId);
+    SetMonData(mon, MON_DATA_IS_DISABLED, &hasAlreadyCaughtInArea);
+
+    if(nuzlockeRulesEnabled)
+        SetNuzlockeCaughtFlag(caughtLocation);
 
     for (i = 0; i < PARTY_SIZE; i++) {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) == SPECIES_NONE) break;
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) == SPECIES_NONE)
+            break;
     }
 
-    if (!UsingBattlePyramidBag()) AddBagItem(mon->box.heldItem, 1);
+    if (!UsingBattlePyramidBag())
+        AddBagItem(mon->box.heldItem, 1);
 
-    if (i >= PARTY_SIZE) return SendMonToPC(mon);
+    if (i >= PARTY_SIZE || hasAlreadyCaughtInArea)
+        return SendMonToPC(mon);
 
     CopyMon(&gPlayerParty[i], mon, sizeof(*mon));
     gPlayerPartyCount = i + 1;
@@ -6380,4 +6396,32 @@ u16 GetHeldItemIfNotDuplicate(u8 partyId){
     }
     
     return heldItem;
+}
+
+//Nuzlocke Stuff
+void SetNuzlockeCaughtFlag(u8 locationIndex)
+{
+    u8 byteIndex = locationIndex / 8;
+    u8 bitIndex = locationIndex % 8;
+    gSaveBlock2Ptr->hasCaughtMonOnLocation[byteIndex] |= (1 << bitIndex);
+}
+
+void ClearNuzlockeCaughtFlag(u8 locationIndex)
+{
+    u8 byteIndex = locationIndex / 8;
+    u8 bitIndex = locationIndex % 8;
+    gSaveBlock2Ptr->hasCaughtMonOnLocation[byteIndex] &= ~(1 << bitIndex);
+}
+
+bool8 GetNuzlockeCaughtFlag(u8 locationIndex)
+{
+    u8 byteIndex = locationIndex / 8;
+    u8 bitIndex = locationIndex % 8;
+    return (gSaveBlock2Ptr->hasCaughtMonOnLocation[byteIndex] & (1 << bitIndex)) != 0;
+}
+
+bool8 AreNuzlockeRulesEnabled(void){
+    bool8 nuzlockeRulesEnabled = gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL;
+
+    return nuzlockeRulesEnabled;
 }
