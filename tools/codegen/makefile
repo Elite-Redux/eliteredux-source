@@ -17,7 +17,7 @@ endif
 
 protoc:
 	if [ ! -f protoc.zip ]; then wget -O protoc.zip "https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-$(TARGET)-x86_64.zip" -q && exit; fi
-	@unzip -p protoc.zip bin/protoc > protoc && exit
+	@unzip -p protoc.zip bin/protoc > protoc && chmod +x protoc && exit
 
 protobuf-java.jar:
 	wget -O protobuf-java.jar https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/4.29.2/protobuf-java-4.29.2.jar -q && exit
