@@ -52,7 +52,7 @@
 #include "tmhm_struct.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
 
 enum { PAGE_MAIN, PAGE_INFO, PAGE_SEARCH, PAGE_SEARCH_RESULTS, PAGE_UNK, PAGE_AREA, PAGE_CRY, PAGE_SIZE };
 
@@ -5849,13 +5849,13 @@ static void PrintStatsScreen_Left(u8 taskId) {
     if (gTasks[taskId].data[5] == 0) {
         // Abilitie(s)
         ability0 = gBaseStats[species].abilities[sPokedexView->abilitynum];
-        PrintInfoScreenTextSmallWhite(gAbilities[ability0].name, abilities_x, abilities_y);
-        PrintInfoScreenTextSmall(gAbilities[ability0].description, abilities_x, abilities_y + 14);
+        PrintInfoScreenTextSmallWhite(gAbilityText[ability0].name, abilities_x, abilities_y);
+        PrintInfoScreenTextSmall(gAbilityText[ability0].description, abilities_x, abilities_y + 14);
     } else {
         // Innates
         ability0 = gBaseStats[species].innates[sPokedexView->innatenum];
-        PrintInfoScreenTextSmallWhite(gAbilities[ability0].name, abilities_x, abilities_y);
-        PrintInfoScreenTextSmall(gAbilities[ability0].description, abilities_x, abilities_y + 14);
+        PrintInfoScreenTextSmallWhite(gAbilityText[ability0].name, abilities_x, abilities_y);
+        PrintInfoScreenTextSmall(gAbilityText[ability0].description, abilities_x, abilities_y + 14);
     }
 }
 static void Task_SwitchScreensFromStatsScreen(u8 taskId) {

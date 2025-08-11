@@ -48,7 +48,7 @@
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
 #include "trig.h"
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
 
 //==========DEFINES==========//
 enum {
@@ -1586,11 +1586,11 @@ static void PrintAbilityTab() {
                                  0,
                                  sMenuWindowFontColors[FONT_WHITE],
                                  0xFF,
-                                 gAbilities[ability].name);
+                                 gAbilityText[ability].name);
     // Description ---------------------------------------------------------------------------------------------------
     y++;
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[ability].description);
+        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilityText[ability].description);
 
     // Innate 1
     y = y + SPACE_BETWEEN_ABILITIES;
@@ -1606,11 +1606,11 @@ static void PrintAbilityTab() {
                                  0,
                                  sMenuWindowFontColors[FONT_WHITE],
                                  0xFF,
-                                 gAbilities[innate1].name);
+                                 gAbilityText[innate1].name);
     // Description ---------------------------------------------------------------------------------------------------
     y++;
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[innate1].description);
+        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilityText[innate1].description);
 
     // Innate 2
     y = y + SPACE_BETWEEN_ABILITIES;
@@ -1626,11 +1626,11 @@ static void PrintAbilityTab() {
                                  0,
                                  sMenuWindowFontColors[FONT_WHITE],
                                  0xFF,
-                                 gAbilities[innate2].name);
+                                 gAbilityText[innate2].name);
     // Description ---------------------------------------------------------------------------------------------------
     y++;
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[innate2].description);
+        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilityText[innate2].description);
 
     // Innate 3
     y = y + SPACE_BETWEEN_ABILITIES;
@@ -1646,11 +1646,11 @@ static void PrintAbilityTab() {
                                  0,
                                  sMenuWindowFontColors[FONT_WHITE],
                                  0xFF,
-                                 gAbilities[innate3].name);
+                                 gAbilityText[innate3].name);
     // Description ---------------------------------------------------------------------------------------------------
     y++;
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[innate3].description);
+        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilityText[innate3].description);
 
     PutWindowTilemap(windowId);
     CopyWindowToVram(windowId, 3);
@@ -5400,22 +5400,22 @@ static void PrintToWindow(u8 windowId, u8 colorIdx) {
                                  0,
                                  sMenuWindowFontColors[colorIdx],
                                  0xFF,
-                                 gAbilities[gBattleMons[sMenuDataPtr->battlerId].abilities[0]].name);
+                                 gAbilityText[gBattleMons[sMenuDataPtr->battlerId].abilities[0]].name);
     y++;
     // Innate 1
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, sText_Innate);
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[innate1].name);
+        windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilityText[innate1].name);
     y++;
     // Innate 2
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, sText_Innate);
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[innate2].name);
+        windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilityText[innate2].name);
     y++;
     // Innate 3
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, sText_Innate);
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[innate3].name);
+        windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilityText[innate3].name);
 
     // Moves
     y = y + 2;

@@ -1,6 +1,6 @@
 #include "battle_ai_util.h"
 
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
 #include "battle.h"
 #include "battle_ai_main.h"
 #include "battle_ai_switch_items.h"
@@ -1143,8 +1143,7 @@ bool32 IsHazardMoveEffect(u16 moveEffect) {
 bool32 IsMoveRedirectionPrevented(u16 move, u16 battler) {
     if (AI_THINKING_STRUCT->aiFlags & AI_FLAG_NEGATE_UNAWARE) return FALSE;
 
-    if (move == MOVE_SKY_DROP || move == MOVE_SNIPE_SHOT || BattlerHasAbility(battler, ABILITY_PROPELLER_TAIL, FALSE) ||
-        BattlerHasAbility(battler, ABILITY_STALWART, FALSE))
+    if (move == MOVE_SKY_DROP || move == MOVE_SNIPE_SHOT || IgnoresRedirection(battler))
         return TRUE;
     return FALSE;
 }

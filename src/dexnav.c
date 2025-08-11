@@ -64,7 +64,7 @@
 #include "constants/maps.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
 
 #define GLOBAL_DEXNAV_SEARCH_LEVEL 0
 #define HIDDEN_WILD_COUNT 3
@@ -513,7 +513,7 @@ static void AddSearchWindowText(SpeciesEnum species, u8 proximity, u8 searchLeve
 
         if (searchLevel > 2) {
             // ability name
-            StringCopy(gStringVar1, gAbilities[GetAbilityBySpecies(species, sDexNavSearchDataPtr->abilityNum)].name);
+            StringCopy(gStringVar1, gAbilityText[GetAbilityBySpecies(species, sDexNavSearchDataPtr->abilityNum)].name);
             AddTextPrinterParameterized3(windowId, 0, WINDOW_COL_1 + 16, 12, sSearchFontColor, TEXT_SKIP_DRAW, gStringVar1);
 
             // item name
@@ -2188,7 +2188,7 @@ static void PrintCurrentSpeciesInfo(void) {
     for (i = 0; i < NUM_ABILITY_SLOTS; i++) {
         if (gBaseStats[species].innates[i] == ABILITY_NONE) break;
 
-        StringCopy(gStringVar1, gAbilities[gBaseStats[species].innates[i]].name);
+        StringCopy(gStringVar1, gAbilityText[gBaseStats[species].innates[i]].name);
         offset = GetStringCenterAlignXOffset(font, gStringVar1, 68);
         AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8) - 4 + offset, (y * 8) - 4, sFontColor_Black, 0, gStringVar1);
         y++;

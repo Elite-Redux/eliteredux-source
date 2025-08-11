@@ -35,7 +35,7 @@
 #include "mgba_printf/mini_printf.h"
 #include "battle_events.h"
 #include "generated/constants/abilities.h"
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
 
 enum {  // Corresponds to gHealthboxElementsGfxTable (and the tables after it) in graphics.c
         // These are indexes into the tables, which are filled with 8x8 square pixel data.
@@ -2592,7 +2592,7 @@ static void PrintBattlerOnAbilityPopUp(u8 battlerId, u8 spriteId1, u8 spriteId2)
 }
 
 static void PrintAbilityOnAbilityPopUp(AbilityEnum ability, u8 spriteId1, u8 spriteId2) {
-    PrintOnAbilityPopUp(gAbilities[ability].name,
+    PrintOnAbilityPopUp(gAbilityText[ability].name,
                         (void *)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32) + 256,
                         (void *)(OBJ_VRAM0) + (gSprites[spriteId2].oam.tileNum * 32) + 256,
                         5,

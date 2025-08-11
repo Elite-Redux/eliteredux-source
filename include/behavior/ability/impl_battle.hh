@@ -115,6 +115,13 @@ AbilityEnum HandleOnMoldBreaker(int battler, MoveEnum move);
 void DisableReviveAbilities(int battler);
 int TryUseRevive(int battler);
 int TryActivateRevive(int battler, AbilityEnum* ability);
+AbilityEnum HasFortKnox(int battler);
+AbilityEnum RedirectsType(int battler, Type type);
+void SetBattlerAffectedFlags(int attacker, int target, MoveEffectEnum effect);
+void HandleOnExit(int battler);
+int RemainingNoDamageHits(int battler);
+AbilityEnum GetNoDamageAbility(int battler);
+AbilityEnum AllowsTerrainIfAirborne(int battler, TerrainType terrain);
 
 #ifdef __cplusplus
 }

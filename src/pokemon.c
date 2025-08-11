@@ -62,7 +62,7 @@
 #include "constants/maps.h"
 #include "script_pokemon_util.h"
 #include "tmhm_struct.h"
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
 #include "day_night.h"
 #include "constants/day_night.h"
 

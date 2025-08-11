@@ -17,49 +17,6 @@ ENUM_OR(ApplyOnTarget)
 ENUM_NOT(ApplyOn)
 ENUM_NOT(ApplyOnTarget)
 
-template <typename T>
-consteval bool IsBreakable() {
-    return std::is_assignable_v<Breakable, T> && !std::is_assignable_v<OverrideBreakable, T>;
-}
-
-template <AbilityEnum Id>
-consteval bool IsBreakable() {
-    return IsBreakable<AbilityImpl<Id>>();
-}
-
-template <typename T, typename Func>
-AbilityEnum HasAbilityWithTagMatchingCondition(int battler, Func predicate, bool checkMoldBreaker = IsBreakable<T>()) {
-    for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
-        AbilityEnum ability = gBattleMons[battler].abilities[i];
-        const T* ptr = dispatchTo<T>(ability);
-        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
-        FILTER(ptr && predicate(ptr, ability))
-        return ability;
-    }
-    return ABILITY_NONE;
-}
-
-template <typename T>
-AbilityEnum HasAbilityWithTag(int battler, bool checkMoldBreaker = IsBreakable<T>()) {
-    for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
-        auto ability = gBattleMons[battler].abilities[i];
-        FILTER(dispatchTo<T>(ability))
-        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
-        return ability;
-    }
-    return ABILITY_NONE;
-}
-
-template <AbilityEnum Id>
-AbilityEnum HasAbilityOrClone(int battler, bool checkMoldBreaker = IsBreakable<Id>()) {
-    return HasAbilityWithTag<AbilityImpl<Id>>(battler, checkMoldBreaker);
-}
-
-template <AbilityEnum Id, typename Func>
-AbilityEnum HasAbilityOrCloneMatchingCondition(int battler, Func predicate, bool checkMoldBreaker = IsBreakable<Id>()) {
-    return HasAbilityWithTagMatchingCondition<AbilityImpl<Id>>(battler, predicate, checkMoldBreaker);
-}
-
 inline bool CheckApplyOn(ApplyOn actual, ApplyOn expected) {
     if (expected == ApplyOn::SELF) {
         return (actual & ApplyOn::IGNORE_SELF) == ApplyOn::SELF;
@@ -765,4 +722,57 @@ int TryActivateRevive(int battler, AbilityEnum* ability) {
         return result;
     }
     return FALSE;
+}
+
+AbilityEnum HasFortKnox(int battler) { return HasAbilityOrClone<ABILITY_FORT_KNOX>(battler); }
+AbilityEnum RedirectsType(int battler, Type type) {
+    return HasAbilityWithTagMatchingCondition<RedirectsBase>(battler, [&](const RedirectsBase* impl, auto&) -> auto { return impl->redirectType() == type; });
+}
+void SetBattlerAffectedFlags(int attacker, int target, MoveEffectEnum effect) {
+    if (effect == MOVE_EFFECT_TOXIC) effect = MOVE_EFFECT_POISON;
+    if (attacker == target) return;
+    for (int i = ARRAY_COUNT(gBattleMons[attacker].abilities); i--;) {
+        auto ability = gBattleMons[attacker].abilities[i];
+        auto ptr = dispatchTo<SetStateOnEffectBase>(ability);
+        FILTER(ptr)
+        FILTER(ptr->setStateOnEffect() == effect)
+        int flag = GetAbilityState(attacker, ability);
+        SetAbilityState(attacker, ability, flag | (1 << target));
+    }
+}
+
+void HandleOnExit(int battler) {
+    HasAbilityWithTagMatchingCondition<OnExit>(battler, [&](const OnExit* impl, auto ability) -> auto {
+        if (impl->onExit(ability, battler)) {
+            gBattlerAbility = battler;
+            gBattleScripting.abilityPopupOverwrite = ability;
+            BattleScriptCall(BattleScript_AbilityPopUp);
+        }
+        return false;
+    });
+}
+
+int RemainingNoDamageHits(int battler) {
+    int count = 0;
+    for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
+        auto ptr = dispatchTo<NoDamageHitsBase>(gBattleMons[battler].abilities[i]);
+        FILTER(ptr)
+        count += ptr->noDamageHits() - GetSingleUseAbilityCountByIndex(battler, i);
+    }
+    return count;
+}
+
+AbilityEnum GetNoDamageAbility(int battler) {
+    for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
+        AbilityEnum ability = gBattleMons[battler].abilities[i];
+        auto ptr = dispatchTo<NoDamageHitsBase>(ability);
+        FILTER(ptr)
+        if (ptr->noDamageHits() > GetSingleUseAbilityCountByIndex(battler, i)) return ability;
+    }
+    return ABILITY_NONE;
+}
+
+AbilityEnum AllowsTerrainIfAirborne(int battler, TerrainType terrain) {
+    return HasAbilityWithTagMatchingCondition<AllowTerrainIfAirborneBase>(
+        battler, [&](const AllowTerrainIfAirborneBase* impl, auto&) -> auto { return impl->allowTerrainIfAirborne() == terrain; });
 }

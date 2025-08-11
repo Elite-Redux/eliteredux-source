@@ -82,7 +82,7 @@
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
 #include "tmhm_struct.h"
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
 
 #define PARTY_PAL_SELECTED (1 << 0)
 #define PARTY_PAL_FAINTED (1 << 1)
@@ -4336,11 +4336,11 @@ void Task_AbilityCapsule(u8 taskId) {
 
             if (item == ITEM_ABILITY_CAPSULE) {
                 tAbilityNum ^= 1;
-                StringCopy(gStringVar2, gAbilities[GetAbilityBySpecies(tSpecies, tAbilityNum)].name);
+                StringCopy(gStringVar2, gAbilityText[GetAbilityBySpecies(tSpecies, tAbilityNum)].name);
                 StringExpandPlaceholders(gStringVar4, askText);
             } else {
                 tAbilityNum = (tAbilityNum == 2) ? 0 : 2;
-                StringCopy(gStringVar2, gAbilities[GetAbilityBySpecies(tSpecies, tAbilityNum)].name);
+                StringCopy(gStringVar2, gAbilityText[GetAbilityBySpecies(tSpecies, tAbilityNum)].name);
                 StringExpandPlaceholders(gStringVar4, askText);
             }
 

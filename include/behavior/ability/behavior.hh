@@ -19,6 +19,19 @@ ENUM_OR(NonStackingState)
 template <typename As>
 const As *dispatchTo(AbilityEnum id);
 
+template <typename T>
+consteval bool IsBreakable() {
+    return std::is_assignable_v<Breakable, T> && !std::is_assignable_v<OverrideBreakable, T>;
+}
+
+template <AbilityEnum Id>
+consteval bool IsBreakable() {
+    return IsBreakable<AbilityImpl<Id>>();
+}
+
+template <typename T>
+AbilityEnum HasAbilityWithTag(int battler, bool checkMoldBreaker = IsBreakable<T>());
+
 #define NO_ANNOUNCE 2
 
 struct __EnumHack {
@@ -52,31 +65,6 @@ static void InsertCorrectEndType(AbilityCallType type) {
             return;
     }
 }
-
-// int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag) {
-//     switch (flag) {
-//         case APPLY_ON_ATTACKER_OR_TARGET:
-//             return sourceBattler == attacker || sourceBattler == target;
-
-//         case APPLY_ON_ATTACKER:
-//             return sourceBattler == attacker;
-
-//         case APPLY_ON_TARGET:
-//             return sourceBattler == target;
-//     }
-
-//     return IsApplyOnFlagAppropriate(contextBattler, sourceBattler, (AbilityApplyOn)flag);
-// }
-
-// int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag) {
-//     if (flag == APPLY_ON_SELF) return contextBattler == sourceBattler;
-//     if (contextBattler == sourceBattler) return !(flag & APPLY_IGNORE_SELF);
-//     if (GetBattlerSide(contextBattler) == GetBattlerSide(sourceBattler))
-//         return flag & APPLY_ON_ALLY;
-//     else
-//         return flag & APPLY_ON_FOE;
-//     return FALSE;
-// }
 
 typedef enum {
     FOLLOWUP_STANDARD,
@@ -173,7 +161,8 @@ struct RuinEffect : is OnStat<ApplyOn::OTHER> {
     ON_STAT {
         if (statId != Stat) return;
         if (*flags & Stat) return;
-        ON_ABILITY(battler, FALSE, dispatchTo<RuinEffect<Stat>>(ability), return) *stat *= .75;
+        if (HasAbilityWithTag<RuinEffect<Stat>>(battler)) return;
+        *stat *= .75;
         *flags = *flags | static_cast<NonStackingState>(1 << Stat);
     }
 };
@@ -414,7 +403,8 @@ struct AbilityImpl<ABILITY_INTIMIDATE> : is OnEntry {
 
 template <>
 struct AbilityImpl<ABILITY_SHADOW_TAG> : is OnTrap {
-    ON_TRAP { ON_ABILITY(switchingBattler, FALSE, dispatchTo<AbilityImpl<ABILITY_SHADOW_TAG>>(ability), return FALSE) return TRUE; }
+    ON_TRAP { 
+        return HasAbilityWithTag<AbilityImpl<ABILITY_SHADOW_TAG>>(switchingBattler) == ABILITY_NONE; }
 };
 
 template <>
@@ -1365,9 +1355,7 @@ struct AbilityImpl<ABILITY_HEALER> : is OnEndTurn {
 
 template <>
 struct AbilityImpl<ABILITY_FRIEND_GUARD> : is OnDefensiveMultiplier<ApplyOn::ALLY_ONLY> {
-    ON_DEFENSIVE_MULTIPLIER {
-        MUL(.5);
-    }
+    ON_DEFENSIVE_MULTIPLIER { MUL(.5); }
 };
 
 template <>
@@ -1443,15 +1431,11 @@ struct AbilityImpl<ABILITY_HARVEST> : is OnEndTurn {
 
 template <>
 struct AbilityImpl<ABILITY_TELEPATHY> : is OnDefenderAfterTypeEffectiveness, is OnAttackerAfterTypeEffectiveness {
-    static void immuneIfAlly(int attacker, int target, MoveEnum move, u16* mod) {
+    static void immuneIfAlly(int attacker, int target, MoveEnum move, u16 *mod) {
         if (target == BATTLE_PARTNER(attacker) && gBattleMoves[move].power) *mod = 0;
     }
-    ON_ATTACKER_AFTER_TYPE_EFFECTIVENESS {
-        immuneIfAlly(battler, target, move, mod);
-    }
-    ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS {
-        immuneIfAlly(attacker, battler, move, mod);
-    }
+    ON_ATTACKER_AFTER_TYPE_EFFECTIVENESS { immuneIfAlly(battler, target, move, mod); }
+    ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS { immuneIfAlly(attacker, battler, move, mod); }
 };
 
 template <>
@@ -4119,8 +4103,11 @@ struct AbilityImpl<ABILITY_ABSORBANT> : is OnAttacker {
 template <>
 struct AbilityImpl<ABILITY_CLUELESS> : is AbilityImpl<ABILITY_CLOUD_NINE>, is Unsuppressable {};
 
+struct NoDamageHitsBase {
+    virtual int noDamageHits() const = 0;
+};
 template <int N>
-struct NoDamageHits : is Persistent, is OnEntry, is Breakable {
+struct NoDamageHits : is Persistent, is OnEntry, is Breakable, is NoDamageHitsBase {
     ON_ENTRY {
         int uses = N - GetSingleUseAbilityCounter(battler, ability);
         CHECK(uses)
@@ -4134,7 +4121,7 @@ struct NoDamageHits : is Persistent, is OnEntry, is Breakable {
         return TRUE;
     }
 
-    virtual int noDamageHits() { return N; }
+    virtual int noDamageHits() const { return N; }
 };
 template <>
 struct AbilityImpl<ABILITY_CHEATING_DEATH> : is NoDamageHits<2>, is OverrideBreakable {};
@@ -8202,7 +8189,6 @@ struct AbilityImpl<ABILITY_POWER_LEAK> : is OnDefender, is AllowTerrainIfAirborn
         BattleScriptCall(BattleScript_SurgeActivatesRet);
         return TRUE;
     }
-    TerrainType allowTerrainIfAirborne() { return TERRAIN_ELECTRIC; }
 };
 
 template <>
@@ -8328,6 +8314,39 @@ inline const As *dispatchTo(AbilityEnum id) {
     }
 
     return nullptr;
+}
+
+template <typename T, typename Func>
+AbilityEnum HasAbilityWithTagMatchingCondition(int battler, Func predicate, bool checkMoldBreaker = IsBreakable<T>()) {
+    for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
+        AbilityEnum ability = gBattleMons[battler].abilities[i];
+        const T *ptr = dispatchTo<T>(ability);
+        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
+        FILTER(ptr && predicate(ptr, ability))
+        return ability;
+    }
+    return ABILITY_NONE;
+}
+
+template <typename T>
+AbilityEnum HasAbilityWithTag(int battler, bool checkMoldBreaker) {
+    for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
+        auto ability = gBattleMons[battler].abilities[i];
+        FILTER(dispatchTo<T>(ability))
+        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))
+        return ability;
+    }
+    return ABILITY_NONE;
+}
+
+template <AbilityEnum Id>
+AbilityEnum HasAbilityOrClone(int battler, bool checkMoldBreaker = IsBreakable<Id>()) {
+    return HasAbilityWithTag<AbilityImpl<Id>>(battler, checkMoldBreaker);
+}
+
+template <AbilityEnum Id, typename Func>
+AbilityEnum HasAbilityOrCloneMatchingCondition(int battler, Func predicate, bool checkMoldBreaker = IsBreakable<Id>()) {
+    return HasAbilityWithTagMatchingCondition<AbilityImpl<Id>>(battler, predicate, checkMoldBreaker);
 }
 
 #pragma GCC diagnostic pop

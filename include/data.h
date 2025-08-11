@@ -131,4 +131,12 @@ extern const u8 *const gSpeciesNames[];
 extern const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1];
 extern const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1];
 
+typedef struct AbilityText {
+    const u8* name;
+    const u8* description;
+    const u8* expandedDescription;
+} AbilityText;
+
+extern const AbilityText gAbilityText[ABILITIES_COUNT];
+
 #endif  // GUARD_DATA_H

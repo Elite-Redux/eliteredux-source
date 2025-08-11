@@ -27,17 +27,17 @@ object AbilityTextGenerator : Generator {
 
         writer.appendLine(
             """
-                |constexpr AbilityKVPair sAbilityText[] = {
+                |const AbilityText gAbilityText[] = {
                 |$IND${
                 ABILITIES_LIST.joinToString("\n$IND") {
-                    """{${it.id}, { .name = $("${it.name}"), .description = $("${
+                    """[${it.id}] = { .name = $("${it.name}"), .description = $("${
                         breakString(
                             it.description,
                             SMALL_NARROW,
                             150,
                             2
                         )
-                    }")}},"""
+                    }")},"""
                 }
             }
                 |};

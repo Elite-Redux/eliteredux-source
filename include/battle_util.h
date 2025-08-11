@@ -1,7 +1,7 @@
 #ifndef GUARD_BATTLE_UTIL_H
 #define GUARD_BATTLE_UTIL_H
 
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
 #include "battle_ai_new.h"
 #include "behavior/ability/impl_battle.hh"
 
@@ -239,8 +239,6 @@ u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, u16 ext
         FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker)) \
         callback;                                                    \
     }
-
-#define RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, flag) ON_ABILITY(battler, checkMoldBreaker, gAbilities[ability].flag, return ability)
 
 void GetAllBattlerAbilities(AbilityEnum* abilities, int battler, int battlerAtk);
 u32 IsAbilityOnSide(u32 battlerId, AbilityEnum ability);

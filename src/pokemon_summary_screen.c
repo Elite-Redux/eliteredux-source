@@ -57,7 +57,7 @@
 #include "mgba_printf/mini_printf.h"
 #include "recommended_set_struct.h"
 #include "data/pokemon/recommended_sets.h"
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
 
 // Config options - Note that some config options need external modifications to fully work, such as CONFIG_CAN_FORGET_HM_MOVES, CONFIG_PHYSICAL_SPECIAL_SPLIT,
 // and CONFIG_DECAPITALIZE_MET_LOCATION_STRINGS
@@ -5160,15 +5160,15 @@ static void BufferMonPokemonExpandedAbilityAndInnates(void)
 
 	y = 4;
 
-    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilityToShow].name);
+    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityText[abilityToShow].name);
     offset = GetStringCenterAlignXOffset(font, gStringVar4, ABILITY_NAME_COLUMN_SIZE);
     PrintTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, offset, y + 2, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
 
 	// Main Ability Description 
-    if(gAbilities[abilityToShow].expandedDescription != NULL)
-	    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilityToShow].expandedDescription);
+    if(gAbilityText[abilityToShow].expandedDescription != NULL)
+	    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityText[abilityToShow].expandedDescription);
     else
-	    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilityToShow].description);
+	    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityText[abilityToShow].description);
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 20), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
 }
 
@@ -5202,10 +5202,10 @@ static void BufferMonPokemonAbilityAndInnates(void) {
         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
     }
     // Name ---------------------------------------------------------------------------------------------------
-    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[0]].name);
+    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityText[abilities[0]].name);
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
     // Description ---------------------------------------------------------------------------------------------------
-    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilities[0]].description);
+    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityText[abilities[0]].description);
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
 
     // Innates
@@ -5222,10 +5222,10 @@ static void BufferMonPokemonAbilityAndInnates(void) {
                     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
                 }
                 // Name ---------------------------------------------------------------------------------------------------
-                DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilityId].name);
+                DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityText[abilityId].name);
                 PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
                 // Description ---------------------------------------------------------------------------------------------------
-                DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilityId].description);
+                DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityText[abilityId].description);
                 PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
             }
             else
@@ -5237,7 +5237,7 @@ static void BufferMonPokemonAbilityAndInnates(void) {
                     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
                 }
                 // Name ---------------------------------------------------------------------------------------------------
-                DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilities[abilityId].name);
+                DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityText[abilityId].name);
                 PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
                 // Unlock Level ---------------------------------------------------------------------------------------------------
                 ConvertIntToDecimalStringN(gStringVar1, getInnateDisableLevel(i), STR_CONV_MODE_LEFT_ALIGN, 3);

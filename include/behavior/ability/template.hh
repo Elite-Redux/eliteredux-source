@@ -228,14 +228,14 @@ struct OnAttackerAfterTypeEffectiveness {
 #define ON_ATTACKER_AFTER_TYPE_EFFECTIVENESS \
     virtual void onAttackerAfterTypeEffectiveness(int battler, int target, MoveEnum move, Type moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3) const
 #define DELEGATE_ATTACKER_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
-ON_ATTACKER_AFTER_TYPE_EFFECTIVENESS = 0;
+    ON_ATTACKER_AFTER_TYPE_EFFECTIVENESS = 0;
 };
 
 struct OnDefenderAfterTypeEffectiveness {
 #define ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS \
     virtual void onDefenderAfterTypeEffectiveness(int battler, AbilityEnum ability, int attacker, MoveEnum move, Type moveType, u16 *mod) const
 #define DELEGATE_DEFENDER_AFTER_TYPE_EFFECTIVENESS battler, ability, attacker, move, moveType, mod
-ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS = 0;
+    ON_DEFENDER_AFTER_TYPE_EFFECTIVENESS = 0;
 };
 
 #define ON_MODIFY_EFFECT_CHANCE virtual void onModifyEffectChance(int battler, MoveEnum move, MoveEffectEnum moveEffect, int *effectChance) const
@@ -287,28 +287,27 @@ struct OnRevive : is Persistent {
     ON_REVIVE = 0;
 };
 
+struct SetStateOnEffectBase {
+    virtual MoveEffectEnum setStateOnEffect() const = 0;
+};
 template <MoveEffectEnum Effect>
-struct SetStateOnEffect {
-    MoveEffectEnum setStateOnEffect() { return Effect; }
+struct SetStateOnEffect : is SetStateOnEffectBase {
+    MoveEffectEnum setStateOnEffect() const { return Effect; }
 };
 
-template <TerrainType Terrain>
-struct AllowTerrainIfAirborne {
-    TerrainType allowTerrainIfAirborne() { return Terrain; }
-};
-
-#define ENUM_WRAPPER(Name, name, type, BaseType)             \
-    struct Name##Base : is BaseType {                        \
-        virtual type name() = 0;                             \
-    };                                                       \
-    template <type Value>                                    \
-    struct Name : is Name##Base {                            \
-        virtual type name() { return static_cast<type>(0); } \
+#define ENUM_WRAPPER(Name, name, type, BaseType)    \
+    struct Name##Base : is BaseType {               \
+        virtual type name() const = 0;              \
+    };                                              \
+    template <type Value>                           \
+    struct Name : is Name##Base {                   \
+        virtual type name() const { return Value; } \
     };
 
-ENUM_WRAPPER(Redirects, redirectType, Type, OnAbsorb);
-
 struct Placeholder {};
+
+ENUM_WRAPPER(Redirects, redirectType, Type, OnAbsorb)
+ENUM_WRAPPER(AllowTerrainIfAirborne, allowTerrainIfAirborne, TerrainType, Placeholder)
 
 #define MERGE_OPERATOR(Name, name, ON_NAME, DELEGATE_NAME, op)                        \
     template <typename T, typename U>                                                 \

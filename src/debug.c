@@ -59,7 +59,7 @@
 #include "constants/songs.h"
 #include "generated/constants/species.h"
 #include "constants/weather.h"
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
 
 #if TX_DEBUG_SYSTEM_ENABLE == TRUE
 // *******************************
@@ -2857,7 +2857,7 @@ static void DebugAction_Give_Pokemon_SelectNature(u8 taskId) {
         ConvertIntToDecimalStringN(gStringVar3, gTasks[taskId].data[3], STR_CONV_MODE_LEADING_ZEROS, 2);
         StringCopyPadded(gStringVar3, gStringVar3, CHAR_SPACE, 15);
         abilityId = GetAbilityBySpecies(sDebugMonData->mon_speciesId, 0);
-        StringCopy(gStringVar1, gAbilities[abilityId].name);
+        StringCopy(gStringVar1, gAbilityText[abilityId].name);
         StringExpandPlaceholders(gStringVar4, sDebugText_PokemonAbility);
         AddTextPrinterParameterized(gTasks[taskId].data[2], 1, gStringVar4, 1, 1, 0, NULL);
 
@@ -2895,7 +2895,7 @@ static void DebugAction_Give_Pokemon_SelectAbility(u8 taskId) {
         StringCopy(gStringVar2, gText_DigitIndicator[gTasks[taskId].data[4]]);
         ConvertIntToDecimalStringN(gStringVar3, gTasks[taskId].data[3], STR_CONV_MODE_LEADING_ZEROS, 2);
         StringCopyPadded(gStringVar3, gStringVar3, CHAR_SPACE, 15);
-        StringCopy(gStringVar1, gAbilities[abilityId].name);
+        StringCopy(gStringVar1, gAbilityText[abilityId].name);
         StringExpandPlaceholders(gStringVar4, sDebugText_PokemonAbility);
         AddTextPrinterParameterized(gTasks[taskId].data[2], 1, gStringVar4, 1, 1, 0, NULL);
     }

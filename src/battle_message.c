@@ -32,7 +32,8 @@
 #include "constants/weather.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
+#include "generated/data/abilities/ability_text.h"
 
 struct BattleWindowText {
     u8 fillValue;
@@ -3733,19 +3734,19 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) {
                     }
                     break;
                 case B_TXT_LAST_ABILITY:  // last used ability
-                    toCpy = gAbilities[gBattleScripting.abilityPopupOverwrite].name;
+                    toCpy = gAbilityText[gBattleScripting.abilityPopupOverwrite].name;
                     break;
                 case B_TXT_ATK_ABILITY:  // attacker ability
-                    toCpy = gAbilities[sBattlerAbilities[gBattlerAttacker]].name;
+                    toCpy = gAbilityText[sBattlerAbilities[gBattlerAttacker]].name;
                     break;
                 case B_TXT_DEF_ABILITY:  // target ability
-                    toCpy = gAbilities[sBattlerAbilities[gBattlerTarget]].name;
+                    toCpy = gAbilityText[sBattlerAbilities[gBattlerTarget]].name;
                     break;
                 case B_TXT_SCR_ACTIVE_ABILITY:  // scripting active ability
-                    toCpy = gAbilities[sBattlerAbilities[gBattleScripting.battler]].name;
+                    toCpy = gAbilityText[sBattlerAbilities[gBattleScripting.battler]].name;
                     break;
                 case B_TXT_EFF_ABILITY:  // effect battlerId ability
-                    toCpy = gAbilities[sBattlerAbilities[gEffectBattler]].name;
+                    toCpy = gAbilityText[sBattlerAbilities[gEffectBattler]].name;
                     break;
                 case B_TXT_TRAINER1_CLASS:  // trainer class name
                     toCpy = BattleStringGetOpponentClassByTrainerId(gTrainerBattleOpponent_A);
@@ -4064,7 +4065,7 @@ static void ExpandBattleTextBuffPlaceholders(const u8 *src, u8 *dst) {
                 srcID += 2;
                 break;
             case B_BUFF_ABILITY:  // ability names
-                StringAppend(dst, gAbilities[T1_READ_16(&src[srcID + 1])].name);
+                StringAppend(dst, gAbilityText[T1_READ_16(&src[srcID + 1])].name);
                 srcID += 3;
                 break;
             case B_BUFF_ITEM:  // item name

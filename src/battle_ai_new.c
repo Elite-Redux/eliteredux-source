@@ -1,6 +1,6 @@
 #include "battle_ai_new.h"
 
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
 #include "battle.h"
 #include "battle_ai_attack.h"
 #include "battle_ai_new_util.h"

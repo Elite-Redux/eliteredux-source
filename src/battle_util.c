@@ -1,6 +1,6 @@
 #include "battle_util.h"
 
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
 #include "battle.h"
 #include "battle_ai_main.h"
 #include "battle_ai_util.h"
@@ -4733,9 +4733,7 @@ bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag) {
             break;
     }
 
-    ON_ABILITY(battlerId, FALSE, gAbilities[ability].allowTerrainIfAirborne == type, return TRUE)
-
-    return FALSE;
+    return AllowsTerrainIfAirborne(battlerId, type);
 }
 
 bool8 IsEvasionClauseDisablingMove(u8 battlerId, MoveEnum move) {
@@ -7783,18 +7781,6 @@ static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u
     AbilityEnum newImmunityAbility = HandleOnAfterTypeEffectiveness(battlerAtk, battlerDef, move, moveType, &modifier, modifier1, modifier2, modifier3);
     if (!immunityAbility) immunityAbility = newImmunityAbility;
 
-    for (int i = 0; i < gBattlersCount; i++) {
-        int battler = (battlerDef + i) % gBattlersCount;
-        FILTER(battler == battlerDef || battler == battlerAtk || IsBattlerAlive(battler))
-        ON_ABILITY(battler,
-                   TRUE,
-                   gAbilities[ability].onAfterTypeEffectiveness &&
-                       IsTargettedApplyOnFlagAppropriate(battlerAtk, battler, battlerAtk, battlerDef, gAbilities[ability].onAfterTypeEffectivenessFor),
-                   int wasImmune = modifier == 0;
-                   gAbilities[ability].onAfterTypeEffectiveness(battler, ability, battlerDef, move, moveType, &modifier, modifier1, modifier2, modifier3);
-                   if (!wasImmune && !modifier) immunityAbility = ability)
-    }
-
     if (recordAbilities && immunityAbility && !modifier) {
         SetActiveAbilityPopupOverride(immunityAbility);
         gBattleScripting.abilityPopupOverwrite = immunityAbility;
@@ -9031,9 +9017,8 @@ AbilityEnum HasRedirectionAbility(int battlerAtk, int battlerDef, MoveEnum move,
     if (!type) return ABILITY_NONE;
     if (battlerAtk == battlerDef) return ABILITY_NONE;
     if (gBattleMoves[move].effect == EFFECT_SNIPE_SHOT) return ABILITY_NONE;
-    if (BattlerHasAbility(battlerAtk, ABILITY_PROPELLER_TAIL, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_STALWART, FALSE)) return ABILITY_NONE;
-    RETURN_ABILITY_IF_FLAG(battlerDef, TRUE, redirectType == type)
-    return ABILITY_NONE;
+    if (IgnoresRedirection(battlerAtk)) return ABILITY_NONE;
+    return RedirectsType(battlerDef, type);
 }
 
 int CanRaiseStat(int battler, int stat) { return CompareStat(battler, stat, MAX_STAT_STAGE, CMP_LESS_THAN); }

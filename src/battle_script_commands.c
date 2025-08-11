@@ -1,6 +1,6 @@
 #include "constants/battle_script_commands.h"
 
-#include "abilities.hh"
+#include "behavior/ability/impl_battle.hh"
 #include "battle.h"
 #include "battle_ai_main.h"
 #include "battle_ai_new.h"
@@ -965,11 +965,6 @@ MultihitType GetParentalBondType(int battler, int target, MoveEnum move, int mov
     int hasFortKnox = HasFortKnox(target);
 
     return HandleParentalBond(battler, hasFortKnox, move, moveType);
-}
-
-AbilityEnum HasFortKnox(int battler) {
-    RETURN_ABILITY_IF_FLAG(battler, FALSE, fortKnox)
-    return FALSE;
 }
 
 int GetParentalBondCount(int battler, MultihitType parentalBondType) {
@@ -2149,12 +2144,6 @@ bool8 IsPreventableSecondaryEffect(u8 moveEffect) {
     }
 }
 
-void SetOnMoveEffectReactionFlags(int attacker, int target, MoveEffectEnum moveEffect) {
-    int effect = moveEffect == MOVE_EFFECT_TOXIC ? MOVE_EFFECT_POISON : moveEffect;
-
-    ON_ABILITY(attacker, FALSE, gAbilities[ability].setStateOnEffect == effect, SetBattlerAffectedFlag(attacker, target, ability))
-}
-
 void SetMoveEffect(bool32 primary, u32 certain) {
     s32 i, byTwo = 0, affectsUser = 0;
     bool32 statusChanged = FALSE;
@@ -2411,7 +2400,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                 gHitMarker |= HITMARKER_SYNCHRONISE_EFFECT;
             }
 
-            SetOnMoveEffectReactionFlags(gBattleScripting.battler, gEffectBattler, gBattleScripting.moveEffect);
+            SetBattlerAffectedFlags(gBattleScripting.battler, gEffectBattler, gBattleScripting.moveEffect);
             return;
         } else if (statusChanged == FALSE) {
             gBattleScripting.moveEffect = 0;
@@ -2490,7 +2479,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     break;
                 case MOVE_EFFECT_CONFUSION:
                     if (CanBeConfused(gEffectBattler)) {
-                        SetOnMoveEffectReactionFlags(gBattleScripting.battler, gEffectBattler, MOVE_EFFECT_CONFUSION);
+                        SetBattlerAffectedFlags(gBattleScripting.battler, gEffectBattler, MOVE_EFFECT_CONFUSION);
                         gBattleMons[gEffectBattler].status2 |= STATUS2_CONFUSION_TURN(((Random()) % 4) + 2);  // 2-5 turns
 
                         BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
@@ -7983,7 +7972,7 @@ static void Cmd_various(void) {
         case VARIOUS_SET_FEAR:
             gStatuses4[gActiveBattler] |= STATUS4_FEAR;
             gVolatileStructs[gActiveBattler].fear = gVolatileStructs[gActiveBattler].started.fear = TRUE;
-            SetOnMoveEffectReactionFlags(gBattleScripting.battler, gEffectBattler, MOVE_EFFECT_FEAR);
+            SetBattlerAffectedFlags(gBattleScripting.battler, gEffectBattler, MOVE_EFFECT_FEAR);
             break;
         case VARIOUS_ON_WEATHER_CHANGE:
             HandleOnWeather(gActiveBattler);
@@ -8534,10 +8523,10 @@ static void Cmd_various(void) {
                             gBattleMons[gActiveBattler].status1 |= STATUS1_POISON;
 
                         if (gBattlerAttacker == gActiveBattler) {
-                            SetOnMoveEffectReactionFlags(BATTLE_OPPOSITE(gActiveBattler), gActiveBattler, MOVE_EFFECT_POISON);
-                            SetOnMoveEffectReactionFlags(BATTLE_OPPOSITE(BATTLE_PARTNER(gActiveBattler)), gActiveBattler, MOVE_EFFECT_POISON);
+                            SetBattlerAffectedFlags(BATTLE_OPPOSITE(gActiveBattler), gActiveBattler, MOVE_EFFECT_POISON);
+                            SetBattlerAffectedFlags(BATTLE_OPPOSITE(BATTLE_PARTNER(gActiveBattler)), gActiveBattler, MOVE_EFFECT_POISON);
                         } else {
-                            SetOnMoveEffectReactionFlags(gBattlerAttacker, gActiveBattler, MOVE_EFFECT_POISON);
+                            SetBattlerAffectedFlags(gBattlerAttacker, gActiveBattler, MOVE_EFFECT_POISON);
                         }
 
                         BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
@@ -8569,10 +8558,10 @@ static void Cmd_various(void) {
                     REQUIRE(CanBeBurned(gActiveBattler))
 
                     if (gBattlerAttacker == gActiveBattler) {
-                        SetOnMoveEffectReactionFlags(BATTLE_OPPOSITE(gActiveBattler), gActiveBattler, MOVE_EFFECT_BURN);
-                        SetOnMoveEffectReactionFlags(BATTLE_OPPOSITE(BATTLE_PARTNER(gActiveBattler)), gActiveBattler, MOVE_EFFECT_BURN);
+                        SetBattlerAffectedFlags(BATTLE_OPPOSITE(gActiveBattler), gActiveBattler, MOVE_EFFECT_BURN);
+                        SetBattlerAffectedFlags(BATTLE_OPPOSITE(BATTLE_PARTNER(gActiveBattler)), gActiveBattler, MOVE_EFFECT_BURN);
                     } else {
-                        SetOnMoveEffectReactionFlags(gBattlerAttacker, gActiveBattler, MOVE_EFFECT_BURN);
+                        SetBattlerAffectedFlags(gBattlerAttacker, gActiveBattler, MOVE_EFFECT_BURN);
                     }
 
                     gBattleMons[gActiveBattler].status1 |= STATUS1_BURN;
@@ -11924,11 +11913,7 @@ static void Cmd_switchoutabilities(void) {
     gActiveBattler = GetBattlerForBattleScript(READ_FIRST_8_INC);
     gRoundStructs[gActiveBattler].protectedThisTurn = FALSE;
 
-    ON_ABILITY(
-        gActiveBattler, FALSE, gAbilities[ability].onExit, if (gAbilities[ability].onExit(ability, gActiveBattler)) {
-            gBattlerAbility = gActiveBattler;
-            BattleScriptCall(BattleScript_AbilityPopUp);
-        })
+    HandleOnExit(gActiveBattler);
 
     ReadActiveScriptInitialStackState();
 }
@@ -12065,21 +12050,6 @@ bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
     if (Infiltrates(battlerAtk, move, INFILTRATE_SUBSTITUTE)) return FALSE;
 
     return TRUE;
-}
-
-s8 RemainingNoDamageHits(u8 battler) {
-    s8 counts = 0;
-
-    ON_ABILITY(battler, TRUE, gAbilities[ability].noDamageHits, counts += gAbilities[ability].noDamageHits - GetSingleUseAbilityCounter(battler, ability))
-
-    return counts;
-}
-
-u16 GetNoDamageAbility(u8 battler) {
-    ON_ABILITY(
-        battler, TRUE, gAbilities[ability].noDamageHits, if (gAbilities[ability].noDamageHits > GetSingleUseAbilityCounter(battler, ability)) return ability)
-
-    return ABILITY_NONE;
 }
 
 static void Cmd_jumpifsubstituteblocks(void) {
@@ -12982,14 +12952,6 @@ bool8 IsMoveAffectedByParentalBond(MoveEnum move, u8 battlerId) {
 // #define CHECK_FOR_BAD_EGGS //Uncomment if you want to check for bad eggs after each step or after each fight (causes slowdown)
 
 void CheckForBadEggs(void) {}
-
-void SetBattlerAffectedFlag(int attacker, int target, AbilityEnum ability) {
-    if (attacker == target) return;
-    if (!IsBattlerAlive(attacker)) return;
-
-    int flag = GetAbilityState(attacker, ability);
-    SetAbilityState(attacker, ability, flag | (1 << target));
-}
 
 void ClearBattlerAffectedFlag(int attacker, int target, AbilityEnum ability) {
     int flag = GetAbilityState(attacker, ability);
