@@ -956,8 +956,7 @@ bool8 PartyIsMaxLevel(void) {
 int ShouldSetMoldBreaker(int battler, MoveEnum move) {
     if (gBattleMoves[move].flags & FLAG_TARGET_ABILITY_IGNORED) return TRUE;
     if (getMonotypeChampType() == TYPE_STEEL && GetBattlerSide(battler) != B_SIDE_PLAYER) return TRUE;
-    ON_ABILITY(battler, FALSE, gAbilities[ability].onMoldBreaker, if (gAbilities[ability].onMoldBreaker(battler, move)) return TRUE)
-    return FALSE;
+    return HandleOnMoldBreaker(battler, move);
 }
 
 MultihitType GetParentalBondType(int battler, int target, MoveEnum move, int moveType) {
@@ -1071,29 +1070,7 @@ static void Cmd_attackcanceler(void) {
         return;
     }
 
-    ON_ABILITY(
-        gBattlerAttacker,
-        FALSE,
-        gAbilities[ability].onBeforeAttack &&
-            IsTargettedApplyOnFlagAppropriate(gBattlerAttacker, gBattlerAttacker, gBattlerAttacker, gBattlerTarget, gAbilities[ability].onBeforeAttackFor),
-        gStackBattler1 = gBattlerAttacker;
-        gBattleScripting.abilityPopupOverwrite = ability;
-        if (gAbilities[ability].onBeforeAttack(gBattlerAttacker, gBattlerAttacker, ability, gCurrentMove, moveType)) {
-            BattleScriptCall(BattleScript_AbilityPopUpStack);
-            return;
-        })
-
-    ON_ABILITY(
-        gBattlerTarget,
-        FALSE,
-        gAbilities[ability].onBeforeAttack &&
-            IsTargettedApplyOnFlagAppropriate(gBattlerAttacker, gBattlerTarget, gBattlerAttacker, gBattlerTarget, gAbilities[ability].onBeforeAttackFor),
-        gStackBattler1 = gBattlerTarget;
-        gBattleScripting.abilityPopupOverwrite = ability;
-        if (gAbilities[ability].onBeforeAttack(gBattlerTarget, gBattlerAttacker, ability, gCurrentMove, moveType)) {
-            BattleScriptCall(BattleScript_AbilityPopUpStack);
-            return;
-        })
+    HandleOnBeforeAttack(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType);
 
     gHitMarker &= ~(HITMARKER_x800000);
     if (!(gHitMarker & HITMARKER_OBEYS) && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)) {
@@ -2997,16 +2974,7 @@ static void Cmd_tryfaintmon(void) {
     int reviveMsg = FALSE;
     AbilityEnum reviveAbility = ABILITY_NONE;
     if (!IsBattlerAlive(gActiveBattler)) {
-        ON_ABILITY(
-            gActiveBattler,
-            FALSE,
-            gAbilities[ability].onRevive && !GetSingleUseAbilityCountByIndex(gActiveBattler, idx),
-            reviveMsg = gAbilities[ability].onRevive(gActiveBattler);
-            if (reviveMsg) {
-                reviveAbility = ability;
-                SetSingleUseAbilityCountByIndex(gActiveBattler, idx, 1);
-                break;
-            })
+        reviveMsg = TryActivateRevive(gActiveBattler, &reviveAbility);
     }
 
     if (gBattlescriptCurrInstr[2] != 0) {
@@ -3059,8 +3027,8 @@ static void Cmd_tryfaintmon(void) {
                 BattleScriptCall(BattleScript_DestinyBondTakesLife);
                 gBattleMoveDamage = gBattleMons[battlerId].hp;
                 // Destiny Bond disables recurring nightmare
-                ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].onRevive, SetSingleUseAbilityCountByIndex(gBattlerAttacker, idx, 2))
-                ON_ABILITY(gBattlerTarget, FALSE, gAbilities[ability].onRevive, SetSingleUseAbilityCountByIndex(gBattlerTarget, idx, 2))
+                DisableReviveAbilities(gBattlerAttacker);
+                DisableReviveAbilities(gBattlerTarget);
             }
             if ((gStatuses3[gBattlerTarget] & STATUS3_GRUDGE) && !(gHitMarker & HITMARKER_GRUDGE) &&
                 GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget) && gBattleMons[gBattlerAttacker].hp != 0 && gCurrentMove != MOVE_STRUGGLE) {
@@ -7112,7 +7080,7 @@ static void Cmd_various(void) {
             } else if (BATTLER_MAX_HP(gActiveBattler)) {
                 gBattlescriptCurrInstr = ptr;
             } else {
-                if (IsMegaLauncherBoosted(gBattlerAttacker, gCurrentMove) && HasMegaLauncherBoost(gBattlerAttacker))
+                if (IsMoveMegaLauncher(gBattlerAttacker, gCurrentMove) && HasMegaLauncherBoost(gBattlerAttacker))
                     gBattleMoveDamage = -(gBattleMons[gActiveBattler].maxHP * 3 / 4);
                 else
                     gBattleMoveDamage = -(gBattleMons[gActiveBattler].maxHP / 2);
@@ -8441,15 +8409,11 @@ static void Cmd_various(void) {
         }
             return;
         case VARIOUS_TRY_RECURRING_NIGHTMARE:
-            ON_ABILITY(gActiveBattler,
-                       FALSE,
-                       gAbilities[ability].onRevive && GetSingleUseAbilityCountByIndex(gActiveBattler, idx) == 1,
-                       gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
-                       if (!gBattleMoveDamage) gBattleMoveDamage = 1;
-                       SetSingleUseAbilityCountByIndex(gActiveBattler, idx, 2);
-                       BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[gBattleStruct->battlerPartyIndexes[gActiveBattler]], 2, &gBattleMoveDamage);
-                       MarkBattlerForControllerExec(gActiveBattler);
-                       break;)
+            REQUIRE(TryUseRevive(gActiveBattler))
+            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
+            if (!gBattleMoveDamage) gBattleMoveDamage = 1;
+            BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[gBattleStruct->battlerPartyIndexes[gActiveBattler]], 2, &gBattleMoveDamage);
+            MarkBattlerForControllerExec(gActiveBattler);
             break;
         case VARIOUS_SET_RANDOM:
             gBattleCommunication[MULTIUSE_STATE] = Random() % READ_8_INC;
@@ -12095,7 +12059,7 @@ static void Cmd_settypebasedhalvers(void)  // water and mud sport
 
 bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
     if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE)) return FALSE;
-    if (IsSoundMove(battlerAtk, move)) return FALSE;
+    if (IsMoveSound(battlerAtk, move)) return FALSE;
     if (gBattleMoves[move].flags & FLAG_HIT_IN_SUBSTITUTE) return FALSE;
 
     if (Infiltrates(battlerAtk, move, INFILTRATE_SUBSTITUTE)) return FALSE;

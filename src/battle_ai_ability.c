@@ -81,7 +81,7 @@ int ScoreAttackAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int 
             return AI_SCORE_ABSORB_MOVE(50);
 
         case ABILITY_VITALITY_STRIKE:
-            REQUIRE(IsIronFistBoosted(battlerAtk, move))
+            REQUIRE(IsMovePunch(battlerAtk, move))
             return AI_SCORE_ABSORB_MOVE(50);
 
         case ABILITY_PURE_LOVE:
@@ -106,11 +106,11 @@ int ScoreAttackAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int 
             return AI_SCORE_ATTACK_UP(battlerAtk, 1);
 
         case ABILITY_LOUD_BANG:
-            REQUIRE(IsSoundMove(battlerAtk, move))
+            REQUIRE(IsMoveSound(battlerAtk, move))
             return AI_SCORE_ADJUST(50, AI_SCORE_CONFUSION(battlerDef));
 
         case ABILITY_PIERCING_SOLO:
-            REQUIRE(IsSoundMove(battlerAtk, move))
+            REQUIRE(IsMoveSound(battlerAtk, move))
             return AI_SCORE_ADJUST(30, AI_SCORE_BLEED(battlerDef));
 
         case ABILITY_TO_THE_BONE:
@@ -132,11 +132,11 @@ int ScoreAttackAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int 
             return AI_SCORE_ADJUST(50, AI_SCORE_STAT(battlerDef, STAT_DEF, -1));
 
         case ABILITY_BEAUTIFUL_MUSIC:
-            REQUIRE(IsSoundMove(battlerAtk, move))
+            REQUIRE(IsMoveSound(battlerAtk, move))
             return AI_SCORE_ADJUST(50, AI_SCORE_ATTRACT(battlerAtk, battlerDef));
 
         case ABILITY_RESONANCE:
-            REQUIRE(IsSoundMove(battlerAtk, move))
+            REQUIRE(IsMoveSound(battlerAtk, move))
             return AI_SCORE_BLEED(battlerDef);
 
         case ABILITY_TOXIC_CHAIN:
@@ -253,7 +253,7 @@ int ScoreAttackAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int 
             return AI_SCORE_ADJUST(50, AI_SCORE_PARALYSIS(battlerDef));
 
         case ABILITY_RADIO_JAM:
-            REQUIRE(IsSoundMove(battlerAtk, move))
+            REQUIRE(IsMoveSound(battlerAtk, move))
             return AI_SCORE_ADJUST(20, AI_SCORE_DISABLE(battlerDef));
 
         case ABILITY_DEMOLITIONIST:

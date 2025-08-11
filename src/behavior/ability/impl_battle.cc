@@ -660,3 +660,109 @@ AbilityEnum HandleRemovesStatusAtTurnEnd(int statusedBattler, StatusCheckEnum st
         return impl->onStatusImmune(statusedBattler, statusedBattler, ability, status);
     });
 }
+
+int HandleOnTrap(int battler) {
+    for (int opponent = GetOppositeSide(battler); opponent < gBattlersCount; opponent += 2) {
+        FILTER(IsBattlerAlive(opponent))
+        AbilityEnum result = HasAbilityWithTagMatchingCondition<OnTrap>(opponent, [&](const OnTrap* impl, auto&) -> auto { return impl->onTrap(battler); });
+        if (result) return opponent + 1;
+    }
+    return 0;
+}
+
+AbilityEnum HandleOnBeforeAttack(int battlerAtk, int battlerDef, MoveEnum move, Type moveType) {
+    auto [ability, _, __] = TestAllBattlersWithAttacker<OnBeforeAttackBase, bool>(
+        battlerAtk,
+        battlerDef,
+        [](const OnBeforeAttackBase* impl) -> auto { return impl->onBeforeAttackFor(); },
+        [&](const OnBeforeAttackBase* impl, auto ability, auto battler) -> bool {
+            gStackBattler1 = battler;
+            gBattleScripting.abilityPopupOverwrite = ability;
+            CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
+            if (impl->onBeforeAttack(battler, battlerAtk, ability, move, moveType)) {
+                BattleScriptCall(BattleScript_AbilityPopUpStack);
+                return true;
+            }
+            return false;
+        });
+    return ability;
+}
+
+void HandleOnPreemptAction(int battlerAtk) {
+    for (auto opponent = GetOppositeSide(battlerAtk); opponent < gBattlersCount; opponent += 2) {
+        HasAbilityWithTagMatchingCondition<OnPreemptAction>(opponent, [&](const OnPreemptAction* impl, auto ability) -> auto {
+            impl->onPreemptAction(opponent, ability, battlerAtk);
+            return false;
+        });
+    }
+}
+
+template <MoveFlag Flag>
+int DoesMoveMatchFlag(int battler, MoveEnum move) {
+    switch (Flag) {
+        case MOVE_FLAG_DANCE:
+            if (gBattleMoves[move].flags & FLAG_DANCE) return TRUE;
+            break;
+        case MOVE_FLAG_KICK:
+            if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) return TRUE;
+            break;
+        case MOVE_FLAG_MEGA_LAUNCHER:
+            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) return TRUE;
+            break;
+        case MOVE_FLAG_PUNCH:
+            if (gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST) return TRUE;
+            break;
+        case MOVE_FLAG_SOUND:
+            if (gBattleMoves[move].flags & FLAG_SOUND) return TRUE;
+            break;
+
+        default:
+            return FALSE;
+            break;
+    }
+
+    return HasAbilityWithTagMatchingCondition<OnModifyMoveFlags>(
+        battler, [&](const OnModifyMoveFlags* impl, auto&) -> auto { return impl->onModifyMoveFlags(battler, move, Flag); });
+}
+
+int IsMoveDance(int battler, MoveEnum move) { return DoesMoveMatchFlag<MOVE_FLAG_DANCE>(battler, move); }
+int IsMoveKick(int battler, MoveEnum move) { return DoesMoveMatchFlag<MOVE_FLAG_KICK>(battler, move); }
+int IsMoveMegaLauncher(int battler, MoveEnum move) { return DoesMoveMatchFlag<MOVE_FLAG_MEGA_LAUNCHER>(battler, move); }
+int IsMovePunch(int battler, MoveEnum move) { return DoesMoveMatchFlag<MOVE_FLAG_PUNCH>(battler, move); }
+int IsMoveSound(int battler, MoveEnum move) { return DoesMoveMatchFlag<MOVE_FLAG_SOUND>(battler, move); }
+
+AbilityEnum HandleOnMoldBreaker(int battler, MoveEnum move) {
+    return HasAbilityWithTagMatchingCondition<OnMoldBreaker>(battler,
+                                                             [&](const OnMoldBreaker* impl, auto&) -> auto { return impl->onMoldBreaker(battler, move); });
+}
+
+void DisableReviveAbilities(int battler) {
+    for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
+        FILTER(dispatchTo<OnRevive>(gBattleMons[battler].abilities[i]))
+        SetSingleUseAbilityCountByIndex(battler, i, 2);
+    }
+}
+
+int TryUseRevive(int battler) {
+    for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
+        FILTER(dispatchTo<OnRevive>(gBattleMons[battler].abilities[i]))
+        FILTER(GetSingleUseAbilityCountByIndex(battler, i) == 1)
+        SetSingleUseAbilityCountByIndex(battler, i, 2);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+int TryActivateRevive(int battler, AbilityEnum* ability) {
+    for (int i = ARRAY_COUNT(gBattleMons[battler].abilities); i--;) {
+        auto ptr = dispatchTo<OnRevive>(gBattleMons[battler].abilities[i]);
+        FILTER(ptr)
+        FILTER_NOT(GetSingleUseAbilityCountByIndex(battler, i))
+        int result = ptr->onRevive(battler);
+        FILTER(result)
+        SetSingleUseAbilityCountByIndex(battler, i, 1);
+        *ability = gBattleMons[battler].abilities[i];
+        return result;
+    }
+    return FALSE;
+}

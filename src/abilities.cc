@@ -333,33 +333,6 @@ static void RuinEffect(int ruinStat, int battler, int statId, u32 *stat, NonStac
     *flags = static_cast<NonStackingState>(static_cast<int>(*flags) | static_cast<int>(NON_STACKING_RUIN));
 }
 
-int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS) {
-    switch (flag) {
-        case MOVE_FLAG_DANCE:
-            if (gBattleMoves[flag].flags & FLAG_DANCE) return TRUE;
-            break;
-        case MOVE_FLAG_KICK:
-            if (gBattleMoves[flag].flags & FLAG_STRIKER_BOOST) return TRUE;
-            break;
-        case MOVE_FLAG_MEGA_LAUNCHER:
-            if (gBattleMoves[flag].flags & FLAG_MEGA_LAUNCHER_BOOST) return TRUE;
-            break;
-        case MOVE_FLAG_PUNCH:
-            if (gBattleMoves[flag].flags & FLAG_IRON_FIST_BOOST) return TRUE;
-            break;
-        case MOVE_FLAG_SOUND:
-            if (gBattleMoves[flag].flags & FLAG_SOUND) return TRUE;
-            break;
-
-        default:
-            return FALSE;
-            break;
-    }
-
-    ON_ABILITY(battler, FALSE, gAbilities[ability].onModifyMoveFlags, if (gAbilities[ability].onModifyMoveFlags(DELEGATE_MODIFY_MOVE_FLAGS)) return TRUE)
-    return FALSE;
-}
-
 static int UseTurnAttackAsPursuit(ON_PREEMPT_ACTION) {
     CHECK(gCurrentActionFuncId == B_ACTION_SWITCH)
     CHECK(gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] == B_ACTION_USE_MOVE)
@@ -840,7 +813,7 @@ constexpr Ability MagnetPull = {
 
 constexpr Ability Soundproof = {
     .onImmune = +[](ON_IMMUNE) -> int {
-        CHECK(IsSoundMove(attacker, move))
+        CHECK(IsMoveSound(attacker, move))
         CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
         return TRUE;
     },
@@ -1240,7 +1213,7 @@ constexpr Ability Download = {
 constexpr Ability IronFist = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (IsIronFistBoosted(battler, move)) MUL(1.3);
+            if (IsMovePunch(battler, move)) MUL(1.3);
         },
 };
 
@@ -2016,7 +1989,7 @@ constexpr Ability GaleWings = {
 constexpr Ability MegaLauncher = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (IsMegaLauncherBoosted(battler, move)) MUL(1.3);
+            if (IsMoveMegaLauncher(battler, move)) MUL(1.3);
         },
     .megaLauncherBoost = TRUE,
 };
@@ -2286,7 +2259,7 @@ constexpr Ability LongReach = {
 constexpr Ability LiquidVoice = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (IsSoundMove(battler, move)) MUL(1.2);
+            if (IsMoveSound(battler, move)) MUL(1.2);
         },
     .onMoveType = +[](ON_MOVE_TYPE) -> int {
         CHECK(moveType == TYPE_NORMAL)
@@ -2471,7 +2444,7 @@ constexpr Ability InnardsOut = {
 
 constexpr Ability Dancer = {
     .onCopyMove = +[](ON_COPY_MOVE) -> int {
-        CHECK(IsDance(attacker, move))
+        CHECK(IsMoveDance(attacker, move))
         return UseOutOfTurnAttack(battler, target, ability, move, 0);
     },
 };
@@ -2739,11 +2712,11 @@ constexpr Ability SteamEngine = {
 constexpr Ability PunkRock = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (IsSoundMove(battler, move)) MUL(1.3);
+            if (IsMoveSound(battler, move)) MUL(1.3);
         },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (IsSoundMove(attacker, move)) MUL(.5);
+            if (IsMoveSound(attacker, move)) MUL(.5);
         },
     .breakable = TRUE,
 };
@@ -3091,7 +3064,7 @@ constexpr Ability PrismScales = {
 constexpr Ability PowerFists = {
     .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(IsIronFistBoosted(battler, move))
+        CHECK(IsMovePunch(battler, move))
         return STAT_SPDEF;
     },
 };
@@ -3121,7 +3094,7 @@ constexpr Ability Vengeance = {
 
 constexpr Ability BlitzBoxer = {
     .onPriority = +[](ON_PRIORITY) -> int {
-        CHECK(IsIronFistBoosted(battler, move))
+        CHECK(IsMovePunch(battler, move))
         CHECK(BATTLER_MAX_HP(battler));
         return 1;
     },
@@ -3274,7 +3247,7 @@ constexpr Ability LoudBang = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeConfused(target))
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
         CHECK(Random() % 2)
 
         return AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
@@ -3481,7 +3454,7 @@ constexpr Ability PrimalArmor = {
 
 constexpr Ability RagingBoxer = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
-        CHECK(IsIronFistBoosted(battler, move))
+        CHECK(IsMovePunch(battler, move))
         return PARENTAL_BOND_PRIMAL_MAW;
     },
 };
@@ -3871,7 +3844,7 @@ constexpr Ability FieldExplorer = {
 constexpr Ability Striker = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (IsStrikerBoosted(battler, move)) MUL(1.3);
+            if (IsMoveKick(battler, move)) MUL(1.3);
         },
 };
 
@@ -3976,18 +3949,18 @@ constexpr Ability BigLeaves = {
 
 constexpr Ability PreciseFist = {
     .onCrit = +[](ON_CRIT) -> int {
-        CHECK(IsIronFistBoosted(battler, move))
+        CHECK(IsMovePunch(battler, move))
         return 1;
     },
     .onModifyEffectChance =
         +[](ON_MODIFY_EFFECT_CHANCE) {
-            if (IsIronFistBoosted(battler, move)) *effectChance *= 5;
+            if (IsMovePunch(battler, move)) *effectChance *= 5;
         },
 };
 
 constexpr Ability Deadeye = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-        CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].arrowBased)
+        CHECK(IsMoveMegaLauncher(battler, move) || gBattleMoves[move].arrowBased)
         return ACCURACY_HITS_IF_POSSIBLE;
     },
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
@@ -4005,7 +3978,7 @@ constexpr Ability Deadeye = {
 
 constexpr Ability Artillery = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-        CHECK(IsMegaLauncherBoosted(battler, move))
+        CHECK(IsMoveMegaLauncher(battler, move))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
 };
@@ -4176,7 +4149,7 @@ constexpr Ability SteelBarrel = {
 
 constexpr Ability PyroShells = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(IsMegaLauncherBoosted(battler, move))
+        CHECK(IsMoveMegaLauncher(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_OUTBURST, 50);
@@ -4236,11 +4209,11 @@ constexpr Ability ToxicDebris = {
 
 constexpr Ability Roundhouse = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-        CHECK(IsStrikerBoosted(battler, move))
+        CHECK(IsMoveKick(battler, move))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(IsStrikerBoosted(battler, move))
+        CHECK(IsMoveKick(battler, move))
         u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
         u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
         if (def < spDef)
@@ -4564,7 +4537,7 @@ constexpr Ability InfernalRage = {
 
 constexpr Ability DualWield = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
-        CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
+        CHECK(IsMoveMegaLauncher(battler, move) || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
         return PARENTAL_BOND_DUAL_WIELD;
     },
 };
@@ -5560,7 +5533,7 @@ constexpr Ability MonsterMash = {
 
 constexpr Ability TwoStep = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(IsDance(battler, move))
+        CHECK(IsMoveDance(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_REVELATION_DANCE, 50);
@@ -5796,7 +5769,7 @@ constexpr Ability Airborne = {
 constexpr Ability Parroting = {
     .onImmune = Soundproof.onImmune,
     .onCopyMove = +[](ON_COPY_MOVE) -> int {
-        CHECK(IsSoundMove(attacker, move))
+        CHECK(IsMoveSound(attacker, move))
         return UseOutOfTurnAttack(battler, target, ability, move, 0);
     },
     .breakable = TRUE,
@@ -6377,7 +6350,7 @@ constexpr Ability RadioJam = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeDisabled(target))
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
         CHECK(Random() % 100 < 20)
 
         return AbilityStatusEffect(MOVE_EFFECT_DISABLE);
@@ -6630,7 +6603,7 @@ constexpr Ability BeautifulMusic = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(Random() % 2)
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
 
         return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
     },
@@ -6661,7 +6634,7 @@ constexpr Ability Resonance = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
         CHECK(Random() % 100 < 50)
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
@@ -6779,7 +6752,7 @@ constexpr Ability PiercingSolo = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     },
@@ -6791,7 +6764,7 @@ constexpr Ability Rhythmic = {
 
 constexpr Ability ChunkyBassLine = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_EARTHQUAKE, 40);
@@ -7249,7 +7222,7 @@ constexpr Ability VitalityStrike = {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
-        CHECK(IsIronFistBoosted(battler, move))
+        CHECK(IsMovePunch(battler, move))
 
         gBattleMoveDamage = -gHpDealt / 10;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
@@ -7683,7 +7656,7 @@ constexpr Ability ToTheBone = {
 
 constexpr Ability BladeDance = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(IsDance(battler, move))
+        CHECK(IsMoveDance(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_LEAF_BLADE, 50);
@@ -7794,7 +7767,7 @@ constexpr Ability MagicalFists = {
     .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (IsIronFistBoosted(battler, move)) *atkStatToUse = STAT_SPATK;
+            if (IsMovePunch(battler, move)) *atkStatToUse = STAT_SPATK;
         },
 };
 
@@ -8006,7 +7979,7 @@ constexpr Ability ChampionsEntrance = {
 constexpr Ability Presto = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(BATTLER_MAX_HP(battler))
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
         return 1;
     },
 };
@@ -8558,7 +8531,7 @@ constexpr Ability TemporalRupture = {
 constexpr Ability GrassFlute = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
         CHECK_NOT(gVolatileStructs[target].fear)
 
         return AbilityStatusEffect(MOVE_EFFECT_FEAR);
@@ -9035,7 +9008,7 @@ constexpr Ability PaintShot = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(IS_BATTLER_OF_TYPE(target, moveType))
-        CHECK(IsMegaLauncherBoosted(battler, move))
+        CHECK(IsMoveMegaLauncher(battler, move))
 
         gBattleMons[target].type1 = moveType;
         gBattleMons[target].type2 = moveType;

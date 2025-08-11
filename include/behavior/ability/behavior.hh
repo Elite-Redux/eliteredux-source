@@ -164,33 +164,6 @@ struct SwarmLike : is OnOffensiveMultiplier<> {
     }
 };
 
-// int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS_ARGS) {
-//     switch (flag) {
-//         case MOVE_FLAG_DANCE:
-//             if (gBattleMoves[flag].flags & FLAG_DANCE) return TRUE;
-//             break;
-//         case MOVE_FLAG_KICK:
-//             if (gBattleMoves[flag].flags & FLAG_STRIKER_BOOST) return TRUE;
-//             break;
-//         case MOVE_FLAG_MEGA_LAUNCHER:
-//             if (gBattleMoves[flag].flags & FLAG_MEGA_LAUNCHER_BOOST) return TRUE;
-//             break;
-//         case MOVE_FLAG_PUNCH:
-//             if (gBattleMoves[flag].flags & FLAG_IRON_FIST_BOOST) return TRUE;
-//             break;
-//         case MOVE_FLAG_SOUND:
-//             if (gBattleMoves[flag].flags & FLAG_SOUND) return TRUE;
-//             break;
-
-//         default:
-//             return FALSE;
-//             break;
-//     }
-
-//     ON_ABILITY(battler, FALSE, gAbilities[ability].onModifyMoveFlags, if (gAbilities[ability].onModifyMoveFlags(DELEGATE_MODIFY_MOVE_FLAGS)) return TRUE)
-//     return FALSE;
-// }
-
 template <>
 struct AbilityImpl<ABILITY_NONE> : is RandomizerBanned {};
 
@@ -656,7 +629,7 @@ struct AbilityImpl<ABILITY_MAGNET_PULL> : is OnTrap {
 template <>
 struct AbilityImpl<ABILITY_SOUNDPROOF> : is OnImmune<> {
     ON_IMMUNE {
-        CHECK(IsSoundMove(attacker, move))
+        CHECK(IsMoveSound(attacker, move))
         CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
         return TRUE;
     }
@@ -1043,7 +1016,7 @@ struct AbilityImpl<ABILITY_DOWNLOAD> : is OnEntry {
 template <>
 struct AbilityImpl<ABILITY_IRON_FIST> : is OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
-        if (IsIronFistBoosted(battler, move)) MUL(1.3);
+        if (IsMovePunch(battler, move)) MUL(1.3);
     }
 };
 
@@ -1801,7 +1774,7 @@ struct AbilityImpl<ABILITY_GALE_WINGS> : is GaleWingsLike<TYPE_FLYING> {};
 template <>
 struct AbilityImpl<ABILITY_MEGA_LAUNCHER> : is OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
-        if (IsMegaLauncherBoosted(battler, move)) MUL(1.3);
+        if (IsMoveMegaLauncher(battler, move)) MUL(1.3);
     }
 };
 
@@ -2069,7 +2042,7 @@ struct AbilityImpl<ABILITY_LONG_REACH> : is OnOffensiveMultiplier<> {
 template <Type BoostType>
 struct LiquidVoiceClone : is OnOffensiveMultiplier<>, is OnMoveType {
     ON_OFFENSIVE_MULTIPLIER {
-        if (IsSoundMove(battler, move)) MUL(1.2);
+        if (IsMoveSound(battler, move)) MUL(1.2);
     }
     ON_MOVE_TYPE {
         CHECK(moveType == TYPE_NORMAL)
@@ -2243,7 +2216,7 @@ struct AbilityImpl<ABILITY_INNARDS_OUT> : is OnDefender {
 
 template <>
 struct AbilityImpl<ABILITY_DANCER> : is OnCopyMove {
-    ON_COPY_MOVE { CHECK(IsDance(attacker, move)) return UseOutOfTurnAttack(battler, target, ability, move, 0); }
+    ON_COPY_MOVE { CHECK(IsMoveDance(attacker, move)) return UseOutOfTurnAttack(battler, target, ability, move, 0); }
 };
 
 template <>
@@ -2490,15 +2463,15 @@ struct AbilityImpl<ABILITY_STEAM_ENGINE> : is OnDefender {
 template <>
 struct AbilityImpl<ABILITY_AMPLIFIER> : is OnOffensiveMultiplier<>, is OnMakeSpread {
     ON_OFFENSIVE_MULTIPLIER {
-        if (IsSoundMove(battler, move)) MUL(1.3);
+        if (IsMoveSound(battler, move)) MUL(1.3);
     }
-    ON_MAKE_SPREAD { return IsSoundMove(battler, move); }
+    ON_MAKE_SPREAD { return IsMoveSound(battler, move); }
 };
 
 template <>
 struct AbilityImpl<ABILITY_PUNK_ROCK> : is OnDefensiveMultiplier<>, is AbilityImpl<ABILITY_AMPLIFIER> {
     ON_DEFENSIVE_MULTIPLIER {
-        if (IsSoundMove(attacker, move)) MUL(.5);
+        if (IsMoveSound(attacker, move)) MUL(.5);
     }
 };
 
@@ -2826,7 +2799,7 @@ struct AbilityImpl<ABILITY_PRISM_SCALES> : is OnDefensiveMultiplier<> {
 
 template <>
 struct AbilityImpl<ABILITY_POWER_FISTS> : is AbilityImpl<ABILITY_IRON_FIST>, is OnChooseDefensiveStat<> {
-    ON_CHOOSE_DEFENSIVE_STAT { CHECK(IsIronFistBoosted(battler, move)) return STAT_SPDEF; }
+    ON_CHOOSE_DEFENSIVE_STAT { CHECK(IsMovePunch(battler, move)) return STAT_SPDEF; }
 };
 
 template <>
@@ -2848,7 +2821,7 @@ struct AbilityImpl<ABILITY_VENGEANCE> : is SwarmLike<TYPE_GHOST> {};
 template <>
 struct AbilityImpl<ABILITY_BLITZ_BOXER> : is OnPriority {
     ON_PRIORITY {
-        CHECK(IsIronFistBoosted(battler, move)) CHECK(BATTLER_MAX_HP(battler));
+        CHECK(IsMovePunch(battler, move)) CHECK(BATTLER_MAX_HP(battler));
         return 1;
     }
 };
@@ -2994,7 +2967,7 @@ struct AbilityImpl<ABILITY_LOUD_BANG> : is OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeConfused(target))
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
         CHECK(Random() % 2)
 
         return AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
@@ -3205,7 +3178,7 @@ struct AbilityImpl<ABILITY_PRIMAL_ARMOR> : is OnDefensiveMultiplier<> {
 
 template <>
 struct AbilityImpl<ABILITY_RAGING_BOXER> : is OnParentalBond {
-    ON_PARENTAL_BOND { CHECK(IsIronFistBoosted(battler, move)) return PARENTAL_BOND_PRIMAL_MAW; }
+    ON_PARENTAL_BOND { CHECK(IsMovePunch(battler, move)) return PARENTAL_BOND_PRIMAL_MAW; }
 };
 
 template <>
@@ -3565,7 +3538,7 @@ struct AbilityImpl<ABILITY_FIELD_EXPLORER> : is OnOffensiveMultiplier<> {
 template <>
 struct AbilityImpl<ABILITY_STRIKER> : is OnOffensiveMultiplier<> {
     ON_OFFENSIVE_MULTIPLIER {
-        if (IsStrikerBoosted(battler, move)) MUL(1.3);
+        if (IsMoveKick(battler, move)) MUL(1.3);
     }
 };
 
@@ -3655,15 +3628,15 @@ struct AbilityImpl<ABILITY_BIG_LEAVES>
 
 template <>
 struct AbilityImpl<ABILITY_PRECISE_FIST> : is OnCrit<>, is OnModifyEffectChance<> {
-    ON_CRIT { CHECK(IsIronFistBoosted(battler, move)) return 1; }
+    ON_CRIT { CHECK(IsMovePunch(battler, move)) return 1; }
     ON_MODIFY_EFFECT_CHANCE {
-        if (IsIronFistBoosted(battler, move)) *effectChance *= 5;
+        if (IsMovePunch(battler, move)) *effectChance *= 5;
     }
 };
 
 template <>
 struct AbilityImpl<ABILITY_DEADEYE> : is OnAccuracy<>, is OnChooseDefensiveStat<> {
-    ON_ACCURACY { CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].arrowBased) return ACCURACY_HITS_IF_POSSIBLE; }
+    ON_ACCURACY { CHECK(IsMoveMegaLauncher(battler, move) || gBattleMoves[move].arrowBased) return ACCURACY_HITS_IF_POSSIBLE; }
     ON_CHOOSE_DEFENSIVE_STAT {
         CHECK(gIsCriticalHit)
         u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
@@ -3679,8 +3652,8 @@ struct AbilityImpl<ABILITY_DEADEYE> : is OnAccuracy<>, is OnChooseDefensiveStat<
 
 template <>
 struct AbilityImpl<ABILITY_ARTILLERY> : is OnAccuracy<>, is OnMakeSpread {
-    ON_ACCURACY { CHECK(IsMegaLauncherBoosted(battler, move)) return ACCURACY_HITS_IF_POSSIBLE; }
-    ON_MAKE_SPREAD { return IsMegaLauncherBoosted(battler, move); }
+    ON_ACCURACY { CHECK(IsMoveMegaLauncher(battler, move)) return ACCURACY_HITS_IF_POSSIBLE; }
+    ON_MAKE_SPREAD { return IsMoveMegaLauncher(battler, move); }
 };
 
 template <>
@@ -3831,7 +3804,7 @@ struct AbilityImpl<ABILITY_STEEL_BARREL> : is AbilityImpl<ABILITY_ROCK_HEAD> {};
 template <>
 struct AbilityImpl<ABILITY_PYRO_SHELLS> : is OnAttacker {
     ON_ATTACKER {
-        CHECK(IsMegaLauncherBoosted(battler, move))
+        CHECK(IsMoveMegaLauncher(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_OUTBURST, 50);
@@ -3894,9 +3867,9 @@ struct AbilityImpl<ABILITY_TOXIC_DEBRIS> : is OnDefender {
 
 template <>
 struct AbilityImpl<ABILITY_ROUNDHOUSE> : is OnAccuracy<>, is OnChooseDefensiveStat<> {
-    ON_ACCURACY { CHECK(IsStrikerBoosted(battler, move)) return ACCURACY_HITS_IF_POSSIBLE; }
+    ON_ACCURACY { CHECK(IsMoveKick(battler, move)) return ACCURACY_HITS_IF_POSSIBLE; }
     ON_CHOOSE_DEFENSIVE_STAT {
-        CHECK(IsStrikerBoosted(battler, move))
+        CHECK(IsMoveKick(battler, move))
         u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
         u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
         if (def < spDef)
@@ -4209,7 +4182,7 @@ struct AbilityImpl<ABILITY_INFERNAL_RAGE> : is OnRecoil, is OnOffensiveMultiplie
 template <>
 struct AbilityImpl<ABILITY_DUAL_WIELD> : is OnParentalBond {
     ON_PARENTAL_BOND {
-        CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
+        CHECK(IsMoveMegaLauncher(battler, move) || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
         return PARENTAL_BOND_DUAL_WIELD;
     }
 };
@@ -5116,7 +5089,7 @@ struct AbilityImpl<ABILITY_MONSTER_MASH> : is SimpleEntryMove<MOVE_TRICK_OR_TREA
 template <>
 struct AbilityImpl<ABILITY_TWO_STEP> : is OnAttacker {
     ON_ATTACKER {
-        CHECK(IsDance(battler, move))
+        CHECK(IsMoveDance(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_REVELATION_DANCE, 50);
@@ -5326,7 +5299,7 @@ struct AbilityImpl<ABILITY_AIRBORNE> : is OnOffensiveMultiplier<ApplyOn::ALLY> {
 
 template <>
 struct AbilityImpl<ABILITY_PARROTING> : is AbilityImpl<ABILITY_SOUNDPROOF>, is OnCopyMove {
-    ON_COPY_MOVE { CHECK(IsSoundMove(attacker, move)) return UseOutOfTurnAttack(battler, target, ability, move, 0); }
+    ON_COPY_MOVE { CHECK(IsMoveSound(attacker, move)) return UseOutOfTurnAttack(battler, target, ability, move, 0); }
 };
 
 template <>
@@ -5822,7 +5795,7 @@ struct AbilityImpl<ABILITY_RADIO_JAM> : is OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeDisabled(target))
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
         CHECK(Random() % 100 < 20)
 
         return AbilityStatusEffect(MOVE_EFFECT_DISABLE);
@@ -6081,7 +6054,7 @@ struct AbilityImpl<ABILITY_BEAUTIFUL_MUSIC> : is OnAttacker, is InfatuatesAny {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(Random() % 2)
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
 
         return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
     }
@@ -6107,7 +6080,7 @@ struct AbilityImpl<ABILITY_RESONANCE> : is OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
         CHECK(Random() % 100 < 50)
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
@@ -6211,7 +6184,7 @@ struct AbilityImpl<ABILITY_PIERCING_SOLO> : is OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     }
@@ -6225,7 +6198,7 @@ struct AbilityImpl<ABILITY_RHYTHMIC> : is OnOffensiveMultiplier<> {
 template <>
 struct AbilityImpl<ABILITY_CHUNKY_BASS_LINE> : is OnAttacker {
     ON_ATTACKER {
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_EARTHQUAKE, 40);
@@ -6629,7 +6602,7 @@ struct AbilityImpl<ABILITY_VITALITY_STRIKE> : is OnAttacker {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
-        CHECK(IsIronFistBoosted(battler, move))
+        CHECK(IsMovePunch(battler, move))
 
         gBattleMoveDamage = -gHpDealt / 10;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
@@ -6999,7 +6972,7 @@ struct AbilityImpl<ABILITY_TO_THE_BONE> : is AbilityImpl<ABILITY_RAZOR_SHARP>, i
 template <>
 struct AbilityImpl<ABILITY_BLADE_DANCE> : is OnAttacker {
     ON_ATTACKER {
-        CHECK(IsDance(battler, move))
+        CHECK(IsMoveDance(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_LEAF_BLADE, 50);
@@ -7104,7 +7077,7 @@ struct AbilityImpl<ABILITY_BREAKWATER> : is AbilityImpl<ABILITY_STALL>, is Abili
 template <>
 struct AbilityImpl<ABILITY_MAGICAL_FISTS> : is AbilityImpl<ABILITY_IRON_FIST>, is OnChooseOffensiveStat {
     ON_CHOOSE_OFFENSIVE_STAT {
-        if (IsIronFistBoosted(battler, move)) *atkStatToUse = STAT_SPATK;
+        if (IsMovePunch(battler, move)) *atkStatToUse = STAT_SPATK;
     }
 };
 
@@ -7270,7 +7243,7 @@ struct AbilityImpl<ABILITY_CHAMPIONS_ENTRANCE> : is Merged<ABILITY_INTIMIDATE, A
 
 template <>
 struct AbilityImpl<ABILITY_PRESTO> : is OnPriority {
-    ON_PRIORITY { CHECK(BATTLER_MAX_HP(battler)) CHECK(IsSoundMove(battler, move)) return 1; }
+    ON_PRIORITY { CHECK(BATTLER_MAX_HP(battler)) CHECK(IsMoveSound(battler, move)) return 1; }
 };
 
 template <>
@@ -7689,7 +7662,7 @@ template <>
 struct AbilityImpl<ABILITY_GRASS_FLUTE> : is OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(IsSoundMove(battler, move))
+        CHECK(IsMoveSound(battler, move))
         CHECK_NOT(gVolatileStructs[target].fear)
 
         return AbilityStatusEffect(MOVE_EFFECT_FEAR);
@@ -8075,7 +8048,7 @@ struct AbilityImpl<ABILITY_PAINT_SHOT> : is OnAttacker {
     ON_ATTACKER {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(IS_BATTLER_OF_TYPE(target, moveType))
-        CHECK(IsMegaLauncherBoosted(battler, move))
+        CHECK(IsMoveMegaLauncher(battler, move))
 
         gBattleMons[target].type1 = moveType;
         gBattleMons[target].type2 = moveType;

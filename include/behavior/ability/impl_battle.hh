@@ -103,6 +103,18 @@ AbilityEnum AbilityAllowsPoison(int battler, MoveEnum move);
 AbilityEnum AbilityAllowsParalysis(int battler);
 AbilityEnum IsAbilityStatusProtected(int battler, StatusCheckEnum status);
 AbilityEnum HandleRemovesStatusAtTurnEnd(int statusedBattler, StatusCheckEnum status);
+int HandleOnTrap(int battler);
+AbilityEnum HandleOnBeforeAttack(int battlerAtk, int battlerDef, MoveEnum move, Type moveType);
+void HandleOnPreemptAction(int battlerAtk);
+int IsMoveDance(int battler, MoveEnum move);
+int IsMoveKick(int battler, MoveEnum move);
+int IsMoveMegaLauncher(int battler, MoveEnum move);
+int IsMovePunch(int battler, MoveEnum move);
+int IsMoveSound(int battler, MoveEnum move);
+AbilityEnum HandleOnMoldBreaker(int battler, MoveEnum move);
+void DisableReviveAbilities(int battler);
+int TryUseRevive(int battler);
+int TryActivateRevive(int battler, AbilityEnum* ability);
 
 #ifdef __cplusplus
 }

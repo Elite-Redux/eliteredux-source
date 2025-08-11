@@ -691,9 +691,7 @@ void HandleAction_TryFinish(void) {
 void TryPreemptiveActions() {
     int battler = gBattlerByTurnOrder[gCurrentTurnActionNumber];
 
-    for (u8 opponent = GetOppositeSide(battler); opponent < gBattlersCount; opponent += 2) {
-        ON_ABILITY(opponent, TRUE, gAbilities[ability].onPreemptAction, gAbilities[ability].onPreemptAction(opponent, ability, battler))
-    }
+    HandleOnPreemptAction(battler);
 
     if (gQueuedAttackCount) {
         gDelayedTurnActionId = gCurrentActionFuncId;
@@ -1335,7 +1333,7 @@ u8 TrySetCantSelectMoveBattleScript(void) {
         }
     }
 
-    if (gVolatileStructs[gActiveBattler].throatChopTimer != 0 && IsSoundMove(gActiveBattler, move)) {
+    if (gVolatileStructs[gActiveBattler].throatChopTimer != 0 && IsMoveSound(gActiveBattler, move)) {
         gCurrentMove = move;
         if (gBattleTypeFlags & BATTLE_TYPE_PALACE) {
             gPalaceSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveThroatChopInPalace;
@@ -1523,7 +1521,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check) {
         FILTER_NOT(IsGravityPreventingMove(gBattleMons[battlerId].moves[i]))
         FILTER_NOT(IsHealBlockPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
         FILTER_NOT(IsBelchPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
-        FILTER_NOT(gVolatileStructs[battlerId].throatChopTimer && IsSoundMove(battlerId, gBattleMons[battlerId].moves[i]))
+        FILTER_NOT(gVolatileStructs[battlerId].throatChopTimer && IsMoveSound(battlerId, gBattleMons[battlerId].moves[i]))
         FILTER_NOT(gBattleMons[battlerId].moves[i] == MOVE_STUFF_CHEEKS && ItemId_GetPocket(gBattleMons[gActiveBattler].item) != POCKET_BERRIES)
         FILTER_NOT(BattlerHasAbility(battlerId, ABILITY_DISCIPLINE, FALSE) && *choicedMove != 0 && *choicedMove != 0xFFFF &&
                    *choicedMove != gBattleMons[battlerId].moves[i])
@@ -3330,7 +3328,7 @@ u8 AtkCanceller_UnableToUseMove(void) {
                 gBattleStruct->atkCancellerTracker++;
                 break;
             case CANCELLER_THROAT_CHOP:
-                if (gVolatileStructs[gBattlerAttacker].throatChopTimer && IsSoundMove(gBattlerAttacker, gCurrentMove)) {
+                if (gVolatileStructs[gBattlerAttacker].throatChopTimer && IsMoveSound(gBattlerAttacker, gCurrentMove)) {
                     gRoundStructs[gBattlerAttacker].usedThroatChopPreventedMove = TRUE;
                     CancelMultiTurnMoves(gBattlerAttacker);
                     gBattlescriptCurrInstr = BattleScript_MoveUsedIsThroatChopPrevented;
@@ -4657,10 +4655,7 @@ u32 IsAbilityOnFieldExcept(u32 battlerId, AbilityEnum ability) {
 u32 IsAbilityPreventingEscape(u32 battlerId) {
     if (ItemId_GetHoldEffect(gBattleMons[battlerId].item) == HOLD_EFFECT_SHED_SHELL) return 0;
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) return 0;
-    for (int opponent = GetOppositeSide(battlerId); opponent < gBattlersCount; opponent += 2) {
-        ON_ABILITY(opponent, FALSE, gAbilities[ability].onTrap, if (gAbilities[ability].onTrap(battlerId)) return opponent + 1)
-    }
-    return 0;
+    return HandleOnTrap(battlerId);
 }
 
 bool32 CanBattlerEscape(u32 battlerId)  // no ability check
@@ -6357,7 +6352,7 @@ bool32 IsMoveMakingContact(MoveEnum move, u8 battlerAtk) {
         return FALSE;
     } else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PROTECTIVE_PADS) {
         return FALSE;
-    } else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PUNCHING_GLOVE && IsIronFistBoosted(battlerAtk, move)) {
+    } else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PUNCHING_GLOVE && IsMovePunch(battlerAtk, move)) {
         return FALSE;
     } else {
         return TRUE;
@@ -7488,7 +7483,7 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
                 MUL_MODIFIER(&finalModifier, 1.3);
             break;
         case HOLD_EFFECT_PUNCHING_GLOVE:
-            if (IsIronFistBoosted(battlerAtk, move)) MulModifier(&finalModifier, UQ_4_12(1.1));
+            if (IsMovePunch(battlerAtk, move)) MulModifier(&finalModifier, UQ_4_12(1.1));
             break;
     }
 
@@ -8953,8 +8948,6 @@ int HandleEndTurnAbility(int abilityNumber, int battler) {
     return PerformOnEndTurn(battler, gBattleMons[battler].abilities[abilityNumber]);
 }
 
-int IsDance(int attacker, MoveEnum move) { return DoesMoveMatchFlag(attacker, move, MOVE_FLAG_DANCE); }
-
 int HasAnyStatusOrAbility(int battler) {
     if (gBattleMons[battler].status1 && STATUS1_ANY) return TRUE;
     if (HasComatose(battler)) return TRUE;
@@ -9046,14 +9039,6 @@ AbilityEnum HasRedirectionAbility(int battlerAtk, int battlerDef, MoveEnum move,
 int CanRaiseStat(int battler, int stat) { return CompareStat(battler, stat, MAX_STAT_STAGE, CMP_LESS_THAN); }
 
 int CanLowerStat(int battler, int stat) { return CompareStat(battler, stat, MIN_STAT_STAGE, CMP_GREATER_THAN); }
-
-int IsMegaLauncherBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_MEGA_LAUNCHER); }
-
-int IsIronFistBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_PUNCH); }
-
-int IsStrikerBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_KICK); }
-
-int IsSoundMove(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_DANCE); }
 
 int IsPoisonedForMove(int battler) {
     return gBattleMons[battler].status1 & STATUS1_POISON_ANY || IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN);

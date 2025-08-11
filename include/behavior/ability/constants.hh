@@ -97,7 +97,6 @@ extern "C" {
 
 int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag);
 int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag);
-int DoesMoveMatchFlag(int battler, MoveEnum move, MoveFlag flag);
 
 #ifdef __cplusplus
 

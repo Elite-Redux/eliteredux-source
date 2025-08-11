@@ -4615,13 +4615,12 @@ static void HandleEndTurn_BattleWon(void) {
 
     for (int battler = 0; battler < gBattlersCount; battler += 2) {
         FILTER_NOT(gBattleMons[battler].hp)
-        ON_ABILITY(
-            battler, FALSE, gAbilities[ability].onRevive, if (GetSingleUseAbilityCountByIndex(battler, idx) == 1) {
-                int damage = gBattleMons[battler].maxHP / 4;
-                if (!damage) damage = 1;
-                gBattleMons[battler].hp = damage;
-                SetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_HP, &damage);
-            })
+        if (TryUseRevive(battler)) {
+            int damage = gBattleMons[battler].maxHP / 4;
+            if (!damage) damage = 1;
+            gBattleMons[battler].hp = damage;
+            SetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_HP, &damage);
+        }
     }
 
     if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK)) {
