@@ -1,5 +1,9 @@
-
 #include "abilities.hh"
+
+#undef __SIZE_TYPE__
+#define __SIZE_TYPE__ uint32_t
+#include <cstddef>
+#include <array>
 
 extern "C" {
 #include "generated/constants/abilities.h"
@@ -26,6 +30,10 @@ extern "C" {
 #pragma GCC diagnostic error "-Wunused-function"
 
 #define NO_ANNOUNCE 2
+
+static int max(int a, int b) { return a > b ? a : b; }
+
+static int min(int a, int b) { return a < b ? a : b; }
 
 class __EnumHack {
    public:
@@ -126,6 +134,10 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_PREEMPT_ACTION battler, ability, turnBattler
 #define ON_MODIFY_MOVE_FLAGS int battler, MoveEnum move, MoveFlag flag
 #define DELEGATE_MODIFY_MOVE_FLAGS battler, move, flag
+#define ON_MOLD_BREAKER int battler, MoveEnum move
+#define DELEGATE_MOLD_BREAKER battler, move, moveType
+#define ON_REVIVE int battler
+#define DELEGATE_REVIVE battler
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -347,38 +359,37 @@ int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS) {
 }
 
 static int UseTurnAttackAsPursuit(ON_PREEMPT_ACTION) {
-        CHECK(gCurrentActionFuncId == B_ACTION_SWITCH)
-        CHECK(gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] == B_ACTION_USE_MOVE)
+    CHECK(gCurrentActionFuncId == B_ACTION_SWITCH)
+    CHECK(gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] == B_ACTION_USE_MOVE)
 
-        MoveEnum move = GetChosenMove(battler);
-        int targetFlag = GetBattlerBattleMoveTargetFlags(move, battler);
+    MoveEnum move = GetChosenMove(battler);
+    int targetFlag = GetBattlerBattleMoveTargetFlags(move, battler);
 
-        switch (targetFlag) {
-            case MOVE_TARGET_SELECTED:
-                CHECK(gBattleStruct->moveTarget[battler] == turnBattler)
-                break;
+    switch (targetFlag) {
+        case MOVE_TARGET_SELECTED:
+            CHECK(gBattleStruct->moveTarget[battler] == turnBattler)
+            break;
 
-            case MOVE_TARGET_BOTH:
-            case MOVE_TARGET_FOES_AND_ALLY:
-                break;
+        case MOVE_TARGET_BOTH:
+        case MOVE_TARGET_FOES_AND_ALLY:
+            break;
 
-            case MOVE_TARGET_RANDOM:
-            default:
-                return FALSE;
-        }
-
-        gQueuedExtraAttackData[++gQueuedAttackCount] = (ExtraAttackActionStruct){
-            .ability = ability,
-            .move = move,
-            .attacker = battler,
-            .target = turnBattler,
-            .movePos = gBattleStruct->chosenMovePositions[battler],
-        };
-        gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] = B_ACTION_FINISHED;
-        return TRUE;
+        case MOVE_TARGET_RANDOM:
+        default:
+            return FALSE;
     }
 
-#define CONTEXT None
+    gQueuedExtraAttackData[++gQueuedAttackCount] = (ExtraAttackActionStruct){
+        .ability = ability,
+        .move = move,
+        .attacker = battler,
+        .target = turnBattler,
+        .movePos = gBattleStruct->chosenMovePositions[battler],
+    };
+    gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] = B_ACTION_FINISHED;
+    return TRUE;
+}
+
 constexpr Ability None = {
     .randomizerBanned = TRUE,
 };
@@ -1099,10 +1110,6 @@ constexpr Ability WhiteSmoke = {
     },
 };
 
-constexpr Ability PurePower = {
-    .onStat = HugePower.onStat,
-};
-
 constexpr Ability ShellArmor = {
     .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
     .onCrit = BattleArmor.onCrit,
@@ -1321,6 +1328,7 @@ constexpr Ability LeafGuard = {
 
 constexpr Ability MoldBreaker = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER); },
+    .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int { return TRUE; },
 };
 
 constexpr Ability SuperLuck = {
@@ -1883,10 +1891,12 @@ constexpr Ability VictoryStar = {
 
 constexpr Ability Turboblaze = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIRE); },
+    .onMoldBreaker = MoldBreaker.onMoldBreaker,
 };
 
 constexpr Ability Teravolt = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ELECTRIC); },
+    .onMoldBreaker = MoldBreaker.onMoldBreaker,
 };
 
 constexpr Ability AromaVeil = {
@@ -3306,6 +3316,10 @@ constexpr Ability FelineProwess = {
         +[](ON_STAT) {
             if (statId == STAT_SPATK) *stat *= 2;
         },
+};
+
+constexpr Ability PurePower = {
+    .onStat = FelineProwess.onStat,
 };
 
 constexpr Ability CoilUp = {
@@ -6664,6 +6678,10 @@ constexpr Ability CuteAntecedence = {
 };
 
 constexpr Ability RecurringNightmare = {
+    .onRevive = +[](ON_REVIVE) -> int {
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+        return B_MSG_FADE_OUT;
+    },
     .persistent = TRUE,
 };
 
@@ -7332,6 +7350,7 @@ constexpr Ability Patchwork = {
 constexpr Ability BlindRage = {
     .onEntry = MoldBreaker.onEntry,
     .onTypeEffectiveness = Scrappy.onTypeEffectiveness,
+    .onMoldBreaker = MoldBreaker.onMoldBreaker,
     .tauntImmune = TRUE,
 };
 
@@ -8874,6 +8893,14 @@ constexpr Ability FireAspect = {
         CHECK(moveType == TYPE_FIRE)
         return ABSORB_RESULT_HEAL;
     },
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(moveType == TYPE_FIRE)
+        CHECK(CanBeBurned(target))
+
+        AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, target);
+        return TRUE;
+    },
     .breakable = TRUE,
 };
 
@@ -8888,7 +8915,29 @@ constexpr Ability AurorasGale = {
 };
 
 constexpr Ability WinterThrone = {
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_WINTER_THRONE); },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(IsAbilityOnField(ability) - 1 == battler)
+
+        int any = FALSE;
+        for (int target = 0; target < gBattlersCount; target++) {
+            FILTER(IsBattlerAlive(target))
+
+            if (IS_BATTLER_OF_TYPE(target, TYPE_ICE)) {
+                FILTER_NOT(IsMagicGuardProtected(target))
+                gStackBattler1 = target;
+                BattleScriptExecute(BattleScript_FuneralPyreDamage);
+            } else {
+                FILTER_NOT(BATTLER_MAX_HP(target))
+                FILTER(CanBattlerHeal(target))
+                gStackBattler1 = target;
+                BattleScriptExecute(BattleScript_HealStack1HpOver8End3);
+            }
+
+            any = TRUE;
+        }
+        return any;
+    },
 };
 
 constexpr Ability IcePlumes = {
@@ -8948,11 +8997,22 @@ constexpr Ability Taekkyeon = {
 };
 
 constexpr Ability SludgeSpit = {
-    .breakable = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(gBattleMoves[move].power)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_VENOM_BOLT, 35);
+    },
 };
 
 constexpr Ability SwampThing = {
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideTimers[GetOppositeSide(battler)].swampTimer)
+
+        AbilityStatusEffectSafe(MOVE_EFFECT_SWAMP, battler, GetOppositeSide(battler));
+        InsertCorrectEndType(ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+        return TRUE;
+    },
 };
 
 constexpr Ability FrostyPrescence = {
@@ -8970,20 +9030,47 @@ constexpr Ability ChillingPellets = {
 };
 
 constexpr Ability PaintShot = {
-    .breakable = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK_NOT(IS_BATTLER_OF_TYPE(target, moveType))
+        CHECK(IsMegaLauncherBoosted(battler, move))
+
+        gBattleMons[target].type1 = moveType;
+        gBattleMons[target].type2 = moveType;
+        gBattleMons[target].type3 = TYPE_MYSTERY;
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
+        gStackBattler1 = target;
+        BattleScriptCall(BattleScript_StackBecameTheTypeFull);
+        return TRUE;
+    },
 };
 
 constexpr Ability Stonecutter = {
+    .onOffensiveMultiplier = Fossilized.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Fossilized.onDefensiveMultiplier,
+    .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
+        gHitMarker |= HITMARKER_MOLD_BREAKER;
+        SetTypeBeforeUsingMove(move, gActiveBattler);
+        u8 moveType;
+        GET_MOVE_TYPE(move, moveType)
+        if (gBattleMoves[move].type2) {
+            u16 typeEffectiveness;
+            CalculateMoveDamageAndEffectiveness(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, &typeEffectiveness);
+        }
+        gHitMarker &= ~HITMARKER_MOLD_BREAKER;
+        return moveType == TYPE_ROCK;
+    },
     .breakable = TRUE,
 };
 
 constexpr Ability Edgelord = {
     .onEntry = Cutthroat.onEntry,
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        CHECK(gBattleMoves[gCurrentMove].flags & FLAG_KEEN_EDGE_BOOST || !(gStatuses4[battler] & STATUS4_CUTTHROAT))
+        CHECK_NOT(gStatuses4[battler] & STATUS4_CUTTHROAT)
+
         gStatuses4[battler] |= STATUS4_CUTTHROAT;
-        SetAbilityState(battler, ability, TRUE);
-        BattleScriptCall(BattleScript_BattlerCoiledUpReturnNoPopup);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CUTTHROAT;
+        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsgRet);
         return TRUE;
     },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
@@ -8997,15 +9084,26 @@ constexpr Ability Warmonger = {
 };
 
 constexpr Ability LocustSwarm = {
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onEndTurn = +[](ON_END_TURN) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability Revelation = {
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onEndTurn = +[](ON_END_TURN) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability CurseOfFamine = {
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
+
+        BattleScriptPushCursorAndCallback(BattleScript_CurseOfFamine);
+        return TRUE;
+    },
 };
 
 constexpr Ability CrystallineArmor = {
@@ -9013,13 +9111,17 @@ constexpr Ability CrystallineArmor = {
 };
 
 constexpr Ability SoulHarvest = {
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != STAT_SPEED) *stat = *stat * (20 + min(5, gFaintedMonCount[GetBattlerSide(battler)])) / 20;
+        },
     .breakable = TRUE,
 };
 
 constexpr Ability ThickBlubber = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.75);
+            if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.25);
         },
     .onStat =
         +[](ON_STAT) {
@@ -9032,19 +9134,34 @@ constexpr Ability Craving = {
 };
 
 constexpr Ability RatKing = {
-    .breakable = TRUE,
+    .onStat =
+        +[](ON_STAT) {
+            const BaseStats *baseStats = &gBaseStats[gBattleMons[battler].species];
+            int bst =
+                baseStats->baseHP + baseStats->baseAttack + baseStats->baseDefense + baseStats->baseSpAttack + baseStats->baseSpDefense + baseStats->baseSpeed;
+            if (bst >= 400) return;
+            *stat *= 1.5;
+        },
+    .onStatFor = APPLY_ON_ALLY,
 };
 
 constexpr Ability CrispyCream = {
-    .onDefender = FlameBody.onDefender,
+    .onDefender = +[](ON_DEFENDER) -> int { return Random() % 2 ? FlameBody.onDefender(DELEGATE_DEFENDER) : FreezingPoint.onDefender(DELEGATE_DEFENDER); },
 };
 
 constexpr Ability DeepFried = {
-    .breakable = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideTimers[GetOppositeSide(battler)].fireSeaTimer)
+
+        AbilityStatusEffectSafe(MOVE_EFFECT_FIRE_SEA, battler, GetOppositeSide(battler));
+        InsertCorrectEndType(ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+        return TRUE;
+    },
 };
 
 constexpr Ability FoodLovers = {
     .onEntry = Hospitality.onEntry,
+    .breakable = TRUE,
 };
 
 constexpr Ability LunarWrath = {
@@ -9060,22 +9177,31 @@ constexpr Ability Spyware = {
     .breakable = TRUE,
 };
 
-constexpr Ability Virus = {
-    .breakable = TRUE,
-};
+constexpr Ability Virus = {.onAttacker = +[](ON_ATTACKER) -> int {
+    CHECK(ShouldApplyOnHitAffect(target))
+    CHECK(moveType == TYPE_ELECTRIC)
+    CHECK(CanBePoisoned(battler, target, move))
+
+    return AbilityStatusEffect(MOVE_EFFECT_POISON);
+}};
 
 constexpr Ability PowerLeak = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
 
-        BattleScriptCall(BattleScript_SeedSower);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESELECTRIC;
+        BattleScriptCall(BattleScript_SurgeActivatesRet);
         return TRUE;
     },
     .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
 constexpr Ability BackupPower = {
+    .onRevive = +[](ON_REVIVE) -> int {
+        CHECK(IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN))
+        return B_MSG_BACKUP_POWER;
+    },
     .persistent = TRUE,
 };
 
@@ -9088,7 +9214,7 @@ constexpr Ability SandFiend = {
 };
 
 constexpr Ability Moustache = {
-    .onDefender = Stamina.onDefender,
+    .onDefender = +[](ON_DEFENDER) -> int { return TanglingHair.onDefender(DELEGATE_DEFENDER) | Stamina.onDefender(DELEGATE_DEFENDER); },
 };
 
 constexpr Ability DepthExplorer = {
@@ -9119,7 +9245,7 @@ constexpr Ability FogMachine = {
         }
         else if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
             gBattleScripting.battler = battler;
-            BattleScriptCall(BattleScript_SandSpitActivates);
+            BattleScriptCall(BattleScript_FogStartsReturn);
             return TRUE;
         }
         return FALSE;
@@ -9127,7 +9253,13 @@ constexpr Ability FogMachine = {
 };
 
 constexpr Ability DropBlocks = {
-    .breakable = TRUE,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(gSideTimers[BATTLE_OPPOSITE(battler)].spikesAmount < 3)
+
+        BattleScriptCall(BattleScript_DefenderSetsSpikeLayer_Scrapyard);
+        return TRUE;
+    },
 };
 
 constexpr Ability LaserDrill = {
@@ -9168,6 +9300,23 @@ constexpr Ability Bruiser = {
 
 constexpr Ability LetsDance = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TEETER_DANCE, 0); },
+};
+
+constexpr Ability MyceliumMight = {
+    .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int { return IS_MOVE_STATUS(move); },
+};
+
+constexpr Ability DeadlyPrecision = {
+    .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
+        gHitMarker |= HITMARKER_MOLD_BREAKER;
+        SetTypeBeforeUsingMove(move, gActiveBattler);
+        u8 moveType;
+        GET_MOVE_TYPE(move, moveType)
+        u16 typeEffectiveness;
+        CalculateMoveDamageAndEffectiveness(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, &typeEffectiveness);
+        gHitMarker &= ~HITMARKER_MOLD_BREAKER;
+        return typeEffectiveness >= UQ_4_12(2.0);
+    },
 };
 
 typedef struct AbilityKVPair {
@@ -10052,21 +10201,24 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_HOME_RUN, HomeRun},
     {ABILITY_BRUISER, Bruiser},
     {ABILITY_LETS_DANCE, LetsDance},
+    {ABILITY_MYCELIUM_MIGHT, MyceliumMight},
+    {ABILITY_DEADLY_PRECISION, DeadlyPrecision},
 };
 
 template <int N>
-consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKVPair second[N]) {
-    AbilitiesWrapper newWrapper = wrapper;
+consteval std::array<Ability, ABILITIES_COUNT> mergeArrays(const AbilityKVPair second[N],
+                                                           std::array<Ability, ABILITIES_COUNT> wrapper = std::array<Ability, ABILITIES_COUNT>{0}) {
+    std::array<Ability, ABILITIES_COUNT> abilities = wrapper;
     bool assigned[ABILITIES_COUNT] = {0};
     for (int i = 0; i < N; i++) {
         auto val = second[i];
         if (assigned[val.key]) {
-            return (AbilitiesWrapper){0};
+            return std::array<Ability, ABILITIES_COUNT>{0};
         }
         assigned[val.key] = true;
-#define __OVERWRITE_ARRAY_VAL(field) .field = val.ability.field ? val.ability.field : wrapper.abilities[val.key].field
+#define __OVERWRITE_ARRAY_VAL(field) .field = val.ability.field ? val.ability.field : wrapper[val.key].field
 
-        newWrapper.abilities[val.key] = (Ability){
+        abilities[val.key] = (Ability){
             __OVERWRITE_ARRAY_VAL(name),
             __OVERWRITE_ARRAY_VAL(description),
             __OVERWRITE_ARRAY_VAL(expandedDescription),
@@ -10106,6 +10258,8 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(onBeforeAttack),
             __OVERWRITE_ARRAY_VAL(onPreemptAction),
             __OVERWRITE_ARRAY_VAL(onModifyMoveFlags),
+            __OVERWRITE_ARRAY_VAL(onMoldBreaker),
+            __OVERWRITE_ARRAY_VAL(onRevive),
             __OVERWRITE_ARRAY_VAL(onImmuneFor),
             __OVERWRITE_ARRAY_VAL(onBattlerFaintsFor),
             __OVERWRITE_ARRAY_VAL(onOffensiveMultiplierFor),
@@ -10155,12 +10309,12 @@ consteval AbilitiesWrapper mergeArrays(AbilitiesWrapper wrapper, const AbilityKV
             __OVERWRITE_ARRAY_VAL(stealthRockImmune),
         };
     }
-    return newWrapper;
+    return abilities;
 }
 
 #include "generated/data/abilities/ability_text.hh"
 
-const AbilitiesWrapper gAbilitiesWrapper =
-    mergeArrays<ARRAY_COUNT(sAbilities)>(mergeArrays<ARRAY_COUNT(sAbilityText)>((AbilitiesWrapper){0}, sAbilityText), sAbilities);
+const static auto abilityData = mergeArrays<ARRAY_COUNT(sAbilities)>(sAbilities, mergeArrays<ARRAY_COUNT(sAbilityText)>(sAbilityText));
+const Ability *const gAbilities = abilityData.data();
 
 #pragma GCC diagnostic pop

@@ -1148,6 +1148,27 @@ BattleScript_Lawnmower_SpDef:
 	setstatchanger STAT_SPDEF, 1, FALSE
 	goto BattleScript_Lawnmower_Continue
 
+BattleScript_CurseOfFamine::
+	removeterrain
+	printfromtable gTerrainEndingStringIds
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_TOXICTERRAINENDS, BattleScript_CurseOfFamine_SpDef
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_PSYCHICTERRAINENDS, BattleScript_CurseOfFamine_SpDef
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_MISTYTERRAINENDS, BattleScript_CurseOfFamine_SpDef
+	setstatchanger STAT_DEF, 1, FALSE
+	goto BattleScript_CurseOfFamine_Continue
+BattleScript_CurseOfFamine_Continue:
+	printfromtable gTerrainEndingStringIds
+	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
+	call BattleScript_PerformStatUp
+	jumpifstatus BS_ATTACKER, STATUS1_BLEED, BattleScript_End3
+	jumpifhealingblocked BS_ATTACKER, BattleScript_End3
+	call BattleScript_HealHpOver4
+	end3
+BattleScript_CurseOfFamine_SpDef:
+	setstatchanger STAT_SPDEF, 1, FALSE
+	goto BattleScript_CurseOfFamine_Continue
+
 BattleScript_EffectClearWeatherAndTerrainHit::
 	attackcanceler
 	attackstring
@@ -9064,6 +9085,14 @@ BattleScript_FuneralPyreDamage::
 	chosenstatus2animation BS_ATTACKER, STATUS2_CURSED
 	goto BattleScript_DoTurnDmg
 
+BattleScript_WinterThroneDamage::
+	hpfractiontodamage BS_STACK_1, 8
+	copybyte gBattlerAttacker, gStackBattler1
+	printstring STRINGID_PKMNHURTBYWINTERTHRONE
+	waitmessage B_WAIT_TIME_LONG
+	chosenstatus2animation BS_ATTACKER, STATUS2_CURSED
+	goto BattleScript_DoTurnDmg
+
 BattleScript_FireCoatDamage::
 	hpfractiontodamage BS_STACK_1, 8
 	copybyte gBattlerAttacker, gStackBattler1
@@ -9998,6 +10027,19 @@ BattleScript_AbilityHpHeal_NoPopup:
 BattleScript_RainDishActivates::
 	call BattleScript_AbilityHpHeal_NoPopup
 	end3
+
+BattleScript_HealStack1HpOver8End3::
+	copybyte gBattlerAttacker, gStackBattler1
+	hpfractiontodamage BS_ATTACKER, 8
+	manipulatedamage DMG_CHANGE_SIGN
+	call BattleScript_AbilityHpHeal_NoPopup
+	end3
+
+BattleScript_HealHpOver4::
+	hpfractiontodamage BS_ATTACKER, 4
+	manipulatedamage DMG_CHANGE_SIGN
+	call BattleScript_AbilityHpHeal_NoPopup
+	return
 	
 BattleScript_CheekPouchActivates::
 	saveattackertostack3
@@ -10284,6 +10326,14 @@ BattleScript_DroughtActivates::
 	playanimation BS_BATTLER_0, B_ANIM_SUN_CONTINUES, NULL
 	call BattleScript_OnWeatherChange
 	end3
+
+BattleScript_FogStartsReturn::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_FOG_STARTS
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_FOG_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
+	return
 
 BattleScript_BadOmensActivates::
 	call BattleScript_AbilityPopUp

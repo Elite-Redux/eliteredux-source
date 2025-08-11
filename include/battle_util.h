@@ -160,7 +160,7 @@ typedef struct {
     SpeciesEnum lowHpSpecies;
     u8 hpFraction;
 } HpTransformation;
-extern const HpTransformation gHpTransformations[10];
+extern const HpTransformation gHpTransformations[11];
 
 int GetAbilityIndex(int battler, AbilityEnum ability, int checkMoldBreaker);
 s32 CountUsablePartyMons(u8 battlerId);
@@ -414,6 +414,8 @@ AbilityEnum IgnoresBurnAtkDrop(int battler);
 AbilityEnum IgnoresFrostbiteSpatkDrop(int battler);
 int IsStatusImmune(u8 battlerId, StatusCheckEnum status);
 u16 IsPowderImmune(int battler, int checkMoldBreaker);
+s8 GetSingleUseAbilityCountByIndex(u8 battler, int index);
+void SetSingleUseAbilityCountByIndex(u8 battler, int index, u8 value);
 
 MultihitType GetMultihitType(int battler, MoveEnum move);
 

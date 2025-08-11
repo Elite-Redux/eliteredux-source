@@ -735,8 +735,6 @@ static const u8 sText_AngelsWrath_BugBiteEffect[] = _("{B_DEF_NAME_WITH_PREFIX}'
 static const u8 sText_AngelsWrath_ProtectEffect[] = _("All of {B_DEF_NAME_WITH_PREFIX}'s\nstats were lowered!");
 static const u8 sText_PkmnsDisciplineLockEnds[] = _("{B_ATK_NAME_WITH_PREFIX} is no longer\nlocked into only using one move!");
 static const u8 sText_SleepClauseDisablesMove[] = _("Sleep Clause prevents\nselecting this move!\p");
-static const u8 sText_EvasionClauseDisablesMove[] = _("Evasion Clause prevents\nselecting this move!\p");
-static const u8 sText_CurrentFightDisablesMove[] = _("The current fight prevents\nselecting this move!\p");
 static const u8 sText_ElectromorphosisActivates[] = _("{B_DEF_NAME_WITH_PREFIX} became fully\ncharged!");
 static const u8 sText_InverseRoomEnds[] = _("The inverted dimensions returned to\nnormal!");
 static const u8 sText_BattlerAbilitySetUpInverseRoom[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s Inverse Room\nset up Inverse Room!");
@@ -923,6 +921,12 @@ static const u8 sText_MimicryEnds[] = _("{B_STACK_1_NAME_WITH_PREFIX}'s type\nre
 static const u8 sText_TerrainBecomesToxic[] = _("Toxic sludge covers the battlefield!");
 static const u8 sText_ToxicTerrainEnds[] = _("The sludge disappeared\nfrom the battlefield.");
 static const u8 sText_ToxicTerrainDamages[] = _("{B_STACK_1_NAME_WITH_PREFIX} was damaged\nby the toxic terrain!");
+static const u8 sText_AbsorbStealthRocks[] = _("{B_ATK_NAME_WITH_PREFIX} absorbs\nthe Stealth Rocks!");
+static const u8 sText_EvasionClauseDisablesMove[] = _("Evasion Clause prevents\nselecting this move!\p");
+static const u8 sText_CurrentFightDisablesMove[] = _("The current fight prevents\nselecting this move!\p");
+static const u8 sText_WinterThroneEntry[] = _("A bitter chill envelops\nthe battlefield!");
+static const u8 sText_PkmnHurtByWinterThrone[] = _("{B_ATK_NAME_WITH_PREFIX} was hurt\nby the bitter cold!");
+static const u8 sText_BackupPower[] = _("{B_STACK_1_NAME_WITH_PREFIX} is\nrebooting!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1081,7 +1085,6 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_AbsorbStealthRocks[] = _("{B_ATK_NAME_WITH_PREFIX} absorbs\nthe Stealth Rocks!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1759,8 +1762,6 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ANGELS_WRATH_PROTECT_EFFECT - 12] = sText_AngelsWrath_ProtectEffect,
     [STRINGID_DISCIPLINE_LOCK_ENDS - 12] = sText_PkmnsDisciplineLockEnds,
     [STRINGID_SLEEPCLAUSEDISABLESMOVE - 12] = sText_SleepClauseDisablesMove,
-    [STRINGID_EVASIONCLAUSEDISABLESMOVE - 12] = sText_EvasionClauseDisablesMove,
-    [STRINGID_DISABLESMOVE - 12] = sText_CurrentFightDisablesMove,
     [STRINGID_ELECTROMORPHOSIS_ACTIVATES - 12] = sText_ElectromorphosisActivates,
     [STRINGID_INVERSEROOMENDS - 12] = sText_InverseRoomEnds,
     [STRINGID_INVERSEROOMACTIVATED - 12] = sText_BattlerAbilitySetUpInverseRoom,
@@ -1948,6 +1949,11 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_TOXICTERRAINENDS - 12] = sText_ToxicTerrainEnds,
     [STRINGID_TOXICTERRAINDAMAGES - 12] = sText_ToxicTerrainDamages,
     [STRINGID_ABSORB_STEALTH_ROCKS - 12] = sText_AbsorbStealthRocks,
+    [STRINGID_EVASIONCLAUSEDISABLESMOVE - 12] = sText_EvasionClauseDisablesMove,
+    [STRINGID_DISABLESMOVE - 12] = sText_CurrentFightDisablesMove,
+    [STRINGID_WINTER_THRONE_ENTRY - 12] = sText_WinterThroneEntry,
+    [STRINGID_PKMNHURTBYWINTERTHRONE - 12] = sText_PkmnHurtByWinterThrone,
+    [STRINGID_BACKUP_POWER - 12] = sText_BackupPower,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2044,6 +2050,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_FIRE_COAT] = STRINGID_FIRECOATSTART,
     [B_MSG_SWITCHIN_SOOTHSAYER] = STRINGID_SOOTHSAYER,
     [B_MSG_SWITCHIN_MOLTEN_CORE] = STRINGID_ABSORB_STEALTH_ROCKS,
+    [B_MSG_SWITCHIN_WINTER_THRONE] = STRINGID_WINTER_THRONE_ENTRY,
 };
 
 const u16 gParadoxBoostSourceIds[] = 
@@ -2521,6 +2528,7 @@ const u16 gFaintMonMessage[] =
 {
     [B_MSG_MON_FAINTED] = STRINGID_ATTACKERFAINTED,
     [B_MSG_FADE_OUT] = STRINGID_RECURRING_NIGHTMARE,
+    [B_MSG_BACKUP_POWER] = STRINGID_BACKUP_POWER,
 };
 
 const u16 gRecoilMessage[] = 

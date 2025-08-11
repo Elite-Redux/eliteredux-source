@@ -858,27 +858,48 @@ const u16 gPercentToModifier[] = {
 #define X UQ_4_12
 
 static const u16 sTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] = {
-    //   normal  fight   flying  poison  ground  rock    bug     ghost   steel   mystery fire    water   grass  electric psychic ice     dragon  dark    fairy   stellar
-    {    X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(0.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)},  // normal
-    {    X(2.0), X(1.0), X(0.5), X(0.5), X(1.0), X(2.0), X(0.5), X(0.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(2.0), X(1.0), X(2.0), X(0.5), X(1.0)},  // fight
-    {    X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(0.5), X(2.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(2.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)},  // flying
-    {    X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(0.5), X(0.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0)},  // poison
-    {    X(1.0), X(1.0), X(0.0), X(2.0), X(1.0), X(2.0), X(0.5), X(1.0), X(2.0), X(1.0), X(2.0), X(1.0), X(0.5), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)},  // ground
-    {    X(1.0), X(0.5), X(2.0), X(1.0), X(0.5), X(1.0), X(2.0), X(1.0), X(0.5), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0)},  // rock
-    {    X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(2.0), X(1.0), X(2.0), X(1.0), X(1.0), X(2.0), X(0.5), X(1.0)},  // bug
-    {    X(0.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0)},  // ghost
-    {    X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(0.5), X(1.0), X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(2.0), X(1.0), X(1.0), X(2.0), X(1.0)},  // steel
-    {    X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)},  // mystery
-    {    X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(2.0), X(1.0), X(2.0), X(1.0), X(0.5), X(0.5), X(2.0), X(1.0), X(1.0), X(2.0), X(0.5), X(1.0), X(1.0), X(1.0)},  // fire
-    {    X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0)},  // water
-    {    X(1.0), X(1.0), X(0.5), X(0.5), X(2.0), X(2.0), X(0.5), X(1.0), X(0.5), X(1.0), X(0.5), X(2.0), X(0.5), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0)},  // grass
-    {    X(1.0), X(1.0), X(2.0), X(1.0), X(0.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(0.5), X(0.5), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0)},  // electric
-    {    X(1.0), X(2.0), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(0.0), X(1.0), X(1.0)},  // psychic
-    {    X(1.0), X(1.0), X(2.0), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(0.5), X(0.5), X(2.0), X(1.0), X(1.0), X(0.5), X(2.0), X(1.0), X(1.0), X(1.0)},  // ice
-    {    X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(0.0), X(1.0)},  // dragon
-    {    X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(0.5), X(0.5), X(1.0)},  // dark
-    {    X(1.0), X(2.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(2.0), X(1.0), X(1.0)},  // fairy
-    {    X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0)},  // stellar
+    //   normal  fight   flying  poison  ground  rock    bug     ghost   steel   mystery fire    water   grass  electric psychic ice     dragon  dark    fairy
+    //   stellar
+    {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(0.0), X(0.5), X(1.0),
+     X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)},  // normal
+    {X(2.0), X(1.0), X(0.5), X(0.5), X(1.0), X(2.0), X(0.5), X(0.0), X(2.0), X(1.0),
+     X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(2.0), X(1.0), X(2.0), X(0.5), X(1.0)},  // fight
+    {X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(0.5), X(2.0), X(1.0), X(0.5), X(1.0),
+     X(1.0), X(1.0), X(2.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)},  // flying
+    {X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(0.5), X(0.0), X(1.0),
+     X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0)},  // poison
+    {X(1.0), X(1.0), X(0.0), X(2.0), X(1.0), X(2.0), X(0.5), X(1.0), X(2.0), X(1.0),
+     X(2.0), X(1.0), X(0.5), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)},  // ground
+    {X(1.0), X(0.5), X(2.0), X(1.0), X(0.5), X(1.0), X(2.0), X(1.0), X(0.5), X(1.0),
+     X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0)},  // rock
+    {X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(1.0),
+     X(0.5), X(1.0), X(2.0), X(1.0), X(2.0), X(1.0), X(1.0), X(2.0), X(0.5), X(1.0)},  // bug
+    {X(0.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0),
+     X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0)},  // ghost
+    {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(0.5), X(1.0),
+     X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(2.0), X(1.0), X(1.0), X(2.0), X(1.0)},  // steel
+    {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0),
+     X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)},  // mystery
+    {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(2.0), X(1.0), X(2.0), X(1.0),
+     X(0.5), X(0.5), X(2.0), X(1.0), X(1.0), X(2.0), X(0.5), X(1.0), X(1.0), X(1.0)},  // fire
+    {X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0),
+     X(2.0), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0)},  // water
+    {X(1.0), X(1.0), X(0.5), X(0.5), X(2.0), X(2.0), X(0.5), X(1.0), X(0.5), X(1.0),
+     X(0.5), X(2.0), X(0.5), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0)},  // grass
+    {X(1.0), X(1.0), X(2.0), X(1.0), X(0.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0),
+     X(1.0), X(2.0), X(0.5), X(0.5), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0)},  // electric
+    {X(1.0), X(2.0), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0),
+     X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(0.0), X(1.0), X(1.0)},  // psychic
+    {X(1.0), X(1.0), X(2.0), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0),
+     X(0.5), X(0.5), X(2.0), X(1.0), X(1.0), X(0.5), X(2.0), X(1.0), X(1.0), X(1.0)},  // ice
+    {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0),
+     X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(0.0), X(1.0)},  // dragon
+    {X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0),
+     X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(0.5), X(0.5), X(1.0)},  // dark
+    {X(1.0), X(2.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0),
+     X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(2.0), X(1.0), X(1.0)},  // fairy
+    {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0),
+     X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0)},  // stellar
 };
 
 static const u16 sInverseTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] = {
@@ -1412,8 +1433,8 @@ u8 TrySetCantSelectMoveBattleScript(void) {
         }
     }
 
-    //Evasion Clause
-    if(IsEvasionClauseDisablingMove(gActiveBattler, move)) {
+    // Evasion Clause
+    if (IsEvasionClauseDisablingMove(gActiveBattler, move)) {
         gCurrentMove = move;
         if (gBattleTypeFlags & BATTLE_TYPE_PALACE) {
             gRoundStructs[gActiveBattler].palaceUnableToUseMove = 1;
@@ -1423,8 +1444,8 @@ u8 TrySetCantSelectMoveBattleScript(void) {
         }
     }
 
-    //Disabled because of the disable system
-    if(isMoveDisabled(gActiveBattler, move)) {
+    // Disabled because of the disable system
+    if (isMoveDisabled(gActiveBattler, move)) {
         gCurrentMove = move;
         if (gBattleTypeFlags & BATTLE_TYPE_PALACE) {
             gRoundStructs[gActiveBattler].palaceUnableToUseMove = 1;
@@ -1491,7 +1512,7 @@ u8 TrySetCantSelectMoveBattleScript(void) {
     return limitations;
 }
 
-//Seems unused?
+// Seems unused?
 u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check) {
     u8 holdEffect = GetBattlerHoldEffect(battlerId, TRUE);
     u16 *choicedMove = &gBattleStruct->choicedMove[battlerId];
@@ -3247,7 +3268,7 @@ u8 AtkCanceller_UnableToUseMove(void) {
                 gBattleStruct->atkCancellerTracker++;
                 break;
             case CANCELLER_PARALYSED:  // paralysis
-                //Paralyzed enemies will always move but will still have a speed penalty
+                // Paralyzed enemies will always move but will still have a speed penalty
                 bool8 disableParalysisCancel = (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL && GET_BATTLER_SIDE(gBattlerAttacker) != B_SIDE_PLAYER);
 
                 if (!gProcessingExtraAttacks && (gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS) && (Random() % 4) == 0 && !disableParalysisCancel) {
@@ -3656,6 +3677,8 @@ const HpTransformation gHpTransformations[] = {
     {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_YELLOW, SPECIES_MINIOR_CORE_YELLOW, 2},
     {ABILITY_SCHOOLING, SPECIES_WISHIWASHI_SCHOOL, SPECIES_WISHIWASHI, 4},
     {ABILITY_APE_SHIFT, SPECIES_SLAKING_MEGA, SPECIES_SLAKING_MEGA_APE_SHIFT, 2},
+    {ABILITY_REVELATION, SPECIES_UNOWN_REVELATION, SPECIES_UNOWN, 4},
+    {ABILITY_LOCUST_SWARM, SPECIES_WISPYWASPY_HIVEMIND, SPECIES_WISPYWASPY, 4},
 };
 
 bool32 ShouldChangeFormHpBased(u32 battler) {
@@ -3788,18 +3811,26 @@ bool8 CheckAndSetSwitchInAbility(u8 battlerId, AbilityEnum ability) {
     return FALSE;
 }
 
+s8 GetSingleUseAbilityCountByIndex(u8 battler, int index) {
+    return gBattleStruct->singleuseability[gBattlerPartyIndexes[battler]][index][GetBattlerSide(battler)];
+}
+
 s8 GetSingleUseAbilityCounter(u8 battler, AbilityEnum ability) {
     int index = GetAbilityIndex(battler, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return -1;
 
-    return gBattleStruct->singleuseability[gBattlerPartyIndexes[battler]][index][GetBattlerSide(battler)];
+    return GetSingleUseAbilityCountByIndex(battler, index);
+}
+
+void SetSingleUseAbilityCountByIndex(u8 battler, int index, u8 value) {
+    gBattleStruct->singleuseability[gBattlerPartyIndexes[battler]][index][GetBattlerSide(battler)] = value;
 }
 
 void SetSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value) {
     int index = GetAbilityIndex(battler, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return;
 
-    gBattleStruct->singleuseability[gBattlerPartyIndexes[battler]][index][GetBattlerSide(battler)] = value;
+    SetSingleUseAbilityCountByIndex(battler, index, value);
 }
 
 void IncrementSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value) {
@@ -4732,7 +4763,7 @@ bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag) {
 
     if (IsBattlerGrounded(battlerId)) return TRUE;
 
-    TerrainType type = TYPE_NONE;
+    TerrainType type = TERRAIN_NONE;
     switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
         case STATUS_FIELD_TOXIC_TERRAIN:
             type = TERRAIN_TOXIC;
@@ -4763,16 +4794,16 @@ bool8 IsEvasionClauseDisablingMove(u8 battlerId, MoveEnum move) {
     if (gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_HELL || !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))  // Evasion Clause is only enabled for hell mode
         return FALSE;
 
-    if(isPlayerMon){
-        //Evasion Clause enforced on the player’s side (exceptions being moves like Detect or Mind Reader)
-        switch(moveEffect){
-            //Evasion Up Moves
+    if (isPlayerMon) {
+        // Evasion Clause enforced on the player’s side (exceptions being moves like Detect or Mind Reader)
+        switch (moveEffect) {
+            // Evasion Up Moves
             case EFFECT_EVASION_UP:
             case EFFECT_MINIMIZE:
-            //Accuracy Down Moves - not sure if needed
-            //case EFFECT_ACCURACY_DOWN:
+                // Accuracy Down Moves - not sure if needed
+                // case EFFECT_ACCURACY_DOWN:
                 return TRUE;
-            break;
+                break;
         }
     }
 
@@ -5483,7 +5514,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                                 u8 maxPP;
                                 u8 ppRestored = GetBattlerHoldEffectParam(battlerId);
 
-                                if(GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+                                if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
                                     maxPP = CalculatePPWithBonusPlayer(move, ppBonuses, i);
                                 else
                                     maxPP = CalculatePPWithBonus(move, ppBonuses, i);
@@ -6933,8 +6964,10 @@ u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk,
     // move effect
     switch (gBattleMoves[move].effect) {
         case EFFECT_DOUBLE_DMG_IF_STATUS1:
-            if (gBattleMons[battlerDef].status1 & (gBattleMoves[move].argument)) MulModifier(&modifier, UQ_4_12(2.0));
-            else if (gBattleMoves[move].argument & STATUS1_PSN_ANY && IsPoisonedForMove(battlerDef)) MUL_MODIFIER(&modifier, 2.0);
+            if (gBattleMons[battlerDef].status1 & (gBattleMoves[move].argument))
+                MulModifier(&modifier, UQ_4_12(2.0));
+            else if (gBattleMoves[move].argument & STATUS1_PSN_ANY && IsPoisonedForMove(battlerDef))
+                MUL_MODIFIER(&modifier, 2.0);
             break;
         case EFFECT_FACADE:
             if (gBattleMons[battlerAtk].status1 & (STATUS1_BURN | STATUS1_PSN_ANY | STATUS1_PARALYSIS | STATUS1_FROSTBITE | STATUS1_BLEED) ||
@@ -7411,50 +7444,48 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
         }
     }
 
-    if(gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL){
-        //Post-Brawly, enemy teams take 10% less damage (35% damage reduction total as a result of combining with Global-wide damage reduction)
-        if(defSide != B_SIDE_PLAYER && FlagGet(FLAG_BADGE02_GET))
-            dmg = ApplyModifier(UQ_4_12(0.9), dmg);
+    if (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL) {
+        // Post-Brawly, enemy teams take 10% less damage (35% damage reduction total as a result of combining with Global-wide damage reduction)
+        if (defSide != B_SIDE_PLAYER && FlagGet(FLAG_BADGE02_GET)) dmg = ApplyModifier(UQ_4_12(0.9), dmg);
 
-        //Global-wide damage reduction (-25% applies to you and the opponent)
+        // Global-wide damage reduction (-25% applies to you and the opponent)
         dmg = ApplyModifier(UQ_4_12(0.75), dmg);
 
         sliderValue = DAMAGE_SLIDER_VALUE_DEFAULT;
     }
 
-    //This way it can be set in scripts when needed
-    if(VarGet(VAR_DAMAGE_SLIDER_VALUE) != DAMAGE_SLIDER_VALUE_DEFAULT)
-        sliderValue = VarGet(VAR_DAMAGE_SLIDER_VALUE);
+    // This way it can be set in scripts when needed
+    if (VarGet(VAR_DAMAGE_SLIDER_VALUE) != DAMAGE_SLIDER_VALUE_DEFAULT) sliderValue = VarGet(VAR_DAMAGE_SLIDER_VALUE);
 
-    //Damage Slider
-    switch(sliderValue){
-        case DAMAGE_SLIDER_VALUE_10_PERCENT: //10%
+    // Damage Slider
+    switch (sliderValue) {
+        case DAMAGE_SLIDER_VALUE_10_PERCENT:  // 10%
             dmg = ApplyModifier(UQ_4_12(0.1), dmg);
-        break;
-        case DAMAGE_SLIDER_VALUE_20_PERCENT: //20%
+            break;
+        case DAMAGE_SLIDER_VALUE_20_PERCENT:  // 20%
             dmg = ApplyModifier(UQ_4_12(0.2), dmg);
-        break;
-        case DAMAGE_SLIDER_VALUE_30_PERCENT: //30%
+            break;
+        case DAMAGE_SLIDER_VALUE_30_PERCENT:  // 30%
             dmg = ApplyModifier(UQ_4_12(0.3), dmg);
-        break;
-        case DAMAGE_SLIDER_VALUE_40_PERCENT: //40%
+            break;
+        case DAMAGE_SLIDER_VALUE_40_PERCENT:  // 40%
             dmg = ApplyModifier(UQ_4_12(0.4), dmg);
-        break;
-        case DAMAGE_SLIDER_VALUE_50_PERCENT: //50%
+            break;
+        case DAMAGE_SLIDER_VALUE_50_PERCENT:  // 50%
             dmg = ApplyModifier(UQ_4_12(0.5), dmg);
-        break;
-        case DAMAGE_SLIDER_VALUE_60_PERCENT: //60%
+            break;
+        case DAMAGE_SLIDER_VALUE_60_PERCENT:  // 60%
             dmg = ApplyModifier(UQ_4_12(0.6), dmg);
-        break;
-        case DAMAGE_SLIDER_VALUE_70_PERCENT: //70%
+            break;
+        case DAMAGE_SLIDER_VALUE_70_PERCENT:  // 70%
             dmg = ApplyModifier(UQ_4_12(0.7), dmg);
-        break;
-        case DAMAGE_SLIDER_VALUE_80_PERCENT: //80%
+            break;
+        case DAMAGE_SLIDER_VALUE_80_PERCENT:  // 80%
             dmg = ApplyModifier(UQ_4_12(0.8), dmg);
-        break;
-        case DAMAGE_SLIDER_VALUE_90_PERCENT: //90%
+            break;
+        case DAMAGE_SLIDER_VALUE_90_PERCENT:  // 90%
             dmg = ApplyModifier(UQ_4_12(0.9), dmg);
-        break;
+            break;
     }
 
 #define CHECK_WEATHER_DOUBLE_BOOST(boost, drop) (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WEATHER_DOUBLE_BOOST) ? UQ_4_12(boost) : UQ_4_12(drop))
@@ -7536,7 +7567,8 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
 
     // target's ally's abilities
     if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_FRIEND_GUARD, TRUE)) MulModifier(&finalModifier, UQ_4_12(0.5));
-    if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_CARETAKER, TRUE)) MulModifier(&finalModifier, UQ_4_12(0.5));  // was 0.75
+    if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_CARETAKER, TRUE)) MulModifier(&finalModifier, UQ_4_12(0.5));
+    if (BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_FOOD_LOVERS, TRUE)) MulModifier(&finalModifier, UQ_4_12(0.5));
 
     // attacker's hold effect
     switch (GetBattlerHoldEffect(battlerAtk, TRUE)) {
@@ -7932,15 +7964,15 @@ u16 GetTypeModifier(int atkType, int defType, int battlerAtk, int battlerDef) {
     else
         ret = sTypeEffectivenessTable[atkType][defType];
 
-    //Super-effective damage is reduced from 2x to 1.5x, and 4x to 2x
-    if(gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL && HELL_MODE_TYPE_EFFECTIVENESS_CHANGE){
-        switch(ret){
+    // Super-effective damage is reduced from 2x to 1.5x, and 4x to 2x
+    if (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL && HELL_MODE_TYPE_EFFECTIVENESS_CHANGE) {
+        switch (ret) {
             case UQ_4_12(2.0):
                 ret = UQ_4_12(1.5);
-            break;
+                break;
             case UQ_4_12(4.0):
                 ret = UQ_4_12(2.5);
-            break;
+                break;
         }
     }
 
@@ -8727,9 +8759,8 @@ u8 TranslateStatId(u8 statId, u8 battlerId) {
 bool32 IsAlly(u32 battlerAtk, u32 battlerDef) { return (GetBattlerSide(battlerAtk) == GetBattlerSide(battlerDef)); }
 
 AbilityEnum GetInnateInSlot(int level, SpeciesEnum species, u8 position, u32 personality, u8 isPlayer) {
-    if (isPlayer && CanDisableInnates() && level < getInnateDisableLevel(position))
-        return ABILITY_NONE;
-    
+    if (isPlayer && CanDisableInnates() && level < getInnateDisableLevel(position)) return ABILITY_NONE;
+
     return isPlayer ? RandomizeInnate(gBaseStats[species].innates[position], species, personality) : gBaseStats[species].innates[position];
 }
 
@@ -9150,9 +9181,7 @@ int HandleEndTurnAbility(int abilityNumber, int battler) {
     return TRUE;
 }
 
-int IsDance(int attacker, MoveEnum move) {
-    return DoesMoveMatchFlag(attacker, move, MOVE_FLAG_DANCE);
-}
+int IsDance(int attacker, MoveEnum move) { return DoesMoveMatchFlag(attacker, move, MOVE_FLAG_DANCE); }
 
 int HasAnyStatusOrAbility(int battler) {
     if (gBattleMons[battler].status1 && STATUS1_ANY) return TRUE;
@@ -9256,21 +9285,13 @@ AbilityEnum HasSkillLink(int battler) {
     return FALSE;
 }
 
-int IsMegaLauncherBoosted(int battler, MoveEnum move) {
-    return DoesMoveMatchFlag(battler, move, MOVE_FLAG_MEGA_LAUNCHER);
-}
+int IsMegaLauncherBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_MEGA_LAUNCHER); }
 
-int IsIronFistBoosted(int battler, MoveEnum move) {
-    return DoesMoveMatchFlag(battler, move, MOVE_FLAG_PUNCH);
-}
+int IsIronFistBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_PUNCH); }
 
-int IsStrikerBoosted(int battler, MoveEnum move) {
-    return DoesMoveMatchFlag(battler, move, MOVE_FLAG_KICK);
-}
+int IsStrikerBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_KICK); }
 
-int IsSoundMove(int battler, MoveEnum move) {
-    return DoesMoveMatchFlag(battler, move, MOVE_FLAG_DANCE);
-}
+int IsSoundMove(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_DANCE); }
 
 int IsPoisonedForMove(int battler) {
     return gBattleMons[battler].status1 & STATUS1_POISON_ANY || IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN);

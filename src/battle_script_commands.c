@@ -954,13 +954,9 @@ bool8 PartyIsMaxLevel(void) {
 }
 
 int ShouldSetMoldBreaker(int battler, MoveEnum move) {
-    if (gBattleMoves[gCurrentMove].flags & FLAG_TARGET_ABILITY_IGNORED) return TRUE;
+    if (gBattleMoves[move].flags & FLAG_TARGET_ABILITY_IGNORED) return TRUE;
     if (getMonotypeChampType() == TYPE_STEEL && GetBattlerSide(battler) != B_SIDE_PLAYER) return TRUE;
-    if (BattlerHasAbility(gBattlerAttacker, ABILITY_MOLD_BREAKER, FALSE)) return TRUE;
-    if (BattlerHasAbility(gBattlerAttacker, ABILITY_TERAVOLT, FALSE)) return TRUE;
-    if (BattlerHasAbility(gBattlerAttacker, ABILITY_TURBOBLAZE, FALSE)) return TRUE;
-    if (BattlerHasAbility(gBattlerAttacker, ABILITY_BLIND_RAGE, FALSE)) return TRUE;
-    if (BattlerHasAbility(gBattlerAttacker, ABILITY_MYCELIUM_MIGHT, FALSE) && IS_MOVE_STATUS(gCurrentMove)) return TRUE;
+    ON_ABILITY(battler, FALSE, gAbilities[ability].onMoldBreaker, if (gAbilities[ability].onMoldBreaker(battler, move)) return TRUE)
     return FALSE;
 }
 
@@ -1025,12 +1021,9 @@ static void Cmd_attackcanceler(void) {
 
     GET_MOVE_TYPE(gCurrentMove, moveType);
 
-    if (gBattleMoves[gCurrentMove].type2) {
+    if (gBattleMoves[gCurrentMove].type2 && !gBattleStruct->dynamicMoveType) {
         u16 typeEffectiveness;
-        int isMoldBreakerActive = gHitMarker & HITMARKER_MOLD_BREAKER;
-        if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DEADLY_PRECISION)) gHitMarker |= HITMARKER_MOLD_BREAKER;
         CalculateMoveDamageAndEffectiveness(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, &typeEffectiveness);
-        if (!isMoldBreakerActive && typeEffectiveness < UQ_4_12(2.0)) gHitMarker &= ~HITMARKER_MOLD_BREAKER;
         gBattleStruct->dynamicMoveType = moveType | 0x80;
     }
 
@@ -2938,11 +2931,10 @@ void SetMoveEffect(bool32 primary, u32 certain) {
 
 int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChance) {
     // Only the first hit can flinch from abilities similar to Parental Bond
-    if (moveEffect == MOVE_EFFECT_FLINCH && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount)
-        return 0;
+    if (moveEffect == MOVE_EFFECT_FLINCH && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) return 0;
 
-    //Flinch as a secondary effect will always fail on player use (excluded for moves with 100% Flinch chance such as Fake Out and First Impression)
-    if(moveEffect == MOVE_EFFECT_FLINCH && baseChance < 100 && gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL && GetBattlerSide(battler) == B_SIDE_PLAYER)
+    // Flinch as a secondary effect will always fail on player use (excluded for moves with 100% Flinch chance such as Fake Out and First Impression)
+    if (moveEffect == MOVE_EFFECT_FLINCH && baseChance < 100 && gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL && GetBattlerSide(battler) == B_SIDE_PLAYER)
         return 0;
 
     for (int i = 0; i < gBattlersCount; i++) {
@@ -2976,11 +2968,10 @@ static void Cmd_seteffectwithchance(void) {
     if (gBattleScripting.moveEffect & MOVE_EFFECT_CERTAIN && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
         gBattleScripting.moveEffect &= ~(MOVE_EFFECT_CERTAIN);
         SetMoveEffect(FALSE, MOVE_EFFECT_CERTAIN);
-    } 
-    else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MINION_CONTROL && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) {
+    } else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MINION_CONTROL &&
+               gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) {
         // No-op
-    }
-    else if (Random() % 100 < percentChance && gBattleScripting.moveEffect && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
+    } else if (Random() % 100 < percentChance && gBattleScripting.moveEffect && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
         if (percentChance >= 100)
             SetMoveEffect(FALSE, MOVE_EFFECT_CERTAIN);
         else
@@ -3028,7 +3019,6 @@ static void Cmd_clearstatusfromeffect(void) {
 
 static void Cmd_tryfaintmon(void) {
     const u8* BS_ptr;
-    int recurringNightmare = FALSE;
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
     if (gActiveBattler == gBattlerAttacker && gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ABILITY_VICTORY_BOMB) {
@@ -3036,10 +3026,19 @@ static void Cmd_tryfaintmon(void) {
         return;
     }
 
-    if (BattlerHasAbility(gActiveBattler, ABILITY_RECURRING_NIGHTMARE, TRUE) && !IsBattlerAlive(gActiveBattler) &&
-        !GetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE) && IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY)) {
-        SetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE, 1);
-        recurringNightmare = TRUE;
+    int reviveMsg = FALSE;
+    AbilityEnum reviveAbility = ABILITY_NONE;
+    if (!IsBattlerAlive(gActiveBattler)) {
+        ON_ABILITY(
+            gActiveBattler,
+            FALSE,
+            gAbilities[ability].onRevive && !GetSingleUseAbilityCountByIndex(gActiveBattler, idx),
+            reviveMsg = gAbilities[ability].onRevive(gActiveBattler);
+            if (reviveMsg) {
+                reviveAbility = ability;
+                SetSingleUseAbilityCountByIndex(gActiveBattler, idx, 1);
+                break;
+            })
     }
 
     if (gBattlescriptCurrInstr[2] != 0) {
@@ -3066,9 +3065,9 @@ static void Cmd_tryfaintmon(void) {
 
         SetActiveStackBattler(gActiveBattler, 1);
 
-        if (recurringNightmare) {
-            SetActiveMultistringChooser(B_MSG_FADE_OUT);
-            SetActiveAbilityPopupOverride(ABILITY_RECURRING_NIGHTMARE);
+        if (reviveMsg) {
+            SetActiveMultistringChooser(reviveMsg);
+            SetActiveAbilityPopupOverride(reviveAbility);
         } else
             SetActiveMultistringChooser(B_MSG_MON_FAINTED);
 
@@ -3092,8 +3091,8 @@ static void Cmd_tryfaintmon(void) {
                 BattleScriptCall(BattleScript_DestinyBondTakesLife);
                 gBattleMoveDamage = gBattleMons[battlerId].hp;
                 // Destiny Bond disables recurring nightmare
-                SetSingleUseAbilityCounter(gBattlerAttacker, ABILITY_RECURRING_NIGHTMARE, 2);
-                SetSingleUseAbilityCounter(gBattlerTarget, ABILITY_RECURRING_NIGHTMARE, 2);
+                ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].onRevive, SetSingleUseAbilityCountByIndex(gBattlerAttacker, idx, 2))
+                ON_ABILITY(gBattlerTarget, FALSE, gAbilities[ability].onRevive, SetSingleUseAbilityCountByIndex(gBattlerTarget, idx, 2))
             }
             if ((gStatuses3[gBattlerTarget] & STATUS3_GRUDGE) && !(gHitMarker & HITMARKER_GRUDGE) &&
                 GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget) && gBattleMons[gBattlerAttacker].hp != 0 && gCurrentMove != MOVE_STRUGGLE) {
@@ -6607,18 +6606,18 @@ u32 JumpIfStandardStatusBlocking(u32 battler, bool32 affectsUser, StatusCheckEnu
 }
 
 static void RecalcBattlerStats(u32 battler, struct Pokemon* mon) {
-    if(GetBattlerSide(battler) == B_SIDE_PLAYER)
+    if (GetBattlerSide(battler) == B_SIDE_PLAYER)
         CalculateMonStatsWithoutRestoringPP(mon);
     else
         CalculateEnemyTrainerMonStats(mon);
-    
-    gBattleMons[battler].level     = GetMonData(mon, MON_DATA_LEVEL);
-    gBattleMons[battler].hp        = GetMonData(mon, MON_DATA_HP);
-    gBattleMons[battler].maxHP     = GetMonData(mon, MON_DATA_MAX_HP);
-    gBattleMons[battler].attack    = GetMonData(mon, MON_DATA_ATK);
-    gBattleMons[battler].defense   = GetMonData(mon, MON_DATA_DEF);
-    gBattleMons[battler].speed     = GetMonData(mon, MON_DATA_SPEED);
-    gBattleMons[battler].spAttack  = GetMonData(mon, MON_DATA_SPATK);
+
+    gBattleMons[battler].level = GetMonData(mon, MON_DATA_LEVEL);
+    gBattleMons[battler].hp = GetMonData(mon, MON_DATA_HP);
+    gBattleMons[battler].maxHP = GetMonData(mon, MON_DATA_MAX_HP);
+    gBattleMons[battler].attack = GetMonData(mon, MON_DATA_ATK);
+    gBattleMons[battler].defense = GetMonData(mon, MON_DATA_DEF);
+    gBattleMons[battler].speed = GetMonData(mon, MON_DATA_SPEED);
+    gBattleMons[battler].spAttack = GetMonData(mon, MON_DATA_SPATK);
     gBattleMons[battler].spDefense = GetMonData(mon, MON_DATA_SPDEF);
     RepopulateAbilities(battler);
 
@@ -7052,8 +7051,9 @@ static void Cmd_various(void) {
             break;
         case VARIOUS_RESTORE_PP:
             for (i = 0; i < 4; i++) {
-                if(GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
-                    gBattleMons[gActiveBattler].pp[i] = CalculatePPWithBonusPlayer(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
+                if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+                    gBattleMons[gActiveBattler].pp[i] =
+                        CalculatePPWithBonusPlayer(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
                 else
                     gBattleMons[gActiveBattler].pp[i] = CalculatePPWithBonus(gBattleMons[gActiveBattler].moves[i], gBattleMons[gActiveBattler].ppBonuses, i);
 
@@ -8104,8 +8104,8 @@ static void Cmd_various(void) {
             }
             return;
         case VARIOUS_SET_DYNAMIC_TYPE:
-            gBattleStruct->dynamicMoveType = READ_8_INC;
-            if (gBattleStruct->dynamicMoveType == TYPE_MYSTERY) SetTypeBeforeUsingMove(gCurrentMove, gActiveBattler);
+            gBattleStruct->dynamicMoveType = 0x80 | READ_8_INC;
+            if ((gBattleStruct->dynamicMoveType & ~0x80) == TYPE_MYSTERY) SetTypeBeforeUsingMove(gCurrentMove, gActiveBattler);
             return;
         case VARIOUS_GOTO_ACTUAL_MOVE:
             gBattlescriptCurrInstr = gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect];
@@ -8549,13 +8549,15 @@ static void Cmd_various(void) {
         }
             return;
         case VARIOUS_TRY_RECURRING_NIGHTMARE:
-            if (GetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE) == 1) {
-                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
-                if (!gBattleMoveDamage) gBattleMoveDamage = 1;
-                SetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE, 2);
-                BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[gBattleStruct->battlerPartyIndexes[gActiveBattler]], 2, &gBattleMoveDamage);
-                MarkBattlerForControllerExec(gActiveBattler);
-            }
+            ON_ABILITY(gActiveBattler,
+                       FALSE,
+                       gAbilities[ability].onRevive && GetSingleUseAbilityCountByIndex(gActiveBattler, idx) == 1,
+                       gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
+                       if (!gBattleMoveDamage) gBattleMoveDamage = 1;
+                       SetSingleUseAbilityCountByIndex(gActiveBattler, idx, 2);
+                       BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[gBattleStruct->battlerPartyIndexes[gActiveBattler]], 2, &gBattleMoveDamage);
+                       MarkBattlerForControllerExec(gActiveBattler);
+                       break;)
             break;
         case VARIOUS_SET_RANDOM:
             gBattleCommunication[MULTIUSE_STATE] = Random() % READ_8_INC;
@@ -8918,7 +8920,7 @@ static void Cmd_various(void) {
                 }
             }
         } break;
-        case VARIOUS_HP_FRACTION_TO_DAMAGE:{
+        case VARIOUS_HP_FRACTION_TO_DAMAGE: {
             int fraction = READ_8_INC;
             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / fraction;
             if (gBattleMoveDamage > gBattleMons[gActiveBattler].hp) gBattleMoveDamage = gBattleMons[gActiveBattler].hp;
