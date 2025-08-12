@@ -4643,8 +4643,6 @@ static struct Sprite *CreateMonIconSprite(SpeciesEnum species, u32 personality, 
     } else {
         spriteTemplate.paletteTag = PALTAG_MON_ICON_0 + gMonIconPaletteIndices[species];
     }
-    if(isDisabled)
-        spriteTemplate.paletteTag = PALTAG_MON_ICON_0;
     tileNum = TryLoadMonIconTiles(species, personality);
     if (tileNum == 0xFFFF) return NULL;
 
