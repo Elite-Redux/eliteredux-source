@@ -2071,8 +2071,8 @@ void CopyMon(void *dest, void *src, size_t size) { memcpy(dest, src, size); }
 
 u8 GiveMonToPlayer(struct Pokemon *mon) {
     s32 i;
-    u32 caughtLocation = GetCurrentRegionMapSectionId();
-    bool8 nuzlockeRulesEnabled = AreNuzlockeRulesEnabled();
+    u32 caughtLocation           = GetCurrentRegionMapSectionId();
+    bool8 nuzlockeRulesEnabled   = AreNuzlockeRulesEnabled();
     bool8 hasAlreadyCaughtInArea = GetNuzlockeCaughtFlag(caughtLocation) && nuzlockeRulesEnabled;
 
     SetMonData(mon, MON_DATA_OT_NAME,     gSaveBlock2Ptr->playerName);

@@ -94,6 +94,7 @@ enum {
     MSG_ITEM_IS_HELD,
     MSG_CHANGED_TO_ITEM,
     MSG_CANT_STORE_MAIL,
+    MSG_CANT_USE_MON,
 };
 
 // IDs for how to resolve variables in the above messages
@@ -455,6 +456,7 @@ struct PokemonStorageSystemData {
     u16 boxSpecies[IN_BOX_COUNT];
     u8 boxLevel[IN_BOX_COUNT];
     u32 boxPersonalities[IN_BOX_COUNT];
+    bool8 isDisabled[IN_BOX_COUNT];
     u8 incomingBoxId;
     u8 shiftTimer;
     u8 numPartyToCompact;
@@ -646,7 +648,7 @@ static void ReshowReleaseMon(void);
 static bool8 ResetReleaseMonSpritePtr(void);
 static void SetMovingMonPriority(u8);
 static void SpriteCB_HeldMon(struct Sprite *);
-static struct Sprite *CreateMonIconSprite(SpeciesEnum, u32, s16, s16, u8, u8);
+static struct Sprite *CreateMonIconSprite(SpeciesEnum, u32, s16, s16, u8, u8, bool8);
 static void DestroyBoxMonIcon(struct Sprite *);
 
 // Pokémon data
@@ -879,6 +881,9 @@ static void UnkUtil_Run(void);
 static void UnkUtil_CpuRun(struct UnkUtilData *);
 static void UnkUtil_DmaRun(struct UnkUtilData *);
 
+//Custom
+static bool8 isSelectedMonDisabled(void);
+
 const u8 gPCText_LevelUp[] = _("Level Up");
 const u8 gPCText_Evolve[] = _("Evolve");
 const u8 gText_MoveLevelUpDescription[] = _("Level Up to what level?");
@@ -1028,6 +1033,8 @@ static const struct SpriteTemplate sSpriteTemplate_DisplayMon = {
     .callback = SpriteCallbackDummy,
 };
 
+const u8 sText_Cant_Use_Mon[] = _("Can't use this Pokémon.");
+
 static const struct StorageMessage sMessages[] = {
     [MSG_EXIT_BOX] = {gText_ExitFromBox, MSG_VAR_NONE},
     [MSG_WHAT_YOU_DO] = {gText_WhatDoYouWantToDo, MSG_VAR_NONE},
@@ -1062,6 +1069,7 @@ static const struct StorageMessage sMessages[] = {
     [MSG_ITEM_IS_HELD] = {gText_ItemIsNowHeld, MSG_VAR_ITEM_NAME},
     [MSG_CHANGED_TO_ITEM] = {gText_ChangedToNewItem, MSG_VAR_ITEM_NAME},
     [MSG_CANT_STORE_MAIL] = {gText_MailCantBeStored, MSG_VAR_NONE},
+    [MSG_CANT_USE_MON] = {sText_Cant_Use_Mon, MSG_VAR_NONE},
 };
 
 static const struct WindowTemplate sYesNoWindowTemplate = {
@@ -1311,9 +1319,10 @@ u8 CountPartyNonEggMons(void) {
     u16 i, count;
 
     for (i = 0, count = 0; i < PARTY_SIZE; i++) {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG)) {
+        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG)      &&
+            !GetMonData(&gPlayerParty[i], MON_DATA_IS_DISABLED) &&
+             GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
             count++;
-        }
     }
 
     return count;
@@ -2290,9 +2299,11 @@ static void Task_OnSelectedMon(u8 taskId) {
                     SetPokeStorageTask(Task_PokeStorageMain);
                     break;
                 case MENU_MOVE:
-                    if (IsRemovingLastPartyMon()) {
+                    if (IsRemovingLastPartyMon())
                         sStorage->state = 3;
-                    } else {
+                    else if(isSelectedMonDisabled())
+                        sStorage->state = 6;
+                    else {
                         PlaySE(SE_SELECT);
                         ClearBottomWindow();
                         SetPokeStorageTask(Task_MoveMon);
@@ -2382,19 +2393,24 @@ static void Task_OnSelectedMon(u8 taskId) {
         case 3:
             PlaySE(SE_FAILURE);
             PrintMessage(MSG_LAST_POKE);
-            sStorage->state = 6;
+            sStorage->state = 7;
             break;
         case 5:
             PlaySE(SE_FAILURE);
             PrintMessage(MSG_CANT_RELEASE_EGG);
-            sStorage->state = 6;
+            sStorage->state = 7;
             break;
         case 4:
             PlaySE(SE_FAILURE);
             PrintMessage(MSG_PLEASE_REMOVE_MAIL);
-            sStorage->state = 6;
+            sStorage->state = 7;
             break;
         case 6:
+            PlaySE(SE_FAILURE);
+            PrintMessage(MSG_CANT_USE_MON);
+            sStorage->state = 7;
+            break;
+        case 7:
             if (JOY_NEW(A_BUTTON | B_BUTTON | DPAD_ANY)) {
                 ClearBottomWindow();
                 SetPokeStorageTask(Task_PokeStorageMain);
@@ -2458,7 +2474,13 @@ static void Task_WithdrawMon(u8 taskId) {
             if (CalculatePlayerPartyCount() == PARTY_SIZE) {
                 PrintMessage(MSG_PARTY_FULL);
                 sStorage->state = 1;
-            } else {
+            } 
+            else if (isSelectedMonDisabled())
+            {
+                PrintMessage(MSG_CANT_USE_MON);
+                sStorage->state = 1;
+            }
+            else {
                 SaveCursorPos();
                 InitMonPlaceChange(CHANGE_GRAB);
                 sStorage->state = 2;
@@ -4007,9 +4029,11 @@ static u8 GetMonIconPriorityByCursorPos(void) { return (IsCursorInBox() ? 2 : 1)
 static void CreateMovingMonIcon(void) {
     u32 personality = GetMonData(&sStorage->movingMon, MON_DATA_PERSONALITY);
     SpeciesEnum species = GetMonData(&sStorage->movingMon, MON_DATA_SPECIES2);
+    bool8 isDisabled = GetMonData(&sStorage->movingMon, MON_DATA_IS_DISABLED);
     u8 priority = GetMonIconPriorityByCursorPos();
 
-    sStorage->movingMonSprite = CreateMonIconSprite(species, personality, 0, 0, priority, 7);
+    sStorage->movingMonSprite = CreateMonIconSprite(species, personality, 0, 0, priority, 7, isDisabled);
+
     sStorage->movingMonSprite->callback = SpriteCB_HeldMon;
 }
 
@@ -4018,6 +4042,7 @@ static void InitBoxMonSprites(u8 boxId) {
     u16 i, j, count;
     SpeciesEnum species;
     u32 personality;
+    bool8 isDisabled;
 
     count = 0;
     boxPosition = 0;
@@ -4025,13 +4050,15 @@ static void InitBoxMonSprites(u8 boxId) {
     // For each box slot, create a Pokémon icon if a species is present
     for (i = 0; i < IN_BOX_ROWS; i++) {
         for (j = 0; j < IN_BOX_COLUMNS; j++) {
-            species = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_SPECIES2);
-            if (species != SPECIES_NONE) {
+            species    = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_SPECIES2);
+            if (species != SPECIES_NONE){
                 personality = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_PERSONALITY);
-                sStorage->boxMonsSprites[count] = CreateMonIconSprite(species, personality, 8 * (3 * j) + 100, 8 * (3 * i) + 44, 2, 19 - j);
-            } else {
-                sStorage->boxMonsSprites[count] = NULL;
+                isDisabled  = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_IS_DISABLED);
+                
+                sStorage->boxMonsSprites[count] = CreateMonIconSprite(species, personality, 8 * (3 * j) + 100, 8 * (3 * i) + 44, 2, 19 - j, isDisabled);
             }
+            else
+                sStorage->boxMonsSprites[count] = NULL;
             boxPosition++;
             count++;
         }
@@ -4051,9 +4078,11 @@ static void CreateBoxMonIconAtPos(u8 boxPosition) {
     if (species != SPECIES_NONE) {
         s16 x = 8 * (3 * (boxPosition % IN_BOX_COLUMNS)) + 100;
         s16 y = 8 * (3 * (boxPosition / IN_BOX_COLUMNS)) + 44;
-        u32 personality = GetCurrentBoxMonData(boxPosition, MON_DATA_PERSONALITY);
+        u32 personality  = GetCurrentBoxMonData(boxPosition, MON_DATA_PERSONALITY);
+        bool8 isDisabled = GetCurrentBoxMonData(boxPosition, MON_DATA_IS_DISABLED);
 
-        sStorage->boxMonsSprites[boxPosition] = CreateMonIconSprite(species, personality, x, y, 2, 19 - (boxPosition % IN_BOX_COLUMNS));
+        sStorage->boxMonsSprites[boxPosition] = CreateMonIconSprite(species, personality, x, y, 2, 19 - (boxPosition % IN_BOX_COLUMNS), isDisabled);
+
         if (sStorage->boxOption == OPTION_MOVE_ITEMS) sStorage->boxMonsSprites[boxPosition]->oam.objMode = ST_OAM_OBJ_BLEND;
     }
 }
@@ -4134,8 +4163,8 @@ static u8 CreateBoxMonIconsInColumn(u8 column, u16 distance, s16 speed) {
     if (sStorage->boxOption != OPTION_MOVE_ITEMS) {
         for (i = 0; i < IN_BOX_ROWS; i++) {
             if (sStorage->boxSpecies[boxPosition] != SPECIES_NONE) {
-                sStorage->boxMonsSprites[boxPosition] =
-                    CreateMonIconSprite(sStorage->boxSpecies[boxPosition], sStorage->boxPersonalities[boxPosition], x, y, 2, subpriority);
+                sStorage->boxMonsSprites[boxPosition] = CreateMonIconSprite(sStorage->boxSpecies[boxPosition], sStorage->boxPersonalities[boxPosition], x, y, 2, subpriority, sStorage->isDisabled[boxPosition]);
+
                 if (sStorage->boxMonsSprites[boxPosition] != NULL) {
                     sStorage->boxMonsSprites[boxPosition]->sDistance = distance;
                     sStorage->boxMonsSprites[boxPosition]->sSpeed = speed;
@@ -4152,8 +4181,8 @@ static u8 CreateBoxMonIconsInColumn(u8 column, u16 distance, s16 speed) {
         // to create the icons with the proper blend
         for (i = 0; i < IN_BOX_ROWS; i++) {
             if (sStorage->boxSpecies[boxPosition] != SPECIES_NONE) {
-                sStorage->boxMonsSprites[boxPosition] =
-                    CreateMonIconSprite(sStorage->boxSpecies[boxPosition], sStorage->boxPersonalities[boxPosition], x, y, 2, subpriority);
+                sStorage->boxMonsSprites[boxPosition] = CreateMonIconSprite(sStorage->boxSpecies[boxPosition], sStorage->boxPersonalities[boxPosition], x, y, 2, subpriority, sStorage->isDisabled[boxPosition]);
+
                 if (sStorage->boxMonsSprites[boxPosition] != NULL) {
                     sStorage->boxMonsSprites[boxPosition]->sDistance = distance;
                     sStorage->boxMonsSprites[boxPosition]->sSpeed = speed;
@@ -4246,8 +4275,13 @@ static void GetIncomingBoxMonData(u8 boxId) {
         for (j = 0; j < IN_BOX_COLUMNS; j++) {
             sStorage->boxSpecies[boxPosition] = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_SPECIES2);
             sStorage->boxLevel[boxPosition] = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_LEVEL);
-            if (sStorage->boxSpecies[boxPosition] != SPECIES_NONE)
+            if (sStorage->boxSpecies[boxPosition] != SPECIES_NONE){
                 sStorage->boxPersonalities[boxPosition] = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_PERSONALITY);
+                sStorage->isDisabled[boxPosition] = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_IS_DISABLED);
+            }
+            else{
+                sStorage->isDisabled[boxPosition] = FALSE;
+            }
             boxPosition++;
         }
     }
@@ -4263,8 +4297,10 @@ static void CreatePartyMonsSprites(bool8 visible) {
     u16 i, count;
     SpeciesEnum species = GetMonData(&gPlayerParty[0], MON_DATA_SPECIES2);
     u32 personality = GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY);
+    bool8 isDisabled = GetMonData(&gPlayerParty[0], MON_DATA_IS_DISABLED);
 
-    sStorage->partySprites[0] = CreateMonIconSprite(species, personality, 104, 64, 1, 12);
+    sStorage->partySprites[0] = CreateMonIconSprite(species, personality, 104, 64, 1, 12, isDisabled);
+    
     count = 1;
     for (i = 1; i < PARTY_SIZE; i++) {
         if (CreatePartyMonSprite(i)) count++;
@@ -4288,9 +4324,10 @@ static void CreatePartyMonsSprites(bool8 visible) {
 static bool8 CreatePartyMonSprite(u8 partyId) {
     SpeciesEnum species = GetMonData(&gPlayerParty[partyId], MON_DATA_SPECIES2);
     u32 personality = GetMonData(&gPlayerParty[partyId], MON_DATA_PERSONALITY);
+    u32 isDisabled = GetMonData(&gPlayerParty[partyId], MON_DATA_IS_DISABLED);
 
     if (species != SPECIES_NONE) {
-        sStorage->partySprites[partyId] = CreateMonIconSprite(species, personality, 152, 8 * (3 * (partyId - 1)) + 16, 1, 12);
+        sStorage->partySprites[partyId] = CreateMonIconSprite(species, personality, 152, 8 * (3 * (partyId - 1)) + 16, 1, 12, isDisabled);
         return TRUE;
     } else {
         sStorage->partySprites[partyId] = NULL;
@@ -4595,7 +4632,7 @@ static void RemoveSpeciesFromIconList(SpeciesEnum species) {
     }
 }
 
-static struct Sprite *CreateMonIconSprite(SpeciesEnum species, u32 personality, s16 x, s16 y, u8 oamPriority, u8 subpriority) {
+static struct Sprite *CreateMonIconSprite(SpeciesEnum species, u32 personality, s16 x, s16 y, u8 oamPriority, u8 subpriority, bool8 isDisabled) {
     u16 tileNum;
     u8 spriteId;
     struct SpriteTemplate spriteTemplate = sSpriteTemplate_MonIcon;
@@ -4606,6 +4643,8 @@ static struct Sprite *CreateMonIconSprite(SpeciesEnum species, u32 personality, 
     } else {
         spriteTemplate.paletteTag = PALTAG_MON_ICON_0 + gMonIconPaletteIndices[species];
     }
+    if(isDisabled)
+        spriteTemplate.paletteTag = PALTAG_MON_ICON_0;
     tileNum = TryLoadMonIconTiles(species, personality);
     if (tileNum == 0xFFFF) return NULL;
 
@@ -4618,12 +4657,18 @@ static struct Sprite *CreateMonIconSprite(SpeciesEnum species, u32 personality, 
     gSprites[spriteId].oam.tileNum = tileNum;
     gSprites[spriteId].oam.priority = oamPriority;
     gSprites[spriteId].data[0] = species;
+    if(isDisabled)
+        gSprites[spriteId].oam.objMode = 1; // BLEND
+
+    //MGBA_PRINT_DEBUG("CreateMonIconSprite species: %d isDisabled: %d x: %d y: %d", species, isDisabled, x, y)
+    
     return &gSprites[spriteId];
 }
 
 static void DestroyBoxMonIcon(struct Sprite *sprite) {
     RemoveSpeciesFromIconList(sprite->data[0]);
     DestroySprite(sprite);
+    //MGBA_PRINT_DEBUG("DestroyBoxMonIcon")
 }
 
 //------------------------------------------------------------------------------
@@ -5953,9 +5998,11 @@ static bool8 IsRemovingLastPartyMon(void) {
 
 static bool8 CanShiftMon(void) {
     HealPlayerParty();
+
     if (sIsMonBeingMoved) {
         if (sCursorArea == CURSOR_AREA_IN_PARTY && CountPartyAliveNonEggMonsExcept(sCursorPosition) == 0) {
-            if (sStorage->displayMonIsEgg || GetMonData(&sStorage->movingMon, MON_DATA_HP) == 0) return FALSE;
+            if (sStorage->displayMonIsEgg || GetMonData(&sStorage->movingMon, MON_DATA_HP) == 0 || GetMonData(&sStorage->movingMon, MON_DATA_IS_DISABLED))
+                return FALSE;
         }
         return TRUE;
     }
@@ -8694,4 +8741,13 @@ void UpdateSpeciesSpritePSS_Mon(struct Pokemon *mon) {
 
     DestroyPartyMonIcon(pos);
     CreatePartyMonSprite(pos);
+}
+
+static bool8 isSelectedMonDisabled(void){
+    if(sCursorArea == CURSOR_AREA_IN_BOX){
+        struct BoxPokemon *boxMon = GetBoxedMonPtr(StorageGetCurrentBox(), sCursorPosition);
+        return GetBoxMonData(boxMon, MON_DATA_IS_DISABLED);
+    }
+
+    return GetMonData(&gPlayerParty[sCursorPosition], MON_DATA_IS_DISABLED);
 }
