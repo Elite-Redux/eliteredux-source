@@ -91,6 +91,10 @@ gBattleAnims_Special::
 	.4byte Special_CriticalCaptureBallThrow @ B_ANIM_CRITICAL_CAPTURE_THROW
 
 @@@@@@@@@@@@@@@@@@@@@@@ GEN 4 @@@@@@@@@@@@@@@@@@@@@@@
+Move_OBSCURED_SHOT:
+Move_BLITZ_ARROW:
+	goto Move_TACKLE
+
 Move_ROOST:
 	loadspritegfx ANIM_TAG_WHITE_FEATHER
 	loadspritegfx ANIM_TAG_BLUE_STAR
