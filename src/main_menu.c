@@ -740,7 +740,7 @@ static void UpdateBoxMon(struct BoxPokemon* boxMon)
         .pokeball = old.pokeball,
         .speedDown = old.speedDown,
         .otGender = old.otGender,
-        .attackDown = old.attackDown,
+        //.attackDown = old.attackDown,
         .markings = old.markings,
     };
     ARRAY_COPY(boxMon->otName, old.otName)

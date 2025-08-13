@@ -229,6 +229,7 @@ typedef enum Type {
 #define MON_DATA_IS_SHINY 88    // New
 #define MON_DATA_HP_TYPE 89     // New
 #define MON_DATA_MAX_SHINY 90   // New
+#define MON_DATA_IS_DISABLED 91 // New
 
 // Ribbon IDs used by TV and Pokénav
 #define CHAMPION_RIBBON 0

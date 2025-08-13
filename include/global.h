@@ -546,6 +546,10 @@ struct RankingHall2P {
 #include "constants/quests.h"
 #define SIDE_QUEST_FLAGS_COUNT ((SIDE_QUEST_COUNT / 8) + ((SIDE_QUEST_COUNT % 8) ? 1 : 0))
 
+//Nuzlocke Caught Locations
+#define NUZLOCKE_CAUGHT_LOCATION_COUNT 0xFF //METLOC_FATEFUL_ENCOUNTER
+#define NUM_NUZLOCKE_FLAGS ((NUZLOCKE_CAUGHT_LOCATION_COUNT / 8) + ((NUZLOCKE_CAUGHT_LOCATION_COUNT % 8) ? 1 : 0))
+
 struct SaveBlock2 {
     u8 playerName[PLAYER_NAME_LENGTH + 1];
     u8 playerGender;  // MALE, FEMALE
@@ -624,6 +628,7 @@ struct SaveBlock2 {
     u8 start_cursorRowY;
     u8 start_FirstItem;
     u8 damageSliderValue;
+    bool8 hasCaughtMonOnLocation[NUM_NUZLOCKE_FLAGS];
 };  // sizeof=0xF2C
 
 extern struct SaveBlock2* gSaveBlock2Ptr;

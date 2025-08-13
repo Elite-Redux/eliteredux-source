@@ -6660,9 +6660,6 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
             REQUIRE(gTurnStructs[battlerAtk].multiHitCounter)
             basePower *= 4 - gTurnStructs[battlerAtk].multiHitCounter;
             break;
-        case EFFECT_SPIT_UP:
-            basePower = 100 * gVolatileStructs[battlerAtk].stockpileCounter;
-            break;
         case EFFECT_REVENGE:
             if ((gRoundStructs[battlerAtk].physicalDmg && gRoundStructs[battlerAtk].physicalBattlerId == battlerDef) ||
                 (gRoundStructs[battlerAtk].specialDmg && gRoundStructs[battlerAtk].specialBattlerId == battlerDef))

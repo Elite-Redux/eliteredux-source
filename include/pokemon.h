@@ -118,7 +118,7 @@ struct BoxPokemon {
     u8 pokeball:5;  // 31 balls
     u8 speedDown:1;
     u8 otGender:1;
-    u8 attackDown:1;
+    u8 isDisabled:1;
 
     u8 markings:4;
 };
@@ -571,5 +571,10 @@ bool8 CanDisableInnates(void);
 bool8 getInnateDisableLevel(u8 innateNum);
 bool8 isMoveDisabled(u8 battler, u16 move);
 u16 GetHeldItemIfNotDuplicate(u8 partyId);
+
+void SetNuzlockeCaughtFlag(u8 locationIndex);
+void ClearNuzlockeCaughtFlag(u8 locationIndex);
+bool8 GetNuzlockeCaughtFlag(u8 locationIndex);
+bool8 AreNuzlockeRulesEnabled(void);
 
 #endif  // GUARD_POKEMON_H
