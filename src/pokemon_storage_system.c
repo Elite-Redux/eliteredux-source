@@ -539,7 +539,7 @@ struct PokemonStorageSystemData {
     struct ItemIcon itemIcons[MAX_ITEM_ICONS];
     u16 movingItemId;
     u16 itemInfoWindowOffset;
-    u8 unkUnused2;  // Unused
+    u8 darkPaletteSlot;
     u16 displayMonPalOffset;
     u16 *displayMonTilePtr;
     struct Sprite *displayMonSprite;
@@ -4011,10 +4011,16 @@ static void InitCursorItemIcon(void) {
 //  animating released Pokémon.
 //------------------------------------------------------------------------------
 
+#define PAL_DARK_ICON 15
+static const u16 sDarkPokemonIconPal[] = INCBIN_U16("graphics/pokemon/icon_palettes/pal6.gbapal");
+static const struct SpritePalette sDarkPokemonIconSpritePalette[] = {sDarkPokemonIconPal, PAL_DARK_ICON};
+
 static void InitMonIconFields(void) {
     u16 i;
 
     LoadMonIconPalettes();
+    sStorage->darkPaletteSlot = LoadSpritePalette(sDarkPokemonIconSpritePalette);
+
     for (i = 0; i < MAX_MON_ICONS; i++) sStorage->numIconsPerSpecies[i] = 0;
     for (i = 0; i < MAX_MON_ICONS; i++) sStorage->iconSpeciesList[i] = SPECIES_NONE;
     for (i = 0; i < PARTY_SIZE; i++) sStorage->partySprites[i] = NULL;
@@ -4083,7 +4089,8 @@ static void CreateBoxMonIconAtPos(u8 boxPosition) {
 
         sStorage->boxMonsSprites[boxPosition] = CreateMonIconSprite(species, personality, x, y, 2, 19 - (boxPosition % IN_BOX_COLUMNS), isDisabled);
 
-        if (sStorage->boxOption == OPTION_MOVE_ITEMS) sStorage->boxMonsSprites[boxPosition]->oam.objMode = ST_OAM_OBJ_BLEND;
+        if (sStorage->boxOption == OPTION_MOVE_ITEMS) 
+            sStorage->boxMonsSprites[boxPosition]->oam.objMode = ST_OAM_OBJ_BLEND;
     }
 }
 
@@ -4324,10 +4331,9 @@ static void CreatePartyMonsSprites(bool8 visible) {
 static bool8 CreatePartyMonSprite(u8 partyId) {
     SpeciesEnum species = GetMonData(&gPlayerParty[partyId], MON_DATA_SPECIES2);
     u32 personality = GetMonData(&gPlayerParty[partyId], MON_DATA_PERSONALITY);
-    u32 isDisabled = GetMonData(&gPlayerParty[partyId], MON_DATA_IS_DISABLED);
 
     if (species != SPECIES_NONE) {
-        sStorage->partySprites[partyId] = CreateMonIconSprite(species, personality, 152, 8 * (3 * (partyId - 1)) + 16, 1, 12, isDisabled);
+        sStorage->partySprites[partyId] = CreateMonIconSprite(species, personality, 152, 8 * (3 * (partyId - 1)) + 16, 1, 12, FALSE);
         return TRUE;
     } else {
         sStorage->partySprites[partyId] = NULL;
@@ -4638,25 +4644,30 @@ static struct Sprite *CreateMonIconSprite(SpeciesEnum species, u32 personality, 
     struct SpriteTemplate spriteTemplate = sSpriteTemplate_MonIcon;
 
     species = GetIconSpecies(species, personality);
-    if (SpeciesHasGenderDifference(species) && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE) {
+
+    if (SpeciesHasGenderDifference(species) && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
         spriteTemplate.paletteTag = PALTAG_MON_ICON_0 + gMonIconPaletteIndicesFemale[species];
-    } else {
+    else
         spriteTemplate.paletteTag = PALTAG_MON_ICON_0 + gMonIconPaletteIndices[species];
-    }
+
     tileNum = TryLoadMonIconTiles(species, personality);
-    if (tileNum == 0xFFFF) return NULL;
+
+    if (tileNum == 0xFFFF)
+        return NULL;
 
     spriteId = CreateSprite(&spriteTemplate, x, y, subpriority);
+    
     if (spriteId == MAX_SPRITES) {
         RemoveSpeciesFromIconList(species);
         return NULL;
     }
 
-    gSprites[spriteId].oam.tileNum = tileNum;
+    gSprites[spriteId].oam.tileNum  = tileNum;
     gSprites[spriteId].oam.priority = oamPriority;
-    gSprites[spriteId].data[0] = species;
-    if(isDisabled)
-        gSprites[spriteId].oam.objMode = 1; // BLEND
+    gSprites[spriteId].data[0]      = species;
+
+    if (isDisabled)
+        gSprites[spriteId].oam.paletteNum = sStorage->darkPaletteSlot;
 
     //MGBA_PRINT_DEBUG("CreateMonIconSprite species: %d isDisabled: %d x: %d y: %d", species, isDisabled, x, y)
     
