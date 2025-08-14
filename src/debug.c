@@ -126,6 +126,7 @@ enum {  // Flags and Vars
     DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_RANDOMIZED_MODE,
     DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_AUTOWIN,
     DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_MGBA_PRINT,
+    DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_SEASON,
 };
 enum {  // Battle 0 Type
     DEBUG_BATTLE_0_MENU_ITEM_BOX,
@@ -347,6 +348,7 @@ static void DebugAction_FlagsVars_ToggleFrontierPass(u8 taskId);
 static void DebugAction_FlagsVars_CollisionOnOff(u8 taskId);
 static void DebugAction_FlagsVars_AutoWinOnOff(u8 taskId);
 static void DebugAction_FlagsVars_MgbaPrintOnOff(u8 taskId);
+static void DebugAction_FlagsVars_SeasonsOnOff(u8 taskId);
 static void DebugAction_FlagsVars_RandomOnOff(u8 taskId);
 static void DebugAction_FlagsVars_EncounterOnOff(u8 taskId);
 static void DebugAction_FlagsVars_TrainerSeeOnOff(u8 taskId);
@@ -495,6 +497,7 @@ static const u8 sDebugText_FlagsVars_SwitchCatching[] = _("Toggle {STR_VAR_1}Cat
 static const u8 sDebugText_FlagsVars_SwitchGodMode[] = _("Toggle {STR_VAR_1}GodMode OFF");
 static const u8 sDebugText_FlagsVars_SwitchAutowin[] = _("Toggle {STR_VAR_1}Autowin OFF");
 static const u8 sDebugText_FlagsVars_SwitchmGBAPrint[] = _("Toggle {STR_VAR_1}mGBA Print OFF");
+static const u8 sDebugText_FlagsVars_SwitchSeason[] = _("Toggle {STR_VAR_1}Season OFF");
 static const u8 sDebugText_FlagsVars_SwitchRandomPrint[] = _("Toggle {STR_VAR_1}Randomized Mode OFF");
 // Battle
 static const u8 sDebugText_Battle_0_Box[] = _("Box…{CLEAR_TO 110}{RIGHT_ARROW}");
@@ -677,6 +680,7 @@ static const struct ListMenuItem sDebugMenu_Items_FlagsVars[] = {
     [DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_GODMODE] = {sDebugText_FlagsVars_SwitchGodMode, DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_GODMODE},
     [DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_AUTOWIN] = {sDebugText_FlagsVars_SwitchAutowin, DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_AUTOWIN},
     [DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_MGBA_PRINT] = {sDebugText_FlagsVars_SwitchmGBAPrint, DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_MGBA_PRINT},
+    [DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_SEASON] = {sDebugText_FlagsVars_SwitchSeason, DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_SEASON},
     [DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_RANDOMIZED_MODE] = {sDebugText_FlagsVars_SwitchRandomPrint, DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_RANDOMIZED_MODE},
 };
 static const struct ListMenuItem sDebugMenu_Items_Battle_0[] = {
@@ -811,6 +815,7 @@ static void (*const sDebugMenu_Actions_Flags[])(u8) = {
     [DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_GODMODE] = DebugAction_FlagsVars_GodMode,
     [DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_AUTOWIN] = DebugAction_FlagsVars_AutoWinOnOff,
     [DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_MGBA_PRINT] = DebugAction_FlagsVars_MgbaPrintOnOff,
+    [DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_SEASON] = DebugAction_FlagsVars_SeasonsOnOff,
     [DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_RANDOMIZED_MODE] = DebugAction_FlagsVars_RandomOnOff,
 };
 static void (*const sDebugMenu_Actions_Give[])(u8) = {
@@ -2320,6 +2325,11 @@ static void DebugAction_FlagsVars_MgbaPrintOnOff(u8 taskId) {
     else
         PlaySE(SE_PC_LOGIN);
     FlagToggle(FLAG_SYS_MGBA_PRINT);
+}
+static void DebugAction_FlagsVars_SeasonsOnOff(u8 taskId) {
+    gSaveBlock2Ptr->season++;
+    if(gSaveBlock2Ptr->season > SEASON_WINTER)
+        gSaveBlock2Ptr->season = SEASON_SPRING;
 }
 static void DebugAction_FlagsVars_RandomOnOff(u8 taskId) {
     if (gSaveBlock2Ptr->innaterandomizedMode == 1) {
