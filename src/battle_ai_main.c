@@ -1797,7 +1797,8 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
                 score -= 4;
             break;
         case EFFECT_WISH:
-            if (gWishFutureKnock.wishCounter[battlerAtk] != 0) score -= 10;
+            if (gWishFutureKnock.wishCounter[battlerAtk] != 0) 
+                score -= 10;
             break;
         case EFFECT_ASSIST:
             if (CountUsablePartyMons(battlerAtk) == 0) score -= 10;  // no teammates to assist from
@@ -3117,7 +3118,8 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
             break;
         case EFFECT_WISH:
         case EFFECT_HEAL_BELL:
-            if (ShouldUseWishAromatherapy(battlerAtk, battlerDef, move)) score += 7;
+            if (ShouldUseWishAromatherapy(battlerAtk, battlerDef, move)) 
+                score += 7;
             break;
         case EFFECT_THIEF: {
             bool32 canSteal = FALSE;
