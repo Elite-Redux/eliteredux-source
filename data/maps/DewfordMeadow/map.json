@@ -14,9 +14,9 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "right",
+      "map": "MAP_DEWFORD_TOWN",
       "offset": -10,
-      "map": "MAP_DEWFORD_TOWN"
+      "direction": "right"
     }
   ],
   "object_events": [
