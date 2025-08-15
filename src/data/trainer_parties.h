@@ -96917,3 +96917,291 @@ static const struct TrainerMonItemCustomMoves sParty_Trent15Hell[] = {
     .moves = MOVE_EXPLOSION, MOVE_EXPLOSION, MOVE_EXPLOSION, MOVE_PROTECT
     }
 };
+
+static const struct TrainerMonItemCustomMoves sParty_Lett[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_LettInsane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_LettHell[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sPartyOrwell[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_OrwellInsane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_OrwellHell[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Amanda[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_AmandaInsane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_AmandaHell[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Rodrick[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_RodrickInsane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_RodrickHell[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Grunt_Sunhollow_1[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Grunt_Sunhollow_1Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Grunt_Sunhollow_1Hell[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Grunt_Sunhollow_2[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Grunt_Sunhollow_2Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Grunt_Sunhollow_2Hell[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Grunt_Sunhollow_3[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Grunt_Sunhollow_3Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Grunt_Sunhollow_3Hell[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Courtney_Sunhollow[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Courtney_SunhollowInsane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Courtney_SunhollowHell[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_MAGIKARP,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {4, 0, 252, 0, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SPLASH, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+};
