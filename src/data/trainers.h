@@ -15436,7 +15436,7 @@ const struct Trainer gTrainers[] = {
         .partyHell = {.ItemCustomMoves = sParty_Grunt_Sunhollow_3Hell},
     },
 
-    [TRAINER_COURTNEY_METEOR_FALLS] =
+    [TRAINER_COURTNEY_SUNHOLLOW] =
     {
         .partyFlags = F_TRAINER_PARTY_HELD_ITEM | F_TRAINER_PARTY_CUSTOM_MOVESET,
         .trainerClass = TRAINER_CLASS_MAGMA_ADMIN,
