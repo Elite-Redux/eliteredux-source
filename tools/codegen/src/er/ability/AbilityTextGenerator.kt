@@ -25,6 +25,22 @@ object AbilityTextGenerator : Generator {
 
         check(errors.isEmpty()) { errors.joinToString("\n") }
 
+        val errorsExpanded = ABILITIES_LIST.mapNotNull {
+            try {
+                breakString(
+                    it.expandedDescription,
+                    SMALL_NARROW,
+                    150,
+                    11
+                )
+                null
+            } catch (e: Exception) {
+                e.message
+            }
+        }
+
+        check(errorsExpanded.isEmpty()) { errorsExpanded.joinToString("\n") }
+
         writer.appendLine(
             """
                 |constexpr AbilityKVPair sAbilityText[] = {
@@ -37,7 +53,19 @@ object AbilityTextGenerator : Generator {
                             150,
                             2
                         )
-                    }")}},"""
+                    }")${
+                        if (it.hasExpandedDescription())
+                            """, .expandedDescription = $("${
+                                breakString(
+                                    it.expandedDescription,
+                                    SMALL_NARROW,
+                                    150,
+                                    11
+                                )
+                            }")"""
+                        else
+                        ""
+                    }}},"""
                 }
             }
                 |};
