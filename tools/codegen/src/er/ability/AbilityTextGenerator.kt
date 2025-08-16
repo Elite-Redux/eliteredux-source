@@ -37,7 +37,11 @@ object AbilityTextGenerator : Generator {
                     put(
                         it.id,
                         breakString(
-                            it.expandedDescription,
+                            if (it.expandedDescription.isNotEmpty()) {
+                                it.expandedDescription
+                            } else {
+                                it.description
+                            },
                             SMALL_NARROW,
                             150,
                             11
@@ -55,7 +59,7 @@ object AbilityTextGenerator : Generator {
         val allStrings = (shortDescriptions.values + expandedDescriptions.values).toSet()
 
         writer.appendLine(allStrings.joinToString("\n") {
-            """static const u8[] $PREFIX${
+            """static constexpr u8[] $PREFIX${
                 it.hashCode().toUInt()
             } = $("$it");"""
         })
