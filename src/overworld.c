@@ -1559,6 +1559,7 @@ void CB2_WhiteOut(void)
     {
         FlagClear(FLAG_TAG_BATTLE);
         FlagClear(FLAG_SYS_DISABLE_AUTOHEAL);
+        FlagClear(FLAG_TEMP_CAN_CATCH_POKEMON);
         FlagClear(FLAG_SYS_LOCKED_MODE);
         VarSet(VAR_BATTLE_FIELD_EFFECT_TYPE, 0);
         VarSet(VAR_BATTLE_FIELD_ID, 0);
@@ -1575,6 +1576,9 @@ void CB2_WhiteOut(void)
         SetFieldVBlankCallback();
         SetMainCallback1(CB1_Overworld);
         SetMainCallback2(CB2_Overworld);
+
+        if(AreNuzlockeRulesEnabled()) //Lost Nuzlocke Challenge
+            ClearNuzlockeDisableFlags();
     }
 }
 

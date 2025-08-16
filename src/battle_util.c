@@ -1519,7 +1519,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check) {
     s32 i;
 
     gPotentialItemEffectBattler = battlerId;
-    MGBA_PRINT_DEBUG("CheckMoveLimitations: %d", holdEffect)
+    //MGBA_PRINT_DEBUG("CheckMoveLimitations: %d", holdEffect)
 
     for (i = 0; i < MAX_MON_MOVES; i++) {
         FILTER_NOT(unusableMoves & (1 << i))

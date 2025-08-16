@@ -3071,14 +3071,26 @@ bool8 MapHasMons(void) {
 }
 
 bool8 canOpenDexnav(void) {
-    u16 headerId = GetCurrentMapWildMonHeaderId();
     u8 i;
+    u32 caughtLocation = GetCurrentRegionMapSectionId();
+    u16 headerId = GetCurrentMapWildMonHeaderId();
     const struct WildPokemonInfo* landMonsInfo = gWildMonHeaders[headerId].landMonsInfo;
     const struct WildPokemonInfo* waterMonsInfo = gWildMonHeaders[headerId].waterMonsInfo;
     const struct WildPokemonInfo* hiddenMonsInfo = gWildMonHeaders[headerId].hiddenMonsInfo;
     const struct WildPokemonInfo* honeyMonsInfo = gWildMonHeaders[headerId].honeyMonsInfo;
     const struct WildPokemonInfo* rockSmashMonsInfo = gWildMonHeaders[headerId].rockSmashMonsInfo;
     const struct WildPokemonInfo* fishingMonsInfo = gWildMonHeaders[headerId].fishingMonsInfo;
+
+    if(FlagGet(FLAG_NUZLOCKE_MODE_ENABLED)){
+        //Nuzlocke Mode
+        if(NUZLOCKE_MODE_DISABLE_DEXNAV && !GetNuzlockeCaughtFlag(caughtLocation))
+            return FALSE;
+    }
+    else if(gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL){
+        //Hell Mode
+        if(HELL_MODE_DISABLE_DEXNAV && !GetNuzlockeCaughtFlag(caughtLocation))
+            return FALSE;
+    }
 
     if (IsRouteDexnavLocked() || !MapHasMons()) return FALSE;
 
