@@ -44,15 +44,127 @@ int GetStandardBattlerTarget(BattlerTarget target, u8 battlerAtk, u8 battlerDef)
     }
 }
 
+template <>
+int resolveMoveRequirementAbility<ABILITY_CHLOROPLAST>(BattlerTarget target, MoveEnum move, u8 battlerAtk, u8 battlerDef) {
+    int battler = GetStandardBattlerTarget(target, battlerAtk, battlerDef);
+    return HasChloroplast(battler);
+}
+
+template <>
+int resolveMoveRequirementAbility<ABILITY_AURORA_BOREALIS>(BattlerTarget target, MoveEnum move, u8 battlerAtk, u8 battlerDef) {
+    int battler = GetStandardBattlerTarget(target, battlerAtk, battlerDef);
+    return BattlerHasAbility(battler, ABILITY_PARENTAL_BOND, FALSE);
+}
+
+template <>
+int resolveMoveRequirementAbility<ABILITY_PARENTAL_BOND>(BattlerTarget target, MoveEnum move, u8 battlerAtk, u8 battlerDef) {
+    int battler = GetStandardBattlerTarget(target, battlerAtk, battlerDef);
+    return BattlerHasAbility(battler, ABILITY_PARENTAL_BOND, FALSE);
+}
+
 template <SpeciesEnum Species>
 int resolveMoveRequirementSpecies(BattlerTarget target, MoveEnum move, u8 battlerAtk, u8 battlerDef) {
     return GET_BASE_SPECIES_ID(gBattleMons[GetStandardBattlerTarget(target, battlerAtk, battlerDef)].species) == Species;
 }
 
+template <SpeciesEnum Species>
+int resolveMoveRequirementSpecies(BattlerTarget target, MoveEnum move, struct Pokemon* mon, SpeciesEnum species, ItemEnum item, Type type1, Type type2) {
+    if (target != BattlerTarget::TARGET_MOVE_USER) return FALSE;
+    return species == Species;
+}
+
+int resolveMoveRequirementHoldEffectMatchesArgument(BattlerTarget target, MoveEnum move, u8 battlerAtk, u8 battlerDef) {
+    int battler = GetStandardBattlerTarget(target, battlerAtk, battlerDef);
+    return ItemId_GetHoldEffect(gBattleMons[battler].item) == static_cast<HoldEffectEnum>(gBattleMoves[move].argument);
+}
+
+template <HoldEffect Effect>
+int resolveMoveRequirementHoldEffect(BattlerTarget target, MoveEnum move, u8 battlerAtk, u8 battlerDef) {
+    int battler = GetStandardBattlerTarget(target, battlerAtk, battlerDef);
+    return ItemId_GetHoldEffect(gBattleMons[battler].item) == static_cast<HoldEffectEnum>(Effect);
+}
+
+Type resolveTypeChangeHiddenPower(MoveEnum move, u8 battler) { return gBattleMons[battler].hpType; }
+
+Type resolveTypeChangeItemType(MoveEnum move, u8 battler) { return static_cast<Type>(ItemId_GetSecondaryId(gBattleMons[battler].item)); }
+
 template <ItemEnum Item>
 int resolveMoveRequirementItem(BattlerTarget target, MoveEnum move, u8 battlerAtk, u8 battlerDef) {
     int battler = GetStandardBattlerTarget(target, battlerAtk, battlerDef);
     return gBattleMons[battler].item == Item && !IsItemNegated(battler);
+}
+
+Type resolveTypeChangeFirstType(MoveEnum move, u8 battler) {
+    if (gBattleMons[battler].type1 != TYPE_MYSTERY) return gBattleMons[battler].type1;
+    if (gBattleMons[battler].type2 != TYPE_MYSTERY) return gBattleMons[battler].type2;
+    return gBattleMons[battler].type3;
+}
+
+Type resolveTypeChangeSecondType(MoveEnum move, u8 battler) {
+    if (gBattleMons[battler].type2 != TYPE_MYSTERY) return gBattleMons[battler].type2;
+    if (gBattleMons[battler].type1 != TYPE_MYSTERY) return gBattleMons[battler].type1;
+    return gBattleMons[battler].type3;
+}
+
+Type resolveTypeChangeWeather(MoveEnum move, u8 battler) {
+    if (resolveMoveRequirementAbility<ABILITY_CHLOROPLAST>(BattlerTarget::TARGET_MOVE_USER, move, battler, battler)) return TYPE_FIRE;
+    if (resolveMoveRequirementAbility<ABILITY_AURORA_BOREALIS>(BattlerTarget::TARGET_MOVE_USER, move, battler, battler)) return TYPE_FIRE;
+    if (!IsWeatherActive(WEATHER_ANY_VALUE)) return TYPE_NORMAL;
+    if (gBattleWeather & WEATHER_FOG_ANY) return TYPE_GHOST;
+    if (gBattleWeather & WEATHER_SUN_ANY) return TYPE_FIRE;
+    if (gBattleWeather & WEATHER_RAIN_ANY) return TYPE_WATER;
+    if (gBattleWeather & WEATHER_SANDSTORM_ANY) return TYPE_ROCK;
+    if (gBattleWeather & WEATHER_HAIL_ANY) return TYPE_ICE;
+    return TYPE_NORMAL;
+}
+
+Type resolveTypeChangeNaturalGift(MoveEnum move, u8 battler) { return gNaturalGiftTable[gBattleMons[battler].item - FIRST_BERRY_INDEX].type; }
+
+Type resolveTypeChangeTerrain(MoveEnum move, u8 battler) {
+    if (resolveMoveRequirementTerrainAffected<Terrain::TERRAIN_ELECTRIC>(BattlerTarget::TARGET_MOVE_USER, move, battler, battler)) return TYPE_ELECTRIC;
+    if (resolveMoveRequirementTerrainAffected<Terrain::TERRAIN_GRASSY>(BattlerTarget::TARGET_MOVE_USER, move, battler, battler)) return TYPE_GRASS;
+    if (resolveMoveRequirementTerrainAffected<Terrain::TERRAIN_MISTY>(BattlerTarget::TARGET_MOVE_USER, move, battler, battler)) return TYPE_FAIRY;
+    if (resolveMoveRequirementTerrainAffected<Terrain::TERRAIN_PSYCHIC>(BattlerTarget::TARGET_MOVE_USER, move, battler, battler)) return TYPE_PSYCHIC;
+    if (resolveMoveRequirementTerrainAffected<Terrain::TERRAIN_TOXIC>(BattlerTarget::TARGET_MOVE_USER, move, battler, battler)) return TYPE_POISON;
+    return TYPE_NORMAL;
+}
+
+template <Type T>
+Type resolveTypeChangeType(MoveEnum move, u8 battler) {
+    return T;
+}
+
+int resolveMoveRequirementHoldEffectMatchesArgument(
+    BattlerTarget target, MoveEnum move, Pokemon* mon, SpeciesEnum species, ItemEnum item, Type type1, Type type2) {
+    if (target != BattlerTarget::TARGET_MOVE_USER) return FALSE;
+    return ItemId_GetHoldEffect(item) == static_cast<HoldEffectEnum>(gBattleMoves[move].argument);
+}
+
+Type resolveTypeChangeItemType(MoveEnum move, Pokemon* mon, ItemEnum item, Type type1, Type type2) { return static_cast<Type>(ItemId_GetSecondaryId(item)); }
+
+Type resolveTypeChangeHiddenPower(MoveEnum move, Pokemon* mon, ItemEnum item, Type type1, Type type2) {
+    return static_cast<Type>(GetMonData(mon, MON_DATA_HP_TYPE));
+}
+
+template <HoldEffect Effect>
+int resolveMoveRequirementHoldEffect(BattlerTarget target, MoveEnum move, Pokemon* mon, SpeciesEnum species, ItemEnum item, Type type1, Type type2) {
+    if (target != BattlerTarget::TARGET_MOVE_USER) return FALSE;
+    return ItemId_GetHoldEffect(item) == static_cast<HoldEffectEnum>(Effect);
+}
+
+Type resolveTypeChangeFirstType(MoveEnum move, Pokemon* mon, ItemEnum item, Type type1, Type type2) { return type1 != TYPE_MYSTERY ? type1 : type2; }
+
+template <Type T>
+Type resolveTypeChangeType(MoveEnum move, Pokemon* mon, ItemEnum item, Type type1, Type type2) {
+    return T;
+}
+
+Type resolveTypeChangeWeather(MoveEnum move, Pokemon* mon, ItemEnum item, Type type1, Type type2) { return TYPE_NORMAL; }
+
+Type resolveTypeChangeTerrain(MoveEnum move, Pokemon* mon, ItemEnum item, Type type1, Type type2) { return TYPE_NORMAL; }
+
+Type resolveTypeChangeNaturalGift(MoveEnum move, Pokemon* mon, ItemEnum item, Type type1, Type type2) {
+    return gNaturalGiftTable[item - FIRST_BERRY_INDEX].type;
 }
 
 int resolveAdjustPowerFlat(int basePower, u8 battlerAtk, u8 battlerDef, int flat) { return flat; }
@@ -302,20 +414,13 @@ int resolveMoveRequirementAllyFaintedRecently(BattlerTarget target, MoveEnum mov
     return gSideTimers[GetBattlerSide(battler)].retaliateTimer == 1;
 }
 
-template <>
-int resolveMoveRequirementAbility<ABILITY_CHLOROPLAST>(BattlerTarget target, MoveEnum move, u8 battlerAtk, u8 battlerDef) {
-    int battler = GetStandardBattlerTarget(target, battlerAtk, battlerDef);
-    return HasChloroplast(battler);
-}
-
-template <>
-int resolveMoveRequirementAbility<ABILITY_PARENTAL_BOND>(BattlerTarget target, MoveEnum move, u8 battlerAtk, u8 battlerDef) {
-    int battler = GetStandardBattlerTarget(target, battlerAtk, battlerDef);
-    return BattlerHasAbility(battler, ABILITY_PARENTAL_BOND, FALSE);
-}
-
 #include "generated/data/behavior/move/base_power.hh"
+#include "generated/data/behavior/move/type_change.hh"
 
 extern "C" {
 int AdjustMovePowerC(u8 battlerAtk, u8 battlerDef, MoveEnum move, int basePower) { return AdjustMovePower(battlerAtk, battlerDef, move, basePower); }
+Type GetBattleMoveTypeC(u8 battlerAtk, u8 battlerDef, MoveEnum move, Type baseType) { return GetBattleMoveType(battlerAtk, battlerDef, move, baseType); }
+Type GetOutOfBattleMoveTypeC(struct Pokemon* mon, SpeciesEnum species, ItemEnum item, Type type1, Type type2, MoveEnum move, Type baseType) {
+    return GetOutOfBattleMoveType(mon, species, item, type1, type2, move, baseType);
+}
 }

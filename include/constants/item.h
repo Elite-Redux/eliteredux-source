@@ -3,17 +3,6 @@
 
 #include "generated/constants/pockets.h"
 
-// These constants are used in gItems
-#define POCKET_NONE        0
-#define POCKET_ITEMS       1
-#define POCKET_MEDICINE    2
-#define POCKET_BATTLE      3
-#define POCKET_TM_HM       4
-#define POCKET_BERRIES     5
-#define POCKET_POKE_BALLS  6
-#define POCKET_KEY_ITEMS   7
-#define POCKET_MEGA_STONES 8
-
 #define ITEMS_POCKET       (POCKET_ITEMS - 1)
 #define MEDICINE_POCKET    (POCKET_MEDICINE - 1)
 #define BATTLE_POCKET      (POCKET_BATTLE - 1)

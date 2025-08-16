@@ -8,6 +8,7 @@ import er.item.*
 import er.move.*
 import er.scripting.move.MoveBehaviorEnumConfigGenerator
 import er.scripting.move.PowerAdjustmentGenerator
+import er.scripting.move.TypeChangeGenerator
 import er.text.ArticlesGenerator
 import er.trainer.TrainerPartyGenerator
 import java.io.File
@@ -83,6 +84,7 @@ object FileGenerator {
         "movebehaviorconfigenums" to MoveBehaviorEnumConfigGenerator,
         "poweradjustment" to PowerAdjustmentGenerator,
         "pocketenum" to PocketEnumGenerator,
+        "movetypechange" to TypeChangeGenerator,
     )
 
     @JvmStatic

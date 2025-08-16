@@ -12,6 +12,7 @@
 #include "constants/berry.h"
 #include "constants/expansion_branches.h"
 #include "constants/items.h"
+#include "generated/constants/hold_effects.h"
 
 // #define RECOMPILE_ME
 

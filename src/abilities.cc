@@ -48,6 +48,13 @@ class __EnumHack {
 ENUM_OR(InfiltrateType)
 ENUM_OR(MoveEffectEnum)
 
+#define ENUM_PLUS(enumType) \
+    inline enumType operator+(enumType a, int b) { return static_cast<enumType>(static_cast<int>(a) + b); }
+#define ENUM_PLUSPLUS(enumType) \
+    ENUM_PLUS(enumType); inline enumType operator++(enumType a) { return a + 1; }
+
+ENUM_PLUSPLUS(Type)
+
 #define CHECK(effect) \
     if (!(effect)) return __EnumHack();
 #define CHECK_NOT(effect) \
@@ -58,9 +65,9 @@ ENUM_OR(MoveEffectEnum)
 
 #define ON_ENTRY AbilityEnum ability, int battler
 #define DELEGATE_ENTRY ability, battler
-#define ON_ABSORB int battler, MoveEnum move, int moveType, int *statId
+#define ON_ABSORB int battler, MoveEnum move, Type moveType, int *statId
 #define DELEGATE_ABSORB battler, move, moveType, statId
-#define ON_IMMUNE int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript
+#define ON_IMMUNE int battler, int attacker, MoveEnum move, Type moveType, const u8 **immunityScript
 #define DELEGATE_IMMUNE battler, attacker, move, moveType, immunityScript
 #define ON_INFILTRATE int battler, MoveEnum move
 #define DELEGATE_INFILTRATE battler, move
@@ -72,30 +79,30 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_TERRAIN ability, battler
 #define ON_END_TURN AbilityEnum ability, int battler
 #define DELEGATE_END_TURN ability, battler
-#define ON_ATTACKER AbilityEnum ability, int battler, int target, MoveEnum move, int moveType
+#define ON_ATTACKER AbilityEnum ability, int battler, int target, MoveEnum move, Type moveType
 #define DELEGATE_ATTACKER ability, battler, target, move, moveType
-#define ON_DEFENDER AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType
+#define ON_DEFENDER AbilityEnum ability, int battler, int attacker, MoveEnum move, Type moveType
 #define DELEGATE_DEFENDER ability, battler, attacker, move, moveType
-#define ON_EITHER(name) static int name##OnEither(AbilityEnum ability, int battler, int opponent, MoveEnum move, int moveType)
+#define ON_EITHER(name) static int name##OnEither(AbilityEnum ability, int battler, int opponent, MoveEnum move, Type moveType)
 #define ON_EITHER_ABILITY(name) .onAttacker = name##OnEither, .onDefender = name##OnEither
-#define ON_RECOIL int damage, int battler, int moveType
+#define ON_RECOIL int damage, int battler, Type moveType
 #define DELEGATE_RECOIL damage, battler, moveType
 #define ON_REACTIVE AbilityEnum ability, int battler, AbilityCallType callType
 #define DELEGATE_REACTIVE ability, battler
-#define ON_BATTLER_FAINTS AbilityEnum ability, int battler, int attacker, int fainted, MoveEnum move, int moveType
+#define ON_BATTLER_FAINTS AbilityEnum ability, int battler, int attacker, int fainted, MoveEnum move, Type moveType
 #define DELEGATE_BATTLER_FAINTS ability, battler, attacker, fainted, move, moveType
-#define ON_PARENTAL_BOND int battler, MoveEnum move, int moveType
+#define ON_PARENTAL_BOND int battler, MoveEnum move, Type moveType
 #define DELEGATE_PARENTAL_BOND battler, move, moveType
 #define ON_STAT AbilityEnum ability, int battler, int statId, u32 *stat, NonStackingState *flags
 #define DELEGATE_STAT ability, battler, statId, stat, flags
 #define ON_OFFENSIVE_MULTIPLIER                                                                                                                             \
-    int battler, AbilityEnum ability, int target, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, \
+    int battler, AbilityEnum ability, int target, MoveEnum move, Type moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, \
         u16 *modifier
 #define DELEGATE_OFFENSIVE_MULTIPLIER battler, ability, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier
 #define ON_DEFENSIVE_MULTIPLIER \
-    int battler, int attacker, MoveEnum move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
+    int battler, int attacker, MoveEnum move, Type moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
 #define DELEGATE_DEFENSIVE_MULTIPLIER battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier
-#define ON_ACCURACY AbilityEnum ability, int battler, int target, MoveEnum move, int moveType, int *accuracy
+#define ON_ACCURACY AbilityEnum ability, int battler, int target, MoveEnum move, Type moveType, int *accuracy
 #define DELEGATE_ACCURACY ability, battler, target, move, moveType, accuracy
 #define ON_SWAP_SPLIT int battler, MoveEnum move
 #define DELEGATE_SWAP_SPLIT battler, move
@@ -104,21 +111,21 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_CHOOSE_OFFENSIVE_STAT battler, move, ignoreOffensiveStatDrops, targetUnaware, atkStatToUse, secondaryAtkStatToUse
 #define ON_CHOOSE_DEFENSIVE_STAT int battler, int target, MoveEnum move, int ignoreDefensiveStatBoosts, int battlerUnaware
 #define DELEGATE_CHOOSE_DEFENSIVE_STAT battler, target, move, ignoreDefensiveStatBoosts, battlerUnaware
-#define ON_STAB int moveType
+#define ON_STAB Type moveType
 #define DELEGATE_STAB moveType
 #define ON_PRIORITY int battler, int target, MoveEnum move
 #define DELEGATE_PRIORITY battler, target, move
-#define ON_MOVE_TYPE AbilityEnum ability, MoveEnum move, int moveType, u8 *ateBoost
+#define ON_MOVE_TYPE AbilityEnum ability, MoveEnum move, Type moveType, u8 *ateBoost
 #define DELEGATE_MOVE_TYPE ability, move, moveType, ateBoost
 #define ON_EXIT AbilityEnum ability, int battler
 #define DELEGATE_EXIT ability, battler
 #define ON_CRIT int battler, int target, MoveEnum move, u16 typeEffectiveness
 #define DELEGATE_CRIT battler, target, move, typeEffectiveness
-#define ON_TYPE_EFFECTIVENESS int defType, MoveEnum move, int moveType, u16 *mod
+#define ON_TYPE_EFFECTIVENESS int defType, MoveEnum move, Type moveType, u16 *mod
 #define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
 #define ON_COPY_MOVE AbilityEnum ability, int battler, int attacker, int target, MoveEnum move
 #define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
-#define ON_AFTER_TYPE_EFFECTIVENESS int battler, AbilityEnum ability, int target, MoveEnum move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
+#define ON_AFTER_TYPE_EFFECTIVENESS int battler, AbilityEnum ability, int target, MoveEnum move, Type moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
 #define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
 #define ON_MODIFY_EFFECT_CHANCE int battler, MoveEnum move, MoveEffectEnum moveEffect, int *effectChance
 #define DELEGATE_MODIFY_EFFECT_CHANCE battler, move, moveEffect, effectChance
@@ -128,7 +135,7 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_ON_STATUS_IMMUNE int battler, target, ability, status
 #define ABILITY_ON_TRAP int switchingBattler
 #define DELEGATE_ON_TRAP switchingBattler
-#define ABILITY_ON_BEFORE_ATTACK int battler, int attacker, AbilityEnum ability, MoveEnum move, int moveType
+#define ABILITY_ON_BEFORE_ATTACK int battler, int attacker, AbilityEnum ability, MoveEnum move, Type moveType
 #define DELEGATE_ON_BEFORE_ATTACK battler, attacker, ability, move, moveType
 #define ON_PREEMPT_ACTION u8 battler, AbilityEnum ability, u8 turnBattler
 #define DELEGATE_PREEMPT_ACTION battler, ability, turnBattler
@@ -229,7 +236,7 @@ static int TryTransformAttacker(AbilityEnum ability, int battler, AbilityCallTyp
     return TRUE;
 }
 
-static int AddBattlerType(int battler, int type) {
+static int AddBattlerType(int battler, Type type) {
     CHECK_NOT(IS_BATTLER_OF_TYPE(battler, type))
 
     gBattleMons[battler].type3 = type;
@@ -549,10 +556,10 @@ constexpr Ability ColorChange = {
         CHECK(battler != attacker)
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
 
-        u32 bestType = gBattleMons[gBattlerTarget].type1;
+        Type bestType = gBattleMons[gBattlerTarget].type1;
         u16 bestModifier = GetTypeModifier(moveType, bestType, attacker, battler);
 
-        for (int currentType = TYPE_NORMAL; currentType < NUMBER_OF_MON_TYPES; ++currentType) {
+        for (Type currentType = TYPE_NORMAL; currentType < NUMBER_OF_MON_TYPES; ++currentType) {
             u16 currentModifier = GetTypeModifier(moveType, currentType, attacker, battler);
             if (currentModifier < bestModifier) {
                 bestModifier = currentModifier;
@@ -1103,7 +1110,7 @@ constexpr Ability WhiteSmoke = {
         CHECK_NOT(gSideTimers[GET_BATTLER_SIDE(battler)].smokescreenTimer)
 
         int side = GET_BATTLER_SIDE(battler);
-        gSideTimers[side].smokescreenTimer = GetBattlerHoldEffect(battler, TRUE) == ITEM_LIGHT_CLAY ? SCREEN_DURATION : SCREEN_DURATION_SHORT;
+        gSideTimers[side].smokescreenTimer = GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_LIGHT_CLAY ? SCREEN_DURATION : SCREEN_DURATION_SHORT;
         gSideTimers[side].started.smokescreen = TRUE;
         gSideTimers[side].smokescreenBattler = battler;
         return SwitchInAnnounce(B_MSG_SWITCHIN_WHITE_SMOKE);
@@ -1358,7 +1365,7 @@ constexpr Ability Anticipation = {
             if (IsBattlerAlive(i) && side != GetBattlerSide(i)) {
                 for (int j = 0; j < MAX_MON_MOVES; j++) {
                     MoveEnum move = gBattleMons[i].moves[j];
-                    int moveType = gBattleMoves[move].type;
+                    Type moveType = gBattleMoves[move].type;
                     if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0)) {
                         any = TRUE;
                         break;
@@ -2534,7 +2541,7 @@ constexpr Ability PowerOfAlchemy = {
         int any = FALSE;
         for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
             FILTER(IsBattlerAlive(i))
-            FILTER(ItemId_GetPocket(GetBattlerHoldEffect(i, FALSE)) == POCKET_BERRIES)
+            FILTER(ItemId_GetPocket(gBattleMons[i].item) == POCKET_BERRIES)
             any = TRUE;
             UpdateBattlerItem(i, ITEM_BLACK_SLUDGE);
             BattleScriptPushCursorAndCallback(BattleScript_End3);
@@ -2797,7 +2804,7 @@ constexpr Ability PowerSpot = {
 };
 
 int HandleMimicry(u8 battler, AbilityEnum ability, AbilityCallType endType) {
-    u32 moveType = 0;
+    Type moveType = TYPE_NORMAL;
 
     switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
         case STATUS_FIELD_ELECTRIC_TERRAIN:
@@ -2813,7 +2820,7 @@ int HandleMimicry(u8 battler, AbilityEnum ability, AbilityCallType endType) {
             moveType = TYPE_PSYCHIC;
             break;
         default:
-            moveType = 0;
+            moveType = TYPE_NORMAL;
             break;
     }
 
@@ -5369,7 +5376,7 @@ constexpr Ability FreezingPoint = {
     ON_EITHER_ABILITY(FreezingPoint),
 };
 
-static int CryoProficiencyHail(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType) {
+static int CryoProficiencyHail(AbilityEnum ability, int battler, int attacker, MoveEnum move, Type moveType) {
     CHECK(ShouldApplyOnHitAffect(battler))
     CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY)
     if (gBattleWeather & WEATHER_PRIMAL_ANY) {
@@ -5539,7 +5546,7 @@ constexpr Ability Retriever = {
 
         u8 side = GetBattlerSide(gActiveBattler);
         u8 index = gBattlerPartyIndexes[gActiveBattler];
-        u16 originalItem = gLastUsedItem = side == B_SIDE_PLAYER ? gBattleStruct->itemStolen[index].originalItem : gBattleStruct->opposingOriginalItems[index];
+        ItemEnum originalItem = gLastUsedItem = side == B_SIDE_PLAYER ? gBattleStruct->itemStolen[index].originalItem : gBattleStruct->opposingOriginalItems[index];
 
         CHECK(originalItem)
 
@@ -7418,9 +7425,9 @@ constexpr Ability Energized = {
 
 constexpr Ability ColorSpectrum = {
     .onEndTurn = +[](ON_END_TURN) -> int {
-        int newType;
+        Type newType;
         do {
-            newType = Random() % NUMBER_OF_MON_TYPES;
+            newType = static_cast<Type>(Random() % NUMBER_OF_MON_TYPES);
         } while (newType == TYPE_MYSTERY || newType == TYPE_STELLAR || IS_BATTLER_OF_TYPE(battler, newType));
 
         gBattleMons[battler].type1 = newType;

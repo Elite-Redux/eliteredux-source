@@ -8,7 +8,8 @@ import java.io.OutputStreamWriter
 data class TemplateConfig(
     val additionalEnums: Set<EnumDescriptor>,
     val descriptorsToPrint: Map<Descriptor, (FieldDescriptor) -> Boolean>,
-    val parameters: String
+    val parameters: String,
+    val returnType: String = "int",
 )
 
 object MoveBehaviorEnumConfigGenerator : Generator {
@@ -40,13 +41,16 @@ object MoveBehaviorEnumConfigGenerator : Generator {
             for ((descriptor, filter) in descriptorsToPrint) {
                 for (field in descriptor.fields.filter { filter(it) }) {
                     if (field.type == ENUM) field.enumType.printEnumIfNotPresent()
-                    writer.appendLine(printFieldMethods(parameters, descriptor, field))
+                    writer.appendLine(printFieldMethods(parameters, returnType, descriptor, field))
                 }
             }
         }
 
         Requirement.TEMPLATE_CONFIG.print()
         PowerAdjustmentGenerator.TEMPLATE_CONFIG.print()
+        TypeChangeGenerator.TEMPLATE_CONFIG.print()
+        TypeChangeGenerator.DISPLAY_TEMPLATE_CONFIG.print()
+        TypeChangeGenerator.REQUIRE_CONFIG.print()
     }
 
     fun printTemplateCall(
@@ -84,17 +88,18 @@ object MoveBehaviorEnumConfigGenerator : Generator {
 
     private fun printFieldMethods(
         parameters: String,
+        returnType: String,
         descriptor: Descriptor,
         fieldDescriptor: FieldDescriptor
     ): String =
         when (fieldDescriptor.type) {
-            INT32 -> "int resolve${descriptor.name}${fieldDescriptor.name.snakeToPascal()}($parameters, int value);"
-            FLOAT -> "int resolve${descriptor.name}${fieldDescriptor.name.snakeToPascal()}($parameters, float value);"
-            BOOL -> "int resolve${descriptor.name}${fieldDescriptor.name.snakeToPascal()}($parameters);"
+            INT32 -> "$returnType resolve${descriptor.name}${fieldDescriptor.name.snakeToPascal()}($parameters, int value);"
+            FLOAT -> "$returnType resolve${descriptor.name}${fieldDescriptor.name.snakeToPascal()}($parameters, float value);"
+            BOOL -> "$returnType resolve${descriptor.name}${fieldDescriptor.name.snakeToPascal()}($parameters);"
             ENUM -> """
                 |
                 |template<${fieldDescriptor.enumType.name} Value>
-                |int resolve${descriptor.name}${fieldDescriptor.name.snakeToPascal()}($parameters);
+                |$returnType resolve${descriptor.name}${fieldDescriptor.name.snakeToPascal()}($parameters);
                 |""".trimMargin()
 
             else -> ""

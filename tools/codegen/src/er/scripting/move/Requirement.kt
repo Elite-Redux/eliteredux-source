@@ -12,18 +12,31 @@ object Requirement {
     private val MESSAGE_HANDLERS = mapOf<String, (Descriptor, FieldDescriptor, Any, String) -> String>()
 
     val TEMPLATE_CONFIG = TemplateConfig(
-        additionalEnums = setOf(BattlerTarget.getDescriptor()), descriptorsToPrint = mapOf(
-            MoveRequirement.getDescriptor() to { it.name !in FILTERED_FIELDS }), parameters = "BattlerTarget target, MoveEnum move, u8 battlerAtk, u8 battlerDef"
+        additionalEnums = setOf(BattlerTarget.getDescriptor()),
+        descriptorsToPrint = mapOf(
+            MoveRequirement.getDescriptor() to { it.name !in FILTERED_FIELDS }),
+        parameters = "BattlerTarget target, MoveEnum move, u8 battlerAtk, u8 battlerDef"
     )
 
-    fun getRequirementString(requirementEntry: List<MoveRequirement>): String {
-        return requirementEntry.joinToString(" && ", prefix = "(", postfix = ")") { getOrRequirement(it) }
+    fun getRequirementString(requirementEntry: List<MoveRequirement>, params: String? = null): String {
+        return requirementEntry.joinToString(" && ", prefix = "(", postfix = ")") {
+            getOrRequirement(
+                it,
+                params ?: "move, battlerAtk, battlerDef"
+            )
+        }
     }
 
-    private fun getOrRequirement(requirement: MoveRequirement): String {
+    private fun getOrRequirement(requirement: MoveRequirement, params: String): String {
         val entries = requirement.allFields.filter { it.key.name !in FILTERED_FIELDS }
-            .flatMap { getSingleRequirement(it, requirement.target) } + if (requirement.requireList.isNotEmpty()) {
-            listOf(getRequirementString(requirement.requireList))
+            .flatMap {
+                getSingleRequirement(
+                    it,
+                    requirement.target,
+                    params
+                )
+            } + if (requirement.requireList.isNotEmpty()) {
+            listOf(getRequirementString(requirement.requireList, params))
         } else {
             emptyList()
         }
@@ -32,9 +45,12 @@ object Requirement {
     }
 
 
-    private fun getSingleRequirement(entry: Entry<FieldDescriptor, Any>, battler: BattlerTarget) =
+    private fun getSingleRequirement(entry: Entry<FieldDescriptor, Any>, battler: BattlerTarget, params: String) =
         MoveBehaviorEnumConfigGenerator.printTemplateCall(
-            "BattlerTarget::$battler, move, battlerAtk, battlerDef", entry.value, entry.key, MoveRequirement.getDescriptor(),
+            "BattlerTarget::$battler, $params",
+            entry.value,
+            entry.key,
+            MoveRequirement.getDescriptor(),
             MESSAGE_HANDLERS
         )
 }

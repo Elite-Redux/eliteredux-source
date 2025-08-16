@@ -3,6 +3,7 @@
 
 #include "abilities.hh"
 #include "battle_ai_new.h"
+#include "generated/constants/hold_effects.h"
 
 #define MOVE_LIMITATION_ZEROMOVE (1 << 0)
 #define MOVE_LIMITATION_PP (1 << 1)
@@ -94,9 +95,9 @@ enum MiscMoveEffects {
 
 // for Natural Gift and Fling
 typedef struct TypePower {
-    u8 type;
+    Type type;
     u8 power;
-    u16 effect;
+    MoveEffectEnum effect;
 } TypePower;
 
 typedef enum {
@@ -129,14 +130,14 @@ typedef struct {
 } StatCopyState;
 
 typedef struct {
-    u16 itemId;
+    ItemEnum itemId;
     bool8 setThisTurn:1;
     bool8 activating:1;
 } CudChewState;
 
 typedef struct {
-    u8 type1:5;
-    u8 type2:5;
+    Type type1:5;
+    Type type2:5;
     u8 active:1;
 } MimicryState;
 
@@ -263,7 +264,7 @@ u32 SetRandomTarget(u32 battlerId);
 u32 GetMoveTarget(MoveEnum move, u8 setTarget);
 u8 IsMonDisobedient(void);
 bool8 IsItemNegated(u8 battlerId);
-u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating);
+HoldEffectEnum GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating);
 u32 GetBattlerHoldEffectParam(u8 battlerId);
 bool32 IsMoveMakingContact(MoveEnum move, u8 battlerAtk);
 bool32 IsBattlerGrounded(u8 battlerId);
@@ -314,7 +315,7 @@ bool32 TryRoomService(u8 battlerId);
 void BufferStatChange(u8 battlerId, u8 statId, u8 stringId);
 void DoBurmyFormChange(u32 monId);
 bool32 BlocksPrankster(MoveEnum move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget);
-u16 GetUsedHeldItem(u8 battler);
+ItemEnum GetUsedHeldItem(u8 battler);
 bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags);
 bool8 IsMoveAffectedByParentalBond(MoveEnum move, u8 battlerId);
 u8 GetBattlerBattleMoveTargetFlags(MoveEnum moveId, u8 battler);

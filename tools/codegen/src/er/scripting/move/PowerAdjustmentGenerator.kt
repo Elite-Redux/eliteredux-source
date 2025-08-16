@@ -10,6 +10,7 @@ import er.proto.AttackBehaviorConfig.AdjustPower.CustomScaling
 import er.proto.MoveBehavior
 import er.proto.MoveBehaviorConfig
 import er.scripting.move.MoveBehaviorEnumConfigGenerator.printTemplateCall
+import er.scripting.move.MoveScriptingUtils.groupAttackData
 import java.io.OutputStreamWriter
 
 object PowerAdjustmentGenerator : Generator {
@@ -22,16 +23,7 @@ object PowerAdjustmentGenerator : Generator {
     )
 
     override fun generate(writer: OutputStreamWriter) {
-        val adjustments = MOVES_BEHAVIOR_CONFIGS_LIST.groupBy({
-            when (it.configCase) {
-                MoveBehaviorConfig.ConfigCase.ATTACK -> it.attack.powerModifierList
-                MoveBehaviorConfig.ConfigCase.STATUS -> emptyList()
-                MoveBehaviorConfig.ConfigCase.TWO_TURN -> it.twoTurn.turn2Attack.powerModifierList
-                MoveBehaviorConfig.ConfigCase.CUSTOM_BEHAVIOR -> emptyList()
-                MoveBehaviorConfig.ConfigCase.ALLY_ENEMY_DIFFER -> it.allyEnemyDiffer.enemy.powerModifierList
-                MoveBehaviorConfig.ConfigCase.CONFIG_NOT_SET -> emptyList()
-            }
-        }, { it.id }).filterKeys { it.isNotEmpty() }
+        val adjustments = groupAttackData { it.powerModifierList }
         writer.appendLine(
             """
             |int AdjustMovePower(u8 battlerAtk, u8 battlerDef, MoveEnum move, int basePower) {

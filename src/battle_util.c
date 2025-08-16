@@ -6367,7 +6367,7 @@ bool8 IsItemNegated(u8 battlerId) {
     return FALSE;
 }
 
-u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating) {
+HoldEffectEnum GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating) {
     if (checkNegating && IsItemNegated(battlerId)) return HOLD_EFFECT_NONE;
 
     gPotentialItemEffectBattler = battlerId;
@@ -8351,7 +8351,7 @@ bool32 BlocksPrankster(MoveEnum move, u8 battlerPrankster, u8 battlerDef, bool32
     return TRUE;
 }
 
-u16 GetUsedHeldItem(u8 battler) { return gBattleStruct->usedHeldItems[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)]; }
+ItemEnum GetUsedHeldItem(u8 battler) { return gBattleStruct->usedHeldItems[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)]; }
 
 int IsWeatherActive(int weather) {
     if (!(gBattleWeather & weather)) return FALSE;
@@ -8720,7 +8720,8 @@ AbilityEnum IsUnaware(int battler) {
 }
 
 int HandleAttackerAbility(int abilityNumber, int battler, int target, MoveEnum move) {
-    AbilityEnum ability, moveType;
+    AbilityEnum ability;
+    Type moveType;
 
     if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
     abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
@@ -8757,7 +8758,8 @@ int CheckHalfHpAbility(int battlerDef, int battlerAtk) {
 }
 
 int HandleDefenderAbility(int abilityNumber, int battler, int attacker, MoveEnum move) {
-    AbilityEnum ability, moveType;
+    AbilityEnum ability;
+    Type moveType;
 
     if (battler >= gBattlersCount) return FALSE;
 

@@ -603,7 +603,7 @@ struct Illusion
 
 struct StolenItem
 {
-    u16 originalItem:15;
+    ItemEnum originalItem:15;
     u16 stolen:1;
 };
 
@@ -749,7 +749,7 @@ struct BattleStruct
     u16 changedSpecies[PARTY_SIZE]; // For Zygarde or future forms when multiple mons can change into the same pokemon.
     u8 quickClawBattlerId;
     struct StolenItem itemStolen[PARTY_SIZE];  // Player's team that had items stolen (two bytes per party member)
-    u16 opposingOriginalItems[PARTY_SIZE];  // Player's team that had items stolen (two bytes per party member)
+    ItemEnum opposingOriginalItems[PARTY_SIZE];  // Player's team that had items stolen (two bytes per party member)
     u8 blunderPolicy:1; // should blunder policy activate
     StatStageCheckState statStageCheckState:2;
     u8 ballSpriteIds[2];    // item gfx, window gfx
@@ -1025,7 +1025,7 @@ extern MoveEnum gCalledMove;
 extern s32 gBattleMoveDamage;
 extern s32 gHpDealt;
 extern s32 gTakenDmg[MAX_BATTLERS_COUNT];
-extern u16 gLastUsedItem;
+extern ItemEnum gLastUsedItem;
 extern u8 gBattlerAttacker;
 extern u8 gBattlerTarget;
 extern u8 gBattlerFainted;

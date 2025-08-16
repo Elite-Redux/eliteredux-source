@@ -174,11 +174,11 @@ struct BattlePokemon {
     AbilityEnum abilities[TOTAL_ABILITY_COUNT];
     u16 hp;
     u16 maxHP;
-    u16 item;
+    ItemEnum item;
     s8 statStages[NUM_BATTLE_STATS];
-    u8 type1;
-    u8 type2;
-    u8 type3;
+    Type type1;
+    Type type2;
+    Type type3;
     u8 pp[MAX_MON_MOVES];
     u8 level;
     u8 friendship;
@@ -186,7 +186,7 @@ struct BattlePokemon {
     u8 ppBonuses;
     u8 otName[PLAYER_NAME_LENGTH + 1];
     u8 nature;
-    u8 hpType;
+    Type hpType;
     bool8 wasalreadytotemboosted:1;
     u8 speedDown:1;
     u8 abilityNum:2;
@@ -258,8 +258,8 @@ struct BattleMove {
     u16 target;
     u16 argument;
     u8 power;
-    u8 type;
-    u8 type2;
+    Type type;
+    Type type2;
     u8 accuracy;
     u8 pp;
     u8 secondaryEffectChance;

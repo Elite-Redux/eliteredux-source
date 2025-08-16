@@ -132,6 +132,7 @@ $(eval $(call GENERATE, include/generated/data/text/help_articles.h, helparticle
 
 $(eval $(call GENERATE, include/generated/data/behavior/move/enums.hh, movebehaviorconfigenums))
 $(eval $(call GENERATE, include/generated/data/behavior/move/base_power.hh, poweradjustment))
+$(eval $(call GENERATE, include/generated/data/behavior/move/type_change.hh, movetypechange))
 
 timestamp/generated: $(ALL_GENERATED)
 	@touch timestamp/generated
