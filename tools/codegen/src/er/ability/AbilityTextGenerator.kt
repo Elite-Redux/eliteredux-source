@@ -59,9 +59,9 @@ object AbilityTextGenerator : Generator {
         val allStrings = (shortDescriptions.values + expandedDescriptions.values).toSet()
 
         writer.appendLine(allStrings.joinToString("\n") {
-            """static constexpr u8[] $PREFIX${
+            """constexpr u8 $PREFIX${
                 it.hashCode().toUInt()
-            } = $("$it");"""
+            }[] = _("$it");"""
         })
 
         writer.appendLine(
