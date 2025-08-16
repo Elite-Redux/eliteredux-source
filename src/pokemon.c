@@ -2091,7 +2091,7 @@ u8 GiveMonToPlayer(struct Pokemon *mon) {
     if (!UsingBattlePyramidBag())
         AddBagItem(mon->box.heldItem, 1);
 
-    if (i >= PARTY_SIZE || hasAlreadyCaughtInArea)
+    if (i >= PARTY_SIZE || (hasAlreadyCaughtInArea && nuzlockeRulesEnabled))
         return SendMonToPC(mon);
 
     CopyMon(&gPlayerParty[i], mon, sizeof(*mon));
