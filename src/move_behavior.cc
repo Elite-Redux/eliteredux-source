@@ -419,8 +419,8 @@ int resolveMoveRequirementAllyFaintedRecently(BattlerTarget target, MoveEnum mov
 
 extern "C" {
 int AdjustMovePowerC(u8 battlerAtk, u8 battlerDef, MoveEnum move, int basePower) { return AdjustMovePower(battlerAtk, battlerDef, move, basePower); }
-Type GetBattleMoveTypeC(u8 battlerAtk, u8 battlerDef, MoveEnum move, Type baseType) { return GetBattleMoveType(battlerAtk, battlerDef, move, baseType); }
-Type GetOutOfBattleMoveTypeC(struct Pokemon* mon, SpeciesEnum species, ItemEnum item, Type type1, Type type2, MoveEnum move, Type baseType) {
-    return GetOutOfBattleMoveType(mon, species, item, type1, type2, move, baseType);
+Type GetBattleMoveTypeC(u8 battlerAtk, u8 battlerDef, MoveEnum move) { return GetBattleMoveType(battlerAtk, battlerDef, move); }
+Type GetOutOfBattleMoveTypeC(struct Pokemon* mon, SpeciesEnum species, ItemEnum item, Type type1, Type type2, MoveEnum move) {
+    return GetOutOfBattleMoveType(mon, species, item, type1, type2, move);
 }
 }

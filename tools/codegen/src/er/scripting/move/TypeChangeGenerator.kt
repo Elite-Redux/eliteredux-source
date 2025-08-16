@@ -32,7 +32,7 @@ object TypeChangeGenerator : Generator {
 
         writer.appendLine(
             """
-            |Type GetBattleMoveType(u8 battlerAtk, u8 battlerDef, MoveEnum move, Type baseType) {
+            |Type GetBattleMoveType(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
             |${IND}switch (gBattleMoves[move].effect) {
             |${
                 typeChanges.entries.joinToString("\n") {
@@ -40,14 +40,14 @@ object TypeChangeGenerator : Generator {
                 }
             }
             |$IND}
-            |${IND}return baseType;
+            |${IND}return static_cast<Type>(TYPE_NONE);
             |}
             |""".trimMargin()
         )
 
         writer.appendLine(
             """
-            |Type GetOutOfBattleMoveType(struct Pokemon* mon, SpeciesEnum species, ItemEnum item, Type type1, Type type2, MoveEnum move, Type baseType) {
+            |Type GetOutOfBattleMoveType(struct Pokemon* mon, SpeciesEnum species, ItemEnum item, Type type1, Type type2, MoveEnum move) {
             |${IND}switch (gBattleMoves[move].effect) {
             |${
                 typeChanges.entries.joinToString("\n") {
@@ -55,7 +55,7 @@ object TypeChangeGenerator : Generator {
                 }
             }
             |$IND}
-            |${IND}return baseType;
+            |${IND}return static_cast<Type>(TYPE_NONE);
             |}
             |""".trimMargin()
         )

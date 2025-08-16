@@ -75,6 +75,7 @@
 #include "util.h"
 #include "wild_encounter.h"
 #include "window.h"
+#include "move_behavior.hh"
 
 extern struct MusicPlayerInfo gMPlayInfo_SE1;
 extern struct MusicPlayerInfo gMPlayInfo_SE2;
@@ -4929,15 +4930,14 @@ void RunBattleScriptCommands(void) {
 }
 
 u8 GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer) {
-    u32 moveType = gBattleMoves[move].type;
-    u16 item = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
-    u16 holdEffect = ItemId_GetHoldEffect(item);
+    Type moveType = gBattleMoves[move].type;
+    ItemEnum item = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
     SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     u8 abilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM, NULL);
     AbilityEnum ability = GetAbilityBySpecies(species, abilityNum);
-    u8 type1 = gBaseStats[species].type1;
-    u8 type2 = gBaseStats[species].type2;
+    Type type1 = gBaseStats[species].type1;
+    Type type2 = gBaseStats[species].type2;
 
     if (!disableRandomizer) {
         ability = RandomizeAbility(GetAbilityBySpecies(species, abilityNum), species, personality);
@@ -4946,9 +4946,7 @@ u8 GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer) {
     }
 
     if (move == MOVE_STRUGGLE) return TYPE_NORMAL;
-
-    // Present looks normal but is actually typeless
-    if (move == MOVE_PRESENT) return TYPE_NORMAL;
+    if (moveType == TYPE_MYSTERY) return TYPE_NORMAL;
 
     if (move == MOVE_RAGING_BULL) {
         switch (species) {
@@ -4963,51 +4961,8 @@ u8 GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer) {
 
     if (move == MOVE_TERA_STARSTORM && (type1 == TYPE_STELLAR || type2 == TYPE_STELLAR)) return TYPE_STELLAR;
 
-    switch (gBattleMoves[move].effect) {
-        case EFFECT_HIDDEN_POWER:
-            return GetMonData(mon, MON_DATA_HP_TYPE, NULL);
-        case EFFECT_FLING:
-            if (ItemId_GetHoldEffect(item) == HOLD_EFFECT_GEMS) return ItemId_GetSecondaryId(item);
-            break;
-        case EFFECT_CHANGE_TYPE_ON_ITEM:
-            if (holdEffect == gBattleMoves[move].argument) return ItemId_GetSecondaryId(item);
-            break;
-        case EFFECT_REVELATION_DANCE:
-        case EFFECT_SPIT_UP:
-            if (type1 != TYPE_MYSTERY)
-                return type1;
-            else if (type2 != TYPE_MYSTERY)
-                return type2;
-            break;
-        case EFFECT_SYNCHRONOISE:
-            if (gBattleMoves[move].argument == MISC_EFFECT_IVY_CUDGEL) {
-                switch (species) {
-                    case SPECIES_OGERPON:
-                        return TYPE_GRASS;
-                    case SPECIES_OGERPON_HEARTHFLAME_MASK:
-                        return TYPE_FIRE;
-                    case SPECIES_OGERPON_WELLSPRING_MASK:
-                        return TYPE_WATER;
-                    case SPECIES_OGERPON_CORNERSTONE_MASK:
-                        return TYPE_ROCK;
-                    case SPECIES_OGERPON_HEARTHFLAME_MASK_MEGA:
-                        return TYPE_FIRE;
-                    case SPECIES_OGERPON_WELLSPRING_MASK_MEGA:
-                        return TYPE_WATER;
-                    case SPECIES_OGERPON_CORNERSTONE_MASK_MEGA:
-                        return TYPE_ROCK;
-                }
-            }
-
-            if (type2 != TYPE_MYSTERY)
-                return type2;
-            else if (type1 != TYPE_MYSTERY)
-                return type1;
-            break;
-        case EFFECT_NATURAL_GIFT:
-            if (ItemId_GetPocket(item) == POCKET_BERRIES) return gNaturalGiftTable[item - FIRST_BERRY_INDEX].type;
-            break;
-    }
+    Type newMoveType = GetOutOfBattleMoveTypeC(mon, species, item, type1, type2, move);
+    if (newMoveType != TYPE_NONE) return newMoveType;
 
     if (gAbilities[ability].onMoveType) {
         u8 unused;
@@ -5045,94 +5000,22 @@ static int GetMoveTypeInternal(MoveEnum move, int battlerAtk, u8 *ateBoost, s8 *
         case MOVE_TERA_STARSTORM:
             REQUIRE(IS_BATTLER_OF_TYPE(battlerAtk, TYPE_STELLAR))
             return TYPE_STELLAR;
-
-        case MOVE_WEATHER_BALL:
-            if (HasChloroplast(battlerAtk)) return TYPE_FIRE;
-            if (HasAuroraBorealis(battlerAtk)) return TYPE_ICE;
-            REQUIRE(IsWeatherActive(WEATHER_ANY))
-            if (gBattleWeather & WEATHER_RAIN_ANY) return TYPE_WATER;
-            if (gBattleWeather & WEATHER_SUN_ANY) return TYPE_FIRE;
-            if (gBattleWeather & WEATHER_SANDSTORM_ANY) return TYPE_ROCK;
-            if (gBattleWeather & WEATHER_HAIL_ANY) return TYPE_ICE;
-            if (gBattleWeather & WEATHER_FOG_ANY) return TYPE_GHOST;
-            break;
-
-        case MOVE_PRESENT:
-            *realType = TYPE_MYSTERY;
-            return TYPE_NORMAL;
     }
 
-    switch (gBattleMoves[move].effect) {
-        case EFFECT_HIDDEN_POWER:
-            return gBattleMons[battlerAtk].hpType;
+    Type moveType = gBattleMoves[move].type;
 
-        case EFFECT_FLING:
-            REQUIRE(ItemId_GetHoldEffect(gBattleMons[battlerAtk].item) == HOLD_EFFECT_GEMS);
-            return ItemId_GetSecondaryId(gBattleMons[battlerAtk].item);
-
-        case EFFECT_CHANGE_TYPE_ON_ITEM:
-            REQUIRE(GetBattlerHoldEffect(battlerAtk, TRUE) == gBattleMoves[move].argument)
-            return ItemId_GetSecondaryId(gBattleMons[battlerAtk].item);
-
-        case EFFECT_REVELATION_DANCE:
-        case EFFECT_SPIT_UP:
-            if (gBattleMons[battlerAtk].type1 != TYPE_MYSTERY)
-                return gBattleMons[battlerAtk].type1;
-            else if (gBattleMons[battlerAtk].type2 != TYPE_MYSTERY)
-                return gBattleMons[battlerAtk].type2;
-            else
-                return gBattleMons[battlerAtk].type3;
-
-        case EFFECT_SYNCHRONOISE:
-            if (gBattleMoves[move].argument == MISC_EFFECT_IVY_CUDGEL) {
-                switch (gBattleMons[battlerAtk].species) {
-                    case SPECIES_OGERPON_HEARTHFLAME_MASK:
-                        return TYPE_FIRE;
-                    case SPECIES_OGERPON_WELLSPRING_MASK:
-                        return TYPE_WATER;
-                    case SPECIES_OGERPON_CORNERSTONE_MASK:
-                        return TYPE_ROCK;
-                }
-            }
-
-            if (gBattleMons[battlerAtk].type2 != TYPE_MYSTERY)
-                return gBattleMons[battlerAtk].type2;
-            else if (gBattleMons[battlerAtk].type1 != TYPE_MYSTERY)
-                return gBattleMons[battlerAtk].type1;
-            else
-                return gBattleMons[battlerAtk].type3;
-
-        case EFFECT_NATURAL_GIFT:
-            REQUIRE(ItemId_GetPocket(gBattleMons[battlerAtk].item) == POCKET_BERRIES)
-            return gNaturalGiftTable[gBattleMons[battlerAtk].item - FIRST_BERRY_INDEX].type;
-
-        case EFFECT_TERRAIN_PULSE:
-            REQUIRE(IsBattlerTerrainAffected(battlerAtk, STATUS_FIELD_TERRAIN_ANY))
-            switch (GetCurrentTerrain()) {
-                case STATUS_FIELD_ELECTRIC_TERRAIN:
-                    return TYPE_ELECTRIC;
-
-                case STATUS_FIELD_GRASSY_TERRAIN:
-                    return TYPE_GRASS;
-
-                case STATUS_FIELD_MISTY_TERRAIN:
-                    return TYPE_FAIRY;
-
-                case STATUS_FIELD_PSYCHIC_TERRAIN:
-                    return TYPE_PSYCHIC;
-
-                case STATUS_FIELD_TOXIC_TERRAIN:
-                    return TYPE_POISON;
-            }
-            break;
+    if (moveType == TYPE_MYSTERY) {
+        *realType = TYPE_MYSTERY;
+        return TYPE_NORMAL;
     }
 
-    int moveType = gBattleMoves[move].type;
+    Type newMoveType = GetBattleMoveTypeC(battlerAtk, battlerAtk, move);
+    if (newMoveType != TYPE_NONE) return newMoveType;
 
     if ((gFieldStatuses & STATUS_FIELD_ION_DELUGE && moveType == TYPE_NORMAL) || gStatuses4[battlerAtk] & STATUS4_ELECTRIFIED) return TYPE_ELECTRIC;
     if (gStatuses4[battlerAtk] & STATUS4_PLASMA_FISTS && moveType == TYPE_NORMAL) return TYPE_ELECTRIC;
 
-    ON_ABILITY(battlerAtk, FALSE, gAbilities[ability].onMoveType, int newType = gAbilities[ability].onMoveType(ability, move, moveType, ateBoost);
+    ON_ABILITY(battlerAtk, FALSE, gAbilities[ability].onMoveType, Type newType = gAbilities[ability].onMoveType(ability, move, moveType, ateBoost);
                if (newType) return newType - 1;)
 
     *realType = -1;
