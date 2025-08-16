@@ -78,6 +78,7 @@ $(eval $(call GENERATE, include/generated/constants/abilities.h, abilities))
 $(eval $(call GENERATE, include/generated/constants/species.h, species))
 $(eval $(call GENERATE, include/generated/constants/moves.h, moves))
 $(eval $(call GENERATE, include/generated/constants/items.h, itemids))
+$(eval $(call GENERATE, include/generated/constants/pockets.h, pocketenum))
 $(eval $(call GENERATE, include/generated/constants/trainer_ids.h, trainerids))
 $(eval $(call GENERATE, include/generated/constants/trainer_field_enums.h, trainerfields))
 
@@ -128,6 +129,9 @@ $(eval $(call GENERATE, include/generated/constants/hold_effects.h, holdeffect))
 $(eval $(call GENERATE, include/generated/data/trainers.h, trainerparties))
 
 $(eval $(call GENERATE, include/generated/data/text/help_articles.h, helparticles))
+
+$(eval $(call GENERATE, include/generated/data/behavior/move/enums.hh, movebehaviorconfigenums))
+$(eval $(call GENERATE, include/generated/data/behavior/move/base_power.hh, poweradjustment))
 
 timestamp/generated: $(ALL_GENERATED)
 	@touch timestamp/generated

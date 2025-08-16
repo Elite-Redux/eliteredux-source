@@ -173,7 +173,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectStomp                   @ EFFECT_FLINCH_MINIMIZE_HIT
 	.4byte BattleScript_EffectSolarbeam               @ EFFECT_SOLARBEAM
 	.4byte BattleScript_EffectThunder                 @ EFFECT_THUNDER
-	.4byte BattleScript_EffectBatonPass               @ EFFECT_SWITCH_ARGUMENT
+	.4byte BattleScript_EffectBatonPass               @ EFFECT_SWITCH
 	.4byte BattleScript_EffectBeatUp                  @ EFFECT_BEAT_UP
 	.4byte BattleScript_EffectSemiInvulnerable        @ EFFECT_SEMI_INVULNERABLE
 	.4byte BattleScript_EffectDefenseCurl             @ EFFECT_DEFENSE_CURL

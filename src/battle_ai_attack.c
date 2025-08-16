@@ -690,7 +690,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         CASE_AND_LABEL(EFFECT_THUNDER)
         GOTO(EFFECT_PARALYZE_HIT);
 
-        CASE_AND_LABEL(EFFECT_SWITCH_ARGUMENT)
+        CASE_AND_LABEL(EFFECT_SWITCH)
         // TODO: Safe passage
         if (move == MOVE_SAFE_PASSAGE) score = AI_SCORE_SAFE_PASSAGE;
         return score + AI_SCORE_SWITCH(battlerAtk);

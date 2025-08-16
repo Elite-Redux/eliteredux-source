@@ -45,6 +45,13 @@ object GeneratorUtils {
         TextFormat.parse(File("../../proto/MoveList.textproto").readText(), MoveList::class.java).movesList
     }
 
+    val MOVES_BEHAVIOR_CONFIGS_LIST by lazy {
+        TextFormat.parse(
+            File("../../proto/MoveBehaviorConfigList.textproto").readText(),
+            MoveBehaviorConfigList::class.java
+        ).behaviorList
+    }
+
     val SPECIES_LIST by lazy {
         TextFormat.parse(
             File("../../proto/SpeciesList.textproto").readText(),

@@ -1,6 +1,8 @@
 #ifndef GUARD_ITEM_CONSTANTS_H
 #define GUARD_ITEM_CONSTANTS_H
 
+#include "generated/constants/pockets.h"
+
 // These constants are used in gItems
 #define POCKET_NONE        0
 #define POCKET_ITEMS       1
@@ -12,15 +14,15 @@
 #define POCKET_KEY_ITEMS   7
 #define POCKET_MEGA_STONES 8
 
-#define ITEMS_POCKET       0
-#define MEDICINE_POCKET    1
-#define BATTLE_POCKET      2
-#define TMHM_POCKET        3
-#define BERRIES_POCKET     4
-#define BALLS_POCKET       5
-#define KEYITEMS_POCKET    6
-#define MEGA_STONES_POCKET 7
-#define POCKETS_COUNT      8
+#define ITEMS_POCKET       (POCKET_ITEMS - 1)
+#define MEDICINE_POCKET    (POCKET_MEDICINE - 1)
+#define BATTLE_POCKET      (POCKET_BATTLE - 1)
+#define TMHM_POCKET        (POCKET_TM_HM - 1)
+#define BERRIES_POCKET     (POCKET_BERRIES - 1)
+#define BALLS_POCKET       (POCKET_POKE_BALLS - 1)
+#define KEYITEMS_POCKET    (POCKET_KEY_ITEMS - 1)
+#define MEGA_STONES_POCKET (POCKET_MEGA_STONES - 1)
+#define POCKETS_COUNT      (POCKET_MEGA_STONES)
 
 // The Items pocket is the largest pocket, so the maximum amount of items
 // in a pocket is its count + 1 for the cancel option

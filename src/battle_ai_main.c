@@ -1377,7 +1377,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             else
                 score += 5;
             break;
-        case EFFECT_SWITCH_ARGUMENT:
+        case EFFECT_SWITCH:
             score -= 10;
             break;
         case EFFECT_FAKE_OUT:
@@ -3027,7 +3027,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
         case EFFECT_DO_NOTHING:
             // todo - check z splash, z celebrate, z happy hour (lol)
             break;
-        case EFFECT_SWITCH_ARGUMENT:
+        case EFFECT_SWITCH:
             if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) || GetBattlerSide(battlerAtk) != B_SIDE_PLAYER) break;
             FALLTHROUGH
         case EFFECT_HIT_ESCAPE:
