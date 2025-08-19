@@ -19,9 +19,9 @@
 #define P_SHEDINJA_BALL         GEN_8 // Since Gen 4, Shedinja requires a Poké Ball for its evolution. In Gen 3, Shedinja inherits Nincada's Ball.
 
 //Innate Disable Configuration
-#define P_DISABLE_FIRST_DIFFICULTY DIFFICULTY_HELL //First difficulty that disables Innate until a certain level requirement is met
+#define P_DISABLE_FIRST_DIFFICULTY DIFFICULTY_ELITE //First difficulty that disables Innate until a certain level requirement is met
 
-//Elite Mode - Unused in-game because Hell mode is the first mode with disabled innates
+//Elite Mode
 #define INNATE_1_LEVEL_ELITE 1
 #define INNATE_2_LEVEL_ELITE 17
 #define INNATE_3_LEVEL_ELITE 24

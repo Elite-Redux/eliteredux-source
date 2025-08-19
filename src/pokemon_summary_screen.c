@@ -1775,7 +1775,7 @@ static void Task_HandleInput(u8 taskId)
                                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                                 SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM, &abilityNum);
                                 SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM, &abilityNum);
-                                ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
+                                 ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
                             }
                             PlaySE(SE_SELECT);
                             RefreshPageAfterChange(1);
@@ -1783,7 +1783,6 @@ static void Task_HandleInput(u8 taskId)
                         shouldChangeTab = FALSE;
                     }
                 break;
-
             }
 
             if (shouldChangeTab)
@@ -1792,6 +1791,7 @@ static void Task_HandleInput(u8 taskId)
 		else if (gMain.newKeys & R_BUTTON)
 		{
             bool8 shouldChangePage = TRUE;
+
             switch (sMonSummaryScreen->currPageIndex) {
                 case PSS_PAGE_EVOLUTION:
                     //Change Pokeball
@@ -1811,7 +1811,9 @@ static void Task_HandleInput(u8 taskId)
                 break;
                 case PSS_PAGE_SKILLS:
                     //Ev modifier
-                    if (CurrentEv != MAX_PER_STAT_EVS && TotalEvs < MAX_TOTAL_EVS &&  gSaveBlock2Ptr->enableEvs){
+                    shouldChangePage = FALSE;
+
+                    if (CurrentEv != MAX_PER_STAT_EVS && TotalEvs < MAX_TOTAL_EVS && gSaveBlock2Ptr->enableEvs){
                         RemainingEvs = CurrentEv;
                         CurrentEv = CurrentEv + LR_EV_AMOUNT_CHANGE;
 
@@ -1824,7 +1826,6 @@ static void Task_HandleInput(u8 taskId)
                             CurrentEv = CurrentEv - ((TotalEvs + RemainingEvs) - MAX_TOTAL_EVS);
 
                         SetEVsToMonAndRefreshData(CurrentEv);
-                        shouldChangePage = FALSE;
                     }
                 break;
                 case PSS_PAGE_BATTLE_MOVES:
@@ -1834,6 +1835,7 @@ static void Task_HandleInput(u8 taskId)
                         SwitchToMoveReplaceMenu(taskId);
                         shouldChangePage = FALSE;
                     }
+
                     if(sMonSummaryScreen->ModifyMode)
                         shouldChangePage = FALSE;
                 break;
@@ -1844,6 +1846,7 @@ static void Task_HandleInput(u8 taskId)
 		}
 		else if (gMain.newKeys & L_BUTTON) {
             bool8 shouldChangePage = TRUE;
+
             switch (sMonSummaryScreen->currPageIndex) {
                 case PSS_PAGE_EVOLUTION:
                     //Change Pokeball
@@ -1863,6 +1866,8 @@ static void Task_HandleInput(u8 taskId)
                 break;
                 case PSS_PAGE_SKILLS:
                     //Ev modifier
+                    shouldChangePage = FALSE;
+                    
                     if (CurrentEv && gSaveBlock2Ptr->enableEvs){
                         if (CurrentEv >= LR_EV_AMOUNT_CHANGE)
                             CurrentEv = CurrentEv - LR_EV_AMOUNT_CHANGE;
@@ -1870,7 +1875,6 @@ static void Task_HandleInput(u8 taskId)
                             CurrentEv = 0;
 
                         SetEVsToMonAndRefreshData(CurrentEv);
-                        shouldChangePage = FALSE;
                     }
                 break;
                 case PSS_PAGE_BATTLE_MOVES:
@@ -1880,6 +1884,7 @@ static void Task_HandleInput(u8 taskId)
                         SwitchToMoveReplaceMenu(taskId);
                         shouldChangePage = FALSE;
                     }
+
                     if(sMonSummaryScreen->ModifyMode)
                         shouldChangePage = FALSE;
                 break;
@@ -1982,626 +1987,6 @@ static void Task_HandleInput(u8 taskId)
     }
 }
 
-//There seems to be some changes to this funcion that was cleaned in the above version, not sure if there is anything new here if not, delete this funcion if there is anything new added to this funcion in the last 6 months please tell me so I can port it to the cleaner version above
-/*static void Task_HandleInput(u8 taskId) {
-    s16 *data = gTasks[taskId].data;
-    u8 i;
-    u16 CurrentEv = 0;
-    u16 TotalEvs = 0;
-    u16 RemainingEvs = 0;
-    u8 abilityNum;
-    u8 nature;
-    data[0] = 0;
-
-    if (!sMonSummaryScreen->isBoxMon) {
-        abilityNum = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM);
-        nature = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_NATURE);
-    } else {
-        struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-        abilityNum = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM);
-        nature = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_NATURE);
-    }
-
-    switch (sMonSummaryScreen->sCurrentModifyIndex) {
-        case 0:
-            if (!sMonSummaryScreen->isBoxMon) {
-                CurrentEv = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV);
-            } else {
-                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV);
-            }
-            break;
-        case 1:
-            if (!sMonSummaryScreen->isBoxMon) {
-                CurrentEv = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV);
-            } else {
-                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV);
-            }
-            break;
-        case 2:
-            if (!sMonSummaryScreen->isBoxMon) {
-                CurrentEv = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV);
-            } else {
-                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV);
-            }
-            break;
-        case 3:
-            if (!sMonSummaryScreen->isBoxMon) {
-                CurrentEv = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV);
-            } else {
-                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV);
-            }
-            break;
-        case 4:
-            if (!sMonSummaryScreen->isBoxMon) {
-                CurrentEv = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV);
-            } else {
-                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV);
-            }
-            break;
-        case 5:
-            if (!sMonSummaryScreen->isBoxMon) {
-                CurrentEv = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV);
-            } else {
-                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV);
-            }
-            break;
-    }
-
-    for (i = 0; i < 6; i++) {
-        if (!sMonSummaryScreen->isBoxMon) {
-            TotalEvs = TotalEvs + GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV + i);
-        } else {
-            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-            TotalEvs = TotalEvs + GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV + i);
-        }
-    }
-    RemainingEvs = 510 - TotalEvs;
-
-    if (MenuHelpers_CallLinkSomething() != TRUE && !gPaletteFade.active) {
-        if (JOY_NEW(DPAD_UP)) {
-            if (!sMonSummaryScreen->ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES) {
-                // Change Page
-                sMonSummaryScreen->sCurrentModifyIndex = 0;
-                ChangeSummaryPokemon(taskId, -1);
-            } else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS) {
-                // Ev Changes
-                if (sMonSummaryScreen->sCurrentModifyIndex != 0)
-                    sMonSummaryScreen->sCurrentModifyIndex--;
-                else
-                    sMonSummaryScreen->sCurrentModifyIndex = 5;
-                RefreshPageAfterChange(0);
-            }
-        } else if (JOY_NEW(DPAD_DOWN)) {
-            if (!sMonSummaryScreen->ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES) {
-                // Change Page
-                sMonSummaryScreen->sCurrentModifyIndex = 0;
-                ChangeSummaryPokemon(taskId, 1);
-            } else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS) {
-                // Ev Changes
-                if (sMonSummaryScreen->sCurrentModifyIndex != 5)
-                    sMonSummaryScreen->sCurrentModifyIndex++;
-                else
-                    sMonSummaryScreen->sCurrentModifyIndex = 0;
-                RefreshPageAfterChange(0);
-            }
-        } else if ((JOY_NEW(DPAD_LEFT)) || GetLRKeysPressed() == MENU_L_PRESSED) {
-            if (!sMonSummaryScreen->ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES) {
-                // Change Page
-                ChangePage(taskId, -1);
-            } else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_MEMO && sMonSummaryScreen->ModifyMode) {
-                // Change Nature
-
-                if (!sMonSummaryScreen->isBoxMon) {
-                    CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
-                    CalculateMonStats(&sMonSummaryScreen->currentMon);
-
-                    if (nature == 0)
-                        nature = NATURE_QUIRKY;
-                    else
-                        nature--;
-
-                    SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_NATURE, &nature);
-                    SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_NATURE, &nature);
-                } else {
-                    struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-
-                    if (nature == 0)
-                        nature = NATURE_QUIRKY;
-                    else
-                        nature--;
-
-                    SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_NATURE, &nature);
-                    SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_NATURE, &nature);
-                    ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
-                }
-
-                PlaySE(SE_SELECT);
-                PrintMemoPage();
-            } else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS && sMonSummaryScreen->ModifyMode && gSaveBlock2Ptr->enableEvs) {
-                // Change Evs
-                if (CurrentEv != 0) {
-                    if (CurrentEv >= LEFTRIGHT_EV_AMOUNT_CHANGE)
-                        CurrentEv = CurrentEv - LEFTRIGHT_EV_AMOUNT_CHANGE;
-                    else
-                        CurrentEv = 0;
-
-                    switch (sMonSummaryScreen->sCurrentModifyIndex) {
-                        case 0:
-                            if (!sMonSummaryScreen->isBoxMon) {
-                                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
-                            } else {
-                                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
-                                SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
-                            }
-                            break;
-                        case 1:
-                            if (!sMonSummaryScreen->isBoxMon) {
-                                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
-                            } else {
-                                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
-                                SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
-                            }
-                            break;
-                        case 2:
-                            if (!sMonSummaryScreen->isBoxMon) {
-                                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
-                            } else {
-                                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
-                                SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
-                            }
-                            break;
-                        case 3:
-                            if (!sMonSummaryScreen->isBoxMon) {
-                                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
-                            } else {
-                                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
-                                SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
-                            }
-                            break;
-                        case 4:
-                            if (!sMonSummaryScreen->isBoxMon) {
-                                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
-                            } else {
-                                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
-                                SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
-                            }
-                            break;
-                        case 5:
-                            if (!sMonSummaryScreen->isBoxMon) {
-                                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
-                            } else {
-                                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
-                                SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
-                            }
-                            break;
-                    }
-
-                    if (!sMonSummaryScreen->isBoxMon) CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
-                    CalculateMonStats(&sMonSummaryScreen->currentMon);
-                    ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
-
-                    RefreshPageAfterChange(0);
-                }
-            } else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_ABILITY && sMonSummaryScreen->ModifyMode) {
-                // Ability Modifier
-                do {
-                    if (abilityNum != 0)
-                        abilityNum--;
-                    else
-                        abilityNum = NUM_ABILITY_SLOTS - 1;
-                } while (gBaseStats[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
-
-                if (!sMonSummaryScreen->isBoxMon) {
-                    SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM, &abilityNum);
-                    SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM, &abilityNum);
-                    CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
-                    CalculateMonStats(&sMonSummaryScreen->currentMon);
-                } else {
-                    struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                    SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM, &abilityNum);
-                    SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM, &abilityNum);
-                    CalculateMonStats(&sMonSummaryScreen->currentMon);
-                    ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
-                }
-                PlaySE(SE_SELECT);
-                RefreshPageAfterChange(1);
-            }
-        } else if ((JOY_NEW(DPAD_RIGHT)) || GetLRKeysPressed() == MENU_R_PRESSED) {
-            if (!sMonSummaryScreen->ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES) {
-                // Page Change
-                ChangePage(taskId, 1);
-            }
-
-            else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_MEMO && sMonSummaryScreen->ModifyMode) {
-                // Nature Change
-                if (!sMonSummaryScreen->isBoxMon) {
-                    if (nature != NATURE_QUIRKY)
-                        nature++;
-                    else
-                        nature = NATURE_HARDY;
-
-                    SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_NATURE, &nature);
-                    SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_NATURE, &nature);
-                    CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
-                    CalculateMonStats(&sMonSummaryScreen->currentMon);
-                } else {
-                    struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-
-                    if (nature != NATURE_QUIRKY)
-                        nature++;
-                    else
-                        nature = NATURE_HARDY;
-
-                    SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_NATURE, &nature);
-                    SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_NATURE, &nature);
-                    CalculateMonStats(&sMonSummaryScreen->currentMon);
-                    ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
-                }
-
-                PlaySE(SE_SELECT);
-                PrintMemoPage();
-            } else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS && sMonSummaryScreen->ModifyMode && gSaveBlock2Ptr->enableEvs) {
-                // Ev Changer
-                if ((CurrentEv != MAX_PER_STAT_EVS && TotalEvs < MAX_TOTAL_EVS) || sMonSummaryScreen->sCurrentModifyIndex == 6) {
-                    CurrentEv = CurrentEv + LEFTRIGHT_EV_AMOUNT_CHANGE;
-
-                    if (CurrentEv > MAX_PER_STAT_EVS) CurrentEv = MAX_PER_STAT_EVS;
-
-                    if ((TotalEvs + LEFTRIGHT_EV_AMOUNT_CHANGE) > MAX_TOTAL_EVS)
-                        CurrentEv = CurrentEv - ((TotalEvs + LEFTRIGHT_EV_AMOUNT_CHANGE) - MAX_TOTAL_EVS);
-
-                    switch (sMonSummaryScreen->sCurrentModifyIndex) {
-                        case 0:
-                            if (!sMonSummaryScreen->isBoxMon) {
-                                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
-                            } else {
-                                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
-                                SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
-                            }
-                            break;
-                        case 1:
-                            if (!sMonSummaryScreen->isBoxMon) {
-                                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
-                            } else {
-                                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
-                                SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
-                            }
-                            break;
-                        case 2:
-                            if (!sMonSummaryScreen->isBoxMon) {
-                                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
-                            } else {
-                                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
-                                SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
-                            }
-                            break;
-                        case 3:
-                            if (!sMonSummaryScreen->isBoxMon) {
-                                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
-                            } else {
-                                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
-                                SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
-                            }
-                            break;
-                        case 4:
-                            if (!sMonSummaryScreen->isBoxMon) {
-                                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
-                            } else {
-                                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
-                                SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
-                            }
-                            break;
-                        case 5:
-                            if (!sMonSummaryScreen->isBoxMon) {
-                                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
-                            } else {
-                                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
-                                SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
-                            }
-                            break;
-                    }
-
-                    if (!sMonSummaryScreen->isBoxMon) CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
-                    CalculateMonStats(&sMonSummaryScreen->currentMon);
-                    ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
-                    RefreshPageAfterChange(0);
-                }
-            } else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_ABILITY && sMonSummaryScreen->ModifyMode) {
-                // Ability Modifier
-                do {
-                    if (abilityNum < NUM_ABILITY_SLOTS - 1)
-                        abilityNum++;
-                    else
-                        abilityNum = 0;
-                } while (gBaseStats[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
-
-                if (!sMonSummaryScreen->isBoxMon) {
-                    SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM, &abilityNum);
-                    SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM, &abilityNum);
-                    CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
-                    CalculateMonStats(&sMonSummaryScreen->currentMon);
-                } else {
-                    struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                    SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM, &abilityNum);
-                    SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM, &abilityNum);
-                    ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
-                }
-                PlaySE(SE_SELECT);
-                RefreshPageAfterChange(1);
-            }
-        } else if (gMain.newKeys & R_BUTTON) {
-            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_EVOLUTION && enablePokemonChanges() && !gMain.inBattle) {
-                u8 pokeball = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, NULL);
-
-                if (pokeball < LAST_BALL_INDEX)
-                    pokeball++;
-                else
-                    pokeball = FIRST_BALL_INDEX;
-                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, &pokeball);
-                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_POKEBALL, &pokeball);
-                RefreshPageAfterChange(2);
-                CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
-            } else if (!sMonSummaryScreen->ModifyMode && sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES && enablePokemonChanges() && !gMain.inBattle) {
-                PlaySE(SE_SELECT);
-                SwitchToMoveReplaceMenu(taskId);
-            } else if (!sMonSummaryScreen->ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES) {
-                ChangePage(taskId, 1);
-            } else if ((CurrentEv != MAX_PER_STAT_EVS && TotalEvs < MAX_TOTAL_EVS && gSaveBlock2Ptr->enableEvs &&
-                        sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)) {
-                // Ev Changer
-                RemainingEvs = CurrentEv;
-                CurrentEv = CurrentEv + LR_EV_AMOUNT_CHANGE;
-
-                if (CurrentEv > MAX_PER_STAT_EVS) CurrentEv = MAX_PER_STAT_EVS;
-
-                RemainingEvs = CurrentEv - RemainingEvs;
-
-                if ((TotalEvs + RemainingEvs) > MAX_TOTAL_EVS) CurrentEv = CurrentEv - ((TotalEvs + RemainingEvs) - MAX_TOTAL_EVS);
-
-                switch (sMonSummaryScreen->sCurrentModifyIndex) {
-                    case 0:
-                        if (!sMonSummaryScreen->isBoxMon) {
-                            SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
-                        } else {
-                            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
-                            SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
-                        }
-                        break;
-                    case 1:
-                        if (!sMonSummaryScreen->isBoxMon) {
-                            SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
-                        } else {
-                            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
-                            SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
-                        }
-                        break;
-                    case 2:
-                        if (!sMonSummaryScreen->isBoxMon) {
-                            SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
-                        } else {
-                            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
-                            SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
-                        }
-                        break;
-                    case 3:
-                        if (!sMonSummaryScreen->isBoxMon) {
-                            SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
-                        } else {
-                            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
-                            SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
-                        }
-                        break;
-                    case 4:
-                        if (!sMonSummaryScreen->isBoxMon) {
-                            SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
-                        } else {
-                            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
-                            SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
-                        }
-                        break;
-                    case 5:
-                        if (!sMonSummaryScreen->isBoxMon) {
-                            SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
-                        } else {
-                            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
-                            SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
-                        }
-                        break;
-                }
-
-                if (!sMonSummaryScreen->isBoxMon) CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
-                CalculateMonStats(&sMonSummaryScreen->currentMon);
-                ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
-                RefreshPageAfterChange(0);
-            }
-        } else if (gMain.newKeys & L_BUTTON) {
-            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_EVOLUTION && enablePokemonChanges() && !gMain.inBattle) {
-                u8 pokeball = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, NULL);
-
-                if (pokeball != FIRST_BALL_INDEX)
-                    pokeball--;
-                else
-                    pokeball = LAST_BALL_INDEX;
-                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, &pokeball);
-                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_POKEBALL, &pokeball);
-                RefreshPageAfterChange(2);
-                CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
-            } else if (!sMonSummaryScreen->ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
-                ChangePage(taskId, -1);
-            else if (CurrentEv != 0 && gSaveBlock2Ptr->enableEvs && sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS) {  // Ev modifier
-                if (CurrentEv >= LR_EV_AMOUNT_CHANGE)
-                    CurrentEv = CurrentEv - LR_EV_AMOUNT_CHANGE;
-                else
-                    CurrentEv = 0;
-
-                switch (sMonSummaryScreen->sCurrentModifyIndex) {
-                    case 0:
-                        if (!sMonSummaryScreen->isBoxMon) {
-                            SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
-                        } else {
-                            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
-                            SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
-                        }
-                        break;
-                    case 1:
-                        if (!sMonSummaryScreen->isBoxMon) {
-                            SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
-                        } else {
-                            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
-                            SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
-                        }
-                        break;
-                    case 2:
-                        if (!sMonSummaryScreen->isBoxMon) {
-                            SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
-                        } else {
-                            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
-                            SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
-                        }
-                        break;
-                    case 3:
-                        if (!sMonSummaryScreen->isBoxMon) {
-                            SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
-                        } else {
-                            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
-                            SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
-                        }
-                        break;
-                    case 4:
-                        if (!sMonSummaryScreen->isBoxMon) {
-                            SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
-                        } else {
-                            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
-                            SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
-                        }
-                        break;
-                    case 5:
-                        if (!sMonSummaryScreen->isBoxMon) {
-                            SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
-                        } else {
-                            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                            SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
-                            SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
-                        }
-                        break;
-                }
-
-                if (!sMonSummaryScreen->isBoxMon) CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
-                CalculateMonStats(&sMonSummaryScreen->currentMon);
-                ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
-                RefreshPageAfterChange(0);
-            }
-        } else if (JOY_NEW(A_BUTTON)) {
-            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES) {
-                PlaySE(SE_SELECT);
-                SwitchToMoveSelection(taskId);
-            } else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS && !sMonSummaryScreen->lockMovesFlag && enablePokemonChanges()) {
-                // Start EVs Modifier
-                if (gSaveBlock2Ptr->enableEvs) {
-                    sMonSummaryScreen->ModifyMode = !sMonSummaryScreen->ModifyMode;
-                    if (!sMonSummaryScreen->isBoxMon) CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
-                    CalculateMonStats(&sMonSummaryScreen->currentMon);
-                    RefreshPageAfterChange(0);
-                    PlaySE(SE_SELECT);
-                }
-            } else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_MEMO && !sMonSummaryScreen->lockMovesFlag && enablePokemonChanges()) {
-                sMonSummaryScreen->ModifyMode = !sMonSummaryScreen->ModifyMode;
-                PrintMemoPage();
-                PlaySE(SE_SELECT);
-            }
-
-            else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_ABILITY && !sMonSummaryScreen->lockMovesFlag && enablePokemonChanges()) {
-                sMonSummaryScreen->ModifyMode = !sMonSummaryScreen->ModifyMode;
-                PrintAbilityAndInnates();
-                PlaySE(SE_SELECT);
-            }
-        } else if (JOY_NEW(B_BUTTON)) {
-            if (!sMonSummaryScreen->ModifyMode) {
-                StopPokemonAnimations();
-                PlaySE(SE_SELECT);
-                BeginCloseSummaryScreen(taskId);
-            } else {
-                sMonSummaryScreen->ModifyMode = !sMonSummaryScreen->ModifyMode;
-                switch (sMonSummaryScreen->currPageIndex) {
-                    case PSS_PAGE_ABILITY:
-                        PrintAbilityAndInnates();
-                        break;
-                    case PSS_PAGE_MEMO:
-                        PrintMemoPage();
-                        break;
-                    case PSS_PAGE_SKILLS:
-                        if (!sMonSummaryScreen->isBoxMon) CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
-                        CalculateMonStats(&sMonSummaryScreen->currentMon);
-                        RefreshPageAfterChange(0);
-                        break;
-                }
-                PlaySE(SE_SELECT);
-            }
-        }
-#if DEBUG_POKEMON_MENU == TRUE
-        else if (JOY_NEW(SELECT_BUTTON) && !gMain.inBattle) {
-            sMonSummaryScreen->callback = CB2_Debug_Pokemon;
-            StopPokemonAnimations();
-            PlaySE(SE_SELECT);
-            CloseSummaryScreen(taskId);
-        }
-#endif
-    }
-}*/
-
 static void RefreshPageAfterChange(u8 mode) {
     switch (mode) {
         case 0:
@@ -2614,7 +1999,11 @@ static void RefreshPageAfterChange(u8 mode) {
             ClearWindowTilemap(PSS_LABEL_PANE_RIGHT);
             ScheduleBgCopyTilemapToVram(0);
             PrintInfoBar(PSS_PAGE_ABILITY, FALSE);
-            PrintAbilityAndInnates();
+            
+            if(sMonSummaryScreen->expandedAbilityMode)
+                PrintExpandedAbilityAndInnates();
+            else
+                PrintAbilityAndInnates();
             break;
         case 2:
             ClearWindowTilemap(PSS_LABEL_PANE_RIGHT);

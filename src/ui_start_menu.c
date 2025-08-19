@@ -423,6 +423,17 @@ void Menu_Start_Init(MainCallback callback) {
 
     sMenuDataPtr->actionNumber = j;
 
+    if(gSaveBlock2Ptr->start_LastNumItems == 0 || gSaveBlock2Ptr->start_LastNumItems != sMenuDataPtr->actionNumber){
+        //If the last time you opened the menu you had less items, reset the saved stuff related to this to avoid glitches
+        gSaveBlock2Ptr->start_cursorRowY = 0;
+        gSaveBlock2Ptr->start_FirstItem  = 0;
+
+        sMenuDataPtr->cursorRowY = 0;
+        sMenuDataPtr->FirstItem  = 0;
+    }
+
+    gSaveBlock2Ptr->start_LastNumItems = sMenuDataPtr->actionNumber;
+
     SetMainCallback2(Menu_RunSetup);
 }
 
@@ -1033,7 +1044,7 @@ static void PrintToWindow(void) {
     for (i = 0; i < MAX_SHOWN_START_MENU_ROWS; i++) {
         j = i + max(sMenuDataPtr->FirstItem, 0);
 
-        if (j == START_MENU_ACTION_PLAYER)
+        if (getCurrentOptionIndex(j) == START_MENU_ACTION_PLAYER)
             StringCopy(&strArray[0], gSaveBlock2Ptr->playerName);
         else
             StringCopy(&strArray[0], StartMenuActions[getCurrentOptionIndex(j)].title);
