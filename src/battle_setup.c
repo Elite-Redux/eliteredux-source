@@ -416,16 +416,30 @@ void BattleSetup_StartDoubleWildBattle(void) { DoStandardWildBattle(TRUE); }
 void BattleSetup_StartBattlePikeWildBattle(void) { DoBattlePikeWildBattle(); }
 
 static void DoStandardWildBattle(bool32 isDouble) {
+    u32 caughtLocation = GetCurrentRegionMapSectionId();
+
     ScriptContext2_Enable();
     FreezeObjectEvents();
     sub_808BCF4();
     gMain.savedCallback = CB2_EndWildBattle;
     gBattleTypeFlags = 0;
-    if (isDouble) gBattleTypeFlags |= BATTLE_TYPE_DOUBLE;
-    if (InBattlePyramid()) {
+    if (isDouble) 
+        gBattleTypeFlags |= BATTLE_TYPE_DOUBLE;
+
+    if (InBattlePyramid())
+    {
         VarSet(VAR_TEMP_E, 0);
         gBattleTypeFlags |= BATTLE_TYPE_PYRAMID;
     }
+
+    //If its the first encounter and you have nuzlocke rules enabled set the correct flags
+    if(AreNuzlockeRulesEnabled() && !GetNuzlockeCaughtFlag(caughtLocation)){
+        SetNuzlockeCaughtFlag(caughtLocation);
+        FlagSet(FLAG_TEMP_CAN_CATCH_POKEMON);
+        //MGBA_PRINT_DEBUG("DoStandardWildBattle AreNuzlockeRulesEnabled:%d", AreNuzlockeRulesEnabled())
+        //MgbaPrintf("DoStandardWildBattle caughtLocation %d AreNuzlockeRulesEnabled %d GetNuzlockeCaughtFlag %d CanCatchMon %d", caughtLocation, AreNuzlockeRulesEnabled(), GetNuzlockeCaughtFlag(caughtLocation), FlagGet(FLAG_TEMP_CAN_CATCH_POKEMON));
+    }
+
     CreateBattleStartTask(GetWildBattleTransition(), 0);
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
@@ -434,6 +448,7 @@ static void DoStandardWildBattle(bool32 isDouble) {
 }
 
 void DoStandardWildBattle_Debug(void) {
+
     ScriptContext2_Enable();
     FreezeObjectEvents();
     sub_808BCF4();  // StopPlayerAvatar();
@@ -444,6 +459,7 @@ void DoStandardWildBattle_Debug(void) {
         gBattleTypeFlags |= BATTLE_TYPE_PYRAMID;
     }
     CreateBattleStartTask_Debug(GetWildBattleTransition(), 0);
+
     // IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     // IncrementGameStat(GAME_STAT_WILD_BATTLES);
     // IncrementDailyWildBattles();
@@ -553,6 +569,8 @@ void BattleSetup_StartLegendaryBattle(void) {
 
     musicId = GetBattleBGM();
 
+    FlagSet(FLAG_TEMP_CAN_CATCH_POKEMON); //Legendary Pokémon can always be caught
+
     switch (GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, NULL)) {
         default:
             CreateBattleStartTask(B_TRANSITION_BLUR, musicId);
@@ -636,10 +654,11 @@ void StartRegiBattle(void) {
 static void CB2_EndWildBattle(void) {
     CpuFill16(0, (void *)(BG_PLTT), BG_PLTT_SIZE);
     ResetOamRange(0, 128);
+    FlagClear(FLAG_TEMP_CAN_CATCH_POKEMON); //Clear Regardless if you catch a Pokémon or not
 
     if (IsPlayerDefeated(gBattleOutcome) == TRUE && !InBattlePyramid() && !InBattlePike()) {
         SetMainCallback2(CB2_WhiteOut);
-    } else {
+    }else {
         SetMainCallback2(CB2_ReturnToField);
         gFieldCallback = FieldCB_ReturnToFieldNoScriptCheckMusic;
     }

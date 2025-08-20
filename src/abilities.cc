@@ -3174,10 +3174,6 @@ constexpr Ability ChristmasSpirit = {
 };
 
 constexpr Ability ExploitWeakness = {
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (HasAnyStatusOrAbility(target)) MUL(1.25);
-        },
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
         CHECK(HasAnyStatusOrAbility(target))
         u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);

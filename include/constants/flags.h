@@ -1539,6 +1539,9 @@
 #define FLAG_RECEIVED_CALYREX                                       3098
 #define FLAG_RECEIVED_FIDOUGH_PARTNER                               3099
 #define FLAG_RECEIVED_OGERPON                                       3100
+#define FLAG_TEMP_CAN_CATCH_POKEMON                                 3101
+#define FLAG_NUZLOCKE_MODE_ENABLED                                  3102
+#define FLAG_LOST_NUZLOCKE_CHALLENGE                                3103
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 

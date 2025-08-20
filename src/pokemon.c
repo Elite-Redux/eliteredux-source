@@ -2071,17 +2071,17 @@ void CopyMon(void *dest, void *src, size_t size) { memcpy(dest, src, size); }
 
 u8 GiveMonToPlayer(struct Pokemon *mon) {
     s32 i;
-    u32 caughtLocation           = GetCurrentRegionMapSectionId();
     bool8 nuzlockeRulesEnabled   = AreNuzlockeRulesEnabled();
-    bool8 hasAlreadyCaughtInArea = GetNuzlockeCaughtFlag(caughtLocation) && nuzlockeRulesEnabled;
+    bool8 hasAlreadyCaughtInArea = !FlagGet(FLAG_TEMP_CAN_CATCH_POKEMON);
 
     SetMonData(mon, MON_DATA_OT_NAME,     gSaveBlock2Ptr->playerName);
     SetMonData(mon, MON_DATA_OT_GENDER,   &gSaveBlock2Ptr->playerGender);
     SetMonData(mon, MON_DATA_OT_ID,       gSaveBlock2Ptr->playerTrainerId);
-    SetMonData(mon, MON_DATA_IS_DISABLED, &hasAlreadyCaughtInArea);
 
     if(nuzlockeRulesEnabled)
-        SetNuzlockeCaughtFlag(caughtLocation);
+        SetMonData(mon, MON_DATA_IS_DISABLED, &hasAlreadyCaughtInArea);
+
+    FlagClear(FLAG_TEMP_CAN_CATCH_POKEMON);
 
     for (i = 0; i < PARTY_SIZE; i++) {
         if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) == SPECIES_NONE)
@@ -2091,11 +2091,12 @@ u8 GiveMonToPlayer(struct Pokemon *mon) {
     if (!UsingBattlePyramidBag())
         AddBagItem(mon->box.heldItem, 1);
 
-    if (i >= PARTY_SIZE || hasAlreadyCaughtInArea)
+    if (i >= PARTY_SIZE || (hasAlreadyCaughtInArea && nuzlockeRulesEnabled))
         return SendMonToPC(mon);
 
     CopyMon(&gPlayerParty[i], mon, sizeof(*mon));
     gPlayerPartyCount = i + 1;
+    
     return MON_GIVEN_TO_PARTY;
 }
 
@@ -6421,7 +6422,31 @@ bool8 GetNuzlockeCaughtFlag(u8 locationIndex)
 }
 
 bool8 AreNuzlockeRulesEnabled(void){
-    bool8 nuzlockeRulesEnabled = gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL;
+    bool8 nuzlockeRulesEnabled = (FlagGet(FLAG_NUZLOCKE_MODE_ENABLED) || gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL);
 
     return nuzlockeRulesEnabled;
+}
+
+void ClearNuzlockeDisableFlags(void){
+    u16 boxId, boxPosition, i;
+    bool8 isDisabled = FALSE;
+
+    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
+    {
+        for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++){
+			if(GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_SPECIES) != SPECIES_NONE)
+				SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_IS_DISABLED, &isDisabled);
+		}
+    }
+	
+	for (i = 0; i < PARTY_SIZE; i++)
+	{
+		if(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE)
+			SetMonData(&gPlayerParty[i], MON_DATA_LEVEL, &isDisabled);
+	}
+
+    if(FlagGet(FLAG_NUZLOCKE_MODE_ENABLED)){
+        FlagSet(FLAG_LOST_NUZLOCKE_CHALLENGE);
+        FlagClear(FLAG_NUZLOCKE_MODE_ENABLED);
+    }
 }

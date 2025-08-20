@@ -2206,24 +2206,27 @@ script PKMN_Center_EventScript_Lower_Difficulty{
 				checkSaveblockValue(SAVEBLOCK_DIFFICULTY)
 				if(var(VAR_RESULT) == DIFFICULTY_HELL){
 					//Hell Mode -> Elite Mode
-					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_ELITE)
-					playfanfare(MUS_OBTAIN_ITEM)
-					message(format("The difficulty became Elite."))
+					//toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_ELITE)
+					//playfanfare(MUS_OBTAIN_ITEM)
+					//message(format("The difficulty became Elite."))
+					msgbox(format("You can't disable Hell Mode Difficulty!,\nplease restart you save file if you\lthink it is too difficult."), MSGBOX_NPC)
 				}
 				elif(var(VAR_RESULT) == DIFFICULTY_ELITE){
 					//Elite Mode -> Ace Mode
 					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_ACE)
 					playfanfare(MUS_OBTAIN_ITEM)
 					message(format("The difficulty became Ace."))
+					waitmessage
+					waitfanfare
 				}
 				else{
 					//Ace Mode -> Easy Mode
 					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_EASY)
 					playfanfare(MUS_OBTAIN_ITEM)
 					message(format("The difficulty became Easy."))
+					waitmessage
+					waitfanfare
 				}
-				waitmessage
-				waitfanfare
 			break
 			case NO:
 			case MULTI_B_PRESSED:
@@ -2252,22 +2255,26 @@ script PKMN_Center_EventScript_Up_Difficulty{
 					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_ACE)
 					playfanfare(MUS_OBTAIN_ITEM)
 					message(format("The difficulty became Ace."))
+					setflag(FLAG_SYS_UPPED_DIFFICULTY)
+					waitmessage
+					waitfanfare
 				}
 				elif(var(VAR_RESULT) == DIFFICULTY_ACE){
 					//Ace Mode -> Elite Mode
 					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_ELITE)
 					playfanfare(MUS_OBTAIN_ITEM)
 					message(format("The difficulty became Elite."))
+					setflag(FLAG_SYS_UPPED_DIFFICULTY)
+					waitmessage
+					waitfanfare
 				}
 				else{
 					//Elite Mode -> Hell Mode
-					toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_HELL)
-					playfanfare(MUS_OBTAIN_ITEM)
-					message(format("The difficulty became Hell."))
+					//toggleSaveblock(SAVEBLOCK_DIFFICULTY, DIFFICULTY_HELL)
+					//playfanfare(MUS_OBTAIN_ITEM)
+					//message(format("The difficulty became Hell."))
+					msgbox(format("You can't go to Hell Difficulty without\nrestarting your save!"), MSGBOX_NPC)
 				}
-				setflag(FLAG_SYS_UPPED_DIFFICULTY)
-				waitmessage
-				waitfanfare
 			break
 			case NO:
 			case MULTI_B_PRESSED:

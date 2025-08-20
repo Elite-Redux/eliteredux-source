@@ -8,68 +8,76 @@ import er.text.FontMapping.breakString
 import java.io.OutputStreamWriter
 
 object AbilityTextGenerator : Generator {
+    private val PREFIX = "__sAbilityText_"
     override fun generate(writer: OutputStreamWriter) {
-        val errors = ABILITIES_LIST.mapNotNull {
-            try {
-                breakString(
-                    it.description,
-                    SMALL_NARROW,
-                    150,
-                    2
-                )
-                null
-            } catch (e: Exception) {
-                e.message
-            }
-        }
-
-        check(errors.isEmpty()) { errors.joinToString("\n") }
-
-        val errorsExpanded = ABILITIES_LIST.mapNotNull {
-            try {
-                breakString(
-                    it.expandedDescription,
-                    SMALL_NARROW,
-                    150,
-                    11
-                )
-                null
-            } catch (e: Exception) {
-                e.message
-            }
-        }
-
-        check(errorsExpanded.isEmpty()) { errorsExpanded.joinToString("\n") }
-
-        writer.appendLine(
-            """
-                |constexpr AbilityKVPair sAbilityText[] = {
-                |$IND${
-                ABILITIES_LIST.joinToString("\n$IND") {
-                    """{${it.id}, { .name = $("${it.name}"), .description = $("${
+        val shortDescriptions = buildMap {
+            val errors = ABILITIES_LIST.mapNotNull {
+                try {
+                    put(
+                        it.id,
                         breakString(
                             it.description,
                             SMALL_NARROW,
                             150,
                             2
                         )
-                    }")${
-                        if (it.hasExpandedDescription())
-                            """, .expandedDescription = $("${
-                                breakString(
-                                    it.expandedDescription,
-                                    SMALL_NARROW,
-                                    150,
-                                    11
-                                )
-                            }")"""
-                        else
-                        ""
+                    )
+                    null
+                } catch (e: Exception) {
+                    e.message
+                }
+            }
+
+            check(errors.isEmpty()) { errors.joinToString("\n") }
+        }
+
+        val expandedDescriptions = buildMap {
+            val errors = ABILITIES_LIST.mapNotNull {
+                try {
+                    put(
+                        it.id,
+                        breakString(
+                            if (it.expandedDescription.isNotEmpty()) {
+                                it.expandedDescription
+                            } else {
+                                it.description
+                            },
+                            SMALL_NARROW,
+                            150,
+                            11
+                        )
+                    )
+                    null
+                } catch (e: Exception) {
+                    e.message
+                }
+            }
+
+            check(errors.isEmpty()) { errors.joinToString("\n") }
+        }
+
+        val allStrings = (shortDescriptions.values + expandedDescriptions.values).toSet()
+
+        writer.appendLine(allStrings.joinToString("\n") {
+            """constexpr u8 $PREFIX${
+                it.hashCode().toUInt()
+            }[] = _("$it");"""
+        })
+
+        writer.appendLine(
+            """
+            |constexpr AbilityKVPair sAbilityText[] = {
+            |$IND${
+                ABILITIES_LIST.joinToString("\n$IND") {
+                    """{${it.id}, { .name = $("${it.name}"), .description = $PREFIX${
+                        shortDescriptions[it.id]!!.hashCode().toUInt()
+                    }, .expandedDescription = $PREFIX${
+                        expandedDescriptions[it.id]!!.hashCode().toUInt()
                     }}},"""
                 }
             }
-                |};
-            """.trimMargin()
+            |};
+            |""".trimMargin()
         )
     }
 }

@@ -576,5 +576,6 @@ void SetNuzlockeCaughtFlag(u8 locationIndex);
 void ClearNuzlockeCaughtFlag(u8 locationIndex);
 bool8 GetNuzlockeCaughtFlag(u8 locationIndex);
 bool8 AreNuzlockeRulesEnabled(void);
+void ClearNuzlockeDisableFlags(void);
 
 #endif  // GUARD_POKEMON_H

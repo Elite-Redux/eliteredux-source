@@ -10186,13 +10186,13 @@ static void Cmd_battlemacros(void) {
 
     switch (type) {
         case MACROS_PRINT_MGBA_MESSAGE:
-#ifdef DEBUG_BUILD
+            #ifdef DEBUG_BUILD
             if (FlagGet(FLAG_SYS_MGBA_PRINT)) {
                 MgbaOpen();
                 MgbaPrintf(MGBA_LOG_WARN, "Debug Stuff");
                 MgbaClose();
             }
-#endif
+            #endif
             break;
         case MACROS_FORCE_FALSE_SWIPE_EFFECT:
             gBattleScripting.forceFalseSwipeEffect = TRUE;
