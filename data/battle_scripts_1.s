@@ -7390,6 +7390,19 @@ BattleScript_FaintTarget_NoPopup:
 	readtargetfromstack4
 	return
 
+BattleScript_TagTeamSecondPhase::
+	savetargettostack4
+	copybyte gBattlerTarget, gStackBattler1
+	playfaintcry BS_TARGET
+	pause B_WAIT_TIME_LONG
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	waitanimation
+	printstring STRINGID_PKMNREGAINEDHEALTH
+	waitmessage B_WAIT_TIME_LONG
+	readtargetfromstack4
+	return
+
 BattleScript_GiveExp::
 	setbyte sGIVEEXP_STATE, 0
 	getexp BS_TARGET

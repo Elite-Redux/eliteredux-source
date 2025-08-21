@@ -3026,6 +3026,20 @@ static void Cmd_tryfaintmon(void) {
         return;
     }
 
+    if (!IsBattlerAlive(gActiveBattler) && GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT) {
+        SetActiveStackBattler(gActiveBattler, 1);
+
+        // Heal the Pokemon here to prevent heal blocking and visual glitchs
+        gBattleMons[gActiveBattler].hp = gBattleMons[gActiveBattler].maxHP;
+        gBattleMoveDamage = -gBattleMons[gActiveBattler].hp;
+
+        BS_ptr = BattleScript_TagTeamSecondPhase;
+        BattleScriptPush(gBattlescriptCurrInstr + 7);
+        gBattlescriptCurrInstr = BS_ptr;
+
+        return;
+    }
+
     int reviveMsg = FALSE;
     AbilityEnum reviveAbility = ABILITY_NONE;
     if (!IsBattlerAlive(gActiveBattler)) {
