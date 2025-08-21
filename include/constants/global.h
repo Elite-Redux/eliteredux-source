@@ -239,6 +239,11 @@
 #define MENU_ACTION_EXIT            18
 #define NUM_MENU_ACTIONS            19
 
+#define OPTIONS_OPPONENT_HP_NONE        0
+#define OPTIONS_OPPONENT_HP_NUMBER      1
+#define OPTIONS_OPPONENT_HP_PERCENTAGE  2
+#define OPTIONS_OPPONENT_HP_COUNT       3
+
 //Hell mode configuration
 
 #define HELL_MODE_TYPE_EFFECTIVENESS_CHANGE  TRUE //(possibly? clashes with above somewhat) Super-effective damage is reduced from 2x to 1.5x, and 4x to 2x

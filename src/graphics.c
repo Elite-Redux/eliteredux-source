@@ -1003,11 +1003,12 @@ const u32 gBattleAnimSpritePal_Eye[] = INCBIN_U32("graphics/battle_anims/sprites
 const u32 gBattleAnimSpriteGfx_Tendrils[] = INCBIN_U32("graphics/battle_anims/sprites/tendrils.4bpp.lz");
 const u32 gBattleAnimSpritePal_Tendrils[] = INCBIN_U32("graphics/battle_anims/sprites/tendrils.gbapal.lz");
 
-const u32 gHealthboxSinglesPlayerGfx[] = INCBIN_U32("graphics/battle_interface/healthbox_singles_player.4bpp.lz");
-const u32 gHealthboxSinglesOpponentGfx[] = INCBIN_U32("graphics/battle_interface/healthbox_singles_opponent.4bpp.lz");
-const u32 gHealthboxDoublesPlayerGfx[] = INCBIN_U32( "graphics/battle_interface/healthbox_doubles_player.4bpp.lz");
-const u32 gHealthboxDoublesOpponentGfx[] = INCBIN_U32("graphics/battle_interface/healthbox_doubles_opponent.4bpp.lz");
-const u32 gHealthboxSafariGfx[] = INCBIN_U32("graphics/battle_interface/healthbox_safari.4bpp.lz");
+const u32 gHealthboxSinglesPlayerGfx[]       = INCBIN_U32("graphics/battle_interface/healthbox_singles_player.4bpp.lz");
+const u32 gHealthboxSinglesOpponentGfx[]     = INCBIN_U32("graphics/battle_interface/healthbox_singles_opponent.4bpp.lz");
+const u32 gHealthboxSinglesOpponentFullGfx[] = INCBIN_U32("graphics/battle_interface/healthbox_singles_opponent_full.4bpp.lz");
+const u32 gHealthboxDoublesPlayerGfx[]       = INCBIN_U32( "graphics/battle_interface/healthbox_doubles_player.4bpp.lz");
+const u32 gHealthboxDoublesOpponentGfx[]     = INCBIN_U32("graphics/battle_interface/healthbox_doubles_opponent.4bpp.lz");
+const u32 gHealthboxSafariGfx[]              = INCBIN_U32("graphics/battle_interface/healthbox_safari.4bpp.lz");
 
 const u32 gUnusedGfx_Shadow[] = INCBIN_U32("graphics/unused/shadow.4bpp.lz");
 const u32 gUnusedPal_Shadow[] = INCBIN_U32("graphics/unused/shadow.gbapal.lz");

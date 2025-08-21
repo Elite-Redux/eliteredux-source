@@ -82,7 +82,7 @@
 
 #define DEBUG_BUILD
 #define DEBUG_POKEMON_MENU TRUE
-#define VALIDATE_TRAINERS
+//#define VALIDATE_TRAINERS
 #define CURRENT_GAME_VERSION 1047
 
 #define PRINT_BATTLE_SCRIPT_TRACING FALSE
@@ -624,12 +624,14 @@ struct SaveBlock2 {
     u8 season:2;
     u8 startMenuPaletteNum:3;
     u8 startMenuOptionToOpen:5;  // Space for 31 options
-    u8 filler:3;
+    u8 optionsOpponentHp:2; // Show Hp text in the opponent healthbox OPTIONS_OPPONENT_HP_[NONE/TEXT/PERCENTAGE]
+    u8 filler:1;
     u8 start_cursorRowY;
     u8 start_FirstItem;
     u8 damageSliderValue;
     bool8 hasCaughtMonOnLocation[NUM_NUZLOCKE_FLAGS];
-    u8 start_LastNumItems;
+    u8 start_LastNumItems:5;
+    u8 filler2:3;
 };  // sizeof=0xF2C
 
 extern struct SaveBlock2* gSaveBlock2Ptr;

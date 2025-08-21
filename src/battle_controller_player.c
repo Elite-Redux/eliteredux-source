@@ -2106,9 +2106,10 @@ static void HandleInputChooseActionPlayer(void) {
                 break;
         }
         PrintBattleWindow_ActionPromt();
-    } else if (JOY_NEW(START_BUTTON)) {
+    }
+    else if (JOY_NEW(START_BUTTON)) 
         SwapHpBarsWithHpText();
-    } else if (B_ENABLE_DEBUG && gMain.newKeys & SELECT_BUTTON) {
+    else if (B_ENABLE_DEBUG && gMain.newKeys & SELECT_BUTTON) {
         BtlController_EmitTwoReturnValues(1, B_ACTION_DEBUG, 0);
         PlayerBufferExecCompleted();
     }

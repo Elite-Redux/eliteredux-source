@@ -59,6 +59,7 @@ enum
     MENUITEM_CUSTOM_AUTOMATIC_EVGAIN,
     MENUITEM_CUSTOM_AUTOMATIC_EXPGAIN,
     MENUITEM_CUSTOM_AUTOMATIC_EVOLUTION,
+    MENUITEM_CUSTOM_OPPONENT_HP,
     //MENUITEM_CUSTOM_SANDBOX_MODE,
     //MENUITEM_CUSTOM_HP_BAR,
     //MENUITEM_CUSTOM_EXP_BAR,
@@ -178,6 +179,7 @@ static void DrawOptionMenuChoice(const u8 *text, u8 x, u8 y, u8 style, bool8 act
 static void DrawChoices_Options_Four(const u8 *const *const strings, int selection, int y, bool8 active);
 static void ReDrawAll(void);
 static void DrawChoices_TextSpeed(int selection, int y);
+static void DrawChoices_OpponentHp(int selection, int y);
 static void DrawChoices_BarSpeed(int selection, int y);
 static void DrawChoices_BattleScene(int selection, int y);
 static void DrawChoices_BattleSpeed(int selection, int y);
@@ -260,6 +262,7 @@ static struct // MENU_CUSTOM
     [MENUITEM_CUSTOM_AUTOMATIC_EVGAIN]    = {DrawChoices_EnableDisableCustom,      ProcessInput_Options_Two},
     [MENUITEM_CUSTOM_AUTOMATIC_EXPGAIN]   = {DrawChoices_EnableDisableCustom,      ProcessInput_Options_Two},
     [MENUITEM_CUSTOM_AUTOMATIC_EVOLUTION] = {DrawChoices_EnableDisableCustom,      ProcessInput_Options_Two},
+    [MENUITEM_CUSTOM_OPPONENT_HP]         = {DrawChoices_OpponentHp,               ProcessInput_Options_Three},
     //[MENUITEM_CUSTOM_SANDBOX_MODE]      = {DrawChoices_AskForNickname,           ProcessInput_Options_Two},
     //[MENUITEM_CUSTOM_HP_BAR]            = {DrawChoices_BarSpeed,                 ProcessInput_Options_Eleven},
     //[MENUITEM_CUSTOM_EXP_BAR]           = {DrawChoices_BarSpeed,                 ProcessInput_Options_Eleven},
@@ -269,26 +272,27 @@ static struct // MENU_CUSTOM
 };
 
 // Menu left side option names text
-static const u8 sText_Battle_Speed[]     = _("Battle Speed");
-static const u8 sText_HpBar[]            = _("HP BAR");
-static const u8 sText_ExpBar[]           = _("EXP BAR");
-static const u8 sText_AutoRun[]          = _("Auto Run");
-static const u8 sText_PermanentRepel[]   = _("Permanent Repel");
-static const u8 sText_DamageDone[]       = _("Display Damage");
-static const u8 sText_AskForNickname[]   = _("Ask for Nickname");
-static const u8 sText_EnableEvs[]        = _("Enable EVs");
-static const u8 sText_PlayerAI[]         = _("Player AI");
-static const u8 sText_ShinyRate[]        = _("Shiny Rate");
-static const u8 sText_IndividualColors[] = _("Individual Colors");
-static const u8 sText_SandboxMode[]      = _("Sandbox Mode");
-static const u8 sText_DoubleBattleMode[] = _("Double Battles");
-static const u8 sText_AutomaticEvGain[]  = _("Auto Ev Gain");
-static const u8 sText_AutomaticExpGain[] = _("Auto Exp Gain");
-static const u8 sText_AutomaticEvo[]     = _("Auto Evolution");
-static const u8 sText_BattleUITheme[]    = _("Battle UI Skin");
-static const u8 sText_StartMenuColor[]   = _("Start Menu Color");
-static const u8 gText_ShortcutButton[]   = _("Shortcut Button");
+static const u8 sText_Battle_Speed[]        = _("Battle Speed");
+static const u8 sText_HpBar[]               = _("HP BAR");
+static const u8 sText_ExpBar[]              = _("EXP BAR");
+static const u8 sText_AutoRun[]             = _("Auto Run");
+static const u8 sText_PermanentRepel[]      = _("Permanent Repel");
+static const u8 sText_DamageDone[]          = _("Display Damage");
+static const u8 sText_AskForNickname[]      = _("Ask for Nickname");
+static const u8 sText_EnableEvs[]           = _("Enable EVs");
+static const u8 sText_PlayerAI[]            = _("Player AI");
+static const u8 sText_ShinyRate[]           = _("Shiny Rate");
+static const u8 sText_IndividualColors[]    = _("Individual Colors");
+static const u8 sText_SandboxMode[]         = _("Sandbox Mode");
+static const u8 sText_DoubleBattleMode[]    = _("Double Battles");
+static const u8 sText_AutomaticEvGain[]     = _("Auto Ev Gain");
+static const u8 sText_AutomaticExpGain[]    = _("Auto Exp Gain");
+static const u8 sText_AutomaticEvo[]        = _("Auto Evolution");
+static const u8 sText_BattleUITheme[]       = _("Battle UI Skin");
+static const u8 sText_StartMenuColor[]      = _("Start Menu Color");
+static const u8 gText_ShortcutButton[]      = _("Shortcut Button");
 static const u8 gText_DamageDonePercent[]   = _("Damage Percent");
+static const u8 sText_OpponentHp[]          = _("Opponent Hp");
 
 //doubleBattleMode
 const u8 gText_Font[]             = _("FONT");  //tx_optionsPlus
@@ -324,6 +328,7 @@ static const u8 *const sOptionMenuItemsNamesCustom[MENUITEM_CUSTOM_COUNT] =
     [MENUITEM_CUSTOM_AUTOMATIC_EVGAIN]    = sText_AutomaticEvGain,
     [MENUITEM_CUSTOM_AUTOMATIC_EXPGAIN]   = sText_AutomaticExpGain,
     [MENUITEM_CUSTOM_AUTOMATIC_EVOLUTION] = sText_AutomaticEvo,
+    [MENUITEM_CUSTOM_OPPONENT_HP]         = sText_OpponentHp,
     //[MENUITEM_CUSTOM_SANDBOX_MODE]      = sText_SandboxMode,
     //[MENUITEM_CUSTOM_HP_BAR]            = sText_HpBar,
     //[MENUITEM_CUSTOM_EXP_BAR]           = sText_ExpBar,
@@ -384,6 +389,7 @@ static bool8 CheckConditions(int selection)
         //case MENUITEM_CUSTOM_EXP_BAR:           return TRUE;
         //case MENUITEM_CUSTOM_FONT:              return TRUE;
         //case MENUITEM_CUSTOM_MATCHCALL:         return TRUE;
+        case MENUITEM_CUSTOM_OPPONENT_HP:         return TRUE;
         case MENUITEM_CUSTOM_CANCEL:              return TRUE;
         case MENUITEM_CUSTOM_COUNT:               return TRUE;
         case MENUITEM_CUSTOM_DAMAGE_SLIDER:
@@ -479,6 +485,7 @@ static const u8 sText_Desc_AutomaticEvolution_Off[]  = _("Pokémon will not evol
 static const u8 sText_Desc_Battle_UI_Themes[]        = _("Choose the Battle UI Theme.");
 static const u8 sText_Desc_Start_Menu_Colors[]       = _("Choose the Start Menu Colors.");
 static const u8 sText_Desc_Shortcut_Button[]         = _("Choose the In-Battle Shortcut\nthat you can use with L.");
+static const u8 sText_Desc_OpponentHp[]              = _("Choose the opponent HP text in\nbattles.");
 
 static const u8 sText_Desc_DamageSlider[]            = _("Globally set damage reduction.");
 
@@ -500,6 +507,7 @@ static const u8 *const sOptionMenuItemDescriptionsCustom[MENUITEM_CUSTOM_COUNT][
     [MENUITEM_CUSTOM_AUTOMATIC_EVGAIN]    = {sText_Desc_AutomaticEvGain_Off,    sText_Desc_AutomaticEvGain_On},
     [MENUITEM_CUSTOM_AUTOMATIC_EXPGAIN]   = {sText_Desc_AutomaticExpGain_Off,   sText_Desc_AutomaticExpGain_On},
     [MENUITEM_CUSTOM_AUTOMATIC_EVOLUTION] = {sText_Desc_AutomaticEvolution_Off, sText_Desc_AutomaticEvolution_On},
+    [MENUITEM_CUSTOM_OPPONENT_HP]         = {sText_Desc_OpponentHp,             sText_Empty},
     //[MENUITEM_CUSTOM_SANDBOX_MODE]      = {sText_Desc_Sandbox_Off,            sText_Desc_Sandbox_On},
     //[MENUITEM_CUSTOM_HP_BAR]            = {sText_Desc_BattleHPBar,            sText_Empty},
     //[MENUITEM_CUSTOM_EXP_BAR]           = {sText_Desc_BattleExpBar,           sText_Empty},
@@ -548,7 +556,8 @@ static const u8 *const sOptionMenuItemDescriptionsDisabledCustom[MENUITEM_CUSTOM
     //[MENUITEM_CUSTOM_EXP_BAR]           = sText_Empty,
     //[MENUITEM_CUSTOM_FONT]              = sText_Empty,
     //[MENUITEM_CUSTOM_MATCHCALL]         = sText_Empty,
-    [MENUITEM_CUSTOM_CANCEL]            = sText_Empty,
+    [MENUITEM_CUSTOM_OPPONENT_HP]         = sText_Empty,
+    [MENUITEM_CUSTOM_CANCEL]              = sText_Empty,
 };
 
 #pragma GCC diagnostic push
@@ -571,7 +580,7 @@ static const u8 *const OptionTextDescription(void)
         if (!CheckConditions(menuItem))
             return sOptionMenuItemDescriptionsDisabledCustom[menuItem];
         selection = sOptions->sel_custom[menuItem];
-        if (menuItem == MENUITEM_CUSTOM_SHINY_RATE || menuItem == MENUITEM_CUSTOM_BATTLE_UI_THEME || menuItem == MENUITEM_CUSTOM_SHORTCUT_BUTTON || menuItem == MENUITEM_CUSTOM_START_MENU_COLOR ||  menuItem == MENUITEM_CUSTOM_DAMAGE_SLIDER)
+        if (menuItem == MENUITEM_CUSTOM_SHINY_RATE || menuItem == MENUITEM_CUSTOM_BATTLE_UI_THEME || menuItem == MENUITEM_CUSTOM_SHORTCUT_BUTTON || menuItem == MENUITEM_CUSTOM_START_MENU_COLOR ||  menuItem == MENUITEM_CUSTOM_DAMAGE_SLIDER || menuItem == MENUITEM_CUSTOM_OPPONENT_HP)
             selection = 0;
         return sOptionMenuItemDescriptionsCustom[menuItem][selection];
     }
@@ -811,6 +820,7 @@ void CB2_InitOptionPlusMenu(void)
         sOptions->sel_custom[MENUITEM_CUSTOM_AUTOMATIC_EVGAIN]    = gSaveBlock2Ptr->automaticEVGain;
         sOptions->sel_custom[MENUITEM_CUSTOM_AUTOMATIC_EXPGAIN]   = gSaveBlock2Ptr->automaticExpGain;
         sOptions->sel_custom[MENUITEM_CUSTOM_AUTOMATIC_EVOLUTION] = gSaveBlock2Ptr->automaticEvolution;
+        sOptions->sel_custom[MENUITEM_CUSTOM_OPPONENT_HP]         = gSaveBlock2Ptr->optionsOpponentHp;
         //sOptions->sel_custom[MENUITEM_CUSTOM_SANDBOX_MODE]      = gSaveBlock2Ptr->sandboxMode;
 
         //sOptions->sel_custom[MENUITEM_CUSTOM_HP_BAR]            = gSaveBlock2Ptr->optionsBattleSceneOff; //To change
@@ -1017,6 +1027,7 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->automaticEVGain              = sOptions->sel_custom[MENUITEM_CUSTOM_AUTOMATIC_EVGAIN];
     gSaveBlock2Ptr->automaticExpGain             = sOptions->sel_custom[MENUITEM_CUSTOM_AUTOMATIC_EXPGAIN];
     gSaveBlock2Ptr->automaticEvolution           = sOptions->sel_custom[MENUITEM_CUSTOM_AUTOMATIC_EVOLUTION];
+    gSaveBlock2Ptr->optionsOpponentHp = sOptions->sel_custom[MENUITEM_CUSTOM_OPPONENT_HP];
     //gSaveBlock2Ptr->sandboxMode                = sOptions->sel_custom[MENUITEM_CUSTOM_SANDBOX_MODE];
     /*gSaveBlock2Ptr->optionsBattleSceneOff      = sOptions->sel_custom[MENUITEM_CUSTOM_HP_BAR];    //To change
     gSaveBlock2Ptr->optionsBattleSceneOff        = sOptions->sel_custom[MENUITEM_CUSTOM_EXP_BAR];   //To change
@@ -1263,6 +1274,27 @@ static void ReDrawAll(void)
 static const u8 sText_Faster[] = _("Fast");
 static const u8 sText_Instant[] = _("Instant");
 static const u8 *const sTextSpeedStrings[] = {gText_TextSpeedSlow, gText_TextSpeedMid, gText_TextSpeedFast, sText_Instant};
+
+static const u8 sText_Options_OpponentHp_Disabled[]   = _("Disabled");
+static const u8 sText_Options_OpponentHp_Number[]     = _("Number");
+static const u8 sText_Options_OpponentHp_Percentage[] = _("Percentage");
+
+static void DrawChoices_OpponentHp(int selection, int y)
+{
+    bool8 active = CheckConditions(MENUITEM_CUSTOM_OPPONENT_HP);
+    switch(selection)
+    {
+        case 0:
+            DrawOptionMenuChoice(sText_Options_OpponentHp_Disabled, 104, y, 1, active);
+        break;
+        case 1:
+            DrawOptionMenuChoice(sText_Options_OpponentHp_Number, 104, y, 1, active);
+        break;
+        case 2:
+            DrawOptionMenuChoice(sText_Options_OpponentHp_Percentage, 104, y, 1, active);
+        break;
+    }
+}
 
 static void DrawChoices_TextSpeed(int selection, int y)
 {

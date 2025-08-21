@@ -51,9 +51,19 @@ static void Task_ClearBitWhenSpecialAnimDone(u8 taskId);
 static void ClearSpritesBattlerHealthboxAnimData(void);
 
 // const rom data
-static const struct CompressedSpriteSheet sSpriteSheet_SinglesPlayerHealthbox = {gHealthboxSinglesPlayerGfx, 0x1000, TAG_HEALTHBOX_PLAYER1_TILE};
+static const struct CompressedSpriteSheet sSpriteSheet_SinglesPlayerHealthbox = 
+{
+    gHealthboxSinglesPlayerGfx, 0x1000, TAG_HEALTHBOX_PLAYER1_TILE
+};
 
-static const struct CompressedSpriteSheet sSpriteSheet_SinglesOpponentHealthbox = {gHealthboxSinglesOpponentGfx, 0x1000, TAG_HEALTHBOX_OPPONENT1_TILE};
+static const struct CompressedSpriteSheet sSpriteSheet_SinglesOpponentHealthbox = {
+    gHealthboxSinglesOpponentGfx, 0x1000, TAG_HEALTHBOX_OPPONENT1_TILE
+};
+
+static const struct CompressedSpriteSheet sSpriteSheet_SinglesOpponentHealthboxFull =
+{
+    gHealthboxSinglesOpponentFullGfx, 0x1000, TAG_HEALTHBOX_OPPONENT1_TILE
+};
 
 static const struct CompressedSpriteSheet sSpriteSheets_DoublesPlayerHealthbox[2] = {{gHealthboxDoublesPlayerGfx, 0x800, TAG_HEALTHBOX_PLAYER1_TILE},
                                                                                      {gHealthboxDoublesPlayerGfx, 0x800, TAG_HEALTHBOX_PLAYER2_TILE}};
@@ -69,7 +79,7 @@ static const struct CompressedSpriteSheet sSpriteSheets_HealthBar[MAX_BATTLERS_C
                                                                                          {gBlankGfxCompressed, 0x0120, TAG_HEALTHBAR_OPPONENT2_TILE}};
 
 static const struct SpritePalette sSpritePalettes_HealthBoxHealthBar[2] = {{gBattleInterface_BallStatusBarPal, TAG_HEALTHBOX_PAL},
-                                                                           {gBattleInterface_BallDisplayPal, TAG_HEALTHBAR_PAL}};
+                                                                           {gBattleInterface_BallDisplayPal,   TAG_HEALTHBAR_PAL}};
 
 // code
 void AllocateBattleSpritesData(void) {
@@ -573,14 +583,16 @@ void BattleLoadAllHealthBoxesGfxAtOnce(void) {
         LoadCompressedSpriteSheet(&sSpriteSheet_SinglesPlayerHealthbox);
         LoadCompressedSpriteSheet(&sSpriteSheet_SinglesOpponentHealthbox);
         numberOfBattlers = 2;
-    } else {
+    } else
+    {
         LoadCompressedSpriteSheet(&sSpriteSheets_DoublesPlayerHealthbox[0]);
         LoadCompressedSpriteSheet(&sSpriteSheets_DoublesPlayerHealthbox[1]);
         LoadCompressedSpriteSheet(&sSpriteSheets_DoublesOpponentHealthbox[0]);
         LoadCompressedSpriteSheet(&sSpriteSheets_DoublesOpponentHealthbox[1]);
         numberOfBattlers = MAX_BATTLERS_COUNT;
     }
-    for (i = 0; i < numberOfBattlers; i++) LoadCompressedSpriteSheet(&sSpriteSheets_HealthBar[gBattlerPositions[i]]);
+    for (i = 0; i < numberOfBattlers; i++) 
+        LoadCompressedSpriteSheet(&sSpriteSheets_HealthBar[gBattlerPositions[i]]);
 }
 
 // For Pokemon Debug Menu
@@ -601,8 +613,14 @@ bool8 BattleLoadAllHealthBoxesGfx(u8 state) {
                     LoadCompressedSpriteSheet(&sSpriteSheet_SafariHealthbox);
                 else
                     LoadCompressedSpriteSheet(&sSpriteSheet_SinglesPlayerHealthbox);
-            } else if (state == 3)
-                LoadCompressedSpriteSheet(&sSpriteSheet_SinglesOpponentHealthbox);
+            }
+            else if (state == 3)
+            {
+                if (gSaveBlock2Ptr->optionsOpponentHp == OPTIONS_OPPONENT_HP_NONE)
+                    LoadCompressedSpriteSheet(&sSpriteSheet_SinglesOpponentHealthbox);
+                else
+                    LoadCompressedSpriteSheet(&sSpriteSheet_SinglesOpponentHealthboxFull);
+            }
             else if (state == 4)
                 LoadCompressedSpriteSheet(&sSpriteSheets_HealthBar[gBattlerPositions[0]]);
             else if (state == 5)

@@ -1117,8 +1117,9 @@ static u8 SetUpCopyrightScreen(void)
         UpdatePaletteFade();
         gMain.state++;
         GameCubeMultiBoot_Main(&gMultibootProgramStruct);
+        if ((JOY_NEW(A_BUTTON)) || (JOY_NEW(L_BUTTON)) || (JOY_NEW(START_BUTTON)))
+            gMain.state = 140;
         break;
-
     case 30:
         RhhIntro_LoadCopyrightBgGraphics();
         BeginNormalPaletteFade(0x00000001, 0, 0x10, 0, RGB_BLACK); 
