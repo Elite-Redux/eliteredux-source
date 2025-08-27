@@ -81,12 +81,14 @@ static const u8 sGoNearCounterToEscapeFactor[] = {4, 4, 4, 4};
 
 static const u16 sSkillSwapBannedAbilities[] = {
     ABILITY_WONDER_GUARD,
+    ABILITY_PRISMATIC_FUR,
 };
 
 static const u16 sRolePlayBannedAbilities[] = {
     ABILITY_TRACE,
     ABILITY_WONDER_GUARD,
     ABILITY_RECEIVER,
+    ABILITY_PRISMATIC_FUR,
 };
 
 static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] = {
