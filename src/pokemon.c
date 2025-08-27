@@ -2074,6 +2074,12 @@ u8 GiveMonToPlayer(struct Pokemon *mon) {
     bool8 nuzlockeRulesEnabled   = AreNuzlockeRulesEnabled();
     bool8 hasAlreadyCaughtInArea = !FlagGet(FLAG_TEMP_CAN_CATCH_POKEMON);
 
+    //Shiny Clause
+    if(SetMonData(mon, MON_DATA_IS_SHINY) != 0){
+        nuzlockeRulesEnabled  = FALSE;
+        hasAlreadyCaughtInArea = FALSE;
+    }
+
     SetMonData(mon, MON_DATA_OT_NAME,     gSaveBlock2Ptr->playerName);
     SetMonData(mon, MON_DATA_OT_GENDER,   &gSaveBlock2Ptr->playerGender);
     SetMonData(mon, MON_DATA_OT_ID,       gSaveBlock2Ptr->playerTrainerId);
