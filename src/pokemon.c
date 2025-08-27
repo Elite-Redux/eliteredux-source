@@ -2075,7 +2075,7 @@ u8 GiveMonToPlayer(struct Pokemon *mon) {
     bool8 hasAlreadyCaughtInArea = !FlagGet(FLAG_TEMP_CAN_CATCH_POKEMON);
 
     //Shiny Clause
-    if(SetMonData(mon, MON_DATA_IS_SHINY) != 0){
+    if(GetMonData(mon, MON_DATA_IS_SHINY) != 0){
         nuzlockeRulesEnabled  = FALSE;
         hasAlreadyCaughtInArea = FALSE;
     }
