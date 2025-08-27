@@ -2433,6 +2433,14 @@
 	.2byte \move
 	.endm
 
+	.macro tagteamupdatehpdata battler:req
+	various \battler, VARIOUS_TAGTEAM_UPDATE_HPDATA
+	.endm
+
+	.macro tagteamupdatehealthbar battler:req
+	various \battler, VARIOUS_TAGTEAM_UPDATE_HEALTHBAR
+	.endm
+
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr

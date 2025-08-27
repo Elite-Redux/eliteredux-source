@@ -3031,7 +3031,6 @@ static void Cmd_tryfaintmon(void) {
 
         // Heal the Pokemon here to prevent heal blocking and visual glitchs
         gBattleMons[gActiveBattler].hp = gBattleMons[gActiveBattler].maxHP;
-        gBattleMoveDamage = -gBattleMons[gActiveBattler].hp;
 
         BS_ptr = BattleScript_TagTeamSecondPhase;
         BattleScriptPush(gBattlescriptCurrInstr + 7);
@@ -8976,6 +8975,16 @@ static void Cmd_various(void) {
                 gBattlescriptCurrInstr = ptr;
             }
         } break;
+        case VARIOUS_TAGTEAM_UPDATE_HPDATA: {
+            BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, 0, 2, &gBattleMons[gActiveBattler].hp);
+            MarkBattlerForControllerExec(gActiveBattler);
+            break;
+        }
+        case VARIOUS_TAGTEAM_UPDATE_HEALTHBAR: {
+            BtlController_EmitHealthBarUpdate(0, -gBattleMons[gActiveBattler].hp);
+            MarkBattlerForControllerExec(gActiveBattler);
+            break;
+        }
     }  // End of switch (gBattlescriptCurrInstr[2])
 }
 
