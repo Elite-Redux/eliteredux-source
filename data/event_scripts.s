@@ -1200,3 +1200,5 @@ Common_Text_ClydeAskResetTrainers::
 	.include "data/maps/Route111_Tunnel/scripts.inc"
 
 	.include "data/maps/Route111_Tunnel2/scripts.inc"
+
+	.include "data/maps/Route111_SunhollowRuins_House1/scripts.inc"

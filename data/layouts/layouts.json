@@ -4860,6 +4860,16 @@
       "secondary_tileset": "gTileset_MirageTower",
       "border_filepath": "data/layouts/Route111_Tunnel2/border.bin",
       "blockdata_filepath": "data/layouts/Route111_Tunnel2/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_SUNHOLLOW_RUINS_HOUSE1",
+      "name": "Route111_SunhollowRuins_House1_Layout",
+      "width": 9,
+      "height": 10,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_GenericBuilding",
+      "border_filepath": "data/layouts/Route111_SunhollowRuins_House1/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_SunhollowRuins_House1/map.bin"
     }
   ]
 }
