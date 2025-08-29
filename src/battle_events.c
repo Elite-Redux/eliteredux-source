@@ -16,7 +16,6 @@
 #include "constants/songs.h"
 #include "field_message_box.h"
 
-
 static u8 gNbBattleEvents = 0;
 static u8 gCurrBattleEvent = 0;
 EWRAM_DATA u8 gLastBattleEvent = 0;
