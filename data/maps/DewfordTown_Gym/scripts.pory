@@ -232,9 +232,6 @@ DewfordTown_Gym_EventScript_Exit::
 	releaseall
 	end
 
-
-	end
-
 DewfordTown_Gym_EventScript_TakaoBrightenRoom:: @ 81FC8D2
 	call DewfordTown_Gym_EventScript_BrightenRoom
 	release
