@@ -7401,7 +7401,11 @@ BattleScript_TagTeamSecondPhase::
 	printstring STRINGID_PKMNREGAINEDHEALTH
 	waitmessage B_WAIT_TIME_LONG
 	clearstatus BS_TARGET
+	waitstate
+	updatestatusicon BS_TARGET
+	waitstate
 	restorepp BS_TARGET
+	tagteamcleareffects BS_TARGET
 	readtargetfromstack4
 	return
 

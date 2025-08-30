@@ -8985,6 +8985,12 @@ static void Cmd_various(void) {
             MarkBattlerForControllerExec(gActiveBattler);
             break;
         }
+        case VARIOUS_TAGTEAM_CLEAR_EFFECTS: {
+            gBattleMons[gActiveBattler].status2 = 0;
+            gStatuses3[gActiveBattler] = 0;
+            gStatuses4[gActiveBattler] = 0;
+            break;
+        }
     }  // End of switch (gBattlescriptCurrInstr[2])
 }
 
