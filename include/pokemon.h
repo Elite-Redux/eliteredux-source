@@ -205,6 +205,7 @@ struct RawStatsLevel {
 #define F_GALARIAN_FORM (1 << 2)
 #define F_TWO_HEADED    (1 << 3)
 #define F_THREE_HEADED  (1 << 4)
+#define F_TAG_TEAM      (1 << 5)
 
 typedef struct BaseStats {
     /* 0x00 */ u8 baseHP;

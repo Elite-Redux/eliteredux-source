@@ -914,6 +914,8 @@ static const u8 sBattlePalaceNatureToFlavorTextId[NUM_NATURES] = {
 
 #define IS_THREE_HEADED(battlerAttacker) (gBaseStats[gBattleMons[battlerAttacker].species].flags & F_THREE_HEADED)
 
+#define IS_TAG_TEAM(battler) (gBaseStats[gBattleMons[battler].species].flags & F_TAG_TEAM)
+
 static bool32 NoTargetPresent(MoveEnum move) {
     switch (move) {
         case MOVE_SUNNY_DAY:
@@ -3026,7 +3028,7 @@ static void Cmd_tryfaintmon(void) {
         return;
     }
 
-    if (!IsBattlerAlive(gActiveBattler) && GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT) {
+    if (!IsBattlerAlive(gActiveBattler) && GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT && IS_TAG_TEAM(gActiveBattler)) {
         SetActiveStackBattler(gActiveBattler, 1);
 
         // Heal the Pokemon here to prevent heal blocking and visual glitchs
