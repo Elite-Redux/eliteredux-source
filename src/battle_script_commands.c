@@ -3028,7 +3028,7 @@ static void Cmd_tryfaintmon(void) {
         return;
     }
 
-    if (!IsBattlerAlive(gActiveBattler) && GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT && IS_TAG_TEAM(gActiveBattler)) {
+    if (!IsBattlerAlive(gActiveBattler) && IS_TAG_TEAM(gActiveBattler)) {
         SetActiveStackBattler(gActiveBattler, 1);
 
         // Heal the Pokemon here to prevent heal blocking and visual glitchs
