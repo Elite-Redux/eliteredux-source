@@ -916,6 +916,20 @@ static const u8 sBattlePalaceNatureToFlavorTextId[NUM_NATURES] = {
 
 #define IS_TAG_TEAM(battler) (gBaseStats[gBattleMons[battler].species].flags & F_TAG_TEAM)
 
+static bool8 moveFailVsTagTeam(MoveEnum move)
+{
+    switch (move) {
+        case MOVE_DESTINY_BOND:
+        case MOVE_ENDEAVOR:
+        case MOVE_COUNTER:
+        case MOVE_MIRROR_COAT:
+        case MOVE_METAL_BURST:
+        case MOVE_COMEUPPANCE:
+            return TRUE;
+    }
+    return FALSE;
+}
+
 static bool32 NoTargetPresent(MoveEnum move) {
     switch (move) {
         case MOVE_SUNNY_DAY:
@@ -1153,6 +1167,15 @@ static void Cmd_attackcanceler(void) {
             BattleScriptCall(BattleScript_SnatchedMove);
             return;
         }
+    }
+
+    if (IS_TAG_TEAM(gBattlerTarget) && moveFailVsTagTeam(gCurrentMove)) {
+        CancelMultiTurnMoves(gBattlerAttacker);
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gLastLandedMoves[gBattlerTarget] = 0;
+        gLastHitByType[gBattlerTarget] = 0;
+        gBattlescriptCurrInstr++;
+        return;
     }
 
     if (gTurnStructs[gBattlerTarget].redirectedAbility) {
