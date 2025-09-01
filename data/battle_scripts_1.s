@@ -7406,6 +7406,7 @@ BattleScript_TagTeamSecondPhase::
 	waitstate
 	restorepp BS_TARGET
 	tagteamcleareffects BS_TARGET
+	tagteamrestoreitem BS_TARGET
 	readtargetfromstack4
 	return
 

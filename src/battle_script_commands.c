@@ -8993,6 +8993,18 @@ static void Cmd_various(void) {
             gStatuses4[gActiveBattler] = 0;
             break;
         }
+        case VARIOUS_TAGTEAM_RESTORE_ITEM: {
+            u16* usedHeldItem;
+            usedHeldItem = &gBattleStruct->usedHeldItems[gBattlerPartyIndexes[gActiveBattler]][GetBattlerSide(gActiveBattler)];
+
+            if (*usedHeldItem != 0 && gBattleMons[gActiveBattler].item == 0) {
+                gLastUsedItem = *usedHeldItem;
+                UpdateBattlerItem(gActiveBattler, *usedHeldItem);
+                *usedHeldItem = 0;
+            }
+
+            break;
+        }
     }  // End of switch (gBattlescriptCurrInstr[2])
 }
 
