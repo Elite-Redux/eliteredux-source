@@ -264,6 +264,7 @@ EWRAM_DATA u8 gLastUsedBall = 0;
 EWRAM_DATA u16 gLastThrownBall = 0;
 EWRAM_DATA u8 gMaxPartyLevel = 1;
 EWRAM_DATA bool8 gSwapDamageCategory = FALSE;  // Photon Geyser, Shell Side Arm, Light That Burns the Sky
+EWRAM_DATA bool8 gTagTeamPhases[PARTY_SIZE][2] = {0};
 
 // IWRAM common vars
 void (*gPreBattleCallback1)(void);
@@ -2774,6 +2775,12 @@ static void BattleStartClearSetData(void) {
 
     for (i = 0; i < gBattlersCount; i++) {
         gBattlerByTurnOrder[i] = i;
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        gTagTeamPhases[i][0] = 0;
+        gTagTeamPhases[i][1] = 0;
     }
 }
 

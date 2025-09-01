@@ -916,6 +916,10 @@ static const u8 sBattlePalaceNatureToFlavorTextId[NUM_NATURES] = {
 
 #define IS_TAG_TEAM(battler) (gBaseStats[gBattleMons[battler].species].flags & F_TAG_TEAM)
 
+static bool8 GetTagTeamPhase(u8 battler) { return gTagTeamPhases[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)]; }
+
+static void SetTagTeamPhase(u8 battler, bool8 value) { gTagTeamPhases[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] = value; }
+
 static bool8 moveFailVsTagTeam(MoveEnum move)
 {
     switch (move) {
@@ -3051,8 +3055,10 @@ static void Cmd_tryfaintmon(void) {
         return;
     }
 
-    if (!IsBattlerAlive(gActiveBattler) && IS_TAG_TEAM(gActiveBattler)) {
+    if (!IsBattlerAlive(gActiveBattler) && IS_TAG_TEAM(gActiveBattler) && GetTagTeamPhase(gActiveBattler) == FALSE) {
         SetActiveStackBattler(gActiveBattler, 1);
+
+        SetTagTeamPhase(gActiveBattler, TRUE);
 
         // Heal the Pokemon here to prevent heal blocking and visual glitchs
         gBattleMons[gActiveBattler].hp = gBattleMons[gActiveBattler].maxHP;
