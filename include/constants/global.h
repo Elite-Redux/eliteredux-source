@@ -247,4 +247,14 @@
 //Nuzlocke Mode Configuration
 #define NUZLOCKE_MODE_DISABLE_DEXNAV         FALSE //if TRUE the dexnav is disabled before you catch the first Pokémon on each route so the mon you get its random
 
+//Overworld Speedup
+#define OPTIONS_OVERWORLD_SPEED_1X                          0
+#define OPTIONS_OVERWORLD_SPEED_2X                          1
+#define OPTIONS_OVERWORLD_SPEED_4X                          2
+#define OPTIONS_OVERWORLD_SPEED_8X                          3
+#define OPTIONS_OVERWORLD_SPEED_1X_EXTRA_ITERATIONS         0
+#define OPTIONS_OVERWORLD_SPEED_2X_EXTRA_ITERATIONS         1
+#define OPTIONS_OVERWORLD_SPEED_4X_EXTRA_ITERATIONS         3
+#define OPTIONS_OVERWORLD_SPEED_8X_EXTRA_ITERATIONS         7
+
 #endif // GUARD_CONSTANTS_GLOBAL_H

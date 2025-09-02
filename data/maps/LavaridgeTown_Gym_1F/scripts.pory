@@ -650,7 +650,6 @@ script LavaridgeTown_Gym_1F_EventScript_Trolleychan{
     msgbox(format("konbawa goshujin-sama {COLOR BLUE}><{COLOR DARK_GRAY} teehee, watashi wa Trolley-chan {COLOR GREEN}desu{COLOR DARK_GRAY}. Release o boku no wasurenai ne kudasai {COLOR BLUE}><{COLOR DARK_GRAY}"), MSGBOX_NPC)
 }
 
-
 script LavaridgeTown_Gym_1F_EventScript_AskResetTrainers{
 	lock
 	clydeaskresettrainers(LavaridgeTown_Gym_1F_EventScript_ResetAllTrainers, LavaridgeTown_Gym_1F_EventScript_SelectTrainers)

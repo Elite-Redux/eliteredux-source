@@ -5,7 +5,7 @@
   "music": "MUS_DEWFORD",
   "region_map_section": "MAPSEC_DEWFORD_MEADOW",
   "requires_flash": false,
-  "weather": "WEATHER_NONE",
+  "weather": "WEATHER_SUNNY",
   "map_type": "MAP_TYPE_ROUTE",
   "allow_cycling": true,
   "allow_escaping": false,
@@ -49,16 +49,16 @@
   "bg_events": [
     {
       "type": "hidden_item",
-      "x": 11,
-      "y": 18,
+      "x": 19,
+      "y": 3,
       "elevation": 3,
       "item": "ITEM_YELLOW_NECTAR",
       "flag": "FLAG_HIDDEN_ITEM_YELLOW_NECTAR"
     },
     {
       "type": "hidden_item",
-      "x": 21,
-      "y": 5,
+      "x": 20,
+      "y": 3,
       "elevation": 3,
       "item": "ITEM_RED_NECTAR",
       "flag": "FLAG_HIDDEN_ITEM_RED_NECTAR"
