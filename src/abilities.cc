@@ -9302,6 +9302,10 @@ constexpr Ability MyceliumMight = {
     .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int { return IS_MOVE_STATUS(move); },
 };
 
+constexpr Ability IAmSteve = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_NO_RETREAT, 0); },
+};
+
 constexpr Ability DeadlyPrecision = {
     .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
         gHitMarker |= HITMARKER_MOLD_BREAKER;
@@ -10199,6 +10203,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_LETS_DANCE, LetsDance},
     {ABILITY_MYCELIUM_MIGHT, MyceliumMight},
     {ABILITY_DEADLY_PRECISION, DeadlyPrecision},
+    {ABILITY_I_AM_STEVE, IAmSteve},
 };
 
 template <int N>
