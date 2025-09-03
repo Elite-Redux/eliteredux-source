@@ -5850,3 +5850,16 @@ static void HandleBattleEvents(void) {
     gBattleStruct->battleEventDone = BATTLE_EVENTS_NOT_DONE;
     gBattleMainFunc = HandleTurnActionSelectionState;
 }
+
+void HandleTagTeamBattleEvents(void) {
+    // end of the turn, exec battle events
+    if (gBattleStruct->battleEventDone != BATTLE_EVENTS_DONE) {
+        if (ExecBattleEvents() == EXEC_BATTLE_EVENTS_ALL_CLEAR) {
+            gBattleStruct->battleEventDone = BATTLE_EVENTS_DONE;
+        } else {
+            return;
+        }
+    }
+    gBattleStruct->battleEventDone = BATTLE_EVENTS_NOT_DONE;
+    gBattleMainFunc = RunTurnActionsFunctions;
+}

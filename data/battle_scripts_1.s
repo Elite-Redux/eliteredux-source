@@ -7407,6 +7407,7 @@ BattleScript_TagTeamSecondPhase::
 	restorepp BS_TARGET
 	tagteamcleareffects BS_TARGET
 	tagteamrestoreitem BS_TARGET
+	tagteamexecbattleevents BS_TARGET
 	readtargetfromstack4
 	return
 

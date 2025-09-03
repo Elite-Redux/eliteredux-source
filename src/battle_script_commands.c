@@ -9034,6 +9034,11 @@ static void Cmd_various(void) {
 
             break;
         }
+        case VARIOUS_TAGTEAM_EXEC_BATTLE_EVENTS: {
+            if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT)
+                gBattleMainFunc = HandleTagTeamBattleEvents;
+            break;
+        }
     }  // End of switch (gBattlescriptCurrInstr[2])
 }
 

@@ -2449,6 +2449,10 @@
 	various \battler, VARIOUS_TAGTEAM_RESTORE_ITEM
 	.endm
 
+	.macro tagteamexecbattleevents battler:req
+	various \battler, VARIOUS_TAGTEAM_EXEC_BATTLE_EVENTS
+	.endm
+
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr
