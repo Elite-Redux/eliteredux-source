@@ -914,6 +914,26 @@ static const u8 sBattlePalaceNatureToFlavorTextId[NUM_NATURES] = {
 
 #define IS_THREE_HEADED(battlerAttacker) (gBaseStats[gBattleMons[battlerAttacker].species].flags & F_THREE_HEADED)
 
+#define IS_TAG_TEAM(battler) (gBaseStats[gBattleMons[battler].species].flags & F_TAG_TEAM)
+
+static bool8 GetTagTeamPhase(u8 battler) { return gTagTeamPhases[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)]; }
+
+static void SetTagTeamPhase(u8 battler, bool8 value) { gTagTeamPhases[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] = value; }
+
+static bool8 moveFailVsTagTeam(MoveEnum move)
+{
+    switch (move) {
+        case MOVE_DESTINY_BOND:
+        case MOVE_ENDEAVOR:
+        case MOVE_COUNTER:
+        case MOVE_MIRROR_COAT:
+        case MOVE_METAL_BURST:
+        case MOVE_COMEUPPANCE:
+            return TRUE;
+    }
+    return FALSE;
+}
+
 static bool32 NoTargetPresent(MoveEnum move) {
     switch (move) {
         case MOVE_SUNNY_DAY:
@@ -1151,6 +1171,15 @@ static void Cmd_attackcanceler(void) {
             BattleScriptCall(BattleScript_SnatchedMove);
             return;
         }
+    }
+
+    if (IS_TAG_TEAM(gBattlerTarget) && moveFailVsTagTeam(gCurrentMove)) {
+        CancelMultiTurnMoves(gBattlerAttacker);
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gLastLandedMoves[gBattlerTarget] = 0;
+        gLastHitByType[gBattlerTarget] = 0;
+        gBattlescriptCurrInstr++;
+        return;
     }
 
     if (gTurnStructs[gBattlerTarget].redirectedAbility) {
@@ -3023,6 +3052,21 @@ static void Cmd_tryfaintmon(void) {
 
     if (gActiveBattler == gBattlerAttacker && gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ABILITY_VICTORY_BOMB) {
         gBattlescriptCurrInstr += 7;
+        return;
+    }
+
+    if (!IsBattlerAlive(gActiveBattler) && IS_TAG_TEAM(gActiveBattler) && GetTagTeamPhase(gActiveBattler) == FALSE) {
+        SetActiveStackBattler(gActiveBattler, 1);
+
+        SetTagTeamPhase(gActiveBattler, TRUE);
+
+        // Heal the Pokemon here to prevent heal blocking and visual glitchs
+        gBattleMons[gActiveBattler].hp = gBattleMons[gActiveBattler].maxHP;
+
+        BS_ptr = BattleScript_TagTeamSecondPhase;
+        BattleScriptPush(gBattlescriptCurrInstr + 7);
+        gBattlescriptCurrInstr = BS_ptr;
+
         return;
     }
 
@@ -8962,6 +9006,39 @@ static void Cmd_various(void) {
                 gBattlescriptCurrInstr = ptr;
             }
         } break;
+        case VARIOUS_TAGTEAM_UPDATE_HPDATA: {
+            BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, 0, 2, &gBattleMons[gActiveBattler].hp);
+            MarkBattlerForControllerExec(gActiveBattler);
+            break;
+        }
+        case VARIOUS_TAGTEAM_UPDATE_HEALTHBAR: {
+            BtlController_EmitHealthBarUpdate(0, -gBattleMons[gActiveBattler].hp);
+            MarkBattlerForControllerExec(gActiveBattler);
+            break;
+        }
+        case VARIOUS_TAGTEAM_CLEAR_EFFECTS: {
+            gBattleMons[gActiveBattler].status2 = 0;
+            gStatuses3[gActiveBattler] = 0;
+            gStatuses4[gActiveBattler] = 0;
+            break;
+        }
+        case VARIOUS_TAGTEAM_RESTORE_ITEM: {
+            u16* usedHeldItem;
+            usedHeldItem = &gBattleStruct->usedHeldItems[gBattlerPartyIndexes[gActiveBattler]][GetBattlerSide(gActiveBattler)];
+
+            if (*usedHeldItem != 0 && gBattleMons[gActiveBattler].item == 0) {
+                gLastUsedItem = *usedHeldItem;
+                UpdateBattlerItem(gActiveBattler, *usedHeldItem);
+                *usedHeldItem = 0;
+            }
+
+            break;
+        }
+        case VARIOUS_TAGTEAM_EXEC_BATTLE_EVENTS: {
+            if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT)
+                gBattleMainFunc = HandleTagTeamBattleEvents;
+            break;
+        }
     }  // End of switch (gBattlescriptCurrInstr[2])
 }
 

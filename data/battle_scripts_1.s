@@ -7390,6 +7390,27 @@ BattleScript_FaintTarget_NoPopup:
 	readtargetfromstack4
 	return
 
+BattleScript_TagTeamSecondPhase::
+	savetargettostack4
+	copybyte gBattlerTarget, gStackBattler1
+	playfaintcry BS_TARGET
+	pause B_WAIT_TIME_LONG
+	tagteamupdatehealthbar BS_TARGET
+	tagteamupdatehpdata BS_TARGET
+	waitanimation
+	printstring STRINGID_PKMNREGAINEDHEALTH
+	waitmessage B_WAIT_TIME_LONG
+	clearstatus BS_TARGET
+	waitstate
+	updatestatusicon BS_TARGET
+	waitstate
+	restorepp BS_TARGET
+	tagteamcleareffects BS_TARGET
+	tagteamrestoreitem BS_TARGET
+	tagteamexecbattleevents BS_TARGET
+	readtargetfromstack4
+	return
+
 BattleScript_GiveExp::
 	setbyte sGIVEEXP_STATE, 0
 	getexp BS_TARGET
