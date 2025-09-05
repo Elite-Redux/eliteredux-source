@@ -741,4 +741,6 @@ extern const u8 BattleScript_ExtraSkillPermaWideGuard[];
 
 extern const u8 BattleScript_ExtraSkillCopyStats[];
 
+extern const u8 BattleScript_TagTeamSecondPhase[];
+
 #endif  // GUARD_BATTLE_SCRIPTS_H

@@ -127,4 +127,6 @@ extern const u8 *const gStatusConditionStringsTable[8][2];
 bool32 InBattleChoosingMoves();
 bool32 InBattleRunningActions();
 
+void HandleTagTeamBattleEvents(void);
+
 #endif  // GUARD_BATTLE_MAIN_H
