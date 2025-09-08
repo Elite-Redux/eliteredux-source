@@ -323,7 +323,6 @@ static const u16 sAdoptionCenterInventory_TwoBadges[] = {
     SPECIES_SWINUB_REDUX,
     SPECIES_RATTATA_REDUX,
     SPECIES_VANILLITE_REDUX,
-    SPECIES_BELLSPROUT_REDUX,
     SPECIES_BLOCLI,
     SPECIES_HIPPOPOTATO,
     SPECIES_EXEGGCUTE_REDUX,
@@ -369,7 +368,6 @@ static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
     SPECIES_RATTATA_REDUX,
     SPECIES_VANILLITE_REDUX,
     SPECIES_KLEFKI_REDUX,
-    SPECIES_BELLSPROUT_REDUX,
     SPECIES_SAWK_REDUX,
     SPECIES_THROH_REDUX,
     SPECIES_BLOCLI,
@@ -435,7 +433,6 @@ static const u16 sAdoptionCenterInventory_FourBadges[] = {
     SPECIES_RATTATA_REDUX,
     SPECIES_VANILLITE_REDUX,
     SPECIES_KLEFKI_REDUX,
-    SPECIES_BELLSPROUT_REDUX,
     SPECIES_SAWK_REDUX,
     SPECIES_THROH_REDUX,
     SPECIES_LITWICK_REDUX,
@@ -506,7 +503,6 @@ static const u16 sAdoptionCenterInventory_FiveBadges[] = {
     SPECIES_RATTATA_REDUX,
     SPECIES_VANILLITE_REDUX,
     SPECIES_KLEFKI_REDUX,
-    SPECIES_BELLSPROUT_REDUX,
     SPECIES_SAWK_REDUX,
     SPECIES_THROH_REDUX,
     SPECIES_LITWICK_REDUX,
@@ -580,7 +576,6 @@ static const u16 sAdoptionCenterInventory_SixBadges[] = {
     SPECIES_RATTATA_REDUX,
     SPECIES_VANILLITE_REDUX,
     SPECIES_KLEFKI_REDUX,
-    SPECIES_BELLSPROUT_REDUX,
     SPECIES_SAWK_REDUX,
     SPECIES_THROH_REDUX,
     SPECIES_LITWICK_REDUX,
@@ -655,7 +650,6 @@ static const u16 sAdoptionCenterInventory_SevenBadges[] = {
     SPECIES_RATTATA_REDUX,
     SPECIES_VANILLITE_REDUX,
     SPECIES_KLEFKI_REDUX,
-    SPECIES_BELLSPROUT_REDUX,
     SPECIES_SAWK_REDUX,
     SPECIES_THROH_REDUX,
     SPECIES_LITWICK_REDUX,
@@ -732,33 +726,32 @@ static const u16 sAdoptionCenterInventory_EightBadges[] = {
     SPECIES_RATTATA_REDUX,
     SPECIES_VANILLITE_REDUX,
     SPECIES_KLEFKI_REDUX,
-    SPECIES_BELLSPROUT_REDUX,
     SPECIES_SAWK_REDUX,
     SPECIES_THROH_REDUX,
     SPECIES_LITWICK_REDUX,
     SPECIES_BLOCLI,
     SPECIES_HIPPOPOTATO,
     SPECIES_EXEGGCUTE_REDUX,
-    SPECIES_LARVESTA_REDUX,     // testing purposes
-    SPECIES_HAPPINY_REDUX,     // testing purposes
-    SPECIES_SPIRITOMB_REDUX,   // testing purposes
-    SPECIES_DARUMAKA_REDUX,    // testing purposes
-    SPECIES_SEEL_REDUX,        // testing purposes
-    SPECIES_GLIGAR_REDUX,      // testing purposes
-    SPECIES_CRABRAWLER_REDUX,  // testing purposes
-    SPECIES_PSYDUCK_REDUX,     // testing purposes
-    SPECIES_TRAPINCH_REDUX,    // testing purposes
-    SPECIES_TOXEL_REDUX,       // testing purposes
-    SPECIES_BOUNSWEET_REDUX,   // testing purposes
-    SPECIES_TURTWIG_REDUX,     // testing purposes
-    SPECIES_CHIMCHAR_REDUX,    // testing purposes
-    SPECIES_PIPLUP_REDUX,      // testing purposes
-    SPECIES_CLEFFA_REDUX,      // testing purposes
-    SPECIES_CORM,              // testing purposes
-    SPECIES_MARBEEP,           // testing purposes
-    SPECIES_BUBBLEO,           // testing purposes
-    SPECIES_SNORUNT_REDUX,     // testing purposes
-    SPECIES_DEWPIDER_REDUX,    // testing purposes
+    SPECIES_LARVESTA_REDUX,     
+    SPECIES_HAPPINY_REDUX,     
+    SPECIES_SPIRITOMB_REDUX,   
+    SPECIES_DARUMAKA_REDUX,    
+    SPECIES_SEEL_REDUX,        
+    SPECIES_GLIGAR_REDUX,      
+    SPECIES_CRABRAWLER_REDUX, 
+    SPECIES_PSYDUCK_REDUX,     
+    SPECIES_TRAPINCH_REDUX,    
+    SPECIES_TOXEL_REDUX,       
+    SPECIES_BOUNSWEET_REDUX,   
+    SPECIES_TURTWIG_REDUX,     
+    SPECIES_CHIMCHAR_REDUX,    
+    SPECIES_PIPLUP_REDUX,      
+    SPECIES_CLEFFA_REDUX,      
+    SPECIES_CORM,              
+    SPECIES_MARBEEP,           
+    SPECIES_BUBBLEO,           
+    SPECIES_SNORUNT_REDUX,    
+    SPECIES_DEWPIDER_REDUX,    
     SPECIES_KUBFU,             // testing purposes
     SPECIES_MELTAN,
     SPECIES_POIPOLE,
