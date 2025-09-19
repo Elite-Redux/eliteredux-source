@@ -36,7 +36,7 @@ gText_Birch_BoyOrGirl:: @ 82C8BDD
 	.string "Or are you a girl?$"
 
 gText_Birch_WhatsYourName:: @ 82C8BFF
-	.string "All right.\n"
+	.string "All right.\p"
 	.string "Please configure your playthrough.\n"
 	.string "If you're new, I'd recommend Ace mode.$"
 
