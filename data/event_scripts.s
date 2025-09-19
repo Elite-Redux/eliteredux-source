@@ -1048,9 +1048,9 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	end
 
 Common_Text_YesNoBattle::
-	.string "{COLOR RED}No thanks :X{COLOR DARK_GRAY}$"
-	.string "{COLOR GREEN}Battle time! :D{COLOR DARK_GRAY}$"
-	.string "{COLOR BLUE}Sorry what? >.<{COLOR DARK_GRAY}$"
+	.string "{COLOR RED}I'll pass.{COLOR DARK_GRAY}$"
+	.string "{COLOR GREEN}Battle time!{COLOR DARK_GRAY}$"
+	.string "{COLOR BLUE}Repeat that?{COLOR DARK_GRAY}$"
 	.string "$"
 
 Common_Text_ClearFlagOrNext::
