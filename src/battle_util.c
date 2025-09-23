@@ -7643,33 +7643,42 @@ s32 DoMoveDamageCalcInternal(
     // Calculate final modifiers.
     dmg = CalcFinalDmg(dmg, move, battlerAtk, battlerDef, moveType, typeEffectivenessModifier, gIsCriticalHit, updateFlags);
 
-    // Monotype Champ
-    switch (getMonotypeChampType()) {
+    // Monotype Champ Damage Mods
+switch (getMonotypeChampType()) {
         case TYPE_GRASS:
+            // 30% damage reduction for champions team
+            if (GetBattlerSide(battlerDef) != B_SIDE_PLAYER) dmg = dmg * 0.7;
+            break;
         case TYPE_PSYCHIC:
+            // 30% blanket damage reduction for champions team
+            if (GetBattlerSide(battlerDef) != B_SIDE_PLAYER) dmg = dmg * 0.7;
+            break;
         case TYPE_ELECTRIC:
+            // 30% damage reduction for champions team
+            if (GetBattlerSide(battlerDef) != B_SIDE_PLAYER) dmg = dmg * 0.7;
+            break;
         case TYPE_POISON:
+            // 30% blanket damage reduction
+            dmg = dmg * 0.7;
+            break;
         case TYPE_STEEL:
-            if (GetBattlerSide(battlerDef) != B_SIDE_PLAYER) dmg = dmg / 2;
+            // 30% damage reduction
+            dmg = dmg * 0.7;
             break;
         case TYPE_GROUND:
-            // SE Moves are halved
+            // Ground champions mons have 35% reduced damage from super effective attacks
             if (GetBattlerSide(battlerDef) != B_SIDE_PLAYER) {
-                if (typeEffectivenessModifier >= UQ_4_12(2.0)) dmg = dmg / 2;
+                if (typeEffectivenessModifier >= UQ_4_12(2.0)) dmg = dmg * 0.65;
             }
             break;
         case TYPE_FIGHTING:
-            // SE Moves are halved
-            if (GetBattlerSide(battlerDef) != B_SIDE_PLAYER) {
-                if (typeEffectivenessModifier >= UQ_4_12(2.0)) dmg = dmg / 2;
-            } else if (GetBattlerSide(battlerDef) == B_SIDE_PLAYER && GetBattlerSide(battlerAtk) != B_SIDE_PLAYER && gBattleMoves[move].type == TYPE_FIGHTING) {
-                dmg = dmg * 2;
-            }
-            break;
-        case TYPE_ICE:
-            // Moves do double damage
-            if (GetBattlerSide(battlerDef) == B_SIDE_PLAYER && GetBattlerSide(battlerAtk) != B_SIDE_PLAYER) {
-                dmg = dmg * 2;
+            // Super effective moves do neutral damage
+            if (typeEffectivenessModifier == UQ_4_12(4.0)) dmg = dmg / 4;
+            else if (typeEffectivenessModifier == UQ_4_12(2.0)) dmg = dmg / 2;
+
+            // Fighting moves boosted for both sides by 1.5x
+            if (gBattleMoves[move].type == TYPE_FIGHTING) {
+                dmg = dmg * 1.5;
             }
             break;
     }

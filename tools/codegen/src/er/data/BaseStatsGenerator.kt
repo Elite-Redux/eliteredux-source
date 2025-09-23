@@ -60,6 +60,15 @@ object BaseStatsGenerator : Generator {
             }
             if (species.noFlip) lines += ".noFlip = TRUE"
             if (species.tier > 0) lines += ".tier = ${species.tier}"
+
+            val flags = buildList {
+                if (species.heads == 2) add ("F_TWO_HEADED")
+                if (species.heads == 3) add ("F_THREE_HEADED")
+                if (species.isTagTeam) add ("F_TAG_TEAM")
+            }.joinToString(" | ")
+
+            if (flags.isNotEmpty()) lines += ".flags = $flags"
+
             if (lines.isNotEmpty()) {
                 lines += ".genderRatio = " + when {
                     species.genderless -> "MON_GENDERLESS"
