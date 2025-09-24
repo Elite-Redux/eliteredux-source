@@ -1174,3 +1174,14 @@ gTileset_Petalburg_Woods::
 	.4byte NULL @ Summer_Palette
 	.4byte NULL @ Autumn_Palette
 	.4byte NULL @ Winter_Palette
+
+	.align 2
+gTileset_Mossdeep_Ice::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0 @ padding
+	.4byte gTilesetTiles_Mossdeep_Ice
+	.4byte gTilesetPalettes_Mossdeep_Ice
+	.4byte gMetatiles_Mossdeep_Ice
+	.4byte gMetatileAttributes_Mossdeep_Ice
+	.4byte NULL @ animation callback

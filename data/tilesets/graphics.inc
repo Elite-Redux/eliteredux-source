@@ -1789,3 +1789,23 @@ gTilesetPalettes_Petalburg_Woods::
 	.align 2
 gTilesetTiles_Petalburg_Woods::
 	.incbin "data/tilesets/secondary/petalburg_woods/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_Mossdeep_Ice::
+	.incbin "data/tilesets/secondary/mossdeep_ice/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/mossdeep_ice/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/mossdeep_ice/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/mossdeep_ice/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/mossdeep_ice/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/mossdeep_ice/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/mossdeep_ice/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/mossdeep_ice/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/mossdeep_ice/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/mossdeep_ice/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/mossdeep_ice/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/mossdeep_ice/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/mossdeep_ice/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_Mossdeep_Ice::
+	.incbin "data/tilesets/secondary/mossdeep_ice/tiles.4bpp.lz"
