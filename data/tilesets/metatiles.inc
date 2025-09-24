@@ -581,3 +581,11 @@ gMetatiles_Petalburg_Woods::
 	.align 1
 gMetatileAttributes_Petalburg_Woods::
 	.incbin "data/tilesets/secondary/petalburg_woods/metatile_attributes.bin"
+
+	.align 1
+gMetatiles_Mossdeep_Ice::
+	.incbin "data/tilesets/secondary/mossdeep_ice/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_Mossdeep_Ice::
+	.incbin "data/tilesets/secondary/mossdeep_ice/metatile_attributes.bin"
