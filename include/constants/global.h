@@ -240,7 +240,6 @@
 #define NUM_MENU_ACTIONS            19
 
 //Hell mode configuration
-
 #define HELL_MODE_TYPE_EFFECTIVENESS_CHANGE  TRUE //(possibly? clashes with above somewhat) Super-effective damage is reduced from 2x to 1.5x, and 4x to 2x
 #define HELL_MODE_DISABLE_DEXNAV             FALSE //if TRUE the dexnav is disabled before you catch the first Pokémon on each route so the mon you get its random
 

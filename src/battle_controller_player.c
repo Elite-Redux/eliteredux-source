@@ -3465,6 +3465,7 @@ static u32 CopyPlayerMonData(u8 monId, u8 *dst) {
     s16 data16;
     u32 data32;
     s32 size = 0;
+    u8 i;
 
     switch (gBattleResources->bufferA[gActiveBattler][1]) {
         case REQUEST_ALL_BATTLE:
@@ -3496,6 +3497,11 @@ static u32 CopyPlayerMonData(u8 monId, u8 *dst) {
             battleMon.abilities[1] = GetInnateInSlot(battleMon.level, battleMon.species, 0, battleMon.personality, TRUE);
             battleMon.abilities[2] = GetInnateInSlot(battleMon.level, battleMon.species, 1, battleMon.personality, TRUE);
             battleMon.abilities[3] = GetInnateInSlot(battleMon.level, battleMon.species, 2, battleMon.personality, TRUE);
+
+        //Extra Abilities
+        for(i = 0; i < HELL_MODE_EXTRA_ABILITIES; i++)
+            battleMon.extraAbilities[i] = GetExtraAbilityToSetToBattler(i, FALSE);
+            
             GetMonData(&gPlayerParty[monId], MON_DATA_NICKNAME, nickname);
             StringCopy10(battleMon.nickname, nickname);
             GetMonData(&gPlayerParty[monId], MON_DATA_OT_NAME, battleMon.otName);

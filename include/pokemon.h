@@ -172,6 +172,7 @@ struct BattlePokemon {
     } __attribute__((packed, aligned(2)));
     MoveEnum moves[MAX_MON_MOVES];
     AbilityEnum abilities[TOTAL_ABILITY_COUNT];
+    AbilityEnum extraAbilities[TOTAL_ABILITY_COUNT];
     u16 hp;
     u16 maxHP;
     u16 item;
@@ -578,5 +579,11 @@ void ClearNuzlockeCaughtFlag(u8 locationIndex);
 bool8 GetNuzlockeCaughtFlag(u8 locationIndex);
 bool8 AreNuzlockeRulesEnabled(void);
 void ClearNuzlockeDisableFlags(void);
+
+AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy);
+AbilityEnum GetExtraAbilityForBattler(u8 battler, u8 abilityNumber);
+AbilityEnum GetBattlerAbilityInSlot(u8 battler, u8 abilityNumber);
+u8 GetNumPossibleAbilitiesForBattler(void);
+bool8 isHellMode(void);
 
 #endif  // GUARD_POKEMON_H

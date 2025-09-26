@@ -587,6 +587,7 @@ static u32 GetOpponentMonData(u8 monId, u8 *dst)
     s16 data16;
     u32 data32;
     s32 size = 0;
+    u8 i;
 
     switch (gBattleResources->bufferA[gActiveBattler][1])
     {
@@ -620,6 +621,11 @@ static u32 GetOpponentMonData(u8 monId, u8 *dst)
         battleMon.abilities[1] = GetInnateInSlot(battleMon.level, battleMon.species, 0, battleMon.personality, FALSE);
         battleMon.abilities[2] = GetInnateInSlot(battleMon.level, battleMon.species, 1, battleMon.personality, FALSE);
         battleMon.abilities[3] = GetInnateInSlot(battleMon.level, battleMon.species, 2, battleMon.personality, FALSE);
+        
+        //Extra Abilities
+        for(i = 0; i < HELL_MODE_EXTRA_ABILITIES; i++)
+            battleMon.extraAbilities[i] = GetExtraAbilityToSetToBattler(i, TRUE);
+
         GetMonData(&gEnemyParty[monId], MON_DATA_NICKNAME, nickname);
         StringCopy10(battleMon.nickname, nickname);
         GetMonData(&gEnemyParty[monId], MON_DATA_OT_NAME, battleMon.otName);

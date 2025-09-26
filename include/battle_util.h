@@ -237,8 +237,8 @@ bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum mo
 u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, u16 extraMove, u8 movePower);
 
 #define ON_ABILITY(battler, checkMoldBreaker, condition, callback)   \
-    for (int idx = TOTAL_ABILITY_COUNT - 1; idx >= 0; idx--) {       \
-        AbilityEnum ability = gBattleMons[battler].abilities[idx];   \
+    for (int idx = GetNumPossibleAbilitiesForBattler() - 1; idx >= 0; idx--) {       \
+        AbilityEnum ability = GetBattlerAbilityInSlot(battler, idx); \
         FILTER(condition)                                            \
         FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker)) \
         callback;                                                    \

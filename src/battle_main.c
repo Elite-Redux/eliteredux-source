@@ -3342,21 +3342,28 @@ static void TryDoEventsBeforeFirstTurn(void) {
 
             ClearMiscTurnFlags();
             // Primal Reversion
-            if (TryPrimalReversion(gBattlerAttacker, FALSE)) return;
+            if (TryPrimalReversion(gBattlerAttacker, FALSE))
+                return;
         }
-        while (gBattleStruct->firstTurnAbilityLoopCounter <= TOTAL_ABILITY_COUNT) {
-            if (HandleSwitchInAbility(gBattleStruct->firstTurnAbilityLoopCounter++, gBattlerAttacker)) return;
+
+        while (gBattleStruct->firstTurnAbilityLoopCounter < GetNumPossibleAbilitiesForBattler() - 1){
+            if (HandleSwitchInAbility(gBattleStruct->firstTurnAbilityLoopCounter++, gBattlerAttacker))
+                return;
         }
+
         gBattleStruct->firstTurnAbilityLoopCounter = 0;
         gBattleStruct->switchInAbilitiesCounter++;
         if (gQueuedAttackCount) return;
     }
+
     ClearMiscTurnFlags();
     if (AbilityBattleEffects(ABILITYEFFECT_TRACE1, 0, 0, 0, 0) != 0) return;
     // Check all switch in items having effect from the fastest mon to slowest.
     while (gBattleStruct->switchInItemsCounter < gBattlersCount) {
-        if (!IsBattlerAlive(gBattleStruct->switchInItemsCounter++)) continue;
-        if (ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gBattlerByTurnOrder[gBattleStruct->switchInItemsCounter], FALSE)) return;
+        if (!IsBattlerAlive(gBattleStruct->switchInItemsCounter++))
+            continue;
+        if (ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gBattlerByTurnOrder[gBattleStruct->switchInItemsCounter], FALSE))
+            return;
     }
 
     ZERO(gChosenMoveByBattler)
