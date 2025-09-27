@@ -3086,7 +3086,7 @@ bool8 canOpenDexnav(void) {
         if(NUZLOCKE_MODE_DISABLE_DEXNAV && !GetNuzlockeCaughtFlag(caughtLocation))
             return FALSE;
     }
-    else if(gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL){
+    else if(isHellMode()){
         //Hell Mode
         if(HELL_MODE_DISABLE_DEXNAV && !GetNuzlockeCaughtFlag(caughtLocation))
             return FALSE;

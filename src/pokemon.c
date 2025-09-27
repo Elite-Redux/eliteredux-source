@@ -2324,10 +2324,9 @@ void GetSpeciesName(u8 *name, SpeciesEnum species) {
 
 #define HELL_MODE_REDUCED_PP_FOR_SLEEPING_MOVES 2
 u8 CalculatePPWithBonusPlayer(u16 move, u8 ppBonuses, u8 moveIndex) {
-    bool8 isHellMode = gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL;
     u8 basePP = gBattleMoves[move].pp;
 
-    if(isHellMode){
+    if(isHellMode()){
         //Sleep-inflicting moves have 2 PP (for the player)
         //Rest and Sleep Talk reduced to 2 PP (for the player)
         switch(gBattleMoves[move].effect){
@@ -6428,7 +6427,7 @@ bool8 GetNuzlockeCaughtFlag(u8 locationIndex)
 }
 
 bool8 AreNuzlockeRulesEnabled(void){
-    bool8 nuzlockeRulesEnabled = (FlagGet(FLAG_NUZLOCKE_MODE_ENABLED) || gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL);
+    bool8 nuzlockeRulesEnabled = (FlagGet(FLAG_NUZLOCKE_MODE_ENABLED) || isHellMode());
 
     return nuzlockeRulesEnabled;
 }
@@ -6455,4 +6454,56 @@ void ClearNuzlockeDisableFlags(void){
         FlagSet(FLAG_LOST_NUZLOCKE_CHALLENGE);
         FlagClear(FLAG_NUZLOCKE_MODE_ENABLED);
     }
+}
+
+AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy){
+    if(isEnemy){
+        /*
+        AbilityEnum abilities[HELL_MODE_EXTRA_ABILITIES] = {ABILITY_INTIMIDATE, ABILITY_AIR_BLOWER, ABILITY_UNNERVE, ABILITY_RUN_AWAY};
+        AbilityEnum ability = abilities[abilityNumber];
+        */
+
+        u16 trainerId = gTrainerBattleOpponent_A;
+        AbilityEnum ability = gTrainers[trainerId].hellAbilities[abilityNumber];
+
+        //if(gTrainers[trainerId].hellAbilities[abilityNumber] == NULL)
+        //    return ABILITY_NONE;
+
+        return ability;
+    }
+
+    return ABILITY_NONE;
+}
+
+AbilityEnum GetExtraAbilityForBattler(u8 battler, u8 abilityNumber){
+    abilityNumber = abilityNumber - TOTAL_ABILITY_COUNT;
+
+    if(abilityNumber > HELL_MODE_EXTRA_ABILITIES)
+        return ABILITY_NONE;
+
+    return gBattleMons[battler].extraAbilities[abilityNumber];
+}
+
+AbilityEnum GetBattlerAbilityInSlot(u8 battler, u8 abilityNumber){
+    AbilityEnum abilityToCheck = ABILITY_NONE;
+
+    if(abilityNumber >= TOTAL_ABILITY_COUNT)
+        abilityToCheck = GetExtraAbilityForBattler(battler, abilityNumber);
+    else
+        abilityToCheck = gBattleMons[battler].abilities[abilityNumber];
+
+    //MGBA_PRINT_DEBUG("GetBattlerAbilityInSlot abilityNumber: %d", abilityNumber)
+
+    return abilityToCheck;
+}
+
+u8 GetNumPossibleAbilitiesForBattler(void){
+    if(isHellMode())
+        return TOTAL_ABILITY_COUNT + HELL_MODE_EXTRA_ABILITIES;
+    else
+        return TOTAL_ABILITY_COUNT;
+}
+
+bool8 isHellMode(void){
+    return (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL);
 }

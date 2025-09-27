@@ -1597,21 +1597,27 @@ u8 GetImprisonedMovesCount(u8 battlerId, MoveEnum move) {
 
 int GetOncePerTurnAbilityCounter(int battler, AbilityEnum ability) {
     int index = GetAbilityIndex(battler, ability, TRUE);
-    if (index == TOTAL_ABILITY_COUNT) return -1;
+
+    if (index >= GetNumPossibleAbilitiesForBattler())
+        return -1;
 
     return gTurnStructs[battler].turnAbilityTriggers[index];
 }
 
 void SetOncePerTurnAbilityCounter(int battler, AbilityEnum ability, int value) {
     int index = GetAbilityIndex(battler, ability, TRUE);
-    if (index == TOTAL_ABILITY_COUNT) return;
+
+    if (index >= GetNumPossibleAbilitiesForBattler())
+        return;
 
     gTurnStructs[battler].turnAbilityTriggers[index] = value;
 }
 
 int CheckAndSetOncePerTurnAbility(int battler, AbilityEnum ability) {
     int index = GetAbilityIndex(battler, ability, TRUE);
-    if (index == TOTAL_ABILITY_COUNT) return FALSE;
+
+    if (index >= GetNumPossibleAbilitiesForBattler())
+        return FALSE;
 
     if (!gTurnStructs[battler].turnAbilityTriggers[index]) {
         gTurnStructs[battler].turnAbilityTriggers[index]++;
@@ -3271,7 +3277,7 @@ u8 AtkCanceller_UnableToUseMove(void) {
                 break;
             case CANCELLER_PARALYSED:  // paralysis
                 // Paralyzed enemies will always move but will still have a speed penalty
-                bool8 disableParalysisCancel = (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL && GET_BATTLER_SIDE(gBattlerAttacker) != B_SIDE_PLAYER);
+                bool8 disableParalysisCancel = (isHellMode() && GET_BATTLER_SIDE(gBattlerAttacker) != B_SIDE_PLAYER);
 
                 if (!gProcessingExtraAttacks && (gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS) && (Random() % 4) == 0 && !disableParalysisCancel) {
                     gRoundStructs[gBattlerAttacker].prlzImmobility = TRUE;
@@ -3795,13 +3801,17 @@ bool32 TryPrimalReversion(u8 battlerId, int useReturn) {
 
 void DisableSwitchInAbility(u8 battlerId, AbilityEnum ability) {
     int index = GetAbilityIndex(battlerId, ability, TRUE);
-    if (index == TOTAL_ABILITY_COUNT) return;
+    
+    if (index >= GetNumPossibleAbilitiesForBattler())
+        return;
     gVolatileStructs[battlerId].switchInAbilityDone[index] = TRUE;
 }
 
 bool8 CheckAndSetSwitchInAbility(u8 battlerId, AbilityEnum ability) {
     int index = GetAbilityIndex(battlerId, ability, FALSE);
-    if (index == TOTAL_ABILITY_COUNT) return FALSE;
+
+    if (index >= GetNumPossibleAbilitiesForBattler())
+        return FALSE;
 
     if (!gVolatileStructs[battlerId].switchInAbilityDone[index]) {
         gVolatileStructs[battlerId].switchInAbilityDone[index] = TRUE;
@@ -3819,7 +3829,9 @@ s8 GetSingleUseAbilityCountByIndex(u8 battler, int index) {
 
 s8 GetSingleUseAbilityCounter(u8 battler, AbilityEnum ability) {
     int index = GetAbilityIndex(battler, ability, TRUE);
-    if (index == TOTAL_ABILITY_COUNT) return -1;
+
+    if (index >= GetNumPossibleAbilitiesForBattler())
+        return -1;
 
     return GetSingleUseAbilityCountByIndex(battler, index);
 }
@@ -3830,7 +3842,9 @@ void SetSingleUseAbilityCountByIndex(u8 battler, int index, u8 value) {
 
 void SetSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value) {
     int index = GetAbilityIndex(battler, ability, TRUE);
-    if (index == TOTAL_ABILITY_COUNT) return;
+
+    if (index >= GetNumPossibleAbilitiesForBattler())
+        return;
 
     SetSingleUseAbilityCountByIndex(battler, index, value);
 }
@@ -3843,7 +3857,9 @@ AbilityStates GetAbilityStateAs(u8 battler, AbilityEnum ability) { return (Abili
 
 u32 GetAbilityState(u8 battler, AbilityEnum ability) {
     int index = GetAbilityIndex(battler, ability, TRUE);
-    if (index == TOTAL_ABILITY_COUNT) return 0;
+
+    if (index >= GetNumPossibleAbilitiesForBattler())
+        return 0;
 
     return gVolatileStructs[battler].abilityState[index];
 }
@@ -3852,7 +3868,9 @@ void SetAbilityStateAs(u8 battler, AbilityEnum ability, AbilityStates value) { S
 
 void SetAbilityState(u8 battler, AbilityEnum ability, u32 value) {
     int index = GetAbilityIndex(battler, ability, TRUE);
-    if (index == TOTAL_ABILITY_COUNT) return;
+
+    if (index >= GetNumPossibleAbilitiesForBattler())
+        return;
 
     gVolatileStructs[battler].abilityState[index] = value;
 }
@@ -3934,15 +3952,19 @@ int UseIntimidateClone(AbilityEnum abilityToCheck, int battler) {
     u8 numAbility;
 
     for (numAbility = 0; numAbility < NUM_INTIMIDATE_CLONES; numAbility++) {
-        if (gIntimidateCloneData[numAbility].ability == abilityToCheck) break;
+        if (gIntimidateCloneData[numAbility].ability == abilityToCheck)
+            break;
     }
 
-    if (numAbility >= NUM_INTIMIDATE_CLONES) return FALSE;
+    if (numAbility >= NUM_INTIMIDATE_CLONES)
+        return FALSE;
 
-    if (!gIntimidateCloneData[numAbility].numStatsLowered) return FALSE;
+    if (!gIntimidateCloneData[numAbility].numStatsLowered)
+        return FALSE;
 
     gBattlerTarget = BATTLE_OPPOSITE(battler);
-    if (!IsBattlerAlive(gBattlerTarget) && !IsBattlerAlive(BATTLE_PARTNER(gBattlerTarget))) return FALSE;
+    if (!IsBattlerAlive(gBattlerTarget) && !IsBattlerAlive(BATTLE_PARTNER(gBattlerTarget)))
+        return FALSE;
 
     BattleScriptPushCursorAndCallback(BattleScript_IntimidateActivatedNew);
     return TRUE;
@@ -4267,13 +4289,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
         case ABILITYEFFECT_ON_SWITCHIN:  // 0
             gBattleScripting.battler = battler;
 
-            for (i = 0; i <= NUM_ABILITY_SLOTS + 1; i++) {
+            for (i = 0; i <= GetNumPossibleAbilitiesForBattler(); i++) {
                 effect += HandleSwitchInAbility(i, battler);
             }
 
             break;
         case ABILITYEFFECT_ENDTURN:  // 1
-            for (i = 0; i <= NUM_ABILITY_SLOTS + 1; i++) {
+            for (i = 0; i <= GetNumPossibleAbilitiesForBattler(); i++) {
                 effect += HandleEndTurnAbility(i, battler);
             }
             break;
@@ -4360,13 +4382,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
             }
             break;
         case ABILITYEFFECT_MOVE_END:  // Think contact abilities.
-            for (i = 0; i <= NUM_ABILITY_SLOTS + 1; i++) {
+            for (i = 0; i <= GetNumPossibleAbilitiesForBattler(); i++) {
                 effect += HandleDefenderAbility(i, battler, gBattlerAttacker, move);
             }
             break;
 
         case ABILITYEFFECT_MOVE_END_ATTACKER:  // Same as above, but for attacker
-            for (i = 0; i <= NUM_ABILITY_SLOTS + 1; i++) {
+            for (i = 0; i <= GetNumPossibleAbilitiesForBattler(); i++) {
                 effect += HandleAttackerAbility(i, battler, gBattlerTarget, move);
             }
             break;
@@ -4587,7 +4609,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
                         if (DoesBattlerHaveAbilityShield(i)) continue;
                         ARRAY_COPY(abilities, gBattleMons[i].abilities)
                         for (j = 0; j < TOTAL_ABILITY_COUNT; j++) {
-                            if (!IsPersistentOrUnsuppressableAbility(abilities[j])) abilities[j] = ABILITY_NONE;
+                            if (!IsPersistentOrUnsuppressableAbility(abilities[j]))
+                                abilities[j] = ABILITY_NONE;
                         }
                         UpdateAbilityStateIndices(i, abilities);
                     }
@@ -7443,7 +7466,7 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
         }
     }
 
-    if (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL) {
+    if (isHellMode()) {
         // Post-Brawly, enemy teams take 10% less damage (35% damage reduction total as a result of combining with Global-wide damage reduction)
         if (defSide != B_SIDE_PLAYER && FlagGet(FLAG_BADGE02_GET)) dmg = ApplyModifier(UQ_4_12(0.9), dmg);
 
@@ -7973,7 +7996,7 @@ u16 GetTypeModifier(int atkType, int defType, int battlerAtk, int battlerDef) {
         ret = sTypeEffectivenessTable[atkType][defType];
 
     // Super-effective damage is reduced from 2x to 1.5x, and 4x to 2x
-    if (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL && HELL_MODE_TYPE_EFFECTIVENESS_CHANGE) {
+    if (isHellMode() && HELL_MODE_TYPE_EFFECTIVENESS_CHANGE) {
         switch (ret) {
             case UQ_4_12(2.0):
                 ret = UQ_4_12(1.5);
@@ -8974,22 +8997,27 @@ AbilityEnum IsUnaware(int battler) {
 
 int HandleAttackerAbility(int abilityNumber, int battler, int target, MoveEnum move) {
     AbilityEnum ability, moveType;
+    u8 numPossibleAbilities = GetNumPossibleAbilitiesForBattler();
 
-    if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
-    abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
+    if (abilityNumber >= numPossibleAbilities)
+        return FALSE;
+    
+    abilityNumber = numPossibleAbilities - abilityNumber;
 
     GET_MOVE_TYPE(move, moveType)
     gBattlerAbility = battler;
 
-    if (abilityNumber == TOTAL_ABILITY_COUNT) {
+    if (abilityNumber == numPossibleAbilities) {
         return HandleMiscAbilityMoveEffects(battler, target, move);
     }
 
-    ability = gBattleMons[battler].abilities[abilityNumber];
+    ability = GetBattlerAbilityInSlot(battler, abilityNumber);
 
-    if (!gAbilities[ability].onAttacker) return FALSE;
+    if (!gAbilities[ability].onAttacker)
+        return FALSE;
 
-    if (IsSuppressed(battler, ability, FALSE)) return FALSE;
+    if (IsSuppressed(battler, ability, FALSE))
+        return FALSE;
 
     gBattleScripting.abilityPopupOverwrite = ability;
     int result = gAbilities[ability].onAttacker(ability, battler, target, move, moveType);
@@ -9011,20 +9039,25 @@ int CheckHalfHpAbility(int battlerDef, int battlerAtk) {
 
 int HandleDefenderAbility(int abilityNumber, int battler, int attacker, MoveEnum move) {
     AbilityEnum ability, moveType;
+    u8 numPossibleAbilities = GetNumPossibleAbilitiesForBattler();
 
-    if (battler >= gBattlersCount) return FALSE;
 
-    if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
-    abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
+    if (battler >= gBattlersCount)
+        return FALSE;
+
+    if (abilityNumber > numPossibleAbilities)
+        return FALSE;
+    
+    abilityNumber = numPossibleAbilities - abilityNumber;
 
     GET_MOVE_TYPE(move, moveType)
     gBattlerAbility = battler;
 
-    if (abilityNumber == TOTAL_ABILITY_COUNT) {
+    if (abilityNumber == numPossibleAbilities) {
         return HandleMiscAbilityMoveEffects(battler, attacker, move);
     }
 
-    ability = gBattleMons[battler].abilities[abilityNumber];
+    ability = GetBattlerAbilityInSlot(battler, abilityNumber);
 
     if (!gAbilities[ability].onDefender) return FALSE;
 
@@ -9061,11 +9094,15 @@ int HandleMiscAbilityMoveEffects(int battler, int opponent, MoveEnum move) {
 
 int HandleSwitchInAbility(int abilityNumber, int battler) {
     AbilityEnum ability;
+    int numPossibleAbilities = GetNumPossibleAbilitiesForBattler();
 
-    if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
-    abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
+    if (abilityNumber >= numPossibleAbilities)
+        return FALSE;
+    
+    abilityNumber = numPossibleAbilities - abilityNumber;
 
-    if (abilityNumber == TOTAL_ABILITY_COUNT) {
+    //Extra Switch in effects
+    if (abilityNumber == numPossibleAbilities) {
         int effect = 0;
         {
             int commander = IsAbilityOnSide(battler, ABILITY_COMMANDER);
@@ -9098,12 +9135,12 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
             gBattlerAttacker = battler;
             gBattleMons[battler].wasalreadytotemboosted = TRUE;
 
-            gBattleMons[battler].statStages[STAT_ATK] = gBattleMons[battler].statStages[STAT_ATK] + VarGet(VAR_TOTEM_POKEMON_ATK_BOOST);
-            gBattleMons[battler].statStages[STAT_DEF] = gBattleMons[battler].statStages[STAT_DEF] + VarGet(VAR_TOTEM_POKEMON_DEF_BOOST);
-            gBattleMons[battler].statStages[STAT_SPATK] = gBattleMons[battler].statStages[STAT_SPATK] + VarGet(VAR_TOTEM_POKEMON_SP_ATK_BOOST);
-            gBattleMons[battler].statStages[STAT_SPDEF] = gBattleMons[battler].statStages[STAT_SPDEF] + VarGet(VAR_TOTEM_POKEMON_SP_DEF_BOOST);
-            gBattleMons[battler].statStages[STAT_SPEED] = gBattleMons[battler].statStages[STAT_SPEED] + VarGet(VAR_TOTEM_POKEMON_SPEED_BOOST);
-            gBattleMons[battler].statStages[STAT_ACC] = gBattleMons[battler].statStages[STAT_ACC] + VarGet(VAR_TOTEM_POKEMON_ACCURACY_BOOST);
+            gBattleMons[battler].statStages[STAT_ATK]     = gBattleMons[battler].statStages[STAT_ATK]     + VarGet(VAR_TOTEM_POKEMON_ATK_BOOST);
+            gBattleMons[battler].statStages[STAT_DEF]     = gBattleMons[battler].statStages[STAT_DEF]     + VarGet(VAR_TOTEM_POKEMON_DEF_BOOST);
+            gBattleMons[battler].statStages[STAT_SPATK]   = gBattleMons[battler].statStages[STAT_SPATK]   + VarGet(VAR_TOTEM_POKEMON_SP_ATK_BOOST);
+            gBattleMons[battler].statStages[STAT_SPDEF]   = gBattleMons[battler].statStages[STAT_SPDEF]   + VarGet(VAR_TOTEM_POKEMON_SP_DEF_BOOST);
+            gBattleMons[battler].statStages[STAT_SPEED]   = gBattleMons[battler].statStages[STAT_SPEED]   + VarGet(VAR_TOTEM_POKEMON_SPEED_BOOST);
+            gBattleMons[battler].statStages[STAT_ACC]     = gBattleMons[battler].statStages[STAT_ACC]     + VarGet(VAR_TOTEM_POKEMON_ACCURACY_BOOST);
             gBattleMons[battler].statStages[STAT_EVASION] = gBattleMons[battler].statStages[STAT_EVASION] + VarGet(VAR_TOTEM_POKEMON_EVASION_BOOST);
 
             SetStatChanger(STAT_ATK, 1);  // Just for the animation
@@ -9130,25 +9167,31 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
         return effect;
     }
 
-    ability = gBattleMons[battler].abilities[abilityNumber];
+    ability = GetBattlerAbilityInSlot(battler, abilityNumber);
     AbilityOnEntryHandler handler = gAbilities[ability].onEntry;
-    if (!handler) return FALSE;
+    if (!handler)
+        return FALSE;
 
-    if (IsSuppressed(battler, ability, FALSE)) return FALSE;
+    if (IsSuppressed(battler, ability, FALSE))
+        return FALSE;
 
     switch (ability) {
         case ABILITY_TRACE:
             break;
-
         default:
-            if (!CheckAndSetSwitchInAbility(battler, ability)) return FALSE;
+            if (!CheckAndSetSwitchInAbility(battler, ability))
+                return FALSE;
+            break;
     }
 
     gBattleScripting.abilityPopupOverwrite = ability;
     gBattlerAbility = gBattleScripting.battler = battler;
 
     int result = handler(ability, battler);
-    if (result & 1) BattleScriptCall(BattleScript_AbilityPopUp);
+
+    if (result & 1)
+        BattleScriptCall(BattleScript_AbilityPopUp);
+    
     return result;
 }
 
@@ -9160,20 +9203,21 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
 
 int HandleEndTurnAbility(int abilityNumber, int battler) {
     AbilityEnum ability;
+    u8 numPossibleAbilities = GetNumPossibleAbilitiesForBattler();
 
     if (!IsBattlerAlive(battler)) return FALSE;
 
-    if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
-    abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
+    if (abilityNumber > numPossibleAbilities) return FALSE;
+    abilityNumber = numPossibleAbilities - abilityNumber;
 
     gBattlerAttacker = gBattlerAbility = battler;
 
-    if (abilityNumber == TOTAL_ABILITY_COUNT) {
+    if (abilityNumber == numPossibleAbilities) {
         // TODO: Handle non-ability actions that happen in this pass
         return FALSE;
     }
 
-    ability = gBattleMons[battler].abilities[abilityNumber];
+    ability = GetBattlerAbilityInSlot(battler, abilityNumber);
 
     if (!gAbilities[ability].onEndTurn) return FALSE;
 
@@ -9208,21 +9252,28 @@ int IsSuppressed(int battler, AbilityEnum ability, int checkMoldBreaker) {
 }
 
 AbilityEnum GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker) {
-    AbilityEnum ability = gBattleMons[battler].abilities[abilityNumber];
+    AbilityEnum ability = GetBattlerAbilityInSlot(battler, abilityNumber);
 
-    if (IsSuppressed(battler, ability, checkMoldBreaker)) return ABILITY_NONE;
+    if (IsSuppressed(battler, ability, checkMoldBreaker))
+        return ABILITY_NONE;
 
     return ability;
 }
 
 AbilityEnum BattlerHasAbility(int battler, AbilityEnum ability, int checkMoldBreaker) {
-    if (GetAbilityIndex(battler, ability, checkMoldBreaker) != TOTAL_ABILITY_COUNT) return ability;
+    u8 i;
+
+    for(i = 0; i < GetNumPossibleAbilitiesForBattler(); i++){
+        if(GetBattlerAbilityInSlot(battler, i) == ability)
+            return ability;
+    }
 
     return FALSE;
 }
 
 void RepopulateAbilities(int battler) {
     int isPlayer = GET_BATTLER_SIDE(battler) == B_SIDE_PLAYER;
+    u8 i;
     gBattleMons[battler].abilities[0] = GetAbilityBySpecies(gBattleMons[battler].species, gBattleMons[battler].abilityNum);
     gBattleMons[battler].abilities[1] =
         GetInnateInSlot(gBattleMons[battler].level, gBattleMons[battler].species, 0, gBattleMons[battler].personality, isPlayer);
@@ -9230,34 +9281,50 @@ void RepopulateAbilities(int battler) {
         GetInnateInSlot(gBattleMons[battler].level, gBattleMons[battler].species, 1, gBattleMons[battler].personality, isPlayer);
     gBattleMons[battler].abilities[3] =
         GetInnateInSlot(gBattleMons[battler].level, gBattleMons[battler].species, 2, gBattleMons[battler].personality, isPlayer);
+
+    //Extra Abilities
+    for(i = 0; i < HELL_MODE_EXTRA_ABILITIES; i++)
+        gBattleMons[battler].extraAbilities[i] = GetExtraAbilityToSetToBattler(i, !isPlayer);
+    
     if (isPlayer)
         gBattleMons[battler].abilities[0] = RandomizeAbility(GetBattlerAbility(battler), gBattleMons[battler].species, gBattleMons[battler].personality);
 }
 
 int GetAbilityIndex(int battler, AbilityEnum ability, int checkMoldBreaker) {
     int i;
+    int abilityCount = GetNumPossibleAbilitiesForBattler();
+    //MGBA_PRINT_DEBUG("GetAbilityIndex battler: %d, ability: %d checkMoldBreaker : %d", battler, ability, checkMoldBreaker)
 
-    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
-        if (gBattleMons[battler].abilities[i] == ability) break;
-
-    if (i == TOTAL_ABILITY_COUNT) return TOTAL_ABILITY_COUNT;
-
-    if (IsSuppressed(battler, ability, checkMoldBreaker)) return TOTAL_ABILITY_COUNT;
+    for (i = 0; i < abilityCount; i++){
+        if(GetBattlerAbilityInSlot(battler, i) == ability){
+            if (!IsSuppressed(battler, ability, checkMoldBreaker))
+                return i;
+            else
+                return abilityCount;
+        }
+    }
 
     return i;
 }
 
 int HasAbilityIgnoringSuppression(int battler, AbilityEnum ability) {
     int i;
-    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
-        if (gBattleMons[battler].abilities[i] == ability) return TRUE;
+
+    for (i = 0; i < GetNumPossibleAbilitiesForBattler(); i++){
+        if (GetBattlerAbilityInSlot(battler, i) == ability)
+            return TRUE;
+    }
 
     return FALSE;
 }
 
-void ReplaceAbility(int battler, AbilityEnum ability) { gBattleMons[battler].abilities[0] = ability; }
+void ReplaceAbility(int battler, AbilityEnum ability) { 
+    gBattleMons[battler].abilities[0] = ability;
+}
 
-AbilityEnum GetBattlerAbility(int battler) { return gBattleMons[battler].abilities[0]; }
+AbilityEnum GetBattlerAbility(int battler) {
+    return gBattleMons[battler].abilities[0];
+}
 
 AbilityEnum IsStickyHold(int battler) {
     AbilityEnum ability = BattlerHasAbility(battler, ABILITY_STICKY_HOLD, TRUE);

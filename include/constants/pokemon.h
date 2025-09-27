@@ -457,6 +457,7 @@ typedef enum Type {
 
 #define NUM_ABILITY_SLOTS 3
 #define TOTAL_ABILITY_COUNT 4
+#define HELL_MODE_EXTRA_ABILITIES 4
 
 #define SPECIES_INNATE_NUM_1 0
 #define SPECIES_INNATE_NUM_2 1

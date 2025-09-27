@@ -172,12 +172,12 @@
               {
                 "min_level": 2,
                 "max_level": 2,
-                "species": "SPECIES_BEAUTIFLY"
+                "species": "SPECIES_MARBEEP"
               },
               {
                 "min_level": 2,
                 "max_level": 2,
-                "species": "SPECIES_DUSTOX"
+                "species": "SPECIES_CORM"
               },
               {
                 "min_level": 3,
@@ -1588,7 +1588,7 @@
               {
                 "min_level": 16,
                 "max_level": 16,
-                "species": "SPECIES_FLITTLE"
+                "species": "SPECIES_MERRYKARP"
               },
               {
                 "min_level": 18,
@@ -3929,12 +3929,12 @@
               {
                 "min_level": 22,
                 "max_level": 22,
-                "species": "SPECIES_JANGMO_O"
+                "species": "SPECIES_HERACREUS"
               },
               {
                 "min_level": 22,
                 "max_level": 22,
-                "species": "SPECIES_TURTONATOR"
+                "species": "SPECIES_GROTOM"
               }
             ]
           },
@@ -4762,7 +4762,7 @@
               {
                 "min_level": 24,
                 "max_level": 24,
-                "species": "SPECIES_KECLEON"
+                "species": "SPECIES_FOGGING"
               },
               {
                 "min_level": 25,
@@ -4777,12 +4777,12 @@
               {
                 "min_level": 27,
                 "max_level": 27,
-                "species": "SPECIES_AMOONGUSS"
+                "species": "SPECIES_KIPMODO"
               },
               {
                 "min_level": 25,
                 "max_level": 25,
-                "species": "SPECIES_GOOMY"
+                "species": "SPECIES_WISPYWASPY"
               }
             ]
           },
@@ -10558,12 +10558,12 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_KRABBY"
+                "species": "SPECIES_BUBBLEO"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_KRABBY"
+                "species": "SPECIES_BUBBLEO"
               },
               {
                 "min_level": 5,
@@ -10776,7 +10776,7 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_ARON"
+                "species": "SPECIES_BLOCLI"
               },
               {
                 "min_level": 5,
@@ -16982,7 +16982,7 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_KOFFING"
+                "species": "SPECIES_HIPPOPOTATO"
               },
               {
                 "min_level": 5,

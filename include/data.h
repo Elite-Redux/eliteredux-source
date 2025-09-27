@@ -74,6 +74,7 @@ struct Trainer {
     /*0x20*/ u8 partySizeHell;
     /*0x28*/ const TrainerMonItemCustomMoves * partyHell;
     /*0x2F*/ u16 trainerFlag;
+    /*0x??*/ AbilityEnum hellAbilities[HELL_MODE_EXTRA_ABILITIES];
 };
 
 #define TRAINER_ENCOUNTER_MUSIC(trainer) ((gTrainers[trainer].encounterMusic_gender & 0x7F))

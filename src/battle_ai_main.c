@@ -598,11 +598,15 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
 
         // target ability checks
         if (!DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move)) {
-            if (TestAbsorbingAbilitiesOnly(battlerDef, battlerAtk, move, moveType)) RETURN_SCORE_MINUS(20);
-            if (TestImmunityAbilitiesOnly(battlerDef, battlerAtk, move, moveType)) RETURN_SCORE_MINUS(20);
+            if (TestAbsorbingAbilitiesOnly(battlerDef, battlerAtk, move, moveType))
+                RETURN_SCORE_MINUS(20);
+            
+            if (TestImmunityAbilitiesOnly(battlerDef, battlerAtk, move, moveType))
+                RETURN_SCORE_MINUS(20);
 
-            for (i = 0; i < TOTAL_ABILITY_COUNT; i++) {
-                switch (gBattleMons[battlerDef].abilities[i]) {
+            for (i = 0; i < GetNumPossibleAbilitiesForBattler(); i++) {
+                AbilityEnum abilityToCheck = GetBattlerAbilityInSlot(battlerDef, i);
+                switch (abilityToCheck) {
                     case ABILITY_GIFTED_MIND:
                         if (moveType == TYPE_DARK || moveType == TYPE_GHOST || moveType == TYPE_BUG) RETURN_SCORE_MINUS(20);
                         break;
@@ -672,8 +676,10 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
                     (moveEffect == EFFECT_SLEEP || moveEffect == EFFECT_YAWN))
                     RETURN_SCORE_MINUS(10);
 
-                for (i = 0; i < TOTAL_ABILITY_COUNT; i++) {
-                    switch (gBattleMons[BATTLE_PARTNER(battlerDef)].abilities[i]) {
+                for (i = 0; i < GetNumPossibleAbilitiesForBattler(); i++) {
+                    AbilityEnum abilityToCheck = GetBattlerAbilityInSlot(BATTLE_PARTNER(battlerDef), i);
+
+                    switch (abilityToCheck){
                         case ABILITY_LIGHTNING_ROD:
                             if (moveType == TYPE_ELECTRIC && !IsMoveRedirectionPrevented(move, BATTLE_PARTNER(battlerDef))) RETURN_SCORE_MINUS(20);
                             break;
@@ -2345,7 +2351,7 @@ static s16 AI_DoubleBattle(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
         if (GetMoveDamageResult(move) == MOVE_POWER_WEAK) {
             // partner ability checks
             if (!partnerProtecting && gBattleMoves[move].target != MOVE_TARGET_BOTH && !DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move)) {
-                for (i = 0; i < TOTAL_ABILITY_COUNT; i++) {
+                for (i = 0; i < GetNumPossibleAbilitiesForBattler(); i++) {
                     switch (GetAbilityAtIndex(BATTLE_PARTNER(battlerAtk), i, TRUE)) {
                         case ABILITY_VOLT_ABSORB:
                         case ABILITY_EARTH_EATER:
@@ -2643,8 +2649,10 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
     }*/
 
     // Attacker ability checks
-    for (i = 0; i < TOTAL_ABILITY_COUNT; i++) {
-        switch (gBattleMons[battlerAtk].abilities[i]) {
+    for (i = 0; i < GetNumPossibleAbilitiesForBattler(); i++) {
+        AbilityEnum abilityToCheck = GetBattlerAbilityInSlot(battlerAtk, i);
+
+        switch (abilityToCheck) {
             case ABILITY_MOXIE:
             case ABILITY_BEAST_BOOST:
             case ABILITY_SOUL_HEART:
@@ -3045,7 +3053,8 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
                 }
             } else  // Double Battle
             {
-                if (CountUsablePartyMons(battlerAtk) == 0) break;  // Can't switch
+                if (CountUsablePartyMons(battlerAtk) == 0)
+                    break;  // Can't switch
 
                 // if (switchAbility == ABILITY_INTIMIDATE && PartyHasMoveSplit(battlerDef, SPLIT_PHYSICAL))
                 // score += 7;
