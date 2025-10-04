@@ -1026,68 +1026,56 @@ void CreateEventLegalEnemyMon(void) {
         SetMonData(mon, field, &n);                                 \
     }
 
-void CalculateMonStatsWithoutRestoringPP(struct Pokemon *mon){
-    CalculateMonStatsMaster(mon, FALSE, FALSE);
-}
+void CalculateMonStatsWithoutRestoringPP(struct Pokemon *mon) { CalculateMonStatsMaster(mon, FALSE, FALSE); }
 
-void CalculateMonStats(struct Pokemon *mon)
-{
-    CalculateMonStatsMaster(mon, TRUE, FALSE);
-}
+void CalculateMonStats(struct Pokemon *mon) { CalculateMonStatsMaster(mon, TRUE, FALSE); }
 
-void CalculateEnemyTrainerMonStats(struct Pokemon *mon)
-{
-    CalculateMonStatsMaster(mon, TRUE, TRUE);
-}
+void CalculateEnemyTrainerMonStats(struct Pokemon *mon) { CalculateMonStatsMaster(mon, TRUE, TRUE); }
 
-void CalculateMonStatsMaster(struct Pokemon *mon, bool8 shouldRestorePP, bool8 isEnemyMon){
+void CalculateMonStatsMaster(struct Pokemon *mon, bool8 shouldRestorePP, bool8 isEnemyMon) {
     s32 newMaxHP, movePP, i;
     s32 hpIV, attackIV, defenseIV, speedIV, spAttackIV, spDefenseIV;
 
     SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     s32 level = GetLevelFromMonExp(mon);
 
-    s32 oldMaxHP    = GetMonData(mon, MON_DATA_MAX_HP, NULL);
-    s32 currentHP   = GetMonData(mon, MON_DATA_HP, NULL);
-    s32 hpEV        = GetMonData(mon, MON_DATA_HP_EV, NULL);
-    s32 attackEV    = GetMonData(mon, MON_DATA_ATK_EV, NULL);
-    s32 defenseEV   = GetMonData(mon, MON_DATA_DEF_EV, NULL);
-    s32 speedEV     = GetMonData(mon, MON_DATA_SPEED_EV, NULL);
-    s32 spAttackEV  = GetMonData(mon, MON_DATA_SPATK_EV, NULL);
+    s32 oldMaxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
+    s32 currentHP = GetMonData(mon, MON_DATA_HP, NULL);
+    s32 hpEV = GetMonData(mon, MON_DATA_HP_EV, NULL);
+    s32 attackEV = GetMonData(mon, MON_DATA_ATK_EV, NULL);
+    s32 defenseEV = GetMonData(mon, MON_DATA_DEF_EV, NULL);
+    s32 speedEV = GetMonData(mon, MON_DATA_SPEED_EV, NULL);
+    s32 spAttackEV = GetMonData(mon, MON_DATA_SPATK_EV, NULL);
     s32 spDefenseEV = GetMonData(mon, MON_DATA_SPDEF_EV, NULL);
     bool8 speedDown = GetMonData(mon, MON_DATA_SPEED_DOWN, NULL);
-    u8 difficulty   = gSaveBlock2Ptr->gameDifficulty;
+    u8 difficulty = gSaveBlock2Ptr->gameDifficulty;
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
 
-    if (isEnemyMon || difficulty != DIFFICULTY_HELL || !FlagGet(HELL_MODE_0_IVS_FLAG)) // Ivs are maxed normally
+    if (isEnemyMon || difficulty != DIFFICULTY_HELL || !FlagGet(HELL_MODE_0_IVS_FLAG))  // Ivs are maxed normally
         hpIV = attackIV = defenseIV = spAttackIV = spDefenseIV = speedIV = MAX_IVS;
     else
         hpIV = attackIV = defenseIV = spAttackIV = spDefenseIV = speedIV = 0;
 
-    if (speedDown)
-        speedIV = 0;
+    if (speedDown) speedIV = 0;
 
-    if (!gSaveBlock2Ptr->enableEvs) //Evs are Disabled
+    if (!gSaveBlock2Ptr->enableEvs)  // Evs are Disabled
         hpEV = attackEV = defenseEV = spAttackEV = spDefenseEV = speedEV = 0;
 
     if (species == SPECIES_SHEDINJA || species == SPECIES_SHEDINJA_MEGA) {
         newMaxHP = 1;
-    }
-    else
-    {
+    } else {
         s32 n = 2 * gBaseStats[species].baseHP + hpIV;
         newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
     }
 
     gBattleScripting.levelUpHP = newMaxHP - oldMaxHP;
-    if (gBattleScripting.levelUpHP == 0)
-        gBattleScripting.levelUpHP = 1;
+    if (gBattleScripting.levelUpHP == 0) gBattleScripting.levelUpHP = 1;
 
     SetMonData(mon, MON_DATA_MAX_HP, &newMaxHP);
 
     // Set move PP
-    if(shouldRestorePP){
+    if (shouldRestorePP) {
         for (i = 0; i < MAX_MON_MOVES; i++) {
             movePP = gBattleMoves[GetMonData(mon, MON_DATA_MOVE1 + i, NULL)].pp;
             SetMonData(mon, MON_DATA_PP1 + i, &movePP);
@@ -1096,30 +1084,25 @@ void CalculateMonStatsMaster(struct Pokemon *mon, bool8 shouldRestorePP, bool8 i
 
     MonRestorePP(mon);
 
-    CALC_STAT(baseAttack,    attackIV,    attackEV,    STAT_ATK,   MON_DATA_ATK)
-    CALC_STAT(baseDefense,   defenseIV,   defenseEV,   STAT_DEF,   MON_DATA_DEF)
-    CALC_STAT(baseSpeed,     speedIV,     speedEV,     STAT_SPEED, MON_DATA_SPEED)
-    CALC_STAT(baseSpAttack,  spAttackIV,  spAttackEV,  STAT_SPATK, MON_DATA_SPATK)
+    CALC_STAT(baseAttack, attackIV, attackEV, STAT_ATK, MON_DATA_ATK)
+    CALC_STAT(baseDefense, defenseIV, defenseEV, STAT_DEF, MON_DATA_DEF)
+    CALC_STAT(baseSpeed, speedIV, speedEV, STAT_SPEED, MON_DATA_SPEED)
+    CALC_STAT(baseSpAttack, spAttackIV, spAttackEV, STAT_SPATK, MON_DATA_SPATK)
     CALC_STAT(baseSpDefense, spDefenseIV, spDefenseEV, STAT_SPDEF, MON_DATA_SPDEF)
 
-    if (species == SPECIES_SHEDINJA) 
-    {
+    if (species == SPECIES_SHEDINJA) {
         if (currentHP != 0 || oldMaxHP == 0)
             currentHP = 1;
         else
             return;
-    } 
-    else
-    {
+    } else {
         if (currentHP == 0 && oldMaxHP == 0)
             currentHP = newMaxHP;
         else if (currentHP != 0) {
             currentHP += newMaxHP - oldMaxHP;
 
-            if (currentHP <= 0) 
-                currentHP = 1;
-        }
-        else
+            if (currentHP <= 0) currentHP = 1;
+        } else
             return;
     }
 
@@ -2071,38 +2054,34 @@ void CopyMon(void *dest, void *src, size_t size) { memcpy(dest, src, size); }
 
 u8 GiveMonToPlayer(struct Pokemon *mon) {
     s32 i;
-    bool8 nuzlockeRulesEnabled   = AreNuzlockeRulesEnabled();
+    bool8 nuzlockeRulesEnabled = AreNuzlockeRulesEnabled();
     bool8 hasAlreadyCaughtInArea = !FlagGet(FLAG_TEMP_CAN_CATCH_POKEMON);
 
-    //Shiny Clause
-    if(GetMonData(mon, MON_DATA_IS_SHINY) != 0){
-        nuzlockeRulesEnabled  = FALSE;
+    // Shiny Clause
+    if (GetMonData(mon, MON_DATA_IS_SHINY) != 0) {
+        nuzlockeRulesEnabled = FALSE;
         hasAlreadyCaughtInArea = FALSE;
     }
 
-    SetMonData(mon, MON_DATA_OT_NAME,     gSaveBlock2Ptr->playerName);
-    SetMonData(mon, MON_DATA_OT_GENDER,   &gSaveBlock2Ptr->playerGender);
-    SetMonData(mon, MON_DATA_OT_ID,       gSaveBlock2Ptr->playerTrainerId);
+    SetMonData(mon, MON_DATA_OT_NAME, gSaveBlock2Ptr->playerName);
+    SetMonData(mon, MON_DATA_OT_GENDER, &gSaveBlock2Ptr->playerGender);
+    SetMonData(mon, MON_DATA_OT_ID, gSaveBlock2Ptr->playerTrainerId);
 
-    if(nuzlockeRulesEnabled)
-        SetMonData(mon, MON_DATA_IS_DISABLED, &hasAlreadyCaughtInArea);
+    if (nuzlockeRulesEnabled) SetMonData(mon, MON_DATA_IS_DISABLED, &hasAlreadyCaughtInArea);
 
     FlagClear(FLAG_TEMP_CAN_CATCH_POKEMON);
 
     for (i = 0; i < PARTY_SIZE; i++) {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) == SPECIES_NONE)
-            break;
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) == SPECIES_NONE) break;
     }
 
-    if (!UsingBattlePyramidBag())
-        AddBagItem(mon->box.heldItem, 1);
+    if (!UsingBattlePyramidBag()) AddBagItem(mon->box.heldItem, 1);
 
-    if (i >= PARTY_SIZE || (hasAlreadyCaughtInArea && nuzlockeRulesEnabled))
-        return SendMonToPC(mon);
+    if (i >= PARTY_SIZE || (hasAlreadyCaughtInArea && nuzlockeRulesEnabled)) return SendMonToPC(mon);
 
     CopyMon(&gPlayerParty[i], mon, sizeof(*mon));
     gPlayerPartyCount = i + 1;
-    
+
     return MON_GIVEN_TO_PARTY;
 }
 
@@ -2326,19 +2305,19 @@ void GetSpeciesName(u8 *name, SpeciesEnum species) {
 u8 CalculatePPWithBonusPlayer(u16 move, u8 ppBonuses, u8 moveIndex) {
     u8 basePP = gBattleMoves[move].pp;
 
-    if(isHellMode()){
-        //Sleep-inflicting moves have 2 PP (for the player)
-        //Rest and Sleep Talk reduced to 2 PP (for the player)
-        switch(gBattleMoves[move].effect){
+    if (isHellMode()) {
+        // Sleep-inflicting moves have 2 PP (for the player)
+        // Rest and Sleep Talk reduced to 2 PP (for the player)
+        switch (gBattleMoves[move].effect) {
             case EFFECT_SLEEP_HIT:
             case EFFECT_SLEEP:
             case EFFECT_SNORE:
             case EFFECT_REST:
             case EFFECT_SLEEP_TALK:
                 return HELL_MODE_REDUCED_PP_FOR_SLEEPING_MOVES;
-            break;
+                break;
         }
-        return basePP; //Player's moves are not PP Maxed (ie: Fire Blast PP is 5 instead of 8 for the player only)
+        return basePP;  // Player's moves are not PP Maxed (ie: Fire Blast PP is 5 instead of 8 for the player only)
     }
 
     return basePP + ((basePP * 20 * ((gPPUpGetMask[moveIndex] & ppBonuses) >> (2 * moveIndex))) / 100);
@@ -3261,7 +3240,8 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
                         break;
                     case EVO_LEVEL_DAY:
                         RtcCalcLocalTime();
-                        if (GetCurrentTimeOfDay() != TIME_NIGHT && gEvolutionTable[species][i].param <= level) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (GetCurrentTimeOfDay() != TIME_NIGHT && gEvolutionTable[species][i].param <= level)
+                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
                         break;
                     case EVO_FRIENDSHIP_NIGHT:
                         RtcCalcLocalTime();
@@ -3269,7 +3249,8 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
                         break;
                     case EVO_LEVEL_NIGHT:
                         RtcCalcLocalTime();
-                        if (GetCurrentTimeOfDay() == TIME_NIGHT && gEvolutionTable[species][i].param <= level) targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        if (GetCurrentTimeOfDay() == TIME_NIGHT && gEvolutionTable[species][i].param <= level)
+                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
                         break;
                     case EVO_ITEM_HOLD_NIGHT:
                         RtcCalcLocalTime();
@@ -5124,12 +5105,10 @@ AbilityEnum GetMonInnate(struct Pokemon *mon, int slot, int disableRandomizer) {
 
     AbilityEnum innate = gBaseStats[species].innates[slot];
 
-    if (!disableRandomizer)
-        innate = RandomizeInnate(innate, species, personality);
+    if (!disableRandomizer) innate = RandomizeInnate(innate, species, personality);
 
-    //Disable Innate if it does not meet the level requirments
-    if (!disableRandomizer && (CanDisableInnates() && level < getInnateDisableLevel(slot)))
-        return ABILITY_NONE;
+    // Disable Innate if it does not meet the level requirments
+    if (!disableRandomizer && (CanDisableInnates() && level < getInnateDisableLevel(slot))) return ABILITY_NONE;
 
     return innate;
 }
@@ -6319,39 +6298,37 @@ bool8 isShinyVariantUnlocked(SpeciesEnum species, u8 variant) {
         return TRUE;
 }
 
-bool8 CanDisableInnates(void){
-    return (gSaveBlock2Ptr->gameDifficulty >= P_DISABLE_FIRST_DIFFICULTY);
-}
+bool8 CanDisableInnates(void) { return (gSaveBlock2Ptr->gameDifficulty >= P_DISABLE_FIRST_DIFFICULTY); }
 
-u8 getInnateDisableLevel(u8 innateNum){
-    if(CanDisableInnates()){
-        switch(innateNum){
-            default://Fallback
+u8 getInnateDisableLevel(u8 innateNum) {
+    if (CanDisableInnates()) {
+        switch (innateNum) {
+            default:  // Fallback
             case SPECIES_INNATE_NUM_1:
-                if(gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE)
+                if (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE)
                     return INNATE_1_LEVEL_ELITE;
                 else
                     return INNATE_1_LEVEL_HELL;
-            break;
+                break;
             case SPECIES_INNATE_NUM_2:
-                if(gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE)
+                if (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE)
                     return INNATE_2_LEVEL_ELITE;
                 else
                     return INNATE_2_LEVEL_HELL;
-            break;
+                break;
             case SPECIES_INNATE_NUM_3:
-                if(gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE)
+                if (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_ELITE)
                     return INNATE_3_LEVEL_ELITE;
                 else
                     return INNATE_3_LEVEL_HELL;
-            break;
+                break;
         }
     }
-    
+
     return 0;
 }
 
-bool8 isMoveDisabled(u8 battler, u16 move){
+bool8 isMoveDisabled(u8 battler, u16 move) {
     /*u16 difficulty    = gSaveBlock2Ptr->gameDifficulty;
     u16 moveEffect    = gBattleMoves[move].effect;
     bool8 isPlayerMon = (GetBattlerSide(battler) == B_SIDE_PLAYER);
@@ -6379,85 +6356,77 @@ bool8 isMoveDisabled(u8 battler, u16 move){
     return FALSE;
 }
 
-u16 GetHeldItemIfNotDuplicate(u8 partyId){
+u16 GetHeldItemIfNotDuplicate(u8 partyId) {
     u8 i;
     u16 heldItem = GetMonData(&gPlayerParty[partyId], MON_DATA_HELD_ITEM);
 
-    if(heldItem == ITEM_NONE || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_HELL)
-        return heldItem;
+    if (heldItem == ITEM_NONE || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_HELL) return heldItem;
 
-    for(i = 0; i < PARTY_SIZE; i++){
-        u16 species   = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
+    for (i = 0; i < PARTY_SIZE; i++) {
+        u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
         u16 heldItem2 = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
 
-        //The first Pokémon holding the held item can keep it
-        if(i == partyId)
-            return heldItem;
+        // The first Pokémon holding the held item can keep it
+        if (i == partyId) return heldItem;
 
-        if(species != SPECIES_NONE && heldItem2 == heldItem){
+        if (species != SPECIES_NONE && heldItem2 == heldItem) {
             heldItem = ITEM_NONE;
             SetMonData(&gPlayerParty[partyId], MON_DATA_HELD_ITEM, &heldItem);
             return heldItem;
         }
     }
-    
+
     return heldItem;
 }
 
-//Nuzlocke Stuff
-void SetNuzlockeCaughtFlag(u8 locationIndex)
-{
+// Nuzlocke Stuff
+void SetNuzlockeCaughtFlag(u8 locationIndex) {
     u8 byteIndex = locationIndex / 8;
     u8 bitIndex = locationIndex % 8;
     gSaveBlock2Ptr->hasCaughtMonOnLocation[byteIndex] |= (1 << bitIndex);
 }
 
-void ClearNuzlockeCaughtFlag(u8 locationIndex)
-{
+void ClearNuzlockeCaughtFlag(u8 locationIndex) {
     u8 byteIndex = locationIndex / 8;
     u8 bitIndex = locationIndex % 8;
     gSaveBlock2Ptr->hasCaughtMonOnLocation[byteIndex] &= ~(1 << bitIndex);
 }
 
-bool8 GetNuzlockeCaughtFlag(u8 locationIndex)
-{
+bool8 GetNuzlockeCaughtFlag(u8 locationIndex) {
     u8 byteIndex = locationIndex / 8;
     u8 bitIndex = locationIndex % 8;
     return (gSaveBlock2Ptr->hasCaughtMonOnLocation[byteIndex] & (1 << bitIndex)) != 0;
 }
 
-bool8 AreNuzlockeRulesEnabled(void){
+bool8 AreNuzlockeRulesEnabled(void) {
     bool8 nuzlockeRulesEnabled = (FlagGet(FLAG_NUZLOCKE_MODE_ENABLED) || isHellMode());
 
     return nuzlockeRulesEnabled;
 }
 
-void ClearNuzlockeDisableFlags(void){
+void ClearNuzlockeDisableFlags(void) {
     u16 boxId, boxPosition, i;
     bool8 isDisabled = FALSE;
 
-    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
-    {
-        for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++){
-			if(GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_SPECIES) != SPECIES_NONE)
-				SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_IS_DISABLED, &isDisabled);
-		}
+    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++) {
+        for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++) {
+            if (GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_SPECIES) != SPECIES_NONE)
+                SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_IS_DISABLED, &isDisabled);
+        }
     }
-	
-	for (i = 0; i < PARTY_SIZE; i++)
-	{
-		if(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE)
-			SetMonData(&gPlayerParty[i], MON_DATA_LEVEL, &isDisabled);
-	}
 
-    if(FlagGet(FLAG_NUZLOCKE_MODE_ENABLED)){
+    for (i = 0; i < PARTY_SIZE; i++) {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE) SetMonData(&gPlayerParty[i], MON_DATA_LEVEL, &isDisabled);
+    }
+
+    if (FlagGet(FLAG_NUZLOCKE_MODE_ENABLED)) {
         FlagSet(FLAG_LOST_NUZLOCKE_CHALLENGE);
         FlagClear(FLAG_NUZLOCKE_MODE_ENABLED);
     }
 }
 
-AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy){
-    if(isEnemy){
+AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy) {
+    if (isEnemy) {
         /*
         AbilityEnum abilities[HELL_MODE_EXTRA_ABILITIES] = {ABILITY_INTIMIDATE, ABILITY_AIR_BLOWER, ABILITY_UNNERVE, ABILITY_RUN_AWAY};
         AbilityEnum ability = abilities[abilityNumber];
@@ -6466,8 +6435,8 @@ AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy){
         u16 trainerId = gTrainerBattleOpponent_A;
         AbilityEnum ability = gTrainers[trainerId].hellAbilities[abilityNumber];
 
-        //if(gTrainers[trainerId].hellAbilities[abilityNumber] == NULL)
-        //    return ABILITY_NONE;
+        // if(gTrainers[trainerId].hellAbilities[abilityNumber] == NULL)
+        //     return ABILITY_NONE;
 
         return ability;
     }
@@ -6475,35 +6444,32 @@ AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy){
     return ABILITY_NONE;
 }
 
-AbilityEnum GetExtraAbilityForBattler(u8 battler, u8 abilityNumber){
+AbilityEnum GetExtraAbilityForBattler(u8 battler, u8 abilityNumber) {
     abilityNumber = abilityNumber - TOTAL_ABILITY_COUNT;
 
-    if(abilityNumber > HELL_MODE_EXTRA_ABILITIES)
-        return ABILITY_NONE;
+    if (abilityNumber > HELL_MODE_EXTRA_ABILITIES) return ABILITY_NONE;
 
     return gBattleMons[battler].extraAbilities[abilityNumber];
 }
 
-AbilityEnum GetBattlerAbilityInSlot(u8 battler, u8 abilityNumber){
+AbilityEnum GetBattlerAbilityInSlot(u8 battler, u8 abilityNumber) {
     AbilityEnum abilityToCheck = ABILITY_NONE;
 
-    if(abilityNumber >= TOTAL_ABILITY_COUNT)
+    if (abilityNumber >= TOTAL_ABILITY_COUNT)
         abilityToCheck = GetExtraAbilityForBattler(battler, abilityNumber);
     else
         abilityToCheck = gBattleMons[battler].abilities[abilityNumber];
 
-    //MGBA_PRINT_DEBUG("GetBattlerAbilityInSlot abilityNumber: %d", abilityNumber)
+    // MGBA_PRINT_DEBUG("GetBattlerAbilityInSlot abilityNumber: %d", abilityNumber)
 
     return abilityToCheck;
 }
 
-u8 GetNumPossibleAbilitiesForBattler(void){
-    if(isHellMode())
+u8 GetNumPossibleAbilitiesForBattler(void) {
+    if (isHellMode())
         return TOTAL_ABILITY_COUNT + HELL_MODE_EXTRA_ABILITIES;
     else
         return TOTAL_ABILITY_COUNT;
 }
 
-bool8 isHellMode(void){
-    return (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL);
-}
+bool8 isHellMode(void) { return (gSaveBlock2Ptr->gameDifficulty == DIFFICULTY_HELL); }

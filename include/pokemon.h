@@ -201,12 +201,12 @@ struct RawStatsLevel {
     u8 extraSpeedLevel;
 };
 
-#define F_ULTRA_BEAST   (1 << 0)
-#define F_ALOLAN_FORM   (1 << 1)
+#define F_ULTRA_BEAST (1 << 0)
+#define F_ALOLAN_FORM (1 << 1)
 #define F_GALARIAN_FORM (1 << 2)
-#define F_TWO_HEADED    (1 << 3)
-#define F_THREE_HEADED  (1 << 4)
-#define F_TAG_TEAM      (1 << 5)
+#define F_TWO_HEADED (1 << 3)
+#define F_THREE_HEADED (1 << 4)
+#define F_TAG_TEAM (1 << 5)
 
 typedef struct BaseStats {
     /* 0x00 */ u8 baseHP;
@@ -353,7 +353,8 @@ void ZeroMonData(struct Pokemon *mon);
 void ZeroPlayerPartyMons(void);
 void ZeroEnemyPartyMons(void);
 void CreateMon(struct Pokemon *mon, SpeciesEnum species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId);
-void CreateBoxMon(struct BoxPokemon *boxMon, SpeciesEnum species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId);
+void CreateBoxMon(
+    struct BoxPokemon *boxMon, SpeciesEnum species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId);
 void CreateMonWithNature(struct Pokemon *mon, SpeciesEnum species, u8 level, u8 fixedIV, u8 nature);
 void CreateMonWithGenderNatureLetter(struct Pokemon *mon, SpeciesEnum species, u8 level, u8 fixedIV, u8 gender, u8 nature, u8 unownLetter);
 void CreateMaleMon(struct Pokemon *mon, SpeciesEnum species, u8 level);
@@ -365,7 +366,8 @@ void CreateBattleTowerMon2(struct Pokemon *mon, struct BattleTowerPokemon *src, 
 void CreateApprenticeMon(struct Pokemon *mon, const struct Apprentice *src, u8 monId);
 void CreateMonWithEVSpreadNatureOTID(struct Pokemon *mon, SpeciesEnum species, u8 level, u8 nature, u8 fixedIV, u8 evSpread, u32 otId, u16 abilityNum);
 void ConvertPokemonToBattleTowerPokemon(struct Pokemon *mon, struct BattleTowerPokemon *dest);
-void CreateEventLegalMon(struct Pokemon *mon, SpeciesEnum species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId);
+void CreateEventLegalMon(
+    struct Pokemon *mon, SpeciesEnum species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId);
 bool8 ShouldIgnoreDeoxysForm(u8 caseId, u8 battlerId);
 u16 GetUnionRoomTrainerPic(void);
 u16 GetUnionRoomTrainerClass(void);

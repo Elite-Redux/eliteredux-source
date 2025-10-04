@@ -657,12 +657,10 @@ void UI_Battle_Menu_Init(MainCallback callback) {
         for (j = 0; j < MAX_BATTLERS_COUNT; j++) {
             isExtraInfoShown = FALSE;
             switch (i) {
-                case STATUS_INFO_EXTRA_ABILITIES:
-                {
+                case STATUS_INFO_EXTRA_ABILITIES: {
                     u8 k;
-                    for(k = 0; k < HELL_MODE_EXTRA_ABILITIES; k++){
-                        if (GetBattlerAbilityInSlot(j, TOTAL_ABILITY_COUNT + k) != ABILITY_NONE)
-                            isExtraInfoShown = TRUE;
+                    for (k = 0; k < HELL_MODE_EXTRA_ABILITIES; k++) {
+                        if (GetBattlerAbilityInSlot(j, TOTAL_ABILITY_COUNT + k) != ABILITY_NONE) isExtraInfoShown = TRUE;
                     }
                     break;
                 }
@@ -1854,14 +1852,13 @@ static void PrintMoveInfo(MoveEnum move, u8 x, u8 y, u8 moveIdx) {
             y++;
             // PP
             ConvertIntToDecimalStringN(gStringVar1, gBattleMons[sMenuDataPtr->battlerId].pp[moveIdx], STR_CONV_MODE_LEFT_ALIGN, 2);  // Current PP
-            if(GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_PLAYER){
+            if (GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_PLAYER) {
                 ConvertIntToDecimalStringN(
                     gStringVar2,
                     CalculatePPWithBonusPlayer(move, GetMonData(&party[gBattlerPartyIndexes[sMenuDataPtr->battlerId]], MON_DATA_PP_BONUSES, NULL), moveIdx),
                     STR_CONV_MODE_LEFT_ALIGN,
                     2);  // Max PP
-            }
-            else{
+            } else {
                 ConvertIntToDecimalStringN(
                     gStringVar2,
                     CalculatePPWithBonus(move, GetMonData(&party[gBattlerPartyIndexes[sMenuDataPtr->battlerId]], MON_DATA_PP_BONUSES, NULL), moveIdx),
@@ -1962,17 +1959,14 @@ const u8 sText_Title_Field_Paralysis[] = _("Causes Paralysis");
 const u8 sText_Title_Field_Active[] = _("Active");
 const u8 sText_Title_Field_Not_Active[] = _("Not Active");
 const u8 sText_Title_Field_None[] = _("None");
-//Extra Abilities
+// Extra Abilities
 const u8 sText_Title_Extra_Abilities[] = _("Extra Abilities");
 const u8 sText_Title_Extra_Abilities_Description[] =
     _("This Pokémon has the next extra\n"
       "abilities: {STR_VAR_3}.");
-const u8 sText_Title_Extra_Abilities_Description_2[] =
-    _("{STR_VAR_1}, {STR_VAR_2}");
-const u8 sText_Title_Extra_Abilities_Description_3[] =
-    _("{STR_VAR_1}\n{STR_VAR_2}");
-const u8 sText_Title_Extra_Abilities_Description_4[] =
-    _("{STR_VAR_1} and {STR_VAR_2}");
+const u8 sText_Title_Extra_Abilities_Description_2[] = _("{STR_VAR_1}, {STR_VAR_2}");
+const u8 sText_Title_Extra_Abilities_Description_3[] = _("{STR_VAR_1}\n{STR_VAR_2}");
+const u8 sText_Title_Extra_Abilities_Description_4[] = _("{STR_VAR_1} and {STR_VAR_2}");
 // Primary Status
 const u8 sText_Title_Status_Paralysis[] = _("Paralyzed");
 const u8 sText_Title_Status_Paralysis_Description[] =
@@ -2304,27 +2298,25 @@ static void PrintStatusTab(void) {
         j = sMenuDataPtr->BattlerStatus[currentStatus][sMenuDataPtr->battlerId];
 
         switch (j) {
-            case STATUS_INFO_EXTRA_ABILITIES:
-            {
+            case STATUS_INFO_EXTRA_ABILITIES: {
                 u8 k;
                 AbilityEnum extraAbilities[HELL_MODE_EXTRA_ABILITIES];
 
                 StringCopy(gStringVar1, sText_Title_Extra_Abilities);
                 AddTextPrinterParameterized4(
                     windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
-                
-                for(k = 0; k < HELL_MODE_EXTRA_ABILITIES; k++)
-                    extraAbilities[k] = GetBattlerAbilityInSlot(sMenuDataPtr->battlerId, TOTAL_ABILITY_COUNT + k);
+
+                for (k = 0; k < HELL_MODE_EXTRA_ABILITIES; k++) extraAbilities[k] = GetBattlerAbilityInSlot(sMenuDataPtr->battlerId, TOTAL_ABILITY_COUNT + k);
 
                 StringCopy(gStringVar1, gAbilities[extraAbilities[0]].name);
                 StringCopy(gStringVar2, gAbilities[extraAbilities[1]].name);
 
                 StringExpandPlaceholders(gStringVar3, sText_Title_Extra_Abilities_Description_2);
-                
+
                 StringCopy(gStringVar1, gStringVar3);
                 StringCopy(gStringVar2, gAbilities[extraAbilities[2]].name);
                 StringExpandPlaceholders(gStringVar3, sText_Title_Extra_Abilities_Description_3);
-                
+
                 StringCopy(gStringVar1, gStringVar3);
                 StringCopy(gStringVar2, gAbilities[extraAbilities[3]].name);
                 StringExpandPlaceholders(gStringVar3, sText_Title_Extra_Abilities_Description_4);
@@ -2333,10 +2325,9 @@ static void PrintStatusTab(void) {
                 StringExpandPlaceholders(gStringVar4, sText_Title_Extra_Abilities_Description);
                 AddTextPrinterParameterized4(
                     windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar4);
-                
+
                 break;
-            }
-            break;
+            } break;
             case STATUS_INFO_PRIMARY:
                 printedInfo = TRUE;
                 if (gBattleMons[sMenuDataPtr->battlerId].status1 & STATUS1_SLEEP) {

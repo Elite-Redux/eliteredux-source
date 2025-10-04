@@ -222,14 +222,14 @@ typedef enum Type {
 #define MON_DATA_SPEED2 81
 #define MON_DATA_SPATK2 82
 #define MON_DATA_SPDEF2 83
-#define MON_DATA_NATURE 84      // New
-#define MON_DATA_SPEED_DOWN 85  // New
-#define MON_DATA_EXIOLITE 86    // New
-#define MON_DATA_IS_ALPHA 87    // New
-#define MON_DATA_IS_SHINY 88    // New
-#define MON_DATA_HP_TYPE 89     // New
-#define MON_DATA_MAX_SHINY 90   // New
-#define MON_DATA_IS_DISABLED 91 // New
+#define MON_DATA_NATURE 84       // New
+#define MON_DATA_SPEED_DOWN 85   // New
+#define MON_DATA_EXIOLITE 86     // New
+#define MON_DATA_IS_ALPHA 87     // New
+#define MON_DATA_IS_SHINY 88     // New
+#define MON_DATA_HP_TYPE 89      // New
+#define MON_DATA_MAX_SHINY 90    // New
+#define MON_DATA_IS_DISABLED 91  // New
 
 // Ribbon IDs used by TV and Pokénav
 #define CHAMPION_RIBBON 0

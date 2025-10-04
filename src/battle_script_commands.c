@@ -920,8 +920,7 @@ static bool8 GetTagTeamPhase(u8 battler) { return gTagTeamPhases[gBattlerPartyIn
 
 static void SetTagTeamPhase(u8 battler, bool8 value) { gTagTeamPhases[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] = value; }
 
-static bool8 moveFailVsTagTeam(MoveEnum move)
-{
+static bool8 moveFailVsTagTeam(MoveEnum move) {
     switch (move) {
         case MOVE_DESTINY_BOND:
         case MOVE_ENDEAVOR:
@@ -2963,8 +2962,7 @@ int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChan
     if (moveEffect == MOVE_EFFECT_FLINCH && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) return 0;
 
     // Flinch as a secondary effect will always fail on player use (excluded for moves with 100% Flinch chance such as Fake Out and First Impression)
-    if (moveEffect == MOVE_EFFECT_FLINCH && baseChance < 100 && isHellMode() && GetBattlerSide(battler) == B_SIDE_PLAYER)
-        return 0;
+    if (moveEffect == MOVE_EFFECT_FLINCH && baseChance < 100 && isHellMode() && GetBattlerSide(battler) == B_SIDE_PLAYER) return 0;
 
     for (int i = 0; i < gBattlersCount; i++) {
         int abilityBattler = (battler + i) % gBattlersCount;
@@ -5510,14 +5508,12 @@ static void Cmd_switchineffects(void) {
         for (i = 0; i < gBattlersCount; i++) {
             AbilityEnum abilities[TOTAL_ABILITY_COUNT];
             u8 j = 0;
-            if (DoesBattlerHaveAbilityShield(i))
-                continue;
-            
+            if (DoesBattlerHaveAbilityShield(i)) continue;
+
             ARRAY_COPY(abilities, gBattleMons[i].abilities)
 
             for (j = 0; j < TOTAL_ABILITY_COUNT; j++) {
-                if (!IsPersistentOrUnsuppressableAbility(abilities[j]))
-                    abilities[j] = ABILITY_NONE;
+                if (!IsPersistentOrUnsuppressableAbility(abilities[j])) abilities[j] = ABILITY_NONE;
             }
 
             UpdateAbilityStateIndices(i, abilities);
@@ -5533,9 +5529,7 @@ static void Cmd_switchineffects(void) {
         gVolatileStructs[gActiveBattler].hazardDamaged = TRUE;
         gStackBattler1 = gActiveBattler;
         BattleScriptCall(BattleScript_ResolveAllHazards);
-    }
-    else
-    {
+    } else {
         if (AbilityBattleEffects(ABILITYEFFECT_REACTIVE, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0)) return;
 
         if (TryPrimalReversion(gActiveBattler, TRUE)) return;
@@ -7079,8 +7073,7 @@ static void Cmd_various(void) {
             ptr = gBattlescriptCurrInstr;
             gBattlescriptCurrInstr = runAgain;
             while (gBattleScripting.abilityLoopCounter <= GetNumPossibleAbilitiesForBattler()) {
-                if (HandleSwitchInAbility(gBattleScripting.abilityLoopCounter++, gActiveBattler))
-                    return;
+                if (HandleSwitchInAbility(gBattleScripting.abilityLoopCounter++, gActiveBattler)) return;
             }
             gBattlescriptCurrInstr = ptr;
             AbilityBattleEffects(ABILITYEFFECT_TRACE2, gActiveBattler, 0, 0, 0);
@@ -8941,8 +8934,7 @@ static void Cmd_various(void) {
                 ability = ABILITY_FEARMONGER;
 
             for (i = 0; i < NUM_INTIMIDATE_CLONES; i++) {
-                if (gIntimidateCloneData[i].ability == ability)
-                    break;
+                if (gIntimidateCloneData[i].ability == ability) break;
             }
 
             REQUIRE(i < NUM_INTIMIDATE_CLONES)
@@ -9045,8 +9037,7 @@ static void Cmd_various(void) {
             break;
         }
         case VARIOUS_TAGTEAM_EXEC_BATTLE_EVENTS: {
-            if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT)
-                gBattleMainFunc = HandleTagTeamBattleEvents;
+            if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT) gBattleMainFunc = HandleTagTeamBattleEvents;
             break;
         }
     }  // End of switch (gBattlescriptCurrInstr[2])
@@ -10273,13 +10264,13 @@ static void Cmd_battlemacros(void) {
 
     switch (type) {
         case MACROS_PRINT_MGBA_MESSAGE:
-            #ifdef DEBUG_BUILD
+#ifdef DEBUG_BUILD
             if (FlagGet(FLAG_SYS_MGBA_PRINT)) {
                 MgbaOpen();
                 MgbaPrintf(MGBA_LOG_WARN, "Debug Stuff");
                 MgbaClose();
             }
-            #endif
+#endif
             break;
         case MACROS_FORCE_FALSE_SWIPE_EFFECT:
             gBattleScripting.forceFalseSwipeEffect = TRUE;
