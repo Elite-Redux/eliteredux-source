@@ -334,19 +334,19 @@ static void RuinEffect(int ruinStat, int battler, int statId, u32 *stat, NonStac
 int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS) {
     switch (flag) {
         case MOVE_FLAG_DANCE:
-            if (gBattleMoves[flag].flags & FLAG_DANCE) return TRUE;
+            if (gBattleMoves[move].flags & FLAG_DANCE) return TRUE;
             break;
         case MOVE_FLAG_KICK:
-            if (gBattleMoves[flag].flags & FLAG_STRIKER_BOOST) return TRUE;
+            if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) return TRUE;
             break;
         case MOVE_FLAG_MEGA_LAUNCHER:
-            if (gBattleMoves[flag].flags & FLAG_MEGA_LAUNCHER_BOOST) return TRUE;
+            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) return TRUE;
             break;
         case MOVE_FLAG_PUNCH:
-            if (gBattleMoves[flag].flags & FLAG_IRON_FIST_BOOST) return TRUE;
+            if (gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST) return TRUE;
             break;
         case MOVE_FLAG_SOUND:
-            if (gBattleMoves[flag].flags & FLAG_SOUND) return TRUE;
+            if (gBattleMoves[move].flags & FLAG_SOUND) return TRUE;
             break;
 
         default:
