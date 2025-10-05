@@ -9335,7 +9335,7 @@ int IsIronFistBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(bat
 
 int IsStrikerBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_KICK); }
 
-int IsSoundMove(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_DANCE); }
+int IsSoundMove(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_SOUND); }
 
 int IsPoisonedForMove(int battler) {
     return gBattleMons[battler].status1 & STATUS1_POISON_ANY || IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN);
