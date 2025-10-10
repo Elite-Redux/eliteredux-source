@@ -67,6 +67,12 @@
 
 #define BATTLE_EVENT_NO_PROTECT         230
 
+//New
+#define BATTLE_EVENT_EVIOLITE           231
+#define BATTLE_EVENT_SPIKES_1           232
+#define BATTLE_EVENT_LEECH_SEED         233
+#define BATTLE_EVENT_UNNERVE            234
+
 #define BATTLE_EVENT_TENSE_BATTLE       255
 #define BATTLE_EVENT_MAX_NUMBER         255
 #endif // GUARD_CONSTANTS_BATTLE_EVENTS_H

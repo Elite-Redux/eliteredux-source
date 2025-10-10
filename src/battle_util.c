@@ -7,6 +7,7 @@
 #include "battle_anim.h"
 #include "battle_arena.h"
 #include "battle_controllers.h"
+#include "battle_events.h"
 #include "battle_interface.h"
 #include "battle_message.h"
 #include "battle_pyramid.h"
@@ -54,6 +55,7 @@
 #include "ui_battle_menu.h"
 #include "util.h"
 #include "window.h"
+#include "constants/battle_events.h"
 
 /*
 NOTE: The data and functions in this file up until (but not including) sSoundMovesTable
@@ -7381,6 +7383,12 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
                 MulModifier(&modifier, UQ_4_12(1.5));
             break;
 #endif
+    }
+
+    //Extra Skill
+    if(GET_BATTLER_SIDE(battlerDef) != B_SIDE_PLAYER && GetBattlerHoldEffect(battlerDef, TRUE) != HOLD_EFFECT_EVIOLITE && isExtraSkillEnabled(BATTLE_EVENT_EVIOLITE)){
+        if (CanEvolve(gBattleMons[battlerDef].species))
+            MulModifier(&modifier, UQ_4_12(1.5));
     }
 
     return ApplyModifier(modifier, defStat);

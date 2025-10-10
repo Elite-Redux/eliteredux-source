@@ -75,6 +75,7 @@
 #include "util.h"
 #include "wild_encounter.h"
 #include "window.h"
+#include "constants/battle_events.h"
 
 extern struct MusicPlayerInfo gMPlayInfo_SE1;
 extern struct MusicPlayerInfo gMPlayInfo_SE2;
@@ -1763,6 +1764,8 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     VarSet(VAR_LAST_TRAINER_BATTLED, trainerNum);
 
     if (trainerNum == TRAINER_SECRET_BASE) return 0;
+
+    RegisterTrainerBattleEvents(trainerNum);
 
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && !(gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL))) {
         if (firstTrainer == TRUE) ZeroEnemyPartyMons();

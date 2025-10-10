@@ -67,5 +67,8 @@ const u8 gBattleEventNames[BATTLE_EVENT_MAX_NUMBER + 1][20] = {
 
     [BATTLE_EVENT_NO_PROTECT] = _("No Protect"),
 
-    [BATTLE_EVENT_TENSE_BATTLE] = _("Tense Battle"),
+    //New
+    [BATTLE_EVENT_EVIOLITE] = _("Eviolite"),
+
+    [BATTLE_EVENT_TENSE_BATTLE] = _("Tense Battle"), 
 };

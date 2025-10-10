@@ -12804,12 +12804,20 @@ BattleScript_ExtraSkillLuckyChant::
 	waitanimation
 	end2
 
-BattleScript_ExtraSkillNoProtect::
+BattleScript_ExtraSkillEviolite::
 	call BattleScript_ExtraSkillPopup
-		printstring STRINGID_EXTRASKILL_NOPROTECT
+	printstring STRINGID_EXTRASKILL_EVIOLITE
 	playSE SE_M_DETECT
 	playSE SE_M_BRICK_BREAK
 	end2
+
+BattleScript_ExtraSkillNoProtect::
+	call BattleScript_ExtraSkillPopup
+	printstring STRINGID_EXTRASKILL_NOPROTECT
+	playSE SE_M_DETECT
+	playSE SE_M_BRICK_BREAK
+	end2
+
 BattleScript_EffectSmokescreen::
 	attackcanceler
 	attackstring

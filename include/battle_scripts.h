@@ -743,4 +743,6 @@ extern const u8 BattleScript_ExtraSkillCopyStats[];
 
 extern const u8 BattleScript_TagTeamSecondPhase[];
 
+extern const u8 BattleScript_ExtraSkillEviolite[];
+
 #endif  // GUARD_BATTLE_SCRIPTS_H

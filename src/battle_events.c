@@ -325,7 +325,7 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent) {
         gSideTimers[B_SIDE_OPPONENT].reflectTimer = battleEvent->data0;
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillReflect)
-    case BATTLE_EVENT_LIGHTSCREEN:
+    case BATTLE_EVENT_LIGHTSCREEN: 
         gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_LIGHTSCREEN;
         gSideTimers[B_SIDE_OPPONENT].lightscreenTimer = battleEvent->data0;
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
@@ -346,7 +346,11 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent) {
         if (!DepleteTeamPowerPointOfMove(MOVE_PROTECT))
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillNoProtect)
-    
+
+    //These don't unregister
+    case BATTLE_EVENT_EVIOLITE:
+        BattleScriptExecute(BattleScript_ExtraSkillEviolite);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
 
     case BATTLE_EVENT_TENSE_BATTLE:
         CalculateEnemyPartyCount();
@@ -482,4 +486,36 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent) {
         return EXEC_BATTLE_EVENTS_ALL_CLEAR;
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+}
+
+//
+
+void RegisterTrainerBattleEvents(u16 trainerId){
+    u8 i;
+
+    u8 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS] = {
+        [TRAINER_BRENDAN_ROUTE_103_MUDKIP] = {BATTLE_EVENT_LAST_PARALYZED, BATTLE_EVENT_PERMA_HEAL_BLOCK, BATTLE_EVENT_PERMA_NIGHTMARE, BATTLE_EVENT_PERMA_SMACKDOWN},
+        [TRAINER_CALVIN_1] = {BATTLE_EVENT_EVIOLITE, BATTLE_EVENT_PERMA_HEAL_BLOCK, BATTLE_EVENT_PERMA_NIGHTMARE, BATTLE_EVENT_PERMA_SMACKDOWN},
+    };
+
+    for(i = 0; i < MAX_HELL_TRAINERS_GYM_SKILLS; i++){
+        u8 battleEvent = sTrainerSkillList[trainerId][i];
+        u8 battleEventData0 = 1; //& 0xF later
+        u8 battleEventData1 = 1; //& 0xF later 
+
+        RegisterBattleEvent(battleEvent, battleEventData0, battleEventData1);
+    }
+}
+
+bool8 isExtraSkillEnabled(u8 extraSkill){
+    u8 i;
+
+    for(i = 0; i < BATTLE_EVENTS_MAX_REGISTERABLE; i++){
+        if(gBattleEvents[i].id == extraSkill){
+            MGBA_PRINT_DEBUG("isExtraSkillEnabled I: %d, gBattleEvents[i].id: %d extraSkill : %d", i, gBattleEvents[i].id, extraSkill)
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }
