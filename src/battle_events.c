@@ -1,6 +1,7 @@
 #include "global.h"
 #include "gba/gba.h"
 #include "battle_events.h"
+#include "union_room.h"
 #include "constants/battle_events.h"
 #include "data/text/battle_events.h"
 #include "constants/battle_string_ids.h"
@@ -352,6 +353,27 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent) {
         BattleScriptExecute(BattleScript_ExtraSkillEviolite);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
 
+    case BATTLE_EVENT_EXTRA_ABILITIES_1:
+    {
+        u16 ability = GetExtraAbilityToSetToBattler(0, TRUE);
+        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ability);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraAbilities1)
+    }
+
+    case BATTLE_EVENT_EXTRA_ABILITIES_2:
+    {
+        u16 ability = GetExtraAbilityToSetToBattler(1, TRUE);
+        PREPARE_ABILITY_BUFFER(gBattleTextBuff2, ability);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraAbilities2)
+    }
+
+    case BATTLE_EVENT_EXTRA_ABILITIES_3:
+    {
+        u16 ability = GetExtraAbilityToSetToBattler(2, TRUE);
+        PREPARE_ABILITY_BUFFER(gBattleTextBuff3, ability);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraAbilities3)
+    }
+
     case BATTLE_EVENT_TENSE_BATTLE:
         CalculateEnemyPartyCount();
         return EXEC_BATTLE_EVENTS_ALL_CLEAR;
@@ -488,22 +510,28 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent) {
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
 
-//
+#include "data/hell_trainer_skills.h"
 
 void RegisterTrainerBattleEvents(u16 trainerId){
     u8 i;
 
-    u8 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS] = {
-        [TRAINER_BRENDAN_ROUTE_103_MUDKIP] = {BATTLE_EVENT_LAST_PARALYZED, BATTLE_EVENT_PERMA_HEAL_BLOCK, BATTLE_EVENT_PERMA_NIGHTMARE, BATTLE_EVENT_PERMA_SMACKDOWN},
-        [TRAINER_CALVIN_1] = {BATTLE_EVENT_EVIOLITE, BATTLE_EVENT_PERMA_HEAL_BLOCK, BATTLE_EVENT_PERMA_NIGHTMARE, BATTLE_EVENT_PERMA_SMACKDOWN},
-    };
-
     for(i = 0; i < MAX_HELL_TRAINERS_GYM_SKILLS; i++){
-        u8 battleEvent = sTrainerSkillList[trainerId][i];
-        u8 battleEventData0 = 1; //& 0xF later
-        u8 battleEventData1 = 1; //& 0xF later 
+        u8 battleEvent      = sTrainerSkillList[trainerId][i][BATTLE_EVENT_ID];
+        u8 battleEventData0 = sTrainerSkillList[trainerId][i][BATTLE_EVENT_DATA0]; //& 0xF later
+        u8 battleEventData1 = sTrainerSkillList[trainerId][i][BATTLE_EVENT_DATA1]; //& 0xF later 
 
-        RegisterBattleEvent(battleEvent, battleEventData0, battleEventData1);
+        if(battleEvent != BATTLE_EVENT_NONE){
+            switch(battleEvent){
+                default:
+                    RegisterBattleEvent(battleEvent, battleEventData0, battleEventData1);
+                break;
+                case BATTLE_EVENT_EXTRA_ABILITIES_1:
+                case BATTLE_EVENT_EXTRA_ABILITIES_2:
+                case BATTLE_EVENT_EXTRA_ABILITIES_3:
+                    RegisterBattleEvent(battleEvent, 0, 0);
+                break;
+            }
+        }
     }
 }
 
@@ -512,10 +540,17 @@ bool8 isExtraSkillEnabled(u8 extraSkill){
 
     for(i = 0; i < BATTLE_EVENTS_MAX_REGISTERABLE; i++){
         if(gBattleEvents[i].id == extraSkill){
-            MGBA_PRINT_DEBUG("isExtraSkillEnabled I: %d, gBattleEvents[i].id: %d extraSkill : %d", i, gBattleEvents[i].id, extraSkill)
+            //MGBA_PRINT_DEBUG("isExtraSkillEnabled I: %d, gBattleEvents[i].id: %d extraSkill : %d", i, gBattleEvents[i].id, extraSkill)
             return TRUE;
         }
     }
 
     return FALSE;
+}
+
+u16 GetTrainerBattleEventData(u16 trainerId, u8 number, u8 dataID){
+    if(sTrainerSkillList[trainerId][number][BATTLE_EVENT_ID] == BATTLE_EVENT_NONE)
+        return 0;
+
+    return sTrainerSkillList[trainerId][number][dataID];
 }

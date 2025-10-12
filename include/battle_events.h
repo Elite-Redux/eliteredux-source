@@ -1,9 +1,7 @@
 #ifndef GUARD_BATTLE_EVENTS_H
 #define GUARD_BATTLE_EVENTS_H
 
-
 #define BATTLE_EVENTS_MAX_REGISTERABLE 16
-#define MAX_HELL_TRAINERS_GYM_SKILLS 4
 
 extern u8 gLastBattleEvent;
 
@@ -29,6 +27,7 @@ u8 BattleEventStartTurnExec(struct BattleEvent*);
 
 void RegisterTrainerBattleEvents(u16 trainerId);
 bool8 isExtraSkillEnabled(u8 extraSkill);
+u16 GetTrainerBattleEventData(u16 trainerId, u8 number, u8 dataID);
 // enum to communicate to execBattleEvent as execEnum parameter
 
 // enum that returns from execBattleEvents to communicate if a rendering is needed or if all battleEvents were done correctly

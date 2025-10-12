@@ -69,6 +69,9 @@ const u8 gBattleEventNames[BATTLE_EVENT_MAX_NUMBER + 1][20] = {
 
     //New
     [BATTLE_EVENT_EVIOLITE] = _("Eviolite"),
+    [BATTLE_EVENT_EXTRA_ABILITIES_1] = _("Extra Abilities"),
+    [BATTLE_EVENT_EXTRA_ABILITIES_2] = _("Extra Abilities"),
+    [BATTLE_EVENT_EXTRA_ABILITIES_3] = _("Extra Abilities"),
 
     [BATTLE_EVENT_TENSE_BATTLE] = _("Tense Battle"), 
 };

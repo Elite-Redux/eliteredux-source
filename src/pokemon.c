@@ -4,6 +4,7 @@
 #include "battle.h"
 #include "battle_anim.h"
 #include "battle_controllers.h"
+#include "battle_events.h"
 #include "battle_message.h"
 #include "battle_pike.h"
 #include "battle_pyramid.h"
@@ -65,6 +66,7 @@
 #include "abilities.hh"
 #include "day_night.h"
 #include "constants/day_night.h"
+#include "constants/battle_events.h"
 
 struct SpeciesItem {
     SpeciesEnum species;
@@ -6425,20 +6427,44 @@ void ClearNuzlockeDisableFlags(void) {
     }
 }
 
+
+
 AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy) {
     if (isEnemy) {
-        /*
-        AbilityEnum abilities[HELL_MODE_EXTRA_ABILITIES] = {ABILITY_INTIMIDATE, ABILITY_AIR_BLOWER, ABILITY_UNNERVE, ABILITY_RUN_AWAY};
-        AbilityEnum ability = abilities[abilityNumber];
-        */
-
         u16 trainerId = gTrainerBattleOpponent_A;
-        AbilityEnum ability = gTrainers[trainerId].hellAbilities[abilityNumber];
+        u8 i;
 
-        // if(gTrainers[trainerId].hellAbilities[abilityNumber] == NULL)
+        for(i = 0; i < MAX_HELL_TRAINERS_GYM_SKILLS; i++){
+            u8 battleEvent = GetTrainerBattleEventData(trainerId, i, BATTLE_EVENT_ID);
+
+            if(battleEvent != BATTLE_EVENT_NONE){
+                switch(battleEvent){
+                    case BATTLE_EVENT_EXTRA_ABILITIES_1:
+                        if(abilityNumber == 0)
+                            return GetTrainerBattleEventData(trainerId, i, BATTLE_EVENT_DATA0);
+                        break;
+                    break;
+                    case BATTLE_EVENT_EXTRA_ABILITIES_2:
+                        if(abilityNumber == 1)
+                            return GetTrainerBattleEventData(trainerId, i, BATTLE_EVENT_DATA0);
+                        break;
+                    case BATTLE_EVENT_EXTRA_ABILITIES_3:
+                        if(abilityNumber == 2)
+                            return GetTrainerBattleEventData(trainerId, i, BATTLE_EVENT_DATA0);
+                        break;
+                }
+            }
+        }
+
+        //u16 trainerId = gTrainerBattleOpponent_A;
+        //AbilityEnum ability = gTrainers[trainerId].hellAbilities[abilityNumber];
+        //AbilityEnum abilities[HELL_MODE_EXTRA_ABILITIES] = {ABILITY_INNARDS_OUT, ABILITY_INTIMIDATE, ABILITY_MOXIE, ABILITY_NONE};
+        //AbilityEnum ability = abilities[abilityNumber];
+
+        //if(gTrainers[trainerId].hellAbilities[abilityNumber] == NULL)
         //     return ABILITY_NONE;
 
-        return ability;
+        //return ability;
     }
 
     return ABILITY_NONE;
