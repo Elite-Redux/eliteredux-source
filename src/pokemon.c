@@ -6427,8 +6427,6 @@ void ClearNuzlockeDisableFlags(void) {
     }
 }
 
-
-
 AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy) {
     if (isEnemy) {
         u16 trainerId = gTrainerBattleOpponent_A;
