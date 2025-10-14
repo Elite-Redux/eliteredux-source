@@ -6443,7 +6443,6 @@ AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy) {
                         if(abilityNumber == 0)
                             return GetTrainerBattleEventData(trainerId, i, BATTLE_EVENT_DATA0);
                         break;
-                    break;
                     case BATTLE_EVENT_EXTRA_ABILITIES_2:
                         if(abilityNumber == 1)
                             return GetTrainerBattleEventData(trainerId, i, BATTLE_EVENT_DATA0);
