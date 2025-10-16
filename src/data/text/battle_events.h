@@ -50,6 +50,7 @@ const u8 gBattleEventNames[BATTLE_EVENT_MAX_NUMBER + 1][20] = {
     [BATTLE_EVENT_PERMA_NIGHTMARE] = _("Nightmare"),
     [BATTLE_EVENT_PERMA_SMACKDOWN] = _("Smack Down"), 
     [BATTLE_EVENT_PERMA_WIDE_GUARD] = _("Wide Guard"),
+    [BATTLE_EVENT_PERMA_STICKY_WEB] = _("Sticky Web"),
 
     [BATTLE_EVENT_ONDS_COPY_STATS] = _("Copy Stat"),
 
