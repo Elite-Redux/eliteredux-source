@@ -1967,7 +1967,7 @@ script PetalburgCity_Gym_EventScript_CheckTrainers{
     }
 	if (!defeated(TRAINER_MARY)){
 		registerbattleevent(BATTLE_EVENT_STEADY_ACCURACY)
-		registerbattleevent(BATTLE_EVENT_LAST_STAND, 5)
+		registerbattleevent(BATTLE_EVENT_LAST_STAND, 5, 5)
     }
     if (!defeated(TRAINER_PARKER)){
 		registerbattleevent(BATTLE_EVENT_SPIKES, 2)

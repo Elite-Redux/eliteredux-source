@@ -38,6 +38,7 @@ const u8 gBattleEventNames[BATTLE_EVENT_MAX_NUMBER + 1][20] = {
     [BATTLE_EVENT_SUN] = _(""),
 
     [BATTLE_EVENT_LAST_STAND] = _("Last Stand"),
+    [BATTLE_EVENT_LAST_STAND_STAGES] = _("Last Stand"),
     [BATTLE_EVENT_SUBSTITUTE] = _("Substitute"),
 
     [BATTLE_EVENT_ONSTAY_LEECH_SEED] = _("Leech Seed"),
