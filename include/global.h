@@ -628,7 +628,7 @@ struct SaveBlock2 {
     u8 start_cursorRowY;
     u8 start_FirstItem;
     u8 damageSliderValue;
-    bool8 hasCaughtMonOnLocation[NUM_NUZLOCKE_FLAGS];
+    u8 hasCaughtMonOnLocation[NUM_NUZLOCKE_FLAGS];
     u8 start_LastNumItems;
 };  // sizeof=0xF2C
 

@@ -354,11 +354,6 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent) {
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillNoProtect)
 
-    //These don't unregister
-    case BATTLE_EVENT_EVIOLITE:
-        BattleScriptExecute(BattleScript_ExtraSkillEviolite);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
-
     case BATTLE_EVENT_EXTRA_ABILITIES_1:
     {
         u16 ability = GetExtraAbilityToSetToBattler(0, TRUE);
@@ -379,6 +374,11 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent) {
         PREPARE_ABILITY_BUFFER(gBattleTextBuff3, ability);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraAbilities3)
     }
+
+    //These don't unregister
+    case BATTLE_EVENT_EVIOLITE:
+        BattleScriptExecute(BattleScript_ExtraSkillEviolite);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
 
     case BATTLE_EVENT_TENSE_BATTLE:
         CalculateEnemyPartyCount();

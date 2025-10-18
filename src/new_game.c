@@ -225,6 +225,7 @@ void NewGameInitData(void)
     gSaveBlock2Ptr->activeQuest = 0;
 	gSaveBlock2Ptr->start_cursorRowY = 0;
 	gSaveBlock2Ptr->start_FirstItem  = 0;
+    ClearAllNuzlockeFlags();
     VarSet(VAR_SAVE_VERSION, CURRENT_GAME_VERSION);
 }
 

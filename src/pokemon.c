@@ -6406,6 +6406,14 @@ bool8 AreNuzlockeRulesEnabled(void) {
     return nuzlockeRulesEnabled;
 }
 
+#define NUZLOCKE_CAUGHT_LOCATION_COUNT 0xFF //METLOC_FATEFUL_ENCOUNTER
+void ClearAllNuzlockeFlags(void){
+    u16 i;
+
+    for(i = 0; i < NUZLOCKE_CAUGHT_LOCATION_COUNT; i++)
+        ClearNuzlockeCaughtFlag(i);
+}
+
 void ClearNuzlockeDisableFlags(void) {
     u16 boxId, boxPosition, i;
     bool8 isDisabled = FALSE;
