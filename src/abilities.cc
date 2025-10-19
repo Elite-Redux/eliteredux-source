@@ -8458,19 +8458,19 @@ constexpr Ability Overrule = {
 };
 
 constexpr Ability MentalPollution = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability MadnessEnhancement = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability Tentalock = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability SerpentBind = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability SoulTap = {
@@ -8537,7 +8537,7 @@ constexpr Ability WonderScale = {
 };
 
 constexpr Ability Overzealous = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability StainlessSteel = {
@@ -8546,7 +8546,7 @@ constexpr Ability StainlessSteel = {
 };
 
 constexpr Ability TemporalRupture = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability GrassFlute = {
@@ -8573,7 +8573,7 @@ constexpr Ability Hemotoxin = {
 };
 
 constexpr Ability Harukaze = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability ToxicSurge = {
@@ -8611,7 +8611,7 @@ constexpr Ability Biofilm = {
 };
 
 constexpr Ability Chokehold = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability GuardianCoat = {
@@ -8678,7 +8678,7 @@ constexpr Ability LightningBorn = {
 };
 
 constexpr Ability Superheavy = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability WorldSerpent = {
@@ -8853,7 +8853,7 @@ constexpr Ability Thermomancy = {
 };
 
 constexpr Ability Chuckster = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability HeatSink = {
@@ -9103,7 +9103,7 @@ constexpr Ability CurseOfFamine = {
 };
 
 constexpr Ability CrystallineArmor = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability SoulHarvest = {
@@ -9126,7 +9126,7 @@ constexpr Ability ThickBlubber = {
 };
 
 constexpr Ability Craving = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability RatKing = {
@@ -9170,7 +9170,7 @@ constexpr Ability LunarWrath = {
 };
 
 constexpr Ability Spyware = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability Virus = {.onAttacker = +[](ON_ATTACKER) -> int {
@@ -9259,35 +9259,35 @@ constexpr Ability DropBlocks = {
 };
 
 constexpr Ability LaserDrill = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability LightSaber = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability LooseThorns = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability TurfWar = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability Greedy = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability MusicalNotes = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability Strikeout = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability HomeRun = {
-    .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability Bruiser = {
@@ -9304,6 +9304,10 @@ constexpr Ability MyceliumMight = {
 
 constexpr Ability IAmSteve = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_NO_RETREAT, 0); },
+};
+
+constexpr Ability IAmSteve = {
+    .randomizerBanned = TRUE,
 };
 
 constexpr Ability DeadlyPrecision = {
