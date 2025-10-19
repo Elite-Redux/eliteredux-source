@@ -200,6 +200,10 @@ bool8 DepleteTeamPowerPointOfMove(u16 moveId) {
 SET_EXTRA_STATS_LEVEL_TO_BATTLER(B_POSITION_OPPONENT_LEFT, stat, level)\
 if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && (gBattleMons[B_POSITION_OPPONENT_RIGHT].hp > 0))\
     SET_EXTRA_STATS_LEVEL_TO_BATTLER(B_POSITION_OPPONENT_RIGHT, stat, level);
+#define SET_STATS_STAGE_LEVEL(stat, level)\
+    gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[stat] = (DEFAULT_STAT_STAGE + level);\
+if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && (gBattleMons[B_POSITION_OPPONENT_RIGHT].hp > 0))\
+    gBattleMons[B_POSITION_OPPONENT_RIGHT].statStages[stat] = (DEFAULT_STAT_STAGE + level);
 // this is run once pokemon have landed before their ability have popped
 u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent) {
     switch (battleEvent->id)
@@ -343,15 +347,16 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent) {
         gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_WIDE_GUARD;
         RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaWideGuard);
 
+    case BATTLE_EVENT_PERMA_STICKY_WEB:
+        if (gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STICKY_WEB)
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STICKY_WEB;
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaStickyWeb);
+
     case BATTLE_EVENT_NO_PROTECT:
         if (!DepleteTeamPowerPointOfMove(MOVE_PROTECT))
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillNoProtect)
-
-    //These don't unregister
-    case BATTLE_EVENT_EVIOLITE:
-        BattleScriptExecute(BattleScript_ExtraSkillEviolite);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
 
     case BATTLE_EVENT_EXTRA_ABILITIES_1:
     {
@@ -373,6 +378,11 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent) {
         PREPARE_ABILITY_BUFFER(gBattleTextBuff3, ability);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraAbilities3)
     }
+
+    //These don't unregister
+    case BATTLE_EVENT_EVIOLITE:
+        BattleScriptExecute(BattleScript_ExtraSkillEviolite);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
 
     case BATTLE_EVENT_TENSE_BATTLE:
         CalculateEnemyPartyCount();
@@ -455,11 +465,26 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent) {
     case BATTLE_EVENT_LAST_STAND:
         if (gFaintedMonCount[1] != battleEvent->data0)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
-        SET_EXTRA_STATS_LEVEL(extraAttackLevel, 5);
-        SET_EXTRA_STATS_LEVEL(extraDefenseLevel, 5);
-        SET_EXTRA_STATS_LEVEL(extraSpAttackLevel, 5);
-        SET_EXTRA_STATS_LEVEL(extraSpDefenseLevel, 5);
-        SET_EXTRA_STATS_LEVEL(extraSpeedLevel, 5);
+        SET_EXTRA_STATS_LEVEL(extraAttackLevel, battleEvent->data1);
+        SET_EXTRA_STATS_LEVEL(extraDefenseLevel, battleEvent->data1);
+        SET_EXTRA_STATS_LEVEL(extraSpAttackLevel, battleEvent->data1);
+        SET_EXTRA_STATS_LEVEL(extraSpDefenseLevel, battleEvent->data1);
+        SET_EXTRA_STATS_LEVEL(extraSpeedLevel, battleEvent->data1);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillLastStand);
+    
+    case BATTLE_EVENT_LAST_STAND_STAGES:
+        if (gFaintedMonCount[1] != battleEvent->data0)
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        u8 level = battleEvent->data1;
+        if((level + DEFAULT_STAT_STAGE) > MAX_STAT_STAGE)
+            level = (MAX_STAT_STAGE - DEFAULT_STAT_STAGE);
+        else if(level == 0)
+            level = 1;
+        SET_STATS_STAGE_LEVEL(STAT_ATK,   level);
+        SET_STATS_STAGE_LEVEL(STAT_DEF,   level);
+        SET_STATS_STAGE_LEVEL(STAT_SPATK, level);
+        SET_STATS_STAGE_LEVEL(STAT_SPDEF, level);
+        SET_STATS_STAGE_LEVEL(STAT_SPEED, level);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillLastStand);
     case BATTLE_EVENT_SUBSTITUTE:
         if (gFaintedMonCount[1] != battleEvent->data0)
@@ -486,6 +511,11 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent) {
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_WIDE_GUARD;
         RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaWideGuard);
+    case BATTLE_EVENT_PERMA_STICKY_WEB:
+        if (gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STICKY_WEB)
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STICKY_WEB;
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaStickyWeb);
 
     case BATTLE_EVENT_ONDS_COPY_STATS:
         if (!gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn || gSideTimers[B_POSITION_OPPONENT_LEFT].retaliateTimer != 1)

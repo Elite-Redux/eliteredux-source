@@ -6406,6 +6406,14 @@ bool8 AreNuzlockeRulesEnabled(void) {
     return nuzlockeRulesEnabled;
 }
 
+#define NUZLOCKE_CAUGHT_LOCATION_COUNT 0xFF //METLOC_FATEFUL_ENCOUNTER
+void ClearAllNuzlockeFlags(void){
+    u16 i;
+
+    for(i = 0; i < NUZLOCKE_CAUGHT_LOCATION_COUNT; i++)
+        ClearNuzlockeCaughtFlag(i);
+}
+
 void ClearNuzlockeDisableFlags(void) {
     u16 boxId, boxPosition, i;
     bool8 isDisabled = FALSE;
@@ -6427,8 +6435,6 @@ void ClearNuzlockeDisableFlags(void) {
     }
 }
 
-
-
 AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy) {
     if (isEnemy) {
         u16 trainerId = gTrainerBattleOpponent_A;
@@ -6443,7 +6449,6 @@ AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy) {
                         if(abilityNumber == 0)
                             return GetTrainerBattleEventData(trainerId, i, BATTLE_EVENT_DATA0);
                         break;
-                    break;
                     case BATTLE_EVENT_EXTRA_ABILITIES_2:
                         if(abilityNumber == 1)
                             return GetTrainerBattleEventData(trainerId, i, BATTLE_EVENT_DATA0);

@@ -503,7 +503,7 @@ script RustboroCity_Gym_EventScript_CheckTrainers{
 	}
 	// register all battle events for all trainer not fought
 	if (!defeated(TRAINER_MARC)){
-		registerbattleevent(BATTLE_EVENT_LAST_STAND, 5)
+		registerbattleevent(BATTLE_EVENT_LAST_STAND, 5, 5)
 	}
 	if (!defeated(TRAINER_TOMMY)){
 		registerbattleevent(BATTLE_EVENT_LAST_BLEED, 2)

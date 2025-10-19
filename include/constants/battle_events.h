@@ -2,13 +2,13 @@
 #define GUARD_CONSTANTS_BATTLE_EVENTS_H
 
 #define BATTLE_EVENT_NONE               0
-#define BATTLE_EVENT_STEADY_OFFENSE     1
-#define BATTLE_EVENT_STEADY_DEFENSE     2
-#define BATTLE_EVENT_STEADY_SPECIAL     3
-#define BATTLE_EVENT_STEADY_SPDEF       4
-#define BATTLE_EVENT_STEADY_SPEED       5
-#define BATTLE_EVENT_STEADY_ACCURACY    6
-#define BATTLE_EVENT_STEADY_CRIT        7
+#define BATTLE_EVENT_STEADY_OFFENSE     1  //Boost Atk Stat by data0 to the lead + stat boost each turn
+#define BATTLE_EVENT_STEADY_DEFENSE     2  //Boost Defense Stat by data0 to the lead + stat boost each turn
+#define BATTLE_EVENT_STEADY_SPECIAL     3  //Boost Special Attack Stat by data0 to the lead + stat boost each turn
+#define BATTLE_EVENT_STEADY_SPDEF       4  //Boost Special Defense Stat by data0 to the lead + stat boost each turn
+#define BATTLE_EVENT_STEADY_SPEED       5  //Boost Speed Stat by data0 to the lead + stat boost each turn
+#define BATTLE_EVENT_STEADY_ACCURACY    6  //Boost Accuracy by data0 to the lead + stat boost each turn
+#define BATTLE_EVENT_STEADY_CRIT        7  //Boost Crit rate by data0 to the lead + stat boost each turn
 #define BATTLE_EVENT_POSTURE_OFFENSE    8  
 #define BATTLE_EVENT_POSTURE_DEFENSE    9
 #define BATTLE_EVENT_POSTURE_SPECIAL    10
@@ -50,6 +50,7 @@
 #define BATTLE_EVENT_PERMA_NIGHTMARE    161
 #define BATTLE_EVENT_PERMA_SMACKDOWN    162 // made specifically with winona in mind but I changed my mind it's a bad idea
 #define BATTLE_EVENT_PERMA_WIDE_GUARD   163
+#define BATTLE_EVENT_PERMA_STICKY_WEB   164
 
 #define BATTLE_EVENT_ONDS_COPY_STATS    180 //DS => Death Switch (in)
 
@@ -72,6 +73,7 @@
 #define BATTLE_EVENT_EXTRA_ABILITIES_1  232
 #define BATTLE_EVENT_EXTRA_ABILITIES_2  233
 #define BATTLE_EVENT_EXTRA_ABILITIES_3  234
+#define BATTLE_EVENT_LAST_STAND_STAGES  235 //Similar to BATTLE_EVENT_LAST_STAND but modifies the stat stages rather than the stats directly
 
 #define BATTLE_EVENT_TENSE_BATTLE       255
 #define BATTLE_EVENT_MAX_NUMBER         255
