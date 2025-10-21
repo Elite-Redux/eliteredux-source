@@ -4,6 +4,7 @@
 #include "mevent.h"
 #include "util.h"
 #include "string_util.h"
+#include "trainer_see.h"
 #include "constants/map_scripts.h"
 #include "constants/battle_frontier.h"
 #include "mgba_printf/mgba.h"
@@ -471,4 +472,10 @@ void InitRamScript_NoObjectEvent(u8 *script, u16 scriptSize)
         scriptSize = sizeof(gSaveBlock1Ptr->ramScript.data.script);
     InitRamScript(script, scriptSize, 0xFF, 0xFF, 0xFF);
     #endif
+}
+
+bool8 LoadTrainerObjectScript(void)
+{
+    sScriptContext1.scriptPtr = gApproachingTrainers[gNoOfApproachingTrainers - 1].trainerScriptPtr;
+    return TRUE;
 }

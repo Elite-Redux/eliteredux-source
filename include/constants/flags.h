@@ -24,7 +24,7 @@
 #define FLAG_TEMP_D                                      13 // Unused Flag
 #define FLAG_TEMP_E                                      14 // Unused Flag
 #define FLAG_TEMP_F                                      15 // Unused Flag
-#define FLAG_TEMP_10                                     16 // Unused Flag
+#define FLAG_TEMP_10                                     16 // Used for Trainer See Scripts
 #define FLAG_TEMP_11                                     17
 #define FLAG_TEMP_12                                     18
 #define FLAG_TEMP_13                                     19

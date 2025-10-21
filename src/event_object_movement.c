@@ -9072,3 +9072,8 @@ u8 MovementAction_Fly_Finish(struct ObjectEvent *objectEvent, struct Sprite *spr
 {
     return TRUE;
 }
+
+u16 GetObjectEventTrainerSightFlagByObjectEventId(u8 objEventId)
+{
+    return GetObjectEventTemplateByLocalIdAndMap(gObjectEvents[objEventId].localId, gObjectEvents[objEventId].mapNum, gObjectEvents[objEventId].mapGroup)->trainerType;
+}

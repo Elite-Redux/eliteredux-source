@@ -2,57 +2,11 @@ mapscripts Route111_SunhollowRuins_MapScripts {
     
 }
 
-
 const OBJECT_EVENT_MAGMA_GRUNT_1 = 7
 const OBJECT_EVENT_MAGMA_GRUNT_2 = 8
 const OBJECT_EVENT_MAGMA_GRUNT_3 = 10
 const OBJECT_EVENT_MAGMA_GRUNT_4 = 9
 const OBJECT_EVENT_MAGMA_GRUNT_5 = 6
-
-script Route111_SunhollowRuins_EventScript_PlayerFound_1{
-    lock
-    playse(SE_PIN)
-	applymovement (OBJECT_EVENT_MAGMA_GRUNT_1, Common_Movement_ExclamationMark)
-	waitmovement (0)
-    goto(Route111_SunhollowRuins_EventScript_PlayerFound_Global)
-    end
-}
-
-script Route111_SunhollowRuins_EventScript_PlayerFound_2{
-    lock
-    playse(SE_PIN)
-	applymovement (OBJECT_EVENT_MAGMA_GRUNT_2, Common_Movement_ExclamationMark)
-	waitmovement (0)
-    goto(Route111_SunhollowRuins_EventScript_PlayerFound_Global)
-    end
-}
-
-script Route111_SunhollowRuins_EventScript_PlayerFound_3{
-    lock
-    playse(SE_PIN)
-	applymovement (OBJECT_EVENT_MAGMA_GRUNT_3, Common_Movement_ExclamationMark)
-	waitmovement (0)
-    goto(Route111_SunhollowRuins_EventScript_PlayerFound_Global)
-    end
-}
-
-script Route111_SunhollowRuins_EventScript_PlayerFound_4{
-    lock
-    playse(SE_PIN)
-	applymovement (OBJECT_EVENT_MAGMA_GRUNT_4, Common_Movement_ExclamationMark)
-	waitmovement (0)
-    goto(Route111_SunhollowRuins_EventScript_PlayerFound_Global)
-    end
-}
-
-script Route111_SunhollowRuins_EventScript_PlayerFound_5{
-    lock
-    playse(SE_PIN)
-	applymovement (OBJECT_EVENT_MAGMA_GRUNT_5, Common_Movement_ExclamationMark)
-	waitmovement (0)
-    goto(Route111_SunhollowRuins_EventScript_PlayerFound_Global)
-    end
-}
 
 script Route111_SunhollowRuins_EventScript_PlayerFound_Talk{
     lock
