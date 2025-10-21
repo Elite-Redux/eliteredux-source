@@ -1543,6 +1543,8 @@
 #define FLAG_NUZLOCKE_MODE_ENABLED                                  3102
 #define FLAG_LOST_NUZLOCKE_CHALLENGE                                3103
 #define FLAG_PREVENT_OVERWORLD_SPEEDUP                              3104
+#define FLAG_HIDE_SUNHOLLOW_ENTRANCE_CHARACTERS                     3105
+#define FLAG_HIDE_SUNHOLLOW_NORMAN                                  3106
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 

@@ -9304,9 +9304,6 @@ constexpr Ability MyceliumMight = {
 
 constexpr Ability IAmSteve = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_NO_RETREAT, 0); },
-};
-
-constexpr Ability IAmSteve = {
     .randomizerBanned = TRUE,
 };
 

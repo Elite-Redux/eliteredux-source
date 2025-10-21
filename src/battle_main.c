@@ -1779,6 +1779,10 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
             monsCount = enemyPartySize;
         }
 
+        #ifdef DEBUG_BUILD
+        if (FlagGet(FLAG_DEBUG_GODMODE)) monsCount = 1;
+        #endif
+
         for (i = 0; i < monsCount; i++) {
             if (isDoubleBattle == TRUE)
                 personalityValue = 0x80;
@@ -1817,9 +1821,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
             if (level > MAX_LEVEL) level = MAX_LEVEL;
 
-#ifdef DEBUG_BUILD
+            #ifdef DEBUG_BUILD
             if (FlagGet(FLAG_DEBUG_GODMODE)) level = 1;
-#endif
+            #endif
 
             if (trainerNum == TRAINER_OLDPLAYER) {
                 species = Random() % 500;
