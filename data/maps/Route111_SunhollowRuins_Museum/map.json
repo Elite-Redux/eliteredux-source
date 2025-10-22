@@ -2,7 +2,7 @@
   "id": "MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM",
   "name": "Route111_SunhollowRuins_Museum",
   "layout": "LAYOUT_ROUTE111_SUNHOLLOW_RUINS_MUSEUM",
-  "music": "MUS_ROUTE110",
+  "music": "MUS_B_PYRAMID_TOP",
   "region_map_section": "MAPSEC_ROUTE_111",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
@@ -80,30 +80,30 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MAGMA_MEMBER_M",
-      "x": 10,
-      "y": 69,
+      "graphics_id": "OBJ_EVENT_GFX_BRANDON",
+      "x": 2,
+      "y": 48,
       "elevation": 0,
-      "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
-      "flag": "0"
+      "flag": "FLAG_TEMP_2"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_NORMAN",
-      "x": 9,
-      "y": 69,
+      "x": 2,
+      "y": 47,
       "elevation": 0,
-      "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
-      "flag": "0"
+      "flag": "FLAG_TEMP_2"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_MAGMA_MEMBER_M",
@@ -195,6 +195,110 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "x": 3,
+      "y": 53,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "NULL",
+      "flag": "FLAG_TEMP_1"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_F",
+      "x": 3,
+      "y": 54,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "NULL",
+      "flag": "FLAG_TEMP_1"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "x": 3,
+      "y": 55,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "NULL",
+      "flag": "FLAG_TEMP_1"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_F",
+      "x": 3,
+      "y": 56,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "NULL",
+      "flag": "FLAG_TEMP_1"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "x": 3,
+      "y": 57,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "NULL",
+      "flag": "FLAG_TEMP_1"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_F",
+      "x": 3,
+      "y": 58,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "NULL",
+      "flag": "FLAG_TEMP_1"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_F",
+      "x": 3,
+      "y": 52,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "NULL",
+      "flag": "FLAG_TEMP_1"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+      "x": 3,
+      "y": 51,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "NULL",
+      "flag": "FLAG_TEMP_1"
     }
   ],
   "warp_events": [
@@ -214,7 +318,78 @@
     }
   ],
   "coord_events": [
-
+    {
+      "type": "trigger",
+      "x": 5,
+      "y": 40,
+      "elevation": 0,
+      "var": "VAR_SUNHOLLOW_STATE",
+      "var_value": "1",
+      "script": "Route111_SunhollowRuins_Museum_EventScript_PyramidScript_2"
+    },
+    {
+      "type": "trigger",
+      "x": 5,
+      "y": 41,
+      "elevation": 0,
+      "var": "VAR_SUNHOLLOW_STATE",
+      "var_value": "1",
+      "script": "Route111_SunhollowRuins_Museum_EventScript_PyramidScript_1"
+    },
+    {
+      "type": "trigger",
+      "x": 5,
+      "y": 39,
+      "elevation": 0,
+      "var": "VAR_SUNHOLLOW_STATE",
+      "var_value": "1",
+      "script": "Route111_SunhollowRuins_Museum_EventScript_PyramidScript_3"
+    },
+    {
+      "type": "trigger",
+      "x": 5,
+      "y": 38,
+      "elevation": 0,
+      "var": "VAR_SUNHOLLOW_STATE",
+      "var_value": "1",
+      "script": "Route111_SunhollowRuins_Museum_EventScript_PyramidScript_4"
+    },
+    {
+      "type": "trigger",
+      "x": 5,
+      "y": 37,
+      "elevation": 0,
+      "var": "VAR_SUNHOLLOW_STATE",
+      "var_value": "1",
+      "script": "Route111_SunhollowRuins_Museum_EventScript_PyramidScript_5"
+    },
+    {
+      "type": "trigger",
+      "x": 5,
+      "y": 36,
+      "elevation": 0,
+      "var": "VAR_SUNHOLLOW_STATE",
+      "var_value": "1",
+      "script": "Route111_SunhollowRuins_Museum_EventScript_PyramidScript_6"
+    },
+    {
+      "type": "trigger",
+      "x": 5,
+      "y": 35,
+      "elevation": 0,
+      "var": "VAR_SUNHOLLOW_STATE",
+      "var_value": "1",
+      "script": "Route111_SunhollowRuins_Museum_EventScript_PyramidScript_7"
+    },
+    {
+      "type": "trigger",
+      "x": 5,
+      "y": 34,
+      "elevation": 0,
+      "var": "VAR_SUNHOLLOW_STATE",
+      "var_value": "1",
+      "script": "Route111_SunhollowRuins_Museum_EventScript_PyramidScript_8"
+    }
   ],
   "bg_events": [
 
