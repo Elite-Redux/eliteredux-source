@@ -1545,6 +1545,7 @@
 #define FLAG_PREVENT_OVERWORLD_SPEEDUP                              3104
 #define FLAG_HIDE_SUNHOLLOW_ENTRANCE_CHARACTERS                     3105
 #define FLAG_HIDE_SUNHOLLOW_NORMAN                                  3106
+#define FLAG_HIDE_SUNHOLLOW_MUSEUM_MAGMA_GRUNTS                     3107
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 
