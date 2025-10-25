@@ -356,7 +356,7 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
     ))
     waitmovement(0)
 
-    msgbox(format("Norman: Brandon, meet my son {PLAYER}"))
+    msgbox(format("Norman: Brandon, meet my son {PLAYER}."))
     closemessage
 
     applymovement(OBJECT_EVENT_BRANDON, moves(
