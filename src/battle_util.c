@@ -2530,7 +2530,7 @@ u8 DoBattlerEndTurnEffects(void) {
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_SALT_CURE:
-                if (gStatuses4[gActiveBattler] & STATUS4_SALT_CURE && gBattleMons[gActiveBattler].hp != 0) {
+                if (((getMonotypeChampType() == TYPE_ROCK && GET_BATTLER_SIDE(gActiveBattler) == B_SIDE_PLAYER) || (gStatuses4[gActiveBattler] & STATUS4_SALT_CURE)) && gBattleMons[gActiveBattler].hp != 0) {
                     MAGIC_GUARD_CHECK;
                     gBattleMoveDamage = (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_WATER) || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_WATER))
                                             ? gBattleMons[gActiveBattler].maxHP / 4
