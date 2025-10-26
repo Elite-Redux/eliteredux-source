@@ -5803,27 +5803,11 @@ void HandleMonoChampSpecialEffects(void) {
             fieldEffectId = STATUS_FIELD_PSYCHIC_TERRAIN;
             setTerrain = TRUE;
             break;
-        case TYPE_ICE:
-            SetPermanentWeather(ENUM_WEATHER_HAIL);
-            break;
         case TYPE_FIRE:
             SetPermanentWeather(ENUM_WEATHER_SUN_PRIMAL);
             break;
-        case TYPE_WATER:
-            SetPermanentWeather(ENUM_WEATHER_RAIN_PRIMAL);
-            break;
         case TYPE_FLYING:
             SetPermanentWeather(ENUM_WEATHER_STRONG_WINDS);
-            break;
-        case TYPE_ROCK:
-            SetPermanentWeather(ENUM_WEATHER_SANDSTORM);
-            break;
-        case TYPE_BUG:
-            gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STICKY_WEB;
-            break;
-        case TYPE_POISON:
-            gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount = 2;
-            gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_TOXIC_SPIKES;
             break;
     }
 
