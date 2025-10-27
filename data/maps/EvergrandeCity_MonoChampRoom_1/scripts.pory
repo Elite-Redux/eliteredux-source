@@ -501,6 +501,7 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Ice{
             setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
             setvar(VAR_BATTLE_FIELD_ID, TYPE_ICE)
             msgbox(format("Let's get started"))
+            registerbattleevent(BATTLE_EVENT_STEADY_SPEED)
             trainerbattle_no_intro(TRAINER_MONOCHAMP_ICE, format("I lost"))
         }
     }

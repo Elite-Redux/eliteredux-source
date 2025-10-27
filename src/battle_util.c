@@ -7193,7 +7193,12 @@ static u32 CalcAttackStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
         statBattler = battlerDef;
     } else if (gBattleMoves[move].effect == EFFECT_BODY_PRESS) {
         atkStatToUse = STAT_DEF;
-    } else {
+    }  else if (getMonotypeChampType() == TYPE_ICE && GetBattlerSide(battlerDef) == B_SIDE_PLAYER) {
+        // Monotype Champ Ice uses Speed to calculate attacks
+        atkStatToUse = STAT_SPEED;
+    }
+
+    else {
         ON_ABILITY(battlerAtk,
                    FALSE,
                    gAbilities[ability].onChooseOffensiveStat,
