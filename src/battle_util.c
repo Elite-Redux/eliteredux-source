@@ -8658,7 +8658,7 @@ s32 GetCurrentTerrain(void) {
 }
 
 bool8 IsTrickRoomActive(void) {
-    if (IsAbilityOnField(ABILITY_CLUELESS))
+    if (IsAbilityOnField(ABILITY_CLUELESS) || getMonotypeChampType() == TYPE_FLYING)
         return FALSE;
     else if ((gFieldStatuses & STATUS_FIELD_TRICK_ROOM) || (getMonotypeChampType() == TYPE_NORMAL && gBattleResults.battleTurnCounter % 2 == 1))
         return TRUE;
