@@ -3656,7 +3656,7 @@ bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum mo
 }
 
 bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer) {
-    if (!(gFieldStatuses & statusFlag)) {
+    if (!(gFieldStatuses & statusFlag) && !((gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) == STATUS_FIELD_TERRAIN_PERMANENT)) {
         gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;
         gFieldStatuses |= statusFlag;
         gFieldTimers.started.terrain = TRUE;

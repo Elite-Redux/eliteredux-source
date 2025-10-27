@@ -7890,6 +7890,8 @@ static void Cmd_various(void) {
                 gBattlescriptCurrInstr = ptr;  // fail
             return;
         case VARIOUS_REMOVE_TERRAIN:
+        // If terrain isn't permanent
+        if (!((gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) == STATUS_FIELD_TERRAIN_PERMANENT)) {
             gFieldTimers.terrainTimer = 0;
             switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
                 case STATUS_FIELD_MISTY_TERRAIN:
@@ -7912,6 +7914,11 @@ static void Cmd_various(void) {
                     break;
             }
             gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;  // remove the terrain
+        }
+        else {
+            // Loads the "But it failed!" string but doesn't actually play since script will skip to end of function.
+            SetActiveMultistringChooser(B_MSG_REMOVE_WEATHER_FAILED);
+        }
             break;
         case VARIOUS_REMOVE_WEATHER:
             if (gBattleWeather & WEATHER_SUN_PRIMAL)

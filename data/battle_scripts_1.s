@@ -1123,6 +1123,7 @@ BattleScript_EffectRemoveTerrain:
 	waitmessage B_WAIT_TIME_LONG
 	removeterrain
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_TOXICTERRAINENDS + 1, BattleScript_MoveEndTryFaintTarget
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_MoveEndTryFaintTarget
 	printfromtable gTerrainEndingStringIds
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
@@ -1131,6 +1132,7 @@ BattleScript_EffectRemoveTerrain:
 
 BattleScript_Lawnmower::
 	removeterrain
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_End3
 	printfromtable gTerrainEndingStringIds
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_TOXICTERRAINENDS, BattleScript_Lawnmower_SpDef
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_PSYCHICTERRAINENDS, BattleScript_Lawnmower_SpDef
@@ -1150,6 +1152,7 @@ BattleScript_Lawnmower_SpDef:
 
 BattleScript_CurseOfFamine::
 	removeterrain
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_End3
 	printfromtable gTerrainEndingStringIds
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_TOXICTERRAINENDS, BattleScript_CurseOfFamine_SpDef
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_PSYCHICTERRAINENDS, BattleScript_CurseOfFamine_SpDef
@@ -1193,6 +1196,7 @@ BattleScript_EffectClearWeatherAndTerrainHit::
 BattleScript_EffectClearWeatherAndTerrainHit_TryTerrain:
 	removeterrain
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_TOXICTERRAINENDS + 1, BattleScript_MoveEndTryFaintTarget
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_MoveEndTryFaintTarget
 	printfromtable gTerrainEndingStringIds
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
@@ -1220,6 +1224,7 @@ BattleScript_EffectRemoveTerrainNoFail:
 	seteffectwithchance
 	removeterrain
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_TOXICTERRAINENDS + 1, BattleScript_MoveEndTryFaintTarget
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_MoveEndTryFaintTarget
 	printfromtable gTerrainEndingStringIds
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
@@ -8966,6 +8971,7 @@ BattleScript_TeraformZero::
 BattleScript_TeraformZero_ClearTerrain:
 	removeterrain
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_TOXICTERRAINENDS + 1, BattleScript_End3
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_End3
 	printfromtable gTerrainEndingStringIds
 	waitmessage B_WAIT_TIME_LONG
 	end3
