@@ -1,35 +1,32 @@
 const OBJECT_EVENT_NORMAN         = 7
 const OBJECT_EVENT_BRANDON        = 6
 
-const OBJECT_EVENT_NORMAN_2       = 24
-const OBJECT_EVENT_BRANDON_2      = 25
+const OBJECT_EVENT_NORMAN_2       = 21
+const OBJECT_EVENT_BRANDON_2      = 22
 
-const OBJECT_EVENT_AQUA_MEMBER_1  = 22
-const OBJECT_EVENT_AQUA_MEMBER_2  = 21
+const OBJECT_EVENT_AQUA_MEMBER_1  = 19
+const OBJECT_EVENT_AQUA_MEMBER_2  = 18
 const OBJECT_EVENT_AQUA_MEMBER_3  = 15
 const OBJECT_EVENT_AQUA_MEMBER_4  = 16
 const OBJECT_EVENT_AQUA_MEMBER_5  = 17
-const OBJECT_EVENT_AQUA_MEMBER_6  = 18
-const OBJECT_EVENT_AQUA_MEMBER_7  = 19
-const OBJECT_EVENT_AQUA_MEMBER_8  = 20
 
 const OBJECT_EVENT_MAGMA_MEMBER_1 = 14
 const OBJECT_EVENT_MAGMA_MEMBER_2 = 3
 
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_1 = 34
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_2 = 29
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_3 = 31
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_4 = 26
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_5 = 27
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_6 = 37
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_7 = 32
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_8 = 23
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_1 = 31
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_2 = 26
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_3 = 28
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_4 = 23
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_5 = 24
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_6 = 34
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_7 = 29
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_8 = 20
 
-const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_1  = 33
-const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_2  = 30
-const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_3  = 28
-const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_4  = 35
-const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_5  = 36
+const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_1  = 30
+const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_2  = 27
+const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_3  = 25
+const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_4  = 32
+const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_5  = 33
 
 mapscripts Route111_SunhollowRuins_Museum_MapScripts {
     MAP_SCRIPT_ON_TRANSITION {
@@ -356,7 +353,12 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
     ))
     waitmovement(0)
 
-    msgbox(format("Norman: Brandon, meet my son {PLAYER}."))
+    checkplayergender
+    if(var(VAR_RESULT) == MALE) {
+        msgbox(format("Norman: Brandon, meet my son {PLAYER}."))
+    } else {
+        msgbox(format("Norman: Brandon, meet my daughter {PLAYER}."))
+    }
     closemessage
 
     applymovement(OBJECT_EVENT_BRANDON, moves(
@@ -440,9 +442,9 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
 	addobject(OBJECT_EVENT_AQUA_MEMBER_3)
 	addobject(OBJECT_EVENT_AQUA_MEMBER_4)
 	addobject(OBJECT_EVENT_AQUA_MEMBER_5)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_6)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_7)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_8)
+	addobject(OBJECT_EVENT_AQUA_MEMBER_5)
+	addobject(OBJECT_EVENT_AQUA_MEMBER_5)
+	addobject(OBJECT_EVENT_AQUA_MEMBER_5)
 
     applymovement(OBJECT_EVENT_AQUA_MEMBER_1, moves(
         walk_fast_up * 20
@@ -461,18 +463,6 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
         step_end
     ))
     applymovement(OBJECT_EVENT_AQUA_MEMBER_5, moves(
-        walk_fast_up * 20
-        step_end
-    ))
-    applymovement(OBJECT_EVENT_AQUA_MEMBER_6, moves(
-        walk_fast_up * 20
-        step_end
-    ))
-    applymovement(OBJECT_EVENT_AQUA_MEMBER_7, moves(
-        walk_fast_up * 20
-        step_end
-    ))
-    applymovement(OBJECT_EVENT_AQUA_MEMBER_8, moves(
         walk_fast_up * 20
         step_end
     ))
@@ -531,10 +521,6 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
     hideobjectat(OBJECT_EVENT_BRANDON, MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
     removeobject(OBJECT_EVENT_BRANDON,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
 	setobjectxyperm(OBJECT_EVENT_BRANDON, 1, 1)
-    
-    hideobjectat(OBJECT_EVENT_AQUA_MEMBER_8, MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-    removeobject(OBJECT_EVENT_AQUA_MEMBER_8,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-	setobjectxyperm(OBJECT_EVENT_AQUA_MEMBER_8, 1, 1)
     
     hideobjectat(OBJECT_EVENT_MAGMA_MEMBER_1, MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
     removeobject(OBJECT_EVENT_MAGMA_MEMBER_1,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
@@ -679,7 +665,12 @@ script Route111_SunhollowRuins_Museum_EventScript_Courtney_Global_Script {
         step_end
     ))
     waitmovement(0)
-    msgbox(format("Courtney, keep him busy!"))
+    checkplayergender
+    if(var(VAR_RESULT) == MALE) {
+        msgbox(format("Courtney, keep him busy!"))
+    } else {
+        msgbox(format("Courtney, keep her busy!"))
+    }
     closemessage
 	applymovement(OBJECT_EVENT_COURTNEY, moves(
         face_right
