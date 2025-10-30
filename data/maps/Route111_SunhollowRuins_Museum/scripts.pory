@@ -44,7 +44,7 @@ mapscripts Route111_SunhollowRuins_Museum_MapScripts {
                 setflag(FLAG_TEMP_5)
             break
             case 3: //Everything Finished
-	            playbgm(MUS_B_PYRAMID, 0)
+                playbgm(MUS_B_PYRAMID, 0)
                 setflag(FLAG_TEMP_1)
                 setflag(FLAG_TEMP_2)
                 setflag(FLAG_TEMP_3)
@@ -142,7 +142,7 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_MovePlayerToScri
             waitmovement(0)
         break
     }
-    
+
     applymovement(OBJECT_EVENT_NORMAN, moves(
         walk_up * 6
         walk_right * 2
@@ -316,10 +316,10 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_MovePlayerToScri
     }
     waitmovement(0)
     setflag(FLAG_HIDE_SUNHOLLOW_MUSEUM_MAGMA_GRUNTS)
-    
+
     hideobjectat(OBJECT_EVENT_MAGMA_MEMBER_1,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
     removeobject(OBJECT_EVENT_MAGMA_MEMBER_1,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-	setobjectxyperm(OBJECT_EVENT_MAGMA_MEMBER_1, 1, 1)
+    setobjectxyperm(OBJECT_EVENT_MAGMA_MEMBER_1, 1, 1)
 
     return
 }
@@ -329,17 +329,17 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
     closemessage
     clearflag(FLAG_TEMP_2)
 
-	addobject(OBJECT_EVENT_NORMAN)
-	addobject(OBJECT_EVENT_BRANDON)
+    addobject(OBJECT_EVENT_NORMAN)
+    addobject(OBJECT_EVENT_BRANDON)
 
     setflag(FLAG_TEMP_4)
-    
+
     hideobjectat(OBJECT_EVENT_MAGMA_MEMBER_2,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
     removeobject(OBJECT_EVENT_MAGMA_MEMBER_2,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-	setobjectxyperm(OBJECT_EVENT_MAGMA_MEMBER_2, 1, 1)
+    setobjectxyperm(OBJECT_EVENT_MAGMA_MEMBER_2, 1, 1)
 
     playse(SE_PIN)
-	applymovement(OBJ_EVENT_ID_PLAYER, moves(
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(
         emote_exclamation_mark
         face_left
         step_end
@@ -402,7 +402,7 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
     delay(30)
 
     playse(SE_PIN)
-	applymovement(OBJECT_EVENT_BRANDON, moves(
+    applymovement(OBJECT_EVENT_BRANDON, moves(
         emote_question_mark
         face_down
         step_end
@@ -441,14 +441,14 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
     ))
     waitmovement(0)
     clearflag(FLAG_TEMP_1)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_1)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_2)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_3)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_4)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_5)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_5)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_5)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_5)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_1)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_2)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_3)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_4)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_5)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_5)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_5)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_5)
 
     applymovement(OBJECT_EVENT_AQUA_MEMBER_1, moves(
         walk_fast_up * 20
@@ -471,7 +471,7 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
         step_end
     ))
     waitmovement(0)
-    
+
     applymovement(OBJECT_EVENT_NORMAN, moves(
         face_up
         step_end
@@ -514,21 +514,21 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
         step_end
     ))
     waitmovement(0)
-    
+
     setflag(FLAG_TEMP_1)
     setflag(FLAG_TEMP_2)
-    
+
     hideobjectat(OBJECT_EVENT_NORMAN, MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
     removeobject(OBJECT_EVENT_NORMAN,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-	setobjectxyperm(OBJECT_EVENT_NORMAN, 1, 1)
-    
+    setobjectxyperm(OBJECT_EVENT_NORMAN, 1, 1)
+
     hideobjectat(OBJECT_EVENT_BRANDON, MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
     removeobject(OBJECT_EVENT_BRANDON,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-	setobjectxyperm(OBJECT_EVENT_BRANDON, 1, 1)
-    
+    setobjectxyperm(OBJECT_EVENT_BRANDON, 1, 1)
+
     hideobjectat(OBJECT_EVENT_MAGMA_MEMBER_1, MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
     removeobject(OBJECT_EVENT_MAGMA_MEMBER_1,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-	setobjectxyperm(OBJECT_EVENT_MAGMA_MEMBER_1, 1, 1)
+    setobjectxyperm(OBJECT_EVENT_MAGMA_MEMBER_1, 1, 1)
 
     call(Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Enable_Fighting_Members)
 
@@ -539,23 +539,23 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
 
 script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Enable_Fighting_Members {
     clearflag(FLAG_TEMP_3)
-	addobject(OBJECT_EVENT_NORMAN_2)
-	addobject(OBJECT_EVENT_BRANDON_2)
+    addobject(OBJECT_EVENT_NORMAN_2)
+    addobject(OBJECT_EVENT_BRANDON_2)
 
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_1)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_2)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_3)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_4)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_5)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_6)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_7)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_8)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_1)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_2)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_3)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_4)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_5)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_6)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_7)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_8)
 
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_1)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_2)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_3)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_4)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_5)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_1)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_2)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_3)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_4)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_5)
     return
 }
 
@@ -592,15 +592,15 @@ script Route111_SunhollowRuins_Museum_EventScript_Brandon_Fighting {
 }
 
 script Route111_SunhollowRuins_Museum_EventScript_Magma_Grunt_1 {
-	trainerbattle_single(TRAINER_GRUNT_MAGMA_HIDEOUT_14, format("How did you get in here?! Those guards must be sleeping...\pFine, I'll take care of you myself!"), format("No! No, you can't, we need to- Oops, nearly gave it away!"))
-	msgbox(format("I don't suppose I could convince you to turn around and head home, could I?"), MSGBOX_AUTOCLOSE)
-	end
+    trainerbattle_single(TRAINER_GRUNT_MAGMA_HIDEOUT_14, format("How did you get in here?! Those guards must be sleeping...\pFine, I'll take care of you myself!"), format("No! No, you can't, we need to- Oops, nearly gave it away!"))
+    msgbox(format("I don't suppose I could convince you to turn around and head home, could I?"), MSGBOX_AUTOCLOSE)
+    end
 }
 
 script Route111_SunhollowRuins_Museum_EventScript_Magma_Grunt_2 {
-	trainerbattle_single(TRAINER_GRUNT_MAGMA_HIDEOUT_2, format("Hey, this is a historical site, you oughta be careful!"), format("Wait, you think WE'RE the vandals?!"))
-	msgbox(format("What? We're being careful too. It's not any more ruined than when we arrived."), MSGBOX_AUTOCLOSE)
-	end
+    trainerbattle_single(TRAINER_GRUNT_MAGMA_HIDEOUT_2, format("Hey, this is a historical site, you oughta be careful!"), format("Wait, you think WE'RE the vandals?!"))
+    msgbox(format("What? We're being careful too. It's not any more ruined than when we arrived."), MSGBOX_AUTOCLOSE)
+    end
 }
 
 const OBJECT_EVENT_MAXIE    = 2
@@ -643,19 +643,19 @@ script Route111_SunhollowRuins_Museum_EventScript_Courtney_Global_Script {
     closemessage
 
     playse(SE_PIN)
-	applymovement(OBJECT_EVENT_COURTNEY, moves(
+    applymovement(OBJECT_EVENT_COURTNEY, moves(
         emote_exclamation_mark
         face_down
         step_end
     ))
     waitmovement(0)
-	playbgm(MUS_ENCOUNTER_MAGMA, 0)
+    playbgm(MUS_ENCOUNTER_MAGMA, 0)
     delay(60)
 
     msgbox(format("Courtney: Maxie, caution! The meddling child from Mt Chimney is here."))
 
     playse(SE_PIN)
-	applymovement(OBJECT_EVENT_MAXIE, moves(
+    applymovement(OBJECT_EVENT_MAXIE, moves(
         emote_exclamation_mark
         face_down
         step_end
@@ -664,7 +664,7 @@ script Route111_SunhollowRuins_Museum_EventScript_Courtney_Global_Script {
 
     msgbox(format("Maxie: NOW?!\pArgh, I need more time!"))
     closemessage
-	applymovement(OBJECT_EVENT_MAXIE, moves(
+    applymovement(OBJECT_EVENT_MAXIE, moves(
         face_left
         step_end
     ))
@@ -676,7 +676,7 @@ script Route111_SunhollowRuins_Museum_EventScript_Courtney_Global_Script {
         msgbox(format("Courtney, keep her busy!"))
     }
     closemessage
-	applymovement(OBJECT_EVENT_COURTNEY, moves(
+    applymovement(OBJECT_EVENT_COURTNEY, moves(
         face_right
         step_end
     ))
@@ -684,7 +684,7 @@ script Route111_SunhollowRuins_Museum_EventScript_Courtney_Global_Script {
     msgbox(format("Courtney: Yes! Engaging."))
     closemessage
 
-	applymovement(OBJECT_EVENT_COURTNEY, moves(
+    applymovement(OBJECT_EVENT_COURTNEY, moves(
         walk_down  * 2
         walk_right * 2
         step_end
