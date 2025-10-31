@@ -757,16 +757,14 @@ script Route111_SunhollowRuins_Museum_EventScript_Archie_Global_Script {
     clearflag(FLAG_TEMP_5)
 
     addobject(OBJECT_EVENT_ARCHIE)
+    addobject(OBJECT_EVENT_BRANDON_3)
+    addobject(OBJECT_EVENT_NORMAN_3)
 
     applymovement(OBJECT_EVENT_ARCHIE, moves(
         walk_fast_up   * 9
         walk_fast_left * 2
         step_end
     ))
-    waitmovement(0)
-
-    addobject(OBJECT_EVENT_BRANDON_3)
-    addobject(OBJECT_EVENT_NORMAN_3)
 
     applymovement(OBJECT_EVENT_BRANDON_3, moves(
         walk_fast_up   * 7
@@ -781,6 +779,9 @@ script Route111_SunhollowRuins_Museum_EventScript_Archie_Global_Script {
         step_end
     ))
     waitmovement(0)
+
+    msgbox(format("Maxie: Team Aqua? Here already?!"))
+    closemessage
 
     addobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_1)
     addobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_2)
