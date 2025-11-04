@@ -4174,7 +4174,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType) {
         else if (GET_BATTLER_SIDE(battlerId) != B_SIDE_PLAYER && getMonotypeChampType() == TYPE_FLYING)
             speed *= 2;
 
-        if (gSideTimers[GET_BATTLER_SIDE2(battlerId)].swampTimer) speed /= 4;
+        if (gSideTimers[GET_BATTLER_SIDE2(battlerId)].swampTimer) speed /= 1.5;
 
         if (calcType == TOTAL_SPEED_SECONDARY) return speed;
 

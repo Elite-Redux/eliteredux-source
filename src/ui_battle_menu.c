@@ -4564,7 +4564,7 @@ const u8 sText_Title_Side_Swamp[] = _("Swamp");
 const u8 sText_Title_Side_Swamp_Description[] =
     _("A deep swamp reduces the speed\n"
       "stat of Pokémon on this side\n"
-      "by 75%.");
+      "by 33%.");
 const u8 sText_Title_Side_Smokescreen[] = _("Smokescreen");
 const u8 sText_Title_Side_Smokescreen_Description[] =
     _("Reduces the chance to be hit\n"
