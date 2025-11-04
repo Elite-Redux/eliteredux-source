@@ -4840,7 +4840,7 @@ bool8 IsSleepDisabled(u8 battlerId) {
             asleepmons++;
     }
 
-    if (asleepmons != 0)
+    if (asleepmons != 0 && !(getMonotypeChampType() == TYPE_DARK && GetBattlerSide(battlerId) == B_SIDE_PLAYER)) // AI Sleep Clause disabled for Monochamp Dark
         return TRUE;
     else
         return FALSE;
