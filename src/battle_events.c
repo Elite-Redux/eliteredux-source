@@ -542,8 +542,119 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent) {
 
 #include "data/hell_trainer_skills.h"
 
+// List of gym trainers (underlings + leaders) and Elite Four/Champion who should have skills in Elite mode
+static const u16 sGymTrainersList[] = {
+    // Rustboro Gym
+    TRAINER_JOSH,
+    TRAINER_TOMMY,
+    TRAINER_MARC,
+    TRAINER_ROXANNE_1,
+    // Dewford Gym
+    TRAINER_TAKAO,
+    TRAINER_JOCELYN,
+    TRAINER_LAURA,
+    TRAINER_BRENDEN,
+    TRAINER_CRISTIAN,
+    TRAINER_LILITH,
+    TRAINER_BRAWLY_1,
+    // Mauville Gym
+    TRAINER_KIRK,
+    TRAINER_SHAWN,
+    TRAINER_BEN,
+    TRAINER_VIVIAN,
+    TRAINER_ANGELO,
+    TRAINER_WATTSON_1,
+    // Lavaridge Gym
+    TRAINER_COLE,
+    TRAINER_AXLE,
+    TRAINER_KEEGAN,
+    TRAINER_GERALD,
+    TRAINER_DANIELLE,
+    TRAINER_JACE,
+    TRAINER_JEFF,
+    TRAINER_ELI,
+    TRAINER_FLANNERY_1,
+    // Petalburg Gym
+    TRAINER_RANDALL,
+    TRAINER_PARKER,
+    TRAINER_GEORGE,
+    TRAINER_BERKE,
+    TRAINER_MARY,
+    TRAINER_ALEXIA,
+    TRAINER_JODY,
+    TRAINER_NORMAN_1,
+    // Fortree Gym
+    TRAINER_JARED,
+    TRAINER_FLINT,
+    TRAINER_ASHLEY,
+    TRAINER_EDWARDO,
+    TRAINER_HUMBERTO,
+    TRAINER_DARIUS,
+    TRAINER_WINONA_1,
+    // Mossdeep Gym
+    TRAINER_PRESTON,
+    TRAINER_VIRGIL,
+    TRAINER_BLAKE,
+    TRAINER_HANNAH,
+    TRAINER_SAMANTHA,
+    TRAINER_MAURA,
+    TRAINER_SYLVIA,
+    TRAINER_NATE,
+    TRAINER_KATHLEEN,
+    TRAINER_CLIFFORD,
+    TRAINER_MACEY,
+    TRAINER_NICHOLAS,
+    TRAINER_TATE_AND_LIZA_1,
+    // Sootopolis Gym
+    TRAINER_ANDREA,
+    TRAINER_CRISSY,
+    TRAINER_BRIANNA,
+    TRAINER_CONNIE,
+    TRAINER_BRIDGET,
+    TRAINER_OLIVIA,
+    TRAINER_TIFFANY,
+    TRAINER_BETHANY,
+    TRAINER_ANNIKA,
+    TRAINER_DAPHNE,
+    TRAINER_JUAN_1,
+    // Elite Four & Champion
+    TRAINER_SIDNEY,
+    TRAINER_PHOEBE,
+    TRAINER_GLACIA,
+    TRAINER_DRAKE,
+    TRAINER_WALLACE,
+};
+
+#define GYM_TRAINERS_COUNT ARRAY_COUNT(sGymTrainersList)
+
+// Helper function to check if a trainer is a gym trainer (should have skills in Elite mode)
+static bool8 IsGymTrainer(u16 trainerId) {
+    u16 i;
+    for (i = 0; i < GYM_TRAINERS_COUNT; i++) {
+        if (sGymTrainersList[i] == trainerId)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 void RegisterTrainerBattleEvents(u16 trainerId){
     u8 i;
+    u8 difficulty = gSaveBlock2Ptr->gameDifficulty;
+    bool8 shouldHaveSkills = FALSE;
+
+    // Determine if this trainer should have skills based on difficulty
+    if (difficulty == DIFFICULTY_HELL) {
+        // Hell mode: ALL trainers have skills
+        shouldHaveSkills = TRUE;
+    }
+    else {
+        // Elite/Ace/Easy modes: Only gym trainers have skills
+        shouldHaveSkills = IsGymTrainer(trainerId);
+    }
+
+    // Don't register skills if this trainer shouldn't have them
+    if (!shouldHaveSkills)
+        return;
 
     for(i = 0; i < MAX_HELL_TRAINERS_GYM_SKILLS; i++){
         u8 battleEvent      = sTrainerSkillList[trainerId][i][BATTLE_EVENT_ID];
