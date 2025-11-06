@@ -2382,7 +2382,7 @@ u8 DoBattlerEndTurnEffects(void) {
                 effect++;
                 break;
             case ENDTURN_TOXIC_WASTE_DAMAGE:
-                if (getMonotypeChampType() == TYPE_POISON) effect = gAbilities[ABILITY_TOXIC_SPILL].onEndTurn(ABILITY_NONE, MAX_BATTLERS_COUNT);
+                if (getMonotypeChampType() == TYPE_POISON && gActiveBattler == B_SIDE_PLAYER) effect = gAbilities[ABILITY_TOXIC_SPILL].onEndTurn(ABILITY_NONE, MAX_BATTLERS_COUNT);
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_POISON:  // poison
