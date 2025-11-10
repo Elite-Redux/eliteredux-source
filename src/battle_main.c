@@ -5811,7 +5811,7 @@ void HandleMonoChampSpecialEffects(void) {
             SetPermanentWeather(ENUM_WEATHER_STRONG_WINDS);
             break;
         case TYPE_WATER:
-            SetPermanentWeather(ENUM_WEATHER_RAIN);
+            SetPermanentWeather(ENUM_WEATHER_RAIN_PRIMAL);
             gSideTimers[B_SIDE_PLAYER].swampTimer = 1;
             break;
     }
