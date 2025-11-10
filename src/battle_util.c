@@ -9116,9 +9116,9 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
         }
 
         // Dragon Monotype
-        if (getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(battler) != B_SIDE_PLAYER) {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_FEARMONGER;
-            effect += UseIntimidateClone(battler, ABILITY_FEARMONGER);
+        if (getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(battler) == B_SIDE_PLAYER) {
+            gBattleScripting.abilityPopupOverwrite = ABILITY_FEARMONGER; // Pop up non-functional: to be fixed?
+            effect += UseIntimidateClone(ABILITY_FEARMONGER, B_SIDE_OPPONENT);
         }
 
         // Totem Boost
