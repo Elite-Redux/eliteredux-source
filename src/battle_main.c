@@ -5805,12 +5805,15 @@ void HandleMonoChampSpecialEffects(void) {
             setTerrain = TRUE;
             break;
         case TYPE_FIRE:
+            FlagClear(FLAG_PERMANENT_UNCHANGEABLE_WEATHER); // Clears Permanent weather flag from other Monotype Champs
             SetPermanentWeather(ENUM_WEATHER_SUN_PRIMAL);
             break;
         case TYPE_FLYING:
+            FlagClear(FLAG_PERMANENT_UNCHANGEABLE_WEATHER);
             SetPermanentWeather(ENUM_WEATHER_STRONG_WINDS);
             break;
         case TYPE_WATER:
+            FlagClear(FLAG_PERMANENT_UNCHANGEABLE_WEATHER);
             SetPermanentWeather(ENUM_WEATHER_RAIN_PRIMAL);
             gSideTimers[B_SIDE_PLAYER].swampTimer = 1;
             break;
