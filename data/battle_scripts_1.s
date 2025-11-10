@@ -9133,7 +9133,6 @@ BattleScript_ToxicWasteTurnDmg::
 	copybyte gBattlerAttacker, gStackBattler1
 	printstring STRINGID_PKMNHURTBYTOXICWASTE
 	waitmessage B_WAIT_TIME_LONG
-BattleScript_DoToxicWasteTurnDmg::
 	chosenstatus1animation BS_ATTACKER, STATUS1_POISON
 	goto BattleScript_DoTurnDmg
 
