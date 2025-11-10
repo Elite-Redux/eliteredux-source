@@ -3356,7 +3356,7 @@ static void TryDoEventsBeforeFirstTurn(void) {
                 return;
         }
 
-        while (gBattleStruct->firstTurnAbilityLoopCounter < GetNumPossibleAbilitiesForBattler() - 1){
+        while (gBattleStruct->firstTurnAbilityLoopCounter <= GetNumPossibleAbilitiesForBattler()){
             if (HandleSwitchInAbility(gBattleStruct->firstTurnAbilityLoopCounter++, gBattlerAttacker))
                 return;
         }

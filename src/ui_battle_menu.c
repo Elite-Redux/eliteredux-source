@@ -2318,7 +2318,7 @@ static void PrintStatusTab(void) {
                 StringExpandPlaceholders(gStringVar3, sText_Title_Extra_Abilities_Description_3);
 
                 StringCopy(gStringVar1, gStringVar3);
-                StringCopy(gStringVar2, gAbilities[extraAbilities[3]].name);
+                StringCopy(gStringVar2, gAbilities[extraAbilities[2]].name); // Placeholder since 4th Hell Mode ability slot is not implemented
                 StringExpandPlaceholders(gStringVar3, sText_Title_Extra_Abilities_Description_4);
 
                 // Description

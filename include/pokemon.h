@@ -172,7 +172,7 @@ struct BattlePokemon {
     } __attribute__((packed, aligned(2)));
     MoveEnum moves[MAX_MON_MOVES];
     AbilityEnum abilities[TOTAL_ABILITY_COUNT];
-    AbilityEnum extraAbilities[TOTAL_ABILITY_COUNT];
+    AbilityEnum extraAbilities[HELL_MODE_EXTRA_ABILITIES];
     u16 hp;
     u16 maxHP;
     u16 item;

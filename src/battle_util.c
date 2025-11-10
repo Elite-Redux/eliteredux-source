@@ -8826,7 +8826,7 @@ void UpdateAbilityStateIndicesForNewAbility(u8 battler, u16 newAbility) {
 
 void UpdateAbilityStateIndices(u8 battler, u16 newAbilities[]) {
     u8 i, j;
-    u8 switchInAbilityDone[NUM_INNATE_PER_SPECIES + 1] = {0};
+    u8 switchInAbilityDone[TOTAL_ABILITY_COUNT + HELL_MODE_EXTRA_ABILITIES] = {0};
     u8 turnAbilityTriggers[NUM_INNATE_PER_SPECIES + 1] = {0};
     u32 abilityState[NUM_INNATE_PER_SPECIES + 1] = {0};
     SpeciesEnum species = gBattleMons[battler].species;
@@ -8850,7 +8850,7 @@ void UpdateAbilityStateIndices(u8 battler, u16 newAbilities[]) {
         abilityState[i] = gVolatileStructs[battler].abilityState[j];
     }
 
-    ARRAY_COPY(gVolatileStructs[battler].switchInAbilityDone, switchInAbilityDone)
+    ARRAY_COPY(gVolatileStructs[battler].switchInAbilityDone, switchInAbilityDone);
     ARRAY_COPY(gTurnStructs[battler].turnAbilityTriggers, turnAbilityTriggers);
     ARRAY_COPY(gVolatileStructs[battler].abilityState, abilityState);
 }
@@ -9091,7 +9091,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
     AbilityEnum ability;
     int numPossibleAbilities = GetNumPossibleAbilitiesForBattler();
 
-    if (abilityNumber >= numPossibleAbilities) return FALSE;
+    if (abilityNumber > numPossibleAbilities) return FALSE;
 
     abilityNumber = numPossibleAbilities - abilityNumber;
 
