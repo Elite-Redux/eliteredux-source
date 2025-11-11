@@ -9133,7 +9133,6 @@ BattleScript_ToxicWasteTurnDmg::
 	copybyte gBattlerAttacker, gStackBattler1
 	printstring STRINGID_PKMNHURTBYTOXICWASTE
 	waitmessage B_WAIT_TIME_LONG
-BattleScript_DoToxicWasteTurnDmg::
 	chosenstatus1animation BS_ATTACKER, STATUS1_POISON
 	goto BattleScript_DoTurnDmg
 
@@ -9950,6 +9949,17 @@ BattleScript_DefenderSetsStealthRockEnd:
 	restoreattackerandtargetfrom34
 	return
 
+BattleScript_DefenderSetsCreepingThorns::
+	swapbattlerandtargetvia34
+	checkcondition CONDITION_CREEPING_THORNS, BattleScript_DefenderSetsCreepingThornsEnd
+	playmoveanimation BS_ATTACKER, MOVE_CREEPING_THORNS
+	waitanimation
+	printstring STRINGID_VICIOUSTHORNSUSED
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_DefenderSetsCreepingThornsEnd:
+	restoreattackerandtargetfrom34
+	return
+
 BattleScript_AttackerRoughSkinActivates::
 	call BattleScript_AbilityPopUp
 	call BattleScript_HurtTarget
@@ -10182,13 +10192,19 @@ BattleScript_SetMagicRoomFromScript::
 	end3
 
 BattleScript_SetMonotypeEffect_Normal::
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_NORMAL
 	waitmessage B_WAIT_TIME_LONG
+	playmoveanimation BS_ATTACKER, MOVE_TRICK_ROOM
+	waitanimation
 	end3
 
 BattleScript_SetMonotypeEffect_Fighting::
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_FIGHTING
 	waitmessage B_WAIT_TIME_LONG
+	playmoveanimation BS_ATTACKER, MOVE_NO_RETREAT
+	waitanimation
 	end3
 
 BattleScript_SetMonotypeEffect_Flying::
@@ -10199,13 +10215,19 @@ BattleScript_SetMonotypeEffect_Flying::
 	end3
 
 BattleScript_SetMonotypeEffect_Poison::
+	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_POISON
 	waitmessage B_WAIT_TIME_LONG
+	chosenstatus1animation BS_ATTACKER, STATUS1_POISON
+	waitanimation
 	end3
 
 BattleScript_SetMonotypeEffect_Ground::
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_GROUND
 	waitmessage B_WAIT_TIME_LONG
+	playmoveanimation BS_ATTACKER, MOVE_GRAVITY
+	waitanimation
 	end3
 
 BattleScript_SetMonotypeEffect_Rock::
@@ -10221,13 +10243,19 @@ BattleScript_SetMonotypeEffect_Bug::
 	end3
 
 BattleScript_SetMonotypeEffect_Ghost::
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_GHOST
 	waitmessage B_WAIT_TIME_LONG
+	playmoveanimation BS_ATTACKER, MOVE_CURSE
+	waitanimation
 	end3
 
 BattleScript_SetMonotypeEffect_Steel::
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_STEEL
 	waitmessage B_WAIT_TIME_LONG
+	playmoveanimation BS_ATTACKER, MOVE_IRON_DEFENSE
+	waitanimation
 	end3
 
 BattleScript_SetMonotypeEffect_Fire::
@@ -10266,20 +10294,27 @@ BattleScript_SetMonotypeEffect_Psychic::
 	end3
 
 BattleScript_SetMonotypeEffect_Ice::
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_ICE
 	waitmessage B_WAIT_TIME_LONG
-	playanimation BS_BATTLER_0, B_ANIM_HAIL_CONTINUES, NULL
-	call BattleScript_OnWeatherChange
+	playmoveanimation BS_ATTACKER, MOVE_DOUBLE_TEAM
+	waitanimation
 	end3
 
 BattleScript_SetMonotypeEffect_Dragon::
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_DRAGON
 	waitmessage B_WAIT_TIME_LONG
+	playmoveanimation BS_ATTACKER, MOVE_SCARY_FACE
+	waitanimation
 	end3
 
 BattleScript_SetMonotypeEffect_Dark::
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_DARK
 	waitmessage B_WAIT_TIME_LONG
+	playmoveanimation BS_ATTACKER, MOVE_DARK_VOID
+	waitanimation
 	end3
 
 BattleScript_SetMonotypeEffect_Fairy::

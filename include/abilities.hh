@@ -64,7 +64,7 @@ typedef void (*AbilityOnOffensiveMultiplierHandler)(int battler,
                                                     u16* resistance,
                                                     u16* modifier);
 typedef void (*AbilityOnDefensiveMultiplierHandler)(
-    int battler, int attacker, MoveEnum move, int moveType, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier);
+    int battler, AbilityEnum ability, int attacker, MoveEnum move, int moveType, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier);
 typedef enum NonStackingState {
     NON_STACKING_NONE = 0,
     NON_STACKING_RUIN = 1 << 0,
@@ -244,6 +244,7 @@ typedef struct Ability {
     u16 hailImmune:1;
     u16 toxicTerrainImmune:1;
     u16 stealthRockImmune:1;
+    u16 redCardEffect:1;
 } Ability;
 
 #ifdef __cplusplus

@@ -2132,7 +2132,7 @@ u8 DoFieldEndTurnEffects(void) {
                             if (GetBattlerSide(gBattlerAttacker) == side) break;
                         }
 
-                        if (gSideTimers[side].swampTimer && !gSideTimers[side].started.swamp && --gSideTimers[side].swampTimer == 0) {
+                        if (gSideTimers[side].swampTimer && !gSideTimers[side].started.swamp && !(getMonotypeChampType() == TYPE_WATER) && --gSideTimers[side].swampTimer == 0) {
                             BattleScriptExecute(BattleScript_TheSwampDisappeared);
                             effect++;
                         }
@@ -2382,7 +2382,7 @@ u8 DoBattlerEndTurnEffects(void) {
                 effect++;
                 break;
             case ENDTURN_TOXIC_WASTE_DAMAGE:
-                if (getMonotypeChampType() == TYPE_POISON) effect = gAbilities[ABILITY_TOXIC_SPILL].onEndTurn(ABILITY_NONE, MAX_BATTLERS_COUNT);
+                if (getMonotypeChampType() == TYPE_POISON && gActiveBattler == B_SIDE_PLAYER) effect = gAbilities[ABILITY_TOXIC_SPILL].onEndTurn(ABILITY_NONE, MAX_BATTLERS_COUNT);
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_POISON:  // poison
@@ -4840,7 +4840,7 @@ bool8 IsSleepDisabled(u8 battlerId) {
             asleepmons++;
     }
 
-    if (asleepmons != 0)
+    if (asleepmons != 0 && !(getMonotypeChampType() == TYPE_DARK && GetBattlerSide(battlerId) == B_SIDE_PLAYER)) // AI Sleep Clause disabled for Monochamp Dark
         return TRUE;
     else
         return FALSE;
@@ -6918,7 +6918,7 @@ u16 CalculateAbilityMultipliers(
                TRUE,
                gAbilities[ability].onDefensiveMultiplier,
                gAbilities[ability].onDefensiveMultiplier(
-                   battlerDef, battlerAtk, move, moveType, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier))
+                   battlerDef, ability, battlerAtk, move, moveType, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier))
 
     return multiplier;
 }
@@ -8826,7 +8826,7 @@ void UpdateAbilityStateIndicesForNewAbility(u8 battler, u16 newAbility) {
 
 void UpdateAbilityStateIndices(u8 battler, u16 newAbilities[]) {
     u8 i, j;
-    u8 switchInAbilityDone[NUM_INNATE_PER_SPECIES + 1] = {0};
+    u8 switchInAbilityDone[TOTAL_ABILITY_COUNT + HELL_MODE_EXTRA_ABILITIES] = {0};
     u8 turnAbilityTriggers[NUM_INNATE_PER_SPECIES + 1] = {0};
     u32 abilityState[NUM_INNATE_PER_SPECIES + 1] = {0};
     SpeciesEnum species = gBattleMons[battler].species;
@@ -8850,7 +8850,7 @@ void UpdateAbilityStateIndices(u8 battler, u16 newAbilities[]) {
         abilityState[i] = gVolatileStructs[battler].abilityState[j];
     }
 
-    ARRAY_COPY(gVolatileStructs[battler].switchInAbilityDone, switchInAbilityDone)
+    ARRAY_COPY(gVolatileStructs[battler].switchInAbilityDone, switchInAbilityDone);
     ARRAY_COPY(gTurnStructs[battler].turnAbilityTriggers, turnAbilityTriggers);
     ARRAY_COPY(gVolatileStructs[battler].abilityState, abilityState);
 }
@@ -9091,7 +9091,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
     AbilityEnum ability;
     int numPossibleAbilities = GetNumPossibleAbilitiesForBattler();
 
-    if (abilityNumber >= numPossibleAbilities) return FALSE;
+    if (abilityNumber > numPossibleAbilities) return FALSE;
 
     abilityNumber = numPossibleAbilities - abilityNumber;
 
@@ -9116,9 +9116,9 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
         }
 
         // Dragon Monotype
-        if (getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(battler) != B_SIDE_PLAYER) {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_FEARMONGER;
-            effect += UseIntimidateClone(battler, ABILITY_FEARMONGER);
+        if (getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(battler) == B_SIDE_PLAYER) {
+            gBattleScripting.abilityPopupOverwrite = ABILITY_FEARMONGER; // Pop up non-functional: to be fixed?
+            effect += UseIntimidateClone(ABILITY_FEARMONGER, B_SIDE_OPPONENT);
         }
 
         // Totem Boost
