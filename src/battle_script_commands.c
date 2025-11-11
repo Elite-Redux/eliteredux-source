@@ -4757,12 +4757,17 @@ static void Cmd_moveend(void) {
                     SortBattlersBySpeed(battlers, FALSE);
                     for (i = 0; i < gBattlersCount; i++) {
                         u8 battler = battlers[i];
-                        RestrainingOrderState restrainingOrderState = GetAbilityState(battler, ABILITY_RESTRAINING_ORDER);
+                        AbilityEnum redCardAbility = ABILITY_NONE;
+                        if (GetAbilityState(battler, ABILITY_RESTRAINING_ORDER) == RESTRAINING_ORDER_ACTIVATING) {
+                            redCardAbility = ABILITY_RESTRAINING_ORDER;
+                        } else if (GetAbilityState(battler, ABILITY_CHUCKSTER) == RESTRAINING_ORDER_ACTIVATING) {
+                            redCardAbility = ABILITY_CHUCKSTER;
+                        }
                         // Search for fastest hit pokemon with a red card
                         // Attacker is the one to be switched out, battler is one with red card
-                        if (restrainingOrderState == RESTRAINING_ORDER_ACTIVATING && IsBattlerAlive(battler) && CanBattlerSwitch(gBattlerAttacker)) {
-                            SetAbilityState(battler, ABILITY_RESTRAINING_ORDER, RESTRAINING_ORDER_DONE);
-                            gBattleScripting.abilityPopupOverwrite = ABILITY_RESTRAINING_ORDER;
+                        if (redCardAbility && IsBattlerAlive(battler) && CanBattlerSwitch(gBattlerAttacker)) {
+                            SetAbilityState(battler, redCardAbility, RESTRAINING_ORDER_DONE);
+                            gBattleScripting.abilityPopupOverwrite = redCardAbility;
                             gBattlerAbility = gStackBattler1 = battler;
                             if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
                                 gBattlescriptCurrInstr = BattleScript_MoveEnd;  // Prevent user switch-in selection
@@ -4787,6 +4792,8 @@ static void Cmd_moveend(void) {
                 for (i = 0; i < gBattlersCount; i++) {
                     if (GetAbilityState(i, ABILITY_RESTRAINING_ORDER) == RESTRAINING_ORDER_ACTIVATING)
                         SetAbilityState(i, ABILITY_RESTRAINING_ORDER, RESTRAINING_ORDER_NOT_TRIGGERED);
+
+                    if (GetAbilityState(i, ABILITY_CHUCKSTER) == RESTRAINING_ORDER_ACTIVATING) SetAbilityState(i, ABILITY_CHUCKSTER, RESTRAINING_ORDER_DONE);
                 }
                 gBattleScripting.moveendState++;
                 break;
@@ -7890,35 +7897,34 @@ static void Cmd_various(void) {
                 gBattlescriptCurrInstr = ptr;  // fail
             return;
         case VARIOUS_REMOVE_TERRAIN:
-        // If terrain isn't permanent
-        if (!((gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) == STATUS_FIELD_TERRAIN_PERMANENT)) {
-            gFieldTimers.terrainTimer = 0;
-            switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
-                case STATUS_FIELD_MISTY_TERRAIN:
-                    SetActiveMultistringChooser(B_MSG_MISTYTERRAINENDS);
-                    break;
-                case STATUS_FIELD_GRASSY_TERRAIN:
-                    SetActiveMultistringChooser(B_MSG_GRASSYTERRAINENDS);
-                    break;
-                case STATUS_FIELD_ELECTRIC_TERRAIN:
-                    SetActiveMultistringChooser(B_MSG_ELECTRICTERRAINENDS);
-                    break;
-                case STATUS_FIELD_PSYCHIC_TERRAIN:
-                    SetActiveMultistringChooser(B_MSG_PSYCHICTERRAINENDS);
-                    break;
-                case STATUS_FIELD_TOXIC_TERRAIN:
-                    SetActiveMultistringChooser(B_MSG_TOXICTERRAINENDS);
-                    break;
-                default:
-                    SetActiveMultistringChooser(B_MSG_TOXICTERRAINENDS + 1);  // failsafe
-                    break;
+            // If terrain isn't permanent
+            if (!((gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) == STATUS_FIELD_TERRAIN_PERMANENT)) {
+                gFieldTimers.terrainTimer = 0;
+                switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
+                    case STATUS_FIELD_MISTY_TERRAIN:
+                        SetActiveMultistringChooser(B_MSG_MISTYTERRAINENDS);
+                        break;
+                    case STATUS_FIELD_GRASSY_TERRAIN:
+                        SetActiveMultistringChooser(B_MSG_GRASSYTERRAINENDS);
+                        break;
+                    case STATUS_FIELD_ELECTRIC_TERRAIN:
+                        SetActiveMultistringChooser(B_MSG_ELECTRICTERRAINENDS);
+                        break;
+                    case STATUS_FIELD_PSYCHIC_TERRAIN:
+                        SetActiveMultistringChooser(B_MSG_PSYCHICTERRAINENDS);
+                        break;
+                    case STATUS_FIELD_TOXIC_TERRAIN:
+                        SetActiveMultistringChooser(B_MSG_TOXICTERRAINENDS);
+                        break;
+                    default:
+                        SetActiveMultistringChooser(B_MSG_TOXICTERRAINENDS + 1);  // failsafe
+                        break;
+                }
+                gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;  // remove the terrain
+            } else {
+                // Loads the "But it failed!" string but doesn't actually play since script will skip to end of function.
+                SetActiveMultistringChooser(B_MSG_REMOVE_WEATHER_FAILED);
             }
-            gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;  // remove the terrain
-        }
-        else {
-            // Loads the "But it failed!" string but doesn't actually play since script will skip to end of function.
-            SetActiveMultistringChooser(B_MSG_REMOVE_WEATHER_FAILED);
-        }
             break;
         case VARIOUS_REMOVE_WEATHER:
             if (gBattleWeather & WEATHER_SUN_PRIMAL)

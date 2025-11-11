@@ -6918,7 +6918,7 @@ u16 CalculateAbilityMultipliers(
                TRUE,
                gAbilities[ability].onDefensiveMultiplier,
                gAbilities[ability].onDefensiveMultiplier(
-                   battlerDef, battlerAtk, move, moveType, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier))
+                   battlerDef, ability, battlerAtk, move, moveType, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier))
 
     return multiplier;
 }
