@@ -9949,6 +9949,17 @@ BattleScript_DefenderSetsStealthRockEnd:
 	restoreattackerandtargetfrom34
 	return
 
+BattleScript_DefenderSetsCreepingThorns::
+	swapbattlerandtargetvia34
+	checkcondition CONDITION_CREEPING_THORNS, BattleScript_DefenderSetsCreepingThornsEnd
+	playmoveanimation BS_ATTACKER, MOVE_CREEPING_THORNS
+	waitanimation
+	printstring STRINGID_VICIOUSTHORNSUSED
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_DefenderSetsCreepingThornsEnd:
+	restoreattackerandtargetfrom34
+	return
+
 BattleScript_AttackerRoughSkinActivates::
 	call BattleScript_AbilityPopUp
 	call BattleScript_HurtTarget

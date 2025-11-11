@@ -9267,7 +9267,14 @@ constexpr Ability LightSaber = {
 };
 
 constexpr Ability LooseThorns = {
-    .randomizerBanned = TRUE,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STEALTH_ROCK)
+
+        BattleScriptCall(BattleScript_DefenderSetsCreepingThorns);
+        return TRUE;
+    },
 };
 
 constexpr Ability TurfWar = {

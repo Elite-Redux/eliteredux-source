@@ -9576,6 +9576,13 @@ static void Cmd_checkcondition(void) {
                 appliedEffect = TRUE;
             }
             break;
+        case CONDITION_CREEPING_THORNS:
+            if (!(gSideStatuses[targetSide] & SIDE_STATUS_STEALTH_ROCK)) {
+                gSideStatuses[targetSide] |= SIDE_STATUS_STEALTH_ROCK;
+                gSideTimers[targetSide].stealthRockType = TYPE_GRASS;
+                appliedEffect = TRUE;
+            }
+            break;
     }
 
     if (!appliedEffect) {
