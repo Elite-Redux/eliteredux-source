@@ -273,7 +273,7 @@ script Route114_EventScript_Feraligatr{
 	setvar(VAR_TOTEM_MESSAGE, TOTEM_FIGHT_FERALIGATR)
 	//setflag(FLAG_SHINY_CREATION)
 	setflag(FLAG_ALPHA_CREATION)
-	setwildbattlewithcustommoves(SPECIES_FERALIGATR, 0, ITEM_FERALIGATRITE_Y, MOVE_HYDRO_CANNON, MOVE_HYPER_BEAM, MOVE_BLIZZARD, MOVE_HYPER_VOICE, 0, NATURE_MODEST, 252, 252, 252, 252, 252, 252)
+	setwildbattlewithcustommoves(SPECIES_FERALIGATR, 0, ITEM_FERALIGITE_Y, MOVE_HYDRO_CANNON, MOVE_HYPER_BEAM, MOVE_BLIZZARD, MOVE_HYPER_VOICE, 0, NATURE_MODEST, 252, 252, 252, 252, 252, 252)
 	setflag(FLAG_SYS_CTRL_OBJ_DELETE)
 	dowildbattle
 	clearflag(FLAG_SYS_CTRL_OBJ_DELETE)
@@ -326,8 +326,8 @@ script Route114_EventScript_Feraligatr_Join{
 	if(!flag(FLAG_DEFEATED_ROUTE114_FERALIGATR)){
     	setflag(FLAG_DEFEATED_ROUTE114_FERALIGATR)
 		playfanfare(MUS_OBTAIN_ITEM)
-		giveitem(ITEM_FERALIGATRITE_Y, 1)
-		message(format("{PLAYER} received a Feraligatrite Y!"))
+		giveitem(ITEM_FERALIGITE_Y, 1)
+		message(format("{PLAYER} received a Feraligite Y!"))
 		waitfanfare
 	}
 	release

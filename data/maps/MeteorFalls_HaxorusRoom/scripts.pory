@@ -427,9 +427,9 @@ script MeteorFalls_HaxorusRoom_EventScript_MegaStoneTest{
 			giveitem(ITEM_TOUCANNONITE, 1)
 		}
 
-		checkitem(ITEM_DRAGONITENITE, 1)
+		checkitem(ITEM_DRAGONINITE, 1)
 		if(var(VAR_RESULT) == 0){
-			giveitem(ITEM_DRAGONITENITE, 1)
+			giveitem(ITEM_DRAGONINITE, 1)
 		}
 
 		checkitem(ITEM_BRELOOMITE, 1)
@@ -457,14 +457,14 @@ script MeteorFalls_HaxorusRoom_EventScript_MegaStoneTest{
 			giveitem(ITEM_GYARADOSITE_Y, 1)
 		}
 
-		checkitem(ITEM_FERALIGATRITE_X, 1)
+		checkitem(ITEM_FERALIGITE_X, 1)
 		if(var(VAR_RESULT) == 0){
-			giveitem(ITEM_FERALIGATRITE_X, 1)
+			giveitem(ITEM_FERALIGITE_X, 1)
 		}
 
-		checkitem(ITEM_FERALIGATRITE_Y, 1)
+		checkitem(ITEM_FERALIGITE_Y, 1)
 		if(var(VAR_RESULT) == 0){
-			giveitem(ITEM_FERALIGATRITE_Y, 1)
+			giveitem(ITEM_FERALIGITE_Y, 1)
 		}
 
 		checkitem(ITEM_HAXORUSITE, 1)

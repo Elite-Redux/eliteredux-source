@@ -233,7 +233,7 @@ script SkyPillar_Outside_Text_Gauntlet{
 				// fade the screen here, remove the Bug Catcher and show the Mega Stone
 				msgbox(format("Receive this, and brandish the veritable power of Dragonite in its purest essence."), MSGBOX_NPC)
 				playfanfare(MUS_OBTAIN_ITEM)
-				giveitem(ITEM_DRAGONITENITE, 1)
+				giveitem(ITEM_DRAGONINITE, 1)
 				setflag(FLAG_OBTAINED_DRAGONITENITE)
 				clearflag(FLAG_SYS_DISABLE_AUTOHEAL)
 				waitfanfare

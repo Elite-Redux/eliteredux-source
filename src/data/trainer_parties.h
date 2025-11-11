@@ -43186,7 +43186,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt26[] = { // with Grunt
     },
     {
     .lvl = 0,
-    .species = SPECIES_SCRAFTY_MEGA,
+    .species = SPECIES_SCRAFSTER,
     .heldItem = ITEM_LEFTOVERS,
     .ability = 1,
     .evs = {252, 252, 0, 0, 0, 4},
@@ -55286,7 +55286,7 @@ static const struct TrainerMonItemCustomMoves sParty_Sidney[] = { // Marriland P
     },
     {
     .lvl = 0,
-    .species = SPECIES_SCRAFTY_MEGA,
+    .species = SPECIES_SCRAFSTER,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 0,
     .evs = {3, 252, 0, 0, 0, 252},
@@ -56501,7 +56501,7 @@ static const struct TrainerMonItemCustomMoves sParty_WallaceInsane2[] = {
     {
     .lvl = 0,
     .species = SPECIES_DRAGONITE, // Mega, Wallace-E
-    .heldItem = ITEM_DRAGONITENITE,
+    .heldItem = ITEM_DRAGONINITE,
     .ability = 2, // Prism Scales > Multiscale
     .evs = {0, 252, 4, 0, 0, 252}, // HP, Atk, Def, Sp.Atk, Sp.Def, Speed
     .nature = NATURE_JOLLY,
@@ -56573,7 +56573,7 @@ static const struct TrainerMonItemCustomMoves sParty_WallaceInsane3[] = {
     {
     .lvl = 0,
     .species = SPECIES_DRAGONITE, // Mega, Wallace-E
-    .heldItem = ITEM_DRAGONITENITE,
+    .heldItem = ITEM_DRAGONINITE,
     .ability = 2, // Prism Scales > Multiscale
     .evs = {0, 252, 4, 0, 0, 252}, // HP, Atk, Def, Sp.Atk, Sp.Def, Speed
     .nature = NATURE_JOLLY,
@@ -56645,7 +56645,7 @@ static const struct TrainerMonItemCustomMoves sParty_WallaceInsane4[] = {
     {
     .lvl = 0,
     .species = SPECIES_DRAGONITE, // Mega, Wallace-E
-    .heldItem = ITEM_DRAGONITENITE,
+    .heldItem = ITEM_DRAGONINITE,
     .ability = 2, // Prism Scales > Multiscale
     .evs = {0, 252, 4, 0, 0, 252}, // HP, Atk, Def, Sp.Atk, Sp.Def, Speed
     .nature = NATURE_JOLLY,
@@ -61501,7 +61501,7 @@ static const struct TrainerMonItemCustomMoves sParty_FeraligatriteXRoute105[] = 
     {
     .lvl = 0,
     .species = SPECIES_FERALIGATR, // Mega X
-    .heldItem = ITEM_FERALIGATRITE_X,
+    .heldItem = ITEM_FERALIGITE_X,
     .ability = 0, // Intimidate > Primal Maw
     .evs = {0, 252, 0, 0, 4, 252}, // HP, Atk, Def, SpA, SpD, Spe
     .nature = NATURE_ADAMANT,
@@ -61558,7 +61558,7 @@ static const struct TrainerMonItemCustomMoves sParty_FeraligatriteXRoute105Hell[
     {
     .lvl = 0,
     .species = SPECIES_FERALIGATR, // Mega X
-    .heldItem = ITEM_FERALIGATRITE_X,
+    .heldItem = ITEM_FERALIGITE_X,
     .ability = 0, // Intimidate > Primal Maw
     .evs = {0, 252, 0, 0, 4, 252}, // HP, Atk, Def, SpA, SpD, Spe
     .nature = NATURE_ADAMANT,
@@ -61939,7 +61939,7 @@ static const struct TrainerMonItemCustomMoves sParty_Dragonitenite_Sage_1_SkyPil
     {
     .lvl = 0,
     .species = SPECIES_DRAGONITE,
-    .heldItem = ITEM_DRAGONITENITE,
+    .heldItem = ITEM_DRAGONINITE,
     .ability = 2,
     .evs = {0, 252, 4, 0, 0, 252},
     .nature = NATURE_JOLLY,
@@ -61978,7 +61978,7 @@ static const struct TrainerMonItemCustomMoves sParty_Dragonitenite_Sage_1_SkyPil
     {
     .lvl = 0,
     .species = SPECIES_DRAGONITE,
-    .heldItem = ITEM_DRAGONITENITE,
+    .heldItem = ITEM_DRAGONINITE,
     .ability = 2,
     .evs = {0, 252, 4, 0, 0, 252},
     .nature = NATURE_JOLLY,
@@ -71702,7 +71702,7 @@ static const struct TrainerMonItemCustomMoves sParty_Jackson1Insane[] = {
     {
     .lvl = 0,
     .species = SPECIES_FERALIGATR,
-    .heldItem = ITEM_FERALIGATRITE_Y,
+    .heldItem = ITEM_FERALIGITE_Y,
     .ability = 0,
     .evs = {252, 0, 0, 252, 4, 0},
     .nature = NATURE_MODEST,
@@ -71750,7 +71750,7 @@ static const struct TrainerMonItemCustomMoves sParty_Jackson1Hell[] = {
     {
     .lvl = 0,
     .species = SPECIES_FERALIGATR,
-    .heldItem = ITEM_FERALIGATRITE_Y,
+    .heldItem = ITEM_FERALIGITE_Y,
     .ability = 0,
     .evs = {252, 0, 0, 252, 4, 0},
     .nature = NATURE_MODEST,
@@ -72751,7 +72751,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt37Insane[] = {
     {
     .lvl = 0,
     .species = SPECIES_FERALIGATR,
-    .heldItem = ITEM_FERALIGATRITE_X,
+    .heldItem = ITEM_FERALIGITE_X,
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
@@ -72799,7 +72799,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt37Hell[] = {
     {
     .lvl = 0,
     .species = SPECIES_FERALIGATR,
-    .heldItem = ITEM_FERALIGATRITE_X,
+    .heldItem = ITEM_FERALIGITE_X,
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
@@ -73107,7 +73107,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt41Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_SCRAFTY_MEGA,
+    .species = SPECIES_SCRAFSTER,
     .heldItem = ITEM_LEFTOVERS,
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
@@ -73155,7 +73155,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt41Hell[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_SCRAFTY_MEGA,
+    .species = SPECIES_SCRAFSTER,
     .heldItem = ITEM_LEFTOVERS,
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
@@ -88557,7 +88557,7 @@ static const struct TrainerMonItemCustomMoves sParty_Feraligatritexroute105Insan
     {
     .lvl = 0,
     .species = SPECIES_FERALIGATR,
-    .heldItem = ITEM_FERALIGATRITE_X,
+    .heldItem = ITEM_FERALIGITE_X,
     .ability = 0,
     .evs = {0, 252, 0, 0, 4, 252},
     .nature = NATURE_JOLLY,
@@ -88615,7 +88615,7 @@ static const struct TrainerMonItemCustomMoves sParty_Feraligatritexroute105Hell[
     {
     .lvl = 0,
     .species = SPECIES_FERALIGATR,
-    .heldItem = ITEM_FERALIGATRITE_X,
+    .heldItem = ITEM_FERALIGITE_X,
     .ability = 0,
     .evs = {0, 252, 0, 0, 4, 252},
     .nature = NATURE_JOLLY,
@@ -95303,7 +95303,7 @@ static const struct TrainerMonItemCustomMoves sParty_ShannonInsane[] = {
     {
     .lvl = 0,
     .species = SPECIES_DRAGONITE,
-    .heldItem = ITEM_DRAGONITENITE,
+    .heldItem = ITEM_DRAGONINITE,
     .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_ADAMANT,
@@ -95360,7 +95360,7 @@ static const struct TrainerMonItemCustomMoves sParty_ShannonHell[] = {
     {
     .lvl = 0,
     .species = SPECIES_DRAGONITE,
-    .heldItem = ITEM_DRAGONITENITE,
+    .heldItem = ITEM_DRAGONINITE,
     .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_ADAMANT,
@@ -96047,7 +96047,7 @@ static const struct TrainerMonItemCustomMoves sParty_MichelleInsane[] = {
     {
     .lvl = 0,
     .species = SPECIES_CLEFABLE_REDUX,
-    .heldItem = ITEM_CLEFABITE_R,
+    .heldItem = ITEM_CLEFABLITE_R,
     .ability = 1,
     .evs = {160, 0, 96, 252, 0, 0},
     .nature = NATURE_MODEST,
@@ -96104,7 +96104,7 @@ static const struct TrainerMonItemCustomMoves sParty_MichelleHell[] = {
     {
     .lvl = 0,
     .species = SPECIES_CLEFABLE_REDUX,
-    .heldItem = ITEM_CLEFABITE_R,
+    .heldItem = ITEM_CLEFABLITE_R,
     .ability = 1,
     .evs = {160, 0, 96, 252, 0, 0},
     .nature = NATURE_MODEST,
