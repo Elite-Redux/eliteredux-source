@@ -1765,7 +1765,10 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
     if (trainerNum == TRAINER_SECRET_BASE) return 0;
 
-    RegisterTrainerBattleEvents(trainerNum);
+    // Register battle events (hell mode extra skills) only in hell difficulty.
+    // This function is also called for wild mons, not just trainers.
+    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && difficultySetting == DIFFICULTY_HELL)
+        RegisterTrainerBattleEvents(trainerNum);
 
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && !(gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL))) {
         if (firstTrainer == TRUE) ZeroEnemyPartyMons();
@@ -3353,7 +3356,7 @@ static void TryDoEventsBeforeFirstTurn(void) {
                 return;
         }
 
-        while (gBattleStruct->firstTurnAbilityLoopCounter < GetNumPossibleAbilitiesForBattler() - 1){
+        while (gBattleStruct->firstTurnAbilityLoopCounter <= GetNumPossibleAbilitiesForBattler()){
             if (HandleSwitchInAbility(gBattleStruct->firstTurnAbilityLoopCounter++, gBattlerAttacker))
                 return;
         }
@@ -4174,7 +4177,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType) {
         else if (GET_BATTLER_SIDE(battlerId) != B_SIDE_PLAYER && getMonotypeChampType() == TYPE_FLYING)
             speed *= 2;
 
-        if (gSideTimers[GET_BATTLER_SIDE2(battlerId)].swampTimer) speed /= 4;
+        if (gSideTimers[GET_BATTLER_SIDE2(battlerId)].swampTimer) speed /= 1.5;
 
         if (calcType == TOTAL_SPEED_SECONDARY) return speed;
 
@@ -5802,10 +5805,17 @@ void HandleMonoChampSpecialEffects(void) {
             setTerrain = TRUE;
             break;
         case TYPE_FIRE:
+            FlagClear(FLAG_PERMANENT_UNCHANGEABLE_WEATHER); // Clears Permanent weather flag from other Monotype Champs
             SetPermanentWeather(ENUM_WEATHER_SUN_PRIMAL);
             break;
         case TYPE_FLYING:
+            FlagClear(FLAG_PERMANENT_UNCHANGEABLE_WEATHER);
             SetPermanentWeather(ENUM_WEATHER_STRONG_WINDS);
+            break;
+        case TYPE_WATER:
+            FlagClear(FLAG_PERMANENT_UNCHANGEABLE_WEATHER);
+            SetPermanentWeather(ENUM_WEATHER_RAIN_PRIMAL);
+            gSideTimers[B_SIDE_PLAYER].swampTimer = 1;
             break;
     }
 

@@ -38,6 +38,7 @@ static int min(int a, int b) { return a < b ? a : b; }
 class __EnumHack {
    public:
     operator int() const { return 0; }
+    operator u32() const { return 0; }
     operator AccuracyPriority() const { return ACCURACY_NO_RESULT; }
     operator MultihitType() const { return MULTIHIT_SINGLE; }
 };
@@ -93,7 +94,7 @@ ENUM_OR(MoveEffectEnum)
         u16 *modifier
 #define DELEGATE_OFFENSIVE_MULTIPLIER battler, ability, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier
 #define ON_DEFENSIVE_MULTIPLIER \
-    int battler, int attacker, MoveEnum move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
+    int battler, AbilityEnum ability, int attacker, MoveEnum move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
 #define DELEGATE_DEFENSIVE_MULTIPLIER battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier
 #define ON_ACCURACY AbilityEnum ability, int battler, int target, MoveEnum move, int moveType, int *accuracy
 #define DELEGATE_ACCURACY ability, battler, target, move, moveType, accuracy
@@ -194,7 +195,7 @@ typedef enum {
     FOLLOWUP_ALLOW_FAILED,
     FOLLOWUP_ALLOW_SELF,
 } FollowupType;
-static int AdjustFollowupMoveTarget(int battler, int *target, MoveEnum move, FollowupType type) {
+static int AdjustFollowupMoveTarget(int battler, int* target, MoveEnum move, FollowupType type) {
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT && type != FOLLOWUP_ALLOW_FAILED) return FALSE;
 
     switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
@@ -261,7 +262,7 @@ static int AbilityStatusEffectSafe(MoveEffectEnum effect, int attacker, int targ
     return TRUE;
 }
 
-static int PoisonPuppeteerClone(AbilityEnum ability, int battler, int (*predicate)(int battler, int target), const u8 *callback) {
+static int PoisonPuppeteerClone(AbilityEnum ability, int battler, int (*predicate)(int battler, int target), const u8* callback) {
     int flag = GetAbilityState(battler, ability);
     if (!flag) return FALSE;
     int any = FALSE;
@@ -324,10 +325,10 @@ static int MoxieClone(int battler, int stat) {
         }                                                                    \
     }
 
-static void RuinEffect(int ruinStat, int battler, int statId, u32 *stat, NonStackingState *flags) {
+static void RuinEffect(int ruinStat, int battler, int statId, u32* stat, NonStackingState* flags) {
     if (statId != ruinStat) return;
     if (*flags & NON_STACKING_RUIN) return;
-    ON_ABILITY(battler, FALSE, gAbilities[ability].ruinStat == statId, return) *stat *= .75;
+    ON_ABILITY(battler, FALSE, gAbilities[ability].ruinStat == statId, return)* stat *= .75;
     *flags = static_cast<NonStackingState>(static_cast<int>(*flags) | static_cast<int>(NON_STACKING_RUIN));
 }
 
@@ -839,7 +840,7 @@ constexpr Ability MagnetPull = {
 constexpr Ability Soundproof = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(IsSoundMove(attacker, move))
-        CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
+        CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)* immunityScript = BattleScript_SoundproofProtected;
         return TRUE;
     },
     .breakable = TRUE,
@@ -957,7 +958,7 @@ constexpr Ability Truant = {
 constexpr Ability Hustle = {
     .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MUL(1.4); },
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-        CHECK_NOT(IS_MOVE_STATUS(move)) *accuracy *= .9;
+        CHECK_NOT(IS_MOVE_STATUS(move))* accuracy *= .9;
         return ACCURACY_MULTIPLICATIVE;
     },
 };
@@ -1281,7 +1282,7 @@ constexpr Ability Normalize = {
         },
     .onMoveType = +[](ON_MOVE_TYPE) -> int { return TYPE_NORMAL + 1; },
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
-        CHECK(moveType == TYPE_NORMAL) CHECK(*mod) CHECK(*mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
+        CHECK(moveType == TYPE_NORMAL) CHECK(*mod) CHECK(*mod < UQ_4_12(1.0))* mod = UQ_4_12(1.0);
         return TRUE;
     },
 };
@@ -1945,7 +1946,7 @@ constexpr Ability FurCoat = {
 constexpr Ability Bulletproof = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(gBattleMoves[move].flags & FLAG_BALLISTIC)
-        CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER) *immunityScript = BattleScript_SoundproofProtected;
+        CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)* immunityScript = BattleScript_SoundproofProtected;
         return TRUE;
     },
     .breakable = TRUE,
@@ -2135,13 +2136,21 @@ constexpr Ability Stamina = {
     },
 };
 
+u32 CanBattlerBeForceSwitched(int battler) {
+    CHECK(IsBattlerAlive(battler))
+    CHECK(CanBattlerSwitch(battler))
+    CHECK(gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+    CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
+    CHECK(CountUsablePartyMons(battler))
+    return TRUE;
+}
+
 constexpr Ability WimpOut = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(CheckHalfHpAbility(battler, attacker))
         CHECK_NOT(TestSheerForceFlag(attacker, gCurrentMove))
-        CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-        CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
-        CHECK(CountUsablePartyMons(battler));
+        CHECK(CanBattlerBeForceSwitched(battler))
+
         gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_EMERGENCY_EXIT;
         return FALSE;
     },
@@ -3542,7 +3551,7 @@ constexpr Ability Hypnotist = {
 
 constexpr Ability Overwhelm = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
-        CHECK(moveType == TYPE_DRAGON) CHECK(defType == TYPE_FAIRY) CHECK_NOT(*mod) *mod = UQ_4_12(1.0);
+        CHECK(moveType == TYPE_DRAGON) CHECK(defType == TYPE_FAIRY) CHECK_NOT(*mod)* mod = UQ_4_12(1.0);
         return TRUE;
     },
     .tauntImmune = TRUE,
@@ -5287,7 +5296,7 @@ constexpr Ability WindRider = {
 constexpr Ability SoothingAroma = {
     .onEntry = +[](ON_ENTRY) -> int {
         int anyStatus = FALSE;
-        struct Pokemon *party;
+        struct Pokemon* party;
 
         if (GetBattlerSide(battler) == B_SIDE_PLAYER)
             party = gPlayerParty;
@@ -7272,11 +7281,9 @@ constexpr Ability SwordOfDamnation = {
 constexpr Ability RestrainingOrder = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
-        CHECK(ShouldApplyOnHitAffect(battler))
-        CHECK(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-        CHECK_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
-        CHECK(CountUsablePartyMons(battler))
-
+        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(CanBattlerBeForceSwitched(attacker))
+        
         SetAbilityState(battler, ability, RESTRAINING_ORDER_ACTIVATING);
         return FALSE;
     },
@@ -8853,7 +8860,20 @@ constexpr Ability Thermomancy = {
 };
 
 constexpr Ability Chuckster = {
-    .randomizerBanned = TRUE,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
+        CHECK(DidMoveHit())
+        
+        SetAbilityState(battler, ability, CanBattlerBeForceSwitched(attacker) ? RESTRAINING_ORDER_ACTIVATING : RESTRAINING_ORDER_DONE);
+        return FALSE;
+    },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (!GetAbilityState(battler, ability)) {
+                MUL(.5);
+            }
+        },
+    .redCardEffect = TRUE,
 };
 
 constexpr Ability HeatSink = {
@@ -9132,7 +9152,7 @@ constexpr Ability Craving = {
 constexpr Ability RatKing = {
     .onStat =
         +[](ON_STAT) {
-            const BaseStats *baseStats = &gBaseStats[gBattleMons[battler].species];
+            const BaseStats* baseStats = &gBaseStats[gBattleMons[battler].species];
             int bst =
                 baseStats->baseHP + baseStats->baseAttack + baseStats->baseDefense + baseStats->baseSpAttack + baseStats->baseSpDefense + baseStats->baseSpeed;
             if (bst >= 400) return;
@@ -9267,7 +9287,14 @@ constexpr Ability LightSaber = {
 };
 
 constexpr Ability LooseThorns = {
-    .randomizerBanned = TRUE,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(IsMoveMakingContact(move, attacker))
+        CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STEALTH_ROCK)
+
+        BattleScriptCall(BattleScript_DefenderSetsCreepingThorns);
+        return TRUE;
+    },
 };
 
 constexpr Ability TurfWar = {
@@ -9318,6 +9345,10 @@ constexpr Ability DeadlyPrecision = {
         gHitMarker &= ~HITMARKER_MOLD_BREAKER;
         return typeEffectiveness >= UQ_4_12(2.0);
     },
+};
+
+constexpr Ability RockyExterior = {
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ROCK); },
 };
 
 typedef struct AbilityKVPair {
@@ -10205,6 +10236,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_MYCELIUM_MIGHT, MyceliumMight},
     {ABILITY_DEADLY_PRECISION, DeadlyPrecision},
     {ABILITY_I_AM_STEVE, IAmSteve},
+    {ABILITY_ROCKY_EXTERIOR, RockyExterior},
 };
 
 template <int N>
@@ -10317,6 +10349,6 @@ consteval std::array<Ability, ABILITIES_COUNT> mergeArrays(const AbilityKVPair s
 #include "generated/data/abilities/ability_text.hh"
 
 const static auto abilityData = mergeArrays<ARRAY_COUNT(sAbilities)>(sAbilities, mergeArrays<ARRAY_COUNT(sAbilityText)>(sAbilityText));
-const Ability *const gAbilities = abilityData.data();
+const Ability* const gAbilities = abilityData.data();
 
 #pragma GCC diagnostic pop

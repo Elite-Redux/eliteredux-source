@@ -1,35 +1,32 @@
 const OBJECT_EVENT_NORMAN         = 7
 const OBJECT_EVENT_BRANDON        = 6
 
-const OBJECT_EVENT_NORMAN_2       = 24
-const OBJECT_EVENT_BRANDON_2      = 25
+const OBJECT_EVENT_NORMAN_2       = 21
+const OBJECT_EVENT_BRANDON_2      = 22
 
-const OBJECT_EVENT_AQUA_MEMBER_1  = 22
-const OBJECT_EVENT_AQUA_MEMBER_2  = 21
+const OBJECT_EVENT_AQUA_MEMBER_1  = 19
+const OBJECT_EVENT_AQUA_MEMBER_2  = 18
 const OBJECT_EVENT_AQUA_MEMBER_3  = 15
 const OBJECT_EVENT_AQUA_MEMBER_4  = 16
 const OBJECT_EVENT_AQUA_MEMBER_5  = 17
-const OBJECT_EVENT_AQUA_MEMBER_6  = 18
-const OBJECT_EVENT_AQUA_MEMBER_7  = 19
-const OBJECT_EVENT_AQUA_MEMBER_8  = 20
 
 const OBJECT_EVENT_MAGMA_MEMBER_1 = 14
 const OBJECT_EVENT_MAGMA_MEMBER_2 = 3
 
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_1 = 34
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_2 = 29
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_3 = 31
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_4 = 26
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_5 = 27
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_6 = 37
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_7 = 32
-const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_8 = 23
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_1 = 31
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_2 = 26
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_3 = 28
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_4 = 23
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_5 = 24
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_6 = 34
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_7 = 29
+const OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_8 = 20
 
-const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_1  = 33
-const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_2  = 30
-const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_3  = 28
-const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_4  = 35
-const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_5  = 36
+const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_1  = 30
+const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_2  = 27
+const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_3  = 25
+const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_4  = 32
+const OBJECT_EVENT_FIGHTING_MEMBER_AQUA_5  = 33
 
 mapscripts Route111_SunhollowRuins_Museum_MapScripts {
     MAP_SCRIPT_ON_TRANSITION {
@@ -38,18 +35,22 @@ mapscripts Route111_SunhollowRuins_Museum_MapScripts {
                 setflag(FLAG_TEMP_1)
                 setflag(FLAG_TEMP_2)
                 setflag(FLAG_TEMP_3)
+                setflag(FLAG_TEMP_5)
                 setvar(VAR_SUNHOLLOW_STATE, 1)
             break
             case 2: //Mid conflict
                 setflag(FLAG_TEMP_1)
                 setflag(FLAG_TEMP_2)
+                setflag(FLAG_TEMP_5)
             break
             case 3: //Everything Finished
-	            playbgm(MUS_B_PYRAMID, 0)
+                playbgm(MUS_B_PYRAMID, 0)
                 setflag(FLAG_TEMP_1)
                 setflag(FLAG_TEMP_2)
                 setflag(FLAG_TEMP_3)
                 setflag(FLAG_TEMP_4)
+                setflag(FLAG_TEMP_5)
+                setflag(FLAG_TEMP_6)
                 setflag(FLAG_HIDE_SUNHOLLOW_MUSEUM_MAGMA_GRUNTS)
             break
         }
@@ -141,7 +142,7 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_MovePlayerToScri
             waitmovement(0)
         break
     }
-    
+
     applymovement(OBJECT_EVENT_NORMAN, moves(
         walk_up * 6
         walk_right * 2
@@ -315,10 +316,10 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_MovePlayerToScri
     }
     waitmovement(0)
     setflag(FLAG_HIDE_SUNHOLLOW_MUSEUM_MAGMA_GRUNTS)
-    
+
     hideobjectat(OBJECT_EVENT_MAGMA_MEMBER_1,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
     removeobject(OBJECT_EVENT_MAGMA_MEMBER_1,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-	setobjectxyperm(OBJECT_EVENT_MAGMA_MEMBER_1, 1, 1)
+    setobjectxyperm(OBJECT_EVENT_MAGMA_MEMBER_1, 1, 1)
 
     return
 }
@@ -328,17 +329,17 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
     closemessage
     clearflag(FLAG_TEMP_2)
 
-	addobject(OBJECT_EVENT_NORMAN)
-	addobject(OBJECT_EVENT_BRANDON)
+    addobject(OBJECT_EVENT_NORMAN)
+    addobject(OBJECT_EVENT_BRANDON)
 
     setflag(FLAG_TEMP_4)
-    
+
     hideobjectat(OBJECT_EVENT_MAGMA_MEMBER_2,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
     removeobject(OBJECT_EVENT_MAGMA_MEMBER_2,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-	setobjectxyperm(OBJECT_EVENT_MAGMA_MEMBER_2, 1, 1)
+    setobjectxyperm(OBJECT_EVENT_MAGMA_MEMBER_2, 1, 1)
 
     playse(SE_PIN)
-	applymovement(OBJ_EVENT_ID_PLAYER, moves(
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(
         emote_exclamation_mark
         face_left
         step_end
@@ -356,7 +357,12 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
     ))
     waitmovement(0)
 
-    msgbox(format("Norman: Brandon, meet my son {PLAYER}."))
+    checkplayergender
+    if(var(VAR_RESULT) == MALE) {
+        msgbox(format("Norman: Brandon, meet my son {PLAYER}."))
+    } else {
+        msgbox(format("Norman: Brandon, meet my daughter {PLAYER}."))
+    }
     closemessage
 
     applymovement(OBJECT_EVENT_BRANDON, moves(
@@ -396,7 +402,7 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
     delay(30)
 
     playse(SE_PIN)
-	applymovement(OBJECT_EVENT_BRANDON, moves(
+    applymovement(OBJECT_EVENT_BRANDON, moves(
         emote_question_mark
         face_down
         step_end
@@ -435,14 +441,14 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
     ))
     waitmovement(0)
     clearflag(FLAG_TEMP_1)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_1)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_2)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_3)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_4)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_5)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_6)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_7)
-	addobject(OBJECT_EVENT_AQUA_MEMBER_8)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_1)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_2)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_3)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_4)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_5)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_5)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_5)
+    addobject(OBJECT_EVENT_AQUA_MEMBER_5)
 
     applymovement(OBJECT_EVENT_AQUA_MEMBER_1, moves(
         walk_fast_up * 20
@@ -464,20 +470,8 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
         walk_fast_up * 20
         step_end
     ))
-    applymovement(OBJECT_EVENT_AQUA_MEMBER_6, moves(
-        walk_fast_up * 20
-        step_end
-    ))
-    applymovement(OBJECT_EVENT_AQUA_MEMBER_7, moves(
-        walk_fast_up * 20
-        step_end
-    ))
-    applymovement(OBJECT_EVENT_AQUA_MEMBER_8, moves(
-        walk_fast_up * 20
-        step_end
-    ))
     waitmovement(0)
-    
+
     applymovement(OBJECT_EVENT_NORMAN, moves(
         face_up
         step_end
@@ -520,25 +514,21 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
         step_end
     ))
     waitmovement(0)
-    
+
     setflag(FLAG_TEMP_1)
     setflag(FLAG_TEMP_2)
-    
+
     hideobjectat(OBJECT_EVENT_NORMAN, MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
     removeobject(OBJECT_EVENT_NORMAN,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-	setobjectxyperm(OBJECT_EVENT_NORMAN, 1, 1)
-    
+    setobjectxyperm(OBJECT_EVENT_NORMAN, 1, 1)
+
     hideobjectat(OBJECT_EVENT_BRANDON, MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
     removeobject(OBJECT_EVENT_BRANDON,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-	setobjectxyperm(OBJECT_EVENT_BRANDON, 1, 1)
-    
-    hideobjectat(OBJECT_EVENT_AQUA_MEMBER_8, MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-    removeobject(OBJECT_EVENT_AQUA_MEMBER_8,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-	setobjectxyperm(OBJECT_EVENT_AQUA_MEMBER_8, 1, 1)
-    
+    setobjectxyperm(OBJECT_EVENT_BRANDON, 1, 1)
+
     hideobjectat(OBJECT_EVENT_MAGMA_MEMBER_1, MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
     removeobject(OBJECT_EVENT_MAGMA_MEMBER_1,  MAP_ROUTE111_SUNHOLLOW_RUINS_MUSEUM)
-	setobjectxyperm(OBJECT_EVENT_MAGMA_MEMBER_1, 1, 1)
+    setobjectxyperm(OBJECT_EVENT_MAGMA_MEMBER_1, 1, 1)
 
     call(Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Enable_Fighting_Members)
 
@@ -549,23 +539,23 @@ script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Global {
 
 script Route111_SunhollowRuins_Museum_EventScript_PyramidScript_Enable_Fighting_Members {
     clearflag(FLAG_TEMP_3)
-	addobject(OBJECT_EVENT_NORMAN_2)
-	addobject(OBJECT_EVENT_BRANDON_2)
+    addobject(OBJECT_EVENT_NORMAN_2)
+    addobject(OBJECT_EVENT_BRANDON_2)
 
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_1)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_2)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_3)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_4)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_5)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_6)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_7)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_8)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_1)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_2)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_3)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_4)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_5)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_6)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_7)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_MAGMA_8)
 
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_1)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_2)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_3)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_4)
-	addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_5)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_1)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_2)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_3)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_4)
+    addobject(OBJECT_EVENT_FIGHTING_MEMBER_AQUA_5)
     return
 }
 
@@ -602,15 +592,15 @@ script Route111_SunhollowRuins_Museum_EventScript_Brandon_Fighting {
 }
 
 script Route111_SunhollowRuins_Museum_EventScript_Magma_Grunt_1 {
-	trainerbattle_single(TRAINER_GRUNT_MAGMA_HIDEOUT_14, format("How did you get in here?! Those guards must be sleeping...\pFine, I'll take care of you myself!"), format("No! No, you can't, we need to- Oops, nearly gave it away!"))
-	msgbox(format("I don't suppose I could convince you to turn around and head home, could I?"), MSGBOX_AUTOCLOSE)
-	end
+    trainerbattle_single(TRAINER_GRUNT_MAGMA_HIDEOUT_14, format("How did you get in here?! Those guards must be sleeping...\pFine, I'll take care of you myself!"), format("No! No, you can't, we need to- Oops, nearly gave it away!"))
+    msgbox(format("I don't suppose I could convince you to turn around and head home, could I?"), MSGBOX_AUTOCLOSE)
+    end
 }
 
 script Route111_SunhollowRuins_Museum_EventScript_Magma_Grunt_2 {
-	trainerbattle_single(TRAINER_GRUNT_MAGMA_HIDEOUT_2, format("Hey, this is a historical site, you oughta be careful!"), format("Wait, you think WE'RE the vandals?!"))
-	msgbox(format("What? We're being careful too. It's not any more ruined than when we arrived."), MSGBOX_AUTOCLOSE)
-	end
+    trainerbattle_single(TRAINER_GRUNT_MAGMA_HIDEOUT_2, format("Hey, this is a historical site, you oughta be careful!"), format("Wait, you think WE'RE the vandals?!"))
+    msgbox(format("What? We're being careful too. It's not any more ruined than when we arrived."), MSGBOX_AUTOCLOSE)
+    end
 }
 
 const OBJECT_EVENT_MAXIE    = 2
@@ -653,19 +643,19 @@ script Route111_SunhollowRuins_Museum_EventScript_Courtney_Global_Script {
     closemessage
 
     playse(SE_PIN)
-	applymovement(OBJECT_EVENT_COURTNEY, moves(
+    applymovement(OBJECT_EVENT_COURTNEY, moves(
         emote_exclamation_mark
         face_down
         step_end
     ))
     waitmovement(0)
-	playbgm(MUS_ENCOUNTER_MAGMA, 0)
+    playbgm(MUS_ENCOUNTER_MAGMA, 0)
     delay(60)
 
     msgbox(format("Courtney: Maxie, caution! The meddling child from Mt Chimney is here."))
 
     playse(SE_PIN)
-	applymovement(OBJECT_EVENT_MAXIE, moves(
+    applymovement(OBJECT_EVENT_MAXIE, moves(
         emote_exclamation_mark
         face_down
         step_end
@@ -674,14 +664,19 @@ script Route111_SunhollowRuins_Museum_EventScript_Courtney_Global_Script {
 
     msgbox(format("Maxie: NOW?!\pArgh, I need more time!"))
     closemessage
-	applymovement(OBJECT_EVENT_MAXIE, moves(
+    applymovement(OBJECT_EVENT_MAXIE, moves(
         face_left
         step_end
     ))
     waitmovement(0)
-    msgbox(format("Courtney, keep him busy!"))
+    checkplayergender
+    if(var(VAR_RESULT) == MALE) {
+        msgbox(format("Courtney, keep him busy!"))
+    } else {
+        msgbox(format("Courtney, keep her busy!"))
+    }
     closemessage
-	applymovement(OBJECT_EVENT_COURTNEY, moves(
+    applymovement(OBJECT_EVENT_COURTNEY, moves(
         face_right
         step_end
     ))
@@ -689,13 +684,367 @@ script Route111_SunhollowRuins_Museum_EventScript_Courtney_Global_Script {
     msgbox(format("Courtney: Yes! Engaging."))
     closemessage
 
-	applymovement(OBJECT_EVENT_COURTNEY, moves(
+    applymovement(OBJECT_EVENT_COURTNEY, moves(
         walk_down  * 2
         walk_right * 2
         step_end
     ))
     waitmovement(0)
     trainerbattle_no_intro(TRAINER_COURTNEY_SUNHOLLOW, format("I do hope I bought Maxie enough time."))
+
+    goto(Route111_SunhollowRuins_Museum_EventScript_Archie_Global_Script)
+}
+
+const OBJECT_EVENT_ARCHIE    = 35
+const OBJECT_EVENT_BRANDON_3 = 36
+const OBJECT_EVENT_NORMAN_3  = 37
+
+const OBJECT_EVENT_FINAL_MEMBER_AQUA_1 = 38
+const OBJECT_EVENT_FINAL_MEMBER_AQUA_2 = 39
+const OBJECT_EVENT_FINAL_MEMBER_AQUA_3 = 40
+const OBJECT_EVENT_FINAL_MEMBER_AQUA_4 = 41
+const OBJECT_EVENT_FINAL_MEMBER_AQUA_5 = 42
+
+const OBJECT_EVENT_CRAWDAUNT  = 43
+const OBJECT_EVENT_ALAKAZAM   = 44
+const OBJECT_EVENT_GOTHITELLE = 45
+
+script Route111_SunhollowRuins_Museum_EventScript_Archie_Global_Script {
+    lock
+
+    setflag(FLAG_TEMP_3)
+
+    applymovement(OBJECT_EVENT_MAXIE, moves(
+        face_down
+        step_end
+    ))
+    waitmovement(0)
+    applymovement(OBJECT_EVENT_COURTNEY, moves(
+        walk_left * 2
+        walk_up   * 2
+        face_down
+        step_end
+    ))
+    waitmovement(0)
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(
+        walk_left * 3
+        face_up
+        step_end
+    ))
+    waitmovement(0)
+
+    msgbox(format("Maxie: Bravo, Courtney. And greetings again, meddlesome child!\p"
+                  "I imagine the rest of my underlings are also quite sore?\p"
+                  "Congratulations on getting here. I wanted to speak with you, after all.\p"
+                  "Do you know why we're here, child?\p"
+                  "We thought the Red Orb, mayhaps even Groudon itself, created this desert.\p"
+                  "Courtney: No traces detected yet.\p"
+                  "Maxie: True enough. But! We've found some quite fascinating-\p"
+                  "Ah, but I'm getting ahead of myself. And that's not what I wanted to ask, anyway.\p"
+                  "Tell me, child. Why do you oppose us so fervently?\p"
+                  "The land groans under humanity's mass, yet we continue to expand!\p"
+                  "We could do so much good for humans' future. Would you-\p"
+                  "Archie: MAXIE!!"))
+    closemessage
+
+    playse(SE_PIN)
+    applymovement(OBJECT_EVENT_MAXIE, moves(
+        emote_exclamation_mark
+        step_end
+    ))
+    waitmovement(0)
+
+    clearflag(FLAG_TEMP_5)
+
+    addobject(OBJECT_EVENT_ARCHIE)
+    addobject(OBJECT_EVENT_BRANDON_3)
+    addobject(OBJECT_EVENT_NORMAN_3)
+
+    applymovement(OBJECT_EVENT_ARCHIE, moves(
+        walk_fast_up   * 9
+        walk_fast_left * 2
+        step_end
+    ))
+
+    applymovement(OBJECT_EVENT_BRANDON_3, moves(
+        walk_fast_up   * 7
+        walk_fast_left * 7
+        face_up
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_NORMAN_3, moves(
+        walk_fast_up   * 8
+        walk_fast_left * 5
+        face_up
+        step_end
+    ))
+    waitmovement(0)
+
+    msgbox(format("Maxie: Team Aqua? Here already?!"))
+    closemessage
+
+    addobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_1)
+    addobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_2)
+    addobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_3)
+    addobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_4)
+    addobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_5)
+
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_1, moves(
+        walk_fast_up   * 11
+        walk_fast_left * 2
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_2, moves(
+        walk_fast_up   * 9
+        walk_fast_left * 3
+        walk_fast_up
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_3, moves(
+        walk_fast_up   * 10
+        walk_fast_left * 3
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_4, moves(
+        walk_fast_up   * 11
+        walk_fast_left * 2
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_5, moves(
+        walk_fast_up   * 12
+        walk_fast_left
+        step_end
+    ))
+    waitmovement(0)
+
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_3, moves(
+        walk_fast_left * 7
+        walk_fast_up
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_4, moves(
+        walk_fast_left * 8
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_5, moves(
+        walk_fast_left * 7
+        walk_fast_up
+        step_end
+    ))
+    waitmovement(0)
+
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_3, moves(
+        walk_fast_up * 3
+        face_right
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_4, moves(
+        walk_fast_up * 3
+        face_right
+        step_end
+    ))
+    waitmovement(0)
+
+    msgbox(format("Norman: {PLAYER}, are you alright?\p"
+                  "Maxie: So it's {PLAYER}, hm?\p"
+                  "Archie: Oi! Maxie! Your quarrel's over here.\p"
+                  "And I have a quarrel with the nonsense you're spouting!"))
+    closemessage
+
+    applymovement(OBJECT_EVENT_MAXIE, moves(
+        face_right
+        step_end
+    ))
+    waitmovement(0)
+
+    msgbox(format("Maxie: Nonsense?! How dare you-\p"
+                  "Archie: The biggest problem we have is that we're trampling nature instead of working around it!\p"
+                  "More space won't solve anything! We'll ruin that too!\p"
+                  "Maxie: So you would feed more mouths with less resources?\p"
+                  "Archie: Better that than... than awakening Groudon!\p"
+                  "Maxie: The legends exaggerate its bad temper. I believe-\p"
+                  "Archie: It's not worth the risk."))
+    closemessage
+
+    addobject(OBJECT_EVENT_CRAWDAUNT)
+    playse(SE_BALL_OPEN)
+    setobjectxy(OBJECT_EVENT_CRAWDAUNT, 13, 22)
+
+    delay(20)
+
+    msgbox(format("Courtney: Maxie, we should go!\p"
+                  "Maxie: It's been a pleasure as always, Archie."))
+    closemessage
+
+    applymovement(OBJECT_EVENT_MAXIE, moves(
+        face_down
+        step_end
+    ))
+    waitmovement(0)
+
+    msgbox(format("Maxie: See you soon, {PLAYER}."))
+    closemessage
+
+    addobject(OBJECT_EVENT_ALAKAZAM)
+    playse(SE_BALL_OPEN)
+    setobjectxy(OBJECT_EVENT_ALAKAZAM, 9, 22)
+
+    delay(10)
+
+    playse(SE_PIN)
+    applymovement(OBJECT_EVENT_ARCHIE, moves(
+        emote_exclamation_mark
+        step_end
+    ))
+    waitmovement(0)
+
+    fadescreen(FADE_TO_BLACK)
+    playse(SE_M_TELEPORT)
+    removeobject(OBJECT_EVENT_MAXIE)
+    removeobject(OBJECT_EVENT_COURTNEY)
+    removeobject(OBJECT_EVENT_ALAKAZAM)
+    waitse
+    addobject(OBJECT_EVENT_GOTHITELLE)
+    playse(SE_BALL_OPEN)
+    setobjectxy(OBJECT_EVENT_GOTHITELLE, 13, 23)
+    fadescreen(FADE_FROM_BLACK)
+
+    delay(10)
+
+    msgbox(format("Archie: Rrgh!\p"
+                  "Aqua Grunt: Dammit, I was too slow!"))
+    closemessage
+
+    applymovement(OBJECT_EVENT_ARCHIE, moves(
+        face_down
+        step_end
+    ))
+    waitmovement(0)
+
+    msgbox(format("Archie: It's alright David, you were probably out of range anyway."))
+    closemessage
+
+    delay(10)
+
+    playse(SE_BALL_OPEN)
+    removeobject(OBJECT_EVENT_CRAWDAUNT)
+    removeobject(OBJECT_EVENT_GOTHITELLE)
+
+    delay(30)
+
+    applymovement(OBJECT_EVENT_ARCHIE, moves(
+        walk_left * 3
+        walk_down * 2
+        step_end
+    ))
+    waitmovement(0)
+
+    msgbox(format("Archie: Thank you for stalling him, {PLAYER}, and for helping outside, Gym Leader.\p"
+                  "Norman: Just doing my job.\p"
+                  "So you're Archie?\p"
+                  "Archie: Aye.\p"
+                  "Norman: I was wondering if we could talk?\p"
+                  "We've had reports of criminal activity from a 'Team Aqua', describing outfits similar to the Aqua Sailors and Seafarers' Society.\p"
+                  "Similar to your people's, in fact.\p"
+                  "You are the head of that society, yes?\p"
+                  "Archie: ...Aye.\p"
+                  "Norman: I hoped we could sit down and talk about it.\p"
+                  "Archie: I hate to do this to you, I really do."))
+    closemessage
+
+    messageinstant(format("Norman: What do you mean by-"))
+    delay(30)
+    closemessage
+
+    messageinstant(format("Archie: SKEDADDLE!"))
+    delay(20)
+    closemessage
+
+    fadescreen(FADE_TO_BLACK)
+    playse(SE_M_TELEPORT)
+    removeobject(OBJECT_EVENT_ARCHIE)
+    removeobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_1)
+    delay(10)
+    fadescreen(FADE_FROM_BLACK)
+
+    delay(10)
+
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_1, moves(
+        walk_fastest_right * 2
+        walk_fastest_down  * 18
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_2, moves(
+        walk_fastest_down  * 1
+        walk_fastest_right * 3
+        walk_fastest_down  * 16
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_5, moves(
+        walk_fastest_down  * 1
+        walk_fastest_right * 8
+        walk_fastest_down  * 11
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_4, moves(
+        walk_fastest_down  * 3
+        walk_fastest_right * 10
+        walk_fastest_down  * 7
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_3, moves(
+        walk_fastest_down  * 4
+        walk_fastest_right * 10
+        walk_fastest_down  * 6
+        step_end
+    ))
+    waitmovement(0)
+
+    removeobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_1)
+    removeobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_2)
+    removeobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_3)
+    removeobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_4)
+    removeobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_5)
+
+    msgbox(format("Brandon: That seems... incriminating.\p"
+                  "Norman: YES. Yes it does."))
+    closemessage
+
+    applymovement(OBJECT_EVENT_NORMAN_3, moves(
+        face_left
+        step_end
+    ))
+    waitmovement(0)
+
+    msgbox(format("Anyways, thanks for your help, {PLAYER}! How's your Gym Challenge going?\p"
+                  "...Four badges? Already? Excellent work!\p"
+                  "Well, I'd better not keep you waiting, hm? See you in Petalburg!"))
+    closemessage
+
+    applymovement(OBJECT_EVENT_NORMAN_3, moves(
+        walk_fastest_right * 5
+        walk_fastest_down  * 8
+        step_end
+    ))
+    waitmovement(0)
+    removeobject(OBJECT_EVENT_NORMAN_3)
+
+    msgbox(format("Brandon: Heh. He's never that excited to fight me, you know.\p"
+                  "Good luck with the gyms, young adventurer!"))
+    closemessage
+
+    applymovement(OBJECT_EVENT_BRANDON_3, moves(
+        walk_right * 7
+        walk_down  * 8
+        step_end
+    ))
+    waitmovement(0)
+    removeobject(OBJECT_EVENT_BRANDON_3)
+
+    setvar(VAR_SUNHOLLOW_STATE, 3)
+    setflag(VAR_TEMP_5)
+    setflag(VAR_TEMP_6)
+
     release
     end
 }
