@@ -3991,7 +3991,7 @@ static void HandleTurnActionSelectionState(void) {
                     gBattlerAttacker = gActiveBattler;
                     gBattlescriptCurrInstr = gSelectionBattleScripts[gActiveBattler];
 #if PRINT_BATTLE_SCRIPT_TRACING
-                    MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d",
+                    MGBA_PRINT_DEBUG("Exec: %d Addr: %X Cmd: %X Bytes: %d %d",
                                      gBattleControllerExecFlags,
                                      gBattlescriptCurrInstr,
                                      gBattlescriptCurrInstr[0],
@@ -4041,7 +4041,7 @@ static void HandleTurnActionSelectionState(void) {
                         gBattlerAttacker = gActiveBattler;
                         gBattlescriptCurrInstr = gSelectionBattleScripts[gActiveBattler];
 #if PRINT_BATTLE_SCRIPT_TRACING
-                        MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d",
+                        MGBA_PRINT_DEBUG("Exec: %d Addr: %X Cmd: %X Bytes: %d %d",
                                          gBattleControllerExecFlags,
                                          gBattlescriptCurrInstr,
                                          gBattlescriptCurrInstr[0],
@@ -4069,7 +4069,7 @@ static void HandleTurnActionSelectionState(void) {
                         gBattlerAttacker = gActiveBattler;
                         gBattlescriptCurrInstr = gSelectionBattleScripts[gActiveBattler];
 #if PRINT_BATTLE_SCRIPT_TRACING
-                        MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d",
+                        MGBA_PRINT_DEBUG("Exec: %d Addr: %X Cmd: %X Bytes: %d %d",
                                          gBattleControllerExecFlags,
                                          gBattlescriptCurrInstr,
                                          gBattlescriptCurrInstr[0],
@@ -4823,7 +4823,7 @@ static void HandleEndTurn_FinishBattle(void) {
     } else {
         if (gBattleControllerExecFlags == 0) {
 #if PRINT_BATTLE_SCRIPT_TRACING
-            MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d",
+            MGBA_PRINT_DEBUG("Exec: %d Addr: %X Cmd: %X Bytes: %d %d",
                              gBattleControllerExecFlags,
                              gBattlescriptCurrInstr,
                              gBattlescriptCurrInstr[0],
@@ -4928,7 +4928,7 @@ void RunBattleScriptCommands_PopCallbacksStack(void) {
         gBattleMainFunc = gBattleResources->battleCallbackStack->function[gBattleResources->battleCallbackStack->size];
     } else {
 #if PRINT_BATTLE_SCRIPT_TRACING
-        MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d",
+        MGBA_PRINT_DEBUG("Exec: %d Addr: %X Cmd: %X Bytes: %d %d",
                          gBattleControllerExecFlags,
                          gBattlescriptCurrInstr,
                          gBattlescriptCurrInstr[0],
@@ -4941,7 +4941,7 @@ void RunBattleScriptCommands_PopCallbacksStack(void) {
 
 void RunBattleScriptCommands(void) {
 #if PRINT_BATTLE_SCRIPT_TRACING
-    MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d",
+    MGBA_PRINT_DEBUG("Exec: %d Addr: %X Cmd: %X Bytes: %d %d",
                      gBattleControllerExecFlags,
                      gBattlescriptCurrInstr,
                      gBattlescriptCurrInstr[0],
