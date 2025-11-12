@@ -65,11 +65,7 @@ LavaridgeTown_EventScript_RivalGiveGoGoggles:: @ 81EA551
 	call_if_eq LavaridgeTown_EventScript_RivalApproachPlayer1
 	compare VAR_0x8008, 9
 	call_if_ne LavaridgeTown_EventScript_RivalApproachPlayer2
-	checkplayergender
-	compare VAR_RESULT, MALE
-	goto_if_eq LavaridgeTown_EventScript_MayGiveGoGoggles
-	compare VAR_RESULT, FEMALE
-	goto_if_eq LavaridgeTown_EventScript_BrendanGiveGoGoggles
+	goto LavaridgeTown_EventScript_RivalGiveGoGoggles2
 	end
 
 LavaridgeTown_EventScript_MayGiveGoGoggles:: @ 81EA5B5
@@ -443,3 +439,242 @@ LavaridgeTown_Text_HerbShopSign: @ 81EB1CB
 	.string "“Bitter taste--better cure!”$"
 
 `
+
+const LOCALID_FLANNERY = 10
+
+script LavaridgeTown_EventScript_RivalGiveGoGoggles2 {
+    checkplayergender
+    if (var(VAR_RESULT) == MALE) {
+        msgbox(format(
+            "May: {PLAYER}! Long time no see!\p"
+            "You got the Heat Badge while I was chilling in the hot springs?\p"
+            "You must have collected- no, sorry, you must have trained some really good Pokémon.\p"
+            "Are you going to go battle your dad next?\p"
+            "Flannery: Excuse me!"
+        ))
+    } else {
+        msgbox(format(
+            "Brendan: {PLAYER}! Long time no see!\p"
+            "You got the Heat Badge while I was chilling in the hot springs?\p"
+            "You must have collected- no, sorry, you must have trained some really good Pokémon.\p"
+            "Are you going to go battle your dad next?\p"
+            "Flannery: Excuse me!"
+        ))
+    }
+    closemessage
+
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(
+        walk_down
+        face_up
+        step_end
+    ))
+    waitmovement(0)
+    opendoor(5, 15)
+    waitdooranim
+    addobject(LOCALID_FLANNERY)
+    applymovement(LOCALID_FLANNERY, moves(
+        walk_down
+        step_end
+    ))
+    waitmovement(0)
+    closedoor(5, 15)
+    waitdooranim
+
+    checkplayergender
+    if (var(VAR_RESULT) == MALE) {
+        msgbox(format(
+            "May: Gym Leader!\p"
+            "Flannery: Hello again {PLAYER}."
+        ))
+    } else {
+        msgbox(format(
+            "Brendan: Gym Leader!\p"
+            "Flannery: Hello again {PLAYER}."
+        ))
+    }
+
+    applymovement(LOCALID_FLANNERY, moves(
+        face_right
+        step_end
+    ))
+    waitmovement(0)
+
+    checkplayergender
+    if (var(VAR_RESULT) == MALE) {
+        msgbox(format(
+            "And you're... Professor Birch's kid, right?\p"
+            "May: Uh, yeah, that's me, I'm May.\p"
+            "Flannery: Nice to meet you."
+        ))
+    } else {
+        msgbox(format(
+            "And you're... Professor Birch's kid, right?\p"
+            "Brendan: Uh, yeah, that's me, I'm Brendan.\p"
+            "Flannery: Nice to meet you."
+        ))
+    }
+
+    applymovement(LOCALID_FLANNERY, moves(
+        face_down
+        step_end
+    ))
+    waitmovement(0)
+
+    checkplayergender
+    if (var(VAR_RESULT) == MALE) {
+        msgbox(format(
+            "I'm really sorry about this, {PLAYER}, but I need your help.\p"
+            "Norman called. There's trouble in the {COLOR RED}Sunhollow Ruins{COLOR DARK_GRAY}, and he's away to help.\p"
+            "Something about Team Magma, I think?\p"
+            "May: I heard about them! They're some kind of criminals, right?\p"
+            "Flannery: Right. They were doing... weird science, I dunno, on Mt Chimney.\p"
+            "He said they're disrupting research at the ruins or something. He wanted me to go and provide backup.\p"
+            "But, see, I'm worried they might come back to Mt Chimney.\p"
+            "Would you go to the ruins in my place?\p"
+            "May: Wait a minute! You're a Gym Leader, you're a better battler than {PLAYER}, surely?"
+        ))
+    } else {
+        msgbox(format(
+            "I'm really sorry about this, {PLAYER}, but I need your help.\p"
+            "Norman called. There's trouble in the {COLOR RED}Sunhollow Ruins{COLOR DARK_GRAY}, and he's away to help.\p"
+            "Something about Team Magma, I think?\p"
+            "Brendan: I heard about them! They're some kind of criminals, right?\p"
+            "Flannery: Right. They were doing... weird science, I dunno, on Mt Chimney.\p"
+            "He said they're disrupting research at the ruins or something. He wanted me to go and provide backup.\p"
+            "But, see, I'm worried they might come back to Mt Chimney.\p"
+            "Would you go to the ruins in my place?\p"
+            "Brendan: Wait a minute! You're a Gym Leader, you're a better battler than {PLAYER}, surely?"
+        ))
+    }
+
+    applymovement(LOCALID_FLANNERY, moves(
+        face_right
+        step_end
+    ))
+    waitmovement(0)
+
+    checkplayergender
+    if (var(VAR_RESULT) == MALE) {
+        msgbox(format(
+            "Flannery: Probably!\p"
+            "May: Probably?!\p"
+            "Flannery: But it'll be safer with Norman than it would be here by himself.\p"
+            "Someone needs to keep watch here.\p"
+            "May: ..."
+        ))
+    } else {
+        msgbox(format(
+            "Flannery: Probably!\p"
+            "Brendan: Probably?!\p"
+            "Flannery: But it'll be safer with Norman than it would be here by herself.\p"
+            "Someone needs to keep watch here.\p"
+            "Brendan: ..."
+        ))
+    }
+
+    applymovement(LOCALID_FLANNERY, moves(
+        face_down
+        step_end
+    ))
+    waitmovement(0)
+
+    checkplayergender
+    if (var(VAR_RESULT) == MALE) {
+        msgbox(format(
+            "Flannery: So! {PLAYER}, you'll go, right?\p"
+            "(You nod)\p"
+            "Flannery: Excellent!\p"
+            "May: You're really OK with this? You'll need these, then."
+        ))
+    } else {
+        msgbox(format(
+            "Flannery: So! {PLAYER}, you'll go, right?\p"
+            "(You nod)\p"
+            "Flannery: Excellent!\p"
+            "Brendan: You're really OK with this? You'll need these, then."
+        ))
+    }
+
+    applymovement(LOCALID_RIVAL, moves(
+        walk_down
+        face_left
+        step_end
+    ))
+    waitmovement(0)
+
+    giveitem(ITEM_GO_GOGGLES)
+    setflag(FLAG_RECEIVED_GO_GOGGLES)
+    giveitem(ITEM_SAFETY_GOGGLES)
+
+    checkplayergender
+    if (var(VAR_RESULT) == MALE) {
+        msgbox(format(
+            "May: I've already finished my research in the Route 110 desert for now.\p"
+            "You'll need these to protect your eyes in the sandstorm.\p"
+            "Flannery: Thank you so much, again! Good luck!"
+        ))
+    } else {
+        msgbox(format(
+            "Brendan: I've already finished my research in the Route 110 desert for now.\p"
+            "You'll need these to protect your eyes in the sandstorm.\p"
+            "Flannery: Thank you so much, again! Good luck!"
+        ))
+    }
+    closemessage
+
+    opendoor(5, 15)
+    waitdooranim
+    applymovement(LOCALID_FLANNERY, moves(
+        walk_up
+        step_end
+    ))
+    waitmovement(0)
+    closedoor(5, 15)
+    removeobject(LOCALID_FLANNERY)
+    waitdooranim
+
+    delay(30)
+
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(
+        face_right
+        step_end
+    ))
+    waitmovement(0)
+
+    delay(15)
+
+    if (var(VAR_RESULT) == MALE) {
+        msgbox(format(
+            "May: She sounds... super relieved.\p"
+            "Do you think Team Magma will actually come back here?"
+        ), MSGBOX_YESNO)
+    } else {
+        msgbox(format(
+            "Brendan: She sounds... super relieved.\p"
+            "Do you think Team Magma will actually come back here?"
+        ), MSGBOX_YESNO)
+    }
+    if (var(VAR_RESULT) == YES)
+    {
+        msgbox(format(
+            "Really? Huh!\p"
+            "She sounded nervous to me. Maybe because she thinks they're coming here?\p"
+            "I didn't think so but I could be wrong.\p"
+            "Anyways... I guess you should get going.\p"
+            "Good luck, and please come back safe, OK?"
+        ))
+    } else {
+        msgbox(format(
+            "Yeah, me neither.\p"
+            "I get that she's a new Gym Leader, but this kind of thing is her responsibility.\p"
+            "I don't blame her. I couldn't do what you're doing, I'd be terrified.\p"
+            "Anyways... I guess you should get going.\p"
+            "Good luck, and please come back safe, OK?"
+        ))
+    }
+    closemessage
+
+    goto(LavaridgeTown_EventScript_RivalExit)
+
+    end
+}
