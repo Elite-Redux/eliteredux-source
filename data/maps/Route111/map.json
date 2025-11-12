@@ -331,8 +331,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 12,
-      "y": 54,
+      "x": 13,
+      "y": 53,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
       "movement_range_x": 0,
@@ -651,7 +651,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "JaggedPass_EventScript_MagmaHideoutGuard",
+      "script": "Route111South_EventScript_Magma_Grunt",
       "flag": "FLAG_BADGE04_GET"
     }
   ],
@@ -664,10 +664,10 @@
       "dest_warp_id": "0"
     },
     {
-      "x": 29,
-      "y": 87,
+      "x": 31,
+      "y": 113,
       "elevation": 0,
-      "dest_map": "MAP_DESERT_RUINS",
+      "dest_map": "MAP_TRAINER_HILL_ENTRANCE",
       "dest_warp_id": "0"
     },
     {
@@ -688,7 +688,7 @@
       "x": 16,
       "y": 45,
       "elevation": 0,
-      "dest_map": "MAP_ROUTE111_DESERT",
+      "dest_map": "MAP_ROUTE111_DESERT_ENTRANCE",
       "dest_warp_id": "0"
     }
   ],
@@ -786,7 +786,7 @@
     {
       "type": "trigger",
       "x": 18,
-      "y": 32,
+      "y": 38,
       "elevation": 3,
       "var": "0",
       "var_value": "0",
@@ -794,8 +794,8 @@
     },
     {
       "type": "trigger",
-      "x": 17,
-      "y": 31,
+      "x": 18,
+      "y": 38,
       "elevation": 3,
       "var": "0",
       "var_value": "0",
@@ -857,7 +857,7 @@
     },
     {
       "type": "trigger",
-      "x": 15,
+      "x": 16,
       "y": 62,
       "elevation": 3,
       "var": "0",
@@ -893,7 +893,7 @@
     },
     {
       "type": "trigger",
-      "x": 15,
+      "x": 16,
       "y": 62,
       "elevation": 3,
       "var": "0",

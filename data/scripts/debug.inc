@@ -43,8 +43,8 @@ Debug_CheatStart::
 	end
 
 Debug_Script_1::
-	cleartrainerflag TRAINER_KAYLEE
-	trainerbattle_single TRAINER_KAYLEE, Route102_Text_RickIntro, Route102_Text_RickDefeated
+	setflag FLAG_BADGE04_GET
+	warp MAP_ROUTE111, 255, 16, 47
 	end
 
 Debug_Script_2::
@@ -52,8 +52,7 @@ Debug_Script_2::
 	end
 
 Debug_Script_3::
-	cleartrainerflag TRAINER_JUAN_1
-	trainerbattle_single TRAINER_JUAN_1, Route102_Text_RickIntro, Route102_Text_RickDefeated
+	warp MAP_ROUTE111, 255, 16, 47
 	end
 
 Debug_Script_4::

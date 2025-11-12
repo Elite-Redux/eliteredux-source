@@ -1,7 +1,7 @@
 {
-  "id": "MAP_ROUTE111_CAVE",
-  "name": "Route111_Cave",
-  "layout": "LAYOUT_ROUTE111_CAVE",
+  "id": "MAP_ROUTE111_DESERT_ENTRANCE",
+  "name": "Route111_Desert_Entrance",
+  "layout": "LAYOUT_ROUTE111_DESERT_ENTRANCE",
   "music": "MUS_PETALBURG_WOODS",
   "region_map_section": "MAPSEC_ROUTE_111",
   "requires_flash": false,
@@ -17,7 +17,20 @@
 
   ],
   "warp_events": [
-
+    {
+      "x": 14,
+      "y": 34,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111",
+      "dest_warp_id": "4"
+    },
+    {
+      "x": 15,
+      "y": 9,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_DESERT",
+      "dest_warp_id": "0"
+    }
   ],
   "coord_events": [
 
