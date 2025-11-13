@@ -9279,7 +9279,14 @@ constexpr Ability DropBlocks = {
 };
 
 constexpr Ability LaserDrill = {
-    .randomizerBanned = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBeBurned(target))
+        CHECK(gBattleMoves[move].hornBased)
+        CHECK(Random() % 2)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BURN);
+    },
 };
 
 constexpr Ability LightSaber = {
