@@ -9393,6 +9393,11 @@ constexpr Ability Dragonfruit = {
     .onDefender = RoughSkin.onDefender,
 };
 
+constexpr Ability LeadClaws = {
+    .onOffensiveMultiplier = BigPecks.onOffensiveMultiplier,
+    ATE_ABILITY(TYPE_ROCK),
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10280,6 +10285,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_I_AM_STEVE, IAmSteve},
     {ABILITY_ROCKY_EXTERIOR, RockyExterior},
     {ABILITY_DRAGONFRUIT, Dragonfruit},
+    {ABILITY_LEAD_CLAWS, LeadClaws}
 };
 
 template <int N>
