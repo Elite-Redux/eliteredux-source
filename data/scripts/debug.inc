@@ -61,7 +61,7 @@ Debug_Script_4::
 	end
 
 Debug_Script_5::
-	call MeteorFalls_HaxorusRoom_EventScript_MegaStoneTest
+	setflag(FLAG_FINISHED_SUNHOLLOW_STORY)
 	end
 
 Debug_Script_6::

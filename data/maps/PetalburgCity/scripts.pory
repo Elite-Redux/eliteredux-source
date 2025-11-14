@@ -8,6 +8,7 @@ raw `
 PetalburgCity_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, PetalburgCity_OnTransition
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, PetalburgCity_OnFrame
+	map_script MAP_SCRIPT_ON_LOAD, PetalburgCity_OnLoad
 	.byte 0
 
 PetalburgCity_OnTransition: @ 81DC2D7
@@ -230,10 +231,6 @@ PetalburgCity_EventScript_GymSign:: @ 81DC476
 
 PetalburgCity_EventScript_CitySign:: @ 81DC47F
 	msgbox PetalburgCity_Text_CitySign, MSGBOX_SIGN
-	end
-
-PetalburgCity_EventScript_Gentleman:: @ 81DC488
-	msgbox PetalburgCity_Text_FullPartyExplanation, MSGBOX_NPC
 	end
 
 PetalburgCity_EventScript_WallyHouseSign:: @ 81DC491
@@ -786,3 +783,33 @@ PetalburgCity_Text_ImLookingForTalentedTrainers: @ 81DCC09
 	.string "talented Trainers.\p"
 	.string "I'm sorry to have taken your time.$"
 `
+script PetalburgCity_OnLoad{
+	if(flag(FLAG_BADGE04_GET) && !flag(FLAG_FINISHED_SUNHOLLOW_STORY)){
+		setmetatile(15, 8, METATILE_Petalburg_ClosedGymDoor, 1)
+	}
+	end
+}
+
+script PetalburgCity_EventScript_GymSign_Closed{
+	if(flag(FLAG_BADGE04_GET) && !flag(FLAG_FINISHED_SUNHOLLOW_STORY)){
+		msgbox(format("(There's a note attached to the door.)\p"
+					"Hi! Sorry for the inconvenience, but\n"
+					"we're currently closed.\p"
+					"Gym Leader Norman is out on business.\n"
+					"We should be open again soon!"), MSGBOX_SIGN)
+	}
+	end
+}
+
+script PetalburgCity_EventScript_Gentleman{
+	if(flag(FLAG_BADGE04_GET) && !flag(FLAG_FINISHED_SUNHOLLOW_STORY)){
+		msgbox(format("I saw Norman leave here with a set\n"
+		              "of Go-Goggles not so long ago.\p"
+		              "I wonder what business he has in the\n"
+					  "desert?"), MSGBOX_NPC)
+	}
+	else{
+		msgbox(PetalburgCity_Text_FullPartyExplanation, MSGBOX_NPC)
+	}
+	end
+}
