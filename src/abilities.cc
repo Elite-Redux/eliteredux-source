@@ -9388,6 +9388,11 @@ constexpr Ability RockyExterior = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ROCK); },
 };
 
+constexpr Ability Dragonfruit = {
+    .onEntry = HalfDrake.onEntry,
+    .onDefender = RoughSkin.onDefender,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10274,6 +10279,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_DEADLY_PRECISION, DeadlyPrecision},
     {ABILITY_I_AM_STEVE, IAmSteve},
     {ABILITY_ROCKY_EXTERIOR, RockyExterior},
+    {ABILITY_DRAGONFRUIT, Dragonfruit},
 };
 
 template <int N>
