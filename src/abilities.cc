@@ -9190,7 +9190,37 @@ constexpr Ability LunarWrath = {
 };
 
 constexpr Ability Spyware = {
-    .randomizerBanned = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int {
+        gBattlerTarget = BATTLE_OPPOSITE(battler);
+        if (!IsBattlerAlive(battler)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
+        CHECK(IsBattlerAlive(battler))
+
+        int stat;
+        switch (GetHighestStatId(gBattlerTarget, TRUE)){
+            case STAT_SPEED:
+                stat = STAT_SPEED;
+                break;
+            case STAT_ATK:
+                stat = STAT_DEF;
+                break;
+            case STAT_DEF:
+                stat = STAT_ATK;
+                break;
+            case STAT_SPATK:
+                stat = STAT_SPDEF;
+                break;
+            case STAT_SPDEF:
+                stat = STAT_SPATK;
+                break;
+            default:
+                stat = STAT_SPEED;
+                break;
+        }
+
+        CHECK(ChangeStatBuffs(battler, 2, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+        return TRUE;
+    },
 };
 
 constexpr Ability Virus = {.onAttacker = +[](ON_ATTACKER) -> int {
