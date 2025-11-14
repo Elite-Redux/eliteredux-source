@@ -4357,10 +4357,37 @@ static void DebugAction_AccessPC(u8 taskId) {
 }
 
 static void DebugAction_FillBox(u8 taskId) {
+    int boxId, boxPosition;
+    u32 personality;
+    struct BoxPokemon boxMon;
+    u32 i = 1;
+
+    personality = Random32();
+
+    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
+    {
+        for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++)
+        {
+            if (!GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_SANITY_HAS_SPECIES))
+            {
+                CreateBoxMon(&boxMon,
+                    i,
+                    100,
+                    32,
+                    personality,
+                    0,
+                    OT_ID_PLAYER_ID,
+                    0);
+
+                i += 1;
+
+                gPokemonStoragePtr->boxes[boxId][boxPosition] = boxMon;
+            }
+        }
+    }
+
     Debug_DestroyMenu_Full(taskId);
-    CleanupOverworldWindowsAndTilemaps();
-    BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-    CreateTask(Task_WaitFadeAccessPC, 0);
+    EnableBothScriptContexts();
 }
 
 #endif
