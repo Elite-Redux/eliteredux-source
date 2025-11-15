@@ -9398,6 +9398,20 @@ constexpr Ability LeadClaws = {
     ATE_ABILITY(TYPE_ROCK),
 };
 
+constexpr Ability Chainsaw = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
+
+        int affected = GetOncePerTurnAbilityCounter(battler, ability);
+        CHECK_NOT(affected & (1 << target))
+
+        SetOncePerTurnAbilityCounter(battler, ability, affected | (1 << target));
+        return AbilityStatusEffect(MOVE_EFFECT_DEF_MINUS_1);
+    },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10285,7 +10299,8 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_I_AM_STEVE, IAmSteve},
     {ABILITY_ROCKY_EXTERIOR, RockyExterior},
     {ABILITY_DRAGONFRUIT, Dragonfruit},
-    {ABILITY_LEAD_CLAWS, LeadClaws}
+    {ABILITY_LEAD_CLAWS, LeadClaws},
+    {ABILITY_CHAINSAW, Chainsaw},
 };
 
 template <int N>
