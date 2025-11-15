@@ -43,8 +43,8 @@ Debug_CheatStart::
 	end
 
 Debug_Script_1::
-	cleartrainerflag TRAINER_KAYLEE
-	trainerbattle_single TRAINER_KAYLEE, Route102_Text_RickIntro, Route102_Text_RickDefeated
+	setflag FLAG_BADGE04_GET
+	warp MAP_ROUTE111, 255, 16, 47
 	end
 
 Debug_Script_2::
@@ -52,8 +52,7 @@ Debug_Script_2::
 	end
 
 Debug_Script_3::
-	cleartrainerflag TRAINER_JUAN_1
-	trainerbattle_single TRAINER_JUAN_1, Route102_Text_RickIntro, Route102_Text_RickDefeated
+	warp MAP_ROUTE111, 255, 16, 47
 	end
 
 Debug_Script_4::
@@ -62,7 +61,7 @@ Debug_Script_4::
 	end
 
 Debug_Script_5::
-	call MeteorFalls_HaxorusRoom_EventScript_MegaStoneTest
+	setflag(FLAG_FINISHED_SUNHOLLOW_STORY)
 	end
 
 Debug_Script_6::
@@ -137,14 +136,14 @@ Debug_Script_6::
 	additem ITEM_JELLICENTITE
 	additem ITEM_IRON_PILL
 	additem ITEM_TOUCANNONITE
-	additem ITEM_DRAGONITENITE
+	additem ITEM_DRAGONINITE
 	additem ITEM_BRELOOMITE
 	additem ITEM_SLAKINGITE
 	additem ITEM_PURPLE_ORB
 	additem ITEM_SLOWKINGITE
 	additem ITEM_GYARADOSITE_Y
-	additem ITEM_FERALIGATRITE_X
-	additem ITEM_FERALIGATRITE_Y
+	additem ITEM_FERALIGITE_X
+	additem ITEM_FERALIGITE_Y
 	additem ITEM_HAXORUSITE
 	additem ITEM_LUXRAYNITE
 	additem ITEM_GRANBULLITE
@@ -169,7 +168,6 @@ Debug_Script_6::
 	additem ITEM_MAWILITE_R
 	additem ITEM_SABLENITE_R
 	additem ITEM_FROSLASSITE
-	additem ITEM_SCRAFTITE
 	additem ITEM_RIBOMBITE
 	additem ITEM_URSALUNITE
 	additem ITEM_ARCANITE_R
@@ -181,7 +179,7 @@ Debug_Script_6::
 	additem ITEM_SENZU
 	additem ITEM_AEGISLASHITE_R
 	additem ITEM_ARBOKITE
-	additem ITEM_CLEFABITE_R
+	additem ITEM_CLEFABLITE_R
 	additem ITEM_FLYGONITE_R
 	additem ITEM_EMPOLEONITE_R
 	additem ITEM_INFERNAPENITE_R

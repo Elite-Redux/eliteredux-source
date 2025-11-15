@@ -727,7 +727,7 @@ script Route111_SunhollowRuins_Museum_EventScript_Archie_Global_Script {
     ))
     waitmovement(0)
     applymovement(OBJ_EVENT_ID_PLAYER, moves(
-        walk_left * 3
+        walk_left * 2
         face_up
         step_end
     ))
@@ -750,6 +750,20 @@ script Route111_SunhollowRuins_Museum_EventScript_Archie_Global_Script {
     playse(SE_PIN)
     applymovement(OBJECT_EVENT_MAXIE, moves(
         emote_exclamation_mark
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_COURTNEY, moves(
+        emote_exclamation_mark
+        step_end
+    ))
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(
+        emote_exclamation_mark
+        step_end
+    ))
+    waitmovement(0)
+
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(
+        face_right
         step_end
     ))
     waitmovement(0)
@@ -845,13 +859,33 @@ script Route111_SunhollowRuins_Museum_EventScript_Archie_Global_Script {
     ))
     waitmovement(0)
 
-    msgbox(format("Norman: {PLAYER}, are you alright?\p"
-                  "Maxie: So it's {PLAYER}, hm?\p"
-                  "Archie: Oi! Maxie! Your quarrel's over here.\p"
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(
+        face_down
+        step_end
+    ))
+    waitmovement(0)
+
+    msgbox(format("Norman: {PLAYER}, are you alright?"))
+    closemessage
+
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(
+        face_up
+        step_end
+    ))
+    waitmovement(0)
+
+    msgbox(format("Maxie: So it's {PLAYER}, hm?"))
+    closemessage
+
+    msgbox(format("Archie: Oi! Maxie! Your quarrel's over here.\p"
                   "And I have a quarrel with the nonsense you're spouting!"))
     closemessage
 
     applymovement(OBJECT_EVENT_MAXIE, moves(
+        face_right
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_COURTNEY, moves(
         face_right
         step_end
     ))
@@ -880,6 +914,17 @@ script Route111_SunhollowRuins_Museum_EventScript_Archie_Global_Script {
         face_down
         step_end
     ))
+
+    applymovement(OBJECT_EVENT_COURTNEY, moves(
+        face_down
+        step_end
+    ))
+    waitmovement(0)
+
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(
+        face_up
+        step_end
+    ))
     waitmovement(0)
 
     msgbox(format("Maxie: See you soon, {PLAYER}."))
@@ -893,6 +938,22 @@ script Route111_SunhollowRuins_Museum_EventScript_Archie_Global_Script {
 
     playse(SE_PIN)
     applymovement(OBJECT_EVENT_ARCHIE, moves(
+        emote_exclamation_mark
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_1, moves(
+        emote_exclamation_mark
+        step_end
+    ))
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(
+        emote_exclamation_mark
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_NORMAN_3, moves(
+        emote_exclamation_mark
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_BRANDON_3, moves(
         emote_exclamation_mark
         step_end
     ))
@@ -911,8 +972,22 @@ script Route111_SunhollowRuins_Museum_EventScript_Archie_Global_Script {
 
     delay(10)
 
-    msgbox(format("Archie: Rrgh!\p"
-                  "Aqua Grunt: Dammit, I was too slow!"))
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(
+        face_right
+        step_end
+    ))
+    waitmovement(0)
+
+    msgbox("Archie: Rrgh!")
+    closemessage
+
+    applymovement(OBJECT_EVENT_FINAL_MEMBER_AQUA_1, moves(
+        face_up
+        step_end
+    ))
+    waitmovement(0)
+
+    msgbox("Aqua Grunt: Dammit, I was too slow!")
     closemessage
 
     applymovement(OBJECT_EVENT_ARCHIE, moves(
@@ -933,18 +1008,25 @@ script Route111_SunhollowRuins_Museum_EventScript_Archie_Global_Script {
     delay(30)
 
     applymovement(OBJECT_EVENT_ARCHIE, moves(
-        walk_left * 3
+        walk_left * 2
         walk_down * 2
         step_end
     ))
     waitmovement(0)
 
-    msgbox(format("Archie: Thank you for stalling him, {PLAYER}, and for helping outside, Gym Leader.\p"
+    applymovement(OBJECT_EVENT_NORMAN_3, moves(
+        walk_right
+        face_up
+        step_end
+    ))
+    waitmovement(0)
+
+    msgbox(format("Archie: Thank you for stalling him, {PLAYER}, and for helping outside,\lGym Leader.\p"
                   "Norman: Just doing my job.\p"
                   "So you're Archie?\p"
                   "Archie: Aye.\p"
                   "Norman: I was wondering if we could talk?\p"
-                  "We've had reports of criminal activity from a 'Team Aqua', describing outfits similar to the Aqua Sailors and Seafarers' Society.\p"
+                  "We've had reports of criminal activity from a 'Team Aqua', describing outfits\lsimilar to the Aqua Sailors and Seafarers' Society.\p"
                   "Similar to your people's, in fact.\p"
                   "You are the head of that society, yes?\p"
                   "Archie: ...Aye.\p"
@@ -1006,12 +1088,23 @@ script Route111_SunhollowRuins_Museum_EventScript_Archie_Global_Script {
     removeobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_4)
     removeobject(OBJECT_EVENT_FINAL_MEMBER_AQUA_5)
 
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(
+        face_down
+        step_end
+    ))
+    applymovement(OBJECT_EVENT_BRANDON_3, moves(
+        face_right
+        step_end
+    ))
+    waitmovement(0)
+
     msgbox(format("Brandon: That seems... incriminating.\p"
                   "Norman: YES. Yes it does."))
     closemessage
 
     applymovement(OBJECT_EVENT_NORMAN_3, moves(
-        face_left
+        walk_left
+        face_up
         step_end
     ))
     waitmovement(0)
@@ -1020,30 +1113,36 @@ script Route111_SunhollowRuins_Museum_EventScript_Archie_Global_Script {
                   "...Four badges? Already? Excellent work!\p"
                   "Well, I'd better not keep you waiting, hm? See you in Petalburg!"))
     closemessage
-
     applymovement(OBJECT_EVENT_NORMAN_3, moves(
-        walk_fastest_right * 5
+        walk_fastest_right * 4
         walk_fastest_down  * 8
         step_end
     ))
     waitmovement(0)
     removeobject(OBJECT_EVENT_NORMAN_3)
+    applymovement(OBJECT_EVENT_BRANDON_3, moves(
+        walk_right * 2
+        face_up
+        step_end
+    ))
+    waitmovement(0)
 
     msgbox(format("Brandon: Heh. He's never that excited to fight me, you know.\p"
-                  "Good luck with the gyms, young adventurer!"))
+                  "Good luck with the Gyms, young adventurer!"))
     closemessage
 
     applymovement(OBJECT_EVENT_BRANDON_3, moves(
-        walk_right * 7
+        walk_right * 4
         walk_down  * 8
         step_end
     ))
     waitmovement(0)
     removeobject(OBJECT_EVENT_BRANDON_3)
-
+    
     setvar(VAR_SUNHOLLOW_STATE, 3)
-    setflag(VAR_TEMP_5)
-    setflag(VAR_TEMP_6)
+    setflag(FLAG_TEMP_5)
+    setflag(FLAG_TEMP_6)
+    setflag(FLAG_FINISHED_SUNHOLLOW_STORY)
 
     release
     end

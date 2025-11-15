@@ -437,7 +437,7 @@
       "width": 120,
       "height": 40,
       "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_Mossdeep",
+      "secondary_tileset": "gTileset_Mossdeep_Ice",
       "border_filepath": "data/layouts/Route128/border.bin",
       "blockdata_filepath": "data/layouts/Route128/map.bin"
     },
@@ -4870,6 +4870,16 @@
       "secondary_tileset": "gTileset_GenericBuilding",
       "border_filepath": "data/layouts/Route111_SunhollowRuins_House1/border.bin",
       "blockdata_filepath": "data/layouts/Route111_SunhollowRuins_House1/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_DESERT_ENTRANCE",
+      "name": "Route111_Desert_Entrance_Layout",
+      "width": 20,
+      "height": 40,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_MirageTower",
+      "border_filepath": "data/layouts/Route111_Desert_Entrance/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_Desert_Entrance/map.bin"
     }
   ]
 }

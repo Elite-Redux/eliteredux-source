@@ -1,0 +1,41 @@
+{
+  "id": "MAP_ROUTE111_DESERT_ENTRANCE",
+  "name": "Route111_Desert_Entrance",
+  "layout": "LAYOUT_ROUTE111_DESERT_ENTRANCE",
+  "music": "MUS_PETALBURG_WOODS",
+  "region_map_section": "MAPSEC_ROUTE_111",
+  "requires_flash": false,
+  "weather": "WEATHER_SHADE",
+  "map_type": "MAP_TYPE_UNDERGROUND",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": false,
+  "show_map_name": false,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": 0,
+  "object_events": [
+
+  ],
+  "warp_events": [
+    {
+      "x": 7,
+      "y": 9,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111",
+      "dest_warp_id": "4"
+    },
+    {
+      "x": 15,
+      "y": 33,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_DESERT",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [
+
+  ],
+  "bg_events": [
+
+  ]
+}

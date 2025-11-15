@@ -116,7 +116,7 @@ script Route105_EventScript_FeraligatriteX_Battle {
 				trainerbattle_no_intro(TRAINER_FERALIGATRITEX_ROUTE105, format("Aye, ye had me figured out, ye did!")) // when the player wins
 				msgbox(format("Ye've proven yer mettle, and true to me word, here's that stone I promised ye!"), MSGBOX_NPC)
 				playfanfare(MUS_OBTAIN_ITEM)
-				giveitem(ITEM_FERALIGATRITE_X, 1) // Item given to the player
+				giveitem(ITEM_FERALIGITE_X, 1) // Item given to the player
 				waitmessage
 			}
 			else { // when refusing the battle

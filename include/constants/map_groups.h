@@ -280,6 +280,7 @@
 // gMapGroup_IndoorRoute111
 #define MAP_ROUTE111_WINSTRATE_FAMILYS_HOUSE (0 | (18 << 8))
 #define MAP_ROUTE111_OLD_LADYS_REST_STOP     (1 | (18 << 8))
+#define MAP_ROUTE111_DESERT_ENTRANCE         (2 | (18 << 8))
 
 // gMapGroup_IndoorRoute112
 #define MAP_ROUTE112_CABLE_CAR_STATION   (0 | (19 << 8))

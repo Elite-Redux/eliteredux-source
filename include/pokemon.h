@@ -588,5 +588,6 @@ AbilityEnum GetExtraAbilityForBattler(u8 battler, u8 abilityNumber);
 AbilityEnum GetBattlerAbilityInSlot(u8 battler, u8 abilityNumber);
 u8 GetNumPossibleAbilitiesForBattler(void);
 bool8 isHellMode(void);
+u16 GetSpeciesCry(SpeciesEnum species, bool32 v0);
 
 #endif  // GUARD_POKEMON_H

@@ -6169,7 +6169,7 @@ void ClearFuryCutterDestinyBondGrudge(u8 battlerId) {
 void HandleAction_RunBattleScript(void)  // identical to RunBattleScriptCommands
 {
 #if PRINT_BATTLE_SCRIPT_TRACING
-    MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d",
+    MGBA_PRINT_DEBUG("Exec: %d Addr: %X Cmd: %X Bytes: %d %d",
                      gBattleControllerExecFlags,
                      gBattlescriptCurrInstr,
                      gBattlescriptCurrInstr[0],

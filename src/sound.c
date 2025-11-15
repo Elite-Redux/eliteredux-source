@@ -8,6 +8,9 @@
 #include "constants/songs.h"
 #include "task.h"
 
+extern const struct ToneData gCryTable[];
+extern const struct ToneData gCryTable2[];
+
 struct Fanfare
 {
     u16 songNum;
@@ -32,8 +35,6 @@ extern struct MusicPlayerInfo gMPlayInfo_BGM;
 extern struct MusicPlayerInfo gMPlayInfo_SE1;
 extern struct MusicPlayerInfo gMPlayInfo_SE2;
 extern struct MusicPlayerInfo gMPlayInfo_SE3;
-extern struct ToneData gCryTable[];
-extern struct ToneData gCryTable2[];
 
 static void Task_Fanfare(u8 taskId);
 static void CreateFanfareTask(void);
@@ -456,6 +457,8 @@ void PlayCryInternal(SpeciesEnum species, s8 pan, s8 volume, u8 priority, u8 mod
         break;
     }
 
+
+
     SetPokemonCryVolume(volume);
     SetPokemonCryPanpot(pan);
     SetPokemonCryPitch(pitch);
@@ -466,7 +469,16 @@ void PlayCryInternal(SpeciesEnum species, s8 pan, s8 volume, u8 priority, u8 mod
     SetPokemonCryPriority(priority);
 
     species--;
-    gMPlay_PokemonCry = SetPokemonCryTone(v0 ? &gCryTable2[species] : &gCryTable[species]);
+	#ifdef POKEMON_CRIES
+        gMPlay_PokemonCry = SetPokemonCryTone(v0 ? &gCryTable2[species] : &gCryTable[species]);
+	#else
+		species++;
+        species = GetSpeciesCry(species, v0);
+        if(v0)
+            gMPlay_PokemonCry = SetPokemonCryTone((struct ToneData *) &gCryTable2[species]);
+        else
+            gMPlay_PokemonCry = SetPokemonCryTone((struct ToneData *) &gCryTable[species]);
+    #endif
 }
 
 bool8 IsCryFinished(void)

@@ -50,12 +50,12 @@ Route111_EventScript_ShowTemporaryMirageTower:: @ 81F0CE4
 Route111_OnTransition: @ 81F0D87
 	setvar VAR_TRAINER_HILL_IS_ACTIVE, 0
 	special SetMirageTowerVisibility
-	call_if_unset FLAG_MIRAGE_TOWER_VISIBLE, Route111_EventScript_SetLayoutNoMirageTower
+	//call_if_unset FLAG_MIRAGE_TOWER_VISIBLE, Route111_EventScript_SetLayoutNoMirageTower
 	compare VAR_MIRAGE_TOWER_STATE, 1
 	call_if_eq Route111_EventScript_SetFallingPlayerGfx
 	compare VAR_MIRAGE_TOWER_STATE, 2
 	call_if_eq Route111_EventScript_SetMirageTowerGone
-	call Route111_EventScript_CheckSetSandstorm
+	//call Route111_EventScript_CheckSetSandstorm
 	call GabbyAndTy_EventScript_UpdateLocation
 	goto_if_not_defeated TRAINER_VICKY, Route111_EventScript_SetWinstratesNotDefeated
 	end
@@ -428,7 +428,7 @@ Route111_EventScript_Hiker:: @ 81F119B
 	goto_if_eq Route111_EventScript_HikerMirageTowerGone
 	compare VAR_MIRAGE_TOWER_STATE, 2
 	goto_if_eq Route111_EventScript_HikerMirageTowerDisintegrated
-	goto_if_set FLAG_MIRAGE_TOWER_VISIBLE, Route111_EventScript_HikerMirageTowerVisible
+	//goto_if_set FLAG_MIRAGE_TOWER_VISIBLE, Route111_EventScript_HikerMirageTowerVisible
 	msgbox Route111_Text_ShouldBeMirageTowerAroundHere, MSGBOX_DEFAULT
 	release
 	end
@@ -875,6 +875,24 @@ Route111_Text_TrainerHillSign: @ 81F1D61
 
 
 `
+script Route111South_EventScript_Magma_Grunt{
+    lock
+	playse(SE_PIN)
+	applymovement(VAR_LAST_TALKED, Common_Movement_ExclamationMark)
+	faceplayer
+	msgbox(JaggedPass_Text_GruntIntro, MSGBOX_DEFAULT)
+    release
+    end
+}
+
+script Route111South_EventScript_Magma_Grunt_Off_Limits{
+    lock
+	faceplayer
+	msgbox(format("This area is off-limits, now scram!"), MSGBOX_DEFAULT)
+    release
+    end
+}
+
 script Route111South_EventScript_Gen8_NPC{
     lock
     faceplayer
