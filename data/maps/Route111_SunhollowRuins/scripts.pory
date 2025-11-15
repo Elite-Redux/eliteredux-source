@@ -38,10 +38,10 @@ script Route111_SunhollowRuins_EventScript_PlayerFound_Global{
     end
 }
 
-const OBJECT_EVENT_NORMAN         = 32
-const OBJECT_EVENT_SLAKING        = 35
-const OBJECT_EVENT_ENTRANCE_GRUNT = 33
-const OBJECT_EVENT_EXCADRILL      = 34
+const OBJECT_EVENT_NORMAN         = 31
+const OBJECT_EVENT_SLAKING        = 34
+const OBJECT_EVENT_ENTRANCE_GRUNT = 32
+const OBJECT_EVENT_EXCADRILL      = 33
 
 script Route111_SunhollowRuins_EventScript_Pre_EntranceScript_1{
     lock
