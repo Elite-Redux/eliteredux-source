@@ -9412,6 +9412,13 @@ constexpr Ability Chainsaw = {
     },
 };
 
+constexpr Ability GaleforceWings = {
+    .onPriority = +[](ON_PRIORITY) -> int {
+        CHECK(GetTypeBeforeUsingMove(move, battler) == TYPE_FLYING)
+        return 1;
+    }
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10301,6 +10308,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_DRAGONFRUIT, Dragonfruit},
     {ABILITY_LEAD_CLAWS, LeadClaws},
     {ABILITY_CHAINSAW, Chainsaw},
+    {ABILITY_GALEFORCE_WINGS, GaleforceWings}
 };
 
 template <int N>
