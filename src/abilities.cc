@@ -9427,6 +9427,19 @@ constexpr Ability Empress = {
     .breakable = TRUE,
 };
 
+ON_EITHER(HypnoticTouch) {
+    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(CanSleep(opponent))
+    CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+    CHECK(Random() % 100 < 20)
+
+    AbilityStatusEffectSafe(MOVE_EFFECT_SLEEP, battler, opponent);
+    return TRUE;
+}
+constexpr Ability HypnoticTouch = {
+    ON_EITHER_ABILITY(HypnoticTouch),
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10318,6 +10331,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_CHAINSAW, Chainsaw},
     {ABILITY_GALEFORCE_WINGS, GaleforceWings},
     {ABILITY_EMPRESS, Empress},
+    {ABILITY_HYPNOTIC_TOUCH, HypnoticTouch},
 };
 
 template <int N>
