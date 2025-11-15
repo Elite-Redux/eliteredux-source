@@ -9419,6 +9419,14 @@ constexpr Ability GaleforceWings = {
     }
 };
 
+constexpr Ability Empress = {
+    .onImmune = QueenlyMajesty.onImmune,
+    .onOffensiveMultiplier = Rivalry.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Rivalry.onDefensiveMultiplier,
+    .onImmuneFor = APPLY_ON_ALLY,
+    .breakable = TRUE,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10308,7 +10316,8 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_DRAGONFRUIT, Dragonfruit},
     {ABILITY_LEAD_CLAWS, LeadClaws},
     {ABILITY_CHAINSAW, Chainsaw},
-    {ABILITY_GALEFORCE_WINGS, GaleforceWings}
+    {ABILITY_GALEFORCE_WINGS, GaleforceWings},
+    {ABILITY_EMPRESS, Empress},
 };
 
 template <int N>
