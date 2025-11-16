@@ -53,8 +53,9 @@ MtPyre_Summit_EventScript_TeamAquaExits:: @ 823203C
 	call_if_eq MtPyre_Summit_EventScript_ArchieFacePlayer1
 	compare VAR_0x8008, 2
 	call_if_eq MtPyre_Summit_EventScript_ArchieFacePlayer2
-	msgbox MtPyre_Summit_Text_ArchieWeGotTheOrbLetsGo, MSGBOX_DEFAULT
-	closemessage
+	call MtPyre_Summit_EventScript_ArchieBattle
+	// msgbox MtPyre_Summit_Text_ArchieWeGotTheOrbLetsGo, MSGBOX_DEFAULT
+	// closemessage
 	fadescreen FADE_TO_BLACK
 	removeobject LOCALID_ARCHIE
 	removeobject LOCALID_GRUNT_1
@@ -686,4 +687,17 @@ script MtPyre_Summit_EventScript_ReAddBoulders{
     addobject(LOCALID_BOULDER_0)
     addobject(LOCALID_BOULDER_1)
     setvar(VAR_TEMP_0, 0)
+}
+
+script MtPyre_Summit_EventScript_ArchieBattle {
+    msgbox(format(
+        "Archie: {PLAYER}, you're here too? How'd you even-\p"
+        "Ah, you were at Sunhollow Pyramid. Right.\p"
+        "Damn it.\p"
+        "This is unfortunate, but I can't have you taking back the Blue Orb. Have at you!"
+    ))
+    closemessage
+
+    trainerbattle_no_intro(TRAINER_ARCHIE, format("Blast it all!"))
+    return
 }
