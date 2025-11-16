@@ -9453,6 +9453,29 @@ constexpr Ability Hydra = {
     .resistsFortKnox = TRUE,
 };
 
+constexpr Ability WingsOfPestilence = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        u16 randomCurse = Random() % 100;
+        u16 randomBleed = Random() % 100;
+        if (randomBleed < 20 && randomCurse < 10 && !(gBattleMons[target].status2 & STATUS2_CURSED)
+        && !(gBattleMons[target].status2 & STATUS1_BLEED) && CanBleed(target)) {
+            // AbilityStatusEffect() does not execute the effect on its own.
+            // Individual battle script call is necessary for multiple move effects.
+            gBattleMons[target].status2 |= STATUS2_CURSED;
+            BattleScriptCall(BattleScript_MoveEffectCurse);
+            return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+        }
+        else if (randomCurse < 10 && !(gBattleMons[target].status2 & STATUS2_CURSED)) {
+            return AbilityStatusEffect(MOVE_EFFECT_CURSE);
+        } 
+        else if (randomBleed < 20 && !(gBattleMons[target].status2 & STATUS1_BLEED) && CanBleed(target)){
+            return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+        }
+        else return FALSE;
+    },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10347,6 +10370,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_HYPNOTIC_TOUCH, HypnoticTouch},
     {ABILITY_SUNDAE, Sundae},
     {ABILITY_HYDRA, Hydra},
+    {ABILITY_WINGS_OF_PESTILENCE, WingsOfPestilence},
 };
 
 template <int N>
