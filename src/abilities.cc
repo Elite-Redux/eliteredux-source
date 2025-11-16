@@ -9446,6 +9446,13 @@ constexpr Ability Sundae = {
     .hailImmune = TRUE,
 };
 
+constexpr Ability Hydra = {
+    .onBattlerFaints = BeastBoost.onBattlerFaints,
+    .onParentalBond = MultiHeaded.onParentalBond,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .resistsFortKnox = TRUE,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10339,6 +10346,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_EMPRESS, Empress},
     {ABILITY_HYPNOTIC_TOUCH, HypnoticTouch},
     {ABILITY_SUNDAE, Sundae},
+    {ABILITY_HYDRA, Hydra},
 };
 
 template <int N>
