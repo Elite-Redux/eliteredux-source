@@ -9440,6 +9440,12 @@ constexpr Ability HypnoticTouch = {
     ON_EITHER_ABILITY(HypnoticTouch),
 };
 
+constexpr Ability Sundae = {
+    .onEntry = SnowWarning.onEntry,
+    .onEndTurn = IceBody.onEndTurn,
+    .hailImmune = TRUE,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10332,6 +10338,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_GALEFORCE_WINGS, GaleforceWings},
     {ABILITY_EMPRESS, Empress},
     {ABILITY_HYPNOTIC_TOUCH, HypnoticTouch},
+    {ABILITY_SUNDAE, Sundae},
 };
 
 template <int N>
