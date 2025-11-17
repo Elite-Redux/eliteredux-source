@@ -9458,18 +9458,14 @@ constexpr Ability WingsOfPestilence = {
         CHECK(ShouldApplyOnHitAffect(target))
         u16 randomCurse = Random() % 100;
         u16 randomBleed = Random() % 100;
-        if (randomBleed < 20 && randomCurse < 10 && !(gBattleMons[target].status2 & STATUS2_CURSED)
-        && !(gBattleMons[target].status2 & STATUS1_BLEED) && CanBleed(target)) {
+
+        if (randomCurse < 10 && !(gBattleMons[target].status2 & STATUS2_CURSED)) {
             // AbilityStatusEffect() does not execute the effect on its own.
             // Individual battle script call is necessary for multiple move effects.
             gBattleMons[target].status2 |= STATUS2_CURSED;
             BattleScriptCall(BattleScript_MoveEffectCurse);
-            return AbilityStatusEffect(MOVE_EFFECT_BLEED);
-        }
-        else if (randomCurse < 10 && !(gBattleMons[target].status2 & STATUS2_CURSED)) {
-            return AbilityStatusEffect(MOVE_EFFECT_CURSE);
         } 
-        else if (randomBleed < 20 && !(gBattleMons[target].status2 & STATUS1_BLEED) && CanBleed(target)){
+        if (randomBleed < 20 && !(gBattleMons[target].status2 & STATUS1_BLEED) && CanBleed(target)){
             return AbilityStatusEffect(MOVE_EFFECT_BLEED);
         }
         else return FALSE;
