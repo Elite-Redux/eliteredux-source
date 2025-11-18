@@ -9320,7 +9320,34 @@ constexpr Ability LaserDrill = {
 };
 
 constexpr Ability LightSaber = {
-    .randomizerBanned = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(!(gBattleMons[target].status1 & STATUS1_ANY))
+        u16 randomBurn = Random() % 100;
+        u16 randomPara = Random() % 100;
+
+        // Determine 50/50 if both statuses proc and are both valid
+        if (randomBurn < 25 && randomPara < 25 && CanBeBurned(target) && CanBeParalyzed(battler, target)) {
+            switch(Random() % 2){
+                case 0:
+                    return AbilityStatusEffect(MOVE_EFFECT_BURN);
+                    break;
+                case 1:
+                default:
+                    return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+                    break;
+            }
+        }
+
+        else if (randomBurn < 25 && CanBeBurned(target)) {
+            return AbilityStatusEffect(MOVE_EFFECT_BURN);
+        }
+
+        else if (randomPara < 25 && CanBeParalyzed(battler, target)){
+            return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+        }
+        else return FALSE;
+    },
 };
 
 constexpr Ability LooseThorns = {
@@ -9396,6 +9423,80 @@ constexpr Ability Dragonfruit = {
 constexpr Ability LeadClaws = {
     .onOffensiveMultiplier = BigPecks.onOffensiveMultiplier,
     ATE_ABILITY(TYPE_ROCK),
+};
+
+constexpr Ability Chainsaw = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
+
+        int affected = GetOncePerTurnAbilityCounter(battler, ability);
+        CHECK_NOT(affected & (1 << target))
+
+        SetOncePerTurnAbilityCounter(battler, ability, affected | (1 << target));
+        return AbilityStatusEffect(MOVE_EFFECT_DEF_MINUS_1);
+    },
+};
+
+constexpr Ability GaleforceWings = {
+    .onPriority = +[](ON_PRIORITY) -> int {
+        CHECK(GetTypeBeforeUsingMove(move, battler) == TYPE_FLYING)
+        return 1;
+    }
+};
+
+constexpr Ability Empress = {
+    .onImmune = QueenlyMajesty.onImmune,
+    .onOffensiveMultiplier = Rivalry.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Rivalry.onDefensiveMultiplier,
+    .onImmuneFor = APPLY_ON_ALLY,
+    .breakable = TRUE,
+};
+
+ON_EITHER(HypnoticTouch) {
+    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(CanSleep(opponent))
+    CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+    CHECK(Random() % 100 < 20)
+
+    AbilityStatusEffectSafe(MOVE_EFFECT_SLEEP, battler, opponent);
+    return TRUE;
+}
+constexpr Ability HypnoticTouch = {
+    ON_EITHER_ABILITY(HypnoticTouch),
+};
+
+constexpr Ability Sundae = {
+    .onEntry = SnowWarning.onEntry,
+    .onEndTurn = IceBody.onEndTurn,
+    .hailImmune = TRUE,
+};
+
+constexpr Ability Hydra = {
+    .onBattlerFaints = BeastBoost.onBattlerFaints,
+    .onParentalBond = MultiHeaded.onParentalBond,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .resistsFortKnox = TRUE,
+};
+
+constexpr Ability WingsOfPestilence = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        u16 randomCurse = Random() % 100;
+        u16 randomBleed = Random() % 100;
+
+        if (randomCurse < 10 && !(gBattleMons[target].status2 & STATUS2_CURSED)) {
+            // AbilityStatusEffect() does not execute the effect on its own.
+            // Individual battle script call is necessary for multiple move effects.
+            gBattleMons[target].status2 |= STATUS2_CURSED;
+            BattleScriptCall(BattleScript_MoveEffectCurse);
+        } 
+        if (randomBleed < 20 && !(gBattleMons[target].status2 & STATUS1_BLEED) && CanBleed(target)){
+            return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+        }
+        else return FALSE;
+    },
 };
 
 typedef struct AbilityKVPair {
@@ -10285,7 +10386,14 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_I_AM_STEVE, IAmSteve},
     {ABILITY_ROCKY_EXTERIOR, RockyExterior},
     {ABILITY_DRAGONFRUIT, Dragonfruit},
-    {ABILITY_LEAD_CLAWS, LeadClaws}
+    {ABILITY_LEAD_CLAWS, LeadClaws},
+    {ABILITY_CHAINSAW, Chainsaw},
+    {ABILITY_GALEFORCE_WINGS, GaleforceWings},
+    {ABILITY_EMPRESS, Empress},
+    {ABILITY_HYPNOTIC_TOUCH, HypnoticTouch},
+    {ABILITY_SUNDAE, Sundae},
+    {ABILITY_HYDRA, Hydra},
+    {ABILITY_WINGS_OF_PESTILENCE, WingsOfPestilence},
 };
 
 template <int N>

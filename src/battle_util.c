@@ -9000,7 +9000,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, MoveEnum m
     AbilityEnum ability, moveType;
     u8 numPossibleAbilities = GetNumPossibleAbilitiesForBattler();
 
-    if (abilityNumber >= numPossibleAbilities) return FALSE;
+    if (abilityNumber > numPossibleAbilities) return FALSE;
 
     abilityNumber = numPossibleAbilities - abilityNumber;
 
