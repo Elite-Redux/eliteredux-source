@@ -326,7 +326,6 @@ bool8 MetatileBehavior_IsReflective(u8 metatileBehavior)
     if (metatileBehavior == MB_POND_WATER
      || metatileBehavior == MB_PUDDLE
      || metatileBehavior == MB_UNUSED_SOOTOPOLIS_DEEP_WATER_2
-     || metatileBehavior == MB_ICE
      || metatileBehavior == MB_SOOTOPOLIS_DEEP_WATER
      || metatileBehavior == MB_REFLECTION_UNDER_BRIDGE)
         return TRUE;
