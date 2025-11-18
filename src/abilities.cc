@@ -9320,7 +9320,34 @@ constexpr Ability LaserDrill = {
 };
 
 constexpr Ability LightSaber = {
-    .randomizerBanned = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        u16 randomBurn = Random() % 100;
+        u16 randomPara = Random() % 100;
+
+        // Determine 50/50 if both statuses proc and are both valid
+        if (randomBurn < 25 && randomPara < 25 && !(gBattleMons[target].status1 & STATUS1_ANY) 
+        && CanBeBurned(target) && CanBeParalyzed(battler, target)) {
+            switch(Random() % 2){
+                case 0:
+                    return AbilityStatusEffect(MOVE_EFFECT_BURN);
+                    break;
+                case 1:
+                default:
+                    return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+                    break;
+            }
+        }
+
+        else if (randomBurn < 25 && !(gBattleMons[target].status1 & STATUS1_ANY) && CanBeBurned(target)) {
+            return AbilityStatusEffect(MOVE_EFFECT_BURN);
+        }
+
+        else if (randomPara < 25 && !(gBattleMons[target].status2 & STATUS1_ANY) && CanBeParalyzed(battler, target)){
+            return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+        }
+        else return FALSE;
+    },
 };
 
 constexpr Ability LooseThorns = {
