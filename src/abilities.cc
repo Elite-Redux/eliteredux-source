@@ -9571,6 +9571,18 @@ constexpr Ability Echolocation = {
     },
 };
 
+constexpr Ability DeadBark = {
+    .onEntry = +[](ON_ENTRY) -> int { AddBattlerType(battler, TYPE_GHOST);},
+    .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) {
+        if (typeEffectivenessModifier >= UQ_4_12(2.0)) {
+            MUL(.7);
+        } else {
+            MUL(.85);
+        }
+    },
+    .addsType = TYPE_GHOST,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -9789,6 +9801,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_POWER_OF_ALCHEMY, PowerOfAlchemy},
     {ABILITY_BEAST_BOOST, BeastBoost},
     {ABILITY_RKS_SYSTEM, RksSystem},
+    {ABILITY_BARK_SKIN, DeadBark},
     {ABILITY_ELECTRIC_SURGE, ElectricSurge},
     {ABILITY_PSYCHIC_SURGE, PsychicSurge},
     {ABILITY_MISTY_SURGE, MistySurge},
