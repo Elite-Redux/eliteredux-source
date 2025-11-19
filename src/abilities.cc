@@ -5720,6 +5720,11 @@ constexpr Ability CosmicDaze = {
         },
 };
 
+constexpr Ability CosmicDust = {
+    .onOffensiveMultiplier = CosmicDaze.onOffensiveMultiplier,
+    .magicGuard = TRUE,
+};
+
 constexpr Ability MindsEye = {
     .onTypeEffectiveness = Scrappy.onTypeEffectiveness,
     .breakable = TRUE,
@@ -10517,6 +10522,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_MASSIVE_PELT, MassivePelt},
     {ABILITY_SAP_TRAP, SapTrap},
     {ABILITY_DEVIOUS_PRESENT, DeviousPresent},
+    {ABILITY_COSMIC_DUST, CosmicDust},
 };
 
 template <int N>
