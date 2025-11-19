@@ -9561,6 +9561,16 @@ constexpr Ability MassivePelt = {
     .breakable = Fluffy.breakable,
 };
 
+constexpr Ability Echolocation = {
+    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) {
+        if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) MUL(1.2);
+    },
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+        return ACCURACY_ALWAYS_HITS;
+    },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -9728,6 +9738,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_BULLETPROOF, Bulletproof},
     {ABILITY_STRONG_JAW, StrongJaw},
     {ABILITY_REFRIGERATE, Refrigerate},
+    {ABILITY_ECHOLOCATION, Echolocation},
     {ABILITY_SWEET_VEIL, SweetVeil},
     {ABILITY_STANCE_CHANGE, StanceChange},
     {ABILITY_GALE_WINGS, GaleWings},
