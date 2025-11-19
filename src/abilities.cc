@@ -9476,8 +9476,8 @@ constexpr Ability Empress = {
 ON_EITHER(HypnoticTouch) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(CanSleep(opponent))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK(Random() % 100 < 20)
+    CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+    CHECK(Random() % 100 < 20)
 
     AbilityStatusEffectSafe(MOVE_EFFECT_SLEEP, battler, opponent);
     return TRUE;
@@ -9516,6 +9516,42 @@ constexpr Ability WingsOfPestilence = {
         }
 
         return any;
+    },
+};
+
+constexpr Ability ZenGarden = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SEEDS) {
+            switch (GetBattlerHoldEffectParam(battler)) {
+                case HOLD_EFFECT_PARAM_GRASSY_TERRAIN:
+                    return GrassySurge.onEntry(DELEGATE_ENTRY);
+
+                case HOLD_EFFECT_PARAM_PSYCHIC_TERRAIN:
+                    return PsychicSurge.onEntry(DELEGATE_ENTRY);
+            }
+        }
+
+        switch (Random() % 2) {
+            case 0:
+                return GrassySurge.onEntry(DELEGATE_ENTRY);
+
+            case 1:
+                return PsychicSurge.onEntry(DELEGATE_ENTRY);
+
+            default:
+                return FALSE;
+        }
+    },
+};
+
+constexpr Ability SharpTalons = {
+    .onAttacker = +[](ON_ATTACKER)->int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(DoesMoveMatchFlag(battler, move, MOVE_FLAG_KICK))
+        CHECK(CanBleed(target))
+        CHECK(Random() % 2)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     },
 };
 
@@ -10414,6 +10450,8 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_SUNDAE, Sundae},
     {ABILITY_HYDRA, Hydra},
     {ABILITY_WINGS_OF_PESTILENCE, WingsOfPestilence},
+    {ABILITY_ZEN_GARDEN, ZenGarden},
+    {ABILITY_SHARP_TALONS, SharpTalons},
 };
 
 template <int N>
