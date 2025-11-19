@@ -9050,8 +9050,8 @@ constexpr Ability SwampThing = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideTimers[GetOppositeSide(battler)].swampTimer)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_SWAMP, battler, GetOppositeSide(battler));
         InsertCorrectEndType(ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+        AbilityStatusEffectSafe(MOVE_EFFECT_SWAMP, battler, GetOppositeSide(battler));
         return TRUE;
     },
 };
@@ -9194,8 +9194,8 @@ constexpr Ability DeepFried = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideTimers[GetOppositeSide(battler)].fireSeaTimer)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_FIRE_SEA, battler, GetOppositeSide(battler));
         InsertCorrectEndType(ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+        AbilityStatusEffectSafe(MOVE_EFFECT_FIRE_SEA, battler, GetOppositeSide(battler));
         return TRUE;
     },
 };
@@ -9581,6 +9581,29 @@ constexpr Ability DeadBark = {
         }
     },
     .addsType = TYPE_GHOST,
+};
+
+constexpr Ability SapTrap = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+      int any = FALSE;
+
+      int target = BATTLE_OPPOSITE(battler);
+      if (CanLowerStat(target, STAT_SPEED)) {
+        InsertCorrectEndType(ABILITY_BS_EXECUTE);
+        any = TRUE;
+        AbilityStatusEffectSafe(MOVE_EFFECT_SPD_MINUS_1, battler, target);
+      }
+
+      target = BATTLE_PARTNER(target);
+      if (CanLowerStat(target, STAT_SPEED)) {
+        if (!any) InsertCorrectEndType(ABILITY_BS_EXECUTE);
+        any = TRUE;
+        AbilityStatusEffectSafe(MOVE_EFFECT_SPD_MINUS_1, battler, target);
+      }
+
+      return any;
+    },
+    .onTrap = +[](ABILITY_ON_TRAP) -> int { return gBattleMons[switchingBattler].statStages[STAT_SPEED] <= 3; },
 };
 
 typedef struct AbilityKVPair {
