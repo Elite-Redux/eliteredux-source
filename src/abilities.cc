@@ -7283,7 +7283,7 @@ constexpr Ability RestrainingOrder = {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(CanBattlerBeForceSwitched(attacker))
-        
+
         SetAbilityState(battler, ability, RESTRAINING_ORDER_ACTIVATING);
         return FALSE;
     },
@@ -8863,7 +8863,7 @@ constexpr Ability Chuckster = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
         CHECK(DidMoveHit())
-        
+
         SetAbilityState(battler, ability, CanBattlerBeForceSwitched(attacker) ? RESTRAINING_ORDER_ACTIVATING : RESTRAINING_ORDER_DONE);
         return FALSE;
     },
@@ -9196,7 +9196,7 @@ constexpr Ability Spyware = {
         CHECK(IsBattlerAlive(battler))
 
         int stat;
-        switch (GetHighestStatId(gBattlerTarget, TRUE)){
+        switch (GetHighestStatId(gBattlerTarget, TRUE)) {
             case STAT_SPEED:
                 stat = STAT_SPEED;
                 break;
@@ -9320,15 +9320,22 @@ constexpr Ability LaserDrill = {
 };
 
 constexpr Ability LightSaber = {
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIRE); },
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
         CHECK(Random() % 2)
-        if (Random() % 2) {
-            CHECK(CanBeBurned(target))
-            return AbilityStatusEffect(MOVE_EFFECT_BURN);
-        } else {
-            CHECK(CanBeParalyzed(battler, target))
-            return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+        switch (Random() % 4) {
+            case 0:
+                CHECK(CanBeBurned(target))
+                return AbilityStatusEffect(MOVE_EFFECT_BURN);
+
+            case 1:
+                CHECK(CanBeParalyzed(battler, target))
+                return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+
+            default:
+                return FALSE;
         }
     },
 };
@@ -9426,7 +9433,7 @@ constexpr Ability GaleforceWings = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(GetTypeBeforeUsingMove(move, battler) == TYPE_FLYING)
         return 1;
-    }
+    },
 };
 
 constexpr Ability Empress = {
@@ -9440,8 +9447,8 @@ constexpr Ability Empress = {
 ON_EITHER(HypnoticTouch) {
     CHECK(ShouldApplyOnHitAffect(opponent))
     CHECK(CanSleep(opponent))
-    CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-    CHECK(Random() % 100 < 20)
+        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+        CHECK(Random() % 100 < 20)
 
     AbilityStatusEffectSafe(MOVE_EFFECT_SLEEP, battler, opponent);
     return TRUE;
@@ -9466,19 +9473,20 @@ constexpr Ability Hydra = {
 constexpr Ability WingsOfPestilence = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        u16 randomCurse = Random() % 100;
-        u16 randomBleed = Random() % 100;
 
-        if (randomCurse < 10 && !(gBattleMons[target].status2 & STATUS2_CURSED)) {
-            // AbilityStatusEffect() does not execute the effect on its own.
-            // Individual battle script call is necessary for multiple move effects.
+        int any = FALSE;
+
+        if (Random() % 100 < 10 && !(gBattleMons[target].status2 & STATUS2_CURSED)) {
             gBattleMons[target].status2 |= STATUS2_CURSED;
             BattleScriptCall(BattleScript_MoveEffectCurse);
-        } 
-        if (randomBleed < 20 && !(gBattleMons[target].status2 & STATUS1_BLEED) && CanBleed(target)){
-            return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+            any = TRUE;
         }
-        else return FALSE;
+
+        if (Random() % 100 < 20 && CanBleed(target)) {
+            any |= AbilityStatusEffect(MOVE_EFFECT_BLEED);
+        }
+
+        return any;
     },
 };
 
