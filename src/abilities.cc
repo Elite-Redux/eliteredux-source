@@ -1893,11 +1893,13 @@ constexpr Ability VictoryStar = {
 constexpr Ability Turboblaze = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIRE); },
     .onMoldBreaker = MoldBreaker.onMoldBreaker,
+    .addsType = TYPE_FIRE,
 };
 
 constexpr Ability Teravolt = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ELECTRIC); },
     .onMoldBreaker = MoldBreaker.onMoldBreaker,
+    .addsType = TYPE_ELECTRIC,
 };
 
 constexpr Ability AromaVeil = {
@@ -1933,6 +1935,7 @@ constexpr Ability Protean = {
         BattleScriptCall(BattleScript_ProteanActivates);
         return TRUE;
     },
+    .omniStab = TRUE,
 };
 
 constexpr Ability FurCoat = {
@@ -2597,6 +2600,7 @@ constexpr Ability RksSystem = {
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
     .adaptability = TRUE,
+    .omniStab = TRUE,
 };
 
 constexpr Ability ElectricSurge = {
@@ -2684,6 +2688,7 @@ constexpr Ability DauntlessShield = {
 
 constexpr Ability Libero = {
     .onBeforeAttack = Protean.onBeforeAttack,
+    .omniStab = TRUE,
 };
 
 constexpr Ability CottonDown = {
@@ -3212,6 +3217,7 @@ constexpr Ability AncientIdol = {
 
 constexpr Ability MysticPower = {
     .onStab = +[](ON_STAB) -> int { return TRUE; },
+    .omniStab = TRUE,
 };
 
 constexpr Ability Perfectionist = {
@@ -3306,6 +3312,7 @@ constexpr Ability Amphibious = {
 
 constexpr Ability Grounded = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GROUND); },
+    .addsType = TYPE_GROUND,
 };
 
 constexpr Ability Earthbound = {
@@ -3411,14 +3418,17 @@ constexpr Ability Tectonize = {
 
 constexpr Ability IceAge = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ICE); },
+    .addsType = TYPE_ICE,
 };
 
 constexpr Ability HalfDrake = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_DRAGON); },
+    .addsType = TYPE_DRAGON,
 };
 
 constexpr Ability Aquatic = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_WATER); },
+    .addsType = TYPE_WATER,
 };
 
 constexpr Ability Liquified = {
@@ -3434,6 +3444,7 @@ constexpr Ability Dragonfly = {
     .onEntry = HalfDrake.onEntry,
     .breakable = TRUE,
     .levitate = TRUE,
+    .addsType = TYPE_DRAGON,
 };
 
 constexpr Ability Dragonslayer = {
@@ -3464,6 +3475,7 @@ constexpr Ability Hydrate = {
 
 constexpr Ability Metallic = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_STEEL); },
+    .addsType = TYPE_STEEL,
 };
 
 constexpr Ability Permafrost = {
@@ -3531,6 +3543,7 @@ constexpr Ability MajesticBird = {
 
 constexpr Ability Phantom = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GHOST); },
+    .addsType = TYPE_GHOST,
 };
 
 constexpr Ability Intoxicate = {
@@ -4784,6 +4797,7 @@ constexpr Ability PrismaticFur = {
         return ColorChange.onBeforeAttack(DELEGATE_ON_BEFORE_ATTACK);
     },
     .onBeforeAttackFor = APPLY_ON_ATTACKER_OR_TARGET,
+    .omniStab = TRUE,
 };
 
 constexpr Ability ShockingJaws = {
@@ -4893,6 +4907,7 @@ constexpr Ability LingeringAroma = {
 
 constexpr Ability FairyTale = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FAIRY); },
+    .addsType = TYPE_FAIRY,
 };
 
 constexpr Ability RagingMoth = {
@@ -5400,6 +5415,7 @@ constexpr Ability ArcaneForce = {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
         },
     .onStab = MysticPower.onStab,
+    .omniStab = TRUE,
 };
 
 constexpr Ability Doombringer = {
@@ -5702,6 +5718,11 @@ constexpr Ability CosmicDaze = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMons[target].status2 & STATUS2_CONFUSION) MUL(2);
         },
+};
+
+constexpr Ability CosmicDust = {
+    .onOffensiveMultiplier = CosmicDaze.onOffensiveMultiplier,
+    .magicGuard = TRUE,
 };
 
 constexpr Ability MindsEye = {
@@ -7037,6 +7058,7 @@ constexpr Ability SnowyWrath = {
 constexpr Ability PatternChange = {
     .onEndTurn = ShedSkin.onEndTurn,
     .onBeforeAttack = Protean.onBeforeAttack,
+    .omniStab = TRUE,
 };
 
 constexpr Ability NoTurningBack = {
@@ -7283,7 +7305,7 @@ constexpr Ability RestrainingOrder = {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(CanBattlerBeForceSwitched(attacker))
-        
+
         SetAbilityState(battler, ability, RESTRAINING_ORDER_ACTIVATING);
         return FALSE;
     },
@@ -7549,6 +7571,7 @@ constexpr Ability Hover = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_PSYCHIC); },
     .breakable = TRUE,
     .levitate = TRUE,
+    .addsType = TYPE_PSYCHIC,
 };
 
 constexpr Ability Depravity = {
@@ -8101,6 +8124,7 @@ constexpr Ability UnownPower = {
             if (*mod < UQ_4_12(2.0) && (move == MOVE_HIDDEN_POWER || move == MOVE_SECRET_POWER)) *mod = UQ_4_12(2.0);
         },
     .randomizerBanned = TRUE,
+    .omniStab = TRUE,
 };
 
 constexpr Ability SuperScope = {
@@ -8284,6 +8308,7 @@ constexpr Ability DNAScramble = {
 constexpr Ability MetallicJaws = {
     .onEntry = Metallic.onEntry,
     .onParentalBond = PrimalMaw.onParentalBond,
+    .addsType = TYPE_STEEL,
 };
 
 constexpr Ability Calculative = {
@@ -8510,6 +8535,7 @@ constexpr Ability Scarecrow = {
 constexpr Ability OminousShroud = {
     .onEntry = Phantom.onEntry,
     .onDefensiveMultiplier = ShadowShield.onDefensiveMultiplier,
+    .addsType = TYPE_GHOST,
 };
 
 constexpr Ability ChillingPresence = {
@@ -8602,6 +8628,7 @@ constexpr Ability PoisonQuills = {
 constexpr Ability DraconicMight = {
     .onEntry = HalfDrake.onEntry,
     ATE_ABILITY(TYPE_DRAGON),
+    .addsType = TYPE_DRAGON,
 };
 
 constexpr Ability AtlanticRuler = {
@@ -8653,6 +8680,7 @@ constexpr Ability FeyFlight = {
     .onEntry = FairyTale.onEntry,
     .breakable = TRUE,
     .levitate = TRUE,
+    .addsType = TYPE_FAIRY,
 };
 
 constexpr Ability BestOffense = {
@@ -8682,6 +8710,7 @@ constexpr Ability MagusBlades = {
 
 constexpr Ability LightningBorn = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ELECTRIC); },
+    .addsType = TYPE_ELECTRIC,
 };
 
 constexpr Ability Superheavy = {
@@ -8702,6 +8731,7 @@ constexpr Ability LuckyWings = {
 constexpr Ability Komodo = {
     .onEntry = HalfDrake.onEntry,
     .onAttacker = ToxicChain.onAttacker,
+    .addsType = TYPE_DRAGON,
 };
 
 constexpr Ability Envenom = {
@@ -8863,7 +8893,7 @@ constexpr Ability Chuckster = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
         CHECK(DidMoveHit())
-        
+
         SetAbilityState(battler, ability, CanBattlerBeForceSwitched(attacker) ? RESTRAINING_ORDER_ACTIVATING : RESTRAINING_ORDER_DONE);
         return FALSE;
     },
@@ -9025,8 +9055,8 @@ constexpr Ability SwampThing = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideTimers[GetOppositeSide(battler)].swampTimer)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_SWAMP, battler, GetOppositeSide(battler));
         InsertCorrectEndType(ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+        AbilityStatusEffectSafe(MOVE_EFFECT_SWAMP, battler, GetOppositeSide(battler));
         return TRUE;
     },
 };
@@ -9169,8 +9199,8 @@ constexpr Ability DeepFried = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideTimers[GetOppositeSide(battler)].fireSeaTimer)
 
-        AbilityStatusEffectSafe(MOVE_EFFECT_FIRE_SEA, battler, GetOppositeSide(battler));
         InsertCorrectEndType(ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+        AbilityStatusEffectSafe(MOVE_EFFECT_FIRE_SEA, battler, GetOppositeSide(battler));
         return TRUE;
     },
 };
@@ -9196,7 +9226,7 @@ constexpr Ability Spyware = {
         CHECK(IsBattlerAlive(battler))
 
         int stat;
-        switch (GetHighestStatId(gBattlerTarget, TRUE)){
+        switch (GetHighestStatId(gBattlerTarget, TRUE)) {
             case STAT_SPEED:
                 stat = STAT_SPEED;
                 break;
@@ -9320,7 +9350,25 @@ constexpr Ability LaserDrill = {
 };
 
 constexpr Ability LightSaber = {
-    .randomizerBanned = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIRE); },
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        CHECK(Random() % 2)
+        switch (Random() % 4) {
+            case 0:
+                CHECK(CanBeBurned(target))
+                return AbilityStatusEffect(MOVE_EFFECT_BURN);
+
+            case 1:
+                CHECK(CanBeParalyzed(battler, target))
+                return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+
+            default:
+                return FALSE;
+        }
+    },
+    .addsType = TYPE_FIRE,
 };
 
 constexpr Ability LooseThorns = {
@@ -9356,6 +9404,7 @@ constexpr Ability HomeRun = {
 
 constexpr Ability Bruiser = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIGHTING); },
+    .addsType = TYPE_FIGHTING,
 };
 
 constexpr Ability LetsDance = {
@@ -9386,11 +9435,13 @@ constexpr Ability DeadlyPrecision = {
 
 constexpr Ability RockyExterior = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ROCK); },
+    .addsType = TYPE_ROCK,
 };
 
 constexpr Ability Dragonfruit = {
     .onEntry = HalfDrake.onEntry,
     .onDefender = RoughSkin.onDefender,
+    .addsType = TYPE_DRAGON,
 };
 
 constexpr Ability LeadClaws = {
@@ -9416,7 +9467,7 @@ constexpr Ability GaleforceWings = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(GetTypeBeforeUsingMove(move, battler) == TYPE_FLYING)
         return 1;
-    }
+    },
 };
 
 constexpr Ability Empress = {
@@ -9451,6 +9502,122 @@ constexpr Ability Hydra = {
     .onParentalBond = MultiHeaded.onParentalBond,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .resistsFortKnox = TRUE,
+};
+
+constexpr Ability WingsOfPestilence = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+
+        int any = FALSE;
+
+        if (Random() % 100 < 10 && !(gBattleMons[target].status2 & STATUS2_CURSED)) {
+            gBattleMons[target].status2 |= STATUS2_CURSED;
+            BattleScriptCall(BattleScript_MoveEffectCurse);
+            any = TRUE;
+        }
+
+        if (Random() % 100 < 20 && CanBleed(target)) {
+            any |= AbilityStatusEffect(MOVE_EFFECT_BLEED);
+        }
+
+        return any;
+    },
+};
+
+constexpr Ability ZenGarden = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SEEDS) {
+            switch (GetBattlerHoldEffectParam(battler)) {
+                case HOLD_EFFECT_PARAM_GRASSY_TERRAIN:
+                    return GrassySurge.onEntry(DELEGATE_ENTRY);
+
+                case HOLD_EFFECT_PARAM_PSYCHIC_TERRAIN:
+                    return PsychicSurge.onEntry(DELEGATE_ENTRY);
+            }
+        }
+
+        switch (Random() % 2) {
+            case 0:
+                return GrassySurge.onEntry(DELEGATE_ENTRY);
+
+            case 1:
+                return PsychicSurge.onEntry(DELEGATE_ENTRY);
+
+            default:
+                return FALSE;
+        }
+    },
+};
+
+constexpr Ability SharpTalons = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(DoesMoveMatchFlag(battler, move, MOVE_FLAG_KICK))
+        CHECK(CanBleed(target))
+        CHECK(Random() % 2)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+    },
+};
+
+constexpr Ability MassivePelt = {
+    .onDefender = TanglingHair.onDefender,
+    .onDefensiveMultiplier = Fluffy.onDefensiveMultiplier,
+    .breakable = Fluffy.breakable,
+};
+
+constexpr Ability Echolocation = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) MUL(1.2);
+        },
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+        return ACCURACY_ALWAYS_HITS;
+    },
+};
+
+constexpr Ability DeadBark = {
+    .onEntry = +[](ON_ENTRY) -> int { AddBattlerType(battler, TYPE_GHOST); },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (typeEffectivenessModifier >= UQ_4_12(2.0)) {
+                MUL(.7);
+            } else {
+                MUL(.85);
+            }
+        },
+    .addsType = TYPE_GHOST,
+};
+
+constexpr Ability SapTrap = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        int any = FALSE;
+
+        int target = BATTLE_OPPOSITE(battler);
+        if (CanLowerStat(target, STAT_SPEED)) {
+            InsertCorrectEndType(ABILITY_BS_EXECUTE);
+            any = TRUE;
+            AbilityStatusEffectSafe(MOVE_EFFECT_SPD_MINUS_1, battler, target);
+        }
+
+        target = BATTLE_PARTNER(target);
+        if (CanLowerStat(target, STAT_SPEED)) {
+            if (!any) InsertCorrectEndType(ABILITY_BS_EXECUTE);
+            any = TRUE;
+            AbilityStatusEffectSafe(MOVE_EFFECT_SPD_MINUS_1, battler, target);
+        }
+
+        return any;
+    },
+    .onTrap = +[](ABILITY_ON_TRAP) -> int { return gBattleMons[switchingBattler].statStages[STAT_SPEED] <= 3; },
+};
+
+constexpr Ability DeviousPresent = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ICE || gBattleMoves[move].throwingBased) MUL(1.5);
+        },
 };
 
 typedef struct AbilityKVPair {
@@ -9620,6 +9787,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_BULLETPROOF, Bulletproof},
     {ABILITY_STRONG_JAW, StrongJaw},
     {ABILITY_REFRIGERATE, Refrigerate},
+    {ABILITY_ECHOLOCATION, Echolocation},
     {ABILITY_SWEET_VEIL, SweetVeil},
     {ABILITY_STANCE_CHANGE, StanceChange},
     {ABILITY_GALE_WINGS, GaleWings},
@@ -9670,6 +9838,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_POWER_OF_ALCHEMY, PowerOfAlchemy},
     {ABILITY_BEAST_BOOST, BeastBoost},
     {ABILITY_RKS_SYSTEM, RksSystem},
+    {ABILITY_BARK_SKIN, DeadBark},
     {ABILITY_ELECTRIC_SURGE, ElectricSurge},
     {ABILITY_PSYCHIC_SURGE, PsychicSurge},
     {ABILITY_MISTY_SURGE, MistySurge},
@@ -10347,6 +10516,13 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_HYPNOTIC_TOUCH, HypnoticTouch},
     {ABILITY_SUNDAE, Sundae},
     {ABILITY_HYDRA, Hydra},
+    {ABILITY_WINGS_OF_PESTILENCE, WingsOfPestilence},
+    {ABILITY_ZEN_GARDEN, ZenGarden},
+    {ABILITY_SHARP_TALONS, SharpTalons},
+    {ABILITY_MASSIVE_PELT, MassivePelt},
+    {ABILITY_SAP_TRAP, SapTrap},
+    {ABILITY_DEVIOUS_PRESENT, DeviousPresent},
+    {ABILITY_COSMIC_DUST, CosmicDust},
 };
 
 template <int N>

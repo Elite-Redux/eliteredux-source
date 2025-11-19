@@ -3,8 +3,8 @@
 
 // Pokemon types
 
-#ifdef __assembly__
 #define TYPE_NONE 255
+#ifdef __assembly__
 #define TYPE_NORMAL 0
 #define TYPE_FIGHTING 1
 #define TYPE_FLYING 2
@@ -28,7 +28,6 @@
 #define NUMBER_OF_MON_TYPES 20
 #else
 typedef enum Type {
-    TYPE_NONE = 255,
     TYPE_NORMAL = 0,
     TYPE_FIGHTING,
     TYPE_FLYING,

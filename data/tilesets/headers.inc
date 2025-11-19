@@ -1185,3 +1185,6 @@ gTileset_Mossdeep_Ice::
 	.4byte gMetatiles_Mossdeep_Ice
 	.4byte gMetatileAttributes_Mossdeep_Ice
 	.4byte NULL @ animation callback
+	.4byte NULL @ Summer_Palette
+	.4byte NULL @ Autumn_Palette
+	.4byte NULL @ Winter_Palette

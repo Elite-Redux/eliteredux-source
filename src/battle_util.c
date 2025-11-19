@@ -9000,7 +9000,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, MoveEnum m
     AbilityEnum ability, moveType;
     u8 numPossibleAbilities = GetNumPossibleAbilitiesForBattler();
 
-    if (abilityNumber >= numPossibleAbilities) return FALSE;
+    if (abilityNumber > numPossibleAbilities) return FALSE;
 
     abilityNumber = numPossibleAbilities - abilityNumber;
 
@@ -9056,7 +9056,7 @@ int HandleDefenderAbility(int abilityNumber, int battler, int attacker, MoveEnum
 
     if (!gAbilities[ability].onDefender) return FALSE;
 
-    if (IsSuppressed(battler, ability, TRUE)) return FALSE;
+    if (IsSuppressed(battler, ability, FALSE)) return FALSE;
 
     gBattleScripting.abilityPopupOverwrite = ability;
     int result = gAbilities[ability].onDefender(ability, battler, attacker, move, moveType);
