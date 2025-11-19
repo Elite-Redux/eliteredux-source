@@ -9545,7 +9545,7 @@ constexpr Ability ZenGarden = {
 };
 
 constexpr Ability SharpTalons = {
-    .onAttacker = +[](ON_ATTACKER)->int {
+    .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(DoesMoveMatchFlag(battler, move, MOVE_FLAG_KICK))
         CHECK(CanBleed(target))
@@ -9562,9 +9562,10 @@ constexpr Ability MassivePelt = {
 };
 
 constexpr Ability Echolocation = {
-    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) {
-        if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) MUL(1.2);
-    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) MUL(1.2);
+        },
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
         return ACCURACY_ALWAYS_HITS;
@@ -9572,38 +9573,46 @@ constexpr Ability Echolocation = {
 };
 
 constexpr Ability DeadBark = {
-    .onEntry = +[](ON_ENTRY) -> int { AddBattlerType(battler, TYPE_GHOST);},
-    .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) {
-        if (typeEffectivenessModifier >= UQ_4_12(2.0)) {
-            MUL(.7);
-        } else {
-            MUL(.85);
-        }
-    },
+    .onEntry = +[](ON_ENTRY) -> int { AddBattlerType(battler, TYPE_GHOST); },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (typeEffectivenessModifier >= UQ_4_12(2.0)) {
+                MUL(.7);
+            } else {
+                MUL(.85);
+            }
+        },
     .addsType = TYPE_GHOST,
 };
 
 constexpr Ability SapTrap = {
     .onEndTurn = +[](ON_END_TURN) -> int {
-      int any = FALSE;
+        int any = FALSE;
 
-      int target = BATTLE_OPPOSITE(battler);
-      if (CanLowerStat(target, STAT_SPEED)) {
-        InsertCorrectEndType(ABILITY_BS_EXECUTE);
-        any = TRUE;
-        AbilityStatusEffectSafe(MOVE_EFFECT_SPD_MINUS_1, battler, target);
-      }
+        int target = BATTLE_OPPOSITE(battler);
+        if (CanLowerStat(target, STAT_SPEED)) {
+            InsertCorrectEndType(ABILITY_BS_EXECUTE);
+            any = TRUE;
+            AbilityStatusEffectSafe(MOVE_EFFECT_SPD_MINUS_1, battler, target);
+        }
 
-      target = BATTLE_PARTNER(target);
-      if (CanLowerStat(target, STAT_SPEED)) {
-        if (!any) InsertCorrectEndType(ABILITY_BS_EXECUTE);
-        any = TRUE;
-        AbilityStatusEffectSafe(MOVE_EFFECT_SPD_MINUS_1, battler, target);
-      }
+        target = BATTLE_PARTNER(target);
+        if (CanLowerStat(target, STAT_SPEED)) {
+            if (!any) InsertCorrectEndType(ABILITY_BS_EXECUTE);
+            any = TRUE;
+            AbilityStatusEffectSafe(MOVE_EFFECT_SPD_MINUS_1, battler, target);
+        }
 
-      return any;
+        return any;
     },
     .onTrap = +[](ABILITY_ON_TRAP) -> int { return gBattleMons[switchingBattler].statStages[STAT_SPEED] <= 3; },
+};
+
+constexpr Ability DeviousPresent = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ICE || gBattleMoves[move].throwingBased) MUL(1.5);
+        },
 };
 
 typedef struct AbilityKVPair {
@@ -10506,6 +10515,8 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_ZEN_GARDEN, ZenGarden},
     {ABILITY_SHARP_TALONS, SharpTalons},
     {ABILITY_MASSIVE_PELT, MassivePelt},
+    {ABILITY_SAP_TRAP, SapTrap},
+    {ABILITY_DEVIOUS_PRESENT, DeviousPresent},
 };
 
 template <int N>
