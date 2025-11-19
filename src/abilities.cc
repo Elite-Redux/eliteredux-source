@@ -1893,11 +1893,13 @@ constexpr Ability VictoryStar = {
 constexpr Ability Turboblaze = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIRE); },
     .onMoldBreaker = MoldBreaker.onMoldBreaker,
+    .addsType = TYPE_FIRE,
 };
 
 constexpr Ability Teravolt = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ELECTRIC); },
     .onMoldBreaker = MoldBreaker.onMoldBreaker,
+    .addsType = TYPE_ELECTRIC,
 };
 
 constexpr Ability AromaVeil = {
@@ -1933,6 +1935,7 @@ constexpr Ability Protean = {
         BattleScriptCall(BattleScript_ProteanActivates);
         return TRUE;
     },
+    .omniStab = TRUE,
 };
 
 constexpr Ability FurCoat = {
@@ -2597,6 +2600,7 @@ constexpr Ability RksSystem = {
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
     .adaptability = TRUE,
+    .omniStab = TRUE,
 };
 
 constexpr Ability ElectricSurge = {
@@ -2684,6 +2688,7 @@ constexpr Ability DauntlessShield = {
 
 constexpr Ability Libero = {
     .onBeforeAttack = Protean.onBeforeAttack,
+    .omniStab = TRUE,
 };
 
 constexpr Ability CottonDown = {
@@ -3212,6 +3217,7 @@ constexpr Ability AncientIdol = {
 
 constexpr Ability MysticPower = {
     .onStab = +[](ON_STAB) -> int { return TRUE; },
+    .omniStab = TRUE,
 };
 
 constexpr Ability Perfectionist = {
@@ -3306,6 +3312,7 @@ constexpr Ability Amphibious = {
 
 constexpr Ability Grounded = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GROUND); },
+    .addsType = TYPE_GROUND,
 };
 
 constexpr Ability Earthbound = {
@@ -3411,14 +3418,17 @@ constexpr Ability Tectonize = {
 
 constexpr Ability IceAge = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ICE); },
+    .addsType = TYPE_ICE,
 };
 
 constexpr Ability HalfDrake = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_DRAGON); },
+    .addsType = TYPE_DRAGON,
 };
 
 constexpr Ability Aquatic = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_WATER); },
+    .addsType = TYPE_WATER,
 };
 
 constexpr Ability Liquified = {
@@ -3434,6 +3444,7 @@ constexpr Ability Dragonfly = {
     .onEntry = HalfDrake.onEntry,
     .breakable = TRUE,
     .levitate = TRUE,
+    .addsType = TYPE_DRAGON,
 };
 
 constexpr Ability Dragonslayer = {
@@ -3464,6 +3475,7 @@ constexpr Ability Hydrate = {
 
 constexpr Ability Metallic = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_STEEL); },
+    .addsType = TYPE_STEEL,
 };
 
 constexpr Ability Permafrost = {
@@ -3531,6 +3543,7 @@ constexpr Ability MajesticBird = {
 
 constexpr Ability Phantom = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GHOST); },
+    .addsType = TYPE_GHOST,
 };
 
 constexpr Ability Intoxicate = {
@@ -4784,6 +4797,7 @@ constexpr Ability PrismaticFur = {
         return ColorChange.onBeforeAttack(DELEGATE_ON_BEFORE_ATTACK);
     },
     .onBeforeAttackFor = APPLY_ON_ATTACKER_OR_TARGET,
+    .omniStab = TRUE,
 };
 
 constexpr Ability ShockingJaws = {
@@ -4893,6 +4907,7 @@ constexpr Ability LingeringAroma = {
 
 constexpr Ability FairyTale = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FAIRY); },
+    .addsType = TYPE_FAIRY,
 };
 
 constexpr Ability RagingMoth = {
@@ -5400,6 +5415,7 @@ constexpr Ability ArcaneForce = {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
         },
     .onStab = MysticPower.onStab,
+    .omniStab = TRUE,
 };
 
 constexpr Ability Doombringer = {
@@ -7037,6 +7053,7 @@ constexpr Ability SnowyWrath = {
 constexpr Ability PatternChange = {
     .onEndTurn = ShedSkin.onEndTurn,
     .onBeforeAttack = Protean.onBeforeAttack,
+    .omniStab = TRUE,
 };
 
 constexpr Ability NoTurningBack = {
@@ -7549,6 +7566,7 @@ constexpr Ability Hover = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_PSYCHIC); },
     .breakable = TRUE,
     .levitate = TRUE,
+    .addsType = TYPE_PSYCHIC,
 };
 
 constexpr Ability Depravity = {
@@ -8101,6 +8119,7 @@ constexpr Ability UnownPower = {
             if (*mod < UQ_4_12(2.0) && (move == MOVE_HIDDEN_POWER || move == MOVE_SECRET_POWER)) *mod = UQ_4_12(2.0);
         },
     .randomizerBanned = TRUE,
+    .omniStab = TRUE,
 };
 
 constexpr Ability SuperScope = {
@@ -8284,6 +8303,7 @@ constexpr Ability DNAScramble = {
 constexpr Ability MetallicJaws = {
     .onEntry = Metallic.onEntry,
     .onParentalBond = PrimalMaw.onParentalBond,
+    .addsType = TYPE_STEEL,
 };
 
 constexpr Ability Calculative = {
@@ -8510,6 +8530,7 @@ constexpr Ability Scarecrow = {
 constexpr Ability OminousShroud = {
     .onEntry = Phantom.onEntry,
     .onDefensiveMultiplier = ShadowShield.onDefensiveMultiplier,
+    .addsType = TYPE_GHOST,
 };
 
 constexpr Ability ChillingPresence = {
@@ -8602,6 +8623,7 @@ constexpr Ability PoisonQuills = {
 constexpr Ability DraconicMight = {
     .onEntry = HalfDrake.onEntry,
     ATE_ABILITY(TYPE_DRAGON),
+    .addsType = TYPE_DRAGON,
 };
 
 constexpr Ability AtlanticRuler = {
@@ -8653,6 +8675,7 @@ constexpr Ability FeyFlight = {
     .onEntry = FairyTale.onEntry,
     .breakable = TRUE,
     .levitate = TRUE,
+    .addsType = TYPE_FAIRY,
 };
 
 constexpr Ability BestOffense = {
@@ -8682,6 +8705,7 @@ constexpr Ability MagusBlades = {
 
 constexpr Ability LightningBorn = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ELECTRIC); },
+    .addsType = TYPE_ELECTRIC,
 };
 
 constexpr Ability Superheavy = {
@@ -8702,6 +8726,7 @@ constexpr Ability LuckyWings = {
 constexpr Ability Komodo = {
     .onEntry = HalfDrake.onEntry,
     .onAttacker = ToxicChain.onAttacker,
+    .addsType = TYPE_DRAGON,
 };
 
 constexpr Ability Envenom = {
@@ -9338,6 +9363,7 @@ constexpr Ability LightSaber = {
                 return FALSE;
         }
     },
+    .addsType = TYPE_FIRE,
 };
 
 constexpr Ability LooseThorns = {
@@ -9373,6 +9399,7 @@ constexpr Ability HomeRun = {
 
 constexpr Ability Bruiser = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIGHTING); },
+    .addsType = TYPE_FIGHTING,
 };
 
 constexpr Ability LetsDance = {
@@ -9403,11 +9430,13 @@ constexpr Ability DeadlyPrecision = {
 
 constexpr Ability RockyExterior = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ROCK); },
+    .addsType = TYPE_ROCK,
 };
 
 constexpr Ability Dragonfruit = {
     .onEntry = HalfDrake.onEntry,
     .onDefender = RoughSkin.onDefender,
+    .addsType = TYPE_DRAGON,
 };
 
 constexpr Ability LeadClaws = {
