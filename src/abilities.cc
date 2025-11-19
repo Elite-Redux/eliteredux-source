@@ -9555,6 +9555,12 @@ constexpr Ability SharpTalons = {
     },
 };
 
+constexpr Ability MassivePelt = {
+    .onDefender = TanglingHair.onDefender,
+    .onDefensiveMultiplier = Fluffy.onDefensiveMultiplier,
+    .breakable = Fluffy.breakable,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10452,6 +10458,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_WINGS_OF_PESTILENCE, WingsOfPestilence},
     {ABILITY_ZEN_GARDEN, ZenGarden},
     {ABILITY_SHARP_TALONS, SharpTalons},
+    {ABILITY_MASSIVE_PELT, MassivePelt},
 };
 
 template <int N>
