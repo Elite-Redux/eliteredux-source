@@ -451,15 +451,20 @@ constexpr Ability CoolExit = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
 
-        if (!GetAbilityState(battler, ability)) {
-            SetAbilityState(battler, ability, TRUE);
-        } else {
-            gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
-                .ability = ability,
-                .move = MOVE_CHILLY_RECEPTION,
-                .attacker = battler,
-                .target = battler,
-            };
+        switch (GetAbilityState(battler, ability)) {
+            case 0:
+                SetAbilityState(battler, ability, 1);
+                break;
+
+            case 1:
+                gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+                    .ability = ability,
+                    .move = MOVE_CHILLY_RECEPTION,
+                    .attacker = battler,
+                    .target = battler,
+                };
+                SetAbilityState(battler, ability, 2);
+                break;
         }
 
         return FALSE;
