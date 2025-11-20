@@ -9045,6 +9045,7 @@ constexpr Ability ChristmasNightmare = {
         }
         return any;
     },
+    .hailImmune = TRUE,
 };
 
 constexpr Ability IcePlumes = {
