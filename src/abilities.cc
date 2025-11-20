@@ -44,7 +44,7 @@ class __EnumHack {
 };
 
 #define ENUM_OR(enumType) \
-    inline enumType operator|(enumType a, enumType b) { return static_cast<enumType>(static_cast<int>(a) | static_cast<int>(b)); }
+    inline constexpr enumType operator|(enumType a, enumType b) { return static_cast<enumType>(static_cast<int>(a) | static_cast<int>(b)); }
 
 ENUM_OR(InfiltrateType)
 ENUM_OR(MoveEffectEnum)
@@ -72,7 +72,7 @@ ENUM_OR(TerrainType)
 #define DELEGATE_WEATHER ability, battler
 #define ON_TERRAIN AbilityEnum ability, int battler
 #define DELEGATE_TERRAIN ability, battler
-#define ON_END_TURN AbilityEnum ability, int battler
+#define ON_END_TURN AbilityEnum ability, u8 battler
 #define DELEGATE_END_TURN ability, battler
 #define ON_ATTACKER AbilityEnum ability, int battler, int target, MoveEnum move, int moveType
 #define DELEGATE_ATTACKER ability, battler, target, move, moveType
@@ -9703,6 +9703,13 @@ constexpr Ability DeviousPresent = {
         },
 };
 
+constexpr Ability CosmicWings = {
+    .onMoveType = +[](ON_MOVE_TYPE) -> int {
+        CHECK(moveType == TYPE_FLYING)
+        return TYPE_FAIRY + 1;
+    },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10608,6 +10615,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_COSMIC_DUST, CosmicDust},
     {ABILITY_CHRISTMAS_NIGHTMARE, ChristmasNightmare},
     {ABILITY_COOL_EXIT, CoolExit},
+    {ABILITY_COSMIC_WINGS, CosmicWings},
 };
 
 template <int N>

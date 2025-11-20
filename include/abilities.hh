@@ -22,7 +22,7 @@ typedef InfiltrateType (*AbilityOnInfiltrateHandler)(int battler, MoveEnum move)
 typedef SpeciesEnum (*AbilityOnDisguiseHandler)(int battler, int checkOnly);
 typedef int (*AbilityOnWeatherHandler)(AbilityEnum ability, int battler);
 typedef int (*AbilityOnTerrainHandler)(AbilityEnum ability, int battler);
-typedef int (*AbilityOnEndTurnHandler)(AbilityEnum ability, int battler);
+typedef int (*AbilityOnEndTurnHandler)(AbilityEnum ability, u8 battler);
 typedef int (*AbilityOnAttackerHandler)(AbilityEnum ability, int battler, int target, MoveEnum move, int moveType);
 typedef int (*AbilityOnDefenderHandler)(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType);
 typedef int (*AbilityOnRecoilHandler)(int damage, int battler, int moveType);
