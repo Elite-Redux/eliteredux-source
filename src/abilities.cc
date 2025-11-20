@@ -446,6 +446,25 @@ constexpr Ability SpeedBoost = {
     },
 };
 
+constexpr Ability CoolExit = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(gVolatileStructs[battler].isFirstTurn)
+
+        if (!GetAbilityState(battler, ability)) {
+            SetAbilityState(battler, ability, TRUE);
+        } else {
+            gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+                .ability = ability,
+                .move = MOVE_CHILLY_RECEPTION,
+                .attacker = battler,
+                .target = battler,
+            };
+        }
+
+        return FALSE;
+    },
+};
+
 constexpr Ability BattleArmor = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.8); },
     .onCrit = +[](ON_CRIT) { return NEVER_CRIT; },
@@ -10586,6 +10605,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_DEVIOUS_PRESENT, DeviousPresent},
     {ABILITY_COSMIC_DUST, CosmicDust},
     {ABILITY_CHRISTMAS_NIGHTMARE, ChristmasNightmare},
+    {ABILITY_COOL_EXIT, CoolExit},
 };
 
 template <int N>
