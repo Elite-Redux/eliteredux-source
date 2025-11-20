@@ -4795,7 +4795,7 @@ bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag) {
             break;
     }
 
-    ON_ABILITY(battlerId, FALSE, gAbilities[ability].allowTerrainIfAirborne == type, return TRUE)
+    ON_ABILITY(battlerId, FALSE, gAbilities[ability].allowTerrainIfAirborne & type, return TRUE)
 
     return FALSE;
 }

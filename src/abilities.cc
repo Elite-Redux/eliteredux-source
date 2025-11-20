@@ -48,6 +48,7 @@ class __EnumHack {
 
 ENUM_OR(InfiltrateType)
 ENUM_OR(MoveEffectEnum)
+ENUM_OR(TerrainType)
 
 #define CHECK(effect) \
     if (!(effect)) return __EnumHack();
@@ -9628,6 +9629,7 @@ constexpr Ability ZenGarden = {
                 return FALSE;
         }
     },
+    .allowTerrainIfAirborne = TERRAIN_GRASSY | TERRAIN_PSYCHIC,
 };
 
 constexpr Ability SharpTalons = {
