@@ -215,6 +215,18 @@ static int AdjustFollowupMoveTarget(int battler, int* target, MoveEnum move, Fol
     }
 }
 
+static int CheckAbilityWasAnnouncedBy(int announcer, AbilityEnum ability) {
+    return BattlerHasAbility(announcer, ability, FALSE) && !CheckAndSetSwitchInAbility(announcer, ability);
+}
+
+static int CheckAbilityWasAnnounced(int battler, AbilityEnum ability) {
+    for (int other = 0; other < gBattlersCount; other++) {
+        FILTER(other != battler)
+        if (CheckAbilityWasAnnouncedBy(other, ability)) return TRUE;
+    }
+    return FALSE;
+}
+
 static int SwitchInAnnounce(int message) {
     gBattleCommunication[MULTISTRING_CHOOSER] = message;
     BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
@@ -4342,6 +4354,10 @@ constexpr Ability Fearmonger = {
 constexpr Ability ToxicSpill = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
+
+        CHECK_NOT(CheckAbilityWasAnnounced(battler, ABILITY_TOXIC_SPILL))
+        CHECK_NOT(CheckAbilityWasAnnounced(battler, ABILITY_TRASH_HEAP))
+
         BattleScriptPushCursorAndCallback(BattleScript_BattlerAnnouncedToxicSpill);
         return TRUE;
     },
@@ -7018,7 +7034,11 @@ constexpr Ability HigherRank = {
 };
 
 constexpr Ability FuneralPyre = {
-    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE); },
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(CheckAbilityWasAnnounced(battler, ABILITY_FUNERAL_PYRE))
+
+        return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE);
+    },
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(IsAbilityOnField(ability) - 1 == battler)
 
@@ -8098,7 +8118,10 @@ constexpr Ability CorruptedMind = {
 };
 
 constexpr Ability FlameCoat = {
-    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_FIRE_COAT); },
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(CheckAbilityWasAnnounced(battler, ABILITY_FLAME_COAT))
+        return SwitchInAnnounce(B_MSG_SWITCHIN_FIRE_COAT);
+    },
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(IsAbilityOnField(ability) - 1 == battler)
 
@@ -8961,7 +8984,9 @@ constexpr Ability AurorasGale = {
 };
 
 constexpr Ability WinterThrone = {
-    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_WINTER_THRONE); },
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(CheckAbilityWasAnnounced(battler, ABILITY_WINTER_THRONE)) return SwitchInAnnounce(B_MSG_SWITCHIN_WINTER_THRONE);
+    },
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(IsAbilityOnField(ability) - 1 == battler)
 
@@ -8972,13 +8997,49 @@ constexpr Ability WinterThrone = {
             if (IS_BATTLER_OF_TYPE(target, TYPE_ICE)) {
                 FILTER_NOT(IsMagicGuardProtected(target))
                 gStackBattler1 = target;
-                BattleScriptExecute(BattleScript_FuneralPyreDamage);
+                BattleScriptExecute(BattleScript_WinterThroneDamage);
             } else {
                 FILTER_NOT(BATTLER_MAX_HP(target))
                 FILTER(CanBattlerHeal(target))
                 gStackBattler1 = target;
                 BattleScriptExecute(BattleScript_HealStack1HpOver8End3);
             }
+
+            any = TRUE;
+        }
+        return any;
+    },
+};
+
+constexpr Ability ChristmasNightmare = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(IsWeatherActive(WEATHER_HAIL_ANY))
+
+        CHECK_NOT(CheckAbilityWasAnnouncedBy(BATTLE_PARTNER(battler), ABILITY_FLAME_COAT))
+
+        return SwitchInAnnounce(B_MSG_SWITCHIN_CHRISTMAS_NIGHTMARE);
+    },
+    .onWeather = +[](ON_WEATHER) -> int {
+        CHECK(IsWeatherActive(WEATHER_HAIL_ANY))
+        CHECK(IsAbilityOnSide(GetBattlerSide(battler), ability) - 1 == battler)
+
+        DisableSwitchInAbility(battler, ability);
+        DisableSwitchInAbility(BATTLE_PARTNER(battler), ability);
+
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CHRISTMAS_NIGHTMARE;
+        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsgRet);
+        return TRUE;
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(IsAbilityOnSide(GetBattlerSide(battler), ability) - 1 == battler)
+
+        int any = FALSE;
+        for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
+            FILTER(IsBattlerAlive(target))
+            FILTER_NOT(IsHailImmune(target))
+
+            gStackBattler1 = target;
+            BattleScriptExecute(BattleScript_WinterThroneDamage);
 
             any = TRUE;
         }
@@ -9578,7 +9639,7 @@ constexpr Ability Echolocation = {
 };
 
 constexpr Ability DeadBark = {
-    .onEntry = +[](ON_ENTRY) -> int { AddBattlerType(battler, TYPE_GHOST); },
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GHOST); },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (typeEffectivenessModifier >= UQ_4_12(2.0)) {
@@ -10523,6 +10584,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_SAP_TRAP, SapTrap},
     {ABILITY_DEVIOUS_PRESENT, DeviousPresent},
     {ABILITY_COSMIC_DUST, CosmicDust},
+    {ABILITY_CHRISTMAS_NIGHTMARE, ChristmasNightmare},
 };
 
 template <int N>

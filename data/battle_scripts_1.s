@@ -9117,7 +9117,7 @@ BattleScript_WinterThroneDamage::
 	copybyte gBattlerAttacker, gStackBattler1
 	printstring STRINGID_PKMNHURTBYWINTERTHRONE
 	waitmessage B_WAIT_TIME_LONG
-	chosenstatus2animation BS_ATTACKER, STATUS2_CURSED
+	chosenstatus1animation BS_ATTACKER, STATUS1_FROSTBITE
 	goto BattleScript_DoTurnDmg
 
 BattleScript_FireCoatDamage::
