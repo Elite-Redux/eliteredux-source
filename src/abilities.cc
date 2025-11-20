@@ -449,7 +449,7 @@ constexpr Ability SpeedBoost = {
 
 constexpr Ability CoolExit = {
     .onEndTurn = +[](ON_END_TURN) -> int {
-        CHECK_NOT(gVolatileStructs[battler].isFirstTurn)
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
 
         if (!GetAbilityState(battler, ability)) {
             SetAbilityState(battler, ability, TRUE);
