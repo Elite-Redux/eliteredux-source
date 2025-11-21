@@ -9723,6 +9723,11 @@ constexpr Ability CosmicWings = {
     },
 };
 
+constexpr Ability Mach3 = {
+    .onChooseOffensiveStat = Slipstream.onChooseOffensiveStat,
+    .onMoldBreaker = DeadlyPrecision.onMoldBreaker,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10630,6 +10635,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_COOL_EXIT, CoolExit},
     {ABILITY_COSMIC_WINGS, CosmicWings},
     {ABILITY_RAGING_STORM, RagingStorm},
+    {ABILITY_MACH_3, Mach3},
 };
 
 template <int N>
