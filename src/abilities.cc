@@ -1305,6 +1305,14 @@ constexpr Ability SolarPower = {
         },
 };
 
+constexpr Ability RagingStorm = {
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
+            if (IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat *= 1.5;
+        },
+};
+
 constexpr Ability QuickFeet = {
     .onStat =
         +[](ON_STAT) {
@@ -10621,6 +10629,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_CHRISTMAS_NIGHTMARE, ChristmasNightmare},
     {ABILITY_COOL_EXIT, CoolExit},
     {ABILITY_COSMIC_WINGS, CosmicWings},
+    {ABILITY_RAGING_STORM, RagingStorm},
 };
 
 template <int N>
