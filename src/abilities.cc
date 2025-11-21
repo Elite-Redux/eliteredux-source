@@ -9728,6 +9728,192 @@ constexpr Ability Mach3 = {
     .onMoldBreaker = DeadlyPrecision.onMoldBreaker,
 };
 
+constexpr Ability FoggyEye = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_GHOST && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) MUL(1.5);
+        },
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (moveType != TYPE_GHOST) return;
+            if (!IsBattlerWeatherAffected(target, WEATHER_FOG_ANY)) return;
+            if (*mod > UQ_4_12(0.5)) *mod = UQ_4_12(0.5);
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
+};
+
+constexpr Ability Chandelier = {
+    .onAccuracy = Illuminate.onAccuracy,
+    .onModifyEffectChance = Pyromancy.onModifyEffectChance,
+};
+
+constexpr Ability AngelicWings = {
+    .onOffensiveMultiplier = HugeWings.onOffensiveMultiplier,
+    .onDefensiveMultiplier = PrismScales.onDefensiveMultiplier,
+    .breakable = TRUE,
+    .levitate = TRUE,
+};
+
+constexpr Ability WitchBroom = {
+    .onEntry = Hover.onEntry,
+    .onParentalBond = HyperAggressive.onParentalBond,
+    .breakable = TRUE,
+    .levitate = TRUE,
+    .addsType = TYPE_PSYCHIC,
+};
+
+constexpr Ability RainShroud = {
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(IsBattlerWeatherAffected(target, WEATHER_RAIN_ANY));
+        *accuracy /= 1.25;
+        return ACCURACY_MULTIPLICATIVE;
+    },
+    .onAccuracyFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
+};
+
+constexpr Ability ChestnutShield = {
+    .onImmune = Bulletproof.onImmune,
+    .breakable = TRUE,
+    .magicGuard = TRUE,
+};
+
+constexpr Ability BrainMass = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (BATTLER_MAX_HP(battler)) MUL(.5);
+        },
+    .breakable = TRUE,
+};
+
+constexpr Ability Tummyache = {
+    .onDefensiveMultiplier = ThickFat.onDefensiveMultiplier,
+    .onTypeEffectiveness = Corrosion.onTypeEffectiveness,
+    .onCanStatusType = Corrosion.onCanStatusType,
+    .breakable = TRUE,
+};
+
+constexpr Ability SumoGuard = {
+    .onDefensiveMultiplier = ThickFat.onDefensiveMultiplier,
+    .onChooseOffensiveStat = Juggernaut.onChooseOffensiveStat,
+    .onStatusImmune = Juggernaut.onStatusImmune,
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+};
+
+constexpr Ability IcePick = {
+    .onOffensiveMultiplier = ToughClaws.onOffensiveMultiplier,
+    .onStat = SlushRush.onStat,
+    .hailImmune = TRUE,
+};
+
+constexpr Ability HammerFist = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (DoesMoveMatchFlag(battler, move, MOVE_FLAG_PUNCH) || gBattleMoves[move].hammerBased) MUL(1.25);
+        },
+};
+
+constexpr Ability ToxicShell = {
+    .onAttacker = PoisonPoint.onAttacker,
+    .onDefender = PoisonPoint.onDefender,
+    .onDefensiveMultiplier = ShellArmor.onDefensiveMultiplier,
+    .onCrit = ShellArmor.onCrit,
+    .onCritFor = ShellArmor.onCritFor,
+    .breakable = TRUE,
+};
+
+constexpr Ability HandBarnacles = {
+    .onParentalBond = MultiHeaded.onParentalBond,
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
+    .resistsFortKnox = TRUE,
+};
+
+constexpr Ability Lepidopteran = {
+    .onOffensiveMultiplier = Swarm.onOffensiveMultiplier,
+    .breakable = TRUE,
+    .unaware = TRUE,
+};
+
+constexpr Ability BreakItDown = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(DoesMoveMatchFlag(battler, move, MOVE_FLAG_DANCE))
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_RAPID_SPIN, 20);
+    },
+};
+
+constexpr Ability BackstreetBoy = {
+    .onOffensiveMultiplier = Striker.onOffensiveMultiplier,
+    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
+        switch (flag) {
+            case MOVE_FLAG_KICK:
+                CHECK(gBattleMoves[move].flags & FLAG_DANCE)
+                return TRUE;
+
+            case MOVE_FLAG_DANCE:
+                CHECK(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
+                return TRUE;
+
+            default:
+                return FALSE;
+        }
+    },
+};
+
+constexpr Ability Backflip = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(DoesMoveMatchFlag(battler, move, MOVE_FLAG_DANCE))
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_CHIP_AWAY, 50);
+    },
+};
+
+constexpr Ability CrushingJaw = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        CHECK(Random() % 2)
+        CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
+
+        return AbilityStatusEffect(MOVE_EFFECT_DEF_MINUS_1);
+    },
+    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
+};
+
+constexpr Ability Cryostasis = {
+    .onReactive = +[](ON_REACTIVE) -> int {
+        return PoisonPuppeteerClone(
+            ability,
+            battler,
+            +[](int battler, int target) -> int {
+                gBattleMons[target].status2 |= STATUS2_FLINCHED;
+                return FALSE;
+            },
+            nullptr);
+    },
+    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+    .onModifyEffectChance = Cryomancy.onModifyEffectChance,
+    .onBattlerFaintsFor = PoisonPuppeteer.onBattlerFaintsFor,
+    .setStateOnEffect = MOVE_EFFECT_FROSTBITE,
+};
+
+constexpr Ability BoogerHeads = {
+    .onDefender = Gooey.onDefender,
+    .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.7); },
+    .breakable = TRUE,
+};
+
+constexpr Ability Voltron = {
+    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
+    .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .onCrit = BattleArmor.onCrit,
+    .onCritFor = BattleArmor.onCritFor,
+    .breakable = TRUE,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10636,6 +10822,27 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_COSMIC_WINGS, CosmicWings},
     {ABILITY_RAGING_STORM, RagingStorm},
     {ABILITY_MACH_3, Mach3},
+    {ABILITY_HAMMER_FIST, HammerFist},
+    {ABILITY_ICE_PICK, IcePick},
+    {ABILITY_SUMO_GUARD, SumoGuard},
+    {ABILITY_TUMMYACHE, Tummyache},
+    {ABILITY_BRAIN_MASS, BrainMass},
+    {ABILITY_CHESTNUT_SHIELD, ChestnutShield},
+    {ABILITY_RAIN_SHROUD, RainShroud},
+    {ABILITY_WITCH_BROOM, WitchBroom},
+    {ABILITY_ANGELIC_WINGS, AngelicWings},
+    {ABILITY_CHANDELIER, Chandelier},
+    {ABILITY_FOGGY_EYE, FoggyEye},
+    {ABILITY_TOXIC_SHELL, ToxicShell},
+    {ABILITY_HAND_BARNACLES, HandBarnacles},
+    {ABILITY_VOLTRON, Voltron},
+    {ABILITY_LEPIDOPTERAN, Lepidopteran},
+    {ABILITY_BREAK_IT_DOWN, BreakItDown},
+    {ABILITY_BACKSTREET_BOY, BackstreetBoy},
+    {ABILITY_BACKFLIP, Backflip},
+    {ABILITY_CRUSHING_JAW, CrushingJaw},
+    {ABILITY_CRYOSTASIS, Cryostasis},
+    {ABILITY_BOOGER_HEADS, BoogerHeads},
 };
 
 template <int N>
