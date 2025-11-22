@@ -273,6 +273,8 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Dewgong;
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Feraligatr;
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Baneful;
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Hooded;
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Skier;
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Skier_Female;
 
 const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM_OBJ_EVENT_GFX] = {
     [OBJ_EVENT_GFX_BRENDAN_NORMAL] =           &gObjectEventGraphicsInfo_BrendanNormal,
@@ -543,6 +545,8 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_FERALIGATR] =               &gObjectEventGraphicsInfo_Feraligatr,
     [OBJ_EVENT_GFX_BANEFUL] =                  &gObjectEventGraphicsInfo_Baneful,
     [OBJ_EVENT_GFX_HOODED] =                   &gObjectEventGraphicsInfo_Hooded,
+    [OBJ_EVENT_GFX_SKIER_M] =                  &gObjectEventGraphicsInfo_Skier,
+    [OBJ_EVENT_GFX_SKIER_F] =                  &gObjectEventGraphicsInfo_Skier_Female,
 };
 
 const struct ObjectEventGraphicsInfo *const gMauvilleOldManGraphicsInfoPointers[] = {

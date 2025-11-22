@@ -96,6 +96,8 @@ const struct MonCoords gTrainerFrontPicCoords[] =
     [TRAINER_PIC_MAGMA_ADMIN_F] = {.size = 8, .y_offset = 1},
     [TRAINER_PIC_CYNTHIA] = {.size = 8, .y_offset = 1},
     [TRAINER_PIC_BANEFUL] = {.size = 8, .y_offset = 1},
+    [TRAINER_PIC_SKIER_F] = {.size = 8, .y_offset = 1},
+    [TRAINER_PIC_SKIER_M] = {.size = 8, .y_offset = 1},
 };
 
 #define TRAINER_SPRITE(trainerPic, sprite, size) [TRAINER_PIC_##trainerPic] = {sprite, size, TRAINER_PIC_##trainerPic}
@@ -198,6 +200,8 @@ const struct CompressedSpriteSheet gTrainerFrontPicTable[] =
     TRAINER_SPRITE(MAGMA_ADMIN_F, gTrainerFrontPic_MagmaAdminF, 0x800),
     TRAINER_SPRITE(CYNTHIA, gTrainerFrontPic_Cynthia, 0x800),
     TRAINER_SPRITE(BANEFUL, gTrainerFrontPic_Baneful, 0x800),
+    TRAINER_SPRITE(SKIER_F, gTrainerFrontPic_Skier_Female, 0x800),
+    TRAINER_SPRITE(SKIER_M, gTrainerFrontPic_Skier, 0x800),
 };
 
 #define TRAINER_PAL(trainerPic, pal) [TRAINER_PIC_##trainerPic] = {pal, TRAINER_PIC_##trainerPic}
@@ -300,4 +304,6 @@ const struct CompressedSpritePalette gTrainerFrontPicPaletteTable[] =
     TRAINER_PAL(MAGMA_ADMIN_F, gTrainerPalette_MagmaAdminF),
     TRAINER_PAL(CYNTHIA, gTrainerPalette_Cynthia),
     TRAINER_PAL(BANEFUL, gTrainerPalette_Baneful),
+    TRAINER_PAL(SKIER_F, gTrainerPalette_Skier_Female),
+    TRAINER_PAL(SKIER_M, gTrainerPalette_Skier),
 };

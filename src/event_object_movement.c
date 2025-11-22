@@ -482,6 +482,8 @@ const u8 gInitialMovementTypeFacingDirections[] = {
 #define OBJ_EVENT_PAL_TAG_FERALIGATR              0x1131
 #define OBJ_EVENT_PAL_TAG_HOODED                  0x1132
 #define OBJ_EVENT_PAL_TAG_MAGMA_ADMIN_F           0x1133
+#define OBJ_EVENT_PAL_TAG_SKIER                   0x1134
+#define OBJ_EVENT_PAL_TAG_SKIER_F                 0x1135
 #define OBJ_EVENT_PAL_TAG_NONE                    0x11FF
 
 #include "data/object_events/object_event_graphics_info_pointers.h"
@@ -544,6 +546,8 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPaletteFeraligatr,         OBJ_EVENT_PAL_TAG_FERALIGATR},
     {gObjectEventPaletteHooded,             OBJ_EVENT_PAL_TAG_HOODED},
     {gObjectEventPaletteMagmaAdminF,        OBJ_EVENT_PAL_TAG_MAGMA_ADMIN_F},
+    {gObjectEventPalette_Skier,             OBJ_EVENT_PAL_TAG_SKIER},
+    {gObjectEventPalette_Skier_Female,      OBJ_EVENT_PAL_TAG_SKIER_F},
     {NULL,                                  0x0000},
 };
 

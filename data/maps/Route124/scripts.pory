@@ -107,3 +107,15 @@ Route124_Text_HuntersHouse: @ 81F6739
 	.string "Hunter's House$"
 
 `
+
+script Route124_EventScript_Glovel{
+	trainerbattle_single(TRAINER_SKIER_GLOVEL, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
+	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	end
+}
+
+script Route124_EventScript_Janet{
+	trainerbattle_single(TRAINER_SKIER_JANET, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
+	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	end
+}
