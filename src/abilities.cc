@@ -3487,9 +3487,9 @@ constexpr Ability Liquified = {
 
 constexpr Ability Dragonfly = {
     .onEntry = HalfDrake.onEntry,
+    .addsType = TYPE_DRAGON,
     .breakable = TRUE,
     .levitate = TRUE,
-    .addsType = TYPE_DRAGON,
 };
 
 constexpr Ability Dragonslayer = {
@@ -7634,9 +7634,9 @@ constexpr Ability ApplePie = {
 
 constexpr Ability Hover = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_PSYCHIC); },
+    .addsType = TYPE_PSYCHIC,
     .breakable = TRUE,
     .levitate = TRUE,
-    .addsType = TYPE_PSYCHIC,
 };
 
 constexpr Ability Depravity = {
@@ -8746,9 +8746,9 @@ constexpr Ability Festivities = {
 
 constexpr Ability FeyFlight = {
     .onEntry = FairyTale.onEntry,
+    .addsType = TYPE_FAIRY,
     .breakable = TRUE,
     .levitate = TRUE,
-    .addsType = TYPE_FAIRY,
 };
 
 constexpr Ability BestOffense = {
@@ -9769,9 +9769,9 @@ constexpr Ability AngelicWings = {
 constexpr Ability WitchBroom = {
     .onEntry = Hover.onEntry,
     .onParentalBond = HyperAggressive.onParentalBond,
+    .addsType = TYPE_PSYCHIC,
     .breakable = TRUE,
     .levitate = TRUE,
-    .addsType = TYPE_PSYCHIC,
 };
 
 constexpr Ability RainShroud = {
