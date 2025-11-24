@@ -56,12 +56,14 @@ Debug_Script_3::
 	end
 
 Debug_Script_4::
-	additem ITEM_MEGA_BRACELET
-	setflag FLAG_SYS_RECEIVED_KEYSTONE
+	//additem ITEM_MEGA_BRACELET
+	setflag FLAG_HIDE_LILYCOVE_CITY_AQUA_GRUNTS
+	setflag FLAG_BADGE07_GET
+	setflag FLAG_BADGE05_GET
 	end
 
 Debug_Script_5::
-	setflag(FLAG_FINISHED_SUNHOLLOW_STORY)
+	setflag FLAG_FINISHED_SUNHOLLOW_STORY
 	end
 
 Debug_Script_6::

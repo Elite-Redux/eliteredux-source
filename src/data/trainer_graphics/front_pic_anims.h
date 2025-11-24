@@ -290,6 +290,14 @@ static const union AnimCmd *const sAnims_Baneful[] ={
     sAnim_GeneralFrame0,
 };
 
+static const union AnimCmd *const sAnims_SkierM[] ={
+    sAnim_GeneralFrame0,
+};
+
+static const union AnimCmd *const sAnims_SkierF[] ={
+    sAnim_GeneralFrame0,
+};
+
 static const union AnimCmd *const sAnims_Wally[] ={
     sAnim_GeneralFrame0,
 };
@@ -480,4 +488,6 @@ const union AnimCmd *const *const gTrainerFrontAnimsPtrTable[] =
     [TRAINER_PIC_MAGMA_ADMIN_F] = sAnims_MagmaAdminF,
     [TRAINER_PIC_CYNTHIA] = sAnims_Cynthia,
     [TRAINER_PIC_BANEFUL] = sAnims_Baneful,
+    [TRAINER_PIC_SKIER_M] = sAnims_SkierM,
+    [TRAINER_PIC_SKIER_F] = sAnims_SkierF,
 };

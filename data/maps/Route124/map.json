@@ -54,7 +54,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MANIAC",
+      "graphics_id": "OBJ_EVENT_GFX_SKIER_M",
       "x": 46,
       "y": 63,
       "elevation": 1,
@@ -63,7 +63,7 @@
       "movement_range_y": 3,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "7",
-      "script": "Route124_EventScript_Roland",
+      "script": "Route124_EventScript_Glovel",
       "flag": "0"
     },
     {
@@ -145,7 +145,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_GIRL_3",
+      "graphics_id": "OBJ_EVENT_GFX_SKIER_F",
       "x": 62,
       "y": 63,
       "elevation": 1,
@@ -154,7 +154,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "7",
-      "script": "Route124_EventScript_Isabella",
+      "script": "Route124_EventScript_Janet",
       "flag": "0"
     },
     {

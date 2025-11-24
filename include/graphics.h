@@ -7058,6 +7058,8 @@ extern const u8 gMonIcon_CalyrexShadowRider[];
 extern const u8 gMonIcon_Egg[];
 
 // trainer sprites
+extern const u32 gTrainerFrontPic_Skier[];
+extern const u32 gTrainerFrontPic_Skier_Female[];
 extern const u32 gTrainerFrontPic_Hiker[];
 extern const u32 gTrainerFrontPic_AquaGruntM[];
 extern const u32 gTrainerFrontPic_PokemonBreederF[];
@@ -7156,6 +7158,8 @@ extern const u32 gTrainerFrontPic_Cynthia[];
 extern const u32 gTrainerFrontPic_Baneful[];
 extern const u32 gTrainerPalette_Baneful[];
 
+extern const u32 gTrainerPalette_Skier[];
+extern const u32 gTrainerPalette_Skier_Female[];
 extern const u32 gTrainerPalette_Hiker[];
 extern const u32 gTrainerPalette_AquaGruntM[];
 extern const u32 gTrainerPalette_PokemonBreederF[];
