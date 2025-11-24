@@ -153,6 +153,9 @@ typedef enum {
 
 #ifdef __cplusplus
 #define AbilityApplyOnWithTarget int
+// Because Type is defined in a C header file C++ and C end up with different alignments for the enum when packed into a bit field for some reason
+#define Type u16
+#else
 #endif
 
 typedef struct Ability {
@@ -208,9 +211,8 @@ typedef struct Ability {
     AbilityApplyOn onModifyEffectChanceFor:3;
     AbilityApplyOn onStatusImmuneFor:3;
     AbilityApplyOnWithTarget onBeforeAttackFor:5;
-    MoveEffectEnum setStateOnEffect;
     TerrainType allowTerrainIfAirborne:5;
-    Type addsType:5;
+    MoveEffectEnum setStateOnEffect;
     u16 redirectType:5;
     u16 ruinStat:3;
     u16 noDamageHits:2;
@@ -247,10 +249,12 @@ typedef struct Ability {
     u16 stealthRockImmune:1;
     u16 redCardEffect:1;
     u16 omniStab:1;
+    Type addsType:5;
 } Ability;
 
 #ifdef __cplusplus
 #undef AbilityApplyOnWithTarget
+#undef Type
 #endif
 
 extern const Ability* const gAbilities;
