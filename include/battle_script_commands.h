@@ -23,7 +23,7 @@ struct IntimidateCloneData {
     u8 statChange:4;
 };
 
-#define NUM_INTIMIDATE_CLONES 11
+#define NUM_INTIMIDATE_CLONES 12
 extern const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES];
 
 int GetParentalBondCount(int battler, MultihitType parentalBondType);

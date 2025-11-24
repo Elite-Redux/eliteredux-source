@@ -160,6 +160,12 @@ const struct IntimidateCloneData gIntimidateCloneData[] = {
         .statsLowered = {STAT_SPATK, 0, 0},
         .targetBoth = TRUE,
     },
+    {
+        .ability = ABILITY_FIRES_WRATH,
+        .numStatsLowered = 2,
+        .statsLowered = {STAT_ATK, STAT_SPATK, 0},
+        .targetBoth = TRUE,
+    },
 };
 
 // Used in an unreferenced function in RS.

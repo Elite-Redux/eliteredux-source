@@ -4384,6 +4384,18 @@ constexpr Ability Fearmonger = {
     },
 };
 
+constexpr Ability FiresWrath = {
+    .onEntry = UseIntimidateClone,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBeBurned(target))
+        CHECK_NOT(IsMoveMakingContact(move, battler))
+        CHECK(Random() % 100 < 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BURN);
+    },
+};
+
 constexpr Ability ToxicSpill = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
@@ -9358,7 +9370,7 @@ constexpr Ability Virus = {.onAttacker = +[](ON_ATTACKER) -> int {
 
 constexpr Ability PowerLeak = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(DidMoveHit())
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
 
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESELECTRIC;
@@ -9912,6 +9924,18 @@ constexpr Ability Voltron = {
     .onCrit = BattleArmor.onCrit,
     .onCritFor = BattleArmor.onCritFor,
     .breakable = TRUE,
+};
+
+constexpr Ability BrainOverload = {
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
+
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESPSYCHIC;
+        BattleScriptCall(BattleScript_SurgeActivatesRet);
+        return TRUE;
+    },
+    .allowTerrainIfAirborne = TERRAIN_PSYCHIC,
 };
 
 typedef struct AbilityKVPair {
@@ -10843,6 +10867,8 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_CRUSHING_JAW, CrushingJaw},
     {ABILITY_CRYOSTASIS, Cryostasis},
     {ABILITY_BOOGER_HEADS, BoogerHeads},
+    {ABILITY_BRAIN_OVERLOAD, BrainOverload},
+    {ABILITY_FIRES_WRATH, FiresWrath},
 };
 
 template <int N>
@@ -10956,5 +10982,16 @@ consteval std::array<Ability, ABILITIES_COUNT> mergeArrays(const AbilityKVPair s
 
 const static auto abilityData = mergeArrays<ARRAY_COUNT(sAbilities)>(sAbilities, mergeArrays<ARRAY_COUNT(sAbilityText)>(sAbilityText));
 const Ability* const gAbilities = abilityData.data();
+
+consteval int testNoDuplicates() {
+    std::array<bool, ABILITIES_COUNT> arr = {0};
+    for (auto kvp : sAbilities) {
+        if (arr[kvp.key]) return FALSE;
+        arr[kvp.key] = TRUE;
+    }
+    return TRUE;
+}
+
+STATIC_ASSERT(testNoDuplicates(), noDuplicateAbilityEntries)
 
 #pragma GCC diagnostic pop
