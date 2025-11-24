@@ -246,7 +246,7 @@ typedef struct Ability {
     u16 stealthRockImmune:1;
     u16 redCardEffect:1;
     Type addsType:5;
-    u16 omniStab:1;
+    u16 omniStab;
 } Ability;
 
 #ifdef __cplusplus
