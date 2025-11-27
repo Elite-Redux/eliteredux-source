@@ -68,6 +68,7 @@ typedef void (*AbilityOnDefensiveMultiplierHandler)(
 typedef enum NonStackingState {
     NON_STACKING_NONE = 0,
     NON_STACKING_RUIN = 1 << 0,
+    NON_STACKING_ETERNAL_FLOWER = 1 << 1,
 } NonStackingState;
 typedef void (*AbilityOnStatHandler)(AbilityEnum ability, int battler, int statId, u32* stat, NonStackingState* flags);
 typedef enum {

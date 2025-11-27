@@ -6937,7 +6937,7 @@ u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk,
         if ((gBattleMons[i].status1 & STATUS1_SLEEP) && IsBattlerAlive(i)) numsleepmons++;
     }
 
-    if (gBattleMoves[move].doubleDamageVsMega && (gBattleStruct->mega.evolvedSpecies[battlerDef] || gBattleStruct->mega.primalRevertedSpecies[battlerDef])) {
+    if (gBattleMoves[move].doubleDamageVsMega && GetBaseSpeciesFromMega(gBattleMons[battlerDef].species)) {
         MulModifier(&modifier, UQ_4_12(2.0));
     }
 

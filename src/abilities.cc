@@ -49,6 +49,7 @@ class __EnumHack {
 ENUM_OR(InfiltrateType)
 ENUM_OR(MoveEffectEnum)
 ENUM_OR(TerrainType)
+ENUM_OR(NonStackingState)
 
 #define CHECK(effect) \
     if (!(effect)) return __EnumHack();
@@ -336,13 +337,13 @@ static int MoxieClone(int battler, int stat) {
             else                                                             \
                 MUL(1.3);                                                    \
         }                                                                    \
-    }
+}
 
 static void RuinEffect(int ruinStat, int battler, int statId, u32* stat, NonStackingState* flags) {
     if (statId != ruinStat) return;
     if (*flags & NON_STACKING_RUIN) return;
     ON_ABILITY(battler, FALSE, gAbilities[ability].ruinStat == statId, return)* stat *= .75;
-    *flags = static_cast<NonStackingState>(static_cast<int>(*flags) | static_cast<int>(NON_STACKING_RUIN));
+    *flags = *flags | NON_STACKING_RUIN;
 }
 
 int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS) {
@@ -9938,6 +9939,19 @@ constexpr Ability BrainOverload = {
     .allowTerrainIfAirborne = TERRAIN_PSYCHIC,
 };
 
+constexpr Ability EternalFlower = {
+    .onStat =
+        +[](ON_STAT) {
+            if (BattlerHasAbility(battler, ABILITY_ETERNAL_FLOWER, FALSE)) return;
+            if (!GetBaseSpeciesFromMega(gBattleMons[battler].species)) return;
+            if (*flags & NON_STACKING_ETERNAL_FLOWER) return;
+
+            *stat *= .8;
+            *flags = *flags | NON_STACKING_ETERNAL_FLOWER;
+        },
+    .onStatFor = APPLY_ON_OTHER,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10869,6 +10883,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_BOOGER_HEADS, BoogerHeads},
     {ABILITY_BRAIN_OVERLOAD, BrainOverload},
     {ABILITY_FIRES_WRATH, FiresWrath},
+    {ABILITY_ETERNAL_FLOWER, EternalFlower},
 };
 
 template <int N>
