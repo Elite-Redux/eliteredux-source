@@ -9937,7 +9937,7 @@ constexpr Ability Cryostasis = {
     .setStateOnEffect = MOVE_EFFECT_FROSTBITE,
 };
 
-constexpr Ability BoogerHeads = {
+constexpr Ability MucusMembrane = {
     .onDefender = Gooey.onDefender,
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.7); },
     .breakable = TRUE,
@@ -9998,6 +9998,13 @@ constexpr Ability NihilBlaster = {
     .auraBreak = TRUE,
 };
 
+constexpr Ability GiantShuriken = {
+    .onCrit = +[](ON_CRIT) -> int { 
+        CHECK(move == MOVE_WATER_SHURIKEN);
+        return 1; 
+    },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10005,7 +10012,6 @@ typedef struct AbilityKVPair {
 
 constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_NONE, None},
-    {ABILITY_NIHIL_BLASTER, NihilBlaster},
     {ABILITY_STENCH, Stench},
     {ABILITY_DRIZZLE, Drizzle},
     {ABILITY_SPEED_BOOST, SpeedBoost},
@@ -10927,13 +10933,15 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_BACKFLIP, Backflip},
     {ABILITY_CRUSHING_JAW, CrushingJaw},
     {ABILITY_CRYOSTASIS, Cryostasis},
-    {ABILITY_BOOGER_HEADS, BoogerHeads},
+    {ABILITY_MUCUS_MEMBRANE, MucusMembrane},
     {ABILITY_BRAIN_OVERLOAD, BrainOverload},
     {ABILITY_FIRES_WRATH, FiresWrath},
     {ABILITY_ETERNAL_FLOWER, EternalFlower},
     {ABILITY_CURLIPEDE, Curlipede},
     {ABILITY_FLAWLESS_PRECISION, FlawlessPrecision},
     {ABILITY_MASHED_POTATO, MashedPotato},
+    {ABILITY_NIHIL_BLASTER, NihilBlaster},
+    {ABILITY_GIANT_SHURIKEN, GiantShuriken},
 };
 
 template <int N>

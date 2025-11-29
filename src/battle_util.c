@@ -3459,6 +3459,8 @@ MultihitType GetMultihitType(int battler, MoveEnum move) {
             if (HasSkillLink(battler)) return MULTIHIT_FIVE;
             if (move == MOVE_WATER_SHURIKEN && BattlerHasAbility(battler, ABILITY_BATTLE_BOND, FALSE) && gBattleMons[battler].species == SPECIES_GRENINJA_ASH)
                 return MULTIHIT_THREE;
+            else if (move == MOVE_WATER_SHURIKEN && BattlerHasAbility(battler, ABILITY_GIANT_SHURIKEN, FALSE))
+                return MULTIHIT_SINGLE;
             if (GetBattlerHoldEffect(battler, FALSE) == HOLD_EFFECT_LOADED_DICE) return MULTIHIT_FOUR_OR_FIVE;
             return MULTIHIT_TWO_TO_FIVE;
 
@@ -6861,6 +6863,7 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
     switch (move) {
         case MOVE_WATER_SHURIKEN:
             if (gBattleMons[battlerAtk].species == SPECIES_GRENINJA_ASH) basePower = 20;
+            else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GIANT_SHURIKEN)) basePower = 100;
             break;
         case MOVE_DRAGON_DARTS:
             if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PARENTAL_BOND)) basePower = basePower * 5 / 4;
