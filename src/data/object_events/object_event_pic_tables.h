@@ -2396,3 +2396,27 @@ static const struct SpriteFrameImage sPicTable_Hooded[] = {
     overworld_frame(gObjectEventPic_Hooded, 2, 4, 7),
     overworld_frame(gObjectEventPic_Hooded, 2, 4, 8),
 };
+
+static const struct SpriteFrameImage sPicTable_Skier[] = {
+    overworld_frame(gObjectEventPic_Skier, 2, 4, 0),
+    overworld_frame(gObjectEventPic_Skier, 2, 4, 1),
+    overworld_frame(gObjectEventPic_Skier, 2, 4, 2),
+    overworld_frame(gObjectEventPic_Skier, 2, 4, 0),
+    overworld_frame(gObjectEventPic_Skier, 2, 4, 0),
+    overworld_frame(gObjectEventPic_Skier, 2, 4, 1),
+    overworld_frame(gObjectEventPic_Skier, 2, 4, 1),
+    overworld_frame(gObjectEventPic_Skier, 2, 4, 2),
+    overworld_frame(gObjectEventPic_Skier, 2, 4, 2),
+};
+
+static const struct SpriteFrameImage sPicTable_Skier_Female[] = {
+    overworld_frame(gObjectEventPic_Skier_Female, 2, 4, 0),
+    overworld_frame(gObjectEventPic_Skier_Female, 2, 4, 1),
+    overworld_frame(gObjectEventPic_Skier_Female, 2, 4, 2),
+    overworld_frame(gObjectEventPic_Skier_Female, 2, 4, 0),
+    overworld_frame(gObjectEventPic_Skier_Female, 2, 4, 0),
+    overworld_frame(gObjectEventPic_Skier_Female, 2, 4, 1),
+    overworld_frame(gObjectEventPic_Skier_Female, 2, 4, 1),
+    overworld_frame(gObjectEventPic_Skier_Female, 2, 4, 2),
+    overworld_frame(gObjectEventPic_Skier_Female, 2, 4, 2),
+};

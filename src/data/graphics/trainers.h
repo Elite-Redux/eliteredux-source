@@ -1,3 +1,9 @@
+const u32 gTrainerFrontPic_Skier[] = INCBIN_U32("graphics/trainers/front_pics/skier_front_pic.4bpp.lz");
+const u32 gTrainerPalette_Skier[] = INCBIN_U32("graphics/trainers/palettes/skier.gbapal.lz");
+
+const u32 gTrainerFrontPic_Skier_Female[] = INCBIN_U32("graphics/trainers/front_pics/skier_female_front_pic.4bpp.lz");
+const u32 gTrainerPalette_Skier_Female[] = INCBIN_U32("graphics/trainers/palettes/skier_female.gbapal.lz");
+
 const u32 gTrainerFrontPic_Hiker[] = INCBIN_U32("graphics/trainers/front_pics/hiker_front_pic.4bpp.lz");
 const u32 gTrainerPalette_Hiker[] = INCBIN_U32("graphics/trainers/palettes/hiker.gbapal.lz");
 

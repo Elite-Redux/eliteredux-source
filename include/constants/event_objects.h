@@ -269,9 +269,10 @@
 #define OBJ_EVENT_GFX_BANEFUL                    265
 #define OBJ_EVENT_GFX_HOODED                     266
 #define OBJ_EVENT_GFX_MAGMA_ADMIN_F              267
+#define OBJ_EVENT_GFX_SKIER_F                    268
+#define OBJ_EVENT_GFX_SKIER_M                    269
 
-#define NUM_OBJ_EVENT_GFX                        268
-
+#define NUM_OBJ_EVENT_GFX                        270
 
 // These are dynamic object gfx ids.
 // They correspond with the values of the VAR_OBJ_GFX_ID_X vars.

@@ -124,3 +124,39 @@ script Route127_EventScript_LegendaryNPC{
     release
     end
 }
+
+script Route127_EventScript_Neo{
+	trainerbattle_single(TRAINER_ACE_TRAINER_NEO, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
+	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	end
+}
+
+script Route127_EventScript_Leela{
+	trainerbattle_single(TRAINER_ACE_TRAINER_LEELA, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
+	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	end
+}
+
+script Route127_EventScript_Guin{
+	trainerbattle_single(TRAINER_SKIER_GUIN, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
+	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	end
+}
+
+script Route127_EventScript_Mike{
+	trainerbattle_single(TRAINER_ACE_TRAINER_MIKE, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
+	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	end
+}
+
+script Route127_EventScript_Ashley{
+	trainerbattle_single(TRAINER_ACE_TRAINER_ASHLEY, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
+	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	end
+}
+
+script Route127_EventScript_Pagani{
+	trainerbattle_single(TRAINER_ACE_TRAINER_PAGANI, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
+	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	end
+}

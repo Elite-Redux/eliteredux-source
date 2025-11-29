@@ -68,6 +68,7 @@
 #include "constants/day_night.h"
 #include "constants/battle_events.h"
 #include "data/pokemon/cry_table.h"
+#include "generated/data/pokemon/reverse_mega_map.h"
 
 struct SpeciesItem {
     SpeciesEnum species;
@@ -158,6 +159,12 @@ const struct IntimidateCloneData gIntimidateCloneData[] = {
         .ability = ABILITY_SCARECROW,
         .numStatsLowered = 1,
         .statsLowered = {STAT_SPATK, 0, 0},
+        .targetBoth = TRUE,
+    },
+    {
+        .ability = ABILITY_FIRES_WRATH,
+        .numStatsLowered = 2,
+        .statsLowered = {STAT_ATK, STAT_SPATK, 0},
         .targetBoth = TRUE,
     },
 };

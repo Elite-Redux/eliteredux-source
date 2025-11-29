@@ -595,6 +595,7 @@ extern const u8 BattleScript_MoveEffectAttract[];
 extern const u8 BattleScript_MoveEffectCurse[];
 extern const u8 BattleScript_HydroCircuitAbsorbEffectActivated[];
 extern const u8 BattleScript_AbsorbantActivated[];
+extern const u8 BattleScript_WinterThroneDamage[];
 extern const u8 BattleScript_AnnounceTargetTrapped[];
 extern const u8 BattleScript_BattlerHasNoDamageHits[];
 extern const u8 BattleScript_BattlerHasASingleNoDamageHit[];

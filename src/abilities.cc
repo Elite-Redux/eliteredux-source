@@ -44,10 +44,12 @@ class __EnumHack {
 };
 
 #define ENUM_OR(enumType) \
-    inline enumType operator|(enumType a, enumType b) { return static_cast<enumType>(static_cast<int>(a) | static_cast<int>(b)); }
+    inline constexpr enumType operator|(enumType a, enumType b) { return static_cast<enumType>(static_cast<int>(a) | static_cast<int>(b)); }
 
 ENUM_OR(InfiltrateType)
 ENUM_OR(MoveEffectEnum)
+ENUM_OR(TerrainType)
+ENUM_OR(NonStackingState)
 
 #define CHECK(effect) \
     if (!(effect)) return __EnumHack();
@@ -71,7 +73,7 @@ ENUM_OR(MoveEffectEnum)
 #define DELEGATE_WEATHER ability, battler
 #define ON_TERRAIN AbilityEnum ability, int battler
 #define DELEGATE_TERRAIN ability, battler
-#define ON_END_TURN AbilityEnum ability, int battler
+#define ON_END_TURN AbilityEnum ability, u8 battler
 #define DELEGATE_END_TURN ability, battler
 #define ON_ATTACKER AbilityEnum ability, int battler, int target, MoveEnum move, int moveType
 #define DELEGATE_ATTACKER ability, battler, target, move, moveType
@@ -215,6 +217,18 @@ static int AdjustFollowupMoveTarget(int battler, int* target, MoveEnum move, Fol
     }
 }
 
+static int CheckAbilityWasAnnouncedBy(int announcer, AbilityEnum ability) {
+    return BattlerHasAbility(announcer, ability, FALSE) && !CheckAndSetSwitchInAbility(announcer, ability);
+}
+
+static int CheckAbilityWasAnnounced(int battler, AbilityEnum ability) {
+    for (int other = 0; other < gBattlersCount; other++) {
+        FILTER(other != battler)
+        if (CheckAbilityWasAnnouncedBy(other, ability)) return TRUE;
+    }
+    return FALSE;
+}
+
 static int SwitchInAnnounce(int message) {
     gBattleCommunication[MULTISTRING_CHOOSER] = message;
     BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
@@ -323,13 +337,13 @@ static int MoxieClone(int battler, int stat) {
             else                                                             \
                 MUL(1.3);                                                    \
         }                                                                    \
-    }
+}
 
 static void RuinEffect(int ruinStat, int battler, int statId, u32* stat, NonStackingState* flags) {
     if (statId != ruinStat) return;
     if (*flags & NON_STACKING_RUIN) return;
     ON_ABILITY(battler, FALSE, gAbilities[ability].ruinStat == statId, return)* stat *= .75;
-    *flags = static_cast<NonStackingState>(static_cast<int>(*flags) | static_cast<int>(NON_STACKING_RUIN));
+    *flags = *flags | NON_STACKING_RUIN;
 }
 
 int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS) {
@@ -431,6 +445,30 @@ constexpr Ability SpeedBoost = {
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         gBattleScripting.battler = battler;
         return TRUE;
+    },
+};
+
+constexpr Ability CoolExit = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+
+        switch (GetAbilityState(battler, ability)) {
+            case 0:
+                SetAbilityState(battler, ability, 1);
+                break;
+
+            case 1:
+                gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+                    .ability = ability,
+                    .move = MOVE_CHILLY_RECEPTION,
+                    .attacker = battler,
+                    .target = battler,
+                };
+                SetAbilityState(battler, ability, 2);
+                break;
+        }
+
+        return FALSE;
     },
 };
 
@@ -1265,6 +1303,14 @@ constexpr Ability SolarPower = {
         +[](ON_STAT) {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
             if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat *= 1.5;
+        },
+};
+
+constexpr Ability RagingStorm = {
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
+            if (IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat *= 1.5;
         },
 };
 
@@ -4339,9 +4385,25 @@ constexpr Ability Fearmonger = {
     },
 };
 
+constexpr Ability FiresWrath = {
+    .onEntry = UseIntimidateClone,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(CanBeBurned(target))
+        CHECK_NOT(IsMoveMakingContact(move, battler))
+        CHECK(Random() % 100 < 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BURN);
+    },
+};
+
 constexpr Ability ToxicSpill = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
+
+        CHECK_NOT(CheckAbilityWasAnnounced(battler, ABILITY_TOXIC_SPILL))
+        CHECK_NOT(CheckAbilityWasAnnounced(battler, ABILITY_TRASH_HEAP))
+
         BattleScriptPushCursorAndCallback(BattleScript_BattlerAnnouncedToxicSpill);
         return TRUE;
     },
@@ -7018,7 +7080,11 @@ constexpr Ability HigherRank = {
 };
 
 constexpr Ability FuneralPyre = {
-    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE); },
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(CheckAbilityWasAnnounced(battler, ABILITY_FUNERAL_PYRE))
+
+        return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE);
+    },
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(IsAbilityOnField(ability) - 1 == battler)
 
@@ -8098,7 +8164,10 @@ constexpr Ability CorruptedMind = {
 };
 
 constexpr Ability FlameCoat = {
-    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_FIRE_COAT); },
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(CheckAbilityWasAnnounced(battler, ABILITY_FLAME_COAT))
+        return SwitchInAnnounce(B_MSG_SWITCHIN_FIRE_COAT);
+    },
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(IsAbilityOnField(ability) - 1 == battler)
 
@@ -8961,7 +9030,9 @@ constexpr Ability AurorasGale = {
 };
 
 constexpr Ability WinterThrone = {
-    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_WINTER_THRONE); },
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(CheckAbilityWasAnnounced(battler, ABILITY_WINTER_THRONE)) return SwitchInAnnounce(B_MSG_SWITCHIN_WINTER_THRONE);
+    },
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(IsAbilityOnField(ability) - 1 == battler)
 
@@ -8972,7 +9043,7 @@ constexpr Ability WinterThrone = {
             if (IS_BATTLER_OF_TYPE(target, TYPE_ICE)) {
                 FILTER_NOT(IsMagicGuardProtected(target))
                 gStackBattler1 = target;
-                BattleScriptExecute(BattleScript_FuneralPyreDamage);
+                BattleScriptExecute(BattleScript_WinterThroneDamage);
             } else {
                 FILTER_NOT(BATTLER_MAX_HP(target))
                 FILTER(CanBattlerHeal(target))
@@ -8984,6 +9055,43 @@ constexpr Ability WinterThrone = {
         }
         return any;
     },
+};
+
+constexpr Ability ChristmasNightmare = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(IsWeatherActive(WEATHER_HAIL_ANY))
+
+        CHECK_NOT(CheckAbilityWasAnnouncedBy(BATTLE_PARTNER(battler), ABILITY_FLAME_COAT))
+
+        return SwitchInAnnounce(B_MSG_SWITCHIN_CHRISTMAS_NIGHTMARE);
+    },
+    .onWeather = +[](ON_WEATHER) -> int {
+        CHECK(IsWeatherActive(WEATHER_HAIL_ANY))
+        CHECK(IsAbilityOnSide(GetBattlerSide(battler), ability) - 1 == battler)
+
+        DisableSwitchInAbility(battler, ability);
+        DisableSwitchInAbility(BATTLE_PARTNER(battler), ability);
+
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CHRISTMAS_NIGHTMARE;
+        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsgRet);
+        return TRUE;
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(IsAbilityOnSide(GetBattlerSide(battler), ability) - 1 == battler)
+
+        int any = FALSE;
+        for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
+            FILTER(IsBattlerAlive(target))
+            FILTER_NOT(IsHailImmune(target))
+
+            gStackBattler1 = target;
+            BattleScriptExecute(BattleScript_WinterThroneDamage);
+
+            any = TRUE;
+        }
+        return any;
+    },
+    .hailImmune = TRUE,
 };
 
 constexpr Ability IcePlumes = {
@@ -9263,7 +9371,7 @@ constexpr Ability Virus = {.onAttacker = +[](ON_ATTACKER) -> int {
 
 constexpr Ability PowerLeak = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(DidMoveHit())
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
 
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESELECTRIC;
@@ -9547,6 +9655,7 @@ constexpr Ability ZenGarden = {
                 return FALSE;
         }
     },
+    .allowTerrainIfAirborne = TERRAIN_GRASSY | TERRAIN_PSYCHIC,
 };
 
 constexpr Ability SharpTalons = {
@@ -9578,7 +9687,7 @@ constexpr Ability Echolocation = {
 };
 
 constexpr Ability DeadBark = {
-    .onEntry = +[](ON_ENTRY) -> int { AddBattlerType(battler, TYPE_GHOST); },
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GHOST); },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (typeEffectivenessModifier >= UQ_4_12(2.0)) {
@@ -9618,6 +9727,244 @@ constexpr Ability DeviousPresent = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ICE || gBattleMoves[move].throwingBased) MUL(1.5);
         },
+};
+
+constexpr Ability CosmicWings = {
+    .onMoveType = +[](ON_MOVE_TYPE) -> int {
+        CHECK(moveType == TYPE_FLYING)
+        return TYPE_FAIRY + 1;
+    },
+};
+
+constexpr Ability Mach3 = {
+    .onChooseOffensiveStat = Slipstream.onChooseOffensiveStat,
+    .onMoldBreaker = DeadlyPrecision.onMoldBreaker,
+};
+
+constexpr Ability FoggyEye = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_GHOST && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) MUL(1.5);
+        },
+    .onAfterTypeEffectiveness =
+        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (moveType != TYPE_GHOST) return;
+            if (!IsBattlerWeatherAffected(target, WEATHER_FOG_ANY)) return;
+            if (*mod > UQ_4_12(0.5)) *mod = UQ_4_12(0.5);
+        },
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
+};
+
+constexpr Ability Chandelier = {
+    .onAccuracy = Illuminate.onAccuracy,
+    .onModifyEffectChance = Pyromancy.onModifyEffectChance,
+};
+
+constexpr Ability AngelicWings = {
+    .onOffensiveMultiplier = HugeWings.onOffensiveMultiplier,
+    .onDefensiveMultiplier = PrismScales.onDefensiveMultiplier,
+    .breakable = TRUE,
+    .levitate = TRUE,
+};
+
+constexpr Ability WitchBroom = {
+    .onEntry = Hover.onEntry,
+    .onParentalBond = HyperAggressive.onParentalBond,
+    .breakable = TRUE,
+    .levitate = TRUE,
+    .addsType = TYPE_PSYCHIC,
+};
+
+constexpr Ability RainShroud = {
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(IsBattlerWeatherAffected(target, WEATHER_RAIN_ANY));
+        *accuracy /= 1.25;
+        return ACCURACY_MULTIPLICATIVE;
+    },
+    .onAccuracyFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
+};
+
+constexpr Ability ChestnutShield = {
+    .onImmune = Bulletproof.onImmune,
+    .breakable = TRUE,
+    .magicGuard = TRUE,
+};
+
+constexpr Ability BrainMass = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (BATTLER_MAX_HP(battler)) MUL(.5);
+        },
+    .breakable = TRUE,
+};
+
+constexpr Ability Tummyache = {
+    .onDefensiveMultiplier = ThickFat.onDefensiveMultiplier,
+    .onTypeEffectiveness = Corrosion.onTypeEffectiveness,
+    .onCanStatusType = Corrosion.onCanStatusType,
+    .breakable = TRUE,
+};
+
+constexpr Ability SumoGuard = {
+    .onDefensiveMultiplier = ThickFat.onDefensiveMultiplier,
+    .onChooseOffensiveStat = Juggernaut.onChooseOffensiveStat,
+    .onStatusImmune = Juggernaut.onStatusImmune,
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+};
+
+constexpr Ability IcePick = {
+    .onOffensiveMultiplier = ToughClaws.onOffensiveMultiplier,
+    .onStat = SlushRush.onStat,
+    .hailImmune = TRUE,
+};
+
+constexpr Ability HammerFist = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (DoesMoveMatchFlag(battler, move, MOVE_FLAG_PUNCH) || gBattleMoves[move].hammerBased) MUL(1.25);
+        },
+};
+
+constexpr Ability ToxicShell = {
+    .onAttacker = PoisonPoint.onAttacker,
+    .onDefender = PoisonPoint.onDefender,
+    .onDefensiveMultiplier = ShellArmor.onDefensiveMultiplier,
+    .onCrit = ShellArmor.onCrit,
+    .onCritFor = ShellArmor.onCritFor,
+    .breakable = TRUE,
+};
+
+constexpr Ability HandBarnacles = {
+    .onParentalBond = MultiHeaded.onParentalBond,
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
+    .resistsFortKnox = TRUE,
+};
+
+constexpr Ability Lepidopteran = {
+    .onOffensiveMultiplier = Swarm.onOffensiveMultiplier,
+    .breakable = TRUE,
+    .unaware = TRUE,
+};
+
+constexpr Ability BreakItDown = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(DoesMoveMatchFlag(battler, move, MOVE_FLAG_DANCE))
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_RAPID_SPIN, 20);
+    },
+};
+
+constexpr Ability BackstreetBoy = {
+    .onOffensiveMultiplier = Striker.onOffensiveMultiplier,
+    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
+        switch (flag) {
+            case MOVE_FLAG_KICK:
+                CHECK(gBattleMoves[move].flags & FLAG_DANCE)
+                return TRUE;
+
+            case MOVE_FLAG_DANCE:
+                CHECK(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
+                return TRUE;
+
+            default:
+                return FALSE;
+        }
+    },
+};
+
+constexpr Ability Backflip = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(DoesMoveMatchFlag(battler, move, MOVE_FLAG_DANCE))
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_CHIP_AWAY, 50);
+    },
+};
+
+constexpr Ability CrushingJaw = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        CHECK(Random() % 2)
+        CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
+
+        return AbilityStatusEffect(MOVE_EFFECT_DEF_MINUS_1);
+    },
+    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
+};
+
+constexpr Ability Cryostasis = {
+    .onReactive = +[](ON_REACTIVE) -> int {
+        return PoisonPuppeteerClone(
+            ability,
+            battler,
+            +[](int battler, int target) -> int {
+                gBattleMons[target].status2 |= STATUS2_FLINCHED;
+                return FALSE;
+            },
+            nullptr);
+    },
+    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+    .onModifyEffectChance = Cryomancy.onModifyEffectChance,
+    .onBattlerFaintsFor = PoisonPuppeteer.onBattlerFaintsFor,
+    .setStateOnEffect = MOVE_EFFECT_FROSTBITE,
+};
+
+constexpr Ability BoogerHeads = {
+    .onDefender = Gooey.onDefender,
+    .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.7); },
+    .breakable = TRUE,
+};
+
+constexpr Ability Voltron = {
+    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
+    .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
+    .onCrit = BattleArmor.onCrit,
+    .onCritFor = BattleArmor.onCritFor,
+    .breakable = TRUE,
+};
+
+constexpr Ability BrainOverload = {
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
+
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESPSYCHIC;
+        BattleScriptCall(BattleScript_SurgeActivatesRet);
+        return TRUE;
+    },
+    .allowTerrainIfAirborne = TERRAIN_PSYCHIC,
+};
+
+constexpr Ability EternalFlower = {
+    .onStat =
+        +[](ON_STAT) {
+            if (BattlerHasAbility(battler, ABILITY_ETERNAL_FLOWER, FALSE)) return;
+            if (!GetBaseSpeciesFromMega(gBattleMons[battler].species)) return;
+            if (*flags & NON_STACKING_ETERNAL_FLOWER) return;
+
+            *stat *= .8;
+            *flags = *flags | NON_STACKING_ETERNAL_FLOWER;
+        },
+    .onStatFor = APPLY_ON_OTHER,
+};
+
+
+constexpr Ability Curlipede = {
+    .onEntry = +[](ON_ENTRY) -> int { return LetsRoll.onEntry(DELEGATE_ENTRY) | CoilUp.onEntry(DELEGATE_ENTRY); }
+};
+
+constexpr Ability FlawlessPrecision = {
+    .onAccuracy = FatalPrecision.onAccuracy,
+    .onCrit = FatalPrecision.onCrit,
+    .onMoldBreaker = DeadlyPrecision.onMoldBreaker,
+};
+
+constexpr Ability MashedPotato = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SYRUP_BOMB, 0); },
 };
 
 typedef struct AbilityKVPair {
@@ -10523,6 +10870,38 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_SAP_TRAP, SapTrap},
     {ABILITY_DEVIOUS_PRESENT, DeviousPresent},
     {ABILITY_COSMIC_DUST, CosmicDust},
+    {ABILITY_CHRISTMAS_NIGHTMARE, ChristmasNightmare},
+    {ABILITY_COOL_EXIT, CoolExit},
+    {ABILITY_COSMIC_WINGS, CosmicWings},
+    {ABILITY_RAGING_STORM, RagingStorm},
+    {ABILITY_MACH_3, Mach3},
+    {ABILITY_HAMMER_FIST, HammerFist},
+    {ABILITY_ICE_PICK, IcePick},
+    {ABILITY_SUMO_GUARD, SumoGuard},
+    {ABILITY_TUMMYACHE, Tummyache},
+    {ABILITY_BRAIN_MASS, BrainMass},
+    {ABILITY_CHESTNUT_SHIELD, ChestnutShield},
+    {ABILITY_RAIN_SHROUD, RainShroud},
+    {ABILITY_WITCH_BROOM, WitchBroom},
+    {ABILITY_ANGELIC_WINGS, AngelicWings},
+    {ABILITY_CHANDELIER, Chandelier},
+    {ABILITY_FOGGY_EYE, FoggyEye},
+    {ABILITY_TOXIC_SHELL, ToxicShell},
+    {ABILITY_HAND_BARNACLES, HandBarnacles},
+    {ABILITY_VOLTRON, Voltron},
+    {ABILITY_LEPIDOPTERAN, Lepidopteran},
+    {ABILITY_BREAK_IT_DOWN, BreakItDown},
+    {ABILITY_BACKSTREET_BOY, BackstreetBoy},
+    {ABILITY_BACKFLIP, Backflip},
+    {ABILITY_CRUSHING_JAW, CrushingJaw},
+    {ABILITY_CRYOSTASIS, Cryostasis},
+    {ABILITY_BOOGER_HEADS, BoogerHeads},
+    {ABILITY_BRAIN_OVERLOAD, BrainOverload},
+    {ABILITY_FIRES_WRATH, FiresWrath},
+    {ABILITY_ETERNAL_FLOWER, EternalFlower},
+    {ABILITY_CURLIPEDE, Curlipede},
+    {ABILITY_FLAWLESS_PRECISION, FlawlessPrecision},
+    {ABILITY_MASHED_POTATO, MashedPotato},
 };
 
 template <int N>
@@ -10591,8 +10970,8 @@ consteval std::array<Ability, ABILITIES_COUNT> mergeArrays(const AbilityKVPair s
             __OVERWRITE_ARRAY_VAL(onModifyEffectChanceFor),
             __OVERWRITE_ARRAY_VAL(onStatusImmuneFor),
             __OVERWRITE_ARRAY_VAL(onBeforeAttackFor),
-            __OVERWRITE_ARRAY_VAL(setStateOnEffect),
             __OVERWRITE_ARRAY_VAL(allowTerrainIfAirborne),
+            __OVERWRITE_ARRAY_VAL(setStateOnEffect),
             __OVERWRITE_ARRAY_VAL(redirectType),
             __OVERWRITE_ARRAY_VAL(ruinStat),
             __OVERWRITE_ARRAY_VAL(noDamageHits),
@@ -10627,6 +11006,9 @@ consteval std::array<Ability, ABILITIES_COUNT> mergeArrays(const AbilityKVPair s
             __OVERWRITE_ARRAY_VAL(hailImmune),
             __OVERWRITE_ARRAY_VAL(toxicTerrainImmune),
             __OVERWRITE_ARRAY_VAL(stealthRockImmune),
+            __OVERWRITE_ARRAY_VAL(redCardEffect),
+            __OVERWRITE_ARRAY_VAL(omniStab),
+            __OVERWRITE_ARRAY_VAL(addsType),
         };
     }
     return abilities;
@@ -10636,5 +11018,16 @@ consteval std::array<Ability, ABILITIES_COUNT> mergeArrays(const AbilityKVPair s
 
 const static auto abilityData = mergeArrays<ARRAY_COUNT(sAbilities)>(sAbilities, mergeArrays<ARRAY_COUNT(sAbilityText)>(sAbilityText));
 const Ability* const gAbilities = abilityData.data();
+
+consteval int testNoDuplicates() {
+    std::array<bool, ABILITIES_COUNT> arr = {0};
+    for (auto kvp : sAbilities) {
+        if (arr[kvp.key]) return FALSE;
+        arr[kvp.key] = TRUE;
+    }
+    return TRUE;
+}
+
+STATIC_ASSERT(testNoDuplicates(), noDuplicateAbilityEntries)
 
 #pragma GCC diagnostic pop

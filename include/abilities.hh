@@ -22,7 +22,7 @@ typedef InfiltrateType (*AbilityOnInfiltrateHandler)(int battler, MoveEnum move)
 typedef SpeciesEnum (*AbilityOnDisguiseHandler)(int battler, int checkOnly);
 typedef int (*AbilityOnWeatherHandler)(AbilityEnum ability, int battler);
 typedef int (*AbilityOnTerrainHandler)(AbilityEnum ability, int battler);
-typedef int (*AbilityOnEndTurnHandler)(AbilityEnum ability, int battler);
+typedef int (*AbilityOnEndTurnHandler)(AbilityEnum ability, u8 battler);
 typedef int (*AbilityOnAttackerHandler)(AbilityEnum ability, int battler, int target, MoveEnum move, int moveType);
 typedef int (*AbilityOnDefenderHandler)(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType);
 typedef int (*AbilityOnRecoilHandler)(int damage, int battler, int moveType);
@@ -68,6 +68,7 @@ typedef void (*AbilityOnDefensiveMultiplierHandler)(
 typedef enum NonStackingState {
     NON_STACKING_NONE = 0,
     NON_STACKING_RUIN = 1 << 0,
+    NON_STACKING_ETERNAL_FLOWER = 1 << 1,
 } NonStackingState;
 typedef void (*AbilityOnStatHandler)(AbilityEnum ability, int battler, int statId, u32* stat, NonStackingState* flags);
 typedef enum {
@@ -144,15 +145,18 @@ typedef enum {
 
 typedef enum {
     TERRAIN_NONE = 0,
-    TERRAIN_GRASSY = 1,
-    TERRAIN_ELECTRIC = 2,
-    TERRAIN_PSYCHIC = 3,
-    TERRAIN_MISTY = 4,
-    TERRAIN_TOXIC = 5,
+    TERRAIN_GRASSY = 1 << 0,
+    TERRAIN_ELECTRIC = 1 << 1,
+    TERRAIN_PSYCHIC = 1 << 2,
+    TERRAIN_MISTY = 1 << 3,
+    TERRAIN_TOXIC = 1 << 4,
 } TerrainType;
 
 #ifdef __cplusplus
 #define AbilityApplyOnWithTarget int
+// Because Type is defined in a C header file C++ and C end up with different alignments for the enum when packed into a bit field for some reason
+#define Type u16
+#else
 #endif
 
 typedef struct Ability {
@@ -208,8 +212,8 @@ typedef struct Ability {
     AbilityApplyOn onModifyEffectChanceFor:3;
     AbilityApplyOn onStatusImmuneFor:3;
     AbilityApplyOnWithTarget onBeforeAttackFor:5;
+    TerrainType allowTerrainIfAirborne:5;
     MoveEffectEnum setStateOnEffect;
-    TerrainType allowTerrainIfAirborne:3;
     u16 redirectType:5;
     u16 ruinStat:3;
     u16 noDamageHits:2;
@@ -245,12 +249,13 @@ typedef struct Ability {
     u16 toxicTerrainImmune:1;
     u16 stealthRockImmune:1;
     u16 redCardEffect:1;
-    Type addsType:5;
     u16 omniStab:1;
+    Type addsType:5;
 } Ability;
 
 #ifdef __cplusplus
 #undef AbilityApplyOnWithTarget
+#undef Type
 #endif
 
 extern const Ability* const gAbilities;
