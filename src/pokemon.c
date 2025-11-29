@@ -68,6 +68,7 @@
 #include "constants/day_night.h"
 #include "constants/battle_events.h"
 #include "data/pokemon/cry_table.h"
+#include "generated/data/pokemon/reverse_mega_map.h"
 
 struct SpeciesItem {
     SpeciesEnum species;

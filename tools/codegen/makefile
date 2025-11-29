@@ -90,7 +90,7 @@ $(eval $(call GENERATE, include/generated/data/pokemon/tutor_learnsets.h, tutorl
 $(eval $(call GENERATE, include/generated/data/pokemon/level_up_learnset_pointers.h, leveluplearnsets))
 $(eval $(call GENERATE, include/generated/data/pokemon/form_species_table_pointers.h, forms))
 $(eval $(call GENERATE, include/generated/data/pokemon/undo_form_change.h, undoforms))
-#$(eval $(call GENERATE, include/generated/data/pokemon/reverse_mega_map.h, reversemegamap))
+$(eval $(call GENERATE, include/generated/data/pokemon/reverse_mega_map.h, reversemegamap))
 $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_entries.h, pokedexentries))
 $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_orders.h, pokedexorders))
 $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_numbers.h, pokedexnumbers))
