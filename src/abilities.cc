@@ -9974,6 +9974,13 @@ constexpr Ability NihilBlaster = {
     .megaLauncherBoost = TRUE,
 };
 
+constexpr Ability GiantShuriken = {
+    .onCrit = +[](ON_CRIT) -> int { 
+        CHECK(move == MOVE_WATER_SHURIKEN);
+        return 1; 
+    },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10910,6 +10917,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_FLAWLESS_PRECISION, FlawlessPrecision},
     {ABILITY_MASHED_POTATO, MashedPotato},
     {ABILITY_NIHIL_BLASTER, NihilBlaster},
+    {ABILITY_GIANT_SHURIKEN, GiantShuriken},
 };
 
 template <int N>
