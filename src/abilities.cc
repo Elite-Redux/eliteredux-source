@@ -61,12 +61,12 @@ ENUM_OR(NonStackingState)
 
 #define ON_ENTRY AbilityEnum ability, int battler
 #define DELEGATE_ENTRY ability, battler
-#define ON_ABSORB int battler, MoveEnum move, int moveType, int *statId
+#define ON_ABSORB int battler, MoveEnum move, Type moveType, int *statId
 #define DELEGATE_ABSORB battler, move, moveType, statId
-#define ON_IMMUNE int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript
+#define ON_IMMUNE int battler, int attacker, MoveEnum move, Type moveType, const u8 **immunityScript
 #define DELEGATE_IMMUNE battler, attacker, move, moveType, immunityScript
-#define ON_INFILTRATE int battler, MoveEnum move
-#define DELEGATE_INFILTRATE battler, move
+#define ON_INFILTRATE int battler, MoveEnum move, Type moveType
+#define DELEGATE_INFILTRATE battler, move, moveType
 #define ON_DISGUISE int battler, int testOnly
 #define DELEGATE_DISGUISE battler, testOnly
 #define ON_WEATHER AbilityEnum ability, int battler
@@ -75,53 +75,53 @@ ENUM_OR(NonStackingState)
 #define DELEGATE_TERRAIN ability, battler
 #define ON_END_TURN AbilityEnum ability, u8 battler
 #define DELEGATE_END_TURN ability, battler
-#define ON_ATTACKER AbilityEnum ability, int battler, int target, MoveEnum move, int moveType
+#define ON_ATTACKER AbilityEnum ability, int battler, int target, MoveEnum move, Type moveType
 #define DELEGATE_ATTACKER ability, battler, target, move, moveType
-#define ON_DEFENDER AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType
+#define ON_DEFENDER AbilityEnum ability, int battler, int attacker, MoveEnum move, Type moveType
 #define DELEGATE_DEFENDER ability, battler, attacker, move, moveType
-#define ON_EITHER(name) static int name##OnEither(AbilityEnum ability, int battler, int opponent, MoveEnum move, int moveType)
+#define ON_EITHER(name) static int name##OnEither(AbilityEnum ability, int battler, int opponent, MoveEnum move, Type moveType)
 #define ON_EITHER_ABILITY(name) .onAttacker = name##OnEither, .onDefender = name##OnEither
-#define ON_RECOIL int damage, int battler, int moveType
+#define ON_RECOIL int damage, int battler, Type moveType
 #define DELEGATE_RECOIL damage, battler, moveType
 #define ON_REACTIVE AbilityEnum ability, int battler, AbilityCallType callType
 #define DELEGATE_REACTIVE ability, battler
-#define ON_BATTLER_FAINTS AbilityEnum ability, int battler, int attacker, int fainted, MoveEnum move, int moveType
+#define ON_BATTLER_FAINTS AbilityEnum ability, int battler, int attacker, int fainted, MoveEnum move, Type moveType
 #define DELEGATE_BATTLER_FAINTS ability, battler, attacker, fainted, move, moveType
-#define ON_PARENTAL_BOND int battler, MoveEnum move, int moveType
+#define ON_PARENTAL_BOND int battler, MoveEnum move, Type moveType
 #define DELEGATE_PARENTAL_BOND battler, move, moveType
 #define ON_STAT AbilityEnum ability, int battler, int statId, u32 *stat, NonStackingState *flags
 #define DELEGATE_STAT ability, battler, statId, stat, flags
-#define ON_OFFENSIVE_MULTIPLIER                                                                                                                             \
-    int battler, AbilityEnum ability, int target, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, \
+#define ON_OFFENSIVE_MULTIPLIER                                                                                                                              \
+    int battler, AbilityEnum ability, int target, MoveEnum move, Type moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, \
         u16 *modifier
 #define DELEGATE_OFFENSIVE_MULTIPLIER battler, ability, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier
 #define ON_DEFENSIVE_MULTIPLIER \
-    int battler, AbilityEnum ability, int attacker, MoveEnum move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
+    int battler, AbilityEnum ability, int attacker, MoveEnum move, Type moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
 #define DELEGATE_DEFENSIVE_MULTIPLIER battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier
-#define ON_ACCURACY AbilityEnum ability, int battler, int target, MoveEnum move, int moveType, int *accuracy
+#define ON_ACCURACY AbilityEnum ability, int battler, int target, MoveEnum move, Type moveType, int *accuracy
 #define DELEGATE_ACCURACY ability, battler, target, move, moveType, accuracy
-#define ON_SWAP_SPLIT int battler, MoveEnum move
-#define DELEGATE_SWAP_SPLIT battler, move
+#define ON_SWAP_SPLIT int battler, MoveEnum move, Type moveType
+#define DELEGATE_SWAP_SPLIT battler, move, type
 #define ON_CHOOSE_OFFENSIVE_STAT \
     int battler, MoveEnum move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 secondaryAtkStatToUse[NUM_STATS]
 #define DELEGATE_CHOOSE_OFFENSIVE_STAT battler, move, ignoreOffensiveStatDrops, targetUnaware, atkStatToUse, secondaryAtkStatToUse
 #define ON_CHOOSE_DEFENSIVE_STAT int battler, int target, MoveEnum move, int ignoreDefensiveStatBoosts, int battlerUnaware
 #define DELEGATE_CHOOSE_DEFENSIVE_STAT battler, target, move, ignoreDefensiveStatBoosts, battlerUnaware
-#define ON_STAB int moveType
+#define ON_STAB Type moveType
 #define DELEGATE_STAB moveType
 #define ON_PRIORITY int battler, int target, MoveEnum move
 #define DELEGATE_PRIORITY battler, target, move
-#define ON_MOVE_TYPE AbilityEnum ability, MoveEnum move, int moveType, u8 *ateBoost
+#define ON_MOVE_TYPE AbilityEnum ability, MoveEnum move, Type moveType, u8 *ateBoost
 #define DELEGATE_MOVE_TYPE ability, move, moveType, ateBoost
 #define ON_EXIT AbilityEnum ability, int battler
 #define DELEGATE_EXIT ability, battler
 #define ON_CRIT int battler, int target, MoveEnum move, u16 typeEffectiveness
 #define DELEGATE_CRIT battler, target, move, typeEffectiveness
-#define ON_TYPE_EFFECTIVENESS int defType, MoveEnum move, int moveType, u16 *mod
+#define ON_TYPE_EFFECTIVENESS int defType, MoveEnum move, Type moveType, u16 *mod
 #define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
 #define ON_COPY_MOVE AbilityEnum ability, int battler, int attacker, int target, MoveEnum move
 #define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
-#define ON_AFTER_TYPE_EFFECTIVENESS int battler, AbilityEnum ability, int target, MoveEnum move, int moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
+#define ON_AFTER_TYPE_EFFECTIVENESS int battler, AbilityEnum ability, int target, MoveEnum move, Type moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
 #define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
 #define ON_MODIFY_EFFECT_CHANCE int battler, MoveEnum move, MoveEffectEnum moveEffect, int *effectChance
 #define DELEGATE_MODIFY_EFFECT_CHANCE battler, move, moveEffect, effectChance
@@ -131,14 +131,14 @@ ENUM_OR(NonStackingState)
 #define DELEGATE_ON_STATUS_IMMUNE int battler, target, ability, status
 #define ABILITY_ON_TRAP int switchingBattler
 #define DELEGATE_ON_TRAP switchingBattler
-#define ABILITY_ON_BEFORE_ATTACK int battler, int attacker, AbilityEnum ability, MoveEnum move, int moveType
+#define ABILITY_ON_BEFORE_ATTACK int battler, int attacker, AbilityEnum ability, MoveEnum move, Type moveType
 #define DELEGATE_ON_BEFORE_ATTACK battler, attacker, ability, move, moveType
 #define ON_PREEMPT_ACTION u8 battler, AbilityEnum ability, u8 turnBattler
 #define DELEGATE_PREEMPT_ACTION battler, ability, turnBattler
-#define ON_MODIFY_MOVE_FLAGS int battler, MoveEnum move, MoveFlag flag
-#define DELEGATE_MODIFY_MOVE_FLAGS battler, move, flag
+#define ON_MODIFY_MOVE_FLAGS int battler, MoveEnum move, Type moveType, MoveFlag flag
+#define DELEGATE_MODIFY_MOVE_FLAGS battler, move, moveType, flag
 #define ON_MOLD_BREAKER int battler, MoveEnum move
-#define DELEGATE_MOLD_BREAKER battler, move, moveType
+#define DELEGATE_MOLD_BREAKER battler, move
 #define ON_REVIVE int battler
 #define DELEGATE_REVIVE battler
 
@@ -384,6 +384,9 @@ int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS) {
             break;
         case MOVE_FLAG_SOUND:
             if (gBattleMoves[move].flags & FLAG_SOUND) return TRUE;
+            break;
+        case MOVE_FLAG_KEEN_EDGE:
+            if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) return TRUE;
             break;
 
         default:
@@ -1428,7 +1431,7 @@ constexpr Ability Anticipation = {
             if (IsBattlerAlive(i) && side != GetBattlerSide(i)) {
                 for (int j = 0; j < MAX_MON_MOVES; j++) {
                     MoveEnum move = gBattleMons[i].moves[j];
-                    int moveType = gBattleMoves[move].type;
+                    Type moveType = gBattleMoves[move].type;
                     if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0)) {
                         any = TRUE;
                         break;
@@ -3159,7 +3162,7 @@ constexpr Ability Pyromancy = {
 constexpr Ability KeenEdge = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) MUL(1.3);
+            if (DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE)) MUL(1.3);
         },
 };
 
@@ -4539,7 +4542,7 @@ constexpr Ability PrimalMaw = {
 
 constexpr Ability SweepingEdge = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
 };
@@ -4667,7 +4670,7 @@ constexpr Ability InfernalRage = {
 
 constexpr Ability DualWield = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
-        CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
+        CHECK(IsMegaLauncherBoosted(battler, move) || DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE));
         return PARENTAL_BOND_DUAL_WIELD;
     },
 };
@@ -5476,7 +5479,7 @@ constexpr Ability FreezingPoint = {
     ON_EITHER_ABILITY(FreezingPoint),
 };
 
-static int CryoProficiencyHail(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType) {
+static int CryoProficiencyHail(AbilityEnum ability, int battler, int attacker, MoveEnum move, Type moveType) {
     CHECK(ShouldApplyOnHitAffect(battler))
     CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY)
     if (gBattleWeather & WEATHER_PRIMAL_ANY) {
@@ -5579,7 +5582,7 @@ constexpr Ability MysticBlades = {
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
     .onSwapSplit = +[](ON_SWAP_SPLIT) -> int {
         CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
-        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST);
+        CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE));
         return TRUE;
     },
 };
@@ -6457,7 +6460,7 @@ constexpr Ability MoltenBlades = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeBurned(target))
-        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
         CHECK(Random() % 100 < 20)
 
         return AbilityStatusEffect(MOVE_EFFECT_BURN);
@@ -7487,11 +7490,11 @@ constexpr Ability DragonsRitual = {
 
 constexpr Ability PinnacleBlade = {
     .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType {
-        return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : INFILTRATE_NONE;
+        return DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE) ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : INFILTRATE_NONE;
     },
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(DidMoveHit())
-        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
 
         int shouldApply = FALSE;
         int opposingSide = GetBattlerSide(target);
@@ -7846,7 +7849,7 @@ constexpr Ability DeepCuts = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
-        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
         CHECK(Random() % 2)
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
@@ -9486,7 +9489,7 @@ constexpr Ability LightSaber = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIRE); },
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
         CHECK(Random() % 2)
         switch (Random() % 4) {
             case 0:
@@ -9585,7 +9588,7 @@ constexpr Ability LeadClaws = {
 constexpr Ability Chainsaw = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
         CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
 
         int affected = GetOncePerTurnAbilityCounter(battler, ability);
@@ -9686,7 +9689,7 @@ constexpr Ability ZenGarden = {
 constexpr Ability SharpTalons = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(DoesMoveMatchFlag(battler, move, MOVE_FLAG_KICK))
+        CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KICK))
         CHECK(CanBleed(target))
         CHECK(Random() % 2)
 
@@ -9848,7 +9851,7 @@ constexpr Ability IcePick = {
 constexpr Ability HammerFist = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (DoesMoveMatchFlag(battler, move, MOVE_FLAG_PUNCH) || gBattleMoves[move].hammerBased) MUL(1.25);
+            if (DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_PUNCH) || gBattleMoves[move].hammerBased) MUL(1.25);
         },
 };
 
@@ -9875,7 +9878,7 @@ constexpr Ability Lepidopteran = {
 
 constexpr Ability BreakItDown = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(DoesMoveMatchFlag(battler, move, MOVE_FLAG_DANCE))
+        CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_DANCE))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_RAPID_SPIN, 20);
@@ -9902,7 +9905,7 @@ constexpr Ability BackstreetBoy = {
 
 constexpr Ability Backflip = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(DoesMoveMatchFlag(battler, move, MOVE_FLAG_DANCE))
+        CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_DANCE))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_CHIP_AWAY, 50);
@@ -10000,11 +10003,19 @@ constexpr Ability NihilBlaster = {
 };
 
 constexpr Ability GiantShuriken = {
-    .onCrit = +[](ON_CRIT) -> int { 
+    .onCrit = +[](ON_CRIT) -> int {
         CHECK(move == MOVE_WATER_SHURIKEN);
-        return 1; 
+        return 1;
     },
 };
+
+ constexpr Ability ChestnutAxe = {
+    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
+    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
+        CHECK(flag == MOVE_FLAG_KEEN_EDGE)
+        return moveType == TYPE_GRASS;
+    },
+ };
 
 typedef struct AbilityKVPair {
     u16 key;

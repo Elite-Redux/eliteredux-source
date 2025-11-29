@@ -983,7 +983,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             }
             break;
         case EFFECT_ACUPRESSURE:
-            if (DoesSubstituteBlockMove(battlerAtk, battlerDef, move) || AreBattlersStatsMaxed(battlerDef)) score -= 10;
+            if (DoesSubstituteBlockMove(battlerAtk, battlerDef, move, moveType) || AreBattlersStatsMaxed(battlerDef)) score -= 10;
             break;
         case EFFECT_MAGNETIC_FLUX:
             if (BattlerHasAbility(battlerAtk, ABILITY_PLUS, TRUE) || BattlerHasAbility(battlerAtk, ABILITY_MINUS, TRUE)) {
@@ -1120,14 +1120,14 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             if (IsBattlerIncapacitated(battlerDef) || gBattleMons[battlerDef].status2 & (STATUS2_CONFUSION)) score--;
             if (predictedMove == MOVE_NONE || GetBattleMoveSplit(predictedMove) == SPLIT_STATUS ||
                 (GetBattleMoveSplit(predictedMove) == SPLIT_SPECIAL && B_USE_COUNTER_MIRROR_COAT_RIGHT) ||
-                DoesSubstituteBlockMove(battlerAtk, BATTLE_PARTNER(battlerDef), predictedMove))
+                DoesSubstituteBlockMove(battlerAtk, BATTLE_PARTNER(battlerDef), predictedMove, moveType))
                 score -= 10;
             break;
         case EFFECT_MIRROR_COAT:
             if (IsBattlerIncapacitated(battlerDef) || gBattleMons[battlerDef].status2 & (STATUS2_CONFUSION)) score--;
             if (predictedMove == MOVE_NONE || GetBattleMoveSplit(predictedMove) == SPLIT_STATUS ||
                 (GetBattleMoveSplit(predictedMove) == SPLIT_PHYSICAL && B_USE_COUNTER_MIRROR_COAT_RIGHT) ||
-                DoesSubstituteBlockMove(battlerAtk, BATTLE_PARTNER(battlerDef), predictedMove))
+                DoesSubstituteBlockMove(battlerAtk, BATTLE_PARTNER(battlerDef), predictedMove, moveType))
                 score -= 10;
             break;
         case EFFECT_ROAR:
@@ -1587,12 +1587,12 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
                  (!DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move) && BattlerHasAbility(battlerDef, ABILITY_OWN_TEMPO, TRUE)) ||
                  (!DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move) && BattlerHasAbility(battlerDef, ABILITY_DISCIPLINE, TRUE)) ||
                  (IsBattlerGrounded(battlerDef) && (GetCurrentTerrain() == STATUS_FIELD_MISTY_TERRAIN)) ||
-                 (DoesSubstituteBlockMove(battlerAtk, battlerDef, move))) &&
+                 (DoesSubstituteBlockMove(battlerAtk, battlerDef, move, moveType))) &&
                 ((gBattleMons[BATTLE_PARTNER(battlerDef)].status2 & STATUS2_CONFUSION) ||
                  (!DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move) && !BattlerHasAbility(BATTLE_PARTNER(battlerDef), ABILITY_OWN_TEMPO, TRUE)) ||
                  (!DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move) && !BattlerHasAbility(BATTLE_PARTNER(battlerDef), ABILITY_DISCIPLINE, TRUE)) ||
                  (IsBattlerGrounded(BATTLE_PARTNER(battlerDef)) && (GetCurrentTerrain() == STATUS_FIELD_MISTY_TERRAIN)) ||
-                 (DoesSubstituteBlockMove(battlerAtk, BATTLE_PARTNER(battlerDef), move)))) {
+                 (DoesSubstituteBlockMove(battlerAtk, BATTLE_PARTNER(battlerDef), move, moveType)))) {
                 score -= 10;
             }
             break;

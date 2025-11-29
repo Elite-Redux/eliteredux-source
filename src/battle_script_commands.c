@@ -1586,7 +1586,7 @@ static void Cmd_adjustdamage(void) {
 
     GET_MOVE_TYPE(gCurrentMove, moveType);
 
-    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove)) goto END;
+    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType)) goto END;
     if (DoesDisguiseBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove)) goto END;
     if (RemainingNoDamageHits(gBattlerTarget) > 0) goto END;
     if (gBattleMons[gBattlerTarget].hp > gBattleMoveDamage) goto END;
@@ -1760,7 +1760,10 @@ static void Cmd_healthbarupdate(void) {
     if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) || (gHitMarker & HITMARKER_PASSIVE_DAMAGE) || gBattleMoveDamage < 0) {
         gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
-        if (gBattleMoveDamage >= 0 && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove) &&
+        Type moveType;
+        GET_MOVE_TYPE(gCurrentMove, moveType)
+
+        if (gBattleMoveDamage >= 0 && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove, moveType) &&
             gVolatileStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE)) {
             PrepareStringBattle(STRINGID_SUBSTITUTEDAMAGED, gActiveBattler);
             FlagSet(FLAG_SYS_DISABLE_DAMAGE_DONE);
@@ -1814,7 +1817,11 @@ static void Cmd_datahpupdate(void) {
 
     if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) || gHitMarker & HITMARKER_PASSIVE_DAMAGE || gBattleMoveDamage < 0) {
         gActiveBattler = GetBattlerForBattleScript(battlerType);
-        if (gBattleMoveDamage >= 0 && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove) &&
+
+        Type moveType;
+        GET_MOVE_TYPE(gCurrentMove, moveType)
+
+        if (gBattleMoveDamage >= 0 && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove, moveType) &&
             gVolatileStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE)) {
             if (gVolatileStructs[gActiveBattler].substituteHP >= gBattleMoveDamage) {
                 if (gTurnStructs[gActiveBattler].dmg == 0) gTurnStructs[gActiveBattler].dmg = gBattleMoveDamage;
@@ -2292,7 +2299,10 @@ void SetMoveEffect(bool32 primary, u32 certain) {
         }
     }
 
-    if (DoesSubstituteBlockMove(gBattlerAttacker, gEffectBattler, gCurrentMove) && affectsUser != MOVE_EFFECT_AFFECTS_USER) RESET_RETURN
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
+
+    if (DoesSubstituteBlockMove(gBattlerAttacker, gEffectBattler, gCurrentMove, moveType) && affectsUser != MOVE_EFFECT_AFFECTS_USER) RESET_RETURN
 
     if (gBattleScripting.moveEffect <= PRIMARY_STATUS_MOVE_EFFECT)  // status change
     {
@@ -4183,7 +4193,9 @@ static int CanPickpocket(int target, int attackerStealing) {
     if (!BATTLER_DAMAGED(target)) return FALSE;
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT) return FALSE;
     if (!BATTLER_HAS_ABILITY(stealer, ability)) return FALSE;
-    if (DoesSubstituteBlockMove(gBattlerAttacker, target, gCurrentMove)) return FALSE;
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
+    if (DoesSubstituteBlockMove(gBattlerAttacker, target, gCurrentMove, moveType)) return FALSE;
     if (!CanStealItem(stealer, stolen, gBattleMons[stolen].item)) return FALSE;
     if (IsStickyHold(target)) return FALSE;
     if (TestSheerForceFlag(gBattlerAttacker, gCurrentMove)) return FALSE;
@@ -5779,9 +5791,12 @@ static void Cmd_yesnoboxstoplearningmove(void) {
 static void Cmd_hitanimation(void) {
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
+
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT) {
         gBattlescriptCurrInstr += 2;
-    } else if (!(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE) || !(DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove)) ||
+    } else if (!(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE) || !(DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove, moveType)) ||
                gVolatileStructs[gActiveBattler].substituteHP == 0) {
         BtlController_EmitHitAnimation(0);
         MarkBattlerForControllerExec(gActiveBattler);
@@ -6641,9 +6656,11 @@ u32 IsAbilityStatusProtected(u32 battler, StatusCheckEnum status) {
 
 u32 JumpIfStandardStatusBlocking(u32 battler, bool32 affectsUser, StatusCheckEnum status) {
     AbilityEnum ability;
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
     if (!affectsUser && gBattleMons[gActiveBattler].status1)
         gBattlescriptCurrInstr = BattleScript_ButItFailed;
-    else if (!affectsUser && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
+    else if (!affectsUser && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove, moveType))
         gBattlescriptCurrInstr = BattleScript_ButItFailed;
     else if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_MISTY_TERRAIN))
         gBattlescriptCurrInstr = BattleScript_MistyTerrainPrevents;
@@ -6734,6 +6751,8 @@ static void Cmd_various(void) {
     const u8* runAgain;
     int battlerType;
     int cmd;
+    int moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
 
     if (gBattleControllerExecFlags) return;
 
@@ -7120,8 +7139,6 @@ static void Cmd_various(void) {
             break;
         case VARIOUS_ON_FAINTED_BY_ATTACKER:
             REQUIRE_NOT(NoAliveMonsForEitherParty())
-            int moveType;
-            GET_MOVE_TYPE(gCurrentMove, moveType)
             for (int i = 0; i < gBattlersCount; i++) {
                 FILTER(IsBattlerAlive(i))
                 ON_ABILITY(
@@ -8802,7 +8819,7 @@ static void Cmd_various(void) {
         case VARIOUS_TRY_DESTROY_ITEM:
             ptr = READ_PTR_INC;
             if (!gBattleMons[gActiveBattler].item || !CanBattlerGetOrLoseItem(gActiveBattler, gBattleMons[gActiveBattler].item) ||
-                IsStickyHold(gActiveBattler) || DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
+                IsStickyHold(gActiveBattler) || DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove, moveType))
                 gBattlescriptCurrInstr = ptr;
             else {
                 RemoveItem(gActiveBattler);
@@ -9676,6 +9693,9 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
     bool8 dontSetBuffers = flags & STAT_BUFF_DONT_SET_BUFFERS;
     int updateMoveEffect;
     AbilityEnum ability;
+    Type moveType;
+
+    GET_MOVE_TYPE(gCurrentMove, moveType)
 
     SetStatChanger(statId, statValue);
 
@@ -9717,7 +9737,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
     if (statValue <= -1)  // Stat decrease.
     {
         if (gSideTimers[GET_BATTLER_SIDE(battler)].mistTimer && !certain && gCurrentMove != MOVE_CURSE &&
-            !(!affectsUser && Infiltrates(gBattlerAttacker, gCurrentMove, INFILTRATE_SCREENS))) {
+            !(!affectsUser && Infiltrates(gBattlerAttacker, gCurrentMove, moveType, INFILTRATE_SCREENS))) {
             if (flags == STAT_BUFF_ALLOW_PTR) {
                 if (gTurnStructs[battler].statLowered) {
                     gBattlescriptCurrInstr = BS_ptr;
@@ -10843,7 +10863,10 @@ static void Cmd_trysetencore(void) {
 }
 
 static void Cmd_painsplitdmgcalc(void) {
-    if (!(DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))) {
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
+
+    if (!(DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType))) {
         s32 hpDiff = (gBattleMons[gBattlerAttacker].hp + gBattleMons[gBattlerTarget].hp) / 2;
         s32 painSplitHp = gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - hpDiff;
         u8* storeLoc = (void*)(&gBattleScripting.painSplitHp);
@@ -11666,8 +11689,10 @@ static void Cmd_jumpifattackandspecialattackcannotfall(void)  // memento
     if (gBattleMons[gBattlerTarget].statStages[STAT_ATK] == MIN_STAT_STAGE && gBattleMons[gBattlerTarget].statStages[STAT_SPATK] == MIN_STAT_STAGE &&
         gBattleCommunication[MISS_TYPE] != B_MSG_PROTECTED)
 #else
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
     if (gBattleCommunication[MISS_TYPE] == B_MSG_PROTECTED || gStatuses3[gBattlerTarget] & STATUS3_SEMI_INVULNERABLE ||
-        IsBattlerProtected(gBattlerTarget, gCurrentMove) || DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))
+        IsBattlerProtected(gBattlerTarget, gCurrentMove) || DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType))
 #endif
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
@@ -12307,18 +12332,18 @@ static void Cmd_settypebasedhalvers(void)  // water and mud sport
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 }
 
-int Infiltrates(int battler, MoveEnum move, InfiltrateType type) {
-    ON_ABILITY(battler, FALSE, gAbilities[ability].onInfiltrate, if (gAbilities[ability].onInfiltrate(battler, move) & type) return TRUE)
+int Infiltrates(int battler, MoveEnum move, Type moveType, InfiltrateType type) {
+    ON_ABILITY(battler, FALSE, gAbilities[ability].onInfiltrate, if (gAbilities[ability].onInfiltrate(battler, move, moveType) & type) return TRUE)
 
     return FALSE;
 }
 
-bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
+bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move, Type moveType) {
     if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE)) return FALSE;
     if (IsSoundMove(battlerAtk, move)) return FALSE;
     if (gBattleMoves[move].flags & FLAG_HIT_IN_SUBSTITUTE) return FALSE;
 
-    if (Infiltrates(battlerAtk, move, INFILTRATE_SUBSTITUTE)) return FALSE;
+    if (Infiltrates(battlerAtk, move, moveType, INFILTRATE_SUBSTITUTE)) return FALSE;
 
     return TRUE;
 }
@@ -12349,7 +12374,9 @@ bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
 }
 
 static void Cmd_jumpifsubstituteblocks(void) {
-    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
+    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType))
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     else
         gBattlescriptCurrInstr += 5;

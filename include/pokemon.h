@@ -215,8 +215,8 @@ typedef struct BaseStats {
     /* 0x03 */ u8 baseSpeed;
     /* 0x04 */ u8 baseSpAttack;
     /* 0x05 */ u8 baseSpDefense;
-    /* 0x06 */ u8 type1;
-    /* 0x07 */ u8 type2;
+    /* 0x06 */ Type type1;
+    /* 0x07 */ Type type2;
     /* 0x08 */ u8 catchRate;
     /* 0x09 */ u16 expYield;
     /* 0x0A */ u16 evYield_HP:2;
@@ -260,8 +260,8 @@ struct BattleMove {
     u16 target;
     u16 argument;
     u8 power;
-    u8 type;
-    u8 type2;
+    Type type;
+    Type type2;
     u8 accuracy;
     u8 pp;
     u8 secondaryEffectChance;

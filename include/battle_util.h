@@ -269,6 +269,7 @@ bool32 IsMoveMakingContact(MoveEnum move, u8 battlerAtk);
 bool32 IsBattlerGrounded(u8 battlerId);
 bool32 IsBattlerGroundedIgnoreType(u8 battlerId);
 int IsSoundMove(int battler, MoveEnum move);
+int IsKeenEdge(int battler, MoveEnum move, Type moveType);
 bool32 IsBattlerAlive(u8 battlerId);
 u8 GetBattleMonMoveSlot(struct BattlePokemon* battleMon, MoveEnum move);
 u32 GetBattlerWeight(u8 battlerId);

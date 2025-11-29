@@ -1167,48 +1167,7 @@ bool32 IsSemiInvulnerable(u8 battlerDef, u16 move) {
 }
 
 bool32 IsMoveEncouragedToHit(u8 battlerAtk, u8 battlerDef, u16 move) {
-    // No Guard and Toxic can hit semi-invulnerable mons
-    if (BattlerHasAbility(battlerDef, ABILITY_NO_GUARD, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_NO_GUARD, FALSE)) return TRUE;
-
-    if (BattlerHasAbility(battlerAtk, ABILITY_DEADEYE, FALSE)) return TRUE;
-
-    if (BattlerHasAbility(battlerAtk, ABILITY_GIFTED_MIND, FALSE) && IS_MOVE_STATUS(move)) return TRUE;
-
-    if (B_TOXIC_NEVER_MISS >= GEN_6 && gBattleMoves[move].effect == EFFECT_TOXIC && IS_BATTLER_OF_TYPE(battlerAtk, TYPE_POISON)) return TRUE;
-
-    if (IsSemiInvulnerable(battlerDef, move)) return FALSE;
-
-    if ((BattlerHasAbility(battlerAtk, ABILITY_ARTILLERY, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_SUPER_SCOPE, FALSE)) &&
-        IsMegaLauncherBoosted(battlerAtk, move))
-        return TRUE;
-
-    if ((BattlerHasAbility(battlerAtk, ABILITY_SWEEPING_EDGE, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_SWEEPING_EDGE_PLUS, FALSE)) &&
-        gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-        return TRUE;
-
-    if (BattlerHasAbility(battlerAtk, ABILITY_SIGHTING_SYSTEM, FALSE)) return TRUE;
-
-    if (BattlerHasAbility(battlerAtk, ABILITY_IRON_BARRAGE, FALSE)) return TRUE;
-
-    // TODO - anticipate protect move?
-
-    // always hits
-    if (gStatuses3[battlerDef] & STATUS3_ALWAYS_HITS || gVolatileStructs[battlerDef].battlerWithSureHit == battlerAtk) return TRUE;
-
-    // discouraged from hitting
-    if (AI_WeatherHasEffect() && (gBattleWeather & WEATHER_SUN_ANY) &&
-        (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
-        return FALSE;
-
-    // increased accuracy but don't always hit
-    if ((AI_WeatherHasEffect() &&
-         (((gBattleWeather & WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE)) ||
-          (((gBattleWeather & WEATHER_HAIL_ANY) && move == MOVE_BLIZZARD)))) ||
-        (gBattleMoves[move].effect == EFFECT_VITAL_THROW) || (gBattleMoves[move].accuracy == 0)) {
-        return TRUE;
-    }
-
-    return FALSE;
+    return GetTotalAccuracy(battlerAtk, battlerDef, move, NULL) == 101;
 }
 
 int HasWeatherBallAndNoForcedTyping(int battler) {
@@ -2181,7 +2140,7 @@ bool32 AI_CanPoison(u8 battlerAtk, u8 battlerDef, u16 move, u16 partnerMove) { r
 
 bool32 AI_CanParalyze(u8 battlerAtk, u8 battlerDef, u16 move, u16 partnerMove) {
     if (!CanBeParalyzed(battlerAtk, battlerDef) || AI_GetMoveEffectiveness(move, battlerAtk, battlerDef) == AI_EFFECTIVENESS_x0 ||
-        gSideStatuses[GetBattlerSide(battlerDef)] & SIDE_STATUS_SAFEGUARD || DoesSubstituteBlockMove(battlerAtk, battlerDef, move) ||
+        gSideStatuses[GetBattlerSide(battlerDef)] & SIDE_STATUS_SAFEGUARD || DoesSubstituteBlockMove(battlerAtk, battlerDef, move, GetTypeBeforeUsingMove(move, battlerAtk)) ||
         PartnerMoveEffectIsStatusSameTarget(BATTLE_PARTNER(battlerAtk), battlerDef, partnerMove))
         return FALSE;
     return TRUE;
@@ -2220,7 +2179,7 @@ bool32 AI_CanBurn(u8 battlerAtk, u8 battlerDef, u16 partnerMove) {
 
 bool32 AI_CanGiveFrostbite(u8 battlerAtk, u8 battlerDef, u8 battlerAtkPartner, u16 move, u16 partnerMove) {
     if (!CanGetFrostbite(battlerDef) || AI_GetMoveEffectiveness(move, battlerAtk, battlerDef) == AI_EFFECTIVENESS_x0 ||
-        DoesSubstituteBlockMove(battlerAtk, battlerDef, move) || PartnerMoveEffectIsStatusSameTarget(battlerAtkPartner, battlerDef, partnerMove)) {
+        DoesSubstituteBlockMove(battlerAtk, battlerDef, move, GetTypeBeforeUsingMove(move, battlerAtk)) || PartnerMoveEffectIsStatusSameTarget(battlerAtkPartner, battlerDef, partnerMove)) {
         return FALSE;
     }
     return TRUE;
@@ -2228,7 +2187,7 @@ bool32 AI_CanGiveFrostbite(u8 battlerAtk, u8 battlerDef, u8 battlerAtkPartner, u
 
 bool32 AI_CanCauseBleed(u8 battlerAtk, u8 battlerDef, u8 battlerAtkPartner, u16 move, u16 partnerMove) {
     if (!CanBleed(battlerDef) || AI_GetMoveEffectiveness(move, battlerAtk, battlerDef) == AI_EFFECTIVENESS_x0 ||
-        DoesSubstituteBlockMove(battlerAtk, battlerDef, move) || PartnerMoveEffectIsStatusSameTarget(battlerAtkPartner, battlerDef, partnerMove)) {
+        DoesSubstituteBlockMove(battlerAtk, battlerDef, move, GetTypeBeforeUsingMove(move, battlerAtk)) || PartnerMoveEffectIsStatusSameTarget(battlerAtkPartner, battlerDef, partnerMove)) {
         return FALSE;
     }
     return TRUE;
@@ -2238,7 +2197,7 @@ bool32 AI_CanBeInfatuated(u8 battlerAtk, u8 battlerDef, u8 atkGender, u8 defGend
 
 u32 ShouldTryToFlinch(u8 battlerAtk, u8 battlerDef, u16 move) {
     if (BattlerHasAbility(battlerDef, ABILITY_INNER_FOCUS, TRUE) || BattlerHasAbility(battlerDef, ABILITY_UNLOCKED_POTENTIAL, TRUE) ||
-        DoesSubstituteBlockMove(battlerAtk, battlerDef, move) || GetWhoStrikesFirst(battlerAtk, battlerDef, TRUE) == 1)  // opponent goes first
+        DoesSubstituteBlockMove(battlerAtk, battlerDef, move, GetTypeBeforeUsingMove(move, battlerAtk)) || GetWhoStrikesFirst(battlerAtk, battlerDef, TRUE) == 1)  // opponent goes first
     {
         return 0;  // don't try to flinch
     } else if ((gBattleMons[battlerDef].status1 & STATUS1_SLEEP) && !HasMoveEffect(battlerDef, EFFECT_SLEEP_TALK) && !HasMoveEffect(battlerDef, EFFECT_SNORE)) {
@@ -2264,7 +2223,7 @@ bool32 ShouldFakeOut(u8 battlerAtk, u8 battlerDef, u16 move) {
     if (AI_GetHoldEffect(battlerAtk) == HOLD_EFFECT_CHOICE_BAND && CountUsablePartyMons(battlerAtk) == 0)
         return FALSE;  // don't lock attacker into fake out if can't switch out
 
-    if (gVolatileStructs[battlerAtk].isFirstTurn && ShouldTryToFlinch(battlerAtk, battlerDef, move) && !DoesSubstituteBlockMove(battlerAtk, battlerDef, move))
+    if (gVolatileStructs[battlerAtk].isFirstTurn && ShouldTryToFlinch(battlerAtk, battlerDef, move) && !DoesSubstituteBlockMove(battlerAtk, battlerDef, move, GetTypeBeforeUsingMove(move, battlerAtk)))
         return TRUE;
 
     return FALSE;

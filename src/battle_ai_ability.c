@@ -241,7 +241,7 @@ int ScoreAttackAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int 
             return AI_SCORE_ADJUST(10, AI_SCORE_POISON_MOVE(battlerDef) + AI_SCORE_PARALYSIS(battlerDef) + AI_SCORE_BLEED(battlerDef));
 
         case ABILITY_DEEP_CUTS:
-            REQUIRE(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+            REQUIRE(IsKeenEdge(battlerAtk, move, moveType))
             return AI_SCORE_ADJUST(50, AI_SCORE_BLEED(battlerDef));
 
         case ABILITY_FLAMING_JAWS:
@@ -261,7 +261,7 @@ int ScoreAttackAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int 
             return AI_SCORE_BREAK_SCREENS(battlerDef);
 
         case ABILITY_PINNACLE_BLADE:
-            REQUIRE(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+            REQUIRE(IsKeenEdge(battlerAtk, move, moveType))
             return AI_SCORE_BREAK_PROTECT + AI_SCORE_BREAK_SCREENS(battlerDef) + AI_SCORE_BREAK_SUBSTITUTE;
 
         case ABILITY_FEARMONGER:
@@ -284,7 +284,7 @@ int ScoreAttackAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int 
             return AI_SCORE_ADJUST(10, AI_SCORE_TOXIC(battlerDef) + AI_SCORE_BURN_MOVE(battlerDef));
 
         case ABILITY_MOLTEN_BLADES:
-            REQUIRE(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+            REQUIRE(IsKeenEdge(battlerAtk, move, moveType))
             return AI_SCORE_ADJUST(20, AI_SCORE_BURN_MOVE(battlerDef));
 
         case ABILITY_DEAD_POWER:

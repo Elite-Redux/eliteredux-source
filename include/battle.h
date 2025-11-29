@@ -636,7 +636,7 @@ struct BattleStruct
     u8 expGetterMonId;
     u8 hasBattleInputStarted:1; // Speed up battle
     u8 wildVictorySong;
-    u8 dynamicMoveType;
+    Type dynamicMoveType;
     u8 wrappedBy[MAX_BATTLERS_COUNT];
     u16 assistPossibleMoves[PARTY_SIZE * MAX_MON_MOVES]; // Each of mons can know max 4 moves.
     u8 focusPunchBattlerId;
@@ -719,7 +719,7 @@ struct BattleStruct
     u8 magnitudeBasePower;
     u8 presentBasePower;
     u8 roostTypes[MAX_BATTLERS_COUNT][3];
-    bool8 ateBoost[MAX_BATTLERS_COUNT];
+    Type ateBoost[MAX_BATTLERS_COUNT];
     u8 activeAbilityPopUps; // as bits for each battler
     u8 abilityPopUpSpriteIds[MAX_BATTLERS_COUNT][2];    // two per battler
     u8 activeExtraskillPopUps;

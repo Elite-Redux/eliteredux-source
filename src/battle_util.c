@@ -129,7 +129,7 @@ u8 GetBattlerBattleMoveTargetFlags(MoveEnum moveId, u8 battler) {
         gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
         return MOVE_TARGET_BOTH;
     else if ((BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE) || BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE_PLUS)) &&
-             (gBattleMoves[moveId].flags & FLAG_KEEN_EDGE_BOOST) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
+             IsKeenEdge(battler, moveId, GetTypeBeforeUsingMove(moveId, battler)) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
         return MOVE_TARGET_BOTH;
     else if ((BATTLER_HAS_ABILITY(battler, ABILITY_AMPLIFIER) || BATTLER_HAS_ABILITY(battler, ABILITY_BASS_BOOSTED)) && (IsSoundMove(battler, moveId)) &&
              gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
@@ -2711,7 +2711,7 @@ u8 DoBattlerEndTurnEffects(void) {
                 else
                     SetAbilityState(gActiveBattler, ABILITY_SIDEWINDER, FALSE);
 
-                if (gStatuses4[gActiveBattler] & STATUS4_CUTTHROAT && gBattleMoves[gLastMoves[gActiveBattler]].flags & FLAG_KEEN_EDGE_BOOST)
+                if (gStatuses4[gActiveBattler] & STATUS4_CUTTHROAT && IsKeenEdge(gActiveBattler, gLastMoves[gActiveBattler], GetTypeBeforeUsingMove(gLastMoves[gActiveBattler], gActiveBattler)))
                     gStatuses4[gActiveBattler] &= ~STATUS4_CUTTHROAT;
 
                 gBattleStruct->turnEffectsTracker++;
@@ -5139,8 +5139,10 @@ static u8 TrySetMicleBerry(u32 battlerId, u32 itemId, bool32 end2) {
 }
 
 static u8 DamagedStatBoostBerryEffect(u8 battlerId, u8 statId, u8 split) {
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
     if (IsBattlerAlive(battlerId) && TARGET_TURN_DAMAGED && CanRaiseStat(battlerId, statId) &&
-        !DoesSubstituteBlockMove(gBattlerAttacker, battlerId, gCurrentMove) && GetBattleMoveSplit(gCurrentMove) == split) {
+        !DoesSubstituteBlockMove(gBattlerAttacker, battlerId, gCurrentMove, moveType) && GetBattleMoveSplit(gCurrentMove) == split) {
         BufferStatChange(battlerId, statId, STRINGID_STATROSE);
 
         gEffectBattler = battlerId;
@@ -6068,7 +6070,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_JABOCA_BERRY:  // consume and damage attacker if used physical move
-                        if (IsBattlerAlive(battlerId) && TARGET_TURN_DAMAGED && !DoesSubstituteBlockMove(gBattlerAttacker, battlerId, gCurrentMove) &&
+                        if (IsBattlerAlive(battlerId) && TARGET_TURN_DAMAGED && !DoesSubstituteBlockMove(gBattlerAttacker, battlerId, gCurrentMove, moveType) &&
                             IS_MOVE_PHYSICAL(gCurrentMove) && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker)) {
                             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
                             if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
@@ -6081,7 +6083,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         }
                         break;
                     case HOLD_EFFECT_ROWAP_BERRY:  // consume and damage attacker if used special move
-                        if (IsBattlerAlive(battlerId) && TARGET_TURN_DAMAGED && !DoesSubstituteBlockMove(gBattlerAttacker, battlerId, gCurrentMove) &&
+                        if (IsBattlerAlive(battlerId) && TARGET_TURN_DAMAGED && !DoesSubstituteBlockMove(gBattlerAttacker, battlerId, gCurrentMove, moveType) &&
                             IS_MOVE_SPECIAL(gCurrentMove) && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker)) {
                             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
                             if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
@@ -6101,7 +6103,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         break;
                     case HOLD_EFFECT_STICKY_BARB:
                         if (TARGET_TURN_DAMAGED && (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) && IsMoveMakingContact(gCurrentMove, gBattlerAttacker) &&
-                            !DoesSubstituteBlockMove(gBattlerAttacker, battlerId, gCurrentMove) && IsBattlerAlive(gBattlerAttacker) &&
+                            !DoesSubstituteBlockMove(gBattlerAttacker, battlerId, gCurrentMove, moveType) && IsBattlerAlive(gBattlerAttacker) &&
                             CanStealItem(gBattlerAttacker, gBattlerTarget, gBattleMons[gBattlerTarget].item) &&
                             gBattleMons[gBattlerAttacker].item == ITEM_NONE) {
                             // No sticky hold checks.
@@ -6450,7 +6452,7 @@ bool32 IsBattlerProtected(u8 battlerId, MoveEnum move) {
         return FALSE;
     else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DEMOLITIONIST) && gVolatileStructs[gBattlerAttacker].readiedAction)
         return FALSE;
-    else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+    else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PINNACLE_BLADE) && IsKeenEdge(battlerId, move, moveType))
         return FALSE;
     else if (!(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED))
         return FALSE;
@@ -7278,11 +7280,11 @@ static bool32 CanEvolve(u32 species) {
     return FALSE;
 }
 
-void SetSwapDamageCategory(int battler, int target, MoveEnum move) {
+void SetSwapDamageCategory(int battler, int target, MoveEnum move, Type moveType) {
     switch (gBattleMoves[move].splitFlag) {
         default:
             gSwapDamageCategory = FALSE;
-            ON_ABILITY(battler, FALSE, gAbilities[ability].onSwapSplit, gSwapDamageCategory = gAbilities[ability].onSwapSplit(battler, move);
+            ON_ABILITY(battler, FALSE, gAbilities[ability].onSwapSplit, gSwapDamageCategory = gAbilities[ability].onSwapSplit(battler, move, moveType);
                        if (gSwapDamageCategory) break)
             break;
 
@@ -7585,7 +7587,7 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
     // reflect, light screen, aurora veil
     if (((gSideStatuses[defSide] & SIDE_STATUS_REFLECT && IS_MOVE_PHYSICAL(move)) ||
          (gSideStatuses[defSide] & SIDE_STATUS_LIGHTSCREEN && IS_MOVE_SPECIAL(move)) || (gSideStatuses[defSide] & SIDE_STATUS_AURORA_VEIL)) &&
-        !Infiltrates(battlerAtk, move, INFILTRATE_SCREENS | INFILTRATE_BREAK_SCREENS) && !isCrit) {
+        !Infiltrates(battlerAtk, move, moveType, INFILTRATE_SCREENS | INFILTRATE_BREAK_SCREENS) && !isCrit) {
         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
             MulModifier(&finalModifier, UQ_4_12(0.66));
         else
@@ -7732,7 +7734,7 @@ static s32 DoMoveDamageCalc(MoveEnum move,
                             bool32 updateFlags,
                             u16* typeEffectivenessModifier) {
     s32 dmg;
-    SetSwapDamageCategory(battlerAtk, battlerDef, move);
+    SetSwapDamageCategory(battlerAtk, battlerDef, move, *moveType);
     *typeEffectivenessModifier = CalcTypeEffectivenessMultiplier(move, *moveType, battlerAtk, battlerDef, updateFlags);
     dmg = DoMoveDamageCalcInternal(move, battlerAtk, battlerDef, *moveType, fixedBasePower, critRoll, updateFlags, *typeEffectivenessModifier);
 
@@ -9009,7 +9011,8 @@ AbilityEnum IsUnaware(int battler) {
 }
 
 int HandleAttackerAbility(int abilityNumber, int battler, int target, MoveEnum move) {
-    AbilityEnum ability, moveType;
+    AbilityEnum ability;
+    Type moveType;
     u8 numPossibleAbilities = GetNumPossibleAbilitiesForBattler();
 
     if (abilityNumber > numPossibleAbilities) return FALSE;
@@ -9048,7 +9051,8 @@ int CheckHalfHpAbility(int battlerDef, int battlerAtk) {
 }
 
 int HandleDefenderAbility(int abilityNumber, int battler, int attacker, MoveEnum move) {
-    AbilityEnum ability, moveType;
+    AbilityEnum ability;
+    Type moveType;
     u8 numPossibleAbilities = GetNumPossibleAbilitiesForBattler();
 
     if (battler >= gBattlersCount) return FALSE;
@@ -9235,7 +9239,7 @@ int HandleEndTurnAbility(int abilityNumber, int battler) {
     return TRUE;
 }
 
-int IsDance(int attacker, MoveEnum move) { return DoesMoveMatchFlag(attacker, move, MOVE_FLAG_DANCE); }
+int IsDance(int attacker, MoveEnum move) { return DoesMoveMatchFlag(attacker, move, TYPE_NORMAL, MOVE_FLAG_DANCE); }
 
 int HasAnyStatusOrAbility(int battler) {
     if (gBattleMons[battler].status1 && STATUS1_ANY) return TRUE;
@@ -9354,13 +9358,15 @@ AbilityEnum HasSkillLink(int battler) {
     return FALSE;
 }
 
-int IsMegaLauncherBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_MEGA_LAUNCHER); }
+int IsMegaLauncherBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, TYPE_NORMAL, MOVE_FLAG_MEGA_LAUNCHER); }
 
-int IsIronFistBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_PUNCH); }
+int IsIronFistBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, TYPE_NORMAL, MOVE_FLAG_PUNCH); }
 
-int IsStrikerBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_KICK); }
+int IsStrikerBoosted(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, TYPE_NORMAL, MOVE_FLAG_KICK); }
 
-int IsSoundMove(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, MOVE_FLAG_SOUND); }
+int IsSoundMove(int battler, MoveEnum move) { return DoesMoveMatchFlag(battler, move, TYPE_NORMAL, MOVE_FLAG_SOUND); }
+
+int IsKeenEdge(int battler, MoveEnum move, Type moveType) { return DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE); }
 
 int IsPoisonedForMove(int battler) {
     return gBattleMons[battler].status1 & STATUS1_POISON_ANY || IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN);
