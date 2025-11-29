@@ -67,11 +67,11 @@ functions instead of at the top of the file with the other declarations.
 static bool8 DoesMoveBoostStats(MoveEnum move);
 static void UpdateMoveResultFlags(u16 modifier);
 
-extern const u8 *const gBattleScriptsForMoveEffects[];
-extern const u8 *const gBattlescriptsForBallThrow[];
-extern const u8 *const gBattlescriptsForRunningByItem[];
-extern const u8 *const gBattlescriptsForUsingItem[];
-extern const u8 *const gBattlescriptsForSafariActions[];
+extern const u8* const gBattleScriptsForMoveEffects[];
+extern const u8* const gBattlescriptsForBallThrow[];
+extern const u8* const gBattlescriptsForRunningByItem[];
+extern const u8* const gBattlescriptsForUsingItem[];
+extern const u8* const gBattlescriptsForSafariActions[];
 
 static const u8 sPkblToEscapeFactor[][3] = {{[B_MSG_MON_CURIOUS] = 0, [B_MSG_MON_ENTHRALLED] = 0, [B_MSG_MON_IGNORED] = 0},
                                             {[B_MSG_MON_CURIOUS] = 3, [B_MSG_MON_ENTHRALLED] = 5, [B_MSG_MON_IGNORED] = 0},
@@ -98,7 +98,7 @@ static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] = {
 };
 
 u8 CalcBeatUpPower(void) {
-    struct Pokemon *party;
+    struct Pokemon* party;
     u8 basePower;
     SpeciesEnum species;
 
@@ -1197,7 +1197,7 @@ void UpdateSentPokesToOpponentValue(u8 battler) {
     }
 }
 
-void BattleScriptPush(const u8 *bsPtr) {
+void BattleScriptPush(const u8* bsPtr) {
     gBattleResources->battleScriptsStack->ptr[gBattleResources->battleScriptsStack->size++] = bsPtr;
     BattleScriptSaveCurrentStackData();
 }
@@ -1217,7 +1217,7 @@ void BattleScriptSaveCurrentStackData() {
 
 void BattleScriptPushCursor() { BattleScriptPush(gBattlescriptCurrInstr); }
 
-void BattleScriptCall(const u8 *command) {
+void BattleScriptCall(const u8* command) {
     BattleScriptPushCursor();
     gBattlescriptCurrInstr = command;
 }
@@ -1228,7 +1228,7 @@ void BattleScriptPop(void) {
 }
 
 void ReadActiveScriptInitialStackState() {
-    struct SavedStackData *data = &gBattleResources->battleScriptsStack->savedStackData[gBattleResources->battleScriptsStack->size];
+    struct SavedStackData* data = &gBattleResources->battleScriptsStack->savedStackData[gBattleResources->battleScriptsStack->size];
     gBattleScripting.abilityPopupOverwrite = data->abilityOverride;
     gBattleCommunication[MULTISTRING_CHOOSER] = data->multistringChooser;
     gStackBattler1 = data->stackBattler1;
@@ -1314,7 +1314,7 @@ u8 TrySetCantSelectMoveBattleScript(void) {
     u8 moveId = gBattleResources->bufferB[gActiveBattler][2] & ~(RET_MEGA_EVOLUTION);
     u32 move = gBattleMons[gActiveBattler].moves[moveId];
     u32 holdEffect = GetBattlerHoldEffect(gActiveBattler, TRUE);
-    u16 *choicedMove = &gBattleStruct->choicedMove[gActiveBattler];
+    u16* choicedMove = &gBattleStruct->choicedMove[gActiveBattler];
 
     if (gVolatileStructs[gActiveBattler].disabledMove == move && move != MOVE_NONE) {
         gBattleScripting.battler = gActiveBattler;
@@ -1519,7 +1519,7 @@ u8 TrySetCantSelectMoveBattleScript(void) {
 // Seems unused?
 u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check) {
     u8 holdEffect = GetBattlerHoldEffect(battlerId, TRUE);
-    u16 *choicedMove = &gBattleStruct->choicedMove[battlerId];
+    u16* choicedMove = &gBattleStruct->choicedMove[battlerId];
     s32 i;
 
     gPotentialItemEffectBattler = battlerId;
@@ -2132,7 +2132,8 @@ u8 DoFieldEndTurnEffects(void) {
                             if (GetBattlerSide(gBattlerAttacker) == side) break;
                         }
 
-                        if (gSideTimers[side].swampTimer && !gSideTimers[side].started.swamp && !(getMonotypeChampType() == TYPE_WATER) && --gSideTimers[side].swampTimer == 0) {
+                        if (gSideTimers[side].swampTimer && !gSideTimers[side].started.swamp && !(getMonotypeChampType() == TYPE_WATER) &&
+                            --gSideTimers[side].swampTimer == 0) {
                             BattleScriptExecute(BattleScript_TheSwampDisappeared);
                             effect++;
                         }
@@ -2382,7 +2383,8 @@ u8 DoBattlerEndTurnEffects(void) {
                 effect++;
                 break;
             case ENDTURN_TOXIC_WASTE_DAMAGE:
-                if (getMonotypeChampType() == TYPE_POISON && gActiveBattler == B_SIDE_PLAYER) effect = gAbilities[ABILITY_TOXIC_SPILL].onEndTurn(ABILITY_NONE, MAX_BATTLERS_COUNT);
+                if (getMonotypeChampType() == TYPE_POISON && gActiveBattler == B_SIDE_PLAYER)
+                    effect = gAbilities[ABILITY_TOXIC_SPILL].onEndTurn(ABILITY_NONE, MAX_BATTLERS_COUNT);
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_POISON:  // poison
@@ -2530,7 +2532,9 @@ u8 DoBattlerEndTurnEffects(void) {
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_SALT_CURE:
-                if (((getMonotypeChampType() == TYPE_ROCK && GET_BATTLER_SIDE(gActiveBattler) == B_SIDE_PLAYER) || (gStatuses4[gActiveBattler] & STATUS4_SALT_CURE)) && gBattleMons[gActiveBattler].hp != 0) {
+                if (((getMonotypeChampType() == TYPE_ROCK && GET_BATTLER_SIDE(gActiveBattler) == B_SIDE_PLAYER) ||
+                     (gStatuses4[gActiveBattler] & STATUS4_SALT_CURE)) &&
+                    gBattleMons[gActiveBattler].hp != 0) {
                     MAGIC_GUARD_CHECK;
                     gBattleMoveDamage = (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_WATER) || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_WATER))
                                             ? gBattleMons[gActiveBattler].maxHP / 4
@@ -2933,7 +2937,7 @@ bool8 HandleWishPerishSongOnTurnEnd(void) {
             }
             // Hm...
             {
-                u8 *state = &gBattleStruct->wishPerishSongState;
+                u8* state = &gBattleStruct->wishPerishSongState;
                 *state = 2;
                 gBattleStruct->wishPerishSongBattlerId = 0;
             }
@@ -3077,7 +3081,7 @@ u16 IsPowderImmune(int battler, int checkMoldBreaker) {
 
 u8 AtkCanceller_UnableToUseMove(void) {
     u8 effect = 0;
-    s32 *bideDmg = &gBattleScripting.bideDmg;
+    s32* bideDmg = &gBattleScripting.bideDmg;
     do {
         switch (gBattleStruct->atkCancellerTracker) {
             case CANCELLER_FLAGS:  // flags clear
@@ -3407,7 +3411,7 @@ u8 AtkCanceller_UnableToUseMove(void) {
                         break;
 
                     case MULTIHIT_BEAT_UP: {
-                        struct Pokemon *party;
+                        struct Pokemon* party;
                         int i;
 
                         if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
@@ -3456,12 +3460,15 @@ MultihitType GetMultihitType(int battler, MoveEnum move) {
 
     switch (gBattleMoves[gCurrentMove].effect) {
         case EFFECT_MULTI_HIT:
+            if (move == MOVE_WATER_SHURIKEN && BattlerHasAbility(battler, ABILITY_GIANT_SHURIKEN, FALSE)) return MULTIHIT_SINGLE;
+
             if (HasSkillLink(battler)) return MULTIHIT_FIVE;
+
             if (move == MOVE_WATER_SHURIKEN && BattlerHasAbility(battler, ABILITY_BATTLE_BOND, FALSE) && gBattleMons[battler].species == SPECIES_GRENINJA_ASH)
                 return MULTIHIT_THREE;
-            else if (move == MOVE_WATER_SHURIKEN && BattlerHasAbility(battler, ABILITY_GIANT_SHURIKEN, FALSE))
-                return MULTIHIT_SINGLE;
+
             if (GetBattlerHoldEffect(battler, FALSE) == HOLD_EFFECT_LOADED_DICE) return MULTIHIT_FOUR_OR_FIVE;
+
             return MULTIHIT_TWO_TO_FIVE;
 
         case EFFECT_DOUBLE_HIT:
@@ -3484,7 +3491,7 @@ MultihitType GetMultihitType(int battler, MoveEnum move) {
 }
 
 bool8 HasNoMonsToSwitch(u8 battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2) {
-    struct Pokemon *party;
+    struct Pokemon* party;
     u8 id1, id2;
     s32 i;
 
@@ -3657,7 +3664,7 @@ bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum mo
     return TRUE;
 }
 
-bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer) {
+bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8* timer) {
     if (!(gFieldStatuses & statusFlag) && !((gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) == STATUS_FIELD_TERRAIN_PERMANENT)) {
         gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;
         gFieldStatuses |= statusFlag;
@@ -4744,7 +4751,7 @@ bool32 CanBattlerEscape(u32 battlerId)  // no ability check
         return TRUE;
 }
 
-void BattleScriptExecute(const u8 *BS_ptr) {
+void BattleScriptExecute(const u8* BS_ptr) {
     gBattlescriptCurrInstr = BS_ptr;
     gBattleResources->battleCallbackStack->function[gBattleResources->battleCallbackStack->size++] = gBattleMainFunc;
     gBattleMainFunc = RunBattleScriptCommands_PopCallbacksStack;
@@ -4752,7 +4759,7 @@ void BattleScriptExecute(const u8 *BS_ptr) {
     BattleScriptSaveCurrentStackData();
 }
 
-void BattleScriptPushCursorAndCallback(const u8 *BS_ptr) {
+void BattleScriptPushCursorAndCallback(const u8* BS_ptr) {
     BattleScriptCall(BS_ptr);
     gBattleResources->battleCallbackStack->function[gBattleResources->battleCallbackStack->size++] = gBattleMainFunc;
     gBattleMainFunc = RunBattleScriptCommands;
@@ -4827,7 +4834,7 @@ bool8 IsEvasionClauseDisablingMove(u8 battlerId, MoveEnum move) {
 
 bool8 IsSleepDisabled(u8 battlerId) {
     // Sleep Clause
-    struct Pokemon *party;
+    struct Pokemon* party;
     u8 asleepmons = 0;
     u8 i;
 
@@ -4842,7 +4849,7 @@ bool8 IsSleepDisabled(u8 battlerId) {
             asleepmons++;
     }
 
-    if (asleepmons != 0 && !(getMonotypeChampType() == TYPE_DARK && GetBattlerSide(battlerId) == B_SIDE_PLAYER)) // AI Sleep Clause disabled for Monochamp Dark
+    if (asleepmons != 0 && !(getMonotypeChampType() == TYPE_DARK && GetBattlerSide(battlerId) == B_SIDE_PLAYER))  // AI Sleep Clause disabled for Monochamp Dark
         return TRUE;
     else
         return FALSE;
@@ -5514,7 +5521,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         break;
                     case HOLD_EFFECT_RESTORE_PP:
                         if (!moveTurn) {
-                            struct Pokemon *mon;
+                            struct Pokemon* mon;
                             u8 ppBonuses;
                             MoveEnum move;
 
@@ -6529,7 +6536,7 @@ bool32 IsBattlerAlive(u8 battlerId) {
         return TRUE;
 }
 
-u8 GetBattleMonMoveSlot(struct BattlePokemon *battleMon, MoveEnum move) {
+u8 GetBattleMonMoveSlot(struct BattlePokemon* battleMon, MoveEnum move) {
     u8 i;
 
     for (i = 0; i < 4; i++) {
@@ -6618,7 +6625,7 @@ u32 GetMoveTargetCount(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
 
 u16 DivideModifier(u16 mod1, u16 mod2) { return (((u32)mod1) << UQ_4_12_PRECISION) / mod2; }
 
-void MulModifier(u16 *modifier, u16 val) { *modifier = UQ_4_12_TO_INT((*modifier * val) + UQ_4_12_ROUND); }
+void MulModifier(u16* modifier, u16 val) { *modifier = UQ_4_12_TO_INT((*modifier * val) + UQ_4_12_ROUND); }
 
 u32 ApplyModifier(u16 modifier, u32 val) { return UQ_4_12_TO_INT((modifier * val) + UQ_4_12_ROUND); }
 
@@ -6862,8 +6869,10 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
     // move-specific base power changes
     switch (move) {
         case MOVE_WATER_SHURIKEN:
-            if (gBattleMons[battlerAtk].species == SPECIES_GRENINJA_ASH) basePower = 20;
-            else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GIANT_SHURIKEN)) basePower = 100;
+            if (gBattleMons[battlerAtk].species == SPECIES_GRENINJA_ASH)
+                basePower = 20;
+            else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GIANT_SHURIKEN))
+                basePower = 100;
             break;
         case MOVE_DRAGON_DARTS:
             if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PARENTAL_BOND)) basePower = basePower * 5 / 4;
@@ -6901,7 +6910,7 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
 #undef RESISTANCE
 
 u16 CalculateAbilityMultipliers(
-    int battlerAtk, int battlerDef, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistanceMultiplier) {
+    int battlerAtk, int battlerDef, MoveEnum move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier) {
     u16 multiplier = UQ_4_12(1.0);
     int hasFortKnox = HasFortKnox(battlerDef);
 
@@ -7196,7 +7205,7 @@ static u32 CalcAttackStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
         statBattler = battlerDef;
     } else if (gBattleMoves[move].effect == EFFECT_BODY_PRESS) {
         atkStatToUse = STAT_DEF;
-    }  else if (getMonotypeChampType() == TYPE_ICE && GetBattlerSide(battlerDef) == B_SIDE_PLAYER) {
+    } else if (getMonotypeChampType() == TYPE_ICE && GetBattlerSide(battlerDef) == B_SIDE_PLAYER) {
         // Monotype Champ Ice uses Speed to calculate attacks
         atkStatToUse = STAT_SPEED;
     }
@@ -7393,10 +7402,10 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
 #endif
     }
 
-    //Extra Skill
-    if(GET_BATTLER_SIDE(battlerDef) != B_SIDE_PLAYER && GetBattlerHoldEffect(battlerDef, TRUE) != HOLD_EFFECT_EVIOLITE && isExtraSkillEnabled(BATTLE_EVENT_EVIOLITE)){
-        if (CanEvolve(gBattleMons[battlerDef].species))
-            MulModifier(&modifier, UQ_4_12(1.5));
+    // Extra Skill
+    if (GET_BATTLER_SIDE(battlerDef) != B_SIDE_PLAYER && GetBattlerHoldEffect(battlerDef, TRUE) != HOLD_EFFECT_EVIOLITE &&
+        isExtraSkillEnabled(BATTLE_EVENT_EVIOLITE)) {
+        if (CanEvolve(gBattleMons[battlerDef].species)) MulModifier(&modifier, UQ_4_12(1.5));
     }
 
     return ApplyModifier(modifier, defStat);
@@ -7716,12 +7725,12 @@ s32 DoMoveDamageCalcInternal(
 static s32 DoMoveDamageCalc(MoveEnum move,
                             u8 battlerAtk,
                             u8 battlerDef,
-                            u8 *moveType,
+                            u8* moveType,
                             s32 fixedBasePower,
                             u8 critRoll,
                             bool32 randomFactor,
                             bool32 updateFlags,
-                            u16 *typeEffectivenessModifier) {
+                            u16* typeEffectivenessModifier) {
     s32 dmg;
     SetSwapDamageCategory(battlerAtk, battlerDef, move);
     *typeEffectivenessModifier = CalcTypeEffectivenessMultiplier(move, *moveType, battlerAtk, battlerDef, updateFlags);
@@ -7754,7 +7763,7 @@ static s32 DoMoveDamageCalc(MoveEnum move,
     return dmg;
 }
 
-s32 DoMoveDamageCalcBattleMenu(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 *moveType, u8 critRoll, u8 randomFactor, u16 *typeEffectivenessModifier) {
+s32 DoMoveDamageCalcBattleMenu(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8* moveType, u8 critRoll, u8 randomFactor, u16* typeEffectivenessModifier) {
     s32 dmg = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, 0, critRoll, FALSE, FALSE, typeEffectivenessModifier);
 
     if (IsAbilityOnSide(battlerDef, ABILITY_BAD_LUCK) || IsAbilityOnSide(battlerDef, ABILITY_BAD_OMEN)) randomFactor = 16;
@@ -7768,19 +7777,19 @@ s32 DoMoveDamageCalcBattleMenu(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 *
     return dmg;
 }
 
-s32 CalculateMoveDamage(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 *moveType, s32 fixedBasePower, u8 critRoll, bool32 randomFactor, bool32 updateFlags) {
+s32 CalculateMoveDamage(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8* moveType, s32 fixedBasePower, u8 critRoll, bool32 randomFactor, bool32 updateFlags) {
     u16 typeEffectiveness;
     return DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, fixedBasePower, critRoll, randomFactor, updateFlags, &typeEffectiveness);
 }
 
 // for AI - get move damage and effectiveness with one function call
-s32 CalculateMoveDamageAndEffectiveness(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 *moveType, u16 *typeEffectivenessModifier) {
+s32 CalculateMoveDamageAndEffectiveness(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8* moveType, u16* typeEffectivenessModifier) {
     int val = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, 0, CRIT_ROLL_ONLY_IF_GUARANTEED, FALSE, FALSE, typeEffectivenessModifier);
     gSwapDamageCategory = FALSE;
     return val;
 }
 
-int CalcMoveDamageAi(MoveEnum move, int battlerAtk, int battlerDef, u8 *moveType, int fixedBasePower, struct MoveState *moveState) {
+int CalcMoveDamageAi(MoveEnum move, int battlerAtk, int battlerDef, u8* moveType, int fixedBasePower, struct MoveState* moveState) {
     u16 typeEffectivenessModifier;
     int val = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, fixedBasePower, CRIT_ROLL_ONLY_IF_GUARANTEED, 0, FALSE, &typeEffectivenessModifier);
 
@@ -7793,7 +7802,7 @@ int CalcMoveDamageAi(MoveEnum move, int battlerAtk, int battlerDef, u8 *moveType
     return val;
 }
 
-void MulByTypeEffectiveness(u16 *modifier, MoveEnum move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities) {
+void MulByTypeEffectiveness(u16* modifier, MoveEnum move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities) {
     u16 mod = GetTypeModifier(moveType, defType, battlerAtk, battlerDef);
 
     int abilityModified = FALSE;
@@ -8102,10 +8111,10 @@ SpeciesEnum GetWishMegaEvolutionSpecies(SpeciesEnum preEvoSpecies, MoveEnum move
 
 bool32 CanMegaEvolve(u8 battlerId) {
     u32 itemId, species;
-    struct Pokemon *mon;
+    struct Pokemon* mon;
     u8 battlerPosition = GetBattlerPosition(battlerId);
     u8 partnerPosition = GetBattlerPosition(BATTLE_PARTNER(battlerId));
-    struct MegaEvolutionData *mega = &(((struct ChooseMoveStruct *)(&gBattleResources->bufferA[gActiveBattler][4]))->mega);
+    struct MegaEvolutionData* mega = &(((struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]))->mega);
 
     // Check if Player has a Mega Ring and the appropriate flag is set
     if ((GetBattlerPosition(battlerId) == B_POSITION_PLAYER_LEFT ||
@@ -8199,7 +8208,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
 // || gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED check for transformed mon before reverting
 {
     u32 i, currSpecies;
-    struct Pokemon *party = (side == B_SIDE_PLAYER) ? gPlayerParty : gEnemyParty;
+    struct Pokemon* party = (side == B_SIDE_PLAYER) ? gPlayerParty : gEnemyParty;
 
     currSpecies = GetMonData(&party[monId], MON_DATA_SPECIES, NULL);
     for (i = 0; i < ARRAY_COUNT(gUndoFormChangeTable); i++) {
@@ -8252,12 +8261,12 @@ bool32 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId) {
 }
 
 u32 GetIllusionMonSpecies(u32 battlerId) {
-    struct Pokemon *illusionMon = GetIllusionMonPtr(battlerId);
+    struct Pokemon* illusionMon = GetIllusionMonPtr(battlerId);
     if (illusionMon != NULL) return GetMonData(illusionMon, MON_DATA_SPECIES);
     return SPECIES_NONE;
 }
 
-struct Pokemon *GetIllusionMonPtr(u32 battlerId) {
+struct Pokemon* GetIllusionMonPtr(u32 battlerId) {
     if (gBattleStruct->illusion[battlerId].broken) return NULL;
     if (!gBattleStruct->illusion[battlerId].set) {
         if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
@@ -8272,7 +8281,7 @@ struct Pokemon *GetIllusionMonPtr(u32 battlerId) {
 
 void ClearIllusionMon(u32 battlerId){ZERO(gBattleStruct -> illusion[battlerId])}
 
-bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId) {
+bool32 SetIllusionMon(struct Pokemon* mon, u32 battlerId) {
     struct Pokemon *party, *partnerMon;
     s32 i, id;
     SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -8380,8 +8389,8 @@ bool32 TestMoveFlags(MoveEnum move, u32 flag) {
     return FALSE;
 }
 
-struct Pokemon *GetBattlerPartyData(u8 battlerId) {
-    struct Pokemon *mon;
+struct Pokemon* GetBattlerPartyData(u8 battlerId) {
+    struct Pokemon* mon;
     if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
         mon = &gPlayerParty[gBattlerPartyIndexes[battlerId]];
     else
@@ -8444,7 +8453,7 @@ bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(AbilityEnum ability) {
 
 // Sort an array of battlers by speed
 // Useful for effects like pickpocket, eject button, red card, dancer
-void SortBattlersBySpeed(u8 *battlers, bool8 slowToFast) {
+void SortBattlersBySpeed(u8* battlers, bool8 slowToFast) {
     int i, count = SortBattlersExcept(battlers, TRUE, 0);
     if (slowToFast) {
         int temp;
@@ -8925,10 +8934,10 @@ AbilityEnum IsMagicGuardProtected(int battler) {
 
 int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, MoveEnum move, int moveType) {
     int ignored;
-    return TestAbsorbingAbilities(target, gActiveBattler, move, moveType, &ignored, (u16 *)&ignored);
+    return TestAbsorbingAbilities(target, gActiveBattler, move, moveType, &ignored, (u16*)&ignored);
 }
 
-int TestAbsorbingAbilities(int battler, int battlerAtk, MoveEnum move, int moveType, int *statId, u16 *absorbingAbility) {
+int TestAbsorbingAbilities(int battler, int battlerAtk, MoveEnum move, int moveType, int* statId, u16* absorbingAbility) {
     ON_ABILITY(
         battler, TRUE, gAbilities[ability].onAbsorb, int result = gAbilities[ability].onAbsorb(battler, move, moveType, statId); if (result) {
             *absorbingAbility = ability;
@@ -8937,16 +8946,16 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, MoveEnum move, int moveT
     return FALSE;
 }
 
-static int HandleAnyImmunityAbilityAs(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
-static int HandleAlliedImmunityAbilityAs(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
-static int HandleImmunityAbilityAs(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript);
+static int HandleAnyImmunityAbilityAs(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType, const u8** immunityScript);
+static int HandleAlliedImmunityAbilityAs(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType, const u8** immunityScript);
+static int HandleImmunityAbilityAs(AbilityEnum ability, int battler, int attacker, MoveEnum move, int moveType, const u8** immunityScript);
 
 int TestImmunityAbilitiesOnly(int battler, int attacker, MoveEnum move, int moveType) {
     int ignored;
-    return TestImmunityAbilities(battler, attacker, move, moveType, (const u8 **)&ignored, (u8 *)&ignored, (u16 *)&ignored);
+    return TestImmunityAbilities(battler, attacker, move, moveType, (const u8**)&ignored, (u8*)&ignored, (u16*)&ignored);
 }
 
-int TestImmunityAbilities(int battler, int attacker, MoveEnum move, int moveType, const u8 **immunityScript, u8 *overrideBattler, u16 *abilityPopup) {
+int TestImmunityAbilities(int battler, int attacker, MoveEnum move, int moveType, const u8** immunityScript, u8* overrideBattler, u16* abilityPopup) {
     for (int i = 0; i < gBattlersCount; i++) {
         int testBattler = (battler + i) % gBattlersCount;
         FILTER(testBattler == attacker || testBattler == battler || IsBattlerAlive(testBattler))
@@ -9120,7 +9129,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
 
         // Dragon Monotype
         if (getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(battler) == B_SIDE_PLAYER) {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_FEARMONGER; // Pop up non-functional: to be fixed?
+            gBattleScripting.abilityPopupOverwrite = ABILITY_FEARMONGER;  // Pop up non-functional: to be fixed?
             effect += UseIntimidateClone(ABILITY_FEARMONGER, B_SIDE_OPPONENT);
         }
 
