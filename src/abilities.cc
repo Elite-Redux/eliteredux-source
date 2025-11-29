@@ -2110,7 +2110,7 @@ constexpr Ability DarkAura = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType != TYPE_DARK) return;
-            if (IsAbilityOnField(ABILITY_AURA_BREAK))
+            if (IsAbilityOnField(ABILITY_AURA_BREAK) || IsAbilityOnField(ABILITY_NIHIL_BLASTER))
                 MUL(.75);
             else
                 MUL(1.33);
@@ -2123,7 +2123,7 @@ constexpr Ability FairyAura = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType != TYPE_FAIRY) return;
-            if (IsAbilityOnField(ABILITY_AURA_BREAK))
+            if (IsAbilityOnField(ABILITY_AURA_BREAK) || IsAbilityOnField(ABILITY_NIHIL_BLASTER))
                 MUL(.75);
             else
                 MUL(1.33);
@@ -9967,6 +9967,13 @@ constexpr Ability MashedPotato = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SYRUP_BOMB, 0); },
 };
 
+constexpr Ability NihilBlaster = {
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_AURABREAK); },
+    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+    .breakable = TRUE,
+    .megaLauncherBoost = TRUE,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10902,6 +10909,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_CURLIPEDE, Curlipede},
     {ABILITY_FLAWLESS_PRECISION, FlawlessPrecision},
     {ABILITY_MASHED_POTATO, MashedPotato},
+    {ABILITY_NIHIL_BLASTER, NihilBlaster},
 };
 
 template <int N>
