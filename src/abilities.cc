@@ -9952,6 +9952,11 @@ constexpr Ability EternalFlower = {
     .onStatFor = APPLY_ON_OTHER,
 };
 
+
+constexpr Ability Curlipede = {
+    .onEntry = +[](ON_ENTRY) -> int { return LetsRoll.onEntry(DELEGATE_ENTRY) | CoilUp.onEntry(DELEGATE_ENTRY); }
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10884,6 +10889,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_BRAIN_OVERLOAD, BrainOverload},
     {ABILITY_FIRES_WRATH, FiresWrath},
     {ABILITY_ETERNAL_FLOWER, EternalFlower},
+    {ABILITY_CURLIPEDE, Curlipede},
 };
 
 template <int N>
