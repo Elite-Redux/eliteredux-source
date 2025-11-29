@@ -172,6 +172,7 @@ static inline bool BattlerHasAbility(int battler, int checkMoldBreaker, AbilityP
     for (int j = 0; j < GetNumPossibleAbilitiesForBattler(); j++) {
         if (abilityPredicate(GetAbilityAtIndex(battler, j, checkMoldBreaker))) return true;
     }
+    return false;
 }
 
 template <typename AbilityPredicate, typename BattlerPredicate>
@@ -391,7 +392,7 @@ int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS) {
     }
 
     return BattlerHasAbility(battler, FALSE, [&](int ability) -> int {
-        CHECK(gAbilities[ability].onModifyMoveFLags)
+        CHECK(gAbilities[ability].onModifyMoveFlags)
         return (gAbilities[ability].onModifyMoveFlags(DELEGATE_MODIFY_MOVE_FLAGS));
     });
 }
