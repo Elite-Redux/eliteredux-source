@@ -9963,6 +9963,10 @@ constexpr Ability FlawlessPrecision = {
     .onMoldBreaker = DeadlyPrecision.onMoldBreaker,
 };
 
+constexpr Ability MashedPotato = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SYRUP_BOMB, 0); },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10897,6 +10901,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_ETERNAL_FLOWER, EternalFlower},
     {ABILITY_CURLIPEDE, Curlipede},
     {ABILITY_FLAWLESS_PRECISION, FlawlessPrecision},
+    {ABILITY_MASHED_POTATO, MashedPotato},
 };
 
 template <int N>
