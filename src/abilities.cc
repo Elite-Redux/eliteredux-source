@@ -167,6 +167,27 @@ static void InsertCorrectEndType(AbilityCallType type) {
     }
 }
 
+template <typename AbilityPredicate>
+static inline bool BattlerHasAbility(int battler, int checkMoldBreaker, AbilityPredicate abilityPredicate) {
+    for (int j = 0; j < GetNumPossibleAbilitiesForBattler(); j++) {
+        if (abilityPredicate(GetAbilityAtIndex(battler, j, checkMoldBreaker))) return true;
+    }
+}
+
+template <typename AbilityPredicate, typename BattlerPredicate>
+static inline bool IsAbilityOnField(int breakable, AbilityPredicate abilityPredicate, BattlerPredicate battlerPredicate) {
+    for (int i = 0; i < gBattlersCount; i++) {
+        if (!battlerPredicate(i)) continue;
+        if (BattlerHasAbility(i, breakable, abilityPredicate)) return true;
+    }
+    return false;
+}
+
+template <typename AbilityPredicate>
+static inline bool IsAbilityOnField(int breakable, AbilityPredicate abilityPredicate) {
+    return IsAbilityOnField(breakable, abilityPredicate, +[](int battler) -> bool { return true; });
+}
+
 int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag) {
     switch (flag) {
         case APPLY_ON_ATTACKER_OR_TARGET:
@@ -337,12 +358,12 @@ static int MoxieClone(int battler, int stat) {
             else                                                             \
                 MUL(1.3);                                                    \
         }                                                                    \
-}
+    }
 
 static void RuinEffect(int ruinStat, int battler, int statId, u32* stat, NonStackingState* flags) {
     if (statId != ruinStat) return;
     if (*flags & NON_STACKING_RUIN) return;
-    ON_ABILITY(battler, FALSE, gAbilities[ability].ruinStat == statId, return)* stat *= .75;
+    if (BattlerHasAbility(battler, FALSE, [statId](AbilityEnum ability) -> int { return gAbilities[ability].ruinStat == statId; })) return;
     *flags = *flags | NON_STACKING_RUIN;
 }
 
@@ -369,8 +390,10 @@ int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS) {
             break;
     }
 
-    ON_ABILITY(battler, FALSE, gAbilities[ability].onModifyMoveFlags, if (gAbilities[ability].onModifyMoveFlags(DELEGATE_MODIFY_MOVE_FLAGS)) return TRUE)
-    return FALSE;
+    return BattlerHasAbility(battler, FALSE, [&](int ability) -> int {
+        CHECK(gAbilities[ability].onModifyMoveFLags)
+        return (gAbilities[ability].onModifyMoveFlags(DELEGATE_MODIFY_MOVE_FLAGS));
+    });
 }
 
 static int UseTurnAttackAsPursuit(ON_PREEMPT_ACTION) {
@@ -660,8 +683,7 @@ constexpr Ability Intimidate = {
 
 constexpr Ability ShadowTag = {
     .onTrap = +[](ABILITY_ON_TRAP) -> int {
-        ON_ABILITY(switchingBattler, FALSE, gAbilities[ability].shadowTag, return FALSE)
-        return TRUE;
+        return BattlerHasAbility(switchingBattler, FALSE, [](AbilityEnum ability) -> int { return gAbilities[ability].shadowTag; });
     },
     .shadowTag = TRUE,
 };
@@ -2110,7 +2132,8 @@ constexpr Ability DarkAura = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType != TYPE_DARK) return;
-            if (IsAbilityOnField(ABILITY_AURA_BREAK))
+
+            if (IsAbilityOnField(FALSE, [](AbilityEnum ability) -> int { return gAbilities[ability].auraBreak; }))
                 MUL(.75);
             else
                 MUL(1.33);
@@ -2123,7 +2146,7 @@ constexpr Ability FairyAura = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType != TYPE_FAIRY) return;
-            if (IsAbilityOnField(ABILITY_AURA_BREAK))
+            if (IsAbilityOnField(FALSE, [](AbilityEnum ability) -> int { return gAbilities[ability].auraBreak; }))
                 MUL(.75);
             else
                 MUL(1.33);
@@ -2134,6 +2157,7 @@ constexpr Ability FairyAura = {
 constexpr Ability AuraBreak = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_AURABREAK); },
     .breakable = TRUE,
+    .auraBreak = TRUE,
 };
 
 constexpr Ability PrimordialSea = {
@@ -9952,9 +9976,8 @@ constexpr Ability EternalFlower = {
     .onStatFor = APPLY_ON_OTHER,
 };
 
-
 constexpr Ability Curlipede = {
-    .onEntry = +[](ON_ENTRY) -> int { return LetsRoll.onEntry(DELEGATE_ENTRY) | CoilUp.onEntry(DELEGATE_ENTRY); }
+    .onEntry = +[](ON_ENTRY) -> int { return LetsRoll.onEntry(DELEGATE_ENTRY) | CoilUp.onEntry(DELEGATE_ENTRY); },
 };
 
 constexpr Ability FlawlessPrecision = {
@@ -9967,6 +9990,14 @@ constexpr Ability MashedPotato = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SYRUP_BOMB, 0); },
 };
 
+constexpr Ability NihilBlaster = {
+    .onEntry = AuraBreak.onEntry,
+    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+    .breakable = TRUE,
+    .megaLauncherBoost = TRUE,
+    .auraBreak = TRUE,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -9974,6 +10005,7 @@ typedef struct AbilityKVPair {
 
 constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_NONE, None},
+    {ABILITY_NIHIL_BLASTER, NihilBlaster},
     {ABILITY_STENCH, Stench},
     {ABILITY_DRIZZLE, Drizzle},
     {ABILITY_SPEED_BOOST, SpeedBoost},
