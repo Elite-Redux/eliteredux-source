@@ -9957,6 +9957,12 @@ constexpr Ability Curlipede = {
     .onEntry = +[](ON_ENTRY) -> int { return LetsRoll.onEntry(DELEGATE_ENTRY) | CoilUp.onEntry(DELEGATE_ENTRY); }
 };
 
+constexpr Ability FlawlessPrecision = {
+    .onAccuracy = FatalPrecision.onAccuracy,
+    .onCrit = FatalPrecision.onCrit,
+    .onMoldBreaker = DeadlyPrecision.onMoldBreaker,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10890,6 +10896,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_FIRES_WRATH, FiresWrath},
     {ABILITY_ETERNAL_FLOWER, EternalFlower},
     {ABILITY_CURLIPEDE, Curlipede},
+    {ABILITY_FLAWLESS_PRECISION, FlawlessPrecision},
 };
 
 template <int N>
