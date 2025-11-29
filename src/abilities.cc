@@ -9913,7 +9913,7 @@ constexpr Ability Cryostasis = {
     .setStateOnEffect = MOVE_EFFECT_FROSTBITE,
 };
 
-constexpr Ability BoogerHeads = {
+constexpr Ability MucusMembrane = {
     .onDefender = Gooey.onDefender,
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.7); },
     .breakable = TRUE,
@@ -10902,7 +10902,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_BACKFLIP, Backflip},
     {ABILITY_CRUSHING_JAW, CrushingJaw},
     {ABILITY_CRYOSTASIS, Cryostasis},
-    {ABILITY_BOOGER_HEADS, BoogerHeads},
+    {ABILITY_MUCUS_MEMBRANE, MucusMembrane},
     {ABILITY_BRAIN_OVERLOAD, BrainOverload},
     {ABILITY_FIRES_WRATH, FiresWrath},
     {ABILITY_ETERNAL_FLOWER, EternalFlower},
