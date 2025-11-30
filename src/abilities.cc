@@ -10994,7 +10994,6 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_WRESTLE_SHOWMAN, WrestleShowman},
     {ABILITY_GUARD_DOG, GuardDog},
     {ABILITY_STEADFAST, Steadfast},
-    {ABILITY_SUPERHEAVY, Superheavy},
 };
 
 template <int N>
