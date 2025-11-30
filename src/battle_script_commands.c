@@ -6740,6 +6740,18 @@ static bool32 CanTeleport(u8 battlerId) {
     return TRUE;
 }
 
+static int CheckAbilityFlag(int battler, AbilityEnum exampleAbility) {
+    switch (exampleAbility) {
+        case ABILITY_SUCTION_CUPS:
+            return gAbilities[exampleAbility].suctionCups;
+
+        case ABILITY_STEADFAST:
+            return gAbilities[exampleAbility].steadfast;
+    }
+
+    return FALSE;
+}
+
 static void Cmd_various(void) {
     struct Pokemon* mon;
     s32 i;
@@ -9068,6 +9080,15 @@ static void Cmd_various(void) {
         }
         case VARIOUS_TAGTEAM_EXEC_BATTLE_EVENTS: {
             if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT) gBattleMainFunc = HandleTagTeamBattleEvents;
+            break;
+        }
+        case VARIOUS_JUMP_IF_ABILITY_FLAG: {
+            ptr = READ_PTR_INC;
+            AbilityEnum exampleAbility = READ_16_INC;
+            int checkMoldBreaker = READ_8_INC;
+            ON_ABILITY(gActiveBattler, checkMoldBreaker, CheckAbilityFlag(gActiveBattler, exampleAbility), gBattleScripting.abilityPopupOverwrite = ability;
+                       gBattlescriptCurrInstr = ptr;
+                       break)
             break;
         }
     }  // End of switch (gBattlescriptCurrInstr[2])

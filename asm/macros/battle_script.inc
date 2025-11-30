@@ -2453,6 +2453,13 @@
 	various \battler, VARIOUS_TAGTEAM_EXEC_BATTLE_EVENTS
 	.endm
 
+	.macro jumpifabilityflag battler:req ability:req ptr:req checkbreakable=TRUE
+	various \battler, VARIOUS_JUMP_IF_ABILITY_FLAG
+	.4byte \ptr
+	.2byte \ability
+	.byte \checkbreakable
+	.endm
+
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr

@@ -2164,8 +2164,7 @@ BattleScript_EffectHitSwitchTarget:
 	argumenttomoveeffect
 	seteffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
-	jumpifability BS_TARGET, ABILITY_SUCTION_CUPS, BattleScript_AbilityPreventsPhasingOut
-	jumpifability BS_TARGET, ABILITY_GUARD_DOG, BattleScript_AbilityPreventsPhasingOut
+	jumpifabilityflag BS_TARGET, ABILITY_SUCTION_CUPS, BattleScript_AbilityPreventsPhasingOut
 	jumpifstatus3 BS_TARGET, STATUS3_ROOTED, BattleScript_PrintMonIsRooted
 	jumpifstatus4 BS_TARGET, STATUS4_COMMANDED, BattleScript_PrintCommanderCantSwitch
 	tryhitswitchtarget BattleScript_EffectHitSwitchTargetMoveEnd
@@ -4174,8 +4173,7 @@ BattleScript_EffectRoar::
 	attackstring
 	ppreduce
 	jumpifroarfails BattleScript_ButItFailed
-	jumpifability BS_TARGET, ABILITY_SUCTION_CUPS, BattleScript_AbilityPreventsPhasingOut
-	jumpifability BS_TARGET, ABILITY_GUARD_DOG, BattleScript_AbilityPreventsPhasingOut
+	jumpifabilityflag BS_TARGET, ABILITY_SUCTION_CUPS, BattleScript_AbilityPreventsPhasingOut
 	jumpifstatus3 BS_TARGET, STATUS3_ROOTED, BattleScript_PrintMonIsRooted
 	jumpifstatus4 BS_TARGET, STATUS4_COMMANDED, BattleScript_PrintCommanderCantSwitch
 	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
@@ -9208,17 +9206,13 @@ BattleScript_MoveUsedFlinched::
 	printstring STRINGID_PKMNFLINCHED
 	waitmessage B_WAIT_TIME_LONG
 	setstatchanger STAT_SPEED, 1, FALSE
-	callifability BS_ATTACKER, ABILITY_RATTLED, BattleScript_AttackerAbilityStatRaiseAndDoStatBuff
-BattleScript_MoveUsedFlinched_CheckSteadfast:
-	callifability BS_ATTACKER ABILITY_STEADFAST BattleScript_AttackerAbilityStatRaiseAndDoStatBuff
-BattleScript_MoveUsedFlinchedEnd:
+	jumpifabilityflag FALSE, BS_ATTACKER, ABILITY_STEADFAST, BattleScript_AttackerAbilityStatRaiseAndDoStatBuff
 	goto BattleScript_MoveEnd
-
 BattleScript_AttackerAbilityStatRaiseAndDoStatBuff:
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_Return
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_Return
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_MoveEnd
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_MoveEnd
 	call BattleScript_AttackerAbilityStatRaise
-	return
+	goto BattleScript_MoveEnd
 
 BattleScript_PrintUproarOverTurns::
 	printfromtable gUproarOverTurnStringIds
@@ -11833,8 +11827,7 @@ BattleScript_RedCardActivates_AfterPrintString::
 	copybyte gBattlerTarget, gBattlerAttacker
 	copybyte gBattlerAttacker, gStackBattler1
 	jumpifstatus3 BS_TARGET, STATUS3_ROOTED, BattleScript_RedCardIngrain
-	jumpifability BS_TARGET, ABILITY_SUCTION_CUPS, BattleScript_RedCardSuctionCups
-	jumpifability BS_TARGET, ABILITY_GUARD_DOG, BattleScript_RedCardSuctionCups
+	jumpifabilityflag BS_TARGET, ABILITY_SUCTION_CUPS, BattleScript_RedCardSuctionCups
 	jumpifstatus4 BS_TARGET, STATUS4_COMMANDED, BattleScript_PrintCommanderCantSwitch
 	setbyte sSWITCH_CASE, B_SWITCH_RED_CARD
 	savetarget

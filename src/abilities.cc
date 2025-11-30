@@ -679,6 +679,12 @@ constexpr Ability OwnTempo = {
 
 constexpr Ability SuctionCups = {
     .breakable = TRUE,
+    .suctionCups = TRUE,
+};
+
+constexpr Ability GuardDog = {
+    .breakable = TRUE,
+    .suctionCups = TRUE,
 };
 
 constexpr Ability Intimidate = {
@@ -1910,6 +1916,7 @@ constexpr Ability Rattled = {
         BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
         return TRUE;
     },
+    .steadfast = TRUE,
 };
 
 constexpr Ability MagicBounce = {
@@ -10032,13 +10039,22 @@ constexpr Ability WrestleShowman = {
 constexpr Ability Overcast = {
     .onEntry = +[](ON_ENTRY) -> int {
         int any = FALSE;
-        if (!gSideStatuses[battler] & SIDE_STATUS_MIST) {
+        if (!(gSideStatuses[battler] & SIDE_STATUS_MIST)) {
             InsertCorrectEndType(ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
             BattleScriptPushCursorAndCallback(BattleScript_AttackerSetsMist);
             any = TRUE;
         }
         return any | LowVisibility.onEntry(DELEGATE_ENTRY);
     },
+};
+
+constexpr Ability Steadfast = {
+    .steadfast = TRUE,
+};
+
+constexpr Ability Superheavy = {
+    .suctionCups = TRUE,
+    .steadfast = TRUE,
 };
 
 typedef struct AbilityKVPair {
@@ -10980,6 +10996,9 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_NIHIL_BLASTER, NihilBlaster},
     {ABILITY_GIANT_SHURIKEN, GiantShuriken},
     {ABILITY_WRESTLE_SHOWMAN, WrestleShowman},
+    {ABILITY_GUARD_DOG, GuardDog},
+    {ABILITY_STEADFAST, Steadfast},
+    {ABILITY_SUPERHEAVY, Superheavy},
 };
 
 template <int N>

@@ -40,7 +40,7 @@ static u8 ChooseMoveOrAction_Doubles(void);
 static void BattleAI_DoAIProcessing(void);
 
 // ewram
-EWRAM_DATA const u8 *gAIScriptPtr = NULL;  // Still used in contests
+EWRAM_DATA const u8* gAIScriptPtr = NULL;  // Still used in contests
 EWRAM_DATA u8 sBattler_AI = 0;
 
 // const rom data
@@ -95,7 +95,7 @@ static s16 (*const sBattleAiFuncTable[])(u8, u8, u16, s16) = {
 // Functions
 void BattleAI_SetupItems(void) {
     s32 i;
-    u8 *data = (u8 *)BATTLE_HISTORY;
+    u8* data = (u8*)BATTLE_HISTORY;
 
     for (i = 0; i < sizeof(struct BattleHistory); i++) data[i] = 0;
 
@@ -598,11 +598,9 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
 
         // target ability checks
         if (!DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move)) {
-            if (TestAbsorbingAbilitiesOnly(battlerDef, battlerAtk, move, moveType))
-                RETURN_SCORE_MINUS(20);
-            
-            if (TestImmunityAbilitiesOnly(battlerDef, battlerAtk, move, moveType))
-                RETURN_SCORE_MINUS(20);
+            if (TestAbsorbingAbilitiesOnly(battlerDef, battlerAtk, move, moveType)) RETURN_SCORE_MINUS(20);
+
+            if (TestImmunityAbilitiesOnly(battlerDef, battlerAtk, move, moveType)) RETURN_SCORE_MINUS(20);
 
             for (i = 0; i < GetNumPossibleAbilitiesForBattler(); i++) {
                 AbilityEnum abilityToCheck = GetBattlerAbilityInSlot(battlerDef, i);
@@ -679,7 +677,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
                 for (i = 0; i < GetNumPossibleAbilitiesForBattler(); i++) {
                     AbilityEnum abilityToCheck = GetBattlerAbilityInSlot(BATTLE_PARTNER(battlerDef), i);
 
-                    switch (abilityToCheck){
+                    switch (abilityToCheck) {
                         case ABILITY_LIGHTNING_ROD:
                             if (moveType == TYPE_ELECTRIC && !IsMoveRedirectionPrevented(move, BATTLE_PARTNER(battlerDef))) RETURN_SCORE_MINUS(20);
                             break;
@@ -1133,12 +1131,10 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
         case EFFECT_ROAR:
             if (CountUsablePartyMons(battlerDef) == 0)
                 score -= 10;
-            else if (BattlerHasAbility(battlerDef, ABILITY_SUCTION_CUPS, TRUE))
-                score -= 10;
-            else if (BattlerHasAbility(battlerDef, ABILITY_GUARD_DOG, TRUE))
-                score -= 10;
             else if (gStatuses4[battlerDef] & STATUS4_COMMANDED)
                 score -= 10;
+            else
+                ON_ABILITY(battlerDef, TRUE, gAbilities[ability].suctionCups, score -= 10; break)
             break;
         case EFFECT_TOXIC_THREAD:
             if (!ShouldLowerStat(battlerDef, STAT_SPEED)) score--;  // may still want to just poison
@@ -1420,8 +1416,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             if (B_MENTAL_HERB >= GEN_5 && AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_MENTAL_HERB) score -= 6;
             break;
         case EFFECT_WILL_O_WISP:
-            if (!AI_CanBurn(battlerAtk, battlerDef, AI_DATA->partnerMove)|| IsMagicGuardProtected(battlerDef))
-                score -= 10;
+            if (!AI_CanBurn(battlerAtk, battlerDef, AI_DATA->partnerMove) || IsMagicGuardProtected(battlerDef)) score -= 10;
             break;
         case EFFECT_MEMENTO:
             if (CountUsablePartyMons(battlerAtk) == 0 || DoesPartnerHaveSameMoveEffect(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove))
@@ -1803,8 +1798,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
                 score -= 4;
             break;
         case EFFECT_WISH:
-            if (gWishFutureKnock.wishCounter[battlerAtk] != 0) 
-                score -= 10;
+            if (gWishFutureKnock.wishCounter[battlerAtk] != 0) score -= 10;
             break;
         case EFFECT_ASSIST:
             if (CountUsablePartyMons(battlerAtk) == 0) score -= 10;  // no teammates to assist from
@@ -3053,8 +3047,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
                 }
             } else  // Double Battle
             {
-                if (CountUsablePartyMons(battlerAtk) == 0)
-                    break;  // Can't switch
+                if (CountUsablePartyMons(battlerAtk) == 0) break;  // Can't switch
 
                 // if (switchAbility == ABILITY_INTIMIDATE && PartyHasMoveSplit(battlerDef, SPLIT_PHYSICAL))
                 // score += 7;
@@ -3127,8 +3120,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
             break;
         case EFFECT_WISH:
         case EFFECT_HEAL_BELL:
-            if (ShouldUseWishAromatherapy(battlerAtk, battlerDef, move)) 
-                score += 7;
+            if (ShouldUseWishAromatherapy(battlerAtk, battlerDef, move)) score += 7;
             break;
         case EFFECT_THIEF: {
             bool32 canSteal = FALSE;
