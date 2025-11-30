@@ -10015,7 +10015,19 @@ constexpr Ability GiantShuriken = {
         CHECK(flag == MOVE_FLAG_KEEN_EDGE)
         return moveType == TYPE_GRASS;
     },
- };
+};
+
+constexpr Ability WrestleShowman = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(move == MOVE_FLYING_PRESS)
+        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(IsBattlerAlive(target))
+        CHECK(!IsAbilityStatusProtected(target, CHECK_RESTRICTING))
+        CHECK(!gVolatileStructs[target].tauntTimer)
+        BattleScriptCall(BattleScript_WrestleShowman_Effect_FlyingPress);
+        return TRUE;
+    }
+};
 
 typedef struct AbilityKVPair {
     u16 key;
@@ -10954,6 +10966,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_MASHED_POTATO, MashedPotato},
     {ABILITY_NIHIL_BLASTER, NihilBlaster},
     {ABILITY_GIANT_SHURIKEN, GiantShuriken},
+    {ABILITY_WRESTLE_SHOWMAN, WrestleShowman},
 };
 
 template <int N>

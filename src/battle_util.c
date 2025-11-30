@@ -6885,6 +6885,9 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
         case MOVE_DREAM_INVERSION:
             if (gBattleMons[battlerDef].status1 & STATUS1_SLEEP) basePower *= 2;
             break;
+        case MOVE_FLYING_PRESS:
+            if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WRESTLE_SHOWMAN)) basePower += 10;
+            break;
     }
 
     if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH)) {

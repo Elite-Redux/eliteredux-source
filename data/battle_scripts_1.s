@@ -13100,3 +13100,10 @@ BattleScript_EffectQuickGuard:
 	printstring STRINGID_QUICKGUARD
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
+
+BattleScript_WrestleShowman_Effect_FlyingPress::
+    jumpifabilitystatusimmunity BS_TARGET, MOVE_TAUNT, BattleScript_LeafGuardProtects
+    settaunt BattleScript_ButItFailed
+    printstring STRINGID_PKMNFELLFORTAUNT
+    waitmessage B_WAIT_TIME_LONG
+    return
