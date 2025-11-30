@@ -2109,6 +2109,13 @@ constexpr Ability GrassPelt = {
         },
 };
 
+constexpr Ability FlowerNecklace = {
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPDEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
+        },
+};
+
 constexpr Ability ToughClaws = {
     .onOffensiveMultiplier = BigPecks.onOffensiveMultiplier,
 };
@@ -10012,7 +10019,7 @@ constexpr Ability GiantShuriken = {
     },
 };
 
- constexpr Ability ChestnutAxe = {
+constexpr Ability ChestnutAxe = {
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
     .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
         CHECK(flag == MOVE_FLAG_KEEN_EDGE)
@@ -10020,17 +10027,15 @@ constexpr Ability GiantShuriken = {
     },
 };
 
-constexpr Ability WrestleShowman = {
-    .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(move == MOVE_FLYING_PRESS)
-        CHECK(ShouldApplyOnHitAffect(target))
-        CHECK(IsBattlerAlive(target))
-        CHECK(!IsAbilityStatusProtected(target, CHECK_RESTRICTING))
-        CHECK(!gVolatileStructs[target].tauntTimer)
-        BattleScriptCall(BattleScript_WrestleShowman_Effect_FlyingPress);
-        return TRUE;
-    }
-};
+constexpr Ability WrestleShowman = {.onAttacker = +[](ON_ATTACKER) -> int {
+    CHECK(move == MOVE_FLYING_PRESS)
+    CHECK(ShouldApplyOnHitAffect(target))
+    CHECK(IsBattlerAlive(target))
+    CHECK(!IsAbilityStatusProtected(target, CHECK_RESTRICTING))
+    CHECK(!gVolatileStructs[target].tauntTimer)
+    BattleScriptCall(BattleScript_WrestleShowman_Effect_FlyingPress);
+    return TRUE;
+}};
 
 constexpr Ability Overcast = {
     .onEntry = +[](ON_ENTRY) -> int {
@@ -10994,6 +10999,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_WRESTLE_SHOWMAN, WrestleShowman},
     {ABILITY_GUARD_DOG, GuardDog},
     {ABILITY_STEADFAST, Steadfast},
+    {ABILITY_FLOWER_NECKLACE, FlowerNecklace},
 };
 
 template <int N>
