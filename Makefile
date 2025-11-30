@@ -112,14 +112,16 @@ LIB := $(LIBPATH) -lgcc -lc -L../../libagbsyscall -lagbsyscall
 else
 CC1              = $(shell $(PATH_MODERNCC) --print-prog-name=cc1) -quiet
 CC1PLUS 		 = $(shell $(PATH_MODERNCC) --print-prog-name=cc1plus) -quiet
-override CFLAGS += -Wall -Wextra -Werror -Wno-int-in-bool-context -Wno-missing-braces -Wno-pointer-sign -Wno-unused-function -Wno-switch -Wno-unused-local-typedefs -Wno-missing-field-initializers -Wno-ignored-qualifiers -Wno-unused-parameter -Wno-sign-compare -Wno-unused-label -mthumb -mthumb-interwork -O2 -mabi=apcs-gnu -mtune=arm7tdmi -march=armv4t -fno-toplevel-reorder -fshort-enums -g
+override CFLAGS += -Wall -Wextra -Werror -Wno-int-in-bool-context -Wno-missing-braces -Wno-unused-parameter -Wno-switch -Wno-unused-local-typedefs -Wno-missing-field-initializers -Wno-ignored-qualifiers -Wno-sign-compare -mthumb -mthumb-interwork -O2 -mabi=apcs-gnu -mtune=arm7tdmi -march=armv4t -fshort-enums -g
 ROM := $(MODERN_ROM_NAME)
 OBJ_DIR := $(MODERN_OBJ_DIR_NAME)
 LIBPATH := -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libgcc.a))" -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libnosys.a))" -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libc.a))"
 LIB := $(LIBPATH) -lc -lnosys -lgcc -L../../libagbsyscall -lagbsyscall
 endif
 
-CPPCOMPILEFLAGS := -fno-exceptions -fno-rtti $(subst -fno-toplevel-reorder,,$(subst -Wno-pointer-sign,,$(CFLAGS))) -std=gnu++20
+CPPCOMPILEFLAGS := -Wall -Wextra -Werror -fno-exceptions -Wno-sign-compare -Wno-switch -Wno-missing-field-initializers -fno-rtti -mthumb -mthumb-interwork -O2 -mabi=apcs-gnu -mtune=arm7tdmi -march=armv4t -fshort-enums -g -Wunreachable-code -std=gnu++20
+
+override CFLAGS += -fno-toplevel-reorder -Wno-unused-function -Wno-pointer-sign -Wno-unused-label
 
 CPPFLAGS := -iquote include -iquote $(GFLIB_SUBDIR) -Wno-trigraphs -DMODERN=$(MODERN)
 ifneq ($(MODERN),1)

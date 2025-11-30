@@ -66,18 +66,22 @@ object AbilityTextGenerator : Generator {
 
         writer.appendLine(
             """
-            |constexpr AbilityKVPair sAbilityText[] = {
-            |$IND${
-                ABILITIES_LIST.joinToString("\n$IND") {
-                    """{${it.id}, { .name = $("${it.name}"), .description = $PREFIX${
-                        shortDescriptions[it.id]!!.hashCode().toUInt()
-                    }, .expandedDescription = $PREFIX${
-                        expandedDescriptions[it.id]!!.hashCode().toUInt()
-                    }}},"""
-                }
-            }
-            |};
+            |template <AbilityEnum Id>
+            |constexpr Ability AbilityStrings = {0};
             |""".trimMargin()
+        )
+
+        writer.appendLine(
+            ABILITIES_LIST.joinToString("\n") {
+                """
+                |template <>
+                |constexpr Ability AbilityStrings<${it.id}> = {
+                |$IND.name = ${'$'}("${it.name}"),
+                |$IND.description = $PREFIX${shortDescriptions[it.id]!!.hashCode().toUInt()},
+                |$IND.expandedDescription = $PREFIX${expandedDescriptions[it.id]!!.hashCode().toUInt()},
+                |};
+                |""".trimMargin()
+            }
         )
     }
 }

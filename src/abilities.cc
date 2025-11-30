@@ -26,9 +26,6 @@ extern "C" {
 #include "string_util.h"
 }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic error "-Wunused-function"
-
 #define NO_ANNOUNCE 2
 
 static int max(int a, int b) { return a > b ? a : b; }
@@ -59,87 +56,91 @@ ENUM_OR(NonStackingState)
 #define __COMBINE(val1, val2) val1##val2
 #define COMBINE(val1, val2) __COMBINE(val1, val2)
 
-#define ON_ENTRY AbilityEnum ability, int battler
+#define opt [[maybe_unused]]
+
+#define ON_ENTRY opt opt AbilityEnum ability, opt int battler
 #define DELEGATE_ENTRY ability, battler
-#define ON_ABSORB int battler, MoveEnum move, Type moveType, int *statId
+#define ON_ABSORB opt int battler, opt MoveEnum move, opt Type moveType, opt int *statId
 #define DELEGATE_ABSORB battler, move, moveType, statId
-#define ON_IMMUNE int battler, int attacker, MoveEnum move, Type moveType, const u8 **immunityScript
+#define ON_IMMUNE opt int battler, opt int attacker, opt MoveEnum move, opt Type moveType, opt const u8 **immunityScript
 #define DELEGATE_IMMUNE battler, attacker, move, moveType, immunityScript
-#define ON_INFILTRATE int battler, MoveEnum move, Type moveType
+#define ON_INFILTRATE opt int battler, opt MoveEnum move, opt Type moveType
 #define DELEGATE_INFILTRATE battler, move, moveType
-#define ON_DISGUISE int battler, int testOnly
+#define ON_DISGUISE opt int battler, opt int testOnly
 #define DELEGATE_DISGUISE battler, testOnly
-#define ON_WEATHER AbilityEnum ability, int battler
+#define ON_WEATHER opt AbilityEnum ability, opt int battler
 #define DELEGATE_WEATHER ability, battler
-#define ON_TERRAIN AbilityEnum ability, int battler
+#define ON_TERRAIN opt AbilityEnum ability, opt int battler
 #define DELEGATE_TERRAIN ability, battler
-#define ON_END_TURN AbilityEnum ability, u8 battler
+#define ON_END_TURN opt AbilityEnum ability, opt u8 battler
 #define DELEGATE_END_TURN ability, battler
-#define ON_ATTACKER AbilityEnum ability, int battler, int target, MoveEnum move, Type moveType
+#define ON_ATTACKER opt AbilityEnum ability, opt int battler, opt int target, opt MoveEnum move, opt Type moveType
 #define DELEGATE_ATTACKER ability, battler, target, move, moveType
-#define ON_DEFENDER AbilityEnum ability, int battler, int attacker, MoveEnum move, Type moveType
+#define ON_DEFENDER opt AbilityEnum ability, opt int battler, opt int attacker, opt MoveEnum move, opt Type moveType
 #define DELEGATE_DEFENDER ability, battler, attacker, move, moveType
-#define ON_EITHER(name) static int name##OnEither(AbilityEnum ability, int battler, int opponent, MoveEnum move, Type moveType)
+#define ON_EITHER(name) static int name##OnEither(opt AbilityEnum ability, opt int battler, opt int opponent, opt MoveEnum move, opt Type moveType)
 #define ON_EITHER_ABILITY(name) .onAttacker = name##OnEither, .onDefender = name##OnEither
-#define ON_RECOIL int damage, int battler, Type moveType
+#define ON_RECOIL opt int damage, opt int battler, opt Type moveType
 #define DELEGATE_RECOIL damage, battler, moveType
-#define ON_REACTIVE AbilityEnum ability, int battler, AbilityCallType callType
+#define ON_REACTIVE opt AbilityEnum ability, opt int battler, opt AbilityCallType callType
 #define DELEGATE_REACTIVE ability, battler
-#define ON_BATTLER_FAINTS AbilityEnum ability, int battler, int attacker, int fainted, MoveEnum move, Type moveType
+#define ON_BATTLER_FAINTS opt AbilityEnum ability, opt int battler, opt int attacker, opt int fainted, opt MoveEnum move, opt Type moveType
 #define DELEGATE_BATTLER_FAINTS ability, battler, attacker, fainted, move, moveType
-#define ON_PARENTAL_BOND int battler, MoveEnum move, Type moveType
+#define ON_PARENTAL_BOND opt int battler, opt MoveEnum move, opt Type moveType
 #define DELEGATE_PARENTAL_BOND battler, move, moveType
-#define ON_STAT AbilityEnum ability, int battler, int statId, u32 *stat, NonStackingState *flags
+#define ON_STAT opt AbilityEnum ability, opt int battler, opt int statId, opt u32 *stat, opt NonStackingState *flags
 #define DELEGATE_STAT ability, battler, statId, stat, flags
-#define ON_OFFENSIVE_MULTIPLIER                                                                                                                              \
-    int battler, AbilityEnum ability, int target, MoveEnum move, Type moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, \
-        u16 *modifier
+#define ON_OFFENSIVE_MULTIPLIER                                                                                                                             \
+    opt int battler, opt AbilityEnum ability, opt int target, opt MoveEnum move, opt Type moveType, opt int basePower, opt int typeEffectivenessMultiplier, \
+        opt int isCrit, opt u16 *resistance, u16 *modifier
 #define DELEGATE_OFFENSIVE_MULTIPLIER battler, ability, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier
-#define ON_DEFENSIVE_MULTIPLIER \
-    int battler, AbilityEnum ability, int attacker, MoveEnum move, Type moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier
+#define ON_DEFENSIVE_MULTIPLIER                                                                                                                          \
+    opt int battler, opt AbilityEnum ability, opt int attacker, opt MoveEnum move, opt Type moveType, opt int typeEffectivenessModifier, opt int isCrit, \
+        opt u16 *resistance, opt u16 *modifier
 #define DELEGATE_DEFENSIVE_MULTIPLIER battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier
-#define ON_ACCURACY AbilityEnum ability, int battler, int target, MoveEnum move, Type moveType, int *accuracy
+#define ON_ACCURACY opt AbilityEnum ability, opt int battler, opt int target, opt MoveEnum move, opt Type moveType, opt int *accuracy
 #define DELEGATE_ACCURACY ability, battler, target, move, moveType, accuracy
-#define ON_SWAP_SPLIT int battler, MoveEnum move, Type moveType
+#define ON_SWAP_SPLIT opt int battler, opt MoveEnum move, opt Type moveType
 #define DELEGATE_SWAP_SPLIT battler, move, type
 #define ON_CHOOSE_OFFENSIVE_STAT \
-    int battler, MoveEnum move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 secondaryAtkStatToUse[NUM_STATS]
+    opt int battler, opt MoveEnum move, opt int ignoreOffensiveStatDrops, opt int targetUnaware, opt u8 *atkStatToUse, opt u8 secondaryAtkStatToUse[NUM_STATS]
 #define DELEGATE_CHOOSE_OFFENSIVE_STAT battler, move, ignoreOffensiveStatDrops, targetUnaware, atkStatToUse, secondaryAtkStatToUse
-#define ON_CHOOSE_DEFENSIVE_STAT int battler, int target, MoveEnum move, int ignoreDefensiveStatBoosts, int battlerUnaware
+#define ON_CHOOSE_DEFENSIVE_STAT opt int battler, opt int target, opt MoveEnum move, opt int ignoreDefensiveStatBoosts, opt int battlerUnaware
 #define DELEGATE_CHOOSE_DEFENSIVE_STAT battler, target, move, ignoreDefensiveStatBoosts, battlerUnaware
-#define ON_STAB Type moveType
+#define ON_STAB opt Type moveType
 #define DELEGATE_STAB moveType
-#define ON_PRIORITY int battler, int target, MoveEnum move
+#define ON_PRIORITY opt int battler, opt int target, opt MoveEnum move
 #define DELEGATE_PRIORITY battler, target, move
-#define ON_MOVE_TYPE AbilityEnum ability, MoveEnum move, Type moveType, u8 *ateBoost
+#define ON_MOVE_TYPE opt AbilityEnum ability, opt MoveEnum move, opt Type moveType, opt u8 *ateBoost
 #define DELEGATE_MOVE_TYPE ability, move, moveType, ateBoost
-#define ON_EXIT AbilityEnum ability, int battler
+#define ON_EXIT opt AbilityEnum ability, opt int battler
 #define DELEGATE_EXIT ability, battler
-#define ON_CRIT int battler, int target, MoveEnum move, u16 typeEffectiveness
+#define ON_CRIT opt int battler, opt int target, opt MoveEnum move, opt u16 typeEffectiveness
 #define DELEGATE_CRIT battler, target, move, typeEffectiveness
-#define ON_TYPE_EFFECTIVENESS int defType, MoveEnum move, Type moveType, u16 *mod
+#define ON_TYPE_EFFECTIVENESS opt int defType, opt MoveEnum move, opt Type moveType, opt u16 *mod
 #define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
-#define ON_COPY_MOVE AbilityEnum ability, int battler, int attacker, int target, MoveEnum move
+#define ON_COPY_MOVE opt AbilityEnum ability, opt int battler, opt int attacker, opt int target, opt MoveEnum move
 #define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
-#define ON_AFTER_TYPE_EFFECTIVENESS int battler, AbilityEnum ability, int target, MoveEnum move, Type moveType, u16 *mod, u16 mod1, u16 mod2, u16 mod3
+#define ON_AFTER_TYPE_EFFECTIVENESS \
+    opt int battler, opt AbilityEnum ability, opt int target, opt MoveEnum move, opt Type moveType, opt u16 *mod, opt u16 mod1, opt u16 mod2, opt u16 mod3
 #define DELEGATE_AFTER_TYPE_EFFECTIVENESS battler, target, move, moveType, mod, mod1, mod2, mod3
-#define ON_MODIFY_EFFECT_CHANCE int battler, MoveEnum move, MoveEffectEnum moveEffect, int *effectChance
+#define ON_MODIFY_EFFECT_CHANCE opt int battler, opt MoveEnum move, opt MoveEffectEnum moveEffect, opt int *effectChance
 #define DELEGATE_MODIFY_EFFECT_CHANCE battler, move, moveEffect, effectChance
-#define ABILITY_ON_CAN_STATUS_TYPE int battler, MoveEnum move, StatusCheckEnum status
-#define DELEGATE_ON_CAN_STATUS_TYPE battler, move, status
-#define ABILITY_ON_STATUS_IMMUNE int battler, int target, AbilityEnum ability, StatusCheckEnum status
-#define DELEGATE_ON_STATUS_IMMUNE int battler, target, ability, status
-#define ABILITY_ON_TRAP int switchingBattler
-#define DELEGATE_ON_TRAP switchingBattler
-#define ABILITY_ON_BEFORE_ATTACK int battler, int attacker, AbilityEnum ability, MoveEnum move, Type moveType
-#define DELEGATE_ON_BEFORE_ATTACK battler, attacker, ability, move, moveType
-#define ON_PREEMPT_ACTION u8 battler, AbilityEnum ability, u8 turnBattler
+#define ON_CAN_STATUS_TYPE opt int battler, opt MoveEnum move, opt StatusCheckEnum status
+#define DELEGATE_CAN_STATUS_TYPE battler, move, status
+#define ON_STATUS_IMMUNE opt int battler, opt int target, opt AbilityEnum ability, opt StatusCheckEnum status
+#define DELEGATE_STATUS_IMMUNE int battler, target, ability, status
+#define ON_TRAP opt int switchingBattler
+#define DELEGATE_TRAP switchingBattler
+#define ON_BEFORE_ATTACK opt int battler, opt int attacker, opt AbilityEnum ability, opt MoveEnum move, opt Type moveType
+#define DELEGATE_BEFORE_ATTACK battler, attacker, ability, move, moveType
+#define ON_PREEMPT_ACTION opt u8 battler, opt AbilityEnum ability, opt u8 turnBattler
 #define DELEGATE_PREEMPT_ACTION battler, ability, turnBattler
-#define ON_MODIFY_MOVE_FLAGS int battler, MoveEnum move, Type moveType, MoveFlag flag
+#define ON_MODIFY_MOVE_FLAGS opt int battler, opt MoveEnum move, opt Type moveType, opt MoveFlag flag
 #define DELEGATE_MODIFY_MOVE_FLAGS battler, move, moveType, flag
-#define ON_MOLD_BREAKER int battler, MoveEnum move
+#define ON_MOLD_BREAKER opt int battler, opt MoveEnum move
 #define DELEGATE_MOLD_BREAKER battler, move
-#define ON_REVIVE int battler
+#define ON_REVIVE opt int battler
 #define DELEGATE_REVIVE battler
 
 #define GALE_WINGS_CLONE(type)                               \
@@ -186,7 +187,7 @@ static inline bool IsAbilityOnField(int breakable, AbilityPredicate abilityPredi
 
 template <typename AbilityPredicate>
 static inline bool IsAbilityOnField(int breakable, AbilityPredicate abilityPredicate) {
-    return IsAbilityOnField(breakable, abilityPredicate, +[](int battler) -> bool { return true; });
+    return IsAbilityOnField(breakable, abilityPredicate, +[](opt int battler) -> bool { return true; });
 }
 
 int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag) {
@@ -257,7 +258,7 @@ static int SwitchInAnnounce(int message) {
     return TRUE;
 }
 
-static int TryTransformAttacker(AbilityEnum ability, int battler, AbilityCallType callType) {
+static int TryTransformAttacker(int battler, AbilityCallType callType) {
     CHECK(ShouldChangeFormHpBased(battler))
     CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
@@ -365,6 +366,7 @@ static void RuinEffect(int ruinStat, int battler, int statId, u32* stat, NonStac
     if (statId != ruinStat) return;
     if (*flags & NON_STACKING_RUIN) return;
     if (BattlerHasAbility(battler, FALSE, [statId](AbilityEnum ability) -> int { return gAbilities[ability].ruinStat == statId; })) return;
+    *stat *= .75;
     *flags = *flags | NON_STACKING_RUIN;
 }
 
@@ -432,11 +434,16 @@ static int UseTurnAttackAsPursuit(ON_PREEMPT_ACTION) {
     return TRUE;
 }
 
-constexpr Ability None = {
+template <AbilityEnum Id>
+constexpr Ability Impl = {0};
+
+template <>
+constexpr Ability Impl<ABILITY_NONE> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Stench = {
+template <>
+constexpr Ability Impl<ABILITY_STENCH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanMoveHaveExtraFlinchChance(move))
@@ -447,11 +454,13 @@ constexpr Ability Stench = {
     .toxicTerrainImmune = TRUE,
 };
 
-constexpr Ability PoisonHeal = {
+template <>
+constexpr Ability Impl<ABILITY_POISON_HEAL> = {
     .toxicTerrainImmune = TRUE,
 };
 
-constexpr Ability Drizzle = {
+template <>
+constexpr Ability Impl<ABILITY_DRIZZLE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
@@ -464,7 +473,8 @@ constexpr Ability Drizzle = {
     },
 };
 
-constexpr Ability SpeedBoost = {
+template <>
+constexpr Ability Impl<ABILITY_SPEED_BOOST> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
@@ -475,7 +485,8 @@ constexpr Ability SpeedBoost = {
     },
 };
 
-constexpr Ability CoolExit = {
+template <>
+constexpr Ability Impl<ABILITY_COOL_EXIT> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
 
@@ -499,14 +510,16 @@ constexpr Ability CoolExit = {
     },
 };
 
-constexpr Ability BattleArmor = {
+template <>
+constexpr Ability Impl<ABILITY_BATTLE_ARMOR> = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.8); },
     .onCrit = +[](ON_CRIT) { return NEVER_CRIT; },
     .onCritFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
 
-constexpr Ability Sturdy = {
+template <>
+constexpr Ability Impl<ABILITY_STURDY> = {
     .breakable = TRUE,
 };
 
@@ -523,12 +536,14 @@ ON_EITHER(Damp) {
     BattleScriptCall(BattleScript_StackBecameTheTypeFull);
     return TRUE;
 }
-constexpr Ability Damp = {
+template <>
+constexpr Ability Impl<ABILITY_DAMP> = {
     ON_EITHER_ABILITY(Damp),
 };
 
-constexpr Ability Limber = {
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+template <>
+constexpr Ability Impl<ABILITY_LIMBER> = {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_PARALYSIS)
         return TRUE;
     },
@@ -537,7 +552,8 @@ constexpr Ability Limber = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability SandVeil = {
+template <>
+constexpr Ability Impl<ABILITY_SAND_VEIL> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(IsBattlerWeatherAffected(target, WEATHER_SANDSTORM_ANY));
         *accuracy /= 1.25;
@@ -557,11 +573,13 @@ ON_EITHER(Static) {
     AbilityStatusEffectSafe(MOVE_EFFECT_PARALYSIS, battler, opponent);
     return TRUE;
 }
-constexpr Ability Static = {
+template <>
+constexpr Ability Impl<ABILITY_STATIC> = {
     ON_EITHER_ABILITY(Static),
 };
 
-constexpr Ability VoltAbsorb = {
+template <>
+constexpr Ability Impl<ABILITY_VOLT_ABSORB> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_ELECTRIC)
         return ABSORB_RESULT_HEAL;
@@ -569,7 +587,8 @@ constexpr Ability VoltAbsorb = {
     .breakable = TRUE,
 };
 
-constexpr Ability WaterAbsorb = {
+template <>
+constexpr Ability Impl<ABILITY_WATER_ABSORB> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_WATER)
         return ABSORB_RESULT_HEAL;
@@ -577,8 +596,9 @@ constexpr Ability WaterAbsorb = {
     .breakable = TRUE,
 };
 
-constexpr Ability Oblivious = {
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+template <>
+constexpr Ability Impl<ABILITY_OBLIVIOUS> = {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & (CHECK_INFATUATE | CHECK_RESTRICTING))
         return TRUE;
     },
@@ -587,22 +607,25 @@ constexpr Ability Oblivious = {
     .tauntImmune = TRUE,
 };
 
-constexpr Ability CloudNine = {
+template <>
+constexpr Ability Impl<ABILITY_CLOUD_NINE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         BattleScriptPushCursorAndCallback(BattleScript_AnnounceAirLockCloudNine);
         return TRUE;
     },
 };
 
-constexpr Ability CompoundEyes = {
+template <>
+constexpr Ability Impl<ABILITY_COMPOUND_EYES> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         *accuracy *= 1.3;
         return ACCURACY_MULTIPLICATIVE;
     },
 };
 
-constexpr Ability Insomnia = {
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+template <>
+constexpr Ability Impl<ABILITY_INSOMNIA> = {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_SLEEP)
         return TRUE;
     },
@@ -610,8 +633,9 @@ constexpr Ability Insomnia = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability ColorChange = {
-    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+template <>
+constexpr Ability Impl<ABILITY_COLOR_CHANGE> = {
+    .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
         CHECK(battler != attacker)
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
 
@@ -637,12 +661,13 @@ constexpr Ability ColorChange = {
     .onBeforeAttackFor = APPLY_ON_TARGET,
 };
 
-constexpr Ability Immunity = {
+template <>
+constexpr Ability Impl<ABILITY_IMMUNITY> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_POISON) RESISTANCE(.5);
         },
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & (CHECK_STATUS1 & ~CHECK_SLEEP))
         return TRUE;
     },
@@ -650,7 +675,8 @@ constexpr Ability Immunity = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability FlashFire = {
+template <>
+constexpr Ability Impl<ABILITY_FLASH_FIRE> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_FIRE)
         return ABSORB_RESULT_FLASH_FIRE;
@@ -662,13 +688,15 @@ constexpr Ability FlashFire = {
     .breakable = TRUE,
 };
 
-constexpr Ability ShieldDust = {
+template <>
+constexpr Ability Impl<ABILITY_SHIELD_DUST> = {
     .breakable = TRUE,
     .powderImmune = TRUE,
 };
 
-constexpr Ability OwnTempo = {
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+template <>
+constexpr Ability Impl<ABILITY_OWN_TEMPO> = {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_CONFUSION)
         return TRUE;
     },
@@ -677,28 +705,32 @@ constexpr Ability OwnTempo = {
     .tauntImmune = TRUE,
 };
 
-constexpr Ability SuctionCups = {
+template <>
+constexpr Ability Impl<ABILITY_SUCTION_CUPS> = {
     .breakable = TRUE,
     .suctionCups = TRUE,
 };
 
-constexpr Ability GuardDog = {
+template <>
+constexpr Ability Impl<ABILITY_GUARD_DOG> = {
     .breakable = TRUE,
     .suctionCups = TRUE,
 };
 
-constexpr Ability Intimidate = {
+template <>
+constexpr Ability Impl<ABILITY_INTIMIDATE> = {
     .onEntry = UseIntimidateClone,
 };
 
-constexpr Ability ShadowTag = {
-    .onTrap = +[](ABILITY_ON_TRAP) -> int {
-        return BattlerHasAbility(switchingBattler, FALSE, [](AbilityEnum ability) -> int { return gAbilities[ability].shadowTag; });
-    },
+template <>
+constexpr Ability Impl<ABILITY_SHADOW_TAG> = {
+    .onTrap =
+        +[](ON_TRAP) -> int { return BattlerHasAbility(switchingBattler, FALSE, [](AbilityEnum ability) -> int { return gAbilities[ability].shadowTag; }); },
     .shadowTag = TRUE,
 };
 
-constexpr Ability RoughSkin = {
+template <>
+constexpr Ability Impl<ABILITY_ROUGH_SKIN> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsMagicGuardProtected(attacker))
@@ -711,7 +743,8 @@ constexpr Ability RoughSkin = {
     },
 };
 
-constexpr Ability WonderGuard = {
+template <>
+constexpr Ability Impl<ABILITY_WONDER_GUARD> = {
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
             if (*mod < UQ_4_12(2.0)) *mod = 0;
@@ -721,7 +754,8 @@ constexpr Ability WonderGuard = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Levitate = {
+template <>
+constexpr Ability Impl<ABILITY_LEVITATE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FLYING) MUL(1.25);
@@ -730,7 +764,8 @@ constexpr Ability Levitate = {
     .levitate = TRUE,
 };
 
-constexpr Ability EffectSpore = {
+template <>
+constexpr Ability Impl<ABILITY_EFFECT_SPORE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -762,11 +797,13 @@ constexpr Ability EffectSpore = {
     .powderImmune = TRUE,
 };
 
-constexpr Ability ClearBody = {
+template <>
+constexpr Ability Impl<ABILITY_CLEAR_BODY> = {
     .breakable = TRUE,
 };
 
-constexpr Ability NaturalCure = {
+template <>
+constexpr Ability Impl<ABILITY_NATURAL_CURE> = {
     .onExit = +[](ON_EXIT) -> int {
         CHECK(IsBattlerAlive(battler))
         CHECK(gBattleMons[battler].status1 & STATUS1_ANY)
@@ -782,7 +819,8 @@ constexpr Ability NaturalCure = {
     },
 };
 
-constexpr Ability LightningRod = {
+template <>
+constexpr Ability Impl<ABILITY_LIGHTNING_ROD> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_ELECTRIC);
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -792,32 +830,37 @@ constexpr Ability LightningRod = {
     .breakable = TRUE,
 };
 
-constexpr Ability SereneGrace = {
+template <>
+constexpr Ability Impl<ABILITY_SERENE_GRACE> = {
     .onModifyEffectChance = +[](ON_MODIFY_EFFECT_CHANCE) { *effectChance *= 2; },
 };
 
-constexpr Ability SwiftSwim = {
+template <>
+constexpr Ability Impl<ABILITY_SWIFT_SWIM> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat *= 1.5;
         },
 };
 
-constexpr Ability Chlorophyll = {
+template <>
+constexpr Ability Impl<ABILITY_CHLOROPHYLL> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat *= 1.5;
         },
 };
 
-constexpr Ability Illuminate = {
+template <>
+constexpr Ability Impl<ABILITY_ILLUMINATE> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
     },
 };
 
-constexpr Ability Trace = {
+template <>
+constexpr Ability Impl<ABILITY_TRACE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int target = BATTLE_OPPOSITE(battler);
         auto newAbility = GetBattlerAbility(target);
@@ -845,7 +888,8 @@ constexpr Ability Trace = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability HugePower = {
+template <>
+constexpr Ability Impl<ABILITY_HUGE_POWER> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_ATK) *stat *= 2;
@@ -861,11 +905,13 @@ ON_EITHER(PoisonPoint) {
     AbilityStatusEffectSafe(MOVE_EFFECT_POISON, battler, opponent);
     return TRUE;
 }
-constexpr Ability PoisonPoint = {
+template <>
+constexpr Ability Impl<ABILITY_POISON_POINT> = {
     ON_EITHER_ABILITY(PoisonPoint),
 };
 
-constexpr Ability InnerFocus = {
+template <>
+constexpr Ability Impl<ABILITY_INNER_FOCUS> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(move == MOVE_FOCUS_BLAST)
         return ACCURACY_ALWAYS_HITS;
@@ -874,12 +920,13 @@ constexpr Ability InnerFocus = {
     .tauntImmune = TRUE,
 };
 
-constexpr Ability MagmaArmor = {
+template <>
+constexpr Ability Impl<ABILITY_MAGMA_ARMOR> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_WATER || moveType == TYPE_ICE) RESISTANCE(.7);
         },
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_FROSTBITE)
         return TRUE;
     },
@@ -887,7 +934,8 @@ constexpr Ability MagmaArmor = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability WaterVeil = {
+template <>
+constexpr Ability Impl<ABILITY_WATER_VEIL> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gStatuses3[battler] & STATUS3_AQUA_RING)
 
@@ -895,7 +943,7 @@ constexpr Ability WaterVeil = {
         BattleScriptPushCursorAndCallback(BattleScript_BattlerEnvelopedItselfInAVeil);
         return TRUE;
     },
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_BURN)
         return TRUE;
     },
@@ -903,11 +951,13 @@ constexpr Ability WaterVeil = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability MagnetPull = {
-    .onTrap = +[](ABILITY_ON_TRAP) -> int { return IS_BATTLER_OF_TYPE(switchingBattler, TYPE_STEEL); },
+template <>
+constexpr Ability Impl<ABILITY_MAGNET_PULL> = {
+    .onTrap = +[](ON_TRAP) -> int { return IS_BATTLER_OF_TYPE(switchingBattler, TYPE_STEEL); },
 };
 
-constexpr Ability Soundproof = {
+template <>
+constexpr Ability Impl<ABILITY_SOUNDPROOF> = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(IsSoundMove(attacker, move))
         CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)* immunityScript = BattleScript_SoundproofProtected;
@@ -917,7 +967,8 @@ constexpr Ability Soundproof = {
     .isSoundproof = TRUE,
 };
 
-constexpr Ability RainDish = {
+template <>
+constexpr Ability Impl<ABILITY_RAIN_DISH> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
@@ -932,7 +983,8 @@ constexpr Ability RainDish = {
     },
 };
 
-constexpr Ability SandStream = {
+template <>
+constexpr Ability Impl<ABILITY_SAND_STREAM> = {
     .onEntry = +[](ON_ENTRY) -> int {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
@@ -945,7 +997,8 @@ constexpr Ability SandStream = {
     },
 };
 
-constexpr Ability Pressure = {
+template <>
+constexpr Ability Impl<ABILITY_PRESSURE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int loweredStats = 0;
         for (int i = 0; i < gBattlersCount; i++) {
@@ -963,7 +1016,8 @@ constexpr Ability Pressure = {
     },
 };
 
-constexpr Ability ThickFat = {
+template <>
+constexpr Ability Impl<ABILITY_THICK_FAT> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.5);
@@ -980,11 +1034,13 @@ ON_EITHER(FlameBody) {
     AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
     return TRUE;
 }
-constexpr Ability FlameBody = {
+template <>
+constexpr Ability Impl<ABILITY_FLAME_BODY> = {
     ON_EITHER_ABILITY(FlameBody),
 };
 
-constexpr Ability KeenEye = {
+template <>
+constexpr Ability Impl<ABILITY_KEEN_EYE> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
@@ -992,7 +1048,8 @@ constexpr Ability KeenEye = {
     .breakable = TRUE,
 };
 
-constexpr Ability HyperCutter = {
+template <>
+constexpr Ability Impl<ABILITY_HYPER_CUTTER> = {
     .onCrit = +[](ON_CRIT) -> int {
         CHECK(IsMoveMakingContact(move, battler))
         return 1;
@@ -1000,7 +1057,8 @@ constexpr Ability HyperCutter = {
     .breakable = TRUE,
 };
 
-constexpr Ability Pickup = {
+template <>
+constexpr Ability Impl<ABILITY_PICKUP> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int side = GetBattlerSide(battler);
         CHECK(gSideStatuses[side] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[side].hotCoals || gSideTimers[side].caltrops)
@@ -1015,7 +1073,8 @@ constexpr Ability Pickup = {
     },
 };
 
-constexpr Ability Truant = {
+template <>
+constexpr Ability Impl<ABILITY_TRUANT> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         if (GetAbilityState(battler, ability))
             SetAbilityState(battler, ability, FALSE);
@@ -1025,7 +1084,8 @@ constexpr Ability Truant = {
     },
 };
 
-constexpr Ability Hustle = {
+template <>
+constexpr Ability Impl<ABILITY_HUSTLE> = {
     .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MUL(1.4); },
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK_NOT(IS_MOVE_STATUS(move))* accuracy *= .9;
@@ -1042,11 +1102,13 @@ ON_EITHER(CuteCharm) {
     AbilityStatusEffectSafe(MOVE_EFFECT_ATTRACT, battler, opponent);
     return TRUE;
 }
-constexpr Ability CuteCharm = {
+template <>
+constexpr Ability Impl<ABILITY_CUTE_CHARM> = {
     ON_EITHER_ABILITY(CuteCharm),
 };
 
-constexpr Ability Plus = {
+template <>
+constexpr Ability Impl<ABILITY_PLUS> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             int partner = BATTLE_PARTNER(battler);
@@ -1055,14 +1117,16 @@ constexpr Ability Plus = {
         },
 };
 
-constexpr Ability Minus = {
-    .onOffensiveMultiplier = Plus.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_MINUS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_PLUS>.onOffensiveMultiplier,
 };
 
-constexpr Ability Forecast = {
-    .onEntry = +[](ON_ENTRY) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
-    .onWeather = +[](ON_WEATHER) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_CALL); },
-    .onEndTurn = +[](ON_END_TURN) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+template <>
+constexpr Ability Impl<ABILITY_FORECAST> = {
+    .onEntry = +[](ON_ENTRY) -> int { return TryTransformAttacker(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onWeather = +[](ON_WEATHER) -> int { return TryTransformAttacker(battler, ABILITY_BS_CALL); },
+    .onEndTurn = +[](ON_END_TURN) -> int { return TryTransformAttacker(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onAttacker = +[](ON_ATTACKER) -> int {
         switch (move) {
             case MOVE_SUNNY_DAY:
@@ -1083,11 +1147,13 @@ constexpr Ability Forecast = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability StickyHold = {
+template <>
+constexpr Ability Impl<ABILITY_STICKY_HOLD> = {
     .breakable = TRUE,
 };
 
-constexpr Ability ShedSkin = {
+template <>
+constexpr Ability Impl<ABILITY_SHED_SKIN> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(Random() % 100 < 30)
 
@@ -1096,7 +1162,8 @@ constexpr Ability ShedSkin = {
     },
 };
 
-constexpr Ability Guts = {
+template <>
+constexpr Ability Impl<ABILITY_GUTS> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (HasAnyStatusOrAbility(battler) && IS_MOVE_PHYSICAL(move)) MUL(1.5);
@@ -1104,31 +1171,37 @@ constexpr Ability Guts = {
     .negatesBurnAtkDrop = TRUE,
 };
 
-constexpr Ability MarvelScale = {
+template <>
+constexpr Ability Impl<ABILITY_MARVEL_SCALE> = {
     .onStat =
         +[](ON_STAT) {
             if ((statId == STAT_DEF || statId == STAT_SPDEF) && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
         },
 };
 
-constexpr Ability Overgrow = {
+template <>
+constexpr Ability Impl<ABILITY_OVERGROW> = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_GRASS),
 };
 
-constexpr Ability Blaze = {
+template <>
+constexpr Ability Impl<ABILITY_BLAZE> = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_FIRE),
 };
 
-constexpr Ability Torrent = {
+template <>
+constexpr Ability Impl<ABILITY_TORRENT> = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_WATER),
 };
 
-constexpr Ability Swarm = {
+template <>
+constexpr Ability Impl<ABILITY_SWARM> = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_BUG),
 };
 
-constexpr Ability RockHead = {
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+template <>
+constexpr Ability Impl<ABILITY_ROCK_HEAD> = {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_CONFUSION)
         return TRUE;
     },
@@ -1137,7 +1210,8 @@ constexpr Ability RockHead = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability Drought = {
+template <>
+constexpr Ability Impl<ABILITY_DROUGHT> = {
     .onEntry = +[](ON_ENTRY) -> int {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
@@ -1150,17 +1224,19 @@ constexpr Ability Drought = {
     },
 };
 
-constexpr Ability ArenaTrap = {
-    .onTrap = +[](ABILITY_ON_TRAP) -> int { return IsBattlerGrounded(switchingBattler); },
+template <>
+constexpr Ability Impl<ABILITY_ARENA_TRAP> = {
+    .onTrap = +[](ON_TRAP) -> int { return IsBattlerGrounded(switchingBattler); },
 };
 
-constexpr Ability VitalSpirit = {
+template <>
+constexpr Ability Impl<ABILITY_VITAL_SPIRIT> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(moveType == TYPE_FIGHTING)
         CHECK(AbilityHealMonStatus(battler, ability));
         return TRUE;
     },
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_SLEEP)
         return TRUE;
     },
@@ -1169,7 +1245,8 @@ constexpr Ability VitalSpirit = {
     .tauntImmune = TRUE,
 };
 
-constexpr Ability WhiteSmoke = {
+template <>
+constexpr Ability Impl<ABILITY_WHITE_SMOKE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideTimers[GET_BATTLER_SIDE(battler)].smokescreenTimer)
 
@@ -1181,18 +1258,21 @@ constexpr Ability WhiteSmoke = {
     },
 };
 
-constexpr Ability ShellArmor = {
-    .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
-    .onCrit = BattleArmor.onCrit,
-    .onCritFor = BattleArmor.onCritFor,
+template <>
+constexpr Ability Impl<ABILITY_SHELL_ARMOR> = {
+    .onDefensiveMultiplier = Impl<ABILITY_BATTLE_ARMOR>.onDefensiveMultiplier,
+    .onCrit = Impl<ABILITY_BATTLE_ARMOR>.onCrit,
+    .onCritFor = Impl<ABILITY_BATTLE_ARMOR>.onCritFor,
     .breakable = TRUE,
 };
 
-constexpr Ability AirLock = {
-    .onEntry = CloudNine.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_AIR_LOCK> = {
+    .onEntry = Impl<ABILITY_CLOUD_NINE>.onEntry,
 };
 
-constexpr Ability TangledFeet = {
+template <>
+constexpr Ability Impl<ABILITY_TANGLED_FEET> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(gBattleMons[target].status2 & STATUS2_CONFUSION);
         *accuracy /= 2;
@@ -1202,7 +1282,8 @@ constexpr Ability TangledFeet = {
     .breakable = TRUE,
 };
 
-constexpr Ability MotorDrive = {
+template <>
+constexpr Ability Impl<ABILITY_MOTOR_DRIVE> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_ELECTRIC);
         *statId = STAT_SPEED;
@@ -1211,7 +1292,8 @@ constexpr Ability MotorDrive = {
     .breakable = TRUE,
 };
 
-constexpr Ability Rivalry = {
+template <>
+constexpr Ability Impl<ABILITY_RIVALRY> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, gBattleMons[battler].personality);
@@ -1231,7 +1313,8 @@ constexpr Ability Rivalry = {
     .breakable = TRUE,
 };
 
-constexpr Ability SnowCloak = {
+template <>
+constexpr Ability Impl<ABILITY_SNOW_CLOAK> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(IsBattlerWeatherAffected(target, WEATHER_HAIL_ANY));
         *accuracy /= 1.25;
@@ -1242,7 +1325,8 @@ constexpr Ability SnowCloak = {
     .hailImmune = TRUE,
 };
 
-constexpr Ability AngerPoint = {
+template <>
+constexpr Ability Impl<ABILITY_ANGER_POINT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_ATK))
@@ -1258,14 +1342,16 @@ constexpr Ability AngerPoint = {
     },
 };
 
-constexpr Ability Unburden = {
+template <>
+constexpr Ability Impl<ABILITY_UNBURDEN> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && GetAbilityState(battler, ability)) *stat *= 2;
         },
 };
 
-constexpr Ability Heatproof = {
+template <>
+constexpr Ability Impl<ABILITY_HEATPROOF> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE) RESISTANCE(.5);
@@ -1274,8 +1360,9 @@ constexpr Ability Heatproof = {
     .negatesBurnAtkDrop = TRUE,
 };
 
-constexpr Ability DrySkin = {
-    .onAbsorb = WaterAbsorb.onAbsorb,
+template <>
+constexpr Ability Impl<ABILITY_DRY_SKIN> = {
+    .onAbsorb = Impl<ABILITY_WATER_ABSORB>.onAbsorb,
     .onEndTurn = +[](ON_END_TURN) -> int {
         if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && !IsMagicGuardProtected(battler)) {
             gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
@@ -1284,7 +1371,7 @@ constexpr Ability DrySkin = {
             return TRUE;
         }
 
-        return RainDish.onEndTurn(DELEGATE_END_TURN);
+        return Impl<ABILITY_RAIN_DISH>.onEndTurn(DELEGATE_END_TURN);
     },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
@@ -1293,7 +1380,8 @@ constexpr Ability DrySkin = {
     .breakable = TRUE,
 };
 
-constexpr Ability Download = {
+template <>
+constexpr Ability Impl<ABILITY_DOWNLOAD> = {
     .onEntry = +[](ON_ENTRY) -> int {
         gBattlerTarget = BATTLE_OPPOSITE(battler);
         if (!IsBattlerAlive(battler)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
@@ -1306,22 +1394,26 @@ constexpr Ability Download = {
     },
 };
 
-constexpr Ability IronFist = {
+template <>
+constexpr Ability Impl<ABILITY_IRON_FIST> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IsIronFistBoosted(battler, move)) MUL(1.3);
         },
 };
 
-constexpr Ability Adaptability = {
+template <>
+constexpr Ability Impl<ABILITY_ADAPTABILITY> = {
     .adaptability = TRUE,
 };
 
-constexpr Ability SkillLink = {
+template <>
+constexpr Ability Impl<ABILITY_SKILL_LINK> = {
     .skillLink = TRUE,
 };
 
-constexpr Ability Hydration = {
+template <>
+constexpr Ability Impl<ABILITY_HYDRATION> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
@@ -1330,7 +1422,8 @@ constexpr Ability Hydration = {
     },
 };
 
-constexpr Ability SolarPower = {
+template <>
+constexpr Ability Impl<ABILITY_SOLAR_POWER> = {
     .onStat =
         +[](ON_STAT) {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
@@ -1338,7 +1431,8 @@ constexpr Ability SolarPower = {
         },
 };
 
-constexpr Ability RagingStorm = {
+template <>
+constexpr Ability Impl<ABILITY_RAGING_STORM> = {
     .onStat =
         +[](ON_STAT) {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
@@ -1346,14 +1440,16 @@ constexpr Ability RagingStorm = {
         },
 };
 
-constexpr Ability QuickFeet = {
+template <>
+constexpr Ability Impl<ABILITY_QUICK_FEET> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
         },
 };
 
-constexpr Ability Normalize = {
+template <>
+constexpr Ability Impl<ABILITY_NORMALIZE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
@@ -1365,23 +1461,27 @@ constexpr Ability Normalize = {
     },
 };
 
-constexpr Ability Sniper = {
+template <>
+constexpr Ability Impl<ABILITY_SNIPER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (isCrit) MUL(1.5);
         },
 };
 
-constexpr Ability MagicGuard = {
+template <>
+constexpr Ability Impl<ABILITY_MAGIC_GUARD> = {
     .magicGuard = TRUE,
 };
 
-constexpr Ability NoGuard = {
+template <>
+constexpr Ability Impl<ABILITY_NO_GUARD> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority { return ACCURACY_ALWAYS_HITS; },
     .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
 };
 
-constexpr Ability Stall = {
+template <>
+constexpr Ability Impl<ABILITY_STALL> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (gCurrentTurnActionNumber < GetBattlerTurnOrderNum(battler)) MUL(.7);
@@ -1389,14 +1489,16 @@ constexpr Ability Stall = {
     .breakable = TRUE,
 };
 
-constexpr Ability Technician = {
+template <>
+constexpr Ability Impl<ABILITY_TECHNICIAN> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (basePower <= 60) MUL(1.5);
         },
 };
 
-constexpr Ability LeafGuard = {
+template <>
+constexpr Ability Impl<ABILITY_LEAF_GUARD> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
 
@@ -1405,16 +1507,19 @@ constexpr Ability LeafGuard = {
     },
 };
 
-constexpr Ability MoldBreaker = {
+template <>
+constexpr Ability Impl<ABILITY_MOLD_BREAKER> = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER); },
     .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int { return TRUE; },
 };
 
-constexpr Ability SuperLuck = {
+template <>
+constexpr Ability Impl<ABILITY_SUPER_LUCK> = {
     .onCrit = +[](ON_CRIT) -> int { return 1; },
 };
 
-constexpr Ability Aftermath = {
+template <>
+constexpr Ability Impl<ABILITY_AFTERMATH> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
@@ -1428,7 +1533,8 @@ constexpr Ability Aftermath = {
     },
 };
 
-constexpr Ability Anticipation = {
+template <>
+constexpr Ability Impl<ABILITY_ANTICIPATION> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int side = GetBattlerSide(battler);
         int any = FALSE;
@@ -1454,7 +1560,8 @@ constexpr Ability Anticipation = {
     .persistent = TRUE,
 };
 
-constexpr Ability Forewarn = {
+template <>
+constexpr Ability Impl<ABILITY_FOREWARN> = {
     .onEntry = +[](ON_ENTRY) -> int {
         gBattlerTarget = BATTLE_OPPOSITE(battler);
         if (!IsBattlerAlive(gBattlerTarget) || gWishFutureKnock.futureSightCounter[gBattlerTarget]) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
@@ -1472,19 +1579,22 @@ constexpr Ability Forewarn = {
     },
 };
 
-constexpr Ability Unaware = {
+template <>
+constexpr Ability Impl<ABILITY_UNAWARE> = {
     .breakable = TRUE,
     .unaware = TRUE,
 };
 
-constexpr Ability TintedLens = {
+template <>
+constexpr Ability Impl<ABILITY_TINTED_LENS> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (typeEffectivenessMultiplier <= UQ_4_12(.5)) RESISTANCE(2);
         },
 };
 
-constexpr Ability Filter = {
+template <>
+constexpr Ability Impl<ABILITY_FILTER> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
@@ -1492,7 +1602,8 @@ constexpr Ability Filter = {
     .breakable = TRUE,
 };
 
-constexpr Ability SlowStart = {
+template <>
+constexpr Ability Impl<ABILITY_SLOW_START> = {
     .onEntry = +[](ON_ENTRY) -> int {
         gVolatileStructs[battler].slowStartTimer = 5;
         return SwitchInAnnounce(B_MSG_SWITCHIN_SLOWSTART);
@@ -1504,7 +1615,8 @@ constexpr Ability SlowStart = {
         },
 };
 
-constexpr Ability Scrappy = {
+template <>
+constexpr Ability Impl<ABILITY_SCRAPPY> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
         CHECK(moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING)
         CHECK(defType == TYPE_GHOST)
@@ -1515,7 +1627,8 @@ constexpr Ability Scrappy = {
     .tauntImmune = TRUE,
 };
 
-constexpr Ability StormDrain = {
+template <>
+constexpr Ability Impl<ABILITY_STORM_DRAIN> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_WATER);
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -1525,7 +1638,8 @@ constexpr Ability StormDrain = {
     .breakable = TRUE,
 };
 
-constexpr Ability IceBody = {
+template <>
+constexpr Ability Impl<ABILITY_ICE_BODY> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
@@ -1541,12 +1655,14 @@ constexpr Ability IceBody = {
     .hailImmune = TRUE,
 };
 
-constexpr Ability SolidRock = {
-    .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_SOLID_ROCK> = {
+    .onDefensiveMultiplier = Impl<ABILITY_FILTER>.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-constexpr Ability SnowWarning = {
+template <>
+constexpr Ability Impl<ABILITY_SNOW_WARNING> = {
     .onEntry = +[](ON_ENTRY) -> int {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
@@ -1559,7 +1675,8 @@ constexpr Ability SnowWarning = {
     },
 };
 
-constexpr Ability HoneyGather = {
+template <>
+constexpr Ability Impl<ABILITY_HONEY_GATHER> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(gBattleMons[battler].item)
         CHECK(Random() % 2)
@@ -1570,7 +1687,8 @@ constexpr Ability HoneyGather = {
     },
 };
 
-constexpr Ability Frisk = {
+template <>
+constexpr Ability Impl<ABILITY_FRISK> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int any = FALSE;
         for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
@@ -1586,22 +1704,25 @@ constexpr Ability Frisk = {
     },
 };
 
-constexpr Ability Reckless = {
+template <>
+constexpr Ability Impl<ABILITY_RECKLESS> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
         },
 };
 
-constexpr Ability Multitype = {
+template <>
+constexpr Ability Impl<ABILITY_MULTITYPE> = {
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability FlowerGift = {
-    .onEntry = Forecast.onEntry,
-    .onWeather = Forecast.onWeather,
-    .onEndTurn = Forecast.onEndTurn,
+template <>
+constexpr Ability Impl<ABILITY_FLOWER_GIFT> = {
+    .onEntry = Impl<ABILITY_FORECAST>.onEntry,
+    .onWeather = Impl<ABILITY_FORECAST>.onWeather,
+    .onEndTurn = Impl<ABILITY_FORECAST>.onEndTurn,
     .onStat =
         +[](ON_STAT) {
             if (statId != STAT_SPATK && statId != STAT_SPDEF) return;
@@ -1613,7 +1734,8 @@ constexpr Ability FlowerGift = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability BadDreams = {
+template <>
+constexpr Ability Impl<ABILITY_BAD_DREAMS> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         gBattleScripting.abilityPopupOverwrite = ability;
         BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
@@ -1621,23 +1743,27 @@ constexpr Ability BadDreams = {
     },
 };
 
-constexpr Ability SheerForce = {
+template <>
+constexpr Ability Impl<ABILITY_SHEER_FORCE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST) MUL(1.3);
         },
 };
 
-constexpr Ability Contrary = {
+template <>
+constexpr Ability Impl<ABILITY_CONTRARY> = {
     .breakable = TRUE,
 };
 
-constexpr Ability Unnerve = {
+template <>
+constexpr Ability Impl<ABILITY_UNNERVE> = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE); },
     .unnerve = TRUE,
 };
 
-constexpr Ability Defeatist = {
+template <>
+constexpr Ability Impl<ABILITY_DEFEATIST> = {
     .onStat =
         +[](ON_STAT) {
             if (statId != STAT_ATK && statId != STAT_SPATK) return;
@@ -1645,7 +1771,8 @@ constexpr Ability Defeatist = {
         },
 };
 
-constexpr Ability CursedBody = {
+template <>
+constexpr Ability Impl<ABILITY_CURSED_BODY> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(gVolatileStructs[attacker].disabledMove)
@@ -1662,7 +1789,8 @@ constexpr Ability CursedBody = {
     },
 };
 
-constexpr Ability Healer = {
+template <>
+constexpr Ability Impl<ABILITY_HEALER> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(Random() % 100 < 30)
 
@@ -1678,11 +1806,13 @@ constexpr Ability Healer = {
     },
 };
 
-constexpr Ability FriendGuard = {
+template <>
+constexpr Ability Impl<ABILITY_FRIEND_GUARD> = {
     .breakable = TRUE,
 };
 
-constexpr Ability WeakArmor = {
+template <>
+constexpr Ability Impl<ABILITY_WEAK_ARMOR> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(IS_MOVE_PHYSICAL(move))
@@ -1696,14 +1826,16 @@ constexpr Ability WeakArmor = {
     },
 };
 
-constexpr Ability LightMetal = {
+template <>
+constexpr Ability Impl<ABILITY_LIGHT_METAL> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED) *stat *= 1.3;
         },
 };
 
-constexpr Ability Multiscale = {
+template <>
+constexpr Ability Impl<ABILITY_MULTISCALE> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (BATTLER_MAX_HP(battler)) MUL(.5);
@@ -1711,14 +1843,15 @@ constexpr Ability Multiscale = {
     .breakable = TRUE,
 };
 
-constexpr Ability ToxicBoost = {
+template <>
+constexpr Ability Impl<ABILITY_TOXIC_BOOST> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMons[battler].status1 & STATUS1_PSN_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
         },
 };
 
-int FlareBoostHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
+int FlareBoostHandler(int battler, AbilityCallType callType) {
     CHECK(CanBeBurned(battler))
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
@@ -1730,9 +1863,10 @@ int FlareBoostHandler(AbilityEnum ability, int battler, AbilityCallType callType
     return TRUE;
 }
 
-constexpr Ability FlareBoost = {
-    .onEntry = +[](ON_ENTRY) -> int { return FlareBoostHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
-    .onWeather = +[](ON_WEATHER) -> int { return FlareBoostHandler(ability, battler, ABILITY_BS_CALL); },
+template <>
+constexpr Ability Impl<ABILITY_FLARE_BOOST> = {
+    .onEntry = +[](ON_ENTRY) -> int { return FlareBoostHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onWeather = +[](ON_WEATHER) -> int { return FlareBoostHandler(battler, ABILITY_BS_CALL); },
     .onStat =
         +[](ON_STAT) {
             if (statId != STAT_SPATK) return;
@@ -1741,7 +1875,8 @@ constexpr Ability FlareBoost = {
     .negatesBurnAtkDrop = TRUE,
 };
 
-constexpr Ability Harvest = {
+template <>
+constexpr Ability Impl<ABILITY_HARVEST> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(gBattleMons[battler].item)
         CHECK_NOT(gBattleStruct->changedItems[battler])
@@ -1753,7 +1888,8 @@ constexpr Ability Harvest = {
     },
 };
 
-constexpr Ability Telepathy = {
+template <>
+constexpr Ability Impl<ABILITY_TELEPATHY> = {
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
             if (target == BATTLE_PARTNER(battler) && gBattleMoves[move].power) *mod = 0;
@@ -1762,7 +1898,8 @@ constexpr Ability Telepathy = {
     .breakable = TRUE,
 };
 
-constexpr Ability Moody = {
+template <>
+constexpr Ability Impl<ABILITY_MOODY> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2);
         int validToRaise = 0, validToLower = 0;
@@ -1793,7 +1930,8 @@ constexpr Ability Moody = {
     },
 };
 
-constexpr Ability Overcoat = {
+template <>
+constexpr Ability Impl<ABILITY_OVERCOAT> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IS_MOVE_SPECIAL(move)) MUL(.8);
@@ -1804,12 +1942,14 @@ constexpr Ability Overcoat = {
     .hailImmune = TRUE,
 };
 
-constexpr Ability PoisonTouch = {
-    .onAttacker = PoisonPoint.onAttacker,
-    .onDefender = PoisonPoint.onDefender,
+template <>
+constexpr Ability Impl<ABILITY_POISON_TOUCH> = {
+    .onAttacker = Impl<ABILITY_POISON_POINT>.onAttacker,
+    .onDefender = Impl<ABILITY_POISON_POINT>.onDefender,
 };
 
-constexpr Ability Regenerator = {
+template <>
+constexpr Ability Impl<ABILITY_REGENERATOR> = {
     .onExit = +[](ON_EXIT) -> int {
         CHECK(IsBattlerAlive(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
@@ -1818,14 +1958,16 @@ constexpr Ability Regenerator = {
     },
 };
 
-constexpr Ability BigPecks = {
+template <>
+constexpr Ability Impl<ABILITY_BIG_PECKS> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IsMoveMakingContact(move, battler)) MUL(1.3);
         },
 };
 
-constexpr Ability SandRush = {
+template <>
+constexpr Ability Impl<ABILITY_SAND_RUSH> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat *= 1.5;
@@ -1833,18 +1975,21 @@ constexpr Ability SandRush = {
     .sandImmune = TRUE,
 };
 
-constexpr Ability WonderSkin = {
+template <>
+constexpr Ability Impl<ABILITY_WONDER_SKIN> = {
     .fortKnox = TRUE,
 };
 
-constexpr Ability Analytic = {
+template <>
+constexpr Ability Impl<ABILITY_ANALYTIC> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber && gBattleMoves[move].effect != EFFECT_FUTURE_SIGHT) MUL(1.3);
         },
 };
 
-constexpr Ability Illusion = {
+template <>
+constexpr Ability Impl<ABILITY_ILLUSION> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(gBattleStruct->illusion[battler].on)
@@ -1859,7 +2004,8 @@ constexpr Ability Illusion = {
         },
 };
 
-constexpr Ability Imposter = {
+template <>
+constexpr Ability Impl<ABILITY_IMPOSTER> = {
     .onEntry = +[](ON_ENTRY) -> int {
         gBattlerTarget = BATTLE_OPPOSITE(battler);
         if (!IsBattlerAlive(gBattlerTarget)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
@@ -1874,11 +2020,13 @@ constexpr Ability Imposter = {
     },
 };
 
-constexpr Ability Infiltrator = {
+template <>
+constexpr Ability Impl<ABILITY_INFILTRATOR> = {
     .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType { return INFILTRATE_SCREENS | INFILTRATE_SUBSTITUTE; },
 };
 
-constexpr Ability Mummy = {
+template <>
+constexpr Ability Impl<ABILITY_MUMMY> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
@@ -1893,12 +2041,14 @@ constexpr Ability Mummy = {
     },
 };
 
-constexpr Ability Moxie = {
+template <>
+constexpr Ability Impl<ABILITY_MOXIE> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, STAT_ATK); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability Justified = {
+template <>
+constexpr Ability Impl<ABILITY_JUSTIFIED> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_DARK);
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -1906,7 +2056,8 @@ constexpr Ability Justified = {
     },
 };
 
-constexpr Ability Rattled = {
+template <>
+constexpr Ability Impl<ABILITY_RATTLED> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_DARK || moveType == TYPE_BUG || moveType == TYPE_GHOST)
@@ -1919,12 +2070,14 @@ constexpr Ability Rattled = {
     .steadfast = TRUE,
 };
 
-constexpr Ability MagicBounce = {
+template <>
+constexpr Ability Impl<ABILITY_MAGIC_BOUNCE> = {
     .breakable = TRUE,
     .magicBounce = TRUE,
 };
 
-constexpr Ability SapSipper = {
+template <>
+constexpr Ability Impl<ABILITY_SAP_SIPPER> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_GRASS);
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -1934,14 +2087,16 @@ constexpr Ability SapSipper = {
     .breakable = TRUE,
 };
 
-constexpr Ability Prankster = {
+template <>
+constexpr Ability Impl<ABILITY_PRANKSTER> = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(IS_MOVE_STATUS(move))
         return 1;
     },
 };
 
-constexpr Ability SandForce = {
+template <>
+constexpr Ability Impl<ABILITY_SAND_FORCE> = {
     .onStat =
         +[](ON_STAT) {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
@@ -1950,18 +2105,21 @@ constexpr Ability SandForce = {
     .sandImmune = TRUE,
 };
 
-constexpr Ability IronBarbs = {
-    .onDefender = RoughSkin.onDefender,
+template <>
+constexpr Ability Impl<ABILITY_IRON_BARBS> = {
+    .onDefender = Impl<ABILITY_ROUGH_SKIN>.onDefender,
 };
 
-constexpr Ability ZenMode = {
-    .onEntry = Forecast.onEntry,
-    .onEndTurn = Forecast.onEndTurn,
+template <>
+constexpr Ability Impl<ABILITY_ZEN_MODE> = {
+    .onEntry = Impl<ABILITY_FORECAST>.onEntry,
+    .onEndTurn = Impl<ABILITY_FORECAST>.onEndTurn,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability VictoryStar = {
+template <>
+constexpr Ability Impl<ABILITY_VICTORY_STAR> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
@@ -1969,20 +2127,23 @@ constexpr Ability VictoryStar = {
     .onAccuracyFor = APPLY_ON_ALLY,
 };
 
-constexpr Ability Turboblaze = {
+template <>
+constexpr Ability Impl<ABILITY_TURBOBLAZE> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIRE); },
-    .onMoldBreaker = MoldBreaker.onMoldBreaker,
+    .onMoldBreaker = Impl<ABILITY_MOLD_BREAKER>.onMoldBreaker,
     .addsType = TYPE_FIRE,
 };
 
-constexpr Ability Teravolt = {
+template <>
+constexpr Ability Impl<ABILITY_TERAVOLT> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ELECTRIC); },
-    .onMoldBreaker = MoldBreaker.onMoldBreaker,
+    .onMoldBreaker = Impl<ABILITY_MOLD_BREAKER>.onMoldBreaker,
     .addsType = TYPE_ELECTRIC,
 };
 
-constexpr Ability AromaVeil = {
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+template <>
+constexpr Ability Impl<ABILITY_AROMA_VEIL> = {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & (CHECK_INFATUATE | CHECK_RESTRICTING | CHECK_HEAL_BLOCK))
         return TRUE;
     },
@@ -1990,8 +2151,9 @@ constexpr Ability AromaVeil = {
     .breakable = TRUE,
 };
 
-constexpr Ability FlowerVeil = {
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+template <>
+constexpr Ability Impl<ABILITY_FLOWER_VEIL> = {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_STATUS1)
         CHECK(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
         return TRUE;
@@ -2000,12 +2162,14 @@ constexpr Ability FlowerVeil = {
     .breakable = TRUE,
 };
 
-constexpr Ability CheekPouch = {
+template <>
+constexpr Ability Impl<ABILITY_CHEEK_POUCH> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Protean = {
-    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+template <>
+constexpr Ability Impl<ABILITY_PROTEAN> = {
+    .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
         CHECK_NOT(IS_BATTLER_OF_TYPE(battler, moveType))
         CHECK(move != MOVE_STRUGGLE)
@@ -2017,7 +2181,8 @@ constexpr Ability Protean = {
     .omniStab = TRUE,
 };
 
-constexpr Ability FurCoat = {
+template <>
+constexpr Ability Impl<ABILITY_FUR_COAT> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IS_MOVE_PHYSICAL(move)) MUL(.5);
@@ -2025,7 +2190,8 @@ constexpr Ability FurCoat = {
     .breakable = TRUE,
 };
 
-constexpr Ability Bulletproof = {
+template <>
+constexpr Ability Impl<ABILITY_BULLETPROOF> = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(gBattleMoves[move].flags & FLAG_BALLISTIC)
         CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)* immunityScript = BattleScript_SoundproofProtected;
@@ -2034,19 +2200,22 @@ constexpr Ability Bulletproof = {
     .breakable = TRUE,
 };
 
-constexpr Ability StrongJaw = {
+template <>
+constexpr Ability Impl<ABILITY_STRONG_JAW> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) MUL(1.3);
         },
 };
 
-constexpr Ability Refrigerate = {
+template <>
+constexpr Ability Impl<ABILITY_REFRIGERATE> = {
     ATE_ABILITY(TYPE_ICE),
 };
 
-constexpr Ability SweetVeil = {
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+template <>
+constexpr Ability Impl<ABILITY_SWEET_VEIL> = {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_SLEEP)
         return TRUE;
     },
@@ -2054,8 +2223,9 @@ constexpr Ability SweetVeil = {
     .breakable = TRUE,
 };
 
-constexpr Ability StanceChange = {
-    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+template <>
+constexpr Ability Impl<ABILITY_STANCE_CHANGE> = {
+    .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
         SpeciesEnum newSpecies = SPECIES_NONE;
         switch (gBattleMons[battler].species) {
             default:
@@ -2090,11 +2260,13 @@ constexpr Ability StanceChange = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability GaleWings = {
+template <>
+constexpr Ability Impl<ABILITY_GALE_WINGS> = {
     .onPriority = GALE_WINGS_CLONE(TYPE_FLYING),
 };
 
-constexpr Ability MegaLauncher = {
+template <>
+constexpr Ability Impl<ABILITY_MEGA_LAUNCHER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IsMegaLauncherBoosted(battler, move)) MUL(1.3);
@@ -2102,29 +2274,34 @@ constexpr Ability MegaLauncher = {
     .megaLauncherBoost = TRUE,
 };
 
-constexpr Ability GrassPelt = {
+template <>
+constexpr Ability Impl<ABILITY_GRASS_PELT> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_DEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
         },
 };
 
-constexpr Ability FlowerNecklace = {
+template <>
+constexpr Ability Impl<ABILITY_FLOWER_NECKLACE> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPDEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
         },
 };
 
-constexpr Ability ToughClaws = {
-    .onOffensiveMultiplier = BigPecks.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_TOUGH_CLAWS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_BIG_PECKS>.onOffensiveMultiplier,
 };
 
-constexpr Ability Pixilate = {
+template <>
+constexpr Ability Impl<ABILITY_PIXILATE> = {
     ATE_ABILITY(TYPE_FAIRY),
 };
 
-constexpr Ability Gooey = {
+template <>
+constexpr Ability Impl<ABILITY_GOOEY> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(StatLowerableOrMirrorArmor(attacker, STAT_SPEED))
@@ -2136,16 +2313,19 @@ constexpr Ability Gooey = {
     },
 };
 
-constexpr Ability Aerilate = {
+template <>
+constexpr Ability Impl<ABILITY_AERILATE> = {
     ATE_ABILITY(TYPE_FLYING),
 };
 
-constexpr Ability ParentalBond = {
+template <>
+constexpr Ability Impl<ABILITY_PARENTAL_BOND> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType { return PARENTAL_BOND_HYPER_AGGRESSIVE; },
     .resistsFortKnox = TRUE,
 };
 
-constexpr Ability DarkAura = {
+template <>
+constexpr Ability Impl<ABILITY_DARK_AURA> = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_DARKAURA); },
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
@@ -2159,7 +2339,8 @@ constexpr Ability DarkAura = {
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
-constexpr Ability FairyAura = {
+template <>
+constexpr Ability Impl<ABILITY_FAIRY_AURA> = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_FAIRYAURA); },
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
@@ -2172,13 +2353,15 @@ constexpr Ability FairyAura = {
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
-constexpr Ability AuraBreak = {
+template <>
+constexpr Ability Impl<ABILITY_AURA_BREAK> = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_AURABREAK); },
     .breakable = TRUE,
     .auraBreak = TRUE,
 };
 
-constexpr Ability PrimordialSea = {
+template <>
+constexpr Ability Impl<ABILITY_PRIMORDIAL_SEA> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN_PRIMAL, TRUE))
 
@@ -2187,7 +2370,8 @@ constexpr Ability PrimordialSea = {
     },
 };
 
-constexpr Ability DesolateLand = {
+template <>
+constexpr Ability Impl<ABILITY_DESOLATE_LAND> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_SUN_PRIMAL, TRUE))
 
@@ -2196,7 +2380,8 @@ constexpr Ability DesolateLand = {
     },
 };
 
-constexpr Ability DeltaStream = {
+template <>
+constexpr Ability Impl<ABILITY_DELTA_STREAM> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_STRONG_WINDS, TRUE))
 
@@ -2211,7 +2396,8 @@ constexpr Ability DeltaStream = {
     },
 };
 
-constexpr Ability Stamina = {
+template <>
+constexpr Ability Impl<ABILITY_STAMINA> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_DEF))
@@ -2236,7 +2422,8 @@ u32 CanBattlerBeForceSwitched(int battler) {
     return TRUE;
 }
 
-constexpr Ability WimpOut = {
+template <>
+constexpr Ability Impl<ABILITY_WIMP_OUT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(CheckHalfHpAbility(battler, attacker))
         CHECK_NOT(TestSheerForceFlag(attacker, gCurrentMove))
@@ -2247,11 +2434,13 @@ constexpr Ability WimpOut = {
     },
 };
 
-constexpr Ability EmergencyExit = {
-    .onDefender = WimpOut.onDefender,
+template <>
+constexpr Ability Impl<ABILITY_EMERGENCY_EXIT> = {
+    .onDefender = Impl<ABILITY_WIMP_OUT>.onDefender,
 };
 
-constexpr Ability WaterCompaction = {
+template <>
+constexpr Ability Impl<ABILITY_WATER_COMPACTION> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_WATER)
@@ -2268,7 +2457,8 @@ constexpr Ability WaterCompaction = {
     .breakable = TRUE,
 };
 
-constexpr Ability Merciless = {
+template <>
+constexpr Ability Impl<ABILITY_MERCILESS> = {
     .onCrit = +[](ON_CRIT) -> int {
         if (gBattleMons[target].status1 & STATUS1_PSN_ANY) return ALWAYS_CRIT;
         if (gBattleMons[target].status1 & STATUS1_PARALYSIS) return ALWAYS_CRIT;
@@ -2279,9 +2469,10 @@ constexpr Ability Merciless = {
     },
 };
 
-constexpr Ability ShieldsDown = {
-    .onEntry = Forecast.onEntry,
-    .onEndTurn = Forecast.onEndTurn,
+template <>
+constexpr Ability Impl<ABILITY_SHIELDS_DOWN> = {
+    .onEntry = Impl<ABILITY_FORECAST>.onEntry,
+    .onEndTurn = Impl<ABILITY_FORECAST>.onEndTurn,
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(IsBattlerAlive(battler))
         CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
@@ -2302,7 +2493,7 @@ constexpr Ability ShieldsDown = {
         }
         return FALSE;
     },
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_STATUS1)
         switch (gBattleMons[battler].species) {
             case SPECIES_MINIOR:
@@ -2321,20 +2512,22 @@ constexpr Ability ShieldsDown = {
     .unsuppressable = TRUE,
 };
 
-constexpr Ability Stakeout = {
+template <>
+constexpr Ability Impl<ABILITY_STAKEOUT> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gVolatileStructs[target].isFirstTurn == 2) MUL(2.0);
         },
 };
 
-constexpr Ability WaterBubble = {
+template <>
+constexpr Ability Impl<ABILITY_WATER_BUBBLE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_WATER) MUL(2.0);
         },
-    .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onDefensiveMultiplier = Impl<ABILITY_HEATPROOF>.onDefensiveMultiplier,
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_BURN)
         return TRUE;
     },
@@ -2342,7 +2535,8 @@ constexpr Ability WaterBubble = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability Steelworker = {
+template <>
+constexpr Ability Impl<ABILITY_STEELWORKER> = {
     ATE_ABILITY(TYPE_STEEL),
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
@@ -2352,7 +2546,8 @@ constexpr Ability Steelworker = {
     .breakable = TRUE,
 };
 
-constexpr Ability Berserk = {
+template <>
+constexpr Ability Impl<ABILITY_BERSERK> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(CheckHalfHpAbility(battler, attacker))
         CHECK_NOT(GetAbilityState(battler, ability))
@@ -2366,7 +2561,8 @@ constexpr Ability Berserk = {
     },
 };
 
-constexpr Ability SlushRush = {
+template <>
+constexpr Ability Impl<ABILITY_SLUSH_RUSH> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
@@ -2374,14 +2570,16 @@ constexpr Ability SlushRush = {
     .hailImmune = TRUE,
 };
 
-constexpr Ability LongReach = {
+template <>
+constexpr Ability Impl<ABILITY_LONG_REACH> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_MOVE_PHYSICAL(move) && !gBattleMoves[move].contact) MUL(1.2);
         },
 };
 
-constexpr Ability LiquidVoice = {
+template <>
+constexpr Ability Impl<ABILITY_LIQUID_VOICE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IsSoundMove(battler, move)) MUL(1.2);
@@ -2393,38 +2591,42 @@ constexpr Ability LiquidVoice = {
     },
 };
 
-constexpr Ability Triage = {
+template <>
+constexpr Ability Impl<ABILITY_TRIAGE> = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(IsHealingMoveEffect(gBattleMoves[move].effect))
         return 3;
     },
 };
 
-constexpr Ability Galvanize = {
+template <>
+constexpr Ability Impl<ABILITY_GALVANIZE> = {
     ATE_ABILITY(TYPE_ELECTRIC),
 };
 
-constexpr Ability SurgeSurfer = {
+template <>
+constexpr Ability Impl<ABILITY_SURGE_SURFER> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat *= 1.5;
         },
 };
 
-constexpr Ability Schooling = {
+template <>
+constexpr Ability Impl<ABILITY_SCHOOLING> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gBattleMons[battler].level >= 20)
-        return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+        return TryTransformAttacker(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
     },
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(gBattleMons[battler].level >= 20)
-        return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+        return TryTransformAttacker(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
     },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-static int DisguiseReformHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
+static int DisguiseReformHandler(int battler, AbilityCallType callType) {
     SpeciesEnum newSpecies;
     switch (gBattleMons[battler].species) {
         case SPECIES_MIMIKYU_BUSTED:
@@ -2446,8 +2648,9 @@ static int DisguiseReformHandler(AbilityEnum ability, int battler, AbilityCallTy
     BattleScriptCall(BattleScript_AttackerFormChange);
     return TRUE;
 }
-constexpr Ability Disguise = {
-    .onEntry = +[](ON_ENTRY) -> int { return DisguiseReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+template <>
+constexpr Ability Impl<ABILITY_DISGUISE> = {
+    .onEntry = +[](ON_ENTRY) -> int { return DisguiseReformHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onDisguise = +[](ON_DISGUISE) -> SpeciesEnum {
         switch (gBattleMons[battler].species) {
             case SPECIES_MIMIKYU:
@@ -2459,13 +2662,14 @@ constexpr Ability Disguise = {
                 return SPECIES_NONE;
         }
     },
-    .onWeather = +[](ON_WEATHER) -> int { return DisguiseReformHandler(ability, battler, ABILITY_BS_CALL); },
+    .onWeather = +[](ON_WEATHER) -> int { return DisguiseReformHandler(battler, ABILITY_BS_CALL); },
     .breakable = TRUE,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability BattleBond = {
+template <>
+constexpr Ability Impl<ABILITY_BATTLE_BOND> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         SpeciesEnum newSpecies = SPECIES_NONE;
         switch (gBattleMons[battler].species) {
@@ -2500,7 +2704,8 @@ constexpr Ability BattleBond = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability PowerConstruct = {
+template <>
+constexpr Ability Impl<ABILITY_POWER_CONSTRUCT> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(gBattleMons[battler].species == SPECIES_ZYGARDE || gBattleMons[battler].species == SPECIES_ZYGARDE_10)
         CHECK(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
@@ -2516,26 +2721,28 @@ constexpr Ability PowerConstruct = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Corrosion = {
+template <>
+constexpr Ability Impl<ABILITY_CORROSION> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
         CHECK(moveType == TYPE_POISON)
         CHECK(defType == TYPE_STEEL)
         *mod = UQ_4_12(2.0);
         return TRUE;
     },
-    .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
+    .onCanStatusType = +[](ON_CAN_STATUS_TYPE) -> int {
         CHECK(status & CHECK_POISON)
         return TRUE;
     },
 };
 
-constexpr Ability Comatose = {
+template <>
+constexpr Ability Impl<ABILITY_COMATOSE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
         BattleScriptPushCursorAndCallback(BattleScript_AnnounceStatusAbility);
         return TRUE;
     },
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_STATUS1)
         return TRUE;
     },
@@ -2543,7 +2750,8 @@ constexpr Ability Comatose = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability QueenlyMajesty = {
+template <>
+constexpr Ability Impl<ABILITY_QUEENLY_MAJESTY> = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK_NOT(gProcessingExtraAttacks)
         CHECK(GetBattlerSide(attacker) != GetBattlerSide(battler))
@@ -2555,7 +2763,8 @@ constexpr Ability QueenlyMajesty = {
     .breakable = TRUE,
 };
 
-constexpr Ability InnardsOut = {
+template <>
+constexpr Ability Impl<ABILITY_INNARDS_OUT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
@@ -2567,14 +2776,16 @@ constexpr Ability InnardsOut = {
     },
 };
 
-constexpr Ability Dancer = {
+template <>
+constexpr Ability Impl<ABILITY_DANCER> = {
     .onCopyMove = +[](ON_COPY_MOVE) -> int {
         CHECK(IsDance(attacker, move))
         return UseOutOfTurnAttack(battler, target, ability, move, 0);
     },
 };
 
-constexpr Ability Battery = {
+template <>
+constexpr Ability Impl<ABILITY_BATTERY> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_MOVE_SPECIAL(move)) MUL(1.3);
@@ -2582,7 +2793,8 @@ constexpr Ability Battery = {
     .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
 
-constexpr Ability Fluffy = {
+template <>
+constexpr Ability Impl<ABILITY_FLUFFY> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE) RESISTANCE(2.0);
@@ -2591,13 +2803,15 @@ constexpr Ability Fluffy = {
     .breakable = TRUE,
 };
 
-constexpr Ability Dazzling = {
-    .onImmune = QueenlyMajesty.onImmune,
+template <>
+constexpr Ability Impl<ABILITY_DAZZLING> = {
+    .onImmune = Impl<ABILITY_QUEENLY_MAJESTY>.onImmune,
     .onImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
-constexpr Ability SoulHeart = {
+template <>
+constexpr Ability Impl<ABILITY_SOUL_HEART> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(ChangeStatBuffs(battler, 1, STAT_SPATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
 
@@ -2607,11 +2821,13 @@ constexpr Ability SoulHeart = {
     .onBattlerFaintsFor = APPLY_ON_ANY,
 };
 
-constexpr Ability TanglingHair = {
-    .onDefender = Gooey.onDefender,
+template <>
+constexpr Ability Impl<ABILITY_TANGLING_HAIR> = {
+    .onDefender = Impl<ABILITY_GOOEY>.onDefender,
 };
 
-constexpr Ability Receiver = {
+template <>
+constexpr Ability Impl<ABILITY_RECEIVER> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         AbilityEnum allyAbility = GetBattlerAbility(fainted);
         CHECK_NOT(IsRolePlayBannedAbility(allyAbility))
@@ -2629,7 +2845,8 @@ constexpr Ability Receiver = {
     .onBattlerFaintsFor = APPLY_ON_ALLY,
 };
 
-constexpr Ability PowerOfAlchemy = {
+template <>
+constexpr Ability Impl<ABILITY_POWER_OF_ALCHEMY> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int any = FALSE;
         for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
@@ -2678,20 +2895,23 @@ constexpr Ability PowerOfAlchemy = {
     .onBattlerFaintsFor = APPLY_ON_OTHER,
 };
 
-constexpr Ability BeastBoost = {
+template <>
+constexpr Ability Impl<ABILITY_BEAST_BOOST> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, GetHighestStatId(battler, FALSE)); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability RksSystem = {
-    .onBeforeAttack = Protean.onBeforeAttack,
+template <>
+constexpr Ability Impl<ABILITY_RKS_SYSTEM> = {
+    .onBeforeAttack = Impl<ABILITY_PROTEAN>.onBeforeAttack,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
     .adaptability = TRUE,
     .omniStab = TRUE,
 };
 
-constexpr Ability ElectricSurge = {
+template <>
+constexpr Ability Impl<ABILITY_ELECTRIC_SURGE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -2706,7 +2926,8 @@ constexpr Ability ElectricSurge = {
     .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
-constexpr Ability PsychicSurge = {
+template <>
+constexpr Ability Impl<ABILITY_PSYCHIC_SURGE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -2717,7 +2938,8 @@ constexpr Ability PsychicSurge = {
     .allowTerrainIfAirborne = TERRAIN_PSYCHIC,
 };
 
-constexpr Ability MistySurge = {
+template <>
+constexpr Ability Impl<ABILITY_MISTY_SURGE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -2728,7 +2950,8 @@ constexpr Ability MistySurge = {
     .allowTerrainIfAirborne = TERRAIN_MISTY,
 };
 
-constexpr Ability GrassySurge = {
+template <>
+constexpr Ability Impl<ABILITY_GRASSY_SURGE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -2739,22 +2962,26 @@ constexpr Ability GrassySurge = {
     .allowTerrainIfAirborne = TERRAIN_GRASSY,
 };
 
-constexpr Ability ShadowShield = {
-    .onDefensiveMultiplier = Multiscale.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_SHADOW_SHIELD> = {
+    .onDefensiveMultiplier = Impl<ABILITY_MULTISCALE>.onDefensiveMultiplier,
 };
 
-constexpr Ability PrismArmor = {
-    .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_PRISM_ARMOR> = {
+    .onDefensiveMultiplier = Impl<ABILITY_FILTER>.onDefensiveMultiplier,
 };
 
-constexpr Ability Neuroforce = {
+template <>
+constexpr Ability Impl<ABILITY_NEUROFORCE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.35);
         },
 };
 
-constexpr Ability IntrepidSword = {
+template <>
+constexpr Ability Impl<ABILITY_INTREPID_SWORD> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(CanRaiseStat(battler, STAT_ATK))
 
@@ -2764,7 +2991,8 @@ constexpr Ability IntrepidSword = {
     },
 };
 
-constexpr Ability DauntlessShield = {
+template <>
+constexpr Ability Impl<ABILITY_DAUNTLESS_SHIELD> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(CanRaiseStat(battler, STAT_DEF))
 
@@ -2774,12 +3002,14 @@ constexpr Ability DauntlessShield = {
     },
 };
 
-constexpr Ability Libero = {
-    .onBeforeAttack = Protean.onBeforeAttack,
+template <>
+constexpr Ability Impl<ABILITY_LIBERO> = {
+    .onBeforeAttack = Impl<ABILITY_PROTEAN>.onBeforeAttack,
     .omniStab = TRUE,
 };
 
-constexpr Ability CottonDown = {
+template <>
+constexpr Ability Impl<ABILITY_COTTON_DOWN> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit());
         gStackBattler1 = BATTLE_OPPOSITE(battler);
@@ -2792,11 +3022,13 @@ constexpr Ability CottonDown = {
     },
 };
 
-constexpr Ability MirrorArmor = {
+template <>
+constexpr Ability Impl<ABILITY_MIRROR_ARMOR> = {
     .breakable = TRUE,
 };
 
-constexpr Ability GulpMissile = {
+template <>
+constexpr Ability Impl<ABILITY_GULP_MISSILE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
         CHECK(gBattleMons[battler].species == SPECIES_CRAMORANT)
@@ -2824,7 +3056,8 @@ constexpr Ability GulpMissile = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability SteamEngine = {
+template <>
+constexpr Ability Impl<ABILITY_STEAM_ENGINE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_SPEED))
@@ -2836,7 +3069,8 @@ constexpr Ability SteamEngine = {
     },
 };
 
-constexpr Ability PunkRock = {
+template <>
+constexpr Ability Impl<ABILITY_PUNK_ROCK> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IsSoundMove(battler, move)) MUL(1.3);
@@ -2848,7 +3082,8 @@ constexpr Ability PunkRock = {
     .breakable = TRUE,
 };
 
-constexpr Ability SandSpit = {
+template <>
+constexpr Ability Impl<ABILITY_SAND_SPIT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_SANDSTORM_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
             BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
@@ -2864,7 +3099,8 @@ constexpr Ability SandSpit = {
     .sandImmune = TRUE,
 };
 
-constexpr Ability IceScales = {
+template <>
+constexpr Ability Impl<ABILITY_ICE_SCALES> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IS_MOVE_SPECIAL(move)) MUL(.5);
@@ -2872,7 +3108,7 @@ constexpr Ability IceScales = {
     .breakable = TRUE,
 };
 
-int IceFaceReformHandler(AbilityEnum ability, int battler, AbilityCallType callType) {
+int IceFaceReformHandler(int battler, AbilityCallType callType) {
     CHECK(gBattleMons[battler].species == SPECIES_EISCUE_NOICE_FACE)
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
     CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
@@ -2883,17 +3119,19 @@ int IceFaceReformHandler(AbilityEnum ability, int battler, AbilityCallType callT
     BattleScriptCall(BattleScript_AttackerFormChange);
     return TRUE;
 }
-constexpr Ability IceFace = {
-    .onEntry = +[](ON_ENTRY) -> int { return IceFaceReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+template <>
+constexpr Ability Impl<ABILITY_ICE_FACE> = {
+    .onEntry = +[](ON_ENTRY) -> int { return IceFaceReformHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onDisguise = +[](ON_DISGUISE) -> SpeciesEnum { return gBattleMons[battler].species == SPECIES_EISCUE ? SPECIES_EISCUE_NOICE_FACE : SPECIES_NONE; },
-    .onWeather = +[](ON_WEATHER) -> int { return IceFaceReformHandler(ability, battler, ABILITY_BS_CALL); },
+    .onWeather = +[](ON_WEATHER) -> int { return IceFaceReformHandler(battler, ABILITY_BS_CALL); },
     .breakable = TRUE,
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
     .hailImmune = TRUE,
 };
 
-constexpr Ability PowerSpot = {
+template <>
+constexpr Ability Impl<ABILITY_POWER_SPOT> = {
     .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MUL(1.3); },
     .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
@@ -2956,7 +3194,8 @@ int HandleMimicry(u8 battler, AbilityEnum ability, AbilityCallType endType) {
 
     return FALSE;
 }
-constexpr Ability Mimicry = {
+template <>
+constexpr Ability Impl<ABILITY_MIMICRY> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsBattlerAlive(battler))
 
@@ -2969,7 +3208,8 @@ constexpr Ability Mimicry = {
     },
 };
 
-constexpr Ability ScreenCleaner = {
+template <>
+constexpr Ability Impl<ABILITY_SCREEN_CLEANER> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryRemoveScreens(battler))
 
@@ -2977,7 +3217,8 @@ constexpr Ability ScreenCleaner = {
     },
 };
 
-constexpr Ability SteelySpirit = {
+template <>
+constexpr Ability Impl<ABILITY_STEELY_SPIRIT> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_STEEL) MUL(1.3);
@@ -2985,7 +3226,8 @@ constexpr Ability SteelySpirit = {
     .onOffensiveMultiplierFor = APPLY_ON_ALLY,
 };
 
-constexpr Ability PerishBody = {
+template <>
+constexpr Ability Impl<ABILITY_PERISH_BODY> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(IsBattlerAlive(attacker))
@@ -3005,7 +3247,8 @@ constexpr Ability PerishBody = {
     },
 };
 
-constexpr Ability WanderingSpirit = {
+template <>
+constexpr Ability Impl<ABILITY_WANDERING_SPIRIT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(GetBattlerAbility(battler) == ability)
@@ -3032,18 +3275,21 @@ constexpr Ability WanderingSpirit = {
     },
 };
 
-constexpr Ability GorillaTactics = {
+template <>
+constexpr Ability Impl<ABILITY_GORILLA_TACTICS> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_MOVE_PHYSICAL(move)) MUL(1.5);
         },
 };
 
-constexpr Ability NeutralizingGas = {
+template <>
+constexpr Ability Impl<ABILITY_NEUTRALIZING_GAS> = {
     .unsuppressable = TRUE,
 };
 
-constexpr Ability PastelVeil = {
+template <>
+constexpr Ability Impl<ABILITY_PASTEL_VEIL> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD)
 
@@ -3057,7 +3303,8 @@ constexpr Ability PastelVeil = {
     },
 };
 
-constexpr Ability HungerSwitch = {
+template <>
+constexpr Ability Impl<ABILITY_HUNGER_SWITCH> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         SpeciesEnum newSpecies;
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
@@ -3088,7 +3335,8 @@ constexpr Ability HungerSwitch = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability CuriousMedicine = {
+template <>
+constexpr Ability Impl<ABILITY_CURIOUS_MEDICINE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsDoubleBattle())
         CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
@@ -3101,34 +3349,39 @@ constexpr Ability CuriousMedicine = {
     },
 };
 
-constexpr Ability Transistor = {
+template <>
+constexpr Ability Impl<ABILITY_TRANSISTOR> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ELECTRIC) MUL(1.5);
         },
 };
 
-constexpr Ability DragonsMaw = {
+template <>
+constexpr Ability Impl<ABILITY_DRAGONS_MAW> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_DRAGON) MUL(1.5);
         },
 };
 
-constexpr Ability ChillingNeigh = {
-    .onBattlerFaints = Moxie.onBattlerFaints,
+template <>
+constexpr Ability Impl<ABILITY_CHILLING_NEIGH> = {
+    .onBattlerFaints = Impl<ABILITY_MOXIE>.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability GrimNeigh = {
+template <>
+constexpr Ability Impl<ABILITY_GRIM_NEIGH> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, STAT_SPATK); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability AsOneIceRider = {
+template <>
+constexpr Ability Impl<ABILITY_AS_ONE_ICE_RIDER> = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE); },
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        CHECK(ChillingNeigh.onBattlerFaints(DELEGATE_BATTLER_FAINTS))
+        CHECK(Impl<ABILITY_CHILLING_NEIGH>.onBattlerFaints(DELEGATE_BATTLER_FAINTS))
         gBattleScripting.abilityPopupOverwrite = ABILITY_CHILLING_NEIGH;
         BattleScriptCall(BattleScript_AbilityPopUpStack);
         return NO_ANNOUNCE;
@@ -3139,10 +3392,11 @@ constexpr Ability AsOneIceRider = {
     .unnerve = TRUE,
 };
 
-constexpr Ability AsOneShadowRider = {
-    .onEntry = AsOneIceRider.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_AS_ONE_SHADOW_RIDER> = {
+    .onEntry = Impl<ABILITY_AS_ONE_ICE_RIDER>.onEntry,
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        CHECK(GrimNeigh.onBattlerFaints(DELEGATE_BATTLER_FAINTS))
+        CHECK(Impl<ABILITY_GRIM_NEIGH>.onBattlerFaints(DELEGATE_BATTLER_FAINTS))
         gBattleScripting.abilityPopupOverwrite = ABILITY_GRIM_NEIGH;
         BattleScriptCall(BattleScript_AbilityPopUpStack);
         return NO_ANNOUNCE;
@@ -3153,11 +3407,13 @@ constexpr Ability AsOneShadowRider = {
     .unnerve = TRUE,
 };
 
-constexpr Ability Chloroplast = {
+template <>
+constexpr Ability Impl<ABILITY_CHLOROPLAST> = {
     .chloroplast = TRUE,
 };
 
-constexpr Ability Whiteout = {
+template <>
+constexpr Ability Impl<ABILITY_WHITEOUT> = {
     .onStat =
         +[](ON_STAT) {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
@@ -3166,21 +3422,24 @@ constexpr Ability Whiteout = {
     .hailImmune = TRUE,
 };
 
-constexpr Ability Pyromancy = {
+template <>
+constexpr Ability Impl<ABILITY_PYROMANCY> = {
     .onModifyEffectChance =
         +[](ON_MODIFY_EFFECT_CHANCE) {
             if (moveEffect == MOVE_EFFECT_BURN) *effectChance *= 5;
         },
 };
 
-constexpr Ability KeenEdge = {
+template <>
+constexpr Ability Impl<ABILITY_KEEN_EDGE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE)) MUL(1.3);
         },
 };
 
-constexpr Ability PrismScales = {
+template <>
+constexpr Ability Impl<ABILITY_PRISM_SCALES> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IS_MOVE_SPECIAL(move)) MUL(.7);
@@ -3188,16 +3447,18 @@ constexpr Ability PrismScales = {
     .breakable = TRUE,
 };
 
-constexpr Ability PowerFists = {
-    .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_POWER_FISTS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_IRON_FIST>.onOffensiveMultiplier,
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
         CHECK(IsIronFistBoosted(battler, move))
         return STAT_SPDEF;
     },
 };
 
-constexpr Ability SandSong = {
-    .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_SAND_SONG> = {
+    .onOffensiveMultiplier = Impl<ABILITY_LIQUID_VOICE>.onOffensiveMultiplier,
     .onMoveType = +[](ON_MOVE_TYPE) -> int {
         CHECK(moveType == TYPE_NORMAL)
         CHECK(gBattleMoves[move].flags & FLAG_SOUND);
@@ -3205,7 +3466,8 @@ constexpr Ability SandSong = {
     },
 };
 
-constexpr Ability Rampage = {
+template <>
+constexpr Ability Impl<ABILITY_RAMPAGE> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         SetAbilityState(battler, ability, TRUE);
         gVolatileStructs[battler].rechargeTimer = 0;
@@ -3215,11 +3477,13 @@ constexpr Ability Rampage = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability Vengeance = {
+template <>
+constexpr Ability Impl<ABILITY_VENGEANCE> = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_GHOST),
 };
 
-constexpr Ability BlitzBoxer = {
+template <>
+constexpr Ability Impl<ABILITY_BLITZ_BOXER> = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(IsIronFistBoosted(battler, move))
         CHECK(BATTLER_MAX_HP(battler));
@@ -3227,18 +3491,21 @@ constexpr Ability BlitzBoxer = {
     },
 };
 
-constexpr Ability AntarcticBird = {
+template <>
+constexpr Ability Impl<ABILITY_ANTARCTIC_BIRD> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FLYING || moveType == TYPE_ICE) MUL(1.3);
         },
 };
 
-constexpr Ability Immolate = {
+template <>
+constexpr Ability Impl<ABILITY_IMMOLATE> = {
     ATE_ABILITY(TYPE_FIRE),
 };
 
-constexpr Ability Crystallize = {
+template <>
+constexpr Ability Impl<ABILITY_CRYSTALLIZE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ICE && gBattleStruct->ateBoost[battler]) MUL(1.1);
@@ -3250,14 +3517,16 @@ constexpr Ability Crystallize = {
     },
 };
 
-constexpr Ability Electrocytes = {
+template <>
+constexpr Ability Impl<ABILITY_ELECTROCYTES> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ELECTRIC) MUL(1.25);
         },
 };
 
-constexpr Ability Aerodynamics = {
+template <>
+constexpr Ability Impl<ABILITY_AERODYNAMICS> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_FLYING);
         *statId = STAT_SPEED;
@@ -3266,7 +3535,8 @@ constexpr Ability Aerodynamics = {
     .breakable = TRUE,
 };
 
-constexpr Ability ChristmasSpirit = {
+template <>
+constexpr Ability Impl<ABILITY_CHRISTMAS_SPIRIT> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) MUL(.5);
@@ -3275,7 +3545,8 @@ constexpr Ability ChristmasSpirit = {
     .hailImmune = TRUE,
 };
 
-constexpr Ability ExploitWeakness = {
+template <>
+constexpr Ability Impl<ABILITY_EXPLOIT_WEAKNESS> = {
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
         CHECK(HasAnyStatusOrAbility(target))
         u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
@@ -3289,7 +3560,8 @@ constexpr Ability ExploitWeakness = {
     },
 };
 
-constexpr Ability GroundShock = {
+template <>
+constexpr Ability Impl<ABILITY_GROUND_SHOCK> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
         CHECK(moveType == TYPE_ELECTRIC)
         CHECK(defType == TYPE_GROUND)
@@ -3299,16 +3571,19 @@ constexpr Ability GroundShock = {
     },
 };
 
-constexpr Ability AncientIdol = {
+template <>
+constexpr Ability Impl<ABILITY_ANCIENT_IDOL> = {
     .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; },
 };
 
-constexpr Ability MysticPower = {
+template <>
+constexpr Ability Impl<ABILITY_MYSTIC_POWER> = {
     .onStab = +[](ON_STAB) -> int { return TRUE; },
     .omniStab = TRUE,
 };
 
-constexpr Ability Perfectionist = {
+template <>
+constexpr Ability Impl<ABILITY_PERFECTIONIST> = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(gBattleMoves[move].power <= 25)
         CHECK(gBattleMoves[move].power);
@@ -3321,7 +3596,8 @@ constexpr Ability Perfectionist = {
     },
 };
 
-constexpr Ability GrowingTooth = {
+template <>
+constexpr Ability Impl<ABILITY_GROWING_TOOTH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
@@ -3333,7 +3609,8 @@ constexpr Ability GrowingTooth = {
     },
 };
 
-constexpr Ability Inflatable = {
+template <>
+constexpr Ability Impl<ABILITY_INFLATABLE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_DEF) || CanRaiseStat(battler, STAT_SPDEF))
@@ -3344,19 +3621,22 @@ constexpr Ability Inflatable = {
     },
 };
 
-constexpr Ability AuroraBorealis = {
+template <>
+constexpr Ability Impl<ABILITY_AURORA_BOREALIS> = {
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_ICE; },
     .hailImmune = TRUE,
 };
 
-constexpr Ability Avenger = {
+template <>
+constexpr Ability Impl<ABILITY_AVENGER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gSideTimers[GET_BATTLER_SIDE(battler)].retaliateTimer) MUL(1.5);
         },
 };
 
-constexpr Ability LetsRoll = {
+template <>
+constexpr Ability Impl<ABILITY_LETS_ROLL> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(CanRaiseStat(battler, STAT_DEF))
 
@@ -3367,7 +3647,8 @@ constexpr Ability LetsRoll = {
     },
 };
 
-constexpr Ability LoudBang = {
+template <>
+constexpr Ability Impl<ABILITY_LOUD_BANG> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeConfused(target))
@@ -3378,7 +3659,8 @@ constexpr Ability LoudBang = {
     },
 };
 
-constexpr Ability LeadCoat = {
+template <>
+constexpr Ability Impl<ABILITY_LEAD_COAT> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IS_MOVE_PHYSICAL(move)) MUL(.6);
@@ -3390,39 +3672,46 @@ constexpr Ability LeadCoat = {
     .breakable = TRUE,
 };
 
-constexpr Ability Amphibious = {
+template <>
+constexpr Ability Impl<ABILITY_AMPHIBIOUS> = {
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_DRENCH)
         return TRUE;
     },
 };
 
-constexpr Ability Grounded = {
+template <>
+constexpr Ability Impl<ABILITY_GROUNDED> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GROUND); },
     .addsType = TYPE_GROUND,
 };
 
-constexpr Ability Earthbound = {
+template <>
+constexpr Ability Impl<ABILITY_EARTHBOUND> = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_GROUND),
 };
 
-constexpr Ability FightingSpirit = {
+template <>
+constexpr Ability Impl<ABILITY_FIGHT_SPIRIT> = {
     ATE_ABILITY(TYPE_FIGHTING),
 };
 
-constexpr Ability FelineProwess = {
+template <>
+constexpr Ability Impl<ABILITY_FELINE_PROWESS> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPATK) *stat *= 2;
         },
 };
 
-constexpr Ability PurePower = {
-    .onStat = FelineProwess.onStat,
+template <>
+constexpr Ability Impl<ABILITY_PURE_POWER> = {
+    .onStat = Impl<ABILITY_FELINE_PROWESS>.onStat,
 };
 
-constexpr Ability CoilUp = {
+template <>
+constexpr Ability Impl<ABILITY_COIL_UP> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gStatuses4[battler] & STATUS4_COILED)
 
@@ -3432,7 +3721,8 @@ constexpr Ability CoilUp = {
     },
 };
 
-constexpr Ability Fossilized = {
+template <>
+constexpr Ability Impl<ABILITY_FOSSILIZED> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ROCK) MUL(1.2);
@@ -3444,7 +3734,8 @@ constexpr Ability Fossilized = {
     .breakable = TRUE,
 };
 
-constexpr Ability MagicalDust = {
+template <>
+constexpr Ability Impl<ABILITY_MAGICAL_DUST> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -3457,7 +3748,8 @@ constexpr Ability MagicalDust = {
     },
 };
 
-constexpr Ability Dreamcatcher = {
+template <>
+constexpr Ability Impl<ABILITY_DREAMCATCHER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             for (int i = 0; i < gBattlersCount; i++) {
@@ -3474,7 +3766,8 @@ constexpr Ability Dreamcatcher = {
     },
 };
 
-constexpr Ability Nocturnal = {
+template <>
+constexpr Ability Impl<ABILITY_NOCTURNAL> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_DARK) MUL(1.25);
@@ -3486,7 +3779,8 @@ constexpr Ability Nocturnal = {
     .breakable = TRUE,
 };
 
-constexpr Ability SelfSufficient = {
+template <>
+constexpr Ability Impl<ABILITY_SELF_SUFFICIENT> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
@@ -3500,26 +3794,31 @@ constexpr Ability SelfSufficient = {
     },
 };
 
-constexpr Ability Tectonize = {
+template <>
+constexpr Ability Impl<ABILITY_TECTONIZE> = {
     ATE_ABILITY(TYPE_GROUND),
 };
 
-constexpr Ability IceAge = {
+template <>
+constexpr Ability Impl<ABILITY_ICE_AGE> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ICE); },
     .addsType = TYPE_ICE,
 };
 
-constexpr Ability HalfDrake = {
+template <>
+constexpr Ability Impl<ABILITY_HALF_DRAKE> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_DRAGON); },
     .addsType = TYPE_DRAGON,
 };
 
-constexpr Ability Aquatic = {
+template <>
+constexpr Ability Impl<ABILITY_AQUATIC> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_WATER); },
     .addsType = TYPE_WATER,
 };
 
-constexpr Ability Liquified = {
+template <>
+constexpr Ability Impl<ABILITY_LIQUIFIED> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_WATER) RESISTANCE(2);
@@ -3528,14 +3827,16 @@ constexpr Ability Liquified = {
     .breakable = TRUE,
 };
 
-constexpr Ability Dragonfly = {
-    .onEntry = HalfDrake.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_DRAGONFLY> = {
+    .onEntry = Impl<ABILITY_HALF_DRAKE>.onEntry,
     .breakable = TRUE,
     .levitate = TRUE,
     .addsType = TYPE_DRAGON,
 };
 
-constexpr Ability Dragonslayer = {
+template <>
+constexpr Ability Impl<ABILITY_DRAGONSLAYER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_BATTLER_OF_TYPE(target, TYPE_DRAGON)) RESISTANCE(1.5);
@@ -3547,7 +3848,8 @@ constexpr Ability Dragonslayer = {
     .breakable = TRUE,
 };
 
-constexpr Ability Mountaineer = {
+template <>
+constexpr Ability Impl<ABILITY_MOUNTAINEER> = {
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
             if (moveType == TYPE_ROCK) *mod = 0;
@@ -3557,16 +3859,19 @@ constexpr Ability Mountaineer = {
     .stealthRockImmune = TRUE,
 };
 
-constexpr Ability Hydrate = {
+template <>
+constexpr Ability Impl<ABILITY_HYDRATE> = {
     ATE_ABILITY(TYPE_WATER),
 };
 
-constexpr Ability Metallic = {
+template <>
+constexpr Ability Impl<ABILITY_METALLIC> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_STEEL); },
     .addsType = TYPE_STEEL,
 };
 
-constexpr Ability Permafrost = {
+template <>
+constexpr Ability Impl<ABILITY_PERMAFROST> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
@@ -3574,7 +3879,8 @@ constexpr Ability Permafrost = {
     .breakable = TRUE,
 };
 
-constexpr Ability PrimalArmor = {
+template <>
+constexpr Ability Impl<ABILITY_PRIMAL_ARMOR> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.5);
@@ -3582,14 +3888,16 @@ constexpr Ability PrimalArmor = {
     .breakable = TRUE,
 };
 
-constexpr Ability RagingBoxer = {
+template <>
+constexpr Ability Impl<ABILITY_RAGING_BOXER> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
         CHECK(IsIronFistBoosted(battler, move))
         return PARENTAL_BOND_PRIMAL_MAW;
     },
 };
 
-constexpr Ability AirBlower = {
+template <>
+constexpr Ability Impl<ABILITY_AIR_BLOWER> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND) int side = GetBattlerSide(battler);
         gSideTimers[side].started.tailwind = TRUE;
@@ -3605,12 +3913,13 @@ constexpr Ability AirBlower = {
     },
 };
 
-constexpr Ability Juggernaut = {
+template <>
+constexpr Ability Impl<ABILITY_JUGGERNAUT> = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
             if (gBattleMoves[move].contact) secondaryAtkStatToUse[STAT_DEF] += 20;
         },
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_PARALYSIS)
         return TRUE;
     },
@@ -3618,31 +3927,37 @@ constexpr Ability Juggernaut = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability ShortCircuit = {
+template <>
+constexpr Ability Impl<ABILITY_SHORT_CIRCUIT> = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_ELECTRIC),
 };
 
-constexpr Ability MajesticBird = {
+template <>
+constexpr Ability Impl<ABILITY_MAJESTIC_BIRD> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPATK) *stat *= 1.5;
         },
 };
 
-constexpr Ability Phantom = {
+template <>
+constexpr Ability Impl<ABILITY_PHANTOM> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GHOST); },
     .addsType = TYPE_GHOST,
 };
 
-constexpr Ability Intoxicate = {
+template <>
+constexpr Ability Impl<ABILITY_INTOXICATE> = {
     ATE_ABILITY(TYPE_POISON),
 };
 
-constexpr Ability Impenetrable = {
+template <>
+constexpr Ability Impl<ABILITY_IMPENETRABLE> = {
     .magicGuard = TRUE,
 };
 
-constexpr Ability Hypnotist = {
+template <>
+constexpr Ability Impl<ABILITY_HYPNOTIST> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(move == MOVE_HYPNOSIS);
         *accuracy *= 1.5;
@@ -3650,7 +3965,8 @@ constexpr Ability Hypnotist = {
     },
 };
 
-constexpr Ability Overwhelm = {
+template <>
+constexpr Ability Impl<ABILITY_OVERWHELM> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
         CHECK(moveType == TYPE_DRAGON) CHECK(defType == TYPE_FAIRY) CHECK_NOT(*mod)* mod = UQ_4_12(1.0);
         return TRUE;
@@ -3658,11 +3974,13 @@ constexpr Ability Overwhelm = {
     .tauntImmune = TRUE,
 };
 
-constexpr Ability Scare = {
+template <>
+constexpr Ability Impl<ABILITY_SCARE> = {
     .onEntry = UseIntimidateClone,
 };
 
-constexpr Ability MajesticMoth = {
+template <>
+constexpr Ability Impl<ABILITY_MAJESTIC_MOTH> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(ChangeStatBuffs(battler, 1, GetHighestStatId(battler, TRUE), MOVE_EFFECT_AFFECTS_USER, NULL))
 
@@ -3671,7 +3989,8 @@ constexpr Ability MajesticMoth = {
     },
 };
 
-constexpr Ability SoulEater = {
+template <>
+constexpr Ability Impl<ABILITY_SOUL_EATER> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler));
         CHECK(CanBattlerHeal(battler));
@@ -3690,11 +4009,13 @@ ON_EITHER(SoulLinker) {
     BattleScriptCall(BattleScript_AttackerSoulLinker);
     return TRUE;
 }
-constexpr Ability SoulLinker = {
+template <>
+constexpr Ability Impl<ABILITY_SOUL_LINKER> = {
     ON_EITHER_ABILITY(SoulLinker),
 };
 
-constexpr Ability SweetDreams = {
+template <>
+constexpr Ability Impl<ABILITY_SWEET_DREAMS> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
@@ -3708,7 +4029,8 @@ constexpr Ability SweetDreams = {
     },
 };
 
-constexpr Ability BadLuck = {
+template <>
+constexpr Ability Impl<ABILITY_BAD_LUCK> = {
     .onCrit = +[](ON_CRIT) -> int { return NEVER_CRIT; },
     .onModifyEffectChance =
         +[](ON_MODIFY_EFFECT_CHANCE) {
@@ -3720,7 +4042,8 @@ constexpr Ability BadLuck = {
     .foesMinRoll = TRUE,
 };
 
-constexpr Ability HauntedSpirit = {
+template <>
+constexpr Ability Impl<ABILITY_HAUNTED_SPIRIT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
@@ -3734,7 +4057,8 @@ constexpr Ability HauntedSpirit = {
     },
 };
 
-constexpr Ability ElectricBurst = {
+template <>
+constexpr Ability Impl<ABILITY_ELECTRIC_BURST> = {
     .onRecoil = +[](ON_RECOIL) -> int {
         CHECK(moveType == TYPE_ELECTRIC);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -3746,7 +4070,8 @@ constexpr Ability ElectricBurst = {
         },
 };
 
-constexpr Ability RawWood = {
+template <>
+constexpr Ability Impl<ABILITY_RAW_WOOD> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GRASS) MUL(1.2);
@@ -3758,7 +4083,8 @@ constexpr Ability RawWood = {
     .breakable = TRUE,
 };
 
-constexpr Ability Solenoglyphs = {
+template <>
+constexpr Ability Impl<ABILITY_SOLENOGLYPHS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
@@ -3769,7 +4095,8 @@ constexpr Ability Solenoglyphs = {
     },
 };
 
-constexpr Ability SpiderLair = {
+template <>
+constexpr Ability Impl<ABILITY_SPIDER_LAIR> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
@@ -3782,7 +4109,8 @@ constexpr Ability SpiderLair = {
     },
 };
 
-constexpr Ability FatalPrecision = {
+template <>
+constexpr Ability Impl<ABILITY_FATAL_PRECISION> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK_NOT(IS_MOVE_STATUS(move))
         CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, TRUE) >= UQ_4_12(2.0))
@@ -3794,11 +4122,13 @@ constexpr Ability FatalPrecision = {
     },
 };
 
-constexpr Ability FortKnox = {
+template <>
+constexpr Ability Impl<ABILITY_FORT_KNOX> = {
     .fortKnox = TRUE,
 };
 
-constexpr Ability Seaweed = {
+template <>
+constexpr Ability Impl<ABILITY_SEAWEED> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(target, TYPE_FIRE)) RESISTANCE(2);
@@ -3810,11 +4140,13 @@ constexpr Ability Seaweed = {
     .breakable = TRUE,
 };
 
-constexpr Ability PsychicMind = {
+template <>
+constexpr Ability Impl<ABILITY_PSYCHIC_MIND> = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_PSYCHIC),
 };
 
-constexpr Ability PoisonAbsorb = {
+template <>
+constexpr Ability Impl<ABILITY_POISON_ABSORB> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_POISON)
         return ABSORB_RESULT_HEAL;
@@ -3835,12 +4167,14 @@ constexpr Ability PoisonAbsorb = {
     .breakable = TRUE,
 };
 
-constexpr Ability Scavenger = {
-    .onBattlerFaints = SoulEater.onBattlerFaints,
+template <>
+constexpr Ability Impl<ABILITY_SCAVENGER> = {
+    .onBattlerFaints = Impl<ABILITY_SOUL_EATER>.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability TwistedDimension = {
+template <>
+constexpr Ability Impl<ABILITY_TWISTED_DIMENSION> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
 
@@ -3852,7 +4186,8 @@ constexpr Ability TwistedDimension = {
     },
 };
 
-constexpr Ability MultiHeaded = {
+template <>
+constexpr Ability Impl<ABILITY_MULTI_HEADED> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
         if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
         if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
@@ -3861,7 +4196,8 @@ constexpr Ability MultiHeaded = {
     .resistsFortKnox = TRUE,
 };
 
-constexpr Ability NorthWind = {
+template <>
+constexpr Ability Impl<ABILITY_NORTH_WIND> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_AURORA_VEIL)
 
@@ -3879,38 +4215,43 @@ constexpr Ability NorthWind = {
     .hailImmune = TRUE,
 };
 
-constexpr Ability Overcharge = {
+template <>
+constexpr Ability Impl<ABILITY_OVERCHARGE> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
         CHECK(moveType == TYPE_ELECTRIC)
         CHECK(defType == TYPE_ELECTRIC)
         *mod = UQ_4_12(2.0);
         return TRUE;
     },
-    .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
+    .onCanStatusType = +[](ON_CAN_STATUS_TYPE) -> int {
         CHECK(status & CHECK_PARALYSIS)
         return TRUE;
     },
 };
 
-constexpr Ability ViolentRush = {
+template <>
+constexpr Ability Impl<ABILITY_VIOLENT_RUSH> = {
     .onEntry = +[](ON_ENTRY) -> int {
         gVolatileStructs[battler].violentRush = gVolatileStructs[battler].started.violentRush = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_VIOLENT_RUSH);
     },
 };
 
-constexpr Ability FlamingSoul = {
+template <>
+constexpr Ability Impl<ABILITY_FLAMING_SOUL> = {
     .onPriority = GALE_WINGS_CLONE(TYPE_FIRE),
 };
 
-constexpr Ability SagePower = {
+template <>
+constexpr Ability Impl<ABILITY_SAGE_POWER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_MOVE_SPECIAL(move)) MUL(1.5);
         },
 };
 
-constexpr Ability BoneZone = {
+template <>
+constexpr Ability Impl<ABILITY_BONE_ZONE> = {
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
             if (*mod >= UQ_4_12(1.0)) return;
@@ -3924,19 +4265,22 @@ constexpr Ability BoneZone = {
         },
 };
 
-constexpr Ability WeatherControl = {
-    .onImmune = DeltaStream.onImmune,
+template <>
+constexpr Ability Impl<ABILITY_WEATHER_CONTROL> = {
+    .onImmune = Impl<ABILITY_DELTA_STREAM>.onImmune,
     .breakable = TRUE,
 };
 
-constexpr Ability SpeedForce = {
+template <>
+constexpr Ability Impl<ABILITY_SPEED_FORCE> = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
             if (gBattleMoves[move].contact) secondaryAtkStatToUse[STAT_SPEED] += 20;
         },
 };
 
-constexpr Ability SeaGuardian = {
+template <>
+constexpr Ability Impl<ABILITY_SEA_GUARDIAN> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
@@ -3948,7 +4292,8 @@ constexpr Ability SeaGuardian = {
     },
 };
 
-constexpr Ability MoltenDown = {
+template <>
+constexpr Ability Impl<ABILITY_MOLTEN_DOWN> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
         CHECK(moveType == TYPE_FIRE)
         CHECK(defType == TYPE_ROCK)
@@ -3957,59 +4302,70 @@ constexpr Ability MoltenDown = {
     },
 };
 
-constexpr Ability HyperAggressive = {
-    .onParentalBond = ParentalBond.onParentalBond,
+template <>
+constexpr Ability Impl<ABILITY_HYPER_AGGRESSIVE> = {
+    .onParentalBond = Impl<ABILITY_PARENTAL_BOND>.onParentalBond,
 };
 
-constexpr Ability Flock = {
+template <>
+constexpr Ability Impl<ABILITY_FLOCK> = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_FLYING),
 };
 
-constexpr Ability FieldExplorer = {
+template <>
+constexpr Ability Impl<ABILITY_FIELD_EXPLORER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.5);
         },
 };
 
-constexpr Ability Striker = {
+template <>
+constexpr Ability Impl<ABILITY_STRIKER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IsStrikerBoosted(battler, move)) MUL(1.3);
         },
 };
 
-constexpr Ability FrozenSoul = {
+template <>
+constexpr Ability Impl<ABILITY_FROZEN_SOUL> = {
     .onPriority = GALE_WINGS_CLONE(TYPE_ICE),
 };
 
-constexpr Ability Predator = {
-    .onBattlerFaints = SoulEater.onBattlerFaints,
+template <>
+constexpr Ability Impl<ABILITY_PREDATOR> = {
+    .onBattlerFaints = Impl<ABILITY_SOUL_EATER>.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability Looter = {
-    .onBattlerFaints = SoulEater.onBattlerFaints,
+template <>
+constexpr Ability Impl<ABILITY_LOOTER> = {
+    .onBattlerFaints = Impl<ABILITY_SOUL_EATER>.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability LunarEclipse = {
+template <>
+constexpr Ability Impl<ABILITY_LUNAR_ECLIPSE> = {
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_DARK || moveType == TYPE_FAIRY; },
-    .onAccuracy = Hypnotist.onAccuracy,
+    .onAccuracy = Impl<ABILITY_HYPNOTIST>.onAccuracy,
 };
 
-constexpr Ability SolarFlare = {
-    .onOffensiveMultiplier = Immolate.onOffensiveMultiplier,
-    .onMoveType = Immolate.onMoveType,
+template <>
+constexpr Ability Impl<ABILITY_SOLAR_FLARE> = {
+    .onOffensiveMultiplier = Impl<ABILITY_IMMOLATE>.onOffensiveMultiplier,
+    .onMoveType = Impl<ABILITY_IMMOLATE>.onMoveType,
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FIRE; },
     .chloroplast = TRUE,
 };
 
-constexpr Ability PowerCore = {
+template <>
+constexpr Ability Impl<ABILITY_POWER_CORE> = {
     .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF] += 20; },
 };
 
-constexpr Ability SightingSystem = {
+template <>
+constexpr Ability Impl<ABILITY_SIGHTING_SYSTEM> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority { return ACCURACY_HITS_IF_POSSIBLE; },
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(gBattleMoves[move].accuracy)
@@ -4018,32 +4374,37 @@ constexpr Ability SightingSystem = {
     },
 };
 
-constexpr Ability BadCompany = {
+template <>
+constexpr Ability Impl<ABILITY_BAD_COMPANY> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Opportunist = {
+template <>
+constexpr Ability Impl<ABILITY_OPPORTUNIST> = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(gBattleMons[target].hp <= gBattleMons[target].maxHP / 2)
         return 1;
     },
 };
 
-constexpr Ability GiantWings = {
+template <>
+constexpr Ability Impl<ABILITY_GIANT_WINGS> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].airBased) MUL(1.3);
         },
 };
 
-constexpr Ability Momentum = {
+template <>
+constexpr Ability Impl<ABILITY_MOMENTUM> = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
             if (gBattleMoves[move].contact) *atkStatToUse = STAT_SPEED;
         },
 };
 
-constexpr Ability GripPincer = {
+template <>
+constexpr Ability Impl<ABILITY_GRIP_PINCER> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(gBattlerTarget))
         CHECK(IsBattlerAlive(battler))
@@ -4068,17 +4429,19 @@ constexpr Ability GripPincer = {
     },
 };
 
-constexpr Ability BigLeaves = {
-    .onEndTurn = +[](ON_END_TURN) -> int { return Harvest.onEndTurn(DELEGATE_END_TURN) | LeafGuard.onEndTurn(DELEGATE_END_TURN); },
+template <>
+constexpr Ability Impl<ABILITY_BIG_LEAVES> = {
+    .onEndTurn = +[](ON_END_TURN) -> int { return Impl<ABILITY_HARVEST>.onEndTurn(DELEGATE_END_TURN) | Impl<ABILITY_LEAF_GUARD>.onEndTurn(DELEGATE_END_TURN); },
     .onStat =
         +[](ON_STAT) {
-            SolarPower.onStat(DELEGATE_STAT);
-            Chlorophyll.onStat(DELEGATE_STAT);
+            Impl<ABILITY_SOLAR_POWER>.onStat(DELEGATE_STAT);
+            Impl<ABILITY_CHLOROPHYLL>.onStat(DELEGATE_STAT);
         },
     .chloroplast = TRUE,
 };
 
-constexpr Ability PreciseFist = {
+template <>
+constexpr Ability Impl<ABILITY_PRECISE_FIST> = {
     .onCrit = +[](ON_CRIT) -> int {
         CHECK(IsIronFistBoosted(battler, move))
         return 1;
@@ -4089,7 +4452,8 @@ constexpr Ability PreciseFist = {
         },
 };
 
-constexpr Ability Deadeye = {
+template <>
+constexpr Ability Impl<ABILITY_DEADEYE> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].arrowBased)
         return ACCURACY_HITS_IF_POSSIBLE;
@@ -4107,18 +4471,21 @@ constexpr Ability Deadeye = {
     },
 };
 
-constexpr Ability Artillery = {
+template <>
+constexpr Ability Impl<ABILITY_ARTILLERY> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(IsMegaLauncherBoosted(battler, move))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
 };
 
-constexpr Ability Amplifier = {
-    .onOffensiveMultiplier = PunkRock.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_AMPLIFIER> = {
+    .onOffensiveMultiplier = Impl<ABILITY_PUNK_ROCK>.onOffensiveMultiplier,
 };
 
-constexpr Ability IceDew = {
+template <>
+constexpr Ability Impl<ABILITY_ICE_DEW> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_ICE);
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -4128,7 +4495,8 @@ constexpr Ability IceDew = {
     .breakable = TRUE,
 };
 
-constexpr Ability SunWorship = {
+template <>
+constexpr Ability Impl<ABILITY_SUN_WORSHIP> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
 
@@ -4139,11 +4507,13 @@ constexpr Ability SunWorship = {
     },
 };
 
-constexpr Ability Pollinate = {
+template <>
+constexpr Ability Impl<ABILITY_POLLINATE> = {
     ATE_ABILITY(TYPE_BUG),
 };
 
-constexpr Ability VolcanoRage = {
+template <>
+constexpr Ability Impl<ABILITY_VOLCANO_RAGE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(moveType == TYPE_FIRE)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -4152,7 +4522,8 @@ constexpr Ability VolcanoRage = {
     },
 };
 
-constexpr Ability ColdRebound = {
+template <>
+constexpr Ability Impl<ABILITY_COLD_REBOUND> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -4162,15 +4533,18 @@ constexpr Ability ColdRebound = {
     },
 };
 
-constexpr Ability LowBlow = {
+template <>
+constexpr Ability Impl<ABILITY_LOW_BLOW> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40); },
 };
 
-constexpr Ability Spectralize = {
+template <>
+constexpr Ability Impl<ABILITY_SPECTRALIZE> = {
     ATE_ABILITY(TYPE_GHOST),
 };
 
-constexpr Ability SpectralShroud = {
+template <>
+constexpr Ability Impl<ABILITY_SPECTRAL_SHROUD> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
@@ -4180,12 +4554,13 @@ constexpr Ability SpectralShroud = {
 
         return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
     },
-    .onOffensiveMultiplier = Spectralize.onOffensiveMultiplier,
-    .onMoveType = Spectralize.onMoveType,
+    .onOffensiveMultiplier = Impl<ABILITY_SPECTRALIZE>.onOffensiveMultiplier,
+    .onMoveType = Impl<ABILITY_SPECTRALIZE>.onMoveType,
 };
 
-constexpr Ability Discipline = {
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+template <>
+constexpr Ability Impl<ABILITY_DISCIPLINE> = {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_CONFUSION)
         return TRUE;
     },
@@ -4194,7 +4569,8 @@ constexpr Ability Discipline = {
     .tauntImmune = TRUE,
 };
 
-constexpr Ability Thundercall = {
+template <>
+constexpr Ability Impl<ABILITY_THUNDERCALL> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(moveType == TYPE_ELECTRIC)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -4203,22 +4579,25 @@ constexpr Ability Thundercall = {
     },
 };
 
-constexpr Ability MarineApex = {
-    .onInfiltrate = Infiltrator.onInfiltrate,
+template <>
+constexpr Ability Impl<ABILITY_MARINE_APEX> = {
+    .onInfiltrate = Impl<ABILITY_INFILTRATOR>.onInfiltrate,
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_BATTLER_OF_TYPE(target, TYPE_WATER)) RESISTANCE(1.5);
         },
 };
 
-constexpr Ability MightyHorn = {
+template <>
+constexpr Ability Impl<ABILITY_MIGHTY_HORN> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].hornBased) MUL(1.3);
         },
 };
 
-constexpr Ability HardenedSheath = {
+template <>
+constexpr Ability Impl<ABILITY_HARDENED_SHEATH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(gBattleMoves[move].hornBased)
@@ -4230,12 +4609,14 @@ constexpr Ability HardenedSheath = {
     },
 };
 
-constexpr Ability ArcticFur = {
+template <>
+constexpr Ability Impl<ABILITY_ARCTIC_FUR> = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.65); },
     .breakable = TRUE,
 };
 
-constexpr Ability Lethargy = {
+template <>
+constexpr Ability Impl<ABILITY_LETHARGY> = {
     .onEntry = +[](ON_ENTRY) -> int {
         TryResetBattlerStatChanges(battler, RESET_ALL_STATS);
         gVolatileStructs[battler].slowStartTimer = 5;
@@ -4265,20 +4646,23 @@ constexpr Ability Lethargy = {
         },
 };
 
-constexpr Ability IronBarrage = {
-    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
-    .onAccuracy = SightingSystem.onAccuracy,
-    .onPriority = SightingSystem.onPriority,
+template <>
+constexpr Ability Impl<ABILITY_IRON_BARRAGE> = {
+    .onOffensiveMultiplier = Impl<ABILITY_MEGA_LAUNCHER>.onOffensiveMultiplier,
+    .onAccuracy = Impl<ABILITY_SIGHTING_SYSTEM>.onAccuracy,
+    .onPriority = Impl<ABILITY_SIGHTING_SYSTEM>.onPriority,
     .megaLauncherBoost = TRUE,
 };
 
-constexpr Ability SteelBarrel = {
-    .onStatusImmune = RockHead.onStatusImmune,
+template <>
+constexpr Ability Impl<ABILITY_STEEL_BARREL> = {
+    .onStatusImmune = Impl<ABILITY_ROCK_HEAD>.onStatusImmune,
     .noRecoil = TRUE,
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability PyroShells = {
+template <>
+constexpr Ability Impl<ABILITY_PYRO_SHELLS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(IsMegaLauncherBoosted(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -4287,7 +4671,8 @@ constexpr Ability PyroShells = {
     },
 };
 
-constexpr Ability FungalInfection = {
+template <>
+constexpr Ability Impl<ABILITY_FUNGAL_INFECTION> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
@@ -4301,7 +4686,8 @@ constexpr Ability FungalInfection = {
     },
 };
 
-constexpr Ability Parry = {
+template <>
+constexpr Ability Impl<ABILITY_PARRY> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -4312,7 +4698,8 @@ constexpr Ability Parry = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.8); },
 };
 
-constexpr Ability Scrapyard = {
+template <>
+constexpr Ability Impl<ABILITY_SCRAPYARD> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(IsMoveMakingContact(move, attacker))
@@ -4323,11 +4710,13 @@ constexpr Ability Scrapyard = {
     },
 };
 
-constexpr Ability LooseQuills = {
-    .onDefender = Scrapyard.onDefender,
+template <>
+constexpr Ability Impl<ABILITY_LOOSE_QUILLS> = {
+    .onDefender = Impl<ABILITY_SCRAPYARD>.onDefender,
 };
 
-constexpr Ability ToxicDebris = {
+template <>
+constexpr Ability Impl<ABILITY_TOXIC_DEBRIS> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(IsMoveMakingContact(move, attacker))
@@ -4338,7 +4727,8 @@ constexpr Ability ToxicDebris = {
     },
 };
 
-constexpr Ability Roundhouse = {
+template <>
+constexpr Ability Impl<ABILITY_ROUNDHOUSE> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(IsStrikerBoosted(battler, move))
         return ACCURACY_HITS_IF_POSSIBLE;
@@ -4356,11 +4746,13 @@ constexpr Ability Roundhouse = {
     },
 };
 
-constexpr Ability Mineralize = {
+template <>
+constexpr Ability Impl<ABILITY_MINERALIZE> = {
     ATE_ABILITY(TYPE_ROCK),
 };
 
-constexpr Ability LooseRocks = {
+template <>
+constexpr Ability Impl<ABILITY_LOOSE_ROCKS> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(IsMoveMakingContact(move, attacker))
@@ -4371,7 +4763,8 @@ constexpr Ability LooseRocks = {
     },
 };
 
-constexpr Ability SpinningTop = {
+template <>
+constexpr Ability Impl<ABILITY_SPINNING_TOP> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_FIGHTING)
@@ -4399,7 +4792,8 @@ constexpr Ability SpinningTop = {
     },
 };
 
-constexpr Ability RetributionBlow = {
+template <>
+constexpr Ability Impl<ABILITY_RETRIBUTION_BLOW> = {
     .onReactive = +[](ON_REACTIVE) -> int {
         CHECK_NOT(gTurnStructs[battler].dancerUsedMove)
         CHECK(IsBattlerAlive(gBattlerAttacker))
@@ -4415,7 +4809,8 @@ constexpr Ability RetributionBlow = {
     },
 };
 
-constexpr Ability Fearmonger = {
+template <>
+constexpr Ability Impl<ABILITY_FEARMONGER> = {
     .onEntry = UseIntimidateClone,
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
@@ -4427,7 +4822,8 @@ constexpr Ability Fearmonger = {
     },
 };
 
-constexpr Ability FiresWrath = {
+template <>
+constexpr Ability Impl<ABILITY_FIRES_WRATH> = {
     .onEntry = UseIntimidateClone,
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
@@ -4439,7 +4835,8 @@ constexpr Ability FiresWrath = {
     },
 };
 
-constexpr Ability ToxicSpill = {
+template <>
+constexpr Ability Impl<ABILITY_TOXIC_SPILL> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(getMonotypeChampType() == TYPE_POISON)
 
@@ -4492,8 +4889,9 @@ constexpr Ability ToxicSpill = {
     },
 };
 
-constexpr Ability DesertCloak = {
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+template <>
+constexpr Ability Impl<ABILITY_DESERT_CLOAK> = {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_STATUS1)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
         return TRUE;
@@ -4503,23 +4901,27 @@ constexpr Ability DesertCloak = {
     .sandImmune = TRUE,
 };
 
-constexpr Ability Draconize = {
+template <>
+constexpr Ability Impl<ABILITY_DRACONIZE> = {
     ATE_ABILITY(TYPE_DRAGON),
 };
 
-constexpr Ability PrettyPrincess = {
+template <>
+constexpr Ability Impl<ABILITY_PRETTY_PRINCESS> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (!IsUnaware(battler) && HasAnyLoweredStat(target)) MUL(1.5);
         },
 };
 
-constexpr Ability SelfRepair = {
-    .onEndTurn = SelfSufficient.onEndTurn,
-    .onExit = NaturalCure.onExit,
+template <>
+constexpr Ability Impl<ABILITY_SELF_REPAIR> = {
+    .onEndTurn = Impl<ABILITY_SELF_SUFFICIENT>.onEndTurn,
+    .onExit = Impl<ABILITY_NATURAL_CURE>.onExit,
 };
 
-constexpr Ability Electromorphosis = {
+template <>
+constexpr Ability Impl<ABILITY_ELECTROMORPHOSIS> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
@@ -4530,38 +4932,45 @@ constexpr Ability Electromorphosis = {
     },
 };
 
-constexpr Ability AtomicBurst = {
-    .onDefender = Electromorphosis.onDefender,
+template <>
+constexpr Ability Impl<ABILITY_ATOMIC_BURST> = {
+    .onDefender = Impl<ABILITY_ELECTROMORPHOSIS>.onDefender,
     ATE_ABILITY(TYPE_ELECTRIC),
 };
 
-constexpr Ability Hellblaze = {
+template <>
+constexpr Ability Impl<ABILITY_HELLBLAZE> = {
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_FIRE),
 };
 
-constexpr Ability Riptide = {
+template <>
+constexpr Ability Impl<ABILITY_RIPTIDE> = {
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_WATER),
 };
 
-constexpr Ability ForestRage = {
+template <>
+constexpr Ability Impl<ABILITY_FOREST_RAGE> = {
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_GRASS),
 };
 
-constexpr Ability PrimalMaw = {
+template <>
+constexpr Ability Impl<ABILITY_PRIMAL_MAW> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         return PARENTAL_BOND_PRIMAL_MAW;
     },
 };
 
-constexpr Ability SweepingEdge = {
+template <>
+constexpr Ability Impl<ABILITY_SWEEPING_EDGE> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
 };
 
-constexpr Ability GiftedMind = {
+template <>
+constexpr Ability Impl<ABILITY_GIFTED_MIND> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(IS_MOVE_STATUS(move))
         return ACCURACY_HITS_IF_POSSIBLE;
@@ -4574,7 +4983,8 @@ constexpr Ability GiftedMind = {
     .breakable = TRUE,
 };
 
-constexpr Ability HydroCircuit = {
+template <>
+constexpr Ability Impl<ABILITY_HYDRO_CIRCUIT> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
@@ -4586,10 +4996,11 @@ constexpr Ability HydroCircuit = {
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
     },
-    .onOffensiveMultiplier = Transistor.onOffensiveMultiplier,
+    .onOffensiveMultiplier = Impl<ABILITY_TRANSISTOR>.onOffensiveMultiplier,
 };
 
-constexpr Ability Equinox = {
+template <>
+constexpr Ability Impl<ABILITY_EQUINOX> = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
             int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
@@ -4601,7 +5012,8 @@ constexpr Ability Equinox = {
         },
 };
 
-constexpr Ability Absorbant = {
+template <>
+constexpr Ability Impl<ABILITY_ABSORBANT> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
@@ -4615,12 +5027,14 @@ constexpr Ability Absorbant = {
     },
 };
 
-constexpr Ability Clueless = {
-    .onEntry = CloudNine.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_CLUELESS> = {
+    .onEntry = Impl<ABILITY_CLOUD_NINE>.onEntry,
     .unsuppressable = TRUE,
 };
 
-constexpr Ability CheatingDeath = {
+template <>
+constexpr Ability Impl<ABILITY_CHEATING_DEATH> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int uses = 2 - GetSingleUseAbilityCounter(battler, ability);
         CHECK(uses)
@@ -4637,11 +5051,13 @@ constexpr Ability CheatingDeath = {
     .persistent = TRUE,
 };
 
-constexpr Ability CheapTactics = {
+template <>
+constexpr Ability Impl<ABILITY_CHEAP_TACTICS> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SCRATCH, 0); },
 };
 
-constexpr Ability Coward = {
+template <>
+constexpr Ability Impl<ABILITY_COWARD> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
 
@@ -4653,11 +5069,13 @@ constexpr Ability Coward = {
     .persistent = TRUE,
 };
 
-constexpr Ability VoltRush = {
+template <>
+constexpr Ability Impl<ABILITY_VOLT_RUSH> = {
     .onPriority = GALE_WINGS_CLONE(TYPE_ELECTRIC),
 };
 
-constexpr Ability DuneTerror = {
+template <>
+constexpr Ability Impl<ABILITY_DUNE_TERROR> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GROUND) MUL(1.2);
@@ -4670,7 +5088,8 @@ constexpr Ability DuneTerror = {
     .sandImmune = TRUE,
 };
 
-constexpr Ability InfernalRage = {
+template <>
+constexpr Ability Impl<ABILITY_INFERNAL_RAGE> = {
     .onRecoil = +[](ON_RECOIL) -> int {
         CHECK(moveType == TYPE_FIRE);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -4682,14 +5101,16 @@ constexpr Ability InfernalRage = {
         },
 };
 
-constexpr Ability DualWield = {
+template <>
+constexpr Ability Impl<ABILITY_DUAL_WIELD> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
         CHECK(IsMegaLauncherBoosted(battler, move) || DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE));
         return PARENTAL_BOND_DUAL_WIELD;
     },
 };
 
-constexpr Ability ElementalCharge = {
+template <>
+constexpr Ability Impl<ABILITY_ELEMENTAL_CHARGE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(Random() % 100 < 20)
@@ -4717,14 +5138,16 @@ constexpr Ability ElementalCharge = {
     },
 };
 
-constexpr Ability Ambush = {
+template <>
+constexpr Ability Impl<ABILITY_AMBUSH> = {
     .onCrit = +[](ON_CRIT) -> int {
         CHECK(gVolatileStructs[battler].isFirstTurn)
         return ALWAYS_CRIT;
     },
 };
 
-constexpr Ability Atlas = {
+template <>
+constexpr Ability Impl<ABILITY_ATLAS> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
 
@@ -4736,18 +5159,20 @@ constexpr Ability Atlas = {
     },
 };
 
-constexpr Ability Radiance = {
+template <>
+constexpr Ability Impl<ABILITY_RADIANCE> = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(moveType == TYPE_DARK);
         *immunityScript = BattleScript_RadianceProtected;
         return TRUE;
     },
-    .onAccuracy = Illuminate.onAccuracy,
+    .onAccuracy = Impl<ABILITY_ILLUMINATE>.onAccuracy,
     .onImmuneFor = APPLY_ON_ANY,
     .breakable = TRUE,
 };
 
-constexpr Ability JawsOfCarnage = {
+template <>
+constexpr Ability Impl<ABILITY_JAWS_OF_CARNAGE> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
@@ -4760,7 +5185,8 @@ constexpr Ability JawsOfCarnage = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability AngelsWrath = {
+template <>
+constexpr Ability Impl<ABILITY_ANGELS_WRATH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         switch (move) {
             case MOVE_TACKLE: {
@@ -4887,24 +5313,26 @@ constexpr Ability AngelsWrath = {
         +[](ON_MODIFY_EFFECT_CHANCE) {
             if (move == MOVE_POISON_STING) *effectChance = 100;
         },
-    .onCanStatusType = +[](ABILITY_ON_CAN_STATUS_TYPE) -> int {
+    .onCanStatusType = +[](ON_CAN_STATUS_TYPE) -> int {
         CHECK(status & CHECK_POISON)
         CHECK(move == MOVE_POISON_STING)
         return TRUE;
     },
 };
 
-constexpr Ability PrismaticFur = {
+template <>
+constexpr Ability Impl<ABILITY_PRISMATIC_FUR> = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.5); },
-    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
-        if (battler == attacker && Protean.onBeforeAttack(DELEGATE_ON_BEFORE_ATTACK)) return TRUE;
-        return ColorChange.onBeforeAttack(DELEGATE_ON_BEFORE_ATTACK);
+    .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
+        if (battler == attacker && Impl<ABILITY_PROTEAN>.onBeforeAttack(DELEGATE_BEFORE_ATTACK)) return TRUE;
+        return Impl<ABILITY_COLOR_CHANGE>.onBeforeAttack(DELEGATE_BEFORE_ATTACK);
     },
     .onBeforeAttackFor = APPLY_ON_ATTACKER_OR_TARGET,
     .omniStab = TRUE,
 };
 
-constexpr Ability ShockingJaws = {
+template <>
+constexpr Ability Impl<ABILITY_SHOCKING_JAWS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeParalyzed(battler, target))
@@ -4915,7 +5343,8 @@ constexpr Ability ShockingJaws = {
     },
 };
 
-constexpr Ability FaeHunter = {
+template <>
+constexpr Ability Impl<ABILITY_FAE_HUNTER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_BATTLER_OF_TYPE(target, TYPE_FAIRY)) RESISTANCE(1.5);
@@ -4927,7 +5356,8 @@ constexpr Ability FaeHunter = {
     .breakable = TRUE,
 };
 
-constexpr Ability GravityWell = {
+template <>
+constexpr Ability Impl<ABILITY_GRAVITY_WELL> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
 
@@ -4939,7 +5369,8 @@ constexpr Ability GravityWell = {
     },
 };
 
-constexpr Ability Evaporate = {
+template <>
+constexpr Ability Impl<ABILITY_EVAPORATE> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_WATER)
         return ABSORB_RESULT_EVAPORATE;
@@ -4947,7 +5378,8 @@ constexpr Ability Evaporate = {
     .breakable = TRUE,
 };
 
-constexpr Ability Lumberjack = {
+template <>
+constexpr Ability Impl<ABILITY_LUMBERJACK> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) RESISTANCE(1.5);
@@ -4959,7 +5391,8 @@ constexpr Ability Lumberjack = {
     .breakable = TRUE,
 };
 
-constexpr Ability WellBakedBody = {
+template <>
+constexpr Ability Impl<ABILITY_WELL_BAKED_BODY> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_FIRE);
         *statId = STAT_DEF;
@@ -4969,7 +5402,8 @@ constexpr Ability WellBakedBody = {
     .absorbUp2 = TRUE,
 };
 
-constexpr Ability Furnace = {
+template <>
+constexpr Ability Impl<ABILITY_FURNACE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
         CHECK(gSideTimers[GetBattlerSide(battler)].stealthRockType == TYPE_ROCK)
@@ -4990,14 +5424,16 @@ constexpr Ability Furnace = {
     },
 };
 
-constexpr Ability RockyPayload = {
+template <>
+constexpr Ability Impl<ABILITY_ROCKY_PAYLOAD> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ROCK || gBattleMoves[move].throwingBased) MUL(1.5);
         },
 };
 
-constexpr Ability EarthEater = {
+template <>
+constexpr Ability Impl<ABILITY_EARTH_EATER> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_GROUND)
         return ABSORB_RESULT_HEAL;
@@ -5005,28 +5441,33 @@ constexpr Ability EarthEater = {
     .breakable = TRUE,
 };
 
-constexpr Ability LingeringAroma = {
-    .onDefender = Mummy.onDefender,
+template <>
+constexpr Ability Impl<ABILITY_LINGERING_AROMA> = {
+    .onDefender = Impl<ABILITY_MUMMY>.onDefender,
 };
 
-constexpr Ability FairyTale = {
+template <>
+constexpr Ability Impl<ABILITY_FAIRY_TALE> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FAIRY); },
     .addsType = TYPE_FAIRY,
 };
 
-constexpr Ability RagingMoth = {
+template <>
+constexpr Ability Impl<ABILITY_RAGING_MOTH> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
         CHECK(moveType == TYPE_FIRE)
         return PARENTAL_BOND_DUAL_WIELD;
     },
 };
 
-constexpr Ability AdrenalineRush = {
+template <>
+constexpr Ability Impl<ABILITY_ADRENALINE_RUSH> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return MoxieClone(battler, STAT_SPEED); },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability Archmage = {
+template <>
+constexpr Ability Impl<ABILITY_ARCHMAGE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(DidMoveHit())
         CHECK_NOT(IS_MOVE_STATUS(move))
@@ -5165,14 +5606,16 @@ constexpr Ability Archmage = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Cryomancy = {
+template <>
+constexpr Ability Impl<ABILITY_CRYOMANCY> = {
     .onModifyEffectChance =
         +[](ON_MODIFY_EFFECT_CHANCE) {
             if (moveEffect == MOVE_EFFECT_FROSTBITE) *effectChance *= 5;
         },
 };
 
-constexpr Ability PhantomPain = {
+template <>
+constexpr Ability Impl<ABILITY_PHANTOM_PAIN> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
         CHECK(moveType == TYPE_GHOST)
         CHECK(defType == TYPE_NORMAL)
@@ -5182,46 +5625,54 @@ constexpr Ability PhantomPain = {
     },
 };
 
-constexpr Ability Purgatory = {
+template <>
+constexpr Ability Impl<ABILITY_PURGATORY> = {
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_GHOST),
 };
 
-constexpr Ability Emanate = {
+template <>
+constexpr Ability Impl<ABILITY_EMANATE> = {
     ATE_ABILITY(TYPE_PSYCHIC),
 };
 
-constexpr Ability KunoichiBlade = {
-    .onOffensiveMultiplier = Technician.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_KUNOICHI_BLADE> = {
+    .onOffensiveMultiplier = Impl<ABILITY_TECHNICIAN>.onOffensiveMultiplier,
     .skillLink = TRUE,
 };
 
-constexpr Ability MonkeyBusiness = {
+template <>
+constexpr Ability Impl<ABILITY_MONKEY_BUSINESS> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TICKLE, 0); },
 };
 
-constexpr Ability CombatSpecialist = {
+template <>
+constexpr Ability Impl<ABILITY_COMBAT_SPECIALIST> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            IronFist.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            Striker.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_IRON_FIST>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_STRIKER>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
 };
 
-constexpr Ability JunglesGuard = {
-    .onStatusImmune = FlowerVeil.onStatusImmune,
-    .onStatusImmuneFor = FlowerVeil.onStatusImmuneFor,
+template <>
+constexpr Ability Impl<ABILITY_JUNGLES_GUARD> = {
+    .onStatusImmune = Impl<ABILITY_FLOWER_VEIL>.onStatusImmune,
+    .onStatusImmuneFor = Impl<ABILITY_FLOWER_VEIL>.onStatusImmuneFor,
     .breakable = TRUE,
 };
 
-constexpr Ability HuntersHorn = {
-    .onBattlerFaints = SoulEater.onBattlerFaints,
-    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_HUNTERS_HORN> = {
+    .onBattlerFaints = Impl<ABILITY_SOUL_EATER>.onBattlerFaints,
+    .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability PixiePower = {
-    .onEntry = FairyAura.onEntry,
-    .onOffensiveMultiplier = FairyAura.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_PIXIE_POWER> = {
+    .onEntry = Impl<ABILITY_FAIRY_AURA>.onEntry,
+    .onOffensiveMultiplier = Impl<ABILITY_FAIRY_AURA>.onOffensiveMultiplier,
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
@@ -5229,7 +5680,8 @@ constexpr Ability PixiePower = {
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
 };
 
-constexpr Ability PlasmaLamp = {
+template <>
+constexpr Ability Impl<ABILITY_PLASMA_LAMP> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC) MUL(1.2);
@@ -5241,36 +5693,43 @@ constexpr Ability PlasmaLamp = {
     },
 };
 
-constexpr Ability MagmaEater = {
-    .onBattlerFaints = SoulEater.onBattlerFaints,
-    .onTypeEffectiveness = MoltenDown.onTypeEffectiveness,
+template <>
+constexpr Ability Impl<ABILITY_MAGMA_EATER> = {
+    .onBattlerFaints = Impl<ABILITY_SOUL_EATER>.onBattlerFaints,
+    .onTypeEffectiveness = Impl<ABILITY_MOLTEN_DOWN>.onTypeEffectiveness,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability SuperHotGoo = {
-    .onAttacker = FlameBody.onAttacker,
-    .onDefender = +[](ON_DEFENDER) -> int { return Gooey.onDefender(DELEGATE_DEFENDER) | FlameBody.onDefender(DELEGATE_DEFENDER); },
+template <>
+constexpr Ability Impl<ABILITY_SUPER_HOT_GOO> = {
+    .onAttacker = Impl<ABILITY_FLAME_BODY>.onAttacker,
+    .onDefender =
+        +[](ON_DEFENDER) -> int { return Impl<ABILITY_GOOEY>.onDefender(DELEGATE_DEFENDER) | Impl<ABILITY_FLAME_BODY>.onDefender(DELEGATE_DEFENDER); },
 };
 
-constexpr Ability Nika = {
-    .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_NIKA> = {
+    .onOffensiveMultiplier = Impl<ABILITY_IRON_FIST>.onOffensiveMultiplier,
 };
 
-constexpr Ability Archer = {
+template <>
+constexpr Ability Impl<ABILITY_ARCHER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].arrowBased) MUL(1.3);
         },
 };
 
-constexpr Ability SuperSlammer = {
+template <>
+constexpr Ability Impl<ABILITY_SUPER_SLAMMER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].hammerBased) MUL(1.3);
         },
 };
 
-constexpr Ability InverseRoom = {
+template <>
+constexpr Ability Impl<ABILITY_INVERSE_ROOM> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)
 
@@ -5282,7 +5741,8 @@ constexpr Ability InverseRoom = {
     },
 };
 
-constexpr Ability FrostBurn = {
+template <>
+constexpr Ability Impl<ABILITY_FROST_BURN> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(moveType == TYPE_FIRE)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -5291,7 +5751,8 @@ constexpr Ability FrostBurn = {
     },
 };
 
-constexpr Ability ItchyDefense = {
+template <>
+constexpr Ability Impl<ABILITY_ITCHY_DEFENSE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -5311,7 +5772,8 @@ constexpr Ability ItchyDefense = {
     },
 };
 
-constexpr Ability Generator = {
+template <>
+constexpr Ability Impl<ABILITY_GENERATOR> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
@@ -5345,15 +5807,18 @@ constexpr Ability Generator = {
     .persistent = TRUE,
 };
 
-constexpr Ability MoonSpirit = {
+template <>
+constexpr Ability Impl<ABILITY_MOON_SPIRIT> = {
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FAIRY || moveType == TYPE_DARK; },
 };
 
-constexpr Ability DustCloud = {
+template <>
+constexpr Ability Impl<ABILITY_DUST_CLOUD> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SAND_ATTACK, 0); },
 };
 
-constexpr Ability TippingPoint = {
+template <>
+constexpr Ability Impl<ABILITY_TIPPING_POINT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_SPATK))
@@ -5369,20 +5834,23 @@ constexpr Ability TippingPoint = {
     },
 };
 
-constexpr Ability BerserkerRage = {
-    .onDefender = TippingPoint.onDefender,
-    .onBattlerFaints = Rampage.onBattlerFaints,
+template <>
+constexpr Ability Impl<ABILITY_BERSERKER_RAGE> = {
+    .onDefender = Impl<ABILITY_TIPPING_POINT>.onDefender,
+    .onBattlerFaints = Impl<ABILITY_RAMPAGE>.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability Trickster = {
+template <>
+constexpr Ability Impl<ABILITY_TRICKSTER> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DISABLE, 0); },
 };
 
-constexpr Ability SandGuard = {
+template <>
+constexpr Ability Impl<ABILITY_SAND_GUARD> = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY));
-        return QueenlyMajesty.onImmune(DELEGATE_IMMUNE);
+        return Impl<ABILITY_QUEENLY_MAJESTY>.onImmune(DELEGATE_IMMUNE);
     },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
@@ -5392,11 +5860,13 @@ constexpr Ability SandGuard = {
     .sandImmune = TRUE,
 };
 
-constexpr Ability NaturalRecovery = {
-    .onExit = +[](ON_EXIT) -> int { return NaturalCure.onExit(DELEGATE_EXIT) | Regenerator.onExit(DELEGATE_EXIT); },
+template <>
+constexpr Ability Impl<ABILITY_NATURAL_RECOVERY> = {
+    .onExit = +[](ON_EXIT) -> int { return Impl<ABILITY_NATURAL_CURE>.onExit(DELEGATE_EXIT) | Impl<ABILITY_REGENERATOR>.onExit(DELEGATE_EXIT); },
 };
 
-constexpr Ability WindRider = {
+template <>
+constexpr Ability Impl<ABILITY_WIND_RIDER> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
         CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
@@ -5412,7 +5882,8 @@ constexpr Ability WindRider = {
     .breakable = TRUE,
 };
 
-constexpr Ability SoothingAroma = {
+template <>
+constexpr Ability Impl<ABILITY_SOOTHING_AROMA> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int anyStatus = FALSE;
         struct Pokemon* party;
@@ -5437,12 +5908,14 @@ constexpr Ability SoothingAroma = {
     },
 };
 
-constexpr Ability PrimAndProper = {
-    .onDefender = CuteCharm.onDefender,
+template <>
+constexpr Ability Impl<ABILITY_PRIM_AND_PROPER> = {
+    .onDefender = Impl<ABILITY_CUTE_CHARM>.onDefender,
     .fortKnox = TRUE,
 };
 
-constexpr Ability SuperStrain = {
+template <>
+constexpr Ability Impl<ABILITY_SUPER_STRAIN> = {
     .onRecoil = +[](ON_RECOIL) -> int {
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_STRAIN;
         return max(damage / 4, 1);
@@ -5455,23 +5928,26 @@ constexpr Ability SuperStrain = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability Enlightened = {
-    .onOffensiveMultiplier = Emanate.onOffensiveMultiplier,
-    .onMoveType = Emanate.onMoveType,
-    .onAccuracy = InnerFocus.onAccuracy,
+template <>
+constexpr Ability Impl<ABILITY_ENLIGHTENED> = {
+    .onOffensiveMultiplier = Impl<ABILITY_EMANATE>.onOffensiveMultiplier,
+    .onMoveType = Impl<ABILITY_EMANATE>.onMoveType,
+    .onAccuracy = Impl<ABILITY_INNER_FOCUS>.onAccuracy,
     .breakable = TRUE,
     .tauntImmune = TRUE,
 };
 
-constexpr Ability PeacefulSlumber = {
+template <>
+constexpr Ability Impl<ABILITY_PEACEFUL_SLUMBER> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
-        if (!SweetDreams.onEndTurn(DELEGATE_END_TURN)) return SelfSufficient.onEndTurn(DELEGATE_END_TURN);
+        if (!Impl<ABILITY_SWEET_DREAMS>.onEndTurn(DELEGATE_END_TURN)) return Impl<ABILITY_SELF_SUFFICIENT>.onEndTurn(DELEGATE_END_TURN);
         gBattleMoveDamage -= gBattleMons[battler].maxHP / 16;
         return TRUE;
     },
 };
 
-constexpr Ability Aftershock = {
+template <>
+constexpr Ability Impl<ABILITY_AFTERSHOCK> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(gBattleMoves[move].power)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -5489,11 +5965,12 @@ ON_EITHER(FreezingPoint) {
     AbilityStatusEffectSafe(MOVE_EFFECT_FROSTBITE, battler, opponent);
     return TRUE;
 }
-constexpr Ability FreezingPoint = {
+template <>
+constexpr Ability Impl<ABILITY_FREEZING_POINT> = {
     ON_EITHER_ABILITY(FreezingPoint),
 };
 
-static int CryoProficiencyHail(AbilityEnum ability, int battler, int attacker, MoveEnum move, Type moveType) {
+static int CryoProficiencyHail(int battler) {
     CHECK(ShouldApplyOnHitAffect(battler))
     CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY)
     if (gBattleWeather & WEATHER_PRIMAL_ANY) {
@@ -5506,27 +5983,30 @@ static int CryoProficiencyHail(AbilityEnum ability, int battler, int attacker, M
     }
     return FALSE;
 }
-constexpr Ability CryoProficiency = {
-    .onAttacker = FreezingPoint.onAttacker,
-    .onDefender =
-        +[](ON_DEFENDER) -> int { return FreezingPoint.onDefender(DELEGATE_DEFENDER) | CryoProficiencyHail(ability, battler, attacker, move, moveType); },
+template <>
+constexpr Ability Impl<ABILITY_CRYO_PROFICIENCY> = {
+    .onAttacker = Impl<ABILITY_FREEZING_POINT>.onAttacker,
+    .onDefender = +[](ON_DEFENDER) -> int { return Impl<ABILITY_FREEZING_POINT>.onDefender(DELEGATE_DEFENDER) | CryoProficiencyHail(battler); },
     .hailImmune = TRUE,
 };
 
-constexpr Ability ArcaneForce = {
+template <>
+constexpr Ability Impl<ABILITY_ARCANE_FORCE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
         },
-    .onStab = MysticPower.onStab,
+    .onStab = Impl<ABILITY_MYSTIC_POWER>.onStab,
     .omniStab = TRUE,
 };
 
-constexpr Ability Doombringer = {
+template <>
+constexpr Ability Impl<ABILITY_DOOMBRINGER> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DOOM_DESIRE, 0); },
 };
 
-constexpr Ability Wishmaker = {
+template <>
+constexpr Ability Impl<ABILITY_WISHMAKER> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int counter = GetSingleUseAbilityCounter(battler, ability);
         CHECK(counter < 3)
@@ -5538,7 +6018,8 @@ constexpr Ability Wishmaker = {
     .persistent = TRUE,
 };
 
-constexpr Ability YukiOnna = {
+template <>
+constexpr Ability Impl<ABILITY_YUKI_ONNA> = {
     .onEntry = UseIntimidateClone,
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
@@ -5549,16 +6030,19 @@ constexpr Ability YukiOnna = {
     },
 };
 
-constexpr Ability Suppress = {
+template <>
+constexpr Ability Impl<ABILITY_SUPPRESS> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TORMENT, 0); },
 };
 
-constexpr Ability Refrigerator = {
-    .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
-    .onAccuracy = Illuminate.onAccuracy,
+template <>
+constexpr Ability Impl<ABILITY_REFRIGERATOR> = {
+    .onDefensiveMultiplier = Impl<ABILITY_FILTER>.onDefensiveMultiplier,
+    .onAccuracy = Impl<ABILITY_ILLUMINATE>.onAccuracy,
 };
 
-constexpr Ability HeavenAsunder = {
+template <>
+constexpr Ability Impl<ABILITY_HEAVEN_ASUNDER> = {
     .onCrit =
         +[](ON_CRIT) {
             if (move == MOVE_SPACIAL_REND) return ALWAYS_CRIT;
@@ -5566,20 +6050,23 @@ constexpr Ability HeavenAsunder = {
         },
 };
 
-constexpr Ability PurifyingWaters = {
-    .onEntry = WaterVeil.onEntry,
-    .onEndTurn = Hydration.onEndTurn,
-    .onStatusImmune = WaterVeil.onStatusImmune,
+template <>
+constexpr Ability Impl<ABILITY_PURIFYING_WATERS> = {
+    .onEntry = Impl<ABILITY_WATER_VEIL>.onEntry,
+    .onEndTurn = Impl<ABILITY_HYDRATION>.onEndTurn,
+    .onStatusImmune = Impl<ABILITY_WATER_VEIL>.onStatusImmune,
     .breakable = TRUE,
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability Seaborne = {
-    .onEntry = Drizzle.onEntry,
-    .onStat = SwiftSwim.onStat,
+template <>
+constexpr Ability Impl<ABILITY_SEABORNE> = {
+    .onEntry = Impl<ABILITY_DRIZZLE>.onEntry,
+    .onStat = Impl<ABILITY_SWIFT_SWIM>.onStat,
 };
 
-constexpr Ability HighTide = {
+template <>
+constexpr Ability Impl<ABILITY_HIGH_TIDE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(moveType == TYPE_WATER)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -5588,12 +6075,14 @@ constexpr Ability HighTide = {
     },
 };
 
-constexpr Ability ChangeOfHeart = {
+template <>
+constexpr Ability Impl<ABILITY_CHANGE_OF_HEART> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_HEART_SWAP, 0); },
 };
 
-constexpr Ability MysticBlades = {
-    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_MYSTIC_BLADES> = {
+    .onOffensiveMultiplier = Impl<ABILITY_KEEN_EDGE>.onOffensiveMultiplier,
     .onSwapSplit = +[](ON_SWAP_SPLIT) -> int {
         CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
         CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE));
@@ -5601,7 +6090,8 @@ constexpr Ability MysticBlades = {
     },
 };
 
-constexpr Ability Determination = {
+template <>
+constexpr Ability Impl<ABILITY_DETERMINATION> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (HasAnyStatusOrAbility(battler) && IS_MOVE_SPECIAL(move)) MUL(1.5);
@@ -5609,11 +6099,13 @@ constexpr Ability Determination = {
     .negatesFrzSpatkDrop = TRUE,
 };
 
-constexpr Ability Fertilize = {
+template <>
+constexpr Ability Impl<ABILITY_FERTILIZE> = {
     ATE_ABILITY(TYPE_GRASS),
 };
 
-constexpr Ability PureLove = {
+template <>
+constexpr Ability Impl<ABILITY_PURE_LOVE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
@@ -5625,39 +6117,45 @@ constexpr Ability PureLove = {
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
     },
-    .onDefender = CuteCharm.onDefender,
+    .onDefender = Impl<ABILITY_CUTE_CHARM>.onDefender,
     .canInfatuateAny = TRUE,
 };
 
-constexpr Ability Fighter = {
+template <>
+constexpr Ability Impl<ABILITY_FIGHTER> = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_FIGHTING),
 };
 
-constexpr Ability Telekinetic = {
+template <>
+constexpr Ability Impl<ABILITY_TELEKINETIC> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TELEKINESIS, 0); },
 };
 
-constexpr Ability Combustion = {
+template <>
+constexpr Ability Impl<ABILITY_COMBUSTION> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE) MUL(1.5);
         },
 };
 
-constexpr Ability PonyPower = {
+template <>
+constexpr Ability Impl<ABILITY_PONY_POWER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            KeenEdge.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            MysticBlades.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_KEEN_EDGE>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_MYSTIC_BLADES>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
-    .onSwapSplit = MysticBlades.onSwapSplit,
+    .onSwapSplit = Impl<ABILITY_MYSTIC_BLADES>.onSwapSplit,
 };
 
-constexpr Ability PowderBurst = {
+template <>
+constexpr Ability Impl<ABILITY_POWDER_BURST> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_POWDER, 0); },
 };
 
-constexpr Ability Retriever = {
+template <>
+constexpr Ability Impl<ABILITY_RETRIEVER> = {
     .onExit = +[](ON_EXIT) -> int {
         CHECK(IsBattlerAlive(battler))
         CHECK_NOT(gBattleMons[battler].item)
@@ -5677,11 +6175,13 @@ constexpr Ability Retriever = {
     },
 };
 
-constexpr Ability MonsterMash = {
+template <>
+constexpr Ability Impl<ABILITY_MONSTER_MASH> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TRICK_OR_TREAT, 0); },
 };
 
-constexpr Ability TwoStep = {
+template <>
+constexpr Ability Impl<ABILITY_TWO_STEP> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(IsDance(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
@@ -5690,7 +6190,8 @@ constexpr Ability TwoStep = {
     },
 };
 
-constexpr Ability Spiteful = {
+template <>
+constexpr Ability Impl<ABILITY_SPITEFUL> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(move != MOVE_STRUGGLE)
@@ -5702,7 +6203,8 @@ constexpr Ability Spiteful = {
     },
 };
 
-constexpr Ability Fortitude = {
+template <>
+constexpr Ability Impl<ABILITY_FORTITUDE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(CanRaiseStat(battler, STAT_SPDEF))
@@ -5718,30 +6220,35 @@ constexpr Ability Fortitude = {
     },
 };
 
-constexpr Ability Devourer = {
-    .onParentalBond = PrimalMaw.onParentalBond,
-    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_DEVOURER> = {
+    .onParentalBond = Impl<ABILITY_PRIMAL_MAW>.onParentalBond,
+    .onOffensiveMultiplier = Impl<ABILITY_STRONG_JAW>.onOffensiveMultiplier,
 };
 
-constexpr Ability PhantomThief = {
+template <>
+constexpr Ability Impl<ABILITY_PHANTOM_THIEF> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SPECTRAL_THIEF, 40); },
 };
 
-constexpr Ability EarlyGrave = {
+template <>
+constexpr Ability Impl<ABILITY_EARLY_GRAVE> = {
     .onPriority = GALE_WINGS_CLONE(TYPE_GHOST),
 };
 
-constexpr Ability BassBoosted = {
+template <>
+constexpr Ability Impl<ABILITY_BASS_BOOSTED> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            Amplifier.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            PunkRock.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_AMPLIFIER>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_PUNK_ROCK>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
-    .onDefensiveMultiplier = PunkRock.onDefensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_PUNK_ROCK>.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-constexpr Ability FlamingJaws = {
+template <>
+constexpr Ability Impl<ABILITY_FLAMING_JAWS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeBurned(target))
@@ -5752,7 +6259,8 @@ constexpr Ability FlamingJaws = {
     },
 };
 
-constexpr Ability MonsterHunter = {
+template <>
+constexpr Ability Impl<ABILITY_MONSTER_HUNTER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_BATTLER_OF_TYPE(target, TYPE_DARK)) RESISTANCE(1.5);
@@ -5764,17 +6272,20 @@ constexpr Ability MonsterHunter = {
     .breakable = TRUE,
 };
 
-constexpr Ability CrownedSword = {
-    .onEntry = IntrepidSword.onEntry,
-    .onDefender = AngerPoint.onDefender,
+template <>
+constexpr Ability Impl<ABILITY_CROWNED_SWORD> = {
+    .onEntry = Impl<ABILITY_INTREPID_SWORD>.onEntry,
+    .onDefender = Impl<ABILITY_ANGER_POINT>.onDefender,
 };
 
-constexpr Ability CrownedShield = {
-    .onEntry = DauntlessShield.onEntry,
-    .onDefender = Stamina.onDefender,
+template <>
+constexpr Ability Impl<ABILITY_CROWNED_SHIELD> = {
+    .onEntry = Impl<ABILITY_DAUNTLESS_SHIELD>.onEntry,
+    .onDefender = Impl<ABILITY_STAMINA>.onDefender,
 };
 
-constexpr Ability BerserkDna = {
+template <>
+constexpr Ability Impl<ABILITY_BERSERK_DNA> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE))) if (CanBeConfused(battler)) {
             gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
@@ -5787,10 +6298,12 @@ constexpr Ability BerserkDna = {
     },
 };
 
-constexpr Ability CrownedKing = {
+template <>
+constexpr Ability Impl<ABILITY_CROWNED_KING> = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); },
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
-        return AsOneShadowRider.onBattlerFaints(DELEGATE_BATTLER_FAINTS) | AsOneIceRider.onBattlerFaints(DELEGATE_BATTLER_FAINTS);
+        return Impl<ABILITY_AS_ONE_SHADOW_RIDER>.onBattlerFaints(DELEGATE_BATTLER_FAINTS) |
+               Impl<ABILITY_AS_ONE_ICE_RIDER>.onBattlerFaints(DELEGATE_BATTLER_FAINTS);
     },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .unsuppressable = TRUE,
@@ -5798,7 +6311,8 @@ constexpr Ability CrownedKing = {
     .unnerve = TRUE,
 };
 
-constexpr Ability SnapTrapWhenHit = {
+template <>
+constexpr Ability Impl<ABILITY_SNAP_TRAP_WHEN_HIT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -5808,33 +6322,39 @@ constexpr Ability SnapTrapWhenHit = {
     },
 };
 
-constexpr Ability Permanence = {
+template <>
+constexpr Ability Impl<ABILITY_PERMANENCE> = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_PERMANENCE); },
 };
 
-constexpr Ability Hubris = {
-    .onBattlerFaints = GrimNeigh.onBattlerFaints,
+template <>
+constexpr Ability Impl<ABILITY_HUBRIS> = {
+    .onBattlerFaints = Impl<ABILITY_GRIM_NEIGH>.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability CosmicDaze = {
+template <>
+constexpr Ability Impl<ABILITY_COSMIC_DAZE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMons[target].status2 & STATUS2_CONFUSION) MUL(2);
         },
 };
 
-constexpr Ability CosmicDust = {
-    .onOffensiveMultiplier = CosmicDaze.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_COSMIC_DUST> = {
+    .onOffensiveMultiplier = Impl<ABILITY_COSMIC_DAZE>.onOffensiveMultiplier,
     .magicGuard = TRUE,
 };
 
-constexpr Ability MindsEye = {
-    .onTypeEffectiveness = Scrappy.onTypeEffectiveness,
+template <>
+constexpr Ability Impl<ABILITY_MINDS_EYE> = {
+    .onTypeEffectiveness = Impl<ABILITY_SCRAPPY>.onTypeEffectiveness,
     .breakable = TRUE,
 };
 
-constexpr Ability BloodPrice = {
+template <>
+constexpr Ability Impl<ABILITY_BLOOD_PRICE> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(IS_MOVE_STATUS(gLastResultingMoves[battler]))
         CHECK_NOT(IsMagicGuardProtected(battler))
@@ -5857,11 +6377,13 @@ ON_EITHER(SpikeArmor) {
     AbilityStatusEffectSafe(MOVE_EFFECT_BLEED, battler, opponent);
     return TRUE;
 }
-constexpr Ability SpikeArmor = {
+template <>
+constexpr Ability Impl<ABILITY_SPIKE_ARMOR> = {
     ON_EITHER_ABILITY(SpikeArmor),
 };
 
-constexpr Ability VoodooPower = {
+template <>
+constexpr Ability Impl<ABILITY_VOODOO_POWER> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IS_MOVE_SPECIAL(move))
@@ -5873,17 +6395,19 @@ constexpr Ability VoodooPower = {
     },
 };
 
-constexpr Ability ChromeCoat = {
+template <>
+constexpr Ability Impl<ABILITY_CHROME_COAT> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IS_MOVE_SPECIAL(move)) MUL(.6);
         },
-    .onStat = LeadCoat.onStat,
+    .onStat = Impl<ABILITY_LEAD_COAT>.onStat,
     .breakable = TRUE,
 };
 
-constexpr Ability Banshee = {
-    .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_BANSHEE> = {
+    .onOffensiveMultiplier = Impl<ABILITY_LIQUID_VOICE>.onOffensiveMultiplier,
     .onMoveType = +[](ON_MOVE_TYPE) -> int {
         CHECK(moveType == TYPE_NORMAL)
         CHECK(gBattleMoves[move].flags & FLAG_SOUND);
@@ -5891,18 +6415,21 @@ constexpr Ability Banshee = {
     },
 };
 
-constexpr Ability WebSpinner = {
+template <>
+constexpr Ability Impl<ABILITY_WEB_SPINNER> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_STRING_SHOT, 0); },
 };
 
-constexpr Ability ShowdownMode = {
+template <>
+constexpr Ability Impl<ABILITY_SHOWDOWN_MODE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         gVolatileStructs[battler].showdownMode = gVolatileStructs[battler].started.showdownMode = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_SHOWDOWN_MODE);
     },
 };
 
-constexpr Ability SeedSower = {
+template <>
+constexpr Ability Impl<ABILITY_SEED_SOWER> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
@@ -5913,7 +6440,8 @@ constexpr Ability SeedSower = {
     .allowTerrainIfAirborne = TERRAIN_GRASSY,
 };
 
-constexpr Ability Airborne = {
+template <>
+constexpr Ability Impl<ABILITY_AIRBORNE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FLYING) MUL(1.3);
@@ -5921,8 +6449,9 @@ constexpr Ability Airborne = {
     .onOffensiveMultiplierFor = APPLY_ON_ALLY,
 };
 
-constexpr Ability Parroting = {
-    .onImmune = Soundproof.onImmune,
+template <>
+constexpr Ability Impl<ABILITY_PARROTING> = {
+    .onImmune = Impl<ABILITY_SOUNDPROOF>.onImmune,
     .onCopyMove = +[](ON_COPY_MOVE) -> int {
         CHECK(IsSoundMove(attacker, move))
         return UseOutOfTurnAttack(battler, target, ability, move, 0);
@@ -5931,7 +6460,8 @@ constexpr Ability Parroting = {
     .isSoundproof = TRUE,
 };
 
-constexpr Ability SaltCircle = {
+template <>
+constexpr Ability Impl<ABILITY_SALT_CIRCLE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int anyBlocked = FALSE;
         gBattlerTarget = BATTLE_OPPOSITE(battler);
@@ -5954,12 +6484,13 @@ constexpr Ability SaltCircle = {
     },
 };
 
-constexpr Ability PurifyingSalt = {
+template <>
+constexpr Ability Impl<ABILITY_PURIFYING_SALT> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GHOST) RESISTANCE(.5);
         },
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_STATUS1)
         return TRUE;
     },
@@ -6008,7 +6539,8 @@ int ProtosynthesisHandler(AbilityEnum ability, int battler, AbilityCallType call
     }
     return FALSE;
 }
-constexpr Ability Protosynthesis = {
+template <>
+constexpr Ability Impl<ABILITY_PROTOSYNTHESIS> = {
     .onEntry = +[](ON_ENTRY) -> int { return ProtosynthesisHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onWeather = +[](ON_WEATHER) -> int { return ProtosynthesisHandler(ability, battler, ABILITY_BS_CALL); },
     .onStat =
@@ -6063,13 +6595,15 @@ int QuarkDriveHandler(AbilityEnum ability, int battler, AbilityCallType callType
     }
     return FALSE;
 }
-constexpr Ability QuarkDrive = {
+template <>
+constexpr Ability Impl<ABILITY_QUARK_DRIVE> = {
     .onEntry = +[](ON_ENTRY) -> int { return QuarkDriveHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onTerrain = +[](ON_TERRAIN) -> int { return QuarkDriveHandler(ability, battler, ABILITY_BS_CALL); },
-    .onStat = Protosynthesis.onStat,
+    .onStat = Impl<ABILITY_PROTOSYNTHESIS>.onStat,
 };
 
-constexpr Ability WindPower = {
+template <>
+constexpr Ability Impl<ABILITY_WIND_POWER> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(gBattleMoves[move].airBased)
@@ -6081,21 +6615,24 @@ constexpr Ability WindPower = {
     },
 };
 
-constexpr Ability Impulse = {
+template <>
+constexpr Ability Impl<ABILITY_IMPULSE> = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
             if (!(gBattleMoves[move].contact)) *atkStatToUse = STAT_SPEED;
         },
 };
 
-constexpr Ability TerminalVelocity = {
+template <>
+constexpr Ability Impl<ABILITY_TERMINAL_VELOCITY> = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
             if (IS_MOVE_SPECIAL(move)) secondaryAtkStatToUse[STAT_SPEED] += 20;
         },
 };
 
-constexpr Ability AngerShell = {
+template <>
+constexpr Ability Impl<ABILITY_ANGER_SHELL> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(CheckHalfHpAbility(battler, attacker))
         CHECK_NOT(GetAbilityState(battler, ability))
@@ -6107,7 +6644,8 @@ constexpr Ability AngerShell = {
     },
 };
 
-constexpr Ability Egoist = {
+template <>
+constexpr Ability Impl<ABILITY_EGOIST> = {
     .onReactive = +[](ON_REACTIVE) -> int {
         CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
         for (int opponent = GetOppositeSide(battler); opponent < gBattlersCount; opponent += 2) {
@@ -6127,18 +6665,21 @@ constexpr Ability Egoist = {
     },
 };
 
-constexpr Ability ReadiedAction = {
+template <>
+constexpr Ability Impl<ABILITY_READIED_ACTION> = {
     .onEntry = +[](ON_ENTRY) -> int {
         gVolatileStructs[battler].readiedAction = gVolatileStructs[battler].started.readiedAction = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_READIED_ACTION);
     },
 };
 
-constexpr Ability DarkGaleWings = {
+template <>
+constexpr Ability Impl<ABILITY_DARK_GALE_WINGS> = {
     .onPriority = GALE_WINGS_CLONE(TYPE_DARK),
 };
 
-constexpr Ability GuiltTrip = {
+template <>
+constexpr Ability Impl<ABILITY_GUILT_TRIP> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
@@ -6149,11 +6690,13 @@ constexpr Ability GuiltTrip = {
     },
 };
 
-constexpr Ability WaterGaleWings = {
+template <>
+constexpr Ability Impl<ABILITY_WATER_GALE_WINGS> = {
     .onPriority = GALE_WINGS_CLONE(TYPE_WATER),
 };
 
-constexpr Ability ZeroToHero = {
+template <>
+constexpr Ability Impl<ABILITY_ZERO_TO_HERO> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gBattleMons[battler].species == SPECIES_PALAFIN)
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
@@ -6172,7 +6715,8 @@ constexpr Ability ZeroToHero = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Costar = {
+template <>
+constexpr Ability Impl<ABILITY_COSTAR> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
 
@@ -6189,7 +6733,8 @@ constexpr Ability Costar = {
     },
 };
 
-constexpr Ability Commander = {
+template <>
+constexpr Ability Impl<ABILITY_COMMANDER> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(GetAbilityState(battler, ability))
 
@@ -6208,16 +6753,19 @@ constexpr Ability Commander = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability EjectPackAbility = {
+template <>
+constexpr Ability Impl<ABILITY_EJECT_PACK_ABILITY> = {
     .persistent = TRUE,
 };
 
-constexpr Ability VengefulSpirit = {
-    .onDefender = HauntedSpirit.onDefender,
-    .onOffensiveMultiplier = Vengeance.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_VENGEFUL_SPIRIT> = {
+    .onDefender = Impl<ABILITY_HAUNTED_SPIRIT>.onDefender,
+    .onOffensiveMultiplier = Impl<ABILITY_VENGEANCE>.onOffensiveMultiplier,
 };
 
-constexpr Ability CudChew = {
+template <>
+constexpr Ability Impl<ABILITY_CUD_CHEW> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CudChewState state = GetAbilityStateAs(battler, ability).cudChewState;
         if (state.setThisTurn) {
@@ -6236,21 +6784,24 @@ constexpr Ability CudChew = {
     },
 };
 
-constexpr Ability ArmorTail = {
-    .onImmune = QueenlyMajesty.onImmune,
+template <>
+constexpr Ability Impl<ABILITY_ARMOR_TAIL> = {
+    .onImmune = Impl<ABILITY_QUEENLY_MAJESTY>.onImmune,
     .onImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
-constexpr Ability MindCrush = {
-    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_MIND_CRUSH> = {
+    .onOffensiveMultiplier = Impl<ABILITY_STRONG_JAW>.onOffensiveMultiplier,
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
             if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) *atkStatToUse = STAT_SPATK;
         },
 };
 
-constexpr Ability SupremeOverlord = {
+template <>
+constexpr Ability Impl<ABILITY_SUPREME_OVERLORD> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gFaintedMonCount[GetBattlerSide(battler)])
 
@@ -6262,7 +6813,8 @@ constexpr Ability SupremeOverlord = {
         },
 };
 
-constexpr Ability IllWill = {
+template <>
+constexpr Ability Impl<ABILITY_ILL_WILL> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(move != MOVE_STRUGGLE)
@@ -6279,12 +6831,14 @@ constexpr Ability IllWill = {
     },
 };
 
-constexpr Ability FireScales = {
-    .onDefensiveMultiplier = IceScales.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_FIRE_SCALES> = {
+    .onDefensiveMultiplier = Impl<ABILITY_ICE_SCALES>.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-constexpr Ability WatchYourStep = {
+template <>
+constexpr Ability Impl<ABILITY_WATCH_YOUR_STEP> = {
     .onEntry = +[](ON_ENTRY) -> int {
         u8 targetSide = GetOppositeSide(battler);
         CHECK(gSideTimers[targetSide].spikesAmount < 3)
@@ -6296,14 +6850,16 @@ constexpr Ability WatchYourStep = {
     },
 };
 
-constexpr Ability RapidResponse = {
+template <>
+constexpr Ability Impl<ABILITY_RAPID_RESPONSE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         gVolatileStructs[battler].rapidResponse = gVolatileStructs[battler].started.rapidResponse = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_RAPID_RESPONSE);
     },
 };
 
-constexpr Ability DoubleIronBarbs = {
+template <>
+constexpr Ability Impl<ABILITY_DOUBLE_IRON_BARBS> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK_NOT(IsMagicGuardProtected(attacker))
@@ -6317,7 +6873,8 @@ constexpr Ability DoubleIronBarbs = {
     },
 };
 
-constexpr Ability ThermalExchange = {
+template <>
+constexpr Ability Impl<ABILITY_THERMAL_EXCHANGE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(moveType == TYPE_FIRE)
@@ -6327,7 +6884,7 @@ constexpr Ability ThermalExchange = {
         BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
         return TRUE;
     },
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_BURN)
         return TRUE;
     },
@@ -6335,7 +6892,8 @@ constexpr Ability ThermalExchange = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability GoodAsGold = {
+template <>
+constexpr Ability Impl<ABILITY_GOOD_AS_GOLD> = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(battler != attacker) CHECK(IS_MOVE_STATUS(move));
         *immunityScript = BattleScript_SoundproofProtected;
@@ -6344,7 +6902,8 @@ constexpr Ability GoodAsGold = {
     .breakable = TRUE,
 };
 
-constexpr Ability SharingIsCaring = {
+template <>
+constexpr Ability Impl<ABILITY_SHARING_IS_CARING> = {
     .onReactive = +[](ON_REACTIVE) -> int {
         switch (gBattleStruct->statStageCheckState) {
             default:
@@ -6364,36 +6923,42 @@ constexpr Ability SharingIsCaring = {
     },
 };
 
-constexpr Ability TabletsOfRuin = {
+template <>
+constexpr Ability Impl<ABILITY_TABLETS_OF_RUIN> = {
     .onStat = +[](ON_STAT) { RuinEffect(STAT_ATK, battler, statId, stat, flags); },
     .onStatFor = APPLY_ON_OTHER,
     .ruinStat = STAT_ATK,
 };
 
-constexpr Ability SwordOfRuin = {
+template <>
+constexpr Ability Impl<ABILITY_SWORD_OF_RUIN> = {
     .onStat = +[](ON_STAT) { RuinEffect(STAT_DEF, battler, statId, stat, flags); },
     .onStatFor = APPLY_ON_OTHER,
     .ruinStat = STAT_DEF,
 };
 
-constexpr Ability VesselOfRuin = {
+template <>
+constexpr Ability Impl<ABILITY_VESSEL_OF_RUIN> = {
     .onStat = +[](ON_STAT) { RuinEffect(STAT_SPATK, battler, statId, stat, flags); },
     .onStatFor = APPLY_ON_OTHER,
     .ruinStat = STAT_SPATK,
 };
 
-constexpr Ability BeadsOfRuin = {
+template <>
+constexpr Ability Impl<ABILITY_BEADS_OF_RUIN> = {
     .onStat = +[](ON_STAT) { RuinEffect(STAT_DEF, battler, statId, stat, flags); },
     .onStatFor = APPLY_ON_OTHER,
     .ruinStat = STAT_DEF,
 };
 
-constexpr Ability PermafrostClone = {
-    .onDefensiveMultiplier = Permafrost.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_PERMAFROST_CLONE> = {
+    .onDefensiveMultiplier = Impl<ABILITY_PERMAFROST>.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-constexpr Ability Gallantry = {
+template <>
+constexpr Ability Impl<ABILITY_GALLANTRY> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
 
@@ -6405,8 +6970,9 @@ constexpr Ability Gallantry = {
     .persistent = TRUE,
 };
 
-constexpr Ability OrichalcumPulse = {
-    .onEntry = Drought.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_ORICHALCUM_PULSE> = {
+    .onEntry = Impl<ABILITY_DROUGHT>.onEntry,
     .onStat =
         +[](ON_STAT) {
             if (statId != STAT_ATK) return;
@@ -6414,10 +6980,11 @@ constexpr Ability OrichalcumPulse = {
         },
 };
 
-constexpr Ability SunBasking = {
+template <>
+constexpr Ability Impl<ABILITY_SUN_BASKING> = {
     .onImmune = +[](ON_IMMUNE) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY));
-        return QueenlyMajesty.onImmune(DELEGATE_IMMUNE);
+        return Impl<ABILITY_QUEENLY_MAJESTY>.onImmune(DELEGATE_IMMUNE);
     },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
@@ -6426,15 +6993,17 @@ constexpr Ability SunBasking = {
     .breakable = TRUE,
 };
 
-constexpr Ability WingedKing = {
+template <>
+constexpr Ability Impl<ABILITY_WINGED_KING> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.33);
         },
 };
 
-constexpr Ability HadronEngine = {
-    .onEntry = ElectricSurge.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_HADRON_ENGINE> = {
+    .onEntry = Impl<ABILITY_ELECTRIC_SURGE>.onEntry,
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPATK && IsBattlerTerrainAffected(battler, STATUS_FIELD_ELECTRIC_TERRAIN)) *stat = *stat * 4 / 3;
@@ -6442,16 +7011,19 @@ constexpr Ability HadronEngine = {
     .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
-constexpr Ability IronSerpent = {
-    .onOffensiveMultiplier = WingedKing.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_IRON_SERPENT> = {
+    .onOffensiveMultiplier = Impl<ABILITY_WINGED_KING>.onOffensiveMultiplier,
 };
 
-constexpr Ability SweepingEdgePlus = {
-    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
-    .onAccuracy = SweepingEdge.onAccuracy,
+template <>
+constexpr Ability Impl<ABILITY_SWEEPING_EDGE_PLUS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_KEEN_EDGE>.onOffensiveMultiplier,
+    .onAccuracy = Impl<ABILITY_SWEEPING_EDGE>.onAccuracy,
 };
 
-constexpr Ability CelestialBlessing = {
+template <>
+constexpr Ability Impl<ABILITY_CELESTIAL_BLESSING> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
@@ -6466,11 +7038,13 @@ constexpr Ability CelestialBlessing = {
     },
 };
 
-constexpr Ability MinionControl = {
+template <>
+constexpr Ability Impl<ABILITY_MINION_CONTROL> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType { return PARENTAL_BOND_MINION_CONTROL; },
 };
 
-constexpr Ability MoltenBlades = {
+template <>
+constexpr Ability Impl<ABILITY_MOLTEN_BLADES> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeBurned(target))
@@ -6479,10 +7053,11 @@ constexpr Ability MoltenBlades = {
 
         return AbilityStatusEffect(MOVE_EFFECT_BURN);
     },
-    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
+    .onOffensiveMultiplier = Impl<ABILITY_KEEN_EDGE>.onOffensiveMultiplier,
 };
 
-constexpr Ability HauntingFrenzy = {
+template <>
+constexpr Ability Impl<ABILITY_HAUNTING_FRENZY> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanMoveHaveExtraFlinchChance(move))
@@ -6490,18 +7065,20 @@ constexpr Ability HauntingFrenzy = {
 
         return AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
     },
-    .onBattlerFaints = AdrenalineRush.onBattlerFaints,
+    .onBattlerFaints = Impl<ABILITY_ADRENALINE_RUSH>.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability NoiseCancel = {
-    .onImmune = Soundproof.onImmune,
+template <>
+constexpr Ability Impl<ABILITY_NOISE_CANCEL> = {
+    .onImmune = Impl<ABILITY_SOUNDPROOF>.onImmune,
     .onImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
     .isSoundproof = TRUE,
 };
 
-constexpr Ability RadioJam = {
+template <>
+constexpr Ability Impl<ABILITY_RADIO_JAM> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeDisabled(target))
@@ -6512,7 +7089,8 @@ constexpr Ability RadioJam = {
     },
 };
 
-constexpr Ability Ole = {
+template <>
+constexpr Ability Impl<ABILITY_OLE> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
             case MOVE_TARGET_SELECTED:
@@ -6528,11 +7106,13 @@ constexpr Ability Ole = {
     .onAccuracyFor = APPLY_ON_TARGET,
 };
 
-constexpr Ability Malicious = {
+template <>
+constexpr Ability Impl<ABILITY_MALICIOUS> = {
     .onEntry = UseIntimidateClone,
 };
 
-constexpr Ability DeadPower = {
+template <>
+constexpr Ability Impl<ABILITY_DEAD_POWER> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(gBattleMons[target].status2 & STATUS2_CURSED)
@@ -6547,8 +7127,9 @@ constexpr Ability DeadPower = {
         },
 };
 
-constexpr Ability BrawlingWyvern = {
-    .onAccuracy = NoGuard.onAccuracy,
+template <>
+constexpr Ability Impl<ABILITY_BRAWLING_WYVERN> = {
+    .onAccuracy = Impl<ABILITY_NO_GUARD>.onAccuracy,
     .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
         CHECK(flag == MOVE_FLAG_PUNCH)
         CHECK(IS_MOVE_TYPE(move, TYPE_DRAGON))
@@ -6557,7 +7138,8 @@ constexpr Ability BrawlingWyvern = {
     .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
 };
 
-constexpr Ability JunshiSanda = {
+template <>
+constexpr Ability Impl<ABILITY_JUNSHI_SANDA> = {
     .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
         switch (flag) {
             case MOVE_FLAG_PUNCH:
@@ -6570,8 +7152,9 @@ constexpr Ability JunshiSanda = {
     },
 };
 
-constexpr Ability MythicalArrows = {
-    .onOffensiveMultiplier = Archer.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_MYTHICAL_ARROWS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_ARCHER>.onOffensiveMultiplier,
     .onSwapSplit = +[](ON_SWAP_SPLIT) -> int {
         CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
         CHECK(gBattleMoves[move].arrowBased);
@@ -6579,7 +7162,8 @@ constexpr Ability MythicalArrows = {
     },
 };
 
-constexpr Ability Lawnmower = {
+template <>
+constexpr Ability Impl<ABILITY_LAWNMOWER> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
@@ -6588,15 +7172,17 @@ constexpr Ability Lawnmower = {
     },
 };
 
-constexpr Ability Flourish = {
+template <>
+constexpr Ability Impl<ABILITY_FLOURISH> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GRASS && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) MUL(1.5);
         },
 };
 
-constexpr Ability DesertSpirit = {
-    .onEntry = SandStream.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_DESERT_SPIRIT> = {
+    .onEntry = Impl<ABILITY_SAND_STREAM>.onEntry,
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
             if (*mod == 0 && !IsBattlerGrounded(target) && moveType == TYPE_GROUND && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) {
@@ -6606,21 +7192,24 @@ constexpr Ability DesertSpirit = {
     .sandImmune = TRUE,
 };
 
-constexpr Ability Contempt = {
+template <>
+constexpr Ability Impl<ABILITY_CONTEMPT> = {
     .unaware = TRUE,
 };
 
-constexpr Ability Aerialist = {
+template <>
+constexpr Ability Impl<ABILITY_AERIALIST> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            Levitate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            Flock.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_LEVITATE>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_FLOCK>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
     .breakable = TRUE,
     .levitate = TRUE,
 };
 
-constexpr Ability TeraShell = {
+template <>
+constexpr Ability Impl<ABILITY_TERA_SHELL> = {
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
             if (*mod >= UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
@@ -6629,7 +7218,8 @@ constexpr Ability TeraShell = {
     .breakable = TRUE,
 };
 
-constexpr Ability ToxicChain = {
+template <>
+constexpr Ability Impl<ABILITY_TOXIC_CHAIN> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
@@ -6639,7 +7229,8 @@ constexpr Ability ToxicChain = {
     },
 };
 
-constexpr Ability ParasiticSpores = {
+template <>
+constexpr Ability Impl<ABILITY_PARASITIC_SPORES> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gVolatileStructs[battler].parasiticSpores)
 
@@ -6648,9 +7239,10 @@ constexpr Ability ParasiticSpores = {
     },
 };
 
-constexpr Ability PoisonPuppeteer = {
+template <>
+constexpr Ability Impl<ABILITY_POISON_PUPPETEER> = {
     .onReactive = +[](ON_REACTIVE) -> int {
-        return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) -> int { return CanBeConfused(target); }, BattleScript_PoisonPuppeteer);
+        return PoisonPuppeteerClone(ability, battler, +[](opt int battler, int target) -> int { return CanBeConfused(target); }, BattleScript_PoisonPuppeteer);
     },
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         int state = GetAbilityState(battler, ability);
@@ -6661,14 +7253,16 @@ constexpr Ability PoisonPuppeteer = {
     .setStateOnEffect = MOVE_EFFECT_POISON,
 };
 
-constexpr Ability Entrance = {
+template <>
+constexpr Ability Impl<ABILITY_ENTRANCE> = {
     .onReactive = +[](ON_REACTIVE) -> int { return PoisonPuppeteerClone(ability, battler, CanInfatuate, BattleScript_Entrance); },
-    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+    .onBattlerFaints = Impl<ABILITY_POISON_PUPPETEER>.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
     .setStateOnEffect = MOVE_EFFECT_CONFUSION,
 };
 
-constexpr Ability Rejection = {
+template <>
+constexpr Ability Impl<ABILITY_REJECTION> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gFieldTimers.quashTimer)
 
@@ -6678,23 +7272,28 @@ constexpr Ability Rejection = {
     },
 };
 
-constexpr Ability AppleEnlightenment = {
-    .onDefensiveMultiplier = FurCoat.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_APPLE_ENLIGHTENMENT> = {
+    .onDefensiveMultiplier = Impl<ABILITY_FUR_COAT>.onDefensiveMultiplier,
     .breakable = TRUE,
     .magicGuard = TRUE,
 };
 
-constexpr Ability BalloonBomber = {
-    .onDefender = +[](ON_DEFENDER) -> int { return Aftermath.onDefender(DELEGATE_DEFENDER) || Inflatable.onDefender(DELEGATE_DEFENDER); },
+template <>
+constexpr Ability Impl<ABILITY_BALLOON_BOMBER> = {
+    .onDefender =
+        +[](ON_DEFENDER) -> int { return Impl<ABILITY_AFTERMATH>.onDefender(DELEGATE_DEFENDER) || Impl<ABILITY_INFLATABLE>.onDefender(DELEGATE_DEFENDER); },
 };
 
-constexpr Ability FlamingMaw = {
-    .onAttacker = FlamingJaws.onAttacker,
-    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_FLAMING_MAW> = {
+    .onAttacker = Impl<ABILITY_FLAMING_JAWS>.onAttacker,
+    .onOffensiveMultiplier = Impl<ABILITY_STRONG_JAW>.onOffensiveMultiplier,
 };
 
-constexpr Ability Demolitionist = {
-    .onEntry = ReadiedAction.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_DEMOLITIONIST> = {
+    .onEntry = Impl<ABILITY_READIED_ACTION>.onEntry,
     .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType {
         if (gVolatileStructs[battler].readiedAction && !IS_MOVE_STATUS(move)) return INFILTRATE_BREAK_SCREENS;
         return INFILTRATE_NONE;
@@ -6709,7 +7308,8 @@ constexpr Ability Demolitionist = {
     },
 };
 
-constexpr Ability RockhardWill = {
+template <>
+constexpr Ability Impl<ABILITY_ROCKHARD_WILL> = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_ROCK),
 };
 
@@ -6722,11 +7322,13 @@ ON_EITHER(FragrantDaze) {
     AbilityStatusEffectSafe(MOVE_EFFECT_CONFUSION, battler, opponent);
     return TRUE;
 }
-constexpr Ability FragrantDaze = {
+template <>
+constexpr Ability Impl<ABILITY_FRAGRANT_DAZE> = {
     ON_EITHER_ABILITY(FragrantDaze),
 };
 
-constexpr Ability LowVisibility = {
+template <>
+constexpr Ability Impl<ABILITY_LOW_VISIBILITY> = {
     .onEntry = +[](ON_ENTRY) -> int {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_BadOmensActivates);
@@ -6739,14 +7341,16 @@ constexpr Ability LowVisibility = {
     },
 };
 
-constexpr Ability OldMariner = {
-    .onOffensiveMultiplier = Seaweed.onOffensiveMultiplier,
-    .onDefensiveMultiplier = Seaweed.onDefensiveMultiplier,
-    .onStab = Amphibious.onStab,
+template <>
+constexpr Ability Impl<ABILITY_OLD_MARINER> = {
+    .onOffensiveMultiplier = Impl<ABILITY_SEAWEED>.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_SEAWEED>.onDefensiveMultiplier,
+    .onStab = Impl<ABILITY_AMPHIBIOUS>.onStab,
     .breakable = TRUE,
 };
 
-constexpr Ability Ectoplasm = {
+template <>
+constexpr Ability Impl<ABILITY_ECTOPLASM> = {
     .onStat =
         +[](ON_STAT) {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
@@ -6754,7 +7358,8 @@ constexpr Ability Ectoplasm = {
         },
 };
 
-constexpr Ability BeautifulMusic = {
+template <>
+constexpr Ability Impl<ABILITY_BEAUTIFUL_MUSIC> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(Random() % 2)
@@ -6765,8 +7370,9 @@ constexpr Ability BeautifulMusic = {
     .canInfatuateAny = TRUE,
 };
 
-constexpr Ability SnowSong = {
-    .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_SNOW_SONG> = {
+    .onOffensiveMultiplier = Impl<ABILITY_LIQUID_VOICE>.onOffensiveMultiplier,
     .onMoveType = +[](ON_MOVE_TYPE) -> int {
         CHECK(moveType == TYPE_NORMAL)
         CHECK(gBattleMoves[move].flags & FLAG_SOUND);
@@ -6774,7 +7380,8 @@ constexpr Ability SnowSong = {
     },
 };
 
-constexpr Ability GreaterSpirit = {
+template <>
+constexpr Ability Impl<ABILITY_GREATER_SPIRIT> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
@@ -6785,7 +7392,8 @@ constexpr Ability GreaterSpirit = {
     },
 };
 
-constexpr Ability Resonance = {
+template <>
+constexpr Ability Impl<ABILITY_RESONANCE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
@@ -6796,18 +7404,21 @@ constexpr Ability Resonance = {
     },
 };
 
-constexpr Ability EtherealRush = {
+template <>
+constexpr Ability Impl<ABILITY_ETHEREAL_RUSH> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
         },
 };
 
-constexpr Ability CuteAntecedence = {
+template <>
+constexpr Ability Impl<ABILITY_CUTE_ANTECEDENCE> = {
     .onPriority = GALE_WINGS_CLONE(TYPE_FAIRY),
 };
 
-constexpr Ability RecurringNightmare = {
+template <>
+constexpr Ability Impl<ABILITY_RECURRING_NIGHTMARE> = {
     .onRevive = +[](ON_REVIVE) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
         return B_MSG_FADE_OUT;
@@ -6826,11 +7437,13 @@ ON_EITHER(MenacingSituation) {
     BattleScriptCall(BattleScript_AbilitySetFear);
     return TRUE;
 }
-constexpr Ability MenacingSituation = {
+template <>
+constexpr Ability Impl<ABILITY_MENACING_SITUATION> = {
     ON_EITHER_ABILITY(MenacingSituation),
 };
 
-constexpr Ability ShinyLightning = {
+template <>
+constexpr Ability Impl<ABILITY_SHINY_LIGHTNING> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         if (move == MOVE_THUNDER) return ACCURACY_HITS_IF_POSSIBLE;
         *accuracy *= 1.2;
@@ -6838,11 +7451,13 @@ constexpr Ability ShinyLightning = {
     },
 };
 
-constexpr Ability Terrify = {
+template <>
+constexpr Ability Impl<ABILITY_TERRIFY> = {
     .onEntry = UseIntimidateClone,
 };
 
-constexpr Ability IceDownfall = {
+template <>
+constexpr Ability Impl<ABILITY_ICE_DOWNFALL> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -6852,7 +7467,8 @@ constexpr Ability IceDownfall = {
     },
 };
 
-constexpr Ability LastStand = {
+template <>
+constexpr Ability Impl<ABILITY_LAST_STAND> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_DEF || statId == STAT_SPDEF)
@@ -6861,19 +7477,23 @@ constexpr Ability LastStand = {
     .breakable = TRUE,
 };
 
-constexpr Ability PyroclasticFlow = {
+template <>
+constexpr Ability Impl<ABILITY_PYROCLASTIC_FLOW> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
-        return MoltenDown.onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS) || Corrosion.onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS);
+        return Impl<ABILITY_MOLTEN_DOWN>.onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS) ||
+               Impl<ABILITY_CORROSION>.onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS);
     },
-    .onCanStatusType = Corrosion.onCanStatusType,
+    .onCanStatusType = Impl<ABILITY_CORROSION>.onCanStatusType,
 };
 
-constexpr Ability BloodBath = {
+template <>
+constexpr Ability Impl<ABILITY_BLOOD_BATH> = {
     .onReactive = +[](ON_REACTIVE) -> int {
-        return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) -> int { return !gVolatileStructs[target].fear; }, BattleScript_Bloodlust);
+        return PoisonPuppeteerClone(
+            ability, battler, +[](opt int battler, int target) -> int { return !gVolatileStructs[target].fear; }, BattleScript_Bloodlust);
     },
-    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onBattlerFaints = Impl<ABILITY_POISON_PUPPETEER>.onBattlerFaints,
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_BLEED)
         return TRUE;
     },
@@ -6883,27 +7503,30 @@ constexpr Ability BloodBath = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability BattleAura = {
+template <>
+constexpr Ability Impl<ABILITY_BATTLE_AURA> = {
     .onCrit = +[](ON_CRIT) -> int { return 2; },
     .onCritFor = APPLY_ON_ANY,
 };
 
-constexpr Ability Bloodlust = {
-    .onReactive = BloodBath.onReactive,
+template <>
+constexpr Ability Impl<ABILITY_BLOODLUST> = {
+    .onReactive = Impl<ABILITY_BLOOD_BATH>.onReactive,
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         int result = 0;
         if (battler == attacker) {
-            result |= SoulEater.onBattlerFaints(DELEGATE_BATTLER_FAINTS);
+            result |= Impl<ABILITY_SOUL_EATER>.onBattlerFaints(DELEGATE_BATTLER_FAINTS);
         }
-        return result | BloodBath.onBattlerFaints(DELEGATE_BATTLER_FAINTS);
+        return result | Impl<ABILITY_BLOOD_BATH>.onBattlerFaints(DELEGATE_BATTLER_FAINTS);
     },
-    .onStatusImmune = BloodBath.onStatusImmune,
+    .onStatusImmune = Impl<ABILITY_BLOOD_BATH>.onStatusImmune,
     .onBattlerFaintsFor = APPLY_ON_ANY,
     .breakable = TRUE,
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability PiercingSolo = {
+template <>
+constexpr Ability Impl<ABILITY_PIERCING_SOLO> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
@@ -6913,11 +7536,13 @@ constexpr Ability PiercingSolo = {
     },
 };
 
-constexpr Ability Rhythmic = {
+template <>
+constexpr Ability Impl<ABILITY_RHYTHMIC> = {
     .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battler]); },
 };
 
-constexpr Ability ChunkyBassLine = {
+template <>
+constexpr Ability Impl<ABILITY_CHUNKY_BASS_LINE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(IsSoundMove(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -6926,14 +7551,16 @@ constexpr Ability ChunkyBassLine = {
     },
 };
 
-constexpr Ability DualHammer = {
+template <>
+constexpr Ability Impl<ABILITY_DUAL_HAMMER> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
         CHECK(gBattleMoves[move].hammerBased)
         return PARENTAL_BOND_DUAL_WIELD;
     },
 };
 
-constexpr Ability DentingBlows = {
+template <>
+constexpr Ability Impl<ABILITY_DENTING_BLOWS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(gBattleMoves[move].hammerBased)
@@ -6947,7 +7574,8 @@ constexpr Ability DentingBlows = {
     },
 };
 
-constexpr Ability IceColdHunter = {
+template <>
+constexpr Ability Impl<ABILITY_ICE_COLD_HUNTER> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
         CHECK(moveType == TYPE_ICE)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
@@ -6956,7 +7584,8 @@ constexpr Ability IceColdHunter = {
     .hailImmune = TRUE,
 };
 
-constexpr Ability SoulCrusher = {
+template <>
+constexpr Ability Impl<ABILITY_SOUL_CRUSHER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].hammerBased) MUL(1.1);
@@ -6967,7 +7596,8 @@ constexpr Ability SoulCrusher = {
     },
 };
 
-constexpr Ability ArcFlash = {
+template <>
+constexpr Ability Impl<ABILITY_ARC_FLASH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeParalyzed(battler, target))
@@ -6985,19 +7615,22 @@ constexpr Ability ArcFlash = {
     },
 };
 
-constexpr Ability Unicorn = {
-    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_UNICORN> = {
+    .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
     ATE_ABILITY(TYPE_FAIRY),
 };
 
-constexpr Ability OnTheProwl = {
+template <>
+constexpr Ability Impl<ABILITY_ON_THE_PROWL> = {
     .onEntry = +[](ON_ENTRY) -> int {
         gVolatileStructs[battler].onTheProwl = gVolatileStructs[battler].started.onTheProwl = TRUE;
         return SwitchInAnnounce(B_MSG_SWITCHIN_ON_THE_PROWL);
     },
 };
 
-constexpr Ability Pretentious = {
+template <>
+constexpr Ability Impl<ABILITY_PRETENTIOUS> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(gVolatileStructs[battler].critBoost < 3);
         gVolatileStructs[battler].critBoost++;
@@ -7008,7 +7641,8 @@ constexpr Ability Pretentious = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability VenoblazePincers = {
+template <>
+constexpr Ability Impl<ABILITY_VENOBLAZE_PINCERS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(IS_MOVE_PHYSICAL(move))
@@ -7033,15 +7667,20 @@ constexpr Ability VenoblazePincers = {
         },
 };
 
-constexpr Ability EternalBlessing = {
-    .onEndTurn = CelestialBlessing.onEndTurn,
-    .onExit = Regenerator.onExit,
+template <>
+constexpr Ability Impl<ABILITY_ETERNAL_BLESSING> = {
+    .onEndTurn = Impl<ABILITY_CELESTIAL_BLESSING>.onEndTurn,
+    .onExit = Impl<ABILITY_REGENERATOR>.onExit,
     .persistent = TRUE,
 };
 
-constexpr Ability SugarRush = {.onStat = Unburden.onStat};
+template <>
+constexpr Ability Impl<ABILITY_SUGAR_RUSH> = {
+    .onStat = Impl<ABILITY_UNBURDEN>.onStat,
+};
 
-constexpr Ability PeacefulRest = {
+template <>
+constexpr Ability Impl<ABILITY_PEACEFUL_REST> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
@@ -7056,13 +7695,15 @@ constexpr Ability PeacefulRest = {
     },
 };
 
-constexpr Ability WhiteNoise = {
-    .onEndTurn = PeacefulRest.onEndTurn,
-    .onAttacker = Static.onAttacker,
-    .onDefender = Static.onDefender,
+template <>
+constexpr Ability Impl<ABILITY_WHITE_NOISE> = {
+    .onEndTurn = Impl<ABILITY_PEACEFUL_REST>.onEndTurn,
+    .onAttacker = Impl<ABILITY_STATIC>.onAttacker,
+    .onDefender = Impl<ABILITY_STATIC>.onDefender,
 };
 
-constexpr Ability SmokeyManeuvers = {
+template <>
+constexpr Ability Impl<ABILITY_SMOKEY_MANEUVERS> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(IsBattlerWeatherAffected(target, WEATHER_FOG_ANY));
         *accuracy /= 1.25;
@@ -7072,8 +7713,9 @@ constexpr Ability SmokeyManeuvers = {
     .breakable = TRUE,
 };
 
-constexpr Ability PowerMetal = {
-    .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_POWER_METAL> = {
+    .onOffensiveMultiplier = Impl<ABILITY_LIQUID_VOICE>.onOffensiveMultiplier,
     .onMoveType = +[](ON_MOVE_TYPE) -> int {
         CHECK(moveType == TYPE_NORMAL)
         CHECK(gBattleMoves[move].flags & FLAG_SOUND);
@@ -7081,11 +7723,13 @@ constexpr Ability PowerMetal = {
     },
 };
 
-constexpr Ability PowerEdge = {
-    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_POWER_EDGE> = {
+    .onOffensiveMultiplier = Impl<ABILITY_KEEN_EDGE>.onOffensiveMultiplier,
 };
 
-constexpr Ability Superconductor = {
+template <>
+constexpr Ability Impl<ABILITY_SUPERCONDUCTOR> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[battler]) MUL(1.1);
@@ -7097,7 +7741,8 @@ constexpr Ability Superconductor = {
     },
 };
 
-constexpr Ability UltraInstinct = {
+template <>
+constexpr Ability Impl<ABILITY_ULTRA_INSTINCT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -7105,23 +7750,26 @@ constexpr Ability UltraInstinct = {
         UseOutOfTurnAttack(battler, attacker, ability, MOVE_VACUUM_WAVE, 0);
         return FALSE;
     },
-    .onDefensiveMultiplier = Parry.onDefensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_PARRY>.onDefensiveMultiplier,
 };
 
-constexpr Ability UnlockedPotential = {
-    .onDefender = Berserk.onDefender,
-    .onAccuracy = InnerFocus.onAccuracy,
+template <>
+constexpr Ability Impl<ABILITY_UNLOCKED_POTENTIAL> = {
+    .onDefender = Impl<ABILITY_BERSERK>.onDefender,
+    .onAccuracy = Impl<ABILITY_INNER_FOCUS>.onAccuracy,
     .tauntImmune = TRUE,
 };
 
-constexpr Ability HigherRank = {
+template <>
+constexpr Ability Impl<ABILITY_HIGHER_RANK> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (GetMovePriority(battler, move, target) > 0) MUL(1.2);
         },
 };
 
-constexpr Ability FuneralPyre = {
+template <>
+constexpr Ability Impl<ABILITY_FUNERAL_PYRE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(CheckAbilityWasAnnounced(battler, ABILITY_FUNERAL_PYRE))
 
@@ -7144,32 +7792,37 @@ constexpr Ability FuneralPyre = {
     },
 };
 
-constexpr Ability FlameBubble = {
-    .onOffensiveMultiplier = WaterBubble.onOffensiveMultiplier,
-    .onDefensiveMultiplier = WaterBubble.onDefensiveMultiplier,
-    .onPriority = FlamingSoul.onPriority,
-    .onStatusImmune = WaterBubble.onStatusImmune,
+template <>
+constexpr Ability Impl<ABILITY_FLAME_BUBBLE> = {
+    .onOffensiveMultiplier = Impl<ABILITY_WATER_BUBBLE>.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_WATER_BUBBLE>.onDefensiveMultiplier,
+    .onPriority = Impl<ABILITY_FLAMING_SOUL>.onPriority,
+    .onStatusImmune = Impl<ABILITY_WATER_BUBBLE>.onStatusImmune,
     .breakable = TRUE,
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability ElementalVortex = {
-    .onAbsorb = +[](ON_ABSORB) -> int { return WaterAbsorb.onAbsorb(DELEGATE_ABSORB) || FlashFire.onAbsorb(DELEGATE_ABSORB); },
-    .onOffensiveMultiplier = FlashFire.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_ELEMENTAL_VORTEX> = {
+    .onAbsorb = +[](ON_ABSORB) -> int { return Impl<ABILITY_WATER_ABSORB>.onAbsorb(DELEGATE_ABSORB) || Impl<ABILITY_FLASH_FIRE>.onAbsorb(DELEGATE_ABSORB); },
+    .onOffensiveMultiplier = Impl<ABILITY_FLASH_FIRE>.onOffensiveMultiplier,
 };
 
-constexpr Ability SnowyWrath = {
-    .onEntry = SnowWarning.onEntry,
-    .onModifyEffectChance = Cryomancy.onModifyEffectChance,
+template <>
+constexpr Ability Impl<ABILITY_SNOWY_WRATH> = {
+    .onEntry = Impl<ABILITY_SNOW_WARNING>.onEntry,
+    .onModifyEffectChance = Impl<ABILITY_CRYOMANCY>.onModifyEffectChance,
 };
 
-constexpr Ability PatternChange = {
-    .onEndTurn = ShedSkin.onEndTurn,
-    .onBeforeAttack = Protean.onBeforeAttack,
+template <>
+constexpr Ability Impl<ABILITY_PATTERN_CHANGE> = {
+    .onEndTurn = Impl<ABILITY_SHED_SKIN>.onEndTurn,
+    .onBeforeAttack = Impl<ABILITY_PROTEAN>.onBeforeAttack,
     .omniStab = TRUE,
 };
 
-constexpr Ability NoTurningBack = {
+template <>
+constexpr Ability Impl<ABILITY_NO_TURNING_BACK> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(CheckHalfHpAbility(battler, attacker))
         CHECK_NOT(GetAbilityState(battler, ability))
@@ -7181,7 +7834,8 @@ constexpr Ability NoTurningBack = {
     },
 };
 
-constexpr Ability FlammableCoat = {
+template <>
+constexpr Ability Impl<ABILITY_FLAMMABLE_COAT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler) || (gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
         CHECK(moveType == TYPE_FIRE)
@@ -7193,7 +7847,7 @@ constexpr Ability FlammableCoat = {
         BattleScriptCall(BattleScript_TargetFormChange);
         return TRUE;
     },
-    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+    .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
         CHECK(moveType == TYPE_FIRE)
         CHECK(gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH)
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
@@ -7207,11 +7861,13 @@ constexpr Ability FlammableCoat = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability DracoMorale = {
+template <>
+constexpr Ability Impl<ABILITY_DRACO_MORALE> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DRAGON_CHEER, 0); },
 };
 
-constexpr Ability BadOmen = {
+template <>
+constexpr Ability Impl<ABILITY_BAD_OMEN> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (isCrit) MUL(.25);
@@ -7219,7 +7875,8 @@ constexpr Ability BadOmen = {
     .breakable = TRUE,
 };
 
-constexpr Ability MoshPit = {
+template <>
+constexpr Ability Impl<ABILITY_MOSH_PIT> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
@@ -7244,10 +7901,11 @@ ON_EITHER(BloodStain) {
     DisableSwitchInAbility(opponent, ability);
     return TRUE;
 }
-constexpr Ability BloodStain = {
+template <>
+constexpr Ability Impl<ABILITY_BLOOD_STAIN> = {
     .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_BLOOD_STAIN); },
     ON_EITHER_ABILITY(BloodStain),
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_STATUS1)
         return TRUE;
     },
@@ -7255,12 +7913,13 @@ constexpr Ability BloodStain = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability BloodStigma = {
+template <>
+constexpr Ability Impl<ABILITY_BLOOD_STIGMA> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMons[target].status1 & STATUS1_BLEED || IsBloodStainAffected(target)) MUL(2);
         },
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_STATUS1)
         return TRUE;
     },
@@ -7268,17 +7927,20 @@ constexpr Ability BloodStigma = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability Slipstream = {
+template <>
+constexpr Ability Impl<ABILITY_SLIPSTREAM> = {
     .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPEED] += 20; },
 };
 
-constexpr Ability MaximumAcceleration = {
-    .onEndTurn = SpeedBoost.onEndTurn,
-    .onChooseOffensiveStat = Slipstream.onChooseOffensiveStat,
+template <>
+constexpr Ability Impl<ABILITY_MAXIMUM_ACCELERATION> = {
+    .onEndTurn = Impl<ABILITY_SPEED_BOOST>.onEndTurn,
+    .onChooseOffensiveStat = Impl<ABILITY_SLIPSTREAM>.onChooseOffensiveStat,
 };
 
-constexpr Ability Sidewinder = {
-    .onEntry = CoilUp.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_SIDEWINDER> = {
+    .onEntry = Impl<ABILITY_COIL_UP>.onEntry,
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST || !(gStatuses4[battler] & STATUS4_COILED))
         gStatuses4[battler] |= STATUS4_COILED;
@@ -7289,7 +7951,8 @@ constexpr Ability Sidewinder = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability Petrify = {
+template <>
+constexpr Ability Impl<ABILITY_PETRIFY> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int loweredStats = 0;
         int intimidated = UseIntimidateClone(ability, battler);
@@ -7305,7 +7968,8 @@ constexpr Ability Petrify = {
     },
 };
 
-constexpr Ability Fluffiest = {
+template <>
+constexpr Ability Impl<ABILITY_FLUFFIEST> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE) RESISTANCE(2.0);
@@ -7314,32 +7978,36 @@ constexpr Ability Fluffiest = {
     .breakable = TRUE,
 };
 
-constexpr Ability WayOfPrecision = {
-    .onAccuracy = InnerFocus.onAccuracy,
-    .onCrit = PreciseFist.onCrit,
-    .onModifyEffectChance = PreciseFist.onModifyEffectChance,
+template <>
+constexpr Ability Impl<ABILITY_WAY_OF_PRECISION> = {
+    .onAccuracy = Impl<ABILITY_INNER_FOCUS>.onAccuracy,
+    .onCrit = Impl<ABILITY_PRECISE_FIST>.onCrit,
+    .onModifyEffectChance = Impl<ABILITY_PRECISE_FIST>.onModifyEffectChance,
     .breakable = TRUE,
     .tauntImmune = TRUE,
 };
 
-constexpr Ability WayOfSwiftness = {
-    .onBattlerFaints = Pretentious.onBattlerFaints,
-    .onStat = SwiftSwim.onStat,
+template <>
+constexpr Ability Impl<ABILITY_WAY_OF_SWIFTNESS> = {
+    .onBattlerFaints = Impl<ABILITY_PRETENTIOUS>.onBattlerFaints,
+    .onStat = Impl<ABILITY_SWIFT_SWIM>.onStat,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability AtomicPunch = {
+template <>
+constexpr Ability Impl<ABILITY_ATOMIC_PUNCH> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            IronFist.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            SteelySpirit.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_IRON_FIST>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_STEELY_SPIRIT>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
 };
 
-constexpr Ability IronGiant = {
-    .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
-    .onChooseOffensiveStat = Juggernaut.onChooseOffensiveStat,
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+template <>
+constexpr Ability Impl<ABILITY_IRON_GIANT> = {
+    .onDefensiveMultiplier = Impl<ABILITY_HEATPROOF>.onDefensiveMultiplier,
+    .onChooseOffensiveStat = Impl<ABILITY_JUGGERNAUT>.onChooseOffensiveStat,
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_PARALYSIS)
         return TRUE;
     },
@@ -7348,19 +8016,22 @@ constexpr Ability IronGiant = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability MasterHand = {
-    .onBattlerFaints = Rampage.onBattlerFaints,
-    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_MASTER_HAND> = {
+    .onBattlerFaints = Impl<ABILITY_RAMPAGE>.onBattlerFaints,
+    .onOffensiveMultiplier = Impl<ABILITY_MEGA_LAUNCHER>.onOffensiveMultiplier,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .megaLauncherBoost = TRUE,
 };
 
-constexpr Ability FinalBlow = {
-    .onAccuracy = FatalPrecision.onAccuracy,
-    .onCrit = FatalPrecision.onCrit,
+template <>
+constexpr Ability Impl<ABILITY_FINAL_BLOW> = {
+    .onAccuracy = Impl<ABILITY_FATAL_PRECISION>.onAccuracy,
+    .onCrit = Impl<ABILITY_FATAL_PRECISION>.onCrit,
 };
 
-constexpr Ability Hospitality = {
+template <>
+constexpr Ability Impl<ABILITY_HOSPITALITY> = {
     .onEntry = +[](ON_ENTRY) -> int {
         gBattlerTarget = BATTLE_PARTNER(battler);
         CHECK(IsBattlerAlive(gBattlerTarget))
@@ -7373,11 +8044,13 @@ constexpr Ability Hospitality = {
     },
 };
 
-constexpr Ability ButterUp = {
-    .onEntry = +[](ON_ENTRY) -> int { return Hospitality.onEntry(DELEGATE_ENTRY) | SoothingAroma.onEntry(DELEGATE_ENTRY); },
+template <>
+constexpr Ability Impl<ABILITY_BUTTER_UP> = {
+    .onEntry = +[](ON_ENTRY) -> int { return Impl<ABILITY_HOSPITALITY>.onEntry(DELEGATE_ENTRY) | Impl<ABILITY_SOOTHING_AROMA>.onEntry(DELEGATE_ENTRY); },
 };
 
-constexpr Ability VitalityStrike = {
+template <>
+constexpr Ability Impl<ABILITY_VITALITY_STRIKE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
@@ -7391,24 +8064,27 @@ constexpr Ability VitalityStrike = {
     },
 };
 
-constexpr Ability HugeWings = {
+template <>
+constexpr Ability Impl<ABILITY_HUGE_WINGS> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            GiantWings.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            Levitate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_GIANT_WINGS>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_LEVITATE>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
     .breakable = TRUE,
     .levitate = TRUE,
 };
 
-constexpr Ability SwordOfDamnation = {
-    .onStat = SwordOfRuin.onStat,
+template <>
+constexpr Ability Impl<ABILITY_SWORD_OF_DAMNATION> = {
+    .onStat = Impl<ABILITY_SWORD_OF_RUIN>.onStat,
     .onStatFor = APPLY_ON_OTHER,
     .ruinStat = STAT_DEF,
     .unaware = TRUE,
 };
 
-constexpr Ability RestrainingOrder = {
+template <>
+constexpr Ability Impl<ABILITY_RESTRAINING_ORDER> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
         CHECK(ShouldApplyOnHitAffect(attacker))
@@ -7419,7 +8095,8 @@ constexpr Ability RestrainingOrder = {
     },
 };
 
-constexpr Ability AssassinsTools = {
+template <>
+constexpr Ability Impl<ABILITY_ASSASSINS_TOOLS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(IsMoveMakingContact(move, battler))
@@ -7444,7 +8121,8 @@ constexpr Ability AssassinsTools = {
     },
 };
 
-constexpr Ability Frostmaw = {
+template <>
+constexpr Ability Impl<ABILITY_FROSTMAW> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanGetFrostbite(target))
@@ -7455,10 +8133,11 @@ constexpr Ability Frostmaw = {
     },
 };
 
-constexpr Ability Patchwork = {
-    .onEntry = Disguise.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_PATCHWORK> = {
+    .onEntry = Impl<ABILITY_DISGUISE>.onEntry,
     .onDisguise = +[](ON_DISGUISE) -> SpeciesEnum {
-        SpeciesEnum species = Disguise.onDisguise(DELEGATE_DISGUISE);
+        SpeciesEnum species = Impl<ABILITY_DISGUISE>.onDisguise(DELEGATE_DISGUISE);
         if (species && !testOnly) {
             SetOncePerTurnAbilityCounter(battler, ABILITY_PATCHWORK, gBattlerAttacker + 1);
         }
@@ -7480,20 +8159,23 @@ constexpr Ability Patchwork = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability BlindRage = {
-    .onEntry = MoldBreaker.onEntry,
-    .onTypeEffectiveness = Scrappy.onTypeEffectiveness,
-    .onMoldBreaker = MoldBreaker.onMoldBreaker,
+template <>
+constexpr Ability Impl<ABILITY_BLIND_RAGE> = {
+    .onEntry = Impl<ABILITY_MOLD_BREAKER>.onEntry,
+    .onTypeEffectiveness = Impl<ABILITY_SCRAPPY>.onTypeEffectiveness,
+    .onMoldBreaker = Impl<ABILITY_MOLD_BREAKER>.onMoldBreaker,
     .tauntImmune = TRUE,
 };
 
-constexpr Ability ApexPredator = {
-    .onBattlerFaints = SoulEater.onBattlerFaints,
-    .onOffensiveMultiplier = ToughClaws.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_APEX_PREDATOR> = {
+    .onBattlerFaints = Impl<ABILITY_SOUL_EATER>.onBattlerFaints,
+    .onOffensiveMultiplier = Impl<ABILITY_TOUGH_CLAWS>.onOffensiveMultiplier,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability DragonsRitual = {
+template <>
+constexpr Ability Impl<ABILITY_DRAGONS_RITUAL> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN) || CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
         BattleScriptCall(BattleScript_DragonsRitual);
@@ -7502,7 +8184,8 @@ constexpr Ability DragonsRitual = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability PinnacleBlade = {
+template <>
+constexpr Ability Impl<ABILITY_PINNACLE_BLADE> = {
     .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType {
         return DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE) ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : INFILTRATE_NONE;
     },
@@ -7535,21 +8218,23 @@ constexpr Ability PinnacleBlade = {
     },
 };
 
-constexpr Ability Energized = {
-    .onEntry = Generator.onEntry,
-    .onTerrain = Generator.onTerrain,
+template <>
+constexpr Ability Impl<ABILITY_ENERGIZED> = {
+    .onEntry = Impl<ABILITY_GENERATOR>.onEntry,
+    .onTerrain = Impl<ABILITY_GENERATOR>.onTerrain,
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(moveType == TYPE_ELECTRIC);
         SetOncePerTurnAbilityCounter(battler, ability, TRUE);
         BattleScriptCall(BattleScript_GeneratorActivatesRet);
         return TRUE;
     },
-    .onExit = Generator.onExit,
+    .onExit = Impl<ABILITY_GENERATOR>.onExit,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .persistent = TRUE,
 };
 
-constexpr Ability ColorSpectrum = {
+template <>
+constexpr Ability Impl<ABILITY_COLOR_SPECTRUM> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         int newType;
         do {
@@ -7569,13 +8254,15 @@ constexpr Ability ColorSpectrum = {
         },
 };
 
-constexpr Ability SteelBeetle = {
-    .onParentalBond = RagingBoxer.onParentalBond,
-    .onOffensiveMultiplier = Pollinate.onOffensiveMultiplier,
-    .onMoveType = Pollinate.onMoveType,
+template <>
+constexpr Ability Impl<ABILITY_STEEL_BEETLE> = {
+    .onParentalBond = Impl<ABILITY_RAGING_BOXER>.onParentalBond,
+    .onOffensiveMultiplier = Impl<ABILITY_POLLINATE>.onOffensiveMultiplier,
+    .onMoveType = Impl<ABILITY_POLLINATE>.onMoveType,
 };
 
-constexpr Ability FromTheShadows = {
+template <>
+constexpr Ability Impl<ABILITY_FROM_THE_SHADOWS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(GetBattlerTurnOrderNum(target) >= gCurrentTurnActionNumber)
@@ -7592,7 +8279,8 @@ constexpr Ability FromTheShadows = {
     },
 };
 
-constexpr Ability RagePoint = {
+template <>
+constexpr Ability Impl<ABILITY_RAGE_POINT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK(gIsCriticalHit)
@@ -7609,7 +8297,8 @@ constexpr Ability RagePoint = {
     .negatesFrzSpatkDrop = TRUE,
 };
 
-constexpr Ability HotCoals = {
+template <>
+constexpr Ability Impl<ABILITY_HOT_COALS> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals)
 
@@ -7618,7 +8307,8 @@ constexpr Ability HotCoals = {
     },
 };
 
-constexpr Ability TerastalTreasure = {
+template <>
+constexpr Ability Impl<ABILITY_TERASTAL_TREASURE> = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.6); },
     .onStat =
         +[](ON_STAT) {
@@ -7627,72 +8317,85 @@ constexpr Ability TerastalTreasure = {
     .breakable = TRUE,
 };
 
-constexpr Ability ShockingMaw = {
-    .onAttacker = ShockingJaws.onAttacker,
-    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_SHOCKING_MAW> = {
+    .onAttacker = Impl<ABILITY_SHOCKING_JAWS>.onAttacker,
+    .onOffensiveMultiplier = Impl<ABILITY_STRONG_JAW>.onOffensiveMultiplier,
 };
 
-constexpr Ability GleamEyes = {
-    .onEntry = +[](ON_ENTRY) -> int { return UseIntimidateClone(ability, battler) | Frisk.onEntry(DELEGATE_ENTRY); },
+template <>
+constexpr Ability Impl<ABILITY_GLEAM_EYES> = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseIntimidateClone(ability, battler) | Impl<ABILITY_FRISK>.onEntry(DELEGATE_ENTRY); },
 };
 
-constexpr Ability RousedFangs = {
-    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
-    .onChooseOffensiveStat = MindCrush.onChooseOffensiveStat,
+template <>
+constexpr Ability Impl<ABILITY_ROUSED_FANGS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_STRONG_JAW>.onOffensiveMultiplier,
+    .onChooseOffensiveStat = Impl<ABILITY_MIND_CRUSH>.onChooseOffensiveStat,
 };
 
-constexpr Ability DreamState = {
-    .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
-    .onCrit = BattleArmor.onCrit,
-    .onCritFor = BattleArmor.onCritFor,
+template <>
+constexpr Ability Impl<ABILITY_DREAM_STATE> = {
+    .onDefensiveMultiplier = Impl<ABILITY_BATTLE_ARMOR>.onDefensiveMultiplier,
+    .onCrit = Impl<ABILITY_BATTLE_ARMOR>.onCrit,
+    .onCritFor = Impl<ABILITY_BATTLE_ARMOR>.onCritFor,
     .breakable = TRUE,
 };
 
-constexpr Ability DreamWhimsy = {
+template <>
+constexpr Ability Impl<ABILITY_DREAM_WHIMSY> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_YAWN, 0); },
 };
 
-constexpr Ability LunarAffinity = {
+template <>
+constexpr Ability Impl<ABILITY_LUNAR_AFFINITY> = {
     .onCopyMove = +[](ON_COPY_MOVE) -> int {
         CHECK(gBattleMoves[move].lunar)
         return UseOutOfTurnAttack(battler, target, ability, move, 0);
     },
 };
 
-constexpr Ability FlameShield = {
-    .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_FLAME_SHIELD> = {
+    .onDefensiveMultiplier = Impl<ABILITY_FILTER>.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-constexpr Ability AquaticDweller = {
+template <>
+constexpr Ability Impl<ABILITY_AQUATIC_DWELLER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_WATER) MUL(1.5);
         },
 };
 
-constexpr Ability ApplePie = {
-    .onEndTurn = SelfSufficient.onEndTurn,
+template <>
+constexpr Ability Impl<ABILITY_APPLE_PIE> = {
+    .onEndTurn = Impl<ABILITY_SELF_SUFFICIENT>.onEndTurn,
 };
 
-constexpr Ability Hover = {
+template <>
+constexpr Ability Impl<ABILITY_HOVER> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_PSYCHIC); },
     .breakable = TRUE,
     .levitate = TRUE,
     .addsType = TYPE_PSYCHIC,
 };
 
-constexpr Ability Depravity = {
-    .onCrit = Merciless.onCrit,
-    .onTypeEffectiveness = Overcharge.onTypeEffectiveness,
-    .onCanStatusType = Overcharge.onCanStatusType,
+template <>
+constexpr Ability Impl<ABILITY_DEPRAVITY> = {
+    .onCrit = Impl<ABILITY_MERCILESS>.onCrit,
+    .onTypeEffectiveness = Impl<ABILITY_OVERCHARGE>.onTypeEffectiveness,
+    .onCanStatusType = Impl<ABILITY_OVERCHARGE>.onCanStatusType,
 };
 
-constexpr Ability Wildfire = {
+template <>
+constexpr Ability Impl<ABILITY_WILDFIRE> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_FIRE_SPIN, 0); },
 };
 
-constexpr Ability JumpScare = {
+template <>
+constexpr Ability Impl<ABILITY_JUMP_SCARE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
         return UseEntryMove(battler, ability, MOVE_ASTONISH, 0);
@@ -7700,11 +8403,13 @@ constexpr Ability JumpScare = {
     .persistent = TRUE,
 };
 
-constexpr Ability TarToss = {
+template <>
+constexpr Ability Impl<ABILITY_TAR_TOSS> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TAR_SHOT, 0); },
 };
 
-constexpr Ability StunShock = {
+template <>
+constexpr Ability Impl<ABILITY_STUN_SHOCK> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target)) CHECK(Random() % 100 < 60) switch (Random() % 2) {
             case 0:
@@ -7721,13 +8426,15 @@ constexpr Ability StunShock = {
     },
 };
 
-constexpr Ability RagingGoddess = {
-    .onBattlerFaints = Rampage.onBattlerFaints,
-    .onParentalBond = ParentalBond.onParentalBond,
+template <>
+constexpr Ability Impl<ABILITY_RAGING_GODDESS> = {
+    .onBattlerFaints = Impl<ABILITY_RAMPAGE>.onBattlerFaints,
+    .onParentalBond = Impl<ABILITY_PARENTAL_BOND>.onParentalBond,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability Whiplash = {
+template <>
+constexpr Ability Impl<ABILITY_WHIPLASH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(IS_MOVE_PHYSICAL(move))
@@ -7741,7 +8448,8 @@ constexpr Ability Whiplash = {
     },
 };
 
-constexpr Ability SupersweetSyrup = {
+template <>
+constexpr Ability Impl<ABILITY_SUPERSWEET_SYRUP> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -7757,34 +8465,39 @@ constexpr Ability SupersweetSyrup = {
     .breakable = TRUE,
 };
 
-constexpr Ability TrashHeap = {
-    .onEntry = ToxicSpill.onEntry,
-    .onEndTurn = ToxicSpill.onEndTurn,
-    .onExit = ToxicSpill.onExit,
-    .onTypeEffectiveness = Corrosion.onTypeEffectiveness,
-    .onCanStatusType = Corrosion.onCanStatusType,
+template <>
+constexpr Ability Impl<ABILITY_TRASH_HEAP> = {
+    .onEntry = Impl<ABILITY_TOXIC_SPILL>.onEntry,
+    .onEndTurn = Impl<ABILITY_TOXIC_SPILL>.onEndTurn,
+    .onExit = Impl<ABILITY_TOXIC_SPILL>.onExit,
+    .onTypeEffectiveness = Impl<ABILITY_CORROSION>.onTypeEffectiveness,
+    .onCanStatusType = Impl<ABILITY_CORROSION>.onCanStatusType,
 };
 
-constexpr Ability SludgyMix = {
+template <>
+constexpr Ability Impl<ABILITY_SLUDGY_MIX> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            Intoxicate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            PunkRock.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_INTOXICATE>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_PUNK_ROCK>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
-    .onMoveType = Intoxicate.onMoveType,
+    .onMoveType = Impl<ABILITY_INTOXICATE>.onMoveType,
 };
 
-constexpr Ability Overwatch = {
-    .onEntry = OnTheProwl.onEntry,
-    .onOffensiveMultiplier = Stakeout.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_OVERWATCH> = {
+    .onEntry = Impl<ABILITY_ON_THE_PROWL>.onEntry,
+    .onOffensiveMultiplier = Impl<ABILITY_STAKEOUT>.onOffensiveMultiplier,
 };
 
-constexpr Ability WindRage = {
+template <>
+constexpr Ability Impl<ABILITY_WIND_RAGE> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DEFOG, 0); },
-    .onOffensiveMultiplier = GiantWings.onOffensiveMultiplier,
+    .onOffensiveMultiplier = Impl<ABILITY_GIANT_WINGS>.onOffensiveMultiplier,
 };
 
-constexpr Ability VictoryBomb = {
+template <>
+constexpr Ability Impl<ABILITY_VICTORY_BOMB> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK_NOT(IsBattlerAlive(battler))
 
@@ -7798,7 +8511,8 @@ constexpr Ability VictoryBomb = {
     },
 };
 
-constexpr Ability RazorSharp = {
+template <>
+constexpr Ability Impl<ABILITY_RAZOR_SHARP> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
@@ -7808,12 +8522,14 @@ constexpr Ability RazorSharp = {
     },
 };
 
-constexpr Ability ToTheBone = {
-    .onAttacker = RazorSharp.onAttacker,
-    .onOffensiveMultiplier = Sniper.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_TO_THE_BONE> = {
+    .onAttacker = Impl<ABILITY_RAZOR_SHARP>.onAttacker,
+    .onOffensiveMultiplier = Impl<ABILITY_SNIPER>.onOffensiveMultiplier,
 };
 
-constexpr Ability BladeDance = {
+template <>
+constexpr Ability Impl<ABILITY_BLADE_DANCE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(IsDance(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
@@ -7836,7 +8552,8 @@ int ApeShiftHandler(int battler, AbilityCallType callType) {
     BattleScriptCall(BattleScript_StackBattlerFormChange);
     return TRUE;
 }
-constexpr Ability ApeShift = {
+template <>
+constexpr Ability Impl<ABILITY_APE_SHIFT> = {
     .onEntry = +[](ON_ENTRY) -> int { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onEndTurn = +[](ON_END_TURN) -> int { return ApeShiftHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onDefender = +[](ON_DEFENDER) -> int { return ApeShiftHandler(battler, ABILITY_BS_CALL); },
@@ -7847,7 +8564,8 @@ constexpr Ability ApeShift = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability KnowYourPlace = {
+template <>
+constexpr Ability Impl<ABILITY_KNOW_YOUR_PLACE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(gVolatileStructs[target].dazed)
@@ -7859,7 +8577,8 @@ constexpr Ability KnowYourPlace = {
     },
 };
 
-constexpr Ability DeepCuts = {
+template <>
+constexpr Ability Impl<ABILITY_DEEP_CUTS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
@@ -7870,7 +8589,8 @@ constexpr Ability DeepCuts = {
     },
 };
 
-constexpr Ability LifeSteal = {
+template <>
+constexpr Ability Impl<ABILITY_LIFE_STEAL> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         int any = FALSE;
         for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
@@ -7887,8 +8607,9 @@ constexpr Ability LifeSteal = {
     },
 };
 
-constexpr Ability RudeAwakening = {
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+template <>
+constexpr Ability Impl<ABILITY_RUDE_AWAKENING> = {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_SLEEP)
         CHECK(GetAbilityState(battler, ability))
         return TRUE;
@@ -7896,7 +8617,8 @@ constexpr Ability RudeAwakening = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability TeraformZero = {
+template <>
+constexpr Ability Impl<ABILITY_TERAFORM_ZERO> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(!GetSingleUseAbilityCounter(battler, ability));
         SetSingleUseAbilityCounter(battler, ability, TRUE);
@@ -7904,33 +8626,37 @@ constexpr Ability TeraformZero = {
         BattleScriptPushCursorAndCallback(BattleScript_TeraformZero);
         return TRUE;
     },
-    .onAfterTypeEffectiveness = TeraShell.onAfterTypeEffectiveness,
-    .onAfterTypeEffectivenessFor = TeraShell.onAfterTypeEffectivenessFor,
+    .onAfterTypeEffectiveness = Impl<ABILITY_TERA_SHELL>.onAfterTypeEffectiveness,
+    .onAfterTypeEffectivenessFor = Impl<ABILITY_TERA_SHELL>.onAfterTypeEffectivenessFor,
     .breakable = TRUE,
 };
 
-constexpr Ability SetAblaze = {
-    .onReactive = BloodBath.onReactive,
-    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+template <>
+constexpr Ability Impl<ABILITY_SET_ABLAZE> = {
+    .onReactive = Impl<ABILITY_BLOOD_BATH>.onReactive,
+    .onBattlerFaints = Impl<ABILITY_POISON_PUPPETEER>.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
     .setStateOnEffect = MOVE_EFFECT_BURN,
 };
 
-constexpr Ability Breakwater = {
-    .onDefensiveMultiplier = Stall.onDefensiveMultiplier,
-    .onStat = SwiftSwim.onStat,
+template <>
+constexpr Ability Impl<ABILITY_BREAKWATER> = {
+    .onDefensiveMultiplier = Impl<ABILITY_STALL>.onDefensiveMultiplier,
+    .onStat = Impl<ABILITY_SWIFT_SWIM>.onStat,
     .breakable = TRUE,
 };
 
-constexpr Ability MagicalFists = {
-    .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_MAGICAL_FISTS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_IRON_FIST>.onOffensiveMultiplier,
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
             if (IsIronFistBoosted(battler, move)) *atkStatToUse = STAT_SPATK;
         },
 };
 
-constexpr Ability Cutthroat = {
+template <>
+constexpr Ability Impl<ABILITY_CUTTHROAT> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gStatuses4[battler] & STATUS4_CUTTHROAT)
 
@@ -7939,17 +8665,20 @@ constexpr Ability Cutthroat = {
     },
 };
 
-constexpr Ability SandBender = {
-    .onEntry = SandStream.onEntry,
-    .onStat = SandForce.onStat,
+template <>
+constexpr Ability Impl<ABILITY_SAND_BENDER> = {
+    .onEntry = Impl<ABILITY_SAND_STREAM>.onEntry,
+    .onStat = Impl<ABILITY_SAND_FORCE>.onStat,
     .sandImmune = TRUE,
 };
 
-constexpr Ability SandPit = {
+template <>
+constexpr Ability Impl<ABILITY_SAND_PIT> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SAND_TOMB, 20); },
 };
 
-constexpr Ability DesolateSun = {
+template <>
+constexpr Ability Impl<ABILITY_DESOLATE_SUN> = {
     .randomizerBanned = TRUE,
 };
 
@@ -7961,11 +8690,13 @@ ON_EITHER(Daybreak) {
     AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
     return TRUE;
 }
-constexpr Ability Daybreak = {
+template <>
+constexpr Ability Impl<ABILITY_DAYBREAK> = {
     ON_EITHER_ABILITY(Daybreak),
 };
 
-constexpr Ability EnergySiphon = {
+template <>
+constexpr Ability Impl<ABILITY_ENERGY_SIPHON> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
@@ -7978,7 +8709,8 @@ constexpr Ability EnergySiphon = {
     },
 };
 
-constexpr Ability Reservoir = {
+template <>
+constexpr Ability Impl<ABILITY_RESERVOIR> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_WATER);
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -7988,18 +8720,20 @@ constexpr Ability Reservoir = {
     .breakable = TRUE,
 };
 
-static int NeurotoxinCondition(int battler, int target) {
+static int NeurotoxinCondition(opt int battler, int target) {
     return CanLowerStat(target, STAT_ATK) || CanLowerStat(target, STAT_SPATK) || CanLowerStat(target, STAT_SPEED);
 }
-constexpr Ability Neurotoxin = {
+template <>
+constexpr Ability Impl<ABILITY_NEUROTOXIN> = {
     .onReactive = +[](ON_REACTIVE) -> int { return PoisonPuppeteerClone(ability, battler, NeurotoxinCondition, BattleScript_Neurotoxin); },
-    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+    .onBattlerFaints = Impl<ABILITY_POISON_PUPPETEER>.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
     .setStateOnEffect = MOVE_EFFECT_POISON,
 };
 
-constexpr Ability EnergizedHorns = {
-    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_ENERGIZED_HORNS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
     .onSwapSplit = +[](ON_SWAP_SPLIT) -> int {
         CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
         CHECK(gBattleMoves[move].hornBased);
@@ -8007,7 +8741,8 @@ constexpr Ability EnergizedHorns = {
     },
 };
 
-constexpr Ability SpiderLairUpgrade = {
+template <>
+constexpr Ability Impl<ABILITY_SPIDER_LAIR_UPGRADE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
 
@@ -8020,34 +8755,39 @@ constexpr Ability SpiderLairUpgrade = {
     },
 };
 
-constexpr Ability CrustCoat = {
-    .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
-    .onCrit = BattleArmor.onCrit,
-    .onCritFor = BattleArmor.onCritFor,
+template <>
+constexpr Ability Impl<ABILITY_CRUST_COAT> = {
+    .onDefensiveMultiplier = Impl<ABILITY_BATTLE_ARMOR>.onDefensiveMultiplier,
+    .onCrit = Impl<ABILITY_BATTLE_ARMOR>.onCrit,
+    .onCritFor = Impl<ABILITY_BATTLE_ARMOR>.onCritFor,
     .breakable = TRUE,
 };
 
-constexpr Ability Puffy = {
-    .onDefensiveMultiplier = Fluffy.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_PUFFY> = {
+    .onDefensiveMultiplier = Impl<ABILITY_FLUFFY>.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-constexpr Ability BalloonBlitz = {
-    .onDefender = Inflatable.onDefender,
-    .onParentalBond = ParentalBond.onParentalBond,
+template <>
+constexpr Ability Impl<ABILITY_BALLOON_BLITZ> = {
+    .onDefender = Impl<ABILITY_INFLATABLE>.onDefender,
+    .onParentalBond = Impl<ABILITY_PARENTAL_BOND>.onParentalBond,
 };
 
-constexpr Ability StrikerPixilate = {
+template <>
+constexpr Ability Impl<ABILITY_STRIKER_PIXILATE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            Striker.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            Pixilate.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_STRIKER>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_PIXILATE>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
-    .onMoveType = Pixilate.onMoveType,
+    .onMoveType = Impl<ABILITY_PIXILATE>.onMoveType,
 };
 
 // 2.6
-constexpr Ability DoomBlast = {
+template <>
+constexpr Ability Impl<ABILITY_DOOM_BLAST> = {
     .onRecoil = +[](ON_RECOIL) -> int {
         CHECK(moveType == TYPE_DARK);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -8059,14 +8799,16 @@ constexpr Ability DoomBlast = {
         },
 };
 
-constexpr Ability Bruteforce = {
-    .onOffensiveMultiplier = Reckless.onOffensiveMultiplier,
-    .onStatusImmune = RockHead.onStatusImmune,
+template <>
+constexpr Ability Impl<ABILITY_BRUTEFORCE> = {
+    .onOffensiveMultiplier = Impl<ABILITY_RECKLESS>.onOffensiveMultiplier,
+    .onStatusImmune = Impl<ABILITY_ROCK_HEAD>.onStatusImmune,
     .noRecoil = TRUE,
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability FaradayCage = {
+template <>
+constexpr Ability Impl<ABILITY_FARADAY_CAGE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -8074,19 +8816,21 @@ constexpr Ability FaradayCage = {
         UseOutOfTurnAttack(battler, attacker, ability, MOVE_THUNDER_CAGE, 50);
         return FALSE;
     },
-    .onDefensiveMultiplier = ShellArmor.onDefensiveMultiplier,
-    .onCrit = ShellArmor.onCrit,
-    .onCritFor = ShellArmor.onCritFor,
+    .onDefensiveMultiplier = Impl<ABILITY_SHELL_ARMOR>.onDefensiveMultiplier,
+    .onCrit = Impl<ABILITY_SHELL_ARMOR>.onCrit,
+    .onCritFor = Impl<ABILITY_SHELL_ARMOR>.onCritFor,
     .breakable = TRUE,
 };
 
-constexpr Ability AcidicSlime = {
+template <>
+constexpr Ability Impl<ABILITY_ACIDIC_SLIME> = {
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
-    .onTypeEffectiveness = Corrosion.onTypeEffectiveness,
-    .onCanStatusType = Corrosion.onCanStatusType,
+    .onTypeEffectiveness = Impl<ABILITY_CORROSION>.onTypeEffectiveness,
+    .onCanStatusType = Impl<ABILITY_CORROSION>.onCanStatusType,
 };
 
-constexpr Ability RoseGarden = {
+template <>
+constexpr Ability Impl<ABILITY_ROSE_GARDEN> = {
     .onEntry = +[](ON_ENTRY) -> int {
         u8 targetSide = GetOppositeSide(battler);
         CHECK(gSideTimers[targetSide].toxicSpikesAmount < 2)
@@ -8099,21 +8843,24 @@ constexpr Ability RoseGarden = {
     },
 };
 
-constexpr Ability Qigong = {
-    .onBattlerFaints = Rampage.onBattlerFaints,
-    .onOffensiveMultiplier = FightingSpirit.onOffensiveMultiplier,
-    .onMoveType = FightingSpirit.onMoveType,
+template <>
+constexpr Ability Impl<ABILITY_QIGONG> = {
+    .onBattlerFaints = Impl<ABILITY_RAMPAGE>.onBattlerFaints,
+    .onOffensiveMultiplier = Impl<ABILITY_FIGHT_SPIRIT>.onOffensiveMultiplier,
+    .onMoveType = Impl<ABILITY_FIGHT_SPIRIT>.onMoveType,
     .onAccuracy = +[](ON_ACCURACY) { return ACCURACY_ALWAYS_HITS; },
-    .onBattlerFaintsFor = Rampage.onBattlerFaintsFor,
+    .onBattlerFaintsFor = Impl<ABILITY_RAMPAGE>.onBattlerFaintsFor,
 };
 
-constexpr Ability ConjurerOfDeceit = {
+template <>
+constexpr Ability Impl<ABILITY_CONJOURER_OF_DECEIT> = {
     .breakable = TRUE,
     .magicGuard = TRUE,
     .magicBounce = TRUE,
 };
 
-constexpr Ability DeepFreeze = {
+template <>
+constexpr Ability Impl<ABILITY_DEEP_FREEZE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_WATER || moveType == TYPE_ICE) MUL(1.25);
@@ -8125,17 +8872,20 @@ constexpr Ability DeepFreeze = {
     .breakable = TRUE,
 };
 
-constexpr Ability SoulDevourer = {
-    .onBattlerFaints = SoulEater.onBattlerFaints,
-    .onTypeEffectiveness = PhantomPain.onTypeEffectiveness,
-    .onBattlerFaintsFor = SoulEater.onBattlerFaintsFor,
+template <>
+constexpr Ability Impl<ABILITY_SOUL_DEVOURER> = {
+    .onBattlerFaints = Impl<ABILITY_SOUL_EATER>.onBattlerFaints,
+    .onTypeEffectiveness = Impl<ABILITY_PHANTOM_PAIN>.onTypeEffectiveness,
+    .onBattlerFaintsFor = Impl<ABILITY_SOUL_EATER>.onBattlerFaintsFor,
 };
 
-constexpr Ability ChampionsEntrance = {
-    .onEntry = +[](ON_ENTRY) -> int { return Intimidate.onEntry(DELEGATE_ENTRY) | ViolentRush.onEntry(DELEGATE_ENTRY); },
+template <>
+constexpr Ability Impl<ABILITY_CHAMPIONS_ENTRANCE> = {
+    .onEntry = +[](ON_ENTRY) -> int { return Impl<ABILITY_INTIMIDATE>.onEntry(DELEGATE_ENTRY) | Impl<ABILITY_VIOLENT_RUSH>.onEntry(DELEGATE_ENTRY); },
 };
 
-constexpr Ability Presto = {
+template <>
+constexpr Ability Impl<ABILITY_PRESTO> = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(BATTLER_MAX_HP(battler))
         CHECK(IsSoundMove(battler, move))
@@ -8143,16 +8893,19 @@ constexpr Ability Presto = {
     },
 };
 
-constexpr Ability Samba = {
-    .onOffensiveMultiplier = Striker.onOffensiveMultiplier,
-    .onCopyMove = Dancer.onCopyMove,
+template <>
+constexpr Ability Impl<ABILITY_SAMBA> = {
+    .onOffensiveMultiplier = Impl<ABILITY_STRIKER>.onOffensiveMultiplier,
+    .onCopyMove = Impl<ABILITY_DANCER>.onCopyMove,
 };
 
-constexpr Ability Gladiator = {
+template <>
+constexpr Ability Impl<ABILITY_GLADIATOR> = {
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_FIGHTING),
 };
 
-constexpr Ability ForsakenHeart = {
+template <>
+constexpr Ability Impl<ABILITY_FORSAKEN_HEART> = {
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
 
@@ -8162,13 +8915,15 @@ constexpr Ability ForsakenHeart = {
     .onBattlerFaintsFor = APPLY_ON_ANY,
 };
 
-constexpr Ability Relentless = {
-    .onOffensiveMultiplier = ExploitWeakness.onOffensiveMultiplier,
-    .onChooseDefensiveStat = ExploitWeakness.onChooseDefensiveStat,
-    .onCrit = Merciless.onCrit,
+template <>
+constexpr Ability Impl<ABILITY_RELENTLESS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_EXPLOIT_WEAKNESS>.onOffensiveMultiplier,
+    .onChooseDefensiveStat = Impl<ABILITY_EXPLOIT_WEAKNESS>.onChooseDefensiveStat,
+    .onCrit = Impl<ABILITY_MERCILESS>.onCrit,
 };
 
-constexpr Ability Soothsayer = {
+template <>
+constexpr Ability Impl<ABILITY_SOOTHSAYER> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(!GetSingleUseAbilityCounter(battler, ability))
         SetSingleUseAbilityCounter(battler, ability, TRUE);
@@ -8190,7 +8945,8 @@ constexpr Ability Soothsayer = {
     .persistent = TRUE,
 };
 
-constexpr Ability CorruptedMind = {
+template <>
+constexpr Ability Impl<ABILITY_CORRUPTED_MIND> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
         CHECK(moveType == TYPE_PSYCHIC)
         if (*mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
@@ -8205,7 +8961,8 @@ constexpr Ability CorruptedMind = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability FlameCoat = {
+template <>
+constexpr Ability Impl<ABILITY_FLAME_COAT> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(CheckAbilityWasAnnounced(battler, ABILITY_FLAME_COAT))
         return SwitchInAnnounce(B_MSG_SWITCHIN_FIRE_COAT);
@@ -8228,7 +8985,8 @@ constexpr Ability FlameCoat = {
     },
 };
 
-constexpr Ability UnownPower = {
+template <>
+constexpr Ability Impl<ABILITY_UNOWN_POWER> = {
     .onStab = +[](ON_STAB) -> int { return TRUE; },
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
@@ -8238,27 +8996,31 @@ constexpr Ability UnownPower = {
     .omniStab = TRUE,
 };
 
-constexpr Ability SuperScope = {
-    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
-    .onAccuracy = Artillery.onAccuracy,
+template <>
+constexpr Ability Impl<ABILITY_SUPER_SCOPE> = {
+    .onOffensiveMultiplier = Impl<ABILITY_MEGA_LAUNCHER>.onOffensiveMultiplier,
+    .onAccuracy = Impl<ABILITY_ARTILLERY>.onAccuracy,
     .megaLauncherBoost = TRUE,
 };
 
-constexpr Ability VenomCrown = {
+template <>
+constexpr Ability Impl<ABILITY_VENOM_CROWN> = {
     ON_EITHER_ABILITY(PoisonPoint),
-    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
+    .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability BlightScale = {
+template <>
+constexpr Ability Impl<ABILITY_BLIGHT_SCALE> = {
     ON_EITHER_ABILITY(PoisonPoint),
-    .onDefensiveMultiplier = Multiscale.onDefensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_MULTISCALE>.onDefensiveMultiplier,
     .breakable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Gunman = {
-    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_GUNMAN> = {
+    .onOffensiveMultiplier = Impl<ABILITY_MEGA_LAUNCHER>.onOffensiveMultiplier,
     .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
         CHECK(flag == MOVE_FLAG_MEGA_LAUNCHER)
         CHECK(IS_MOVE_STATUS(move))
@@ -8267,7 +9029,8 @@ constexpr Ability Gunman = {
     .megaLauncherBoost = TRUE,
 };
 
-constexpr Ability Caretaker = {
+template <>
+constexpr Ability Impl<ABILITY_CARETAKER> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(Random() % 100 < 30)
 
@@ -8283,12 +9046,14 @@ constexpr Ability Caretaker = {
     },
 };
 
-constexpr Ability PoseidonsDominion = {
+template <>
+constexpr Ability Impl<ABILITY_POSEIDONS_DOMINION> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_WHIRLPOOL, 0); },
 };
 
-constexpr Ability DualShadow = {
-    .onEndTurn = HungerSwitch.onEndTurn,
+template <>
+constexpr Ability Impl<ABILITY_DUAL_SHADOW> = {
+    .onEndTurn = Impl<ABILITY_HUNGER_SWITCH>.onEndTurn,
     .onRecoil = +[](ON_RECOIL) -> int {
         CHECK(moveType == TYPE_ELECTRIC || moveType == TYPE_DARK);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -8302,7 +9067,8 @@ constexpr Ability DualShadow = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Lullaby = {
+template <>
+constexpr Ability Impl<ABILITY_LULLABY> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(move == MOVE_SING);
         *accuracy *= 1.5;
@@ -8310,7 +9076,8 @@ constexpr Ability Lullaby = {
     },
 };
 
-constexpr Ability CryoArchitect = {
+template <>
+constexpr Ability Impl<ABILITY_CRYO_ARCHITECT> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         int abilityState = GetAbilityState(battler, ability);
         CHECK(abilityState)
@@ -8353,7 +9120,8 @@ constexpr Ability CryoArchitect = {
     },
 };
 
-constexpr Ability GlacialRage = {
+template <>
+constexpr Ability Impl<ABILITY_GLACIAL_RAGE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(moveType == TYPE_ICE)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -8362,18 +9130,21 @@ constexpr Ability GlacialRage = {
     },
 };
 
-constexpr Ability ImmovableObject = {
+template <>
+constexpr Ability Impl<ABILITY_IMMOVABLE_OBJECT> = {
     .magicGuard = TRUE,
 };
 
-constexpr Ability FrenziedPhantom = {
-    .onParentalBond = ParentalBond.onParentalBond,
-    .onTrap = ShadowTag.onTrap,
+template <>
+constexpr Ability Impl<ABILITY_FRENZIED_PHANTOM> = {
+    .onParentalBond = Impl<ABILITY_PARENTAL_BOND>.onParentalBond,
+    .onTrap = Impl<ABILITY_SHADOW_TAG>.onTrap,
     .shadowTag = TRUE,
 };
 
-constexpr Ability DNAScramble = {
-    .onBeforeAttack = +[](ABILITY_ON_BEFORE_ATTACK) -> int {
+template <>
+constexpr Ability Impl<ABILITY_DNA_SCRAMBLE> = {
+    .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
         SpeciesEnum newSpecies = SPECIES_NONE;
         switch (gBattleMons[battler].species) {
             default:
@@ -8416,21 +9187,24 @@ constexpr Ability DNAScramble = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability MetallicJaws = {
-    .onEntry = Metallic.onEntry,
-    .onParentalBond = PrimalMaw.onParentalBond,
+template <>
+constexpr Ability Impl<ABILITY_METALLIC_JAWS> = {
+    .onEntry = Impl<ABILITY_METALLIC>.onEntry,
+    .onParentalBond = Impl<ABILITY_PRIMAL_MAW>.onParentalBond,
     .addsType = TYPE_STEEL,
 };
 
-constexpr Ability Calculative = {
+template <>
+constexpr Ability Impl<ABILITY_CALCULATIVE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            Analytic.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            Neuroforce.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_ANALYTIC>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_NEUROFORCE>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
 };
 
-constexpr Ability EmbodyAspect = {
+template <>
+constexpr Ability Impl<ABILITY_EMBODY_ASPECT> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(CanRaiseStat(battler, STAT_SPEED))
 
@@ -8440,15 +9214,18 @@ constexpr Ability EmbodyAspect = {
     },
 };
 
-constexpr Ability EmbodyAspectHearthflame = {
-    .onEntry = IntrepidSword.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_EMBODY_ASPECT_HEARTHFLAME> = {
+    .onEntry = Impl<ABILITY_INTREPID_SWORD>.onEntry,
 };
 
-constexpr Ability EmbodyAspectCornerstone = {
-    .onEntry = DauntlessShield.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_EMBODY_ASPECT_CORNERSTONE> = {
+    .onEntry = Impl<ABILITY_DAUNTLESS_SHIELD>.onEntry,
 };
 
-constexpr Ability EmbodyAspectWellspring = {
+template <>
+constexpr Ability Impl<ABILITY_EMBODY_ASPECT_WELLSPRING> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(CanRaiseStat(battler, STAT_SPDEF))
 
@@ -8458,33 +9235,39 @@ constexpr Ability EmbodyAspectWellspring = {
     },
 };
 
-constexpr Ability RockhardShaft = {
+template <>
+constexpr Ability Impl<ABILITY_ROCKHARD_SHAFT> = {
     .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_ROCK),
 };
 
-constexpr Ability HuntersMark = {
-    .onAccuracy = Deadeye.onAccuracy,
-    .onChooseDefensiveStat = Deadeye.onChooseDefensiveStat,
-    .onCrit = Ambush.onCrit,
+template <>
+constexpr Ability Impl<ABILITY_HUNTERS_MARK> = {
+    .onAccuracy = Impl<ABILITY_DEADEYE>.onAccuracy,
+    .onChooseDefensiveStat = Impl<ABILITY_DEADEYE>.onChooseDefensiveStat,
+    .onCrit = Impl<ABILITY_AMBUSH>.onCrit,
 };
 
-constexpr Ability Deviate = {
+template <>
+constexpr Ability Impl<ABILITY_DEVIATE> = {
     ATE_ABILITY(TYPE_DARK),
 };
 
-constexpr Ability SunsBounty = {
-    .onEndTurn = +[](ON_END_TURN) -> int { return Harvest.onEndTurn(DELEGATE_END_TURN) | LeafGuard.onEndTurn(DELEGATE_END_TURN); },
+template <>
+constexpr Ability Impl<ABILITY_SUNS_BOUNTY> = {
+    .onEndTurn = +[](ON_END_TURN) -> int { return Impl<ABILITY_HARVEST>.onEndTurn(DELEGATE_END_TURN) | Impl<ABILITY_LEAF_GUARD>.onEndTurn(DELEGATE_END_TURN); },
 };
 
-constexpr Ability RiteOfSpring = {
+template <>
+constexpr Ability Impl<ABILITY_RITE_OF_SPRING> = {
     .onStat =
         +[](ON_STAT) {
-            SolarPower.onStat(DELEGATE_STAT);
-            Chlorophyll.onStat(DELEGATE_STAT);
+            Impl<ABILITY_SOLAR_POWER>.onStat(DELEGATE_STAT);
+            Impl<ABILITY_CHLOROPHYLL>.onStat(DELEGATE_STAT);
         },
 };
 
-constexpr Ability Headstrong = {
+template <>
+constexpr Ability Impl<ABILITY_HEADSTRONG> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(CanRaiseStat(battler, STAT_SPDEF))
 
@@ -8495,7 +9278,8 @@ constexpr Ability Headstrong = {
     .breakable = TRUE,
 };
 
-constexpr Ability Firefighter = {
+template <>
+constexpr Ability Impl<ABILITY_FIREFIGHTER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_BATTLER_OF_TYPE(target, TYPE_FIRE)) RESISTANCE(1.5);
@@ -8507,18 +9291,20 @@ constexpr Ability Firefighter = {
     .breakable = TRUE,
 };
 
-constexpr Ability SepiaLens = {
-    .onImmune = SandGuard.onImmune,
-    .onOffensiveMultiplier = TintedLens.onOffensiveMultiplier,
-    .onDefensiveMultiplier = SandGuard.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_SEPIA_LENS> = {
+    .onImmune = Impl<ABILITY_SAND_GUARD>.onImmune,
+    .onOffensiveMultiplier = Impl<ABILITY_TINTED_LENS>.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_SAND_GUARD>.onDefensiveMultiplier,
     .breakable = TRUE,
     .sandImmune = TRUE,
 };
 
-constexpr Ability SuperSniper = {
+template <>
+constexpr Ability Impl<ABILITY_SUPER_SNIPER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            Sniper.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_SNIPER>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
             if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ability) {
                 MUL(0.5);
             }
@@ -8537,12 +9323,14 @@ ON_EITHER(WoodlandCurse) {
     BattleScriptCall(BattleScript_StackBecameTheTypeFull);
     return TRUE;
 }
-constexpr Ability WoodlandCurse = {
+template <>
+constexpr Ability Impl<ABILITY_WOODLAND_CURSE> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_FORESTS_CURSE, 0); },
     ON_EITHER_ABILITY(WoodlandCurse),
 };
 
-constexpr Ability Malodor = {
+template <>
+constexpr Ability Impl<ABILITY_MALODOR> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -8554,7 +9342,8 @@ constexpr Ability Malodor = {
     },
 };
 
-constexpr Ability Blur = {
+template <>
+constexpr Ability Impl<ABILITY_BLUR> = {
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
         CHECK(IsMoveMakingContact(move, gBattlerAttacker))
         return STAT_SPEED;
@@ -8562,7 +9351,8 @@ constexpr Ability Blur = {
     .onChooseDefensiveStatFor = APPLY_ON_TARGET,
 };
 
-constexpr Ability Elude = {
+template <>
+constexpr Ability Impl<ABILITY_ELUDE> = {
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
         CHECK_NOT(IsMoveMakingContact(move, gBattlerAttacker))
         return STAT_SPEED;
@@ -8570,13 +9360,15 @@ constexpr Ability Elude = {
     .onChooseDefensiveStatFor = APPLY_ON_TARGET,
 };
 
-constexpr Ability DrakeOfRage = {
-    .onBattlerFaints = Rampage.onBattlerFaints,
-    .onOffensiveMultiplier = TintedLens.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_DRAKE_OF_RAGE> = {
+    .onBattlerFaints = Impl<ABILITY_RAMPAGE>.onBattlerFaints,
+    .onOffensiveMultiplier = Impl<ABILITY_TINTED_LENS>.onOffensiveMultiplier,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability MixedMartialArts = {
+template <>
+constexpr Ability Impl<ABILITY_MIXED_MARTIAL_ARTS> = {
     .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
         CHECK(flag == MOVE_FLAG_PUNCH || flag == MOVE_FLAG_KICK)
         CHECK(gBattleMoves[move].type == TYPE_NORMAL)
@@ -8584,8 +9376,9 @@ constexpr Ability MixedMartialArts = {
     },
 };
 
-constexpr Ability StrategicPause = {
-    .onOffensiveMultiplier = Analytic.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_STRATEGIC_PAUSE> = {
+    .onOffensiveMultiplier = Impl<ABILITY_ANALYTIC>.onOffensiveMultiplier,
     .onCrit = +[](ON_CRIT) -> int {
         CHECK(GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber)
         CHECK(gBattleMoves[move].effect != EFFECT_FUTURE_SIGHT)
@@ -8593,30 +9386,36 @@ constexpr Ability StrategicPause = {
     },
 };
 
-constexpr Ability Overrule = {
+template <>
+constexpr Ability Impl<ABILITY_OVERRULE> = {
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
             if (gIsCriticalHit && *mod && *mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
         },
 };
 
-constexpr Ability MentalPollution = {
+template <>
+constexpr Ability Impl<ABILITY_MENTAL_POLLUTION> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability MadnessEnhancement = {
+template <>
+constexpr Ability Impl<ABILITY_MADNESS_ENHANCEMENT> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Tentalock = {
+template <>
+constexpr Ability Impl<ABILITY_TENTALOCK> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability SerpentBind = {
+template <>
+constexpr Ability Impl<ABILITY_SERPENT_BIND> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability SoulTap = {
+template <>
+constexpr Ability Impl<ABILITY_SOUL_TAP> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
         int any = FALSE;
@@ -8634,66 +9433,77 @@ constexpr Ability SoulTap = {
     },
 };
 
-constexpr Ability Scarecrow = {
+template <>
+constexpr Ability Impl<ABILITY_SCARECROW> = {
     .onEntry = UseIntimidateClone,
-    .onCrit = BadLuck.onCrit,
-    .onModifyEffectChance = BadLuck.onModifyEffectChance,
-    .onCritFor = BadLuck.onCritFor,
-    .onModifyEffectChanceFor = BadLuck.onModifyEffectChanceFor,
+    .onCrit = Impl<ABILITY_BAD_LUCK>.onCrit,
+    .onModifyEffectChance = Impl<ABILITY_BAD_LUCK>.onModifyEffectChance,
+    .onCritFor = Impl<ABILITY_BAD_LUCK>.onCritFor,
+    .onModifyEffectChanceFor = Impl<ABILITY_BAD_LUCK>.onModifyEffectChanceFor,
     .breakable = TRUE,
 };
 
-constexpr Ability OminousShroud = {
-    .onEntry = Phantom.onEntry,
-    .onDefensiveMultiplier = ShadowShield.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_OMINOUS_SHROUD> = {
+    .onEntry = Impl<ABILITY_PHANTOM>.onEntry,
+    .onDefensiveMultiplier = Impl<ABILITY_SHADOW_SHIELD>.onDefensiveMultiplier,
     .addsType = TYPE_GHOST,
 };
 
-constexpr Ability ChillingPresence = {
+template <>
+constexpr Ability Impl<ABILITY_CHILLING_PRESENCE> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_ICY_WIND, 10); },
 };
 
-constexpr Ability Frostbind = {
+template <>
+constexpr Ability Impl<ABILITY_FROSTBIND> = {
     .onReactive = +[](ON_REACTIVE) -> int {
-        return PoisonPuppeteerClone(ability, battler, +[](int battler, int target) { return (int)CanGetFrostbite(battler); }, BattleScript_Frostbind);
+        return PoisonPuppeteerClone(ability, battler, +[](opt int battler, int target) { return (int)CanBeDisabled(target); }, BattleScript_Frostbind);
     },
-    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
+    .onBattlerFaints = Impl<ABILITY_POISON_PUPPETEER>.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,
     .setStateOnEffect = MOVE_EFFECT_FROSTBITE,
 };
 
-constexpr Ability TenderAffection = {
+template <>
+constexpr Ability Impl<ABILITY_TENDER_AFFECTION> = {
     ON_EITHER_ABILITY(CuteCharm),
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FAIRY; },
 };
 
-constexpr Ability GlacialGhost = {
-    .onStat = SlushRush.onStat,
-    .onAccuracy = SnowCloak.onAccuracy,
-    .onAccuracyFor = SnowCloak.onAccuracyFor,
+template <>
+constexpr Ability Impl<ABILITY_GLACIAL_GHOST> = {
+    .onStat = Impl<ABILITY_SLUSH_RUSH>.onStat,
+    .onAccuracy = Impl<ABILITY_SNOW_CLOAK>.onAccuracy,
+    .onAccuracyFor = Impl<ABILITY_SNOW_CLOAK>.onAccuracyFor,
     .breakable = TRUE,
     .hailImmune = TRUE,
 };
 
-constexpr Ability WonderScale = {
-    .onEndTurn = ShedSkin.onEndTurn,
+template <>
+constexpr Ability Impl<ABILITY_WONDER_SCALE> = {
+    .onEndTurn = Impl<ABILITY_SHED_SKIN>.onEndTurn,
     .fortKnox = TRUE,
 };
 
-constexpr Ability Overzealous = {
+template <>
+constexpr Ability Impl<ABILITY_OVERZEALOUS> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability StainlessSteel = {
+template <>
+constexpr Ability Impl<ABILITY_STAINLESS_STEEL> = {
     ATE_ABILITY(TYPE_STEEL),
     .fortKnox = TRUE,
 };
 
-constexpr Ability TemporalRupture = {
+template <>
+constexpr Ability Impl<ABILITY_TEMPORAL_RUPTURE> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability GrassFlute = {
+template <>
+constexpr Ability Impl<ABILITY_GRASS_FLUTE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(IsSoundMove(battler, move))
@@ -8703,24 +9513,31 @@ constexpr Ability GrassFlute = {
     },
 };
 
-constexpr Ability Hemotoxin = {
+template <>
+constexpr Ability Impl<ABILITY_HEMOTOXIN> = {
     .onReactive = +[](ON_REACTIVE) -> int {
         return PoisonPuppeteerClone(
             ability,
             battler,
-            [](int battler, int target) -> int { return !(gStatuses3[target] & STATUS3_GASTRO_ACID); },
+            [](opt int battler, int target) -> int {
+                CHECK_NOT(gStatuses3[target] & STATUS3_GASTRO_ACID);
+                gStatuses3[target] |= STATUS3_GASTRO_ACID;
+                return TRUE;
+            },
             BattleScript_StackAbilitySuppressedMessage);
     },
-    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
-    .onBattlerFaintsFor = PoisonPuppeteer.onBattlerFaintsFor,
+    .onBattlerFaints = Impl<ABILITY_POISON_PUPPETEER>.onBattlerFaints,
+    .onBattlerFaintsFor = Impl<ABILITY_POISON_PUPPETEER>.onBattlerFaintsFor,
     .setStateOnEffect = MOVE_EFFECT_POISON,
 };
 
-constexpr Ability Harukaze = {
+template <>
+constexpr Ability Impl<ABILITY_HARUKAZE> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability ToxicSurge = {
+template <>
+constexpr Ability Impl<ABILITY_TOXIC_SURGE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_TOXIC_TERRAIN, &gFieldTimers.terrainTimer))
 
@@ -8731,35 +9548,42 @@ constexpr Ability ToxicSurge = {
     .allowTerrainIfAirborne = TERRAIN_TOXIC,
 };
 
-constexpr Ability PoisonQuills = {
-    .onAttacker = PoisonPoint.onAttacker,
-    .onDefender = +[](ON_DEFENDER) -> int { return RoughSkin.onDefender(DELEGATE_DEFENDER) | PoisonPoint.onDefender(DELEGATE_DEFENDER); },
+template <>
+constexpr Ability Impl<ABILITY_POISON_QUILLS> = {
+    .onAttacker = Impl<ABILITY_POISON_POINT>.onAttacker,
+    .onDefender =
+        +[](ON_DEFENDER) -> int { return Impl<ABILITY_ROUGH_SKIN>.onDefender(DELEGATE_DEFENDER) | Impl<ABILITY_POISON_POINT>.onDefender(DELEGATE_DEFENDER); },
 };
 
-constexpr Ability DraconicMight = {
-    .onEntry = HalfDrake.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_DRACONIC_MIGHT> = {
+    .onEntry = Impl<ABILITY_HALF_DRAKE>.onEntry,
     ATE_ABILITY(TYPE_DRAGON),
     .addsType = TYPE_DRAGON,
 };
 
-constexpr Ability AtlanticRuler = {
-    .onOffensiveMultiplier = AquaticDweller.onOffensiveMultiplier,
-    .onStat = SwiftSwim.onStat,
+template <>
+constexpr Ability Impl<ABILITY_ATLANTIC_RULER> = {
+    .onOffensiveMultiplier = Impl<ABILITY_AQUATIC_DWELLER>.onOffensiveMultiplier,
+    .onStat = Impl<ABILITY_SWIFT_SWIM>.onStat,
     .breakable = TRUE,
 };
 
-constexpr Ability Biofilm = {
+template <>
+constexpr Ability Impl<ABILITY_BIOFILM> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPDEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN)) *stat *= 1.5;
         },
 };
 
-constexpr Ability Chokehold = {
+template <>
+constexpr Ability Impl<ABILITY_CHOKEHOLD> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability GuardianCoat = {
+template <>
+constexpr Ability Impl<ABILITY_GUARDIAN_COAT> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (IS_MOVE_PHYSICAL(move)) MUL(.8);
@@ -8770,11 +9594,13 @@ constexpr Ability GuardianCoat = {
     .hailImmune = TRUE,
 };
 
-constexpr Ability NeutralizingFog = {
+template <>
+constexpr Ability Impl<ABILITY_NEUTRALIZING_FOG> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_DEFOG, 0); },
 };
 
-constexpr Ability Festivities = {
+template <>
+constexpr Ability Impl<ABILITY_FESTIVITIES> = {
     .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
         switch (flag) {
             case MOVE_FLAG_DANCE:
@@ -8787,20 +9613,23 @@ constexpr Ability Festivities = {
     },
 };
 
-constexpr Ability FeyFlight = {
-    .onEntry = FairyTale.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_FEY_FLIGHT> = {
+    .onEntry = Impl<ABILITY_FAIRY_TALE>.onEntry,
     .breakable = TRUE,
     .levitate = TRUE,
     .addsType = TYPE_FAIRY,
 };
 
-constexpr Ability BestOffense = {
-    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
-    .onSwapSplit = MysticBlades.onSwapSplit,
+template <>
+constexpr Ability Impl<ABILITY_BEST_OFFENSE> = {
+    .onOffensiveMultiplier = Impl<ABILITY_KEEN_EDGE>.onOffensiveMultiplier,
+    .onSwapSplit = Impl<ABILITY_MYSTIC_BLADES>.onSwapSplit,
     .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPDEF] += 20; },
 };
 
-constexpr Ability Impaler = {
+template <>
+constexpr Ability Impl<ABILITY_IMPALER> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBleed(target))
@@ -8809,39 +9638,45 @@ constexpr Ability Impaler = {
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     },
-    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
+    .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
 };
 
-constexpr Ability MagusBlades = {
-    .onParentalBond = DualWield.onParentalBond,
-    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
-    .onSwapSplit = MysticBlades.onSwapSplit,
+template <>
+constexpr Ability Impl<ABILITY_MAGUS_BLADES> = {
+    .onParentalBond = Impl<ABILITY_DUAL_WIELD>.onParentalBond,
+    .onOffensiveMultiplier = Impl<ABILITY_KEEN_EDGE>.onOffensiveMultiplier,
+    .onSwapSplit = Impl<ABILITY_MYSTIC_BLADES>.onSwapSplit,
     .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPDEF] += 20; },
 };
 
-constexpr Ability LightningBorn = {
+template <>
+constexpr Ability Impl<ABILITY_LIGHTNING_BORN> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ELECTRIC); },
     .addsType = TYPE_ELECTRIC,
 };
 
-constexpr Ability WorldSerpent = {
-    .onAttacker = GripPincer.onAttacker,
-    .onOffensiveMultiplier = LongReach.onOffensiveMultiplier,
-    .onAccuracy = GripPincer.onAccuracy,
+template <>
+constexpr Ability Impl<ABILITY_WORLD_SERPENT> = {
+    .onAttacker = Impl<ABILITY_GRIP_PINCER>.onAttacker,
+    .onOffensiveMultiplier = Impl<ABILITY_LONG_REACH>.onOffensiveMultiplier,
+    .onAccuracy = Impl<ABILITY_GRIP_PINCER>.onAccuracy,
 };
 
-constexpr Ability LuckyWings = {
-    .onOffensiveMultiplier = GiantWings.onOffensiveMultiplier,
-    .onModifyEffectChance = SereneGrace.onModifyEffectChance,
+template <>
+constexpr Ability Impl<ABILITY_LUCKY_WINGS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_GIANT_WINGS>.onOffensiveMultiplier,
+    .onModifyEffectChance = Impl<ABILITY_SERENE_GRACE>.onModifyEffectChance,
 };
 
-constexpr Ability Komodo = {
-    .onEntry = HalfDrake.onEntry,
-    .onAttacker = ToxicChain.onAttacker,
+template <>
+constexpr Ability Impl<ABILITY_KOMODO> = {
+    .onEntry = Impl<ABILITY_HALF_DRAKE>.onEntry,
+    .onAttacker = Impl<ABILITY_TOXIC_CHAIN>.onAttacker,
     .addsType = TYPE_DRAGON,
 };
 
-constexpr Ability Envenom = {
+template <>
+constexpr Ability Impl<ABILITY_ENVENOM> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
@@ -8851,7 +9686,8 @@ constexpr Ability Envenom = {
     },
 };
 
-constexpr Ability PurpleHaze = {
+template <>
+constexpr Ability Impl<ABILITY_PURPLE_HAZE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
@@ -8859,21 +9695,23 @@ constexpr Ability PurpleHaze = {
     },
 };
 
-constexpr Ability GnashingCannon = {
+template <>
+constexpr Ability Impl<ABILITY_GNASHING_CANNON> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            MegaLauncher.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            MindCrush.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_MEGA_LAUNCHER>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_MIND_CRUSH>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
-    .onChooseOffensiveStat = MindCrush.onChooseOffensiveStat,
+    .onChooseOffensiveStat = Impl<ABILITY_MIND_CRUSH>.onChooseOffensiveStat,
 };
 
-constexpr Ability HyperCleanse = {
+template <>
+constexpr Ability Impl<ABILITY_HYPER_CLEANSE> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_POISON) RESISTANCE(.5);
         },
-    .onStatusImmune = +[](ABILITY_ON_STATUS_IMMUNE) -> int {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_STATUS1)
         return TRUE;
     },
@@ -8881,7 +9719,8 @@ constexpr Ability HyperCleanse = {
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability MoltenCoat = {
+template <>
+constexpr Ability Impl<ABILITY_MOLTEN_COAT> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(moveType == TYPE_ROCK)
@@ -8894,17 +9733,19 @@ constexpr Ability MoltenCoat = {
     ATE_ABILITY(TYPE_ROCK),
 };
 
-constexpr Ability RoyalDecree = {
+template <>
+constexpr Ability Impl<ABILITY_ROYAL_DECREE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
         return UseEntryMove(battler, ability, MOVE_GLARE, 0);
     },
-    .onImmune = QueenlyMajesty.onImmune,
+    .onImmune = Impl<ABILITY_QUEENLY_MAJESTY>.onImmune,
     .onImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
-constexpr Ability Tag = {
+template <>
+constexpr Ability Impl<ABILITY_TAG> = {
     .onPreemptAction = +[](ON_PREEMPT_ACTION) -> int {
         CHECK(gCurrentActionFuncId == B_ACTION_SWITCH)
         gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
@@ -8919,7 +9760,8 @@ constexpr Ability Tag = {
     },
 };
 
-constexpr Ability Surprise = {
+template <>
+constexpr Ability Impl<ABILITY_SURPRISE> = {
     .onPreemptAction = +[](ON_PREEMPT_ACTION) -> int {
         CHECK(gCurrentActionFuncId == B_ACTION_USE_MOVE)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
@@ -8951,52 +9793,59 @@ constexpr Ability Surprise = {
     },
 };
 
-constexpr Ability BreezyNeigh = {
-    .onBattlerFaints = AdrenalineRush.onBattlerFaints,
+template <>
+constexpr Ability Impl<ABILITY_BREEZY_NEIGH> = {
+    .onBattlerFaints = Impl<ABILITY_ADRENALINE_RUSH>.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability Dreamscape = {
-    .onEntry = Comatose.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_DREAMSCAPE> = {
+    .onEntry = Impl<ABILITY_COMATOSE>.onEntry,
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            Dreamcatcher.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_DREAMCATCHER>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
             MUL(1.2);
         },
-    .onStatusImmune = Comatose.onStatusImmune,
-    .onPreemptAction = Dreamcatcher.onPreemptAction,
+    .onStatusImmune = Impl<ABILITY_COMATOSE>.onStatusImmune,
+    .onPreemptAction = Impl<ABILITY_DREAMCATCHER>.onPreemptAction,
     .unsuppressable = TRUE,
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability HasteMakesWaste = {
-    .onOffensiveMultiplier = Analytic.onOffensiveMultiplier,
-    .onDefensiveMultiplier = Stall.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_HASTE_MAKES_WASTE> = {
+    .onOffensiveMultiplier = Impl<ABILITY_ANALYTIC>.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_STALL>.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-constexpr Ability HungryMaws = {
-    .onBattlerFaints = JawsOfCarnage.onBattlerFaints,
-    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_HUNGRY_MAWS> = {
+    .onBattlerFaints = Impl<ABILITY_JAWS_OF_CARNAGE>.onBattlerFaints,
+    .onOffensiveMultiplier = Impl<ABILITY_STRONG_JAW>.onOffensiveMultiplier,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability ThermalSlide = {
+template <>
+constexpr Ability Impl<ABILITY_THERMAL_SLIDE> = {
     .onStat =
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY | WEATHER_HAIL_ANY)) *stat *= 1.5;
         },
 };
 
-constexpr Ability Thermomancy = {
+template <>
+constexpr Ability Impl<ABILITY_THERMOMANCY> = {
     .onModifyEffectChance =
         +[](ON_MODIFY_EFFECT_CHANCE) {
-            Cryomancy.onModifyEffectChance(DELEGATE_MODIFY_EFFECT_CHANCE);
-            Pyromancy.onModifyEffectChance(DELEGATE_MODIFY_EFFECT_CHANCE);
+            Impl<ABILITY_CRYOMANCY>.onModifyEffectChance(DELEGATE_MODIFY_EFFECT_CHANCE);
+            Impl<ABILITY_PYROMANCY>.onModifyEffectChance(DELEGATE_MODIFY_EFFECT_CHANCE);
         },
 };
 
-constexpr Ability Chuckster = {
+template <>
+constexpr Ability Impl<ABILITY_CHUCKSTER> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
         CHECK(DidMoveHit())
@@ -9013,7 +9862,8 @@ constexpr Ability Chuckster = {
     .redCardEffect = TRUE,
 };
 
-constexpr Ability HeatSink = {
+template <>
+constexpr Ability Impl<ABILITY_HEAT_SINK> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_FIRE);
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -9023,16 +9873,19 @@ constexpr Ability HeatSink = {
     .breakable = TRUE,
 };
 
-constexpr Ability RelicStone = {
+template <>
+constexpr Ability Impl<ABILITY_RELIC_STONE> = {
     .breakable = TRUE,
 };
 
-constexpr Ability Supercell = {
-    .onEntry = +[](ON_ENTRY) -> int { return ElectricSurge.onEntry(DELEGATE_ENTRY) | Drizzle.onEntry(DELEGATE_ENTRY); },
+template <>
+constexpr Ability Impl<ABILITY_SUPERCELL> = {
+    .onEntry = +[](ON_ENTRY) -> int { return Impl<ABILITY_ELECTRIC_SURGE>.onEntry(DELEGATE_ENTRY) | Impl<ABILITY_DRIZZLE>.onEntry(DELEGATE_ENTRY); },
     .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
-constexpr Ability LightningAspect = {
+template <>
+constexpr Ability Impl<ABILITY_LIGHTNING_ASPECT> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_ELECTRIC)
         *statId = GetHighestAttackingStatId(battler, TRUE);
@@ -9041,7 +9894,8 @@ constexpr Ability LightningAspect = {
     .breakable = TRUE,
 };
 
-constexpr Ability FireAspect = {
+template <>
+constexpr Ability Impl<ABILITY_FIRE_ASPECT> = {
     .onAbsorb = +[](ON_ABSORB) -> int {
         CHECK(moveType == TYPE_FIRE)
         return ABSORB_RESULT_HEAL;
@@ -9057,17 +9911,20 @@ constexpr Ability FireAspect = {
     .breakable = TRUE,
 };
 
-constexpr Ability BlisteringSun = {
-    .onEntry = +[](ON_ENTRY) -> int { return DesolateLand.onEntry(DELEGATE_ENTRY) | AirBlower.onEntry(DELEGATE_ENTRY); },
+template <>
+constexpr Ability Impl<ABILITY_BLISTERING_SUN> = {
+    .onEntry = +[](ON_ENTRY) -> int { return Impl<ABILITY_DESOLATE_LAND>.onEntry(DELEGATE_ENTRY) | Impl<ABILITY_AIR_BLOWER>.onEntry(DELEGATE_ENTRY); },
 };
 
-constexpr Ability AurorasGale = {
-    .onEntry = NorthWind.onEntry,
-    .onStat = MajesticBird.onStat,
+template <>
+constexpr Ability Impl<ABILITY_AURORAS_GALE> = {
+    .onEntry = Impl<ABILITY_NORTH_WIND>.onEntry,
+    .onStat = Impl<ABILITY_MAJESTIC_BIRD>.onStat,
     .hailImmune = TRUE,
 };
 
-constexpr Ability WinterThrone = {
+template <>
+constexpr Ability Impl<ABILITY_WINTER_THRONE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(CheckAbilityWasAnnounced(battler, ABILITY_WINTER_THRONE)) return SwitchInAnnounce(B_MSG_SWITCHIN_WINTER_THRONE);
     },
@@ -9095,7 +9952,8 @@ constexpr Ability WinterThrone = {
     },
 };
 
-constexpr Ability ChristmasNightmare = {
+template <>
+constexpr Ability Impl<ABILITY_CHRISTMAS_NIGHTMARE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsWeatherActive(WEATHER_HAIL_ANY))
 
@@ -9132,16 +9990,19 @@ constexpr Ability ChristmasNightmare = {
     .hailImmune = TRUE,
 };
 
-constexpr Ability IcePlumes = {
-    .onDefensiveMultiplier = IceScales.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_ICE_PLUMES> = {
+    .onDefensiveMultiplier = Impl<ABILITY_ICE_SCALES>.onDefensiveMultiplier,
     .breakable = TRUE,
 };
 
-constexpr Ability PropellerTail = {
-    .onStat = SwiftSwim.onStat,
+template <>
+constexpr Ability Impl<ABILITY_PROPELLER_TAIL> = {
+    .onStat = Impl<ABILITY_SWIFT_SWIM>.onStat,
 };
 
-constexpr Ability EnergyTap = {
+template <>
+constexpr Ability Impl<ABILITY_ENERGY_TAP> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
@@ -9154,9 +10015,10 @@ constexpr Ability EnergyTap = {
     },
 };
 
-constexpr Ability MoltenCore = {
+template <>
+constexpr Ability Impl<ABILITY_MOLTEN_CORE> = {
     .onEntry = +[](ON_ENTRY) -> int {
-        Furnace.onEntry(DELEGATE_ENTRY);
+        Impl<ABILITY_FURNACE>.onEntry(DELEGATE_ENTRY);
 
         CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
         gSideStatuses[GetBattlerSide(battler)] &= ~SIDE_STATUS_STEALTH_ROCK;
@@ -9172,7 +10034,8 @@ constexpr Ability MoltenCore = {
     .stealthRockImmune = TRUE,
 };
 
-constexpr Ability Reverberate = {
+template <>
+constexpr Ability Impl<ABILITY_REVERBATE> = {
     .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
         CHECK(flag == MOVE_FLAG_SOUND)
         CHECK(gBattleMoves[move].type == TYPE_NORMAL)
@@ -9180,7 +10043,8 @@ constexpr Ability Reverberate = {
     },
 };
 
-constexpr Ability Taekkyeon = {
+template <>
+constexpr Ability Impl<ABILITY_TAEKKYEON> = {
     .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
         CHECK(flag == MOVE_FLAG_DANCE)
         CHECK_NOT(IS_MOVE_STATUS(move))
@@ -9188,7 +10052,8 @@ constexpr Ability Taekkyeon = {
     },
 };
 
-constexpr Ability SludgeSpit = {
+template <>
+constexpr Ability Impl<ABILITY_SLUDGE_SPIT> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(gBattleMoves[move].power)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -9197,7 +10062,8 @@ constexpr Ability SludgeSpit = {
     },
 };
 
-constexpr Ability SwampThing = {
+template <>
+constexpr Ability Impl<ABILITY_SWAMP_THING> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideTimers[GetOppositeSide(battler)].swampTimer)
 
@@ -9207,11 +10073,13 @@ constexpr Ability SwampThing = {
     },
 };
 
-constexpr Ability FrostyPrescence = {
+template <>
+constexpr Ability Impl<ABILITY_FROSTY_PRESCENCE> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_MIST, 0); },
 };
 
-constexpr Ability ChillingPellets = {
+template <>
+constexpr Ability Impl<ABILITY_CHILLING_PELLETS> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -9221,7 +10089,8 @@ constexpr Ability ChillingPellets = {
     },
 };
 
-constexpr Ability PaintShot = {
+template <>
+constexpr Ability Impl<ABILITY_PAINT_SHOT> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK_NOT(IS_BATTLER_OF_TYPE(target, moveType))
@@ -9237,9 +10106,10 @@ constexpr Ability PaintShot = {
     },
 };
 
-constexpr Ability Stonecutter = {
-    .onOffensiveMultiplier = Fossilized.onOffensiveMultiplier,
-    .onDefensiveMultiplier = Fossilized.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_STONECUTTER> = {
+    .onOffensiveMultiplier = Impl<ABILITY_FOSSILIZED>.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_FOSSILIZED>.onDefensiveMultiplier,
     .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
         gHitMarker |= HITMARKER_MOLD_BREAKER;
         SetTypeBeforeUsingMove(move, gActiveBattler);
@@ -9255,8 +10125,9 @@ constexpr Ability Stonecutter = {
     .breakable = TRUE,
 };
 
-constexpr Ability Edgelord = {
-    .onEntry = Cutthroat.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_EDGELORD> = {
+    .onEntry = Impl<ABILITY_CUTTHROAT>.onEntry,
     .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int {
         CHECK_NOT(gStatuses4[battler] & STATUS4_CUTTHROAT)
 
@@ -9268,28 +10139,32 @@ constexpr Ability Edgelord = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
-constexpr Ability Warmonger = {
+template <>
+constexpr Ability Impl<ABILITY_WARMONGER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ROCK || moveType == TYPE_STEEL || moveType == TYPE_FIGHTING) MUL(1.30);
         },
 };
 
-constexpr Ability LocustSwarm = {
-    .onEntry = +[](ON_ENTRY) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
-    .onEndTurn = +[](ON_END_TURN) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+template <>
+constexpr Ability Impl<ABILITY_LOCUST_SWARM> = {
+    .onEntry = +[](ON_ENTRY) -> int { return TryTransformAttacker(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onEndTurn = +[](ON_END_TURN) -> int { return TryTransformAttacker(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Revelation = {
-    .onEntry = +[](ON_ENTRY) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
-    .onEndTurn = +[](ON_END_TURN) -> int { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+template <>
+constexpr Ability Impl<ABILITY_REVELATION> = {
+    .onEntry = +[](ON_ENTRY) -> int { return TryTransformAttacker(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onEndTurn = +[](ON_END_TURN) -> int { return TryTransformAttacker(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability CurseOfFamine = {
+template <>
+constexpr Ability Impl<ABILITY_CURSE_OF_FAMINE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
@@ -9298,11 +10173,13 @@ constexpr Ability CurseOfFamine = {
     },
 };
 
-constexpr Ability CrystallineArmor = {
+template <>
+constexpr Ability Impl<ABILITY_CRYSTALLINE_ARMOR> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability SoulHarvest = {
+template <>
+constexpr Ability Impl<ABILITY_SOUL_HARVEST> = {
     .onStat =
         +[](ON_STAT) {
             if (statId != STAT_SPEED) *stat = *stat * (20 + min(5, gFaintedMonCount[GetBattlerSide(battler)])) / 20;
@@ -9310,7 +10187,8 @@ constexpr Ability SoulHarvest = {
     .breakable = TRUE,
 };
 
-constexpr Ability ThickBlubber = {
+template <>
+constexpr Ability Impl<ABILITY_THICK_BLUBBER> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.25);
@@ -9321,11 +10199,13 @@ constexpr Ability ThickBlubber = {
         },
 };
 
-constexpr Ability Craving = {
+template <>
+constexpr Ability Impl<ABILITY_CRAVING> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability RatKing = {
+template <>
+constexpr Ability Impl<ABILITY_RAT_KING> = {
     .onStat =
         +[](ON_STAT) {
             const BaseStats* baseStats = &gBaseStats[gBattleMons[battler].species];
@@ -9337,11 +10217,15 @@ constexpr Ability RatKing = {
     .onStatFor = APPLY_ON_ALLY,
 };
 
-constexpr Ability CrispyCream = {
-    .onDefender = +[](ON_DEFENDER) -> int { return Random() % 2 ? FlameBody.onDefender(DELEGATE_DEFENDER) : FreezingPoint.onDefender(DELEGATE_DEFENDER); },
+template <>
+constexpr Ability Impl<ABILITY_CRISPY_CREAM> = {
+    .onDefender = +[](ON_DEFENDER) -> int {
+        return Random() % 2 ? Impl<ABILITY_FLAME_BODY>.onDefender(DELEGATE_DEFENDER) : Impl<ABILITY_FREEZING_POINT>.onDefender(DELEGATE_DEFENDER);
+    },
 };
 
-constexpr Ability DeepFried = {
+template <>
+constexpr Ability Impl<ABILITY_DEEP_FRIED> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideTimers[GetOppositeSide(battler)].fireSeaTimer)
 
@@ -9351,12 +10235,14 @@ constexpr Ability DeepFried = {
     },
 };
 
-constexpr Ability FoodLovers = {
-    .onEntry = Hospitality.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_FOOD_LOVERS> = {
+    .onEntry = Impl<ABILITY_HOSPITALITY>.onEntry,
     .breakable = TRUE,
 };
 
-constexpr Ability LunarWrath = {
+template <>
+constexpr Ability Impl<ABILITY_LUNAR_WRATH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(moveType == TYPE_GHOST)
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
@@ -9365,7 +10251,8 @@ constexpr Ability LunarWrath = {
     },
 };
 
-constexpr Ability Spyware = {
+template <>
+constexpr Ability Impl<ABILITY_SPYWARE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         gBattlerTarget = BATTLE_OPPOSITE(battler);
         if (!IsBattlerAlive(battler)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
@@ -9399,7 +10286,8 @@ constexpr Ability Spyware = {
     },
 };
 
-constexpr Ability Virus = {.onAttacker = +[](ON_ATTACKER) -> int {
+template <>
+constexpr Ability Impl<ABILITY_VIRUS> = {.onAttacker = +[](ON_ATTACKER) -> int {
     CHECK(ShouldApplyOnHitAffect(target))
     CHECK(moveType == TYPE_ELECTRIC)
     CHECK(CanBePoisoned(battler, target, move))
@@ -9407,7 +10295,8 @@ constexpr Ability Virus = {.onAttacker = +[](ON_ATTACKER) -> int {
     return AbilityStatusEffect(MOVE_EFFECT_POISON);
 }};
 
-constexpr Ability PowerLeak = {
+template <>
+constexpr Ability Impl<ABILITY_POWER_LEAK> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
@@ -9419,7 +10308,8 @@ constexpr Ability PowerLeak = {
     .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
-constexpr Ability BackupPower = {
+template <>
+constexpr Ability Impl<ABILITY_BACKUP_POWER> = {
     .onRevive = +[](ON_REVIVE) -> int {
         CHECK(IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN))
         return B_MSG_BACKUP_POWER;
@@ -9427,39 +10317,46 @@ constexpr Ability BackupPower = {
     .persistent = TRUE,
 };
 
-constexpr Ability SandFiend = {
-    .onImmune = SandGuard.onImmune,
-    .onDefensiveMultiplier = SandGuard.onDefensiveMultiplier,
-    .onStat = SandForce.onStat,
+template <>
+constexpr Ability Impl<ABILITY_SAND_FIEND> = {
+    .onImmune = Impl<ABILITY_SAND_GUARD>.onImmune,
+    .onDefensiveMultiplier = Impl<ABILITY_SAND_GUARD>.onDefensiveMultiplier,
+    .onStat = Impl<ABILITY_SAND_FORCE>.onStat,
     .breakable = TRUE,
     .sandImmune = TRUE,
 };
 
-constexpr Ability Moustache = {
-    .onDefender = +[](ON_DEFENDER) -> int { return TanglingHair.onDefender(DELEGATE_DEFENDER) | Stamina.onDefender(DELEGATE_DEFENDER); },
+template <>
+constexpr Ability Impl<ABILITY_MOUSTACHE> = {
+    .onDefender =
+        +[](ON_DEFENDER) -> int { return Impl<ABILITY_TANGLING_HAIR>.onDefender(DELEGATE_DEFENDER) | Impl<ABILITY_STAMINA>.onDefender(DELEGATE_DEFENDER); },
 };
 
-constexpr Ability DepthExplorer = {
-    .onOffensiveMultiplier = FieldExplorer.onOffensiveMultiplier,
-    .onAccuracy = Illuminate.onAccuracy,
+template <>
+constexpr Ability Impl<ABILITY_DEPTH_EXPLORER> = {
+    .onOffensiveMultiplier = Impl<ABILITY_FIELD_EXPLORER>.onOffensiveMultiplier,
+    .onAccuracy = Impl<ABILITY_ILLUMINATE>.onAccuracy,
 };
 
-constexpr Ability DuneVeil = {
-    .onImmune = SandGuard.onImmune,
-    .onEndTurn = SelfSufficient.onEndTurn,
-    .onDefensiveMultiplier = SandGuard.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_DUNE_VEIL> = {
+    .onImmune = Impl<ABILITY_SAND_GUARD>.onImmune,
+    .onEndTurn = Impl<ABILITY_SELF_SUFFICIENT>.onEndTurn,
+    .onDefensiveMultiplier = Impl<ABILITY_SAND_GUARD>.onDefensiveMultiplier,
     .breakable = TRUE,
     .sandImmune = TRUE,
 };
 
-constexpr Ability StrongFoundation = {
+template <>
+constexpr Ability Impl<ABILITY_STRONG_FOUNDATION> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_WATER || moveType == TYPE_GROUND) RESISTANCE(.50);
         },
 };
 
-constexpr Ability FogMachine = {
+template <>
+constexpr Ability Impl<ABILITY_FOG_MACHINE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_FOG_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
             BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
@@ -9474,7 +10371,8 @@ constexpr Ability FogMachine = {
     },
 };
 
-constexpr Ability DropBlocks = {
+template <>
+constexpr Ability Impl<ABILITY_DROP_BLOCKS> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(gSideTimers[BATTLE_OPPOSITE(battler)].spikesAmount < 3)
@@ -9484,7 +10382,8 @@ constexpr Ability DropBlocks = {
     },
 };
 
-constexpr Ability LaserDrill = {
+template <>
+constexpr Ability Impl<ABILITY_LASER_DRILL> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(CanBeBurned(target))
@@ -9495,7 +10394,8 @@ constexpr Ability LaserDrill = {
     },
 };
 
-constexpr Ability LightSaber = {
+template <>
+constexpr Ability Impl<ABILITY_LIGHT_SABER> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIRE); },
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
@@ -9517,7 +10417,8 @@ constexpr Ability LightSaber = {
     .addsType = TYPE_FIRE,
 };
 
-constexpr Ability LooseThorns = {
+template <>
+constexpr Ability Impl<ABILITY_LOOSE_THORNS> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(IsMoveMakingContact(move, attacker))
@@ -9528,45 +10429,55 @@ constexpr Ability LooseThorns = {
     },
 };
 
-constexpr Ability TurfWar = {
+template <>
+constexpr Ability Impl<ABILITY_TURF_WAR> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Greedy = {
+template <>
+constexpr Ability Impl<ABILITY_GREEDY> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability MusicalNotes = {
+template <>
+constexpr Ability Impl<ABILITY_MUSICAL_NOTES> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Strikeout = {
+template <>
+constexpr Ability Impl<ABILITY_STRIKEOUT> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability HomeRun = {
+template <>
+constexpr Ability Impl<ABILITY_HOME_RUN> = {
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability Bruiser = {
+template <>
+constexpr Ability Impl<ABILITY_BRUISER> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIGHTING); },
     .addsType = TYPE_FIGHTING,
 };
 
-constexpr Ability LetsDance = {
+template <>
+constexpr Ability Impl<ABILITY_LETS_DANCE> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TEETER_DANCE, 0); },
 };
 
-constexpr Ability MyceliumMight = {
+template <>
+constexpr Ability Impl<ABILITY_MYCELIUM_MIGHT> = {
     .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int { return IS_MOVE_STATUS(move); },
 };
 
-constexpr Ability IAmSteve = {
+template <>
+constexpr Ability Impl<ABILITY_I_AM_STEVE> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_NO_RETREAT, 0); },
     .randomizerBanned = TRUE,
 };
 
-constexpr Ability DeadlyPrecision = {
+template <>
+constexpr Ability Impl<ABILITY_DEADLY_PRECISION> = {
     .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
         gHitMarker |= HITMARKER_MOLD_BREAKER;
         SetTypeBeforeUsingMove(move, gActiveBattler);
@@ -9579,23 +10490,27 @@ constexpr Ability DeadlyPrecision = {
     },
 };
 
-constexpr Ability RockyExterior = {
+template <>
+constexpr Ability Impl<ABILITY_ROCKY_EXTERIOR> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ROCK); },
     .addsType = TYPE_ROCK,
 };
 
-constexpr Ability Dragonfruit = {
-    .onEntry = HalfDrake.onEntry,
-    .onDefender = RoughSkin.onDefender,
+template <>
+constexpr Ability Impl<ABILITY_DRAGONFRUIT> = {
+    .onEntry = Impl<ABILITY_HALF_DRAKE>.onEntry,
+    .onDefender = Impl<ABILITY_ROUGH_SKIN>.onDefender,
     .addsType = TYPE_DRAGON,
 };
 
-constexpr Ability LeadClaws = {
-    .onOffensiveMultiplier = BigPecks.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_LEAD_CLAWS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_BIG_PECKS>.onOffensiveMultiplier,
     ATE_ABILITY(TYPE_ROCK),
 };
 
-constexpr Ability Chainsaw = {
+template <>
+constexpr Ability Impl<ABILITY_CHAINSAW> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
@@ -9609,17 +10524,19 @@ constexpr Ability Chainsaw = {
     },
 };
 
-constexpr Ability GaleforceWings = {
+template <>
+constexpr Ability Impl<ABILITY_GALEFORCE_WINGS> = {
     .onPriority = +[](ON_PRIORITY) -> int {
         CHECK(GetTypeBeforeUsingMove(move, battler) == TYPE_FLYING)
         return 1;
     },
 };
 
-constexpr Ability Empress = {
-    .onImmune = QueenlyMajesty.onImmune,
-    .onOffensiveMultiplier = Rivalry.onOffensiveMultiplier,
-    .onDefensiveMultiplier = Rivalry.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_EMPRESS> = {
+    .onImmune = Impl<ABILITY_QUEENLY_MAJESTY>.onImmune,
+    .onOffensiveMultiplier = Impl<ABILITY_RIVALRY>.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_RIVALRY>.onDefensiveMultiplier,
     .onImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
@@ -9633,24 +10550,28 @@ ON_EITHER(HypnoticTouch) {
     AbilityStatusEffectSafe(MOVE_EFFECT_SLEEP, battler, opponent);
     return TRUE;
 }
-constexpr Ability HypnoticTouch = {
+template <>
+constexpr Ability Impl<ABILITY_HYPNOTIC_TOUCH> = {
     ON_EITHER_ABILITY(HypnoticTouch),
 };
 
-constexpr Ability Sundae = {
-    .onEntry = SnowWarning.onEntry,
-    .onEndTurn = IceBody.onEndTurn,
+template <>
+constexpr Ability Impl<ABILITY_SUNDAE> = {
+    .onEntry = Impl<ABILITY_SNOW_WARNING>.onEntry,
+    .onEndTurn = Impl<ABILITY_ICE_BODY>.onEndTurn,
     .hailImmune = TRUE,
 };
 
-constexpr Ability Hydra = {
-    .onBattlerFaints = BeastBoost.onBattlerFaints,
-    .onParentalBond = MultiHeaded.onParentalBond,
+template <>
+constexpr Ability Impl<ABILITY_HYDRA> = {
+    .onBattlerFaints = Impl<ABILITY_BEAST_BOOST>.onBattlerFaints,
+    .onParentalBond = Impl<ABILITY_MULTI_HEADED>.onParentalBond,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .resistsFortKnox = TRUE,
 };
 
-constexpr Ability WingsOfPestilence = {
+template <>
+constexpr Ability Impl<ABILITY_WINGS_OF_PESTILENCE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
 
@@ -9670,24 +10591,25 @@ constexpr Ability WingsOfPestilence = {
     },
 };
 
-constexpr Ability ZenGarden = {
+template <>
+constexpr Ability Impl<ABILITY_ZEN_GARDEN> = {
     .onEntry = +[](ON_ENTRY) -> int {
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SEEDS) {
             switch (GetBattlerHoldEffectParam(battler)) {
                 case HOLD_EFFECT_PARAM_GRASSY_TERRAIN:
-                    return GrassySurge.onEntry(DELEGATE_ENTRY);
+                    return Impl<ABILITY_GRASSY_SURGE>.onEntry(DELEGATE_ENTRY);
 
                 case HOLD_EFFECT_PARAM_PSYCHIC_TERRAIN:
-                    return PsychicSurge.onEntry(DELEGATE_ENTRY);
+                    return Impl<ABILITY_PSYCHIC_SURGE>.onEntry(DELEGATE_ENTRY);
             }
         }
 
         switch (Random() % 2) {
             case 0:
-                return GrassySurge.onEntry(DELEGATE_ENTRY);
+                return Impl<ABILITY_GRASSY_SURGE>.onEntry(DELEGATE_ENTRY);
 
             case 1:
-                return PsychicSurge.onEntry(DELEGATE_ENTRY);
+                return Impl<ABILITY_PSYCHIC_SURGE>.onEntry(DELEGATE_ENTRY);
 
             default:
                 return FALSE;
@@ -9696,7 +10618,8 @@ constexpr Ability ZenGarden = {
     .allowTerrainIfAirborne = TERRAIN_GRASSY | TERRAIN_PSYCHIC,
 };
 
-constexpr Ability SharpTalons = {
+template <>
+constexpr Ability Impl<ABILITY_SHARP_TALONS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KICK))
@@ -9707,13 +10630,15 @@ constexpr Ability SharpTalons = {
     },
 };
 
-constexpr Ability MassivePelt = {
-    .onDefender = TanglingHair.onDefender,
-    .onDefensiveMultiplier = Fluffy.onDefensiveMultiplier,
-    .breakable = Fluffy.breakable,
+template <>
+constexpr Ability Impl<ABILITY_MASSIVE_PELT> = {
+    .onDefender = Impl<ABILITY_TANGLING_HAIR>.onDefender,
+    .onDefensiveMultiplier = Impl<ABILITY_FLUFFY>.onDefensiveMultiplier,
+    .breakable = TRUE,
 };
 
-constexpr Ability Echolocation = {
+template <>
+constexpr Ability Impl<ABILITY_ECHOLOCATION> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) MUL(1.2);
@@ -9724,7 +10649,8 @@ constexpr Ability Echolocation = {
     },
 };
 
-constexpr Ability DeadBark = {
+template <>
+constexpr Ability Impl<ABILITY_BARK_SKIN> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GHOST); },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
@@ -9737,7 +10663,8 @@ constexpr Ability DeadBark = {
     .addsType = TYPE_GHOST,
 };
 
-constexpr Ability SapTrap = {
+template <>
+constexpr Ability Impl<ABILITY_SAP_TRAP> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         int any = FALSE;
 
@@ -9757,29 +10684,33 @@ constexpr Ability SapTrap = {
 
         return any;
     },
-    .onTrap = +[](ABILITY_ON_TRAP) -> int { return gBattleMons[switchingBattler].statStages[STAT_SPEED] <= 3; },
+    .onTrap = +[](ON_TRAP) -> int { return gBattleMons[switchingBattler].statStages[STAT_SPEED] <= 3; },
 };
 
-constexpr Ability DeviousPresent = {
+template <>
+constexpr Ability Impl<ABILITY_DEVIOUS_PRESENT> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ICE || gBattleMoves[move].throwingBased) MUL(1.5);
         },
 };
 
-constexpr Ability CosmicWings = {
+template <>
+constexpr Ability Impl<ABILITY_COSMIC_WINGS> = {
     .onMoveType = +[](ON_MOVE_TYPE) -> int {
         CHECK(moveType == TYPE_FLYING)
         return TYPE_FAIRY + 1;
     },
 };
 
-constexpr Ability Mach3 = {
-    .onChooseOffensiveStat = Slipstream.onChooseOffensiveStat,
-    .onMoldBreaker = DeadlyPrecision.onMoldBreaker,
+template <>
+constexpr Ability Impl<ABILITY_MACH_3> = {
+    .onChooseOffensiveStat = Impl<ABILITY_SLIPSTREAM>.onChooseOffensiveStat,
+    .onMoldBreaker = Impl<ABILITY_DEADLY_PRECISION>.onMoldBreaker,
 };
 
-constexpr Ability FoggyEye = {
+template <>
+constexpr Ability Impl<ABILITY_FOGGY_EYE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GHOST && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) MUL(1.5);
@@ -9793,27 +10724,31 @@ constexpr Ability FoggyEye = {
     .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
 };
 
-constexpr Ability Chandelier = {
-    .onAccuracy = Illuminate.onAccuracy,
-    .onModifyEffectChance = Pyromancy.onModifyEffectChance,
+template <>
+constexpr Ability Impl<ABILITY_CHANDELIER> = {
+    .onAccuracy = Impl<ABILITY_ILLUMINATE>.onAccuracy,
+    .onModifyEffectChance = Impl<ABILITY_PYROMANCY>.onModifyEffectChance,
 };
 
-constexpr Ability AngelicWings = {
-    .onOffensiveMultiplier = HugeWings.onOffensiveMultiplier,
-    .onDefensiveMultiplier = PrismScales.onDefensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_ANGELIC_WINGS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_HUGE_WINGS>.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_PRISM_SCALES>.onDefensiveMultiplier,
     .breakable = TRUE,
     .levitate = TRUE,
 };
 
-constexpr Ability WitchBroom = {
-    .onEntry = Hover.onEntry,
-    .onParentalBond = HyperAggressive.onParentalBond,
+template <>
+constexpr Ability Impl<ABILITY_WITCH_BROOM> = {
+    .onEntry = Impl<ABILITY_HOVER>.onEntry,
+    .onParentalBond = Impl<ABILITY_HYPER_AGGRESSIVE>.onParentalBond,
     .breakable = TRUE,
     .levitate = TRUE,
     .addsType = TYPE_PSYCHIC,
 };
 
-constexpr Ability RainShroud = {
+template <>
+constexpr Ability Impl<ABILITY_RAIN_SHROUD> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(IsBattlerWeatherAffected(target, WEATHER_RAIN_ANY));
         *accuracy /= 1.25;
@@ -9823,13 +10758,15 @@ constexpr Ability RainShroud = {
     .breakable = TRUE,
 };
 
-constexpr Ability ChestnutShield = {
-    .onImmune = Bulletproof.onImmune,
+template <>
+constexpr Ability Impl<ABILITY_CHESTNUT_SHIELD> = {
+    .onImmune = Impl<ABILITY_BULLETPROOF>.onImmune,
     .breakable = TRUE,
     .magicGuard = TRUE,
 };
 
-constexpr Ability BrainMass = {
+template <>
+constexpr Ability Impl<ABILITY_BRAIN_MASS> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (BATTLER_MAX_HP(battler)) MUL(.5);
@@ -9837,56 +10774,64 @@ constexpr Ability BrainMass = {
     .breakable = TRUE,
 };
 
-constexpr Ability Tummyache = {
-    .onDefensiveMultiplier = ThickFat.onDefensiveMultiplier,
-    .onTypeEffectiveness = Corrosion.onTypeEffectiveness,
-    .onCanStatusType = Corrosion.onCanStatusType,
+template <>
+constexpr Ability Impl<ABILITY_TUMMYACHE> = {
+    .onDefensiveMultiplier = Impl<ABILITY_THICK_FAT>.onDefensiveMultiplier,
+    .onTypeEffectiveness = Impl<ABILITY_CORROSION>.onTypeEffectiveness,
+    .onCanStatusType = Impl<ABILITY_CORROSION>.onCanStatusType,
     .breakable = TRUE,
 };
 
-constexpr Ability SumoGuard = {
-    .onDefensiveMultiplier = ThickFat.onDefensiveMultiplier,
-    .onChooseOffensiveStat = Juggernaut.onChooseOffensiveStat,
-    .onStatusImmune = Juggernaut.onStatusImmune,
+template <>
+constexpr Ability Impl<ABILITY_SUMO_GUARD> = {
+    .onDefensiveMultiplier = Impl<ABILITY_THICK_FAT>.onDefensiveMultiplier,
+    .onChooseOffensiveStat = Impl<ABILITY_JUGGERNAUT>.onChooseOffensiveStat,
+    .onStatusImmune = Impl<ABILITY_JUGGERNAUT>.onStatusImmune,
     .breakable = TRUE,
     .removesStatusOnImmunity = TRUE,
 };
 
-constexpr Ability IcePick = {
-    .onOffensiveMultiplier = ToughClaws.onOffensiveMultiplier,
-    .onStat = SlushRush.onStat,
+template <>
+constexpr Ability Impl<ABILITY_ICE_PICK> = {
+    .onOffensiveMultiplier = Impl<ABILITY_TOUGH_CLAWS>.onOffensiveMultiplier,
+    .onStat = Impl<ABILITY_SLUSH_RUSH>.onStat,
     .hailImmune = TRUE,
 };
 
-constexpr Ability HammerFist = {
+template <>
+constexpr Ability Impl<ABILITY_HAMMER_FIST> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_PUNCH) || gBattleMoves[move].hammerBased) MUL(1.25);
         },
 };
 
-constexpr Ability ToxicShell = {
-    .onAttacker = PoisonPoint.onAttacker,
-    .onDefender = PoisonPoint.onDefender,
-    .onDefensiveMultiplier = ShellArmor.onDefensiveMultiplier,
-    .onCrit = ShellArmor.onCrit,
-    .onCritFor = ShellArmor.onCritFor,
+template <>
+constexpr Ability Impl<ABILITY_TOXIC_SHELL> = {
+    .onAttacker = Impl<ABILITY_POISON_POINT>.onAttacker,
+    .onDefender = Impl<ABILITY_POISON_POINT>.onDefender,
+    .onDefensiveMultiplier = Impl<ABILITY_SHELL_ARMOR>.onDefensiveMultiplier,
+    .onCrit = Impl<ABILITY_SHELL_ARMOR>.onCrit,
+    .onCritFor = Impl<ABILITY_SHELL_ARMOR>.onCritFor,
     .breakable = TRUE,
 };
 
-constexpr Ability HandBarnacles = {
-    .onParentalBond = MultiHeaded.onParentalBond,
+template <>
+constexpr Ability Impl<ABILITY_HAND_BARNACLES> = {
+    .onParentalBond = Impl<ABILITY_MULTI_HEADED>.onParentalBond,
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
     .resistsFortKnox = TRUE,
 };
 
-constexpr Ability Lepidopteran = {
-    .onOffensiveMultiplier = Swarm.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_LEPIDOPTERAN> = {
+    .onOffensiveMultiplier = Impl<ABILITY_SWARM>.onOffensiveMultiplier,
     .breakable = TRUE,
     .unaware = TRUE,
 };
 
-constexpr Ability BreakItDown = {
+template <>
+constexpr Ability Impl<ABILITY_BREAK_IT_DOWN> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_DANCE))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
@@ -9895,8 +10840,9 @@ constexpr Ability BreakItDown = {
     },
 };
 
-constexpr Ability BackstreetBoy = {
-    .onOffensiveMultiplier = Striker.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_BACKSTREET_BOY> = {
+    .onOffensiveMultiplier = Impl<ABILITY_STRIKER>.onOffensiveMultiplier,
     .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
         switch (flag) {
             case MOVE_FLAG_KICK:
@@ -9913,7 +10859,8 @@ constexpr Ability BackstreetBoy = {
     },
 };
 
-constexpr Ability Backflip = {
+template <>
+constexpr Ability Impl<ABILITY_BACKFLIP> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_DANCE))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
@@ -9922,7 +10869,8 @@ constexpr Ability Backflip = {
     },
 };
 
-constexpr Ability CrushingJaw = {
+template <>
+constexpr Ability Impl<ABILITY_CRUSHING_JAW> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitAffect(target))
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
@@ -9931,41 +10879,45 @@ constexpr Ability CrushingJaw = {
 
         return AbilityStatusEffect(MOVE_EFFECT_DEF_MINUS_1);
     },
-    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
+    .onOffensiveMultiplier = Impl<ABILITY_STRONG_JAW>.onOffensiveMultiplier,
 };
 
-constexpr Ability Cryostasis = {
+template <>
+constexpr Ability Impl<ABILITY_CRYOSTASIS> = {
     .onReactive = +[](ON_REACTIVE) -> int {
         return PoisonPuppeteerClone(
             ability,
             battler,
-            +[](int battler, int target) -> int {
+            +[](opt int battler, int target) -> int {
                 gBattleMons[target].status2 |= STATUS2_FLINCHED;
                 return FALSE;
             },
             nullptr);
     },
-    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
-    .onModifyEffectChance = Cryomancy.onModifyEffectChance,
-    .onBattlerFaintsFor = PoisonPuppeteer.onBattlerFaintsFor,
+    .onBattlerFaints = Impl<ABILITY_POISON_PUPPETEER>.onBattlerFaints,
+    .onModifyEffectChance = Impl<ABILITY_CRYOMANCY>.onModifyEffectChance,
+    .onBattlerFaintsFor = Impl<ABILITY_POISON_PUPPETEER>.onBattlerFaintsFor,
     .setStateOnEffect = MOVE_EFFECT_FROSTBITE,
 };
 
-constexpr Ability MucusMembrane = {
-    .onDefender = Gooey.onDefender,
+template <>
+constexpr Ability Impl<ABILITY_MUCUS_MEMBRANE> = {
+    .onDefender = Impl<ABILITY_GOOEY>.onDefender,
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.7); },
     .breakable = TRUE,
 };
 
-constexpr Ability Voltron = {
-    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
-    .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
-    .onCrit = BattleArmor.onCrit,
-    .onCritFor = BattleArmor.onCritFor,
+template <>
+constexpr Ability Impl<ABILITY_VOLTRON> = {
+    .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_BATTLE_ARMOR>.onDefensiveMultiplier,
+    .onCrit = Impl<ABILITY_BATTLE_ARMOR>.onCrit,
+    .onCritFor = Impl<ABILITY_BATTLE_ARMOR>.onCritFor,
     .breakable = TRUE,
 };
 
-constexpr Ability BrainOverload = {
+template <>
+constexpr Ability Impl<ABILITY_BRAIN_OVERLOAD> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
@@ -9977,7 +10929,8 @@ constexpr Ability BrainOverload = {
     .allowTerrainIfAirborne = TERRAIN_PSYCHIC,
 };
 
-constexpr Ability EternalFlower = {
+template <>
+constexpr Ability Impl<ABILITY_ETERNAL_FLOWER> = {
     .onStat =
         +[](ON_STAT) {
             if (BattlerHasAbility(battler, ABILITY_ETERNAL_FLOWER, FALSE)) return;
@@ -9990,44 +10943,51 @@ constexpr Ability EternalFlower = {
     .onStatFor = APPLY_ON_OTHER,
 };
 
-constexpr Ability Curlipede = {
-    .onEntry = +[](ON_ENTRY) -> int { return LetsRoll.onEntry(DELEGATE_ENTRY) | CoilUp.onEntry(DELEGATE_ENTRY); },
+template <>
+constexpr Ability Impl<ABILITY_CURLIPEDE> = {
+    .onEntry = +[](ON_ENTRY) -> int { return Impl<ABILITY_LETS_ROLL>.onEntry(DELEGATE_ENTRY) | Impl<ABILITY_COIL_UP>.onEntry(DELEGATE_ENTRY); },
 };
 
-constexpr Ability FlawlessPrecision = {
-    .onAccuracy = FatalPrecision.onAccuracy,
-    .onCrit = FatalPrecision.onCrit,
-    .onMoldBreaker = DeadlyPrecision.onMoldBreaker,
+template <>
+constexpr Ability Impl<ABILITY_FLAWLESS_PRECISION> = {
+    .onAccuracy = Impl<ABILITY_FATAL_PRECISION>.onAccuracy,
+    .onCrit = Impl<ABILITY_FATAL_PRECISION>.onCrit,
+    .onMoldBreaker = Impl<ABILITY_DEADLY_PRECISION>.onMoldBreaker,
 };
 
-constexpr Ability MashedPotato = {
+template <>
+constexpr Ability Impl<ABILITY_MASHED_POTATO> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SYRUP_BOMB, 0); },
 };
 
-constexpr Ability NihilBlaster = {
-    .onEntry = AuraBreak.onEntry,
-    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_NIHIL_BLASTER> = {
+    .onEntry = Impl<ABILITY_AURA_BREAK>.onEntry,
+    .onOffensiveMultiplier = Impl<ABILITY_MEGA_LAUNCHER>.onOffensiveMultiplier,
     .breakable = TRUE,
     .megaLauncherBoost = TRUE,
     .auraBreak = TRUE,
 };
 
-constexpr Ability GiantShuriken = {
+template <>
+constexpr Ability Impl<ABILITY_GIANT_SHURIKEN> = {
     .onCrit = +[](ON_CRIT) -> int {
         CHECK(move == MOVE_WATER_SHURIKEN);
         return 1;
     },
 };
 
-constexpr Ability ChestnutAxe = {
-    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
+template <>
+constexpr Ability Impl<ABILITY_CHESTNUT_AXE> = {
+    .onOffensiveMultiplier = Impl<ABILITY_KEEN_EDGE>.onOffensiveMultiplier,
     .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
         CHECK(flag == MOVE_FLAG_KEEN_EDGE)
         return moveType == TYPE_GRASS;
     },
 };
 
-constexpr Ability WrestleShowman = {.onAttacker = +[](ON_ATTACKER) -> int {
+template <>
+constexpr Ability Impl<ABILITY_WRESTLE_SHOWMAN> = {.onAttacker = +[](ON_ATTACKER) -> int {
     CHECK(move == MOVE_FLYING_PRESS)
     CHECK(ShouldApplyOnHitAffect(target))
     CHECK(IsBattlerAlive(target))
@@ -10037,7 +10997,8 @@ constexpr Ability WrestleShowman = {.onAttacker = +[](ON_ATTACKER) -> int {
     return TRUE;
 }};
 
-constexpr Ability Overcast = {
+template <>
+constexpr Ability Impl<ABILITY_OVERCAST> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int any = FALSE;
         if (!(gSideStatuses[battler] & SIDE_STATUS_MIST)) {
@@ -10045,1094 +11006,38 @@ constexpr Ability Overcast = {
             BattleScriptPushCursorAndCallback(BattleScript_AttackerSetsMist);
             any = TRUE;
         }
-        return any | LowVisibility.onEntry(DELEGATE_ENTRY);
+        return any | Impl<ABILITY_LOW_VISIBILITY>.onEntry(DELEGATE_ENTRY);
     },
 };
 
-constexpr Ability Steadfast = {
+template <>
+constexpr Ability Impl<ABILITY_STEADFAST> = {
     .steadfast = TRUE,
 };
 
-constexpr Ability Superheavy = {
+template <>
+constexpr Ability Impl<ABILITY_SUPERHEAVY> = {
     .suctionCups = TRUE,
     .steadfast = TRUE,
 };
 
-constexpr Ability Waterborne = {
-    .onEntry = Aquatic.onEntry,
+template <>
+constexpr Ability Impl<ABILITY_WATERBORNE> = {
+    .onEntry = Impl<ABILITY_AQUATIC>.onEntry,
     .adaptability = TRUE,
-    .addsType = Aquatic.addsType,
+    .addsType = Impl<ABILITY_AQUATIC>.addsType,
 };
-
-typedef struct AbilityKVPair {
-    u16 key;
-    Ability ability;
-} AbilityKVPair;
-
-constexpr AbilityKVPair sAbilities[] = {
-    {ABILITY_NONE, None},
-    {ABILITY_OVERCAST, Overcast},
-    {ABILITY_STENCH, Stench},
-    {ABILITY_DRIZZLE, Drizzle},
-    {ABILITY_SPEED_BOOST, SpeedBoost},
-    {ABILITY_BATTLE_ARMOR, BattleArmor},
-    {ABILITY_STURDY, Sturdy},
-    {ABILITY_DAMP, Damp},
-    {ABILITY_LIMBER, Limber},
-    {ABILITY_SAND_VEIL, SandVeil},
-    {ABILITY_STATIC, Static},
-    {ABILITY_VOLT_ABSORB, VoltAbsorb},
-    {ABILITY_WATER_ABSORB, WaterAbsorb},
-    {ABILITY_OBLIVIOUS, Oblivious},
-    {ABILITY_CLOUD_NINE, CloudNine},
-    {ABILITY_COMPOUND_EYES, CompoundEyes},
-    {ABILITY_INSOMNIA, Insomnia},
-    {ABILITY_COLOR_CHANGE, ColorChange},
-    {ABILITY_IMMUNITY, Immunity},
-    {ABILITY_FLASH_FIRE, FlashFire},
-    {ABILITY_SHIELD_DUST, ShieldDust},
-    {ABILITY_OWN_TEMPO, OwnTempo},
-    {ABILITY_SUCTION_CUPS, SuctionCups},
-    {ABILITY_INTIMIDATE, Intimidate},
-    {ABILITY_SHADOW_TAG, ShadowTag},
-    {ABILITY_ROUGH_SKIN, RoughSkin},
-    {ABILITY_WONDER_GUARD, WonderGuard},
-    {ABILITY_LEVITATE, Levitate},
-    {ABILITY_EFFECT_SPORE, EffectSpore},
-    {ABILITY_CLEAR_BODY, ClearBody},
-    {ABILITY_NATURAL_CURE, NaturalCure},
-    {ABILITY_LIGHTNING_ROD, LightningRod},
-    {ABILITY_SERENE_GRACE, SereneGrace},
-    {ABILITY_SWIFT_SWIM, SwiftSwim},
-    {ABILITY_CHLOROPHYLL, Chlorophyll},
-    {ABILITY_ILLUMINATE, Illuminate},
-    {ABILITY_TRACE, Trace},
-    {ABILITY_HUGE_POWER, HugePower},
-    {ABILITY_POISON_POINT, PoisonPoint},
-    {ABILITY_INNER_FOCUS, InnerFocus},
-    {ABILITY_MAGMA_ARMOR, MagmaArmor},
-    {ABILITY_WATER_VEIL, WaterVeil},
-    {ABILITY_MAGNET_PULL, MagnetPull},
-    {ABILITY_SOUNDPROOF, Soundproof},
-    {ABILITY_RAIN_DISH, RainDish},
-    {ABILITY_SAND_STREAM, SandStream},
-    {ABILITY_PRESSURE, Pressure},
-    {ABILITY_THICK_FAT, ThickFat},
-    {ABILITY_FLAME_BODY, FlameBody},
-    {ABILITY_KEEN_EYE, KeenEye},
-    {ABILITY_HYPER_CUTTER, HyperCutter},
-    {ABILITY_PICKUP, Pickup},
-    {ABILITY_TRUANT, Truant},
-    {ABILITY_HUSTLE, Hustle},
-    {ABILITY_CUTE_CHARM, CuteCharm},
-    {ABILITY_PLUS, Plus},
-    {ABILITY_MINUS, Minus},
-    {ABILITY_FORECAST, Forecast},
-    {ABILITY_STICKY_HOLD, StickyHold},
-    {ABILITY_SHED_SKIN, ShedSkin},
-    {ABILITY_GUTS, Guts},
-    {ABILITY_MARVEL_SCALE, MarvelScale},
-    {ABILITY_OVERGROW, Overgrow},
-    {ABILITY_BLAZE, Blaze},
-    {ABILITY_TORRENT, Torrent},
-    {ABILITY_SWARM, Swarm},
-    {ABILITY_ROCK_HEAD, RockHead},
-    {ABILITY_DROUGHT, Drought},
-    {ABILITY_ARENA_TRAP, ArenaTrap},
-    {ABILITY_VITAL_SPIRIT, VitalSpirit},
-    {ABILITY_WHITE_SMOKE, WhiteSmoke},
-    {ABILITY_PURE_POWER, PurePower},
-    {ABILITY_SHELL_ARMOR, ShellArmor},
-    {ABILITY_AIR_LOCK, AirLock},
-    {ABILITY_TANGLED_FEET, TangledFeet},
-    {ABILITY_MOTOR_DRIVE, MotorDrive},
-    {ABILITY_RIVALRY, Rivalry},
-    {ABILITY_SNOW_CLOAK, SnowCloak},
-    {ABILITY_ANGER_POINT, AngerPoint},
-    {ABILITY_UNBURDEN, Unburden},
-    {ABILITY_HEATPROOF, Heatproof},
-    {ABILITY_DRY_SKIN, DrySkin},
-    {ABILITY_DOWNLOAD, Download},
-    {ABILITY_IRON_FIST, IronFist},
-    {ABILITY_ADAPTABILITY, Adaptability},
-    {ABILITY_SKILL_LINK, SkillLink},
-    {ABILITY_HYDRATION, Hydration},
-    {ABILITY_SOLAR_POWER, SolarPower},
-    {ABILITY_QUICK_FEET, QuickFeet},
-    {ABILITY_NORMALIZE, Normalize},
-    {ABILITY_SNIPER, Sniper},
-    {ABILITY_MAGIC_GUARD, MagicGuard},
-    {ABILITY_NO_GUARD, NoGuard},
-    {ABILITY_STALL, Stall},
-    {ABILITY_TECHNICIAN, Technician},
-    {ABILITY_LEAF_GUARD, LeafGuard},
-    {ABILITY_MOLD_BREAKER, MoldBreaker},
-    {ABILITY_SUPER_LUCK, SuperLuck},
-    {ABILITY_AFTERMATH, Aftermath},
-    {ABILITY_ANTICIPATION, Anticipation},
-    {ABILITY_FOREWARN, Forewarn},
-    {ABILITY_UNAWARE, Unaware},
-    {ABILITY_TINTED_LENS, TintedLens},
-    {ABILITY_FILTER, Filter},
-    {ABILITY_SLOW_START, SlowStart},
-    {ABILITY_SCRAPPY, Scrappy},
-    {ABILITY_STORM_DRAIN, StormDrain},
-    {ABILITY_ICE_BODY, IceBody},
-    {ABILITY_SOLID_ROCK, SolidRock},
-    {ABILITY_SNOW_WARNING, SnowWarning},
-    {ABILITY_HONEY_GATHER, HoneyGather},
-    {ABILITY_FRISK, Frisk},
-    {ABILITY_RECKLESS, Reckless},
-    {ABILITY_MULTITYPE, Multitype},
-    {ABILITY_FLOWER_GIFT, FlowerGift},
-    {ABILITY_BAD_DREAMS, BadDreams},
-    {ABILITY_SHEER_FORCE, SheerForce},
-    {ABILITY_CONTRARY, Contrary},
-    {ABILITY_UNNERVE, Unnerve},
-    {ABILITY_DEFEATIST, Defeatist},
-    {ABILITY_CURSED_BODY, CursedBody},
-    {ABILITY_HEALER, Healer},
-    {ABILITY_FRIEND_GUARD, FriendGuard},
-    {ABILITY_WEAK_ARMOR, WeakArmor},
-    {ABILITY_LIGHT_METAL, LightMetal},
-    {ABILITY_MULTISCALE, Multiscale},
-    {ABILITY_TOXIC_BOOST, ToxicBoost},
-    {ABILITY_FLARE_BOOST, FlareBoost},
-    {ABILITY_HARVEST, Harvest},
-    {ABILITY_TELEPATHY, Telepathy},
-    {ABILITY_MOODY, Moody},
-    {ABILITY_OVERCOAT, Overcoat},
-    {ABILITY_POISON_TOUCH, PoisonTouch},
-    {ABILITY_REGENERATOR, Regenerator},
-    {ABILITY_BIG_PECKS, BigPecks},
-    {ABILITY_SAND_RUSH, SandRush},
-    {ABILITY_WONDER_SKIN, WonderSkin},
-    {ABILITY_ANALYTIC, Analytic},
-    {ABILITY_ILLUSION, Illusion},
-    {ABILITY_IMPOSTER, Imposter},
-    {ABILITY_INFILTRATOR, Infiltrator},
-    {ABILITY_MUMMY, Mummy},
-    {ABILITY_MOXIE, Moxie},
-    {ABILITY_JUSTIFIED, Justified},
-    {ABILITY_RATTLED, Rattled},
-    {ABILITY_MAGIC_BOUNCE, MagicBounce},
-    {ABILITY_SAP_SIPPER, SapSipper},
-    {ABILITY_PRANKSTER, Prankster},
-    {ABILITY_SAND_FORCE, SandForce},
-    {ABILITY_IRON_BARBS, IronBarbs},
-    {ABILITY_ZEN_MODE, ZenMode},
-    {ABILITY_VICTORY_STAR, VictoryStar},
-    {ABILITY_TURBOBLAZE, Turboblaze},
-    {ABILITY_TERAVOLT, Teravolt},
-    {ABILITY_AROMA_VEIL, AromaVeil},
-    {ABILITY_FLOWER_VEIL, FlowerVeil},
-    {ABILITY_CHEEK_POUCH, CheekPouch},
-    {ABILITY_PROTEAN, Protean},
-    {ABILITY_FUR_COAT, FurCoat},
-    {ABILITY_BULLETPROOF, Bulletproof},
-    {ABILITY_STRONG_JAW, StrongJaw},
-    {ABILITY_REFRIGERATE, Refrigerate},
-    {ABILITY_ECHOLOCATION, Echolocation},
-    {ABILITY_SWEET_VEIL, SweetVeil},
-    {ABILITY_STANCE_CHANGE, StanceChange},
-    {ABILITY_GALE_WINGS, GaleWings},
-    {ABILITY_MEGA_LAUNCHER, MegaLauncher},
-    {ABILITY_GRASS_PELT, GrassPelt},
-    {ABILITY_TOUGH_CLAWS, ToughClaws},
-    {ABILITY_PIXILATE, Pixilate},
-    {ABILITY_GOOEY, Gooey},
-    {ABILITY_AERILATE, Aerilate},
-    {ABILITY_PARENTAL_BOND, ParentalBond},
-    {ABILITY_DARK_AURA, DarkAura},
-    {ABILITY_FAIRY_AURA, FairyAura},
-    {ABILITY_AURA_BREAK, AuraBreak},
-    {ABILITY_PRIMORDIAL_SEA, PrimordialSea},
-    {ABILITY_DESOLATE_LAND, DesolateLand},
-    {ABILITY_DELTA_STREAM, DeltaStream},
-    {ABILITY_STAMINA, Stamina},
-    {ABILITY_WIMP_OUT, WimpOut},
-    {ABILITY_EMERGENCY_EXIT, EmergencyExit},
-    {ABILITY_WATER_COMPACTION, WaterCompaction},
-    {ABILITY_MERCILESS, Merciless},
-    {ABILITY_SHIELDS_DOWN, ShieldsDown},
-    {ABILITY_STAKEOUT, Stakeout},
-    {ABILITY_WATER_BUBBLE, WaterBubble},
-    {ABILITY_STEELWORKER, Steelworker},
-    {ABILITY_BERSERK, Berserk},
-    {ABILITY_SLUSH_RUSH, SlushRush},
-    {ABILITY_LONG_REACH, LongReach},
-    {ABILITY_LIQUID_VOICE, LiquidVoice},
-    {ABILITY_TRIAGE, Triage},
-    {ABILITY_GALVANIZE, Galvanize},
-    {ABILITY_SURGE_SURFER, SurgeSurfer},
-    {ABILITY_SCHOOLING, Schooling},
-    {ABILITY_DISGUISE, Disguise},
-    {ABILITY_BATTLE_BOND, BattleBond},
-    {ABILITY_POWER_CONSTRUCT, PowerConstruct},
-    {ABILITY_CORROSION, Corrosion},
-    {ABILITY_COMATOSE, Comatose},
-    {ABILITY_QUEENLY_MAJESTY, QueenlyMajesty},
-    {ABILITY_INNARDS_OUT, InnardsOut},
-    {ABILITY_DANCER, Dancer},
-    {ABILITY_BATTERY, Battery},
-    {ABILITY_FLUFFY, Fluffy},
-    {ABILITY_DAZZLING, Dazzling},
-    {ABILITY_SOUL_HEART, SoulHeart},
-    {ABILITY_TANGLING_HAIR, TanglingHair},
-    {ABILITY_RECEIVER, Receiver},
-    {ABILITY_POWER_OF_ALCHEMY, PowerOfAlchemy},
-    {ABILITY_BEAST_BOOST, BeastBoost},
-    {ABILITY_RKS_SYSTEM, RksSystem},
-    {ABILITY_BARK_SKIN, DeadBark},
-    {ABILITY_ELECTRIC_SURGE, ElectricSurge},
-    {ABILITY_PSYCHIC_SURGE, PsychicSurge},
-    {ABILITY_MISTY_SURGE, MistySurge},
-    {ABILITY_GRASSY_SURGE, GrassySurge},
-    {ABILITY_SHADOW_SHIELD, ShadowShield},
-    {ABILITY_PRISM_ARMOR, PrismArmor},
-    {ABILITY_NEUROFORCE, Neuroforce},
-    {ABILITY_INTREPID_SWORD, IntrepidSword},
-    {ABILITY_DAUNTLESS_SHIELD, DauntlessShield},
-    {ABILITY_LIBERO, Libero},
-    {ABILITY_COTTON_DOWN, CottonDown},
-    {ABILITY_PROPELLER_TAIL, PropellerTail},
-    {ABILITY_MIRROR_ARMOR, MirrorArmor},
-    {ABILITY_GULP_MISSILE, GulpMissile},
-    {ABILITY_STEAM_ENGINE, SteamEngine},
-    {ABILITY_PUNK_ROCK, PunkRock},
-    {ABILITY_SAND_SPIT, SandSpit},
-    {ABILITY_ICE_SCALES, IceScales},
-    {ABILITY_ICE_FACE, IceFace},
-    {ABILITY_POWER_SPOT, PowerSpot},
-    {ABILITY_MIMICRY, Mimicry},
-    {ABILITY_SCREEN_CLEANER, ScreenCleaner},
-    {ABILITY_STEELY_SPIRIT, SteelySpirit},
-    {ABILITY_PERISH_BODY, PerishBody},
-    {ABILITY_WANDERING_SPIRIT, WanderingSpirit},
-    {ABILITY_GORILLA_TACTICS, GorillaTactics},
-    {ABILITY_NEUTRALIZING_GAS, NeutralizingGas},
-    {ABILITY_PASTEL_VEIL, PastelVeil},
-    {ABILITY_HUNGER_SWITCH, HungerSwitch},
-    {ABILITY_CURIOUS_MEDICINE, CuriousMedicine},
-    {ABILITY_TRANSISTOR, Transistor},
-    {ABILITY_DRAGONS_MAW, DragonsMaw},
-    {ABILITY_CHILLING_NEIGH, ChillingNeigh},
-    {ABILITY_GRIM_NEIGH, GrimNeigh},
-    {ABILITY_AS_ONE_ICE_RIDER, AsOneIceRider},
-    {ABILITY_AS_ONE_SHADOW_RIDER, AsOneShadowRider},
-    {ABILITY_CHLOROPLAST, Chloroplast},
-    {ABILITY_WHITEOUT, Whiteout},
-    {ABILITY_PYROMANCY, Pyromancy},
-    {ABILITY_KEEN_EDGE, KeenEdge},
-    {ABILITY_PRISM_SCALES, PrismScales},
-    {ABILITY_POWER_FISTS, PowerFists},
-    {ABILITY_SAND_SONG, SandSong},
-    {ABILITY_RAMPAGE, Rampage},
-    {ABILITY_VENGEANCE, Vengeance},
-    {ABILITY_BLITZ_BOXER, BlitzBoxer},
-    {ABILITY_ANTARCTIC_BIRD, AntarcticBird},
-    {ABILITY_IMMOLATE, Immolate},
-    {ABILITY_CRYSTALLIZE, Crystallize},
-    {ABILITY_ELECTROCYTES, Electrocytes},
-    {ABILITY_AERODYNAMICS, Aerodynamics},
-    {ABILITY_CHRISTMAS_SPIRIT, ChristmasSpirit},
-    {ABILITY_EXPLOIT_WEAKNESS, ExploitWeakness},
-    {ABILITY_GROUND_SHOCK, GroundShock},
-    {ABILITY_ANCIENT_IDOL, AncientIdol},
-    {ABILITY_MYSTIC_POWER, MysticPower},
-    {ABILITY_PERFECTIONIST, Perfectionist},
-    {ABILITY_GROWING_TOOTH, GrowingTooth},
-    {ABILITY_INFLATABLE, Inflatable},
-    {ABILITY_AURORA_BOREALIS, AuroraBorealis},
-    {ABILITY_AVENGER, Avenger},
-    {ABILITY_LETS_ROLL, LetsRoll},
-    {ABILITY_LOUD_BANG, LoudBang},
-    {ABILITY_LEAD_COAT, LeadCoat},
-    {ABILITY_AMPHIBIOUS, Amphibious},
-    {ABILITY_GROUNDED, Grounded},
-    {ABILITY_EARTHBOUND, Earthbound},
-    {ABILITY_FIGHT_SPIRIT, FightingSpirit},
-    {ABILITY_FELINE_PROWESS, FelineProwess},
-    {ABILITY_COIL_UP, CoilUp},
-    {ABILITY_FOSSILIZED, Fossilized},
-    {ABILITY_MAGICAL_DUST, MagicalDust},
-    {ABILITY_DREAMCATCHER, Dreamcatcher},
-    {ABILITY_NOCTURNAL, Nocturnal},
-    {ABILITY_SELF_SUFFICIENT, SelfSufficient},
-    {ABILITY_TECTONIZE, Tectonize},
-    {ABILITY_ICE_AGE, IceAge},
-    {ABILITY_HALF_DRAKE, HalfDrake},
-    {ABILITY_LIQUIFIED, Liquified},
-    {ABILITY_DRAGONFLY, Dragonfly},
-    {ABILITY_DRAGONSLAYER, Dragonslayer},
-    {ABILITY_MOUNTAINEER, Mountaineer},
-    {ABILITY_HYDRATE, Hydrate},
-    {ABILITY_METALLIC, Metallic},
-    {ABILITY_PERMAFROST, Permafrost},
-    {ABILITY_PRIMAL_ARMOR, PrimalArmor},
-    {ABILITY_RAGING_BOXER, RagingBoxer},
-    {ABILITY_AIR_BLOWER, AirBlower},
-    {ABILITY_JUGGERNAUT, Juggernaut},
-    {ABILITY_SHORT_CIRCUIT, ShortCircuit},
-    {ABILITY_MAJESTIC_BIRD, MajesticBird},
-    {ABILITY_PHANTOM, Phantom},
-    {ABILITY_INTOXICATE, Intoxicate},
-    {ABILITY_IMPENETRABLE, Impenetrable},
-    {ABILITY_HYPNOTIST, Hypnotist},
-    {ABILITY_OVERWHELM, Overwhelm},
-    {ABILITY_SCARE, Scare},
-    {ABILITY_MAJESTIC_MOTH, MajesticMoth},
-    {ABILITY_SOUL_EATER, SoulEater},
-    {ABILITY_SOUL_LINKER, SoulLinker},
-    {ABILITY_SWEET_DREAMS, SweetDreams},
-    {ABILITY_BAD_LUCK, BadLuck},
-    {ABILITY_HAUNTED_SPIRIT, HauntedSpirit},
-    {ABILITY_ELECTRIC_BURST, ElectricBurst},
-    {ABILITY_RAW_WOOD, RawWood},
-    {ABILITY_SOLENOGLYPHS, Solenoglyphs},
-    {ABILITY_SPIDER_LAIR, SpiderLair},
-    {ABILITY_FATAL_PRECISION, FatalPrecision},
-    {ABILITY_FORT_KNOX, FortKnox},
-    {ABILITY_SEAWEED, Seaweed},
-    {ABILITY_PSYCHIC_MIND, PsychicMind},
-    {ABILITY_POISON_ABSORB, PoisonAbsorb},
-    {ABILITY_SCAVENGER, Scavenger},
-    {ABILITY_TWISTED_DIMENSION, TwistedDimension},
-    {ABILITY_MULTI_HEADED, MultiHeaded},
-    {ABILITY_NORTH_WIND, NorthWind},
-    {ABILITY_OVERCHARGE, Overcharge},
-    {ABILITY_VIOLENT_RUSH, ViolentRush},
-    {ABILITY_FLAMING_SOUL, FlamingSoul},
-    {ABILITY_SAGE_POWER, SagePower},
-    {ABILITY_BONE_ZONE, BoneZone},
-    {ABILITY_WEATHER_CONTROL, WeatherControl},
-    {ABILITY_SPEED_FORCE, SpeedForce},
-    {ABILITY_SEA_GUARDIAN, SeaGuardian},
-    {ABILITY_MOLTEN_DOWN, MoltenDown},
-    {ABILITY_HYPER_AGGRESSIVE, HyperAggressive},
-    {ABILITY_FLOCK, Flock},
-    {ABILITY_FIELD_EXPLORER, FieldExplorer},
-    {ABILITY_STRIKER, Striker},
-    {ABILITY_FROZEN_SOUL, FrozenSoul},
-    {ABILITY_PREDATOR, Predator},
-    {ABILITY_LOOTER, Looter},
-    {ABILITY_LUNAR_ECLIPSE, LunarEclipse},
-    {ABILITY_SOLAR_FLARE, SolarFlare},
-    {ABILITY_POWER_CORE, PowerCore},
-    {ABILITY_SIGHTING_SYSTEM, SightingSystem},
-    {ABILITY_BAD_COMPANY, BadCompany},
-    {ABILITY_OPPORTUNIST, Opportunist},
-    {ABILITY_GIANT_WINGS, GiantWings},
-    {ABILITY_MOMENTUM, Momentum},
-    {ABILITY_GRIP_PINCER, GripPincer},
-    {ABILITY_BIG_LEAVES, BigLeaves},
-    {ABILITY_PRECISE_FIST, PreciseFist},
-    {ABILITY_DEADEYE, Deadeye},
-    {ABILITY_ARTILLERY, Artillery},
-    {ABILITY_AMPLIFIER, Amplifier},
-    {ABILITY_ICE_DEW, IceDew},
-    {ABILITY_SUN_WORSHIP, SunWorship},
-    {ABILITY_POLLINATE, Pollinate},
-    {ABILITY_VOLCANO_RAGE, VolcanoRage},
-    {ABILITY_COLD_REBOUND, ColdRebound},
-    {ABILITY_LOW_BLOW, LowBlow},
-    {ABILITY_SPECTRAL_SHROUD, SpectralShroud},
-    {ABILITY_DISCIPLINE, Discipline},
-    {ABILITY_THUNDERCALL, Thundercall},
-    {ABILITY_MARINE_APEX, MarineApex},
-    {ABILITY_MIGHTY_HORN, MightyHorn},
-    {ABILITY_HARDENED_SHEATH, HardenedSheath},
-    {ABILITY_ARCTIC_FUR, ArcticFur},
-    {ABILITY_SPECTRALIZE, Spectralize},
-    {ABILITY_LETHARGY, Lethargy},
-    {ABILITY_IRON_BARRAGE, IronBarrage},
-    {ABILITY_STEEL_BARREL, SteelBarrel},
-    {ABILITY_PYRO_SHELLS, PyroShells},
-    {ABILITY_FUNGAL_INFECTION, FungalInfection},
-    {ABILITY_PARRY, Parry},
-    {ABILITY_SCRAPYARD, Scrapyard},
-    {ABILITY_LOOSE_QUILLS, LooseQuills},
-    {ABILITY_TOXIC_DEBRIS, ToxicDebris},
-    {ABILITY_ROUNDHOUSE, Roundhouse},
-    {ABILITY_MINERALIZE, Mineralize},
-    {ABILITY_LOOSE_ROCKS, LooseRocks},
-    {ABILITY_SPINNING_TOP, SpinningTop},
-    {ABILITY_RETRIBUTION_BLOW, RetributionBlow},
-    {ABILITY_FEARMONGER, Fearmonger},
-    {ABILITY_TOXIC_SPILL, ToxicSpill},
-    {ABILITY_DESERT_CLOAK, DesertCloak},
-    {ABILITY_DRACONIZE, Draconize},
-    {ABILITY_PRETTY_PRINCESS, PrettyPrincess},
-    {ABILITY_SELF_REPAIR, SelfRepair},
-    {ABILITY_ATOMIC_BURST, AtomicBurst},
-    {ABILITY_HELLBLAZE, Hellblaze},
-    {ABILITY_RIPTIDE, Riptide},
-    {ABILITY_FOREST_RAGE, ForestRage},
-    {ABILITY_PRIMAL_MAW, PrimalMaw},
-    {ABILITY_SWEEPING_EDGE, SweepingEdge},
-    {ABILITY_GIFTED_MIND, GiftedMind},
-    {ABILITY_HYDRO_CIRCUIT, HydroCircuit},
-    {ABILITY_EQUINOX, Equinox},
-    {ABILITY_ABSORBANT, Absorbant},
-    {ABILITY_CLUELESS, Clueless},
-    {ABILITY_CHEATING_DEATH, CheatingDeath},
-    {ABILITY_CHEAP_TACTICS, CheapTactics},
-    {ABILITY_COWARD, Coward},
-    {ABILITY_VOLT_RUSH, VoltRush},
-    {ABILITY_DUNE_TERROR, DuneTerror},
-    {ABILITY_INFERNAL_RAGE, InfernalRage},
-    {ABILITY_DUAL_WIELD, DualWield},
-    {ABILITY_ELEMENTAL_CHARGE, ElementalCharge},
-    {ABILITY_AMBUSH, Ambush},
-    {ABILITY_ATLAS, Atlas},
-    {ABILITY_RADIANCE, Radiance},
-    {ABILITY_JAWS_OF_CARNAGE, JawsOfCarnage},
-    {ABILITY_ANGELS_WRATH, AngelsWrath},
-    {ABILITY_PRISMATIC_FUR, PrismaticFur},
-    {ABILITY_SHOCKING_JAWS, ShockingJaws},
-    {ABILITY_FAE_HUNTER, FaeHunter},
-    {ABILITY_GRAVITY_WELL, GravityWell},
-    {ABILITY_EVAPORATE, Evaporate},
-    {ABILITY_LUMBERJACK, Lumberjack},
-    {ABILITY_WELL_BAKED_BODY, WellBakedBody},
-    {ABILITY_FURNACE, Furnace},
-    {ABILITY_ELECTROMORPHOSIS, Electromorphosis},
-    {ABILITY_ROCKY_PAYLOAD, RockyPayload},
-    {ABILITY_EARTH_EATER, EarthEater},
-    {ABILITY_LINGERING_AROMA, LingeringAroma},
-    {ABILITY_FAIRY_TALE, FairyTale},
-    {ABILITY_RAGING_MOTH, RagingMoth},
-    {ABILITY_ADRENALINE_RUSH, AdrenalineRush},
-    {ABILITY_ARCHMAGE, Archmage},
-    {ABILITY_CRYOMANCY, Cryomancy},
-    {ABILITY_PHANTOM_PAIN, PhantomPain},
-    {ABILITY_PURGATORY, Purgatory},
-    {ABILITY_EMANATE, Emanate},
-    {ABILITY_KUNOICHI_BLADE, KunoichiBlade},
-    {ABILITY_MONKEY_BUSINESS, MonkeyBusiness},
-    {ABILITY_COMBAT_SPECIALIST, CombatSpecialist},
-    {ABILITY_JUNGLES_GUARD, JunglesGuard},
-    {ABILITY_HUNTERS_HORN, HuntersHorn},
-    {ABILITY_PIXIE_POWER, PixiePower},
-    {ABILITY_PLASMA_LAMP, PlasmaLamp},
-    {ABILITY_MAGMA_EATER, MagmaEater},
-    {ABILITY_SUPER_HOT_GOO, SuperHotGoo},
-    {ABILITY_NIKA, Nika},
-    {ABILITY_ARCHER, Archer},
-    {ABILITY_SUPER_SLAMMER, SuperSlammer},
-    {ABILITY_INVERSE_ROOM, InverseRoom},
-    {ABILITY_FROST_BURN, FrostBurn},
-    {ABILITY_ITCHY_DEFENSE, ItchyDefense},
-    {ABILITY_GENERATOR, Generator},
-    {ABILITY_MOON_SPIRIT, MoonSpirit},
-    {ABILITY_DUST_CLOUD, DustCloud},
-    {ABILITY_BERSERKER_RAGE, BerserkerRage},
-    {ABILITY_TRICKSTER, Trickster},
-    {ABILITY_SAND_GUARD, SandGuard},
-    {ABILITY_NATURAL_RECOVERY, NaturalRecovery},
-    {ABILITY_WIND_RIDER, WindRider},
-    {ABILITY_SOOTHING_AROMA, SoothingAroma},
-    {ABILITY_PRIM_AND_PROPER, PrimAndProper},
-    {ABILITY_SUPER_STRAIN, SuperStrain},
-    {ABILITY_TIPPING_POINT, TippingPoint},
-    {ABILITY_ENLIGHTENED, Enlightened},
-    {ABILITY_PEACEFUL_SLUMBER, PeacefulSlumber},
-    {ABILITY_AFTERSHOCK, Aftershock},
-    {ABILITY_FREEZING_POINT, FreezingPoint},
-    {ABILITY_CRYO_PROFICIENCY, CryoProficiency},
-    {ABILITY_ARCANE_FORCE, ArcaneForce},
-    {ABILITY_DOOMBRINGER, Doombringer},
-    {ABILITY_WISHMAKER, Wishmaker},
-    {ABILITY_YUKI_ONNA, YukiOnna},
-    {ABILITY_SUPPRESS, Suppress},
-    {ABILITY_REFRIGERATOR, Refrigerator},
-    {ABILITY_HEAVEN_ASUNDER, HeavenAsunder},
-    {ABILITY_PURIFYING_WATERS, PurifyingWaters},
-    {ABILITY_SEABORNE, Seaborne},
-    {ABILITY_HIGH_TIDE, HighTide},
-    {ABILITY_CHANGE_OF_HEART, ChangeOfHeart},
-    {ABILITY_MYSTIC_BLADES, MysticBlades},
-    {ABILITY_DETERMINATION, Determination},
-    {ABILITY_FERTILIZE, Fertilize},
-    {ABILITY_PURE_LOVE, PureLove},
-    {ABILITY_FIGHTER, Fighter},
-    {ABILITY_TELEKINETIC, Telekinetic},
-    {ABILITY_COMBUSTION, Combustion},
-    {ABILITY_PONY_POWER, PonyPower},
-    {ABILITY_POWDER_BURST, PowderBurst},
-    {ABILITY_RETRIEVER, Retriever},
-    {ABILITY_MONSTER_MASH, MonsterMash},
-    {ABILITY_TWO_STEP, TwoStep},
-    {ABILITY_SPITEFUL, Spiteful},
-    {ABILITY_FORTITUDE, Fortitude},
-    {ABILITY_DEVOURER, Devourer},
-    {ABILITY_PHANTOM_THIEF, PhantomThief},
-    {ABILITY_EARLY_GRAVE, EarlyGrave},
-    {ABILITY_BASS_BOOSTED, BassBoosted},
-    {ABILITY_FLAMING_JAWS, FlamingJaws},
-    {ABILITY_MONSTER_HUNTER, MonsterHunter},
-    {ABILITY_CROWNED_SWORD, CrownedSword},
-    {ABILITY_CROWNED_SHIELD, CrownedShield},
-    {ABILITY_BERSERK_DNA, BerserkDna},
-    {ABILITY_CROWNED_KING, CrownedKing},
-    {ABILITY_SNAP_TRAP_WHEN_HIT, SnapTrapWhenHit},
-    {ABILITY_PERMANENCE, Permanence},
-    {ABILITY_HUBRIS, Hubris},
-    {ABILITY_COSMIC_DAZE, CosmicDaze},
-    {ABILITY_MINDS_EYE, MindsEye},
-    {ABILITY_BLOOD_PRICE, BloodPrice},
-    {ABILITY_SPIKE_ARMOR, SpikeArmor},
-    {ABILITY_VOODOO_POWER, VoodooPower},
-    {ABILITY_CHROME_COAT, ChromeCoat},
-    {ABILITY_BANSHEE, Banshee},
-    {ABILITY_WEB_SPINNER, WebSpinner},
-    {ABILITY_SHOWDOWN_MODE, ShowdownMode},
-    {ABILITY_SEED_SOWER, SeedSower},
-    {ABILITY_AIRBORNE, Airborne},
-    {ABILITY_PARROTING, Parroting},
-    {ABILITY_SALT_CIRCLE, SaltCircle},
-    {ABILITY_PURIFYING_SALT, PurifyingSalt},
-    {ABILITY_PROTOSYNTHESIS, Protosynthesis},
-    {ABILITY_QUARK_DRIVE, QuarkDrive},
-    {ABILITY_WIND_POWER, WindPower},
-    {ABILITY_IMPULSE, Impulse},
-    {ABILITY_TERMINAL_VELOCITY, TerminalVelocity},
-    {ABILITY_ANGER_SHELL, AngerShell},
-    {ABILITY_EGOIST, Egoist},
-    {ABILITY_READIED_ACTION, ReadiedAction},
-    {ABILITY_DARK_GALE_WINGS, DarkGaleWings},
-    {ABILITY_GUILT_TRIP, GuiltTrip},
-    {ABILITY_WATER_GALE_WINGS, WaterGaleWings},
-    {ABILITY_ZERO_TO_HERO, ZeroToHero},
-    {ABILITY_COSTAR, Costar},
-    {ABILITY_COMMANDER, Commander},
-    {ABILITY_EJECT_PACK_ABILITY, EjectPackAbility},
-    {ABILITY_VENGEFUL_SPIRIT, VengefulSpirit},
-    {ABILITY_CUD_CHEW, CudChew},
-    {ABILITY_ARMOR_TAIL, ArmorTail},
-    {ABILITY_MIND_CRUSH, MindCrush},
-    {ABILITY_SUPREME_OVERLORD, SupremeOverlord},
-    {ABILITY_ILL_WILL, IllWill},
-    {ABILITY_FIRE_SCALES, FireScales},
-    {ABILITY_WATCH_YOUR_STEP, WatchYourStep},
-    {ABILITY_RAPID_RESPONSE, RapidResponse},
-    {ABILITY_DOUBLE_IRON_BARBS, DoubleIronBarbs},
-    {ABILITY_THERMAL_EXCHANGE, ThermalExchange},
-    {ABILITY_GOOD_AS_GOLD, GoodAsGold},
-    {ABILITY_SHARING_IS_CARING, SharingIsCaring},
-    {ABILITY_TABLETS_OF_RUIN, TabletsOfRuin},
-    {ABILITY_SWORD_OF_RUIN, SwordOfRuin},
-    {ABILITY_VESSEL_OF_RUIN, VesselOfRuin},
-    {ABILITY_BEADS_OF_RUIN, BeadsOfRuin},
-    {ABILITY_PERMAFROST_CLONE, PermafrostClone},
-    {ABILITY_GALLANTRY, Gallantry},
-    {ABILITY_ORICHALCUM_PULSE, OrichalcumPulse},
-    {ABILITY_SUN_BASKING, SunBasking},
-    {ABILITY_WINGED_KING, WingedKing},
-    {ABILITY_HADRON_ENGINE, HadronEngine},
-    {ABILITY_IRON_SERPENT, IronSerpent},
-    {ABILITY_SWEEPING_EDGE_PLUS, SweepingEdgePlus},
-    {ABILITY_CELESTIAL_BLESSING, CelestialBlessing},
-    {ABILITY_MINION_CONTROL, MinionControl},
-    {ABILITY_MOLTEN_BLADES, MoltenBlades},
-    {ABILITY_HAUNTING_FRENZY, HauntingFrenzy},
-    {ABILITY_NOISE_CANCEL, NoiseCancel},
-    {ABILITY_RADIO_JAM, RadioJam},
-    {ABILITY_OLE, Ole},
-    {ABILITY_MALICIOUS, Malicious},
-    {ABILITY_DEAD_POWER, DeadPower},
-    {ABILITY_BRAWLING_WYVERN, BrawlingWyvern},
-    {ABILITY_MYTHICAL_ARROWS, MythicalArrows},
-    {ABILITY_LAWNMOWER, Lawnmower},
-    {ABILITY_FLOURISH, Flourish},
-    {ABILITY_DESERT_SPIRIT, DesertSpirit},
-    {ABILITY_CONTEMPT, Contempt},
-    {ABILITY_AERIALIST, Aerialist},
-    {ABILITY_TERA_SHELL, TeraShell},
-    {ABILITY_TOXIC_CHAIN, ToxicChain},
-    {ABILITY_PARASITIC_SPORES, ParasiticSpores},
-    {ABILITY_POISON_PUPPETEER, PoisonPuppeteer},
-    {ABILITY_ENTRANCE, Entrance},
-    {ABILITY_REJECTION, Rejection},
-    {ABILITY_APPLE_ENLIGHTENMENT, AppleEnlightenment},
-    {ABILITY_BALLOON_BOMBER, BalloonBomber},
-    {ABILITY_FLAMING_MAW, FlamingMaw},
-    {ABILITY_DEMOLITIONIST, Demolitionist},
-    {ABILITY_ROCKHARD_WILL, RockhardWill},
-    {ABILITY_FRAGRANT_DAZE, FragrantDaze},
-    {ABILITY_LOW_VISIBILITY, LowVisibility},
-    {ABILITY_OLD_MARINER, OldMariner},
-    {ABILITY_ECTOPLASM, Ectoplasm},
-    {ABILITY_BEAUTIFUL_MUSIC, BeautifulMusic},
-    {ABILITY_SNOW_SONG, SnowSong},
-    {ABILITY_GREATER_SPIRIT, GreaterSpirit},
-    {ABILITY_RESONANCE, Resonance},
-    {ABILITY_ETHEREAL_RUSH, EtherealRush},
-    {ABILITY_CUTE_ANTECEDENCE, CuteAntecedence},
-    {ABILITY_RECURRING_NIGHTMARE, RecurringNightmare},
-    {ABILITY_MENACING_SITUATION, MenacingSituation},
-    {ABILITY_SHINY_LIGHTNING, ShinyLightning},
-    {ABILITY_TERRIFY, Terrify},
-    {ABILITY_ICE_DOWNFALL, IceDownfall},
-    {ABILITY_LAST_STAND, LastStand},
-    {ABILITY_PYROCLASTIC_FLOW, PyroclasticFlow},
-    {ABILITY_BLOOD_BATH, BloodBath},
-    {ABILITY_BATTLE_AURA, BattleAura},
-    {ABILITY_BLOODLUST, Bloodlust},
-    {ABILITY_PIERCING_SOLO, PiercingSolo},
-    {ABILITY_RHYTHMIC, Rhythmic},
-    {ABILITY_CHUNKY_BASS_LINE, ChunkyBassLine},
-    {ABILITY_DUAL_HAMMER, DualHammer},
-    {ABILITY_DENTING_BLOWS, DentingBlows},
-    {ABILITY_ICE_COLD_HUNTER, IceColdHunter},
-    {ABILITY_SOUL_CRUSHER, SoulCrusher},
-    {ABILITY_ARC_FLASH, ArcFlash},
-    {ABILITY_UNICORN, Unicorn},
-    {ABILITY_ON_THE_PROWL, OnTheProwl},
-    {ABILITY_PRETENTIOUS, Pretentious},
-    {ABILITY_VENOBLAZE_PINCERS, VenoblazePincers},
-    {ABILITY_ETERNAL_BLESSING, EternalBlessing},
-    {ABILITY_SUGAR_RUSH, SugarRush},
-    {ABILITY_PEACEFUL_REST, PeacefulRest},
-    {ABILITY_WHITE_NOISE, WhiteNoise},
-    {ABILITY_SMOKEY_MANEUVERS, SmokeyManeuvers},
-    {ABILITY_POWER_METAL, PowerMetal},
-    {ABILITY_POWER_EDGE, PowerEdge},
-    {ABILITY_SUPERCONDUCTOR, Superconductor},
-    {ABILITY_ULTRA_INSTINCT, UltraInstinct},
-    {ABILITY_UNLOCKED_POTENTIAL, UnlockedPotential},
-    {ABILITY_HIGHER_RANK, HigherRank},
-    {ABILITY_FUNERAL_PYRE, FuneralPyre},
-    {ABILITY_FLAME_BUBBLE, FlameBubble},
-    {ABILITY_ELEMENTAL_VORTEX, ElementalVortex},
-    {ABILITY_SNOWY_WRATH, SnowyWrath},
-    {ABILITY_PATTERN_CHANGE, PatternChange},
-    {ABILITY_NO_TURNING_BACK, NoTurningBack},
-    {ABILITY_FLAMMABLE_COAT, FlammableCoat},
-    {ABILITY_DRACO_MORALE, DracoMorale},
-    {ABILITY_BAD_OMEN, BadOmen},
-    {ABILITY_MOSH_PIT, MoshPit},
-    {ABILITY_BLOOD_STAIN, BloodStain},
-    {ABILITY_BLOOD_STIGMA, BloodStigma},
-    {ABILITY_MAXIMUM_ACCELERATION, MaximumAcceleration},
-    {ABILITY_SIDEWINDER, Sidewinder},
-    {ABILITY_PETRIFY, Petrify},
-    {ABILITY_FLUFFIEST, Fluffiest},
-    {ABILITY_WAY_OF_PRECISION, WayOfPrecision},
-    {ABILITY_WAY_OF_SWIFTNESS, WayOfSwiftness},
-    {ABILITY_ATOMIC_PUNCH, AtomicPunch},
-    {ABILITY_IRON_GIANT, IronGiant},
-    {ABILITY_MASTER_HAND, MasterHand},
-    {ABILITY_FINAL_BLOW, FinalBlow},
-    {ABILITY_HOSPITALITY, Hospitality},
-    {ABILITY_BUTTER_UP, ButterUp},
-    {ABILITY_VITALITY_STRIKE, VitalityStrike},
-    {ABILITY_HUGE_WINGS, HugeWings},
-    {ABILITY_SWORD_OF_DAMNATION, SwordOfDamnation},
-    {ABILITY_RESTRAINING_ORDER, RestrainingOrder},
-    {ABILITY_ASSASSINS_TOOLS, AssassinsTools},
-    {ABILITY_FROSTMAW, Frostmaw},
-    {ABILITY_PATCHWORK, Patchwork},
-    {ABILITY_BLIND_RAGE, BlindRage},
-    {ABILITY_SLIPSTREAM, Slipstream},
-    {ABILITY_APEX_PREDATOR, ApexPredator},
-    {ABILITY_DRAGONS_RITUAL, DragonsRitual},
-    {ABILITY_PINNACLE_BLADE, PinnacleBlade},
-    {ABILITY_ENERGIZED, Energized},
-    {ABILITY_COLOR_SPECTRUM, ColorSpectrum},
-    {ABILITY_STEEL_BEETLE, SteelBeetle},
-    {ABILITY_FROM_THE_SHADOWS, FromTheShadows},
-    {ABILITY_RAGE_POINT, RagePoint},
-    {ABILITY_HOT_COALS, HotCoals},
-    {ABILITY_TERASTAL_TREASURE, TerastalTreasure},
-    {ABILITY_SHOCKING_MAW, ShockingMaw},
-    {ABILITY_GLEAM_EYES, GleamEyes},
-    {ABILITY_ROUSED_FANGS, RousedFangs},
-    {ABILITY_DREAM_STATE, DreamState},
-    {ABILITY_DREAM_WHIMSY, DreamWhimsy},
-    {ABILITY_LUNAR_AFFINITY, LunarAffinity},
-    {ABILITY_FLAME_SHIELD, FlameShield},
-    {ABILITY_AQUATIC_DWELLER, AquaticDweller},
-    {ABILITY_APPLE_PIE, ApplePie},
-    {ABILITY_HOVER, Hover},
-    {ABILITY_DEPRAVITY, Depravity},
-    {ABILITY_WILDFIRE, Wildfire},
-    {ABILITY_JUMP_SCARE, JumpScare},
-    {ABILITY_TAR_TOSS, TarToss},
-    {ABILITY_STUN_SHOCK, StunShock},
-    {ABILITY_RAGING_GODDESS, RagingGoddess},
-    {ABILITY_WHIPLASH, Whiplash},
-    {ABILITY_SUPERSWEET_SYRUP, SupersweetSyrup},
-    {ABILITY_TRASH_HEAP, TrashHeap},
-    {ABILITY_SLUDGY_MIX, SludgyMix},
-    {ABILITY_OVERWATCH, Overwatch},
-    {ABILITY_WIND_RAGE, WindRage},
-    {ABILITY_VICTORY_BOMB, VictoryBomb},
-    {ABILITY_RAZOR_SHARP, RazorSharp},
-    {ABILITY_TO_THE_BONE, ToTheBone},
-    {ABILITY_BLADE_DANCE, BladeDance},
-    {ABILITY_APE_SHIFT, ApeShift},
-    {ABILITY_KNOW_YOUR_PLACE, KnowYourPlace},
-    {ABILITY_DEEP_CUTS, DeepCuts},
-    {ABILITY_LIFE_STEAL, LifeSteal},
-    {ABILITY_RUDE_AWAKENING, RudeAwakening},
-    {ABILITY_TERAFORM_ZERO, TeraformZero},
-    {ABILITY_SET_ABLAZE, SetAblaze},
-    {ABILITY_BREAKWATER, Breakwater},
-    {ABILITY_MAGICAL_FISTS, MagicalFists},
-    {ABILITY_CUTTHROAT, Cutthroat},
-    {ABILITY_SAND_BENDER, SandBender},
-    {ABILITY_SAND_PIT, SandPit},
-    {ABILITY_DESOLATE_SUN, DesolateSun},
-    {ABILITY_DAYBREAK, Daybreak},
-    {ABILITY_ENERGY_SIPHON, EnergySiphon},
-    {ABILITY_RESERVOIR, Reservoir},
-    {ABILITY_NEUROTOXIN, Neurotoxin},
-    {ABILITY_ENERGIZED_HORNS, EnergizedHorns},
-    {ABILITY_SPIDER_LAIR_UPGRADE, SpiderLairUpgrade},
-    {ABILITY_CRUST_COAT, CrustCoat},
-    {ABILITY_PUFFY, Puffy},
-    {ABILITY_BALLOON_BLITZ, BalloonBlitz},
-    {ABILITY_STRIKER_PIXILATE, StrikerPixilate},
-    {ABILITY_DOOM_BLAST, DoomBlast},
-    {ABILITY_BRUTEFORCE, Bruteforce},
-    {ABILITY_FARADAY_CAGE, FaradayCage},
-    {ABILITY_ACIDIC_SLIME, AcidicSlime},
-    {ABILITY_ROSE_GARDEN, RoseGarden},
-    {ABILITY_QIGONG, Qigong},
-    {ABILITY_CONJOURER_OF_DECEIT, ConjurerOfDeceit},
-    {ABILITY_DEEP_FREEZE, DeepFreeze},
-    {ABILITY_SOUL_DEVOURER, SoulDevourer},
-    {ABILITY_CHAMPIONS_ENTRANCE, ChampionsEntrance},
-    {ABILITY_PRESTO, Presto},
-    {ABILITY_SAMBA, Samba},
-    {ABILITY_GLADIATOR, Gladiator},
-    {ABILITY_FORSAKEN_HEART, ForsakenHeart},
-    {ABILITY_RELENTLESS, Relentless},
-    {ABILITY_SOOTHSAYER, Soothsayer},
-    {ABILITY_CORRUPTED_MIND, CorruptedMind},
-    {ABILITY_FLAME_COAT, FlameCoat},
-    {ABILITY_UNOWN_POWER, UnownPower},
-    {ABILITY_SUPER_SCOPE, SuperScope},
-    {ABILITY_VENOM_CROWN, VenomCrown},
-    {ABILITY_BLIGHT_SCALE, BlightScale},
-    {ABILITY_GUNMAN, Gunman},
-    {ABILITY_HUNTERS_MARK, HuntersMark},
-    {ABILITY_CARETAKER, Caretaker},
-    {ABILITY_POSEIDONS_DOMINION, PoseidonsDominion},
-    {ABILITY_DUAL_SHADOW, DualShadow},
-    {ABILITY_LULLABY, Lullaby},
-    {ABILITY_CRYO_ARCHITECT, CryoArchitect},
-    {ABILITY_GLACIAL_RAGE, GlacialRage},
-    {ABILITY_IMMOVABLE_OBJECT, ImmovableObject},
-    {ABILITY_FRENZIED_PHANTOM, FrenziedPhantom},
-    {ABILITY_DNA_SCRAMBLE, DNAScramble},
-    {ABILITY_AQUATIC, Aquatic},
-    {ABILITY_METALLIC_JAWS, MetallicJaws},
-    {ABILITY_CALCULATIVE, Calculative},
-    {ABILITY_EMBODY_ASPECT, EmbodyAspect},
-    {ABILITY_EMBODY_ASPECT_HEARTHFLAME, EmbodyAspect},
-    {ABILITY_EMBODY_ASPECT_CORNERSTONE, EmbodyAspectCornerstone},
-    {ABILITY_EMBODY_ASPECT_WELLSPRING, EmbodyAspectWellspring},
-    {ABILITY_ROCKHARD_SHAFT, RockhardShaft},
-    {ABILITY_DEVIATE, Deviate},
-    {ABILITY_SUNS_BOUNTY, SunsBounty},
-    {ABILITY_RITE_OF_SPRING, RiteOfSpring},
-    {ABILITY_HEADSTRONG, Headstrong},
-    {ABILITY_FIREFIGHTER, Firefighter},
-    {ABILITY_SEPIA_LENS, SepiaLens},
-    {ABILITY_SUPER_SNIPER, SuperSniper},
-    {ABILITY_WOODLAND_CURSE, WoodlandCurse},
-    {ABILITY_MALODOR, Malodor},
-    {ABILITY_BLUR, Blur},
-    {ABILITY_ELUDE, Elude},
-    {ABILITY_DRAKE_OF_RAGE, DrakeOfRage},
-    {ABILITY_MIXED_MARTIAL_ARTS, MixedMartialArts},
-    {ABILITY_STRATEGIC_PAUSE, StrategicPause},
-    {ABILITY_OVERRULE, Overrule},
-    {ABILITY_MENTAL_POLLUTION, MentalPollution},
-    {ABILITY_MADNESS_ENHANCEMENT, MadnessEnhancement},
-    {ABILITY_TENTALOCK, Tentalock},
-    {ABILITY_SERPENT_BIND, SerpentBind},
-    {ABILITY_SOUL_TAP, SoulTap},
-    {ABILITY_SCARECROW, Scarecrow},
-    {ABILITY_OMINOUS_SHROUD, OminousShroud},
-    {ABILITY_CHILLING_PRESENCE, ChillingPresence},
-    {ABILITY_FROSTBIND, Frostbind},
-    {ABILITY_GLACIAL_GHOST, GlacialGhost},
-    {ABILITY_TENDER_AFFECTION, TenderAffection},
-    {ABILITY_WONDER_SCALE, WonderScale},
-    {ABILITY_OVERZEALOUS, Overzealous},
-    {ABILITY_STAINLESS_STEEL, StainlessSteel},
-    {ABILITY_TEMPORAL_RUPTURE, TemporalRupture},
-    {ABILITY_GRASS_FLUTE, GrassFlute},
-    {ABILITY_HEMOTOXIN, Hemotoxin},
-    {ABILITY_HARUKAZE, Harukaze},
-    {ABILITY_TOXIC_SURGE, ToxicSurge},
-    {ABILITY_ATLANTIC_RULER, AtlanticRuler},
-    {ABILITY_BIOFILM, Biofilm},
-    {ABILITY_CHOKEHOLD, Chokehold},
-    {ABILITY_GUARDIAN_COAT, GuardianCoat},
-    {ABILITY_NEUTRALIZING_FOG, NeutralizingFog},
-    {ABILITY_POISON_QUILLS, PoisonQuills},
-    {ABILITY_DRACONIC_MIGHT, DraconicMight},
-    {ABILITY_FESTIVITIES, Festivities},
-    {ABILITY_FEY_FLIGHT, FeyFlight},
-    {ABILITY_BEST_OFFENSE, BestOffense},
-    {ABILITY_IMPALER, Impaler},
-    {ABILITY_MAGUS_BLADES, MagusBlades},
-    {ABILITY_LIGHTNING_BORN, LightningBorn},
-    {ABILITY_SUPERHEAVY, Superheavy},
-    {ABILITY_WORLD_SERPENT, WorldSerpent},
-    {ABILITY_LUCKY_WINGS, LuckyWings},
-    {ABILITY_KOMODO, Komodo},
-    {ABILITY_ENVENOM, Envenom},
-    {ABILITY_PURPLE_HAZE, PurpleHaze},
-    {ABILITY_GNASHING_CANNON, GnashingCannon},
-    {ABILITY_HYPER_CLEANSE, HyperCleanse},
-    {ABILITY_MOLTEN_COAT, MoltenCoat},
-    {ABILITY_ROYAL_DECREE, RoyalDecree},
-    {ABILITY_BREEZY_NEIGH, BreezyNeigh},
-    {ABILITY_DREAMSCAPE, Dreamscape},
-    {ABILITY_HASTE_MAKES_WASTE, HasteMakesWaste},
-    {ABILITY_HUNGRY_MAWS, HungryMaws},
-    {ABILITY_THERMAL_SLIDE, ThermalSlide},
-    {ABILITY_THERMOMANCY, Thermomancy},
-    {ABILITY_CHUCKSTER, Chuckster},
-    {ABILITY_HEAT_SINK, HeatSink},
-    {ABILITY_RELIC_STONE, RelicStone},
-    {ABILITY_SUPERCELL, Supercell},
-    {ABILITY_LIGHTNING_ASPECT, LightningAspect},
-    {ABILITY_POISON_HEAL, PoisonHeal},
-    {ABILITY_ENERGY_TAP, EnergyTap},
-    {ABILITY_JUNSHI_SANDA, JunshiSanda},
-    {ABILITY_REVERBATE, Reverberate},
-    {ABILITY_TAEKKYEON, Taekkyeon},
-    {ABILITY_SLUDGE_SPIT, SludgeSpit},
-    {ABILITY_SWAMP_THING, SwampThing},
-    {ABILITY_FROSTY_PRESCENCE, FrostyPrescence},
-    {ABILITY_CHILLING_PELLETS, ChillingPellets},
-    {ABILITY_PAINT_SHOT, PaintShot},
-    {ABILITY_STONECUTTER, Stonecutter},
-    {ABILITY_EDGELORD, Edgelord},
-    {ABILITY_WARMONGER, Warmonger},
-    {ABILITY_LOCUST_SWARM, LocustSwarm},
-    {ABILITY_REVELATION, Revelation},
-    {ABILITY_CURSE_OF_FAMINE, CurseOfFamine},
-    {ABILITY_CRYSTALLINE_ARMOR, CrystallineArmor},
-    {ABILITY_SOUL_HARVEST, SoulHarvest},
-    {ABILITY_THICK_BLUBBER, ThickBlubber},
-    {ABILITY_CRAVING, Craving},
-    {ABILITY_RAT_KING, RatKing},
-    {ABILITY_CRISPY_CREAM, CrispyCream},
-    {ABILITY_DEEP_FRIED, DeepFried},
-    {ABILITY_FOOD_LOVERS, FoodLovers},
-    {ABILITY_LUNAR_WRATH, LunarWrath},
-    {ABILITY_SPYWARE, Spyware},
-    {ABILITY_VIRUS, Virus},
-    {ABILITY_POWER_LEAK, PowerLeak},
-    {ABILITY_BACKUP_POWER, BackupPower},
-    {ABILITY_SAND_FIEND, SandFiend},
-    {ABILITY_MOUSTACHE, Moustache},
-    {ABILITY_DEPTH_EXPLORER, DepthExplorer},
-    {ABILITY_DUNE_VEIL, DuneVeil},
-    {ABILITY_STRONG_FOUNDATION, StrongFoundation},
-    {ABILITY_FOG_MACHINE, FogMachine},
-    {ABILITY_DROP_BLOCKS, DropBlocks},
-    {ABILITY_LASER_DRILL, LaserDrill},
-    {ABILITY_LIGHT_SABER, LightSaber},
-    {ABILITY_LOOSE_THORNS, LooseThorns},
-    {ABILITY_TURF_WAR, TurfWar},
-    {ABILITY_GREEDY, Greedy},
-    {ABILITY_MUSICAL_NOTES, MusicalNotes},
-    {ABILITY_STRIKEOUT, Strikeout},
-    {ABILITY_HOME_RUN, HomeRun},
-    {ABILITY_BRUISER, Bruiser},
-    {ABILITY_LETS_DANCE, LetsDance},
-    {ABILITY_MYCELIUM_MIGHT, MyceliumMight},
-    {ABILITY_DEADLY_PRECISION, DeadlyPrecision},
-    {ABILITY_I_AM_STEVE, IAmSteve},
-    {ABILITY_ROCKY_EXTERIOR, RockyExterior},
-    {ABILITY_DRAGONFRUIT, Dragonfruit},
-    {ABILITY_LEAD_CLAWS, LeadClaws},
-    {ABILITY_CHAINSAW, Chainsaw},
-    {ABILITY_GALEFORCE_WINGS, GaleforceWings},
-    {ABILITY_EMPRESS, Empress},
-    {ABILITY_HYPNOTIC_TOUCH, HypnoticTouch},
-    {ABILITY_SUNDAE, Sundae},
-    {ABILITY_HYDRA, Hydra},
-    {ABILITY_WINGS_OF_PESTILENCE, WingsOfPestilence},
-    {ABILITY_ZEN_GARDEN, ZenGarden},
-    {ABILITY_SHARP_TALONS, SharpTalons},
-    {ABILITY_MASSIVE_PELT, MassivePelt},
-    {ABILITY_SAP_TRAP, SapTrap},
-    {ABILITY_DEVIOUS_PRESENT, DeviousPresent},
-    {ABILITY_COSMIC_DUST, CosmicDust},
-    {ABILITY_CHRISTMAS_NIGHTMARE, ChristmasNightmare},
-    {ABILITY_COOL_EXIT, CoolExit},
-    {ABILITY_COSMIC_WINGS, CosmicWings},
-    {ABILITY_RAGING_STORM, RagingStorm},
-    {ABILITY_MACH_3, Mach3},
-    {ABILITY_HAMMER_FIST, HammerFist},
-    {ABILITY_ICE_PICK, IcePick},
-    {ABILITY_SUMO_GUARD, SumoGuard},
-    {ABILITY_TUMMYACHE, Tummyache},
-    {ABILITY_BRAIN_MASS, BrainMass},
-    {ABILITY_CHESTNUT_SHIELD, ChestnutShield},
-    {ABILITY_RAIN_SHROUD, RainShroud},
-    {ABILITY_WITCH_BROOM, WitchBroom},
-    {ABILITY_ANGELIC_WINGS, AngelicWings},
-    {ABILITY_CHANDELIER, Chandelier},
-    {ABILITY_FOGGY_EYE, FoggyEye},
-    {ABILITY_TOXIC_SHELL, ToxicShell},
-    {ABILITY_HAND_BARNACLES, HandBarnacles},
-    {ABILITY_VOLTRON, Voltron},
-    {ABILITY_LEPIDOPTERAN, Lepidopteran},
-    {ABILITY_BREAK_IT_DOWN, BreakItDown},
-    {ABILITY_BACKSTREET_BOY, BackstreetBoy},
-    {ABILITY_BACKFLIP, Backflip},
-    {ABILITY_CRUSHING_JAW, CrushingJaw},
-    {ABILITY_CRYOSTASIS, Cryostasis},
-    {ABILITY_MUCUS_MEMBRANE, MucusMembrane},
-    {ABILITY_BRAIN_OVERLOAD, BrainOverload},
-    {ABILITY_FIRES_WRATH, FiresWrath},
-    {ABILITY_ETERNAL_FLOWER, EternalFlower},
-    {ABILITY_CURLIPEDE, Curlipede},
-    {ABILITY_FLAWLESS_PRECISION, FlawlessPrecision},
-    {ABILITY_MASHED_POTATO, MashedPotato},
-    {ABILITY_NIHIL_BLASTER, NihilBlaster},
-    {ABILITY_GIANT_SHURIKEN, GiantShuriken},
-    {ABILITY_WRESTLE_SHOWMAN, WrestleShowman},
-    {ABILITY_GUARD_DOG, GuardDog},
-    {ABILITY_STEADFAST, Steadfast},
-    {ABILITY_WATERBORNE, Waterborne},
-    {ABILITY_FLOWER_NECKLACE, FlowerNecklace},
-};
-
-template <int N>
-consteval std::array<Ability, ABILITIES_COUNT> mergeArrays(const AbilityKVPair second[N],
-                                                           std::array<Ability, ABILITIES_COUNT> wrapper = std::array<Ability, ABILITIES_COUNT>{0}) {
-    std::array<Ability, ABILITIES_COUNT> abilities = wrapper;
-    bool assigned[ABILITIES_COUNT] = {0};
-    for (int i = 0; i < N; i++) {
-        auto val = second[i];
-        if (assigned[val.key]) {
-            return std::array<Ability, ABILITIES_COUNT>{0};
-        }
-        assigned[val.key] = true;
-#define __OVERWRITE_ARRAY_VAL(field) .field = val.ability.field ? val.ability.field : wrapper[val.key].field
-
-        abilities[val.key] = (Ability){
-            __OVERWRITE_ARRAY_VAL(name),
-            __OVERWRITE_ARRAY_VAL(description),
-            __OVERWRITE_ARRAY_VAL(expandedDescription),
-            __OVERWRITE_ARRAY_VAL(onEntry),
-            __OVERWRITE_ARRAY_VAL(onAbsorb),
-            __OVERWRITE_ARRAY_VAL(onImmune),
-            __OVERWRITE_ARRAY_VAL(onInfiltrate),
-            __OVERWRITE_ARRAY_VAL(onDisguise),
-            __OVERWRITE_ARRAY_VAL(onWeather),
-            __OVERWRITE_ARRAY_VAL(onTerrain),
-            __OVERWRITE_ARRAY_VAL(onEndTurn),
-            __OVERWRITE_ARRAY_VAL(onAttacker),
-            __OVERWRITE_ARRAY_VAL(onDefender),
-            __OVERWRITE_ARRAY_VAL(onRecoil),
-            __OVERWRITE_ARRAY_VAL(onReactive),
-            __OVERWRITE_ARRAY_VAL(onBattlerFaints),
-            __OVERWRITE_ARRAY_VAL(onParentalBond),
-            __OVERWRITE_ARRAY_VAL(onOffensiveMultiplier),
-            __OVERWRITE_ARRAY_VAL(onDefensiveMultiplier),
-            __OVERWRITE_ARRAY_VAL(onMoveType),
-            __OVERWRITE_ARRAY_VAL(onStab),
-            __OVERWRITE_ARRAY_VAL(onStat),
-            __OVERWRITE_ARRAY_VAL(onAccuracy),
-            __OVERWRITE_ARRAY_VAL(onSwapSplit),
-            __OVERWRITE_ARRAY_VAL(onChooseOffensiveStat),
-            __OVERWRITE_ARRAY_VAL(onChooseDefensiveStat),
-            __OVERWRITE_ARRAY_VAL(onPriority),
-            __OVERWRITE_ARRAY_VAL(onExit),
-            __OVERWRITE_ARRAY_VAL(onCrit),
-            __OVERWRITE_ARRAY_VAL(onTypeEffectiveness),
-            __OVERWRITE_ARRAY_VAL(onCopyMove),
-            __OVERWRITE_ARRAY_VAL(onAfterTypeEffectiveness),
-            __OVERWRITE_ARRAY_VAL(onModifyEffectChance),
-            __OVERWRITE_ARRAY_VAL(onCanStatusType),
-            __OVERWRITE_ARRAY_VAL(onStatusImmune),
-            __OVERWRITE_ARRAY_VAL(onTrap),
-            __OVERWRITE_ARRAY_VAL(onBeforeAttack),
-            __OVERWRITE_ARRAY_VAL(onPreemptAction),
-            __OVERWRITE_ARRAY_VAL(onModifyMoveFlags),
-            __OVERWRITE_ARRAY_VAL(onMoldBreaker),
-            __OVERWRITE_ARRAY_VAL(onRevive),
-            __OVERWRITE_ARRAY_VAL(onImmuneFor),
-            __OVERWRITE_ARRAY_VAL(onBattlerFaintsFor),
-            __OVERWRITE_ARRAY_VAL(onOffensiveMultiplierFor),
-            __OVERWRITE_ARRAY_VAL(onStatFor),
-            __OVERWRITE_ARRAY_VAL(onAccuracyFor),
-            __OVERWRITE_ARRAY_VAL(onChooseDefensiveStatFor),
-            __OVERWRITE_ARRAY_VAL(onCritFor),
-            __OVERWRITE_ARRAY_VAL(onAfterTypeEffectivenessFor),
-            __OVERWRITE_ARRAY_VAL(onModifyEffectChanceFor),
-            __OVERWRITE_ARRAY_VAL(onStatusImmuneFor),
-            __OVERWRITE_ARRAY_VAL(onBeforeAttackFor),
-            __OVERWRITE_ARRAY_VAL(allowTerrainIfAirborne),
-            __OVERWRITE_ARRAY_VAL(setStateOnEffect),
-            __OVERWRITE_ARRAY_VAL(redirectType),
-            __OVERWRITE_ARRAY_VAL(ruinStat),
-            __OVERWRITE_ARRAY_VAL(noDamageHits),
-            __OVERWRITE_ARRAY_VAL(breakable),
-            __OVERWRITE_ARRAY_VAL(unsuppressable),
-            __OVERWRITE_ARRAY_VAL(persistent),
-            __OVERWRITE_ARRAY_VAL(randomizerBanned),
-            __OVERWRITE_ARRAY_VAL(unaware),
-            __OVERWRITE_ARRAY_VAL(absorbUp2),
-            __OVERWRITE_ARRAY_VAL(isSoundproof),
-            __OVERWRITE_ARRAY_VAL(magicGuard),
-            __OVERWRITE_ARRAY_VAL(noRecoil),
-            __OVERWRITE_ARRAY_VAL(halfRecoil),
-            __OVERWRITE_ARRAY_VAL(chloroplast),
-            __OVERWRITE_ARRAY_VAL(skillLink),
-            __OVERWRITE_ARRAY_VAL(resistsFortKnox),
-            __OVERWRITE_ARRAY_VAL(fortKnox),
-            __OVERWRITE_ARRAY_VAL(adaptability),
-            __OVERWRITE_ARRAY_VAL(magicBounce),
-            __OVERWRITE_ARRAY_VAL(levitate),
-            __OVERWRITE_ARRAY_VAL(megaLauncherBoost),
-            __OVERWRITE_ARRAY_VAL(unnerve),
-            __OVERWRITE_ARRAY_VAL(negatesBurnAtkDrop),
-            __OVERWRITE_ARRAY_VAL(negatesFrzSpatkDrop),
-            __OVERWRITE_ARRAY_VAL(canInfatuateAny),
-            __OVERWRITE_ARRAY_VAL(removesStatusOnImmunity),
-            __OVERWRITE_ARRAY_VAL(tauntImmune),
-            __OVERWRITE_ARRAY_VAL(shadowTag),
-            __OVERWRITE_ARRAY_VAL(foesMinRoll),
-            __OVERWRITE_ARRAY_VAL(powderImmune),
-            __OVERWRITE_ARRAY_VAL(sandImmune),
-            __OVERWRITE_ARRAY_VAL(hailImmune),
-            __OVERWRITE_ARRAY_VAL(toxicTerrainImmune),
-            __OVERWRITE_ARRAY_VAL(stealthRockImmune),
-            __OVERWRITE_ARRAY_VAL(redCardEffect),
-            __OVERWRITE_ARRAY_VAL(omniStab),
-            __OVERWRITE_ARRAY_VAL(addsType),
-        };
-    }
-    return abilities;
-}
 
 #include "generated/data/abilities/ability_text.hh"
 
-const static auto abilityData = mergeArrays<ARRAY_COUNT(sAbilities)>(sAbilities, mergeArrays<ARRAY_COUNT(sAbilityText)>(sAbilityText));
-const Ability* const gAbilities = abilityData.data();
-
-consteval int testNoDuplicates() {
-    std::array<bool, ABILITIES_COUNT> arr = {0};
-    for (auto kvp : sAbilities) {
-        if (arr[kvp.key]) return FALSE;
-        arr[kvp.key] = TRUE;
-    }
-    return TRUE;
+template <AbilityEnum Id>
+constexpr Ability mergeAbility() {
+    Ability impl = Impl<Id>;
+    impl.name = AbilityStrings<Id>.name;
+    impl.description = AbilityStrings<Id>.description;
+    impl.expandedDescription = AbilityStrings<Id>.expandedDescription;
+    return impl;
 }
 
-STATIC_ASSERT(testNoDuplicates(), noDuplicateAbilityEntries)
-
-#pragma GCC diagnostic pop
+#define FOR_EACH_ABILITY_FUNCTION(ability) mergeAbility<ability>(),
+const Ability gAbilities[] = {FOR_EACH_ABILITY};

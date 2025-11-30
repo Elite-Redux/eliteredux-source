@@ -262,7 +262,7 @@ typedef struct Ability {
 #undef Type
 #endif
 
-extern const Ability* const gAbilities;
+extern const Ability gAbilities[ABILITIES_COUNT];
 
 int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag);
 int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag);
