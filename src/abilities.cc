@@ -8817,10 +8817,6 @@ constexpr Ability LightningBorn = {
     .addsType = TYPE_ELECTRIC,
 };
 
-constexpr Ability Superheavy = {
-    .randomizerBanned = TRUE,
-};
-
 constexpr Ability WorldSerpent = {
     .onAttacker = GripPincer.onAttacker,
     .onOffensiveMultiplier = LongReach.onOffensiveMultiplier,

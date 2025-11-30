@@ -9206,7 +9206,7 @@ BattleScript_MoveUsedFlinched::
 	printstring STRINGID_PKMNFLINCHED
 	waitmessage B_WAIT_TIME_LONG
 	setstatchanger STAT_SPEED, 1, FALSE
-	jumpifabilityflag FALSE, BS_ATTACKER, ABILITY_STEADFAST, BattleScript_AttackerAbilityStatRaiseAndDoStatBuff
+	jumpifabilityflag BS_ATTACKER, ABILITY_STEADFAST, BattleScript_AttackerAbilityStatRaiseAndDoStatBuff, FALSE
 	goto BattleScript_MoveEnd
 BattleScript_AttackerAbilityStatRaiseAndDoStatBuff:
 	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_MoveEnd
