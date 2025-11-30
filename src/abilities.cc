@@ -10029,6 +10029,18 @@ constexpr Ability WrestleShowman = {
     }
 };
 
+constexpr Ability Overcast = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        int any = FALSE;
+        if (!gSideStatuses[battler] & SIDE_STATUS_MIST) {
+            InsertCorrectEndType(ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+            BattleScriptPushCursorAndCallback(BattleScript_AttackerSetsMist);
+            any = TRUE;
+        }
+        return any | LowVisibility.onEntry(DELEGATE_ENTRY);
+    },
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10036,6 +10048,7 @@ typedef struct AbilityKVPair {
 
 constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_NONE, None},
+    {ABILITY_OVERCAST, Overcast},
     {ABILITY_STENCH, Stench},
     {ABILITY_DRIZZLE, Drizzle},
     {ABILITY_SPEED_BOOST, SpeedBoost},

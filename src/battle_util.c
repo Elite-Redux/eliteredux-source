@@ -4367,7 +4367,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
                         gSideTimers[side].started.mist = TRUE;
                         gSideTimers[side].mistTimer = SCREEN_DURATION;
                         gSideTimers[side].mistBattlerId = battler;
-                        BattleScriptCall(BattleScript_SetMist);
+                        BattleScriptCall(BattleScript_DefenderSetsMist);
                     }
 
                     if (!any) BattleScriptCall(BattleScript_MonMadeMoveUseless);

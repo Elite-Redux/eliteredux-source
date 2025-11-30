@@ -4598,11 +4598,15 @@ BattleScript_RecoilIfMissCrashed::
 	orhalfword gMoveResultFlags, MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE
 	goto BattleScript_MoveEnd
 
-BattleScript_SetMist::
-	swapbattlerandtargetvia34
+BattleScript_AttackerSetsMist::
 	printstring STRINGID_PKMNSHROUDEDINMIST
 	playmoveanimation BS_ATTACKER, MOVE_MIST
 	waitanimation
+	return
+
+BattleScript_DefenderSetsMist::
+	swapbattlerandtargetvia34
+	call BattleScript_AttackerSetsMist
 	restoreattackerandtargetfrom34
 	return
 
