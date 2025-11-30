@@ -13103,7 +13103,7 @@ BattleScript_EffectQuickGuard:
 
 BattleScript_WrestleShowman_Effect_FlyingPress::
     jumpifabilitystatusimmunity BS_TARGET, MOVE_TAUNT, BattleScript_LeafGuardProtects
-    settaunt BattleScript_ButItFailed
+    settaunt BattleScript_Return
     printstring STRINGID_PKMNFELLFORTAUNT
     waitmessage B_WAIT_TIME_LONG
     return
