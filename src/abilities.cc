@@ -10058,6 +10058,12 @@ constexpr Ability Superheavy = {
     .steadfast = TRUE,
 };
 
+constexpr Ability Waterborne = {
+    .onEntry = Aquatic.onEntry,
+    .adaptability = TRUE,
+    .addsType = Aquatic.addsType,
+};
+
 typedef struct AbilityKVPair {
     u16 key;
     Ability ability;
@@ -10999,6 +11005,7 @@ constexpr AbilityKVPair sAbilities[] = {
     {ABILITY_WRESTLE_SHOWMAN, WrestleShowman},
     {ABILITY_GUARD_DOG, GuardDog},
     {ABILITY_STEADFAST, Steadfast},
+    {ABILITY_WATERBORNE, Waterborne},
     {ABILITY_FLOWER_NECKLACE, FlowerNecklace},
 };
 
