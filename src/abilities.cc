@@ -9491,6 +9491,9 @@ constexpr Ability Impl<ABILITY_OVERZEALOUS> = {
 template <>
 constexpr Ability Impl<ABILITY_STAINLESS_STEEL> = {
     ATE_ABILITY(TYPE_STEEL),
+    .onAfterTypeEffectiveness = Impl<ABILITY_STEELWORKER>.onAfterTypeEffectiveness,
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
     .fortKnox = TRUE,
 };
 
