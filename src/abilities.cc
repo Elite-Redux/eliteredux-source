@@ -11149,6 +11149,25 @@ constexpr Ability Impl<ABILITY_FIRE_RULER> = {
     .onStatLoweredFor = APPLY_ON_ALLY,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_NARCISSIST> = {
+    .onStatLowered = +[](ON_STAT_LOWERED) -> int {
+        int any = FALSE;
+        if (CanRaiseStat(battler, STAT_SPATK)) {
+            SetStatChanger(STAT_SPATK, 2);
+            BattleScriptCall(BattleScript_StackBattlerStatUp);
+            any = TRUE;
+        }
+        if (CanRaiseStat(battler, STAT_ATK)) {
+            SetStatChanger(STAT_ATK, 2);
+            BattleScriptCall(BattleScript_StackBattlerStatUp);
+            any = TRUE;
+        }
+        return any;
+    },
+    .onStatLoweredFor = APPLY_ON_ALLY,
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>
