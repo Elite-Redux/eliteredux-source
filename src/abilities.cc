@@ -11169,6 +11169,12 @@ constexpr Ability Impl<ABILITY_NARCISSIST> = {
     .onStatLoweredFor = APPLY_ON_ALLY,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_STORM_CLOUD> = {
+    .onEntry = Impl<ABILITY_DRIZZLE>.onEntry,
+    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_ELECTRIC; },
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>
