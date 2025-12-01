@@ -10447,11 +10447,6 @@ constexpr Ability Impl<ABILITY_GREEDY> = {
 };
 
 template <>
-constexpr Ability Impl<ABILITY_MUSICAL_NOTES> = {
-    .randomizerBanned = TRUE,
-};
-
-template <>
 constexpr Ability Impl<ABILITY_STRIKEOUT> = {
     .randomizerBanned = TRUE,
 };

@@ -8986,7 +8986,10 @@ int BenefitsFromStatBuffs(int battler) {
     return TRUE;
 }
 
-AbilityEnum IsComatose(int battler) { RETURN_ABILITY_IF_FLAG(battler, FALSE, alwaysSleeping); }
+AbilityEnum IsComatose(int battler) {
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, alwaysSleeping);
+    return ABILITY_NONE;
+}
 
 int IsBloodStainAffected(int battler) {
     if (IS_BATTLER_OF_TYPE(battler, TYPE_GHOST)) return FALSE;
