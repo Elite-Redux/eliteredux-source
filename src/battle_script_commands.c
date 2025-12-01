@@ -4166,7 +4166,7 @@ static void Cmd_playstatchangeanimation(void) {
 static bool32 TryKnockOffBattleScript(u32 battlerDef) {
     if (!gBattleMons[battlerDef].item) return FALSE;
     if (!CanBattlerGetOrLoseItem(battlerDef, gBattleMons[battlerDef].item)) return FALSE;
-    if (!ShouldApplyOnHitAffect(battlerDef)) return FALSE;
+    if (!ShouldApplyOnHitEffect(battlerDef)) return FALSE;
     if (NoAliveMonsForEitherParty()) return FALSE;
 
     if ((gBattleScripting.abilityPopupOverwrite = IsStickyHold(battlerDef))) {

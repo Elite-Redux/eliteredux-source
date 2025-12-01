@@ -3932,7 +3932,7 @@ int WasMoveSuccessful() { return !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && 
 
 int DidMoveHit() { return WasMoveSuccessful() && TARGET_TURN_DAMAGED; }
 
-int ShouldApplyOnHitAffect(int applyTo) { return DidMoveHit() && IsBattlerAlive(applyTo); }
+int ShouldApplyOnHitEffect(int applyTo) { return DidMoveHit() && IsBattlerAlive(applyTo); }
 
 int UseIntimidateClone(AbilityEnum abilityToCheck, int battler) {
     u8 numAbility;
@@ -4602,7 +4602,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
             break;
         case ABILITYEFFECT_AFTER_RECOIL:
             // Nosferatu
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_NOSFERATU) && ShouldApplyOnHitAffect(battler) && IsMoveMakingContact(move, battler) &&
+            if (BATTLER_HAS_ABILITY(battler, ABILITY_NOSFERATU) && ShouldApplyOnHitEffect(battler) && IsMoveMakingContact(move, battler) &&
                 !BATTLER_MAX_HP(battler) && CanBattlerHeal(battler)) {
                 gBattleScripting.abilityPopupOverwrite = ABILITY_NOSFERATU;
                 gBattleMoveDamage = -gHpDealt / 2;
@@ -9032,7 +9032,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, MoveEnum m
 }
 
 int CheckHalfHpAbility(int battlerDef, int battlerAtk) {
-    if (!ShouldApplyOnHitAffect(battlerDef)) return FALSE;
+    if (!ShouldApplyOnHitEffect(battlerDef)) return FALSE;
     if (gBattleStruct->hpBefore[battlerDef] <= gBattleMons[battlerDef].maxHP / 2) return FALSE;
     if (gBattleMons[battlerDef].hp > gBattleMons[battlerDef].maxHP / 2) return FALSE;
     if (gTurnStructs[battlerAtk].multiHitCounter > 1) return FALSE;
@@ -9078,7 +9078,7 @@ int HandleDefenderAbility(int abilityNumber, int battler, int attacker, MoveEnum
 int HandleMiscAbilityMoveEffects(int battler, int opponent, MoveEnum move) {
     int effect = 0;
 
-    if (gVolatileStructs[battler].parasiticSpores && ShouldApplyOnHitAffect(opponent) && IsMoveMakingContact(move, gBattlerAttacker) &&
+    if (gVolatileStructs[battler].parasiticSpores && ShouldApplyOnHitEffect(opponent) && IsMoveMakingContact(move, gBattlerAttacker) &&
         !gVolatileStructs[opponent].parasiticSpores) {
         gBattleScripting.abilityPopupOverwrite = ABILITY_PARASITIC_SPORES;
         gVolatileStructs[opponent].parasiticSpores = TRUE;

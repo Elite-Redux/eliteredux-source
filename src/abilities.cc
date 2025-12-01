@@ -447,7 +447,7 @@ constexpr Ability Impl<ABILITY_NONE> = {
 template <>
 constexpr Ability Impl<ABILITY_STENCH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanMoveHaveExtraFlinchChance(move))
         CHECK(Random() % 100 < 10)
 
@@ -526,7 +526,7 @@ constexpr Ability Impl<ABILITY_STURDY> = {
 };
 
 ON_EITHER(Damp) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK_NOT(IS_BATTLER_OF_TYPE(opponent, TYPE_WATER))
 
@@ -567,7 +567,7 @@ constexpr Ability Impl<ABILITY_SAND_VEIL> = {
 };
 
 ON_EITHER(Static) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanBeParalyzed(battler, opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK(Random() % 100 < 30)
@@ -734,7 +734,7 @@ constexpr Ability Impl<ABILITY_SHADOW_TAG> = {
 template <>
 constexpr Ability Impl<ABILITY_ROUGH_SKIN> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK_NOT(IsMagicGuardProtected(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         gBattleMoveDamage = gBattleMons[attacker].maxHP / 8;
@@ -769,7 +769,7 @@ constexpr Ability Impl<ABILITY_LEVITATE> = {
 template <>
 constexpr Ability Impl<ABILITY_EFFECT_SPORE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IsPowderImmune(attacker, FALSE))
         CHECK(Random() % 100 < 30)
@@ -899,7 +899,7 @@ constexpr Ability Impl<ABILITY_HUGE_POWER> = {
 };
 
 ON_EITHER(PoisonPoint) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanBePoisoned(battler, opponent, MOVE_NONE))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK(Random() % 100 < 30)
@@ -1028,7 +1028,7 @@ constexpr Ability Impl<ABILITY_THICK_FAT> = {
 };
 
 ON_EITHER(FlameBody) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanBeBurned(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK(Random() % 100 < 30)
@@ -1096,7 +1096,7 @@ constexpr Ability Impl<ABILITY_HUSTLE> = {
 };
 
 ON_EITHER(CuteCharm) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK(CanInfatuate(battler, opponent))
     CHECK(Random() % 100 < 50)
@@ -1330,7 +1330,7 @@ constexpr Ability Impl<ABILITY_SNOW_CLOAK> = {
 template <>
 constexpr Ability Impl<ABILITY_ANGER_POINT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(CanRaiseStat(battler, STAT_ATK))
 
         if (gIsCriticalHit) {
@@ -1523,7 +1523,7 @@ constexpr Ability Impl<ABILITY_SUPER_LUCK> = {
 template <>
 constexpr Ability Impl<ABILITY_AFTERMATH> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
         CHECK_NOT(IsMagicGuardProtected(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -1776,7 +1776,7 @@ constexpr Ability Impl<ABILITY_DEFEATIST> = {
 template <>
 constexpr Ability Impl<ABILITY_CURSED_BODY> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK_NOT(gVolatileStructs[attacker].disabledMove)
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IsAbilityStatusProtected(attacker, CHECK_RESTRICTING))
@@ -1816,7 +1816,7 @@ constexpr Ability Impl<ABILITY_FRIEND_GUARD> = {
 template <>
 constexpr Ability Impl<ABILITY_WEAK_ARMOR> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(IS_MOVE_PHYSICAL(move))
         CHECK(CanRaiseStat(battler, STAT_SPEED) || CanLowerStat(battler, STAT_DEF))
 
@@ -2030,7 +2030,7 @@ constexpr Ability Impl<ABILITY_INFILTRATOR> = {
 template <>
 constexpr Ability Impl<ABILITY_MUMMY> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
@@ -2061,7 +2061,7 @@ constexpr Ability Impl<ABILITY_JUSTIFIED> = {
 template <>
 constexpr Ability Impl<ABILITY_RATTLED> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(moveType == TYPE_DARK || moveType == TYPE_BUG || moveType == TYPE_GHOST)
         CHECK(CanRaiseStat(battler, STAT_SPEED))
 
@@ -2305,7 +2305,7 @@ constexpr Ability Impl<ABILITY_PIXILATE> = {
 template <>
 constexpr Ability Impl<ABILITY_GOOEY> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(StatLowerableOrMirrorArmor(attacker, STAT_SPEED))
         CHECK(IsMoveMakingContact(move, attacker))
 
@@ -2401,7 +2401,7 @@ constexpr Ability Impl<ABILITY_DELTA_STREAM> = {
 template <>
 constexpr Ability Impl<ABILITY_STAMINA> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(CanRaiseStat(battler, STAT_DEF))
 
         if (gIsCriticalHit) {
@@ -2444,7 +2444,7 @@ constexpr Ability Impl<ABILITY_EMERGENCY_EXIT> = {
 template <>
 constexpr Ability Impl<ABILITY_WATER_COMPACTION> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(moveType == TYPE_WATER)
         CHECK(CanRaiseStat(battler, STAT_DEF))
 
@@ -2769,7 +2769,7 @@ constexpr Ability Impl<ABILITY_QUEENLY_MAJESTY> = {
 template <>
 constexpr Ability Impl<ABILITY_INNARDS_OUT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
         CHECK_NOT(IsMagicGuardProtected(attacker))
 
@@ -3045,7 +3045,7 @@ constexpr Ability Impl<ABILITY_GULP_MISSILE> = {
         return TRUE;
     },
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         SpeciesEnum species = gBattleMons[battler].species;
         CHECK(species == SPECIES_CRAMORANT_GORGING || species == SPECIES_CRAMORANT_GULPING)
         UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_CRAMORANT);
@@ -3062,7 +3062,7 @@ constexpr Ability Impl<ABILITY_GULP_MISSILE> = {
 template <>
 constexpr Ability Impl<ABILITY_STEAM_ENGINE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(CanRaiseStat(battler, STAT_SPEED))
         CHECK(moveType == TYPE_FIRE || moveType == TYPE_WATER)
 
@@ -3088,7 +3088,7 @@ constexpr Ability Impl<ABILITY_PUNK_ROCK> = {
 template <>
 constexpr Ability Impl<ABILITY_SAND_SPIT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_SANDSTORM_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
+        CHECK(ShouldApplyOnHitEffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_SANDSTORM_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
             BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
             return NO_ANNOUNCE;
         }
@@ -3232,7 +3232,7 @@ constexpr Ability Impl<ABILITY_STEELY_SPIRIT> = {
 template <>
 constexpr Ability Impl<ABILITY_PERISH_BODY> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(IsBattlerAlive(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(gStatuses3[attacker] & STATUS3_PERISH_SONG)
@@ -3253,7 +3253,7 @@ constexpr Ability Impl<ABILITY_PERISH_BODY> = {
 template <>
 constexpr Ability Impl<ABILITY_WANDERING_SPIRIT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(GetBattlerAbility(battler) == ability)
         CHECK_NOT(HasAbilityIgnoringSuppression(attacker, ability))
         CHECK(IsMoveMakingContact(move, attacker))
@@ -3602,7 +3602,7 @@ constexpr Ability Impl<ABILITY_PERFECTIONIST> = {
 template <>
 constexpr Ability Impl<ABILITY_GROWING_TOOTH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
 
@@ -3615,7 +3615,7 @@ constexpr Ability Impl<ABILITY_GROWING_TOOTH> = {
 template <>
 constexpr Ability Impl<ABILITY_INFLATABLE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(CanRaiseStat(battler, STAT_DEF) || CanRaiseStat(battler, STAT_SPDEF))
         CHECK(moveType == TYPE_FIRE || moveType == TYPE_FLYING);
         BattleScriptCall(BattleScript_InflatableActivates);
@@ -3653,7 +3653,7 @@ constexpr Ability Impl<ABILITY_LETS_ROLL> = {
 template <>
 constexpr Ability Impl<ABILITY_LOUD_BANG> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBeConfused(target))
         CHECK(IsSoundMove(battler, move))
         CHECK(Random() % 2)
@@ -3741,7 +3741,7 @@ constexpr Ability Impl<ABILITY_FOSSILIZED> = {
 template <>
 constexpr Ability Impl<ABILITY_MAGICAL_DUST> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_PSYCHIC))
 
@@ -4005,7 +4005,7 @@ constexpr Ability Impl<ABILITY_SOUL_EATER> = {
 };
 
 ON_EITHER(SoulLinker) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(IsBattlerAlive(battler))
     CHECK_NOT(BATTLER_HAS_ABILITY(opponent, ABILITY_SOUL_LINKER))
     CHECK(move != MOVE_PAIN_SPLIT)
@@ -4049,7 +4049,7 @@ constexpr Ability Impl<ABILITY_BAD_LUCK> = {
 template <>
 constexpr Ability Impl<ABILITY_HAUNTED_SPIRIT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
         CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_GHOST))
         CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED)
@@ -4090,7 +4090,7 @@ constexpr Ability Impl<ABILITY_RAW_WOOD> = {
 template <>
 constexpr Ability Impl<ABILITY_SOLENOGLYPHS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(Random() % 2)
@@ -4410,7 +4410,7 @@ constexpr Ability Impl<ABILITY_MOMENTUM> = {
 template <>
 constexpr Ability Impl<ABILITY_GRIP_PINCER> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(gBattlerTarget))
+        CHECK(ShouldApplyOnHitEffect(gBattlerTarget))
         CHECK(IsBattlerAlive(battler))
         CHECK(IsMoveMakingContact(move, battler))
         CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
@@ -4529,7 +4529,7 @@ constexpr Ability Impl<ABILITY_VOLCANO_RAGE> = {
 template <>
 constexpr Ability Impl<ABILITY_COLD_REBOUND> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
         UseOutOfTurnAttack(battler, attacker, ability, MOVE_ICY_WIND, 0);
@@ -4550,7 +4550,7 @@ constexpr Ability Impl<ABILITY_SPECTRALIZE> = {
 template <>
 constexpr Ability Impl<ABILITY_SPECTRAL_SHROUD> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
         CHECK(gBattleStruct->ateBoost[battler])
         CHECK(moveType == TYPE_GHOST)
@@ -4603,7 +4603,7 @@ constexpr Ability Impl<ABILITY_MIGHTY_HORN> = {
 template <>
 constexpr Ability Impl<ABILITY_HARDENED_SHEATH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(gBattleMoves[move].hornBased)
         CHECK(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
 
@@ -4678,7 +4678,7 @@ constexpr Ability Impl<ABILITY_PYRO_SHELLS> = {
 template <>
 constexpr Ability Impl<ABILITY_FUNGAL_INFECTION> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
         CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
         CHECK(IsMoveMakingContact(move, battler))
@@ -4693,7 +4693,7 @@ constexpr Ability Impl<ABILITY_FUNGAL_INFECTION> = {
 template <>
 constexpr Ability Impl<ABILITY_PARRY> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
         UseOutOfTurnAttack(battler, attacker, ability, MOVE_MACH_PUNCH, 0);
@@ -4770,7 +4770,7 @@ constexpr Ability Impl<ABILITY_LOOSE_ROCKS> = {
 template <>
 constexpr Ability Impl<ABILITY_SPINNING_TOP> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(moveType == TYPE_FIGHTING)
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
 
@@ -4817,7 +4817,7 @@ template <>
 constexpr Ability Impl<ABILITY_FEARMONGER> = {
     .onEntry = UseIntimidateClone,
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBeParalyzed(battler, target))
         CHECK(IsMoveMakingContact(move, battler))
         CHECK(Random() % 100 < 10)
@@ -4830,7 +4830,7 @@ template <>
 constexpr Ability Impl<ABILITY_FIRES_WRATH> = {
     .onEntry = UseIntimidateClone,
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBeBurned(target))
         CHECK_NOT(IsMoveMakingContact(move, battler))
         CHECK(Random() % 100 < 10)
@@ -4927,7 +4927,7 @@ constexpr Ability Impl<ABILITY_SELF_REPAIR> = {
 template <>
 constexpr Ability Impl<ABILITY_ELECTROMORPHOSIS> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
         gStatuses3[battler] |= STATUS3_CHARGED_UP;
@@ -4990,7 +4990,7 @@ constexpr Ability Impl<ABILITY_GIFTED_MIND> = {
 template <>
 constexpr Ability Impl<ABILITY_HYDRO_CIRCUIT> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
         CHECK(moveType == TYPE_WATER)
@@ -5019,7 +5019,7 @@ constexpr Ability Impl<ABILITY_EQUINOX> = {
 template <>
 constexpr Ability Impl<ABILITY_ABSORBANT> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
         CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
         CHECK(gBattleMoves[move].effect == EFFECT_ABSORB || gBattleMoves[move].effect == EFFECT_DREAM_EATER)
@@ -5116,7 +5116,7 @@ constexpr Ability Impl<ABILITY_DUAL_WIELD> = {
 template <>
 constexpr Ability Impl<ABILITY_ELEMENTAL_CHARGE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(Random() % 100 < 20)
 
         switch (moveType) {
@@ -5194,7 +5194,7 @@ constexpr Ability Impl<ABILITY_ANGELS_WRATH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         switch (move) {
             case MOVE_TACKLE: {
-                CHECK(ShouldApplyOnHitAffect(target))
+                CHECK(ShouldApplyOnHitEffect(target))
                 CHECK(!IsAbilityStatusProtected(target, CHECK_RESTRICTING))
                 CHECK(!gVolatileStructs[target].encoreTimer || !gVolatileStructs[target].disableTimer)
 
@@ -5264,7 +5264,7 @@ constexpr Ability Impl<ABILITY_ANGELS_WRATH> = {
             }
 
             case MOVE_ELECTROWEB: {
-                CHECK(ShouldApplyOnHitAffect(target))
+                CHECK(ShouldApplyOnHitEffect(target))
                 CHECK_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
                 CHECK_NOT(gBattleMons[target].statStages[STAT_SPEED] == MIN_STAT_STAGE)
 
@@ -5275,7 +5275,7 @@ constexpr Ability Impl<ABILITY_ANGELS_WRATH> = {
             }
 
             case MOVE_BUG_BITE: {
-                CHECK(ShouldApplyOnHitAffect(battler))
+                CHECK(ShouldApplyOnHitEffect(battler))
                 CHECK_NOT(BATTLER_MAX_HP(battler))
                 CHECK(CanBattlerHeal(battler))
 
@@ -5338,7 +5338,7 @@ constexpr Ability Impl<ABILITY_PRISMATIC_FUR> = {
 template <>
 constexpr Ability Impl<ABILITY_SHOCKING_JAWS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBeParalyzed(battler, target))
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(Random() % 2)
@@ -5418,7 +5418,7 @@ constexpr Ability Impl<ABILITY_FURNACE> = {
         return TRUE;
     },
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(moveType == TYPE_ROCK)
         CHECK(CanRaiseStat(battler, STAT_SPEED))
 
@@ -5758,7 +5758,7 @@ constexpr Ability Impl<ABILITY_FROST_BURN> = {
 template <>
 constexpr Ability Impl<ABILITY_ITCHY_DEFENSE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_WRAPPED)
 
@@ -5824,7 +5824,7 @@ constexpr Ability Impl<ABILITY_DUST_CLOUD> = {
 template <>
 constexpr Ability Impl<ABILITY_TIPPING_POINT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(CanRaiseStat(battler, STAT_SPATK))
 
         if (gIsCriticalHit) {
@@ -5961,7 +5961,7 @@ constexpr Ability Impl<ABILITY_AFTERSHOCK> = {
 };
 
 ON_EITHER(FreezingPoint) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanGetFrostbite(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK(Random() % 100 < 30)
@@ -5975,7 +5975,7 @@ constexpr Ability Impl<ABILITY_FREEZING_POINT> = {
 };
 
 static int CryoProficiencyHail(int battler) {
-    CHECK(ShouldApplyOnHitAffect(battler))
+    CHECK(ShouldApplyOnHitEffect(battler))
     CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY)
     if (gBattleWeather & WEATHER_PRIMAL_ANY) {
         BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
@@ -6026,7 +6026,7 @@ template <>
 constexpr Ability Impl<ABILITY_YUKI_ONNA> = {
     .onEntry = UseIntimidateClone,
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanInfatuate(battler, target))
         CHECK(Random() % 100 < 30)
 
@@ -6111,7 +6111,7 @@ constexpr Ability Impl<ABILITY_FERTILIZE> = {
 template <>
 constexpr Ability Impl<ABILITY_PURE_LOVE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
         CHECK(gBattleMons[target].status2 & STATUS2_INFATUATION)
@@ -6197,7 +6197,7 @@ constexpr Ability Impl<ABILITY_TWO_STEP> = {
 template <>
 constexpr Ability Impl<ABILITY_SPITEFUL> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(move != MOVE_STRUGGLE)
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK(gBattleMons[attacker].pp[gChosenMovePos])
@@ -6210,7 +6210,7 @@ constexpr Ability Impl<ABILITY_SPITEFUL> = {
 template <>
 constexpr Ability Impl<ABILITY_FORTITUDE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(CanRaiseStat(battler, STAT_SPDEF))
 
         if (gIsCriticalHit) {
@@ -6254,7 +6254,7 @@ constexpr Ability Impl<ABILITY_BASS_BOOSTED> = {
 template <>
 constexpr Ability Impl<ABILITY_FLAMING_JAWS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBeBurned(target))
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(Random() % 2)
@@ -6318,7 +6318,7 @@ constexpr Ability Impl<ABILITY_CROWNED_KING> = {
 template <>
 constexpr Ability Impl<ABILITY_SNAP_TRAP_WHEN_HIT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
         UseOutOfTurnAttack(battler, attacker, ability, MOVE_SNAP_TRAP, 50);
@@ -6373,7 +6373,7 @@ constexpr Ability Impl<ABILITY_BLOOD_PRICE> = {
 };
 
 ON_EITHER(SpikeArmor) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanBleed(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK(Random() % 100 < 30)
@@ -6389,7 +6389,7 @@ constexpr Ability Impl<ABILITY_SPIKE_ARMOR> = {
 template <>
 constexpr Ability Impl<ABILITY_VOODOO_POWER> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IS_MOVE_SPECIAL(move))
         CHECK(CanBleed(attacker))
         CHECK(Random() % 100 < 30)
@@ -6435,7 +6435,7 @@ constexpr Ability Impl<ABILITY_SHOWDOWN_MODE> = {
 template <>
 constexpr Ability Impl<ABILITY_SEED_SOWER> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
 
         BattleScriptCall(BattleScript_SeedSower);
@@ -6609,7 +6609,7 @@ constexpr Ability Impl<ABILITY_QUARK_DRIVE> = {
 template <>
 constexpr Ability Impl<ABILITY_WIND_POWER> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(gBattleMoves[move].airBased)
         CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
@@ -6685,7 +6685,7 @@ constexpr Ability Impl<ABILITY_DARK_GALE_WINGS> = {
 template <>
 constexpr Ability Impl<ABILITY_GUILT_TRIP> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK_NOT(IsBattlerAlive(battler))
         CHECK(CanLowerStat(attacker, STAT_ATK) || CanLowerStat(attacker, STAT_SPATK))
 
@@ -6820,7 +6820,7 @@ constexpr Ability Impl<ABILITY_SUPREME_OVERLORD> = {
 template <>
 constexpr Ability Impl<ABILITY_ILL_WILL> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(move != MOVE_STRUGGLE)
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK(gBattleMons[attacker].pp[gChosenMovePos])
@@ -6865,7 +6865,7 @@ constexpr Ability Impl<ABILITY_RAPID_RESPONSE> = {
 template <>
 constexpr Ability Impl<ABILITY_DOUBLE_IRON_BARBS> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK_NOT(IsMagicGuardProtected(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
@@ -6880,7 +6880,7 @@ constexpr Ability Impl<ABILITY_DOUBLE_IRON_BARBS> = {
 template <>
 constexpr Ability Impl<ABILITY_THERMAL_EXCHANGE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(moveType == TYPE_FIRE)
         CHECK(CanRaiseStat(battler, STAT_ATK))
 
@@ -7050,7 +7050,7 @@ constexpr Ability Impl<ABILITY_MINION_CONTROL> = {
 template <>
 constexpr Ability Impl<ABILITY_MOLTEN_BLADES> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBeBurned(target))
         CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
         CHECK(Random() % 100 < 20)
@@ -7063,7 +7063,7 @@ constexpr Ability Impl<ABILITY_MOLTEN_BLADES> = {
 template <>
 constexpr Ability Impl<ABILITY_HAUNTING_FRENZY> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanMoveHaveExtraFlinchChance(move))
         CHECK(Random() % 100 < 20)
 
@@ -7084,7 +7084,7 @@ constexpr Ability Impl<ABILITY_NOISE_CANCEL> = {
 template <>
 constexpr Ability Impl<ABILITY_RADIO_JAM> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBeDisabled(target))
         CHECK(IsSoundMove(battler, move))
         CHECK(Random() % 100 < 20)
@@ -7118,7 +7118,7 @@ constexpr Ability Impl<ABILITY_MALICIOUS> = {
 template <>
 constexpr Ability Impl<ABILITY_DEAD_POWER> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK_NOT(gBattleMons[target].status2 & STATUS2_CURSED)
         CHECK(IsMoveMakingContact(move, battler))
         CHECK(Random() % 100 < 20)
@@ -7220,7 +7220,7 @@ constexpr Ability Impl<ABILITY_TERA_SHELL> = {
 template <>
 constexpr Ability Impl<ABILITY_TOXIC_CHAIN> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
         CHECK(Random() % 100 < 30)
 
@@ -7313,7 +7313,7 @@ constexpr Ability Impl<ABILITY_ROCKHARD_WILL> = {
 };
 
 ON_EITHER(FragrantDaze) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanBeConfused(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK(Random() % 100 < 30)
@@ -7360,7 +7360,7 @@ constexpr Ability Impl<ABILITY_ECTOPLASM> = {
 template <>
 constexpr Ability Impl<ABILITY_BEAUTIFUL_MUSIC> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(Random() % 2)
         CHECK(IsSoundMove(battler, move))
 
@@ -7394,7 +7394,7 @@ constexpr Ability Impl<ABILITY_GREATER_SPIRIT> = {
 template <>
 constexpr Ability Impl<ABILITY_RESONANCE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBleed(target))
         CHECK(IsSoundMove(battler, move))
         CHECK(Random() % 100 < 50)
@@ -7426,7 +7426,7 @@ constexpr Ability Impl<ABILITY_RECURRING_NIGHTMARE> = {
 };
 
 ON_EITHER(MenacingSituation) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK_NOT(gVolatileStructs[opponent].fear)
     CHECK(Random() % 100 < 30)
@@ -7458,7 +7458,7 @@ constexpr Ability Impl<ABILITY_TERRIFY> = {
 template <>
 constexpr Ability Impl<ABILITY_ICE_DOWNFALL> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
         UseOutOfTurnAttack(battler, attacker, ability, MOVE_ICICLE_CRASH, 60);
@@ -7527,7 +7527,7 @@ constexpr Ability Impl<ABILITY_BLOODLUST> = {
 template <>
 constexpr Ability Impl<ABILITY_PIERCING_SOLO> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBleed(target))
         CHECK(IsSoundMove(battler, move))
 
@@ -7561,7 +7561,7 @@ constexpr Ability Impl<ABILITY_DUAL_HAMMER> = {
 template <>
 constexpr Ability Impl<ABILITY_DENTING_BLOWS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(gBattleMoves[move].hammerBased)
         CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
 
@@ -7598,14 +7598,14 @@ constexpr Ability Impl<ABILITY_SOUL_CRUSHER> = {
 template <>
 constexpr Ability Impl<ABILITY_ARC_FLASH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBeParalyzed(battler, target))
         CHECK(Random() % 2)
 
         return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
     },
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(CanBeBurned(attacker))
         CHECK(Random() % 2)
 
@@ -7643,7 +7643,7 @@ constexpr Ability Impl<ABILITY_PRETENTIOUS> = {
 template <>
 constexpr Ability Impl<ABILITY_VENOBLAZE_PINCERS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(IS_MOVE_PHYSICAL(move))
         CHECK(Random() % 100 < 20)
 
@@ -7743,7 +7743,7 @@ constexpr Ability Impl<ABILITY_SUPERCONDUCTOR> = {
 template <>
 constexpr Ability Impl<ABILITY_ULTRA_INSTINCT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
         UseOutOfTurnAttack(battler, attacker, ability, MOVE_VACUUM_WAVE, 0);
@@ -7836,7 +7836,7 @@ constexpr Ability Impl<ABILITY_NO_TURNING_BACK> = {
 template <>
 constexpr Ability Impl<ABILITY_FLAMMABLE_COAT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler) || (gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
+        CHECK(ShouldApplyOnHitEffect(battler) || (gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
         CHECK(moveType == TYPE_FIRE)
         CHECK(gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH)
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
@@ -7887,7 +7887,7 @@ constexpr Ability Impl<ABILITY_MOSH_PIT> = {
 };
 
 ON_EITHER(BloodStain) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(opponent)))
     CHECK_NOT(HasAbilityIgnoringSuppression(opponent, ability))
@@ -8052,7 +8052,7 @@ constexpr Ability Impl<ABILITY_BUTTER_UP> = {
 template <>
 constexpr Ability Impl<ABILITY_VITALITY_STRIKE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
         CHECK(IsIronFistBoosted(battler, move))
@@ -8087,7 +8087,7 @@ template <>
 constexpr Ability Impl<ABILITY_RESTRAINING_ORDER> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(CanBattlerBeForceSwitched(attacker))
 
         SetAbilityState(battler, ability, RESTRAINING_ORDER_ACTIVATING);
@@ -8098,7 +8098,7 @@ constexpr Ability Impl<ABILITY_RESTRAINING_ORDER> = {
 template <>
 constexpr Ability Impl<ABILITY_ASSASSINS_TOOLS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(IsMoveMakingContact(move, battler))
 
         switch (Random() % 3) {
@@ -8124,7 +8124,7 @@ constexpr Ability Impl<ABILITY_ASSASSINS_TOOLS> = {
 template <>
 constexpr Ability Impl<ABILITY_FROSTMAW> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanGetFrostbite(target))
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(Random() % 2)
@@ -8264,7 +8264,7 @@ constexpr Ability Impl<ABILITY_STEEL_BEETLE> = {
 template <>
 constexpr Ability Impl<ABILITY_FROM_THE_SHADOWS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(GetBattlerTurnOrderNum(target) >= gCurrentTurnActionNumber)
 
         if (CanMoveHaveExtraFlinchChance(move) && Random() % 100 < 20) {
@@ -8282,7 +8282,7 @@ constexpr Ability Impl<ABILITY_FROM_THE_SHADOWS> = {
 template <>
 constexpr Ability Impl<ABILITY_RAGE_POINT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(gIsCriticalHit)
         CHECK(CanRaiseStat(battler, STAT_ATK) || CanRaiseStat(battler, STAT_SPATK))
 
@@ -8411,7 +8411,7 @@ constexpr Ability Impl<ABILITY_TAR_TOSS> = {
 template <>
 constexpr Ability Impl<ABILITY_STUN_SHOCK> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target)) CHECK(Random() % 100 < 60) switch (Random() % 2) {
+        CHECK(ShouldApplyOnHitEffect(target)) CHECK(Random() % 100 < 60) switch (Random() % 2) {
             case 0:
                 CHECK(CanBePoisoned(battler, target, MOVE_NONE));
                 AbilityStatusEffect(MOVE_EFFECT_POISON);
@@ -8436,7 +8436,7 @@ constexpr Ability Impl<ABILITY_RAGING_GODDESS> = {
 template <>
 constexpr Ability Impl<ABILITY_WHIPLASH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(IS_MOVE_PHYSICAL(move))
         CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
 
@@ -8451,7 +8451,7 @@ constexpr Ability Impl<ABILITY_WHIPLASH> = {
 template <>
 constexpr Ability Impl<ABILITY_SUPERSWEET_SYRUP> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(gStatuses3[attacker] & STATUS3_EMBARGO)
         CHECK(gBattleMons[attacker].item)
@@ -8514,7 +8514,7 @@ constexpr Ability Impl<ABILITY_VICTORY_BOMB> = {
 template <>
 constexpr Ability Impl<ABILITY_RAZOR_SHARP> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBleed(target))
         CHECK(gIsCriticalHit)
 
@@ -8567,7 +8567,7 @@ constexpr Ability Impl<ABILITY_APE_SHIFT> = {
 template <>
 constexpr Ability Impl<ABILITY_KNOW_YOUR_PLACE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK_NOT(gVolatileStructs[target].dazed)
         CHECK(IsMoveMakingContact(move, battler))
 
@@ -8580,7 +8580,7 @@ constexpr Ability Impl<ABILITY_KNOW_YOUR_PLACE> = {
 template <>
 constexpr Ability Impl<ABILITY_DEEP_CUTS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBleed(target))
         CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
         CHECK(Random() % 2)
@@ -8684,7 +8684,7 @@ constexpr Ability Impl<ABILITY_DESOLATE_SUN> = {
 };
 
 ON_EITHER(Daybreak) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanBeBurned(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
 
@@ -8699,7 +8699,7 @@ constexpr Ability Impl<ABILITY_DAYBREAK> = {
 template <>
 constexpr Ability Impl<ABILITY_ENERGY_SIPHON> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
 
@@ -8811,7 +8811,7 @@ constexpr Ability Impl<ABILITY_BRUTEFORCE> = {
 template <>
 constexpr Ability Impl<ABILITY_FARADAY_CAGE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
         UseOutOfTurnAttack(battler, attacker, ability, MOVE_THUNDER_CAGE, 50);
@@ -9095,7 +9095,7 @@ constexpr Ability Impl<ABILITY_CRYO_ARCHITECT> = {
         return TRUE;
     },
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK(moveType == TYPE_WATER || moveType == TYPE_ICE)
 
         int any = FALSE;
@@ -9314,7 +9314,7 @@ constexpr Ability Impl<ABILITY_SUPER_SNIPER> = {
 };
 
 ON_EITHER(WoodlandCurse) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK_NOT(IS_BATTLER_OF_TYPE(opponent, TYPE_GRASS))
 
@@ -9333,7 +9333,7 @@ constexpr Ability Impl<ABILITY_WOODLAND_CURSE> = {
 template <>
 constexpr Ability Impl<ABILITY_MALODOR> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(gStatuses3[attacker] & STATUS3_GASTRO_ACID)
 
@@ -9509,7 +9509,7 @@ constexpr Ability Impl<ABILITY_TEMPORAL_RUPTURE> = {
 template <>
 constexpr Ability Impl<ABILITY_GRASS_FLUTE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(IsSoundMove(battler, move))
         CHECK_NOT(gVolatileStructs[target].fear)
 
@@ -9635,7 +9635,7 @@ constexpr Ability Impl<ABILITY_BEST_OFFENSE> = {
 template <>
 constexpr Ability Impl<ABILITY_IMPALER> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBleed(target))
         CHECK(gBattleMoves[move].hornBased);
         CHECK(Random() % 100 < 30)
@@ -9682,7 +9682,7 @@ constexpr Ability Impl<ABILITY_KOMODO> = {
 template <>
 constexpr Ability Impl<ABILITY_ENVENOM> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
         CHECK(Random() % 100 < 30)
 
@@ -9726,7 +9726,7 @@ constexpr Ability Impl<ABILITY_HYPER_CLEANSE> = {
 template <>
 constexpr Ability Impl<ABILITY_MOLTEN_COAT> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(moveType == TYPE_ROCK)
         CHECK(CanBeBurned(target))
         CHECK(Random() % 2)
@@ -9906,7 +9906,7 @@ constexpr Ability Impl<ABILITY_FIRE_ASPECT> = {
         return ABSORB_RESULT_HEAL;
     },
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(moveType == TYPE_FIRE)
         CHECK(CanBeBurned(target))
 
@@ -10009,7 +10009,7 @@ constexpr Ability Impl<ABILITY_PROPELLER_TAIL> = {
 template <>
 constexpr Ability Impl<ABILITY_ENERGY_TAP> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
 
@@ -10086,7 +10086,7 @@ constexpr Ability Impl<ABILITY_FROSTY_PRESCENCE> = {
 template <>
 constexpr Ability Impl<ABILITY_CHILLING_PELLETS> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(attacker))
+        CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
         UseOutOfTurnAttack(battler, attacker, ability, MOVE_ICICLE_SPEAR, 13);
@@ -10097,7 +10097,7 @@ constexpr Ability Impl<ABILITY_CHILLING_PELLETS> = {
 template <>
 constexpr Ability Impl<ABILITY_PAINT_SHOT> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK_NOT(IS_BATTLER_OF_TYPE(target, moveType))
         CHECK(IsMegaLauncherBoosted(battler, move))
 
@@ -10294,7 +10294,7 @@ constexpr Ability Impl<ABILITY_SPYWARE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_VIRUS> = {.onAttacker = +[](ON_ATTACKER) -> int {
-    CHECK(ShouldApplyOnHitAffect(target))
+    CHECK(ShouldApplyOnHitEffect(target))
     CHECK(moveType == TYPE_ELECTRIC)
     CHECK(CanBePoisoned(battler, target, move))
 
@@ -10365,7 +10365,7 @@ constexpr Ability Impl<ABILITY_STRONG_FOUNDATION> = {
 template <>
 constexpr Ability Impl<ABILITY_FOG_MACHINE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitAffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_FOG_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
+        CHECK(ShouldApplyOnHitEffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_FOG_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
             BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
             return NO_ANNOUNCE;
         }
@@ -10392,7 +10392,7 @@ constexpr Ability Impl<ABILITY_DROP_BLOCKS> = {
 template <>
 constexpr Ability Impl<ABILITY_LASER_DRILL> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBeBurned(target))
         CHECK(gBattleMoves[move].hornBased)
         CHECK(Random() % 2)
@@ -10405,7 +10405,7 @@ template <>
 constexpr Ability Impl<ABILITY_LIGHT_SABER> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIRE); },
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
         CHECK(Random() % 2)
         switch (Random() % 4) {
@@ -10514,7 +10514,7 @@ constexpr Ability Impl<ABILITY_LEAD_CLAWS> = {
 template <>
 constexpr Ability Impl<ABILITY_CHAINSAW> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
         CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
 
@@ -10544,7 +10544,7 @@ constexpr Ability Impl<ABILITY_EMPRESS> = {
 };
 
 ON_EITHER(HypnoticTouch) {
-    CHECK(ShouldApplyOnHitAffect(opponent))
+    CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanSleep(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK(Random() % 100 < 20)
@@ -10575,7 +10575,7 @@ constexpr Ability Impl<ABILITY_HYDRA> = {
 template <>
 constexpr Ability Impl<ABILITY_WINGS_OF_PESTILENCE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
 
         int any = FALSE;
 
@@ -10623,7 +10623,7 @@ constexpr Ability Impl<ABILITY_ZEN_GARDEN> = {
 template <>
 constexpr Ability Impl<ABILITY_SHARP_TALONS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KICK))
         CHECK(CanBleed(target))
         CHECK(Random() % 2)
@@ -10874,7 +10874,7 @@ constexpr Ability Impl<ABILITY_BACKFLIP> = {
 template <>
 constexpr Ability Impl<ABILITY_CRUSHING_JAW> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitAffect(target))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(Random() % 2)
         CHECK(StatLowerableOrMirrorArmor(target, STAT_DEF))
@@ -10992,7 +10992,7 @@ constexpr Ability Impl<ABILITY_CHESTNUT_AXE> = {
 template <>
 constexpr Ability Impl<ABILITY_WRESTLE_SHOWMAN> = {.onAttacker = +[](ON_ATTACKER) -> int {
     CHECK(move == MOVE_FLYING_PRESS)
-    CHECK(ShouldApplyOnHitAffect(target))
+    CHECK(ShouldApplyOnHitEffect(target))
     CHECK(IsBattlerAlive(target))
     CHECK(!IsAbilityStatusProtected(target, CHECK_RESTRICTING))
     CHECK(!gVolatileStructs[target].tauntTimer)
@@ -11198,7 +11198,7 @@ template <>
 constexpr Ability Impl<ABILITY_HOME_RUN> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(gIsCriticalHit)
-        CHECK(ShouldApplyOnHitAffect(battler))
+        CHECK(ShouldApplyOnHitEffect(battler))
 
         u8 secondaryStat[6] = {0};
         u32 temp = 0;

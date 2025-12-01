@@ -226,7 +226,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler);
 int HandleEndTurnAbility(int abilityNumber, int battler);
 int WasMoveSuccessful();
 int DidMoveHit();
-int ShouldApplyOnHitAffect(int applyTo);
+int ShouldApplyOnHitEffect(int applyTo);
 void ReplaceAbility(int battler, AbilityEnum ability);
 int HasAbilityIgnoringSuppression(int battler, AbilityEnum ability);
 AbilityEnum GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker);
