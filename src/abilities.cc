@@ -11175,6 +11175,24 @@ constexpr Ability Impl<ABILITY_STORM_CLOUD> = {
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_ELECTRIC; },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_TASTE_THE_RAINBOW> = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideTimers[GetBattlerSide(battler)].rainbowTimer)
+
+        InsertCorrectEndType(ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+
+        return AbilityStatusEffect(MOVE_EFFECT_RAINBOW | MOVE_EFFECT_AFFECTS_USER);
+    },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_RAINBOW_SCALES> = {
+    .onEntry = Impl<ABILITY_TASTE_THE_RAINBOW>.onEntry,
+    .onDefensiveMultiplier = Impl<ABILITY_FIRE_SCALES>.onDefensiveMultiplier,
+    .breakable = TRUE,
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>
