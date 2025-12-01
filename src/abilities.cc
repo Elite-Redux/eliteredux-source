@@ -10355,6 +10355,7 @@ constexpr Ability Impl<ABILITY_STRONG_FOUNDATION> = {
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_WATER || moveType == TYPE_GROUND) RESISTANCE(.50);
         },
+    .suctionCups = TRUE,
 };
 
 template <>
