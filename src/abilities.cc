@@ -7195,11 +7195,6 @@ constexpr Ability Impl<ABILITY_DESERT_SPIRIT> = {
 };
 
 template <>
-constexpr Ability Impl<ABILITY_CONTEMPT> = {
-    .unaware = TRUE,
-};
-
-template <>
 constexpr Ability Impl<ABILITY_AERIALIST> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
@@ -10453,11 +10448,6 @@ constexpr Ability Impl<ABILITY_STRIKEOUT> = {
 };
 
 template <>
-constexpr Ability Impl<ABILITY_HOME_RUN> = {
-    .randomizerBanned = TRUE,
-};
-
-template <>
 constexpr Ability Impl<ABILITY_BRUISER> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_FIGHTING); },
     .addsType = TYPE_FIGHTING,
@@ -11052,8 +11042,9 @@ constexpr Ability Impl<ABILITY_COMPETITIVE> = {
 };
 
 template <>
-constexpr Ability Impl<ABILITY_COMPETITIVE> = {
+constexpr Ability Impl<ABILITY_CONTEMPT> = {
     .onStatLowered = Impl<ABILITY_DEFIANT>.onStatLowered,
+    .unaware = TRUE,
 };
 
 template <>
@@ -11211,20 +11202,13 @@ constexpr Ability Impl<ABILITY_HOME_RUN> = {
         };
 
         // This is just a partial bubble sort
-        // Move highest stat to end of array
-        for (int i = 0; i < 4; i++) {
-            if (stats[i][1] < stats[4][1]) continue;
-            if (stats[i][1] == stats[4][1] && Random() % 2) continue;
-            SWAP(stats[i][0], stats[4][0], temp)
-            SWAP(stats[i][1], stats[4][1], temp)
+        for (int maxValueIndex : {4, 3}) {
+        for (int i = 0; i < maxValueIndex; i++) {
+            if (stats[i][1] < stats[maxValueIndex][1]) continue;
+            if (stats[i][1] == stats[maxValueIndex][1] && Random() % 2) continue;
+            SWAP(stats[i][0], stats[maxValueIndex][0], temp)
+            SWAP(stats[i][1], stats[maxValueIndex][1], temp)
         }
-
-        // Move highest remaining stat (second highest) to next to last position
-        for (int i = 0; i < 3; i++) {
-            if (stats[i][1] < stats[3][1]) continue;
-            if (stats[i][1] == stats[3][1] && Random() % 2) continue;
-            SWAP(stats[i][0], stats[3][0], temp)
-            SWAP(stats[i][1], stats[3][1], temp)
         }
 
         int statsToBoost[3] = {0};

@@ -1289,6 +1289,15 @@ void ProtectChecks(u8 battlerAtk, u8 battlerDef, u16 move, u16 predictedMove, s1
         (*score) += 2;
 }
 
+bool32 LoweringStatsPointlessOrBad(u8 battlerDef) {
+    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CONTRARY)) return TRUE;
+    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CLEAR_BODY)) return TRUE;
+    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_FULL_METAL_BODY)) return TRUE;
+    RETURN_ABILITY_IF_FLAG(battlerDef, FALSE, onStatLowered);
+
+    return FALSE;
+}
+
 // stat stages
 bool32 ShouldLowerStat(u8 battler, u8 stat) {
     if ((gBattleMons[battler].statStages[stat] > MIN_STAT_STAGE && !BattlerHasAbility(battler, ABILITY_CONTRARY, TRUE)) ||
@@ -1358,15 +1367,6 @@ u32 CountNegativeStatStages(u8 battlerId) {
         if (gBattleMons[battlerId].statStages[i] < DEFAULT_STAT_STAGE) count++;
     }
     return count;
-}
-
-bool32 LoweringStatsPointlessOrBad(u8 battlerDef) {
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CONTRARY)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CLEAR_BODY)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_FULL_METAL_BODY)) return TRUE;
-    RETURN_ABILITY_IF_FLAG(battlerDef, FALSE, onStatLowered);
-
-    return FALSE;
 }
 
 bool32 ShouldLowerAttack(u8 battlerAtk, u8 battlerDef) {

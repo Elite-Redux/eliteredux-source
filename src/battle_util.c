@@ -1083,7 +1083,7 @@ bool8 WasUnableToUseMove(u8 battler) {
 }
 
 void PrepareStringBattle(u16 stringId, u8 battler) {
-    int hasContrary, abilityBattler;
+    int hasContrary;
 
     hasContrary = BATTLER_HAS_ABILITY(battler, ABILITY_CONTRARY);
 
