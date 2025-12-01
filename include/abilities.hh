@@ -126,6 +126,7 @@ typedef enum MoveFlag {
 typedef int (*AbilityOnModifyMoveFlags)(int battler, MoveEnum move, Type type, MoveFlag flag);
 typedef int (*AbilityOnMoldBreaker)(int battler, MoveEnum move);
 typedef int (*AbilityOnRevive)(int battler);
+typedef int (*AbilityOnStatLowered)(int battler);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -202,6 +203,7 @@ typedef struct Ability {
     AbilityOnModifyMoveFlags onModifyMoveFlags;
     AbilityOnMoldBreaker onMoldBreaker;
     AbilityOnRevive onRevive;
+    AbilityOnStatLowered onStatLowered;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;
@@ -213,6 +215,7 @@ typedef struct Ability {
     AbilityApplyOn onModifyEffectChanceFor:3;
     AbilityApplyOn onStatusImmuneFor:3;
     AbilityApplyOnWithTarget onBeforeAttackFor:5;
+    AbilityApplyOn onStatLoweredFor:3;
     TerrainType allowTerrainIfAirborne:5;
     MoveEffectEnum setStateOnEffect;
     u16 redirectType:5;

@@ -9567,6 +9567,17 @@ BattleScript_DefiantActivates_Effect:
 BattleScript_DefiantActivates_End:
 	return
 
+BattleScript_StackBattlerStatUp::
+	saveattackertostack3
+	copybyte gBattlerAttacker, gStackBattler1
+	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_RestoreAttackerReturn
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_RestoreAttackerReturn
+	setgraphicalstatchangevalues
+	playanimation BS_ABILITY_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printstring STRINGID_ATTACKER_STATS_ROSE
+	readattackerfromstack3
+	return
+
 BattleScript_AbilityPopUpEnd3::
 	call BattleScript_AbilityPopUp
 	end3

@@ -9091,6 +9091,19 @@ static void Cmd_various(void) {
                        break)
             break;
         }
+        case VARIOUS_ON_STAT_LOWERED: {
+            REQUIRE(GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget))
+            REQUIRE(IsBattlerAlive(gActiveBattler))
+            ON_ABILITY(
+                gActiveBattler,
+                FALSE,
+                gAbilities[ability].onStatLowered && IsApplyOnFlagAppropriate(gBattlerTarget, gActiveBattler, gAbilities[ability].onStatLoweredFor),
+                if (gAbilities[ability].onStatLowered(gActiveBattler)) {
+                    gBattleScripting.abilityPopupOverwrite = ability;
+                    BattleScriptCall(BattleScript_AbilityPopUpStack);
+                })
+            break;
+        }
     }  // End of switch (gBattlescriptCurrInstr[2])
 }
 

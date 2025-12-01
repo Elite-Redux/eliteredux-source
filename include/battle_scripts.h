@@ -184,6 +184,7 @@ extern const u8 BattleScript_AfterAbsorbEffect[];
 extern const u8 BattleScript_MoveHPDrain[];
 extern const u8 BattleScript_DefenderSetsMist[];
 extern const u8 BattleScript_AttackerSetsMist[];
+extern const u8 BattleScript_StackBattlerStatUp[];
 extern const u8 BattleScript_MonMadeMoveUseless[];
 extern const u8 BattleScript_FlashFireBoost[];
 extern const u8 BattleScript_AbilityNoStatLoss[];

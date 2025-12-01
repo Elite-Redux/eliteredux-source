@@ -1293,19 +1293,19 @@ void ProtectChecks(u8 battlerAtk, u8 battlerDef, u16 move, u16 predictedMove, s1
 bool32 ShouldLowerStat(u8 battler, u8 stat) {
     if ((gBattleMons[battler].statStages[stat] > MIN_STAT_STAGE && !BattlerHasAbility(battler, ABILITY_CONTRARY, TRUE)) ||
         (BattlerHasAbility(battler, ABILITY_CONTRARY, TRUE) && gBattleMons[battler].statStages[stat] < MAX_STAT_STAGE)) {
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_CLEAR_BODY) || BATTLER_HAS_ABILITY(battler, ABILITY_FULL_METAL_BODY)) return FALSE;
+
+        if (LoweringStatsPointlessOrBad(battler)) return FALSE;
 
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_CLEAR_AMULET) return FALSE;
 
-        if (stat == STAT_ATK && (BATTLER_HAS_ABILITY(battler, ABILITY_HYPER_CUTTER) || BATTLER_HAS_ABILITY(battler, ABILITY_DEFIANT) ||
-                                 BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT)))
+        if (stat == STAT_ATK && BATTLER_HAS_ABILITY(battler, ABILITY_HYPER_CUTTER))
             return FALSE;
 
         /*if (stat == STAT_DEF &&
             (BATTLER_HAS_ABILITY(battler, ABILITY_BIG_PECKS)))
             return FALSE;*/
 
-        if (stat == STAT_SPATK && (BATTLER_HAS_ABILITY(battler, ABILITY_HYPER_CUTTER) || BATTLER_HAS_ABILITY(battler, ABILITY_COMPETITIVE))) return FALSE;
+        if (stat == STAT_SPATK && BATTLER_HAS_ABILITY(battler, ABILITY_HYPER_CUTTER)) return FALSE;
 
         return TRUE;
     }
@@ -1364,13 +1364,8 @@ bool32 LoweringStatsPointlessOrBad(u8 battlerDef) {
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CONTRARY)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CLEAR_BODY)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_FULL_METAL_BODY)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_RUN_AWAY)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CONTEMPT)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_DEFIANT)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_COMPETITIVE)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_KINGS_WRATH)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_QUEENS_MOURNING)) return TRUE;
-    if (GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_CLEAR_AMULET) return TRUE;
+    RETURN_ABILITY_IF_FLAG(battlerDef, FALSE, onStatLowered);
+
     return FALSE;
 }
 

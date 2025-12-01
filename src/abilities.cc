@@ -142,6 +142,8 @@ ENUM_OR(NonStackingState)
 #define DELEGATE_MOLD_BREAKER battler, move
 #define ON_REVIVE opt int battler
 #define DELEGATE_REVIVE battler
+#define ON_STAT_LOWERED opt int battler
+#define DELEGATE_STAT_LOWERED battler
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -11026,6 +11028,125 @@ constexpr Ability Impl<ABILITY_WATERBORNE> = {
     .onEntry = Impl<ABILITY_AQUATIC>.onEntry,
     .adaptability = TRUE,
     .addsType = Impl<ABILITY_AQUATIC>.addsType,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_DEFIANT> = {
+    .onStatLowered = +[](ON_STAT_LOWERED) -> int {
+        CHECK(CanRaiseStat(battler, STAT_ATK))
+        SetStatChanger(STAT_ATK, 2);
+        BattleScriptCall(BattleScript_StackBattlerStatUp);
+        return TRUE;
+    },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_COMPETITIVE> = {
+    .onStatLowered = +[](ON_STAT_LOWERED) -> int {
+        CHECK(CanRaiseStat(battler, STAT_SPATK))
+        SetStatChanger(STAT_SPATK, 2);
+        BattleScriptCall(BattleScript_StackBattlerStatUp);
+        return TRUE;
+    },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_COMPETITIVE> = {
+    .onStatLowered = Impl<ABILITY_DEFIANT>.onStatLowered,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_RUN_AWAY> = {
+    .onStatLowered = +[](ON_STAT_LOWERED) -> int {
+        CHECK(CanRaiseStat(battler, STAT_SPEED))
+        SetStatChanger(STAT_SPEED, 2);
+        BattleScriptCall(BattleScript_StackBattlerStatUp);
+        return TRUE;
+    },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_KINGS_WRATH> = {
+    .onStatLowered = +[](ON_STAT_LOWERED) -> int {
+        int any = FALSE;
+        if (CanRaiseStat(battler, STAT_DEF)) {
+            SetStatChanger(STAT_DEF, 1);
+            BattleScriptCall(BattleScript_StackBattlerStatUp);
+            any = TRUE;
+        }
+        if (CanRaiseStat(battler, STAT_ATK)) {
+            SetStatChanger(STAT_ATK, 1);
+            BattleScriptCall(BattleScript_StackBattlerStatUp);
+            any = TRUE;
+        }
+        return any;
+    },
+    .onStatLoweredFor = APPLY_ON_ALLY,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_QUEENS_MOURNING> = {
+    .onStatLowered = +[](ON_STAT_LOWERED) -> int {
+        int any = FALSE;
+        if (CanRaiseStat(battler, STAT_SPDEF)) {
+            SetStatChanger(STAT_SPDEF, 1);
+            BattleScriptCall(BattleScript_StackBattlerStatUp);
+            any = TRUE;
+        }
+        if (CanRaiseStat(battler, STAT_SPATK)) {
+            SetStatChanger(STAT_SPATK, 1);
+            BattleScriptCall(BattleScript_StackBattlerStatUp);
+            any = TRUE;
+        }
+        return any;
+    },
+    .onStatLoweredFor = APPLY_ON_ALLY,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_EMPERORS_WRATH> = {
+    .onStatLowered = +[](ON_STAT_LOWERED) -> int {
+        int any = FALSE;
+        if (CanRaiseStat(battler, STAT_SPDEF)) {
+            SetStatChanger(STAT_SPDEF, 1);
+            BattleScriptCall(BattleScript_StackBattlerStatUp);
+            any = TRUE;
+        }
+        if (CanRaiseStat(battler, STAT_DEF)) {
+            SetStatChanger(STAT_DEF, 1);
+            BattleScriptCall(BattleScript_StackBattlerStatUp);
+            any = TRUE;
+        }
+        if (CanRaiseStat(battler, STAT_SPATK)) {
+            SetStatChanger(STAT_SPATK, 1);
+            BattleScriptCall(BattleScript_StackBattlerStatUp);
+            any = TRUE;
+        }
+        if (CanRaiseStat(battler, STAT_ATK)) {
+            SetStatChanger(STAT_ATK, 1);
+            BattleScriptCall(BattleScript_StackBattlerStatUp);
+            any = TRUE;
+        }
+        return any;
+    },
+    .onStatLoweredFor = APPLY_ON_ALLY,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_LUCHA_LIBRE> = {
+    .onImmune = Impl<ABILITY_DAZZLING>.onImmune,
+    .onStatLowered = Impl<ABILITY_DEFIANT>.onStatLowered,
+    .onImmuneFor = APPLY_ON_ALLY,
+    .onStatLoweredFor = APPLY_ON_ALLY,
+    .breakable = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_FIRE_RULER> = {
+    .onAttacker = Impl<ABILITY_FLAME_BODY>.onAttacker,
+    .onDefender = Impl<ABILITY_FLAME_BODY>.onDefender,
+    .onStatLowered = Impl<ABILITY_KINGS_WRATH>.onStatLowered,
+    .onStatLoweredFor = APPLY_ON_ALLY,
 };
 
 #include "generated/data/abilities/ability_text.hh"

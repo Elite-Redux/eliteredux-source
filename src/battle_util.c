@@ -1113,45 +1113,28 @@ void PrepareStringBattle(u16 stringId, u8 battler) {
         stringId = STRINGID_STATSWONTINCREASE2;
     else if (stringId == STRINGID_STATSWONTINCREASE2 && hasContrary)
         stringId = STRINGID_STATSWONTDECREASE2;
-    else if ((stringId == STRINGID_DEFENDERSSTATFELL) && (abilityBattler = IsAbilityOnSide(gBattlerTarget, ABILITY_KINGS_WRATH)) &&
-             gTurnStructs[gBattlerTarget].changedStatsBattlerId != BATTLE_PARTNER(gBattlerTarget) &&
-             gTurnStructs[gBattlerTarget].changedStatsBattlerId != gBattlerTarget) {
-        // Overwrites the Popout
-        gBattleScripting.abilityPopupOverwrite = ABILITY_KINGS_WRATH;
-        // Overwrites where it's written
-        if (abilityBattler - 1 != gBattlerTarget) {
-            gBattleScripting.battlerPopupOverwrite = BATTLE_PARTNER(gBattlerTarget);
-            gBattlerAbility = BATTLE_PARTNER(gBattlerTarget);
-        } else
-            gBattlerAbility = gBattlerTarget;
-
-        BattleScriptCall(BattleScript_KingsWrathActivated);
-    } else if ((stringId == STRINGID_DEFENDERSSTATFELL) && (abilityBattler = IsAbilityOnSide(gBattlerTarget, ABILITY_QUEENS_MOURNING)) &&
-               gTurnStructs[gBattlerTarget].changedStatsBattlerId != BATTLE_PARTNER(gBattlerTarget) &&
-               gTurnStructs[gBattlerTarget].changedStatsBattlerId != gBattlerTarget) {
-        // Overwrites the Popout
-        gBattleScripting.abilityPopupOverwrite = ABILITY_QUEENS_MOURNING;
-        // Overwrites where it's written
-        if (abilityBattler - 1 != gBattlerTarget) {
-            gBattleScripting.battlerPopupOverwrite = BATTLE_PARTNER(gBattlerTarget);
-            gBattlerAbility = BATTLE_PARTNER(gBattlerTarget);
-        } else
-            gBattlerAbility = gBattlerTarget;
-
-        BattleScriptCall(BattleScript_QueensMourningActivated);
-    } else if (stringId == STRINGID_DEFENDERSSTATFELL &&
-               (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_DEFIANT) || BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_CONTEMPT))) {
-        gBattleScripting.abilityPopupOverwrite = BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_DEFIANT) ? ABILITY_DEFIANT : ABILITY_CONTEMPT;
-        gBattlerAbility = gBattlerTarget;
-        BattleScriptCall(BattleScript_DefiantActivates);
-    } else if (stringId == STRINGID_DEFENDERSSTATFELL && BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_COMPETITIVE)) {
-        gBattleScripting.abilityPopupOverwrite = ABILITY_COMPETITIVE;
-        gBattlerAbility = gBattlerTarget;
-        BattleScriptCall(BattleScript_CompetitiveActivates);
-    } else if (stringId == STRINGID_DEFENDERSSTATFELL && BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_RUN_AWAY)) {
-        gBattleScripting.abilityPopupOverwrite = ABILITY_RUN_AWAY;
-        gBattlerAbility = gBattlerTarget;
-        BattleScriptCall(BattleScript_RunAwayActivates);
+    else if (stringId == STRINGID_DEFENDERSSTATFELL && GetBattlerSide(gTurnStructs[gBattlerTarget].changedStatsBattlerId) != GetBattlerSide(gBattlerTarget)) {
+        if (IsBattlerAlive(gBattlerTarget)) {
+            ON_ABILITY(
+                gBattlerTarget,
+                FALSE,
+                gAbilities[ability].onStatLowered && IsApplyOnFlagAppropriate(gBattlerTarget, gBattlerTarget, gAbilities[ability].onStatLoweredFor),
+                if (gAbilities[ability].onStatLowered(gBattlerTarget)) {
+                    gBattleScripting.abilityPopupOverwrite = ability;
+                    BattleScriptCall(BattleScript_AbilityPopUpStack);
+                })
+        }
+        int partner = BATTLE_PARTNER(gBattlerTarget);
+        if (IsBattlerAlive(partner)) {
+            ON_ABILITY(
+                gBattlerTarget,
+                FALSE,
+                gAbilities[ability].onStatLowered && IsApplyOnFlagAppropriate(partner, gBattlerTarget, gAbilities[ability].onStatLoweredFor),
+                if (gAbilities[ability].onStatLowered(partner)) {
+                    gBattleScripting.abilityPopupOverwrite = ability;
+                    BattleScriptCall(BattleScript_AbilityPopUpStack);
+                })
+        }
     }
 
     gActiveBattler = battler;
@@ -2711,7 +2694,8 @@ u8 DoBattlerEndTurnEffects(void) {
                 else
                     SetAbilityState(gActiveBattler, ABILITY_SIDEWINDER, FALSE);
 
-                if (gStatuses4[gActiveBattler] & STATUS4_CUTTHROAT && IsKeenEdge(gActiveBattler, gLastMoves[gActiveBattler], GetTypeBeforeUsingMove(gLastMoves[gActiveBattler], gActiveBattler)))
+                if (gStatuses4[gActiveBattler] & STATUS4_CUTTHROAT &&
+                    IsKeenEdge(gActiveBattler, gLastMoves[gActiveBattler], GetTypeBeforeUsingMove(gLastMoves[gActiveBattler], gActiveBattler)))
                     gStatuses4[gActiveBattler] &= ~STATUS4_CUTTHROAT;
 
                 gBattleStruct->turnEffectsTracker++;

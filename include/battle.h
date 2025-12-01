@@ -414,7 +414,7 @@ struct SavedStackData
     u8 stackBattler4:2;
 };
 
-#define MAX_SCRIPT_STACK_COUNT 9
+#define MAX_SCRIPT_STACK_COUNT 20
 struct BattleScriptsStack
 {
     const u8 *ptr[MAX_SCRIPT_STACK_COUNT];
