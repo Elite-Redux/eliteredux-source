@@ -11210,6 +11210,7 @@ constexpr Ability Impl<ABILITY_HOME_RUN> = {
             {STAT_SPEED, CalculateStat(battler, STAT_SPEED, secondaryStat, move, FALSE, FALSE, FALSE, FALSE)},
         };
 
+        // This is just a partial bubble sort
         // Move highest stat to end of array
         for (int i = 0; i < 4; i++) {
             if (stats[i][1] < stats[4][1]) continue;
