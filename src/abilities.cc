@@ -11247,6 +11247,14 @@ constexpr Ability Impl<ABILITY_HOME_RUN> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_MUSICAL_NOTES> = {
+    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
+        CHECK(flag == MOVE_FLAG_SOUND)
+        return IS_MOVE_STATUS(move);
+    },
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>
