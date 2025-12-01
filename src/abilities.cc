@@ -2750,6 +2750,7 @@ constexpr Ability Impl<ABILITY_COMATOSE> = {
     },
     .unsuppressable = TRUE,
     .removesStatusOnImmunity = TRUE,
+    .alwaysSleeping = TRUE,
 };
 
 template <>
@@ -3721,6 +3722,7 @@ constexpr Ability Impl<ABILITY_COIL_UP> = {
         BattleScriptPushCursorAndCallback(BattleScript_BattlerCoiledUp);
         return TRUE;
     },
+    .coilUp = TRUE,
 };
 
 template <>
@@ -7946,6 +7948,7 @@ constexpr Ability Impl<ABILITY_SIDEWINDER> = {
         return TRUE;
     },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .coilUp = TRUE,
 };
 
 template <>
@@ -8660,6 +8663,7 @@ constexpr Ability Impl<ABILITY_CUTTHROAT> = {
         gStatuses4[battler] |= STATUS4_CUTTHROAT;
         return SwitchInAnnounce(B_MSG_SWITCHIN_CUTTHROAT);
     },
+    .cutthroat = TRUE,
 };
 
 template <>
@@ -9811,6 +9815,7 @@ constexpr Ability Impl<ABILITY_DREAMSCAPE> = {
     .onPreemptAction = Impl<ABILITY_DREAMCATCHER>.onPreemptAction,
     .unsuppressable = TRUE,
     .removesStatusOnImmunity = TRUE,
+    .alwaysSleeping = TRUE,
 };
 
 template <>
@@ -10137,6 +10142,7 @@ constexpr Ability Impl<ABILITY_EDGELORD> = {
         return TRUE;
     },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .cutthroat = TRUE,
 };
 
 template <>
@@ -10942,6 +10948,7 @@ constexpr Ability Impl<ABILITY_ETERNAL_FLOWER> = {
 template <>
 constexpr Ability Impl<ABILITY_CURLIPEDE> = {
     .onEntry = +[](ON_ENTRY) -> int { return Impl<ABILITY_LETS_ROLL>.onEntry(DELEGATE_ENTRY) | Impl<ABILITY_COIL_UP>.onEntry(DELEGATE_ENTRY); },
+    .coilUp = TRUE,
 };
 
 template <>
@@ -11206,12 +11213,12 @@ constexpr Ability Impl<ABILITY_HOME_RUN> = {
 
         // This is just a partial bubble sort
         for (int maxValueIndex : {4, 3}) {
-        for (int i = 0; i < maxValueIndex; i++) {
-            if (stats[i][1] < stats[maxValueIndex][1]) continue;
-            if (stats[i][1] == stats[maxValueIndex][1] && Random() % 2) continue;
-            SWAP(stats[i][0], stats[maxValueIndex][0], temp)
-            SWAP(stats[i][1], stats[maxValueIndex][1], temp)
-        }
+            for (int i = 0; i < maxValueIndex; i++) {
+                if (stats[i][1] < stats[maxValueIndex][1]) continue;
+                if (stats[i][1] == stats[maxValueIndex][1] && Random() % 2) continue;
+                SWAP(stats[i][0], stats[maxValueIndex][0], temp)
+                SWAP(stats[i][1], stats[maxValueIndex][1], temp)
+            }
         }
 
         int statsToBoost[3] = {0};

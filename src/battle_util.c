@@ -6690,7 +6690,7 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
             }
             break;
         case EFFECT_WAKE_UP_SLAP:
-            if (gBattleMons[battlerDef].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battlerDef, ABILITY_COMATOSE)) basePower *= 2;
+            if (gBattleMons[battlerDef].status1 & STATUS1_SLEEP || IsComatose(battlerDef)) basePower *= 2;
             break;
         case EFFECT_SMELLINGSALT:
             if (gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS) basePower *= 2;
@@ -8986,6 +8986,8 @@ int BenefitsFromStatBuffs(int battler) {
     return TRUE;
 }
 
+AbilityEnum IsComatose(int battler) { RETURN_ABILITY_IF_FLAG(battler, FALSE, alwaysSleeping); }
+
 int IsBloodStainAffected(int battler) {
     if (IS_BATTLER_OF_TYPE(battler, TYPE_GHOST)) return FALSE;
     if (IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)) return FALSE;
@@ -9230,7 +9232,7 @@ int IsDance(int attacker, MoveEnum move) { return DoesMoveMatchFlag(attacker, mo
 
 int HasAnyStatusOrAbility(int battler) {
     if (gBattleMons[battler].status1 && STATUS1_ANY) return TRUE;
-    if (BattlerHasAbility(battler, ABILITY_COMATOSE, TRUE)) return TRUE;
+    if (IsComatose(battler)) return TRUE;
     if (IsBloodStainAffected(battler)) return TRUE;
     return FALSE;
 }

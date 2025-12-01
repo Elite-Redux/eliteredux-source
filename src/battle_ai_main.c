@@ -643,6 +643,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
                         break;
                     case ABILITY_BLOOD_STAIN:
                     case ABILITY_COMATOSE:
+                    case ABILITY_DREAMSCAPE:
                         if (IsNonVolatileStatusMoveEffect(moveEffect)) RETURN_SCORE_MINUS(10);
                         break;
                     case ABILITY_SHIELDS_DOWN:
@@ -820,7 +821,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             }
             break;
         case EFFECT_DREAM_EATER:
-            if (!(gBattleMons[battlerDef].status1 & STATUS1_SLEEP) || BattlerHasAbility(battlerDef, ABILITY_COMATOSE, TRUE))
+            if (!(gBattleMons[battlerDef].status1 & STATUS1_SLEEP) || IsComatose(battlerDef))
                 score -= 8;
             else if (effectiveness == AI_EFFECTIVENESS_x0)
                 score -= 10;
@@ -1224,7 +1225,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             break;
         case EFFECT_SNORE:
         case EFFECT_SLEEP_TALK:
-            if (IsWakeupTurn(battlerAtk) || (!(gBattleMons[battlerAtk].status1 & STATUS1_SLEEP) || !BattlerHasAbility(battlerAtk, ABILITY_COMATOSE, TRUE)))
+            if (IsWakeupTurn(battlerAtk) || (!(gBattleMons[battlerAtk].status1 & STATUS1_SLEEP) || !IsComatose(battlerAtk)))
                 score -= 10;  // if mon will wake up, is not asleep, or is not comatose
             break;
         case EFFECT_MEAN_LOOK:
@@ -1234,7 +1235,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
         case EFFECT_NIGHTMARE:
             if (gBattleMons[battlerDef].status2 & STATUS2_NIGHTMARE)
                 score -= 10;
-            else if (!(gBattleMons[battlerDef].status1 & STATUS1_SLEEP) || BattlerHasAbility(battlerDef, ABILITY_COMATOSE, TRUE))
+            else if (!(gBattleMons[battlerDef].status1 & STATUS1_SLEEP) || IsComatose(battlerDef))
                 score -= 8;
             else if (DoesPartnerHaveSameMoveEffect(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove))
                 score -= 10;
@@ -3168,7 +3169,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
         } break;
         case EFFECT_NIGHTMARE:
             if (!IsMagicGuardProtected(battlerDef) && !(gBattleMons[battlerDef].status2 & STATUS2_NIGHTMARE) &&
-                (BattlerHasAbility(battlerDef, ABILITY_COMATOSE, TRUE) || gBattleMons[battlerDef].status1 & STATUS1_SLEEP)) {
+                (IsComatose(battlerDef) || gBattleMons[battlerDef].status1 & STATUS1_SLEEP)) {
                 score += 5;
                 if (IsBattlerTrapped(battlerDef, TRUE)) score += 3;
             }

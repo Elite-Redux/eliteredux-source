@@ -567,8 +567,7 @@ BattleScript_EffectSteelBeam::
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
 	seteffectwithchance
-	jumpifability BS_ATTACKER, ABILITY_ROCK_HEAD, BattleScript_SteelBeamAfterSelfDamage
-	jumpifability BS_ATTACKER, ABILITY_STEEL_BARREL, BattleScript_SteelBeamAfterSelfDamage
+	jumpifabilityflag BS_ATTACKER, ABILITY_ROCK_HEAD, BattleScript_SteelBeamAfterSelfDamage
 	jumpifmagicguard BS_ATTACKER, BattleScript_SteelBeamAfterSelfDamage
 	call BattleScript_SteelBeamSelfDamage
 BattleScript_SteelBeamAfterSelfDamage::
@@ -581,8 +580,7 @@ BattleScript_SteelBeamMiss::
 	effectivenesssound
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	jumpifability BS_ATTACKER, ABILITY_ROCK_HEAD, BattleScript_SteelBeamAfterSelfDamage
-	jumpifability BS_ATTACKER, ABILITY_STEEL_BARREL, BattleScript_SteelBeamAfterSelfDamage
+	jumpifabilityflag BS_ATTACKER, ABILITY_ROCK_HEAD, BattleScript_SteelBeamAfterSelfDamage
 	jumpifmagicguard BS_ATTACKER, BattleScript_MoveEnd
 	bichalfword gMoveResultFlags, MOVE_RESULT_MISSED
 	call BattleScript_SteelBeamSelfDamage
@@ -779,7 +777,6 @@ BattleScript_OctolockEndTurn::
 	jumpifstat BS_TARGET, CMP_GREATER_THAN, STAT_SPDEF, MIN_STAT_STAGE, BattleScript_OctolockTryLowerSpDef
 	goto BattleScript_OctolockEnd2
 BattleScript_OctolockLowerDef:
-	jumpifability BS_TARGET, ABILITY_BIG_PECKS, BattleScript_OctolockTryLowerSpDef
 	playstatchangeanimation BS_ATTACKER, BIT_DEF | BIT_SPDEF, STAT_CHANGE_NEGATIVE
 	setbyte sSTAT_ANIM_PLAYED, TRUE
 	setstatchanger STAT_DEF, 1, TRUE
@@ -2396,9 +2393,7 @@ BattleScript_GrowthDoMoveAnim::
 	setbyte sSTAT_ANIM_PLAYED, FALSE
 	playstatchangeanimation BS_ATTACKER, BIT_ATK | BIT_SPATK, 0
 	jumpifweatheraffected BS_ATTACKER, WEATHER_SUN_ANY, BattleScript_GrowthAtk2
-	jumpifability BS_ATTACKER, ABILITY_CHLOROPLAST, BattleScript_GrowthAtk2
-	jumpifability BS_ATTACKER, ABILITY_BIG_LEAVES, BattleScript_GrowthAtk2
-	jumpifability BS_ATTACKER, ABILITY_SOLAR_FLARE, BattleScript_GrowthAtk2
+	jumpifabilityflag BS_ATTACKER, ABILITY_CHLOROPLAST, BattleScript_GrowthAtk2
 	setstatchanger STAT_ATK, 1, FALSE
 	goto BattleScript_GrowthAtk
 BattleScript_GrowthAtk2:
@@ -2410,9 +2405,7 @@ BattleScript_GrowthAtk:
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_GrowthTrySpAtk::
 	jumpifweatheraffected BS_ATTACKER, WEATHER_SUN_ANY, BattleScript_GrowthSpAtk2
-	jumpifability BS_ATTACKER, ABILITY_CHLOROPLAST, BattleScript_GrowthSpAtk2
-	jumpifability BS_ATTACKER, ABILITY_BIG_LEAVES, BattleScript_GrowthSpAtk2
-	jumpifability BS_ATTACKER, ABILITY_SOLAR_FLARE, BattleScript_GrowthSpAtk2
+	jumpifabilityflag BS_ATTACKER, ABILITY_CHLOROPLAST, BattleScript_GrowthSpAtk2
 	setstatchanger STAT_SPATK, 1, FALSE
 	goto BattleScript_GrowthSpAtk
 BattleScript_GrowthSpAtk2:
@@ -2502,8 +2495,7 @@ BattleScript_EffectCoil:
 	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_ATK, MAX_STAT_STAGE, BattleScript_CoilDoMoveAnim
 	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_DEF, MAX_STAT_STAGE, BattleScript_CoilDoMoveAnim
 	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_ACC, MAX_STAT_STAGE, BattleScript_CoilDoMoveAnim
-	jumpifability BS_ATTACKER, ABILITY_COIL_UP, BattleScript_EffectCoil_TryCoil
-	jumpifability BS_ATTACKER, ABILITY_SIDEWINDER, BattleScript_EffectCoil_TryCoil
+	jumpifabilityflag BS_ATTACKER, ABILITY_COIL_UP, BattleScript_EffectCoil_TryCoil
 	goto BattleScript_ButItFailed
 BattleScript_EffectCoil_TryCoil:
 	jumpifstatus4 BS_ATTACKER, STATUS4_COILED, BattleScript_ButItFailed
@@ -2530,8 +2522,7 @@ BattleScript_CoilTryAcc:
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_CoilTryCoilUp:
-	jumpifability BS_ATTACKER, ABILITY_COIL_UP, BattleScript_CoilTryCoilUp_CheckCoiled
-	jumpifability BS_ATTACKER, ABILITY_SIDEWINDER, BattleScript_CoilTryCoilUp_CheckCoiled
+	jumpifabilityflag BS_ATTACKER, ABILITY_COIL_UP, BattleScript_CoilTryCoilUp_CheckCoiled
 	goto BattleScript_CoilEnd
 BattleScript_CoilTryCoilUp_CheckCoiled:
 	jumpifstatus4 BS_ATTACKER, STATUS4_COILED, BattleScript_CoilEnd
@@ -3954,8 +3945,7 @@ BattleScript_EffectMindBlown::
 	attackstring
 	ppreduce
 	jumpifabilitypresent ABILITY_DAMP, BattleScript_EffectMindBlown_Failed
-	jumpifability BS_ATTACKER, ABILITY_STEEL_BARREL, BattleScript_EffectMindBlown_NoDamage
-	jumpifability BS_ATTACKER, ABILITY_ROCK_HEAD, BattleScript_EffectMindBlown_NoDamage
+	jumpifabilityflag BS_ATTACKER, ABILITY_ROCK_HEAD, BattleScript_EffectMindBlown_NoDamage
 	jumpifmagicguard BS_ATTACKER, BattleScript_EffectMindBlown_NoDamage
 	dmg_1_2_attackerhp
 	healthbarupdate BS_ATTACKER
@@ -3980,7 +3970,7 @@ BattleScript_EffectDreamEater::
 	attackcanceler
 	jumpifsubstituteblocks BattleScript_DreamEaterNoEffect
 	jumpifstatus BS_TARGET, STATUS1_SLEEP, BattleScript_EffectAbsorb
-	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_EffectAbsorb
+	jumpifabilityflag BS_TARGET, ABILITY_COMATOSE, BattleScript_EffectAbsorb
 BattleScript_DreamEaterNoEffect:
 	attackstring
 	ppreduce
@@ -4447,7 +4437,7 @@ BattleScript_EffectRest::
 	attackstring
 	ppreduce
 	jumpifstatus BS_ATTACKER, STATUS1_SLEEP, BattleScript_RestIsAlreadyAsleep
-	jumpifability BS_ATTACKER, ABILITY_COMATOSE, BattleScript_RestIsAlreadyAsleep
+	jumpifabilityflag BS_ATTACKER, ABILITY_COMATOSE, BattleScript_RestIsAlreadyAsleep
 	requirecandoeffect BS_ATTACKER, MOVE_EFFECT_SLEEP | MOVE_EFFECT_AFFECTS_USER
 	trysetrest BattleScript_AlreadyAtFullHp
 	pause B_WAIT_TIME_SHORT
@@ -5178,7 +5168,7 @@ BattleScript_EffectPainSplit::
 
 BattleScript_EffectSnore::
 	attackcanceler
-	jumpifability BS_ATTACKER, ABILITY_COMATOSE, BattleScript_SnoreIsAsleep
+	jumpifabilityflag BS_ATTACKER, ABILITY_COMATOSE, BattleScript_SnoreIsAsleep
 	jumpifstatus BS_ATTACKER, STATUS1_SLEEP, BattleScript_SnoreIsAsleep
 	attackstring
 	ppreduce
@@ -5232,7 +5222,7 @@ BattleScript_EffectSketch::
 
 BattleScript_EffectSleepTalk::
 	attackcanceler
-	jumpifability BS_ATTACKER, ABILITY_COMATOSE, BattleScript_SleepTalkIsAsleep
+	jumpifabilityflag BS_ATTACKER, ABILITY_COMATOSE, BattleScript_SleepTalkIsAsleep
 	jumpifstatus BS_ATTACKER, STATUS1_SLEEP, BattleScript_SleepTalkIsAsleep
 	attackstring
 	ppreduce
@@ -5382,7 +5372,7 @@ BattleScript_EffectMeanLook::
 
 BattleScript_EffectNightmare::
 	jumpifstatus BS_TARGET, STATUS1_SLEEP, BattleScript_NightmareWorked
-	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_NightmareWorked
+	jumpifabilityflag BS_TARGET, ABILITY_COMATOSE, BattleScript_NightmareWorked
 	goto BattleScript_ButItFailed
 BattleScript_NightmareWorked::
 	setmoveeffect MOVE_EFFECT_NIGHTMARE
@@ -5565,9 +5555,7 @@ BattleScript_EffectPerishSong::
 	waitmessage B_WAIT_TIME_LONG
 	setbyte gBattlerTarget, 0
 BattleScript_PerishSongLoop::
-	jumpifability BS_TARGET, ABILITY_SOUNDPROOF, BattleScript_PerishSongBlocked
-	jumpifability BS_TARGET, ABILITY_PARROTING, BattleScript_PerishSongBlocked
-	jumpifability BS_TARGET, ABILITY_NOISE_CANCEL, BattleScript_PerishSongBlocked
+	jumpifabilityflag BS_TARGET, ABILITY_SOUNDPROOF, BattleScript_PerishSongBlocked
 	jumpifability BS_TARGET_PARTNER, ABILITY_NOISE_CANCEL, BattleScript_PerishSongBlockedPartner
 	jumpifpranksterblocked BS_TARGET, BattleScript_PerishSongNotAffected
 BattleScript_PerishSongLoopIncrement::
@@ -6177,10 +6165,8 @@ BattleScript_EffectGust::
 	goto BattleScript_EffectHit
 
 BattleScript_EffectSolarbeam::
-	jumpifability BS_ATTACKER, ABILITY_CHLOROPLAST, BattleScript_SolarbeamOnFirstTurn
+	jumpifabilityflag BS_ATTACKER, ABILITY_CHLOROPLAST, BattleScript_SolarbeamOnFirstTurn
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, BattleScript_SolarbeamOnFirstTurn
-	jumpifability BS_ATTACKER, ABILITY_BIG_LEAVES, BattleScript_SolarbeamOnFirstTurn
-	jumpifability BS_ATTACKER, ABILITY_SOLAR_FLARE, BattleScript_SolarbeamOnFirstTurn
 	jumpifweatheraffected BS_ATTACKER, WEATHER_SUN_ANY, BattleScript_SolarbeamOnFirstTurn
 BattleScript_SolarbeamDecideTurn::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_TwoTurnMovesSecondTurn
@@ -9189,7 +9175,7 @@ BattleScript_PowderMoveNoEffect::
 	ppreduce
 	pause B_WAIT_TIME_SHORT
 	jumpiftype BS_TARGET, TYPE_GRASS, BattleScript_PowderMoveNoEffectPrint
-	jumpifability BS_TARGET, ABILITY_OVERCOAT, BattleScript_PowderMoveNoEffectOvercoat
+	jumpifabilityflag BS_TARGET, ABILITY_OVERCOAT, BattleScript_PowderMoveNoEffectOvercoat
 	printstring STRINGID_SAFETYGOGGLESPROTECTED
 	goto BattleScript_PowderMoveNoEffectWaitMsg
 BattleScript_PowderMoveNoEffectOvercoat:
@@ -12531,7 +12517,7 @@ BattleScript_EffectSharpen_AfterCrit:
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_EffectSharpen_TryCutthroat:
 	jumpifstatus4 BS_ATTACKER, STATUS4_CUTTHROAT, BattleScript_MoveEnd
-	jumpifability BS_ATTACKER, ABILITY_CUTTHROAT, BattleScript_EffectSharpen_DoCutthroat
+	jumpifabilityflag BS_ATTACKER, ABILITY_CUTTHROAT, BattleScript_EffectSharpen_DoCutthroat
 	goto BattleScript_MoveEnd
 BattleScript_EffectSharpen_DoCutthroat:
 	call BattleScript_AbilityPopUp
@@ -12546,7 +12532,7 @@ BattleScript_EffectSharpen_CritOnly:
 	goto BattleScript_EffectSharpen_AfterCrit
 BattleScript_EffectSharpen_CutthroatOnly:
 	jumpifstatus4 BS_ATTACKER, STATUS4_CUTTHROAT, BattleScript_ButItFailed
-	jumpifability BS_ATTACKER, ABILITY_CUTTHROAT, BattleScript_EffectSharpen_CutthroatOnly_Anim
+	jumpifabilityflag BS_ATTACKER, ABILITY_CUTTHROAT, BattleScript_EffectSharpen_CutthroatOnly_Anim
 	goto BattleScript_ButItFailed
 BattleScript_EffectSharpen_CutthroatOnly_Anim:
 	attackanimation

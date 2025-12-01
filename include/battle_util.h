@@ -236,12 +236,12 @@ int CheckHalfHpAbility(int battlerDef, int battlerAtk);
 bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum move, u8 movePower);
 u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, u16 extraMove, u8 movePower);
 
-#define ON_ABILITY(battler, checkMoldBreaker, condition, callback)   \
-    for (int idx = GetNumPossibleAbilitiesForBattler() - 1; idx >= 0; idx--) {       \
-        AbilityEnum ability = GetBattlerAbilityInSlot(battler, idx); \
-        FILTER(condition)                                            \
-        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker)) \
-        callback;                                                    \
+#define ON_ABILITY(battler, checkMoldBreaker, condition, callback)             \
+    for (int idx = GetNumPossibleAbilitiesForBattler() - 1; idx >= 0; idx--) { \
+        AbilityEnum ability = GetBattlerAbilityInSlot(battler, idx);           \
+        FILTER(condition)                                                      \
+        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))           \
+        callback;                                                              \
     }
 
 #define RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, flag) ON_ABILITY(battler, checkMoldBreaker, gAbilities[ability].flag, return ability)
@@ -384,6 +384,7 @@ void MulModifier(u16* modifier, u16 val);
 u32 ApplyModifier(u16 modifier, u32 val);
 int CanBattlerHeal(int battler);
 int BenefitsFromStatBuffs(int battler);
+AbilityEnum IsComatose(int battler);
 int IsBloodStainAffected(int battler);
 AbilityEnum IsUnaware(int battler);
 int GetOncePerTurnAbilityCounter(int battler, AbilityEnum ability);

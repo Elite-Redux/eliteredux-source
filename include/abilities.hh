@@ -258,6 +258,9 @@ typedef struct Ability {
     u16 auraBreak:1;
     u16 suctionCups:1;
     u16 steadfast:1;
+    u16 alwaysSleeping:1;
+    u16 cutthroat:1;
+    u16 coilUp:1;
 } Ability;
 
 #ifdef __cplusplus

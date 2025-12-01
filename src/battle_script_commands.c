@@ -6747,6 +6747,27 @@ static int CheckAbilityFlag(int battler, AbilityEnum exampleAbility) {
 
         case ABILITY_STEADFAST:
             return gAbilities[exampleAbility].steadfast;
+
+        case ABILITY_CHLOROPLAST:
+            return gAbilities[exampleAbility].chloroplast;
+
+        case ABILITY_OVERCOAT:
+            return gAbilities[exampleAbility].powderImmune;
+
+        case ABILITY_COMATOSE:
+            return gAbilities[exampleAbility].alwaysSleeping;
+
+        case ABILITY_ROCK_HEAD:
+            return gAbilities[exampleAbility].noRecoil;
+
+        case ABILITY_SOUNDPROOF:
+            return gAbilities[exampleAbility].isSoundproof;
+
+        case ABILITY_CUTTHROAT:
+            return gAbilities[exampleAbility].cutthroat;
+
+        case ABILITY_COIL_UP:
+            return gAbilities[exampleAbility].coilUp;
     }
 
     return FALSE;
@@ -12734,7 +12755,7 @@ static void Cmd_handleballthrow(void) {
                     break;
                 case ITEM_DREAM_BALL:
 #if B_DREAM_BALL_MODIFIER >= GEN_8
-                    if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || BattlerHasAbility(gBattlerTarget, ABILITY_COMATOSE, FALSE)) ballMultiplier = 40;
+                    if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || IsComatose(gBattlerTarget)) ballMultiplier = 40;
 #else
                     ballMultiplier = 10;
 #endif
@@ -13196,9 +13217,7 @@ static void Cmd_trygetbaddreamstarget(void) {
     u8 badDreamsMonSide = GetBattlerSide(gBattlerAttacker);
     for (; gBattlerTarget < gBattlersCount; gBattlerTarget++) {
         if (GetBattlerSide(gBattlerTarget) == badDreamsMonSide) continue;
-        if ((gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || BattlerHasAbility(gBattlerTarget, ABILITY_COMATOSE, FALSE)) &&
-            IsBattlerAlive(gBattlerTarget))
-            break;
+        if ((gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || IsComatose(gBattlerTarget)) && IsBattlerAlive(gBattlerTarget)) break;
     }
 
     if (gBattlerTarget >= gBattlersCount)
