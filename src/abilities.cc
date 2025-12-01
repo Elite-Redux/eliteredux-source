@@ -1115,12 +1115,18 @@ constexpr Ability Impl<ABILITY_PLUS> = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             int partner = BATTLE_PARTNER(battler);
             if (!IsBattlerAlive(partner)) return;
-            if (BattlerHasAbility(partner, ABILITY_PLUS, FALSE) || BattlerHasAbility(partner, ABILITY_MINUS, FALSE)) MUL(2.0);
+            if (BattlerHasAbility(partner, ABILITY_PLUS, FALSE) || BattlerHasAbility(partner, ABILITY_MINUS, FALSE) 
+            || BattlerHasAbility(partner, ABILITY_POLARITY, FALSE)) MUL(2.0);
         },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_MINUS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_PLUS>.onOffensiveMultiplier,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_POLARITY> = {
     .onOffensiveMultiplier = Impl<ABILITY_PLUS>.onOffensiveMultiplier,
 };
 
