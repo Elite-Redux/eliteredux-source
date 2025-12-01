@@ -11193,6 +11193,65 @@ constexpr Ability Impl<ABILITY_RAINBOW_SCALES> = {
     .breakable = TRUE,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_HOME_RUN> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(gIsCriticalHit)
+        CHECK(ShouldApplyOnHitAffect(battler))
+
+        u8 secondaryStat[6] = {0};
+        u32 temp = 0;
+
+        u32 stats[5][2] = {
+            {STAT_ATK, CalculateStat(battler, STAT_ATK, secondaryStat, move, FALSE, FALSE, FALSE, FALSE)},
+            {STAT_DEF, CalculateStat(battler, STAT_DEF, secondaryStat, move, FALSE, FALSE, FALSE, FALSE)},
+            {STAT_SPATK, CalculateStat(battler, STAT_SPATK, secondaryStat, move, FALSE, FALSE, FALSE, FALSE)},
+            {STAT_SPDEF, CalculateStat(battler, STAT_SPDEF, secondaryStat, move, FALSE, FALSE, FALSE, FALSE)},
+            {STAT_SPEED, CalculateStat(battler, STAT_SPEED, secondaryStat, move, FALSE, FALSE, FALSE, FALSE)},
+        };
+
+        // Move highest stat to end of array
+        for (int i = 0; i < 4; i++) {
+            if (stats[i][1] < stats[4][1]) continue;
+            if (stats[i][1] == stats[4][1] && Random() % 2) continue;
+            SWAP(stats[i][0], stats[4][0], temp)
+            SWAP(stats[i][1], stats[4][1], temp)
+        }
+
+        // Move highest remaining stat (second highest) to next to last position
+        for (int i = 0; i < 3; i++) {
+            if (stats[i][1] < stats[3][1]) continue;
+            if (stats[i][1] == stats[3][1] && Random() % 2) continue;
+            SWAP(stats[i][0], stats[3][0], temp)
+            SWAP(stats[i][1], stats[3][1], temp)
+        }
+
+        int statsToBoost[3] = {0};
+        int pos = 0;
+
+        // Sort stats by boost order. Read LIFO so in reverse order.
+        for (int statId : {STAT_SPEED, STAT_SPDEF, STAT_DEF, STAT_SPATK, STAT_ATK}) {
+            for (int i = 0; i < 3; i++) {
+                if (stats[i][0] == statId) {
+                    statsToBoost[pos++] = statId;
+                    break;
+                }
+            }
+            if (pos >= 3) break;
+        }
+
+        int any = FALSE;
+
+        for (int stat : statsToBoost) {
+            FILTER(CanRaiseStat(battler, stat))
+            any = TRUE;
+            AbilityStatusEffect(static_cast<MoveEffectEnum>(static_cast<int>(MOVE_EFFECT_ATK_PLUS_1) + (stat - 1)));
+        }
+
+        return any;
+    },
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>
