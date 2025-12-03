@@ -11256,6 +11256,11 @@ constexpr Ability Impl<ABILITY_MUSICAL_NOTES> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_TANGLED_TAILS> = {
+    .onAttacker = Impl<ABILITY_KNOW_YOUR_PLACE>.onAttacker,
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>
