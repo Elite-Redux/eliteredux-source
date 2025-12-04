@@ -45,6 +45,7 @@ void HandleBattleWindow(u8 xStart, u8 yStart, u8 xEnd, u8 yEnd, u8 flags);
 bool8 UproarWakeUpCheck(u8 battlerId);
 bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move, Type moveType);
 u8 WrapDuration(int wrappedBy);
+void SetOnMoveEffectReactionFlags(int attacker, int target, MoveEffectEnum moveEffect);
 bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move);
 s8 RemainingNoDamageHits(u8 battler);
 u16 GetNoDamageAbility(u8 battler);

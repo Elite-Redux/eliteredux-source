@@ -11035,6 +11035,11 @@ BattleScript_Frostbind::
 	call BattleScript_PoisonPuppeteer_Internal
 	return
 
+BattleScript_Chokehold::
+	setmoveeffect MOVE_EFFECT_PARALYSIS
+	call BattleScript_PoisonPuppeteer_Internal
+	return
+
 BattleScript_PoisonPuppeteer_Internal:
 	saveattackerandtargetto34
 	copybyte gBattlerAttacker, gStackBattler1

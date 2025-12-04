@@ -2661,6 +2661,8 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     break;
                 case MOVE_EFFECT_WRAP:
                     if (!(gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED)) {
+                        SetOnMoveEffectReactionFlags(gBattlerAttacker, gEffectBattler, MOVE_EFFECT_WRAP);
+
                         gVolatileStructs[gEffectBattler].wrapTurns = WrapDuration(gBattlerAttacker);
 
                         gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;

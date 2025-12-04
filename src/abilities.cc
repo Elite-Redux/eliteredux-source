@@ -4423,6 +4423,7 @@ constexpr Ability Impl<ABILITY_GRIP_PINCER> = {
         CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
         CHECK(Random() % 2)
 
+        SetOnMoveEffectReactionFlags(battler, target, MOVE_EFFECT_WRAP);
         gBattleMons[target].status2 |= STATUS2_WRAPPED;
         gVolatileStructs[target].wrapTurns = WrapDuration(battler);
 
@@ -5766,6 +5767,7 @@ constexpr Ability Impl<ABILITY_ITCHY_DEFENSE> = {
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_WRAPPED)
 
+        SetOnMoveEffectReactionFlags(battler, attacker, MOVE_EFFECT_WRAP);
         gBattleMons[attacker].status2 |= STATUS2_WRAPPED;
         gVolatileStructs[attacker].wrapTurns = WrapDuration(battler);
 
@@ -9407,16 +9409,6 @@ constexpr Ability Impl<ABILITY_MADNESS_ENHANCEMENT> = {
 };
 
 template <>
-constexpr Ability Impl<ABILITY_TENTALOCK> = {
-    .randomizerBanned = TRUE,
-};
-
-template <>
-constexpr Ability Impl<ABILITY_SERPENT_BIND> = {
-    .randomizerBanned = TRUE,
-};
-
-template <>
 constexpr Ability Impl<ABILITY_SOUL_TAP> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
@@ -9580,11 +9572,6 @@ constexpr Ability Impl<ABILITY_BIOFILM> = {
         +[](ON_STAT) {
             if (statId == STAT_SPDEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN)) *stat *= 1.5;
         },
-};
-
-template <>
-constexpr Ability Impl<ABILITY_CHOKEHOLD> = {
-    .randomizerBanned = TRUE,
 };
 
 template <>
@@ -11288,6 +11275,7 @@ constexpr Ability Impl<ABILITY_SERPENT_BIND> = {
         CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
         CHECK(Random() % 2)
 
+        SetOnMoveEffectReactionFlags(battler, target, MOVE_EFFECT_WRAP);
         gBattleMons[target].status2 |= STATUS2_WRAPPED;
         gVolatileStructs[target].wrapTurns = WrapDuration(battler);
 
@@ -11303,6 +11291,17 @@ constexpr Ability Impl<ABILITY_TENTALOCK> = {
     .onEndTurn = Impl<ABILITY_SERPENT_BIND>.onEndTurn,
     .onAttacker = Impl<ABILITY_SERPENT_BIND>.onAttacker,
     .grappler = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_CHOKEHOLD> = {
+    .onEndTurn = Impl<ABILITY_SERPENT_BIND>.onEndTurn,
+    .onReactive = +[](ON_REACTIVE) -> int {
+        return PoisonPuppeteerClone(ability, battler, +[](opt int battler, int target) { return (int)CanBeParalyzed(battler, target); }, BattleScript_Chokehold);
+    },
+    .onBattlerFaints = Impl<ABILITY_POISON_PUPPETEER>.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
+    .setStateOnEffect = MOVE_EFFECT_WRAP,
 };
 
 #include "generated/data/abilities/ability_text.hh"
