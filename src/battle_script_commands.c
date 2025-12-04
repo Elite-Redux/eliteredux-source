@@ -6743,34 +6743,34 @@ static bool32 CanTeleport(u8 battlerId) {
     return TRUE;
 }
 
-static int CheckAbilityFlag(int battler, AbilityEnum exampleAbility) {
+static int CheckAbilityFlag(AbilityEnum actualAbility, AbilityEnum exampleAbility) {
     switch (exampleAbility) {
         case ABILITY_SUCTION_CUPS:
-            return gAbilities[exampleAbility].suctionCups;
+            return gAbilities[actualAbility].suctionCups;
 
         case ABILITY_STEADFAST:
-            return gAbilities[exampleAbility].steadfast;
+            return gAbilities[actualAbility].steadfast;
 
         case ABILITY_CHLOROPLAST:
-            return gAbilities[exampleAbility].chloroplast;
+            return gAbilities[actualAbility].chloroplast;
 
         case ABILITY_OVERCOAT:
-            return gAbilities[exampleAbility].powderImmune;
+            return gAbilities[actualAbility].powderImmune;
 
         case ABILITY_COMATOSE:
-            return gAbilities[exampleAbility].alwaysSleeping;
+            return gAbilities[actualAbility].alwaysSleeping;
 
         case ABILITY_ROCK_HEAD:
-            return gAbilities[exampleAbility].noRecoil;
+            return gAbilities[actualAbility].noRecoil;
 
         case ABILITY_SOUNDPROOF:
-            return gAbilities[exampleAbility].isSoundproof;
+            return gAbilities[actualAbility].isSoundproof;
 
         case ABILITY_CUTTHROAT:
-            return gAbilities[exampleAbility].cutthroat;
+            return gAbilities[actualAbility].cutthroat;
 
         case ABILITY_COIL_UP:
-            return gAbilities[exampleAbility].coilUp;
+            return gAbilities[actualAbility].coilUp;
     }
 
     return FALSE;
@@ -9110,7 +9110,7 @@ static void Cmd_various(void) {
             ptr = READ_PTR_INC;
             AbilityEnum exampleAbility = READ_16_INC;
             int checkMoldBreaker = READ_8_INC;
-            ON_ABILITY(gActiveBattler, checkMoldBreaker, CheckAbilityFlag(gActiveBattler, exampleAbility), gBattleScripting.abilityPopupOverwrite = ability;
+            ON_ABILITY(gActiveBattler, checkMoldBreaker, CheckAbilityFlag(ability, exampleAbility), SetActiveAbilityPopupOverride(ability);
                        gBattlescriptCurrInstr = ptr;
                        break)
             break;
