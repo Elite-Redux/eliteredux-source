@@ -13116,3 +13116,8 @@ BattleScript_DrakelpHeadReset::
     printstring STRINGID_DRAKELP_HEAD_RESET
     waitmessage B_WAIT_TIME_LONG
     return
+
+BattleScript_MentalPollution::
+	printstring STRINGID_MENTAL_POLLUTION
+    waitmessage B_WAIT_TIME_LONG
+    return

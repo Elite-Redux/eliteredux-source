@@ -13335,7 +13335,6 @@ bool8 IsMoveAffectedByParentalBond(MoveEnum move, u8 battlerId) {
 void CheckForBadEggs(void) {}
 
 void SetBattlerAffectedFlag(int attacker, int target, AbilityEnum ability) {
-    if (attacker == target) return;
     if (!IsBattlerAlive(attacker)) return;
 
     int flag = GetAbilityState(attacker, ability);

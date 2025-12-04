@@ -310,6 +310,7 @@ static int PoisonPuppeteerClone(AbilityEnum ability, int battler, int (*predicat
     SetAbilityState(battler, ability, 0);
 
     for (int target = 0; target < gBattlersCount; target++) {
+        FILTER(battler != target)
         FILTER(flag & (1 << target))
         FILTER(IsBattlerAlive(target))
         FILTER(predicate(battler, target))
@@ -6295,6 +6296,7 @@ template <>
 constexpr Ability Impl<ABILITY_BERSERK_DNA> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE))) if (CanBeConfused(battler)) {
+            SetOnMoveEffectReactionFlags(battler, battler, MOVE_EFFECT_CONFUSION);
             gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
             BattleScriptPushCursorAndCallback(BattleScript_BerserkDNA);
         }
@@ -9399,11 +9401,6 @@ constexpr Ability Impl<ABILITY_OVERRULE> = {
 };
 
 template <>
-constexpr Ability Impl<ABILITY_MENTAL_POLLUTION> = {
-    .randomizerBanned = TRUE,
-};
-
-template <>
 constexpr Ability Impl<ABILITY_MADNESS_ENHANCEMENT> = {
     .randomizerBanned = TRUE,
 };
@@ -11357,6 +11354,29 @@ constexpr Ability Impl<ABILITY_SUMO_WRESTLER> = {
             SetAbilityState(battler, ability, 1);
         return NO_ANNOUNCE;
     },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_MENTAL_POLLUTION> = {
+    .onReactive = +[](ON_REACTIVE) -> int {
+        int state = GetAbilityState(battler, ability);
+        CHECK(state)
+        SetAbilityState(battler, ability, FALSE);
+        CHECK(state & (1 << battler))
+        int any = FALSE;
+        for (int i = 0; i < gBattlersCount; i++) {
+            FILTER(i != battler)
+            FILTER_NOT(BattlerHasAbility(i, ABILITY_MENTAL_POLLUTION, FALSE))
+            FILTER_NOT(gStatuses3[battler] & STATUS3_GASTRO_ACID)
+            gStatuses3[battler] |= STATUS3_GASTRO_ACID;
+            any = TRUE;
+        }
+
+        InsertCorrectEndType(callType);
+        BattleScriptCall(BattleScript_MentalPollution);
+        return any;
+    },
+    .setStateOnEffect = MOVE_EFFECT_CONFUSION,
 };
 
 #include "generated/data/abilities/ability_text.hh"

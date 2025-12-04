@@ -1093,6 +1093,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_MentalPollution[] = _("The mental static prevents other\nbattlers from using their abilities!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1970,6 +1971,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_CHRISTMAS_NIGHTMARE - 12] = sText_ChristmasNightmare,
     [STRINGID_DRAKELP_HEAD - 12] = sText_DrakelpHead,
     [STRINGID_DRAKELP_HEAD_RESET - 12] = sText_DrakelpHeadReset,
+    [STRINGID_MENTAL_POLLUTION - 12] = sText_MentalPollution,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
