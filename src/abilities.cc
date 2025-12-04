@@ -11287,6 +11287,34 @@ constexpr Ability Impl<ABILITY_SERPENT_BIND> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_DRAKELP_HEAD> = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(GetSingleUseAbilityCounter(battler,ability))
+        CHECK(gFieldStatuses & STATUS_FIELD_TOXIC_TERRAIN)
+        SetSingleUseAbilityCounter(battler, ability, FALSE);
+        BattleScriptPushCursorAndCallback(BattleScript_DrakelpHeadReset);
+        return TRUE;
+    },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitEffect(battler))
+        switch (GetSingleUseAbilityCounter(battler,ability)) {
+            case 0:
+                SetSingleUseAbilityCounter(battler, ability, TRUE);
+                BattleScriptCall(BattleScript_DrakelpHead);
+                CHECK(StatLowerableOrMirrorArmor(attacker, STAT_ATK))
+                return AbilityStatusEffect(MOVE_EFFECT_ATK_MINUS_1 | MOVE_EFFECT_AFFECTS_USER);
+                break;
+            case 1:
+                break;
+        }
+        return FALSE;
+    },
+    .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) {
+        if (!GetSingleUseAbilityCounter(battler,ability)) MUL(.65);
+    },
+};
+
+template <>
 constexpr Ability Impl<ABILITY_TENTALOCK> = {
     .onEndTurn = Impl<ABILITY_SERPENT_BIND>.onEndTurn,
     .onAttacker = Impl<ABILITY_SERPENT_BIND>.onAttacker,

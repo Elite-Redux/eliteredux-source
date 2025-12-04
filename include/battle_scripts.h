@@ -658,6 +658,8 @@ extern const u8 BattleScript_AnnounceAttackerItemDisabled[];
 extern const u8 BattleScript_AnnounceRemovedHazards[];
 extern const u8 BattleScript_AnnounceAbilitySpeedBoost[];
 extern const u8 BattleScript_WrestleShowman_Effect_FlyingPress[];
+extern const u8 BattleScript_DrakelpHead[];
+extern const u8 BattleScript_DrakelpHeadReset[];
 
 extern const u8 BattleScript_Archmage_Effect_Type_Electric[];
 extern const u8 BattleScript_Archmage_Effect_Type_Fairy[];

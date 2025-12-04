@@ -933,6 +933,8 @@ static const u8 sText_ExtraSkillAbility2[] = _("{B_TRAINER1_NAME}'s team gained 
 static const u8 sText_ExtraSkillAbility3[] = _("{B_TRAINER1_NAME}'s team gained the\nability {B_BUFF3}.");
 static const u8 sText_ExtraSkillPermaStickyWeb[] = _("Permanent sticky web has been casted\naround {B_PLAYER_NAME}'s team.");
 static const u8 sText_ChristmasNightmare[] = _("The hail intensifies!");
+static const u8 sText_DrakelpHead[] = _("{B_DEF_NAME_WITH_PREFIX}'s kelp weakened the attack!");
+static const u8 sText_DrakelpHeadReset[] = _("{B_STACK_1_NAME_WITH_PREFIX}'s kelp regrew!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1966,6 +1968,8 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_EXTRA_ABILITIES_3 - 12] = sText_ExtraSkillAbility3,
     [STRINGID_EXTRASKILL_PERMA_STICKY_WEB - 12] = sText_ExtraSkillPermaStickyWeb,
     [STRINGID_CHRISTMAS_NIGHTMARE - 12] = sText_ChristmasNightmare,
+    [STRINGID_DRAKELP_HEAD - 12] = sText_DrakelpHead,
+    [STRINGID_DRAKELP_HEAD_RESET - 12] = sText_DrakelpHeadReset,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
