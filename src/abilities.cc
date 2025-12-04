@@ -11302,7 +11302,7 @@ constexpr Ability Impl<ABILITY_DRAKELP_HEAD> = {
     .onTerrain = +[](ON_TERRAIN) -> int { return DrakelpHeadReformHandler(battler, ability, ABILITY_BS_CALL); },
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
-        CHECK(GetSingleUseAbilityCounter(battler, ability))
+        CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
         SetSingleUseAbilityCounter(battler, ability, TRUE);
 
         int canLowerStat = ShouldApplyOnHitEffect(attacker) && StatLowerableOrMirrorArmor(attacker, STAT_ATK);
