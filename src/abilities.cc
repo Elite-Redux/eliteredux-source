@@ -11292,7 +11292,7 @@ static int DrakelpHeadReformHandler(int battler, AbilityEnum ability, AbilityCal
 
     SetSingleUseAbilityCounter(battler, ability, FALSE);
     InsertCorrectEndType(type);
-    BattleScriptPushCursorAndCallback(BattleScript_DrakelpHeadReset);
+    BattleScriptCall(BattleScript_DrakelpHeadReset);
     return TRUE;
 }
 
