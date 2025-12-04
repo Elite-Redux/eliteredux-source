@@ -11286,32 +11286,39 @@ constexpr Ability Impl<ABILITY_SERPENT_BIND> = {
     },
 };
 
+static int DrakelpHeadReformHandler(int battler, AbilityEnum ability, AbilityCallType type) {
+    CHECK(GetSingleUseAbilityCounter(battler, ability))
+    CHECK(IsTerrainActive(STATUS_FIELD_TOXIC_TERRAIN))
+
+    SetSingleUseAbilityCounter(battler, ability, FALSE);
+    InsertCorrectEndType(type);
+    BattleScriptPushCursorAndCallback(BattleScript_DrakelpHeadReset);
+    return TRUE;
+}
+
 template <>
 constexpr Ability Impl<ABILITY_DRAKELP_HEAD> = {
-    .onEntry = +[](ON_ENTRY) -> int {
-        CHECK(GetSingleUseAbilityCounter(battler,ability))
-        CHECK(gFieldStatuses & STATUS_FIELD_TOXIC_TERRAIN)
-        SetSingleUseAbilityCounter(battler, ability, FALSE);
-        BattleScriptPushCursorAndCallback(BattleScript_DrakelpHeadReset);
+    .onEntry = +[](ON_ENTRY) -> int { return DrakelpHeadReformHandler(battler, ability, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onTerrain = +[](ON_TERRAIN) -> int { return DrakelpHeadReformHandler(battler, ability, ABILITY_BS_CALL); },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(DidMoveHit())
+        CHECK(GetSingleUseAbilityCounter(battler, ability))
+        SetSingleUseAbilityCounter(battler, ability, TRUE);
+
+        int canLowerStat = ShouldApplyOnHitEffect(attacker) && StatLowerableOrMirrorArmor(attacker, STAT_ATK);
+
+        CHECK(canLowerStat || IsBattlerAlive(battler))
+
+        if (canLowerStat) AbilityStatusEffectSafe(MOVE_EFFECT_ATK_MINUS_1, battler, attacker);
+        BattleScriptCall(BattleScript_DrakelpHead);
+
         return TRUE;
     },
-    .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitEffect(battler))
-        switch (GetSingleUseAbilityCounter(battler,ability)) {
-            case 0:
-                SetSingleUseAbilityCounter(battler, ability, TRUE);
-                BattleScriptCall(BattleScript_DrakelpHead);
-                CHECK(StatLowerableOrMirrorArmor(attacker, STAT_ATK))
-                return AbilityStatusEffect(MOVE_EFFECT_ATK_MINUS_1 | MOVE_EFFECT_AFFECTS_USER);
-                break;
-            case 1:
-                break;
-        }
-        return FALSE;
-    },
-    .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) {
-        if (!GetSingleUseAbilityCounter(battler,ability)) MUL(.65);
-    },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (!GetSingleUseAbilityCounter(battler, ability)) MUL(.65);
+        },
+    .persistent = TRUE,
 };
 
 template <>
@@ -11325,7 +11332,8 @@ template <>
 constexpr Ability Impl<ABILITY_CHOKEHOLD> = {
     .onEndTurn = Impl<ABILITY_SERPENT_BIND>.onEndTurn,
     .onReactive = +[](ON_REACTIVE) -> int {
-        return PoisonPuppeteerClone(ability, battler, +[](opt int battler, int target) { return (int)CanBeParalyzed(battler, target); }, BattleScript_Chokehold);
+        return PoisonPuppeteerClone(
+            ability, battler, +[](opt int battler, int target) { return (int)CanBeParalyzed(battler, target); }, BattleScript_Chokehold);
     },
     .onBattlerFaints = Impl<ABILITY_POISON_PUPPETEER>.onBattlerFaints,
     .onBattlerFaintsFor = APPLY_ON_OTHER,

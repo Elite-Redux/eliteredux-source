@@ -13115,4 +13115,4 @@ BattleScript_DrakelpHead::
 BattleScript_DrakelpHeadReset::
     printstring STRINGID_DRAKELP_HEAD_RESET
     waitmessage B_WAIT_TIME_LONG
-    end3
+    return
