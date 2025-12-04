@@ -508,7 +508,7 @@ constexpr Ability Impl<ABILITY_COOL_EXIT> = {
                 break;
         }
 
-        return FALSE;
+        return NO_ANNOUNCE;
     },
 };
 
