@@ -13106,3 +13106,13 @@ BattleScript_WrestleShowman_Effect_FlyingPress::
     printstring STRINGID_PKMNFELLFORTAUNT
     waitmessage B_WAIT_TIME_LONG
     return
+
+BattleScript_DrakelpHead::
+    printstring STRINGID_DRAKELP_HEAD
+    waitmessage B_WAIT_TIME_LONG
+    return
+
+BattleScript_DrakelpHeadReset::
+    printstring STRINGID_DRAKELP_HEAD_RESET
+    waitmessage B_WAIT_TIME_LONG
+    end3
