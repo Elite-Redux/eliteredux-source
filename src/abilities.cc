@@ -11340,6 +11340,25 @@ constexpr Ability Impl<ABILITY_CHOKEHOLD> = {
     .setStateOnEffect = MOVE_EFFECT_WRAP,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_SUMO_WRESTLER> = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+
+        if (GetAbilityState(battler, ability)) {
+            gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+                .ability = ability,
+                .move = MOVE_CIRCLE_THROW,
+                .attacker = battler,
+                .target = GetOppositeSide(battler),
+            };
+            SetAbilityState(battler, ability, 0);
+        } else
+            SetAbilityState(battler, ability, 1);
+        return NO_ANNOUNCE;
+    },
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>
