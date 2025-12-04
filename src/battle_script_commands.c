@@ -2235,6 +2235,17 @@ void SetOnMoveEffectReactionFlags(int attacker, int target, MoveEffectEnum moveE
     ON_ABILITY(attacker, FALSE, gAbilities[ability].setStateOnEffect == effect, SetBattlerAffectedFlag(attacker, target, ability))
 }
 
+u8 WrapDuration(int wrappedBy) {
+    bool8 hasGrappler = HasGrappler(wrappedBy);
+    bool8 hasGripClaw = GetBattlerHoldEffect(wrappedBy, TRUE) == HOLD_EFFECT_GRIP_CLAW;
+
+    if (hasGrappler || hasGripClaw) {
+        return 5 + !!hasGrappler + 2 * !!hasGripClaw;
+    } else {
+        return (Random() % 2) + 4;
+    }
+}
+
 void SetMoveEffect(bool32 primary, u32 certain) {
     s32 i, byTwo = 0, affectsUser = 0;
     bool32 statusChanged = FALSE;
@@ -2650,17 +2661,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     break;
                 case MOVE_EFFECT_WRAP:
                     if (!(gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED)) {
-                        bool8 hasGrappler = BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_GRAPPLER);
-                        bool8 hasGripClaw = GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW;
-                        gBattleMons[gEffectBattler].status2 |= STATUS2_WRAPPED;
-                        if (hasGrappler && hasGripClaw)
-                            gVolatileStructs[gEffectBattler].wrapTurns = 8;
-                        else if (hasGrappler)
-                            gVolatileStructs[gEffectBattler].wrapTurns = 6;
-                        else if (hasGripClaw)
-                            gVolatileStructs[gEffectBattler].wrapTurns = 7;
-                        else
-                            gVolatileStructs[gEffectBattler].wrapTurns = (Random() % 2) + 4;
+                        gVolatileStructs[gEffectBattler].wrapTurns = WrapDuration(gBattlerAttacker);
 
                         gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
                         gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;

@@ -2558,14 +2558,13 @@ u8 DoBattlerEndTurnEffects(void) {
                         }
                         gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
 
-                        if (BATTLER_HAS_ABILITY(gBattleStruct->wrappedBy[gActiveBattler], ABILITY_GRAPPLER)
-                        || BATTLER_HAS_ABILITY(gBattleStruct->wrappedBy[gActiveBattler], ABILITY_TANGLED_TAILS)) {
-                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / ((B_BINDING_DAMAGE >= GEN_6) ? 6 : 8);
+                        if (HasGrappler(gBattleStruct->wrappedBy[gActiveBattler])) {
+                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
                         }
                         else if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
-                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / ((B_BINDING_DAMAGE >= GEN_6) ? 6 : 8);
+                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
                         else
-                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / ((B_BINDING_DAMAGE >= GEN_6) ? 8 : 16);
+                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
 
                         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
                     } else  // broke free
@@ -9340,6 +9339,11 @@ AbilityEnum HasRedirectionAbility(int battlerAtk, int battlerDef, MoveEnum move,
     if (gBattleMoves[move].effect == EFFECT_SNIPE_SHOT) return ABILITY_NONE;
     if (BattlerHasAbility(battlerAtk, ABILITY_PROPELLER_TAIL, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_STALWART, FALSE)) return ABILITY_NONE;
     RETURN_ABILITY_IF_FLAG(battlerDef, TRUE, redirectType == type)
+    return ABILITY_NONE;
+}
+
+AbilityEnum HasGrappler(int battler) {
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, grappler);
     return ABILITY_NONE;
 }
 

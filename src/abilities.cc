@@ -1115,8 +1115,9 @@ constexpr Ability Impl<ABILITY_PLUS> = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             int partner = BATTLE_PARTNER(battler);
             if (!IsBattlerAlive(partner)) return;
-            if (BattlerHasAbility(partner, ABILITY_PLUS, FALSE) || BattlerHasAbility(partner, ABILITY_MINUS, FALSE) 
-            || BattlerHasAbility(partner, ABILITY_POLARITY, FALSE)) MUL(2.0);
+            if (BattlerHasAbility(partner, ABILITY_PLUS, FALSE) || BattlerHasAbility(partner, ABILITY_MINUS, FALSE) ||
+                BattlerHasAbility(partner, ABILITY_POLARITY, FALSE))
+                MUL(2.0);
         },
 };
 
@@ -4423,12 +4424,9 @@ constexpr Ability Impl<ABILITY_GRIP_PINCER> = {
         CHECK(Random() % 2)
 
         gBattleMons[target].status2 |= STATUS2_WRAPPED;
-        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_GRIP_CLAW)
-            gVolatileStructs[target].wrapTurns = 7;
-        else
-            gVolatileStructs[target].wrapTurns = (Random() % 2) + 4;
+        gVolatileStructs[target].wrapTurns = WrapDuration(battler);
 
-        gBattleStruct->wrappedMove[target] = gCurrentMove;
+        gBattleStruct->wrappedMove[target] = move;
         gBattleStruct->wrappedBy[target] = battler;
         BattleScriptCall(BattleScript_GripPincerActivated);
         return TRUE;
@@ -5769,10 +5767,7 @@ constexpr Ability Impl<ABILITY_ITCHY_DEFENSE> = {
         CHECK_NOT(gBattleMons[attacker].status2 & STATUS2_WRAPPED)
 
         gBattleMons[attacker].status2 |= STATUS2_WRAPPED;
-        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_GRIP_CLAW)
-            gVolatileStructs[attacker].wrapTurns = 7;
-        else
-            gVolatileStructs[attacker].wrapTurns = (Random() % 2) + 4;
+        gVolatileStructs[attacker].wrapTurns = WrapDuration(battler);
 
         gBattleStruct->wrappedMove[attacker] = MOVE_INFESTATION;
         gBattleStruct->wrappedBy[attacker] = battler;
@@ -11257,8 +11252,57 @@ constexpr Ability Impl<ABILITY_MUSICAL_NOTES> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_GRAPPLER> = {
+    .grappler = TRUE,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_TANGLED_TAILS> = {
     .onAttacker = Impl<ABILITY_KNOW_YOUR_PLACE>.onAttacker,
+    .grappler = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_SERPENT_BIND> = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        int any = FALSE;
+        for (int i = gBattlersCount - 1; i >= 0; i--) {
+            FILTER(gBattleMons[i].status2 & STATUS2_WRAPPED)
+            FILTER(gBattleStruct->wrappedBy[i] == battler)
+            FILTER(StatLowerableOrMirrorArmor(i, STAT_SPEED))
+
+            if (!any) {
+                InsertCorrectEndType(ABILITY_BS_EXECUTE);
+                any = TRUE;
+            }
+
+            AbilityStatusEffectSafe(MOVE_EFFECT_SPD_MINUS_1, battler, i);
+        }
+
+        return any;
+    },
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitEffect(gBattlerTarget))
+        CHECK(IsBattlerAlive(battler))
+        CHECK(IsMoveMakingContact(move, battler))
+        CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
+        CHECK(Random() % 2)
+
+        gBattleMons[target].status2 |= STATUS2_WRAPPED;
+        gVolatileStructs[target].wrapTurns = WrapDuration(battler);
+
+        gBattleStruct->wrappedMove[target] = move;
+        gBattleStruct->wrappedBy[target] = battler;
+        BattleScriptCall(BattleScript_GripPincerActivated);
+        return TRUE;
+    },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_TENTALOCK> = {
+    .onEndTurn = Impl<ABILITY_SERPENT_BIND>.onEndTurn,
+    .onAttacker = Impl<ABILITY_SERPENT_BIND>.onAttacker,
+    .grappler = TRUE,
 };
 
 #include "generated/data/abilities/ability_text.hh"
