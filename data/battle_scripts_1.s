@@ -9773,6 +9773,12 @@ BattleScript_AirBlowerActivated::
 	call BattleScript_OnTailwindStart
 	end3
 
+BattleScript_HarukazeTailwind::
+	printstring STRINGID_TAILWINDBLEW
+	waitmessage B_WAIT_TIME_LONG
+	call BattleScript_OnTailwindStart
+	return
+
 BattleScript_OnTailwindStart::
 	callifability BS_ATTACKER, ABILITY_WIND_RIDER, BattleScript_DoWindRider
 	callifability BS_ATTACKER, ABILITY_WIND_POWER, BattleScript_DoWindPower

@@ -9527,7 +9527,36 @@ constexpr Ability Impl<ABILITY_HEMOTOXIN> = {
 
 template <>
 constexpr Ability Impl<ABILITY_HARUKAZE> = {
-    .randomizerBanned = TRUE,
+    .onTerrain = +[](ON_TERRAIN) -> int {
+        CHECK(IsTerrainActive(STATUS_FIELD_GRASSY_TERRAIN))
+        CHECK(gFieldTimers.started.terrain)
+        CHECK(gFieldTimers.terrainBattlerId == battler)
+        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND) int side = GetBattlerSide(battler);
+
+        gSideTimers[side].started.tailwind = TRUE;
+        gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
+        gSideTimers[side].tailwindBattlerId = battler;
+        gSideTimers[side].tailwindTimer = TAILWIND_DURATION_SHORT;
+
+        DisableSwitchInAbility(battler, ABILITY_WIND_RIDER);
+        DisableSwitchInAbility(BATTLE_PARTNER(battler), ABILITY_WIND_RIDER);
+
+        InsertCorrectEndType(ABILITY_BS_CALL);
+        BattleScriptCall(BattleScript_HarukazeTailwind);
+
+        return TRUE;
+    },
+    .onReactive = +[](ON_REACTIVE) -> int {
+        if (gSideTimers[GetBattlerSide(battler)].tailwindBattlerId == battler && gSideTimers[GetBattlerSide(battler)].started.tailwind &&
+            !IsTerrainActive(STATUS_FIELD_GRASSY_TERRAIN)) {
+            Impl<ABILITY_GRASSY_SURGE>.onEntry(DELEGATE_ENTRY);
+            gBattleScripting.abilityPopupOverwrite = ABILITY_HARUKAZE;
+            BattleScriptCall(BattleScript_AbilityPopUpStack);
+            return TRUE;
+        } else
+            return FALSE;
+    },
+    .allowTerrainIfAirborne = TERRAIN_GRASSY,
 };
 
 template <>
