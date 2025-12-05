@@ -1116,9 +1116,7 @@ constexpr Ability Impl<ABILITY_PLUS> = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             int partner = BATTLE_PARTNER(battler);
             if (!IsBattlerAlive(partner)) return;
-            if (BattlerHasAbility(partner, ABILITY_PLUS, FALSE) || BattlerHasAbility(partner, ABILITY_MINUS, FALSE) ||
-                BattlerHasAbility(partner, ABILITY_POLARITY, FALSE))
-                MUL(2.0);
+            if (BattlerHasAbility(partner, ABILITY_PLUS, FALSE) || BattlerHasAbility(partner, ABILITY_MINUS, FALSE)) MUL(2.0);
         },
 };
 
@@ -1129,7 +1127,12 @@ constexpr Ability Impl<ABILITY_MINUS> = {
 
 template <>
 constexpr Ability Impl<ABILITY_POLARITY> = {
-    .onOffensiveMultiplier = Impl<ABILITY_PLUS>.onOffensiveMultiplier,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != GetHighestStatId(battler, TRUE)) return;
+            *stat *= 1.3;
+        },
+    .onStatFor = APPLY_ON_ALLY,
 };
 
 template <>
