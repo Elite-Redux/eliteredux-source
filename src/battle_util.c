@@ -3654,6 +3654,7 @@ bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8* timer) {
         gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;
         gFieldStatuses |= statusFlag;
         gFieldTimers.started.terrain = TRUE;
+        gFieldTimers.terrainBattlerId = battler;
 
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
             *timer = TERRAIN_DURATION_EXTENDED;

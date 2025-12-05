@@ -6492,6 +6492,7 @@ static void HandleTerrainMove(u32 moveEffect) {
         gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;
         gFieldStatuses |= statusFlag;
         gFieldTimers.started.terrain = TRUE;
+        gFieldTimers.terrainBattlerId = gBattlerAttacker;
         if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
             *timer = TERRAIN_DURATION_EXTENDED;
         else
