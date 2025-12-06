@@ -13137,3 +13137,9 @@ BattleScript_ResilienceActivates::
 	datahpupdate BS_ATTACKER
 	return
 
+BattleScript_MadnessEnhancementRet::
+	chosenstatus2animation BS_ATTACKER, STATUS2_CONFUSION
+	copybyte gEffectBattler, gBattlerAttacker
+	printstring STRINGID_PKMNWASCONFUSED
+	waitmessage B_WAIT_TIME_LONG
+	return

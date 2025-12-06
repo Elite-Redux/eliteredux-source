@@ -4412,7 +4412,7 @@ static void Cmd_moveend(void) {
                            BattleScriptCall(BattleScript_AbilityPopUp);
                            gBattleMoveDamage += damage;)
 
-                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION) {
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION && !BattlerHasAbility(gBattlerAttacker, ABILITY_MADNESS_ENHANCEMENT, FALSE)) {
                     if (!gBattleMoveDamage) {
                         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_CONFUSION;
                         BattleScriptCall(BattleScript_MoveEffectRecoil);

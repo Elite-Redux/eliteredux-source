@@ -9403,9 +9403,28 @@ constexpr Ability Impl<ABILITY_OVERRULE> = {
         },
 };
 
+static int MadnessEnhancementHandler(int battler, AbilityCallType callType) {
+    CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+    CHECK(CanBeConfused(battler))
+
+    SetOnMoveEffectReactionFlags(battler, battler, MOVE_EFFECT_CONFUSION);
+    gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
+
+    InsertCorrectEndType(callType);
+    BattleScriptCall(BattleScript_MadnessEnhancementRet);
+    return TRUE;
+}
+
 template <>
 constexpr Ability Impl<ABILITY_MADNESS_ENHANCEMENT> = {
-    .randomizerBanned = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int { return MadnessEnhancementHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onWeather = +[](ON_WEATHER) -> int { return MadnessEnhancementHandler(battler, ABILITY_BS_CALL); },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (gBattleMons[battler].status2 & STATUS2_CONFUSION) {
+                MUL(.5);
+            }
+        },
 };
 
 template <>
