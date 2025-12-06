@@ -11418,6 +11418,17 @@ constexpr Ability Impl<ABILITY_GOING_BERSERK> = {
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_THUNDER_CLOUDS> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(gBattleMoves[move].power)
+        CHECK(IS_MOVE_SPECIAL(move))
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_THUNDERBOLT, 35);
+    },
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>
