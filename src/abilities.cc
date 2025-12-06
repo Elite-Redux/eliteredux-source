@@ -11411,6 +11411,13 @@ constexpr Ability Impl<ABILITY_MENTAL_POLLUTION> = {
     .setStateOnEffect = MOVE_EFFECT_CONFUSION,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_GOING_BERSERK> = {
+    .onDefender = Impl<ABILITY_BERSERK>.onDefender,
+    .onBattlerFaints = Impl<ABILITY_RAMPAGE>.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>
