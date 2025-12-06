@@ -13127,3 +13127,13 @@ BattleScript_MentalPollution::
 	printstring STRINGID_MENTAL_POLLUTION
     waitmessage B_WAIT_TIME_LONG
     return
+
+BattleScript_ResilienceActivates::
+	swapbattlerandtargetvia34
+	printstring STRINGID_PKMNRESTOREDHPUSING
+	waitmessage B_WAIT_TIME_LONG
+	orword gHitMarker, HITMARKER_SKIP_DMG_TRACK | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE | HITMARKER_PASSIVE_DAMAGE
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	return
+

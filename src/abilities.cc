@@ -11429,6 +11429,23 @@ constexpr Ability Impl<ABILITY_THUNDER_CLOUDS> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_RESILIENCE> = {
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(CheckHalfHpAbility(battler, attacker))
+        CHECK(CanBattlerHeal(battler))
+        CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
+
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 4;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        gBattleMoveDamage *= -1;
+
+        SetSingleUseAbilityCounter(battler, ability, TRUE);
+        BattleScriptCall(BattleScript_ResilienceActivates);
+        return TRUE;
+    },
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>

@@ -662,6 +662,7 @@ extern const u8 BattleScript_DrakelpHead[];
 extern const u8 BattleScript_DrakelpHeadReset[];
 extern const u8 BattleScript_MentalPollution[];
 extern const u8 BattleScript_HarukazeTailwind[];
+extern const u8 BattleScript_ResilienceActivates[];
 
 extern const u8 BattleScript_Archmage_Effect_Type_Electric[];
 extern const u8 BattleScript_Archmage_Effect_Type_Fairy[];
