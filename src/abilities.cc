@@ -5069,7 +5069,7 @@ constexpr Ability Impl<ABILITY_CHEATING_DEATH> = {
 
 template <>
 constexpr Ability Impl<ABILITY_CHEAP_TACTICS> = {
-    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SCRATCH, 0); },
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_SCRATCH, 40); },
 };
 
 template <>
