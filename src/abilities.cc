@@ -4436,7 +4436,7 @@ constexpr Ability Impl<ABILITY_MOMENTUM> = {
 template <>
 constexpr Ability Impl<ABILITY_GRIP_PINCER> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitEffect(gBattlerTarget))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(IsBattlerAlive(battler))
         CHECK(IsMoveMakingContact(move, battler))
         CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
@@ -4460,7 +4460,7 @@ constexpr Ability Impl<ABILITY_GRIP_PINCER> = {
 template <>
 constexpr Ability Impl<ABILITY_TALON_TRAP> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitEffect(gBattlerTarget))
+        CHECK(ShouldApplyOnHitEffect(target))
         CHECK(IsBattlerAlive(battler))
         CHECK(IsStrikerBoosted(battler, move))
         CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
