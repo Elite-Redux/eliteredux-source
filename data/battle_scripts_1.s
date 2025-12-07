@@ -500,7 +500,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectShellTrap				  @ EFFECT_SHELL_TRAP
 	.4byte BattleScript_GrassyTerrainHit			  @ EFFECT_GRASSY_TERRAIN_HIT
 	.4byte BattleScript_EffectMistyTerrain			  @ EFFECT_TOXIC_TERRAIN
-	.4byte BattleScript_SludgeSpit                    @ EFFECT_SLUDGE_SPIT
+	.4byte BattleScript_SepticSwitch                  @ EFFECT_SEPTIC_SWITCH
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -13142,7 +13142,7 @@ BattleScript_IceStatue::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
-BattleScript_SludgeSpit::
+BattleScript_SepticSwitch::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring

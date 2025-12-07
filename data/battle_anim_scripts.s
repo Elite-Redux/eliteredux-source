@@ -28311,7 +28311,7 @@ Move_LUNAR_BLESSING::
 	blendoff
 	end
 
-Move_SLUDGE_SPIT:
+Move_SEPTIC_SWITCH:
 	loadspritegfx ANIM_TAG_GREEN_POISON_BUBBLE
 	monbg ANIM_DEF_PARTNER
 	createsprite gGreenPoisonBubble, ANIM_TARGET, 2, 20, 0, 40, 1, 0, 0, FALSE
@@ -28342,4 +28342,4 @@ Move_SLUDGE_SPIT:
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	end
-	
+
