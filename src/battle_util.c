@@ -3442,8 +3442,6 @@ u8 AtkCanceller_UnableToUseMove(void) {
 
 MultihitType GetMultihitType(int battler, MoveEnum move) {
     if (IsTwoStrikesMove(move)) return MULTIHIT_TWO;
-    else if (BattlerHasAbility(battler, ABILITY_UNRELENTING, FALSE) && gBattleMoves[move].power) 
-        return GetBattlerHoldEffect(battler, FALSE) == HOLD_EFFECT_LOADED_DICE ? MULTIHIT_FOUR_OR_FIVE : MULTIHIT_TWO_TO_FIVE;
 
     switch (gBattleMoves[gCurrentMove].effect) {
         case EFFECT_MULTI_HIT:

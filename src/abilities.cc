@@ -11625,6 +11625,11 @@ constexpr Ability Impl<ABILITY_AEGIS_WARD> = {
         },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_UNRELENTING> = {
+    .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType { return MULTIHIT_TWO_TO_FIVE; },
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>
