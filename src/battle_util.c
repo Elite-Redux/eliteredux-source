@@ -1583,7 +1583,7 @@ u8 GetImprisonedMovesCount(u8 battlerId, MoveEnum move) {
 int GetOncePerTurnAbilityCounter(int battler, AbilityEnum ability) {
     int index = GetAbilityIndex(battler, ability, TRUE);
 
-    if (index >= GetNumPossibleAbilitiesForBattler()) return -1;
+    if (index >= GetNumPossibleAbilitiesForBattler()) return FALSE;
 
     return gTurnStructs[battler].turnAbilityTriggers[index];
 }
