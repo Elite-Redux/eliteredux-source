@@ -6832,6 +6832,7 @@ constexpr Ability Impl<ABILITY_CRAVING> = {.onEndTurn = +[](ON_END_TURN) -> int 
         BattleScriptPushCursorAndCallback(BattleScript_CudChew);
         return TRUE;
     }
+    return FALSE;
 }};
 
 template <>
@@ -7222,9 +7223,10 @@ constexpr Ability Impl<ABILITY_LAWNMOWER> = {
             case STATUS_FIELD_PSYCHIC_TERRAIN:
             case STATUS_FIELD_MISTY_TERRAIN:
                 SetStatChanger(STAT_SPDEF, 1);
-
+                break;
             default:
                 SetStatChanger(STAT_DEF, 1);
+                break;
         }
 
         BattleScriptPushCursorAndCallback(BattleScript_Lawnmower);
