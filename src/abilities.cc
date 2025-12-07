@@ -7180,6 +7180,16 @@ constexpr Ability Impl<ABILITY_LAWNMOWER> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
+        switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
+            case STATUS_FIELD_TOXIC_TERRAIN:
+            case STATUS_FIELD_PSYCHIC_TERRAIN:
+            case STATUS_FIELD_MISTY_TERRAIN:
+                SetStatChanger(STAT_SPDEF, 1);
+
+            default:
+                SetStatChanger(STAT_DEF, 1);
+        }
+
         BattleScriptPushCursorAndCallback(BattleScript_Lawnmower);
         return TRUE;
     },
@@ -10496,7 +10506,14 @@ constexpr Ability Impl<ABILITY_LOOSE_THORNS> = {
 
 template <>
 constexpr Ability Impl<ABILITY_TURF_WAR> = {
-    .randomizerBanned = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
+
+        SetStatChanger(GetHighestStatId(battler, TRUE), 1);
+
+        BattleScriptPushCursorAndCallback(BattleScript_Lawnmower);
+        return TRUE;
+    },
 };
 
 template <>
