@@ -4458,6 +4458,26 @@ constexpr Ability Impl<ABILITY_GRIP_PINCER> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_TALON_TRAP> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitEffect(gBattlerTarget))
+        CHECK(IsBattlerAlive(battler))
+        CHECK(IsMoveMakingContact(move, battler))
+        CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
+        CHECK(Random() % 2)
+
+        SetOnMoveEffectReactionFlags(battler, target, MOVE_EFFECT_WRAP);
+        gBattleMons[target].status2 |= STATUS2_WRAPPED;
+        gVolatileStructs[target].wrapTurns = WrapDuration(battler);
+
+        gBattleStruct->wrappedMove[target] = MOVE_SNAP_TRAP;
+        gBattleStruct->wrappedBy[target] = battler;
+        BattleScriptCall(BattleScript_GripPincerActivated);
+        return TRUE;
+    },
+};
+
+template <>
 constexpr Ability Impl<ABILITY_BIG_LEAVES> = {
     .onEndTurn = +[](ON_END_TURN) -> int { return Impl<ABILITY_HARVEST>.onEndTurn(DELEGATE_END_TURN) | Impl<ABILITY_LEAF_GUARD>.onEndTurn(DELEGATE_END_TURN); },
     .onStat =
