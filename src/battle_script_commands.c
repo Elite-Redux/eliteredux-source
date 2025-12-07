@@ -4412,7 +4412,7 @@ static void Cmd_moveend(void) {
                            BattleScriptCall(BattleScript_AbilityPopUp);
                            gBattleMoveDamage += damage;)
 
-                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION) {
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION && !BattlerHasAbility(gBattlerAttacker, ABILITY_MADNESS_ENHANCEMENT, FALSE)) {
                     if (!gBattleMoveDamage) {
                         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_CONFUSION;
                         BattleScriptCall(BattleScript_MoveEffectRecoil);
@@ -6501,6 +6501,7 @@ static void HandleTerrainMove(u32 moveEffect) {
         gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;
         gFieldStatuses |= statusFlag;
         gFieldTimers.started.terrain = TRUE;
+        gFieldTimers.terrainBattlerId = gBattlerAttacker;
         if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
             *timer = TERRAIN_DURATION_EXTENDED;
         else

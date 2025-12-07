@@ -1116,9 +1116,7 @@ constexpr Ability Impl<ABILITY_PLUS> = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             int partner = BATTLE_PARTNER(battler);
             if (!IsBattlerAlive(partner)) return;
-            if (BattlerHasAbility(partner, ABILITY_PLUS, FALSE) || BattlerHasAbility(partner, ABILITY_MINUS, FALSE) ||
-                BattlerHasAbility(partner, ABILITY_POLARITY, FALSE))
-                MUL(2.0);
+            if (BattlerHasAbility(partner, ABILITY_PLUS, FALSE) || BattlerHasAbility(partner, ABILITY_MINUS, FALSE)) MUL(2.0);
         },
 };
 
@@ -1129,7 +1127,12 @@ constexpr Ability Impl<ABILITY_MINUS> = {
 
 template <>
 constexpr Ability Impl<ABILITY_POLARITY> = {
-    .onOffensiveMultiplier = Impl<ABILITY_PLUS>.onOffensiveMultiplier,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId != GetHighestStatId(battler, TRUE)) return;
+            *stat *= 1.3;
+        },
+    .onStatFor = APPLY_ON_ALLY,
 };
 
 template <>
@@ -9400,9 +9403,28 @@ constexpr Ability Impl<ABILITY_OVERRULE> = {
         },
 };
 
+static int MadnessEnhancementHandler(int battler, AbilityCallType callType) {
+    CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+    CHECK(CanBeConfused(battler))
+
+    SetOnMoveEffectReactionFlags(battler, battler, MOVE_EFFECT_CONFUSION);
+    gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
+
+    InsertCorrectEndType(callType);
+    BattleScriptCall(BattleScript_MadnessEnhancementRet);
+    return TRUE;
+}
+
 template <>
 constexpr Ability Impl<ABILITY_MADNESS_ENHANCEMENT> = {
-    .randomizerBanned = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int { return MadnessEnhancementHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onWeather = +[](ON_WEATHER) -> int { return MadnessEnhancementHandler(battler, ABILITY_BS_CALL); },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (gBattleMons[battler].status2 & STATUS2_CONFUSION) {
+                MUL(.5);
+            }
+        },
 };
 
 template <>
@@ -9527,7 +9549,36 @@ constexpr Ability Impl<ABILITY_HEMOTOXIN> = {
 
 template <>
 constexpr Ability Impl<ABILITY_HARUKAZE> = {
-    .randomizerBanned = TRUE,
+    .onTerrain = +[](ON_TERRAIN) -> int {
+        CHECK(IsTerrainActive(STATUS_FIELD_GRASSY_TERRAIN))
+        CHECK(gFieldTimers.started.terrain)
+        CHECK(gFieldTimers.terrainBattlerId == battler)
+        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND) int side = GetBattlerSide(battler);
+
+        gSideTimers[side].started.tailwind = TRUE;
+        gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
+        gSideTimers[side].tailwindBattlerId = battler;
+        gSideTimers[side].tailwindTimer = TAILWIND_DURATION_SHORT;
+
+        DisableSwitchInAbility(battler, ABILITY_WIND_RIDER);
+        DisableSwitchInAbility(BATTLE_PARTNER(battler), ABILITY_WIND_RIDER);
+
+        InsertCorrectEndType(ABILITY_BS_CALL);
+        BattleScriptCall(BattleScript_HarukazeTailwind);
+
+        return TRUE;
+    },
+    .onReactive = +[](ON_REACTIVE) -> int {
+        if (gSideTimers[GetBattlerSide(battler)].tailwindBattlerId == battler && gSideTimers[GetBattlerSide(battler)].started.tailwind &&
+            !IsTerrainActive(STATUS_FIELD_GRASSY_TERRAIN)) {
+            Impl<ABILITY_GRASSY_SURGE>.onEntry(DELEGATE_ENTRY);
+            gBattleScripting.abilityPopupOverwrite = ABILITY_HARUKAZE;
+            BattleScriptCall(BattleScript_AbilityPopUpStack);
+            return TRUE;
+        } else
+            return FALSE;
+    },
+    .allowTerrainIfAirborne = TERRAIN_GRASSY,
 };
 
 template <>
@@ -11377,6 +11428,41 @@ constexpr Ability Impl<ABILITY_MENTAL_POLLUTION> = {
         return any;
     },
     .setStateOnEffect = MOVE_EFFECT_CONFUSION,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_GOING_BERSERK> = {
+    .onDefender = Impl<ABILITY_BERSERK>.onDefender,
+    .onBattlerFaints = Impl<ABILITY_RAMPAGE>.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_THUNDER_CLOUDS> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(gBattleMoves[move].power)
+        CHECK(IS_MOVE_SPECIAL(move))
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_THUNDERBOLT, 35);
+    },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_RESILIENCE> = {
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(CheckHalfHpAbility(battler, attacker))
+        CHECK(CanBattlerHeal(battler))
+        CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
+
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 4;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        gBattleMoveDamage *= -1;
+
+        SetSingleUseAbilityCounter(battler, ability, TRUE);
+        BattleScriptCall(BattleScript_ResilienceActivates);
+        return TRUE;
+    },
 };
 
 template <>

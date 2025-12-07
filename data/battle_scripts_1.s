@@ -9773,6 +9773,12 @@ BattleScript_AirBlowerActivated::
 	call BattleScript_OnTailwindStart
 	end3
 
+BattleScript_HarukazeTailwind::
+	printstring STRINGID_TAILWINDBLEW
+	waitmessage B_WAIT_TIME_LONG
+	call BattleScript_OnTailwindStart
+	return
+
 BattleScript_OnTailwindStart::
 	callifability BS_ATTACKER, ABILITY_WIND_RIDER, BattleScript_DoWindRider
 	callifability BS_ATTACKER, ABILITY_WIND_POWER, BattleScript_DoWindPower
@@ -13121,6 +13127,22 @@ BattleScript_MentalPollution::
 	printstring STRINGID_MENTAL_POLLUTION
     waitmessage B_WAIT_TIME_LONG
     return
+
+BattleScript_ResilienceActivates::
+	swapbattlerandtargetvia34
+	printstring STRINGID_PKMNRESTOREDHPUSING
+	waitmessage B_WAIT_TIME_LONG
+	orword gHitMarker, HITMARKER_SKIP_DMG_TRACK | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE | HITMARKER_PASSIVE_DAMAGE
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	return
+
+BattleScript_MadnessEnhancementRet::
+	chosenstatus2animation BS_ATTACKER, STATUS2_CONFUSION
+	copybyte gEffectBattler, gBattlerAttacker
+	printstring STRINGID_PKMNWASCONFUSED
+	waitmessage B_WAIT_TIME_LONG
+	return
 
 BattleScript_IceStatue::
 	printstring STRINGID_ICE_STATUE

@@ -155,7 +155,7 @@ typedef enum {
 } TerrainType;
 
 #ifdef __cplusplus
-#define AbilityApplyOnWithTarget int
+#define AbilityApplyOnWithTarget u8
 // Because Type is defined in a C header file C++ and C end up with different alignments for the enum when packed into a bit field for some reason
 #define Type u16
 #else

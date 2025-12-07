@@ -333,6 +333,7 @@ struct FieldTimer
     u8 magicRoomTimer;
     u8 trickRoomTimer;
     u8 terrainTimer;
+    u8 terrainBattlerId;
     u8 gravityTimer;
     u8 fairyLockTimer;
     u8 inverseRoomTimer;
