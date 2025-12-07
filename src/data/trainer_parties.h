@@ -55829,7 +55829,7 @@ static const struct TrainerMonItemCustomMoves sParty_DrakeInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_DURALUDON_PARTNER,
+    .species = SPECIES_DURALUDON,
     .heldItem = ITEM_DURALUDITE,
     .ability = 1,
     .evs = {0, 156, 0, 0, 100, 252},
@@ -55886,7 +55886,7 @@ static const struct TrainerMonItemCustomMoves sParty_DrakeHell[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_DURALUDON_PARTNER,
+    .species = SPECIES_DURALUDON,
     .heldItem = ITEM_DURALUDITE,
     .ability = 1,
     .evs = {0, 156, 0, 0, 100, 252},
@@ -92854,7 +92854,7 @@ static const struct TrainerMonItemCustomMoves sParty_Isaac1Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_DURALUDON_PARTNER,
+    .species = SPECIES_DURALUDON,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 2,
     .evs = {252, 252, 4, 0, 0, 0},
@@ -92893,7 +92893,7 @@ static const struct TrainerMonItemCustomMoves sParty_Isaac1Hell[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_DURALUDON_PARTNER,
+    .species = SPECIES_DURALUDON,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 2,
     .evs = {252, 252, 4, 0, 0, 0},
