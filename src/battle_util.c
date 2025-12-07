@@ -7025,7 +7025,7 @@ u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk,
     if (gStatuses4[battlerAtk] & STATUS4_GHASTLY_ECHO) MulModifier(&modifier, UQ_4_12(1.5));
     if (gStatuses3[battlerAtk] & STATUS3_CHARGED_UP && moveType == TYPE_ELECTRIC) MulModifier(&modifier, UQ_4_12(2.0));
     if (gStatuses3[battlerAtk] & STATUS3_ME_FIRST) MulModifier(&modifier, UQ_4_12(1.5));
-    if (gVolatileStructs[battlerDef].fear) MulModifier(&modifier, UQ_4_12(1.5));
+    if (gVolatileStructs[battlerDef].fear) MulModifier(&modifier, UQ_4_12(1.25));
     if (gRoundStructs[battlerDef].safePassage) MulModifier(&modifier, UQ_4_12(.65));
 
     if (IsBattlerTerrainAffected(battlerAtk, STATUS_FIELD_TERRAIN_ANY)) {
