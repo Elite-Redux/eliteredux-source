@@ -3459,6 +3459,7 @@ void BattleTurnPassed(void) {
         if (DoFieldEndTurnEffects()) return;
         if (DoBattlerEndTurnEffects()) return;
         gBattleStruct->ranEndTurnEffects = TRUE;
+        if (gQueuedAttackCount) return;
     }
     if (HandleFaintedMonActions()) {
         return;
@@ -4177,7 +4178,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType) {
         else if (GET_BATTLER_SIDE(battlerId) != B_SIDE_PLAYER && getMonotypeChampType() == TYPE_FLYING)
             speed *= 2;
 
-        if (gSideTimers[GET_BATTLER_SIDE2(battlerId)].swampTimer) speed /= 1.5;
+        if (gSideTimers[GET_BATTLER_SIDE2(battlerId)].swampTimer && IsBattlerGrounded(battlerId)) speed /= 1.5;
 
         if (calcType == TOTAL_SPEED_SECONDARY) return speed;
 
@@ -4247,7 +4248,7 @@ s8 GetMovePriority(u32 battlerId, MoveEnum move, u32 target) {
         priority++;
     }
 
-    if ((gStatuses4[battlerId] & STATUS4_CUTTHROAT) && (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)) {
+    if ((gStatuses4[battlerId] & STATUS4_CUTTHROAT) && IsKeenEdge(battlerId, move, GetTypeBeforeUsingMove(move, battlerId))) {
         priority++;
     }
 
@@ -4951,7 +4952,7 @@ void RunBattleScriptCommands(void) {
     if (gBattleControllerExecFlags == 0) gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
 }
 
-u8 GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer) {
+Type GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer) {
     u32 moveType = gBattleMoves[move].type;
     u16 item = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
     u16 holdEffect = ItemId_GetHoldEffect(item);
@@ -4959,8 +4960,8 @@ u8 GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer) {
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     u8 abilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM, NULL);
     AbilityEnum ability = GetAbilityBySpecies(species, abilityNum);
-    u8 type1 = gBaseStats[species].type1;
-    u8 type2 = gBaseStats[species].type2;
+    Type type1 = gBaseStats[species].type1;
+    Type type2 = gBaseStats[species].type2;
 
     if (!disableRandomizer) {
         ability = RandomizeAbility(GetAbilityBySpecies(species, abilityNum), species, personality);
@@ -5039,7 +5040,7 @@ u8 GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer) {
     }
 
     for (int i = 0; i < NUM_INNATE_PER_SPECIES; i++) {
-        u8 unused;
+        Type unused;
         int innate = GetMonInnate(mon, i, disableRandomizer);
         FILTER(gAbilities[innate].onMoveType)
         int result = gAbilities[innate].onMoveType(innate, move, moveType, &unused);
@@ -5049,7 +5050,7 @@ u8 GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer) {
     return gBattleMoves[move].type;
 }
 
-static int GetMoveTypeInternal(MoveEnum move, int battlerAtk, u8 *ateBoost, s8 *realType) {
+static Type GetMoveTypeInternal(MoveEnum move, int battlerAtk, Type *ateBoost, Type *realType) {
     switch (move) {
         case MOVE_STRUGGLE:
             return TYPE_NORMAL;
@@ -5162,8 +5163,8 @@ static int GetMoveTypeInternal(MoveEnum move, int battlerAtk, u8 *ateBoost, s8 *
     return moveType;
 }
 
-u8 GetTypeBeforeUsingMove(MoveEnum move, u8 battlerAtk) {
-    s8 ignored;
+Type GetTypeBeforeUsingMove(MoveEnum move, u8 battlerAtk) {
+    Type ignored;
     return GetMoveTypeInternal(move, battlerAtk, &ignored, &ignored);
 }
 
@@ -5188,12 +5189,12 @@ void ApplyTypeOverrideInformation(MoveEnum move, int battlerAtk, int moveType, i
 }
 
 void SetTypeBeforeUsingMove(MoveEnum move, u8 battlerAtk) {
-    u32 moveType;
+    Type moveType;
     s8 realType = -2;
 
     gBattleStruct->ateBoost[battlerAtk] = 0;
 
-    moveType = GetMoveTypeInternal(move, battlerAtk, &gBattleStruct->ateBoost[battlerAtk], &realType);
+    moveType = GetMoveTypeInternal(move, battlerAtk, &gBattleStruct->ateBoost[battlerAtk], (Type*) &realType);
     if (realType >= 0) moveType = realType;
 
     if (realType != -1)

@@ -6,7 +6,7 @@ import java.io.OutputStreamWriter
 
 object AbilitiesEnumGenerator : Generator {
     override fun generate(writer: OutputStreamWriter) {
-        val abilities = ABILITIES_LIST.map { it.id }
+        val abilities = ABILITIES_LIST.map { it.id }.sorted()
         val abilityCount = abilities.maxOf { it.number } + 1
         writer.appendLine(
             """
@@ -24,6 +24,9 @@ object AbilitiesEnumGenerator : Generator {
             |} AbilityEnum;
             |
             |#endif
+            |
+            |#define FOR_EACH_ABILITY \
+            |${abilities.joinToString(" \\\n") { "FOR_EACH_ABILITY_FUNCTION(${it.name})" }}
             |""".trimMargin()
         )
     }

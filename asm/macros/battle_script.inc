@@ -2453,6 +2453,17 @@
 	various \battler, VARIOUS_TAGTEAM_EXEC_BATTLE_EVENTS
 	.endm
 
+	.macro jumpifabilityflag battler:req ability:req ptr:req checkbreakable=TRUE
+	various \battler, VARIOUS_JUMP_IF_ABILITY_FLAG
+	.4byte \ptr
+	.2byte \ability
+	.byte \checkbreakable
+	.endm
+
+	.macro onloweredstat battler:req
+	various \battler, VARIOUS_ON_STAT_LOWERED
+	.endm
+
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr
@@ -2463,29 +2474,8 @@ twoturnmoveacceleratecheck_\@:
 	.endm
 
 	.macro checkstatbuffonlowered
-	jumpifability BS_TARGET, ABILITY_COMPETITIVE,           checkstatbuffonlowered_competitive_\@
-	jumpifability BS_TARGET, ABILITY_DEFIANT,               checkstatbuffonlowered_defiant_\@
-	jumpifability BS_TARGET, ABILITY_CONTEMPT,              checkstatbuffonlowered_defiant_\@
-	jumpifability BS_TARGET, ABILITY_RUN_AWAY,              checkstatbuffonlowered_runaway_\@
-	jumpifabilityonside BS_TARGET, ABILITY_KINGS_WRATH,     checkstatbuffonlowered_kingswrath_\@
-	jumpifabilityonside BS_TARGET, ABILITY_QUEENS_MOURNING, checkstatbuffonlowered_queensmourning_\@
-	goto checkstatbuffonlowered_none_\@
-checkstatbuffonlowered_competitive_\@:
-	call BattleScript_CompetitiveActivates
-	goto checkstatbuffonlowered_none_\@
-checkstatbuffonlowered_defiant_\@:
-	call BattleScript_DefiantActivates
-	goto checkstatbuffonlowered_none_\@
-checkstatbuffonlowered_runaway_\@:
-	call BattleScript_RunAwayActivates
-	goto checkstatbuffonlowered_none_\@
-checkstatbuffonlowered_kingswrath_\@:
-	call BattleScript_KingsWrathActivated
-	goto checkstatbuffonlowered_none_\@
-checkstatbuffonlowered_queensmourning_\@:
-	call BattleScript_QueensMourningActivated
-	goto checkstatbuffonlowered_none_\@
-checkstatbuffonlowered_none_\@:
+	onloweredstat BS_TARGET
+	onloweredstat BS_TARGET_PARTNER
 	.endm
 
 	.macro jumpifroom statusField:req, ptr:req

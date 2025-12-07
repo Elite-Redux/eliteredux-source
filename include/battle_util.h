@@ -226,7 +226,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler);
 int HandleEndTurnAbility(int abilityNumber, int battler);
 int WasMoveSuccessful();
 int DidMoveHit();
-int ShouldApplyOnHitAffect(int applyTo);
+int ShouldApplyOnHitEffect(int applyTo);
 void ReplaceAbility(int battler, AbilityEnum ability);
 int HasAbilityIgnoringSuppression(int battler, AbilityEnum ability);
 AbilityEnum GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker);
@@ -236,12 +236,12 @@ int CheckHalfHpAbility(int battlerDef, int battlerAtk);
 bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum move, u8 movePower);
 u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, u16 extraMove, u8 movePower);
 
-#define ON_ABILITY(battler, checkMoldBreaker, condition, callback)   \
-    for (int idx = GetNumPossibleAbilitiesForBattler() - 1; idx >= 0; idx--) {       \
-        AbilityEnum ability = GetBattlerAbilityInSlot(battler, idx); \
-        FILTER(condition)                                            \
-        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker)) \
-        callback;                                                    \
+#define ON_ABILITY(battler, checkMoldBreaker, condition, callback)             \
+    for (int idx = GetNumPossibleAbilitiesForBattler() - 1; idx >= 0; idx--) { \
+        AbilityEnum ability = GetBattlerAbilityInSlot(battler, idx);           \
+        FILTER(condition)                                                      \
+        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker))           \
+        callback;                                                              \
     }
 
 #define RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, flag) ON_ABILITY(battler, checkMoldBreaker, gAbilities[ability].flag, return ability)
@@ -269,6 +269,7 @@ bool32 IsMoveMakingContact(MoveEnum move, u8 battlerAtk);
 bool32 IsBattlerGrounded(u8 battlerId);
 bool32 IsBattlerGroundedIgnoreType(u8 battlerId);
 int IsSoundMove(int battler, MoveEnum move);
+int IsKeenEdge(int battler, MoveEnum move, Type moveType);
 bool32 IsBattlerAlive(u8 battlerId);
 u8 GetBattleMonMoveSlot(struct BattlePokemon* battleMon, MoveEnum move);
 u32 GetBattlerWeight(u8 battlerId);
@@ -383,6 +384,7 @@ void MulModifier(u16* modifier, u16 val);
 u32 ApplyModifier(u16 modifier, u32 val);
 int CanBattlerHeal(int battler);
 int BenefitsFromStatBuffs(int battler);
+AbilityEnum IsComatose(int battler);
 int IsBloodStainAffected(int battler);
 AbilityEnum IsUnaware(int battler);
 int GetOncePerTurnAbilityCounter(int battler, AbilityEnum ability);
@@ -398,6 +400,8 @@ AbilityEnum IsStickyHold(int battler);
 AbilityEnum HasChloroplast(int battler);
 AbilityEnum HasAuroraBorealis(int battler);
 AbilityEnum HasRedirectionAbility(int battlerAtk, int battlerDef, MoveEnum move, int type);
+AbilityEnum HasGrappler(int battler);
+AbilityEnum HasMirrorArmor(int battler);
 int CanRaiseStat(int battler, int stat);
 int CanLowerStat(int battler, int stat);
 bool8 UseEntryMove(u8 battler, AbilityEnum ability, u16 extraMove, u8 movePower);

@@ -200,9 +200,7 @@ int BelowHalfHp(int battler) { return gBattleMons[battler].hp <= gBattleMons[bat
 
 int AreSameSide(int battler1, int battler2) { return GetBattlerSide(battler1) == GetBattlerSide(battler2); }
 
-int IsSleeping(int battler, struct AiData* aiData) {
-    return gBattleMons[battler].status1 & STATUS1_SLEEP || BattlerHasAbility(battler, ABILITY_COMATOSE, FALSE);
-}
+int IsSleeping(int battler, struct AiData* aiData) { return gBattleMons[battler].status1 & STATUS1_SLEEP || IsComatose(battler); }
 
 int SeesSunlight(int battler, struct AiData* aiData) { return IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY); }
 

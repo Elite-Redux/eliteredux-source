@@ -155,6 +155,7 @@ struct VolatileStruct
     u8 dazed:3;
     u8 trepidation:2;
     u8 hazardDamaged:1;
+    u8 iceStatue:1;
 };
 
 struct RoundStruct
@@ -305,6 +306,7 @@ struct SideTimer
     u8 hotCoals:1;
     u8 caltrops:1;
     u8 quickGuardTimer:3;
+    u8 foamyWeb:1;
 };
 
 struct FieldBeganThisTurn
@@ -332,6 +334,7 @@ struct FieldTimer
     u8 magicRoomTimer;
     u8 trickRoomTimer;
     u8 terrainTimer;
+    u8 terrainBattlerId;
     u8 gravityTimer;
     u8 fairyLockTimer;
     u8 inverseRoomTimer;
@@ -414,7 +417,7 @@ struct SavedStackData
     u8 stackBattler4:2;
 };
 
-#define MAX_SCRIPT_STACK_COUNT 9
+#define MAX_SCRIPT_STACK_COUNT 20
 struct BattleScriptsStack
 {
     const u8 *ptr[MAX_SCRIPT_STACK_COUNT];
@@ -636,7 +639,7 @@ struct BattleStruct
     u8 expGetterMonId;
     u8 hasBattleInputStarted:1; // Speed up battle
     u8 wildVictorySong;
-    u8 dynamicMoveType;
+    Type dynamicMoveType;
     u8 wrappedBy[MAX_BATTLERS_COUNT];
     u16 assistPossibleMoves[PARTY_SIZE * MAX_MON_MOVES]; // Each of mons can know max 4 moves.
     u8 focusPunchBattlerId;
@@ -719,7 +722,7 @@ struct BattleStruct
     u8 magnitudeBasePower;
     u8 presentBasePower;
     u8 roostTypes[MAX_BATTLERS_COUNT][3];
-    bool8 ateBoost[MAX_BATTLERS_COUNT];
+    Type ateBoost[MAX_BATTLERS_COUNT];
     u8 activeAbilityPopUps; // as bits for each battler
     u8 abilityPopUpSpriteIds[MAX_BATTLERS_COUNT][2];    // two per battler
     u8 activeExtraskillPopUps;

@@ -1586,7 +1586,7 @@ static void Cmd_adjustdamage(void) {
 
     GET_MOVE_TYPE(gCurrentMove, moveType);
 
-    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove)) goto END;
+    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType)) goto END;
     if (DoesDisguiseBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove)) goto END;
     if (RemainingNoDamageHits(gBattlerTarget) > 0) goto END;
     if (gBattleMons[gBattlerTarget].hp > gBattleMoveDamage) goto END;
@@ -1760,7 +1760,10 @@ static void Cmd_healthbarupdate(void) {
     if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) || (gHitMarker & HITMARKER_PASSIVE_DAMAGE) || gBattleMoveDamage < 0) {
         gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
-        if (gBattleMoveDamage >= 0 && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove) &&
+        Type moveType;
+        GET_MOVE_TYPE(gCurrentMove, moveType)
+
+        if (gBattleMoveDamage >= 0 && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove, moveType) &&
             gVolatileStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE)) {
             PrepareStringBattle(STRINGID_SUBSTITUTEDAMAGED, gActiveBattler);
             FlagSet(FLAG_SYS_DISABLE_DAMAGE_DONE);
@@ -1814,7 +1817,11 @@ static void Cmd_datahpupdate(void) {
 
     if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) || gHitMarker & HITMARKER_PASSIVE_DAMAGE || gBattleMoveDamage < 0) {
         gActiveBattler = GetBattlerForBattleScript(battlerType);
-        if (gBattleMoveDamage >= 0 && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove) &&
+
+        Type moveType;
+        GET_MOVE_TYPE(gCurrentMove, moveType)
+
+        if (gBattleMoveDamage >= 0 && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove, moveType) &&
             gVolatileStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE)) {
             if (gVolatileStructs[gActiveBattler].substituteHP >= gBattleMoveDamage) {
                 if (gTurnStructs[gActiveBattler].dmg == 0) gTurnStructs[gActiveBattler].dmg = gBattleMoveDamage;
@@ -2143,6 +2150,8 @@ int UpdateBattlerItem(int battler, int newItem) {
     if (newItem == ITEM_NONE && oldItem != ITEM_BIG_NUGGET && (alchemyBattler = IsAbilityOnField(ABILITY_POWER_OF_ALCHEMY)))
         SetPowerOfAlchemyState(alchemyBattler - 1, battler, oldItem);
 
+    if (newItem == ITEM_NONE) SetAbilityState(battler, ABILITY_GREEDY, TRUE);
+
     if (newItem == ITEM_NONE) gBattleStruct->choicedMove[battler] = 0;
 
     gActiveBattler = battler;
@@ -2228,10 +2237,21 @@ void SetOnMoveEffectReactionFlags(int attacker, int target, MoveEffectEnum moveE
     ON_ABILITY(attacker, FALSE, gAbilities[ability].setStateOnEffect == effect, SetBattlerAffectedFlag(attacker, target, ability))
 }
 
+u8 WrapDuration(int wrappedBy) {
+    bool8 hasGrappler = HasGrappler(wrappedBy);
+    bool8 hasGripClaw = GetBattlerHoldEffect(wrappedBy, TRUE) == HOLD_EFFECT_GRIP_CLAW;
+
+    if (hasGrappler || hasGripClaw) {
+        return 5 + !!hasGrappler + 2 * !!hasGripClaw;
+    } else {
+        return (Random() % 2) + 4;
+    }
+}
+
 void SetMoveEffect(bool32 primary, u32 certain) {
     s32 i, byTwo = 0, affectsUser = 0;
     bool32 statusChanged = FALSE;
-    bool32 mirrorArmorReflected = BattlerHasAbility(gBattlerTarget, ABILITY_MIRROR_ARMOR, TRUE);
+    AbilityEnum mirrorArmorReflected = HasMirrorArmor(gBattlerTarget);
     u32 flags = 0;
     bool16 ignoreTypeImmunities = gBattleScripting.moveEffect & MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES;
     AbilityEnum ability;
@@ -2292,7 +2312,10 @@ void SetMoveEffect(bool32 primary, u32 certain) {
         }
     }
 
-    if (DoesSubstituteBlockMove(gBattlerAttacker, gEffectBattler, gCurrentMove) && affectsUser != MOVE_EFFECT_AFFECTS_USER) RESET_RETURN
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
+
+    if (DoesSubstituteBlockMove(gBattlerAttacker, gEffectBattler, gCurrentMove, moveType) && affectsUser != MOVE_EFFECT_AFFECTS_USER) RESET_RETURN
 
     if (gBattleScripting.moveEffect <= PRIMARY_STATUS_MOVE_EFFECT)  // status change
     {
@@ -2640,17 +2663,9 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     break;
                 case MOVE_EFFECT_WRAP:
                     if (!(gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED)) {
-                        bool8 hasGrappler = BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_GRAPPLER);
-                        bool8 hasGripClaw = GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW;
-                        gBattleMons[gEffectBattler].status2 |= STATUS2_WRAPPED;
-                        if (hasGrappler && hasGripClaw)
-                            gVolatileStructs[gEffectBattler].wrapTurns = 8;
-                        else if (hasGrappler)
-                            gVolatileStructs[gEffectBattler].wrapTurns = 6;
-                        else if (hasGripClaw)
-                            gVolatileStructs[gEffectBattler].wrapTurns = 7;
-                        else
-                            gVolatileStructs[gEffectBattler].wrapTurns = (Random() % 2) + 4;
+                        SetOnMoveEffectReactionFlags(gBattlerAttacker, gEffectBattler, MOVE_EFFECT_WRAP);
+
+                        gVolatileStructs[gEffectBattler].wrapTurns = WrapDuration(gBattlerAttacker);
 
                         gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
                         gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
@@ -4156,7 +4171,7 @@ static void Cmd_playstatchangeanimation(void) {
 static bool32 TryKnockOffBattleScript(u32 battlerDef) {
     if (!gBattleMons[battlerDef].item) return FALSE;
     if (!CanBattlerGetOrLoseItem(battlerDef, gBattleMons[battlerDef].item)) return FALSE;
-    if (!ShouldApplyOnHitAffect(battlerDef)) return FALSE;
+    if (!ShouldApplyOnHitEffect(battlerDef)) return FALSE;
     if (NoAliveMonsForEitherParty()) return FALSE;
 
     if ((gBattleScripting.abilityPopupOverwrite = IsStickyHold(battlerDef))) {
@@ -4183,7 +4198,9 @@ static int CanPickpocket(int target, int attackerStealing) {
     if (!BATTLER_DAMAGED(target)) return FALSE;
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT) return FALSE;
     if (!BATTLER_HAS_ABILITY(stealer, ability)) return FALSE;
-    if (DoesSubstituteBlockMove(gBattlerAttacker, target, gCurrentMove)) return FALSE;
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
+    if (DoesSubstituteBlockMove(gBattlerAttacker, target, gCurrentMove, moveType)) return FALSE;
     if (!CanStealItem(stealer, stolen, gBattleMons[stolen].item)) return FALSE;
     if (IsStickyHold(target)) return FALSE;
     if (TestSheerForceFlag(gBattlerAttacker, gCurrentMove)) return FALSE;
@@ -4397,7 +4414,7 @@ static void Cmd_moveend(void) {
                            BattleScriptCall(BattleScript_AbilityPopUp);
                            gBattleMoveDamage += damage;)
 
-                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION) {
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION && !BattlerHasAbility(gBattlerAttacker, ABILITY_MADNESS_ENHANCEMENT, FALSE)) {
                     if (!gBattleMoveDamage) {
                         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_CONFUSION;
                         BattleScriptCall(BattleScript_MoveEffectRecoil);
@@ -4803,6 +4820,15 @@ static void Cmd_moveend(void) {
                     SortBattlersBySpeed(battlers, FALSE);
                     for (i = 0; i < gBattlersCount; i++) {
                         u8 battler = battlers[i];
+
+                        if (battler == gBattlerAttacker && GetOncePerTurnAbilityCounter(battler, ABILITY_HOLLOW_ICE_ZONE)) {
+                            gStackBattler1 = battler;
+                            gBattleScripting.abilityPopupOverwrite = ABILITY_HOLLOW_ICE_ZONE;
+                            BattleScriptCall(BattleScript_EmergencyExitPopupNoPause);
+                            effect = TRUE;
+                            break;
+                        }
+
                         if (IsBattlerAlive(battler) && gRoundStructs[battler].statFell && gRoundStructs[battler].disableEjectPack == 0 &&
                             GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_PACK && CountUsablePartyMons(battler) > 0)  // Has mon to switch into
                         {
@@ -5779,9 +5805,12 @@ static void Cmd_yesnoboxstoplearningmove(void) {
 static void Cmd_hitanimation(void) {
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
+
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT) {
         gBattlescriptCurrInstr += 2;
-    } else if (!(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE) || !(DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove)) ||
+    } else if (!(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE) || !(DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove, moveType)) ||
                gVolatileStructs[gActiveBattler].substituteHP == 0) {
         BtlController_EmitHitAnimation(0);
         MarkBattlerForControllerExec(gActiveBattler);
@@ -6474,6 +6503,7 @@ static void HandleTerrainMove(u32 moveEffect) {
         gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;
         gFieldStatuses |= statusFlag;
         gFieldTimers.started.terrain = TRUE;
+        gFieldTimers.terrainBattlerId = gBattlerAttacker;
         if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
             *timer = TERRAIN_DURATION_EXTENDED;
         else
@@ -6549,7 +6579,9 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear) {
         }
         DEFOG_CLEAR(SIDE_STATUS_STEALTH_ROCK, stealthRockType, BattleScript_StealthRockFree, 0);
         DEFOG_CLEAR(SIDE_STATUS_TOXIC_SPIKES, toxicSpikesAmount, BattleScript_ToxicSpikesFree, 0);
-        DEFOG_CLEAR(SIDE_STATUS_STICKY_WEB, stickyWebTimer, BattleScript_StickyWebFree, 0);
+        if (!sideTimer->foamyWeb) {
+            DEFOG_CLEAR(SIDE_STATUS_STICKY_WEB, stickyWebTimer, BattleScript_StickyWebFree, 0);
+        }
         if (gSideTimers[i].caltrops) {
             if (clear) {
                 gSideTimers[i].caltrops = FALSE;
@@ -6641,9 +6673,11 @@ u32 IsAbilityStatusProtected(u32 battler, StatusCheckEnum status) {
 
 u32 JumpIfStandardStatusBlocking(u32 battler, bool32 affectsUser, StatusCheckEnum status) {
     AbilityEnum ability;
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
     if (!affectsUser && gBattleMons[gActiveBattler].status1)
         gBattlescriptCurrInstr = BattleScript_ButItFailed;
-    else if (!affectsUser && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
+    else if (!affectsUser && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove, moveType))
         gBattlescriptCurrInstr = BattleScript_ButItFailed;
     else if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_MISTY_TERRAIN))
         gBattlescriptCurrInstr = BattleScript_MistyTerrainPrevents;
@@ -6723,6 +6757,42 @@ static bool32 CanTeleport(u8 battlerId) {
     return TRUE;
 }
 
+static int CheckAbilityFlag(AbilityEnum actualAbility, AbilityEnum exampleAbility) {
+    switch (exampleAbility) {
+        case ABILITY_SUCTION_CUPS:
+            return gAbilities[actualAbility].suctionCups;
+
+        case ABILITY_STEADFAST:
+            return gAbilities[actualAbility].steadfast;
+
+        case ABILITY_CHLOROPLAST:
+            return gAbilities[actualAbility].chloroplast;
+
+        case ABILITY_OVERCOAT:
+            return gAbilities[actualAbility].powderImmune;
+
+        case ABILITY_COMATOSE:
+            return gAbilities[actualAbility].alwaysSleeping;
+
+        case ABILITY_ROCK_HEAD:
+            return gAbilities[actualAbility].noRecoil;
+
+        case ABILITY_SOUNDPROOF:
+            return gAbilities[actualAbility].isSoundproof;
+
+        case ABILITY_CUTTHROAT:
+            return gAbilities[actualAbility].cutthroat;
+
+        case ABILITY_COIL_UP:
+            return gAbilities[actualAbility].coilUp;
+
+        case ABILITY_MIRROR_ARMOR:
+            return gAbilities[actualAbility].mirrorArmor;
+    }
+
+    return FALSE;
+}
+
 static void Cmd_various(void) {
     struct Pokemon* mon;
     s32 i;
@@ -6734,6 +6804,8 @@ static void Cmd_various(void) {
     const u8* runAgain;
     int battlerType;
     int cmd;
+    int moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
 
     if (gBattleControllerExecFlags) return;
 
@@ -7120,8 +7192,6 @@ static void Cmd_various(void) {
             break;
         case VARIOUS_ON_FAINTED_BY_ATTACKER:
             REQUIRE_NOT(NoAliveMonsForEitherParty())
-            int moveType;
-            GET_MOVE_TYPE(gCurrentMove, moveType)
             for (int i = 0; i < gBattlersCount; i++) {
                 FILTER(IsBattlerAlive(i))
                 ON_ABILITY(
@@ -8332,7 +8402,6 @@ static void Cmd_various(void) {
             SWAP(gSideTimers[0].spikesAmount, gSideTimers[1].spikesAmount, temp)
             SWAP(gSideTimers[0].toxicSpikesAmount, gSideTimers[1].toxicSpikesAmount, temp)
             SWAP(gSideTimers[0].stealthRockType, gSideTimers[1].stealthRockType, temp)
-            SWAP(gSideTimers[0].stickyWebTimer, gSideTimers[1].stickyWebTimer, temp)
             SWAP(gSideTimers[0].auroraVeilTimer, gSideTimers[1].auroraVeilTimer, temp)
             SWAP(gSideTimers[0].tailwindTimer, gSideTimers[1].tailwindTimer, temp)
             SWAP(gSideTimers[0].luckyChantTimer, gSideTimers[1].luckyChantTimer, temp)
@@ -8343,6 +8412,13 @@ static void Cmd_various(void) {
             SWAP(gSideTimers[0].hotCoals, gSideTimers[1].hotCoals, temp)
             SWAP(gSideTimers[0].caltrops, gSideTimers[1].caltrops, temp)
             SWAP(gSideTimers[0].started, gSideTimers[1].started, tempSide);
+
+            if (!gSideTimers[0].foamyWeb && !gSideTimers[1].foamyWeb) {
+                SWAP(gSideTimers[0].stickyWebTimer, gSideTimers[1].stickyWebTimer, temp)
+            } else {
+                // Return these to their initial state
+                SWAP(gSideTimers[0].started.spiderWeb, gSideTimers[1].started.spiderWeb, temp);
+            }
 
 #define UPDATE_COURTCHANGED_BATTLER(structField)                                  \
     {                                                                             \
@@ -8515,7 +8591,7 @@ static void Cmd_various(void) {
                 case MOVE_EFFECT_FROSTBITE:
                     if (CanGetFrostbite(gActiveBattler))
                         return;
-                    else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_ICE))
+                    else if (!gVolatileStructs[gActiveBattler].iceStatue && IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_ICE))
                         gBattlescriptCurrInstr = BattleScript_NotAffected;
                     else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_FROSTBITE))
                         return;
@@ -8802,7 +8878,7 @@ static void Cmd_various(void) {
         case VARIOUS_TRY_DESTROY_ITEM:
             ptr = READ_PTR_INC;
             if (!gBattleMons[gActiveBattler].item || !CanBattlerGetOrLoseItem(gActiveBattler, gBattleMons[gActiveBattler].item) ||
-                IsStickyHold(gActiveBattler) || DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
+                IsStickyHold(gActiveBattler) || DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove, moveType))
                 gBattlescriptCurrInstr = ptr;
             else {
                 RemoveItem(gActiveBattler);
@@ -9051,6 +9127,28 @@ static void Cmd_various(void) {
         }
         case VARIOUS_TAGTEAM_EXEC_BATTLE_EVENTS: {
             if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT) gBattleMainFunc = HandleTagTeamBattleEvents;
+            break;
+        }
+        case VARIOUS_JUMP_IF_ABILITY_FLAG: {
+            ptr = READ_PTR_INC;
+            AbilityEnum exampleAbility = READ_16_INC;
+            int checkMoldBreaker = READ_8_INC;
+            ON_ABILITY(gActiveBattler, checkMoldBreaker, CheckAbilityFlag(ability, exampleAbility), SetActiveAbilityPopupOverride(ability);
+                       gBattlescriptCurrInstr = ptr;
+                       break)
+            break;
+        }
+        case VARIOUS_ON_STAT_LOWERED: {
+            REQUIRE(GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget))
+            REQUIRE(IsBattlerAlive(gActiveBattler))
+            ON_ABILITY(
+                gActiveBattler,
+                FALSE,
+                gAbilities[ability].onStatLowered && IsApplyOnFlagAppropriate(gBattlerTarget, gActiveBattler, gAbilities[ability].onStatLoweredFor),
+                if (gAbilities[ability].onStatLowered(gActiveBattler)) {
+                    gBattleScripting.abilityPopupOverwrite = ability;
+                    BattleScriptCall(BattleScript_AbilityPopUpStack);
+                })
             break;
         }
     }  // End of switch (gBattlescriptCurrInstr[2])
@@ -9676,6 +9774,9 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
     bool8 dontSetBuffers = flags & STAT_BUFF_DONT_SET_BUFFERS;
     int updateMoveEffect;
     AbilityEnum ability;
+    Type moveType;
+
+    GET_MOVE_TYPE(gCurrentMove, moveType)
 
     SetStatChanger(statId, statValue);
 
@@ -9717,7 +9818,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
     if (statValue <= -1)  // Stat decrease.
     {
         if (gSideTimers[GET_BATTLER_SIDE(battler)].mistTimer && !certain && gCurrentMove != MOVE_CURSE &&
-            !(!affectsUser && Infiltrates(gBattlerAttacker, gCurrentMove, INFILTRATE_SCREENS))) {
+            !(!affectsUser && Infiltrates(gBattlerAttacker, gCurrentMove, moveType, INFILTRATE_SCREENS))) {
             if (flags == STAT_BUFF_ALLOW_PTR) {
                 if (gTurnStructs[battler].statLowered) {
                     gBattlescriptCurrInstr = BS_ptr;
@@ -9813,16 +9914,16 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
                 BattleScriptCall(BattleScript_AbilityNoSpecificStatLoss);
             }
             return 0;
-        } else if (BATTLER_HAS_ABILITY(battler, ABILITY_MIRROR_ARMOR) && !affectsUser && gBattlerAttacker != gBattlerTarget && battler == gBattlerTarget) {
+        } else if ((ability = HasMirrorArmor(battler)) && !affectsUser && gBattlerAttacker != gBattlerTarget && battler == gBattlerTarget) {
             if (flags == STAT_BUFF_ALLOW_PTR) {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_MIRROR_ARMOR;
+                gBattleScripting.abilityPopupOverwrite = ability;
                 SET_STATCHANGER_WITH_SIGN(statId, statValue);
                 gBattleScripting.battler = battler;
                 gBattlerAbility = battler;
                 BattleScriptPush(BS_ptr);
                 gBattlescriptCurrInstr = BattleScript_MirrorArmorReflect;
             } else if (updateMoveEffect && !gTurnStructs[battler].statLowered) {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_MIRROR_ARMOR;
+                gBattleScripting.abilityPopupOverwrite = ability;
                 SET_STATCHANGER_WITH_SIGN(statId, statValue);
                 gBattleScripting.battler = battler;
                 gBattlerAbility = battler;
@@ -10843,7 +10944,10 @@ static void Cmd_trysetencore(void) {
 }
 
 static void Cmd_painsplitdmgcalc(void) {
-    if (!(DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))) {
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
+
+    if (!(DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType))) {
         s32 hpDiff = (gBattleMons[gBattlerAttacker].hp + gBattleMons[gBattlerTarget].hp) / 2;
         s32 painSplitHp = gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - hpDiff;
         u8* storeLoc = (void*)(&gBattleScripting.painSplitHp);
@@ -11466,7 +11570,7 @@ static void Cmd_rapidspinfree(void) {
         BattleScriptCall(BattleScript_HotCoalsFree);
     }
 
-    if (gSideStatuses[atkSide] & SIDE_STATUS_STICKY_WEB) {
+    if (gSideStatuses[atkSide] & SIDE_STATUS_STICKY_WEB && !gSideTimers[atkSide].foamyWeb) {
         gSideStatuses[atkSide] &= ~(SIDE_STATUS_STICKY_WEB);
         gSideTimers[atkSide].stickyWebTimer = 0;
         BattleScriptCall(BattleScript_StickyWebFree);
@@ -11666,8 +11770,10 @@ static void Cmd_jumpifattackandspecialattackcannotfall(void)  // memento
     if (gBattleMons[gBattlerTarget].statStages[STAT_ATK] == MIN_STAT_STAGE && gBattleMons[gBattlerTarget].statStages[STAT_SPATK] == MIN_STAT_STAGE &&
         gBattleCommunication[MISS_TYPE] != B_MSG_PROTECTED)
 #else
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
     if (gBattleCommunication[MISS_TYPE] == B_MSG_PROTECTED || gStatuses3[gBattlerTarget] & STATUS3_SEMI_INVULNERABLE ||
-        IsBattlerProtected(gBattlerTarget, gCurrentMove) || DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))
+        IsBattlerProtected(gBattlerTarget, gCurrentMove) || DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType))
 #endif
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
@@ -12307,18 +12413,18 @@ static void Cmd_settypebasedhalvers(void)  // water and mud sport
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 }
 
-int Infiltrates(int battler, MoveEnum move, InfiltrateType type) {
-    ON_ABILITY(battler, FALSE, gAbilities[ability].onInfiltrate, if (gAbilities[ability].onInfiltrate(battler, move) & type) return TRUE)
+int Infiltrates(int battler, MoveEnum move, Type moveType, InfiltrateType type) {
+    ON_ABILITY(battler, FALSE, gAbilities[ability].onInfiltrate, if (gAbilities[ability].onInfiltrate(battler, move, moveType) & type) return TRUE)
 
     return FALSE;
 }
 
-bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
+bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move, Type moveType) {
     if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE)) return FALSE;
     if (IsSoundMove(battlerAtk, move)) return FALSE;
     if (gBattleMoves[move].flags & FLAG_HIT_IN_SUBSTITUTE) return FALSE;
 
-    if (Infiltrates(battlerAtk, move, INFILTRATE_SUBSTITUTE)) return FALSE;
+    if (Infiltrates(battlerAtk, move, moveType, INFILTRATE_SUBSTITUTE)) return FALSE;
 
     return TRUE;
 }
@@ -12349,7 +12455,9 @@ bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move) {
 }
 
 static void Cmd_jumpifsubstituteblocks(void) {
-    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))
+    Type moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType)
+    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType))
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     else
         gBattlescriptCurrInstr += 5;
@@ -12673,7 +12781,7 @@ static void Cmd_handleballthrow(void) {
                     break;
                 case ITEM_DREAM_BALL:
 #if B_DREAM_BALL_MODIFIER >= GEN_8
-                    if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || BattlerHasAbility(gBattlerTarget, ABILITY_COMATOSE, FALSE)) ballMultiplier = 40;
+                    if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || IsComatose(gBattlerTarget)) ballMultiplier = 40;
 #else
                     ballMultiplier = 10;
 #endif
@@ -13135,9 +13243,7 @@ static void Cmd_trygetbaddreamstarget(void) {
     u8 badDreamsMonSide = GetBattlerSide(gBattlerAttacker);
     for (; gBattlerTarget < gBattlersCount; gBattlerTarget++) {
         if (GetBattlerSide(gBattlerTarget) == badDreamsMonSide) continue;
-        if ((gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || BattlerHasAbility(gBattlerTarget, ABILITY_COMATOSE, FALSE)) &&
-            IsBattlerAlive(gBattlerTarget))
-            break;
+        if ((gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || IsComatose(gBattlerTarget)) && IsBattlerAlive(gBattlerTarget)) break;
     }
 
     if (gBattlerTarget >= gBattlersCount)
@@ -13252,7 +13358,6 @@ bool8 IsMoveAffectedByParentalBond(MoveEnum move, u8 battlerId) {
 void CheckForBadEggs(void) {}
 
 void SetBattlerAffectedFlag(int attacker, int target, AbilityEnum ability) {
-    if (attacker == target) return;
     if (!IsBattlerAlive(attacker)) return;
 
     int flag = GetAbilityState(attacker, ability);
