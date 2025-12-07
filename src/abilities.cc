@@ -11585,7 +11585,16 @@ constexpr Ability Impl<ABILITY_FOAMY_WEB> = {
         CHECK(Impl<ABILITY_SPIDER_LAIR>.onEntry(DELEGATE_ENTRY))
         gSideTimers[GetBattlerSide(battler)].foamyWeb = TRUE;
         return TRUE;
-    }
+    },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_MEGA_DRILL> = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            if (gBattleMoves[move].drill) MUL(1.3);
+        },
 };
 
 #include "generated/data/abilities/ability_text.hh"
