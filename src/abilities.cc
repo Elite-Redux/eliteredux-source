@@ -439,6 +439,12 @@ static int UseTurnAttackAsPursuit(ON_PREEMPT_ACTION) {
     return TRUE;
 }
 
+int GetClearableHazardFlags(int side) {
+    int hazardBits = SIDE_STATUS_HAZARDS_ANY;
+    if (gSideTimers[side].foamyWeb) hazardBits &= !SIDE_STATUS_STICKY_WEB;
+    return hazardBits;
+}
+
 template <AbilityEnum Id>
 constexpr Ability Impl = {0};
 
@@ -1066,9 +1072,10 @@ template <>
 constexpr Ability Impl<ABILITY_PICKUP> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int side = GetBattlerSide(battler);
-        CHECK(gSideStatuses[side] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[side].hotCoals || gSideTimers[side].caltrops)
+        int hazardBits = GetClearableHazardFlags(side);
+        CHECK(gSideStatuses[side] & hazardBits || gSideTimers[side].hotCoals || gSideTimers[side].caltrops)
 
-        gSideStatuses[side] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
+        gSideStatuses[side] &= ~hazardBits;
         gSideTimers[side].spikesAmount = 0;
         gSideTimers[side].toxicSpikesAmount = 0;
         gSideTimers[side].hotCoals = FALSE;
@@ -4792,10 +4799,10 @@ constexpr Ability Impl<ABILITY_SPINNING_TOP> = {
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
 
         int any = FALSE;
-        if (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[GetBattlerSide(battler)].hotCoals ||
+        int hazardBits = GetClearableHazardFlags(GetBattlerSide(battler));
+        if (gSideStatuses[GetBattlerSide(battler)] & hazardBits || gSideTimers[GetBattlerSide(battler)].hotCoals ||
             gSideTimers[GetBattlerSide(battler)].caltrops) {
-            gSideStatuses[GetBattlerSide(battler)] &=
-                ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_STICKY_WEB);
+            gSideStatuses[GetBattlerSide(battler)] &= ~hazardBits;
             gSideTimers[GetBattlerSide(battler)].hotCoals = FALSE;
             gSideTimers[GetBattlerSide(battler)].caltrops = FALSE;
             BattleScriptCall(BattleScript_AnnounceRemovedHazards);
@@ -11570,6 +11577,15 @@ constexpr Ability Impl<ABILITY_HOLLOW_ICE_ZONE> = {
         SetOncePerTurnAbilityCounter(battler, ability, TRUE);
         return TRUE;
     },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_FOAMY_WEB> = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(Impl<ABILITY_SPIDER_LAIR>.onEntry(DELEGATE_ENTRY))
+        gSideTimers[GetBattlerSide(battler)].foamyWeb = TRUE;
+        return TRUE;
+    }
 };
 
 #include "generated/data/abilities/ability_text.hh"

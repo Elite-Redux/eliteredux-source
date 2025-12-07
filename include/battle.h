@@ -306,6 +306,7 @@ struct SideTimer
     u8 hotCoals:1;
     u8 caltrops:1;
     u8 quickGuardTimer:3;
+    u8 foamyWeb:1;
 };
 
 struct FieldBeganThisTurn

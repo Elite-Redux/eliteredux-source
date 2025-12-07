@@ -4560,6 +4560,11 @@ const u8 sText_Title_Side_Sticky_Web_Description[] =
     _("Pokémon who switch into the field\n"
       "get their Speed stat lowered by\n"
       "one.");
+const u8 sText_Title_Side_Foamy_Web[] = _("Foamy Web");
+const u8 sText_Title_Side_Foamy_Web_Description[] =
+    _("Pokémon who switch into the field\n"
+      "get their Speed stat lowered by\n"
+      "one. Can't be removed by effects.");
 const u8 sText_Title_Side_Safeguard[] = _("Safeguard");
 const u8 sText_Title_Side_Safeguard_Description[] =
     _("A protective field that prevents\n"
@@ -4901,7 +4906,8 @@ static void PrintSideTab(u8 side) {
                 printedInfo = TRUE;
                 break;
             case SIDE_INFO_STICKY_WEB:
-                StringCopy(gStringVar1, sText_Title_Side_Sticky_Web);
+                int foamyWeb = gSideTimers[GetBattlerSide(side)].foamyWeb;
+                StringCopy(gStringVar1, foamyWeb ? sText_Title_Side_Foamy_Web : sText_Title_Side_Sticky_Web);
                 AddTextPrinterParameterized4(
                     windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
 
@@ -4930,7 +4936,7 @@ static void PrintSideTab(u8 side) {
                 }
 
                 // Description
-                StringCopy(gStringVar1, sText_Title_Side_Sticky_Web_Description);
+                StringCopy(gStringVar1, foamyWeb ? sText_Title_Side_Foamy_Web_Description : sText_Title_Side_Sticky_Web_Description);
                 AddTextPrinterParameterized4(
                     windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
 
