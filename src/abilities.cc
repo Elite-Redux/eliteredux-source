@@ -3039,6 +3039,7 @@ constexpr Ability Impl<ABILITY_COTTON_DOWN> = {
 template <>
 constexpr Ability Impl<ABILITY_MIRROR_ARMOR> = {
     .breakable = TRUE,
+    .mirrorArmor = TRUE,
 };
 
 template <>
@@ -10235,7 +10236,10 @@ constexpr Ability Impl<ABILITY_CURSE_OF_FAMINE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_CRYSTALLINE_ARMOR> = {
-    .randomizerBanned = TRUE,
+    .onCrit = Impl<ABILITY_BATTLE_ARMOR>.onCrit,
+    .onCritFor = Impl<ABILITY_BATTLE_ARMOR>.onCritFor,
+    .breakable = TRUE,
+    .mirrorArmor = TRUE,
 };
 
 template <>

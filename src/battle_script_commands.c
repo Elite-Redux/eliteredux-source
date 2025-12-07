@@ -2249,7 +2249,7 @@ u8 WrapDuration(int wrappedBy) {
 void SetMoveEffect(bool32 primary, u32 certain) {
     s32 i, byTwo = 0, affectsUser = 0;
     bool32 statusChanged = FALSE;
-    bool32 mirrorArmorReflected = BattlerHasAbility(gBattlerTarget, ABILITY_MIRROR_ARMOR, TRUE);
+    AbilityEnum mirrorArmorReflected = HasMirrorArmor(gBattlerTarget);
     u32 flags = 0;
     bool16 ignoreTypeImmunities = gBattleScripting.moveEffect & MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES;
     AbilityEnum ability;
@@ -6781,6 +6781,9 @@ static int CheckAbilityFlag(AbilityEnum actualAbility, AbilityEnum exampleAbilit
 
         case ABILITY_COIL_UP:
             return gAbilities[actualAbility].coilUp;
+
+        case ABILITY_MIRROR_ARMOR:
+            return gAbilities[actualAbility].mirrorArmor;
     }
 
     return FALSE;
@@ -9901,16 +9904,16 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
                 BattleScriptCall(BattleScript_AbilityNoSpecificStatLoss);
             }
             return 0;
-        } else if (BATTLER_HAS_ABILITY(battler, ABILITY_MIRROR_ARMOR) && !affectsUser && gBattlerAttacker != gBattlerTarget && battler == gBattlerTarget) {
+        } else if ((ability = HasMirrorArmor(battler)) && !affectsUser && gBattlerAttacker != gBattlerTarget && battler == gBattlerTarget) {
             if (flags == STAT_BUFF_ALLOW_PTR) {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_MIRROR_ARMOR;
+                gBattleScripting.abilityPopupOverwrite = ability;
                 SET_STATCHANGER_WITH_SIGN(statId, statValue);
                 gBattleScripting.battler = battler;
                 gBattlerAbility = battler;
                 BattleScriptPush(BS_ptr);
                 gBattlescriptCurrInstr = BattleScript_MirrorArmorReflect;
             } else if (updateMoveEffect && !gTurnStructs[battler].statLowered) {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_MIRROR_ARMOR;
+                gBattleScripting.abilityPopupOverwrite = ability;
                 SET_STATCHANGER_WITH_SIGN(statId, statValue);
                 gBattleScripting.battler = battler;
                 gBattlerAbility = battler;

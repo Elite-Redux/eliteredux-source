@@ -262,6 +262,7 @@ typedef struct Ability {
     u16 cutthroat:1;
     u16 coilUp:1;
     u16 grappler:1;
+    u16 mirrorArmor:1;
 } Ability;
 
 #ifdef __cplusplus

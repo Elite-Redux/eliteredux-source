@@ -8526,7 +8526,7 @@ bool32 TestSheerForceFlag(u8 battler, MoveEnum move) {
 int StatLowerableOrMirrorArmor(int battler, int stat) {
     if (CanLowerStat(battler, stat)) return TRUE;
 
-    return BATTLER_HAS_ABILITY(battler, ABILITY_MIRROR_ARMOR);
+    return HasMirrorArmor(battler);
 }
 
 // This function is the body of "jumpifstat", but can be used dynamically in a function
@@ -9326,6 +9326,11 @@ AbilityEnum IsStickyHold(int battler) {
     AbilityEnum ability = BattlerHasAbility(battler, ABILITY_STICKY_HOLD, TRUE);
     if (!ability) ability = BattlerHasAbility(battler, ABILITY_SUPERSWEET_SYRUP, TRUE);
     return ability;
+}
+
+AbilityEnum HasMirrorArmor(int battler) {
+    RETURN_ABILITY_IF_FLAG(battler, TRUE, mirrorArmor)
+    return FALSE;
 }
 
 AbilityEnum HasChloroplast(int battler) {

@@ -401,6 +401,7 @@ AbilityEnum HasChloroplast(int battler);
 AbilityEnum HasAuroraBorealis(int battler);
 AbilityEnum HasRedirectionAbility(int battlerAtk, int battlerDef, MoveEnum move, int type);
 AbilityEnum HasGrappler(int battler);
+AbilityEnum HasMirrorArmor(int battler);
 int CanRaiseStat(int battler, int stat);
 int CanLowerStat(int battler, int stat);
 bool8 UseEntryMove(u8 battler, AbilityEnum ability, u16 extraMove, u8 movePower);
