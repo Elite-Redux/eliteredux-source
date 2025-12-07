@@ -6579,7 +6579,9 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear) {
         }
         DEFOG_CLEAR(SIDE_STATUS_STEALTH_ROCK, stealthRockType, BattleScript_StealthRockFree, 0);
         DEFOG_CLEAR(SIDE_STATUS_TOXIC_SPIKES, toxicSpikesAmount, BattleScript_ToxicSpikesFree, 0);
-        DEFOG_CLEAR(SIDE_STATUS_STICKY_WEB, stickyWebTimer, BattleScript_StickyWebFree, 0);
+        if (!sideTimer->foamyWeb) {
+            DEFOG_CLEAR(SIDE_STATUS_STICKY_WEB, stickyWebTimer, BattleScript_StickyWebFree, 0);
+        }
         if (gSideTimers[i].caltrops) {
             if (clear) {
                 gSideTimers[i].caltrops = FALSE;
@@ -8400,7 +8402,6 @@ static void Cmd_various(void) {
             SWAP(gSideTimers[0].spikesAmount, gSideTimers[1].spikesAmount, temp)
             SWAP(gSideTimers[0].toxicSpikesAmount, gSideTimers[1].toxicSpikesAmount, temp)
             SWAP(gSideTimers[0].stealthRockType, gSideTimers[1].stealthRockType, temp)
-            SWAP(gSideTimers[0].stickyWebTimer, gSideTimers[1].stickyWebTimer, temp)
             SWAP(gSideTimers[0].auroraVeilTimer, gSideTimers[1].auroraVeilTimer, temp)
             SWAP(gSideTimers[0].tailwindTimer, gSideTimers[1].tailwindTimer, temp)
             SWAP(gSideTimers[0].luckyChantTimer, gSideTimers[1].luckyChantTimer, temp)
@@ -8411,6 +8412,13 @@ static void Cmd_various(void) {
             SWAP(gSideTimers[0].hotCoals, gSideTimers[1].hotCoals, temp)
             SWAP(gSideTimers[0].caltrops, gSideTimers[1].caltrops, temp)
             SWAP(gSideTimers[0].started, gSideTimers[1].started, tempSide);
+
+            if (!gSideTimers[0].foamyWeb && !gSideTimers[1].foamyWeb) {
+                SWAP(gSideTimers[0].stickyWebTimer, gSideTimers[1].stickyWebTimer, temp)
+            } else {
+                // Return these to their initial state
+                SWAP(gSideTimers[0].started.spiderWeb, gSideTimers[1].started.spiderWeb, temp);
+            }
 
 #define UPDATE_COURTCHANGED_BATTLER(structField)                                  \
     {                                                                             \
@@ -11562,7 +11570,7 @@ static void Cmd_rapidspinfree(void) {
         BattleScriptCall(BattleScript_HotCoalsFree);
     }
 
-    if (gSideStatuses[atkSide] & SIDE_STATUS_STICKY_WEB) {
+    if (gSideStatuses[atkSide] & SIDE_STATUS_STICKY_WEB && !gSideTimers[atkSide].foamyWeb) {
         gSideStatuses[atkSide] &= ~(SIDE_STATUS_STICKY_WEB);
         gSideTimers[atkSide].stickyWebTimer = 0;
         BattleScriptCall(BattleScript_StickyWebFree);

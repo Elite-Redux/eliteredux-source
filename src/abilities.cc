@@ -439,6 +439,12 @@ static int UseTurnAttackAsPursuit(ON_PREEMPT_ACTION) {
     return TRUE;
 }
 
+int GetClearableHazardFlags(int side) {
+    int hazardBits = SIDE_STATUS_HAZARDS_ANY;
+    if (gSideTimers[side].foamyWeb) hazardBits &= ~SIDE_STATUS_STICKY_WEB;
+    return hazardBits;
+}
+
 template <AbilityEnum Id>
 constexpr Ability Impl = {0};
 
@@ -1066,9 +1072,10 @@ template <>
 constexpr Ability Impl<ABILITY_PICKUP> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int side = GetBattlerSide(battler);
-        CHECK(gSideStatuses[side] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[side].hotCoals || gSideTimers[side].caltrops)
+        int hazardBits = GetClearableHazardFlags(side);
+        CHECK(gSideStatuses[side] & hazardBits || gSideTimers[side].hotCoals || gSideTimers[side].caltrops)
 
-        gSideStatuses[side] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
+        gSideStatuses[side] &= ~hazardBits;
         gSideTimers[side].spikesAmount = 0;
         gSideTimers[side].toxicSpikesAmount = 0;
         gSideTimers[side].hotCoals = FALSE;
@@ -3771,7 +3778,7 @@ constexpr Ability Impl<ABILITY_DREAMCATCHER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             for (int i = 0; i < gBattlersCount; i++) {
-                if (IsBattlerAlive(i) && gBattleMons[i].status1 & STATUS1_SLEEP) {
+                if (GetBattlerSide(i) != GetBattlerSide(battler) && IsBattlerAlive(i) && (gBattleMons[i].status1 & STATUS1_SLEEP || IsComatose(i))) {
                     FILTER_NOT(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ability && gQueuedExtraAttackData[0].target == i)
                     MUL(2.0);
                     return;
@@ -3779,7 +3786,7 @@ constexpr Ability Impl<ABILITY_DREAMCATCHER> = {
             }
         },
     .onPreemptAction = +[](ON_PREEMPT_ACTION) -> int {
-        CHECK(gBattleMons[turnBattler].status1 & STATUS1_SLEEP)
+        CHECK(gBattleMons[turnBattler].status1 & STATUS1_SLEEP || IsComatose(turnBattler))
         return UseTurnAttackAsPursuit(DELEGATE_PREEMPT_ACTION);
     },
 };
@@ -4049,11 +4056,16 @@ constexpr Ability Impl<ABILITY_SWEET_DREAMS> = {
 
 template <>
 constexpr Ability Impl<ABILITY_BAD_LUCK> = {
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        *accuracy -= 5;
+        return ACCURACY_ADDITIVE;
+    },
     .onCrit = +[](ON_CRIT) -> int { return NEVER_CRIT; },
     .onModifyEffectChance =
         +[](ON_MODIFY_EFFECT_CHANCE) {
             if (*effectChance < 1) *effectChance = 0;
         },
+    .onAccuracyFor = APPLY_ON_TARGET,
     .onCritFor = APPLY_ON_FOE,
     .onModifyEffectChanceFor = APPLY_ON_FOE,
     .breakable = TRUE,
@@ -4787,10 +4799,10 @@ constexpr Ability Impl<ABILITY_SPINNING_TOP> = {
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
 
         int any = FALSE;
-        if (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[GetBattlerSide(battler)].hotCoals ||
+        int hazardBits = GetClearableHazardFlags(GetBattlerSide(battler));
+        if (gSideStatuses[GetBattlerSide(battler)] & hazardBits || gSideTimers[GetBattlerSide(battler)].hotCoals ||
             gSideTimers[GetBattlerSide(battler)].caltrops) {
-            gSideStatuses[GetBattlerSide(battler)] &=
-                ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_STICKY_WEB);
+            gSideStatuses[GetBattlerSide(battler)] &= ~hazardBits;
             gSideTimers[GetBattlerSide(battler)].hotCoals = FALSE;
             gSideTimers[GetBattlerSide(battler)].caltrops = FALSE;
             BattleScriptCall(BattleScript_AnnounceRemovedHazards);
@@ -9499,8 +9511,10 @@ constexpr Ability Impl<ABILITY_SOUL_TAP> = {
 template <>
 constexpr Ability Impl<ABILITY_SCARECROW> = {
     .onEntry = UseIntimidateClone,
+    .onAccuracy = Impl<ABILITY_BAD_LUCK>.onAccuracy,
     .onCrit = Impl<ABILITY_BAD_LUCK>.onCrit,
     .onModifyEffectChance = Impl<ABILITY_BAD_LUCK>.onModifyEffectChance,
+    .onAccuracyFor = Impl<ABILITY_BAD_LUCK>.onAccuracyFor,
     .onCritFor = Impl<ABILITY_BAD_LUCK>.onCritFor,
     .onModifyEffectChanceFor = Impl<ABILITY_BAD_LUCK>.onModifyEffectChanceFor,
     .breakable = TRUE,
@@ -11563,6 +11577,52 @@ constexpr Ability Impl<ABILITY_HOLLOW_ICE_ZONE> = {
         SetOncePerTurnAbilityCounter(battler, ability, TRUE);
         return TRUE;
     },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_FOAMY_WEB> = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(Impl<ABILITY_SPIDER_LAIR>.onEntry(DELEGATE_ENTRY))
+        gSideTimers[GetBattlerSide(battler)].foamyWeb = TRUE;
+        return TRUE;
+    },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_MEGA_DRILL> = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            if (gBattleMoves[move].drill) MUL(1.3);
+        },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_ELEMENTAL_AEGIS> = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            switch (moveType) {
+                case TYPE_FIRE:
+                case TYPE_WATER:
+                case TYPE_ELECTRIC:
+                    RESISTANCE(0.5)
+                    return;
+            }
+        },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_AEGIS_WARD> = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            switch (moveType) {
+                case TYPE_GHOST:
+                case TYPE_DARK:
+                case TYPE_PSYCHIC:
+                    RESISTANCE(0.5)
+                    return;
+            }
+        },
 };
 
 #include "generated/data/abilities/ability_text.hh"
