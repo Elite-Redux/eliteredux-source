@@ -11597,6 +11597,34 @@ constexpr Ability Impl<ABILITY_MEGA_DRILL> = {
         },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_ELEMENTAL_AEGIS> = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            switch (moveType) {
+                case TYPE_FIRE:
+                case TYPE_WATER:
+                case TYPE_ELECTRIC:
+                    RESISTANCE(0.5)
+                    return;
+            }
+        },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_AEGIS_WARD> = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            switch (moveType) {
+                case TYPE_GHOST:
+                case TYPE_DARK:
+                case TYPE_PSYCHIC:
+                    RESISTANCE(0.5)
+                    return;
+            }
+        },
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>
