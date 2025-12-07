@@ -3441,6 +3441,8 @@ u8 AtkCanceller_UnableToUseMove(void) {
 
 MultihitType GetMultihitType(int battler, MoveEnum move) {
     if (IsTwoStrikesMove(move)) return MULTIHIT_TWO;
+    else if (BattlerHasAbility(battler, ABILITY_UNRELENTING, FALSE) && gBattleMoves[move].power) 
+        return GetBattlerHoldEffect(battler, FALSE) == HOLD_EFFECT_LOADED_DICE ? MULTIHIT_FOUR_OR_FIVE : MULTIHIT_TWO_TO_FIVE;
 
     switch (gBattleMoves[gCurrentMove].effect) {
         case EFFECT_MULTI_HIT:
@@ -3451,9 +3453,7 @@ MultihitType GetMultihitType(int battler, MoveEnum move) {
             if (move == MOVE_WATER_SHURIKEN && BattlerHasAbility(battler, ABILITY_BATTLE_BOND, FALSE) && gBattleMons[battler].species == SPECIES_GRENINJA_ASH)
                 return MULTIHIT_THREE;
 
-            if (GetBattlerHoldEffect(battler, FALSE) == HOLD_EFFECT_LOADED_DICE) return MULTIHIT_FOUR_OR_FIVE;
-
-            return MULTIHIT_TWO_TO_FIVE;
+            return GetBattlerHoldEffect(battler, FALSE) == HOLD_EFFECT_LOADED_DICE ? MULTIHIT_FOUR_OR_FIVE : MULTIHIT_TWO_TO_FIVE;
 
         case EFFECT_DOUBLE_HIT:
             if (gBattleMoves[move].argument == 3) return MULTIHIT_THREE;
