@@ -218,12 +218,14 @@ int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApply
 }
 
 typedef enum {
-    FOLLOWUP_STANDARD,
-    FOLLOWUP_ALLOW_FAILED,
-    FOLLOWUP_ALLOW_SELF,
+    FOLLOWUP_STANDARD = 0,
+    FOLLOWUP_ALLOW_FAILED = 1 << 0,
+    FOLLOWUP_ALLOW_SELF = 1 << 1,
 } FollowupType;
+ENUM_OR(FollowupType)
+
 static int AdjustFollowupMoveTarget(int battler, int* target, MoveEnum move, FollowupType type) {
-    if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT && type != FOLLOWUP_ALLOW_FAILED) return FALSE;
+    if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT && !(type & FOLLOWUP_ALLOW_FAILED)) return FALSE;
 
     switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
         case MOVE_TARGET_BOTH:
@@ -233,7 +235,7 @@ static int AdjustFollowupMoveTarget(int battler, int* target, MoveEnum move, Fol
 
         default:
             if (*target == battler || *target == BATTLE_PARTNER(battler)) {
-                if (type == FOLLOWUP_ALLOW_SELF)
+                if (type & FOLLOWUP_ALLOW_SELF)
                     *target = GetMoveTarget(MOVE_POUND, MOVE_TARGET_SELECTED + 1);
                 else
                     return FALSE;
@@ -10518,7 +10520,15 @@ constexpr Ability Impl<ABILITY_TURF_WAR> = {
 
 template <>
 constexpr Ability Impl<ABILITY_GREEDY> = {
-    .randomizerBanned = TRUE,
+    .onReactive = +[](ON_REACTIVE) -> int {
+        CHECK(GetAbilityState(battler, ability))
+
+        int target = gBattlerAttacker;
+
+        CHECK(AdjustFollowupMoveTarget(battler, &target, MOVE_THIEF, FOLLOWUP_ALLOW_SELF | FOLLOWUP_ALLOW_FAILED))
+
+        return UseOutOfTurnAttack(battler, target, ability, MOVE_THIEF, 0);
+    },
 };
 
 template <>
@@ -11464,6 +11474,9 @@ constexpr Ability Impl<ABILITY_MENTAL_POLLUTION> = {
 
         InsertCorrectEndType(callType);
         BattleScriptCall(BattleScript_MentalPollution);
+        gBattleScripting.abilityPopupOverwrite = ability;
+        gBattlerAbility = battler;
+        BattleScriptCall(BattleScript_AbilityPopUpAndWait);
         return any;
     },
     .setStateOnEffect = MOVE_EFFECT_CONFUSION,

@@ -2150,6 +2150,8 @@ int UpdateBattlerItem(int battler, int newItem) {
     if (newItem == ITEM_NONE && oldItem != ITEM_BIG_NUGGET && (alchemyBattler = IsAbilityOnField(ABILITY_POWER_OF_ALCHEMY)))
         SetPowerOfAlchemyState(alchemyBattler - 1, battler, oldItem);
 
+    if (newItem == ITEM_NONE) SetAbilityState(battler, ABILITY_GREEDY, TRUE);
+
     if (newItem == ITEM_NONE) gBattleStruct->choicedMove[battler] = 0;
 
     gActiveBattler = battler;
