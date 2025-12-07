@@ -388,7 +388,6 @@ PKMN_Center_Mystery_Gift_EventScript_TakeCare::
 	case SPECIES_EEVEE_PARTNER, PKMN_Center_EventScript_SetflagEeveePartner
 	case SPECIES_MEOWTH_PARTNER, PKMN_Center_EventScript_SetflagMeowthPartner
 	case SPECIES_FIDOUGH_PARTNER, PKMN_Center_EventScript_SetflagFidoughPartner
-	case SPECIES_DURALUDON_PARTNER, PKMN_Center_EventScript_SetflagDuraludonPartner
 	case SPECIES_OGERPON, PKMN_Center_EventScript_SetflagOgerpon
 	releaseall
 	end
