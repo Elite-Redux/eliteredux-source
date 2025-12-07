@@ -3459,6 +3459,7 @@ void BattleTurnPassed(void) {
         if (DoFieldEndTurnEffects()) return;
         if (DoBattlerEndTurnEffects()) return;
         gBattleStruct->ranEndTurnEffects = TRUE;
+        if (gQueuedAttackCount) return;
     }
     if (HandleFaintedMonActions()) {
         return;
