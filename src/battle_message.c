@@ -935,6 +935,7 @@ static const u8 sText_ExtraSkillPermaStickyWeb[] = _("Permanent sticky web has b
 static const u8 sText_ChristmasNightmare[] = _("The hail intensifies!");
 static const u8 sText_DrakelpHead[] = _("{B_DEF_NAME_WITH_PREFIX}'s kelp weakened the attack!");
 static const u8 sText_DrakelpHeadReset[] = _("{B_STACK_1_NAME_WITH_PREFIX}'s kelp regrew!");
+static const u8 sText_MentalPollution[] = _("The mental static prevents other\nbattlers from using their abilities!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1093,7 +1094,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_MentalPollution[] = _("The mental static prevents other\nbattlers from using their abilities!");
+static const u8 sText_IceStatue[] = _("{B_DEF_NAME_WITH_PREFIX} is\nturned to ice!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1972,6 +1973,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_DRAKELP_HEAD - 12] = sText_DrakelpHead,
     [STRINGID_DRAKELP_HEAD_RESET - 12] = sText_DrakelpHeadReset,
     [STRINGID_MENTAL_POLLUTION - 12] = sText_MentalPollution,
+    [STRINGID_ICE_STATUE - 12] = sText_IceStatue,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

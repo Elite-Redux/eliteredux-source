@@ -181,6 +181,7 @@ enum {
     STATUS_INFO_TREPIDATION,
     STATUS_INFO_STOCKPILE,
     STATUS_INFO_SOOTHSAYER,
+    STATUS_INFO_ICE_STATUE,
     // Battle Events (Extraskills)
     STATUS_INFO_EXTRA_ATTACK,
     STATUS_INFO_EXTRA_DEFENSE,
@@ -279,9 +280,9 @@ enum move_modes {
 };
 
 //==========EWRAM==========//
-static EWRAM_DATA struct MenuResources *sMenuDataPtr = NULL;
+static EWRAM_DATA struct MenuResources* sMenuDataPtr = NULL;
 static EWRAM_DATA MainCallback tempsavedCallback = NULL;  // Temporary Callback
-static EWRAM_DATA u8 *sBg1TilemapBuffer = NULL;
+static EWRAM_DATA u8* sBg1TilemapBuffer = NULL;
 
 //==========STATIC=DEFINES==========//
 static void Battle_Menu_RunSetup(void);
@@ -814,6 +815,9 @@ void UI_Battle_Menu_Init(MainCallback callback) {
                 case STATUS_INFO_SOOTHSAYER:
                     if (GetAbilityState(j, ABILITY_SOOTHSAYER)) isExtraInfoShown = TRUE;
                     break;
+                case STATUS_INFO_ICE_STATUE:
+                    if (gVolatileStructs[j].iceStatue) isExtraInfoShown = TRUE;
+                    break;
                 case STATUS_INFO_EXTRA_ATTACK:
                     if (gVolatileStructs[j].extraAttackLevel) isExtraInfoShown = TRUE;
                     break;
@@ -887,7 +891,7 @@ static void Menu_VBlankCB(void) {
 static bool8 Menu_DoGfxSetup(void) {
     switch (gMain.state) {
         case 0:
-            DmaClearLarge16(3, (void *)VRAM, VRAM_SIZE, 0x1000) SetVBlankHBlankCallbacksToNull();
+            DmaClearLarge16(3, (void*)VRAM, VRAM_SIZE, 0x1000) SetVBlankHBlankCallbacksToNull();
             ClearScheduledBgCopiesToVram();
             gMain.state++;
             break;
@@ -946,7 +950,7 @@ static bool8 Menu_DoGfxSetup(void) {
 
 #define try_free(ptr)                     \
     ({                                    \
-        void **ptr__ = (void **)&(ptr);   \
+        void** ptr__ = (void**)&(ptr);    \
         if (*ptr__ != NULL) Free(*ptr__); \
     })
 
@@ -1145,7 +1149,7 @@ static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Forest[] = {
 
 // Field Icon
 void FreeFieldSprite(void) {
-    u8 *spriteId = &sMenuDataPtr->spriteIds[SPRITE_ARR_ID_FIELD_ICON];
+    u8* spriteId = &sMenuDataPtr->spriteIds[SPRITE_ARR_ID_FIELD_ICON];
     if (*spriteId != SPRITE_NONE) {
         FreeSpriteTilesByTag(SPRITE_ARR_ID_FIELD_ICON);
         FreeSpritePaletteByTag(SPRITE_ARR_ID_FIELD_ICON);
@@ -1176,13 +1180,13 @@ static void ShowFieldIcon(void) {
     gSprites[sMenuDataPtr->spriteIds[SPRITE_ARR_ID_FIELD_ICON]].oam.priority = 1;
 }
 
-static void SpriteCB_Selector(struct Sprite *sprite) {
+static void SpriteCB_Selector(struct Sprite* sprite) {
     u8 val = sprite->data[0];
     sprite->y2 = (gSineTable[val] / 128) + ((sMenuDataPtr->modeId * 4) * 8);
     sprite->data[0] += 8;
 }
 
-static void SpriteCB_PartyMons(struct Sprite *sprite) {
+static void SpriteCB_PartyMons(struct Sprite* sprite) {
     if (sMenuDataPtr->modeId != MODE_FIELD || sMenuDataPtr->fieldTabId != TAB_PARTY)
         sprite->invisible = TRUE;
     else
@@ -1196,7 +1200,7 @@ static const struct SpritePalette sBattleMenuSelectorSpritePalette[] = {gBattleS
 
 // Selector
 void FreeSelectorSprite(void) {
-    u8 *spriteId = &sMenuDataPtr->spriteIds[SPRITE_ARR_ID_SELECTOR];
+    u8* spriteId = &sMenuDataPtr->spriteIds[SPRITE_ARR_ID_SELECTOR];
     if (*spriteId != SPRITE_NONE) {
         FreeSpriteTilesByTag(SPRITE_ARR_ID_SELECTOR);
         FreeSpritePaletteByTag(SPRITE_ARR_ID_SELECTOR);
@@ -1228,7 +1232,7 @@ static void CreateSelectorSprite(void) {
 }
 
 static void FreeItemIconSprite(void) {
-    u8 *spriteId = &sMenuDataPtr->spriteIds[SPRITE_ARR_HELD_ITEM];
+    u8* spriteId = &sMenuDataPtr->spriteIds[SPRITE_ARR_HELD_ITEM];
     if (*spriteId != SPRITE_NONE) {
         FreeSpriteTilesByTag(TAG_ITEM_ICON);
         FreeSpritePaletteByTag(TAG_ITEM_ICON);
@@ -1241,7 +1245,7 @@ static void FreeItemIconSprite(void) {
 
 static void ShowItemIcon(u16 itemId, u8 x, u8 y) {
     u8 itemSpriteId;
-    u8 *spriteId = &sMenuDataPtr->spriteIds[SPRITE_ARR_HELD_ITEM];
+    u8* spriteId = &sMenuDataPtr->spriteIds[SPRITE_ARR_HELD_ITEM];
 
     FreeItemIconSprite();
 
@@ -1297,9 +1301,9 @@ static void PrintStatsTab() {
     u8 statStage;
     bool8 statStageUp = FALSE;
     u8 numtypes = 1;
-    struct Pokemon *party;
+    struct Pokemon* party;
     u8 nature;
-    const s8 *natureMod;
+    const s8* natureMod;
 
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
 
@@ -1755,7 +1759,7 @@ static void PrintMoveInfo(MoveEnum move, u8 x, u8 y, u8 moveIdx) {
     u8 moveType = gBattleMoves[move].type;
     bool8 isStatusMove = gBattleMoves[move].split == SPLIT_STATUS;
     u8 stab = 2;
-    struct Pokemon *party;
+    struct Pokemon* party;
 
     // Party
     if (!isEnemyMon)
@@ -2257,6 +2261,11 @@ const u8 sText_Title_Status_ExtraStat[] = _("Extra {STR_VAR_2}.");
 const u8 sText_Title_Status_ExtraStat_Description[] =
     _("This Pokémon's usual {STR_VAR_2} is\n"
       "boosted by {STR_VAR_3}%");
+const u8 sText_Title_Status_IceStatue[] = _("Ice Statue");
+const u8 sText_Title_Status_IceStatue_Description[] =
+    _("This Pokémon is Ice-type, does not\n"
+      "resist ice, and is not immune to\n"
+      "frostbite.");
 
 #define SPACE_BETWEEN_LINES_FIELD ((6 * 8) + 4)
 #define MAX_DESCRIPTION_LINES 3
@@ -2318,7 +2327,7 @@ static void PrintStatusTab(void) {
                 StringExpandPlaceholders(gStringVar3, sText_Title_Extra_Abilities_Description_3);
 
                 StringCopy(gStringVar1, gStringVar3);
-                StringCopy(gStringVar2, gAbilities[extraAbilities[2]].name); // Placeholder since 4th Hell Mode ability slot is not implemented
+                StringCopy(gStringVar2, gAbilities[extraAbilities[2]].name);  // Placeholder since 4th Hell Mode ability slot is not implemented
                 StringExpandPlaceholders(gStringVar3, sText_Title_Extra_Abilities_Description_4);
 
                 // Description
@@ -3289,6 +3298,17 @@ static void PrintStatusTab(void) {
                     windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
                 break;
+            case STATUS_INFO_ICE_STATUE:
+                StringCopy(gStringVar1, sText_Title_Status_IceStatue);
+                AddTextPrinterParameterized4(
+                    windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                // Description
+                StringCopy(gStringVar1, sText_Title_Status_IceStatue_Description);
+                AddTextPrinterParameterized4(
+                    windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+                break;
             case STATUS_INFO_EXTRA_ATTACK:
                 StringCopy(gStringVar2, gStatNamesTable[STAT_ATK]);
                 StringExpandPlaceholders(gStringVar1, sText_Title_Status_ExtraStat);
@@ -3479,7 +3499,7 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
     struct Pokemon *party, *targetParty;
     u16 targetCurrentHp = gBattleMons[target].hp;
     MoveEnum move = gBattleMons[battler].moves[moveIndex];
-    const s8 *natureMod;
+    const s8* natureMod;
     int ignored, immune;
 
     if (sMenuDataPtr->damageCalculation[battler][target][moveIndex].calculated) return;
@@ -3493,8 +3513,8 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
     GET_MOVE_TYPE(move, moveType);
 
     // Max and Min Damage
-    minDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MIN_DAMAGE_FACTOR, (u16 *)&ignored);
-    maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MAX_DAMAGE_FACTOR, (u16 *)&ignored);
+    minDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MIN_DAMAGE_FACTOR, (u16*)&ignored);
+    maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MAX_DAMAGE_FACTOR, (u16*)&ignored);
 
     immune = TestImmunityAbilitiesOnly(target, battler, move, moveType);
     if (!immune) immune = TestAbsorbingAbilitiesOnly(target, battler, move, moveType);
@@ -3527,7 +3547,7 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
     hits2KO++;
 
     for (i = 0; i < MIN_DAMAGE_FACTOR; i++) {
-        tempdamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MIN_DAMAGE_FACTOR - i, (u16 *)&ignored);
+        tempdamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, CRIT_ROLL_ONLY_IF_GUARANTEED, MIN_DAMAGE_FACTOR - i, (u16*)&ignored);
 
         if (tempdamage * hits2KO >= targetCurrentHp) {
             break;
@@ -3608,7 +3628,7 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx) {
     u16 targetCurrentHp = gBattleMons[target].hp;
     u16 targetHeldItem = gBattleMons[target].item;
     MoveEnum move = gBattleMons[battler].moves[moveIdx];
-    struct DamageCalculation *damageCalculation;
+    struct DamageCalculation* damageCalculation;
 
     // Sets move type depending on the mon ability/stats
     SetTypeBeforeUsingMove(move, battler);
@@ -3704,7 +3724,7 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx) {
 void PrintDamageCalculationExported(u8 battler, u8 target, u8 moveIdx) {
     u32 minDamage, maxDamage;
     MoveEnum move = gBattleMons[battler].moves[moveIdx];
-    struct DamageCalculation *damageCalculation;
+    struct DamageCalculation* damageCalculation;
 
     // Sets move type depending on the mon ability/stats
     SetTypeBeforeUsingMove(move, battler);
@@ -5533,7 +5553,7 @@ static const union AnimCmd sSpriteAnim_StatusPokerus[] = {ANIMCMD_FRAME(20, 0, F
 static const union AnimCmd sSpriteAnim_StatusFaint[] = {ANIMCMD_FRAME(24, 0, FALSE, FALSE), ANIMCMD_END};
 static const union AnimCmd sSpriteAnim_StatusFrostbite[] = {ANIMCMD_FRAME(28, 0, FALSE, FALSE), ANIMCMD_END};
 static const union AnimCmd sSpriteAnim_StatusBleed[] = {ANIMCMD_FRAME(32, 0, FALSE, FALSE), ANIMCMD_END};
-static const union AnimCmd *const sSpriteAnimTable_StatusCondition[] = {
+static const union AnimCmd* const sSpriteAnimTable_StatusCondition[] = {
     sSpriteAnim_StatusPoison,
     sSpriteAnim_StatusParalyzed,
     sSpriteAnim_StatusSleep,
@@ -5571,7 +5591,7 @@ static const struct SpriteTemplate sSpriteTemplate_StatusCondition = {.tileTag =
 #define STATUS_ICON_X (7 * 8)
 #define STATUS_ICON_Y (5 * 8)
 static void CreateSetStatusSprite(void) {
-    u8 *spriteId = &sMenuDataPtr->spriteIds[SPRITE_ARR_ID_STATUS];
+    u8* spriteId = &sMenuDataPtr->spriteIds[SPRITE_ARR_ID_STATUS];
     u8 statusAnim;
 
     if (*spriteId == SPRITE_NONE) *spriteId = CreateSprite(&sSpriteTemplate_StatusCondition, STATUS_ICON_X, STATUS_ICON_Y, 0);
@@ -5587,7 +5607,7 @@ static void CreateSetStatusSprite(void) {
 }
 
 static void DestroyBattleMenuSprite(u8 spriteArrayId) {
-    struct Sprite *sprite = &gSprites[sMenuDataPtr->spriteIds[spriteArrayId]];
+    struct Sprite* sprite = &gSprites[sMenuDataPtr->spriteIds[spriteArrayId]];
     sMenuDataPtr->spriteIds[spriteArrayId] = SPRITE_NONE;
     DestroySpriteAndFreeResources(sprite);
 }
@@ -5638,7 +5658,7 @@ static void FreeEveryMonIconSprite(void) {
 }
 
 static void FreeSpeciesIconSprite(u8 battler) {
-    u8 *spriteId = &sMenuDataPtr->spriteIds[SPRITE_ARR_ID_MON_ICON_1_SPEED + battler];
+    u8* spriteId = &sMenuDataPtr->spriteIds[SPRITE_ARR_ID_MON_ICON_1_SPEED + battler];
     if (*spriteId != SPRITE_NONE) {
         FreeSpriteTilesByTag(TAG_BATTLER_SPEED + battler - 1);
         FreeSpritePaletteByTag(TAG_BATTLER_SPEED + battler - 1);
@@ -5688,7 +5708,7 @@ static u8 ShowSpeciesIconSpeed(u8 battler, u8 x, u8 y) {
 }
 
 static u8 ShowSpeciesIconParty(u8 num, bool8 isEnemyParty, u8 x, u8 y) {
-    struct Pokemon *party = NULL;
+    struct Pokemon* party = NULL;
     SpeciesEnum species;
     u32 personality;
     u8 spriteId;
@@ -5734,7 +5754,7 @@ static void FreeEveryPartyMonIconSprite(void) {
 }
 
 static void FreePartySpeciesIconSprite(u8 num, bool8 isEnemyMon) {
-    u8 *spriteId;
+    u8* spriteId;
 
     if (isEnemyMon)
         spriteId = &sMenuDataPtr->spriteIds[SPRITE_ARR_ID_MON_ICON_1_PARTY_ENEMY + num];
@@ -5775,7 +5795,7 @@ static const u8 sMoveTypeToOamPaletteNum[NUMBER_OF_MON_TYPES] = {
 static void SetSpriteInvisibility(u8 spriteArrayId, bool8 invisible) { gSprites[sMenuDataPtr->spriteIds[spriteArrayId]].invisible = invisible; }
 
 static void SetTypeIconSpritePosAndPal(u8 typeId, u8 x, u8 y, u8 spriteArrayId) {
-    struct Sprite *sprite = &gSprites[sMenuDataPtr->spriteIds[spriteArrayId]];
+    struct Sprite* sprite = &gSprites[sMenuDataPtr->spriteIds[spriteArrayId]];
     StartSpriteAnim(sprite, typeId);
     sprite->oam.paletteNum = sMoveTypeToOamPaletteNum[typeId];
     sprite->x = x + 16;

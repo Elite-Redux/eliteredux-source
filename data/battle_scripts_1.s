@@ -13121,3 +13121,8 @@ BattleScript_MentalPollution::
 	printstring STRINGID_MENTAL_POLLUTION
     waitmessage B_WAIT_TIME_LONG
     return
+
+BattleScript_IceStatue::
+	printstring STRINGID_ICE_STATUE
+	waitmessage B_WAIT_TIME_LONG
+	return

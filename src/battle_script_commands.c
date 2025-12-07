@@ -4818,6 +4818,15 @@ static void Cmd_moveend(void) {
                     SortBattlersBySpeed(battlers, FALSE);
                     for (i = 0; i < gBattlersCount; i++) {
                         u8 battler = battlers[i];
+
+                        if (battler == gBattlerAttacker && GetOncePerTurnAbilityCounter(battler, ABILITY_HOLLOW_ICE_ZONE)) {
+                            gStackBattler1 = battler;
+                            gBattleScripting.abilityPopupOverwrite = ABILITY_HOLLOW_ICE_ZONE;
+                            BattleScriptCall(BattleScript_EmergencyExitPopupNoPause);
+                            effect = TRUE;
+                            break;
+                        }
+
                         if (IsBattlerAlive(battler) && gRoundStructs[battler].statFell && gRoundStructs[battler].disableEjectPack == 0 &&
                             GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_PACK && CountUsablePartyMons(battler) > 0)  // Has mon to switch into
                         {
@@ -8568,7 +8577,7 @@ static void Cmd_various(void) {
                 case MOVE_EFFECT_FROSTBITE:
                     if (CanGetFrostbite(gActiveBattler))
                         return;
-                    else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_ICE))
+                    else if (!gVolatileStructs[gActiveBattler].iceStatue && IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_ICE))
                         gBattlescriptCurrInstr = BattleScript_NotAffected;
                     else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_FROSTBITE))
                         return;

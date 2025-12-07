@@ -11379,6 +11379,22 @@ constexpr Ability Impl<ABILITY_MENTAL_POLLUTION> = {
     .setStateOnEffect = MOVE_EFFECT_CONFUSION,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_HOLLOW_ICE_ZONE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(moveType == TYPE_ICE)
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK_NOT(gVolatileStructs[target].iceStatue)
+        CHECK_NOT(BattlerHasAbility(target, ability, FALSE))
+
+        gVolatileStructs[target].iceStatue = TRUE;
+        SET_BATTLER_TYPE(target, TYPE_ICE);
+        BattleScriptCall(BattleScript_IceStatue);
+        SetOncePerTurnAbilityCounter(battler, ability, TRUE);
+        return TRUE;
+    },
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>

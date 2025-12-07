@@ -2560,8 +2560,7 @@ u8 DoBattlerEndTurnEffects(void) {
 
                         if (HasGrappler(gBattleStruct->wrappedBy[gActiveBattler])) {
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
-                        }
-                        else if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
+                        } else if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
                         else
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
@@ -4954,7 +4953,7 @@ bool32 CanGetFrostbite(u8 battlerId) {
     if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
-    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE)) return FALSE;
+    if (!gVolatileStructs[battlerId].iceStatue && IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE)) return FALSE;
 
     if (IsStatusImmune(battlerId, CHECK_FROSTBITE)) return FALSE;
     return TRUE;
@@ -7819,6 +7818,8 @@ void MulByTypeEffectiveness(u16* modifier, MoveEnum move, u8 moveType, u8 battle
                 mod = UQ_4_12(2.0);  // super-effective
             else if (GetBattlerSide(battlerDef) != B_SIDE_PLAYER && moveType == TYPE_ROCK)
                 mod = UQ_4_12(0.0);  // Immune
+        } else if (gVolatileStructs[battlerDef].iceStatue && moveType == TYPE_ICE && defType == TYPE_ICE && mod < UQ_4_12(1)) {
+            mod *= 2;
         }
     }
 

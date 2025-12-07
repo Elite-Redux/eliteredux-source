@@ -155,6 +155,7 @@ struct VolatileStruct
     u8 dazed:3;
     u8 trepidation:2;
     u8 hazardDamaged:1;
+    u8 iceStatue:1;
 };
 
 struct RoundStruct
