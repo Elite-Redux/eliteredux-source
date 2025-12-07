@@ -441,7 +441,7 @@ static int UseTurnAttackAsPursuit(ON_PREEMPT_ACTION) {
 
 int GetClearableHazardFlags(int side) {
     int hazardBits = SIDE_STATUS_HAZARDS_ANY;
-    if (gSideTimers[side].foamyWeb) hazardBits &= !SIDE_STATUS_STICKY_WEB;
+    if (gSideTimers[side].foamyWeb) hazardBits &= ~SIDE_STATUS_STICKY_WEB;
     return hazardBits;
 }
 
