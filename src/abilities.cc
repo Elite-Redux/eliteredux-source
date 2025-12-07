@@ -6830,21 +6830,15 @@ constexpr Ability Impl<ABILITY_CRAVING> = {.onEndTurn = +[](ON_END_TURN) -> int 
     CHECK(gVolatileStructs[battler].isFirstTurn != 2)
     ItemEnum berry = sCravingBerryTable[Random() % ARRAY_COUNT(sCravingBerryTable)];
     if (berry == ITEM_FIGY_BERRY) {
-        int nature = gBattleMons[battler].nature;
         static const ItemEnum figyAlternatives[] = {ITEM_FIGY_BERRY, ITEM_WIKI_BERRY, ITEM_MAGO_BERRY, ITEM_AGUAV_BERRY, ITEM_IAPAPA_BERRY};
-        int i;
-        do {
-            i = Random() % ARRAY_COUNT(figyAlternatives);
-        } while (GetFlavorRelationByNature(nature, i) < 0);
-        berry = figyAlternatives[i];
-
-        gBattleStruct->changedItems[battler] = gBattleMons[battler].item;
-        gBattleMons[battler].item = berry;
-
-        BattleScriptPushCursorAndCallback(BattleScript_CudChew);
-        return TRUE;
+        berry = figyAlternatives[Random() % ARRAY_COUNT(figyAlternatives)];
     }
-    return FALSE;
+
+    gBattleStruct->changedItems[battler] = gBattleMons[battler].item;
+    gBattleMons[battler].item = berry;
+
+    BattleScriptPushCursorAndCallback(BattleScript_CudChew);
+    return TRUE;
 }};
 
 template <>
