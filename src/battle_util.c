@@ -6873,6 +6873,9 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
         case MOVE_FLYING_PRESS:
             if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WRESTLE_SHOWMAN)) basePower += 10;
             break;
+        case MOVE_ROAR_OF_TIME:
+            if (BattlerHasAbility(battlerAtk, ABILITY_TEMPORAL_RUPTURE, FALSE)) basePower = 100;
+            break;
     }
 
     if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH)) {

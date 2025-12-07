@@ -2141,6 +2141,9 @@ BattleScript_EffectFinalGambit:
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectHitSwitchTarget:
+	jumpifnotmove MOVE_ROAR_OF_TIME, BattleScript_EffectHitSwitchTarget_Continue
+	jumpifability BS_ATTACKER, ABILITY_TEMPORAL_RUPTURE, BattleScript_EffectHit
+BattleScript_EffectHitSwitchTarget_Continue:
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring

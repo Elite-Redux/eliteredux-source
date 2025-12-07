@@ -9515,7 +9515,25 @@ constexpr Ability Impl<ABILITY_STAINLESS_STEEL> = {
 
 template <>
 constexpr Ability Impl<ABILITY_TEMPORAL_RUPTURE> = {
-    .randomizerBanned = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK_NOT(HasAbilityIgnoringSuppression(target, ABILITY_SLOW_START))
+        CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(target)))
+        CHECK_NOT(DoesBattlerHaveAbilityShield(target))
+
+        UpdateAbilityStateIndicesForNewAbility(target, ABILITY_SLOW_START);
+        ReplaceAbility(target, ABILITY_SLOW_START);
+
+        gVolatileStructs[target].slowStartTimer = 5;
+
+        gStackBattler1 = target;
+        BattleScriptCall(BattleScript_BloodStainActivates);
+        return TRUE;
+    },
+    .onPriority = +[](ON_PRIORITY) -> int {
+        CHECK(move == MOVE_ROAR_OF_TIME)
+        return -gBattleMoves[MOVE_ROAR_OF_TIME].priority;
+    },
 };
 
 template <>
