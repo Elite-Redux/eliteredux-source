@@ -4049,11 +4049,16 @@ constexpr Ability Impl<ABILITY_SWEET_DREAMS> = {
 
 template <>
 constexpr Ability Impl<ABILITY_BAD_LUCK> = {
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        *accuracy -= 5;
+        return ACCURACY_ADDITIVE;
+    },
     .onCrit = +[](ON_CRIT) -> int { return NEVER_CRIT; },
     .onModifyEffectChance =
         +[](ON_MODIFY_EFFECT_CHANCE) {
             if (*effectChance < 1) *effectChance = 0;
         },
+    .onAccuracyFor = APPLY_ON_TARGET,
     .onCritFor = APPLY_ON_FOE,
     .onModifyEffectChanceFor = APPLY_ON_FOE,
     .breakable = TRUE,
@@ -9499,8 +9504,10 @@ constexpr Ability Impl<ABILITY_SOUL_TAP> = {
 template <>
 constexpr Ability Impl<ABILITY_SCARECROW> = {
     .onEntry = UseIntimidateClone,
+    .onAccuracy = Impl<ABILITY_BAD_LUCK>.onAccuracy,
     .onCrit = Impl<ABILITY_BAD_LUCK>.onCrit,
     .onModifyEffectChance = Impl<ABILITY_BAD_LUCK>.onModifyEffectChance,
+    .onAccuracyFor = Impl<ABILITY_BAD_LUCK>.onAccuracyFor,
     .onCritFor = Impl<ABILITY_BAD_LUCK>.onCritFor,
     .onModifyEffectChanceFor = Impl<ABILITY_BAD_LUCK>.onModifyEffectChanceFor,
     .breakable = TRUE,

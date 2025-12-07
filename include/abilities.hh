@@ -77,6 +77,7 @@ typedef enum {
     ACCURACY_HITS_IF_POSSIBLE,
     ACCURACY_ALWAYS_MISSES,
     ACCURACY_ALWAYS_HITS,
+    ACCURACY_ADDITIVE,
 } AccuracyPriority;
 typedef AccuracyPriority (*AbilityOnAccuracyHandler)(AbilityEnum ability, int battler, int target, MoveEnum move, Type moveType, int* accuracy);
 typedef int (*AbilityOnSwapSplitHandler)(int battler, MoveEnum move, Type moveType);
