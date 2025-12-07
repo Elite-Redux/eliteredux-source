@@ -500,6 +500,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectShellTrap				  @ EFFECT_SHELL_TRAP
 	.4byte BattleScript_GrassyTerrainHit			  @ EFFECT_GRASSY_TERRAIN_HIT
 	.4byte BattleScript_EffectMistyTerrain			  @ EFFECT_TOXIC_TERRAIN
+	.4byte BattleScript_SludgeSpit                    @ EFFECT_SLUDGE_SPIT
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -13140,3 +13141,20 @@ BattleScript_IceStatue::
 	printstring STRINGID_ICE_STATUE
 	waitmessage B_WAIT_TIME_LONG
 	return
+
+BattleScript_SludgeSpit::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	setgastroacid BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	printstring STRINGID_PKMNSABILITYSUPPRESSED
+	waitmessage B_WAIT_TIME_LONG
+	trytoclearprimalweather
+	printstring STRINGID_EMPTYSTRING3
+	waitmessage 1
+    moveendto MOVEEND_ATTACKER_VISIBLE
+    moveendfrom MOVEEND_TARGET_VISIBLE
+    goto BattleScript_MoveSwitch
