@@ -3771,7 +3771,7 @@ constexpr Ability Impl<ABILITY_DREAMCATCHER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             for (int i = 0; i < gBattlersCount; i++) {
-                if (IsBattlerAlive(i) && gBattleMons[i].status1 & STATUS1_SLEEP) {
+                if (GetBattlerSide(i) != GetBattlerSide(battler) && IsBattlerAlive(i) && (gBattleMons[i].status1 & STATUS1_SLEEP || IsComatose(i))) {
                     FILTER_NOT(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ability && gQueuedExtraAttackData[0].target == i)
                     MUL(2.0);
                     return;
@@ -3779,7 +3779,7 @@ constexpr Ability Impl<ABILITY_DREAMCATCHER> = {
             }
         },
     .onPreemptAction = +[](ON_PREEMPT_ACTION) -> int {
-        CHECK(gBattleMons[turnBattler].status1 & STATUS1_SLEEP)
+        CHECK(gBattleMons[turnBattler].status1 & STATUS1_SLEEP || IsComatose(turnBattler))
         return UseTurnAttackAsPursuit(DELEGATE_PREEMPT_ACTION);
     },
 };
