@@ -4462,9 +4462,9 @@ constexpr Ability Impl<ABILITY_TALON_TRAP> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitEffect(gBattlerTarget))
         CHECK(IsBattlerAlive(battler))
-        CHECK(IsMoveMakingContact(move, battler))
+        CHECK(IsStrikerBoosted(battler, move))
         CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
-        CHECK(Random() % 2)
+        CHECK(Random() % 100 < 75)
 
         SetOnMoveEffectReactionFlags(battler, target, MOVE_EFFECT_WRAP);
         gBattleMons[target].status2 |= STATUS2_WRAPPED;
