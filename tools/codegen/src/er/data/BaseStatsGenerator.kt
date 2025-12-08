@@ -71,7 +71,7 @@ object BaseStatsGenerator : Generator {
 
             val flags = buildList {
                 if (species.heads == 2) add("F_TWO_HEADED")
-                if (species.heads == 3) add("F_THREE_HEADED")
+                if (species.heads >= 3) add("F_THREE_HEADED")
                 if (species.isTagTeam) add("F_TAG_TEAM")
             }.joinToString(" | ")
 
