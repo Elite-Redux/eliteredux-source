@@ -10639,4 +10639,22 @@ const struct PokedexEntry gPokedexEntries[] = {
         .trainerScale = 256,
         .trainerOffset = 0,
     },
+    [1071] = { // Knaiver
+        .categoryName = $("Hatchling"),
+        .height = 4,
+        .weight = 40,
+        .description = $("An elusive Pokémon, it adapts to\nalmost any surroundings, scavenging until\nit reaches its incredible potential."),
+        .trainerScale = 256,
+        .trainerOffset = 0,
+    },
+    [1083] = { // Merrykarp
+        .categoryName = $("Fish"),
+        .height = 9,
+        .weight = 100,
+        .description = $("Its swimming muscles are weak, so it is\neasily washed away by currents. In places\nwhere water pools, you can see many\nMagikarp deposited there by the flow."),
+        .pokemonScale = 310,
+        .pokemonOffset = 4,
+        .trainerScale = 256,
+        .trainerOffset = 0,
+    },
 };
