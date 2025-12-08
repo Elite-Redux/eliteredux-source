@@ -10035,12 +10035,9 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
 static void Cmd_statbuffchange(void) {
     u16 flags = READ_FIRST_16_INC;
     const u8* jumpPtr = READ_PTR_INC;
-    const u8* ptrBefore = gBattlescriptCurrInstr;
-
-    u8 result = ChangeStatBuffsImplicit(GET_STAT_BUFF_VALUE_WITH_SIGN(gBattleScripting.statChanger), gBattleScripting.statChanger.statId, flags, jumpPtr);
+    
+    ChangeStatBuffsImplicit(GET_STAT_BUFF_VALUE_WITH_SIGN(gBattleScripting.statChanger), gBattleScripting.statChanger.statId, flags, jumpPtr);
     SetActiveMultistringChooser(gBattleCommunication[MULTISTRING_CHOOSER]);
-
-    if (!result && jumpPtr && gBattlescriptCurrInstr == ptrBefore) gBattlescriptCurrInstr = jumpPtr;
 }
 
 bool32 TryResetBattlerStatChanges(u8 battler, s8 comparison) {
