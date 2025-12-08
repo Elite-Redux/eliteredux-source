@@ -2663,12 +2663,13 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     break;
                 case MOVE_EFFECT_WRAP:
                     if (!(gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED)) {
-                        SetOnMoveEffectReactionFlags(gBattlerAttacker, gEffectBattler, MOVE_EFFECT_WRAP);
+                        SetOnMoveEffectReactionFlags(gBattleScripting.battler, gEffectBattler, MOVE_EFFECT_WRAP);
 
-                        gVolatileStructs[gEffectBattler].wrapTurns = WrapDuration(gBattlerAttacker);
+                        gVolatileStructs[gEffectBattler].wrapTurns = WrapDuration(gBattleScripting.battler);
+                        gBattleMons[gEffectBattler].status2 |= STATUS2_WRAPPED;
 
                         gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
-                        gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
+                        gBattleStruct->wrappedBy[gEffectBattler] = gBattleScripting.battler;
 
                         for (gBattleCommunication[MULTISTRING_CHOOSER] = 0;; gBattleCommunication[MULTISTRING_CHOOSER]++) {
                             if (gBattleCommunication[MULTISTRING_CHOOSER] > ARRAY_COUNT(sTrappingMoves) - 1) break;
