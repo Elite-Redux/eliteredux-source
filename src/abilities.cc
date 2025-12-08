@@ -736,7 +736,7 @@ constexpr Ability Impl<ABILITY_INTIMIDATE> = {
 template <>
 constexpr Ability Impl<ABILITY_SHADOW_TAG> = {
     .onTrap =
-        +[](ON_TRAP) -> int { return BattlerHasAbility(switchingBattler, FALSE, [](AbilityEnum ability) -> int { return gAbilities[ability].shadowTag; }); },
+        +[](ON_TRAP) -> int { return !BattlerHasAbility(switchingBattler, FALSE, [](AbilityEnum ability) -> int { return gAbilities[ability].shadowTag; }); },
     .shadowTag = TRUE,
 };
 
