@@ -4444,6 +4444,7 @@ constexpr Ability Impl<ABILITY_GRIP_PINCER> = {
         SetOnMoveEffectReactionFlags(battler, target, MOVE_EFFECT_WRAP);
         gBattleMons[target].status2 |= STATUS2_WRAPPED;
         gVolatileStructs[target].wrapTurns = WrapDuration(battler);
+        gVolatileStructs[target].wrapAbility = ability;
 
         gBattleStruct->wrappedMove[target] = move;
         gBattleStruct->wrappedBy[target] = battler;
@@ -4468,6 +4469,7 @@ constexpr Ability Impl<ABILITY_TALON_TRAP> = {
         SetOnMoveEffectReactionFlags(battler, target, MOVE_EFFECT_WRAP);
         gBattleMons[target].status2 |= STATUS2_WRAPPED;
         gVolatileStructs[target].wrapTurns = WrapDuration(battler);
+        gVolatileStructs[target].wrapAbility = ability;
 
         gBattleStruct->wrappedMove[target] = MOVE_SNAP_TRAP;
         gBattleStruct->wrappedBy[target] = battler;
@@ -5808,6 +5810,7 @@ constexpr Ability Impl<ABILITY_ITCHY_DEFENSE> = {
         SetOnMoveEffectReactionFlags(battler, attacker, MOVE_EFFECT_WRAP);
         gBattleMons[attacker].status2 |= STATUS2_WRAPPED;
         gVolatileStructs[attacker].wrapTurns = WrapDuration(battler);
+        gVolatileStructs[attacker].wrapAbility = ability;
 
         gBattleStruct->wrappedMove[attacker] = MOVE_INFESTATION;
         gBattleStruct->wrappedBy[attacker] = battler;
@@ -11461,6 +11464,7 @@ constexpr Ability Impl<ABILITY_SERPENT_BIND> = {
         SetOnMoveEffectReactionFlags(battler, target, MOVE_EFFECT_WRAP);
         gBattleMons[target].status2 |= STATUS2_WRAPPED;
         gVolatileStructs[target].wrapTurns = WrapDuration(battler);
+        gVolatileStructs[target].wrapAbility = ability;
 
         gBattleStruct->wrappedMove[target] = move;
         gBattleStruct->wrappedBy[target] = battler;

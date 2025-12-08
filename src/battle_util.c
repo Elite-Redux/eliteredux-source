@@ -2551,13 +2551,15 @@ u8 DoBattlerEndTurnEffects(void) {
 
                         gBattleScripting.animArg1 = gBattleStruct->wrappedMove[gActiveBattler];
                         gBattleScripting.animArg2 = gBattleStruct->wrappedMove[gActiveBattler] >> 8;
-                        if (gBattleMoves[gBattleStruct->wrappedMove[gActiveBattler]].effect == EFFECT_TRAP) {
-                            PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+
+                        if (gVolatileStructs[gActiveBattler].wrapAbility) {
+                            gBattleScripting.abilityPopupOverwrite = gVolatileStructs[gActiveBattler].wrapAbility;
+                            PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gVolatileStructs[gActiveBattler].wrapAbility);
+                            gBattlescriptCurrInstr = BattleScript_WrapTurnDmgAbility;
                         } else {
-                            gBattleScripting.abilityPopupOverwrite = ABILITY_GRIP_PINCER;
-                            PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ABILITY_GRIP_PINCER);
+                            PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                            gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
                         }
-                        gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
 
                         if (HasGrappler(gBattleStruct->wrappedBy[gActiveBattler])) {
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
@@ -2570,8 +2572,17 @@ u8 DoBattlerEndTurnEffects(void) {
                     } else  // broke free
                     {
                         gBattleMons[gActiveBattler].status2 &= ~(STATUS2_WRAPPED);
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
-                        gBattlescriptCurrInstr = BattleScript_WrapEnds;
+
+                        if (gVolatileStructs[gActiveBattler].wrapAbility) {
+                            gBattleScripting.abilityPopupOverwrite = gVolatileStructs[gActiveBattler].wrapAbility;
+                            PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gVolatileStructs[gActiveBattler].wrapAbility);
+                            gBattlescriptCurrInstr = BattleScript_WrapEndsAbility;
+                        } else {
+                            PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                            gBattlescriptCurrInstr = BattleScript_WrapEnds;
+                        }
+
+                        gVolatileStructs[gEffectBattler].wrapAbility = ABILITY_NONE;
                     }
                     BattleScriptExecute(gBattlescriptCurrInstr);
                     effect++;

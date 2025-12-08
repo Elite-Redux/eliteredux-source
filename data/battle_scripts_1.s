@@ -9261,14 +9261,17 @@ BattleScript_PrintPayDayMoneyString::
 	printstring STRINGID_PLAYERPICKEDUPMONEY
 	waitmessage B_WAIT_TIME_LONG
 	return
-
+	
+BattleScript_WrapTurnDmgAbility::
+	call BattleScript_AbilityPopUpAndWait
 BattleScript_WrapTurnDmg::
-	jumpifmagicguard BS_ATTACKER, BattleScript_DoTurnDmgEnd
 	playanimation BS_ATTACKER, B_ANIM_TURN_TRAP, sB_ANIM_ARG1
 	printstring STRINGID_PKMNHURTBY
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_DoTurnDmg
 
+BattleScript_WrapEndsAbility::
+	call BattleScript_AbilityPopUpAndWait
 BattleScript_WrapEnds::
 	printstring STRINGID_PKMNFREEDFROM
 	waitmessage B_WAIT_TIME_LONG

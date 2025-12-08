@@ -92,6 +92,7 @@ struct VolatileStruct
     struct VolatileBeganThisTurn started;
     u16 disabledMove;
     u16 encoredMove;
+    AbilityEnum wrapAbility;
     u8 protectUses;
     u8 stockpileCounter;
     s8 stockpileDef;
