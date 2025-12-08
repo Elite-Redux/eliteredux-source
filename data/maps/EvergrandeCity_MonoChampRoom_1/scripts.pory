@@ -102,7 +102,7 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_Scott{
             msgbox(format("Congratulations, you have defeated all of the Type Mono Champions, here is your reward, a Rare Candy"))
             giveitem(ITEM_RARE_CANDY, 1)
             msgbox(format("If you want to try again just talk to me"))
-            warp(MAP_VICTORY_ROAD_1F, 255, 46, 15)
+            warp(MAP_EVER_GRANDE_CITY, 255, 25, 46)
     }
     else{
         msgbox(format("Do you want to leave the room?"), MSGBOX_YESNO)
