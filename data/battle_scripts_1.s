@@ -5021,7 +5021,7 @@ BattleScript_EffectMimic::
 BattleScript_EffectMetronome::
 	attackcanceler
 	attackstring
-	pause B_WAIT_TIME_SHORT
+	ppreduce
 	attackanimation
 	waitanimation
 	setbyte sB_ANIM_TURN, 0

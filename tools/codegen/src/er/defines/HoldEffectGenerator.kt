@@ -22,13 +22,13 @@ object HoldEffectGenerator : Generator {
             |#ifdef __assembly__
             |
             |#define $HOLD_EFFECT_NONE 0
-            |${effects.withIndex().joinToString("\n") { "#define ${it.value} ${it.index}" }}
+            |${effects.withIndex().joinToString("\n") { "#define ${it.value} ${it.index + 1}" }}
             |
             |#else
             |
             |typedef enum HoldEffectEnum {
             |$IND${HOLD_EFFECT_NONE} = 0,
-            |${effects.withIndex().joinToString("\n") { "$IND${it.value} = ${it.index}," }}
+            |${effects.withIndex().joinToString("\n") { "$IND${it.value} = ${it.index + 1}," }}
             |} HoldEffectEnum;
             |
             |#endif
