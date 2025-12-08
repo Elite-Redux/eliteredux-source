@@ -11531,6 +11531,7 @@ constexpr Ability Impl<ABILITY_SUMO_WRESTLER> = {
             gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
                 .ability = ability,
                 .move = MOVE_CIRCLE_THROW,
+                .movePower = 20,
                 .attacker = battler,
                 .target = GetOppositeSide(battler),
             };
@@ -11667,6 +11668,24 @@ constexpr Ability Impl<ABILITY_AEGIS_WARD> = {
 template <>
 constexpr Ability Impl<ABILITY_UNRELENTING> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType { return MULTIHIT_TWO_TO_FIVE; },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_ACID_REFLUX> = {
+    .onReactive = +[](ON_REACTIVE) -> int {
+        CHECK(gRoundStructs[battler].damaged)
+        CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
+
+        gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+            .ability = ability,
+            .move = MOVE_ACID,
+            .movePower = 20,
+            .attacker = battler,
+            .target = BATTLE_OPPOSITE(battler),
+        };
+
+        return TRUE;
+    },
 };
 
 #include "generated/data/abilities/ability_text.hh"
