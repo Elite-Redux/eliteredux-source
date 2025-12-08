@@ -2865,8 +2865,7 @@ constexpr Ability Impl<ABILITY_RECEIVER> = {
         BattleScriptCall(BattleScript_ReceiverActivates);
         return TRUE;
     },
-    .onBattlerFaintsFor = APPLY_ON_ALLY,
-};
+    .onBattlerFaintsFor = APPLY_ON_ALLY,};
 
 template <>
 constexpr Ability Impl<ABILITY_POWER_OF_ALCHEMY> = {
@@ -11693,6 +11692,22 @@ constexpr Ability Impl<ABILITY_ACID_REFLUX> = {
 template <>
 constexpr Ability Impl<ABILITY_RIPEN> = {
     .ripen = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_SHATTERED_ARMOR> = {
+    .onDefender = Impl<ABILITY_SCRAPYARD>.onDefender,
+    .onDefensiveMultiplier = Impl<ABILITY_BATTLE_ARMOR>.onDefensiveMultiplier,
+    .onCrit = Impl<ABILITY_BATTLE_ARMOR>.onCrit,
+    .onCritFor = Impl<ABILITY_BATTLE_ARMOR>.onCritFor,
+    .breakable = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_GHOST_FRENZY> = {
+    .onBattlerFaints = Impl<ABILITY_SOUL_EATER>.onBattlerFaints,
+    .onParentalBond = Impl<ABILITY_HYPER_AGGRESSIVE>.onParentalBond,
+    .onBattlerFaintsFor = Impl<ABILITY_SOUL_EATER>.onBattlerFaintsFor,
 };
 
 #include "generated/data/abilities/ability_text.hh"
