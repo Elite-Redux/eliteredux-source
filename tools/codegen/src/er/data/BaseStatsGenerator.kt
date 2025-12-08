@@ -5,6 +5,7 @@ import er.Generator
 import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.GeneratorUtils.SPECIES_LIST
 import er.GeneratorUtils.SPECIES_MAP
+import er.proto.AbilityEnum
 import er.proto.EggGroup
 import er.proto.SpeciesEnum
 import er.proto.Type
@@ -18,6 +19,13 @@ object BaseStatsGenerator : Generator {
             |
             |const BaseStats gBaseStats[$REAL_SPECIES_COUNT] = {""".trimMargin()
         )
+
+        val multiheadedAbilities =
+            setOf(AbilityEnum.ABILITY_MULTI_HEADED, AbilityEnum.ABILITY_HAND_BARNACLES, AbilityEnum.ABILITY_HYDRA)
+        val badMultiheadedMons =
+            SPECIES_LIST.filter { ((it.abilityList + it.innateList) intersect multiheadedAbilities).isNotEmpty() }
+                .filter { it.heads <= 1 }
+        check(badMultiheadedMons.isEmpty()) { "Mons with multiheaded and no head count defined: ${badMultiheadedMons.map { it.id }}" }
 
         for (species in SPECIES_LIST) {
             val lines = mutableListOf<String>()
@@ -62,9 +70,9 @@ object BaseStatsGenerator : Generator {
             if (species.tier > 0) lines += ".tier = ${species.tier}"
 
             val flags = buildList {
-                if (species.heads == 2) add ("F_TWO_HEADED")
-                if (species.heads == 3) add ("F_THREE_HEADED")
-                if (species.isTagTeam) add ("F_TAG_TEAM")
+                if (species.heads == 2) add("F_TWO_HEADED")
+                if (species.heads == 3) add("F_THREE_HEADED")
+                if (species.isTagTeam) add("F_TAG_TEAM")
             }.joinToString(" | ")
 
             if (flags.isNotEmpty()) lines += ".flags = $flags"

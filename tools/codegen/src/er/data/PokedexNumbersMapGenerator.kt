@@ -15,6 +15,10 @@ object PokedexNumbersMapGenerator : Generator {
             SPECIES_LIST.filter { it.hasDex() }.groupBy { it.dex.nationalDexNum }.filter { it.value.size > 1 }
         check(duplicateDexEntries.isEmpty()) { "Duplicated dex numbers: ${duplicateDexEntries.mapValues { kvp -> kvp.value.map { it.id } }}" }
 
+        val duplicateHoennDexEntries =
+            SPECIES_LIST.filter { it.hasDex() }.groupBy { it.dex.hoennDexNum }.filter { it.value.size > 1 } - 0
+        check(duplicateHoennDexEntries.isEmpty()) { "Duplicated hoenn dex numbers: ${duplicateHoennDexEntries.mapValues { kvp -> kvp.value.map { it.id } }}" }
+
         writer.appendLine(
             """
             |const u8 gSpeciesToHoennPokedexNum[NUM_SPECIES] = {
