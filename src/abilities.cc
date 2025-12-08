@@ -7760,6 +7760,7 @@ constexpr Ability Impl<ABILITY_ETERNAL_BLESSING> = {
 template <>
 constexpr Ability Impl<ABILITY_SUGAR_RUSH> = {
     .onStat = Impl<ABILITY_UNBURDEN>.onStat,
+    .ripen = TRUE,
 };
 
 template <>
@@ -8456,6 +8457,7 @@ constexpr Ability Impl<ABILITY_AQUATIC_DWELLER> = {
 template <>
 constexpr Ability Impl<ABILITY_APPLE_PIE> = {
     .onEndTurn = Impl<ABILITY_SELF_SUFFICIENT>.onEndTurn,
+    .ripen = TRUE,
 };
 
 template <>
@@ -11686,6 +11688,11 @@ constexpr Ability Impl<ABILITY_ACID_REFLUX> = {
 
         return TRUE;
     },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_RIPEN> = {
+    .ripen = TRUE,
 };
 
 #include "generated/data/abilities/ability_text.hh"

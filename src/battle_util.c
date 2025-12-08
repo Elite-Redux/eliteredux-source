@@ -5014,8 +5014,9 @@ bool32 HasEnoughHpToEatBerry(u32 battlerId, u32 hpFraction, u32 itemId) {
     return FALSE;
 }
 
-int HasRipenEffect(int battler) {
-    return BATTLER_HAS_ABILITY(battler, ABILITY_RIPEN) || BATTLER_HAS_ABILITY(battler, ABILITY_APPLE_PIE) || BATTLER_HAS_ABILITY(battler, ABILITY_SUGAR_RUSH);
+AbilityEnum HasRipenEffect(int battler) {
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, ripen);
+    return ABILITY_NONE;
 }
 
 static u8 HealConfuseBerry(u32 battlerId, u32 itemId, u8 flavorId, bool32 end2) {

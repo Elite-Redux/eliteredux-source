@@ -389,7 +389,7 @@ int IsBloodStainAffected(int battler);
 AbilityEnum IsUnaware(int battler);
 int GetOncePerTurnAbilityCounter(int battler, AbilityEnum ability);
 void SetOncePerTurnAbilityCounter(int battler, AbilityEnum ability, int value);
-int HasRipenEffect(int battler);
+AbilityEnum HasRipenEffect(int battler);
 int IsDance(int attacker, MoveEnum move);
 int HasAnyStatusOrAbility(int battler);
 void RepopulateAbilities(int battler);

@@ -6061,10 +6061,8 @@ static void Cmd_setgravity(void) {
 
 static void TryCheekPouch(u32 battlerId, u32 itemId) {
     AbilityEnum ability;
-    if (ItemId_GetPocket(itemId) == POCKET_BERRIES &&
-        ((ability = BattlerHasAbility(battlerId, ABILITY_GLUTTONY, FALSE)) || (ability = BattlerHasAbility(battlerId, ABILITY_SUGAR_RUSH, FALSE))) &&
-        CanBattlerHeal(battlerId) && gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]] &&
-        !BATTLER_MAX_HP(battlerId)) {
+    if (ItemId_GetPocket(itemId) == POCKET_BERRIES && (ability = BattlerHasAbility(battlerId, ABILITY_GLUTTONY, FALSE)) && CanBattlerHeal(battlerId) &&
+        gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]] && !BATTLER_MAX_HP(battlerId)) {
         gBattleScripting.abilityPopupOverwrite = ability;
         gBattleMoveDamage = gBattleMons[battlerId].maxHP / 3;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
@@ -6671,24 +6669,28 @@ u32 IsAbilityStatusProtected(u32 battler, StatusCheckEnum status) {
     return FALSE;
 }
 
-u32 JumpIfStandardStatusBlocking(u32 battler, bool32 affectsUser, StatusCheckEnum status) {
+u32 JumpIfStandardStatusBlocking(u32 battler, bool32 affectsUser, StatusCheckEnum status, const u8* butItFailed, const u8* after) {
     AbilityEnum ability;
     Type moveType;
+    const u8* currPtr = gBattlescriptCurrInstr;
+    gBattlescriptCurrInstr = after;
     GET_MOVE_TYPE(gCurrentMove, moveType)
     if (!affectsUser && gBattleMons[gActiveBattler].status1)
-        gBattlescriptCurrInstr = BattleScript_ButItFailed;
+        BattleScriptCall(butItFailed);
     else if (!affectsUser && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove, moveType))
-        gBattlescriptCurrInstr = BattleScript_ButItFailed;
+        BattleScriptCall(butItFailed);
     else if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_MISTY_TERRAIN))
-        gBattlescriptCurrInstr = BattleScript_MistyTerrainPrevents;
+        BattleScriptCall(BattleScript_MistyTerrainPrevents);
     else if (!affectsUser && gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SAFEGUARD)
-        gBattlescriptCurrInstr = BattleScript_SafeguardProtected;
+        BattleScriptCall(BattleScript_SafeguardProtected);
     else if ((ability = IsAbilityStatusProtected(gActiveBattler, status))) {
         if (!BATTLER_HAS_ABILITY(gActiveBattler, ability)) gBattleScripting.battlerPopupOverwrite = BATTLE_PARTNER(gActiveBattler);
         SetActiveAbilityPopupOverride(ability);
-        gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
-    } else
+        BattleScriptCall(BattleScript_LeafGuardProtectsRet);
+    } else {
+        gBattlescriptCurrInstr = currPtr;
         return FALSE;
+    }
     return TRUE;
 }
 
@@ -6788,6 +6790,19 @@ static int CheckAbilityFlag(AbilityEnum actualAbility, AbilityEnum exampleAbilit
 
         case ABILITY_MIRROR_ARMOR:
             return gAbilities[actualAbility].mirrorArmor;
+
+        case ABILITY_MAGIC_GUARD:
+            return gAbilities[actualAbility].magicGuard;
+
+        case ABILITY_RIPEN:
+            return gAbilities[actualAbility].ripen;
+
+        case ABILITY_INFILTRATOR: {
+            Type moveType;
+            GET_MOVE_TYPE(gCurrentMove, moveType);
+            return gAbilities[actualAbility].onInfiltrate &&
+                   gAbilities[actualAbility].onInfiltrate(gActiveBattler, gCurrentMove, moveType) & INFILTRATE_SCREENS;
+        }
     }
 
     return FALSE;
@@ -8562,6 +8577,8 @@ static void Cmd_various(void) {
             return;
         case VARIOUS_REQUIRE_CAN_DO_EFFECT: {
             u16 effect = READ_16_INC;
+            ptr = READ_PTR_INC;
+            const u8* afterPtr = READ_PTR_INC;
             u16 affectsUser = effect & MOVE_EFFECT_AFFECTS_USER;
             effect &= ~MOVE_EFFECT_AFFECTS_USER;
             switch (effect) {
@@ -8571,60 +8588,75 @@ static void Cmd_various(void) {
                 case MOVE_EFFECT_SLEEP:
                     if (CanSleep(gActiveBattler))
                         return;
-                    else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_SLEEP))
+                    else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_SLEEP, ptr, afterPtr))
                         return;
-                    else if (affectsUser && gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP)
-                        gBattlescriptCurrInstr = BattleScript_RestIsAlreadyAsleep;
-                    else if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_ELECTRIC_TERRAIN))
-                        gBattlescriptCurrInstr = BattleScript_ElectricTerrainPrevents;
+                    else if (affectsUser && gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP) {
+                        gBattlescriptCurrInstr = afterPtr;
+                        BattleScriptCall(BattleScript_RestIsAlreadyAsleep);
+                    } else if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_ELECTRIC_TERRAIN)) {
+                        gBattlescriptCurrInstr = afterPtr;
+                        BattleScriptCall(BattleScript_ElectricTerrainPrevents);
+                    }
                     return;
                 case MOVE_EFFECT_BLEED:
                     if (CanBleed(gActiveBattler))
                         return;
-                    else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_ROCK))
-                        gBattlescriptCurrInstr = BattleScript_NotAffected;
-                    else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST))
-                        gBattlescriptCurrInstr = BattleScript_NotAffected;
-                    else
-                        JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_BLEED);
+                    else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_ROCK)) {
+                        gBattlescriptCurrInstr = afterPtr;
+                        BattleScriptCall(BattleScript_NotAffected);
+                    } else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)) {
+                        gBattlescriptCurrInstr = afterPtr;
+                        BattleScriptCall(BattleScript_NotAffected);
+                    } else
+                        JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_BLEED, ptr, afterPtr);
                     return;
                 case MOVE_EFFECT_FROSTBITE:
                     if (CanGetFrostbite(gActiveBattler))
                         return;
-                    else if (!gVolatileStructs[gActiveBattler].iceStatue && IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_ICE))
-                        gBattlescriptCurrInstr = BattleScript_NotAffected;
-                    else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_FROSTBITE))
+                    else if (!gVolatileStructs[gActiveBattler].iceStatue && IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_ICE)) {
+                        gBattlescriptCurrInstr = afterPtr;
+                        BattleScriptCall(BattleScript_NotAffected);
+                    } else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_FROSTBITE, ptr, afterPtr))
                         return;
                     return;
                 case MOVE_EFFECT_TOXIC:
                 case MOVE_EFFECT_POISON:
                     if (CanBePoisoned(gBattlerAttacker, gActiveBattler, gCurrentMove))
                         return;
-                    else if (!CanPoisonType(gBattlerAttacker, gActiveBattler, gCurrentMove))
-                        gBattlescriptCurrInstr = BattleScript_NotAffected;
-                    else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_POISON))
+                    else if (!CanPoisonType(gBattlerAttacker, gActiveBattler, gCurrentMove)) {
+                        gBattlescriptCurrInstr = afterPtr;
+                        BattleScriptCall(BattleScript_NotAffected);
+                    } else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_POISON, ptr, afterPtr))
                         return;
                     return;
                 case (MOVE_EFFECT_PARALYSIS | MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES):
                     if (CanBeParalyzedIgnoreType(gBattlerAttacker, gActiveBattler))
                         return;
-                    else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_PARALYSIS))
+                    else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_PARALYSIS, ptr, afterPtr))
                         return;
                     return;
                 case MOVE_EFFECT_PARALYSIS:
                     if (CanBeParalyzedIgnoreType(gBattlerAttacker, gActiveBattler))
                         return;
-                    else if (!CanParalyzeType(gBattlerAttacker, gActiveBattler))
-                        gBattlescriptCurrInstr = BattleScript_NotAffected;
-                    else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_PARALYSIS))
+                    else if (!CanParalyzeType(gBattlerAttacker, gActiveBattler)) {
+                        gBattlescriptCurrInstr = afterPtr;
+                        BattleScriptCall(BattleScript_NotAffected);
+                    } else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_PARALYSIS, ptr, afterPtr))
                         return;
                     return;
                 case MOVE_EFFECT_BURN:
                     if (CanBeBurned(gActiveBattler))
                         return;
-                    else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FIRE))
-                        gBattlescriptCurrInstr = BattleScript_NotAffected;
-                    else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_BURN))
+                    else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FIRE)) {
+                        gBattlescriptCurrInstr = afterPtr;
+                        BattleScriptCall(BattleScript_NotAffected);
+                    } else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_BURN, ptr, afterPtr))
+                        return;
+                    return;
+                case MOVE_EFFECT_CONFUSION:
+                    if (CanBeConfused(gActiveBattler))
+                        return;
+                    else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_CONFUSION, ptr, afterPtr))
                         return;
                     return;
             }
@@ -10035,7 +10067,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
 static void Cmd_statbuffchange(void) {
     u16 flags = READ_FIRST_16_INC;
     const u8* jumpPtr = READ_PTR_INC;
-    
+
     ChangeStatBuffsImplicit(GET_STAT_BUFF_VALUE_WITH_SIGN(gBattleScripting.statChanger), gBattleScripting.statChanger.statId, flags, jumpPtr);
     SetActiveMultistringChooser(gBattleCommunication[MULTISTRING_CHOOSER]);
 }

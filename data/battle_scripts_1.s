@@ -3518,11 +3518,16 @@ BattleScript_ElectricTerrainPrevents::
 	goto BattleScript_MoveEnd
 
 BattleScript_MistyTerrainPrevents::
+	call BattleScript_MistyTerrainPreventsRet
+BattleScript_MoveFailedMoveEnd:
+	orhalfword gMoveResultFlags, MOVE_RESULT_FAILED
+	goto BattleScript_MoveEnd
+
+BattleScript_MistyTerrainPreventsRet::
 	pause B_WAIT_TIME_SHORT
 	printstring STRINGID_MISTYTERRAINPREVENTS
 	waitmessage B_WAIT_TIME_LONG
-	orhalfword gMoveResultFlags, MOVE_RESULT_FAILED
-	goto BattleScript_MoveEnd
+	return
 
 BattleScript_FlowerVeilProtectsRet::
 	pause B_WAIT_TIME_SHORT
@@ -4447,11 +4452,15 @@ BattleScript_RestCantSleep::
 	goto BattleScript_MoveEnd
 
 BattleScript_RestIsAlreadyAsleep::
+	call BattleScript_RestIsAlreadyAsleepRet
+	goto BattleScript_MoveEnd
+
+BattleScript_RestIsAlreadyAsleepRet::
 	setalreadystatusedmoveattempt BS_ATTACKER
 	pause B_WAIT_TIME_SHORT
 	printstring STRINGID_PKMNALREADYASLEEP2
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	return
 
 BattleScript_EffectOHKO::
 	attackcanceler
@@ -4615,11 +4624,7 @@ BattleScript_EffectFocusEnergy:
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectSweetKiss:
-	checktargetowntempoprotects BattleScript_EffectAttract
-	jumpifsubstituteblocks BattleScript_EffectAttract
-	jumpifstatus2 BS_TARGET, STATUS2_CONFUSION, BattleScript_EffectAttract
-	jumpifterrainaffected BS_TARGET, STATUS_FIELD_MISTY_TERRAIN, BattleScript_EffectAttract
-	jumpifsafeguard BattleScript_EffectAttract
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_CONFUSION, BattleScript_Return, BattleScript_EffectAttract
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	attackcanceler
 	attackstring
@@ -4639,12 +4644,8 @@ BattleScript_EffectConfuse:
 	attackcanceler
 	attackstring
 	ppreduce
-	checktargetowntempoprotects
-	jumpifsubstituteblocks BattleScript_ButItFailed
-	jumpifstatus2 BS_TARGET, STATUS2_CONFUSION, BattleScript_AlreadyConfused
-	jumpifterrainaffected BS_TARGET, STATUS_FIELD_MISTY_TERRAIN, BattleScript_MistyTerrainPrevents
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_CONFUSION
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsafeguard BattleScript_SafeguardProtected
 	attackanimation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_CONFUSION
@@ -5605,10 +5606,7 @@ BattleScript_EffectSwagger::
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_SwaggerTryConfuse:
-	jumpifability BS_ATTACKER, ABILITY_MYCELIUM_MIGHT, BattleScript_SwaggerTryConfuseMyceliumMight
-	checktargetowntempoprotects
-	jumpifsafeguard BattleScript_SafeguardProtected
-BattleScript_SwaggerTryConfuseMyceliumMight:
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_CONFUSION, BattleScript_Return, BattleScript_MoveEnd
 	setmoveeffect MOVE_EFFECT_CONFUSION
 	seteffectprimary
 	goto BattleScript_MoveEnd
@@ -5621,10 +5619,7 @@ BattleScript_EffectSpicyExtract:
 	ppreduce
 	jumpifstat BS_TARGET, CMP_LESS_THAN, STAT_ATK, MAX_STAT_STAGE, BattleScript_EffectSpicyExtractContinue
 	jumpifstat BS_TARGET, CMP_GREATER_THAN, STAT_DEF, MIN_STAT_STAGE, BattleScript_EffectSpicyExtractContinue
-	checktargetowntempoprotects
-	jumpifsubstituteblocks BattleScript_ButItFailed
-	jumpifstatus2 BS_TARGET, STATUS2_CONFUSION, BattleScript_ButItFailed
-	jumpifterrainaffected BS_TARGET, STATUS_FIELD_MISTY_TERRAIN, BattleScript_ButItFailed
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_CONFUSION
 BattleScript_EffectSpicyExtractContinue:
 	attackanimation
 	waitanimation
@@ -6390,18 +6385,22 @@ BattleScript_ButItFailedAtkStringPpReduce::
 BattleScript_ButItFailedAtkString::
 	attackstring
 BattleScript_ButItFailed::
-	pause B_WAIT_TIME_SHORT
+	call BattleScript_ButItFailed
 	orhalfword gMoveResultFlags, MOVE_RESULT_FAILED
+	goto BattleScript_MoveEnd
+
+BattleScript_ButItFailedRet:
+	pause B_WAIT_TIME_SHORT
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	return
 
 BattleScript_NotAffected::
 	pause B_WAIT_TIME_SHORT
 	orhalfword gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	return
 
 BattleScript_NotAffectedAbilityPopUp::
 	copybyte gBattlerAbility, gBattlerTarget
@@ -6529,8 +6528,7 @@ BattleScript_EffectFlatter::
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_FlatterTryConfuse::
-	checktargetowntempoprotects
-	jumpifsafeguard BattleScript_SafeguardProtected
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_CONFUSION, BattleScript_Return, BattleScript_MoveEnd
 	setmoveeffect MOVE_EFFECT_CONFUSION
 	seteffectprimary
 	goto BattleScript_MoveEnd
@@ -6998,11 +6996,9 @@ BattleScript_TeeterDanceLoop::
 	movevaluescleanup
 	setmoveeffect MOVE_EFFECT_CONFUSION
 	jumpifbyteequal gBattlerAttacker, gBattlerTarget, BattleScript_TeeterDanceLoopIncrement
-	checktargetowntempoprotects BattleScript_TeeterDanceOwnTempoPrevents
-	jumpifsubstituteblocks BattleScript_TeeterDanceSubstitutePrevents
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_CONFUSION, BattleScript_Return, BattleScript_TeeterDanceDoMoveEndIncrement
 	jumpifhasnohp BS_TARGET, BattleScript_TeeterDanceLoopIncrement
 	accuracycheck BattleScript_TeeterDanceMissed, ACC_CURR_MOVE
-	jumpifsafeguard BattleScript_TeeterDanceSafeguardProtected
 	attackanimation
 	waitanimation
 	seteffectprimary
@@ -7926,10 +7922,14 @@ BattleScript_GravityEnds::
 	end2
 
 BattleScript_SafeguardProtected::
+	call BattleScript_SafeguardProtectedRet
+	end2
+
+BattleScript_SafeguardProtectedRet::
 	pause B_WAIT_TIME_SHORT
 	printstring STRINGID_PKMNUSEDSAFEGUARD
 	waitmessage B_WAIT_TIME_LONG
-	end2
+	return
 
 BattleScript_SafeguardEnds::
 	pause B_WAIT_TIME_SHORT
@@ -8307,10 +8307,7 @@ BattleScript_GulpMissileGulping::
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 	getbattlerfainted BS_ATTACKER
 	jumpifbyte CMP_EQUAL, gBattleCommunication, TRUE, BattleScript_GulpMissileNoSecondEffectGulping
-	jumpifability BS_ATTACKER, ABILITY_CLEAR_BODY, BattleScript_GulpMissileNoSecondEffectGulping
-	jumpifability BS_ATTACKER, ABILITY_FULL_METAL_BODY, BattleScript_GulpMissileNoSecondEffectGulping
 	jumpifholdeffect BS_ATTACKER, HOLD_EFFECT_CLEAR_AMULET, BattleScript_GulpMissileNoSecondEffectGulping
-	jumpifflowerveilattacker BattleScript_GulpMissileNoSecondEffectGulping
 BattleScript_GulpMissileNoDmgGulping:
 	jumpifabsent BS_TARGET, BattleScript_GulpMissileDoDefense
 	handleformchange BS_TARGET, 0
@@ -8324,10 +8321,12 @@ BattleScript_GulpMissileDoDefense:
 	swapattackerwithtarget @ to make gStatDownStringIds down below print the right battler
 	setstatchanger STAT_DEF, 1, TRUE
 	statbuffchange STAT_BUFF_NOT_PROTECT_AFFECTED, BattleScript_GulpMissileGorgingTargetDefenseCantGoLower
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_GulpMissileDoDefenseAfter
 	setgraphicalstatchangevalues
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printfromtable gStatDownStringIds
 	waitmessage B_WAIT_TIME_LONG
+BattleScript_GulpMissileDoDefenseAfter:
 	swapattackerwithtarget @ restore the battlers, just in case
 	return
 BattleScript_GulpMissileNoSecondEffectGulping:

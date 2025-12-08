@@ -2127,18 +2127,6 @@
 	manipulatedamage DMG_1_2_ATTACKER_HP
 	.endm
 
-	.macro jumpifflowerveil jumpptr:req
-	jumpifnottype BS_TARGET, TYPE_GRASS, 1f
-	jumpifability BS_TARGET_SIDE, ABILITY_FLOWER_VEIL, \jumpptr
-	1:
-	.endm
-
-	.macro jumpifflowerveilattacker jumpptr:req
-	jumpifnottype BS_ATTACKER, TYPE_GRASS, 1f
-	jumpifability BS_ATTACKER_SIDE, ABILITY_FLOWER_VEIL, \jumpptr
-	1:
-	.endm
-
 	.macro setallytonexttarget jumpptr:req
 	jumpifbyte CMP_GREATER_THAN, gBattlerTarget, 0x1, 1f
 	addbyte gBattlerTarget, 0x2
@@ -2154,8 +2142,7 @@
 	.endm
 
 	.macro jumpifsafeguard jumpptr:req
-	jumpifability BS_ATTACKER, ABILITY_INFILTRATOR, 1f
-	jumpifability BS_ATTACKER, ABILITY_MARINE_APEX, 1f
+	jumpifabilityflag BS_ATTACKER, ABILITY_INFILTRATOR, 1f
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, \jumpptr
 	1:
 	.endm
@@ -2290,9 +2277,11 @@
 	.4byte \ptr
 	.endm
 
-	.macro requirecandoeffect battler:req, effect:req
+	.macro requirecandoeffect battler:req, effect:req, genericFailPtr=BattleScript_ButItFailedRet, afterPtr=BattleScript_MoveFailedMoveEnd
 	various \battler, VARIOUS_REQUIRE_CAN_DO_EFFECT
 	.2byte \effect
+	.4byte \genericFailPtr
+	.4byte \afterPtr
 	.endm
 
 	.macro increasecrit battler:req amount:req failPtr=NULL
@@ -2485,9 +2474,7 @@ twoturnmoveacceleratecheck_\@:
 	.endm
 
 	.macro jumpifmagicguard battler:req, ptr:req
-	jumpifability \battler, ABILITY_MAGIC_GUARD, \ptr
-	jumpifability \battler, ABILITY_IMPENETRABLE, \ptr
-	jumpifability \battler, ABILITY_APPLE_ENLIGHTENMENT, \ptr
+	jumpifabilityflag \battler, ABILITY_MAGIC_GUARD, \ptr
 	jumpifroom STATUS_FIELD_MAGIC_ROOM, \ptr
 	.endm
 
@@ -2574,13 +2561,5 @@ checkprimalweather_pass_\@:
 .endm
 
 .macro jumpifripen battler:req, ptr:req
-	jumpifability \battler, ABILITY_RIPEN, \ptr
-	jumpifability \battler, ABILITY_APPLE_PIE, \ptr
-.endm
-
-.macro checktargetowntempoprotects ptr=BattleScript_OwnTempoPrevents
-	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, \ptr
-	jumpifability BS_TARGET, ABILITY_DISCIPLINE, \ptr
-	jumpifability BS_TARGET, ABILITY_ROCK_HEAD, \ptr
-	jumpifability BS_TARGET, ABILITY_STEEL_BARREL, \ptr
+	jumpifabilityflag \battler, ABILITY_RIPEN, \ptr
 .endm
