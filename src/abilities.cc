@@ -11681,7 +11681,7 @@ constexpr Ability Impl<ABILITY_ACID_REFLUX> = {
             .move = MOVE_ACID,
             .movePower = 20,
             .attacker = (u8)battler,
-            .target = BATTLE_OPPOSITE((u8)battler),
+            .target = (u8)BATTLE_OPPOSITE(battler),
         };
 
         return TRUE;
