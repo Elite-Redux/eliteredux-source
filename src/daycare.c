@@ -41,8 +41,6 @@ EWRAM_DATA static u16 sTransferEggMovesZero[EGG_MOVES_ARRAY_COUNT] = {0};
 EWRAM_DATA static u16 sTransferEggMovesOne[EGG_MOVES_ARRAY_COUNT] = {0};
 EWRAM_DATA static u16 sHatchedEggMotherMoves[MAX_MON_MOVES] = {0};
 
-#include "data/pokemon/egg_moves.h"
-
 static const struct WindowTemplate sDaycareLevelMenuWindowTemplate = {
     .bg = 0, .tilemapLeft = 15, .tilemapTop = 1, .width = 14, .height = 6, .paletteNum = 15, .baseBlock = 8};
 
