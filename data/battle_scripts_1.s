@@ -6385,7 +6385,7 @@ BattleScript_ButItFailedAtkStringPpReduce::
 BattleScript_ButItFailedAtkString::
 	attackstring
 BattleScript_ButItFailed::
-	call BattleScript_ButItFailed
+	call BattleScript_ButItFailedRet
 	orhalfword gMoveResultFlags, MOVE_RESULT_FAILED
 	goto BattleScript_MoveEnd
 
