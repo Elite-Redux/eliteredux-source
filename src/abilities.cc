@@ -11714,6 +11714,18 @@ constexpr Ability Impl<ABILITY_GHOST_FRENZY> = {
     .onBattlerFaintsFor = Impl<ABILITY_SOUL_EATER>.onBattlerFaintsFor,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_BANDIT> = {
+    .onBattlerFaints =  Impl<ABILITY_SCAVENGER>.onBattlerFaints,
+    .onOffensiveMultiplier = Impl<ABILITY_TECHNICIAN>.onOffensiveMultiplier,
+    .onBattlerFaintsFor =  Impl<ABILITY_SCAVENGER>.onBattlerFaintsFor,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_SURVIVOR_BIAS> = {
+    .breakable = TRUE,
+};
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>

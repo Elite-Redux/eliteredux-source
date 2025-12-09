@@ -310,7 +310,7 @@ static void DestroyExpTaskAndCompleteOnInactiveTextPrinter(u8 taskId);
 static void Task_GiveExpWithExpBar(u8 taskId);
 static void Task_UpdateLvlInHealthbox(u8 taskId);
 static void PrintLinkStandbyMsg(void);
-static u32 CopyPlayerMonData(u8 monId, u8 *dst);
+static u32 CopyPlayerMonData(u8 monId, u8* dst);
 static void SetPlayerMonData(u8 monId);
 static void StartSendOutAnim(u8 battlerId, bool8 dontClearSubstituteBit);
 static void DoSwitchOutAnimation(void);
@@ -1298,7 +1298,7 @@ static const u8 sTheme_DPPt_Can_KO_Mark_Gfx[] = INCBIN_U8("graphics/ui_menus/bat
 static const u8 sTheme_Dark_Can_KO_Mark_Gfx[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/check.4bpp");
 static const u8 sTheme_Light_Can_KO_Mark_Gfx[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/check.4bpp");
 void PrintBattleWindow_MoveSelection(void) {
-    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[gActiveBattler][MAX_MON_MOVES]);
+    struct ChooseMoveStruct* moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][MAX_MON_MOVES]);
     u8 i, x, y, x2, y2, offset, moveType, effectiveness, extraX;
     u16 move, movePower;
     u8 windowId = B_WIN_ACTION_PROMPT;
@@ -1351,12 +1351,12 @@ void PrintBattleWindow_MoveSelection(void) {
         StringCopy(gStringVar1, gMoveNamesLong[move]);
         AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - NEGATIVE_MOVE_X, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
         // PP
-        ConvertIntToDecimalStringN(gStringVar1, gBattleMons[gActiveBattler].pp[i], STR_CONV_MODE_LEFT_ALIGN, 3);   // Current PP
-        if(GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+        ConvertIntToDecimalStringN(gStringVar1, gBattleMons[gActiveBattler].pp[i], STR_CONV_MODE_LEFT_ALIGN, 3);  // Current PP
+        if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
             ConvertIntToDecimalStringN(gStringVar2, CalculatePPWithBonusPlayer(move, 255, 0), STR_CONV_MODE_LEFT_ALIGN, 3);  // Max PP
         else
             ConvertIntToDecimalStringN(gStringVar2, CalculatePPWithBonus(move, 255, 0), STR_CONV_MODE_LEFT_ALIGN, 3);  // Max PP
-            
+
         StringExpandPlaceholders(gStringVar4, sText_PP);
         AddTextPrinterParameterized4(windowId,
                                      font,
@@ -1683,7 +1683,7 @@ void PrintBattleWindow_MoveSelection(void) {
             movePower = CalcMoveBasePowerAfterModifiers(move, 0, gActiveBattler, target, moveType, FALSE);
             if (movePower) {
                 u16 multiplier =
-                    CalculateAbilityMultipliers(gActiveBattler, target, move, moveType, movePower, typeEffectivenessMultiplier, FALSE, (u16 *)&ignored);
+                    CalculateAbilityMultipliers(gActiveBattler, target, move, moveType, movePower, typeEffectivenessMultiplier, FALSE, (u16*)&ignored);
                 MulModifier(&multiplier, typeEffectivenessMultiplier);
                 movePower *= StabMultiplierInHalves(gActiveBattler, moveType, move);
                 movePower /= 2;
@@ -1819,8 +1819,13 @@ void PrintBattleWindow_MoveSelection(void) {
                     if (percentage > MAX_PERCENT) percentage = MAX_PERCENT;
 
                     // Focus Sash Check
-                    if ((heldItem == ITEM_FOCUS_SASH || BattlerHasAbility(target, ABILITY_STURDY, TRUE)) && percentage == MAX_PERCENT &&
-                        targetCurrentHp == gBattleMons[target].maxHP)
+                    if ((heldItem == ITEM_FOCUS_SASH || BattlerHasAbility(target, ABILITY_STURDY, TRUE) ||
+                         BattlerHasAbility(target, ABILITY_IMMOVABLE_OBJECT, TRUE)) &&
+                        percentage == MAX_PERCENT && targetCurrentHp == gBattleMons[target].maxHP)
+                        percentage = 99;
+                    else if (BATTLER_HAS_ABILITY(target, ABILITY_LUCKY_HALO) && !GetSingleUseAbilityCounter(target, ABILITY_LUCKY_HALO))
+                        percentage = 99;
+                    else if (BATTLER_HAS_ABILITY(target, ABILITY_SURVIVOR_BIAS) && typeEffectivenessMultiplier < UQ_4_12(1.0))
                         percentage = 99;
 
                     ConvertIntToDecimalStringN(gStringVar2, percentage, STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -2373,7 +2378,7 @@ static void HandleInputChooseMove(void) {
     u16 moveTarget;
     u32 canSelectTarget = 0;
     u8 windowMode = VarGet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW);
-    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[gActiveBattler][4]);
+    struct ChooseMoveStruct* moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
 
     if (gMain.newKeys & A_BUTTON) {
         FlagClear(FLAG_SYS_MOVE_INFO);
@@ -2660,7 +2665,7 @@ static void HandleMoveSwitching(void) {
         PlaySE(SE_SELECT);
 
         if (gMoveSelectionCursor[gActiveBattler] != gMultiUsePlayerCursor) {
-            struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[gActiveBattler][4]);
+            struct ChooseMoveStruct* moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
             s32 i;
 
             // swap moves and pp
@@ -3070,7 +3075,7 @@ static void Task_GiveExpToMon(u8 taskId) {
 
     if (IsDoubleBattle() == TRUE || monId != gBattlerPartyIndexes[battlerId])  // Give exp without moving the expbar.
     {
-        struct Pokemon *mon = &gPlayerParty[monId];
+        struct Pokemon* mon = &gPlayerParty[monId];
         SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES);
         u8 level = GetMonData(mon, MON_DATA_LEVEL);
         u32 currExp = GetMonData(mon, MON_DATA_EXP);
@@ -3106,7 +3111,7 @@ static void Task_PrepareToGiveExpWithExpBar(u8 taskId) {
     u8 monIndex = gTasks[taskId].tExpTask_monId;
     s32 gainedExp = GetTaskExpValue(taskId);
     u8 battlerId = gTasks[taskId].tExpTask_battler;
-    struct Pokemon *mon = &gPlayerParty[monIndex];
+    struct Pokemon* mon = &gPlayerParty[monIndex];
     u8 level = GetMonData(mon, MON_DATA_LEVEL);
     SpeciesEnum species = GetMonData(mon, MON_DATA_SPECIES);
     u32 exp = GetMonData(mon, MON_DATA_EXP);
@@ -3457,11 +3462,11 @@ static void PlayerHandleGetMonData(void) {
     PlayerBufferExecCompleted();
 }
 
-static u32 CopyPlayerMonData(u8 monId, u8 *dst) {
+static u32 CopyPlayerMonData(u8 monId, u8* dst) {
     struct BattlePokemon battleMon;
     struct MovePpInfo moveData;
     u8 nickname[20];
-    u8 *src;
+    u8* src;
     s16 data16;
     u32 data32;
     s32 size = 0;
@@ -3498,14 +3503,13 @@ static u32 CopyPlayerMonData(u8 monId, u8 *dst) {
             battleMon.abilities[2] = GetInnateInSlot(battleMon.level, battleMon.species, 1, battleMon.personality, TRUE);
             battleMon.abilities[3] = GetInnateInSlot(battleMon.level, battleMon.species, 2, battleMon.personality, TRUE);
 
-        //Extra Abilities
-        for(i = 0; i < HELL_MODE_EXTRA_ABILITIES; i++)
-            battleMon.extraAbilities[i] = GetExtraAbilityToSetToBattler(i, FALSE);
-            
+            // Extra Abilities
+            for (i = 0; i < HELL_MODE_EXTRA_ABILITIES; i++) battleMon.extraAbilities[i] = GetExtraAbilityToSetToBattler(i, FALSE);
+
             GetMonData(&gPlayerParty[monId], MON_DATA_NICKNAME, nickname);
             StringCopy10(battleMon.nickname, nickname);
             GetMonData(&gPlayerParty[monId], MON_DATA_OT_NAME, battleMon.otName);
-            src = (u8 *)&battleMon;
+            src = (u8*)&battleMon;
             for (size = 0; size < sizeof(battleMon); size++) dst[size] = src[size];
             break;
         case REQUEST_SPECIES_BATTLE:
@@ -3526,7 +3530,7 @@ static u32 CopyPlayerMonData(u8 monId, u8 *dst) {
                 moveData.pp[size] = GetMonData(&gPlayerParty[monId], MON_DATA_PP1 + size);
             }
             moveData.ppBonuses = GetMonData(&gPlayerParty[monId], MON_DATA_PP_BONUSES);
-            src = (u8 *)(&moveData);
+            src = (u8*)(&moveData);
             for (size = 0; size < sizeof(moveData); size++) dst[size] = src[size];
             break;
         case REQUEST_MOVE1_BATTLE:
@@ -3768,8 +3772,8 @@ static u32 CopyPlayerMonData(u8 monId, u8 *dst) {
 
 void PlayerHandleGetRawMonData(void) {
     struct BattlePokemon battleMon;
-    u8 *src = (u8 *)&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]] + gBattleResources->bufferA[gActiveBattler][1];
-    u8 *dst = (u8 *)&battleMon + gBattleResources->bufferA[gActiveBattler][1];
+    u8* src = (u8*)&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]] + gBattleResources->bufferA[gActiveBattler][1];
+    u8* dst = (u8*)&battleMon + gBattleResources->bufferA[gActiveBattler][1];
     u8 i;
 
     for (i = 0; i < gBattleResources->bufferA[gActiveBattler][2]; i++) dst[i] = src[i];
@@ -3795,8 +3799,8 @@ static void PlayerHandleSetMonData(void) {
 }
 
 static void SetPlayerMonData(u8 monId) {
-    struct BattlePokemon *battlePokemon = (struct BattlePokemon *)&gBattleResources->bufferA[gActiveBattler][3];
-    struct MovePpInfo *moveData = (struct MovePpInfo *)&gBattleResources->bufferA[gActiveBattler][3];
+    struct BattlePokemon* battlePokemon = (struct BattlePokemon*)&gBattleResources->bufferA[gActiveBattler][3];
+    struct MovePpInfo* moveData = (struct MovePpInfo*)&gBattleResources->bufferA[gActiveBattler][3];
     s32 i;
 
     switch (gBattleResources->bufferA[gActiveBattler][1]) {
@@ -4005,7 +4009,7 @@ static void SetPlayerMonData(u8 monId) {
 }
 
 static void PlayerHandleSetRawMonData(void) {
-    u8 *dst = (u8 *)&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]] + gBattleResources->bufferA[gActiveBattler][1];
+    u8* dst = (u8*)&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]] + gBattleResources->bufferA[gActiveBattler][1];
     u8 i;
 
     for (i = 0; i < gBattleResources->bufferA[gActiveBattler][2]; i++) dst[i] = gBattleResources->bufferA[gActiveBattler][3 + i];
@@ -4266,7 +4270,7 @@ static void PlayerHandleMoveAnimation(void) {
                        (gBattleResources->bufferA[gActiveBattler][8] << 16) | (gBattleResources->bufferA[gActiveBattler][9] << 24);
         gAnimFriendship = gBattleResources->bufferA[gActiveBattler][10];
         gWeatherMoveAnim = gBattleResources->bufferA[gActiveBattler][12] | (gBattleResources->bufferA[gActiveBattler][13] << 8);
-        gAnimVolatileStructPtr = (struct VolatileStruct *)&gBattleResources->bufferA[gActiveBattler][16];
+        gAnimVolatileStructPtr = (struct VolatileStruct*)&gBattleResources->bufferA[gActiveBattler][16];
         gTransformedPersonalities[gActiveBattler] = gAnimVolatileStructPtr->transformedMonPersonality;
         if (IsMoveWithoutAnimation(move, gAnimMoveTurn))  // Always returns FALSE.
         {
@@ -4322,11 +4326,11 @@ static void PlayerDoMoveAnimation(void) {
 }
 
 static void PlayerHandlePrintString(void) {
-    u16 *stringId;
+    u16* stringId;
 
     gBattle_BG0_X = 0;
     gBattle_BG0_Y = 0;
-    stringId = (u16 *)(&gBattleResources->bufferA[gActiveBattler][2]);
+    stringId = (u16*)(&gBattleResources->bufferA[gActiveBattler][2]);
     BufferStringBattle(*stringId);
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MSG);
     gBattlerControllerFuncs[gActiveBattler] = CompleteOnInactiveTextPrinter2;
@@ -4536,8 +4540,8 @@ static void PlayerHandleDMA3Transfer(void) {
                  (gBattleResources->bufferA[gActiveBattler][3] << 16) | (gBattleResources->bufferA[gActiveBattler][4] << 24);
     u16 sizeArg = gBattleResources->bufferA[gActiveBattler][5] | (gBattleResources->bufferA[gActiveBattler][6] << 8);
 
-    const u8 *src = &gBattleResources->bufferA[gActiveBattler][7];
-    u8 *dst = (u8 *)(dstArg);
+    const u8* src = &gBattleResources->bufferA[gActiveBattler][7];
+    u8* dst = (u8*)(dstArg);
     u32 size = sizeArg;
 
     while (1) {
@@ -4684,7 +4688,7 @@ static void PlayerHandleIntroTrainerBallThrow(void) {
     gBattlerControllerFuncs[gActiveBattler] = BattleControllerDummy;
 }
 
-void SpriteCB_FreePlayerSpriteLoadMonSprite(struct Sprite *sprite) {
+void SpriteCB_FreePlayerSpriteLoadMonSprite(struct Sprite* sprite) {
     u8 battlerId = sprite->sBattlerId;
 
     // Free player trainer sprite
@@ -4734,7 +4738,7 @@ static void PlayerHandleDrawPartyStatusSummary(void) {
     } else {
         gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].partyStatusSummaryShown = 1;
         gBattlerStatusSummaryTaskId[gActiveBattler] = CreatePartyStatusSummarySprites(gActiveBattler,
-                                                                                      (struct HpAndStatus *)&gBattleResources->bufferA[gActiveBattler][4],
+                                                                                      (struct HpAndStatus*)&gBattleResources->bufferA[gActiveBattler][4],
                                                                                       gBattleResources->bufferA[gActiveBattler][1],
                                                                                       gBattleResources->bufferA[gActiveBattler][2]);
         gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].partyStatusDelayTimer = 0;
