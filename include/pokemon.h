@@ -73,6 +73,7 @@ struct OldBoxPokemon {
 };
 
 STATIC_ASSERT(MOVES_COUNT < 1 << 11, movesFitInBoxPokemon)
+STATIC_ASSERT(ITEMS_COUNT < 1 << 10, itemsFitInBoxPokemon)
 struct BoxPokemon {
     u32 personality;
     u32 otId;
