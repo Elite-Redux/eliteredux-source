@@ -1604,9 +1604,9 @@ static void Cmd_adjustdamage(void) {
         gTurnStructs[gBattlerTarget].focusSashed = TRUE;
     } else {
         AbilityEnum sturdyAbility = ABILITY_NONE;
-        if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_STURDY))
+        if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_STURDY) && BATTLER_MAX_HP(gBattlerTarget))
             sturdyAbility = ABILITY_STURDY;
-        else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_IMMOVABLE_OBJECT))
+        else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_IMMOVABLE_OBJECT) && BATTLER_MAX_HP(gBattlerTarget))
             sturdyAbility = ABILITY_IMMOVABLE_OBJECT;
         else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_SURVIVOR_BIAS) && gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE)
             sturdyAbility = ABILITY_SURVIVOR_BIAS;
@@ -1616,7 +1616,7 @@ static void Cmd_adjustdamage(void) {
         if (sturdyAbility) gTurnStructs[gBattlerTarget].sturdyAbility = sturdyAbility;
         if (sturdyAbility == ABILITY_LUCKY_HALO)
             gTurnStructs[gBattlerTarget].haloed = TRUE;
-        else
+        else if (sturdyAbility != ABILITY_NONE)
             gTurnStructs[gBattlerTarget].sturdied = TRUE;
     }
 
