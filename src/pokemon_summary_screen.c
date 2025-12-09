@@ -1787,7 +1787,7 @@ static void Task_HandleInput(u8 taskId) {
                     // Ev modifier
                     shouldChangePage = FALSE;
 
-                    if (CurrentEv != MAX_PER_STAT_EVS && TotalEvs < MAX_TOTAL_EVS && gSaveBlock2Ptr->enableEvs) {
+                    if (sMonSummaryScreen->ModifyMode && CurrentEv != MAX_PER_STAT_EVS && TotalEvs < MAX_TOTAL_EVS && gSaveBlock2Ptr->enableEvs) {
                         RemainingEvs = CurrentEv;
                         CurrentEv = CurrentEv + LR_EV_AMOUNT_CHANGE;
 
@@ -1837,7 +1837,7 @@ static void Task_HandleInput(u8 taskId) {
                     // Ev modifier
                     shouldChangePage = FALSE;
 
-                    if (CurrentEv && gSaveBlock2Ptr->enableEvs) {
+                    if (sMonSummaryScreen->ModifyMode && CurrentEv && gSaveBlock2Ptr->enableEvs) {
                         if (CurrentEv >= LR_EV_AMOUNT_CHANGE)
                             CurrentEv = CurrentEv - LR_EV_AMOUNT_CHANGE;
                         else
