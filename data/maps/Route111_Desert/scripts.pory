@@ -1,2 +1,26 @@
 mapscripts Route111_Desert_MapScripts {
 }
+
+script Route111_Desert_EventScript_Lett{
+	trainerbattle_single(TRAINER_LETT, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
+	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	end
+}
+
+script Route111_Desert_EventScript_Orwell{
+	trainerbattle_single(TRAINER_ORWELL, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
+	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	end
+}
+
+script Route111_Desert_EventScript_Amanda{
+	trainerbattle_single(TRAINER_AMANDA, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
+	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	end
+}
+
+script Route111_Desert_EventScript_Rodrick{
+	trainerbattle_single(TRAINER_RODRICK, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
+	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	end
+}
