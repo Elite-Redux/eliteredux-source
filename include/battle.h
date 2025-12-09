@@ -226,6 +226,7 @@ struct TurnStruct
     u16 parentalBondTrigger; // Ability that triggered parental bond
     u16 flungItem;
     u16 redirectedAbility;
+    AbilityEnum sturdyAbility;
     bool8 turnAbilityTriggers[NUM_INNATE_PER_SPECIES + 1];
     u8 gemParam;
     u8 physicalBattlerId;

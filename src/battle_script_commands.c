@@ -1602,12 +1602,22 @@ static void Cmd_adjustdamage(void) {
     } else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && !IsUnnerveAbilityOnOpposingSide(gBattlerTarget) && BATTLER_MAX_HP(gBattlerTarget)) {
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gTurnStructs[gBattlerTarget].focusSashed = TRUE;
-    } else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_STURDY) && BATTLER_MAX_HP(gBattlerTarget)) {
-        gTurnStructs[gBattlerTarget].sturdied = TRUE;
-    } else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_IMMOVABLE_OBJECT) && BATTLER_MAX_HP(gBattlerTarget)) {
-        gTurnStructs[gBattlerTarget].sturdied = TRUE;
-    } else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_LUCKY_HALO) && !GetSingleUseAbilityCounter(gBattlerTarget, ABILITY_LUCKY_HALO)) {
-        gTurnStructs[gBattlerTarget].haloed = TRUE;
+    } else {
+        AbilityEnum sturdyAbility = ABILITY_NONE;
+        if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_STURDY))
+            sturdyAbility = ABILITY_STURDY;
+        else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_IMMOVABLE_OBJECT))
+            sturdyAbility = ABILITY_IMMOVABLE_OBJECT;
+        else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_SURVIVOR_BIAS) && gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE)
+            sturdyAbility = ABILITY_SURVIVOR_BIAS;
+        else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_LUCKY_HALO) && !GetSingleUseAbilityCounter(gBattlerTarget, ABILITY_LUCKY_HALO))
+            sturdyAbility = ABILITY_LUCKY_HALO;
+
+        if (sturdyAbility) gTurnStructs[gBattlerTarget].sturdyAbility = sturdyAbility;
+        if (sturdyAbility == ABILITY_LUCKY_HALO)
+            gTurnStructs[gBattlerTarget].haloed = TRUE;
+        else
+            gTurnStructs[gBattlerTarget].sturdied = TRUE;
     }
 
     if ((gBattleMoves[gCurrentMove].effect != EFFECT_FALSE_SWIPE && !gBattleScripting.forceFalseSwipeEffect) &&
@@ -1626,10 +1636,10 @@ static void Cmd_adjustdamage(void) {
         gLastUsedItem = gBattleMons[gBattlerTarget].item;
     } else if (gTurnStructs[gBattlerTarget].sturdied) {
         gMoveResultFlags |= MOVE_RESULT_STURDIED;
-        gBattleScripting.abilityPopupOverwrite = ABILITY_STURDY;
+        gBattleScripting.abilityPopupOverwrite = gTurnStructs[gBattlerTarget].sturdyAbility;
     } else if (gTurnStructs[gBattlerTarget].haloed) {
         gMoveResultFlags |= MOVE_RESULT_STURDIED;
-        gBattleScripting.abilityPopupOverwrite = ABILITY_LUCKY_HALO;
+        gBattleScripting.abilityPopupOverwrite = gTurnStructs[gBattlerTarget].sturdyAbility;
     }
 
 END:
