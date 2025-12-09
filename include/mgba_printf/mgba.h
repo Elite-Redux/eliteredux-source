@@ -48,7 +48,7 @@ void MgbaPrintEncoded(s32 level, const char *encodedString);
 
 #define MGBA_PRINT_DEBUG(string, ...) \
 MgbaOpen(); \
-MgbaPrintf(MGBA_LOG_WARN, __BASE_FILE__ ":%d: " string, __LINE__, 0 + __VA_ARGS__ + 0); \
+MgbaPrintf(MGBA_LOG_DEBUG, __BASE_FILE__ ":%d: " string, __LINE__, 0 + __VA_ARGS__ + 0); \
 MgbaClose();
 
 #define __PICK_MACRO5(_6, _5, _4, _3, _2, _1, NAME, ...) NAME
