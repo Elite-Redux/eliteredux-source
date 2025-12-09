@@ -77,7 +77,7 @@
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
       "script": "Route111_SunhollowRuins_Museum_EventScript_Magma_Grunt_1",
-      "flag": "0"
+      "flag": "FLAG_FINISHED_SUNHOLLOW_STORY"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_BRANDON",
