@@ -409,7 +409,7 @@ static bool8 CheckConditions(int selection)
 static const u8 sText_Empty[]                   = _("");
 static const u8 sText_Desc_Save[]               = _("Save your settings.");
 static const u8 sText_Desc_BattleSpeed[]        = _("Choose one of the four Battle\nspeeds.");
-static const u8 sText_Desc_OverworldSpeed[]     = _("Choose one of the four Overworld\nspeeds.");
+static const u8 sText_Desc_OverworldSpeed[]     = _("Change overworld speed. (highly\nexperimental, please report bugs)");
 static const u8 sText_Desc_TextSpeed[]          = _("Choose one of the four text-display\nspeeds.");
 static const u8 sText_Desc_HPBarSpeed[]         = _("Choose one of the four HP Bar\nspeeds.");
 static const u8 sText_Desc_BattleScene_On[]     = _("Show the POKéMON battle animations.");

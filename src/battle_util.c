@@ -8109,7 +8109,7 @@ SpeciesEnum GetWishMegaEvolutionSpecies(SpeciesEnum preEvoSpecies, MoveEnum move
     for (i = 0; gFormChangeTable[preEvoSpecies][i].method; i++) {
         if (gFormChangeTable[preEvoSpecies][i].method == EVO_MOVE_MEGA_EVOLUTION) {
             par = gFormChangeTable[preEvoSpecies][i].param;
-            if (par == moveId1 || par == moveId2 || par == moveId3 || par == moveId4) return gEvolutionTable[preEvoSpecies][i].targetSpecies;
+            if (par == moveId1 || par == moveId2 || par == moveId3 || par == moveId4) return gFormChangeTable[preEvoSpecies][i].targetSpecies;
         }
     }
     return SPECIES_NONE;
@@ -8169,7 +8169,7 @@ bool32 CanMegaEvolve(u8 battlerId) {
 
     // Check if there is an entry in the evolution table for Wish Mega Evolution.
     if (GetWishMegaEvolutionSpecies(
-            species, GetMonData(mon, MON_DATA_MOVE1), GetMonData(mon, MON_DATA_MOVE2), GetMonData(mon, MON_DATA_MOVE3), GetMonData(mon, MON_DATA_MOVE4))) {
+            species, GetMonData(mon, MON_DATA_MOVE1), GetMonData(mon, MON_DATA_MOVE2), GetMonData(mon, MON_DATA_MOVE3), GetMonData(mon, MON_DATA_MOVE4))){
         gBattleStruct->mega.isWishMegaEvo = TRUE;
         return TRUE;
     }
