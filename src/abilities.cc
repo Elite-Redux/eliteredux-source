@@ -2865,7 +2865,8 @@ constexpr Ability Impl<ABILITY_RECEIVER> = {
         BattleScriptCall(BattleScript_ReceiverActivates);
         return TRUE;
     },
-    .onBattlerFaintsFor = APPLY_ON_ALLY,};
+    .onBattlerFaintsFor = APPLY_ON_ALLY,
+};
 
 template <>
 constexpr Ability Impl<ABILITY_POWER_OF_ALCHEMY> = {
@@ -8866,12 +8867,9 @@ constexpr Ability Impl<ABILITY_BALLOON_BLITZ> = {
 
 template <>
 constexpr Ability Impl<ABILITY_STRIKER_PIXILATE> = {
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            Impl<ABILITY_STRIKER>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            Impl<ABILITY_PIXILATE>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-        },
+    .onOffensiveMultiplier = Impl<ABILITY_STRIKER>.onOffensiveMultiplier,
     .onMoveType = Impl<ABILITY_PIXILATE>.onMoveType,
+    .onStab = Impl<ABILITY_PIXILATE>.onStab,
 };
 
 // 2.6
@@ -11716,9 +11714,9 @@ constexpr Ability Impl<ABILITY_GHOST_FRENZY> = {
 
 template <>
 constexpr Ability Impl<ABILITY_BANDIT> = {
-    .onBattlerFaints =  Impl<ABILITY_SCAVENGER>.onBattlerFaints,
+    .onBattlerFaints = Impl<ABILITY_SCAVENGER>.onBattlerFaints,
     .onOffensiveMultiplier = Impl<ABILITY_TECHNICIAN>.onOffensiveMultiplier,
-    .onBattlerFaintsFor =  Impl<ABILITY_SCAVENGER>.onBattlerFaintsFor,
+    .onBattlerFaintsFor = Impl<ABILITY_SCAVENGER>.onBattlerFaintsFor,
 };
 
 template <>
