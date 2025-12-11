@@ -2152,10 +2152,13 @@ int UpdateBattlerItem(int battler, int newItem) {
     int oldItem = gBattleMons[battler].item;
     int alchemyBattler;
     if (oldItem == newItem) return 0;
-    if (oldItem == ITEM_NONE)
+    if (oldItem == ITEM_NONE) {
         SetAbilityState(battler, ABILITY_UNBURDEN, FALSE);
-    else if (newItem == ITEM_NONE)
+        SetAbilityState(battler, ABILITY_SUGAR_RUSH, FALSE);
+    } else if (newItem == ITEM_NONE) {
         SetAbilityState(battler, ABILITY_UNBURDEN, TRUE);
+        SetAbilityState(battler, ABILITY_SUGAR_RUSH, TRUE);
+    }
 
     if (newItem == ITEM_NONE && oldItem != ITEM_BIG_NUGGET && (alchemyBattler = IsAbilityOnField(ABILITY_POWER_OF_ALCHEMY)))
         SetPowerOfAlchemyState(alchemyBattler - 1, battler, oldItem);
