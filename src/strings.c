@@ -1685,9 +1685,9 @@ const u8 gText_SavingEliteMode[] = _("Elite Mode");
 const u8 gText_SavingHellMode[] = _("Hell Mode");
 const u8 gText_SavingNormalMode[] = _("Normal Mode"); // not used
 #ifdef DEBUG_BUILD
-const u8 gText_SavingVersionNum[] = _("v2.5 Debug");
+const u8 gText_SavingVersionNum[] = _("v2.65 Alpha");
 #else
-const u8 gText_SavingVersionNum[] = _("v2.5");
+const u8 gText_SavingVersionNum[] = _("v2.65 Alpha");
 #endif
 const u8 gText_WirelessCommStatus[] = _("Wireless Communication Status");
 const u8 gText_PeopleTrading[] = _("People trading:");
