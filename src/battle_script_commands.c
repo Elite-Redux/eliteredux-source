@@ -4832,7 +4832,8 @@ static void Cmd_moveend(void) {
                     for (i = 0; i < gBattlersCount; i++) {
                         u8 battler = battlers[i];
 
-                        if (battler == gBattlerAttacker && GetOncePerTurnAbilityCounter(battler, ABILITY_HOLLOW_ICE_ZONE)) {
+                        if (battler == gBattlerAttacker && GetOncePerTurnAbilityCounter(battler, ABILITY_HOLLOW_ICE_ZONE) &&
+                            CountUsablePartyMons(battler) > 0) {
                             gStackBattler1 = battler;
                             gBattleScripting.abilityPopupOverwrite = ABILITY_HOLLOW_ICE_ZONE;
                             BattleScriptCall(BattleScript_EmergencyExitPopupNoPause);
