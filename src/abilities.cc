@@ -11175,7 +11175,7 @@ constexpr Ability Impl<ABILITY_OVERCAST> = {
         int any = FALSE;
         if (!(gSideStatuses[battler] & SIDE_STATUS_MIST)) {
             InsertCorrectEndType(ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
-            BattleScriptPushCursorAndCallback(BattleScript_AttackerSetsMist);
+            BattleScriptCall(BattleScript_AttackerSetsMist);
             any = TRUE;
         }
         return any | Impl<ABILITY_LOW_VISIBILITY>.onEntry(DELEGATE_ENTRY);
