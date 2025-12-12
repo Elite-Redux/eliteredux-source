@@ -60,14 +60,7 @@
       "y": 27,
       "elevation": 1,
       "dest_map": "MAP_LILYCOVE_CITY",
-      "dest_warp_id": "6"
-    },
-    {
-      "x": 14,
-      "y": 27,
-      "elevation": 1,
-      "dest_map": "MAP_LILYCOVE_CITY",
-      "dest_warp_id": "6"
+      "dest_warp_id": "15"
     },
     {
       "x": 22,
