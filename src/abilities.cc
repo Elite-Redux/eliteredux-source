@@ -10584,6 +10584,8 @@ template <>
 constexpr Ability Impl<ABILITY_GREEDY> = {
     .onReactive = +[](ON_REACTIVE) -> int {
         CHECK(GetAbilityState(battler, ability))
+        SetAbilityState(battler, ability, FALSE);
+        CHECK_NOT(gBattleMons[battler].item)
 
         int target = gBattlerAttacker;
 
