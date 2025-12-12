@@ -11677,9 +11677,18 @@ constexpr Ability Impl<ABILITY_UNRELENTING> = {
 
 template <>
 constexpr Ability Impl<ABILITY_ACID_REFLUX> = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        // Persists through the end-turn phase in case damage later in the end-turn phase would trigger another second attack
+        SetOncePerTurnAbilityCounter(battler, ability, GetAbilityState(battler, ability));
+        SetAbilityState(battler, ability, FALSE);
+        return FALSE;
+    },
     .onReactive = +[](ON_REACTIVE) -> int {
         CHECK(gRoundStructs[battler].damaged)
-        CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
+        CHECK_NOT(GetAbilityState(battler, ability))
+        CHECK_NOT(GetOncePerTurnAbilityCounter(battler, ability))
+
+        SetAbilityState(battler, ability, TRUE);
 
         gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
             .ability = ability,
