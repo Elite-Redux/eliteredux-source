@@ -5818,6 +5818,10 @@ void HandleMonoChampSpecialEffects(void) {
             SetPermanentWeather(ENUM_WEATHER_RAIN_PRIMAL);
             gSideTimers[B_SIDE_PLAYER].swampTimer = 1;
             break;
+        case TYPE_ICE:
+            FlagClear(FLAG_PERMANENT_UNCHANGEABLE_WEATHER);
+            SetPermanentWeather(ENUM_WEATHER_HAIL);     
+            break;
     }
 
     if (setTerrain) {
