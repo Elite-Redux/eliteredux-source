@@ -2116,8 +2116,8 @@ u8 DoFieldEndTurnEffects(void) {
                             if (GetBattlerSide(gBattlerAttacker) == side) break;
                         }
 
-                        if (gSideTimers[side].swampTimer && !gSideTimers[side].started.swamp && !(getMonotypeChampType() == TYPE_WATER) &&
-                            --gSideTimers[side].swampTimer == 0) {
+                        if (gSideTimers[side].swampTimer && !gSideTimers[side].started.swamp &&
+                            !(getMonotypeChampType() == TYPE_WATER && side == B_SIDE_PLAYER) && --gSideTimers[side].swampTimer == 0) {
                             BattleScriptExecute(BattleScript_TheSwampDisappeared);
                             effect++;
                         }
