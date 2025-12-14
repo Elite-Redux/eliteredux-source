@@ -4385,9 +4385,8 @@ constexpr Ability Impl<ABILITY_LUNAR_ECLIPSE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_SOLAR_FLARE> = {
-    .onOffensiveMultiplier = Impl<ABILITY_IMMOLATE>.onOffensiveMultiplier,
     .onMoveType = Impl<ABILITY_IMMOLATE>.onMoveType,
-    .onStab = +[](ON_STAB) -> int { return moveType == TYPE_FIRE; },
+    .onStab = Impl<ABILITY_IMMOLATE>.onStab,
     .chloroplast = TRUE,
 };
 
@@ -4606,8 +4605,8 @@ constexpr Ability Impl<ABILITY_SPECTRAL_SHROUD> = {
 
         return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
     },
-    .onOffensiveMultiplier = Impl<ABILITY_SPECTRALIZE>.onOffensiveMultiplier,
     .onMoveType = Impl<ABILITY_SPECTRALIZE>.onMoveType,
+    .onStab = Impl<ABILITY_SPECTRALIZE>.onStab,
 };
 
 template <>
@@ -5981,8 +5980,8 @@ constexpr Ability Impl<ABILITY_SUPER_STRAIN> = {
 
 template <>
 constexpr Ability Impl<ABILITY_ENLIGHTENED> = {
-    .onOffensiveMultiplier = Impl<ABILITY_EMANATE>.onOffensiveMultiplier,
     .onMoveType = Impl<ABILITY_EMANATE>.onMoveType,
+    .onStab = Impl<ABILITY_EMANATE>.onStab,
     .onAccuracy = Impl<ABILITY_INNER_FOCUS>.onAccuracy,
     .breakable = TRUE,
     .tauntImmune = TRUE,
@@ -8347,8 +8346,8 @@ constexpr Ability Impl<ABILITY_COLOR_SPECTRUM> = {
 template <>
 constexpr Ability Impl<ABILITY_STEEL_BEETLE> = {
     .onParentalBond = Impl<ABILITY_RAGING_BOXER>.onParentalBond,
-    .onOffensiveMultiplier = Impl<ABILITY_POLLINATE>.onOffensiveMultiplier,
     .onMoveType = Impl<ABILITY_POLLINATE>.onMoveType,
+    .onStab = Impl<ABILITY_POLLINATE>.onStab,
 };
 
 template <>
@@ -8934,8 +8933,8 @@ constexpr Ability Impl<ABILITY_ROSE_GARDEN> = {
 template <>
 constexpr Ability Impl<ABILITY_QIGONG> = {
     .onBattlerFaints = Impl<ABILITY_RAMPAGE>.onBattlerFaints,
-    .onOffensiveMultiplier = Impl<ABILITY_FIGHT_SPIRIT>.onOffensiveMultiplier,
     .onMoveType = Impl<ABILITY_FIGHT_SPIRIT>.onMoveType,
+    .onStab = Impl<ABILITY_FIGHT_SPIRIT>.onStab,
     .onAccuracy = +[](ON_ACCURACY) { return ACCURACY_ALWAYS_HITS; },
     .onBattlerFaintsFor = Impl<ABILITY_RAMPAGE>.onBattlerFaintsFor,
 };
