@@ -8567,12 +8567,11 @@ constexpr Ability Impl<ABILITY_TRASH_HEAP> = {
 
 template <>
 constexpr Ability Impl<ABILITY_SLUDGY_MIX> = {
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            Impl<ABILITY_INTOXICATE>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-            Impl<ABILITY_PUNK_ROCK>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-        },
+    .onOffensiveMultiplier = Impl<ABILITY_PUNK_ROCK>.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_PUNK_ROCK>.onDefensiveMultiplier,
     .onMoveType = Impl<ABILITY_INTOXICATE>.onMoveType,
+    .onStab = Impl<ABILITY_INTOXICATE>.onStab,
+    .breakable = TRUE,
 };
 
 template <>
