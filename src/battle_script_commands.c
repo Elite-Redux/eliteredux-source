@@ -9192,6 +9192,7 @@ static void Cmd_various(void) {
                 gActiveBattler,
                 FALSE,
                 gAbilities[ability].onStatLowered && IsApplyOnFlagAppropriate(gBattlerTarget, gActiveBattler, gAbilities[ability].onStatLoweredFor),
+                gStackBattler1 = gActiveBattler;
                 if (gAbilities[ability].onStatLowered(gActiveBattler)) {
                     gBattleScripting.abilityPopupOverwrite = ability;
                     BattleScriptCall(BattleScript_AbilityPopUpStack);
