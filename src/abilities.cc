@@ -9609,6 +9609,7 @@ constexpr Ability Impl<ABILITY_TEMPORAL_RUPTURE> = {
         gVolatileStructs[target].slowStartTimer = 5;
 
         gStackBattler1 = target;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_SLOW_START;
         BattleScriptCall(BattleScript_BloodStainActivates);
         return TRUE;
     },
