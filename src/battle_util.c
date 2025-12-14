@@ -2116,8 +2116,8 @@ u8 DoFieldEndTurnEffects(void) {
                             if (GetBattlerSide(gBattlerAttacker) == side) break;
                         }
 
-                        if (gSideTimers[side].swampTimer && !gSideTimers[side].started.swamp && !(getMonotypeChampType() == TYPE_WATER) &&
-                            --gSideTimers[side].swampTimer == 0) {
+                        if (gSideTimers[side].swampTimer && !gSideTimers[side].started.swamp &&
+                            !(getMonotypeChampType() == TYPE_WATER && side == B_SIDE_PLAYER) && --gSideTimers[side].swampTimer == 0) {
                             BattleScriptExecute(BattleScript_TheSwampDisappeared);
                             effect++;
                         }
@@ -7924,6 +7924,18 @@ static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u
     MulModifier(&modifier, modifier2);
     MulModifier(&modifier, modifier3);
 
+    // Super-effective damage is reduced from 2x to 1.5x, and 4x to 2x
+    if (isHellMode() && HELL_MODE_TYPE_EFFECTIVENESS_CHANGE) {
+        switch (modifier) {
+            case UQ_4_12(2.0):
+                modifier = UQ_4_12(1.5);
+                break;
+            case UQ_4_12(4.0):
+                modifier = UQ_4_12(2.5);
+                break;
+        }
+    }
+
     if (recordAbilities && (illusionSpecies = GetIllusionMonSpecies(battlerDef)))
         TryNoticeIllusionInTypeEffectiveness(move, moveType, battlerAtk, battlerDef, modifier, illusionSpecies);
 
@@ -8013,18 +8025,6 @@ u16 GetTypeModifier(int atkType, int defType, int battlerAtk, int battlerDef) {
         ret = sInverseTypeEffectivenessTable[atkType][defType];
     else
         ret = sTypeEffectivenessTable[atkType][defType];
-
-    // Super-effective damage is reduced from 2x to 1.5x, and 4x to 2x
-    if (isHellMode() && HELL_MODE_TYPE_EFFECTIVENESS_CHANGE) {
-        switch (ret) {
-            case UQ_4_12(2.0):
-                ret = UQ_4_12(1.5);
-                break;
-            case UQ_4_12(4.0):
-                ret = UQ_4_12(2.5);
-                break;
-        }
-    }
 
     if ((miracleEyeDef || miracleEyeAtk) && atkType == TYPE_DARK && defType == TYPE_PSYCHIC) ret = 0;
 

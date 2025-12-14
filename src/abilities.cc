@@ -445,6 +445,8 @@ int GetClearableHazardFlags(int side) {
     return hazardBits;
 }
 
+u16 GetSuperEffectiveMult() { return isHellMode() == TRUE && HELL_MODE_TYPE_EFFECTIVENESS_CHANGE ? UQ_4_12(1.5) : UQ_4_12(2.0); }
+
 template <AbilityEnum Id>
 constexpr Ability Impl = {0};
 
@@ -758,7 +760,7 @@ template <>
 constexpr Ability Impl<ABILITY_WONDER_GUARD> = {
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
-            if (*mod < UQ_4_12(2.0)) *mod = 0;
+            if (*mod < GetSuperEffectiveMult()) *mod = 0;
         },
     .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
@@ -1566,7 +1568,7 @@ constexpr Ability Impl<ABILITY_ANTICIPATION> = {
                 for (int j = 0; j < MAX_MON_MOVES; j++) {
                     MoveEnum move = gBattleMons[i].moves[j];
                     Type moveType = gBattleMoves[move].type;
-                    if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0)) {
+                    if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= GetSuperEffectiveMult()) {
                         any = TRUE;
                         break;
                     }
@@ -1619,7 +1621,7 @@ template <>
 constexpr Ability Impl<ABILITY_FILTER> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
+            if (typeEffectivenessModifier >= GetSuperEffectiveMult()) MUL(.65);
         },
     .breakable = TRUE,
 };
@@ -2748,7 +2750,7 @@ constexpr Ability Impl<ABILITY_CORROSION> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
         CHECK(moveType == TYPE_POISON)
         CHECK(defType == TYPE_STEEL)
-        *mod = UQ_4_12(2.0);
+        *mod = GetSuperEffectiveMult();
         return TRUE;
     },
     .onCanStatusType = +[](ON_CAN_STATUS_TYPE) -> int {
@@ -2999,7 +3001,7 @@ template <>
 constexpr Ability Impl<ABILITY_NEUROFORCE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.35);
+            if (typeEffectivenessMultiplier >= GetSuperEffectiveMult()) MUL(1.35);
         },
 };
 
@@ -3899,7 +3901,7 @@ template <>
 constexpr Ability Impl<ABILITY_PERMAFROST> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
+            if (typeEffectivenessModifier >= GetSuperEffectiveMult()) MUL(.65);
         },
     .breakable = TRUE,
 };
@@ -3908,7 +3910,7 @@ template <>
 constexpr Ability Impl<ABILITY_PRIMAL_ARMOR> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.5);
+            if (typeEffectivenessModifier >= GetSuperEffectiveMult()) MUL(.5);
         },
     .breakable = TRUE,
 };
@@ -4143,11 +4145,11 @@ template <>
 constexpr Ability Impl<ABILITY_FATAL_PRECISION> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK_NOT(IS_MOVE_STATUS(move))
-        CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, TRUE) >= UQ_4_12(2.0))
+        CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, TRUE) >= GetSuperEffectiveMult())
         return ACCURACY_HITS_IF_POSSIBLE;
     },
     .onCrit = +[](ON_CRIT) -> int {
-        CHECK(typeEffectiveness >= UQ_4_12(2.0))
+        CHECK(typeEffectiveness >= GetSuperEffectiveMult())
         return ALWAYS_CRIT;
     },
 };
@@ -4250,7 +4252,7 @@ constexpr Ability Impl<ABILITY_OVERCHARGE> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
         CHECK(moveType == TYPE_ELECTRIC)
         CHECK(defType == TYPE_ELECTRIC)
-        *mod = UQ_4_12(2.0);
+        *mod = GetSuperEffectiveMult();
         return TRUE;
     },
     .onCanStatusType = +[](ON_CAN_STATUS_TYPE) -> int {
@@ -4291,7 +4293,7 @@ constexpr Ability Impl<ABILITY_BONE_ZONE> = {
                 if (mod2) MulModifier(mod, mod2);
                 if (mod3) MulModifier(mod, mod3);
             }
-            if (*mod < UQ_4_12(1.0)) MulModifier(mod, UQ_4_12(2.0));
+            if (*mod < UQ_4_12(1.0)) MulModifier(mod, GetSuperEffectiveMult());
         },
 };
 
@@ -4327,7 +4329,7 @@ constexpr Ability Impl<ABILITY_MOLTEN_DOWN> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
         CHECK(moveType == TYPE_FIRE)
         CHECK(defType == TYPE_ROCK)
-        *mod = UQ_4_12(2.0);
+        *mod = GetSuperEffectiveMult();
         return TRUE;
     },
 };
@@ -5348,13 +5350,13 @@ constexpr Ability Impl<ABILITY_ANGELS_WRATH> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
         if (move == MOVE_POISON_STING) {
             CHECK(defType == TYPE_STEEL)
-            *mod = UQ_4_12(2.0);
+            *mod = GetSuperEffectiveMult();
             return TRUE;
         }
 
         if (move == MOVE_ELECTROWEB) {
             CHECK(defType == TYPE_GROUND)
-            *mod = UQ_4_12(2.0);
+            *mod = GetSuperEffectiveMult();
             return TRUE;
         }
         return FALSE;
@@ -6043,7 +6045,7 @@ template <>
 constexpr Ability Impl<ABILITY_ARCANE_FORCE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
+            if (typeEffectivenessMultiplier >= GetSuperEffectiveMult()) MUL(1.1);
         },
     .onStab = Impl<ABILITY_MYSTIC_POWER>.onStab,
     .omniStab = TRUE,
@@ -7077,7 +7079,7 @@ template <>
 constexpr Ability Impl<ABILITY_WINGED_KING> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.33);
+            if (typeEffectivenessMultiplier >= GetSuperEffectiveMult()) MUL(1.33);
         },
 };
 
@@ -9077,7 +9079,7 @@ constexpr Ability Impl<ABILITY_UNOWN_POWER> = {
     .onStab = +[](ON_STAB) -> int { return TRUE; },
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
-            if (*mod < UQ_4_12(2.0) && (move == MOVE_HIDDEN_POWER || move == MOVE_SECRET_POWER)) *mod = UQ_4_12(2.0);
+            if (*mod < GetSuperEffectiveMult() && (move == MOVE_HIDDEN_POWER || move == MOVE_SECRET_POWER)) *mod = GetSuperEffectiveMult();
         },
     .randomizerBanned = TRUE,
     .omniStab = TRUE,
@@ -10657,7 +10659,7 @@ constexpr Ability Impl<ABILITY_DEADLY_PRECISION> = {
         u16 typeEffectiveness;
         CalculateMoveDamageAndEffectiveness(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, &typeEffectiveness);
         gHitMarker &= ~HITMARKER_MOLD_BREAKER;
-        return typeEffectiveness >= UQ_4_12(2.0);
+        return typeEffectiveness >= GetSuperEffectiveMult();
     },
 };
 
@@ -10825,7 +10827,7 @@ constexpr Ability Impl<ABILITY_BARK_SKIN> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GHOST); },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (typeEffectivenessModifier >= UQ_4_12(2.0)) {
+            if (typeEffectivenessModifier >= GetSuperEffectiveMult()) {
                 MUL(.7);
             } else {
                 MUL(.85);

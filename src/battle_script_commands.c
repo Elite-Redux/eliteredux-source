@@ -8435,7 +8435,7 @@ static void Cmd_various(void) {
             SWAP(gSideTimers[0].auroraVeilTimer, gSideTimers[1].auroraVeilTimer, temp)
             SWAP(gSideTimers[0].tailwindTimer, gSideTimers[1].tailwindTimer, temp)
             SWAP(gSideTimers[0].luckyChantTimer, gSideTimers[1].luckyChantTimer, temp)
-            SWAP(gSideTimers[0].swampTimer, gSideTimers[1].swampTimer, temp)
+            if (!(getMonotypeChampType() == TYPE_WATER)) SWAP(gSideTimers[0].swampTimer, gSideTimers[1].swampTimer, temp)
             SWAP(gSideTimers[0].fireSeaTimer, gSideTimers[1].fireSeaTimer, temp)
             SWAP(gSideTimers[0].rainbowTimer, gSideTimers[1].rainbowTimer, temp)
             SWAP(gSideTimers[0].smokescreenTimer, gSideTimers[1].smokescreenTimer, temp)
