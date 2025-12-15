@@ -3452,9 +3452,15 @@ u8 AtkCanceller_UnableToUseMove(void) {
 }
 
 MultihitType GetMultihitType(int battler, MoveEnum move) {
-    if (IsTwoStrikesMove(move)) return MULTIHIT_TWO;
+    switch (gBattleMoves[move].hitCountOverride) {
+        case 2:
+            return MULTIHIT_TWO;
 
-    switch (gBattleMoves[gCurrentMove].effect) {
+        case 3:
+            return MULTIHIT_THREE;
+    }
+
+    switch (gBattleMoves[move].effect) {
         case EFFECT_MULTI_HIT:
             if (move == MOVE_WATER_SHURIKEN && BattlerHasAbility(battler, ABILITY_GIANT_SHURIKEN, FALSE)) return MULTIHIT_SINGLE;
 
@@ -8616,19 +8622,6 @@ bool32 TryRoomService(u8 battlerId) {
     } else {
         return FALSE;
     }
-}
-
-// Move Checks
-bool8 IsTwoStrikesMove(MoveEnum move) {
-    switch (move) {
-        case MOVE_DOUBLE_IRON_BASH:
-        case MOVE_TWINEEDLE:
-        case MOVE_CROSS_POISON:
-        case MOVE_DOUBLE_SHOCK:
-            return TRUE;
-    }
-
-    return FALSE;
 }
 
 bool32 BlocksPrankster(MoveEnum move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget) {
