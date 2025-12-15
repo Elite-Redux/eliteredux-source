@@ -60,7 +60,7 @@ enum {
 };
 
 struct TrainerBattleParameter {
-    void *varPtr;
+    void* varPtr;
     u8 ptrType;
 };
 
@@ -80,8 +80,8 @@ static bool32 IsPlayerDefeated(u32 battleOutcome);
 static u16 GetRematchTrainerId(u16 trainerId);
 static void RegisterTrainerInMatchCall(void);
 static void HandleRematchVarsOnBattleEnd(void);
-static const u8 *GetIntroSpeechOfApproachingTrainer(void);
-static const u8 *GetTrainerCantBattleSpeech(void);
+static const u8* GetIntroSpeechOfApproachingTrainer(void);
+static const u8* GetTrainerCantBattleSpeech(void);
 
 // ewram vars
 EWRAM_DATA static u16 sTrainerBattleMode = 0;
@@ -89,15 +89,15 @@ EWRAM_DATA u16 gTrainerBattleOpponent_A = 0;
 EWRAM_DATA u16 gTrainerBattleOpponent_B = 0;
 EWRAM_DATA u16 gPartnerTrainerId = 0;
 EWRAM_DATA static u16 sTrainerObjectEventLocalId = 0;
-EWRAM_DATA static u8 *sTrainerAIntroSpeech = NULL;
-EWRAM_DATA static u8 *sTrainerBIntroSpeech = NULL;
-EWRAM_DATA static u8 *sTrainerADefeatSpeech = NULL;
-EWRAM_DATA static u8 *sTrainerBDefeatSpeech = NULL;
-EWRAM_DATA static u8 *sTrainerVictorySpeech = NULL;
-EWRAM_DATA static u8 *sTrainerCannotBattleSpeech = NULL;
-EWRAM_DATA static u8 *sTrainerBattleEndScript = NULL;
-EWRAM_DATA static u8 *sTrainerABattleScriptRetAddr = NULL;
-EWRAM_DATA static u8 *sTrainerBBattleScriptRetAddr = NULL;
+EWRAM_DATA static u8* sTrainerAIntroSpeech = NULL;
+EWRAM_DATA static u8* sTrainerBIntroSpeech = NULL;
+EWRAM_DATA static u8* sTrainerADefeatSpeech = NULL;
+EWRAM_DATA static u8* sTrainerBDefeatSpeech = NULL;
+EWRAM_DATA static u8* sTrainerVictorySpeech = NULL;
+EWRAM_DATA static u8* sTrainerCannotBattleSpeech = NULL;
+EWRAM_DATA static u8* sTrainerBattleEndScript = NULL;
+EWRAM_DATA static u8* sTrainerABattleScriptRetAddr = NULL;
+EWRAM_DATA static u8* sTrainerBBattleScriptRetAddr = NULL;
 EWRAM_DATA static bool8 sShouldCheckTrainerBScript = FALSE;
 EWRAM_DATA static u8 sNoOfPossibleTrainerRetScripts = 0;
 EWRAM_DATA static u32 sPrevTrainerSeeing = 0;
@@ -340,7 +340,7 @@ static const u16 sBadgeFlags[NUM_BADGES] = {
 #define tTransition data[1]
 
 static void Task_BattleStart(u8 taskId) {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (tState) {
         case 0:
@@ -371,7 +371,7 @@ static void CreateBattleStartTask(u8 transition, u16 song) {
 }
 
 static void Task_BattleStart_Debug(u8 taskId) {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     switch (tState) {
         case 0:
@@ -423,21 +423,17 @@ static void DoStandardWildBattle(bool32 isDouble) {
     sub_808BCF4();
     gMain.savedCallback = CB2_EndWildBattle;
     gBattleTypeFlags = 0;
-    if (isDouble) 
-        gBattleTypeFlags |= BATTLE_TYPE_DOUBLE;
+    if (isDouble) gBattleTypeFlags |= BATTLE_TYPE_DOUBLE;
 
-    if (InBattlePyramid())
-    {
+    if (InBattlePyramid()) {
         VarSet(VAR_TEMP_E, 0);
         gBattleTypeFlags |= BATTLE_TYPE_PYRAMID;
     }
 
-    //If its the first encounter and you have nuzlocke rules enabled set the correct flags
-    if(AreNuzlockeRulesEnabled() && !GetNuzlockeCaughtFlag(caughtLocation)){
+    // If its the first encounter and you have nuzlocke rules enabled set the correct flags
+    if (AreNuzlockeRulesEnabled() && !GetNuzlockeCaughtFlag(caughtLocation)) {
         SetNuzlockeCaughtFlag(caughtLocation);
         FlagSet(FLAG_TEMP_CAN_CATCH_POKEMON);
-        //MGBA_PRINT_DEBUG("DoStandardWildBattle AreNuzlockeRulesEnabled:%d", AreNuzlockeRulesEnabled())
-        //MgbaPrintf("DoStandardWildBattle caughtLocation %d AreNuzlockeRulesEnabled %d GetNuzlockeCaughtFlag %d CanCatchMon %d", caughtLocation, AreNuzlockeRulesEnabled(), GetNuzlockeCaughtFlag(caughtLocation), FlagGet(FLAG_TEMP_CAN_CATCH_POKEMON));
     }
 
     CreateBattleStartTask(GetWildBattleTransition(), 0);
@@ -448,7 +444,6 @@ static void DoStandardWildBattle(bool32 isDouble) {
 }
 
 void DoStandardWildBattle_Debug(void) {
-
     ScriptContext2_Enable();
     FreezeObjectEvents();
     sub_808BCF4();  // StopPlayerAvatar();
@@ -569,7 +564,7 @@ void BattleSetup_StartLegendaryBattle(void) {
 
     musicId = GetBattleBGM();
 
-    FlagSet(FLAG_TEMP_CAN_CATCH_POKEMON); //Legendary Pokémon can always be caught
+    FlagSet(FLAG_TEMP_CAN_CATCH_POKEMON);  // Legendary Pokémon can always be caught
 
     switch (GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, NULL)) {
         default:
@@ -652,20 +647,20 @@ void StartRegiBattle(void) {
 }
 
 static void CB2_EndWildBattle(void) {
-    CpuFill16(0, (void *)(BG_PLTT), BG_PLTT_SIZE);
+    CpuFill16(0, (void*)(BG_PLTT), BG_PLTT_SIZE);
     ResetOamRange(0, 128);
-    FlagClear(FLAG_TEMP_CAN_CATCH_POKEMON); //Clear Regardless if you catch a Pokémon or not
+    FlagClear(FLAG_TEMP_CAN_CATCH_POKEMON);  // Clear Regardless if you catch a Pokémon or not
 
     if (IsPlayerDefeated(gBattleOutcome) == TRUE && !InBattlePyramid() && !InBattlePike()) {
         SetMainCallback2(CB2_WhiteOut);
-    }else {
+    } else {
         SetMainCallback2(CB2_ReturnToField);
         gFieldCallback = FieldCB_ReturnToFieldNoScriptCheckMusic;
     }
 }
 
 static void CB2_EndScriptedWildBattle(void) {
-    CpuFill16(0, (void *)(BG_PLTT), BG_PLTT_SIZE);
+    CpuFill16(0, (void*)(BG_PLTT), BG_PLTT_SIZE);
     ResetOamRange(0, 128);
 
     if (IsPlayerDefeated(gBattleOutcome) == TRUE) {
@@ -764,7 +759,7 @@ static u8 GetSumOfEnemyPartyLevel(u16 opponentId, u8 numMons) {
 
     sum = 0;
 
-    const struct TrainerMonItemCustomMoves *party = gTrainers[opponentId].party;
+    const struct TrainerMonItemCustomMoves* party = gTrainers[opponentId].party;
     for (i = 0; i < count; i++) sum += party[i].lvl;
 
     return sum;
@@ -954,11 +949,11 @@ static void TryUpdateGymLeaderRematchFromTrainer(void) {
 }
 
 // why not just use the macros? maybe its because they didnt want to uncast const every time?
-static u32 TrainerBattleLoadArg32(const u8 *ptr) { return T1_READ_32(ptr); }
+static u32 TrainerBattleLoadArg32(const u8* ptr) { return T1_READ_32(ptr); }
 
-static u16 TrainerBattleLoadArg16(const u8 *ptr) { return T1_READ_16(ptr); }
+static u16 TrainerBattleLoadArg16(const u8* ptr) { return T1_READ_16(ptr); }
 
-static u8 TrainerBattleLoadArg8(const u8 *ptr) { return T1_READ_8(ptr); }
+static u8 TrainerBattleLoadArg8(const u8* ptr) { return T1_READ_8(ptr); }
 
 static u16 GetTrainerAFlag(void) {
     if (gTrainerBattleOpponent_A <= MAX_OLD_TRAINERS_COUNT || gTrainerBattleOpponent_A == TRAINER_OLDPLAYER)
@@ -1013,15 +1008,15 @@ static void InitTrainerBattleVariables(void) {
     sTrainerBattleEndScript = NULL;
 }
 
-static inline void SetU8(void *ptr, u8 value) { *(u8 *)(ptr) = value; }
+static inline void SetU8(void* ptr, u8 value) { *(u8*)(ptr) = value; }
 
-static inline void SetU16(void *ptr, u16 value) { *(u16 *)(ptr) = value; }
+static inline void SetU16(void* ptr, u16 value) { *(u16*)(ptr) = value; }
 
-static inline void SetU32(void *ptr, u32 value) { *(u32 *)(ptr) = value; }
+static inline void SetU32(void* ptr, u32 value) { *(u32*)(ptr) = value; }
 
-static inline void SetPtr(const void *ptr, const void *value) { *(const void **)(ptr) = value; }
+static inline void SetPtr(const void* ptr, const void* value) { *(const void**)(ptr) = value; }
 
-static void TrainerBattleLoadArgs(const struct TrainerBattleParameter *specs, const u8 *data) {
+static void TrainerBattleLoadArgs(const struct TrainerBattleParameter* specs, const u8* data) {
     while (1) {
         switch (specs->ptrType) {
             case TRAINER_PARAM_LOAD_VAL_8BIT:
@@ -1060,7 +1055,7 @@ void SetMapVarsToTrainer(void) {
     }
 }
 
-const u8 *BattleSetup_ConfigureTrainerBattle(const u8 *data) {
+const u8* BattleSetup_ConfigureTrainerBattle(const u8* data) {
     if (TrainerBattleLoadArg8(data) != TRAINER_BATTLE_SET_TRAINER_B) InitTrainerBattleVariables();
     sTrainerBattleMode = TrainerBattleLoadArg8(data);
 
@@ -1142,7 +1137,7 @@ const u8 *BattleSetup_ConfigureTrainerBattle(const u8 *data) {
     }
 }
 
-void ConfigureAndSetUpOneTrainerBattle(u8 trainerObjEventId, const u8 *trainerScript) {
+void ConfigureAndSetUpOneTrainerBattle(u8 trainerObjEventId, const u8* trainerScript) {
     gSelectedObjectEvent = trainerObjEventId;
     gSpecialVar_LastTalked = gObjectEvents[trainerObjEventId].localId;
     BattleSetup_ConfigureTrainerBattle(trainerScript + 1);
@@ -1150,7 +1145,7 @@ void ConfigureAndSetUpOneTrainerBattle(u8 trainerObjEventId, const u8 *trainerSc
     ScriptContext2_Enable();
 }
 
-void ConfigureTwoTrainersBattle(u8 trainerObjEventId, const u8 *trainerScript) {
+void ConfigureTwoTrainersBattle(u8 trainerObjEventId, const u8* trainerScript) {
     gSelectedObjectEvent = trainerObjEventId;
     gSpecialVar_LastTalked = gObjectEvents[trainerObjEventId].localId;
     BattleSetup_ConfigureTrainerBattle(trainerScript + 1);
@@ -1161,7 +1156,7 @@ void SetUpTwoTrainersBattle(void) {
     ScriptContext2_Enable();
 }
 
-bool32 GetTrainerFlagFromScriptPointer(const u8 *data) {
+bool32 GetTrainerFlagFromScriptPointer(const u8* data) {
     u32 flag = TrainerBattleLoadArg16(data + 2);
     if (flag != sPrevTrainerSeeing) {
         sPrevTrainerSeeing = flag;
@@ -1178,7 +1173,7 @@ bool32 GetTrainerFlagFromScriptPointer(const u8 *data) {
 // Note: Only for trainers who are spoken to directly
 //       For trainers who spot the player this is handled by PlayerFaceApproachingTrainer
 void SetTrainerFacingDirection(void) {
-    struct ObjectEvent *objectEvent = &gObjectEvents[gSelectedObjectEvent];
+    struct ObjectEvent* objectEvent = &gObjectEvents[gSelectedObjectEvent];
     SetTrainerMovementType(objectEvent, GetTrainerFacingDirectionMovementType(objectEvent->facingDirection));
 }
 
@@ -1363,14 +1358,14 @@ void ShowTrainerIntroSpeech(void) {
     }
 }
 
-const u8 *BattleSetup_GetScriptAddrAfterBattle(void) {
+const u8* BattleSetup_GetScriptAddrAfterBattle(void) {
     if (sTrainerBattleEndScript != NULL)
         return sTrainerBattleEndScript;
     else
         return EventScript_TestSignpostMsg;
 }
 
-const u8 *BattleSetup_GetTrainerPostBattleScript(void) {
+const u8* BattleSetup_GetTrainerPostBattleScript(void) {
     if (FlagGet(FLAG_RAN_FROM_TRAINER)) return EventScript_TryGetTrainerScript;  // Stops things like registering to Pokenav after the battle ends
 
     if (sShouldCheckTrainerBScript) {
@@ -1453,22 +1448,22 @@ void PlayTrainerEncounterMusic(void) {
     }
 }
 
-static const u8 *ReturnEmptyStringIfNull(const u8 *string) {
+static const u8* ReturnEmptyStringIfNull(const u8* string) {
     if (string == NULL)
         return gText_EmptyString2;
     else
         return string;
 }
 
-static const u8 *GetIntroSpeechOfApproachingTrainer(void) {
+static const u8* GetIntroSpeechOfApproachingTrainer(void) {
     if (gApproachingTrainerId == 0)
         return ReturnEmptyStringIfNull(sTrainerAIntroSpeech);
     else
         return ReturnEmptyStringIfNull(sTrainerBIntroSpeech);
 }
 
-const u8 *GetTrainerALoseText(void) {
-    const u8 *string;
+const u8* GetTrainerALoseText(void) {
+    const u8* string;
 
     if (gTrainerBattleOpponent_A == TRAINER_SECRET_BASE)
         string = GetSecretBaseTrainerLoseText();
@@ -1481,7 +1476,7 @@ const u8 *GetTrainerALoseText(void) {
     return gStringVar4;
 }
 
-const u8 *GetTrainerBLoseText(void) {
+const u8* GetTrainerBLoseText(void) {
     if (FlagGet(FLAG_TAG_BATTLE))
         StringExpandPlaceholders(gStringVar4, ReturnEmptyStringIfNull(GetTagTeamTrainerLoseText(TRUE)));
     else
@@ -1490,11 +1485,11 @@ const u8 *GetTrainerBLoseText(void) {
     return gStringVar4;
 }
 
-const u8 *GetTrainerWonSpeech(void) { return ReturnEmptyStringIfNull(sTrainerVictorySpeech); }
+const u8* GetTrainerWonSpeech(void) { return ReturnEmptyStringIfNull(sTrainerVictorySpeech); }
 
-static const u8 *GetTrainerCantBattleSpeech(void) { return ReturnEmptyStringIfNull(sTrainerCannotBattleSpeech); }
+static const u8* GetTrainerCantBattleSpeech(void) { return ReturnEmptyStringIfNull(sTrainerCannotBattleSpeech); }
 
-static s32 FirstBattleTrainerIdToRematchTableId(const struct RematchTrainer *table, u16 trainerId) {
+static s32 FirstBattleTrainerIdToRematchTableId(const struct RematchTrainer* table, u16 trainerId) {
     s32 i;
 
     for (i = 0; i < REMATCH_TABLE_ENTRIES; i++) {
@@ -1504,7 +1499,7 @@ static s32 FirstBattleTrainerIdToRematchTableId(const struct RematchTrainer *tab
     return -1;
 }
 
-static s32 TrainerIdToRematchTableId(const struct RematchTrainer *table, u16 trainerId) {
+static s32 TrainerIdToRematchTableId(const struct RematchTrainer* table, u16 trainerId) {
     s32 i, j;
 
     for (i = 0; i < REMATCH_TABLE_ENTRIES; i++) {
@@ -1526,7 +1521,7 @@ static bool32 sub_80B1D94(s32 rematchTableId) {
         return FALSE;
 }
 
-static void SetRematchIdForTrainer(const struct RematchTrainer *table, u32 tableId) {
+static void SetRematchIdForTrainer(const struct RematchTrainer* table, u32 tableId) {
 #ifndef FREE_MATCH_CALL
     s32 i;
     for (i = 1; i < REMATCHES_COUNT; i++) {
@@ -1540,7 +1535,7 @@ static void SetRematchIdForTrainer(const struct RematchTrainer *table, u32 table
 #endif
 }
 
-static bool32 UpdateRandomTrainerRematches(const struct RematchTrainer *table, u16 mapGroup, u16 mapNum) {
+static bool32 UpdateRandomTrainerRematches(const struct RematchTrainer* table, u16 mapGroup, u16 mapNum) {
     bool32 ret = FALSE;
 #ifndef FREE_MATCH_CALL
     s32 i;
@@ -1564,7 +1559,7 @@ void UpdateRematchIfDefeated(s32 rematchTableId) {
     if (HasTrainerBeenFought(gRematchTable[rematchTableId].trainerIds[0]) == TRUE) SetRematchIdForTrainer(gRematchTable, rematchTableId);
 }
 
-static bool32 DoesSomeoneWantRematchIn_(const struct RematchTrainer *table, u16 mapGroup, u16 mapNum) {
+static bool32 DoesSomeoneWantRematchIn_(const struct RematchTrainer* table, u16 mapGroup, u16 mapNum) {
 #ifndef FREE_MATCH_CALL
     s32 i;
     for (i = 0; i < REMATCH_TABLE_ENTRIES; i++) {
@@ -1574,7 +1569,7 @@ static bool32 DoesSomeoneWantRematchIn_(const struct RematchTrainer *table, u16 
     return FALSE;
 }
 
-static bool32 IsRematchTrainerIn_(const struct RematchTrainer *table, u16 mapGroup, u16 mapNum) {
+static bool32 IsRematchTrainerIn_(const struct RematchTrainer* table, u16 mapGroup, u16 mapNum) {
     s32 i;
 
     for (i = 0; i < REMATCH_TABLE_ENTRIES; i++) {
@@ -1584,7 +1579,7 @@ static bool32 IsRematchTrainerIn_(const struct RematchTrainer *table, u16 mapGro
     return FALSE;
 }
 
-static bool8 IsFirstTrainerIdReadyForRematch(const struct RematchTrainer *table, u16 firstBattleTrainerId) {
+static bool8 IsFirstTrainerIdReadyForRematch(const struct RematchTrainer* table, u16 firstBattleTrainerId) {
     s32 tableId = FirstBattleTrainerIdToRematchTableId(table, firstBattleTrainerId);
 
     if (tableId == -1) return FALSE;
@@ -1594,7 +1589,7 @@ static bool8 IsFirstTrainerIdReadyForRematch(const struct RematchTrainer *table,
     return TRUE;
 }
 
-static bool8 IsTrainerReadyForRematch_(const struct RematchTrainer *table, u16 trainerId) {
+static bool8 IsTrainerReadyForRematch_(const struct RematchTrainer* table, u16 trainerId) {
     s32 tableId = TrainerIdToRematchTableId(table, trainerId);
 
     if (tableId == -1) return FALSE;
@@ -1606,8 +1601,8 @@ static bool8 IsTrainerReadyForRematch_(const struct RematchTrainer *table, u16 t
     return TRUE;
 }
 
-static u16 GetRematchTrainerIdFromTable(const struct RematchTrainer *table, u16 firstBattleTrainerId) {
-    const struct RematchTrainer *trainerEntry;
+static u16 GetRematchTrainerIdFromTable(const struct RematchTrainer* table, u16 firstBattleTrainerId) {
+    const struct RematchTrainer* trainerEntry;
     s32 i;
     s32 tableId = FirstBattleTrainerIdToRematchTableId(table, firstBattleTrainerId);
 
@@ -1623,8 +1618,8 @@ static u16 GetRematchTrainerIdFromTable(const struct RematchTrainer *table, u16 
     return trainerEntry->trainerIds[REMATCHES_COUNT - 1];  // already beaten at max stage
 }
 
-static u16 GetLastBeatenRematchTrainerIdFromTable(const struct RematchTrainer *table, u16 firstBattleTrainerId) {
-    const struct RematchTrainer *trainerEntry;
+static u16 GetLastBeatenRematchTrainerIdFromTable(const struct RematchTrainer* table, u16 firstBattleTrainerId) {
+    const struct RematchTrainer* trainerEntry;
     s32 i;
     s32 tableId = FirstBattleTrainerIdToRematchTableId(table, firstBattleTrainerId);
 
@@ -1640,7 +1635,7 @@ static u16 GetLastBeatenRematchTrainerIdFromTable(const struct RematchTrainer *t
     return trainerEntry->trainerIds[REMATCHES_COUNT - 1];  // already beaten at max stage
 }
 
-static void ClearTrainerWantRematchState(const struct RematchTrainer *table, u16 firstBattleTrainerId) {
+static void ClearTrainerWantRematchState(const struct RematchTrainer* table, u16 firstBattleTrainerId) {
 #ifndef FREE_MATCH_CALL
     s32 tableId = TrainerIdToRematchTableId(table, firstBattleTrainerId);
 
@@ -1665,7 +1660,7 @@ static void RegisterTrainerInMatchCall(void) {
     }
 }
 
-static bool8 WasSecondRematchWon(const struct RematchTrainer *table, u16 firstBattleTrainerId) {
+static bool8 WasSecondRematchWon(const struct RematchTrainer* table, u16 firstBattleTrainerId) {
     s32 tableId = FirstBattleTrainerIdToRematchTableId(table, firstBattleTrainerId);
 
     if (tableId == -1) return FALSE;

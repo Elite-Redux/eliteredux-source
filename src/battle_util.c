@@ -1508,7 +1508,6 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check) {
     s32 i;
 
     gPotentialItemEffectBattler = battlerId;
-    // MGBA_PRINT_DEBUG("CheckMoveLimitations: %d", holdEffect)
 
     for (i = 0; i < MAX_MON_MOVES; i++) {
         FILTER_NOT(unusableMoves & (1 << i))
@@ -9300,7 +9299,6 @@ void RepopulateAbilities(int battler) {
 int GetAbilityIndex(int battler, AbilityEnum ability, int checkMoldBreaker) {
     int i;
     int abilityCount = GetNumPossibleAbilitiesForBattler();
-    // MGBA_PRINT_DEBUG("GetAbilityIndex battler: %d, ability: %d checkMoldBreaker : %d", battler, ability, checkMoldBreaker)
 
     for (i = 0; i < abilityCount; i++) {
         if (GetBattlerAbilityInSlot(battler, i) == ability) {
