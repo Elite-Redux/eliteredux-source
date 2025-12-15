@@ -22,9 +22,4 @@
 #define MEGA_STONES_POCKET 7
 #define POCKETS_COUNT      8
 
-// The Items pocket is the largest pocket, so the maximum amount of items
-// in a pocket is its count + 1 for the cancel option
-#define MAX_POCKET_ITEMS   (BAG_BATTLE_COUNT + 1)
-
-
 #endif // GUARD_ITEM_CONSTANTS_H
