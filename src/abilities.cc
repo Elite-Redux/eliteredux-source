@@ -2944,7 +2944,7 @@ constexpr Ability Impl<ABILITY_POWER_OF_ALCHEMY> = {
         int any = FALSE;
         for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
             FILTER(IsBattlerAlive(i))
-            FILTER(ItemId_GetPocket(GetBattlerHoldEffect(i, FALSE)) == POCKET_BERRIES)
+            FILTER(ItemId_GetPocket(gBattleMons[i].item) == POCKET_BERRIES)
             any = TRUE;
             UpdateBattlerItem(i, ITEM_BLACK_SLUDGE);
             BattleScriptPushCursorAndCallback(BattleScript_End3);
