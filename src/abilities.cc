@@ -10356,7 +10356,7 @@ constexpr Ability Impl<ABILITY_EDGELORD> = {
 
         gStatuses4[battler] |= STATUS4_CUTTHROAT;
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CUTTHROAT;
-        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsgRet);
+        BattleScriptCall(BattleScript_SwitchInAbilityMsgRet);
         return TRUE;
     },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
