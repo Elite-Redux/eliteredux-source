@@ -11291,6 +11291,7 @@ constexpr Ability Impl<ABILITY_DEFIANT> = {
     .onStatLowered = +[](ON_STAT_LOWERED) -> int {
         CHECK(CanRaiseStat(battler, STAT_ATK))
         SetStatChanger(STAT_ATK, 2);
+        gStackBattler1 = battler;
         BattleScriptCall(BattleScript_StackBattlerStatUp);
         return TRUE;
     },
@@ -11301,6 +11302,7 @@ constexpr Ability Impl<ABILITY_COMPETITIVE> = {
     .onStatLowered = +[](ON_STAT_LOWERED) -> int {
         CHECK(CanRaiseStat(battler, STAT_SPATK))
         SetStatChanger(STAT_SPATK, 2);
+        gStackBattler1 = battler;
         BattleScriptCall(BattleScript_StackBattlerStatUp);
         return TRUE;
     },
@@ -11317,6 +11319,7 @@ constexpr Ability Impl<ABILITY_RUN_AWAY> = {
     .onStatLowered = +[](ON_STAT_LOWERED) -> int {
         CHECK(CanRaiseStat(battler, STAT_SPEED))
         SetStatChanger(STAT_SPEED, 2);
+        gStackBattler1 = battler;
         BattleScriptCall(BattleScript_StackBattlerStatUp);
         return TRUE;
     },
@@ -11328,11 +11331,13 @@ constexpr Ability Impl<ABILITY_KINGS_WRATH> = {
         int any = FALSE;
         if (CanRaiseStat(battler, STAT_DEF)) {
             SetStatChanger(STAT_DEF, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
         if (CanRaiseStat(battler, STAT_ATK)) {
             SetStatChanger(STAT_ATK, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
@@ -11347,11 +11352,13 @@ constexpr Ability Impl<ABILITY_QUEENS_MOURNING> = {
         int any = FALSE;
         if (CanRaiseStat(battler, STAT_SPDEF)) {
             SetStatChanger(STAT_SPDEF, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
         if (CanRaiseStat(battler, STAT_SPATK)) {
             SetStatChanger(STAT_SPATK, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
@@ -11366,21 +11373,25 @@ constexpr Ability Impl<ABILITY_EMPERORS_WRATH> = {
         int any = FALSE;
         if (CanRaiseStat(battler, STAT_SPDEF)) {
             SetStatChanger(STAT_SPDEF, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
         if (CanRaiseStat(battler, STAT_DEF)) {
             SetStatChanger(STAT_DEF, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
         if (CanRaiseStat(battler, STAT_SPATK)) {
             SetStatChanger(STAT_SPATK, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
         if (CanRaiseStat(battler, STAT_ATK)) {
             SetStatChanger(STAT_ATK, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
@@ -11412,11 +11423,13 @@ constexpr Ability Impl<ABILITY_NARCISSIST> = {
         int any = FALSE;
         if (CanRaiseStat(battler, STAT_SPATK)) {
             SetStatChanger(STAT_SPATK, 2);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
         if (CanRaiseStat(battler, STAT_ATK)) {
             SetStatChanger(STAT_ATK, 2);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
