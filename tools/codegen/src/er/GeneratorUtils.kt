@@ -34,7 +34,7 @@ object GeneratorUtils {
             } else {
                 emptyList()
             }
-        }
+        }.filter { it.name.isNotEmpty() && it.image.isNotEmpty() && it.palette.isNotEmpty() }
     }
 
     val ABILITIES_LIST by lazy {

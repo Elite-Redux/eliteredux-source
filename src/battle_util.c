@@ -226,7 +226,7 @@ void HandleAction_UseMove(void) {
             gBattleResults.lastUsedMoveOpponent = gCurrentMove;
     }
 
-    if (ShouldSetMoldBreaker(gBattlerAttacker, gChosenMove)) gHitMarker |= HITMARKER_MOLD_BREAKER;
+    SetMoldBreaker(gBattlerAttacker, gChosenMove);
 
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_MYCELIUM_MIGHT, FALSE)) gHitMarker |= HITMARKER_MYCELIUM_MIGHT;
 
@@ -2590,9 +2590,9 @@ u8 DoBattlerEndTurnEffects(void) {
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_OCTOLOCK:
-                if (gVolatileStructs[gActiveBattler].octolock &&
-                    !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) ||
-                      GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_CLEAR_AMULET)) {
+
+                if (gVolatileStructs[gActiveBattler].octolock && !IsStatDropBlocked(gActiveBattler, STAT_DEF, FALSE) &&
+                    !IsStatDropBlocked(gActiveBattler, STAT_SPDEF, FALSE) && GetBattlerHoldEffect(gActiveBattler, TRUE) != HOLD_EFFECT_CLEAR_AMULET) {
                     gBattlerTarget = gActiveBattler;
                     BattleScriptExecute(BattleScript_OctolockEndTurn);
                     effect++;
@@ -3452,9 +3452,15 @@ u8 AtkCanceller_UnableToUseMove(void) {
 }
 
 MultihitType GetMultihitType(int battler, MoveEnum move) {
-    if (IsTwoStrikesMove(move)) return MULTIHIT_TWO;
+    switch (gBattleMoves[move].hitCountOverride) {
+        case 2:
+            return MULTIHIT_TWO;
 
-    switch (gBattleMoves[gCurrentMove].effect) {
+        case 3:
+            return MULTIHIT_THREE;
+    }
+
+    switch (gBattleMoves[move].effect) {
         case EFFECT_MULTI_HIT:
             if (move == MOVE_WATER_SHURIKEN && BattlerHasAbility(battler, ABILITY_GIANT_SHURIKEN, FALSE)) return MULTIHIT_SINGLE;
 
@@ -3855,7 +3861,7 @@ void IncrementSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value)
 AbilityStates GetAbilityStateAs(u8 battler, AbilityEnum ability) { return (AbilityStates){.intValue = GetAbilityState(battler, ability)}; }
 
 u32 GetAbilityState(u8 battler, AbilityEnum ability) {
-    int index = GetAbilityIndex(battler, ability, TRUE);
+    int index = GetAbilityIndex(battler, ability, FALSE);
 
     if (index >= GetNumPossibleAbilitiesForBattler()) return 0;
 
@@ -3865,7 +3871,7 @@ u32 GetAbilityState(u8 battler, AbilityEnum ability) {
 void SetAbilityStateAs(u8 battler, AbilityEnum ability, AbilityStates value) { SetAbilityState(battler, ability, value.intValue); }
 
 void SetAbilityState(u8 battler, AbilityEnum ability, u32 value) {
-    int index = GetAbilityIndex(battler, ability, TRUE);
+    int index = GetAbilityIndex(battler, ability, FALSE);
 
     if (index >= GetNumPossibleAbilitiesForBattler()) return;
 
@@ -8169,7 +8175,7 @@ bool32 CanMegaEvolve(u8 battlerId) {
 
     // Check if there is an entry in the evolution table for Wish Mega Evolution.
     if (GetWishMegaEvolutionSpecies(
-            species, GetMonData(mon, MON_DATA_MOVE1), GetMonData(mon, MON_DATA_MOVE2), GetMonData(mon, MON_DATA_MOVE3), GetMonData(mon, MON_DATA_MOVE4))){
+            species, GetMonData(mon, MON_DATA_MOVE1), GetMonData(mon, MON_DATA_MOVE2), GetMonData(mon, MON_DATA_MOVE3), GetMonData(mon, MON_DATA_MOVE4))) {
         gBattleStruct->mega.isWishMegaEvo = TRUE;
         return TRUE;
     }
@@ -8618,19 +8624,6 @@ bool32 TryRoomService(u8 battlerId) {
     }
 }
 
-// Move Checks
-bool8 IsTwoStrikesMove(MoveEnum move) {
-    switch (move) {
-        case MOVE_DOUBLE_IRON_BASH:
-        case MOVE_TWINEEDLE:
-        case MOVE_CROSS_POISON:
-        case MOVE_DOUBLE_SHOCK:
-            return TRUE;
-    }
-
-    return FALSE;
-}
-
 bool32 BlocksPrankster(MoveEnum move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget) {
     if (gProcessingExtraAttacks) {
         if (!gQueuedExtraAttackData[0].prankster) return FALSE;
@@ -8664,7 +8657,7 @@ bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags) {
     return FALSE;
 }
 
-bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler) { return ShouldSetMoldBreaker(battler, MOVE_NONE); }
+bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler) { return SetMoldBreaker(battler, MOVE_NONE); }
 
 bool8 HasAnyLoweredStat(u8 battler) {
     u8 i;

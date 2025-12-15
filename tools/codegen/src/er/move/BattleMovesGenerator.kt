@@ -29,6 +29,10 @@ object BattleMovesGenerator : Generator {
         """.trimMargin()
         )
 
+        val supportedHitCounts = setOf(0, 1, 2, 3)
+        val badHitCounts = MOVES_LIST.filter { it.hitCount !in supportedHitCounts }
+        check(badHitCounts.isEmpty()) { "Unsupported hit counts for moves: ${badHitCounts.map { it.id }}" }
+
         for (move in MOVES_LIST) {
             writer.appendLine(
                 """
@@ -125,6 +129,8 @@ object BattleMovesGenerator : Generator {
             }
 
             if (argument.isNotBlank()) writer.appendLine("$IND$IND.argument = $argument,")
+
+            if (move.hitCount > 1) writer.appendLine("$IND$IND.hitCountOverride = ${move.hitCount},")
 
             writer.appendLine("$IND},")
         }
