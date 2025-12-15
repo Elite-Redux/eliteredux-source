@@ -1119,6 +1119,7 @@ void PrepareStringBattle(u16 stringId, u8 battler) {
                 gBattlerTarget,
                 FALSE,
                 gAbilities[ability].onStatLowered && IsApplyOnFlagAppropriate(gBattlerTarget, gBattlerTarget, gAbilities[ability].onStatLoweredFor),
+                gStackBattler1 = gBattlerTarget;
                 if (gAbilities[ability].onStatLowered(gBattlerTarget)) {
                     gBattleScripting.abilityPopupOverwrite = ability;
                     BattleScriptCall(BattleScript_AbilityPopUpStack);
@@ -1130,6 +1131,7 @@ void PrepareStringBattle(u16 stringId, u8 battler) {
                 gBattlerTarget,
                 FALSE,
                 gAbilities[ability].onStatLowered && IsApplyOnFlagAppropriate(partner, gBattlerTarget, gAbilities[ability].onStatLoweredFor),
+                gStackBattler1 = partner;
                 if (gAbilities[ability].onStatLowered(partner)) {
                     gBattleScripting.abilityPopupOverwrite = ability;
                     BattleScriptCall(BattleScript_AbilityPopUpStack);
