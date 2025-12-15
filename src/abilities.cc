@@ -2966,6 +2966,7 @@ constexpr Ability Impl<ABILITY_POWER_OF_ALCHEMY> = {
             FILTER(CanBattlerGetOrLoseItem(target, item))
             gStackBattler1 = battler;
             gStackBattler2 = target;
+            gBattleScripting.abilityPopupOverwrite = ability;
             if (!any) {
                 InsertCorrectEndType(callType);
                 any = TRUE;
