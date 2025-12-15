@@ -176,7 +176,8 @@ static void InsertCorrectEndType(AbilityCallType type) {
 template <typename AbilityPredicate>
 static inline AbilityEnum BattlerHasAbility(int battler, int checkMoldBreaker, AbilityPredicate abilityPredicate) {
     for (int j = 0; j < GetNumPossibleAbilitiesForBattler(); j++) {
-        AbilityEnum ability = GetAbilityAtIndex(battler, j, checkMoldBreaker) if (abilityPredicate(ability)) return ability;
+        AbilityEnum ability = GetAbilityAtIndex(battler, j, checkMoldBreaker);
+        if (abilityPredicate(ability)) return ability;
     }
     return ABILITY_NONE;
 }
