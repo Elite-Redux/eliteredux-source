@@ -128,6 +128,12 @@ typedef int (*AbilityOnModifyMoveFlags)(int battler, MoveEnum move, Type type, M
 typedef int (*AbilityOnMoldBreaker)(int battler, MoveEnum move);
 typedef int (*AbilityOnRevive)(int battler);
 typedef int (*AbilityOnStatLowered)(int battler);
+typedef enum {
+    STAT_DROP_BLOCK_NONE = 0,
+    STAT_DROP_BLOCK_ALL = 1,
+    STAT_DROP_BLOCK_SPECIFIC = 2,
+} StatDropBlockType;
+typedef StatDropBlockType (*AbilityOnBlockStatDrops)(int battler, int stat, int selfStatDrop, const u8** script);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -205,6 +211,7 @@ typedef struct Ability {
     AbilityOnMoldBreaker onMoldBreaker;
     AbilityOnRevive onRevive;
     AbilityOnStatLowered onStatLowered;
+    AbilityOnBlockStatDrops onBlockStatDrops;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;
@@ -217,6 +224,7 @@ typedef struct Ability {
     AbilityApplyOn onStatusImmuneFor:3;
     AbilityApplyOnWithTarget onBeforeAttackFor:5;
     AbilityApplyOn onStatLoweredFor:3;
+    AbilityApplyOn onBlockStatDropsFor:3;
     TerrainType allowTerrainIfAirborne:5;
     MoveEffectEnum setStateOnEffect;
     u16 redirectType:5;
@@ -277,6 +285,8 @@ extern const Ability gAbilities[ABILITIES_COUNT];
 int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag);
 int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag);
 int DoesMoveMatchFlag(int battler, MoveEnum move, Type type, MoveFlag flag);
+StatDropBlockType IsStatDropBlocked(u8 battler, int stat, int selfStatDrop);
+StatDropBlockType GetStatDropBlock(u8* battler, int stat, int selfStatDrop, AbilityEnum* ability, const u8** script);
 
 #ifdef __cplusplus
 }

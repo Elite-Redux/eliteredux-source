@@ -3551,7 +3551,7 @@ BattleScript_FlowerVeilProtects:
 BattleScript_SweetVeilProtectsRet::
 	pause B_WAIT_TIME_SHORT
 	call BattleScript_AbilityPopUp
-	printstring STRINGID_FLOWERVEILPROTECTED
+	printstring STRINGID_SWEETVEILPROTECTED
 	waitmessage B_WAIT_TIME_LONG
 	return
 

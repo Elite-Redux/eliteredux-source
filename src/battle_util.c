@@ -2590,9 +2590,9 @@ u8 DoBattlerEndTurnEffects(void) {
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_OCTOLOCK:
-                if (gVolatileStructs[gActiveBattler].octolock &&
-                    !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) ||
-                      GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_CLEAR_AMULET)) {
+
+                if (gVolatileStructs[gActiveBattler].octolock && !IsStatDropBlocked(gActiveBattler, STAT_DEF, FALSE) &&
+                    !IsStatDropBlocked(gActiveBattler, STAT_SPDEF, FALSE) && GetBattlerHoldEffect(gActiveBattler, TRUE) != HOLD_EFFECT_CLEAR_AMULET) {
                     gBattlerTarget = gActiveBattler;
                     BattleScriptExecute(BattleScript_OctolockEndTurn);
                     effect++;
@@ -8169,7 +8169,7 @@ bool32 CanMegaEvolve(u8 battlerId) {
 
     // Check if there is an entry in the evolution table for Wish Mega Evolution.
     if (GetWishMegaEvolutionSpecies(
-            species, GetMonData(mon, MON_DATA_MOVE1), GetMonData(mon, MON_DATA_MOVE2), GetMonData(mon, MON_DATA_MOVE3), GetMonData(mon, MON_DATA_MOVE4))){
+            species, GetMonData(mon, MON_DATA_MOVE1), GetMonData(mon, MON_DATA_MOVE2), GetMonData(mon, MON_DATA_MOVE3), GetMonData(mon, MON_DATA_MOVE4))) {
         gBattleStruct->mega.isWishMegaEvo = TRUE;
         return TRUE;
     }
