@@ -1536,7 +1536,7 @@ void PrintBattleWindow_MoveSelection(void) {
     isStatusMove = gBattleMoves[move].split == SPLIT_STATUS;
     moveType = gBattleMoves[move].type;
     gBattlerAttacker = gActiveBattler;
-    if (ShouldSetMoldBreaker(gActiveBattler, move)) gHitMarker |= HITMARKER_MOLD_BREAKER;
+    SetMoldBreaker(gActiveBattler, move);
     SetTypeBeforeUsingMove(move, gActiveBattler);
     GET_MOVE_TYPE(move, moveType);
     maxDamage =
@@ -1869,7 +1869,7 @@ void PrintBattleWindow_MoveSelection(void) {
                     // Can KO - Todo: Check calculation
                     if (gBattleMoves[newMove].split != SPLIT_STATUS && gBattleMoves[newMove].power > 0) {
                         u8 moveType = gBattleMoves[newMove].type;
-                        if (ShouldSetMoldBreaker(target, newMove)) gHitMarker |= HITMARKER_MOLD_BREAKER;
+                        SetMoldBreaker(target, newMove);
                         SetTypeBeforeUsingMove(newMove, target);
                         GET_MOVE_TYPE(newMove, moveType);
                         moveDamage = CalculateMoveDamageAndEffectiveness(newMove, target, gActiveBattler, &moveType, &typeEffectivenessMultiplier);

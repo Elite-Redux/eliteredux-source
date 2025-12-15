@@ -38,6 +38,7 @@ class __EnumHack {
     operator u32() const { return 0; }
     operator AccuracyPriority() const { return ACCURACY_NO_RESULT; }
     operator MultihitType() const { return MULTIHIT_SINGLE; }
+    operator StatDropBlockType() const { return STAT_DROP_BLOCK_NONE; }
 };
 
 #define ENUM_OR(enumType) \
@@ -144,6 +145,8 @@ ENUM_OR(NonStackingState)
 #define DELEGATE_REVIVE battler
 #define ON_STAT_LOWERED opt int battler
 #define DELEGATE_STAT_LOWERED battler
+#define ON_BLOCK_STAT_DROPS opt int battler, opt int stat, opt int selfStatDrop, const u8 **script
+#define DELEGATE_BLOCK_STAT_DROPS battler, stat, selfStatDrop, script
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -171,20 +174,22 @@ static void InsertCorrectEndType(AbilityCallType type) {
 }
 
 template <typename AbilityPredicate>
-static inline bool BattlerHasAbility(int battler, int checkMoldBreaker, AbilityPredicate abilityPredicate) {
+static inline AbilityEnum BattlerHasAbility(int battler, int checkMoldBreaker, AbilityPredicate abilityPredicate) {
     for (int j = 0; j < GetNumPossibleAbilitiesForBattler(); j++) {
-        if (abilityPredicate(GetAbilityAtIndex(battler, j, checkMoldBreaker))) return true;
+        AbilityEnum ability = GetAbilityAtIndex(battler, j, checkMoldBreaker);
+        if (abilityPredicate(ability)) return ability;
     }
-    return false;
+    return ABILITY_NONE;
 }
 
 template <typename AbilityPredicate, typename BattlerPredicate>
-static inline bool IsAbilityOnField(int breakable, AbilityPredicate abilityPredicate, BattlerPredicate battlerPredicate) {
+static inline AbilityEnum IsAbilityOnField(int breakable, AbilityPredicate abilityPredicate, BattlerPredicate battlerPredicate) {
     for (int i = 0; i < gBattlersCount; i++) {
         if (!battlerPredicate(i)) continue;
-        if (BattlerHasAbility(i, breakable, abilityPredicate)) return true;
+        AbilityEnum ability = BattlerHasAbility(i, breakable, abilityPredicate);
+        if (ability) return ability;
     }
-    return false;
+    return ABILITY_NONE;
 }
 
 template <typename AbilityPredicate>
@@ -447,6 +452,36 @@ int GetClearableHazardFlags(int side) {
 
 u16 GetSuperEffectiveMult() { return isHellMode() == TRUE && HELL_MODE_TYPE_EFFECTIVENESS_CHANGE ? UQ_4_12(1.5) : UQ_4_12(2.0); }
 
+StatDropBlockType IsStatDropBlocked(u8 battler, int stat, int selfStatDrop) {
+    int unused = 0;
+    return GetStatDropBlock(&battler, stat, selfStatDrop, (AbilityEnum*)&unused, (const u8**)&unused);
+}
+
+StatDropBlockType GetStatDropBlock(u8* battler, int stat, int selfStatDrop, AbilityEnum* ability, const u8** script) {
+    StatDropBlockType type = STAT_DROP_BLOCK_NONE;
+    *ability = BattlerHasAbility(*battler, TRUE, [&](AbilityEnum ability) -> StatDropBlockType {
+        CHECK(gAbilities[ability].onBlockStatDrops)
+        type = gAbilities[ability].onBlockStatDrops(*battler, stat, selfStatDrop, script);
+        return type;
+    });
+
+    if (type) return type;
+
+    int partner = BATTLE_PARTNER(*battler);
+
+    if (IsBattlerAlive(partner)) {
+        *ability = BattlerHasAbility(partner, TRUE, [&](AbilityEnum ability) -> StatDropBlockType {
+            CHECK(gAbilities[ability].onBlockStatDrops)
+            type = gAbilities[ability].onBlockStatDrops(*battler, stat, selfStatDrop, script);
+            CHECK(type)
+            *battler = partner;
+            return type;
+        });
+    }
+
+    return type;
+}
+
 template <AbilityEnum Id>
 constexpr Ability Impl = {0};
 
@@ -559,6 +594,11 @@ constexpr Ability Impl<ABILITY_LIMBER> = {
     .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_PARALYSIS)
         return TRUE;
+    },
+    .onBlockStatDrops = +[](ON_BLOCK_STAT_DROPS) -> StatDropBlockType {
+        CHECK(selfStatDrop)
+        *script = BattleScript_AbilityNoStatLoss;
+        return STAT_DROP_BLOCK_ALL;
     },
     .breakable = TRUE,
     .halfRecoil = TRUE,
@@ -812,7 +852,16 @@ constexpr Ability Impl<ABILITY_EFFECT_SPORE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_CLEAR_BODY> = {
+    .onBlockStatDrops = +[](ON_BLOCK_STAT_DROPS) -> StatDropBlockType {
+        *script = BattleScript_AbilityNoStatLoss;
+        return STAT_DROP_BLOCK_ALL;
+    },
     .breakable = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_FULL_METAL_BODY> = {
+    .onBlockStatDrops = Impl<ABILITY_CLEAR_BODY>.onBlockStatDrops,
 };
 
 template <>
@@ -1058,6 +1107,12 @@ constexpr Ability Impl<ABILITY_KEEN_EYE> = {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
     },
+    .onBlockStatDrops = +[](ON_BLOCK_STAT_DROPS) -> StatDropBlockType {
+        CHECK_NOT(selfStatDrop)
+        CHECK(stat == STAT_ACC)
+        *script = BattleScript_AbilityNoSpecificStatLoss;
+        return STAT_DROP_BLOCK_SPECIFIC;
+    },
     .breakable = TRUE,
 };
 
@@ -1066,6 +1121,12 @@ constexpr Ability Impl<ABILITY_HYPER_CUTTER> = {
     .onCrit = +[](ON_CRIT) -> int {
         CHECK(IsMoveMakingContact(move, battler))
         return 1;
+    },
+    .onBlockStatDrops = +[](ON_BLOCK_STAT_DROPS) -> StatDropBlockType {
+        CHECK_NOT(selfStatDrop)
+        CHECK(stat == STAT_ATK || stat == STAT_SPATK)
+        *script = BattleScript_AbilityNoSpecificStatLoss;
+        return STAT_DROP_BLOCK_SPECIFIC;
     },
     .breakable = TRUE,
 };
@@ -2182,7 +2243,14 @@ constexpr Ability Impl<ABILITY_FLOWER_VEIL> = {
         CHECK(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
         return TRUE;
     },
+    .onBlockStatDrops = +[](ON_BLOCK_STAT_DROPS) -> StatDropBlockType {
+        CHECK_NOT(selfStatDrop)
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_GRASS))
+        *script = BattleScript_FlowerVeilProtectsRet;
+        return STAT_DROP_BLOCK_ALL;
+    },
     .onStatusImmuneFor = APPLY_ON_ALLY,
+    .onBlockStatDropsFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
 
@@ -2876,7 +2944,7 @@ constexpr Ability Impl<ABILITY_POWER_OF_ALCHEMY> = {
         int any = FALSE;
         for (int i = GetOppositeSide(battler); i < gBattlersCount; i += 2) {
             FILTER(IsBattlerAlive(i))
-            FILTER(ItemId_GetPocket(GetBattlerHoldEffect(i, FALSE)) == POCKET_BERRIES)
+            FILTER(ItemId_GetPocket(gBattleMons[i].item) == POCKET_BERRIES)
             any = TRUE;
             UpdateBattlerItem(i, ITEM_BLACK_SLUDGE);
             BattleScriptPushCursorAndCallback(BattleScript_End3);
@@ -2895,8 +2963,10 @@ constexpr Ability Impl<ABILITY_POWER_OF_ALCHEMY> = {
             state = state >> 2;
             FILTER(item)
             FILTER_NOT(gBattleMons[target].item)
+            FILTER(CanBattlerGetOrLoseItem(target, item))
             gStackBattler1 = battler;
             gStackBattler2 = target;
+            gBattleScripting.abilityPopupOverwrite = ability;
             if (!any) {
                 InsertCorrectEndType(callType);
                 any = TRUE;
@@ -4947,7 +5017,14 @@ constexpr Ability Impl<ABILITY_DESERT_CLOAK> = {
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
         return TRUE;
     },
+    .onBlockStatDrops = +[](ON_BLOCK_STAT_DROPS) -> StatDropBlockType {
+        CHECK_NOT(selfStatDrop)
+        CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
+        *script = BattleScript_DesertCloakProtectsRet;
+        return STAT_DROP_BLOCK_ALL;
+    },
     .onStatusImmuneFor = APPLY_ON_ALLY,
+    .onBlockStatDropsFor = APPLY_ON_ALLY,
     .breakable = TRUE,
     .sandImmune = TRUE,
 };
@@ -5709,7 +5786,9 @@ constexpr Ability Impl<ABILITY_COMBAT_SPECIALIST> = {
 template <>
 constexpr Ability Impl<ABILITY_JUNGLES_GUARD> = {
     .onStatusImmune = Impl<ABILITY_FLOWER_VEIL>.onStatusImmune,
+    .onBlockStatDrops = Impl<ABILITY_FLOWER_VEIL>.onBlockStatDrops,
     .onStatusImmuneFor = Impl<ABILITY_FLOWER_VEIL>.onStatusImmuneFor,
+    .onBlockStatDropsFor = Impl<ABILITY_FLOWER_VEIL>.onBlockStatDropsFor,
     .breakable = TRUE,
 };
 
@@ -6401,6 +6480,12 @@ constexpr Ability Impl<ABILITY_COSMIC_DUST> = {
 template <>
 constexpr Ability Impl<ABILITY_MINDS_EYE> = {
     .onTypeEffectiveness = Impl<ABILITY_SCRAPPY>.onTypeEffectiveness,
+    .onBlockStatDrops = +[](ON_BLOCK_STAT_DROPS) -> StatDropBlockType {
+        CHECK_NOT(selfStatDrop)
+        CHECK(stat == STAT_ACC)
+        *script = BattleScript_AbilityNoSpecificStatLoss;
+        return STAT_DROP_BLOCK_SPECIFIC;
+    },
     .breakable = TRUE,
 };
 
@@ -10273,7 +10358,7 @@ constexpr Ability Impl<ABILITY_EDGELORD> = {
 
         gStatuses4[battler] |= STATUS4_CUTTHROAT;
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CUTTHROAT;
-        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsgRet);
+        BattleScriptCall(BattleScript_SwitchInAbilityMsgRet);
         return TRUE;
     },
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
@@ -11206,6 +11291,7 @@ constexpr Ability Impl<ABILITY_DEFIANT> = {
     .onStatLowered = +[](ON_STAT_LOWERED) -> int {
         CHECK(CanRaiseStat(battler, STAT_ATK))
         SetStatChanger(STAT_ATK, 2);
+        gStackBattler1 = battler;
         BattleScriptCall(BattleScript_StackBattlerStatUp);
         return TRUE;
     },
@@ -11216,6 +11302,7 @@ constexpr Ability Impl<ABILITY_COMPETITIVE> = {
     .onStatLowered = +[](ON_STAT_LOWERED) -> int {
         CHECK(CanRaiseStat(battler, STAT_SPATK))
         SetStatChanger(STAT_SPATK, 2);
+        gStackBattler1 = battler;
         BattleScriptCall(BattleScript_StackBattlerStatUp);
         return TRUE;
     },
@@ -11232,6 +11319,7 @@ constexpr Ability Impl<ABILITY_RUN_AWAY> = {
     .onStatLowered = +[](ON_STAT_LOWERED) -> int {
         CHECK(CanRaiseStat(battler, STAT_SPEED))
         SetStatChanger(STAT_SPEED, 2);
+        gStackBattler1 = battler;
         BattleScriptCall(BattleScript_StackBattlerStatUp);
         return TRUE;
     },
@@ -11243,11 +11331,13 @@ constexpr Ability Impl<ABILITY_KINGS_WRATH> = {
         int any = FALSE;
         if (CanRaiseStat(battler, STAT_DEF)) {
             SetStatChanger(STAT_DEF, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
         if (CanRaiseStat(battler, STAT_ATK)) {
             SetStatChanger(STAT_ATK, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
@@ -11262,11 +11352,13 @@ constexpr Ability Impl<ABILITY_QUEENS_MOURNING> = {
         int any = FALSE;
         if (CanRaiseStat(battler, STAT_SPDEF)) {
             SetStatChanger(STAT_SPDEF, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
         if (CanRaiseStat(battler, STAT_SPATK)) {
             SetStatChanger(STAT_SPATK, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
@@ -11281,21 +11373,25 @@ constexpr Ability Impl<ABILITY_EMPERORS_WRATH> = {
         int any = FALSE;
         if (CanRaiseStat(battler, STAT_SPDEF)) {
             SetStatChanger(STAT_SPDEF, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
         if (CanRaiseStat(battler, STAT_DEF)) {
             SetStatChanger(STAT_DEF, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
         if (CanRaiseStat(battler, STAT_SPATK)) {
             SetStatChanger(STAT_SPATK, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
         if (CanRaiseStat(battler, STAT_ATK)) {
             SetStatChanger(STAT_ATK, 1);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
@@ -11327,11 +11423,13 @@ constexpr Ability Impl<ABILITY_NARCISSIST> = {
         int any = FALSE;
         if (CanRaiseStat(battler, STAT_SPATK)) {
             SetStatChanger(STAT_SPATK, 2);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
         if (CanRaiseStat(battler, STAT_ATK)) {
             SetStatChanger(STAT_ATK, 2);
+            gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
             any = TRUE;
         }
@@ -11410,7 +11508,9 @@ constexpr Ability Impl<ABILITY_HOME_RUN> = {
         for (int stat : statsToBoost) {
             FILTER(CanRaiseStat(battler, stat))
             any = TRUE;
-            AbilityStatusEffect(static_cast<MoveEffectEnum>(static_cast<int>(MOVE_EFFECT_ATK_PLUS_1) + (stat - 1)));
+            SetStatChanger(stat, 1);
+            gStackBattler1 = battler;
+            BattleScriptCall(BattleScript_StackBattlerStatUp);
         }
 
         return any;
@@ -11734,6 +11834,15 @@ constexpr Ability Impl<ABILITY_BANDIT> = {
 template <>
 constexpr Ability Impl<ABILITY_SURVIVOR_BIAS> = {
     .breakable = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_LUCKY_HALO> = {
+    .onBlockStatDrops = +[](ON_BLOCK_STAT_DROPS) -> StatDropBlockType {
+        CHECK(selfStatDrop)
+        *script = BattleScript_AbilityNoStatLoss;
+        return STAT_DROP_BLOCK_ALL;
+    },
 };
 
 #include "generated/data/abilities/ability_text.hh"

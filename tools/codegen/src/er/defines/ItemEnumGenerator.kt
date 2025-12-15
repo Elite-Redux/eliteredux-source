@@ -2,6 +2,7 @@ package er.defines
 
 import er.Generator
 import er.GeneratorUtils.ITEMS_LIST
+import er.proto.Pocket
 import java.io.OutputStreamWriter
 
 object ItemEnumGenerator : Generator {
@@ -24,6 +25,8 @@ object ItemEnumGenerator : Generator {
             |} ItemEnum;
             |
             |#endif
+            |
+            |#define MAX_POCKET_ITEMS ${(ITEMS_LIST.groupBy { it.grouping } - Pocket.POCKET_NONE).maxOf { it.value.size + 1 }}
             |""".trimMargin()
         )
     }

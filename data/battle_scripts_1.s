@@ -3551,7 +3551,7 @@ BattleScript_FlowerVeilProtects:
 BattleScript_SweetVeilProtectsRet::
 	pause B_WAIT_TIME_SHORT
 	call BattleScript_AbilityPopUp
-	printstring STRINGID_FLOWERVEILPROTECTED
+	printstring STRINGID_SWEETVEILPROTECTED
 	waitmessage B_WAIT_TIME_LONG
 	return
 
@@ -9555,7 +9555,7 @@ BattleScript_StackBattlerStatUp::
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_RestoreAttackerReturn
 	setgraphicalstatchangevalues
 	playanimation BS_ABILITY_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printstring STRINGID_ATTACKER_STATS_ROSE
+	printfromtable gStatUpStringIds
 	readattackerfromstack3
 	return
 

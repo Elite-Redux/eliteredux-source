@@ -2136,11 +2136,6 @@
 	goto \jumpptr
 	.endm
 
-	.macro jumpifleafguardprotected battler:req, jumpptr:req
-	various \battler, VARIOUS_JUMP_IF_LEAF_GUARD_PROTECTED
-	.4byte \jumpptr
-	.endm
-
 	.macro jumpifsafeguard jumpptr:req
 	jumpifabilityflag BS_ATTACKER, ABILITY_INFILTRATOR, 1f
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, \jumpptr

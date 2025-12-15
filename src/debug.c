@@ -262,9 +262,9 @@ struct DebugBattleData {
 };
 
 // EWRAM
-static EWRAM_DATA struct DebugMonData *sDebugMonData = NULL;
-static EWRAM_DATA struct DebugMenuListData *sDebugMenuListData = NULL;
-static EWRAM_DATA struct DebugBattleData *sDebugBattleData = NULL;
+static EWRAM_DATA struct DebugMonData* sDebugMonData = NULL;
+static EWRAM_DATA struct DebugMenuListData* sDebugMenuListData = NULL;
+static EWRAM_DATA struct DebugBattleData* sDebugBattleData = NULL;
 EWRAM_DATA bool8 gIsDebugBattle = FALSE;
 EWRAM_DATA u32 gDebugAIFlags = 0;
 
@@ -598,7 +598,7 @@ static const u8 digitInidicator_10000[] = _("{LEFT_ARROW}+10000{RIGHT_ARROW}    
 static const u8 digitInidicator_100000[] = _("{LEFT_ARROW}+100000{RIGHT_ARROW}   ");
 static const u8 digitInidicator_1000000[] = _("{LEFT_ARROW}+1000000{RIGHT_ARROW}  ");
 static const u8 digitInidicator_10000000[] = _("{LEFT_ARROW}+10000000{RIGHT_ARROW} ");
-const u8 *const gText_DigitIndicator[] = {digitInidicator_1,
+const u8* const gText_DigitIndicator[] = {digitInidicator_1,
                                           digitInidicator_10,
                                           digitInidicator_100,
                                           digitInidicator_1000,
@@ -1123,7 +1123,7 @@ static void Debug_RefreshListMenu(u8 taskId) {
     const u8 sColor_Red[] = _("{COLOR RED}");
     const u8 sColor_Green[] = _("{COLOR GREEN}");
     u8 totalItems = 0, flagResult = 0xFF;
-    u8 const *name = NULL;
+    u8 const* name = NULL;
 
     if (sDebugMenuListData->listId == 0) {
         gMultiuseListMenuTemplate = sDebugMenu_ListTemplate_FlagsVars;
@@ -2328,8 +2328,7 @@ static void DebugAction_FlagsVars_MgbaPrintOnOff(u8 taskId) {
 }
 static void DebugAction_FlagsVars_SeasonsOnOff(u8 taskId) {
     gSaveBlock2Ptr->season++;
-    if(gSaveBlock2Ptr->season > SEASON_WINTER)
-        gSaveBlock2Ptr->season = SEASON_SPRING;
+    if (gSaveBlock2Ptr->season > SEASON_WINTER) gSaveBlock2Ptr->season = SEASON_SPRING;
 }
 static void DebugAction_FlagsVars_RandomOnOff(u8 taskId) {
     if (gSaveBlock2Ptr->innaterandomizedMode == 1) {
@@ -2524,7 +2523,7 @@ static void DebugAction_Give_AllTMs(u8 taskId) {
 }
 
 // Pokemon
-static void ResetMonDataStruct(struct DebugMonData *sDebugMonData) {
+static void ResetMonDataStruct(struct DebugMonData* sDebugMonData) {
     sDebugMonData->mon_speciesId = 1;
     sDebugMonData->mon_level = 1;
     sDebugMonData->isShiny = 0;
@@ -3269,34 +3268,16 @@ static void DebugAction_Give_DayCareEgg(u8 taskId) { TriggerPendingDaycareEgg();
 // *******************************
 // Actions Fill
 static void FillPocket(int pocket) {
-    for (u16 item = 0; item < gItemCountsForPocket[pocket - 1]; item++)
-        AddBagItem(item, 1);
-
+    for (u16 item = 0; item < gItemCountsForPocket[pocket - 1]; item++) AddBagItem(gItemsForPocket[pocket - 1][item], 1);
 }
-static void DebugAction_Fill_PocketItems(u8 taskId) {
-    FillPocket(POCKET_ITEMS);
-}
-static void DebugAction_Fill_PocketPokeBalls(u8 taskId) {
-    FillPocket(POCKET_POKE_BALLS);
-}
-static void DebugAction_Fill_PocketTMHM(u8 taskId) {
-    FillPocket(POCKET_TM_HM);
-}
-static void DebugAction_Fill_PocketBerries(u8 taskId) {
-    FillPocket(POCKET_BERRIES);
-}
-static void DebugAction_Fill_PocketKeyItems(u8 taskId) {
-    FillPocket(POCKET_KEY_ITEMS);
-}
-static void DebugAction_Fill_PocketBattle(u8 taskId) {
-    FillPocket(POCKET_BATTLE);
-}
-static void DebugAction_Fill_PocketMedicine(u8 taskId) {
-    FillPocket(POCKET_MEDICINE);
-}
-static void DebugAction_Fill_PocketMegas(u8 taskId) {
-    FillPocket(POCKET_MEGA_STONES);
-}
+static void DebugAction_Fill_PocketItems(u8 taskId) { FillPocket(POCKET_ITEMS); }
+static void DebugAction_Fill_PocketPokeBalls(u8 taskId) { FillPocket(POCKET_POKE_BALLS); }
+static void DebugAction_Fill_PocketTMHM(u8 taskId) { FillPocket(POCKET_TM_HM); }
+static void DebugAction_Fill_PocketBerries(u8 taskId) { FillPocket(POCKET_BERRIES); }
+static void DebugAction_Fill_PocketKeyItems(u8 taskId) { FillPocket(POCKET_KEY_ITEMS); }
+static void DebugAction_Fill_PocketBattle(u8 taskId) { FillPocket(POCKET_BATTLE); }
+static void DebugAction_Fill_PocketMedicine(u8 taskId) { FillPocket(POCKET_MEDICINE); }
+static void DebugAction_Fill_PocketMegas(u8 taskId) { FillPocket(POCKET_MEGA_STONES); }
 static void DebugAction_Fill_GiveAllItems(u8 taskId) {
     memset(&gSaveBlock1Ptr->itemFlags, -1, sizeof(gSaveBlock1Ptr->itemFlags));
     ClearItem(0);
@@ -3304,8 +3285,8 @@ static void DebugAction_Fill_GiveAllItems(u8 taskId) {
 
 // *******************************
 // Actions Sound
-static const u8 *const gBGMNames[];
-static const u8 *const gSENames[];
+static const u8* const gBGMNames[];
+static const u8* const gSENames[];
 static void DebugAction_Sound_SE(u8 taskId) {
     u8 windowId;
 
@@ -4328,7 +4309,7 @@ SOUND_LIST_BGM
 #undef X
 
 #define X(songId, name) sBGMName_##songId,
-static const u8 *const gBGMNames[] = {SOUND_LIST_BGM};
+static const u8* const gBGMNames[] = {SOUND_LIST_BGM};
 #undef X
 
 // Create SE list
@@ -4337,7 +4318,7 @@ SOUND_LIST_SE
 #undef X
 
 #define X(songId, name) sSEName_##songId,
-static const u8 *const gSENames[] = {SOUND_LIST_SE};
+static const u8* const gSENames[] = {SOUND_LIST_SE};
 #undef X
 
 // *******************************
@@ -4364,20 +4345,10 @@ static void DebugAction_FillBox(u8 taskId) {
 
     personality = Random32();
 
-    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
-    {
-        for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++)
-        {
-            if (!GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_SANITY_HAS_SPECIES))
-            {
-                CreateBoxMon(&boxMon,
-                    i,
-                    100,
-                    32,
-                    personality,
-                    0,
-                    OT_ID_PLAYER_ID,
-                    0);
+    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++) {
+        for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++) {
+            if (!GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_SANITY_HAS_SPECIES)) {
+                CreateBoxMon(&boxMon, i, 100, 32, personality, 0, OT_ID_PLAYER_ID, 0);
 
                 i += 1;
 

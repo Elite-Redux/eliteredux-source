@@ -99,8 +99,75 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_Scott{
         defeated(TRAINER_MONOCHAMP_DRAGON)   &&
         defeated(TRAINER_MONOCHAMP_DARK)     &&
         defeated(TRAINER_MONOCHAMP_FAIRY)){
-            msgbox(format("Congratulations, you have defeated all of the Type Mono Champions, here is your reward, a Rare Candy"))
-            giveitem(ITEM_RARE_CANDY, 1)
+            msgbox(format("Congratulations, you have defeated all of the Type Mono Champions, here are your rewards, some exclusive Pokemon and items!"))
+            
+            givemon(SPECIES_BEWEAR_ANGRY, 80, ITEM_NONE)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got an {COLOR BLUE}Angry Bewear{COLOR DARK_GRAY}!"))
+            waitfanfare
+
+            givemon(SPECIES_CALYREX_CLOUD_RIDER, 80, ITEM_NONE)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Cloud Rider Calyrex{COLOR DARK_GRAY}!"))
+            waitfanfare
+
+            givemon(SPECIES_SOLROCK_SYSTEM, 80, ITEM_NONE)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Solrock System{COLOR DARK_GRAY}!"))
+            waitfanfare
+
+            givemon(SPECIES_LEDIAN_PARADOX, 80, ITEM_NONE)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got an {COLOR BLUE}Iron Heart{COLOR DARK_GRAY}!"))
+            waitfanfare
+
+            givemon(SPECIES_DRAGONITE_DELIVERY, 80, ITEM_NONE)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Delivery Dragonite{COLOR DARK_GRAY}!"))
+            waitfanfare
+
+            givemon(SPECIES_DARKRAI_NIGHTMARE, 80, ITEM_NONE)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Nightmare Darkrai{COLOR DARK_GRAY}!"))
+            waitfanfare
+
+            givemon(SPECIES_MAWILE_REDUX_B, 80, ITEM_MAWILITE_R_B)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Redux Mawile B{COLOR DARK_GRAY}!"))
+            waitfanfare
+
+            givemon(SPECIES_WEAVILE_REDUX, 80, ITEM_WEAVILEITE_R)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Redux Weavile{COLOR DARK_GRAY}!"))
+            waitfanfare
+
+            givemon(SPECIES_RIBOMBEE_REDUX, 80, ITEM_RIBOMBITE_R)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Redux Ribombee{COLOR DARK_GRAY}!"))
+            waitfanfare
+
+            givemon(SPECIES_MIMIKYU_APEX, 80, ITEM_PHANTOM_METEOR)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got an {COLOR BLUE}Apex Mimikyu{COLOR DARK_GRAY}!"))
+            waitfanfare
+            
+            givemon(SPECIES_FLYGON_REDUX_B, 80, ITEM_FLYGONITE_R_B)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Redux Flygon B{COLOR DARK_GRAY}!"))
+            waitfanfare
+
+            givemon(SPECIES_WIGGLYTUFF_APEX, 80, ITEM_WIGGLITUFF_ORB)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got an {COLOR BLUE}Apex Wigglytuff{COLOR DARK_GRAY}!"))
+            waitfanfare
+
+            giveitem(ITEM_SNORLAX_ORB, 1)
+            giveitem(ITEM_VICTINI_ORB, 1)
+            giveitem(ITEM_DRACOVISHITE, 1)
+            giveitem(ITEM_ABOMASITE_S, 1)
+            giveitem(ITEM_GALACTIC_ORB, 1)
+            giveitem(ITEM_CHIEN_PAOITE, 1)
+
             msgbox(format("If you want to try again just talk to me"))
             warp(MAP_EVER_GRANDE_CITY, 255, 25, 46)
     }
