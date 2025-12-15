@@ -972,11 +972,20 @@ bool8 PartyIsMaxLevel(void) {
     return TRUE;
 }
 
-int ShouldSetMoldBreaker(int battler, MoveEnum move) {
-    if (gBattleMoves[move].flags & FLAG_TARGET_ABILITY_IGNORED) return TRUE;
-    if (getMonotypeChampType() == TYPE_STEEL && GetBattlerSide(battler) != B_SIDE_PLAYER) return TRUE;
-    ON_ABILITY(battler, FALSE, gAbilities[ability].onMoldBreaker, if (gAbilities[ability].onMoldBreaker(battler, move)) return TRUE)
-    return FALSE;
+int SetMoldBreaker(int battler, MoveEnum move) {
+    gHitMarker &= ~HITMARKER_MOLD_BREAKER;
+    if (gBattleMoves[move].flags & FLAG_TARGET_ABILITY_IGNORED)
+        gHitMarker |= HITMARKER_MOLD_BREAKER;
+    else if (getMonotypeChampType() == TYPE_STEEL && GetBattlerSide(battler) != B_SIDE_PLAYER)
+        gHitMarker |= HITMARKER_MOLD_BREAKER;
+    else {
+        ON_ABILITY(
+            battler, FALSE, gAbilities[ability].onMoldBreaker, if (gAbilities[ability].onMoldBreaker(battler, move)) {
+                gHitMarker |= HITMARKER_MOLD_BREAKER;
+                break;
+            })
+    }
+    return gHitMarker & HITMARKER_MOLD_BREAKER;
 }
 
 MultihitType GetParentalBondType(int battler, int target, MoveEnum move, int moveType) {
@@ -1477,7 +1486,7 @@ static const u8 sCriticalHitChance[] = {16, 8, 4, 3, 2};  // Gens 2,3,4,5
 s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, MoveEnum move, u16 typeEffectiveness) {
     u32 holdEffectAtk = GetBattlerHoldEffect(battlerAtk, TRUE);
 
-    if (gSideStatuses[battlerDef] & SIDE_STATUS_LUCKY_CHANT || gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT) {
+    if (gSideStatuses[battlerDef] & SIDE_STATUS_LUCKY_CHANT || gStatuses3[battlerAtk] & STATUS3_CANT_SCORE_A_CRIT) {
         return NEVER_CRIT;
     }
 

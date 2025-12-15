@@ -226,7 +226,7 @@ void HandleAction_UseMove(void) {
             gBattleResults.lastUsedMoveOpponent = gCurrentMove;
     }
 
-    if (ShouldSetMoldBreaker(gBattlerAttacker, gChosenMove)) gHitMarker |= HITMARKER_MOLD_BREAKER;
+    SetMoldBreaker(gBattlerAttacker, gChosenMove);
 
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_MYCELIUM_MIGHT, FALSE)) gHitMarker |= HITMARKER_MYCELIUM_MIGHT;
 
@@ -3861,7 +3861,7 @@ void IncrementSingleUseAbilityCounter(u8 battler, AbilityEnum ability, u8 value)
 AbilityStates GetAbilityStateAs(u8 battler, AbilityEnum ability) { return (AbilityStates){.intValue = GetAbilityState(battler, ability)}; }
 
 u32 GetAbilityState(u8 battler, AbilityEnum ability) {
-    int index = GetAbilityIndex(battler, ability, TRUE);
+    int index = GetAbilityIndex(battler, ability, FALSE);
 
     if (index >= GetNumPossibleAbilitiesForBattler()) return 0;
 
@@ -3871,7 +3871,7 @@ u32 GetAbilityState(u8 battler, AbilityEnum ability) {
 void SetAbilityStateAs(u8 battler, AbilityEnum ability, AbilityStates value) { SetAbilityState(battler, ability, value.intValue); }
 
 void SetAbilityState(u8 battler, AbilityEnum ability, u32 value) {
-    int index = GetAbilityIndex(battler, ability, TRUE);
+    int index = GetAbilityIndex(battler, ability, FALSE);
 
     if (index >= GetNumPossibleAbilitiesForBattler()) return;
 
@@ -8657,7 +8657,7 @@ bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags) {
     return FALSE;
 }
 
-bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler) { return ShouldSetMoldBreaker(battler, MOVE_NONE); }
+bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler) { return SetMoldBreaker(battler, MOVE_NONE); }
 
 bool8 HasAnyLoweredStat(u8 battler) {
     u8 i;

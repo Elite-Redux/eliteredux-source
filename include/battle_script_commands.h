@@ -74,7 +74,7 @@ void SetCudChew(u32 battlerId, u32 itemId);
 void SetBattlerAffectedFlag(int attacker, int target, AbilityEnum ability);
 void ClearBattlerAffectedFlag(int attacker, int target, AbilityEnum ability);
 int GetWeatherChangeMultistringChooser(int weather);
-int ShouldSetMoldBreaker(int battler, MoveEnum move);
+int SetMoldBreaker(int battler, MoveEnum move);
 int EatTargetBerry(int battler, int target);
 void ClearPowerOfAlchemyState(int alchemyBattler, int battler);
 int UpdateBattlerItem(int battler, int newItem);

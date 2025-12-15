@@ -1061,7 +1061,7 @@ bool32 DoesBattlerIgnoreAbilityChecks(u8 battler, u8 battlerDef, u16 move) {
 
     if (DoesBattlerHaveAbilityShield(battlerDef)) return FALSE;
 
-    return ShouldSetMoldBreaker(battler, move);
+    return SetMoldBreaker(battler, move);
 }
 
 bool32 AI_WeatherHasEffect(void) { return WEATHER_HAS_EFFECT; }

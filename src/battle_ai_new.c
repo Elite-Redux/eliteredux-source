@@ -77,7 +77,7 @@ void IterateForPhase(AiProcessingPhase phase, struct AiData* aiData) {
             struct MoveContainer* container = &aiData->moveState[battlerAtk][moveNum];
             FILTER_NOT(container->unusable)
             gHitMarker &= ~(HITMARKER_MOLD_BREAKER | HITMARKER_MYCELIUM_MIGHT);
-            if (ShouldSetMoldBreaker(battlerAtk, container->move)) gHitMarker |= HITMARKER_MOLD_BREAKER;
+            SetMoldBreaker(battlerAtk, container->move);
             if (BattlerHasAbility(battlerAtk, ABILITY_MYCELIUM_MIGHT, FALSE)) gHitMarker |= HITMARKER_MYCELIUM_MIGHT;
             for (targetNum = 0; targetNum < container->count; targetNum++) {
                 struct MoveState* state = &container->targetData[targetNum];
