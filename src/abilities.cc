@@ -2963,6 +2963,7 @@ constexpr Ability Impl<ABILITY_POWER_OF_ALCHEMY> = {
             state = state >> 2;
             FILTER(item)
             FILTER_NOT(gBattleMons[target].item)
+            FILTER(CanBattlerGetOrLoseItem(target, item))
             gStackBattler1 = battler;
             gStackBattler2 = target;
             if (!any) {
