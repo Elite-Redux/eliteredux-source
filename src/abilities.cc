@@ -11495,7 +11495,9 @@ constexpr Ability Impl<ABILITY_HOME_RUN> = {
         for (int stat : statsToBoost) {
             FILTER(CanRaiseStat(battler, stat))
             any = TRUE;
-            AbilityStatusEffect(static_cast<MoveEffectEnum>(static_cast<int>(MOVE_EFFECT_ATK_PLUS_1) + (stat - 1)));
+            SetStatChanger(stat, 1);
+            gStackBattler1 = battler;
+            BattleScriptCall(BattleScript_StackBattlerStatUp);
         }
 
         return any;
