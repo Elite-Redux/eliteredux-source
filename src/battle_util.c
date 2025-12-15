@@ -9273,7 +9273,7 @@ AbilityEnum BattlerHasAbility(int battler, AbilityEnum ability, int checkMoldBre
     u8 i;
 
     for (i = 0; i < GetNumPossibleAbilitiesForBattler(); i++) {
-        if (GetBattlerAbilityInSlot(battler, i) == ability) return ability;
+        if (GetBattlerAbilityInSlot(battler, i) == ability && !IsSuppressed(battler, ability, checkMoldBreaker)) return ability;
     }
 
     return FALSE;
