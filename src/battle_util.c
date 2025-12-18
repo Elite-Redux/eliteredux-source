@@ -6486,7 +6486,7 @@ bool32 IsBattlerProtected(u8 battlerId, MoveEnum move) {
         return TRUE;
     else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_MAT_BLOCK && !IS_MOVE_STATUS(move))
         return TRUE;
-    else if (gRoundStructs[battlerId].tanglingHusked && moveType == TYPE_FIRE)
+    else if (gRoundStructs[battlerId].tanglingHusked && moveType != TYPE_FIRE)
         return TRUE;
     else
         return FALSE;
