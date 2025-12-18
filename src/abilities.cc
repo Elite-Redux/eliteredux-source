@@ -4117,7 +4117,7 @@ constexpr Ability Impl<ABILITY_SWEET_DREAMS> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
-        CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
+        CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || IsComatose(battler))
 
         gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
         if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
