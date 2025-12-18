@@ -472,6 +472,7 @@ StatDropBlockType GetStatDropBlock(u8* battler, int stat, int selfStatDrop, Abil
     if (IsBattlerAlive(partner)) {
         *ability = BattlerHasAbility(partner, TRUE, [&](AbilityEnum ability) -> StatDropBlockType {
             CHECK(gAbilities[ability].onBlockStatDrops)
+            CHECK(IsApplyOnFlagAppropriate(*battler, partner, gAbilities[ability].onBlockStatDropsFor))
             type = gAbilities[ability].onBlockStatDrops(*battler, stat, selfStatDrop, script);
             CHECK(type)
             *battler = partner;
@@ -10700,7 +10701,7 @@ constexpr Ability Impl<ABILITY_STRIKEOUT> = {
         }
 
         SetAbilityState(battler, ability, FALSE);
-        return any;
+        return any ? NO_ANNOUNCE : FALSE;
     },
 
     .onDefender = +[](ON_DEFENDER) -> int {
