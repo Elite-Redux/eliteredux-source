@@ -2521,11 +2521,11 @@ u8 DoBattlerEndTurnEffects(void) {
                      (gStatuses4[gActiveBattler] & STATUS4_SALT_CURE)) &&
                     gBattleMons[gActiveBattler].hp != 0) {
                     MAGIC_GUARD_CHECK;
-                    gBattleMoveDamage = (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_WATER) || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_WATER))
+                    gBattleMoveDamage = (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_WATER) || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL))
                                             ? gBattleMons[gActiveBattler].maxHP / 4
                                             : gBattleMons[gActiveBattler].maxHP / 8;
                     if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-                    BattleScriptExecute(BattleScript_CurseTurnDmg);
+                    BattleScriptExecute(BattleScript_SaltCureTurnDmg);
                     effect++;
                 }
                 gBattleStruct->turnEffectsTracker++;

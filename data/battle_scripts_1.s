@@ -9303,7 +9303,7 @@ BattleScript_CurseTurnDmg::
 BattleScript_SaltCureTurnDmg::
 	playanimation BS_TARGET, B_ANIM_SALT_CURE_DAMAGE, NULL
 	waitanimation
-	printstring STRINGID_PKMNAFFLICTEDBYCURSE
+	printstring STRINGID_PKMNAFFLICTEDBYSALTCURE
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_DoTurnDmg
 
