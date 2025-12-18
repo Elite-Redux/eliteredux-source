@@ -9994,6 +9994,8 @@ constexpr Ability Impl<ABILITY_SURPRISE> = {
         MoveEnum move = GetChosenMove(turnBattler);
         int targetFlag = GetBattlerBattleMoveTargetFlags(move, turnBattler);
 
+        CHECK(GetMovePriority(turnBattler, move, gBattleStruct->moveTarget[turnBattler]))
+
         switch (targetFlag) {
             case MOVE_TARGET_BOTH:
             case MOVE_TARGET_RANDOM:
