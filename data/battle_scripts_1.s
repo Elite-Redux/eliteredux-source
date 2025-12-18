@@ -10680,6 +10680,7 @@ BattleScript_ToxicTerrainDamages::
 	waitmessage B_WAIT_TIME_LONG
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
+	tryfaintmon BS_ATTACKER, FALSE, NULL
 	end2
 
 BattleScript_AbilityNoSpecificStatLoss::
