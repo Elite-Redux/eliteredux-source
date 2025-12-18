@@ -9,7 +9,7 @@ object AdoptionCenterMegasGenerator : Generator {
     override fun generate(writer: OutputStreamWriter) {
         val adoptionCenterMegas = ITEMS_LIST.filter { it.adoptionCenter }
         val adoptionCenterIds = adoptionCenterMegas.sortedBy { it.name }.map { it.id }
-        
+
         writer.appendLine(
             """
             |#define ALL_ADOPTION_CENTER_MEGAS \
