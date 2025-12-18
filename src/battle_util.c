@@ -4847,7 +4847,7 @@ bool8 IsSleepDisabled(u8 battlerId) {
 
     for (i = 0; i < PARTY_SIZE; i++) {
         if ((GetMonData(&party[i], MON_DATA_STATUS) & (STATUS1_SLEEP)) && GetMonData(&party[i], MON_DATA_SPECIES2) != SPECIES_EGG &&
-            GetMonData(&party[i], MON_DATA_SPECIES2) != SPECIES_NONE)
+            GetMonData(&party[i], MON_DATA_SPECIES2) != SPECIES_NONE && GetMonData(&party[i], MON_DATA_HP))
             asleepmons++;
     }
 
@@ -9136,8 +9136,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
 
         // Dragon Monotype
         if (getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(battler) == B_SIDE_PLAYER && !gVolatileStructs[battler].usedMonotypeEntry) {
-            
-            gBattleScripting.abilityPopupOverwrite = ABILITY_FEARMONGER;
+                        gBattleScripting.abilityPopupOverwrite = ABILITY_FEARMONGER;
             gVolatileStructs[battler].usedMonotypeEntry = TRUE;
 
             if (UseIntimidateClone(ABILITY_FEARMONGER, B_SIDE_OPPONENT)) {
