@@ -158,6 +158,7 @@ struct VolatileStruct
     u8 hazardDamaged:1;
     u8 iceStatue:1;
     u8 strikeoutCount:2;
+    u8 usedMonotypeEntry:1;
 };
 
 struct RoundStruct

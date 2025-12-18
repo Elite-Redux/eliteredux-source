@@ -9135,9 +9135,14 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
         }
 
         // Dragon Monotype
-        if (getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(battler) == B_SIDE_PLAYER) {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_FEARMONGER;  // Pop up non-functional: to be fixed?
-            effect += UseIntimidateClone(ABILITY_FEARMONGER, B_SIDE_OPPONENT);
+        if (getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(battler) == B_SIDE_PLAYER && !gVolatileStructs[battler].usedMonotypeEntry) {
+            gVolatileStructs[battler].usedMonotypeEntry = TRUE;
+            if (UseIntimidateClone(ABILITY_FEARMONGER, B_SIDE_OPPONENT)) {
+                effect = TRUE;
+                gBattleScripting.abilityPopupOverwrite = ABILITY_FEARMONGER;
+                gBattlerAbility = battler;
+                BattleScriptCall(BattleScript_AbilityPopUp);
+            }
         }
 
         // Totem Boost
