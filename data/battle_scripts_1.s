@@ -804,6 +804,7 @@ BattleScript_EffectPoltergeist:
 	checkpoltergeist BS_TARGET, BattleScript_ButItFailed
 	printstring STRINGID_ABOUTTOUSEPOLTERGEIST
 	waitmessage B_WAIT_TIME_LONG
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	goto BattleScript_HitFromCritCalc
 
 BattleScript_EffectTarShot:
