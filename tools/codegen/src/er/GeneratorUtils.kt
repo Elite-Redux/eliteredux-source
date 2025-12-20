@@ -68,6 +68,10 @@ object GeneratorUtils {
         SPECIES_LIST.associateBy { it.id }
     }
 
+    val RANDOMIZER_CONFIG by lazy {
+        TextFormat.parse(File("../../proto/LimitedRandomizerConfig.textproto").readText(), LimitedRandomizerConfig::class.java)
+    }
+
     fun findLearnsetForSpecies(species: Species): Learnset =
         when {
             species.id == SpeciesEnum.SPECIES_NONE -> species.learnset
