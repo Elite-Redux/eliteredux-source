@@ -3752,6 +3752,7 @@ static void Task_EvolveMon(u8 taskId) {
     u8 i;
     u8 pos = GetCursorPosition();
     u8 boxId = StorageGetCurrentBox();
+    SpeciesEnum currentSpecies = SPECIES_NONE;
     SpeciesEnum targetSpecies = SPECIES_NONE;
     u8 numEvo = 0;
     u8 targetNumEvo = 0;
@@ -3787,16 +3788,21 @@ static void Task_EvolveMon(u8 taskId) {
                         }
                     }
 
+                    currentSpecies = pokemon.box.species;
                     targetSpecies = GetEvolutionForMon(&pokemon, targetNumEvo);
 
                     if (sInPartyMenu) {
                         SetMonData(&gPlayerParty[pos], MON_DATA_SPECIES, &targetSpecies);
-                        SetMonData(&gPlayerParty[pos], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
+                        GetMonData(&gPlayerParty[pos], MON_DATA_NICKNAME, gStringVar1);
+                        if (!StringCompare(gSpeciesNames[currentSpecies], gStringVar1))
+                            SetMonData(&gPlayerParty[pos], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
                         CalculateMonStats(&gPlayerParty[pos]);
                         UpdateSpeciesSpritePSS_Mon(&gPlayerParty[pos]);
                     } else {
                         SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_SPECIES, &targetSpecies);
-                        SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
+                        GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_NICKNAME, gStringVar1);
+                        if (!StringCompare(gSpeciesNames[currentSpecies], gStringVar1))
+                            SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
                         UpdateSpeciesSpritePSS(&gPokemonStoragePtr->boxes[boxId][pos]);
                     }
 
