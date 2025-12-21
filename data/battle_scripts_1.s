@@ -8198,8 +8198,11 @@ BattleScript_PrintHurtByDmgHazards::
 	return
 
 BattleScript_ToxicSpikesAbsorbed::
+	saveattackertostack3
+	copybyte gBattlerAttacker, gStackBattler1
 	printstring STRINGID_TOXICSPIKESABSORBED
 	waitmessage B_WAIT_TIME_LONG
+	readattackerfromstack3
 	return
 
 BattleScript_CaltropsFade::
