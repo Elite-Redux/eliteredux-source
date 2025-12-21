@@ -4357,6 +4357,7 @@ template <>
 constexpr Ability Impl<ABILITY_BONE_ZONE> = {
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (!(gBattleMoves[move].flags & FLAG_BONE_BASED)) return;
             if (*mod >= UQ_4_12(1.0)) return;
             if (*mod == 0) {
                 *mod = UQ_4_12(1.0);
