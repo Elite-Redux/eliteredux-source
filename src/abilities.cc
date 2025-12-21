@@ -1091,8 +1091,8 @@ constexpr Ability Impl<ABILITY_THICK_FAT> = {
 ON_EITHER(FlameBody) {
     CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanBeBurned(opponent))
-    CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-    CHECK(Random() % 100 < 30)
+    int chance = IsMoveMakingContact(move, gBattlerAttacker) ? 30 : 20;
+    CHECK(Random() % 100 < chance)
 
     AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
     return TRUE;
@@ -6090,7 +6090,8 @@ ON_EITHER(FreezingPoint) {
     CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanGetFrostbite(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-    CHECK(Random() % 100 < 30)
+    int chance = IsMoveMakingContact(move, gBattlerAttacker) ? 30 : 20;
+    CHECK(Random() % 100 < chance)
 
     AbilityStatusEffectSafe(MOVE_EFFECT_FROSTBITE, battler, opponent);
     return TRUE;
