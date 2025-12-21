@@ -10929,14 +10929,14 @@ constexpr Ability Impl<ABILITY_SAP_TRAP> = {
         int any = FALSE;
 
         int target = BATTLE_OPPOSITE(battler);
-        if (CanLowerStat(target, STAT_SPEED)) {
+        if (IsBattlerAlive(target) && CanLowerStat(target, STAT_SPEED)) {
             InsertCorrectEndType(ABILITY_BS_EXECUTE);
             any = TRUE;
             AbilityStatusEffectSafe(MOVE_EFFECT_SPD_MINUS_1, battler, target);
         }
 
         target = BATTLE_PARTNER(target);
-        if (CanLowerStat(target, STAT_SPEED)) {
+        if (IsBattlerAlive(target) && CanLowerStat(target, STAT_SPEED)) {
             if (!any) InsertCorrectEndType(ABILITY_BS_EXECUTE);
             any = TRUE;
             AbilityStatusEffectSafe(MOVE_EFFECT_SPD_MINUS_1, battler, target);
