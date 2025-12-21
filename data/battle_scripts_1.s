@@ -1126,6 +1126,7 @@ BattleScript_EffectRemoveTerrain:
 	printfromtable gTerrainEndingStringIds
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
+	call BattleScript_OnTerrainChanged
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
 
@@ -1136,6 +1137,7 @@ BattleScript_Lawnmower::
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
 	call BattleScript_PerformStatUp
+	call BattleScript_OnTerrainChanged
 BattleScript_End3::
 	end3
 
@@ -1153,6 +1155,7 @@ BattleScript_CurseOfFamine_Continue:
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
 	call BattleScript_PerformStatUp
+	call BattleScript_OnTerrainChanged
 	jumpifstatus BS_ATTACKER, STATUS1_BLEED, BattleScript_End3
 	jumpifhealingblocked BS_ATTACKER, BattleScript_End3
 	call BattleScript_HealHpOver4
@@ -1189,6 +1192,7 @@ BattleScript_EffectClearWeatherAndTerrainHit_TryTerrain:
 	printfromtable gTerrainEndingStringIds
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
+	call BattleScript_OnTerrainChanged
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
 
@@ -1217,6 +1221,7 @@ BattleScript_EffectRemoveTerrainNoFail:
 	printfromtable gTerrainEndingStringIds
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
+	call BattleScript_OnTerrainChanged
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
 
@@ -8955,6 +8960,8 @@ BattleScript_TeraformZero_ClearTerrain:
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_End3
 	printfromtable gTerrainEndingStringIds
 	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
+	call BattleScript_OnTerrainChanged
 	end3
 
 BattleScript_StackBattlerFormChange::
@@ -12110,24 +12117,28 @@ BattleScript_Archmage_Effect_Type_Electric::
 	printstring STRINGID_TERRAINBECOMESELECTRIC
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
+	call BattleScript_OnTerrainChanged
 	return
 
 BattleScript_Archmage_Effect_Type_Fairy::
 	printstring STRINGID_TERRAINBECOMESMISTY
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
+	call BattleScript_OnTerrainChanged
 	return
 
 BattleScript_Archmage_Effect_Type_Grass::
 	printstring STRINGID_TERRAINBECOMESGRASSY
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
+	call BattleScript_OnTerrainChanged
 	return
 
 BattleScript_Archmage_Effect_Type_Psychic::
 	printstring STRINGID_TERRAINBECOMESPSYCHIC
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
+	call BattleScript_OnTerrainChanged
 	return
 
 BattleScript_Archmage_Effect_Type_Normal::
