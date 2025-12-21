@@ -1136,8 +1136,10 @@ BattleScript_Lawnmower::
 	printfromtable gTerrainEndingStringIds
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
-	call BattleScript_PerformStatUp
 	call BattleScript_OnTerrainChanged
+	statbuffchange STAT_BUFF_NOT_PROTECT_AFFECTED | STAT_BUFF_ALLOW_PTR, BattleScript_End3
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_End3
+	call BattleScript_PerformStatUp
 BattleScript_End3::
 	end3
 
@@ -1154,8 +1156,10 @@ BattleScript_CurseOfFamine_Continue:
 	printfromtable gTerrainEndingStringIds
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
-	call BattleScript_PerformStatUp
 	call BattleScript_OnTerrainChanged
+	statbuffchange STAT_BUFF_NOT_PROTECT_AFFECTED | STAT_BUFF_ALLOW_PTR, BattleScript_End3
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_End3
+	call BattleScript_PerformStatUp
 	jumpifstatus BS_ATTACKER, STATUS1_BLEED, BattleScript_End3
 	jumpifhealingblocked BS_ATTACKER, BattleScript_End3
 	call BattleScript_HealHpOver4
