@@ -6091,7 +6091,7 @@ ON_EITHER(FreezingPoint) {
     CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanGetFrostbite(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-    int chance = IsMoveMakingContact(move, gBattlerAttacker) ? 30 : 20;
+    int chance = IsMoveMakingContact(move, gBattlerAttacker) ? 20 : 30;
     CHECK(Random() % 100 < chance)
 
     AbilityStatusEffectSafe(MOVE_EFFECT_FROSTBITE, battler, opponent);
