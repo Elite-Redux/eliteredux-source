@@ -1261,7 +1261,7 @@ template <>
 constexpr Ability Impl<ABILITY_MARVEL_SCALE> = {
     .onStat =
         +[](ON_STAT) {
-            if ((statId == STAT_DEF || statId == STAT_SPDEF) && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
+            if ((statId == STAT_DEF) && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
         },
 };
 
