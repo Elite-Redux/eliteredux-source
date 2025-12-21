@@ -10691,17 +10691,20 @@ constexpr Ability Impl<ABILITY_STRIKEOUT> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         int any = FALSE;
 
-        if (gVolatileStructs[battler].strikeoutCount == 2) {
+        if (!GetAbilityState(battler, ability) && gVolatileStructs[battler].isFirstTurn != 2) {
+            gVolatileStructs[battler].strikeoutCount += 1;
+        }
+
+        if (gVolatileStructs[battler].strikeoutCount == 3) {
             gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
                 .ability = ability,
-                .move = MOVE_ROAR,
+                .move = MOVE_WHIRLWIND,
+                .movePower = 20,
                 .attacker = battler,
                 .target = GetOppositeSide(battler),
             };
             gVolatileStructs[battler].strikeoutCount = 0;
             any = TRUE;
-        } else if (!GetAbilityState(battler, ability) && gVolatileStructs[battler].isFirstTurn != 2) {
-            gVolatileStructs[battler].strikeoutCount += 1;
         }
 
         SetAbilityState(battler, ability, FALSE);
@@ -10710,7 +10713,6 @@ constexpr Ability Impl<ABILITY_STRIKEOUT> = {
 
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
-        gVolatileStructs[battler].strikeoutCount = 0;
         SetAbilityState(battler, ability, TRUE);
         return FALSE;
     },
