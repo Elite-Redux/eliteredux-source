@@ -11456,9 +11456,15 @@ constexpr Ability Impl<ABILITY_RAINBOW_SCALES> = {
 
 template <>
 constexpr Ability Impl<ABILITY_HOME_RUN> = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(GetAbilityState(battler, ability))
+        SetAbilityState(battler, ability, 0);
+        return FALSE;
+    },
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(gIsCriticalHit)
         CHECK(ShouldApplyOnHitEffect(battler))
+        CHECK_NOT(GetAbilityState(battler, ability))
 
         u8 secondaryStat[6] = {0};
         u32 temp = 0;
@@ -11500,6 +11506,7 @@ constexpr Ability Impl<ABILITY_HOME_RUN> = {
         for (int stat : statsToBoost) {
             FILTER(CanRaiseStat(battler, stat))
             any = TRUE;
+            SetAbilityState(battler, ability, 1);
             SetStatChanger(stat, 1);
             gStackBattler1 = battler;
             BattleScriptCall(BattleScript_StackBattlerStatUp);
