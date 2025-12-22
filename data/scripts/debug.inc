@@ -56,10 +56,8 @@ Debug_Script_3::
 	end
 
 Debug_Script_4::
-	//additem ITEM_MEGA_BRACELET
-	setflag FLAG_HIDE_LILYCOVE_CITY_AQUA_GRUNTS
-	setflag FLAG_BADGE07_GET
-	setflag FLAG_BADGE05_GET
+	additem ITEM_MEGA_BRACELET
+	setflag FLAG_SYS_RECEIVED_KEYSTONE
 	end
 
 Debug_Script_5::
