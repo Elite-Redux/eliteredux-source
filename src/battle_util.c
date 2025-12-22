@@ -119,7 +119,7 @@ bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move) {
         BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PROPELLER_TAIL) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_STALWART))
         return FALSE;
 
-    if (gSideTimers[defSide].followmePowder && !IsPowderImmune(battlerAtk, TRUE)) return FALSE;
+    if (gSideTimers[defSide].followmePowder && IsPowderImmune(battlerAtk, TRUE)) return FALSE;
 
     return TRUE;
 }

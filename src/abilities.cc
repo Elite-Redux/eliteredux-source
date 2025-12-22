@@ -323,7 +323,7 @@ static int PoisonPuppeteerClone(AbilityEnum ability, int battler, int (*predicat
         FILTER(predicate(battler, target))
 
         gStackBattler1 = gBattlerAttacker;
-        gStackBattler2 = gBattlerTarget;
+        gStackBattler2 = target;
         BattleScriptCall(callback);
         any = TRUE;
     }
@@ -10342,12 +10342,12 @@ constexpr Ability Impl<ABILITY_STONECUTTER> = {
     .onDefensiveMultiplier = Impl<ABILITY_FOSSILIZED>.onDefensiveMultiplier,
     .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
         gHitMarker |= HITMARKER_MOLD_BREAKER;
-        SetTypeBeforeUsingMove(move, gActiveBattler);
+        SetTypeBeforeUsingMove(move, battler);
         u8 moveType;
         GET_MOVE_TYPE(move, moveType)
         if (gBattleMoves[move].type2) {
             u16 typeEffectiveness;
-            CalculateMoveDamageAndEffectiveness(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, &typeEffectiveness);
+            CalculateMoveDamageAndEffectiveness(move, battler, gBattlerTarget, &moveType, &typeEffectiveness);
         }
         gHitMarker &= ~HITMARKER_MOLD_BREAKER;
         return moveType == TYPE_ROCK;
@@ -10744,11 +10744,11 @@ template <>
 constexpr Ability Impl<ABILITY_DEADLY_PRECISION> = {
     .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
         gHitMarker |= HITMARKER_MOLD_BREAKER;
-        SetTypeBeforeUsingMove(move, gActiveBattler);
+        SetTypeBeforeUsingMove(move, battler);
         u8 moveType;
         GET_MOVE_TYPE(move, moveType)
         u16 typeEffectiveness;
-        CalculateMoveDamageAndEffectiveness(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, &typeEffectiveness);
+        CalculateMoveDamageAndEffectiveness(move, battler, gBattlerTarget, &moveType, &typeEffectiveness);
         gHitMarker &= ~HITMARKER_MOLD_BREAKER;
         return typeEffectiveness >= GetSuperEffectiveMult();
     },
