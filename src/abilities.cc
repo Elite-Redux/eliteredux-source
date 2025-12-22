@@ -323,7 +323,7 @@ static int PoisonPuppeteerClone(AbilityEnum ability, int battler, int (*predicat
         FILTER(predicate(battler, target))
 
         gStackBattler1 = gBattlerAttacker;
-        gStackBattler2 = gBattlerTarget;
+        gStackBattler2 = target;
         BattleScriptCall(callback);
         any = TRUE;
     }
