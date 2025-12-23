@@ -7974,7 +7974,7 @@ constexpr Ability Impl<ABILITY_ULTRA_INSTINCT> = {
         CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
 
-        UseOutOfTurnAttack(battler, attacker, ability, MOVE_VACUUM_WAVE, 0);
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_VACUUM_WAVE, 20);
         return FALSE;
     },
     .onDefensiveMultiplier = Impl<ABILITY_PARRY>.onDefensiveMultiplier,
@@ -12098,7 +12098,13 @@ constexpr Ability Impl<ABILITY_AURA_ARMOR> = {
 
 template <>
 constexpr Ability Impl<ABILITY_DEFLECT> = {
-    .randomizerBanned = TRUE,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitEffect(attacker))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_VACUUM_WAVE, 20);
+        return FALSE;
+    },
+    .onDefensiveMultiplier = Impl<ABILITY_PARRY>.onDefensiveMultiplier,
 };
 
 template <>
