@@ -9022,7 +9022,6 @@ static void Cmd_various(void) {
         }
         case VARIOUS_DO_INTIMIDATE: {
             AbilityEnum ability = gBattleScripting.abilityPopupOverwrite;
-            u8 numAbility = 0;
             int immunityAbility = IsBattlerImmuneToLowerStatsFromIntimidateClone(gActiveBattler);
 
             gBattlerTarget = gActiveBattler;
@@ -9040,18 +9039,14 @@ static void Cmd_various(void) {
             if (getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(gBattlerAttacker) != B_SIDE_PLAYER && ability == ABILITY_NONE)
                 ability = ABILITY_FEARMONGER;
 
-            for (i = 0; i < NUM_INTIMIDATE_CLONES; i++) {
-                if (gIntimidateCloneData[i].ability == ability) break;
-            }
+            const IntimidateCloneData* intimidateData = GetIntimidateData(ability);
 
-            REQUIRE(i < NUM_INTIMIDATE_CLONES)
+            REQUIRE(intimidateData)
 
-            numAbility = i;
-
-            for (i = gIntimidateCloneData[numAbility].numStatsLowered - 1; i >= 0; i--) {
+            for (i = intimidateData->numStatsLowered - 1; i >= 0; i--) {
                 int moveEffect;
-                int statToLower = TranslateStatId(gIntimidateCloneData[numAbility].statsLowered[i], gBattlerTarget);
-                if (gIntimidateCloneData[numAbility].statChange == 2) {
+                int statToLower = TranslateStatId(intimidateData->statsLowered[i], gBattlerTarget);
+                if (intimidateData->statChange == 2) {
                     if (BattlerHasAbility(gBattlerTarget, ABILITY_GUARD_DOG, TRUE))
                         moveEffect = MOVE_EFFECT_ATK_PLUS_2;
                     else

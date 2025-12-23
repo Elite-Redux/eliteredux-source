@@ -484,6 +484,9 @@ StatDropBlockType GetStatDropBlock(u8* battler, int stat, int selfStatDrop, Abil
 }
 
 template <AbilityEnum Id>
+constexpr IntimidateCloneData Intimidate{};
+
+template <AbilityEnum Id>
 constexpr Ability Impl = {0};
 
 template <>
@@ -769,6 +772,13 @@ template <>
 constexpr Ability Impl<ABILITY_GUARD_DOG> = {
     .breakable = TRUE,
     .suctionCups = TRUE,
+};
+
+template <>
+constexpr IntimidateCloneData Intimidate<ABILITY_INTIMIDATE> = {
+    .statsLowered = {STAT_ATK, 0, 0},
+    .numStatsLowered = 1,
+    .targetBoth = TRUE,
 };
 
 template <>
@@ -4073,6 +4083,13 @@ constexpr Ability Impl<ABILITY_OVERWHELM> = {
 };
 
 template <>
+constexpr IntimidateCloneData Intimidate<ABILITY_SCARE> = {
+    .statsLowered = {STAT_SPATK, 0, 0},
+    .numStatsLowered = 1,
+    .targetBoth = TRUE,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_SCARE> = {
     .onEntry = UseIntimidateClone,
 };
@@ -4933,6 +4950,13 @@ constexpr Ability Impl<ABILITY_RETRIBUTION_BLOW> = {
 };
 
 template <>
+constexpr IntimidateCloneData Intimidate<ABILITY_FEARMONGER> = {
+    .statsLowered = {STAT_ATK, STAT_SPATK, 0},
+    .numStatsLowered = 1,
+    .targetBoth = TRUE,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_FEARMONGER> = {
     .onEntry = UseIntimidateClone,
     .onAttacker = +[](ON_ATTACKER) -> int {
@@ -4944,6 +4968,9 @@ constexpr Ability Impl<ABILITY_FEARMONGER> = {
         return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
     },
 };
+
+template <>
+constexpr IntimidateCloneData Intimidate<ABILITY_FIRES_WRATH> = Intimidate<ABILITY_FEARMONGER>;
 
 template <>
 constexpr Ability Impl<ABILITY_FIRES_WRATH> = {
@@ -5772,6 +5799,13 @@ constexpr Ability Impl<ABILITY_KUNOICHI_BLADE> = {
 };
 
 template <>
+constexpr IntimidateCloneData Intimidate<ABILITY_MONKEY_BUSINESS> = {
+    .statsLowered = {STAT_ATK, STAT_DEF, 0},
+    .numStatsLowered = 2,
+    .targetBoth = FALSE,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_MONKEY_BUSINESS> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_TICKLE, 0); },
 };
@@ -6149,6 +6183,9 @@ constexpr Ability Impl<ABILITY_WISHMAKER> = {
     },
     .persistent = TRUE,
 };
+
+template <>
+constexpr IntimidateCloneData Intimidate<ABILITY_YUKI_ONNA> = Intimidate<ABILITY_FEARMONGER>;
 
 template <>
 constexpr Ability Impl<ABILITY_YUKI_ONNA> = {
@@ -7276,6 +7313,13 @@ constexpr Ability Impl<ABILITY_OLE> = {
 };
 
 template <>
+constexpr IntimidateCloneData Intimidate<ABILITY_MALICIOUS> = {
+    .statsLowered = {STAT_HIGHEST_ATTACKING | STAT_USE_STAT_BOOSTS_IN_CALC, STAT_HIGHEST_DEFENDING | STAT_USE_STAT_BOOSTS_IN_CALC, 0},
+    .numStatsLowered = 2,
+    .targetBoth = TRUE,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_MALICIOUS> = {
     .onEntry = UseIntimidateClone,
 };
@@ -7624,6 +7668,14 @@ constexpr Ability Impl<ABILITY_SHINY_LIGHTNING> = {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
     },
+};
+
+template <>
+constexpr IntimidateCloneData Intimidate<ABILITY_TERRIFY> = {
+    .statsLowered = {STAT_SPATK, 0, 0},
+    .numStatsLowered = 1,
+    .targetBoth = TRUE,
+    .statChange = 2,
 };
 
 template <>
@@ -8128,6 +8180,13 @@ constexpr Ability Impl<ABILITY_SIDEWINDER> = {
 };
 
 template <>
+constexpr IntimidateCloneData Intimidate<ABILITY_PETRIFY> = {
+    .statsLowered = {STAT_SPEED, 0, 0},
+    .numStatsLowered = 1,
+    .targetBoth = TRUE,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_PETRIFY> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int loweredStats = 0;
@@ -8498,6 +8557,9 @@ constexpr Ability Impl<ABILITY_SHOCKING_MAW> = {
     .onAttacker = Impl<ABILITY_SHOCKING_JAWS>.onAttacker,
     .onOffensiveMultiplier = Impl<ABILITY_STRONG_JAW>.onOffensiveMultiplier,
 };
+
+template <>
+constexpr IntimidateCloneData Intimidate<ABILITY_GLEAM_EYES> = Intimidate<ABILITY_SCARE>;
 
 template <>
 constexpr Ability Impl<ABILITY_GLEAM_EYES> = {
@@ -9052,6 +9114,9 @@ constexpr Ability Impl<ABILITY_SOUL_DEVOURER> = {
     .onTypeEffectiveness = Impl<ABILITY_PHANTOM_PAIN>.onTypeEffectiveness,
     .onBattlerFaintsFor = Impl<ABILITY_SOUL_EATER>.onBattlerFaintsFor,
 };
+
+template <>
+constexpr IntimidateCloneData Intimidate<ABILITY_CHAMPIONS_ENTRANCE> = Intimidate<ABILITY_INTIMIDATE>;
 
 template <>
 constexpr Ability Impl<ABILITY_CHAMPIONS_ENTRANCE> = {
@@ -9610,6 +9675,9 @@ constexpr Ability Impl<ABILITY_SOUL_TAP> = {
         return any;
     },
 };
+
+template <>
+constexpr IntimidateCloneData Intimidate<ABILITY_SCARECROW> = Intimidate<ABILITY_SCARE>;
 
 template <>
 constexpr Ability Impl<ABILITY_SCARECROW> = {
@@ -11947,8 +12015,12 @@ constexpr Ability Impl<ABILITY_PETAL_SHIELD> = {
 };
 
 template <>
+constexpr IntimidateCloneData Intimidate<ABILITY_MOB_BOSS> = Intimidate<ABILITY_TERRIFY>;
+
+template <>
 constexpr Ability Impl<ABILITY_MOB_BOSS> = {
-    .randomizerBanned = TRUE,
+    .onEntry = UseIntimidateClone,
+    ATE_ABILITY(TYPE_DARK),
 };
 
 template <>
@@ -12047,17 +12119,19 @@ constexpr Ability Impl<ABILITY_FOUL_ENERGY> = {
 
 template <>
 constexpr Ability Impl<ABILITY_REAPERS_EMBARCE> = {
-    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) {
-        Impl<ABILITY_FOUL_ENERGY>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-        Impl<ABILITY_TOUGH_CLAWS>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
-    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            Impl<ABILITY_FOUL_ENERGY>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_TOUGH_CLAWS>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+        },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_JUNGLE_FEVER> = {
-    .onStat = +[](ON_STAT) {
-        if (statId == STAT_SPEED && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.1;
-    },
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPEED && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.1;
+        },
     .onCrit = +[](ON_CRIT) -> int {
         CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN))
         return 1;
@@ -12067,10 +12141,42 @@ constexpr Ability Impl<ABILITY_JUNGLE_FEVER> = {
 template <>
 constexpr Ability Impl<ABILITY_KING_OF_THE_JUNGLE> = {
     .onInfiltrate = Impl<ABILITY_INFILTRATOR>.onInfiltrate,
-    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { 
-        if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) RESISTANCE(1.5);
-    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) RESISTANCE(1.5);
+        },
 };
+
+#define FOR_EACH_ABILITY_FUNCTION(abilityId) \
+    if (Intimidate<abilityId>.statsLowered[0]) count++;
+constexpr u32 IntimidateCount() {
+    int count = 0;
+    FOR_EACH_ABILITY
+    return count;
+}
+#undef FOR_EACH_ABILITY_FUNCTION
+
+#define FOR_EACH_ABILITY_FUNCTION(abilityId)     \
+    if (Intimidate<abilityId>.statsLowered[0]) { \
+        arr[idx] = Intimidate<abilityId>;        \
+        arr[idx++].ability = abilityId;          \
+    }
+constexpr std::array<IntimidateCloneData, IntimidateCount()> IntimidateDataArray() {
+    int idx = 0;
+    std::array<IntimidateCloneData, IntimidateCount()> arr{};
+    FOR_EACH_ABILITY
+    return arr;
+}
+#undef FOR_EACH_ABILITY_FUNCTION
+
+constexpr static auto sIntimidateData = IntimidateDataArray();
+
+const IntimidateCloneData* GetIntimidateData(AbilityEnum ability) {
+    for (auto& clone : sIntimidateData) {
+        if (clone.ability == ability) return &clone;
+    }
+    return nullptr;
+}
 
 #include "generated/data/abilities/ability_text.hh"
 

@@ -3953,15 +3953,7 @@ int DidMoveHit() { return WasMoveSuccessful() && TARGET_TURN_DAMAGED; }
 int ShouldApplyOnHitEffect(int applyTo) { return DidMoveHit() && IsBattlerAlive(applyTo); }
 
 int UseIntimidateClone(AbilityEnum abilityToCheck, int battler) {
-    u8 numAbility;
-
-    for (numAbility = 0; numAbility < NUM_INTIMIDATE_CLONES; numAbility++) {
-        if (gIntimidateCloneData[numAbility].ability == abilityToCheck) break;
-    }
-
-    if (numAbility >= NUM_INTIMIDATE_CLONES) return FALSE;
-
-    if (!gIntimidateCloneData[numAbility].numStatsLowered) return FALSE;
+    if (!GetIntimidateData(abilityToCheck)) return FALSE;
 
     gBattlerTarget = BATTLE_OPPOSITE(battler);
     if (!IsBattlerAlive(gBattlerTarget) && !IsBattlerAlive(BATTLE_PARTNER(gBattlerTarget))) return FALSE;

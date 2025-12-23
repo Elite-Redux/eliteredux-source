@@ -15,14 +15,6 @@ struct StatFractions {
     u8 divisor;
 };
 
-struct IntimidateCloneData {
-    AbilityEnum ability;
-    u8 statsLowered[3];    // atk, def, speed
-    u8 numStatsLowered:2;  // 1 - 3
-    bool8 targetBoth:1;
-    u8 statChange:4;
-};
-
 #define NUM_INTIMIDATE_CLONES 12
 extern const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES];
 

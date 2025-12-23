@@ -161,6 +161,14 @@ typedef enum {
     TERRAIN_TOXIC = 1 << 4,
 } TerrainType;
 
+typedef struct IntimidateCloneData {
+    AbilityEnum ability;
+    u8 statsLowered[3];    // atk, def, speed
+    u8 numStatsLowered:2;  // 1 - 3
+    bool8 targetBoth:1;
+    u8 statChange:4;
+} IntimidateCloneData;
+
 #ifdef __cplusplus
 #define AbilityApplyOnWithTarget u8
 // Because Type is defined in a C header file C++ and C end up with different alignments for the enum when packed into a bit field for some reason
@@ -287,6 +295,7 @@ int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int
 int DoesMoveMatchFlag(int battler, MoveEnum move, Type type, MoveFlag flag);
 StatDropBlockType IsStatDropBlocked(u8 battler, int stat, int selfStatDrop);
 StatDropBlockType GetStatDropBlock(u8* battler, int stat, int selfStatDrop, AbilityEnum* ability, const u8** script);
+const IntimidateCloneData* GetIntimidateData(AbilityEnum ability);
 
 #ifdef __cplusplus
 }
