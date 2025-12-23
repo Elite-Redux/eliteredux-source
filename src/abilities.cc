@@ -98,7 +98,7 @@ ENUM_OR(NonStackingState)
 #define ON_DEFENSIVE_MULTIPLIER                                                                                                                          \
     opt int battler, opt AbilityEnum ability, opt int attacker, opt MoveEnum move, opt Type moveType, opt int typeEffectivenessModifier, opt int isCrit, \
         opt u16 *resistance, opt u16 *modifier
-#define DELEGATE_DEFENSIVE_MULTIPLIER battler, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier
+#define DELEGATE_DEFENSIVE_MULTIPLIER battler, ability, attacker, move, moveType, typeEffectivenessModifier, isCrit, resistance, modifier
 #define ON_ACCURACY opt AbilityEnum ability, opt int battler, opt int target, opt MoveEnum move, opt Type moveType, opt int *accuracy
 #define DELEGATE_ACCURACY ability, battler, target, move, moveType, accuracy
 #define ON_SWAP_SPLIT opt int battler, opt MoveEnum move, opt Type moveType
@@ -7649,7 +7649,6 @@ constexpr Ability Impl<ABILITY_LAST_STAND> = {
             if (statId == STAT_DEF || statId == STAT_SPDEF)
                 *stat = *stat + (*stat * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
         },
-    .breakable = TRUE,
 };
 
 template <>
@@ -11848,139 +11847,230 @@ constexpr Ability Impl<ABILITY_LUCKY_HALO> = {
 
 template <>
 constexpr Ability Impl<ABILITY_FORTRESS> = {
-  .randomizerBanned = TRUE,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            Impl<ABILITY_FILTER>.onDefensiveMultiplier(DELEGATE_DEFENSIVE_MULTIPLIER);
+            Impl<ABILITY_SHELL_ARMOR>.onDefensiveMultiplier(DELEGATE_DEFENSIVE_MULTIPLIER);
+        },
+    .onCrit = Impl<ABILITY_SHELL_ARMOR>.onCrit,
+    .onCritFor = Impl<ABILITY_SHELL_ARMOR>.onCritFor,
+    .breakable = TRUE,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_BIRD_OF_PREY> = {
-  .randomizerBanned = TRUE,
+    .onOffensiveMultiplier = Impl<ABILITY_BIG_PECKS>.onOffensiveMultiplier,
+    .onTypeEffectiveness = Impl<ABILITY_SCRAPPY>.onTypeEffectiveness,
+    .tauntImmune = TRUE,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_FEATHERCOAT> = {
-  .randomizerBanned = TRUE,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (typeEffectivenessModifier < UQ_4_12(1))
+                MUL(.8);
+            else
+                MUL(.9);
+        },
+    .breakable = TRUE,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_POWER_OUTAGE> = {
-  .randomizerBanned = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_ELECTRO_BOOSTER> = {
-  .randomizerBanned = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_MAGNET_RISE, 0); },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_CURRENT_CRASH> = {
-  .randomizerBanned = TRUE,
+    .onAttacker = Impl<ABILITY_THUNDERCALL>.onAttacker,
+    .onOffensiveMultiplier = Impl<ABILITY_RECKLESS>.onOffensiveMultiplier,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_DAREDEVIL> = {
-  .randomizerBanned = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitEffect(battler))
+        CHECK(gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
+        CHECK(CanRaiseStat(battler, STAT_ATK))
+
+        return AbilityStatusEffect(MOVE_EFFECT_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER);
+    },
+    .halfRecoil = TRUE,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_FROST_DRAGON> = {
-  .randomizerBanned = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(moveType == TYPE_ICE || moveType == TYPE_DRAGON)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_BLIZZARD, 50);
+    },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_THERMAL_ENTROPY> = {
-  .randomizerBanned = TRUE,
+    .onDefender = Impl<ABILITY_THERMAL_EXCHANGE>.onDefender,
+    .onDefensiveMultiplier = Impl<ABILITY_HEATPROOF>.onDefensiveMultiplier,
+    .onStatusImmune = Impl<ABILITY_THERMAL_EXCHANGE>.onStatusImmune,
+    .breakable = TRUE,
+    .negatesBurnAtkDrop = TRUE,
+    .removesStatusOnImmunity = TRUE,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_SINISTER_CLAWS> = {
-  .randomizerBanned = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
+        CHECK(StatLowerableOrMirrorArmor(target, STAT_SPDEF))
+
+        int affected = GetOncePerTurnAbilityCounter(battler, ability);
+        CHECK_NOT(affected & (1 << target))
+
+        SetOncePerTurnAbilityCounter(battler, ability, affected | (1 << target));
+        return AbilityStatusEffect(MOVE_EFFECT_SP_DEF_MINUS_1);
+    },
+    .onOffensiveMultiplier = Impl<ABILITY_MYSTIC_BLADES>.onOffensiveMultiplier,
+    .onSwapSplit = Impl<ABILITY_MYSTIC_BLADES>.onSwapSplit,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_PETAL_SHIELD> = {
-  .randomizerBanned = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_MOB_BOSS> = {
-  .randomizerBanned = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_GHOST_PEPPER> = {
-  .randomizerBanned = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(moveType == TYPE_GRASS)
+        CHECK(CanBeBurned(target))
+        CHECK(Random() % 100 < 30)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BURN);
+    },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_DROIDEKA> = {
-  .randomizerBanned = TRUE,
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            Impl<ABILITY_HEATPROOF>.onDefensiveMultiplier(DELEGATE_DEFENSIVE_MULTIPLIER);
+            Impl<ABILITY_SHELL_ARMOR>.onDefensiveMultiplier(DELEGATE_DEFENSIVE_MULTIPLIER);
+        },
+    .onCrit = Impl<ABILITY_SHELL_ARMOR>.onCrit,
+    .onCritFor = Impl<ABILITY_SHELL_ARMOR>.onCritFor,
+    .breakable = TRUE,
+    .negatesBurnAtkDrop = TRUE,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_3_GT_1> = {
-  .randomizerBanned = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_ABOMINABLE_MONSTER> = {
-  .randomizerBanned = TRUE,
+    .onStat =
+        +[](ON_STAT) {
+            if (statId == STAT_SPDEF && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
+        },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_ICICLE_FIST> = {
-  .randomizerBanned = TRUE,
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(IsIronFistBoosted(battler, move))
+        CHECK(CanGetFrostbite(target))
+        CHECK(Random() % 100 < 30)
+
+        return AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
+    },
+    .onOffensiveMultiplier = Impl<ABILITY_IRON_FIST>.onOffensiveMultiplier,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_WIND_CHIMES> = {
-  .randomizerBanned = TRUE,
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitEffect(attacker))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_HYPER_VOICE, 30);
+        return FALSE;
+    },
+    .onOffensiveMultiplier = Impl<ABILITY_AMPLIFIER>.onOffensiveMultiplier,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_UNSTABLE_CORE> = {
-  .randomizerBanned = TRUE,
+    .onDefender = Impl<ABILITY_AFTERMATH>.onDefender,
+    .onChooseOffensiveStat = Impl<ABILITY_POWER_CORE>.onChooseOffensiveStat,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_AURA_ARMOR> = {
-  .randomizerBanned = TRUE,
+    .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.65); },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_DEFLECT> = {
-  .randomizerBanned = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_OVERWHELMING_MIND> = {
-  .randomizerBanned = TRUE,
+    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_PSYCHIC),
 };
 
 template <>
 constexpr Ability Impl<ABILITY_DUALITY> = {
-  .randomizerBanned = TRUE,
-};
-
-template <>
-constexpr Ability Impl<ABILITY_REAPERS_EMBARCE> = {
-  .randomizerBanned = TRUE,
+    .onInfiltrate = Impl<ABILITY_INFILTRATOR>.onInfiltrate,
+    .onStatLowered = Impl<ABILITY_COMPETITIVE>.onStatLowered,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_FOUL_ENERGY> = {
-  .randomizerBanned = TRUE,
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_DARK),
+};
+
+template <>
+constexpr Ability Impl<ABILITY_REAPERS_EMBARCE> = {
+    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) {
+        Impl<ABILITY_FOUL_ENERGY>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+        Impl<ABILITY_TOUGH_CLAWS>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+    },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_JUNGLE_FEVER> = {
-  .randomizerBanned = TRUE,
+    .onStat = +[](ON_STAT) {
+        if (statId == STAT_SPEED && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.1;
+    },
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN))
+        return 1;
+    },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_KING_OF_THE_JUNGLE> = {
-  .randomizerBanned = TRUE,
+    .onInfiltrate = Impl<ABILITY_INFILTRATOR>.onInfiltrate,
+    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { 
+        if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) RESISTANCE(1.5);
+    },
 };
-
 
 #include "generated/data/abilities/ability_text.hh"
 
