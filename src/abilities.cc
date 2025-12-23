@@ -11846,6 +11846,142 @@ constexpr Ability Impl<ABILITY_LUCKY_HALO> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_FORTRESS> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_BIRD_OF_PREY> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_FEATHERCOAT> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_POWER_OUTAGE> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_ELECTRO_BOOSTER> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_CURRENT_CRASH> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_DAREDEVIL> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_FROST_DRAGON> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_THERMAL_ENTROPY> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_SINISTER_CLAWS> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_PETAL_SHIELD> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_MOB_BOSS> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_GHOST_PEPPER> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_DROIDEKA> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_3_GT_1> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_ABOMINABLE_MONSTER> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_ICICLE_FIST> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_WIND_CHIMES> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_UNSTABLE_CORE> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_AURA_ARMOR> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_DEFLECT> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_OVERWHELMING_MIND> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_DUALITY> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_REAPERS_EMBARCE> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_FOUL_ENERGY> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_JUNGLE_FEVER> = {
+  .randomizerBanned = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_KING_OF_THE_JUNGLE> = {
+  .randomizerBanned = TRUE,
+};
+
+
 #include "generated/data/abilities/ability_text.hh"
 
 template <AbilityEnum Id>
