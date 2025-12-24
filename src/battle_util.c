@@ -279,26 +279,27 @@ void HandleAction_UseMove(void) {
         }
     }
 
-    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && gSideTimers[side].followmeTimer == 0 &&
-        (gBattleMoves[gCurrentMove].power != 0 || !(GetBattlerBattleMoveTargetFlags(gCurrentMove, gBattlerAttacker) & (MOVE_TARGET_USER | MOVE_TARGET_ALLY))) &&
-        !HasRedirectionAbility(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType)) {
-        if (GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker)) {
-            int target = BATTLE_OPPOSITE(gBattlerAttacker);
-            if (IsBattlerAlive(target) &&
-                (gTurnStructs[gActiveBattler].redirectedAbility = HasRedirectionAbility(gBattlerAttacker, target, gCurrentMove, moveType))) {
-                gBattlerTarget = gActiveBattler = target;
-            } else {
-                target = BATTLE_PARTNER(target);
-                if (IsBattlerAlive(target) &&
-                    (gTurnStructs[gActiveBattler].redirectedAbility = HasRedirectionAbility(gBattlerAttacker, target, gCurrentMove, moveType))) {
-                    gBattlerTarget = gActiveBattler = target;
+    if (IsBattlerAlive(BATTLE_PARTNER(gBattlerTarget))) {
+        int flags = GetBattlerBattleMoveTargetFlags(gCurrentMove, gBattlerAttacker);
+        int isRedirectableTargetType = flags == MOVE_TARGET_SELECTED || flags == MOVE_TARGET_RANDOM;
+        if (isRedirectableTargetType && !HasRedirectionAbility(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType)) {
+            int redirect;
+            AbilityEnum ability = ABILITY_NONE;
+            if (GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker)) {
+                redirect = BATTLE_OPPOSITE(gBattlerAttacker);
+                if (IsBattlerAlive(redirect)) ability = HasRedirectionAbility(gBattlerAttacker, redirect, gCurrentMove, moveType);
+                if (!ability) {
+                    redirect = BATTLE_PARTNER(redirect);
+                    if (IsBattlerAlive(redirect)) ability = HasRedirectionAbility(gBattlerAttacker, redirect, gCurrentMove, moveType);
                 }
+            } else {
+                redirect = BATTLE_PARTNER(gBattlerTarget);
+                if (IsBattlerAlive(redirect)) ability = HasRedirectionAbility(gBattlerAttacker, redirect, gCurrentMove, moveType);
             }
-        } else {
-            int partner = BATTLE_PARTNER(gBattlerTarget);
-            if (IsBattlerAlive(partner) &&
-                (gTurnStructs[gActiveBattler].redirectedAbility = HasRedirectionAbility(gBattlerAttacker, partner, gCurrentMove, moveType))) {
-                gBattlerTarget = gActiveBattler = partner;
+
+            if (ability) {
+                gTurnStructs[redirect].redirectedAbility = ability;
+                gBattlerTarget = gActiveBattler = redirect;
             }
         }
     }
