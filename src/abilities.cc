@@ -1939,8 +1939,22 @@ constexpr Ability Impl<ABILITY_MULTISCALE> = {
     .breakable = TRUE,
 };
 
+int ToxicBoostHandler(int battler, AbilityCallType callType) {
+    CHECK(CanBePoisoned(battler, battler, MOVE_NONE))
+    CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN))
+
+    InsertCorrectEndType(callType);
+    gBattleMons[battler].status1 |= STATUS1_POISON;
+    BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
+    MarkBattlerForControllerExec(battler);
+    BattleScriptCall(BattleScript_ToxicBoostRet);
+    return TRUE;
+}
+
 template <>
 constexpr Ability Impl<ABILITY_TOXIC_BOOST> = {
+    .onEntry = +[](ON_ENTRY) -> int { return ToxicBoostHandler(battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
+    .onTerrain = +[](ON_WEATHER) -> int { return ToxicBoostHandler(battler, ABILITY_BS_CALL); },
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMons[battler].status1 & STATUS1_PSN_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);

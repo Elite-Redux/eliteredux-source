@@ -9403,9 +9403,13 @@ BattleScript_MoveEffectBurn::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_UpdateEffectStatusIconRet
 
-BattleScript_FlareBoostEnd3::
-	call BattleScript_FlareBoostRet
-	end3
+BattleScript_ToxicBoostRet::
+	statusanimation BS_ATTACKER
+	printstring STRINGID_TOXIC_BOOST_POISONS
+	waitmessage B_WAIT_TIME_LONG
+	updatestatusicon BS_ATTACKER
+	waitstate
+	return
 
 BattleScript_FlareBoostRet::
 	statusanimation BS_ATTACKER

@@ -151,7 +151,7 @@ extern const u8 BattleScript_YawnMakesAsleep[];
 extern const u8 BattleScript_MoveEffectPoison[];
 extern const u8 BattleScript_MoveEffectBurn[];
 extern const u8 BattleScript_FlareBoostRet[];
-extern const u8 BattleScript_FlareBoostEnd3[];
+extern const u8 BattleScript_ToxicBoostRet[];
 extern const u8 BattleScript_MoveEffectFreeze[];
 extern const u8 BattleScript_MoveEffectParalysis[];
 extern const u8 BattleScript_MoveEffectUproar[];
