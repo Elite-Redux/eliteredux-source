@@ -3109,6 +3109,9 @@ u8 AtkCanceller_UnableToUseMove(void) {
 
                         if (gBattleMons[gBattlerAttacker].status1 & STATUS1_SLEEP) {
                             if (gChosenMove != MOVE_SNORE && gChosenMove != MOVE_SLEEP_TALK) {
+                                gActiveBattler = gBattlerAttacker;
+                                BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gBattlerAttacker].status1);
+                                MarkBattlerForControllerExec(gBattlerAttacker);
                                 gBattlescriptCurrInstr = BattleScript_MoveUsedIsAsleep;
                                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                                 effect = 1;
