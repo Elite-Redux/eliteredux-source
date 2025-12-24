@@ -3069,8 +3069,8 @@ enum {
 };
 
 u16 IsPowderImmune(int battler, int checkMoldBreaker) {
-    if (checkMoldBreaker && IsMyceliumMightActive(gBattlerAttacker))
-        if (IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)) return TRUE;
+    if (IsMyceliumMightActive(gBattlerAttacker)) return FALSE;
+    if (IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)) return TRUE;
     if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES) return TRUE;
     RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, powderImmune)
     return FALSE;
@@ -3334,18 +3334,9 @@ u8 AtkCanceller_UnableToUseMove(void) {
                 if ((gBattleMoves[gCurrentMove].flags & FLAG_POWDER) && (gBattlerAttacker != gBattlerTarget) &&
                     !IsMyceliumMightActive(gBattlerAttacker))  // Rage Powder targets the user
                 {
-                    if ((B_POWDER_GRASS >= GEN_6 && IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS)) ||
-                        BattlerHasAbility(gBattlerTarget, ABILITY_OVERCOAT || ABILITY_GUARDIAN_COAT, TRUE)) {
-                        gBattlerAbility = gBattlerTarget;
-                        effect = 1;
-                    } else if (GetBattlerHoldEffect(gBattlerTarget, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES) {
-                        RecordItemEffectBattle(gBattlerTarget, HOLD_EFFECT_SAFETY_GOGGLES);
-                        gLastUsedItem = gBattleMons[gBattlerTarget].item;
-                        effect = 1;
-                    }
-
                     if (IsPowderImmune(gBattlerTarget, TRUE)) {
-                        gBattlerAbility = gBattlerTarget;
+                        // Script checks if it was actually blocked by the item
+                        gLastUsedItem = gBattleMons[gBattlerTarget].item;
                         effect = 1;
                         gBattlescriptCurrInstr = BattleScript_PowderMoveNoEffect;
                     }
