@@ -9,12 +9,15 @@ import er.GeneratorUtils.SPECIES_MAP
 import er.GeneratorUtils.createDedupMaps
 import er.GeneratorUtils.printLookupTable
 import er.proto.Species
+import er.proto.Species.Gender.GENDER_NONE
 import er.proto.SpeciesEnum
 import java.io.OutputStreamWriter
 
 object EvolutionsGenerator : Generator {
     private const val EVO_PREFIX = "__sEvoList_"
     private const val FORM_PREFX = "__sFormList_"
+
+    private val INCONSISTENT_GENDER_MONS = setOf(SpeciesEnum.SPECIES_SHEDINJA, SpeciesEnum.SPECIES_MARILL)
 
     private data class Evo(val method: EvoOrFormType, val condition: String, val to: SpeciesEnum) {
         override fun toString() = "{$method, $condition, $to}"
@@ -36,6 +39,15 @@ object EvolutionsGenerator : Generator {
     }
 
     override fun generate(writer: OutputStreamWriter) {
+
+        val allEvoPairs = SPECIES_LIST.flatMap {
+            it.evoList.filter { evo -> evo.gender == GENDER_NONE && evo.to !in INCONSISTENT_GENDER_MONS }.map { evo -> it.id to evo.to }
+        } + SPECIES_LIST.flatMap { it.megaList.map { mega -> it.id to mega.from } } + SPECIES_LIST.flatMap { it.primalList.map { primal -> it.id to primal.from } }
+
+        val inconsistentGenderEvos =
+            allEvoPairs.filter { SPECIES_MAP[it.first]!!.genderless != SPECIES_MAP[it.second]!!.genderless || SPECIES_MAP[it.first]!!.percentFemale != SPECIES_MAP[it.second]!!.percentFemale }
+
+        check(inconsistentGenderEvos.isEmpty()) { "Gender ratios don't match in evos, is this intentional?: $inconsistentGenderEvos" }
 
         val deevos = SPECIES_LIST.filter { it.allowDeevolutionTo }
             .flatMap { species -> species.evoList.map { it.to to species.id } }.toMap()
