@@ -7885,7 +7885,7 @@ static void Cmd_various(void) {
         case VARIOUS_TERRAIN_SEED:
             if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_SEEDS) {
                 u16 item = gBattleMons[gActiveBattler].item;
-                switch (GetBattlerHoldEffectParam(gActiveBattler)) {
+                switch (ItemId_GetSecondaryId(gActiveBattler)) {
                     case HOLD_EFFECT_PARAM_ELECTRIC_TERRAIN:
                         TryHandleSeed(gActiveBattler, STATUS_FIELD_ELECTRIC_TERRAIN, STAT_DEF, item, FALSE);
                         break;

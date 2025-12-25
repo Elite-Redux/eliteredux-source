@@ -10956,7 +10956,7 @@ template <>
 constexpr Ability Impl<ABILITY_ZEN_GARDEN> = {
     .onEntry = +[](ON_ENTRY) -> int {
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SEEDS) {
-            switch (GetBattlerHoldEffectParam(battler)) {
+            switch (ItemId_GetSecondaryId(battler)) {
                 case HOLD_EFFECT_PARAM_GRASSY_TERRAIN:
                     return Impl<ABILITY_GRASSY_SURGE>.onEntry(DELEGATE_ENTRY);
 
