@@ -6287,9 +6287,7 @@ constexpr Ability Impl<ABILITY_FERTILIZE> = {
     ATE_ABILITY(TYPE_GRASS),
 };
 
-template <>
-constexpr Ability Impl<ABILITY_PURE_LOVE> = {
-    .onAttacker = +[](ON_ATTACKER) -> int {
+static int PureLoveOnAttacker(ON_ATTACKER) {
         CHECK(ShouldApplyOnHitEffect(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
@@ -6299,6 +6297,12 @@ constexpr Ability Impl<ABILITY_PURE_LOVE> = {
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
+}
+
+template <>
+constexpr Ability Impl<ABILITY_PURE_LOVE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        return PureLoveOnAttacker(DELEGATE_ATTACKER) | Impl<ABILITY_CUTE_CHARM>.onAttacker(DELEGATE_ATTACKER);
     },
     .onDefender = Impl<ABILITY_CUTE_CHARM>.onDefender,
     .canInfatuateAny = TRUE,
