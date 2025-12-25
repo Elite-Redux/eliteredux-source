@@ -6550,6 +6550,8 @@ constexpr Ability Impl<ABILITY_MINDS_EYE> = {
 template <>
 constexpr Ability Impl<ABILITY_BLOOD_PRICE> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(gLastResultingMoves[battler])
+        CHECK(gLastResultingMoves[battler] != 0xFFFF)
         CHECK_NOT(IS_MOVE_STATUS(gLastResultingMoves[battler]))
         CHECK_NOT(IsMagicGuardProtected(battler))
         CHECK(IsBattlerAlive(battler))
