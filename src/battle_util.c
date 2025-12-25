@@ -226,6 +226,7 @@ void HandleAction_UseMove(void) {
             gBattleResults.lastUsedMoveOpponent = gCurrentMove;
     }
 
+    gCritRoll = MakeCritRoll();
     SetMoldBreaker(gBattlerAttacker, gChosenMove);
 
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_MYCELIUM_MIGHT, FALSE)) gHitMarker |= HITMARKER_MYCELIUM_MIGHT;
@@ -690,6 +691,8 @@ void ClearMiscTurnFlags() {
 }
 
 void HandleAction_TryFinish(void) {
+    gCritRoll = CRIT_ROLL_ONLY_IF_GUARANTEED;
+
     if (gQueuedAttackCount) {
         ClearMiscTurnFlags();
         gQueuedExtraAttackData[0] = gQueuedExtraAttackData[gQueuedAttackCount--];

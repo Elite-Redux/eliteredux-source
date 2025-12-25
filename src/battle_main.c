@@ -266,6 +266,7 @@ EWRAM_DATA u16 gLastThrownBall = 0;
 EWRAM_DATA u8 gMaxPartyLevel = 1;
 EWRAM_DATA bool8 gSwapDamageCategory = FALSE;  // Photon Geyser, Shell Side Arm, Light That Burns the Sky
 EWRAM_DATA bool8 gTagTeamPhases[PARTY_SIZE][2] = {0};
+EWRAM_DATA bool8 gCritRoll = 0;
 
 // IWRAM common vars
 void (*gPreBattleCallback1)(void);

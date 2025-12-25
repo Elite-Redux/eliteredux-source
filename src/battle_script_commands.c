@@ -1573,7 +1573,7 @@ static void Cmd_damagecalc(void) {
     }
 
     GET_MOVE_TYPE(gCurrentMove, moveType);
-    gBattleMoveDamage = CalculateMoveDamage(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, movePower, MakeCritRoll(), TRUE, TRUE);
+    gBattleMoveDamage = CalculateMoveDamage(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, movePower, gCritRoll, TRUE, TRUE);
     gBattleStruct->dynamicMoveType = moveType | 0x80;
 
     gBattlescriptCurrInstr++;
@@ -4956,6 +4956,7 @@ static void Cmd_moveend(void) {
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && !(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE) &&
                     gTurnStructs[gBattlerAttacker].multiHitCounter)  // Silly edge case
                 {
+                    gCritRoll = MakeCritRoll();
                     gBattleScripting.multihitString[4]++;
                     if (--gTurnStructs[gBattlerAttacker].multiHitCounter == 0) {
                         BattleScriptCall(BattleScript_MultiHitPrintStrings);

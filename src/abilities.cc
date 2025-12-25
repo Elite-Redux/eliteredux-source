@@ -9641,10 +9641,20 @@ constexpr Ability Impl<ABILITY_STRATEGIC_PAUSE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_OVERRULE> = {
-    .onAfterTypeEffectiveness =
-        +[](ON_AFTER_TYPE_EFFECTIVENESS) {
-            if (gIsCriticalHit && *mod && *mod < UQ_4_12(1.0)) *mod = UQ_4_12(1.0);
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (gIsCriticalHit && typeEffectivenessMultiplier < UQ_4_12(1.0)) RESISTANCE(2);
         },
+    .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
+        gHitMarker |= HITMARKER_MOLD_BREAKER;
+        SetTypeBeforeUsingMove(move, battler);
+        u8 moveType;
+        u16 typeEffectivenessModifier;
+        GET_MOVE_TYPE(move, moveType)
+        DoMoveDamageCalcBattleMenu(move, battler, gBattlerTarget, &moveType, gCritRoll, 0, (u16*)&typeEffectivenessModifier);
+        gHitMarker &= ~HITMARKER_MOLD_BREAKER;
+        return gIsCriticalHit;
+    },
 };
 
 static int MadnessEnhancementHandler(int battler, AbilityCallType callType) {
@@ -12150,12 +12160,8 @@ template <>
 constexpr Ability Impl<ABILITY_JUNGLE_FEVER> = {
     .onStat =
         +[](ON_STAT) {
-            if (statId == STAT_SPEED && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.1;
+            if (statId == STAT_SPEED && IsTerrainActive(STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
         },
-    .onCrit = +[](ON_CRIT) -> int {
-        CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN))
-        return 1;
-    },
 };
 
 template <>
