@@ -549,7 +549,7 @@
     },
     {
       "x": 10,
-      "y": 12,
+      "y": 11,
       "elevation": 0,
       "dest_map": "MAP_SLATEPORT_CITY_BATTLE_TENT_LOBBY",
       "dest_warp_id": "0"
