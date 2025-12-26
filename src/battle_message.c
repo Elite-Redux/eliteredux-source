@@ -938,6 +938,7 @@ static const u8 sText_DrakelpHeadReset[] = _("{B_STACK_1_NAME_WITH_PREFIX}'s kel
 static const u8 sText_MentalPollution[] = _("The mental static prevents other\nbattlers from using their abilities!");
 static const u8 sText_IceStatue[] = _("{B_DEF_NAME_WITH_PREFIX} is\nturned to ice!");
 static const u8 sText_ToxicBoostPoisons[] = _("{B_ATK_NAME_WITH_PREFIX} takes\nthe poison in!");
+static const u8 sText_PetalShield[] = _("{B_ATK_NAME_WITH_PREFIX} surrounds\nitself with a blur of petals.");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1976,6 +1977,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_MENTAL_POLLUTION - 12] = sText_MentalPollution,
     [STRINGID_ICE_STATUE - 12] = sText_IceStatue,
     [STRINGID_TOXIC_BOOST_POISONS - 12] = sText_ToxicBoostPoisons,
+    [STRINGID_PETAL_SHIELD - 12] = sText_PetalShield,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2074,6 +2076,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_MOLTEN_CORE] = STRINGID_ABSORB_STEALTH_ROCKS,
     [B_MSG_SWITCHIN_WINTER_THRONE] = STRINGID_WINTER_THRONE_ENTRY,
     [B_MSG_SWITCHIN_CHRISTMAS_NIGHTMARE] = STRINGID_CHRISTMAS_NIGHTMARE,
+    [B_MSG_SWITCHIN_PETAL_SHIELD] = STRINGID_PETAL_SHIELD,
 };
 
 const u16 gParadoxBoostSourceIds[] = 

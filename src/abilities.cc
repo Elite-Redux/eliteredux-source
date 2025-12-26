@@ -12085,7 +12085,17 @@ constexpr Ability Impl<ABILITY_SINISTER_CLAWS> = {
 
 template <>
 constexpr Ability Impl<ABILITY_PETAL_SHIELD> = {
-    .randomizerBanned = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(gBattleMons[battler].statStages[STAT_DEF] < MAX_STAT_STAGE)
+        gBattleMons[battler].statStages[STAT_DEF] = MAX_STAT_STAGE;
+        return SwitchInAnnounce(B_MSG_SWITCHIN_PETAL_SHIELD);
+    },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitEffect(battler))
+        CHECK(CanLowerStat(battler, STAT_DEF))
+
+        return AbilityStatusEffectSafe(MOVE_EFFECT_DEF_MINUS_1 | MOVE_EFFECT_AFFECTS_USER, battler, attacker);
+    },
 };
 
 template <>
