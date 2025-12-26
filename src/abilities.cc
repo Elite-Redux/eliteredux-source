@@ -114,8 +114,8 @@ ENUM_OR(NonStackingState)
 #define DELEGATE_PRIORITY battler, target, move
 #define ON_MOVE_TYPE opt AbilityEnum ability, opt MoveEnum move, opt Type moveType, opt u8 *ateBoost
 #define DELEGATE_MOVE_TYPE ability, move, moveType, ateBoost
-#define ON_EXIT opt AbilityEnum ability, opt int battler
-#define DELEGATE_EXIT ability, battler
+#define ON_EXIT opt AbilityEnum ability, opt int battler, opt int switchingBattler
+#define DELEGATE_EXIT ability, battler, switchingBattler
 #define ON_CRIT opt int battler, opt int target, opt MoveEnum move, opt u16 typeEffectiveness
 #define DELEGATE_CRIT battler, target, move, typeEffectiveness
 #define ON_TYPE_EFFECTIVENESS opt int defType, opt MoveEnum move, opt Type moveType, opt u16 *mod
@@ -6288,22 +6288,20 @@ constexpr Ability Impl<ABILITY_FERTILIZE> = {
 };
 
 static int PureLoveOnAttacker(ON_ATTACKER) {
-        CHECK(ShouldApplyOnHitEffect(battler))
-        CHECK_NOT(BATTLER_MAX_HP(battler))
-        CHECK(CanBattlerHeal(battler))
-        CHECK(gBattleMons[target].status2 & STATUS2_INFATUATION)
+    CHECK(ShouldApplyOnHitEffect(battler))
+    CHECK_NOT(BATTLER_MAX_HP(battler))
+    CHECK(CanBattlerHeal(battler))
+    CHECK(gBattleMons[target].status2 & STATUS2_INFATUATION)
 
-        gBattleMoveDamage = -gHpDealt / 4;
-        if (!gBattleMoveDamage) gBattleMoveDamage = -1;
-        BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
-        return TRUE;
+    gBattleMoveDamage = -gHpDealt / 4;
+    if (!gBattleMoveDamage) gBattleMoveDamage = -1;
+    BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
+    return TRUE;
 }
 
 template <>
 constexpr Ability Impl<ABILITY_PURE_LOVE> = {
-    .onAttacker = +[](ON_ATTACKER) -> int {
-        return PureLoveOnAttacker(DELEGATE_ATTACKER) | Impl<ABILITY_CUTE_CHARM>.onAttacker(DELEGATE_ATTACKER);
-    },
+    .onAttacker = +[](ON_ATTACKER) -> int { return PureLoveOnAttacker(DELEGATE_ATTACKER) | Impl<ABILITY_CUTE_CHARM>.onAttacker(DELEGATE_ATTACKER); },
     .onDefender = Impl<ABILITY_CUTE_CHARM>.onDefender,
     .canInfatuateAny = TRUE,
 };
@@ -10783,36 +10781,85 @@ constexpr Ability Impl<ABILITY_GREEDY> = {
     },
 };
 
+static int StrikeoutClearFlags(int battler, AbilityEnum ability, int clearFor) {
+    AbilityStates state = GetAbilityStateAs(battler, ability);
+
+    if (clearFor == 0 || clearFor == 1) {
+        state.strikeoutState.damagedBy1 = FALSE;
+        state.strikeoutState.counter1 = 0;
+    } else {
+        state.strikeoutState.damagedBy2 = FALSE;
+        state.strikeoutState.counter2 = 0;
+    }
+
+    SetAbilityStateAs(battler, ability, state);
+    return FALSE;
+}
+
 template <>
 constexpr Ability Impl<ABILITY_STRIKEOUT> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
         int any = FALSE;
 
-        if (!GetAbilityState(battler, ability) && gVolatileStructs[battler].isFirstTurn != 2) {
-            gVolatileStructs[battler].strikeoutCount += 1;
+        StrikeoutState state = GetAbilityStateAs(battler, ability).strikeoutState;
+
+        if (gVolatileStructs[battler].isFirstTurn != 2) {
+            if (!state.damagedBy1) state.counter1++;
+            if (!state.damagedBy2) state.counter2++;
         }
 
-        if (gVolatileStructs[battler].strikeoutCount == 3) {
-            gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
-                .ability = ability,
-                .move = MOVE_WHIRLWIND,
-                .movePower = 20,
-                .attacker = battler,
-                .target = GetOppositeSide(battler),
-            };
-            gVolatileStructs[battler].strikeoutCount = 0;
-            any = TRUE;
+        if (state.counter2 >= 3) {
+            state.counter2 = 0;
+            u8 target = BATTLE_PARTNER(BATTLE_OPPOSITE(GetBattlerSide(battler)));
+            if (IsBattlerAlive(target)) {
+                gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+                    .ability = ability,
+                    .move = MOVE_WHIRLWIND,
+                    .movePower = 20,
+                    .attacker = battler,
+                    .target = target,
+                };
+            }
         }
 
-        SetAbilityState(battler, ability, FALSE);
+        if (state.counter1 >= 3) {
+            state.counter1 = 0;
+            u8 target = BATTLE_OPPOSITE(GetBattlerSide(battler));
+            if (IsBattlerAlive(target)) {
+                gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+                    .ability = ability,
+                    .move = MOVE_WHIRLWIND,
+                    .movePower = 20,
+                    .attacker = battler,
+                    .target = target,
+                };
+            }
+        }
+
+        state.damagedBy1 = FALSE;
+        state.damagedBy2 = FALSE;
+
+        SetAbilityStateAs(battler, ability, (AbilityStates){.strikeoutState = state});
         return any ? NO_ANNOUNCE : FALSE;
     },
-
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(DidMoveHit())
-        SetAbilityState(battler, ability, TRUE);
+        CHECK(GetBattlerSide(attacker) != GetBattlerSide(battler))
+
+        StrikeoutState state = GetAbilityStateAs(battler, ability).strikeoutState;
+        if (attacker == 0 || attacker == 1) {
+            state.damagedBy1 = TRUE;
+        } else {
+            state.damagedBy2 = TRUE;
+        }
+
+        SetAbilityStateAs(battler, ability, (AbilityStates){.strikeoutState = state});
         return FALSE;
     },
+    .onBattlerFaints = +[](ON_BATTLER_FAINTS) -> int { return StrikeoutClearFlags(battler, ability, fainted); },
+    .onExit = +[](ON_EXIT) -> int { return StrikeoutClearFlags(battler, ability, switchingBattler); },
+    .onBattlerFaintsFor = APPLY_ON_FOE,
+    .onExitFor = APPLY_ON_FOE,
 };
 
 template <>

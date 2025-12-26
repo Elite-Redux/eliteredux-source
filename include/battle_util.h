@@ -140,11 +140,19 @@ typedef struct {
     u8 active:1;
 } MimicryState;
 
+typedef struct {
+    u8 counter1;
+    u8 counter2;
+    u8 damagedBy1;
+    u8 damagedBy2;
+} StrikeoutState;
+
 typedef union AbilityStates {
     ParadoxBoost paradoxBoost;
     StatCopyState statCopyState;
     CudChewState cudChewState;
     MimicryState mimicryState;
+    StrikeoutState strikeoutState;
     u32 intValue;
 } AbilityStates;
 

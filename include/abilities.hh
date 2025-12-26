@@ -87,7 +87,7 @@ typedef int (*AbilityOnChooseDefensiveStat)(int battler, int target, MoveEnum mo
 typedef int (*AbilityOnStab)(Type moveType);
 typedef int (*AbilityOnPriority)(int battler, int target, MoveEnum move);
 typedef int (*AbilityOnMoveType)(AbilityEnum ability, MoveEnum move, Type moveType, u8* ateBoost);
-typedef int (*AbilityOnSwitchOut)(AbilityEnum ability, int battler);
+typedef int (*AbilityOnSwitchOut)(AbilityEnum ability, int battler, int switchingBattler);
 typedef int (*AbilityOnCrit)(int battler, int target, MoveEnum move, u16 typeEffectiveness);
 #define NEVER_CRIT -2
 #define ALWAYS_CRIT 3
@@ -233,6 +233,7 @@ typedef struct Ability {
     AbilityApplyOnWithTarget onBeforeAttackFor:5;
     AbilityApplyOn onStatLoweredFor:3;
     AbilityApplyOn onBlockStatDropsFor:3;
+    AbilityApplyOn onExitFor:3;
     TerrainType allowTerrainIfAirborne:5;
     MoveEffectEnum setStateOnEffect;
     u16 redirectType:5;

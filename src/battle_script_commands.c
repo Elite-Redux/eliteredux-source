@@ -12241,11 +12241,15 @@ static void Cmd_switchoutabilities(void) {
     gActiveBattler = GetBattlerForBattleScript(READ_FIRST_8_INC);
     gRoundStructs[gActiveBattler].protectedThisTurn = FALSE;
 
-    ON_ABILITY(
-        gActiveBattler, FALSE, gAbilities[ability].onExit, if (gAbilities[ability].onExit(ability, gActiveBattler)) {
-            gBattlerAbility = gActiveBattler;
-            BattleScriptCall(BattleScript_AbilityPopUp);
-        })
+    for (int i = 0; i < gBattlersCount; i++) {
+        int battler = (gActiveBattler + i) % gBattlersCount;
+        FILTER(i == 0 || IsBattlerAlive(battler))
+        ON_ABILITY(
+            battler, FALSE, gAbilities[ability].onExit && IsApplyOnFlagAppropriate(gActiveBattler, battler, gAbilities[ability].onExitFor), if (gAbilities[ability].onExit(ability, battler, gActiveBattler)) {
+                gBattlerAbility = battler;
+                BattleScriptCall(BattleScript_AbilityPopUp);
+            })
+    }
 
     ReadActiveScriptInitialStackState();
 }
