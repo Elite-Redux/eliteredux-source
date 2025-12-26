@@ -8042,6 +8042,7 @@ BattleScript_RoarSuccessRet:
 BattleScript_RoarSuccessRet_Ret:
 	saveattackerandtargetto34
 	switchoutabilities BS_TARGET
+	waitstate
 	returntoball BS_TARGET
 	waitstate
 	return
@@ -11966,19 +11967,18 @@ BattleScript_DoSingleSwitchIn::
 	return
 
 BattleScript_RegeneratorExits::
-	tryhealpercenthealth BS_ATTACKER, 33, BattleScript_Return
-	datahpupdate BS_ATTACKER
+	tryhealpercenthealth BS_STACK_1, 33, BattleScript_Return
+	datahpupdate BS_STACK_1
 	return
 
 BattleScript_NaturalCureExits::
 	printstring STRINGID_NATURAL_CURE_EXITS
-	updatestatusicon BS_ATTACKER
+	curestatus BS_STACK_1
+	updatestatusicon BS_STACK_1
 	waitmessage B_WAIT_TIME_LONG
 	return
 
 BattleScript_RetrieverExits::
-	call BattleScript_AbilityPopUp
-	pause B_WAIT_TIME_SHORT
 	printstring STRINGID_RETRIEVEREXITS
 	waitmessage B_WAIT_TIME_LONG
 	return

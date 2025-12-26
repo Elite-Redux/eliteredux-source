@@ -883,8 +883,6 @@ constexpr Ability Impl<ABILITY_NATURAL_CURE> = {
 
         gActiveBattler = battler;
         gBattleMons[battler].status1 &= ~STATUS1_ANY;
-        BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
-        MarkBattlerForControllerExec(battler);
 
         gBattleScripting.abilityPopupOverwrite = ability;
         BattleScriptCall(BattleScript_NaturalCureExits);
@@ -2064,7 +2062,7 @@ constexpr Ability Impl<ABILITY_REGENERATOR> = {
         CHECK(IsBattlerAlive(battler))
         CHECK_NOT(BATTLER_MAX_HP(battler))
         BattleScriptCall(BattleScript_RegeneratorExits);
-        return FALSE;
+        return TRUE;
     },
 };
 

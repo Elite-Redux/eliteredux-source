@@ -4843,7 +4843,7 @@ static void Cmd_moveend(void) {
 
                         if (battler == gBattlerAttacker && GetOncePerTurnAbilityCounter(battler, ABILITY_HOLLOW_ICE_ZONE) &&
                             CountUsablePartyMons(battler) > 0) {
-                            gStackBattler1 = battler;
+                            gBattlerAbility = gStackBattler1 = battler;
                             gBattleScripting.abilityPopupOverwrite = ABILITY_HOLLOW_ICE_ZONE;
                             BattleScriptCall(BattleScript_EmergencyExitPopupNoPause);
                             effect = TRUE;
@@ -4866,7 +4866,7 @@ static void Cmd_moveend(void) {
                             CanBattlerSwitch(battler))  // Has mon to switch into
                         {
                             SetSingleUseAbilityCounter(battler, ABILITY_EJECT_PACK_ABILITY, TRUE);
-                            gStackBattler1 = battler;
+                            gBattlerAbility = gStackBattler1 = battler;
                             gRoundStructs[battler].statFell = FALSE;
                             gBattleScripting.abilityPopupOverwrite = ABILITY_EJECT_PACK_ABILITY;
                             BattleScriptCall(BattleScript_EmergencyExitPopupNoPause);
@@ -4933,7 +4933,12 @@ static void Cmd_moveend(void) {
             case MOVEEND_EMERGENCY_EXIT:  // Special case, because moves hitting multiple opponents stop after switching out
                 for (i = 0; i < gBattlersCount; i++) {
                     if (gBattleResources->flags->flags[i] & RESOURCE_FLAG_EMERGENCY_EXIT) {
-                        gStackBattler1 = i;
+                        if (HasAbilityIgnoringSuppression(i, ABILITY_WIMP_OUT)) {
+                            gBattleScripting.abilityPopupOverwrite = ABILITY_WIMP_OUT;
+                        } else {
+                            gBattleScripting.abilityPopupOverwrite = ABILITY_EMERGENCY_EXIT;
+                        }
+                        gBattlerAbility = gStackBattler1 = i;
                         gBattleResources->flags->flags[i] &= ~(RESOURCE_FLAG_EMERGENCY_EXIT);
                         BattleScriptPushCursor();
                         if (gBattleTypeFlags & BATTLE_TYPE_TRAINER || GetBattlerSide(i) == B_SIDE_PLAYER) {
@@ -12244,10 +12249,14 @@ static void Cmd_switchoutabilities(void) {
     for (int i = 0; i < gBattlersCount; i++) {
         int battler = (gActiveBattler + i) % gBattlersCount;
         FILTER(i == 0 || IsBattlerAlive(battler))
+        gStackBattler1 = battler;
         ON_ABILITY(
-            battler, FALSE, gAbilities[ability].onExit && IsApplyOnFlagAppropriate(gActiveBattler, battler, gAbilities[ability].onExitFor), if (gAbilities[ability].onExit(ability, battler, gActiveBattler)) {
-                gBattlerAbility = battler;
-                BattleScriptCall(BattleScript_AbilityPopUp);
+            battler,
+            FALSE,
+            gAbilities[ability].onExit && IsApplyOnFlagAppropriate(gActiveBattler, battler, gAbilities[ability].onExitFor),
+            if (gAbilities[ability].onExit(ability, battler, gActiveBattler) & 1) {
+                gBattleScripting.abilityPopupOverwrite = ability;
+                BattleScriptCall(BattleScript_AbilityPopUpStack);
             })
     }
 
