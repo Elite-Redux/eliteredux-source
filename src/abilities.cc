@@ -12020,7 +12020,22 @@ constexpr Ability Impl<ABILITY_FEATHERCOAT> = {
 
 template <>
 constexpr Ability Impl<ABILITY_POWER_OUTAGE> = {
-    .randomizerBanned = TRUE,
+    .onEntry = +[](ON_ENTRY) -> int {
+        return SwitchInAnnounce(B_MSG_SWITCHIN_POWER_OUTAGE);
+    },
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(moveType == TYPE_ELECTRIC)
+        CHECK_NOT(GetAbilityState(battler, ability))
+        SetAbilityState(battler, ability, TRUE);
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_ELECTRIC))
+
+        BattleScriptCall(BattleScript_BurnUpRemoveType);
+        return TRUE;
+    },
+    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) {
+        if (moveType == TYPE_ELECTRIC && !GetAbilityState(battler, ability)) MUL(2);
+    },
+    .persistent = TRUE,
 };
 
 template <>

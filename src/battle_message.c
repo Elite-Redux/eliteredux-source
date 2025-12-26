@@ -939,6 +939,7 @@ static const u8 sText_MentalPollution[] = _("The mental static prevents other\nb
 static const u8 sText_IceStatue[] = _("{B_DEF_NAME_WITH_PREFIX} is\nturned to ice!");
 static const u8 sText_ToxicBoostPoisons[] = _("{B_ATK_NAME_WITH_PREFIX} takes\nthe poison in!");
 static const u8 sText_PetalShield[] = _("{B_ATK_NAME_WITH_PREFIX} surrounds\nitself with a blur of petals.");
+static const u8 sText_PowerOutageEntry[] = _("The air crackles around\n{B_ATK_NAME_WITH_PREFIX}");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1978,6 +1979,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ICE_STATUE - 12] = sText_IceStatue,
     [STRINGID_TOXIC_BOOST_POISONS - 12] = sText_ToxicBoostPoisons,
     [STRINGID_PETAL_SHIELD - 12] = sText_PetalShield,
+    [STRINGID_POWER_OUTAGE_ENTRY - 12] = sText_PowerOutageEntry,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2077,6 +2079,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_WINTER_THRONE] = STRINGID_WINTER_THRONE_ENTRY,
     [B_MSG_SWITCHIN_CHRISTMAS_NIGHTMARE] = STRINGID_CHRISTMAS_NIGHTMARE,
     [B_MSG_SWITCHIN_PETAL_SHIELD] = STRINGID_PETAL_SHIELD,
+    [B_MSG_SWITCHIN_POWER_OUTAGE] = STRINGID_POWER_OUTAGE_ENTRY,
 };
 
 const u16 gParadoxBoostSourceIds[] = 
