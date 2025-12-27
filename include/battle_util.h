@@ -260,7 +260,15 @@ u32 IsAbilityOnOpposingSide(u32 battlerId, AbilityEnum ability);
 u32 IsAbilityOnField(AbilityEnum ability);
 u32 IsAbilityOnFieldExcept(u32 battlerId, AbilityEnum ability);
 u32 IsAbilityPreventingEscape(u32 battlerId);
-bool32 IsBattlerProtected(u8 battlerId, MoveEnum move);
+
+typedef enum ProtectType {
+    PROTECT_NONE = 0,
+    PROTECT_BLOCK = 1 << 0,
+    PROTECT_TOUCH_BUT_DAMAGED = 1 << 1,
+    PROTECT_BLOCK_ALWAYS_TOUCH = PROTECT_BLOCK | 1 << 2,
+} ProtectType;
+
+ProtectType IsBattlerProtected(u8 battlerId, MoveEnum move);
 bool32 CanBattlerEscape(u32 battlerId);  // no ability check
 void BattleScriptExecute(const u8* BS_ptr);
 void BattleScriptPushCursorAndCallback(const u8* BS_ptr);

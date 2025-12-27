@@ -9712,6 +9712,14 @@ BattleScript_PowerOfAlchemyGold::
 	waitmessage B_WAIT_TIME_LONG
 	return
 	
+BattleScript_StackAddedTheTypeRet::
+	saveattackertostack3
+	copybyte gBattlerAttacker, gStackBattler1
+	printstring STRINGID_BATTLERADDEDTHETYPE
+	waitmessage B_WAIT_TIME_LONG
+	readattackerfromstack3
+	return
+
 BattleScript_BattlerAddedTheType::
 	printstring STRINGID_BATTLERADDEDTHETYPE
 	waitmessage B_WAIT_TIME_LONG

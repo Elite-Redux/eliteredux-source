@@ -3388,7 +3388,7 @@ static void TryDoEventsBeforeFirstTurn(void) {
     for (i = 0; i < gBattlersCount; i++) {
         if (!IsBattlerAlive(i)) continue;
         // Restore Coward for the first turn
-        if (GetSingleUseAbilityCounter(i, ABILITY_COWARD) > 0) gRoundStructs[i].isProtected = TRUE;
+        if (GetSingleUseAbilityCounter(i, ABILITY_COWARD) > 0) gRoundStructs[i].protectMove = MOVE_PROTECT;
     }
     TurnStructsClear();
     gCurrentTurnActionNumber = gBattlersCount;

@@ -160,13 +160,9 @@ struct VolatileStruct {
 struct RoundStruct {
     u32 physicalDmg;
     u32 specialDmg;
+    MoveEnum protectMove;
     u8 physicalBattlerId;
     u8 specialBattlerId;
-    u8 isProtected:1;
-    u8 spikyShielded:1;
-    u8 kingsShielded:1;
-    u8 banefulBunkered:1;
-    u8 obstructed:1;
     u8 endured:1;
     u8 noValidMoves:1;
     u8 helpingHand:1;
@@ -185,7 +181,6 @@ struct RoundStruct {
     u8 notFirstStrike:1;
     u8 palaceUnableToUseMove:1;
     u8 usesBouncedMove:1;
-    u8 protectedThisTurn:1;
     u8 usedHealBlockedMove:1;
     u8 usedGravityPreventedMove:1;
     u8 powderSelfDmg:1;
@@ -197,20 +192,11 @@ struct RoundStruct {
     u8 disableEjectPack:1;
     u8 statFell:1;
     u8 quickDraw:1;
-    u8 iceBurnCharge:1;
-    u8 angelsWrathProtected:1;
     u8 glaiveRush:1;
-    u8 silkTrapped:1;
     u8 attackCancelled:1;
-    u8 burningBulwark:1;
-    u8 mindReader:1;
     u8 afterYou:1;
-    u8 tanglingHusked:1;
     u8 damaged:1;
-    u8 merculight:1;
-    u8 detected:1;
     u8 safePassage:1;
-    u8 freezeShockCharge:1;
 };
 
 struct TurnStruct {
@@ -766,13 +752,9 @@ struct BattleStruct {
         gBattleMons[battlerId].type3 = TYPE_MYSTERY; \
     }
 
-#define IS_BATTLER_PROTECTED(battlerId)                                                                                                          \
-    (gRoundStructs[battlerId].isProtected || gRoundStructs[gActiveBattler].protectedThisTurn ||                                                  \
-     gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_WIDE_GUARD || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_QUICK_GUARD ||  \
-     gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_CRAFTY_SHIELD || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_MAT_BLOCK || \
-     gRoundStructs[battlerId].angelsWrathProtected || gRoundStructs[battlerId].spikyShielded || gRoundStructs[battlerId].kingsShielded ||        \
-     gRoundStructs[battlerId].banefulBunkered || gRoundStructs[battlerId].obstructed || gRoundStructs[battlerId].burningBulwark ||               \
-     gRoundStructs[battlerId].silkTrapped || gRoundStructs[battlerId].mindReader || gRoundStructs[battlerId].tanglingHusked)
+#define IS_BATTLER_PROTECTED(battlerId)      \
+    (gRoundStructs[battlerId].protectMove || \
+     gSideStatuses[GetBattlerSide(battlerId)] & (SIDE_STATUS_WIDE_GUARD | SIDE_STATUS_CRAFTY_SHIELD | SIDE_STATUS_MAT_BLOCK))
 
 #define SET_STAT_BUFF_VALUE(n) ((((n) << 3) & 0xF8))
 

@@ -6432,61 +6432,80 @@ bool32 IsMoveMakingContact(MoveEnum move, u8 battlerAtk) {
     }
 }
 
-bool32 IsBattlerProtected(u8 battlerId, MoveEnum move) {
+ProtectType IsBattlerProtected(u8 battlerId, MoveEnum move) {
     int moveType;
 
     GET_MOVE_TYPE(move, moveType)
 
     // Protective Pads doesn't stop Unseen Fist from bypassing Protect effects, so IsMoveMakingContact() isn't used here.
     // This means extra logic is needed to handle Shell Side Arm.
-    if (IS_MOVE_STATUS(move) && !(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED)) return FALSE;
-    if (gRoundStructs[battlerId].iceBurnCharge && IsMoveMakingContact(move, gBattlerAttacker)) return TRUE;
-    if (gRoundStructs[battlerId].freezeShockCharge && IsMoveMakingContact(move, gBattlerAttacker)) return TRUE;
-    if (gRoundStructs[battlerId].merculight && !IS_MOVE_STATUS(move) && GetTotalAccuracy(gBattlerAttacker, battlerId, move, NULL) < 101) return TRUE;
-    if (gRoundStructs[battlerId].detected && GetTotalAccuracy(gBattlerAttacker, battlerId, move, NULL) < 101)
-        return TRUE;
-    else if (gRoundStructs[battlerId].mindReader && GetTotalAccuracy(gBattlerAttacker, battlerId, move, NULL) < 101)
-        return TRUE;
-    else if ((BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_UNSEEN_FIST) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_FINAL_BLOW)) &&
-             (gBattleMoves[move].contact || (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)))
-        return FALSE;
+    if (IS_MOVE_STATUS(move) && !(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED)) return PROTECT_NONE;
+
+    switch (gRoundStructs[battlerId].protectMove) {
+        case MOVE_MERCULIGHT:
+            if (GetTotalAccuracy(gBattlerAttacker, battlerId, move, NULL) < 101 && !IS_MOVE_STATUS(move)) return PROTECT_BLOCK_ALWAYS_TOUCH;
+            break;
+
+        case MOVE_DETECT:
+            if (GetTotalAccuracy(gBattlerAttacker, battlerId, move, NULL) < 101) return PROTECT_BLOCK;
+            break;
+    }
+
+    int evadesProtect = FALSE;
+
+    if ((BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_UNSEEN_FIST) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_FINAL_BLOW)) &&
+        (gBattleMoves[move].contact || (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)))
+        evadesProtect = TRUE;
     else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DEMOLITIONIST) && gVolatileStructs[gBattlerAttacker].readiedAction)
-        return FALSE;
+        evadesProtect = TRUE;
     else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PINNACLE_BLADE) && IsKeenEdge(battlerId, move, moveType))
-        return FALSE;
+        evadesProtect = TRUE;
     else if (!(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED))
-        return FALSE;
+        evadesProtect = TRUE;
     else if (gBattleMoves[move].effect == EFFECT_FEINT)
-        return FALSE;
-    else if (gRoundStructs[battlerId].isProtected)
-        return TRUE;
-    else if (gRoundStructs[battlerId].protectedThisTurn)
-        return TRUE;
-    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_WIDE_GUARD &&
-             GetBattlerBattleMoveTargetFlags(move, gBattlerAttacker) & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
-        return TRUE;
-    else if (gRoundStructs[battlerId].banefulBunkered)
-        return TRUE;
-    else if (gRoundStructs[battlerId].obstructed && !IS_MOVE_STATUS(move))
-        return TRUE;
-    else if (gRoundStructs[battlerId].silkTrapped && !IS_MOVE_STATUS(move))
-        return TRUE;
-    else if (gRoundStructs[battlerId].burningBulwark && !IS_MOVE_STATUS(move))
-        return TRUE;
-    else if (gRoundStructs[battlerId].spikyShielded)
-        return TRUE;
-    else if (gRoundStructs[battlerId].kingsShielded && gBattleMoves[move].power != 0)
-        return TRUE;
-    else if (gRoundStructs[battlerId].angelsWrathProtected && gBattleMoves[move].power != 0)
-        return TRUE;
-    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_CRAFTY_SHIELD && IS_MOVE_STATUS(move))
-        return TRUE;
-    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_MAT_BLOCK && !IS_MOVE_STATUS(move))
-        return TRUE;
-    else if (gRoundStructs[battlerId].tanglingHusked && moveType != TYPE_FIRE)
-        return TRUE;
-    else
-        return FALSE;
+        evadesProtect = TRUE;
+
+    if (!evadesProtect) {
+        switch (gRoundStructs[battlerId].protectMove) {
+            case MOVE_NONE:
+                break;
+
+            case MOVE_OBSTRUCT:
+            case MOVE_SILK_TRAP:
+            case MOVE_BURNING_BULWARK:
+            case MOVE_KINGS_SHIELD:
+            // Angel's Wrath
+            case MOVE_IRON_DEFENSE:
+                if (!IS_MOVE_STATUS(move)) return PROTECT_BLOCK;
+                break;
+
+            case MOVE_TANGLING_HUSK:
+                if (moveType != TYPE_FIRE) return PROTECT_BLOCK;
+                break;
+
+            case MOVE_CAMOUFLAGE:
+                return PROTECT_BLOCK_ALWAYS_TOUCH;
+
+            default:
+                return PROTECT_BLOCK;
+        }
+
+        if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_WIDE_GUARD &&
+            GetBattlerBattleMoveTargetFlags(move, gBattlerAttacker) & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
+            return PROTECT_BLOCK;
+        else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_CRAFTY_SHIELD && IS_MOVE_STATUS(move))
+            return PROTECT_BLOCK;
+        else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_MAT_BLOCK && !IS_MOVE_STATUS(move))
+            return PROTECT_BLOCK;
+    }
+        
+    switch (gRoundStructs[battlerId].protectMove) {
+        case MOVE_ICE_BURN:
+        case MOVE_FREEZE_SHOCK:
+            return PROTECT_TOUCH_BUT_DAMAGED;
+    }
+
+    return PROTECT_NONE;
 }
 
 static int CheckGroundingEffects(u8 battlerId) {

@@ -5287,7 +5287,7 @@ constexpr Ability Impl<ABILITY_COWARD> = {
         CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
 
         SetSingleUseAbilityCounter(battler, ability, TRUE);
-        gRoundStructs[battler].protectedThisTurn = TRUE;
+        gRoundStructs[battler].protectMove = MOVE_PROTECT;
         BattleScriptPushCursorAndCallback(BattleScript_BattlerIsProtectedForThisTurn);
         return TRUE;
     },
@@ -5479,7 +5479,7 @@ constexpr Ability Impl<ABILITY_ANGELS_WRATH> = {
             case MOVE_IRON_DEFENSE: {
                 CHECK_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
 
-                gRoundStructs[battler].angelsWrathProtected = TRUE;
+                gRoundStructs[battler].protectMove = MOVE_IRON_DEFENSE;
                 BattleScriptCall(BattleScript_AngelsWrath_Effect_Iron_Defense);
                 return TRUE;
             }
@@ -9633,7 +9633,7 @@ ON_EITHER(WoodlandCurse) {
     gBattleMons[opponent].type3 = TYPE_GRASS;
     PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMons[opponent].type3);
     gStackBattler1 = opponent;
-    BattleScriptCall(BattleScript_StackBecameTheTypeFull);
+    BattleScriptCall(BattleScript_StackAddedTheTypeRet);
     return TRUE;
 }
 template <>
