@@ -1143,9 +1143,7 @@ bool32 IsHazardMoveEffect(u16 moveEffect) {
 bool32 IsMoveRedirectionPrevented(u16 move, u16 battler) {
     if (AI_THINKING_STRUCT->aiFlags & AI_FLAG_NEGATE_UNAWARE) return FALSE;
 
-    if (move == MOVE_SKY_DROP || move == MOVE_SNIPE_SHOT || BattlerHasAbility(battler, ABILITY_PROPELLER_TAIL, FALSE) ||
-        BattlerHasAbility(battler, ABILITY_STALWART, FALSE))
-        return TRUE;
+    if (move == MOVE_SKY_DROP || move == MOVE_SNIPE_SHOT || IsStatusImmune(battler, CHECK_REDIRECTION)) return TRUE;
     return FALSE;
 }
 

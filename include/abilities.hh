@@ -111,6 +111,7 @@ typedef enum {
     CHECK_HEAL_BLOCK = 1 << 9,
     CHECK_DRENCH = 1 << 10,
     CHECK_FLINCH = 1 << 11,
+    CHECK_REDIRECTION = 1 << 12,
 } StatusCheckEnum;
 typedef int (*AbilityOnCanStatusType)(int battler, MoveEnum move, StatusCheckEnum status);
 typedef int (*AbilityOnStatusImmune)(int battler, int target, AbilityEnum ability, StatusCheckEnum status);
@@ -243,6 +244,7 @@ typedef struct Ability {
     u16 breakable:1;
     u16 unsuppressable:1;
     u16 persistent:1;
+    u16 blocksAbilitySuppression:1;
     u16 randomizerBanned:1;
     u16 unaware:1;
     u16 absorbUp2:1;

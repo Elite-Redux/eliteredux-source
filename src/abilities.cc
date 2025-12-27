@@ -9641,6 +9641,7 @@ constexpr Ability Impl<ABILITY_MALODOR> = {
         CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(gStatuses3[attacker] & STATUS3_GASTRO_ACID)
+        CHECK_NOT(DoesBattlerHaveAbilityShield(attacker))
 
         gStatuses3[attacker] |= STATUS3_GASTRO_ACID;
         BattleScriptCall(BattleScript_StackAbilitySuppressedMessage);
@@ -9868,6 +9869,7 @@ constexpr Ability Impl<ABILITY_HEMOTOXIN> = {
             battler,
             [](opt int battler, int target) -> int {
                 CHECK_NOT(gStatuses3[target] & STATUS3_GASTRO_ACID);
+                CHECK_NOT(DoesBattlerHaveAbilityShield(target))
                 gStatuses3[target] |= STATUS3_GASTRO_ACID;
                 return TRUE;
             },
@@ -10373,6 +10375,21 @@ constexpr Ability Impl<ABILITY_ICE_PLUMES> = {
 template <>
 constexpr Ability Impl<ABILITY_PROPELLER_TAIL> = {
     .onStat = Impl<ABILITY_SWIFT_SWIM>.onStat,
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_REDIRECTION)
+        return TRUE;
+    },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_STALWART> = {
+    .onCrit = +[](ON_CRIT) { return NEVER_CRIT; },
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
+        CHECK(status & (CHECK_REDIRECTION))
+        return TRUE;
+    },
+    .onCritFor = APPLY_ON_TARGET,
+    .unsuppressable = TRUE,
 };
 
 template <>
@@ -11854,6 +11871,7 @@ constexpr Ability Impl<ABILITY_MENTAL_POLLUTION> = {
             FILTER(i != battler)
             FILTER_NOT(BattlerHasAbility(i, ABILITY_MENTAL_POLLUTION, FALSE))
             FILTER_NOT(gStatuses3[battler] & STATUS3_GASTRO_ACID)
+            FILTER_NOT(DoesBattlerHaveAbilityShield(battler))
             gStatuses3[battler] |= STATUS3_GASTRO_ACID;
             any = TRUE;
         }

@@ -11971,11 +11971,11 @@ static void Cmd_settoxicspikes(void) {
 }
 
 static void Cmd_setgastroacid(void) {
-    if (gStatuses3[gBattlerTarget] & STATUS3_GASTRO_ACID) {
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    const u8* ptr = READ_FIRST_PTR_INC;
+    if (gStatuses3[gBattlerTarget] & STATUS3_GASTRO_ACID || DoesBattlerHaveAbilityShield(gBattlerTarget)) {
+        gBattlescriptCurrInstr = ptr;
     } else {
         gStatuses3[gBattlerTarget] |= STATUS3_GASTRO_ACID;
-        gBattlescriptCurrInstr += 5;
     }
 }
 

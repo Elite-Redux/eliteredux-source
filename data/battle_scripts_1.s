@@ -13178,7 +13178,7 @@ BattleScript_SepticSwitch::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	setgastroacid BattleScript_ButItFailed
+	setgastroacid BattleScript_SepticSwitch_FailIfNoSwitch
 	attackanimation
 	waitanimation
 	printstring STRINGID_PKMNSABILITYSUPPRESSED
@@ -13186,6 +13186,12 @@ BattleScript_SepticSwitch::
 	trytoclearprimalweather
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
+BattleScript_SepticSwitch_Continue:
     moveendto MOVEEND_ATTACKER_VISIBLE
     moveendfrom MOVEEND_TARGET_VISIBLE
     goto BattleScript_MoveSwitch
+BattleScript_SepticSwitch_FailIfNoSwitch:
+	jumpifcantswitch SWITCH_IGNORE_ESCAPE_PREVENTION | BS_ATTACKER, BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	goto BattleScript_SepticSwitch_Continue

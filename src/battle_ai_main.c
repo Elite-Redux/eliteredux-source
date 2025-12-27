@@ -1810,7 +1810,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             if (BattlerHasAbility(battlerDef, ABILITY_INSOMNIA, TRUE) || IsWorrySeedBannedAbility(GetBattlerAbility(battlerDef))) score -= 10;
             break;
         case EFFECT_GASTRO_ACID:
-            if (gStatuses3[battlerDef] & STATUS3_GASTRO_ACID) score -= 10;
+            if (gStatuses3[battlerDef] & STATUS3_GASTRO_ACID || DoesBattlerHaveAbilityShield(battlerDef)) score -= 10;
             break;
         case EFFECT_ENTRAINMENT:
             if (GetBattlerAbility(battlerAtk) == ABILITY_NONE || IsEntrainmentBannedAbilityAttacker(GetBattlerAbility(battlerAtk)) ||

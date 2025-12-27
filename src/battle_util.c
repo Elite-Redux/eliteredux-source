@@ -116,7 +116,7 @@ u8 CalcBeatUpPower(void) {
 
 bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move) {
     if (gSideTimers[defSide].followmeTimer == 0 || gBattleMons[gSideTimers[defSide].followmeTarget].hp == 0 || gBattleMoves[move].effect == EFFECT_SNIPE_SHOT ||
-        BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PROPELLER_TAIL) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_STALWART))
+        IsStatusImmune(battlerAtk, CHECK_REDIRECTION))
         return FALSE;
 
     if (gSideTimers[defSide].followmePowder && IsPowderImmune(battlerAtk, TRUE)) return FALSE;
@@ -6401,6 +6401,9 @@ u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating) {
 }
 
 bool8 DoesBattlerHaveAbilityShield(u8 battlerId) {
+    for (int i = 0; i < ARRAY_COUNT(gBattleMons[battlerId].abilities); i++) {
+        if (gAbilities[gBattleMons[battlerId].abilities[i]].blocksAbilitySuppression) return TRUE;
+    }
     if (GetBattlerHoldEffect(battlerId, FALSE) != HOLD_EFFECT_ABILITY_SHIELD) return FALSE;
     return !(gStatuses3[battlerId] & STATUS3_EMBARGO);
 }
@@ -9351,7 +9354,7 @@ AbilityEnum HasRedirectionAbility(int battlerAtk, int battlerDef, MoveEnum move,
     if (!type) return ABILITY_NONE;
     if (battlerAtk == battlerDef) return ABILITY_NONE;
     if (gBattleMoves[move].effect == EFFECT_SNIPE_SHOT) return ABILITY_NONE;
-    if (BattlerHasAbility(battlerAtk, ABILITY_PROPELLER_TAIL, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_STALWART, FALSE)) return ABILITY_NONE;
+    if (IsStatusImmune(battlerAtk, CHECK_REDIRECTION)) return ABILITY_NONE;
     RETURN_ABILITY_IF_FLAG(battlerDef, TRUE, redirectType == type)
     return ABILITY_NONE;
 }
