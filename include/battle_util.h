@@ -129,14 +129,14 @@ typedef struct {
 } StatCopyState;
 
 typedef struct {
-    u16 itemId;
+    ItemEnum itemId;
     bool8 setThisTurn:1;
     bool8 activating:1;
 } CudChewState;
 
 typedef struct {
-    u8 type1:5;
-    u8 type2:5;
+    Type type1:5;
+    Type type2:5;
     u8 active:1;
 } MimicryState;
 

@@ -580,7 +580,7 @@ struct Illusion {
 };
 
 struct StolenItem {
-    u16 originalItem:15;
+    ItemEnum originalItem:15;
     u16 stolen:1;
 };
 
@@ -722,9 +722,9 @@ struct BattleStruct {
     u16 moveEffect2;                       // For Knock Off
     u16 changedSpecies[PARTY_SIZE];        // For Zygarde or future forms when multiple mons can change into the same pokemon.
     u8 quickClawBattlerId;
-    struct StolenItem itemStolen[PARTY_SIZE];  // Player's team that had items stolen (two bytes per party member)
-    u16 opposingOriginalItems[PARTY_SIZE];     // Player's team that had items stolen (two bytes per party member)
-    u8 blunderPolicy:1;                        // should blunder policy activate
+    struct StolenItem itemStolen[PARTY_SIZE];    // Player's team that had items stolen (two bytes per party member)
+    ItemEnum opposingOriginalItems[PARTY_SIZE];  // Player's team that had items stolen (two bytes per party member)
+    u8 blunderPolicy:1;                          // should blunder policy activate
     StatStageCheckState statStageCheckState:2;
     u8 ballSpriteIds[2];   // item gfx, window gfx
     u8 moveInfoSpriteId;   // window gfx
@@ -983,7 +983,7 @@ extern MoveEnum gCalledMove;
 extern s32 gBattleMoveDamage;
 extern s32 gHpDealt;
 extern s32 gTakenDmg[MAX_BATTLERS_COUNT];
-extern u16 gLastUsedItem;
+extern ItemEnum gLastUsedItem;
 extern u8 gBattlerAttacker;
 extern u8 gBattlerTarget;
 extern u8 gBattlerFainted;
@@ -995,16 +995,16 @@ extern const u8* gBattlescriptCurrInstr;
 extern u8 gChosenActionByBattler[MAX_BATTLERS_COUNT];
 extern const u8* gSelectionBattleScripts[MAX_BATTLERS_COUNT];
 extern const u8* gPalaceSelectionBattleScripts[MAX_BATTLERS_COUNT];
-extern u16 gLastPrintedMoves[MAX_BATTLERS_COUNT];
-extern u16 gLastMoves[MAX_BATTLERS_COUNT];
-extern u16 gLastLandedMoves[MAX_BATTLERS_COUNT];
+extern MoveEnum gLastPrintedMoves[MAX_BATTLERS_COUNT];
+extern MoveEnum gLastMoves[MAX_BATTLERS_COUNT];
+extern MoveEnum gLastLandedMoves[MAX_BATTLERS_COUNT];
 extern u16 gLastHitByType[MAX_BATTLERS_COUNT];
-extern u16 gLastResultingMoves[MAX_BATTLERS_COUNT];
-extern u16 gLockedMoves[MAX_BATTLERS_COUNT];
-extern u16 gLastUsedMove;
+extern MoveEnum gLastResultingMoves[MAX_BATTLERS_COUNT];
+extern MoveEnum gLockedMoves[MAX_BATTLERS_COUNT];
+extern MoveEnum gLastUsedMove;
 extern u8 gLastHitBy[MAX_BATTLERS_COUNT];
-extern u16 gChosenMoveByBattler[MAX_BATTLERS_COUNT];
-extern u16 gLastChosenMove[MAX_BATTLERS_COUNT];
+extern MoveEnum gChosenMoveByBattler[MAX_BATTLERS_COUNT];
+extern MoveEnum gLastChosenMove[MAX_BATTLERS_COUNT];
 extern u16 gMoveResultFlags;
 extern u32 gHitMarker;
 extern u8 gTakenDmgByBattler[MAX_BATTLERS_COUNT];

@@ -44,10 +44,18 @@ class __EnumHack {
 #define ENUM_OR(enumType) \
     inline constexpr enumType operator|(enumType a, enumType b) { return static_cast<enumType>(static_cast<int>(a) | static_cast<int>(b)); }
 
+#define ENUM_ADD(enumType)                                  \
+    inline constexpr enumType& operator++(enumType& a) {    \
+        a = static_cast<enumType>(static_cast<int>(a) + 1); \
+        return a;                                           \
+    }
+
 ENUM_OR(InfiltrateType)
 ENUM_OR(MoveEffectEnum)
 ENUM_OR(TerrainType)
 ENUM_OR(NonStackingState)
+
+ENUM_ADD(Type)
 
 #define CHECK(effect) \
     if (!(effect)) return __EnumHack();
@@ -276,7 +284,7 @@ static int TryTransformAttacker(int battler, AbilityCallType callType) {
     return TRUE;
 }
 
-static int AddBattlerType(int battler, int type) {
+static int AddBattlerType(int battler, Type type) {
     CHECK_NOT(IS_BATTLER_OF_TYPE(battler, type))
 
     gBattleMons[battler].type3 = type;
@@ -696,10 +704,10 @@ constexpr Ability Impl<ABILITY_COLOR_CHANGE> = {
         CHECK(battler != attacker)
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
 
-        u32 bestType = gBattleMons[gBattlerTarget].type1;
+        Type bestType = gBattleMons[gBattlerTarget].type1;
         u16 bestModifier = GetTypeModifier(moveType, bestType, attacker, battler);
 
-        for (int currentType = TYPE_NORMAL; currentType < NUMBER_OF_MON_TYPES; ++currentType) {
+        for (Type currentType = TYPE_NORMAL; currentType < NUMBER_OF_MON_TYPES; ++currentType) {
             u16 currentModifier = GetTypeModifier(moveType, currentType, attacker, battler);
             if (currentModifier < bestModifier) {
                 bestModifier = currentModifier;
@@ -953,6 +961,7 @@ constexpr Ability Impl<ABILITY_ILLUMINATE> = {
         PREPARE_TYPE_BUFFER(gBattleTextBuff1, TYPE_GHOST);
         gStackBattler1 = target;
         BattleScriptCall(BattleScript_StackRemovedType);
+        return TRUE;
     },
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         *accuracy *= 1.2;
@@ -3296,7 +3305,7 @@ constexpr Ability Impl<ABILITY_POWER_SPOT> = {
 };
 
 int HandleMimicry(u8 battler, AbilityEnum ability, AbilityCallType endType) {
-    u32 moveType = 0;
+    Type moveType = TYPE_NORMAL;
 
     switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) {
         case STATUS_FIELD_ELECTRIC_TERRAIN:
@@ -3312,7 +3321,7 @@ int HandleMimicry(u8 battler, AbilityEnum ability, AbilityCallType endType) {
             moveType = TYPE_PSYCHIC;
             break;
         default:
-            moveType = 0;
+            moveType = TYPE_NORMAL;
             break;
     }
 
@@ -8529,9 +8538,9 @@ constexpr Ability Impl<ABILITY_ENERGIZED> = {
 template <>
 constexpr Ability Impl<ABILITY_COLOR_SPECTRUM> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
-        int newType;
+        Type newType;
         do {
-            newType = Random() % NUMBER_OF_MON_TYPES;
+            newType = static_cast<Type>(Random() % NUMBER_OF_MON_TYPES);
         } while (newType == TYPE_MYSTERY || newType == TYPE_STELLAR || IS_BATTLER_OF_TYPE(battler, newType));
 
         gBattleMons[battler].type1 = newType;
