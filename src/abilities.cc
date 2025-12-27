@@ -1406,7 +1406,7 @@ constexpr Ability Impl<ABILITY_SHELL_ARMOR> = {
 
 template <>
 constexpr Ability Impl<ABILITY_AIR_LOCK> = {
-    .onEntry = Impl<ABILITY_CLOUD_NINE>.onEntry,
+    .onEntry = +[](ON_ENTRY) -> int { return Impl<ABILITY_CLOUD_NINE>.onEntry(DELEGATE_ENTRY) | Impl<ABILITY_AIR_BLOWER>.onEntry(DELEGATE_ENTRY); },
 };
 
 template <>
