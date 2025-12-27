@@ -988,7 +988,8 @@ BattleScript_EffectSappySeed:
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectBaddyBad:
-	jumpifsideaffecting BS_ATTACKER, SIDE_STATUS_REFLECT, BattleScript_EffectHit
+	jumpifsideaffecting BS_ATTACKER, SIDE_STATUS_REFLECT, BattleScript_EffectBaddyBad_CheckScreenCleaner
+BattleScript_EffectBaddyBad_Continue:
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
@@ -1011,9 +1012,13 @@ BattleScript_EffectBaddyBad:
 	printfromtable gReflectLightScreenSafeguardStringIds
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
+BattleScript_EffectBaddyBad_CheckScreenCleaner:
+	jumpifability BS_ATTACKER, ABILITY_SCREEN_CLEANER, BattleScript_EffectBaddyBad_Continue
+	goto BattleScript_EffectHit
 
 BattleScript_EffectGlitzyGlow:
-	jumpifsideaffecting BS_ATTACKER, SIDE_STATUS_LIGHTSCREEN, BattleScript_EffectHit
+	jumpifsideaffecting BS_ATTACKER, SIDE_STATUS_LIGHTSCREEN, BattleScript_EffectGlitzyGlow_CheckScreenCleaner
+	BattleScript_EffectGlitzyGlow_Continue:
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
@@ -1036,6 +1041,9 @@ BattleScript_EffectGlitzyGlow:
 	printfromtable gReflectLightScreenSafeguardStringIds
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
+BattleScript_EffectGlitzyGlow_CheckScreenCleaner:
+	jumpifability BS_ATTACKER, ABILITY_SCREEN_CLEANER, BattleScript_EffectGlitzyGlow_Continue
+	goto BattleScript_EffectHit
 
 BattleScript_EffectEvasionUpHit:
 	setmoveeffect MOVE_EFFECT_EVS_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
@@ -12915,12 +12923,17 @@ BattleScript_EffectSmokescreen::
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifsideaffecting BS_ATTACKER, SIDE_STATUS_SMOKESCREEN, BattleScript_ButItFailed
+	jumpifsideaffecting BS_ATTACKER, SIDE_STATUS_SMOKESCREEN, BattleScript_EffectSmokescreen_CheckScreenCleaner
+	BattleScript_EffectSmokescreen_Continue:
 	attackanimation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_SMOKESCREEN
 	seteffectprimary
 	goto BattleScript_MoveEnd
+BattleScript_EffectSmokescreen_CheckScreenCleaner:
+	jumpifability BS_ATTACKER, ABILITY_SCREEN_CLEANER, BattleScript_EffectSmokescreen_Continue
+	goto BattleScript_ButItFailed
+
 
 BattleScript_AbilityBoostsCrit::
 	printfromtable gCritRaisedStrings

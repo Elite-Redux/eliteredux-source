@@ -4380,7 +4380,7 @@ constexpr Ability Impl<ABILITY_MULTI_HEADED> = {
 template <>
 constexpr Ability Impl<ABILITY_NORTH_WIND> = {
     .onEntry = +[](ON_ENTRY) -> int {
-        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_AURORA_VEIL)
+        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_AURORA_VEIL && !BattlerHasAbility(battler, ABILITY_SCREEN_CLEANER, FALSE))
 
         int side = GetBattlerSide(battler);
         gSideTimers[side].started.auroraVeil = TRUE;

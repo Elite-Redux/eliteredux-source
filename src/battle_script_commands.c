@@ -2945,7 +2945,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     }
                     break;
                 case MOVE_EFFECT_SMOKESCREEN:
-                    if (!gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].smokescreenTimer) {
+                    if (!gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].smokescreenTimer && !BattlerHasAbility(gBattlerAttacker, ABILITY_SCREEN_CLEANER, FALSE)) {
                         int side = GET_BATTLER_SIDE(gBattlerAttacker);
                         gSideTimers[side].smokescreenTimer =
                             GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_LIGHT_CLAY ? SCREEN_DURATION_EXTENDED : SCREEN_DURATION;
@@ -3084,7 +3084,8 @@ static void Cmd_tryfaintmon(void) {
     const u8* BS_ptr;
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
-    if (gActiveBattler == gBattlerAttacker && gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability && gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION) {
+    if (gActiveBattler == gBattlerAttacker && gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability &&
+        gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION) {
         gBattlescriptCurrInstr += 7;
         return;
     }
@@ -7816,7 +7817,8 @@ static void Cmd_various(void) {
             }
             break;
         case VARIOUS_SET_AURORA_VEIL:
-            if (gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_AURORA_VEIL ||
+            if ((gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_AURORA_VEIL &&
+                 !BattlerHasAbility(gActiveBattler, ABILITY_SCREEN_CLEANER, FALSE)) ||
                 !(IsBattlerWeatherAffected(gActiveBattler, WEATHER_HAIL_ANY) || HasAuroraBorealis(gActiveBattler))) {
                 gMoveResultFlags |= MOVE_RESULT_MISSED;
                 SetActiveMultistringChooser(B_MSG_SIDE_STATUS_FAILED);
@@ -9392,7 +9394,7 @@ static void Cmd_setrain(void) {
 }
 
 static void Cmd_setreflect(void) {
-    if (gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] & SIDE_STATUS_REFLECT) {
+    if (gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] & SIDE_STATUS_REFLECT && !BattlerHasAbility(gBattlerAttacker, ABILITY_SCREEN_CLEANER, FALSE)) {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         SetActiveMultistringChooser(B_MSG_SIDE_STATUS_FAILED);
     } else {
@@ -10311,7 +10313,7 @@ static void Cmd_givepaydaymoney(void) {
 }
 
 static void Cmd_setlightscreen(void) {
-    if (gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] & SIDE_STATUS_LIGHTSCREEN) {
+    if (gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] & SIDE_STATUS_LIGHTSCREEN && !BattlerHasAbility(gBattlerAttacker, ABILITY_SCREEN_CLEANER, FALSE)) {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         SetActiveMultistringChooser(B_MSG_SIDE_STATUS_FAILED);
     } else {
