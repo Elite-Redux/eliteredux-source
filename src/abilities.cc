@@ -1402,6 +1402,10 @@ constexpr Ability Impl<ABILITY_TANGLED_FEET> = {
         *accuracy /= 2;
         return ACCURACY_MULTIPLICATIVE;
     },
+    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
+        CHECK(gBattleMons[battler].status2 & STATUS2_CONFUSION)
+        return STAT_SPEED;
+    },
     .onAccuracyFor = APPLY_ON_TARGET,
     .breakable = TRUE,
 };
