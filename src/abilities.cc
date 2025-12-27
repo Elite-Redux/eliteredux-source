@@ -1405,6 +1405,23 @@ constexpr Ability Impl<ABILITY_SHELL_ARMOR> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_AIR_BLOWER> = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND) int side = GetBattlerSide(battler);
+        gSideTimers[side].started.tailwind = TRUE;
+        gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
+        gSideTimers[side].tailwindBattlerId = battler;
+        gSideTimers[side].tailwindTimer = TAILWIND_DURATION_SHORT;
+
+        DisableSwitchInAbility(battler, ABILITY_WIND_RIDER);
+        DisableSwitchInAbility(BATTLE_PARTNER(battler), ABILITY_WIND_RIDER);
+
+        BattleScriptPushCursorAndCallback(BattleScript_AirBlowerActivated);
+        return TRUE;
+    },
+};
+
+template <>
 constexpr Ability Impl<ABILITY_AIR_LOCK> = {
     .onEntry = +[](ON_ENTRY) -> int { return Impl<ABILITY_CLOUD_NINE>.onEntry(DELEGATE_ENTRY) | Impl<ABILITY_AIR_BLOWER>.onEntry(DELEGATE_ENTRY); },
 };
@@ -4073,23 +4090,6 @@ constexpr Ability Impl<ABILITY_RAGING_BOXER> = {
 };
 
 template <>
-constexpr Ability Impl<ABILITY_AIR_BLOWER> = {
-    .onEntry = +[](ON_ENTRY) -> int {
-        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND) int side = GetBattlerSide(battler);
-        gSideTimers[side].started.tailwind = TRUE;
-        gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
-        gSideTimers[side].tailwindBattlerId = battler;
-        gSideTimers[side].tailwindTimer = TAILWIND_DURATION_SHORT;
-
-        DisableSwitchInAbility(battler, ABILITY_WIND_RIDER);
-        DisableSwitchInAbility(BATTLE_PARTNER(battler), ABILITY_WIND_RIDER);
-
-        BattleScriptPushCursorAndCallback(BattleScript_AirBlowerActivated);
-        return TRUE;
-    },
-};
-
-template <>
 constexpr Ability Impl<ABILITY_JUGGERNAUT> = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
@@ -5029,11 +5029,11 @@ constexpr Ability Impl<ABILITY_FEARMONGER> = {
     .onEntry = UseIntimidateClone,
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitEffect(target))
-        CHECK(CanBeParalyzed(battler, target))
+        CHECK_NOT(gVolatileStructs[target].fear)
         CHECK(IsMoveMakingContact(move, battler))
         CHECK(Random() % 100 < 10)
 
-        return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+        return AbilityStatusEffect(MOVE_EFFECT_FEAR);
     },
 };
 

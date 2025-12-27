@@ -3064,7 +3064,7 @@ BattleScript_EffectGastroAcid:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	setgastroacid BattleScript_ButItFailed
+	setgastroacid BattleScript_EffectPoison
 	attackanimation
 	waitanimation
 	printstring STRINGID_PKMNSABILITYSUPPRESSED
@@ -3072,6 +3072,8 @@ BattleScript_EffectGastroAcid:
 	trytoclearprimalweather
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
+	setmoveeffect MOVE_EFFECT_POISON
+	seteffectprimary
 	goto BattleScript_MoveEnd
 
 BattleScript_SuppressStack2Ability::
