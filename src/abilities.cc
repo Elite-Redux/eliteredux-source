@@ -3261,6 +3261,7 @@ constexpr Ability Impl<ABILITY_SAND_SPIT> = {
         else if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
             gBattleScripting.battler = battler;
             BattleScriptCall(BattleScript_SandSpitActivates);
+            AbilityStatusEffectDirect(MOVE_EFFECT_SMACK_DOWN);
             return TRUE;
         }
         return FALSE;
