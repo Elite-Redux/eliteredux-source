@@ -540,6 +540,7 @@ extern const u8 BattleScript_BattlerCoiledUpReturn[];
 extern const u8 BattleScript_BattlerCoiledUpReturnNoPopup[];
 extern const u8 BattleScript_AttackerBecameTheType[];
 extern const u8 BattleScript_StackBecameTheTypeFull[];
+extern const u8 BattleScript_StackRemovedType[];
 extern const u8 BattleScript_AttackerBecameTheTypeFull[];
 extern const u8 BattleScript_AttackerBecameTheTypeFullEnd3[];
 extern const u8 BattleScript_DefenderBecameTheTypeFull[];

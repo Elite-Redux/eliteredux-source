@@ -924,6 +924,36 @@ constexpr Ability Impl<ABILITY_CHLOROPHYLL> = {
 
 template <>
 constexpr Ability Impl<ABILITY_ILLUMINATE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(IS_BATTLER_OF_TYPE(target, TYPE_GHOST))
+
+        Type type1, type2, type3;
+        type1 = gBattleMons[target].type1;
+        type2 = gBattleMons[target].type2;
+        type3 = gBattleMons[target].type3;
+
+        if (type1 == TYPE_GHOST) {
+            if (type1 == type2) {
+                if (type3 == TYPE_GHOST) {
+                    gBattleMons[target].type1 = gBattleMons[target].type2 = gBattleMons[target].type3 = TYPE_MYSTERY;
+                } else {
+                    gBattleMons[target].type1 = gBattleMons[target].type2 = gBattleMons[target].type3;
+                    gBattleMons[target].type3 = TYPE_MYSTERY;
+                }
+            } else {
+                gBattleMons[target].type1 = gBattleMons[target].type2;
+            }
+        } else if (type2 == TYPE_GHOST) {
+            gBattleMons[target].type2 = gBattleMons[target].type1;
+        }
+
+        if (type3 == TYPE_GHOST) gBattleMons[target].type3 = TYPE_MYSTERY;
+
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, TYPE_GHOST);
+        gStackBattler1 = target;
+        BattleScriptCall(BattleScript_StackRemovedType);
+    },
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         *accuracy *= 1.2;
         return ACCURACY_MULTIPLICATIVE;
@@ -12020,9 +12050,7 @@ constexpr Ability Impl<ABILITY_FEATHERCOAT> = {
 
 template <>
 constexpr Ability Impl<ABILITY_POWER_OUTAGE> = {
-    .onEntry = +[](ON_ENTRY) -> int {
-        return SwitchInAnnounce(B_MSG_SWITCHIN_POWER_OUTAGE);
-    },
+    .onEntry = +[](ON_ENTRY) -> int { return SwitchInAnnounce(B_MSG_SWITCHIN_POWER_OUTAGE); },
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(moveType == TYPE_ELECTRIC)
         CHECK_NOT(GetAbilityState(battler, ability))
@@ -12032,9 +12060,10 @@ constexpr Ability Impl<ABILITY_POWER_OUTAGE> = {
         BattleScriptCall(BattleScript_BurnUpRemoveType);
         return TRUE;
     },
-    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) {
-        if (moveType == TYPE_ELECTRIC && !GetAbilityState(battler, ability)) MUL(2);
-    },
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ELECTRIC && !GetAbilityState(battler, ability)) MUL(2);
+        },
     .persistent = TRUE,
 };
 

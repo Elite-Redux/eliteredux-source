@@ -176,11 +176,11 @@ struct BattlePokemon {
     AbilityEnum extraAbilities[HELL_MODE_EXTRA_ABILITIES];
     u16 hp;
     u16 maxHP;
-    u16 item;
+    ItemEnum item;
     s8 statStages[NUM_BATTLE_STATS];
-    u8 type1;
-    u8 type2;
-    u8 type3;
+    Type type1;
+    Type type2;
+    Type type3;
     u8 pp[MAX_MON_MOVES];
     u8 level;
     u8 friendship;

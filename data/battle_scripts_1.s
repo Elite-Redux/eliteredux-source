@@ -9732,6 +9732,11 @@ BattleScript_StackBecameTheTypeFull::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+BattleScript_StackRemovedType::
+	printstring STRINGID_STACKLOSTTYPE
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_AttackerBecameTheTypeFull::
 	call BattleScript_AbilityPopUp
 BattleScript_AttackerBecameTheTypeFullNoPopup:
