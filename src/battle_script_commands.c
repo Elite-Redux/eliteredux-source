@@ -1190,8 +1190,6 @@ static void Cmd_attackcanceler(void) {
         return;
     }
 
-    int protectType = 0;
-
     if (gTurnStructs[gBattlerTarget].redirectedAbility) {
         gBattleScripting.abilityPopupOverwrite = gTurnStructs[gBattlerTarget].redirectedAbility;
         gTurnStructs[gBattlerTarget].redirectedAbility = ABILITY_NONE;
@@ -1301,18 +1299,23 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
 
                 case EFFECT_LEECH_SEED:
                     if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GRASS)) prio = ACCURACY_HITS_IF_POSSIBLE;
+                    break;
 
                 case EFFECT_TOXIC:
                     if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_POISON)) prio = ACCURACY_HITS_IF_POSSIBLE;
+                    break;
 
                 case EFFECT_WILL_O_WISP:
                     if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_FIRE)) prio = ACCURACY_HITS_IF_POSSIBLE;
+                    break;
 
                 case EFFECT_PARALYZE:
                     if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_ELECTRIC)) prio = ACCURACY_HITS_IF_POSSIBLE;
+                    break;
 
                 case EFFECT_FROSTBITE:
                     if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_ICE)) prio = ACCURACY_HITS_IF_POSSIBLE;
+                    break;
             }
         }
 
@@ -7307,9 +7310,7 @@ static void Cmd_various(void) {
             return;
         case VARIOUS_SUCKER_PUNCH_CHECK:
             ptr = READ_PTR_INC;
-            if (gRoundStructs[gBattlerTarget].obstructed)
-                gBattlescriptCurrInstr = ptr;
-            else if (GetBattlerTurnOrderNum(gBattlerAttacker) > GetBattlerTurnOrderNum(gBattlerTarget))
+            if (GetBattlerTurnOrderNum(gBattlerAttacker) > GetBattlerTurnOrderNum(gBattlerTarget))
                 gBattlescriptCurrInstr = ptr;
             else if (gBattleMoves[gBattleMons[gBattlerTarget].moves[gBattleStruct->chosenMovePositions[gBattlerTarget]]].split == SPLIT_STATUS)
                 gBattlescriptCurrInstr = ptr;

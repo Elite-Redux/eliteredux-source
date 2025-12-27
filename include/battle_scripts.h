@@ -544,6 +544,7 @@ extern const u8 BattleScript_StackBecameTheTypeFull[];
 extern const u8 BattleScript_AttackerBecameTheTypeFull[];
 extern const u8 BattleScript_AttackerBecameTheTypeFullEnd3[];
 extern const u8 BattleScript_DefenderBecameTheTypeFull[];
+extern const u8 BattleScript_StackRemovedType[];
 extern const u8 BattleScript_AttackerBecameInfested[];
 extern const u8 BattleScript_SelfSufficientActivates[];
 extern const u8 BattleScript_BattlerEnvelopedItselfInAVeil[];
