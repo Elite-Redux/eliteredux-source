@@ -39,6 +39,7 @@ class __EnumHack {
     operator AccuracyPriority() const { return ACCURACY_NO_RESULT; }
     operator MultihitType() const { return MULTIHIT_SINGLE; }
     operator StatDropBlockType() const { return STAT_DROP_BLOCK_NONE; }
+    operator InfiltrateType() const { return INFILTRATE_NONE; }
 };
 
 #define ENUM_OR(enumType) \
@@ -10946,6 +10947,10 @@ constexpr Ability Impl<ABILITY_LETS_DANCE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_MYCELIUM_MIGHT> = {
+    .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType {
+        CHECK(IS_MOVE_STATUS(move))
+        return INFILTRATE_SCREENS | INFILTRATE_SUBSTITUTE;
+    },
     .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int { return IS_MOVE_STATUS(move); },
 };
 
