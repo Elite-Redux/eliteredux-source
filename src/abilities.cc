@@ -1017,6 +1017,10 @@ constexpr Ability Impl<ABILITY_INNER_FOCUS> = {
         CHECK(move == MOVE_FOCUS_BLAST)
         return ACCURACY_ALWAYS_HITS;
     },
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_FLINCH)
+        return TRUE;
+    },
     .breakable = TRUE,
     .tauntImmune = TRUE,
 };
@@ -1648,16 +1652,18 @@ constexpr Ability Impl<ABILITY_SUPER_LUCK> = {
 
 template <>
 constexpr Ability Impl<ABILITY_AFTERMATH> = {
-    .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitEffect(attacker))
-        CHECK_NOT(IsBattlerAlive(battler))
-        CHECK_NOT(IsMagicGuardProtected(attacker))
-        CHECK(IsMoveMakingContact(move, attacker))
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(gBattleMoves[move].effect == EFFECT_EXPLOSION)
 
-        gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
-        if (!gBattleMoveDamage) gBattleMoveDamage = 1;
-        BattleScriptCall(BattleScript_AftermathDmg);
-        return TRUE;
+        return AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
+    },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK_NOT(IsBattlerAlive(battler))
+
+        int highestStat = GetHighestAttackingStatId(battler, TRUE);
+
+        UseOutOfTurnAttack(battler, attacker, ability, highestStat == STAT_SPATK ? MOVE_OUTBURST : MOVE_EXPLOSION, 100);
+        return FALSE;
     },
 };
 
@@ -6144,6 +6150,7 @@ constexpr Ability Impl<ABILITY_ENLIGHTENED> = {
     .onMoveType = Impl<ABILITY_EMANATE>.onMoveType,
     .onStab = Impl<ABILITY_EMANATE>.onStab,
     .onAccuracy = Impl<ABILITY_INNER_FOCUS>.onAccuracy,
+    .onStatusImmune = Impl<ABILITY_INNER_FOCUS>.onStatusImmune,
     .breakable = TRUE,
     .tauntImmune = TRUE,
 };
@@ -8033,6 +8040,7 @@ template <>
 constexpr Ability Impl<ABILITY_UNLOCKED_POTENTIAL> = {
     .onDefender = Impl<ABILITY_BERSERK>.onDefender,
     .onAccuracy = Impl<ABILITY_INNER_FOCUS>.onAccuracy,
+    .onStatusImmune = Impl<ABILITY_INNER_FOCUS>.onStatusImmune,
     .tauntImmune = TRUE,
 };
 
@@ -8267,6 +8275,7 @@ constexpr Ability Impl<ABILITY_WAY_OF_PRECISION> = {
     .onAccuracy = Impl<ABILITY_INNER_FOCUS>.onAccuracy,
     .onCrit = Impl<ABILITY_PRECISE_FIST>.onCrit,
     .onModifyEffectChance = Impl<ABILITY_PRECISE_FIST>.onModifyEffectChance,
+    .onStatusImmune = Impl<ABILITY_INNER_FOCUS>.onStatusImmune,
     .breakable = TRUE,
     .tauntImmune = TRUE,
 };

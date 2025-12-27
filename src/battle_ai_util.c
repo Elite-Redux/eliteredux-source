@@ -2118,15 +2118,13 @@ bool32 AI_CanCauseBleed(u8 battlerAtk, u8 battlerDef, u8 battlerAtkPartner, u16 
 bool32 AI_CanBeInfatuated(u8 battlerAtk, u8 battlerDef, u8 atkGender, u8 defGender) { return CanInfatuate(battlerAtk, battlerDef); }
 
 u32 ShouldTryToFlinch(u8 battlerAtk, u8 battlerDef, u16 move) {
-    if (BattlerHasAbility(battlerDef, ABILITY_INNER_FOCUS, TRUE) || BattlerHasAbility(battlerDef, ABILITY_UNLOCKED_POTENTIAL, TRUE) ||
-        DoesSubstituteBlockMove(battlerAtk, battlerDef, move, GetTypeBeforeUsingMove(move, battlerAtk)) ||
+    if (IsStatusImmune(battlerDef, CHECK_FLINCH) || DoesSubstituteBlockMove(battlerAtk, battlerDef, move, GetTypeBeforeUsingMove(move, battlerAtk)) ||
         GetWhoStrikesFirst(battlerAtk, battlerDef, TRUE) == 1)  // opponent goes first
     {
         return 0;  // don't try to flinch
     } else if ((gBattleMons[battlerDef].status1 & STATUS1_SLEEP) && !HasMoveEffect(battlerDef, EFFECT_SLEEP_TALK) && !HasMoveEffect(battlerDef, EFFECT_SNORE)) {
         return 0;  // don't try to flinch sleeping pokemon
-    } else if (BattlerHasAbility(battlerAtk, ABILITY_INNER_FOCUS, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_UNLOCKED_POTENTIAL, FALSE) ||
-               gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS || gBattleMons[battlerDef].status2 & STATUS2_CONFUSION) {
+    } else if (gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS || gBattleMons[battlerDef].status2 & STATUS2_CONFUSION) {
         return 2;  // good idea to flinch
     }
     return 1;  // decent idea to flinch

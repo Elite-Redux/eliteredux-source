@@ -160,7 +160,8 @@ void HandleAction_UseMove(void) {
 
     gBattlerAttacker = GetTurnBattler();
     if (gBattleStruct->field_91 & 1 << gBattlerAttacker ||
-        (!IsBattlerAlive(gBattlerAttacker) && !(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ABILITY_VICTORY_BOMB))) {
+        (!IsBattlerAlive(gBattlerAttacker) &&
+         !(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability && gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION))) {
         gCurrentActionFuncId = B_ACTION_FINISHED;
         return;
     }
@@ -319,7 +320,8 @@ void HandleAction_UseMove(void) {
             gBattlescriptCurrInstr = BattleScript_MoveUsedLoafingAround;
         }
     } else {
-        if (gProcessingExtraAttacks && !IsBattlerAlive(gBattlerTarget) && gQueuedExtraAttackData[0].ability != ABILITY_VICTORY_BOMB) {
+        if (gProcessingExtraAttacks && !IsBattlerAlive(gBattlerTarget) &&
+            !(gQueuedExtraAttackData[0].ability && gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)) {
             gCurrentActionFuncId = B_ACTION_TRY_FINISH;
         } else if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability) {
             gBattleScripting.abilityPopupOverwrite = gQueuedExtraAttackData[0].ability;
@@ -696,7 +698,9 @@ void HandleAction_TryFinish(void) {
     if (gQueuedAttackCount) {
         ClearMiscTurnFlags();
         gQueuedExtraAttackData[0] = gQueuedExtraAttackData[gQueuedAttackCount--];
-        if (!IsBattlerAlive(gQueuedExtraAttackData[0].attacker) && gQueuedExtraAttackData[0].ability != ABILITY_VICTORY_BOMB) return;
+        if (!IsBattlerAlive(gQueuedExtraAttackData[0].attacker) &&
+            !(gQueuedExtraAttackData[0].ability && gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION))
+            return;
         gProcessingExtraAttacks = TRUE;
         gCurrentActionFuncId = B_ACTION_USE_MOVE;
         return;
@@ -3646,7 +3650,7 @@ bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum mo
     if (gTurnStructs[battler].dancerUsedMove) return FALSE;
     if (gBattleMons[battler].status1 & STATUS1_SLEEP) return FALSE;
     if (gBattleMons[battler].status1 & STATUS1_FREEZE) return FALSE;
-    if (!IsBattlerAlive(battler) && ability != ABILITY_VICTORY_BOMB) return FALSE;
+    if (!IsBattlerAlive(battler) && !(ability && gBattleMoves[move].effect == EFFECT_EXPLOSION)) return FALSE;
 
     // Set bit and save Dancer mon's original target
     gTurnStructs[battler].dancerUsedMove = TRUE;

@@ -1072,7 +1072,7 @@ static void Cmd_attackcanceler(void) {
         return;
     }
     if (!IsBattlerAlive(gBattlerAttacker) && !(gHitMarker & HITMARKER_NO_ATTACKSTRING) &&
-        !(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ABILITY_VICTORY_BOMB)) {
+        !(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability && gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)) {
         gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
         gBattlescriptCurrInstr = BattleScript_MoveEnd;
         return;
@@ -2614,8 +2614,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     }
                     break;
                 case MOVE_EFFECT_FLINCH:
-                    if (!BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_INNER_FOCUS) && !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_ENLIGHTENED) &&
-                        !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_UNLOCKED_POTENTIAL) && !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_WAY_OF_PRECISION)) {
+                    if (!IsStatusImmune(gEffectBattler, CHECK_FLINCH)) {
                         gBattleMons[gEffectBattler].status2 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
                     }
                     break;
@@ -3085,7 +3084,7 @@ static void Cmd_tryfaintmon(void) {
     const u8* BS_ptr;
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
-    if (gActiveBattler == gBattlerAttacker && gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ABILITY_VICTORY_BOMB) {
+    if (gActiveBattler == gBattlerAttacker && gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability && gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION) {
         gBattlescriptCurrInstr += 7;
         return;
     }
