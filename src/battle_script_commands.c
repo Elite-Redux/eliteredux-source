@@ -1287,14 +1287,47 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
     if (prio < ACCURACY_ALWAYS_MISSES) {
         if (moveAcc == 0)
             prio = ACCURACY_HITS_IF_POSSIBLE;
-        else if (IsBattlerWeatherAffected(battlerDef, WEATHER_RAIN_ANY) &&
-                 (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
-            prio = ACCURACY_HITS_IF_POSSIBLE;
-        else if ((IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY) || HasAuroraBorealis(battlerAtk)) &&
-                 (gBattleMoves[move].effect == EFFECT_FREEZE_DRY || move == MOVE_SHEER_COLD || move == MOVE_BLIZZARD))
-            prio = ACCURACY_HITS_IF_POSSIBLE;
-        else if (IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY) && (move == MOVE_EERIE_SPELL || move == MOVE_VEXING_VOID))
-            prio = ACCURACY_HITS_IF_POSSIBLE;
+        else {
+            switch (gBattleMoves[move].effect) {
+                case EFFECT_THUNDER:
+                case EFFECT_HURRICANE:
+                    if (IsBattlerWeatherAffected(battlerDef, WEATHER_RAIN_ANY)) prio = ACCURACY_HITS_IF_POSSIBLE;
+                    break;
+
+                case EFFECT_FREEZE_DRY:
+                    if (IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY)) prio = ACCURACY_HITS_IF_POSSIBLE;
+                    break;
+
+                case EFFECT_LEECH_SEED:
+                    if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GRASS)) prio = ACCURACY_HITS_IF_POSSIBLE;
+
+                case EFFECT_TOXIC:
+                    if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_POISON)) prio = ACCURACY_HITS_IF_POSSIBLE;
+
+                case EFFECT_WILL_O_WISP:
+                    if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_FIRE)) prio = ACCURACY_HITS_IF_POSSIBLE;
+
+                case EFFECT_PARALYZE:
+                    if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_ELECTRIC)) prio = ACCURACY_HITS_IF_POSSIBLE;
+
+                case EFFECT_FROSTBITE:
+                    if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_ICE)) prio = ACCURACY_HITS_IF_POSSIBLE;
+            }
+        }
+
+        if (prio != ACCURACY_HITS_IF_POSSIBLE) {
+            switch (move) {
+                case MOVE_SHEER_COLD:
+                case MOVE_BLIZZARD:
+                    if (IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY)) prio = ACCURACY_HITS_IF_POSSIBLE;
+                    break;
+
+                case MOVE_EERIE_SPELL:
+                case MOVE_VEXING_VOID:
+                    if (IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY)) prio = ACCURACY_HITS_IF_POSSIBLE;
+                    break;
+            }
+        }
     }
 
     gPotentialItemEffectBattler = battlerDef;
@@ -2945,7 +2978,8 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     }
                     break;
                 case MOVE_EFFECT_SMOKESCREEN:
-                    if (!gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].smokescreenTimer && !BattlerHasAbility(gBattlerAttacker, ABILITY_SCREEN_CLEANER, FALSE)) {
+                    if (!gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].smokescreenTimer &&
+                        !BattlerHasAbility(gBattlerAttacker, ABILITY_SCREEN_CLEANER, FALSE)) {
                         int side = GET_BATTLER_SIDE(gBattlerAttacker);
                         gSideTimers[side].smokescreenTimer =
                             GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_LIGHT_CLAY ? SCREEN_DURATION_EXTENDED : SCREEN_DURATION;
