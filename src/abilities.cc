@@ -3903,18 +3903,23 @@ constexpr Ability Impl<ABILITY_FOSSILIZED> = {
     .breakable = TRUE,
 };
 
+ON_EITHER(MagicalDust) {
+    CHECK(ShouldApplyOnHitEffect(opponent))
+    CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+    CHECK_NOT(IS_BATTLER_OF_TYPE(opponent, TYPE_PSYCHIC))
+
+    gBattleMons[opponent].type1 = TYPE_PSYCHIC;
+    gBattleMons[opponent].type2 = TYPE_PSYCHIC;
+    gBattleMons[opponent].type3 = TYPE_MYSTERY;
+    PREPARE_TYPE_BUFFER(gBattleTextBuff1, TYPE_PSYCHIC);
+    gStackBattler1 = opponent;
+    BattleScriptCall(BattleScript_StackBecameTheTypeFull);
+    return TRUE;
+}
+
 template <>
 constexpr Ability Impl<ABILITY_MAGICAL_DUST> = {
-    .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitEffect(attacker))
-        CHECK(IsMoveMakingContact(move, attacker))
-        CHECK_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_PSYCHIC))
-
-        gBattleMons[attacker].type3 = TYPE_PSYCHIC;
-        PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMons[attacker].type3);
-        BattleScriptCall(BattleScript_AttackerBecameTheType);
-        return TRUE;
-    },
+    ON_EITHER_ABILITY(MagicalDust),
 };
 
 template <>
