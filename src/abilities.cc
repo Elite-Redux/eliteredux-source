@@ -9846,6 +9846,7 @@ constexpr Ability Impl<ABILITY_STAINLESS_STEEL> = {
 template <>
 constexpr Ability Impl<ABILITY_TEMPORAL_RUPTURE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(move == MOVE_ROAR_OF_TIME)
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK_NOT(HasAbilityIgnoringSuppression(target, ABILITY_SLOW_START))
         CHECK_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(target)))
