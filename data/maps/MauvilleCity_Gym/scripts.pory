@@ -532,7 +532,7 @@ text MauvilleCity_Gym_Text_WattsonIntro1{
     format("Not bad, child! You can't afford to cut corners when handling electricity, though - let me show you and your Pokemon what I mean!")
 }
 text MauvilleCity_Gym_Text_WattsonIntroAll{
-    format("Now this is going to amp me up we shall give it our all wahahahaa")
+    format("Now this is going to amp me up! We shall give it our all! Wahahahaa!")
 }
 text MauvilleCity_Gym_Text_WattsonDefeat0{
 	format("Wahahaha! That battle was electrifying! Even all my tricks couldn't stop you. If you're ever in the mood for another challenge, my doors are always open!")
