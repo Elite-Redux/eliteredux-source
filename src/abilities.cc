@@ -1851,7 +1851,8 @@ constexpr Ability Impl<ABILITY_HONEY_GATHER> = {
         CHECK_NOT(gBattleMons[battler].item)
         CHECK(Random() % 2)
 
-        gBattleMons[battler].item = gLastUsedItem = ITEM_HONEY;
+        UpdateBattlerItem(battler, ITEM_HONEY);
+        
         BattleScriptPushCursorAndCallback(BattleScript_HoneyGatherActivates);
         return TRUE;
     },

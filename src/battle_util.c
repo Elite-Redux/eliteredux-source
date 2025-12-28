@@ -5262,7 +5262,7 @@ static int CanUseHoney(int battler) {
             return TRUE;
 
         default:
-            return FALSE;
+            return BattlerHasAbility(battler, ABILITY_HONEY_GATHER, FALSE);
     }
 }
 
