@@ -10768,6 +10768,7 @@ BattleScript_CursedBodyActivates::
 	return
 
 BattleScript_BloodStainActivates::
+	copybyte gBattlerAbility, gStackBattler1
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_BATTLERACQUIREDABILITY
 	waitmessage B_WAIT_TIME_LONG

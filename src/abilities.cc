@@ -9860,6 +9860,8 @@ constexpr Ability Impl<ABILITY_TEMPORAL_RUPTURE> = {
         gStackBattler1 = target;
         gBattleScripting.abilityPopupOverwrite = ABILITY_SLOW_START;
         BattleScriptCall(BattleScript_BloodStainActivates);
+
+        gBattleScripting.abilityPopupOverwrite = ability;
         return TRUE;
     },
     .onPriority = +[](ON_PRIORITY) -> int {
