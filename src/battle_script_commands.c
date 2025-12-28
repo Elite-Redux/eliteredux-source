@@ -11679,6 +11679,7 @@ static void Cmd_setsemiinvulnerablebit(void) {
         case MOVE_SEISMIC_TOSS:
         case MOVE_FLY:
         case MOVE_BOUNCE:
+        case MOVE_ROCK_CLIMB:
             gStatuses3[gBattlerAttacker] |= STATUS3_ON_AIR;
             break;
         case MOVE_DIG:
