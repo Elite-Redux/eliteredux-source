@@ -1278,12 +1278,12 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
         if (moveState && gVolatileStructs[battlerAtk].trepidation == 1)
             moveState->missesThisTurn = AI_MISSES_THIS_TURN;
         else
-            return ACCURACY_ALWAYS_MISSES;
+            prio = ACCURACY_ALWAYS_MISSES;
     }
 
     int moveAcc = gBattleMoves[move].accuracy;
 
-    if (prio < ACCURACY_ALWAYS_MISSES) {
+    if (prio < ACCURACY_HITS_IF_POSSIBLE) {
         if (moveAcc == 0)
             prio = ACCURACY_HITS_IF_POSSIBLE;
         else {
@@ -1355,9 +1355,6 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
         (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE || move == MOVE_EERIE_SPELL || move == MOVE_VEXING_VOID))
         moveAcc = 50;
 
-    moveAcc *= gAccuracyStageRatios[buff].dividend;
-    moveAcc /= gAccuracyStageRatios[buff].divisor;
-
     for (int sourceBattler = 0; sourceBattler < gBattlersCount; sourceBattler++) {
         FILTER(sourceBattler == battlerAtk || sourceBattler == battlerDef || IsBattlerAlive(sourceBattler))
         ON_ABILITY(sourceBattler,
@@ -1367,6 +1364,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
                    int result = gAbilities[ability].onAccuracy(ability, battlerAtk, battlerDef, move, moveType, &moveAcc);
                    prio = max(prio, result))
     }
+    
     switch (prio) {
         case ACCURACY_ALWAYS_HITS:
         case ACCURACY_HITS_IF_POSSIBLE:
@@ -1375,6 +1373,9 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
         case ACCURACY_ALWAYS_MISSES:
             return 0;
     }
+
+    moveAcc *= gAccuracyStageRatios[buff].dividend;
+    moveAcc /= gAccuracyStageRatios[buff].divisor;
 
     if (defHoldEffect == HOLD_EFFECT_EVASION_UP) moveAcc = (moveAcc * (100 - defParam)) / 100;
 
