@@ -940,6 +940,8 @@ static const u8 sText_IceStatue[] = _("{B_DEF_NAME_WITH_PREFIX} is\nturned to ic
 static const u8 sText_ToxicBoostPoisons[] = _("{B_ATK_NAME_WITH_PREFIX} takes\nthe poison in!");
 static const u8 sText_PetalShield[] = _("{B_ATK_NAME_WITH_PREFIX} surrounds\nitself with a blur of petals.");
 static const u8 sText_PowerOutageEntry[] = _("The air crackles around\n{B_ATK_NAME_WITH_PREFIX}");
+static const u8 sText_StackLostType[] = _("{B_STACK_1_NAME_WITH_PREFIX} lost\nits {B_BUFF1} typing!");
+static const u8 sText_RockClimb[] = _("{B_ATK_NAME_WITH_PREFIX} climbed\nup high!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1098,7 +1100,6 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_StackLostType[] = _("{B_STACK_1_NAME_WITH_PREFIX} lost\nits {B_BUFF1} typing!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1982,6 +1983,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_PETAL_SHIELD - 12] = sText_PetalShield,
     [STRINGID_POWER_OUTAGE_ENTRY - 12] = sText_PowerOutageEntry,
     [STRINGID_STACKLOSTTYPE - 12] = sText_StackLostType,
+    [STRINGID_ROCKCLIMB - 12] = sText_RockClimb,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2250,6 +2252,7 @@ const u16 gFirstTurnOfTwoStringIds[] =
     [B_MSG_TURN1_FREEZE_SHOCK] = STRINGID_CLOAKEDINAFREEZINGLIGHT,
     [B_MSG_TURN1_METEOR_BEAM] = STRINGID_OVERFLOWINGWITHSPACEPOWER,
     [B_MSG_TURN1_ELECTRO_SHOT] = STRINGID_ELECTRO_SHOT,
+    [B_MSG_TURN1_ROCK_CLIMB] = STRINGID_ROCKCLIMB,
 };
 
 const u16 gWrappedStringIds[] = 

@@ -6325,6 +6325,7 @@ BattleScript_EffectSemiInvulnerable::
 	jumpifmove MOVE_SHADOW_FORCE, BattleScript_FirstTurnPhantomForce
 	jumpifmove MOVE_READY_OR_NOT, BattleScript_FirstTurnPhantomForce
 	jumpifmove MOVE_CHEAP_SHOT, BattleScript_FirstTurnPhantomForce
+	jumpifmove MOVE_ROCK_CLIMB, BattleScript_FirstTurnRockClimb
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_DIG
 	goto BattleScript_FirstTurnSemiInvulnerable
 BattleScript_FirstTurnBounce::
@@ -6335,6 +6336,9 @@ BattleScript_FirstTurnDive::
 	goto BattleScript_FirstTurnSemiInvulnerable
 BattleScript_FirstTurnPhantomForce:
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_PHANTOM_FORCE
+	goto BattleScript_FirstTurnSemiInvulnerable
+BattleScript_FirstTurnRockClimb:
+	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_ROCK_CLIMB
 	goto BattleScript_FirstTurnSemiInvulnerable
 BattleScript_FirstTurnFly::
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_FLY
