@@ -7448,17 +7448,17 @@ static void Cmd_various(void) {
             ptr = READ_PTR_INC;
             if (gBattleMons[gBattlerTarget].species == SPECIES_ARCEUS || gBattleMons[gBattlerTarget].species == SPECIES_SILVALLY) {
                 gBattlescriptCurrInstr = ptr;
-            } else if (gBattleMons[gBattlerTarget].type1 == TYPE_MYSTERY && gBattleMons[gBattlerTarget].type2 != TYPE_MYSTERY) {
-                gBattleMons[gBattlerAttacker].type1 = gBattleMons[gBattlerTarget].type2;
-                gBattleMons[gBattlerAttacker].type2 = gBattleMons[gBattlerTarget].type2;
-            } else if (gBattleMons[gBattlerTarget].type1 != TYPE_MYSTERY && gBattleMons[gBattlerTarget].type2 == TYPE_MYSTERY) {
-                gBattleMons[gBattlerAttacker].type1 = gBattleMons[gBattlerTarget].type1;
-                gBattleMons[gBattlerAttacker].type2 = gBattleMons[gBattlerTarget].type1;
-            } else if (gBattleMons[gBattlerTarget].type1 == TYPE_MYSTERY && gBattleMons[gBattlerTarget].type2 == TYPE_MYSTERY) {
+            } else if (gBattleMons[gBattlerAttacker].type1 == TYPE_MYSTERY && gBattleMons[gBattlerAttacker].type2 != TYPE_MYSTERY) {
+                gBattleMons[gBattlerTarget].type1 = gBattleMons[gBattlerAttacker].type2;
+                gBattleMons[gBattlerTarget].type2 = gBattleMons[gBattlerAttacker].type2;
+            } else if (gBattleMons[gBattlerAttacker].type1 != TYPE_MYSTERY && gBattleMons[gBattlerAttacker].type2 == TYPE_MYSTERY) {
+                gBattleMons[gBattlerTarget].type1 = gBattleMons[gBattlerAttacker].type1;
+                gBattleMons[gBattlerTarget].type2 = gBattleMons[gBattlerAttacker].type1;
+            } else if (gBattleMons[gBattlerAttacker].type1 == TYPE_MYSTERY && gBattleMons[gBattlerAttacker].type2 == TYPE_MYSTERY) {
                 gBattlescriptCurrInstr = ptr;
             } else {
-                gBattleMons[gBattlerAttacker].type1 = gBattleMons[gBattlerTarget].type1;
-                gBattleMons[gBattlerAttacker].type2 = gBattleMons[gBattlerTarget].type2;
+                gBattleMons[gBattlerTarget].type1 = gBattleMons[gBattlerAttacker].type1;
+                gBattleMons[gBattlerTarget].type2 = gBattleMons[gBattlerAttacker].type2;
             }
             return;
         case VARIOUS_TRY_SOAK:
