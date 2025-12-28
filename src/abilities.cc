@@ -492,6 +492,15 @@ StatDropBlockType GetStatDropBlock(u8* battler, int stat, int selfStatDrop, Abil
     return type;
 }
 
+int IsRecklessBoosted(int battler, MoveEnum move, Type moveType) {
+    if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) return TRUE;
+    if (gBattleMons[battler].status2 & STATUS2_CONFUSION) return TRUE;
+    return gBattleMoves[move].power && BattlerHasAbility(battler, FALSE, [&](AbilityEnum ability) -> int {
+               CHECK(gAbilities[ability].onRecoil)
+               return gAbilities[ability].onRecoil(100, battler, moveType);
+           });
+};
+
 template <AbilityEnum Id>
 constexpr IntimidateCloneData Intimidate{};
 
@@ -1869,7 +1878,7 @@ template <>
 constexpr Ability Impl<ABILITY_RECKLESS> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
+            if (IsRecklessBoosted(battler, move, moveType)) MUL(1.2);
         },
 };
 
@@ -8179,10 +8188,10 @@ template <>
 constexpr Ability Impl<ABILITY_MOSH_PIT> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
-                MUL(1.25);
-            else
+            if (IsRecklessBoosted(battler, move, moveType))
                 MUL(1.5);
+            else
+                MUL(1.25);
         },
     .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
 };
@@ -12133,7 +12142,7 @@ template <>
 constexpr Ability Impl<ABILITY_DAREDEVIL> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitEffect(battler))
-        CHECK(gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
+        CHECK(IsRecklessBoosted(battler, move, moveType))
         CHECK(CanRaiseStat(battler, STAT_ATK))
 
         return AbilityStatusEffect(MOVE_EFFECT_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER);
