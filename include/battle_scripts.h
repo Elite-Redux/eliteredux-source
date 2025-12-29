@@ -357,6 +357,7 @@ extern const u8 BattleScript_MoveEffectClearSmog[];
 extern const u8 BattleScript_ForceRandomSwitch[];
 extern const u8 BattleScript_SideStatusWoreOffReturn[];
 extern const u8 BattleScript_MoveEffectSmackDown[];
+extern const u8 BattleScript_AttackerSmackDown[];
 extern const u8 BattleScript_MoveEffectFlameBurst[];
 extern const u8 BattleScript_TrainerSlideMsgRet[];
 extern const u8 BattleScript_TrainerSlideMsgEnd2[];

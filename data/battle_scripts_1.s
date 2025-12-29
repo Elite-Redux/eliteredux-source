@@ -2037,6 +2037,13 @@ BattleScript_MoveEffectSmackDown::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+BattleScript_AttackerSmackDown::
+	swapbattlerandtargetvia34
+	printstring STRINGID_FELLSTRAIGHTDOWN
+	waitmessage B_WAIT_TIME_LONG
+	restoreattackerandtargetfrom34
+	return
+
 BattleScript_EffectHitEnemyHealAlly:
 	jumpiftargetally BattleScript_EffectHealPulse
 	goto BattleScript_EffectHit

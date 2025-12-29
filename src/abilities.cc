@@ -3271,14 +3271,22 @@ constexpr Ability Impl<ABILITY_PUNK_ROCK> = {
 template <>
 constexpr Ability Impl<ABILITY_SAND_SPIT> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitEffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_SANDSTORM_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
+        CHECK(ShouldApplyOnHitEffect(battler))
+        CHECK_NOT(gBattleWeather & WEATHER_SANDSTORM_ANY)
+
+        if (gBattleWeather & WEATHER_PRIMAL_ANY) {
             BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
             return NO_ANNOUNCE;
-        }
-        else if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
+        } else if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
+            
+            if (!IsBattlerGrounded(attacker) && IsBattlerAlive(attacker)) {
+                gStatuses3[attacker] |= STATUS3_SMACKED_DOWN;
+                gStatuses3[attacker] &= ~(STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS | STATUS3_ON_AIR);
+                BattleScriptCall(BattleScript_AttackerSmackDown);
+            }
+
             gBattleScripting.battler = battler;
             BattleScriptCall(BattleScript_SandSpitActivates);
-            AbilityStatusEffectDirect(MOVE_EFFECT_SMACK_DOWN);
             return TRUE;
         }
         return FALSE;
