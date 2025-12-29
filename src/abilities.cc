@@ -11405,11 +11405,12 @@ constexpr Ability Impl<ABILITY_MUCUS_MEMBRANE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_VOLTRON> = {
-    .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
+    .onEntry = Impl<ABILITY_METALLIC>.onEntry,
     .onDefensiveMultiplier = Impl<ABILITY_BATTLE_ARMOR>.onDefensiveMultiplier,
     .onCrit = Impl<ABILITY_BATTLE_ARMOR>.onCrit,
     .onCritFor = Impl<ABILITY_BATTLE_ARMOR>.onCritFor,
     .breakable = TRUE,
+    .addsType = TYPE_STEEL,
 };
 
 template <>
