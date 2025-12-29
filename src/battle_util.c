@@ -5261,7 +5261,7 @@ static bool32 GetMentalHerbEffect(u8 battlerId) {
 }
 
 static int CanUseHoney(int battler) {
-    SpeciesEnum species = GET_BASE_SPECIES_ID(gBattleMons[battler].spDefense);
+    SpeciesEnum species = GET_BASE_SPECIES_ID(gBattleMons[battler].species);
     switch (species) {
         case SPECIES_COMBEE:
         case SPECIES_VESPIQUEN:
@@ -5441,12 +5441,12 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                             effect = ITEM_STATUS_CHANGE;
                         }
                         break;
-                    case HOLD_EFFECT_HONEY:
-                        REQUIRE(CanUseHoney(battlerId))
-                        FALLTHROUGH
                     case HOLD_EFFECT_RESTORE_HP:
                         if (B_BERRIES_INSTANT >= GEN_4) effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, FALSE);
                         break;
+                    case HOLD_EFFECT_HONEY:
+                        REQUIRE(CanUseHoney(battlerId))
+                        FALLTHROUGH
                     case HOLD_EFFECT_RESTORE_PCT_HP:
                         if (B_BERRIES_INSTANT >= GEN_4) effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, TRUE);
                         break;
@@ -5517,6 +5517,9 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
         case 1:
             if (gBattleMons[battlerId].hp) {
                 switch (battlerHoldEffect) {
+                    case HOLD_EFFECT_RESTORE_HP:
+                        if (!moveTurn) effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, FALSE);
+                        break;
                     case HOLD_EFFECT_HONEY:
                         REQUIRE(CanUseHoney(battlerId))
                         if (!moveTurn && ItemHealHp(battlerId, gLastUsedItem, TRUE, FALSE)) {
@@ -5525,9 +5528,6 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         } else {
                             goto LEFTOVERS;
                         }
-                    case HOLD_EFFECT_RESTORE_HP:
-                        if (!moveTurn) effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, FALSE);
-                        break;
                     case HOLD_EFFECT_RESTORE_PCT_HP:
                         if (!moveTurn) effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, TRUE);
                         break;
@@ -5775,12 +5775,12 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                     case HOLD_EFFECT_MICLE_BERRY:
                         if (B_HP_BERRIES >= GEN_4) effect = TrySetMicleBerry(battlerId, gLastUsedItem, FALSE);
                         break;
-                    case HOLD_EFFECT_HONEY:
-                        REQUIRE(CanUseHoney(battlerId))
-                        FALLTHROUGH
                     case HOLD_EFFECT_RESTORE_HP:
                         if (B_HP_BERRIES >= GEN_4) effect = ItemHealHp(battlerId, gLastUsedItem, FALSE, FALSE);
                         break;
+                    case HOLD_EFFECT_HONEY:
+                        REQUIRE(CanUseHoney(battlerId))
+                        FALLTHROUGH
                     case HOLD_EFFECT_RESTORE_PCT_HP:
                         if (B_BERRIES_INSTANT >= GEN_4) effect = ItemHealHp(battlerId, gLastUsedItem, FALSE, TRUE);
                         break;

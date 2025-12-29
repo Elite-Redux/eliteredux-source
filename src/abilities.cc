@@ -1841,6 +1841,7 @@ constexpr Ability Impl<ABILITY_HONEY_GATHER> = {
         CHECK(Random() % 2)
 
         UpdateBattlerItem(battler, ITEM_HONEY);
+        gLastUsedItem = ITEM_HONEY;
 
         BattleScriptPushCursorAndCallback(BattleScript_HoneyGatherActivates);
         return TRUE;
