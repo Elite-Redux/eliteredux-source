@@ -12251,7 +12251,9 @@ constexpr Ability Impl<ABILITY_DROIDEKA> = {
 
 template <>
 constexpr Ability Impl<ABILITY_3_GT_1> = {
-    .randomizerBanned = TRUE,
+    .onParentalBond = Impl<ABILITY_MULTI_HEADED>.onParentalBond,
+    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_WATER),
+    .resistsFortKnox = TRUE,
 };
 
 template <>
