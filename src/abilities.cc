@@ -494,7 +494,7 @@ StatDropBlockType GetStatDropBlock(u8* battler, int stat, int selfStatDrop, Abil
 
 int IsRecklessBoosted(int battler, MoveEnum move, Type moveType) {
     if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) return TRUE;
-    if (gBattleMons[battler].status2 & STATUS2_CONFUSION) return TRUE;
+    if (gBattleMons[battler].status2 & STATUS2_ENRAGED) return TRUE;
     return gBattleMoves[move].power && BattlerHasAbility(battler, FALSE, [&](AbilityEnum ability) -> int {
                CHECK(gAbilities[ability].onRecoil)
                return gAbilities[ability].onRecoil(100, battler, moveType);
@@ -1348,10 +1348,6 @@ constexpr Ability Impl<ABILITY_SWARM> = {
 
 template <>
 constexpr Ability Impl<ABILITY_ROCK_HEAD> = {
-    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
-        CHECK(status & CHECK_CONFUSION)
-        return TRUE;
-    },
     .breakable = TRUE,
     .noRecoil = TRUE,
     .removesStatusOnImmunity = TRUE,
@@ -1437,17 +1433,10 @@ constexpr Ability Impl<ABILITY_AIR_LOCK> = {
 
 template <>
 constexpr Ability Impl<ABILITY_TANGLED_FEET> = {
-    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
-        CHECK(gBattleMons[target].status2 & STATUS2_CONFUSION);
-        *accuracy /= 2;
-        return ACCURACY_MULTIPLICATIVE;
-    },
     .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
         CHECK(gBattleMons[battler].status2 & STATUS2_CONFUSION)
         return STAT_SPEED;
     },
-    .onAccuracyFor = APPLY_ON_TARGET,
-    .breakable = TRUE,
 };
 
 template <>
@@ -1852,7 +1841,7 @@ constexpr Ability Impl<ABILITY_HONEY_GATHER> = {
         CHECK(Random() % 2)
 
         UpdateBattlerItem(battler, ITEM_HONEY);
-        
+
         BattleScriptPushCursorAndCallback(BattleScript_HoneyGatherActivates);
         return TRUE;
     },
@@ -4627,21 +4616,21 @@ constexpr Ability Impl<ABILITY_GRIP_PINCER> = {
 };
 
 ON_EITHER(TalonTrap) {
-        CHECK(ShouldApplyOnHitEffect(opponent))
-        CHECK(IsBattlerAlive(battler))
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        CHECK_NOT(gBattleMons[opponent].status2 & STATUS2_WRAPPED)
-        CHECK(gVolatileStructs[battler].isFirstTurn == 2 || GetAbilityState(battler, ability) || Random() % 100 < 50)
+    CHECK(ShouldApplyOnHitEffect(opponent))
+    CHECK(IsBattlerAlive(battler))
+    CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+    CHECK_NOT(gBattleMons[opponent].status2 & STATUS2_WRAPPED)
+    CHECK(gVolatileStructs[battler].isFirstTurn == 2 || GetAbilityState(battler, ability) || Random() % 100 < 50)
 
-        SetOnMoveEffectReactionFlags(battler, opponent, MOVE_EFFECT_WRAP);
-        gBattleMons[opponent].status2 |= STATUS2_WRAPPED;
-        gVolatileStructs[opponent].wrapTurns = WrapDuration(battler);
-        gVolatileStructs[opponent].wrapAbility = ability;
+    SetOnMoveEffectReactionFlags(battler, opponent, MOVE_EFFECT_WRAP);
+    gBattleMons[opponent].status2 |= STATUS2_WRAPPED;
+    gVolatileStructs[opponent].wrapTurns = WrapDuration(battler);
+    gVolatileStructs[opponent].wrapAbility = ability;
 
-        gBattleStruct->wrappedMove[opponent] = MOVE_SNAP_TRAP;
-        gBattleStruct->wrappedBy[opponent] = battler;
-        BattleScriptCall(BattleScript_GripPincerActivated);
-        return TRUE;
+    gBattleStruct->wrappedMove[opponent] = MOVE_SNAP_TRAP;
+    gBattleStruct->wrappedBy[opponent] = battler;
+    BattleScriptCall(BattleScript_GripPincerActivated);
+    return TRUE;
 }
 
 template <>
@@ -4885,7 +4874,6 @@ constexpr Ability Impl<ABILITY_IRON_BARRAGE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_STEEL_BARREL> = {
-    .onStatusImmune = Impl<ABILITY_ROCK_HEAD>.onStatusImmune,
     .noRecoil = TRUE,
     .removesStatusOnImmunity = TRUE,
 };
@@ -6547,13 +6535,14 @@ constexpr Ability Impl<ABILITY_CROWNED_SHIELD> = {
 template <>
 constexpr Ability Impl<ABILITY_BERSERK_DNA> = {
     .onEntry = +[](ON_ENTRY) -> int {
-        CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE))) if (CanBeConfused(battler)) {
-            SetOnMoveEffectReactionFlags(battler, battler, MOVE_EFFECT_CONFUSION);
-            gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
-            BattleScriptPushCursorAndCallback(BattleScript_BerserkDNA);
-        }
-        else {
+        CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
+
+        if (gBattleMons[battler].status2 & STATUS2_ENRAGED) {
             BattleScriptPushCursorAndCallback(BattleScript_BerserkDNANoConfusion);
+        } else {
+            SetOnMoveEffectReactionFlags(battler, battler, MOVE_EFFECT_CONFUSION);
+            gBattleMons[battler].status2 |= STATUS2_ENRAGED;
+            BattleScriptPushCursorAndCallback(BattleScript_BerserkDNA);
         }
         return TRUE;
     },
@@ -6598,7 +6587,7 @@ template <>
 constexpr Ability Impl<ABILITY_COSMIC_DAZE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMons[target].status2 & STATUS2_CONFUSION) MUL(2);
+            if (gBattleMons[target].status2 & (STATUS2_CONFUSION | STATUS2_ENRAGED)) MUL(2);
         },
 };
 
@@ -9133,7 +9122,6 @@ constexpr Ability Impl<ABILITY_DOOM_BLAST> = {
 template <>
 constexpr Ability Impl<ABILITY_BRUTEFORCE> = {
     .onOffensiveMultiplier = Impl<ABILITY_RECKLESS>.onOffensiveMultiplier,
-    .onStatusImmune = Impl<ABILITY_ROCK_HEAD>.onStatusImmune,
     .noRecoil = TRUE,
     .removesStatusOnImmunity = TRUE,
 };
@@ -9741,10 +9729,9 @@ constexpr Ability Impl<ABILITY_OVERRULE> = {
 
 static int MadnessEnhancementHandler(int battler, AbilityCallType callType) {
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
-    CHECK(CanBeConfused(battler))
+    CHECK_NOT(gStatuses4[battler] & STATUS2_ENRAGED)
 
-    SetOnMoveEffectReactionFlags(battler, battler, MOVE_EFFECT_CONFUSION);
-    gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
+    gStatuses4[battler] |= STATUS2_ENRAGED;
 
     InsertCorrectEndType(callType);
     BattleScriptCall(BattleScript_MadnessEnhancementRet);
@@ -9757,7 +9744,7 @@ constexpr Ability Impl<ABILITY_MADNESS_ENHANCEMENT> = {
     .onWeather = +[](ON_WEATHER) -> int { return MadnessEnhancementHandler(battler, ABILITY_BS_CALL); },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (gBattleMons[battler].status2 & STATUS2_CONFUSION) {
+            if (gBattleMons[battler].status2 & STATUS2_ENRAGED) {
                 MUL(.5);
             }
         },

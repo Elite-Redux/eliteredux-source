@@ -127,6 +127,7 @@ enum {
     STATUS_INFO_PRIMARY,
     // Status 2
     STATUS_INFO_CONFUSION,
+    STATUS_INFO_ENRAGED,
     STATUS_INFO_FUTURE_SIGHT,
     // STATUS_INFO_FLINCHED,
     STATUS_INFO_UPROAR,
@@ -671,6 +672,9 @@ void UI_Battle_Menu_Init(MainCallback callback) {
                 case STATUS_INFO_CONFUSION:
                     if (gBattleMons[j].status2 & STATUS2_CONFUSION) isExtraInfoShown = TRUE;
                     break;
+                case STATUS_INFO_ENRAGED:
+                    if (gBattleMons[j].status2 & STATUS2_ENRAGED) isExtraInfoShown = TRUE;
+                    break;
                 case STATUS_INFO_FUTURE_SIGHT:
                     if (gWishFutureKnock.futureSightCounter[j] != 0) isExtraInfoShown = TRUE;
                     break;
@@ -699,7 +703,7 @@ void UI_Battle_Menu_Init(MainCallback callback) {
                     if (gBattleMons[j].status2 & STATUS2_CURSED) isExtraInfoShown = TRUE;
                     break;
                 case STATUS_INFO_FORESIGHT:
-                    if (gBattleMons[j].status2 & STATUS2_FORESIGHT) isExtraInfoShown = TRUE;
+                    if (gStatuses4[j] & STATUS4_FORESIGHT) isExtraInfoShown = TRUE;
                     break;
                 case STATUS_INFO_DEFENSE_CURL:
                     if (gBattleMons[j].status2 & STATUS2_DEFENSE_CURL) isExtraInfoShown = TRUE;
@@ -2016,6 +2020,11 @@ const u8 sText_Title_Status_Bleed_Description[] =
 // Secondary Status
 const u8 sText_Title_Status_Confusion[] = _("Confused");
 const u8 sText_Title_Status_Confusion_Description[] =
+    _("This Pokémon has a 33% chance to\n"
+      "attack itself for 40 BP instead of\n"
+      "acting.");
+const u8 sText_Title_Status_Enraged[] = _("Enraged");
+const u8 sText_Title_Status_Enraged_Description[] =
     _("This Pokémon takes 33% of the\n"
       "damage it deals as recoil.");
 const u8 sText_Title_Status_IncomingAttack[] = _("Incoming Attack");
@@ -2478,6 +2487,17 @@ static void PrintStatusTab(void) {
 
                 // Description
                 StringCopy(gStringVar1, sText_Title_Status_Confusion_Description);
+                AddTextPrinterParameterized4(
+                    windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+                break;
+            case STATUS_INFO_ENRAGED:
+                StringCopy(gStringVar1, sText_Title_Status_Enraged);
+                AddTextPrinterParameterized4(
+                    windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                // Description
+                StringCopy(gStringVar1, sText_Title_Status_Enraged_Description);
                 AddTextPrinterParameterized4(
                     windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;

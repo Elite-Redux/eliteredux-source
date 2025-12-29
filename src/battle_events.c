@@ -413,9 +413,9 @@ u8 BattleEventStartTurnExec(struct BattleEvent* battleEvent) {
             RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillMatBlock)
 
         case BATTLE_EVENT_ONSTAY_FORESIGHT:
-            if (!HasNumberOfTurnsStayedReached(battleEvent, B_POSITION_PLAYER_LEFT) || gBattleMons[B_SIDE_PLAYER].status2 & STATUS2_FORESIGHT)
+            if (!HasNumberOfTurnsStayedReached(battleEvent, B_POSITION_PLAYER_LEFT) || gStatuses4[B_SIDE_PLAYER] & STATUS4_FORESIGHT)
                 return EXEC_BATTLE_EVENTS_ALL_CLEAR;
-            gBattleMons[B_SIDE_PLAYER].status2 |= STATUS2_FORESIGHT;
+            gStatuses4[B_SIDE_PLAYER] |= STATUS4_FORESIGHT;
             RUN_BATTLESCRIPT(BattleScript_ExtraSkillForesight)
         case BATTLE_EVENT_ONSTAY_LEECH_SEED:
             if (!HasNumberOfTurnsStayedReached(battleEvent, B_POSITION_PLAYER_LEFT) || gStatuses3[B_SIDE_PLAYER] & STATUS3_LEECHSEED)

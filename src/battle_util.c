@@ -3062,17 +3062,17 @@ enum {
     CANCELLER_HEAL_BLOCKED,
     CANCELLER_TAUNTED,
     CANCELLER_IMPRISONED,
-    CANCELLER_CONFUSED,
     CANCELLER_PARALYSED,
     CANCELLER_BIDE,
     CANCELLER_THAW,
     CANCELLER_POWDER_MOVE,
     CANCELLER_POWDER_STATUS,
     CANCELLER_THROAT_CHOP,
-    CANCELLER_MULTIHIT_MOVES,
     CANCELLER_SKY_DROP,
     CANCELLER_QUICK_GUARD,
     CANCELLER_PSYCHIC_TERRAIN,
+    CANCELLER_CONFUSED,
+    CANCELLER_MULTIHIT_MOVES,
     CANCELLER_END,
 };
 
@@ -3254,37 +3254,36 @@ u8 AtkCanceller_UnableToUseMove(void) {
                 gBattleStruct->atkCancellerTracker++;
                 break;
             case CANCELLER_CONFUSED:  // confusion
-                // if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
-                // {
-                //     gBattleMons[gBattlerAttacker].status2 -= STATUS2_CONFUSION_TURN(1);
-                //     if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
-                //     {
-                //         if (Random() % ((B_CONFUSION_SELF_DMG_CHANCE >= GEN_7) ? 3 : 2) == 0) // confusion dmg
-                //         {
-                //             u8 moveType = TYPE_MYSTERY;
-                //             gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
-                //             gBattlerTarget = gBattlerAttacker;
-                //             gBattleMoveDamage = CalculateMoveDamage(MOVE_NONE, gBattlerAttacker, gBattlerAttacker, &moveType,
-                //             IsAbilityOnSide(BATTLE_OPPOSITE(gBattlerAttacker), ABILITY_COSMIC_DAZE) ? 80 : 40, FALSE, FALSE, TRUE);
-                //             gRoundStructs[gBattlerAttacker].confusionSelfDmg = TRUE;
-                //             gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-                //             effect = 1;
-                //         }
-                //         else
-                //         {
-                //             gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;
-                //             BattleScriptPushCursor();
-                //             effect = 3;
-                //         }
-                //         gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused;
-                //     }
-                //     else // snapped out of confusion
-                //     {
-                //         BattleScriptCall(BattleScript_MoveUsedIsConfusedNoMore);
-                //         effect = 3;
-                //     }
-                // }
                 gBattleStruct->atkCancellerTracker++;
+
+                REQUIRE(gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
+                REQUIRE(!gProcessingExtraAttacks)
+
+                if ((--gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION) == 0) {
+                    BattleScriptCall(BattleScript_MoveUsedIsConfusedNoMore);
+                    effect = 3;
+                } else if (Random() % 3 == 0) {
+                    Type moveType = TYPE_MYSTERY;
+                    gBattlerTarget = gBattlerAttacker;
+                    gBattleMoveDamage = CalculateMoveDamage(MOVE_NONE,
+                                                            gBattlerAttacker,
+                                                            gBattlerAttacker,
+                                                            &moveType,
+                                                            IsAbilityOnSide(BATTLE_OPPOSITE(gBattlerAttacker), ABILITY_COSMIC_DAZE) ? 80 : 40,
+                                                            FALSE,
+                                                            0,
+                                                            TRUE);
+                    gRoundStructs[gBattlerAttacker].confusionSelfDmg = TRUE;
+                    gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                    gBattlerTarget = gBattlerAttacker;
+                    SetActiveMultistringChooser(TRUE);
+                    gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused;
+                    effect = 1;
+                } else {
+                    gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;
+                    BattleScriptCall(BattleScript_MoveUsedIsConfused);
+                    effect = 3;
+                }
                 break;
             case CANCELLER_PARALYSED:  // paralysis
                 // Paralyzed enemies will always move but will still have a speed penalty
@@ -3292,8 +3291,8 @@ u8 AtkCanceller_UnableToUseMove(void) {
 
                 if (!gProcessingExtraAttacks && (gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS) && (Random() % 4) == 0 && !disableParalysisCancel) {
                     gRoundStructs[gBattlerAttacker].prlzImmobility = TRUE;
-                    // This is removed in Emerald for some reason
-                    // CancelMultiTurnMoves(gBattlerAttacker);
+
+                    CancelMultiTurnMoves(gBattlerAttacker);
                     gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
                     gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                     effect = 1;
@@ -6498,7 +6497,7 @@ ProtectType IsBattlerProtected(u8 battlerId, MoveEnum move) {
         else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_MAT_BLOCK && !IS_MOVE_STATUS(move))
             return PROTECT_BLOCK;
     }
-        
+
     switch (gRoundStructs[battlerId].protectMove) {
         case MOVE_ICE_BURN:
         case MOVE_FREEZE_SHOCK:
@@ -7843,7 +7842,7 @@ void MulByTypeEffectiveness(u16* modifier, MoveEnum move, u8 moveType, u8 battle
         if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET) {
             mod = UQ_4_12(1.0);
             if (recordAbilities) RecordItemEffectBattle(battlerDef, HOLD_EFFECT_RING_TARGET);
-        } else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT &&
+        } else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && gStatuses4[battlerDef] & STATUS4_FORESIGHT &&
                    mod == UQ_4_12(0.0)) {
             mod = UQ_4_12(1.0);
         } else if (moveType == TYPE_FAIRY && (defType == TYPE_POISON || defType == TYPE_STEEL) && GetBattlerSide(battlerDef) == B_SIDE_PLAYER &&

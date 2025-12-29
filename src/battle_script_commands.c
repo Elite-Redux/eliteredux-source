@@ -298,7 +298,7 @@ static void Cmd_trysetspikes(void);
 static void Cmd_setforesight(void);
 static void Cmd_trysetperishsong(void);
 static void Cmd_handlerollout(void);
-static void Cmd_jumpifconfusedandstatmaxed(void);
+static void Cmd_jumpifenragedandstatmaxed(void);
 static void Cmd_handlefurycutter(void);
 static void Cmd_setembargo(void);
 static void Cmd_presentdamagecalculation(void);
@@ -570,7 +570,7 @@ void (*const gBattleScriptingCommandsTable[])(void) = {
     Cmd_setforesight,                            // 0xB1
     Cmd_trysetperishsong,                        // 0xB2
     Cmd_handlerollout,                           // 0xB3
-    Cmd_jumpifconfusedandstatmaxed,              // 0xB4
+    Cmd_jumpifenragedandstatmaxed,              // 0xB4
     Cmd_handlefurycutter,                        // 0xB5
     Cmd_setembargo,                              // 0xB6
     Cmd_presentdamagecalculation,                // 0xB7
@@ -1342,7 +1342,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
     else if (IsUnaware(battlerAtk))
         evasionStage = DEFAULT_STAT_STAGE;
 
-    if (gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT)
+    if (gStatuses4[battlerDef] & STATUS4_FORESIGHT)
         buff = accStage;
     else
         buff = accStage + DEFAULT_STAT_STAGE - evasionStage;
@@ -1364,7 +1364,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
                    int result = gAbilities[ability].onAccuracy(ability, battlerAtk, battlerDef, move, moveType, &moveAcc);
                    prio = max(prio, result))
     }
-    
+
     switch (prio) {
         case ACCURACY_ALWAYS_HITS:
         case ACCURACY_HITS_IF_POSSIBLE:
@@ -2646,7 +2646,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                 case MOVE_EFFECT_CONFUSION:
                     if (CanBeConfused(gEffectBattler)) {
                         SetOnMoveEffectReactionFlags(gBattleScripting.battler, gEffectBattler, MOVE_EFFECT_CONFUSION);
-                        gBattleMons[gEffectBattler].status2 |= STATUS2_CONFUSION_TURN(((Random()) % 4) + 2);  // 2-5 turns
+                        gBattleMons[gEffectBattler].status2 |= STATUS2_CONFUSION_TURN(((Random()) % 2) + 3);  // 3-4 turns
 
                         BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
                     }
@@ -3012,6 +3012,11 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     ItemEnum item = gBattleMons[gBattlerAttacker].item;
                     REQUIRE(ItemId_GetPocket(item) == POCKET_BERRIES)
                     SET_MOVE_EFFECT_AS(gNaturalGiftTable[item - FIRST_BERRY_INDEX].effect)
+                    break;
+                case MOVE_EFFECT_ENRAGE:
+                    REQUIRE_NOT(gBattleMons[gEffectBattler].status2 & STATUS2_ENRAGED)
+                    gBattleMons[gEffectBattler].status2 |= STATUS2_ENRAGED;
+                    BattleScriptCall(BattleScript_BecomesEnraged);
                     break;
             }
         }
@@ -4415,17 +4420,17 @@ static void Cmd_moveend(void) {
             case MOVEEND_RECOIL:
                 gBattleScripting.moveendState++;
 
-                if (IS_MOVE_STATUS(gCurrentMove)) break;
-                if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT) break;
-                if (gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE) break;
-                if (!gBattleMoveDamage) break;
-                if (!IsBattlerAlive(gBattlerAttacker)) break;
-                if (!gTurnStructs[gBattlerAttacker].savedDmg) break;
+                REQUIRE_NOT(IS_MOVE_STATUS(gCurrentMove))
+                REQUIRE_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                REQUIRE_NOT(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
+                REQUIRE(IsBattlerAlive(gBattlerAttacker))
+                REQUIRE(gTurnStructs[gBattlerAttacker].savedDmg)
+
                 if (gCurrentMove != MOVE_STRUGGLE) {
-                    if (IsMagicGuardProtected(gBattlerAttacker)) break;
+                    REQUIRE_NOT(IsMagicGuardProtected(gBattlerAttacker))
                     int blocked = FALSE;
                     ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].noRecoil, blocked = TRUE; break)
-                    if (blocked) break;
+                    REQUIRE_NOT(blocked)
                 }
 
                 switch (gBattleMoves[gCurrentMove].effect) {
@@ -4461,13 +4466,20 @@ static void Cmd_moveend(void) {
                            BattleScriptCall(BattleScript_AbilityPopUp);
                            gBattleMoveDamage += damage;)
 
-                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION && !BattlerHasAbility(gBattlerAttacker, ABILITY_MADNESS_ENHANCEMENT, FALSE)) {
-                    if (!gBattleMoveDamage) {
-                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_CONFUSION;
-                        BattleScriptCall(BattleScript_MoveEffectRecoil);
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_ENRAGED) {
+                    if (!BattlerHasAbility(gBattlerAttacker, ABILITY_MADNESS_ENHANCEMENT, FALSE)) {
+                        if (!gBattleMoveDamage) {
+                            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_ENRAGED;
+                            BattleScriptCall(BattleScript_MoveEffectRecoil);
+                        }
+                        u32 damage = gTurnStructs[gBattlerAttacker].savedDmg / 3;
+                        if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_COSMIC_DAZE)) damage *= 2;
+                        gBattleMoveDamage = max(1, gBattleMoveDamage + damage);
+                        BattleScriptCall(BattleScript_AttackerIsEnraged);
+                    } else {
+                        gBattleScripting.abilityPopupOverwrite = ABILITY_MADNESS_ENHANCEMENT;
+                        BattleScriptCall(BattleScript_AttackerIsEnragedMadness);
                     }
-                    gBattleMoveDamage = max(1, gBattleMoveDamage + (gTurnStructs[gBattlerAttacker].savedDmg / 3));
-                    BattleScriptCall(BattleScript_ConfusionAnimation);
                 }
 
                 if (!gBattleMoveDamage) break;
@@ -6036,7 +6048,9 @@ static void Cmd_status2animation(void) {
         wantedToAnimate = T1_READ_32(gBattlescriptCurrInstr + 2);
         if (!(gStatuses3[gActiveBattler] & STATUS3_SEMI_INVULNERABLE) && gVolatileStructs[gActiveBattler].substituteHP == 0 &&
             !(gHitMarker & HITMARKER_NO_ANIMATIONS)) {
-            BtlController_EmitStatusAnimation(0, TRUE, gBattleMons[gActiveBattler].status2 & wantedToAnimate);
+            u32 status = gBattleMons[gActiveBattler].status2;
+            if (wantedToAnimate == STATUS2_CURSED && IsBattlerCursed(gActiveBattler)) status |= STATUS2_CURSED;
+            BtlController_EmitStatusAnimation(0, TRUE, status & wantedToAnimate);
             MarkBattlerForControllerExec(gActiveBattler);
         }
         gBattlescriptCurrInstr += 6;
@@ -11260,7 +11274,7 @@ static void Cmd_trysetspikes(void) {
 }
 
 static void Cmd_setforesight(void) {
-    gBattleMons[gBattlerTarget].status2 |= STATUS2_FORESIGHT;
+    gStatuses4[gBattlerTarget] |= STATUS4_FORESIGHT;
     gBattlescriptCurrInstr++;
 }
 
@@ -11301,11 +11315,11 @@ static void Cmd_handlerollout(void) {
     }
 }
 
-static void Cmd_jumpifconfusedandstatmaxed(void) {
+static void Cmd_jumpifenragedandstatmaxed(void) {
     int stat = READ_FIRST_8_INC;
     u8* ptr = READ_PTR_INC;
-    if (!CanBeConfused(gBattlerTarget) && !CompareStat(gBattlerTarget, stat, MAX_STAT_STAGE, CMP_LESS_THAN))
-        gBattlescriptCurrInstr = ptr;  // Fails if we're confused AND stat cannot be raised
+    if (gBattleMons[gBattlerTarget].status2 & STATUS2_ENRAGED && !CompareStat(gBattlerTarget, stat, MAX_STAT_STAGE, CMP_LESS_THAN))
+        gBattlescriptCurrInstr = ptr;  // Fails if we're enraged AND stat cannot be raised
 }
 
 static void Cmd_handlefurycutter(void) {

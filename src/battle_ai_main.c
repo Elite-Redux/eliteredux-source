@@ -1267,7 +1267,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
                 score -= 10;  // only one mon needs to set up Sticky Web
             break;
         case EFFECT_FORESIGHT:
-            if (gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT)
+            if (gStatuses4[battlerDef] & STATUS4_FORESIGHT)
                 score -= 10;
             else if (gBattleMons[battlerDef].statStages[STAT_EVASION] <= 4 || !(IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST)) ||
                      DoesPartnerHaveSameMoveEffect(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove))
@@ -1275,19 +1275,12 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             break;
         case EFFECT_PERISH_SONG:
             if (isDoubleBattle) {
-                if (CountUsablePartyMons(battlerAtk) == 0 && !BattlerHasAbility(battlerAtk, ABILITY_SOUNDPROOF, TRUE) &&
-                    !BattlerHasAbility(BATTLE_PARTNER(battlerAtk), ABILITY_SOUNDPROOF, TRUE) && !BattlerHasAbility(battlerAtk, ABILITY_NOISE_CANCEL, TRUE) &&
-                    !BattlerHasAbility(BATTLE_PARTNER(battlerAtk), ABILITY_NOISE_CANCEL, TRUE) && !BattlerHasAbility(battlerAtk, ABILITY_PARROTING, TRUE) &&
-                    !BattlerHasAbility(BATTLE_PARTNER(battlerAtk), ABILITY_PARROTING, TRUE) && CountUsablePartyMons(FOE(battlerAtk)) >= 1) {
+                if (CountUsablePartyMons(battlerAtk) == 0 && !IsSoundproof(battlerAtk) && !IsSoundproof(BATTLE_PARTNER(battlerAtk)) &&
+                    CountUsablePartyMons(FOE(battlerAtk)) >= 1) {
                     score -= 10;  // Don't wipe your team if you're going to lose
-                } else if ((!IsBattlerAlive(FOE(battlerAtk)) || BattlerHasAbility(FOE(battlerAtk), ABILITY_SOUNDPROOF, TRUE) ||
-                            BattlerHasAbility(FOE(battlerAtk), ABILITY_NOISE_CANCEL, TRUE) ||
-                            BattlerHasAbility(BATTLE_PARTNER(FOE(battlerAtk)), ABILITY_NOISE_CANCEL, TRUE) ||
-                            gStatuses3[FOE(battlerAtk)] & STATUS3_PERISH_SONG) &&
-                           (!IsBattlerAlive(BATTLE_PARTNER(FOE(battlerAtk))) || BattlerHasAbility(BATTLE_PARTNER(FOE(battlerAtk)), ABILITY_SOUNDPROOF, TRUE) ||
-                            BattlerHasAbility(FOE(battlerAtk), ABILITY_NOISE_CANCEL, TRUE) ||
-                            BattlerHasAbility(BATTLE_PARTNER(FOE(battlerAtk)), ABILITY_NOISE_CANCEL, TRUE) ||
-                            BattlerHasAbility(FOE(battlerAtk), ABILITY_PARROTING, TRUE) || gStatuses3[BATTLE_PARTNER(FOE(battlerAtk))] & STATUS3_PERISH_SONG)) {
+                } else if ((!IsBattlerAlive(FOE(battlerAtk)) || IsSoundproof(FOE(battlerAtk)) || gStatuses3[FOE(battlerAtk)] & STATUS3_PERISH_SONG) &&
+                           (!IsBattlerAlive(BATTLE_PARTNER(FOE(battlerAtk))) || IsSoundproof(BATTLE_PARTNER(FOE(battlerAtk))) ||
+                            gStatuses3[BATTLE_PARTNER(FOE(battlerAtk))] & STATUS3_PERISH_SONG)) {
                     score -= 10;  // Both enemies are perish songed
                 } else if (DoesPartnerHaveSameMoveEffect(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove)) {
                     score -= 10;

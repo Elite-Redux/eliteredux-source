@@ -147,7 +147,7 @@
 #define STATUS2_ESCAPE_PREVENTION (1 << 26)
 #define STATUS2_NIGHTMARE (1 << 27)
 #define STATUS2_CURSED (1 << 28)
-#define STATUS2_FORESIGHT (1 << 29)
+#define STATUS2_ENRAGED (1 << 29)
 #define STATUS2_DEFENSE_CURL (1 << 30)
 #define STATUS2_TORMENT (1 << 31)
 
@@ -193,6 +193,7 @@
 #define STATUS4_DRAGON_CHEER (1 << 6)
 #define STATUS4_FEAR (1 << 7)
 #define STATUS4_CUTTHROAT (1 << 8)
+#define STATUS4_FORESIGHT (1 << 9)
 
 #define HITMARKER_x10 (1 << 4)
 #define HITMARKER_SKIP_DMG_TRACK (1 << 5)

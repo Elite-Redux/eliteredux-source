@@ -942,6 +942,10 @@ static const u8 sText_PetalShield[] = _("{B_ATK_NAME_WITH_PREFIX} surrounds\nits
 static const u8 sText_PowerOutageEntry[] = _("The air crackles around\n{B_ATK_NAME_WITH_PREFIX}");
 static const u8 sText_StackLostType[] = _("{B_STACK_1_NAME_WITH_PREFIX} lost\nits {B_BUFF1} typing!");
 static const u8 sText_RockClimb[] = _("{B_ATK_NAME_WITH_PREFIX} climbed\nup high!");
+static const u8 sText_IsEnraged[] = _("{B_ATK_NAME_WITH_PREFIX} is enraged!");
+static const u8 sText_MadnessEnhancement[] = _("{B_ATK_NAME_WITH_PREFIX} cackles maniacally!");
+static const u8 sText_BecomesEnraged[] = _("{B_EFF_NAME_WITH_PREFIX} is filled\nwith rage!");
+static const u8 sText_EnrageHurt[] = _("{B_ATK_NAME_WITH_PREFIX} hurts itself\nin its rampage!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1100,6 +1104,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_MadnessEnrage[] = _("{B_ATK_NAME_WITH_PREFIX} succumbs\nto the madness!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1984,6 +1989,11 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_POWER_OUTAGE_ENTRY - 12] = sText_PowerOutageEntry,
     [STRINGID_STACKLOSTTYPE - 12] = sText_StackLostType,
     [STRINGID_ROCKCLIMB - 12] = sText_RockClimb,
+    [STRINGID_IS_ENRAGED - 12] = sText_IsEnraged,
+    [STRINGID_MADNESS_ENHANCEMENT - 12] = sText_MadnessEnhancement,
+    [STRINGID_BECOMES_ENRAGED - 12] = sText_BecomesEnraged,
+    [STRINGID_ENRAGE_HURT - 12] = sText_EnrageHurt,
+    [STRINGID_MADNESS_ENRAGE - 12] = sText_MadnessEnrage,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2568,7 +2578,7 @@ const u16 gFaintMonMessage[] =
 const u16 gRecoilMessage[] = 
 {
     [B_MSG_RECOIL_NORMAL] = STRINGID_PKMNHITWITHRECOIL,
-    [B_MSG_RECOIL_CONFUSION] = STRINGID_ITHURTCONFUSION,
+    [B_MSG_RECOIL_ENRAGED] = STRINGID_ENRAGE_HURT,
     [B_MSG_RECOIL_STRAIN] = STRINGID_SUPER_STRAIN_RECOIL,
 };
 

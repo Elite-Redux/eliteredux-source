@@ -35,6 +35,7 @@ gBattleAnims_StatusConditions::
 	.4byte Status_Nightmare                 @ B_ANIM_STATUS_NIGHTMARE
 	.4byte Status_Powder
 	.4byte Status_Bleed						@ B_ANIM_STATUS_BLEED
+	.4byte Status_Enraged					@ B_ANIM_STATUS_ENRAGED
 
 	.align 2
 gBattleAnims_General::
@@ -26787,6 +26788,20 @@ Status_Bleed:
 	delay 10
 	createsprite gBloodDropletSpriteTemplate, ANIM_TARGET, 2, 27, -22, 0, 15, 50, TRUE
 	playsewithpan SE_M_BUBBLE, SOUND_PAN_TARGET
+	waitforvisualfinish
+	clearmonbg ANIM_DEF_PARTNER
+	end
+
+Status_Enraged:
+	loadspritegfx ANIM_TAG_ANGER
+	monbg ANIM_DEF_PARTNER
+	setalpha 12, 8
+	createvisualtask AnimTask_BlendMonInAndOut, 3, ANIM_TARGET, RGB_RED, 10, 0, 2
+	createsprite gAngerMarkSpriteTemplate, ANIM_TARGET, 2, 0, -20, -28
+	playsewithpan SE_M_SWAGGER2, ANIM_TARGET
+	delay 20
+	createsprite gAngerMarkSpriteTemplate, ANIM_TARGET, 2, 0, 20, -28
+	playsewithpan SE_M_SWAGGER2, ANIM_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	end

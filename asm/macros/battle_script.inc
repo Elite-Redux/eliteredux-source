@@ -970,7 +970,7 @@
 	.byte 0xb3
 	.endm
 
-	.macro jumpifconfusedandstatmaxed stat:req, ptr:req
+	.macro jumpifenragedandstatmaxed stat:req, ptr:req
 	.byte 0xb4
 	.byte \stat
 	.4byte \ptr

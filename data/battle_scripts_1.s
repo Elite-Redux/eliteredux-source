@@ -5549,7 +5549,7 @@ BattleScript_EffectForesight:
 	attackstring
 	ppreduce
 	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
-	jumpifstatus2 BS_TARGET, STATUS2_FORESIGHT, BattleScript_ButItFailed
+	jumpifstatus4 BS_TARGET, STATUS4_FORESIGHT, BattleScript_ButItFailed
 	setforesight
 BattleScript_IdentifiedFoe:
 	attackanimation
@@ -5615,7 +5615,7 @@ BattleScript_EffectSwagger::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	jumpifconfusedandstatmaxed STAT_ATK, BattleScript_ButItFailed
+	jumpifenragedandstatmaxed STAT_ATK, BattleScript_ButItFailed
 	attackanimation
 	waitanimation
 	setstatchanger STAT_ATK, 2, FALSE
@@ -5626,8 +5626,7 @@ BattleScript_EffectSwagger::
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_SwaggerTryConfuse:
-	requirecandoeffect BS_TARGET, MOVE_EFFECT_CONFUSION, BattleScript_Return, BattleScript_MoveEnd
-	setmoveeffect MOVE_EFFECT_CONFUSION
+	setmoveeffect MOVE_EFFECT_ENRAGE
 	seteffectprimary
 	goto BattleScript_MoveEnd
 
@@ -6541,7 +6540,7 @@ BattleScript_EffectFlatter::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	jumpifconfusedandstatmaxed STAT_SPATK, BattleScript_ButItFailed
+	jumpifenragedandstatmaxed STAT_SPATK, BattleScript_ButItFailed
 	attackanimation
 	waitanimation
 	setstatchanger STAT_SPATK, 1, FALSE
@@ -6552,8 +6551,7 @@ BattleScript_EffectFlatter::
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_FlatterTryConfuse::
-	requirecandoeffect BS_TARGET, MOVE_EFFECT_CONFUSION, BattleScript_Return, BattleScript_MoveEnd
-	setmoveeffect MOVE_EFFECT_CONFUSION
+	setmoveeffect MOVE_EFFECT_ENRAGE
 	seteffectprimary
 	goto BattleScript_MoveEnd
 
@@ -9474,8 +9472,16 @@ BattleScript_MoveEffectConfusion::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
-BattleScript_ConfusionAnimation::
-	status2animation BS_ATTACKER, STATUS2_CONFUSION
+BattleScript_AttackerIsEnragedMadness::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_MADNESS_ENHANCEMENT
+	goto BattleScript_AttackerIsEnraged_Continue
+
+BattleScript_AttackerIsEnraged::
+	printstring STRINGID_IS_ENRAGED
+BattleScript_AttackerIsEnraged_Continue:
+	waitmessage B_WAIT_TIME_LONG
+	status2animation BS_ATTACKER, STATUS2_ENRAGED
 	return
 
 BattleScript_MoveEffectRecoil::
@@ -12239,11 +12245,15 @@ BattleScript_BerserkDNA::
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printstring STRINGID_BATTLERABILITYRAISEDSTAT
 BattleScript_BerserkDNAStatMaxed:
-	chosenstatus2animation BS_ATTACKER, STATUS2_CONFUSION
 	copybyte gEffectBattler, gBattlerAttacker
-	printstring STRINGID_PKMNWASCONFUSED
-	waitmessage B_WAIT_TIME_LONG
+	call BattleScript_BecomesEnraged
 	end3
+
+BattleScript_BecomesEnraged::
+	chosenstatus2animation BS_EFFECT_BATTLER, STATUS2_ENRAGED
+	printstring STRINGID_BECOMES_ENRAGED
+	waitmessage B_WAIT_TIME_LONG
+	return
 
 BattleScript_BerserkDNANoConfusion::
 	raisehighestattackingstat BS_ATTACKER, 2, BattleScript_BerserkDNAStatMaxedNoConfusion
@@ -13190,9 +13200,8 @@ BattleScript_ResilienceActivates::
 	return
 
 BattleScript_MadnessEnhancementRet::
-	chosenstatus2animation BS_ATTACKER, STATUS2_CONFUSION
-	copybyte gEffectBattler, gBattlerAttacker
-	printstring STRINGID_PKMNWASCONFUSED
+	chosenstatus2animation BS_ATTACKER, STATUS2_ENRAGED
+	printstring STRINGID_MADNESS_ENRAGE
 	waitmessage B_WAIT_TIME_LONG
 	return
 

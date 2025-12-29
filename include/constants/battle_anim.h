@@ -588,6 +588,7 @@
 #define B_ANIM_STATUS_NIGHTMARE         8
 #define B_ANIM_STATUS_WRAPPED           9 // does not actually exist
 #define B_ANIM_STATUS_BLEED             10
+#define B_ANIM_STATUS_ENRAGED           11
 
 // Tasks with return values often assign them to gBattleAnimArgs[7].
 #define ARG_RET_ID 7
