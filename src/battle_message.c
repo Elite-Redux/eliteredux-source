@@ -477,7 +477,7 @@ static const u8 sText_RestoreTargetsHealth[] = _("{B_DEF_NAME_WITH_PREFIX}'s HP 
 static const u8 sText_TookPkmnIntoTheSky[] = _("{B_ATK_NAME_WITH_PREFIX} took\n{B_DEF_NAME_WITH_PREFIX} into the sky!");
 static const u8 sText_FreedFromSkyDrop[] = _("{B_DEF_NAME_WITH_PREFIX} was freed\nfrom the Sky Drop!");
 static const u8 sText_PostponeTargetMove[] = _("{B_DEF_NAME_WITH_PREFIX}'s move\nwas postponed!");
-static const u8 sText_ReflectTargetsType[] = _("{B_ATK_NAME_WITH_PREFIX}'s type\nchanged to match the {B_DEF_NAME_WITH_PREFIX}'s!");
+static const u8 sText_ReflectTargetsType[] = _("{B_DEF_NAME_WITH_PREFIX}'s type\nchanged to match {B_ATK_NAME_WITH_PREFIX}'s!");
 static const u8 sText_TransferHeldItem[] = _("{B_DEF_NAME_WITH_PREFIX} received {B_LAST_ITEM}\nfrom {B_ATK_NAME_WITH_PREFIX}");
 static const u8 sText_EmbargoEnds[] = _("{B_ATK_NAME_WITH_PREFIX} can\nuse items again!");
 static const u8 sText_Electromagnetism[] = _("electromagnetism");
@@ -947,6 +947,7 @@ static const u8 sText_MadnessEnhancement[] = _("{B_ATK_NAME_WITH_PREFIX} cackles
 static const u8 sText_BecomesEnraged[] = _("{B_EFF_NAME_WITH_PREFIX} is filled\nwith rage!");
 static const u8 sText_EnrageHurt[] = _("{B_ATK_NAME_WITH_PREFIX} hurts itself\nin its rampage!");
 static const u8 sText_MadnessEnrage[] = _("{B_ATK_NAME_WITH_PREFIX} succumbs\nto the madness!");
+static const u8 sText_BecomesDrenched[] = _("{B_EFF_NAME_WITH_PREFIX} became\ndrenched!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1105,7 +1106,6 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_BecomesDrenched[] = _("{B_EFF_NAME_WITH_PREFIX} became\ndrenched!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
