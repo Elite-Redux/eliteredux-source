@@ -4653,6 +4653,7 @@ constexpr Ability Impl<ABILITY_TALON_TRAP> = {
     },
     .onEndTurn = +[](ON_END_TURN) -> int {
         SetAbilityState(battler, ability, FALSE);
+        return FALSE;
     },
     ON_EITHER_ABILITY(TalonTrap),
 };
