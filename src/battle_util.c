@@ -161,7 +161,7 @@ void HandleAction_UseMove(void) {
     gBattlerAttacker = GetTurnBattler();
     if (gBattleStruct->field_91 & 1 << gBattlerAttacker ||
         (!IsBattlerAlive(gBattlerAttacker) &&
-         !(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability && gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION))) {
+         !(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability && gBattleMoves[gQueuedExtraAttackData[0].move].effect == EFFECT_EXPLOSION))) {
         gCurrentActionFuncId = B_ACTION_FINISHED;
         return;
     }
@@ -699,7 +699,7 @@ void HandleAction_TryFinish(void) {
         ClearMiscTurnFlags();
         gQueuedExtraAttackData[0] = gQueuedExtraAttackData[gQueuedAttackCount--];
         if (!IsBattlerAlive(gQueuedExtraAttackData[0].attacker) &&
-            !(gQueuedExtraAttackData[0].ability && gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION))
+            !(gQueuedExtraAttackData[0].ability && gBattleMoves[gQueuedExtraAttackData[0].move].effect == EFFECT_EXPLOSION))
             return;
         gProcessingExtraAttacks = TRUE;
         gCurrentActionFuncId = B_ACTION_USE_MOVE;
@@ -3651,8 +3651,7 @@ bool32 SetPermanentWeather(u32 weatherEnumId) {
 bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum move, u8 movePower) {
     if (gBattlerAttacker == battler) return FALSE;
     if (gTurnStructs[battler].dancerUsedMove) return FALSE;
-    if (gBattleMons[battler].status1 & STATUS1_SLEEP) return FALSE;
-    if (gBattleMons[battler].status1 & STATUS1_FREEZE) return FALSE;
+    if (gBattleMons[battler].status1 & (STATUS1_SLEEP | STATUS1_FREEZE)) return FALSE;
     if (!IsBattlerAlive(battler) && !(ability && gBattleMoves[move].effect == EFFECT_EXPLOSION)) return FALSE;
 
     // Set bit and save Dancer mon's original target
