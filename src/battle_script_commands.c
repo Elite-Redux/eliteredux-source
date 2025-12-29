@@ -570,7 +570,7 @@ void (*const gBattleScriptingCommandsTable[])(void) = {
     Cmd_setforesight,                            // 0xB1
     Cmd_trysetperishsong,                        // 0xB2
     Cmd_handlerollout,                           // 0xB3
-    Cmd_jumpifenragedandstatmaxed,              // 0xB4
+    Cmd_jumpifenragedandstatmaxed,               // 0xB4
     Cmd_handlefurycutter,                        // 0xB5
     Cmd_setembargo,                              // 0xB6
     Cmd_presentdamagecalculation,                // 0xB7
@@ -3017,6 +3017,12 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     REQUIRE_NOT(gBattleMons[gEffectBattler].status2 & STATUS2_ENRAGED)
                     gBattleMons[gEffectBattler].status2 |= STATUS2_ENRAGED;
                     BattleScriptCall(BattleScript_BecomesEnraged);
+                    break;
+                case MOVE_EFFECT_DRENCH:
+                    REQUIRE(CanBeDrenched(gEffectBattler))
+                    gVolatileStructs[gEffectBattler].drenched = 2 + (Random() % 2);
+                    gVolatileStructs[gEffectBattler].started.drenched = TRUE;
+                    BattleScriptCall(BattleScript_BecomesDrenched);
                     break;
             }
         }
@@ -8818,8 +8824,10 @@ static void Cmd_various(void) {
             ptr = READ_PTR_INC;
             if (gVolatileStructs[gActiveBattler].trepidation)
                 gBattlescriptCurrInstr = ptr;
-            else
+            else {
                 gVolatileStructs[gActiveBattler].trepidation = 3;
+                gVolatileStructs[gActiveBattler].started.trepidation = TRUE;
+            }
             break;
         case VARIOUS_DO_HAZARD_DAMAGE:
             i = READ_8_INC;

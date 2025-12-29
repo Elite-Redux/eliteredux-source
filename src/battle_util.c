@@ -2863,8 +2863,12 @@ u8 DoBattlerEndTurnEffects(void) {
                 CLEAR_ONE_TURN(violentRush)
                 CLEAR_ONE_TURN(onTheProwl)
 #undef CLEAR_ONE_TURN
-                if (gVolatileStructs[gActiveBattler].dazed) gVolatileStructs[gActiveBattler].dazed--;
-                if (gVolatileStructs[gActiveBattler].trepidation) gVolatileStructs[gActiveBattler].trepidation--;
+#define SUBTRACT_VOLATILE_TIMER(flag) \
+    if (gVolatileStructs[gActiveBattler].flag && !gVolatileStructs[gActiveBattler].started.flag) gVolatileStructs[gActiveBattler].flag--;
+                SUBTRACT_VOLATILE_TIMER(dazed)
+                SUBTRACT_VOLATILE_TIMER(trepidation)
+                SUBTRACT_VOLATILE_TIMER(drenched)
+#undef SUBTRACT_VOLATILE_TIMER
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_BATTLER_COUNT:  // done
@@ -4985,6 +4989,16 @@ bool32 CanBeConfused(u8 battlerId) {
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
     if (IsAbilityStatusProtected(battlerId, CHECK_CONFUSION)) return FALSE;
+
+    return TRUE;
+}
+
+bool32 CanBeDrenched(u8 battlerId) {
+    if (gVolatileStructs[battlerId].drenched) return FALSE;
+    if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
+
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_WATER))
+        if (IsAbilityStatusProtected(battlerId, CHECK_DRENCH)) return FALSE;
 
     return TRUE;
 }

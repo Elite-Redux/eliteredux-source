@@ -81,6 +81,9 @@ struct VolatileBeganThisTurn {
     u8 showdownMode:1;
     u8 fear:1;
     u8 onTheProwl:1;
+    u8 dazed:1;
+    u8 drenched:1;
+    u8 trepidation:1;
 };
 
 struct VolatileStruct {
@@ -155,6 +158,7 @@ struct VolatileStruct {
     u8 hazardDamaged:1;
     u8 iceStatue:1;
     u8 usedMonotypeEntry:1;
+    u8 drenched:2;
 };
 
 struct RoundStruct {

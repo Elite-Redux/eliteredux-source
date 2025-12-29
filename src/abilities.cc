@@ -8894,6 +8894,7 @@ constexpr Ability Impl<ABILITY_KNOW_YOUR_PLACE> = {
         CHECK(IsMoveMakingContact(move, battler))
 
         gVolatileStructs[target].dazed = 5;
+        gVolatileStructs[target].started.dazed = TRUE;
         BattleScriptCall(BattleScript_TargetDazed);
         return TRUE;
     },

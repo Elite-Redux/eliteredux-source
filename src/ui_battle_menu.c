@@ -128,6 +128,7 @@ enum {
     // Status 2
     STATUS_INFO_CONFUSION,
     STATUS_INFO_ENRAGED,
+    STATUS_INFO_DRENCHED,
     STATUS_INFO_FUTURE_SIGHT,
     // STATUS_INFO_FLINCHED,
     STATUS_INFO_UPROAR,
@@ -821,6 +822,9 @@ void UI_Battle_Menu_Init(MainCallback callback) {
                     break;
                 case STATUS_INFO_ICE_STATUE:
                     if (gVolatileStructs[j].iceStatue) isExtraInfoShown = TRUE;
+                    break;
+                case STATUS_INFO_DRENCHED:
+                    if (gVolatileStructs[j].drenched) isExtraInfoShown = TRUE;
                     break;
                 case STATUS_INFO_EXTRA_ATTACK:
                     if (gVolatileStructs[j].extraAttackLevel) isExtraInfoShown = TRUE;
@@ -2275,12 +2279,16 @@ const u8 sText_Title_Status_IceStatue_Description[] =
     _("This Pokémon is Ice-type, does not\n"
       "resist ice, and is not immune to\n"
       "frostbite.");
+const u8 sText_Title_Status_Drenched[] = _("Drenched");
+const u8 sText_Title_Status_Drenched_Description[] =
+    _("This Pokémon moves last within its\n"
+      "priority bracket.");
 
 #define SPACE_BETWEEN_LINES_FIELD ((6 * 8) + 4)
 #define MAX_DESCRIPTION_LINES 3
 #define LINES_BETWEEN_STUFF 1
 
-#define SHOW_SLEEPING_TURNS TRUE
+#define SHOW_SLEEPING_TURNS FALSE
 
 static void PrintStatusTab(void) {
     u8 i, j;
@@ -3314,6 +3322,17 @@ static void PrintStatusTab(void) {
 
                 // Description
                 StringCopy(gStringVar1, sText_Title_Status_OnTheProwl_Description);
+                AddTextPrinterParameterized4(
+                    windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+                break;
+            case STATUS_INFO_DRENCHED:
+                StringCopy(gStringVar1, sText_Title_Status_Drenched);
+                AddTextPrinterParameterized4(
+                    windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                // Description
+                StringCopy(gStringVar1, sText_Title_Status_Drenched_Description);
                 AddTextPrinterParameterized4(
                     windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;

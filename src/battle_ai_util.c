@@ -1515,6 +1515,7 @@ bool32 IsTrappingMoveEffect(u16 effect) {
     switch (effect) {
         case EFFECT_MEAN_LOOK:
         case EFFECT_TRAP:
+        case EFFECT_WHIRLPOOL:
         case EFFECT_HIT_PREVENT_ESCAPE:
         case EFFECT_FAIRY_LOCK:
             // case EFFECT_NO_RETREAT:   // TODO

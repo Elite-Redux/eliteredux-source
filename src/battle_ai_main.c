@@ -2932,6 +2932,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
             if (gStatuses3[battlerAtk] & STATUS3_ALWAYS_HITS) score += 5;
             break;
         case EFFECT_TRAP:
+        case EFFECT_WHIRLPOOL:
         case EFFECT_MEAN_LOOK:
             if (HasMoveEffect(battlerDef, EFFECT_RAPID_SPIN) || (B_GHOSTS_ESCAPE >= GEN_6 && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST)) ||
                 gBattleMons[battlerDef].status2 & STATUS2_WRAPPED) {

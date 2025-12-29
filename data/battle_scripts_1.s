@@ -210,7 +210,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectYawn                    @ EFFECT_YAWN
 	.4byte BattleScript_EffectKnockOff                @ EFFECT_KNOCK_OFF
 	.4byte BattleScript_EffectEndeavor                @ EFFECT_ENDEAVOR
-	.4byte BattleScript_EffectHit                     @ EFFECT_ERUPTION
+	.4byte BattleScript_EffectArgumentHit             @ EFFECT_ERUPTION
 	.4byte BattleScript_EffectSkillSwap               @ EFFECT_SKILL_SWAP
 	.4byte BattleScript_EffectImprison                @ EFFECT_IMPRISON
 	.4byte BattleScript_EffectRefresh                 @ EFFECT_REFRESH
@@ -218,7 +218,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectSnatch                  @ EFFECT_SNATCH
 	.4byte BattleScript_EffectHit                     @ EFFECT_LOW_KICK
 	.4byte BattleScript_EffectSecretPower             @ EFFECT_SECRET_POWER
-	.4byte BattleScript_EffectHit                     @ EFFECT_RECOIL_33
+	.4byte BattleScript_EffectArgumentHit             @ EFFECT_RECOIL_33
 	.4byte BattleScript_EffectTeeterDance             @ EFFECT_TEETER_DANCE
 	.4byte BattleScript_EffectHitEscape               @ EFFECT_HIT_ESCAPE
 	.4byte BattleScript_EffectMudSport                @ EFFECT_MUD_SPORT
@@ -243,7 +243,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectHit                     @ EFFECT_ASSURANCE
 	.4byte BattleScript_EffectHit                     @ EFFECT_TRUMP_CARD
 	.4byte BattleScript_EffectHit                     @ EFFECT_ACROBATICS
-	.4byte BattleScript_EffectHit                     @ EFFECT_HEAT_CRASH
+	.4byte BattleScript_EffectArgumentHit             @ EFFECT_HEAT_CRASH
 	.4byte BattleScript_EffectHit                     @ EFFECT_PUNISHMENT
 	.4byte BattleScript_EffectHit                     @ EFFECT_STORED_POWER
 	.4byte BattleScript_EffectHit                     @ EFFECT_ELECTRO_BALL
@@ -501,6 +501,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_GrassyTerrainHit			  @ EFFECT_GRASSY_TERRAIN_HIT
 	.4byte BattleScript_EffectMistyTerrain			  @ EFFECT_TOXIC_TERRAIN
 	.4byte BattleScript_SepticSwitch                  @ EFFECT_SEPTIC_SWITCH
+	.4byte BattleScript_EffectWhirlpool				  @ EFFECT_WHIRLPOOL
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -3386,6 +3387,33 @@ BattleScript_EffectTripleArrows::
 	waitmessage B_WAIT_TIME_LONG
 	seteffectwithchance
 	setmoveeffect MOVE_EFFECT_FLINCH
+	setmoveeffectchance 30
+	seteffectwithchance
+	tryfaintmon BS_TARGET, FALSE, NULL
+	moveendall
+	end
+
+BattleScript_EffectWhirlpool::
+	setmoveeffect MOVE_EFFECT_WRAP
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	damagecalc
+	adjustdamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	seteffectwithchance
+	setmoveeffect MOVE_EFFECT_DRENCH
 	setmoveeffectchance 30
 	seteffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
@@ -12252,6 +12280,12 @@ BattleScript_BerserkDNAStatMaxed:
 BattleScript_BecomesEnraged::
 	chosenstatus2animation BS_EFFECT_BATTLER, STATUS2_ENRAGED
 	printstring STRINGID_BECOMES_ENRAGED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_BecomesDrenched::
+	playanimation BS_EFFECT_BATTLER, B_ANIM_DRENCHED
+	printstring STRINGID_BECOMES_DRENCHED
 	waitmessage B_WAIT_TIME_LONG
 	return
 

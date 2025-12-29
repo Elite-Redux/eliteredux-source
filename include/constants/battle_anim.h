@@ -565,6 +565,7 @@
 #define B_ANIM_SWAMP                    37
 #define B_ANIM_SYRUP_BOMB_SPEED_DROP    38
 #define B_ANIM_FOG_CONTINUES            39
+#define B_ANIM_DRENCHED                 40
 
 // special animations table (gBattleAnims_Special)
 #define B_ANIM_LVL_UP                   0
