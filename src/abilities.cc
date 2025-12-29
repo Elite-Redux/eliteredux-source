@@ -4626,25 +4626,35 @@ constexpr Ability Impl<ABILITY_GRIP_PINCER> = {
     },
 };
 
-template <>
-constexpr Ability Impl<ABILITY_TALON_TRAP> = {
-    .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitEffect(target))
+ON_EITHER(TalonTrap) {
+        CHECK(ShouldApplyOnHitEffect(opponent))
         CHECK(IsBattlerAlive(battler))
-        CHECK(IsStrikerBoosted(battler, move))
-        CHECK_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
-        CHECK(Random() % 100 < 75)
+        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
+        CHECK_NOT(gBattleMons[opponent].status2 & STATUS2_WRAPPED)
+        CHECK(gVolatileStructs[battler].isFirstTurn == 2 || GetAbilityState(battler, ability) || Random() % 100 < 50)
 
-        SetOnMoveEffectReactionFlags(battler, target, MOVE_EFFECT_WRAP);
-        gBattleMons[target].status2 |= STATUS2_WRAPPED;
-        gVolatileStructs[target].wrapTurns = WrapDuration(battler);
-        gVolatileStructs[target].wrapAbility = ability;
+        SetOnMoveEffectReactionFlags(battler, opponent, MOVE_EFFECT_WRAP);
+        gBattleMons[opponent].status2 |= STATUS2_WRAPPED;
+        gVolatileStructs[opponent].wrapTurns = WrapDuration(battler);
+        gVolatileStructs[opponent].wrapAbility = ability;
 
-        gBattleStruct->wrappedMove[target] = MOVE_SNAP_TRAP;
-        gBattleStruct->wrappedBy[target] = battler;
+        gBattleStruct->wrappedMove[opponent] = MOVE_SNAP_TRAP;
+        gBattleStruct->wrappedBy[opponent] = battler;
         BattleScriptCall(BattleScript_GripPincerActivated);
         return TRUE;
+}
+
+template <>
+constexpr Ability Impl<ABILITY_TALON_TRAP> = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+        SetAbilityState(battler, ability, TRUE);
+        return FALSE;
     },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        SetAbilityState(battler, ability, FALSE);
+    },
+    ON_EITHER_ABILITY(TalonTrap),
 };
 
 template <>
