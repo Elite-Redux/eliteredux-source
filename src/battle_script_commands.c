@@ -4381,7 +4381,7 @@ static void Cmd_moveend(void) {
                             }
 
                             gBattleMons[gBattlerTarget].type3 = moveType;
-                            PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
+                            PREPARE_TYPE_BUFFER(gBattleTextBuff2, moveType);
                             gStackBattler1 = gBattlerTarget;
 
                             BattleScriptCall(BattleScript_StackAddedTheTypeRet);
