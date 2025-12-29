@@ -4425,6 +4425,7 @@ static void Cmd_moveend(void) {
                 break;
             case MOVEEND_RECOIL:
                 gBattleScripting.moveendState++;
+                REQUIRE_NOT(!gProcessingExtraAttacks && gRoundStructs[gBattlerAttacker].confusionSelfDmg)
 
                 REQUIRE_NOT(IS_MOVE_STATUS(gCurrentMove))
                 REQUIRE_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
@@ -4499,21 +4500,24 @@ static void Cmd_moveend(void) {
                 effect = TRUE;
                 break;
             case MOVEEND_ABILITIES_AFTER_RECOIL:
+                gBattleScripting.moveendState++;
+                REQUIRE_NOT(!gProcessingExtraAttacks && gRoundStructs[gBattlerAttacker].confusionSelfDmg)
                 gHpDealt = gTurnStructs[gBattlerAttacker].savedDmg;
                 if (AbilityBattleEffects(ABILITYEFFECT_AFTER_RECOIL, gBattlerAttacker, 0, 0, 0)) effect = TRUE;
-                gBattleScripting.moveendState++;
                 break;
             case MOVEEND_SYNCHRONIZE_TARGET:  // target synchronize
                 if (AbilityBattleEffects(ABILITYEFFECT_SYNCHRONIZE, gBattlerTarget, 0, 0, 0)) effect = TRUE;
                 gBattleScripting.moveendState++;
                 break;
             case MOVEEND_ABILITIES:  // Such as abilities activating on contact(Poison Spore, Rough Skin, etc.).
-                if (AbilityBattleEffects(ABILITYEFFECT_MOVE_END, gBattlerTarget, 0, 0, 0)) effect = TRUE;
                 gBattleScripting.moveendState++;
+                REQUIRE_NOT(!gProcessingExtraAttacks && gRoundStructs[gBattlerAttacker].confusionSelfDmg)
+                if (AbilityBattleEffects(ABILITYEFFECT_MOVE_END, gBattlerTarget, 0, 0, 0)) effect = TRUE;
                 break;
             case MOVEEND_ABILITIES_ATTACKER:  // Poison Touch, possibly other in the future
-                if (AbilityBattleEffects(ABILITYEFFECT_MOVE_END_ATTACKER, gBattlerAttacker, 0, 0, 0)) effect = TRUE;
                 gBattleScripting.moveendState++;
+                REQUIRE_NOT(!gProcessingExtraAttacks && gRoundStructs[gBattlerAttacker].confusionSelfDmg)
+                if (AbilityBattleEffects(ABILITYEFFECT_MOVE_END_ATTACKER, gBattlerAttacker, 0, 0, 0)) effect = TRUE;
                 break;
             case MOVEEND_STATUS_IMMUNITY_ABILITIES:  // status immunities
                 if (AbilityBattleEffects(ABILITYEFFECT_IMMUNITY, 0, 0, 0, 0))
@@ -4526,6 +4530,8 @@ static void Cmd_moveend(void) {
                 gBattleScripting.moveendState++;
                 break;
             case MOVEEND_CHOICE_MOVE:  // update choice band move
+                ++gBattleScripting.moveendState;
+                REQUIRE_NOT(!gProcessingExtraAttacks && gRoundStructs[gBattlerAttacker].confusionSelfDmg)
                 if (gHitMarker & HITMARKER_OBEYS && gChosenMove != MOVE_STRUGGLE && gChosenMove && !gProcessingExtraAttacks &&
                     gBattlerAttacker == GetTurnBattler() && (*choicedMoveAtk == 0 || *choicedMoveAtk == 0xFFFF) &&
                     (HOLD_EFFECT_CHOICE(holdEffectAtk) ||
@@ -4536,7 +4542,6 @@ static void Cmd_moveend(void) {
 
                     if ((gBattleMoves[gChosenMove].effect == EFFECT_BATON_PASS || gBattleMoves[gChosenMove].effect == EFFECT_HEALING_WISH) &&
                         !(gMoveResultFlags & MOVE_RESULT_FAILED)) {
-                        ++gBattleScripting.moveendState;
                         break;
                     }
                     *choicedMoveAtk = gChosenMove;
@@ -4545,7 +4550,6 @@ static void Cmd_moveend(void) {
                     if (gBattleMons[gBattlerAttacker].moves[i] == *choicedMoveAtk) break;
                 }
                 if (i == MAX_MON_MOVES) *choicedMoveAtk = 0;
-                ++gBattleScripting.moveendState;
                 break;
             case MOVEEND_ITEM_EFFECTS_TARGET:
                 if (ItemBattleEffects(ITEMEFFECT_TARGET, gBattlerTarget, FALSE)) effect = TRUE;
@@ -4923,10 +4927,14 @@ static void Cmd_moveend(void) {
                 gBattleScripting.moveendState++;
                 break;
             case MOVEEND_LIFEORB_SHELLBELL:
-                if (ItemBattleEffects(ITEMEFFECT_LIFEORB_SHELLBELL, 0, FALSE)) effect = TRUE;
                 gBattleScripting.moveendState++;
+                REQUIRE_NOT(!gProcessingExtraAttacks && gRoundStructs[gBattlerAttacker].confusionSelfDmg)
+                if (ItemBattleEffects(ITEMEFFECT_LIFEORB_SHELLBELL, 0, FALSE)) effect = TRUE;
                 break;
             case MOVEEND_PICKPOCKET: {
+                gBattleScripting.moveendState++;
+                REQUIRE_NOT(!gProcessingExtraAttacks && gRoundStructs[gBattlerAttacker].confusionSelfDmg)
+
                 AbilityEnum ability;
                 int checkOffense = gBattleMons[gBattlerAttacker].item == ITEM_NONE;
                 u8 thieves[4] = {0};
@@ -4949,9 +4957,11 @@ static void Cmd_moveend(void) {
                     effect = TRUE;
                 }
             }
-                gBattleScripting.moveendState++;
                 break;
             case MOVEEND_DANCER:  // Special case because it's so annoying
+                gBattleScripting.moveendState++;
+                REQUIRE_NOT(!gProcessingExtraAttacks && gRoundStructs[gBattlerAttacker].confusionSelfDmg)
+
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
                     int i, dancersCount = 0, include = 0;
                     u8 battlers[MAX_BATTLERS_COUNT];
@@ -4973,7 +4983,6 @@ static void Cmd_moveend(void) {
                         AbilityBattleEffects(ABILITYEFFECT_MOVE_END_OTHER, battlers[i], 0, 0, 0);
                     }
                 }
-                gBattleScripting.moveendState++;
                 break;
             case MOVEEND_EMERGENCY_EXIT:  // Special case, because moves hitting multiple opponents stop after switching out
                 for (i = 0; i < gBattlersCount; i++) {
@@ -5044,13 +5053,15 @@ static void Cmd_moveend(void) {
                 gBattleScripting.moveendState++;
                 break;
             case MOVEEND_CHARGE: {
+                gBattleScripting.moveendState++;
+                REQUIRE_NOT(!gProcessingExtraAttacks && gRoundStructs[gBattlerAttacker].confusionSelfDmg)
+
                 u8 currentMoveType;
                 GET_MOVE_TYPE(gCurrentMove, currentMoveType)
                 if (currentMoveType == TYPE_ELECTRIC && gBattleMoves[gCurrentMove].power && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS) &&
                     GetOncePerTurnAbilityCounter(gBattlerTarget, ABILITY_ENERGIZED) <= 0) {
                     gStatuses3[gBattlerAttacker] &= ~STATUS3_CHARGED_UP;
                 }
-                gBattleScripting.moveendState++;
                 break;
             }
             case MOVEEND_CLEAR_BITS:  // Clear/Set bits for things like using a move for all targets and all hits.
