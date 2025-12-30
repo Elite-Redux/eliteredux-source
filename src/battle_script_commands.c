@@ -4502,7 +4502,6 @@ static void Cmd_moveend(void) {
             case MOVEEND_ABILITIES_AFTER_RECOIL:
                 gBattleScripting.moveendState++;
                 REQUIRE_NOT(!gProcessingExtraAttacks && gRoundStructs[gBattlerAttacker].confusionSelfDmg)
-                gHpDealt = gTurnStructs[gBattlerAttacker].savedDmg;
                 if (AbilityBattleEffects(ABILITYEFFECT_AFTER_RECOIL, gBattlerAttacker, 0, 0, 0)) effect = TRUE;
                 break;
             case MOVEEND_SYNCHRONIZE_TARGET:  // target synchronize
@@ -5014,6 +5013,7 @@ static void Cmd_moveend(void) {
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && !(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE) &&
                     gTurnStructs[gBattlerAttacker].multiHitCounter)  // Silly edge case
                 {
+                    gHpDealt = 0;
                     gCritRoll = MakeCritRoll();
                     gBattleScripting.multihitString[4]++;
                     if (--gTurnStructs[gBattlerAttacker].multiHitCounter == 0) {

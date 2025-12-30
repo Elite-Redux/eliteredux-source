@@ -675,6 +675,7 @@ void ClearMiscTurnFlags() {
                     HITMARKER_IGNORE_DISGUISE | HITMARKER_NO_ATTACKSTRING | HITMARKER_MOLD_BREAKER);
 
     gCurrentMove = 0;
+    gHpDealt = 0;
     gBattleMoveDamage = 0;
     gMoveResultFlags = 0;
     gBattleScripting.animTurn = 0;
