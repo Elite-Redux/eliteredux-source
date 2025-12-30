@@ -109,38 +109,38 @@ Route124_Text_HuntersHouse: @ 81F6739
 `
 
 script Route124_EventScript_Glovel{
-	trainerbattle_single(TRAINER_SKIER_GLOVEL, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
-	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	trainerbattle_single(TRAINER_SKIER_GLOVEL, format("It's so c-c-cold here! My hands are sha-shaking..."), format("ow could I win when I can b-b-barely point a Pokeball straight?"))
+	msgbox(format("I r-r-really need to get some better gloves. And a new hat..."), MSGBOX_AUTOCLOSE)
 	end
 }
 
 script Route124_EventScript_Janet{
-	trainerbattle_single(TRAINER_SKIER_JANET, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
-	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	trainerbattle_single(TRAINER_SKIER_JANET, format("Y'know, I used to sled down Mt Chimney, but skiing is a lot smoother."), format("Damn, I really bailed on that one."))
+	msgbox(format("This really is a good place for winter sports!"), MSGBOX_AUTOCLOSE)
 	end
 }
 
 script Route124_EventScript_Goat{
-	trainerbattle_single(TRAINER_ACE_TRAINER_GOAT, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
-	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	trainerbattle_single(TRAINER_ACE_TRAINER_GOAT, format("I guess you want to fight too? Alright then..."), format("Yeah, that tracks."))
+	msgbox(format("Who even decides what an 'Ace Trainer' is anyway?"), MSGBOX_AUTOCLOSE)
 	end
 }
 
 script Route124_EventScript_Anabelle{
-	trainerbattle_single(TRAINER_ACE_TRAINER_ANABELLE, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
-	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	trainerbattle_single(TRAINER_ACE_TRAINER_ANABELLE, format("Needing glasses as a trainer sucks, especially when you lose them."), format("That sounded like a great battle..."))
+	msgbox(format("Oh, those? Those are my Pokémon's glasses. Did you like our strategy?"), MSGBOX_AUTOCLOSE)
 	end
 }
 
 script Route124_EventScript_Violet{
-	trainerbattle_single(TRAINER_ACE_TRAINER_VIOLET, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
-	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	trainerbattle_single(TRAINER_ACE_TRAINER_VIOLET, format("Aw, your cheeks are blushing scarlet in the cold!"), format("No! Steelix!"))
+	msgbox(format("Steelix is my best friend. Did you enjoy the encounter?"), MSGBOX_AUTOCLOSE)
 	end
 }
 
 script Route124_EventScript_Dick{
-	trainerbattle_single(TRAINER_ACE_TRAINER_DICK, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
-	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	trainerbattle_single(TRAINER_ACE_TRAINER_DICK, format("I came out here to get away from those Team Magma goons. Do you wanna battle?"), format("Well, that was over quickly."))
+	msgbox(format("You gave me a harder battle than I expected! Good job."), MSGBOX_AUTOCLOSE)
 	end
 }
 

@@ -126,20 +126,20 @@ script Route127_EventScript_LegendaryNPC{
 }
 
 script Route127_EventScript_Neo{
-	trainerbattle_single(TRAINER_ACE_TRAINER_NEO, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
-	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	trainerbattle_single(TRAINER_ACE_TRAINER_NEO, format("I approach, and it's time for us to battle!"), format("Didn't expect to meet a big shot like you!"))
+	msgbox(format("Man, I just came here for a ride around Mossdeep City..."), MSGBOX_AUTOCLOSE)
 	end
 }
 
 script Route127_EventScript_Leela{
-	trainerbattle_single(TRAINER_ACE_TRAINER_LEELA, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
-	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	trainerbattle_single(TRAINER_ACE_TRAINER_LEELA, format("Let's make this quick, my goggles are cracked so I need to leave soon."), format("Ending on a loss...\nGreat."))
+	msgbox(format("I'm struggling to see a little from the snow glare..."), MSGBOX_AUTOCLOSE)
 	end
 }
 
 script Route127_EventScript_Guin{
-	trainerbattle_single(TRAINER_SKIER_GUIN, format("Don't mind me I'm just a placeholder"), format("I guess even placeholders can be defeated"))
-	msgbox(format("This is a dummy text isn't it?"), MSGBOX_AUTOCLOSE)
+	trainerbattle_single(TRAINER_SKIER_GUIN, format("This is the coldest part of Hoenn! I love it here!"), format("Skidded right to a halt..."))
+	msgbox(format("You've actually handled this environment really well."), MSGBOX_AUTOCLOSE)
 	end
 }
 
