@@ -4956,8 +4956,7 @@ static void Cmd_moveend(void) {
                     BattleScriptCall(BattleScript_Pickpocket);  // Includes sticky hold check to print separate string
                     effect = TRUE;
                 }
-            }
-                break;
+            } break;
             case MOVEEND_DANCER:  // Special case because it's so annoying
                 gBattleScripting.moveendState++;
                 REQUIRE_NOT(!gProcessingExtraAttacks && gRoundStructs[gBattlerAttacker].confusionSelfDmg)
@@ -5081,6 +5080,7 @@ static void Cmd_moveend(void) {
                 gStatuses3[gBattlerAttacker] &= ~(STATUS3_ME_FIRST);
                 gTurnStructs[gBattlerAttacker].gemBoost = FALSE;
                 gTurnStructs[gBattlerAttacker].damagedMons = 0;
+                gTurnStructs[gBattlerAttacker].savedDmg = 0;
                 gTurnStructs[gBattlerTarget].berryReduced = FALSE;
                 gBattleScripting.moveEffect = 0;
                 gBattleScripting.moveSecondaryEffectChance = 0;
