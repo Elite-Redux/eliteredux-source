@@ -174,9 +174,9 @@ gTileset_EverGrande::
 	.4byte gMetatileAttributes_EverGrande
 	.4byte InitTilesetAnim_EverGrande
 	.4byte NULL @ PalOverrides
-	.4byte NULL @ Summer_Palette
-	.4byte NULL @ Autumn_Palette
-	.4byte NULL @ Winter_Palette
+	.4byte gTilesetPalettes_EverGrande_Summer @ Summer_Palette
+	.4byte gTilesetPalettes_EverGrande_Autumn @ Autumn_Palette
+	.4byte gTilesetPalettes_EverGrande_Winter @ Winter_Palette
 
 	.align 2
 gTileset_Pacifidlog::

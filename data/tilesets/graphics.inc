@@ -433,7 +433,7 @@ gTilesetPalettes_Lilycove_Autumn:: @ 83475C0
 	.incbin "data/tilesets/secondary/lilycove/palettes/13.gbapal"
 	.incbin "data/tilesets/secondary/lilycove/palettes/14.gbapal"
 	.incbin "data/tilesets/secondary/lilycove/palettes/15.gbapal"
-	
+
 	.align 2
 gTilesetTiles_Mossdeep::
 	.incbin "data/tilesets/secondary/mossdeep/tiles.4bpp.lz"
@@ -475,6 +475,63 @@ gTilesetPalettes_EverGrande::
 	.incbin "data/tilesets/secondary/ever_grande/palettes/09.gbapal"
 	.incbin "data/tilesets/secondary/ever_grande/palettes/10.gbapal"
 	.incbin "data/tilesets/secondary/ever_grande/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/15.gbapal"
+
+	.align 2
+gTilesetPalettes_EverGrande_Winter:: @ 8349C28
+	.incbin "data/tilesets/secondary/ever_grande/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/winter/09.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/winter/10.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/winter/11.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/15.gbapal"
+
+	.align 2
+gTilesetPalettes_EverGrande_Summer:: @ 8349C28
+	.incbin "data/tilesets/secondary/ever_grande/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/summer/09.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/summer/10.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/summer/11.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/15.gbapal"
+
+	.align 2
+gTilesetPalettes_EverGrande_Autumn:: @ 8349C28
+	.incbin "data/tilesets/secondary/ever_grande/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/autumn/09.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/autumn/10.gbapal"
+	.incbin "data/tilesets/secondary/ever_grande/palettes/autumn/11.gbapal"
 	.incbin "data/tilesets/secondary/ever_grande/palettes/12.gbapal"
 	.incbin "data/tilesets/secondary/ever_grande/palettes/13.gbapal"
 	.incbin "data/tilesets/secondary/ever_grande/palettes/14.gbapal"
