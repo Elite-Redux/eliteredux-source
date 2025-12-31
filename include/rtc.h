@@ -49,4 +49,8 @@ u32 RtcGetLocalDayCount(void);
 bool8 IsCurrentlyDay(void);
 bool8 IsCurrentlyDusk(void);
 
+u8 RtcGetCurrentDay(void);
+u8 RtcGetCurrentMonth(void);
+u16 RtcGetCurrentYear(void);
+
 #endif // GUARD_RTC_UTIL_H

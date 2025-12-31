@@ -410,7 +410,7 @@ void Menu_Start_Init(MainCallback callback) {
     sMenuDataPtr->FirstItem = gSaveBlock2Ptr->start_FirstItem;
 
     sMenuDataPtr->KonamiCodeState = 0;
-    // setCorrectSeason();
+    setCorrectSeason();
 
     for (i = 0; i < NUM_START_MENU_SPRITES; i++) sMenuDataPtr->spriteIDs[i] = 0xFF;
 

@@ -41,6 +41,7 @@
 #include "palette.h"
 #include "play_time.h"
 #include "random.h"
+#include "rtc.h"
 #include "roamer.h"
 #include "rotating_gate.h"
 #include "safari_zone.h"
@@ -69,6 +70,8 @@
 #include "constants/songs.h"
 #include "constants/trainer_hill.h"
 #include "constants/weather.h"
+#include "mgba_printf/mgba.h"
+#include "mgba_printf/mini_printf.h"
 
 struct CableClubPlayer
 {
@@ -641,6 +644,7 @@ static void SetPlayerCoordsFromWarp(void)
 
 void WarpIntoMap(void)
 {
+	setCorrectSeason();
     ApplyCurrentWarp();
     LoadCurrentMapData();
     SetPlayerCoordsFromWarp();
@@ -3254,6 +3258,33 @@ static void SpriteCB_LinkPlayer(struct Sprite *sprite)
         sprite->invisible = ((sprite->data[7] & 4) >> 2);
         sprite->data[7]++;
     }
+}
+
+void setCorrectSeason(void){
+    u8 month = RtcGetCurrentMonth();
+    u8 day   = RtcGetCurrentDay();
+
+    if(!DISABLE_AUTOMATIC_SEASON){
+        if ((month == MONTH_DEC && day >= 21) || month == MONTH_JAN || month == MONTH_FEB || (month == MONTH_MAR && day < 20)) {
+            gSaveBlock2Ptr->season = SEASON_WINTER;
+        }
+        else if ((month == MONTH_MAR && day >= 20) || month == MONTH_APR || month == MONTH_MAY || (month == MONTH_JUN && day < 21)) {
+            gSaveBlock2Ptr->season = SEASON_SPRING;
+        }
+        else if ((month == MONTH_JUN && day >= 21) || month == MONTH_JUL || month == MONTH_AUG || (month == MONTH_SEP && day < 22)) {
+            gSaveBlock2Ptr->season = SEASON_SUMMER;
+        }
+        else if ((month == MONTH_SEP && day >= 22) || month == MONTH_OCT || month == MONTH_NOV || (month == MONTH_DEC && day < 21)) {
+            gSaveBlock2Ptr->season = SEASON_AUTUMN;
+        }
+        else {
+            gSaveBlock2Ptr->season = SEASON_SPRING; //Fallback
+        }
+    }
+
+    /*MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "setCorrectSeason gSaveBlock2Ptr->season %d month %d day %d", gSaveBlock2Ptr->season, month, day);
+    MgbaClose();*/
 }
 
 u8 OverworldSpeedup_AdditionalIterations(u16 speed, bool32 overworld)

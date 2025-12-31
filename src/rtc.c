@@ -366,6 +366,27 @@ u32 RtcGetLocalDayCount(void)
     return RtcGetDayCount(&sRtc);
 }
 
+u16 RtcGetCurrentYear(void){
+    struct SiiRtcInfo *rtc = &sRtc;
+    u8 year = ConvertBcdToBinary(rtc->year);
+    
+    return year + 2000;
+}
+
+u8 RtcGetCurrentMonth(void){
+    struct SiiRtcInfo *rtc = &sRtc;
+    u8 month = ConvertBcdToBinary(rtc->month);
+
+    return month;
+}
+
+u8 RtcGetCurrentDay(void){
+    struct SiiRtcInfo *rtc = &sRtc;
+    u8 day = ConvertBcdToBinary(rtc->day);
+
+    return day;
+}
+
 bool8 IsCurrentlyDay(void)
 {
     RtcCalcLocalTime();
