@@ -297,6 +297,63 @@ gTilesetPalettes_Fortree::
 	.incbin "data/tilesets/secondary/fortree/palettes/15.gbapal"
 
 	.align 2
+gTilesetPalettes_Fortree_Winter::
+	.incbin "data/tilesets/secondary/fortree/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/winter/09.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/winter/10.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/winter/11.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/15.gbapal"
+
+	.align 2
+gTilesetPalettes_Fortree_Summer::
+	.incbin "data/tilesets/secondary/fortree/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/summer/09.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/summer/10.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/summer/11.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/15.gbapal"
+
+	.align 2
+gTilesetPalettes_Fortree_Autumn::
+	.incbin "data/tilesets/secondary/fortree/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/autumn/09.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/autumn/10.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/autumn/11.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/fortree/palettes/15.gbapal"
+
+	.align 2
 gTilesetTiles_Lilycove::
 	.incbin "data/tilesets/secondary/lilycove/tiles.4bpp.lz"
 

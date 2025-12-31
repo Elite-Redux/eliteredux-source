@@ -129,9 +129,9 @@ gTileset_Fortree::
 	.4byte gMetatileAttributes_Fortree
 	.4byte InitTilesetAnim_Fortree
 	.4byte NULL @ PalOverrides
-	.4byte NULL @ Summer_Palette
-	.4byte NULL @ Autumn_Palette
-	.4byte NULL @ Winter_Palette
+	.4byte gTilesetPalettes_Fortree_Summer @ Summer_Palette
+	.4byte gTilesetPalettes_Fortree_Autumn @ Autumn_Palette
+	.4byte gTilesetPalettes_Fortree_Winter @ Winter_Palette
 
 	.align 2
 gTileset_Lilycove::
