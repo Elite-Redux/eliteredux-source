@@ -24,6 +24,9 @@ jobs:
         run: cd tools && wget https://github.com/huderlem/poryscript/releases/download/3.3.0/poryscript-linux.zip && unzip poryscript-linux.zip -d ./ && rm ./poryscript-linux.zip && mv ./poryscript-linux ./poryscript && ls && cd ..
         # Downloads poryscript and unzips it
 
+      - name: Build ER
+        run: pwd && make -j${nproc}
+
       - name: Download pokeemerald repo
         run: pwd && cd tools && git clone https://github.com/pret/pokeemerald
         # Clones pokeemerald repo
@@ -41,9 +44,6 @@ jobs:
       - name: Build pokeemerald repo
         run: pwd && cd tools && cd pokeemerald && pwd && ls && make -j${nproc}
         # builds agbcc to pokeemerald repo
-
-      - name: Build ER
-        run: pwd && make -j${nproc}
 
       - name: Build the patch
         run: chmod -R 755 ./flips-linux && ls && ./flips-linux --create tools/pokeemerald/pokeemerald.gba pokeemerald_modern.gba EliteRedux.bps
