@@ -30,12 +30,12 @@ jobs:
 
       - name: Install agbcc
         run: |
-          ./build.sh
-          ./install.sh ../
-        working-directory: agbcc
-
-      - name: Agbcc
-        run: make -j${nproc} all
+          pwd
+          git clone https://github.com/pret/agbcc
+          cd agbcc && ./build.sh
+          ./install.sh ../pokeemerald
+          cd ..
+        # Downloads and installs agbcc
 
       - name: Build pokeemerald repo
         run: pwd && cd tools && cd pokeemerald && pwd && ls && make -j${nproc}
