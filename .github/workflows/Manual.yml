@@ -42,8 +42,11 @@ jobs:
         run: pwd && cd tools && cd pokeemerald && pwd && ls && make -j${nproc}
         # builds agbcc to pokeemerald repo
 
+      - name: Build ER
+        run: pwd && make -j${nproc}
+
       - name: Build the patch
-        run: chmod -R 755 ./flips-linux && ls && ./flips-linux --create tools/pokeemerald/pokeemerald.gba pokeemerald.gba EliteRedux.bps
+        run: chmod -R 755 ./flips-linux && ls && ./flips-linux --create tools/pokeemerald/pokeemerald.gba pokeemerald_modern.gba EliteRedux.bps
 
       - name: Upload bps file
         uses: actions/upload-artifact@v6
