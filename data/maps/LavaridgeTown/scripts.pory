@@ -530,7 +530,7 @@ script LavaridgeTown_EventScript_RivalGiveGoGoggles2 {
             "Flannery: Right. They were also doing... weird science, I dunno, on Mt Chimney.\p"
             "He said they're disrupting research at the ruins or something. He wanted me to go and provide backup.\p"
             "But, see, I'm worried they might come back to Mt Chimney.\p"
-            "Would you go to the ruins in my place?\p"
+            "Would you go to the desert in my place?\p"
             "May: Wait a minute! You're a Gym Leader, you're a better battler than {PLAYER}, surely?"
         ))
     } else {
@@ -542,7 +542,7 @@ script LavaridgeTown_EventScript_RivalGiveGoGoggles2 {
             "Flannery: Right. They were also doing... weird science, I dunno, on Mt Chimney.\p"
             "He said they're disrupting research at the ruins or something. He wanted me to go and provide backup.\p"
             "But, see, I'm worried they might come back to Mt Chimney.\p"
-            "Would you go to the ruins in my place?\p"
+            "Would you go to the desert in my place?\p"
             "Brendan: Wait a minute! You're a Gym Leader, you're a better battler than {PLAYER}, surely?"
         ))
     }
