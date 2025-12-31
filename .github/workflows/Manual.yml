@@ -48,7 +48,7 @@ jobs:
         run: chmod -R 755 ./flips-linux && ls && ./flips-linux --create tools/pokeemerald/pokeemerald.gba pokeemerald.gba EliteRedux.bps
 
       - name: Upload bps file
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v6
         with:
           name: pokeemerald_patch
           path: EliteRedux.bps
