@@ -497,7 +497,7 @@ static const u8 sDebugText_FlagsVars_SwitchCatching[] = _("Toggle {STR_VAR_1}Cat
 static const u8 sDebugText_FlagsVars_SwitchGodMode[] = _("Toggle {STR_VAR_1}GodMode OFF");
 static const u8 sDebugText_FlagsVars_SwitchAutowin[] = _("Toggle {STR_VAR_1}Autowin OFF");
 static const u8 sDebugText_FlagsVars_SwitchmGBAPrint[] = _("Toggle {STR_VAR_1}mGBA Print OFF");
-static const u8 sDebugText_FlagsVars_SwitchSeason[] = _("Toggle {STR_VAR_1}Season OFF");
+static const u8 sDebugText_FlagsVars_SwitchSeason[] = _("Change Season");
 static const u8 sDebugText_FlagsVars_SwitchRandomPrint[] = _("Toggle {STR_VAR_1}Randomized Mode OFF");
 // Battle
 static const u8 sDebugText_Battle_0_Box[] = _("Box…{CLEAR_TO 110}{RIGHT_ARROW}");

@@ -84,9 +84,9 @@ gTileset_Mauville::
 	.4byte gMetatileAttributes_Mauville
 	.4byte InitTilesetAnim_Mauville
 	.4byte NULL @ PalOverrides
-	.4byte NULL @ Summer_Palette
-	.4byte NULL @ Autumn_Palette
-	.4byte NULL @ Winter_Palette
+	.4byte gTilesetPalettes_Mauville_Summer @ Summer_Palette
+	.4byte gTilesetPalettes_Mauville_Autumn @ Autumn_Palette
+	.4byte gTilesetPalettes_Mauville_Winter @ Winter_Palette
 
 	.align 2
 gTileset_Lavaridge::

@@ -114,6 +114,63 @@ gTilesetPalettes_Mauville::
 	.incbin "data/tilesets/secondary/mauville/palettes/15.gbapal"
 
 	.align 2
+gTilesetPalettes_Mauville_Summer:: @ 834172C
+	.incbin "data/tilesets/secondary/mauville/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/summer/08.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/summer/09.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/15.gbapal"
+
+	.align 2
+gTilesetPalettes_Mauville_Autumn:: @ 834172C
+	.incbin "data/tilesets/secondary/mauville/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/autumn/08.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/autumn/09.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/15.gbapal"
+
+	.align 2
+gTilesetPalettes_Mauville_Winter:: @ 834172C
+	.incbin "data/tilesets/secondary/mauville/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/winter/08.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/winter/09.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/mauville/palettes/15.gbapal"
+
+	.align 2
 gTilesetTiles_Lavaridge::
 	.incbin "data/tilesets/secondary/lavaridge/tiles.4bpp.lz"
 
