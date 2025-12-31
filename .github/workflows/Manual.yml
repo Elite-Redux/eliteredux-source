@@ -31,6 +31,7 @@ jobs:
       - name: Install agbcc
         run: |
           pwd
+          cd tools
           git clone https://github.com/pret/agbcc
           cd agbcc && ./build.sh
           ./install.sh ../pokeemerald
