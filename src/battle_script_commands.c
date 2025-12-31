@@ -10576,8 +10576,6 @@ static void Cmd_transformdataexecution(void) {
         s32 i;
         struct BattlePokemon *battleMonAttacker, *battleMonTarget;
 
-        // TODO: THIS NEEDS TO BE FIXED
-
         gBattleMons[gBattlerAttacker].status2 |= STATUS2_TRANSFORMED;
         gVolatileStructs[gBattlerAttacker].disabledMove = 0;
         gVolatileStructs[gBattlerAttacker].disableTimer = 0;
@@ -10589,6 +10587,8 @@ static void Cmd_transformdataexecution(void) {
 
         battleMonAttacker = &gBattleMons[gBattlerAttacker];
         battleMonTarget = &gBattleMons[gBattlerTarget];
+
+        UpdateAbilityStateIndices(gBattlerAttacker, battleMonTarget->abilities);
 
         battleMonAttacker->species = battleMonTarget->species;
         battleMonAttacker->attack = battleMonTarget->attack;
@@ -10604,7 +10604,6 @@ static void Cmd_transformdataexecution(void) {
         ARRAY_COPY(battleMonAttacker->abilities, battleMonTarget->abilities)
         ARRAY_COPY(battleMonAttacker->moves, battleMonTarget->moves)
         ARRAY_COPY(battleMonAttacker->statStages, battleMonTarget->statStages)
-
         for (i = 0; i < MAX_MON_MOVES; i++) {
             if (gBattleMoves[gBattleMons[gBattlerAttacker].moves[i]].pp < 5)
                 gBattleMons[gBattlerAttacker].pp[i] = gBattleMoves[battleMonAttacker->moves[i]].pp;

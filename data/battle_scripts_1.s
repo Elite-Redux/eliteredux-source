@@ -4764,6 +4764,8 @@ BattleScript_EffectTransform::
 	waitanimation
 	printfromtable gTransformUsedStringIds
 	waitmessage B_WAIT_TIME_LONG
+	saveattackerandtargetto34
+	switchinabilities BS_ATTACKER
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectAttackDown2:
