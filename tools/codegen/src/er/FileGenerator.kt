@@ -78,6 +78,7 @@ object FileGenerator {
         "trainerparties" to TrainerPartyGenerator,
         "trainerids" to TrainerEnumGenerator,
         "trainerfields" to TrainerMiscEnumsGenerator,
+        "elevations" to ElevationGenerator,
     )
 
     @JvmStatic
