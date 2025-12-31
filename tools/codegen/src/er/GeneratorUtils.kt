@@ -45,11 +45,15 @@ object GeneratorUtils {
         TextFormat.parse(File("../../proto/MoveList.textproto").readText(), MoveList::class.java).movesList
     }
 
-    val SPECIES_LIST by lazy {
+    val FULL_SPECIES_LIST by lazy {
         TextFormat.parse(
             File("../../proto/SpeciesList.textproto").readText(),
             SpeciesList::class.java
-        ).speciesList.filter { it.randomizerBanned != SPECIES_HIDDEN }
+        ).speciesList
+    }
+
+    val SPECIES_LIST by lazy {
+        FULL_SPECIES_LIST.filter { it.randomizerBanned != SPECIES_HIDDEN }
     }
 
     val NO_EGG_LIST by lazy {
@@ -69,7 +73,10 @@ object GeneratorUtils {
     }
 
     val RANDOMIZER_CONFIG by lazy {
-        TextFormat.parse(File("../../proto/LimitedRandomizerConfig.textproto").readText(), LimitedRandomizerConfig::class.java)
+        TextFormat.parse(
+            File("../../proto/LimitedRandomizerConfig.textproto").readText(),
+            LimitedRandomizerConfig::class.java
+        )
     }
 
     fun findLearnsetForSpecies(species: Species): Learnset =
