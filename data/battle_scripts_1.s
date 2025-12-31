@@ -11071,6 +11071,8 @@ BattleScript_ImposterActivates::
 	waitanimation
 	printstring STRINGID_IMPOSTERTRANSFORM
 	waitmessage B_WAIT_TIME_LONG
+	saveattackerandtargetto34
+	switchinabilities BS_ATTACKER
 	end3
 
 BattleScript_HurtAttacker:
