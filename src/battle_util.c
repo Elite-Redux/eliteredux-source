@@ -4620,7 +4620,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
             if (BATTLER_HAS_ABILITY(battler, ABILITY_NOSFERATU) && ShouldApplyOnHitEffect(battler) && IsMoveMakingContact(move, battler) &&
                 !BATTLER_MAX_HP(battler) && CanBattlerHeal(battler)) {
                 gBattleScripting.abilityPopupOverwrite = ABILITY_NOSFERATU;
-                gBattleMoveDamage = -gHpDealt / 2;
+                gBattleMoveDamage = -gTurnStructs[battler].savedDmg / 2;
                 if (!gBattleMoveDamage) gBattleMoveDamage = -1;
                 BattleScriptCall(BattleScript_NosferatuActivated);
                 effect++;
