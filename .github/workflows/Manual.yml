@@ -21,7 +21,7 @@ jobs:
         run: sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi libpng-dev
         # build-essential, git, zip, unzip, java, kotlin, and python are already installed
       - name: Download poryscript
-        run: cd tools && wget https://github.com/huderlem/poryscript/releases/download/3.3.0/poryscript-linux.zip && unzip poryscript-linux.zip -d ./ && rm ./poryscript-linux.zip && mv ./poryscript-linux ./poryscript && ls && cd ..
+        run: cd tools && wget https://github.com/huderlem/poryscript/releases/download/3.5.2/poryscript-linux.zip && unzip poryscript-linux.zip -d ./ && rm ./poryscript-linux.zip && mv ./poryscript-linux ./poryscript && ls && cd ..
         # Downloads poryscript and unzips it
 
       - name: Build ER
