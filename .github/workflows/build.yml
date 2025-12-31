@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ upcoming ]
   pull_request:
 
 jobs:
@@ -16,48 +16,43 @@ jobs:
       COMPARE: 0
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Checkout agbcc
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
         with:
-          path: agbcc
-          repository: pret/agbcc
+          submodules: 'recursive'
 
       - name: Install binutils
-        run: sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi
-        # build-essential, git, and libpng-dev are already installed
-        # gcc-arm-none-eabi is only needed for the modern build
-        # as an alternative to dkP
+        run: sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi libpng-dev
+        # build-essential, git, zip, unzip, java, kotlin, and python are already installed
       - name: Download poryscript
-        run: cd tools && wget https://github.com/huderlem/poryscript/releases/download/3.3.0/poryscript-linux.zip && unzip poryscript-linux.zip -d ./ && rm ./poryscript-linux.zip && mv ./poryscript-linux ./poryscript && ls && cd ..
+        run: cd tools && wget https://github.com/huderlem/poryscript/releases/download/3.5.2/poryscript-linux.zip && unzip poryscript-linux.zip -d ./ && rm ./poryscript-linux.zip && mv ./poryscript-linux ./poryscript && ls && cd ..
         # Downloads poryscript and unzips it
 
-      - name: Install agbcc
-        run: |
-          ./build.sh
-          ./install.sh ../
-        working-directory: agbcc
-
-      - name: Agbcc
-        run: make -j${nproc} all
+      - name: Build ER
+        run: pwd && make -j${nproc}
 
       - name: Download pokeemerald repo
         run: pwd && cd tools && git clone https://github.com/pret/pokeemerald
         # Clones pokeemerald repo
 
-      - name: Install agbcc to vanilla emerald
-        run: pwd && cd tools && ls && cp -r agbcc pokeemerald/tools/ && cd pokeemerald && pwd
+      - name: Install agbcc
+        run: |
+          pwd
+          cd tools
+          git clone https://github.com/pret/agbcc
+          cd agbcc && ./build.sh
+          ./install.sh ../pokeemerald
+          cd ..
+        # Downloads and installs agbcc
 
       - name: Build pokeemerald repo
         run: pwd && cd tools && cd pokeemerald && pwd && ls && make -j${nproc}
         # builds agbcc to pokeemerald repo
 
       - name: Build the patch
-        run: chmod -R 755 ./flips-linux && ls && ./flips-linux --create tools/pokeemerald/pokeemerald.gba pokeemerald.gba EliteRedux.bps
+        run: chmod -R 755 ./flips-linux && ls && ./flips-linux --create tools/pokeemerald/pokeemerald.gba pokeemerald_modern.gba EliteRedux.bps
 
       - name: Upload bps file
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v6
         with:
           name: pokeemerald_patch
           path: EliteRedux.bps
