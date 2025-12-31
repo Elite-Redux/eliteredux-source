@@ -39,9 +39,9 @@ gTileset_Rustboro::
 	.4byte gMetatileAttributes_Rustboro
 	.4byte InitTilesetAnim_Rustboro
 	.4byte NULL @ PalOverrides
-	.4byte NULL @ Summer_Palette
-	.4byte NULL @ Autumn_Palette
-	.4byte NULL @ Winter_Palette
+	.4byte gTilesetPalettes_Rustboro_Summer @ Summer_Palette
+	.4byte gTilesetPalettes_Rustboro_Autumn @ Autumn_Palette
+	.4byte gTilesetPalettes_Rustboro_Winter @ Winter_Palette
 
 	.align 2
 gTileset_Dewford::

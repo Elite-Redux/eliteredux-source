@@ -45,6 +45,63 @@ gTilesetPalettes_Rustboro::
 	.incbin "data/tilesets/secondary/rustboro/palettes/15.gbapal"
 
 	.align 2
+gTilesetPalettes_Rustboro_Winter:: @ 833BEC0
+	.incbin "data/tilesets/secondary/rustboro/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/winter/08.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/15.gbapal"
+
+	.align 2
+gTilesetPalettes_Rustboro_Summer:: @ 833BEC0
+	.incbin "data/tilesets/secondary/rustboro/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/summer/08.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/15.gbapal"
+
+	.align 2
+gTilesetPalettes_Rustboro_Autumn:: @ 833BEC0
+	.incbin "data/tilesets/secondary/rustboro/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/autumn/08.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/rustboro/palettes/15.gbapal"
+
+	.align 2
 gTilesetTiles_Dewford::
 	.incbin "data/tilesets/secondary/dewford/tiles.4bpp.lz"
 

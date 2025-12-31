@@ -2066,7 +2066,7 @@ const u16 gTilesetPalettes_General_Winter[][16] =
     INCBIN_U16("data/tilesets/primary/general/palettes/00.gbapal"),
     INCBIN_U16("data/tilesets/primary/general/palettes/winter/01.gbapal"),
     INCBIN_U16("data/tilesets/primary/general/palettes/winter/02.gbapal"),
-    INCBIN_U16("data/tilesets/primary/general/palettes/summer/03.gbapal"),
+    INCBIN_U16("data/tilesets/primary/general/palettes/winter/03.gbapal"),
     INCBIN_U16("data/tilesets/primary/general/palettes/04.gbapal"),
     INCBIN_U16("data/tilesets/primary/general/palettes/winter/05.gbapal"),
     INCBIN_U16("data/tilesets/primary/general/palettes/06.gbapal"),
