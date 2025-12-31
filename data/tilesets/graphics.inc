@@ -376,6 +376,64 @@ gTilesetPalettes_Lilycove::
 	.incbin "data/tilesets/secondary/lilycove/palettes/14.gbapal"
 	.incbin "data/tilesets/secondary/lilycove/palettes/15.gbapal"
 
+
+	.align 2
+gTilesetPalettes_Lilycove_Winter:: @ 83475C0
+	.incbin "data/tilesets/secondary/lilycove/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/winter/09.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/15.gbapal"
+
+	.align 2
+gTilesetPalettes_Lilycove_Summer:: @ 83475C0
+	.incbin "data/tilesets/secondary/lilycove/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/summer/09.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/15.gbapal"
+
+	.align 2
+gTilesetPalettes_Lilycove_Autumn:: @ 83475C0
+	.incbin "data/tilesets/secondary/lilycove/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/autumn/09.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/12.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/13.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/14.gbapal"
+	.incbin "data/tilesets/secondary/lilycove/palettes/15.gbapal"
+	
 	.align 2
 gTilesetTiles_Mossdeep::
 	.incbin "data/tilesets/secondary/mossdeep/tiles.4bpp.lz"

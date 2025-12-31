@@ -144,9 +144,9 @@ gTileset_Lilycove::
 	.4byte gMetatileAttributes_Lilycove
 	.4byte InitTilesetAnim_Lilycove
 	.4byte NULL @ PalOverrides
-	.4byte NULL @ Summer_Palette
-	.4byte NULL @ Autumn_Palette
-	.4byte NULL @ Winter_Palette
+	.4byte gTilesetPalettes_Lilycove_Summer @ Summer_Palette
+	.4byte gTilesetPalettes_Lilycove_Autumn @ Autumn_Palette
+	.4byte gTilesetPalettes_Lilycove_Winter @ Winter_Palette
 
 	.align 2
 gTileset_Mossdeep::
