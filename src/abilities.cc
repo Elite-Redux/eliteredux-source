@@ -10361,7 +10361,7 @@ constexpr Ability Impl<ABILITY_CHRISTMAS_NIGHTMARE> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(IsWeatherActive(WEATHER_HAIL_ANY))
 
-        CHECK_NOT(CheckAbilityWasAnnouncedBy(BATTLE_PARTNER(battler), ABILITY_FLAME_COAT))
+        CHECK_NOT(CheckAbilityWasAnnouncedBy(BATTLE_PARTNER(battler), ABILITY_CHRISTMAS_NIGHTMARE))
 
         return SwitchInAnnounce(B_MSG_SWITCHIN_CHRISTMAS_NIGHTMARE);
     },
@@ -10373,11 +10373,12 @@ constexpr Ability Impl<ABILITY_CHRISTMAS_NIGHTMARE> = {
         DisableSwitchInAbility(BATTLE_PARTNER(battler), ability);
 
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CHRISTMAS_NIGHTMARE;
-        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsgRet);
+        BattleScriptCall(BattleScript_SwitchInAbilityMsgRet);
         return TRUE;
     },
     .onEndTurn = +[](ON_END_TURN) -> int {
         CHECK(IsAbilityOnSide(GetBattlerSide(battler), ability) - 1 == battler)
+        CHECK(IsWeatherActive(WEATHER_HAIL_ANY))
 
         int any = FALSE;
         for (int target = GetOppositeSide(battler); target < gBattlersCount; target += 2) {
