@@ -2083,6 +2083,7 @@ const u16 gTilesetPalettes_General_Winter[][16] =
 
 const u32 gTilesetTiles_General[]        = INCBIN_U32("data/tilesets/primary/general/tiles.4bpp.lz");
 const u32 gTilesetTiles_General_Autumn[] = INCBIN_U32("data/tilesets/primary/general/tiles_autumn.4bpp.lz");
+const u32 gTilesetTiles_General_Winter[] = INCBIN_U32("data/tilesets/primary/general/tiles_winter.4bpp.lz");
 
 // trade/egg hatch
 

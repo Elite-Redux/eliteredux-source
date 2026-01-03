@@ -14,7 +14,7 @@ gTileset_General::
 	.4byte gTilesetPalettes_General_Winter
 	.4byte NULL @ Summer_Tileset
 	.4byte gTilesetTiles_General_Autumn @ Autumn_Tileset
-	.4byte NULL @ Winter_Tileset
+	.4byte gTilesetTiles_General_Winter @ Winter_Tileset
 
 	.align 2
 gTileset_Petalburg::
@@ -32,7 +32,7 @@ gTileset_Petalburg::
 	.4byte NULL @ Winter_Palette
 	.4byte NULL @ Summer_Tileset
 	.4byte NULL @ Autumn_Tileset
-	.4byte NULL @ Winter_Tileset
+	.4byte gTilesetTiles_Petalburg_Winter @ Winter_Tileset
 
 	.align 2
 gTileset_Rustboro::

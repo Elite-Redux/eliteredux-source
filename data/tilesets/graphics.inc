@@ -3,6 +3,10 @@ gTilesetTiles_Petalburg::
 	.incbin "data/tilesets/secondary/petalburg/tiles.4bpp.lz"
 
 	.align 2
+gTilesetTiles_Petalburg_Winter::
+	.incbin "data/tilesets/secondary/petalburg/tiles_winter.4bpp.lz"
+
+	.align 2
 gTilesetPalettes_Petalburg::
 	.incbin "data/tilesets/secondary/petalburg/palettes/00.gbapal"
 	.incbin "data/tilesets/secondary/petalburg/palettes/01.gbapal"
