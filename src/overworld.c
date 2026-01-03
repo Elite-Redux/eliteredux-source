@@ -3264,7 +3264,7 @@ void setCorrectSeason(void){
     u8 month = RtcGetCurrentMonth();
     u8 day   = RtcGetCurrentDay();
 
-    if(!DISABLE_AUTOMATIC_SEASON){
+    if(FlagGet(FLAG_AUTOMATIC_SEASON)){
         if ((month == MONTH_DEC && day >= 21) || month == MONTH_JAN || month == MONTH_FEB || (month == MONTH_MAR && day < 20)) {
             gSaveBlock2Ptr->season = SEASON_WINTER;
         }

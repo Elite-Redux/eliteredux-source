@@ -678,6 +678,11 @@ gTilesetPalettes_Shop::
 	.align 2
 gTilesetTiles_PokemonCenter::
 	.incbin "data/tilesets/secondary/pokemon_center/tiles.4bpp.lz"
+	
+	.align 2
+gTilesetTiles_PokemonCenter_Autumn::
+	.incbin "data/tilesets/secondary/pokemon_center/tiles_autumn.4bpp.lz"
+
 
 	.align 2
 gTilesetPalettes_PokemonCenter::

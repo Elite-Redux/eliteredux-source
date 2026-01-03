@@ -2125,9 +2125,31 @@ script PKMN_Center_Move_Tutor{
 		break
 		case 4:
 			closemessage
-			goto(PKMN_Center_EventScript_Up_Difficulty)
+			goto(PKMN_Center_Change_Difficulty)
 		break
 		case 5:
+			closemessage
+			goto(PKMN_Center_Change_Season)
+		break
+		case MULTI_B_PRESSED:
+		default:
+		case 6:
+			closemessage
+			goto(PKMN_Center_Move_Tutor_General_Exit)
+		break
+	}
+}
+
+script PKMN_Center_Change_Difficulty{
+	lockall
+	messageinstant("What do you want to do with it?")
+	multichoice2(0, 0, MultiChoice_Difficulty_Change)
+	switch(var(VAR_RESULT)){
+		case 0:
+			closemessage
+			goto(PKMN_Center_EventScript_Up_Difficulty)
+		break
+		case 1:
 			closemessage
 			goto(PKMN_Center_EventScript_Lower_Difficulty)
 		break
@@ -2135,7 +2157,65 @@ script PKMN_Center_Move_Tutor{
 		default:
 		case 6:
 			closemessage
-			goto(PKMN_Center_Move_Tutor_General_Exit)
+			goto(PKMN_Center_Move_Tutor)
+		break
+	}
+}
+
+script PKMN_Center_Change_Season{
+	lockall
+	messageinstant("Please chose the season you like\nthe best.")
+	multichoice2(0, 0, MultiChoice_Season_Change)
+	switch(var(VAR_RESULT)){
+		case 0:
+			//Spring
+			clearflag(FLAG_AUTOMATIC_SEASON)
+			toggleSaveblock(SAVEBLOCK_SEASON, SEASON_SPRING)
+			playfanfare(MUS_OBTAIN_ITEM)
+			message(format("The season became Spring!"))
+			waitmessage
+			waitfanfare
+		break
+		case 1:
+			//Spring
+			clearflag(FLAG_AUTOMATIC_SEASON)
+			toggleSaveblock(SAVEBLOCK_SEASON, SEASON_SUMMER)
+			playfanfare(MUS_OBTAIN_ITEM)
+			message(format("The season became Summer!"))
+			waitmessage
+			waitfanfare
+		break
+		case 2:
+			//Spring
+			clearflag(FLAG_AUTOMATIC_SEASON)
+			toggleSaveblock(SAVEBLOCK_SEASON, SEASON_AUTUMN)
+			playfanfare(MUS_OBTAIN_ITEM)
+			message(format("The season became Autumn!"))
+			waitmessage
+			waitfanfare
+		break
+		case 3:
+			//Spring
+			clearflag(FLAG_AUTOMATIC_SEASON)
+			toggleSaveblock(SAVEBLOCK_SEASON, SEASON_WINTER)
+			playfanfare(MUS_OBTAIN_ITEM)
+			message(format("The season became Winter!"))
+			waitmessage
+			waitfanfare
+		break
+		case 4:
+			//Spring
+			setflag(FLAG_AUTOMATIC_SEASON)
+			playfanfare(MUS_OBTAIN_ITEM)
+			message(format("The season will be set automatically!"))
+			waitmessage
+			waitfanfare
+		break
+		case MULTI_B_PRESSED:
+		default:
+		case 6:
+			closemessage
+			goto(PKMN_Center_Move_Tutor)
 		break
 	}
 }
@@ -2231,7 +2311,7 @@ script PKMN_Center_EventScript_Lower_Difficulty{
 			case NO:
 			case MULTI_B_PRESSED:
 			default:
-				goto(PKMN_Center_Move_Tutor)
+				goto(PKMN_Center_Change_Difficulty)
 			break
 		}
 	}
@@ -2279,7 +2359,7 @@ script PKMN_Center_EventScript_Up_Difficulty{
 			case NO:
 			case MULTI_B_PRESSED:
 			default:
-				goto(PKMN_Center_Move_Tutor)
+				goto(PKMN_Center_Change_Difficulty)
 			break
 		}
 	}
@@ -2290,14 +2370,30 @@ script PKMN_Center_EventScript_Up_Difficulty{
     release
     end
 }
-
 text MultiChoice_Move_Tutor_NPC{
     "Invert Day and Night$"
     "Disable Randomizer$"
     "Rate a nickname$"
     "Mystery Gift$"
+    "Change Difficulty$"
+    "Change Season$"
+    "$"
+}
+
+text MultiChoice_Difficulty_Change{
     "Upping Difficulty$"
     "Lower Difficulty$"
+    "Exit$"
+    "$"
+}
+
+text MultiChoice_Season_Change{
+    "Spring$"
+    "Summer$"
+    "Autumn$"
+    "Winter$"
+    "Automatic$"
+    "Exit$"
     "$"
 }
 

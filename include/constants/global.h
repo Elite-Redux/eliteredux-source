@@ -158,6 +158,7 @@
 #define SAVEBLOCK_INNATE_RANDOMIZER 1
 #define SAVEBLOCK_DIFFICULTY        2
 #define SAVEBLOCK_ENABLE_LEGENDARY  3
+#define SAVEBLOCK_SEASON            4
 
 //In Battle Debug Stuff
 #define MACROS_PRINT_MGBA_MESSAGE                          0

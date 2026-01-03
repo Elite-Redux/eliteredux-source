@@ -1547,6 +1547,7 @@
 #define FLAG_HIDE_SUNHOLLOW_NORMAN                                  3106
 #define FLAG_HIDE_SUNHOLLOW_MUSEUM_MAGMA_GRUNTS                     3107
 #define FLAG_FINISHED_SUNHOLLOW_STORY                               3108
+#define FLAG_AUTOMATIC_SEASON                                       3109
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 

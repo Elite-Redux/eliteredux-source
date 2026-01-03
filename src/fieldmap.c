@@ -847,21 +847,105 @@ static void CopyTilesetToVram(struct Tileset const *tileset, u16 numTiles, u16 o
 {
     if (tileset)
     {
-        if (!tileset->isCompressed)
-            LoadBgTiles(2, tileset->tiles, numTiles * 32, offset);
-        else
-            DecompressAndCopyTileDataToVram(2, tileset->tiles, numTiles * 32, offset, 0);
+        u8 season = getCurrentSeason();
+        bool8 useDefaultTileset = TRUE;
+        switch(season){
+            default:
+            case SEASON_SPRING:
+                useDefaultTileset = TRUE;
+            break;
+            case SEASON_SUMMER:
+                if(tileset->tiles_summer != NULL){
+                    if (!tileset->isCompressed)
+                        LoadBgTiles(2, tileset->tiles_summer, numTiles * 32, offset);
+                    else
+                        DecompressAndCopyTileDataToVram(2, tileset->tiles_summer, numTiles * 32, offset, 0);
+                    
+                    useDefaultTileset = FALSE;
+                }
+            break;
+            case SEASON_AUTUMN:
+                if(tileset->tiles_autumn != NULL){
+                    if (!tileset->isCompressed)
+                        LoadBgTiles(2, tileset->tiles_autumn, numTiles * 32, offset);
+                    else
+                        DecompressAndCopyTileDataToVram(2, tileset->tiles_autumn, numTiles * 32, offset, 0);
+                    
+                    useDefaultTileset = FALSE;
+                }
+            break;
+            case SEASON_WINTER:
+                if(tileset->tiles_winter != NULL){
+                    if (!tileset->isCompressed)
+                        LoadBgTiles(2, tileset->tiles_winter, numTiles * 32, offset);
+                    else
+                        DecompressAndCopyTileDataToVram(2, tileset->tiles_winter, numTiles * 32, offset, 0);
+                    
+                    useDefaultTileset = FALSE;
+                }
+            break;
+        }
+
+        if(useDefaultTileset){
+            if (!tileset->isCompressed)
+                LoadBgTiles(2, tileset->tiles, numTiles * 32, offset);
+            else
+                DecompressAndCopyTileDataToVram(2, tileset->tiles, numTiles * 32, offset, 0);
+        }
     }
 }
+
 
 static void CopyTilesetToVramUsingHeap(struct Tileset const *tileset, u16 numTiles, u16 offset)
 {
     if (tileset)
     {
-        if (!tileset->isCompressed)
-            LoadBgTiles(2, tileset->tiles, numTiles * 32, offset);
-        else
-            DecompressAndLoadBgGfxUsingHeap(2, tileset->tiles, numTiles * 32, offset, 0);
+        u8 season = getCurrentSeason();
+        bool8 useDefaultTileset = TRUE;
+
+        switch(season){
+            default:
+            case SEASON_SPRING:
+                useDefaultTileset = TRUE;
+            break;
+            case SEASON_SUMMER:
+                if(tileset->tiles_summer != NULL){
+                    if (!tileset->isCompressed)
+                        LoadBgTiles(2, tileset->tiles_summer, numTiles * 32, offset);
+                    else
+                        DecompressAndCopyTileDataToVram(2, tileset->tiles_summer, numTiles * 32, offset, 0);
+                    
+                    useDefaultTileset = FALSE;
+                }
+            break;
+            case SEASON_AUTUMN:
+                if(tileset->tiles_autumn != NULL){
+                    if (!tileset->isCompressed)
+                        LoadBgTiles(2, tileset->tiles_autumn, numTiles * 32, offset);
+                    else
+                        DecompressAndCopyTileDataToVram(2, tileset->tiles_autumn, numTiles * 32, offset, 0);
+                    
+                    useDefaultTileset = FALSE;
+                }
+            break;
+            case SEASON_WINTER:
+                if(tileset->tiles_winter != NULL){
+                    if (!tileset->isCompressed)
+                        LoadBgTiles(2, tileset->tiles_winter, numTiles * 32, offset);
+                    else
+                        DecompressAndCopyTileDataToVram(2, tileset->tiles_winter, numTiles * 32, offset, 0);
+                    
+                    useDefaultTileset = FALSE;
+                }
+            break;
+        }
+
+        if(useDefaultTileset){
+            if (!tileset->isCompressed)
+                LoadBgTiles(2, tileset->tiles, numTiles * 32, offset);
+            else
+                DecompressAndLoadBgGfxUsingHeap(2, tileset->tiles, numTiles * 32, offset, 0);
+        }
     }
 }
 

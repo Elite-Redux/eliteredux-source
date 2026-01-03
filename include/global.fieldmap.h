@@ -50,6 +50,9 @@ struct Tileset
     void *palettes_summer;
     void *palettes_autumn;
     void *palettes_winter;
+    void *tiles_summer;
+    void *tiles_autumn;
+    void *tiles_winter;
 };
 
 struct MapLayout

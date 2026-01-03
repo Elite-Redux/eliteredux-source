@@ -839,7 +839,6 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
                 tMenuType = HAS_SAVED_GAME;
                 if (IsMysteryGiftEnabled())
                     tMenuType++;
-                setCorrectSeason();
                 gTasks[taskId].func = Task_MainMenuCheckBattery;
             }
             else {

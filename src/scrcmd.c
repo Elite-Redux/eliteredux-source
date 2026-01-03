@@ -2558,6 +2558,9 @@ bool8 ScrCmd_toggleSaveblock(struct ScriptContext *ctx)
         case SAVEBLOCK_ENABLE_LEGENDARY:
             gSaveBlock2Ptr->encounterRandomizedLegendaryMode = value;
         break;
+        case SAVEBLOCK_SEASON:
+            gSaveBlock2Ptr->season = value;
+        break;
     }
     return TRUE;
 }
@@ -2577,6 +2580,9 @@ bool8 ScrCmd_checkSaveblockValue(struct ScriptContext *ctx)
         break;
         case SAVEBLOCK_ENABLE_LEGENDARY:
             gSpecialVar_Result = gSaveBlock2Ptr->encounterRandomizedLegendaryMode;
+        break;
+        case SAVEBLOCK_SEASON:
+            gSpecialVar_Result = gSaveBlock2Ptr->season;
         break;
     }
     return FALSE;
