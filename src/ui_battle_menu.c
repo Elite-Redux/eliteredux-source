@@ -5216,7 +5216,7 @@ static void PrintSideTab(u8 side) {
                 printedInfo = TRUE;
                 break;
             case SIDE_INFO_QUICK_GUARD:
-                StringCopy(gStringVar1, sText_Title_Side_Smokescreen);
+                StringCopy(gStringVar1, sText_Title_Side_QuickGuard);
                 AddTextPrinterParameterized4(
                     windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
 
@@ -5244,7 +5244,7 @@ static void PrintSideTab(u8 side) {
                                              gStringVar1);
 
                 // Description
-                StringCopy(gStringVar1, sText_Title_Side_Smokescreen_Description);
+                StringCopy(gStringVar1, sText_Title_Side_QuickGuard_Description);
                 AddTextPrinterParameterized4(
                     windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
 
