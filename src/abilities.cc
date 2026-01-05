@@ -12353,6 +12353,12 @@ constexpr Ability Impl<ABILITY_KING_OF_THE_JUNGLE> = {
         },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_WARRIORS_SPEAR> = {
+    .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
+    ATE_ABILITY(TYPE_FIGHTING),
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
