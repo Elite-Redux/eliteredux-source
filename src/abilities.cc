@@ -9268,7 +9268,7 @@ constexpr Ability Impl<ABILITY_SOOTHSAYER> = {
     },
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
-            if (!GetAbilityState(battler, ability)) return;
+            if (!GetAbilityState(target, ability)) return;
             if (*mod >= UQ_4_12(1.0)) *mod = UQ_4_12(0.5);
         },
     .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
