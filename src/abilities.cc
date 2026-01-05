@@ -3278,7 +3278,6 @@ constexpr Ability Impl<ABILITY_SAND_SPIT> = {
             BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
             return NO_ANNOUNCE;
         } else if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
-            
             if (!IsBattlerGrounded(attacker) && IsBattlerAlive(attacker)) {
                 gStatuses3[attacker] |= STATUS3_SMACKED_DOWN;
                 gStatuses3[attacker] &= ~(STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS | STATUS3_ON_AIR);
@@ -10253,13 +10252,14 @@ constexpr Ability Impl<ABILITY_CHUCKSTER> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED)
         CHECK(DidMoveHit())
+        CHECK(IsMoveMakingContact(move, attacker))
 
         SetAbilityState(battler, ability, CanBattlerBeForceSwitched(attacker) ? RESTRAINING_ORDER_ACTIVATING : RESTRAINING_ORDER_DONE);
         return FALSE;
     },
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
-            if (!GetAbilityState(battler, ability)) {
+            if (!GetAbilityState(battler, ability) && IsMoveMakingContact(move, attacker)) {
                 MUL(.5);
             }
         },
