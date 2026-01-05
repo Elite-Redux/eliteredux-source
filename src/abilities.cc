@@ -2874,7 +2874,7 @@ constexpr Ability Impl<ABILITY_BATTLE_BOND> = {
 
         CHECK(newSpecies)
 
-        PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[battler].species);
+        StringCopy(gStringVar1, GetSpeciesLongName(newSpecies));
         gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
         UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
         gBattleMons[battler].species = newSpecies;
