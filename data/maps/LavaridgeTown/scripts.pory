@@ -609,13 +609,13 @@ script LavaridgeTown_EventScript_RivalGiveGoGoggles2 {
     checkplayergender
     if (var(VAR_RESULT) == MALE) {
         msgbox(format(
-            "May: I've already finished my research in the Route 110 desert for now.\p"
+            "May: I've already finished my research in the Route 111 desert for now.\p"
             "You'll need these to protect your eyes in the sandstorm.\p"
             "Flannery: Thank you so much, again! Good luck!"
         ))
     } else {
         msgbox(format(
-            "Brendan: I've already finished my research in the Route 110 desert for now.\p"
+            "Brendan: I've already finished my research in the Route 111 desert for now.\p"
             "You'll need these to protect your eyes in the sandstorm.\p"
             "Flannery: Thank you so much, again! Good luck!"
         ))
