@@ -344,7 +344,43 @@ void HandleAction_UseMove(void) {
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
 }
 
+int TryScheduleSwitch(ExtraSwitchActionStruct data) {
+    for (int i = 1; i <= gQueuedSwitchCount; i++) {
+        if (gQueuedSwitchData[i].switchingBattler == data.switchingBattler) return FALSE;
+    }
+
+    gQueuedSwitchData[++gQueuedSwitchCount] = data;
+    return TRUE;
+}
+
 void HandleAction_Switch(void) {
+    gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
+    UndoFormChange(gBattlerPartyIndexes[gBattlerAttacker], GetBattlerSide(gBattlerAttacker), TRUE);
+
+    if (gProcessingSwitch) {
+        gBattlerAttacker = gQueuedSwitchData[0].sourceBattler;
+        gBattlerTarget = gQueuedSwitchData[0].switchingBattler;
+
+        gBattlescriptCurrInstr = gQueuedSwitchData[0].script;
+
+        switch (gQueuedSwitchData[0].cause) {
+            case SWITCH_ABILITY:
+                gBattlerAbility = gBattlerAttacker;
+                gBattleScripting.abilityPopupOverwrite = gQueuedSwitchData[0].ability.id;
+                break;
+
+            case SWITCH_ITEM:
+                gLastUsedItem = gQueuedSwitchData[0].item;
+                break;
+
+            case SWITCH_MOVE:
+                gCurrentMove = gQueuedSwitchData[0].move;
+                break;
+        }
+
+        return;
+    }
+
     gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     gBattle_BG0_X = 0;
     gBattle_BG0_Y = 0;
@@ -355,11 +391,8 @@ void HandleAction_Switch(void) {
 
     gBattleScripting.battler = gBattlerAttacker;
     gBattlescriptCurrInstr = BattleScript_ActionSwitch;
-    gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
 
     if (gBattleResults.playerSwitchesCounter < 255) gBattleResults.playerSwitchesCounter++;
-
-    UndoFormChange(gBattlerPartyIndexes[gBattlerAttacker], GetBattlerSide(gBattlerAttacker), TRUE);
 }
 
 void HandleAction_UseItem(void) {
@@ -696,16 +729,7 @@ void ClearMiscTurnFlags() {
 void HandleAction_TryFinish(void) {
     gCritRoll = CRIT_ROLL_ONLY_IF_GUARANTEED;
 
-    if (gQueuedAttackCount) {
-        ClearMiscTurnFlags();
-        gQueuedExtraAttackData[0] = gQueuedExtraAttackData[gQueuedAttackCount--];
-        if (!IsBattlerAlive(gQueuedExtraAttackData[0].attacker) &&
-            !(gQueuedExtraAttackData[0].ability && gBattleMoves[gQueuedExtraAttackData[0].move].effect == EFFECT_EXPLOSION))
-            return;
-        gProcessingExtraAttacks = TRUE;
-        gCurrentActionFuncId = B_ACTION_USE_MOVE;
-        return;
-    }
+    if (TryPerformExtraAction()) return;
 
     gProcessingExtraAttacks = FALSE;
 
@@ -720,6 +744,54 @@ void HandleAction_TryFinish(void) {
         gBattleStruct->faintedActionsState = 0;
         gCurrentActionFuncId = B_ACTION_FINISHED;
     }
+}
+
+int TryPerformExtraAction() {
+    gProcessingSwitch = FALSE;
+    gProcessingExtraAttacks = FALSE;
+
+    while (gQueuedAttackCount) {
+        gQueuedExtraAttackData[0] = gQueuedExtraAttackData[gQueuedAttackCount--];
+        FILTER(IsBattlerAlive(gQueuedExtraAttackData[0].attacker) ||
+               (gQueuedExtraAttackData[0].ability && gBattleMoves[gQueuedExtraAttackData[0].move].effect == EFFECT_EXPLOSION))
+        ClearMiscTurnFlags();
+        gProcessingExtraAttacks = TRUE;
+        gCurrentActionFuncId = B_ACTION_USE_MOVE;
+        return TRUE;
+    }
+
+    while (gQueuedSwitchCount) {
+        gQueuedSwitchData[0] = gQueuedSwitchData[gQueuedSwitchCount--];
+        int switching = gQueuedSwitchData[0].switchingBattler;
+        FILTER(IsBattlerAlive(switching) ||
+               (gQueuedSwitchData[0].cause == SWITCH_MOVE && gBattleMoves[gQueuedSwitchData[0].move].effect == EFFECT_HEALING_WISH))
+        int source = gQueuedSwitchData[0].sourceBattler;
+        switch (gQueuedSwitchData[0].cause) {
+            case SWITCH_ITEM:
+                FILTER(gBattleMons[source].item == gQueuedSwitchData[0].item)
+                FILTER_NOT(IsItemNegated(source))
+                FILTER_NOT(IsUnnerveAbilityOnOpposingSide(source))
+                break;
+
+            case SWITCH_ABILITY:
+                AbilityEnum ability = gQueuedSwitchData[0].ability.id;
+                FILTER(BattlerHasAbility(source, ability, FALSE))
+                if (gQueuedSwitchData[0].ability.setAbilityState) {
+                    if (GetAbilityState(source, ability)) {
+                        continue;
+                    } else {
+                        SetAbilityState(source, ability, TRUE);
+                    }
+                }
+                break;
+        }
+        FILTER(CanBattlerSwitch(switching))
+        gProcessingSwitch = TRUE;
+        gCurrentActionFuncId = B_ACTION_SWITCH;
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 void TryPreemptiveActions() {
@@ -3957,7 +4029,7 @@ int DidMoveHit() { return WasMoveSuccessful() && TARGET_TURN_DAMAGED; }
 
 int ShouldApplyOnHitEffect(int applyTo) { return DidMoveHit() && IsBattlerAlive(applyTo); }
 
-int UseIntimidateClone(AbilityEnum abilityToCheck, int battler) {
+int UseIntimidateClone(AbilityEnum abilityToCheck, u8 battler) {
     if (!GetIntimidateData(abilityToCheck)) return FALSE;
 
     gBattlerTarget = BATTLE_OPPOSITE(battler);
@@ -5003,7 +5075,7 @@ bool32 CanBeDrenched(u8 battlerId) {
     return TRUE;
 }
 
-int CanInfatuate(int battlerAtk, int battlerDef) {
+int CanInfatuate(u8 battlerAtk, u8 battlerDef) {
     int genderAtk, genderDef;
     if (gBattleMons[battlerDef].status2 & STATUS2_INFATUATION) return FALSE;
     if (battlerAtk == battlerDef) return FALSE;
@@ -5479,21 +5551,6 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                             case HOLD_EFFECT_PARAM_TOXIC_TERRAIN:
                                 effect = TryHandleSeed(battlerId, STATUS_FIELD_TOXIC_TERRAIN, STAT_SPDEF, gLastUsedItem, TRUE);
                                 break;
-                        }
-                        break;
-                    case HOLD_EFFECT_EJECT_PACK:
-                        if (gRoundStructs[battlerId].statFell && gRoundStructs[battlerId].disableEjectPack == 0 &&
-                            !(gCurrentMove == MOVE_PARTING_SHOT &&
-                              CanBattlerSwitch(gBattlerAttacker)))  // Does not activate if attacker used Parting Shot and can switch out
-                        {
-                            gRoundStructs[battlerId].statFell = FALSE;
-                            gStackBattler1 = battlerId;
-                            effect = ITEM_STATS_CHANGE;
-                            if (moveTurn) {
-                                BattleScriptCall(BattleScript_EjectPackActivate_Ret);
-                            } else {
-                                BattleScriptExecute(BattleScript_EjectPackActivate_End2);
-                            }
                         }
                         break;
                 }
@@ -6023,10 +6080,28 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                 GET_MOVE_TYPE(gCurrentMove, moveType);
                 switch (battlerHoldEffect) {
                     case HOLD_EFFECT_RED_CARD:
+                        REQUIRE_NOT(IsUnnerveAbilityOnOpposingSide(battlerId))
+                        REQUIRE(TARGET_TURN_DAMAGED)
+
+                        TryScheduleSwitch((ExtraSwitchActionStruct){
+                            .cause = SWITCH_ITEM,
+                            .item = gBattleMons[battlerId].item,
+                            .sourceBattler = battlerId,
+                            .switchingBattler = gBattlerAttacker,
+                            .script = BattleScript_RedCardActivates,
+                        });
+                        break;
                     case HOLD_EFFECT_EJECT_BUTTON:
-                        if (TARGET_TURN_DAMAGED) {
-                            gTurnStructs[battlerId].shouldTriggerSwitchItem = TRUE;
-                        }
+                        REQUIRE_NOT(IsUnnerveAbilityOnOpposingSide(battlerId))
+                        REQUIRE(TARGET_TURN_DAMAGED)
+
+                        TryScheduleSwitch((ExtraSwitchActionStruct){
+                            .cause = SWITCH_ITEM,
+                            .item = gBattleMons[battlerId].item,
+                            .sourceBattler = battlerId,
+                            .switchingBattler = battlerId,
+                            .script = BattleScript_EjectButtonActivates,
+                        });
                         break;
                     case HOLD_EFFECT_AIR_BALLOON:
                         if (gBattlerTarget != gBattlerAttacker && TARGET_TURN_DAMAGED) {
@@ -9078,7 +9153,6 @@ int CheckHalfHpAbility(int battlerDef, int battlerAtk) {
     if (!ShouldApplyOnHitEffect(battlerDef)) return FALSE;
     if (gBattleStruct->hpBefore[battlerDef] <= gBattleMons[battlerDef].maxHP / 2) return FALSE;
     if (gBattleMons[battlerDef].hp > gBattleMons[battlerDef].maxHP / 2) return FALSE;
-    if (gTurnStructs[battlerAtk].multiHitCounter > 1) return FALSE;
     return TRUE;
 }
 
@@ -9303,7 +9377,7 @@ AbilityEnum GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreak
     return ability;
 }
 
-AbilityEnum BattlerHasAbility(int battler, AbilityEnum ability, int checkMoldBreaker) {
+AbilityEnum BattlerHasAbility(u8 battler, AbilityEnum ability, int checkMoldBreaker) {
     u8 i;
 
     for (i = 0; i < GetNumPossibleAbilitiesForBattler(); i++) {

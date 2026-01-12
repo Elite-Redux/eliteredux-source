@@ -619,8 +619,8 @@ static const u8 sText_PkmnGotOverItsInfatuation[] = _("{B_SCR_ACTIVE_NAME_WITH_P
 static const u8 sText_ItemCannotBeRemoved[] = _("{B_ATK_NAME_WITH_PREFIX}'s item cannot be removed!");
 static const u8 sText_StickyBarbTransfer[] = _("The {B_LAST_ITEM} attached itself to\n{B_ATK_NAME_WITH_PREFIX}!");
 static const u8 sText_PkmnBurnHealed[] = _("{B_DEF_NAME_WITH_PREFIX}'s\nburn was healed.");
-static const u8 sText_RedCardActivate[] = _("{B_STACK_1_NAME_WITH_PREFIX} held up its {B_LAST_ITEM}\nagainst {B_ATK_NAME_WITH_PREFIX}!");
-static const u8 sText_EjectButtonActivate[] = _("{B_STACK_1_NAME_WITH_PREFIX} is switched\nout with the {B_LAST_ITEM}!");
+static const u8 sText_RedCardActivate[] = _("{B_ATK_NAME_WITH_PREFIX} held up its {B_LAST_ITEM}\nagainst {B_DEF_NAME_WITH_PREFIX}!");
+static const u8 sText_EjectButtonActivate[] = _("{B_DEF_NAME_WITH_PREFIX} is switched\nout with the {B_LAST_ITEM}!");
 static const u8 sText_AttackerGotOverInfatuation[] = _("{B_ATK_NAME_WITH_PREFIX} got over\nits infatuation!");
 static const u8 sText_TormentedNoMore[] = _("{B_ATK_NAME_WITH_PREFIX} is\ntormented no more!");
 static const u8 sText_HealBlockedNoMore[] = _("{B_ATK_NAME_WITH_PREFIX} is cured of\nits heal block!");
@@ -1106,6 +1106,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_Chuckster[] = _("{B_DEF_NAME_WITH_PREFIX} is\nthrown out!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1996,6 +1997,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ENRAGE_HURT - 12] = sText_EnrageHurt,
     [STRINGID_MADNESS_ENRAGE - 12] = sText_MadnessEnrage,
     [STRINGID_BECOMES_DRENCHED - 12] = sText_BecomesDrenched,
+    [STRINGID_CHUCKSTER - 12] = sText_Chuckster,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

@@ -175,10 +175,13 @@ EWRAM_DATA u8 gActionsByTurnOrder[MAX_BATTLERS_COUNT] = {B_ACTION_FINISHED, B_AC
 EWRAM_DATA u8 gBattlerByTurnOrder[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gCurrentTurnActionNumber = 0;
 EWRAM_DATA bool8 gProcessingExtraAttacks = FALSE;
+EWRAM_DATA bool8 gProcessingSwitch = FALSE;
 EWRAM_DATA u8 gDelayedTurnActionId = B_ACTION_FINISHED;
 EWRAM_DATA u8 gQueuedAttackCount = 0;
 // Position 0 is active attack
 EWRAM_DATA struct ExtraAttackActionStruct gQueuedExtraAttackData[MAX_BATTLERS_COUNT + 1] = {0};
+EWRAM_DATA struct ExtraSwitchActionStruct gQueuedSwitchData[MAX_BATTLERS_COUNT + 1] = {0};
+EWRAM_DATA u8 gQueuedSwitchCount = 0;
 EWRAM_DATA u8 gCurrentActionFuncId = B_ACTION_FINISHED;
 EWRAM_DATA struct BattlePokemon gBattleMons[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gBattlerSpriteIds[MAX_BATTLERS_COUNT] = {0};
