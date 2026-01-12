@@ -3389,8 +3389,9 @@ static void TryDoEventsBeforeFirstTurn(void) {
         if (ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gBattlerByTurnOrder[gBattleStruct->switchInItemsCounter], FALSE)) return;
     }
 
+    gBattleStruct->canProcessSwitches = TRUE;
+
     if (gQueuedSwitchCount) {
-        gBattleStruct->canProcessSwitches = TRUE;
         gCurrentActionFuncId = B_ACTION_TRY_FINISH;
         return;
     }
