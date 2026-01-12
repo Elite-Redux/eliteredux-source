@@ -298,15 +298,15 @@ static void SetShopMenuCallback(void (*callback)(void)) { sMartInfo.callback = c
         SPECIES_MESPRIT_REDUX
 
 static const u16* const sAdoptionCenterInventories[] = {
-    {ADOPTION_CENTER_ZERO_BADGES, SPECIES_NONE},   // 0 Badges
-    {ADOPTION_CENTER_ONE_BADGE, SPECIES_NONE},     // 1 Badge
-    {ADOPTION_CENTER_TWO_BADGES, SPECIES_NONE},    // 2 Badges
-    {ADOPTION_CENTER_THREE_BADGES, SPECIES_NONE},  // 3 Badges
-    {ADOPTION_CENTER_FOUR_BADGES, SPECIES_NONE},   // 4 Badges
-    {ADOPTION_CENTER_FIVE_BADGES, SPECIES_NONE},   // 5 Badges
-    {ADOPTION_CENTER_SIX_BADGES, SPECIES_NONE},    // 6 Badges
-    {ADOPTION_CENTER_SEVEN_BADGES, SPECIES_NONE},  // 7 Badges
-    {ADOPTION_CENTER_EIGHT_BADGES, SPECIES_NONE}   // 8 Badges
+    (const u16[]){ADOPTION_CENTER_ZERO_BADGES, SPECIES_NONE},   // 0 Badges
+    (const u16[]){ADOPTION_CENTER_ONE_BADGE, SPECIES_NONE},     // 1 Badge
+    (const u16[]){ADOPTION_CENTER_TWO_BADGES, SPECIES_NONE},    // 2 Badges
+    (const u16[]){ADOPTION_CENTER_THREE_BADGES, SPECIES_NONE},  // 3 Badges
+    (const u16[]){ADOPTION_CENTER_FOUR_BADGES, SPECIES_NONE},   // 4 Badges
+    (const u16[]){ADOPTION_CENTER_FIVE_BADGES, SPECIES_NONE},   // 5 Badges
+    (const u16[]){ADOPTION_CENTER_SIX_BADGES, SPECIES_NONE},    // 6 Badges
+    (const u16[]){ADOPTION_CENTER_SEVEN_BADGES, SPECIES_NONE},  // 7 Badges
+    (const u16[]){ADOPTION_CENTER_EIGHT_BADGES, SPECIES_NONE}   // 8 Badges
 };
 
 static u8 GetNumberOfBadges(void) {
