@@ -9850,7 +9850,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
                                 .switchingBattler = battler,
                                 .script = BattleScript_EmergencyExitPopupNoPause,
                             });
-                        } else if (GetBattlerHoldEffect(battler, HOLD_EFFECT_EJECT_PACK) && !IsUnnerveAbilityOnOpposingSide(battler)) {
+                        } else if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_PACK && !IsUnnerveAbilityOnOpposingSide(battler)) {
                             TryScheduleSwitch((ExtraSwitchActionStruct){
                                 .cause = SWITCH_ITEM,
                                 .item = gBattleMons[battler].item,
