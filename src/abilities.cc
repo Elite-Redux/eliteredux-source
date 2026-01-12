@@ -10372,7 +10372,7 @@ constexpr Ability Impl<ABILITY_WINTER_THRONE> = {
         for (u8 target = 0; target < gBattlersCount; target++) {
             FILTER(IsBattlerAlive(target))
 
-            if (IS_BATTLER_OF_TYPE(target, TYPE_ICE)) {
+            if (!IS_BATTLER_OF_TYPE(target, TYPE_ICE)) {
                 FILTER_NOT(IsMagicGuardProtected(target))
                 gStackBattler1 = target;
                 BattleScriptExecute(BattleScript_WinterThroneDamage);
