@@ -760,6 +760,8 @@ int TryPerformExtraAction() {
         return TRUE;
     }
 
+    if (!gBattleStruct->canProcessSwitches) return FALSE;
+
     while (gQueuedSwitchCount) {
         gQueuedSwitchData[0] = gQueuedSwitchData[gQueuedSwitchCount--];
         int switching = gQueuedSwitchData[0].switchingBattler;

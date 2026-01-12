@@ -728,6 +728,7 @@ struct BattleStruct {
     u8 battleEventDone;
     u8 firstTurnAbilityLoopCounter:4;
     u8 ranEndTurnEffects:1;
+    u8 canProcessSwitches:1;
 };
 
 #define GET_MOVE_TYPE(move, typeArg)                         \
