@@ -4869,6 +4869,7 @@ constexpr Ability Impl<ABILITY_SPECTRALIZE> = {
         gStackBattler2 = target;
         gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
         BattleScriptCall(BattleScript_AbilitySetFear);
+        return TRUE;
     },
     ATE_ABILITY(TYPE_GHOST),
 };
