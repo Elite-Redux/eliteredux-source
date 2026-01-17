@@ -3160,6 +3160,7 @@ u16 IsPowderImmune(int battler, int checkMoldBreaker) {
     if (IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)) return TRUE;
     if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES) return TRUE;
     RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, powderImmune)
+    if (IS_BATTLER_OF_TYPE(battler, TYPE_BUG)) RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, pollinateImmunities)
     return FALSE;
 }
 
@@ -6890,12 +6891,13 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
             basePower += (CountBattlerStatIncreases(battlerAtk, TRUE) * 20);
             break;
         case EFFECT_ELECTRO_BALL:
-            speed = GetBattlerTotalSpeedStat(battlerAtk, TOTAL_SPEED_FULL) / GetBattlerTotalSpeedStat(battlerDef, TOTAL_SPEED_FULL);
+            speed = GetBattlerTotalSpeedStat(battlerAtk, TOTAL_SPEED_FULL, move) / GetBattlerTotalSpeedStat(battlerDef, TOTAL_SPEED_FULL, move);
             if (speed >= ARRAY_COUNT(sSpeedDiffPowerTable)) speed = ARRAY_COUNT(sSpeedDiffPowerTable) - 1;
             basePower = sSpeedDiffPowerTable[speed];
             break;
         case EFFECT_GYRO_BALL:
-            basePower = ((25 * GetBattlerTotalSpeedStat(battlerDef, TOTAL_SPEED_FULL)) / GetBattlerTotalSpeedStat(battlerAtk, TOTAL_SPEED_FULL)) + 1;
+            basePower =
+                ((25 * GetBattlerTotalSpeedStat(battlerDef, TOTAL_SPEED_FULL, move)) / GetBattlerTotalSpeedStat(battlerAtk, TOTAL_SPEED_FULL, move)) + 1;
             if (basePower > 150) basePower = 150;
             break;
         case EFFECT_ECHOED_VOICE:
@@ -7253,7 +7255,7 @@ u32 CalculateStat(
             if (IS_BATTLER_OF_TYPE(battler, TYPE_ROCK) && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) statBase = statBase * 3 / 2;
             break;
         case STAT_SPEED:
-            statBase = GetBattlerTotalSpeedStat(battler, calculatingSecondary ? TOTAL_SPEED_SECONDARY : TOTAL_SPEED_PRIMARY);
+            statBase = GetBattlerTotalSpeedStat(battler, calculatingSecondary ? TOTAL_SPEED_SECONDARY : TOTAL_SPEED_PRIMARY, move);
             extraStatLevel = gVolatileStructs[battler].extraSpeedLevel;
             break;
     }
@@ -7264,7 +7266,7 @@ u32 CalculateStat(
         ON_ABILITY(sourceBattler,
                    TRUE,
                    gAbilities[ability].onStat && IsApplyOnFlagAppropriate(battler, sourceBattler, gAbilities[ability].onStatFor),
-                   gAbilities[ability].onStat(ability, battler, statEnum, &statBase, &flags))
+                   gAbilities[ability].onStat(ability, battler, move, statEnum, &statBase, &flags))
     }
 
     if (isUnaware)
@@ -7924,7 +7926,7 @@ void MulByTypeEffectiveness(u16* modifier, MoveEnum move, u8 moveType, u8 battle
 
     int abilityModified = FALSE;
     ON_ABILITY(
-        battlerAtk, FALSE, gAbilities[ability].onTypeEffectiveness, if (gAbilities[ability].onTypeEffectiveness(defType, move, moveType, &mod)) {
+        battlerAtk, FALSE, gAbilities[ability].onTypeEffectiveness, if (gAbilities[ability].onTypeEffectiveness(battlerAtk, defType, move, moveType, &mod)) {
             abilityModified = TRUE;
             break;
         })
@@ -8626,18 +8628,13 @@ void TrySaveExchangedItem(u8 battlerId, u16 stolenItem) {
 #endif
 }
 
-bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 stealthRock) {
-    bool32 ret = TRUE;
-    u32 holdEffect = GetBattlerHoldEffect(gActiveBattler, TRUE);
-    if (holdEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS) {
-        ret = FALSE;
-        RecordItemEffectBattle(battlerId, holdEffect);
-    } else if (BattlerHasAbility(gActiveBattler, ABILITY_SHIELD_DUST, FALSE)) {
-        ret = FALSE;
-    } else if (stealthRock && BattlerHasAbility(gActiveBattler, ABILITY_MOUNTAINEER, FALSE)) {
-        ret = FALSE;
-    }
-    return ret;
+bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 stealthRock, int spikes) {
+    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_HEAVY_DUTY_BOOTS) return FALSE;
+    if (BattlerHasAbility(battlerId, ABILITY_SHIELD_DUST, FALSE)) return FALSE;
+    if (stealthRock) ON_ABILITY(battlerId, FALSE, gAbilities[ability].stealthRockImmune, return FALSE)
+    if ((stealthRock || spikes) && IS_BATTLER_OF_TYPE(battlerId, TYPE_GROUND))
+        ON_ABILITY(battlerId, FALSE, gAbilities[ability].tectonizeImmunities, return FALSE)
+    return TRUE;
 }
 
 bool32 TestSheerForceFlag(u8 battler, MoveEnum move) {

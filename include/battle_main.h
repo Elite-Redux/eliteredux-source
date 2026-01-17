@@ -84,7 +84,7 @@ void SwapTurnOrder(u8 id1, u8 id2);
 #define TOTAL_SPEED_PRIMARY 1
 #define TOTAL_SPEED_SECONDARY 2
 #define TOTAL_SPEED_QUASH 3
-u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType);
+u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType, MoveEnum move);
 MoveEnum GetChosenMove(u32 battlerId);
 u16 IsMyceliumMightActive(u32 battlerId);
 s8 GetChosenMovePriority(u32 battlerId, u32 target);

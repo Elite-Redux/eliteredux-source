@@ -98,8 +98,8 @@ ENUM_ADD(Type)
 #define DELEGATE_BATTLER_FAINTS ability, battler, attacker, fainted, move, moveType
 #define ON_PARENTAL_BOND opt u8 battler, opt MoveEnum move, opt Type moveType
 #define DELEGATE_PARENTAL_BOND battler, move, moveType
-#define ON_STAT opt AbilityEnum ability, opt u8 battler, opt int statId, opt u32 *stat, opt NonStackingState *flags
-#define DELEGATE_STAT ability, battler, statId, stat, flags
+#define ON_STAT opt AbilityEnum ability, opt u8 battler, opt MoveEnum move, opt int statId, opt u32 *stat, opt NonStackingState *flags
+#define DELEGATE_STAT ability, battler, move, statId, stat, flags
 #define ON_OFFENSIVE_MULTIPLIER                                                                                                                           \
     opt u8 battler, opt AbilityEnum ability, opt u8 target, opt MoveEnum move, opt Type moveType, opt int basePower, opt int typeEffectivenessMultiplier, \
         opt int isCrit, opt u16 *resistance, u16 *modifier
@@ -127,8 +127,8 @@ ENUM_ADD(Type)
 #define DELEGATE_EXIT ability, battler, switchingBattler
 #define ON_CRIT opt u8 battler, opt u8 target, opt MoveEnum move, opt u16 typeEffectiveness
 #define DELEGATE_CRIT battler, target, move, typeEffectiveness
-#define ON_TYPE_EFFECTIVENESS opt int defType, opt MoveEnum move, opt Type moveType, opt u16 *mod
-#define DELEGATE_TYPE_EFFECTIVENESS defType, move, moveType, mod
+#define ON_TYPE_EFFECTIVENESS opt u8 battler, opt int defType, opt MoveEnum move, opt Type moveType, opt u16 *mod
+#define DELEGATE_TYPE_EFFECTIVENESS battler, defType, move, moveType, mod
 #define ON_COPY_MOVE opt AbilityEnum ability, opt u8 battler, opt u8 attacker, opt u8 target, opt MoveEnum move
 #define DELEGATE_COPY_MOVE ability, battler, attacker, target, move
 #define ON_AFTER_TYPE_EFFECTIVENESS \
@@ -2395,6 +2395,15 @@ constexpr Ability Impl<ABILITY_STRONG_JAW> = {
 
 template <>
 constexpr Ability Impl<ABILITY_REFRIGERATE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_ICE))
+        CHECK(moveType == TYPE_ICE)
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(CanGetFrostbite(target))
+        CHECK(Random() % 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
+    },
     ATE_ABILITY(TYPE_ICE),
 };
 
@@ -2482,6 +2491,15 @@ constexpr Ability Impl<ABILITY_TOUGH_CLAWS> = {
 
 template <>
 constexpr Ability Impl<ABILITY_PIXILATE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_FAIRY))
+        CHECK(moveType == TYPE_FAIRY)
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(CanInfatuate(battler, target))
+        CHECK(Random() % 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
+    },
     ATE_ABILITY(TYPE_FAIRY),
 };
 
@@ -2501,6 +2519,13 @@ constexpr Ability Impl<ABILITY_GOOEY> = {
 template <>
 constexpr Ability Impl<ABILITY_AERILATE> = {
     ATE_ABILITY(TYPE_FLYING),
+    .onStat =
+        +[](ON_STAT) {
+            if (!IS_BATTLER_OF_TYPE(battler, TYPE_FLYING)) return;
+            if (statId != STAT_SPEED) return;
+            if (GetTypeBeforeUsingMove(move, battler) != TYPE_FLYING) return;
+            *stat *= 1.1;
+        },
 };
 
 template <>
@@ -2740,6 +2765,7 @@ constexpr Ability Impl<ABILITY_STEELWORKER> = {
     ATE_ABILITY(TYPE_STEEL),
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
+            if (!IS_BATTLER_OF_TYPE(target, TYPE_STEEL)) return;
             if (moveType == TYPE_DARK || moveType == TYPE_GHOST) *mod /= 2;
         },
     .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
@@ -2801,6 +2827,15 @@ constexpr Ability Impl<ABILITY_TRIAGE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_GALVANIZE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_ELECTRIC))
+        CHECK(moveType == TYPE_ELECTRIC)
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(CanBeParalyzed(battler, target))
+        CHECK(Random() % 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
+    },
     ATE_ABILITY(TYPE_ELECTRIC),
 };
 
@@ -3713,6 +3748,15 @@ constexpr Ability Impl<ABILITY_ANTARCTIC_BIRD> = {
 
 template <>
 constexpr Ability Impl<ABILITY_IMMOLATE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_FIRE))
+        CHECK(moveType == TYPE_FIRE)
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(CanBeBurned(target))
+        CHECK(Random() % 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BURN);
+    },
     ATE_ABILITY(TYPE_FIRE),
 };
 
@@ -3906,6 +3950,11 @@ constexpr Ability Impl<ABILITY_EARTHBOUND> = {
 
 template <>
 constexpr Ability Impl<ABILITY_FIGHT_SPIRIT> = {
+    .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType {
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_FIGHTING))
+        CHECK(moveType == TYPE_FIGHTING)
+        return INFILTRATE_BREAK_SCREENS;
+    },
     ATE_ABILITY(TYPE_FIGHTING),
 };
 
@@ -4015,6 +4064,7 @@ constexpr Ability Impl<ABILITY_SELF_SUFFICIENT> = {
 template <>
 constexpr Ability Impl<ABILITY_TECTONIZE> = {
     ATE_ABILITY(TYPE_GROUND),
+    .tectonizeImmunities = TRUE,
 };
 
 template <>
@@ -4079,6 +4129,15 @@ constexpr Ability Impl<ABILITY_MOUNTAINEER> = {
 
 template <>
 constexpr Ability Impl<ABILITY_HYDRATE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_WATER))
+        CHECK(moveType == TYPE_WATER)
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(CanBeDrenched(target))
+        CHECK(Random() % 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_DRENCH);
+    },
     ATE_ABILITY(TYPE_WATER),
 };
 
@@ -4149,6 +4208,15 @@ constexpr Ability Impl<ABILITY_PHANTOM> = {
 
 template <>
 constexpr Ability Impl<ABILITY_INTOXICATE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_POISON))
+        CHECK(moveType == TYPE_POISON)
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(CanBePoisoned(battler, target, MOVE_NONE))
+        CHECK(Random() % 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
+    },
     ATE_ABILITY(TYPE_POISON),
 };
 
@@ -4169,7 +4237,10 @@ constexpr Ability Impl<ABILITY_HYPNOTIST> = {
 template <>
 constexpr Ability Impl<ABILITY_OVERWHELM> = {
     .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
-        CHECK(moveType == TYPE_DRAGON) CHECK(defType == TYPE_FAIRY) CHECK_NOT(*mod)* mod = UQ_4_12(1.0);
+        CHECK(moveType == TYPE_DRAGON)
+        CHECK(defType == TYPE_FAIRY)
+        CHECK_NOT(*mod);
+        *mod = UQ_4_12(1.0);
         return TRUE;
     },
     .tauntImmune = TRUE,
@@ -4567,6 +4638,7 @@ constexpr Ability Impl<ABILITY_LUNAR_ECLIPSE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_SOLAR_FLARE> = {
+    .onAttacker = Impl<ABILITY_IMMOLATE>.onAttacker,
     .onMoveType = Impl<ABILITY_IMMOLATE>.onMoveType,
     .onStab = Impl<ABILITY_IMMOLATE>.onStab,
     .chloroplast = TRUE,
@@ -4754,6 +4826,8 @@ constexpr Ability Impl<ABILITY_SUN_WORSHIP> = {
 template <>
 constexpr Ability Impl<ABILITY_POLLINATE> = {
     ATE_ABILITY(TYPE_BUG),
+    .breakable = TRUE,
+    .pollinateImmunities = TRUE,
 };
 
 template <>
@@ -4784,20 +4858,37 @@ constexpr Ability Impl<ABILITY_LOW_BLOW> = {
 
 template <>
 constexpr Ability Impl<ABILITY_SPECTRALIZE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_GHOST))
+        CHECK(moveType == TYPE_GHOST)
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK_NOT(gVolatileStructs[target].fear)
+        CHECK(Random() % 10)
+
+        gStackBattler1 = battler;
+        gStackBattler2 = target;
+        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+        BattleScriptCall(BattleScript_AbilitySetFear);
+    },
     ATE_ABILITY(TYPE_GHOST),
 };
 
+int SpectralShroud(ON_ATTACKER) {
+    if (IS_MOVE_STATUS(move)) {
+        CHECK(WasMoveSuccessful())
+        CHECK(IsBattlerAlive(target))
+    } else {
+        CHECK(ShouldApplyOnHitEffect(target))
+    }
+    CHECK(CanBePoisoned(battler, target, MOVE_NONE))
+    CHECK(Random() % 100 < 30)
+
+    return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
+}
+
 template <>
 constexpr Ability Impl<ABILITY_SPECTRAL_SHROUD> = {
-    .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitEffect(target))
-        CHECK(CanBePoisoned(battler, target, MOVE_NONE))
-        CHECK(gBattleStruct->ateBoost[battler])
-        CHECK(moveType == TYPE_GHOST)
-        CHECK(Random() % 100 < 30)
-
-        return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
-    },
+    .onAttacker = +[](ON_ATTACKER) -> int { return Impl<ABILITY_SPECTRALIZE>.onAttacker(DELEGATE_ATTACKER) | SpectralShroud(DELEGATE_ATTACKER); },
     .onMoveType = Impl<ABILITY_SPECTRALIZE>.onMoveType,
     .onStab = Impl<ABILITY_SPECTRALIZE>.onStab,
 };
@@ -4991,6 +5082,15 @@ constexpr Ability Impl<ABILITY_ROUNDHOUSE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_MINERALIZE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_ROCK))
+        CHECK(moveType == TYPE_ROCK)
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(CanBleed(target))
+        CHECK(Random() % 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_BLEED);
+    },
     ATE_ABILITY(TYPE_ROCK),
 };
 
@@ -5164,6 +5264,14 @@ constexpr Ability Impl<ABILITY_DESERT_CLOAK> = {
 template <>
 constexpr Ability Impl<ABILITY_DRACONIZE> = {
     ATE_ABILITY(TYPE_DRAGON),
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_DRAGON))
+        CHECK(moveType == TYPE_DRAGON)
+        CHECK(defType == TYPE_FAIRY)
+        CHECK_NOT(*mod);
+        *mod = UQ_4_12(1.0);
+        return TRUE;
+    },
 };
 
 template <>
@@ -5194,6 +5302,7 @@ constexpr Ability Impl<ABILITY_ELECTROMORPHOSIS> = {
 
 template <>
 constexpr Ability Impl<ABILITY_ATOMIC_BURST> = {
+    .onAttacker = Impl<ABILITY_GALVANIZE>.onAttacker,
     .onDefender = Impl<ABILITY_ELECTROMORPHOSIS>.onDefender,
     ATE_ABILITY(TYPE_ELECTRIC),
 };
@@ -5892,6 +6001,15 @@ constexpr Ability Impl<ABILITY_PURGATORY> = {
 
 template <>
 constexpr Ability Impl<ABILITY_EMANATE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_PSYCHIC))
+        CHECK(moveType == TYPE_PSYCHIC)
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(CanBeConfused(target))
+        CHECK(Random() % 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
+    },
     ATE_ABILITY(TYPE_PSYCHIC),
 };
 
@@ -6198,6 +6316,7 @@ constexpr Ability Impl<ABILITY_SUPER_STRAIN> = {
 
 template <>
 constexpr Ability Impl<ABILITY_ENLIGHTENED> = {
+    .onAttacker = Impl<ABILITY_EMANATE>.onAttacker,
     .onMoveType = Impl<ABILITY_EMANATE>.onMoveType,
     .onStab = Impl<ABILITY_EMANATE>.onStab,
     .onAccuracy = Impl<ABILITY_INNER_FOCUS>.onAccuracy,
@@ -6373,6 +6492,18 @@ constexpr Ability Impl<ABILITY_DETERMINATION> = {
 
 template <>
 constexpr Ability Impl<ABILITY_FERTILIZE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_GRASS))
+        CHECK(moveType == TYPE_GRASS)
+        CHECK(ShouldApplyOnHitEffect(battler))
+        CHECK_NOT(BATTLER_MAX_HP(battler))
+        CHECK(CanBattlerHeal(battler))
+
+        gBattleMoveDamage = -gHpDealt / 10;
+        if (!gBattleMoveDamage) gBattleMoveDamage = -1;
+        BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
+        return TRUE;
+    },
     ATE_ABILITY(TYPE_GRASS),
 };
 
@@ -7761,6 +7892,7 @@ ON_EITHER(MenacingSituation) {
 
     gStackBattler1 = battler;
     gStackBattler2 = opponent;
+    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
     BattleScriptCall(BattleScript_AbilitySetFear);
     return TRUE;
 }
@@ -7950,6 +8082,7 @@ constexpr Ability Impl<ABILITY_ARC_FLASH> = {
 
 template <>
 constexpr Ability Impl<ABILITY_UNICORN> = {
+    .onAttacker = Impl<ABILITY_PIXILATE>.onAttacker,
     .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
     ATE_ABILITY(TYPE_FAIRY),
 };
@@ -8610,6 +8743,8 @@ constexpr Ability Impl<ABILITY_STEEL_BEETLE> = {
     .onParentalBond = Impl<ABILITY_RAGING_BOXER>.onParentalBond,
     .onMoveType = Impl<ABILITY_POLLINATE>.onMoveType,
     .onStab = Impl<ABILITY_POLLINATE>.onStab,
+    .breakable = TRUE,
+    .pollinateImmunities = TRUE,
 };
 
 template <>
@@ -8831,6 +8966,7 @@ constexpr Ability Impl<ABILITY_TRASH_HEAP> = {
 
 template <>
 constexpr Ability Impl<ABILITY_SLUDGY_MIX> = {
+    .onAttacker = Impl<ABILITY_INTOXICATE>.onAttacker,
     .onOffensiveMultiplier = Impl<ABILITY_PUNK_ROCK>.onOffensiveMultiplier,
     .onDefensiveMultiplier = Impl<ABILITY_PUNK_ROCK>.onDefensiveMultiplier,
     .onMoveType = Impl<ABILITY_INTOXICATE>.onMoveType,
@@ -9133,6 +9269,7 @@ constexpr Ability Impl<ABILITY_BALLOON_BLITZ> = {
 
 template <>
 constexpr Ability Impl<ABILITY_STRIKER_PIXILATE> = {
+    .onAttacker = Impl<ABILITY_PIXILATE>.onAttacker,
     .onOffensiveMultiplier = Impl<ABILITY_STRIKER>.onOffensiveMultiplier,
     .onMoveType = Impl<ABILITY_PIXILATE>.onMoveType,
     .onStab = Impl<ABILITY_PIXILATE>.onStab,
@@ -9197,6 +9334,7 @@ constexpr Ability Impl<ABILITY_ROSE_GARDEN> = {
 
 template <>
 constexpr Ability Impl<ABILITY_QIGONG> = {
+    .onInfiltrate = Impl<ABILITY_FIGHT_SPIRIT>.onInfiltrate,
     .onBattlerFaints = Impl<ABILITY_RAMPAGE>.onBattlerFaints,
     .onMoveType = Impl<ABILITY_FIGHT_SPIRIT>.onMoveType,
     .onStab = Impl<ABILITY_FIGHT_SPIRIT>.onStab,
@@ -9605,6 +9743,15 @@ constexpr Ability Impl<ABILITY_HUNTERS_MARK> = {
 
 template <>
 constexpr Ability Impl<ABILITY_DEVIATE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_DARK))
+        CHECK(moveType == TYPE_DARK)
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK_NOT(gBattleMons[target].status2 & STATUS2_ENRAGED)
+        CHECK(Random() % 10)
+
+        return AbilityStatusEffect(MOVE_EFFECT_ENRAGE);
+    },
     ATE_ABILITY(TYPE_DARK),
 };
 
@@ -9989,6 +10136,7 @@ template <>
 constexpr Ability Impl<ABILITY_DRACONIC_MIGHT> = {
     .onEntry = Impl<ABILITY_HALF_DRAKE>.onEntry,
     ATE_ABILITY(TYPE_DRAGON),
+    .onTypeEffectiveness = Impl<ABILITY_DRACONIZE>.onTypeEffectiveness,
     .addsType = TYPE_DRAGON,
 };
 
@@ -11045,6 +11193,7 @@ constexpr Ability Impl<ABILITY_DRAGONFRUIT> = {
 
 template <>
 constexpr Ability Impl<ABILITY_LEAD_CLAWS> = {
+    .onAttacker = Impl<ABILITY_MINERALIZE>.onAttacker,
     .onOffensiveMultiplier = Impl<ABILITY_BIG_PECKS>.onOffensiveMultiplier,
     ATE_ABILITY(TYPE_ROCK),
 };
@@ -12263,6 +12412,7 @@ constexpr IntimidateCloneData Intimidate<ABILITY_MOB_BOSS> = Intimidate<ABILITY_
 template <>
 constexpr Ability Impl<ABILITY_MOB_BOSS> = {
     .onEntry = UseIntimidateClone,
+    .onAttacker = Impl<ABILITY_DEVIATE>.onAttacker,
     ATE_ABILITY(TYPE_DARK),
 };
 
@@ -12396,6 +12546,7 @@ constexpr Ability Impl<ABILITY_KING_OF_THE_JUNGLE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_WARRIORS_SPEAR> = {
+    .onInfiltrate = Impl<ABILITY_FIGHT_SPIRIT>.onInfiltrate,
     .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
     ATE_ABILITY(TYPE_FIGHTING),
 };

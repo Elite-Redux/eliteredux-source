@@ -350,7 +350,7 @@ bool32 CanStealItem(u8 battlerStealing, u8 battlerItem, u16 item);
 void TrySaveExchangedItem(u8 battlerId, u16 stolenItem);
 bool32 IsPartnerMonFromSameTrainer(u8 battlerId);
 u8 TryHandleSeed(u8 battler, u32 terrainFlag, u8 statId, u16 itemId, bool32 execute);
-bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 stealthRock);
+bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 stealthRock, int spikes);
 bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind);
 int StatLowerableOrMirrorArmor(int battler, int stat);
 bool32 TryRoomService(u8 battlerId);

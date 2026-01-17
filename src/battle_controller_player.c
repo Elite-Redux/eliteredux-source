@@ -1776,7 +1776,7 @@ void PrintBattleWindow_MoveSelection(void) {
                     StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battlertoCheck].species]);
                     AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
 
-                    monSpeed = GetBattlerTotalSpeedStat(battlertoCheck, TOTAL_SPEED_FULL);
+                    monSpeed = GetBattlerTotalSpeedStat(battlertoCheck, TOTAL_SPEED_FULL, MOVE_NONE);
                     ConvertIntToDecimalStringN(gStringVar1, monSpeed, STR_CONV_MODE_LEFT_ALIGN, 3);
                     if (HasPriorityMove(battlertoCheck, battlertoCheck == gActiveBattler ? target : BATTLE_OPPOSITE(battlertoCheck)))
                         StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_CalculationPriority);

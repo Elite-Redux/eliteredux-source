@@ -70,7 +70,7 @@ typedef enum NonStackingState {
     NON_STACKING_RUIN = 1 << 0,
     NON_STACKING_ETERNAL_FLOWER = 1 << 1,
 } NonStackingState;
-typedef void (*AbilityOnStatHandler)(AbilityEnum ability, u8 battler, int statId, u32* stat, NonStackingState* flags);
+typedef void (*AbilityOnStatHandler)(AbilityEnum ability, u8 battler, MoveEnum move, int statId, u32* stat, NonStackingState* flags);
 typedef enum {
     ACCURACY_NO_RESULT = 0,
     ACCURACY_MULTIPLICATIVE,
@@ -91,7 +91,7 @@ typedef int (*AbilityOnSwitchOut)(AbilityEnum ability, u8 battler, int switching
 typedef int (*AbilityOnCrit)(u8 battler, u8 target, MoveEnum move, u16 typeEffectiveness);
 #define NEVER_CRIT -2
 #define ALWAYS_CRIT 3
-typedef int (*AbilityOnTypeEffectiveness)(int defType, MoveEnum move, Type moveType, u16* mod);
+typedef int (*AbilityOnTypeEffectiveness)(u8 battler, int defType, MoveEnum move, Type moveType, u16* mod);
 typedef int (*AbilityOnCopyMove)(AbilityEnum ability, u8 battler, u8 attacker, u8 target, MoveEnum move);
 typedef void (*AbilityOnAfterTypeEffectiveness)(
     u8 battler, AbilityEnum ability, u8 target, MoveEnum move, Type moveType, u16* mod, u16 mod1, u16 mod2, u16 mod3);
@@ -284,6 +284,8 @@ typedef struct Ability {
     u16 grappler:1;
     u16 mirrorArmor:1;
     u16 ripen:1;
+    u16 tectonizeImmunities:1;
+    u16 pollinateImmunities:1;
 } Ability;
 
 #ifdef __cplusplus

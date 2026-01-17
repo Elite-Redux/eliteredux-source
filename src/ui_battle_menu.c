@@ -1487,7 +1487,7 @@ static void PrintStatsTab() {
     y++;
     // Speed
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, sText_Speed);
-    ConvertIntToDecimalStringN(gStringVar1, GetBattlerTotalSpeedStat(sMenuDataPtr->battlerId, TOTAL_SPEED_FULL), STR_CONV_MODE_LEFT_ALIGN, 5);
+    ConvertIntToDecimalStringN(gStringVar1, GetBattlerTotalSpeedStat(sMenuDataPtr->battlerId, TOTAL_SPEED_FULL, MOVE_NONE), STR_CONV_MODE_LEFT_ALIGN, 5);
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, ((x + 3) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gStringVar1);
 
     // Nature
@@ -5321,7 +5321,7 @@ static void PrintSpeedTab(void) {
         battlertoCheck = sBattlerByTurnOrder[firstMon + i];
         if (IsBattlerAlive(battlertoCheck)) {
             u8 gender = GetGenderFromSpeciesAndPersonality(gBattleMons[battlertoCheck].species, gBattleMons[battlertoCheck].personality);
-            u16 speed = GetBattlerTotalSpeedStat(battlertoCheck, TOTAL_SPEED_FULL);
+            u16 speed = GetBattlerTotalSpeedStat(battlertoCheck, TOTAL_SPEED_FULL, MOVE_NONE);
             species = gBattleMons[battlertoCheck].species;
             target = BATTLE_OPPOSITE(battlertoCheck);
             targetCurrentHp = gBattleMons[target].hp;

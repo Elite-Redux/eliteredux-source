@@ -4164,10 +4164,10 @@ void SwapTurnOrder(u8 id1, u8 id2) {
     SWAP(gBattlerByTurnOrder[id1], gBattlerByTurnOrder[id2], temp);
 }
 
-static u32 GetSpeedFromAbilities(u8 battlerId, u32 speed) {
+static u32 GetSpeedFromAbilities(u8 battlerId, MoveEnum move, u32 speed) {
     NonStackingState flags = 0;
 
-    ON_ABILITY(battlerId, FALSE, gAbilities[ability].onStat, gAbilities[ability].onStat(ability, battlerId, STAT_SPEED, &speed, &flags))
+    ON_ABILITY(battlerId, FALSE, gAbilities[ability].onStat, gAbilities[ability].onStat(ability, battlerId, move, STAT_SPEED, &speed, &flags))
 
     if (gVolatileStructs[battlerId].violentRush) speed = (speed * 150) / 100;
 
@@ -4182,13 +4182,13 @@ static u32 GetSpeedFromAbilities(u8 battlerId, u32 speed) {
     return speed;
 }
 
-u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType) {
+u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType, MoveEnum move) {
     u32 speed = gBattleMons[battlerId].speed;
     u32 holdEffect = GetBattlerHoldEffect(battlerId, TRUE);
     u8 statStage = gBattleMons[battlerId].statStages[STAT_SPEED];
     u8 extraStatLevel = gVolatileStructs[battlerId].extraSpeedLevel;
 
-    if (calcType != TOTAL_SPEED_QUASH) speed = GetSpeedFromAbilities(battlerId, speed);
+    if (calcType != TOTAL_SPEED_QUASH) speed = GetSpeedFromAbilities(battlerId, speed, move);
 
     if (calcType == TOTAL_SPEED_PRIMARY) return speed;
 
@@ -4203,7 +4203,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType) {
 
         if (calcType == TOTAL_SPEED_SECONDARY) return speed;
 
-        if (gChosenMoveByBattler[battlerId] == MOVE_STEAMROLLER) speed = 3 * speed / 2;
+        if (move == MOVE_STEAMROLLER) speed = 3 * speed / 2;
     }
 
     // item effects
@@ -4313,7 +4313,8 @@ union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove) {
     if (!quash && gVolatileStructs[battler].drenched) speedValue.goesLastNegation++;
     speedValue.goesLastNegation = ~speedValue.goesLastNegation;
 
-    speedValue.effectiveSpeed = GetBattlerTotalSpeedStat(battler, quash ? TOTAL_SPEED_QUASH : TOTAL_SPEED_FULL);
+    speedValue.effectiveSpeed =
+        GetBattlerTotalSpeedStat(battler, quash ? TOTAL_SPEED_QUASH : TOTAL_SPEED_FULL, ignoreChosenMove ? MOVE_NONE : GetChosenMove(battler));
     if (!quash && IsTrickRoomActive()) speedValue.effectiveSpeed = ~speedValue.effectiveSpeed;
     return speedValue;
 }

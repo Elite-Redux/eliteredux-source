@@ -11204,10 +11204,8 @@ BattleScript_AbilityStatusEffect::
 
 BattleScript_AbilitySetFear::
 	saveattackerandtargetto34
-	jumpifstatus4 BS_STACK_2, STATUS4_FEAR, BattleScript_AbilitySetFear_Return
 	copybyte gBattlerAttacker, gStackBattler1
 	copybyte gBattlerTarget, gStackBattler2
-	call BattleScript_AbilityPopUp
 	setmoveeffect MOVE_EFFECT_FEAR
 	seteffectprimary
 BattleScript_AbilitySetFear_Return:

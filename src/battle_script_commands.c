@@ -8708,7 +8708,7 @@ static void Cmd_various(void) {
                     REQUIRE(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES)
                     REQUIRE_NOT(IsMagicGuardProtected(gActiveBattler))
                     REQUIRE(IsBattlerGrounded(gActiveBattler))
-                    REQUIRE(IsBattlerAffectedByHazards(gActiveBattler, FALSE))
+                    REQUIRE(IsBattlerAffectedByHazards(gActiveBattler, FALSE, TRUE))
 
                     u8 spikesDmg = (5 - gSideTimers[GetBattlerSide(gActiveBattler)].spikesAmount) * 2;
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / (spikesDmg);
@@ -8720,7 +8720,7 @@ static void Cmd_various(void) {
                     BattleScriptCall(BattleScript_ResolvePoisonSpikes);
 
                     REQUIRE(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK)
-                    REQUIRE(IsBattlerAffectedByHazards(gActiveBattler, gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType == TYPE_ROCK))
+                    REQUIRE(IsBattlerAffectedByHazards(gActiveBattler, gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType == TYPE_ROCK, FALSE))
                     REQUIRE_NOT(IsMagicGuardProtected(gActiveBattler))
 
                     gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STEALTH_ROCK_DAMAGED;
@@ -8742,7 +8742,7 @@ static void Cmd_various(void) {
                         gSideStatuses[GetBattlerSide(gActiveBattler)] &= ~(SIDE_STATUS_TOXIC_SPIKES);
                         gSideTimers[GetBattlerSide(gActiveBattler)].toxicSpikesAmount = 0;
                         BattleScriptCall(BattleScript_ToxicSpikesAbsorbed);
-                    } else if (IsBattlerAffectedByHazards(gActiveBattler, FALSE) &&
+                    } else if (IsBattlerAffectedByHazards(gActiveBattler, FALSE, FALSE) &&
                                CanBePoisoned(BATTLE_OPPOSITE(gActiveBattler), gActiveBattler, gCurrentMove)) {
                         if (gSideTimers[GetBattlerSide(gActiveBattler)].toxicSpikesAmount >= 2)
                             gBattleMons[gActiveBattler].status1 |= STATUS1_TOXIC_POISON;
@@ -8765,7 +8765,7 @@ static void Cmd_various(void) {
                     BattleScriptCall(BattleScript_ResolveFireTrap);
 
                     REQUIRE(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STICKY_WEB)
-                    REQUIRE(IsBattlerAffectedByHazards(gActiveBattler, FALSE))
+                    REQUIRE(IsBattlerAffectedByHazards(gActiveBattler, FALSE, FALSE))
                     REQUIRE(IsBattlerGrounded(gActiveBattler))
 
                     gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STICKY_WEB_DAMAGED;
@@ -8776,7 +8776,7 @@ static void Cmd_various(void) {
                     BattleScriptCall(BattleScript_ResolveCaltrops);
 
                     REQUIRE(gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals)
-                    REQUIRE(IsBattlerAffectedByHazards(gActiveBattler, FALSE))
+                    REQUIRE(IsBattlerAffectedByHazards(gActiveBattler, FALSE, FALSE))
                     REQUIRE(IsBattlerGrounded(gActiveBattler))
 
                     gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals = FALSE;
@@ -8798,7 +8798,7 @@ static void Cmd_various(void) {
                     break;
                 case HAZARD_MODE_CALTROPS:
                     REQUIRE(gSideTimers[GetBattlerSide(gActiveBattler)].caltrops)
-                    REQUIRE(IsBattlerAffectedByHazards(gActiveBattler, FALSE))
+                    REQUIRE(IsBattlerAffectedByHazards(gActiveBattler, FALSE, FALSE))
                     REQUIRE(IsBattlerGrounded(gActiveBattler))
 
                     gSideTimers[GetBattlerSide(gActiveBattler)].caltrops = FALSE;

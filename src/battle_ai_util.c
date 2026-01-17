@@ -2194,12 +2194,12 @@ u16 GetBattlerSideSpeedAverage(u8 battler) {
     u8 numBattlersAlive = 0;
 
     if (IsBattlerAlive(battler)) {
-        speed1 = GetBattlerTotalSpeedStat(battler, TOTAL_SPEED_FULL);
+        speed1 = GetBattlerTotalSpeedStat(battler, TOTAL_SPEED_FULL, MOVE_NONE);
         numBattlersAlive++;
     }
 
     if (IsDoubleBattle() && IsBattlerAlive(BATTLE_PARTNER(battler))) {
-        speed2 = GetBattlerTotalSpeedStat(BATTLE_PARTNER(battler), TOTAL_SPEED_FULL);
+        speed2 = GetBattlerTotalSpeedStat(BATTLE_PARTNER(battler), TOTAL_SPEED_FULL, MOVE_NONE);
         numBattlersAlive++;
     }
 
@@ -2711,8 +2711,8 @@ void IncreaseParalyzeScore(u8 battlerAtk, u8 battlerDef, u16 move, s16* score) {
     if ((AI_THINKING_STRUCT->aiFlags & AI_FLAG_TRY_TO_FAINT) && CanAIFaintTarget(battlerAtk, battlerDef, 0)) return;
 
     if (AI_CanParalyze(battlerAtk, battlerDef, move, AI_DATA->partnerMove)) {
-        u8 atkSpeed = GetBattlerTotalSpeedStat(battlerAtk, TOTAL_SPEED_FULL);
-        u8 defSpeed = GetBattlerTotalSpeedStat(battlerDef, TOTAL_SPEED_FULL);
+        u8 atkSpeed = GetBattlerTotalSpeedStat(battlerAtk, TOTAL_SPEED_FULL, move);
+        u8 defSpeed = GetBattlerTotalSpeedStat(battlerDef, TOTAL_SPEED_FULL, MOVE_NONE);
 
         if ((defSpeed >= atkSpeed && defSpeed / 2 < atkSpeed)  // You'll go first after paralyzing foe
             || HasMoveEffect(battlerAtk, EFFECT_HEX) || HasMoveEffect(battlerAtk, EFFECT_FLINCH_HIT) || gBattleMons[battlerDef].status2 & STATUS2_CONFUSION)
