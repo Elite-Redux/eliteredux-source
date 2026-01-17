@@ -281,6 +281,7 @@
 #define VARIOUS_TAGTEAM_EXEC_BATTLE_EVENTS      198
 #define VARIOUS_JUMP_IF_ABILITY_FLAG            199
 #define VARIOUS_ON_STAT_LOWERED                 200
+#define VARIOUS_SCHEDULE_SWITCH                 201
 
 #define HAZARD_MODE_SPIKES 0
 #define HAZARD_MODE_ROCKS 1
@@ -357,15 +358,11 @@
 #define MOVEEND_RECOIL                            MOVEEND_MOVE_EFFECTS2 + 1
 #define MOVEEND_CHARGE                            MOVEEND_RECOIL + 1
 #define MOVEEND_ABILITIES_AFTER_RECOIL            MOVEEND_CHARGE + 1
-#define MOVEEND_EJECT_BUTTON                      MOVEEND_ABILITIES_AFTER_RECOIL + 1
-#define MOVEEND_RED_CARD                          MOVEEND_EJECT_BUTTON + 1
-#define MOVEEND_EJECT_PACK                        MOVEEND_RED_CARD + 1
-#define MOVEEND_LIFEORB_SHELLBELL                 MOVEEND_EJECT_PACK + 1
+#define MOVEEND_LIFEORB_SHELLBELL                 MOVEEND_ABILITIES_AFTER_RECOIL + 1
 #define MOVEEND_CHANGED_ITEMS                     MOVEEND_LIFEORB_SHELLBELL + 1
 #define MOVEEND_DEFROST                           MOVEEND_CHANGED_ITEMS + 1
 #define MOVEEND_PICKPOCKET                        MOVEEND_DEFROST + 1
-#define MOVEEND_EMERGENCY_EXIT                    MOVEEND_PICKPOCKET + 1
-#define MOVEEND_CLEAR_BITS                        MOVEEND_EMERGENCY_EXIT + 1
+#define MOVEEND_CLEAR_BITS                        MOVEEND_PICKPOCKET + 1
 #define MOVEEND_COUNT                             MOVEEND_CLEAR_BITS + 1
 
 // switch cases

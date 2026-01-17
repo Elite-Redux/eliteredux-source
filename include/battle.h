@@ -728,6 +728,7 @@ struct BattleStruct {
     u8 battleEventDone;
     u8 firstTurnAbilityLoopCounter:4;
     u8 ranEndTurnEffects:1;
+    u8 canProcessSwitches:1;
 };
 
 #define GET_MOVE_TYPE(move, typeArg)                         \
@@ -1020,6 +1021,9 @@ extern struct BattleStruct* gBattleStruct;
 extern u8 gQueuedAttackCount;
 extern struct ExtraAttackActionStruct gQueuedExtraAttackData[MAX_BATTLERS_COUNT + 1];
 extern bool8 gProcessingExtraAttacks;
+extern struct ExtraSwitchActionStruct gQueuedSwitchData[MAX_BATTLERS_COUNT + 1];
+extern u8 gQueuedSwitchCount;
+extern bool8 gProcessingSwitch;
 extern u8 gDelayedTurnActionId;
 extern u8* gLinkBattleSendBuffer;
 extern u8* gLinkBattleRecvBuffer;

@@ -2352,7 +2352,7 @@ static void PrintStatusTab(void) {
                 AddTextPrinterParameterized4(
                     windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar4);
 
-                break;
+                printedInfo = TRUE;
             } break;
             case STATUS_INFO_PRIMARY:
                 printedInfo = TRUE;

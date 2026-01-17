@@ -1637,9 +1637,8 @@
 	various BS_ATTACKER, VARIOUS_ARGUMENT_STATUS_EFFECT
 	.endm
 
-	.macro tryhitswitchtarget ptr:req
+	.macro tryhitswitchtarget
 	various BS_ATTACKER, VARIOUS_TRY_HIT_SWITCH_TARGET
-	.4byte \ptr
 	.endm
 
 	.macro tryautotomize battler:req, ptr:req
@@ -2446,6 +2445,16 @@
 
 	.macro onloweredstat battler:req
 	various \battler, VARIOUS_ON_STAT_LOWERED
+	.endm
+
+	.macro scheduleswitch battler:req script:req source=0xFF
+	various \battler, VARIOUS_SCHEDULE_SWITCH
+	.if \source == 0xFF
+		.byte \battler
+	.else
+		.byte \source
+	.endif
+	.4byte \script
 	.endm
 
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd

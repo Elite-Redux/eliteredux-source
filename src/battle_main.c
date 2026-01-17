@@ -175,10 +175,13 @@ EWRAM_DATA u8 gActionsByTurnOrder[MAX_BATTLERS_COUNT] = {B_ACTION_FINISHED, B_AC
 EWRAM_DATA u8 gBattlerByTurnOrder[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gCurrentTurnActionNumber = 0;
 EWRAM_DATA bool8 gProcessingExtraAttacks = FALSE;
+EWRAM_DATA bool8 gProcessingSwitch = FALSE;
 EWRAM_DATA u8 gDelayedTurnActionId = B_ACTION_FINISHED;
 EWRAM_DATA u8 gQueuedAttackCount = 0;
 // Position 0 is active attack
 EWRAM_DATA struct ExtraAttackActionStruct gQueuedExtraAttackData[MAX_BATTLERS_COUNT + 1] = {0};
+EWRAM_DATA struct ExtraSwitchActionStruct gQueuedSwitchData[MAX_BATTLERS_COUNT + 1] = {0};
+EWRAM_DATA u8 gQueuedSwitchCount = 0;
 EWRAM_DATA u8 gCurrentActionFuncId = B_ACTION_FINISHED;
 EWRAM_DATA struct BattlePokemon gBattleMons[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gBattlerSpriteIds[MAX_BATTLERS_COUNT] = {0};
@@ -2770,6 +2773,7 @@ static void BattleStartClearSetData(void) {
 
     gBattleStruct->stickyWebUser = 0xFF;
     gBattleStruct->appearedInBattle = 0;
+    gBattleStruct->canProcessSwitches = FALSE;
 
     for (i = 0; i < PARTY_SIZE; i++) {
         gBattleStruct->usedHeldItems[i][0] = 0;
@@ -2844,13 +2848,24 @@ void SwitchInClearSetData(void) {
 
     // Remove any queued out-of-turn attacks
     {
-        u8 previousQueuedAttackCount = gQueuedAttackCount;
+        u8 previousCount = gQueuedAttackCount;
         gQueuedAttackCount = 0;
-        for (i = 1; i <= previousQueuedAttackCount; i++) {
+        for (i = 1; i <= previousCount; i++) {
             if (gQueuedExtraAttackData[i].attacker == gActiveBattler) continue;
             gQueuedAttackCount++;
             if (gQueuedAttackCount != i) {
                 gQueuedExtraAttackData[gQueuedAttackCount] = gQueuedExtraAttackData[i];
+            }
+
+            previousCount = gQueuedSwitchCount;
+            for (i = 1; i <= previousCount; i++) {
+                FILTER_NOT(gQueuedSwitchData[i].switchingBattler == gActiveBattler)
+                FILTER_NOT(gQueuedSwitchData[i].sourceBattler == gActiveBattler)
+
+                gQueuedSwitchCount++;
+                if (gQueuedSwitchCount != i) {
+                    gQueuedSwitchData[gQueuedSwitchCount] = gQueuedSwitchData[i];
+                }
             }
         }
     }
@@ -3366,11 +3381,19 @@ static void TryDoEventsBeforeFirstTurn(void) {
     }
 
     ClearMiscTurnFlags();
+
     if (AbilityBattleEffects(ABILITYEFFECT_TRACE1, 0, 0, 0, 0) != 0) return;
     // Check all switch in items having effect from the fastest mon to slowest.
     while (gBattleStruct->switchInItemsCounter < gBattlersCount) {
         if (!IsBattlerAlive(gBattleStruct->switchInItemsCounter++)) continue;
         if (ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gBattlerByTurnOrder[gBattleStruct->switchInItemsCounter], FALSE)) return;
+    }
+
+    gBattleStruct->canProcessSwitches = TRUE;
+
+    if (gQueuedSwitchCount) {
+        gCurrentActionFuncId = B_ACTION_TRY_FINISH;
+        return;
     }
 
     ZERO(gChosenMoveByBattler)
@@ -3421,6 +3444,7 @@ static void HandleEndTurn_ContinueBattle(void) {
 
     if (gBattleControllerExecFlags == 0) {
         gQueuedAttackCount = 0;
+        gQueuedSwitchCount = 0;
         gCurrentActionFuncId = B_ACTION_FINISHED;
         gBattleMainFunc = BattleTurnPassed;
         for (i = 0; i < BATTLE_COMMUNICATION_ENTRIES_COUNT; i++) gBattleCommunication[i] = 0;
@@ -3445,7 +3469,7 @@ void BattleTurnPassed(void) {
         if (gCurrentActionFuncId != B_ACTION_FINISHED && !(gCurrentActionFuncId == B_ACTION_TRY_FINISH && gBattleOutcome)) {
             sTurnActionsFuncsTable[gCurrentActionFuncId]();
             return;
-        } else if (!gBattleOutcome && gQueuedAttackCount) {
+        } else if (!gBattleOutcome && (gQueuedAttackCount || gQueuedSwitchCount)) {
             gCurrentActionFuncId = B_ACTION_TRY_FINISH;
             return;
         }
@@ -3456,7 +3480,7 @@ void BattleTurnPassed(void) {
         if (DoFieldEndTurnEffects()) return;
         if (DoBattlerEndTurnEffects()) return;
         gBattleStruct->ranEndTurnEffects = TRUE;
-        if (gQueuedAttackCount) return;
+        if (gQueuedAttackCount || gQueuedSwitchCount) return;
     }
     if (HandleFaintedMonActions()) {
         return;

@@ -222,6 +222,32 @@ bool8 HandleWishPerishSongOnTurnEnd(void);
 bool8 HandleFaintedMonActions(void);
 void TryClearRageAndFuryCutter(void);
 u8 AtkCanceller_UnableToUseMove(void);
+int TryPerformExtraAction();
+
+typedef enum SwitchActionCause {
+    SWITCH_MOVE,
+    SWITCH_ITEM,
+    SWITCH_ABILITY,
+} SwitchActionCause;
+
+typedef struct ExtraSwitchActionStruct {
+    const u8* script;
+    union {
+        // VSCode's C++ analysis doesn't correctly identify that anonymous structs in anonymous unions are perfectly fine
+        struct {
+            AbilityEnum id:14;
+            u16 setAbilityState:1;
+            u16 setSingleUseCounter:1;
+        } ability __attribute__((packed, aligned(2)));
+        MoveEnum move;
+        ItemEnum item;
+    };
+    u8 switchingBattler:2;
+    u8 sourceBattler:2;
+    SwitchActionCause cause:2;
+} ExtraSwitchActionStruct;
+
+int TryScheduleSwitch(ExtraSwitchActionStruct data);
 bool8 HasNoMonsToSwitch(u8 battlerId, u8 r1, u8 r2);
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility);
 bool32 SetPermanentWeather(u32 weatherEnumId);
@@ -372,7 +398,7 @@ int IsPersistentOrUnsuppressableAbility(AbilityEnum ability);
 bool8 CanBeDisabled(u8 battlerId);
 bool8 DoesBattlerHaveAbilityShield(u8 battlerId);
 u16 IsSoundproof(u8 battlerId);
-AbilityEnum BattlerHasAbility(int battler, AbilityEnum ability, int checkMoldBreaker);
+AbilityEnum BattlerHasAbility(u8 battler, AbilityEnum ability, int checkMoldBreaker);
 u8 GetTurnBattler();
 void ReadActiveScriptInitialStackState();
 void SetActiveMultistringChooser(u8 messageId);
@@ -421,7 +447,7 @@ AbilityEnum HasMirrorArmor(int battler);
 int CanRaiseStat(int battler, int stat);
 int CanLowerStat(int battler, int stat);
 bool8 UseEntryMove(u8 battler, AbilityEnum ability, u16 extraMove, u8 movePower);
-int UseIntimidateClone(AbilityEnum abilityToCheck, int battler);
+int UseIntimidateClone(AbilityEnum abilityToCheck, u8 battler);
 bool32 TryRemoveScreens(u8 battler);
 void DisableSwitchInAbility(u8 battlerId, AbilityEnum ability);
 bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8* timer);
@@ -457,7 +483,7 @@ bool32 CanGetFrostbite(u8 battlerId);
 bool32 CanBeConfused(u8 battlerId);
 bool32 CanBeDrenched(u8 battlerId);
 bool32 CanBleed(u8 battlerId);
-int CanInfatuate(int battlerAtk, int battlerDef);
+int CanInfatuate(u8 battlerAtk, u8 battlerDef);
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
 int IsTerrainActive(int terrainFlag);
 int IsWeatherActive(int weather);

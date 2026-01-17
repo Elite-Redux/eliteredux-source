@@ -51,8 +51,8 @@
 #define TAG_ITEM_ICON_BASE 2110
 
 static EWRAM_DATA struct MartInfo sMartInfo = {0};
-static EWRAM_DATA struct ShopData *sShopData = NULL;
-static EWRAM_DATA struct ListMenuItem *sListMenuItems = NULL;
+static EWRAM_DATA struct ShopData* sShopData = NULL;
+static EWRAM_DATA struct ListMenuItem* sListMenuItems = NULL;
 static EWRAM_DATA u8 (*sItemNames)[ADOPTION_CENTER_MEGA_MAX_LENGTH] = {0};
 static EWRAM_DATA u8 sPurchaseHistoryId = 0;
 EWRAM_DATA struct ItemSlot gMartPurchaseHistory[SMARTSHOPPER_NUM_ITEMS] = {0};
@@ -71,19 +71,19 @@ static void BuyMenuBuildListMenuTemplate(void);
 static void BuyMenuInitBgs(void);
 static void BuyMenuInitWindows(void);
 static void BuyMenuDecompressBgGraphics(void);
-static void BuyMenuSetListEntry(struct ListMenuItem *, u16, u8 *);
+static void BuyMenuSetListEntry(struct ListMenuItem*, u16, u8*);
 static void BuyMenuAddItemIcon(u16, u8);
 static void BuyMenuRemoveItemIcon(u16, u8);
-static void BuyMenuPrint(u8 windowId, const u8 *text, u8 x, u8 y, s8 speed, u8 colorSet);
+static void BuyMenuPrint(u8 windowId, const u8* text, u8 x, u8 y, s8 speed, u8 colorSet);
 static void BuyMenuDrawMapGraphics(void);
 static void BuyMenuCopyMenuBgToBg1TilemapBuffer(void);
 static void BuyMenuCollectObjectEventData(void);
 static void BuyMenuDrawObjectEvents(void);
 static void BuyMenuDrawMapBg(void);
 static bool8 BuyMenuCheckForOverlapWithMenuBg(int, int);
-static void BuyMenuDrawMapMetatile(s16, s16, const u16 *, u8);
-static void BuyMenuDrawMapMetatileLayer(u16 *dest, s16 offset1, s16 offset2, const u16 *src);
-static bool8 BuyMenuCheckIfObjectEventOverlapsMenuBg(s16 *);
+static void BuyMenuDrawMapMetatile(s16, s16, const u16*, u8);
+static void BuyMenuDrawMapMetatileLayer(u16* dest, s16 offset1, s16 offset2, const u16* src);
+static bool8 BuyMenuCheckIfObjectEventOverlapsMenuBg(s16*);
 static void ExitBuyMenu(u8 taskId);
 static void Task_ExitBuyMenu(u8 taskId);
 static void BuyMenuTryMakePurchase(u8 taskId);
@@ -97,7 +97,7 @@ static void Task_ReturnToItemListAfterItemPurchase(u8 taskId);
 static void Task_ReturnToItemListAfterDecorationPurchase(u8 taskId);
 static void Task_HandleShopMenuBuy(u8 taskId);
 static void Task_HandleShopMenuSell(u8 taskId);
-static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, struct ListMenu *list);
+static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, struct ListMenu* list);
 static void BuyMenuPrintPriceInList(u8 windowId, u32 itemId, u8 y);
 
 static const struct YesNoFuncTable sShopPurchaseYesNoFuncs = {BuyMenuTryMakePurchase, BuyMenuReturnToItemList};
@@ -263,466 +263,50 @@ static u8 CreateShopMenu(u8 martType) {
 
 static void SetShopMenuCallback(void (*callback)(void)) { sMartInfo.callback = callback; }
 
-// 0 Badges
-static const u16 sAdoptionCenterInventory_ZeroBadges[] = {
-    SPECIES_TINKATINK_REDUX,
-    SPECIES_RATTATA_REDUX,
-    SPECIES_HAPPINY_REDUX,
-    SPECIES_PANSAGE_REDUX,
-    SPECIES_PANSEAR_REDUX,
-    SPECIES_PANPOUR_REDUX,
-    SPECIES_TURTWIG_REDUX,
-    SPECIES_CHIMCHAR_REDUX,
-    SPECIES_PIPLUP_REDUX,
-    SPECIES_CLEFFA_REDUX,
-    SPECIES_NOIBAT_REDUX,
-    SPECIES_NONE,
-};
+#define ADOPTION_CENTER_ZERO_BADGES                                                                                                            \
+    SPECIES_TINKATINK_REDUX, SPECIES_RATTATA_REDUX, SPECIES_PANSAGE_REDUX, SPECIES_PANSEAR_REDUX, SPECIES_PANPOUR_REDUX, SPECIES_NOIBAT_REDUX, \
+        SPECIES_HAPPINY_REDUX, SPECIES_TURTWIG_REDUX, SPECIES_CHIMCHAR_REDUX, SPECIES_PIPLUP_REDUX, SPECIES_CLEFFA_REDUX
 
-// 1 Badge
-static const u16 sAdoptionCenterInventory_OneBadges[] = {
-    SPECIES_BELLSPROUT_REDUX,
-    SPECIES_TINKATINK_REDUX,
-    SPECIES_SHINX_REDUX,
-    SPECIES_RATTATA_REDUX,
-    SPECIES_VANILLITE_REDUX,
-    SPECIES_HIPPOPOTATO,
-    SPECIES_HAPPINY_REDUX,   // testing purposes
-    SPECIES_TURTWIG_REDUX,   // testing purposes
-    SPECIES_CHIMCHAR_REDUX,  // testing purposes
-    SPECIES_PIPLUP_REDUX,    // testing purposes
-    SPECIES_CLEFFA_REDUX,    // testing purposes
-    SPECIES_WEEDLE_REDUX,
-    SPECIES_WHISMUR_REDUX,
-    SPECIES_STUFFUL_REDUX,
-    SPECIES_SOLOSIS_REDUX,
-    SPECIES_ABRA_REDUX,
-    SPECIES_PANSAGE_REDUX,
-    SPECIES_PANSEAR_REDUX,
-    SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX,
-    SPECIES_SWABLU_REDUX,
-    SPECIES_SPEAROW_REDUX,
-    SPECIES_NONE,
-};
+#define ADOPTION_CENTER_ONE_BADGE                                                                                                                   \
+    ADOPTION_CENTER_ZERO_BADGES, SPECIES_BELLSPROUT_REDUX, SPECIES_SHINX_REDUX, SPECIES_VANILLITE_REDUX, SPECIES_HIPPOPOTATO, SPECIES_WEEDLE_REDUX, \
+        SPECIES_WHISMUR_REDUX, SPECIES_STUFFUL_REDUX, SPECIES_SOLOSIS_REDUX, SPECIES_ABRA_REDUX, SPECIES_SWABLU_REDUX, SPECIES_SPEAROW_REDUX
 
 // 2 Badges
-static const u16 sAdoptionCenterInventory_TwoBadges[] = {
-    SPECIES_BELLSPROUT_REDUX,
-    SPECIES_TINKATINK_REDUX,
-    SPECIES_KRABBY_REDUX,
-    SPECIES_SHINX_REDUX,
-    SPECIES_ARON_REDUX,
-    SPECIES_MINCCINO_REDUX,
-    SPECIES_CETODDLE_REDUX,
-    SPECIES_SWINUB_REDUX,
-    SPECIES_RATTATA_REDUX,
-    SPECIES_VANILLITE_REDUX,
-    SPECIES_EXEGGCUTE_REDUX,
-    SPECIES_HAPPINY_REDUX,    // testing purposes
-    SPECIES_TURTWIG_REDUX,    // testing purposes
-    SPECIES_CHIMCHAR_REDUX,   // testing purposes
-    SPECIES_PIPLUP_REDUX,     // testing purposes
-    SPECIES_BOUNSWEET_REDUX,  // testing purposes
-    SPECIES_CLEFFA_REDUX,     // testing purposes
-    SPECIES_PAWNIARD_REDUX,
-    SPECIES_MACHOP_REDUX,
-    SPECIES_BUIZEL_REDUX,
-    SPECIES_HONEDGE_REDUX,
-    SPECIES_WEEDLE_REDUX,
-    SPECIES_WHISMUR_REDUX,
-    SPECIES_STUFFUL_REDUX,
-    SPECIES_SOLOSIS_REDUX,
-    SPECIES_ABRA_REDUX,
-    SPECIES_PANSAGE_REDUX,
-    SPECIES_PANSEAR_REDUX,
-    SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX,
-    SPECIES_NONE,
-};
+#define ADOPTION_CENTER_TWO_BADGES                                                                                                             \
+    ADOPTION_CENTER_ONE_BADGE, SPECIES_KRABBY_REDUX, SPECIES_ARON_REDUX, SPECIES_MINCCINO_REDUX, SPECIES_CETODDLE_REDUX, SPECIES_SWINUB_REDUX, \
+        SPECIES_EXEGGCUTE_REDUX, SPECIES_BOUNSWEET_REDUX, SPECIES_PAWNIARD_REDUX, SPECIES_MACHOP_REDUX, SPECIES_BUIZEL_REDUX, SPECIES_HONEDGE_REDUX
 
 // 3 Badges
-static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
-    SPECIES_BELLSPROUT_REDUX,
-    SPECIES_TINKATINK_REDUX,
-    SPECIES_SINISTEA_REDUX,
-    SPECIES_KRABBY_REDUX,
-    SPECIES_SHINX_REDUX,
-    SPECIES_ARON_REDUX,
-    SPECIES_MINCCINO_REDUX,
-    SPECIES_CETODDLE_REDUX,
-    SPECIES_HERACREUS,
-    SPECIES_SWINUB_REDUX,
-    SPECIES_RATTATA_REDUX,
-    SPECIES_VANILLITE_REDUX,
-    SPECIES_KLEFKI_REDUX,
-    SPECIES_SAWK_REDUX,
-    SPECIES_THROH_REDUX,
-    SPECIES_EXEGGCUTE_REDUX,
-    SPECIES_HAPPINY_REDUX,     // testing purposes
-    SPECIES_DARUMAKA_REDUX,    // testing purposes
-    SPECIES_GLIGAR_REDUX,      // testing purposes
-    SPECIES_CRABRAWLER_REDUX,  // testing purposes
-    SPECIES_TRAPINCH_REDUX,    // testing purposes
-    SPECIES_TOXEL_REDUX,       // testing purposes
-    SPECIES_BOUNSWEET_REDUX,   // testing purposes
-    SPECIES_TURTWIG_REDUX,     // testing purposes
-    SPECIES_CHIMCHAR_REDUX,    // testing purposes
-    SPECIES_PIPLUP_REDUX,      // testing purposes
-    SPECIES_CLEFFA_REDUX,      // testing purposes
-    SPECIES_SNORUNT_REDUX,     // testing purposes
-    SPECIES_DEWPIDER_REDUX,    // testing purposes
-    SPECIES_DEINO_REDUX,
-    SPECIES_LARVITAR_REDUX,
-    SPECIES_HOUNDOUR_REDUX,
-    SPECIES_SLUGMA_REDUX,
-    SPECIES_GROWLITHE_REDUX,
-    SPECIES_SABLEYE_REDUX,
-    SPECIES_MAWILE_REDUX,
-    SPECIES_DODUO_REDUX,
-    SPECIES_SKARMORY_REDUX,
-    SPECIES_PAWNIARD_REDUX,
-    SPECIES_MACHOP_REDUX,
-    SPECIES_BUIZEL_REDUX,
-    SPECIES_HONEDGE_REDUX,
-    SPECIES_WEEDLE_REDUX,
-    SPECIES_WHISMUR_REDUX,
-    SPECIES_STUFFUL_REDUX,
-    SPECIES_SOLOSIS_REDUX,
-    SPECIES_ABRA_REDUX,
-    SPECIES_PANSAGE_REDUX,
-    SPECIES_PANSEAR_REDUX,
-    SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX,
-    SPECIES_NONE,
-};
+#define ADOPTION_CENTER_THREE_BADGES                                                                                                                \
+    ADOPTION_CENTER_TWO_BADGES, SPECIES_SINISTEA_REDUX, SPECIES_HERACREUS, SPECIES_KLEFKI_REDUX, SPECIES_SAWK_REDUX, SPECIES_THROH_REDUX,           \
+        SPECIES_DARUMAKA_REDUX, SPECIES_GLIGAR_REDUX, SPECIES_CRABRAWLER_REDUX, SPECIES_TRAPINCH_REDUX, SPECIES_TOXEL_REDUX, SPECIES_SNORUNT_REDUX, \
+        SPECIES_DEWPIDER_REDUX, SPECIES_DEINO_REDUX, SPECIES_LARVITAR_REDUX, SPECIES_HOUNDOUR_REDUX, SPECIES_SLUGMA_REDUX, SPECIES_GROWLITHE_REDUX, \
+        SPECIES_SABLEYE_REDUX, SPECIES_MAWILE_REDUX, SPECIES_DODUO_REDUX, SPECIES_SKARMORY_REDUX
 
-// 4 Badges
-static const u16 sAdoptionCenterInventory_FourBadges[] = {
-    SPECIES_BELLSPROUT_REDUX,
-    SPECIES_TINKATINK_REDUX,
-    SPECIES_SINISTEA_REDUX,
-    SPECIES_KRABBY_REDUX,
-    SPECIES_SHINX_REDUX,
-    SPECIES_ARON_REDUX,
-    SPECIES_MINCCINO_REDUX,
-    SPECIES_CETODDLE_REDUX,
-    SPECIES_SWINUB_REDUX,
-    SPECIES_RATTATA_REDUX,
-    SPECIES_VANILLITE_REDUX,
-    SPECIES_KLEFKI_REDUX,
-    SPECIES_SAWK_REDUX,
-    SPECIES_THROH_REDUX,
-    SPECIES_LITWICK_REDUX,
-    SPECIES_EXEGGCUTE_REDUX,
-    SPECIES_HAPPINY_REDUX,     // testing purposes
-    SPECIES_DARUMAKA_REDUX,    // testing purposes
-    SPECIES_GLIGAR_REDUX,      // testing purposes
-    SPECIES_CRABRAWLER_REDUX,  // testing purposes
-    SPECIES_TRAPINCH_REDUX,    // testing purposes
-    SPECIES_TOXEL_REDUX,       // testing purposes
-    SPECIES_BOUNSWEET_REDUX,   // testing purposes
-    SPECIES_TURTWIG_REDUX,     // testing purposes
-    SPECIES_CHIMCHAR_REDUX,    // testing purposes
-    SPECIES_PIPLUP_REDUX,      // testing purposes
-    SPECIES_CLEFFA_REDUX,      // testing purposes
-    SPECIES_SNORUNT_REDUX,     // testing purposes
-    SPECIES_DEWPIDER_REDUX,    // testing purposes
-    SPECIES_DEINO_REDUX,
-    SPECIES_LARVITAR_REDUX,
-    SPECIES_HOUNDOUR_REDUX,
-    SPECIES_SLUGMA_REDUX,
-    SPECIES_GROWLITHE_REDUX,
-    SPECIES_SABLEYE_REDUX,
-    SPECIES_MAWILE_REDUX,
-    SPECIES_DODUO_REDUX,
-    SPECIES_SKARMORY_REDUX,
-    SPECIES_PAWNIARD_REDUX,
-    SPECIES_MACHOP_REDUX,
-    SPECIES_BUIZEL_REDUX,
-    SPECIES_HONEDGE_REDUX,
-    SPECIES_WEEDLE_REDUX,
-    SPECIES_WHISMUR_REDUX,
-    SPECIES_STUFFUL_REDUX,
-    SPECIES_SOLOSIS_REDUX,
-    SPECIES_ABRA_REDUX,
-    SPECIES_PANSAGE_REDUX,
-    SPECIES_PANSEAR_REDUX,
-    SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX,
-    SPECIES_NONE,
-};
+#define ADOPTION_CENTER_FOUR_BADGES ADOPTION_CENTER_THREE_BADGES, SPECIES_LITWICK_REDUX
 
-// 5 Badges
-static const u16 sAdoptionCenterInventory_FiveBadges[] = {
-    SPECIES_BELLSPROUT_REDUX,
-    SPECIES_TINKATINK_REDUX,
-    SPECIES_SINISTEA_REDUX,
-    SPECIES_KNAIVER_REDUX,
-    SPECIES_KRABBY_REDUX,
-    SPECIES_SHINX_REDUX,
-    SPECIES_ARON_REDUX,
-    SPECIES_RALTS_REDUX,
-    SPECIES_MERRYKARP,
-    SPECIES_MINCCINO_REDUX,
-    SPECIES_CETODDLE_REDUX,
-    SPECIES_DRILBUR_REDUX,
-    SPECIES_SWINUB_REDUX,
-    SPECIES_RATTATA_REDUX,
-    SPECIES_VANILLITE_REDUX,
-    SPECIES_KLEFKI_REDUX,
-    SPECIES_SAWK_REDUX,
-    SPECIES_THROH_REDUX,
-    SPECIES_LITWICK_REDUX,
-    SPECIES_EXEGGCUTE_REDUX,
-    SPECIES_HAPPINY_REDUX,     // testing purposes
-    SPECIES_SPIRITOMB_REDUX,   // testing purposes
-    SPECIES_DARUMAKA_REDUX,    // testing purposes
-    SPECIES_SEEL_REDUX,        // testing purposes
-    SPECIES_GLIGAR_REDUX,      // testing purposes
-    SPECIES_CRABRAWLER_REDUX,  // testing purposes
-    SPECIES_TRAPINCH_REDUX,    // testing purposes
-    SPECIES_TOXEL_REDUX,       // testing purposes
-    SPECIES_BOUNSWEET_REDUX,   // testing purposes
-    SPECIES_TURTWIG_REDUX,     // testing purposes
-    SPECIES_CHIMCHAR_REDUX,    // testing purposes
-    SPECIES_PIPLUP_REDUX,      // testing purposes
-    SPECIES_CLEFFA_REDUX,      // testing purposes
-    SPECIES_SNORUNT_REDUX,     // testing purposes
-    SPECIES_DEWPIDER_REDUX,    // testing purposes
-    SPECIES_DEINO_REDUX,
-    SPECIES_LARVITAR_REDUX,
-    SPECIES_HOUNDOUR_REDUX,
-    SPECIES_SLUGMA_REDUX,
-    SPECIES_GROWLITHE_REDUX,
-    SPECIES_SABLEYE_REDUX,
-    SPECIES_MAWILE_REDUX,
-    SPECIES_DODUO_REDUX,
-    SPECIES_SKARMORY_REDUX,
-    SPECIES_PAWNIARD_REDUX,
-    SPECIES_MACHOP_REDUX,
-    SPECIES_BUIZEL_REDUX,
-    SPECIES_HONEDGE_REDUX,
-    SPECIES_WEEDLE_REDUX,
-    SPECIES_WHISMUR_REDUX,
-    SPECIES_STUFFUL_REDUX,
-    SPECIES_SOLOSIS_REDUX,
-    SPECIES_ABRA_REDUX,
-    SPECIES_PANSAGE_REDUX,
-    SPECIES_PANSEAR_REDUX,
-    SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX,
-    SPECIES_NONE,
-};
+#define ADOPTION_CENTER_FIVE_BADGES                                                                                                             \
+    ADOPTION_CENTER_FOUR_BADGES, SPECIES_KNAIVER_REDUX, SPECIES_RALTS_REDUX, SPECIES_MERRYKARP, SPECIES_DRILBUR_REDUX, SPECIES_SPIRITOMB_REDUX, \
+        SPECIES_SEEL_REDUX
 
-// 6 Badges
-static const u16 sAdoptionCenterInventory_SixBadges[] = {
-    SPECIES_BELLSPROUT_REDUX,
-    SPECIES_TINKATINK_REDUX,
-    SPECIES_SINISTEA_REDUX,
-    SPECIES_KNAIVER_REDUX,
-    SPECIES_KRABBY_REDUX,
-    SPECIES_SHINX_REDUX,
-    SPECIES_ARON_REDUX,
-    SPECIES_MAKUHITA_REDUX,
-    SPECIES_RALTS_REDUX,
-    SPECIES_MINCCINO_REDUX,
-    SPECIES_CETODDLE_REDUX,
-    SPECIES_DRILBUR_REDUX,
-    SPECIES_SWINUB_REDUX,
-    SPECIES_RATTATA_REDUX,
-    SPECIES_VANILLITE_REDUX,
-    SPECIES_KLEFKI_REDUX,
-    SPECIES_SAWK_REDUX,
-    SPECIES_THROH_REDUX,
-    SPECIES_LITWICK_REDUX,
-    SPECIES_EXEGGCUTE_REDUX,
-    SPECIES_HAPPINY_REDUX,     // testing purposes
-    SPECIES_SPIRITOMB_REDUX,   // testing purposes
-    SPECIES_DARUMAKA_REDUX,    // testing purposes
-    SPECIES_SEEL_REDUX,        // testing purposes
-    SPECIES_GLIGAR_REDUX,      // testing purposes
-    SPECIES_CRABRAWLER_REDUX,  // testing purposes
-    SPECIES_TRAPINCH_REDUX,    // testing purposes
-    SPECIES_TOXEL_REDUX,       // testing purposes
-    SPECIES_BOUNSWEET_REDUX,   // testing purposes
-    SPECIES_TURTWIG_REDUX,     // testing purposes
-    SPECIES_CHIMCHAR_REDUX,    // testing purposes
-    SPECIES_PIPLUP_REDUX,      // testing purposes
-    SPECIES_CLEFFA_REDUX,      // testing purposes
-    SPECIES_SNORUNT_REDUX,     // testing purposes
-    SPECIES_DEWPIDER_REDUX,    // testing purposes
-    SPECIES_DEINO_REDUX,
-    SPECIES_GIBLE_REDUX,
-    SPECIES_LARVITAR_REDUX,
-    SPECIES_HOUNDOUR_REDUX,
-    SPECIES_SLUGMA_REDUX,
-    SPECIES_GROWLITHE_REDUX,
-    SPECIES_SABLEYE_REDUX,
-    SPECIES_MAWILE_REDUX,
-    SPECIES_DODUO_REDUX,
-    SPECIES_SKARMORY_REDUX,
-    SPECIES_PAWNIARD_REDUX,
-    SPECIES_MACHOP_REDUX,
-    SPECIES_BUIZEL_REDUX,
-    SPECIES_HONEDGE_REDUX,
-    SPECIES_WEEDLE_REDUX,
-    SPECIES_WHISMUR_REDUX,
-    SPECIES_STUFFUL_REDUX,
-    SPECIES_SOLOSIS_REDUX,
-    SPECIES_ABRA_REDUX,
-    SPECIES_PANSAGE_REDUX,
-    SPECIES_PANSEAR_REDUX,
-    SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX,
-    SPECIES_NONE,
-};
+#define ADOPTION_CENTER_SIX_BADGES ADOPTION_CENTER_FIVE_BADGES, SPECIES_GIBLE_REDUX
 
-// 7 Badges
-static const u16 sAdoptionCenterInventory_SevenBadges[] = {
-    SPECIES_BELLSPROUT_REDUX,
-    SPECIES_TINKATINK_REDUX,
-    SPECIES_SINISTEA_REDUX,
-    SPECIES_KNAIVER_REDUX,
-    SPECIES_KRABBY_REDUX,
-    SPECIES_SHINX_REDUX,
-    SPECIES_ARON_REDUX,
-    SPECIES_MAKUHITA_REDUX,
-    SPECIES_RALTS_REDUX,
-    SPECIES_MINCCINO_REDUX,
-    SPECIES_CETODDLE_REDUX,
-    SPECIES_DRILBUR_REDUX,
-    SPECIES_SWINUB_REDUX,
-    SPECIES_RATTATA_REDUX,
-    SPECIES_VANILLITE_REDUX,
-    SPECIES_KLEFKI_REDUX,
-    SPECIES_SAWK_REDUX,
-    SPECIES_THROH_REDUX,
-    SPECIES_LITWICK_REDUX,
-    SPECIES_EXEGGCUTE_REDUX,
-    SPECIES_HAPPINY_REDUX,     // testing purposes
-    SPECIES_SPIRITOMB_REDUX,   // testing purposes
-    SPECIES_DARUMAKA_REDUX,    // testing purposes
-    SPECIES_SEEL_REDUX,        // testing purposes
-    SPECIES_GLIGAR_REDUX,      // testing purposes
-    SPECIES_CRABRAWLER_REDUX,  // testing purposes
-    SPECIES_PSYDUCK_REDUX,     // testing purposes
-    SPECIES_TRAPINCH_REDUX,    // testing purposes
-    SPECIES_TOXEL_REDUX,       // testing purposes
-    SPECIES_BOUNSWEET_REDUX,   // testing purposes
-    SPECIES_TURTWIG_REDUX,     // testing purposes
-    SPECIES_CHIMCHAR_REDUX,    // testing purposes
-    SPECIES_PIPLUP_REDUX,      // testing purposes
-    SPECIES_CLEFFA_REDUX,      // testing purposes
-    SPECIES_SNORUNT_REDUX,     // testing purposes
-    SPECIES_DEWPIDER_REDUX,    // testing purposes
-    SPECIES_DEINO_REDUX,
-    SPECIES_GIBLE_REDUX,
-    SPECIES_LARVITAR_REDUX,
-    SPECIES_HOUNDOUR_REDUX,
-    SPECIES_SLUGMA_REDUX,
-    SPECIES_GROWLITHE_REDUX,
-    SPECIES_SABLEYE_REDUX,
-    SPECIES_MAWILE_REDUX,
-    SPECIES_DODUO_REDUX,
-    SPECIES_SKARMORY_REDUX,
-    SPECIES_PAWNIARD_REDUX,
-    SPECIES_MACHOP_REDUX,
-    SPECIES_BUIZEL_REDUX,
-    SPECIES_HONEDGE_REDUX,
-    SPECIES_WEEDLE_REDUX,
-    SPECIES_WHISMUR_REDUX,
-    SPECIES_STUFFUL_REDUX,
-    SPECIES_SOLOSIS_REDUX,
-    SPECIES_ABRA_REDUX,
-    SPECIES_PANSAGE_REDUX,
-    SPECIES_PANSEAR_REDUX,
-    SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX,
-    SPECIES_NONE,
-};
+#define ADOPTION_CENTER_SEVEN_BADGES ADOPTION_CENTER_SIX_BADGES, SPECIES_MAKUHITA_REDUX, SPECIES_PSYDUCK_REDUX
 
-// 8 Badges
-static const u16 sAdoptionCenterInventory_EightBadges[] = {
-    SPECIES_BELLSPROUT_REDUX,
-    SPECIES_TINKATINK_REDUX,
-    SPECIES_SINISTEA_REDUX,
-    SPECIES_KNAIVER_REDUX,
-    SPECIES_KRABBY_REDUX,
-    SPECIES_SHINX_REDUX,
-    SPECIES_ARON_REDUX,
-    SPECIES_MAKUHITA_REDUX,
-    SPECIES_LARVESTA_REDUX,
-    SPECIES_RALTS_REDUX,
-    SPECIES_MINCCINO_REDUX,
-    SPECIES_CETODDLE_REDUX,
-    SPECIES_DRILBUR_REDUX,
-    SPECIES_SWINUB_REDUX,
-    SPECIES_RATTATA_REDUX,
-    SPECIES_VANILLITE_REDUX,
-    SPECIES_KLEFKI_REDUX,
-    SPECIES_SAWK_REDUX,
-    SPECIES_THROH_REDUX,
-    SPECIES_LITWICK_REDUX,
-    SPECIES_EXEGGCUTE_REDUX,     
-    SPECIES_HAPPINY_REDUX,     
-    SPECIES_SPIRITOMB_REDUX,   
-    SPECIES_DARUMAKA_REDUX,    
-    SPECIES_SEEL_REDUX,        
-    SPECIES_GLIGAR_REDUX,      
-    SPECIES_CRABRAWLER_REDUX, 
-    SPECIES_PSYDUCK_REDUX,     
-    SPECIES_TRAPINCH_REDUX,    
-    SPECIES_TOXEL_REDUX,       
-    SPECIES_BOUNSWEET_REDUX,   
-    SPECIES_TURTWIG_REDUX,     
-    SPECIES_CHIMCHAR_REDUX,    
-    SPECIES_PIPLUP_REDUX,      
-    SPECIES_CLEFFA_REDUX,         
-    SPECIES_SNORUNT_REDUX,    
-    SPECIES_DEWPIDER_REDUX,    
-    SPECIES_KUBFU,             // testing purposes
-    SPECIES_MELTAN,
-    SPECIES_POIPOLE,
-    SPECIES_AZELF_REDUX,
-    SPECIES_UXIE_REDUX,
-    SPECIES_MESPRIT_REDUX,
-    SPECIES_DEINO_REDUX,
-    SPECIES_GIBLE_REDUX,
-    SPECIES_LARVITAR_REDUX,
-    SPECIES_HOUNDOUR_REDUX,
-    SPECIES_SLUGMA_REDUX,
-    SPECIES_GROWLITHE_REDUX,
-    SPECIES_SABLEYE_REDUX,
-    SPECIES_MAWILE_REDUX,
-    SPECIES_DODUO_REDUX,
-    SPECIES_SKARMORY_REDUX,
-    SPECIES_PAWNIARD_REDUX,
-    SPECIES_MACHOP_REDUX,
-    SPECIES_BUIZEL_REDUX,
-    SPECIES_HONEDGE_REDUX,
-    SPECIES_WEEDLE_REDUX,
-    SPECIES_WHISMUR_REDUX,
-    SPECIES_STUFFUL_REDUX,
-    SPECIES_SOLOSIS_REDUX,
-    SPECIES_ABRA_REDUX,
-    SPECIES_PANSAGE_REDUX,
-    SPECIES_PANSEAR_REDUX,
-    SPECIES_PANPOUR_REDUX,
-    SPECIES_NOIBAT_REDUX,
-    SPECIES_NONE,
-};
+#define ADOPTION_CENTER_EIGHT_BADGES                                                                                                               \
+    ADOPTION_CENTER_SEVEN_BADGES, SPECIES_LARVESTA_REDUX, SPECIES_KUBFU, SPECIES_MELTAN, SPECIES_POIPOLE, SPECIES_AZELF_REDUX, SPECIES_UXIE_REDUX, \
+        SPECIES_MESPRIT_REDUX
 
-static const u16 *const sAdoptionCenterInventories[] = {
-    sAdoptionCenterInventory_ZeroBadges,   // 0 Badges
-    sAdoptionCenterInventory_OneBadges,    // 1 Badge
-    sAdoptionCenterInventory_TwoBadges,    // 2 Badges
-    sAdoptionCenterInventory_ThreeBadges,  // 3 Badges
-    sAdoptionCenterInventory_FourBadges,   // 4 Badges
-    sAdoptionCenterInventory_FiveBadges,   // 5 Badges
-    sAdoptionCenterInventory_SixBadges,    // 6 Badges
-    sAdoptionCenterInventory_SevenBadges,  // 7 Badges
-    sAdoptionCenterInventory_EightBadges   // 8 Badges
+static const u16* const sAdoptionCenterInventories[] = {
+    (const u16[]){ADOPTION_CENTER_ZERO_BADGES, SPECIES_NONE},   // 0 Badges
+    (const u16[]){ADOPTION_CENTER_ONE_BADGE, SPECIES_NONE},     // 1 Badge
+    (const u16[]){ADOPTION_CENTER_TWO_BADGES, SPECIES_NONE},    // 2 Badges
+    (const u16[]){ADOPTION_CENTER_THREE_BADGES, SPECIES_NONE},  // 3 Badges
+    (const u16[]){ADOPTION_CENTER_FOUR_BADGES, SPECIES_NONE},   // 4 Badges
+    (const u16[]){ADOPTION_CENTER_FIVE_BADGES, SPECIES_NONE},   // 5 Badges
+    (const u16[]){ADOPTION_CENTER_SIX_BADGES, SPECIES_NONE},    // 6 Badges
+    (const u16[]){ADOPTION_CENTER_SEVEN_BADGES, SPECIES_NONE},  // 7 Badges
+    (const u16[]){ADOPTION_CENTER_EIGHT_BADGES, SPECIES_NONE}   // 8 Badges
 };
 
 static u8 GetNumberOfBadges(void) {
@@ -746,7 +330,7 @@ static u8 GetNumberOfBadges(void) {
         return 0;
 }
 
-static void SetShopItemsForSale(const u16 *items) {
+static void SetShopItemsForSale(const u16* items) {
     u16 i = 0;
 
     if (items == NULL) {
@@ -781,7 +365,7 @@ static void Task_ShopMenu(u8 taskId) {
 }
 
 static void Task_HandleShopMenuBuy(u8 taskId) {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     data[8] = (u32)CB2_InitBuyMenu >> 16;
     data[9] = (u32)CB2_InitBuyMenu;
     gTasks[taskId].func = Task_GoToBuyOrSellMenu;
@@ -789,7 +373,7 @@ static void Task_HandleShopMenuBuy(u8 taskId) {
 }
 
 static void Task_HandleShopMenuSell(u8 taskId) {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     data[8] = (u32)CB2_GoToSellMenu >> 16;
     data[9] = (u32)CB2_GoToSellMenu;
     gTasks[taskId].func = Task_GoToBuyOrSellMenu;
@@ -812,10 +396,10 @@ static void Task_HandleShopMenuQuit(u8 taskId) {
 }
 
 static void Task_GoToBuyOrSellMenu(u8 taskId) {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     if (!gPaletteFade.active) {
         DestroyTask(taskId);
-        SetMainCallback2((void *)((u16)data[8] << 16 | (u16)data[9]));
+        SetMainCallback2((void*)((u16)data[8] << 16 | (u16)data[9]));
     }
 }
 
@@ -862,7 +446,7 @@ static void CB2_InitBuyMenu(void) {
     switch (gMain.state) {
         case 0:
             SetVBlankHBlankCallbacksToNull();
-            CpuFastFill(0, (void *)OAM, OAM_SIZE);
+            CpuFastFill(0, (void*)OAM, OAM_SIZE);
             ScanlineEffect_Stop();
             ResetTempTileDataBuffers();
             FreeAllSpritePalettes();
@@ -929,7 +513,7 @@ static void BuyMenuBuildListMenuTemplate(void) {
     sShopData->itemsShowed = gMultiuseListMenuTemplate.maxShowed;
 }
 
-static void BuyMenuSetListEntry(struct ListMenuItem *menuItem, u16 item, u8 *name) {
+static void BuyMenuSetListEntry(struct ListMenuItem* menuItem, u16 item, u8* name) {
     switch (sMartInfo.martType) {
         case MART_TYPE_NORMAL:
             CopyItemName(item, name);
@@ -950,8 +534,8 @@ static void BuyMenuSetListEntry(struct ListMenuItem *menuItem, u16 item, u8 *nam
 extern const struct PokedexEntry gPokedexEntries[];
 const u8 sText_Title_PokemonDescription[] = _("The {STR_VAR_2}\nPokémon {STR_VAR_1}\nat {LV}{STR_VAR_3}");
 
-static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, struct ListMenu *list) {
-    const u8 *description = NULL;
+static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, struct ListMenu* list) {
+    const u8* description = NULL;
     u8 level = GetLevelCap();
 
     if (level >= MAX_LEVEL) level = MAX_LEVEL;
@@ -1083,7 +667,7 @@ static void BuyMenuPrintCursor(u8 scrollIndicatorsTaskId, u8 colorSet) {
 
 static void BuyMenuAddItemIcon(u16 item, u8 iconSlot) {
     u8 spriteId;
-    u8 *spriteIdPtr = &sShopData->itemSpriteIds[iconSlot];
+    u8* spriteIdPtr = &sShopData->itemSpriteIds[iconSlot];
     if (*spriteIdPtr != SPRITE_NONE) return;
 
     switch (sMartInfo.martType) {
@@ -1115,7 +699,7 @@ static void BuyMenuAddItemIcon(u16 item, u8 iconSlot) {
 }
 
 static void BuyMenuRemoveItemIcon(u16 item, u8 iconSlot) {
-    u8 *spriteIdPtr = &sShopData->itemSpriteIds[iconSlot];
+    u8* spriteIdPtr = &sShopData->itemSpriteIds[iconSlot];
     if (*spriteIdPtr == SPRITE_NONE) return;
 
     if (sMartInfo.martType == MART_TYPE_MONS && item > SPECIES_NONE && item < NUM_SPECIES) {
@@ -1167,11 +751,11 @@ static void BuyMenuInitWindows(void) {
     PutWindowTilemap(2);
 }
 
-static void BuyMenuPrint(u8 windowId, const u8 *text, u8 x, u8 y, s8 speed, u8 colorSet) {
+static void BuyMenuPrint(u8 windowId, const u8* text, u8 x, u8 y, s8 speed, u8 colorSet) {
     AddTextPrinterParameterized4(windowId, 1, x, y, 0, 0, sShopBuyMenuTextColors[colorSet], speed, text);
 }
 
-static void BuyMenuDisplayMessage(u8 taskId, const u8 *text, TaskFunc callback) {
+static void BuyMenuDisplayMessage(u8 taskId, const u8* text, TaskFunc callback) {
     DisplayMessageAndContinueTask(taskId, 5, 10, 14, 1, GetPlayerTextSpeedDelay(), text, callback);
     ScheduleBgCopyTilemapToVram(0);
 }
@@ -1208,7 +792,7 @@ static void BuyMenuDrawMapBg(void) {
     s16 j;
     s16 x;
     s16 y;
-    const struct MapLayout *mapLayout;
+    const struct MapLayout* mapLayout;
     u16 metatile;
     u8 metatileLayerType;
 
@@ -1226,36 +810,35 @@ static void BuyMenuDrawMapBg(void) {
                 metatileLayerType = 1;
 
             if (metatile < NUM_METATILES_IN_PRIMARY) {
-                BuyMenuDrawMapMetatile(i, j, (u16 *)mapLayout->primaryTileset->metatiles + metatile * 8, metatileLayerType);
+                BuyMenuDrawMapMetatile(i, j, (u16*)mapLayout->primaryTileset->metatiles + metatile * 8, metatileLayerType);
             } else {
-                BuyMenuDrawMapMetatile(i, j, (u16 *)mapLayout->secondaryTileset->metatiles + ((metatile - NUM_METATILES_IN_PRIMARY) * 8), metatileLayerType);
+                BuyMenuDrawMapMetatile(i, j, (u16*)mapLayout->secondaryTileset->metatiles + ((metatile - NUM_METATILES_IN_PRIMARY) * 8), metatileLayerType);
             }
         }
     }
 }
 
-static void BuyMenuDrawMapMetatile(s16 x, s16 y, const u16 *src, u8 metatileLayerType) {
+static void BuyMenuDrawMapMetatile(s16 x, s16 y, const u16* src, u8 metatileLayerType) {
     u16 offset1 = x * 2;
     u16 offset2 = y * 64;
 
-    switch (metatileLayerType)
-    {
-    case METATILE_LAYER_TYPE_NORMAL:
-        BuyMenuDrawMapMetatileLayer(sShopData->tilemapBuffers[3], offset1, offset2, src);
-        BuyMenuDrawMapMetatileLayer(sShopData->tilemapBuffers[1], offset1, offset2, src + 4);
-        break;
-    case METATILE_LAYER_TYPE_COVERED:
-        BuyMenuDrawMapMetatileLayer(sShopData->tilemapBuffers[2], offset1, offset2, src);
-        BuyMenuDrawMapMetatileLayer(sShopData->tilemapBuffers[3], offset1, offset2, src + 4);
-        break;
-    case METATILE_LAYER_TYPE_SPLIT:
-        BuyMenuDrawMapMetatileLayer(sShopData->tilemapBuffers[2], offset1, offset2, src);
-        BuyMenuDrawMapMetatileLayer(sShopData->tilemapBuffers[1], offset1, offset2, src + 4);
-        break;
+    switch (metatileLayerType) {
+        case METATILE_LAYER_TYPE_NORMAL:
+            BuyMenuDrawMapMetatileLayer(sShopData->tilemapBuffers[3], offset1, offset2, src);
+            BuyMenuDrawMapMetatileLayer(sShopData->tilemapBuffers[1], offset1, offset2, src + 4);
+            break;
+        case METATILE_LAYER_TYPE_COVERED:
+            BuyMenuDrawMapMetatileLayer(sShopData->tilemapBuffers[2], offset1, offset2, src);
+            BuyMenuDrawMapMetatileLayer(sShopData->tilemapBuffers[3], offset1, offset2, src + 4);
+            break;
+        case METATILE_LAYER_TYPE_SPLIT:
+            BuyMenuDrawMapMetatileLayer(sShopData->tilemapBuffers[2], offset1, offset2, src);
+            BuyMenuDrawMapMetatileLayer(sShopData->tilemapBuffers[1], offset1, offset2, src + 4);
+            break;
     }
 }
 
-static void BuyMenuDrawMapMetatileLayer(u16 *dest, s16 offset1, s16 offset2, const u16 *src) {
+static void BuyMenuDrawMapMetatileLayer(u16* dest, s16 offset1, s16 offset2, const u16* src) {
     // This function draws a whole 2x2 metatile.
     dest[offset1 + offset2] = src[0];       // top left
     dest[offset1 + offset2 + 1] = src[1];   // top right
@@ -1306,7 +889,7 @@ static void BuyMenuCollectObjectEventData(void) {
 static void BuyMenuDrawObjectEvents(void) {
     u8 i;
     u8 spriteId;
-    const struct ObjectEventGraphicsInfo *graphicsInfo;
+    const struct ObjectEventGraphicsInfo* graphicsInfo;
 
     for (i = 0; i < OBJECT_EVENTS_COUNT; i++) {
         if (sShopData->viewportObjects[i][OBJ_EVENT_ID] == OBJECT_EVENTS_COUNT) continue;
@@ -1328,7 +911,7 @@ static void BuyMenuDrawObjectEvents(void) {
     }
 }
 
-static bool8 BuyMenuCheckIfObjectEventOverlapsMenuBg(s16 *object) {
+static bool8 BuyMenuCheckIfObjectEventOverlapsMenuBg(s16* object) {
     if (!BuyMenuCheckForOverlapWithMenuBg(object[X_COORD], object[Y_COORD] + 2) && object[LAYER_TYPE] != MB_SECRET_BASE_WALL) {
         return TRUE;
     } else {
@@ -1338,8 +921,8 @@ static bool8 BuyMenuCheckIfObjectEventOverlapsMenuBg(s16 *object) {
 
 static void BuyMenuCopyMenuBgToBg1TilemapBuffer(void) {
     s16 i;
-    u16 *dest = sShopData->tilemapBuffers[1];
-    const u16 *src = sShopData->tilemapBuffers[0];
+    u16* dest = sShopData->tilemapBuffers[1];
+    const u16* src = sShopData->tilemapBuffers[0];
 
     for (i = 0; i < 1024; i++) {
         if (src[i] != 0) {
@@ -1349,7 +932,7 @@ static void BuyMenuCopyMenuBgToBg1TilemapBuffer(void) {
 }
 
 static bool8 BuyMenuCheckForOverlapWithMenuBg(int x, int y) {
-    const u16 *metatile = sShopData->tilemapBuffers[0];
+    const u16* metatile = sShopData->tilemapBuffers[0];
     int offset1 = x * 2;
     int offset2 = y * 64;
 
@@ -1368,7 +951,7 @@ const u8 gText_Var1IsItThatllBeVar2Coins[] = _("{STR_VAR_1}, is it?\nThat'll be 
 const u8 gText_YouWantedVar1ThatllBeVar2BP[] = _("You wanted {STR_VAR_1}?\nThat'll be {STR_VAR_2} BP. Will that be okay?");
 
 static void Task_BuyMenu(u8 taskId) {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     u32 money;
 
     switch (VarGet(VAR_SHOP_MONEY_TYPE)) {
@@ -1513,7 +1096,7 @@ static void BuyMenuConfirmPurchase(u8 taskId) {
 }
 
 static void BuyMenuTryMakePurchase(u8 taskId) {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
     u8 level = GetLevelCap();
 
     if (level >= MAX_LEVEL) level = MAX_LEVEL;
@@ -1586,7 +1169,7 @@ static void BuyMenuSubtractMoney(u8 taskId) {
 }
 
 static void Task_ReturnToItemListAfterItemPurchase(u8 taskId) {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     if (JOY_NEW(A_BUTTON | B_BUTTON)) {
         PlaySE(SE_SELECT);
@@ -1613,7 +1196,7 @@ static void Task_ReturnToItemListAfterDecorationPurchase(u8 taskId) {
 }
 
 static void BuyMenuReturnToItemList(u8 taskId) {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     ClearDialogWindowAndFrameToTransparent(5, 0);
     BuyMenuPrintCursor(tListTaskId, 1);
@@ -1625,7 +1208,7 @@ static void BuyMenuReturnToItemList(u8 taskId) {
 }
 
 static void BuyMenuPrintItemQuantityAndPrice(u8 taskId) {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     FillWindowPixelBuffer(4, PIXEL_FILL(1));
     PrintMoneyAmount(4, 32, 1, sShopData->totalCost, TEXT_SPEED_FF);
@@ -1655,7 +1238,7 @@ static void ClearItemPurchases(void) {
 }
 
 static void RecordItemPurchase(u8 taskId) {
-    s16 *data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;
 
     u16 i;
 
@@ -1680,7 +1263,7 @@ static void RecordItemPurchase(u8 taskId) {
 #undef tItemId
 #undef tListTaskId
 
-void CreatePokemartMenu(const u16 *itemsForSale) {
+void CreatePokemartMenu(const u16* itemsForSale) {
     CreateShopMenu(VarGet(VAR_SHOP_TYPE));
     VarSet(VAR_SHOP_TYPE, 0);
     SetShopItemsForSale(itemsForSale);
@@ -1688,13 +1271,13 @@ void CreatePokemartMenu(const u16 *itemsForSale) {
     SetShopMenuCallback(EnableBothScriptContexts);
 }
 
-void CreateDecorationShop1Menu(const u16 *itemsForSale) {
+void CreateDecorationShop1Menu(const u16* itemsForSale) {
     CreateShopMenu(MART_TYPE_DECOR);
     SetShopItemsForSale(itemsForSale);
     SetShopMenuCallback(EnableBothScriptContexts);
 }
 
-void CreateDecorationShop2Menu(const u16 *itemsForSale) {
+void CreateDecorationShop2Menu(const u16* itemsForSale) {
     CreateShopMenu(MART_TYPE_DECOR2);
     SetShopItemsForSale(itemsForSale);
     SetShopMenuCallback(EnableBothScriptContexts);

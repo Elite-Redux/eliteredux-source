@@ -4804,127 +4804,6 @@ static void Cmd_moveend(void) {
                 RecordLastUsedMoveBy(gBattlerAttacker, gCurrentMove);
                 gBattleScripting.moveendState++;
                 break;
-            case MOVEEND_EJECT_BUTTON:
-                if (gBattleMoves[gCurrentMove].effect != EFFECT_HIT_SWITCH_TARGET && IsBattlerAlive(gBattlerAttacker) &&
-                    !TestSheerForceFlag(gBattlerAttacker, gCurrentMove) &&
-                    (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER || (gBattleTypeFlags & BATTLE_TYPE_TRAINER))) {
-                    // Since we check if battler was damaged, we don't need to check move result.
-                    // In fact, doing so actually prevents multi-target moves from activating eject button properly
-                    u8 battlers[4] = {0, 1, 2, 3};
-                    SortBattlersBySpeed(battlers, FALSE);
-                    for (i = 0; i < gBattlersCount; i++) {
-                        u8 battler = battlers[i];
-                        if (battler == GetTurnBattler()) continue;
-                        // Attacker is the damage-dealer, battler is mon to be switched out
-                        if (gTurnStructs[battler].shouldTriggerSwitchItem && IsBattlerAlive(battler) &&
-                            GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_BUTTON && !IsUnnerveAbilityOnOpposingSide(battler) &&
-                            CanBattlerSwitch(battler))  // Has mon to switch into
-                        {
-                            gStackBattler1 = battler;
-                            gTurnStructs[battler].shouldTriggerSwitchItem = FALSE;
-                            gLastUsedItem = gBattleMons[battler].item;
-                            if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
-                                gBattlescriptCurrInstr = BattleScript_MoveEnd;  // Prevent user switch-in selection
-                            BattleScriptCall(BattleScript_EjectButtonActivates);
-                            effect = TRUE;
-                            break;  // Only the fastest Eject Button activates
-                        }
-                    }
-                }
-                gBattleScripting.moveendState++;
-                break;
-            case MOVEEND_RED_CARD:
-                if (gBattleMoves[gCurrentMove].effect != EFFECT_HIT_SWITCH_TARGET && IsBattlerAlive(gBattlerAttacker) &&
-                    !TestSheerForceFlag(gBattlerAttacker, gCurrentMove)) {
-                    // Since we check if battler was damaged, we don't need to check move result.
-                    // In fact, doing so actually prevents multi-target moves from activating red card properly
-                    u8 battlers[4] = {0, 1, 2, 3};
-                    SortBattlersBySpeed(battlers, FALSE);
-                    for (i = 0; i < gBattlersCount; i++) {
-                        u8 battler = battlers[i];
-                        AbilityEnum redCardAbility = ABILITY_NONE;
-                        if (GetAbilityState(battler, ABILITY_RESTRAINING_ORDER) == RESTRAINING_ORDER_ACTIVATING) {
-                            redCardAbility = ABILITY_RESTRAINING_ORDER;
-                        } else if (GetAbilityState(battler, ABILITY_CHUCKSTER) == RESTRAINING_ORDER_ACTIVATING) {
-                            redCardAbility = ABILITY_CHUCKSTER;
-                        }
-                        // Search for fastest hit pokemon with a red card
-                        // Attacker is the one to be switched out, battler is one with red card
-                        if (redCardAbility && IsBattlerAlive(battler) && CanBattlerSwitch(gBattlerAttacker)) {
-                            SetAbilityState(battler, redCardAbility, RESTRAINING_ORDER_DONE);
-                            gBattleScripting.abilityPopupOverwrite = redCardAbility;
-                            gBattlerAbility = gStackBattler1 = battler;
-                            if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
-                                gBattlescriptCurrInstr = BattleScript_MoveEnd;  // Prevent user switch-in selection
-                            BattleScriptCall(BattleScript_RestrainingOrderActivates);
-                            effect = TRUE;
-                            break;
-                        } else if (gTurnStructs[battler].shouldTriggerSwitchItem && IsBattlerAlive(battler) &&
-                                   GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_RED_CARD && !IsUnnerveAbilityOnOpposingSide(battler) &&
-                                   CanBattlerSwitch(gBattlerAttacker))  // Has mon to switch into
-                        {
-                            gLastUsedItem = gBattleMons[battler].item;
-                            gStackBattler1 = battler;
-                            if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
-                                gBattlescriptCurrInstr = BattleScript_MoveEnd;  // Prevent user switch-in selection
-                            BattleScriptCall(BattleScript_RedCardActivates);
-                            effect = TRUE;
-                            break;  // Only fastest red card activates
-                        }
-                    }
-                }
-
-                for (i = 0; i < gBattlersCount; i++) {
-                    if (GetAbilityState(i, ABILITY_RESTRAINING_ORDER) == RESTRAINING_ORDER_ACTIVATING)
-                        SetAbilityState(i, ABILITY_RESTRAINING_ORDER, RESTRAINING_ORDER_NOT_TRIGGERED);
-
-                    if (GetAbilityState(i, ABILITY_CHUCKSTER) == RESTRAINING_ORDER_ACTIVATING) SetAbilityState(i, ABILITY_CHUCKSTER, RESTRAINING_ORDER_DONE);
-                }
-                gBattleScripting.moveendState++;
-                break;
-            case MOVEEND_EJECT_PACK:
-                if (!(gCurrentMove == MOVE_PARTING_SHOT && CanBattlerSwitch(gBattlerAttacker))) {
-                    u8 battlers[4] = {0, 1, 2, 3};
-                    SortBattlersBySpeed(battlers, FALSE);
-                    for (i = 0; i < gBattlersCount; i++) {
-                        u8 battler = battlers[i];
-
-                        if (battler == gBattlerAttacker && GetOncePerTurnAbilityCounter(battler, ABILITY_HOLLOW_ICE_ZONE) &&
-                            CountUsablePartyMons(battler) > 0) {
-                            gBattlerAbility = gStackBattler1 = battler;
-                            gBattleScripting.abilityPopupOverwrite = ABILITY_HOLLOW_ICE_ZONE;
-                            BattleScriptCall(BattleScript_EmergencyExitPopupNoPause);
-                            effect = TRUE;
-                            break;
-                        }
-
-                        if (IsBattlerAlive(battler) && gRoundStructs[battler].statFell && gRoundStructs[battler].disableEjectPack == 0 &&
-                            GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_PACK && CountUsablePartyMons(battler) > 0)  // Has mon to switch into
-                        {
-                            gStackBattler1 = battler;
-                            gRoundStructs[battler].statFell = FALSE;
-                            gLastUsedItem = gBattleMons[battler].item;
-                            BattleScriptCall(BattleScript_EjectPackActivates);
-                            effect = TRUE;
-                            break;  // Only fastest eject pack activates
-                        }
-
-                        if (IsBattlerAlive(battler) && gRoundStructs[battler].statFell && gRoundStructs[battler].disableEjectPack == 0 &&
-                            BATTLER_HAS_ABILITY(battler, ABILITY_EJECT_PACK_ABILITY) && !GetSingleUseAbilityCounter(battler, ABILITY_EJECT_PACK_ABILITY) &&
-                            CanBattlerSwitch(battler))  // Has mon to switch into
-                        {
-                            SetSingleUseAbilityCounter(battler, ABILITY_EJECT_PACK_ABILITY, TRUE);
-                            gBattlerAbility = gStackBattler1 = battler;
-                            gRoundStructs[battler].statFell = FALSE;
-                            gBattleScripting.abilityPopupOverwrite = ABILITY_EJECT_PACK_ABILITY;
-                            BattleScriptCall(BattleScript_EmergencyExitPopupNoPause);
-                            effect = TRUE;
-                            break;  // Only fastest eject pack activates
-                        }
-                    }
-                }
-                gBattleScripting.moveendState++;
-                break;
             case MOVEEND_LIFEORB_SHELLBELL:
                 gBattleScripting.moveendState++;
                 REQUIRE_NOT(!gProcessingExtraAttacks && gRoundStructs[gBattlerAttacker].confusionSelfDmg)
@@ -4981,33 +4860,6 @@ static void Cmd_moveend(void) {
                         AbilityBattleEffects(ABILITYEFFECT_MOVE_END_OTHER, battlers[i], 0, 0, 0);
                     }
                 }
-                break;
-            case MOVEEND_EMERGENCY_EXIT:  // Special case, because moves hitting multiple opponents stop after switching out
-                for (i = 0; i < gBattlersCount; i++) {
-                    if (gBattleResources->flags->flags[i] & RESOURCE_FLAG_EMERGENCY_EXIT) {
-                        if (HasAbilityIgnoringSuppression(i, ABILITY_WIMP_OUT)) {
-                            gBattleScripting.abilityPopupOverwrite = ABILITY_WIMP_OUT;
-                        } else {
-                            gBattleScripting.abilityPopupOverwrite = ABILITY_EMERGENCY_EXIT;
-                        }
-                        gBattlerAbility = gStackBattler1 = i;
-                        gBattleResources->flags->flags[i] &= ~(RESOURCE_FLAG_EMERGENCY_EXIT);
-                        BattleScriptPushCursor();
-                        if (gBattleTypeFlags & BATTLE_TYPE_TRAINER || GetBattlerSide(i) == B_SIDE_PLAYER) {
-                            if (B_ABILITY_POP_UP)
-                                gBattlescriptCurrInstr = BattleScript_EmergencyExit;
-                            else
-                                gBattlescriptCurrInstr = BattleScript_EmergencyExitNoPopUp;
-                        } else {
-                            if (B_ABILITY_POP_UP)
-                                gBattlescriptCurrInstr = BattleScript_EmergencyExitWild;
-                            else
-                                gBattlescriptCurrInstr = BattleScript_EmergencyExitWildNoPopUp;
-                        }
-                        return;
-                    }
-                }
-                gBattleScripting.moveendState++;
                 break;
             case MOVEEND_MULTIHIT_MOVE:
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && !(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE) &&
@@ -7648,13 +7500,18 @@ static void Cmd_various(void) {
             if (!CanUseLastResort(gActiveBattler)) gBattlescriptCurrInstr = ptr;
             return;
         case VARIOUS_TRY_HIT_SWITCH_TARGET:
-            ptr = READ_PTR_INC;
-            if (IsBattlerAlive(gBattlerAttacker) && IsBattlerAlive(gBattlerTarget) && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && TARGET_TURN_DAMAGED) {
-                gBattleScripting.switchCase = B_SWITCH_HIT;
-                gBattlescriptCurrInstr = BattleScript_ForceRandomSwitch;
-            } else {
-                gBattlescriptCurrInstr = ptr;
-            }
+            REQUIRE(IsBattlerAlive(gBattlerAttacker))
+            REQUIRE(IsBattlerAlive(gBattlerTarget))
+            REQUIRE_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+            REQUIRE(TARGET_TURN_DAMAGED)
+
+            TryScheduleSwitch((ExtraSwitchActionStruct){
+                .cause = SWITCH_MOVE,
+                .move = gCurrentMove,
+                .script = BattleScript_ForceRandomSwitch,
+                .switchingBattler = gBattlerTarget,
+                .sourceBattler = gBattlerAttacker,
+            });
             return;
         case VARIOUS_TRY_AUTOTOMIZE:
             ptr = READ_PTR_INC;
@@ -9227,6 +9084,18 @@ static void Cmd_various(void) {
                 })
             break;
         }
+        case VARIOUS_SCHEDULE_SWITCH: {
+            u8 sourceBattler = READ_8_INC;
+            ptr = READ_PTR_INC;
+            TryScheduleSwitch((ExtraSwitchActionStruct){
+                .move = gCurrentMove,
+                .cause = SWITCH_MOVE,
+                .script = ptr,
+                .switchingBattler = gActiveBattler,
+                .sourceBattler = GetBattlerForBattleScript(sourceBattler),
+            });
+            break;
+        }
     }  // End of switch (gBattlescriptCurrInstr[2])
 }
 
@@ -9971,6 +9840,26 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
                 } else {
                     gRoundStructs[battler].statFell = TRUE;                    // Eject pack, lash out
                     gBattleCommunication[MULTISTRING_CHOOSER] = !affectsUser;  // B_MSG_ATTACKER_STAT_FELL or B_MSG_DEFENDER_STAT_FELL
+
+                    if (!gRoundStructs[battler].disableEjectPack) {
+                        if (BattlerHasAbility(battler, ABILITY_EJECT_PACK_ABILITY, FALSE) && !GetSingleUseAbilityCounter(battler, ABILITY_EJECT_PACK_ABILITY)) {
+                            TryScheduleSwitch((ExtraSwitchActionStruct){
+                                .cause = SWITCH_ABILITY,
+                                .ability = {.id = ABILITY_EJECT_PACK_ABILITY, .setSingleUseCounter = TRUE},
+                                .sourceBattler = battler,
+                                .switchingBattler = battler,
+                                .script = BattleScript_EmergencyExitPopupNoPause,
+                            });
+                        } else if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_PACK && !IsUnnerveAbilityOnOpposingSide(battler)) {
+                            TryScheduleSwitch((ExtraSwitchActionStruct){
+                                .cause = SWITCH_ITEM,
+                                .item = gBattleMons[battler].item,
+                                .sourceBattler = battler,
+                                .switchingBattler = battler,
+                                .script = BattleScript_EjectButtonActivates,
+                            });
+                        }
+                    }
                 }
             }
         }
