@@ -4188,7 +4188,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType, MoveEnum move) {
     u8 statStage = gBattleMons[battlerId].statStages[STAT_SPEED];
     u8 extraStatLevel = gVolatileStructs[battlerId].extraSpeedLevel;
 
-    if (calcType != TOTAL_SPEED_QUASH) speed = GetSpeedFromAbilities(battlerId, speed, move);
+    if (calcType != TOTAL_SPEED_QUASH) speed = GetSpeedFromAbilities(battlerId, move, speed);
 
     if (calcType == TOTAL_SPEED_PRIMARY) return speed;
 
