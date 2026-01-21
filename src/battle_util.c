@@ -1197,6 +1197,8 @@ void PrepareStringBattle(u16 stringId, u8 battler) {
     else if (stringId == STRINGID_STATSWONTINCREASE2 && hasContrary)
         stringId = STRINGID_STATSWONTDECREASE2;
     else if (stringId == STRINGID_DEFENDERSSTATFELL && GetBattlerSide(gTurnStructs[gBattlerTarget].changedStatsBattlerId) != GetBattlerSide(gBattlerTarget)) {
+        StatChanger currentStatChanger = gBattleScripting.statChanger;
+        int any = FALSE;
         if (IsBattlerAlive(gBattlerTarget)) {
             ON_ABILITY(
                 gBattlerTarget,
@@ -1206,19 +1208,28 @@ void PrepareStringBattle(u16 stringId, u8 battler) {
                 if (gAbilities[ability].onStatLowered(gBattlerTarget)) {
                     gBattleScripting.abilityPopupOverwrite = ability;
                     BattleScriptCall(BattleScript_AbilityPopUpStack);
+                    any = TRUE;
                 })
         }
         int partner = BATTLE_PARTNER(gBattlerTarget);
         if (IsBattlerAlive(partner)) {
             ON_ABILITY(
-                gBattlerTarget,
+                partner,
                 FALSE,
-                gAbilities[ability].onStatLowered && IsApplyOnFlagAppropriate(partner, gBattlerTarget, gAbilities[ability].onStatLoweredFor),
+                gAbilities[ability].onStatLowered && IsApplyOnFlagAppropriate(gBattlerTarget, partner, gAbilities[ability].onStatLoweredFor),
                 gStackBattler1 = partner;
                 if (gAbilities[ability].onStatLowered(partner)) {
                     gBattleScripting.abilityPopupOverwrite = ability;
                     BattleScriptCall(BattleScript_AbilityPopUpStack);
+                    any = TRUE;
                 })
+        }
+
+        if (any) {
+            // EmitPrintString needs statChanger to be correct for printing the string, so queue a stack restoration to be completed after the string is
+            // printed.
+            BattleScriptCall(BattleScript_RestoreStackState);
+            gBattleScripting.statChanger = currentStatChanger;
         }
     }
 

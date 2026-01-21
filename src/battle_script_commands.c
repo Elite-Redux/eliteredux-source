@@ -2652,7 +2652,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     }
                     break;
                 case MOVE_EFFECT_FLINCH:
-                    if (!IsStatusImmune(gEffectBattler, CHECK_FLINCH)) {
+                    if (!IsAbilityStatusProtected(gEffectBattler, CHECK_FLINCH)) {
                         gBattleMons[gEffectBattler].status2 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
                     }
                     break;
@@ -7686,7 +7686,7 @@ static void Cmd_various(void) {
         case VARIOUS_BESTOW:
             ptr = READ_PTR_INC;
             if (gBattleMons[gBattlerAttacker].item == ITEM_NONE || !CanBattlerGetOrLoseItem(gBattlerAttacker, gBattleMons[gBattlerAttacker].item) ||
-                !CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerAttacker].item)) {
+                !CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerTarget].item)) {
                 gBattlescriptCurrInstr = ptr;
             } else {
                 gLastUsedItem = UpdateBattlerItem(gBattlerAttacker, ITEM_NONE);
