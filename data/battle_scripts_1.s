@@ -1882,7 +1882,9 @@ BattleScript_EffectBestow:
 	waitanimation
 	printstring STRINGID_BESTOWITEMGIVING
 	waitmessage B_WAIT_TIME_LONG
-	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_MoveEnd
+	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_EffectBestow_HasStatus
+	goto BattleScript_MoveEnd
+BattleScript_EffectBestow_HasStatus:
 	jumpifsafeguard BattleScript_SafeguardProtected
 	trypsychoshift BattleScript_MoveEnd
 	copybyte gEffectBattler, gBattlerTarget
@@ -1892,7 +1894,9 @@ BattleScript_EffectBestow:
 	updatestatusicon BS_TARGET
 	goto BattleScript_MoveEnd
 BattleScript_EffectBestow_NoGiveItem:
-	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
+	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_EffectBestow_NoGiveItem_HasStatus
+	goto BattleScript_ButItFailed
+BattleScript_EffectBestow_NoGiveItem_HasStatus:
 	jumpifsafeguard BattleScript_SafeguardProtected
 	trypsychoshift BattleScript_ButItFailed
 	attackanimation

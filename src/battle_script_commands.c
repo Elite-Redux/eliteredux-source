@@ -7686,7 +7686,7 @@ static void Cmd_various(void) {
         case VARIOUS_BESTOW:
             ptr = READ_PTR_INC;
             if (gBattleMons[gBattlerAttacker].item == ITEM_NONE || !CanBattlerGetOrLoseItem(gBattlerAttacker, gBattleMons[gBattlerAttacker].item) ||
-                !CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerAttacker].item)) {
+                !CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerTarget].item)) {
                 gBattlescriptCurrInstr = ptr;
             } else {
                 gLastUsedItem = UpdateBattlerItem(gBattlerAttacker, ITEM_NONE);
