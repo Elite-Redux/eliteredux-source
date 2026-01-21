@@ -12004,7 +12004,6 @@ BattleScript_HandleJawsOfCarnageEffect::
 	goto BattleScript_HandleSoulEaterEffect_AfterHeal
 
 BattleScript_AttackerSoulLinker::
-	call BattleScript_AbilityPopUp
     orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
