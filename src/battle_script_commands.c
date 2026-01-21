@@ -2652,7 +2652,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     }
                     break;
                 case MOVE_EFFECT_FLINCH:
-                    if (!IsStatusImmune(gEffectBattler, CHECK_FLINCH)) {
+                    if (!IsAbilityStatusProtected(gEffectBattler, CHECK_FLINCH)) {
                         gBattleMons[gEffectBattler].status2 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
                     }
                     break;
