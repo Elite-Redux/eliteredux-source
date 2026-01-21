@@ -9560,83 +9560,6 @@ BattleScript_DrizzleActivates::
 	call BattleScript_OnWeatherChange
 	end3
 
-BattleScript_KingsWrathActivated::
-	jumpifstat BS_ABILITY_BATTLER, CMP_LESS_THAN, STAT_ATK, MAX_STAT_STAGE, BattleScript_KingsWrath_AttackUpDoAnim
-	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_DEF, MAX_STAT_STAGE, BattleScript_KingsWrath_End
-BattleScript_KingsWrath_AttackUpDoAnim::
-	call BattleScript_AbilityPopUp
-	pause B_WAIT_TIME_SHORT
-	saveattackertostack3
-	copybyte gBattlerAttacker, gBattlerAbility
-	playstatchangeanimation BS_ABILITY_BATTLER, BIT_ATK | BIT_DEF, 0
-	setstatchanger STAT_ATK, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_KingsWrath_DefenseUpDoAnim
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_KingsWrath_DefenseUpDoAnim
-	printfromtable gStatUpStringIds
-	waitmessage B_WAIT_TIME_LONG
-BattleScript_KingsWrath_DefenseUpDoAnim::
-	setstatchanger STAT_DEF, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_KingsWrath_End
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_KingsWrath_End
-	printfromtable gStatUpStringIds
-	waitmessage B_WAIT_TIME_LONG
-BattleScript_KingsWrath_End:
-	readattackerfromstack3
-	return
-
-BattleScript_QueensMourningActivated::
-	jumpifstat BS_ABILITY_BATTLER, CMP_LESS_THAN, STAT_SPATK, MAX_STAT_STAGE, BattleScript_QueensMourning_AttackUpDoAnim
-	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_QueensMourning_End
-BattleScript_QueensMourning_AttackUpDoAnim::
-	call BattleScript_AbilityPopUp
-	pause B_WAIT_TIME_SHORT
-	saveattackertostack3
-	copybyte gBattlerAttacker, gBattlerAbility
-	playstatchangeanimation BS_ABILITY_BATTLER, BIT_SPATK | BIT_SPDEF, 0
-	setstatchanger STAT_SPATK, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_QueensMourning_DefenseUpDoAnim
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_QueensMourning_DefenseUpDoAnim
-	printfromtable gStatUpStringIds
-	waitmessage B_WAIT_TIME_LONG
-BattleScript_QueensMourning_DefenseUpDoAnim::
-	setstatchanger STAT_SPDEF, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_QueensMourning_End
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_QueensMourning_End
-	printfromtable gStatUpStringIds
-	waitmessage B_WAIT_TIME_LONG
-BattleScript_QueensMourning_End:
-	readattackerfromstack3
-	return
-
-BattleScript_FortKnoxActivates::
-	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_DEF, MAX_STAT_STAGE, BattleScript_DefiantActivates_End
-	setstatchanger STAT_DEF, 3, FALSE
-	goto BattleScript_DefiantActivates_Effect
-
-BattleScript_RunAwayActivates::
-	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_SPEED, MAX_STAT_STAGE, BattleScript_DefiantActivates_End
-	setstatchanger STAT_SPEED, 2, FALSE
-	goto BattleScript_DefiantActivates_Effect
-
-BattleScript_CompetitiveActivates::
-	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_SPATK, MAX_STAT_STAGE, BattleScript_DefiantActivates_End
-	setstatchanger STAT_SPATK, 2, FALSE
-	goto BattleScript_DefiantActivates_Effect
-	
-BattleScript_DefiantActivates::
-	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_ATK, MAX_STAT_STAGE, BattleScript_DefiantActivates_End
-	setstatchanger STAT_ATK, 2, FALSE
-BattleScript_DefiantActivates_Effect:
-	statbuffchange 0, BattleScript_Return
-	pause B_WAIT_TIME_SHORT
-	call BattleScript_AbilityPopUp
-	setgraphicalstatchangevalues
-	playanimation BS_ABILITY_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printstring STRINGID_DEFENDERSSTATROSE
-	waitmessage B_WAIT_TIME_LONG
-BattleScript_DefiantActivates_End:
-	return
-
 BattleScript_StackBattlerStatUp::
 	saveattackertostack3
 	copybyte gBattlerAttacker, gStackBattler1
@@ -9890,6 +9813,7 @@ BattleScript_DoWindRider:
 	playanimation BS_ABILITY_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printstring STRINGID_BATTLERABILITYRAISEDSTAT
 	waitmessage B_WAIT_TIME_LONG
+BattleScript_RestoreStackState::
 BattleScript_Return:
 	return
 	
