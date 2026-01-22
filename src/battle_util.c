@@ -4836,6 +4836,11 @@ bool32 CanBattlerEscape(u32 battlerId)  // no ability check
         return TRUE;
 }
 
+void BattleScriptExecuteCurrentAction() {
+    gBattleResources->battleCallbackStack->function[gBattleResources->battleCallbackStack->size++] = gBattleMainFunc;
+    gBattleMainFunc = RunActionsUntilFinishedThenPop;
+}
+
 void BattleScriptExecute(const u8* BS_ptr) {
     gBattlescriptCurrInstr = BS_ptr;
     gBattleResources->battleCallbackStack->function[gBattleResources->battleCallbackStack->size++] = gBattleMainFunc;
