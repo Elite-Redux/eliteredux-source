@@ -4526,12 +4526,12 @@ static void CheckMegaEvolutionBeforeTurn(void) {
         }
     }
 
-#if B_MEGA_EVO_TURN_ORDER <= GEN_6
-    gBattleMainFunc = CheckFocusPunch_ClearVarsBeforeTurnStarts;
-    gBattleStruct->focusPunchBattlerId = 0;
-#else
+    if (TryPerformExtraAction()) {
+        BattleScriptExecuteCurrentAction();
+        return;
+    }
+    
     gBattleMainFunc = TryChangeTurnOrder;  // This will just do nothing if no mon has mega evolved
-#endif
 }
 
 // In gen7, priority and speed are recalculated during the turn in which a pokemon mega evolves
@@ -4945,6 +4945,15 @@ static void ReturnFromBattleToOverworld(void) {
 
     m4aSongNumStop(SE_LOW_HEALTH);
     SetMainCallback2(gMain.savedCallback);
+}
+
+void RunActionsUntilFinishedThenPop() {
+    if (gCurrentActionFuncId == B_ACTION_FINISHED) {
+        if (gBattleResources->battleCallbackStack->size != 0) gBattleResources->battleCallbackStack->size--;
+        gBattleMainFunc = gBattleResources->battleCallbackStack->function[gBattleResources->battleCallbackStack->size];
+    } else {
+        sTurnActionsFuncsTable[gCurrentActionFuncId]();
+    }
 }
 
 void RunBattleScriptCommands_PopCallbacksStack(void) {

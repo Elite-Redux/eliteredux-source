@@ -104,6 +104,7 @@ u16 selectMoves(SpeciesEnum species, u8 i, u16 atk, u16 spAtk);
 Type GetMonMoveType(MoveEnum move, struct Pokemon *mon, bool8 disableRandomizer);
 bool32 IsWildMonSmart(void);
 void RecalculateMoveOrder(int from, int ignoreChosenMove);
+void RunActionsUntilFinishedThenPop();
 extern struct UnknownPokemonStruct4 gMultiPartnerParty[MULTI_PARTY_SIZE];
 
 extern const struct SpriteTemplate gUnusedBattleInitSprite;

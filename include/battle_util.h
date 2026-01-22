@@ -296,6 +296,7 @@ typedef enum ProtectType {
 
 ProtectType IsBattlerProtected(u8 battlerId, MoveEnum move);
 bool32 CanBattlerEscape(u32 battlerId);  // no ability check
+void BattleScriptExecuteCurrentAction();
 void BattleScriptExecute(const u8* BS_ptr);
 void BattleScriptPushCursorAndCallback(const u8* BS_ptr);
 u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn);
