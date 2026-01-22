@@ -2830,9 +2830,9 @@ static void FillPartnerParty(u16 trainerId) {
             SetMonData(&gPlayerParty[i + 3], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
             SetMonData(&gPlayerParty[i + 3], MON_DATA_ABILITY_NUM, &partyData[i].ability);
 
-            SetMonData(&gPlayerParty[i], MON_DATA_SPEED_DOWN, &partyData[i].zeroSpeedIvs);
+            SetMonData(&gPlayerParty[i + 3], MON_DATA_SPEED_DOWN, &partyData[i].zeroSpeedIvs);
 
-            SetMonData(&gPlayerParty[i], MON_DATA_HP_TYPE, &partyData[i].hpType);
+            SetMonData(&gPlayerParty[i + 3], MON_DATA_HP_TYPE, &partyData[i].hpType);
 
             // SetPartnerPokemonData
 
