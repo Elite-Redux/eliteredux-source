@@ -79,17 +79,23 @@ object GeneratorUtils {
         )
     }
 
-    fun findLearnsetForSpecies(species: Species): Learnset =
-        when {
+    fun findLearnsetForSpecies(species: Species, learnsetChain: MutableList<SpeciesEnum> = mutableListOf()): Learnset {
+        val id = species.id
+
+        check(id !in learnsetChain) { "Self referential moveset found: ${learnsetChain.joinToString(" -> ")} -> $id" }
+        learnsetChain += id
+
+        return when {
             species.id == SpeciesEnum.SPECIES_NONE -> species.learnset
-            species.megaList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.megaList.first().from]!!)
-            species.primalList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.primalList.first().from]!!)
-            species.hasBattleForm() -> findLearnsetForSpecies(SPECIES_MAP[species.battleForm.of]!!)
+            species.megaList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.megaList.first().from]!!, learnsetChain)
+            species.primalList.isNotEmpty() -> findLearnsetForSpecies(SPECIES_MAP[species.primalList.first().from]!!, learnsetChain)
+            species.hasBattleForm() -> findLearnsetForSpecies(SPECIES_MAP[species.battleForm.of]!!, learnsetChain)
             species.hasLearnset() -> species.learnset
-            species.usesLearnset != SpeciesEnum.SPECIES_NONE -> findLearnsetForSpecies(SPECIES_MAP[species.usesLearnset]!!)
-            species.formShiftOf != SpeciesEnum.SPECIES_NONE -> findLearnsetForSpecies(SPECIES_MAP[species.formShiftOf]!!)
-            else -> findLearnsetForSpecies(SPECIES_MAP[species.formOf]!!)
+            species.usesLearnset != SpeciesEnum.SPECIES_NONE -> findLearnsetForSpecies(SPECIES_MAP[species.usesLearnset]!!, learnsetChain)
+            species.formShiftOf != SpeciesEnum.SPECIES_NONE -> findLearnsetForSpecies(SPECIES_MAP[species.formShiftOf]!!, learnsetChain)
+            else -> findLearnsetForSpecies(SPECIES_MAP[species.formOf]!!, learnsetChain)
         }
+    }
 
     fun expandLearnset(learnset: Learnset, species: Species) =
         UNIVERSAL_TUTORS + UNIVERSAL_ATTACKS.takeIf { learnset.universalTutors != UniversalTutors.NO_ATTACKS }
