@@ -270,7 +270,7 @@ static void SetShopMenuCallback(void (*callback)(void)) { sMartInfo.callback = c
 #define ADOPTION_CENTER_ONE_BADGE                                                                                                                 \
     ADOPTION_CENTER_ZERO_BADGES, SPECIES_WEEDLE_REDUX, SPECIES_SABLEYE_REDUX, SPECIES_MAWILE_REDUX, SPECIES_SWABLU_REDUX, SPECIES_MAKUHITA_REDUX, \
         SPECIES_CLEFFA_REDUX, SPECIES_WHISMUR_REDUX, SPECIES_STUFFUL_REDUX, SPECIES_ABRA_REDUX, SPECIES_ARON_REDUX, SPECIES_CETODDLE_REDUX,       \
-        SPECIES_SINISTEA_REDUX, SPECIES_DEWPIDER_REDUX, SPECIES_DODUO_REDUX
+        SPECIES_SINISTEA_REDUX, SPECIES_DEWPIDER_REDUX, SPECIES_DODUO_REDUX, SPECIES_DRILBUR_REDUX
 
 // 2 Badges
 #define ADOPTION_CENTER_TWO_BADGES                                                                                                                  \
