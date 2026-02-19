@@ -57,7 +57,6 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers{
     cleartrainerflag(TRAINER_MONOCHAMP_DRAGON)
     cleartrainerflag(TRAINER_MONOCHAMP_DARK)
     cleartrainerflag(TRAINER_MONOCHAMP_FAIRY)
-    cleartrainerflag(TRAINER_MONOCHAMP_FAIRY)
     setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     return
 }
@@ -190,24 +189,38 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_Scott{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Normal{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NORMAL) // Sets variable to compare against player's party type
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType) // Variable holds result of party monotype == VAR_MONOTYPE_BOOST check
+ 
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_NORMAL) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Normal-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Normal Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_NORMAL)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_NORMAL, format("I lost"))
+        msgbox(format("Hello, I'm the Normal-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_NORMAL)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_NORMAL, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Normal-type prowess is amazing! Take this with you!"))
+
+            giveitem(ITEM_SNORLAX_ORB, 1)
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -216,24 +229,41 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Normal{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Fighting{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_FIGHTING)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_FIGHTING) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Fighting-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Fighting Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_FIGHTING)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_FIGHTING, format("I lost"))
+        msgbox(format("Hello, I'm the Fighting-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_FIGHTING)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_FIGHTING, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Fighting-type prowess is amazing! Take this with you!"))
+
+            givemon(SPECIES_BEWEAR_ANGRY, 80, ITEM_NONE)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got an {COLOR BLUE}Angry Bewear{COLOR DARK_GRAY}!"))
+            waitfanfare
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -242,24 +272,41 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Fighting{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Flying{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_FLYING)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_FLYING) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Flying-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Flying Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_FLYING)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_FLYING, format("I lost"))
+        msgbox(format("Hello, I'm the Flying-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_FLYING)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_FLYING, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Flying-type prowess is amazing! Take this with you!"))
+
+            givemon(SPECIES_CALYREX_CLOUD_RIDER, 80, ITEM_NONE)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Cloud Rider Calyrex{COLOR DARK_GRAY}!"))
+            waitfanfare
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -268,24 +315,41 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Flying{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Poison{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_POISON)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_POISON) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Poison-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Poison Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_POISON)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_POISON, format("I lost"))
+        msgbox(format("Hello, I'm the Poison-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_POISON)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_POISON, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Poison-type prowess is amazing! Take this with you!"))
+
+            givemon(SPECIES_MAWILE_REDUX_B, 80, ITEM_MAWILITE_R_B)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Redux Mawile B{COLOR DARK_GRAY}!"))
+            waitfanfare
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -294,24 +358,41 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Poison{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Ground{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_GROUND)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_GROUND) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Ground-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Ground Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_GROUND)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_GROUND, format("I lost"))
+        msgbox(format("Hello, I'm the Ground-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_GROUND)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_GROUND, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Ground-type prowess is amazing! Take this with you!"))
+
+            givemon(SPECIES_WEAVILE_REDUX, 80, ITEM_WEAVILEITE_R)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Redux Weavile{COLOR DARK_GRAY}!"))
+            waitfanfare
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -320,24 +401,41 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Ground{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Rock{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_ROCK)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_ROCK) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Rock-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Rock Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_ROCK)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_ROCK, format("I lost"))
+        msgbox(format("Hello, I'm the Rock-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_ROCK)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_ROCK, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Rock-type prowess is amazing! Take this with you!"))
+
+            givemon(SPECIES_SOLROCK_SYSTEM, 80, ITEM_NONE)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Solrock System{COLOR DARK_GRAY}!"))
+            waitfanfare
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -346,25 +444,42 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Rock{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Bug{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_BUG)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_BUG) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Bug-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Bug Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_BUG)
-            msgbox(format("Let's get started"))
-            registerbattleevent(BATTLE_EVENT_PERMA_STICKY_WEB)
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_BUG, format("I lost"))
+        msgbox(format("Hello, I'm the Bug-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_BUG)
+        msgbox(format("Let's get started"))
+        registerbattleevent(BATTLE_EVENT_PERMA_STICKY_WEB)
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_BUG, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Bug-type prowess is amazing! Take this with you!"))
+
+            givemon(SPECIES_RIBOMBEE_REDUX, 80, ITEM_RIBOMBITE_R)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Redux Ribombee{COLOR DARK_GRAY}!"))
+            waitfanfare
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -373,24 +488,42 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Bug{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Ghost{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_GHOST)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_GHOST) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Ghost-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Ghost Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_GHOST)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_GHOST, format("I lost"))
+        msgbox(format("Hello, I'm the Ghost-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_GHOST)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_GHOST, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Ghost-type prowess is amazing! Take this with you!"))
+
+            givemon(SPECIES_MIMIKYU_APEX, 80, ITEM_PHANTOM_METEOR)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got an {COLOR BLUE}Apex Mimikyu{COLOR DARK_GRAY}!"))
+            waitfanfare
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -399,24 +532,41 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Ghost{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Steel{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_STEEL)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_STEEL) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Steel-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Steel Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_STEEL)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_STEEL, format("I lost"))
+        msgbox(format("Hello, I'm the Steel-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_STEEL)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_STEEL, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Steel-type prowess is amazing! Take this with you!"))
+
+            givemon(SPECIES_LEDIAN_PARADOX, 80, ITEM_NONE)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got an {COLOR BLUE}Iron Heart{COLOR DARK_GRAY}!"))
+            waitfanfare
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -425,24 +575,38 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Steel{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Fire{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_FIRE)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_FIRE) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Fire-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Fire Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_FIRE)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_FIRE, format("I lost"))
+        msgbox(format("Hello, I'm the Fire-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_FIRE)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_FIRE, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Fire-type prowess is amazing! Take this with you!"))
+
+            giveitem(ITEM_VICTINI_ORB, 1)
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -451,24 +615,38 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Fire{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Water{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_WATER)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_WATER) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Water-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Water Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_WATER)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_WATER, format("I lost"))
+        msgbox(format("Hello, I'm the Water-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_WATER)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_WATER, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Water-type prowess is amazing! Take this with you!"))
+
+            giveitem(ITEM_DRACOVISHITE, 1)
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -477,24 +655,38 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Water{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Grass{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_GRASS)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_GRASS) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Grass-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Grass Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_GRASS)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_GRASS, format("I lost"))
+        msgbox(format("Hello, I'm the Grass-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_GRASS)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_GRASS, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Grass-type prowess is amazing! Take this with you!"))
+
+            giveitem(ITEM_ABOMASITE_S, 1)
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -503,24 +695,41 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Grass{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Electric{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_ELECTRIC)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_ELECTRIC) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Electric-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Electric Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_ELECTRIC)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_ELECTRIC, format("I lost"))
+        msgbox(format("Hello, I'm the Electric-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_ELECTRIC)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_ELECTRIC, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Electric-type prowess is amazing! Take this with you!"))
+
+            givemon(SPECIES_FLYGON_REDUX_B, 80, ITEM_FLYGONITE_R_B)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Redux Flygon B{COLOR DARK_GRAY}!"))
+            waitfanfare
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -529,24 +738,38 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Electric{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Psychic{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_PSYCHIC)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_PSYCHIC) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Psychic-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Psychic Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_PSYCHIC)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_PSYCHIC, format("I lost"))
+        msgbox(format("Hello, I'm the Psychic-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_PSYCHIC)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_PSYCHIC, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Psychic-type prowess is amazing! Take this with you!"))
+
+            giveitem(ITEM_GALACTIC_ORB, 1)
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -555,25 +778,39 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Psychic{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Ice{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_ICE)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_ICE) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Ice-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Ice Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_ICE)
-            msgbox(format("Let's get started"))
-            registerbattleevent(BATTLE_EVENT_STEADY_SPEED)
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_ICE, format("I lost"))
+        msgbox(format("Hello, I'm the Ice-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_ICE)
+        msgbox(format("Let's get started"))
+        registerbattleevent(BATTLE_EVENT_STEADY_SPEED)
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_ICE, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Ice-type prowess is amazing! Take this with you!"))
+
+            giveitem(ITEM_CHIEN_PAOITE, 1)
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -582,24 +819,41 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Ice{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Dragon{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_DRAGON)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_DRAGON) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Dragon-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Dragon Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_DRAGON)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_DRAGON, format("I lost"))
+        msgbox(format("Hello, I'm the Dragon-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_DRAGON)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_DRAGON, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Dragon-type prowess is amazing! Take this with you!"))
+
+            givemon(SPECIES_DRAGONITE_DELIVERY, 80, ITEM_NONE)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Delivery Dragonite{COLOR DARK_GRAY}!"))
+            waitfanfare
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -608,24 +862,41 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Dragon{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Dark{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_DARK)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_DARK) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Dark-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Dark Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_DARK)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_DARK, format("I lost"))
+        msgbox(format("Hello, I'm the Dark-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_DARK)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_DARK, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Dark-type prowess is amazing! Take this with you!"))
+
+            givemon(SPECIES_DARKRAI_NIGHTMARE, 80, ITEM_NONE)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got a {COLOR BLUE}Nightmare Darkrai{COLOR DARK_GRAY}!"))
+            waitfanfare
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
@@ -634,24 +905,41 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Dark{
 script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Fairy{
     lock
     faceplayer
+    setvar(VAR_MONOTYPE_BOOST, TYPE_FAIRY)
+    specialvar(VAR_TEMP_2, IsPlayerPartyMonotypeType)
+
+    if(var(VAR_TEMP_2) == TRUE){
+        msgbox(format("I like your style! If you beat me I got a reward for you!"))
+    }
+
     if(defeated(TRAINER_MONOCHAMP_FAIRY) == TRUE){
-        msgbox(format("Good luck defeating the other Type Mono Champions"))
+        msgbox(format("Are you ready for another round against the Fairy-type Mono Champion?"), MSGBOX_YESNO)
     }
     else{
-        msgbox(format("Hello, I'm the Fairy Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
-        if(var(VAR_RESULT) == NO){
-            msgbox(format("Come back when you are ready"))
-        }
-        else{
-            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
-            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
-            setvar(VAR_BATTLE_FIELD_ID, TYPE_FAIRY)
-            msgbox(format("Let's get started"))
-            trainerbattle_no_intro(TRAINER_MONOCHAMP_FAIRY, format("I lost"))
+        msgbox(format("Hello, I'm the Fairy-type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+    }
+
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+        setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+        setvar(VAR_BATTLE_FIELD_ID, TYPE_FAIRY)
+        msgbox(format("Let's get started"))
+        trainerbattle_no_intro(TRAINER_MONOCHAMP_FAIRY, format("I lost"))
+        if(var(VAR_TEMP_2) == TRUE){
+            msgbox(format("Whoa... your Fairy-type prowess is amazing! Take this with you!"))
+
+            givemon(SPECIES_WIGGLYTUFF_APEX, 80, ITEM_WIGGLITUFF_ORB)
+            playfanfare(MUS_OBTAIN_ITEM)
+            message(format("{PLAYER} got an {COLOR BLUE}Apex Wigglytuff{COLOR DARK_GRAY}!"))
+            waitfanfare
         }
     }
     setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
     setvar(VAR_BATTLE_FIELD_ID, 0)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     release
     end
 }
