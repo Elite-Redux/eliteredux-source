@@ -592,13 +592,13 @@ script Route111_SunhollowRuins_Museum_EventScript_Brandon_Fighting {
 }
 
 script Route111_SunhollowRuins_Museum_EventScript_Magma_Grunt_1 {
-    trainerbattle_single(TRAINER_GRUNT_MAGMA_HIDEOUT_14, format("How did you get in here?! Those guards must be sleeping...\pFine, I'll take care of you myself!"), format("No! No, you can't, we need to- Oops, nearly gave it away!"))
+    trainerbattle_single(TRAINER_GRUNT_SUNHOLLOW_2, format("How did you get in here?! Those guards must be sleeping...\pFine, I'll take care of you myself!"), format("No! No, you can't, we need to- Oops, nearly gave it away!"))
     msgbox(format("I don't suppose I could convince you to turn around and head home, could I?"), MSGBOX_AUTOCLOSE)
     end
 }
 
 script Route111_SunhollowRuins_Museum_EventScript_Magma_Grunt_2 {
-    trainerbattle_single(TRAINER_GRUNT_MAGMA_HIDEOUT_2, format("Hey, this is a historical site, you oughta be careful!"), format("Wait, you think WE'RE the vandals?!"))
+    trainerbattle_single(TRAINER_GRUNT_SUNHOLLOW_3, format("Hey, this is a historical site, you oughta be careful!"), format("Wait, you think WE'RE the vandals?!"))
     msgbox(format("What? We're being careful too. It's not any more ruined than when we arrived."), MSGBOX_AUTOCLOSE)
     end
 }

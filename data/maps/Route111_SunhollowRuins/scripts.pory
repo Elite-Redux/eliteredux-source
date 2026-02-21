@@ -190,7 +190,7 @@ script Route111_SunhollowRuins_EventScript_EntranceScript{
     closemessage
     msgbox(format("This is ridiculous!"))
     closemessage
-    trainerbattle_no_intro(TRAINER_GRUNT_MAGMA_HIDEOUT_1, format("This day keeps getting worse..."))
+    trainerbattle_no_intro(TRAINER_GRUNT_SUNHOLLOW_1, format("This day keeps getting worse..."))
     goto(Route111_SunhollowRuins_EventScript_EntranceScript_Part_2)
     release
     end
