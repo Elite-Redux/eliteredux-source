@@ -11,7 +11,7 @@ mapscripts EvergrandeCity_MonoChampRoom_1_MapScripts{
 
 script EvergrandeCity_MonoChampRoom_1_OnTrainsition{
     lock
-    call(EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     applymovement(LOCALID_SCOTT, EvergrandeCity_MonoChampRoom_1_MovementScript_Scott_1)
     waitmovement(LOCALID_SCOTT)
     msgbox(format("Welcome to the Type Mono Champion Room, if you defeat all of the trainers here you will be able to get a reward from me, if you want to leave just talk to me and I will take you out of the room. Also, if you want Rare Rewards, beat the trainers with their own type. Good luck!"))
@@ -38,11 +38,6 @@ movement  EvergrandeCity_MonoChampRoom_1_MovementScript_Player_1{
     walk_up
 }
 
-script EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers{
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
-    return
-}
-
 script EverGrandeCity_MonoChampRoom_1_EventScript_Scott_Outside{
     lock
     faceplayer
@@ -52,7 +47,7 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_Scott_Outside{
     }
     else{
         msgbox(format("Let me take you there"))
-        call(EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers)
+        setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
         warp(MAP_EVERGRANDE_CITY_MONO_CHAMP_ROOM_1, 255, 14, 17)
     }
     release
@@ -109,7 +104,7 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_Scott{
         }
         else{
             msgbox(format("Let me take you out of the room"))
-            call(EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers)
+            setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
             warp(MAP_EVER_GRANDE_CITY, 255, 25, 46)
         }
     }
