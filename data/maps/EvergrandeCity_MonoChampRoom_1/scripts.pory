@@ -14,7 +14,7 @@ script EvergrandeCity_MonoChampRoom_1_OnTrainsition{
     call(EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers)
     applymovement(LOCALID_SCOTT, EvergrandeCity_MonoChampRoom_1_MovementScript_Scott_1)
     waitmovement(LOCALID_SCOTT)
-    msgbox(format("Welcome to the Type Mono Champion Room, if you defeat all of the trainers here you will be able to get a reward from me, if you want to give up just talk to me and I will take you out of the room, however you will have to defeat all of the trainers again to get the reward, the same goes for if you lose to any of the trainers, Good luck!"))
+    msgbox(format("Welcome to the Type Mono Champion Room, if you defeat all of the trainers here you will be able to get a reward from me, if you want to leave just talk to me and I will take you out of the room. Also, if you want Rare Rewards, beat the trainers with their own type. Good luck!"))
     applymovement(OBJ_EVENT_ID_PLAYER, EvergrandeCity_MonoChampRoom_1_MovementScript_Player_1)
     waitmovement(OBJ_EVENT_ID_PLAYER)
     applymovement(LOCALID_SCOTT, EvergrandeCity_MonoChampRoom_1_MovementScript_Scott_2)
@@ -39,24 +39,6 @@ movement  EvergrandeCity_MonoChampRoom_1_MovementScript_Player_1{
 }
 
 script EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers{
-    cleartrainerflag(TRAINER_MONOCHAMP_NORMAL)
-    cleartrainerflag(TRAINER_MONOCHAMP_FIGHTING)
-    cleartrainerflag(TRAINER_MONOCHAMP_FLYING)
-    cleartrainerflag(TRAINER_MONOCHAMP_POISON)
-    cleartrainerflag(TRAINER_MONOCHAMP_GROUND)
-    cleartrainerflag(TRAINER_MONOCHAMP_ROCK)
-    cleartrainerflag(TRAINER_MONOCHAMP_BUG)
-    cleartrainerflag(TRAINER_MONOCHAMP_GHOST)
-    cleartrainerflag(TRAINER_MONOCHAMP_STEEL)
-    cleartrainerflag(TRAINER_MONOCHAMP_FIRE)
-    cleartrainerflag(TRAINER_MONOCHAMP_WATER)
-    cleartrainerflag(TRAINER_MONOCHAMP_GRASS)
-    cleartrainerflag(TRAINER_MONOCHAMP_ELECTRIC)
-    cleartrainerflag(TRAINER_MONOCHAMP_PSYCHIC)
-    cleartrainerflag(TRAINER_MONOCHAMP_ICE)
-    cleartrainerflag(TRAINER_MONOCHAMP_DRAGON)
-    cleartrainerflag(TRAINER_MONOCHAMP_DARK)
-    cleartrainerflag(TRAINER_MONOCHAMP_FAIRY)
     setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
     return
 }
@@ -64,7 +46,7 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers{
 script EverGrandeCity_MonoChampRoom_1_EventScript_Scott_Outside{
     lock
     faceplayer
-    msgbox(format("Do you want to try defeating a bunch of strong trainers to avoid going throught the Victory Road and get a Rare Reward?"), MSGBOX_YESNO)
+    msgbox(format("Do you want to try defeating a bunch of strong trainers to avoid going through the Victory Road and possibly get some Rare Rewards?"), MSGBOX_YESNO)
     if(var(VAR_RESULT) == NO){
         msgbox(format("Come back when you are ready"))
     }
@@ -97,78 +79,28 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_Scott{
         defeated(TRAINER_MONOCHAMP_ICE)      &&
         defeated(TRAINER_MONOCHAMP_DRAGON)   &&
         defeated(TRAINER_MONOCHAMP_DARK)     &&
-        defeated(TRAINER_MONOCHAMP_FAIRY)){
-            msgbox(format("Congratulations, you have defeated all of the Type Mono Champions, here are your rewards, some exclusive Pokemon and items!"))
-            
-            givemon(SPECIES_BEWEAR_ANGRY, 80, ITEM_NONE)
-            playfanfare(MUS_OBTAIN_ITEM)
-            message(format("{PLAYER} got an {COLOR BLUE}Angry Bewear{COLOR DARK_GRAY}!"))
-            waitfanfare
+        defeated(TRAINER_MONOCHAMP_FAIRY)    &&
+        !flag(FLAG_MONOTYPE_TUNNEL_OPEN)
+        ){
+            msgbox(format("Congratulations, you have defeated all of the Type Mono Champions, let me open up the tunnel for you!"))
+            playse(SE_SWITCH)
+            msgbox(format("Click!"))
+            waitse
 
-            givemon(SPECIES_CALYREX_CLOUD_RIDER, 80, ITEM_NONE)
-            playfanfare(MUS_OBTAIN_ITEM)
-            message(format("{PLAYER} got a {COLOR BLUE}Cloud Rider Calyrex{COLOR DARK_GRAY}!"))
-            waitfanfare
+            playse(SE_PIN)
+            applymovement(OBJ_EVENT_ID_PLAYER, moves(
+                emote_exclamation_mark
+                face_up
+            ))
+            waitse
+            waitmovement(0)
 
-            givemon(SPECIES_SOLROCK_SYSTEM, 80, ITEM_NONE)
-            playfanfare(MUS_OBTAIN_ITEM)
-            message(format("{PLAYER} got a {COLOR BLUE}Solrock System{COLOR DARK_GRAY}!"))
-            waitfanfare
+            playse(SE_M_ROCK_THROW)
+            waitse
+            msgbox(format("The boulders disappeared"))
 
-            givemon(SPECIES_LEDIAN_PARADOX, 80, ITEM_NONE)
-            playfanfare(MUS_OBTAIN_ITEM)
-            message(format("{PLAYER} got an {COLOR BLUE}Iron Heart{COLOR DARK_GRAY}!"))
-            waitfanfare
-
-            givemon(SPECIES_DRAGONITE_DELIVERY, 80, ITEM_NONE)
-            playfanfare(MUS_OBTAIN_ITEM)
-            message(format("{PLAYER} got a {COLOR BLUE}Delivery Dragonite{COLOR DARK_GRAY}!"))
-            waitfanfare
-
-            givemon(SPECIES_DARKRAI_NIGHTMARE, 80, ITEM_NONE)
-            playfanfare(MUS_OBTAIN_ITEM)
-            message(format("{PLAYER} got a {COLOR BLUE}Nightmare Darkrai{COLOR DARK_GRAY}!"))
-            waitfanfare
-
-            givemon(SPECIES_MAWILE_REDUX_B, 80, ITEM_MAWILITE_R_B)
-            playfanfare(MUS_OBTAIN_ITEM)
-            message(format("{PLAYER} got a {COLOR BLUE}Redux Mawile B{COLOR DARK_GRAY}!"))
-            waitfanfare
-
-            givemon(SPECIES_WEAVILE_REDUX, 80, ITEM_WEAVILEITE_R)
-            playfanfare(MUS_OBTAIN_ITEM)
-            message(format("{PLAYER} got a {COLOR BLUE}Redux Weavile{COLOR DARK_GRAY}!"))
-            waitfanfare
-
-            givemon(SPECIES_RIBOMBEE_REDUX, 80, ITEM_RIBOMBITE_R)
-            playfanfare(MUS_OBTAIN_ITEM)
-            message(format("{PLAYER} got a {COLOR BLUE}Redux Ribombee{COLOR DARK_GRAY}!"))
-            waitfanfare
-
-            givemon(SPECIES_MIMIKYU_APEX, 80, ITEM_PHANTOM_METEOR)
-            playfanfare(MUS_OBTAIN_ITEM)
-            message(format("{PLAYER} got an {COLOR BLUE}Apex Mimikyu{COLOR DARK_GRAY}!"))
-            waitfanfare
-            
-            givemon(SPECIES_FLYGON_REDUX_B, 80, ITEM_FLYGONITE_R_B)
-            playfanfare(MUS_OBTAIN_ITEM)
-            message(format("{PLAYER} got a {COLOR BLUE}Redux Flygon B{COLOR DARK_GRAY}!"))
-            waitfanfare
-
-            givemon(SPECIES_WIGGLYTUFF_APEX, 80, ITEM_WIGGLITUFF_ORB)
-            playfanfare(MUS_OBTAIN_ITEM)
-            message(format("{PLAYER} got an {COLOR BLUE}Apex Wigglytuff{COLOR DARK_GRAY}!"))
-            waitfanfare
-
-            giveitem(ITEM_SNORLAX_ORB, 1)
-            giveitem(ITEM_VICTINI_ORB, 1)
-            giveitem(ITEM_DRACOVISHITE, 1)
-            giveitem(ITEM_ABOMASITE_S, 1)
-            giveitem(ITEM_GALACTIC_ORB, 1)
-            giveitem(ITEM_CHIEN_PAOITE, 1)
-
-            msgbox(format("If you want to try again just talk to me"))
-            warp(MAP_EVER_GRANDE_CITY, 255, 25, 46)
+            setflag(FLAG_MONOTYPE_TUNNEL_OPEN)
+            msgbox(format("Get out there and win, kid! It's a one way trip though!"))
     }
     else{
         msgbox(format("Do you want to leave the room?"), MSGBOX_YESNO)
