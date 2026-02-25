@@ -230,9 +230,9 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Flying{
         if(var(VAR_TEMP_2) == TRUE){
             msgbox(format("Whoa... your Flying-type prowess is amazing! Take this with you!"))
 
-            givemon(SPECIES_CALYREX_CLOUD_RIDER, 80, ITEM_NONE)
+            givemon(SPECIES_SPECTRIER_CLOUD, 80, ITEM_NONE)
             playfanfare(MUS_OBTAIN_ITEM)
-            message(format("{PLAYER} got a {COLOR BLUE}Cloud Rider Calyrex{COLOR DARK_GRAY}!"))
+            message(format("{PLAYER} got a {COLOR BLUE}Cloud Spectrier{COLOR DARK_GRAY}!"))
             waitfanfare
         }
     }
