@@ -6027,6 +6027,24 @@ u16 GetMysteryGiftSpecies (void)
     return FALSE;
 }
 
+bool8 IsPlayerPartyMonotypeType(void) {
+    u8 i;
+    SpeciesEnum species;
+    Type type = VarGet(VAR_MONOTYPE_BOOST);
+    
+    struct Pokemon* pokemon;
+    for (i = 0; i < PARTY_SIZE; i++) {
+        pokemon = &gPlayerParty[i];
+        if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES) && !GetMonData(pokemon, MON_DATA_IS_EGG)) {
+            species = GetMonData(pokemon, MON_DATA_SPECIES);
+            if (!(gBaseStats[species].type1 == type || gBaseStats[species].type2 == type)) {
+                return FALSE;
+            }
+        }
+    }
+    return TRUE;
+}
+
 #undef MYSTERY_GIFT_SPECIES
 #undef MYSTERY_GIFT_RECEIVED_FLAG
 #undef MYSTERY_GIFT_REQ_FLAG
