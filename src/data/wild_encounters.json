@@ -372,6 +372,11 @@
                 "min_level": 3,
                 "max_level": 3,
                 "species": "SPECIES_VENONAT"
+              },
+              {
+                "min_level": 5,
+                "max_level": 5,
+                "species": "SPECIES_NONE"
               }
             ]
           },
