@@ -57,6 +57,7 @@ data/maps/*/*scripts.inc
 dockerfile
 dd_lazy_utils/ # doubledot stuff
 *.ups
+*.bps
 generated/
 output.txt
 rg
