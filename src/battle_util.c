@@ -5095,7 +5095,6 @@ bool32 CanBeDrenched(u8 battlerId) {
 }
 
 int CanInfatuate(u8 battlerAtk, u8 battlerDef) {
-    int genderAtk, genderDef;
     if (gBattleMons[battlerDef].status2 & STATUS2_INFATUATION) return FALSE;
     if (battlerAtk == battlerDef) return FALSE;
     if (!IsBattlerAlive(battlerAtk)) return FALSE;

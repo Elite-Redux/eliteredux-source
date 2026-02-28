@@ -11293,7 +11293,7 @@ constexpr Ability Impl<ABILITY_SUNDAE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_HYDRA> = {
-    .onBattlerFaints = Impl<ABILITY_BEAST_BOOST>.onBattlerFaints,
+    .onBattlerFaints = Impl<ABILITY_HUBRIS>.onBattlerFaints,
     .onParentalBond = Impl<ABILITY_MULTI_HEADED>.onParentalBond,
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .resistsFortKnox = TRUE,
