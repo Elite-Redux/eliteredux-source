@@ -644,8 +644,8 @@ constexpr Ability Impl<ABILITY_SAND_VEIL> = {
 ON_EITHER(Static) {
     CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanBeParalyzed(battler, opponent))
-    CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-    CHECK(Random() % 100 < 30)
+    int chance = IsMoveMakingContact(move, gBattlerAttacker) ? 30 : 10;
+    CHECK(Random() % 100 < chance)
 
     AbilityStatusEffectSafe(MOVE_EFFECT_PARALYSIS, battler, opponent);
     return TRUE;
@@ -1147,6 +1147,15 @@ constexpr Ability Impl<ABILITY_THICK_FAT> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.5);
+        },
+    .breakable = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_HEAVY_METAL> = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_GHOST || moveType == TYPE_DARK) RESISTANCE(.5);
         },
     .breakable = TRUE,
 };
@@ -4668,11 +4677,6 @@ constexpr Ability Impl<ABILITY_POWER_CORE> = {
 };
 
 template <>
-constexpr Ability Impl<ABILITY_POWER_CORE> = {
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF] += 20; },
-};
-
-template <>
 constexpr Ability Impl<ABILITY_SIGHTING_SYSTEM> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority { return ACCURACY_HITS_IF_POSSIBLE; },
     .onPriority = +[](ON_PRIORITY) -> int {
@@ -6545,7 +6549,6 @@ template <>
 constexpr Ability Impl<ABILITY_PURE_LOVE> = {
     .onAttacker = +[](ON_ATTACKER) -> int { return PureLoveOnAttacker(DELEGATE_ATTACKER) | Impl<ABILITY_CUTE_CHARM>.onAttacker(DELEGATE_ATTACKER); },
     .onDefender = Impl<ABILITY_CUTE_CHARM>.onDefender,
-    .canInfatuateAny = TRUE,
 };
 
 template <>
@@ -7847,7 +7850,6 @@ constexpr Ability Impl<ABILITY_BEAUTIFUL_MUSIC> = {
 
         return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
     },
-    .canInfatuateAny = TRUE,
 };
 
 template <>
@@ -10969,9 +10971,11 @@ constexpr Ability Impl<ABILITY_DEPTH_EXPLORER> = {
 
 template <>
 constexpr Ability Impl<ABILITY_DUNE_VEIL> = {
-    .onImmune = Impl<ABILITY_SAND_GUARD>.onImmune,
     .onEndTurn = Impl<ABILITY_SELF_SUFFICIENT>.onEndTurn,
-    .onDefensiveMultiplier = Impl<ABILITY_SAND_GUARD>.onDefensiveMultiplier,
+    .onStatusImmune  = Impl<ABILITY_DESERT_CLOAK>.onStatusImmune,
+    .onBlockStatDrops  = Impl<ABILITY_DESERT_CLOAK>.onBlockStatDrops,
+    .onStatusImmuneFor  = Impl<ABILITY_DESERT_CLOAK>.onStatusImmuneFor,
+    .onBlockStatDropsFor  = Impl<ABILITY_DESERT_CLOAK>.onBlockStatDropsFor,
     .breakable = TRUE,
     .sandImmune = TRUE,
 };
