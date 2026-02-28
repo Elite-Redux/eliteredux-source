@@ -11121,15 +11121,18 @@ static void Cmd_healpartystatus(void) {
             u8 abilityNum = GetMonData(&party[i], MON_DATA_ABILITY_NUM);
 
             if (species != SPECIES_NONE && species != SPECIES_EGG) {
-                u16 healMon;
+                u16 healMon = FALSE;
 
                 if (gBattlerPartyIndexes[gBattlerAttacker] == i || gBattlerPartyIndexes[BATTLE_PARTNER(gBattlerAttacker)] == i) {
                     healMon = !IsSoundproof(i);
                 } else {
-                    AbilityEnum ability = GetAbilityBySpecies(species, abilityNum);
-                    healMon = ability != ABILITY_SOUNDPROOF && ability != ABILITY_NOISE_CANCEL && ability != ABILITY_PARROTING &&
-                              !MonHasInnate(&party[i], ABILITY_SOUNDPROOF, FALSE) && !MonHasInnate(&party[i], ABILITY_NOISE_CANCEL, FALSE) &&
-                              !MonHasInnate(&party[i], ABILITY_PARROTING, FALSE);
+                    if (!gAbilities[GetAbilityBySpecies(species, abilityNum)].isSoundproof) {
+                        int j;
+                        for (j = 0; j < NUM_INNATE_PER_SPECIES; j++) {
+                            REQUIRE_NOT(gAbilities[GetMonInnate(&party[i], j, FALSE)].isSoundproof)
+                        }
+                        healMon = j == NUM_INNATE_PER_SPECIES;
+                    }
                 }
 
                 if (healMon) toHeal |= (1 << i);

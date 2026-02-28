@@ -2819,7 +2819,7 @@ template <>
 constexpr Ability Impl<ABILITY_LONG_REACH> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (IS_MOVE_PHYSICAL(move) && !gBattleMoves[move].contact) MUL(1.2);
+            if (IS_MOVE_PHYSICAL(move)) MUL(1.2);
         },
 };
 
@@ -6897,7 +6897,6 @@ constexpr Ability Impl<ABILITY_PARROTING> = {
         return UseOutOfTurnAttack(battler, target, ability, move, 0);
     },
     .breakable = TRUE,
-    .isSoundproof = TRUE,
 };
 
 template <>
@@ -10972,10 +10971,10 @@ constexpr Ability Impl<ABILITY_DEPTH_EXPLORER> = {
 template <>
 constexpr Ability Impl<ABILITY_DUNE_VEIL> = {
     .onEndTurn = Impl<ABILITY_SELF_SUFFICIENT>.onEndTurn,
-    .onStatusImmune  = Impl<ABILITY_DESERT_CLOAK>.onStatusImmune,
-    .onBlockStatDrops  = Impl<ABILITY_DESERT_CLOAK>.onBlockStatDrops,
-    .onStatusImmuneFor  = Impl<ABILITY_DESERT_CLOAK>.onStatusImmuneFor,
-    .onBlockStatDropsFor  = Impl<ABILITY_DESERT_CLOAK>.onBlockStatDropsFor,
+    .onStatusImmune = Impl<ABILITY_DESERT_CLOAK>.onStatusImmune,
+    .onBlockStatDrops = Impl<ABILITY_DESERT_CLOAK>.onBlockStatDrops,
+    .onStatusImmuneFor = Impl<ABILITY_DESERT_CLOAK>.onStatusImmuneFor,
+    .onBlockStatDropsFor = Impl<ABILITY_DESERT_CLOAK>.onBlockStatDropsFor,
     .breakable = TRUE,
     .sandImmune = TRUE,
 };
@@ -11873,10 +11872,10 @@ constexpr Ability Impl<ABILITY_LUCHA_LIBRE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_FIRE_RULER> = {
-    .onAttacker = Impl<ABILITY_FLAME_BODY>.onAttacker,
-    .onDefender = Impl<ABILITY_FLAME_BODY>.onDefender,
+    .onDefensiveMultiplier = Impl<ABILITY_FLAME_SHIELD>.onDefensiveMultiplier,
     .onStatLowered = Impl<ABILITY_KINGS_WRATH>.onStatLowered,
     .onStatLoweredFor = APPLY_ON_ALLY,
+    .breakable = TRUE,
 };
 
 template <>

@@ -1286,17 +1286,9 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
                     score -= 10;
                 }
             } else {
-                if (CountUsablePartyMons(battlerAtk) == 0 &&
-                    (!BattlerHasAbility(battlerAtk, ABILITY_SOUNDPROOF, TRUE) || !BattlerHasAbility(battlerAtk, ABILITY_NOISE_CANCEL, TRUE) ||
-                     !BattlerHasAbility(battlerAtk, ABILITY_PARROTING, TRUE)) &&
-                    CountUsablePartyMons(battlerDef) >= 1)
-                    score -= 10;
+                if (CountUsablePartyMons(battlerAtk) == 0 && (!IsSoundproof(battlerAtk)) && CountUsablePartyMons(battlerDef) >= 1) score -= 10;
 
-                if (gStatuses3[FOE(battlerAtk)] & STATUS3_PERISH_SONG || BattlerHasAbility(FOE(battlerAtk), ABILITY_SOUNDPROOF, TRUE) ||
-                    BattlerHasAbility(FOE(battlerAtk), ABILITY_NOISE_CANCEL, TRUE) ||
-                    BattlerHasAbility(BATTLE_PARTNER(FOE(battlerAtk)), ABILITY_NOISE_CANCEL, TRUE) ||
-                    BattlerHasAbility(FOE(battlerAtk), ABILITY_PARROTING, TRUE))
-                    score -= 10;
+                if (gStatuses3[FOE(battlerAtk)] & STATUS3_PERISH_SONG || IsSoundproof(FOE(battlerAtk))) score -= 10;
             }
             break;
         case EFFECT_SANDSTORM:

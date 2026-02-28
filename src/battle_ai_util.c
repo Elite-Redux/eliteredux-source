@@ -2176,11 +2176,14 @@ bool32 AnyPartyMemberStatused(u8 battlerId, bool32 checkSoundproof) {
         party = gEnemyParty;
 
     for (i = 0; i < PARTY_SIZE; i++) {
-        if (checkSoundproof && GetMonAbility(&party[i]) == ABILITY_SOUNDPROOF) continue;
-
-        if (checkSoundproof && GetMonAbility(&party[i]) == ABILITY_NOISE_CANCEL) continue;
-
-        if (checkSoundproof && GetMonAbility(&party[i]) == ABILITY_PARROTING) continue;
+        if (checkSoundproof) {
+            if (gAbilities[GetMonAbility(&party[i])].isSoundproof) continue;
+            int j;
+            for (j = 0; j < NUM_INNATE_PER_SPECIES; j++) {
+                if (gAbilities[GetMonInnate(&party[i], j, FALSE)].isSoundproof) break;
+            }
+            if (j < NUM_INNATE_PER_SPECIES) continue;
+        }
 
         if (GetMonData(&party[i], MON_DATA_STATUS) != STATUS1_NONE) return TRUE;
     }
