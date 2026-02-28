@@ -6540,7 +6540,6 @@ template <>
 constexpr Ability Impl<ABILITY_PURE_LOVE> = {
     .onAttacker = +[](ON_ATTACKER) -> int { return PureLoveOnAttacker(DELEGATE_ATTACKER) | Impl<ABILITY_CUTE_CHARM>.onAttacker(DELEGATE_ATTACKER); },
     .onDefender = Impl<ABILITY_CUTE_CHARM>.onDefender,
-    .canInfatuateAny = TRUE,
 };
 
 template <>
@@ -7842,7 +7841,6 @@ constexpr Ability Impl<ABILITY_BEAUTIFUL_MUSIC> = {
 
         return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
     },
-    .canInfatuateAny = TRUE,
 };
 
 template <>

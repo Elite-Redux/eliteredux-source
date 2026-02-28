@@ -263,7 +263,6 @@ typedef struct Ability {
     u16 unnerve:1;
     u16 negatesBurnAtkDrop:1;
     u16 negatesFrzSpatkDrop:1;
-    u16 canInfatuateAny:1;
     u16 removesStatusOnImmunity:1;
     u16 tauntImmune:1;
     u16 shadowTag:1;

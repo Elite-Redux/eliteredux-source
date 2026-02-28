@@ -5102,15 +5102,7 @@ int CanInfatuate(u8 battlerAtk, u8 battlerDef) {
 
     if (IsMyceliumMightActive(battlerAtk)) return TRUE;
     if (IsAbilityStatusProtected(battlerDef, CHECK_INFATUATE)) return FALSE;
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PURE_LOVE)) return TRUE;
-
-    genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[battlerAtk].species, gBattleMons[battlerAtk].personality);
-    genderDef = GetGenderFromSpeciesAndPersonality(gBattleMons[battlerDef].species, gBattleMons[battlerDef].personality);
-
-    if (genderAtk == MON_GENDERLESS) return FALSE;
-    if (genderDef == MON_GENDERLESS) return FALSE;
-    return genderAtk != genderDef;
+    return TRUE;
 }
 
 // second argument is 1/X of current hp compared to max hp
