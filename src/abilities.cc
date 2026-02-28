@@ -11558,8 +11558,8 @@ constexpr Ability Impl<ABILITY_LEPIDOPTERAN> = {
 template <>
 constexpr Ability Impl<ABILITY_BREAK_IT_DOWN> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_DANCE))
-        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
+        CHECK(gBattleMoves[move].power)
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
         return UseAttackerFollowUpMove(battler, target, ability, MOVE_RAPID_SPIN, 20);
     },
