@@ -11817,8 +11817,7 @@ BattleScript_Pickpocket::
 	saveattackerandtargetto34
 	copybyte gBattlerAttacker, gStackBattler1
 	copybyte gBattlerTarget, gStackBattler2
-	jumpifability BS_TARGET, ABILITY_STICKY_HOLD, BattleScript_PickpocketPrevented
-	jumpifability BS_TARGET, ABILITY_SUPERSWEET_SYRUP, BattleScript_PickpocketPrevented
+	jumpifabilityflag BS_TARGET, ABILITY_STICKY_HOLD, BattleScript_PickpocketPrevented
 	copybyte gEffectBattler, gBattlerTarget
 	call BattleScript_ItemSteal
 	activateitemeffects BS_ATTACKER

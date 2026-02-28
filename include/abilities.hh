@@ -83,7 +83,7 @@ typedef AccuracyPriority (*AbilityOnAccuracyHandler)(AbilityEnum ability, u8 bat
 typedef int (*AbilityOnSwapSplitHandler)(u8 battler, MoveEnum move, Type moveType);
 typedef void (*AbilityOnChooseOffensiveStat)(
     u8 battler, MoveEnum move, int ignoreOffensiveStatDrops, u8 targetUnaware, u8* atkStatToUse, u8 secondaryAtkStatToUse[NUM_STATS]);
-typedef int (*AbilityOnChooseDefensiveStat)(u8 battler, u8 target, MoveEnum move, int ignoreDefensiveStatBoosts, u8 battlerUnaware);
+typedef void (*AbilityOnChooseDefensiveStat)(u8 battler, u8 target, MoveEnum move, int ignoreDefensiveStatBoosts, u8 battlerUnaware, u8* defStatToUse, u8 secondaryDefStatToUse[NUM_STATS]);
 typedef int (*AbilityOnStab)(Type moveType);
 typedef int (*AbilityOnPriority)(u8 battler, u8 target, MoveEnum move);
 typedef int (*AbilityOnMoveType)(AbilityEnum ability, MoveEnum move, Type moveType, u8* ateBoost);
@@ -286,6 +286,7 @@ typedef struct Ability {
     u16 ripen:1;
     u16 tectonizeImmunities:1;
     u16 pollinateImmunities:1;
+    u16 stickyHold:1;
 } Ability;
 
 #ifdef __cplusplus

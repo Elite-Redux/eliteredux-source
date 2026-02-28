@@ -7480,6 +7480,7 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
     u8 noPositiveStatStages = isCrit || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED ||
                               (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BattlerHasAbility(battlerAtk, ABILITY_GRIP_PINCER, FALSE));
     u8 isUnaware = IsUnaware(battlerAtk);
+    u8 secondaryDefStats[NUM_STATS] = {0};
 
     for (int i = 0; i < gBattlersCount && !defStatToUse; i++) {
         int abilityBattler = (battlerAtk + i) % gBattlersCount;
@@ -7489,8 +7490,7 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
                    FALSE,
                    gAbilities[ability].onChooseDefensiveStat &&
                        IsTargettedApplyOnFlagAppropriate(battlerAtk, abilityBattler, battlerAtk, battlerDef, gAbilities[ability].onChooseDefensiveStatFor),
-                   defStatToUse = gAbilities[ability].onChooseDefensiveStat(battlerAtk, battlerDef, move, noPositiveStatStages, isUnaware);
-                   if (!defStatToUse) break)
+                   gAbilities[ability].onChooseDefensiveStat(battlerAtk, battlerDef, move, noPositiveStatStages, isUnaware, &defStatToUse, secondaryDefStats))
     }
 
     if (!defStatToUse) {
@@ -7504,7 +7504,7 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
         }
     }
 
-    u32 defStat = CalculateStat(battlerDef, defStatToUse, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
+    u32 defStat = CalculateStat(battlerDef, defStatToUse, secondaryDefStats, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
 
     // apply defense stat modifiers
     u16 modifier = UQ_4_12(1.0);

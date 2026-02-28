@@ -115,8 +115,10 @@ ENUM_ADD(Type)
 #define ON_CHOOSE_OFFENSIVE_STAT \
     opt u8 battler, opt MoveEnum move, opt int ignoreOffensiveStatDrops, opt u8 targetUnaware, opt u8 *atkStatToUse, opt u8 secondaryAtkStatToUse[NUM_STATS]
 #define DELEGATE_CHOOSE_OFFENSIVE_STAT battler, move, ignoreOffensiveStatDrops, targetUnaware, atkStatToUse, secondaryAtkStatToUse
-#define ON_CHOOSE_DEFENSIVE_STAT opt u8 battler, opt u8 target, opt MoveEnum move, opt int ignoreDefensiveStatBoosts, opt u8 battlerUnaware
-#define DELEGATE_CHOOSE_DEFENSIVE_STAT battler, target, move, ignoreDefensiveStatBoosts, battlerUnaware
+#define ON_CHOOSE_DEFENSIVE_STAT                                                                                                      \
+    opt u8 battler, opt u8 target, opt MoveEnum move, opt int ignoreDefensiveStatBoosts, opt u8 battlerUnaware, opt u8 *defStatToUse, \
+        opt u8 secondaryDefStatToUse[NUM_STATS]
+#define DELEGATE_CHOOSE_DEFENSIVE_STAT battler, target, move, ignoreDefensiveStatBoosts, battlerUnaware, defStatToUse, secondaryDefStatToUse
 #define ON_STAB opt Type moveType
 #define DELEGATE_STAB moveType
 #define ON_PRIORITY opt u8 battler, opt u8 target, opt MoveEnum move
@@ -1297,6 +1299,7 @@ constexpr Ability Impl<ABILITY_FORECAST> = {
 template <>
 constexpr Ability Impl<ABILITY_STICKY_HOLD> = {
     .breakable = TRUE,
+    .stickyHold = TRUE,
 };
 
 template <>
@@ -1433,10 +1436,10 @@ constexpr Ability Impl<ABILITY_AIR_LOCK> = {
 
 template <>
 constexpr Ability Impl<ABILITY_TANGLED_FEET> = {
-    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(gBattleMons[battler].status2 & STATUS2_CONFUSION)
-        return STAT_SPEED;
-    },
+    .onChooseDefensiveStat =
+        +[](ON_CHOOSE_DEFENSIVE_STAT) {
+            if (gBattleMons[battler].status2 & STATUS2_CONFUSION) *defStatToUse = STAT_SPEED;
+        },
 };
 
 template <>
@@ -2514,6 +2517,13 @@ constexpr Ability Impl<ABILITY_GOOEY> = {
         gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
         return TRUE;
     },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_SLIME_MOLD> = {
+    .onDefender = Impl<ABILITY_GOOEY>.onDefender,
+    .breakable = TRUE,
+    .stickyHold = TRUE,
 };
 
 template <>
@@ -3697,10 +3707,10 @@ constexpr Ability Impl<ABILITY_PRISM_SCALES> = {
 template <>
 constexpr Ability Impl<ABILITY_POWER_FISTS> = {
     .onOffensiveMultiplier = Impl<ABILITY_IRON_FIST>.onOffensiveMultiplier,
-    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(IsIronFistBoosted(battler, move))
-        return STAT_SPDEF;
-    },
+    .onChooseDefensiveStat =
+        +[](ON_CHOOSE_DEFENSIVE_STAT) {
+            if (IsIronFistBoosted(battler, move)) *defStatToUse = STAT_SPDEF;
+        },
 };
 
 template <>
@@ -3803,17 +3813,16 @@ constexpr Ability Impl<ABILITY_CHRISTMAS_SPIRIT> = {
 
 template <>
 constexpr Ability Impl<ABILITY_EXPLOIT_WEAKNESS> = {
-    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(HasAnyStatusOrAbility(target))
-        u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
-        u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
-        if (def < spDef)
-            return STAT_DEF;
-        else if (spDef < def)
-            return STAT_SPDEF;
-        else
-            return 0;
-    },
+    .onChooseDefensiveStat =
+        +[](ON_CHOOSE_DEFENSIVE_STAT) {
+            if (!HasAnyStatusOrAbility(target)) return;
+            u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+            u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+            if (def < spDef)
+                *defStatToUse = STAT_DEF;
+            else if (spDef < def)
+                *defStatToUse = STAT_SPDEF;
+        },
 };
 
 template <>
@@ -4368,6 +4377,15 @@ constexpr Ability Impl<ABILITY_RAW_WOOD> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_SMOLDERING_WOOD> = {
+    .onAttacker = Impl<ABILITY_FLAME_BODY>.onAttacker,
+    .onDefender = Impl<ABILITY_FLAME_BODY>.onDefender,
+    .onOffensiveMultiplier = Impl<ABILITY_RAW_WOOD>.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_RAW_WOOD>.onDefensiveMultiplier,
+    .breakable = TRUE,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_SOLENOGLYPHS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitEffect(target))
@@ -4650,6 +4668,11 @@ constexpr Ability Impl<ABILITY_POWER_CORE> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_POWER_CORE> = {
+    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF] += 20; },
+};
+
+template <>
 constexpr Ability Impl<ABILITY_SIGHTING_SYSTEM> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority { return ACCURACY_HITS_IF_POSSIBLE; },
     .onPriority = +[](ON_PRIORITY) -> int {
@@ -4774,17 +4797,16 @@ constexpr Ability Impl<ABILITY_DEADEYE> = {
         CHECK(IsMegaLauncherBoosted(battler, move) || gBattleMoves[move].arrowBased)
         return ACCURACY_HITS_IF_POSSIBLE;
     },
-    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(gIsCriticalHit)
-        u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
-        u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
-        if (def < spDef)
-            return STAT_DEF;
-        else if (spDef < def)
-            return STAT_SPDEF;
-        else
-            return 0;
-    },
+    .onChooseDefensiveStat =
+        +[](ON_CHOOSE_DEFENSIVE_STAT) {
+            if (!gIsCriticalHit) return;
+            u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+            u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+            if (def < spDef)
+                *defStatToUse = STAT_DEF;
+            else if (spDef < def)
+                *defStatToUse = STAT_SPDEF;
+        },
 };
 
 template <>
@@ -5068,17 +5090,16 @@ constexpr Ability Impl<ABILITY_ROUNDHOUSE> = {
         CHECK(IsStrikerBoosted(battler, move))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
-    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(IsStrikerBoosted(battler, move))
-        u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
-        u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
-        if (def < spDef)
-            return STAT_DEF;
-        else if (spDef < def)
-            return STAT_SPDEF;
-        else
-            return 0;
-    },
+    .onChooseDefensiveStat =
+        +[](ON_CHOOSE_DEFENSIVE_STAT) {
+            if (!IsStrikerBoosted(battler, move)) return;
+            u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+            u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+            if (def < spDef)
+                *defStatToUse = STAT_DEF;
+            else if (spDef < def)
+                *defStatToUse = STAT_SPDEF;
+        },
 };
 
 template <>
@@ -8056,10 +8077,10 @@ constexpr Ability Impl<ABILITY_SOUL_CRUSHER> = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMoves[move].hammerBased) MUL(1.1);
         },
-    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(gBattleMoves[move].hammerBased)
-        return STAT_SPDEF;
-    },
+    .onChooseDefensiveStat =
+        +[](ON_CHOOSE_DEFENSIVE_STAT) {
+            if (gBattleMoves[move].hammerBased) *defStatToUse = STAT_SPDEF;
+        },
 };
 
 template <>
@@ -8954,6 +8975,7 @@ constexpr Ability Impl<ABILITY_SUPERSWEET_SYRUP> = {
         return TRUE;
     },
     .breakable = TRUE,
+    .stickyHold = TRUE,
 };
 
 template <>
@@ -9849,19 +9871,25 @@ constexpr Ability Impl<ABILITY_MALODOR> = {
 
 template <>
 constexpr Ability Impl<ABILITY_BLUR> = {
-    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-        return STAT_SPEED;
-    },
+    .onChooseDefensiveStat =
+        +[](ON_CHOOSE_DEFENSIVE_STAT) {
+            if (IsMoveMakingContact(move, gBattlerAttacker)) *defStatToUse = STAT_SPEED;
+        },
+    .onChooseDefensiveStatFor = APPLY_ON_TARGET,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_SLEEK_SCALES> = {
+    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) { secondaryDefStatToUse[STAT_SPEED] += 15; },
     .onChooseDefensiveStatFor = APPLY_ON_TARGET,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_ELUDE> = {
-    .onChooseDefensiveStat = +[](ON_CHOOSE_DEFENSIVE_STAT) -> int {
-        CHECK_NOT(IsMoveMakingContact(move, gBattlerAttacker))
-        return STAT_SPEED;
-    },
+    .onChooseDefensiveStat =
+        +[](ON_CHOOSE_DEFENSIVE_STAT) {
+            if (!IsMoveMakingContact(move, gBattlerAttacker)) *defStatToUse = STAT_SPEED;
+        },
     .onChooseDefensiveStatFor = APPLY_ON_TARGET,
 };
 
@@ -11182,6 +11210,13 @@ constexpr Ability Impl<ABILITY_DEADLY_PRECISION> = {
 template <>
 constexpr Ability Impl<ABILITY_ROCKY_EXTERIOR> = {
     .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_ROCK); },
+    .addsType = TYPE_ROCK,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_ROCK_ARMOR> = {
+    .onEntry = Impl<ABILITY_ROCKY_EXTERIOR>.onEntry,
+    .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.9); },
     .addsType = TYPE_ROCK,
 };
 

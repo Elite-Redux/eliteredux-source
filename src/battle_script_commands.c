@@ -6709,6 +6709,9 @@ static int CheckAbilityFlag(AbilityEnum actualAbility, AbilityEnum exampleAbilit
             return gAbilities[actualAbility].onInfiltrate &&
                    gAbilities[actualAbility].onInfiltrate(gActiveBattler, gCurrentMove, moveType) & INFILTRATE_SCREENS;
         }
+
+        case ABILITY_STICKY_HOLD:
+            return gAbilities[actualAbility].stickyHold;
     }
 
     return FALSE;
