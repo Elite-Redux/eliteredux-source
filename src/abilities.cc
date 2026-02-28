@@ -1151,6 +1151,15 @@ constexpr Ability Impl<ABILITY_THICK_FAT> = {
     .breakable = TRUE,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_HEAVY_METAL> = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_GHOST || moveType == TYPE_DARK) RESISTANCE(.5);
+        },
+    .breakable = TRUE,
+};
+
 ON_EITHER(FlameBody) {
     CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanBeBurned(opponent))
