@@ -1930,7 +1930,7 @@ static void Task_HandleInput(u8 taskId) {
                 PlaySE(SE_SELECT);
             }
         }
-#if DEBUG_POKEMON_MENU == TRUE
+#ifdef DEBUG_POKEMON_MENU
         else if (JOY_NEW(SELECT_BUTTON)) {
             if (!gMain.inBattle) {
                 sMonSummaryScreen->callback = CB2_Debug_Pokemon;

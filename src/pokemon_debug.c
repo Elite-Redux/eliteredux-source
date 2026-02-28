@@ -40,7 +40,7 @@
 
 #include "constants/items.h"
 
-#if DEBUG_POKEMON_MENU == TRUE
+#ifdef DEBUG_POKEMON_MENU
 extern const struct BattleBackground sBattleTerrainTable[];
 extern const struct CompressedSpriteSheet gSpriteSheet_EnemyShadow;
 extern const struct SpriteTemplate gSpriteTemplate_EnemyShadow;
