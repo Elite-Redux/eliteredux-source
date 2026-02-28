@@ -644,8 +644,8 @@ constexpr Ability Impl<ABILITY_SAND_VEIL> = {
 ON_EITHER(Static) {
     CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(CanBeParalyzed(battler, opponent))
-    CHECK(IsMoveMakingContact(move, gBattlerAttacker))
-    CHECK(Random() % 100 < 30)
+    int chance = IsMoveMakingContact(move, gBattlerAttacker) ? 30 : 10;
+    CHECK(Random() % 100 < chance)
 
     AbilityStatusEffectSafe(MOVE_EFFECT_PARALYSIS, battler, opponent);
     return TRUE;
@@ -4660,11 +4660,6 @@ constexpr Ability Impl<ABILITY_SOLAR_FLARE> = {
     .onMoveType = Impl<ABILITY_IMMOLATE>.onMoveType,
     .onStab = Impl<ABILITY_IMMOLATE>.onStab,
     .chloroplast = TRUE,
-};
-
-template <>
-constexpr Ability Impl<ABILITY_POWER_CORE> = {
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF] += 20; },
 };
 
 template <>
@@ -10969,9 +10964,11 @@ constexpr Ability Impl<ABILITY_DEPTH_EXPLORER> = {
 
 template <>
 constexpr Ability Impl<ABILITY_DUNE_VEIL> = {
-    .onImmune = Impl<ABILITY_SAND_GUARD>.onImmune,
     .onEndTurn = Impl<ABILITY_SELF_SUFFICIENT>.onEndTurn,
-    .onDefensiveMultiplier = Impl<ABILITY_SAND_GUARD>.onDefensiveMultiplier,
+    .onStatusImmune  = Impl<ABILITY_DESERT_CLOAK>.onStatusImmune,
+    .onBlockStatDrops  = Impl<ABILITY_DESERT_CLOAK>.onBlockStatDrops,
+    .onStatusImmuneFor  = Impl<ABILITY_DESERT_CLOAK>.onStatusImmuneFor,
+    .onBlockStatDropsFor  = Impl<ABILITY_DESERT_CLOAK>.onBlockStatDropsFor,
     .breakable = TRUE,
     .sandImmune = TRUE,
 };
