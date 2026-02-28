@@ -2228,7 +2228,7 @@ static void ChangePageTask(u8 taskId) {
     }
 }
 
-static void PopulateAbilities(u16* abilities) {
+static void PopulateAbilities(AbilityEnum* abilities) {
     int isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2;
     SpeciesEnum species = sMonSummaryScreen->summary.species;
     int personality = sMonSummaryScreen->summary.pid;
@@ -2246,7 +2246,7 @@ static void PopulateAbilities(u16* abilities) {
     }
 }
 
-static int HasAbility(AbilityEnum ability, u16* abilities) {
+static int HasAbility(AbilityEnum ability, AbilityEnum* abilities) {
     return abilities[0] == ability || abilities[1] == ability || abilities[2] == ability || abilities[3] == ability;
 }
 
@@ -4479,19 +4479,13 @@ static void PrintExpandedAbilityAndInnates(void) {
 
 #define ABILITY_NAME_COLUMN_SIZE 147
 static void BufferMonPokemonExpandedAbilityAndInnates(void) {
-    struct PokeSummary* sum = &sMonSummaryScreen->summary;
-    // u8 level = sum->level;
     u8 y;
-    // bool8 isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2; //checks if you are looking into the summary screen for the enemy
-    u16 abilityToShow = ABILITY_NONE;
-    // u16 L_Ability = ABILITY_NONE;
-    // u16 R_Ability = ABILITY_NONE;
     u8 offset;
     u8 font = FONT_NORMAL;
     AbilityEnum abilities[4] = {0};
 
     PopulateAbilities(abilities);
-    abilityToShow = abilities[sMonSummaryScreen->currentAbilityIndex];
+    AbilityEnum abilityToShow = abilities[sMonSummaryScreen->currentAbilityIndex];
 
     DynamicPlaceholderTextUtil_Reset();
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, sMemoNatureTextColor);
