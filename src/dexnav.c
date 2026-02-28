@@ -650,7 +650,7 @@ static bool8 DexNavPickTile(u8 environment, u8 areaX, u8 areaY, bool8 smallScan)
             switch (environment) {
                 case ENCOUNTER_TYPE_LAND:
                     if (MetatileBehavior_IsLandWildEncounter(tileBehaviour)) {
-                        if (currMapType == MAP_TYPE_UNDERGROUND) {                                                              // inside (cave)
+                        if (currMapType == MAP_TYPE_UNDERGROUND) {                                                                 // inside (cave)
                             if (IsElevationMismatchAt(gObjectEvents[gPlayerAvatar.spriteId].currentElevation, topX, topY)) break;  // occurs at same z coord
 
                             // Check if it's possible to find a mon there
@@ -3081,15 +3081,12 @@ bool8 canOpenDexnav(void) {
     const struct WildPokemonInfo* rockSmashMonsInfo = gWildMonHeaders[headerId].rockSmashMonsInfo;
     const struct WildPokemonInfo* fishingMonsInfo = gWildMonHeaders[headerId].fishingMonsInfo;
 
-    if(FlagGet(FLAG_NUZLOCKE_MODE_ENABLED)){
-        //Nuzlocke Mode
-        if(NUZLOCKE_MODE_DISABLE_DEXNAV && !GetNuzlockeCaughtFlag(caughtLocation))
-            return FALSE;
-    }
-    else if(isHellMode()){
-        //Hell Mode
-        if(HELL_MODE_DISABLE_DEXNAV && !GetNuzlockeCaughtFlag(caughtLocation))
-            return FALSE;
+    if (FlagGet(FLAG_NUZLOCKE_MODE_ENABLED)) {
+        // Nuzlocke Mode
+        if (NUZLOCKE_MODE_DISABLE_DEXNAV && !GetNuzlockeCaughtFlag(caughtLocation)) return FALSE;
+    } else if (isHellMode()) {
+        // Hell Mode
+        if (HELL_MODE_DISABLE_DEXNAV && !GetNuzlockeCaughtFlag(caughtLocation)) return FALSE;
     }
 
     if (IsRouteDexnavLocked() || !MapHasMons()) return FALSE;
