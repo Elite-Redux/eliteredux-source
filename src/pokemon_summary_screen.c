@@ -4488,20 +4488,10 @@ static void BufferMonPokemonExpandedAbilityAndInnates(void) {
     // u16 R_Ability = ABILITY_NONE;
     u8 offset;
     u8 font = FONT_NORMAL;
-    u16 species = sum->species;
-    u8 abilityNum;
+    AbilityEnum abilities[4] = {0};
 
-    if (!sMonSummaryScreen->isBoxMon)
-        abilityNum = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM);
-    else {
-        struct BoxPokemon* boxMon = sMonSummaryScreen->monList.boxMons;
-        abilityNum = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM);
-    }
-
-    if (sMonSummaryScreen->currentAbilityIndex)
-        abilityToShow = gBaseStats[species].innates[sMonSummaryScreen->currentAbilityIndex - 1];
-    else
-        abilityToShow = gBaseStats[species].abilities[abilityNum];
+    PopulateAbilities(abilities);
+    abilityToShow = abilities[sMonSummaryScreen->currentAbilityIndex];
 
     DynamicPlaceholderTextUtil_Reset();
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, sMemoNatureTextColor);
