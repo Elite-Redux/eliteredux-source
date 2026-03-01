@@ -63,7 +63,7 @@ u8 ScriptGiveMon(SpeciesEnum species, u8 level, u16 item, u32 unused1, u32 unuse
     u8 heldItem[2];
     struct Pokemon mon;
 
-    if(AreNuzlockeRulesEnabled() && !GetNuzlockeCaughtFlag(caughtLocation)){
+    if (AreNuzlockeRulesEnabled() && !GetNuzlockeCaughtFlag(caughtLocation)) {
         SetNuzlockeCaughtFlag(caughtLocation);
         FlagSet(FLAG_TEMP_CAN_CATCH_POKEMON);
     }
@@ -226,7 +226,7 @@ void ReducePlayerPartyToSelectedMons(void) {
     CalculatePlayerPartyCount();
 }
 
-u8 ScriptGiveCustomMon(SpeciesEnum species, u8 level, u16 item, u8 ball, u8 nature, u8 abilityNum, u8 *evs, u8 *ivs, u16 *moves, u8 isShiny) {
+u8 ScriptGiveCustomMon(SpeciesEnum species, u8 level, u16 item, u8 ball, u8 nature, u8 abilityNum, u8* evs, u8* ivs, u16* moves, u8 isShiny) {
     u16 nationalDexNum;
     int sentToPc;
     u8 heldItem[2];
