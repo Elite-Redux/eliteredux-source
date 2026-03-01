@@ -6463,16 +6463,15 @@ bool32 CanParalyzeType(u8 battlerAttacker, u8 battlerTarget) {
 }
 
 bool32 CanUseLastResort(u8 battlerId) {
-    u32 i;
-    u32 knownMovesCount = 0, usedMovesCount = 0;
-
-    for (i = 0; i < 4; i++) {
-        if (gBattleMons[battlerId].moves[i] != MOVE_NONE) knownMovesCount++;
-        if (i != gCurrMovePos && gVolatileStructs[battlerId].usedMoves & gBitTable[i])  // Increment used move count for all moves except current Last Resort.
-            usedMovesCount++;
+    for (int i = 0; i < MAX_MON_MOVES; i++) {
+        // All move slots must be empty, last resort, or have been used
+        MoveEnum move = gBattleMons[battlerId].moves[i];
+        FILTER(move)
+        FILTER(gBattleMoves[move].effect == EFFECT_LAST_RESORT)
+        FILTER(gVolatileStructs[battlerId].usedMoves & (1 << i))
+        return FALSE;
     }
-
-    return (knownMovesCount >= 2 && usedMovesCount >= knownMovesCount - 1);
+    return TRUE;
 }
 
 #define DEFOG_CLEAR(status, structField, battlescript, move)           \
