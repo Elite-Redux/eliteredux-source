@@ -11858,7 +11858,7 @@ BattleScript_RedCardActivates_AfterPrintString::
 	waitmessage B_WAIT_TIME_LONG
 	jumpifstatus3 BS_TARGET, STATUS3_ROOTED, BattleScript_RedCardIngrain
 	jumpifabilityflag BS_TARGET, ABILITY_SUCTION_CUPS, BattleScript_RedCardSuctionCups
-	jumpifstatus4 BS_TARGET, STATUS4_COMMANDED, BattleScript_PrintCommanderCantSwitch
+	jumpifstatus4 BS_TARGET, STATUS4_COMMANDED, BattleScript_RedCardCommander
 	setbyte sSWITCH_CASE, B_SWITCH_RED_CARD
 	forcerandomswitch BattleScript_RedCardEnd
 	@ changes the current battle script. the rest happens in BattleScript_RoarSuccessSwitch_Ret, if switch is successful
