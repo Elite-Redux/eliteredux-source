@@ -10049,13 +10049,6 @@ static void Cmd_forcerandomswitch(void) {
         }
     }
 
-    // Swap battlers for Red Card; ths will switch out the attacker instead of the target
-    if (gBattlescriptCurrInstr[5] == TRUE) {
-        i = gBattlerAttacker;
-        gBattlerAttacker = gBattlerTarget;
-        gBattlerTarget = i;
-    }
-
     // Swapping pokemon happens in:
     // trainer battles
     // wild double battles when an opposing pokemon uses it against one of the two alive player mons
