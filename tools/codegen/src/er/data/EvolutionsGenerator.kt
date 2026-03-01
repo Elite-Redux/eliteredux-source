@@ -17,7 +17,12 @@ object EvolutionsGenerator : Generator {
     private const val EVO_PREFIX = "__sEvoList_"
     private const val FORM_PREFX = "__sFormList_"
 
-    private val INCONSISTENT_GENDER_MONS = setOf(SpeciesEnum.SPECIES_SHEDINJA, SpeciesEnum.SPECIES_MARILL)
+    private val INCONSISTENT_GENDER_MONS =
+        setOf(
+            SpeciesEnum.SPECIES_SHEDINJA,
+            SpeciesEnum.SPECIES_MARILL,
+            SpeciesEnum.SPECIES_MEOWSTIC_MEGA,
+        )
 
     private data class Evo(val method: EvoOrFormType, val condition: String, val to: SpeciesEnum) {
         override fun toString() = "{$method, $condition, $to}"
@@ -41,7 +46,8 @@ object EvolutionsGenerator : Generator {
     override fun generate(writer: OutputStreamWriter) {
 
         val allEvoPairs = SPECIES_LIST.flatMap {
-            it.evoList.filter { evo -> evo.gender == GENDER_NONE && evo.to !in INCONSISTENT_GENDER_MONS }.map { evo -> it.id to evo.to }
+            it.evoList.filter { evo -> evo.gender == GENDER_NONE && evo.to !in INCONSISTENT_GENDER_MONS }
+                .map { evo -> it.id to evo.to }
         } + SPECIES_LIST.flatMap { it.megaList.map { mega -> it.id to mega.from } } + SPECIES_LIST.flatMap { it.primalList.map { primal -> it.id to primal.from } }
 
         val inconsistentGenderEvos =
