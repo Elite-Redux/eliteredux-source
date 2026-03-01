@@ -8090,7 +8090,7 @@ BattleScript_RoarSuccessSwitch::
 	waitstate
 	printstring STRINGID_PKMNWASDRAGGEDOUT
 	switchineffects BS_TARGET
-	jumpifbyte CMP_EQUAL, sSWITCH_CASE, B_SWITCH_RED_CARD, BattleScript_RedCardSuccessSwitch_Ret
+	jumpifbyte CMP_NOT_EQUAL, sSWITCH_CASE, B_SWITCH_RED_CARD, BattleScript_RedCardSuccessSwitch_Ret
 	setbyte sSWITCH_CASE, B_SWITCH_NORMAL
 	end
 
@@ -11860,6 +11860,7 @@ BattleScript_RedCardActivates_AfterPrintString::
 	jumpifabilityflag BS_TARGET, ABILITY_SUCTION_CUPS, BattleScript_RedCardSuctionCups
 	jumpifstatus4 BS_TARGET, STATUS4_COMMANDED, BattleScript_RedCardCommander
 	setbyte sSWITCH_CASE, B_SWITCH_RED_CARD
+	saveattackerandtargetto34
 	forcerandomswitch BattleScript_RedCardEnd
 	@ changes the current battle script. the rest happens in BattleScript_RoarSuccessSwitch_Ret, if switch is successful
 BattleScript_RedCardEnd:
@@ -11885,7 +11886,7 @@ BattleScript_RedCardSuccessSwitch_Ret:
 	@ BS_TARGET restored via switchineffects inclusion of restoreattackerandtargetfrom34
 	removeitem BS_STACK_1
 	setbyte sSWITCH_CASE, B_SWITCH_NORMAL
-	return
+	end
 
 BattleScript_EjectButtonActivates::
 	makevisible BS_ATTACKER
