@@ -4032,6 +4032,7 @@ static void Cmd_playanimation(void) {
 
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     argumentPtr = T2_READ_PTR(gBattlescriptCurrInstr + 3);
+    u16 argument = argumentPtr ? *argumentPtr : 0;
 
 #if B_TERRAIN_BG_CHANGE == FALSE
     if (animId == B_ANIM_RESTORE_BG) {
@@ -4043,7 +4044,7 @@ static void Cmd_playanimation(void) {
 
     if (animId == B_ANIM_STATS_CHANGE || animId == B_ANIM_SNATCH_MOVE || animId == B_ANIM_MEGA_EVOLUTION || animId == B_ANIM_ILLUSION_OFF ||
         animId == B_ANIM_FORM_CHANGE || animId == B_ANIM_SUBSTITUTE_FADE || animId == B_ANIM_PRIMAL_REVERSION) {
-        BtlController_EmitBattleAnimation(0, animId, *argumentPtr);
+        BtlController_EmitBattleAnimation(0, animId, argument);
         MarkBattlerForControllerExec(gActiveBattler);
         gBattlescriptCurrInstr += 7;
     } else if (gHitMarker & HITMARKER_NO_ANIMATIONS && animId != B_ANIM_RESTORE_BG) {
@@ -4051,7 +4052,7 @@ static void Cmd_playanimation(void) {
         gBattlescriptCurrInstr = BattleScript_Pausex20;
     } else if (animId == B_ANIM_RAIN_CONTINUES || animId == B_ANIM_SUN_CONTINUES || animId == B_ANIM_SANDSTORM_CONTINUES || animId == B_ANIM_HAIL_CONTINUES ||
                animId == B_ANIM_FOG_CONTINUES) {
-        BtlController_EmitBattleAnimation(0, animId, *argumentPtr);
+        BtlController_EmitBattleAnimation(0, animId, argument);
         MarkBattlerForControllerExec(gActiveBattler);
         gBattlescriptCurrInstr += 7;
     } else if (gStatuses3[gActiveBattler] & STATUS3_SEMI_INVULNERABLE) {
@@ -4060,7 +4061,7 @@ static void Cmd_playanimation(void) {
         DrawTerrainTypeBattleBackground();
         gBattlescriptCurrInstr += 7;
     } else {
-        BtlController_EmitBattleAnimation(0, animId, *argumentPtr);
+        BtlController_EmitBattleAnimation(0, animId, argument);
         MarkBattlerForControllerExec(gActiveBattler);
         gBattlescriptCurrInstr += 7;
     }
