@@ -84,7 +84,7 @@ EWRAM_DATA static bool8 sSavingComplete = FALSE;
 EWRAM_DATA static u8 sSaveInfoWindowId = 0;
 EWRAM_DATA static bool8 canSave = TRUE;
 
-#if defined(DEBUG_BUILD) && TX_DEBUG_SYSTEM_PUBLIC == FALSE
+#if defined(DEBUG_BUILD)
 static const u8 sText_SavingVersionNumShort[] = _("v2.65 Beta2 D.");
 #endif
 
@@ -1585,7 +1585,7 @@ static void ShowSaveInfoWindow(void)
 
     // Print difficulty and version number
     yOffset += 16;
-    #if defined(DEBUG_BUILD) && TX_DEBUG_SYSTEM_PUBLIC == FALSE
+    #if defined(DEBUG_BUILD)
     AddTextPrinterParameterized(sSaveInfoWindowId, 1, sText_SavingVersionNumShort, 0, yOffset, 0xFF, NULL);
     #else
     AddTextPrinterParameterized(sSaveInfoWindowId, 1, gText_SavingVersionNum, 0, yOffset, 0xFF, NULL);
