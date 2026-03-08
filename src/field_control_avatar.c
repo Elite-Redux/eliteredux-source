@@ -148,7 +148,7 @@ void FieldGetPlayerInput(struct FieldInput *input, u16 newKeys, u16 heldKeys)
         input->dpadDirection = DIR_EAST;
 	
 	#if B_ENABLE_DEBUG == TRUE && TX_DEBUG_SYSTEM_IN_MENU == FALSE
-    if ((heldKeys & TX_DEBUG_SYSTEM_HELD_KEYS) && input->TX_DEBUG_SYSTEM_TRIGGER_EVENT)
+    if (Debug_IsMenuAccessibleForCurrentSave() && (heldKeys & TX_DEBUG_SYSTEM_HELD_KEYS) && input->TX_DEBUG_SYSTEM_TRIGGER_EVENT)
     {
         input->input_field_1_2 = TRUE;
         input->TX_DEBUG_SYSTEM_TRIGGER_EVENT = FALSE;
@@ -231,7 +231,7 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
         return TRUE;
 	
 	#if B_ENABLE_DEBUG == TRUE && TX_DEBUG_SYSTEM_IN_MENU == FALSE
-    if (input->input_field_1_2)
+    if (Debug_IsMenuAccessibleForCurrentSave() && input->input_field_1_2)
     {
         PlaySE(SE_WIN_OPEN);
         FreezeObjectEvents();
@@ -1095,4 +1095,3 @@ static bool8 EnableAutoRun(void)
     
     return TRUE;
 }
-

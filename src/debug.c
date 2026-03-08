@@ -61,7 +61,7 @@
 #include "constants/weather.h"
 #include "abilities.hh"
 
-#if TX_DEBUG_SYSTEM_ENABLE == TRUE
+#if TX_DEBUG_BUILD_ENABLED == TRUE && TX_DEBUG_SYSTEM_ENABLE == TRUE
 // *******************************
 // Enums
 enum {  // Main
@@ -275,9 +275,15 @@ static void Debug_ShowMenu(void (*HandleInput)(u8), struct ListMenuTemplate LMte
 static void Debug_ShowMenuDynamic(u8 taskId);
 static void Debug_DestroyMenu(u8 taskId);
 static void Debug_DestroyMenu_Full(u8 taskId);
+static struct ListMenuTemplate Debug_GetMainListTemplate(void);
+static struct ListMenuTemplate Debug_GetUtilitiesListTemplate(void);
+static struct ListMenuTemplate Debug_GetGiveListTemplate(void);
+static struct ListMenuTemplate Debug_GetFillListTemplate(void);
 static void DebugAction_Cancel(u8 taskId);
 static void DebugAction_DestroyExtraWindow(u8 taskId);
 static void DebugTask_HandleMenuInput(u8 taskId, void (*HandleInput)(u8));
+static bool8 Debug_IsBlockedSpeciesForCurrentMode(SpeciesEnum species);
+static bool8 Debug_IsBlockedItemForCurrentMode(u16 itemId);
 static void Debug_InitDebugBattleData(void);
 static void Debug_RefreshListMenu(u8 taskId);
 static void Debug_RedrawListMenu(u8 taskId);
@@ -408,6 +414,58 @@ extern u8 PlayersHouse_2F_EventScript_SetWallClock[];
 extern u8 PlayersHouse_2F_EventScript_CheckWallClock[];
 
 #define ABILITY_NAME_LENGTH 20
+#define DEBUG_PUBLIC_DISABLE_FROM_DIFFICULTY DIFFICULTY_HELL
+
+static const SpeciesEnum sDebugPublicBlockedSpecies[] = {
+    SPECIES_ARTICUNO_EX,
+    SPECIES_ARTICUNO_EX_MEGA,
+    SPECIES_MOLTRES_EX,
+    SPECIES_MOLTRES_EX_MEGA,
+    SPECIES_ZAPDOS_EX,
+    SPECIES_ZAPDOS_EX_MEGA,
+    SPECIES_WEAVILE_REDUX,
+    SPECIES_WEAVILE_REDUX_MEGA,
+    SPECIES_CHIEN_PAO_MEGA,
+    SPECIES_BEWEAR_ANGRY,
+    SPECIES_ABOMASNOW_SANTA,
+    SPECIES_DARKRAI_NIGHTMARE,
+    SPECIES_ESPEON_GALAXY,
+    SPECIES_SNORLAX_PRIMAL,
+    SPECIES_VICTINI_PRIMAL,
+    SPECIES_SPECTRIER_CLOUD,
+    SPECIES_MAWILE_REDUX_B,
+    SPECIES_MAWILE_REDUX_B_MEGA,
+    SPECIES_SOLROCK_SYSTEM,
+    SPECIES_RIBOMBEE_REDUX,
+    SPECIES_RIBOMBEE_REDUX_MEGA,
+    SPECIES_MIMIKYU_APEX,
+    SPECIES_MIMIKYU_RAYQUAZA,
+    SPECIES_MIMIKYU_RAYQUAZA_BUSTED,
+    SPECIES_LEDIAN_PARADOX,
+    SPECIES_DRACOVISH_MEGA,
+    SPECIES_FLYGON_REDUX_B,
+    SPECIES_FLYGON_REDUX_B_MEGA,
+    SPECIES_DRAGONITE_DELIVERY,
+    SPECIES_WIGGLYTUFF_APEX,
+    SPECIES_WIGGLYTUFF_PRIMAL,
+    SPECIES_KARTANA_FALLEN,
+    SPECIES_CALYREX_CLOUD_RIDER,
+};
+
+static const u16 sDebugPublicBlockedItems[] = {
+    ITEM_WEAVILEITE_R,
+    ITEM_CHIEN_PAOITE,
+    ITEM_ABOMASITE_S,
+    ITEM_GALACTIC_ORB,
+    ITEM_VICTINI_ORB,
+    ITEM_SNORLAX_ORB,
+    ITEM_MAWILITE_R_B,
+    ITEM_RIBOMBITE_R,
+    ITEM_PHANTOM_METEOR,
+    ITEM_DRACOVISHITE,
+    ITEM_FLYGONITE_R_B,
+    ITEM_WIGGLITUFF_ORB,
+};
 
 // *******************************
 // Maps per map group COPY FROM /include/constants/map_groups.h
@@ -753,6 +811,39 @@ static const struct ListMenuItem sDebugMenu_Items_Sound[] = {
     [DEBUG_SOUND_MENU_ITEM_SE] = {sDebugText_Sound_SE, DEBUG_SOUND_MENU_ITEM_SE},
     [DEBUG_SOUND_MENU_ITEM_MUS] = {sDebugText_Sound_MUS, DEBUG_SOUND_MENU_ITEM_MUS},
 };
+static const struct ListMenuItem sDebugMenu_Items_Main_Public[] = {
+    [0] = {sDebugText_Utilities, DEBUG_MENU_ITEM_UTILITIES},
+    [1] = {sDebugText_Battle, DEBUG_MENU_ITEM_BATTLE},
+    [2] = {sDebugText_Give, DEBUG_MENU_ITEM_GIVE},
+    [3] = {sDebugText_Fill, DEBUG_MENU_ITEM_FILL},
+    [4] = {sDebugText_Sound, DEBUG_MENU_ITEM_SOUND},
+    [5] = {sDebugText_AccessPC, DEBUG_MENU_ITEM_ACCESS_PC},
+    [6] = {sDebugText_Cancel, DEBUG_MENU_ITEM_CANCEL},
+};
+static const struct ListMenuItem sDebugMenu_Items_Utilities_Public[] = {
+    [0] = {sDebugText_Util_ResetRandomizeFlags, DEBUG_UTIL_MENU_RESET_RANDOMIZE_FLAGS},
+    [1] = {sDebugText_Util_ResetParty, DEBUG_UTIL_MENU_RESET_PC_PARTY},
+    [2] = {sDebugText_Util_HealParty, DEBUG_UTIL_MENU_ITEM_HEAL_PARTY},
+    [3] = {sDebugText_Util_PoisonMons, DEBUG_UTIL_MENU_ITEM_POISON_MONS},
+    [4] = {sDebugText_Util_SaveBlockSpace, DEBUG_UTIL_MENU_ITEM_SAVEBLOCK},
+    [5] = {sDebugText_Util_Weather, DEBUG_UTIL_MENU_ITEM_WEATHER},
+    [6] = {sDebugText_Util_CheckWallClock, DEBUG_UTIL_MENU_ITEM_CHECKWALLCLOCK},
+    [7] = {sDebugText_Util_SetWallClock, DEBUG_UTIL_MENU_ITEM_SETWALLCLOCK},
+    [8] = {sDebugText_Util_WatchCredits, DEBUG_UTIL_MENU_ITEM_WATCHCREDITS},
+    [9] = {sDebugText_Util_Trainer_Name, DEBUG_UTIL_MENU_ITEM_TRAINER_NAME},
+    [10] = {sDebugText_Util_Trainer_Gender, DEBUG_UTIL_MENU_ITEM_TRAINER_GENDER},
+    [11] = {sDebugText_Util_Trainer_Id, DEBUG_UTIL_MENU_ITEM_TRAINER_ID},
+    [12] = {sDebugText_Util_Reset_Trainer_Flags, DEBUG_UTIL_MENU_ITEM_RESET_TRAINER_FLAGS},
+};
+static const struct ListMenuItem sDebugMenu_Items_Give_Public[] = {
+    [0] = {sDebugText_Give_GiveItem, DEBUG_GIVE_MENU_ITEM_ITEM_X},
+    [1] = {sDebugText_Give_AllTMs, DEBUG_GIVE_MENU_ITEM_ALLTMS},
+    [2] = {sDebugText_Give_GivePokemonSimple, DEBUG_GIVE_MENU_ITEM_POKEMON_SIMPLE},
+    [3] = {sDebugText_Give_MaxMoney, DEBUG_GIVE_MENU_ITEM_MAX_MONEY},
+    [4] = {sDebugText_Give_MaxCoins, DEBUG_GIVE_MENU_ITEM_MAX_COINS},
+    [5] = {sDebugText_Give_BattlePoints, DEBUG_GIVE_MENU_ITEM_MAX_BATTLE_POINTS},
+    [6] = {sDebugText_Give_DaycareEgg, DEBUG_GIVE_MENU_ITEM_DAYCARE_EGG},
+};
 
 // *******************************
 // Menu Actions
@@ -948,14 +1039,77 @@ static const struct ListMenuTemplate sDebugMenu_ListTemplate_Sound = {
 
 // *******************************
 // Functions universal
+bool8 Debug_IsSystemEnabled(void) { return TRUE; }
+bool8 Debug_IsPublicModeEnabled(void) { return TX_DEBUG_SYSTEM_PUBLIC == TRUE; }
+
+bool8 Debug_IsMenuAccessibleForCurrentSave(void) {
+    if (!Debug_IsPublicModeEnabled()) return TRUE;
+    if (gSaveBlock2Ptr == NULL) return TRUE;
+
+    return gSaveBlock2Ptr->gameDifficulty < DEBUG_PUBLIC_DISABLE_FROM_DIFFICULTY;
+}
+
+static bool8 Debug_IsPublicBlockedSpecies(SpeciesEnum species) {
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sDebugPublicBlockedSpecies); i++) {
+        if (sDebugPublicBlockedSpecies[i] == species) return TRUE;
+    }
+
+    return FALSE;
+}
+
+static bool8 Debug_IsPublicBlockedItem(u16 itemId) {
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sDebugPublicBlockedItems); i++) {
+        if (sDebugPublicBlockedItems[i] == itemId) return TRUE;
+    }
+
+    return FALSE;
+}
+
+static bool8 Debug_IsBlockedSpeciesForCurrentMode(SpeciesEnum species) {
+    return Debug_IsPublicModeEnabled() && Debug_IsPublicBlockedSpecies(species);
+}
+
+static bool8 Debug_IsBlockedItemForCurrentMode(u16 itemId) {
+    return Debug_IsPublicModeEnabled() && Debug_IsPublicBlockedItem(itemId);
+}
+
+static struct ListMenuTemplate Debug_GetMainListTemplate(void) {
+    return Debug_IsPublicModeEnabled() ? (struct ListMenuTemplate){.items = sDebugMenu_Items_Main_Public,
+                                                                   .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
+                                                                   .totalItems = ARRAY_COUNT(sDebugMenu_Items_Main_Public)}
+                                       : sDebugMenu_ListTemplate_Main;
+}
+
+static struct ListMenuTemplate Debug_GetUtilitiesListTemplate(void) {
+    return Debug_IsPublicModeEnabled() ? (struct ListMenuTemplate){.items = sDebugMenu_Items_Utilities_Public,
+                                                                   .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
+                                                                   .totalItems = ARRAY_COUNT(sDebugMenu_Items_Utilities_Public)}
+                                       : sDebugMenu_ListTemplate_Utilities;
+}
+
+static struct ListMenuTemplate Debug_GetGiveListTemplate(void) {
+    return Debug_IsPublicModeEnabled() ? (struct ListMenuTemplate){.items = sDebugMenu_Items_Give_Public,
+                                                                   .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
+                                                                   .totalItems = ARRAY_COUNT(sDebugMenu_Items_Give_Public)}
+                                       : sDebugMenu_ListTemplate_Give;
+}
+
+static struct ListMenuTemplate Debug_GetFillListTemplate(void) { return sDebugMenu_ListTemplate_Fill; }
+
 void Debug_ShowMainMenu(void) {
+    if (!Debug_IsMenuAccessibleForCurrentSave()) return;
+
     sDebugBattleData = AllocZeroed(sizeof(*sDebugBattleData));
     sDebugMenuListData = AllocZeroed(sizeof(*sDebugMenuListData));
     Debug_InitDebugBattleData();
 
-    Debug_ShowMenu(DebugTask_HandleMenuInput_Main, sDebugMenu_ListTemplate_Main);
+    Debug_ShowMenu(DebugTask_HandleMenuInput_Main, Debug_GetMainListTemplate());
 }
-static void Debug_ReShowMainMenu(void) { Debug_ShowMenu(DebugTask_HandleMenuInput_Main, sDebugMenu_ListTemplate_Main); }
+static void Debug_ReShowMainMenu(void) { Debug_ShowMenu(DebugTask_HandleMenuInput_Main, Debug_GetMainListTemplate()); }
 static void Debug_ShowMenu(void (*HandleInput)(u8), struct ListMenuTemplate LMtemplate) {
     struct ListMenuTemplate menuTemplate;
     u8 windowId;
@@ -1464,7 +1618,7 @@ static void DebugTask_HandleMenuInput_Sound(u8 taskId) {
 // Open sub-menus
 static void DebugAction_OpenUtilitiesMenu(u8 taskId) {
     Debug_DestroyMenu(taskId);
-    Debug_ShowMenu(DebugTask_HandleMenuInput_Utilities, sDebugMenu_ListTemplate_Utilities);
+    Debug_ShowMenu(DebugTask_HandleMenuInput_Utilities, Debug_GetUtilitiesListTemplate());
 }
 static void DebugAction_OpenScriptsMenu(u8 taskId) {
     Debug_DestroyMenu(taskId);
@@ -1484,11 +1638,11 @@ static void DebugAction_OpenBattleMenu(u8 taskId) {
 
 static void DebugAction_OpenGiveMenu(u8 taskId) {
     Debug_DestroyMenu(taskId);
-    Debug_ShowMenu(DebugTask_HandleMenuInput_Give, sDebugMenu_ListTemplate_Give);
+    Debug_ShowMenu(DebugTask_HandleMenuInput_Give, Debug_GetGiveListTemplate());
 }
 static void DebugAction_OpenFillMenu(u8 taskId) {
     Debug_DestroyMenu(taskId);
-    Debug_ShowMenu(DebugTask_HandleMenuInput_Fill, sDebugMenu_ListTemplate_Fill);
+    Debug_ShowMenu(DebugTask_HandleMenuInput_Fill, Debug_GetFillListTemplate());
 }
 static void DebugAction_OpenSoundMenu(u8 taskId) {
     Debug_DestroyMenu(taskId);
@@ -2415,10 +2569,12 @@ static void DebugAction_Give_Item_SelectId(u8 taskId) {
         if (gMain.newKeys & DPAD_UP) {
             gTasks[taskId].data[3] += sPowersOfTen[gTasks[taskId].data[4]];
             if (gTasks[taskId].data[3] >= ITEMS_COUNT) gTasks[taskId].data[3] = ITEMS_COUNT - 1;
+            while (Debug_IsBlockedItemForCurrentMode(gTasks[taskId].data[3]) && gTasks[taskId].data[3] < ITEMS_COUNT - 1) gTasks[taskId].data[3]++;
         }
         if (gMain.newKeys & DPAD_DOWN) {
             gTasks[taskId].data[3] -= sPowersOfTen[gTasks[taskId].data[4]];
             if (gTasks[taskId].data[3] < 1) gTasks[taskId].data[3] = 1;
+            while (Debug_IsBlockedItemForCurrentMode(gTasks[taskId].data[3]) && gTasks[taskId].data[3] > 1) gTasks[taskId].data[3]--;
         }
         if (gMain.newKeys & DPAD_LEFT) {
             if (gTasks[taskId].data[4] > 0) gTasks[taskId].data[4] -= 1;
@@ -2444,7 +2600,7 @@ static void DebugAction_Give_Item_SelectId(u8 taskId) {
         gSprites[gTasks[taskId].data[6]].oam.priority = 0;
     }
 
-    if (gMain.newKeys & A_BUTTON) {
+    if ((gMain.newKeys & A_BUTTON) && !Debug_IsBlockedItemForCurrentMode(gTasks[taskId].data[3])) {
         gTasks[taskId].data[5] = gTasks[taskId].data[3];
         gTasks[taskId].data[3] = 1;
         gTasks[taskId].data[4] = 0;
@@ -2499,7 +2655,7 @@ static void DebugAction_Give_Item_SelectQuantity(u8 taskId) {
         DestroySprite(&gSprites[gTasks[taskId].data[6]]);        // Destroy item icon
 
         PlaySE(MUS_OBTAIN_ITEM);
-        AddBagItem(gTasks[taskId].data[5], gTasks[taskId].data[3]);
+        if (!Debug_IsBlockedItemForCurrentMode(gTasks[taskId].data[5])) AddBagItem(gTasks[taskId].data[5], gTasks[taskId].data[3]);
         DebugAction_DestroyExtraWindow(taskId);
     } else if (gMain.newKeys & B_BUTTON) {
         FreeSpriteTilesByTag(ITEM_TAG);                          // Destroy item icon
@@ -2582,6 +2738,11 @@ static void DebugAction_Give_PokemonSimple(u8 taskId) {
 static void DebugAction_Give_PokemonComplex(u8 taskId) {
     u8 windowId;
 
+    if (Debug_IsPublicModeEnabled()) {
+        DebugAction_Give_PokemonSimple(taskId);
+        return;
+    }
+
     // Mon data struct
     sDebugMonData = AllocZeroed(sizeof(struct DebugMonData));
     ResetMonDataStruct(sDebugMonData);
@@ -2630,10 +2791,11 @@ static void DebugAction_Give_Pokemon_SelectId(u8 taskId) {
 
         if (gMain.newKeys & DPAD_UP) {
             gTasks[taskId].data[3] += sPowersOfTen[gTasks[taskId].data[4]];
-            if (isSpeciesPlaceholderMon(gTasks[taskId].data[3])) {
+            if (isSpeciesPlaceholderMon(gTasks[taskId].data[3]) || Debug_IsBlockedSpeciesForCurrentMode(gTasks[taskId].data[3])) {
                 do {
                     gTasks[taskId].data[3]++;
-                } while (isSpeciesPlaceholderMon(gTasks[taskId].data[3]) && gTasks[taskId].data[3] <= NUM_SPECIES);
+                } while ((isSpeciesPlaceholderMon(gTasks[taskId].data[3]) || Debug_IsBlockedSpeciesForCurrentMode(gTasks[taskId].data[3]))
+                         && gTasks[taskId].data[3] <= NUM_SPECIES);
             }
 
             if (gTasks[taskId].data[3] > SPECIES_CELEBI && gTasks[taskId].data[3] < SPECIES_TREECKO) gTasks[taskId].data[3] = SPECIES_TREECKO;
@@ -2641,10 +2803,11 @@ static void DebugAction_Give_Pokemon_SelectId(u8 taskId) {
         }
         if (gMain.newKeys & DPAD_DOWN) {
             gTasks[taskId].data[3] -= sPowersOfTen[gTasks[taskId].data[4]];
-            if (isSpeciesPlaceholderMon(gTasks[taskId].data[3])) {
+            if (isSpeciesPlaceholderMon(gTasks[taskId].data[3]) || Debug_IsBlockedSpeciesForCurrentMode(gTasks[taskId].data[3])) {
                 do {
                     gTasks[taskId].data[3]--;
-                } while (isSpeciesPlaceholderMon(gTasks[taskId].data[3]) && gTasks[taskId].data[3] != SPECIES_NONE);
+                } while ((isSpeciesPlaceholderMon(gTasks[taskId].data[3]) || Debug_IsBlockedSpeciesForCurrentMode(gTasks[taskId].data[3]))
+                         && gTasks[taskId].data[3] != SPECIES_NONE);
             }
 
             if (gTasks[taskId].data[3] < SPECIES_TREECKO && gTasks[taskId].data[3] > SPECIES_CELEBI) gTasks[taskId].data[3] = SPECIES_CELEBI;
@@ -2659,7 +2822,7 @@ static void DebugAction_Give_Pokemon_SelectId(u8 taskId) {
 
         StringCopy(gStringVar2, gText_DigitIndicator[gTasks[taskId].data[4]]);
 
-        if (!isSpeciesPlaceholderMon(gTasks[taskId].data[3]))
+        if (!isSpeciesPlaceholderMon(gTasks[taskId].data[3]) && !Debug_IsBlockedSpeciesForCurrentMode(gTasks[taskId].data[3]))
             StringCopy(gStringVar1, gSpeciesNames[gTasks[taskId].data[3]]);
         else
             StringCopy(gStringVar1, gText_PlaceholderName);
@@ -2672,7 +2835,7 @@ static void DebugAction_Give_Pokemon_SelectId(u8 taskId) {
         FreeAndDestroyMonIconSprite(&gSprites[gTasks[taskId].data[6]]);
         FreeMonIconPalettes();  // Free space for new pallete
 
-        if (!isSpeciesPlaceholderMon(gTasks[taskId].data[3]))
+        if (!isSpeciesPlaceholderMon(gTasks[taskId].data[3]) && !Debug_IsBlockedSpeciesForCurrentMode(gTasks[taskId].data[3]))
             LoadMonIconPalette(gTasks[taskId].data[3]);  // Loads pallete for current mon
         else
             LoadMonIconPalette(SPECIES_NONE);  // Loads pallete for current mon
@@ -2682,7 +2845,7 @@ static void DebugAction_Give_Pokemon_SelectId(u8 taskId) {
             CreateMonIcon(gTasks[taskId].data[3], SpriteCB_MonIcon, DEBUG_NUMBER_ICON_X, DEBUG_NUMBER_ICON_Y, 4, 0, TRUE);  // Create pokemon sprite
 #endif
 #ifdef POKEMON_EXPANSION
-        if (!isSpeciesPlaceholderMon(gTasks[taskId].data[3]))
+        if (!isSpeciesPlaceholderMon(gTasks[taskId].data[3]) && !Debug_IsBlockedSpeciesForCurrentMode(gTasks[taskId].data[3]))
             gTasks[taskId].data[6] =
                 CreateMonIcon(gTasks[taskId].data[3], SpriteCB_MonIcon, DEBUG_NUMBER_ICON_X, DEBUG_NUMBER_ICON_Y, 4, 0);  // Create pokemon sprite
         else
@@ -2691,7 +2854,8 @@ static void DebugAction_Give_Pokemon_SelectId(u8 taskId) {
         gSprites[gTasks[taskId].data[6]].oam.priority = 0;
     }
 
-    if ((gMain.newKeys & A_BUTTON) && !isSpeciesPlaceholderMon(gTasks[taskId].data[3])) {
+    if ((gMain.newKeys & A_BUTTON) && !isSpeciesPlaceholderMon(gTasks[taskId].data[3])
+        && !Debug_IsBlockedSpeciesForCurrentMode(gTasks[taskId].data[3])) {
         sDebugMonData->mon_speciesId = gTasks[taskId].data[3];  // Species ID
         gTasks[taskId].data[3] = 1;
         gTasks[taskId].data[4] = 0;
@@ -2742,7 +2906,8 @@ static void DebugAction_Give_Pokemon_SelectLevel(u8 taskId) {
         FreeAndDestroyMonIconSprite(&gSprites[gTasks[taskId].data[6]]);  // Destroy pokemon sprite
         if (gTasks[taskId].data[5] == 0) {
             PlaySE(MUS_LEVEL_UP);
-            ScriptGiveMon(sDebugMonData->mon_speciesId, gTasks[taskId].data[3], ITEM_NONE, 0, 0, 0);
+            if (!Debug_IsBlockedSpeciesForCurrentMode(sDebugMonData->mon_speciesId))
+                ScriptGiveMon(sDebugMonData->mon_speciesId, gTasks[taskId].data[3], ITEM_NONE, 0, 0, 0);
             Free(sDebugMonData);  // Frees EWRAM of MonData Struct
             DebugAction_DestroyExtraWindow(taskId);
         } else {
@@ -3175,6 +3340,12 @@ static void DebugAction_Give_Pokemon_ComplexCreateMon(u8 taskId)  // https://git
     // Nature
     if (nature == NUM_NATURES || nature == 0xFF) nature = Random() % NUM_NATURES;
 
+    if (Debug_IsBlockedSpeciesForCurrentMode(species)) {
+        Free(sDebugMonData);
+        DebugAction_DestroyExtraWindow(taskId);
+        return;
+    }
+
     CreateMonWithNature(&mon, species, level, 32, nature);
 
     // Shinyness
@@ -3268,7 +3439,15 @@ static void DebugAction_Give_DayCareEgg(u8 taskId) { TriggerPendingDaycareEgg();
 // *******************************
 // Actions Fill
 static void FillPocket(int pocket) {
-    for (u16 item = 0; item < gItemCountsForPocket[pocket - 1]; item++) AddBagItem(gItemsForPocket[pocket - 1][item], 1);
+    u16 item;
+
+    for (item = 0; item < gItemCountsForPocket[pocket - 1]; item++) {
+        u16 itemId = gItemsForPocket[pocket - 1][item];
+
+        if (Debug_IsBlockedItemForCurrentMode(itemId)) continue;
+
+        AddBagItem(itemId, 1);
+    }
 }
 static void DebugAction_Fill_PocketItems(u8 taskId) { FillPocket(POCKET_ITEMS); }
 static void DebugAction_Fill_PocketPokeBalls(u8 taskId) { FillPocket(POCKET_POKE_BALLS); }
@@ -3279,8 +3458,18 @@ static void DebugAction_Fill_PocketBattle(u8 taskId) { FillPocket(POCKET_BATTLE)
 static void DebugAction_Fill_PocketMedicine(u8 taskId) { FillPocket(POCKET_MEDICINE); }
 static void DebugAction_Fill_PocketMegas(u8 taskId) { FillPocket(POCKET_MEGA_STONES); }
 static void DebugAction_Fill_GiveAllItems(u8 taskId) {
-    memset(&gSaveBlock1Ptr->itemFlags, -1, sizeof(gSaveBlock1Ptr->itemFlags));
-    ClearItem(0);
+    u16 itemId;
+
+    if (!Debug_IsPublicModeEnabled()) {
+        memset(&gSaveBlock1Ptr->itemFlags, -1, sizeof(gSaveBlock1Ptr->itemFlags));
+        ClearItem(0);
+        return;
+    }
+
+    for (itemId = 1; itemId < ITEMS_COUNT; itemId++) {
+        if (Debug_IsBlockedItemForCurrentMode(itemId)) continue;
+        AddBagItem(itemId, 1);
+    }
 }
 
 // *******************************
@@ -4342,6 +4531,12 @@ static void DebugAction_FillBox(u8 taskId) {
     u32 personality;
     struct BoxPokemon boxMon;
     u32 i = 1;
+
+    if (Debug_IsPublicModeEnabled()) {
+        Debug_DestroyMenu_Full(taskId);
+        EnableBothScriptContexts();
+        return;
+    }
 
     personality = Random32();
 
