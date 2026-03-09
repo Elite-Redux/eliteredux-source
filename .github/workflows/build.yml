@@ -18,8 +18,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          token: ${{ secrets.CI_SUBMODULE_TOKEN }}
-          submodules: 'recursive'
+          submodules: false
+
+      - name: Fetch submodules
+        run: |
+          git config --global url."https://x-access-token:${{ secrets.CI_SUBMODULE_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git submodule sync --recursive
+          git submodule update --init --recursive --depth 1
 
       - name: Install binutils
         run: sudo apt update && sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi libpng-dev
