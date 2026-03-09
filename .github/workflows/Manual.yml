@@ -19,7 +19,7 @@ jobs:
 
       - name: Fetch submodules
         run: |
-          git config --global url."https://x-access-token:${{ secrets.CI_SUBMODULE_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://darkyy92:${{ secrets.CI_SUBMODULE_TOKEN }}@github.com/".insteadOf "https://github.com/"
           git submodule sync --recursive
           git submodule update --init --recursive --depth 1
 
