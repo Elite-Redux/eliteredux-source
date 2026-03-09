@@ -21,10 +21,16 @@ jobs:
           submodules: false
 
       - name: Fetch submodules
+        env:
+          ER_CONFIG_DEPLOY_KEY: ${{ secrets.ER_CONFIG_DEPLOY_KEY }}
         run: |
-          git config --global url."https://darkyy92:${{ secrets.CI_SUBMODULE_TOKEN }}@github.com/".insteadOf "https://github.com/"
           git submodule sync --recursive
-          git submodule update --init --recursive --depth 1
+          mkdir -p ~/.ssh
+          printf '%s\n' "$ER_CONFIG_DEPLOY_KEY" > ~/.ssh/er_config_ci
+          chmod 600 ~/.ssh/er_config_ci
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config submodule.proto.url git@github.com:Elite-Redux/er-config.git
+          GIT_SSH_COMMAND='ssh -i ~/.ssh/er_config_ci -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes' git submodule update --init --recursive --depth 1
 
       - name: Install binutils
         run: sudo apt update && sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi libpng-dev
