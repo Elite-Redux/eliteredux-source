@@ -625,7 +625,8 @@ struct SaveBlock2 {
     u8 season:2;
     u8 startMenuPaletteNum:3;
     u8 startMenuOptionToOpen:5;  // Space for 31 options
-    u8 filler:3;
+    u8 bossRushMode:1;
+    u8 filler:2;
     u8 start_cursorRowY;
     u8 start_FirstItem;
     u8 damageSliderValue;

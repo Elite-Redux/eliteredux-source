@@ -99,6 +99,7 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->autoRun = FALSE;
     gSaveBlock2Ptr->damageDone = TRUE;
     gSaveBlock2Ptr->shinyrate = 0; //Normal Shiny Rate
+    gSaveBlock2Ptr->bossRushMode = FALSE;
     gSaveBlock2Ptr->optionsWindowFrameType = 0;
     gSaveBlock2Ptr->optionsSound = OPTIONS_SOUND_STEREO;
     gSaveBlock2Ptr->optionsBattleStyle = OPTIONS_BATTLE_STYLE_SET;

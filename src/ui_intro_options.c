@@ -29,6 +29,7 @@
 #include "strings.h"
 #include "task.h"
 #include "text_window.h"
+#include "trainer_see.h"
 #include "overworld.h"
 #include "event_data.h"
 #include "constants/items.h"
@@ -52,6 +53,7 @@
 enum{
     SETTING_DIFFICULTY,
     SETTING_LEVEL_CAP,
+    SETTING_BOSS_RUSH,
     SETTING_RANDOMIZER_MODE,
     SETTING_RANDOMIZER_ABILITY_MODE,
     SETTING_RANDOMIZER_INNATE_MODE,
@@ -184,6 +186,7 @@ static void SaveOptionsData()
     gSaveBlock2Ptr->individualColors        = sMenuDataPtr->temporal_settings[SETTING_INDIVIDUAL_COLORS];
     gSaveBlock2Ptr->moveRandomizedMode      = sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MOVE_MODE];
     gSaveBlock2Ptr->typeRandomizedMode      = sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_TYPE_MODE];
+    SetBossRushEnabled(sMenuDataPtr->temporal_settings[SETTING_BOSS_RUSH]);
     gSaveBlock2Ptr->permanentMegaMode       = sMenuDataPtr->temporal_settings[SETTING_PERMANENT_MEGA_MODE];
     gSaveBlock2Ptr->nuzlockeCaptures        = sMenuDataPtr->temporal_settings[SETTING_NUZLOCKE_CAPTURES];
 }
@@ -209,6 +212,7 @@ static void LoadOptionsData()
     sMenuDataPtr->temporal_settings[SETTING_INDIVIDUAL_COLORS]       = gSaveBlock2Ptr->individualColors;
     sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MOVE_MODE]    = gSaveBlock2Ptr->moveRandomizedMode;
     sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_TYPE_MODE]    = gSaveBlock2Ptr->typeRandomizedMode;
+    sMenuDataPtr->temporal_settings[SETTING_BOSS_RUSH]               = IsBossRushEnabled();
     sMenuDataPtr->temporal_settings[SETTING_PERMANENT_MEGA_MODE]     = gSaveBlock2Ptr->permanentMegaMode;
     sMenuDataPtr->temporal_settings[SETTING_NUZLOCKE_CAPTURES]       = gSaveBlock2Ptr->nuzlockeCaptures;
 }
@@ -501,6 +505,19 @@ const struct OptionData Intro_Options[NUM_INTRO_OPTIONS] = {
             },
         //.numOptions = 4,
         .numOptions = 3,
+    },
+    [SETTING_BOSS_RUSH] =
+    {
+        .title = _("Boss Rush"),
+        .options = {
+            _("Disabled"),
+            _("Enabled"),
+            },
+        .optionDescription = {
+            _("Normal trainer spotting stays active."),
+            _("Normal trainers won't spot you.\nYou can still battle them by talking.\nCan be disabled anytime."),
+            },
+        .numOptions = 2,
     },
     [SETTING_RANDOMIZER_MODE] =
     {

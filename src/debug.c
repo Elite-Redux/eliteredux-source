@@ -38,6 +38,7 @@
 #include "party_menu.h"
 #include "pokedex.h"
 #include "pokemon.h"
+#include "trainer_see.h"
 #include "pokemon_icon.h"
 #include "pokemon_storage_system.h"
 #include "random.h"
@@ -1224,7 +1225,7 @@ static u8 Debug_CheckToggleFlags(u8 id) {
             result = FlagGet(FLAG_SYS_NO_ENCOUNTER);
             break;
         case DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_TRAINER_SEE:
-            result = FlagGet(FLAG_SYS_NO_TRAINER_SEE);
+            result = IsBossRushEnabled();
             break;
         case DEBUG_FLAGVAR_MENU_ITEM_TOGGLE_BAG_USE:
             result = FlagGet(FLAG_SYS_NO_BAG_USE);
@@ -2501,11 +2502,11 @@ static void DebugAction_FlagsVars_EncounterOnOff(u8 taskId) {
     FlagToggle(FLAG_SYS_NO_ENCOUNTER);
 }
 static void DebugAction_FlagsVars_TrainerSeeOnOff(u8 taskId) {
-    if (FlagGet(FLAG_SYS_NO_TRAINER_SEE))
+    if (IsBossRushEnabled())
         PlaySE(SE_PC_OFF);
     else
         PlaySE(SE_PC_LOGIN);
-    FlagToggle(FLAG_SYS_NO_TRAINER_SEE);
+    SetBossRushEnabled(!IsBossRushEnabled());
 }
 static void DebugAction_FlagsVars_BagUseOnOff(u8 taskId) {
     if (FlagGet(FLAG_SYS_NO_BAG_USE))
