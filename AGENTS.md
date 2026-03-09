@@ -7,6 +7,7 @@
 - Treat all existing uncommitted changes as potentially important human or agent work unless explicitly told otherwise.
 - Only stage and commit changes you personally made for the current task, unless the human explicitly asks for something else.
 - Do not include unrelated work from the human or other agents in a commit.
+- When committing, use a concise title plus a commit body with flat bullet points. Prefer end-user wording for player-visible changes; for dev-only commits, use the bullets to explain the technical/internal changes.
 
 ## Repo Skills
 
