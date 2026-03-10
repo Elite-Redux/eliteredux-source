@@ -84,6 +84,10 @@ EWRAM_DATA static bool8 sSavingComplete = FALSE;
 EWRAM_DATA static u8 sSaveInfoWindowId = 0;
 EWRAM_DATA static bool8 canSave = TRUE;
 
+#if defined(DEBUG_BUILD)
+static const u8 sText_SavingVersionNumShort[] = _("v2.65 B2.1 D.");
+#endif
+
 // Menu action callbacks
 static bool8 StartMenuPokedexCallback(void);
 static bool8 StartMenuPokemonCallback(void);
@@ -403,6 +407,7 @@ static void BuildNormalStartMenu(void)
                 AddStartMenuAction(MENU_ACTION_EXIT);
 
             #ifdef DEBUG_BUILD
+            if (!Debug_IsPublicModeEnabled())
                 AddStartMenuAction(MENU_ACTION_UI_TEST);
             #endif
         break;
@@ -431,7 +436,8 @@ static void BuildDebugStartMenu(void)
     //AddStartMenuAction(MENU_ACTION_SAVE);
     AddStartMenuAction(MENU_ACTION_OPTION);
 	AddStartMenuAction(MENU_ACTION_ACCESS_PC);
-    AddStartMenuAction(MENU_ACTION_DEBUG);
+    if (Debug_IsMenuAccessibleForCurrentSave())
+        AddStartMenuAction(MENU_ACTION_DEBUG);
 }
 
 static void BuildSafariZoneStartMenu(void)
@@ -906,6 +912,8 @@ static bool8 StartMenuDebugCallback(void)
     HideStartMenuDebug(); // Hide start menu without enabling movement
 
 	#if TX_DEBUG_SYSTEM_ENABLE == TRUE
+        if (!Debug_IsMenuAccessibleForCurrentSave())
+            return TRUE;
 		FreezeObjectEvents();
 		Debug_ShowMainMenu();
 	#endif
@@ -1577,7 +1585,11 @@ static void ShowSaveInfoWindow(void)
 
     // Print difficulty and version number
     yOffset += 16;
+    #if defined(DEBUG_BUILD)
+    AddTextPrinterParameterized(sSaveInfoWindowId, 1, sText_SavingVersionNumShort, 0, yOffset, 0xFF, NULL);
+    #else
     AddTextPrinterParameterized(sSaveInfoWindowId, 1, gText_SavingVersionNum, 0, yOffset, 0xFF, NULL);
+    #endif
     BufferSaveMenuText(SAVE_MENU_DIFFICULTY, gStringVar4, color);
     xOffset = GetStringRightAlignXOffset(1, gStringVar4, 0x80);
     AddTextPrinterParameterized(sSaveInfoWindowId, 1, gStringVar4, xOffset, yOffset, 0xFF, NULL);

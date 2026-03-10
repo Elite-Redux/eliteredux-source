@@ -17,6 +17,8 @@ extern bool8 gTrainerApproachedPlayer;
 extern u8 gApproachingTrainerId;
 
 bool8 CheckForTrainersWantingBattle(void);
+bool8 IsBossRushEnabled(void);
+void SetBossRushEnabled(bool8 enabled);
 void SetBuriedTrainerMovement(struct ObjectEvent *var);
 void DoTrainerApproach(void);
 void TryPrepareSecondApproachingTrainer(void);

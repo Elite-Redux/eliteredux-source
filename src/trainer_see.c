@@ -190,15 +190,28 @@ static const struct SpriteTemplate sSpriteTemplate_HeartIcon =
 };
 
 // code
+bool8 IsBossRushEnabled(void)
+{
+    return gSaveBlock2Ptr->bossRushMode || FlagGet(FLAG_SYS_NO_TRAINER_SEE);
+}
+
+void SetBossRushEnabled(bool8 enabled)
+{
+    gSaveBlock2Ptr->bossRushMode = enabled;
+
+    if (enabled)
+        FlagSet(FLAG_SYS_NO_TRAINER_SEE);
+    else
+        FlagClear(FLAG_SYS_NO_TRAINER_SEE);
+}
+
 bool8 CheckForTrainersWantingBattle(void)
 {
     u8 i;
     u8 numTrainers = 0;
-	
-	#if TX_DEBUG_SYSTEM_ENABLE == TRUE
-    if (FlagGet(FLAG_SYS_NO_TRAINER_SEE))
+
+    if (IsBossRushEnabled())
         return FALSE;
-	#endif
 
     gNoOfApproachingTrainers = 0;
     gApproachingTrainerId = 0;

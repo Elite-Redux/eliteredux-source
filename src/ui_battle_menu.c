@@ -1560,23 +1560,41 @@ const u8 sText_PrintAbilityTab_Ability[] = _("Ability");
 const u8 sText_PrintAbilityTab_Innate[] = _("Innate");
 #define SPACE_BETWEEN_ABILITY_AND_NAME (8 * 8)
 #define SPACE_BETWEEN_ABILITIES 3
+static void GetBattlerDisplayedAbilities(u8 battlerId, AbilityEnum *abilities) {
+    SpeciesEnum species = gBattleMons[battlerId].species;
+    u32 personality = gBattleMons[battlerId].personality;
+    bool8 isEnemyMon = GetBattlerSide(battlerId) == B_SIDE_OPPONENT;
+    bool8 shouldShowRandomizedWildEnemy = isEnemyMon && !(gBattleTypeFlags & BATTLE_TYPE_TRAINER);
+
+    if (shouldShowRandomizedWildEnemy) {
+        u8 partyIndex = gBattlerPartyIndexes[battlerId];
+        struct Pokemon *enemyMon = &gEnemyParty[partyIndex];
+        species = GetMonData(enemyMon, MON_DATA_SPECIES, NULL);
+        personality = GetMonData(enemyMon, MON_DATA_PERSONALITY, NULL);
+        abilities[0] = GetAbilityBySpecies(species, GetMonData(enemyMon, MON_DATA_ABILITY_NUM, NULL));
+        abilities[0] = RandomizeAbility(abilities[0], species, personality);
+    } else {
+        abilities[0] = gBattleMons[battlerId].abilities[0];
+    }
+
+    if (shouldShowRandomizedWildEnemy || !isEnemyMon) {
+        abilities[1] = RandomizeInnate(gBaseStats[species].innates[0], species, personality);
+        abilities[2] = RandomizeInnate(gBaseStats[species].innates[1], species, personality);
+        abilities[3] = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
+    } else {
+        abilities[1] = gBaseStats[species].innates[0];
+        abilities[2] = gBaseStats[species].innates[1];
+        abilities[3] = gBaseStats[species].innates[2];
+    }
+}
+
 static void PrintAbilityTab() {
     u8 x, y, x2, y2;
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
-    SpeciesEnum species = gBattleMons[sMenuDataPtr->battlerId].species;
-    AbilityEnum innate1 = gBaseStats[species].innates[0];
-    AbilityEnum innate2 = gBaseStats[species].innates[1];
-    AbilityEnum innate3 = gBaseStats[species].innates[2];
-    AbilityEnum ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
-    u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
-    bool8 isEnemyMon = GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_OPPONENT;
+    AbilityEnum abilities[4];
 
-    if (!isEnemyMon) {  // Enemy Mons have disabled randomized innates/abilies
-        innate1 = RandomizeInnate(gBaseStats[species].innates[0], species, personality);
-        innate2 = RandomizeInnate(gBaseStats[species].innates[1], species, personality);
-        innate3 = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
-    }
+    GetBattlerDisplayedAbilities(sMenuDataPtr->battlerId, abilities);
 
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
 
@@ -1606,11 +1624,11 @@ static void PrintAbilityTab() {
                                  0,
                                  sMenuWindowFontColors[FONT_WHITE],
                                  0xFF,
-                                 gAbilities[ability].name);
+                                 gAbilities[abilities[0]].name);
     // Description ---------------------------------------------------------------------------------------------------
     y++;
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[ability].description);
+        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[abilities[0]].description);
 
     // Innate 1
     y = y + SPACE_BETWEEN_ABILITIES;
@@ -1626,11 +1644,11 @@ static void PrintAbilityTab() {
                                  0,
                                  sMenuWindowFontColors[FONT_WHITE],
                                  0xFF,
-                                 gAbilities[innate1].name);
+                                 gAbilities[abilities[1]].name);
     // Description ---------------------------------------------------------------------------------------------------
     y++;
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[innate1].description);
+        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[abilities[1]].description);
 
     // Innate 2
     y = y + SPACE_BETWEEN_ABILITIES;
@@ -1646,11 +1664,11 @@ static void PrintAbilityTab() {
                                  0,
                                  sMenuWindowFontColors[FONT_WHITE],
                                  0xFF,
-                                 gAbilities[innate2].name);
+                                 gAbilities[abilities[2]].name);
     // Description ---------------------------------------------------------------------------------------------------
     y++;
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[innate2].description);
+        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[abilities[2]].description);
 
     // Innate 3
     y = y + SPACE_BETWEEN_ABILITIES;
@@ -1666,11 +1684,11 @@ static void PrintAbilityTab() {
                                  0,
                                  sMenuWindowFontColors[FONT_WHITE],
                                  0xFF,
-                                 gAbilities[innate3].name);
+                                 gAbilities[abilities[3]].name);
     // Description ---------------------------------------------------------------------------------------------------
     y++;
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[innate3].description);
+        windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2 + 4, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[abilities[3]].description);
 
     PutWindowTilemap(windowId);
     CopyWindowToVram(windowId, 3);
@@ -5395,10 +5413,7 @@ static void PrintToWindow(u8 windowId, u8 colorIdx) {
     u8 i, j;
     u8 x, y, x2, y2;
     SpeciesEnum species = gBattleMons[sMenuDataPtr->battlerId].species;
-    AbilityEnum innate1 = gBaseStats[species].innates[0];
-    AbilityEnum innate2 = gBaseStats[species].innates[1];
-    AbilityEnum innate3 = gBaseStats[species].innates[2];
-    u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
+    AbilityEnum abilities[4];
     u8 gender = GetGenderFromSpeciesAndPersonality(gBattleMons[sMenuDataPtr->battlerId].species, gBattleMons[sMenuDataPtr->battlerId].personality);
     u8 statStage;
     bool8 statStageUp = FALSE;
@@ -5406,12 +5421,7 @@ static void PrintToWindow(u8 windowId, u8 colorIdx) {
     MoveEnum move = MOVE_NONE;
 
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
-
-    if (!isEnemyMon) {  // Enemy Mons have disabled randomized innates/abilies
-        innate1 = RandomizeInnate(gBaseStats[species].innates[0], species, personality);
-        innate2 = RandomizeInnate(gBaseStats[species].innates[1], species, personality);
-        innate3 = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
-    }
+    GetBattlerDisplayedAbilities(sMenuDataPtr->battlerId, abilities);
 
     // Title
     x = 7;
@@ -5510,22 +5520,22 @@ static void PrintToWindow(u8 windowId, u8 colorIdx) {
                                  0,
                                  sMenuWindowFontColors[colorIdx],
                                  0xFF,
-                                 gAbilities[gBattleMons[sMenuDataPtr->battlerId].abilities[0]].name);
+                                 gAbilities[abilities[0]].name);
     y++;
     // Innate 1
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, sText_Innate);
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[innate1].name);
+        windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[abilities[1]].name);
     y++;
     // Innate 2
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, sText_Innate);
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[innate2].name);
+        windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[abilities[2]].name);
     y++;
     // Innate 3
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, sText_Innate);
     AddTextPrinterParameterized4(
-        windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[innate3].name);
+        windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilities[abilities[3]].name);
 
     // Moves
     y = y + 2;

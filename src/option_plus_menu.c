@@ -15,6 +15,7 @@
 #include "text_window.h"
 #include "international_string_util.h"
 #include "strings.h"
+#include "trainer_see.h"
 #include "gba/m4a_internal.h"
 #include "constants/rgb.h"
 #include "mgba_printf/mgba.h"
@@ -48,6 +49,7 @@ enum
     MENUITEM_CUSTOM_START_MENU_COLOR,
     MENUITEM_CUSTOM_SHORTCUT_BUTTON,
     MENUITEM_CUSTOM_AUTO_RUN,
+    MENUITEM_CUSTOM_BOSS_RUSH,
     MENUITEM_CUSTOM_DAMAGE_SLIDER,
     //MENUITEM_CUSTOM_PERMANENT_REPEL,
     MENUITEM_CUSTOM_DISPLAY_DAMAGE,
@@ -260,6 +262,7 @@ static struct // MENU_CUSTOM
     [MENUITEM_CUSTOM_SHINY_RATE]          = {DrawChoices_ShinyRate,                ProcessInput_Options_Three},
     [MENUITEM_CUSTOM_INDIVIDUAL_COLORS]   = {DrawChoices_AskForNickname,           ProcessInput_Options_Two},
     [MENUITEM_CUSTOM_DOUBLE_BATTLE_MODE]  = {DrawChoices_DoubleBattleMode,         ProcessInput_Options_Two},
+    [MENUITEM_CUSTOM_BOSS_RUSH]           = {DrawChoices_EnableDisableCustom,      ProcessInput_Options_Two},
     [MENUITEM_CUSTOM_AUTOMATIC_EVGAIN]    = {DrawChoices_EnableDisableCustom,      ProcessInput_Options_Two},
     [MENUITEM_CUSTOM_AUTOMATIC_EXPGAIN]   = {DrawChoices_EnableDisableCustom,      ProcessInput_Options_Two},
     [MENUITEM_CUSTOM_AUTOMATIC_EVOLUTION] = {DrawChoices_EnableDisableCustom,      ProcessInput_Options_Two},
@@ -286,6 +289,7 @@ static const u8 sText_ShinyRate[]        = _("Shiny Rate");
 static const u8 sText_IndividualColors[] = _("Individual Colors");
 static const u8 sText_SandboxMode[]      = _("Sandbox Mode");
 static const u8 sText_DoubleBattleMode[] = _("Double Battles");
+static const u8 sText_BossRush[]         = _("Boss Rush");
 static const u8 sText_AutomaticEvGain[]  = _("Auto Ev Gain");
 static const u8 sText_AutomaticExpGain[] = _("Auto Exp Gain");
 static const u8 sText_AutomaticEvo[]     = _("Auto Evolution");
@@ -326,6 +330,7 @@ static const u8 *const sOptionMenuItemsNamesCustom[MENUITEM_CUSTOM_COUNT] =
     [MENUITEM_CUSTOM_SHINY_RATE]          = sText_ShinyRate,
     [MENUITEM_CUSTOM_INDIVIDUAL_COLORS]   = sText_IndividualColors,
     [MENUITEM_CUSTOM_DOUBLE_BATTLE_MODE]  = sText_DoubleBattleMode,
+    [MENUITEM_CUSTOM_BOSS_RUSH]           = sText_BossRush,
     [MENUITEM_CUSTOM_AUTOMATIC_EVGAIN]    = sText_AutomaticEvGain,
     [MENUITEM_CUSTOM_AUTOMATIC_EXPGAIN]   = sText_AutomaticExpGain,
     [MENUITEM_CUSTOM_AUTOMATIC_EVOLUTION] = sText_AutomaticEvo,
@@ -382,6 +387,7 @@ static bool8 CheckConditions(int selection)
         case MENUITEM_CUSTOM_SHINY_RATE:          return TRUE;
         case MENUITEM_CUSTOM_INDIVIDUAL_COLORS:   return TRUE;
         case MENUITEM_CUSTOM_DOUBLE_BATTLE_MODE:  return TRUE;
+        case MENUITEM_CUSTOM_BOSS_RUSH:           return TRUE;
         case MENUITEM_CUSTOM_AUTOMATIC_EVGAIN:    return TRUE;
         case MENUITEM_CUSTOM_AUTOMATIC_EXPGAIN:   return TRUE;
         case MENUITEM_CUSTOM_AUTOMATIC_EVOLUTION: return TRUE;
@@ -475,6 +481,8 @@ static const u8 sText_Desc_OverworldCallsOn[]      = _("TRAINERs will be able to
 static const u8 sText_Desc_OverworldCallsOff[]     = _("You will not receive calls.\nSpecial events will still occur.");
 static const u8 sText_Desc_DoubleBattleMode_On[]   = _("Enable Double Battle Mode.");
 static const u8 sText_Desc_DoubleBattleMode_Off[]  = _("Disable Double Battle Mode.");
+static const u8 sText_Desc_BossRush_On[]           = _("Trainers won't auto-spot you.\nTalk to battle. Toggle anytime.");
+static const u8 sText_Desc_BossRush_Off[]          = _("Normal trainer aggro is on.\nToggle anytime to skip it.");
 
 static const u8 sText_Desc_AutomaticEvGain_On[]     = _("Pokémon will gain Evs in battle\ndepending on the defeated foe.");
 static const u8 sText_Desc_AutomaticEvGain_Off[]    = _("Pokémon will not gain any Evs, only\nusing the summary screen.");
@@ -505,6 +513,7 @@ static const u8 *const sOptionMenuItemDescriptionsCustom[MENUITEM_CUSTOM_COUNT][
     [MENUITEM_CUSTOM_SHINY_RATE]          = {sText_Desc_Shiny_Rate,             sText_Empty},
     [MENUITEM_CUSTOM_INDIVIDUAL_COLORS]   = {sText_Desc_Individual_Colors_Off,  sText_Desc_Individual_Colors_On},
     [MENUITEM_CUSTOM_DOUBLE_BATTLE_MODE]  = {sText_Desc_DoubleBattleMode_Off,   sText_Desc_DoubleBattleMode_On},
+    [MENUITEM_CUSTOM_BOSS_RUSH]           = {sText_Desc_BossRush_Off,           sText_Desc_BossRush_On},
     [MENUITEM_CUSTOM_AUTOMATIC_EVGAIN]    = {sText_Desc_AutomaticEvGain_Off,    sText_Desc_AutomaticEvGain_On},
     [MENUITEM_CUSTOM_AUTOMATIC_EXPGAIN]   = {sText_Desc_AutomaticExpGain_Off,   sText_Desc_AutomaticExpGain_On},
     [MENUITEM_CUSTOM_AUTOMATIC_EVOLUTION] = {sText_Desc_AutomaticEvolution_Off, sText_Desc_AutomaticEvolution_On},
@@ -549,6 +558,7 @@ static const u8 *const sOptionMenuItemDescriptionsDisabledCustom[MENUITEM_CUSTOM
     [MENUITEM_CUSTOM_SHINY_RATE]          = sText_Empty,
     [MENUITEM_CUSTOM_INDIVIDUAL_COLORS]   = sText_Empty,
     [MENUITEM_CUSTOM_DOUBLE_BATTLE_MODE]  = sText_Empty,
+    [MENUITEM_CUSTOM_BOSS_RUSH]           = sText_Empty,
     [MENUITEM_CUSTOM_AUTOMATIC_EVGAIN]    = sText_Empty,
     [MENUITEM_CUSTOM_AUTOMATIC_EXPGAIN]   = sText_Empty,
     [MENUITEM_CUSTOM_AUTOMATIC_EVOLUTION] = sText_Empty,
@@ -818,6 +828,7 @@ void CB2_InitOptionPlusMenu(void)
         sOptions->sel_custom[MENUITEM_CUSTOM_SHINY_RATE]          = gSaveBlock2Ptr->shinyrate;
         sOptions->sel_custom[MENUITEM_CUSTOM_INDIVIDUAL_COLORS]   = gSaveBlock2Ptr->individualColors;
         sOptions->sel_custom[MENUITEM_CUSTOM_DOUBLE_BATTLE_MODE]  = gSaveBlock2Ptr->doubleBattleMode;
+        sOptions->sel_custom[MENUITEM_CUSTOM_BOSS_RUSH]           = IsBossRushEnabled();
         sOptions->sel_custom[MENUITEM_CUSTOM_AUTOMATIC_EVGAIN]    = gSaveBlock2Ptr->automaticEVGain;
         sOptions->sel_custom[MENUITEM_CUSTOM_AUTOMATIC_EXPGAIN]   = gSaveBlock2Ptr->automaticExpGain;
         sOptions->sel_custom[MENUITEM_CUSTOM_AUTOMATIC_EVOLUTION] = gSaveBlock2Ptr->automaticEvolution;
@@ -1025,6 +1036,7 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->shinyrate                    = sOptions->sel_custom[MENUITEM_CUSTOM_SHINY_RATE];
     gSaveBlock2Ptr->individualColors             = sOptions->sel_custom[MENUITEM_CUSTOM_INDIVIDUAL_COLORS];
     gSaveBlock2Ptr->doubleBattleMode             = sOptions->sel_custom[MENUITEM_CUSTOM_DOUBLE_BATTLE_MODE];
+    SetBossRushEnabled(sOptions->sel_custom[MENUITEM_CUSTOM_BOSS_RUSH]);
     gSaveBlock2Ptr->automaticEVGain              = sOptions->sel_custom[MENUITEM_CUSTOM_AUTOMATIC_EVGAIN];
     gSaveBlock2Ptr->automaticExpGain             = sOptions->sel_custom[MENUITEM_CUSTOM_AUTOMATIC_EXPGAIN];
     gSaveBlock2Ptr->automaticEvolution           = sOptions->sel_custom[MENUITEM_CUSTOM_AUTOMATIC_EVOLUTION];

@@ -2246,6 +2246,21 @@ static void PopulateAbilities(AbilityEnum* abilities) {
     }
 }
 
+static void PopulateDisplayedAbilities(AbilityEnum *abilities) {
+    PopulateAbilities(abilities);
+
+    if (gMain.inBattle && sMonSummaryScreen->monList.mons == gEnemyParty && !(gBattleTypeFlags & BATTLE_TYPE_TRAINER)) {
+        SpeciesEnum species = sMonSummaryScreen->summary.species;
+        u32 personality = sMonSummaryScreen->summary.pid;
+
+        abilities[0] = GetAbilityBySpecies(species, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+        abilities[1] = RandomizeInnate(gBaseStats[species].innates[0], species, personality);
+        abilities[2] = RandomizeInnate(gBaseStats[species].innates[1], species, personality);
+        abilities[3] = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
+        abilities[0] = RandomizeAbility(abilities[0], species, personality);
+    }
+}
+
 static int HasAbility(AbilityEnum ability, AbilityEnum* abilities) {
     return abilities[0] == ability || abilities[1] == ability || abilities[2] == ability || abilities[3] == ability;
 }
@@ -4484,7 +4499,7 @@ static void BufferMonPokemonExpandedAbilityAndInnates(void) {
     u8 font = FONT_NORMAL;
     AbilityEnum abilities[4] = {0};
 
-    PopulateAbilities(abilities);
+    PopulateDisplayedAbilities(abilities);
     AbilityEnum abilityToShow = abilities[sMonSummaryScreen->currentAbilityIndex];
 
     DynamicPlaceholderTextUtil_Reset();
@@ -4513,7 +4528,7 @@ static void BufferMonPokemonAbilityAndInnates(void) {
     bool8 isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2;  // checks if you are looking into the summary screen for the enemy
     AbilityEnum abilities[4] = {0};
 
-    PopulateAbilities(abilities);
+    PopulateDisplayedAbilities(abilities);
 
     DynamicPlaceholderTextUtil_Reset();
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, sMemoNatureTextColor);

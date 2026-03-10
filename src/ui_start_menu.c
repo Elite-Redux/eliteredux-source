@@ -10,6 +10,7 @@
 #include "dexnav.h"
 #include "event_data.h"
 #include "event_object_lock.h"
+#include "event_object_movement.h"
 #include "field_weather.h"
 #include "fieldmap.h"
 #include "frontier_pass.h"
@@ -414,6 +415,9 @@ void Menu_Start_Init(MainCallback callback) {
     for (i = 0; i < NUM_START_MENU_SPRITES; i++) sMenuDataPtr->spriteIDs[i] = 0xFF;
 
     for (i = 0; i < NUM_START_MENU_ACTIONS; i++) {
+#ifdef DEBUG_BUILD
+        if (i == START_MENU_ACTION_DEBUG && (!Debug_IsSystemEnabled() || !Debug_IsMenuAccessibleForCurrentSave())) continue;
+#endif
         if (FlagGet(StartMenuActions[i].flag) || StartMenuActions[i].flag == FLAG_NONE) {
             sMenuDataPtr->MenuOptions[j] = i;
             j++;
@@ -1378,8 +1382,35 @@ void Task_OpenPokenavStartMenu(u8 taskId) {
     }
 }
 
+#if TX_DEBUG_BUILD_ENABLED == TRUE && TX_DEBUG_SYSTEM_ENABLE == TRUE
+static bool8 FieldCB_ReturnToFieldDebugMenu(void) {
+    FreezeObjectEvents();
+    Debug_ShowMainMenu();
+    return TRUE;
+}
+#endif
+
 void Task_OpenDebugStartMenu(u8 taskId) {
     if (!gPaletteFade.active) {
+        if (!Debug_IsSystemEnabled() || !Debug_IsMenuAccessibleForCurrentSave()) {
+            CleanupOverworldWindowsAndTilemaps();
+            SetMainCallback2(sMenuDataPtr->savedCallback);
+            Menu_FreeResources();
+            DestroyTask(taskId);
+            return;
+        }
+
+#if TX_DEBUG_BUILD_ENABLED == TRUE && TX_DEBUG_SYSTEM_ENABLE == TRUE
+        if (Debug_IsPublicModeEnabled()) {
+            CleanupOverworldWindowsAndTilemaps();
+            gFieldCallback2 = FieldCB_ReturnToFieldDebugMenu;
+            SetMainCallback2(sMenuDataPtr->savedCallback);
+            Menu_FreeResources();
+            DestroyTask(taskId);
+            return;
+        }
+#endif
+
         Menu_FreeResources();
         CleanupOverworldWindowsAndTilemaps();
         FlagSet(FLAG_SYS_DEBUG_MENU_OPENED);
