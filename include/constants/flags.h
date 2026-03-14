@@ -1537,18 +1537,17 @@
 #define FLAG_RECEIVED_SERENA_DELPHOX                                3096
 #define FLAG_SYS_OPEN_MOVE_MENU_FROM_PARTY_SCREEN                   3097
 #define FLAG_RECEIVED_CALYREX                                       3098
-#define FLAG_RECEIVED_FIDOUGH_PARTNER                               3099
-#define FLAG_RECEIVED_OGERPON                                       3100
-#define FLAG_TEMP_CAN_CATCH_POKEMON                                 3101
-#define FLAG_NUZLOCKE_MODE_ENABLED                                  3102
-#define FLAG_LOST_NUZLOCKE_CHALLENGE                                3103
-#define FLAG_PREVENT_OVERWORLD_SPEEDUP                              3104
-#define FLAG_HIDE_SUNHOLLOW_ENTRANCE_CHARACTERS                     3105
-#define FLAG_HIDE_SUNHOLLOW_NORMAN                                  3106
-#define FLAG_HIDE_SUNHOLLOW_MUSEUM_MAGMA_GRUNTS                     3107
-#define FLAG_FINISHED_SUNHOLLOW_STORY                               3108
-#define FLAG_AUTOMATIC_SEASON                                       3109
-#define FLAG_MONOTYPE_TUNNEL_OPEN                                   3110
+#define FLAG_RECEIVED_OGERPON                                       3099
+#define FLAG_TEMP_CAN_CATCH_POKEMON                                 3100
+#define FLAG_NUZLOCKE_MODE_ENABLED                                  3101
+#define FLAG_LOST_NUZLOCKE_CHALLENGE                                3102
+#define FLAG_PREVENT_OVERWORLD_SPEEDUP                              3103
+#define FLAG_HIDE_SUNHOLLOW_ENTRANCE_CHARACTERS                     3104
+#define FLAG_HIDE_SUNHOLLOW_NORMAN                                  3105
+#define FLAG_HIDE_SUNHOLLOW_MUSEUM_MAGMA_GRUNTS                     3106
+#define FLAG_FINISHED_SUNHOLLOW_STORY                               3107
+#define FLAG_AUTOMATIC_SEASON                                       3108
+#define FLAG_MONOTYPE_TUNNEL_OPEN                                   3109
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 
