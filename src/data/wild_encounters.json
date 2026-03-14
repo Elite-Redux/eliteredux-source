@@ -3351,7 +3351,7 @@
               {
                 "min_level": 38,
                 "max_level": 38,
-                "species": "SPECIES_OGERPON"
+                "species": "SPECIES_JAGGED_CHUNGULIS"
               },
               {
                 "min_level": 38,
@@ -17359,27 +17359,27 @@
               {
                 "min_level": 2,
                 "max_level": 2,
-                "species": "SPECIES_IRON_VOCA"
+                "species": "SPECIES_WOOLY_WORM"
               },
               {
                 "min_level": 2,
                 "max_level": 2,
-                "species": "SPECIES_IRON_VOCA"
+                "species": "SPECIES_HARVESTING_TYRANT"
               },
               {
                 "min_level": 2,
                 "max_level": 2,
-                "species": "SPECIES_IRON_VOCA"
+                "species": "SPECIES_IRON_SPIRALS"
               },
               {
                 "min_level": 3,
                 "max_level": 3,
-                "species": "SPECIES_IRON_VOCA"
+                "species": "SPECIES_IRON_SCYTHE"
               },
               {
                 "min_level": 3,
                 "max_level": 3,
-                "species": "SPECIES_IRON_VOCA"
+                "species": "SPECIES_IRON_PALETTE"
               },
               {
                 "min_level": 3,
