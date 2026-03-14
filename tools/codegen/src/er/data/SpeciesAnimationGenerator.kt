@@ -19,54 +19,73 @@ import java.io.OutputStreamWriter
 import kotlin.collections.Map.Entry
 
 object SpeciesAnimationGenerator : Generator {
-    private fun getAnimation(species: Species): AnimationList = when {
-        species.reuseVisuals != SPECIES_NONE -> getAnimation(SPECIES_MAP[species.reuseVisuals]!!)
-        species.visuals.reuseAnimation != SPECIES_NONE -> getAnimation(SPECIES_MAP[species.visuals.reuseAnimation]!!)
-        else -> species.visuals.anim.takeIf { it.stepList.isNotEmpty() }
-            ?: animationList { step += animStep { frame += animCmd { duration = 1 } } }
+  private fun getAnimation(species: Species): AnimationList =
+    when {
+      species.reuseVisuals != SPECIES_NONE -> getAnimation(SPECIES_MAP[species.reuseVisuals]!!)
+      species.visuals.reuseAnimation != SPECIES_NONE ->
+        getAnimation(SPECIES_MAP[species.visuals.reuseAnimation]!!)
+      else ->
+        species.visuals.anim.takeIf { it.stepList.isNotEmpty() }
+          ?: animationList { step += animStep { frame += animCmd { duration = 1 } } }
     }
 
-    private const val STEP_PREFIX = "__sAnimStep_"
-    private const val LIST_PREFIX = "__sAnimList_"
+  private const val STEP_PREFIX = "__sAnimStep_"
+  private const val LIST_PREFIX = "__sAnimList_"
 
-    private fun AnimCmd.toStruct() = when (type) {
-        AnimCmd.Type.FRAME -> "ANIMCMD_FRAME($image, $duration)"
-        AnimCmd.Type.JUMP -> TODO("Jump not support yet")
-        AnimCmd.Type.LOOP -> TODO("Loop not supported yet")
-        AnimCmd.Type.UNRECOGNIZED -> error("Unrecognized AnimCmd type")
+  private fun AnimCmd.toStruct() =
+    when (type) {
+      AnimCmd.Type.FRAME -> "ANIMCMD_FRAME($image, $duration)"
+      AnimCmd.Type.JUMP -> TODO("Jump not support yet")
+      AnimCmd.Type.LOOP -> TODO("Loop not supported yet")
+      AnimCmd.Type.UNRECOGNIZED -> error("Unrecognized AnimCmd type")
     }
 
-    private fun Entry<AnimStep, Int>.toStruct() =
-        """
+  private fun Entry<AnimStep, Int>.toStruct() =
+    """
         |static const union AnimCmd $STEP_PREFIX$value[] = {
         |$IND${key.frameList.joinToString("\n$IND") { it.toStruct() + "," }}
         |${IND}ANIMCMD_END,
         |};
-        |""".trimMargin()
+        |"""
+      .trimMargin()
 
-    private fun Entry<AnimationList, Int>.toStruct(stepMap: Map<AnimStep, Int>) =
-        """
+  private fun Entry<AnimationList, Int>.toStruct(stepMap: Map<AnimStep, Int>) =
+    """
         |static const union AnimCmd *const $LIST_PREFIX$value[] = {
         |${IND}sAnim_GeneralFrame0,
         |$IND${key.stepList.joinToString("\n$IND") { "$STEP_PREFIX${stepMap[it]}," }}
         |};
-        |""".trimMargin()
+        |"""
+      .trimMargin()
 
-    override fun generate(writer: OutputStreamWriter) {
-        val animationLists = SPECIES_LIST.map { getAnimation(it) to it.id }
-        val animationSteps = animationLists.flatMap { (animation, _) -> animation.stepList.map { it to animation } }
+  override fun generate(writer: OutputStreamWriter) {
+      val badAnims =
+          SPECIES_LIST.filter { it.visuals.anim.stepList.isNotEmpty() }
+              .groupBy { it.visuals.anim.stepList.last().frameList.last().image } - 0
+      check(badAnims.isNotEmpty()) {
+          "Species animations do not end on image 0: ${badAnims.values.flatMap { it }.map { it.id }}"
+      }
 
-        val animationStepsToId = animationSteps.createDedupMaps().first
-        val (animationListToId, speciesToId) = animationLists.createDedupMaps()
+    val animationLists = SPECIES_LIST.map { getAnimation(it) to it.id }
+    val animationSteps =
+      animationLists.flatMap { (animation, _) -> animation.stepList.map { it to animation } }
 
-        writer.appendLine(
-            """
+    val animationStepsToId = animationSteps.createDedupMaps().first
+    val (animationListToId, speciesToId) = animationLists.createDedupMaps()
+
+    writer.appendLine(
+      """
             |${animationStepsToId.entries.joinToString("\n") { it.toStruct() }}
             |
             |${animationListToId.entries.joinToString("\n") { it.toStruct(animationStepsToId) }}
-            |""".trimMargin()
-        )
+            |"""
+        .trimMargin()
+    )
 
-        speciesToId.printLookupTable("const union AnimCmd *const *const gMonFrontAnimsPtrTable[]", LIST_PREFIX, writer)
-    }
+    speciesToId.printLookupTable(
+      "const union AnimCmd *const *const gMonFrontAnimsPtrTable[]",
+      LIST_PREFIX,
+      writer,
+    )
+  }
 }
