@@ -10141,7 +10141,7 @@ static void Cmd_forcerandomswitch(void) {
         if (!redCardForcedSwitch && validMons <= minNeeded) {
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
         } else {
-            *(gBattleStruct->battlerPartyIndexes + gBattlerTarget) = gBattlerPartyIndexes[gBattlerTarget];
+            gBattleStruct->battlerPartyIndexes[gBattlerTarget] = gBattlerPartyIndexes[gBattlerTarget];
             gBattlescriptCurrInstr = BattleScript_RoarSuccessSwitch;
 
             do {
@@ -10150,7 +10150,7 @@ static void Cmd_forcerandomswitch(void) {
             } while (i == battler2PartyId || i == battler1PartyId || GetMonData(&party[i], MON_DATA_SPECIES) == SPECIES_NONE ||
                      GetMonData(&party[i], MON_DATA_IS_EGG) == TRUE || GetMonData(&party[i], MON_DATA_HP) == 0);
 
-            *(gBattleStruct->monToSwitchIntoId + gBattlerTarget) = i;
+            gBattleStruct->monToSwitchIntoId[gBattlerTarget] = i;
 
             if (!IsMultiBattle()) SwitchPartyOrder(gBattlerTarget);
 

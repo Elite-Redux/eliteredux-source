@@ -8090,7 +8090,6 @@ BattleScript_RoarSuccessSwitch::
 	waitstate
 	printstring STRINGID_PKMNWASDRAGGEDOUT
 	switchineffects BS_TARGET
-	jumpifbyte CMP_NOT_EQUAL, sSWITCH_CASE, B_SWITCH_RED_CARD, BattleScript_RedCardSuccessSwitch_Ret
 	setbyte sSWITCH_CASE, B_SWITCH_NORMAL
 	end
 
@@ -11880,12 +11879,6 @@ BattleScript_RedCardCommander:
 	printstring STRINGID_COMMANDER_CANT_SWITCH
 	waitmessage B_WAIT_TIME_LONG
 	restoreattackerandtargetfrom34
-	end
-
-BattleScript_RedCardSuccessSwitch_Ret:
-	@ BS_TARGET restored via switchineffects inclusion of restoreattackerandtargetfrom34
-	removeitem BS_STACK_1
-	setbyte sSWITCH_CASE, B_SWITCH_NORMAL
 	end
 
 BattleScript_EjectButtonActivates::
