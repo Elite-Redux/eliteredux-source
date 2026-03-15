@@ -83,7 +83,7 @@
 #define DEBUG_BUILD
 // #define DEBUG_POKEMON_MENU
 //#define VALIDATE_TRAINERS
-#define CURRENT_GAME_VERSION 1048
+#define CURRENT_GAME_VERSION 1049
 #define DISABLE_AUTOMATIC_SEASON FALSE //Disable Seasons generated with the current month and day to match real world
 
 #define PRINT_BATTLE_SCRIPT_TRACING FALSE

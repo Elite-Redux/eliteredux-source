@@ -58,17 +58,17 @@
 /*
  * Main menu state machine
  * -----------------------
- * 
+ *
  * Entry point: CB2_InitMainMenu
- * 
+ *
  * Note: States advance sequentially unless otherwise stated.
- * 
+ *
  * CB2_InitMainMenu / CB2_ReinitMainMenu
  *  - Both of these states call InitMainMenu, which does all the work.
  *  - In the Reinit case, the init code will check if the user came from
  *    the options screen. If they did, then the options menu item is
  *    pre-selected.
- * 
+ *
  * Task_MainMenuCheckSaveFile
  *  - Determines how many menu options to show based on whether
  *    the save file is Ok, empty, corrupted, etc.
@@ -77,33 +77,33 @@
  *  - If there were no errors, advance to Task_MainMenuCheckBattery.
  *  - Note that the check to enable Mystery Events would normally happen
  *    here, but this version of Emerald has them disabled.
- * 
+ *
  * Task_WaitForSaveFileErrorWindow
  *  - Wait for the text to finish printing and then for the A button
  *    to be pressed.
- * 
+ *
  * Task_MainMenuCheckBattery
  *  - If the battery is OK, advance to Task_DisplayMainMenu.
  *  - If the battery is dry, advance to Task_WaitForBatteryDryErrorWindow.
- * 
+ *
  * Task_WaitForBatteryDryErrorWindow
  *  - Wait for the text to finish printing and then for the A button
  *    to be pressed.
- * 
+ *
  * Task_DisplayMainWindow
  *  - Display the buttons to the user. If the menu is in HAS_MYSTERY_EVENTS
  *    mode, there are too many buttons for one screen and a scrollbar is added,
  *    and the scrollbar task is spawned (Task_ScrollIndicatorArrowPairOnMainMenu).
- * 
+ *
  * Task_HighlightSelectedMainMenuItem
  *  - Update the UI to match the currently selected item.
- * 
+ *
  * Task_HandleMainMenuInput
  *  - If A is pressed, advance to Task_HandleMainMenuAPressed.
  *  - If B is pressed, return to the title screen via CB2_InitTitleScreen.
  *  - If Up or Down is pressed, handle scrolling if there is a scroll bar, change
  *    the selection, then go back to Task_HighlightSelectedMainMenuItem.
- * 
+ *
  * Task_HandleMainMenuAPressed
  *  - If the user selected New Game, advance to Task_NewGameBirchSpeech_Init.
  *  - If the user selected Continue, advance to CB2_ContinueSavedGame.
@@ -113,15 +113,15 @@
  *    Task_DisplayMainMenuInvalidActionError.
  *  - Code to start a Mystery Event is present here, but is unreachable in this
  *    version.
- *    
+ *
  * Task_HandleMainMenuBPressed
  *  - Clean up the main menu and go back to CB2_InitTitleScreen.
- * 
+ *
  * Task_DisplayMainMenuInvalidActionError
  *  - Print one of three different error messages, wait for the text to stop
  *    printing, and then wait for A or B to be pressed.
  * - Then advance to Task_HandleMainMenuBPressed.
- * 
+ *
  * Task_NewGameBirchSpeechInit
  *  - Load the sprites for the intro speech, start playing music
  * Task_NewGameBirchSpeech_WaitToShowBirch
@@ -144,11 +144,11 @@
  *  - Animates by advancing to Task_NewGameBirchSpeech_SlideOutOldGenderSprite
  *    whenever the player's selection changes.
  *  - Advances to Task_NewGameBirchSpeech_WhatsYourName when done.
- * 
+ *
  * Task_NewGameBirchSpeech_SlideOutOldGenderSprite
  * Task_NewGameBirchSpeech_SlideInNewGenderSprite
  *  - Returns back to Task_NewGameBirchSpeech_ChooseGender.
- * 
+ *
  * Task_NewGameBirchSpeech_WhatsYourName
  * Task_NewGameBirchSpeech_WaitForWhatsYourNameToPrint
  * Task_NewGameBirchSpeech_WaitPressBeforeNameChoice
@@ -162,7 +162,7 @@
  * Task_NewGameBirchSpeech_ProcessYesNoMenu
  *  - If confirmed, advance to Task_NewGameBirchSpeech_SlidePlatformAway2.
  *  - Otherwise, return to Task_NewGameBirchSpeech_BoyOrGirl.
- * 
+ *
  * Task_NewGameBirchSpeech_SlidePlatformAway2
  * Task_NewGameBirchSpeech_ReshowBirchLotad
  * Task_NewGameBirchSpeech_WaitForSpriteFadeInAndTextPrinter
@@ -172,7 +172,7 @@
  * Task_NewGameBirchSpeech_FadePlayerToWhite
  * Task_NewGameBirchSpeech_Cleanup
  *  - Advances to CB2_NewGame.
- * 
+ *
  * Task_NewGameBirchSpeechSub_InitPokeball
  *  - Advances to Task_NewGameBirchSpeechSub_WaitForLotad
  * Task_NewGameBirchSpeechSub_WaitForLotad
@@ -219,7 +219,7 @@ static void NewGameBirchSpeech_ShowDialogueWindow(u8, u8);
 static void NewGameBirchSpeech_ClearWindow(u8);
 static void Task_NewGameBirchSpeech_ThisIsAPokemon(u8);
 static void Task_NewGameBirchSpeech_MainSpeech(u8);
-static void NewGameBirchSpeech_ShowPokeBallPrinterCallback(struct TextPrinterTemplate *printer, u16 a);
+static void NewGameBirchSpeech_ShowPokeBallPrinterCallback(struct TextPrinterTemplate* printer, u16 a);
 static void Task_NewGameBirchSpeech_AndYouAre(u8);
 static void Task_NewGameBirchSpeechSub_WaitForLotad(u8);
 static void Task_NewGameBirchSpeech_StartBirchLotadPlatformFade(u8);
@@ -283,13 +283,9 @@ static void MainMenu_FormatSavegameBadges(void);
 static void NewGameBirchSpeech_CreateDialogueWindowBorder(u8, u8, u8, u8, u8, u8);
 static s8 NewGameBirchSpeech_ProcessDifficultyMenuInput(void);
 
-
 // .rodata
 
-static const u16 sBirchSpeechBgPals[][16] = {
-    INCBIN_U16("graphics/birch_speech/bg0.gbapal"),
-    INCBIN_U16("graphics/birch_speech/bg1.gbapal")
-};
+static const u16 sBirchSpeechBgPals[][16] = {INCBIN_U16("graphics/birch_speech/bg0.gbapal"), INCBIN_U16("graphics/birch_speech/bg1.gbapal")};
 
 static const u32 sBirchSpeechShadowGfx[] = INCBIN_U32("graphics/birch_speech/shadow.4bpp.lz");
 static const u32 sBirchSpeechBgMap[] = INCBIN_U32("graphics/birch_speech/map.bin.lz");
@@ -324,149 +320,39 @@ static const u16 sBirchSpeechPlatformBlackPal[] = {RGB_BLACK, RGB_BLACK, RGB_BLA
 #define MENU_WIN_VCOORDS(n) WIN_RANGE(((MENU_TOP_WIN##n - 1) * 8) + MENU_SHADOW_PADDING, (MENU_TOP_WIN##n + MENU_HEIGHT_WIN##n + 1) * 8 - MENU_SHADOW_PADDING)
 #define MENU_SCROLL_SHIFT WIN_RANGE(32, 32)
 
-static const struct WindowTemplate sWindowTemplates_MainMenu[] =
-{
+static const struct WindowTemplate sWindowTemplates_MainMenu[] = {
     // No saved game
     // NEW GAME
-    {
-        .bg = 0,
-        .tilemapLeft = MENU_LEFT,
-        .tilemapTop = MENU_TOP_WIN0,
-        .width = MENU_WIDTH,
-        .height = MENU_HEIGHT_WIN0,
-        .paletteNum = 15,
-        .baseBlock = 1
-    },
+    {.bg = 0, .tilemapLeft = MENU_LEFT, .tilemapTop = MENU_TOP_WIN0, .width = MENU_WIDTH, .height = MENU_HEIGHT_WIN0, .paletteNum = 15, .baseBlock = 1},
     // OPTIONS
-    {
-        .bg = 0,
-        .tilemapLeft = MENU_LEFT,
-        .tilemapTop = MENU_TOP_WIN1,
-        .width = MENU_WIDTH,
-        .height = MENU_HEIGHT_WIN1,
-        .paletteNum = 15,
-        .baseBlock = 0x35
-    },
+    {.bg = 0, .tilemapLeft = MENU_LEFT, .tilemapTop = MENU_TOP_WIN1, .width = MENU_WIDTH, .height = MENU_HEIGHT_WIN1, .paletteNum = 15, .baseBlock = 0x35},
     // Has saved game
     // CONTINUE
-    {
-        .bg = 0,
-        .tilemapLeft = MENU_LEFT,
-        .tilemapTop = MENU_TOP_WIN2,
-        .width = MENU_WIDTH,
-        .height = MENU_HEIGHT_WIN2,
-        .paletteNum = 15,
-        .baseBlock = 1
-    },
+    {.bg = 0, .tilemapLeft = MENU_LEFT, .tilemapTop = MENU_TOP_WIN2, .width = MENU_WIDTH, .height = MENU_HEIGHT_WIN2, .paletteNum = 15, .baseBlock = 1},
     // NEW GAME
-    {
-        .bg = 0,
-        .tilemapLeft = MENU_LEFT,
-        .tilemapTop = MENU_TOP_WIN3,
-        .width = MENU_WIDTH,
-        .height = MENU_HEIGHT_WIN3,
-        .paletteNum = 15,
-        .baseBlock = 0x9D
-    },
+    {.bg = 0, .tilemapLeft = MENU_LEFT, .tilemapTop = MENU_TOP_WIN3, .width = MENU_WIDTH, .height = MENU_HEIGHT_WIN3, .paletteNum = 15, .baseBlock = 0x9D},
     // OPTION / MYSTERY GIFT
-    {
-        .bg = 0,
-        .tilemapLeft = MENU_LEFT,
-        .tilemapTop = MENU_TOP_WIN4,
-        .width = MENU_WIDTH,
-        .height = MENU_HEIGHT_WIN4,
-        .paletteNum = 15,
-        .baseBlock = 0xD1
-    },
+    {.bg = 0, .tilemapLeft = MENU_LEFT, .tilemapTop = MENU_TOP_WIN4, .width = MENU_WIDTH, .height = MENU_HEIGHT_WIN4, .paletteNum = 15, .baseBlock = 0xD1},
     // OPTION / MYSTERY EVENTS
-    {
-        .bg = 0,
-        .tilemapLeft = MENU_LEFT,
-        .tilemapTop = MENU_TOP_WIN5,
-        .width = MENU_WIDTH,
-        .height = MENU_HEIGHT_WIN5,
-        .paletteNum = 15,
-        .baseBlock = 0x105
-    },
+    {.bg = 0, .tilemapLeft = MENU_LEFT, .tilemapTop = MENU_TOP_WIN5, .width = MENU_WIDTH, .height = MENU_HEIGHT_WIN5, .paletteNum = 15, .baseBlock = 0x105},
     // OPTION
-    {
-        .bg = 0,
-        .tilemapLeft = MENU_LEFT,
-        .tilemapTop = MENU_TOP_WIN6,
-        .width = MENU_WIDTH,
-        .height = MENU_HEIGHT_WIN6,
-        .paletteNum = 15,
-        .baseBlock = 0x139
-    },
+    {.bg = 0, .tilemapLeft = MENU_LEFT, .tilemapTop = MENU_TOP_WIN6, .width = MENU_WIDTH, .height = MENU_HEIGHT_WIN6, .paletteNum = 15, .baseBlock = 0x139},
     // Error message window
-    {
-        .bg = 0,
-        .tilemapLeft = MENU_LEFT_ERROR,
-        .tilemapTop = MENU_TOP_ERROR,
-        .width = MENU_WIDTH_ERROR,
-        .height = MENU_HEIGHT_ERROR,
-        .paletteNum = 15,
-        .baseBlock = 0x16D
-    }
-};
+    {.bg = 0,
+     .tilemapLeft = MENU_LEFT_ERROR,
+     .tilemapTop = MENU_TOP_ERROR,
+     .width = MENU_WIDTH_ERROR,
+     .height = MENU_HEIGHT_ERROR,
+     .paletteNum = 15,
+     .baseBlock = 0x16D}};
 
-static const struct WindowTemplate gNewGameBirchSpeechTextWindows[] =
-{
-    {
-        .bg = 0,
-        .tilemapLeft = 2,
-        .tilemapTop = 15,
-        .width = 27,
-        .height = 4,
-        .paletteNum = 15,
-        .baseBlock = 1
-    },
-    {
-        .bg = 0,
-        .tilemapLeft = 3,
-        .tilemapTop = 5,
-        .width = 6,
-        .height = 4,
-        .paletteNum = 15,
-        .baseBlock = 0x6D
-    },
-    {
-        .bg = 0,
-        .tilemapLeft = 3,
-        .tilemapTop = 2,
-        .width = 9,
-        .height = 10,
-        .paletteNum = 15,
-        .baseBlock = 0x85
-    },
-    {
-        .bg = 0,
-        .tilemapLeft = 3,
-        .tilemapTop = 5,
-        .width = 10,
-        .height = 4,
-        .paletteNum = 15,
-        .baseBlock = 0x6D
-    },
-    {
-        .bg = 0,
-        .tilemapLeft = 3,
-        .tilemapTop = 4,
-        .width = 8,
-        .height = 6,
-        .paletteNum = 15,
-        .baseBlock = 0x6D
-    },
-    {
-        .bg = 0,
-        .tilemapLeft = 2,
-        .tilemapTop = 4,
-        .width = 10,
-        .height = 6,
-        .paletteNum = 15,
-        .baseBlock = 0x6D
-    }
-};
+static const struct WindowTemplate gNewGameBirchSpeechTextWindows[] = {
+    {.bg = 0, .tilemapLeft = 2, .tilemapTop = 15, .width = 27, .height = 4, .paletteNum = 15, .baseBlock = 1},
+    {.bg = 0, .tilemapLeft = 3, .tilemapTop = 5, .width = 6, .height = 4, .paletteNum = 15, .baseBlock = 0x6D},
+    {.bg = 0, .tilemapLeft = 3, .tilemapTop = 2, .width = 9, .height = 10, .paletteNum = 15, .baseBlock = 0x85},
+    {.bg = 0, .tilemapLeft = 3, .tilemapTop = 5, .width = 10, .height = 4, .paletteNum = 15, .baseBlock = 0x6D},
+    {.bg = 0, .tilemapLeft = 3, .tilemapTop = 4, .width = 8, .height = 6, .paletteNum = 15, .baseBlock = 0x6D},
+    {.bg = 0, .tilemapLeft = 2, .tilemapTop = 4, .width = 10, .height = 6, .paletteNum = 15, .baseBlock = 0x6D}};
 
 static const u16 sMainMenuBgPal[] = INCBIN_U16("graphics/misc/main_menu_bg.gbapal");
 static const u16 sMainMenuTextPal[] = INCBIN_U16("graphics/misc/main_menu_text.gbapal");
@@ -475,59 +361,26 @@ static const u8 sTextColor_Headers[] = {TEXT_DYNAMIC_COLOR_1, TEXT_DYNAMIC_COLOR
 static const u8 sTextColor_MenuInfo[] = {TEXT_DYNAMIC_COLOR_1, TEXT_COLOR_WHITE, TEXT_DYNAMIC_COLOR_3};
 
 static const struct BgTemplate sMainMenuBgTemplates[] = {
-    {
-        .bg = 0,
-        .charBaseIndex = 2,
-        .mapBaseIndex = 30,
-        .screenSize = 0,
-        .paletteMode = 0,
-        .priority = 0,
-        .baseTile = 0
-    },
-    {
-        .bg = 1,
-        .charBaseIndex = 0,
-        .mapBaseIndex = 7,
-        .screenSize = 0,
-        .paletteMode = 0,
-        .priority = 3,
-        .baseTile = 0
-    }
-};
+    {.bg = 0, .charBaseIndex = 2, .mapBaseIndex = 30, .screenSize = 0, .paletteMode = 0, .priority = 0, .baseTile = 0},
+    {.bg = 1, .charBaseIndex = 0, .mapBaseIndex = 7, .screenSize = 0, .paletteMode = 0, .priority = 3, .baseTile = 0}};
 
 static const struct BgTemplate sBirchBgTemplate = {
-    .bg = 0,
-    .charBaseIndex = 3,
-    .mapBaseIndex = 30,
-    .screenSize = 0,
-    .paletteMode = 0,
-    .priority = 0,
-    .baseTile = 0
-};
+    .bg = 0, .charBaseIndex = 3, .mapBaseIndex = 30, .screenSize = 0, .paletteMode = 0, .priority = 0, .baseTile = 0};
 
 static const struct ScrollArrowsTemplate sScrollArrowsTemplate_MainMenu = {2, 0x78, 8, 3, 0x78, 0x98, 3, 4, 1, 1, 0};
 
-static const union AffineAnimCmd sSpriteAffineAnim_PlayerShrink[] = {
-    AFFINEANIMCMD_FRAME(-2, -2, 0, 0x30),
-    AFFINEANIMCMD_END
-};
+static const union AffineAnimCmd sSpriteAffineAnim_PlayerShrink[] = {AFFINEANIMCMD_FRAME(-2, -2, 0, 0x30), AFFINEANIMCMD_END};
 
-static const union AffineAnimCmd *const sSpriteAffineAnimTable_PlayerShrink[] =
-{
-    sSpriteAffineAnim_PlayerShrink
-};
+static const union AffineAnimCmd* const sSpriteAffineAnimTable_PlayerShrink[] = {sSpriteAffineAnim_PlayerShrink};
 
-static const struct MenuAction sMenuActions_Gender[] = {
-    {gText_BirchBoy, NULL},
-    {gText_BirchGirl, NULL}
-};
+static const struct MenuAction sMenuActions_Gender[] = {{gText_BirchBoy, NULL}, {gText_BirchGirl, NULL}};
 
 static const struct MenuAction sMenuActions_Difficulty[] = {
-    {gText_BirchEasyMode,  NULL},
-    {gText_BirchAceMode,   NULL},
+    {gText_BirchEasyMode, NULL},
+    {gText_BirchAceMode, NULL},
     {gText_BirchEliteMode, NULL},
-    {gText_BirchHellMode,  NULL},
-    {gText_BirchInsanityMode, NULL}, // Add Hell mode option
+    {gText_BirchHellMode, NULL},
+    {gText_BirchInsanityMode, NULL},  // Add Hell mode option
 };
 
 static const struct MenuAction sMenuActions_LevelCaps[] = {
@@ -541,102 +394,49 @@ static const struct MenuAction sMenuActions_Randomizer[] = {
     {gText_Yes, NULL},
 };
 
-static const u8 *const gMalePresetNames[] = {
-    gText_DefaultNameStu,
-    gText_DefaultNameMilton,
-    gText_DefaultNameTom,
-    gText_DefaultNameKenny,
-    gText_DefaultNameReid,
-    gText_DefaultNameJude,
-    gText_DefaultNameJaxson,
-    gText_DefaultNameEaston,
-    gText_DefaultNameWalker,
-    gText_DefaultNameTeru,
-    gText_DefaultNameJohnny,
-    gText_DefaultNameBrett,
-    gText_DefaultNameSeth,
-    gText_DefaultNameTerry,
-    gText_DefaultNameCasey,
-    gText_DefaultNameDarren,
-    gText_DefaultNameLandon,
-    gText_DefaultNameCollin,
-    gText_DefaultNameStanley,
-    gText_DefaultNameQuincy
-};
+static const u8* const gMalePresetNames[] = {gText_DefaultNameStu,    gText_DefaultNameMilton, gText_DefaultNameTom,     gText_DefaultNameKenny,
+                                             gText_DefaultNameReid,   gText_DefaultNameJude,   gText_DefaultNameJaxson,  gText_DefaultNameEaston,
+                                             gText_DefaultNameWalker, gText_DefaultNameTeru,   gText_DefaultNameJohnny,  gText_DefaultNameBrett,
+                                             gText_DefaultNameSeth,   gText_DefaultNameTerry,  gText_DefaultNameCasey,   gText_DefaultNameDarren,
+                                             gText_DefaultNameLandon, gText_DefaultNameCollin, gText_DefaultNameStanley, gText_DefaultNameQuincy};
 
-static const u8 *const gFemalePresetNames[] = {
-    gText_DefaultNameKimmy,
-    gText_DefaultNameTiara,
-    gText_DefaultNameBella,
-    gText_DefaultNameJayla,
-    gText_DefaultNameAllie,
-    gText_DefaultNameLianna,
-    gText_DefaultNameSara,
-    gText_DefaultNameMonica,
-    gText_DefaultNameCamila,
-    gText_DefaultNameAubree,
-    gText_DefaultNameRuthie,
-    gText_DefaultNameHazel,
-    gText_DefaultNameNadine,
-    gText_DefaultNameTanja,
-    gText_DefaultNameYasmin,
-    gText_DefaultNameNicola,
-    gText_DefaultNameLillie,
-    gText_DefaultNameTerra,
-    gText_DefaultNameLucy,
-    gText_DefaultNameHalie
-};
+static const u8* const gFemalePresetNames[] = {gText_DefaultNameKimmy,  gText_DefaultNameTiara,  gText_DefaultNameBella,  gText_DefaultNameJayla,
+                                               gText_DefaultNameAllie,  gText_DefaultNameLianna, gText_DefaultNameSara,   gText_DefaultNameMonica,
+                                               gText_DefaultNameCamila, gText_DefaultNameAubree, gText_DefaultNameRuthie, gText_DefaultNameHazel,
+                                               gText_DefaultNameNadine, gText_DefaultNameTanja,  gText_DefaultNameYasmin, gText_DefaultNameNicola,
+                                               gText_DefaultNameLillie, gText_DefaultNameTerra,  gText_DefaultNameLucy,   gText_DefaultNameHalie};
 
 // .text
 
-enum
-{
-    HAS_NO_SAVED_GAME,  //NEW GAME, OPTION
-    HAS_SAVED_GAME,     //CONTINUE, NEW GAME, OPTION
-    HAS_MYSTERY_GIFT,   //CONTINUE, NEW GAME, MYSTERY GIFT, OPTION
-    HAS_MYSTERY_EVENTS, //CONTINUE, NEW GAME, MYSTERY GIFT, MYSTERY EVENTS, OPTION
+enum {
+    HAS_NO_SAVED_GAME,   // NEW GAME, OPTION
+    HAS_SAVED_GAME,      // CONTINUE, NEW GAME, OPTION
+    HAS_MYSTERY_GIFT,    // CONTINUE, NEW GAME, MYSTERY GIFT, OPTION
+    HAS_MYSTERY_EVENTS,  // CONTINUE, NEW GAME, MYSTERY GIFT, MYSTERY EVENTS, OPTION
 };
 
-enum
-{
-    ACTION_NEW_GAME,
-    ACTION_CONTINUE,
-    ACTION_OPTION,
-    ACTION_MYSTERY_GIFT,
-    ACTION_MYSTERY_EVENTS,
-    ACTION_EREADER,
-    ACTION_INVALID
-};
+enum { ACTION_NEW_GAME, ACTION_CONTINUE, ACTION_OPTION, ACTION_MYSTERY_GIFT, ACTION_MYSTERY_EVENTS, ACTION_EREADER, ACTION_INVALID };
 
-#define MAIN_MENU_BORDER_TILE   0x1D5
+#define MAIN_MENU_BORDER_TILE 0x1D5
 
-static void CB2_MainMenu(void)
-{
+static void CB2_MainMenu(void) {
     RunTasks();
     AnimateSprites();
     BuildOamBuffer();
     UpdatePaletteFade();
 }
 
-static void VBlankCB_MainMenu(void)
-{
+static void VBlankCB_MainMenu(void) {
     LoadOam();
     ProcessSpriteCopyRequests();
     TransferPlttBuffer();
 }
 
-void CB2_InitMainMenu(void)
-{
-    InitMainMenu(FALSE);
-}
+void CB2_InitMainMenu(void) { InitMainMenu(FALSE); }
 
-void CB2_ReinitMainMenu(void)
-{
-    InitMainMenu(TRUE);
-}
+void CB2_ReinitMainMenu(void) { InitMainMenu(TRUE); }
 
-static u32 InitMainMenu(bool8 returningFromOptionsMenu)
-{
+static u32 InitMainMenu(bool8 returningFromOptionsMenu) {
     SetVBlankCallback(NULL);
 
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
@@ -650,9 +450,9 @@ static u32 InitMainMenu(bool8 returningFromOptionsMenu)
     SetGpuReg(REG_OFFSET_BG0HOFS, 0);
     SetGpuReg(REG_OFFSET_BG0VOFS, 0);
 
-    DmaFill16(3, 0, (void *)VRAM, VRAM_SIZE);
-    DmaFill32(3, 0, (void *)OAM, OAM_SIZE);
-    DmaFill16(3, 0, (void *)(PLTT + 2), PLTT_SIZE - 2);
+    DmaFill16(3, 0, (void*)VRAM, VRAM_SIZE);
+    DmaFill32(3, 0, (void*)OAM, OAM_SIZE);
+    DmaFill16(3, 0, (void*)(PLTT + 2), PLTT_SIZE - 2);
 
     ResetPaletteFade();
     LoadPalette(sMainMenuBgPal, 0, 32);
@@ -662,9 +462,9 @@ static u32 InitMainMenu(bool8 returningFromOptionsMenu)
     ResetSpriteData();
     FreeAllSpritePalettes();
     if (returningFromOptionsMenu)
-        BeginNormalPaletteFade(PALETTES_ALL, 0, 0x10, 0, RGB_BLACK); // fade to black
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0x10, 0, RGB_BLACK);  // fade to black
     else
-        BeginNormalPaletteFade(PALETTES_ALL, 0, 0x10, 0, RGB_WHITEALPHA); // fade to white
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0x10, 0, RGB_WHITEALPHA);  // fade to white
     ResetBgsAndClearDma3BusyFlags(0);
     InitBgsFromTemplates(0, sMainMenuBgTemplates, ARRAY_COUNT(sMainMenuBgTemplates));
     ChangeBgX(0, 0, 0);
@@ -701,15 +501,14 @@ static u32 InitMainMenu(bool8 returningFromOptionsMenu)
 #define tIsScrolled data[14]
 #define tWirelessAdapterConnected data[15]
 
-#define tArrowTaskIsScrolled data[15]   // For scroll indicator arrow task
+#define tArrowTaskIsScrolled data[15]  // For scroll indicator arrow task
 
 extern const u8 EventScript_UpdateVersionFlags[];
 const u8 gText_FutureSave[] = _("The save file cannot be loaded since\nits from a future version of this game.");
 
-static void UpdateBoxMon(struct BoxPokemon* boxMon)
-{
-    struct OldBoxPokemon old = *((struct OldBoxPokemon*) boxMon);
-    *boxMon = (struct BoxPokemon) {
+static void UpdateBoxMon(struct BoxPokemon* boxMon) {
+    struct OldBoxPokemon old = *((struct OldBoxPokemon*)boxMon);
+    *boxMon = (struct BoxPokemon){
         .personality = old.personality,
         .otId = old.otId,
         .move1 = old.move1,
@@ -747,15 +546,13 @@ static void UpdateBoxMon(struct BoxPokemon* boxMon)
     ARRAY_COPY(boxMon->nickname, old.nickname)
 }
 
-static void Task_MainMenuCheckSaveFile(u8 taskId)
-{
+static void Task_MainMenuCheckSaveFile(u8 taskId) {
     s16* data = gTasks[taskId].data;
-	u16 timesUpdated = 0 + VarGet(VAR_UPDATED_TIMES);
-	FlagClear(FLAG_TAG_BATTLE);
+    u16 timesUpdated = 0 + VarGet(VAR_UPDATED_TIMES);
+    FlagClear(FLAG_TAG_BATTLE);
     VarSet(VAR_TRAINER_PRIZE_BP, 0);
 
-    if (!gPaletteFade.active)
-    {
+    if (!gPaletteFade.active) {
         SetGpuReg(REG_OFFSET_WIN0H, 0);
         SetGpuReg(REG_OFFSET_WIN0V, 0);
         SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG0 | WININ_WIN0_OBJ);
@@ -764,89 +561,98 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
         SetGpuReg(REG_OFFSET_BLDALPHA, 0);
         SetGpuReg(REG_OFFSET_BLDY, 7);
 
-        if (IsWirelessAdapterConnected())
-            tWirelessAdapterConnected = TRUE;
-        switch (gSaveFileStatus)
-        {
+        if (IsWirelessAdapterConnected()) tWirelessAdapterConnected = TRUE;
+        switch (gSaveFileStatus) {
             case SAVE_STATUS_OK:
-            if (!VarGet(VAR_SAVE_VERSION))
-            {
-                // Temporary fix
-                VarSet(VAR_SAVE_VERSION, CURRENT_GAME_VERSION);
-            }
-            else if (VarGet(VAR_SAVE_VERSION) <= CURRENT_GAME_VERSION) {
-                //No problems
-                if (VarGet(VAR_SAVE_VERSION) < CURRENT_GAME_VERSION) {
-                    if (VarGet(VAR_SAVE_VERSION) <= 1046)
-                    {
-                        int i, j;
-                        u16 newItems[ARRAY_COUNT(gSaveblock1.itemFlags)] = {0};
+                int saveVersion = VarGet(VAR_SAVE_VERSION);
+                if (!saveVersion) {
+                    // Temporary fix
+                    VarSet(VAR_SAVE_VERSION, CURRENT_GAME_VERSION);
+                } else if (saveVersion <= CURRENT_GAME_VERSION) {
+                    // No problems
+                    if (saveVersion < CURRENT_GAME_VERSION) {
+                        if (saveVersion <= 1046) {
+                            int i, j;
+                            u16 newItems[ARRAY_COUNT(gSaveblock1.itemFlags)] = {0};
 
-                        for (i = 0; i < gSaveBlock1Ptr->playerPartyCount; i++)
-                        {
-                            u16 item = gSaveBlock1Ptr->playerParty[i].box.heldItem;
-                            if (item) newItems[item / 16] |= 1 << (item % 16);
-                        }
-                        
-                        for (int i = 0; i < ARRAY_COUNT(gPokemonStoragePtr->boxes); i++)
-                        {
-                            for (int j = 0; j < ARRAY_COUNT(gPokemonStoragePtr->boxes[i]); j++)
-                            {
-                                u16 item = gPokemonStoragePtr->boxes[i][j].heldItem;
+                            for (i = 0; i < gSaveBlock1Ptr->playerPartyCount; i++) {
+                                u16 item = gSaveBlock1Ptr->playerParty[i].box.heldItem;
                                 if (item) newItems[item / 16] |= 1 << (item % 16);
                             }
-                        }
 
-                        for (int i = 0; i <= POCKETS_COUNT; i++) {
-                            int size = 0;
-                            struct ItemSlot* items = NULL;
-                            #define POCKET_SIZE_ITEMS(pocket, bag) case pocket: size = ARRAY_COUNT(bag); items = bag; break;
-                            switch (i)
-                            {
-                                case POCKET_NONE:
-                                    size = ARRAY_COUNT(gSaveblock1.pcItems);
-                                    items = gSaveblock1.pcItems;
-                                    break;
-                                    
-                                POCKET_SIZE_ITEMS(POCKET_BATTLE, gSaveblock1.bagPocket_Battle)
-                                POCKET_SIZE_ITEMS(POCKET_BERRIES, gSaveblock1.bagPocket_Berries)
-                                POCKET_SIZE_ITEMS(POCKET_ITEMS, gSaveblock1.bagPocket_Items)
-                                POCKET_SIZE_ITEMS(POCKET_KEY_ITEMS, gSaveblock1.bagPocket_KeyItems)
-                                POCKET_SIZE_ITEMS(POCKET_POKE_BALLS, gSaveblock1.bagPocket_PokeBalls)
-                                POCKET_SIZE_ITEMS(POCKET_MEDICINE, gSaveblock1.bagPocket_Medicine)
-                                POCKET_SIZE_ITEMS(POCKET_MEGA_STONES, gSaveblock1.bagPocket_MegaStones)
-                                POCKET_SIZE_ITEMS(POCKET_TM_HM, gSaveblock1.bagPocket_TMHM)
+                            for (int i = 0; i < ARRAY_COUNT(gPokemonStoragePtr->boxes); i++) {
+                                for (int j = 0; j < ARRAY_COUNT(gPokemonStoragePtr->boxes[i]); j++) {
+                                    u16 item = gPokemonStoragePtr->boxes[i][j].heldItem;
+                                    if (item) newItems[item / 16] |= 1 << (item % 16);
+                                }
                             }
 
-                            for (j = 0; j < size; j++) {
-                                u16 item = items[j].itemId;
-                                if (item && items[j].quantity) newItems[item / 16] |= 1 << (item % 16);;
+                            for (int i = 0; i <= POCKETS_COUNT; i++) {
+                                int size = 0;
+                                struct ItemSlot* items = NULL;
+#define POCKET_SIZE_ITEMS(pocket, bag) \
+    case pocket:                       \
+        size = ARRAY_COUNT(bag);       \
+        items = bag;                   \
+        break;
+                                switch (i) {
+                                    case POCKET_NONE:
+                                        size = ARRAY_COUNT(gSaveblock1.pcItems);
+                                        items = gSaveblock1.pcItems;
+                                        break;
+
+                                        POCKET_SIZE_ITEMS(POCKET_BATTLE, gSaveblock1.bagPocket_Battle)
+                                        POCKET_SIZE_ITEMS(POCKET_BERRIES, gSaveblock1.bagPocket_Berries)
+                                        POCKET_SIZE_ITEMS(POCKET_ITEMS, gSaveblock1.bagPocket_Items)
+                                        POCKET_SIZE_ITEMS(POCKET_KEY_ITEMS, gSaveblock1.bagPocket_KeyItems)
+                                        POCKET_SIZE_ITEMS(POCKET_POKE_BALLS, gSaveblock1.bagPocket_PokeBalls)
+                                        POCKET_SIZE_ITEMS(POCKET_MEDICINE, gSaveblock1.bagPocket_Medicine)
+                                        POCKET_SIZE_ITEMS(POCKET_MEGA_STONES, gSaveblock1.bagPocket_MegaStones)
+                                        POCKET_SIZE_ITEMS(POCKET_TM_HM, gSaveblock1.bagPocket_TMHM)
+                                }
+
+                                for (j = 0; j < size; j++) {
+                                    u16 item = items[j].itemId;
+                                    if (item && items[j].quantity) newItems[item / 16] |= 1 << (item % 16);
+                                    ;
+                                }
+                                memset(items, 0, size);
                             }
-                            memset(items, 0, size);
+
+                            ARRAY_COPY(gSaveblock1.itemFlags, newItems);
+                            gSaveblock1.defaultPokeball = ITEM_NONE;
                         }
 
-                        ARRAY_COPY(gSaveblock1.itemFlags, newItems);
-                        gSaveblock1.defaultPokeball = ITEM_NONE;
+                        if (saveVersion <= 1048) {
+                            for (int i = 0; i < gSaveBlock1Ptr->playerPartyCount; i++) {
+                                SpeciesEnum species = gSaveBlock1Ptr->playerParty[i].box.species;
+                                if (species == 2682 || species == 2683) gSaveBlock1Ptr->playerParty[i].box.species -= 2;
+                            }
+
+                            for (int i = 0; i < ARRAY_COUNT(gPokemonStoragePtr->boxes); i++) {
+                                for (int j = 0; j < ARRAY_COUNT(gPokemonStoragePtr->boxes[i]); j++) {
+                                    SpeciesEnum species = gPokemonStoragePtr->boxes[i][j].species;
+                                    if (species == 2682 || species == 2683) gPokemonStoragePtr->boxes[i][j].species -= 2;
+                                }
+                            }
+                        }
+
+                        // Updating Version
+                        timesUpdated++;
+                        VarSet(VAR_UPDATED_TIMES, timesUpdated);
+                        VarSet(VAR_SAVE_VERSION, CURRENT_GAME_VERSION);
+                        // Settings the new flags to their defaults
+                        ScriptContext2_RunNewScript(EventScript_UpdateVersionFlags);
                     }
-
-                    //Updating Version
-					timesUpdated++;
-					VarSet(VAR_UPDATED_TIMES, timesUpdated);
-					VarSet(VAR_SAVE_VERSION, CURRENT_GAME_VERSION);
-                    //Settings the new flags to their defaults
-                    ScriptContext2_RunNewScript(EventScript_UpdateVersionFlags);
-				}
-                tMenuType = HAS_SAVED_GAME;
-                if (IsMysteryGiftEnabled())
-                    tMenuType++;
-                gTasks[taskId].func = Task_MainMenuCheckBattery;
-            }
-            else {
-                //People trying to downgrade their game
-				CreateMainMenuErrorWindow(gText_FutureSave);
-				tMenuType = HAS_NO_SAVED_GAME;
-				gTasks[taskId].func = Task_WaitForSaveFileErrorWindow;	
-            }
+                    tMenuType = HAS_SAVED_GAME;
+                    if (IsMysteryGiftEnabled()) tMenuType++;
+                    gTasks[taskId].func = Task_MainMenuCheckBattery;
+                } else {
+                    // People trying to downgrade their game
+                    CreateMainMenuErrorWindow(gText_FutureSave);
+                    tMenuType = HAS_NO_SAVED_GAME;
+                    gTasks[taskId].func = Task_WaitForSaveFileErrorWindow;
+                }
                 break;
             case SAVE_STATUS_CORRUPT:
                 CreateMainMenuErrorWindow(gText_SaveFileErased);
@@ -857,8 +663,7 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
                 CreateMainMenuErrorWindow(gText_SaveFileCorrupted);
                 gTasks[taskId].func = Task_WaitForSaveFileErrorWindow;
                 tMenuType = HAS_SAVED_GAME;
-                if (IsMysteryGiftEnabled() == TRUE)
-                    tMenuType++;
+                if (IsMysteryGiftEnabled() == TRUE) tMenuType++;
                 break;
             case SAVE_STATUS_EMPTY:
             default:
@@ -871,7 +676,7 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
                 gTasks[taskId].func = Task_WaitForSaveFileErrorWindow;
                 break;
         }
-        if (sCurrItemAndOptionMenuCheck & OPTION_MENU_FLAG)   // are we returning from the options menu?
+        if (sCurrItemAndOptionMenuCheck & OPTION_MENU_FLAG)  // are we returning from the options menu?
         {
             switch (tMenuType)  // if so, highlight the OPTIONS item
             {
@@ -893,21 +698,17 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
     }
 }
 
-static void Task_WaitForSaveFileErrorWindow(u8 taskId)
-{
+static void Task_WaitForSaveFileErrorWindow(u8 taskId) {
     RunTextPrinters();
-    if (!IsTextPrinterActive(7) && (JOY_NEW(A_BUTTON)))
-    {
+    if (!IsTextPrinterActive(7) && (JOY_NEW(A_BUTTON))) {
         ClearWindowTilemap(7);
         ClearMainMenuWindowTilemap(&sWindowTemplates_MainMenu[7]);
         gTasks[taskId].func = Task_MainMenuCheckBattery;
     }
 }
 
-static void Task_MainMenuCheckBattery(u8 taskId)
-{
-    if (!gPaletteFade.active)
-    {
+static void Task_MainMenuCheckBattery(u8 taskId) {
+    if (!gPaletteFade.active) {
         SetGpuReg(REG_OFFSET_WIN0H, 0);
         SetGpuReg(REG_OFFSET_WIN0V, 0);
         SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG0 | WININ_WIN0_OBJ);
@@ -916,36 +717,29 @@ static void Task_MainMenuCheckBattery(u8 taskId)
         SetGpuReg(REG_OFFSET_BLDALPHA, 0);
         SetGpuReg(REG_OFFSET_BLDY, 7);
 
-        if (!(RtcGetErrorStatus() & RTC_ERR_FLAG_MASK))
-        {
+        if (!(RtcGetErrorStatus() & RTC_ERR_FLAG_MASK)) {
             gTasks[taskId].func = Task_DisplayMainMenu;
-        }
-        else
-        {
+        } else {
             CreateMainMenuErrorWindow(gText_BatteryRunDry);
             gTasks[taskId].func = Task_WaitForBatteryDryErrorWindow;
         }
     }
 }
 
-static void Task_WaitForBatteryDryErrorWindow(u8 taskId)
-{
+static void Task_WaitForBatteryDryErrorWindow(u8 taskId) {
     RunTextPrinters();
-    if (!IsTextPrinterActive(7) && (JOY_NEW(A_BUTTON)))
-    {
+    if (!IsTextPrinterActive(7) && (JOY_NEW(A_BUTTON))) {
         ClearWindowTilemap(7);
         ClearMainMenuWindowTilemap(&sWindowTemplates_MainMenu[7]);
         gTasks[taskId].func = Task_DisplayMainMenu;
     }
 }
 
-static void Task_DisplayMainMenu(u8 taskId)
-{
+static void Task_DisplayMainMenu(u8 taskId) {
     s16* data = gTasks[taskId].data;
     u16 palette;
 
-    if (!gPaletteFade.active)
-    {
+    if (!gPaletteFade.active) {
         SetGpuReg(REG_OFFSET_WIN0H, 0);
         SetGpuReg(REG_OFFSET_WIN0V, 0);
         SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG0 | WININ_WIN0_OBJ);
@@ -968,19 +762,15 @@ static void Task_DisplayMainMenu(u8 taskId)
 
         // Note: If there is no save file, the save block is zeroed out,
         // so the default gender is MALE.
-        if (gSaveBlock2Ptr->playerGender == MALE)
-        {
+        if (gSaveBlock2Ptr->playerGender == MALE) {
             palette = RGB(4, 16, 31);
             LoadPalette(&palette, 241, 2);
-        }
-        else
-        {
+        } else {
             palette = RGB(31, 3, 21);
             LoadPalette(&palette, 241, 2);
         }
 
-        switch (gTasks[taskId].tMenuType)
-        {
+        switch (gTasks[taskId].tMenuType) {
             case HAS_NO_SAVED_GAME:
             default:
                 FillWindowPixelBuffer(0, PIXEL_FILL(0xA));
@@ -1064,8 +854,7 @@ static void Task_DisplayMainMenu(u8 taskId)
                 DrawMainMenuWindowBorder(&sWindowTemplates_MainMenu[6], MAIN_MENU_BORDER_TILE);
                 tScrollArrowTaskId = AddScrollIndicatorArrowPair(&sScrollArrowsTemplate_MainMenu, &sCurrItemAndOptionMenuCheck);
                 gTasks[tScrollArrowTaskId].func = Task_ScrollIndicatorArrowPairOnMainMenu;
-                if (sCurrItemAndOptionMenuCheck == 4)
-                {
+                if (sCurrItemAndOptionMenuCheck == 4) {
                     ChangeBgY(0, 0x2000, 1);
                     ChangeBgY(1, 0x2000, 1);
                     tIsScrolled = TRUE;
@@ -1077,35 +866,27 @@ static void Task_DisplayMainMenu(u8 taskId)
     }
 }
 
-static void Task_HighlightSelectedMainMenuItem(u8 taskId)
-{
+static void Task_HighlightSelectedMainMenuItem(u8 taskId) {
     HighlightSelectedMainMenuItem(gTasks[taskId].tMenuType, gTasks[taskId].tCurrItem, gTasks[taskId].tIsScrolled);
     gTasks[taskId].func = Task_HandleMainMenuInput;
 }
 
-static bool8 HandleMainMenuInput(u8 taskId)
-{
+static bool8 HandleMainMenuInput(u8 taskId) {
     s16* data = gTasks[taskId].data;
 
-    if (JOY_NEW(A_BUTTON))
-    {
+    if (JOY_NEW(A_BUTTON)) {
         PlaySE(SE_SELECT);
-        IsWirelessAdapterConnected();   // why bother calling this here? debug? Task_HandleMainMenuAPressed will check too
+        IsWirelessAdapterConnected();  // why bother calling this here? debug? Task_HandleMainMenuAPressed will check too
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
         gTasks[taskId].func = Task_HandleMainMenuAPressed;
-    }
-    else if (JOY_NEW(B_BUTTON))
-    {
+    } else if (JOY_NEW(B_BUTTON)) {
         PlaySE(SE_SELECT);
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_WHITEALPHA);
         SetGpuReg(REG_OFFSET_WIN0H, WIN_RANGE(0, DISPLAY_WIDTH));
         SetGpuReg(REG_OFFSET_WIN0V, WIN_RANGE(0, DISPLAY_HEIGHT));
         gTasks[taskId].func = Task_HandleMainMenuBPressed;
-    }
-    else if ((JOY_NEW(DPAD_UP)) && tCurrItem > 0)
-    {
-        if (tMenuType == HAS_MYSTERY_EVENTS && tIsScrolled == TRUE && tCurrItem == 1)
-        {
+    } else if ((JOY_NEW(DPAD_UP)) && tCurrItem > 0) {
+        if (tMenuType == HAS_MYSTERY_EVENTS && tIsScrolled == TRUE && tCurrItem == 1) {
             ChangeBgY(0, 0x2000, 2);
             ChangeBgY(1, 0x2000, 2);
             gTasks[tScrollArrowTaskId].tArrowTaskIsScrolled = tIsScrolled = FALSE;
@@ -1113,11 +894,8 @@ static bool8 HandleMainMenuInput(u8 taskId)
         tCurrItem--;
         sCurrItemAndOptionMenuCheck = tCurrItem;
         return TRUE;
-    }
-    else if ((JOY_NEW(DPAD_DOWN)) && tCurrItem < tItemCount - 1)
-    {
-        if (tMenuType == HAS_MYSTERY_EVENTS && tCurrItem == 3 && tIsScrolled == FALSE)
-        {
+    } else if ((JOY_NEW(DPAD_DOWN)) && tCurrItem < tItemCount - 1) {
+        if (tMenuType == HAS_MYSTERY_EVENTS && tCurrItem == 3 && tIsScrolled == FALSE) {
             ChangeBgY(0, 0x2000, 1);
             ChangeBgY(1, 0x2000, 1);
             gTasks[tScrollArrowTaskId].tArrowTaskIsScrolled = tIsScrolled = TRUE;
@@ -1129,21 +907,16 @@ static bool8 HandleMainMenuInput(u8 taskId)
     return FALSE;
 }
 
-static void Task_HandleMainMenuInput(u8 taskId)
-{
-    if (HandleMainMenuInput(taskId))
-        gTasks[taskId].func = Task_HighlightSelectedMainMenuItem;
+static void Task_HandleMainMenuInput(u8 taskId) {
+    if (HandleMainMenuInput(taskId)) gTasks[taskId].func = Task_HighlightSelectedMainMenuItem;
 }
 
-static void Task_HandleMainMenuAPressed(u8 taskId)
-{
+static void Task_HandleMainMenuAPressed(u8 taskId) {
     bool8 wirelessAdapterConnected;
     u8 action;
 
-    if (!gPaletteFade.active)
-    {
-        if (gTasks[taskId].tMenuType == HAS_MYSTERY_EVENTS)
-            RemoveScrollIndicatorArrowPair(gTasks[taskId].tScrollArrowTaskId);
+    if (!gPaletteFade.active) {
+        if (gTasks[taskId].tMenuType == HAS_MYSTERY_EVENTS) RemoveScrollIndicatorArrowPair(gTasks[taskId].tScrollArrowTaskId);
         ClearStdWindowAndFrame(0, TRUE);
         ClearStdWindowAndFrame(1, TRUE);
         ClearStdWindowAndFrame(2, TRUE);
@@ -1153,12 +926,10 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
         ClearStdWindowAndFrame(6, TRUE);
         ClearStdWindowAndFrame(7, TRUE);
         wirelessAdapterConnected = IsWirelessAdapterConnected();
-        switch (gTasks[taskId].tMenuType)
-        {
+        switch (gTasks[taskId].tMenuType) {
             case HAS_NO_SAVED_GAME:
             default:
-                switch (gTasks[taskId].tCurrItem)
-                {
+                switch (gTasks[taskId].tCurrItem) {
                     case 0:
                     default:
                         action = ACTION_NEW_GAME;
@@ -1169,8 +940,7 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
                 }
                 break;
             case HAS_SAVED_GAME:
-                switch (gTasks[taskId].tCurrItem)
-                {
+                switch (gTasks[taskId].tCurrItem) {
                     case 0:
                     default:
                         action = ACTION_CONTINUE;
@@ -1184,8 +954,7 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
                 }
                 break;
             case HAS_MYSTERY_GIFT:
-                switch (gTasks[taskId].tCurrItem)
-                {
+                switch (gTasks[taskId].tCurrItem) {
                     case 0:
                     default:
                         action = ACTION_CONTINUE;
@@ -1195,8 +964,7 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
                         break;
                     case 2:
                         action = ACTION_MYSTERY_GIFT;
-                        if (!wirelessAdapterConnected)
-                        {
+                        if (!wirelessAdapterConnected) {
                             action = ACTION_INVALID;
                             gTasks[taskId].tMenuType = HAS_NO_SAVED_GAME;
                         }
@@ -1207,8 +975,7 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
                 }
                 break;
             case HAS_MYSTERY_EVENTS:
-                switch (gTasks[taskId].tCurrItem)
-                {
+                switch (gTasks[taskId].tCurrItem) {
                     case 0:
                     default:
                         action = ACTION_CONTINUE;
@@ -1217,33 +984,24 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
                         action = ACTION_NEW_GAME;
                         break;
                     case 2:
-                        if (gTasks[taskId].tWirelessAdapterConnected)
-                        {
+                        if (gTasks[taskId].tWirelessAdapterConnected) {
                             action = ACTION_MYSTERY_GIFT;
-                            if (!wirelessAdapterConnected)
-                            {
+                            if (!wirelessAdapterConnected) {
                                 action = ACTION_INVALID;
                                 gTasks[taskId].tMenuType = HAS_NO_SAVED_GAME;
                             }
-                        }
-                        else if (wirelessAdapterConnected)
-                        {
+                        } else if (wirelessAdapterConnected) {
                             action = ACTION_INVALID;
                             gTasks[taskId].tMenuType = HAS_SAVED_GAME;
-                        }
-                        else
-                        {
+                        } else {
                             action = ACTION_EREADER;
                         }
                         break;
                     case 3:
-                        if (wirelessAdapterConnected)
-                        {
+                        if (wirelessAdapterConnected) {
                             action = ACTION_INVALID;
                             gTasks[taskId].tMenuType = HAS_MYSTERY_GIFT;
-                        }
-                        else
-                        {
+                        } else {
                             action = ACTION_MYSTERY_EVENTS;
                         }
                         break;
@@ -1255,8 +1013,7 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
         }
         ChangeBgY(0, 0, 0);
         ChangeBgY(1, 0, 0);
-        switch (action)
-        {
+        switch (action) {
             case ACTION_NEW_GAME:
             default:
                 gPlttBufferUnfaded[0] = RGB_BLACK;
@@ -1308,12 +1065,9 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
     }
 }
 
-static void Task_HandleMainMenuBPressed(u8 taskId)
-{
-    if (!gPaletteFade.active)
-    {
-        if (gTasks[taskId].tMenuType == HAS_MYSTERY_EVENTS)
-            RemoveScrollIndicatorArrowPair(gTasks[taskId].tScrollArrowTaskId);
+static void Task_HandleMainMenuBPressed(u8 taskId) {
+    if (!gPaletteFade.active) {
+        if (gTasks[taskId].tMenuType == HAS_MYSTERY_EVENTS) RemoveScrollIndicatorArrowPair(gTasks[taskId].tScrollArrowTaskId);
         sCurrItemAndOptionMenuCheck = 0;
         FreeAllWindowBuffers();
         SetMainCallback2(CB2_InitTitleScreen);
@@ -1321,14 +1075,11 @@ static void Task_HandleMainMenuBPressed(u8 taskId)
     }
 }
 
-static void Task_DisplayMainMenuInvalidActionError(u8 taskId)
-{
-    switch (gTasks[taskId].tCurrItem)
-    {
+static void Task_DisplayMainMenuInvalidActionError(u8 taskId) {
+    switch (gTasks[taskId].tCurrItem) {
         case 0:
             FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 30, 20);
-            switch (gTasks[taskId].tMenuType)
-            {
+            switch (gTasks[taskId].tMenuType) {
                 case 0:
                     CreateMainMenuErrorWindow(gText_WirelessNotConnected);
                     break;
@@ -1342,17 +1093,14 @@ static void Task_DisplayMainMenuInvalidActionError(u8 taskId)
             gTasks[taskId].tCurrItem++;
             break;
         case 1:
-            if (!gPaletteFade.active)
-                gTasks[taskId].tCurrItem++;
+            if (!gPaletteFade.active) gTasks[taskId].tCurrItem++;
             break;
         case 2:
             RunTextPrinters();
-            if (!IsTextPrinterActive(7))
-                gTasks[taskId].tCurrItem++;
+            if (!IsTextPrinterActive(7)) gTasks[taskId].tCurrItem++;
             break;
         case 3:
-            if (JOY_NEW(A_BUTTON | B_BUTTON))
-            {
+            if (JOY_NEW(A_BUTTON | B_BUTTON)) {
                 PlaySE(SE_SELECT);
                 BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
                 gTasks[taskId].func = Task_HandleMainMenuBPressed;
@@ -1369,16 +1117,13 @@ static void Task_DisplayMainMenuInvalidActionError(u8 taskId)
 
 #undef tArrowTaskIsScrolled
 
-static void HighlightSelectedMainMenuItem(u8 menuType, u8 selectedMenuItem, s16 isScrolled)
-{
+static void HighlightSelectedMainMenuItem(u8 menuType, u8 selectedMenuItem, s16 isScrolled) {
     SetGpuReg(REG_OFFSET_WIN0H, MENU_WIN_HCOORDS);
 
-    switch (menuType)
-    {
+    switch (menuType) {
         case HAS_NO_SAVED_GAME:
         default:
-            switch (selectedMenuItem)
-            {
+            switch (selectedMenuItem) {
                 case 0:
                 default:
                     SetGpuReg(REG_OFFSET_WIN0V, MENU_WIN_VCOORDS(0));
@@ -1389,8 +1134,7 @@ static void HighlightSelectedMainMenuItem(u8 menuType, u8 selectedMenuItem, s16 
             }
             break;
         case HAS_SAVED_GAME:
-            switch (selectedMenuItem)
-            {
+            switch (selectedMenuItem) {
                 case 0:
                 default:
                     SetGpuReg(REG_OFFSET_WIN0V, MENU_WIN_VCOORDS(2));
@@ -1404,8 +1148,7 @@ static void HighlightSelectedMainMenuItem(u8 menuType, u8 selectedMenuItem, s16 
             }
             break;
         case HAS_MYSTERY_GIFT:
-            switch (selectedMenuItem)
-            {
+            switch (selectedMenuItem) {
                 case 0:
                 default:
                     SetGpuReg(REG_OFFSET_WIN0V, MENU_WIN_VCOORDS(2));
@@ -1422,8 +1165,7 @@ static void HighlightSelectedMainMenuItem(u8 menuType, u8 selectedMenuItem, s16 
             }
             break;
         case HAS_MYSTERY_EVENTS:
-            switch (selectedMenuItem)
-            {
+            switch (selectedMenuItem) {
                 case 0:
                 default:
                     SetGpuReg(REG_OFFSET_WIN0V, MENU_WIN_VCOORDS(2));
@@ -1465,8 +1207,7 @@ static void HighlightSelectedMainMenuItem(u8 menuType, u8 selectedMenuItem, s16 
 #define tMaySpriteId data[11]
 #define tYesNoType data[12]
 
-static void Task_NewGameBirchSpeech_Init(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_Init(u8 taskId) {
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
     InitBgFromTemplate(&sBirchBgTemplate);
@@ -1498,16 +1239,12 @@ static void Task_NewGameBirchSpeech_Init(u8 taskId)
     ShowBg(1);
 }
 
-static void Task_NewGameBirchSpeech_WaitToShowBirch(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_WaitToShowBirch(u8 taskId) {
     u8 spriteId;
 
-    if (gTasks[taskId].tTimer)
-    {
+    if (gTasks[taskId].tTimer) {
         gTasks[taskId].tTimer--;
-    }
-    else
-    {
+    } else {
         spriteId = gTasks[taskId].tBirchSpriteId;
         gSprites[spriteId].x = 136;
         gSprites[spriteId].y = 60;
@@ -1520,17 +1257,12 @@ static void Task_NewGameBirchSpeech_WaitToShowBirch(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome(u8 taskId)
-{
-    if (gTasks[taskId].tIsDoneFadingSprites)
-    {
+static void Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome(u8 taskId) {
+    if (gTasks[taskId].tIsDoneFadingSprites) {
         gSprites[gTasks[taskId].tBirchSpriteId].oam.objMode = ST_OAM_OBJ_NORMAL;
-        if (gTasks[taskId].tTimer)
-        {
+        if (gTasks[taskId].tTimer) {
             gTasks[taskId].tTimer--;
-        }
-        else
-        {
+        } else {
             INIT_WINDOWS(gNewGameBirchSpeechTextWindows);
             LoadMainMenuWindowFrameTiles(0, 0xF3);
             LoadMessageBoxGfx(0, 0xFC, 0xF0);
@@ -1545,10 +1277,8 @@ static void Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_ThisIsAPokemon(u8 taskId)
-{
-    if (!gPaletteFade.active && !RunTextPrintersAndIsPrinter0Active())
-    {
+static void Task_NewGameBirchSpeech_ThisIsAPokemon(u8 taskId) {
+    if (!gPaletteFade.active && !RunTextPrintersAndIsPrinter0Active()) {
         gTasks[taskId].func = Task_NewGameBirchSpeech_MainSpeech;
         StringExpandPlaceholders(gStringVar4, gText_ThisIsAPokemon);
         AddTextPrinterWithCallbackForMessage(1, NewGameBirchSpeech_ShowPokeBallPrinterCallback);
@@ -1556,10 +1286,8 @@ static void Task_NewGameBirchSpeech_ThisIsAPokemon(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_MainSpeech(u8 taskId)
-{
-    if (!RunTextPrintersAndIsPrinter0Active())
-    {
+static void Task_NewGameBirchSpeech_MainSpeech(u8 taskId) {
+    if (!RunTextPrintersAndIsPrinter0Active()) {
         StringExpandPlaceholders(gStringVar4, gText_Birch_MainSpeech);
         AddTextPrinterForMessage(1);
         gTasks[taskId].func = Task_NewGameBirchSpeech_AndYouAre;
@@ -1568,8 +1296,7 @@ static void Task_NewGameBirchSpeech_MainSpeech(u8 taskId)
 
 #define tState data[0]
 
-static void Task_NewGameBirchSpeechSub_InitPokeBall(u8 taskId)
-{
+static void Task_NewGameBirchSpeechSub_InitPokeBall(u8 taskId) {
     u8 spriteId = gTasks[sBirchSpeechMainTaskId].tLotadSpriteId;
 
     gSprites[spriteId].x = 100;
@@ -1582,38 +1309,30 @@ static void Task_NewGameBirchSpeechSub_InitPokeBall(u8 taskId)
     gTasks[sBirchSpeechMainTaskId].tTimer = 0;
 }
 
-static void Task_NewGameBirchSpeechSub_WaitForLotad(u8 taskId)
-{
-    s16 *data = gTasks[taskId].data;
-    struct Sprite *sprite = &gSprites[gTasks[sBirchSpeechMainTaskId].tLotadSpriteId];
+static void Task_NewGameBirchSpeechSub_WaitForLotad(u8 taskId) {
+    s16* data = gTasks[taskId].data;
+    struct Sprite* sprite = &gSprites[gTasks[sBirchSpeechMainTaskId].tLotadSpriteId];
 
-    switch (tState)
-    {
+    switch (tState) {
         case 0:
-            if (sprite->callback != SpriteCallbackDummy)
-                return;
+            if (sprite->callback != SpriteCallbackDummy) return;
             sprite->oam.affineMode = ST_OAM_AFFINE_OFF;
             break;
         case 1:
-            if (gTasks[sBirchSpeechMainTaskId].tTimer >= 96)
-            {
+            if (gTasks[sBirchSpeechMainTaskId].tTimer >= 96) {
                 DestroyTask(taskId);
-                if (gTasks[sBirchSpeechMainTaskId].tTimer < 0x4000)
-                    gTasks[sBirchSpeechMainTaskId].tTimer++;
+                if (gTasks[sBirchSpeechMainTaskId].tTimer < 0x4000) gTasks[sBirchSpeechMainTaskId].tTimer++;
             }
             return;
     }
     tState++;
-    if (gTasks[sBirchSpeechMainTaskId].tTimer < 0x4000)
-        gTasks[sBirchSpeechMainTaskId].tTimer++;
+    if (gTasks[sBirchSpeechMainTaskId].tTimer < 0x4000) gTasks[sBirchSpeechMainTaskId].tTimer++;
 }
 
 #undef tState
 
-static void Task_NewGameBirchSpeech_AndYouAre(u8 taskId)
-{
-    if (!RunTextPrintersAndIsPrinter0Active())
-    {
+static void Task_NewGameBirchSpeech_AndYouAre(u8 taskId) {
+    if (!RunTextPrintersAndIsPrinter0Active()) {
         gUnknown_02022D04 = 0;
         StringExpandPlaceholders(gStringVar4, gText_Birch_AndYouAre);
         AddTextPrinterForMessage(1);
@@ -1621,10 +1340,8 @@ static void Task_NewGameBirchSpeech_AndYouAre(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_StartBirchLotadPlatformFade(u8 taskId)
-{
-    if (!RunTextPrintersAndIsPrinter0Active())
-    {
+static void Task_NewGameBirchSpeech_StartBirchLotadPlatformFade(u8 taskId) {
+    if (!RunTextPrintersAndIsPrinter0Active()) {
         gSprites[gTasks[taskId].tBirchSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
         gSprites[gTasks[taskId].tLotadSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
         NewGameBirchSpeech_StartFadeOutTarget1InTarget2(taskId, 2);
@@ -1634,32 +1351,23 @@ static void Task_NewGameBirchSpeech_StartBirchLotadPlatformFade(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_SlidePlatformAway(u8 taskId)
-{
-    if (gTasks[taskId].tBG1HOFS != -60)
-    {
+static void Task_NewGameBirchSpeech_SlidePlatformAway(u8 taskId) {
+    if (gTasks[taskId].tBG1HOFS != -60) {
         gTasks[taskId].tBG1HOFS -= 2;
         SetGpuReg(REG_OFFSET_BG1HOFS, gTasks[taskId].tBG1HOFS);
-    }
-    else
-    {
+    } else {
         gTasks[taskId].tBG1HOFS = -60;
         gTasks[taskId].func = Task_NewGameBirchSpeech_StartPlayerFadeIn;
     }
 }
 
-static void Task_NewGameBirchSpeech_StartPlayerFadeIn(u8 taskId)
-{
-    if (gTasks[taskId].tIsDoneFadingSprites)
-    {
+static void Task_NewGameBirchSpeech_StartPlayerFadeIn(u8 taskId) {
+    if (gTasks[taskId].tIsDoneFadingSprites) {
         gSprites[gTasks[taskId].tBirchSpriteId].invisible = TRUE;
         gSprites[gTasks[taskId].tLotadSpriteId].invisible = TRUE;
-        if (gTasks[taskId].tTimer)
-        {
+        if (gTasks[taskId].tTimer) {
             gTasks[taskId].tTimer--;
-        }
-        else
-        {
+        } else {
             u8 spriteId = gTasks[taskId].tBrendanSpriteId;
 
             gSprites[spriteId].x = 180;
@@ -1675,39 +1383,32 @@ static void Task_NewGameBirchSpeech_StartPlayerFadeIn(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_WaitForPlayerFadeIn(u8 taskId)
-{
-    if (gTasks[taskId].tIsDoneFadingSprites)
-    {
+static void Task_NewGameBirchSpeech_WaitForPlayerFadeIn(u8 taskId) {
+    if (gTasks[taskId].tIsDoneFadingSprites) {
         gSprites[gTasks[taskId].tPlayerSpriteId].oam.objMode = ST_OAM_OBJ_NORMAL;
         gTasks[taskId].func = Task_NewGameBirchSpeech_BoyOrGirl;
     }
 }
 
-static void Task_NewGameBirchSpeech_BoyOrGirl(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_BoyOrGirl(u8 taskId) {
     NewGameBirchSpeech_ClearWindow(0);
     StringExpandPlaceholders(gStringVar4, gText_Birch_BoyOrGirl);
     AddTextPrinterForMessage(1);
     gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowGenderMenu;
 }
 
-static void Task_NewGameBirchSpeech_WaitToShowGenderMenu(u8 taskId)
-{
-    if (!RunTextPrintersAndIsPrinter0Active())
-    {
+static void Task_NewGameBirchSpeech_WaitToShowGenderMenu(u8 taskId) {
+    if (!RunTextPrintersAndIsPrinter0Active()) {
         NewGameBirchSpeech_ShowGenderMenu();
         gTasks[taskId].func = Task_NewGameBirchSpeech_ChooseGender;
     }
 }
 
-static void Task_NewGameBirchSpeech_ChooseGender(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_ChooseGender(u8 taskId) {
     int gender = NewGameBirchSpeech_ProcessGenderMenuInput();
     int gender2;
 
-    switch (gender)
-    {
+    switch (gender) {
         case MALE:
             PlaySE(SE_SELECT);
             gSaveBlock2Ptr->playerGender = gender;
@@ -1722,8 +1423,7 @@ static void Task_NewGameBirchSpeech_ChooseGender(u8 taskId)
             break;
     }
     gender2 = Menu_GetCursorPos();
-    if (gender2 != gTasks[taskId].tPlayerGender)
-    {
+    if (gender2 != gTasks[taskId].tPlayerGender) {
         gTasks[taskId].tPlayerGender = gender2;
         gSprites[gTasks[taskId].tPlayerSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
         NewGameBirchSpeech_StartFadeOutTarget1InTarget2(taskId, 0);
@@ -1731,15 +1431,11 @@ static void Task_NewGameBirchSpeech_ChooseGender(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_SlideOutOldGenderSprite(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_SlideOutOldGenderSprite(u8 taskId) {
     u8 spriteId = gTasks[taskId].tPlayerSpriteId;
-    if (gTasks[taskId].tIsDoneFadingSprites == 0)
-    {
+    if (gTasks[taskId].tIsDoneFadingSprites == 0) {
         gSprites[spriteId].x += 4;
-    }
-    else
-    {
+    } else {
         gSprites[spriteId].invisible = TRUE;
         if (gTasks[taskId].tPlayerGender != MALE)
             spriteId = gTasks[taskId].tMaySpriteId;
@@ -1755,63 +1451,50 @@ static void Task_NewGameBirchSpeech_SlideOutOldGenderSprite(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_SlideInNewGenderSprite(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_SlideInNewGenderSprite(u8 taskId) {
     u8 spriteId = gTasks[taskId].tPlayerSpriteId;
 
-    if (gSprites[spriteId].x > 180)
-    {
+    if (gSprites[spriteId].x > 180) {
         gSprites[spriteId].x -= 4;
-    }
-    else
-    {
+    } else {
         gSprites[spriteId].x = 180;
-        if (gTasks[taskId].tIsDoneFadingSprites)
-        {
+        if (gTasks[taskId].tIsDoneFadingSprites) {
             gSprites[spriteId].oam.objMode = ST_OAM_OBJ_NORMAL;
             gTasks[taskId].func = Task_NewGameBirchSpeech_ChooseGender;
         }
     }
 }
 
-static void Task_NewGameBirchSpeech_WhatsYourName(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_WhatsYourName(u8 taskId) {
     NewGameBirchSpeech_ClearWindow(0);
     StringExpandPlaceholders(gStringVar4, gText_Birch_WhatsYourName);
     AddTextPrinterForMessage(1);
     gTasks[taskId].func = Task_NewGameBirchSpeech_WaitForWhatsYourNameToPrint;
 }
 
-static void Task_NewGameBirchSpeech_WaitForWhatsYourNameToPrint(u8 taskId)
-{
-    if (!RunTextPrintersAndIsPrinter0Active())
-        gTasks[taskId].func = Task_NewGameBirchSpeech_WaitPressBeforeNameChoice;
+static void Task_NewGameBirchSpeech_WaitForWhatsYourNameToPrint(u8 taskId) {
+    if (!RunTextPrintersAndIsPrinter0Active()) gTasks[taskId].func = Task_NewGameBirchSpeech_WaitPressBeforeNameChoice;
 }
 
-static void Task_NewGameBirchSpeech_WaitPressBeforeNameChoice(u8 taskId)
-{
-    if ((JOY_NEW(A_BUTTON)) || (JOY_NEW(B_BUTTON)))
-    {
+static void Task_NewGameBirchSpeech_WaitPressBeforeNameChoice(u8 taskId) {
+    if ((JOY_NEW(A_BUTTON)) || (JOY_NEW(B_BUTTON))) {
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
         gTasks[taskId].func = Task_NewGameBirchSpeech_StartNamingScreen;
     }
 }
 
-static void Task_NewGameBirchSpeech_StartNamingScreen(u8 taskId)
-{
-    if (!gPaletteFade.active)
-    {
+static void Task_NewGameBirchSpeech_StartNamingScreen(u8 taskId) {
+    if (!gPaletteFade.active) {
         FreeAllWindowBuffers();
         FreeAndDestroyMonPicSprite(gTasks[taskId].tLotadSpriteId);
         NewGameBirchSpeech_SetDefaultPlayerName(Random() % 20);
         DestroyTask(taskId);
         Intro_Options_Menu_Init(CB2_NewGameBirchSpeech_ReturnFromNamingScreen);
-        //DoNamingScreen(NAMING_SCREEN_PLAYER, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, CB2_NewGameBirchSpeech_ReturnFromNamingScreen);
+        // DoNamingScreen(NAMING_SCREEN_PLAYER, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, CB2_NewGameBirchSpeech_ReturnFromNamingScreen);
     }
 }
 
-static void Task_NewGameBirchSpeech_SoItsPlayerName(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_SoItsPlayerName(u8 taskId) {
     NewGameBirchSpeech_ClearWindow(0);
     StringExpandPlaceholders(gStringVar4, gText_Birch_SoItsPlayer);
     AddTextPrinterForMessage(1);
@@ -1819,40 +1502,33 @@ static void Task_NewGameBirchSpeech_SoItsPlayerName(u8 taskId)
     gTasks[taskId].func = Task_NewGameBirchSpeech_CreateYesNo;
 }
 
-static void Task_NewGameBirchSpeech_CreateYesNo(u8 taskId)
-{
-    if (!RunTextPrintersAndIsPrinter0Active())
-    {
+static void Task_NewGameBirchSpeech_CreateYesNo(u8 taskId) {
+    if (!RunTextPrintersAndIsPrinter0Active()) {
         CreateYesNoMenuParameterized(2, 1, 0xF3, 0xDF, 2, 15);
         gTasks[taskId].func = Task_NewGameBirchSpeech_ProcessYesNoMenu;
     }
 }
 
-static void Task_NewGameBirchSpeech_ProcessYesNoMenu(u8 taskId)
-{
-    switch (Menu_ProcessInputNoWrapClearOnChoose())
-    {
+static void Task_NewGameBirchSpeech_ProcessYesNoMenu(u8 taskId) {
+    switch (Menu_ProcessInputNoWrapClearOnChoose()) {
         // Player chose "Yes" - go to next section
         case 0:
             PlaySE(SE_SELECT);
-            if (gTasks[taskId].tYesNoType == 1) // Confirm gender
+            if (gTasks[taskId].tYesNoType == 1)  // Confirm gender
             {
                 gSprites[gTasks[taskId].tPlayerSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
                 NewGameBirchSpeech_StartFadeOutTarget1InTarget2(taskId, 2);
                 NewGameBirchSpeech_StartFadePlatformIn(taskId, 1);
                 gTasks[taskId].func = Task_NewGameBirchSpeech_SlidePlatformAway2;
-            }
-            else if (gTasks[taskId].tYesNoType == 2) // Confirm difficulty
+            } else if (gTasks[taskId].tYesNoType == 2)  // Confirm difficulty
             {
                 NewGameBirchSpeech_ClearWindow(0);
                 gTasks[taskId].func = Task_NewGameBirchSpeech_LevelCapSelect;
-            }
-            else if (gTasks[taskId].tYesNoType == 3) // Confirm level caps
+            } else if (gTasks[taskId].tYesNoType == 3)  // Confirm level caps
             {
                 NewGameBirchSpeech_ClearWindow(0);
                 gTasks[taskId].func = Task_NewGameBirchSpeech_RandomizerSelect;
-            }
-            else // Confirm Randomizer
+            } else  // Confirm Randomizer
             {
                 NewGameBirchSpeech_ClearWindow(0);
                 gTasks[taskId].func = Task_NewGameBirchSpeech_ReadTheDocs;
@@ -1862,26 +1538,19 @@ static void Task_NewGameBirchSpeech_ProcessYesNoMenu(u8 taskId)
         case -1:
         case 1:
             PlaySE(SE_SELECT);
-            if (gTasks[taskId].tYesNoType == 1)
-            {
+            if (gTasks[taskId].tYesNoType == 1) {
                 gTasks[taskId].func = Task_NewGameBirchSpeech_BoyOrGirl;
-            }
-            else if (gTasks[taskId].tYesNoType == 2)
-            {
+            } else if (gTasks[taskId].tYesNoType == 2) {
                 NewGameBirchSpeech_ClearWindow(0);
                 StringExpandPlaceholders(gStringVar4, gText_Pie_WhichDifficulty);
                 AddTextPrinterForMessage(1);
                 gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowDifficultyMenu;
-            }
-            else if (gTasks[taskId].tYesNoType == 3)
-            {
+            } else if (gTasks[taskId].tYesNoType == 3) {
                 NewGameBirchSpeech_ClearWindow(0);
                 StringExpandPlaceholders(gStringVar4, gText_Pie_WhichLevelCapSetting);
                 AddTextPrinterForMessage(1);
                 gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowLevelCapMenu;
-            }
-            else
-            {
+            } else {
                 NewGameBirchSpeech_ClearWindow(0);
                 StringExpandPlaceholders(gStringVar4, gText_Pie_WhichRandomizerSetting);
                 AddTextPrinterForMessage(1);
@@ -1890,25 +1559,19 @@ static void Task_NewGameBirchSpeech_ProcessYesNoMenu(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_SlidePlatformAway2(u8 taskId)
-{
-    if (gTasks[taskId].tBG1HOFS)
-    {
+static void Task_NewGameBirchSpeech_SlidePlatformAway2(u8 taskId) {
+    if (gTasks[taskId].tBG1HOFS) {
         gTasks[taskId].tBG1HOFS += 2;
         SetGpuReg(REG_OFFSET_BG1HOFS, gTasks[taskId].tBG1HOFS);
-    }
-    else
-    {
+    } else {
         gTasks[taskId].func = Task_NewGameBirchSpeech_ReshowBirchLotad;
     }
 }
 
-static void Task_NewGameBirchSpeech_ReshowBirchLotad(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_ReshowBirchLotad(u8 taskId) {
     u8 spriteId;
 
-    if (gTasks[taskId].tIsDoneFadingSprites)
-    {
+    if (gTasks[taskId].tIsDoneFadingSprites) {
         gSprites[gTasks[taskId].tBrendanSpriteId].invisible = TRUE;
         gSprites[gTasks[taskId].tMaySpriteId].invisible = TRUE;
         spriteId = gTasks[taskId].tBirchSpriteId;
@@ -1930,14 +1593,11 @@ static void Task_NewGameBirchSpeech_ReshowBirchLotad(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_WaitForSpriteFadeInAndTextPrinter(u8 taskId)
-{
-    if (gTasks[taskId].tIsDoneFadingSprites)
-    {
+static void Task_NewGameBirchSpeech_WaitForSpriteFadeInAndTextPrinter(u8 taskId) {
+    if (gTasks[taskId].tIsDoneFadingSprites) {
         gSprites[gTasks[taskId].tBirchSpriteId].oam.objMode = ST_OAM_OBJ_NORMAL;
         gSprites[gTasks[taskId].tLotadSpriteId].oam.objMode = ST_OAM_OBJ_NORMAL;
-        if (!RunTextPrintersAndIsPrinter0Active())
-        {
+        if (!RunTextPrintersAndIsPrinter0Active()) {
             gSprites[gTasks[taskId].tBirchSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
             gSprites[gTasks[taskId].tLotadSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
             NewGameBirchSpeech_StartFadeOutTarget1InTarget2(taskId, 2);
@@ -1948,16 +1608,13 @@ static void Task_NewGameBirchSpeech_WaitForSpriteFadeInAndTextPrinter(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_AreYouReady(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_AreYouReady(u8 taskId) {
     u8 spriteId;
 
-    if (gTasks[taskId].tIsDoneFadingSprites)
-    {
+    if (gTasks[taskId].tIsDoneFadingSprites) {
         gSprites[gTasks[taskId].tBirchSpriteId].invisible = TRUE;
         gSprites[gTasks[taskId].tLotadSpriteId].invisible = TRUE;
-        if (gTasks[taskId].tTimer)
-        {
+        if (gTasks[taskId].tTimer) {
             gTasks[taskId].tTimer--;
             return;
         }
@@ -1975,35 +1632,29 @@ static void Task_NewGameBirchSpeech_AreYouReady(u8 taskId)
         StringExpandPlaceholders(gStringVar4, gText_Birch_AreYouReady);
         AddTextPrinterForMessage(1);
         gTasks[taskId].func = Task_NewGameBirchSpeech_ShrinkPlayer;
-        //gTasks[taskId].func = Task_NewGameBirchSpeech_HackIntro;
+        // gTasks[taskId].func = Task_NewGameBirchSpeech_HackIntro;
     }
 }
 
-static void Task_NewGameBirchSpeech_HackIntro(u8 taskId)
-{
-    if (!RunTextPrintersAndIsPrinter0Active())
-    {
+static void Task_NewGameBirchSpeech_HackIntro(u8 taskId) {
+    if (!RunTextPrintersAndIsPrinter0Active()) {
         StringExpandPlaceholders(gStringVar4, gText_Pie_Welcome);
         AddTextPrinterForMessage(1);
         gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowDifficultyMenu;
     }
 }
 
-static void Task_NewGameBirchSpeech_WaitToShowDifficultyMenu(u8 taskId)
-{
-    if (!RunTextPrintersAndIsPrinter0Active())
-    {
+static void Task_NewGameBirchSpeech_WaitToShowDifficultyMenu(u8 taskId) {
+    if (!RunTextPrintersAndIsPrinter0Active()) {
         NewGameBirchSpeech_ShowDifficultyMenu();
         gTasks[taskId].func = Task_NewGameBirchSpeech_ChooseDifficulty;
     }
 }
 
-static void Task_NewGameBirchSpeech_ChooseDifficulty(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_ChooseDifficulty(u8 taskId) {
     int difficulty = NewGameBirchSpeech_ProcessDifficultyMenuInput();
 
-    switch (difficulty)
-    {
+    switch (difficulty) {
         case DIFFICULTY_EASY:
             PlaySE(SE_SELECT);
             gSaveBlock2Ptr->gameDifficulty = DIFFICULTY_EASY;
@@ -2035,12 +1686,10 @@ static void Task_NewGameBirchSpeech_ChooseDifficulty(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_DifficultyDesc(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_DifficultyDesc(u8 taskId) {
     int difficulty = gSaveBlock2Ptr->gameDifficulty;
-    const u8 *str;
-    switch (difficulty)
-    {
+    const u8* str;
+    switch (difficulty) {
         default:
         case DIFFICULTY_EASY:
             str = gText_Pie_NormalMode;
@@ -2062,32 +1711,26 @@ static void Task_NewGameBirchSpeech_DifficultyDesc(u8 taskId)
     AddTextPrinterForMessage(1);
     gTasks[taskId].func = Task_NewGameBirchSpeech_CreateYesNo;
 }
-//Level Caps
-static void Task_NewGameBirchSpeech_LevelCapSelect(u8 taskId)
-{
-    if (!RunTextPrintersAndIsPrinter0Active())
-    {
+// Level Caps
+static void Task_NewGameBirchSpeech_LevelCapSelect(u8 taskId) {
+    if (!RunTextPrintersAndIsPrinter0Active()) {
         StringExpandPlaceholders(gStringVar4, gText_Pie_LevelCaps);
         AddTextPrinterForMessage(1);
         gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowLevelCapMenu;
     }
 }
 
-static void Task_NewGameBirchSpeech_WaitToShowLevelCapMenu(u8 taskId)
-{
-    if (!RunTextPrintersAndIsPrinter0Active())
-    {
+static void Task_NewGameBirchSpeech_WaitToShowLevelCapMenu(u8 taskId) {
+    if (!RunTextPrintersAndIsPrinter0Active()) {
         NewGameBirchSpeech_ShowLevelCapMenu();
         gTasks[taskId].func = Task_NewGameBirchSpeech_ChooseLevelCaps;
     }
 }
 
-static void Task_NewGameBirchSpeech_ChooseLevelCaps(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_ChooseLevelCaps(u8 taskId) {
     int difficulty = NewGameBirchSpeech_ProcessDifficultyMenuInput();
 
-    switch (difficulty)
-    {
+    switch (difficulty) {
         case 0:
             PlaySE(SE_SELECT);
             gSaveBlock2Ptr->levelCaps = LEVEL_CAPS_EASY;
@@ -2109,12 +1752,10 @@ static void Task_NewGameBirchSpeech_ChooseLevelCaps(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_LevelCapsDesc(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_LevelCapsDesc(u8 taskId) {
     int levelCap = gSaveBlock2Ptr->levelCaps;
-    const u8 *str;
-    switch (levelCap)
-    {
+    const u8* str;
+    switch (levelCap) {
         default:
         case LEVEL_CAPS_EASY:
             str = gText_Pie_StandardCaps;
@@ -2134,38 +1775,32 @@ static void Task_NewGameBirchSpeech_LevelCapsDesc(u8 taskId)
     gTasks[taskId].func = Task_NewGameBirchSpeech_CreateYesNo;
 }
 // Randomizer
-static void Task_NewGameBirchSpeech_RandomizerSelect(u8 taskId)
-{
-    if (!RunTextPrintersAndIsPrinter0Active())
-    {
+static void Task_NewGameBirchSpeech_RandomizerSelect(u8 taskId) {
+    if (!RunTextPrintersAndIsPrinter0Active()) {
         StringExpandPlaceholders(gStringVar4, gText_Pie_Randomizer);
         AddTextPrinterForMessage(1);
         gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowRandomizerMenu;
     }
 }
 
-static void Task_NewGameBirchSpeech_WaitToShowRandomizerMenu(u8 taskId)
-{
-    if (!RunTextPrintersAndIsPrinter0Active())
-    {
+static void Task_NewGameBirchSpeech_WaitToShowRandomizerMenu(u8 taskId) {
+    if (!RunTextPrintersAndIsPrinter0Active()) {
         NewGameBirchSpeech_ShowRandomizerMenu();
         gTasks[taskId].func = Task_NewGameBirchSpeech_ChooseRandomizer;
     }
 }
 
-static void Task_NewGameBirchSpeech_ChooseRandomizer(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_ChooseRandomizer(u8 taskId) {
     int difficulty = NewGameBirchSpeech_ProcessDifficultyMenuInput();
 
-    switch (difficulty)
-    {
-        case 0://No
+    switch (difficulty) {
+        case 0:  // No
             PlaySE(SE_SELECT);
             gSaveBlock2Ptr->innaterandomizedMode = 0;
             NewGameBirchSpeech_ClearGenderWindow(4, 1);
             gTasks[taskId].func = Task_NewGameBirchSpeech_RandomizerDesc;
             break;
-        case 1://Yes
+        case 1:  // Yes
             PlaySE(SE_SELECT);
             gSaveBlock2Ptr->innaterandomizedMode = 1;
             NewGameBirchSpeech_ClearGenderWindow(4, 1);
@@ -2174,9 +1809,8 @@ static void Task_NewGameBirchSpeech_ChooseRandomizer(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_RandomizerDesc(u8 taskId)
-{
-    const u8 *str;
+static void Task_NewGameBirchSpeech_RandomizerDesc(u8 taskId) {
+    const u8* str;
     if (gSaveBlock2Ptr->innaterandomizedMode == 1)
         str = gText_Pie_Randomizer_Enabled;
     else
@@ -2189,23 +1823,19 @@ static void Task_NewGameBirchSpeech_RandomizerDesc(u8 taskId)
     gTasks[taskId].func = Task_NewGameBirchSpeech_CreateYesNo;
 }
 //
-static void Task_NewGameBirchSpeech_ReadTheDocs(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_ReadTheDocs(u8 taskId) {
     NewGameBirchSpeech_ClearWindow(0);
     StringExpandPlaceholders(gStringVar4, gText_Pie_Documents);
     AddTextPrinterForMessage(1);
     gTasks[taskId].func = Task_NewGameBirchSpeech_ShrinkPlayer;
 }
 
-static void Task_NewGameBirchSpeech_ShrinkPlayer(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_ShrinkPlayer(u8 taskId) {
     u8 spriteId;
 
-    if (gTasks[taskId].tIsDoneFadingSprites)
-    {
+    if (gTasks[taskId].tIsDoneFadingSprites) {
         gSprites[gTasks[taskId].tPlayerSpriteId].oam.objMode = ST_OAM_OBJ_NORMAL;
-        if (!RunTextPrintersAndIsPrinter0Active())
-        {
+        if (!RunTextPrintersAndIsPrinter0Active()) {
             spriteId = gTasks[taskId].tPlayerSpriteId;
             gSprites[spriteId].oam.affineMode = ST_OAM_AFFINE_NORMAL;
             gSprites[spriteId].affineAnims = sSpriteAffineAnimTable_PlayerShrink;
@@ -2219,20 +1849,16 @@ static void Task_NewGameBirchSpeech_ShrinkPlayer(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_WaitForPlayerShrink(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_WaitForPlayerShrink(u8 taskId) {
     u8 spriteId = gTasks[taskId].tPlayerSpriteId;
 
-    if (gSprites[spriteId].affineAnimEnded)
-        gTasks[taskId].func = Task_NewGameBirchSpeech_FadePlayerToWhite;
+    if (gSprites[spriteId].affineAnimEnded) gTasks[taskId].func = Task_NewGameBirchSpeech_FadePlayerToWhite;
 }
 
-static void Task_NewGameBirchSpeech_FadePlayerToWhite(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_FadePlayerToWhite(u8 taskId) {
     u8 spriteId;
 
-    if (!gPaletteFade.active)
-    {
+    if (!gPaletteFade.active) {
         spriteId = gTasks[taskId].tPlayerSpriteId;
         gSprites[spriteId].callback = SpriteCB_Null;
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
@@ -2241,10 +1867,8 @@ static void Task_NewGameBirchSpeech_FadePlayerToWhite(u8 taskId)
     }
 }
 
-static void Task_NewGameBirchSpeech_Cleanup(u8 taskId)
-{
-    if (!gPaletteFade.active)
-    {
+static void Task_NewGameBirchSpeech_Cleanup(u8 taskId) {
+    if (!gPaletteFade.active) {
         FreeAllWindowBuffers();
         FreeAndDestroyMonPicSprite(gTasks[taskId].tLotadSpriteId);
         ResetAllPicSprites();
@@ -2253,8 +1877,7 @@ static void Task_NewGameBirchSpeech_Cleanup(u8 taskId)
     }
 }
 
-static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void)
-{
+static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void) {
     u8 taskId;
     u8 spriteId;
     u16 savedIme;
@@ -2291,13 +1914,10 @@ static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void)
     FreeAllSpritePalettes();
     ResetAllPicSprites();
     AddBirchSpeechObjects(taskId);
-    if (gSaveBlock2Ptr->playerGender != MALE)
-    {
+    if (gSaveBlock2Ptr->playerGender != MALE) {
         gTasks[taskId].tPlayerGender = FEMALE;
         spriteId = gTasks[taskId].tMaySpriteId;
-    }
-    else
-    {
+    } else {
         gTasks[taskId].tPlayerGender = MALE;
         spriteId = gTasks[taskId].tBrendanSpriteId;
     }
@@ -2329,12 +1949,9 @@ static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void)
     CopyWindowToVram(0, 3);
 }
 
-static void SpriteCB_Null(struct Sprite *sprite)
-{
-}
+static void SpriteCB_Null(struct Sprite* sprite) {}
 
-static void SpriteCB_MovePlayerDownWhileShrinking(struct Sprite *sprite)
-{
+static void SpriteCB_MovePlayerDownWhileShrinking(struct Sprite* sprite) {
     u32 y;
 
     y = (sprite->y << 16) + sprite->data[0] + 0xC000;
@@ -2342,13 +1959,9 @@ static void SpriteCB_MovePlayerDownWhileShrinking(struct Sprite *sprite)
     sprite->data[0] = y;
 }
 
-static u8 NewGameBirchSpeech_CreateLotadSprite(u8 a, u8 b)
-{
-    return CreatePicSprite2(SPECIES_DEWGONG, SHINY_ODDS, 0, 1, a, b, 14, -1, FALSE, FALSE);
-}
+static u8 NewGameBirchSpeech_CreateLotadSprite(u8 a, u8 b) { return CreatePicSprite2(SPECIES_DEWGONG, SHINY_ODDS, 0, 1, a, b, 14, -1, FALSE, FALSE); }
 
-static void AddBirchSpeechObjects(u8 taskId)
-{
+static void AddBirchSpeechObjects(u8 taskId) {
     u8 birchSpriteId;
     u8 lotadSpriteId;
     u8 brendanSpriteId;
@@ -2391,21 +2004,15 @@ static void AddBirchSpeechObjects(u8 taskId)
 #define tDelay data[3]
 #define tDelayTimer data[4]
 
-static void Task_NewGameBirchSpeech_FadeOutTarget1InTarget2(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_FadeOutTarget1InTarget2(u8 taskId) {
     int alphaCoeff2;
 
-    if (gTasks[taskId].tAlphaCoeff1 == 0)
-    {
+    if (gTasks[taskId].tAlphaCoeff1 == 0) {
         gTasks[gTasks[taskId].tMainTask].tIsDoneFadingSprites = TRUE;
         DestroyTask(taskId);
-    }
-    else if (gTasks[taskId].tDelayTimer)
-    {
+    } else if (gTasks[taskId].tDelayTimer) {
         gTasks[taskId].tDelayTimer--;
-    }
-    else
-    {
+    } else {
         gTasks[taskId].tDelayTimer = gTasks[taskId].tDelay;
         gTasks[taskId].tAlphaCoeff1--;
         gTasks[taskId].tAlphaCoeff2++;
@@ -2414,8 +2021,7 @@ static void Task_NewGameBirchSpeech_FadeOutTarget1InTarget2(u8 taskId)
     }
 }
 
-static void NewGameBirchSpeech_StartFadeOutTarget1InTarget2(u8 taskId, u8 delay)
-{
+static void NewGameBirchSpeech_StartFadeOutTarget1InTarget2(u8 taskId, u8 delay) {
     u8 taskId2;
 
     SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_BG1 | BLDCNT_EFFECT_BLEND | BLDCNT_TGT1_OBJ);
@@ -2430,21 +2036,15 @@ static void NewGameBirchSpeech_StartFadeOutTarget1InTarget2(u8 taskId, u8 delay)
     gTasks[taskId2].tDelayTimer = delay;
 }
 
-static void Task_NewGameBirchSpeech_FadeInTarget1OutTarget2(u8 taskId)
-{
+static void Task_NewGameBirchSpeech_FadeInTarget1OutTarget2(u8 taskId) {
     int alphaCoeff2;
 
-    if (gTasks[taskId].tAlphaCoeff1 == 16)
-    {
+    if (gTasks[taskId].tAlphaCoeff1 == 16) {
         gTasks[gTasks[taskId].tMainTask].tIsDoneFadingSprites = TRUE;
         DestroyTask(taskId);
-    }
-    else if (gTasks[taskId].tDelayTimer)
-    {
+    } else if (gTasks[taskId].tDelayTimer) {
         gTasks[taskId].tDelayTimer--;
-    }
-    else
-    {
+    } else {
         gTasks[taskId].tDelayTimer = gTasks[taskId].tDelay;
         gTasks[taskId].tAlphaCoeff1++;
         gTasks[taskId].tAlphaCoeff2--;
@@ -2453,8 +2053,7 @@ static void Task_NewGameBirchSpeech_FadeInTarget1OutTarget2(u8 taskId)
     }
 }
 
-static void NewGameBirchSpeech_StartFadeInTarget1OutTarget2(u8 taskId, u8 delay)
-{
+static void NewGameBirchSpeech_StartFadeInTarget1OutTarget2(u8 taskId, u8 delay) {
     u8 taskId2;
 
     SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_BG1 | BLDCNT_EFFECT_BLEND | BLDCNT_TGT1_OBJ);
@@ -2483,30 +2082,21 @@ static void NewGameBirchSpeech_StartFadeInTarget1OutTarget2(u8 taskId, u8 delay)
 #define tDelay data[3]
 #define tDelayTimer data[4]
 
-static void Task_NewGameBirchSpeech_FadePlatformIn(u8 taskId)
-{
-    if (gTasks[taskId].tDelayBefore)
-    {
+static void Task_NewGameBirchSpeech_FadePlatformIn(u8 taskId) {
+    if (gTasks[taskId].tDelayBefore) {
         gTasks[taskId].tDelayBefore--;
-    }
-    else if (gTasks[taskId].tPalIndex == 8)
-    {
+    } else if (gTasks[taskId].tPalIndex == 8) {
         DestroyTask(taskId);
-    }
-    else if (gTasks[taskId].tDelayTimer)
-    {
+    } else if (gTasks[taskId].tDelayTimer) {
         gTasks[taskId].tDelayTimer--;
-    }
-    else
-    {
+    } else {
         gTasks[taskId].tDelayTimer = gTasks[taskId].tDelay;
         gTasks[taskId].tPalIndex++;
         LoadPalette(&sBirchSpeechBgGradientPal[gTasks[taskId].tPalIndex], 1, 16);
     }
 }
 
-static void NewGameBirchSpeech_StartFadePlatformIn(u8 taskId, u8 delay)
-{
+static void NewGameBirchSpeech_StartFadePlatformIn(u8 taskId, u8 delay) {
     u8 taskId2;
 
     taskId2 = CreateTask(Task_NewGameBirchSpeech_FadePlatformIn, 0);
@@ -2517,30 +2107,21 @@ static void NewGameBirchSpeech_StartFadePlatformIn(u8 taskId, u8 delay)
     gTasks[taskId2].tDelayTimer = delay;
 }
 
-static void Task_NewGameBirchSpeech_FadePlatformOut(u8 taskId)
-{
-    if (gTasks[taskId].tDelayBefore)
-    {
+static void Task_NewGameBirchSpeech_FadePlatformOut(u8 taskId) {
+    if (gTasks[taskId].tDelayBefore) {
         gTasks[taskId].tDelayBefore--;
-    }
-    else if (gTasks[taskId].tPalIndex == 0)
-    {
+    } else if (gTasks[taskId].tPalIndex == 0) {
         DestroyTask(taskId);
-    }
-    else if (gTasks[taskId].tDelayTimer)
-    {
+    } else if (gTasks[taskId].tDelayTimer) {
         gTasks[taskId].tDelayTimer--;
-    }
-    else
-    {
+    } else {
         gTasks[taskId].tDelayTimer = gTasks[taskId].tDelay;
         gTasks[taskId].tPalIndex--;
         LoadPalette(&sBirchSpeechBgGradientPal[gTasks[taskId].tPalIndex], 1, 16);
     }
 }
 
-static void NewGameBirchSpeech_StartFadePlatformOut(u8 taskId, u8 delay)
-{
+static void NewGameBirchSpeech_StartFadePlatformOut(u8 taskId, u8 delay) {
     u8 taskId2;
 
     taskId2 = CreateTask(Task_NewGameBirchSpeech_FadePlatformOut, 0);
@@ -2557,8 +2138,7 @@ static void NewGameBirchSpeech_StartFadePlatformOut(u8 taskId, u8 delay)
 #undef tDelay
 #undef tDelayTimer
 
-static void NewGameBirchSpeech_ShowGenderMenu(void)
-{
+static void NewGameBirchSpeech_ShowGenderMenu(void) {
     DrawMainMenuWindowBorder(&gNewGameBirchSpeechTextWindows[1], 0xF3);
     FillWindowPixelBuffer(1, PIXEL_FILL(1));
     PrintMenuTable(1, ARRAY_COUNT(sMenuActions_Gender), sMenuActions_Gender);
@@ -2567,13 +2147,9 @@ static void NewGameBirchSpeech_ShowGenderMenu(void)
     CopyWindowToVram(1, 3);
 }
 
-static s8 NewGameBirchSpeech_ProcessGenderMenuInput(void)
-{
-    return Menu_ProcessInputNoWrap();
-}
+static s8 NewGameBirchSpeech_ProcessGenderMenuInput(void) { return Menu_ProcessInputNoWrap(); }
 
-static void NewGameBirchSpeech_ShowDifficultyMenu(void)
-{
+static void NewGameBirchSpeech_ShowDifficultyMenu(void) {
     DrawMainMenuWindowBorder(&gNewGameBirchSpeechTextWindows[5], 0xF3);
     FillWindowPixelBuffer(5, PIXEL_FILL(1));
     PrintMenuTable(5, ARRAY_COUNT(sMenuActions_Difficulty), sMenuActions_Difficulty);
@@ -2582,8 +2158,7 @@ static void NewGameBirchSpeech_ShowDifficultyMenu(void)
     CopyWindowToVram(5, 3);
 }
 
-static void NewGameBirchSpeech_ShowLevelCapMenu(void)
-{
+static void NewGameBirchSpeech_ShowLevelCapMenu(void) {
     DrawMainMenuWindowBorder(&gNewGameBirchSpeechTextWindows[5], 0xF3);
     FillWindowPixelBuffer(5, PIXEL_FILL(1));
     PrintMenuTable(5, ARRAY_COUNT(sMenuActions_LevelCaps), sMenuActions_LevelCaps);
@@ -2592,8 +2167,7 @@ static void NewGameBirchSpeech_ShowLevelCapMenu(void)
     CopyWindowToVram(5, 3);
 }
 
-static void NewGameBirchSpeech_ShowRandomizerMenu(void)
-{
+static void NewGameBirchSpeech_ShowRandomizerMenu(void) {
     DrawMainMenuWindowBorder(&gNewGameBirchSpeechTextWindows[1], 0xF3);
     FillWindowPixelBuffer(1, PIXEL_FILL(1));
     PrintMenuTable(1, ARRAY_COUNT(sMenuActions_Randomizer), sMenuActions_Randomizer);
@@ -2602,13 +2176,9 @@ static void NewGameBirchSpeech_ShowRandomizerMenu(void)
     CopyWindowToVram(1, 3);
 }
 
-static s8 NewGameBirchSpeech_ProcessDifficultyMenuInput(void)
-{
-    return Menu_ProcessInputNoWrap();
-}
+static s8 NewGameBirchSpeech_ProcessDifficultyMenuInput(void) { return Menu_ProcessInputNoWrap(); }
 
-void NewGameBirchSpeech_SetDefaultPlayerName(u8 nameId)
-{
+void NewGameBirchSpeech_SetDefaultPlayerName(u8 nameId) {
     const u8* name;
     u8 i;
 
@@ -2616,13 +2186,11 @@ void NewGameBirchSpeech_SetDefaultPlayerName(u8 nameId)
         name = gMalePresetNames[nameId];
     else
         name = gFemalePresetNames[nameId];
-    for (i = 0; i < PLAYER_NAME_LENGTH; i++)
-        gSaveBlock2Ptr->playerName[i] = name[i];
+    for (i = 0; i < PLAYER_NAME_LENGTH; i++) gSaveBlock2Ptr->playerName[i] = name[i];
     gSaveBlock2Ptr->playerName[PLAYER_NAME_LENGTH] = EOS;
 }
 
-static void CreateMainMenuErrorWindow(const u8* str)
-{
+static void CreateMainMenuErrorWindow(const u8* str) {
     FillWindowPixelBuffer(7, PIXEL_FILL(1));
     AddTextPrinterParameterized(7, 1, str, 0, 1, 2, 0);
     PutWindowTilemap(7);
@@ -2632,23 +2200,20 @@ static void CreateMainMenuErrorWindow(const u8* str)
     SetGpuReg(REG_OFFSET_WIN0V, WIN_RANGE(113, DISPLAY_HEIGHT - 1));
 }
 
-static void MainMenu_FormatSavegameText(void)
-{
+static void MainMenu_FormatSavegameText(void) {
     MainMenu_FormatSavegamePlayer();
     MainMenu_FormatSavegamePokedex();
     MainMenu_FormatSavegameTime();
     MainMenu_FormatSavegameBadges();
 }
 
-static void MainMenu_FormatSavegamePlayer(void)
-{
-    StringExpandPlaceholders(gStringVar4, gText_ContinueMenuPlayer); 
+static void MainMenu_FormatSavegamePlayer(void) {
+    StringExpandPlaceholders(gStringVar4, gText_ContinueMenuPlayer);
     AddTextPrinterParameterized3(2, 1, 0, 17, sTextColor_MenuInfo, -1, gStringVar4);
     AddTextPrinterParameterized3(2, 1, GetStringRightAlignXOffset(1, gSaveBlock2Ptr->playerName, 100), 17, sTextColor_MenuInfo, -1, gSaveBlock2Ptr->playerName);
 }
 
-static void MainMenu_FormatSavegameTime(void)
-{
+static void MainMenu_FormatSavegameTime(void) {
     u8 str[0x20];
     u8* ptr;
 
@@ -2659,18 +2224,16 @@ static void MainMenu_FormatSavegameTime(void)
     ConvertIntToDecimalStringN(ptr + 1, gSaveBlock2Ptr->playTimeMinutes, STR_CONV_MODE_LEADING_ZEROS, 2);
     AddTextPrinterParameterized3(2, 1, GetStringRightAlignXOffset(1, str, 0xD0), 17, sTextColor_MenuInfo, -1, str);
 
-    //Game Version
-    //AddTextPrinterParameterized3(2, 1, 0x6C - 16, 1, sTextColor_Headers, -1, sText_GameVersion);
+    // Game Version
+    // AddTextPrinterParameterized3(2, 1, 0x6C - 16, 1, sTextColor_Headers, -1, sText_GameVersion);
     AddTextPrinterParameterized3(2, 1, GetStringRightAlignXOffset(1, gText_SavingVersionNum, 0xD0), 1, sTextColor_Headers, -1, gText_SavingVersionNum);
 }
 
-static void MainMenu_FormatSavegamePokedex(void)
-{
+static void MainMenu_FormatSavegamePokedex(void) {
     u8 str[0x20];
     u16 dexCount;
 
-    if (FlagGet(FLAG_SYS_POKEDEX_GET) == TRUE)
-    {
+    if (FlagGet(FLAG_SYS_POKEDEX_GET) == TRUE) {
         if (IsNationalPokedexEnabled())
             dexCount = GetNationalPokedexCount(FLAG_GET_CAUGHT);
         else
@@ -2682,16 +2245,13 @@ static void MainMenu_FormatSavegamePokedex(void)
     }
 }
 
-static void MainMenu_FormatSavegameBadges(void)
-{
+static void MainMenu_FormatSavegameBadges(void) {
     u8 str[0x20];
     u8 badgeCount = 0;
     u32 i;
 
-    for (i = FLAG_BADGE01_GET; i < FLAG_BADGE01_GET + NUM_BADGES; i++)
-    {
-        if (FlagGet(i))
-            badgeCount++;
+    for (i = FLAG_BADGE01_GET; i < FLAG_BADGE01_GET + NUM_BADGES; i++) {
+        if (FlagGet(i)) badgeCount++;
     }
     StringExpandPlaceholders(gStringVar4, gText_ContinueMenuBadges);
     AddTextPrinterParameterized3(2, 1, 0x6C, 33, sTextColor_MenuInfo, -1, gStringVar4);
@@ -2699,14 +2259,12 @@ static void MainMenu_FormatSavegameBadges(void)
     AddTextPrinterParameterized3(2, 1, GetStringRightAlignXOffset(1, str, 0xD0), 33, sTextColor_MenuInfo, -1, str);
 }
 
-static void LoadMainMenuWindowFrameTiles(u8 bgId, u16 tileOffset)
-{
+static void LoadMainMenuWindowFrameTiles(u8 bgId, u16 tileOffset) {
     LoadBgTiles(bgId, GetWindowFrameTilesPal(gSaveBlock2Ptr->optionsWindowFrameType)->tiles, 0x120, tileOffset);
     LoadPalette(GetWindowFrameTilesPal(gSaveBlock2Ptr->optionsWindowFrameType)->pal, 32, 32);
 }
 
-static void DrawMainMenuWindowBorder(const struct WindowTemplate *spriteTemplate, u16 baseTileNum)
-{
+static void DrawMainMenuWindowBorder(const struct WindowTemplate* spriteTemplate, u16 baseTileNum) {
     u16 r9 = 1 + baseTileNum;
     u16 r10 = 2 + baseTileNum;
     u16 sp18 = 3 + baseTileNum;
@@ -2719,35 +2277,39 @@ static void DrawMainMenuWindowBorder(const struct WindowTemplate *spriteTemplate
     FillBgTilemapBufferRect(spriteTemplate->bg, r9, spriteTemplate->tilemapLeft, spriteTemplate->tilemapTop - 1, spriteTemplate->width, 1, 2);
     FillBgTilemapBufferRect(spriteTemplate->bg, r10, spriteTemplate->tilemapLeft + spriteTemplate->width, spriteTemplate->tilemapTop - 1, 1, 1, 2);
     FillBgTilemapBufferRect(spriteTemplate->bg, sp18, spriteTemplate->tilemapLeft - 1, spriteTemplate->tilemapTop, 1, spriteTemplate->height, 2);
-    FillBgTilemapBufferRect(spriteTemplate->bg, spC, spriteTemplate->tilemapLeft + spriteTemplate->width, spriteTemplate->tilemapTop, 1, spriteTemplate->height, 2);
+    FillBgTilemapBufferRect(
+        spriteTemplate->bg, spC, spriteTemplate->tilemapLeft + spriteTemplate->width, spriteTemplate->tilemapTop, 1, spriteTemplate->height, 2);
     FillBgTilemapBufferRect(spriteTemplate->bg, sp10, spriteTemplate->tilemapLeft - 1, spriteTemplate->tilemapTop + spriteTemplate->height, 1, 1, 2);
-    FillBgTilemapBufferRect(spriteTemplate->bg, sp14, spriteTemplate->tilemapLeft, spriteTemplate->tilemapTop + spriteTemplate->height, spriteTemplate->width, 1, 2);
-    FillBgTilemapBufferRect(spriteTemplate->bg, r6, spriteTemplate->tilemapLeft + spriteTemplate->width, spriteTemplate->tilemapTop + spriteTemplate->height, 1, 1, 2);
+    FillBgTilemapBufferRect(
+        spriteTemplate->bg, sp14, spriteTemplate->tilemapLeft, spriteTemplate->tilemapTop + spriteTemplate->height, spriteTemplate->width, 1, 2);
+    FillBgTilemapBufferRect(
+        spriteTemplate->bg, r6, spriteTemplate->tilemapLeft + spriteTemplate->width, spriteTemplate->tilemapTop + spriteTemplate->height, 1, 1, 2);
     CopyBgTilemapBufferToVram(spriteTemplate->bg);
 }
 
-static void ClearMainMenuWindowTilemap(const struct WindowTemplate *spriteTemplate)
-{
-    FillBgTilemapBufferRect(spriteTemplate->bg, 0, spriteTemplate->tilemapLeft - 1, spriteTemplate->tilemapTop - 1, spriteTemplate->tilemapLeft + spriteTemplate->width + 1, spriteTemplate->tilemapTop + spriteTemplate->height + 1, 2);
+static void ClearMainMenuWindowTilemap(const struct WindowTemplate* spriteTemplate) {
+    FillBgTilemapBufferRect(spriteTemplate->bg,
+                            0,
+                            spriteTemplate->tilemapLeft - 1,
+                            spriteTemplate->tilemapTop - 1,
+                            spriteTemplate->tilemapLeft + spriteTemplate->width + 1,
+                            spriteTemplate->tilemapTop + spriteTemplate->height + 1,
+                            2);
     CopyBgTilemapBufferToVram(spriteTemplate->bg);
 }
 
-static void NewGameBirchSpeech_ClearGenderWindowTilemap(u8 a, u8 b, u8 c, u8 d, u8 e, u8 unused)
-{
+static void NewGameBirchSpeech_ClearGenderWindowTilemap(u8 a, u8 b, u8 c, u8 d, u8 e, u8 unused) {
     FillBgTilemapBufferRect(a, 0, b + 0xFF, c + 0xFF, d + 2, e + 2, 2);
 }
 
-static void NewGameBirchSpeech_ClearGenderWindow(u8 windowId, bool8 copyToVram)
-{
+static void NewGameBirchSpeech_ClearGenderWindow(u8 windowId, bool8 copyToVram) {
     CallWindowFunction(windowId, NewGameBirchSpeech_ClearGenderWindowTilemap);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
     ClearWindowTilemap(windowId);
-    if (copyToVram == TRUE)
-        CopyWindowToVram(windowId, 3);
+    if (copyToVram == TRUE) CopyWindowToVram(windowId, 3);
 }
 
-static void NewGameBirchSpeech_ClearWindow(u8 windowId)
-{
+static void NewGameBirchSpeech_ClearWindow(u8 windowId) {
     u8 bgColor = GetFontAttribute(1, FONTATTR_COLOR_BACKGROUND);
     u8 maxCharWidth = GetFontAttribute(1, FONTATTR_MAX_LETTER_WIDTH);
     u8 maxCharHeight = GetFontAttribute(1, FONTATTR_MAX_LETTER_HEIGHT);
@@ -2758,53 +2320,45 @@ static void NewGameBirchSpeech_ClearWindow(u8 windowId)
     CopyWindowToVram(windowId, 2);
 }
 
-static void NewGameBirchSpeech_ShowPokeBallPrinterCallback(struct TextPrinterTemplate *printer, u16 a)
-{
-    if (*(printer->currentChar - 2) == 8 && gUnknown_02022D04 == 0)
-    {
+static void NewGameBirchSpeech_ShowPokeBallPrinterCallback(struct TextPrinterTemplate* printer, u16 a) {
+    if (*(printer->currentChar - 2) == 8 && gUnknown_02022D04 == 0) {
         gUnknown_02022D04 = 1;
         CreateTask(Task_NewGameBirchSpeechSub_InitPokeBall, 0);
     }
 }
 
-void CreateYesNoMenuParameterized(u8 a, u8 b, u16 c, u16 d, u8 e, u8 f)
-{
+void CreateYesNoMenuParameterized(u8 a, u8 b, u16 c, u16 d, u8 e, u8 f) {
     struct WindowTemplate sp;
 
     sp = CreateWindowTemplate(0, a + 1, b + 1, 5, 4, f, d);
     CreateYesNoMenu(&sp, c, e, 0);
 }
 
-static void NewGameBirchSpeech_ShowDialogueWindow(u8 windowId, u8 copyToVram)
-{
+static void NewGameBirchSpeech_ShowDialogueWindow(u8 windowId, u8 copyToVram) {
     CallWindowFunction(windowId, NewGameBirchSpeech_CreateDialogueWindowBorder);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
     PutWindowTilemap(windowId);
-    if (copyToVram == TRUE)
-        CopyWindowToVram(windowId, 3);
+    if (copyToVram == TRUE) CopyWindowToVram(windowId, 3);
 }
 
-static void NewGameBirchSpeech_CreateDialogueWindowBorder(u8 a, u8 b, u8 c, u8 d, u8 e, u8 f)
-{
-    FillBgTilemapBufferRect(a, 0xFD,  b-2,   c-1, 1,   1, f);
-    FillBgTilemapBufferRect(a, 0xFF,  b-1,   c-1, 1,   1, f);
-    FillBgTilemapBufferRect(a, 0x100, b,     c-1, d,   1, f);
-    FillBgTilemapBufferRect(a, 0x101, b+d-1, c-1, 1,   1, f);
-    FillBgTilemapBufferRect(a, 0x102, b+d,   c-1, 1,   1, f);
-    FillBgTilemapBufferRect(a, 0x103, b-2,   c,   1,   5, f);
-    FillBgTilemapBufferRect(a, 0x105, b-1,   c,   d+1, 5, f);
-    FillBgTilemapBufferRect(a, 0x106, b+d,   c,   1,   5, f);
-    FillBgTilemapBufferRect(a, BG_TILE_V_FLIP(0xFD), b-2,   c+e, 1,   1, f);
-    FillBgTilemapBufferRect(a, BG_TILE_V_FLIP(0xFF), b-1,   c+e, 1,   1, f);
-    FillBgTilemapBufferRect(a, BG_TILE_V_FLIP(0x100), b,     c+e, d-1, 1, f);
-    FillBgTilemapBufferRect(a, BG_TILE_V_FLIP(0x101), b+d-1, c+e, 1,   1, f);
-    FillBgTilemapBufferRect(a, BG_TILE_V_FLIP(0x102), b+d,   c+e, 1,   1, f);
+static void NewGameBirchSpeech_CreateDialogueWindowBorder(u8 a, u8 b, u8 c, u8 d, u8 e, u8 f) {
+    FillBgTilemapBufferRect(a, 0xFD, b - 2, c - 1, 1, 1, f);
+    FillBgTilemapBufferRect(a, 0xFF, b - 1, c - 1, 1, 1, f);
+    FillBgTilemapBufferRect(a, 0x100, b, c - 1, d, 1, f);
+    FillBgTilemapBufferRect(a, 0x101, b + d - 1, c - 1, 1, 1, f);
+    FillBgTilemapBufferRect(a, 0x102, b + d, c - 1, 1, 1, f);
+    FillBgTilemapBufferRect(a, 0x103, b - 2, c, 1, 5, f);
+    FillBgTilemapBufferRect(a, 0x105, b - 1, c, d + 1, 5, f);
+    FillBgTilemapBufferRect(a, 0x106, b + d, c, 1, 5, f);
+    FillBgTilemapBufferRect(a, BG_TILE_V_FLIP(0xFD), b - 2, c + e, 1, 1, f);
+    FillBgTilemapBufferRect(a, BG_TILE_V_FLIP(0xFF), b - 1, c + e, 1, 1, f);
+    FillBgTilemapBufferRect(a, BG_TILE_V_FLIP(0x100), b, c + e, d - 1, 1, f);
+    FillBgTilemapBufferRect(a, BG_TILE_V_FLIP(0x101), b + d - 1, c + e, 1, 1, f);
+    FillBgTilemapBufferRect(a, BG_TILE_V_FLIP(0x102), b + d, c + e, 1, 1, f);
 }
 
-static void Task_NewGameBirchSpeech_ReturnFromNamingScreenShowTextbox(u8 taskId)
-{
-    if (gTasks[taskId].tTimer-- <= 0)
-    {
+static void Task_NewGameBirchSpeech_ReturnFromNamingScreenShowTextbox(u8 taskId) {
+    if (gTasks[taskId].tTimer-- <= 0) {
         NewGameBirchSpeech_ShowDialogueWindow(0, 1);
         gTasks[taskId].func = Task_NewGameBirchSpeech_SoItsPlayerName;
     }
