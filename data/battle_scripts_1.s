@@ -10082,6 +10082,8 @@ BattleScript_AbilityHpHeal_NoPopup:
 	return
 
 BattleScript_RainDishActivates::
+	hpfractiontodamage BS_ATTACKER, 8
+	manipulatedamage DMG_CHANGE_SIGN
 	call BattleScript_AbilityHpHeal_NoPopup
 	end3
 

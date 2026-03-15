@@ -1100,10 +1100,7 @@ constexpr Ability Impl<ABILITY_RAIN_DISH> = {
         CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
-
-        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-        gBattleMoveDamage *= -1;
+        
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
         return TRUE;
     },
@@ -1817,9 +1814,6 @@ constexpr Ability Impl<ABILITY_ICE_BODY> = {
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
 
-        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-        gBattleMoveDamage *= -1;
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
         return TRUE;
     },
@@ -4467,10 +4461,7 @@ constexpr Ability Impl<ABILITY_POISON_ABSORB> = {
         CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN))
-
-        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-        gBattleMoveDamage *= -1;
+        
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
         return TRUE;
     },
@@ -8176,10 +8167,7 @@ constexpr Ability Impl<ABILITY_PEACEFUL_REST> = {
         CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
-
-        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-        gBattleMoveDamage *= -1;
+        
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
         return TRUE;
     },
