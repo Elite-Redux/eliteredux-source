@@ -1293,10 +1293,6 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
                     if (IsBattlerWeatherAffected(battlerDef, WEATHER_RAIN_ANY)) prio = ACCURACY_HITS_IF_POSSIBLE;
                     break;
 
-                case EFFECT_FREEZE_DRY:
-                    if (IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY)) prio = ACCURACY_HITS_IF_POSSIBLE;
-                    break;
-
                 case EFFECT_LEECH_SEED:
                     if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GRASS)) prio = ACCURACY_HITS_IF_POSSIBLE;
                     break;
@@ -1323,7 +1319,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
             switch (move) {
                 case MOVE_SHEER_COLD:
                 case MOVE_BLIZZARD:
-                    if (IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY)) prio = ACCURACY_HITS_IF_POSSIBLE;
+                    if (IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY) || HasAuroraBorealis(battlerAtk)) prio = ACCURACY_HITS_IF_POSSIBLE;
                     break;
 
                 case MOVE_EERIE_SPELL:
