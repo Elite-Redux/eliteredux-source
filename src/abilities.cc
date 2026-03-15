@@ -5181,7 +5181,7 @@ constexpr Ability Impl<ABILITY_RETRIBUTION_BLOW> = {
 template <>
 constexpr IntimidateCloneData Intimidate<ABILITY_FEARMONGER> = {
     .statsLowered = {STAT_ATK, STAT_SPATK, 0},
-    .numStatsLowered = 1,
+    .numStatsLowered = 2,
     .targetBoth = TRUE,
 };
 
