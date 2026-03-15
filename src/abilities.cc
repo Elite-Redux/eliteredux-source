@@ -2955,7 +2955,17 @@ constexpr Ability Impl<ABILITY_BATTLE_BOND> = {
 template <>
 constexpr Ability Impl<ABILITY_POWER_CONSTRUCT> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
-        CHECK(gBattleMons[battler].species == SPECIES_ZYGARDE || gBattleMons[battler].species == SPECIES_ZYGARDE_10)
+        switch (gBattleMons[battler].species) {
+            case SPECIES_ZYGARDE:
+            case SPECIES_ZYGARDE_10:
+            case SPECIES_ZYGARDE_10_POWER_CONSTRUCT:
+            case SPECIES_ZYGARDE_50_POWER_CONSTRUCT:
+                break;
+            
+            default:
+                return FALSE;
+        }
+        
         CHECK(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
