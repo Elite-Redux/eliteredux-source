@@ -116,7 +116,7 @@ u8 CalcBeatUpPower(void) {
 
 bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move) {
     if (gSideTimers[defSide].followmeTimer == 0 || gBattleMons[gSideTimers[defSide].followmeTarget].hp == 0 || gBattleMoves[move].effect == EFFECT_SNIPE_SHOT ||
-        IsStatusImmune(battlerAtk, CHECK_REDIRECTION))
+        IsAbilityStatusProtected(battlerAtk, CHECK_REDIRECTION))
         return FALSE;
 
     if (gSideTimers[defSide].followmePowder && IsPowderImmune(battlerAtk, TRUE)) return FALSE;
@@ -9466,7 +9466,7 @@ AbilityEnum HasRedirectionAbility(int battlerAtk, int battlerDef, MoveEnum move,
     if (!type) return ABILITY_NONE;
     if (battlerAtk == battlerDef) return ABILITY_NONE;
     if (gBattleMoves[move].effect == EFFECT_SNIPE_SHOT) return ABILITY_NONE;
-    if (IsStatusImmune(battlerAtk, CHECK_REDIRECTION)) return ABILITY_NONE;
+    if (IsAbilityStatusProtected(battlerAtk, CHECK_REDIRECTION)) return ABILITY_NONE;
     RETURN_ABILITY_IF_FLAG(battlerDef, TRUE, redirectType == type)
     return ABILITY_NONE;
 }

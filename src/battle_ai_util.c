@@ -1143,7 +1143,7 @@ bool32 IsHazardMoveEffect(u16 moveEffect) {
 bool32 IsMoveRedirectionPrevented(u16 move, u16 battler) {
     if (AI_THINKING_STRUCT->aiFlags & AI_FLAG_NEGATE_UNAWARE) return FALSE;
 
-    if (move == MOVE_SKY_DROP || move == MOVE_SNIPE_SHOT || IsStatusImmune(battler, CHECK_REDIRECTION)) return TRUE;
+    if (move == MOVE_SKY_DROP || move == MOVE_SNIPE_SHOT || IsAbilityStatusProtected(battler, CHECK_REDIRECTION)) return TRUE;
     return FALSE;
 }
 
@@ -2117,7 +2117,7 @@ bool32 AI_CanCauseBleed(u8 battlerAtk, u8 battlerDef, u8 battlerAtkPartner, u16 
 bool32 AI_CanBeInfatuated(u8 battlerAtk, u8 battlerDef, u8 atkGender, u8 defGender) { return CanInfatuate(battlerAtk, battlerDef); }
 
 u32 ShouldTryToFlinch(u8 battlerAtk, u8 battlerDef, u16 move) {
-    if (IsStatusImmune(battlerDef, CHECK_FLINCH) || DoesSubstituteBlockMove(battlerAtk, battlerDef, move, GetTypeBeforeUsingMove(move, battlerAtk)) ||
+    if (IsAbilityStatusProtected(battlerDef, CHECK_FLINCH) || DoesSubstituteBlockMove(battlerAtk, battlerDef, move, GetTypeBeforeUsingMove(move, battlerAtk)) ||
         GetWhoStrikesFirst(battlerAtk, battlerDef, TRUE) == 1)  // opponent goes first
     {
         return 0;  // don't try to flinch
