@@ -79,6 +79,7 @@ object FileGenerator {
         "trainerids" to TrainerEnumGenerator,
         "trainerfields" to TrainerMiscEnumsGenerator,
         "elevations" to ElevationGenerator,
+        "adoptioncentermons" to AdoptionCenterMonGenerator,
     )
 
     @JvmStatic

@@ -263,50 +263,6 @@ static u8 CreateShopMenu(u8 martType) {
 
 static void SetShopMenuCallback(void (*callback)(void)) { sMartInfo.callback = callback; }
 
-#define ADOPTION_CENTER_ZERO_BADGES                                                                                                        \
-    SPECIES_PANSAGE_REDUX, SPECIES_PANSEAR_REDUX, SPECIES_PANPOUR_REDUX, SPECIES_RATTATA_REDUX, SPECIES_SHINX_REDUX, SPECIES_NOIBAT_REDUX, \
-        SPECIES_SPEAROW_REDUX, SPECIES_BELLSPROUT_REDUX, SPECIES_RALTS_REDUX
-
-#define ADOPTION_CENTER_ONE_BADGE                                                                                                                 \
-    ADOPTION_CENTER_ZERO_BADGES, SPECIES_WEEDLE_REDUX, SPECIES_SABLEYE_REDUX, SPECIES_MAWILE_REDUX, SPECIES_SWABLU_REDUX, SPECIES_MAKUHITA_REDUX, \
-        SPECIES_CLEFFA_REDUX, SPECIES_WHISMUR_REDUX, SPECIES_STUFFUL_REDUX, SPECIES_ABRA_REDUX, SPECIES_ARON_REDUX, SPECIES_CETODDLE_REDUX,       \
-        SPECIES_SINISTEA_REDUX, SPECIES_DEWPIDER_REDUX, SPECIES_DODUO_REDUX, SPECIES_DRILBUR_REDUX
-
-// 2 Badges
-#define ADOPTION_CENTER_TWO_BADGES                                                                                                                  \
-    ADOPTION_CENTER_ONE_BADGE, SPECIES_TINKATINK_REDUX, SPECIES_TURTWIG_REDUX, SPECIES_CHIMCHAR_REDUX, SPECIES_PIPLUP_REDUX, SPECIES_HAPPINY_REDUX, \
-        SPECIES_VANILLITE_REDUX, SPECIES_SOLOSIS_REDUX, SPECIES_SWINUB_REDUX, SPECIES_PAWNIARD_REDUX, SPECIES_KLEFKI_REDUX, SPECIES_GLIGAR_REDUX,   \
-        SPECIES_MINCCINO_REDUX, SPECIES_SNORUNT_REDUX, SPECIES_GROWLITHE_REDUX
-
-// 3 Badges
-#define ADOPTION_CENTER_THREE_BADGES                                                                                                                \
-    ADOPTION_CENTER_TWO_BADGES, SPECIES_EXEGGCUTE_REDUX, SPECIES_BOUNSWEET_REDUX, SPECIES_MACHOP_REDUX, SPECIES_HONEDGE_REDUX, SPECIES_SAWK_REDUX,  \
-        SPECIES_THROH_REDUX, SPECIES_CRABRAWLER_REDUX, SPECIES_TRAPINCH_REDUX, SPECIES_SLUGMA_REDUX, SPECIES_LITWICK_REDUX, SPECIES_SKARMORY_REDUX, \
-        SPECIES_SCYTHER_REDUX
-
-#define ADOPTION_CENTER_FOUR_BADGES ADOPTION_CENTER_THREE_BADGES, SPECIES_BUIZEL_REDUX, SPECIES_TOXEL_REDUX, SPECIES_HOUNDOUR_REDUX, SPECIES_MUNCHLAX_REDUX
-
-#define ADOPTION_CENTER_FIVE_BADGES \
-    ADOPTION_CENTER_FOUR_BADGES, SPECIES_KRABBY_REDUX, SPECIES_SPIRITOMB_REDUX, SPECIES_LARVITAR_REDUX, SPECIES_DEINO_REDUX, SPECIES_GIBLE_REDUX
-
-#define ADOPTION_CENTER_SIX_BADGES ADOPTION_CENTER_FIVE_BADGES, SPECIES_SEEL_REDUX
-
-#define ADOPTION_CENTER_SEVEN_BADGES ADOPTION_CENTER_SIX_BADGES, SPECIES_LARVESTA_REDUX, SPECIES_PSYDUCK_REDUX
-
-#define ADOPTION_CENTER_EIGHT_BADGES ADOPTION_CENTER_SEVEN_BADGES, SPECIES_AZELF_REDUX, SPECIES_UXIE_REDUX, SPECIES_MESPRIT_REDUX, SPECIES_KUBFU
-
-static const u16* const sAdoptionCenterInventories[] = {
-    (const u16[]){ADOPTION_CENTER_ZERO_BADGES, SPECIES_NONE},   // 0 Badges
-    (const u16[]){ADOPTION_CENTER_ONE_BADGE, SPECIES_NONE},     // 1 Badge
-    (const u16[]){ADOPTION_CENTER_TWO_BADGES, SPECIES_NONE},    // 2 Badges
-    (const u16[]){ADOPTION_CENTER_THREE_BADGES, SPECIES_NONE},  // 3 Badges
-    (const u16[]){ADOPTION_CENTER_FOUR_BADGES, SPECIES_NONE},   // 4 Badges
-    (const u16[]){ADOPTION_CENTER_FIVE_BADGES, SPECIES_NONE},   // 5 Badges
-    (const u16[]){ADOPTION_CENTER_SIX_BADGES, SPECIES_NONE},    // 6 Badges
-    (const u16[]){ADOPTION_CENTER_SEVEN_BADGES, SPECIES_NONE},  // 7 Badges
-    (const u16[]){ADOPTION_CENTER_EIGHT_BADGES, SPECIES_NONE}   // 8 Badges
-};
-
 static u8 GetNumberOfBadges(void) {
     if (FlagGet(FLAG_BADGE08_GET))
         return 8;
@@ -328,14 +284,18 @@ static u8 GetNumberOfBadges(void) {
         return 0;
 }
 
+#include "generated/data/pokemon/adoption_center_mons.h"
+
 static void SetShopItemsForSale(const u16* items) {
     u16 i = 0;
 
     if (items == NULL) {
         switch (sMartInfo.martType) {
             case MART_TYPE_MONS:
-                sMartInfo.itemList = sAdoptionCenterInventories[GetNumberOfBadges()];
-                break;
+                u8 badges = GetNumberOfBadges();
+                sMartInfo.itemList = sAdoptionCenterInventories;
+                sMartInfo.itemCount = sAdoptionCenterCountsByBadge[badges];
+                return;
         }
     } else
         sMartInfo.itemList = items;

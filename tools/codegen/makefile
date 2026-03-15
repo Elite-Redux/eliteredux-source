@@ -95,6 +95,7 @@ $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_entries.h, pokede
 $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_orders.h, pokedexorders))
 $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_numbers.h, pokedexnumbers))
 $(eval $(call GENERATE, include/generated/data/pokemon/randomizer_banned.h, randomizerbanned))
+$(eval $(call GENERATE, include/generated/data/pokemon/adoption_center_mons.h, adoptioncentermons))
 
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/icons.h, icons))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/pics.h, monpics))
