@@ -16,6 +16,7 @@ enum {
     ITEMMENULOCATION_APPRENTICE,
     ITEMMENULOCATION_WALLY,
     ITEMMENULOCATION_LAST,
+    ITEMMENULOCATION_FOSSIL,
 };
 
 // Window IDs for the item menu
@@ -38,13 +39,12 @@ enum {
     ITEMMENUSPRITE_BAG,
     ITEMMENUSPRITE_BALL,
     ITEMMENUSPRITE_ITEM,
-    ITEMMENUSPRITE_ITEM_ALT, // Need two when selecting new item
+    ITEMMENUSPRITE_ITEM_ALT,  // Need two when selecting new item
     ITEMMENUSPRITE_SWAP_LINE,
     ITEMMENUSPRITE_COUNT = ITEMMENUSPRITE_SWAP_LINE + ITEMMENU_SWAP_LINE_LENGTH,
 };
 
-struct BagPosition
-{
+struct BagPosition {
     void (*exitCallback)(void);
     u8 location;
     u8 pocket;
@@ -55,8 +55,12 @@ struct BagPosition
 
 extern struct BagPosition gBagPosition;
 
-struct BagMenu
-{
+typedef enum BagFilter {
+    BAG_FILTER_NONE,
+    BAG_FILTER_FOSSIL,
+} BagFilter;
+
+struct BagMenu {
     void (*newScreenCallback)(void);
     u8 tilemapBuffer[BG_SCREEN_SIZE];
     u8 spriteIds[ITEMMENUSPRITE_COUNT];
@@ -78,9 +82,10 @@ struct BagMenu
     u8 unused2[14];
     u8 pocketNameBuffer[32][32];
     u8 unused3[4];
+    BagFilter filter;
 };
 
-extern struct BagMenu *gBagMenu;
+extern struct BagMenu* gBagMenu;
 extern u16 gSpecialVar_ItemId;
 
 void CB2_GoToItemDepositMenu(void);
@@ -94,19 +99,20 @@ void CB2_BagMenuFromStartMenu(void);
 u8 GetItemListPosition(u8 pocketId);
 bool8 UseRegisteredKeyItemOnField(u8 button);
 void CB2_GoToSellMenu(void);
-void GoToBagMenu(u8 bagMenuType, u8 pocketId, void ( *exitCallback)());
+void GoToBagMenu(u8 bagMenuType, u8 pocketId, void (*exitCallback)());
 void DoWallyTutorialBagMenu(void);
 void ResetBagScrollPositions(void);
 void ChooseBerryForMachine(void (*exitCallback)(void));
 void CB2_ChooseBerry(void);
 void CB2_ChooseItem(void);
+void CB2_ChooseFossil();
 void CB2_ChoosePokeBall(void);
 void Task_FadeAndCloseBagMenu(u8 taskId);
 void BagMenu_YesNo(u8 taskId, u8 windowType, const struct YesNoFuncTable* funcTable);
 void UpdatePocketItemList(u8 pocketId);
-void DisplayItemMessage(u8 taskId, u8 fontId, const u8 *str, void ( *callback)(u8 taskId));
-void DisplayItemMessageOnField(u8 taskId, const u8 *src, TaskFunc callback);
+void DisplayItemMessage(u8 taskId, u8 fontId, const u8* str, void (*callback)(u8 taskId));
+void DisplayItemMessageOnField(u8 taskId, const u8* src, TaskFunc callback);
 void CloseItemMessage(u8 taskId);
 void ShowRegisteredItemsMenu(void);
 
-#endif //GUARD_ITEM_MENU_H
+#endif  // GUARD_ITEM_MENU_H

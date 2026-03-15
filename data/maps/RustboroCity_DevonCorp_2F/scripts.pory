@@ -88,7 +88,7 @@ RustboroCity_DevonCorp_2F_EventScript_NoticeFossil::
 	goto_if_eq RustboroCity_DevonCorp_2F_EventScript_DeclineGiveFossil
 	msgbox RustboroCity_DevonCorp_2F_Text_FossilsPickOne, MSGBOX_DEFAULT
 	fadescreen FADE_TO_BLACK
-	special Bag_ChooseItem
+	special Bag_ChooseFossil
 	waitstate
 	specialvar VAR_RESULT, IsItemFossil
 	compare VAR_RESULT, FALSE

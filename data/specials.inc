@@ -580,3 +580,4 @@ gSpecials::
 	def_special GetStaticEncounterLevel
 	def_special GetMysteryGiftSpecies
 	def_special IsPlayerPartyMonotypeType
+	def_special Bag_ChooseFossil

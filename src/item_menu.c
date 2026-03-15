@@ -52,6 +52,8 @@
 #include "constants/items.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
+#include "field_specials.h"
+#include "mgba_printf/mgba.h"
 
 #define TAG_POCKET_SCROLL_ARROW 110
 #define TAG_BAG_SCROLL_ARROW 111
@@ -312,6 +314,7 @@ static const TaskFunc sContextMenuFuncs[] = {
     [ITEMMENULOCATION_QUIZ_LADY] = Task_ItemContext_Normal,
     [ITEMMENULOCATION_APPRENTICE] = Task_ItemContext_Normal,
     [ITEMMENULOCATION_WALLY] = NULL,
+    [ITEMMENULOCATION_FOSSIL] = Task_FadeAndCloseBagMenu,
 };
 
 static const struct ScrollArrowsTemplate sBagScrollArrowsTemplate = {
@@ -543,6 +546,8 @@ void CB2_ChooseItem(void) { GoToBagMenu(ITEMMENULOCATION_BERRY_TREE, ITEMS_POCKE
 
 void CB2_ChoosePokeBall(void) { GoToBagMenu(ITEMMENULOCATION_BERRY_TREE, BALLS_POCKET, CB2_ReturnToFieldContinueScript); }
 
+void CB2_ChooseFossil() { GoToBagMenu(ITEMMENULOCATION_FOSSIL, KEYITEMS_POCKET, CB2_ReturnToFieldContinueScript); }
+
 void ChooseBerryForMachine(void (*exitCallback)(void)) { GoToBagMenu(ITEMMENULOCATION_BERRY_BLENDER_CRUSH, BERRIES_POCKET, exitCallback); }
 
 void CB2_GoToSellMenu(void) { GoToBagMenu(ITEMMENULOCATION_SHOP, POCKETS_COUNT, CB2_ExitSellMenu); }
@@ -572,8 +577,23 @@ void GoToBagMenu(u8 location, u8 pocket, void (*exitCallback)()) {
         if (location != ITEMMENULOCATION_LAST) gBagPosition.location = location;
         if (exitCallback) gBagPosition.exitCallback = exitCallback;
         if (pocket < POCKETS_COUNT) gBagPosition.pocket = pocket;
-        if (gBagPosition.location == ITEMMENULOCATION_BERRY_TREE || gBagPosition.location == ITEMMENULOCATION_BERRY_BLENDER_CRUSH)
-            gBagMenu->pocketSwitchDisabled = TRUE;
+
+        switch (location) {
+            case ITEMMENULOCATION_FOSSIL:
+                gBagMenu->pocketSwitchDisabled = TRUE;
+                gBagMenu->filter = BAG_FILTER_FOSSIL;
+                break;
+            case ITEMMENULOCATION_BERRY_TREE:
+            case ITEMMENULOCATION_BERRY_BLENDER_CRUSH:
+                gBagMenu->pocketSwitchDisabled = TRUE;
+                gBagMenu->filter = BAG_FILTER_NONE;
+                break;
+            default:
+                gBagMenu->pocketSwitchDisabled = FALSE;
+                gBagMenu->filter = BAG_FILTER_NONE;
+                break;
+        }
+
         gBagMenu->newScreenCallback = NULL;
         gBagMenu->toSwapPos = NOT_SWAPPING;
         gBagMenu->pocketScrollArrowsTask = TASK_NONE;
@@ -797,6 +817,7 @@ static void LoadBagItemListBuffers(u8 pocketId) {
         for (int i = 0; i < itemCount; i++) {
             u16 item = itemsList[i];
             FILTER(HasItem(item))
+            if (gBagMenu->filter == BAG_FILTER_FOSSIL) FILTER(SpeciesFromFossil(item))
             GetItemName(sListBuffer2->name[added], item);
             subBuffer = sListBuffer1->subBuffers;
             subBuffer[added].name = sListBuffer2->name[added];
@@ -811,6 +832,7 @@ static void LoadBagItemListBuffers(u8 pocketId) {
         for (int i = 0; i < itemCount; i++) {
             u16 item = itemsList[i];
             FILTER(HasItem(item))
+            if (gBagMenu->filter == BAG_FILTER_FOSSIL) FILTER(SpeciesFromFossil(item))
             GetItemName(sListBuffer2->name[added], item);
             subBuffer = sListBuffer1->subBuffers;
             subBuffer[added].name = sListBuffer2->name[added];
@@ -998,6 +1020,9 @@ void UpdatePocketItemList(u8 pocketId) {
     gBagMenu->numItemStacks[pocketId] = !gBagMenu->hideCloseBagText;
     for (int i = 0; i < count; i++) {
         if (HasItem(items[i])) {
+            if (gBagMenu->filter == BAG_FILTER_FOSSIL) {
+                if (!SpeciesFromFossil(items[i])) continue;
+            }
             gBagMenu->numItemStacks[pocketId]++;
         }
     }
