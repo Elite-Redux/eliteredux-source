@@ -125,16 +125,7 @@ bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move) {
 }
 
 u8 GetBattlerBattleMoveTargetFlags(MoveEnum moveId, u8 battler) {
-    if ((BATTLER_HAS_ABILITY(battler, ABILITY_ARTILLERY) || BATTLER_HAS_ABILITY(battler, ABILITY_SUPER_SCOPE)) && IsMegaLauncherBoosted(battler, moveId) &&
-        gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
-        return MOVE_TARGET_BOTH;
-    else if ((BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE) || BATTLER_HAS_ABILITY(battler, ABILITY_SWEEPING_EDGE_PLUS)) &&
-             IsKeenEdge(battler, moveId, GetTypeBeforeUsingMove(moveId, battler)) && gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
-        return MOVE_TARGET_BOTH;
-    else if ((BATTLER_HAS_ABILITY(battler, ABILITY_AMPLIFIER) || BATTLER_HAS_ABILITY(battler, ABILITY_BASS_BOOSTED)) && (IsSoundMove(battler, moveId)) &&
-             gBattleMoves[moveId].target == MOVE_TARGET_SELECTED)
-        return MOVE_TARGET_BOTH;
-    else if (gBattleMoves[moveId].effect == EFFECT_EXPANDING_FORCE && GetCurrentTerrain() == STATUS_FIELD_PSYCHIC_TERRAIN)
+    if (gBattleMoves[moveId].effect == EFFECT_EXPANDING_FORCE && GetCurrentTerrain() == STATUS_FIELD_PSYCHIC_TERRAIN)
         return MOVE_TARGET_BOTH;
     else if (gBattleMoves[moveId].effect == EFFECT_TOXIC_THREAD && IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN))
         return MOVE_TARGET_BOTH;
@@ -150,6 +141,9 @@ u8 GetBattlerBattleMoveTargetFlags(MoveEnum moveId, u8 battler) {
             }
             break;
     }
+
+    ON_ABILITY(battler, FALSE, gAbilities[ability].onModifyTargetFlag, MoveTarget target = gAbilities[ability].onModifyTargetFlag(battler, moveId);
+               if (target) return target)
 
     return gBattleMoves[moveId].target;
 }

@@ -136,6 +136,7 @@ typedef enum {
     STAT_DROP_BLOCK_SPECIFIC = 2,
 } StatDropBlockType;
 typedef StatDropBlockType (*AbilityOnBlockStatDrops)(u8 battler, int stat, int selfStatDrop, const u8** script);
+typedef MoveTarget (*AbilityOnModifyTargetFlag)(u8 battler, MoveEnum move);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -222,6 +223,7 @@ typedef struct Ability {
     AbilityOnRevive onRevive;
     AbilityOnStatLowered onStatLowered;
     AbilityOnBlockStatDrops onBlockStatDrops;
+    AbilityOnModifyTargetFlag onModifyTargetFlag;
     AbilityApplyOn onImmuneFor:3;
     AbilityApplyOnWithTarget onBattlerFaintsFor:5;
     AbilityApplyOn onOffensiveMultiplierFor:3;

@@ -2,6 +2,7 @@
 #define GUARD_POKEMON_H
 
 #include "constants/pokemon.h"
+#include "constants/battle.h"
 #include "generated/constants/species.h"
 #include "sprite.h"
 #include "constants/region_map_sections.h"
@@ -258,7 +259,7 @@ typedef enum {
 struct BattleMove {
     u32 flags;
     MoveBehaviorEnum effect;
-    u16 target;
+    MoveTarget target;
     u16 argument;
     u8 power;
     Type type;

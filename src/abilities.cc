@@ -40,6 +40,7 @@ class __EnumHack {
     operator MultihitType() const { return MULTIHIT_SINGLE; }
     operator StatDropBlockType() const { return STAT_DROP_BLOCK_NONE; }
     operator InfiltrateType() const { return INFILTRATE_NONE; }
+    operator MoveTarget() const { return MOVE_TARGET_SELECTED; }
 };
 
 #define ENUM_OR(enumType) \
@@ -158,6 +159,8 @@ ENUM_ADD(Type)
 #define DELEGATE_STAT_LOWERED battler
 #define ON_BLOCK_STAT_DROPS opt u8 battler, opt int stat, opt int selfStatDrop, const u8 **script
 #define DELEGATE_BLOCK_STAT_DROPS battler, stat, selfStatDrop, script
+#define ON_MODIFY_TARGET_FLAG opt u8 battler, opt MoveEnum move
+#define DELEGATE_MODIFY_TARGET_FLAG battler, move
 
 #define GALE_WINGS_CLONE(type)                               \
     +[](ON_PRIORITY) -> int {                                \
@@ -1100,7 +1103,7 @@ constexpr Ability Impl<ABILITY_RAIN_DISH> = {
         CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
-        
+
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
         return TRUE;
     },
@@ -2960,11 +2963,11 @@ constexpr Ability Impl<ABILITY_POWER_CONSTRUCT> = {
             case SPECIES_ZYGARDE_10_POWER_CONSTRUCT:
             case SPECIES_ZYGARDE_50_POWER_CONSTRUCT:
                 break;
-            
+
             default:
                 return FALSE;
         }
-        
+
         CHECK(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
         CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
 
@@ -4470,7 +4473,7 @@ constexpr Ability Impl<ABILITY_POISON_ABSORB> = {
         CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN))
-        
+
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
         return TRUE;
     },
@@ -4819,11 +4822,21 @@ constexpr Ability Impl<ABILITY_ARTILLERY> = {
         CHECK(IsMegaLauncherBoosted(battler, move))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
+    .onModifyTargetFlag = +[](ON_MODIFY_TARGET_FLAG) -> MoveTarget {
+        CHECK(gBattleMoves[move].target == MOVE_TARGET_SELECTED || gBattleMoves[move].target == MOVE_TARGET_RANDOM)
+        CHECK(IsMegaLauncherBoosted(battler, move))
+        return MOVE_TARGET_BOTH;
+    },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_AMPLIFIER> = {
     .onOffensiveMultiplier = Impl<ABILITY_PUNK_ROCK>.onOffensiveMultiplier,
+    .onModifyTargetFlag = +[](ON_MODIFY_TARGET_FLAG) -> MoveTarget {
+        CHECK(gBattleMoves[move].target == MOVE_TARGET_SELECTED || gBattleMoves[move].target == MOVE_TARGET_RANDOM)
+        CHECK(IsSoundMove(battler, move))
+        return MOVE_TARGET_BOTH;
+    },
 };
 
 template <>
@@ -5361,6 +5374,11 @@ constexpr Ability Impl<ABILITY_SWEEPING_EDGE> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
         return ACCURACY_HITS_IF_POSSIBLE;
+    },
+    .onModifyTargetFlag = +[](ON_MODIFY_TARGET_FLAG) -> MoveTarget {
+        CHECK(gBattleMoves[move].target == MOVE_TARGET_SELECTED || gBattleMoves[move].target == MOVE_TARGET_RANDOM)
+        CHECK(IsKeenEdge(battler, move, GetTypeBeforeUsingMove(move, battler)))
+        return MOVE_TARGET_BOTH;
     },
 };
 
@@ -6674,6 +6692,7 @@ constexpr Ability Impl<ABILITY_BASS_BOOSTED> = {
             Impl<ABILITY_PUNK_ROCK>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
         },
     .onDefensiveMultiplier = Impl<ABILITY_PUNK_ROCK>.onDefensiveMultiplier,
+    .onModifyTargetFlag = Impl<ABILITY_AMPLIFIER>.onModifyTargetFlag,
     .breakable = TRUE,
 };
 
@@ -7489,6 +7508,7 @@ template <>
 constexpr Ability Impl<ABILITY_SWEEPING_EDGE_PLUS> = {
     .onOffensiveMultiplier = Impl<ABILITY_KEEN_EDGE>.onOffensiveMultiplier,
     .onAccuracy = Impl<ABILITY_SWEEPING_EDGE>.onAccuracy,
+    .onModifyTargetFlag = Impl<ABILITY_SWEEPING_EDGE>.onModifyTargetFlag,
 };
 
 template <>
@@ -8176,7 +8196,7 @@ constexpr Ability Impl<ABILITY_PEACEFUL_REST> = {
         CHECK(CanBattlerHeal(battler))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
         CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
-        
+
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
         return TRUE;
     },
@@ -9515,6 +9535,7 @@ template <>
 constexpr Ability Impl<ABILITY_SUPER_SCOPE> = {
     .onOffensiveMultiplier = Impl<ABILITY_MEGA_LAUNCHER>.onOffensiveMultiplier,
     .onAccuracy = Impl<ABILITY_ARTILLERY>.onAccuracy,
+    .onModifyTargetFlag = Impl<ABILITY_ARTILLERY>.onModifyTargetFlag,
     .megaLauncherBoost = TRUE,
 };
 
@@ -12514,6 +12535,7 @@ constexpr Ability Impl<ABILITY_WIND_CHIMES> = {
         return FALSE;
     },
     .onOffensiveMultiplier = Impl<ABILITY_AMPLIFIER>.onOffensiveMultiplier,
+    .onModifyTargetFlag = Impl<ABILITY_AMPLIFIER>.onModifyTargetFlag,
 };
 
 template <>

@@ -350,6 +350,7 @@
 #define B_WAIT_TIME_MED 48
 #define B_WAIT_TIME_SHORT 32
 
+#ifdef __assembly__
 // Move targets
 #define MOVE_TARGET_SELECTED 0x0
 #define MOVE_TARGET_DEPENDS 0x1
@@ -362,6 +363,21 @@
 #define MOVE_TARGET_ALLY 0x80
 #define MOVE_TARGET_USER_OR_ALLY MOVE_TARGET_USER | MOVE_TARGET_ALLY
 #define MOVE_TARGET_ALL_BATTLERS (0x100 | MOVE_TARGET_USER)
+#else
+typedef enum MoveTarget : u16 {
+    MOVE_TARGET_SELECTED = 0x0,
+    MOVE_TARGET_DEPENDS = 0x1,
+    MOVE_TARGET_USER_OR_SELECTED = 0x2,
+    MOVE_TARGET_RANDOM = 0x4,
+    MOVE_TARGET_BOTH = 0x8,
+    MOVE_TARGET_USER = 0x10,
+    MOVE_TARGET_FOES_AND_ALLY = 0x20,
+    MOVE_TARGET_OPPONENTS_FIELD = 0x40,
+    MOVE_TARGET_ALLY = 0x80,
+    MOVE_TARGET_USER_OR_ALLY = MOVE_TARGET_USER | MOVE_TARGET_ALLY,
+    MOVE_TARGET_ALL_BATTLERS = (0x100 | MOVE_TARGET_USER),
+} MoveTarget;
+#endif
 
 // Window Ids for sStandardBattleWindowTemplates / sBattleArenaWindowTemplates
 #define B_WIN_MSG 0
@@ -436,6 +452,6 @@
 #define BATTLE_FIELD_EFFECT_MONOCHAMP 4
 #define BATTLE_FIELD_EFFECT_SPECIAL_TRAINER 5
 
-#define B_BATTLE_SPEED 0 // Usage with a variable
+#define B_BATTLE_SPEED 0  // Usage with a variable
 
 #endif  // GUARD_CONSTANTS_BATTLE_H
