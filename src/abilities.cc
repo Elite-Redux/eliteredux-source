@@ -2343,7 +2343,6 @@ constexpr Ability Impl<ABILITY_FLOWER_VEIL> = {
         return TRUE;
     },
     .onBlockStatDrops = +[](ON_BLOCK_STAT_DROPS) -> StatDropBlockType {
-        CHECK_NOT(selfStatDrop)
         CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_GRASS))
         *script = BattleScript_FlowerVeilProtectsRet;
         return STAT_DROP_BLOCK_ALL;
