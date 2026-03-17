@@ -4167,7 +4167,13 @@ void SwapTurnOrder(u8 id1, u8 id2) {
 static u32 GetSpeedFromAbilities(u8 battlerId, MoveEnum move, u32 speed) {
     NonStackingState flags = 0;
 
-    ON_ABILITY(battlerId, FALSE, gAbilities[ability].onStat, gAbilities[ability].onStat(ability, battlerId, move, STAT_SPEED, &speed, &flags))
+    for (int i = 0; i < gBattlersCount; i++) {
+        FILTER(i == battlerId || IsBattlerAlive(i))
+        ON_ABILITY(battlerId,
+                   FALSE,
+                   gAbilities[ability].onStat && IsApplyOnFlagAppropriate(battlerId, i, gAbilities[ability].onStatFor),
+                   gAbilities[ability].onStat(ability, battlerId, move, STAT_SPEED, &speed, &flags))
+    }
 
     if (gVolatileStructs[battlerId].violentRush) speed = (speed * 150) / 100;
 
@@ -4530,7 +4536,7 @@ static void CheckMegaEvolutionBeforeTurn(void) {
         BattleScriptExecuteCurrentAction();
         return;
     }
-    
+
     gBattleMainFunc = TryChangeTurnOrder;  // This will just do nothing if no mon has mega evolved
 }
 

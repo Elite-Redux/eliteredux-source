@@ -1527,6 +1527,7 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, MoveEnum move, u16 typeEff
     int critChance = 0;
 
     for (int battler = 0; battler < gBattlersCount; battler++) {
+        FILTER(battler == battlerAtk || battler == battlerDef || IsBattlerAlive(battler))
         ON_ABILITY(battler,
                    TRUE,
                    gAbilities[ability].onCrit && IsTargettedApplyOnFlagAppropriate(battlerAtk, battler, battlerAtk, battlerDef, gAbilities[ability].onCritFor),
@@ -3037,7 +3038,7 @@ int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChan
 
     for (int i = 0; i < gBattlersCount; i++) {
         int abilityBattler = (battler + i) % gBattlersCount;
-        FILTER(IsBattlerAlive(abilityBattler))
+        FILTER(i == 0 || IsBattlerAlive(abilityBattler))
         ON_ABILITY(abilityBattler,
                    TRUE,
                    gAbilities[ability].onModifyEffectChance && IsApplyOnFlagAppropriate(battler, abilityBattler, gAbilities[0].onModifyEffectChanceFor),

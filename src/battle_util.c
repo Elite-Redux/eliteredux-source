@@ -794,6 +794,7 @@ void TryPreemptiveActions() {
     int battler = gBattlerByTurnOrder[gCurrentTurnActionNumber];
 
     for (u8 opponent = GetOppositeSide(battler); opponent < gBattlersCount; opponent += 2) {
+        FILTER(IsBattlerAlive(opponent))
         ON_ABILITY(opponent, TRUE, gAbilities[ability].onPreemptAction, gAbilities[ability].onPreemptAction(opponent, ability, battler))
     }
 
@@ -7037,7 +7038,7 @@ u16 CalculateAbilityMultipliers(
 
     if (!hasFortKnox) {
         for (int sourceBattler = 0; sourceBattler < gBattlersCount; sourceBattler++) {
-            FILTER(battlerAtk == sourceBattler || IsBattlerAlive(sourceBattler))
+            FILTER(battlerAtk == sourceBattler || battlerDef == sourceBattler || IsBattlerAlive(sourceBattler))
             ON_ABILITY(
                 sourceBattler,
                 FALSE,
@@ -7470,7 +7471,7 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
 
     for (int i = 0; i < gBattlersCount && !defStatToUse; i++) {
         int abilityBattler = (battlerAtk + i) % gBattlersCount;
-        FILTER(IsBattlerAlive(abilityBattler))
+        FILTER(i == 0 || IsBattlerAlive(abilityBattler))
 
         ON_ABILITY(abilityBattler,
                    FALSE,
