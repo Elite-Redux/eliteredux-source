@@ -9958,9 +9958,9 @@ constexpr Ability Impl<ABILITY_OVERRULE> = {
 
 static int MadnessEnhancementHandler(u8 battler, AbilityCallType callType) {
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
-    CHECK_NOT(gStatuses4[battler] & STATUS2_ENRAGED)
+    CHECK_NOT(gBattleMons[battler].status2 & STATUS2_ENRAGED)
 
-    gStatuses4[battler] |= STATUS2_ENRAGED;
+    gBattleMons[battler].status2 |= STATUS2_ENRAGED;
 
     InsertCorrectEndType(callType);
     BattleScriptCall(BattleScript_MadnessEnhancementRet);
