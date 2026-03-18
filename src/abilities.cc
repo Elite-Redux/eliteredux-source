@@ -2408,7 +2408,7 @@ constexpr Ability Impl<ABILITY_REFRIGERATE> = {
         CHECK(moveType == TYPE_ICE)
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanGetFrostbite(target))
-        CHECK(Random() % 10)
+        CHECK(Random() % 10 == 0)
 
         return AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
     },
@@ -2504,7 +2504,7 @@ constexpr Ability Impl<ABILITY_PIXILATE> = {
         CHECK(moveType == TYPE_FAIRY)
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanInfatuate(battler, target))
-        CHECK(Random() % 10)
+        CHECK(Random() % 10 == 0)
 
         return AbilityStatusEffect(MOVE_EFFECT_ATTRACT);
     },
@@ -2847,7 +2847,7 @@ constexpr Ability Impl<ABILITY_GALVANIZE> = {
         CHECK(moveType == TYPE_ELECTRIC)
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBeParalyzed(battler, target))
-        CHECK(Random() % 10)
+        CHECK(Random() % 10 == 0)
 
         return AbilityStatusEffect(MOVE_EFFECT_PARALYSIS);
     },
@@ -3778,7 +3778,7 @@ constexpr Ability Impl<ABILITY_IMMOLATE> = {
         CHECK(moveType == TYPE_FIRE)
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBeBurned(target))
-        CHECK(Random() % 10)
+        CHECK(Random() % 10 == 0)
 
         return AbilityStatusEffect(MOVE_EFFECT_BURN);
     },
@@ -4158,7 +4158,7 @@ constexpr Ability Impl<ABILITY_HYDRATE> = {
         CHECK(moveType == TYPE_WATER)
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBeDrenched(target))
-        CHECK(Random() % 10)
+        CHECK(Random() % 10 == 0)
 
         return AbilityStatusEffect(MOVE_EFFECT_DRENCH);
     },
@@ -4237,7 +4237,7 @@ constexpr Ability Impl<ABILITY_INTOXICATE> = {
         CHECK(moveType == TYPE_POISON)
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBePoisoned(battler, target, MOVE_NONE))
-        CHECK(Random() % 10)
+        CHECK(Random() % 10 == 0)
 
         return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
     },
@@ -4902,7 +4902,7 @@ constexpr Ability Impl<ABILITY_SPECTRALIZE> = {
         CHECK(moveType == TYPE_GHOST)
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK_NOT(gVolatileStructs[target].fear)
-        CHECK(Random() % 10)
+        CHECK(Random() % 10 == 0)
 
         gStackBattler1 = battler;
         gStackBattler2 = target;
@@ -5126,7 +5126,7 @@ constexpr Ability Impl<ABILITY_MINERALIZE> = {
         CHECK(moveType == TYPE_ROCK)
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBleed(target))
-        CHECK(Random() % 10)
+        CHECK(Random() % 10 == 0)
 
         return AbilityStatusEffect(MOVE_EFFECT_BLEED);
     },
@@ -6050,7 +6050,7 @@ constexpr Ability Impl<ABILITY_EMANATE> = {
         CHECK(moveType == TYPE_PSYCHIC)
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(CanBeConfused(target))
-        CHECK(Random() % 10)
+        CHECK(Random() % 10 == 0)
 
         return AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
     },
@@ -9790,7 +9790,7 @@ constexpr Ability Impl<ABILITY_DEVIATE> = {
         CHECK(moveType == TYPE_DARK)
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK_NOT(gBattleMons[target].status2 & STATUS2_ENRAGED)
-        CHECK(Random() % 10)
+        CHECK(Random() % 10 == 0)
 
         return AbilityStatusEffect(MOVE_EFFECT_ENRAGE);
     },
