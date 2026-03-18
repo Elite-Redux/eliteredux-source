@@ -122,16 +122,14 @@
 typedef enum Status1 : u32 {
     STATUS1_NONE = 0,
     STATUS1_SLEEP = 1 << 0 | 1 << 1 | 1 << 2,  // First 3 bits (Number of turns to sleep)
-    STATUS1_SLEEP_TURN_1 = 1 << 0,
-#define STATUS1_SLEEP_TURN(num) (num * STATUS1_SLEEP_TURN_1)
+#define STATUS1_SLEEP_TURN(num) ((Status1) ((num) << 0))
     STATUS1_POISON = 1 << 3,
     STATUS1_BURN = 1 << 4,
     STATUS1_FREEZE = 1 << 5,
     STATUS1_PARALYSIS = 1 << 6,
     STATUS1_TOXIC_POISON = 1 << 7,
     STATUS1_TOXIC_COUNTER = 1 << 8 | 1 << 9 | 1 << 10 | 1 << 11,
-    STATUS1_TOXIC_TURN_1 = 1 << 8,
-#define STATUS1_TOXIC_TURN(num) (num * STATUS1_TOXIC_TURN_1)
+#define STATUS1_TOXIC_TURN(num) ((Status1) ((num) << 8))
     STATUS1_POISON_ANY = STATUS1_POISON | STATUS1_TOXIC_POISON,
     STATUS1_FROSTBITE = 1 << 12,
     STATUS1_BLEED = 1 << 13,
@@ -141,8 +139,11 @@ typedef enum Status1 : u32 {
 
 #define BLEED_DAMAGE(hp) (hp / 16)
 
+#define BIT_31 0x80000000
+
 // Volatile status ailments
 // These are removed after exiting the battle or switching out
+#ifdef __assembly__
 #define STATUS2_CONFUSION (1 << 0 | 1 << 1 | 1 << 2)
 #define STATUS2_CONFUSION_TURN(num) ((num) << 0)
 #define STATUS2_FLINCHED (1 << 3)
@@ -170,7 +171,39 @@ typedef enum Status1 : u32 {
 #define STATUS2_ENRAGED (1 << 29)
 #define STATUS2_DEFENSE_CURL (1 << 30)
 #define STATUS2_TORMENT (1 << 31)
+#else
+typedef enum Status2 : u32 {
+    STATUS2_CONFUSION = 1 << 0 | 1 << 1 | 1 << 2,
+#define STATUS2_CONFUSION_TURN(num) ((Status2) ((num) << 0))
+    STATUS2_FLINCHED = 1 << 3,
+    STATUS2_UPROAR = 1 << 4 | 1 << 5 | 1 << 6,
+#define STATUS2_UPROAR_TURN(num) ((Status2) ((num) << 4))
+    STATUS2_UNUSED = 1 << 7,
+    STATUS2_BIDE = 1 << 8 | 1 << 9,
+#define STATUS2_BIDE_TURN(num) ((Status2) ((num) << 8))
+    STATUS2_LOCK_CONFUSE = 1 << 10 | 1 << 11,  // e.g. Thrash
+#define STATUS2_LOCK_CONFUSE_TURN(num) ((Status2) ((num) << 10))
+    STATUS2_MULTIPLETURNS = 1 << 12,
+    STATUS2_WRAPPED = 1 << 13,
+    STATUS2_POWDER = 1 << 14,
+    STATUS2_INFATUATION = 1 << 16 | 1 << 17 | 1 << 18 | 1 << 19,  // 4 bits, one for every battler
+#define STATUS2_INFATUATED_WITH(battler) ((1 << battler) << 16)
+    STATUS2_FOCUS_ENERGY = 1 << 20,
+    STATUS2_TRANSFORMED = 1 << 21,
+    STATUS2_RECHARGE = 1 << 22,
+    STATUS2_RAGE = 1 << 23,
+    STATUS2_SUBSTITUTE = 1 << 24,
+    STATUS2_DESTINY_BOND = 1 << 25,
+    STATUS2_ESCAPE_PREVENTION = 1 << 26,
+    STATUS2_NIGHTMARE = 1 << 27,
+    STATUS2_CURSED = 1 << 28,
+    STATUS2_ENRAGED = 1 << 29,
+    STATUS2_DEFENSE_CURL = 1 << 30,
+    STATUS2_TORMENT = BIT_31,
+} Status2;
+#endif
 
+#ifdef __assembly__
 #define STATUS3_LEECHSEED_BATTLER (1 << 0 | 1 << 1)  // The battler to receive HP from Leech Seed
 #define STATUS3_LEECHSEED (1 << 2)
 #define STATUS3_ALWAYS_HITS (1 << 3 | 1 << 4)
@@ -203,7 +236,45 @@ typedef enum Status1 : u32 {
 #define STATUS3_LASER_FOCUS (1 << 29)
 #define STATUS3_POWER_TRICK (1 << 30)
 #define STATUS3_SEMI_INVULNERABLE (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER | STATUS3_PHANTOM_FORCE)
+#else
+typedef enum Status3 : u32 {
+    STATUS3_LEECHSEED_BATTLER = 1 << 0 | 1 << 1,  // The battler to receive HP from Leech Seed
+#define STATUS3_LEECHSEED_BY(num) ((Status3) ((num) << 0))
+    STATUS3_LEECHSEED = 1 << 2,
+    STATUS3_ALWAYS_HITS = 1 << 3 | 1 << 4,
+#define STATUS3_ALWAYS_HITS_TURN(num) \
+    (((num) << 3) & STATUS3_ALWAYS_HITS)  // "Always Hits" is set as a 2 turn timer, i.e. next turn is the last turn when it's active
+    STATUS3_PERISH_SONG = 1 << 5,
+    STATUS3_ON_AIR = 1 << 6,
+    STATUS3_UNDERGROUND = 1 << 7,
+    STATUS3_MINIMIZED = 1 << 8,
+    STATUS3_CHARGED_UP = 1 << 9,
+    STATUS3_ROOTED = 1 << 10,
+    STATUS3_YAWN = 1 << 11 | 1 << 12,  // Number of turns to sleep
+#define STATUS3_YAWN_TURN(num) ((Status3) ((num) << 11))
+    STATUS3_IMPRISONED_OTHERS = 1 << 13,
+    STATUS3_GRUDGE = 1 << 14,
+    STATUS3_CANT_SCORE_A_CRIT = 1 << 15,
+    STATUS3_GASTRO_ACID = 1 << 16,
+    STATUS3_EMBARGO = 1 << 17,
+    STATUS3_UNDERWATER = 1 << 18,
+    STATUS3_INTIMIDATE_POKES = 1 << 19,
+    STATUS3_TRACE = 1 << 20,
+    STATUS3_SMACKED_DOWN = 1 << 21,
+    STATUS3_ME_FIRST = 1 << 22,
+    STATUS3_TELEKINESIS = 1 << 23,
+    STATUS3_PHANTOM_FORCE = 1 << 24,
+    STATUS3_MIRACLE_EYED = 1 << 25,
+    STATUS3_MAGNET_RISE = 1 << 26,
+    STATUS3_HEAL_BLOCK = 1 << 27,
+    STATUS3_AQUA_RING = 1 << 28,
+    STATUS3_LASER_FOCUS = 1 << 29,
+    STATUS3_POWER_TRICK = 1 << 30,
+    STATUS3_SEMI_INVULNERABLE = STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER | STATUS3_PHANTOM_FORCE,
+} Status3;
+#endif
 
+#ifdef __assembly__
 #define STATUS4_ELECTRIFIED (1 << 0)
 #define STATUS4_PLASMA_FISTS (1 << 1)
 #define STATUS4_COILED (1 << 2)
@@ -214,6 +285,20 @@ typedef enum Status1 : u32 {
 #define STATUS4_FEAR (1 << 7)
 #define STATUS4_CUTTHROAT (1 << 8)
 #define STATUS4_FORESIGHT (1 << 9)
+#else
+typedef enum Status4 : u32 {
+    STATUS4_ELECTRIFIED = 1 << 0,
+    STATUS4_PLASMA_FISTS = 1 << 1,
+    STATUS4_COILED = 1 << 2,
+    STATUS4_SALT_CURE = 1 << 3,
+    STATUS4_GHASTLY_ECHO = 1 << 4,
+    STATUS4_COMMANDED = 1 << 5,
+    STATUS4_DRAGON_CHEER = 1 << 6,
+    STATUS4_FEAR = 1 << 7,
+    STATUS4_CUTTHROAT = 1 << 8,
+    STATUS4_FORESIGHT = 1 << 9,
+} Status4;
+#endif
 
 #define HITMARKER_x10 (1 << 4)
 #define HITMARKER_SKIP_DMG_TRACK (1 << 5)

@@ -57,8 +57,7 @@ class __EnumHack {
         a = a & b;                                                                                                                           \
         return a;                                                                                                                            \
     }                                                                                                                                        \
-    inline constexpr enumType operator~(enumType a) { return static_cast<enumType>(~static_cast<u32>(a)); }                                  \
-    inline constexpr enumType operator*(enumType a, enumType b) { return static_cast<enumType>(static_cast<u32>(a) * static_cast<u32>(b)); }
+    inline constexpr enumType operator~(enumType a) { return static_cast<enumType>(~static_cast<u32>(a)); }
 
 #define ENUM_ADD(enumType)                                  \
     inline constexpr enumType& operator++(enumType& a) {    \
@@ -67,6 +66,7 @@ class __EnumHack {
     }
 
 STATIC_ASSERT(sizeof(Status1) == sizeof(u32), BadStatus1Size)
+STATIC_ASSERT(sizeof(Status2) == sizeof(u32), BadStatus2Size)
 
 ENUM_OR(InfiltrateType)
 ENUM_OR(MoveEffectEnum)
@@ -74,6 +74,9 @@ ENUM_OR(TerrainType)
 ENUM_OR(NonStackingState)
 
 ENUM_BIT_OPERATIONS(Status1)
+ENUM_BIT_OPERATIONS(Status2)
+ENUM_BIT_OPERATIONS(Status3)
+ENUM_BIT_OPERATIONS(Status4)
 
 ENUM_ADD(Type)
 
@@ -5071,7 +5074,7 @@ constexpr Ability Impl<ABILITY_FUNGAL_INFECTION> = {
         CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
         CHECK(IsMoveMakingContact(move, battler))
 
-        gStatuses3[target] |= battler;
+        gStatuses3[target] |= STATUS3_LEECHSEED_BY(battler);
         gStatuses3[target] |= STATUS3_LEECHSEED;
         BattleScriptCall(BattleScript_AbsorbantActivated);
         return TRUE;
@@ -5451,7 +5454,7 @@ constexpr Ability Impl<ABILITY_ABSORBANT> = {
         CHECK_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
         CHECK(gBattleMoves[move].effect == EFFECT_ABSORB || gBattleMoves[move].effect == EFFECT_DREAM_EATER)
 
-        gStatuses3[target] |= battler;
+        gStatuses3[target] |= STATUS3_LEECHSEED_BY(battler);
         gStatuses3[target] |= STATUS3_LEECHSEED;
         BattleScriptCall(BattleScript_AbsorbantActivated);
         return TRUE;

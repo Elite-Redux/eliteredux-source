@@ -159,7 +159,7 @@ struct BattlePokemon {
     u32 experience;
     u32 personality;
     Status1 status1;
-    u32 status2;
+    Status2 status2;
     u32 otId;
     SpeciesEnum species;
     union {
