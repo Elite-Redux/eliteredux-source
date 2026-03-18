@@ -158,7 +158,7 @@ struct Unknown_806F160_Struct {
 struct BattlePokemon {
     u32 experience;
     u32 personality;
-    u32 status1;
+    Status1 status1;
     u32 status2;
     u32 otId;
     SpeciesEnum species;
