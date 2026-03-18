@@ -1036,7 +1036,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
                 score -= 8;
             break;
         case EFFECT_VENOM_DRENCH:
-            if (!(gBattleMons[battlerDef].status1 & STATUS1_PSN_ANY)) {
+            if (!(gBattleMons[battlerDef].status1 & STATUS1_POISON_ANY)) {
                 score -= 10;
             } else {
                 if (!ShouldLowerStat(battlerDef, STAT_SPEED))
@@ -1423,10 +1423,10 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             if (gStatuses3[battlerAtk] & STATUS3_IMPRISONED_OTHERS) score -= 10;
             break;
         case EFFECT_REFRESH:
-            if (!(gBattleMons[battlerDef].status1 & (STATUS1_PSN_ANY | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_FROSTBITE | STATUS1_BLEED))) score -= 10;
+            if (!(gBattleMons[battlerDef].status1 & (STATUS1_POISON_ANY | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_FROSTBITE | STATUS1_BLEED))) score -= 10;
             break;
         case EFFECT_PSYCHO_SHIFT:
-            if (gBattleMons[battlerAtk].status1 & STATUS1_PSN_ANY && !AI_CanPoison(battlerAtk, battlerDef, move, AI_DATA->partnerMove))
+            if (gBattleMons[battlerAtk].status1 & STATUS1_POISON_ANY && !AI_CanPoison(battlerAtk, battlerDef, move, AI_DATA->partnerMove))
                 score -= 10;
             else if (gBattleMons[battlerAtk].status1 & STATUS1_BURN && !AI_CanBurn(battlerAtk, battlerDef, AI_DATA->partnerMove))
                 score -= 10;
@@ -2736,7 +2736,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
         case EFFECT_EVASION_UP_2:
             if (atkHpPercent > 90 && !AI_RandLessThan(100)) score += 3;
             if (gBattleMons[battlerAtk].statStages[STAT_EVASION] > 9 && AI_RandLessThan(128)) score--;
-            if ((gBattleMons[battlerDef].status1 & STATUS1_PSN_ANY) && atkHpPercent >= 50 && !AI_RandLessThan(80)) score += 3;
+            if ((gBattleMons[battlerDef].status1 & STATUS1_POISON_ANY) && atkHpPercent >= 50 && !AI_RandLessThan(80)) score += 3;
             if (gStatuses3[battlerDef] & STATUS3_LEECHSEED && !AI_RandLessThan(70)) score += 3;
             if (gStatuses3[battlerAtk] & STATUS3_ROOTED && AI_RandLessThan(128)) score += 2;
             if (gBattleMons[battlerDef].status2 & STATUS2_CURSED && !AI_RandLessThan(70)) score += 3;
@@ -2796,7 +2796,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
             if (ShouldLowerStat(battlerDef, STAT_ACC)) score -= 2;
             if ((atkHpPercent < 70 || defHpPercent < 70) && AI_RandLessThan(100)) score--;
             if (gBattleMons[battlerDef].statStages[STAT_ACC] <= 4 && !AI_RandLessThan(80)) score -= 2;
-            if (gBattleMons[battlerDef].status1 & STATUS1_PSN_ANY && !AI_RandLessThan(70)) score += 2;
+            if (gBattleMons[battlerDef].status1 & STATUS1_POISON_ANY && !AI_RandLessThan(70)) score += 2;
             if (gStatuses3[battlerDef] & STATUS3_LEECHSEED && !AI_RandLessThan(70)) score += 2;
             if (gStatuses3[battlerDef] & STATUS3_ROOTED && AI_RandLessThan(128)) score++;
             if (gBattleMons[battlerDef].status2 & STATUS2_CURSED && !AI_RandLessThan(70)) score += 2;
@@ -2976,7 +2976,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
         case EFFECT_SUBSTITUTE:
             if (gBattleMons[battlerAtk].status2 & STATUS2_SUBSTITUTE) score -= 10;
             if (gStatuses3[battlerDef] & STATUS3_PERISH_SONG) score += 3;
-            if (gBattleMons[battlerDef].status1 & (STATUS1_BURN | STATUS1_PSN_ANY | STATUS1_FROSTBITE)) score++;
+            if (gBattleMons[battlerDef].status1 & (STATUS1_BURN | STATUS1_POISON_ANY | STATUS1_FROSTBITE)) score++;
             if (HasMoveEffect(battlerDef, EFFECT_SLEEP) || HasMoveEffect(battlerDef, EFFECT_TOXIC) || HasMoveEffect(battlerDef, EFFECT_POISON) ||
                 HasMoveEffect(battlerDef, EFFECT_PARALYZE) || HasMoveEffect(battlerDef, EFFECT_WILL_O_WISP) || HasMoveEffect(battlerDef, EFFECT_CONFUSE) ||
                 HasMoveEffect(battlerDef, EFFECT_LEECH_SEED))
@@ -3605,10 +3605,10 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
                 score++;
             break;
         case EFFECT_REFRESH:
-            if (gBattleMons[battlerAtk].status1 & (STATUS1_PSN_ANY | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_FROSTBITE | STATUS1_BLEED)) score += 2;
+            if (gBattleMons[battlerAtk].status1 & (STATUS1_POISON_ANY | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_FROSTBITE | STATUS1_BLEED)) score += 2;
             break;
         case EFFECT_PSYCHO_SHIFT:
-            if (gBattleMons[battlerAtk].status1 & STATUS1_PSN_ANY)
+            if (gBattleMons[battlerAtk].status1 & STATUS1_POISON_ANY)
                 IncreasePoisonScore(battlerAtk, battlerDef, move, &score);
             else if (gBattleMons[battlerAtk].status1 & STATUS1_BURN)
                 IncreaseBurnScore(battlerAtk, battlerDef, move, &score);

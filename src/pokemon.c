@@ -2610,7 +2610,7 @@ bool8 PokemonUseItemEffects(struct Pokemon* mon, u16 item, u8 partyIndex, u8 mov
                     if (battlerId != MAX_BATTLERS_COUNT) gBattleMons[battlerId].status2 &= ~STATUS2_NIGHTMARE;
                     retVal = FALSE;
                 }
-                if ((itemEffect[i] & ITEM3_POISON) && HealStatusConditions(mon, partyIndex, STATUS1_PSN_ANY | STATUS1_TOXIC_COUNTER, battlerId) == 0)
+                if ((itemEffect[i] & ITEM3_POISON) && HealStatusConditions(mon, partyIndex, STATUS1_POISON_ANY | STATUS1_TOXIC_COUNTER, battlerId) == 0)
                     retVal = FALSE;
                 if ((itemEffect[i] & ITEM3_BURN) && HealStatusConditions(mon, partyIndex, STATUS1_BURN, battlerId) == 0) retVal = FALSE;
                 if ((itemEffect[i] & ITEM3_FREEZE) && HealStatusConditions(mon, partyIndex, STATUS1_FREEZE | STATUS1_FROSTBITE, battlerId) == 0) retVal = FALSE;

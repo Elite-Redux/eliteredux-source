@@ -1840,7 +1840,7 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId) {
     if (status & STATUS1_SLEEP) {
         statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_SLP_BATTLER0, battlerId));
         statusPalId = PAL_STATUS_SLP;
-    } else if (status & STATUS1_PSN_ANY) {
+    } else if (status & STATUS1_POISON_ANY) {
         statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_PSN_BATTLER0, battlerId));
         statusPalId = PAL_STATUS_PSN;
     } else if (status & STATUS1_BURN) {

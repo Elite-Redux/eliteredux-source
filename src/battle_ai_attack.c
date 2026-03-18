@@ -1206,7 +1206,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_DEFENSE_UP(battlerDef, -1);
 
         CASE_AND_LABEL(EFFECT_VENOM_DRENCH)
-        if (!(gBattleMons[battlerDef].status1 & STATUS1_PSN_ANY)) return AI_SCORE_IMMUNE;
+        if (!(gBattleMons[battlerDef].status1 & STATUS1_POISON_ANY)) return AI_SCORE_IMMUNE;
         return AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_DEFENSE_UP(battlerDef, -1) + AI_SCORE_SPEED_UP(battlerDef, -1);
 
         CASE_AND_LABEL(EFFECT_TOXIC_THREAD)

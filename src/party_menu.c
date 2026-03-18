@@ -1683,7 +1683,7 @@ static void ResetHPTaskData(u8 taskId, u8 caseId, u32 hp) {
 #undef tStartHP
 
 u8 GetAilmentFromStatus(u32 status) {
-    if (status & STATUS1_PSN_ANY) return AILMENT_PSN;
+    if (status & STATUS1_POISON_ANY) return AILMENT_PSN;
     if (status & STATUS1_PARALYSIS) return AILMENT_PRZ;
     if (status & STATUS1_SLEEP) return AILMENT_SLP;
     if (status & STATUS1_FREEZE) return AILMENT_FRZ;

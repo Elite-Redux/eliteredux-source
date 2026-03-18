@@ -1274,7 +1274,7 @@ void ProtectChecks(u8 battlerAtk, u8 battlerDef, u16 move, u16 predictedMove, s1
             (*score) -= min(uses, 3);
     }
 
-    if (gBattleMons[battlerAtk].status1 & (STATUS1_PSN_ANY | STATUS1_BURN | STATUS1_FROSTBITE) || gBattleMons[battlerAtk].status2 & (STATUS2_CURSED) ||
+    if (gBattleMons[battlerAtk].status1 & (STATUS1_POISON_ANY | STATUS1_BURN | STATUS1_FROSTBITE) || gBattleMons[battlerAtk].status2 & (STATUS2_CURSED) ||
         gStatuses3[battlerAtk] & (STATUS3_PERISH_SONG | STATUS3_LEECHSEED | STATUS3_YAWN)) {
         (*score)--;
     }

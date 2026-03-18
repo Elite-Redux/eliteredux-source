@@ -2199,7 +2199,7 @@ BattleScript_EffectToxicThread:
 	attackcanceler
 	jumpifsubstituteblocks BattleScript_ButItFailedAtkStringPpReduce
 	jumpifstat BS_TARGET, CMP_NOT_EQUAL, STAT_SPEED, MIN_STAT_STAGE, BattleScript_ToxicThreadWorks
-	jumpifstatus BS_TARGET, STATUS1_PSN_ANY, BattleScript_ButItFailedAtkStringPpReduce
+	jumpifstatus BS_TARGET, STATUS1_POISON_ANY, BattleScript_ButItFailedAtkStringPpReduce
 BattleScript_ToxicThreadWorks:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
@@ -2226,7 +2226,7 @@ BattleScript_EffectVenomDrench:
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifstatus BS_TARGET, STATUS1_PSN_ANY, BattleScript_EffectVenomDrenchCanBeUsed
+	jumpifstatus BS_TARGET, STATUS1_POISON_ANY, BattleScript_EffectVenomDrenchCanBeUsed
 	jumpifterrainaffected BS_TARGET, STATUS_FIELD_TOXIC_TERRAIN, BattleScript_EffectVenomDrenchCanBeUsed
 	goto BattleScript_ButItFailed
 BattleScript_EffectVenomDrenchCanBeUsed:

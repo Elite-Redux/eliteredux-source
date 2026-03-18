@@ -44,7 +44,21 @@ class __EnumHack {
 };
 
 #define ENUM_OR(enumType) \
-    inline constexpr enumType operator|(enumType a, enumType b) { return static_cast<enumType>(static_cast<int>(a) | static_cast<int>(b)); }
+    inline constexpr enumType operator|(enumType a, enumType b) { return static_cast<enumType>(static_cast<u32>(a) | static_cast<u32>(b)); }
+
+#define ENUM_BIT_OPERATIONS(enumType)                                                                                                        \
+    ENUM_OR(enumType)                                                                                                                        \
+    inline constexpr enumType& operator|=(enumType& a, const enumType b) {                                                                   \
+        a = a | b;                                                                                                                           \
+        return a;                                                                                                                            \
+    }                                                                                                                                        \
+    inline constexpr enumType operator&(enumType a, enumType b) { return static_cast<enumType>(static_cast<u32>(a) & static_cast<u32>(b)); } \
+    inline constexpr enumType& operator&=(enumType& a, enumType b) {                                                                         \
+        a = a & b;                                                                                                                           \
+        return a;                                                                                                                            \
+    }                                                                                                                                        \
+    inline constexpr enumType operator~(enumType a) { return static_cast<enumType>(~static_cast<u32>(a)); }                                  \
+    inline constexpr enumType operator*(enumType a, enumType b) { return static_cast<enumType>(static_cast<u32>(a) * static_cast<u32>(b)); }
 
 #define ENUM_ADD(enumType)                                  \
     inline constexpr enumType& operator++(enumType& a) {    \
@@ -52,10 +66,14 @@ class __EnumHack {
         return a;                                           \
     }
 
+STATIC_ASSERT(sizeof(Status1) == sizeof(u32), BadStatus1Size)
+
 ENUM_OR(InfiltrateType)
 ENUM_OR(MoveEffectEnum)
 ENUM_OR(TerrainType)
 ENUM_OR(NonStackingState)
+
+ENUM_BIT_OPERATIONS(Status1)
 
 ENUM_ADD(Type)
 
@@ -2031,7 +2049,7 @@ constexpr Ability Impl<ABILITY_TOXIC_BOOST> = {
     .onTerrain = +[](ON_WEATHER) -> int { return ToxicBoostHandler(battler, ABILITY_BS_CALL); },
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (gBattleMons[battler].status1 & STATUS1_PSN_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
+            if (gBattleMons[battler].status1 & STATUS1_POISON_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
         },
 };
 
@@ -2700,7 +2718,7 @@ constexpr Ability Impl<ABILITY_WATER_COMPACTION> = {
 template <>
 constexpr Ability Impl<ABILITY_MERCILESS> = {
     .onCrit = +[](ON_CRIT) -> int {
-        if (gBattleMons[target].status1 & STATUS1_PSN_ANY) return ALWAYS_CRIT;
+        if (gBattleMons[target].status1 & STATUS1_POISON_ANY) return ALWAYS_CRIT;
         if (gBattleMons[target].status1 & STATUS1_PARALYSIS) return ALWAYS_CRIT;
         if (gBattleMons[target].status1 & STATUS1_BLEED) return ALWAYS_CRIT;
         if (gBattleMons[target].statStages[STAT_SPEED] < DEFAULT_STAT_STAGE) return ALWAYS_CRIT;

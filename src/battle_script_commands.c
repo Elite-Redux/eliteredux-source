@@ -7632,7 +7632,7 @@ static void Cmd_various(void) {
                 } else {
                     SetActiveMultistringChooser(B_MSG_PKMNWASPARALYZED);
                 }
-            } else if (gBattleMons[gBattlerAttacker].status1 & STATUS1_PSN_ANY && !(gBattleMons[gBattlerTarget].status1 & STATUS1_PSN_ANY)) {
+            } else if (gBattleMons[gBattlerAttacker].status1 & STATUS1_POISON_ANY && !(gBattleMons[gBattlerTarget].status1 & STATUS1_POISON_ANY)) {
                 if (!CanBeParalyzed(gBattlerAttacker, gBattlerTarget)) {
                     BattleScriptPush(ptr);
                     gBattlescriptCurrInstr = BattleScript_PSNPrevention;
