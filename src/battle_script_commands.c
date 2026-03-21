@@ -8017,9 +8017,8 @@ static void Cmd_various(void) {
             if (ItemBattleEffects(ITEMEFFECT_BATTLER_MOVE_END, gActiveBattler, FALSE)) return;
 
             if (restoreItem) {
-                gBattleMons[gActiveBattler].item = gBattleStruct->changedItems[gActiveBattler];
+                UpdateBattlerItem(gActiveBattler, gBattleStruct->changedItems[gActiveBattler]);
                 gBattleStruct->changedItems[gActiveBattler] = ITEM_NONE;
-                gBattleResources->flags->flags[gActiveBattler] &= ~(RESOURCE_FLAG_UNBURDEN);
             }
         }
             return;
