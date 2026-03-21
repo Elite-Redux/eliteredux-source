@@ -282,6 +282,7 @@
 #define VARIOUS_JUMP_IF_ABILITY_FLAG            199
 #define VARIOUS_ON_STAT_LOWERED                 200
 #define VARIOUS_SCHEDULE_SWITCH                 201
+#define VARIOUS_WATERLOG                        202
 
 #define HAZARD_MODE_SPIKES 0
 #define HAZARD_MODE_ROCKS 1

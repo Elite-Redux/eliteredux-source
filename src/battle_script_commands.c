@@ -3055,6 +3055,7 @@ static void Cmd_seteffectwithchance(void) {
     u32 percentChance = gBattleScripting.moveSecondaryEffectChance
                             ? (gBattleScripting.moveSecondaryEffectChance == 0xFF ? 0 : gBattleScripting.moveSecondaryEffectChance)
                             : gBattleMoves[gCurrentMove].secondaryEffectChance;
+    u8 isStatus = IS_MOVE_STATUS(gCurrentMove);
 
     gBattlescriptCurrInstr++;
 
@@ -3066,15 +3067,15 @@ static void Cmd_seteffectwithchance(void) {
 
     if (gBattleScripting.moveEffect & MOVE_EFFECT_CERTAIN && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
         gBattleScripting.moveEffect &= ~(MOVE_EFFECT_CERTAIN);
-        SetMoveEffect(FALSE, MOVE_EFFECT_CERTAIN);
+        SetMoveEffect(isStatus, MOVE_EFFECT_CERTAIN);
     } else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MINION_CONTROL &&
                gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) {
         // No-op
     } else if (Random() % 100 < percentChance && gBattleScripting.moveEffect && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
-        if (percentChance >= 100)
-            SetMoveEffect(FALSE, MOVE_EFFECT_CERTAIN);
+        if (percentChance >= 100 && !isStatus)
+            SetMoveEffect(isStatus, MOVE_EFFECT_CERTAIN);
         else
-            SetMoveEffect(FALSE, 0);
+            SetMoveEffect(isStatus, 0);
 
         FlagSet(FLAG_LAST_MOVE_SECONDARY_EFFECT_ACTIVATED);
     }
@@ -8888,6 +8889,9 @@ static void Cmd_various(void) {
             } else {
                 gBattlescriptCurrInstr = ptr;
             }
+            break;
+        case VARIOUS_WATERLOG:
+            gRoundStructs[gActiveBattler].waterlog = TRUE;
             break;
         case VARIOUS_JUMP_IF_ABILITY_STATE: {
             int type = READ_8_INC;

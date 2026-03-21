@@ -948,6 +948,7 @@ static const u8 sText_BecomesEnraged[] = _("{B_EFF_NAME_WITH_PREFIX} is filled\n
 static const u8 sText_EnrageHurt[] = _("{B_ATK_NAME_WITH_PREFIX} hurts itself\nin its rampage!");
 static const u8 sText_MadnessEnrage[] = _("{B_ATK_NAME_WITH_PREFIX} succumbs\nto the madness!");
 static const u8 sText_BecomesDrenched[] = _("{B_EFF_NAME_WITH_PREFIX} became\ndrenched!");
+static const u8 sText_Chuckster[] = _("{B_DEF_NAME_WITH_PREFIX} is\nthrown out!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1106,7 +1107,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_Chuckster[] = _("{B_DEF_NAME_WITH_PREFIX} is\nthrown out!");
+static const u8 sText_Waterlog[] = _("{B_DEF_NAME_WITH_PREFIX} was\ndelayed!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1998,6 +1999,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_MADNESS_ENRAGE - 12] = sText_MadnessEnrage,
     [STRINGID_BECOMES_DRENCHED - 12] = sText_BecomesDrenched,
     [STRINGID_CHUCKSTER - 12] = sText_Chuckster,
+    [STRINGID_WATERLOG - 12] = sText_Waterlog,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

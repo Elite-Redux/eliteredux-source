@@ -8,6 +8,7 @@ import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.GeneratorUtils.createDedupMaps
 import er.GeneratorUtils.findLearnsetForSpecies
 import er.GeneratorUtils.printLookupTable
+import er.proto.MoveBehavior.EFFECT_PLACEHOLDER
 import er.proto.MoveEnum
 import er.proto.Species.Learnset
 import java.io.OutputStreamWriter
@@ -39,11 +40,13 @@ object LevelUpLearnsetGenerator : Generator {
         .flatMap { it.levelList.flatMap { move -> move.moveList } }
         .distinct()
         .filter {
-          moveMap[it]!!.name.trim().endsWith(")") || moveMap[it]!!.shortName.trim().endsWith(")")
+          moveMap[it]!!.name.trim().endsWith(")") ||
+            moveMap[it]!!.shortName.trim().endsWith(")") ||
+            moveMap[it]!!.effect == EFFECT_PLACEHOLDER
         }
-    //check(unimplementedMoves.isEmpty()) {
-    //  "Unimplemented moves are used in movesets: $unimplementedMoves"
-    //}
+     check(unimplementedMoves.isEmpty()) {
+      "Unimplemented moves are used in movesets: $unimplementedMoves"
+     }
 
     learnsetIds.forEach { writer.appendLine(learnsetString(it.value, it.key)) }
 

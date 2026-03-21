@@ -504,8 +504,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectWhirlpool				  @ EFFECT_WHIRLPOOL
 	.4byte BattleScript_EffectPartyFavors			  @ EFFECT_PARTY_FAVORS
 	.4byte BattleScript_EffectPrismBlast			  @ EFFECT_PRISM_BLAST
-	.4byte BattleScript_EffectPlaceholder			  @ EFFECT_WATERLOG
-	.4byte BattleScript_EffectPlaceholder			  @ EFFECT_INCITE
+	.4byte BattleScript_EffectWaterlog				  @ EFFECT_WATERLOG
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -1775,6 +1774,8 @@ BattleScript_EffectThirdType:
 	waitanimation
 	printstring STRINGID_THIRDTYPEADDED
 	waitmessage B_WAIT_TIME_LONG
+	argumenttomoveeffect
+	seteffectprimary
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectDefenseUp2Hit:
@@ -3496,6 +3497,24 @@ BattleScript_EffectWhirlpool::
 	tryfaintmon BS_TARGET, FALSE, NULL
 	moveendall
 	end
+
+BattleScript_EffectWaterlog:
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	setwaterlogged BS_TARGET
+	printstring STRINGID_WATERLOG
+	waitmessage B_WAIT_TIME_LONG
+	setmoveeffect MOVE_EFFECT_DRENCH
+	jumpifweatheraffected BS_TARGET, WEATHER_RAIN_ANY, BattleScript_EffectWaterlog_RainBoost
+	goto BattleScript_EffectWaterlog_TryDrench
+BattleScript_EffectWaterlog_RainBoost:
+	setmoveeffectchance 50
+BattleScript_EffectWaterlog_TryDrench:
+	seteffectwithchance
+	goto BattleScript_MoveEnd
+
 
 BattleScript_FastEffectHit::
 BattleScript_FastHitFromAtkCanceler::

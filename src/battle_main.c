@@ -4301,7 +4301,7 @@ union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove) {
 
     if (!quash) {
         speedValue.afterYou = gRoundStructs[battler].afterYou;
-        speedValue.dazedNegation = !gVolatileStructs[battler].dazed;
+        speedValue.dazedNegation = ~(gVolatileStructs[battler].dazed + gRoundStructs[battler].waterlog);
     }
 
     if (!ignoreChosenMove) {

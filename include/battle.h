@@ -202,6 +202,7 @@ struct RoundStruct {
     u8 damaged:1;
     u8 safePassage:1;
     u8 confusionSelfDmg:1;
+    u8 waterlog:1;
 };
 
 struct TurnStruct {
