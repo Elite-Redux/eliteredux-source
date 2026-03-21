@@ -3412,30 +3412,28 @@ BattleScript_EffectConcoction:
 	end
 
 BattleScript_EffectSpectralFlame::
+	jumpifweatheraffected BS_ATTACKER, WEATHER_FOG_ANY, BattleScript_EffectSpectralFlame_Continue
+	goto BattleScript_EffectWillOWisp
+BattleScript_EffectSpectralFlame_Continue::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	damagecalc
-	adjustdamage
-	attackanimation
-	waitanimation
-	effectivenesssound
-	hitanimation BS_TARGET
-	waitstate
-	healthbarupdate BS_TARGET
-	datahpupdate BS_TARGET
-	critmessage
+	jumpifsubstituteblocks BattleScript_ButItFailed
+	setgastroacid BattleScript_EffectSpectralFlame_NoSuppress
+	call BattleScript_PlayAnimation
+	setmoveeffect MOVE_EFFECT_BURN
+	seteffectprimary
+	printstring STRINGID_PKMNSABILITYSUPPRESSED
 	waitmessage B_WAIT_TIME_LONG
-	resultmessage
-	waitmessage B_WAIT_TIME_LONG
-	setmoveeffect MOVE_EFFECT_BURN | MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES
-	seteffectwithchance
-	jumpifweatheraffected BS_ATTACKER, WEATHER_FOG_ANY, BattleScript_EffectSpectralFlame_Suppress
-	goto BattleScript_MoveEndTryFaintTarget
-BattleScript_EffectSpectralFlame_Suppress:
-	setgastroacid BattleScript_MoveEndTryFaintTarget
-	goto BattleScript_MoveEndTryFaintTarget
+	goto BattleScript_MoveEnd
+BattleScript_EffectSpectralFlame_NoSuppress:
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_BURN
+	jumpifsafeguard BattleScript_SafeguardProtected
+	call BattleScript_PlayAnimation
+	setmoveeffect MOVE_EFFECT_BURN
+	seteffectprimary
+	goto BattleScript_MoveEnd
 
 BattleScript_EffectPartyFavors::
 	attackcanceler
