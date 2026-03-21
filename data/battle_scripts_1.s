@@ -3453,12 +3453,12 @@ BattleScript_EffectPartyFavors::
 	waitmessage B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	tryfaintmon BS_TARGET, FALSE, NULL
 	copybyte gStackBattler1, gBattlerAttacker
 	call BattleScript_EffectPartyFavors_TryHealStack
 	getbattler BS_ATTACKER_PARTNER
 	copybyte gStackBattler1, sBATTLER
 	call BattleScript_EffectPartyFavors_TryHealStack
+	tryfaintmon BS_TARGET, FALSE, NULL
 	moveendall
 	end
 BattleScript_EffectPartyFavors_TryHealStack:
