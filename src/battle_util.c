@@ -3731,7 +3731,6 @@ bool32 SetPermanentWeather(u32 weatherEnumId) {
 }
 
 bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum move, u8 movePower) {
-    if (gBattlerAttacker == battler) return FALSE;
     if (gTurnStructs[battler].dancerUsedMove) return FALSE;
     if (gBattleMons[battler].status1 & (STATUS1_SLEEP | STATUS1_FREEZE)) return FALSE;
     if (!IsBattlerAlive(battler) && !(ability && gBattleMoves[move].effect == EFFECT_EXPLOSION)) return FALSE;
@@ -3994,7 +3993,7 @@ bool8 UseEntryMove(u8 battler, AbilityEnum ability, u16 extraMove, u8 movePower)
     return FALSE;
 }
 
-u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, u16 extraMove, u8 movePower) {
+u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, MoveEnum extraMove, u8 movePower) {
     if (!CanUseExtraMove(battler, target)) return FALSE;
     if (!CheckAndSetOncePerTurnAbility(battler, ability)) return FALSE;
 

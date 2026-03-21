@@ -268,7 +268,7 @@ int IsSuppressed(int battler, AbilityEnum ability, int checkMoldBreaker);
 int AbilityHealMonStatus(u8 battler, AbilityEnum ability);
 int CheckHalfHpAbility(int battlerDef, int battlerAtk);
 bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum move, u8 movePower);
-u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, u16 extraMove, u8 movePower);
+u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, MoveEnum extraMove, u8 movePower);
 
 #define ON_ABILITY(battler, checkMoldBreaker, condition, callback)             \
     for (int idx = GetNumPossibleAbilitiesForBattler() - 1; idx >= 0; idx--) { \
