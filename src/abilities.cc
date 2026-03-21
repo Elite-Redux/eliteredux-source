@@ -7277,9 +7277,8 @@ static const ItemEnum sCravingBerryTable[] = {
     ITEM_STARF_BERRY,
     ITEM_CUSTAP_BERRY,
 };
-template <>
-constexpr Ability Impl<ABILITY_CRAVING> = {.onEndTurn = +[](ON_END_TURN) -> int {
-    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+
+void SetRandomTempBerry(u8 battler) {
     ItemEnum berry = sCravingBerryTable[Random() % ARRAY_COUNT(sCravingBerryTable)];
     if (berry == ITEM_FIGY_BERRY) {
         static const ItemEnum figyAlternatives[] = {ITEM_FIGY_BERRY, ITEM_WIKI_BERRY, ITEM_MAGO_BERRY, ITEM_AGUAV_BERRY, ITEM_IAPAPA_BERRY};
@@ -7288,6 +7287,14 @@ constexpr Ability Impl<ABILITY_CRAVING> = {.onEndTurn = +[](ON_END_TURN) -> int 
 
     gBattleStruct->changedItems[battler] = gBattleMons[battler].item;
     gBattleMons[battler].item = berry;
+}
+
+template <>
+constexpr Ability Impl<ABILITY_CRAVING> = {.onEndTurn = +[](ON_END_TURN) -> int {
+    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+    CHECK(!IsUnnerveAbilityOnOpposingSide(battler))
+
+    setRandomTempBerry(battler);
 
     BattleScriptPushCursorAndCallback(BattleScript_CudChew);
     return TRUE;

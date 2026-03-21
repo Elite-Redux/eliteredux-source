@@ -283,6 +283,7 @@
 #define VARIOUS_ON_STAT_LOWERED                 200
 #define VARIOUS_SCHEDULE_SWITCH                 201
 #define VARIOUS_WATERLOG                        202
+#define VARIOUS_SET_RANDOM_TEMP_BERRY           203
 
 #define HAZARD_MODE_SPIKES 0
 #define HAZARD_MODE_ROCKS 1

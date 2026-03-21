@@ -9106,6 +9106,10 @@ static void Cmd_various(void) {
             });
             break;
         }
+        case VARIOUS_SET_RANDOM_TEMP_BERRY:
+            SetRandomTempBerry(gActiveBattler);
+            break;
+
     }  // End of switch (gBattlescriptCurrInstr[2])
 }
 

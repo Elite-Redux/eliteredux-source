@@ -506,6 +506,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectPrismBlast			  @ EFFECT_PRISM_BLAST
 	.4byte BattleScript_EffectWaterlog				  @ EFFECT_WATERLOG
 	.4byte BattleScript_EffectSpectralFlame			  @ EFFECT_SPECTRAL_FLAME
+	.4byte BattleScript_EffectConcoction			  @ EFFECT_CONCOCTION
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -3377,6 +3378,34 @@ BattleScript_HitFromAtkAnimation::
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
 	seteffectwithchance
+BattleScript_MoveEndTryFaintTarget:
+	tryfaintmon BS_TARGET, FALSE, NULL
+BattleScript_MoveEnd::
+	moveendall
+	end
+
+BattleScript_EffectConcoction:
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	damagecalc
+	adjustdamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	setrandomtempberry BS_ATTACKER
+	setbyte sBERRY_OVERRIDE, TRUE
+	consumeberry BS_ATTACKER, TRUE
+	setbyte sBERRY_OVERRIDE, FALSE
 BattleScript_MoveEndTryFaintTarget:
 	tryfaintmon BS_TARGET, FALSE, NULL
 BattleScript_MoveEnd::

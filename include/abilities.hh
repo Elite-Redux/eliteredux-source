@@ -303,6 +303,7 @@ int DoesMoveMatchFlag(u8 battler, MoveEnum move, Type type, MoveFlag flag);
 StatDropBlockType IsStatDropBlocked(u8 battler, int stat, int selfStatDrop);
 StatDropBlockType GetStatDropBlock(u8* battler, int stat, int selfStatDrop, AbilityEnum* ability, const u8** script);
 const IntimidateCloneData* GetIntimidateData(AbilityEnum ability);
+void SetRandomTempBerry(u8 battler);
 
 #ifdef __cplusplus
 }

@@ -2461,6 +2461,10 @@
 	various \battler, VARIOUS_WATERLOG
 	.endm
 
+	.macro setrandomtempberry battler:req
+	various \battler, VARIOUS_SET_RANDOM_TEMP_BERRY
+	.endm
+
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr
