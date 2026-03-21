@@ -949,6 +949,12 @@ static const u8 sText_EnrageHurt[] = _("{B_ATK_NAME_WITH_PREFIX} hurts itself\ni
 static const u8 sText_MadnessEnrage[] = _("{B_ATK_NAME_WITH_PREFIX} succumbs\nto the madness!");
 static const u8 sText_BecomesDrenched[] = _("{B_EFF_NAME_WITH_PREFIX} became\ndrenched!");
 static const u8 sText_Chuckster[] = _("{B_DEF_NAME_WITH_PREFIX} is\nthrown out!");
+static const u8 sText_Waterlog[] = _("{B_DEF_NAME_WITH_PREFIX} was\ndelayed!");
+static const u8 sText_Fetch[] = _("Fetch, {B_ACTIVE_NAME}!");
+static const u8 sText_FetchRetrieve[] = _("{B_ATK_NAME_WITH_PREFIX} retrieves\nits {B_LAST_ITEM}!");
+static const u8 sText_FetchNothing[] = _("But {B_ATK_NAME_WITH_PREFIX} is\nalready holding its item...");
+static const u8 sText_FetchSearch[] = _("{B_ATK_NAME_WITH_PREFIX} leaves\nto find its {B_LAST_ITEM}!");
+static const u8 sText_FetchSwitchNoItem[] = _("{B_ATK_NAME_WITH_PREFIX} runs\noff the field!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1107,7 +1113,6 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_Waterlog[] = _("{B_DEF_NAME_WITH_PREFIX} was\ndelayed!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -2000,6 +2005,11 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_BECOMES_DRENCHED - 12] = sText_BecomesDrenched,
     [STRINGID_CHUCKSTER - 12] = sText_Chuckster,
     [STRINGID_WATERLOG - 12] = sText_Waterlog,
+    [STRINGID_FETCH - 12] = sText_Fetch,
+    [STRINGID_FETCH_RETRIEVE - 12] = sText_FetchRetrieve,
+    [STRINGID_FETCH_NOTHING - 12] = sText_FetchNothing,
+    [STRINGID_FETCH_SEARCH - 12] = sText_FetchSearch,
+    [STRINGID_FETCH_SWITCH_NO_ITEM - 12] = sText_FetchSwitchNoItem,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

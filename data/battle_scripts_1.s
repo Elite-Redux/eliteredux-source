@@ -383,7 +383,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectHit                     @ EFFECT_DYNAMAX_DOUBLE_DMG
 	.4byte BattleScript_EffectDecorate                @ EFFECT_DECORATE
 	.4byte BattleScript_EffectHit                     @ EFFECT_SNIPE_SHOT
-	.4byte BattleScript_EffectTripleHit               @ EFFECT_TRIPLE_HIT
+	.4byte BattleScript_EffectPlaceholder             @ EFFECT_TRIPLE_HIT
 	.4byte BattleScript_EffectRecoilHP25              @ EFFECT_RECOIL_HP_25
 	.4byte BattleScript_EffectStuffCheeks             @ EFFECT_STUFF_CHEEKS
 	.4byte BattleScript_EffectArgumentHit             @ EFFECT_GRAV_APPLE
@@ -507,6 +507,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectWaterlog				  @ EFFECT_WATERLOG
 	.4byte BattleScript_EffectSpectralFlame			  @ EFFECT_SPECTRAL_FLAME
 	.4byte BattleScript_EffectConcoction			  @ EFFECT_CONCOCTION
+	.4byte BattleScript_EffectFetch					  @ EFFECT_FETCH
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -4748,16 +4749,6 @@ BattleScript_EffectTrap::
 	setmoveeffect MOVE_EFFECT_WRAP
 	goto BattleScript_EffectHit
 
-BattleScript_EffectTripleHit::
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	setmultihitcounter 3
-	initmultihitstring
-	sethword sMULTIHIT_EFFECT, 0
-	goto BattleScript_MultiHitLoop
-
 BattleScript_EffectDoubleHit::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
@@ -5978,6 +5969,36 @@ BattleScript_EffectChillyReception_NoFail:
 	checkprimalweather BattleScript_MoveSwitch
 	setbattleweather ENUM_WEATHER_HAIL, BattleScript_MoveSwitch, FALSE
 	goto BattleScript_MoveSwitch
+
+BattleScript_EffectFetch:
+	attackcanceler
+	copybyte gActiveBattler, gBattlerAttacker
+	printstring STRINGID_FETCH
+	waitmessage B_WAIT_TIME_LONG
+	ppreduce
+	jumpifbattletype BATTLE_TYPE_ARENA, BattleScript_EffectFetch_NoEffectIfNoItem
+	jumpifcantswitch SWITCH_IGNORE_ESCAPE_PREVENTION | BS_ATTACKER, BattleScript_EffectFetch_NoEffectIfNoItem
+	call BattleScript_PlayAnimation
+	tryrecycleitem BattleScript_EffectFetch_SwitchNoItem
+	printstring STRINGID_FETCH_SEARCH
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveSwitch
+BattleScript_EffectFetch_SwitchNoItem:
+	printstring STRINGID_FETCH_SWITCH_NO_ITEM
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveSwitch
+BattleScript_EffectFetch_NoEffectIfNoItem:
+	tryrecycleitem BattleScript_EffectFetch_NothingHappens
+	call BattleScript_PlayAnimation
+	printstring STRINGID_FETCH_RETRIEVE
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+BattleScript_EffectFetch_NothingHappens:
+	printstring STRINGID_FETCH_NOTHING
+	waitmessage B_WAIT_TIME_LONG
+	orhalfword gMoveResultFlags, MOVE_RESULT_FAILED
+	goto BattleScript_MoveEnd
+	
 
 BattleScript_PlayAnimation:
 	attackanimation
