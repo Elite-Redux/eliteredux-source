@@ -3407,9 +3407,7 @@ BattleScript_EffectConcoction:
 	setbyte sBERRY_OVERRIDE, TRUE
 	consumeberry BS_ATTACKER, TRUE
 	setbyte sBERRY_OVERRIDE, FALSE
-BattleScript_MoveEndTryFaintTarget:
 	tryfaintmon BS_TARGET, FALSE, NULL
-BattleScript_MoveEnd::
 	moveendall
 	end
 

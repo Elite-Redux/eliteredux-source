@@ -1482,9 +1482,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         CASE_AND_LABEL(EFFECT_SNIPE_SHOT)
         GOTO(EFFECT_HIT);
 
-        CASE_AND_LABEL(EFFECT_TRIPLE_HIT)
-        GOTO(EFFECT_HIT);
-
         CASE_AND_LABEL(EFFECT_RECOIL_HP_25)
         AI_CALC_DAMAGE;
         return score + AI_SCORE_LOSE_HP(battlerDef, 25);
@@ -1645,9 +1642,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_BLEED(battlerDef);
 
         CASE_AND_LABEL(EFFECT_FROSTBITE)
-        return AI_SCORE_FROSTBITE_MOVE(battlerDef);
-
-        CASE_AND_LABEL(EFFECT_FREEZE)
         return AI_SCORE_FROSTBITE_MOVE(battlerDef);
 
         CASE_AND_LABEL(EFFECT_INFERNAL_PARADE)

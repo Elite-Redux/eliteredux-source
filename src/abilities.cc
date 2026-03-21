@@ -7294,7 +7294,7 @@ constexpr Ability Impl<ABILITY_CRAVING> = {.onEndTurn = +[](ON_END_TURN) -> int 
     CHECK(gVolatileStructs[battler].isFirstTurn != 2)
     CHECK(!IsUnnerveAbilityOnOpposingSide(battler))
 
-    setRandomTempBerry(battler);
+    SetRandomTempBerry(battler);
 
     BattleScriptPushCursorAndCallback(BattleScript_CudChew);
     return TRUE;
