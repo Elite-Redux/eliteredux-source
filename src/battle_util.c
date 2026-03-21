@@ -5016,6 +5016,15 @@ bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget, MoveEnum move) {
     return TRUE;
 }
 
+bool32 CanBeBurnedIgnoreTypeImmunity(u8 battlerId) {
+    if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
+    if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
+
+    if (IsStatusImmune(battlerId, CHECK_BURN)) return FALSE;
+
+    return TRUE;
+}
+
 bool32 CanBeBurned(u8 battlerId) {
     if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;

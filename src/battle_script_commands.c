@@ -8557,6 +8557,12 @@ static void Cmd_various(void) {
                     } else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_BURN, ptr, afterPtr))
                         return;
                     return;
+                case (MOVE_EFFECT_BURN | MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES):
+                    if (CanBeBurnedIgnoreTypeImmunity(gActiveBattler))
+                        return;
+                     else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_BURN, ptr, afterPtr))
+                        return;
+                    return;
                 case MOVE_EFFECT_CONFUSION:
                     if (CanBeConfused(gActiveBattler))
                         return;

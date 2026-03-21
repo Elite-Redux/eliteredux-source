@@ -505,6 +505,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectPartyFavors			  @ EFFECT_PARTY_FAVORS
 	.4byte BattleScript_EffectPrismBlast			  @ EFFECT_PRISM_BLAST
 	.4byte BattleScript_EffectWaterlog				  @ EFFECT_WATERLOG
+	.4byte BattleScript_EffectSpectralFlame			  @ EFFECT_SPECTRAL_FLAME
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -3381,6 +3382,32 @@ BattleScript_MoveEndTryFaintTarget:
 BattleScript_MoveEnd::
 	moveendall
 	end
+
+BattleScript_EffectSpectralFlame::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	damagecalc
+	adjustdamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	setmoveeffect MOVE_EFFECT_BURN | MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES
+	seteffectwithchance
+	jumpifweatheraffected BS_ATTACKER, WEATHER_FOG_ANY, BattleScript_EffectSpectralFlame_Suppress
+	goto BattleScript_MoveEndTryFaintTarget
+BattleScript_EffectSpectralFlame_Suppress:
+	setgastroacid BattleScript_MoveEndTryFaintTarget
+	goto BattleScript_MoveEndTryFaintTarget
 
 BattleScript_EffectPartyFavors::
 	attackcanceler
