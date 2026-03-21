@@ -13362,7 +13362,7 @@ BattleScript_SepticSwitch_FailIfNoSwitch:
 	waitanimation
 	goto BattleScript_MoveSwitch
 
-BattleScript_Teatime::
+BattleScript_EffectTeatime::
 	attackcanceler
 	attackstring
 	ppreduce
