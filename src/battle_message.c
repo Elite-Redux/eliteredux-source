@@ -955,6 +955,7 @@ static const u8 sText_FetchRetrieve[] = _("{B_ATK_NAME_WITH_PREFIX} retrieves\ni
 static const u8 sText_FetchNothing[] = _("But {B_ATK_NAME_WITH_PREFIX} is\nalready holding its item...");
 static const u8 sText_FetchSearch[] = _("{B_ATK_NAME_WITH_PREFIX} leaves\nto find its {B_LAST_ITEM}!");
 static const u8 sText_FetchSwitchNoItem[] = _("{B_ATK_NAME_WITH_PREFIX} runs\noff the field!");
+static const u8 sText_Teatime[] = _("{B_ATK_NAME_WITH_PREFIX} hosts\na tea party!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -2010,6 +2011,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_FETCH_NOTHING - 12] = sText_FetchNothing,
     [STRINGID_FETCH_SEARCH - 12] = sText_FetchSearch,
     [STRINGID_FETCH_SWITCH_NO_ITEM - 12] = sText_FetchSwitchNoItem,
+    [STRINGID_TEATIME - 12] = sText_Teatime,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

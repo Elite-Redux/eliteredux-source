@@ -383,7 +383,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectHit                     @ EFFECT_DYNAMAX_DOUBLE_DMG
 	.4byte BattleScript_EffectDecorate                @ EFFECT_DECORATE
 	.4byte BattleScript_EffectHit                     @ EFFECT_SNIPE_SHOT
-	.4byte BattleScript_EffectPlaceholder             @ EFFECT_TRIPLE_HIT
+	.4byte BattleScript_EffectTeatime                 @ EFFECT_TEATIME
 	.4byte BattleScript_EffectRecoilHP25              @ EFFECT_RECOIL_HP_25
 	.4byte BattleScript_EffectStuffCheeks             @ EFFECT_STUFF_CHEEKS
 	.4byte BattleScript_EffectArgumentHit             @ EFFECT_GRAV_APPLE
@@ -13363,3 +13363,35 @@ BattleScript_SepticSwitch_FailIfNoSwitch:
 	attackanimation
 	waitanimation
 	goto BattleScript_MoveSwitch
+
+BattleScript_Teatime::
+	attackcanceler
+	attackstring
+	ppreduce
+	setbyte gBattlerTarget, 0
+BattleScript_Teatime_AnyBerriesLoop:
+	jumpifabsent BS_TARGET, BattleScript_Teatime_AnyBerriesLoop_Increment
+	jumpifnotberry BS_TARGET, BattleScript_Teatime_AnyBerriesLoop_Increment
+	goto BattleScript_Teatime_AnyBerriesLoop_Succeed
+BattleScript_Teatime_AnyBerriesLoop_Increment:
+	addbyte gBattlerTarget, 1
+	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_Teatime_AnyBerriesLoop
+	goto BattleScript_ButItFailed
+BattleScript_Teatime_AnyBerriesLoop_Succeed:
+	attackanimation
+	waitanimation
+	printstring STRINGID_TEATIME
+	waitmessage B_WAIT_TIME_LONG
+	setbyte sBERRY_OVERRIDE, TRUE
+	setbyte gBattlerTarget, 0
+BattleScript_Teatime_EatBerriesLoop:
+	jumpifabsent BS_TARGET, BattleScript_Teatime_EatBerriesLoop_Increment
+	jumpifnotberry BS_TARGET, BattleScript_Teatime_EatBerriesLoop_Increment
+	consumeberry BS_TARGET
+BattleScript_Teatime_EatBerriesLoop_Increment:
+	addbyte gBattlerTarget, 1
+	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_Teatime_EatBerriesLoop
+	setbyte sBERRY_OVERRIDE, FALSE
+	goto BattleScript_MoveEnd
+
+

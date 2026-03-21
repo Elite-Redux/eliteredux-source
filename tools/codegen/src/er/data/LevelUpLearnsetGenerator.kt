@@ -44,9 +44,9 @@ object LevelUpLearnsetGenerator : Generator {
             moveMap[it]!!.shortName.trim().endsWith(")") ||
             moveMap[it]!!.effect == EFFECT_PLACEHOLDER
         }
-     check(unimplementedMoves.isEmpty()) {
+    check(unimplementedMoves.isEmpty()) {
       "Unimplemented moves are used in movesets: $unimplementedMoves"
-     }
+    }
 
     learnsetIds.forEach { writer.appendLine(learnsetString(it.value, it.key)) }
 
