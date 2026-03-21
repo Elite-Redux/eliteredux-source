@@ -503,6 +503,9 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_SepticSwitch                  @ EFFECT_SEPTIC_SWITCH
 	.4byte BattleScript_EffectWhirlpool				  @ EFFECT_WHIRLPOOL
 	.4byte BattleScript_EffectPartyFavors			  @ EFFECT_PARTY_FAVORS
+	.4byte BattleScript_EffectPrismBlast			  @ EFFECT_PRISM_BLAST
+	.4byte BattleScript_EffectPlaceholder			  @ EFFECT_WATERLOG
+	.4byte BattleScript_EffectPlaceholder			  @ EFFECT_INCITE
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -3436,6 +3439,32 @@ BattleScript_EffectTripleArrows::
 	seteffectwithchance
 	setmoveeffect MOVE_EFFECT_FLINCH
 	setmoveeffectchance 30
+	seteffectwithchance
+	tryfaintmon BS_TARGET, FALSE, NULL
+	moveendall
+	end
+
+BattleScript_EffectPrismBlast::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	damagecalc
+	adjustdamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	setmoveeffect MOVE_EFFECT_ACC_MINUS_1
+	seteffectsecondary
+	setmoveeffect MOVE_EFFECT_CONFUSION
 	seteffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
 	moveendall
