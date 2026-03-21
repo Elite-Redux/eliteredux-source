@@ -2,6 +2,7 @@ package er.data
 
 import er.FileGenerator.IND
 import er.Generator
+import er.GeneratorUtils.MOVES_LIST
 import er.GeneratorUtils.NO_EGG_LIST
 import er.GeneratorUtils.REAL_SPECIES_COUNT
 import er.GeneratorUtils.createDedupMaps
@@ -12,10 +13,10 @@ import er.proto.Species.Learnset
 import java.io.OutputStreamWriter
 
 object LevelUpLearnsetGenerator : Generator {
-    private const val PREFIX = "__sLevelUpMoveset_"
+  private const val PREFIX = "__sLevelUpMoveset_"
 
-    private fun learnsetString(index: Int, learnset: Learnset): String =
-        """
+  private fun learnsetString(index: Int, learnset: Learnset): String =
+    """
         |static const LevelUpMove $PREFIX$index[] = {
         |$IND${
             learnset.levelList.flatMap { it.moveList.map { move -> it.level to move } }
@@ -24,13 +25,32 @@ object LevelUpLearnsetGenerator : Generator {
         }
         |$IND{0}
         |};
-        |""".trimMargin()
+        |"""
+      .trimMargin()
 
-    override fun generate(writer: OutputStreamWriter) {
-        val (learnsetIds, speciesIds) = NO_EGG_LIST.map { findLearnsetForSpecies(it) to it.id }.createDedupMaps()
+  override fun generate(writer: OutputStreamWriter) {
+    val (learnsetIds, speciesIds) =
+      NO_EGG_LIST.map { findLearnsetForSpecies(it) to it.id }.createDedupMaps()
 
-        learnsetIds.forEach { writer.appendLine(learnsetString(it.value, it.key)) }
+    val moveMap = MOVES_LIST.associateBy { it.id }
 
-        speciesIds.printLookupTable("const LevelUpMove *const gLevelUpLearnsets[$REAL_SPECIES_COUNT]", PREFIX, writer)
-    }
+    val unimplementedMoves =
+      learnsetIds.keys
+        .flatMap { it.levelList.flatMap { move -> move.moveList } }
+        .distinct()
+        .filter {
+          moveMap[it]!!.name.trim().endsWith(")") || moveMap[it]!!.shortName.trim().endsWith(")")
+        }
+    //check(unimplementedMoves.isEmpty()) {
+    //  "Unimplemented moves are used in movesets: $unimplementedMoves"
+    //}
+
+    learnsetIds.forEach { writer.appendLine(learnsetString(it.value, it.key)) }
+
+    speciesIds.printLookupTable(
+      "const LevelUpMove *const gLevelUpLearnsets[$REAL_SPECIES_COUNT]",
+      PREFIX,
+      writer,
+    )
+  }
 }

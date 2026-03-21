@@ -9008,6 +9008,7 @@ bool32 IsHealingMoveEffect(MoveBehaviorEnum effect) {
         case EFFECT_MATCHA_GOTCHA:
         case EFFECT_STRENGTH_SAP:
         case EFFECT_DRAIN_BRAIN:
+        case EFFECT_PARTY_FAVORS:
             return TRUE;
         default:
             return FALSE;

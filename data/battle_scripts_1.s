@@ -502,6 +502,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectMistyTerrain			  @ EFFECT_TOXIC_TERRAIN
 	.4byte BattleScript_SepticSwitch                  @ EFFECT_SEPTIC_SWITCH
 	.4byte BattleScript_EffectWhirlpool				  @ EFFECT_WHIRLPOOL
+	.4byte BattleScript_EffectPartyFavors			  @ EFFECT_PARTY_FAVORS
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -3376,6 +3377,42 @@ BattleScript_MoveEndTryFaintTarget:
 BattleScript_MoveEnd::
 	moveendall
 	end
+
+BattleScript_EffectPartyFavors::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	damagecalc
+	adjustdamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	tryfaintmon BS_TARGET, FALSE, NULL
+	copybyte gStackBattler1, gBattlerAttacker
+	call BattleScript_EffectPartyFavors_TryHealStack
+	getbattler BS_ATTACKER_PARTNER
+	copybyte gStackBattler1, sBATTLER
+	call BattleScript_EffectPartyFavors_TryHealStack
+	moveendall
+	end
+BattleScript_EffectPartyFavors_TryHealStack:
+	jumpifabsent BS_STACK_1, BattleScript_Return
+	tryhealpercenthealth BS_STACK_1, 25, BattleScript_Return
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
+	healthbarupdate BS_STACK_1
+	datahpupdate BS_STACK_1
+	printstring STRINGID_STACKREGAINEDHEALTH
+	waitmessage B_WAIT_TIME_LONG
+	return
 
 BattleScript_EffectTripleArrows::
 	setmoveeffect MOVE_EFFECT_DEF_MINUS_1
