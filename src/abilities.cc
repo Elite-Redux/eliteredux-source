@@ -12165,7 +12165,6 @@ constexpr Ability Impl<ABILITY_MENTAL_POLLUTION> = {
         int state = GetAbilityState(battler, ability);
         CHECK(state)
         SetAbilityState(battler, ability, FALSE);
-        CHECK(state & (1 << battler))
         int any = FALSE;
         for (int i = 0; i < gBattlersCount; i++) {
             FILTER(i != battler)
@@ -12183,7 +12182,6 @@ constexpr Ability Impl<ABILITY_MENTAL_POLLUTION> = {
         BattleScriptCall(BattleScript_AbilityPopUpAndWait);
         return any;
     },
-    .setStateOnEffect = MOVE_EFFECT_CONFUSION,
 };
 
 template <>

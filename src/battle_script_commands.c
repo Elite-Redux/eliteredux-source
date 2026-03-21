@@ -3017,6 +3017,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     REQUIRE_NOT(gBattleMons[gEffectBattler].status2 & STATUS2_ENRAGED)
                     gBattleMons[gEffectBattler].status2 |= STATUS2_ENRAGED;
                     BattleScriptCall(BattleScript_BecomesEnraged);
+                    SetAbilityState(gEffectBattler, ABILITY_MENTAL_POLLUTION, TRUE);
                     break;
                 case MOVE_EFFECT_DRENCH:
                     REQUIRE(CanBeDrenched(gEffectBattler))
