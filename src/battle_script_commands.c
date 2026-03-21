@@ -7754,16 +7754,16 @@ static void Cmd_various(void) {
             break;
         case VARIOUS_TRY_THIRD_TYPE:
             ptr = READ_PTR_INC;
-            if (IS_BATTLER_OF_TYPE(gActiveBattler, gBattleMoves[gCurrentMove].argument)) {
-                if (gBattleMoves[gCurrentMove].argument == TYPE_GHOST) {
+            if (IS_BATTLER_OF_TYPE(gActiveBattler, gBattleMoves[gCurrentMove].type)) {
+                if (gBattleMoves[gCurrentMove].type == TYPE_GHOST) {
                     gVolatileStructs[gActiveBattler].trickOrTreat = TRUE;
-                    gBattleMons[gActiveBattler].type3 = gBattleMoves[gCurrentMove].argument;
-                    PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMoves[gCurrentMove].argument);
+                    gBattleMons[gActiveBattler].type3 = gBattleMoves[gCurrentMove].type;
+                    PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMoves[gCurrentMove].type);
                 } else
                     gBattlescriptCurrInstr = ptr;
             } else {
-                gBattleMons[gActiveBattler].type3 = gBattleMoves[gCurrentMove].argument;
-                PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMoves[gCurrentMove].argument);
+                gBattleMons[gActiveBattler].type3 = gBattleMoves[gCurrentMove].type;
+                PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMoves[gCurrentMove].type);
             }
             return;
         case VARIOUS_DESTROY_ABILITY_POPUP:
