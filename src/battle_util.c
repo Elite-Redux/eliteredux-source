@@ -5486,7 +5486,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                     case HOLD_EFFECT_CURE_STATUS:
                         if (B_BERRIES_INSTANT >= GEN_4 &&
                             (gBattleMons[battlerId].status1 & STATUS1_ANY || gBattleMons[battlerId].status2 & STATUS2_CONFUSION) &&
-                            !IsUnnerveAbilityOnOpposingSide(battlerId)) {
+                            (gBattleScripting.overrideBerryRequirements || !IsUnnerveAbilityOnOpposingSide(battlerId))) {
                             i = 0;
                             if (gBattleMons[battlerId].status1 & STATUS1_POISON_ANY) {
                                 StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
@@ -5767,7 +5767,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         break;
                     case HOLD_EFFECT_CURE_STATUS:
                         if ((gBattleMons[battlerId].status1 & STATUS1_ANY || gBattleMons[battlerId].status2 & STATUS2_CONFUSION) &&
-                            !IsUnnerveAbilityOnOpposingSide(battlerId)) {
+                            (gBattleScripting.overrideBerryRequirements || !IsUnnerveAbilityOnOpposingSide(battlerId))) {
                             i = 0;
                             if (gBattleMons[battlerId].status1 & STATUS1_POISON_ANY) {
                                 StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
@@ -5940,7 +5940,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                         break;
                     case HOLD_EFFECT_CURE_STATUS:
                         if ((gBattleMons[battlerId].status1 & STATUS1_ANY || gBattleMons[battlerId].status2 & STATUS2_CONFUSION) &&
-                            !IsUnnerveAbilityOnOpposingSide(battlerId)) {
+                            (gBattleScripting.overrideBerryRequirements || !IsUnnerveAbilityOnOpposingSide(battlerId))) {
                             if (gBattleMons[battlerId].status1 & STATUS1_POISON_ANY) {
                                 StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
                             }

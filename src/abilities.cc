@@ -7265,7 +7265,6 @@ constexpr Ability Impl<ABILITY_CUD_CHEW> = {
 
 static const ItemEnum sCravingBerryTable[] = {
     ITEM_LUM_BERRY,
-    ITEM_LEPPA_BERRY,
     ITEM_SITRUS_BERRY,
     ITEM_FIGY_BERRY,
     ITEM_LIECHI_BERRY,
@@ -7275,7 +7274,6 @@ static const ItemEnum sCravingBerryTable[] = {
     ITEM_APICOT_BERRY,
     ITEM_LANSAT_BERRY,
     ITEM_STARF_BERRY,
-    ITEM_CUSTAP_BERRY,
 };
 
 void SetRandomTempBerry(u8 battler) {
@@ -11123,8 +11121,10 @@ constexpr Ability Impl<ABILITY_TURF_WAR> = {
 template <>
 constexpr Ability Impl<ABILITY_GREEDY> = {
     .onReactive = +[](ON_REACTIVE) -> int {
-        CHECK(GetAbilityState(battler, ability))
+        int state = GetAbilityState(battler, ability);
+        CHECK(state)
         SetAbilityState(battler, ability, FALSE);
+        CHECK(state == TRUE)
         CHECK_NOT(gBattleMons[battler].item)
 
         u8 target = gBattlerAttacker;

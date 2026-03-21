@@ -2206,7 +2206,10 @@ int UpdateBattlerItem(int battler, int newItem) {
     if (newItem == ITEM_NONE && oldItem != ITEM_BIG_NUGGET && (alchemyBattler = IsAbilityOnField(ABILITY_POWER_OF_ALCHEMY)))
         SetPowerOfAlchemyState(alchemyBattler - 1, battler, oldItem);
 
-    if (newItem == ITEM_NONE) SetAbilityState(battler, ABILITY_GREEDY, TRUE);
+    if (newItem == ITEM_NONE) {
+        int greedyState = GetAbilityState(battler, ABILITY_GREEDY);
+        if (!greedyState) SetAbilityState(battler, ABILITY_GREEDY, TRUE);
+    }
 
     if (newItem == ITEM_NONE) gBattleStruct->choicedMove[battler] = 0;
 
@@ -8010,6 +8013,8 @@ static void Cmd_various(void) {
             if (ItemId_GetHoldEffect(gBattleMons[gActiveBattler].item) == HOLD_EFFECT_NONE) {
                 return;
             }
+
+            if (restoreItem) SetAbilityState(gActiveBattler, ABILITY_GREEDY, -1);
 
             gBattleScripting.battler = gEffectBattler = gBattlerTarget =
                 gActiveBattler;  // Cover all berry effect battlerId cases. e.g. ChangeStatBuffs uses target ID
