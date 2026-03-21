@@ -1649,7 +1649,7 @@ static void SetUpModifyArrows(struct BattleDebugMenu *data)
     case LIST_ITEM_ABILITY:
         data->modifyArrows.minValue = 0;
         data->modifyArrows.maxValue = ABILITIES_COUNT - 1;
-        data->modifyArrows.maxDigits = 3;
+        data->modifyArrows.maxDigits = 4;
         data->modifyArrows.modifiedValPtr = &gBattleMons[data->battlerId].abilities[0];
         data->modifyArrows.typeOfVal = VAL_U16;
         data->modifyArrows.currValue = gBattleMons[data->battlerId].abilities[0];
@@ -1657,7 +1657,7 @@ static void SetUpModifyArrows(struct BattleDebugMenu *data)
     case LIST_ITEM_MOVES:
         data->modifyArrows.minValue = 0;
         data->modifyArrows.maxValue = MOVES_COUNT - 1;
-        data->modifyArrows.maxDigits = 3;
+        data->modifyArrows.maxDigits = 4;
         if (data->currentSecondaryListItemId == 4)
         {
             data->modifyArrows.modifiedValPtr = &gBattleMons[data->battlerId].moves[0];
