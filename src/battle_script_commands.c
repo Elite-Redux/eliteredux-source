@@ -943,7 +943,7 @@ static bool32 NoTargetPresent(MoveEnum move) {
             return FALSE;
     }
 
-    if (!IsBattlerAlive(gBattlerTarget)) gBattlerTarget = GetMoveTarget(move, 0);
+    if (!IsBattlerAlive(gBattlerTarget)) gBattlerTarget = GetMoveTarget(gBattlerAttacker, move, 0);
 
     switch (GetBattlerBattleMoveTargetFlags(move, gBattlerAttacker)) {
         case MOVE_TARGET_SELECTED:
@@ -6925,7 +6925,7 @@ static void Cmd_various(void) {
             gBattleCommunication[0] = IsRunningFromBattleImpossible();
             break;
         case VARIOUS_GET_MOVE_TARGET:
-            gBattlerTarget = GetMoveTarget(gCurrentMove, 0);
+            gBattlerTarget = GetMoveTarget(gBattlerAttacker, gCurrentMove, 0);
             break;
         case VARIOUS_GET_BATTLER_FAINTED:
             if (gHitMarker & HITMARKER_FAINTED(gActiveBattler))
@@ -7306,7 +7306,7 @@ static void Cmd_various(void) {
                         gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
                             .attacker = gBattlerAttacker,
                             .move = move,
-                            .target = GetMoveTarget(gCalledMove, 0),
+                            .target = GetMoveTarget(gBattlerAttacker, gCalledMove, 0),
                             .movePos = MAX_MON_MOVES,
                             .prankster = BattlerHasAbility(gBattlerAttacker, ABILITY_PRANKSTER, FALSE),
                         };
@@ -7541,7 +7541,7 @@ static void Cmd_various(void) {
             } else {
                 gCalledMove = gLastUsedMove;
                 gHitMarker &= ~(HITMARKER_ATTACKSTRING_PRINTED);
-                gBattlerTarget = GetMoveTarget(gCalledMove, 0);
+                gBattlerTarget = GetMoveTarget(gBattlerAttacker, gCalledMove, 0);
             }
             return;
         case VARIOUS_TRY_INSTRUCT:
@@ -7564,7 +7564,7 @@ static void Cmd_various(void) {
                 else {
                     gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
                         .attacker = gActiveBattler,
-                        .target = GetMoveTarget(gLastMoves[gActiveBattler], 0),
+                        .target = GetMoveTarget(gActiveBattler, gLastMoves[gActiveBattler], 0),
                         .move = gLastMoves[gActiveBattler],
                         .movePos = i,
                     };
@@ -8559,7 +8559,7 @@ static void Cmd_various(void) {
                 case (MOVE_EFFECT_BURN | MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES):
                     if (CanBeBurnedIgnoreTypeImmunity(gActiveBattler))
                         return;
-                     else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_BURN, ptr, afterPtr))
+                    else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_BURN, ptr, afterPtr))
                         return;
                     return;
                 case MOVE_EFFECT_CONFUSION:
@@ -9275,13 +9275,13 @@ static void Cmd_trymirrormove(void) {
     if (move != 0 && move != 0xFFFF) {
         gHitMarker &= ~(HITMARKER_ATTACKSTRING_PRINTED);
         gCurrentMove = move;
-        gBattlerTarget = GetMoveTarget(gCurrentMove, 0);
+        gBattlerTarget = GetMoveTarget(gBattlerAttacker, gCurrentMove, 0);
         gBattlescriptCurrInstr = gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect];
     } else if (validMovesCount) {
         gHitMarker &= ~(HITMARKER_ATTACKSTRING_PRINTED);
         i = Random() % validMovesCount;
         gCurrentMove = movesArray[i];
-        gBattlerTarget = GetMoveTarget(gCurrentMove, 0);
+        gBattlerTarget = GetMoveTarget(gBattlerAttacker, gCurrentMove, 0);
         gBattlescriptCurrInstr = gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect];
     } else {
         gBattlescriptCurrInstr++;
@@ -10586,7 +10586,7 @@ static void Cmd_metronome(void) {
     gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
         .attacker = gBattlerAttacker,
         .move = move,
-        .target = GetMoveTarget(move, 0),
+        .target = GetMoveTarget(gBattlerAttacker, move, 0),
         .movePos = MAX_MON_MOVES,
         .prankster = BattlerHasAbility(gBattlerAttacker, ABILITY_PRANKSTER, FALSE),
     };
@@ -10996,7 +10996,7 @@ static void Cmd_trychoosesleeptalkmove(void) {
         gTurnStructs[gBattlerAttacker].sleepTalk = TRUE;
         gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
             .attacker = gBattlerAttacker,
-            .target = GetMoveTarget(gCalledMove, 0),
+            .target = GetMoveTarget(gBattlerAttacker, gCalledMove, 0),
             .move = gBattleMons[gBattlerAttacker].moves[movePosition],
             .movePos = movePosition,
         };
@@ -11691,7 +11691,7 @@ static void Cmd_callterrainattack(void)  // nature power
 {
     gHitMarker &= ~(HITMARKER_ATTACKSTRING_PRINTED);
     gCurrentMove = GetNaturePowerMove();
-    gBattlerTarget = GetMoveTarget(gCurrentMove, 0);
+    gBattlerTarget = GetMoveTarget(gBattlerAttacker, gCurrentMove, 0);
     BattleScriptPush(gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect]);
     gBattlescriptCurrInstr++;
 }
@@ -12107,7 +12107,7 @@ static void Cmd_assistattackselect(void) {
     if (chooseableMovesNo) {
         gHitMarker &= ~(HITMARKER_ATTACKSTRING_PRINTED);
         gCalledMove = movesArray[((Random() & 0xFF) * chooseableMovesNo) >> 8];
-        gBattlerTarget = GetMoveTarget(gCalledMove, 0);
+        gBattlerTarget = GetMoveTarget(gBattlerAttacker, gCalledMove, 0);
         gBattlescriptCurrInstr += 5;
     } else {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);

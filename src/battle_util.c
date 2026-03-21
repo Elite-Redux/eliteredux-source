@@ -185,7 +185,7 @@ void HandleAction_UseMove(void) {
         gRoundStructs[gBattlerAttacker].noValidMoves = FALSE;
         gCurrentMove = gChosenMove = MOVE_STRUGGLE;
         gHitMarker |= HITMARKER_NO_PPDEDUCT;
-        gBattlerTarget = gBattleStruct->moveTarget[gBattlerAttacker] = GetMoveTarget(MOVE_STRUGGLE, 0);
+        gBattlerTarget = gBattleStruct->moveTarget[gBattlerAttacker] = GetMoveTarget(gBattlerAttacker, MOVE_STRUGGLE, 0);
     } else if (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS || gBattleMons[gBattlerAttacker].status2 & STATUS2_RECHARGE) {
         gCurrentMove = gChosenMove = gLockedMoves[gBattlerAttacker];
         gBattlerTarget = gBattleStruct->moveTarget[gBattlerAttacker];
@@ -195,7 +195,7 @@ void HandleAction_UseMove(void) {
              gVolatileStructs[gBattlerAttacker].encoredMove == gBattleMons[gBattlerAttacker].moves[gVolatileStructs[gBattlerAttacker].encoredMovePos]) {
         gCurrentMove = gChosenMove = gVolatileStructs[gBattlerAttacker].encoredMove;
         gCurrMovePos = gChosenMovePos = gVolatileStructs[gBattlerAttacker].encoredMovePos;
-        gBattlerTarget = gBattleStruct->moveTarget[gBattlerAttacker] = GetMoveTarget(gCurrentMove, 0);
+        gBattlerTarget = gBattleStruct->moveTarget[gBattlerAttacker] = GetMoveTarget(gBattlerAttacker, gCurrentMove, 0);
     }
     // check if the encored move wasn't overwritten
     else if (gVolatileStructs[gBattlerAttacker].encoredMove != MOVE_NONE &&
@@ -205,10 +205,10 @@ void HandleAction_UseMove(void) {
         gVolatileStructs[gBattlerAttacker].encoredMove = MOVE_NONE;
         gVolatileStructs[gBattlerAttacker].encoredMovePos = 0;
         gVolatileStructs[gBattlerAttacker].encoreTimer = 0;
-        gBattlerTarget = gBattleStruct->moveTarget[gBattlerAttacker] = GetMoveTarget(gCurrentMove, 0);
+        gBattlerTarget = gBattleStruct->moveTarget[gBattlerAttacker] = GetMoveTarget(gBattlerAttacker, gCurrentMove, 0);
     } else if (gBattleMons[gBattlerAttacker].moves[gCurrMovePos] != gChosenMoveByBattler[gBattlerAttacker]) {
         gCurrentMove = gChosenMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
-        gBattlerTarget = gBattleStruct->moveTarget[gBattlerAttacker] = GetMoveTarget(gCurrentMove, 0);
+        gBattlerTarget = gBattleStruct->moveTarget[gBattlerAttacker] = GetMoveTarget(gBattlerAttacker, gCurrentMove, 0);
     } else {
         gCurrentMove = gChosenMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
         gBattlerTarget = gBattleStruct->moveTarget[gBattlerAttacker];
@@ -3397,7 +3397,7 @@ u8 AtkCanceller_UnableToUseMove(void) {
                             gCurrentMove = MOVE_BIDE;
                             *bideDmg = gTakenDmg[gBattlerAttacker] * 2;
                             gBattlerTarget = gTakenDmgByBattler[gBattlerAttacker];
-                            if (gAbsentBattlerFlags & 1 << gBattlerTarget) gBattlerTarget = GetMoveTarget(MOVE_BIDE, 1);
+                            if (gAbsentBattlerFlags & 1 << gBattlerTarget) gBattlerTarget = GetMoveTarget(gBattlerAttacker, MOVE_BIDE, 1);
                             gBattlescriptCurrInstr = BattleScript_BideAttack;
                         } else {
                             gBattlescriptCurrInstr = BattleScript_BideNoEnergyToAttack;
@@ -6307,20 +6307,20 @@ u32 SetRandomTarget(u32 battlerId) {
     return target;
 }
 
-u32 GetMoveTarget(MoveEnum move, u8 setTarget) {
+u32 GetMoveTarget(u8 attacker, MoveEnum move, u8 setTarget) {
     u8 targetBattler = 0;
     u32 moveTarget, side;
 
     if (setTarget)
         moveTarget = setTarget - 1;
     else
-        moveTarget = GetBattlerBattleMoveTargetFlags(move, gBattlerAttacker);
+        moveTarget = GetBattlerBattleMoveTargetFlags(move, attacker);
 
     // Special cases
     if (move == MOVE_CURSE) {
-        if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST))
+        if (IS_BATTLER_OF_TYPE(attacker, TYPE_GHOST))
             moveTarget = MOVE_TARGET_SELECTED;
-        else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_FOG_ANY))
+        else if (IsBattlerWeatherAffected(attacker, WEATHER_FOG_ANY))
             moveTarget = MOVE_TARGET_SELECTED;
         else
             moveTarget = MOVE_TARGET_USER;
@@ -6328,17 +6328,17 @@ u32 GetMoveTarget(MoveEnum move, u8 setTarget) {
 
     switch (moveTarget) {
         case MOVE_TARGET_SELECTED:
-            side = GetBattlerSide(gBattlerAttacker) ^ BIT_SIDE;
-            if (IsAffectedByFollowMe(gBattlerAttacker, side, move)) {
+            side = GetBattlerSide(attacker) ^ BIT_SIDE;
+            if (IsAffectedByFollowMe(attacker, side, move)) {
                 targetBattler = gSideTimers[side].followmeTarget;
             } else {
-                targetBattler = SetRandomTarget(gBattlerAttacker);
-                if (!HasRedirectionAbility(gBattlerAttacker, targetBattler, move, gBattleMoves[move].type)) {
-                    int opposite = BATTLE_OPPOSITE(gBattlerAttacker);
+                targetBattler = SetRandomTarget(attacker);
+                if (!HasRedirectionAbility(attacker, targetBattler, move, gBattleMoves[move].type)) {
+                    int opposite = BATTLE_OPPOSITE(attacker);
                     AbilityEnum ability = 0;
-                    if (!IsBattlerAlive(opposite) || !(ability = HasRedirectionAbility(gBattlerAttacker, opposite, move, gBattleMoves[move].type)))
+                    if (!IsBattlerAlive(opposite) || !(ability = HasRedirectionAbility(attacker, opposite, move, gBattleMoves[move].type)))
                         opposite = BATTLE_PARTNER(opposite);
-                    if (ability || (IsBattlerAlive(opposite) && (ability = HasRedirectionAbility(gBattlerAttacker, opposite, move, gBattleMoves[move].type)))) {
+                    if (ability || (IsBattlerAlive(opposite) && (ability = HasRedirectionAbility(attacker, opposite, move, gBattleMoves[move].type)))) {
                         targetBattler ^= BIT_FLANK;
                         gTurnStructs[targetBattler].redirectedAbility = ability;
                     }
@@ -6349,33 +6349,33 @@ u32 GetMoveTarget(MoveEnum move, u8 setTarget) {
         case MOVE_TARGET_BOTH:
         case MOVE_TARGET_FOES_AND_ALLY:
         case MOVE_TARGET_OPPONENTS_FIELD:
-            targetBattler = GetBattlerAtPosition((GetBattlerPosition(gBattlerAttacker) & BIT_SIDE) ^ BIT_SIDE);
+            targetBattler = GetBattlerAtPosition((GetBattlerPosition(attacker) & BIT_SIDE) ^ BIT_SIDE);
             if (!IsBattlerAlive(targetBattler)) {
                 if (IsBattlerAlive(BATTLE_PARTNER(targetBattler)))
                     targetBattler = BATTLE_PARTNER(targetBattler);
-                else if (moveTarget == MOVE_TARGET_FOES_AND_ALLY && IsBattlerAlive(BATTLE_PARTNER(gBattlerAttacker)))
-                    targetBattler = BATTLE_PARTNER(gBattlerAttacker);
+                else if (moveTarget == MOVE_TARGET_FOES_AND_ALLY && IsBattlerAlive(BATTLE_PARTNER(attacker)))
+                    targetBattler = BATTLE_PARTNER(attacker);
             }
             break;
         case MOVE_TARGET_RANDOM:
-            side = GetBattlerSide(gBattlerAttacker) ^ BIT_SIDE;
-            if (IsAffectedByFollowMe(gBattlerAttacker, side, move))
+            side = GetBattlerSide(attacker) ^ BIT_SIDE;
+            if (IsAffectedByFollowMe(attacker, side, move))
                 targetBattler = gSideTimers[side].followmeTarget;
             else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && moveTarget & MOVE_TARGET_RANDOM)
-                targetBattler = SetRandomTarget(gBattlerAttacker);
+                targetBattler = SetRandomTarget(attacker);
             else
-                targetBattler = GetBattlerAtPosition((GetBattlerPosition(gBattlerAttacker) & BIT_SIDE) ^ BIT_SIDE);
+                targetBattler = GetBattlerAtPosition((GetBattlerPosition(attacker) & BIT_SIDE) ^ BIT_SIDE);
             break;
         case MOVE_TARGET_USER_OR_SELECTED:
         case MOVE_TARGET_USER:
         default:
-            targetBattler = gBattlerAttacker;
+            targetBattler = attacker;
             break;
         case MOVE_TARGET_ALLY:
-            if (IsBattlerAlive(BATTLE_PARTNER(gBattlerAttacker)))
-                targetBattler = BATTLE_PARTNER(gBattlerAttacker);
+            if (IsBattlerAlive(BATTLE_PARTNER(attacker)))
+                targetBattler = BATTLE_PARTNER(attacker);
             else
-                targetBattler = gBattlerAttacker;
+                targetBattler = attacker;
             break;
     }
 
@@ -6448,7 +6448,7 @@ u8 IsMonDisobedient(void) {
 
             gCalledMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
             gBattlescriptCurrInstr = BattleScript_IgnoresAndUsesRandomMove;
-            gBattlerTarget = GetMoveTarget(gCalledMove, 0);
+            gBattlerTarget = GetMoveTarget(gBattlerAttacker, gCalledMove, 0);
             return 2;
         }
     } else {

@@ -270,13 +270,13 @@ static int AdjustFollowupMoveTarget(u8 battler, u8* target, MoveEnum move, Follo
     switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
         case MOVE_TARGET_BOTH:
         case MOVE_TARGET_FOES_AND_ALLY:
-            *target = GetMoveTarget(MOVE_POUND, MOVE_TARGET_SELECTED + 1);
+            *target = GetMoveTarget(battler, MOVE_POUND, MOVE_TARGET_SELECTED + 1);
             return IsBattlerAlive(*target);
 
         default:
             if (*target == battler || *target == BATTLE_PARTNER(battler)) {
                 if (type & FOLLOWUP_ALLOW_SELF)
-                    *target = GetMoveTarget(MOVE_POUND, MOVE_TARGET_SELECTED + 1);
+                    *target = GetMoveTarget(battler, MOVE_POUND, MOVE_TARGET_SELECTED + 1);
                 else
                     return FALSE;
             }
