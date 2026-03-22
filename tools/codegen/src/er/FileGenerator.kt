@@ -82,6 +82,7 @@ object FileGenerator {
         "adoptioncentermons" to AdoptionCenterMonGenerator,
         "movescripts" to MoveScriptGenerator,
         "movetypemodifiers" to MoveTypeModifierGenerator,
+        "recoilfractions" to MoveRecoilGenerator,
     )
 
     @JvmStatic

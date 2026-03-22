@@ -775,20 +775,10 @@ static u32 WhichMoveBetter(u32 move1, u32 move2) {
     }
     // Check recoil
     if (!BattlerHasAbility(sBattler_AI, ABILITY_ROCK_HEAD, FALSE) && !BattlerHasAbility(sBattler_AI, ABILITY_STEEL_BARREL, FALSE)) {
-        if (((gBattleMoves[move1].effect == EFFECT_RECOIL_25 || gBattleMoves[move1].effect == EFFECT_RECOIL_IF_MISS ||
-              gBattleMoves[move1].effect == EFFECT_RECOIL_50 || gBattleMoves[move1].effect == EFFECT_RECOIL_33 ||
-              gBattleMoves[move1].effect == EFFECT_RECOIL_33_STATUS) &&
-             (gBattleMoves[move2].effect != EFFECT_RECOIL_25 && gBattleMoves[move2].effect != EFFECT_RECOIL_IF_MISS &&
-              gBattleMoves[move2].effect != EFFECT_RECOIL_50 && gBattleMoves[move2].effect != EFFECT_RECOIL_33 &&
-              gBattleMoves[move2].effect != EFFECT_RECOIL_33_STATUS && gBattleMoves[move2].effect != EFFECT_RECHARGE)))
+        if (GetRecoilFraction(gBattleMoves[move1].effect) && (!GetRecoilFraction(gBattleMoves[move2].effect) && gBattleMoves[move2].effect != EFFECT_RECHARGE))
             return 1;
 
-        if (((gBattleMoves[move2].effect == EFFECT_RECOIL_25 || gBattleMoves[move2].effect == EFFECT_RECOIL_IF_MISS ||
-              gBattleMoves[move2].effect == EFFECT_RECOIL_50 || gBattleMoves[move2].effect == EFFECT_RECOIL_33 ||
-              gBattleMoves[move2].effect == EFFECT_RECOIL_33_STATUS) &&
-             (gBattleMoves[move1].effect != EFFECT_RECOIL_25 && gBattleMoves[move1].effect != EFFECT_RECOIL_IF_MISS &&
-              gBattleMoves[move1].effect != EFFECT_RECOIL_50 && gBattleMoves[move1].effect != EFFECT_RECOIL_33 &&
-              gBattleMoves[move1].effect != EFFECT_RECOIL_33_STATUS && gBattleMoves[move1].effect != EFFECT_RECHARGE)))
+        if (GetRecoilFraction(gBattleMoves[move2].effect) && (!GetRecoilFraction(gBattleMoves[move1].effect) && gBattleMoves[move1].effect != EFFECT_RECHARGE))
             return 0;
     }
     // Check recharge

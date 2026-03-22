@@ -80,6 +80,7 @@ u8 MakeCritRoll();
 void SetCritFlag(int attacker, int target, MoveEnum move, u16 typeEffectiveness, u8 critRoll);
 int IsSandImmune(int battler);
 int IsHailImmune(int battler);
+int GetRecoilFraction(MoveBehaviorEnum effect);
 
 extern void (*const gBattleScriptingCommandsTable[])(void);
 extern const u8 gBattlePalaceNatureToMoveGroupLikelihood[NUM_NATURES][4];

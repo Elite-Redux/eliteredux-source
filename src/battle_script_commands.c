@@ -4299,6 +4299,8 @@ static int CanPickpocket(int target, int attackerStealing) {
     return ability;
 }
 
+#include "generated/data/move_recoil_fractions.h"
+
 static void Cmd_moveend(void) {
     s32 i, j;
     bool32 effect = FALSE;
@@ -4464,23 +4466,8 @@ static void Cmd_moveend(void) {
                     REQUIRE_NOT(blocked)
                 }
 
-                switch (gBattleMoves[gCurrentMove].effect) {
-                    case EFFECT_RECOIL_25_STATUS:
-                    case EFFECT_RECOIL_25:
-                        gBattleMoveDamage = max(1, gTurnStructs[gBattlerAttacker].savedDmg / 4);
-                        break;
-                    case EFFECT_RECOIL_33_STATUS:
-                    case EFFECT_FLINCH_RECOIL_33:
-                    case EFFECT_RECOIL_33:
-                        gBattleMoveDamage = max(1, gTurnStructs[gBattlerAttacker].savedDmg / 3);
-                        break;
-                    case EFFECT_FLINCH_RECOIL_50:
-                    case EFFECT_RECOIL_50:
-                        gBattleMoveDamage = max(1, gTurnStructs[gBattlerAttacker].savedDmg / 2);
-                        break;
-                    default:
-                        gBattleMoveDamage = 0;
-                }
+                int recoilFraction = GetRecoilFraction(gBattleMoves[gCurrentMove].effect);
+                gBattleMoveDamage = recoilFraction ? max(1, gTurnStructs[gBattlerAttacker].savedDmg / recoilFraction) : 0;
 
                 if (gBattleMoveDamage) {
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;

@@ -1168,10 +1168,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         CASE_AND_LABEL(EFFECT_LAST_RESORT)
         GOTO(EFFECT_HIT);
 
-        CASE_AND_LABEL(EFFECT_RECOIL_33_STATUS)
-        AI_CALC_DAMAGE;
-        return score + AI_SCORE_RECOIL(battlerAtk, 33, FALSE) + AI_SCORE_ARGUMENT_MOVE_EFFECT;
-
         CASE_AND_LABEL(EFFECT_FLINCH_STATUS)
         AI_CALC_DAMAGE;
         return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_FLINCH(battlerDef) + AI_SCORE_ARGUMENT_MOVE_EFFECT);
@@ -1590,14 +1586,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         AI_CALC_DAMAGE;
         return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_CURSE(battlerDef));
 
-        CASE_AND_LABEL(EFFECT_FLINCH_RECOIL_33)
-        AI_CALC_DAMAGE;
-        return score + AI_SCORE_RECOIL(battlerAtk, 33, FALSE) + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_FLINCH(battlerDef));
-
-        CASE_AND_LABEL(EFFECT_FLINCH_RECOIL_50)
-        AI_CALC_DAMAGE;
-        return score + AI_SCORE_RECOIL(battlerAtk, 50, FALSE) + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_FLINCH(battlerDef));
-
         CASE_AND_LABEL(EFFECT_IGNORE_TYPE_IMMUNITY)
         GOTO(EFFECT_HIT);
 
@@ -1646,10 +1634,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         CASE_AND_LABEL(EFFECT_DRAIN_BRAIN)
         return AI_SCORE_SPATK_UP(battlerDef, -1) +
                AI_SCORE_HEAL_FIXED(CalculateStat(battlerAtk, STAT_SPATK, 0, 0, TRUE, FALSE, IsUnaware(gBattlerAttacker), FALSE););
-
-        CASE_AND_LABEL(EFFECT_RECOIL_25_STATUS)
-        AI_CALC_DAMAGE;
-        return score + AI_SCORE_RECOIL(battlerAtk, 25, FALSE) + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_ARGUMENT_MOVE_EFFECT);
 
         CASE_AND_LABEL(EFFECT_WEATHER_BOOST)
         GOTO(EFFECT_HIT);
