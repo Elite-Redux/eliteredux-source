@@ -81,6 +81,7 @@ object FileGenerator {
         "elevations" to ElevationGenerator,
         "adoptioncentermons" to AdoptionCenterMonGenerator,
         "movescripts" to MoveScriptGenerator,
+        "movetypemodifiers" to MoveTypeModifierGenerator,
     )
 
     @JvmStatic
