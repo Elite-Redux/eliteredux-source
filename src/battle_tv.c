@@ -215,7 +215,6 @@ static const u16 sPoints_MoveEffect[NUM_BATTLE_MOVE_EFFECTS] =
     [EFFECT_BATON_PASS] = 7,
     [EFFECT_PURSUIT] = 2, 
     [EFFECT_RAPID_SPIN] = 2, 
-    [EFFECT_SONICBOOM] = 1, 
 //    [EFFECT_UNUSED_83] = 1, 
     [EFFECT_MORNING_SUN] = 4, 
     [EFFECT_SYNTHESIS] = 4, 

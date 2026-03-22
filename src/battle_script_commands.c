@@ -4244,7 +4244,7 @@ static bool32 TryKnockOffBattleScript(u32 battlerDef) {
 
     gLastUsedItem = UpdateBattlerItem(battlerDef, ITEM_NONE);
 
-    if (gBattleMoves[gCurrentMove].effect == EFFECT_CORROSIVE_GAS)
+    if (gCurrentMove == MOVE_CORROSIVE_GAS)
         BattleScriptCall(BattleScript_CorrosiveGas);
     else
         BattleScriptCall(BattleScript_KnockedOff);
@@ -10616,10 +10616,6 @@ static void Cmd_calculatesetdamage(void) {
         case EFFECT_DRAGON_RAGE:
             // Damage is always 40
             baseDamage = 40;
-            break;
-        case EFFECT_SONICBOOM:
-            // Damage is always 20
-            baseDamage = 20;
             break;
         case EFFECT_PSYWAVE:
             // Inflicts a random amount of damage, varying between 1 damage and 1.5× the user's level.

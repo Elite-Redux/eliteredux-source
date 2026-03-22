@@ -693,9 +693,6 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8* typeEffectiveness)
             case EFFECT_DRAGON_RAGE:
                 dmg = 40;
                 break;
-            case EFFECT_SONICBOOM:
-                dmg = 20;
-                break;
             case EFFECT_ENDEAVOR:
                 // If target has less HP than user, Endeavor does no damage
                 dmg = max(0, gBattleMons[battlerDef].hp - gBattleMons[battlerAtk].hp);

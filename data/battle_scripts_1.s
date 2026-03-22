@@ -2885,6 +2885,26 @@ BattleScript_MoveEnd::
 	moveendall
 	end
 
+BattleScript_EffectHitUntilArgumentReturn:
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	damagecalc
+	adjustdamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_EffectConcoction:
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
@@ -2970,86 +2990,6 @@ BattleScript_EffectPartyFavors_TryHealStack:
 	printstring STRINGID_STACKREGAINEDHEALTH
 	waitmessage B_WAIT_TIME_LONG
 	return
-
-BattleScript_EffectTripleArrows::
-	setmoveeffect MOVE_EFFECT_DEF_MINUS_1
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	damagecalc
-	adjustdamage
-	attackanimation
-	waitanimation
-	effectivenesssound
-	hitanimation BS_TARGET
-	waitstate
-	healthbarupdate BS_TARGET
-	datahpupdate BS_TARGET
-	critmessage
-	waitmessage B_WAIT_TIME_LONG
-	resultmessage
-	waitmessage B_WAIT_TIME_LONG
-	seteffectwithchance
-	setmoveeffect MOVE_EFFECT_FLINCH
-	setmoveeffectchance 30
-	seteffectwithchance
-	tryfaintmon BS_TARGET, FALSE, NULL
-	moveendall
-	end
-
-BattleScript_EffectPrismBlast::
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	damagecalc
-	adjustdamage
-	attackanimation
-	waitanimation
-	effectivenesssound
-	hitanimation BS_TARGET
-	waitstate
-	healthbarupdate BS_TARGET
-	datahpupdate BS_TARGET
-	critmessage
-	waitmessage B_WAIT_TIME_LONG
-	resultmessage
-	waitmessage B_WAIT_TIME_LONG
-	setmoveeffect MOVE_EFFECT_ACC_MINUS_1
-	seteffectsecondary
-	setmoveeffect MOVE_EFFECT_CONFUSION
-	seteffectwithchance
-	tryfaintmon BS_TARGET, FALSE, NULL
-	moveendall
-	end
-
-BattleScript_EffectWhirlpool::
-	setmoveeffect MOVE_EFFECT_WRAP
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	damagecalc
-	adjustdamage
-	attackanimation
-	waitanimation
-	effectivenesssound
-	hitanimation BS_TARGET
-	waitstate
-	healthbarupdate BS_TARGET
-	datahpupdate BS_TARGET
-	critmessage
-	waitmessage B_WAIT_TIME_LONG
-	resultmessage
-	waitmessage B_WAIT_TIME_LONG
-	seteffectwithchance
-	setmoveeffect MOVE_EFFECT_DRENCH
-	setmoveeffectchance 30
-	seteffectwithchance
-	tryfaintmon BS_TARGET, FALSE, NULL
-	moveendall
-	end
 
 BattleScript_EffectWaterlog:
 	attackcanceler
@@ -5572,17 +5512,6 @@ BattleScript_EffectMortalSpin::
 	tryfaintmon BS_TARGET, FALSE, NULL
 	moveendall
 	end
-
-BattleScript_EffectSonicboom::
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	typecalc
-	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
-	calculatesetdamage
-	adjustdamage
-	goto BattleScript_HitFromAtkAnimation
 
 BattleScript_EffectMorningSun::
 BattleScript_EffectSynthesis::
@@ -12613,54 +12542,6 @@ BattleScript_EffectTrepidation::
 	trepidation BS_TARGET, BattleScript_MoveEndTryFaintTarget
 	printstring STRINGID_TREPIDATION
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEndTryFaintTarget
-
-BattleScript_EffectChipAway:
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	damagecalc
-	adjustdamage
-	attackanimation
-	waitanimation
-	effectivenesssound
-	hitanimation BS_TARGET
-	waitstate
-	healthbarupdate BS_TARGET
-	datahpupdate BS_TARGET
-	critmessage
-	waitmessage B_WAIT_TIME_LONG
-	resultmessage
-	waitmessage B_WAIT_TIME_LONG
-	setmoveeffect MOVE_EFFECT_ATK_MINUS_1
-	seteffectwithchance
-	setmoveeffect MOVE_EFFECT_DEF_MINUS_1
-	seteffectwithchance
-	goto BattleScript_MoveEndTryFaintTarget
-
-BattleScript_EffectTerrorCharge::
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	damagecalc
-	adjustdamage
-	attackanimation
-	waitanimation
-	effectivenesssound
-	hitanimation BS_TARGET
-	waitstate
-	healthbarupdate BS_TARGET
-	datahpupdate BS_TARGET
-	critmessage
-	waitmessage B_WAIT_TIME_LONG
-	resultmessage
-	waitmessage B_WAIT_TIME_LONG
-	setmoveeffect MOVE_EFFECT_BLEED
-	seteffectwithchance
-	setmoveeffect MOVE_EFFECT_FEAR
-	seteffectwithchance
 	goto BattleScript_MoveEndTryFaintTarget
 
 BattleScript_EffectKinesis:

@@ -82,6 +82,7 @@ object BattleMovesGenerator : Generator {
           move.effectChance > 0 && move.effect.getOption(flinchEffect) -> false
           move.effectChance > 0 && move.argument.effect.effect.getOption(flinchEffect) -> false
           move.effect.getOption(noKingsRock) -> false
+          move.customBehavior.causesFlinch -> false
           else -> true
         }
 

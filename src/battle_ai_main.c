@@ -1084,7 +1084,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
         case EFFECT_RETURN:
         case EFFECT_PRESENT:
         case EFFECT_FRUSTRATION:
-        case EFFECT_SONICBOOM:
         // case EFFECT_MIRROR_COAT:
         case EFFECT_SKULL_BASH:
         case EFFECT_SUPERPOWER:

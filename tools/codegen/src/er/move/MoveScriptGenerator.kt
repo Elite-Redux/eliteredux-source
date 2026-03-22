@@ -5,9 +5,11 @@ import er.GeneratorUtils.MOVE_BEHAVIORS
 import er.GeneratorUtils.MOVE_BEHAVIOR_CONFIGS
 import er.proto.MoveBehavior
 import er.proto.MoveBehaviorConfig
+import er.proto.MoveBehaviorConfig.Attack.AttackSecondaryEffect.AttackEffectCase
 import java.io.OutputStreamWriter
 
 private const val BATTLE_SCRIPT_HIT = "BattleScript_EffectHit"
+private const val BATTLE_SCRIPT_HIT_RETURN_FOR_EFFECT = "BattleScript_EffectHitUntilArgumentReturn"
 
 object MoveScriptGenerator : Generator {
   override fun generate(writer: OutputStreamWriter) {
@@ -75,6 +77,22 @@ private object AttackScriptGenerator {
       return
     }
 
-    TODO()
+    writer.writeScriptLines("call $BATTLE_SCRIPT_HIT_RETURN_FOR_EFFECT")
+
+    for (effect in attack.effectList) {
+      when (effect.attackEffectCase) {
+        AttackEffectCase.MOVE_EFFECT -> {
+          if (effect.chance != 0) writer.writeScriptLines("setmoveeffectchance ${effect.chance}")
+          writer.writeScriptLines(
+            "setmoveeffect ${effect.moveEffect.fullString()}",
+            "seteffectwithchance",
+          )
+        }
+        else -> TODO()
+      }
+    }
+
+    writer.writeScriptLines("goto BattleScript_MoveEndTryFaintTarget")
+    writer.appendLine()
   }
 }

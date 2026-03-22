@@ -606,9 +606,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         // TODO: Add hazard clearing
         return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPEED_UP(battlerAtk, 1));
 
-        CASE_AND_LABEL(EFFECT_SONICBOOM)
-        return AI_SCORE_IMMUNE;
-
         CASE_AND_LABEL(EFFECT_CAPTIVATE)
         GOTO(EFFECT_HIT);
 
@@ -1650,11 +1647,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_SPATK_UP(battlerDef, -1) +
                AI_SCORE_HEAL_FIXED(CalculateStat(battlerAtk, STAT_SPATK, 0, 0, TRUE, FALSE, IsUnaware(gBattlerAttacker), FALSE););
 
-        CASE_AND_LABEL(EFFECT_TRIPLE_ARROWS)
-        AI_CALC_DAMAGE;
-        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_DEFENSE_UP(battlerDef, -1)) +
-               AI_SCORE_ADJUST(GetFullChance(battlerAtk, move, moveEffect, 30, aiData), AI_SCORE_FLINCH(battlerDef));
-
         CASE_AND_LABEL(EFFECT_RECOIL_25_STATUS)
         AI_CALC_DAMAGE;
         return score + AI_SCORE_RECOIL(battlerAtk, 25, FALSE) + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_ARGUMENT_MOVE_EFFECT);
@@ -1811,10 +1803,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         AI_CALC_DAMAGE;
         return score;
 
-        CASE_AND_LABEL(EFFECT_TERROR_CHARGE)
-        AI_CALC_DAMAGE;
-        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_BLEED(battlerDef) + AI_SCORE_FEAR(battlerDef));
-
         CASE_AND_LABEL(EFFECT_TAILWIND_HIT)
         AI_CALC_DAMAGE;
         return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_TAILWIND);
@@ -1852,10 +1840,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         AI_CALC_DAMAGE;
         return score + AI_SCORE_TREPIDATION;
 
-        CASE_AND_LABEL(EFFECT_CHIP_AWAY)
-        AI_CALC_DAMAGE;
-        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_DEFENSE_UP(battlerDef, -1));
-
         CASE_AND_LABEL(EFFECT_MEDITATE)
         return AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_SPDEF_UP(battlerAtk, 1);
 
@@ -1866,9 +1850,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         CASE_AND_LABEL(EFFECT_KINESIS)
         if (!gBattleMons[battlerDef].item) return AI_SCORE_IMMUNE;
         return AI_SCORE_FLINCH(battlerDef) + AI_SCORE_LOSE_ITEM(battlerDef);
-
-        CASE_AND_LABEL(EFFECT_CORROSIVE_GAS)
-        GOTO(EFFECT_KNOCK_OFF);
 
         CASE_AND_LABEL(EFFECT_CALTROPS)
         return AI_SCORE_CALTROPS;
