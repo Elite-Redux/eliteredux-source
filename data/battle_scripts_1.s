@@ -3382,11 +3382,6 @@ BattleScript_MoveEffectCurse::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
-BattleScript_EffectStealthRockHit::
-	call BattleScript_EffectHit_Return
-	trytoapplymoveeffect BattleScript_MoveEffectStealthRockHit
-	goto BattleScript_MoveEnd
-
 BattleScript_EffectSmellingsalt:
 	call BattleScript_EffectHit_Return
 	jumpifstatus BS_ATTACKER, STATUS1_ANY, BattleScript_EffectSmellingsalt_Continue
@@ -3398,51 +3393,36 @@ BattleScript_EffectSmellingsalt_Continue:
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
-BattleScript_MoveEffectStealthRockHit::
+BattleScript_MoveEffectStealthRock::
 	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
 	waitanimation
 	printstring STRINGID_POINTEDSTONESFLOAT
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	return
 
-BattleScript_EffectCreepingThornsHit::
-	call BattleScript_EffectHit_Return
-	trytoapplymoveeffect BattleScript_MoveEffectCreepingThornsHit
-	goto BattleScript_MoveEnd
-
-BattleScript_MoveEffectCreepingThornsHit::
+BattleScript_MoveEffectCreepingThorns::
 	playmoveanimation BS_ATTACKER, MOVE_CREEPING_THORNS
 	waitanimation
 	printstring STRINGID_VICIOUSTHORNSUSED
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	return
 
-BattleScript_EffectSpikeHit::
-	call BattleScript_EffectHit_Return
-	trytoapplymoveeffect BattleScript_MoveEffectSpikeHit
-	goto BattleScript_MoveEnd
-
-BattleScript_MoveEffectSpikeHit::
+BattleScript_MoveEffectSpike::
 	playmoveanimation BS_ATTACKER, MOVE_SPIKES
 	waitanimation
 	printstring STRINGID_SPIKESSCATTERED
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	goto BattleScript_Return
 
-BattleScript_EffectStickyWebHit::
-	call BattleScript_EffectHit_Return
-	trytoapplymoveeffect BattleScript_MoveEffectSickyWebHit
-	goto BattleScript_MoveEnd
-
-BattleScript_MoveEffectSickyWebHit::
+BattleScript_MoveEffectStickyWeb::
 	printstring STRINGID_STICKYWEBUSED
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	return
 
-BattleScript_EffectLeechSeedHit::
-	call BattleScript_EffectHit_Return
-	trytoapplymoveeffect BattleScript_EffectLeechSeed
-	goto BattleScript_MoveEnd
+BattleScript_MoveEffectLeechSeed::
+	printfromtable gLeechSeedStringIds
+	waitmessage B_WAIT_TIME_LONG
+	return
 
 BattleScript_EffectSandstormHit::
 	call BattleScript_EffectHit_Return

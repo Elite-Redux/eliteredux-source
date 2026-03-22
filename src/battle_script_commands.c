@@ -2364,6 +2364,10 @@ void SetMoveEffect(bool32 primary, u32 certain) {
             case MOVE_EFFECT_RAINBOW:
             case MOVE_EFFECT_FIRE_SEA:
             case MOVE_EFFECT_SPECTRAL_THIEF:
+            case MOVE_EFFECT_SPIKES:
+            case MOVE_EFFECT_STEALTH_ROCK:
+            case MOVE_EFFECT_STICKY_WEB:
+            case MOVE_EFFECT_CREEPING_THORNS:
                 break;
 
             default:
@@ -3024,6 +3028,32 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     gVolatileStructs[gEffectBattler].drenched = 2 + (Random() % 2);
                     gVolatileStructs[gEffectBattler].started.drenched = TRUE;
                     BattleScriptCall(BattleScript_BecomesDrenched);
+                    break;
+                case MOVE_EFFECT_CREEPING_THORNS:
+                case MOVE_EFFECT_STEALTH_ROCK:
+                    REQUIRE_NOT(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STEALTH_ROCK)
+                    gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STEALTH_ROCK;
+                    gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType =
+                        gBattleScripting.moveEffect == MOVE_EFFECT_CREEPING_THORNS ? TYPE_GRASS : TYPE_ROCK;
+                    BattleScriptCall(BattleScript_MoveEffectStealthRock);
+                    break;
+                case MOVE_EFFECT_SPIKES:
+                    REQUIRE(gSideTimers[GetBattlerSide(gBattlerTarget)].spikesAmount < 3)
+                    gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_SPIKES;
+                    gSideTimers[GetBattlerSide(gBattlerTarget)].spikesAmount++;
+                    BattleScriptCall(BattleScript_MoveEffectSpike);
+                    break;
+                case MOVE_EFFECT_LEECH_SEED:
+                    REQUIRE_NOT(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED)
+                    REQUIRE(IsMyceliumMightActive(gBattlerAttacker) || IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS))
+                    gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED_BY(gBattlerAttacker);
+                    gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
+                    BattleScriptCall(BattleScript_MoveEffectLeechSeed);
+                    break;
+                case EFFECT_STICKY_WEB_HIT:
+                    REQUIRE_NOT(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STICKY_WEB)
+                    gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STICKY_WEB;
+                    BattleScriptCall(BattleScript_MoveEffectStickyWeb);
                     break;
             }
         }
@@ -10637,86 +10667,7 @@ static void Cmd_calculatesetdamage(void) {
     gBattlescriptCurrInstr++;
 }
 
-static void Cmd_trytoapplymoveeffect(void) {
-    // Set move effect
-    bool8 appliedEffect = FALSE;
-    int secondaryEffectChance = GetMoveEffectChance(gBattlerAttacker, gCurrentMove, 0, gBattleMoves[gCurrentMove].secondaryEffectChance);
-    u8 rand = (Random() % 100);
-
-    switch (gBattleMoves[gCurrentMove].effect) {
-        case EFFECT_ATTRACT_HIT:
-            if (rand <= secondaryEffectChance) {
-                if (TARGET_TURN_DAMAGED && CanInfatuate(gBattlerAttacker, gBattlerTarget)) {
-                    gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
-                    appliedEffect = TRUE;
-                }
-            }
-            break;
-        case EFFECT_CURSE_HIT:
-            if (rand <= secondaryEffectChance) {
-                if (IsMyceliumMightActive(gBattlerAttacker) && !(gBattleMons[gBattlerTarget].status2 & STATUS2_CURSED)) {
-                    gBattleMons[gBattlerTarget].status2 |= STATUS2_CURSED;
-                    appliedEffect = TRUE;
-                } else if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && IsBattlerAlive(gBattlerTarget) && TARGET_TURN_DAMAGED &&
-                           !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST) && !(gBattleMons[gBattlerTarget].status2 & STATUS2_CURSED)) {
-                    gBattleMons[gBattlerTarget].status2 |= STATUS2_CURSED;
-                    appliedEffect = TRUE;
-                }
-            }
-            break;
-        case EFFECT_CREEPING_THORNS_HIT:
-        case EFFECT_STEALTH_ROCK_HIT:
-            if (rand <= secondaryEffectChance) {
-                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && TARGET_TURN_DAMAGED &&
-                    !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STEALTH_ROCK)) {
-                    gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STEALTH_ROCK;
-                    gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType =
-                        gBattleMoves[gCurrentMove].effect == EFFECT_STEALTH_ROCK_HIT ? TYPE_ROCK : TYPE_GRASS;
-                    appliedEffect = TRUE;
-                }
-            }
-            break;
-        case EFFECT_SPIKE_HIT:
-            if (rand <= secondaryEffectChance) {
-                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && TARGET_TURN_DAMAGED && gSideTimers[GetBattlerSide(gBattlerTarget)].spikesAmount < 3) {
-                    gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_SPIKES;
-                    gSideTimers[GetBattlerSide(gBattlerTarget)].spikesAmount++;
-                    appliedEffect = TRUE;
-                }
-            }
-            break;
-        case EFFECT_LEECH_SEED_HIT:
-            if (rand <= secondaryEffectChance) {
-                if (IsMyceliumMightActive(gBattlerAttacker) && !(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED)) {
-                    gStatuses3[gBattlerTarget] |= gBattlerAttacker;
-                    gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
-                    appliedEffect = TRUE;
-                } else if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && gBattleMons[gBattlerTarget].hp != 0 &&
-                           !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS) && TARGET_TURN_DAMAGED && !(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED)) {
-                    gStatuses3[gBattlerTarget] |= gBattlerAttacker;
-                    gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
-                    appliedEffect = TRUE;
-                }
-            }
-            break;
-        case EFFECT_STICKY_WEB_HIT:
-            if (rand <= secondaryEffectChance) {
-                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && TARGET_TURN_DAMAGED &&
-                    !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STICKY_WEB)) {
-                    gStatuses3[gBattlerTarget] |= gBattlerAttacker;
-                    gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STICKY_WEB;
-                    appliedEffect = TRUE;
-                }
-            }
-            break;
-    }
-
-    if (appliedEffect) {
-        BattleScriptCall(T1_READ_PTR(gBattlescriptCurrInstr + 1));
-    } else {
-        BattleScriptCall(BattleScript_MoveEnd);
-    }
-}
+static void Cmd_trytoapplymoveeffect(void) {}
 
 static void Cmd_counterdamagecalculator(void) {
     u8 sideAttacker = GetBattlerSide(gBattlerAttacker);
