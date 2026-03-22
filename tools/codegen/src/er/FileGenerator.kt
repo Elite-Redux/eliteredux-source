@@ -80,6 +80,7 @@ object FileGenerator {
         "trainerfields" to TrainerMiscEnumsGenerator,
         "elevations" to ElevationGenerator,
         "adoptioncentermons" to AdoptionCenterMonGenerator,
+        "movescripts" to MoveScriptGenerator,
     )
 
     @JvmStatic

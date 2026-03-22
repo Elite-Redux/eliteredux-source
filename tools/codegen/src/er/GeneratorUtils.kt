@@ -59,6 +59,14 @@ object GeneratorUtils {
       .speciesList
   }
 
+  val MOVE_BEHAVIOR_CONFIGS by lazy {
+    TextFormat.parse(
+        File("../../proto/MoveBehaviorConfigList.textproto").readText(),
+        MoveBehaviorConfigList::class.java,
+      )
+      .configList
+  }
+
   val SPECIES_LIST by lazy { FULL_SPECIES_LIST.filter { it.randomizerBanned != SPECIES_HIDDEN } }
 
   val NO_EGG_LIST by lazy { SPECIES_LIST.filter { it.id != SpeciesEnum.SPECIES_EGG } }
