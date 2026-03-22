@@ -473,6 +473,16 @@ static void BattleAI_DoAIProcessing(void) {
     }
 }
 
+AbilityEnum BlocksRecoil(u8 battler) {
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, noRecoil)
+    return ABILITY_NONE;
+}
+
+AbilityEnum ReducesRecoil(u8 battler) {
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, halfRecoil)
+    return ABILITY_NONE;
+}
+
 // AI Score Functions
 // AI_FLAG_CHECK_BAD_MOVE - decreases move scores
 static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
@@ -788,7 +798,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
         case EFFECT_HIT:
         case EFFECT_POISON_HIT:
         case EFFECT_BURN_HIT:
-        case EFFECT_FREEZE_HIT:
         case EFFECT_PARALYZE_HIT:
         case EFFECT_CONFUSE_HIT:
         default:
@@ -1085,7 +1094,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
         case EFFECT_RETURN:
         case EFFECT_PRESENT:
         case EFFECT_FRUSTRATION:
-        case EFFECT_SONICBOOM:
         // case EFFECT_MIRROR_COAT:
         case EFFECT_SKULL_BASH:
         case EFFECT_SUPERPOWER:
@@ -1522,31 +1530,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             break;
         case EFFECT_RECOIL_IF_MISS:
             if (!IsMagicGuardProtected(battlerAtk) && accuracy < 75) score -= 6;
-            break;
-        case EFFECT_RECOIL_25:
-            if (!IsMagicGuardProtected(battlerAtk) && !BattlerHasAbility(battlerAtk, ABILITY_ROCK_HEAD, FALSE) &&
-                !BattlerHasAbility(battlerAtk, ABILITY_STEEL_BARREL, FALSE)) {
-                u32 recoilDmg = max(1, AI_DATA->simulatedDmg[battlerAtk][battlerDef][AI_THINKING_STRUCT->movesetIndex] / 4);
-                if (!ShouldUseRecoilMove(battlerAtk, battlerDef, recoilDmg, AI_THINKING_STRUCT->movesetIndex)) score -= 10;
-                break;
-            }
-            break;
-        case EFFECT_RECOIL_33:
-        case EFFECT_RECOIL_33_STATUS:
-            if (!IsMagicGuardProtected(battlerAtk) && !BattlerHasAbility(battlerAtk, ABILITY_ROCK_HEAD, FALSE) &&
-                !BattlerHasAbility(battlerAtk, ABILITY_STEEL_BARREL, FALSE)) {
-                u32 recoilDmg = max(1, AI_DATA->simulatedDmg[battlerAtk][battlerDef][AI_THINKING_STRUCT->movesetIndex] / 3);
-                if (!ShouldUseRecoilMove(battlerAtk, battlerDef, recoilDmg, AI_THINKING_STRUCT->movesetIndex)) score -= 10;
-                break;
-            }
-            break;
-        case EFFECT_RECOIL_50:
-            if (!IsMagicGuardProtected(battlerAtk) && !BattlerHasAbility(battlerAtk, ABILITY_ROCK_HEAD, FALSE) &&
-                !BattlerHasAbility(battlerAtk, ABILITY_STEEL_BARREL, FALSE)) {
-                u32 recoilDmg = max(1, AI_DATA->simulatedDmg[battlerAtk][battlerDef][AI_THINKING_STRUCT->movesetIndex] / 2);
-                if (!ShouldUseRecoilMove(battlerAtk, battlerDef, recoilDmg, AI_THINKING_STRUCT->movesetIndex)) score -= 10;
-                break;
-            }
             break;
         case EFFECT_TEETER_DANCE:
             if (((gBattleMons[battlerDef].status2 & STATUS2_CONFUSION) ||
@@ -2168,6 +2151,15 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
                 break;*/
     }  // move effect checks
 
+    int recoilFraction = GetRecoilFraction(moveEffect);
+    if (recoilFraction) {
+        if (!IsMagicGuardProtected(battlerAtk) && !BlocksRecoil(battlerAtk)) {
+            if (ReducesRecoil(battlerAtk)) recoilFraction *= 2;
+            u32 recoilDmg = max(1, AI_DATA->simulatedDmg[battlerAtk][battlerDef][AI_THINKING_STRUCT->movesetIndex] / recoilFraction);
+            if (!ShouldUseRecoilMove(battlerAtk, battlerDef, recoilDmg, AI_THINKING_STRUCT->movesetIndex)) score -= 10;
+        }
+    }
+
     if (score < 0) score = 0;
 
     return score;
@@ -2639,7 +2631,6 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
         case EFFECT_HIT:
         case EFFECT_POISON_HIT:
         case EFFECT_BURN_HIT:
-        case EFFECT_FREEZE_HIT:
         case EFFECT_PARALYZE_HIT:
             // case EFFECT_CONFUSE_HIT:
             break;

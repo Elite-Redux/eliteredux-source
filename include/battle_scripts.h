@@ -672,6 +672,11 @@ extern const u8 BattleScript_HarukazeTailwind[];
 extern const u8 BattleScript_ResilienceActivates[];
 extern const u8 BattleScript_MadnessEnhancementRet[];
 extern const u8 BattleScript_IceStatue[];
+extern const u8 BattleScript_MoveEffectStealthRock[];
+extern const u8 BattleScript_MoveEffectCreepingThorns[];
+extern const u8 BattleScript_MoveEffectSpike[];
+extern const u8 BattleScript_MoveEffectStickyWeb[];
+extern const u8 BattleScript_MoveEffectLeechSeed[];
 
 extern const u8 BattleScript_Archmage_Effect_Type_Electric[];
 extern const u8 BattleScript_Archmage_Effect_Type_Fairy[];

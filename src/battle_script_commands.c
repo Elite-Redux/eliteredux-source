@@ -2364,6 +2364,10 @@ void SetMoveEffect(bool32 primary, u32 certain) {
             case MOVE_EFFECT_RAINBOW:
             case MOVE_EFFECT_FIRE_SEA:
             case MOVE_EFFECT_SPECTRAL_THIEF:
+            case MOVE_EFFECT_SPIKES:
+            case MOVE_EFFECT_STEALTH_ROCK:
+            case MOVE_EFFECT_STICKY_WEB:
+            case MOVE_EFFECT_CREEPING_THORNS:
                 break;
 
             default:
@@ -3024,6 +3028,32 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     gVolatileStructs[gEffectBattler].drenched = 2 + (Random() % 2);
                     gVolatileStructs[gEffectBattler].started.drenched = TRUE;
                     BattleScriptCall(BattleScript_BecomesDrenched);
+                    break;
+                case MOVE_EFFECT_CREEPING_THORNS:
+                case MOVE_EFFECT_STEALTH_ROCK:
+                    REQUIRE_NOT(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STEALTH_ROCK)
+                    gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STEALTH_ROCK;
+                    gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType =
+                        gBattleScripting.moveEffect == MOVE_EFFECT_CREEPING_THORNS ? TYPE_GRASS : TYPE_ROCK;
+                    BattleScriptCall(BattleScript_MoveEffectStealthRock);
+                    break;
+                case MOVE_EFFECT_SPIKES:
+                    REQUIRE(gSideTimers[GetBattlerSide(gBattlerTarget)].spikesAmount < 3)
+                    gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_SPIKES;
+                    gSideTimers[GetBattlerSide(gBattlerTarget)].spikesAmount++;
+                    BattleScriptCall(BattleScript_MoveEffectSpike);
+                    break;
+                case MOVE_EFFECT_LEECH_SEED:
+                    REQUIRE_NOT(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED)
+                    REQUIRE(IsMyceliumMightActive(gBattlerAttacker) || IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS))
+                    gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED_BY(gBattlerAttacker);
+                    gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
+                    BattleScriptCall(BattleScript_MoveEffectLeechSeed);
+                    break;
+                case EFFECT_STICKY_WEB_HIT:
+                    REQUIRE_NOT(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STICKY_WEB)
+                    gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STICKY_WEB;
+                    BattleScriptCall(BattleScript_MoveEffectStickyWeb);
                     break;
             }
         }
@@ -4244,7 +4274,7 @@ static bool32 TryKnockOffBattleScript(u32 battlerDef) {
 
     gLastUsedItem = UpdateBattlerItem(battlerDef, ITEM_NONE);
 
-    if (gBattleMoves[gCurrentMove].effect == EFFECT_CORROSIVE_GAS)
+    if (gCurrentMove == MOVE_CORROSIVE_GAS)
         BattleScriptCall(BattleScript_CorrosiveGas);
     else
         BattleScriptCall(BattleScript_KnockedOff);
@@ -4268,6 +4298,8 @@ static int CanPickpocket(int target, int attackerStealing) {
     if (TestSheerForceFlag(gBattlerAttacker, gCurrentMove)) return FALSE;
     return ability;
 }
+
+#include "generated/data/move_recoil_fractions.h"
 
 static void Cmd_moveend(void) {
     s32 i, j;
@@ -4405,15 +4437,6 @@ static void Cmd_moveend(void) {
                 gBattleScripting.moveendState++;
                 break;
             case MOVEEND_DEFROST:  // defrosting check
-                if (gBattleMons[gBattlerTarget].status1 & STATUS1_FREEZE && gBattleMons[gBattlerTarget].hp != 0 && gBattlerAttacker != gBattlerTarget &&
-                    !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && (moveType == TYPE_FIRE || gBattleMoves[gCurrentMove].effect == EFFECT_SCALD)) {
-                    gBattleMons[gBattlerTarget].status1 &= ~(STATUS1_FREEZE);
-                    gActiveBattler = gBattlerTarget;
-                    BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gBattlerTarget].status1);
-                    MarkBattlerForControllerExec(gActiveBattler);
-                    BattleScriptCall(BattleScript_DefrostedViaFireMove);
-                    effect = TRUE;
-                }
                 if (gBattleMons[gBattlerTarget].status1 & STATUS1_FROSTBITE && gBattleMons[gBattlerTarget].hp != 0 && gBattlerAttacker != gBattlerTarget &&
                     gBattleMoves[originallyUsedMove].flags & FLAG_THAW_USER && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
                     gBattleMons[gBattlerTarget].status1 &= ~STATUS1_FROSTBITE;
@@ -4443,23 +4466,8 @@ static void Cmd_moveend(void) {
                     REQUIRE_NOT(blocked)
                 }
 
-                switch (gBattleMoves[gCurrentMove].effect) {
-                    case EFFECT_RECOIL_25_STATUS:
-                    case EFFECT_RECOIL_25:
-                        gBattleMoveDamage = max(1, gTurnStructs[gBattlerAttacker].savedDmg / 4);
-                        break;
-                    case EFFECT_RECOIL_33_STATUS:
-                    case EFFECT_FLINCH_RECOIL_33:
-                    case EFFECT_RECOIL_33:
-                        gBattleMoveDamage = max(1, gTurnStructs[gBattlerAttacker].savedDmg / 3);
-                        break;
-                    case EFFECT_FLINCH_RECOIL_50:
-                    case EFFECT_RECOIL_50:
-                        gBattleMoveDamage = max(1, gTurnStructs[gBattlerAttacker].savedDmg / 2);
-                        break;
-                    default:
-                        gBattleMoveDamage = 0;
-                }
+                int recoilFraction = GetRecoilFraction(gBattleMoves[gCurrentMove].effect);
+                gBattleMoveDamage = recoilFraction ? max(1, gTurnStructs[gBattlerAttacker].savedDmg / recoilFraction) : 0;
 
                 if (gBattleMoveDamage) {
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
@@ -10626,10 +10634,6 @@ static void Cmd_calculatesetdamage(void) {
             // Damage is always 40
             baseDamage = 40;
             break;
-        case EFFECT_SONICBOOM:
-            // Damage is always 20
-            baseDamage = 20;
-            break;
         case EFFECT_PSYWAVE:
             // Inflicts a random amount of damage, varying between 1 damage and 1.5× the user's level.
             randDamage = (Random() % 101);
@@ -10650,86 +10654,7 @@ static void Cmd_calculatesetdamage(void) {
     gBattlescriptCurrInstr++;
 }
 
-static void Cmd_trytoapplymoveeffect(void) {
-    // Set move effect
-    bool8 appliedEffect = FALSE;
-    int secondaryEffectChance = GetMoveEffectChance(gBattlerAttacker, gCurrentMove, 0, gBattleMoves[gCurrentMove].secondaryEffectChance);
-    u8 rand = (Random() % 100);
-
-    switch (gBattleMoves[gCurrentMove].effect) {
-        case EFFECT_ATTRACT_HIT:
-            if (rand <= secondaryEffectChance) {
-                if (TARGET_TURN_DAMAGED && CanInfatuate(gBattlerAttacker, gBattlerTarget)) {
-                    gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
-                    appliedEffect = TRUE;
-                }
-            }
-            break;
-        case EFFECT_CURSE_HIT:
-            if (rand <= secondaryEffectChance) {
-                if (IsMyceliumMightActive(gBattlerAttacker) && !(gBattleMons[gBattlerTarget].status2 & STATUS2_CURSED)) {
-                    gBattleMons[gBattlerTarget].status2 |= STATUS2_CURSED;
-                    appliedEffect = TRUE;
-                } else if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && IsBattlerAlive(gBattlerTarget) && TARGET_TURN_DAMAGED &&
-                           !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST) && !(gBattleMons[gBattlerTarget].status2 & STATUS2_CURSED)) {
-                    gBattleMons[gBattlerTarget].status2 |= STATUS2_CURSED;
-                    appliedEffect = TRUE;
-                }
-            }
-            break;
-        case EFFECT_CREEPING_THORNS_HIT:
-        case EFFECT_STEALTH_ROCK_HIT:
-            if (rand <= secondaryEffectChance) {
-                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && TARGET_TURN_DAMAGED &&
-                    !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STEALTH_ROCK)) {
-                    gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STEALTH_ROCK;
-                    gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType =
-                        gBattleMoves[gCurrentMove].effect == EFFECT_STEALTH_ROCK_HIT ? TYPE_ROCK : TYPE_GRASS;
-                    appliedEffect = TRUE;
-                }
-            }
-            break;
-        case EFFECT_SPIKE_HIT:
-            if (rand <= secondaryEffectChance) {
-                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && TARGET_TURN_DAMAGED && gSideTimers[GetBattlerSide(gBattlerTarget)].spikesAmount < 3) {
-                    gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_SPIKES;
-                    gSideTimers[GetBattlerSide(gBattlerTarget)].spikesAmount++;
-                    appliedEffect = TRUE;
-                }
-            }
-            break;
-        case EFFECT_LEECH_SEED_HIT:
-            if (rand <= secondaryEffectChance) {
-                if (IsMyceliumMightActive(gBattlerAttacker) && !(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED)) {
-                    gStatuses3[gBattlerTarget] |= gBattlerAttacker;
-                    gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
-                    appliedEffect = TRUE;
-                } else if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && gBattleMons[gBattlerTarget].hp != 0 &&
-                           !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS) && TARGET_TURN_DAMAGED && !(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED)) {
-                    gStatuses3[gBattlerTarget] |= gBattlerAttacker;
-                    gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
-                    appliedEffect = TRUE;
-                }
-            }
-            break;
-        case EFFECT_STICKY_WEB_HIT:
-            if (rand <= secondaryEffectChance) {
-                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && TARGET_TURN_DAMAGED &&
-                    !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STICKY_WEB)) {
-                    gStatuses3[gBattlerTarget] |= gBattlerAttacker;
-                    gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STICKY_WEB;
-                    appliedEffect = TRUE;
-                }
-            }
-            break;
-    }
-
-    if (appliedEffect) {
-        BattleScriptCall(T1_READ_PTR(gBattlescriptCurrInstr + 1));
-    } else {
-        BattleScriptCall(BattleScript_MoveEnd);
-    }
-}
+static void Cmd_trytoapplymoveeffect(void) {}
 
 static void Cmd_counterdamagecalculator(void) {
     u8 sideAttacker = GetBattlerSide(gBattlerAttacker);

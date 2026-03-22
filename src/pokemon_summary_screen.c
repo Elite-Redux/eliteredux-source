@@ -5183,18 +5183,16 @@ static u8 GetBattleMoveCategory(u16 move) {
 static void MoveEffectIntoStringVar1(u16 move) {
     switch (gBattleMoves[move].effect) {
         case EFFECT_BURN_HIT:
-        case EFFECT_SCALD:
             StringCopy(gStringVar1, gText_Effect_Burn_Hit);
             break;
         case EFFECT_POISON_HIT:
-        case EFFECT_SLUDGE:
             StringCopy(gStringVar1, gText_Effect_Poison_Hit);
             break;
         case EFFECT_PARALYZE_HIT:
             StringCopy(gStringVar1, gText_Effect_Paralyze_Hit);
             break;
-        case EFFECT_FREEZE_HIT:
-            StringCopy(gStringVar1, gText_Effect_Freeze_Hit);
+        case EFFECT_FROSTBITE_HIT:
+            StringCopy(gStringVar1, gText_Effect_Frostbite_Hit);
             break;
         case EFFECT_CONFUSE_HIT:
             StringCopy(gStringVar1, gText_Effect_Confuse_Hit);

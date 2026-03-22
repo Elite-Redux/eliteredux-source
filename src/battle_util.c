@@ -7932,6 +7932,8 @@ int CalcMoveDamageAi(MoveEnum move, int battlerAtk, int battlerDef, u8* moveType
     return val;
 }
 
+#include "generated/data/move_type_modifiers.h"
+
 void MulByTypeEffectiveness(u16* modifier, MoveEnum move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities) {
     u16 mod = GetTypeModifier(moveType, defType, battlerAtk, battlerDef);
 
@@ -7966,35 +7968,7 @@ void MulByTypeEffectiveness(u16* modifier, MoveEnum move, u8 moveType, u8 battle
 
     if (moveType == TYPE_GROUND && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(0.0)) mod = UQ_4_12(1.0);
 
-    switch (gBattleMoves[move].effect) {
-        case EFFECT_IGNORE_TYPE_IMMUNITY:
-            if (mod == UQ_4_12(0.0)) mod = UQ_4_12(1.0);
-            break;
-
-        case EFFECT_SE_AGAINST_TYPE_HIT:
-            if (defType == gBattleMoves[move].argument) mod = UQ_4_12(2.0);
-            break;
-
-        case EFFECT_FREEZE_DRY:
-            if (defType == TYPE_WATER) mod = UQ_4_12(2.0);
-            break;
-
-        case EFFECT_EXCALIBUR:
-            if (defType == TYPE_DRAGON) mod = UQ_4_12(2.0);
-            break;
-
-        case EFFECT_ACID:
-            if (defType == TYPE_STEEL) mod = UQ_4_12(2.0);
-            break;
-
-        case EFFECT_SLUDGE:
-            if (defType == TYPE_WATER) mod = UQ_4_12(2.0);
-            break;
-
-        case EFFECT_POISON_GAS:
-            if (defType == TYPE_FLYING) mod = UQ_4_12(2.0);
-            break;
-    }
+    mod = UpdateTypeModifier(defType, gBattleMoves[move].effect, mod);
 
     if (moveType == TYPE_FIRE && gVolatileStructs[battlerDef].tarShot) mod = UQ_4_12(2.0);  // super-effective
 

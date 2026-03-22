@@ -2329,7 +2329,7 @@ const u8 gText_Effect_Two_Hits[]                 = _("Two Hits");
 const u8 gText_Effect_Burn_Hit[]                 = _("Burn");
 const u8 gText_Effect_Poison_Hit[]               = _("Poison");
 const u8 gText_Effect_Paralyze_Hit[]             = _("Paralyze");
-const u8 gText_Effect_Freeze_Hit[]               = _("Freeze");
+const u8 gText_Effect_Frostbite_Hit[]            = _("Frostbite");
 const u8 gText_Effect_Confuse_Hit[]              = _("Confuse");
 
 const u8 gText_Effect_All_Stats_Up[]             = _("All+");

@@ -3678,7 +3678,7 @@ extern const u8 gText_Effect_Two_Hits[];
 extern const u8 gText_Effect_Burn_Hit[];
 extern const u8 gText_Effect_Poison_Hit[];
 extern const u8 gText_Effect_Paralyze_Hit[];
-extern const u8 gText_Effect_Freeze_Hit[];
+extern const u8 gText_Effect_Frostbite_Hit[];
 extern const u8 gText_Effect_Confuse_Hit[];
 //Stat Up/Down
 extern const u8 gText_Effect_All_Stats_Up[];
