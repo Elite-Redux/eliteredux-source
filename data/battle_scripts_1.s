@@ -3315,14 +3315,6 @@ BattleScript_CantMakeAsleep::
 	orhalfword gMoveResultFlags, MOVE_RESULT_FAILED
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectPoisonHit:
-	setmoveeffect MOVE_EFFECT_POISON
-	goto BattleScript_EffectHit
-
-BattleScript_EffectToxicHit:
-	setmoveeffect MOVE_EFFECT_TOXIC
-	goto BattleScript_EffectHit
-
 BattleScript_AbilityDrainsHp::
 	hpfractiontodamage BS_STACK_2, 10
 	copybyte gBattlerAttacker, gStackBattler1
