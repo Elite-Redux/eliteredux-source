@@ -91,7 +91,7 @@ object FileGenerator {
             file.parentFile.mkdirs()
             val generator = GENERATORS[type] ?: error("No generator $type for file $filepath")
             file.writer().use {
-                if (filepath.endsWith(".inc")) {
+                if (filepath.endsWith(".inc") || filepath.endsWith(".s")) {
                     it.appendLine(generator.incHeader)
                 } else {
                     it.appendLine(generator.header)

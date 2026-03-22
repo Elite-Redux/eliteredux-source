@@ -114,7 +114,7 @@ $(eval $(call GENERATE, include/generated/constants/move_effects.h, moveeffects)
 $(eval $(call GENERATE, include/generated/data/battle_moves.h, battlemoves))
 $(eval $(call GENERATE, include/generated/data/all_tutors.h, tutors))
 $(eval $(call GENERATE, asm/generated/macros/move_anim_pointers.inc, moveanims))
-$(eval $(call GENERATE, asm/generated/macros/move_behavior_scripts.inc, movescripts))
+$(eval $(call GENERATE, asm/generated/macros/move_behavior_scripts.s, movescripts))
 
 $(eval $(call GENERATE, include/generated/data/abilities/ability_text.hh, abilitytext))
 

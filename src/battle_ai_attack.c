@@ -198,7 +198,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         AI_CALC_DAMAGE;
         return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_BURN_MOVE(battlerDef));
 
-        CASE_AND_LABEL(EFFECT_FREEZE_HIT)
         CASE_AND_LABEL(EFFECT_FROSTBITE_HIT)
         AI_CALC_DAMAGE;
         return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_FROSTBITE_MOVE(battlerDef));

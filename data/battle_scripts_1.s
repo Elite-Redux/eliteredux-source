@@ -15,13 +15,11 @@
 	.include "asm/macros.inc"
 	.include "asm/macros/battle_script.inc"
 	.include "constants/constants.inc"
-	.include "asm/generated/macros/move_behavior_scripts.inc"
 
 	.section script_data, "aw", %progbits
 
-.align 4
-gBattleScriptsForMoveEffects::
-	movescripttable
+
+.include "asm/generated/macros/move_behavior_scripts.s"
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -115,10 +113,6 @@ BattleScript_SteelBeamSelfDamage::
 	datahpupdate BS_ATTACKER
 	return
 
-BattleScript_EffectFrostbiteHit::
-	setmoveeffect MOVE_EFFECT_FROSTBITE
-	goto BattleScript_EffectHit
-
 BattleScript_FrostbiteTurnDmg::
 	printstring STRINGID_PKMNHURTBYFROSTBITE
 	waitmessage B_WAIT_TIME_LONG
@@ -153,14 +147,6 @@ BattleScript_BerryCureFsbRet::
 	updatestatusicon BS_SCRIPTING
 	removeitem BS_SCRIPTING
 	return
-
-BattleScript_EffectBleedHit::
-	setmoveeffect MOVE_EFFECT_BLEED
-	goto BattleScript_EffectHit
-
-BattleScript_EffectSleepHit::
-	setmoveeffect MOVE_EFFECT_SLEEP
-	goto BattleScript_EffectHit
 
 BattleScript_BleedTurnDmg::
 	printstring STRINGID_PKMNHURTBYBLEED
@@ -3445,17 +3431,9 @@ BattleScript_EffectBurnHit::
 	setmoveeffect MOVE_EFFECT_BURN
 	goto BattleScript_EffectHit
 
-BattleScript_EffectFreezeHit::
-	setmoveeffect MOVE_EFFECT_FREEZE
-	goto BattleScript_EffectHit
-
 BattleScript_EffectParalyzeHit::
 	jumpifability BS_ATTACKER, ABILITY_COLD_PLASMA, BattleScript_EffectBurnHit
 	setmoveeffect MOVE_EFFECT_PARALYSIS
-	goto BattleScript_EffectHit
-
-BattleScript_EffectAttracttHit::
-	setmoveeffect MOVE_EFFECT_ATTRACT
 	goto BattleScript_EffectHit
 	
 BattleScript_MoveEffectAttract::
@@ -3465,10 +3443,6 @@ BattleScript_MoveEffectAttract::
 	updatestatusicon BS_EFFECT_BATTLER
 	waitstate
 	goto BattleScript_MoveEnd
-
-BattleScript_EffectCurseHit::
-	setmoveeffect MOVE_EFFECT_CURSE
-	goto BattleScript_EffectHit
 
 BattleScript_MoveEffectCurse::
 	statusanimation BS_EFFECT_BATTLER
@@ -3982,10 +3956,6 @@ BattleScript_EffectConversionSucceededTrySpeed::
 BattleScript_EffectConversionEnds::
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectFlinchHit::
-	setmoveeffect MOVE_EFFECT_FLINCH
-	goto BattleScript_EffectHit
-
 BattleScript_EffectFlinchWithStatus:
 	setmoveeffect MOVE_EFFECT_FLINCH
 	attackcanceler
@@ -4101,10 +4071,6 @@ BattleScript_ImmunityProtected::
 	call BattleScript_PSNPrevention
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectPayDay::
-	setmoveeffect MOVE_EFFECT_PAYDAY
-	goto BattleScript_EffectHit
-
 BattleScript_EffectAuroraVeil:
 	attackcanceler
 	attackstring
@@ -4142,10 +4108,6 @@ BattleScript_EffectLightScreen::
 	ppreduce
 	setlightscreen
 	goto BattleScript_PrintReflectLightScreenSafeguardString
-
-BattleScript_EffectTriAttack::
-	setmoveeffect MOVE_EFFECT_TRI_ATTACK
-	goto BattleScript_EffectHit
 
 BattleScript_EffectRest::
 	attackcanceler
@@ -4254,10 +4216,6 @@ BattleScript_EffectDragonRage::
 	calculatesetdamage
 	adjustdamage
 	goto BattleScript_HitFromAtkAnimation
-
-BattleScript_EffectTrap::
-	setmoveeffect MOVE_EFFECT_WRAP
-	goto BattleScript_EffectHit
 
 BattleScript_EffectDoubleHit::
 	attackcanceler
@@ -4518,34 +4476,6 @@ BattleScript_LimberProtected::
 	setbyte cMULTISTRING_CHOOSER, B_MSG_ABILITY_PREVENTS_MOVE_STATUS
 	call BattleScript_PRLZPrevention
 	goto BattleScript_MoveEnd
-
-BattleScript_EffectAttackDownHit::
-	setmoveeffect MOVE_EFFECT_ATK_MINUS_1
-	goto BattleScript_EffectHit
-
-BattleScript_EffectDefenseDownHit::
-	setmoveeffect MOVE_EFFECT_DEF_MINUS_1
-	goto BattleScript_EffectHit
-
-BattleScript_EffectSpeedDownHit::
-	setmoveeffect MOVE_EFFECT_SPD_MINUS_1
-	goto BattleScript_EffectHit
-
-BattleScript_EffectSpecialAttackDownHit::
-	setmoveeffect MOVE_EFFECT_SP_ATK_MINUS_1
-	goto BattleScript_EffectHit
-
-BattleScript_EffectSpecialDefenseDownHit::
-	setmoveeffect MOVE_EFFECT_SP_DEF_MINUS_1
-	goto BattleScript_EffectHit
-
-BattleScript_EffectSpecialDefenseDownHit2::
-	setmoveeffect MOVE_EFFECT_SP_DEF_MINUS_2
-	goto BattleScript_EffectHit
-
-BattleScript_EffectAccuracyDownHit::
-	setmoveeffect MOVE_EFFECT_ACC_MINUS_1
-	goto BattleScript_EffectHit
 	
 BattleScript_PowerHerbActivation:
 	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT, NULL
@@ -4651,10 +4581,6 @@ BattleScript_GeomancyTrySpeed::
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_GeomancyEnd::
 	goto BattleScript_MoveEnd
-
-BattleScript_EffectConfuseHit::
-	setmoveeffect MOVE_EFFECT_CONFUSION
-	goto BattleScript_EffectHit
 
 BattleScript_EffectTwineedle::
 	attackcanceler
@@ -5045,10 +4971,6 @@ BattleScript_HealAllPartyStatus::
 	waitstate
 	copyword gCurrentMove, gTempMove
 	return
-
-BattleScript_EffectThief::
-	setmoveeffect MOVE_EFFECT_STEAL_ITEM
-	goto BattleScript_EffectHit
 
 BattleScript_EffectHitPreventEscape:
 	setmoveeffect MOVE_EFFECT_PREVENT_ESCAPE
@@ -5766,22 +5688,6 @@ BattleScript_BlockedByPrimalWeatherRet::
 	call BattleScript_AbilityPopUp
 	checkprimalweather BattleScript_Return
 	return
-
-BattleScript_EffectDefenseUpHit::
-	setmoveeffect MOVE_EFFECT_DEF_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
-	goto BattleScript_EffectHit
-
-BattleScript_EffectAttackUpHit::
-	setmoveeffect MOVE_EFFECT_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
-	goto BattleScript_EffectHit
-
-BattleScript_EffectSpecialAttackUpHit::
-	setmoveeffect MOVE_EFFECT_SP_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
-	goto BattleScript_EffectHit
-
-BattleScript_EffectAllStatsUpHit::
-	setmoveeffect MOVE_EFFECT_ALL_STATS_UP | MOVE_EFFECT_AFFECTS_USER
-	goto BattleScript_EffectHit
 
 BattleScript_EffectBellyDrum::
 	attackcanceler
@@ -6800,18 +6706,6 @@ BattleScript_EffectWaterSport::
 	printfromtable gSportsUsedStringIds
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
-
-BattleScript_EffectPoisonFang::
-	setmoveeffect MOVE_EFFECT_TOXIC
-	goto BattleScript_EffectHit
-
-BattleScript_EffectOverheat::
-	setmoveeffect MOVE_EFFECT_SP_ATK_MINUS_2 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
-	goto BattleScript_EffectHit
-
-BattleScript_EffectHammerArm::
-	setmoveeffect MOVE_EFFECT_SPD_MINUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
-	goto BattleScript_EffectHit
 
 BattleScript_EffectTickle::
 	attackcanceler

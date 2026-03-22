@@ -788,7 +788,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
         case EFFECT_HIT:
         case EFFECT_POISON_HIT:
         case EFFECT_BURN_HIT:
-        case EFFECT_FREEZE_HIT:
         case EFFECT_PARALYZE_HIT:
         case EFFECT_CONFUSE_HIT:
         default:
@@ -2639,7 +2638,6 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
         case EFFECT_HIT:
         case EFFECT_POISON_HIT:
         case EFFECT_BURN_HIT:
-        case EFFECT_FREEZE_HIT:
         case EFFECT_PARALYZE_HIT:
             // case EFFECT_CONFUSE_HIT:
             break;

@@ -5193,8 +5193,8 @@ static void MoveEffectIntoStringVar1(u16 move) {
         case EFFECT_PARALYZE_HIT:
             StringCopy(gStringVar1, gText_Effect_Paralyze_Hit);
             break;
-        case EFFECT_FREEZE_HIT:
-            StringCopy(gStringVar1, gText_Effect_Freeze_Hit);
+        case EFFECT_FROSTBITE_HIT:
+            StringCopy(gStringVar1, gText_Effect_Frostbite_Hit);
             break;
         case EFFECT_CONFUSE_HIT:
             StringCopy(gStringVar1, gText_Effect_Confuse_Hit);
