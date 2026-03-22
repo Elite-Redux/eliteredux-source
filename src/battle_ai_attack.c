@@ -1151,10 +1151,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         // TODO: Electrify
         return AI_SCORE_IMMUNE;
 
-        CASE_AND_LABEL(EFFECT_SCALD)
-        AI_CALC_DAMAGE;
-        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_BURN_MOVE(battlerDef));
-
         CASE_AND_LABEL(EFFECT_REFLECT_TYPE)
         // TODO: Reflect Type
         return AI_SCORE_IMMUNE;
@@ -1579,9 +1575,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         CASE_AND_LABEL(EFFECT_BEAK_BLAST)
         return AI_SCORE_IMMUNE;
 
-        CASE_AND_LABEL(EFFECT_EXCALIBUR)
-        return AI_SCORE_IMMUNE;
-
         CASE_AND_LABEL(EFFECT_EXPANDING_FORCE)
         GOTO(EFFECT_HIT);
 
@@ -1609,9 +1602,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return score + AI_SCORE_RECOIL(battlerAtk, 50, FALSE) + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_FLINCH(battlerDef));
 
         CASE_AND_LABEL(EFFECT_IGNORE_TYPE_IMMUNITY)
-        GOTO(EFFECT_HIT);
-
-        CASE_AND_LABEL(EFFECT_SE_AGAINST_TYPE_HIT)
         GOTO(EFFECT_HIT);
 
         CASE_AND_LABEL(EFFECT_DOUBLE_DMG_IF_STATUS1)
@@ -1742,15 +1732,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
         CASE_AND_LABEL(EFFECT_TIDY_UP)
         return AI_SCORE_CLEAR_HAZARDS(GetBattlerSide(battlerAtk)) + AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_SPEED_UP(battlerAtk, 1);
-
-        CASE_AND_LABEL(EFFECT_ACID)
-        GOTO(EFFECT_SPECIAL_DEFENSE_DOWN_HIT);
-
-        CASE_AND_LABEL(EFFECT_SLUDGE)
-        GOTO(EFFECT_POISON_HIT);
-
-        CASE_AND_LABEL(EFFECT_POISON_GAS)
-        GOTO(EFFECT_POISON_HIT);
 
         CASE_AND_LABEL(EFFECT_PARALYZE_IGNORE_TYPE)
         return AI_SCORE_PARALYSIS_IGNORE_TYPE;

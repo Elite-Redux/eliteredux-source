@@ -4405,15 +4405,6 @@ static void Cmd_moveend(void) {
                 gBattleScripting.moveendState++;
                 break;
             case MOVEEND_DEFROST:  // defrosting check
-                if (gBattleMons[gBattlerTarget].status1 & STATUS1_FREEZE && gBattleMons[gBattlerTarget].hp != 0 && gBattlerAttacker != gBattlerTarget &&
-                    !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && (moveType == TYPE_FIRE || gBattleMoves[gCurrentMove].effect == EFFECT_SCALD)) {
-                    gBattleMons[gBattlerTarget].status1 &= ~(STATUS1_FREEZE);
-                    gActiveBattler = gBattlerTarget;
-                    BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gBattlerTarget].status1);
-                    MarkBattlerForControllerExec(gActiveBattler);
-                    BattleScriptCall(BattleScript_DefrostedViaFireMove);
-                    effect = TRUE;
-                }
                 if (gBattleMons[gBattlerTarget].status1 & STATUS1_FROSTBITE && gBattleMons[gBattlerTarget].hp != 0 && gBattlerAttacker != gBattlerTarget &&
                     gBattleMoves[originallyUsedMove].flags & FLAG_THAW_USER && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) {
                     gBattleMons[gBattlerTarget].status1 &= ~STATUS1_FROSTBITE;
