@@ -1010,7 +1010,7 @@ extern u8 gBattleCommunication[BATTLE_COMMUNICATION_ENTRIES_COUNT];
 extern u8 gBattleOutcome;
 extern struct RoundStruct gRoundStructs[MAX_BATTLERS_COUNT];
 extern struct TurnStruct gTurnStructs[MAX_BATTLERS_COUNT];
-extern u16 gBattleWeather;
+extern WeatherFlag gBattleWeather;
 extern struct WishFutureKnock gWishFutureKnock;
 extern u16 gIntroSlideFlags;
 extern u8 gSentPokesToOpponent[2];

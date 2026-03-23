@@ -26,7 +26,7 @@ int StatusCondition(Status1 status, u8 battler) {
 
 int StatusCondition(Status2 status, u8 battler) { return gBattleMons[battler].status2 & status; }
 
-int WeatherCondition(Weather weather, u8 battler, bool forMove) {
+int WeatherCondition(WeatherFlag weather, u8 battler, bool forMove) {
     if (battler == BATTLER_NONE)
         return IsWeatherActive(weather);
     else if (IsBattlerWeatherAffected(battler, weather))
@@ -230,10 +230,11 @@ u32 CustomMoveDamage<EFFECT_TRUMP_CARD>(CUSTOM_MOVE_DAMAGE_PARAMS) {
     int i = GetBattleMonMoveSlot(&gBattleMons[battlerAtk], move);
     if (i != 4) {
         if (gBattleMons[battlerAtk].pp[i] >= ARRAY_COUNT(sTrumpCardPowerTable))
-            baseDamage = sTrumpCardPowerTable[ARRAY_COUNT(sTrumpCardPowerTable) - 1];
+            return sTrumpCardPowerTable[ARRAY_COUNT(sTrumpCardPowerTable) - 1];
         else
-            baseDamage = sTrumpCardPowerTable[gBattleMons[battlerAtk].pp[i]];
+            return sTrumpCardPowerTable[gBattleMons[battlerAtk].pp[i]];
     }
+    return baseDamage;
 }
 
 #include "generated/data/move_damage_modifiers.hh"

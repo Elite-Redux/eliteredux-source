@@ -47,10 +47,6 @@
 #define TERRAIN_HAS_EFFECT (!IsAbilityOnField(ABILITY_CLUELESS))
 #define ROOM_HAS_EFFECT (!IsAbilityOnField(ABILITY_CLUELESS))
 
-#define BATTLER_NONE 0
-#define BATTLER_ABILITY 1
-#define BATTLER_INNATE 2
-
 #define WEATHER_DURATION 8
 #define WEATHER_DURATION_EXTENDED 12
 #define TERRAIN_DURATION 8
@@ -359,7 +355,7 @@ void BufferStatChange(u8 battlerId, u8 statId, u8 stringId);
 void DoBurmyFormChange(u32 monId);
 bool32 BlocksPrankster(MoveEnum move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget);
 u16 GetUsedHeldItem(u8 battler);
-bool32 IsBattlerWeatherAffected(u8 battlerId, Weather weatherFlags);
+bool32 IsBattlerWeatherAffected(u8 battlerId, WeatherFlag weatherFlags);
 u32 TerrainTypeToFieldStatus(TerrainType type);
 bool8 IsMoveAffectedByParentalBond(MoveEnum move, u8 battlerId);
 u8 GetBattlerBattleMoveTargetFlags(MoveEnum moveId, u8 battler);
@@ -489,7 +485,7 @@ bool32 CanBleed(u8 battlerId);
 int CanInfatuate(u8 battlerAtk, u8 battlerDef);
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
 int IsTerrainActive(int terrainFlag);
-Weather IsWeatherActive(Weather weather);
+WeatherFlag IsWeatherActive(WeatherFlag weather);
 u8 getMonotypeChampType(void);
 int NaturalGiftPriority(ItemEnum item);
 int IsPoisonedForMove(int battler);

@@ -6775,9 +6775,7 @@ static const u8 sTrumpCardPowerTable[] = {200, 80, 60, 50, 40};
 #include "generated/data/item/natural_gift.h"
 
 static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
-    u32 i;
     u16 basePower = gBattleMoves[move].power;
-    u32 weight, speed;
 
     switch (gBattleMoves[move].effect) {
         case EFFECT_FLING: {
@@ -6859,7 +6857,7 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
             break;
     }
 
-    basePower = UpdateBaseDamage(basePower, battlerAtk, battlerDef, move, move);
+    basePower = UpdateBaseDamage(basePower, battlerAtk, battlerDef, move, gBattleMoves[move].effect);
 
     // move-specific base power changes
     switch (move) {
@@ -8601,12 +8599,12 @@ bool32 BlocksPrankster(MoveEnum move, u8 battlerPrankster, u8 battlerDef, bool32
 
 u16 GetUsedHeldItem(u8 battler) { return gBattleStruct->usedHeldItems[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)]; }
 
-Weather IsWeatherActive(Weather weather) {
+WeatherFlag IsWeatherActive(WeatherFlag weather) {
     if (!(gBattleWeather & weather)) return FALSE;
     return WEATHER_HAS_EFFECT;
 }
 
-bool32 IsBattlerWeatherAffected(u8 battlerId, Weather weatherFlags) {
+bool32 IsBattlerWeatherAffected(u8 battlerId, WeatherFlag weatherFlags) {
     if (gBattleWeather & weatherFlags && WEATHER_HAS_EFFECT) {
         // given weather is active -> check if its sun, rain against utility umbrella ( since only 1 weather can be active at once)
         if (gBattleWeather & (WEATHER_SUN_ANY | WEATHER_RAIN_ANY) && GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_UTILITY_UMBRELLA)

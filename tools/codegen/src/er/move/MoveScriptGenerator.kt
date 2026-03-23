@@ -9,7 +9,7 @@ import er.proto.MoveBehaviorConfig.Attack.AttackSecondaryEffect.AttackEffectCase
 import java.io.OutputStreamWriter
 
 private const val BATTLE_SCRIPT_HIT = "BattleScript_EffectHit"
-private const val BATTLE_SCRIPT_ARGUMENT_HIT = "BattleScript_ArgumentHit"
+private const val BATTLE_SCRIPT_ARGUMENT_HIT = "BattleScript_EffectArgumentHit"
 private const val BATTLE_SCRIPT_HIT_RETURN_FOR_EFFECT = "BattleScript_EffectHitUntilArgumentReturn"
 
 object MoveScriptGenerator : Generator {

@@ -3,6 +3,7 @@
 
 #include "constants/item.h"
 #include "constants/item_config.h"
+#include "constants/hold_effects.h"
 
 typedef void (*ItemUseFunc)(u8);
 
