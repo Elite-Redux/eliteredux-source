@@ -1091,9 +1091,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
         case EFFECT_PSYWAVE:
         // case EFFECT_COUNTER:
         // case EFFECT_FLAIL:
-        case EFFECT_RETURN:
-        case EFFECT_PRESENT:
-        case EFFECT_FRUSTRATION:
         // case EFFECT_MIRROR_COAT:
         case EFFECT_SKULL_BASH:
         case EFFECT_SUPERPOWER:
@@ -3353,9 +3350,6 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
 
             IncreaseConfusionScore(battlerAtk, battlerDef, move, &score);
             break;
-        case EFFECT_FURY_CUTTER:
-            if (!isDoubleBattle && AI_DATA->holdEffects[battlerAtk] == HOLD_EFFECT_METRONOME) score += 3;
-            break;
         case EFFECT_ATTRACT:
             if (!isDoubleBattle && BattlerWillFaintFromSecondaryDamage(battlerDef) &&
                 GetWhoStrikesFirst(battlerAtk, battlerDef, TRUE) == 1)  // Target goes first
@@ -4114,7 +4108,6 @@ static s16 AI_Risky(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
         case EFFECT_DESTINY_BOND:
         case EFFECT_SWAGGER:
         case EFFECT_ATTRACT:
-        case EFFECT_PRESENT:
         case EFFECT_ALL_STATS_UP_HIT:
         case EFFECT_BELLY_DRUM:
         case EFFECT_MIRROR_COAT:

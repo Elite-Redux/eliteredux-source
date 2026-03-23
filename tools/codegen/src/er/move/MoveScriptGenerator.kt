@@ -9,6 +9,7 @@ import er.proto.MoveBehaviorConfig.Attack.AttackSecondaryEffect.AttackEffectCase
 import java.io.OutputStreamWriter
 
 private const val BATTLE_SCRIPT_HIT = "BattleScript_EffectHit"
+private const val BATTLE_SCRIPT_ARGUMENT_HIT = "BattleScript_ArgumentHit"
 private const val BATTLE_SCRIPT_HIT_RETURN_FOR_EFFECT = "BattleScript_EffectHitUntilArgumentReturn"
 
 object MoveScriptGenerator : Generator {
@@ -50,8 +51,11 @@ private fun OutputStreamWriter.writeScriptLines(vararg lines: String) =
 private object AttackScriptGenerator {
   private fun hasNoBehavior(config: MoveBehaviorConfig) = config.attack.effectList.isEmpty()
 
-  fun getMoveConfigName(name: String, config: MoveBehaviorConfig): String =
-    if (hasNoBehavior(config)) BATTLE_SCRIPT_HIT else "__BATTLE_SCRIPT_GENERATED_$name"
+  fun getMoveConfigName(name: String, config: MoveBehaviorConfig): String = when {
+    hasNoBehavior(config) -> BATTLE_SCRIPT_HIT
+    config.attack.effectList.map { it.argumentEffect } == listOf(true) -> BATTLE_SCRIPT_ARGUMENT_HIT
+    else ->  "__BATTLE_SCRIPT_GENERATED_$name"
+  }
 
   fun MoveBehaviorConfig.Attack.AttackMoveEffect.fullString() =
     listOfNotNull(
@@ -64,7 +68,7 @@ private object AttackScriptGenerator {
   fun generateForBehavior(name: String, config: MoveBehaviorConfig, writer: OutputStreamWriter) {
     val attackScript = getMoveConfigName(name, config)
 
-    if (attackScript == BATTLE_SCRIPT_HIT) return
+    if (attackScript == BATTLE_SCRIPT_HIT || attackScript == BATTLE_SCRIPT_ARGUMENT_HIT) return
 
     val attack = config.attack
 
@@ -85,6 +89,13 @@ private object AttackScriptGenerator {
           if (effect.chance != 0) writer.writeScriptLines("setmoveeffectchance ${effect.chance}")
           writer.writeScriptLines(
             "setmoveeffect ${effect.moveEffect.fullString()}",
+            "seteffectwithchance",
+          )
+        }
+        AttackEffectCase.ARGUMENT_EFFECT -> {
+          if (effect.chance != 0) writer.writeScriptLines("setmoveeffectchance ${effect.chance}")
+          writer.writeScriptLines(
+            "argumenttomoveeffect",
             "seteffectwithchance",
           )
         }

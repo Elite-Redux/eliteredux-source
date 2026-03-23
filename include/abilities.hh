@@ -162,6 +162,7 @@ typedef enum {
     TERRAIN_PSYCHIC = 1 << 2,
     TERRAIN_MISTY = 1 << 3,
     TERRAIN_TOXIC = 1 << 4,
+    TERRAIN_ANY = TERRAIN_GRASSY | TERRAIN_ELECTRIC | TERRAIN_PSYCHIC | TERRAIN_MISTY | TERRAIN_TOXIC,
 } TerrainType;
 
 typedef struct IntimidateCloneData {

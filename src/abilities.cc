@@ -26,69 +26,9 @@ extern "C" {
 #include "string_util.h"
 }
 
+#include "type_utils.hh"
+
 #define NO_ANNOUNCE 2
-
-static int max(int a, int b) { return a > b ? a : b; }
-
-static int min(int a, int b) { return a < b ? a : b; }
-
-class __EnumHack {
-   public:
-    operator int() const { return 0; }
-    operator u32() const { return 0; }
-    operator AccuracyPriority() const { return ACCURACY_NO_RESULT; }
-    operator MultihitType() const { return MULTIHIT_SINGLE; }
-    operator StatDropBlockType() const { return STAT_DROP_BLOCK_NONE; }
-    operator InfiltrateType() const { return INFILTRATE_NONE; }
-    operator MoveTarget() const { return MOVE_TARGET_SELECTED; }
-};
-
-#define ENUM_OR(enumType) \
-    inline constexpr enumType operator|(enumType a, enumType b) { return static_cast<enumType>(static_cast<u32>(a) | static_cast<u32>(b)); }
-
-#define ENUM_BIT_OPERATIONS(enumType)                                                                                                        \
-    ENUM_OR(enumType)                                                                                                                        \
-    inline constexpr enumType& operator|=(enumType& a, const enumType b) {                                                                   \
-        a = a | b;                                                                                                                           \
-        return a;                                                                                                                            \
-    }                                                                                                                                        \
-    inline constexpr enumType operator&(enumType a, enumType b) { return static_cast<enumType>(static_cast<u32>(a) & static_cast<u32>(b)); } \
-    inline constexpr enumType& operator&=(enumType& a, enumType b) {                                                                         \
-        a = a & b;                                                                                                                           \
-        return a;                                                                                                                            \
-    }                                                                                                                                        \
-    inline constexpr enumType operator~(enumType a) { return static_cast<enumType>(~static_cast<u32>(a)); }
-
-#define ENUM_ADD(enumType)                                  \
-    inline constexpr enumType& operator++(enumType& a) {    \
-        a = static_cast<enumType>(static_cast<int>(a) + 1); \
-        return a;                                           \
-    }
-
-STATIC_ASSERT(sizeof(Status1) == sizeof(u32), BadStatus1Size)
-STATIC_ASSERT(sizeof(Status2) == sizeof(u32), BadStatus2Size)
-
-ENUM_OR(InfiltrateType)
-ENUM_OR(MoveEffectEnum)
-ENUM_OR(TerrainType)
-ENUM_OR(NonStackingState)
-
-ENUM_BIT_OPERATIONS(Status1)
-ENUM_BIT_OPERATIONS(Status2)
-ENUM_BIT_OPERATIONS(Status3)
-ENUM_BIT_OPERATIONS(Status4)
-
-ENUM_ADD(Type)
-
-#define CHECK(effect) \
-    if (!(effect)) return __EnumHack();
-#define CHECK_NOT(effect) \
-    if (effect) return __EnumHack();
-
-#define __COMBINE(val1, val2) val1##val2
-#define COMBINE(val1, val2) __COMBINE(val1, val2)
-
-#define opt [[maybe_unused]]
 
 #define ON_ENTRY opt opt AbilityEnum ability, opt u8 battler
 #define DELEGATE_ENTRY ability, battler
@@ -561,7 +501,7 @@ constexpr Ability Impl<ABILITY_DRIZZLE> = {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
             return TRUE;
-        } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
+        } else if (IsWeatherActive(WEATHER_PRIMAL_ANY)) {
             BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
             return NO_ANNOUNCE;
         }
@@ -1136,7 +1076,7 @@ constexpr Ability Impl<ABILITY_SAND_STREAM> = {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
             return TRUE;
-        } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
+        } else if (IsWeatherActive(WEATHER_PRIMAL_ANY)) {
             BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
             return NO_ANNOUNCE;
         }
@@ -1392,7 +1332,7 @@ constexpr Ability Impl<ABILITY_DROUGHT> = {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
             return TRUE;
-        } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
+        } else if (IsWeatherActive(WEATHER_PRIMAL_ANY)) {
             BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
             return NO_ANNOUNCE;
         }
@@ -1856,7 +1796,7 @@ constexpr Ability Impl<ABILITY_SNOW_WARNING> = {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
             return TRUE;
-        } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
+        } else if (IsWeatherActive(WEATHER_PRIMAL_ANY)) {
             BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
             return NO_ANNOUNCE;
         }
@@ -3373,7 +3313,7 @@ constexpr Ability Impl<ABILITY_SAND_SPIT> = {
         CHECK(ShouldApplyOnHitEffect(battler))
         CHECK_NOT(gBattleWeather & WEATHER_SANDSTORM_ANY)
 
-        if (gBattleWeather & WEATHER_PRIMAL_ANY) {
+        if (IsWeatherActive(WEATHER_PRIMAL_ANY)) {
             BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
             return NO_ANNOUNCE;
         } else if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
@@ -6426,7 +6366,7 @@ constexpr Ability Impl<ABILITY_FREEZING_POINT> = {
 static int CryoProficiencyHail(u8 battler) {
     CHECK(ShouldApplyOnHitEffect(battler))
     CHECK_NOT(gBattleWeather & WEATHER_HAIL_ANY)
-    if (gBattleWeather & WEATHER_PRIMAL_ANY) {
+    if (IsWeatherActive(WEATHER_PRIMAL_ANY)) {
         BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
         return NO_ANNOUNCE;
     } else if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE)) {
@@ -7861,7 +7801,7 @@ constexpr Ability Impl<ABILITY_LOW_VISIBILITY> = {
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
             BattleScriptPushCursorAndCallback(BattleScript_BadOmensActivates);
             return TRUE;
-        } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
+        } else if (IsWeatherActive(WEATHER_PRIMAL_ANY)) {
             BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
             return NO_ANNOUNCE;
         }
@@ -11035,11 +10975,12 @@ constexpr Ability Impl<ABILITY_STRONG_FOUNDATION> = {
 template <>
 constexpr Ability Impl<ABILITY_FOG_MACHINE> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitEffect(battler)) CHECK_NOT(gBattleWeather & WEATHER_FOG_ANY) if (gBattleWeather & WEATHER_PRIMAL_ANY) {
+        CHECK(ShouldApplyOnHitEffect(battler))
+        CHECK_NOT(gBattleWeather & WEATHER_FOG_ANY)
+        if (IsWeatherActive(WEATHER_PRIMAL_ANY)) {
             BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
             return NO_ANNOUNCE;
-        }
-        else if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
+        } else if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
             gBattleScripting.battler = battler;
             BattleScriptCall(BattleScript_FogStartsReturn);
             return TRUE;

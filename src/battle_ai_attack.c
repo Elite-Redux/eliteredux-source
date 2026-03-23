@@ -567,20 +567,8 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         CASE_AND_LABEL(EFFECT_SWAGGER)
         return AI_SCORE_ATTACK_UP(battlerDef, 2) + AI_SCORE_CONFUSION(battlerDef);
 
-        CASE_AND_LABEL(EFFECT_FURY_CUTTER)
-        return AI_SCORE_IMMUNE;
-
         CASE_AND_LABEL(EFFECT_ATTRACT)
         return AI_SCORE_ATTRACT(battlerAtk, battlerDef);
-
-        CASE_AND_LABEL(EFFECT_RETURN)
-        GOTO(EFFECT_HIT);
-
-        CASE_AND_LABEL(EFFECT_PRESENT)
-        return AI_SCORE_IMMUNE;
-
-        CASE_AND_LABEL(EFFECT_FRUSTRATION)
-        return AI_SCORE_IMMUNE;
 
         CASE_AND_LABEL(EFFECT_SAFEGUARD)
         return AI_SCORE_SAFEGUARD;
@@ -935,9 +923,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         AI_CALC_DAMAGE;
         if (gBattleMons[battlerDef].status1 & gBattleMoves[move].argument) score += AI_SCORE_CURE_STATUS(battlerDef);
         return score;
-
-        CASE_AND_LABEL(EFFECT_WRING_OUT)
-        return AI_SCORE_IMMUNE;
 
         CASE_AND_LABEL(EFFECT_HEX)
         GOTO(EFFECT_ARGUMENT_HIT);
@@ -1458,9 +1443,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         GOTO(EFFECT_HIT);
 
         CASE_AND_LABEL(EFFECT_REMOVE_TERRAIN)
-        return AI_SCORE_IMMUNE;
-
-        CASE_AND_LABEL(EFFECT_DYNAMAX_DOUBLE_DMG)
         return AI_SCORE_IMMUNE;
 
         CASE_AND_LABEL(EFFECT_DECORATE)

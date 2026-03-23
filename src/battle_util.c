@@ -56,6 +56,7 @@
 #include "util.h"
 #include "window.h"
 #include "constants/battle_events.h"
+#include "script_conditions.hh"
 
 /*
 NOTE: The data and functions in this file up until (but not including) sSoundMovesTable
@@ -4864,6 +4865,16 @@ int IsTerrainActive(int terrainFlag) {
     return (gFieldStatuses & terrainFlag) != 0;
 }
 
+u32 TerrainTypeToFieldStatus(TerrainType type) {
+    int flag = 0;
+    if (flag & TERRAIN_TOXIC) flag |= STATUS_FIELD_TOXIC_TERRAIN;
+    if (flag & TERRAIN_MISTY) flag |= STATUS_FIELD_MISTY_TERRAIN;
+    if (flag & TERRAIN_GRASSY) flag |= STATUS_FIELD_GRASSY_TERRAIN;
+    if (flag & TERRAIN_ELECTRIC) flag |= STATUS_FIELD_ELECTRIC_TERRAIN;
+    if (flag & TERRAIN_PSYCHIC) flag |= STATUS_FIELD_PSYCHIC_TERRAIN;
+    return flag;
+}
+
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag) {
     if (!IsTerrainActive(terrainFlag)) return FALSE;
     if (gStatuses3[battlerId] & STATUS3_SEMI_INVULNERABLE) return FALSE;
@@ -6778,19 +6789,6 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
                     break;
             }
         } break;
-        case EFFECT_ERUPTION:
-            basePower = gBattleMons[battlerAtk].hp * basePower / gBattleMons[battlerAtk].maxHP;
-            break;
-        case EFFECT_RETURN:
-            basePower = 10 * (gBattleMons[battlerAtk].friendship) / 25;
-            break;
-        case EFFECT_FRUSTRATION:
-            basePower = 10 * (255 - gBattleMons[battlerAtk].friendship) / 25;
-            break;
-        case EFFECT_FURY_CUTTER:
-            REQUIRE(gVolatileStructs[battlerAtk].furyCutterCounter);
-            basePower = basePower << (gVolatileStructs[battlerAtk].furyCutterCounter - 1);
-            break;
         case EFFECT_ROLLOUT:
             REQUIRE(gVolatileStructs[battlerAtk].rolloutCounter)
             basePower = basePower << (gVolatileStructs[battlerAtk].rolloutCounter - 1);
@@ -6798,17 +6796,9 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
         case EFFECT_MAGNITUDE:
             basePower = gBattleStruct->magnitudeBasePower;
             break;
-        case EFFECT_PRESENT:
-            basePower = gBattleStruct->presentBasePower;
-            break;
         case EFFECT_TRIPLE_KICK:
             REQUIRE(gTurnStructs[battlerAtk].multiHitCounter)
             basePower *= 4 - gTurnStructs[battlerAtk].multiHitCounter;
-            break;
-        case EFFECT_REVENGE:
-            if ((gRoundStructs[battlerAtk].physicalDmg && gRoundStructs[battlerAtk].physicalBattlerId == battlerDef) ||
-                (gRoundStructs[battlerAtk].specialDmg && gRoundStructs[battlerAtk].specialBattlerId == battlerDef))
-                basePower *= 2;
             break;
         case EFFECT_WEATHER_BALL:
             if (HasChloroplast(battlerAtk) || HasAuroraBorealis(battlerAtk))
@@ -6832,137 +6822,16 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
         case EFFECT_SMELLINGSALT:
             if (gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS) basePower *= 2;
             break;
-        case EFFECT_WRING_OUT:
-            basePower = 120 * gBattleMons[battlerDef].hp / gBattleMons[battlerDef].maxHP;
-            break;
         case EFFECT_FOCUS_PUNCH:
             if (gRoundStructs[battlerAtk].physicalDmg || gRoundStructs[battlerAtk].specialDmg) basePower = 40;
-            break;
-        case EFFECT_HEX:
-            if (HasAnyStatusOrAbility(battlerDef)) basePower *= 2;
-            break;
-        case EFFECT_INFERNAL_PARADE:
-            if (HasAnyStatusOrAbility(battlerDef)) basePower *= 1.5;
-            break;
-        case EFFECT_CAPTIVATE:
-            if (gBattleMons[battlerDef].status2 & STATUS2_INFATUATION) basePower *= 2;
-            break;
-        case EFFECT_ASSURANCE:
-            if (gRoundStructs[battlerDef].damaged) basePower *= 2;
-            break;
-        case EFFECT_TRUMP_CARD:
-            i = GetBattleMonMoveSlot(&gBattleMons[battlerAtk], move);
-            if (i != 4) {
-                if (gBattleMons[battlerAtk].pp[i] >= ARRAY_COUNT(sTrumpCardPowerTable))
-                    basePower = sTrumpCardPowerTable[ARRAY_COUNT(sTrumpCardPowerTable) - 1];
-                else
-                    basePower = sTrumpCardPowerTable[gBattleMons[battlerAtk].pp[i]];
-            }
-            break;
-        case EFFECT_TERROR_CHARGE:
-            if (gBattleMons[battlerDef].status1 & STATUS1_BLEED) basePower *= 2;
-            break;
-        case EFFECT_ACROBATICS:
-            if (gBattleMons[battlerAtk].item == ITEM_NONE
-                // Edge case, because removal of items happens after damage calculation.
-                || (gTurnStructs[battlerAtk].gemBoost && GetBattlerHoldEffect(battlerAtk, FALSE) == HOLD_EFFECT_GEMS))
-                basePower = basePower * 3 / 2;
-            break;
-        case MOVE_EFFECT_PAYDAY:
-            if (gBattleMons[battlerAtk].species == SPECIES_MEOWTH_PARTNER || gBattleMons[battlerAtk].species == SPECIES_MEOWTH_PARTNER_MEGA) {
-                if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_AMULET_COIN) basePower = 120;
-            }
-            break;
-        case EFFECT_LOW_KICK:
-            weight = GetBattlerWeight(battlerDef);
-            for (i = 0; sWeightToDamageTable[i] != 0xFFFF; i += 2) {
-                if (sWeightToDamageTable[i] > weight) break;
-            }
-            if (sWeightToDamageTable[i] != 0xFFFF)
-                basePower = sWeightToDamageTable[i + 1];
-            else
-                basePower = 120;
-            break;
-        case EFFECT_HEAT_CRASH:
-            weight = GetBattlerWeight(battlerAtk) / GetBattlerWeight(battlerDef);
-            if (weight >= ARRAY_COUNT(sHeatCrashPowerTable))
-                basePower = sHeatCrashPowerTable[ARRAY_COUNT(sHeatCrashPowerTable) - 1];
-            else
-                basePower = sHeatCrashPowerTable[weight];
-            break;
-        case EFFECT_PUNISHMENT:
-            basePower = 60 + (CountBattlerStatIncreases(battlerDef, FALSE) * 20);
-            if (basePower > 200) basePower = 200;
-            break;
-        case EFFECT_LASH_OUT:
-            basePower += CountBattlerStatDecreases(battlerAtk) * 20;
-            if (basePower > 140) basePower = 140;
-            break;
-        case EFFECT_STORED_POWER:
-            basePower += (CountBattlerStatIncreases(battlerAtk, TRUE) * 20);
-            break;
-        case EFFECT_ELECTRO_BALL:
-            speed = GetBattlerTotalSpeedStat(battlerAtk, TOTAL_SPEED_FULL, move) / GetBattlerTotalSpeedStat(battlerDef, TOTAL_SPEED_FULL, move);
-            if (speed >= ARRAY_COUNT(sSpeedDiffPowerTable)) speed = ARRAY_COUNT(sSpeedDiffPowerTable) - 1;
-            basePower = sSpeedDiffPowerTable[speed];
-            break;
-        case EFFECT_GYRO_BALL:
-            basePower =
-                ((25 * GetBattlerTotalSpeedStat(battlerDef, TOTAL_SPEED_FULL, move)) / GetBattlerTotalSpeedStat(battlerAtk, TOTAL_SPEED_FULL, move)) + 1;
-            if (basePower > 150) basePower = 150;
-            break;
-        case EFFECT_ECHOED_VOICE:
-            // gBattleStruct->sameMoveTurns incremented in ppreduce
-            if (gBattleStruct->sameMoveTurns[battlerAtk] != 0) {
-                basePower += (basePower * gBattleStruct->sameMoveTurns[battlerAtk]);
-                if (basePower > 200) basePower = 200;
-            }
-            break;
-        case EFFECT_PAYBACK:
-            if (GetBattlerTurnOrderNum(battlerAtk) > GetBattlerTurnOrderNum(battlerDef) &&
-                (gVolatileStructs[battlerDef].isFirstTurn != 2 || B_PAYBACK_SWITCH_BOOST < GEN_5))
-                basePower *= 2;
-            break;
-        case EFFECT_BOLT_BEAK:
-            if (GetBattlerTurnOrderNum(battlerAtk) < GetBattlerTurnOrderNum(battlerDef)) basePower *= 2;
-            break;
-        case EFFECT_ROUND:
-            if (gChosenMoveByBattler[BATTLE_PARTNER(battlerAtk)] == MOVE_ROUND && !(gAbsentBattlerFlags & 1 << BATTLE_PARTNER(battlerAtk))) basePower *= 2;
-            break;
-        case EFFECT_FUSION_COMBO:
-            if (gBattleMoves[gLastUsedMove].effect == EFFECT_FUSION_COMBO && move != gLastUsedMove) basePower *= 2;
             break;
         case EFFECT_EXPLOSION:
             if (move == MOVE_MISTY_EXPLOSION && GetCurrentTerrain() == STATUS_FIELD_MISTY_TERRAIN && IsBattlerGrounded(battlerAtk))
                 MulModifier(&basePower, UQ_4_12(1.5));
             break;
-        case EFFECT_DYNAMAX_DOUBLE_DMG:
-#ifdef B_DYNAMAX
-            if (IsDynamaxed(battlerDef)) basePower *= 2;
-#endif
-            break;
-#if B_BEAT_UP_DMG >= GEN_5
         case EFFECT_BEAT_UP:
             basePower = CalcBeatUpPower();
             break;
-#endif
-        case EFFECT_GRAV_APPLE:
-            if (IsGravityActive()) MulModifier(&basePower, UQ_4_12(1.5));
-            break;
-        case EFFECT_TERRAIN_PULSE:
-            if ((gFieldStatuses & STATUS_FIELD_TERRAIN_ANY) && IsBattlerGrounded(battlerAtk)) basePower *= 2;
-            break;
-        case EFFECT_RISING_VOLTAGE:
-            if (GetCurrentTerrain() == STATUS_FIELD_ELECTRIC_TERRAIN && IsBattlerGrounded(battlerDef)) basePower *= 2;
-            break;
-        case EFFECT_EXPANDING_FORCE:
-            if (GetCurrentTerrain() == STATUS_FIELD_PSYCHIC_TERRAIN) basePower = 120;
-            break;
-        case EFFECT_MISTY_TERRAIN_BOOST:
-            if (GetCurrentTerrain() == STATUS_FIELD_MISTY_TERRAIN && IsBattlerGrounded(battlerAtk)) basePower = basePower * 13 / 10;
-            break;
-        case EFFECT_ALL_STATS_UP_HIT:
-        case EFFECT_BLEED_HIT:
         case EFFECT_MISC_HIT:
             switch (gBattleMoves[move].argument) {
                 case MISC_EFFECT_FAINTED_MON_BOOST:
@@ -6989,6 +6858,8 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
             }
             break;
     }
+
+    basePower = UpdateBaseDamage(basePower, battlerAtk, battlerDef, move, move);
 
     // move-specific base power changes
     switch (move) {
@@ -8730,12 +8601,12 @@ bool32 BlocksPrankster(MoveEnum move, u8 battlerPrankster, u8 battlerDef, bool32
 
 u16 GetUsedHeldItem(u8 battler) { return gBattleStruct->usedHeldItems[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)]; }
 
-int IsWeatherActive(int weather) {
+Weather IsWeatherActive(Weather weather) {
     if (!(gBattleWeather & weather)) return FALSE;
     return WEATHER_HAS_EFFECT;
 }
 
-bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags) {
+bool32 IsBattlerWeatherAffected(u8 battlerId, Weather weatherFlags) {
     if (gBattleWeather & weatherFlags && WEATHER_HAS_EFFECT) {
         // given weather is active -> check if its sun, rain against utility umbrella ( since only 1 weather can be active at once)
         if (gBattleWeather & (WEATHER_SUN_ANY | WEATHER_RAIN_ANY) && GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_UTILITY_UMBRELLA)

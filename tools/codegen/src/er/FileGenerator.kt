@@ -83,6 +83,7 @@ object FileGenerator {
         "movescripts" to MoveScriptGenerator,
         "movetypemodifiers" to MoveTypeModifierGenerator,
         "recoilfractions" to MoveRecoilGenerator,
+        "movedamage" to MoveDamageGenerator,
     )
 
     @JvmStatic
