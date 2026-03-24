@@ -1,3 +1,4 @@
+#include "script_conditions.hh"
 
 extern "C" {
 #include "global.h"
