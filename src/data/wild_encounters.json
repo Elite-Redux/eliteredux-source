@@ -3351,27 +3351,27 @@
               {
                 "min_level": 38,
                 "max_level": 38,
-                "species": "SPECIES_JAGGED_CHUNGULIS"
+                "species": "SPECIES_IRON_SABER"
               },
               {
                 "min_level": 38,
                 "max_level": 38,
-                "species": "SPECIES_OGERPON_CORNERSTONE_MASK"
+                "species": "SPECIES_CRADILY"
               },
               {
                 "min_level": 36,
                 "max_level": 36,
-                "species": "SPECIES_OGERPON_HEARTHFLAME_MASK"
+                "species": "SPECIES_ARMALDO"
               },
               {
                 "min_level": 36,
                 "max_level": 36,
-                "species": "SPECIES_OGERPON_WELLSPRING_MASK"
+                "species": "SPECIES_AERODACTYL"
               },
               {
                 "min_level": 36,
                 "max_level": 36,
-                "species": "SPECIES_PECHARUNT"
+                "species": "SPECIES_CONKELDURR"
               },
               {
                 "min_level": 36,
@@ -16924,22 +16924,22 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_MUNKIDORI"
+                "species": "SPECIES_PASSIMIAN"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_OKIDOGI"
+                "species": "SPECIES_FURFROU"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_FEZANDIPITI"
+                "species": "SPECIES_PIDGEOT"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_PECHARUNT"
+                "species": "SPECIES_URSARING"
               },
               {
                 "min_level": 5,
@@ -16949,37 +16949,37 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_OGERPON"
+                "species": "SPECIES_PIKACHU"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_OGERPON_HEARTHFLAME_MASK"
+                "species": "SPECIES_ABSOL"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_OGERPON_CORNERSTONE_MASK"
+                "species": "SPECIES_KLAWF"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_OGERPON_WELLSPRING_MASK"
+                "species": "SPECIES_LUDICOLO"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_MUNKIDORI"
+                "species": "SPECIES_PASSIMIAN"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_FEZANDIPITI"
+                "species": "SPECIES_PIDGEOT"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_PECHARUNT"
+                "species": "SPECIES_URSARING"
               }
             ]
           }
