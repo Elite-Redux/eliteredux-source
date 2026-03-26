@@ -9299,7 +9299,7 @@
               {
                 "min_level": 30,
                 "max_level": 40,
-                "species": "SPECIES_CYCLIZAR"
+                "species": "SPECIES_JAGGED_CHUNGULIS"
               },
               {
                 "min_level": 30,
@@ -9373,7 +9373,7 @@
               {
                 "min_level": 42,
                 "max_level": 42,
-                "species": "SPECIES_IRON_EXO"
+                "species": "SPECIES_IRON_SABER"
               },
               {
                 "min_level": 44,
@@ -9428,7 +9428,7 @@
               {
                 "min_level": 35,
                 "max_level": 40,
-                "species": "SPECIES_TERAPAGOS"
+                "species": "SPECIES_LANTURN"
               }
             ]
           },
