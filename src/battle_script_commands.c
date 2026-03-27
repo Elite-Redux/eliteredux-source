@@ -2853,8 +2853,6 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                         gBattleMons[gEffectBattler].status2 |= STATUS2_LOCK_CONFUSE_TURN((Random() & 1) + 2);  // thrash for 2-3 turns
                     }
                     break;
-                case MOVE_EFFECT_SP_ATK_TWO_DOWN:  // Overheat
-                    break;
                 case MOVE_EFFECT_CLEAR_SMOG:
                     for (i = 0; i < NUM_BATTLE_STATS; i++) {
                         if (gBattleMons[gEffectBattler].statStages[i] != 6) break;
