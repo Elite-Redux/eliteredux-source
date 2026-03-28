@@ -2284,6 +2284,7 @@ bool8 IsPreventableSecondaryEffect(u8 moveEffect) {
         case MOVE_EFFECT_PREVENT_ESCAPE:
         case MOVE_EFFECT_NIGHTMARE:
         case MOVE_EFFECT_SYRUP:
+        case MOVE_EFFECT_DRENCH:
             return TRUE;
         default:
             return FALSE;
