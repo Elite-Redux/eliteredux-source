@@ -67,6 +67,14 @@ object GeneratorUtils {
       .configList
   }
 
+  val BATTLE_FRONTIER_SETS by lazy {
+    TextFormat.parse(
+        File("../../proto/BattleFrontierList.textproto").readText(),
+        BattleFrontierList::class.java,
+      )
+      .speciesList
+  }
+
   val CUSTOM_BEHAVIORS by lazy {
     MOVES_LIST.filter { it.hasCustomBehavior() }
       .groupBy { it.customBehavior }
