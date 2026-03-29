@@ -3,9 +3,9 @@ package er.move
 import er.FileGenerator.IND
 import er.Generator
 import er.GeneratorUtils.MOVE_BEHAVIORS
-import er.ScriptConditions.Battler.BATTLER_ATTACKER
-import er.ScriptConditions.Battler.BATTLER_TARGET
-import er.ScriptConditions.ScriptCondition.ConditionCase
+import er.proto.Battler.BATTLER_ATTACKER
+import er.proto.Battler.BATTLER_TARGET
+import er.proto.ScriptCondition.ConditionCase
 import er.proto.MoveBehaviorConfig.Attack.DamageModifier.ModifierCase
 import java.io.OutputStreamWriter
 

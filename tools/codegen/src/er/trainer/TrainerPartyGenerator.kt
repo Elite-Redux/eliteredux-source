@@ -9,7 +9,7 @@ import er.GeneratorUtils.findLearnsetForSpecies
 import er.proto.ItemEnum
 import er.proto.Species.Gender.FEMALE
 import er.proto.TrainerParty.TrainerMon
-import er.proto.TrainerParty.TrainerMon.Nature
+import er.proto.Nature
 import er.proto.Type
 import er.trainer.TrainerPartyGenerator.NatureStat.*
 import java.io.OutputStreamWriter
