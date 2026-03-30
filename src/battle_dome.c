@@ -2314,7 +2314,7 @@ static void InitDomeTrainers(void)
                     if (alreadySelectedMonId == monId
                         || species[0] == gFacilityTrainerMons[monId].species
                         || species[1] == gFacilityTrainerMons[monId].species
-                        || gFacilityTrainerMons[alreadySelectedMonId].itemTableId == gFacilityTrainerMons[monId].itemTableId)
+                        || gFacilityTrainerMons[alreadySelectedMonId].item == gFacilityTrainerMons[monId].item)
                         break;
                 }
             } while (k != j);
@@ -2549,7 +2549,7 @@ static void CreateDomeOpponentMon(u8 monPartyId, u16 tournamentTrainerId, u8 tou
 
     SetMonData(&gEnemyParty[monPartyId], MON_DATA_FRIENDSHIP, &friendship);
     SetMonData(&gEnemyParty[monPartyId], MON_DATA_HELD_ITEM,
-               &gBattleFrontierHeldItems[gFacilityTrainerMons[DOME_MONS[tournamentTrainerId][tournamentMonId]].itemTableId]);
+               &gFacilityTrainerMons[DOME_MONS[tournamentTrainerId][tournamentMonId]].item);
 }
 
 static void CreateDomeOpponentMons(u16 tournamentTrainerId)
@@ -5812,7 +5812,7 @@ static void InitRandomTourneyTreeResults(void)
                     if (alreadySelectedMonId == monId
                         || species[0] == gFacilityTrainerMons[monId].species
                         || species[1] == gFacilityTrainerMons[monId].species
-                        || gFacilityTrainerMons[alreadySelectedMonId].itemTableId == gFacilityTrainerMons[monId].itemTableId)
+                        || gFacilityTrainerMons[alreadySelectedMonId].item == gFacilityTrainerMons[monId].item)
                         break;
                 }
             } while (k != j);

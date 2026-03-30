@@ -41,8 +41,8 @@ extern const u8 MossdeepCity_SpaceCenter_2F_EventScript_MaxieTrainer[];
 extern const u8 MossdeepCity_SpaceCenter_2F_EventScript_CourtneyTrainer[];
 
 // EWRAM vars.
-EWRAM_DATA const struct BattleFrontierTrainer *gFacilityTrainers = NULL;
-EWRAM_DATA const struct FacilityMon *gFacilityTrainerMons = NULL;
+EWRAM_DATA const struct BattleFrontierTrainer* gFacilityTrainers = NULL;
+EWRAM_DATA const struct FacilityMon* gFacilityTrainerMons = NULL;
 
 // IWRAM common
 u16 gFrontierTempParty[MAX_FRONTIER_PARTY_SIZE];
@@ -69,444 +69,15 @@ static void SaveCurrentWinStreak(void);
 static void ValidateApprenticesChecksums(void);
 static void SetNextBattleTentOpponent(void);
 static void CopyEReaderTrainerFarewellMessage(void);
-static void ClearBattleTowerRecord(struct EmeraldBattleTowerRecord *record);
+static void ClearBattleTowerRecord(struct EmeraldBattleTowerRecord* record);
 static void FillTrainerParty(u16 trainerId, u8 firstMonId, u8 monCount);
 static void FillTentTrainerParty_(u16 trainerId, u8 firstMonId, u8 monCount);
 static void FillFactoryFrontierTrainerParty(u16 trainerId, u8 firstMonId);
 static void FillFactoryTentTrainerParty(u16 trainerId, u8 firstMonId);
 static u8 GetFrontierTrainerFixedIvs(u16 trainerId);
 static void FillPartnerParty(u16 trainerId);
-static void SetEReaderTrainerChecksum(struct BattleTowerEReaderTrainer *ereaderTrainer);
+static void SetEReaderTrainerChecksum(struct BattleTowerEReaderTrainer* ereaderTrainer);
 static u8 SetTentPtrsGetLevel(void);
-
-// Const rom data.
-const u16 gBattleFrontierHeldItems[] = {ITEM_NONE,
-                                        ITEM_GUARD_SPEC,
-                                        ITEM_DIRE_HIT,
-                                        ITEM_X_ATTACK,
-                                        ITEM_X_DEFENSE,
-                                        ITEM_X_SPEED,
-                                        ITEM_X_ACCURACY,
-                                        ITEM_X_SP_ATK,
-                                        ITEM_X_SP_DEF,
-                                        ITEM_POKE_DOLL,
-                                        ITEM_FLUFFY_TAIL,
-                                        ITEM_BRIGHT_POWDER,
-                                        ITEM_WHITE_HERB,
-                                        ITEM_MACHO_BRACE,
-                                        ITEM_EXP_SHARE,
-                                        ITEM_QUICK_CLAW,
-                                        ITEM_SOOTHE_BELL,
-                                        ITEM_MENTAL_HERB,
-                                        ITEM_CHOICE_BAND,
-                                        ITEM_KINGS_ROCK,
-                                        ITEM_SILVER_POWDER,
-                                        ITEM_AMULET_COIN,
-                                        ITEM_CLEANSE_TAG,
-                                        ITEM_SMOKE_BALL,
-                                        ITEM_EVERSTONE,
-                                        ITEM_FOCUS_BAND,
-                                        ITEM_LUCKY_EGG,
-                                        ITEM_SCOPE_LENS,
-                                        ITEM_METAL_COAT,
-                                        ITEM_SOFT_SAND,
-                                        ITEM_HARD_STONE,
-                                        ITEM_MIRACLE_SEED,
-                                        ITEM_BLACK_GLASSES,
-                                        ITEM_BLACK_BELT,
-                                        ITEM_MAGNET,
-                                        ITEM_MYSTIC_WATER,
-                                        ITEM_SHARP_BEAK,
-                                        ITEM_POISON_BARB,
-                                        ITEM_NEVER_MELT_ICE,
-                                        ITEM_SPELL_TAG,
-                                        ITEM_TWISTED_SPOON,
-                                        ITEM_CHARCOAL,
-                                        ITEM_DRAGON_FANG,
-                                        ITEM_SILK_SCARF,
-                                        ITEM_LEFTOVERS,
-                                        ITEM_DRAGON_SCALE,
-                                        ITEM_RAZOR_CLAW,
-                                        ITEM_RAZOR_FANG,
-                                        ITEM_SHELL_BELL,
-                                        ITEM_POWER_BRACER,
-                                        ITEM_POWER_BELT,
-                                        ITEM_POWER_LENS,
-                                        ITEM_POWER_BAND,
-                                        ITEM_POWER_ANKLET,
-                                        ITEM_POWER_WEIGHT,
-                                        ITEM_POWER_HERB,
-                                        ITEM_CHOICE_SCARF,
-                                        ITEM_CHOICE_SPECS,
-                                        ITEM_FOCUS_SASH,
-                                        ITEM_WIDE_LENS,
-                                        ITEM_ZOOM_LENS,
-                                        ITEM_METRONOME,
-                                        ITEM_MUSCLE_BAND,
-                                        ITEM_WISE_GLASSES,
-                                        ITEM_EXPERT_BELT,
-                                        ITEM_LIGHT_CLAY,
-                                        ITEM_ICY_ROCK,
-                                        ITEM_SMOOTH_ROCK,
-                                        ITEM_HEAT_ROCK,
-                                        ITEM_DAMP_ROCK,
-                                        ITEM_DESTINY_KNOT,
-                                        ITEM_GRIP_CLAW,
-                                        ITEM_LIFE_ORB,
-                                        ITEM_TOXIC_ORB,
-                                        ITEM_FLAME_ORB,
-                                        ITEM_STICKY_BARB,
-                                        ITEM_BLACK_SLUDGE,
-                                        ITEM_IRON_BALL,
-                                        ITEM_LAGGING_TAIL,
-                                        ITEM_SHED_SHELL,
-                                        ITEM_BIG_ROOT,
-                                        ITEM_EVIOLITE,
-                                        ITEM_FLOAT_STONE,
-                                        ITEM_ROCKY_HELMET,
-                                        ITEM_AIR_BALLOON,
-                                        ITEM_RED_CARD,
-                                        ITEM_RING_TARGET,
-                                        ITEM_BINDING_BAND,
-                                        ITEM_EJECT_BUTTON,
-                                        ITEM_ABSORB_BULB,
-                                        ITEM_CELL_BATTERY,
-                                        ITEM_LUMINOUS_MOSS,
-                                        ITEM_SNOWBALL,
-                                        ITEM_WEAKNESS_POLICY,
-                                        ITEM_ASSAULT_VEST,
-                                        ITEM_SAFETY_GOGGLES,
-                                        ITEM_ADRENALINE_ORB,
-                                        ITEM_TERRAIN_EXTENDER,
-                                        ITEM_PROTECTIVE_PADS,
-                                        ITEM_ELECTRIC_SEED,
-                                        ITEM_PSYCHIC_SEED,
-                                        ITEM_MISTY_SEED,
-                                        ITEM_GRASSY_SEED,
-                                        ITEM_BUG_GEM,
-                                        ITEM_DARK_GEM,
-                                        ITEM_DRAGON_GEM,
-                                        ITEM_ELECTRIC_GEM,
-                                        ITEM_FAIRY_GEM,
-                                        ITEM_FIGHTING_GEM,
-                                        ITEM_FIRE_GEM,
-                                        ITEM_FLYING_GEM,
-                                        ITEM_GHOST_GEM,
-                                        ITEM_GRASS_GEM,
-                                        ITEM_GROUND_GEM,
-                                        ITEM_ICE_GEM,
-                                        ITEM_NORMAL_GEM,
-                                        ITEM_POISON_GEM,
-                                        ITEM_PSYCHIC_GEM,
-                                        ITEM_ROCK_GEM,
-                                        ITEM_STEEL_GEM,
-                                        ITEM_WATER_GEM,
-                                        ITEM_THROAT_SPRAY,
-                                        ITEM_EJECT_PACK,
-                                        ITEM_HEAVY_DUTY_BOOTS,
-                                        ITEM_BLUNDER_POLICY,
-                                        ITEM_ROOM_SERVICE,
-                                        ITEM_UTILITY_UMBRELLA,
-                                        ITEM_RUSTED_SWORD,
-                                        ITEM_RUSTED_SHIELD,
-                                        ITEM_INSECT_PLATE,
-                                        ITEM_DREAD_PLATE,
-                                        ITEM_DRACO_PLATE,
-                                        ITEM_ZAP_PLATE,
-                                        ITEM_PIXIE_PLATE,
-                                        ITEM_FIST_PLATE,
-                                        ITEM_FLAME_PLATE,
-                                        ITEM_SKY_PLATE,
-                                        ITEM_SPOOKY_PLATE,
-                                        ITEM_MEADOW_PLATE,
-                                        ITEM_EARTH_PLATE,
-                                        ITEM_ICICLE_PLATE,
-                                        ITEM_TOXIC_PLATE,
-                                        ITEM_MIND_PLATE,
-                                        ITEM_STONE_PLATE,
-                                        ITEM_IRON_PLATE,
-                                        ITEM_SPLASH_PLATE,
-                                        ITEM_SOUL_DEW,
-                                        ITEM_DEEP_SEA_TOOTH,
-                                        ITEM_DEEP_SEA_SCALE,
-                                        ITEM_LUCKY_PUNCH,
-                                        ITEM_METAL_POWDER,
-                                        ITEM_THICK_CLUB,
-                                        ITEM_LEEK,
-                                        ITEM_LIGHT_BALL,
-                                        ITEM_QUICK_POWDER,
-                                        ITEM_ADAMANT_ORB,
-                                        ITEM_LUSTROUS_ORB,
-                                        ITEM_GRISEOUS_ORB,
-                                        ITEM_DOUSE_DRIVE,
-                                        ITEM_SHOCK_DRIVE,
-                                        ITEM_BURN_DRIVE,
-                                        ITEM_CHILL_DRIVE,
-                                        ITEM_SEA_INCENSE,
-                                        ITEM_LAX_INCENSE,
-                                        ITEM_ODD_INCENSE,
-                                        ITEM_ROCK_INCENSE,
-                                        ITEM_FULL_INCENSE,
-                                        ITEM_WAVE_INCENSE,
-                                        ITEM_ROSE_INCENSE,
-                                        ITEM_LUCK_INCENSE,
-                                        ITEM_PURE_INCENSE,
-                                        ITEM_TRAINING_BAND,
-                                        ITEM_CANDY_BOX,
-                                        ITEM_INFINITE_REPEL,
-                                        ITEM_IRON_PILL,
-                                        ITEM_ABILITY_SHIELD,
-                                        ITEM_CLEAR_AMULET,
-                                        ITEM_MIRROR_HERB,
-                                        ITEM_PUNCHING_GLOVE,
-                                        ITEM_COVERT_CLOAK,
-                                        ITEM_LOADED_DICE,
-                                        ITEM_FAIRY_FEATHER,
-                                        ITEM_FROST_ORB,
-                                        ITEM_TACTICAL_VEST,
-                                        ITEM_BOOSTER_ENERGY,
-                                        ITEM_ABOMASITE,
-                                        ITEM_ABSOLITE,
-                                        ITEM_AERODACTYLITE,
-                                        ITEM_AGGRONITE,
-                                        ITEM_ALAKAZITE,
-                                        ITEM_ALTARIANITE,
-                                        ITEM_AMPHAROSITE,
-                                        ITEM_AUDINITE,
-                                        ITEM_BANETTITE,
-                                        ITEM_BEEDRILLITE,
-                                        ITEM_BLASTOISINITE,
-                                        ITEM_BLAZIKENITE,
-                                        ITEM_CAMERUPTITE,
-                                        ITEM_CHARIZARDITE_X,
-                                        ITEM_CHARIZARDITE_Y,
-                                        ITEM_DIANCITE,
-                                        ITEM_GALLADITE,
-                                        ITEM_GARCHOMPITE,
-                                        ITEM_GARDEVOIRITE,
-                                        ITEM_GENGARITE,
-                                        ITEM_GLALITITE,
-                                        ITEM_GYARADOSITE,
-                                        ITEM_HERACRONITE,
-                                        ITEM_HOUNDOOMINITE,
-                                        ITEM_KANGASKHANITE,
-                                        ITEM_LATIASITE,
-                                        ITEM_LATIOSITE,
-                                        ITEM_LOPUNNITE,
-                                        ITEM_LUCARIONITE,
-                                        ITEM_MANECTITE,
-                                        ITEM_MAWILITE,
-                                        ITEM_MEDICHAMITE,
-                                        ITEM_METAGROSSITE,
-                                        ITEM_MEWTWONITE_X,
-                                        ITEM_MEWTWONITE_Y,
-                                        ITEM_PIDGEOTITE,
-                                        ITEM_PINSIRITE,
-                                        ITEM_SABLENITE,
-                                        ITEM_SALAMENCITE,
-                                        ITEM_SCEPTILITE,
-                                        ITEM_SCIZORITE,
-                                        ITEM_SHARPEDONITE,
-                                        ITEM_SLOWBRONITE,
-                                        ITEM_STEELIXITE,
-                                        ITEM_SWAMPERTITE,
-                                        ITEM_TYRANITARITE,
-                                        ITEM_VENUSAURITE,
-                                        ITEM_MILOTICITE,
-                                        ITEM_RED_ORB,
-                                        ITEM_BLUE_ORB,
-                                        ITEM_FLYGONITE,
-                                        ITEM_BUTTERFRENITE,
-                                        ITEM_LAPRASITE_Y,
-                                        ITEM_MACHAMPITE,
-                                        ITEM_KINGLERITE,
-                                        ITEM_KINGDRANITE,
-                                        ITEM_DEWGONGITE,
-                                        ITEM_HITMONCHANITE,
-                                        ITEM_HITMONLEENITE,
-                                        ITEM_HITMONTOPITE,
-                                        ITEM_CROBATITE,
-                                        ITEM_SKARMORITE,
-                                        ITEM_BRUXISHITE,
-                                        ITEM_TORTERRANITE,
-                                        ITEM_INFERNAPENITE,
-                                        ITEM_EMPOLEONITE,
-                                        ITEM_SHUCKLENITE,
-                                        ITEM_RELICANTHITE,
-                                        ITEM_QUAGSIRENITE,
-                                        ITEM_JELLICENTITE,
-                                        ITEM_TOUCANNONITE,
-                                        ITEM_BRELOOMITE,
-                                        ITEM_SLAKINGITE,
-                                        ITEM_PURPLE_ORB,
-                                        ITEM_SLOWKINGITE,
-                                        ITEM_GYARADOSITE_Y,
-                                        ITEM_HAXORUSITE,
-                                        ITEM_LUXRAYNITE,
-                                        ITEM_GRANBULLITE,
-                                        ITEM_TYPHLOSIONITE,
-                                        ITEM_NIDOQUEENITE,
-                                        ITEM_NIDOKINGITE,
-                                        ITEM_SANDSLASHITE,
-                                        ITEM_MEGANIUMITE,
-                                        ITEM_KROOKODILENITE,
-                                        ITEM_MAGNEZONITE,
-                                        ITEM_SHEDINJITE,
-                                        ITEM_SWALOTITE,
-                                        ITEM_LANTURNITE,
-                                        ITEM_LAPRASITE_X,
-                                        ITEM_KINGAMBITITE_R,
-                                        ITEM_RIBOMBITE,
-                                        ITEM_GARCHOMPITE_R,
-                                        ITEM_SKARMORITE_R,
-                                        ITEM_MACHAMPITE_R,
-                                        ITEM_ALAKAZITE_R,
-                                        ITEM_BEEDRILLITE_R,
-                                        ITEM_HOUNDOOMINITE_R,
-                                        ITEM_FROSLASSITE,
-                                        ITEM_MAWILITE_R,
-                                        ITEM_SABLENITE_R,
-                                        ITEM_URSALUNITE,
-                                        ITEM_ARCANITE_R,
-                                        ITEM_TYRANITARITE_R,
-                                        ITEM_WIGGLYTUFFITE,
-                                        ITEM_TINKATITE,
-                                        ITEM_GYARADEATHITE_X,
-                                        ITEM_GYARADEATHITE_Y,
-                                        ITEM_LUCARIONITE_Z,
-                                        ITEM_AEGISLASHITE_R,
-                                        ITEM_ARBOKITE,
-                                        ITEM_FLYGONITE_R,
-                                        ITEM_EMPOLEONITE_R,
-                                        ITEM_INFERNAPENITE_R,
-                                        ITEM_FROSLASSITE_R,
-                                        ITEM_GLALITITE_R,
-                                        ITEM_RAPIDASHITE_G,
-                                        ITEM_GOLISOPITE,
-                                        ITEM_HYDREIGONITE_R,
-                                        ITEM_TORTERRANITE_R,
-                                        ITEM_RAPIDASHITE,
-                                        ITEM_CORMOTHITE,
-                                        ITEM_POPCORMITE,
-                                        ITEM_REUNICLUSITE_R,
-                                        ITEM_TOXTRICITITE_R,
-                                        ITEM_ORICORIONITE,
-                                        ITEM_TSAREENITE_R,
-                                        ITEM_CHIEN_PAOITE,
-                                        ITEM_DRACOVISHITE,
-                                        ITEM_MAWILITE_R_B,
-                                        ITEM_RIBOMBITE_R,
-                                        ITEM_WEAVILEITE_R,
-                                        ITEM_FLYGONITE_R_B,
-                                        ITEM_SNORLAX_ORB,
-                                        ITEM_VICTINI_ORB,
-                                        ITEM_WIGGLITUFF_ORB,
-                                        ITEM_FAB_MAIL,
-                                        ITEM_RETRO_MAIL,
-                                        ITEM_BUG_MEMORY,
-                                        ITEM_DARK_MEMORY,
-                                        ITEM_DRAGON_MEMORY,
-                                        ITEM_ELECTRIC_MEMORY,
-                                        ITEM_FAIRY_MEMORY,
-                                        ITEM_FIGHTING_MEMORY,
-                                        ITEM_FIRE_MEMORY,
-                                        ITEM_FLYING_MEMORY,
-                                        ITEM_GHOST_MEMORY,
-                                        ITEM_GRASS_MEMORY,
-                                        ITEM_GROUND_MEMORY,
-                                        ITEM_ICE_MEMORY,
-                                        ITEM_POISON_MEMORY,
-                                        ITEM_PSYCHIC_MEMORY,
-                                        ITEM_ROCK_MEMORY,
-                                        ITEM_STEEL_MEMORY,
-                                        ITEM_WATER_MEMORY,
-                                        ITEM_OAKS_PARCEL,
-                                        ITEM_POKE_FLUTE,
-                                        ITEM_SECRET_KEY,
-                                        ITEM_BIKE_VOUCHER,
-                                        ITEM_GOLD_TEETH,
-                                        ITEM_CARD_KEY,
-                                        ITEM_LIFT_KEY,
-                                        ITEM_SILPH_SCOPE,
-                                        ITEM_BICYCLE,
-                                        ITEM_TOWN_MAP,
-                                        ITEM_VS_SEEKER,
-                                        ITEM_FAME_CHECKER,
-                                        ITEM_TM_CASE,
-                                        ITEM_BERRY_POUCH,
-                                        ITEM_TEACHY_TV,
-                                        ITEM_TRI_PASS,
-                                        ITEM_RAINBOW_PASS,
-                                        ITEM_TEA,
-                                        ITEM_RUBY,
-                                        ITEM_SAPPHIRE,
-                                        ITEM_CHERI_BERRY,
-                                        ITEM_CHESTO_BERRY,
-                                        ITEM_PECHA_BERRY,
-                                        ITEM_RAWST_BERRY,
-                                        ITEM_ASPEAR_BERRY,
-                                        ITEM_LEPPA_BERRY,
-                                        ITEM_ORAN_BERRY,
-                                        ITEM_PERSIM_BERRY,
-                                        ITEM_LUM_BERRY,
-                                        ITEM_SITRUS_BERRY,
-                                        ITEM_FIGY_BERRY,
-                                        ITEM_WIKI_BERRY,
-                                        ITEM_MAGO_BERRY,
-                                        ITEM_AGUAV_BERRY,
-                                        ITEM_IAPAPA_BERRY,
-                                        ITEM_RAZZ_BERRY,
-                                        ITEM_BLUK_BERRY,
-                                        ITEM_NANAB_BERRY,
-                                        ITEM_WEPEAR_BERRY,
-                                        ITEM_PINAP_BERRY,
-                                        ITEM_POMEG_BERRY,
-                                        ITEM_KELPSY_BERRY,
-                                        ITEM_QUALOT_BERRY,
-                                        ITEM_HONDEW_BERRY,
-                                        ITEM_GREPA_BERRY,
-                                        ITEM_TAMATO_BERRY,
-                                        ITEM_CORNN_BERRY,
-                                        ITEM_MAGOST_BERRY,
-                                        ITEM_RABUTA_BERRY,
-                                        ITEM_NOMEL_BERRY,
-                                        ITEM_SPELON_BERRY,
-                                        ITEM_PAMTRE_BERRY,
-                                        ITEM_WATMEL_BERRY,
-                                        ITEM_DURIN_BERRY,
-                                        ITEM_BELUE_BERRY,
-                                        ITEM_OCCA_BERRY,
-                                        ITEM_PASSHO_BERRY,
-                                        ITEM_WACAN_BERRY,
-                                        ITEM_RINDO_BERRY,
-                                        ITEM_YACHE_BERRY,
-                                        ITEM_CHOPLE_BERRY,
-                                        ITEM_KEBIA_BERRY,
-                                        ITEM_SHUCA_BERRY,
-                                        ITEM_COBA_BERRY,
-                                        ITEM_PAYAPA_BERRY,
-                                        ITEM_TANGA_BERRY,
-                                        ITEM_CHARTI_BERRY,
-                                        ITEM_KASIB_BERRY,
-                                        ITEM_HABAN_BERRY,
-                                        ITEM_COLBUR_BERRY,
-                                        ITEM_BABIRI_BERRY,
-                                        ITEM_CHILAN_BERRY,
-                                        ITEM_ROSELI_BERRY,
-                                        ITEM_LIECHI_BERRY,
-                                        ITEM_GANLON_BERRY,
-                                        ITEM_SALAC_BERRY,
-                                        ITEM_PETAYA_BERRY,
-                                        ITEM_APICOT_BERRY,
-                                        ITEM_LANSAT_BERRY,
-                                        ITEM_STARF_BERRY,
-                                        ITEM_MICLE_BERRY,
-                                        ITEM_CUSTAP_BERRY,
-                                        ITEM_JABOCA_BERRY,
-                                        ITEM_ROWAP_BERRY,
-                                        ITEM_KEE_BERRY,
-                                        ITEM_MARANGA_BERRY,
-                                        ITEM_ENIGMA_BERRY};
 
 #include "data/battle_frontier/battle_frontier_trainer_mons.h"
 #include "data/battle_frontier/battle_frontier_trainers.h"
@@ -564,57 +135,61 @@ const u8 gTowerFemaleFacilityClasses[20] = {FACILITY_CLASS_AROMA_LADY,
                                             FACILITY_CLASS_PKMN_RANGER_F,
                                             FACILITY_CLASS_LASS};
 
-const u16 gTowerMaleTrainerGfxIds[30] = {OBJ_EVENT_GFX_HIKER,
-                                         OBJ_EVENT_GFX_TUBER_M,
-                                         OBJ_EVENT_GFX_MAN_3,
-                                         OBJ_EVENT_GFX_RICH_BOY,
-                                         OBJ_EVENT_GFX_MANIAC,
-                                         OBJ_EVENT_GFX_RUNNING_TRIATHLETE_M,
-                                         OBJ_EVENT_GFX_BLACK_BELT,
-                                         OBJ_EVENT_GFX_MAN_5,
-                                         OBJ_EVENT_GFX_MAN_5,
-                                         OBJ_EVENT_GFX_CAMPER,
-                                         OBJ_EVENT_GFX_MANIAC,
-                                         OBJ_EVENT_GFX_PSYCHIC_M,
-                                         OBJ_EVENT_GFX_GENTLEMAN,
-                                         OBJ_EVENT_GFX_SCHOOL_KID_M,
-                                         OBJ_EVENT_GFX_POKEFAN_M,
-                                         OBJ_EVENT_GFX_EXPERT_M,
-                                         OBJ_EVENT_GFX_YOUNGSTER,
-                                         OBJ_EVENT_GFX_FISHERMAN,
-                                         OBJ_EVENT_GFX_CYCLING_TRIATHLETE_M,
-                                         OBJ_EVENT_GFX_RUNNING_TRIATHLETE_M,
-                                         OBJ_EVENT_GFX_RUNNING_TRIATHLETE_M,
-                                         OBJ_EVENT_GFX_MAN_3,
-                                         OBJ_EVENT_GFX_MAN_5,
-                                         OBJ_EVENT_GFX_NINJA_BOY,
-                                         OBJ_EVENT_GFX_SAILOR,
-                                         OBJ_EVENT_GFX_MANIAC,
-                                         OBJ_EVENT_GFX_MAN_4,
-                                         OBJ_EVENT_GFX_CAMPER,
-                                         OBJ_EVENT_GFX_BUG_CATCHER,
-                                         OBJ_EVENT_GFX_HIKER};
+const u16 gTowerMaleTrainerGfxIds[30] = {
+    OBJ_EVENT_GFX_HIKER,
+    OBJ_EVENT_GFX_TUBER_M,
+    OBJ_EVENT_GFX_MAN_3,
+    OBJ_EVENT_GFX_RICH_BOY,
+    OBJ_EVENT_GFX_MANIAC,
+    OBJ_EVENT_GFX_RUNNING_TRIATHLETE_M,
+    OBJ_EVENT_GFX_BLACK_BELT,
+    OBJ_EVENT_GFX_MAN_5,
+    OBJ_EVENT_GFX_MAN_5,
+    OBJ_EVENT_GFX_CAMPER,
+    OBJ_EVENT_GFX_MANIAC,
+    OBJ_EVENT_GFX_PSYCHIC_M,
+    OBJ_EVENT_GFX_GENTLEMAN,
+    OBJ_EVENT_GFX_SCHOOL_KID_M,
+    OBJ_EVENT_GFX_POKEFAN_M,
+    OBJ_EVENT_GFX_EXPERT_M,
+    OBJ_EVENT_GFX_YOUNGSTER,
+    OBJ_EVENT_GFX_FISHERMAN,
+    OBJ_EVENT_GFX_CYCLING_TRIATHLETE_M,
+    OBJ_EVENT_GFX_RUNNING_TRIATHLETE_M,
+    OBJ_EVENT_GFX_RUNNING_TRIATHLETE_M,
+    OBJ_EVENT_GFX_MAN_3,
+    OBJ_EVENT_GFX_MAN_5,
+    OBJ_EVENT_GFX_NINJA_BOY,
+    OBJ_EVENT_GFX_SAILOR,
+    OBJ_EVENT_GFX_MANIAC,
+    OBJ_EVENT_GFX_MAN_4,
+    OBJ_EVENT_GFX_CAMPER,
+    OBJ_EVENT_GFX_BUG_CATCHER,
+    OBJ_EVENT_GFX_HIKER,
+};
 
-const u16 gTowerFemaleTrainerGfxIds[20] = {OBJ_EVENT_GFX_WOMAN_2,
-                                           OBJ_EVENT_GFX_TUBER_F,
-                                           OBJ_EVENT_GFX_WOMAN_5,
-                                           OBJ_EVENT_GFX_HEX_MANIAC,
-                                           OBJ_EVENT_GFX_WOMAN_2,
-                                           OBJ_EVENT_GFX_BEAUTY,
-                                           OBJ_EVENT_GFX_LASS,
-                                           OBJ_EVENT_GFX_GIRL_3,
-                                           OBJ_EVENT_GFX_POKEFAN_F,
-                                           OBJ_EVENT_GFX_EXPERT_F,
-                                           OBJ_EVENT_GFX_CYCLING_TRIATHLETE_F,
-                                           OBJ_EVENT_GFX_RUNNING_TRIATHLETE_F,
-                                           OBJ_EVENT_GFX_RUNNING_TRIATHLETE_F,
-                                           OBJ_EVENT_GFX_GIRL_3,
-                                           OBJ_EVENT_GFX_WOMAN_5,
-                                           OBJ_EVENT_GFX_RUNNING_TRIATHLETE_F,
-                                           OBJ_EVENT_GFX_PICNICKER,
-                                           OBJ_EVENT_GFX_WOMAN_2,
-                                           OBJ_EVENT_GFX_PICNICKER,
-                                           OBJ_EVENT_GFX_LASS};
+const u16 gTowerFemaleTrainerGfxIds[20] = {
+    OBJ_EVENT_GFX_WOMAN_2,
+    OBJ_EVENT_GFX_TUBER_F,
+    OBJ_EVENT_GFX_WOMAN_5,
+    OBJ_EVENT_GFX_HEX_MANIAC,
+    OBJ_EVENT_GFX_WOMAN_2,
+    OBJ_EVENT_GFX_BEAUTY,
+    OBJ_EVENT_GFX_LASS,
+    OBJ_EVENT_GFX_GIRL_3,
+    OBJ_EVENT_GFX_POKEFAN_F,
+    OBJ_EVENT_GFX_EXPERT_F,
+    OBJ_EVENT_GFX_CYCLING_TRIATHLETE_F,
+    OBJ_EVENT_GFX_RUNNING_TRIATHLETE_F,
+    OBJ_EVENT_GFX_RUNNING_TRIATHLETE_F,
+    OBJ_EVENT_GFX_GIRL_3,
+    OBJ_EVENT_GFX_WOMAN_5,
+    OBJ_EVENT_GFX_RUNNING_TRIATHLETE_F,
+    OBJ_EVENT_GFX_PICNICKER,
+    OBJ_EVENT_GFX_WOMAN_2,
+    OBJ_EVENT_GFX_PICNICKER,
+    OBJ_EVENT_GFX_LASS,
+};
 
 // Excludes the unused RS_FACILITY_CLASS_BOARDER_1 and _2
 static const u8 sRubyFacilityClassToEmerald[RS_FACILITY_CLASSES_COUNT - 2][2] = {
@@ -700,208 +275,212 @@ static const u8 sRubyFacilityClassToEmerald[RS_FACILITY_CLASSES_COUNT - 2][2] = 
         BattleFrontier_BattleTowerMultiPartnerRoom_Text_##name##Mon2Ask, BattleFrontier_BattleTowerMultiPartnerRoom_Text_##name##Accept, \
         BattleFrontier_BattleTowerMultiPartnerRoom_Text_##name##Reject
 
-static const u8 *const sPartnerApprenticeTexts1[] = {PARTNER_TEXTS(Apprentice1)};
+static const u8* const sPartnerApprenticeTexts1[] = {PARTNER_TEXTS(Apprentice1)};
 
-static const u8 *const sPartnerApprenticeTexts2[] = {PARTNER_TEXTS(Apprentice2)};
+static const u8* const sPartnerApprenticeTexts2[] = {PARTNER_TEXTS(Apprentice2)};
 
-static const u8 *const sPartnerApprenticeTexts3[] = {PARTNER_TEXTS(Apprentice3)};
+static const u8* const sPartnerApprenticeTexts3[] = {PARTNER_TEXTS(Apprentice3)};
 
-static const u8 *const sPartnerApprenticeTexts4[] = {PARTNER_TEXTS(Apprentice4)};
+static const u8* const sPartnerApprenticeTexts4[] = {PARTNER_TEXTS(Apprentice4)};
 
-static const u8 *const sPartnerApprenticeTexts5[] = {PARTNER_TEXTS(Apprentice5)};
+static const u8* const sPartnerApprenticeTexts5[] = {PARTNER_TEXTS(Apprentice5)};
 
-static const u8 *const sPartnerApprenticeTexts6[] = {PARTNER_TEXTS(Apprentice6)};
+static const u8* const sPartnerApprenticeTexts6[] = {PARTNER_TEXTS(Apprentice6)};
 
-static const u8 *const sPartnerApprenticeTexts7[] = {PARTNER_TEXTS(Apprentice7)};
+static const u8* const sPartnerApprenticeTexts7[] = {PARTNER_TEXTS(Apprentice7)};
 
-static const u8 *const sPartnerApprenticeTexts8[] = {PARTNER_TEXTS(Apprentice8)};
+static const u8* const sPartnerApprenticeTexts8[] = {PARTNER_TEXTS(Apprentice8)};
 
-static const u8 *const sPartnerApprenticeTexts9[] = {PARTNER_TEXTS(Apprentice9)};
+static const u8* const sPartnerApprenticeTexts9[] = {PARTNER_TEXTS(Apprentice9)};
 
-static const u8 *const sPartnerApprenticeTexts10[] = {PARTNER_TEXTS(Apprentice10)};
+static const u8* const sPartnerApprenticeTexts10[] = {PARTNER_TEXTS(Apprentice10)};
 
-static const u8 *const sPartnerApprenticeTexts11[] = {PARTNER_TEXTS(Apprentice11)};
+static const u8* const sPartnerApprenticeTexts11[] = {PARTNER_TEXTS(Apprentice11)};
 
-static const u8 *const sPartnerApprenticeTexts12[] = {PARTNER_TEXTS(Apprentice12)};
+static const u8* const sPartnerApprenticeTexts12[] = {PARTNER_TEXTS(Apprentice12)};
 
-static const u8 *const sPartnerApprenticeTexts13[] = {PARTNER_TEXTS(Apprentice13)};
+static const u8* const sPartnerApprenticeTexts13[] = {PARTNER_TEXTS(Apprentice13)};
 
-static const u8 *const sPartnerApprenticeTexts14[] = {PARTNER_TEXTS(Apprentice14)};
+static const u8* const sPartnerApprenticeTexts14[] = {PARTNER_TEXTS(Apprentice14)};
 
-static const u8 *const sPartnerApprenticeTexts15[] = {PARTNER_TEXTS(Apprentice15)};
+static const u8* const sPartnerApprenticeTexts15[] = {PARTNER_TEXTS(Apprentice15)};
 
-static const u8 *const sPartnerApprenticeTexts16[] = {PARTNER_TEXTS(Apprentice16)};
+static const u8* const sPartnerApprenticeTexts16[] = {PARTNER_TEXTS(Apprentice16)};
 
-static const u8 *const sPartnerTextsLass[] = {PARTNER_TEXTS(Lass)};
+static const u8* const sPartnerTextsLass[] = {PARTNER_TEXTS(Lass)};
 
-static const u8 *const sPartnerTextsYoungster[] = {PARTNER_TEXTS(Youngster)};
+static const u8* const sPartnerTextsYoungster[] = {PARTNER_TEXTS(Youngster)};
 
-static const u8 *const sPartnerTextsHiker[] = {PARTNER_TEXTS(Hiker)};
+static const u8* const sPartnerTextsHiker[] = {PARTNER_TEXTS(Hiker)};
 
-static const u8 *const sPartnerTextsBeauty[] = {PARTNER_TEXTS(Beauty)};
+static const u8* const sPartnerTextsBeauty[] = {PARTNER_TEXTS(Beauty)};
 
-static const u8 *const sPartnerTextsFisherman[] = {PARTNER_TEXTS(Fisherman)};
+static const u8* const sPartnerTextsFisherman[] = {PARTNER_TEXTS(Fisherman)};
 
-static const u8 *const sPartnerTextsLady[] = {PARTNER_TEXTS(Lady)};
+static const u8* const sPartnerTextsLady[] = {PARTNER_TEXTS(Lady)};
 
-static const u8 *const sPartnerTextsCyclingTriathleteF[] = {PARTNER_TEXTS(CyclingTriathleteF)};
+static const u8* const sPartnerTextsCyclingTriathleteF[] = {PARTNER_TEXTS(CyclingTriathleteF)};
 
-static const u8 *const sPartnerTextsBugCatcher[] = {PARTNER_TEXTS(BugCatcher)};
+static const u8* const sPartnerTextsBugCatcher[] = {PARTNER_TEXTS(BugCatcher)};
 
-static const u8 *const sPartnerTextsSchoolKidM[] = {PARTNER_TEXTS(SchoolKidM)};
+static const u8* const sPartnerTextsSchoolKidM[] = {PARTNER_TEXTS(SchoolKidM)};
 
-static const u8 *const sPartnerTextsRichBoy[] = {PARTNER_TEXTS(RichBoy)};
+static const u8* const sPartnerTextsRichBoy[] = {PARTNER_TEXTS(RichBoy)};
 
-static const u8 *const sPartnerTextsBlackBelt[] = {PARTNER_TEXTS(BlackBelt)};
+static const u8* const sPartnerTextsBlackBelt[] = {PARTNER_TEXTS(BlackBelt)};
 
-static const u8 *const sPartnerTextsTuberF[] = {PARTNER_TEXTS(TuberF)};
+static const u8* const sPartnerTextsTuberF[] = {PARTNER_TEXTS(TuberF)};
 
-static const u8 *const sPartnerTextsHexManiac[] = {PARTNER_TEXTS(HexManiac)};
+static const u8* const sPartnerTextsHexManiac[] = {PARTNER_TEXTS(HexManiac)};
 
-static const u8 *const sPartnerTextsPkmnBreederM[] = {PARTNER_TEXTS(PkmnBreederM)};
+static const u8* const sPartnerTextsPkmnBreederM[] = {PARTNER_TEXTS(PkmnBreederM)};
 
-static const u8 *const sPartnerTextsRunningTriathleteF[] = {PARTNER_TEXTS(RunningTriathleteF)};
+static const u8* const sPartnerTextsRunningTriathleteF[] = {PARTNER_TEXTS(RunningTriathleteF)};
 
-static const u8 *const sPartnerTextsRunningTriathleteM[] = {PARTNER_TEXTS(RunningTriathleteM)};
+static const u8* const sPartnerTextsRunningTriathleteM[] = {PARTNER_TEXTS(RunningTriathleteM)};
 
-static const u8 *const sPartnerTextsBattleGirl[] = {PARTNER_TEXTS(BattleGirl)};
+static const u8* const sPartnerTextsBattleGirl[] = {PARTNER_TEXTS(BattleGirl)};
 
-static const u8 *const sPartnerTextsCyclingTriathleteM[] = {PARTNER_TEXTS(CyclingTriathleteM)};
+static const u8* const sPartnerTextsCyclingTriathleteM[] = {PARTNER_TEXTS(CyclingTriathleteM)};
 
-static const u8 *const sPartnerTextsTuberM[] = {PARTNER_TEXTS(TuberM)};
+static const u8* const sPartnerTextsTuberM[] = {PARTNER_TEXTS(TuberM)};
 
-static const u8 *const sPartnerTextsGuitarist[] = {PARTNER_TEXTS(Guitarist)};
+static const u8* const sPartnerTextsGuitarist[] = {PARTNER_TEXTS(Guitarist)};
 
-static const u8 *const sPartnerTextsGentleman[] = {PARTNER_TEXTS(Gentleman)};
+static const u8* const sPartnerTextsGentleman[] = {PARTNER_TEXTS(Gentleman)};
 
-static const u8 *const sPartnerTextsPokefanM[] = {PARTNER_TEXTS(PokefanM)};
+static const u8* const sPartnerTextsPokefanM[] = {PARTNER_TEXTS(PokefanM)};
 
-static const u8 *const sPartnerTextsExpertM[] = {PARTNER_TEXTS(ExpertM)};
+static const u8* const sPartnerTextsExpertM[] = {PARTNER_TEXTS(ExpertM)};
 
-static const u8 *const sPartnerTextsExpertF[] = {PARTNER_TEXTS(ExpertF)};
+static const u8* const sPartnerTextsExpertF[] = {PARTNER_TEXTS(ExpertF)};
 
-static const u8 *const sPartnerTextsDragonTamer[] = {PARTNER_TEXTS(DragonTamer)};
+static const u8* const sPartnerTextsDragonTamer[] = {PARTNER_TEXTS(DragonTamer)};
 
-static const u8 *const sPartnerTextsBirdKeeper[] = {PARTNER_TEXTS(BirdKeeper)};
+static const u8* const sPartnerTextsBirdKeeper[] = {PARTNER_TEXTS(BirdKeeper)};
 
-static const u8 *const sPartnerTextsNinjaBoy[] = {PARTNER_TEXTS(NinjaBoy)};
+static const u8* const sPartnerTextsNinjaBoy[] = {PARTNER_TEXTS(NinjaBoy)};
 
-static const u8 *const sPartnerTextsParasolLady[] = {PARTNER_TEXTS(ParasolLady)};
+static const u8* const sPartnerTextsParasolLady[] = {PARTNER_TEXTS(ParasolLady)};
 
-static const u8 *const sPartnerTextsBugManiac[] = {PARTNER_TEXTS(BugManiac)};
+static const u8* const sPartnerTextsBugManiac[] = {PARTNER_TEXTS(BugManiac)};
 
-static const u8 *const sPartnerTextsSailor[] = {PARTNER_TEXTS(Sailor)};
+static const u8* const sPartnerTextsSailor[] = {PARTNER_TEXTS(Sailor)};
 
-static const u8 *const sPartnerTextsCollector[] = {PARTNER_TEXTS(Collector)};
+static const u8* const sPartnerTextsCollector[] = {PARTNER_TEXTS(Collector)};
 
-static const u8 *const sPartnerTextsPkmnRangerM[] = {PARTNER_TEXTS(PkmnRangerM)};
+static const u8* const sPartnerTextsPkmnRangerM[] = {PARTNER_TEXTS(PkmnRangerM)};
 
-static const u8 *const sPartnerTextsPkmnRangerF[] = {PARTNER_TEXTS(PkmnRangerF)};
+static const u8* const sPartnerTextsPkmnRangerF[] = {PARTNER_TEXTS(PkmnRangerF)};
 
-static const u8 *const sPartnerTextsAromaLady[] = {PARTNER_TEXTS(AromaLady)};
+static const u8* const sPartnerTextsAromaLady[] = {PARTNER_TEXTS(AromaLady)};
 
-static const u8 *const sPartnerTextsRuinManiac[] = {PARTNER_TEXTS(RuinManiac)};
+static const u8* const sPartnerTextsRuinManiac[] = {PARTNER_TEXTS(RuinManiac)};
 
-static const u8 *const sPartnerTextsCoolTrainerM[] = {PARTNER_TEXTS(CoolTrainerM)};
+static const u8* const sPartnerTextsCoolTrainerM[] = {PARTNER_TEXTS(CoolTrainerM)};
 
-static const u8 *const sPartnerTextsCoolTrainerF[] = {PARTNER_TEXTS(CoolTrainerF)};
+static const u8* const sPartnerTextsCoolTrainerF[] = {PARTNER_TEXTS(CoolTrainerF)};
 
-static const u8 *const sPartnerTextsPokemaniac[] = {PARTNER_TEXTS(Pokemaniac)};
+static const u8* const sPartnerTextsPokemaniac[] = {PARTNER_TEXTS(Pokemaniac)};
 
-static const u8 *const sPartnerTextsKindler[] = {PARTNER_TEXTS(Kindler)};
+static const u8* const sPartnerTextsKindler[] = {PARTNER_TEXTS(Kindler)};
 
-static const u8 *const sPartnerTextsCamper[] = {PARTNER_TEXTS(Camper)};
+static const u8* const sPartnerTextsCamper[] = {PARTNER_TEXTS(Camper)};
 
-static const u8 *const sPartnerTextsPicnicker[] = {PARTNER_TEXTS(Picnicker)};
+static const u8* const sPartnerTextsPicnicker[] = {PARTNER_TEXTS(Picnicker)};
 
-static const u8 *const sPartnerTextsPsychicM[] = {PARTNER_TEXTS(PsychicM)};
+static const u8* const sPartnerTextsPsychicM[] = {PARTNER_TEXTS(PsychicM)};
 
-static const u8 *const sPartnerTextsPsychicF[] = {PARTNER_TEXTS(PsychicF)};
+static const u8* const sPartnerTextsPsychicF[] = {PARTNER_TEXTS(PsychicF)};
 
-static const u8 *const sPartnerTextsSchoolKidF[] = {PARTNER_TEXTS(SchoolKidF)};
+static const u8* const sPartnerTextsSchoolKidF[] = {PARTNER_TEXTS(SchoolKidF)};
 
-static const u8 *const sPartnerTextsPkmnBreederF[] = {PARTNER_TEXTS(PkmnBreederF)};
+static const u8* const sPartnerTextsPkmnBreederF[] = {PARTNER_TEXTS(PkmnBreederF)};
 
-static const u8 *const sPartnerTextsPokefanF[] = {PARTNER_TEXTS(PokefanF)};
+static const u8* const sPartnerTextsPokefanF[] = {PARTNER_TEXTS(PokefanF)};
 
-static const u8 *const sPartnerTextsSwimmerF[] = {PARTNER_TEXTS(SwimmerF)};
+static const u8* const sPartnerTextsSwimmerF[] = {PARTNER_TEXTS(SwimmerF)};
 
-static const u8 *const sPartnerTextsSwimmingTriathleteM[] = {PARTNER_TEXTS(SwimmingTriathleteM)};
+static const u8* const sPartnerTextsSwimmingTriathleteM[] = {PARTNER_TEXTS(SwimmingTriathleteM)};
 
-static const u8 *const sPartnerTextsSwimmingTriathleteF[] = {PARTNER_TEXTS(SwimmingTriathleteF)};
+static const u8* const sPartnerTextsSwimmingTriathleteF[] = {PARTNER_TEXTS(SwimmingTriathleteF)};
 
-static const u8 *const sPartnerTextsSwimmerM[] = {PARTNER_TEXTS(SwimmerM)};
+static const u8* const sPartnerTextsSwimmerM[] = {PARTNER_TEXTS(SwimmerM)};
 
 struct {
     u32 facilityClass;
-    const u8 *const *strings;
-} const sPartnerTrainerTextTables[] = {{FACILITY_CLASS_LASS, sPartnerTextsLass},
-                                       {FACILITY_CLASS_YOUNGSTER, sPartnerTextsYoungster},
-                                       {FACILITY_CLASS_HIKER, sPartnerTextsHiker},
-                                       {FACILITY_CLASS_BEAUTY, sPartnerTextsBeauty},
-                                       {FACILITY_CLASS_FISHERMAN, sPartnerTextsFisherman},
-                                       {FACILITY_CLASS_LADY, sPartnerTextsLady},
-                                       {FACILITY_CLASS_CYCLING_TRIATHLETE_F, sPartnerTextsCyclingTriathleteF},
-                                       {FACILITY_CLASS_BUG_CATCHER, sPartnerTextsBugCatcher},
-                                       {FACILITY_CLASS_SCHOOL_KID_M, sPartnerTextsSchoolKidM},
-                                       {FACILITY_CLASS_RICH_BOY, sPartnerTextsRichBoy},
-                                       {FACILITY_CLASS_BLACK_BELT, sPartnerTextsBlackBelt},
-                                       {FACILITY_CLASS_TUBER_F, sPartnerTextsTuberF},
-                                       {FACILITY_CLASS_HEX_MANIAC, sPartnerTextsHexManiac},
-                                       {FACILITY_CLASS_PKMN_BREEDER_M, sPartnerTextsPkmnBreederM},
-                                       {FACILITY_CLASS_RUNNING_TRIATHLETE_F, sPartnerTextsRunningTriathleteF},
-                                       {FACILITY_CLASS_RUNNING_TRIATHLETE_M, sPartnerTextsRunningTriathleteM},
-                                       {FACILITY_CLASS_BATTLE_GIRL, sPartnerTextsBattleGirl},
-                                       {FACILITY_CLASS_CYCLING_TRIATHLETE_M, sPartnerTextsCyclingTriathleteM},
-                                       {FACILITY_CLASS_TUBER_M, sPartnerTextsTuberM},
-                                       {FACILITY_CLASS_GUITARIST, sPartnerTextsGuitarist},
-                                       {FACILITY_CLASS_GENTLEMAN, sPartnerTextsGentleman},
-                                       {FACILITY_CLASS_POKEFAN_M, sPartnerTextsPokefanM},
-                                       {FACILITY_CLASS_EXPERT_M, sPartnerTextsExpertM},
-                                       {FACILITY_CLASS_EXPERT_F, sPartnerTextsExpertF},
-                                       {FACILITY_CLASS_DRAGON_TAMER, sPartnerTextsDragonTamer},
-                                       {FACILITY_CLASS_BIRD_KEEPER, sPartnerTextsBirdKeeper},
-                                       {FACILITY_CLASS_NINJA_BOY, sPartnerTextsNinjaBoy},
-                                       {FACILITY_CLASS_PARASOL_LADY, sPartnerTextsParasolLady},
-                                       {FACILITY_CLASS_BUG_MANIAC, sPartnerTextsBugManiac},
-                                       {FACILITY_CLASS_SAILOR, sPartnerTextsSailor},
-                                       {FACILITY_CLASS_COLLECTOR, sPartnerTextsCollector},
-                                       {FACILITY_CLASS_PKMN_RANGER_M, sPartnerTextsPkmnRangerM},
-                                       {FACILITY_CLASS_PKMN_RANGER_F, sPartnerTextsPkmnRangerF},
-                                       {FACILITY_CLASS_AROMA_LADY, sPartnerTextsAromaLady},
-                                       {FACILITY_CLASS_RUIN_MANIAC, sPartnerTextsRuinManiac},
-                                       {FACILITY_CLASS_COOLTRAINER_M, sPartnerTextsCoolTrainerM},
-                                       {FACILITY_CLASS_COOLTRAINER_F, sPartnerTextsCoolTrainerF},
-                                       {FACILITY_CLASS_POKEMANIAC, sPartnerTextsPokemaniac},
-                                       {FACILITY_CLASS_KINDLER, sPartnerTextsKindler},
-                                       {FACILITY_CLASS_CAMPER, sPartnerTextsCamper},
-                                       {FACILITY_CLASS_PICNICKER, sPartnerTextsPicnicker},
-                                       {FACILITY_CLASS_PSYCHIC_M, sPartnerTextsPsychicM},
-                                       {FACILITY_CLASS_PSYCHIC_F, sPartnerTextsPsychicF},
-                                       {FACILITY_CLASS_SCHOOL_KID_F, sPartnerTextsSchoolKidF},
-                                       {FACILITY_CLASS_PKMN_BREEDER_F, sPartnerTextsPkmnBreederF},
-                                       {FACILITY_CLASS_POKEFAN_F, sPartnerTextsPokefanF},
-                                       {FACILITY_CLASS_SWIMMER_F, sPartnerTextsSwimmerF},
-                                       {FACILITY_CLASS_SWIMMING_TRIATHLETE_M, sPartnerTextsSwimmingTriathleteM},
-                                       {FACILITY_CLASS_SWIMMING_TRIATHLETE_F, sPartnerTextsSwimmingTriathleteF},
-                                       {FACILITY_CLASS_SWIMMER_M, sPartnerTextsSwimmerM}};
+    const u8* const* strings;
+} const sPartnerTrainerTextTables[] = {
+    {FACILITY_CLASS_LASS, sPartnerTextsLass},
+    {FACILITY_CLASS_YOUNGSTER, sPartnerTextsYoungster},
+    {FACILITY_CLASS_HIKER, sPartnerTextsHiker},
+    {FACILITY_CLASS_BEAUTY, sPartnerTextsBeauty},
+    {FACILITY_CLASS_FISHERMAN, sPartnerTextsFisherman},
+    {FACILITY_CLASS_LADY, sPartnerTextsLady},
+    {FACILITY_CLASS_CYCLING_TRIATHLETE_F, sPartnerTextsCyclingTriathleteF},
+    {FACILITY_CLASS_BUG_CATCHER, sPartnerTextsBugCatcher},
+    {FACILITY_CLASS_SCHOOL_KID_M, sPartnerTextsSchoolKidM},
+    {FACILITY_CLASS_RICH_BOY, sPartnerTextsRichBoy},
+    {FACILITY_CLASS_BLACK_BELT, sPartnerTextsBlackBelt},
+    {FACILITY_CLASS_TUBER_F, sPartnerTextsTuberF},
+    {FACILITY_CLASS_HEX_MANIAC, sPartnerTextsHexManiac},
+    {FACILITY_CLASS_PKMN_BREEDER_M, sPartnerTextsPkmnBreederM},
+    {FACILITY_CLASS_RUNNING_TRIATHLETE_F, sPartnerTextsRunningTriathleteF},
+    {FACILITY_CLASS_RUNNING_TRIATHLETE_M, sPartnerTextsRunningTriathleteM},
+    {FACILITY_CLASS_BATTLE_GIRL, sPartnerTextsBattleGirl},
+    {FACILITY_CLASS_CYCLING_TRIATHLETE_M, sPartnerTextsCyclingTriathleteM},
+    {FACILITY_CLASS_TUBER_M, sPartnerTextsTuberM},
+    {FACILITY_CLASS_GUITARIST, sPartnerTextsGuitarist},
+    {FACILITY_CLASS_GENTLEMAN, sPartnerTextsGentleman},
+    {FACILITY_CLASS_POKEFAN_M, sPartnerTextsPokefanM},
+    {FACILITY_CLASS_EXPERT_M, sPartnerTextsExpertM},
+    {FACILITY_CLASS_EXPERT_F, sPartnerTextsExpertF},
+    {FACILITY_CLASS_DRAGON_TAMER, sPartnerTextsDragonTamer},
+    {FACILITY_CLASS_BIRD_KEEPER, sPartnerTextsBirdKeeper},
+    {FACILITY_CLASS_NINJA_BOY, sPartnerTextsNinjaBoy},
+    {FACILITY_CLASS_PARASOL_LADY, sPartnerTextsParasolLady},
+    {FACILITY_CLASS_BUG_MANIAC, sPartnerTextsBugManiac},
+    {FACILITY_CLASS_SAILOR, sPartnerTextsSailor},
+    {FACILITY_CLASS_COLLECTOR, sPartnerTextsCollector},
+    {FACILITY_CLASS_PKMN_RANGER_M, sPartnerTextsPkmnRangerM},
+    {FACILITY_CLASS_PKMN_RANGER_F, sPartnerTextsPkmnRangerF},
+    {FACILITY_CLASS_AROMA_LADY, sPartnerTextsAromaLady},
+    {FACILITY_CLASS_RUIN_MANIAC, sPartnerTextsRuinManiac},
+    {FACILITY_CLASS_COOLTRAINER_M, sPartnerTextsCoolTrainerM},
+    {FACILITY_CLASS_COOLTRAINER_F, sPartnerTextsCoolTrainerF},
+    {FACILITY_CLASS_POKEMANIAC, sPartnerTextsPokemaniac},
+    {FACILITY_CLASS_KINDLER, sPartnerTextsKindler},
+    {FACILITY_CLASS_CAMPER, sPartnerTextsCamper},
+    {FACILITY_CLASS_PICNICKER, sPartnerTextsPicnicker},
+    {FACILITY_CLASS_PSYCHIC_M, sPartnerTextsPsychicM},
+    {FACILITY_CLASS_PSYCHIC_F, sPartnerTextsPsychicF},
+    {FACILITY_CLASS_SCHOOL_KID_F, sPartnerTextsSchoolKidF},
+    {FACILITY_CLASS_PKMN_BREEDER_F, sPartnerTextsPkmnBreederF},
+    {FACILITY_CLASS_POKEFAN_F, sPartnerTextsPokefanF},
+    {FACILITY_CLASS_SWIMMER_F, sPartnerTextsSwimmerF},
+    {FACILITY_CLASS_SWIMMING_TRIATHLETE_M, sPartnerTextsSwimmingTriathleteM},
+    {FACILITY_CLASS_SWIMMING_TRIATHLETE_F, sPartnerTextsSwimmingTriathleteF},
+    {FACILITY_CLASS_SWIMMER_M, sPartnerTextsSwimmerM},
+};
 
-static const u8 *const *const sPartnerApprenticeTextTables[NUM_APPRENTICES] = {sPartnerApprenticeTexts1,
-                                                                               sPartnerApprenticeTexts2,
-                                                                               sPartnerApprenticeTexts3,
-                                                                               sPartnerApprenticeTexts4,
-                                                                               sPartnerApprenticeTexts5,
-                                                                               sPartnerApprenticeTexts6,
-                                                                               sPartnerApprenticeTexts7,
-                                                                               sPartnerApprenticeTexts8,
-                                                                               sPartnerApprenticeTexts9,
-                                                                               sPartnerApprenticeTexts10,
-                                                                               sPartnerApprenticeTexts11,
-                                                                               sPartnerApprenticeTexts12,
-                                                                               sPartnerApprenticeTexts13,
-                                                                               sPartnerApprenticeTexts14,
-                                                                               sPartnerApprenticeTexts15,
-                                                                               sPartnerApprenticeTexts16};
+static const u8* const* const sPartnerApprenticeTextTables[NUM_APPRENTICES] = {
+    sPartnerApprenticeTexts1,
+    sPartnerApprenticeTexts2,
+    sPartnerApprenticeTexts3,
+    sPartnerApprenticeTexts4,
+    sPartnerApprenticeTexts5,
+    sPartnerApprenticeTexts6,
+    sPartnerApprenticeTexts7,
+    sPartnerApprenticeTexts8,
+    sPartnerApprenticeTexts9,
+    sPartnerApprenticeTexts10,
+    sPartnerApprenticeTexts11,
+    sPartnerApprenticeTexts12,
+    sPartnerApprenticeTexts13,
+    sPartnerApprenticeTexts14,
+    sPartnerApprenticeTexts15,
+    sPartnerApprenticeTexts16,
+};
 
 struct {
     SpeciesEnum species;
@@ -910,24 +489,26 @@ struct {
     u8 nature;
     u8 evs[NUM_STATS];
     u16 moves[MAX_MON_MOVES];
-} const sStevenMons[MULTI_PARTY_SIZE] = {{.species = SPECIES_METANG,
-                                          .fixedIV = MAX_PER_STAT_IVS,
-                                          .level = 42,
-                                          .nature = NATURE_BRAVE,
-                                          .evs = {0, 252, 252, 0, 6, 0},
-                                          .moves = {MOVE_LIGHT_SCREEN, MOVE_PSYCHIC, MOVE_REFLECT, MOVE_METAL_CLAW}},
-                                         {.species = SPECIES_SKARMORY,
-                                          .fixedIV = MAX_PER_STAT_IVS,
-                                          .level = 43,
-                                          .nature = NATURE_IMPISH,
-                                          .evs = {252, 0, 0, 0, 6, 252},
-                                          .moves = {MOVE_TOXIC, MOVE_AERIAL_ACE, MOVE_PROTECT, MOVE_STEEL_WING}},
-                                         {.species = SPECIES_AGGRON,
-                                          .fixedIV = MAX_PER_STAT_IVS,
-                                          .level = 44,
-                                          .nature = NATURE_ADAMANT,
-                                          .evs = {0, 252, 0, 0, 252, 6},
-                                          .moves = {MOVE_THUNDER, MOVE_PROTECT, MOVE_SOLAR_BEAM, MOVE_DRAGON_CLAW}}};
+} const sStevenMons[MULTI_PARTY_SIZE] = {
+    {.species = SPECIES_METANG,
+     .fixedIV = MAX_PER_STAT_IVS,
+     .level = 42,
+     .nature = NATURE_BRAVE,
+     .evs = {0, 252, 252, 0, 6, 0},
+     .moves = {MOVE_LIGHT_SCREEN, MOVE_PSYCHIC, MOVE_REFLECT, MOVE_METAL_CLAW}},
+    {.species = SPECIES_SKARMORY,
+     .fixedIV = MAX_PER_STAT_IVS,
+     .level = 43,
+     .nature = NATURE_IMPISH,
+     .evs = {252, 0, 0, 0, 6, 252},
+     .moves = {MOVE_TOXIC, MOVE_AERIAL_ACE, MOVE_PROTECT, MOVE_STEEL_WING}},
+    {.species = SPECIES_AGGRON,
+     .fixedIV = MAX_PER_STAT_IVS,
+     .level = 44,
+     .nature = NATURE_ADAMANT,
+     .evs = {0, 252, 0, 0, 252, 6},
+     .moves = {MOVE_THUNDER, MOVE_PROTECT, MOVE_SOLAR_BEAM, MOVE_DRAGON_CLAW}},
+};
 
 #include "data/battle_frontier/battle_tent.h"
 
@@ -1099,7 +680,7 @@ static bool8 ChooseSpecialBattleTowerTrainer(void) {
 
     winStreak = GetCurrentBattleTowerWinStreak(lvlMode, battleMode);
     for (i = 0; i < BATTLE_TOWER_RECORD_COUNT; i++) {
-        u32 *record = (u32 *)(&gSaveBlock2Ptr->frontier.towerRecords[i]);
+        u32* record = (u32*)(&gSaveBlock2Ptr->frontier.towerRecords[i]);
         u32 recordHasData = 0;
         u32 checksum = 0;
         for (j = 0; j < (sizeof(struct EmeraldBattleTowerRecord) - 4) / 4; j++)  // - 4, because of the last field being the checksum itself.
@@ -1202,7 +783,7 @@ u16 GetRandomScaledFrontierTrainerId(u8 challengeNum, u8 battleNum) {
 }
 
 // Unused
-static void GetRandomScaledFrontierTrainerIdRange(u8 challengeNum, u8 battleNum, u16 *trainerIdPtr, u8 *rangePtr) {
+static void GetRandomScaledFrontierTrainerIdRange(u8 challengeNum, u8 battleNum, u16* trainerIdPtr, u8* rangePtr) {
     u16 trainerId, range;
 
     if (challengeNum <= 7) {
@@ -1346,12 +927,12 @@ u16 GetBattleFacilityTrainerGfxId(u16 trainerId) {
     }
 }
 
-void PutNewBattleTowerRecord(struct EmeraldBattleTowerRecord *newRecordEm) {
+void PutNewBattleTowerRecord(struct EmeraldBattleTowerRecord* newRecordEm) {
     u16 slotValues[6];
     u16 slotIds[6];
     s32 i, j, k;
     s32 slotsCount = 0;
-    struct EmeraldBattleTowerRecord *newRecord = newRecordEm;  // Needed to match.
+    struct EmeraldBattleTowerRecord* newRecord = newRecordEm;  // Needed to match.
 
     // Find a record slot of the same player and replace it.
     for (i = 0; i < BATTLE_TOWER_RECORD_COUNT; i++) {
@@ -1511,7 +1092,7 @@ static u8 GetFrontierTrainerFacilityClass(u16 trainerId) {
     return facilityClass;
 }
 
-void GetFrontierTrainerName(u8 *dst, u16 trainerId) {
+void GetFrontierTrainerName(u8* dst, u16 trainerId) {
     s32 i = 0;
     SetFacilityPtrsGetLevel();
 
@@ -1534,7 +1115,7 @@ void GetFrontierTrainerName(u8 *dst, u16 trainerId) {
             GetRecordedBattleRecordMixFriendName(dst);
             return;
         } else {
-            struct EmeraldBattleTowerRecord *record = &gSaveBlock2Ptr->frontier.towerRecords[trainerId - TRAINER_RECORD_MIXING_FRIEND];
+            struct EmeraldBattleTowerRecord* record = &gSaveBlock2Ptr->frontier.towerRecords[trainerId - TRAINER_RECORD_MIXING_FRIEND];
             TVShowConvertInternationalString(dst, record->name, record->language);
             return;
         }
@@ -1545,7 +1126,7 @@ void GetFrontierTrainerName(u8 *dst, u16 trainerId) {
             id = GetRecordedBattleApprenticeId();
             language = GetRecordedBattleApprenticeLanguage();
         } else {
-            struct Apprentice *apprentice = &gSaveBlock2Ptr->apprentices[trainerId - TRAINER_RECORD_MIXING_APPRENTICE];
+            struct Apprentice* apprentice = &gSaveBlock2Ptr->apprentices[trainerId - TRAINER_RECORD_MIXING_APPRENTICE];
             id = apprentice->id;
             language = apprentice->language;
         }
@@ -1610,7 +1191,7 @@ static void FillTrainerParty(u16 trainerId, u8 firstMonId, u8 monCount) {
     u8 level = SetFacilityPtrsGetLevel();
     u8 fixedIV = 0;
     u8 bfMonCount;
-    const u16 *monSet = NULL;
+    const u16* monSet = NULL;
     u32 otID = 0;
 
     if (trainerId < FRONTIER_TRAINERS_COUNT) {
@@ -1661,7 +1242,7 @@ static void FillTrainerParty(u16 trainerId, u8 firstMonId, u8 monCount) {
         // Ensure this Pokemon's held item isn't a duplicate.
         for (j = 0; j < i + firstMonId; j++) {
             if (GetMonData(&gEnemyParty[j], MON_DATA_HELD_ITEM, NULL) != 0 &&
-                GetMonData(&gEnemyParty[j], MON_DATA_HELD_ITEM, NULL) == gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId])
+                GetMonData(&gEnemyParty[j], MON_DATA_HELD_ITEM, NULL) == gFacilityTrainerMons[monId].item)
                 break;
         }
         if (j != i + firstMonId) continue;
@@ -1694,7 +1275,7 @@ static void FillTrainerParty(u16 trainerId, u8 firstMonId, u8 monCount) {
         }
 
         SetMonData(&gEnemyParty[i + firstMonId], MON_DATA_FRIENDSHIP, &friendship);
-        SetMonData(&gEnemyParty[i + firstMonId], MON_DATA_HELD_ITEM, &gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId]);
+        SetMonData(&gEnemyParty[i + firstMonId], MON_DATA_HELD_ITEM, &gFacilityTrainerMons[monId].item);
 
         // The pokemon was successfully added to the trainer's party, so it's safe to move on to
         // the next party slot.
@@ -1708,7 +1289,7 @@ static void Unused_CreateApprenticeMons(u16 trainerId, u8 firstMonId) {
     u8 friendship = MAX_FRIENDSHIP;
     u8 level = 0;
     u8 fixedIV = 0;
-    struct Apprentice *apprentice = &gSaveBlock2Ptr->apprentices[0];
+    struct Apprentice* apprentice = &gSaveBlock2Ptr->apprentices[0];
 
     if (apprentice->numQuestions < 5)
         fixedIV = 6;
@@ -1733,7 +1314,7 @@ static void Unused_CreateApprenticeMons(u16 trainerId, u8 firstMonId) {
 
 u16 GetRandomFrontierMonFromSet(u16 trainerId) {
     u8 level = SetFacilityPtrsGetLevel();
-    const u16 *monSet = gFacilityTrainers[trainerId].monSet;
+    const u16* monSet = gFacilityTrainers[trainerId].monSet;
     u8 numMons = 0;
     u32 monId = monSet[numMons];
 
@@ -1801,7 +1382,7 @@ static void FillFactoryFrontierTrainerParty(u16 trainerId, u8 firstMonId) {
         for (j = 0; j < MAX_MON_MOVES; j++) SetMonMoveAvoidReturn(&gEnemyParty[firstMonId + i], gFacilityTrainerMons[monId].moves[j], j);
 
         SetMonData(&gEnemyParty[firstMonId + i], MON_DATA_FRIENDSHIP, &friendship);
-        SetMonData(&gEnemyParty[firstMonId + i], MON_DATA_HELD_ITEM, &gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId]);
+        SetMonData(&gEnemyParty[firstMonId + i], MON_DATA_HELD_ITEM, &gFacilityTrainerMons[monId].item);
     }
 }
 
@@ -1830,11 +1411,11 @@ static void FillFactoryTentTrainerParty(u16 trainerId, u8 firstMonId) {
         }
 
         SetMonData(&gEnemyParty[firstMonId + i], MON_DATA_FRIENDSHIP, &friendship);
-        SetMonData(&gEnemyParty[firstMonId + i], MON_DATA_HELD_ITEM, &gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId]);
+        SetMonData(&gEnemyParty[firstMonId + i], MON_DATA_HELD_ITEM, &gFacilityTrainerMons[monId].item);
     }
 }
 
-void FrontierSpeechToString(const u16 *words) {
+void FrontierSpeechToString(const u16* words) {
     ConvertEasyChatWordsToString(gStringVar4, words, 3, 2);
     if (GetStringWidth(1, gStringVar4, -1) > 204u) {
         s32 i = 0;
@@ -2087,7 +1668,7 @@ static void SaveCurrentWinStreak(void) {
 static void SaveBattleTowerRecord(void) {
     s32 i;
     u8 lvlMode, battleMode, class;
-    struct EmeraldBattleTowerRecord *playerRecord = &gSaveBlock2Ptr->frontier.towerPlayer;
+    struct EmeraldBattleTowerRecord* playerRecord = &gSaveBlock2Ptr->frontier.towerPlayer;
 
     ClearBattleTowerRecord(playerRecord);
     lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
@@ -2194,7 +1775,7 @@ static void LoadMultiPartnerCandidatesData(void) {
     u32 lvlMode, battleMode;
     s32 challengeNum;
     u32 species1, species2;
-    struct ObjectEventTemplate *objEventTemplates;
+    struct ObjectEventTemplate* objEventTemplates;
 
     objEventTemplates = gSaveBlock1Ptr->objectEventTemplates;
     lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
@@ -2223,8 +1804,7 @@ static void LoadMultiPartnerCandidatesData(void) {
         for (j = 0; j < 2; j++) {
             while (1) {
                 monId = GetRandomFrontierMonFromSet(trainerId);
-                if (j % 2 != 0 && gFacilityTrainerMons[gSaveBlock2Ptr->frontier.trainerIds[r10 - 1]].itemTableId == gFacilityTrainerMons[monId].itemTableId)
-                    continue;
+                if (j % 2 != 0 && gFacilityTrainerMons[gSaveBlock2Ptr->frontier.trainerIds[r10 - 1]].item == gFacilityTrainerMons[monId].item) continue;
 
                 for (k = 8; k < r10; k++) {
                     if (gFacilityTrainerMons[gSaveBlock2Ptr->frontier.trainerIds[k]].species == gFacilityTrainerMons[monId].species) break;
@@ -2265,7 +1845,7 @@ static void LoadMultiPartnerCandidatesData(void) {
 
     r10 = 0;
     for (i = 0; i < BATTLE_TOWER_RECORD_COUNT; i++) {
-        u32 *record = (u32 *)(&gSaveBlock2Ptr->frontier.towerRecords[i]);
+        u32* record = (u32*)(&gSaveBlock2Ptr->frontier.towerRecords[i]);
         u32 recordHasData = 0;
         u32 checksum = 0;
         for (j = 0; j < (sizeof(struct EmeraldBattleTowerRecord) - 4) / 4; j++)  // - 4, because of the last field being the checksum itself.
@@ -2519,7 +2099,7 @@ static void SetTowerInterviewData(void) {
 
 static void ValidateBattleTowerRecordChecksums(void) {
     s32 i, j;
-    u32 *record = (u32 *)(&gSaveBlock2Ptr->frontier.towerPlayer);
+    u32* record = (u32*)(&gSaveBlock2Ptr->frontier.towerPlayer);
     u32 checksum = 0;
 
     for (j = 0; j < (sizeof(struct EmeraldBattleTowerRecord) - 4) / 4; j++)  // - 4, because of the last field being the checksum itself.
@@ -2529,7 +2109,7 @@ static void ValidateBattleTowerRecordChecksums(void) {
     if (gSaveBlock2Ptr->frontier.towerPlayer.checksum != checksum) ClearBattleTowerRecord(&gSaveBlock2Ptr->frontier.towerPlayer);
 
     for (i = 0; i < BATTLE_TOWER_RECORD_COUNT; i++) {
-        record = (u32 *)(&gSaveBlock2Ptr->frontier.towerRecords[i]);
+        record = (u32*)(&gSaveBlock2Ptr->frontier.towerRecords[i]);
         checksum = 0;
         for (j = 0; j < (sizeof(struct EmeraldBattleTowerRecord) - 4) / 4; j++)  // - 4, because of the last field being the checksum itself.
         {
@@ -2539,26 +2119,26 @@ static void ValidateBattleTowerRecordChecksums(void) {
     }
 }
 
-void CalcEmeraldBattleTowerChecksum(struct EmeraldBattleTowerRecord *record) {
+void CalcEmeraldBattleTowerChecksum(struct EmeraldBattleTowerRecord* record) {
     u32 i;
 
     record->checksum = 0;
     for (i = 0; i < (sizeof(struct EmeraldBattleTowerRecord) - 4) / 4; i++)  // - 4, because of the last field being the checksum itself.
-        record->checksum += ((u32 *)record)[i];
+        record->checksum += ((u32*)record)[i];
 }
 
-void CalcRubyBattleTowerChecksum(struct RSBattleTowerRecord *record) {
+void CalcRubyBattleTowerChecksum(struct RSBattleTowerRecord* record) {
     u32 i;
 
     record->checksum = 0;
     for (i = 0; i < (sizeof(struct RSBattleTowerRecord) - 4) / 4; i++)  // - 4, because of the last field being the checksum itself.
-        record->checksum += ((u32 *)record)[i];
+        record->checksum += ((u32*)record)[i];
 }
 
-static void ClearBattleTowerRecord(struct EmeraldBattleTowerRecord *record) {
+static void ClearBattleTowerRecord(struct EmeraldBattleTowerRecord* record) {
     u32 i;
 
-    for (i = 0; i < sizeof(struct EmeraldBattleTowerRecord) / 4; i++) ((u32 *)record)[i] = 0;
+    for (i = 0; i < sizeof(struct EmeraldBattleTowerRecord) / 4; i++) ((u32*)record)[i] = 0;
 }
 
 u16 GetCurrentBattleTowerWinStreak(u8 lvlMode, u8 battleMode) {
@@ -2637,7 +2217,7 @@ static void AwardBattleTowerRibbons(void) {
 // trainer with the player's current data.
 static void FillEReaderTrainerWithPlayerData(void) {
 #ifndef FREE_BATTLE_TOWER_E_READER
-    struct BattleTowerEReaderTrainer *ereaderTrainer = &gSaveBlock2Ptr->frontier.ereaderTrainer;
+    struct BattleTowerEReaderTrainer* ereaderTrainer = &gSaveBlock2Ptr->frontier.ereaderTrainer;
     s32 i, j;
 
     if (gSaveBlock2Ptr->playerGender != MALE) {
@@ -2685,7 +2265,7 @@ u8 GetEreaderTrainerClassId(void) {
 #endif
 }
 
-void GetEreaderTrainerName(u8 *dst) {
+void GetEreaderTrainerName(u8* dst) {
 #ifndef FREE_BATTLE_TOWER_E_READER
     s32 i;
 
@@ -2702,14 +2282,14 @@ void ValidateEReaderTrainer(void) {
 #ifndef FREE_BATTLE_TOWER_E_READER
     u32 i;
     u32 checksum;
-    struct BattleTowerEReaderTrainer *ereaderTrainer;
+    struct BattleTowerEReaderTrainer* ereaderTrainer;
 
     gSpecialVar_Result = FALSE;
     ereaderTrainer = &gSaveBlock2Ptr->frontier.ereaderTrainer;
 
     checksum = 0;
     for (i = 0; i < (sizeof(struct BattleTowerEReaderTrainer) - 4) / 4; i++)  // - 4, because of the last field being the checksum itself.
-        checksum |= ((u32 *)ereaderTrainer)[i];
+        checksum |= ((u32*)ereaderTrainer)[i];
 
     if (checksum == 0) {
         gSpecialVar_Result = TRUE;
@@ -2718,7 +2298,7 @@ void ValidateEReaderTrainer(void) {
 
     checksum = 0;
     for (i = 0; i < (sizeof(struct BattleTowerEReaderTrainer) - 4) / 4; i++)  // - 4, because of the last field being the checksum itself.
-        checksum += ((u32 *)ereaderTrainer)[i];
+        checksum += ((u32*)ereaderTrainer)[i];
 
     if (gSaveBlock2Ptr->frontier.ereaderTrainer.checksum != checksum) {
         ClearEReaderTrainer(&gSaveBlock2Ptr->frontier.ereaderTrainer);
@@ -2729,21 +2309,21 @@ void ValidateEReaderTrainer(void) {
 #endif
 }
 
-static void SetEReaderTrainerChecksum(struct BattleTowerEReaderTrainer *ereaderTrainer) {
+static void SetEReaderTrainerChecksum(struct BattleTowerEReaderTrainer* ereaderTrainer) {
 #ifndef FREE_BATTLE_TOWER_E_READER
     s32 i;
 
     ereaderTrainer->checksum = 0;
     for (i = 0; i < (sizeof(struct BattleTowerEReaderTrainer) - 4) / 4; i++)  // - 4, because of the last field being the checksum itself.
-        ereaderTrainer->checksum += ((u32 *)ereaderTrainer)[i];
+        ereaderTrainer->checksum += ((u32*)ereaderTrainer)[i];
 #endif
 }
 
-void ClearEReaderTrainer(struct BattleTowerEReaderTrainer *ereaderTrainer) {
+void ClearEReaderTrainer(struct BattleTowerEReaderTrainer* ereaderTrainer) {
 #ifndef FREE_BATTLE_TOWER_E_READER
     u32 i;
 
-    for (i = 0; i < (sizeof(struct BattleTowerEReaderTrainer)) / 4; i++) ((u32 *)ereaderTrainer)[i] = 0;
+    for (i = 0; i < (sizeof(struct BattleTowerEReaderTrainer)) / 4; i++) ((u32*)ereaderTrainer)[i] = 0;
 #endif
 }
 
@@ -2813,7 +2393,7 @@ static void FillPartnerParty(u16 trainerId) {
         for (i = 0; i < 3 && i < gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].partySize; i++) {
             j = Random32();
 
-            const struct TrainerMonItemCustomMoves *partyData = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].party;
+            const struct TrainerMonItemCustomMoves* partyData = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].party;
 
             level = GetHighestLevelInPlayerParty();  //+ partyData[i].lvl; Scaling not working as expected, but not needed anyway
             if (level > 100) {
@@ -2897,7 +2477,7 @@ static void FillPartnerParty(u16 trainerId) {
                 if (gFacilityTrainerMons[monId].moves[j] == MOVE_FRUSTRATION) friendship = 0;
             }
             SetMonData(&gPlayerParty[MULTI_PARTY_SIZE + i], MON_DATA_FRIENDSHIP, &friendship);
-            SetMonData(&gPlayerParty[MULTI_PARTY_SIZE + i], MON_DATA_HELD_ITEM, &gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId]);
+            SetMonData(&gPlayerParty[MULTI_PARTY_SIZE + i], MON_DATA_HELD_ITEM, &gFacilityTrainerMons[monId].item);
             for (j = 0; j < PLAYER_NAME_LENGTH + 1; j++) trainerName[j] = gFacilityTrainers[trainerId].trainerName[j];
             SetMonData(&gPlayerParty[MULTI_PARTY_SIZE + i], MON_DATA_OT_NAME, &trainerName);
             j = IsFrontierTrainerFemale(trainerId);
@@ -2906,7 +2486,7 @@ static void FillPartnerParty(u16 trainerId) {
     } else if (trainerId < TRAINER_RECORD_MIXING_APPRENTICE) {
         trainerId -= TRAINER_RECORD_MIXING_FRIEND;
         for (i = 0; i < FRONTIER_MULTI_PARTY_SIZE; i++) {
-            struct EmeraldBattleTowerRecord *record = &gSaveBlock2Ptr->frontier.towerRecords[trainerId];
+            struct EmeraldBattleTowerRecord* record = &gSaveBlock2Ptr->frontier.towerRecords[trainerId];
             struct BattleTowerPokemon monData = record->party[gSaveBlock2Ptr->frontier.trainerIds[18 + i]];
             StringCopy(trainerName, record->name);
             if (record->language == LANGUAGE_JAPANESE) {
@@ -2932,7 +2512,7 @@ static void FillPartnerParty(u16 trainerId) {
     }
 }
 
-bool32 RubyBattleTowerRecordToEmerald(struct RSBattleTowerRecord *src, struct EmeraldBattleTowerRecord *dst) {
+bool32 RubyBattleTowerRecordToEmerald(struct RSBattleTowerRecord* src, struct EmeraldBattleTowerRecord* dst) {
     s32 i, validMons = 0;
 
     for (i = 0; i < FRONTIER_PARTY_SIZE; i++) {
@@ -2972,7 +2552,7 @@ bool32 RubyBattleTowerRecordToEmerald(struct RSBattleTowerRecord *src, struct Em
     }
 }
 
-bool32 EmeraldBattleTowerRecordToRuby(struct EmeraldBattleTowerRecord *src, struct RSBattleTowerRecord *dst) {
+bool32 EmeraldBattleTowerRecordToRuby(struct EmeraldBattleTowerRecord* src, struct RSBattleTowerRecord* dst) {
     s32 i, validMons = 0;
 
     for (i = 0; i < FRONTIER_PARTY_SIZE; i++) {
@@ -3009,17 +2589,17 @@ bool32 EmeraldBattleTowerRecordToRuby(struct EmeraldBattleTowerRecord *src, stru
     }
 }
 
-void CalcApprenticeChecksum(struct Apprentice *apprentice) {
+void CalcApprenticeChecksum(struct Apprentice* apprentice) {
     s32 i;
 
     apprentice->checksum = 0;
-    for (i = 0; i < (sizeof(struct Apprentice) - 4) / 4; i++) apprentice->checksum += ((u32 *)apprentice)[i];
+    for (i = 0; i < (sizeof(struct Apprentice) - 4) / 4; i++) apprentice->checksum += ((u32*)apprentice)[i];
 }
 
-static void ClearApprentice(struct Apprentice *apprentice) {
+static void ClearApprentice(struct Apprentice* apprentice) {
     s32 i;
 
-    for (i = 0; i < (sizeof(struct Apprentice)) / 4; i++) ((u32 *)apprentice)[i] = 0;
+    for (i = 0; i < (sizeof(struct Apprentice)) / 4; i++) ((u32*)apprentice)[i] = 0;
     ResetApprenticeStruct(apprentice);
 }
 
@@ -3027,14 +2607,14 @@ static void ValidateApprenticesChecksums(void) {
     s32 i, j;
 
     for (i = 0; i < APPRENTICE_COUNT; i++) {
-        u32 *data = (u32 *)&gSaveBlock2Ptr->apprentices[i];
+        u32* data = (u32*)&gSaveBlock2Ptr->apprentices[i];
         u32 checksum = 0;
         for (j = 0; j < (sizeof(struct Apprentice) - 4) / 4; j++) checksum += data[j];
         if (gSaveBlock2Ptr->apprentices[i].checksum != checksum) ClearApprentice(&gSaveBlock2Ptr->apprentices[i]);
     }
 }
 
-void GetBattleTowerTrainerLanguage(u8 *dst, u16 trainerId) {
+void GetBattleTowerTrainerLanguage(u8* dst, u16 trainerId) {
     if (trainerId == TRAINER_EREADER) {
         *dst = gGameLanguage;
     } else if (trainerId < FRONTIER_TRAINERS_COUNT) {
@@ -3181,7 +2761,7 @@ static void FillTentTrainerParty_(u16 trainerId, u8 firstMonId, u8 monCount) {
     u8 level = SetTentPtrsGetLevel();
     u8 fixedIV = 0;
     u8 bfMonCount;
-    const u16 *monSet = NULL;
+    const u16* monSet = NULL;
     u32 otID = 0;
     u16 monId;
 
@@ -3209,7 +2789,7 @@ static void FillTentTrainerParty_(u16 trainerId, u8 firstMonId, u8 monCount) {
         // Ensure this Pokemon's held item isn't a duplicate.
         for (j = 0; j < i + firstMonId; j++) {
             if (GetMonData(&gEnemyParty[j], MON_DATA_HELD_ITEM, NULL) != 0 &&
-                GetMonData(&gEnemyParty[j], MON_DATA_HELD_ITEM, NULL) == gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId])
+                GetMonData(&gEnemyParty[j], MON_DATA_HELD_ITEM, NULL) == gFacilityTrainerMons[monId].item)
                 break;
         }
         if (j != i + firstMonId) continue;
@@ -3242,7 +2822,7 @@ static void FillTentTrainerParty_(u16 trainerId, u8 firstMonId, u8 monCount) {
         }
 
         SetMonData(&gEnemyParty[i + firstMonId], MON_DATA_FRIENDSHIP, &friendship);
-        SetMonData(&gEnemyParty[i + firstMonId], MON_DATA_HELD_ITEM, &gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId]);
+        SetMonData(&gEnemyParty[i + firstMonId], MON_DATA_HELD_ITEM, &gFacilityTrainerMons[monId].item);
 
         // The pokemon was successfully added to the trainer's party, so it's safe to move on to
         // the next party slot.
@@ -3278,7 +2858,7 @@ u16 FacilityClassToGraphicsId(u8 facilityClass) {
 bool32 ValidateBattleTowerRecord(u8 recordId)  // unused
 {
     s32 i;
-    u32 *record = (u32 *)(&gSaveBlock2Ptr->frontier.towerRecords[recordId]);
+    u32* record = (u32*)(&gSaveBlock2Ptr->frontier.towerRecords[recordId]);
     u32 checksum = 0;
     u32 hasData = 0;
     for (i = 0; i < (sizeof(struct EmeraldBattleTowerRecord) - 4) / 4; i++)  // - 4, because of the last fjeld bejng the checksum jtself.

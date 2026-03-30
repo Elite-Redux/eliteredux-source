@@ -27,18 +27,17 @@ struct BattleFrontierTrainer
 struct FacilityMon
 {
     SpeciesEnum species;
-    u16 moves[MAX_MON_MOVES];
-    u16 itemTableId;
-    u8 evSpread;
-    u8 nature;
-    u16 abilityNum;
+    MoveEnum moves[MAX_MON_MOVES];
+    ItemEnum item;
+    u16 evSpread:6;
+    u16 nature:5;
+    u16 abilityNum:2;
 };
 
 extern const u8 gTowerMaleFacilityClasses[30];
 extern const u16 gTowerMaleTrainerGfxIds[30];
 extern const u8 gTowerFemaleFacilityClasses[20];
 extern const u16 gTowerFemaleTrainerGfxIds[20];
-extern const u16 gBattleFrontierHeldItems[];
 extern const struct FacilityMon gBattleFrontierMons[];
 extern const struct BattleFrontierTrainer gBattleFrontierTrainers[];
 extern const struct FacilityMon gSlateportBattleTentMons[];

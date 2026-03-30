@@ -331,7 +331,7 @@ static void GenerateInitialRentalMons(void)
         // Cannot have two same held items.
         for (j = firstMonId; j < i + firstMonId; j++)
         {
-            if (heldItems[j] != 0 && heldItems[j] == gBattleFrontierHeldItems[gFacilityTrainerMons[monSetId].itemTableId])
+            if (heldItems[j] != 0 && heldItems[j] == gFacilityTrainerMons[monSetId].item)
             {
                 if (gFacilityTrainerMons[monSetId].species == currSpecies)
                     currSpecies = SPECIES_NONE;
@@ -343,7 +343,7 @@ static void GenerateInitialRentalMons(void)
 
         gSaveBlock2Ptr->frontier.rentalMons[i].monId = monSetId;
         species[i] = gFacilityTrainerMons[monSetId].species;
-        heldItems[i] = gBattleFrontierHeldItems[gFacilityTrainerMons[monSetId].itemTableId];
+        heldItems[i] = gFacilityTrainerMons[monSetId].item;
         monIds[i] = monSetId;
         i++;
     }
@@ -408,14 +408,14 @@ static void GenerateOpponentMons(void)
 
         for (k = 0; k < i; k++)
         {
-            if (heldItems[k] != 0 && heldItems[k] == gBattleFrontierHeldItems[gFacilityTrainerMons[sRandMonSetId].itemTableId])
+            if (heldItems[k] != 0 && heldItems[k] == gFacilityTrainerMons[sRandMonSetId].item)
                 break;
         }
         if (k != i)
             continue;
 
         species[i] = gFacilityTrainerMons[sRandMonSetId].species;
-        heldItems[i] = gBattleFrontierHeldItems[gFacilityTrainerMons[sRandMonSetId].itemTableId];
+        heldItems[i] = gFacilityTrainerMons[sRandMonSetId].item;
         gFrontierTempParty[i] = sRandMonSetId;
         i++;
     }
