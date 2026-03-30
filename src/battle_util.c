@@ -7277,6 +7277,15 @@ static bool32 CanEvolve(u32 species) {
     return FALSE;
 }
 
+static bool32 CanEvolveStrict(u32 species) {
+    u32 i;
+
+    for (i = 0; gEvolutionTable[species][i].method; i++) {
+        if ((gEvolutionTable[species][i].method != EVO_DEEVOLUTION) && gEvolutionTable[species][i].method) return TRUE;
+    }
+    return FALSE;
+}
+
 void SetSwapDamageCategory(int battler, int target, MoveEnum move, Type moveType) {
     switch (gBattleMoves[move].splitFlag) {
         default:
@@ -7383,7 +7392,7 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
                 MulModifier(&modifier, UQ_4_12(2.0));
             break;
         case HOLD_EFFECT_EVIOLITE:
-            if (CanEvolve(gBattleMons[battlerDef].species)) MulModifier(&modifier, UQ_4_12(1.5));
+            if (CanEvolveStrict(gBattleMons[battlerDef].species) && (gBattleMons[battlerDef].species != SPECIES_NECROZMA)) MulModifier(&modifier, UQ_4_12(1.5));
             break;
         case HOLD_EFFECT_ASSAULT_VEST:
             if (defStatToUse == STAT_SPDEF) MulModifier(&modifier, UQ_4_12(1.5));
