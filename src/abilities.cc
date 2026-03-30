@@ -1907,7 +1907,7 @@ constexpr Ability Impl<ABILITY_CURSED_BODY> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK_NOT(gVolatileStructs[attacker].disabledMove)
-        CHECK(IsMoveMakingContact(move, attacker))
+        //CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IsAbilityStatusProtected(attacker, CHECK_RESTRICTING))
         CHECK(gBattleMons[attacker].pp[gChosenMovePos])
         CHECK(Random() % 100 < 30)
