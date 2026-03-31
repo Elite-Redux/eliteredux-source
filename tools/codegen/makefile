@@ -26,7 +26,7 @@ protobuf-kotlin.jar:
 	wget -O protobuf-kotlin.jar https://repo1.maven.org/maven2/com/google/protobuf/protobuf-kotlin/4.29.2/protobuf-kotlin-4.29.2.jar -q && exit
 
 preproc.jar: $(PREPROC_SRCS) protobuf-java.jar
-	find src/preproc -name '*.kt' | xargs  kotlinc -cp protobuf-java.jar  -include-runtime -d preproc.jar && exit 
+	find src/preproc -name '*.kt' | xargs  kotlinc -cp protobuf-java.jar  -include-runtime -d preproc.jar && exit
 
 DEPSETS := $(addprefix timestamp/depsets/,$(PROTO_SRCS))
 PROTODEP := $(addsuffix .protodep.txt,$(addprefix timestamp/protodep/,$(PROTO_SRCS)))
@@ -96,6 +96,9 @@ $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_orders.h, pokedex
 $(eval $(call GENERATE, include/generated/data/pokemon/pokedex_numbers.h, pokedexnumbers))
 $(eval $(call GENERATE, include/generated/data/pokemon/randomizer_banned.h, randomizerbanned))
 $(eval $(call GENERATE, include/generated/data/pokemon/adoption_center_mons.h, adoptioncentermons))
+
+$(eval $(call GENERATE, include/generated/data/battle_frontier/battle_frontier_mons.h, battlefrontiermons))
+$(eval $(call GENERATE, include/generated/data/battle_frontier/battle_frontier_defines.h, battlefrontierdefines))
 
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/icons.h, icons))
 $(eval $(call GENERATE, include/generated/data/pokemon_graphics/pics.h, monpics))

@@ -84,6 +84,8 @@ object FileGenerator {
         "movetypemodifiers" to MoveTypeModifierGenerator,
         "recoilfractions" to MoveRecoilGenerator,
         "movedamage" to MoveDamageGenerator,
+        "battlefrontiermons" to BattleFrontierMonGenerator,
+        "battlefrontierdefines" to BattleFrontierDefinesGenerator,
     )
 
     @JvmStatic

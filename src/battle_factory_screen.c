@@ -1770,6 +1770,7 @@ static void CreateFrontierFactorySelectableMons()
             SetMonMoveAvoidReturn(&sFactorySelectScreen->mons[i].monData, gFacilityTrainerMons[monId].moves[j], j);
         SetMonData(&sFactorySelectScreen->mons[i].monData, MON_DATA_FRIENDSHIP, &friendship);
         SetMonData(&sFactorySelectScreen->mons[i].monData, MON_DATA_HELD_ITEM, &gFacilityTrainerMons[monId].item);
+        SetMonData(&sFactorySelectScreen->mons[i].monData, MON_DATA_HP_TYPE, &gFacilityTrainerMons[monId].hpType);
     }
 }
 
@@ -1802,6 +1803,7 @@ static void CreateSlateportTentSelectableMons()
             SetMonMoveAvoidReturn(&sFactorySelectScreen->mons[i].monData, gFacilityTrainerMons[monId].moves[j], j);
         SetMonData(&sFactorySelectScreen->mons[i].monData, MON_DATA_FRIENDSHIP, &friendship);
         SetMonData(&sFactorySelectScreen->mons[i].monData, MON_DATA_HELD_ITEM, &gFacilityTrainerMons[monId].item);
+        SetMonData(&sFactorySelectScreen->mons[i].monData, MON_DATA_HP_TYPE, &gFacilityTrainerMons[monId].hpType);
     }
 }
 

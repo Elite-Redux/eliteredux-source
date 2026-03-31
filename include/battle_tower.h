@@ -1,6 +1,8 @@
 #ifndef GUARD_BATTLE_TOWER_H
 #define GUARD_BATTLE_TOWER_H
 
+#include "generated/data/battle_frontier/battle_frontier_defines.h"
+
 struct RSBattleTowerRecord
 {
     /*0x00*/ u8 lvlMode; // 0 = level 50, 1 = level 100
@@ -32,13 +34,14 @@ struct FacilityMon
     u16 evSpread:6;
     u16 nature:5;
     u16 abilityNum:2;
+    Type hpType;
 };
 
 extern const u8 gTowerMaleFacilityClasses[30];
 extern const u16 gTowerMaleTrainerGfxIds[30];
 extern const u8 gTowerFemaleFacilityClasses[20];
 extern const u16 gTowerFemaleTrainerGfxIds[20];
-extern const struct FacilityMon gBattleFrontierMons[];
+extern const struct FacilityMon gBattleFrontierMons[FRONTIER_MONS_COUNT];
 extern const struct BattleFrontierTrainer gBattleFrontierTrainers[];
 extern const struct FacilityMon gSlateportBattleTentMons[];
 extern const struct BattleFrontierTrainer gSlateportBattleTentTrainers[];

@@ -26,7 +26,6 @@
 #include "constants/apprentice.h"
 #include "constants/battle_dome.h"
 #include "constants/battle_frontier.h"
-#include "constants/battle_frontier_mons.h"
 #include "constants/battle_tent_mons.h"
 #include "constants/battle_tent_trainers.h"
 #include "constants/battle_tower.h"
@@ -81,59 +80,63 @@ static u8 SetTentPtrsGetLevel(void);
 
 #include "data/battle_frontier/battle_frontier_trainer_mons.h"
 #include "data/battle_frontier/battle_frontier_trainers.h"
-#include "data/battle_frontier/battle_frontier_mons.h"
+#include "generated/data/battle_frontier/battle_frontier_mons.h"
 
-const u8 gTowerMaleFacilityClasses[30] = {FACILITY_CLASS_RUIN_MANIAC,
-                                          FACILITY_CLASS_TUBER_M,
-                                          FACILITY_CLASS_COOLTRAINER_M,
-                                          FACILITY_CLASS_RICH_BOY,
-                                          FACILITY_CLASS_POKEMANIAC,
-                                          FACILITY_CLASS_SWIMMER_M,
-                                          FACILITY_CLASS_BLACK_BELT,
-                                          FACILITY_CLASS_GUITARIST,
-                                          FACILITY_CLASS_KINDLER,
-                                          FACILITY_CLASS_CAMPER,
-                                          FACILITY_CLASS_BUG_MANIAC,
-                                          FACILITY_CLASS_PSYCHIC_M,
-                                          FACILITY_CLASS_GENTLEMAN,
-                                          FACILITY_CLASS_SCHOOL_KID_M,
-                                          FACILITY_CLASS_POKEFAN_M,
-                                          FACILITY_CLASS_EXPERT_M,
-                                          FACILITY_CLASS_YOUNGSTER,
-                                          FACILITY_CLASS_FISHERMAN,
-                                          FACILITY_CLASS_CYCLING_TRIATHLETE_M,
-                                          FACILITY_CLASS_RUNNING_TRIATHLETE_M,
-                                          FACILITY_CLASS_SWIMMING_TRIATHLETE_M,
-                                          FACILITY_CLASS_DRAGON_TAMER,
-                                          FACILITY_CLASS_BIRD_KEEPER,
-                                          FACILITY_CLASS_NINJA_BOY,
-                                          FACILITY_CLASS_SAILOR,
-                                          FACILITY_CLASS_COLLECTOR,
-                                          FACILITY_CLASS_PKMN_BREEDER_M,
-                                          FACILITY_CLASS_PKMN_RANGER_M,
-                                          FACILITY_CLASS_BUG_CATCHER,
-                                          FACILITY_CLASS_HIKER};
+const u8 gTowerMaleFacilityClasses[30] = {
+    FACILITY_CLASS_RUIN_MANIAC,
+    FACILITY_CLASS_TUBER_M,
+    FACILITY_CLASS_COOLTRAINER_M,
+    FACILITY_CLASS_RICH_BOY,
+    FACILITY_CLASS_POKEMANIAC,
+    FACILITY_CLASS_SWIMMER_M,
+    FACILITY_CLASS_BLACK_BELT,
+    FACILITY_CLASS_GUITARIST,
+    FACILITY_CLASS_KINDLER,
+    FACILITY_CLASS_CAMPER,
+    FACILITY_CLASS_BUG_MANIAC,
+    FACILITY_CLASS_PSYCHIC_M,
+    FACILITY_CLASS_GENTLEMAN,
+    FACILITY_CLASS_SCHOOL_KID_M,
+    FACILITY_CLASS_POKEFAN_M,
+    FACILITY_CLASS_EXPERT_M,
+    FACILITY_CLASS_YOUNGSTER,
+    FACILITY_CLASS_FISHERMAN,
+    FACILITY_CLASS_CYCLING_TRIATHLETE_M,
+    FACILITY_CLASS_RUNNING_TRIATHLETE_M,
+    FACILITY_CLASS_SWIMMING_TRIATHLETE_M,
+    FACILITY_CLASS_DRAGON_TAMER,
+    FACILITY_CLASS_BIRD_KEEPER,
+    FACILITY_CLASS_NINJA_BOY,
+    FACILITY_CLASS_SAILOR,
+    FACILITY_CLASS_COLLECTOR,
+    FACILITY_CLASS_PKMN_BREEDER_M,
+    FACILITY_CLASS_PKMN_RANGER_M,
+    FACILITY_CLASS_BUG_CATCHER,
+    FACILITY_CLASS_HIKER,
+};
 
-const u8 gTowerFemaleFacilityClasses[20] = {FACILITY_CLASS_AROMA_LADY,
-                                            FACILITY_CLASS_TUBER_F,
-                                            FACILITY_CLASS_COOLTRAINER_F,
-                                            FACILITY_CLASS_HEX_MANIAC,
-                                            FACILITY_CLASS_LADY,
-                                            FACILITY_CLASS_BEAUTY,
-                                            FACILITY_CLASS_PSYCHIC_F,
-                                            FACILITY_CLASS_SCHOOL_KID_F,
-                                            FACILITY_CLASS_POKEFAN_F,
-                                            FACILITY_CLASS_EXPERT_F,
-                                            FACILITY_CLASS_CYCLING_TRIATHLETE_F,
-                                            FACILITY_CLASS_RUNNING_TRIATHLETE_F,
-                                            FACILITY_CLASS_SWIMMING_TRIATHLETE_F,
-                                            FACILITY_CLASS_BATTLE_GIRL,
-                                            FACILITY_CLASS_PARASOL_LADY,
-                                            FACILITY_CLASS_SWIMMER_F,
-                                            FACILITY_CLASS_PICNICKER,
-                                            FACILITY_CLASS_PKMN_BREEDER_F,
-                                            FACILITY_CLASS_PKMN_RANGER_F,
-                                            FACILITY_CLASS_LASS};
+const u8 gTowerFemaleFacilityClasses[20] = {
+    FACILITY_CLASS_AROMA_LADY,
+    FACILITY_CLASS_TUBER_F,
+    FACILITY_CLASS_COOLTRAINER_F,
+    FACILITY_CLASS_HEX_MANIAC,
+    FACILITY_CLASS_LADY,
+    FACILITY_CLASS_BEAUTY,
+    FACILITY_CLASS_PSYCHIC_F,
+    FACILITY_CLASS_SCHOOL_KID_F,
+    FACILITY_CLASS_POKEFAN_F,
+    FACILITY_CLASS_EXPERT_F,
+    FACILITY_CLASS_CYCLING_TRIATHLETE_F,
+    FACILITY_CLASS_RUNNING_TRIATHLETE_F,
+    FACILITY_CLASS_SWIMMING_TRIATHLETE_F,
+    FACILITY_CLASS_BATTLE_GIRL,
+    FACILITY_CLASS_PARASOL_LADY,
+    FACILITY_CLASS_SWIMMER_F,
+    FACILITY_CLASS_PICNICKER,
+    FACILITY_CLASS_PKMN_BREEDER_F,
+    FACILITY_CLASS_PKMN_RANGER_F,
+    FACILITY_CLASS_LASS,
+};
 
 const u16 gTowerMaleTrainerGfxIds[30] = {
     OBJ_EVENT_GFX_HIKER,
@@ -1276,6 +1279,7 @@ static void FillTrainerParty(u16 trainerId, u8 firstMonId, u8 monCount) {
 
         SetMonData(&gEnemyParty[i + firstMonId], MON_DATA_FRIENDSHIP, &friendship);
         SetMonData(&gEnemyParty[i + firstMonId], MON_DATA_HELD_ITEM, &gFacilityTrainerMons[monId].item);
+        SetMonData(&gEnemyParty[i + firstMonId], MON_DATA_HP_TYPE, &gFacilityTrainerMons[monId].hpType);
 
         // The pokemon was successfully added to the trainer's party, so it's safe to move on to
         // the next party slot.
@@ -1383,6 +1387,7 @@ static void FillFactoryFrontierTrainerParty(u16 trainerId, u8 firstMonId) {
 
         SetMonData(&gEnemyParty[firstMonId + i], MON_DATA_FRIENDSHIP, &friendship);
         SetMonData(&gEnemyParty[firstMonId + i], MON_DATA_HELD_ITEM, &gFacilityTrainerMons[monId].item);
+        SetMonData(&gEnemyParty[firstMonId + i], MON_DATA_HP_TYPE, &gFacilityTrainerMons[monId].hpType);
     }
 }
 
@@ -1412,6 +1417,7 @@ static void FillFactoryTentTrainerParty(u16 trainerId, u8 firstMonId) {
 
         SetMonData(&gEnemyParty[firstMonId + i], MON_DATA_FRIENDSHIP, &friendship);
         SetMonData(&gEnemyParty[firstMonId + i], MON_DATA_HELD_ITEM, &gFacilityTrainerMons[monId].item);
+        SetMonData(&gEnemyParty[firstMonId + i], MON_DATA_HP_TYPE, &gFacilityTrainerMons[monId].hpType);
     }
 }
 
@@ -2478,6 +2484,7 @@ static void FillPartnerParty(u16 trainerId) {
             }
             SetMonData(&gPlayerParty[MULTI_PARTY_SIZE + i], MON_DATA_FRIENDSHIP, &friendship);
             SetMonData(&gPlayerParty[MULTI_PARTY_SIZE + i], MON_DATA_HELD_ITEM, &gFacilityTrainerMons[monId].item);
+            SetMonData(&gPlayerParty[MULTI_PARTY_SIZE + i], MON_DATA_HP_TYPE, &gFacilityTrainerMons[monId].hpType);
             for (j = 0; j < PLAYER_NAME_LENGTH + 1; j++) trainerName[j] = gFacilityTrainers[trainerId].trainerName[j];
             SetMonData(&gPlayerParty[MULTI_PARTY_SIZE + i], MON_DATA_OT_NAME, &trainerName);
             j = IsFrontierTrainerFemale(trainerId);
@@ -2823,6 +2830,7 @@ static void FillTentTrainerParty_(u16 trainerId, u8 firstMonId, u8 monCount) {
 
         SetMonData(&gEnemyParty[i + firstMonId], MON_DATA_FRIENDSHIP, &friendship);
         SetMonData(&gEnemyParty[i + firstMonId], MON_DATA_HELD_ITEM, &gFacilityTrainerMons[monId].item);
+        SetMonData(&gEnemyParty[i + firstMonId], MON_DATA_HP_TYPE, &gFacilityTrainerMons[monId].hpType);
 
         // The pokemon was successfully added to the trainer's party, so it's safe to move on to
         // the next party slot.

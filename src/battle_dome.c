@@ -2550,6 +2550,8 @@ static void CreateDomeOpponentMon(u8 monPartyId, u16 tournamentTrainerId, u8 tou
     SetMonData(&gEnemyParty[monPartyId], MON_DATA_FRIENDSHIP, &friendship);
     SetMonData(&gEnemyParty[monPartyId], MON_DATA_HELD_ITEM,
                &gFacilityTrainerMons[DOME_MONS[tournamentTrainerId][tournamentMonId]].item);
+    SetMonData(&gEnemyParty[monPartyId], MON_DATA_HP_TYPE,
+               &gFacilityTrainerMons[DOME_MONS[tournamentTrainerId][tournamentMonId]].hpType);
 }
 
 static void CreateDomeOpponentMons(u16 tournamentTrainerId)
