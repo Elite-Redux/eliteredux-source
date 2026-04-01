@@ -3074,7 +3074,7 @@ int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChan
         FILTER(i == 0 || IsBattlerAlive(abilityBattler))
         ON_ABILITY(abilityBattler,
                    TRUE,
-                   gAbilities[ability].onModifyEffectChance && IsApplyOnFlagAppropriate(battler, abilityBattler, gAbilities[0].onModifyEffectChanceFor),
+                   gAbilities[ability].onModifyEffectChance && IsApplyOnFlagAppropriate(battler, abilityBattler, gAbilities[ability].onModifyEffectChanceFor),
                    gAbilities[ability].onModifyEffectChance(battler, move, moveEffect, &baseChance))
     }
 
