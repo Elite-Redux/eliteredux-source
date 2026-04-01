@@ -3049,7 +3049,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
                     BattleScriptCall(BattleScript_MoveEffectLeechSeed);
                     break;
-                case EFFECT_STICKY_WEB_HIT:
+                case MOVE_EFFECT_STICKY_WEB:
                     REQUIRE_NOT(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STICKY_WEB)
                     gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STICKY_WEB;
                     BattleScriptCall(BattleScript_MoveEffectStickyWeb);
