@@ -3049,7 +3049,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
                     BattleScriptCall(BattleScript_MoveEffectLeechSeed);
                     break;
-                case EFFECT_STICKY_WEB_HIT:
+                case MOVE_EFFECT_STICKY_WEB:
                     REQUIRE_NOT(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STICKY_WEB)
                     gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STICKY_WEB;
                     BattleScriptCall(BattleScript_MoveEffectStickyWeb);
@@ -3074,7 +3074,7 @@ int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChan
         FILTER(i == 0 || IsBattlerAlive(abilityBattler))
         ON_ABILITY(abilityBattler,
                    TRUE,
-                   gAbilities[ability].onModifyEffectChance && IsApplyOnFlagAppropriate(battler, abilityBattler, gAbilities[0].onModifyEffectChanceFor),
+                   gAbilities[ability].onModifyEffectChance && IsApplyOnFlagAppropriate(battler, abilityBattler, gAbilities[ability].onModifyEffectChanceFor),
                    gAbilities[ability].onModifyEffectChance(battler, move, moveEffect, &baseChance))
     }
 

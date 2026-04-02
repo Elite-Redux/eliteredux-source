@@ -4303,7 +4303,7 @@ constexpr Ability Impl<ABILITY_BAD_LUCK> = {
     .onCrit = +[](ON_CRIT) -> int { return NEVER_CRIT; },
     .onModifyEffectChance =
         +[](ON_MODIFY_EFFECT_CHANCE) {
-            if (*effectChance < 1) *effectChance = 0;
+            if (*effectChance < 100) *effectChance = 0;
         },
     .onAccuracyFor = APPLY_ON_TARGET,
     .onCritFor = APPLY_ON_FOE,
