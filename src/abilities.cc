@@ -11186,6 +11186,11 @@ constexpr Ability Impl<ABILITY_I_AM_STEVE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_DEADLY_PRECISION> = {
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK_NOT(IS_MOVE_STATUS(move))
+        CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, TRUE) >= GetSuperEffectiveMult())
+        return ACCURACY_HITS_IF_POSSIBLE;
+    },
     .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
         gHitMarker |= HITMARKER_MOLD_BREAKER;
         SetTypeBeforeUsingMove(move, battler);
