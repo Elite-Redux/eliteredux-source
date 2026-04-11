@@ -11426,6 +11426,7 @@ constexpr Ability Impl<ABILITY_COSMIC_WINGS> = {
 
 template <>
 constexpr Ability Impl<ABILITY_MACH_3> = {
+    .onAccuracy = Impl<ABILITY_DEADLY_PRECISION>.onAccuracy,
     .onChooseOffensiveStat = Impl<ABILITY_SLIPSTREAM>.onChooseOffensiveStat,
     .onMoldBreaker = Impl<ABILITY_DEADLY_PRECISION>.onMoldBreaker,
 };
