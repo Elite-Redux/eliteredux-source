@@ -2376,6 +2376,11 @@ s32 GetDrainedBigRootHp(u32 battler, s32 hp) {
     return hp;
 }
 
+u16 TakesNoBurnDamage(int battler) {
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, noBurnDamage)
+    return FALSE;
+}
+
 #define BATTLER_HAS_MAGIC_GUARD(battlerId) IsMagicGuardProtected(battlerId)
 
 #define MAGIC_GUARD_CHECK                        \
@@ -3181,11 +3186,6 @@ enum {
     CANCELLER_MULTIHIT_MOVES,
     CANCELLER_END,
 };
-
-u16 TakesNoBurnDamage(int battler) {
-    RETURN_ABILITY_IF_FLAG(battler, FALSE, noBurnDamage)
-    return FALSE;
-}
 
 u16 IsPowderImmune(int battler, int checkMoldBreaker) {
     if (IsMyceliumMightActive(gBattlerAttacker)) return FALSE;
@@ -4890,11 +4890,11 @@ int IsTerrainActive(int terrainFlag) {
 
 u32 TerrainTypeToFieldStatus(TerrainType type) {
     int flag = 0;
-    if (flag & TERRAIN_TOXIC) flag |= STATUS_FIELD_TOXIC_TERRAIN;
-    if (flag & TERRAIN_MISTY) flag |= STATUS_FIELD_MISTY_TERRAIN;
-    if (flag & TERRAIN_GRASSY) flag |= STATUS_FIELD_GRASSY_TERRAIN;
-    if (flag & TERRAIN_ELECTRIC) flag |= STATUS_FIELD_ELECTRIC_TERRAIN;
-    if (flag & TERRAIN_PSYCHIC) flag |= STATUS_FIELD_PSYCHIC_TERRAIN;
+    if (type & TERRAIN_TOXIC) flag |= STATUS_FIELD_TOXIC_TERRAIN;
+    if (type & TERRAIN_MISTY) flag |= STATUS_FIELD_MISTY_TERRAIN;
+    if (type & TERRAIN_GRASSY) flag |= STATUS_FIELD_GRASSY_TERRAIN;
+    if (type & TERRAIN_ELECTRIC) flag |= STATUS_FIELD_ELECTRIC_TERRAIN;
+    if (type & TERRAIN_PSYCHIC) flag |= STATUS_FIELD_PSYCHIC_TERRAIN;
     return flag;
 }
 

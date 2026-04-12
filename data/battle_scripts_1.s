@@ -666,7 +666,6 @@ BattleScript_CurseOfFamine::
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_PSYCHICTERRAINENDS, BattleScript_CurseOfFamine_SpDef
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_MISTYTERRAINENDS, BattleScript_CurseOfFamine_SpDef
 	setstatchanger STAT_DEF, 1, FALSE
-	goto BattleScript_CurseOfFamine_Continue
 BattleScript_CurseOfFamine_Continue:
 	printfromtable gTerrainEndingStringIds
 	waitmessage B_WAIT_TIME_LONG

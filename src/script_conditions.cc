@@ -9,6 +9,7 @@ extern "C" {
 #include "generated/constants/species.h"
 #include "battle.h"
 #include "battle_anim.h"
+#include "mgba_printf/mgba.h"
 }
 
 #include "abilities.hh"
