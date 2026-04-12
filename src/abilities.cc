@@ -5142,6 +5142,7 @@ template <>
 constexpr Ability Impl<ABILITY_RETRIBUTION_BLOW> = {
     .onReactive = +[](ON_REACTIVE) -> int {
         CHECK_NOT(gTurnStructs[battler].dancerUsedMove)
+        CHECK(gBattlerAttacker != battler)
         CHECK(IsBattlerAlive(gBattlerAttacker))
         CHECK(gCurrentTurnActionNumber < gBattlersCount || gProcessingExtraAttacks)
         CHECK(gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_NOT_NEEDED)
