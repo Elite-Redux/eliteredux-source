@@ -290,7 +290,7 @@ typedef struct Ability {
     u16 pollinateImmunities:1;
     u16 stickyHold:1;
     u16 noBurnDamage:1;
-} hAbility;
+} Ability;
 
 #ifdef __cplusplus
 #undef AbilityApplyOnWithTarget
