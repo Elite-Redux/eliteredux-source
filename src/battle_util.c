@@ -2390,12 +2390,6 @@ s32 GetDrainedBigRootHp(u32 battler, s32 hp) {
         break;                                                      \
     }
 
-#define FLARE_BOOST_CHECK                                           \
-    if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FLARE_BOOST)) { \
-        gBattleStruct->turnEffectsTracker++;                        \
-        break;                                                      \
-    }
-
 u8 DoBattlerEndTurnEffects(void) {
     u32 i, effect = 0;
 
@@ -2574,7 +2568,6 @@ u8 DoBattlerEndTurnEffects(void) {
             case ENDTURN_BURN:  // burn
                 if ((gBattleMons[gActiveBattler].status1 & STATUS1_BURN) && gBattleMons[gActiveBattler].hp != 0 && !TakesNoBurnDamage(gActiveBattler)) {
                     MAGIC_GUARD_CHECK;
-                    FLARE_BOOST_CHECK;
 
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / (B_BURN_DAMAGE >= GEN_7 ? 16 : 8);
                     if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;

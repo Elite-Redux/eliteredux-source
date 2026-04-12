@@ -2021,6 +2021,7 @@ constexpr Ability Impl<ABILITY_FLARE_BOOST> = {
             if (gBattleMons[battler].status1 & STATUS1_BURN) *stat *= 1.5;
         },
     .negatesBurnAtkDrop = TRUE,
+    .noBurnDamage = TRUE,
 };
 
 template <>
