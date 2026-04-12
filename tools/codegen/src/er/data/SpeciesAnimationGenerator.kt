@@ -2,6 +2,7 @@ package er.data
 
 import er.FileGenerator.IND
 import er.Generator
+import er.GeneratorUtils.NO_EGG_LIST
 import er.GeneratorUtils.SPECIES_LIST
 import er.GeneratorUtils.SPECIES_MAP
 import er.GeneratorUtils.createDedupMaps
@@ -60,9 +61,9 @@ object SpeciesAnimationGenerator : Generator {
 
   override fun generate(writer: OutputStreamWriter) {
       val badAnims =
-          SPECIES_LIST.filter { it.visuals.anim.stepList.isNotEmpty() }
-              .groupBy { it.visuals.anim.stepList.last().frameList.last().image } - 0
-      check(badAnims.isNotEmpty()) {
+          NO_EGG_LIST.filter { it.visuals.anim.stepList.isNotEmpty() }
+              .groupBy { it.visuals.anim.stepList.first().frameList.last().image } - 0
+      check(badAnims.isEmpty()) {
           "Species animations do not end on image 0: ${badAnims.values.flatMap { it }.map { it.id }}"
       }
 
