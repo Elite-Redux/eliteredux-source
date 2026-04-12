@@ -1440,7 +1440,7 @@ BattleScript_MoveEffectFlameBurst::
 	healthbarupdate BS_TARGET_PARTNER
 	datahpupdate BS_TARGET_PARTNER
 	tryfaintmon BS_TARGET_PARTNER, FALSE, NULL
-	goto BattleScript_MoveEnd
+	return
 
 BattleScript_EffectPowerTrick:
 	attackcanceler
@@ -3374,7 +3374,7 @@ BattleScript_MoveEffectAttract::
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_EFFECT_BATTLER
 	waitstate
-	goto BattleScript_MoveEnd
+	return
 
 BattleScript_MoveEffectCurse::
 	statusanimation BS_EFFECT_BATTLER
