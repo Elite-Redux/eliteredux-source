@@ -7318,7 +7318,6 @@ static void Cmd_various(void) {
                             .attacker = gBattlerAttacker,
                             .move = move,
                             .target = GetMoveTarget(gBattlerAttacker, gCalledMove, 0),
-                            .movePos = MAX_MON_MOVES,
                             .prankster = BattlerHasAbility(gBattlerAttacker, ABILITY_PRANKSTER, FALSE),
                         };
                         gStatuses3[gBattlerAttacker] |= STATUS3_ME_FIRST;
@@ -7577,7 +7576,7 @@ static void Cmd_various(void) {
                         .attacker = gActiveBattler,
                         .target = GetMoveTarget(gActiveBattler, gLastMoves[gActiveBattler], 0),
                         .move = gLastMoves[gActiveBattler],
-                        .movePos = i,
+                        .movePos = i + 1,
                     };
                 }
             }
@@ -10600,7 +10599,6 @@ static void Cmd_metronome(void) {
         .attacker = gBattlerAttacker,
         .move = move,
         .target = GetMoveTarget(gBattlerAttacker, move, 0),
-        .movePos = MAX_MON_MOVES,
         .prankster = BattlerHasAbility(gBattlerAttacker, ABILITY_PRANKSTER, FALSE),
     };
     gBattlescriptCurrInstr++;
@@ -10928,7 +10926,7 @@ static void Cmd_trychoosesleeptalkmove(void) {
             .attacker = gBattlerAttacker,
             .target = GetMoveTarget(gBattlerAttacker, gCalledMove, 0),
             .move = gBattleMons[gBattlerAttacker].moves[movePosition],
-            .movePos = movePosition,
+            .movePos = movePosition + 1,
         };
 
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);

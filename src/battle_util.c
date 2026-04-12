@@ -178,8 +178,11 @@ void HandleAction_UseMove(void) {
     // choose move
     if (gProcessingExtraAttacks) {
         gCurrentMove = gChosenMove = gQueuedExtraAttackData[0].move;
-        gCurrMovePos = gQueuedExtraAttackData[0].movePos;
-        if (gCurrMovePos == MAX_MON_MOVES) gHitMarker |= HITMARKER_NO_PPDEDUCT;
+        if (!gQueuedExtraAttackData[0].movePos) {
+            gCurrMovePos = MAX_MON_MOVES;
+            gHitMarker |= HITMARKER_NO_PPDEDUCT;
+        } else
+            gCurrMovePos = gQueuedExtraAttackData[0].movePos - 1;
         gBattlerTarget = gQueuedExtraAttackData[0].target;
         gBattleScripting.usingExtraMove = TRUE;
     } else if (gRoundStructs[gBattlerAttacker].noValidMoves) {
@@ -3745,7 +3748,6 @@ bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum mo
         .attacker = battler,
         .target = target,
         .movePower = movePower,
-        .movePos = MAX_MON_MOVES,
     };
 
     return TRUE;
@@ -4004,7 +4006,6 @@ u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, MoveEnu
         .target = target,
         .move = extraMove,
         .movePower = movePower,
-        .movePos = MAX_MON_MOVES,
     };
 
     return FALSE;

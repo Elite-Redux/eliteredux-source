@@ -413,7 +413,7 @@ static int UseTurnAttackAsPursuit(ON_PREEMPT_ACTION) {
         .move = move,
         .attacker = battler,
         .target = turnBattler,
-        .movePos = gBattleStruct->chosenMovePositions[battler],
+        .movePos = gBattleStruct->chosenMovePositions[battler] + 1,
     };
     gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] = B_ACTION_FINISHED;
     return TRUE;
