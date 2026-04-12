@@ -7687,7 +7687,7 @@ template <>
 constexpr Ability Impl<ABILITY_TERA_SHELL> = {
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
-            if (*mod >= UQ_4_12(1.0) && BATTLER_MAX_HP(battler)) *mod = UQ_4_12(0.5);
+            if (*mod >= UQ_4_12(1.0) && BATTLER_MAX_HP(target)) *mod = UQ_4_12(0.5);
         },
     .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
