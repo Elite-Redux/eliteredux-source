@@ -1490,6 +1490,7 @@ constexpr Ability Impl<ABILITY_HEATPROOF> = {
         },
     .breakable = TRUE,
     .negatesBurnAtkDrop = TRUE,
+    .noBurnDamage = TRUE,
 };
 
 template <>
@@ -8502,6 +8503,7 @@ constexpr Ability Impl<ABILITY_IRON_GIANT> = {
     .breakable = TRUE,
     .negatesBurnAtkDrop = TRUE,
     .removesStatusOnImmunity = TRUE,
+    .noBurnDamage = TRUE,
 };
 
 template <>
@@ -12405,6 +12407,7 @@ constexpr Ability Impl<ABILITY_THERMAL_ENTROPY> = {
     .breakable = TRUE,
     .negatesBurnAtkDrop = TRUE,
     .removesStatusOnImmunity = TRUE,
+    .noBurnDamage = TRUE,
 };
 
 template <>
@@ -12474,6 +12477,7 @@ constexpr Ability Impl<ABILITY_DROIDEKA> = {
     .onCritFor = Impl<ABILITY_SHELL_ARMOR>.onCritFor,
     .breakable = TRUE,
     .negatesBurnAtkDrop = TRUE,
+    .noBurnDamage = TRUE,
 };
 
 template <>

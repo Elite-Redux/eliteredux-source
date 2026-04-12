@@ -2572,8 +2572,7 @@ u8 DoBattlerEndTurnEffects(void) {
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_BURN:  // burn
-                if ((gBattleMons[gActiveBattler].status1 & STATUS1_BURN) && gBattleMons[gActiveBattler].hp != 0 &&
-                    !BattlerHasAbility(gActiveBattler, ABILITY_HEATPROOF, FALSE)) {
+                if ((gBattleMons[gActiveBattler].status1 & STATUS1_BURN) && gBattleMons[gActiveBattler].hp != 0 && !TakesNoBurnDamage(gActiveBattler)) {
                     MAGIC_GUARD_CHECK;
                     FLARE_BOOST_CHECK;
 
@@ -3190,6 +3189,11 @@ enum {
     CANCELLER_END,
 };
 
+u16 TakesNoBurnDamage(int battler) {
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, noBurnDamage)
+    return FALSE;
+}
+
 u16 IsPowderImmune(int battler, int checkMoldBreaker) {
     if (IsMyceliumMightActive(gBattlerAttacker)) return FALSE;
     if (IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)) return TRUE;
@@ -3779,7 +3783,7 @@ bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum mo
 }
 
 bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8* timer) {
-    if (!(gFieldStatuses & statusFlag) && !((gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) == STATUS_FIELD_TERRAIN_PERMANENT)) {
+    if (!(gFieldStatuses & statusFlag) && !(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT)) {
         gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;
         gFieldStatuses |= statusFlag;
         gFieldTimers.started.terrain = TRUE;
