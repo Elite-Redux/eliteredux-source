@@ -2279,6 +2279,7 @@ u8 DoFieldEndTurnEffects(void) {
     if (!gSideTimers[i].started.type && gSideTimers[i].type##Timer) gSideTimers[i].type##Timer--;
 
                     DECREMENT_SIDE_TIMER(quickGuard)
+                    DECREMENT_SIDE_TIMER(rainbow)
 #undef DECREMENT_SIDE_TIMER
                 }
                 gBattleStruct->turnCountersTracker++;
@@ -6089,7 +6090,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                 case HOLD_EFFECT_THROAT_SPRAY:  // Does NOT need to be a damaging move
                     REQUIRE(IsBattlerAlive(gBattlerAttacker))
                     REQUIRE(gRoundStructs[gBattlerAttacker].targetAffected || gTurnStructs[gBattlerAttacker].damagedMons)
-                    REQUIRE(gBattleMoves[gCurrentMove].flags & FLAG_SOUND)
+                    REQUIRE(IsSoundMove(gBattlerAttacker, gCurrentMove))
                     REQUIRE(CanRaiseStat(gBattlerAttacker, STAT_SPATK))
                     REQUIRE_NOT(NoAliveMonsForEitherParty())
 
@@ -6789,8 +6790,13 @@ static u16 CalcMoveBasePower(MoveEnum move, u8 battlerAtk, u8 battlerDef) {
             }
         } break;
         case EFFECT_ROLLOUT:
-            REQUIRE(gVolatileStructs[battlerAtk].rolloutCounter)
-            basePower = basePower << (gVolatileStructs[battlerAtk].rolloutCounter - 1);
+            if (!gVolatileStructs[battlerAtk].rolloutCounter) {
+                // For damage preview
+                REQUIRE(gBattleMons[battlerAtk].status2 & STATUS2_DEFENSE_CURL)
+                basePower = basePower << 1;
+            } else {
+                basePower = basePower << (gVolatileStructs[battlerAtk].rolloutCounter - 1);
+            }
             break;
         case EFFECT_MAGNITUDE:
             basePower = gBattleStruct->magnitudeBasePower;
