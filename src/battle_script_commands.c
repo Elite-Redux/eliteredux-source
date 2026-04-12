@@ -1357,7 +1357,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, MoveEnum move, struct MoveS
                    TRUE,
                    gAbilities[ability].onAccuracy &&
                        IsTargettedApplyOnFlagAppropriate(battlerAtk, sourceBattler, battlerAtk, battlerDef, gAbilities[ability].onAccuracyFor),
-                   int result = gAbilities[ability].onAccuracy(ability, battlerAtk, battlerDef, move, moveType, &moveAcc);
+                   AccuracyPriority result = gAbilities[ability].onAccuracy(ability, battlerAtk, battlerDef, move, moveType, &moveAcc);
                    prio = max(prio, result))
     }
 

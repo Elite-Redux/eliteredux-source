@@ -7884,7 +7884,7 @@ static void UpdateMoveResultFlags(u16 modifier) {
     }
 }
 
-static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities, u16 modifier) {
+static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, Type moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities, u16 modifier) {
     u32 illusionSpecies;
     u16 modifier1, modifier2, modifier3;
     u8 currentAttackBattler = gBattlerAttacker;
@@ -7954,10 +7954,10 @@ static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, u8 moveType, u
     return modifier;
 }
 
-u16 CalcTypeEffectivenessMultiplier(MoveEnum move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities) {
+u16 CalcTypeEffectivenessMultiplier(MoveEnum move, Type moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities) {
     u16 modifier = UQ_4_12(1.0);
 
-    if (move != MOVE_STRUGGLE && moveType != TYPE_MYSTERY) {
+    if (move != MOVE_STRUGGLE && moveType) {
         modifier = CalcTypeEffectivenessMultiplierInternal(move, moveType, battlerAtk, battlerDef, recordAbilities, modifier);
     }
 

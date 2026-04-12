@@ -11188,7 +11188,7 @@ template <>
 constexpr Ability Impl<ABILITY_DEADLY_PRECISION> = {
     .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
         CHECK_NOT(IS_MOVE_STATUS(move))
-        CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, TRUE) >= GetSuperEffectiveMult())
+        CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, FALSE) >= GetSuperEffectiveMult())
         return ACCURACY_HITS_IF_POSSIBLE;
     },
     .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {

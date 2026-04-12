@@ -316,7 +316,7 @@ s32 CalculateMoveDamage(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8* moveTyp
 s32 CalculateMoveDamageAndEffectiveness(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8* moveType, u16* typeEffectivenessModifier);
 u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags);
 int CalcMoveDamageAi(MoveEnum move, int battlerAtk, int battlerDef, u8* moveType, int fixedBasePower, struct MoveState* moveState);
-u16 CalcTypeEffectivenessMultiplier(MoveEnum move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
+u16 CalcTypeEffectivenessMultiplier(MoveEnum move, Type moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
 u16 CalcPartyMonTypeEffectivenessMultiplier(MoveEnum move, SpeciesEnum speciesDef, u16 abilityDef, u8 leveldef);
 u16 GetTypeModifier(int atkType, int defType, int miracleEyeAtk, int miracleEyeDef);
 s32 GetStealthHazardDamage(u8 hazardType, u8 battlerId);
