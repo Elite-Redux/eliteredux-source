@@ -159,7 +159,7 @@ u32 CustomMoveDamage<EFFECT_ERUPTION>(CUSTOM_MOVE_DAMAGE_PARAMS) {
     return gBattleMons[battlerAtk].hp * baseDamage / gBattleMons[battlerAtk].maxHP;
 }
 
-static const u16 sWeightToDamageTable[] = {100, 20, 250, 40, 500, 60, 1000, 80, 2000, 100, 0xFFFF, 0xFFFF};
+static const u16 sWeightToDamageTable[] = {100, 20, 250, 40, 500, 60, 1000, 80, 2000, 100};
 
 template <>
 u32 CustomMoveDamage<EFFECT_LOW_KICK>(CUSTOM_MOVE_DAMAGE_PARAMS) {
