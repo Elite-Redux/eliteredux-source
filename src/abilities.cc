@@ -7303,6 +7303,7 @@ constexpr Ability Impl<ABILITY_WATCH_YOUR_STEP> = {
 
         gSideTimers[targetSide].spikesAmount = min(gSideTimers[targetSide].spikesAmount + 2, 3);
         gSideStatuses[targetSide] |= SIDE_STATUS_SPIKES;
+        gBattlerTarget = BATTLE_OPPOSITE(battler);
         BattleScriptPushCursorAndCallback(BattleScript_DoubleSpikesOnEntry);
         return TRUE;
     },
