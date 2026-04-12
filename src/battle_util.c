@@ -5103,8 +5103,8 @@ bool32 CanBeDrenched(u8 battlerId) {
     if (gVolatileStructs[battlerId].drenched) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
-    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_WATER))
-        if (IsAbilityStatusProtected(battlerId, CHECK_DRENCH)) return FALSE;
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_WATER)) return FALSE;
+    if (IsAbilityStatusProtected(battlerId, CHECK_DRENCH)) return FALSE;
 
     return TRUE;
 }
