@@ -460,6 +460,8 @@ int IsStatusImmune(u8 battlerId, StatusCheckEnum status);
 u16 IsPowderImmune(int battler, int checkMoldBreaker);
 s8 GetSingleUseAbilityCountByIndex(u8 battler, int index);
 void SetSingleUseAbilityCountByIndex(u8 battler, int index, u8 value);
+MoveEnum GetMoveToBeUsed(u8 battler);
+u8 GetFullChosenTarget(u8 battler, MoveEnum move);
 
 MultihitType GetMultihitType(int battler, MoveEnum move);
 

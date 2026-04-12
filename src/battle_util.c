@@ -149,6 +149,30 @@ u8 GetBattlerBattleMoveTargetFlags(MoveEnum moveId, u8 battler) {
     return gBattleMoves[moveId].target;
 }
 
+MoveEnum GetMoveToBeUsed(u8 battler) {
+    if (gRoundStructs[battler].noValidMoves) return MOVE_STRUGGLE;
+
+    if (gBattleMons[battler].status2 & STATUS2_MULTIPLETURNS || gBattleMons[battler].status2 & STATUS2_RECHARGE) return gLockedMoves[battler];
+
+    if (gVolatileStructs[battler].encoredMove != MOVE_NONE) return gBattleMons[battler].moves[gVolatileStructs[battler].encoredMovePos];
+
+    return gBattleMons[battler].moves[gBattleStruct->chosenMovePositions[battler]];
+}
+
+u8 GetFullChosenTarget(u8 battler, MoveEnum move) {
+    if (gRoundStructs[battler].noValidMoves) return GetMoveTarget(battler, MOVE_STRUGGLE, 0);
+
+    if (gBattleMons[battler].status2 & STATUS2_MULTIPLETURNS || gBattleMons[battler].status2 & STATUS2_RECHARGE) return gBattleStruct->moveTarget[battler];
+
+    if (gVolatileStructs[gBattlerAttacker].encoredMove != MOVE_NONE) return GetMoveTarget(battler, move, 0);
+
+    u8 movePos = gBattleStruct->chosenMovePositions[gBattlerAttacker];
+
+    if (gBattleMons[battler].moves[movePos] != move) return GetMoveTarget(battler, move, 0);
+
+    return gBattlerTarget = gBattleStruct->moveTarget[battler];
+}
+
 // Functions
 void HandleAction_UseMove(void) {
     u32 i, side, moveType;
