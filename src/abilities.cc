@@ -408,12 +408,14 @@ static int UseTurnAttackAsPursuit(ON_PREEMPT_ACTION) {
             return FALSE;
     }
 
+    u8 chosenPosition = gBattleStruct->chosenMovePositions[battler] + 1;
+
     gQueuedExtraAttackData[++gQueuedAttackCount] = (ExtraAttackActionStruct){
         .ability = ability,
         .move = move,
         .attacker = battler,
         .target = turnBattler,
-        .movePos = gBattleStruct->chosenMovePositions[battler] + 1,
+        .movePos = (u8)min(chosenPosition, MAX_MON_MOVES),
     };
     gActionsByTurnOrder[GetBattlerTurnOrderNum(battler)] = B_ACTION_FINISHED;
     return TRUE;
@@ -1907,7 +1909,7 @@ constexpr Ability Impl<ABILITY_CURSED_BODY> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK_NOT(gVolatileStructs[attacker].disabledMove)
-        //CHECK(IsMoveMakingContact(move, attacker))
+        // CHECK(IsMoveMakingContact(move, attacker))
         CHECK_NOT(IsAbilityStatusProtected(attacker, CHECK_RESTRICTING))
         CHECK(gBattleMons[attacker].pp[gChosenMovePos])
         CHECK(Random() % 100 < 30)

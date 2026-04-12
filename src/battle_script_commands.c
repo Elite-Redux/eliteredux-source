@@ -2353,7 +2353,13 @@ void SetMoveEffect(bool32 primary, u32 certain) {
         gBattleScripting.moveEffect <= MOVE_EFFECT_CONFUSION)
         RESET_RETURN
 
-    if (TestSheerForceFlag(gBattlerAttacker, gCurrentMove)) RESET_RETURN
+    switch (gBattleScripting.moveEffect) {
+        case MOVE_EFFECT_CHARGING:
+            break;
+
+        default:
+            if (TestSheerForceFlag(gBattlerAttacker, gCurrentMove)) RESET_RETURN
+    }
 
     if (gBattleMons[gEffectBattler].hp == 0) {
         switch (gBattleScripting.moveEffect) {
