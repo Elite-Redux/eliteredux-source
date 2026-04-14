@@ -12592,6 +12592,20 @@ constexpr Ability Impl<ABILITY_WARRIORS_SPEAR> = {
     ATE_ABILITY(TYPE_FIGHTING),
 };
 
+template <>
+constexpr Ability Impl<ABILITY_HYPNOTIC_TRANCE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(move == MOVE_HYPNOSIS)
+        CHECK(WasMoveSuccessful())
+        CHECK(CanBeConfused(target))
+        return AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
+    },
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(move == MOVE_HYPNOSIS)
+        return ACCURACY_HITS_IF_POSSIBLE;
+    },
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
