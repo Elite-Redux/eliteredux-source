@@ -10173,7 +10173,7 @@ template <>
 constexpr Ability Impl<ABILITY_BIOFILM> = {
     .onStat =
         +[](ON_STAT) {
-            if (statId == STAT_SPDEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN)) *stat *= 1.5;
+            if (statId == STAT_SPDEF && IsTerrainActive(STATUS_FIELD_TOXIC_TERRAIN)) *stat *= 1.5;
         },
 };
 
