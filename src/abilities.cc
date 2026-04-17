@@ -1655,6 +1655,7 @@ template <>
 constexpr Ability Impl<ABILITY_AFTERMATH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(gBattleMoves[move].effect == EFFECT_EXPLOSION)
+        CHECK(ShouldApplyOnHitEffect(target))
 
         return AbilityStatusEffectDirect(MOVE_EFFECT_FLINCH);
     },
