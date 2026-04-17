@@ -4306,7 +4306,7 @@ union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove) {
 
     if (!ignoreChosenMove) {
         MoveEnum move = GetMoveToBeUsed(battler);
-        priority += GetChosenMovePriority(move, GetFullChosenTarget(battler, move));
+        priority += GetChosenMovePriority(battler, GetFullChosenTarget(battler, move));
         if (priority > 15)
             priority = 15;
         else if (priority < 0)

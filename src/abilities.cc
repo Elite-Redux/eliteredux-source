@@ -10174,7 +10174,7 @@ template <>
 constexpr Ability Impl<ABILITY_BIOFILM> = {
     .onStat =
         +[](ON_STAT) {
-            if (statId == STAT_SPDEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_TOXIC_TERRAIN)) *stat *= 1.5;
+            if (statId == STAT_SPDEF && IsTerrainActive(STATUS_FIELD_TOXIC_TERRAIN)) *stat *= 1.5;
         },
 };
 
@@ -12591,6 +12591,20 @@ constexpr Ability Impl<ABILITY_WARRIORS_SPEAR> = {
     .onInfiltrate = Impl<ABILITY_FIGHT_SPIRIT>.onInfiltrate,
     .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
     ATE_ABILITY(TYPE_FIGHTING),
+};
+
+template <>
+constexpr Ability Impl<ABILITY_HYPNOTIC_TRANCE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(move == MOVE_HYPNOSIS)
+        CHECK(WasMoveSuccessful())
+        CHECK(CanBeConfused(target))
+        return AbilityStatusEffect(MOVE_EFFECT_CONFUSION);
+    },
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(move == MOVE_HYPNOSIS)
+        return ACCURACY_HITS_IF_POSSIBLE;
+    },
 };
 
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
