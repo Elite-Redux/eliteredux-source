@@ -4169,7 +4169,7 @@ static u32 GetSpeedFromAbilities(u8 battlerId, MoveEnum move, u32 speed) {
 
     for (int i = 0; i < gBattlersCount; i++) {
         FILTER(i == battlerId || IsBattlerAlive(i))
-        ON_ABILITY(battlerId,
+        ON_ABILITY(i,
                    FALSE,
                    gAbilities[ability].onStat && IsApplyOnFlagAppropriate(battlerId, i, gAbilities[ability].onStatFor),
                    gAbilities[ability].onStat(ability, battlerId, move, STAT_SPEED, &speed, &flags))
