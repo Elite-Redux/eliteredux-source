@@ -12579,11 +12579,8 @@ constexpr Ability Impl<ABILITY_JUNGLE_FEVER> = {
 
 template <>
 constexpr Ability Impl<ABILITY_KING_OF_THE_JUNGLE> = {
+    .onEntry = Impl<ABILITY_GRASSY_SURGE>.onEntry,
     .onInfiltrate = Impl<ABILITY_INFILTRATOR>.onInfiltrate,
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) RESISTANCE(1.5);
-        },
 };
 
 template <>
