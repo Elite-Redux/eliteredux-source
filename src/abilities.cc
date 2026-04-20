@@ -12342,9 +12342,9 @@ constexpr Ability Impl<ABILITY_FEATHERCOAT> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (typeEffectivenessModifier < UQ_4_12(1))
-                MUL(.8);
+                MUL(.7);
             else
-                MUL(.9);
+                MUL(.85);
         },
     .breakable = TRUE,
 };
