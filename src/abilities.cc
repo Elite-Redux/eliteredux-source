@@ -12342,9 +12342,9 @@ constexpr Ability Impl<ABILITY_FEATHERCOAT> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (typeEffectivenessModifier < UQ_4_12(1))
-                MUL(.8);
+                MUL(.7);
             else
-                MUL(.9);
+                MUL(.85);
         },
     .breakable = TRUE,
 };
@@ -12579,11 +12579,8 @@ constexpr Ability Impl<ABILITY_JUNGLE_FEVER> = {
 
 template <>
 constexpr Ability Impl<ABILITY_KING_OF_THE_JUNGLE> = {
+    .onEntry = Impl<ABILITY_GRASSY_SURGE>.onEntry,
     .onInfiltrate = Impl<ABILITY_INFILTRATOR>.onInfiltrate,
-    .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLIER) {
-            if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) RESISTANCE(1.5);
-        },
 };
 
 template <>
