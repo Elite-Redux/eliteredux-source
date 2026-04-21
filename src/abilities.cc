@@ -9979,13 +9979,7 @@ constexpr IntimidateCloneData Intimidate<ABILITY_SCARECROW> = Intimidate<ABILITY
 template <>
 constexpr Ability Impl<ABILITY_SCARECROW> = {
     .onEntry = UseIntimidateClone,
-    .onAccuracy = Impl<ABILITY_BAD_LUCK>.onAccuracy,
-    .onCrit = Impl<ABILITY_BAD_LUCK>.onCrit,
-    .onModifyEffectChance = Impl<ABILITY_BAD_LUCK>.onModifyEffectChance,
-    .onAccuracyFor = Impl<ABILITY_BAD_LUCK>.onAccuracyFor,
-    .onCritFor = Impl<ABILITY_BAD_LUCK>.onCritFor,
-    .onModifyEffectChanceFor = Impl<ABILITY_BAD_LUCK>.onModifyEffectChanceFor,
-    .breakable = TRUE,
+    .onDefender = Impl<ABILITY_COTTON_DOWN>.onDefender,
 };
 
 template <>
