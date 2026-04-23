@@ -9783,6 +9783,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
                 gTurnStructs[battler].statLowered = TRUE;
                 BattleScriptCall(BattleScript_MistProtected);
             }
+            return 0;
         } else if (gCurrentMove != MOVE_CURSE && notProtectAffected != TRUE && JumpIfMoveAffectedByProtect(0)) {
             if (flags == STAT_BUFF_ALLOW_PTR) {
                 gBattlescriptCurrInstr = BattleScript_ButItFailed;
