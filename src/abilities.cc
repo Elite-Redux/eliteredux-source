@@ -11728,6 +11728,11 @@ constexpr Ability Impl<ABILITY_OVERCAST> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int any = FALSE;
         if (!(gSideStatuses[battler] & SIDE_STATUS_MIST)) {
+            int side = GetBattlerSide(battler);
+            gSideStatuses[side] |= SIDE_STATUS_MIST;
+            gSideTimers[side].started.mist = TRUE;
+            gSideTimers[side].mistTimer = SCREEN_DURATION;
+            gSideTimers[side].mistBattlerId = battler;
             InsertCorrectEndType(ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
             BattleScriptCall(BattleScript_AttackerSetsMist);
             any = TRUE;
