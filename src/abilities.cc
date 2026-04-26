@@ -12603,6 +12603,14 @@ constexpr Ability Impl<ABILITY_HYPNOTIC_TRANCE> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_BUTTERFLY_WINGS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_GIANT_WINGS>.onOffensiveMultiplier,
+    ATE_ABILITY(TYPE_BUG),
+    .breakable = TRUE,
+    .pollinateImmunities = TRUE,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
