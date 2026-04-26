@@ -12611,6 +12611,16 @@ constexpr Ability Impl<ABILITY_BUTTERFLY_WINGS> = {
     .pollinateImmunities = TRUE,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_SAND_TITAN> = {
+    .onEntry = Impl<ABILITY_SAND_STREAM>.onEntry,
+    .onChooseOffensiveStat = Impl<ABILITY_JUGGERNAUT>.onChooseOffensiveStat,
+    .onStatusImmune = Impl<ABILITY_JUGGERNAUT>.onStatusImmune,
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+    .sandImmune = TRUE,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
