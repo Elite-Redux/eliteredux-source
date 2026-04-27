@@ -12624,6 +12624,7 @@ constexpr Ability Impl<ABILITY_SAND_TITAN> = {
 template <>
 constexpr Ability Impl<ABILITY_FAMILIA_BOND> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType { return PARENTAL_BOND_FAMILIA_BOND; },
+    .resistsFortKnox = TRUE,
 };
 
 template <>
