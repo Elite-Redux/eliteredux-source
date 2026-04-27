@@ -51,6 +51,7 @@ typedef enum {
     PARENTAL_BOND_MINION_CONTROL,
     PARENTAL_BOND_THREE_HEADED,
     PARENTAL_BOND_ICE_COLD_HUNTER,
+    PARENTAL_BOND_FAMILIA_BOND,
 } MultihitType;
 typedef MultihitType (*AbilityOnParentalBondHandler)(u8 battler, MoveEnum move, Type moveType);
 typedef void (*AbilityOnOffensiveMultiplierHandler)(u8 battler,
