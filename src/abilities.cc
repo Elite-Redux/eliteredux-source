@@ -12626,6 +12626,13 @@ constexpr Ability Impl<ABILITY_FAMILIA_BOND> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType { return PARENTAL_BOND_FAMILIA_BOND; },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_MEGA_SOL> = {
+    .onEntry = Impl<ABILITY_GRASSY_SURGE>.onEntry,
+    .allowTerrainIfAirborne = TERRAIN_GRASSY,
+    .chloroplast = TRUE,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
