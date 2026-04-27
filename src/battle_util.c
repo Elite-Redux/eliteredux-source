@@ -7482,6 +7482,10 @@ u16 GetParentalBondMultiplier(MultihitType parentalBondType, int turn) {
 
         case PARENTAL_BOND_DUAL_WIELD:
             return UQ_4_12(0.7);
+
+        case PARENTAL_BOND_FAMILIA_BOND:
+            REQUIRE(turn)
+            return UQ_4_12(0.5);
     }
 
     return UQ_4_12(1.0);
