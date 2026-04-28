@@ -12634,6 +12634,18 @@ constexpr Ability Impl<ABILITY_MEGA_SOL> = {
     .chloroplast = TRUE,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_PETROLEUM_JELLY> = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            Impl<ABILITY_HYPER_CLEANSE>.onDefensiveMultiplier(DELEGATE_DEFENSIVE_MULTIPLIER);
+            Impl<ABILITY_LIQUIFIED>.onDefensiveMultiplier(DELEGATE_DEFENSIVE_MULTIPLIER);
+        },
+    .onStatusImmune = Impl<ABILITY_HYPER_CLEANSE>.onStatusImmune,
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
