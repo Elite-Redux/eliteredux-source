@@ -12201,7 +12201,7 @@ template <>
 constexpr Ability Impl<ABILITY_FOAMY_WEB> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(Impl<ABILITY_SPIDER_LAIR>.onEntry(DELEGATE_ENTRY))
-        gSideTimers[GetBattlerSide(battler)].foamyWeb = TRUE;
+        gSideTimers[GetOppositeSide(battler)].foamyWeb = TRUE;
         return TRUE;
     },
 };
@@ -12644,6 +12644,18 @@ constexpr Ability Impl<ABILITY_PETROLEUM_JELLY> = {
     .onStatusImmune = Impl<ABILITY_HYPER_CLEANSE>.onStatusImmune,
     .breakable = TRUE,
     .removesStatusOnImmunity = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_SPICY_SPRAY> = {
+    .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType { return INFILTRATE_SUBSTITUTE; },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitEffect(attacker))
+        CHECK(CanBeBurned(attacker))
+
+        AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, attacker);
+        return TRUE;
+    },
 };
 
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
