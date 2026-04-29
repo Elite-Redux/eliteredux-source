@@ -12201,7 +12201,7 @@ template <>
 constexpr Ability Impl<ABILITY_FOAMY_WEB> = {
     .onEntry = +[](ON_ENTRY) -> int {
         CHECK(Impl<ABILITY_SPIDER_LAIR>.onEntry(DELEGATE_ENTRY))
-        gSideTimers[GetBattlerSide(battler)].foamyWeb = TRUE;
+        gSideTimers[GetOppositeSide(battler)].foamyWeb = TRUE;
         return TRUE;
     },
 };
@@ -12624,6 +12624,7 @@ constexpr Ability Impl<ABILITY_SAND_TITAN> = {
 template <>
 constexpr Ability Impl<ABILITY_FAMILIA_BOND> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType { return PARENTAL_BOND_FAMILIA_BOND; },
+    .resistsFortKnox = TRUE,
 };
 
 template <>
@@ -12631,6 +12632,45 @@ constexpr Ability Impl<ABILITY_MEGA_SOL> = {
     .onEntry = Impl<ABILITY_GRASSY_SURGE>.onEntry,
     .allowTerrainIfAirborne = TERRAIN_GRASSY,
     .chloroplast = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_PETROLEUM_JELLY> = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            Impl<ABILITY_HYPER_CLEANSE>.onDefensiveMultiplier(DELEGATE_DEFENSIVE_MULTIPLIER);
+            Impl<ABILITY_LIQUIFIED>.onDefensiveMultiplier(DELEGATE_DEFENSIVE_MULTIPLIER);
+        },
+    .onStatusImmune = Impl<ABILITY_HYPER_CLEANSE>.onStatusImmune,
+    .breakable = TRUE,
+    .removesStatusOnImmunity = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_SPICY_SPRAY> = {
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitEffect(attacker))
+        CHECK(CanBeBurned(attacker))
+
+        AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, attacker);
+        return TRUE;
+    },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_CRIMSON_CROWN> = {
+    .onAttacker = Impl<ABILITY_SPIKE_ARMOR>.onAttacker,
+    .onDefender = Impl<ABILITY_SPIKE_ARMOR>.onDefender,
+    .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_MANA_COAT> = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if ((gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN) && IS_MOVE_PHYSICAL(move)) MUL(1.3);
+        },
+    .allowTerrainIfAirborne = TERRAIN_PSYCHIC,
 };
 
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
