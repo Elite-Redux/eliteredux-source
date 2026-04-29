@@ -12657,6 +12657,13 @@ constexpr Ability Impl<ABILITY_SPICY_SPRAY> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_CRIMSON_CROWN> = {
+    .onAttacker = Impl<ABILITY_SPIKE_ARMOR>.onAttacker,
+    .onDefender = Impl<ABILITY_SPIKE_ARMOR>.onDefender,
+    .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
