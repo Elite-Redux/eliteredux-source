@@ -12664,6 +12664,15 @@ constexpr Ability Impl<ABILITY_CRIMSON_CROWN> = {
     .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_MANA_COAT> = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if ((gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN) && IS_MOVE_PHYSICAL(move)) MUL(1.3);
+        },
+    .allowTerrainIfAirborne = TERRAIN_PSYCHIC,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
