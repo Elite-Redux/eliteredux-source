@@ -12648,7 +12648,6 @@ constexpr Ability Impl<ABILITY_PETROLEUM_JELLY> = {
 
 template <>
 constexpr Ability Impl<ABILITY_SPICY_SPRAY> = {
-    .onInfiltrate = +[](ON_INFILTRATE) -> InfiltrateType { return INFILTRATE_SUBSTITUTE; },
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitEffect(attacker))
         CHECK(CanBeBurned(attacker))
