@@ -263,13 +263,13 @@ static int AddBattlerType(u8 battler, Type type) {
 static int AbilityStatusEffect(MoveEffectEnum effect) {
     gBattleScripting.moveEffect = effect;
     BattleScriptCall(BattleScript_AbilityStatusEffect);
-    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD | HITMARKER_IGNORE_SUBSTITUTE;
     return TRUE;
 }
 
 static int AbilityStatusEffectDirect(MoveEffectEnum effect) {
     gBattleScripting.moveEffect = effect;
-    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD | HITMARKER_IGNORE_SUBSTITUTE;
     SetMoveEffect(FALSE, FALSE);
     return FALSE;
 }
@@ -279,7 +279,7 @@ static int AbilityStatusEffectSafe(MoveEffectEnum effect, u8 attacker, u8 target
     gStackBattler1 = attacker;
     gStackBattler2 = target;
     BattleScriptCall(BattleScript_AbilityStatusEffectSafe);
-    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD | HITMARKER_IGNORE_SUBSTITUTE;
     return TRUE;
 }
 
