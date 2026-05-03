@@ -9949,7 +9949,7 @@ constexpr Ability Impl<ABILITY_MADNESS_ENHANCEMENT> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (gBattleMons[battler].status2 & STATUS2_ENRAGED) {
-                MUL(.5);
+                MUL(.8);
             }
         },
 };
