@@ -5008,7 +5008,7 @@ constexpr Ability Impl<ABILITY_PYRO_SHELLS> = {
         CHECK(IsMegaLauncherBoosted(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
-        return UseAttackerFollowUpMove(battler, target, ability, MOVE_OUTBURST, 50);
+        return UseAttackerFollowUpMove(battler, target, ability, gBattleMoves[move].split == SPLIT_PHYSICAL ? MOVE_EXPLOSION : MOVE_OUTBURST, 50);
     },
 };
 
