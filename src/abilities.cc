@@ -10233,10 +10233,15 @@ constexpr Ability Impl<ABILITY_IMPALER> = {
 
 template <>
 constexpr Ability Impl<ABILITY_MAGUS_BLADES> = {
-    .onParentalBond = Impl<ABILITY_DUAL_WIELD>.onParentalBond,
-    .onOffensiveMultiplier = Impl<ABILITY_KEEN_EDGE>.onOffensiveMultiplier,
+    .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
+        CHECK(IsKeenEdge(battler, move, moveType));
+        return PARENTAL_BOND_MAGUS_BLADES;
+    },
     .onSwapSplit = Impl<ABILITY_MYSTIC_BLADES>.onSwapSplit,
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPDEF] += 20; },
+    .onChooseOffensiveStat =
+        +[](ON_CHOOSE_OFFENSIVE_STAT) {
+            if (IsKeenEdge(battler, move, GetTypeBeforeUsingMove(move, battler))) secondaryAtkStatToUse[STAT_DEF] += 20;
+        },
 };
 
 template <>

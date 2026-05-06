@@ -1014,6 +1014,7 @@ int GetParentalBondCount(int battler, MultihitType parentalBondType) {
         case PARENTAL_BOND_DUAL_WIELD:
         case PARENTAL_BOND_ICE_COLD_HUNTER:
         case PARENTAL_BOND_FAMILIA_BOND:
+        case PARENTAL_BOND_MAGUS_BLADES:
             return 2;
 
         case PARENTAL_BOND_THREE_HEADED:
