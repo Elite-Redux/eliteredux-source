@@ -10213,9 +10213,11 @@ constexpr Ability Impl<ABILITY_FEY_FLIGHT> = {
 
 template <>
 constexpr Ability Impl<ABILITY_BEST_OFFENSE> = {
-    .onOffensiveMultiplier = Impl<ABILITY_KEEN_EDGE>.onOffensiveMultiplier,
     .onSwapSplit = Impl<ABILITY_MYSTIC_BLADES>.onSwapSplit,
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPDEF] += 20; },
+    .onChooseOffensiveStat =
+        +[](ON_CHOOSE_OFFENSIVE_STAT) {
+            if (IsKeenEdge(battler, move, GetTypeBeforeUsingMove(move, battler))) secondaryAtkStatToUse[STAT_DEF] += 20;
+        },
 };
 
 template <>
@@ -10238,10 +10240,7 @@ constexpr Ability Impl<ABILITY_MAGUS_BLADES> = {
         return PARENTAL_BOND_MAGUS_BLADES;
     },
     .onSwapSplit = Impl<ABILITY_MYSTIC_BLADES>.onSwapSplit,
-    .onChooseOffensiveStat =
-        +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (IsKeenEdge(battler, move, GetTypeBeforeUsingMove(move, battler))) secondaryAtkStatToUse[STAT_DEF] += 20;
-        },
+    .onChooseOffensiveStat = Impl<ABILITY_BEST_OFFENSE>.onChooseOffensiveStat,
 };
 
 template <>
