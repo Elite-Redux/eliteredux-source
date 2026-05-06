@@ -263,13 +263,13 @@ static int AddBattlerType(u8 battler, Type type) {
 static int AbilityStatusEffect(MoveEffectEnum effect) {
     gBattleScripting.moveEffect = effect;
     BattleScriptCall(BattleScript_AbilityStatusEffect);
-    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD | HITMARKER_IGNORE_SUBSTITUTE;
     return TRUE;
 }
 
 static int AbilityStatusEffectDirect(MoveEffectEnum effect) {
     gBattleScripting.moveEffect = effect;
-    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD | HITMARKER_IGNORE_SUBSTITUTE;
     SetMoveEffect(FALSE, FALSE);
     return FALSE;
 }
@@ -279,7 +279,7 @@ static int AbilityStatusEffectSafe(MoveEffectEnum effect, u8 attacker, u8 target
     gStackBattler1 = attacker;
     gStackBattler2 = target;
     BattleScriptCall(BattleScript_AbilityStatusEffectSafe);
-    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD | HITMARKER_IGNORE_SUBSTITUTE;
     return TRUE;
 }
 
@@ -5008,7 +5008,7 @@ constexpr Ability Impl<ABILITY_PYRO_SHELLS> = {
         CHECK(IsMegaLauncherBoosted(battler, move))
         CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_STANDARD))
 
-        return UseAttackerFollowUpMove(battler, target, ability, MOVE_OUTBURST, 50);
+        return UseAttackerFollowUpMove(battler, target, ability, gBattleMoves[move].split == SPLIT_PHYSICAL ? MOVE_EXPLOSION : MOVE_OUTBURST, 50);
     },
 };
 
@@ -9949,7 +9949,7 @@ constexpr Ability Impl<ABILITY_MADNESS_ENHANCEMENT> = {
     .onDefensiveMultiplier =
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (gBattleMons[battler].status2 & STATUS2_ENRAGED) {
-                MUL(.5);
+                MUL(.8);
             }
         },
 };
@@ -10213,9 +10213,11 @@ constexpr Ability Impl<ABILITY_FEY_FLIGHT> = {
 
 template <>
 constexpr Ability Impl<ABILITY_BEST_OFFENSE> = {
-    .onOffensiveMultiplier = Impl<ABILITY_KEEN_EDGE>.onOffensiveMultiplier,
     .onSwapSplit = Impl<ABILITY_MYSTIC_BLADES>.onSwapSplit,
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPDEF] += 20; },
+    .onChooseOffensiveStat =
+        +[](ON_CHOOSE_OFFENSIVE_STAT) {
+            if (IsKeenEdge(battler, move, GetTypeBeforeUsingMove(move, battler))) secondaryAtkStatToUse[STAT_DEF] += 20;
+        },
 };
 
 template <>
@@ -10233,10 +10235,12 @@ constexpr Ability Impl<ABILITY_IMPALER> = {
 
 template <>
 constexpr Ability Impl<ABILITY_MAGUS_BLADES> = {
-    .onParentalBond = Impl<ABILITY_DUAL_WIELD>.onParentalBond,
-    .onOffensiveMultiplier = Impl<ABILITY_KEEN_EDGE>.onOffensiveMultiplier,
+    .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
+        CHECK(IsKeenEdge(battler, move, moveType));
+        return PARENTAL_BOND_MAGUS_BLADES;
+    },
     .onSwapSplit = Impl<ABILITY_MYSTIC_BLADES>.onSwapSplit,
-    .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { secondaryAtkStatToUse[STAT_SPDEF] += 20; },
+    .onChooseOffensiveStat = Impl<ABILITY_BEST_OFFENSE>.onChooseOffensiveStat,
 };
 
 template <>

@@ -1014,6 +1014,7 @@ int GetParentalBondCount(int battler, MultihitType parentalBondType) {
         case PARENTAL_BOND_DUAL_WIELD:
         case PARENTAL_BOND_ICE_COLD_HUNTER:
         case PARENTAL_BOND_FAMILIA_BOND:
+        case PARENTAL_BOND_MAGUS_BLADES:
             return 2;
 
         case PARENTAL_BOND_THREE_HEADED:
@@ -12254,6 +12255,7 @@ bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move, Type
     if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE)) return FALSE;
     if (IsSoundMove(battlerAtk, move)) return FALSE;
     if (gBattleMoves[move].flags & FLAG_HIT_IN_SUBSTITUTE) return FALSE;
+    if (gHitMarker & HITMARKER_IGNORE_SUBSTITUTE) return FALSE; // For effects from abilities like Flame Body on defense
 
     if (Infiltrates(battlerAtk, move, moveType, INFILTRATE_SUBSTITUTE)) return FALSE;
 
