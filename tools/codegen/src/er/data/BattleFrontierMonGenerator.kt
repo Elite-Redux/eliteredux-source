@@ -98,6 +98,6 @@ object BattleFrontierMonGenerator : Generator {
     |#ifdef VALIDATE_TRAINERS
     |${errors.joinToString("\n")}
     |#endif
-    """.trimIndent())
+    """.trimMargin())
   }
 }
