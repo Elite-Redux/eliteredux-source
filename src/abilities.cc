@@ -6711,6 +6711,7 @@ constexpr Ability Impl<ABILITY_BERSERK_DNA> = {
         } else {
             SetOnMoveEffectReactionFlags(battler, battler, MOVE_EFFECT_CONFUSION);
             gBattleMons[battler].status2 |= STATUS2_ENRAGED;
+            SetAbilityState(battler, ABILITY_MENTAL_POLLUTION, TRUE);
             BattleScriptPushCursorAndCallback(BattleScript_BerserkDNA);
         }
         return TRUE;
@@ -9936,6 +9937,7 @@ static int MadnessEnhancementHandler(u8 battler, AbilityCallType callType) {
     CHECK_NOT(gBattleMons[battler].status2 & STATUS2_ENRAGED)
 
     gBattleMons[battler].status2 |= STATUS2_ENRAGED;
+    SetAbilityState(battler, ABILITY_MENTAL_POLLUTION, TRUE);
 
     InsertCorrectEndType(callType);
     BattleScriptCall(BattleScript_MadnessEnhancementRet);
@@ -12128,9 +12130,9 @@ constexpr Ability Impl<ABILITY_MENTAL_POLLUTION> = {
         for (int i = 0; i < gBattlersCount; i++) {
             FILTER(i != battler)
             FILTER_NOT(BattlerHasAbility(i, ABILITY_MENTAL_POLLUTION, FALSE))
-            FILTER_NOT(gStatuses3[battler] & STATUS3_GASTRO_ACID)
-            FILTER_NOT(DoesBattlerHaveAbilityShield(battler))
-            gStatuses3[battler] |= STATUS3_GASTRO_ACID;
+            FILTER_NOT(gStatuses3[i] & STATUS3_GASTRO_ACID)
+            FILTER_NOT(DoesBattlerHaveAbilityShield(i))
+            gStatuses3[i] |= STATUS3_GASTRO_ACID;
             any = TRUE;
         }
 
