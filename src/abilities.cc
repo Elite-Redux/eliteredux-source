@@ -12679,6 +12679,14 @@ constexpr Ability Impl<ABILITY_MANA_COAT> = {
     .allowTerrainIfAirborne = TERRAIN_PSYCHIC,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_HEMORRHAGE> = {
+    .onReactive = Impl<ABILITY_HEMOTOXIN>.onReactive,
+    .onBattlerFaints = Impl<ABILITY_POISON_PUPPETEER>.onBattlerFaints,
+    .onBattlerFaintsFor = Impl<ABILITY_POISON_PUPPETEER>.onBattlerFaintsFor,
+    .setStateOnEffect = MOVE_EFFECT_BLEED,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
