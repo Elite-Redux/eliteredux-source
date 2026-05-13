@@ -12687,6 +12687,15 @@ constexpr Ability Impl<ABILITY_HEMORRHAGE> = {
     .setStateOnEffect = MOVE_EFFECT_BLEED,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_OVERCLOCK> = {
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        return Impl<ABILITY_GROUND_SHOCK>.onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS) ||
+               Impl<ABILITY_OVERCHARGE>.onTypeEffectiveness(DELEGATE_TYPE_EFFECTIVENESS);
+    },
+    .onCanStatusType = Impl<ABILITY_OVERCHARGE>.onCanStatusType,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
