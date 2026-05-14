@@ -10252,13 +10252,6 @@ constexpr Ability Impl<ABILITY_LIGHTNING_BORN> = {
 };
 
 template <>
-constexpr Ability Impl<ABILITY_WORLD_SERPENT> = {
-    .onAttacker = Impl<ABILITY_GRIP_PINCER>.onAttacker,
-    .onOffensiveMultiplier = Impl<ABILITY_LONG_REACH>.onOffensiveMultiplier,
-    .onAccuracy = Impl<ABILITY_GRIP_PINCER>.onAccuracy,
-};
-
-template <>
 constexpr Ability Impl<ABILITY_LUCKY_WINGS> = {
     .onOffensiveMultiplier = Impl<ABILITY_GIANT_WINGS>.onOffensiveMultiplier,
     .onModifyEffectChance = Impl<ABILITY_SERENE_GRACE>.onModifyEffectChance,
@@ -12045,6 +12038,13 @@ constexpr Ability Impl<ABILITY_SERPENT_BIND> = {
         BattleScriptCall(BattleScript_GripPincerActivated);
         return TRUE;
     },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_WORLD_SERPENT> = {
+    .onEndTurn = Impl<ABILITY_SERPENT_BIND>.onEndTurn,
+    .onAttacker = Impl<ABILITY_GRIP_PINCER>.onAttacker,
+    .onAccuracy = Impl<ABILITY_GRIP_PINCER>.onAccuracy,
 };
 
 static int DrakelpHeadReformHandler(u8 battler, AbilityEnum ability, AbilityCallType type) {
