@@ -4872,15 +4872,15 @@ BattleScript_EffectSoothingAroma::
 	end3
 
 BattleScript_HealAllPartyStatus::
-	copyword gTempMove, gCurrentMove
-	setword gCurrentMove, MOVE_NONE
+	copyhword gTempMove, gCurrentMove
+	sethword gCurrentMove, MOVE_NONE
 	healpartystatus
 	waitstate
 	printfromtable gPartyStatusHealStringIds
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_ATTACKER_WITH_PARTNER
 	waitstate
-	copyword gCurrentMove, gTempMove
+	copyhword gCurrentMove, gTempMove
 	return
 
 BattleScript_EffectHitPreventEscape:
