@@ -9560,7 +9560,7 @@ BattleScript_HealStack1HpOver8End2::
 	manipulatedamage DMG_CHANGE_SIGN
 	call BattleScript_AbilityHpHeal_NoPopup
 	readattackerfromstack3
-	end3
+	end2
 
 BattleScript_HealHpOver4::
 	hpfractiontodamage BS_ATTACKER, 4
