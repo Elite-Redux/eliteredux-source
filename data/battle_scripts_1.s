@@ -9553,11 +9553,13 @@ BattleScript_RainDishActivates::
 	call BattleScript_AbilityHpHeal_NoPopup
 	end3
 
-BattleScript_HealStack1HpOver8End3::
+BattleScript_HealStack1HpOver8End2::
+	saveattackertostack3
 	copybyte gBattlerAttacker, gStackBattler1
 	hpfractiontodamage BS_ATTACKER, 8
 	manipulatedamage DMG_CHANGE_SIGN
 	call BattleScript_AbilityHpHeal_NoPopup
+	readattackerfromstack3
 	end3
 
 BattleScript_HealHpOver4::

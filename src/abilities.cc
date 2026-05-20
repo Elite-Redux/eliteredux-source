@@ -10544,7 +10544,7 @@ constexpr Ability Impl<ABILITY_WINTER_THRONE> = {
                 FILTER_NOT(BATTLER_MAX_HP(target))
                 FILTER(CanBattlerHeal(target))
                 gStackBattler1 = target;
-                BattleScriptPushCursorAndCallback(BattleScript_HealStack1HpOver8End3);
+                BattleScriptExecute(BattleScript_HealStack1HpOver8End2);
             }
 
             any = TRUE;
