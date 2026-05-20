@@ -10544,7 +10544,7 @@ constexpr Ability Impl<ABILITY_WINTER_THRONE> = {
                 FILTER_NOT(BATTLER_MAX_HP(target))
                 FILTER(CanBattlerHeal(target))
                 gStackBattler1 = target;
-                BattleScriptPushCursorAndCallback(BattleScript_HealStack1HpOver8End3);
+                BattleScriptExecute(BattleScript_HealStack1HpOver8End2);
             }
 
             any = TRUE;
@@ -11317,7 +11317,7 @@ template <>
 constexpr Ability Impl<ABILITY_ZEN_GARDEN> = {
     .onEntry = +[](ON_ENTRY) -> int {
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SEEDS) {
-            switch (ItemId_GetSecondaryId(battler)) {
+            switch (ItemId_GetSecondaryId(gBattleMons[battler].item)) {
                 case HOLD_EFFECT_PARAM_GRASSY_TERRAIN:
                     return Impl<ABILITY_GRASSY_SURGE>.onEntry(DELEGATE_ENTRY);
 
