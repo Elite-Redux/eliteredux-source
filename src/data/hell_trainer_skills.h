@@ -398,4 +398,240 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // TODO: Priority moves fail if used by player (player can select another move after selecting a priority move though)
         // TODO: Passive Brightpowder
     },
+    // ==== SLATEPORT CITY ====
+    //[TRAINER_GRETA_SLATEPORT] = {
+        // TODO: Player cannot switch by ANY means
+        // TODO: Player's active Pokemon faints if it does not get a KO in 3 turns
+        // TODO: Player Pokemon get sent out in slot order (for example: Pokemon in slot 2 always sent out after slot 1 faints)
+    //},
+    // ==== SLATEPORT MUSEUM ====
+    //[TRAINER_GRUNT_MUSEUM_1] = {
+        // TODO: Sets caltrops on player's side
+    //},
+    //[TRAINER_GRUNT_MUSEUM_2] = {
+        // TODO: Permanent hail
+    //},
+    //[TRAINER_ARCHIE_SLATEPORT] = {
+        // TODO: Permanent rain
+    //},
+    // ==== ROUTE 103 ====
+    [TRAINER_ISABELLE] = {
+        // Test Primordial Sea (might be a little weird constantly activating/deactivating when Trainer Pokemon faint/switch?)
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_PRIMORDIAL_SEA, 0},
+        // TODO: Permanent Swamp
+        // TODO: Rooms don't work
+    },
+    [TRAINER_PETE] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_PRIMORDIAL_SEA, 0},
+        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_SWIFT_SWIM, 0},
+        [HELL_MODE_TRAINER_SKILL_3] = {BATTLE_EVENT_EXTRA_ABILITIES_3, ABILITY_SAP_SIPPER, 0},
+    },
+    [TRAINER_RHETT] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_LONG_REACH, 0},
+    },
+    //[TRAINER_MARCOS] = {
+        // TODO: Soundproof does not work
+    //},
+    //[TRAINER_AMY_AND_LIV_1] = {
+        // TODO: Life Dew used on switch on
+    //},
+    //[TRAINER_ANDREW] = {
+        // TODO: Permanent Rain
+    //},
+    //[TRAINER_DAISY] = {
+        // TODO: Passive Lax Incense (Bright Powder effect)
+    //},
+    [TRAINER_MIGUEL_1] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_PRETTY_PRINCESS, 0},
+    },
+    // ==== ALTERING CAVE ====
+    //[TRAINER_LEAF_ALTERING_CAVE] = {
+        // TODO: The player can only use mons from Kanto (excluding forms)
+        // TODO: Both sides use Sp. Def for dealing/taking special damage
+        // TODO: Suppress player's abilities
+    //},
+    // ==== ROUTE 110 ====
+    [TRAINER_ISABEL_1] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_FRIEND_GUARD, 0},
+    },
+    //[TRAINER_KALEB] = {
+        // TODO: Permanent Quash
+    //},
+    //[TRAINER_TIMMY] = {
+        // TODO: One layer of Spikes on entry
+        // TODO: Moves heal 200% of damage dealt (only healing moves or all?)
+    //},
+    //[TRAINER_DALE] = {
+        // TODO: Electric immunity
+        // TODO: Switch in with Helping Hand boost
+    //},
+    [TRAINER_JOSEPH] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_MOLD_BREAKER, 0},
+    },
+    [TRAINER_ALYSSA] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SPEED_BOOST, 0},
+    },
+    //[TRAINER_EDWIN_1] = {
+        // TODO: Trainer mons ignore player's immunities
+    //},
+    //[TRAINER_EDWARD] = {
+        // TODO: Trick room
+    //},
+    //[TRAINER_BRENDAN_ROUTE_110_TREECKO] = {
+        // TODO: Enemy team benefits from fog effects
+        // TODO: Permanent fog
+    //},
+    //[TRAINER_BRENDAN_ROUTE_110_TORCHIC] = {
+        // TODO: Enemy team benefits from fog effects
+        // TODO: Permanent fog
+    //},
+    //[TRAINER_BRENDAN_ROUTE_110_MUDKIP] = {
+        // TODO: Enemy team benefits from fog effects
+        // TODO: Permanent fog
+    //},
+    //[TRAINER_MAY_ROUTE_110_TREECKO] = {
+        // TODO: Enemy team benefits from fog effects
+        // TODO: Permanent fog
+    //},
+    //[TRAINER_MAY_ROUTE_110_TORCHIC] = {
+        // TODO: Enemy team benefits from fog effects
+        // TODO: Permanent fog
+    //},
+    //[TRAINER_MAY_ROUTE_110_MUDKIP] = {
+        // TODO: Enemy team benefits from fog effects
+        // TODO: Permanent fog
+    //},
+    [TRAINER_JACLYN] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_GIFTED_MIND, 0},
+    },
+    //[TRAINER_ABIGAIL_1] = {
+        // TODO: Boost attack by 50% and speed by 20% on entry for AI's mons
+    //},
+    //[TRAINER_BENJAMIN_1] = {
+        // TODO: Hadron Engine but permanent electric terrain
+    //},
+    [TRAINER_JACOB] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_GUARD_DOG, 0},
+    },
+    //[TRAINER_ANTHONY] = {
+        // TODO: Permanent Misty Terrain
+    //},
+    //[TRAINER_JASMINE] = {
+        // TODO: +2 Speed on entry for AI's mons and Speed cannot be reduced
+    //},
+    // ==== MAUVILLE CITY ====
+    //[TRAINER_WALLY_MAUVILLE] = {
+        // TODO: Passive Ability Shield for AI's mons
+        // TODO: Changes player's abilities to Lethargy (blockable by Ability Shield)
+    //},
+    // ==== MAUVILLE GAME CORNER ====
+    //[TRAINER_SINNOH_MEGAS_MAUVILLE_GAME_CORNER] = {
+        // TODO: Enemies are immune to stat drops
+        // TODO: Enemies gain +1 to best attack stat on entry
+        // TODO: Enemy moves can never miss
+        // TODO: Immune to rooms
+    //},
+    // ==== ROUTE 111 South ====
+    //[TRAINER_BIANCA] = {
+        // TODO: Player's mons get insta-KOed (!!) by critical hits
+    //},
+    //[TRAINER_CELINA] = {
+        // TODO: Player's moves have a 30% chance to miss
+    //},
+    //[TRAINER_HAYDEN] = {
+        // TODO: Permanent sun
+    //},
+    //[TRAINER_TYRON] = {
+        // TODO: Flower Gift ability, but always only buffs the user (won't buff allies in double battles)
+    //},
+    [TRAINER_VICTOR] = {
+        // Self Sufficient in place of passive leftovers (for now maybe)
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SELF_SUFFICIENT, 0},
+        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_INNER_FOCUS, 0},
+        // TODO: Permanent sandstorm
+    },
+    [TRAINER_VICTORIA] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_GRASS_PELT, 0},
+        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_FLOURISH, 0},
+        [HELL_MODE_TRAINER_SKILL_3] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_SELF_SUFFICIENT, 0},
+    },
+    [TRAINER_VIVI] = {
+        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_BIOFILM, 0},
+        [HELL_MODE_TRAINER_SKILL_3] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_POISON_ABSORB, 0},
+        // TODO: Permanent Toxic Terrain
+    },
+    //[TRAINER_VICKY] = {
+        // TODO: Suppress player's abilities
+        // TODO: Toxic Spikes (on entry I assume?)
+        // TODO: Spikes (on entry I assume?)
+    //},
+    // ==== ROUTE 118 West ====
+    [TRAINER_DEANDRE] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_GALLANTRY, 0},
+    },
+    //[TRAINER_WADE] = {
+        // TODO: Rain sets Aurora Veil
+    //},
+    //[TRAINER_DALTON_1] = {
+        // TODO: Sound moves always crit
+    //},
+    //[TRAINER_ROSE_1] = {
+        // TODO: Lowers player's highest attacking stat each turn
+    //},
+    // ==== ROUTE 117 ====
+    [TRAINER_DEREK] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_TINTED_LENS, 0},
+    },
+    [TRAINER_AISHA] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_HYPER_AGGRESSIVE, 0},
+    },
+    [TRAINER_ANNA_AND_MEG_1] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_FRIEND_GUARD, 0},
+    },
+    [TRAINER_DYLAN_1] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_MOMENTUM, 0},
+    },
+    [TRAINER_MARIA_1] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_IMPULSE, 0},
+    },
+    [TRAINER_ISAAC_1] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_HUBRIS, 0},
+    },
+    [TRAINER_LYDIA_1] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_MOXIE, 0},
+    },
+    [TRAINER_BRANDI] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_PSYCHIC_MIND, 0},
+    },
+    //[TRAINER_MELINA] = {
+        // TODO: Tailwind on entry (permanent?)
+    //},
+    // ==== VERDANTURF MEADOWS ====
+    [TRAINER_MEGANIUMITE_VERDANTURF_MEADOW] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_TRIAGE, 0},
+        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_DAZZLING, 0},
+        // TODO: Permanent Safeguard
+    },
+    // ==== MAUVILLE GYM ====
+    // Permanent electric terrain for all Mauville Gym battles?
+    //[TRAINER_VIVIAN] = {
+        // TODO: Flourish ability but for Electric Terrain 
+    //},
+    [TRAINER_BEN] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SURGE_SURFER, 0},
+    },
+    [TRAINER_KIRK] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_TRANSISTOR, 0},
+    },
+    [TRAINER_SHAWN] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_FRIEND_GUARD, 0},
+    },
+    [TRAINER_ANGELO] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_POWER_SPOT, 0},
+    },
+    [TRAINER_WATTSON_1] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SURGE_SURFER, 0},
+        // TODO: Player's entire party is paralyzed
+        // TODO: Ignores rooms
+    },
 };
