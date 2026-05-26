@@ -14,7 +14,6 @@
 #include "roamer.h"
 #include "tv.h"
 #include "link.h"
-#include "load_save.h"
 #include "script.h"
 #include "battle_debug.h"
 #include "battle_pike.h"
@@ -29,6 +28,7 @@
 #include "generated/constants/species.h"
 #include "item.h"
 #include "mgba_printf/mgba.h"
+#include "nuzlocke.h"
 
 extern const u8 EventScript_RepelWoreOff[];
 

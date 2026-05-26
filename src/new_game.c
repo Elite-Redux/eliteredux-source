@@ -46,6 +46,7 @@
 #include "tx_registered_items_menu.h"
 #include "constants/items.h"
 #include "constants/map_groups.h"
+#include "nuzlocke.h"
 
 extern const u8 EventScript_ResetAllMapFlags[];
 
@@ -227,6 +228,7 @@ void NewGameInitData(void)
 	gSaveBlock2Ptr->start_cursorRowY = 0;
 	gSaveBlock2Ptr->start_FirstItem  = 0;
     ClearAllNuzlockeFlags();
+    ClearAllRouteEncounters();
     VarSet(VAR_SAVE_VERSION, CURRENT_GAME_VERSION);
 }
 
