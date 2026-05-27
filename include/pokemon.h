@@ -580,13 +580,6 @@ bool8 getInnateDisableLevel(u8 innateNum);
 bool8 isMoveDisabled(u8 battler, u16 move);
 u16 GetHeldItemIfNotDuplicate(u8 partyId);
 
-void SetNuzlockeCaughtFlag(u8 locationIndex);
-void ClearNuzlockeCaughtFlag(u8 locationIndex);
-bool8 GetNuzlockeCaughtFlag(u8 locationIndex);
-bool8 AreNuzlockeRulesEnabled(void);
-void ClearNuzlockeDisableFlags(void);
-void ClearAllNuzlockeFlags(void);
-
 AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy);
 AbilityEnum GetExtraAbilityForBattler(u8 battler, u8 abilityNumber);
 AbilityEnum GetBattlerAbilityInSlot(u8 battler, u8 abilityNumber);

@@ -150,6 +150,12 @@ typedef enum RouteIndex {
 u8 GetRouteIndex(s8 loc, s8 locG);
 bool8 IsRouteEncountered(s8 loc, s8 locG);
 void MarkRouteAsEncountered(s8 loc, s8 locG);
-void ClearAllRouteEncounters();
+void ClearAllRouteEncounters(void);
+void SetNuzlockeCaughtFlag(u8 locationIndex);
+void ClearNuzlockeCaughtFlag(u8 locationIndex);
+bool8 GetNuzlockeCaughtFlag(u8 locationIndex);
+bool8 AreNuzlockeRulesEnabled(void);
+void ClearAllNuzlockeFlags(void);
+void ClearNuzlockeDisableFlags(void);
 
 #endif // GUARD_NUZLOCKE_H

@@ -1,6 +1,9 @@
 #include "global.h"
+#include "event_data.h"
 #include "load_save.h"
 #include "nuzlocke.h"
+#include "pokemon.h"
+#include "pokemon_storage_system.h"
 #include "constants/map_groups.h"
 #include "constants/maps.h"
 #include "mgba_printf/mgba.h"
@@ -487,10 +490,63 @@ void MarkRouteAsEncountered(s8 loc, s8 locG) {
     }
 }
 
-void ClearAllRouteEncounters() {
+void ClearAllRouteEncounters(void) {
     gSaveBlock2Ptr->encounteredroutes1 = 0;
     gSaveBlock2Ptr->encounteredroutes2 = 0;
     gSaveBlock2Ptr->encounteredroutes3 = 0;
     gSaveBlock2Ptr->encounteredroutes4 = 0;
     gSaveBlock2Ptr->encounteredroutes5 = 0;
+}
+
+void SetNuzlockeCaughtFlag(u8 locationIndex) {
+    u8 byteIndex = locationIndex / 8;
+    u8 bitIndex = locationIndex % 8;
+    gSaveBlock2Ptr->hasCaughtMonOnLocation[byteIndex] |= (1 << bitIndex);
+}
+
+void ClearNuzlockeCaughtFlag(u8 locationIndex) {
+    u8 byteIndex = locationIndex / 8;
+    u8 bitIndex = locationIndex % 8;
+    gSaveBlock2Ptr->hasCaughtMonOnLocation[byteIndex] &= ~(1 << bitIndex);
+}
+
+bool8 GetNuzlockeCaughtFlag(u8 locationIndex) {
+    u8 byteIndex = locationIndex / 8;
+    u8 bitIndex = locationIndex % 8;
+    return (gSaveBlock2Ptr->hasCaughtMonOnLocation[byteIndex] & (1 << bitIndex)) != 0;
+}
+
+bool8 AreNuzlockeRulesEnabled(void) {
+    bool8 nuzlockeRulesEnabled = (FlagGet(FLAG_NUZLOCKE_MODE_ENABLED) || isHellMode());
+
+    return nuzlockeRulesEnabled;
+}
+
+#define NUZLOCKE_CAUGHT_LOCATION_COUNT 0xFF  // METLOC_FATEFUL_ENCOUNTER
+
+void ClearAllNuzlockeFlags(void) {
+    u16 i;
+
+    for (i = 0; i < NUZLOCKE_CAUGHT_LOCATION_COUNT; i++) ClearNuzlockeCaughtFlag(i);
+}
+
+void ClearNuzlockeDisableFlags(void) {
+    u16 boxId, boxPosition, i;
+    bool8 isDisabled = FALSE;
+
+    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++) {
+        for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++) {
+            if (GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_SPECIES) != SPECIES_NONE)
+                SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_IS_DISABLED, &isDisabled);
+        }
+    }
+
+    for (i = 0; i < PARTY_SIZE; i++) {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE) SetMonData(&gPlayerParty[i], MON_DATA_LEVEL, &isDisabled);
+    }
+
+    if (FlagGet(FLAG_NUZLOCKE_MODE_ENABLED)) {
+        FlagSet(FLAG_LOST_NUZLOCKE_CHALLENGE);
+        FlagClear(FLAG_NUZLOCKE_MODE_ENABLED);
+    }
 }

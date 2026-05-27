@@ -38,6 +38,7 @@
 #include "mirage_tower.h"
 #include "money.h"
 #include "new_game.h"
+#include "nuzlocke.h"
 #include "palette.h"
 #include "play_time.h"
 #include "random.h"

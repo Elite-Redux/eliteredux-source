@@ -11,6 +11,7 @@
 #include "link_rfu.h"
 #include "main.h"
 #include "menu.h"
+#include "nuzlocke.h"
 #include "overworld.h"
 #include "palette.h"
 #include "party_menu.h"
