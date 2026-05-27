@@ -542,7 +542,7 @@ void ClearNuzlockeDisableFlags(void) {
     }
 
     for (i = 0; i < PARTY_SIZE; i++) {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE) SetMonData(&gPlayerParty[i], MON_DATA_LEVEL, &isDisabled);
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE) SetMonData(&gPlayerParty[i], MON_DATA_IS_DISABLED, &isDisabled);
     }
 
     if (FlagGet(FLAG_NUZLOCKE_MODE_ENABLED)) {
