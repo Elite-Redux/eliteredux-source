@@ -7991,10 +7991,14 @@ static u16 CalcTypeEffectivenessMultiplierInternal(MoveEnum move, Type moveType,
     return modifier;
 }
 
+static inline bool8 IsValidType(Type type) {
+    return (unsigned)type < (unsigned)NUMBER_OF_MON_TYPES;
+}
+
 u16 CalcTypeEffectivenessMultiplier(MoveEnum move, Type moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities) {
     u16 modifier = UQ_4_12(1.0);
 
-    if (move != MOVE_STRUGGLE && moveType) {
+    if (move != MOVE_STRUGGLE && IsValidType(moveType)) {
         modifier = CalcTypeEffectivenessMultiplierInternal(move, moveType, battlerAtk, battlerDef, recordAbilities, modifier);
     }
 
@@ -8008,7 +8012,7 @@ u16 CalcPartyMonTypeEffectivenessMultiplier(MoveEnum move, SpeciesEnum speciesDe
     u16 modifier = UQ_4_12(1.0);
     u8 moveType = gBattleMoves[move].type;
 
-    if (move != MOVE_STRUGGLE && moveType != TYPE_MYSTERY) {
+    if (move != MOVE_STRUGGLE && IsValidType(moveType)) {
         MulByTypeEffectiveness(&modifier, move, moveType, 0, gBaseStats[speciesDef].type1, 0, FALSE);
         if (gBaseStats[speciesDef].type2 != gBaseStats[speciesDef].type1)
             MulByTypeEffectiveness(&modifier, move, moveType, 0, gBaseStats[speciesDef].type2, 0, FALSE);
