@@ -25,6 +25,13 @@ const u8 gBattleEventNames[BATTLE_EVENT_MAX_NUMBER + 1][20] = {
     [BATTLE_EVENT_LAST_POISONED] = _("Last Poisoned"),
     [BATTLE_EVENT_LAST_TOXIC] = _("Last Toxic"),
 
+    [BATTLE_EVENT_FIRST_PARALYZED] = _("First Paralyzed"),
+    [BATTLE_EVENT_FIRST_BURNED] = _("First Burned"),
+    [BATTLE_EVENT_FIRST_SLEEP] = _("First Sleep"),
+    [BATTLE_EVENT_FIRST_FROSTBITE] = _("First Frostbite"),
+    [BATTLE_EVENT_FIRST_BLEED] = _("First Bleed"),
+    [BATTLE_EVENT_FIRST_POISONED] = _("First Poisoned"),
+    [BATTLE_EVENT_FIRST_TOXIC] = _("First Toxic"),
 
     [BATTLE_EVENT_ONKILLNS_CURSE] = _("Curse"),
     [BATTLE_EVENT_ONKILLNS_LEECHSEED] = _("Leech Seed"),
