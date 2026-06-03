@@ -144,6 +144,19 @@ bool8 AffectNStatusOnTeamFromLastToFirst(u32 status, u8 n) {
     return FALSE;
 }
 
+bool8 AffectNStatusOnTeamFromFirstToLast(u32 status, u8 n) {
+    u8 i;
+    if (n == 0) n = 1;
+    for (i = 0; i < gPlayerPartyCount; i++) {
+        // do not overwrite a status already existing if we want to have multiple possible status registerable.
+        if (gPlayerParty[i].status == STATUS1_NONE) {
+            gPlayerParty[i].status = status;
+            if ((--n) == 0) return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 // will always set the data in slot 2 (data1) of the battleEvent
 bool8 HasNumberOfTurnsStayedReached(struct BattleEvent* battleEvent, u8 pos) {
     if (gVolatileStructs[pos].isFirstTurn) {
@@ -277,6 +290,35 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent* battleEvent) {
             RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
         case BATTLE_EVENT_LAST_TOXIC:
             if (AffectNStatusOnTeamFromLastToFirst(STATUS1_TOXIC_POISON, battleEvent->data0)) PlaySE(SE_M_TOXIC);
+            SET_STR1(sText_Toxic)
+            RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
+
+        case BATTLE_EVENT_FIRST_PARALYZED:
+            if (AffectNStatusOnTeamFromFirstToLast(STATUS1_PARALYSIS, battleEvent->data0)) PlaySE(SE_M_THUNDERBOLT2);
+            SET_STR1(gText_Paralysis)
+            RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
+        case BATTLE_EVENT_FIRST_BURNED:
+            if (AffectNStatusOnTeamFromFirstToLast(STATUS1_BURN, battleEvent->data0)) PlaySE(SE_M_FLAME_WHEEL);
+            SET_STR1(gText_Burn)
+            RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
+        case BATTLE_EVENT_FIRST_SLEEP:
+            if (AffectNStatusOnTeamFromFirstToLast(STATUS1_SLEEP, battleEvent->data0)) PlaySE(SE_M_SNORE);
+            SET_STR1(gText_Sleep)
+            RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
+        case BATTLE_EVENT_FIRST_FROSTBITE:
+            if (AffectNStatusOnTeamFromFirstToLast(STATUS1_FROSTBITE, battleEvent->data0)) PlaySE(SE_M_ICY_WIND);  // TODO PROBABLY WRONG SE
+            SET_STR1(sText_Frostbite)
+            RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
+        case BATTLE_EVENT_FIRST_BLEED:
+            if (AffectNStatusOnTeamFromFirstToLast(STATUS1_BLEED, battleEvent->data0)) PlaySE(SE_M_BUBBLE);
+            SET_STR1(gText_Bleed)
+            RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
+        case BATTLE_EVENT_FIRST_POISONED:
+            if (AffectNStatusOnTeamFromFirstToLast(STATUS1_POISON, battleEvent->data0)) PlaySE12WithPanning(SE_M_TOXIC, 13);
+            SET_STR1(gText_Poison)
+            RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
+        case BATTLE_EVENT_FIRST_TOXIC:
+            if (AffectNStatusOnTeamFromFirstToLast(STATUS1_TOXIC_POISON, battleEvent->data0)) PlaySE(SE_M_TOXIC);
             SET_STR1(sText_Toxic)
             RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
 

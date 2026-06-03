@@ -81,9 +81,9 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     [TRAINER_JOSE] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SHIELD_DUST, 0},
     },
-    //[TRAINER_JOEY] = {
-        // TODO: Burn first 3 on both teams
-    //},
+    [TRAINER_JOEY] = {
+        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_FIRST_BURNED, 3, 0},
+    },
     [TRAINER_JERRY_1] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_STEADY_SPDEF, 0, 0},
     },
