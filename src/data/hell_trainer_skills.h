@@ -104,9 +104,9 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // Not implemented yet
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_STICKY_WEB, 0, 0},
     },
-    //[TRAINER_JOHNSON] = {
-        // TODO: Rainbow
-    //},
+    [TRAINER_JOHNSON] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_RAINBOW, 0, 0},
+    },
     //[TRAINER_DEVAN] = {
         // TODO: Permanent sand (can be overwritted by player)
     //},
@@ -169,12 +169,12 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // TODO: Player's abilities are disabled after 2 turns on field
         // TODO: Speed increased by one stage when falling under half HP
     //},
-    //[TRAINER_JOSUE] = {
+    [TRAINER_JOSUE] = {
         // Forced Tag Battle with Ruin Maniac Andres
-        // TODO: Permanent rainbow
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_RAINBOW, 0, 0},
         // TODO: Stat changes are shared between allies (not Sharing and Caring ability since that's all mons, not just allies)
         // TODO: Reduce ally damage by 50% (pre-nerf Friend Guard)
-    //},
+    },
     [TRAINER_LUIS] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_KNOW_YOUR_PLACE, 0},
         // TODO: Power of Fighting moves is doubled (all or just opponent?)
@@ -186,11 +186,11 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // TODO: Ancient Power used after every turn
         // TODO: Speed increases by +2 stages when hit by contact move
     //},
-    //[TRAINER_FERALIGATRITEX_ROUTE105] = {
-        // TODO: Permanent swamp
+    [TRAINER_FERALIGATRITEX_ROUTE105] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_SWAMP, 0, 0},
         // TODO: Supereffective moves deal 50% less damage
         // TODO: Recovers 50% HP on KO
-    //},
+    },
     // ==== ROUTE 106 ====
     //[TRAINER_ELLIOT_1] = {
         // TODO: Every AI mon uses Mean Look on entry
@@ -271,7 +271,7 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     //},
     [TRAINER_CORY_1] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_IMMUNITY, 0},
-        // TODO: Permanent Swamp
+        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_SWAMP, 0, 0},
         // TODO: Red Card on hit for AI (once per AI mon)
     },
     // ==== ROUTE 108 ABANDONED SHIP ====
@@ -308,11 +308,11 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // TODO: Use 50BP Explosion/Outburst when fainting
         // TODO: Ups Def and Sp. Def one stage if hit by Fire or Flying moves
     },
-    //[TRAINER_KIRA_AND_DAN_1] = {
-        // TODO: Permanent Sea of Fire
+    [TRAINER_KIRA_AND_DAN_1] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_FIRE_SEA, 0, 0},
         // TODO: Opponent attacks with Burning Jealousy every 2 turns
         // TODO: Opponent attacks with Rage Fist upon fainting (targets mon that fainted it)
-    //},
+    },
     [TRAINER_SHEDINJITE_ABANDONED_SHIP] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_TERA_SHELL, 0},
         // TODO: Opponent's mons enter with a substitute
@@ -418,7 +418,7 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     [TRAINER_ISABELLE] = {
         // Test Primordial Sea (might be a little weird constantly activating/deactivating when Trainer Pokemon faint/switch?)
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_PRIMORDIAL_SEA, 0},
-        // TODO: Permanent Swamp
+        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_SWAMP, 0, 0},
         // TODO: Rooms don't work
     },
     [TRAINER_PETE] = {

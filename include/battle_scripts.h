@@ -743,6 +743,10 @@ extern const u8 BattleScript_ExtraSkillSubstitute[];
 
 extern const u8 BattleScript_ExtraSkillStatusOnTeam[];
 
+extern const u8 BattleScript_ExtraSkillTerrainSwamp[];
+extern const u8 BattleScript_ExtraSkillTerrainRainbow[];
+extern const u8 BattleScript_ExtraSkillTerrainFireSea[];
+
 extern const u8 BattleScript_ExtraSkillTerrainStealthRock[];
 extern const u8 BattleScript_ExtraSkillTerrainSpikes[];
 extern const u8 BattleScript_ExtraSkillTerrainToxicSpikes[];
