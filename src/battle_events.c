@@ -322,6 +322,19 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent* battleEvent) {
             SET_STR1(sText_Toxic)
             RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
 
+        case BATTLE_EVENT_SWAMP:
+            gSideTimers[B_SIDE_PLAYER].started.swamp = TRUE;
+            gSideTimers[B_SIDE_PLAYER].swampTimer = 255;
+            RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillTerrainSwamp)
+        case BATTLE_EVENT_RAINBOW:
+            gSideTimers[B_SIDE_OPPONENT].started.rainbow = TRUE;
+            gSideTimers[B_SIDE_OPPONENT].rainbowTimer = 255;
+            RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillTerrainRainbow)
+        case BATTLE_EVENT_FIRE_SEA:
+            gSideTimers[B_SIDE_PLAYER].started.fireSea = TRUE;
+            gSideTimers[B_SIDE_PLAYER].fireSeaTimer = 255;
+            RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillTerrainFireSea)
+            
         case BATTLE_EVENT_STEALTH_ROCK:
             gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
             gSideTimers[B_SIDE_PLAYER].stealthRockType = TYPE_ROCK;

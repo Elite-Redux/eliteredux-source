@@ -44,6 +44,10 @@ const u8 gBattleEventNames[BATTLE_EVENT_MAX_NUMBER + 1][20] = {
     [BATTLE_EVENT_RAIN] = _(""),
     [BATTLE_EVENT_SUN] = _(""),
 
+    [BATTLE_EVENT_SWAMP] = _("Swamp"),
+    [BATTLE_EVENT_RAINBOW] = _("Rainbow"),
+    [BATTLE_EVENT_FIRE_SEA] = _("Fire Sea"),
+
     [BATTLE_EVENT_LAST_STAND] = _("Last Stand"),
     [BATTLE_EVENT_LAST_STAND_STAGES] = _("Last Stand"),
     [BATTLE_EVENT_SUBSTITUTE] = _("Substitute"),

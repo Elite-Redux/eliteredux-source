@@ -12651,4 +12651,23 @@ BattleScript_Teatime_EatBerriesLoop_Increment:
 	setbyte sBERRY_OVERRIDE, FALSE
 	goto BattleScript_MoveEnd
 
+BattleScript_ExtraSkillTerrainSwamp::
+	call BattleScript_ExtraSkillTerrain
+	swapbattlerandtargetvia34
+	call BattleScript_SwampStart
+	restoreattackerandtargetfrom34
+	end2
+	
+BattleScript_ExtraSkillTerrainRainbow::
+	call BattleScript_ExtraSkillTerrain
+	swapbattlerandtargetvia34
+	call BattleScript_RainbowStart
+	restoreattackerandtargetfrom34
+	end2
 
+BattleScript_ExtraSkillTerrainFireSea::
+	call BattleScript_ExtraSkillTerrain
+	swapbattlerandtargetvia34
+	call BattleScript_SeaOfFireStart
+	restoreattackerandtargetfrom34
+	end2

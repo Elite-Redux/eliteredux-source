@@ -45,6 +45,10 @@
 #define BATTLE_EVENT_RAIN               80
 #define BATTLE_EVENT_SUN                81
 
+#define BATTLE_EVENT_SWAMP              90
+#define BATTLE_EVENT_RAINBOW            91
+#define BATTLE_EVENT_FIRE_SEA           92
+
 #define BATTLE_EVENT_LAST_STAND         100
 #define BATTLE_EVENT_SUBSTITUTE         101
 
