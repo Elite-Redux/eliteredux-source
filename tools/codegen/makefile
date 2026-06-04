@@ -139,6 +139,8 @@ $(eval $(call GENERATE, include/generated/data/trainers.h, trainerparties))
 
 $(eval $(call GENERATE, include/generated/data/text/help_articles.h, helparticles))
 
+$(eval $(call GENERATE, include/generated/data/text/battle_skill_text.hh, battleskilltext))
+
 timestamp/generated: $(ALL_GENERATED)
 	@touch timestamp/generated
 

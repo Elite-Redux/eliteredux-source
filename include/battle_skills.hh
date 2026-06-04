@@ -5,12 +5,11 @@ extern "C" {
 #endif
 
 #include "global.h"
+#include "generated/constants/battle_skills.h"
 
 typedef struct BattleSkill {
     const u8* name;
 } BattleSkill;
-
-#define BATTLE_SKILL_COUNT 1
 
 extern const BattleSkill gBattleSkills[BATTLE_SKILL_COUNT];
 

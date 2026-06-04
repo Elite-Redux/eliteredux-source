@@ -94,6 +94,14 @@ object GeneratorUtils {
       .map { it.toString() } + CUSTOM_BEHAVIORS.values
   }
 
+  val BATTLE_SKILLS by lazy {
+    TextFormat.parse(
+        File("../../proto/BattleSkillList.textproto").readText(),
+        BattleSkillList::class.java,
+      )
+      .skillList
+  }
+
   val SPECIES_LIST by lazy { FULL_SPECIES_LIST.filter { it.randomizerBanned != SPECIES_HIDDEN } }
 
   val NO_EGG_LIST by lazy { SPECIES_LIST.filter { it.id != SpeciesEnum.SPECIES_EGG } }

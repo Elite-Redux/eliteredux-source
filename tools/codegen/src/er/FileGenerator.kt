@@ -6,6 +6,8 @@ import er.defines.*
 import er.gfx.*
 import er.item.*
 import er.move.*
+import er.proto.BattleSkillList
+import er.skill.BattleSkillGenerator
 import er.text.ArticlesGenerator
 import er.trainer.TrainerPartyGenerator
 import java.io.File
@@ -87,6 +89,7 @@ object FileGenerator {
         "battlefrontiermons" to BattleFrontierMonGenerator,
         "battlefrontierdefines" to BattleFrontierDefinesGenerator,
         "battleskills" to BattleSkillEnumGenerator,
+        "battleskilltext" to BattleSkillGenerator,
     )
 
     @JvmStatic
