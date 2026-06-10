@@ -3040,9 +3040,13 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                 case MOVE_EFFECT_STEALTH_ROCK:
                     REQUIRE_NOT(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STEALTH_ROCK)
                     gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STEALTH_ROCK;
-                    gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType =
-                        gBattleScripting.moveEffect == MOVE_EFFECT_CREEPING_THORNS ? TYPE_GRASS : TYPE_ROCK;
-                    BattleScriptCall(BattleScript_MoveEffectStealthRock);
+                    if (gBattleScripting.moveEffect == MOVE_EFFECT_CREEPING_THORNS) {
+                        gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType = TYPE_GRASS;
+                        BattleScriptCall(BattleScript_MoveEffectCreepingThorns);
+                    } else {
+                        gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType = TYPE_ROCK;
+                        BattleScriptCall(BattleScript_MoveEffectStealthRock);
+                    }
                     break;
                 case MOVE_EFFECT_SPIKES:
                     REQUIRE(gSideTimers[GetBattlerSide(gBattlerTarget)].spikesAmount < 3)
