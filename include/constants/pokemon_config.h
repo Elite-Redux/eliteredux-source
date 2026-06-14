@@ -10,6 +10,7 @@
 #define GEN_6 3
 #define GEN_7 4
 #define GEN_8 5
+#define GEN_9 6
 #endif
 
 #define P_UPDATED_TYPES         GEN_8 // In Gen6+, several Pokémon were changed to be partially or fully Fairy type.
