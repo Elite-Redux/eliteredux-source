@@ -9839,7 +9839,7 @@ ON_EITHER(WoodlandCurse) {
     CHECK_NOT(IS_BATTLER_OF_TYPE(opponent, TYPE_GRASS))
 
     gBattleMons[opponent].type3 = TYPE_GRASS;
-    PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMons[opponent].type3);
+    PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[opponent].type3);
     gStackBattler1 = opponent;
     BattleScriptCall(BattleScript_StackAddedTheTypeRet);
     return TRUE;

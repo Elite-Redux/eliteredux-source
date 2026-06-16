@@ -3401,7 +3401,11 @@ u8 AtkCanceller_UnableToUseMove(void) {
                 // Paralyzed enemies will always move but will still have a speed penalty
                 bool8 disableParalysisCancel = (isHellMode() && GET_BATTLER_SIDE(gBattlerAttacker) != B_SIDE_PLAYER);
 
-                if (!gProcessingExtraAttacks && (gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS) && (Random() % 4) == 0 && !disableParalysisCancel) {
+                // Pokemon Champions paralysis chance is 12.5%, otherwise it's 25% chance
+                u8 mod = B_USE_CHAMPIONS_PARALYSIS ? 8 : 4;
+                bool8 isImmobilized = (Random() % mod) == 0;
+
+                if (!gProcessingExtraAttacks && (gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS) && isImmobilized && !disableParalysisCancel) {
                     gRoundStructs[gBattlerAttacker].prlzImmobility = TRUE;
 
                     CancelMultiTurnMoves(gBattlerAttacker);

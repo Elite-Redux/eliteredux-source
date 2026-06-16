@@ -10,6 +10,7 @@
     #define GEN_6 3
     #define GEN_7 4
     #define GEN_8 5
+    #define GEN_9 6
 #endif
 
 // Mega Evolution settings
@@ -53,7 +54,7 @@
 #define B_UPROAR_TURNS              GEN_7 // In Gen5+, Uproar lasts for 3 turns instead of 2-5 turns.
 #define B_DISABLE_TURNS             GEN_7 // Disable's turns. See Cmd_disablelastusedattack.
 #define B_TAILWIND_TURNS            GEN_7 // In Gen5+, Tailwind lasts 4 turns instead of 3.
-#define B_SLEEP_TURNS               GEN_7 // In Gen5+, sleep lasts for 1-3 turns instead of 2-5 turns.
+#define B_SLEEP_TURNS               GEN_9 // In Gen5+, sleep lasts for 1-3 turns instead of 2-5 turns. In Gen9 (specifically Pokemon Champions), sleep is 2-3 turns but not uniformly distributed (wake up chance: 0% turn 1, 33% turn 2, 100% turn 3). See B_USE_CHAMPIONS_SLEEP.
 #define B_TAUNT_TURNS               GEN_7 // In Gen5+, Taunt lasts 3 turns if the user acts before the target, or 4 turns if the target acted before the user. In Gen3, taunt lasts 2 turns and in Gen 4, 3-5 turns.
 
 // Move data settings
@@ -150,6 +151,10 @@
 #define B_CRITICAL_CAPTURE          TRUE     // If set to TRUE, Critical Capture will be enabled.
 #define B_LAST_USED_BALL            TRUE     // If TRUE, the "last used ball" feature from Gen 7 will be implemented
 #define B_LAST_USED_BALL_BUTTON     R_BUTTON // If last used ball is implemented, this button (or button combo) will trigger throwing the last used ball.
+
+// Pokemon Champions status settings
+#define B_USE_CHAMPIONS_SLEEP        TRUE  // If set to TRUE, uses Pokemon Champions sleep mechanics (2-3 turns, 0% wake up chance turn 1, 33% wake up chance turn 2, 100% wake up chance turn 3). Requires B_SLEEP_TURNS == GEN_9.
+#define B_USE_CHAMPIONS_PARALYSIS    TRUE  // If set to TRUE, uses Pokemon Champions paralysis mechanics (Speed reduced to 50%, 12.5% chance of not moving on a turn).
 
 // Other
 #define B_DOUBLE_WILD_CHANCE                 0    // % chance of encountering two Pokémon in a Wild Encounter.

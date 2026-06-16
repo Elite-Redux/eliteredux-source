@@ -2553,11 +2553,23 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                 statusChanged = TRUE;
         }
         if (statusChanged == TRUE) {
-            if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_SLEEP)
-                gBattleMons[gEffectBattler].status1 |= (B_SLEEP_TURNS >= GEN_5) ? ((Random() % 3) + 2) : ((Random() % 4) + 3);
-            else
+            if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_SLEEP) {
+                if (B_SLEEP_TURNS >= GEN_9 && B_USE_CHAMPIONS_SLEEP) {
+                    // Pokemon Champions sleep:
+                    // Turn 1: 0% wake up chance
+                    // Turn 2: 33% wake up chance
+                    // Turn 3: 100% wake up chance
+                    gBattleMons[gEffectBattler].status1 |= (Random() % 3 == 0) ? 2 : 3;
+                } else if (B_SLEEP_TURNS >= GEN_5) {
+                    // Gen 5 sleep: lasts 2-4 turns, uniformly distributed
+                    gBattleMons[gEffectBattler].status1 |= ((Random() % 3) + 2);
+                } else {
+                    // Gen 3 sleep: lasts 2-5 turns, uniformly distributed
+                    gBattleMons[gEffectBattler].status1 |= ((Random() % 4) + 2);
+                }
+            } else {
                 gBattleMons[gEffectBattler].status1 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
-
+            }
             BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
 
             gActiveBattler = gEffectBattler;
