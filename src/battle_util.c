@@ -8872,7 +8872,7 @@ void UpdateAbilityStateIndices(u8 battler, u16 newAbilities[]) {
         turnAbilityTriggers[i] = gTurnStructs[battler].turnAbilityTriggers[j];
         abilityState[i] = gVolatileStructs[battler].abilityState[j];
     }
-
+    
     ARRAY_COPY(gVolatileStructs[battler].switchInAbilityDone, switchInAbilityDone);
     ARRAY_COPY(gTurnStructs[battler].turnAbilityTriggers, turnAbilityTriggers);
     ARRAY_COPY(gVolatileStructs[battler].abilityState, abilityState);
@@ -9269,8 +9269,11 @@ int HasAnyStatusOrAbility(int battler) {
 }
 
 int IsSuppressed(int battler, AbilityEnum ability, int checkMoldBreaker) {
+    // (B_NEUTRALIZING_GAS_WORKS_ON_INNATES || GetBattlerAbility(battler) == ability) assumes that
+    // Neutralizing Gas will always disable battlers' main ability regardless of if it works on innates or not
     if ((checkMoldBreaker && battler != gBattlerAttacker && gHitMarker & HITMARKER_MOLD_BREAKER && gAbilities[ability].breakable) ||
-        ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability))) {
+        (((gFieldTimers.neutralizingGas && (B_NEUTRALIZING_GAS_WORKS_ON_INNATES || GetBattlerAbility(battler) == ability)) || gStatuses3[battler] & STATUS3_GASTRO_ACID) &&
+        !IsUnsuppressableAbility(ability))) {
         return !DoesBattlerHaveAbilityShield(battler);
     }
 

@@ -187,7 +187,7 @@
 #define B_PERFECT_IVS         			    TRUE    // If set to TRUE, the stat calculation makes it as if the Pokemon has perfect Ivs.
 #define B_ENABLE_FIELD_POISON         	    FALSE   // If set to FALSE, your Pokemon won't get damaged when Poisoned in the overworld
 #define B_USE_COUNTER_MIRROR_COAT_RIGHT     TRUE    // If set to TRUE, the AI will use Mirror coat when it predicts an Special Move and counter for Physical moves
-#define B_NEUTRALIZING_GAS_WORKS_ON_INNATES TRUE    // If set to TRUE, Neutralizing Gas/Gastro Acid will disable innates
+#define B_NEUTRALIZING_GAS_WORKS_ON_INNATES FALSE   // If set to TRUE, Neutralizing Gas/Gastro Acid will disable innates
 #define B_MOLD_BREAKER_WORKS_ON_INNATES     TRUE    // If set to TRUE, Mold Breaker will disable innates
 
 // Item Restoration Settings

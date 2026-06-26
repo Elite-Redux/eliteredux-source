@@ -5504,7 +5504,6 @@ static void Cmd_switchineffects(void) {
     gTurnStructs[gActiveBattler].flag40 = 0;
 
     if (!IsBattlerAIControlled(gActiveBattler)) gBattleStruct->appearedInBattle |= gBitTable[gBattlerPartyIndexes[gActiveBattler]];
-
     // Neutralizing Gas announces itself before hazards
     if (!gFieldTimers.neutralizingGas && BattlerHasAbility(gActiveBattler, ABILITY_NEUTRALIZING_GAS, FALSE)) {
         for (i = 0; i < gBattlersCount; i++) {
@@ -5515,7 +5514,11 @@ static void Cmd_switchineffects(void) {
             ARRAY_COPY(abilities, gBattleMons[i].abilities)
 
             for (j = 0; j < TOTAL_ABILITY_COUNT; j++) {
-                if (!IsPersistentOrUnsuppressableAbility(abilities[j])) abilities[j] = ABILITY_NONE;
+                // (B_NEUTRALIZING_GAS_WORKS_ON_INNATES || GetBattlerAbility(i) == ability) assumes that
+                // Neutralizing Gas will always disable battlers' main ability regardless of if it works on innates or not
+                if ((B_NEUTRALIZING_GAS_WORKS_ON_INNATES || GetBattlerAbility(i) == abilities[j]) && !IsPersistentOrUnsuppressableAbility(abilities[j])) {
+                    abilities[j] = ABILITY_NONE;
+                } 
             }
 
             UpdateAbilityStateIndices(i, abilities);
