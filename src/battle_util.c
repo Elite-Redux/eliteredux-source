@@ -4022,6 +4022,26 @@ bool8 UseEntryMove(u8 battler, AbilityEnum ability, u16 extraMove, u8 movePower)
     return FALSE;
 }
 
+int AdjustFollowupMoveTarget(u8 battler, u8* target, MoveEnum move, FollowupType type) {
+    if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT && !(type & FOLLOWUP_ALLOW_FAILED)) return FALSE;
+
+    switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
+        case MOVE_TARGET_BOTH:
+        case MOVE_TARGET_FOES_AND_ALLY:
+            *target = GetMoveTarget(battler, MOVE_POUND, MOVE_TARGET_SELECTED + 1);
+            return IsBattlerAlive(*target);
+
+        default:
+            if (*target == battler || *target == BATTLE_PARTNER(battler)) {
+                if (type & FOLLOWUP_ALLOW_SELF)
+                    *target = GetMoveTarget(battler, MOVE_POUND, MOVE_TARGET_SELECTED + 1);
+                else
+                    return FALSE;
+            }
+            return battler != *target && IsBattlerAlive(*target);
+    }
+}
+
 u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, MoveEnum extraMove, u8 movePower) {
     if (!CanUseExtraMove(battler, target)) return FALSE;
     if (!CheckAndSetOncePerTurnAbility(battler, ability)) return FALSE;

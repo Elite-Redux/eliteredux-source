@@ -197,33 +197,6 @@ int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApply
     return FALSE;
 }
 
-typedef enum {
-    FOLLOWUP_STANDARD = 0,
-    FOLLOWUP_ALLOW_FAILED = 1 << 0,
-    FOLLOWUP_ALLOW_SELF = 1 << 1,
-} FollowupType;
-ENUM_OR(FollowupType)
-
-static int AdjustFollowupMoveTarget(u8 battler, u8* target, MoveEnum move, FollowupType type) {
-    if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT && !(type & FOLLOWUP_ALLOW_FAILED)) return FALSE;
-
-    switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
-        case MOVE_TARGET_BOTH:
-        case MOVE_TARGET_FOES_AND_ALLY:
-            *target = GetMoveTarget(battler, MOVE_POUND, MOVE_TARGET_SELECTED + 1);
-            return IsBattlerAlive(*target);
-
-        default:
-            if (*target == battler || *target == BATTLE_PARTNER(battler)) {
-                if (type & FOLLOWUP_ALLOW_SELF)
-                    *target = GetMoveTarget(battler, MOVE_POUND, MOVE_TARGET_SELECTED + 1);
-                else
-                    return FALSE;
-            }
-            return battler != *target && IsBattlerAlive(*target);
-    }
-}
-
 static int CheckAbilityWasAnnouncedBy(int announcer, AbilityEnum ability) {
     return BattlerHasAbility(announcer, ability, FALSE) && !CheckAndSetSwitchInAbility(announcer, ability);
 }
