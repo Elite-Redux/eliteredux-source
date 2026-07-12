@@ -152,6 +152,12 @@ typedef union AbilityStates {
     u32 intValue;
 } AbilityStates;
 
+typedef enum {
+    FOLLOWUP_STANDARD = 0,
+    FOLLOWUP_ALLOW_FAILED = 1 << 0,
+    FOLLOWUP_ALLOW_SELF = 1 << 1,
+} FollowupType;
+
 #define ABILITY_SUPPRESSION_PERSISTENT (1 << 14)
 #define ABILITY_SUPPRESSION_ABILITY (1 << 15)
 #define ABILITY_SUPPRESSION_MASK (ABILITY_SUPPRESSION_ABILITY | ABILITY_SUPPRESSION_PERSISTENT)
@@ -506,4 +512,6 @@ bool8 IsBattlerCursed(u8 battler);
 void MakePlayerTeamAsleep(void);
 
 bool8 IsEvasionClauseDisablingMove(u8 battlerId, MoveEnum move);
+
+int AdjustFollowupMoveTarget(u8 battler, u8* target, MoveEnum move, FollowupType type);
 #endif  // GUARD_BATTLE_UTIL_H

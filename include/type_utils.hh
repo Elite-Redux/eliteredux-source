@@ -1,6 +1,9 @@
 extern "C" {
     #include "global.h"
-    #include "battle.h"
+    #include "abilities.hh"
+    #include "battle_util.h"
+    #include "pokemon.h"
+    #include "constants/battle.h"
 }
 
 #ifndef max
@@ -51,6 +54,7 @@ ENUM_OR(InfiltrateType)
 ENUM_OR(MoveEffectEnum)
 ENUM_OR(TerrainType)
 ENUM_OR(NonStackingState)
+ENUM_OR(FollowupType)
 
 ENUM_BIT_OPERATIONS(Status1)
 ENUM_BIT_OPERATIONS(Status2)
