@@ -270,7 +270,7 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // TODO: AI hits lowest defense
     //},
     [TRAINER_CORY_1] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_IMMUNITY, 0},
+        // TODO: First SE move from player raises AI mon's highest offense +1 and immune to move
         [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_SWAMP, 0, 0},
         // TODO: Red Card on hit for AI (once per AI mon)
     },
@@ -282,8 +282,7 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     },
     [TRAINER_DEMETRIUS] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_ANGELS_WRATH, 0},
-        // TODO: Opponents deal x1.25 damage
-        // TODO: Opponents hit lowest defense vs statused foes
+        // TODO: Opponents deal 1.25x damage and hit lowest defense vs statused foes
         // TODO: Opponent's status moves ignore abilities
     },
     [TRAINER_DUNCAN] = {
@@ -298,15 +297,15 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     },
     [TRAINER_GARRISON] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_BONE_ZONE, 0},
+        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_HAUNTING_FRENZY, 0},
         // TODO: Every move opponent uses is a Bone move
-        // TODO: 20% chance to flinch Player
-        // TODO: Opponent's Speed raises on KO
     },
     [TRAINER_JANI] = {
+        // 4 skills for this trainer instead of the max of 3 :(
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_RESTRAINING_ORDER, 0},
         [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_LEVITATE, 0},
+        [HELL_MODE_TRAINER_SKILL_3] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_INFLATABLE, 0},
         // TODO: Use 50BP Explosion/Outburst when fainting
-        // TODO: Ups Def and Sp. Def one stage if hit by Fire or Flying moves
     },
     [TRAINER_KIRA_AND_DAN_1] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_FIRE_SEA, 0, 0},
@@ -334,6 +333,9 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     //[TRAINER_GWEN] = {
         // TODO: Sun
     //},
+    [TRAINER_AUSTINA] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_TECHNICIAN, 0},
+    },
     //[TRAINER_EDMOND] = {
         // TODO: Use 10 BP Bubble on switch in
     //},
