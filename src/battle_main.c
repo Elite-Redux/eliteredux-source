@@ -76,6 +76,7 @@
 #include "wild_encounter.h"
 #include "window.h"
 #include "constants/battle_events.h"
+#include "battle_skills.hh"
 
 extern struct MusicPlayerInfo gMPlayInfo_SE1;
 extern struct MusicPlayerInfo gMPlayInfo_SE2;
@@ -183,6 +184,7 @@ EWRAM_DATA struct ExtraAttackActionStruct gQueuedExtraAttackData[MAX_BATTLERS_CO
 EWRAM_DATA struct ExtraSwitchActionStruct gQueuedSwitchData[MAX_BATTLERS_COUNT + 1] = {0};
 EWRAM_DATA u8 gQueuedSwitchCount = 0;
 EWRAM_DATA u8 gCurrentActionFuncId = B_ACTION_FINISHED;
+EWRAM_DATA BattleSkillEnum gActiveSkills[2 * HELL_MODE_MAX_SKILLS] = {0};
 EWRAM_DATA struct BattlePokemon gBattleMons[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gBattlerSpriteIds[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gCurrMovePos = 0;
@@ -2702,6 +2704,8 @@ static void BattleStartClearSetData(void) {
     ZERO(gBattleStruct->choicedMove)
     ZERO(gBattleStruct->changedItems)
     ZERO(gBattleStruct->lastTakenMoveFrom)
+    ZERO(gActiveSkills)
+    gBattleStruct->ranSkillAnnounce = FALSE;
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++) {
         gVolatileStructs[i].isFirstTurn = 2;
@@ -3354,6 +3358,13 @@ static void TryDoEventsBeforeFirstTurn(void) {
     if (AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0) != 0) return;
 
     if (AbilityBattleEffects(ABILITYEFFECT_REACTIVE, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0)) return;
+
+    if (!gBattleStruct->ranSkillAnnounce) {
+        int any = FALSE;
+        gBattleStruct->ranSkillAnnounce = TRUE;
+        ON_SKILL(skill->onBattleStart, any = skill->onBattleStart(skillId))
+        if (any) return;
+    }
 
     // Check all switch in abilities happening from the fastest mon to slowest.
     while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount) {

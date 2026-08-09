@@ -16,6 +16,7 @@
 #include "sound.h"
 #include "constants/songs.h"
 #include "field_message_box.h"
+#include "generated/constants/battle_skills.h"
 
 static u8 gNbBattleEvents = 0;
 static u8 gCurrBattleEvent = 0;
@@ -404,11 +405,6 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent* battleEvent) {
             RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraAbilities3)
         }
 
-        // These don't unregister
-        case BATTLE_EVENT_EVIOLITE:
-            BattleScriptExecute(BattleScript_ExtraSkillEviolite);
-            return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
-
         case BATTLE_EVENT_TENSE_BATTLE:
             CalculateEnemyPartyCount();
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
@@ -558,6 +554,17 @@ u8 BattleEventStartTurnExec(struct BattleEvent* battleEvent) {
 
 void RegisterTrainerBattleEvents(u16 trainerId) {
     u8 i;
+
+    for (i = 0; i < HELL_MODE_MAX_SKILLS; i++) {
+        BattleSkillEnum skill = gTrainers[trainerId].hellSkills[i];
+        REQUIRE(skill)
+        int j;
+        // This is inefficient but filters out duplicates in doubles
+        for (j = 0; j < ARRAY_COUNT(gActiveSkills); j++) {
+            REQUIRE(!gActiveSkills[j] || gActiveSkills[j] == skill)
+        }
+        gActiveSkills[j] = skill;
+    }
 
     for (i = 0; i < MAX_HELL_TRAINERS_GYM_SKILLS; i++) {
         u8 battleEvent = sTrainerSkillList[trainerId][i][BATTLE_EVENT_ID];

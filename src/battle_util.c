@@ -57,6 +57,7 @@
 #include "window.h"
 #include "constants/battle_events.h"
 #include "script_conditions.hh"
+#include "battle_skills.hh"
 
 /*
 NOTE: The data and functions in this file up until (but not including) sSoundMovesTable
@@ -6983,6 +6984,11 @@ u16 CalculateAbilityMultipliers(
                gAbilities[ability].onDefensiveMultiplier(
                    battlerDef, ability, battlerAtk, move, moveType, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier))
 
+    // Extra Skill
+    if (GET_BATTLER_SIDE(battlerDef) != B_SIDE_PLAYER) {
+        ON_SKILL(skill->onDefensiveMultiplier, skill->onDefensiveMultiplier(battlerDef, resistanceMultiplier, &multiplier))
+    }
+
     return multiplier;
 }
 
@@ -7329,7 +7335,7 @@ static bool32 CanEvolve(u32 species) {
     return FALSE;
 }
 
-static bool32 CanEvolveStrict(u32 species) {
+bool32 CanEvolveStrict(SpeciesEnum species) {
     u32 i;
 
     for (i = 0; gEvolutionTable[species][i].method; i++) {
@@ -7461,12 +7467,6 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
                 MulModifier(&modifier, UQ_4_12(1.5));
             break;
 #endif
-    }
-
-    // Extra Skill
-    if (GET_BATTLER_SIDE(battlerDef) != B_SIDE_PLAYER && GetBattlerHoldEffect(battlerDef, TRUE) != HOLD_EFFECT_EVIOLITE &&
-        isExtraSkillEnabled(BATTLE_EVENT_EVIOLITE)) {
-        if (CanEvolve(gBattleMons[battlerDef].species)) MulModifier(&modifier, UQ_4_12(1.5));
     }
 
     return ApplyModifier(modifier, defStat);

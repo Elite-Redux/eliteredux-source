@@ -2,6 +2,7 @@
 #define GUARD_DATA_H
 
 #include "generated/constants/moves.h"
+#include "generated/constants/battle_skills.h"
 
 #define SPECIES_SHINY_TAG 5000
 
@@ -58,6 +59,8 @@ typedef struct TrainerMonItemCustomMoves {
     bool8 isAlpha;
 } TrainerMonItemCustomMoves;
 
+#define HELL_MODE_MAX_SKILLS 3
+
 struct Trainer {
     /*0x00*/ u8 partyFlags;
     /*0x01*/ u8 trainerClass;
@@ -74,7 +77,7 @@ struct Trainer {
     /*0x20*/ u8 partySizeHell;
     /*0x28*/ const TrainerMonItemCustomMoves * partyHell;
     /*0x2F*/ u16 trainerFlag;
-    /*0x??*/ AbilityEnum hellAbilities[HELL_MODE_EXTRA_ABILITIES];
+    /*0x??*/ BattleSkillEnum hellSkills[HELL_MODE_MAX_SKILLS];
 };
 
 #define TRAINER_ENCOUNTER_MUSIC(trainer) ((gTrainers[trainer].encounterMusic_gender & 0x7F))
@@ -124,7 +127,7 @@ extern const u8 gEnemyMonElevation[NUM_SPECIES];
 extern const union AnimCmd *const *const gMonFrontAnimsPtrTable[];
 extern const struct CompressedSpriteSheet gMonFrontPicTable[];
 extern const struct CompressedSpriteSheet gMonFrontPicTableFemale[];
-extern const int SpeciesHasGenderDifference(SpeciesEnum species);
+extern int SpeciesHasGenderDifference(SpeciesEnum species);
 
 extern const struct Trainer gTrainers[];
 extern const u8 gTrainerClassNames[][13];

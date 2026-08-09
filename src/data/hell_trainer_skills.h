@@ -1,23 +1,5 @@
 //This table is used for hell mode trainer skill definitions for each trainer, you can also give them extra abilities for their whole team to avoid having to code a lot of new abilities
 const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE_EVENT_ARGUMENTS] = {
-    [TRAINER_BRENDAN_ROUTE_103_MUDKIP] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EVIOLITE, 0, 0},
-    },
-    [TRAINER_BRENDAN_ROUTE_103_TORCHIC] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EVIOLITE, 0, 0},
-    },
-    [TRAINER_BRENDAN_ROUTE_103_TREECKO] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EVIOLITE, 0, 0},
-    },
-    [TRAINER_MAY_ROUTE_103_MUDKIP] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EVIOLITE, 0, 0},
-    },
-    [TRAINER_MAY_ROUTE_103_TORCHIC] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EVIOLITE, 0, 0},
-    },
-    [TRAINER_MAY_ROUTE_103_TREECKO] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EVIOLITE, 0, 0},
-    },
     [TRAINER_CALVIN_1] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_NO_PROTECT, 0, 0},
         [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_UNNERVE, 0},
@@ -93,9 +75,9 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     //[TRAINER_SARAH] = {
         // TODO: Permanent inverse room
     //},
-    [TRAINER_CLARK] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EVIOLITE, 0, 0},
-    },
+    // [TRAINER_CLARK] = { Transfered to skill format
+    //     [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EVIOLITE, 0, 0},
+    // },
     [TRAINER_JANICE] = {
         // Doc says Focus Sash effect, Sturdy probably good enough (only difference is Mold Breaker?)
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_STURDY, 0},

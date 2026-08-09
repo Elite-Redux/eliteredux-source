@@ -280,6 +280,14 @@ u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, MoveEnu
         callback;                                                              \
     }
 
+#define ON_SKILL(condition, callback)                                 \
+    for (int idx = ARRAY_COUNT(gActiveSkills) - 1; idx >= 0; idx--) { \
+        const BattleSkillEnum skillId = gActiveSkills[idx];                           \
+        const BattleSkill* skill = &gBattleSkills[skillId];           \
+        FILTER(condition)                                             \
+        callback;                                                     \
+    }
+
 #define RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, flag) ON_ABILITY(battler, checkMoldBreaker, gAbilities[ability].flag, return ability)
 
 void GetAllBattlerAbilities(AbilityEnum* abilities, int battler, int battlerAtk);
@@ -468,6 +476,7 @@ s8 GetSingleUseAbilityCountByIndex(u8 battler, int index);
 void SetSingleUseAbilityCountByIndex(u8 battler, int index, u8 value);
 MoveEnum GetMoveToBeUsed(u8 battler);
 u8 GetFullChosenTarget(u8 battler, MoveEnum move);
+bool32 CanEvolveStrict(SpeciesEnum species);
 
 MultihitType GetMultihitType(int battler, MoveEnum move);
 

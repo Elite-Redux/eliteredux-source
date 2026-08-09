@@ -9,7 +9,7 @@ object BattleSkillGenerator : Generator {
   private val PREFIX = "__sSkillText_"
 
   override fun generate(writer: OutputStreamWriter) {
-    val allStrings = BATTLE_SKILLS.map { it.name }.toSet()
+    val allStrings = (BATTLE_SKILLS.map { it.name } + BATTLE_SKILLS.map { it.announceString }).toSet()
 
     writer.appendLine(
       allStrings.joinToString("\n") {
@@ -31,6 +31,7 @@ object BattleSkillGenerator : Generator {
         |template <>
         |constexpr BattleSkill BattleSkillStrings<${it.id}> = {
         |$IND.name = $PREFIX${it.name.hashCode().toUInt()},
+        |$IND.announceString = $PREFIX${it.announceString.hashCode().toUInt()},
         |};
         |"""
           .trimMargin()

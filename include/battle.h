@@ -15,6 +15,8 @@
 #include "pokeball.h"
 #include "pokemon.h"
 #include "battle_debug.h"
+#include "generated/constants/battle_skills.h"
+#include "data.h"
 
 #define GET_BATTLER_POSITION(battler) (gBattlerPositions[battler])
 #define GET_BATTLER_SIDE(battler) (GetBattlerPosition(battler) & BIT_SIDE)
@@ -730,6 +732,7 @@ struct BattleStruct {
     u8 firstTurnAbilityLoopCounter:4;
     u8 ranEndTurnEffects:1;
     u8 canProcessSwitches:1;
+    u8 ranSkillAnnounce:1;
 };
 
 #define GET_MOVE_TYPE(move, typeArg)                         \
@@ -789,7 +792,7 @@ struct BattleScripting {
     MoveEffectEnum savedMoveEffect;  // For moves hitting multiple targets.
     MoveEffectEnum moveEffect;
     u16 multihitMoveEffect;
-    u16 abilityPopupOverwrite;
+    u16 abilityPopupOverwrite;  // Also trainer skills
     u8 multihitString[6];
     bool8 expOnCatch;
     u8 twoTurnsMoveStringId;
@@ -1025,6 +1028,7 @@ extern bool8 gProcessingExtraAttacks;
 extern struct ExtraSwitchActionStruct gQueuedSwitchData[MAX_BATTLERS_COUNT + 1];
 extern u8 gQueuedSwitchCount;
 extern bool8 gProcessingSwitch;
+extern BattleSkillEnum gActiveSkills[/* 2x for doubles */ 2 * HELL_MODE_MAX_SKILLS];
 extern u8 gDelayedTurnActionId;
 extern u8* gLinkBattleSendBuffer;
 extern u8* gLinkBattleRecvBuffer;

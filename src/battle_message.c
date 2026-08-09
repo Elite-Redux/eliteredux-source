@@ -33,6 +33,7 @@
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
 #include "abilities.hh"
+#include "battle_skills.hh"
 
 struct BattleWindowText {
     u8 fillValue;
@@ -3417,6 +3418,14 @@ void BufferStringBattle(u16 stringID) {
             break;
         case STRINGID_TRAINERSLIDE:
             stringPtr = gBattleStruct->trainerSlideMsg;
+            break;
+        case STRINGID_TABLESPECIAL:
+            switch (gBattleCommunication[MULTISTRING_CHOOSER])
+            {
+                case TABLE_SPECIAL_BATTLE_SKILL_ANNOUNCE:
+                    stringPtr = gBattleSkills[gBattleScripting.abilityPopupOverwrite].announceString;
+                    break;
+            }
             break;
         default:  // load a string from the table
             if (stringID >= BATTLESTRINGS_COUNT + BATTLESTRINGS_ID_ADDER) {

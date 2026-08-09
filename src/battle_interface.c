@@ -3179,7 +3179,7 @@ static const s16 sExtraSkillPopUpCoordsSingles[MAX_BATTLERS_COUNT][2] = {
     {149, 24},  // opponent
 };
 static const u8 sExtraSkillText[] = _("-tra Skill");
-void CreateExtraSkillPopUp()  // parameter unused for now
+void CreateExtraSkillPopUp(const u8* name)  // parameter unused for now
 {
     const s16(*coords)[2];
     u8 spriteId1, spriteId2, battlerPosition, taskId;
@@ -3211,7 +3211,7 @@ void CreateExtraSkillPopUp()  // parameter unused for now
     StartSpriteAnim(&gSprites[spriteId2], 0);
 
     // PrintExtraskillOnExtraskillPopUp(extraskill, spriteId1, spriteId2);
-    PrintOnAbilityPopUp(gBattleEventNames[gLastBattleEvent],
+    PrintOnAbilityPopUp(name,
                         (void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32) + 256,
                         (void*)(OBJ_VRAM0) + (gSprites[spriteId2].oam.tileNum * 32) + 256,
                         12,

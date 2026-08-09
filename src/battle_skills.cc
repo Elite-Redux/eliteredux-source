@@ -11,12 +11,23 @@ extern "C" {
 #include "battle_scripts.h"
 #include "battle_script_commands.h"
 #include "battle_util.h"
+#include "battle.h"
 }
 
 #include "type_utils.hh"
 
+#define ON_BATTLE_START opt BattleSkillEnum skill
 #define ON_ENTRY opt BattleSkillEnum skill, opt u8 battler
 #define ON_ATTACKER opt BattleSkillEnum skill, opt u8 battler, opt u8 target, opt MoveEnum move, opt Type moveType
+#define ON_DEFENSIVE_MULTIPLIER opt u8 battler, opt u16 *resistance, opt u16 *modifier
+
+#define MUL(val) MUL_MODIFIER(modifier, val)
+#define BATTLE_START_SIMPLE(script)                     \
+    .onBattleStart = +[](ON_BATTLE_START) -> int {      \
+        gBattleScripting.abilityPopupOverwrite = skill; \
+        BattleScriptPushCursorAndCallback(script);      \
+        return TRUE;                                    \
+    }
 
 template <BattleSkillEnum Id>
 constexpr BattleSkill Impl = {0};
@@ -24,13 +35,13 @@ constexpr BattleSkill Impl = {0};
 #include "generated/data/text/battle_skill_text.hh"
 
 /*
-General idea: Create "base" templates like MoveOnEntry that take arguments, and use these in the 
+General idea: Create "base" templates like MoveOnEntry that take arguments, and use these in the
 implementations of specific skills, for example:
 
 template <>
 constexpr BattleSkill Impl<BATTLE_SKILL_ANCIENT_POWER_ON_ENTRY> = MoveOnEntry<MOVE_ANCIENT_POWER, 60>
 
-This should allow skills to act similarly to abilities (for example: can look up Battle Skills using 
+This should allow skills to act similarly to abilities (for example: can look up Battle Skills using
 just the enum value) while also allowing arguments to be passed so we can reuse the base templates
 and ideally write less code
 
@@ -39,26 +50,38 @@ Hopefully this works without any issues :)
 
 template <int stat, s8 stage>
 constexpr BattleSkill StatOnSwitchIn = {
-    .onEntry = +[](ON_ENTRY) {
-        CHECK(CanRaiseStat(battler, stat))
+    .onEntry =
+        +[](ON_ENTRY) {
+            CHECK(CanRaiseStat(battler, stat))
 
-        SetStatChanger(stat, stage);
-        BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-    },
+            SetStatChanger(stat, stage);
+            BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
+        },
 };
 
 template <MoveEnum entryMove, u8 entryMovePower>
 constexpr BattleSkill MoveOnEntry = {
-    .onEntry = +[](ON_ENTRY) {
-        // Not sure if ABILITY_NONE will work properly or not, should probably change but maybe OK for now
-        return UseEntryMove(battler, ABILITY_NONE, entryMove, entryMovePower);
-    },
+    .onEntry =
+        +[](ON_ENTRY) {
+            // Not sure if ABILITY_NONE will work properly or not, should probably change but maybe OK for now
+            return UseEntryMove(battler, ABILITY_NONE, entryMove, entryMovePower);
+        },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_EVIOLITE> = {
+    BATTLE_START_SIMPLE(BattleScript_ExtraSkillEviolite),
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (CanEvolveStrict(gBattleMons[battler].species) && (gBattleMons[battler].species != SPECIES_NECROZMA)) MUL(1.5);
+        },
 };
 
 template <BattleSkillEnum Id>
 constexpr BattleSkill mergeSkill() {
     BattleSkill skill = Impl<Id>;
     skill.name = BattleSkillStrings<Id>.name;
+    skill.announceString = BattleSkillStrings<Id>.name;
     return skill;
 }
 

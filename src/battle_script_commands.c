@@ -64,6 +64,7 @@
 #include "util.h"
 #include "wild_encounter.h"
 #include "window.h"
+#include "battle_skills.hh"
 
 extern struct MusicPlayerInfo gMPlayInfo_BGM;
 
@@ -5518,7 +5519,7 @@ static void Cmd_switchineffects(void) {
                 // Neutralizing Gas will always disable battlers' main ability regardless of if it works on innates or not
                 if ((B_NEUTRALIZING_GAS_WORKS_ON_INNATES || GetBattlerAbility(i) == abilities[j]) && !IsPersistentOrUnsuppressableAbility(abilities[j])) {
                     abilities[j] = ABILITY_NONE;
-                } 
+                }
             }
 
             UpdateAbilityStateIndices(i, abilities);
@@ -7615,7 +7616,13 @@ static void Cmd_various(void) {
             UpdateAbilityPopup(gActiveBattler);
             break;
         case VARIOUS_EXTRASKILL_POPUP:
-            CreateExtraSkillPopUp();
+            u8 skillSource = READ_8_INC;
+            if (skillSource == 1) {
+                ptr = gBattleSkills[gBattleScripting.abilityPopupOverwrite].name;
+            } else {
+                ptr = gBattleEventNames[gLastBattleEvent];
+            }
+            CreateExtraSkillPopUp(ptr);
             break;
         case VARIOUS_DEFOG: {
             int clear = READ_8_INC;
@@ -9147,7 +9154,6 @@ static void Cmd_various(void) {
         case VARIOUS_SET_RANDOM_TEMP_BERRY:
             SetRandomTempBerry(gActiveBattler);
             break;
-
     }  // End of switch (gBattlescriptCurrInstr[2])
 }
 
@@ -12274,7 +12280,7 @@ bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, MoveEnum move, Type
     if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE)) return FALSE;
     if (IsSoundMove(battlerAtk, move)) return FALSE;
     if (gBattleMoves[move].flags & FLAG_HIT_IN_SUBSTITUTE) return FALSE;
-    if (gHitMarker & HITMARKER_IGNORE_SUBSTITUTE) return FALSE; // For effects from abilities like Flame Body on defense
+    if (gHitMarker & HITMARKER_IGNORE_SUBSTITUTE) return FALSE;  // For effects from abilities like Flame Body on defense
 
     if (Infiltrates(battlerAtk, move, moveType, INFILTRATE_SUBSTITUTE)) return FALSE;
 

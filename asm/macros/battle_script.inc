@@ -2464,6 +2464,11 @@
 	.macro setrandomtempberry battler:req
 	various \battler, VARIOUS_SET_RANDOM_TEMP_BERRY
 	.endm
+	
+	.macro extraskillpopup source:req
+	various 0, VARIOUS_EXTRASKILL_POPUP
+	.byte \source
+	.endm
 
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@

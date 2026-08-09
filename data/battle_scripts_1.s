@@ -12077,7 +12077,7 @@ BattleScript_ExtraSkillEnd2:
 	end2
 
 BattleScript_ExtraSkillPopup:
-	various 0, VARIOUS_EXTRASKILL_POPUP
+	extraskillpopup 0
 	return
 
 BattleScript_ExtraSkillSteadyPrintString:
@@ -12355,12 +12355,17 @@ BattleScript_ExtraSkillLuckyChant::
 	waitanimation
 	end2
 
+BattleScript_AnnounceBattleSkill::
+	extraskillpopup 1
+	copybyte TABLE_SPECIAL_BATTLE_SKILL_ANNOUNCE, cMULTISTRING_CHOOSER
+	printstring STRINGID_TABLESPECIAL
+	return
+
 BattleScript_ExtraSkillEviolite::
-	call BattleScript_ExtraSkillPopup
-	printstring STRINGID_EXTRASKILL_EVIOLITE
+	call BattleScript_AnnounceBattleSkill
 	playSE SE_M_DETECT
 	playSE SE_M_BRICK_BREAK
-	end2
+	end3
 
 BattleScript_ExtraAbilities1::
 	call BattleScript_ExtraSkillPopup
