@@ -282,7 +282,8 @@ u16 UseAttackerFollowUpMove(u8 battler, int target, AbilityEnum ability, MoveEnu
 
 #define ON_SKILL(condition, callback)                                 \
     for (int idx = ARRAY_COUNT(gActiveSkills) - 1; idx >= 0; idx--) { \
-        const BattleSkillEnum skillId = gActiveSkills[idx];                           \
+        const BattleSkillEnum skillId = gActiveSkills[idx];           \
+        FILTER(skillId)                                               \
         const BattleSkill* skill = &gBattleSkills[skillId];           \
         FILTER(condition)                                             \
         callback;                                                     \

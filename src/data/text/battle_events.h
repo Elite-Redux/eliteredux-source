@@ -62,7 +62,6 @@ const u8 gBattleEventNames[BATTLE_EVENT_MAX_NUMBER + 1][20] = {
     [BATTLE_EVENT_PERMA_NIGHTMARE] = _("Nightmare"),
     [BATTLE_EVENT_PERMA_SMACKDOWN] = _("Smack Down"), 
     [BATTLE_EVENT_PERMA_WIDE_GUARD] = _("Wide Guard"),
-    [BATTLE_EVENT_PERMA_STICKY_WEB] = _("Sticky Web"),
 
     [BATTLE_EVENT_ONDS_COPY_STATS] = _("Copy Stat"),
 
@@ -81,7 +80,6 @@ const u8 gBattleEventNames[BATTLE_EVENT_MAX_NUMBER + 1][20] = {
     [BATTLE_EVENT_NO_PROTECT] = _("No Protect"),
 
     //New
-    [BATTLE_EVENT_EVIOLITE] = _("Eviolite"),
     [BATTLE_EVENT_EXTRA_ABILITIES_1] = _("Extra Abilities"),
     [BATTLE_EVENT_EXTRA_ABILITIES_2] = _("Extra Abilities"),
     [BATTLE_EVENT_EXTRA_ABILITIES_3] = _("Extra Abilities"),

@@ -22,12 +22,21 @@ extern "C" {
 #define ON_DEFENSIVE_MULTIPLIER opt u8 battler, opt u16 *resistance, opt u16 *modifier
 
 #define MUL(val) MUL_MODIFIER(modifier, val)
-#define BATTLE_START_SIMPLE(script)                     \
-    .onBattleStart = +[](ON_BATTLE_START) -> int {      \
-        gBattleScripting.abilityPopupOverwrite = skill; \
-        BattleScriptPushCursorAndCallback(script);      \
-        return TRUE;                                    \
+
+static void Unregister(BattleSkillEnum skill) {
+    for (int i = 0; i < ARRAY_COUNT(gActiveSkills); i++) {
+        FILTER(gActiveSkills[i] == i)
+        gActiveSkills[i] = SKILL_NONE;
+        break;
     }
+}
+
+static int RunEntryAnnounceScript(BattleSkillEnum skill, const u8* script) {
+    gBattleScripting.abilityPopupOverwrite = skill;
+    BattleScriptPushCursorAndCallback(script);
+    return TRUE;
+}
+#define BATTLE_START_SIMPLE(script) .onBattleStart = +[](ON_BATTLE_START) -> int { return RunEntryAnnounceScript(skill, script); }
 
 template <BattleSkillEnum Id>
 constexpr BattleSkill Impl = {0};
@@ -75,6 +84,16 @@ constexpr BattleSkill Impl<SKILL_EVIOLITE> = {
         +[](ON_DEFENSIVE_MULTIPLIER) {
             if (CanEvolveStrict(gBattleMons[battler].species) && (gBattleMons[battler].species != SPECIES_NECROZMA)) MUL(1.5);
         },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_STICKY_WEB> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+        CHECK_NOT(gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STICKY_WEB)
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STICKY_WEB;
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaStickyWeb);
+    },
 };
 
 template <BattleSkillEnum Id>

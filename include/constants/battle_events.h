@@ -62,7 +62,6 @@
 #define BATTLE_EVENT_PERMA_NIGHTMARE    161
 #define BATTLE_EVENT_PERMA_SMACKDOWN    162 // made specifically with winona in mind but I changed my mind it's a bad idea
 #define BATTLE_EVENT_PERMA_WIDE_GUARD   163
-#define BATTLE_EVENT_PERMA_STICKY_WEB   164
 
 #define BATTLE_EVENT_ONDS_COPY_STATS    180 //DS => Death Switch (in)
 
@@ -81,7 +80,6 @@
 #define BATTLE_EVENT_NO_PROTECT         230
 
 //New
-#define BATTLE_EVENT_EVIOLITE           231
 #define BATTLE_EVENT_EXTRA_ABILITIES_1  232
 #define BATTLE_EVENT_EXTRA_ABILITIES_2  233
 #define BATTLE_EVENT_EXTRA_ABILITIES_3  234

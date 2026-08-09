@@ -17,9 +17,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     [TRAINER_CINDY_1] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_CUTE_CHARM, 0},
     },
-    [TRAINER_RICK] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_PERMA_STICKY_WEB, 0, 0},
-    },
     [TRAINER_LYLE] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SWORD_OF_RUIN, 0},
     },
@@ -75,9 +72,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     //[TRAINER_SARAH] = {
         // TODO: Permanent inverse room
     //},
-    // [TRAINER_CLARK] = { Transfered to skill format
-    //     [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EVIOLITE, 0, 0},
-    // },
     [TRAINER_JANICE] = {
         // Doc says Focus Sash effect, Sturdy probably good enough (only difference is Mold Breaker?)
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_STURDY, 0},
