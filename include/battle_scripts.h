@@ -768,6 +768,7 @@ extern const u8 BattleScript_ExtraSkillPermaNightmare[];  // not implemented ful
 extern const u8 BattleScript_ExtraSkillPermaHealBlock[];
 extern const u8 BattleScript_ExtraSkillPermaWideGuard[];
 extern const u8 BattleScript_ExtraSkillPermaStickyWeb[];
+extern const u8 BattleScript_ExtraSkillPermaStickyWebOld[];
 
 extern const u8 BattleScript_ExtraSkillCopyStats[];
 

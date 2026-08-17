@@ -12290,6 +12290,14 @@ BattleScript_ExtraSkillPermaWideGuard::
 	waitanimation
 	end2
 
+BattleScript_ExtraSkillPermaStickyWebOld::
+	call BattleScript_ExtraSkillPopup
+	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
+	printstring STRINGID_EXTRASKILL_PERMA_STICKY_WEB
+	playmoveanimation BS_ATTACKER, MOVE_STICKY_WEB
+	waitanimation
+	end2
+
 BattleScript_ExtraSkillPermaStickyWeb::
 	call BattleScript_AnnounceBattleSkill
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT

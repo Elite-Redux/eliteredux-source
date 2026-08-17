@@ -25,7 +25,7 @@ extern "C" {
 
 static void Unregister(BattleSkillEnum skill) {
     for (int i = 0; i < ARRAY_COUNT(gActiveSkills); i++) {
-        FILTER(gActiveSkills[i] == i)
+        FILTER(gActiveSkills[i] == skill)
         gActiveSkills[i] = SKILL_NONE;
         break;
     }

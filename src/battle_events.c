@@ -378,6 +378,11 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent* battleEvent) {
             gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_WIDE_GUARD;
             RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaWideGuard);
 
+        case BATTLE_EVENT_PERMA_STICKY_WEB:
+            if (gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STICKY_WEB) return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+            gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STICKY_WEB;
+            RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaStickyWebOld);
+
         case BATTLE_EVENT_NO_PROTECT:
             if (!DepleteTeamPowerPointOfMove(MOVE_PROTECT)) return EXEC_BATTLE_EVENTS_ALL_CLEAR;
             RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillNoProtect)
@@ -518,6 +523,10 @@ u8 BattleEventStartTurnExec(struct BattleEvent* battleEvent) {
             if (gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_WIDE_GUARD) return EXEC_BATTLE_EVENTS_ALL_CLEAR;
             gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_WIDE_GUARD;
             RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaWideGuard);
+        case BATTLE_EVENT_PERMA_STICKY_WEB:
+            if (gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STICKY_WEB) return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+            gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STICKY_WEB;
+            RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaStickyWebOld);
 
         case BATTLE_EVENT_ONDS_COPY_STATS:
             if (!gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn || gSideTimers[B_POSITION_OPPONENT_LEFT].retaliateTimer != 1)

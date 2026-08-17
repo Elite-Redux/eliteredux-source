@@ -94,12 +94,19 @@ object GeneratorUtils {
       .map { it.toString() } + CUSTOM_BEHAVIORS.values
   }
 
-  val BATTLE_SKILLS by lazy {
+  private val BATTLE_SKILL_PROTO by lazy {
     TextFormat.parse(
-        File("../../proto/BattleSkillList.textproto").readText(),
-        BattleSkillList::class.java,
-      )
-      .skillList
+      File("../../proto/BattleSkillList.textproto").readText(),
+      BattleSkillList::class.java,
+    )
+  }
+
+  val BATTLE_SKILLS by lazy {
+    BATTLE_SKILL_PROTO.skillList
+  }
+
+  val BATTLE_SKILL_TEMPLATES by lazy {
+    
   }
 
   val SPECIES_LIST by lazy { FULL_SPECIES_LIST.filter { it.randomizerBanned != SPECIES_HIDDEN } }
