@@ -121,7 +121,7 @@ endif
 
 CPPCOMPILEFLAGS := -Wall -Wextra -Werror -fno-exceptions -Wno-sign-compare -Wno-switch -Wno-missing-field-initializers -fno-rtti -mthumb -mthumb-interwork -O2 -mabi=apcs-gnu -mtune=arm7tdmi -march=armv4t -fshort-enums -g -Wunreachable-code -std=gnu++20
 
-override CFLAGS += -fno-toplevel-reorder -Wno-unused-function -Wno-pointer-sign -Wno-unused-label
+override CFLAGS += -fno-toplevel-reorder -Wno-unused-function -Wno-pointer-sign -Wno-unused-label -std=gnu23
 
 CPPFLAGS := -iquote include -iquote $(GFLIB_SUBDIR) -Wno-trigraphs -DMODERN=$(MODERN)
 ifneq ($(MODERN),1)
@@ -275,6 +275,13 @@ tidynonmodern:
 tidymodern:
 	rm -f $(MODERN_ROM_NAME) $(MODERN_ELF_NAME) $(MODERN_MAP_NAME)
 	rm -rf $(MODERN_OBJ_DIR_NAME)
+
+tools/poryscript/poryscript:
+	mkdir -p tools/poryscript
+	wget -O tools/poryscript/poryscript.zip "https://github.com/huderlem/poryscript/releases/download/3.6.1/poryscript-linux.zip" -q
+	unzip -qo tools/poryscript/poryscript.zip -d tools/
+	mv tools/poryscript-linux/* tools/poryscript -f
+	rm tools/poryscript-linux -rf
 	
 ifneq ($(MODERN),0)
 $(C_BUILDDIR)/berry_crush.o: override CFLAGS += -Wno-address-of-packed-member
