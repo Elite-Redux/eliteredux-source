@@ -7,6 +7,25 @@ In general, you should not need to open these unless if you get an error or if y
 
 If you run into trouble, ask for help on Discord or IRC (see [README.md](README.md)).
 
+## Simple setup if you have a Debian-based environment
+
+If you already have a Debian-based environment set up (including WSL) you can run the following command from terminal in the folder where you would like to put your repo to fully install prereqs, clone the repo, and build:
+
+```bash
+sudo apt install build-essential binutils-arm-none-eabi gcc-arm-none-eabi git libnewlib-arm-none-eabi libpng-dev gdebi-core zip unzip default-jre default-jdk python3
+wget https://apt.devkitpro.org/install-devkitpro-pacman
+chmod +x ./install-devkitpro-pacman
+sudo ./install-devkitpro-pacman
+sudo ln -s /proc/self/mounts /etc/mtab
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk install kotlin
+git clone https://github.com/Elite-Redux/eliteredux-source.git
+cd eliteredux-source
+git submodule update --init --recursive
+make -j$(nproc)
+```
+
 ## Windows (WSL1)
 WSL1 is the preferred terminal to build **pokeemerald**. The following instructions will explain how to install WSL1 (referred to interchangeably as WSL).
 - If WSL (Debian or Ubuntu) is **not installed**, then go to [Installing WSL1](#Installing-WSL1).
