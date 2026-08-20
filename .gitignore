@@ -72,6 +72,7 @@ poryscript-mac/
 knowledge/
 scripts/
 plans/
+command_config.json
 
 CLAUDE.md
 /tasks

@@ -278,10 +278,13 @@ tidymodern:
 
 tools/poryscript/poryscript:
 	mkdir -p tools/poryscript
-	wget -O tools/poryscript/poryscript.zip "https://github.com/huderlem/poryscript/releases/download/3.6.1/poryscript-linux.zip" -q
+	wget -O tools/poryscript/poryscript.zip "https://github.com/huderlem/poryscript/releases/download/3.5.2/poryscript-linux.zip" -q
 	unzip -qo tools/poryscript/poryscript.zip -d tools/
 	mv tools/poryscript-linux/* tools/poryscript -f
 	rm tools/poryscript-linux -rf
+
+command_config.json: tools/poryscript/poryscript
+	cp tools/poryscript/command_config.json ./
 	
 ifneq ($(MODERN),0)
 $(C_BUILDDIR)/berry_crush.o: override CFLAGS += -Wno-address-of-packed-member
@@ -310,7 +313,7 @@ include songs.mk
 $(CRY_SUBDIR)/uncomp_%.bin: $(CRY_SUBDIR)/uncomp_%.aif ; $(AIF) $< $@
 $(CRY_SUBDIR)/%.bin: $(CRY_SUBDIR)/%.aif ; $(AIF) $< $@ --compress
 sound/%.bin: sound/%.aif ; $(AIF) $< $@
-data/%.inc: data/%.pory; $(SCRIPT) -i $< -o $@ -fc tools/poryscript/font_config.json -cc tools/poryscript/command_config.json
+data/%.inc: command_config.json tools/poryscript/poryscript data/%.pory; $(SCRIPT) -i $< -o $@ -fc tools/poryscript/font_config.json -cc tools/poryscript/command_config.json
 
 
 ifeq ($(MODERN),0)
