@@ -3473,11 +3473,9 @@ static void Cmd_getexp(void) {
         case 1:  // calculate experience points to redistribute
         {
             u32 calculatedExp;
-            s32 viaSentIn;
 
-            for (viaSentIn = 0, i = 0; i < PARTY_SIZE; i++) {
+            for (i = 0; i < PARTY_SIZE; i++) {
                 if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == SPECIES_NONE || GetMonData(&gPlayerParty[i], MON_DATA_HP) == 0) continue;
-                if (gBitTable[i] & sentIn) viaSentIn++;
 
                 item = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
 
