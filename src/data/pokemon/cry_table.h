@@ -937,7 +937,6 @@ static SpeciesEnum GetFirstStageFromSpecies(SpeciesEnum species) {
     // We need to define fist stages for every Pokémon to make things faster
     u16 i, j, k;
     bool8 found;
-    u32 numChecks = 0;
 
     for (i = 0; i < POKEMON_STAGES_FIND; i++) {
         found = FALSE;
@@ -949,7 +948,6 @@ static SpeciesEnum GetFirstStageFromSpecies(SpeciesEnum species) {
                         found = TRUE;
                         break;
                     }
-                    numChecks++;
                 }
             }
 

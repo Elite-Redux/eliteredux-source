@@ -639,12 +639,7 @@ void MauvilleGymSetDefaultBarriers(void) {
 
 // Presses all switches and deactivates all beams.
 void MauvilleGymDeactivatePuzzle(void) {
-    int i, x, y;
-    const struct UCoords8* switchCoords = sMauvilleGymSwitchCoords;
-    for (i = ARRAY_COUNT(sMauvilleGymSwitchCoords) - 1; i >= 0; i--) {
-        // MapGridSetMetatileIdAt(switchCoords->x, switchCoords->y, METATILE_MauvilleGym_PressedSwitch);
-        switchCoords++;
-    }
+    int x, y;
     for (y = 12; y < 24; y++) {
         for (x = 7; x < 16; x++) {
             switch (MapGridGetMetatileIdAt(x, y)) {
