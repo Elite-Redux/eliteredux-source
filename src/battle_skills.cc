@@ -96,6 +96,17 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_STICKY_WEB> = {
     },
 };
 
+template <>
+constexpr BattleSkill Impl<SKILL_SPIKES_1_LAYER> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+        CHECK(gSideTimers[B_SIDE_PLAYER].spikesAmount < 3)
+        gSideTimers[B_SIDE_PLAYER].spikesAmount += 1;
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_SPIKES;
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillSpikes1Layer);
+    },
+};
+
 template <BattleSkillEnum Id>
 constexpr BattleSkill mergeSkill() {
     BattleSkill skill = Impl<Id>;
