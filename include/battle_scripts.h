@@ -771,6 +771,7 @@ extern const u8 BattleScript_ExtraSkillPermaStickyWeb[];
 extern const u8 BattleScript_ExtraSkillPermaStickyWebOld[];
 extern const u8 BattleScript_ExtraSkillSpikes[];
 extern const u8 BattleScript_ExtraSkillToxicSpikes[];
+extern const u8 BattleScript_ExtraSkillStealthRock[];
 extern const u8 BattleScript_ExtraSkillHazardsAll[];
 
 extern const u8 BattleScript_ExtraSkillCopyStats[];

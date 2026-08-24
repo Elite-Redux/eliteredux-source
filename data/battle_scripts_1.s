@@ -12189,7 +12189,7 @@ BattleScript_ExtraSkillStatusOnTeam::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_ExtraSkillTerrainStealthRock::
+BattleScript_ExtraSkillTerrainStealthRock:: @ deprecated
 	call BattleScript_ExtraSkillTerrain
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
@@ -12319,6 +12319,14 @@ BattleScript_ExtraSkillToxicSpikes::
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_TOXIC_SPIKES
+	waitanimation
+	end3
+
+BattleScript_ExtraSkillStealthRock::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
 	waitanimation
 	end3
 

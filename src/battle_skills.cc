@@ -119,6 +119,17 @@ constexpr BattleSkill Impl<SKILL_TOXIC_SPIKES_2_LAYERS> = {
 };
 
 template <>
+constexpr BattleSkill Impl<SKILL_STEALTH_ROCKS> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+        CHECK_NOT(gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STEALTH_ROCK)
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
+        gSideTimers[B_SIDE_PLAYER].stealthRockType = TYPE_ROCK;
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillStealthRock);
+    },
+};
+
+template <>
 constexpr BattleSkill Impl<SKILL_HAZARDS_ALL> = {
     .onBattleStart = +[](ON_BATTLE_START) -> int {
         Unregister(skill);
