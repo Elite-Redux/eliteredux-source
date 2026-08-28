@@ -12,19 +12,21 @@ abstract class EnumGenerator(
 ) : Generator {
 
   override fun generate(writer: OutputStreamWriter) {
+    val sortedEntries = keyMap.entries.sortedBy { it.value }
+
     writer.appendLine(
       """
         |
         |#ifdef __assembly__
         |
-        |${keyMap.entries.joinToString("\n") { "#define ${it.key} ${it.value}" }}
-        |${countName?.let { "#define $countName ${keyMap.values.max() + 1}" }.orEmpty()}
+        |${sortedEntries.joinToString("\n") { "#define ${it.key} ${it.value}" }}
+        |${countName?.let { "#define $countName ${sortedEntries.maxOf { it.value } + 1}" }.orEmpty()}
         |
         |#else
         |
         |typedef enum $name {
-        |$IND${keyMap.entries.joinToString("\n$IND") { "${it.key} = ${it.value}," }}
-        |${countName?.let { "$IND$countName = ${keyMap.values.max() + 1}" }.orEmpty()}
+        |$IND${sortedEntries.joinToString("\n$IND") { "${it.key} = ${it.value}," }}
+        |${countName?.let { "$IND$countName = ${sortedEntries.maxOf { it.value } + 1}" }.orEmpty()}
         |} $name;
         |
         |#endif
@@ -33,10 +35,16 @@ abstract class EnumGenerator(
     )
 
     if (forEachName != null) {
+      val gaps =
+        sortedEntries.zipWithNext().filterNot { (first, second) -> first.value + 1 == second.value }
+      check(gaps.isEmpty()) {
+        "Gaps found in list, FOR_EACH_FUNCTION will not function appropriately: $gaps"
+      }
+
       writer.appendLine(
         """
           |#define $forEachName \
-          |$IND${keyMap.keys.joinToString(" \\\n$IND") { "${forEachName}_FUNCTION($it)"}}
+          |$IND${sortedEntries.joinToString(" \\\n$IND") { "${forEachName}_FUNCTION(${it.key})"}}
           |"""
           .trimMargin()
       )
