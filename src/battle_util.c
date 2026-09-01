@@ -6993,18 +6993,12 @@ u16 CalculateAbilityMultipliers(
 }
 
 u32 CalcMoveBasePowerAfterModifiers(MoveEnum move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags) {
-    u32 i;
     u32 holdEffectAtk, holdEffectParamAtk;
     u16 basePower = CalcMoveBasePower(move, battlerAtk, battlerDef);
     u16 actualPower = fixedPower ? fixedPower : basePower;
     u16 holdEffectModifier;
     u16 modifier = UQ_4_12(1.0);
     u32 atkSide = GET_BATTLER_SIDE(battlerAtk);
-    u8 numsleepmons = 0;
-
-    for (i = 0; i < gBattlersCount; i++) {
-        if ((gBattleMons[i].status1 & STATUS1_SLEEP) && IsBattlerAlive(i)) numsleepmons++;
-    }
 
     if (gBattleMoves[move].doubleDamageVsMega && GetBaseSpeciesFromMega(gBattleMons[battlerDef].species)) {
         MulModifier(&modifier, UQ_4_12(2.0));

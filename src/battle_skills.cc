@@ -96,6 +96,63 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_STICKY_WEB> = {
     },
 };
 
+template <>
+constexpr BattleSkill Impl<SKILL_SPIKES_1_LAYER> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+        CHECK(gSideTimers[B_SIDE_PLAYER].spikesAmount < 3)
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_SPIKES;
+        gSideTimers[B_SIDE_PLAYER].spikesAmount++;
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillSpikes);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_TOXIC_SPIKES_2_LAYERS> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+        CHECK(gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount < 2)
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_TOXIC_SPIKES;
+        gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount = 2;
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillToxicSpikes);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_STEALTH_ROCKS> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+        CHECK_NOT(gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STEALTH_ROCK)
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
+        gSideTimers[B_SIDE_PLAYER].stealthRockType = TYPE_ROCK;
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillStealthRock);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_HAZARDS_ALL> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+
+        CHECK_NOT(gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STEALTH_ROCK)
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
+        gSideTimers[B_SIDE_PLAYER].stealthRockType = TYPE_ROCK;
+
+        CHECK(gSideTimers[B_SIDE_PLAYER].spikesAmount < 3)
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_SPIKES;
+        gSideTimers[B_SIDE_PLAYER].spikesAmount++;
+
+        CHECK(gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount < 2)
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_TOXIC_SPIKES;
+        gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount++;
+
+        CHECK_NOT(gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STICKY_WEB)
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STICKY_WEB;
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillHazardsAll);
+    },
+};
+
 template <BattleSkillEnum Id>
 constexpr BattleSkill mergeSkill() {
     BattleSkill skill = Impl<Id>;

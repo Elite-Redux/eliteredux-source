@@ -12189,7 +12189,7 @@ BattleScript_ExtraSkillStatusOnTeam::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_ExtraSkillTerrainStealthRock::
+BattleScript_ExtraSkillTerrainStealthRock:: @ deprecated
 	call BattleScript_ExtraSkillTerrain
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
@@ -12199,7 +12199,7 @@ BattleScript_ExtraSkillTerrainStealthRock::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_ExtraSkillTerrainSpikes::
+BattleScript_ExtraSkillTerrainSpikes:: @ deprecated
 	call BattleScript_ExtraSkillTerrain
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
@@ -12209,7 +12209,7 @@ BattleScript_ExtraSkillTerrainSpikes::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_ExtraSkillTerrainToxicSpikes::
+BattleScript_ExtraSkillTerrainToxicSpikes:: @ deprecated
 	call BattleScript_ExtraSkillTerrain
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
@@ -12219,7 +12219,7 @@ BattleScript_ExtraSkillTerrainToxicSpikes::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_ExtraSkillTerrainStickyWeb::
+BattleScript_ExtraSkillTerrainStickyWeb:: @ also deprecated?
 	call BattleScript_ExtraSkillTerrain
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
@@ -12303,6 +12303,38 @@ BattleScript_ExtraSkillPermaStickyWeb::
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_STICKY_WEB
+	waitanimation
+	end3
+
+BattleScript_ExtraSkillSpikes::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_SPIKES
+	waitanimation
+	end3
+
+BattleScript_ExtraSkillToxicSpikes::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_TOXIC_SPIKES
+	waitanimation
+	end3
+
+BattleScript_ExtraSkillStealthRock::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
+	waitanimation
+	end3
+
+BattleScript_ExtraSkillHazardsAll::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK @ idk what animation to use for this
 	waitanimation
 	end3
 
