@@ -106,7 +106,7 @@ object GeneratorUtils {
   }
 
   val BATTLE_SKILL_TEMPLATES by lazy {
-    
+    BATTLE_SKILL_PROTO.templateList
   }
 
   val SPECIES_LIST by lazy { FULL_SPECIES_LIST.filter { it.randomizerBanned != SPECIES_HIDDEN } }
