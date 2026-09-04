@@ -8,6 +8,7 @@
 extern "C" {
 #include "global.h"
 #include "generated/constants/battle_skills.h"
+#include "generated/constants/battle_skill_templates.h"
 #include "battle_scripts.h"
 #include "battle_script_commands.h"
 #include "battle_util.h"
@@ -41,8 +42,6 @@ static int RunEntryAnnounceScript(BattleSkillEnum skill, const u8* script) {
 template <BattleSkillEnum Id>
 constexpr BattleSkill Impl = {0};
 
-#include "generated/data/text/battle_skill_text.hh"
-
 /*
 General idea: Create "base" templates like MoveOnEntry that take arguments, and use these in the
 implementations of specific skills, for example:
@@ -57,24 +56,40 @@ and ideally write less code
 Hopefully this works without any issues :)
 */
 
-template <int stat, s8 stage>
-constexpr BattleSkill StatOnSwitchIn = {
-    .onEntry =
-        +[](ON_ENTRY) {
-            CHECK(CanRaiseStat(battler, stat))
+template <BattleSkillTemplateEnum Template, auto... Args>
+constexpr BattleSkill BattleSkillTemplate;
 
-            SetStatChanger(stat, stage);
-            BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-        },
+template <AbilityEnum Ability>
+constexpr BattleSkill BattleSkillTemplate<SKILL_TEMPLATE_EXTRA_ABILITY, Ability> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, Ability);
+
+        return RunEntryAnnounceScript(skill, BattleScript_AnnounceBattleSkillEnd3);
+    },
 };
 
-template <MoveEnum entryMove, u8 entryMovePower>
-constexpr BattleSkill MoveOnEntry = {
-    .onEntry =
-        +[](ON_ENTRY) {
-            // Not sure if ABILITY_NONE will work properly or not, should probably change but maybe OK for now
-            return UseEntryMove(battler, ABILITY_NONE, entryMove, entryMovePower);
-        },
+template <AbilityEnum Ability1, AbilityEnum Ability2>
+constexpr BattleSkill BattleSkillTemplate<SKILL_TEMPLATE_EXTRA_ABILITY, Ability1, Ability2> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, Ability1);
+        PREPARE_ABILITY_BUFFER(gBattleTextBuff2, Ability2);
+
+        return RunEntryAnnounceScript(skill, BattleScript_AnnounceBattleSkillEnd3);
+    },
+};
+
+template <AbilityEnum Ability1, AbilityEnum Ability2, AbilityEnum Ability3>
+constexpr BattleSkill BattleSkillTemplate<SKILL_TEMPLATE_EXTRA_ABILITY, Ability1, Ability2, Ability3> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, Ability1);
+        PREPARE_ABILITY_BUFFER(gBattleTextBuff2, Ability2);
+        PREPARE_ABILITY_BUFFER(gBattleTextBuff3, Ability3);
+
+        return RunEntryAnnounceScript(skill, BattleScript_AnnounceBattleSkillEnd3);
+    },
 };
 
 template <>
@@ -152,6 +167,8 @@ constexpr BattleSkill Impl<SKILL_HAZARDS_ALL> = {
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillHazardsAll);
     },
 };
+
+#include "generated/data/text/battle_skill_text.hh"
 
 template <BattleSkillEnum Id>
 constexpr BattleSkill mergeSkill() {

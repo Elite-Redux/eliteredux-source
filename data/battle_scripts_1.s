@@ -12401,6 +12401,10 @@ BattleScript_AnnounceBattleSkill::
 	printstring STRINGID_TABLESPECIAL
 	return
 
+BattleScript_AnnounceBattleSkillEnd3::
+	call BattleScript_AnnounceBattleSkill
+	end3
+
 BattleScript_ExtraSkillEviolite::
 	call BattleScript_AnnounceBattleSkill
 	playSE SE_M_DETECT
