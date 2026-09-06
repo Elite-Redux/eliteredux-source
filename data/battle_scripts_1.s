@@ -12397,7 +12397,7 @@ BattleScript_ExtraSkillLuckyChant::
 
 BattleScript_AnnounceBattleSkill::
 	extraskillpopup 1
-	copybyte TABLE_SPECIAL_BATTLE_SKILL_ANNOUNCE, cMULTISTRING_CHOOSER
+	setbyte cMULTISTRING_CHOOSER, TABLE_SPECIAL_BATTLE_SKILL_ANNOUNCE
 	printstring STRINGID_TABLESPECIAL
 	return
 
