@@ -12399,6 +12399,7 @@ BattleScript_AnnounceBattleSkill::
 	extraskillpopup 1
 	setbyte cMULTISTRING_CHOOSER, TABLE_SPECIAL_BATTLE_SKILL_ANNOUNCE
 	printstring STRINGID_TABLESPECIAL
+	waitmessage B_WAIT_TIME_LONG
 	return
 
 BattleScript_AnnounceBattleSkillEnd3::
