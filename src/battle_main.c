@@ -2704,7 +2704,6 @@ static void BattleStartClearSetData(void) {
     ZERO(gBattleStruct->choicedMove)
     ZERO(gBattleStruct->changedItems)
     ZERO(gBattleStruct->lastTakenMoveFrom)
-    ZERO(gActiveSkills)
     gBattleStruct->ranSkillAnnounce = FALSE;
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++) {

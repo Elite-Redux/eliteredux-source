@@ -555,13 +555,16 @@ u8 BattleEventStartTurnExec(struct BattleEvent* battleEvent) {
 void RegisterTrainerBattleEvents(u16 trainerId) {
     u8 i;
 
+    ZERO(gActiveSkills)
+
     for (i = 0; i < HELL_MODE_MAX_SKILLS; i++) {
         BattleSkillEnum skill = gTrainers[trainerId].hellSkills[i];
         REQUIRE(skill)
         int j;
         // This is inefficient but filters out duplicates in doubles
         for (j = 0; j < ARRAY_COUNT(gActiveSkills); j++) {
-            REQUIRE(!gActiveSkills[j] || gActiveSkills[j] == skill)
+            REQUIRE(gActiveSkills[j])
+            REQUIRE(gActiveSkills[j] != skill)
         }
         gActiveSkills[j] = skill;
     }

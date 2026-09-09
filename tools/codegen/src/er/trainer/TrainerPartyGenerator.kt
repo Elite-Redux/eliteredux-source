@@ -6,6 +6,7 @@ import er.GeneratorUtils.SPECIES_MAP
 import er.GeneratorUtils.TRAINERS_LIST
 import er.GeneratorUtils.expandLearnset
 import er.GeneratorUtils.findLearnsetForSpecies
+import er.proto.BattleSkillEnum
 import er.proto.ItemEnum
 import er.proto.Nature
 import er.proto.Species.Gender.FEMALE
@@ -98,6 +99,8 @@ object TrainerPartyGenerator : Generator {
     HELL,
   }
 
+  const val HELL_MODE_MAX_SKILLS = 3;
+
   override fun generate(writer: OutputStreamWriter) {
     val allParties =
       TRAINERS_LIST.flatMap { listOf(it.ace.monList, it.elite.monList, it.hell.monList) }.distinct()
@@ -176,6 +179,13 @@ object TrainerPartyGenerator : Generator {
         with(trainer) {
           val actualElite = elite.monList.ifEmpty { ace.monList }
           val actualHell = hell.monList.ifEmpty { actualElite }
+
+          addIfNot(hell.skillList.size <= HELL_MODE_MAX_SKILLS) {
+              "Trainer ${trainer.id} has ${hell.skillList.size} Hell skills; max is ${HELL_MODE_MAX_SKILLS}."
+          }
+          
+          val skills = List(HELL_MODE_MAX_SKILLS) { index -> hell.skillList.getOrElse(index) { BattleSkillEnum.SKILL_NONE } } 
+
           val flags =
             buildList {
                 if (risky) add("AI_FLAG_RISKY")
@@ -211,6 +221,7 @@ object TrainerPartyGenerator : Generator {
             |$IND$IND.partyInsane = __sParty_${actualElite.hashCode().toUInt()},
             |$IND$IND.partySizeHell = ${actualHell.size},
             |$IND$IND.partyHell = __sParty_${actualHell.hashCode().toUInt()},
+            |$IND$IND.hellSkills = { ${skills.joinToString(", ")} },
             |$IND$IND.aiFlags = $flags,
             |$IND},
             """

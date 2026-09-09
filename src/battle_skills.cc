@@ -174,7 +174,7 @@ template <BattleSkillEnum Id>
 constexpr BattleSkill mergeSkill() {
     BattleSkill skill = Impl<Id>;
     skill.name = BattleSkillStrings<Id>.name;
-    skill.announceString = BattleSkillStrings<Id>.name;
+    skill.announceString = BattleSkillStrings<Id>.announceString;
     return skill;
 }
 
