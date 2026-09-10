@@ -168,6 +168,34 @@ constexpr BattleSkill Impl<SKILL_HAZARDS_ALL> = {
     },
 };
 
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_INVERSE_ROOM> = {
+    // TODO: Make "permanent"
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+
+        CHECK_NOT(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)
+        gFieldTimers.started.inverseRoom = TRUE;
+        gFieldStatuses |= STATUS_FIELD_INVERSE_ROOM;
+        gFieldTimers.inverseRoomTimer = ROOM_DURATION_MAX;
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaInverseRoom);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_RAINBOW> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+
+        CHECK_NOT(gSideTimers[B_SIDE_OPPONENT].rainbowTimer)
+        gSideTimers[B_SIDE_OPPONENT].started.rainbow = TRUE;
+        gSideTimers[B_SIDE_OPPONENT].rainbowTimer = 255;
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaRainbow);
+    },
+};
+
 #include "generated/data/text/battle_skill_text.hh"
 
 template <BattleSkillEnum Id>

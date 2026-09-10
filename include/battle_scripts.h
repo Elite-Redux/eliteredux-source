@@ -767,21 +767,28 @@ extern const u8 BattleScript_ExtraSkillMagnetRise[];
 extern const u8 BattleScript_ExtraSkillPermaNightmare[];  // not implemented fully yet, missing anim
 extern const u8 BattleScript_ExtraSkillPermaHealBlock[];
 extern const u8 BattleScript_ExtraSkillPermaWideGuard[];
-extern const u8 BattleScript_ExtraSkillPermaStickyWeb[];
 extern const u8 BattleScript_ExtraSkillPermaStickyWebOld[];
-extern const u8 BattleScript_ExtraSkillSpikes[];
-extern const u8 BattleScript_ExtraSkillToxicSpikes[];
-extern const u8 BattleScript_ExtraSkillStealthRock[];
-extern const u8 BattleScript_ExtraSkillHazardsAll[];
+
 
 extern const u8 BattleScript_ExtraSkillCopyStats[];
 
 extern const u8 BattleScript_TagTeamSecondPhase[];
 
-extern const u8 BattleScript_ExtraSkillEviolite[];
+// New Battle Skill script
 extern const u8 BattleScript_ExtraAbilities1[];
 extern const u8 BattleScript_ExtraAbilities2[];
 extern const u8 BattleScript_ExtraAbilities3[];
 extern const u8 BattleScript_AnnounceBattleSkillEnd3[];
+
+extern const u8 BattleScript_ExtraSkillEviolite[];
+
+extern const u8 BattleScript_ExtraSkillPermaStickyWeb[];
+extern const u8 BattleScript_ExtraSkillSpikes[];
+extern const u8 BattleScript_ExtraSkillToxicSpikes[];
+extern const u8 BattleScript_ExtraSkillStealthRock[];
+extern const u8 BattleScript_ExtraSkillHazardsAll[];
+
+extern const u8 BattleScript_ExtraSkillPermaInverseRoom[];
+extern const u8 BattleScript_ExtraSkillPermaRainbow[];
 
 #endif  // GUARD_BATTLE_SCRIPTS_H
