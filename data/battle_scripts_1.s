@@ -12347,8 +12347,22 @@ BattleScript_ExtraSkillPermaInverseRoom::
 
 BattleScript_ExtraSkillPermaRainbow::
 	call BattleScript_AnnounceBattleSkill
-	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
-	playanimation BS_ATTACKER, B_ANIM_RAINBOW
+	setbyte gEffectBattler B_POSITION_OPPONENT_LEFT
+	playanimation BS_EFFECT_BATTLER, B_ANIM_RAINBOW
+	waitanimation
+	end3
+
+BattleScript_ExtraSkillPermaSwamp::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gEffectBattler B_POSITION_PLAYER_LEFT
+	playanimation BS_EFFECT_BATTLER, B_ANIM_SWAMP
+	waitanimation
+	end3
+
+BattleScript_ExtraSkillPermaFireSea::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gEffectBattler B_POSITION_PLAYER_LEFT
+	playanimation BS_EFFECT_BATTLER, B_ANIM_SEA_OF_FIRE
 	waitanimation
 	end3
 

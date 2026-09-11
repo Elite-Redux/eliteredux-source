@@ -196,6 +196,32 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_RAINBOW> = {
     },
 };
 
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_SWAMP> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+
+        CHECK_NOT(gSideTimers[B_SIDE_PLAYER].swampTimer)
+        gSideTimers[B_SIDE_PLAYER].started.swamp = TRUE;
+        gSideTimers[B_SIDE_PLAYER].swampTimer = 255;
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaSwamp);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_FIRE_SEA> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+
+        CHECK_NOT(gSideTimers[B_SIDE_PLAYER].fireSeaTimer)
+        gSideTimers[B_SIDE_PLAYER].started.fireSea = TRUE;
+        gSideTimers[B_SIDE_PLAYER].fireSeaTimer = 255;
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaFireSea);
+    },
+};
+
 #include "generated/data/text/battle_skill_text.hh"
 
 template <BattleSkillEnum Id>
