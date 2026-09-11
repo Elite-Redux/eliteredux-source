@@ -118,7 +118,7 @@ constexpr BattleSkill Impl<SKILL_SPIKES_1_LAYER> = {
         CHECK(gSideTimers[B_SIDE_PLAYER].spikesAmount < 3)
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_SPIKES;
         gSideTimers[B_SIDE_PLAYER].spikesAmount++;
-        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillSpikes);
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaSpikes);
     },
 };
 
@@ -129,7 +129,7 @@ constexpr BattleSkill Impl<SKILL_TOXIC_SPIKES_2_LAYERS> = {
         CHECK(gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount < 2)
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_TOXIC_SPIKES;
         gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount = 2;
-        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillToxicSpikes);
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaToxicSpikes);
     },
 };
 
@@ -140,7 +140,17 @@ constexpr BattleSkill Impl<SKILL_STEALTH_ROCKS> = {
         CHECK_NOT(gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STEALTH_ROCK)
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
         gSideTimers[B_SIDE_PLAYER].stealthRockType = TYPE_ROCK;
-        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillStealthRock);
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaStealthRock);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_CALTROPS> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+        CHECK_NOT(gSideTimers[B_SIDE_PLAYER].caltrops)
+        gSideTimers[B_SIDE_PLAYER].caltrops = TRUE;
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaCaltrops);
     },
 };
 

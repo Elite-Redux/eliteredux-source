@@ -12306,7 +12306,7 @@ BattleScript_ExtraSkillPermaStickyWeb::
 	waitanimation
 	end3
 
-BattleScript_ExtraSkillSpikes::
+BattleScript_ExtraSkillPermaSpikes::
 	call BattleScript_AnnounceBattleSkill
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
@@ -12314,7 +12314,7 @@ BattleScript_ExtraSkillSpikes::
 	waitanimation
 	end3
 
-BattleScript_ExtraSkillToxicSpikes::
+BattleScript_ExtraSkillPermaToxicSpikes::
 	call BattleScript_AnnounceBattleSkill
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
@@ -12322,11 +12322,19 @@ BattleScript_ExtraSkillToxicSpikes::
 	waitanimation
 	end3
 
-BattleScript_ExtraSkillStealthRock::
+BattleScript_ExtraSkillPermaStealthRock::
 	call BattleScript_AnnounceBattleSkill
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
+	waitanimation
+	end3
+
+BattleScript_ExtraSkillPermaCaltrops::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_SPIKES
 	waitanimation
 	end3
 
