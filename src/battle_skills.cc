@@ -180,7 +180,7 @@ constexpr BattleSkill Impl<SKILL_HAZARDS_ALL> = {
 
 template <>
 constexpr BattleSkill Impl<SKILL_PERMANENT_INVERSE_ROOM> = {
-    // TODO: Make "permanent"
+    // TODO: Set Inverse Room again if removed
     .onBattleStart = +[](ON_BATTLE_START) -> int {
         Unregister(skill);
 
@@ -190,6 +190,21 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_INVERSE_ROOM> = {
         gFieldTimers.inverseRoomTimer = ROOM_DURATION_MAX;
 
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaInverseRoom);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_TRICK_ROOM> = {
+    // TODO: Set Trick Room again if removed
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+
+        CHECK_NOT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
+        gFieldTimers.started.trickRoom = TRUE;
+        gFieldStatuses |= STATUS_FIELD_TRICK_ROOM;
+        gFieldTimers.inverseRoomTimer = ROOM_DURATION_MAX;
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaTrickRoom);
     },
 };
 

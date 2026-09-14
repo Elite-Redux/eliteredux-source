@@ -12346,6 +12346,13 @@ BattleScript_ExtraSkillHazardsAll::
 	waitanimation
 	end3
 
+BattleScript_ExtraSkillPermaTrickRoom::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_TRICK_ROOM
+	waitanimation
+	end3
+
 BattleScript_ExtraSkillPermaInverseRoom::
 	call BattleScript_AnnounceBattleSkill
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
