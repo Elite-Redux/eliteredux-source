@@ -69,10 +69,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // Doc says Focus Sash effect, Sturdy probably good enough (only difference is Mold Breaker?)
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_STURDY, 0},
     },
-    [TRAINER_KAREN_1] = {
-        // Not implemented yet
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_STICKY_WEB, 0, 0},
-    },
     [TRAINER_JOHNSON] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_RAINBOW, 0, 0},
     },
