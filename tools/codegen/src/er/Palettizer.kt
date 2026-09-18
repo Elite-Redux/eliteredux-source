@@ -7,8 +7,11 @@ import er.proto.copy
 import er.proto.speciesList
 import java.awt.Color
 import java.awt.image.BufferedImage
-import java.awt.image.BufferedImage.TYPE_BYTE_INDEXED
+import java.awt.image.ColorModel
+import java.awt.image.DataBuffer
 import java.awt.image.IndexColorModel
+import java.awt.image.MultiPixelPackedSampleModel
+import java.awt.image.Raster
 import java.io.File
 import javax.imageio.ImageIO
 import kotlin.math.abs
@@ -23,17 +26,17 @@ object Palettizer {
       }
     }
 
-    //    File("../../proto/SpeciesList.textproto")
-    //      .writeText(
-    //        """
-    //            |# proto-file: SpeciesList.proto
-    //            |# proto-message: er.SpeciesList
-    //            |
-    //            |$newSpeciesList
-    //            |"""
-    //          .trimMargin()
-    //          .replace(".0", "")
-    //      )
+    File("../../proto/SpeciesList.textproto")
+      .writeText(
+        """
+                |# proto-file: SpeciesList.proto
+                |# proto-message: er.SpeciesList
+                |
+                |$newSpeciesList
+                |"""
+          .trimMargin()
+          .replace(".0", "")
+      )
   }
 
   private fun SpeciesKt.Dsl.fixIcon() {
@@ -43,11 +46,17 @@ object Palettizer {
     if (icon.path.isEmpty()) return
 
     indexImage(icon)
-    findCorrectPalette(icon)?.let { icon.reindexTo(it) }
+    findCorrectPalette(icon)?.let {
+      icon.reindexTo(it)
+      this.visuals = visuals.copy { this.icon = icon.copy { this.palette = it } }
+    }
 
     if (femIcon.path.isNotEmpty()) {
       indexImage(femIcon)
-      findCorrectPalette(femIcon)?.let { icon.reindexTo(it) }
+      findCorrectPalette(femIcon)?.let {
+        icon.reindexTo(it)
+        this.visuals = visuals.copy { this.icon = icon.copy { this.palette = it } }
+      }
     }
   }
 
@@ -56,10 +65,24 @@ object Palettizer {
   private fun Visuals.Icon.write(image: BufferedImage) =
     ImageIO.write(image, "png", File("../../graphics/pokemon/$path.png"))
 
+  private fun createIconBufferedImage(colorModel: ColorModel): BufferedImage {
+    val sampleModel = MultiPixelPackedSampleModel(DataBuffer.TYPE_BYTE, 32, 64, 4)
+
+    val raster = Raster.createWritableRaster(sampleModel, null)
+
+    return BufferedImage(colorModel, raster, colorModel.isAlphaPremultiplied, null)
+  }
+
   private fun indexImage(icon: Visuals.Icon) {
     val iconImage = icon.read()
 
-    if (iconImage.colorModel is IndexColorModel) return
+    val colorModel = iconImage.colorModel
+
+    if (colorModel is IndexColorModel && colorModel.mapSize <= 16) return
+
+    println(
+      "Indexing ${icon.path}, color model is ${colorModel::class.simpleName}, map size is ${(colorModel as? IndexColorModel)?.mapSize}"
+    )
 
     val colorSet = buildSet {
       for (x in 0..<32) {
@@ -83,13 +106,15 @@ object Palettizer {
         ByteArray(16) { paddedList[it].blue.toByte() },
       )
 
-    val newIcon = BufferedImage(32, 64, TYPE_BYTE_INDEXED, newColorModel)
+    val newIcon = createIconBufferedImage(newColorModel)
 
     for (x in 0..<32) {
       for (y in 0..<64) {
         newIcon.setRGB(x, y, iconImage.getRGB(x, y))
       }
     }
+
+    val testColorModel = newIcon.colorModel as IndexColorModel
 
     icon.write(newIcon)
   }
@@ -112,10 +137,6 @@ object Palettizer {
       }
     }
 
-      if (usedColors.any { it > 16}) {
-          println("wtf")
-      }
-
     val paletteColors = usedColors.map { Color(colorModel.getRGB(it)) }.drop(1)
     val assignedColors = usedColors.map { PALETTE_MAP[icon.palette]!![it] }.drop(1)
 
@@ -123,10 +144,15 @@ object Palettizer {
 
     val bestPalette =
       PALETTE_MAP.mapValues {
-        paletteColors.sumOf { color -> it.value.drop(1).minOf { palColor -> palColor box color } }
-      }
+          paletteColors.sumOf { color -> it.value.drop(1).minOf { palColor -> palColor box color } }
+        }
+        .minBy { it.value }
 
-    return bestPalette.minBy { it.value }.key
+    println(
+      "Reindexing ${icon.path} from ${icon.palette} to ${bestPalette.key}. Box sum is ${bestPalette.value}"
+    )
+
+    return bestPalette.key
   }
 
   private fun Visuals.Icon.reindexTo(palette: Int) {
@@ -139,7 +165,7 @@ object Palettizer {
         PALETTE_MAP[palette]!!.map { it.green.toByte() }.toByteArray(),
         PALETTE_MAP[palette]!!.map { it.blue.toByte() }.toByteArray(),
       )
-    val newImage = BufferedImage(32, 64, TYPE_BYTE_INDEXED, newColorModel)
+    val newImage = createIconBufferedImage(newColorModel)
     for (x in 0..<32) {
       for (y in 0..<64) {
         val pixelValue = image.raster.getPixel(x, y, null as? IntArray).first()
