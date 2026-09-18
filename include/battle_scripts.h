@@ -783,6 +783,7 @@ extern const u8 BattleScript_AnnounceBattleSkillEnd3[];
 extern const u8 BattleScript_ExtraSkillEviolite[];
 
 extern const u8 BattleScript_ExtraSkillPermaStickyWeb[];
+extern const u8 BattleScript_ExtraSkillPermaStickyWebBothSides[];
 extern const u8 BattleScript_ExtraSkillPermaSpikes[];
 extern const u8 BattleScript_ExtraSkillPermaToxicSpikes[];
 extern const u8 BattleScript_ExtraSkillPermaStealthRock[];

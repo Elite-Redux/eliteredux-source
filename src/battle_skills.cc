@@ -112,6 +112,19 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_STICKY_WEB> = {
 };
 
 template <>
+constexpr BattleSkill Impl<SKILL_STICKY_WEB_BOTH_SIDES> = {
+    // TODO: Should become permanent as well I think
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+        CHECK_NOT(gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STICKY_WEB)
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STICKY_WEB;
+        CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_STICKY_WEB)
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_STICKY_WEB;
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaStickyWebBothSides);
+    },
+};
+
+template <>
 constexpr BattleSkill Impl<SKILL_SPIKES_1_LAYER> = {
     .onBattleStart = +[](ON_BATTLE_START) -> int {
         Unregister(skill);
