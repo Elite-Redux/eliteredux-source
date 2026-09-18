@@ -1,86 +1,139 @@
 package er
 
-import com.google.protobuf.copy
 import er.GeneratorUtils.FULL_SPECIES_LIST
-import er.GeneratorUtils.SPECIES_LIST
-import er.GeneratorUtils.SPECIES_MAP
-import er.proto.SpeciesEnum
 import er.proto.SpeciesKt
-import er.proto.SpeciesListKt
+import er.proto.Visuals
 import er.proto.copy
 import er.proto.speciesList
 import java.awt.Color
+import java.awt.image.BufferedImage
+import java.awt.image.BufferedImage.TYPE_BYTE_INDEXED
 import java.awt.image.IndexColorModel
 import java.io.File
 import javax.imageio.ImageIO
 
 object Palettizer {
-    @JvmStatic
-    fun main(args: Array<String>) {
-        val newSpeciesList = speciesList {
-            for (species in FULL_SPECIES_LIST.sortedBy { it.id.number }) {
-                this.species += species.copy {
-                    fixIconPalette()
-                }
-            }
+  @JvmStatic
+  fun main(args: Array<String>) {
+    val newSpeciesList = speciesList {
+      for (species in FULL_SPECIES_LIST.sortedBy { it.id.number }) {
+        this.species += species.copy { fixIcon() }
+      }
+    }
+
+    //    File("../../proto/SpeciesList.textproto")
+    //      .writeText(
+    //        """
+    //            |# proto-file: SpeciesList.proto
+    //            |# proto-message: er.SpeciesList
+    //            |
+    //            |$newSpeciesList
+    //            |"""
+    //          .trimMargin()
+    //          .replace(".0", "")
+    //      )
+  }
+
+  private fun SpeciesKt.Dsl.fixIcon() {
+    val icon = visuals.icon
+    val femIcon = visuals.female.icon
+
+    if (icon.path.isEmpty()) return
+
+    updateColorMode(icon)
+
+    if (femIcon.path.isNotEmpty()) {
+      updateColorMode(femIcon)
+    }
+
+    //    val iconImage = ImageIO.read(File("../../graphics/pokemon/${icon.path}.png"))
+  }
+
+  private fun Visuals.Icon.read() = ImageIO.read(File("../../graphics/pokemon/$path.png"))
+
+  private fun Visuals.Icon.write(image: BufferedImage) =
+    ImageIO.write(image, "png", File("../../graphics/pokemon/$path.png"))
+
+  private fun updateColorMode(icon: Visuals.Icon) {
+    val iconImage = icon.read()
+
+    if (iconImage.colorModel is IndexColorModel) return
+
+    val colorSet = buildSet {
+      for (x in 0..<32) {
+        for (y in 0..<64) {
+          add(Color(iconImage.getRGB(x, y)))
         }
-
-//        File("../../proto/SpeciesList.textproto").writeText(
-//            """
-//            |# proto-file: SpeciesList.proto
-//            |# proto-message: er.SpeciesList
-//            |
-//            |$newSpeciesList
-//            |""".trimMargin().replace(".0", "")
-//        )
+      }
     }
 
-    fun palettize(args: List<String>) {
+    check(colorSet.size <= 16) { "Too many colors in icon: ${icon.path}" }
+
+    val colorList = colorSet.toList()
+    val paddedList = List(16) { colorList.getOrElse(it) { Color(0) } }
+
+    val newColorModel =
+      IndexColorModel(
+        4,
+        16,
+        ByteArray(16) { paddedList[it].red.toByte() },
+        ByteArray(16) { paddedList[it].green.toByte() },
+        ByteArray(16) { paddedList[it].blue.toByte() },
+      )
+
+    val newIcon = BufferedImage(32, 64, TYPE_BYTE_INDEXED, newColorModel)
+
+    for (x in 0..<32) {
+      for (y in 0..<64) {
+        newIcon.setRGB(x, y, iconImage.getRGB(x, y))
+      }
     }
 
-    private fun SpeciesKt.Dsl.fixIconPalette() {
-        val icon = visuals.icon
-        val femIcon = visuals.female.icon
+    icon.write(newIcon)
+  }
 
-        if (icon.path.isEmpty()) return
+  private fun fixIcon(iconImage: BufferedImage, currentIndex: Int, path: String): Int {
+    val colorModel = iconImage.colorModel
 
-        val iconImage = ImageIO.read(File("../../graphics/pokemon/${icon.path}.png"))
-        val colorModel = iconImage.colorModel
-        if (colorModel is IndexColorModel && colorModel.pixelSize == 4) {
-            val allColors = buildSet {
-                for (x in 0..<32) {
-                    for (y in 0..<64) {
-                        add(Color(iconImage.getRGB(x, y)))
-                    }
-                }
-            }
+    require(colorModel is IndexColorModel && colorModel.pixelSize == 4) {
+      "Bad color model: $path, ${colorModel::class.simpleName}, ${colorModel.pixelSize}"
+    }
 
-            val colorMap = buildList {
-                for (x in 0..<colorModel.mapSize) {
-                    val color = colorModel.getRGB(x)
-                    if (Color(color) in allColors) add(x to Color(color))
-                }
-            }
-
-            val validPalettes = colorMap.map { PALETTE_FILTER[it].orEmpty() }.flatten().groupBy { it }
-                .filter { it.value.size == colorMap.size }.keys
-
-            if (validPalettes.isNotEmpty() && validPalettes.first() != visuals.icon.palette) {
-                println("${id.number}: ${visuals.icon.palette} -> ${validPalettes.first()}")
-                visuals = visuals.copy {
-                    this.icon = this.icon.copy {
-                        this.palette = validPalettes.first()
-                    }
-                }
-            }
-        } else {
-            // Icon doesn't have a palette
+    val allColors = buildSet {
+      for (x in 0..<32) {
+        for (y in 0..<64) {
+          add(Color(iconImage.getRGB(x, y)))
         }
+      }
     }
+
+    val colorMap = buildList {
+      for (x in 0..<colorModel.mapSize) {
+        val color = colorModel.getRGB(x)
+        if (Color(color) in allColors) add(x to Color(color))
+      }
+    }
+
+    val paletteSquaredError = PALETTE_MAP
+
+    val validPalettes =
+      colorMap
+        .map { PALETTE_FILTER[it].orEmpty() }
+        .flatten()
+        .groupBy { it }
+        .filter { it.value.size == colorMap.size }
+        .keys
+
+    check(validPalettes.isNotEmpty()) { "No matching palette colors for $path" }
+
+    return if (currentIndex in validPalettes) currentIndex else validPalettes.first()
+  }
 }
 
-private val PALETTE_MAP = mapOf(
-    0 to listOf(
+private val PALETTE_MAP =
+  mapOf(
+    0 to
+      listOf(
         Color(98, 156, 131),
         Color(131, 131, 115),
         Color(189, 189, 189),
@@ -97,8 +150,9 @@ private val PALETTE_MAP = mapOf(
         Color(106, 172, 156),
         Color(98, 98, 90),
         Color(65, 65, 65),
-    ),
-    1 to listOf(
+      ),
+    1 to
+      listOf(
         Color(98, 156, 131),
         Color(115, 115, 115),
         Color(189, 189, 189),
@@ -115,8 +169,9 @@ private val PALETTE_MAP = mapOf(
         Color(230, 74, 41),
         Color(98, 98, 90),
         Color(65, 65, 65),
-    ),
-    2 to listOf(
+      ),
+    2 to
+      listOf(
         Color(98, 156, 131),
         Color(123, 123, 123),
         Color(189, 189, 180),
@@ -133,8 +188,9 @@ private val PALETTE_MAP = mapOf(
         Color(189, 41, 156),
         Color(98, 98, 90),
         Color(65, 65, 65),
-    ),
-    3 to listOf(
+      ),
+    3 to
+      listOf(
         Color(98, 156, 131),
         Color(115, 115, 115),
         Color(189, 189, 189),
@@ -151,8 +207,9 @@ private val PALETTE_MAP = mapOf(
         Color(246, 148, 41),
         Color(98, 98, 90),
         Color(65, 65, 65),
-    ),
-    4 to listOf(
+      ),
+    4 to
+      listOf(
         Color(98, 156, 131),
         Color(115, 115, 115),
         Color(189, 189, 189),
@@ -169,8 +226,9 @@ private val PALETTE_MAP = mapOf(
         Color(213, 98, 65),
         Color(98, 98, 90),
         Color(65, 65, 65),
-    ),
-    5 to listOf(
+      ),
+    5 to
+      listOf(
         Color(98, 156, 131),
         Color(123, 123, 123),
         Color(189, 189, 180),
@@ -187,9 +245,9 @@ private val PALETTE_MAP = mapOf(
         Color(246, 148, 41),
         Color(98, 98, 90),
         Color(65, 65, 65),
-    ),
-)
+      ),
+  )
 
 private val PALETTE_FILTER =
-    PALETTE_MAP.flatMap { (id, palette) -> palette.mapIndexed { color, idx -> id to (color to idx) } }
-        .groupBy({ it.second }, { it.first })
+  PALETTE_MAP.flatMap { (id, palette) -> palette.mapIndexed { color, idx -> id to (color to idx) } }
+    .groupBy({ it.second }, { it.first })
