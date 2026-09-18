@@ -132,7 +132,7 @@ object Palettizer {
     val usedColors = buildSet {
       for (x in 0..<32) {
         for (y in 0..<64) {
-          add(iconImage.raster.getPixel(x, y, null as? IntArray).first())
+          @Suppress("USELESS_CAST") add(iconImage.raster.getPixel(x, y, null as? IntArray).first())
         }
       }
     }
@@ -168,6 +168,7 @@ object Palettizer {
     val newImage = createIconBufferedImage(newColorModel)
     for (x in 0..<32) {
       for (y in 0..<64) {
+        @Suppress("USELESS_CAST")
         val pixelValue = image.raster.getPixel(x, y, null as? IntArray).first()
         if (pixelValue == 0) continue
         newImage.setRGB(x, y, image.getRGB(x, y))
