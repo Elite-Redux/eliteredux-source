@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage.TYPE_BYTE_INDEXED
 import java.awt.image.IndexColorModel
 import java.io.File
 import javax.imageio.ImageIO
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 object Palettizer {
   @JvmStatic
@@ -40,13 +42,13 @@ object Palettizer {
 
     if (icon.path.isEmpty()) return
 
-    updateColorMode(icon)
+    indexImage(icon)
+    findCorrectPalette(icon)?.let { icon.reindexTo(it) }
 
     if (femIcon.path.isNotEmpty()) {
-      updateColorMode(femIcon)
+      indexImage(femIcon)
+      findCorrectPalette(femIcon)?.let { icon.reindexTo(it) }
     }
-
-    //    val iconImage = ImageIO.read(File("../../graphics/pokemon/${icon.path}.png"))
   }
 
   private fun Visuals.Icon.read() = ImageIO.read(File("../../graphics/pokemon/$path.png"))
@@ -54,7 +56,7 @@ object Palettizer {
   private fun Visuals.Icon.write(image: BufferedImage) =
     ImageIO.write(image, "png", File("../../graphics/pokemon/$path.png"))
 
-  private fun updateColorMode(icon: Visuals.Icon) {
+  private fun indexImage(icon: Visuals.Icon) {
     val iconImage = icon.read()
 
     if (iconImage.colorModel is IndexColorModel) return
@@ -92,41 +94,60 @@ object Palettizer {
     icon.write(newIcon)
   }
 
-  private fun fixIcon(iconImage: BufferedImage, currentIndex: Int, path: String): Int {
-    val colorModel = iconImage.colorModel
+  private infix fun Color.box(other: Color) =
+    equalize().zip(other.equalize()).maxOf { abs(it.first - it.second) }
 
-    require(colorModel is IndexColorModel && colorModel.pixelSize == 4) {
-      "Bad color model: $path, ${colorModel::class.simpleName}, ${colorModel.pixelSize}"
-    }
+  private fun Color.equalize() =
+    listOf(red, blue, green).map { (it.toDouble() / 255 * 31).roundToInt() }
 
-    val allColors = buildSet {
+  private fun findCorrectPalette(icon: Visuals.Icon): Int? {
+    val iconImage = icon.read()
+    val colorModel = iconImage.colorModel as IndexColorModel
+
+    val usedColors = buildSet {
       for (x in 0..<32) {
         for (y in 0..<64) {
-          add(Color(iconImage.getRGB(x, y)))
+          add(iconImage.raster.getPixel(x, y, null as? IntArray).first())
         }
       }
     }
 
-    val colorMap = buildList {
-      for (x in 0..<colorModel.mapSize) {
-        val color = colorModel.getRGB(x)
-        if (Color(color) in allColors) add(x to Color(color))
+      if (usedColors.any { it > 16}) {
+          println("wtf")
+      }
+
+    val paletteColors = usedColors.map { Color(colorModel.getRGB(it)) }.drop(1)
+    val assignedColors = usedColors.map { PALETTE_MAP[icon.palette]!![it] }.drop(1)
+
+    if (paletteColors.zip(assignedColors).all { it.first box it.second == 0 }) return null
+
+    val bestPalette =
+      PALETTE_MAP.mapValues {
+        paletteColors.sumOf { color -> it.value.drop(1).minOf { palColor -> palColor box color } }
+      }
+
+    return bestPalette.minBy { it.value }.key
+  }
+
+  private fun Visuals.Icon.reindexTo(palette: Int) {
+    val image = read()
+    val newColorModel =
+      IndexColorModel(
+        4,
+        16,
+        PALETTE_MAP[palette]!!.map { it.red.toByte() }.toByteArray(),
+        PALETTE_MAP[palette]!!.map { it.green.toByte() }.toByteArray(),
+        PALETTE_MAP[palette]!!.map { it.blue.toByte() }.toByteArray(),
+      )
+    val newImage = BufferedImage(32, 64, TYPE_BYTE_INDEXED, newColorModel)
+    for (x in 0..<32) {
+      for (y in 0..<64) {
+        val pixelValue = image.raster.getPixel(x, y, null as? IntArray).first()
+        if (pixelValue == 0) continue
+        newImage.setRGB(x, y, image.getRGB(x, y))
       }
     }
-
-    val paletteSquaredError = PALETTE_MAP
-
-    val validPalettes =
-      colorMap
-        .map { PALETTE_FILTER[it].orEmpty() }
-        .flatten()
-        .groupBy { it }
-        .filter { it.value.size == colorMap.size }
-        .keys
-
-    check(validPalettes.isNotEmpty()) { "No matching palette colors for $path" }
-
-    return if (currentIndex in validPalettes) currentIndex else validPalettes.first()
+    write(newImage)
   }
 }
 
