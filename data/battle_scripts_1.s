@@ -12306,6 +12306,16 @@ BattleScript_ExtraSkillPermaStickyWeb::
 	waitanimation
 	end3
 
+BattleScript_ExtraSkillPermaStickyWebBothSides::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_STICKY_WEB
+	swapbattlerandtargetvia34
+	playmoveanimation BS_ATTACKER, MOVE_STICKY_WEB
+	waitanimation
+	end3
+
 BattleScript_ExtraSkillPermaSpikes::
 	call BattleScript_AnnounceBattleSkill
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
