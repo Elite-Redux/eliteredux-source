@@ -5,7 +5,6 @@ import er.Generator
 import er.GeneratorUtils.BATTLE_SKILLS
 import er.GeneratorUtils.BATTLE_SKILL_TEMPLATES
 import er.proto.BattleSkillTemplate
-import er.proto.BattleSkillTemplateParam
 import java.io.OutputStreamWriter
 
 object BattleSkillGenerator : Generator {
