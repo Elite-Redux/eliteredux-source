@@ -5,7 +5,7 @@ import er.Generator
 import er.GeneratorUtils.BATTLE_SKILLS
 import er.GeneratorUtils.BATTLE_SKILL_TEMPLATES
 import er.proto.BattleSkillTemplate
-import er.proto.BattleSkillTemplateParam
+import er.proto.BattleSkillTemplate.BattleSkillTemplateParam
 import java.io.OutputStreamWriter
 
 object BattleSkillGenerator : Generator {
@@ -70,10 +70,10 @@ object BattleSkillGenerator : Generator {
             .trimMargin()
         )
 
-        fun BattleSkillTemplate.BattleSkillTemplateParam.string() =
+        fun BattleSkillTemplateParam.string() =
           when (this.paramCase) {
-            BattleSkillTemplate.BattleSkillTemplateParam.ParamCase.ABILITY -> ability.toString()
-            BattleSkillTemplate.BattleSkillTemplateParam.ParamCase.PARAM_NOT_SET ->
+            BattleSkillTemplateParam.ParamCase.ABILITY -> ability.toString()
+            BattleSkillTemplateParam.ParamCase.PARAM_NOT_SET ->
               error("Param without value: $impl")
           }
 
