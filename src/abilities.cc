@@ -10237,6 +10237,12 @@ constexpr Ability Impl<ABILITY_IGNITION> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_SMARTY_PANTS> = {
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_PSYCHIC); },
+    .addsType = TYPE_PSYCHIC,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_LUCKY_WINGS> = {
     .onOffensiveMultiplier = Impl<ABILITY_GIANT_WINGS>.onOffensiveMultiplier,
     .onModifyEffectChance = Impl<ABILITY_SERENE_GRACE>.onModifyEffectChance,
