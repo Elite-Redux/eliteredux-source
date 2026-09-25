@@ -10226,7 +10226,7 @@ constexpr Ability Impl<ABILITY_LIGHTNING_BORN> = {
 
 template <>
 constexpr Ability Impl<ABILITY_BAD_GUY> = {
-    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_DARK; },
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_DARK); },
     .addsType = TYPE_DARK,
 };
 
