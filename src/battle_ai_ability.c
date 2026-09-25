@@ -1143,7 +1143,8 @@ int ScoreSwitchInAbility(AbilityEnum ability, int battlerAtk, int battlerDef, in
         case ABILITY_IGNITION:
             return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_FIRE);
 
-
+        case ABILITY_BIRD_TYPE:
+            return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_FLYING);
 
 
         case ABILITY_BAD_GUY:
