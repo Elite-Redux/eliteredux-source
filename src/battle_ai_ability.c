@@ -1133,6 +1133,7 @@ int ScoreSwitchInAbility(AbilityEnum ability, int battlerAtk, int battlerDef, in
             return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_STEEL);
 
         case ABILITY_HOVER:
+        case ABILITY_SMARTY_PANTS:
             return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_PSYCHIC);
 
         case ABILITY_TERAVOLT:
@@ -1142,8 +1143,8 @@ int ScoreSwitchInAbility(AbilityEnum ability, int battlerAtk, int battlerDef, in
         case ABILITY_IGNITION:
             return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_FIRE);
 
-        case ABILITY_SMARTY_PANTS:
-            return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_PSYCHIC);
+
+
 
         case ABILITY_BAD_GUY:
             return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_DARK);
