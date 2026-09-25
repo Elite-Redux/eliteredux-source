@@ -1146,6 +1146,8 @@ int ScoreSwitchInAbility(AbilityEnum ability, int battlerAtk, int battlerDef, in
         case ABILITY_BIRD_TYPE:
             return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_FLYING);
 
+        case ABILITY_CREEPYCRAWLIE:
+            return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_BUG);
 
         case ABILITY_BAD_GUY:
             return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_DARK);

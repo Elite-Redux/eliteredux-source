@@ -10262,6 +10262,12 @@ constexpr Ability Impl<ABILITY_BIRD_TYPE> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_CREEPYCRAWLIE> = {
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_BUG); },
+    .addsType = TYPE_BUG,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_LUCKY_WINGS> = {
     .onOffensiveMultiplier = Impl<ABILITY_GIANT_WINGS>.onOffensiveMultiplier,
     .onModifyEffectChance = Impl<ABILITY_SERENE_GRACE>.onModifyEffectChance,
@@ -12705,6 +12711,8 @@ constexpr Ability Impl<ABILITY_OVERCLOCK> = {
     },
     .onCanStatusType = Impl<ABILITY_OVERCHARGE>.onCanStatusType,
 };
+
+
 
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
