@@ -1139,8 +1139,9 @@ int ScoreSwitchInAbility(AbilityEnum ability, int battlerAtk, int battlerDef, in
             return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_ELECTRIC);
 
         case ABILITY_TURBOBLAZE:
+        case ABILITY_IGNITION:
             return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_FIRE);
-            
+
         case ABILITY_BAD_GUY:
             return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_DARK);
 
