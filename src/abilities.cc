@@ -4081,6 +4081,19 @@ constexpr Ability Impl<ABILITY_DRAGONSLAYER> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_INSECTEATER> = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(target, TYPE_BUG)) RESISTANCE(1.5);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(attacker, TYPE_BUG)) MUL(.5);
+        },
+    .breakable = TRUE,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_MOUNTAINEER> = {
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
