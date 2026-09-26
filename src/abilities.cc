@@ -4848,6 +4848,7 @@ constexpr Ability Impl<ABILITY_LOW_BLOW> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40); },
 };
 
+
 template <>
 constexpr Ability Impl<ABILITY_SPECTRALIZE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
@@ -10709,6 +10710,11 @@ constexpr Ability Impl<ABILITY_SWAMP_THING> = {
 template <>
 constexpr Ability Impl<ABILITY_FROSTY_PRESCENCE> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_MIST, 0); },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_GRIMACE> = {
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_MEAN_LOOK, 0); },
 };
 
 template <>
