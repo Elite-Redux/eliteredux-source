@@ -12062,6 +12062,11 @@ constexpr Ability Impl<ABILITY_WORLD_SERPENT> = {
     .onAttacker = Impl<ABILITY_GRIP_PINCER>.onAttacker,
     .onAccuracy = Impl<ABILITY_GRIP_PINCER>.onAccuracy,
 };
+template <>
+constexpr Ability Impl<ABILITY_ENGULF> = {
+    .onAttacker = Impl<ABILITY_GRIP_PINCER>.onAttacker,
+    .onAccuracy = Impl<ABILITY_GRIP_PINCER>.onAccuracy,
+};
 
 static int DrakelpHeadReformHandler(u8 battler, AbilityEnum ability, AbilityCallType type) {
     CHECK(GetSingleUseAbilityCounter(battler, ability))
