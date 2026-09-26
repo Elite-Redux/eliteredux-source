@@ -12744,6 +12744,18 @@ constexpr Ability Impl<ABILITY_THIRDDEGREEBURN> = {
     .breakable = TRUE,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_THERMALDWELLER> = {
+    .onAttacker = Impl<ABILITY_IMMOLATE>.onAttacker,
+    .onMoveType = Impl<ABILITY_IMMOLATE>.onMoveType,
+    .onStab = Impl<ABILITY_IMMOLATE>.onStab,
+    .onDefensiveMultiplier = Impl<ABILITY_HEATPROOF>.onDefensiveMultiplier,
+    .breakable = TRUE,
+    .negatesBurnAtkDrop = TRUE,
+    .removesStatusOnImmunity = TRUE,
+    .noBurnDamage = TRUE,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
