@@ -12756,6 +12756,13 @@ constexpr Ability Impl<ABILITY_THERMALDWELLER> = {
     .noBurnDamage = TRUE,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_LETHALTOUCH> = {
+    .onAttacker = Impl<ABILITY_TOXIC_CHAIN>.onAttacker,
+    .onDefender =
+        +[](ON_DEFENDER) -> int { return Impl<ABILITY_DOUBLE_IRON_BARBS>.onDefender(DELEGATE_DEFENDER) | Impl<ABILITY_TOXIC_CHAIN>.onDefender(DELEGATE_DEFENDER); },
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
