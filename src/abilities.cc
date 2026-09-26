@@ -12712,7 +12712,26 @@ constexpr Ability Impl<ABILITY_OVERCLOCK> = {
     .onCanStatusType = Impl<ABILITY_OVERCHARGE>.onCanStatusType,
 };
 
-
+template <>
+constexpr Ability Impl<ABILITY_THIRDDEGREEBURN> = {
+    .onCanStatusType = +[](ON_CAN_STATUS_TYPE) -> int {
+        CHECK(status & CHECK_FIRE)
+        return TRUE;
+    },
+    .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
+        gHitMarker |= HITMARKER_MOLD_BREAKER;
+        SetTypeBeforeUsingMove(move, battler);
+        u8 moveType;
+        GET_MOVE_TYPE(move, moveType)
+        if (gBattleMoves[move].type2) {
+            u16 typeEffectiveness;
+            CalculateMoveDamageAndEffectiveness(move, battler, gBattlerTarget, &moveType, &typeEffectiveness);
+        }
+        gHitMarker &= ~HITMARKER_MOLD_BREAKER;
+        return moveType == TYPE_FIRE;
+    },
+    .breakable = TRUE,
+};
 
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
