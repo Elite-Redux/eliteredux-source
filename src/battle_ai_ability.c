@@ -431,6 +431,10 @@ int ScoreDefenseAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int
             REQUIRE(moveType == TYPE_FIRE)
             return AI_SCORE_STAT(battlerDef, STAT_DEF, 1);
 
+        case ABILITY_PACKEDICE:
+            REQUIRE(moveType == TYPE_ICE)
+            return AI_SCORE_STAT(battlerDef, STAT_DEF, 1);
+
         case ABILITY_EVAPORATE:
             REQUIRE(moveType == TYPE_WATER)
             return AI_SCORE_MISTY_TERRAIN;

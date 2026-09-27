@@ -12780,6 +12780,17 @@ constexpr Ability Impl<ABILITY_POISON_UPSURGE> = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_POISON),
 };
 
+template <>
+constexpr Ability Impl<ABILITY_PACKEDICE> = {
+    .onAbsorb = +[](ON_ABSORB) -> int {
+        CHECK(moveType == TYPE_ICE);
+        *statId = STAT_DEF;
+        return ABSORB_RESULT_STAT;
+    },
+    .breakable = TRUE,
+    .absorbUp2 = TRUE,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
