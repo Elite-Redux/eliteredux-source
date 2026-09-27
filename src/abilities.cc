@@ -7691,6 +7691,13 @@ constexpr Ability Impl<ABILITY_TOXIC_CHAIN> = {
 
         return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
     },
+    .onDEFENDER = +[](ON_DEFENDER) -> int {
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(CanBePoisoned(battler, target, MOVE_NONE))
+        CHECK(Random() % 100 < 30)
+
+        return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
+    },
 };
 
 template <>
