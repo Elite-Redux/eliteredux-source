@@ -12791,6 +12791,11 @@ constexpr Ability Impl<ABILITY_PACKEDICE> = {
     .absorbUp2 = TRUE,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_BUSHRUSH> = {
+    .onPriority = GALE_WINGS_CLONE(TYPE_GRASS),
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
