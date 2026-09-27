@@ -12796,6 +12796,15 @@ constexpr Ability Impl<ABILITY_BUSHRUSH> = {
     .onPriority = GALE_WINGS_CLONE(TYPE_GRASS),
 };
 
+template <>
+constexpr Ability Impl<ABILITY_GUERILLA_FIGHTER> = {
+    onInfiltrate = Impl<ABILITY_FIGHT_SPIRIT>.onInfiltrate,
+    .onPriority = GALE_WINGS_CLONE(TYPE_GRASS),
+    .onMoveType = Impl<ABILITY_FIGHT_SPIRIT>.onMoveType,
+    .onStab = Impl<ABILITY_FIGHT_SPIRIT>.onStab,
+    ATE_ABILITY(TYPE_FIGHTING),
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
