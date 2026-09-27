@@ -12770,6 +12770,16 @@ constexpr Ability Impl<ABILITY_LETHALTOUCH> = {
         +[](ON_DEFENDER) -> int { return Impl<ABILITY_DOUBLE_IRON_BARBS>.onDefender(DELEGATE_DEFENDER) | Impl<ABILITY_TOXIC_CHAIN>.onDefender(DELEGATE_DEFENDER); },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_FROSTY> = {
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_ICE),
+};
+
+template <>
+constexpr Ability Impl<ABILITY_POISON_UPSURGE> = {
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_POISON),
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
