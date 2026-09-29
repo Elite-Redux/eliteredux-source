@@ -7682,22 +7682,17 @@ constexpr Ability Impl<ABILITY_TERA_SHELL> = {
     .breakable = TRUE,
 };
 
+ON_EITHER(ToxicChain) {
+    CHECK(ShouldApplyOnHitEffect(opponent))
+    CHECK(CanBePoisoned(battler, opponent, MOVE_NONE))
+    CHECK(Random() % 100 < 30)
+
+    AbilityStatusEffectSafe(MOVE_EFFECT_TOXIC, battler, opponent);
+    return TRUE;
+}
 template <>
 constexpr Ability Impl<ABILITY_TOXIC_CHAIN> = {
-    .onAttacker = +[](ON_ATTACKER) -> int {
-        CHECK(ShouldApplyOnHitEffect(target))
-        CHECK(CanBePoisoned(battler, target, MOVE_NONE))
-        CHECK(Random() % 100 < 30)
-
-        return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
-    },
-    .onDEFENDER = +[](ON_DEFENDER) -> int {
-        CHECK(ShouldApplyOnHitEffect(target))
-        CHECK(CanBePoisoned(battler, target, MOVE_NONE))
-        CHECK(Random() % 100 < 30)
-
-        return AbilityStatusEffect(MOVE_EFFECT_TOXIC);
-    },
+    ON_EITHER_ABILITY(ToxicChain),
 };
 
 template <>
@@ -12733,7 +12728,7 @@ constexpr Ability Impl<ABILITY_OVERCLOCK> = {
 template <>
 constexpr Ability Impl<ABILITY_THIRDDEGREEBURN> = {
     .onCanStatusType = +[](ON_CAN_STATUS_TYPE) -> int {
-        CHECK(status & CHECK_FIRE)
+        CHECK(status & CHECK_BURN)
         return TRUE;
     },
     .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int {
@@ -12754,9 +12749,9 @@ constexpr Ability Impl<ABILITY_THIRDDEGREEBURN> = {
 template <>
 constexpr Ability Impl<ABILITY_THERMALDWELLER> = {
     .onAttacker = Impl<ABILITY_IMMOLATE>.onAttacker,
+    .onDefensiveMultiplier = Impl<ABILITY_HEATPROOF>.onDefensiveMultiplier,
     .onMoveType = Impl<ABILITY_IMMOLATE>.onMoveType,
     .onStab = Impl<ABILITY_IMMOLATE>.onStab,
-    .onDefensiveMultiplier = Impl<ABILITY_HEATPROOF>.onDefensiveMultiplier,
     .breakable = TRUE,
     .negatesBurnAtkDrop = TRUE,
     .removesStatusOnImmunity = TRUE,
@@ -12798,11 +12793,9 @@ constexpr Ability Impl<ABILITY_BUSHRUSH> = {
 
 template <>
 constexpr Ability Impl<ABILITY_GUERILLA_FIGHTER> = {
-    onInfiltrate = Impl<ABILITY_FIGHT_SPIRIT>.onInfiltrate,
-    .onPriority = GALE_WINGS_CLONE(TYPE_GRASS),
-    .onMoveType = Impl<ABILITY_FIGHT_SPIRIT>.onMoveType,
-    .onStab = Impl<ABILITY_FIGHT_SPIRIT>.onStab,
+    .onInfiltrate = Impl<ABILITY_FIGHT_SPIRIT>.onInfiltrate,
     ATE_ABILITY(TYPE_FIGHTING),
+    .onPriority = GALE_WINGS_CLONE(TYPE_GRASS),
 };
 
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
