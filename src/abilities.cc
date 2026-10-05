@@ -12807,6 +12807,13 @@ constexpr Ability Impl<ABILITY_SOUR_APPLE> = {
     .breakable = TRUE,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_SEARCHLIGHT> = {
+    .onEntry = Impl<ABILITY_FRISK>.onEntry,
+    .onAccuracy = Impl<ABILITY_ILLUMINATE>.onAccuracy,
+};
+
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
