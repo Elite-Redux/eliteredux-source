@@ -3169,7 +3169,7 @@
               {
                 "min_level": 12,
                 "max_level": 14,
-                "species": "SPECIES_AXEW"
+                "species": "SPECIES_ISOSHREW"
               }
             ]
           }
@@ -4153,7 +4153,7 @@
               {
                 "min_level": 30,
                 "max_level": 35,
-                "species": "SPECIES_DWEBBLE"
+                "species": "SPECIES_ISOSHREW"
               }
             ]
           },
@@ -16870,12 +16870,12 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_VOLTORB"
+                "species": "SPECIES_VOLBEEP"
               },
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_VOLTORB"
+                "species": "SPECIES_ILLUMARS"
               },
               {
                 "min_level": 5,
