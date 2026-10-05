@@ -12816,11 +12816,11 @@ constexpr Ability Impl<ABILITY_SEARCHLIGHT> = {
 template <>
 constexpr Ability Imp<ABILITY_LIGHT_WIELD> = {
         .onEntry = +[](ON_ENTRY) -> int {
-        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & MOVE_LIGHT_SCREEN && !BattlerHasAbility(battler, ABILITY_SCREEN_CLEANER, FALSE))
+        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_LIGHTSCREEN && !BattlerHasAbility(battler, ABILITY_SCREEN_CLEANER, FALSE))
 
         int side = GetBattlerSide(battler);
         gSideTimers[side].started.lightScreen = TRUE;
-        gSideStatuses[side] |= MOVE_LIGHT_SCREEN;
+        gSideStatuses[side] |= SIDE_STATUS_LIGHTSCREEN;
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
             gSideTimers[side].lightscreenTimer = SCREEN_DURATION;
         else
