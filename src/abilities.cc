@@ -12798,6 +12798,15 @@ constexpr Ability Impl<ABILITY_GUERILLA_FIGHTER> = {
     .onPriority = GALE_WINGS_CLONE(TYPE_GRASS),
 };
 
+template <>
+constexpr Ability Impl<ABILITY_SOUR_APPLE> = {
+    .onStatusImmune = Impl<ABILITY_AROMA_VEIL>.onStatusImmune,
+    .onTypeEffectiveness = Impl<ABILITY_CORROSION>.onTypeEffectiveness,
+    .onCanStatusType = Impl<ABILITY_CORROSION>.onCanStatusType,
+    .onStatusImmuneFor = APPLY_ON_ALLY,
+    .breakable = TRUE,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
