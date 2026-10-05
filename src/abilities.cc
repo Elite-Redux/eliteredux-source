@@ -12813,6 +12813,23 @@ constexpr Ability Impl<ABILITY_SEARCHLIGHT> = {
     .onAccuracy = Impl<ABILITY_ILLUMINATE>.onAccuracy,
 };
 
+template <>
+constexpr Ability Imp<ABILITY_LIGHT_WIELD> = {
+        .onEntry = +[](ON_ENTRY) -> int {
+        CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & MOVE_LIGHT_SCREEN && !BattlerHasAbility(battler, ABILITY_SCREEN_CLEANER, FALSE))
+
+        int side = GetBattlerSide(battler);
+        gSideTimers[side].started.lightScreen = TRUE;
+        gSideStatuses[side] |= MOVE_LIGHT_SCREEN;
+        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
+            gSideTimers[side].lightscreenTimer = SCREEN_DURATION;
+        else
+            gSideTimers[side].lightscreenTimer = SCREEN_DURATION_SHORT;
+        BattleScriptPushCursorAndCallback(BattleScript_NorthWindActivated);
+
+        return TRUE;
+    },
+};
 
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
