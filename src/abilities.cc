@@ -12800,9 +12800,9 @@ constexpr Ability Impl<ABILITY_GUERILLA_FIGHTER> = {
 
 template <>
 constexpr Ability Impl<ABILITY_SOUR_APPLE> = {
-    .onStatusImmune = Impl<ABILITY_AROMA_VEIL>.onStatusImmune,
     .onTypeEffectiveness = Impl<ABILITY_CORROSION>.onTypeEffectiveness,
     .onCanStatusType = Impl<ABILITY_CORROSION>.onCanStatusType,
+    .onStatusImmune = Impl<ABILITY_AROMA_VEIL>.onStatusImmune,
     .onStatusImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
 };
@@ -12814,12 +12814,12 @@ constexpr Ability Impl<ABILITY_SEARCHLIGHT> = {
 };
 
 template <>
-constexpr Ability Imp<ABILITY_LIGHT_WIELD> = {
+constexpr Ability Impl<ABILITY_LIGHT_WIELD> = {
         .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_LIGHTSCREEN && !BattlerHasAbility(battler, ABILITY_SCREEN_CLEANER, FALSE))
 
         int side = GetBattlerSide(battler);
-        gSideTimers[side].started.lightScreen = TRUE;
+        gSideTimers[side].started.lightscreen = TRUE;
         gSideStatuses[side] |= SIDE_STATUS_LIGHTSCREEN;
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
             gSideTimers[side].lightscreenTimer = SCREEN_DURATION;
