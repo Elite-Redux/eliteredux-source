@@ -287,6 +287,7 @@ struct BattleMove {
     u8 mimicBanned:1;
     u8 contact:1;
     u8 drill:1;
+    u8 light:1;
     u8 hitCountOverride:2;
 };
 
