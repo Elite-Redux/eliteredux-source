@@ -12831,6 +12831,14 @@ constexpr Ability Impl<ABILITY_LIGHT_WIELD> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_PHOTOKINESIS> = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLER) {
+            if(gBattleMoves[move].light) MUL(1.3);
+        },
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
