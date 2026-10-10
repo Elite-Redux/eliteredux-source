@@ -12834,14 +12834,14 @@ constexpr Ability Impl<ABILITY_LIGHT_WIELD> = {
 template <>
 constexpr Ability Impl<ABILITY_PHOTOKINESIS> = {
     .onOffensiveMultiplier =
-        +[](ON_OFFENSIVE_MULTIPLER) {
+        +[](ON_OFFENSIVE_MULTIPLIER) {
             if(gBattleMoves[move].light) MUL(1.3);
         },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_PHOTON_BURST> = {
-    .onoffensiveMultiplier = Impl<ABILITY_PHOTOKINESIS>.onOffensiveMultiplier,
+    .onOffensiveMultiplier = Impl<ABILITY_PHOTOKINESIS>.onOffensiveMultiplier,
     .onChooseDefensiveStat = 
     +[](ON_CHOOSE_DEFENSIVE_STAT) {
         if (gBattleMoves[move].light) *defStatToUse = STAT_DEF;
