@@ -12848,6 +12848,18 @@ constexpr Ability Impl<ABILITY_PHOTON_BURST> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_RIPPLING_PUNCH> = {
+   .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
+        switch (flag) {
+            case MOVE_FLAG_PUNCH:
+                return gBattleMoves[move].flags & MOVE_SOUND;
+            default:
+                return FALSE;
+        }
+    },
+}
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
