@@ -12851,14 +12851,12 @@ constexpr Ability Impl<ABILITY_PHOTON_BURST> = {
 template <>
 constexpr Ability Impl<ABILITY_RIPPLING_PUNCH> = {
    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
-        switch (flag) {
-            case MOVE_FLAG_PUNCH:
-                return gBattleMoves[move].flags & FLAG_SOUND;
-            default:
-                return FALSE;
-        }
+        if (flag == MOVE_FLAG_PUNCH)
+    return gBattleMoves[move].flags & FLAG_SOUND;
+        
+        return FALSE;
     },
-}
+};
 
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
