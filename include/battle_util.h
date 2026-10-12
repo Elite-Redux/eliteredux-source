@@ -491,7 +491,7 @@ bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(AbilityEnum ability);
 
 bool32 CanSleep(u8 battlerId);
 bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget, MoveEnum move);
-bool32 CanBeBurned(u8 battlerId);
+bool32 CanBeBurned(u8 battlerAttacker, u8 battlerTarget);
 bool32 CanBeBurnedIgnoreTypeImmunity(u8 battlerId);
 bool32 CanBeParalyzed(u8 battlerAttacker, u8 battlerTarget);
 bool32 CanBeParalyzedIgnoreType(u8 battlerAttacker, u8 battlerTarget);

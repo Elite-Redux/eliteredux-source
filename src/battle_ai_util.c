@@ -2057,7 +2057,7 @@ bool32 AI_CanGetFrostbite(u8 battler) { return CanGetFrostbite(battler); }
 bool32 AI_CanBleed(u8 battler) { return CanBleed(battler); }
 
 bool32 ShouldBurnSelf(u8 battler) {
-    if (CanBeBurned(battler) && (BattlerHasAbility(battler, ABILITY_QUICK_FEET, FALSE) || BattlerHasAbility(battler, ABILITY_HEATPROOF, FALSE) ||
+    if (CanBeBurned(battler, battler) && (BattlerHasAbility(battler, ABILITY_QUICK_FEET, FALSE) || BattlerHasAbility(battler, ABILITY_HEATPROOF, FALSE) ||
                                  IsMagicGuardProtected(battler) || HasMoveEffect(battler, EFFECT_FACADE) || HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT) ||
                                  (BattlerHasAbility(battler, ABILITY_FLARE_BOOST, FALSE) && HasMoveWithSplit(battler, SPLIT_SPECIAL)) ||
                                  (BattlerHasAbility(battler, ABILITY_GUTS, FALSE) && HasMoveWithSplit(battler, SPLIT_PHYSICAL)) ||
@@ -2077,7 +2077,7 @@ bool32 ShouldFrostbiteSelf(u8 battler) {
 }
 
 bool32 AI_CanBurn(u8 battlerAtk, u8 battlerDef, u16 partnerMove) {
-    if (!CanBeBurned(battlerDef) || gBattleMoves[partnerMove].effect == EFFECT_WILL_O_WISP)
+    if (!CanBeBurned(battlerAtk, battlerDef) || gBattleMoves[partnerMove].effect == EFFECT_WILL_O_WISP)
         return FALSE;
     else
         return TRUE;

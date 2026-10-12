@@ -1098,7 +1098,7 @@ constexpr Ability Impl<ABILITY_HEAVY_METAL> = {
 
 ON_EITHER(FlameBody) {
     CHECK(ShouldApplyOnHitEffect(opponent))
-    CHECK(CanBeBurned(opponent))
+    CHECK(CanBeBurned(battler, opponent))
     int chance = IsMoveMakingContact(move, gBattlerAttacker) ? 30 : 20;
     CHECK(Random() % 100 < chance)
 
@@ -1974,7 +1974,7 @@ constexpr Ability Impl<ABILITY_TOXIC_BOOST> = {
 };
 
 int FlareBoostHandler(u8 battler, AbilityCallType callType) {
-    CHECK(CanBeBurned(battler))
+    CHECK(CanBeBurned(battler, battler))
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
     InsertCorrectEndType(callType);
@@ -3717,7 +3717,7 @@ constexpr Ability Impl<ABILITY_IMMOLATE> = {
         CHECK(IS_BATTLER_OF_TYPE(battler, TYPE_FIRE))
         CHECK(moveType == TYPE_FIRE)
         CHECK(ShouldApplyOnHitEffect(target))
-        CHECK(CanBeBurned(target))
+        CHECK(CanBeBurned(battler, target))
         CHECK(Random() % 10 == 0)
 
         return AbilityStatusEffect(MOVE_EFFECT_BURN);
@@ -5174,7 +5174,7 @@ constexpr Ability Impl<ABILITY_FIRES_WRATH> = {
     .onEntry = UseIntimidateClone,
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitEffect(target))
-        CHECK(CanBeBurned(target))
+        CHECK(CanBeBurned(battler, target))
         CHECK_NOT(IsMoveMakingContact(move, battler))
         CHECK(Random() % 100 < 10)
 
@@ -5491,7 +5491,7 @@ constexpr Ability Impl<ABILITY_ELEMENTAL_CHARGE> = {
                 return TRUE;
 
             case TYPE_FIRE:
-                CHECK(CanBeBurned(target))
+                CHECK(CanBeBurned(battler, target))
 
                 AbilityStatusEffect(MOVE_EFFECT_BURN);
                 return TRUE;
@@ -5865,7 +5865,7 @@ constexpr Ability Impl<ABILITY_ARCHMAGE> = {
 
             case TYPE_FIRE:
                 CHECK(IsBattlerAlive(target))
-                CHECK(CanBeBurned(target))
+                CHECK(CanBeBurned(battler, target))
 
                 AbilityStatusEffect(MOVE_EFFECT_BURN);
                 ;
@@ -6655,7 +6655,7 @@ template <>
 constexpr Ability Impl<ABILITY_FLAMING_JAWS> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitEffect(target))
-        CHECK(CanBeBurned(target))
+        CHECK(CanBeBurned(battler, target))
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         CHECK(Random() % 2)
 
@@ -7498,7 +7498,7 @@ template <>
 constexpr Ability Impl<ABILITY_MOLTEN_BLADES> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitEffect(target))
-        CHECK(CanBeBurned(target))
+        CHECK(CanBeBurned(battler, target))
         CHECK(DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_KEEN_EDGE))
         CHECK(Random() % 100 < 20)
 
@@ -8079,7 +8079,7 @@ constexpr Ability Impl<ABILITY_ARC_FLASH> = {
     },
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitEffect(attacker))
-        CHECK(CanBeBurned(attacker))
+        CHECK(CanBeBurned(battler, attacker))
         CHECK(Random() % 2)
 
         AbilityStatusEffect(MOVE_EFFECT_BURN | MOVE_EFFECT_AFFECTS_USER);
@@ -8123,7 +8123,7 @@ constexpr Ability Impl<ABILITY_VENOBLAZE_PINCERS> = {
 
         switch (Random() % 2) {
             case 0:
-                CHECK(CanBeBurned(target));
+                CHECK(CanBeBurned(battler, target));
                 AbilityStatusEffect(MOVE_EFFECT_BURN);
                 return TRUE;
 
@@ -9182,7 +9182,7 @@ constexpr Ability Impl<ABILITY_DESOLATE_SUN> = {
 
 ON_EITHER(Daybreak) {
     CHECK(ShouldApplyOnHitEffect(opponent))
-    CHECK(CanBeBurned(opponent))
+    CHECK(CanBeBurned(battler, opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
 
     AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, opponent);
@@ -10332,7 +10332,7 @@ constexpr Ability Impl<ABILITY_MOLTEN_COAT> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(moveType == TYPE_ROCK)
-        CHECK(CanBeBurned(target))
+        CHECK(CanBeBurned(battler, target))
         CHECK(Random() % 2)
 
         AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, target);
@@ -10523,7 +10523,7 @@ constexpr Ability Impl<ABILITY_FIRE_ASPECT> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(moveType == TYPE_FIRE)
-        CHECK(CanBeBurned(target))
+        CHECK(CanBeBurned(battler, target))
 
         AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, target);
         return TRUE;
@@ -11030,7 +11030,7 @@ template <>
 constexpr Ability Impl<ABILITY_LASER_DRILL> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitEffect(target))
-        CHECK(CanBeBurned(target))
+        CHECK(CanBeBurned(battler, target))
         CHECK(gBattleMoves[move].hornBased)
         CHECK(Random() % 2)
 
@@ -11047,7 +11047,7 @@ constexpr Ability Impl<ABILITY_LIGHT_SABER> = {
         CHECK(Random() % 2)
         switch (Random() % 4) {
             case 0:
-                CHECK(CanBeBurned(target))
+                CHECK(CanBeBurned(battler, target))
                 return AbilityStatusEffect(MOVE_EFFECT_BURN);
 
             case 1:
@@ -12495,7 +12495,7 @@ constexpr Ability Impl<ABILITY_GHOST_PEPPER> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(moveType == TYPE_GRASS)
-        CHECK(CanBeBurned(target))
+        CHECK(CanBeBurned(battler, target))
         CHECK(Random() % 100 < 30)
 
         return AbilityStatusEffect(MOVE_EFFECT_BURN);
@@ -12685,7 +12685,7 @@ template <>
 constexpr Ability Impl<ABILITY_SPICY_SPRAY> = {
     .onDefender = +[](ON_DEFENDER) -> int {
         CHECK(ShouldApplyOnHitEffect(attacker))
-        CHECK(CanBeBurned(attacker))
+        CHECK(CanBeBurned(battler, attacker))
 
         AbilityStatusEffectSafe(MOVE_EFFECT_BURN, battler, attacker);
         return TRUE;
@@ -12852,7 +12852,7 @@ template <>
 constexpr Ability Impl<ABILITY_RIPPLING_PUNCH> = {
    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
         if (flag == MOVE_FLAG_PUNCH)
-    return gBattleMoves[move].flags & FLAG_SOUND;
+            return gBattleMoves[move].flags & FLAG_SOUND;
         
         return FALSE;
     },

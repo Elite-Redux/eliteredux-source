@@ -5083,14 +5083,13 @@ bool32 CanBeBurnedIgnoreTypeImmunity(u8 battlerId) {
     return TRUE;
 }
 
-bool32 CanBeBurned(u8 battlerId) {
-    if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
+bool32 CanBeBurned(u8 battlerAttacker, u8 battlerTarget) {
+    if (gBattleMons[battlerTarget].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
-    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FIRE)) return FALSE;
+    if (IsStatusImmune(battlerTarget, CHECK_BURN)) return FALSE;
 
-    if (IsStatusImmune(battlerId, CHECK_BURN)) return FALSE;
-
+    if (!CanBurnType(battlerAttacker, battlerTarget)) return FALSE;
     return TRUE;
 }
 
@@ -6285,7 +6284,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn) {
                     }
                     break;
                 case HOLD_EFFECT_FLAME_ORB:
-                    if (CanBeBurned(battlerId)) {
+                    if (CanBeBurned(battlerId, battlerId)) {
                         effect = ITEM_STATUS_CHANGE;
                         gBattleMons[battlerId].status1 = STATUS1_BURN;
                         BattleScriptExecute(BattleScript_FlameOrb);

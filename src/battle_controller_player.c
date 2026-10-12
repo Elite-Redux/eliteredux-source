@@ -3385,7 +3385,7 @@ static u8 GetMoveTypeEffectivenessStatus(u16 moveNum, u8 targetId, u8 userId) {
             if (!CanBePoisoned(userId, targetId, moveNum)) moveNullified = TRUE;
             break;
         case EFFECT_WILL_O_WISP:
-            if (!CanBeBurned(targetId)) moveNullified = TRUE;
+            if (!CanBeBurned(userId, targetId)) moveNullified = TRUE;
             break;
         case EFFECT_PARALYZE_IGNORE_TYPE:
             if (!CanBeParalyzedIgnoreType(userId, targetId)) moveNullified = TRUE;
