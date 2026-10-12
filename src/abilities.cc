@@ -12853,7 +12853,7 @@ constexpr Ability Impl<ABILITY_RIPPLING_PUNCH> = {
    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
         switch (flag) {
             case MOVE_FLAG_PUNCH:
-                return gBattleMoves[move].flags & MOVE_SOUND;
+                return gBattleMoves[move].flags & FLAG_SOUND;
             default:
                 return FALSE;
         }
