@@ -1141,6 +1141,8 @@ int ScoreSwitchInAbility(AbilityEnum ability, int battlerAtk, int battlerDef, in
             return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_PSYCHIC);
 
         case ABILITY_TERAVOLT:
+        case ABILITY_LIGHTNING_BORN:
+        case ABILITY_BIOLUMINESCENT:
             return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_ELECTRIC);
 
         case ABILITY_TURBOBLAZE:

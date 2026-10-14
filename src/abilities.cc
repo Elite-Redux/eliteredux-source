@@ -12896,6 +12896,13 @@ constexpr Ability Impl<ABILITY_STICKY_SITUATION> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_BIOLUMINESCENT> = {
+    .onEntry = Impl<ABILITY_LIGHTNING_BORN>.onEntry,
+    .onAccuracy = Impl<ABILITY_ILLUMINATE>.onAccuracy,
+    .addsType = TYPE_ELECTRIC,
+}
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
