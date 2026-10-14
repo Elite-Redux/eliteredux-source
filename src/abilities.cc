@@ -2303,6 +2303,7 @@ constexpr Ability Impl<ABILITY_CHEEK_POUCH> = {
 template <>
 constexpr Ability Impl<ABILITY_PROTEAN> = {
     .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
+        CHECK(SetAbilityState(battler, ability, TRUE));
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
         CHECK_NOT(IS_BATTLER_OF_TYPE(battler, moveType))
         CHECK(move != MOVE_STRUGGLE)
