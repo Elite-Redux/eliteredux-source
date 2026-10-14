@@ -499,6 +499,7 @@ constexpr Ability Impl<ABILITY_SPEED_BOOST> = {
 template <>
 constexpr Ability Impl<ABILITY_COOL_EXIT> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
 
         switch (GetAbilityState(battler, ability)) {
