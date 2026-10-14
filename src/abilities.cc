@@ -12873,6 +12873,17 @@ constexpr Ability Impl<ABILITY_CACKLING> = {
     .persistent = TRUE,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_FRESH_SNOWFALL> = {
+    .onDefender = +[](ON_DEFENDER) -> int {
+    CHECK(IS_MOVE_SPECIAL(move, attacker))
+
+    UseOutOfTurnAttack(battler, ability, MOVE_POWDER_SNOW, 30);
+
+        return FALSE;
+    }.
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
