@@ -12884,6 +12884,18 @@ constexpr Ability Impl<ABILITY_FRESH_SNOWFALL> = {
     }.
 };
 
+template <>
+constexpr Ability Impl<ABILITY_STICKY_SITUATION> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(moveType == TYPE_BUG)
+        CHECK(StatLowerableOrMirrorArmor(target, STAT_SPEED))
+
+        AbilityStatusEffect(MOVE_EFFECT_SPD_MINUS_1);
+        return TRUE;
+    },
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
