@@ -12859,6 +12859,19 @@ constexpr Ability Impl<ABILITY_RIPPLING_PUNCH> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_CACKLING> = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        int counter = GetSingleUseAbilityCounter(battler, ability);
+        CHECK(counter < 2)
+        CHECK(UseEntryMove(battler, ability, MOVE_EERIE_LAUGH, 0))
+
+        SetSingleUseAbilityCounter(battler, ability, counter + 1);
+        return TRUE;
+    },
+    .persistent = TRUE,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
