@@ -12901,7 +12901,19 @@ constexpr Ability Impl<ABILITY_BIOLUMINESCENT> = {
     .onEntry = Impl<ABILITY_LIGHTNING_BORN>.onEntry,
     .onAccuracy = Impl<ABILITY_ILLUMINATE>.onAccuracy,
     .addsType = TYPE_ELECTRIC,
-}
+};
+
+template <>
+constexpr Ability Impl<ABILITY_BLINKING_FLASH> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(gBattleMoves[move].light)
+        CHECK(Random() % 100 < 10)
+        CHECK(StatLowerableOrMirrorArmor(target, STAT_ACCURACY))
+
+        return AbilityStatusEffect(MOVE_EFFECT_ACC_MINUS_1);
+    },
+};
 
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
