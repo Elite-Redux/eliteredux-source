@@ -12915,6 +12915,18 @@ constexpr Ability Impl<ABILITY_BLINKING_FLASH> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_BRAIN_FREEZE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(moveType == TYPE_PSYCHIC)
+        CHECK(CanGetFrostbite(target))
+        CHECK(Random() % 100 < 30)
+
+        return AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
+    },
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
