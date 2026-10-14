@@ -2453,7 +2453,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     }
                     RESET_RETURN
                 }
-                if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_FIRE) && (gHitMarker & HITMARKER_IGNORE_SAFEGUARD) &&
+                if (!CanBurnType(gBattleScripting.battler, gEffectBattler) && (gHitMarker & HITMARKER_IGNORE_SAFEGUARD) &&
                     (primary == TRUE || certain == MOVE_EFFECT_CERTAIN)) {
                     BattleScriptCall(BattleScript_BRNPrevention);
 
@@ -2461,7 +2461,7 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     RESET_RETURN
                 }
 
-                if (!CanBeBurned(gEffectBattler)) break;
+                if (!CanBeBurned(gBattleScripting.battler, gEffectBattler)) break;
 
                 statusChanged = TRUE;
             } break;
@@ -6498,6 +6498,15 @@ bool32 CanParalyzeType(u8 battlerAttacker, u8 battlerTarget) {
     return FALSE;
 }
 
+bool32 CanBurnType(u8 battlerAttacker, u8 battlerTarget) {
+    if (!IS_BATTLER_OF_TYPE(battlerTarget, TYPE_FIRE)) return TRUE;
+    ON_ABILITY(battlerAttacker,
+               FALSE,
+               gAbilities[ability].onCanStatusType,
+               if (gAbilities[ability].onCanStatusType(battlerAttacker, MOVE_NONE, CHECK_BURN)) return TRUE)
+    return FALSE;
+}
+
 bool32 CanUseLastResort(u8 battlerId) {
     for (int i = 0; i < MAX_MON_MOVES; i++) {
         // All move slots must be empty, last resort, or have been used
@@ -7687,7 +7696,7 @@ static void Cmd_various(void) {
                         SetActiveMultistringChooser(B_MSG_PKMNBADLYPOISONED);
                 }
             } else if (gBattleMons[gBattlerAttacker].status1 & STATUS1_BURN && !(gBattleMons[gBattlerTarget].status1 & STATUS1_BURN)) {
-                if (!CanBeBurned(gBattlerTarget)) {
+                if (!CanBeBurned(gBattlerAttacker, gBattlerTarget)) {
                     BattleScriptPush(ptr);
                     gBattlescriptCurrInstr = BattleScript_BRNPrevention;
                     i = FALSE;
@@ -8592,9 +8601,9 @@ static void Cmd_various(void) {
                         return;
                     return;
                 case MOVE_EFFECT_BURN:
-                    if (CanBeBurned(gActiveBattler))
+                    if (CanBeBurned(gBattlerAttacker, gActiveBattler))
                         return;
-                    else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FIRE)) {
+                    else if (!CanBurnType(gBattlerAttacker, gActiveBattler)) {
                         gBattlescriptCurrInstr = afterPtr;
                         BattleScriptCall(BattleScript_NotAffected);
                     } else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser, CHECK_BURN, ptr, afterPtr))
@@ -8832,7 +8841,8 @@ static void Cmd_various(void) {
                     gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals = FALSE;
                     BattleScriptCall(BattleScript_HotCoalsFade);
 
-                    REQUIRE(CanBeBurned(gActiveBattler))
+                    // Does this cause issues with battlerAttacker arbitrarily being chosen as the opposite battler?
+                    REQUIRE(CanBeBurned(BATTLE_OPPOSITE(gActiveBattler), gActiveBattler))
 
                     if (gBattlerAttacker == gActiveBattler) {
                         SetOnMoveEffectReactionFlags(BATTLE_OPPOSITE(gActiveBattler), gActiveBattler, MOVE_EFFECT_BURN);

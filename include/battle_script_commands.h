@@ -43,6 +43,7 @@ s8 RemainingNoDamageHits(u8 battler);
 u16 GetNoDamageAbility(u8 battler);
 bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget, MoveEnum move);
 bool32 CanParalyzeType(u8 battlerAttacker, u8 battlerTarget);
+bool32 CanBurnType(u8 battlerAttacker, u8 battlerTarget);
 bool32 CanUseLastResort(u8 battlerId);
 bool32 IsShieldsDownProtected(u32 battler);
 u32 IsAbilityStatusProtected(u32 battler, StatusCheckEnum status);
