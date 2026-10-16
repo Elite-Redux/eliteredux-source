@@ -12927,6 +12927,12 @@ constexpr Ability Impl<ABILITY_BRAIN_FREEZE> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_BLUESCREEN> = {
+    .onEntry = Impl<ABILITY_SCREEN_CLEANER>.onEntry,
+    .onAttacker = Impl<ABILITY_BRAIN_FREEZE>.onAttacker,    
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
