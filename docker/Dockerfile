@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.7
+# syntax=docker/dockerfile:1
 #
 # Containerised Elite Redux build: no local ARM toolchain, JDK or Kotlin needed.
 # Use docker/build.sh rather than calling this directly; see docs/docker-build.md.
@@ -135,21 +135,13 @@ COPY proto/ proto/
 RUN make -C tools/codegen -j"$(nproc)"
 
 FROM builder AS tools
-# Every tools/* dir except codegen. A new tool dir missing here still gets built by the rom stage.
-ARG HOST_TOOLS="aif2pcm bin2c gbafix gbagfx jsonproc mapjson mid2agb preproc ramscrgen rsfont scaninc"
+# Host helper tools (gbagfx, preproc, ...). tools/codegen is left out so codegen edits
+# don't rebuild them; it is built by the codegen stages instead. It can't go in
+# .dockerignore because the codegen stages need it. Docker matches --exclude against the
+# copied directory and Podman against the build context, hence both patterns.
 COPY make_tools.mk ./
-COPY tools/aif2pcm/ tools/aif2pcm/
-COPY tools/bin2c/ tools/bin2c/
-COPY tools/gbafix/ tools/gbafix/
-COPY tools/gbagfx/ tools/gbagfx/
-COPY tools/jsonproc/ tools/jsonproc/
-COPY tools/mapjson/ tools/mapjson/
-COPY tools/mid2agb/ tools/mid2agb/
-COPY tools/preproc/ tools/preproc/
-COPY tools/ramscrgen/ tools/ramscrgen/
-COPY tools/rsfont/ tools/rsfont/
-COPY tools/scaninc/ tools/scaninc/
-RUN make -f make_tools.mk -j"$(nproc)" TOOLDIRS="$(for t in ${HOST_TOOLS}; do printf 'tools/%s ' "$t"; done)"
+COPY --exclude=codegen --exclude=tools/codegen tools/ tools/
+RUN make -f make_tools.mk -j"$(nproc)" TOOLDIRS="$(ls -d tools/*/ | sed 's:/$::' | grep -v '^tools/\(codegen\|agbcc\|binutils\|poryscript\)$' | tr '\n' ' ')"
 
 FROM builder AS rom
 # Set INCREMENTAL=0 (docker/build.sh --clean) to throw away the cached work tree.
