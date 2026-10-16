@@ -5,7 +5,7 @@
 # usage: build-rom.sh SRC WORK OUT
 #   SRC   source snapshot (the image's /src)
 #   WORK  cache-mounted work tree that keeps build outputs between runs
-#   OUT   where pokeemerald_modern.gba is copied
+#   OUT   where the ROM is copied, as EliteRedux.gba
 set -eu
 
 src=$1
@@ -48,4 +48,4 @@ make -f make_tools.mk -j"${jobs}" TOOLDIRS="${tooldirs}"
 # dependency scanning on, which that goal would otherwise switch off.
 make -j"${jobs}" NODEP=0 pokeemerald_modern.gba
 mkdir -p "${out}"
-cp pokeemerald_modern.gba "${out}/"
+cp pokeemerald_modern.gba "${out}/EliteRedux.gba"

@@ -177,7 +177,7 @@ RUN --mount=type=cache,id=eliteredux-rom-work,target=/work,sharing=locked \
 FROM builder AS bps
 COPY --from=vanilla /out/ /opt/vanilla/
 COPY --from=rom /out/ /out/
-RUN /opt/vanilla/flips --create /opt/vanilla/pokeemerald.gba /out/pokeemerald_modern.gba /out/EliteRedux.bps
+RUN /opt/vanilla/flips --create /opt/vanilla/pokeemerald.gba /out/EliteRedux.gba /out/EliteRedux.bps
 
 FROM scratch AS headers-artifact
 COPY --from=codegen /src/include/generated/ /include/generated/
