@@ -28,15 +28,22 @@ jobs:
 
       - name: Install Arm GNU Toolchain
         # Ubuntu's gcc-arm-none-eabi is too old for -std=gnu23
+        env:
+          ARM_TOOLCHAIN_VERSION: 14.2.rel1
         run: |
-          curl -sSL https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi.tar.xz | tar xJ -C "$RUNNER_TEMP"
-          echo "DEVKITARM=$RUNNER_TEMP/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi" >> "$GITHUB_ENV"
+          wget -q -O "$RUNNER_TEMP/arm-gnu-toolchain.tar.xz" "https://developer.arm.com/-/media/Files/downloads/gnu/$ARM_TOOLCHAIN_VERSION/binrel/arm-gnu-toolchain-$ARM_TOOLCHAIN_VERSION-x86_64-arm-none-eabi.tar.xz"
+          mkdir -p "$RUNNER_TEMP/arm-gnu-toolchain"
+          tar xJf "$RUNNER_TEMP/arm-gnu-toolchain.tar.xz" -C "$RUNNER_TEMP/arm-gnu-toolchain" --strip-components=1
+          rm "$RUNNER_TEMP/arm-gnu-toolchain.tar.xz"
+          echo "$RUNNER_TEMP/arm-gnu-toolchain/bin" >> "$GITHUB_PATH"
+
       - name: Download poryscript
         run: cd tools && wget https://github.com/huderlem/poryscript/releases/download/3.5.2/poryscript-linux.zip && unzip poryscript-linux.zip -d ./ && rm ./poryscript-linux.zip && mv ./poryscript-linux ./poryscript && ls && cd ..
         # Downloads poryscript and unzips it
 
       - name: Build ER
-        run: pwd && make -j${nproc}
+        # Not set job-wide: agbcc's build.sh expects DEVKITARM to be devkitPro
+        run: pwd && make -j${nproc} DEVKITARM="$RUNNER_TEMP/arm-gnu-toolchain"
 
       - name: Download pokeemerald repo
         run: pwd && cd tools && git clone https://github.com/pret/pokeemerald
