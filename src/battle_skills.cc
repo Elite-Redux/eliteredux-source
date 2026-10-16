@@ -215,7 +215,7 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_TRICK_ROOM> = {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
         gFieldTimers.started.trickRoom = TRUE;
         gFieldStatuses |= STATUS_FIELD_TRICK_ROOM;
-        gFieldTimers.inverseRoomTimer = ROOM_DURATION_MAX;
+        gFieldTimers.trickRoomTimer = ROOM_DURATION_MAX;
 
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaTrickRoom);
     },
