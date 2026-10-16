@@ -1,0 +1,74 @@
+# Build context for docker/Dockerfile. Keep host build outputs out of it: they would
+# bust the layer cache and, worse, look up to date inside the container (host-built
+# tools for the wrong libc/OS, output from a different Poryscript version, ...).
+
+.git
+**/.DS_Store
+.idea
+.vscode
+.claude
+out
+build
+
+# ROM outputs
+*.gba
+*.elf
+*.map
+*.sym
+*.bps
+*.ups
+
+# Converted graphics, sound and fonts
+**/*.1bpp
+**/*.4bpp
+**/*.8bpp
+**/*.gbapal
+**/*.lz
+**/*.rl
+**/*.latfont
+**/*.hwjpnfont
+**/*.fwjpnfont
+sound/**/*.bin
+sound/songs/midi/*.s
+
+# Generated scripts and map data
+data/maps/*/*scripts.inc
+data/maps/*/connections.inc
+data/maps/*/events.inc
+data/maps/*/header.inc
+data/maps/connections.inc
+data/maps/events.inc
+data/maps/groups.inc
+data/maps/headers.inc
+data/layouts/layouts.inc
+data/layouts/layouts_table.inc
+src/data/wild_encounters.h
+
+# Codegen outputs and downloads
+include/generated
+asm/generated
+tools/codegen/*.jar
+tools/codegen/protoc
+tools/codegen/*.zip
+tools/codegen/bin
+tools/codegen/javabuild
+tools/codegen/timestamp
+tools/codegen/src/er/proto
+
+# Host-built tools
+tools/agbcc
+tools/poryscript
+tools/pokeemerald
+tools/*/*.o
+tools/aif2pcm/aif2pcm
+tools/bin2c/bin2c
+tools/gbafix/gbafix
+tools/gbagfx/gbagfx
+tools/jsonproc/jsonproc
+tools/mapjson/mapjson
+tools/mid2agb/mid2agb
+tools/preproc/preproc
+tools/ramscrgen/ramscrgen
+tools/rsfont/rsfont
+tools/scaninc/scaninc
+**/*.exe
