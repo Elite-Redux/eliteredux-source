@@ -2304,7 +2304,6 @@ constexpr Ability Impl<ABILITY_CHEEK_POUCH> = {
 template <>
 constexpr Ability Impl<ABILITY_PROTEAN> = {
     .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
-        CHECK(SetAbilityState(battler, ability, TRUE));
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
         CHECK_NOT(IS_BATTLER_OF_TYPE(battler, moveType))
         CHECK(move != MOVE_STRUGGLE)
@@ -12876,12 +12875,11 @@ constexpr Ability Impl<ABILITY_CACKLING> = {
 template <>
 constexpr Ability Impl<ABILITY_FRESH_SNOWFALL> = {
     .onDefender = +[](ON_DEFENDER) -> int {
-    CHECK(IS_MOVE_SPECIAL(move, attacker))
+        CHECK(IS_MOVE_SPECIAL(move))
 
-    UseOutOfTurnAttack(battler, ability, MOVE_POWDER_SNOW, 30);
-
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_POWDER_SNOW, 30);
         return FALSE;
-    }.
+    },
 };
 
 template <>
@@ -12909,7 +12907,7 @@ constexpr Ability Impl<ABILITY_BLINKING_FLASH> = {
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(gBattleMoves[move].light)
         CHECK(Random() % 100 < 10)
-        CHECK(StatLowerableOrMirrorArmor(target, STAT_ACCURACY))
+        CHECK(StatLowerableOrMirrorArmor(target, STAT_ACC))
 
         return AbilityStatusEffect(MOVE_EFFECT_ACC_MINUS_1);
     },
