@@ -15,7 +15,6 @@ jobs:
           submodules: false
 
       - name: Fetch er-config
-        # Only proto: the tree still has a leftover eliteredux-darky gitlink with no URL
         run: git submodule update --init --depth 1 proto
 
       - name: Set up Docker Buildx
