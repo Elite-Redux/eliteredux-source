@@ -76,6 +76,6 @@ podman system prune --build    # Podman
 
 ## CI
 
-`.github/workflows/docker.yml` runs the same build on every pull request and uploads the ROM
-and patch. It keeps the tools and other unchanged parts between runs with the GitHub Actions
-cache, so most runs only redo the codegen and the ROM.
+`.github/workflows/docker.yml` runs the same build on every pull request to check that the ROM
+and patch still build. It doesn't upload them. It keeps the tools and other unchanged parts
+between runs with the GitHub Actions cache, so most runs only redo the codegen and the ROM.

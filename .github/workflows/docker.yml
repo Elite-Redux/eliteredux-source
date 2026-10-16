@@ -27,13 +27,8 @@ jobs:
           file: docker/Dockerfile
           target: bps-artifact
           platforms: linux/amd64
-          outputs: type=local,dest=out
+          # Only checks that everything builds; nothing is uploaded
+          outputs: type=cacheonly
           # Toolchain, codegen and host-tool layers are reused between runs
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-      - name: Upload ROM and BPS
-        uses: actions/upload-artifact@v6
-        with:
-          name: EliteRedux-docker
-          path: out/
