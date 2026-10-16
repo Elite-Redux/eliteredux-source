@@ -18,11 +18,14 @@ The container is `linux/amd64`. It works on Apple Silicon, but runs emulated, so
 ## Build the ROM and patch
 
 ```sh
-docker/build.sh            # out/pokeemerald_modern.gba and out/EliteRedux.bps
-docker/build.sh rom        # only out/pokeemerald_modern.gba
+docker/build.sh            # out/EliteRedux.gba and out/EliteRedux.bps
+docker/build.sh rom        # only out/EliteRedux.gba
 ```
 
-Everything ends up in `out/`. Nothing else in your checkout is changed.
+Everything ends up in `out/`. Nothing else in your checkout is changed. `EliteRedux.gba` is the
+same file a normal `make` produces as `pokeemerald_modern.gba` (that name comes from pokeemerald's
+Makefile), just renamed on the way out. `docker/build.sh make` builds in your checkout, so it
+keeps the Makefile's name.
 
 The first build downloads and sets up the tools, which takes a while. After that, a build
 only redoes what your changes affect:

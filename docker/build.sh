@@ -9,7 +9,7 @@ usage: docker/build.sh [--clean] [COMMAND [ARGS...]]
 
 Commands:
   bps          build the ROM and EliteRedux.bps into out/ (default)
-  rom          build pokeemerald_modern.gba into out/
+  rom          build EliteRedux.gba into out/
   headers      run the Kotlin codegen and put include/generated and asm/generated in the tree
   make [ARGS]  run make in your checkout inside the build image (incremental, like a local build)
   shell        open a shell in the build image with your checkout mounted
@@ -95,11 +95,11 @@ run_in_builder() {
 case "${command}" in
     bps)
         export_target bps-artifact "${repo}/out"
-        echo "Built out/pokeemerald_modern.gba and out/EliteRedux.bps"
+        echo "Built out/EliteRedux.gba and out/EliteRedux.bps"
         ;;
     rom)
         export_target rom-artifact "${repo}/out"
-        echo "Built out/pokeemerald_modern.gba"
+        echo "Built out/EliteRedux.gba"
         ;;
     headers)
         mkdir -p "${repo}/out"
