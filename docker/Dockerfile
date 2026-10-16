@@ -30,7 +30,21 @@ RUN curl -fsSL -o toolchain.tar.xz "https://developer.arm.com/-/media/Files/down
  && echo "${ARM_TOOLCHAIN_SHA256}  toolchain.tar.xz" | sha256sum -c - \
  && mkdir -p /opt/arm-gnu-toolchain \
  && tar xJf toolchain.tar.xz -C /opt/arm-gnu-toolchain --strip-components=1 \
- && rm -rf toolchain.tar.xz /opt/arm-gnu-toolchain/share/doc /opt/arm-gnu-toolchain/share/info /opt/arm-gnu-toolchain/share/man
+ && rm toolchain.tar.xz
+# The toolchain ships libraries for ~40 Arm CPU/FPU variants (~600 MB). The GBA only links
+# the one the ROM Makefile's flags select (thumb/nofp), so drop the others, plus the parts
+# the build never runs: Fortran, LTO, gdb, GCC plugins and docs.
+RUN set -eu; t=/opt/arm-gnu-toolchain; \
+    keep=$("$t/bin/arm-none-eabi-gcc" -mthumb -mthumb-interwork -mabi=apcs-gnu -march=armv4t -print-multi-directory); \
+    for base in "$t/arm-none-eabi/lib" "$t"/lib/gcc/arm-none-eabi/*; do \
+        for dir in "$base"/thumb/* "$base"/arm/*; do \
+            [ "${dir#"$base"/}" = "${keep}" ] || rm -rf "${dir}"; \
+        done; \
+    done; \
+    rm -rf "$t"/bin/*gfortran* "$t"/bin/*gdb* "$t"/bin/*lto-dump* "$t"/share \
+        "$t"/libexec/gcc/arm-none-eabi/*/f951 "$t"/libexec/gcc/arm-none-eabi/*/lto1 \
+        "$t"/lib/gcc/arm-none-eabi/*/plugin "$t"/arm-none-eabi/lib/libgfortran*; \
+    test -f "$t/arm-none-eabi/lib/${keep}/libc.a"
 
 FROM fetch AS fetch-kotlin
 ARG KOTLIN_VERSION=2.4.21
@@ -74,14 +88,19 @@ RUN --mount=type=cache,id=eliteredux-apt-cache,target=/var/cache/apt,sharing=loc
     rm -f /etc/apt/apt.conf.d/docker-clean \
  && apt-get update \
  && apt-get install -y --no-install-recommends \
-      build-essential \
       ca-certificates \
+      g++ \
+      gcc \
+      libc6-dev \
       libpng-dev \
+      make \
       openjdk-17-jdk-headless \
+      perl \
       pkg-config \
       rsync \
       unzip \
-      wget
+      wget \
+ && rm -rf /usr/lib/jvm/*/jmods
 COPY --from=fetch-arm-toolchain /opt/arm-gnu-toolchain /opt/arm-gnu-toolchain
 COPY --from=fetch-kotlin /opt/kotlinc /opt/kotlinc
 COPY --from=fetch-poryscript /opt/poryscript /opt/poryscript
