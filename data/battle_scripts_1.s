@@ -12391,6 +12391,12 @@ BattleScript_ExtraSkillPermaFireSea::
 	waitanimation
 	end3
 
+BattleScript_ExtraSkillPermaRain::
+	call BattleScript_AnnounceBattleSkill
+	playanimation BS_BATTLER_0, B_ANIM_RAIN_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
+	end3
+
 BattleScript_ExtraSkillCopyStats::
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT

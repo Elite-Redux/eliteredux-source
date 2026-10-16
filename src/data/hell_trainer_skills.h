@@ -597,4 +597,7 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // TODO: Player's entire party is paralyzed
         // TODO: Ignores rooms
     },
+    [TRAINER_CLAUDE] = {
+        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_TRIAGE, 0},
+    },
 };
