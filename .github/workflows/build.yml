@@ -25,9 +25,15 @@ jobs:
           git submodule sync --recursive
           git submodule update --init --recursive --depth 1
 
-      - name: Install binutils
-        run: sudo apt update && sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi libpng-dev
+      - name: Install build dependencies
+        run: sudo apt update && sudo apt install libpng-dev
         # build-essential, git, zip, unzip, java, kotlin, and python are already installed
+
+      - name: Install Arm GNU Toolchain
+        # Ubuntu's gcc-arm-none-eabi is too old for -std=gnu23
+        run: |
+          curl -sSL https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi.tar.xz | tar xJ -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin" >> "$GITHUB_PATH"
       - name: Download poryscript
         run: cd tools && wget https://github.com/huderlem/poryscript/releases/download/3.5.2/poryscript-linux.zip && unzip poryscript-linux.zip -d ./ && rm ./poryscript-linux.zip && mv ./poryscript-linux ./poryscript && ls && cd ..
         # Downloads poryscript and unzips it
