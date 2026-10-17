@@ -306,6 +306,9 @@ include songs.mk
 %.gbapal: %.png ; $(GFX) $< $@
 %.lz: % ; $(GFX) $< $@
 %.rl: % ; $(GFX) $< $@
+# gbagfx runs ~26k times in a fresh build. With /bin/sh, make runs these simple commands
+# directly instead of starting bash for each one.
+%.1bpp %.4bpp %.8bpp %.gbapal %.lz %.rl: SHELL := /bin/sh
 
 $(CRY_SUBDIR)/uncomp_%.bin: $(CRY_SUBDIR)/uncomp_%.aif ; $(AIF) $< $@
 $(CRY_SUBDIR)/%.bin: $(CRY_SUBDIR)/%.aif ; $(AIF) $< $@ --compress
