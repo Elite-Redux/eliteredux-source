@@ -1439,7 +1439,7 @@ BattleScript_MoveEffectFlameBurst::
 	healthbarupdate BS_TARGET_PARTNER
 	datahpupdate BS_TARGET_PARTNER
 	tryfaintmon BS_TARGET_PARTNER, FALSE, NULL
-	return
+	goto BattleScript_MoveEnd
 
 BattleScript_EffectPowerTrick:
 	attackcanceler
