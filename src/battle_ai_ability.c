@@ -1157,6 +1157,9 @@ int ScoreSwitchInAbility(AbilityEnum ability, int battlerAtk, int battlerDef, in
 
         case ABILITY_BAD_GUY:
             return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_DARK);
+        
+        case ABILITY_CHLOROPHYLLO:
+            return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_GRASS);
 
         case ABILITY_POWER_OF_ALCHEMY:
             if (!gBattleMons[battlerDef].item || gBattleMons[battlerDef].item == ITEM_BIG_NUGGET ||

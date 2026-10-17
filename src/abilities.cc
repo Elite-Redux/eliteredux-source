@@ -12926,6 +12926,12 @@ constexpr Ability Impl<ABILITY_BRAIN_FREEZE> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_CHLOROPHYLLO> = {
+    .onEntry = +[](ON_ENTRY) -> int { return AddBattlerType(battler, TYPE_GRASS); },
+    .addsType = TYPE_GRASS,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_BLUESCREEN> = {
     .onEntry = Impl<ABILITY_SCREEN_CLEANER>.onEntry,
     .onAttacker = Impl<ABILITY_BRAIN_FREEZE>.onAttacker,    
