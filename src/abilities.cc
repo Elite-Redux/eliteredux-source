@@ -499,25 +499,20 @@ constexpr Ability Impl<ABILITY_SPEED_BOOST> = {
 template <>
 constexpr Ability Impl<ABILITY_COOL_EXIT> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
-        CHECK_NOT(GetSingleUseAbilityCounter(battler, ability)) SetSingleUseAbilityCounter(battler, ability, TRUE);
+        CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
         CHECK(gVolatileStructs[battler].isFirstTurn != 2)
 
-        switch (GetAbilityState(battler, ability)) {
-            case 0:
-                SetAbilityState(battler, ability, 1);
-                break;
-
-            case 1:
-                gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
-                    .ability = ability,
-                    .move = MOVE_CHILLY_RECEPTION,
-                    .attacker = battler,
-                    .target = battler,
-                };
-                SetAbilityState(battler, ability, 2);
-                break;
-        }
-
+        if (GetAbilityState(battler, ability)) {
+            gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+                .ability = ability,
+                .move = MOVE_CHILLY_RECEPTION,
+                .attacker = battler,
+                .target = battler,
+            };
+            SetAbilityState(battler, ability, 0);
+            SetSingleUseAbilityCounter(battler, ability, TRUE);
+        } else
+            SetAbilityState(battler, ability, 1);
         return NO_ANNOUNCE;
     },
 };
