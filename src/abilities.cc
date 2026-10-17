@@ -2303,12 +2303,19 @@ constexpr Ability Impl<ABILITY_CHEEK_POUCH> = {
 
 template <>
 constexpr Ability Impl<ABILITY_PROTEAN> = {
+    .onExit = +[](ON_EXIT) -> int {
+        SetSingleUseAbilityCounter(battler, ability, FALSE);
+        return FALSE;
+    },
     .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
-        CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
-        CHECK_NOT(IS_BATTLER_OF_TYPE(battler, moveType))
+        CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
+        SetSingleUseAbilityCounter(battler, ability, TRUE);
+
+        CHECK_NOT(gBattleMons[battler].type1 == moveType && gBattleMons[battler].type2 == moveType && gBattleMons[battler].type3 == TYPE_MYSTERY)
         CHECK(move != MOVE_STRUGGLE)
         SET_BATTLER_TYPE(gBattlerAttacker, moveType);
         PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
+
         BattleScriptCall(BattleScript_ProteanActivates);
         return TRUE;
     },
@@ -3107,7 +3114,16 @@ constexpr Ability Impl<ABILITY_BEAST_BOOST> = {
 
 template <>
 constexpr Ability Impl<ABILITY_RKS_SYSTEM> = {
-    .onBeforeAttack = Impl<ABILITY_PROTEAN>.onBeforeAttack,
+    // Pre-nerf Protean
+    .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
+        CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
+        CHECK_NOT(gBattleMons[battler].type1 == moveType && gBattleMons[battler].type2 == moveType && gBattleMons[battler].type3 == TYPE_MYSTERY)
+        CHECK(move != MOVE_STRUGGLE)
+        SET_BATTLER_TYPE(gBattlerAttacker, moveType);
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
+        BattleScriptCall(BattleScript_ProteanActivates);
+        return TRUE;
+    },
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
     .adaptability = TRUE,
@@ -3208,6 +3224,7 @@ constexpr Ability Impl<ABILITY_DAUNTLESS_SHIELD> = {
 
 template <>
 constexpr Ability Impl<ABILITY_LIBERO> = {
+    .onExit = Impl<ABILITY_PROTEAN>.onExit,
     .onBeforeAttack = Impl<ABILITY_PROTEAN>.onBeforeAttack,
     .omniStab = TRUE,
 };
@@ -5693,7 +5710,7 @@ template <>
 constexpr Ability Impl<ABILITY_PRISMATIC_FUR> = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.5); },
     .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
-        if (battler == attacker && Impl<ABILITY_PROTEAN>.onBeforeAttack(DELEGATE_BEFORE_ATTACK)) return TRUE;
+        if (battler == attacker && Impl<ABILITY_RKS_SYSTEM>.onBeforeAttack(DELEGATE_BEFORE_ATTACK)) return TRUE;
         return Impl<ABILITY_COLOR_CHANGE>.onBeforeAttack(DELEGATE_BEFORE_ATTACK);
     },
     .onBeforeAttackFor = APPLY_ON_ATTACKER_OR_TARGET,
@@ -8289,8 +8306,9 @@ constexpr Ability Impl<ABILITY_SNOWY_WRATH> = {
 
 template <>
 constexpr Ability Impl<ABILITY_PATTERN_CHANGE> = {
+    // TODO: Change to pre-nerf Protean with Protean's onEndTurn when bug is fixed
     .onEndTurn = Impl<ABILITY_SHED_SKIN>.onEndTurn,
-    .onBeforeAttack = Impl<ABILITY_PROTEAN>.onBeforeAttack,
+    .onBeforeAttack = Impl<ABILITY_RKS_SYSTEM>.onBeforeAttack,
     .omniStab = TRUE,
 };
 
