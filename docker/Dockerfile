@@ -160,7 +160,10 @@ FROM builder AS tools
 # copied directory and Podman against the build context, hence both patterns.
 COPY make_tools.mk ./
 COPY --exclude=codegen --exclude=tools/codegen tools/ tools/
-RUN make -f make_tools.mk -j"$(nproc)" TOOLDIRS="$(ls -d tools/*/ | sed 's:/$::' | grep -v '^tools/\(codegen\|agbcc\|binutils\|poryscript\)$' | tr '\n' ' ')"
+# gbagfx runs ~26k times in a fresh build; linking it statically saves the dynamic
+# loader on every run (keep in sync with docker/build-rom.sh).
+RUN make -C tools/gbagfx LDFLAGS=-static "LIBS=-lpng -lz -lm" \
+ && make -f make_tools.mk -j"$(nproc)" TOOLDIRS="$(ls -d tools/*/ | sed 's:/$::' | grep -v '^tools/\(codegen\|agbcc\|binutils\|poryscript\)$' | tr '\n' ' ')"
 
 FROM builder AS rom
 # Set INCREMENTAL=0 (docker/build.sh --clean) to throw away the cached work tree.

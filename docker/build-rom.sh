@@ -42,6 +42,8 @@ tooldirs=$(for dir in tools/*/; do
         *) printf '%s ' "${dir%/}" ;;
     esac
 done)
+# Same static gbagfx as the tools stage, in case make decides to rebuild it here.
+make -C tools/gbagfx LDFLAGS=-static "LIBS=-lpng -lz -lm"
 make -f make_tools.mk -j"${jobs}" TOOLDIRS="${tooldirs}"
 # ...and ask for the ROM file itself: the `all`/`rom` goals would rebuild every tool,
 # codegen included, and rewrite every generated header. NODEP=0 keeps header
