@@ -38,8 +38,6 @@ only redoes what your changes affect:
 | the Kotlin code in `tools/codegen` | the codegen too |
 
 If a build ever looks wrong, `docker/build.sh --clean` rebuilds the ROM from scratch.
-The build right after a clean one recompiles about two thirds of the C files once more,
-because some headers are only generated during the first build. A normal `make` does the same.
 
 ## Other commands
 
