@@ -18,26 +18,32 @@ jobs:
           submodules: false
 
       - name: Fetch submodules
-        env:
-          ER_CONFIG_DEPLOY_KEY: ${{ secrets.ER_CONFIG_DEPLOY_KEY }}
         run: |
           git submodule sync --recursive
-          mkdir -p ~/.ssh
-          printf '%s\n' "$ER_CONFIG_DEPLOY_KEY" > ~/.ssh/er_config_ci
-          chmod 600 ~/.ssh/er_config_ci
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          git config submodule.proto.url git@github.com:Elite-Redux/er-config.git
-          GIT_SSH_COMMAND='ssh -i ~/.ssh/er_config_ci -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes' git submodule update --init --recursive --depth 1
+          git submodule update --init --recursive --depth 1
 
-      - name: Install binutils
-        run: sudo apt update && sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi libpng-dev
+      - name: Install build dependencies
+        run: sudo apt update && sudo apt install libpng-dev
         # build-essential, git, zip, unzip, java, kotlin, and python are already installed
+
+      - name: Install Arm GNU Toolchain
+        # Ubuntu's gcc-arm-none-eabi is too old for -std=gnu23
+        env:
+          ARM_TOOLCHAIN_VERSION: 14.2.rel1
+        run: |
+          wget -q -O "$RUNNER_TEMP/arm-gnu-toolchain.tar.xz" "https://developer.arm.com/-/media/Files/downloads/gnu/$ARM_TOOLCHAIN_VERSION/binrel/arm-gnu-toolchain-$ARM_TOOLCHAIN_VERSION-x86_64-arm-none-eabi.tar.xz"
+          mkdir -p "$RUNNER_TEMP/arm-gnu-toolchain"
+          tar xJf "$RUNNER_TEMP/arm-gnu-toolchain.tar.xz" -C "$RUNNER_TEMP/arm-gnu-toolchain" --strip-components=1
+          rm "$RUNNER_TEMP/arm-gnu-toolchain.tar.xz"
+          echo "$RUNNER_TEMP/arm-gnu-toolchain/bin" >> "$GITHUB_PATH"
+
       - name: Download poryscript
         run: cd tools && wget https://github.com/huderlem/poryscript/releases/download/3.5.2/poryscript-linux.zip && unzip poryscript-linux.zip -d ./ && rm ./poryscript-linux.zip && mv ./poryscript-linux ./poryscript && ls && cd ..
         # Downloads poryscript and unzips it
 
       - name: Build ER
-        run: pwd && make -j${nproc}
+        # Not set job-wide: agbcc's build.sh expects DEVKITARM to be devkitPro
+        run: pwd && make -j${nproc} DEVKITARM="$RUNNER_TEMP/arm-gnu-toolchain"
 
       - name: Download pokeemerald repo
         run: pwd && cd tools && git clone https://github.com/pret/pokeemerald

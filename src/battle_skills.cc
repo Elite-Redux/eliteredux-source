@@ -13,6 +13,7 @@ extern "C" {
 #include "battle_script_commands.h"
 #include "battle_util.h"
 #include "battle.h"
+#include "event_data.h"
 }
 
 #include "type_utils.hh"
@@ -215,7 +216,7 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_TRICK_ROOM> = {
         CHECK_NOT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
         gFieldTimers.started.trickRoom = TRUE;
         gFieldStatuses |= STATUS_FIELD_TRICK_ROOM;
-        gFieldTimers.inverseRoomTimer = ROOM_DURATION_MAX;
+        gFieldTimers.trickRoomTimer = ROOM_DURATION_MAX;
 
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaTrickRoom);
     },
@@ -257,6 +258,19 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_FIRE_SEA> = {
         gSideTimers[B_SIDE_PLAYER].fireSeaTimer = 255;
 
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaFireSea);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_RAIN> = {
+    // Overrides map weather. Never runs out, but other weather can replace it
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        Unregister(skill);
+
+        CHECK_NOT(FlagGet(FLAG_PERMANENT_UNCHANGEABLE_WEATHER))
+        gBattleWeather = WEATHER_RAIN_TEMPORARY | WEATHER_RAIN_PERMANENT;
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaRain);
     },
 };
 
