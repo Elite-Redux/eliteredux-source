@@ -12774,3 +12774,8 @@ BattleScript_ExtraSkillTerrainFireSea::
 	call BattleScript_SeaOfFireStart
 	restoreattackerandtargetfrom34
 	end2
+
+BattleScript_LightWieldActivated::
+	printstring STRINGID_LIGHT_WIELD_ACTIVATED
+	waitmessage B_WAIT_TIME_LONG
+	end3

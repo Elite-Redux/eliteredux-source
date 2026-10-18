@@ -12840,7 +12840,7 @@ constexpr Ability Impl<ABILITY_LIGHT_WIELD> = {
             gSideTimers[side].lightscreenTimer = SCREEN_DURATION;
         else
             gSideTimers[side].lightscreenTimer = SCREEN_DURATION_SHORT;
-        BattleScriptPushCursorAndCallback(BattleScript_NorthWindActivated);
+        BattleScriptPushCursorAndCallback(BattleScript_LightWieldActivated);
 
         return TRUE;
     },
