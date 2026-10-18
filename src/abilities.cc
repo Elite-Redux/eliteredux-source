@@ -12903,7 +12903,7 @@ constexpr Ability Impl<ABILITY_STICKY_SITUATION> = {
         CHECK(moveType == TYPE_BUG)
         CHECK(StatLowerableOrMirrorArmor(target, STAT_SPEED))
 
-        AbilityStatusEffect(MOVE_EFFECT_SPD_MINUS_1);
+        AbilityStatusEffectSafe(MOVE_EFFECT_SPD_MINUS_1, battler, target);
         return TRUE;
     },
 };
@@ -12923,7 +12923,7 @@ constexpr Ability Impl<ABILITY_BLINKING_FLASH> = {
         CHECK(Random() % 100 < 10)
         CHECK(StatLowerableOrMirrorArmor(target, STAT_ACC))
 
-        return AbilityStatusEffect(MOVE_EFFECT_ACC_MINUS_1);
+        return AbilityStatusEffectSafe(MOVE_EFFECT_ACC_MINUS_1, battler, target);
     },
 };
 
@@ -12935,7 +12935,7 @@ constexpr Ability Impl<ABILITY_BRAIN_FREEZE> = {
         CHECK(CanGetFrostbite(target))
         CHECK(Random() % 100 < 30)
 
-        return AbilityStatusEffect(MOVE_EFFECT_FROSTBITE);
+        return AbilityStatusEffectSafe(MOVE_EFFECT_FROSTBITE, battler, target);
     },
 };
 
