@@ -12824,6 +12824,7 @@ constexpr Ability Impl<ABILITY_SOUR_APPLE> = {
 template <>
 constexpr Ability Impl<ABILITY_SEARCHLIGHT> = {
     .onEntry = Impl<ABILITY_FRISK>.onEntry,
+    .onAttacker = Impl<ABILITY_ILLUMINATE>.onAttacker,
     .onAccuracy = Impl<ABILITY_ILLUMINATE>.onAccuracy,
 };
 
