@@ -7403,7 +7403,7 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
     u8 defStatToUse = 0;
     u8 noPositiveStatStages = isCrit || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED ||
                               (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && 
-                                (BattlerHasAbility(battlerAtk, ABILITY_GRIP_PINCER, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_WORLD_SERPENT, FALSE)));
+                                (BattlerHasAbility(battlerAtk, ABILITY_GRIP_PINCER, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_WORLD_SERPENT, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_ENGULF, FALSE)));
     u8 isUnaware = IsUnaware(battlerAtk);
     u8 secondaryDefStats[NUM_STATS] = {0};
 
