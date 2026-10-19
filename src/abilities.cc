@@ -4861,7 +4861,6 @@ constexpr Ability Impl<ABILITY_LOW_BLOW> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40); },
 };
 
-
 template <>
 constexpr Ability Impl<ABILITY_SPECTRALIZE> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
@@ -12775,8 +12774,9 @@ constexpr Ability Impl<ABILITY_THERMALDWELLER> = {
 template <>
 constexpr Ability Impl<ABILITY_LETHALTOUCH> = {
     .onAttacker = Impl<ABILITY_TOXIC_CHAIN>.onAttacker,
-    .onDefender =
-        +[](ON_DEFENDER) -> int { return Impl<ABILITY_DOUBLE_IRON_BARBS>.onDefender(DELEGATE_DEFENDER) | Impl<ABILITY_TOXIC_CHAIN>.onDefender(DELEGATE_DEFENDER); },
+    .onDefender = +[](ON_DEFENDER) -> int {
+        return Impl<ABILITY_DOUBLE_IRON_BARBS>.onDefender(DELEGATE_DEFENDER) | Impl<ABILITY_TOXIC_CHAIN>.onDefender(DELEGATE_DEFENDER);
+    },
 };
 
 template <>
@@ -12830,7 +12830,7 @@ constexpr Ability Impl<ABILITY_SEARCHLIGHT> = {
 
 template <>
 constexpr Ability Impl<ABILITY_LIGHT_WIELD> = {
-        .onEntry = +[](ON_ENTRY) -> int {
+    .onEntry = +[](ON_ENTRY) -> int {
         CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_LIGHTSCREEN && !BattlerHasAbility(battler, ABILITY_SCREEN_CLEANER, FALSE))
 
         int side = GetBattlerSide(battler);
@@ -12850,25 +12850,24 @@ template <>
 constexpr Ability Impl<ABILITY_PHOTOKINESIS> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
-            if(gBattleMoves[move].light) MUL(1.3);
+            if (gBattleMoves[move].light) MUL(1.3);
         },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_PHOTON_BURST> = {
     .onOffensiveMultiplier = Impl<ABILITY_PHOTOKINESIS>.onOffensiveMultiplier,
-    .onChooseDefensiveStat = 
-    +[](ON_CHOOSE_DEFENSIVE_STAT) {
-        if (gBattleMoves[move].light) *defStatToUse = STAT_DEF;
-    },
+    .onChooseDefensiveStat =
+        +[](ON_CHOOSE_DEFENSIVE_STAT) {
+            if (gBattleMoves[move].light) *defStatToUse = STAT_DEF;
+        },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_RIPPLING_PUNCH> = {
-   .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
-        if (flag == MOVE_FLAG_PUNCH)
-            return gBattleMoves[move].flags & FLAG_SOUND;
-        
+    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
+        if (flag == MOVE_FLAG_PUNCH) return gBattleMoves[move].flags & FLAG_SOUND;
+
         return FALSE;
     },
 };
@@ -12948,7 +12947,7 @@ constexpr Ability Impl<ABILITY_CHLOROPHYLLO> = {
 template <>
 constexpr Ability Impl<ABILITY_BLUESCREEN> = {
     .onEntry = Impl<ABILITY_SCREEN_CLEANER>.onEntry,
-    .onAttacker = Impl<ABILITY_BRAIN_FREEZE>.onAttacker,    
+    .onAttacker = Impl<ABILITY_BRAIN_FREEZE>.onAttacker,
 };
 
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
