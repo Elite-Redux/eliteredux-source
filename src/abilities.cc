@@ -12949,6 +12949,15 @@ constexpr Ability Impl<ABILITY_BLUESCREEN> = {
     .onAttacker = Impl<ABILITY_BRAIN_FREEZE>.onAttacker,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_CHARGE_SPORE> = {
+    .onEntry = Impl<ABILITY_HALF_DRAKE>.onEntry,
+    .onDefender = Impl<ABILITY_EFFECT_SPORE>.onDefender,
+    .AddsType = TYPE_ELECTRIC,
+    .breakable = True,
+    .powderImmune = True,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
