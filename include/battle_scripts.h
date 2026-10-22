@@ -685,6 +685,7 @@ extern const u8 BattleScript_Archmage_Effect_Type_Grass[];
 extern const u8 BattleScript_Archmage_Effect_Type_Psychic[];
 extern const u8 BattleScript_Archmage_Effect_Type_Normal[];
 extern const u8 BattleScript_Archmage_Effect_Type_Rock[];
+extern const u8 BattleScript_Archmage_Effect_Type_Bug[];
 
 extern const u8 BattleScript_FrostbiteTurnDmg[];
 extern const u8 BattleScript_MoveUsedUnfrostbite[];

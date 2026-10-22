@@ -11629,6 +11629,11 @@ BattleScript_Archmage_Effect_Type_Rock::
 	printstring STRINGID_POINTEDSTONESFLOAT
 	waitmessage B_WAIT_TIME_LONG
 	return
+
+BattleScript_Archmage_Effect_Type_Bug::
+	printstring STRINGID_STICKYWEBUSED
+	waitmessage B_WAIT_TIME_LONG
+	return
 	
 BattleScript_HurtsUser:
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE

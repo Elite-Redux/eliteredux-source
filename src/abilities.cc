@@ -5880,7 +5880,6 @@ constexpr Ability Impl<ABILITY_ARCHMAGE> = {
                 CHECK(CanBeBurned(battler, target))
 
                 AbilityStatusEffect(MOVE_EFFECT_BURN);
-                ;
                 return TRUE;
 
             case TYPE_ELECTRIC:
@@ -5957,8 +5956,11 @@ constexpr Ability Impl<ABILITY_ARCHMAGE> = {
                 return TRUE;
 
             case TYPE_BUG:
-                // TODO: Set sticky web
-                break;
+                CHECK_NOT(gSideStatuses[GetBattlerSide(target)] & SIDE_STATUS_STICKY_WEB)
+
+                gSideStatuses[GetBattlerSide(target)] |= (SIDE_STATUS_STICKY_WEB);
+                BattleScriptCall(BattleScript_Archmage_Effect_Type_Bug);
+                return TRUE;
 
             case TYPE_DRAGON:
                 CHECK(IsBattlerAlive(target))
@@ -12950,12 +12952,12 @@ constexpr Ability Impl<ABILITY_BLUESCREEN> = {
 };
 
 template <>
-constexpr Ability Impl<ABILITY_CHARGE_SPORE> = {
+constexpr Ability Impl<ABILITY_CHARGE_SPORES> = {
     .onEntry = Impl<ABILITY_HALF_DRAKE>.onEntry,
     .onDefender = Impl<ABILITY_EFFECT_SPORE>.onDefender,
-    .AddsType = TYPE_ELECTRIC,
-    .breakable = True,
-    .powderImmune = True,
+    .breakable = TRUE,
+    .powderImmune = TRUE,
+    .addsType = TYPE_ELECTRIC,
 };
 
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
