@@ -60,6 +60,19 @@ void write_text_file(string filepath, string text) {
     out_file.close();
 }
 
+// For the committed headers in include/constants: leave the file (and its mtime) alone
+// when nothing changed, so the C files that include it aren't seen as out of date.
+void write_text_file_if_changed(string filepath, string text) {
+    ifstream in_file(filepath, std::ifstream::binary);
+    if (in_file.is_open()) {
+        std::stringstream current;
+        current << in_file.rdbuf();
+        if (current.str() == text)
+            return;
+    }
+    write_text_file(filepath, text);
+}
+
 string generate_map_header_text(Json map_data, Json layouts_data, string version) {
     string map_layout_id = map_data["layout"].string_value();
 
@@ -444,7 +457,7 @@ void process_groups(string groups_filepath) {
     write_text_file(file_dir + "connections.inc", connections_text);
     write_text_file(file_dir + "headers.inc", headers_text);
     write_text_file(file_dir + "events.inc", events_text);
-    write_text_file(file_dir + ".." + s + ".." + s + "include" + s + "constants" + s + "map_groups.h", map_header_text);
+    write_text_file_if_changed(file_dir + ".." + s + ".." + s + "include" + s + "constants" + s + "map_groups.h", map_header_text);
 }
 
 string generate_layout_headers_text(Json layouts_data) {
@@ -519,7 +532,7 @@ void process_layouts(string layouts_filepath) {
 
     write_text_file(file_dir + "layouts.inc", layout_headers_text);
     write_text_file(file_dir + "layouts_table.inc", layouts_table_text);
-    write_text_file(file_dir + ".." + s + ".." + s + "include" + s + "constants" + s + "layouts.h", layouts_constants_text);
+    write_text_file_if_changed(file_dir + ".." + s + ".." + s + "include" + s + "constants" + s + "layouts.h", layouts_constants_text);
 }
 
 int main(int argc, char *argv[]) {
