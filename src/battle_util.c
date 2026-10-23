@@ -2455,6 +2455,9 @@ u8 DoBattlerEndTurnEffects(void) {
                 MoveEnum move = gLastResultingMoves[gActiveBattler];
                 if (move == 0xFFFF) move = 0;
                 if (AbilityBattleEffects(ABILITYEFFECT_ENDTURN, gActiveBattler, 0, 0, move)) effect++;
+
+                // Hell mode end turn battle skill, probably ok to put here for now
+                ON_SKILL(skill->onEndTurn, skill->onEndTurn(skillId, gActiveBattler))
             }
                 gBattleStruct->turnEffectsTracker++;
                 break;
