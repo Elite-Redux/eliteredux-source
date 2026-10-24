@@ -4422,6 +4422,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
                 effect += HandleSwitchInAbility(i, battler);
             }
 
+            // On entry battle skills, should be ok for now to put here
+            ON_SKILL(skill->onEntry, skill->onEntry(skillId, battler))
+
             break;
         case ABILITYEFFECT_ENDTURN:  // 1
             for (i = 0; i <= GetNumPossibleAbilitiesForBattler(); i++) {
