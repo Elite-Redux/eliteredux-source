@@ -13,6 +13,7 @@ extern "C" {
 #include "battle_script_commands.h"
 #include "battle_util.h"
 #include "battle.h"
+#include "battle_anim.h"
 }
 
 #include "type_utils.hh"
@@ -409,6 +410,65 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_FOG> = {
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaFog);
     },
 };
+// Inline skills are written in the trainer data: proto/TrainerList.textproto with InlineSkill 
+// from proto/BattleSkillList.proto
+// Codegen turns each `on` block into an InlineTrigger and builds the skill with the InlineSkill template below.
+// For now, very simple structure that we can evolve later, no need to get in complex stuff for now
+
+struct InlineEffect {
+    enum Kind : u8 { STAT_CHANGE } kind;
+    u8 stat;
+    s8 amount;
+};
+
+struct InlineTrigger {
+    enum Kind : u8 { ENTRY, END_TURN } kind;
+    enum When : u8 { EVERY, LEAD } when;  // specific to ENTRY
+    InlineEffect effect;
+};
+
+static int RunInlineEffect(const InlineEffect& effect, BattleSkillEnum skill, u8 battler) {
+    switch (effect.kind) {
+        case InlineEffect::STAT_CHANGE: {
+            u8 stat = TranslateStatId(effect.stat, battler);
+            CHECK(effect.amount > 0 ? CanRaiseStat(battler, stat) : CanLowerStat(battler, stat))
+            SetStatChanger(stat, effect.amount);
+            return RunEntryAnnounceScript(skill, BattleScript_BattleSkillStatChange);
+        }
+    }
+    return FALSE;
+}
+
+static int RunInlineTrigger(const InlineTrigger& trigger, InlineTrigger::Kind hook, BattleSkillEnum skill, u8 battler) {
+    CHECK(trigger.kind == hook)
+    // For now, triggers are only checked from the trainer side
+    CHECK(GetBattlerSide(battler) == B_SIDE_OPPONENT)
+
+    // Switches only get processed after the battle start, so this is only false for the leads
+    CHECK(trigger.when != InlineTrigger::LEAD || !gBattleStruct->canProcessSwitches)
+    return RunInlineEffect(trigger.effect, skill, battler);
+}
+
+// Take the `on` blocks, and execute them 
+template <InlineTrigger... Triggers>
+static int RunInlineTriggers(InlineTrigger::Kind hook, BattleSkillEnum skill, u8 battler) {
+    constexpr InlineTrigger triggers[] = {Triggers...};
+    int ran = FALSE;
+    // Reverse order because pushed scripts run LIFO, and want it FIFO from the proto
+    for (int i = ARRAY_COUNT(triggers) - 1; i >= 0; i--) ran |= RunInlineTrigger(triggers[i], hook, skill, battler);
+    return ran;
+}
+
+// Hooks without a trigger stay null so ON_SKILL skips them if we comment them out from proto
+template <InlineTrigger... Triggers>
+constexpr BattleSkill InlineSkill = [] {
+    BattleSkill impl = {};
+    if constexpr (((Triggers.kind == InlineTrigger::ENTRY) || ...))
+        impl.onEntry = +[](ON_ENTRY) -> int { return RunInlineTriggers<Triggers...>(InlineTrigger::ENTRY, skill, battler); };
+    if constexpr (((Triggers.kind == InlineTrigger::END_TURN) || ...))
+        impl.onEndTurn = +[](ON_END_TURN) -> int { return RunInlineTriggers<Triggers...>(InlineTrigger::END_TURN, skill, battler); };
+    return impl;
+}();
 
 #include "generated/data/text/battle_skill_text.hh"
 

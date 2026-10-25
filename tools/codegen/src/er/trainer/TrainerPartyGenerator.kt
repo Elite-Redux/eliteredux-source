@@ -6,6 +6,7 @@ import er.GeneratorUtils.SPECIES_MAP
 import er.GeneratorUtils.TRAINERS_LIST
 import er.GeneratorUtils.expandLearnset
 import er.GeneratorUtils.findLearnsetForSpecies
+import er.GeneratorUtils.inlineSkillId
 import er.proto.BattleSkillEnum
 import er.proto.ItemEnum
 import er.proto.Nature
@@ -180,11 +181,13 @@ object TrainerPartyGenerator : Generator {
           val actualElite = elite.monList.ifEmpty { ace.monList }
           val actualHell = hell.monList.ifEmpty { actualElite }
 
-          addIfNot(hell.skillList.size <= HELL_MODE_MAX_SKILLS) {
-              "Trainer ${trainer.id} has ${hell.skillList.size} Hell skills; max is ${HELL_MODE_MAX_SKILLS}."
+          val hellSkills =
+            hell.skillList.map { it.name } + hell.inlineSkillList.indices.map { inlineSkillId(trainer, it) }
+          addIfNot(hellSkills.size <= HELL_MODE_MAX_SKILLS) {
+              "Trainer ${trainer.id} has ${hellSkills.size} Hell skills; max is ${HELL_MODE_MAX_SKILLS}."
           }
           
-          val skills = List(HELL_MODE_MAX_SKILLS) { index -> hell.skillList.getOrElse(index) { BattleSkillEnum.SKILL_NONE } } 
+          val skills = List(HELL_MODE_MAX_SKILLS) { index -> hellSkills.getOrElse(index) { BattleSkillEnum.SKILL_NONE.name } } 
 
           val flags =
             buildList {

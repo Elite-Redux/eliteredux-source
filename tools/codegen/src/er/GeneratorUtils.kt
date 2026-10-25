@@ -105,6 +105,13 @@ object GeneratorUtils {
     BATTLE_SKILL_PROTO.skillList
   }
 
+  val INLINE_SKILLS by lazy {
+    TRAINERS_LIST.flatMap { trainer ->
+        trainer.hell.inlineSkillList.mapIndexed { index, skill -> inlineSkillId(trainer, index) to skill }
+      }
+      .toMap()
+  }
+
   val BATTLE_SKILL_TEMPLATES by lazy {
     BATTLE_SKILL_PROTO.templateList
   }
@@ -128,6 +135,10 @@ object GeneratorUtils {
       LimitedRandomizerConfig::class.java,
     )
   }
+
+  // e.g. SKILL_INLINE_JOSH_1 for Josh first inline_skill 
+  fun inlineSkillId(trainer: Trainer, index: Int) =
+    "SKILL_INLINE_${trainer.id.name.removePrefix("TRAINER_")}_${index + 1}"
 
   fun findLearnsetForSpecies(
     species: Species,
