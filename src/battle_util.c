@@ -4421,10 +4421,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
             for (i = 0; i <= GetNumPossibleAbilitiesForBattler(); i++) {
                 effect += HandleSwitchInAbility(i, battler);
             }
-
-            // On entry battle skills, should be ok for now to put here
-            ON_SKILL(skill->onEntry, skill->onEntry(skillId, battler))
-
             break;
         case ABILITYEFFECT_ENDTURN:  // 1
             for (i = 0; i <= GetNumPossibleAbilitiesForBattler(); i++) {
@@ -9147,6 +9143,13 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
     // Extra Switch in effects
     if (abilityNumber == numPossibleAbilities) {
         int effect = 0;
+
+        // Hell mode battle skills onEntry hooks, uses similar detection as monotype effects
+        if (!gVolatileStructs[battler].usedSkillEntry) {
+            gVolatileStructs[battler].usedSkillEntry = TRUE;
+            ON_SKILL(skill->onEntry, if (skill->onEntry(skillId, battler)) effect++)
+        }
+
         {
             int commander = IsAbilityOnSide(battler, ABILITY_COMMANDER);
             if (commander-- && !GetAbilityState(commander, ABILITY_COMMANDER) && IsBattlerAlive(BATTLE_PARTNER(commander)) &&
