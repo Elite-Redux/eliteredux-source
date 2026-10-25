@@ -12515,6 +12515,16 @@ BattleScript_AnnounceBattleSkillEnd3::
 	call BattleScript_AnnounceBattleSkill
 	end3
 
+BattleScript_BattleSkillStatChange::
+	call BattleScript_AnnounceBattleSkill
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_NOT_PROTECT_AFFECTED | MOVE_EFFECT_CERTAIN, BattleScript_End3
+	setgraphicalstatchangevalues
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	waitanimation
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
 BattleScript_ExtraSkillEviolite::
 	call BattleScript_AnnounceBattleSkill
 	playSE SE_M_DETECT
