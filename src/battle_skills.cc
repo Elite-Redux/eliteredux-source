@@ -290,6 +290,78 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_FIRE_SEA> = {
     },
 };
 
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_MIST> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_MIST)
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_MIST;
+        gSideTimers[B_SIDE_OPPONENT].started.mist = TRUE;
+        gSideTimers[B_SIDE_OPPONENT].mistTimer = SCREEN_DURATION_MAX;
+        gSideTimers[B_SIDE_OPPONENT].mistBattlerId = B_POSITION_OPPONENT_LEFT;
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaMist);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        // On turn end, start mist if it's not up to make the skill "permanent"
+        CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_MIST)
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_MIST;
+        gSideTimers[B_SIDE_OPPONENT].started.mist = TRUE;
+        gSideTimers[B_SIDE_OPPONENT].mistTimer = SCREEN_DURATION_MAX;
+        gSideTimers[B_SIDE_OPPONENT].mistBattlerId = B_POSITION_OPPONENT_LEFT;
+
+        // TODO: Change to different string?
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaMist);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_TAILWIND> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_TAILWIND)
+        gSideTimers[B_SIDE_OPPONENT].started.tailwind = TRUE;
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_TAILWIND;
+        gSideTimers[B_SIDE_OPPONENT].tailwindBattlerId = B_POSITION_OPPONENT_LEFT;
+        gSideTimers[B_SIDE_OPPONENT].tailwindTimer = TAILWIND_DURATION_MAX;
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaTailwind);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        // Don't think tailwind can actually be removed? But just in case
+        CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_TAILWIND)
+        gSideTimers[B_SIDE_OPPONENT].started.tailwind = TRUE;
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_TAILWIND;
+        gSideTimers[B_SIDE_OPPONENT].tailwindBattlerId = B_POSITION_OPPONENT_LEFT;
+        gSideTimers[B_SIDE_OPPONENT].tailwindTimer = TAILWIND_DURATION_MAX;
+
+         // TODO: Change to different string?
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaTailwind);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_SAFEGUARD> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_SAFEGUARD)
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_SAFEGUARD;
+        gSideTimers[B_SIDE_OPPONENT].started.safeguard = TRUE;
+        gSideTimers[B_SIDE_OPPONENT].safeguardTimer = SCREEN_DURATION_MAX;
+        gSideTimers[B_SIDE_OPPONENT].safeguardBattlerId = B_POSITION_OPPONENT_LEFT;
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaSafeguard);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        // On turn end, start mist if it's not up to make the skill "permanent"
+        CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_SAFEGUARD)
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_SAFEGUARD;
+        gSideTimers[B_SIDE_OPPONENT].started.safeguard = TRUE;
+        gSideTimers[B_SIDE_OPPONENT].safeguardTimer = SCREEN_DURATION_MAX;
+        gSideTimers[B_SIDE_OPPONENT].safeguardBattlerId = B_POSITION_OPPONENT_LEFT;
+
+        // TODO: Change to different string?
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaSafeguard);
+    },
+};
+
 #include "generated/data/text/battle_skill_text.hh"
 
 template <BattleSkillEnum Id>

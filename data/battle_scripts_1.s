@@ -12396,6 +12396,27 @@ BattleScript_ExtraSkillPermaFireSea::
 	waitanimation
 	end3
 
+BattleScript_ExtraSkillPermaMist::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gEffectBattler B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_MIST
+	waitanimation
+	end3
+
+BattleScript_ExtraSkillPermaTailwind::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gEffectBattler B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_TAILWIND
+	waitanimation
+	end3
+
+BattleScript_ExtraSkillPermaSafeguard::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gEffectBattler B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_SAFEGUARD
+	waitanimation
+	end3
+
 BattleScript_ExtraSkillCopyStats::
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT

@@ -797,5 +797,8 @@ extern const u8 BattleScript_ExtraSkillPermaInverseRoom[];
 extern const u8 BattleScript_ExtraSkillPermaRainbow[];
 extern const u8 BattleScript_ExtraSkillPermaSwamp[];
 extern const u8 BattleScript_ExtraSkillPermaFireSea[];
+extern const u8 BattleScript_ExtraSkillPermaMist[];
+extern const u8 BattleScript_ExtraSkillPermaTailwind[];
+extern const u8 BattleScript_ExtraSkillPermaSafeguard[];
 
 #endif  // GUARD_BATTLE_SCRIPTS_H
