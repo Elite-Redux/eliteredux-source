@@ -12953,7 +12953,7 @@ constexpr Ability Impl<ABILITY_BLUESCREEN> = {
 
 template <>
 constexpr Ability Impl<ABILITY_CHARGE_SPORES> = {
-    .onEntry = Impl<ABILITY_HALF_DRAKE>.onEntry,
+    .onEntry = Impl<ABILITY_LIGHTNING_BORN>.onEntry,
     .onDefender = Impl<ABILITY_EFFECT_SPORE>.onDefender,
     .breakable = TRUE,
     .powderImmune = TRUE,
