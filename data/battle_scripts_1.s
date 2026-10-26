@@ -11629,6 +11629,11 @@ BattleScript_Archmage_Effect_Type_Rock::
 	printstring STRINGID_POINTEDSTONESFLOAT
 	waitmessage B_WAIT_TIME_LONG
 	return
+
+BattleScript_Archmage_Effect_Type_Bug::
+	printstring STRINGID_STICKYWEBUSED
+	waitmessage B_WAIT_TIME_LONG
+	return
 	
 BattleScript_HurtsUser:
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
@@ -12388,6 +12393,27 @@ BattleScript_ExtraSkillPermaFireSea::
 	call BattleScript_AnnounceBattleSkill
 	setbyte gEffectBattler B_POSITION_PLAYER_LEFT
 	playanimation BS_EFFECT_BATTLER, B_ANIM_SEA_OF_FIRE
+	waitanimation
+	end3
+
+BattleScript_ExtraSkillPermaMist::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_MIST
+	waitanimation
+	end3
+
+BattleScript_ExtraSkillPermaTailwind::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_TAILWIND
+	waitanimation
+	end3
+
+BattleScript_ExtraSkillPermaSafeguard::
+	call BattleScript_AnnounceBattleSkill
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_SAFEGUARD
 	waitanimation
 	end3
 

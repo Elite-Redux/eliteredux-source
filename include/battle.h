@@ -160,6 +160,7 @@ struct VolatileStruct {
     u8 hazardDamaged:1;
     u8 iceStatue:1;
     u8 usedMonotypeEntry:1;
+    u8 usedSkillEntry:1;
     u8 drenched:2;
 };
 

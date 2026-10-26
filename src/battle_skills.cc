@@ -21,6 +21,7 @@ extern "C" {
 #define ON_ENTRY opt BattleSkillEnum skill, opt u8 battler
 #define ON_ATTACKER opt BattleSkillEnum skill, opt u8 battler, opt u8 target, opt MoveEnum move, opt Type moveType
 #define ON_DEFENSIVE_MULTIPLIER opt u8 battler, opt u16 *resistance, opt u16 *modifier
+#define ON_END_TURN opt BattleSkillEnum skill, opt u8 battler
 
 #define MUL(val) MUL_MODIFIER(modifier, val)
 
@@ -104,7 +105,12 @@ constexpr BattleSkill Impl<SKILL_EVIOLITE> = {
 template <>
 constexpr BattleSkill Impl<SKILL_PERMANENT_STICKY_WEB> = {
     .onBattleStart = +[](ON_BATTLE_START) -> int {
-        Unregister(skill);
+        CHECK_NOT(gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STICKY_WEB)
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STICKY_WEB;
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaStickyWeb);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        // On turn end, add sticky web if there is no sticky web, to make the skill "permanent"
         CHECK_NOT(gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STICKY_WEB)
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STICKY_WEB;
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaStickyWeb);
@@ -115,7 +121,6 @@ template <>
 constexpr BattleSkill Impl<SKILL_STICKY_WEB_BOTH_SIDES> = {
     // TODO: Should become permanent as well I think
     .onBattleStart = +[](ON_BATTLE_START) -> int {
-        Unregister(skill);
         CHECK_NOT(gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STICKY_WEB)
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STICKY_WEB;
         CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_STICKY_WEB)
@@ -127,10 +132,17 @@ constexpr BattleSkill Impl<SKILL_STICKY_WEB_BOTH_SIDES> = {
 template <>
 constexpr BattleSkill Impl<SKILL_SPIKES_1_LAYER> = {
     .onBattleStart = +[](ON_BATTLE_START) -> int {
-        Unregister(skill);
         CHECK(gSideTimers[B_SIDE_PLAYER].spikesAmount < 3)
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_SPIKES;
         gSideTimers[B_SIDE_PLAYER].spikesAmount++;
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaSpikes);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        // On turn end, add one layer of spikes if there are no spikes, to make the skill "permanent"
+        CHECK(gSideTimers[B_SIDE_PLAYER].spikesAmount < 1) 
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_SPIKES;
+        gSideTimers[B_SIDE_PLAYER].spikesAmount++;
+        // TODO: Change to different string?
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaSpikes);
     },
 };
@@ -138,10 +150,17 @@ constexpr BattleSkill Impl<SKILL_SPIKES_1_LAYER> = {
 template <>
 constexpr BattleSkill Impl<SKILL_TOXIC_SPIKES_2_LAYERS> = {
     .onBattleStart = +[](ON_BATTLE_START) -> int {
-        Unregister(skill);
         CHECK(gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount < 2)
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_TOXIC_SPIKES;
         gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount = 2;
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaToxicSpikes);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        // On turn end, add two layers of toxic spikes if there are no toxic spikes, to make the skill "permanent"
+        CHECK(gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount < 1)
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_TOXIC_SPIKES;
+        gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount = 2;
+        // TODO: Change to different string?
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaToxicSpikes);
     },
 };
@@ -149,10 +168,17 @@ constexpr BattleSkill Impl<SKILL_TOXIC_SPIKES_2_LAYERS> = {
 template <>
 constexpr BattleSkill Impl<SKILL_STEALTH_ROCKS> = {
     .onBattleStart = +[](ON_BATTLE_START) -> int {
-        Unregister(skill);
         CHECK_NOT(gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STEALTH_ROCK)
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
         gSideTimers[B_SIDE_PLAYER].stealthRockType = TYPE_ROCK;
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaStealthRock);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        // On turn end, add stealth rocks if there are no stealth rocks, to make the skill "permanent"
+        CHECK_NOT(gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STEALTH_ROCK)
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
+        gSideTimers[B_SIDE_PLAYER].stealthRockType = TYPE_ROCK;
+        // TODO: Change to different string?
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaStealthRock);
     },
 };
@@ -160,9 +186,15 @@ constexpr BattleSkill Impl<SKILL_STEALTH_ROCKS> = {
 template <>
 constexpr BattleSkill Impl<SKILL_CALTROPS> = {
     .onBattleStart = +[](ON_BATTLE_START) -> int {
-        Unregister(skill);
         CHECK_NOT(gSideTimers[B_SIDE_PLAYER].caltrops)
         gSideTimers[B_SIDE_PLAYER].caltrops = TRUE;
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaCaltrops);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        // On turn end, add caltrops if there are no caltrops, to make the skill "permanent"
+        CHECK_NOT(gSideTimers[B_SIDE_PLAYER].caltrops)
+        gSideTimers[B_SIDE_PLAYER].caltrops = TRUE;
+        // TODO: Change to different string?
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaCaltrops);
     },
 };
@@ -170,8 +202,6 @@ constexpr BattleSkill Impl<SKILL_CALTROPS> = {
 template <>
 constexpr BattleSkill Impl<SKILL_HAZARDS_ALL> = {
     .onBattleStart = +[](ON_BATTLE_START) -> int {
-        Unregister(skill);
-
         CHECK_NOT(gSideStatuses[B_SIDE_PLAYER] & SIDE_STATUS_STEALTH_ROCK)
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
         gSideTimers[B_SIDE_PLAYER].stealthRockType = TYPE_ROCK;
@@ -257,6 +287,78 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_FIRE_SEA> = {
         gSideTimers[B_SIDE_PLAYER].fireSeaTimer = 255;
 
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaFireSea);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_MIST> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_MIST)
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_MIST;
+        gSideTimers[B_SIDE_OPPONENT].started.mist = TRUE;
+        gSideTimers[B_SIDE_OPPONENT].mistTimer = SCREEN_DURATION_MAX;
+        gSideTimers[B_SIDE_OPPONENT].mistBattlerId = B_POSITION_OPPONENT_LEFT;
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaMist);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        // On turn end, start mist if it's not up to make the skill "permanent"
+        CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_MIST)
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_MIST;
+        gSideTimers[B_SIDE_OPPONENT].started.mist = TRUE;
+        gSideTimers[B_SIDE_OPPONENT].mistTimer = SCREEN_DURATION_MAX;
+        gSideTimers[B_SIDE_OPPONENT].mistBattlerId = B_POSITION_OPPONENT_LEFT;
+
+        // TODO: Change to different string?
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaMist);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_TAILWIND> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_TAILWIND)
+        gSideTimers[B_SIDE_OPPONENT].started.tailwind = TRUE;
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_TAILWIND;
+        gSideTimers[B_SIDE_OPPONENT].tailwindBattlerId = B_POSITION_OPPONENT_LEFT;
+        gSideTimers[B_SIDE_OPPONENT].tailwindTimer = TAILWIND_DURATION_MAX;
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaTailwind);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        // Don't think tailwind can actually be removed? But just in case
+        CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_TAILWIND)
+        gSideTimers[B_SIDE_OPPONENT].started.tailwind = TRUE;
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_TAILWIND;
+        gSideTimers[B_SIDE_OPPONENT].tailwindBattlerId = B_POSITION_OPPONENT_LEFT;
+        gSideTimers[B_SIDE_OPPONENT].tailwindTimer = TAILWIND_DURATION_MAX;
+
+         // TODO: Change to different string?
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaTailwind);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_SAFEGUARD> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_SAFEGUARD)
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_SAFEGUARD;
+        gSideTimers[B_SIDE_OPPONENT].started.safeguard = TRUE;
+        gSideTimers[B_SIDE_OPPONENT].safeguardTimer = SCREEN_DURATION_MAX;
+        gSideTimers[B_SIDE_OPPONENT].safeguardBattlerId = B_POSITION_OPPONENT_LEFT;
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaSafeguard);
+    },
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        // On turn end, start mist if it's not up to make the skill "permanent"
+        CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_SAFEGUARD)
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_SAFEGUARD;
+        gSideTimers[B_SIDE_OPPONENT].started.safeguard = TRUE;
+        gSideTimers[B_SIDE_OPPONENT].safeguardTimer = SCREEN_DURATION_MAX;
+        gSideTimers[B_SIDE_OPPONENT].safeguardBattlerId = B_POSITION_OPPONENT_LEFT;
+
+        // TODO: Change to different string?
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaSafeguard);
     },
 };
 

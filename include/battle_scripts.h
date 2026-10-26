@@ -685,6 +685,7 @@ extern const u8 BattleScript_Archmage_Effect_Type_Grass[];
 extern const u8 BattleScript_Archmage_Effect_Type_Psychic[];
 extern const u8 BattleScript_Archmage_Effect_Type_Normal[];
 extern const u8 BattleScript_Archmage_Effect_Type_Rock[];
+extern const u8 BattleScript_Archmage_Effect_Type_Bug[];
 
 extern const u8 BattleScript_FrostbiteTurnDmg[];
 extern const u8 BattleScript_MoveUsedUnfrostbite[];
@@ -796,5 +797,8 @@ extern const u8 BattleScript_ExtraSkillPermaInverseRoom[];
 extern const u8 BattleScript_ExtraSkillPermaRainbow[];
 extern const u8 BattleScript_ExtraSkillPermaSwamp[];
 extern const u8 BattleScript_ExtraSkillPermaFireSea[];
+extern const u8 BattleScript_ExtraSkillPermaMist[];
+extern const u8 BattleScript_ExtraSkillPermaTailwind[];
+extern const u8 BattleScript_ExtraSkillPermaSafeguard[];
 
 #endif  // GUARD_BATTLE_SCRIPTS_H
