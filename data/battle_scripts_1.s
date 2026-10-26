@@ -12417,6 +12417,36 @@ BattleScript_ExtraSkillPermaSafeguard::
 	waitanimation
 	end3
 
+BattleScript_ExtraSkillPermaSun::
+	call BattleScript_AnnounceBattleSkill
+	playanimation BS_BATTLER_0, B_ANIM_SUN_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
+	end3
+
+BattleScript_ExtraSkillPermaRain::
+	call BattleScript_AnnounceBattleSkill
+	playanimation BS_BATTLER_0, B_ANIM_RAIN_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
+	end3
+
+BattleScript_ExtraSkillPermaSandstorm::
+	call BattleScript_AnnounceBattleSkill
+	playanimation BS_BATTLER_0, B_ANIM_SANDSTORM_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
+	end3
+
+BattleScript_ExtraSkillPermaHail::
+	call BattleScript_AnnounceBattleSkill
+	playanimation BS_BATTLER_0, B_ANIM_HAIL_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
+	end3
+
+BattleScript_ExtraSkillPermaFog::
+	call BattleScript_AnnounceBattleSkill
+	playanimation BS_BATTLER_0, B_ANIM_FOG_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
+	end3
+
 BattleScript_ExtraSkillCopyStats::
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT

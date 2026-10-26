@@ -801,4 +801,10 @@ extern const u8 BattleScript_ExtraSkillPermaMist[];
 extern const u8 BattleScript_ExtraSkillPermaTailwind[];
 extern const u8 BattleScript_ExtraSkillPermaSafeguard[];
 
+extern const u8 BattleScript_ExtraSkillPermaSun[];
+extern const u8 BattleScript_ExtraSkillPermaRain[];
+extern const u8 BattleScript_ExtraSkillPermaSandstorm[];
+extern const u8 BattleScript_ExtraSkillPermaHail[];
+extern const u8 BattleScript_ExtraSkillPermaFog[];
+
 #endif  // GUARD_BATTLE_SCRIPTS_H

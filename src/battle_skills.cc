@@ -362,6 +362,54 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_SAFEGUARD> = {
     },
 };
 
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_SUN> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        SetPermanentWeather(ENUM_WEATHER_SUN);
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaSun);
+    },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_RAIN> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        SetPermanentWeather(ENUM_WEATHER_RAIN);
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaRain);
+    },
+};
+
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_SANDSTORM> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        SetPermanentWeather(ENUM_WEATHER_SANDSTORM);
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaSandstorm);
+    },
+};
+
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_HAIL> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        SetPermanentWeather(ENUM_WEATHER_HAIL);
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaHail);
+    },
+};
+
+
+template <>
+constexpr BattleSkill Impl<SKILL_PERMANENT_FOG> = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int {
+        SetPermanentWeather(ENUM_WEATHER_FOG);
+
+        return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaFog);
+    },
+};
+
 #include "generated/data/text/battle_skill_text.hh"
 
 template <BattleSkillEnum Id>
