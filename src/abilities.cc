@@ -12960,6 +12960,14 @@ constexpr Ability Impl<ABILITY_CHARGE_SPORES> = {
     .addsType = TYPE_ELECTRIC,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_STATIC_BLOOM> = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_ELECTRIC && IsBattlerTerrainAffected(battler, STATUS_FIELD_ELECTRIC_TERRAIN)) MUL(1.5);
+        },
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
