@@ -7998,7 +7998,7 @@ static void Cmd_various(void) {
             return;
         case VARIOUS_TRY_TO_CLEAR_PRIMAL_WEATHER: {
             if (!FlagGet(FLAG_PERMANENT_UNCHANGEABLE_WEATHER)) {  // Monotype Champ
-                if (gBattleWeather & WEATHER_SUN_PRIMAL && !IsAbilityOnField(ABILITY_DESOLATE_LAND)) {
+                if (gBattleWeather & WEATHER_SUN_PRIMAL && !IsAbilityOnField(ABILITY_DESOLATE_LAND) && !IsAbilityOnField(ABILITY_BLISTERING_SUN)) {
                     gBattleWeather &= ~WEATHER_SUN_PRIMAL;
                     PrepareStringBattle(STRINGID_EXTREMESUNLIGHTFADED, gActiveBattler);
                     gBattleCommunication[MSG_DISPLAY] = 1;
