@@ -11871,7 +11871,7 @@
               {
                 "min_level": 32,
                 "max_level": 32,
-                "species": "SPECIES_JYNX"
+                "species": "SPECIES_CAMEBERG"
               }
             ]
           }
@@ -13563,7 +13563,7 @@
               {
                 "min_level": 10,
                 "max_level": 12,
-                "species": "SPECIES_WOOBAT"
+                "species": "SPECIES_NUMBERG"
               },
               {
                 "min_level": 10,
@@ -13777,7 +13777,7 @@
               {
                 "min_level": 3,
                 "max_level": 3,
-                "species": "SPECIES_SNOVER"
+                "species": "SPECIES_NUMBERG"
               },
               {
                 "min_level": 3,
