@@ -4552,6 +4552,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
                 else if (gVolatileStructs[battler].tauntTimer || gVolatileStructs[battler].disableTimer || gVolatileStructs[battler].encoreTimer ||
                          gBattleMons[battler].status2 & STATUS2_TORMENT)
                     status = CHECK_RESTRICTING;
+                else if (gStatuses4[battler] & STATUS4_FEAR)
+                    status = CHECK_FEAR;
 
                 if (status) {
                     int immunityAbility = ABILITY_NONE;
@@ -4598,6 +4600,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
                             case CHECK_RESTRICTING:
                                 effect = 4;
                                 break;
+                            case CHECK_FEAR:
+                                effect = 5;
+                                break;
                         }
                     }
                 }
@@ -4625,6 +4630,12 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
                             gVolatileStructs[battler].encoreTimer = 0;
                             gBattleMons[battler].status2 &= ~STATUS2_TORMENT;
                             BattleScriptCall(BattleScript_BattlerShookOffTaunt);
+                            break;
+                        case 5: // get rid of fear
+                            gStatuses4[battler] &= ~STATUS4_FEAR;
+                            gVolatileStructs[battler].started.fear = FALSE;
+                            gVolatileStructs[battler].fear = FALSE;
+                            BattleScriptCall(BattleScript_BattlerGotOverItsFear);
                             break;
                     }
 

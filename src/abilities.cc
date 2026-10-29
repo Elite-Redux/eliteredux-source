@@ -12974,6 +12974,14 @@ constexpr Ability Impl<ABILITY_DAZZLING_WINGS> = {
     .onOffensiveMultiplier = Impl<ABILITY_GIANT_WINGS>.onOffensiveMultiplier,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_FEARLESS> = {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_FEAR)
+        return TRUE;
+    },
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {

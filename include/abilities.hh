@@ -114,6 +114,7 @@ typedef enum {
     CHECK_DRENCH = 1 << 10,
     CHECK_FLINCH = 1 << 11,
     CHECK_REDIRECTION = 1 << 12,
+    CHECK_FEAR = 1 << 13,
 } StatusCheckEnum;
 typedef int (*AbilityOnCanStatusType)(u8 battler, MoveEnum move, StatusCheckEnum status);
 typedef int (*AbilityOnStatusImmune)(u8 battler, u8 target, AbilityEnum ability, StatusCheckEnum status);

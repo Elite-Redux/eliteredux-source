@@ -10666,6 +10666,12 @@ BattleScript_BattlerGotOverItsInfatuation::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+BattleScript_BattlerGotOverItsFear::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_PKMNGOTOVERITSFEAR
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_IgnoresWhileAsleep::
 	printstring STRINGID_PKMNIGNORESASLEEP
 	waitmessage B_WAIT_TIME_LONG

@@ -464,6 +464,7 @@ extern const u8 BattleScript_EjectButton[];
 extern const u8 BattleScript_NotAffectedAbilityPopUp[];
 extern const u8 BattleScript_BattlerShookOffTaunt[];
 extern const u8 BattleScript_BattlerGotOverItsInfatuation[];
+extern const u8 BattleScript_BattlerGotOverItsFear[];
 extern const u8 BattleScript_Pickpocket[];
 extern const u8 BattleScript_StickyBarbTransfer[];
 extern const u8 BattleScript_AttackerItemStatRaise[];
