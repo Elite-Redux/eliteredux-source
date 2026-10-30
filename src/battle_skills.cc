@@ -416,7 +416,7 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_FOG> = {
 // Codegen turns each `on` block into an InlineTrigger and builds the skill with the InlineSkill template below.
 
 struct InlineEffect {
-    enum Kind : u8 { STAT_CHANGE, HAZARD, WEATHER, TERRAIN } kind;
+    enum Kind : u8 { STAT_CHANGE, HAZARD, WEATHER, TERRAIN, USE_MOVE } kind;
     // STAT_CHANGE
     u8 statCount;
     u8 stats[NUM_BATTLE_STATS - 1];  // STAT_*, STAT_HIGHEST_* are picked when it runs
@@ -430,6 +430,10 @@ struct InlineEffect {
     u8 turns;     // without permanent
     // HAZARD: put back at the end of each turn. WEATHER, TERRAIN: locked, nothing replaces or removes it
     bool8 permanent;
+    // USE_MOVE
+    MoveEnum move;
+    u8 power;  // 0 keeps the move's power
+    bool8 falseSwipe;  // leaves the target at 1 HP at least
 };
 
 // extra_ability of the skill. The abilities themselves come from Trainer.hellAbilities (GetExtraAbilityToSetToBattler),
@@ -458,10 +462,11 @@ struct InlineRun {
 
 // This is made to ensure we're waiting at the end of effect chains that aren't waiting
 // Example: Many stats up don't have a wait message explicitely, this catches it.
+// Without a script, only the announce shows.
 static void Show(InlineRun& run, const u8* script) {
     if (!run.shown) BattleScriptPushCursorAndCallback(BattleScript_WaitMessageEnd3);
     run.shown = TRUE;
-    BattleScriptCall(script);
+    if (script) BattleScriptCall(script);
 }
 
 // Returns true if we increased or applied some layers
@@ -543,6 +548,23 @@ static int SetInlineTerrain(const InlineEffect& effect, u8 battler) {
     return TRUE;
 }
 
+// The move runs as its own action once the current one ends, at the first foe still standing
+static int QueueInlineMove(const InlineRun& run, const InlineEffect& effect) {
+    u8 target = BATTLE_OPPOSITE(run.battler);
+    if (!IsBattlerAlive(target)) target ^= BIT_FLANK;
+    CHECK(CanUseExtraMove(run.battler, target))
+    CHECK(gQueuedAttackCount < MAX_BATTLERS_COUNT)
+    gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+        .skill = run.skill,
+        .move = effect.move,
+        .movePower = effect.power,
+        .attacker = run.battler,
+        .target = target,
+        .falseSwipe = effect.falseSwipe,
+    };
+    return TRUE;
+}
+
 static void RunInlineEffect(InlineRun& run, const InlineEffect& effect) {
     switch (effect.kind) {
         case InlineEffect::STAT_CHANGE:
@@ -569,6 +591,9 @@ static void RunInlineEffect(InlineRun& run, const InlineEffect& effect) {
         case InlineEffect::TERRAIN:
             gBattleCommunication[MULTISTRING_CHOOSER] = sInlineTerrains[effect.terrain].message;
             if (SetInlineTerrain(effect, run.battler)) Show(run, BattleScript_SurgeActivatesRet);
+            break;
+        case InlineEffect::USE_MOVE:
+            if (QueueInlineMove(run, effect)) Show(run, NULL);
             break;
     }
 }
