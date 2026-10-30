@@ -421,6 +421,13 @@ struct InlineEffect {
     s8 amount;
 };
 
+// extra_ability of the skill. The abilities themselves come from Trainer.hellAbilities (GetExtraAbilityToSetToBattler),
+// this is for the announce.
+struct InlineAbilities {
+    u8 count;
+    AbilityEnum ability[HELL_MODE_EXTRA_ABILITIES];
+};
+
 struct InlineTrigger {
     enum Kind : u8 { ENTRY, END_TURN } kind;
     enum When : u8 { EVERY, LEAD } when;  // specific to ENTRY
@@ -460,9 +467,15 @@ static int RunInlineTriggers(InlineTrigger::Kind hook, BattleSkillEnum skill, u8
 }
 
 // Hooks without a trigger stay null so ON_SKILL skips them if we comment them out from proto
-template <InlineTrigger... Triggers>
+template <InlineAbilities Abilities, InlineTrigger... Triggers>
 constexpr BattleSkill InlineSkill = [] {
     BattleSkill impl = {};
+    if constexpr (Abilities.count > 0)
+        impl.onBattleStart = +[](ON_BATTLE_START) -> int {
+            u8* buffers[] = {gBattleTextBuff1, gBattleTextBuff2, gBattleTextBuff3};
+            for (int i = 0; i < Abilities.count; i++) PREPARE_ABILITY_BUFFER(buffers[i], Abilities.ability[i]);
+            return RunEntryAnnounceScript(skill, BattleScript_AnnounceBattleSkillEnd3);
+        };
     if constexpr (((Triggers.kind == InlineTrigger::ENTRY) || ...))
         impl.onEntry = +[](ON_ENTRY) -> int { return RunInlineTriggers<Triggers...>(InlineTrigger::ENTRY, skill, battler); };
     if constexpr (((Triggers.kind == InlineTrigger::END_TURN) || ...))

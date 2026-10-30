@@ -6319,6 +6319,13 @@ AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy) {
         u16 trainerId = gTrainerBattleOpponent_A;
         u8 i;
 
+        // Inline skills (extra_ability), hell trainer battles only
+        if (isHellMode() && (gBattleTypeFlags & BATTLE_TYPE_TRAINER) && abilityNumber < HELL_MODE_EXTRA_ABILITIES) {
+            AbilityEnum ability = gTrainers[trainerId].hellAbilities[abilityNumber];
+            if (ability != ABILITY_NONE) return ability;
+        }
+
+        // Old table
         for (i = 0; i < MAX_HELL_TRAINERS_GYM_SKILLS; i++) {
             u8 battleEvent = GetTrainerBattleEventData(trainerId, i, BATTLE_EVENT_ID);
 
@@ -6336,16 +6343,6 @@ AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy) {
                 }
             }
         }
-
-        // u16 trainerId = gTrainerBattleOpponent_A;
-        // AbilityEnum ability = gTrainers[trainerId].hellAbilities[abilityNumber];
-        // AbilityEnum abilities[HELL_MODE_EXTRA_ABILITIES] = {ABILITY_INNARDS_OUT, ABILITY_INTIMIDATE, ABILITY_MOXIE, ABILITY_NONE};
-        // AbilityEnum ability = abilities[abilityNumber];
-
-        // if(gTrainers[trainerId].hellAbilities[abilityNumber] == NULL)
-        //      return ABILITY_NONE;
-
-        // return ability;
     }
 
     return ABILITY_NONE;

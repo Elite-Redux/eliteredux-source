@@ -5,8 +5,10 @@ import er.Generator
 import er.GeneratorUtils.BATTLE_SKILLS
 import er.GeneratorUtils.BATTLE_SKILL_TEMPLATES
 import er.GeneratorUtils.INLINE_SKILLS
+import er.proto.AbilityEnum
 import er.proto.BattleSkillTemplate
 import er.proto.BattleSkillTemplate.BattleSkillTemplateParam
+import er.proto.BattleSkillTemplateEnum
 import er.proto.InlineSkill
 import er.proto.Stat
 import java.io.OutputStreamWriter
@@ -21,7 +23,7 @@ object BattleSkillGenerator : Generator {
         BATTLE_SKILL_TEMPLATES.flatMap {
           it.validParamsList.map { params -> params.announceString }
         } +
-        INLINE_SKILLS.values.flatMap { listOf(it.name, it.announceString) }
+        INLINE_SKILLS.flatMap { (id, skill) -> skill.texts(id).toList() }
 
     writer.appendLine(
       allStrings.joinToString("\n") {
@@ -51,17 +53,20 @@ object BattleSkillGenerator : Generator {
     )
 
     for ((id, skill) in INLINE_SKILLS) {
-      check(skill.onCount > 0) { "$id: inline skill without an `on` block" }
+      check(skill.onCount > 0 || skill.extraAbilityCount > 0) {
+        "$id: inline skill with neither an `on` block nor an extra_ability"
+      }
+      val (name, announceString) = skill.texts(id)
       writer.appendLine(
         """
         |template <>
         |constexpr BattleSkill BattleSkillStrings<$id> = {
-        |$IND.name = $PREFIX${skill.name.hashCode().toUInt()},
-        |$IND.announceString = $PREFIX${skill.announceString.hashCode().toUInt()},
+        |$IND.name = $PREFIX${name.hashCode().toUInt()},
+        |$IND.announceString = $PREFIX${announceString.hashCode().toUInt()},
         |};
         |
         |template <>
-        |constexpr BattleSkill Impl<$id> = InlineSkill<${skill.onList.joinToString { it.toCpp(id) }}>;
+        |constexpr BattleSkill Impl<$id> = InlineSkill<${(listOf(skill.abilitiesToCpp(id)) + skill.onList.flatMap { it.toCpp(id) }).joinToString()}>;
         |"""
           .trimMargin()
       )
@@ -109,26 +114,58 @@ object BattleSkillGenerator : Generator {
     }
   }
 
-  // An `on` block as an InlineTrigger, see battle_skills.cc
-  private fun InlineSkill.Trigger.toCpp(skillId: String): String {
+  // name and announce_string, from the "Extra Ability" template when a skill only grants abilities
+  private fun InlineSkill.texts(skillId: String): Pair<String, String> {
+    if (extraAbilityCount == 0 || (name.isNotEmpty() && announceString.isNotEmpty())) {
+      return name to announceString
+    }
+    // The default announce is about the abilities, it would be wrong each time a trigger fires
+    check(onCount == 0) { "$skillId: needs a name and an announce_string with both `on` and extra_ability" }
+    val template = BATTLE_SKILL_TEMPLATES.first { it.id == BattleSkillTemplateEnum.SKILL_TEMPLATE_EXTRA_ABILITY }
+    val announce =
+      template.validParamsList.firstOrNull { it.paramCount == extraAbilityCount }?.announceString
+        ?: error("$skillId: no \"Extra Ability\" announce for $extraAbilityCount abilities")
+    return name.ifEmpty { template.name } to announceString.ifEmpty { announce }
+  }
+
+  // extra_ability as an InlineAbilities, see battle_skills.cc
+  private fun InlineSkill.abilitiesToCpp(skillId: String): String {
+    check(extraAbilityList.none { it == AbilityEnum.ABILITY_NONE || it == AbilityEnum.UNRECOGNIZED }) {
+      "$skillId: extra_ability without an ability"
+    }
+    return "InlineAbilities{.count = $extraAbilityCount, .ability = {${extraAbilityList.joinToString { it.name }}}}"
+  }
+
+  // An `on` block as InlineTriggers, one per effect, see battle_skills.cc
+  private fun InlineSkill.Trigger.toCpp(skillId: String): List<String> {
     val kind =
       when (kindCase) {
         InlineSkill.Trigger.KindCase.ENTRY -> "ENTRY"
         InlineSkill.Trigger.KindCase.END_TURN -> "END_TURN"
         else -> error("$skillId: `on` without a trigger")
       }
-    val effect =
-      when (effect.kindCase) {
-        InlineSkill.Effect.KindCase.STAT_CHANGE -> {
-          val change = effect.statChange
-          check(change.stat != Stat.STAT_HP) { "$skillId: stat_change without a stat" }
-          check(change.amount in -6..6 && change.amount != 0) {
-            "$skillId: stat_change amount ${change.amount} isn't between -6 and 6, or is 0"
-          }
-          ".kind = InlineEffect::STAT_CHANGE, .stat = ${change.stat}, .amount = ${change.amount}"
-        }
-        else -> error("$skillId: `on` without an effect")
-      }
-    return "InlineTrigger{.kind = InlineTrigger::$kind, .when = InlineTrigger::${entry.`when`}, .effect = {$effect}}"
+    check(effectCount > 0) { "$skillId: `on` without an effect" }
+    return effectList.map { effect ->
+      "InlineTrigger{.kind = InlineTrigger::$kind, .when = InlineTrigger::${entry.`when`}, .effect = {${effect.toCpp(skillId)}}}"
+    }
   }
+
+  private fun InlineSkill.Effect.toCpp(skillId: String): String =
+    when (kindCase) {
+      InlineSkill.Effect.KindCase.STAT_CHANGE -> {
+        val change = statChange
+        check(change.statCount == 1) { "$skillId: stat_change takes one stat for now" }
+        val stat = change.getStat(0)
+        check(stat != Stat.STAT_HP && stat != Stat.UNRECOGNIZED) { "$skillId: stat_change without a stat" }
+        check(change.amount in -6..6 && change.amount != 0) {
+          "$skillId: stat_change amount ${change.amount} isn't between -6 and 6, or is 0"
+        }
+        ".kind = InlineEffect::STAT_CHANGE, .stat = $stat, .amount = ${change.amount}"
+      }
+      InlineSkill.Effect.KindCase.TERRAIN,
+      InlineSkill.Effect.KindCase.WEATHER,
+      InlineSkill.Effect.KindCase.HAZARD,
+      InlineSkill.Effect.KindCase.USE_MOVE -> error("$skillId: ${kindCase.name.lowercase()} effects aren't in battle_skills.cc yet")
+      else -> error("$skillId: effect without a kind")
+    }
 }
