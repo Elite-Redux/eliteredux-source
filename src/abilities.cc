@@ -12984,6 +12984,11 @@ constexpr Ability Impl<ABILITY_FEARLESS> = {
     .tauntImmune = TRUE,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_GNAWING_AWAY> = {
+    .onAttacker = Impl<ABILITY_CRUSHING_JAW>.onAttacker,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
