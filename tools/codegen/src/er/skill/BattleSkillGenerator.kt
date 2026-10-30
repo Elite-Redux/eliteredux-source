@@ -11,6 +11,7 @@ import er.proto.BattleSkillTemplate.BattleSkillTemplateParam
 import er.proto.BattleSkillTemplateEnum
 import er.proto.InlineSkill
 import er.proto.InlineSkill.SetHazard.Hazard.HAZARD_NONE
+import er.proto.MoveEnum
 import er.proto.Stat
 import java.io.OutputStreamWriter
 
@@ -64,6 +65,9 @@ object BattleSkillGenerator : Generator {
       for ((hook, ons) in skill.onList.groupBy { it.kindCase }) {
         val scripts = ons.sumOf { on -> on.effectList.sumOf { it.statChange.statCount + it.hazard.hazardCount + if (it.hasWeather() || it.hasTerrain()) 2 else 0 } }
         check(scripts <= 10) { "$id: too many effects at once on ${hook.name.lowercase()}" }
+        // The extra move queue has 4 slots, shared with abilities
+        val moves = ons.sumOf { on -> on.effectList.count { it.hasUseMove() } }
+        check(moves <= 4) { "$id: $moves use_move on ${hook.name.lowercase()}, max is 4" }
       }
       val (name, announceString) = skill.texts(id)
       writer.appendLine(
@@ -197,7 +201,11 @@ object BattleSkillGenerator : Generator {
         }
         ".kind = InlineEffect::TERRAIN, .terrain = ENUM_${terrain.terrain.name}, ${terrain.durationCase.toCpp(skillId, terrain.turns, terrain.permanent)}"
       }
-      InlineSkill.Effect.KindCase.USE_MOVE -> error("$skillId: ${kindCase.name.lowercase()} effects aren't in battle_skills.cc yet")
+      InlineSkill.Effect.KindCase.USE_MOVE -> {
+        check(useMove.move != MoveEnum.MOVE_NONE && useMove.move != MoveEnum.UNRECOGNIZED) { "$skillId: use_move without a move" }
+        check(useMove.power in 0..255) { "$skillId: use_move power ${useMove.power} isn't between 0 and 255" }
+        ".kind = InlineEffect::USE_MOVE, .move = ${useMove.move.name}, .power = ${useMove.power}, .falseSwipe = ${useMove.falseSwipe}"
+      }
       else -> error("$skillId: effect without a kind")
     }
 
