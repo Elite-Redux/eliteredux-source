@@ -14,6 +14,9 @@ import er.proto.Stat
 import java.io.OutputStreamWriter
 
 object BattleSkillGenerator : Generator {
+  // Same as in src/battle_skills.cc
+  private const val INLINE_MAX_EFFECTS = 4
+
   private val PREFIX = "__sSkillText_"
 
   override fun generate(writer: OutputStreamWriter) {
@@ -56,6 +59,11 @@ object BattleSkillGenerator : Generator {
       check(skill.onCount > 0 || skill.extraAbilityCount > 0) {
         "$id: inline skill with neither an `on` block nor an extra_ability"
       }
+      // Each stat change is one battle script on the stack (20 slots), shared with the other skills
+      for ((hook, ons) in skill.onList.groupBy { it.kindCase }) {
+        val stats = ons.sumOf { on -> on.effectList.sumOf { it.statChange.statCount } }
+        check(stats <= 7) { "$id: $stats stat changes on ${hook.name.lowercase()}, max is 7" }
+      }
       val (name, announceString) = skill.texts(id)
       writer.appendLine(
         """
@@ -66,7 +74,7 @@ object BattleSkillGenerator : Generator {
         |};
         |
         |template <>
-        |constexpr BattleSkill Impl<$id> = InlineSkill<${(listOf(skill.abilitiesToCpp(id)) + skill.onList.flatMap { it.toCpp(id) }).joinToString()}>;
+        |constexpr BattleSkill Impl<$id> = InlineSkill<${(listOf(skill.abilitiesToCpp(id)) + skill.onList.map { it.toCpp(id) }).joinToString()}>;
         |"""
           .trimMargin()
       )
@@ -136,31 +144,32 @@ object BattleSkillGenerator : Generator {
     return "InlineAbilities{.count = $extraAbilityCount, .ability = {${extraAbilityList.joinToString { it.name }}}}"
   }
 
-  // An `on` block as InlineTriggers, one per effect, see battle_skills.cc
-  private fun InlineSkill.Trigger.toCpp(skillId: String): List<String> {
+  // An `on` block as an InlineTrigger, see battle_skills.cc
+  private fun InlineSkill.Trigger.toCpp(skillId: String): String {
     val kind =
       when (kindCase) {
         InlineSkill.Trigger.KindCase.ENTRY -> "ENTRY"
         InlineSkill.Trigger.KindCase.END_TURN -> "END_TURN"
         else -> error("$skillId: `on` without a trigger")
       }
-    check(effectCount > 0) { "$skillId: `on` without an effect" }
-    return effectList.map { effect ->
-      "InlineTrigger{.kind = InlineTrigger::$kind, .when = InlineTrigger::${entry.`when`}, .effect = {${effect.toCpp(skillId)}}}"
-    }
+    check(effectCount in 1..INLINE_MAX_EFFECTS) { "$skillId: `on` needs between 1 and $INLINE_MAX_EFFECTS effects" }
+    val effects = effectList.joinToString { "{${it.toCpp(skillId)}}" }
+    return "InlineTrigger{.kind = InlineTrigger::$kind, .when = InlineTrigger::${entry.`when`}, .effectCount = $effectCount, .effects = {$effects}}"
   }
 
   private fun InlineSkill.Effect.toCpp(skillId: String): String =
     when (kindCase) {
       InlineSkill.Effect.KindCase.STAT_CHANGE -> {
         val change = statChange
-        check(change.statCount == 1) { "$skillId: stat_change takes one stat for now" }
-        val stat = change.getStat(0)
-        check(stat != Stat.STAT_HP && stat != Stat.UNRECOGNIZED) { "$skillId: stat_change without a stat" }
+        check(change.statCount in 1..7) { "$skillId: stat_change needs between 1 and 7 stats" }
+        check(change.statList.none { it == Stat.STAT_HP || it == Stat.UNRECOGNIZED }) {
+          "$skillId: stat_change on ${change.statList} isn't a stat"
+        }
+        check(change.statList.distinct().size == change.statCount) { "$skillId: stat_change lists a stat twice" }
         check(change.amount in -6..6 && change.amount != 0) {
           "$skillId: stat_change amount ${change.amount} isn't between -6 and 6, or is 0"
         }
-        ".kind = InlineEffect::STAT_CHANGE, .stat = $stat, .amount = ${change.amount}"
+        ".kind = InlineEffect::STAT_CHANGE, .statCount = ${change.statCount}, .stats = {${change.statList.joinToString { it.name }}}, .amount = ${change.amount}"
       }
       InlineSkill.Effect.KindCase.TERRAIN,
       InlineSkill.Effect.KindCase.WEATHER,

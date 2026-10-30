@@ -782,7 +782,8 @@ extern const u8 BattleScript_ExtraAbilities1[];
 extern const u8 BattleScript_ExtraAbilities2[];
 extern const u8 BattleScript_ExtraAbilities3[];
 extern const u8 BattleScript_AnnounceBattleSkillEnd3[];
-extern const u8 BattleScript_BattleSkillStatChange[];
+extern const u8 BattleScript_AnnounceBattleSkill[];
+extern const u8 BattleScript_WaitMessageEnd3[];
 
 extern const u8 BattleScript_ExtraSkillEviolite[];
 

@@ -410,14 +410,14 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_FOG> = {
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaFog);
     },
 };
-// Inline skills are written in the trainer data: proto/TrainerList.textproto with InlineSkill 
+// Inline skills are written in the trainer data: proto/TrainerList.textproto with InlineSkill
 // from proto/BattleSkillList.proto
 // Codegen turns each `on` block into an InlineTrigger and builds the skill with the InlineSkill template below.
-// For now, very simple structure that we can evolve later, no need to get in complex stuff for now
 
 struct InlineEffect {
     enum Kind : u8 { STAT_CHANGE } kind;
-    u8 stat;
+    u8 statCount;
+    u8 stats[NUM_BATTLE_STATS - 1];  // STAT_*, STAT_HIGHEST_* are picked when it runs
     s8 amount;
 };
 
@@ -428,42 +428,68 @@ struct InlineAbilities {
     AbilityEnum ability[HELL_MODE_EXTRA_ABILITIES];
 };
 
+#define INLINE_MAX_EFFECTS 4
+
 struct InlineTrigger {
     enum Kind : u8 { ENTRY, END_TURN } kind;
     enum When : u8 { EVERY, LEAD } when;  // specific to ENTRY
-    InlineEffect effect;
+    u8 effectCount;
+    InlineEffect effects[INLINE_MAX_EFFECTS];
 };
 
-static int RunInlineEffect(const InlineEffect& effect, BattleSkillEnum skill, u8 battler) {
-    switch (effect.kind) {
-        case InlineEffect::STAT_CHANGE: {
-            u8 stat = TranslateStatId(effect.stat, battler);
-            CHECK(effect.amount > 0 ? CanRaiseStat(battler, stat) : CanLowerStat(battler, stat))
-            SetStatChanger(stat, effect.amount);
-            return RunEntryAnnounceScript(skill, BattleScript_BattleSkillStatChange);
-        }
-    }
-    return FALSE;
+// One hook firing: the effects change the battle in C and queue their scripts with Show.
+// The skill is announced once, before all of them.
+struct InlineRun {
+    BattleSkillEnum skill;
+    u8 battler;
+    bool8 shown;
+};
+
+// Scripts run last called first, so effects are run in reverse
+static void Show(InlineRun& run, const u8* script) {
+    if (!run.shown) BattleScriptPushCursorAndCallback(BattleScript_WaitMessageEnd3);
+    run.shown = TRUE;
+    BattleScriptCall(script);
 }
 
-static int RunInlineTrigger(const InlineTrigger& trigger, InlineTrigger::Kind hook, BattleSkillEnum skill, u8 battler) {
+static void RunInlineEffect(InlineRun& run, const InlineEffect& effect) {
+    switch (effect.kind) {
+        case InlineEffect::STAT_CHANGE:
+            for (int i = effect.statCount - 1; i >= 0; i--) {
+                u8 stat = TranslateStatId(effect.stats[i], run.battler);
+                FILTER(effect.amount > 0 ? CanRaiseStat(run.battler, stat) : CanLowerStat(run.battler, stat))
+                SetStatChanger(stat, effect.amount);
+                Show(run, BattleScript_StackBattlerStatUp);
+            }
+            break;
+    }
+}
+
+static int IsInlineTriggerOn(const InlineTrigger& trigger, InlineTrigger::Kind hook, u8 battler) {
     CHECK(trigger.kind == hook)
     // For now, triggers are only checked from the trainer side
     CHECK(GetBattlerSide(battler) == B_SIDE_OPPONENT)
 
     // Switches only get processed after the battle start, so this is only false for the leads
     CHECK(trigger.when != InlineTrigger::LEAD || !gBattleStruct->canProcessSwitches)
-    return RunInlineEffect(trigger.effect, skill, battler);
+    return TRUE;
 }
 
-// Take the `on` blocks, and execute them 
+// Take the `on` blocks of the hook, and execute them
 template <InlineTrigger... Triggers>
 static int RunInlineTriggers(InlineTrigger::Kind hook, BattleSkillEnum skill, u8 battler) {
     constexpr InlineTrigger triggers[] = {Triggers...};
-    int ran = FALSE;
-    // Reverse order because pushed scripts run LIFO, and want it FIFO from the proto
-    for (int i = ARRAY_COUNT(triggers) - 1; i >= 0; i--) ran |= RunInlineTrigger(triggers[i], hook, skill, battler);
-    return ran;
+    InlineRun run = {.skill = skill, .battler = battler};
+    gBattleScripting.abilityPopupOverwrite = skill;
+    gStackBattler1 = gBattlerAbility = battler;
+
+    for (int i = ARRAY_COUNT(triggers) - 1; i >= 0; i--) {
+        FILTER(IsInlineTriggerOn(triggers[i], hook, battler))
+        for (int j = triggers[i].effectCount - 1; j >= 0; j--) RunInlineEffect(run, triggers[i].effects[j]);
+    }
+    CHECK(run.shown)
+    BattleScriptCall(BattleScript_AnnounceBattleSkill);
+    return TRUE;
 }
 
 // Hooks without a trigger stay null so ON_SKILL skips them if we comment them out from proto
