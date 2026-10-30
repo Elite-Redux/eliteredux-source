@@ -10,6 +10,7 @@ import er.proto.BattleSkillTemplate
 import er.proto.BattleSkillTemplate.BattleSkillTemplateParam
 import er.proto.BattleSkillTemplateEnum
 import er.proto.InlineSkill
+import er.proto.InlineSkill.SetHazard.Hazard.HAZARD_NONE
 import er.proto.Stat
 import java.io.OutputStreamWriter
 
@@ -59,10 +60,10 @@ object BattleSkillGenerator : Generator {
       check(skill.onCount > 0 || skill.extraAbilityCount > 0) {
         "$id: inline skill with neither an `on` block nor an extra_ability"
       }
-      // Each stat change is one battle script on the stack (20 slots), shared with the other skills
+      // Each stat change and hazard is one battle script on the stack (20 slots), shared with the other skills
       for ((hook, ons) in skill.onList.groupBy { it.kindCase }) {
-        val stats = ons.sumOf { on -> on.effectList.sumOf { it.statChange.statCount } }
-        check(stats <= 7) { "$id: $stats stat changes on ${hook.name.lowercase()}, max is 7" }
+        val scripts = ons.sumOf { on -> on.effectList.sumOf { it.statChange.statCount + it.hazard.hazardCount } }
+        check(scripts <= 8) { "$id: $scripts stat changes and hazards on ${hook.name.lowercase()}, max is 8" }
       }
       val (name, announceString) = skill.texts(id)
       writer.appendLine(
@@ -171,9 +172,18 @@ object BattleSkillGenerator : Generator {
         }
         ".kind = InlineEffect::STAT_CHANGE, .statCount = ${change.statCount}, .stats = {${change.statList.joinToString { it.name }}}, .amount = ${change.amount}"
       }
+      InlineSkill.Effect.KindCase.HAZARD -> {
+        check(hazard.hazardCount > 0) { "$skillId: hazard without a hazard" }
+        check(hazard.hazardList.none { it == HAZARD_NONE || it == InlineSkill.SetHazard.Hazard.UNRECOGNIZED }) {
+          "$skillId: hazard on ${hazard.hazardList} isn't a hazard"
+        }
+        check(hazard.hazardList.distinct().size == hazard.hazardCount) { "$skillId: hazard lists a hazard twice" }
+        check(hazard.layers in 0..3) { "$skillId: hazard layers ${hazard.layers} isn't between 1 and 3" }
+        val bits = hazard.hazardList.joinToString(" | ") { "1 << SKILL_${it.name}" }
+        ".kind = InlineEffect::HAZARD, .hazards = $bits, .layers = ${maxOf(hazard.layers, 1)}, .permanent = ${hazard.permanent}"
+      }
       InlineSkill.Effect.KindCase.TERRAIN,
       InlineSkill.Effect.KindCase.WEATHER,
-      InlineSkill.Effect.KindCase.HAZARD,
       InlineSkill.Effect.KindCase.USE_MOVE -> error("$skillId: ${kindCase.name.lowercase()} effects aren't in battle_skills.cc yet")
       else -> error("$skillId: effect without a kind")
     }

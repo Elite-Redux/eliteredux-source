@@ -415,10 +415,15 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_FOG> = {
 // Codegen turns each `on` block into an InlineTrigger and builds the skill with the InlineSkill template below.
 
 struct InlineEffect {
-    enum Kind : u8 { STAT_CHANGE } kind;
+    enum Kind : u8 { STAT_CHANGE, HAZARD } kind;
+    // STAT_CHANGE
     u8 statCount;
     u8 stats[NUM_BATTLE_STATS - 1];  // STAT_*, STAT_HIGHEST_* are picked when it runs
     s8 amount;
+    // HAZARD, on the player's side
+    u8 hazards;  // bit per SKILL_HAZARD_*
+    u8 layers;   // spikes and toxic spikes are brought up to this many, capped at 3 and 2
+    bool8 permanent;  // HAZARD: put back at the end of each turn
 };
 
 // extra_ability of the skill. The abilities themselves come from Trainer.hellAbilities (GetExtraAbilityToSetToBattler),
@@ -452,6 +457,38 @@ static void Show(InlineRun& run, const u8* script) {
     BattleScriptCall(script);
 }
 
+// Returns whether the hazard wasn't there yet, or had fewer layers
+static int AddInlineHazard(u8 hazard, u8 layers) {
+    struct SideTimer* timer = &gSideTimers[B_SIDE_PLAYER];
+    u32* status = &gSideStatuses[B_SIDE_PLAYER];
+    switch (hazard) {
+        case SKILL_HAZARD_SPIKES:
+            CHECK(timer->spikesAmount < min(layers, 3))
+            timer->spikesAmount = min(layers, 3);
+            *status |= SIDE_STATUS_SPIKES;
+            return TRUE;
+        case SKILL_HAZARD_TOXIC_SPIKES:
+            CHECK(timer->toxicSpikesAmount < min(layers, 2))
+            timer->toxicSpikesAmount = min(layers, 2);
+            *status |= SIDE_STATUS_TOXIC_SPIKES;
+            return TRUE;
+        case SKILL_HAZARD_STEALTH_ROCK:
+            CHECK_NOT(*status & SIDE_STATUS_STEALTH_ROCK)
+            *status |= SIDE_STATUS_STEALTH_ROCK;
+            timer->stealthRockType = TYPE_ROCK;
+            return TRUE;
+        case SKILL_HAZARD_STICKY_WEB:
+            CHECK_NOT(*status & SIDE_STATUS_STICKY_WEB)
+            *status |= SIDE_STATUS_STICKY_WEB;
+            return TRUE;
+        case SKILL_HAZARD_CALTROPS:
+            CHECK_NOT(timer->caltrops)
+            timer->caltrops = TRUE;
+            return TRUE;
+    }
+    return FALSE;
+}
+
 static void RunInlineEffect(InlineRun& run, const InlineEffect& effect) {
     switch (effect.kind) {
         case InlineEffect::STAT_CHANGE:
@@ -462,30 +499,45 @@ static void RunInlineEffect(InlineRun& run, const InlineEffect& effect) {
                 Show(run, BattleScript_StackBattlerStatUp);
             }
             break;
+        case InlineEffect::HAZARD:
+            for (int i = SKILL_HAZARD_COUNT - 1; i >= 0; i--) {
+                FILTER(effect.hazards & (1 << i))
+                FILTER(AddInlineHazard(i, effect.layers))
+                // The script picks the animation, the chooser is kept for it until it runs
+                gBattleCommunication[MULTISTRING_CHOOSER] = i;
+                Show(run, BattleScript_SkillHazard);
+            }
+            break;
     }
 }
 
-static int IsInlineTriggerOn(const InlineTrigger& trigger, InlineTrigger::Kind hook, u8 battler) {
-    CHECK(trigger.kind == hook)
-    // For now, triggers are only checked from the trainer side
-    CHECK(GetBattlerSide(battler) == B_SIDE_OPPONENT)
-
-    // Switches only get processed after the battle start, so this is only false for the leads
-    CHECK(trigger.when != InlineTrigger::LEAD || !gBattleStruct->canProcessSwitches)
-    return TRUE;
+static constexpr bool HasPermanentHazard(const InlineTrigger& trigger) {
+    for (int i = 0; i < trigger.effectCount; i++)
+        if (trigger.effects[i].kind == InlineEffect::HAZARD && trigger.effects[i].permanent) return true;
+    return false;
 }
 
 // Take the `on` blocks of the hook, and execute them
 template <InlineTrigger... Triggers>
 static int RunInlineTriggers(InlineTrigger::Kind hook, BattleSkillEnum skill, u8 battler) {
+    // For now, triggers are only checked from the trainer side
+    CHECK(GetBattlerSide(battler) == B_SIDE_OPPONENT)
+
     constexpr InlineTrigger triggers[] = {Triggers...};
     InlineRun run = {.skill = skill, .battler = battler};
     gBattleScripting.abilityPopupOverwrite = skill;
     gStackBattler1 = gBattlerAbility = battler;
 
     for (int i = ARRAY_COUNT(triggers) - 1; i >= 0; i--) {
-        FILTER(IsInlineTriggerOn(triggers[i], hook, battler))
-        for (int j = triggers[i].effectCount - 1; j >= 0; j--) RunInlineEffect(run, triggers[i].effects[j]);
+        const InlineTrigger& trigger = triggers[i];
+        // Switches only get processed after the battle start, so this is only false for the leads
+        bool8 on = trigger.kind == hook && (trigger.when != InlineTrigger::LEAD || !gBattleStruct->canProcessSwitches);
+        for (int j = trigger.effectCount - 1; j >= 0; j--) {
+            const InlineEffect& effect = trigger.effects[j];
+            // Permanent hazards are put back at the end of every turn, whatever their trigger
+            bool8 reapply = hook == InlineTrigger::END_TURN && effect.kind == InlineEffect::HAZARD && effect.permanent;
+            if (on || reapply) RunInlineEffect(run, effect);
+        }
     }
     CHECK(run.shown)
     BattleScriptCall(BattleScript_AnnounceBattleSkill);
@@ -504,7 +556,7 @@ constexpr BattleSkill InlineSkill = [] {
         };
     if constexpr (((Triggers.kind == InlineTrigger::ENTRY) || ...))
         impl.onEntry = +[](ON_ENTRY) -> int { return RunInlineTriggers<Triggers...>(InlineTrigger::ENTRY, skill, battler); };
-    if constexpr (((Triggers.kind == InlineTrigger::END_TURN) || ...))
+    if constexpr (((Triggers.kind == InlineTrigger::END_TURN || HasPermanentHazard(Triggers)) || ...))
         impl.onEndTurn = +[](ON_END_TURN) -> int { return RunInlineTriggers<Triggers...>(InlineTrigger::END_TURN, skill, battler); };
     return impl;
 }();

@@ -12510,6 +12510,26 @@ BattleScript_ExtraSkillLuckyChant::
 	waitanimation
 	end2
 
+BattleScript_SkillHazard::
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_HAZARD_TOXIC_SPIKES, BattleScript_SkillHazardToxicSpikes
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_HAZARD_STEALTH_ROCK, BattleScript_SkillHazardStealthRock
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_HAZARD_STICKY_WEB, BattleScript_SkillHazardStickyWeb
+	playmoveanimation BS_ATTACKER, MOVE_SPIKES
+	goto BattleScript_SkillHazardEnd
+BattleScript_SkillHazardToxicSpikes:
+	playmoveanimation BS_ATTACKER, MOVE_TOXIC_SPIKES
+	goto BattleScript_SkillHazardEnd
+BattleScript_SkillHazardStealthRock:
+	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
+	goto BattleScript_SkillHazardEnd
+BattleScript_SkillHazardStickyWeb:
+	playmoveanimation BS_ATTACKER, MOVE_STICKY_WEB
+BattleScript_SkillHazardEnd:
+	waitanimation
+	return
+
 BattleScript_AnnounceBattleSkill::
 	extraskillpopup 1
 	setbyte cMULTISTRING_CHOOSER, TABLE_SPECIAL_BATTLE_SKILL_ANNOUNCE
