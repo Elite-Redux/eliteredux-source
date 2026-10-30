@@ -12989,6 +12989,12 @@ constexpr Ability Impl<ABILITY_GNAWING_AWAY> = {
     .onAttacker = Impl<ABILITY_CRUSHING_JAW>.onAttacker,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_VERSATILE> = {
+    .onBeforeAttack = Impl<ABILITY_RKS_SYSTEM>.onBeforeAttack,
+    .randomizerBanned = TRUE,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
