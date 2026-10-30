@@ -7,6 +7,11 @@ In general, you should not need to open these unless if you get an error or if y
 
 If you run into trouble, ask for help on Discord or IRC (see [README.md](README.md)).
 
+## Container build (no ARM toolchain or Kotlin needed)
+
+If you have Docker or Podman, `docker/build.sh` builds the ROM and BPS without installing anything else.
+See [docs/docker-build.md](docs/docker-build.md).
+
 ## Simple setup if you have a Debian-based environment
 
 If you already have a Debian-based environment set up (including WSL) you can run the following command from terminal in the folder where you would like to put your repo to fully install prereqs, clone the repo, and build:
