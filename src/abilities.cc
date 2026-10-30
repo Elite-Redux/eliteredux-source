@@ -12980,6 +12980,8 @@ constexpr Ability Impl<ABILITY_FEARLESS> = {
         CHECK(status & CHECK_FEAR)
         return TRUE;
     },
+    .breakable = TRUE,
+    .tauntImmune = TRUE,
 };
 
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
