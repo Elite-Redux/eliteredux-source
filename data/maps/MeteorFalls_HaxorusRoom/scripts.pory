@@ -477,11 +477,6 @@ script MeteorFalls_HaxorusRoom_EventScript_MegaStoneTest{
 			giveitem(ITEM_LUXRAYNITE, 1)
 		}
 
-		checkitem(ITEM_GRANBULLITE, 1)
-		if(var(VAR_RESULT) == 0){
-			giveitem(ITEM_GRANBULLITE, 1)
-		}
-
 		checkitem(ITEM_TYPHLOSIONITE, 1)
 		if(var(VAR_RESULT) == 0){
 			giveitem(ITEM_TYPHLOSIONITE, 1)

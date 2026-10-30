@@ -248,7 +248,7 @@ script Route123_EventScript_Granbullite_Battle {
 				trainerbattle_no_intro(TRAINER_GRANBULLITE_ROUTE123, format("I'm so, so, so, sorry!")) // in-battle, player wins
 				msgbox(format("I'm so sorry! I didn't expect all 6 of them to jump out of their Pokéballs like that! They usually don't bite. Please, take this as compensation."), MSGBOX_NPC) // after player won
 				playfanfare(MUS_OBTAIN_ITEM)
-				giveitem(ITEM_GRANBULLITE, 1) // Item given to the player
+				giveitem(ITEM_ARCANITE_H, 1) // Item given to the player
 				waitmessage
 			}
 			else { // when refusing the battle
