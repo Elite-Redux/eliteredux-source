@@ -349,6 +349,9 @@ void HandleAction_UseMove(void) {
         } else if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability) {
             gBattleScripting.abilityPopupOverwrite = gQueuedExtraAttackData[0].ability;
             gBattlescriptCurrInstr = BattleScript_AttackerUsedAnExtraMove;
+        } else if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].skill) {
+            gBattleScripting.abilityPopupOverwrite = gQueuedExtraAttackData[0].skill;
+            gBattlescriptCurrInstr = BattleScript_SkillUsedAnExtraMove;
         } else {
             gBattlescriptCurrInstr = gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect];
         }

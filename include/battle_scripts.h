@@ -591,6 +591,7 @@ extern const u8 BattleScript_PrintDamageDoneString[];
 extern const u8 BattleScript_BeakBlastSetUp[];
 extern const u8 BattleScript_AttackerUsedAnExtraMove[];
 extern const u8 BattleScript_AttackerUsedAnExtraMoveOnSwitchIn[];
+extern const u8 BattleScript_SkillUsedAnExtraMove[];
 extern const u8 BattleScript_DefenderEffectSpeedDownHit[];
 extern const u8 BattleScript_DefenderSetsSpikeLayer_Scrapyard[];
 extern const u8 BattleScript_DoubleSpikesOnEntry[];

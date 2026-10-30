@@ -9325,6 +9325,10 @@ BattleScript_AttackerUsedAnExtraMove::
 	waitmessage B_WAIT_TIME_SHORT
 	gotoactualmove BS_ATTACKER
 
+BattleScript_SkillUsedAnExtraMove::
+	extraskillpopup 1
+	gotoactualmove BS_ATTACKER
+
 BattleScript_AttackerUsedAnExtraMoveOnSwitchIn::
 	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
