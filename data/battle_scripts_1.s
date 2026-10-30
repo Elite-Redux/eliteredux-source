@@ -12530,6 +12530,11 @@ BattleScript_SkillHazardEnd:
 	waitanimation
 	return
 
+BattleScript_SkillWeather::
+	playanimation2 BS_BATTLER_0, cMULTISTRING_CHOOSER, NULL
+	call BattleScript_OnWeatherChange
+	return
+
 BattleScript_AnnounceBattleSkill::
 	extraskillpopup 1
 	setbyte cMULTISTRING_CHOOSER, TABLE_SPECIAL_BATTLE_SKILL_ANNOUNCE

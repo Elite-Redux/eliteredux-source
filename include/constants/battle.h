@@ -461,6 +461,14 @@ typedef enum WeatherFlag {
 #define ENUM_WEATHER_STRONG_WINDS 7
 #define ENUM_WEATHER_FOG 8
 
+// Battle Terrain as enum
+#define ENUM_TERRAIN_NONE 0
+#define ENUM_TERRAIN_ELECTRIC 1
+#define ENUM_TERRAIN_GRASSY 2
+#define ENUM_TERRAIN_MISTY 3
+#define ENUM_TERRAIN_PSYCHIC 4
+#define ENUM_TERRAIN_TOXIC 5
+
 #define PRIMARY_STATUS_MOVE_EFFECT MOVE_EFFECT_BLEED  // All above move effects apply primary status
 
 // Battle terrain defines for gBattleTerrain.

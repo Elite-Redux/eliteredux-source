@@ -14,6 +14,7 @@ extern "C" {
 #include "battle_util.h"
 #include "battle.h"
 #include "battle_anim.h"
+#include "constants/battle_string_ids.h"
 }
 
 #include "type_utils.hh"
@@ -415,7 +416,7 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_FOG> = {
 // Codegen turns each `on` block into an InlineTrigger and builds the skill with the InlineSkill template below.
 
 struct InlineEffect {
-    enum Kind : u8 { STAT_CHANGE, HAZARD } kind;
+    enum Kind : u8 { STAT_CHANGE, HAZARD, WEATHER, TERRAIN } kind;
     // STAT_CHANGE
     u8 statCount;
     u8 stats[NUM_BATTLE_STATS - 1];  // STAT_*, STAT_HIGHEST_* are picked when it runs
@@ -423,7 +424,12 @@ struct InlineEffect {
     // HAZARD, on the player's side
     u8 hazards;  // bit per SKILL_HAZARD_*
     u8 layers;   // spikes and toxic spikes are brought up to this many, capped at 3 and 2
-    bool8 permanent;  // HAZARD: put back at the end of each turn
+    // WEATHER, TERRAIN
+    u8 weather;   // ENUM_WEATHER_*
+    u8 terrain;   // ENUM_TERRAIN_*
+    u8 turns;     // without permanent
+    // HAZARD: put back at the end of each turn. WEATHER, TERRAIN: locked, nothing replaces or removes it
+    bool8 permanent;
 };
 
 // extra_ability of the skill. The abilities themselves come from Trainer.hellAbilities (GetExtraAbilityToSetToBattler),
@@ -450,14 +456,15 @@ struct InlineRun {
     bool8 shown;
 };
 
-// Scripts run last called first, so effects are run in reverse
+// This is made to ensure we're waiting at the end of effect chains that aren't waiting
+// Example: Many stats up don't have a wait message explicitely, this catches it.
 static void Show(InlineRun& run, const u8* script) {
     if (!run.shown) BattleScriptPushCursorAndCallback(BattleScript_WaitMessageEnd3);
     run.shown = TRUE;
     BattleScriptCall(script);
 }
 
-// Returns whether the hazard wasn't there yet, or had fewer layers
+// Returns true if we increased or applied some layers
 static int AddInlineHazard(u8 hazard, u8 layers) {
     struct SideTimer* timer = &gSideTimers[B_SIDE_PLAYER];
     u32* status = &gSideStatuses[B_SIDE_PLAYER];
@@ -489,6 +496,53 @@ static int AddInlineHazard(u8 hazard, u8 layers) {
     return FALSE;
 }
 
+// Like TranslateStatId for weather
+static const u8 sInlineWeatherAnims[] = {
+    [ENUM_WEATHER_NONE] = 0,
+    [ENUM_WEATHER_RAIN] = B_ANIM_RAIN_CONTINUES,
+    [ENUM_WEATHER_SUN] = B_ANIM_SUN_CONTINUES,
+    [ENUM_WEATHER_SANDSTORM] = B_ANIM_SANDSTORM_CONTINUES,
+    [ENUM_WEATHER_HAIL] = B_ANIM_HAIL_CONTINUES,
+    [ENUM_WEATHER_SUN_PRIMAL] = B_ANIM_SUN_CONTINUES,
+    [ENUM_WEATHER_RAIN_PRIMAL] = B_ANIM_RAIN_CONTINUES,
+    [ENUM_WEATHER_STRONG_WINDS] = B_ANIM_STRONG_WINDS,
+    [ENUM_WEATHER_FOG] = B_ANIM_FOG_CONTINUES,
+};
+
+static int SetInlineWeather(const InlineEffect& effect, u8 battler) {
+    if (effect.permanent) return SetPermanentWeather(effect.weather);
+    CHECK(TryChangeBattleWeather(battler, effect.weather, TRUE))
+    gWishFutureKnock.weatherDuration = effect.turns;
+    return TRUE;
+}
+
+// Mapping to grab the string and status
+// Like TranslateStatId for terrain
+static const struct {
+    u16 flag;
+    u8 message;
+} sInlineTerrains[] = {
+    [ENUM_TERRAIN_NONE] = {0, 0},
+    [ENUM_TERRAIN_ELECTRIC] = {STATUS_FIELD_ELECTRIC_TERRAIN, B_MSG_TERRAINBECOMESELECTRIC},
+    [ENUM_TERRAIN_GRASSY] = {STATUS_FIELD_GRASSY_TERRAIN, B_MSG_TERRAINBECOMESGRASSY},
+    [ENUM_TERRAIN_MISTY] = {STATUS_FIELD_MISTY_TERRAIN, B_MSG_TERRAINBECOMESMISTY},
+    [ENUM_TERRAIN_PSYCHIC] = {STATUS_FIELD_PSYCHIC_TERRAIN, B_MSG_TERRAINBECOMESPSYCHIC},
+    [ENUM_TERRAIN_TOXIC] = {STATUS_FIELD_TOXIC_TERRAIN, B_MSG_TERRAINBECOMESTOXIC},
+};
+
+static int SetInlineTerrain(const InlineEffect& effect, u8 battler) {
+    u16 flag = sInlineTerrains[effect.terrain].flag;
+    if (effect.permanent) {
+        CHECK_NOT(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT)
+        gFieldStatuses = (gFieldStatuses & ~STATUS_FIELD_TERRAIN_ANY) | flag | STATUS_FIELD_TERRAIN_PERMANENT;
+        gBattleScripting.battler = battler;
+    } else {
+        CHECK(TryChangeBattleTerrain(battler, flag, &gFieldTimers.terrainTimer))
+        gFieldTimers.terrainTimer = effect.turns;
+    }
+    return TRUE;
+}
+
 static void RunInlineEffect(InlineRun& run, const InlineEffect& effect) {
     switch (effect.kind) {
         case InlineEffect::STAT_CHANGE:
@@ -508,9 +562,18 @@ static void RunInlineEffect(InlineRun& run, const InlineEffect& effect) {
                 Show(run, BattleScript_SkillHazard);
             }
             break;
+        case InlineEffect::WEATHER:
+            gBattleCommunication[MULTISTRING_CHOOSER] = sInlineWeatherAnims[effect.weather];
+            if (SetInlineWeather(effect, run.battler)) Show(run, BattleScript_SkillWeather);
+            break;
+        case InlineEffect::TERRAIN:
+            gBattleCommunication[MULTISTRING_CHOOSER] = sInlineTerrains[effect.terrain].message;
+            if (SetInlineTerrain(effect, run.battler)) Show(run, BattleScript_SurgeActivatesRet);
+            break;
     }
 }
 
+// Dirty trick to detect if we need to enforce a endturn hook to reapply
 static constexpr bool HasPermanentHazard(const InlineTrigger& trigger) {
     for (int i = 0; i < trigger.effectCount; i++)
         if (trigger.effects[i].kind == InlineEffect::HAZARD && trigger.effects[i].permanent) return true;

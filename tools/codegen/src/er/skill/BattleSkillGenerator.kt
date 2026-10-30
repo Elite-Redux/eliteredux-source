@@ -62,8 +62,8 @@ object BattleSkillGenerator : Generator {
       }
       // Each stat change and hazard is one battle script on the stack (20 slots), shared with the other skills
       for ((hook, ons) in skill.onList.groupBy { it.kindCase }) {
-        val scripts = ons.sumOf { on -> on.effectList.sumOf { it.statChange.statCount + it.hazard.hazardCount } }
-        check(scripts <= 8) { "$id: $scripts stat changes and hazards on ${hook.name.lowercase()}, max is 8" }
+        val scripts = ons.sumOf { on -> on.effectList.sumOf { it.statChange.statCount + it.hazard.hazardCount + if (it.hasWeather() || it.hasTerrain()) 2 else 0 } }
+        check(scripts <= 10) { "$id: too many effects at once on ${hook.name.lowercase()}" }
       }
       val (name, announceString) = skill.texts(id)
       writer.appendLine(
@@ -182,9 +182,36 @@ object BattleSkillGenerator : Generator {
         val bits = hazard.hazardList.joinToString(" | ") { "1 << SKILL_${it.name}" }
         ".kind = InlineEffect::HAZARD, .hazards = $bits, .layers = ${maxOf(hazard.layers, 1)}, .permanent = ${hazard.permanent}"
       }
-      InlineSkill.Effect.KindCase.TERRAIN,
-      InlineSkill.Effect.KindCase.WEATHER,
+      InlineSkill.Effect.KindCase.WEATHER -> {
+        val name = weather.weather.name
+        check(weather.weather != InlineSkill.SetWeather.Weather.WEATHER_NONE && weather.weather != InlineSkill.SetWeather.Weather.UNRECOGNIZED) {
+          "$skillId: weather without a weather"
+        }
+        val primal = name in listOf("WEATHER_SUN_PRIMAL", "WEATHER_RAIN_PRIMAL", "WEATHER_STRONG_WINDS")
+        check(!primal || weather.permanent) { "$skillId: $name can only be permanent" }
+        ".kind = InlineEffect::WEATHER, .weather = ENUM_$name, ${weather.durationCase.toCpp(skillId, weather.turns, weather.permanent)}"
+      }
+      InlineSkill.Effect.KindCase.TERRAIN -> {
+        check(terrain.terrain != InlineSkill.SetTerrain.Terrain.TERRAIN_NONE && terrain.terrain != InlineSkill.SetTerrain.Terrain.UNRECOGNIZED) {
+          "$skillId: terrain without a terrain"
+        }
+        ".kind = InlineEffect::TERRAIN, .terrain = ENUM_${terrain.terrain.name}, ${terrain.durationCase.toCpp(skillId, terrain.turns, terrain.permanent)}"
+      }
       InlineSkill.Effect.KindCase.USE_MOVE -> error("$skillId: ${kindCase.name.lowercase()} effects aren't in battle_skills.cc yet")
       else -> error("$skillId: effect without a kind")
+    }
+
+  // turns or permanent of a weather or terrain. The oneofs are generated per message, so this takes their name.
+  private fun Enum<*>.toCpp(skillId: String, turns: Int, permanent: Boolean): String =
+    when (name) {
+      "TURNS" -> {
+        check(turns in 1..255) { "$skillId: turns $turns isn't between 1 and 255" }
+        ".turns = $turns"
+      }
+      "PERMANENT" -> {
+        check(permanent) { "$skillId: permanent: false, use turns" }
+        ".permanent = TRUE"
+      }
+      else -> error("$skillId: needs turns or permanent")
     }
 }
