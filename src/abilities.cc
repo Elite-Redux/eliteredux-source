@@ -12996,6 +12996,15 @@ constexpr Ability Impl<ABILITY_VERSATILE> = {
     .omniStab = TRUE,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_POWER_SHOES> = {
+    .onOffensiveMultiplier = Impl<ABILITY_STRIKER>.onOffensiveMultiplier,
+    .onChooseDefensiveStat =
+        +[](ON_CHOOSE_DEFENSIVE_STAT) {
+            if (IsStrikerBoosted(battler, move)) *defStatToUse = STAT_SPDEF;
+        },
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
