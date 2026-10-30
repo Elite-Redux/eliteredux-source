@@ -12993,6 +12993,7 @@ template <>
 constexpr Ability Impl<ABILITY_VERSATILE> = {
     .onBeforeAttack = Impl<ABILITY_RKS_SYSTEM>.onBeforeAttack,
     .randomizerBanned = TRUE,
+    .omniStab = TRUE,
 };
 
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
