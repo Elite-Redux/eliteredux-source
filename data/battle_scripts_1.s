@@ -12653,16 +12653,19 @@ BattleScript_ExtraSkillEviolite::
 BattleScript_ExtraAbilities1::
 	call BattleScript_ExtraSkillPopup
 	printstring STRINGID_EXTRA_ABILITIES_1
+	waitmessage B_WAIT_TIME_LONG
 	end2
 
 BattleScript_ExtraAbilities2::
 	call BattleScript_ExtraSkillPopup
 	printstring STRINGID_EXTRA_ABILITIES_2
+	waitmessage B_WAIT_TIME_LONG
 	end2
 
 BattleScript_ExtraAbilities3::
 	call BattleScript_ExtraSkillPopup
 	printstring STRINGID_EXTRA_ABILITIES_3
+	waitmessage B_WAIT_TIME_LONG
 	end2
 
 BattleScript_ExtraSkillNoProtect::
