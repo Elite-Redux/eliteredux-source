@@ -9031,7 +9031,7 @@ BattleScript_StackBattlerStatUp::
 	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_RestoreAttackerReturn
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_RestoreAttackerReturn
 	setgraphicalstatchangevalues
-	playanimation BS_ABILITY_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printfromtable gStatUpStringIds
 	readattackerfromstack3
 	return
