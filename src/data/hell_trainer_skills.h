@@ -4,29 +4,14 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_NO_PROTECT, 0, 0},
         [HELL_MODE_TRAINER_SKILL_3] = {BATTLE_EVENT_LAST_STAND_STAGES, 5, 2},
     },
-    [TRAINER_BILLY] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_UNNERVE, 0},
-    },
-    [TRAINER_DARIAN] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_INNARDS_OUT, 0},
-    },
     [TRAINER_CINDY_1] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_CUTE_CHARM, 0},
-    },
-    [TRAINER_LYLE] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SWORD_OF_RUIN, 0},
     },
     [TRAINER_WINSTON_1] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_CHEAP_TACTICS, 0},
     },
     [TRAINER_HALEY_1] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SHELL_ARMOR, 0},
-    },
-    [TRAINER_IVAN] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SUPER_LUCK, 0},
-    },
-    [TRAINER_GRUNT_PETALBURG_WOODS] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_FILTER, 0},
     },
     [TRAINER_TIANA] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_ONSTAY_LEECH_SEED, 0, 0},
@@ -37,16 +22,8 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     [TRAINER_TOMMY] = {
         [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_LAST_BLEED, 2, 0}, // Last bleed does not affect the first Pokémon
     },
-    [TRAINER_GINA_AND_MIA_1] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_FLASH_FIRE, 0},
-    },
     [TRAINER_MARC] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_LAST_STAND_STAGES, 5, 2},
-    },
-    [TRAINER_ROXANNE_1] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_PRESSURE, 0},
-        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_SHED_SKIN, 0},
-        [HELL_MODE_TRAINER_SKILL_3] = {BATTLE_EVENT_EXTRA_ABILITIES_3, ABILITY_SELF_SUFFICIENT, 0},
     },
     // ==== Route 116 ====
     [TRAINER_JOSE] = {
@@ -74,16 +51,12 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     //[TRAINER_DEVAN] = {
         // TODO: Permanent sand (can be overwritted by player)
     //},
-    [TRAINER_NIDO_MEGAS_ROUTE116_RUSTURF] = {
+    //[TRAINER_NIDO_MEGAS_ROUTE116_RUSTURF] = {
         // Emperor's Wrath should be the same as Queen's Mourning + King's Wrath
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_EMPERORS_WRATH, 0},
         // TODO: All mons use Tickle each turn
         // TODO: AI uses Tailwind after death
-    },
+    //},
     // ==== Rusturf Tunnel ====
-    [TRAINER_GRUNT_RUSTURF_TUNNEL] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SMOKEY_MANEUVERS, 0},
-    },
     //[TRAINER_MIKE_2] = {
         // TODO: All mons use Power Trip on entry
     //},
@@ -113,19 +86,13 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_STURDY, 0},
     },
     // ==== Route 105 ====
-    [TRAINER_IMANI] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_COMATOSE, 0},
-        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_SWEET_DREAMS, 0},
+    //[TRAINER_IMANI] = {
         // TODO: Inflicts sleep when hit by attack (assume only for AI?)
-    },
-    [TRAINER_DOMINIK] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_WEATHER_DOUBLE_BOOST, 0},
-        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_SUN_WORSHIP, 0},
+    //},
+    //[TRAINER_DOMINIK] = {
         // TODO: Permanent sun (not sure if changeable by player)
-    },
+    //},
     [TRAINER_FOSTER] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_ACCELERATE, 0},
-        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_ANALYTIC, 0},
         [HELL_MODE_TRAINER_SKILL_3] = {BATTLE_EVENT_LAST_STAND_STAGES, 5, 1},
     },
     //[TRAINER_BEVERLY] = {
@@ -137,13 +104,11 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // Forced Tag Battle with Ruin Maniac Andres
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_RAINBOW, 0, 0},
         // TODO: Stat changes are shared between allies (not Sharing and Caring ability since that's all mons, not just allies)
-        // TODO: Reduce ally damage by 50% (pre-nerf Friend Guard)
     },
-    [TRAINER_LUIS] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_KNOW_YOUR_PLACE, 0},
+    //[TRAINER_LUIS] = {
         // TODO: Power of Fighting moves is doubled (all or just opponent?)
         // TODO: Last mon sent out gets +4 Def and Sp. Def
-    },
+    //},
     //[TRAINER_ANDRES_1] = {
         // Forced Tag Battle with Bird Keeper Josue
         // TODO: Pebble Shower used after attacking
@@ -162,18 +127,14 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     //[TRAINER_NED] = {
         // TODO: Rain
     //},
-    [TRAINER_DOUGLAS] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_STICKY_HOLD, 0},
+    //[TRAINER_DOUGLAS] = {
         // TODO: AI uses recycle at end of turn
-    },
+    //},
     [TRAINER_KAYLA] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_MYSTIC_POWER, 0},
         // TODO: Hazards cannot be removed by player
     },
     // ==== GRANITE CAVE ====
-    [TRAINER_STEVEN_GRANITE_CAVE] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_PRIMORDIAL_SEA, 0},
-    },
     // TODO: Steven Stone Post Brawly?
     // TODO: Black Belt Hitmonstone
     // ==== ROUTE 107 ====
@@ -282,12 +243,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // TODO: Passive Heavy Duty Boots effect
     },
     // ==== ROUTE 109 ====
-    [TRAINER_LOLA_1] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_COMATOSE, 0},
-    },
-    [TRAINER_ELIJAH] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_MOUNTAINEER, 0},
-    },
     //[TRAINER_CARTER] = {
         // TODO: Opponents use sub on switch in
     //},
@@ -309,34 +264,25 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     //[TRAINER_RICKY_1] = {
         // TODO: Soaks all player mons?
     //},
-    [TRAINER_MEL_AND_PAUL] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_VOLT_ABSORB, 0},
-        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_WATER_ABSORB, 0},
-    },
     //[TRAINER_ALICE] = {
         // TODO: Opponent has passive Leech Seed effect on player
         // TODO: Passive Leftover effect
     //},
-    [TRAINER_DAVID] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_REGENERATOR, 0},
+    //[TRAINER_DAVID] = {
         // TODO: Opponent uses Teleport every 2 turns
-    },
+    //},
     // ==== ROUTE 109 SEAHOUSE ====
     //[TRAINER_SIMON] = {
         // TODO: Perma Mud Sport (doc says old effect? not sure which one)
     //},
-    [TRAINER_JOHANNA] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_CUTE_CHARM, 0},
-    },
     [TRAINER_DWAYNE] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_MERCILESS, 0},
     },
     // ==== DEWFORD MANOR ====
-    [TRAINER_CROBATITE_DEWFORD_MANOR] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_TRICKSTER, 0},
+    //[TRAINER_CROBATITE_DEWFORD_MANOR] = {
         // TODO: Moves use Speed for damage calculation
         // TODO: Player moves are Normalized
-    },
+    //},
     // ==== DEWFORD GYM ====
     //[TRAINER_TAKAO] = {
         // TODO: All mons in fight are frostbitten
@@ -347,20 +293,16 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     //[TRAINER_CRISTIAN] = {
         // TODO: Increase highest stat by +2 at end of turn
     //},
-    [TRAINER_JOCELYN] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SCRAPPY, 0},
-    },
     //[TRAINER_BRENDEN] = {
         // TODO: Perma rain
     //},
     //[TRAINER_LILITH] = {
         // TODO: Buff ally's mon's Sp. Def by 25%
     //},
-    [TRAINER_BRAWLY_1] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_OLE, 0},
+    //[TRAINER_BRAWLY_1] = {
         // TODO: Priority moves fail if used by player (player can select another move after selecting a priority move though)
         // TODO: Passive Brightpowder
-    },
+    //},
     // ==== SLATEPORT CITY ====
     //[TRAINER_GRETA_SLATEPORT] = {
         // TODO: Player cannot switch by ANY means
