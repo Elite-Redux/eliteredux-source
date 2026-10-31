@@ -4500,6 +4500,7 @@ static void TurnValuesCleanUp(bool8 turnPassOnly) {
             ZERO(gRoundStructs[i])
 
             if (gVolatileStructs[i].isFirstTurn) gVolatileStructs[i].isFirstTurn--;
+            if (gVolatileStructs[i].turnsOnField < 0xFF) gVolatileStructs[i].turnsOnField++;
 
             if (gVolatileStructs[i].rechargeTimer) {
                 gVolatileStructs[i].rechargeTimer--;

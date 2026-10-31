@@ -7173,6 +7173,10 @@ static void Cmd_various(void) {
                         BattleScriptCall(BattleScript_AbilityPopUpStack);
                     })
             }
+            {
+                SkillEvent event = {.kind = SKILL_EVENT_FAINT, .battler = gActiveBattler, .other = gBattlerAttacker, .moveType = moveType, .move = gCurrentMove};
+                ON_SKILL(skill->events & SKILL_EVENT_BIT(SKILL_EVENT_FAINT), skill->onEvent(skillId, &event))
+            }
             ReadActiveScriptInitialStackState();
             break;
         case VARIOUS_TRY_ACTIVATE_SUPER_STRAIN:  // and variants
@@ -7199,6 +7203,10 @@ static void Cmd_various(void) {
                         gBattleScripting.abilityPopupOverwrite = ability;
                         BattleScriptCall(BattleScript_AbilityPopUpStack);
                     })
+            }
+            {
+                SkillEvent event = {.kind = SKILL_EVENT_FAINT, .battler = gActiveBattler, .other = MAX_BATTLERS_COUNT};
+                ON_SKILL(skill->events & SKILL_EVENT_BIT(SKILL_EVENT_FAINT), skill->onEvent(skillId, &event))
             }
             ReadActiveScriptInitialStackState();
             break;

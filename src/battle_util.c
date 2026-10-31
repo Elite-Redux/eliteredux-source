@@ -181,7 +181,8 @@ void HandleAction_UseMove(void) {
     gBattlerAttacker = GetTurnBattler();
     if (gBattleStruct->field_91 & 1 << gBattlerAttacker ||
         (!IsBattlerAlive(gBattlerAttacker) &&
-         !(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability && gBattleMoves[gQueuedExtraAttackData[0].move].effect == EFFECT_EXPLOSION))) {
+         !(gProcessingExtraAttacks && (gQueuedExtraAttackData[0].ability || gQueuedExtraAttackData[0].skill) &&
+           gBattleMoves[gQueuedExtraAttackData[0].move].effect == EFFECT_EXPLOSION))) {
         gCurrentActionFuncId = B_ACTION_FINISHED;
         return;
     }
@@ -344,7 +345,7 @@ void HandleAction_UseMove(void) {
         }
     } else {
         if (gProcessingExtraAttacks && !IsBattlerAlive(gBattlerTarget) &&
-            !(gQueuedExtraAttackData[0].ability && gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)) {
+            !((gQueuedExtraAttackData[0].ability || gQueuedExtraAttackData[0].skill) && gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)) {
             gCurrentActionFuncId = B_ACTION_TRY_FINISH;
         } else if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability) {
             gBattleScripting.abilityPopupOverwrite = gQueuedExtraAttackData[0].ability;
@@ -779,7 +780,8 @@ int TryPerformExtraAction() {
     while (gQueuedAttackCount) {
         gQueuedExtraAttackData[0] = gQueuedExtraAttackData[gQueuedAttackCount--];
         FILTER(IsBattlerAlive(gQueuedExtraAttackData[0].attacker) ||
-               (gQueuedExtraAttackData[0].ability && gBattleMoves[gQueuedExtraAttackData[0].move].effect == EFFECT_EXPLOSION))
+               ((gQueuedExtraAttackData[0].ability || gQueuedExtraAttackData[0].skill) &&
+                gBattleMoves[gQueuedExtraAttackData[0].move].effect == EFFECT_EXPLOSION))
         ClearMiscTurnFlags();
         gProcessingExtraAttacks = TRUE;
         gCurrentActionFuncId = B_ACTION_USE_MOVE;
@@ -828,6 +830,12 @@ void TryPreemptiveActions() {
     for (u8 opponent = GetOppositeSide(battler); opponent < gBattlersCount; opponent += 2) {
         FILTER(IsBattlerAlive(opponent))
         ON_ABILITY(opponent, TRUE, gAbilities[ability].onPreemptAction, gAbilities[ability].onPreemptAction(opponent, ability, battler))
+    }
+
+    // Hell mode skills reacting to a switch out, they queue a move like Pursuit
+    if (gCurrentActionFuncId == B_ACTION_SWITCH && IsBattlerAlive(battler)) {
+        SkillEvent event = {.kind = SKILL_EVENT_SWITCH_OUT, .battler = battler, .other = MAX_BATTLERS_COUNT};
+        ON_SKILL(skill->events & SKILL_EVENT_BIT(SKILL_EVENT_SWITCH_OUT), skill->onEvent(skillId, &event))
     }
 
     if (gQueuedAttackCount) {
@@ -1255,6 +1263,29 @@ void PrepareStringBattle(u16 stringId, u8 battler) {
         if (any) {
             // EmitPrintString needs statChanger to be correct for printing the string, so queue a stack restoration to be completed after the string is
             // printed.
+            BattleScriptCall(BattleScript_RestoreStackState);
+            gBattleScripting.statChanger = currentStatChanger;
+        }
+    }
+
+    // Hell mode skills reacting to a stat stage change, the same way as Defiant above
+    if (stringId == STRINGID_ATTACKERSSTATROSE || stringId == STRINGID_DEFENDERSSTATROSE || stringId == STRINGID_ATTACKERSSTATFELL ||
+        stringId == STRINGID_DEFENDERSSTATFELL) {
+        bool8 onAttacker = stringId == STRINGID_ATTACKERSSTATROSE || stringId == STRINGID_ATTACKERSSTATFELL;
+        bool8 up = stringId == STRINGID_ATTACKERSSTATROSE || stringId == STRINGID_DEFENDERSSTATROSE;
+        StatChanger currentStatChanger = gBattleScripting.statChanger;
+        SkillEvent event = {
+            .kind = SKILL_EVENT_STAT_CHANGE,
+            .battler = onAttacker ? gBattlerAttacker : gBattlerTarget,
+            .other = onAttacker ? MAX_BATTLERS_COUNT : gBattlerAttacker,
+            .stat = currentStatChanger.statId,
+            .change = up ? 1 : -1,
+        };
+        int any = FALSE;
+        if (IsBattlerAlive(event.battler)) {
+            ON_SKILL(skill->events & SKILL_EVENT_BIT(SKILL_EVENT_STAT_CHANGE), any |= skill->onEvent(skillId, &event))
+        }
+        if (any) {
             BattleScriptCall(BattleScript_RestoreStackState);
             gBattleScripting.statChanger = currentStatChanger;
         }
@@ -4515,6 +4546,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
         case ABILITYEFFECT_MOVE_END:  // Think contact abilities.
             for (i = 0; i <= GetNumPossibleAbilitiesForBattler(); i++) {
                 effect += HandleDefenderAbility(i, battler, gBattlerAttacker, move);
+            }
+            // Hell mode skills reacting to the hit. Moves used by skills and abilities on their own don't count.
+            // A damaging move it's immune to counts too, the skill filters it
+            if (!gProcessingExtraAttacks && GetBattlerSide(battler) != GetBattlerSide(gBattlerAttacker) && IsBattlerAlive(battler) &&
+                (DidMoveHit() || (gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE && !IS_MOVE_STATUS(move)))) {
+                SkillEvent event = {.kind = SKILL_EVENT_HIT, .battler = battler, .other = gBattlerAttacker, .moveType = moveType, .move = move};
+                ON_SKILL(skill->events & SKILL_EVENT_BIT(SKILL_EVENT_HIT), effect += skill->onEvent(skillId, &event))
             }
             break;
 
