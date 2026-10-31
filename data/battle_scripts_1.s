@@ -12539,6 +12539,110 @@ BattleScript_SkillWeather::
 	call BattleScript_OnWeatherChange
 	return
 
+@ chooser: SKILL_SIDE_*, gStackBattler1 uses it (the side the move would come from), gStackBattler2 is on the other side
+BattleScript_SkillSideCondition::
+	saveattackerandtargetto34
+	copybyte gBattlerAttacker, gStackBattler1
+	copybyte gBattlerTarget, gStackBattler2
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_SIDE_TOXIC_SPIKES, BattleScript_SkillSideToxicSpikes
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_SIDE_STEALTH_ROCK, BattleScript_SkillSideStealthRock
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_SIDE_STICKY_WEB, BattleScript_SkillSideStickyWeb
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_SIDE_REFLECT, BattleScript_SkillSideReflect
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_SIDE_LIGHT_SCREEN, BattleScript_SkillSideLightScreen
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_SIDE_AURORA_VEIL, BattleScript_SkillSideAuroraVeil
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_SIDE_SAFEGUARD, BattleScript_SkillSideSafeguard
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_SIDE_MIST, BattleScript_SkillSideMist
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_SIDE_TAILWIND, BattleScript_SkillSideTailwind
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_SIDE_LUCKY_CHANT, BattleScript_SkillSideLuckyChant
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_SIDE_SWAMP, BattleScript_SkillSideSwamp
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_SIDE_SEA_OF_FIRE, BattleScript_SkillSideSeaOfFire
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_SIDE_RAINBOW, BattleScript_SkillSideRainbow
+	playmoveanimation BS_ATTACKER, MOVE_SPIKES @ and caltrops
+	goto BattleScript_SkillSideConditionEnd
+BattleScript_SkillSideToxicSpikes:
+	playmoveanimation BS_ATTACKER, MOVE_TOXIC_SPIKES
+	goto BattleScript_SkillSideConditionEnd
+BattleScript_SkillSideStealthRock:
+	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
+	goto BattleScript_SkillSideConditionEnd
+BattleScript_SkillSideStickyWeb:
+	playmoveanimation BS_ATTACKER, MOVE_STICKY_WEB
+	goto BattleScript_SkillSideConditionEnd
+BattleScript_SkillSideReflect:
+	playmoveanimation BS_ATTACKER, MOVE_REFLECT
+	goto BattleScript_SkillSideConditionEnd
+BattleScript_SkillSideLightScreen:
+	playmoveanimation BS_ATTACKER, MOVE_LIGHT_SCREEN
+	goto BattleScript_SkillSideConditionEnd
+BattleScript_SkillSideAuroraVeil:
+	playmoveanimation BS_ATTACKER, MOVE_AURORA_VEIL
+	goto BattleScript_SkillSideConditionEnd
+BattleScript_SkillSideSafeguard:
+	playmoveanimation BS_ATTACKER, MOVE_SAFEGUARD
+	goto BattleScript_SkillSideConditionEnd
+BattleScript_SkillSideMist:
+	playmoveanimation BS_ATTACKER, MOVE_MIST
+	goto BattleScript_SkillSideConditionEnd
+BattleScript_SkillSideTailwind:
+	playmoveanimation BS_ATTACKER, MOVE_TAILWIND
+	goto BattleScript_SkillSideConditionEnd
+BattleScript_SkillSideLuckyChant:
+	playmoveanimation BS_ATTACKER, MOVE_LUCKY_CHANT
+	goto BattleScript_SkillSideConditionEnd
+BattleScript_SkillSideSwamp:
+	playanimation BS_TARGET, B_ANIM_SWAMP
+	goto BattleScript_SkillSideConditionEnd
+BattleScript_SkillSideSeaOfFire:
+	playanimation BS_TARGET, B_ANIM_SEA_OF_FIRE
+	goto BattleScript_SkillSideConditionEnd
+BattleScript_SkillSideRainbow:
+	playanimation BS_ATTACKER, B_ANIM_RAINBOW
+BattleScript_SkillSideConditionEnd:
+	waitanimation
+	restoreattackerandtargetfrom34
+	return
+
+@ chooser: SKILL_FIELD_*, gStackBattler1 uses it
+BattleScript_SkillField::
+	saveattackertostack3
+	copybyte gBattlerAttacker, gStackBattler1
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_FIELD_WONDER_ROOM, BattleScript_SkillFieldWonderRoom
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_FIELD_MAGIC_ROOM, BattleScript_SkillFieldMagicRoom
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_FIELD_INVERSE_ROOM, BattleScript_SkillFieldInverseRoom
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_FIELD_GRAVITY, BattleScript_SkillFieldGravity
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_FIELD_MUD_SPORT, BattleScript_SkillFieldMudSport
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_FIELD_WATER_SPORT, BattleScript_SkillFieldWaterSport
+	playmoveanimation BS_ATTACKER, MOVE_TRICK_ROOM
+	goto BattleScript_SkillFieldEnd
+BattleScript_SkillFieldWonderRoom:
+	playmoveanimation BS_ATTACKER, MOVE_WONDER_ROOM
+	goto BattleScript_SkillFieldEnd
+BattleScript_SkillFieldMagicRoom:
+	playmoveanimation BS_ATTACKER, MOVE_MAGIC_ROOM
+	goto BattleScript_SkillFieldEnd
+BattleScript_SkillFieldInverseRoom:
+	playmoveanimation BS_ATTACKER, MOVE_INVERSE_ROOM
+	goto BattleScript_SkillFieldEnd
+BattleScript_SkillFieldGravity:
+	playmoveanimation BS_ATTACKER, MOVE_GRAVITY
+	goto BattleScript_SkillFieldEnd
+BattleScript_SkillFieldMudSport:
+	playmoveanimation BS_ATTACKER, MOVE_MUD_SPORT
+	goto BattleScript_SkillFieldEnd
+BattleScript_SkillFieldWaterSport:
+	playmoveanimation BS_ATTACKER, MOVE_WATER_SPORT
+BattleScript_SkillFieldEnd:
+	waitanimation
+	readattackerfromstack3
+	return
+
+@ chooser: MOVE_EFFECT_* (all under 256), gStackBattler1 gives it to gStackBattler2. The move effect isn't
+@ kept per script like the chooser, so it's set here
+BattleScript_SkillStatus::
+	sethword sMOVE_EFFECT, 0
+	copybyte sMOVE_EFFECT, cMULTISTRING_CHOOSER
+	goto BattleScript_AbilityStatusEffectSafe
+
 BattleScript_AnnounceBattleSkill::
 	extraskillpopup 1
 	setbyte cMULTISTRING_CHOOSER, TABLE_SPECIAL_BATTLE_SKILL_ANNOUNCE
@@ -12550,6 +12654,11 @@ BattleScript_AnnounceBattleSkill::
 BattleScript_WaitMessageEnd3::
 	waitmessage B_WAIT_TIME_LONG
 	end3
+
+@ Same, for skills that fire in the middle of another script (a move hitting, a Pokemon fainting...)
+BattleScript_WaitMessageReturn::
+	waitmessage B_WAIT_TIME_LONG
+	return
 
 BattleScript_AnnounceBattleSkillEnd3::
 	call BattleScript_AnnounceBattleSkill
