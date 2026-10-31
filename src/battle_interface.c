@@ -3167,9 +3167,11 @@ static void PrintOnExtraskillPopUp(const u8* str, u8* spriteTileData1, u8* sprit
 
     width = GetStringWidth(FONT_SMALL, str, 0);
 
-    if (width > MAX_POPUP_STRING_WIDTH - 5) {
-        windowTileData = AddTextPrinterAndCreateWindowOnExtraskillPopUp(str, x2 - MAX_POPUP_STRING_WIDTH, y, color1, color2, color3, &windowId);
-        TextIntoExtraskillPopUp(spriteTileData2, windowTileData, 3, (y == 0));
+    // The second sprite sits right after the first one, without the ability pop up's overlap. The negative x wraps
+    // around the u8 text cursor, and the letter on the wrap is lost, so wrap one tile early and skip that tile.
+    if (x1 + width > MAX_POPUP_STRING_WIDTH) {
+        windowTileData = AddTextPrinterAndCreateWindowOnExtraskillPopUp(str, x2 - MAX_POPUP_STRING_WIDTH + 8, y, color1, color2, color3, &windowId);
+        TextIntoExtraskillPopUp(spriteTileData2, windowTileData + 32, 3, (y == 0));
         RemoveWindow(windowId);
     }
 }
@@ -3211,7 +3213,7 @@ void CreateExtraSkillPopUp(const u8* name)  // parameter unused for now
     StartSpriteAnim(&gSprites[spriteId2], 0);
 
     // PrintExtraskillOnExtraskillPopUp(extraskill, spriteId1, spriteId2);
-    PrintOnAbilityPopUp(name,
+    PrintOnExtraskillPopUp(name,
                         (void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32) + 256,
                         (void*)(OBJ_VRAM0) + (gSprites[spriteId2].oam.tileNum * 32) + 256,
                         12,
