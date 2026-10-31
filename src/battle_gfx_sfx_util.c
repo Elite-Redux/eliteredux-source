@@ -339,7 +339,8 @@ static void SpriteCB_TrainerSlideVertical(struct Sprite *sprite) {
 void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status) {
     gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 1;
     if (!isStatus2) {
-        switch (status) {
+        // Sleep keeps its turn count in STATUS1_SLEEP, so it never equals it
+        switch (status & STATUS1_SLEEP ? STATUS1_SLEEP : status) {
             case STATUS1_FREEZE:
             case STATUS1_FROSTBITE:
                 LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_FRZ);
