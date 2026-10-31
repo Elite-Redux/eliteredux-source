@@ -1115,7 +1115,7 @@ const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pT
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
 static const u8 sText_ExtraSkillPermaStickyWeb[] = _("Permanent sticky web has been casted\naround {B_PLAYER_NAME}'s team.");
 static const u8 sText_LightWieldSetUpLightScreen[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s Light Wield\nset up Light Screen!");
-static const u8 sText_PkmnGotOverItsFear[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} got over\nits infatuation!");
+static const u8 sText_PkmnGotOverItsFear[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} got over\nits fear!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
