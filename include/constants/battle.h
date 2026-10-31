@@ -353,15 +353,7 @@ typedef enum Status4 : u32 {
 
 #define SIDE_STATUS_HAZARDS_ANY (SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_STEALTH_ROCK)
 
-// Hazards of the inline battle skills. Also the MULTISTRING_CHOOSER of BattleScript_SkillHazard
-#define SKILL_HAZARD_SPIKES 0
-#define SKILL_HAZARD_TOXIC_SPIKES 1
-#define SKILL_HAZARD_STEALTH_ROCK 2
-#define SKILL_HAZARD_STICKY_WEB 3
-#define SKILL_HAZARD_CALTROPS 4
-#define SKILL_HAZARD_COUNT 5
-
-// Side conditions of inline skills, see sInlineSideConditions in battle_skills.cc
+// Side conditions of inline skills (AddInlineSideCondition), also the chooser of BattleScript_SkillSideCondition
 #define SKILL_SIDE_SPIKES 0
 #define SKILL_SIDE_TOXIC_SPIKES 1
 #define SKILL_SIDE_STEALTH_ROCK 2
@@ -379,7 +371,7 @@ typedef enum Status4 : u32 {
 #define SKILL_SIDE_RAINBOW 14
 #define SKILL_SIDE_COUNT 15
 
-// Field statuses of inline skills, see sInlineFieldStatuses in battle_skills.cc
+// Field statuses of inline skills (AddInlineFieldStatus), also the chooser of BattleScript_SkillField
 #define SKILL_FIELD_TRICK_ROOM 0
 #define SKILL_FIELD_WONDER_ROOM 1
 #define SKILL_FIELD_MAGIC_ROOM 2
