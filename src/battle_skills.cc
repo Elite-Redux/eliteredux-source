@@ -14,6 +14,7 @@ extern "C" {
 #include "battle_util.h"
 #include "battle.h"
 #include "battle_anim.h"
+#include "constants/battle_string_ids.h"
 }
 
 #include "type_utils.hh"
@@ -410,62 +411,240 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_FOG> = {
         return RunEntryAnnounceScript(skill, BattleScript_ExtraSkillPermaFog);
     },
 };
-// Inline skills are written in the trainer data: proto/TrainerList.textproto with InlineSkill 
+// Inline skills are written in the trainer data: proto/TrainerList.textproto with InlineSkill
 // from proto/BattleSkillList.proto
 // Codegen turns each `on` block into an InlineTrigger and builds the skill with the InlineSkill template below.
-// For now, very simple structure that we can evolve later, no need to get in complex stuff for now
 
 struct InlineEffect {
-    enum Kind : u8 { STAT_CHANGE } kind;
-    u8 stat;
+    enum Kind : u8 { STAT_CHANGE, HAZARD, WEATHER, TERRAIN, USE_MOVE } kind;
+    // STAT_CHANGE
+    u8 statCount;
+    u8 stats[NUM_BATTLE_STATS - 1];  // STAT_*, STAT_HIGHEST_* are picked when it runs
     s8 amount;
+    // HAZARD, on the player's side
+    u8 hazards;  // bit per SKILL_HAZARD_*
+    u8 layers;   // spikes and toxic spikes are brought up to this many, capped at 3 and 2
+    // WEATHER, TERRAIN
+    u8 weather;   // ENUM_WEATHER_*
+    u8 terrain;   // ENUM_TERRAIN_*
+    u8 turns;     // without permanent
+    // HAZARD: put back at the end of each turn. WEATHER, TERRAIN: locked, nothing replaces or removes it
+    bool8 permanent;
+    // USE_MOVE
+    MoveEnum move;
+    u8 power;  // 0 keeps the move's power
+    bool8 falseSwipe;  // leaves the target at 1 HP at least
 };
+
+// extra_ability of the skill. The abilities themselves come from Trainer.hellAbilities (GetExtraAbilityToSetToBattler),
+// this is for the announce.
+struct InlineAbilities {
+    u8 count;
+    AbilityEnum ability[HELL_MODE_EXTRA_ABILITIES];
+};
+
+#define INLINE_MAX_EFFECTS 4
 
 struct InlineTrigger {
     enum Kind : u8 { ENTRY, END_TURN } kind;
     enum When : u8 { EVERY, LEAD } when;  // specific to ENTRY
-    InlineEffect effect;
+    u8 effectCount;
+    InlineEffect effects[INLINE_MAX_EFFECTS];
 };
 
-static int RunInlineEffect(const InlineEffect& effect, BattleSkillEnum skill, u8 battler) {
-    switch (effect.kind) {
-        case InlineEffect::STAT_CHANGE: {
-            u8 stat = TranslateStatId(effect.stat, battler);
-            CHECK(effect.amount > 0 ? CanRaiseStat(battler, stat) : CanLowerStat(battler, stat))
-            SetStatChanger(stat, effect.amount);
-            return RunEntryAnnounceScript(skill, BattleScript_BattleSkillStatChange);
-        }
+// One hook firing: the effects change the battle in C and queue their scripts with Show.
+// The skill is announced once, before all of them.
+struct InlineRun {
+    BattleSkillEnum skill;
+    u8 battler;
+    bool8 shown;
+};
+
+// This is made to ensure we're waiting at the end of effect chains that aren't waiting
+// Example: Many stats up don't have a wait message explicitely, this catches it.
+// Without a script, only the announce shows.
+static void Show(InlineRun& run, const u8* script) {
+    if (!run.shown) BattleScriptPushCursorAndCallback(BattleScript_WaitMessageEnd3);
+    run.shown = TRUE;
+    if (script) BattleScriptCall(script);
+}
+
+// Returns true if we increased or applied some layers
+static int AddInlineHazard(u8 hazard, u8 layers) {
+    struct SideTimer* timer = &gSideTimers[B_SIDE_PLAYER];
+    u32* status = &gSideStatuses[B_SIDE_PLAYER];
+    switch (hazard) {
+        case SKILL_HAZARD_SPIKES:
+            CHECK(timer->spikesAmount < min(layers, 3))
+            timer->spikesAmount = min(layers, 3);
+            *status |= SIDE_STATUS_SPIKES;
+            return TRUE;
+        case SKILL_HAZARD_TOXIC_SPIKES:
+            CHECK(timer->toxicSpikesAmount < min(layers, 2))
+            timer->toxicSpikesAmount = min(layers, 2);
+            *status |= SIDE_STATUS_TOXIC_SPIKES;
+            return TRUE;
+        case SKILL_HAZARD_STEALTH_ROCK:
+            CHECK_NOT(*status & SIDE_STATUS_STEALTH_ROCK)
+            *status |= SIDE_STATUS_STEALTH_ROCK;
+            timer->stealthRockType = TYPE_ROCK;
+            return TRUE;
+        case SKILL_HAZARD_STICKY_WEB:
+            CHECK_NOT(*status & SIDE_STATUS_STICKY_WEB)
+            *status |= SIDE_STATUS_STICKY_WEB;
+            return TRUE;
+        case SKILL_HAZARD_CALTROPS:
+            CHECK_NOT(timer->caltrops)
+            timer->caltrops = TRUE;
+            return TRUE;
     }
     return FALSE;
 }
 
-static int RunInlineTrigger(const InlineTrigger& trigger, InlineTrigger::Kind hook, BattleSkillEnum skill, u8 battler) {
-    CHECK(trigger.kind == hook)
+// Like TranslateStatId for weather
+static const u8 sInlineWeatherAnims[] = {
+    [ENUM_WEATHER_NONE] = 0,
+    [ENUM_WEATHER_RAIN] = B_ANIM_RAIN_CONTINUES,
+    [ENUM_WEATHER_SUN] = B_ANIM_SUN_CONTINUES,
+    [ENUM_WEATHER_SANDSTORM] = B_ANIM_SANDSTORM_CONTINUES,
+    [ENUM_WEATHER_HAIL] = B_ANIM_HAIL_CONTINUES,
+    [ENUM_WEATHER_SUN_PRIMAL] = B_ANIM_SUN_CONTINUES,
+    [ENUM_WEATHER_RAIN_PRIMAL] = B_ANIM_RAIN_CONTINUES,
+    [ENUM_WEATHER_STRONG_WINDS] = B_ANIM_STRONG_WINDS,
+    [ENUM_WEATHER_FOG] = B_ANIM_FOG_CONTINUES,
+};
+
+static int SetInlineWeather(const InlineEffect& effect, u8 battler) {
+    if (effect.permanent) return SetPermanentWeather(effect.weather);
+    CHECK(TryChangeBattleWeather(battler, effect.weather, TRUE))
+    gWishFutureKnock.weatherDuration = effect.turns;
+    return TRUE;
+}
+
+// Mapping to grab the string and status
+// Like TranslateStatId for terrain
+static const struct {
+    u16 flag;
+    u8 message;
+} sInlineTerrains[] = {
+    [ENUM_TERRAIN_NONE] = {0, 0},
+    [ENUM_TERRAIN_ELECTRIC] = {STATUS_FIELD_ELECTRIC_TERRAIN, B_MSG_TERRAINBECOMESELECTRIC},
+    [ENUM_TERRAIN_GRASSY] = {STATUS_FIELD_GRASSY_TERRAIN, B_MSG_TERRAINBECOMESGRASSY},
+    [ENUM_TERRAIN_MISTY] = {STATUS_FIELD_MISTY_TERRAIN, B_MSG_TERRAINBECOMESMISTY},
+    [ENUM_TERRAIN_PSYCHIC] = {STATUS_FIELD_PSYCHIC_TERRAIN, B_MSG_TERRAINBECOMESPSYCHIC},
+    [ENUM_TERRAIN_TOXIC] = {STATUS_FIELD_TOXIC_TERRAIN, B_MSG_TERRAINBECOMESTOXIC},
+};
+
+static int SetInlineTerrain(const InlineEffect& effect, u8 battler) {
+    u16 flag = sInlineTerrains[effect.terrain].flag;
+    if (effect.permanent) {
+        CHECK_NOT(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT)
+        gFieldStatuses = (gFieldStatuses & ~STATUS_FIELD_TERRAIN_ANY) | flag | STATUS_FIELD_TERRAIN_PERMANENT;
+        gBattleScripting.battler = battler;
+    } else {
+        CHECK(TryChangeBattleTerrain(battler, flag, &gFieldTimers.terrainTimer))
+        gFieldTimers.terrainTimer = effect.turns;
+    }
+    return TRUE;
+}
+
+// The move runs as its own action once the current one ends, at the first foe still standing
+static int QueueInlineMove(const InlineRun& run, const InlineEffect& effect) {
+    u8 target = BATTLE_OPPOSITE(run.battler);
+    if (!IsBattlerAlive(target)) target ^= BIT_FLANK;
+    CHECK(CanUseExtraMove(run.battler, target))
+    CHECK(gQueuedAttackCount < MAX_BATTLERS_COUNT)
+    gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+        .skill = run.skill,
+        .move = effect.move,
+        .movePower = effect.power,
+        .attacker = run.battler,
+        .target = target,
+        .falseSwipe = effect.falseSwipe,
+    };
+    return TRUE;
+}
+
+static void RunInlineEffect(InlineRun& run, const InlineEffect& effect) {
+    switch (effect.kind) {
+        case InlineEffect::STAT_CHANGE:
+            for (int i = effect.statCount - 1; i >= 0; i--) {
+                u8 stat = TranslateStatId(effect.stats[i], run.battler);
+                FILTER(effect.amount > 0 ? CanRaiseStat(run.battler, stat) : CanLowerStat(run.battler, stat))
+                SetStatChanger(stat, effect.amount);
+                Show(run, BattleScript_StackBattlerStatUp);
+            }
+            break;
+        case InlineEffect::HAZARD:
+            for (int i = SKILL_HAZARD_COUNT - 1; i >= 0; i--) {
+                FILTER(effect.hazards & (1 << i))
+                FILTER(AddInlineHazard(i, effect.layers))
+                // The script picks the animation, the chooser is kept for it until it runs
+                gBattleCommunication[MULTISTRING_CHOOSER] = i;
+                Show(run, BattleScript_SkillHazard);
+            }
+            break;
+        case InlineEffect::WEATHER:
+            gBattleCommunication[MULTISTRING_CHOOSER] = sInlineWeatherAnims[effect.weather];
+            if (SetInlineWeather(effect, run.battler)) Show(run, BattleScript_SkillWeather);
+            break;
+        case InlineEffect::TERRAIN:
+            gBattleCommunication[MULTISTRING_CHOOSER] = sInlineTerrains[effect.terrain].message;
+            if (SetInlineTerrain(effect, run.battler)) Show(run, BattleScript_SurgeActivatesRet);
+            break;
+        case InlineEffect::USE_MOVE:
+            if (QueueInlineMove(run, effect)) Show(run, NULL);
+            break;
+    }
+}
+
+// Dirty trick to detect if we need to enforce a endturn hook to reapply
+static constexpr bool HasPermanentHazard(const InlineTrigger& trigger) {
+    for (int i = 0; i < trigger.effectCount; i++)
+        if (trigger.effects[i].kind == InlineEffect::HAZARD && trigger.effects[i].permanent) return true;
+    return false;
+}
+
+// Take the `on` blocks of the hook, and execute them
+template <InlineTrigger... Triggers>
+static int RunInlineTriggers(InlineTrigger::Kind hook, BattleSkillEnum skill, u8 battler) {
     // For now, triggers are only checked from the trainer side
     CHECK(GetBattlerSide(battler) == B_SIDE_OPPONENT)
 
-    // Switches only get processed after the battle start, so this is only false for the leads
-    CHECK(trigger.when != InlineTrigger::LEAD || !gBattleStruct->canProcessSwitches)
-    return RunInlineEffect(trigger.effect, skill, battler);
-}
-
-// Take the `on` blocks, and execute them 
-template <InlineTrigger... Triggers>
-static int RunInlineTriggers(InlineTrigger::Kind hook, BattleSkillEnum skill, u8 battler) {
     constexpr InlineTrigger triggers[] = {Triggers...};
-    int ran = FALSE;
-    // Reverse order because pushed scripts run LIFO, and want it FIFO from the proto
-    for (int i = ARRAY_COUNT(triggers) - 1; i >= 0; i--) ran |= RunInlineTrigger(triggers[i], hook, skill, battler);
-    return ran;
+    InlineRun run = {.skill = skill, .battler = battler};
+    gBattleScripting.abilityPopupOverwrite = skill;
+    gStackBattler1 = gBattlerAbility = battler;
+
+    for (int i = ARRAY_COUNT(triggers) - 1; i >= 0; i--) {
+        const InlineTrigger& trigger = triggers[i];
+        // Switches only get processed after the battle start, so this is only false for the leads
+        bool8 on = trigger.kind == hook && (trigger.when != InlineTrigger::LEAD || !gBattleStruct->canProcessSwitches);
+        for (int j = trigger.effectCount - 1; j >= 0; j--) {
+            const InlineEffect& effect = trigger.effects[j];
+            // Permanent hazards are put back at the end of every turn, whatever their trigger
+            bool8 reapply = hook == InlineTrigger::END_TURN && effect.kind == InlineEffect::HAZARD && effect.permanent;
+            if (on || reapply) RunInlineEffect(run, effect);
+        }
+    }
+    CHECK(run.shown)
+    BattleScriptCall(BattleScript_AnnounceBattleSkill);
+    return TRUE;
 }
 
 // Hooks without a trigger stay null so ON_SKILL skips them if we comment them out from proto
-template <InlineTrigger... Triggers>
+template <InlineAbilities Abilities, InlineTrigger... Triggers>
 constexpr BattleSkill InlineSkill = [] {
     BattleSkill impl = {};
+    if constexpr (Abilities.count > 0)
+        impl.onBattleStart = +[](ON_BATTLE_START) -> int {
+            u8* buffers[] = {gBattleTextBuff1, gBattleTextBuff2, gBattleTextBuff3};
+            for (int i = 0; i < Abilities.count; i++) PREPARE_ABILITY_BUFFER(buffers[i], Abilities.ability[i]);
+            return RunEntryAnnounceScript(skill, BattleScript_AnnounceBattleSkillEnd3);
+        };
     if constexpr (((Triggers.kind == InlineTrigger::ENTRY) || ...))
         impl.onEntry = +[](ON_ENTRY) -> int { return RunInlineTriggers<Triggers...>(InlineTrigger::ENTRY, skill, battler); };
-    if constexpr (((Triggers.kind == InlineTrigger::END_TURN) || ...))
+    if constexpr (((Triggers.kind == InlineTrigger::END_TURN || HasPermanentHazard(Triggers)) || ...))
         impl.onEndTurn = +[](ON_END_TURN) -> int { return RunInlineTriggers<Triggers...>(InlineTrigger::END_TURN, skill, battler); };
     return impl;
 }();

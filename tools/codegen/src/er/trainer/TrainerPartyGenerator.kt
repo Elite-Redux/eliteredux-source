@@ -7,6 +7,7 @@ import er.GeneratorUtils.TRAINERS_LIST
 import er.GeneratorUtils.expandLearnset
 import er.GeneratorUtils.findLearnsetForSpecies
 import er.GeneratorUtils.inlineSkillId
+import er.proto.AbilityEnum
 import er.proto.BattleSkillEnum
 import er.proto.ItemEnum
 import er.proto.Nature
@@ -101,6 +102,8 @@ object TrainerPartyGenerator : Generator {
   }
 
   const val HELL_MODE_MAX_SKILLS = 3;
+  // Same as in include/constants/pokemon.h
+  const val HELL_MODE_EXTRA_ABILITIES = 3
 
   override fun generate(writer: OutputStreamWriter) {
     val allParties =
@@ -189,6 +192,14 @@ object TrainerPartyGenerator : Generator {
           
           val skills = List(HELL_MODE_MAX_SKILLS) { index -> hellSkills.getOrElse(index) { BattleSkillEnum.SKILL_NONE.name } } 
 
+          // From every inline skill of the trainer
+          val hellAbilities = hell.inlineSkillList.flatMap { skill -> skill.extraAbilityList.map { it.name } }
+          // Not in errors, those only show with VALIDATE_TRAINERS and the extra ones would be dropped
+          check(hellAbilities.size <= HELL_MODE_EXTRA_ABILITIES) {
+              "Trainer ${trainer.id} has ${hellAbilities.size} Hell extra abilities; max is ${HELL_MODE_EXTRA_ABILITIES}."
+          }
+          val abilities = List(HELL_MODE_EXTRA_ABILITIES) { index -> hellAbilities.getOrElse(index) { AbilityEnum.ABILITY_NONE.name } }
+
           val flags =
             buildList {
                 if (risky) add("AI_FLAG_RISKY")
@@ -225,6 +236,7 @@ object TrainerPartyGenerator : Generator {
             |$IND$IND.partySizeHell = ${actualHell.size},
             |$IND$IND.partyHell = __sParty_${actualHell.hashCode().toUInt()},
             |$IND$IND.hellSkills = { ${skills.joinToString(", ")} },
+            |$IND$IND.hellAbilities = { ${abilities.joinToString(", ")} },
             |$IND$IND.aiFlags = $flags,
             |$IND},
             """

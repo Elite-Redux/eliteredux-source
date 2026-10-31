@@ -1,6 +1,8 @@
 #ifndef GUARD_DATA_H
 #define GUARD_DATA_H
 
+#include "constants/pokemon.h"
+#include "generated/constants/abilities.h"
 #include "generated/constants/moves.h"
 #include "generated/constants/battle_skills.h"
 
@@ -78,6 +80,7 @@ struct Trainer {
     /*0x28*/ const TrainerMonItemCustomMoves * partyHell;
     /*0x2F*/ u16 trainerFlag;
     /*0x??*/ BattleSkillEnum hellSkills[HELL_MODE_MAX_SKILLS];
+    /*0x??*/ AbilityEnum hellAbilities[HELL_MODE_EXTRA_ABILITIES];
 };
 
 #define TRAINER_ENCOUNTER_MUSIC(trainer) ((gTrainers[trainer].encounterMusic_gender & 0x7F))

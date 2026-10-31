@@ -6468,7 +6468,7 @@ static void HandleTerrainMove(u32 moveEffect) {
             break;
     }
 
-    if (gFieldStatuses & statusFlag || statusFlag == 0) {
+    if (gFieldStatuses & statusFlag || statusFlag == 0 || gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) {
         gBattlescriptCurrInstr = ptr;
     } else {
         gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;
@@ -6576,7 +6576,7 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear) {
             return TRUE;
         }
     }
-    if (gBattleWeather & WEATHER_FOG_ANY) {
+    if (gBattleWeather & WEATHER_FOG_ANY && !FlagGet(FLAG_PERMANENT_UNCHANGEABLE_WEATHER)) {
         if (gBattleWeather & WEATHER_FOG_PERMANENT)
             gFieldTimers.fogReturnTimer = 99;
         else
@@ -7971,7 +7971,9 @@ static void Cmd_various(void) {
             }
             break;
         case VARIOUS_REMOVE_WEATHER:
-            if (gBattleWeather & WEATHER_SUN_PRIMAL)
+            if (FlagGet(FLAG_PERMANENT_UNCHANGEABLE_WEATHER))
+                SetActiveMultistringChooser(B_MSG_REMOVE_WEATHER_FAILED);
+            else if (gBattleWeather & WEATHER_SUN_PRIMAL)
                 SetActiveMultistringChooser(B_MSG_HARSH_SUNLIGHT_CANT_END);
             else if (gBattleWeather & WEATHER_RAIN_PRIMAL)
                 SetActiveMultistringChooser(B_MSG_HEAVY_RAIN_WONT_END);

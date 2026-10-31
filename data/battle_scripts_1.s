@@ -9325,6 +9325,10 @@ BattleScript_AttackerUsedAnExtraMove::
 	waitmessage B_WAIT_TIME_SHORT
 	gotoactualmove BS_ATTACKER
 
+BattleScript_SkillUsedAnExtraMove::
+	extraskillpopup 1
+	gotoactualmove BS_ATTACKER
+
 BattleScript_AttackerUsedAnExtraMoveOnSwitchIn::
 	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
@@ -12510,6 +12514,31 @@ BattleScript_ExtraSkillLuckyChant::
 	waitanimation
 	end2
 
+BattleScript_SkillHazard::
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	setbyte gBattlerTarget B_POSITION_PLAYER_LEFT
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_HAZARD_TOXIC_SPIKES, BattleScript_SkillHazardToxicSpikes
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_HAZARD_STEALTH_ROCK, BattleScript_SkillHazardStealthRock
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_HAZARD_STICKY_WEB, BattleScript_SkillHazardStickyWeb
+	playmoveanimation BS_ATTACKER, MOVE_SPIKES
+	goto BattleScript_SkillHazardEnd
+BattleScript_SkillHazardToxicSpikes:
+	playmoveanimation BS_ATTACKER, MOVE_TOXIC_SPIKES
+	goto BattleScript_SkillHazardEnd
+BattleScript_SkillHazardStealthRock:
+	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
+	goto BattleScript_SkillHazardEnd
+BattleScript_SkillHazardStickyWeb:
+	playmoveanimation BS_ATTACKER, MOVE_STICKY_WEB
+BattleScript_SkillHazardEnd:
+	waitanimation
+	return
+
+BattleScript_SkillWeather::
+	playanimation2 BS_BATTLER_0, cMULTISTRING_CHOOSER, NULL
+	call BattleScript_OnWeatherChange
+	return
+
 BattleScript_AnnounceBattleSkill::
 	extraskillpopup 1
 	setbyte cMULTISTRING_CHOOSER, TABLE_SPECIAL_BATTLE_SKILL_ANNOUNCE
@@ -12517,18 +12546,13 @@ BattleScript_AnnounceBattleSkill::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
-BattleScript_AnnounceBattleSkillEnd3::
-	call BattleScript_AnnounceBattleSkill
+@ So the last line of a chain of scripts stays up before the next one prints
+BattleScript_WaitMessageEnd3::
+	waitmessage B_WAIT_TIME_LONG
 	end3
 
-BattleScript_BattleSkillStatChange::
+BattleScript_AnnounceBattleSkillEnd3::
 	call BattleScript_AnnounceBattleSkill
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_NOT_PROTECT_AFFECTED | MOVE_EFFECT_CERTAIN, BattleScript_End3
-	setgraphicalstatchangevalues
-	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	waitanimation
-	printfromtable gStatUpStringIds
-	waitmessage B_WAIT_TIME_LONG
 	end3
 
 BattleScript_ExtraSkillEviolite::

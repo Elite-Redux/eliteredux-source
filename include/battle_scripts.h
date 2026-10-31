@@ -591,6 +591,7 @@ extern const u8 BattleScript_PrintDamageDoneString[];
 extern const u8 BattleScript_BeakBlastSetUp[];
 extern const u8 BattleScript_AttackerUsedAnExtraMove[];
 extern const u8 BattleScript_AttackerUsedAnExtraMoveOnSwitchIn[];
+extern const u8 BattleScript_SkillUsedAnExtraMove[];
 extern const u8 BattleScript_DefenderEffectSpeedDownHit[];
 extern const u8 BattleScript_DefenderSetsSpikeLayer_Scrapyard[];
 extern const u8 BattleScript_DoubleSpikesOnEntry[];
@@ -782,7 +783,10 @@ extern const u8 BattleScript_ExtraAbilities1[];
 extern const u8 BattleScript_ExtraAbilities2[];
 extern const u8 BattleScript_ExtraAbilities3[];
 extern const u8 BattleScript_AnnounceBattleSkillEnd3[];
-extern const u8 BattleScript_BattleSkillStatChange[];
+extern const u8 BattleScript_AnnounceBattleSkill[];
+extern const u8 BattleScript_WaitMessageEnd3[];
+extern const u8 BattleScript_SkillHazard[];
+extern const u8 BattleScript_SkillWeather[];
 
 extern const u8 BattleScript_ExtraSkillEviolite[];
 
