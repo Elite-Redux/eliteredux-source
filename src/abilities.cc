@@ -13027,6 +13027,15 @@ constexpr Ability Impl <ABILITY_SHARPSHOOTER> = {
         },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_HIGH_RISE> = {
+    ATE_ABILITY(TYPE_STEEL),
+    .onAfterTypeEffectiveness = Impl<ABILITY_STEELWORKER>.onAfterTypeEffectiveness,
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
+    .breakable = TRUE,
+    .mirrorArmor = TRUE,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
