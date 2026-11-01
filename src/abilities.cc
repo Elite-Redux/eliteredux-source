@@ -11792,9 +11792,11 @@ constexpr Ability Impl<ABILITY_SUPERHEAVY> = {
 
 template <>
 constexpr Ability Impl<ABILITY_WATERBORNE> = {
-    .onEntry = Impl<ABILITY_AQUATIC>.onEntry,
+    .onAttacker = Impl<ABILITY_HYDRATE>.onAttacker,
+    .onAfterTypeEffectiveness = Impl<ABILITY_HYDRATE>.onAfterTypeEffectiveness,
+    .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .adaptability = TRUE,
-    .addsType = Impl<ABILITY_AQUATIC>.addsType,
+    ATE_ABILITY(TYPE_WATER),
 };
 
 template <>
