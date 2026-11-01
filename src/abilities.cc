@@ -12821,6 +12821,7 @@ constexpr Ability Impl<ABILITY_SOUR_APPLE> = {
     .onStatusImmune = Impl<ABILITY_AROMA_VEIL>.onStatusImmune,
     .onStatusImmuneFor = APPLY_ON_ALLY,
     .breakable = TRUE,
+    .levitate = TRUE,
 };
 
 template <>
