@@ -12985,6 +12985,19 @@ constexpr Ability Impl<ABILITY_FEARLESS> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_CLEANSE> = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        int counter = GetSingleUseAbilityCounter(battler, ability);
+        CHECK(counter < 2)
+        CHECK(UseEntryMove(battler, ability, MOVE_HEAL_BELL, 0))
+
+        SetSingleUseAbilityCounter(battler, ability, counter + 1);
+        return TRUE;
+    },
+    .persistent = TRUE,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_GNAWING_AWAY> = {
     .onAttacker = Impl<ABILITY_CRUSHING_JAW>.onAttacker,
 };
