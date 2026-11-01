@@ -13018,6 +13018,15 @@ constexpr Ability Impl<ABILITY_POWER_SHOES> = {
         },
 };
 
+template <>
+constexpr Ability Impl <ABILITY_SHARPSHOOTER> = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            Impl<ABILITY_SNIPER>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+            Impl<ABILITY_MEGA_LAUNCHER>.onOffensiveMultiplier(DELEGATE_OFFENSIVE_MULTIPLIER);
+        },
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
