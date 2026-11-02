@@ -85,7 +85,7 @@ EWRAM_DATA static u8 sSaveInfoWindowId = 0;
 EWRAM_DATA static bool8 canSave = TRUE;
 
 #if defined(DEBUG_BUILD)
-static const u8 sText_SavingVersionNumShort[] = _("v2.65.4.1");
+static const u8 sText_SavingVersionNumShort[] = _("v2.65.4.2");
 #endif
 
 // Menu action callbacks
