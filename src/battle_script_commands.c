@@ -10637,7 +10637,7 @@ static void Cmd_metronome(void) {
             default:
                 allowed = TRUE;
         }
-    } while (!allowed && !gBattleMoves[move].metronomeBanned && !gBattleMoves[move].twoTurnMove);
+    } while (!allowed || gBattleMoves[move].metronomeBanned || gBattleMoves[move].twoTurnMove || IsTwoTurnsMove(move));
 
     gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
         .attacker = gBattlerAttacker,
