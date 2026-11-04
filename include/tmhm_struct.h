@@ -68,6 +68,6 @@ typedef union TutorUnion
 extern const u16 gTutorMoveMapping[];
 
 u16 GetTmMove(u8 tmId);
-u16 GetTutorMove(u8 tutorId);
+u16 GetTutorMove(u16 tutorId);
 
 #endif

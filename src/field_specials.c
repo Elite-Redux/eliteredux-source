@@ -3191,7 +3191,7 @@ void sub_813ADD4(void) {
 }
 
 void GetBattleFrontierTutorMoveIndex(void) {
-    u8 i;
+    u16 i;
     u16 moveTutor = 0;
     u16 moveIndex = 0;
     gSpecialVar_0x8005 = 0;

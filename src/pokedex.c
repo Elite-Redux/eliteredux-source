@@ -5197,7 +5197,7 @@ static bool8 CalculateMoves(void) {
     u8 numTMHMMoves = 0;
     u8 numTutorMoves = 0;
     u16 movestotal;
-    u8 i;
+    u16 i;
 
     for (i = 0; i < TUTOR_COUNT; i++) {
         if (CanLearnTutorMove(species, i)) {
