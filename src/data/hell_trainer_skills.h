@@ -22,9 +22,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     [TRAINER_TOMMY] = {
         [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_LAST_BLEED, 2, 0}, // Last bleed does not affect the first Pokémon
     },
-    [TRAINER_MARC] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_LAST_STAND_STAGES, 5, 2},
-    },
     // ==== Route 116 ====
     [TRAINER_JOEY] = {
         [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_FIRST_BURNED, 3, 0},
