@@ -23,9 +23,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_LAST_BLEED, 2, 0}, // Last bleed does not affect the first Pokémon
     },
     // ==== Route 116 ====
-    [TRAINER_JOEY] = {
-        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_FIRST_BURNED, 3, 0},
-    },
     //[TRAINER_SARAH] = {
         // TODO: Permanent inverse room
     //},
