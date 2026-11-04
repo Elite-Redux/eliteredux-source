@@ -4556,7 +4556,7 @@ template <>
 constexpr Ability Impl<ABILITY_SPEED_FORCE> = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (gBattleMoves[move].contact) secondaryAtkStatToUse[STAT_SPEED] += 20;
+            if (IS_MOVE_PHYSICAL(move)) secondaryAtkStatToUse[STAT_SPEED] += 20;
         },
 };
 
