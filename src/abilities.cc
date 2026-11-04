@@ -9873,7 +9873,7 @@ template <>
 constexpr Ability Impl<ABILITY_BLUR> = {
     .onChooseDefensiveStat =
         +[](ON_CHOOSE_DEFENSIVE_STAT) {
-            if (IS_MOVE_PHYSICAL(move)) *defStatToUse = STAT_SPEED;
+            if (IS_MOVE_PHYSICAL(move, gBattlerAttacker)) *defStatToUse = STAT_SPEED;
         },
     .onChooseDefensiveStatFor = APPLY_ON_TARGET,
 };
