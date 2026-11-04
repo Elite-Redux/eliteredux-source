@@ -5708,8 +5708,8 @@ constexpr Ability Impl<ABILITY_PRISMATIC_FUR> = {
         return Impl<ABILITY_COLOR_CHANGE>.onBeforeAttack(DELEGATE_BEFORE_ATTACK);
     },
     .onBeforeAttackFor = APPLY_ON_ATTACKER_OR_TARGET,
-    .omniStab = TRUE,
     .randomizerBanned = TRUE,
+    .omniStab = TRUE,
 };
 
 template <>
