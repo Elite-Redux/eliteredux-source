@@ -7048,7 +7048,7 @@ template <>
 constexpr Ability Impl<ABILITY_IMPULSE> = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (!(gBattleMoves[move].contact)) *atkStatToUse = STAT_SPEED;
+            if (IS_MOVE_SPECIAL(move)) *atkStatToUse = STAT_SPEED;
         },
 };
 
