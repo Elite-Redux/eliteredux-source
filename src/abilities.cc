@@ -4680,7 +4680,7 @@ template <>
 constexpr Ability Impl<ABILITY_MOMENTUM> = {
     .onChooseOffensiveStat =
         +[](ON_CHOOSE_OFFENSIVE_STAT) {
-            if (gBattleMoves[move].contact) *atkStatToUse = STAT_SPEED;
+            if (IS_MOVE_PHYSICAL(move)) *atkStatToUse = STAT_SPEED;
         },
 };
 
@@ -5709,6 +5709,7 @@ constexpr Ability Impl<ABILITY_PRISMATIC_FUR> = {
     },
     .onBeforeAttackFor = APPLY_ON_ATTACKER_OR_TARGET,
     .omniStab = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 template <>
