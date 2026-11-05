@@ -348,6 +348,9 @@ int DoesMoveMatchFlag(ON_MODIFY_MOVE_FLAGS) {
         case MOVE_FLAG_KEEN_EDGE:
             if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) return TRUE;
             break;
+        case MOVE_FLAG_BONE:
+            if (gBattleMoves[move].flags & FLAG_BONE_BASED) return TRUE;
+            break;
 
         default:
             return FALSE;
@@ -4545,7 +4548,7 @@ template <>
 constexpr Ability Impl<ABILITY_BONE_ZONE> = {
     .onAfterTypeEffectiveness =
         +[](ON_AFTER_TYPE_EFFECTIVENESS) {
-            if (!(gBattleMoves[move].flags & FLAG_BONE_BASED)) return;
+            if (!DoesMoveMatchFlag(battler, move, moveType, MOVE_FLAG_BONE)) return;
             if (*mod >= UQ_4_12(1.0)) return;
             if (*mod == 0) {
                 *mod = UQ_4_12(1.0);
@@ -5372,6 +5375,43 @@ constexpr Ability Impl<ABILITY_GIFTED_MIND> = {
         },
     .onAfterTypeEffectivenessFor = APPLY_ON_TARGET,
     .breakable = TRUE,
+};
+
+// The user's moves of the type deal `percent`% of their damage, like Transistor or Water Bubble
+template <Type type, int percent>
+constexpr Ability TypePowerBoost = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (moveType == type) MUL(percent / 100.0);
+        },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_TIDAL_FORCE> = TypePowerBoost<TYPE_WATER, 200>;
+
+template <>
+constexpr Ability Impl<ABILITY_FIGHT_CLUB> = TypePowerBoost<TYPE_FIGHTING, 200>;
+
+template <>
+constexpr Ability Impl<ABILITY_MARTIAL_ARTS> = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IsIronFistBoosted(battler, move) || IsStrikerBoosted(battler, move)) MUL(1.5);
+        },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_BONE_MASTER> = {
+    .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int { return flag == MOVE_FLAG_BONE; },
+};
+
+// Gifted Mind's accuracy part
+template <>
+constexpr Ability Impl<ABILITY_UNERRING> = {
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority {
+        CHECK(IS_MOVE_STATUS(move))
+        return ACCURACY_HITS_IF_POSSIBLE;
+    },
 };
 
 template <>

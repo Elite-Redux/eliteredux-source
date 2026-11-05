@@ -128,6 +128,7 @@ typedef enum MoveFlag {
     MOVE_FLAG_MEGA_LAUNCHER,
     MOVE_FLAG_DANCE,
     MOVE_FLAG_KEEN_EDGE,
+    MOVE_FLAG_BONE,
 } MoveFlag;
 typedef int (*AbilityOnModifyMoveFlags)(u8 battler, MoveEnum move, Type type, MoveFlag flag);
 typedef int (*AbilityOnMoldBreaker)(u8 battler, MoveEnum move);
