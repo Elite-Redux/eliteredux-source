@@ -237,9 +237,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     //[TRAINER_GWEN] = {
         // TODO: Sun
     //},
-    [TRAINER_AUSTINA] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_TECHNICIAN, 0},
-    },
     //[TRAINER_EDMOND] = {
         // TODO: Use 10 BP Bubble on switch in
     //},
@@ -414,9 +411,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     //},
     //[TRAINER_TYRON] = {
         // TODO: Flower Gift ability, but always only buffs the user (won't buff allies in double battles)
-    //},
-    //[TRAINER_VICTOR] = {
-        // TODO: Permanent sandstorm
     //},
     //[TRAINER_VIVI] = {
         // TODO: Permanent Toxic Terrain
