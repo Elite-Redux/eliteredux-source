@@ -18,8 +18,8 @@ The container is `linux/amd64`. It works on Apple Silicon, but runs emulated, so
 ## Build the ROM and patch
 
 ```sh
-docker/build.sh            # out/EliteRedux.gba and out/EliteRedux.bps
-docker/build.sh rom        # only out/EliteRedux.gba
+docker/build.sh            # out/EliteRedux.gba, .sym and .bps
+docker/build.sh rom        # only out/EliteRedux.gba and .sym
 ```
 
 Everything ends up in `out/`. Nothing else in your checkout is changed. `EliteRedux.gba` is the
@@ -38,6 +38,24 @@ only redoes what your changes affect:
 | the Kotlin code in `tools/codegen` | the codegen too |
 
 If a build ever looks wrong, `docker/build.sh --clean` rebuilds the ROM from scratch.
+
+## Public build (no debug)
+
+The default build is the debug build. For the release players get, without the debug menus,
+add `--public`:
+
+```sh
+docker/build.sh --public       # out/EliteRedux-public.gba, .sym and .bps
+docker/build.sh --public rom   # only out/EliteRedux-public.gba and .sym
+```
+
+You don't need to edit `include/global.h` for it: `--public` defines `PUBLIC_BUILD`, which turns
+off `DEBUG_BUILD` and `DEBUG_POKEMON_MENU`. The public build keeps its own build files, so
+switching between the two doesn't rebuild everything each time, and the debug `EliteRedux.gba`
+in `out/` is left alone.
+
+Without Docker, it's `make PUBLIC=1` (or `docker/build.sh make PUBLIC=1`), which builds
+`pokeemerald_modern_public.gba`.
 
 ## Other commands
 

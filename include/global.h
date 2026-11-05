@@ -80,8 +80,10 @@
 
 #define USE_GENERATED FALSE
 
+#ifndef PUBLIC_BUILD
 #define DEBUG_BUILD
 #define DEBUG_POKEMON_MENU
+#endif
 //#define VALIDATE_TRAINERS
 #define CURRENT_GAME_VERSION 1049
 #define DISABLE_AUTOMATIC_SEASON FALSE //Disable Seasons generated with the current month and day to match real world

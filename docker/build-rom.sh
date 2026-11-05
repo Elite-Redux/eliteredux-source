@@ -5,7 +5,7 @@
 # usage: build-rom.sh SRC WORK OUT
 #   SRC   source snapshot (the image's /src)
 #   WORK  cache-mounted work tree that keeps build outputs between runs
-#   OUT   where the ROM is copied, as EliteRedux.gba
+#   OUT   where the ROM is copied, as EliteRedux.gba, with its symbol file as EliteRedux.sym
 set -eu
 
 src=$1
@@ -48,6 +48,12 @@ make -f make_tools.mk -j"${jobs}" TOOLDIRS="${tooldirs}"
 # ...and ask for the ROM file itself: the `all`/`rom` goals would rebuild every tool,
 # codegen included, and rewrite every generated header. NODEP=0 keeps header
 # dependency scanning on, which that goal would otherwise switch off.
-make -j"${jobs}" NODEP=0 pokeemerald_modern.gba
+if [ "${PUBLIC:-0}" = 1 ]; then
+    rom=pokeemerald_modern_public.gba name=EliteRedux-public.gba
+else
+    rom=pokeemerald_modern.gba name=EliteRedux.gba
+fi
+make -j"${jobs}" NODEP=0 PUBLIC="${PUBLIC:-0}" "${rom}"
 mkdir -p "${out}"
-cp pokeemerald_modern.gba "${out}/EliteRedux.gba"
+cp "${rom}" "${out}/${name}"
+sh docker/make-sym.sh "${rom%.gba}.elf" "${out}/${name}" > "${out}/${name%.gba}.sym"

@@ -5,11 +5,11 @@ set -eu
 
 usage() {
     cat <<'EOF'
-usage: docker/build.sh [--clean] [COMMAND [ARGS...]]
+usage: docker/build.sh [--clean] [--public] [COMMAND [ARGS...]]
 
 Commands:
-  bps          build the ROM and EliteRedux.bps into out/ (default)
-  rom          build EliteRedux.gba into out/
+  bps          build EliteRedux.gba, its .sym and EliteRedux.bps into out/ (default)
+  rom          build EliteRedux.gba and its .sym into out/
   headers      run the Kotlin codegen and put include/generated and asm/generated in the tree
   make [ARGS]  run make in your checkout inside the build image (incremental, like a local build)
   shell        open a shell in the build image with your checkout mounted
@@ -17,6 +17,8 @@ Commands:
 
 Options:
   --clean      for bps/rom: discard the cached work tree and build the ROM from scratch
+  --public     for bps/rom: build the public release, without debug, as
+               out/EliteRedux-public.gba (and .sym, .bps).
 
 Environment:
   CONTAINER_ENGINE   docker or podman (default: docker if installed, else podman)
@@ -30,10 +32,13 @@ repo=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 platform=linux/amd64
 builder_image=eliteredux-builder:local
 incremental=1
+public=0
+suffix=
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --clean) incremental=0; shift ;;
+        --public) public=1; suffix=-public; shift ;;
         -h|--help) usage; exit 0 ;;
         *) break ;;
     esac
@@ -62,6 +67,7 @@ build() {
         --file "${repo}/docker/Dockerfile" \
         --build-arg INCREMENTAL="${incremental}" \
         --build-arg JOBS="${JOBS:-}" \
+        --build-arg PUBLIC="${public}" \
         "$@" \
         "${repo}"
 }
@@ -95,11 +101,11 @@ run_in_builder() {
 case "${command}" in
     bps)
         export_target bps-artifact "${repo}/out"
-        echo "Built out/EliteRedux.gba and out/EliteRedux.bps"
+        echo "Built out/EliteRedux${suffix}.gba, .sym and .bps"
         ;;
     rom)
         export_target rom-artifact "${repo}/out"
-        echo "Built out/EliteRedux.gba"
+        echo "Built out/EliteRedux${suffix}.gba and .sym"
         ;;
     headers)
         mkdir -p "${repo}/out"

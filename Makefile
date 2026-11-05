@@ -119,6 +119,13 @@ LIBPATH := -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libgcc.a)
 LIB := $(LIBPATH) -lc -lnosys -lgcc -L../../libagbsyscall -lagbsyscall
 endif
 
+# PUBLIC=1 builds the public release, without debug (see PUBLIC_BUILD in include/global.h).
+PUBLIC ?= 0
+ifeq ($(PUBLIC),1)
+ROM := $(ROM:.gba=_public.gba)
+OBJ_DIR := $(OBJ_DIR)_public
+endif
+
 CPPCOMPILEFLAGS := -Wall -Wextra -Werror -fno-exceptions -Wno-sign-compare -Wno-switch -Wno-missing-field-initializers -fno-rtti -mthumb -mthumb-interwork -O2 -mabi=apcs-gnu -mtune=arm7tdmi -march=armv4t -fshort-enums -g -Wunreachable-code -std=gnu++23
 
 override CFLAGS += -fno-toplevel-reorder -Wno-unused-function -Wno-pointer-sign -Wno-unused-label -std=gnu23
@@ -126,6 +133,9 @@ override CFLAGS += -fno-toplevel-reorder -Wno-unused-function -Wno-pointer-sign 
 CPPFLAGS := -iquote include -iquote $(GFLIB_SUBDIR) -Wno-trigraphs -DMODERN=$(MODERN)
 ifneq ($(MODERN),1)
 CPPFLAGS += -I tools/agbcc/include -I tools/agbcc -nostdinc -undef
+endif
+ifeq ($(PUBLIC),1)
+CPPFLAGS += -DPUBLIC_BUILD
 endif
 
 LDFLAGS = -Map ../../$(MAP) --print-memory-usage 
@@ -274,7 +284,8 @@ tidynonmodern:
 
 tidymodern:
 	rm -f $(MODERN_ROM_NAME) $(MODERN_ELF_NAME) $(MODERN_MAP_NAME)
-	rm -rf $(MODERN_OBJ_DIR_NAME)
+	rm -f $(MODERN_ROM_NAME:.gba=_public.gba) $(MODERN_ELF_NAME:.elf=_public.elf) $(MODERN_MAP_NAME:.map=_public.map)
+	rm -rf $(MODERN_OBJ_DIR_NAME) $(MODERN_OBJ_DIR_NAME)_public
 
 tools/poryscript/poryscript:
 	mkdir -p tools/poryscript

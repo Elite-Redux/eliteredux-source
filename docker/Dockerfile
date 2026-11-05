@@ -169,18 +169,19 @@ FROM builder AS rom
 # Set INCREMENTAL=0 (docker/build.sh --clean) to throw away the cached work tree.
 ARG INCREMENTAL=1
 ARG JOBS=
+ARG PUBLIC=0
 COPY . .
 COPY --from=tools /src/tools/ tools/
 COPY --from=codegen /src/include/generated/ include/generated/
 COPY --from=codegen /src/asm/generated/ asm/generated/
 RUN er-prepare-tree
 RUN --mount=type=cache,id=eliteredux-rom-work,target=/work,sharing=locked \
-    INCREMENTAL="${INCREMENTAL}" JOBS="${JOBS}" sh docker/build-rom.sh /src /work /out
+    INCREMENTAL="${INCREMENTAL}" JOBS="${JOBS}" PUBLIC="${PUBLIC}" sh docker/build-rom.sh /src /work /out
 
 FROM builder AS bps
 COPY --from=vanilla /out/ /opt/vanilla/
 COPY --from=rom /out/ /out/
-RUN /opt/vanilla/flips --create /opt/vanilla/pokeemerald.gba /out/EliteRedux.gba /out/EliteRedux.bps
+RUN for rom in /out/*.gba; do /opt/vanilla/flips --create /opt/vanilla/pokeemerald.gba "${rom}" "${rom%.gba}.bps"; done
 
 FROM scratch AS headers-artifact
 COPY --from=codegen /src/include/generated/ /include/generated/
