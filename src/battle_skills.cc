@@ -466,7 +466,7 @@ struct InlineAbilities {
 
 struct InlineTrigger {
     enum Kind : u8 { ENTRY, END_TURN, BATTLE_START, HIT, FAINT, STAT_CHANGE, SWITCH_OUT } kind;
-    enum When : u8 { EVERY, LEAD } when;  // ENTRY
+    enum When : u8 { EVERY, LEAD, LAST } when;  // ENTRY
     enum Side : u8 { TRAINER, PLAYER, BOTH } side;
     enum Once : u8 { ALWAYS, PER_SWITCH_IN, PER_POKEMON, PER_BATTLE } once;
     u8 onceIndex;  // 0 to INLINE_MAX_ONCE - 1 in the skill
@@ -943,6 +943,7 @@ static bool8 MatchesEvent(const InlineTrigger& trigger, const InlineEvent& event
         case InlineTrigger::ENTRY: {
             // Switches only get processed after the battle start, so this is only false for the leads
             if (trigger.when == InlineTrigger::LEAD && gBattleStruct->canProcessSwitches) return FALSE;
+            if (trigger.when == InlineTrigger::LAST && CountUsablePartyMons(battler)) return FALSE;
             u8 side = GetBattlerSide(battler);
             if (!InSlots(trigger.slotsFirst, trigger.slotsLast, gBattlerPartyIndexes[battler], PartyCount(side))) return FALSE;
             break;
