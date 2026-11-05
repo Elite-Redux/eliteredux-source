@@ -4,6 +4,7 @@
 #define __SIZE_TYPE__ uint32_t
 #include <cstddef>
 #include <array>
+#include <utility>
 
 extern "C" {
 #include "global.h"
@@ -143,7 +144,7 @@ constexpr BattleSkill Impl<SKILL_SPIKES_1_LAYER> = {
     },
     .onEndTurn = +[](ON_END_TURN) -> int {
         // On turn end, add one layer of spikes if there are no spikes, to make the skill "permanent"
-        CHECK(gSideTimers[B_SIDE_PLAYER].spikesAmount < 1) 
+        CHECK(gSideTimers[B_SIDE_PLAYER].spikesAmount < 1)
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_SPIKES;
         gSideTimers[B_SIDE_PLAYER].spikesAmount++;
         // TODO: Change to different string?
@@ -417,18 +418,25 @@ constexpr BattleSkill Impl<SKILL_PERMANENT_FOG> = {
 // from proto/BattleSkillList.proto
 // Codegen turns each `on` block into an InlineTrigger and builds the skill with the InlineSkill template below.
 
+// The event's Pokemon (SUBJECT), its foe or both. Then that Pokemon only, its side of the field, or its whole party
+struct InlineTarget {
+    enum Who : u8 { SUBJECT, FOE, BOTH } who;
+    enum Scope : u8 { MON, FIELD, PARTY } scope;
+    u8 slotsFirst;  // PARTY: first and last N of the party, both 0 = all
+    u8 slotsLast;
+};
+
 struct InlineEffect {
     enum Kind : u8 { STAT_CHANGE, SIDE_CONDITION, WEATHER, TERRAIN, USE_MOVE, FIELD, STATUS } kind;
-    // The event's Pokemon, or the trainer's or the player's one of the event. Parties are for STATUS only
-    enum Target : u8 { EVENT_MON, TRAINER_MON, PLAYER_MON, TRAINER_PARTY, PLAYER_PARTY, BOTH_PARTIES } target;
+    // Check proto definition for more info on taret
+    InlineTarget target;
     // STAT_CHANGE
     u8 statCount;
     u8 stats[NUM_BATTLE_STATS - 1];  // STAT_*, STAT_HIGHEST_* are picked when it runs
     s8 amount;
     // SIDE_CONDITION, FIELD
     u16 types;  // bit per SKILL_SIDE_* or SKILL_FIELD_*
-    // SIDE_CONDITION. DEFAULT_SIDE is where the trainer would put it with the move
-    enum SideChoice : u8 { DEFAULT_SIDE, TRAINER_SIDE, PLAYER_SIDE, BOTH_SIDES } side;
+    // SIDE_CONDITION i think
     u8 layers;  // hazards: brought up to this many, capped at 3 for spikes and 2 for toxic spikes
     // WEATHER, TERRAIN
     u8 weather;  // ENUM_WEATHER_*
@@ -444,8 +452,6 @@ struct InlineEffect {
     bool8 falseSwipe;  // leaves the target at 1 HP at least
     // STATUS
     enum StatusKind : u8 { NO_STATUS, SLEEP, POISON, TOXIC, BURN, PARALYSIS, FROSTBITE, BLEED, CONFUSION, CURSE, SALT_CURE, ATTRACT, DRENCH } status;
-    u8 slotsFirst;  // *_PARTY: first and last N of the party, both 0 = all
-    u8 slotsLast;
 };
 
 // extra_ability of the skill. The abilities themselves come from Trainer.hellAbilities (GetExtraAbilityToSetToBattler),
@@ -461,7 +467,7 @@ struct InlineAbilities {
 struct InlineTrigger {
     enum Kind : u8 { ENTRY, END_TURN, BATTLE_START, HIT, FAINT, STAT_CHANGE, SWITCH_OUT } kind;
     enum When : u8 { EVERY, LEAD } when;  // ENTRY
-    bool8 playerSide;                     // the event happens to a player Pokemon
+    enum Side : u8 { TRAINER, PLAYER, BOTH } side;
     enum Once : u8 { ALWAYS, PER_SWITCH_IN, PER_POKEMON, PER_BATTLE } once;
     u8 onceIndex;  // 0 to INLINE_MAX_ONCE - 1 in the skill
     u8 chance;     // percent, 0 = always
@@ -470,8 +476,12 @@ struct InlineTrigger {
     u8 slotsLast;
     u8 every;      // END_TURN: every N turns, 0 or 1 = every turn
     bool8 onField;  // END_TURN: count the turns on the field, not the battle turns
-    u32 types;      // HIT: bit per TYPE_*, 0 = any
-    bool8 contact;
+    // HIT: the move matches every one that's set
+    // use a simple bitmask and check everything at once.
+    u32 types;      // bit per TYPE_*, 0 = any
+    u8 splits;      // bit per SPLIT_*, 0 = any
+    u8 flags;       // bit per MoveFlag. 0 = any
+    bool8 firstStrikeOnly;
     enum Effectiveness : u8 { SUPER_EFFECTIVE, NEUTRAL, RESISTED, IMMUNE };
     u8 effectiveness;  // HIT: bit per Effectiveness, 0 = any that dealt damage
     u8 stats;      // STAT_CHANGE: bit per STAT_*, 0 = any
@@ -537,16 +547,28 @@ static u8 SideBattler(u8 side) {
     return battler;
 }
 
-static u8 TargetMon(const InlineRun& run, InlineEffect::Target target) {
-    bool8 onPlayerSide = GetBattlerSide(run.event.battler) == B_SIDE_PLAYER;
-    switch (target) {
-        case InlineEffect::TRAINER_MON:
-            return onPlayerSide ? run.event.other : run.event.battler;
-        case InlineEffect::PLAYER_MON:
-            return onPlayerSide ? run.event.battler : run.event.other;
-        default:
-            return run.event.battler;
+// returns the correct pokemon based on required side
+static u8 EventMon(const InlineRun& run, u8 side) { return GetBattlerSide(run.event.battler) == side ? run.event.battler : run.event.other; }
+
+// Resolves valid sides (one or all)
+static u8 TargetSides(const InlineRun& run, InlineTarget::Who who) {
+    u8 sides = 0;
+    if (who != InlineTarget::FOE) sides |= 1 << GetBattlerSide(run.event.battler);
+    if (who != InlineTarget::SUBJECT) sides |= 1 << GetBattlerSide(run.event.other);
+    return sides;
+}
+
+static u8 TargetBattlers(const InlineRun& run, const InlineTarget& target) {
+    if (target.scope == InlineTarget::MON) {
+        u8 battlers = 0;
+        if (target.who != InlineTarget::FOE) battlers |= 1 << run.event.battler;
+        if (target.who != InlineTarget::SUBJECT) battlers |= 1 << run.event.other;
+        return battlers;
     }
+    u8 sides = TargetSides(run, target.who), battlers = 0;
+    for (int battler = 0; battler < gBattlersCount; battler++)
+        if (sides & (1 << GetBattlerSide(battler))) battlers |= 1 << battler;
+    return battlers;
 }
 
 // gEnemyPartyCount isn't set yet at battle start, so count again
@@ -620,7 +642,7 @@ static int AddInlineSideCondition(u8 type, u8 side, const InlineEffect& effect) 
 #undef TIMED_SIDE_STATUS
 #undef TIMER_ONLY
 
-// Where the trainer would put it with the move: on the player's side for these
+// The ones a move puts on the foe's side, for the animation to play correctly
 static bool8 GoesOnFoeSide(u8 type) {
     return type <= SKILL_SIDE_CALTROPS || type == SKILL_SIDE_SWAMP || type == SKILL_SIDE_SEA_OF_FIRE;
 }
@@ -629,21 +651,7 @@ static void RunInlineSideCondition(InlineRun& run, const InlineEffect& effect) {
     for (int type = SKILL_SIDE_COUNT - 1; type >= 0; type--) {
         FILTER(effect.types & (1 << type))
         bool8 onFoeSide = GoesOnFoeSide(type);
-        u8 sides = 0;  // bit per B_SIDE_*
-        switch (effect.side) {
-            case InlineEffect::DEFAULT_SIDE:
-                sides = 1 << (onFoeSide ? B_SIDE_PLAYER : B_SIDE_OPPONENT);
-                break;
-            case InlineEffect::TRAINER_SIDE:
-                sides = 1 << B_SIDE_OPPONENT;
-                break;
-            case InlineEffect::PLAYER_SIDE:
-                sides = 1 << B_SIDE_PLAYER;
-                break;
-            case InlineEffect::BOTH_SIDES:
-                sides = 1 << B_SIDE_PLAYER | 1 << B_SIDE_OPPONENT;
-                break;
-        }
+        u8 sides = TargetSides(run, effect.target.who);
         for (int side = B_SIDE_OPPONENT; side >= B_SIDE_PLAYER; side--) {
             FILTER(sides & (1 << side))
             FILTER(AddInlineSideCondition(type, side, effect))
@@ -685,7 +693,7 @@ static void RunInlineFieldStatus(InlineRun& run, const InlineEffect& effect) {
     for (int type = SKILL_FIELD_COUNT - 1; type >= 0; type--) {
         FILTER(effect.types & (1 << type))
         FILTER(AddInlineFieldStatus(type, effect.permanent ? 255 : effect.turns))
-        gStackBattler1 = TargetMon(run, InlineEffect::TRAINER_MON);
+        gStackBattler1 = EventMon(run, B_SIDE_OPPONENT);
         gBattleCommunication[MULTISTRING_CHOOSER] = type;
         Show(run, BattleScript_SkillField);
     }
@@ -741,8 +749,8 @@ static int SetInlineTerrain(const InlineEffect& effect, u8 battler) {
 // The move runs as its own action once the current one ends. It's used by the trainer's Pokemon of the
 // event at the player's one, or the first foe still standing
 static int QueueInlineMove(InlineRun& run, const InlineEffect& effect) {
-    u8 user = TargetMon(run, InlineEffect::TRAINER_MON);
-    u8 target = TargetMon(run, InlineEffect::PLAYER_MON);
+    u8 user = EventMon(run, B_SIDE_OPPONENT);
+    u8 target = EventMon(run, B_SIDE_PLAYER);
     // A fainted Pokemon can still explode, like with abilities (HandleAction_UseMove)
     CHECK(IsBattlerAlive(user) || gBattleMoves[effect.move].effect == EFFECT_EXPLOSION)
     CHECK_NOT(gRoundStructs[user].attackCancelled)
@@ -842,17 +850,20 @@ static int StatusBenchedMon(struct Pokemon* mon, InlineEffect::StatusKind status
 }
 
 static void RunInlineStatus(InlineRun& run, const InlineEffect& effect) {
-    if (effect.target <= InlineEffect::PLAYER_MON) {
-        StatusBattler(run, effect, TargetMon(run, effect.target));
+    if (effect.target.scope != InlineTarget::PARTY) {
+        u8 battlers = TargetBattlers(run, effect.target);
+        for (int battler = gBattlersCount - 1; battler >= 0; battler--)
+            if (battlers & (1 << battler)) StatusBattler(run, effect, battler);
         return;
     }
 
+    u8 sides = TargetSides(run, effect.target.who);
     for (int side = B_SIDE_OPPONENT; side >= B_SIDE_PLAYER; side--) {
-        FILTER(effect.target == InlineEffect::BOTH_PARTIES || (effect.target == InlineEffect::PLAYER_PARTY) == (side == B_SIDE_PLAYER))
+        FILTER(sides & (1 << side))
         struct Pokemon* party = side == B_SIDE_PLAYER ? gPlayerParty : gEnemyParty;
         int count = PartyCount(side);
         for (int i = count - 1; i >= 0; i--) {
-            FILTER(InSlots(effect.slotsFirst, effect.slotsLast, i, count))
+            FILTER(InSlots(effect.target.slotsFirst, effect.target.slotsLast, i, count))
             u8 onField = MAX_BATTLERS_COUNT;
             for (u8 battler = side; battler < gBattlersCount; battler += 2)
                 if (gBattlerPartyIndexes[battler] == i && !(gAbsentBattlerFlags & (1u << battler))) onField = battler;
@@ -867,14 +878,17 @@ static void RunInlineStatus(InlineRun& run, const InlineEffect& effect) {
 static void RunInlineEffect(InlineRun& run, const InlineEffect& effect) {
     switch (effect.kind) {
         case InlineEffect::STAT_CHANGE: {
-            u8 battler = TargetMon(run, effect.target);
-            if (!IsBattlerAlive(battler)) break;
-            for (int i = effect.statCount - 1; i >= 0; i--) {
-                u8 stat = TranslateStatId(effect.stats[i], battler);
-                FILTER(effect.amount > 0 ? CanRaiseStat(battler, stat) : CanLowerStat(battler, stat))
-                SetStatChanger(stat, effect.amount);
-                gStackBattler1 = battler;
-                Show(run, BattleScript_StackBattlerStatUp);
+            // One script per stat and Pokemon, like Intimidate
+            u8 battlers = TargetBattlers(run, effect.target);
+            for (int battler = gBattlersCount - 1; battler >= 0; battler--) {
+                FILTER(battlers & (1 << battler) && IsBattlerAlive(battler))
+                for (int i = effect.statCount - 1; i >= 0; i--) {
+                    u8 stat = TranslateStatId(effect.stats[i], battler);
+                    FILTER(effect.amount > 0 ? CanRaiseStat(battler, stat) : CanLowerStat(battler, stat))
+                    SetStatChanger(stat, effect.amount);
+                    gStackBattler1 = battler;
+                    Show(run, BattleScript_StackBattlerStatUp);
+                }
             }
             break;
         }
@@ -886,11 +900,11 @@ static void RunInlineEffect(InlineRun& run, const InlineEffect& effect) {
             break;
         case InlineEffect::WEATHER:
             gBattleCommunication[MULTISTRING_CHOOSER] = sInlineWeatherAnims[effect.weather];
-            if (SetInlineWeather(effect, TargetMon(run, InlineEffect::TRAINER_MON))) Show(run, BattleScript_SkillWeather);
+            if (SetInlineWeather(effect, EventMon(run, B_SIDE_OPPONENT))) Show(run, BattleScript_SkillWeather);
             break;
         case InlineEffect::TERRAIN:
             gBattleCommunication[MULTISTRING_CHOOSER] = sInlineTerrains[effect.terrain].message;
-            if (SetInlineTerrain(effect, TargetMon(run, InlineEffect::TRAINER_MON))) Show(run, BattleScript_SurgeActivatesRet);
+            if (SetInlineTerrain(effect, EventMon(run, B_SIDE_OPPONENT))) Show(run, BattleScript_SurgeActivatesRet);
             break;
         case InlineEffect::USE_MOVE:
             if (QueueInlineMove(run, effect)) Show(run, NULL);
@@ -912,10 +926,19 @@ static constexpr bool HasReappliedEffect(const InlineTrigger& trigger) {
     return false;
 }
 
+static bool8 MatchesMoveFlags(u8 flags, const InlineEvent& event) {
+    if (flags & 1 && IsMoveMakingContact(event.move, event.other)) return TRUE;
+    for (int flag = MOVE_FLAG_PUNCH; flag <= MOVE_FLAG_KEEN_EDGE; flag++)
+        if (flags & (1 << flag) && DoesMoveMatchFlag(event.other, event.move, (Type)event.moveType, (MoveFlag)flag)) return TRUE;
+    return FALSE;
+}
+
 static bool8 MatchesEvent(const InlineTrigger& trigger, const InlineEvent& event) {
     u8 battler = event.battler;
     if (trigger.kind != event.kind) return FALSE;
-    if (trigger.kind != InlineTrigger::BATTLE_START && trigger.playerSide != (GetBattlerSide(battler) == B_SIDE_PLAYER)) return FALSE;
+    if (trigger.kind != InlineTrigger::BATTLE_START && trigger.side != InlineTrigger::BOTH &&
+        (trigger.side == InlineTrigger::PLAYER) != (GetBattlerSide(battler) == B_SIDE_PLAYER))
+        return FALSE;
     switch (trigger.kind) {
         case InlineTrigger::ENTRY: {
             // Switches only get processed after the battle start, so this is only false for the leads
@@ -932,7 +955,10 @@ static bool8 MatchesEvent(const InlineTrigger& trigger, const InlineEvent& event
         }
         case InlineTrigger::HIT: {
             if (trigger.types && (event.moveType >= 32 || !(trigger.types & (1u << event.moveType)))) return FALSE;
-            if (trigger.contact && !IsMoveMakingContact(event.move, event.other)) return FALSE;
+            if (trigger.splits && !(trigger.splits & (1 << GetBattleMoveSplit(event.move)))) return FALSE;
+            if (trigger.flags && !MatchesMoveFlags(trigger.flags, event)) return FALSE;
+            // The strike count goes up after each strike's move end
+            if (trigger.firstStrikeOnly && gTurnStructs[event.other].multiHitsUsed) return FALSE;
             u8 effectiveness = gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE  ? InlineTrigger::IMMUNE
                                : gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE    ? InlineTrigger::SUPER_EFFECTIVE
                                : gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE ? InlineTrigger::RESISTED
@@ -995,6 +1021,9 @@ static int RunInlineTriggers(InlineEvent event, BattleSkillEnum skill, InlineRun
         const InlineTrigger& trigger = triggers[i];
         bool8 on = MatchesEvent(trigger, event) && PassesConditions(trigger, skill, event.battler);
         bool8 reapply = event.kind == InlineTrigger::END_TURN && GetBattlerSide(event.battler) == B_SIDE_OPPONENT;
+        // Putting things back runs on the trainer's end of turn, so a player trigger's Pokemon is the foe here
+        run.event = event;
+        if (reapply && trigger.side == InlineTrigger::PLAYER) std::swap(run.event.battler, run.event.other);
         for (int j = trigger.effectCount - 1; j >= 0; j--) {
             const InlineEffect& effect = trigger.effects[j];
             if (on || (reapply && IsReapplied(effect))) RunInlineEffect(run, effect);

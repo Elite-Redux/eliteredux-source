@@ -13,6 +13,7 @@ import er.proto.InlineSkill
 import er.proto.InlineSkill.Effect.KindCase as EffectKind
 import er.proto.InlineSkill.Trigger.KindCase as TriggerKind
 import er.proto.MoveEnum
+import er.proto.MoveSplit
 import er.proto.Stat
 import er.proto.Type
 import java.io.OutputStreamWriter
@@ -192,17 +193,32 @@ object BattleSkillGenerator : Generator {
     // The skill fires in the middle of a move or a faint, the hazard scripts keep the battlers but a whole party
     // status would be too much there
     if (kindCase in listOf(TriggerKind.HIT, TriggerKind.FAINT, TriggerKind.STAT_CHANGE)) {
-      check(effectList.none { it.hasStatus() && it.status.target.number >= InlineSkill.Target.TRAINER_PARTY.number }) {
+      check(effectList.none { it.hasStatus() && it.status.target.scope == InlineSkill.Target.Scope.PARTY }) {
         "$what: party status only on battle_start, entry and end_turn"
+      }
+    }
+    if (side == InlineSkill.Side.BOTH) {
+      check(effectList.none { it.hasSideCondition() && it.sideCondition.permanent && it.sideCondition.who != InlineSkill.Target.Who.BOTH }) {
+        "$what: a permanent side_condition on side: BOTH needs who: BOTH"
       }
     }
 
     val slots = entry.slots
     check(slots.first in 0..6 && slots.last in 0..6) { "$what: slots between 0 and 6" }
     check(endTurn.every in 0..255) { "$what: every ${endTurn.every} isn't between 1 and 255" }
-    check(hit.typeList.none { it == Type.TYPE_NONE || it == Type.UNRECOGNIZED }) { "$what: hit on ${hit.typeList} isn't a type" }
-    check(hit.typeList.distinct().size == hit.typeCount) { "$what: hit lists a type twice" }
-    val types = hit.typeList.joinToString(" | ") { "1u << ${it.name}" }.ifEmpty { "0" }
+    val move = hit.move
+    check(move.typeList.none { it == Type.TYPE_NONE || it == Type.UNRECOGNIZED }) { "$what: hit on ${move.typeList} isn't a type" }
+    check(move.typeList.distinct().size == move.typeCount) { "$what: hit lists a type twice" }
+    val types = move.typeList.joinToString(" | ") { "1u << ${it.name}" }.ifEmpty { "0" }
+    check(move.splitList.none { it == MoveSplit.STATUS || it == MoveSplit.UNRECOGNIZED }) { "$what: hit split is PHYSICAL or SPECIAL" }
+    check(move.splitList.distinct().size == move.splitCount) { "$what: hit lists a split twice" }
+    val splits = move.splitList.joinToString(" | ") { "1 << SPLIT_${it.name}" }.ifEmpty { "0" }
+    check(move.flagList.none { it == InlineSkill.MoveFilter.Flag.FLAG_UNSET || it == InlineSkill.MoveFilter.Flag.UNRECOGNIZED }) {
+      "$what: hit on ${move.flagList} isn't a flag"
+    }
+    check(move.flagList.distinct().size == move.flagCount) { "$what: hit lists a flag twice" }
+    val flags =
+      move.flagList.joinToString(" | ") { if (it == InlineSkill.MoveFilter.Flag.CONTACT) "1" else "1 << MOVE_FLAG_${it.name}" }.ifEmpty { "0" }
     check(hit.effectivenessList.none { it == InlineSkill.Hit.Effectiveness.EFFECTIVENESS_UNSET || it == InlineSkill.Hit.Effectiveness.UNRECOGNIZED }) {
       "$what: hit on ${hit.effectivenessList} isn't an effectiveness"
     }
@@ -221,9 +237,9 @@ object BattleSkillGenerator : Generator {
 
     val effects = effectList.joinToString { "{${it.toCpp(skillId)}}" }
     return "InlineTrigger{.kind = InlineTrigger::$kind, .when = InlineTrigger::${entry.`when`}, " +
-      ".playerSide = ${side == InlineSkill.Side.PLAYER}, .once = InlineTrigger::${once.name}, .onceIndex = $onceIndex, " +
+      ".side = InlineTrigger::${side.name}, .once = InlineTrigger::${once.name}, .onceIndex = $onceIndex, " +
       ".chance = $chance, .hpBelow = $hpBelow, .slotsFirst = ${slots.first}, .slotsLast = ${slots.last}, " +
-      ".every = ${endTurn.every}, .onField = ${endTurn.onField}, .types = $types, .contact = ${hit.contact}, " +
+      ".every = ${endTurn.every}, .onField = ${endTurn.onField}, .types = $types, .splits = $splits, .flags = $flags, .firstStrikeOnly = ${hit.firstStrikeOnly}, " +
       ".effectiveness = $effectiveness, .stats = $stats, .direction = $direction, " +
       ".effectCount = $effectCount, .effects = {$effects}}"
   }
@@ -231,20 +247,26 @@ object BattleSkillGenerator : Generator {
   // Battle scripts the effect can push, see the budget above
   private fun InlineSkill.Effect.scripts(): Int =
     when (kindCase) {
-      EffectKind.STAT_CHANGE -> statChange.statCount
-      EffectKind.SIDE_CONDITION ->
-        sideCondition.typeCount * if (sideCondition.side == InlineSkill.SetSideCondition.TargetSide.BOTH_SIDES) 2 else 1
+      EffectKind.STAT_CHANGE -> statChange.statCount * statChange.target.battlers()
+      EffectKind.SIDE_CONDITION -> sideCondition.typeCount * if (sideCondition.who == InlineSkill.Target.Who.BOTH) 2 else 1
       EffectKind.FIELD -> field.typeCount
       EffectKind.WEATHER, EffectKind.TERRAIN -> 2
-      // Two Pokemon on the field per side
-      EffectKind.STATUS ->
-        when (status.target) {
-          InlineSkill.Target.BOTH_PARTIES -> 4
-          InlineSkill.Target.TRAINER_PARTY, InlineSkill.Target.PLAYER_PARTY -> 2
-          else -> 1
-        }
+      // A party only shows the ones on the field
+      EffectKind.STATUS -> status.target.battlers()
       else -> 0
     }
+
+  // At most, two Pokemon on the field per side, stupid gate but i crashed already once on this.
+  private fun InlineSkill.Target.battlers(): Int =
+    (if (who == InlineSkill.Target.Who.BOTH) 2 else 1) * (if (scope == InlineSkill.Target.Scope.MON) 1 else 2)
+
+  private fun InlineSkill.Target.toCpp(what: String, party: Boolean): String {
+    check(who != InlineSkill.Target.Who.UNRECOGNIZED && scope != InlineSkill.Target.Scope.UNRECOGNIZED) { "$what: unknown target" }
+    check(party || scope != InlineSkill.Target.Scope.PARTY) { "$what: PARTY is for major status only" }
+    check(scope == InlineSkill.Target.Scope.PARTY || !hasSlots()) { "$what: slots are for PARTY" }
+    check(slots.first in 0..6 && slots.last in 0..6) { "$what: slots between 0 and 6" }
+    return ".target = {InlineTarget::${who.name}, InlineTarget::${scope.name}, ${slots.first}, ${slots.last}}"
+  }
 
   private fun InlineSkill.Effect.toCpp(skillId: String): String =
     when (kindCase) {
@@ -258,8 +280,7 @@ object BattleSkillGenerator : Generator {
         check(change.amount in -6..6 && change.amount != 0) {
           "$skillId: stat_change amount ${change.amount} isn't between -6 and 6, or is 0"
         }
-        check(change.target.number in 0..2) { "$skillId: stat_change target is EVENT_MON, TRAINER_MON or PLAYER_MON" }
-        ".kind = InlineEffect::STAT_CHANGE, .target = InlineEffect::${change.target.name}, .statCount = ${change.statCount}, " +
+        ".kind = InlineEffect::STAT_CHANGE, ${change.target.toCpp("$skillId: stat_change", false)}, .statCount = ${change.statCount}, " +
           ".stats = {${change.statList.joinToString { it.name }}}, .amount = ${change.amount}"
       }
       EffectKind.SIDE_CONDITION -> {
@@ -268,18 +289,18 @@ object BattleSkillGenerator : Generator {
         check(condition.typeCount > 0) { "$skillId: side_condition without a type" }
         check(names.none { it == "NONE" || it == "UNRECOGNIZED" }) { "$skillId: side_condition on $names isn't a condition" }
         check(names.distinct().size == names.size) { "$skillId: side_condition lists a type twice" }
-        check(condition.side != InlineSkill.SetSideCondition.TargetSide.UNRECOGNIZED) { "$skillId: unknown side" }
+        check(condition.who != InlineSkill.Target.Who.UNRECOGNIZED) { "$skillId: unknown side_condition who" }
         val hazards = names.count { it in HAZARDS }
         check(hazards == 0 || hazards == names.size) { "$skillId: hazards and timed side conditions need their own side_condition" }
         val types = names.joinToString(" | ") { "1 << SKILL_SIDE_$it" }
-        val side = ".side = InlineEffect::${condition.side.name.replace("DEFAULT", "DEFAULT_SIDE")}"
+        val side = ".target = {InlineTarget::${condition.who.name}}"
         if (hazards > 0) {
           check(condition.layers in 0..3) { "$skillId: hazard layers ${condition.layers} isn't between 1 and 3" }
           check(!condition.hasTurns()) { "$skillId: hazards have layers, not turns" }
-          ".kind = InlineEffect::SIDE_CONDITION, .types = $types, $side, .layers = ${maxOf(condition.layers, 1)}, .permanent = ${condition.permanent}"
+          ".kind = InlineEffect::SIDE_CONDITION, $side, .types = $types, .layers = ${maxOf(condition.layers, 1)}, .permanent = ${condition.permanent}"
         } else {
           check(condition.layers == 0) { "$skillId: only hazards have layers" }
-          ".kind = InlineEffect::SIDE_CONDITION, .types = $types, $side, ${condition.durationCase.toCpp(skillId, condition.turns, condition.permanent)}"
+          ".kind = InlineEffect::SIDE_CONDITION, $side, .types = $types, ${condition.durationCase.toCpp(skillId, condition.turns, condition.permanent)}"
         }
       }
       EffectKind.FIELD -> {
@@ -313,14 +334,8 @@ object BattleSkillGenerator : Generator {
       EffectKind.STATUS -> {
         val name = status.status.name
         check(name != "NONE" && name != "UNRECOGNIZED") { "$skillId: status without a status" }
-        check(status.target != InlineSkill.Target.UNRECOGNIZED) { "$skillId: unknown status target" }
-        val party = status.target.number >= InlineSkill.Target.TRAINER_PARTY.number
         val major = status.status.number <= InlineSkill.ApplyStatus.Status.BLEED.number
-        check(major || !party) { "$skillId: $name only on EVENT_MON, TRAINER_MON or PLAYER_MON" }
-        check(party || !status.hasSlots()) { "$skillId: slots are for party targets" }
-        check(status.slots.first in 0..6 && status.slots.last in 0..6) { "$skillId: slots between 0 and 6" }
-        ".kind = InlineEffect::STATUS, .target = InlineEffect::${status.target.name}, .status = InlineEffect::$name, " +
-          ".slotsFirst = ${status.slots.first}, .slotsLast = ${status.slots.last}"
+        ".kind = InlineEffect::STATUS, ${status.target.toCpp("$skillId: $name", major)}, .status = InlineEffect::$name"
       }
       else -> error("$skillId: effect without a kind")
     }
