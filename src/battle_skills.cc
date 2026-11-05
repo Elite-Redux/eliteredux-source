@@ -757,8 +757,9 @@ static int QueueInlineMove(InlineRun& run, const InlineEffect& effect) {
     if (!IsBattlerAlive(target)) target = FacingFoe(user);
     CHECK(IsBattlerAlive(target))
     CHECK(gQueuedAttackCount < MAX_BATTLERS_COUNT)
-    // One move at a time per skill and Pokemon, multi-hit moves would fill the queue
-    for (int i = 1; i <= gQueuedAttackCount; i++) CHECK_NOT(gQueuedExtraAttackData[i].skill == run.skill && gQueuedExtraAttackData[i].attacker == user)
+    // Each move once at a time per skill and Pokemon, multi-hit moves would fill the queue
+    for (int i = 1; i <= gQueuedAttackCount; i++)
+        CHECK_NOT(gQueuedExtraAttackData[i].skill == run.skill && gQueuedExtraAttackData[i].attacker == user && gQueuedExtraAttackData[i].move == effect.move)
     gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
         .skill = run.skill,
         .move = effect.move,

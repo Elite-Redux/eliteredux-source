@@ -1075,7 +1075,8 @@ static void Cmd_attackcanceler(void) {
         return;
     }
     if (!IsBattlerAlive(gBattlerAttacker) && !(gHitMarker & HITMARKER_NO_ATTACKSTRING) &&
-        !(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability && gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)) {
+        !(gProcessingExtraAttacks && (gQueuedExtraAttackData[0].ability || gQueuedExtraAttackData[0].skill) &&
+          gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)) {
         gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
         gBattlescriptCurrInstr = BattleScript_MoveEnd;
         return;
@@ -3179,7 +3180,7 @@ static void Cmd_tryfaintmon(void) {
     const u8* BS_ptr;
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
-    if (gActiveBattler == gBattlerAttacker && gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability &&
+    if (gActiveBattler == gBattlerAttacker && gProcessingExtraAttacks && (gQueuedExtraAttackData[0].ability || gQueuedExtraAttackData[0].skill) &&
         gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION) {
         gBattlescriptCurrInstr += 7;
         return;
