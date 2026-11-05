@@ -1615,6 +1615,11 @@ static void Cmd_damagecalc(void) {
     gBattleMoveDamage = CalculateMoveDamage(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, movePower, gCritRoll, TRUE, TRUE);
     gBattleStruct->dynamicMoveType = moveType | 0x80;
 
+    // Executioner: critical hits knock out, Sturdy, Focus Sash and Endure still apply in adjustdamage
+    if (gIsCriticalHit && gBattleMoveDamage > 0 && gBattleMoveDamage < gBattleMons[gBattlerTarget].hp &&
+        BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_EXECUTIONER))
+        gBattleMoveDamage = gBattleMons[gBattlerTarget].hp;
+
     gBattlescriptCurrInstr++;
 }
 

@@ -98,6 +98,22 @@ constexpr BattleSkill BattleSkillTemplate<SKILL_TEMPLATE_EXTRA_ABILITY, Ability1
     },
 };
 
+// The player's Pokemon get Lethargy as their main ability when they come in, like Worry Seed. Runs before
+// their own entry abilities, so Lethargy's entry effect fires
+template <>
+constexpr BattleSkill Impl<SKILL_PLAYER_LETHARGY> = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        CHECK(GetBattlerSide(battler) == B_SIDE_PLAYER)
+        CHECK_NOT(IsEntrainmentTargetOrSimpleBeamBannedAbility(GetBattlerAbility(battler)))
+        CHECK_NOT(HasAbilityIgnoringSuppression(battler, ABILITY_LETHARGY))
+        CHECK_NOT(DoesBattlerHaveAbilityShield(battler))
+        UpdateAbilityStateIndicesForNewAbility(battler, ABILITY_LETHARGY);
+        ReplaceAbility(battler, ABILITY_LETHARGY);
+        gStackBattler1 = battler;
+        return RunEntryAnnounceScript(skill, BattleScript_AnnounceBattleSkillEnd3);
+    },
+};
+
 template <>
 constexpr BattleSkill Impl<SKILL_EVIOLITE> = {
     BATTLE_START_SIMPLE(BattleScript_ExtraSkillEviolite),

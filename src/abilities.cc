@@ -5405,6 +5405,18 @@ constexpr Ability Impl<ABILITY_BONE_MASTER> = {
     .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int { return flag == MOVE_FLAG_BONE; },
 };
 
+// The crit KO itself is in Cmd_damagecalc
+template <>
+constexpr Ability Impl<ABILITY_EXECUTIONER> = {};
+
+template <>
+constexpr Ability Impl<ABILITY_PERFECT_PITCH> = {
+    .onCrit = +[](ON_CRIT) -> int {
+        CHECK(IsSoundMove(battler, move))
+        return ALWAYS_CRIT;
+    },
+};
+
 // Gifted Mind's accuracy part
 template <>
 constexpr Ability Impl<ABILITY_UNERRING> = {
