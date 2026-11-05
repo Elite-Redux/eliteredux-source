@@ -3805,6 +3805,17 @@ constexpr Ability Impl<ABILITY_GROUND_SHOCK> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_EARTH_WIRE> = {
+    .onTypeEffectiveness = +[](ON_TYPE_EFFECTIVENESS) -> int {
+        CHECK(moveType == TYPE_ELECTRIC)
+        CHECK(defType == TYPE_GROUND)
+        CHECK_NOT(*mod)
+        *mod = UQ_4_12(2.0);
+        return TRUE;
+    },
+};
+
+template <>
 constexpr Ability Impl<ABILITY_ANCIENT_IDOL> = {
     .onChooseOffensiveStat = +[](ON_CHOOSE_OFFENSIVE_STAT) { *atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; },
 };

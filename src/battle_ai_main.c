@@ -580,6 +580,10 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
             score += 2;
         }
 
+        if (moveType == TYPE_ELECTRIC && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GROUND) && BattlerHasAbility(battlerAtk, ABILITY_EARTH_WIRE, TRUE)) {
+            score += 2;
+        }
+
         if (moveType == TYPE_ELECTRIC && IS_BATTLER_OF_TYPE(battlerDef, TYPE_ELECTRIC) && BattlerHasAbility(battlerAtk, ABILITY_OVERCHARGE, TRUE)) {
             score += 2;
         }
