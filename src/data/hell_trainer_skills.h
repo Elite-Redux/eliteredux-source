@@ -2,31 +2,11 @@
 const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE_EVENT_ARGUMENTS] = {
     [TRAINER_CALVIN_1] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_NO_PROTECT, 0, 0},
-        [HELL_MODE_TRAINER_SKILL_3] = {BATTLE_EVENT_LAST_STAND_STAGES, 5, 2},
-    },
-    [TRAINER_CINDY_1] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_CUTE_CHARM, 0},
-    },
-    [TRAINER_HALEY_1] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SHELL_ARMOR, 0},
-    },
-    [TRAINER_TIANA] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_ONSTAY_LEECH_SEED, 0, 0},
-    },
-    [TRAINER_TOMMY] = {
-        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_LAST_BLEED, 2, 0}, // Last bleed does not affect the first Pokémon
     },
     // ==== Route 116 ====
     //[TRAINER_SARAH] = {
         // TODO: Permanent inverse room
     //},
-    [TRAINER_JANICE] = {
-        // Doc says Focus Sash effect, Sturdy probably good enough (only difference is Mold Breaker?)
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_STURDY, 0},
-    },
-    [TRAINER_JOHNSON] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_RAINBOW, 0, 0},
-    },
     //[TRAINER_DEVAN] = {
         // TODO: Permanent sand (can be overwritted by player)
     //},
@@ -40,30 +20,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // TODO: All mons use Power Trip on entry
     //},
     // ==== Rustboro ====
-    [TRAINER_BRENDAN_RUSTBORO_TREECKO] = {
-        // Doc says Focus Sash effect, Sturdy probably good enough (only difference is Mold Breaker?)
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_STURDY, 0},
-    },
-    [TRAINER_BRENDAN_RUSTBORO_TORCHIC] = {
-        // Doc says Focus Sash effect, Sturdy probably good enough (only difference is Mold Breaker?)
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_STURDY, 0},
-    },
-    [TRAINER_BRENDAN_RUSTBORO_MUDKIP] = {
-        // Doc says Focus Sash effect, Sturdy probably good enough (only difference is Mold Breaker?)
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_STURDY, 0},
-    },
-    [TRAINER_MAY_RUSTBORO_TREECKO] = {
-        // Doc says Focus Sash effect, Sturdy probably good enough (only difference is Mold Breaker?)
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_STURDY, 0},
-    },
-    [TRAINER_MAY_RUSTBORO_TORCHIC] = {
-        // Doc says Focus Sash effect, Sturdy probably good enough (only difference is Mold Breaker?)
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_STURDY, 0},
-    },
-    [TRAINER_MAY_RUSTBORO_MUDKIP] = {
-        // Doc says Focus Sash effect, Sturdy probably good enough (only difference is Mold Breaker?)
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_STURDY, 0},
-    },
     // ==== Route 105 ====
     //[TRAINER_IMANI] = {
         // TODO: Inflicts sleep when hit by attack (assume only for AI?)
@@ -71,19 +27,11 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     //[TRAINER_DOMINIK] = {
         // TODO: Permanent sun (not sure if changeable by player)
     //},
-    [TRAINER_FOSTER] = {
-        [HELL_MODE_TRAINER_SKILL_3] = {BATTLE_EVENT_LAST_STAND_STAGES, 5, 1},
-    },
     //[TRAINER_BEVERLY] = {
         // TODO: Power of Water moves is doubled (all or just opponent?)
         // TODO: Player's abilities are disabled after 2 turns on field
         // TODO: Speed increased by one stage when falling under half HP
     //},
-    [TRAINER_JOSUE] = {
-        // Forced Tag Battle with Ruin Maniac Andres
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_RAINBOW, 0, 0},
-        // TODO: Stat changes are shared between allies (not Sharing and Caring ability since that's all mons, not just allies)
-    },
     //[TRAINER_LUIS] = {
         // TODO: Power of Fighting moves is doubled (all or just opponent?)
         // TODO: Last mon sent out gets +4 Def and Sp. Def
@@ -94,11 +42,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // TODO: Ancient Power used after every turn
         // TODO: Speed increases by +2 stages when hit by contact move
     //},
-    [TRAINER_FERALIGATRITEX_ROUTE105] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_SWAMP, 0, 0},
-        // TODO: Supereffective moves deal 50% less damage
-        // TODO: Recovers 50% HP on KO
-    },
     // ==== ROUTE 106 ====
     //[TRAINER_ELLIOT_1] = {
         // TODO: Every AI mon uses Mean Look on entry
@@ -109,19 +52,10 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     //[TRAINER_DOUGLAS] = {
         // TODO: AI uses recycle at end of turn
     //},
-    [TRAINER_KAYLA] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_MYSTIC_POWER, 0},
-        // TODO: Hazards cannot be removed by player
-    },
     // ==== GRANITE CAVE ====
     // TODO: Steven Stone Post Brawly?
     // TODO: Black Belt Hitmonstone
     // ==== ROUTE 107 ====
-    [TRAINER_DENISE] = {
-        // Doc says passive leftovers, this is same except it can be suppressed
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SELF_SUFFICIENT, 0},
-        // TODO: Every turn 50% chance to use Trick/Wonder/Magic/Inverse Room. Check 50% roll for each individually.
-    },
     //[TRAINER_TONY_1] = {
         // TODO: Uses Night Shade after every attack
         // TODO: Permanent rain
@@ -168,29 +102,7 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // TODO: AI stat drops are immediately reset to 0
         // TODO: AI hits lowest defense
     //},
-    [TRAINER_CORY_1] = {
-        // TODO: First SE move from player raises AI mon's highest offense +1 and immune to move
-        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_SWAMP, 0, 0},
-        // TODO: Red Card on hit for AI (once per AI mon)
-    },
     // ==== ROUTE 108 ABANDONED SHIP ====
-    [TRAINER_DEMETRIUS] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_ANGELS_WRATH, 0},
-        // TODO: Opponents deal 1.25x damage and hit lowest defense vs statused foes
-        // TODO: Opponent's status moves ignore abilities
-    },
-    [TRAINER_GARRISON] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_BONE_ZONE, 0},
-        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_HAUNTING_FRENZY, 0},
-        // TODO: Every move opponent uses is a Bone move
-    },
-    [TRAINER_JANI] = {
-        // 4 skills for this trainer instead of the max of 3 :(
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_RESTRAINING_ORDER, 0},
-        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_LEVITATE, 0},
-        [HELL_MODE_TRAINER_SKILL_3] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_INFLATABLE, 0},
-        // TODO: Use 50BP Explosion/Outburst when fainting
-    },
     // ==== ROUTE 109 ====
     //[TRAINER_CARTER] = {
         // TODO: Opponents use sub on switch in
@@ -221,9 +133,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     //[TRAINER_SIMON] = {
         // TODO: Perma Mud Sport (doc says old effect? not sure which one)
     //},
-    [TRAINER_DWAYNE] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_MERCILESS, 0},
-    },
     // ==== DEWFORD MANOR ====
     //[TRAINER_CROBATITE_DEWFORD_MANOR] = {
         // TODO: Moves use Speed for damage calculation
@@ -266,17 +175,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // TODO: Permanent rain
     //},
     // ==== ROUTE 103 ====
-    [TRAINER_ISABELLE] = {
-        // Test Primordial Sea (might be a little weird constantly activating/deactivating when Trainer Pokemon faint/switch?)
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_PRIMORDIAL_SEA, 0},
-        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_SWAMP, 0, 0},
-        // TODO: Rooms don't work
-    },
-    [TRAINER_PETE] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_PRIMORDIAL_SEA, 0},
-        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_SWIFT_SWIM, 0},
-        [HELL_MODE_TRAINER_SKILL_3] = {BATTLE_EVENT_EXTRA_ABILITIES_3, ABILITY_SAP_SIPPER, 0},
-    },
     //[TRAINER_MARCOS] = {
         // TODO: Soundproof does not work
     //},
