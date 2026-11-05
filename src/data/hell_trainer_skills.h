@@ -7,17 +7,11 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
     [TRAINER_CINDY_1] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_CUTE_CHARM, 0},
     },
-    [TRAINER_WINSTON_1] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_CHEAP_TACTICS, 0},
-    },
     [TRAINER_HALEY_1] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_SHELL_ARMOR, 0},
     },
     [TRAINER_TIANA] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_ONSTAY_LEECH_SEED, 0, 0},
-    },
-    [TRAINER_JOSH] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_POSTURE_DEFENSE, 4, 0},
     },
     [TRAINER_TOMMY] = {
         [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_LAST_BLEED, 2, 0}, // Last bleed does not affect the first Pokémon
@@ -154,11 +148,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // TODO: Player has permanent Ring Target effect
     //},
     // ==== ROUTE 108 ====
-    [TRAINER_MATTHEW] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_COMATOSE, 0},
-        // TODO: Suppress player abilities
-        // TODO: Permanent tailwind
-    },
     //[TRAINER_TARA] = {
         // TODO: Player's mons inflicted with Salt Cure and Curse
         // TODO: Player's accurate moves (95%-100% acc) have accuracy lowered by 25% (-25% acc or acc * 0.75?)
@@ -185,25 +174,10 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         // TODO: Red Card on hit for AI (once per AI mon)
     },
     // ==== ROUTE 108 ABANDONED SHIP ====
-    [TRAINER_THALIA_1] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_PURE_LOVE, 0},
-        [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_PIXIE_POWER, 0},
-        // TODO: Opponent uses Sweet Kiss when attacked
-    },
     [TRAINER_DEMETRIUS] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_ANGELS_WRATH, 0},
         // TODO: Opponents deal 1.25x damage and hit lowest defense vs statused foes
         // TODO: Opponent's status moves ignore abilities
-    },
-    [TRAINER_DUNCAN] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_POISON_HEAL, 0},
-        // TODO: Both trainers' teams start Badly Poisoned
-        // TODO: Opponent uses Anchor Shot if player tries to switch out
-    },
-    [TRAINER_CHARLIE] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_COSMIC_DAZE, 0},
-        // TODO: Opponent uses Whirlwind every other turn
-        // TODO: Opponent uses Confuse Ray when player switches in
     },
     [TRAINER_GARRISON] = {
         [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_BONE_ZONE, 0},
@@ -216,16 +190,6 @@ const u16 sTrainerSkillList[TRAINERS_COUNT][MAX_HELL_TRAINERS_GYM_SKILLS][BATTLE
         [HELL_MODE_TRAINER_SKILL_2] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_LEVITATE, 0},
         [HELL_MODE_TRAINER_SKILL_3] = {BATTLE_EVENT_EXTRA_ABILITIES_2, ABILITY_INFLATABLE, 0},
         // TODO: Use 50BP Explosion/Outburst when fainting
-    },
-    [TRAINER_KIRA_AND_DAN_1] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_FIRE_SEA, 0, 0},
-        // TODO: Opponent attacks with Burning Jealousy every 2 turns
-        // TODO: Opponent attacks with Rage Fist upon fainting (targets mon that fainted it)
-    },
-    [TRAINER_SHEDINJITE_ABANDONED_SHIP] = {
-        [HELL_MODE_TRAINER_SKILL_1] = {BATTLE_EVENT_EXTRA_ABILITIES_1, ABILITY_TERA_SHELL, 0},
-        // TODO: Opponent's mons enter with a substitute
-        // TODO: Passive Heavy Duty Boots effect
     },
     // ==== ROUTE 109 ====
     //[TRAINER_CARTER] = {
