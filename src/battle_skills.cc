@@ -154,7 +154,7 @@ struct InlineEffect {
     u8 power;          // 0 keeps the move's power
     bool8 falseSwipe;  // leaves the target at 1 HP at least
     // STATUS
-    enum StatusKind : u8 { NO_STATUS, SLEEP, POISON, TOXIC, BURN, PARALYSIS, FROSTBITE, BLEED, CONFUSION, CURSE, SALT_CURE, ATTRACT, DRENCH } status;
+    enum StatusKind : u8 { NO_STATUS, SLEEP, POISON, TOXIC, BURN, PARALYSIS, FROSTBITE, BLEED, CONFUSION, CURSE, SALT_CURE, ATTRACT, DRENCH, GASTRO_ACID } status;
 };
 
 // extra_ability of the skill. The abilities themselves come from Trainer.hellAbilities (GetExtraAbilityToSetToBattler),
@@ -493,6 +493,7 @@ static const struct {
     [InlineEffect::SALT_CURE] = {MOVE_EFFECT_SALT_CURE, 0, {TYPE_NONE, TYPE_NONE}},
     [InlineEffect::ATTRACT] = {MOVE_EFFECT_ATTRACT, 0, {TYPE_NONE, TYPE_NONE}},
     [InlineEffect::DRENCH] = {MOVE_EFFECT_DRENCH, 0, {TYPE_NONE, TYPE_NONE}},
+    [InlineEffect::GASTRO_ACID] = {MOVE_EFFECT_NONE, 0, {TYPE_NONE, TYPE_NONE}},
 };
 
 // The same checks as SetMoveEffect, so the skill isn't announced for nothing
@@ -521,6 +522,8 @@ static int CanApplyInlineStatus(InlineEffect::StatusKind status, u8 user, u8 tar
             return CanInfatuate(user, target);
         case InlineEffect::DRENCH:
             return CanBeDrenched(target);
+        case InlineEffect::GASTRO_ACID:  // same as Cmd_setgastroacid
+            return !(gStatuses3[target] & STATUS3_GASTRO_ACID) && !DoesBattlerHaveAbilityShield(target);
         default:
             return FALSE;
     }
@@ -534,6 +537,10 @@ static int StatusBattler(InlineRun& run, const InlineEffect& effect, u8 target) 
     CHECK(CanApplyInlineStatus(effect.status, user, target))
     gStackBattler1 = user;
     gStackBattler2 = target;
+    if (effect.status == InlineEffect::GASTRO_ACID) {
+        Show(run, BattleScript_SuppressStack2Ability);
+        return TRUE;
+    }
     gBattleCommunication[MULTISTRING_CHOOSER] = sInlineStatuses[effect.status].moveEffect;
     Show(run, BattleScript_SkillStatus);
     return TRUE;
