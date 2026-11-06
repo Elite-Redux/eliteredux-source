@@ -12,7 +12,7 @@
 #   tools          host helper tools (gbagfx, preproc, ...)
 #   rom            the ROM, built incrementally in a cache mount
 #   bps            EliteRedux.bps
-#   *-artifact     scratch stages for `--output type=local`
+#   *-artifact     scratch stages for `--output type=local` (ci-artifact: what CI uploads)
 
 ARG DEBIAN_IMAGE=debian:bookworm-slim
 
@@ -192,3 +192,6 @@ COPY --from=rom /out/ /
 
 FROM scratch AS bps-artifact
 COPY --from=bps /out/ /
+
+FROM scratch AS ci-artifact
+COPY --from=bps /out/*.bps /out/*.sym /

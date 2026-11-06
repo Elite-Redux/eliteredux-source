@@ -7,7 +7,16 @@ on:
 
 jobs:
   docker:
+    name: docker (${{ matrix.name }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: EliteRedux
+            public: 0
+          - name: EliteRedux-public
+            public: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -20,15 +29,23 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build ROM and BPS
+      - name: Build ROM, BPS and symbols
         uses: docker/build-push-action@v6
         with:
           context: .
           file: docker/Dockerfile
-          target: bps-artifact
+          target: ci-artifact
           platforms: linux/amd64
-          # Only checks that everything builds; nothing is uploaded
-          outputs: type=cacheonly
+          build-args: PUBLIC=${{ matrix.public }}
+          outputs: type=local,dest=out
           # Toolchain, codegen and host-tool layers are reused between runs
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
+
+      - name: Upload BPS and symbols
+        if: matrix.public == 1
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ matrix.name }}
+          path: out/
+          if-no-files-found: error
