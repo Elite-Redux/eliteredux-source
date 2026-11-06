@@ -411,6 +411,8 @@ void UpdateAbilityStateIndicesForNewSpecies(u8 battler, u16 newSpecies);
 bool32 IsUnsuppressableAbility(AbilityEnum ability);
 int IsPersistentOrUnsuppressableAbility(AbilityEnum ability);
 bool8 CanBeDisabled(u8 battlerId);
+bool32 BattlerHasHoldEffect(u8 battlerId, u32 holdEffect, bool32 checkNegating);
+u32 GetBattlerHoldEffectParamFor(u8 battlerId, u32 holdEffect);
 bool8 DoesBattlerHaveAbilityShield(u8 battlerId);
 u16 IsSoundproof(u8 battlerId);
 AbilityEnum BattlerHasAbility(u8 battler, AbilityEnum ability, int checkMoldBreaker);

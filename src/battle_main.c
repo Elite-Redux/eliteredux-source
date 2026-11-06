@@ -4225,7 +4225,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType, MoveEnum move) {
     // item effects
     if (holdEffect == HOLD_EFFECT_MACHO_BRACE || holdEffect == HOLD_EFFECT_POWER_ITEM)
         speed /= 2;
-    else if (holdEffect == HOLD_EFFECT_IRON_BALL)
+    else if (BattlerHasHoldEffect(battlerId, HOLD_EFFECT_IRON_BALL, TRUE))
         speed /= 2;
     else if (holdEffect == HOLD_EFFECT_CHOICE_SCARF)
         speed = (speed * 150) / 100;
@@ -4325,7 +4325,7 @@ union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove) {
     speedValue.priority = priority;
 
     speedValue.goesFirst = gRoundStructs[battler].quickDraw + gRoundStructs[battler].usedCustapBerry;
-    speedValue.goesLastNegation = GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_LAGGING_TAIL;
+    speedValue.goesLastNegation = BattlerHasHoldEffect(battler, HOLD_EFFECT_LAGGING_TAIL, TRUE);
     if (!ignoreChosenMove && !quash && MYCELIUM_MIGHT_AFFECTED(battler, GetChosenMove(battler))) speedValue.goesLastNegation++;
     if (!quash && gVolatileStructs[battler].drenched) speedValue.goesLastNegation++;
     speedValue.goesLastNegation = ~speedValue.goesLastNegation;
@@ -4416,9 +4416,9 @@ static void SetActionsAndBattlersTurnOrder(void) {
             continue;
         else if (BattlerHasAbility(i, ABILITY_QUICK_DRAW, TRUE) && (Random() % 100) < 30)
             gRoundStructs[i].quickDraw = TRUE;
-        else if (GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_QUICK_CLAW && (Random() % 100) < GetBattlerHoldEffectParam(i))
+        else if (BattlerHasHoldEffect(i, HOLD_EFFECT_QUICK_CLAW, TRUE) && (Random() % 100) < GetBattlerHoldEffectParamFor(i, HOLD_EFFECT_QUICK_CLAW))
             gRoundStructs[i].usedCustapBerry = TRUE;
-        else if (!IsUnnerveAbilityOnOpposingSide(i) && GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_CUSTAP_BERRY &&
+        else if (!IsUnnerveAbilityOnOpposingSide(i) && BattlerHasHoldEffect(i, HOLD_EFFECT_CUSTAP_BERRY, TRUE) &&
                  HasEnoughHpToEatBerry(i, 4, gBattleMons[i].item))
             gRoundStructs[i].usedCustapBerry = TRUE;
     }
@@ -4624,7 +4624,7 @@ static void CheckQuickClaw_CustapBerryActivation(void) {
                     gStackBattler1 = gActiveBattler;
                     gLastUsedItem = gBattleMons[gActiveBattler].item;
                     PREPARE_ITEM_BUFFER(gBattleTextBuff1, gLastUsedItem);
-                    if (GetBattlerHoldEffect(gActiveBattler, FALSE) == HOLD_EFFECT_CUSTAP_BERRY) {
+                    if (BattlerHasHoldEffect(gActiveBattler, HOLD_EFFECT_CUSTAP_BERRY, FALSE)) {
                         // don't record berry since its gone now
                         BattleScriptExecute(BattleScript_CustapBerryActivation);
                     } else {
@@ -5230,7 +5230,7 @@ void ApplyTypeOverrideInformation(MoveEnum move, int battlerAtk, int moveType, i
     }
 
     // Check if a gem should activate.
-    if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_GEMS && moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item) &&
+    if (BattlerHasHoldEffect(battlerAtk, HOLD_EFFECT_GEMS, TRUE) && moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item) &&
         !IsUnnerveAbilityOnOpposingSide(battlerAtk)) {
         gTurnStructs[battlerAtk].gemParam = GetBattlerHoldEffectParam(battlerAtk);
         gTurnStructs[battlerAtk].gemBoost = TRUE;
@@ -5254,7 +5254,7 @@ void SetTypeBeforeUsingMove(MoveEnum move, u8 battlerAtk) {
         gBattleStruct->dynamicMoveType = 0;
 
     // Check if a gem should activate.
-    if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_GEMS && moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item) &&
+    if (BattlerHasHoldEffect(battlerAtk, HOLD_EFFECT_GEMS, TRUE) && moveType == ItemId_GetSecondaryId(gBattleMons[battlerAtk].item) &&
         !IsUnnerveAbilityOnOpposingSide(battlerAtk)) {
         gTurnStructs[battlerAtk].gemParam = GetBattlerHoldEffectParam(battlerAtk);
         gTurnStructs[battlerAtk].gemBoost = TRUE;

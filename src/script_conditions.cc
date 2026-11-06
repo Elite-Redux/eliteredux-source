@@ -123,7 +123,7 @@ inline int ItemCondition(ItemEnum item, u8 battler, bool checkDisabling) {
 }
 
 inline int ItemCondition(HoldEffectEnum holdEffect, u8 battler, bool checkDisabling) {
-    return GetBattlerHoldEffect(battler, (int)checkDisabling) == holdEffect;
+    return BattlerHasHoldEffect(battler, holdEffect, (int)checkDisabling);
 }
 
 #define CUSTOM_MOVE_CONDITION_CALL BATTLER_ATTACKER, BATTLER_TARGET, move
@@ -147,7 +147,7 @@ template <>
 int CustomMoveCondition<EFFECT_ACROBATICS>(CUSTOM_MOVE_CONDITION_PARAMS) {
     return gBattleMons[battlerAtk].item == ITEM_NONE
            // Edge case, because removal of items happens after damage calculation.
-           || (gTurnStructs[battlerAtk].gemBoost && GetBattlerHoldEffect(battlerAtk, FALSE) == HOLD_EFFECT_GEMS);
+           || (gTurnStructs[battlerAtk].gemBoost && BattlerHasHoldEffect(battlerAtk, HOLD_EFFECT_GEMS, FALSE));
 }
 
 template <>

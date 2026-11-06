@@ -747,7 +747,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
         // Magic Bounce
         if (BattlerHasAbility(battlerDef, ABILITY_MAGIC_BOUNCE, TRUE) && TestMoveFlags(move, FLAG_MAGIC_COAT_AFFECTED)) RETURN_SCORE_MINUS(20);
 
-        if (GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_CLEAR_AMULET && IsStatLoweringMoveEffect(moveEffect)) RETURN_SCORE_MINUS(10);
+        if (BattlerHasHoldEffect(battlerDef, HOLD_EFFECT_CLEAR_AMULET, TRUE) && IsStatLoweringMoveEffect(moveEffect)) RETURN_SCORE_MINUS(10);
 
         // gen7+ dark type mons immune to priority->elevated moves from prankster
         if (BattlerHasAbility(battlerAtk, ABILITY_PRANKSTER, TRUE) && IS_BATTLER_OF_TYPE(battlerDef, TYPE_DARK) && IS_MOVE_STATUS(move) &&

@@ -65,8 +65,8 @@ object BattleSkillGenerator : Generator {
     )
 
     for ((id, skill) in INLINE_SKILLS) {
-      check(skill.onCount > 0 || skill.extraAbilityCount > 0) {
-        "$id: inline skill with neither an `on` block nor an extra_ability"
+      check(skill.onCount > 0 || skill.extraAbilityCount > 0 || skill.extraItemCount > 0) {
+        "$id: inline skill with no `on` block, extra_ability or extra_item"
       }
       // Each stat change, side condition, field status and status is one battle script on the stack
       // (20 slots), shared with the other skills

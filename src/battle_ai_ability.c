@@ -1071,13 +1071,13 @@ int ScoreSwitchInAbility(AbilityEnum ability, int battlerAtk, int battlerDef, in
         case ABILITY_PROTOSYNTHESIS:
             if (IsWeatherActive(WEATHER_SUN_ANY)) return AI_SCORE_PARADOX_BOOST;
 
-            if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) return AI_SCORE_PARADOX_BOOST + AI_SCORE_LOSE_ITEM(battlerAtk);
+            if (BattlerHasHoldEffect(battlerAtk, HOLD_EFFECT_BOOSTER_ENERGY, TRUE)) return AI_SCORE_PARADOX_BOOST + AI_SCORE_LOSE_ITEM(battlerAtk);
             break;
 
         case ABILITY_QUARK_DRIVE:
             if (IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) return AI_SCORE_PARADOX_BOOST;
 
-            if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) return AI_SCORE_PARADOX_BOOST + AI_SCORE_LOSE_ITEM(battlerAtk);
+            if (BattlerHasHoldEffect(battlerAtk, HOLD_EFFECT_BOOSTER_ENERGY, TRUE)) return AI_SCORE_PARADOX_BOOST + AI_SCORE_LOSE_ITEM(battlerAtk);
             break;
 
         case ABILITY_FURNACE:

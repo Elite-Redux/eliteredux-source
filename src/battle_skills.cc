@@ -28,8 +28,6 @@ extern "C" {
 #define ON_DEFENSIVE_MULTIPLIER opt u8 battler, opt u16 *resistance, opt u16 *modifier
 #define ON_END_TURN opt BattleSkillEnum skill, opt u8 battler
 
-#define MUL(val) MUL_MODIFIER(modifier, val)
-
 static void Unregister(BattleSkillEnum skill) {
     for (int i = 0; i < ARRAY_COUNT(gActiveSkills); i++) {
         FILTER(gActiveSkills[i] == skill)
@@ -43,7 +41,6 @@ static int RunEntryAnnounceScript(BattleSkillEnum skill, const u8* script) {
     BattleScriptPushCursorAndCallback(script);
     return TRUE;
 }
-#define BATTLE_START_SIMPLE(script) .onBattleStart = +[](ON_BATTLE_START) -> int { return RunEntryAnnounceScript(skill, script); }
 
 template <BattleSkillEnum Id>
 constexpr BattleSkill Impl = {0};

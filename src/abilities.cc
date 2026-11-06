@@ -2650,7 +2650,7 @@ constexpr Ability Impl<ABILITY_MERCILESS> = {
         if (gBattleMons[target].status1 & STATUS1_PARALYSIS) return ALWAYS_CRIT;
         if (gBattleMons[target].status1 & STATUS1_BLEED) return ALWAYS_CRIT;
         if (gBattleMons[target].statStages[STAT_SPEED] < DEFAULT_STAT_STAGE) return ALWAYS_CRIT;
-        if (GetBattlerHoldEffect(target, TRUE) == HOLD_EFFECT_IRON_BALL) return ALWAYS_CRIT;
+        if (BattlerHasHoldEffect(target, HOLD_EFFECT_IRON_BALL, TRUE)) return ALWAYS_CRIT;
         return 0;
     },
 };
@@ -4498,7 +4498,7 @@ constexpr Ability Impl<ABILITY_NORTH_WIND> = {
         int side = GetBattlerSide(battler);
         gSideTimers[side].started.auroraVeil = TRUE;
         gSideStatuses[side] |= SIDE_STATUS_AURORA_VEIL;
-        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
+        if (BattlerHasHoldEffect(battler, HOLD_EFFECT_LIGHT_CLAY, TRUE))
             gSideTimers[side].auroraVeilTimer = SCREEN_DURATION;
         else
             gSideTimers[side].auroraVeilTimer = SCREEN_DURATION_SHORT;
@@ -7005,7 +7005,7 @@ int ProtosynthesisHandler(AbilityEnum ability, u8 battler, AbilityCallType callT
 
     if (state.source == PARADOX_WEATHER_ACTIVE && !IsWeatherActive(WEATHER_SUN_ANY)) {
         InsertCorrectEndType(callType);
-        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
+        if (BattlerHasHoldEffect(battler, HOLD_EFFECT_BOOSTER_ENERGY, TRUE)) {
             // Push this first so it resolves last
             ParadoxBoost boost = {.source = PARADOX_BOOSTER_ENERGY, .statId = GetHighestStatId(battler, TRUE)};
             SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
@@ -7019,7 +7019,7 @@ int ProtosynthesisHandler(AbilityEnum ability, u8 battler, AbilityCallType callT
         return TRUE;
     }
 
-    if (state.source == PARADOX_BOOST_NOT_ACTIVE && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
+    if (state.source == PARADOX_BOOST_NOT_ACTIVE && BattlerHasHoldEffect(battler, HOLD_EFFECT_BOOSTER_ENERGY, TRUE)) {
         InsertCorrectEndType(callType);
         ParadoxBoost boost = {.source = PARADOX_BOOSTER_ENERGY, .statId = GetHighestStatId(battler, TRUE)};
         SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
@@ -7061,7 +7061,7 @@ int QuarkDriveHandler(AbilityEnum ability, u8 battler, AbilityCallType callType)
 
     if (state.source == PARADOX_WEATHER_ACTIVE && !IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) {
         InsertCorrectEndType(callType);
-        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
+        if (BattlerHasHoldEffect(battler, HOLD_EFFECT_BOOSTER_ENERGY, TRUE)) {
             // Push this first so it resolves last
             ParadoxBoost boost = {.source = PARADOX_BOOSTER_ENERGY, .statId = GetHighestStatId(battler, TRUE)};
             SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
@@ -7075,7 +7075,7 @@ int QuarkDriveHandler(AbilityEnum ability, u8 battler, AbilityCallType callType)
         return TRUE;
     }
 
-    if (state.source == PARADOX_BOOST_NOT_ACTIVE && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
+    if (state.source == PARADOX_BOOST_NOT_ACTIVE && BattlerHasHoldEffect(battler, HOLD_EFFECT_BOOSTER_ENERGY, TRUE)) {
         InsertCorrectEndType(callType);
         ParadoxBoost boost = {.source = PARADOX_BOOSTER_ENERGY, .statId = GetHighestStatId(battler, TRUE)};
         SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
@@ -11419,7 +11419,7 @@ constexpr Ability Impl<ABILITY_WINGS_OF_PESTILENCE> = {
 template <>
 constexpr Ability Impl<ABILITY_ZEN_GARDEN> = {
     .onEntry = +[](ON_ENTRY) -> int {
-        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SEEDS) {
+        if (BattlerHasHoldEffect(battler, HOLD_EFFECT_SEEDS, TRUE)) {
             switch (ItemId_GetSecondaryId(gBattleMons[battler].item)) {
                 case HOLD_EFFECT_PARAM_GRASSY_TERRAIN:
                     return Impl<ABILITY_GRASSY_SURGE>.onEntry(DELEGATE_ENTRY);
@@ -12905,7 +12905,7 @@ constexpr Ability Impl<ABILITY_LIGHT_WIELD> = {
         int side = GetBattlerSide(battler);
         gSideTimers[side].started.lightscreen = TRUE;
         gSideStatuses[side] |= SIDE_STATUS_LIGHTSCREEN;
-        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
+        if (BattlerHasHoldEffect(battler, HOLD_EFFECT_LIGHT_CLAY, TRUE))
             gSideTimers[side].lightscreenTimer = SCREEN_DURATION;
         else
             gSideTimers[side].lightscreenTimer = SCREEN_DURATION_SHORT;

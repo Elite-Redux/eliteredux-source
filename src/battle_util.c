@@ -2404,7 +2404,7 @@ enum {
 s32 GetDrainedBigRootHp(u32 battler, s32 hp) {
     if (!hp) return -1;
 
-    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BIG_ROOT) hp = (hp * 3) / 2;  // Buff Big Root's additional healing from 30% to 50%
+    if (BattlerHasHoldEffect(battler, HOLD_EFFECT_BIG_ROOT, TRUE)) hp = (hp * 3) / 2;  // Buff Big Root's additional healing from 30% to 50%
 
     if (BattlerHasAbility(battler, ABILITY_ABSORBANT, FALSE)) hp = (hp * 3) / 2;  // Buff Absorbant additional healing from 30% to 50%
 
@@ -2717,7 +2717,7 @@ u8 DoBattlerEndTurnEffects(void) {
 
                         if (HasGrappler(gBattleStruct->wrappedBy[gActiveBattler])) {
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
-                        } else if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
+                        } else if (BattlerHasHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], HOLD_EFFECT_BINDING_BAND, TRUE))
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
                         else
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
@@ -2746,7 +2746,7 @@ u8 DoBattlerEndTurnEffects(void) {
             case ENDTURN_OCTOLOCK:
 
                 if (gVolatileStructs[gActiveBattler].octolock && !IsStatDropBlocked(gActiveBattler, STAT_DEF, FALSE) &&
-                    !IsStatDropBlocked(gActiveBattler, STAT_SPDEF, FALSE) && GetBattlerHoldEffect(gActiveBattler, TRUE) != HOLD_EFFECT_CLEAR_AMULET) {
+                    !IsStatDropBlocked(gActiveBattler, STAT_SPDEF, FALSE) && !BattlerHasHoldEffect(gActiveBattler, HOLD_EFFECT_CLEAR_AMULET, TRUE)) {
                     gBattlerTarget = gActiveBattler;
                     BattleScriptExecute(BattleScript_OctolockEndTurn);
                     effect++;
@@ -3228,7 +3228,7 @@ enum {
 u16 IsPowderImmune(int battler, int checkMoldBreaker) {
     if (IsMyceliumMightActive(gBattlerAttacker)) return FALSE;
     if (IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)) return TRUE;
-    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES) return TRUE;
+    if (BattlerHasHoldEffect(battler, HOLD_EFFECT_SAFETY_GOGGLES, TRUE)) return TRUE;
     RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, powderImmune)
     if (IS_BATTLER_OF_TYPE(battler, TYPE_BUG)) RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, pollinateImmunities)
     return FALSE;
@@ -3625,7 +3625,7 @@ MultihitType GetMultihitType(int battler, MoveEnum move) {
             if (move == MOVE_WATER_SHURIKEN && BattlerHasAbility(battler, ABILITY_BATTLE_BOND, FALSE) && gBattleMons[battler].species == SPECIES_GRENINJA_ASH)
                 return MULTIHIT_THREE;
 
-            return GetBattlerHoldEffect(battler, FALSE) == HOLD_EFFECT_LOADED_DICE ? MULTIHIT_FOUR_OR_FIVE : MULTIHIT_TWO_TO_FIVE;
+            return BattlerHasHoldEffect(battler, HOLD_EFFECT_LOADED_DICE, FALSE) ? MULTIHIT_FOUR_OR_FIVE : MULTIHIT_TWO_TO_FIVE;
 
         case EFFECT_DOUBLE_HIT:
             if (gBattleMoves[move].argument == 3) return MULTIHIT_THREE;
@@ -3824,7 +3824,7 @@ bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8* timer) {
         gFieldTimers.started.terrain = TRUE;
         gFieldTimers.terrainBattlerId = battler;
 
-        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
+        if (BattlerHasHoldEffect(battler, HOLD_EFFECT_TERRAIN_EXTENDER, TRUE))
             *timer = TERRAIN_DURATION_EXTENDED;
         else
             *timer = TERRAIN_DURATION;
@@ -3948,7 +3948,7 @@ bool32 ShouldChangeFormHpBased(u32 battler) {
 }
 
 bool32 TryPrimalReversion(u8 battlerId, int useReturn) {
-    if (GetBattlerHoldEffect(battlerId, FALSE) == HOLD_EFFECT_PRIMAL_ORB &&
+    if (BattlerHasHoldEffect(battlerId, HOLD_EFFECT_PRIMAL_ORB, FALSE) &&
         GetPrimalReversionSpecies(gBattleMons[battlerId].species, gBattleMons[battlerId].item) != SPECIES_NONE) {
         gBattlerAttacker = battlerId;
         if (useReturn) {
@@ -4814,7 +4814,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
                 u8 i, statId, j;
                 bool8 found = FALSE;
                 for (i = 0; i < gBattlersCount; i++) {
-                    if (GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_MIRROR_HERB) {
+                    if (BattlerHasHoldEffect(i, HOLD_EFFECT_MIRROR_HERB, TRUE)) {
                         for (statId = STAT_ATK; statId < NUM_BATTLE_STATS; statId++) {
                             for (j = 0; j < gBattlersCount; j++) {
                                 FILTER(GetBattlerSide(i) != GetBattlerSide(j))
@@ -4915,7 +4915,7 @@ u32 IsAbilityPreventingEscape(u32 battlerId) {
 bool32 CanBattlerEscape(u32 battlerId)  // no ability check
 {
     if (gVolatileStructs[battlerId].skyDropped) return FALSE;
-    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_SHED_SHELL)
+    if (BattlerHasHoldEffect(battlerId, HOLD_EFFECT_SHED_SHELL, TRUE))
         return TRUE;
     else if ((B_GHOSTS_ESCAPE >= GEN_6 && !IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) &&
              gBattleMons[battlerId].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))
@@ -6614,11 +6614,35 @@ u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating) {
         return ItemId_GetHoldEffect(gBattleMons[battlerId].item);
 }
 
+// Verifies the validity of this item on the hell mode defined items, checks for difficulty and negating pieces
+static const struct HellItem* GetSkillItem(u8 battlerId, u32 holdEffect, bool32 checkNegating) {
+    if (!isHellMode() || !(gBattleTypeFlags & BATTLE_TYPE_TRAINER) || GetBattlerSide(battlerId) != B_SIDE_OPPONENT) return NULL;
+    if (checkNegating && IsItemNegated(battlerId)) return NULL;
+    for (int i = 0; i < HELL_MODE_EXTRA_ITEMS; i++) {
+        const struct HellItem* extra = &gTrainers[gTrainerBattleOpponent_A].hellItems[i];
+        if (extra->item != ITEM_NONE && ItemId_GetHoldEffect(extra->item) == holdEffect) return extra;
+    }
+    return NULL;
+}
+
+// Its item or a skill's extra_item. GetBattlerHoldEffect only sees the item
+// TODO: the switches on GetBattlerHoldEffect in ItemBattleEffects still only see the item (Leftovers, Shell Bell,
+// Life Orb recoil, Rocky Helmet...) until we change them
+bool32 BattlerHasHoldEffect(u8 battlerId, u32 holdEffect, bool32 checkNegating) {
+    return GetBattlerHoldEffect(battlerId, checkNegating) == holdEffect || GetSkillItem(battlerId, holdEffect, checkNegating);
+}
+
+u32 GetBattlerHoldEffectParamFor(u8 battlerId, u32 holdEffect) {
+    const struct HellItem* extra = GetSkillItem(battlerId, holdEffect, FALSE);
+    if (extra) return extra->strength ? extra->strength : ItemId_GetHoldEffectParam(extra->item);
+    return GetBattlerHoldEffectParam(battlerId);
+}
+
 bool8 DoesBattlerHaveAbilityShield(u8 battlerId) {
     for (int i = 0; i < ARRAY_COUNT(gBattleMons[battlerId].abilities); i++) {
         if (gAbilities[gBattleMons[battlerId].abilities[i]].blocksAbilitySuppression) return TRUE;
     }
-    if (GetBattlerHoldEffect(battlerId, FALSE) != HOLD_EFFECT_ABILITY_SHIELD) return FALSE;
+    if (!BattlerHasHoldEffect(battlerId, HOLD_EFFECT_ABILITY_SHIELD, FALSE)) return FALSE;
     return !(gStatuses3[battlerId] & STATUS3_EMBARGO);
 }
 
@@ -6637,9 +6661,9 @@ bool32 IsMoveMakingContact(MoveEnum move, u8 battlerAtk) {
             return FALSE;
     } else if (BattlerHasAbility(battlerAtk, ABILITY_LONG_REACH, TRUE)) {
         return FALSE;
-    } else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PROTECTIVE_PADS) {
+    } else if (BattlerHasHoldEffect(battlerAtk, HOLD_EFFECT_PROTECTIVE_PADS, TRUE)) {
         return FALSE;
-    } else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PUNCHING_GLOVE && IsIronFistBoosted(battlerAtk, move)) {
+    } else if (BattlerHasHoldEffect(battlerAtk, HOLD_EFFECT_PUNCHING_GLOVE, TRUE) && IsIronFistBoosted(battlerAtk, move)) {
         return FALSE;
     } else {
         return TRUE;
@@ -6723,7 +6747,7 @@ ProtectType IsBattlerProtected(u8 battlerId, MoveEnum move) {
 }
 
 static int CheckGroundingEffects(u8 battlerId) {
-    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
+    if (BattlerHasHoldEffect(battlerId, HOLD_EFFECT_IRON_BALL, TRUE))
         return TRUE;
     else if (IsGravityActive())
         return TRUE;
@@ -6742,7 +6766,7 @@ static AbilityEnum CheckLevitatingEffects(u8 battlerId) {
         return TRUE;
     else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
         return TRUE;
-    else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
+    else if (BattlerHasHoldEffect(battlerId, HOLD_EFFECT_AIR_BALLOON, TRUE))
         return TRUE;
     RETURN_ABILITY_IF_FLAG(battlerId, TRUE, levitate)
 
@@ -7430,7 +7454,7 @@ void SetSwapDamageCategory(int battler, int target, MoveEnum move, Type moveType
         }
     }
 
-    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SWIRLY_GLASSES) gSwapDamageCategory = !gSwapDamageCategory;
+    if (BattlerHasHoldEffect(battler, HOLD_EFFECT_SWIRLY_GLASSES, TRUE)) gSwapDamageCategory = !gSwapDamageCategory;
 }
 
 u8 CalculateBattlerLowestDefense(u8 battler) {
@@ -7456,7 +7480,7 @@ u8 CalculateBattlerHighestAttack(u8 battler) {
 static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 isCrit, bool32 updateFlags) {
     u8 defStatToUse = 0;
     u8 noPositiveStatStages = isCrit || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED ||
-                              (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && 
+                              (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED &&
                                 (BattlerHasAbility(battlerAtk, ABILITY_GRIP_PINCER, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_WORLD_SERPENT, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_ENGULF, FALSE)));
     u8 isUnaware = IsUnaware(battlerAtk);
     u8 secondaryDefStats[NUM_STATS] = {0};
@@ -7488,6 +7512,12 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
     // apply defense stat modifiers
     u16 modifier = UQ_4_12(1.0);
 
+    // Out of the switch so a skill's extra_item counts too
+    // TODO: Generalize the switch with something better
+    if (BattlerHasHoldEffect(battlerDef, HOLD_EFFECT_EVIOLITE, TRUE) && CanEvolveStrict(gBattleMons[battlerDef].species) &&
+        gBattleMons[battlerDef].species != SPECIES_NECROZMA)
+        MulModifier(&modifier, UQ_4_12(1.5));
+
     // target's hold effects
     switch (GetBattlerHoldEffect(battlerDef, TRUE)) {
         case HOLD_EFFECT_DEEP_SEA_SCALE:
@@ -7496,9 +7526,6 @@ static u32 CalcDefenseStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveT
         case HOLD_EFFECT_METAL_POWDER:
             if (gBattleMons[battlerDef].species == SPECIES_DITTO && defStatToUse == STAT_DEF && !(gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED))
                 MulModifier(&modifier, UQ_4_12(2.0));
-            break;
-        case HOLD_EFFECT_EVIOLITE:
-            if (CanEvolveStrict(gBattleMons[battlerDef].species) && (gBattleMons[battlerDef].species != SPECIES_NECROZMA)) MulModifier(&modifier, UQ_4_12(1.5));
             break;
         case HOLD_EFFECT_ASSAULT_VEST:
             if (defStatToUse == STAT_SPDEF) MulModifier(&modifier, UQ_4_12(1.5));
@@ -7725,12 +7752,6 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
             percentBoost = min((gBattleStruct->sameMoveTurns[battlerAtk] * GetBattlerHoldEffectParam(battlerAtk)), 100);
             MulModifier(&finalModifier, UQ_4_12(1.0) + gPercentToModifier[percentBoost]);
             break;
-        case HOLD_EFFECT_EXPERT_BELT:
-            if (typeEffectivenessModifier >= UQ_4_12(2.0)) MulModifier(&finalModifier, UQ_4_12(1.2));
-            break;
-        case HOLD_EFFECT_LIFE_ORB:
-            MulModifier(&finalModifier, UQ_4_12(1.3));
-            break;
         case HOLD_EFFECT_AMULET_COIN:
             if (gBattleMons[battlerAtk].species == SPECIES_MEOWTH_PARTNER || gBattleMons[battlerAtk].species == SPECIES_MEOWTH_PARTNER_MEGA)
                 MUL_MODIFIER(&finalModifier, 1.3);
@@ -7739,6 +7760,9 @@ u32 CalcFinalDmg(u32 dmg, MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
             if (IsIronFistBoosted(battlerAtk, move)) MulModifier(&finalModifier, UQ_4_12(1.1));
             break;
     }
+    // See Eviolite above
+    if (BattlerHasHoldEffect(battlerAtk, HOLD_EFFECT_EXPERT_BELT, TRUE) && typeEffectivenessModifier >= UQ_4_12(2.0)) MulModifier(&finalModifier, UQ_4_12(1.2));
+    if (BattlerHasHoldEffect(battlerAtk, HOLD_EFFECT_LIFE_ORB, TRUE)) MulModifier(&finalModifier, UQ_4_12(1.3));
 
     // target's hold effect
     switch (GetBattlerHoldEffect(battlerDef, TRUE)) {
@@ -7931,7 +7955,7 @@ void MulByTypeEffectiveness(u16* modifier, MoveEnum move, u8 moveType, u8 battle
         })
 
     if (!abilityModified) {
-        if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET) {
+        if (mod == UQ_4_12(0.0) && BattlerHasHoldEffect(battlerDef, HOLD_EFFECT_RING_TARGET, TRUE)) {
             mod = UQ_4_12(1.0);
             if (recordAbilities) RecordItemEffectBattle(battlerDef, HOLD_EFFECT_RING_TARGET);
         } else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && gStatuses4[battlerDef] & STATUS4_FORESIGHT &&
@@ -8604,7 +8628,7 @@ void TrySaveExchangedItem(u8 battlerId, u16 stolenItem) {
 }
 
 bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 stealthRock, int spikes) {
-    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_HEAVY_DUTY_BOOTS) return FALSE;
+    if (BattlerHasHoldEffect(battlerId, HOLD_EFFECT_HEAVY_DUTY_BOOTS, TRUE)) return FALSE;
     if (BattlerHasAbility(battlerId, ABILITY_SHIELD_DUST, FALSE)) return FALSE;
     if (stealthRock) ON_ABILITY(battlerId, FALSE, gAbilities[ability].stealthRockImmune, return FALSE)
     if ((stealthRock || spikes) && IS_BATTLER_OF_TYPE(battlerId, TYPE_GROUND))
@@ -8728,7 +8752,7 @@ WeatherFlag IsWeatherActive(WeatherFlag weather) {
 bool32 IsBattlerWeatherAffected(u8 battlerId, WeatherFlag weatherFlags) {
     if (gBattleWeather & weatherFlags && WEATHER_HAS_EFFECT) {
         // given weather is active -> check if its sun, rain against utility umbrella ( since only 1 weather can be active at once)
-        if (gBattleWeather & (WEATHER_SUN_ANY | WEATHER_RAIN_ANY) && GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_UTILITY_UMBRELLA)
+        if (gBattleWeather & (WEATHER_SUN_ANY | WEATHER_RAIN_ANY) && BattlerHasHoldEffect(battlerId, HOLD_EFFECT_UTILITY_UMBRELLA, TRUE))
             return FALSE;  // utility umbrella blocks sun, rain effects
 
         return TRUE;
@@ -8939,7 +8963,7 @@ void UpdateAbilityStateIndices(u8 battler, u16 newAbilities[]) {
         turnAbilityTriggers[i] = gTurnStructs[battler].turnAbilityTriggers[j];
         abilityState[i] = gVolatileStructs[battler].abilityState[j];
     }
-    
+
     ARRAY_COPY(gVolatileStructs[battler].switchInAbilityDone, switchInAbilityDone);
     ARRAY_COPY(gTurnStructs[battler].turnAbilityTriggers, turnAbilityTriggers);
     ARRAY_COPY(gVolatileStructs[battler].abilityState, abilityState);
