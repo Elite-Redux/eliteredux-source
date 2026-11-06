@@ -791,29 +791,8 @@ extern const u8 BattleScript_SkillStatus[];
 extern const u8 BattleScript_WaitMessageReturn[];
 extern const u8 BattleScript_SkillWeather[];
 
-extern const u8 BattleScript_ExtraSkillEviolite[];
 
-extern const u8 BattleScript_ExtraSkillPermaStickyWeb[];
-extern const u8 BattleScript_ExtraSkillPermaStickyWebBothSides[];
-extern const u8 BattleScript_ExtraSkillPermaSpikes[];
-extern const u8 BattleScript_ExtraSkillPermaToxicSpikes[];
-extern const u8 BattleScript_ExtraSkillPermaStealthRock[];
-extern const u8 BattleScript_ExtraSkillPermaCaltrops[];
-extern const u8 BattleScript_ExtraSkillHazardsAll[];
 
-extern const u8 BattleScript_ExtraSkillPermaTrickRoom[];
-extern const u8 BattleScript_ExtraSkillPermaInverseRoom[];
-extern const u8 BattleScript_ExtraSkillPermaRainbow[];
-extern const u8 BattleScript_ExtraSkillPermaSwamp[];
-extern const u8 BattleScript_ExtraSkillPermaFireSea[];
-extern const u8 BattleScript_ExtraSkillPermaMist[];
-extern const u8 BattleScript_ExtraSkillPermaTailwind[];
-extern const u8 BattleScript_ExtraSkillPermaSafeguard[];
 
-extern const u8 BattleScript_ExtraSkillPermaSun[];
-extern const u8 BattleScript_ExtraSkillPermaRain[];
-extern const u8 BattleScript_ExtraSkillPermaSandstorm[];
-extern const u8 BattleScript_ExtraSkillPermaHail[];
-extern const u8 BattleScript_ExtraSkillPermaFog[];
 
 #endif  // GUARD_BATTLE_SCRIPTS_H
