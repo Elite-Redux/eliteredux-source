@@ -3499,6 +3499,10 @@ void BattleTurnPassed(void) {
     if (HandleWishPerishSongOnTurnEnd()) return;
 
     ClearMiscTurnFlags();
+    // Only here: the cleanup before the first turn would count a turn for the leads
+    // which creates off-by-one turn count error for skills
+    for (int i = 0; i < gBattlersCount; i++)
+        if (gVolatileStructs[i].turnsOnField < 0xFF) gVolatileStructs[i].turnsOnField++;
     TurnValuesCleanUp(FALSE);
     gHitMarker &= ~(HITMARKER_NO_ATTACKSTRING);
     gHitMarker &= ~(HITMARKER_UNABLE_TO_USE_MOVE);
@@ -4500,7 +4504,6 @@ static void TurnValuesCleanUp(bool8 turnPassOnly) {
             ZERO(gRoundStructs[i])
 
             if (gVolatileStructs[i].isFirstTurn) gVolatileStructs[i].isFirstTurn--;
-            if (gVolatileStructs[i].turnsOnField < 0xFF) gVolatileStructs[i].turnsOnField++;
 
             if (gVolatileStructs[i].rechargeTimer) {
                 gVolatileStructs[i].rechargeTimer--;
