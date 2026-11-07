@@ -18,6 +18,13 @@
   ],
   "warp_events": [
     {
+      "x": 10,
+      "y": 1,
+      "elevation": 3,
+      "dest_map": "MAP_SANDSTREWN_RUINS",
+      "dest_warp_id": "0"
+    },
+    {
       "x": 3,
       "y": 8,
       "elevation": 3,
@@ -25,11 +32,11 @@
       "dest_warp_id": "2"
     },
     {
-      "x": 10,
-      "y": 1,
-      "elevation": 3,
-      "dest_map": "MAP_SANDSTREWN_RUINS",
-      "dest_warp_id": "0"
+      "x": 3,
+      "y": 4,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_TUNNEL",
+      "dest_warp_id": "3"
     }
   ],
   "coord_events": [
