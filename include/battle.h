@@ -736,7 +736,7 @@ struct BattleStruct {
     u8 firstTurnAbilityLoopCounter:4;
     u8 ranEndTurnEffects:1;
     u8 canProcessSwitches:1;
-    u8 ranSkillAnnounce:1;
+    u8 skillAnnounceCount:3;  // gActiveSkills done with onBattleStart
     // Once-only effects that already fired, a bit each, with oncePerSwitchIn in VolatileStruct.
     // Battle skills take theirs by skill slot (OnceBit in battle_skills.cc)
     u32 oncePerPokemon[2][PARTY_SIZE];  // per side and party slot

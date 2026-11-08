@@ -4807,6 +4807,12 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, AbilityEnum ability, u8 extraArg,
                 if (!gBattleMoveDamage) gBattleMoveDamage = -1;
                 BattleScriptCall(BattleScript_NosferatuActivated);
                 effect++;
+            } else if (HasTrainerSkill(battler, SKILL_DRAIN_TWICE_DAMAGE) && ShouldApplyOnHitEffect(battler) && gTurnStructs[battler].savedDmg &&
+                       !BATTLER_MAX_HP(battler) && CanBattlerHeal(battler)) {
+                // Nosferatu's heal without its ability popup, twice the damage dealt
+                gBattleMoveDamage = -gTurnStructs[battler].savedDmg * 2;
+                BattleScriptCall(BattleScript_DrainHeal);
+                effect++;
             }
             break;
         case ABILITYEFFECT_REACTIVE:
@@ -7358,7 +7364,8 @@ static u32 CalcAttackStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
     modifier = UQ_4_12(1.0);
 
     // Fog
-    if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST) && IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY) && !gVolatileStructs[battlerDef].trickOrTreat)
+    if (((IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST) && !gVolatileStructs[battlerDef].trickOrTreat) || HasTrainerSkill(battlerDef, SKILL_FOG_BENEFITS)) &&
+        IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY))
         MUL_MODIFIER(&modifier, .8);
 
     // Infatuation
@@ -7962,7 +7969,9 @@ void MulByTypeEffectiveness(u16* modifier, MoveEnum move, u8 moveType, u8 battle
         })
 
     if (!abilityModified) {
-        if (mod == UQ_4_12(0.0) && BattlerHasHoldEffect(battlerDef, HOLD_EFFECT_RING_TARGET, TRUE)) {
+        if (mod == UQ_4_12(0.0) && HasTrainerSkill(battlerAtk, SKILL_IGNORE_IMMUNITIES)) {
+            mod = UQ_4_12(1.0);
+        } else if (mod == UQ_4_12(0.0) && BattlerHasHoldEffect(battlerDef, HOLD_EFFECT_RING_TARGET, TRUE)) {
             mod = UQ_4_12(1.0);
             if (recordAbilities) RecordItemEffectBattle(battlerDef, HOLD_EFFECT_RING_TARGET);
         } else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && gStatuses4[battlerDef] & STATUS4_FORESIGHT &&
@@ -8756,6 +8765,14 @@ WeatherFlag IsWeatherActive(WeatherFlag weather) {
     return WEATHER_HAS_EFFECT;
 }
 
+// A Hell trainer skill that only changes how the engine treats the trainer's Pokemon
+bool32 HasTrainerSkill(u8 battler, BattleSkillEnum skill) {
+    if (GetBattlerSide(battler) == B_SIDE_PLAYER) return FALSE;
+    for (int i = 0; i < ARRAY_COUNT(gActiveSkills); i++)
+        if (gActiveSkills[i] == skill) return TRUE;
+    return FALSE;
+}
+
 bool32 IsBattlerWeatherAffected(u8 battlerId, WeatherFlag weatherFlags) {
     if (gBattleWeather & weatherFlags && WEATHER_HAS_EFFECT) {
         // given weather is active -> check if its sun, rain against utility umbrella ( since only 1 weather can be active at once)
@@ -8784,7 +8801,7 @@ s32 GetCurrentTerrain(void) {
 }
 
 bool8 IsTrickRoomActive(void) {
-    if (IsAbilityOnField(ABILITY_CLUELESS) || getMonotypeChampType() == TYPE_FLYING)
+    if ((IsAbilityOnField(ABILITY_CLUELESS) || IsAbilityOnField(ABILITY_ROOM_BREAKER)) || getMonotypeChampType() == TYPE_FLYING)
         return FALSE;
     else if ((gFieldStatuses & STATUS_FIELD_TRICK_ROOM) || (getMonotypeChampType() == TYPE_NORMAL && gBattleResults.battleTurnCounter % 2 == 1))
         return TRUE;
@@ -8793,7 +8810,7 @@ bool8 IsTrickRoomActive(void) {
 }
 
 bool8 IsInverseRoomActive(void) {
-    if (IsAbilityOnField(ABILITY_CLUELESS))
+    if ((IsAbilityOnField(ABILITY_CLUELESS) || IsAbilityOnField(ABILITY_ROOM_BREAKER)))
         return FALSE;
     else if (gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)
         return TRUE;
@@ -8811,7 +8828,7 @@ bool8 IsGravityActive(void) {
 }
 
 bool8 isMagicRoomActive(void) {
-    if (IsAbilityOnField(ABILITY_CLUELESS))
+    if ((IsAbilityOnField(ABILITY_CLUELESS) || IsAbilityOnField(ABILITY_ROOM_BREAKER)))
         return FALSE;
     else if (gFieldStatuses & STATUS_FIELD_MAGIC_ROOM)
         return TRUE;
@@ -8820,7 +8837,7 @@ bool8 isMagicRoomActive(void) {
 }
 
 bool8 isWonderRoomActive(void) {
-    if (IsAbilityOnField(ABILITY_CLUELESS))
+    if ((IsAbilityOnField(ABILITY_CLUELESS) || IsAbilityOnField(ABILITY_ROOM_BREAKER)))
         return FALSE;
     else if ((gFieldStatuses & STATUS_FIELD_WONDER_ROOM) || (getMonotypeChampType() == TYPE_NORMAL && gBattleResults.battleTurnCounter % 2 == 0))
         return TRUE;

@@ -979,6 +979,8 @@ int SetMoldBreaker(int battler, MoveEnum move) {
         gHitMarker |= HITMARKER_MOLD_BREAKER;
     else if (getMonotypeChampType() == TYPE_STEEL && GetBattlerSide(battler) != B_SIDE_PLAYER)
         gHitMarker |= HITMARKER_MOLD_BREAKER;
+    else if (HasTrainerSkill(battler, SKILL_IGNORE_IMMUNITIES) || (HasTrainerSkill(battler, SKILL_IGNORE_SOUNDPROOF) && IsSoundMove(battler, move)))
+        gHitMarker |= HITMARKER_MOLD_BREAKER;
     else {
         ON_ABILITY(
             battler, FALSE, gAbilities[ability].onMoldBreaker, if (gAbilities[ability].onMoldBreaker(battler, move)) {
@@ -8657,7 +8659,8 @@ static void Cmd_various(void) {
 
             if (!IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY) ||
                 ((IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST) || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_PSYCHIC)) &&
-                 !gVolatileStructs[gActiveBattler].trickOrTreat)) {
+                 !gVolatileStructs[gActiveBattler].trickOrTreat) ||
+                HasTrainerSkill(gActiveBattler, SKILL_FOG_BENEFITS)) {
                 gBattlescriptCurrInstr = ptr;
                 return;
             }

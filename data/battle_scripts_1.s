@@ -11529,6 +11529,7 @@ BattleScript_AngelsWrath_Effect_Bug_Bite_2::
 
 BattleScript_NosferatuActivated::
 	call BattleScript_AbilityPopUp
+BattleScript_DrainHeal::
 	manipulatedamage DMG_TO_HP_FROM_ABILITY
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_ATTACKER
@@ -12448,6 +12449,7 @@ BattleScript_SkillField::
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_FIELD_GRAVITY, BattleScript_SkillFieldGravity
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_FIELD_MUD_SPORT, BattleScript_SkillFieldMudSport
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_FIELD_WATER_SPORT, BattleScript_SkillFieldWaterSport
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, SKILL_FIELD_QUASH, BattleScript_SkillFieldQuash
 	playmoveanimation BS_ATTACKER, MOVE_TRICK_ROOM
 	goto BattleScript_SkillFieldEnd
 BattleScript_SkillFieldWonderRoom:
@@ -12467,6 +12469,9 @@ BattleScript_SkillFieldMudSport:
 	goto BattleScript_SkillFieldEnd
 BattleScript_SkillFieldWaterSport:
 	playmoveanimation BS_ATTACKER, MOVE_WATER_SPORT
+	goto BattleScript_SkillFieldEnd
+BattleScript_SkillFieldQuash:
+	playmoveanimation BS_ATTACKER, MOVE_QUASH
 BattleScript_SkillFieldEnd:
 	waitanimation
 	readattackerfromstack3
@@ -12478,6 +12483,18 @@ BattleScript_SkillStatus::
 	sethword sMOVE_EFFECT, 0
 	copybyte sMOVE_EFFECT, cMULTISTRING_CHOOSER
 	goto BattleScript_AbilityStatusEffectSafe
+
+@ The end of BattleScript_EffectPowerTrick on gStackBattler2
+BattleScript_SkillPowerTrick::
+	saveattackerandtargetto34
+	copybyte gBattlerAttacker, gStackBattler2
+	playmoveanimation BS_ATTACKER, MOVE_POWER_TRICK
+	waitanimation
+	powertrick BS_ATTACKER
+	printstring STRINGID_PKMNSWITCHEDATKANDDEF
+	waitmessage B_WAIT_TIME_LONG
+	restoreattackerandtargetfrom34
+	return
 
 BattleScript_AnnounceBattleSkill::
 	extraskillpopup 1

@@ -2704,7 +2704,7 @@ static void BattleStartClearSetData(void) {
     ZERO(gBattleStruct->choicedMove)
     ZERO(gBattleStruct->changedItems)
     ZERO(gBattleStruct->lastTakenMoveFrom)
-    gBattleStruct->ranSkillAnnounce = FALSE;
+    gBattleStruct->skillAnnounceCount = 0;
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++) {
         gVolatileStructs[i].isFirstTurn = 2;
@@ -3358,11 +3358,10 @@ static void TryDoEventsBeforeFirstTurn(void) {
 
     if (AbilityBattleEffects(ABILITYEFFECT_REACTIVE, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0)) return;
 
-    if (!gBattleStruct->ranSkillAnnounce) {
-        int any = FALSE;
-        gBattleStruct->ranSkillAnnounce = TRUE;
-        ON_SKILL(skill->onBattleStart, any = skill->onBattleStart(skillId))
-        if (any) return;
+    // One skill at a time: their announces share the text buffers
+    while (gBattleStruct->skillAnnounceCount < ARRAY_COUNT(gActiveSkills)) {
+        BattleSkillEnum skillId = gActiveSkills[gBattleStruct->skillAnnounceCount++];
+        if (skillId && gBattleSkills[skillId].onBattleStart && gBattleSkills[skillId].onBattleStart(skillId)) return;
     }
 
     // Check all switch in abilities happening from the fastest mon to slowest.

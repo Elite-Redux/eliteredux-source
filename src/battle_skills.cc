@@ -18,6 +18,7 @@ extern "C" {
 #include "pokemon.h"
 #include "random.h"
 #include "constants/battle_string_ids.h"
+#include "constants/hold_effects.h"
 }
 
 #include "type_utils.hh"
@@ -117,6 +118,40 @@ constexpr BattleSkill Impl<SKILL_PLAYER_LETHARGY> = PlayerAbilityOnEntry<ABILITY
 template <>
 constexpr BattleSkill Impl<SKILL_PLAYER_NORMALIZE> = PlayerAbilityOnEntry<ABILITY_NORMALIZE>;
 
+// For the whole battle the engine treats the trainer's Pokemon differently, see HasTrainerSkill. Announced at the start
+constexpr BattleSkill TrainerRule = {
+    .onBattleStart = +[](ON_BATTLE_START) -> int { return RunEntryAnnounceScript(skill, BattleScript_AnnounceBattleSkillEnd3); },
+};
+
+template <>
+constexpr BattleSkill Impl<SKILL_IGNORE_SOUNDPROOF> = TrainerRule;  // sound moves ignore abilities (SetMoldBreaker)
+
+template <>
+constexpr BattleSkill Impl<SKILL_IGNORE_IMMUNITIES> = TrainerRule;  // type immunities do neutral damage, abilities ignored
+
+template <>
+constexpr BattleSkill Impl<SKILL_FOG_BENEFITS> = TrainerRule;  // the Ghost/Psychic fog perks
+
+template <>
+constexpr BattleSkill Impl<SKILL_DRAIN_TWICE_DAMAGE> = TrainerRule;  // heals 200% of the damage dealt
+
+// Aurora Veil on the trainer's side when one of its Pokemon comes in or ends a turn in the rain, as long as the move
+static int RainAuroraVeil(BattleSkillEnum skill, u8 battler) {
+    CHECK(GetBattlerSide(battler) == B_SIDE_OPPONENT)
+    CHECK(IsWeatherActive(WEATHER_RAIN_ANY))
+    CHECK_NOT(gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_AURORA_VEIL)
+    gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_AURORA_VEIL;
+    gSideTimers[B_SIDE_OPPONENT].started.auroraVeil = TRUE;
+    gSideTimers[B_SIDE_OPPONENT].auroraVeilTimer = BattlerHasHoldEffect(battler, HOLD_EFFECT_LIGHT_CLAY, TRUE) ? SCREEN_DURATION_EXTENDED : SCREEN_DURATION;
+    return RunEntryAnnounceScript(skill, BattleScript_AnnounceBattleSkillEnd3);
+}
+
+template <>
+constexpr BattleSkill Impl<SKILL_RAIN_SETS_AURORA_VEIL> = {
+    .onEntry = +[](ON_ENTRY) -> int { return RainAuroraVeil(skill, battler); },
+    .onEndTurn = +[](ON_END_TURN) -> int { return RainAuroraVeil(skill, battler); },
+};
+
 // Inline skills are written in the trainer data: proto/TrainerList.textproto with InlineSkill
 // from proto/BattleSkillList.proto
 // Codegen turns each `on` block into an InlineTrigger and builds the skill with the InlineSkill template below.
@@ -154,7 +189,7 @@ struct InlineEffect {
     u8 power;          // 0 keeps the move's power
     bool8 falseSwipe;  // leaves the target at 1 HP at least
     // STATUS
-    enum StatusKind : u8 { NO_STATUS, SLEEP, POISON, TOXIC, BURN, PARALYSIS, FROSTBITE, BLEED, CONFUSION, CURSE, SALT_CURE, ATTRACT, DRENCH, GASTRO_ACID } status;
+    enum StatusKind : u8 { NO_STATUS, SLEEP, POISON, TOXIC, BURN, PARALYSIS, FROSTBITE, BLEED, CONFUSION, CURSE, SALT_CURE, ATTRACT, DRENCH, GASTRO_ACID, POWER_TRICK } status;
 };
 
 // extra_ability of the skill. The abilities themselves come from Trainer.hellAbilities (GetExtraAbilityToSetToBattler),
@@ -387,6 +422,12 @@ static int AddInlineFieldStatus(u8 type, u8 turns) {
         FIELD_STATUS(SKILL_FIELD_GRAVITY, STATUS_FIELD_GRAVITY, gravity)
         FIELD_STATUS(SKILL_FIELD_MUD_SPORT, STATUS_FIELD_MUDSPORT, mudSport)
         FIELD_STATUS(SKILL_FIELD_WATER_SPORT, STATUS_FIELD_WATERSPORT, waterSport)
+        // only a timer, no field flag
+        case SKILL_FIELD_QUASH:
+            CHECK_NOT(gFieldTimers.quashTimer)
+            gFieldTimers.quashTimer = turns;
+            gFieldTimers.started.quash = TRUE;
+            return TRUE;
     }
     return FALSE;
 }
@@ -494,6 +535,7 @@ static const struct {
     [InlineEffect::ATTRACT] = {MOVE_EFFECT_ATTRACT, 0, {TYPE_NONE, TYPE_NONE}},
     [InlineEffect::DRENCH] = {MOVE_EFFECT_DRENCH, 0, {TYPE_NONE, TYPE_NONE}},
     [InlineEffect::GASTRO_ACID] = {MOVE_EFFECT_NONE, 0, {TYPE_NONE, TYPE_NONE}},
+    [InlineEffect::POWER_TRICK] = {MOVE_EFFECT_NONE, 0, {TYPE_NONE, TYPE_NONE}},
 };
 
 // The same checks as SetMoveEffect, so the skill isn't announced for nothing
@@ -524,6 +566,8 @@ static int CanApplyInlineStatus(InlineEffect::StatusKind status, u8 user, u8 tar
             return CanBeDrenched(target);
         case InlineEffect::GASTRO_ACID:  // same as Cmd_setgastroacid
             return !(gStatuses3[target] & STATUS3_GASTRO_ACID) && !DoesBattlerHaveAbilityShield(target);
+        case InlineEffect::POWER_TRICK:  // a toggle in the engine, so it's never applied twice
+            return !(gStatuses3[target] & STATUS3_POWER_TRICK);
         default:
             return FALSE;
     }
@@ -539,6 +583,10 @@ static int StatusBattler(InlineRun& run, const InlineEffect& effect, u8 target) 
     gStackBattler2 = target;
     if (effect.status == InlineEffect::GASTRO_ACID) {
         Show(run, BattleScript_SuppressStack2Ability);
+        return TRUE;
+    }
+    if (effect.status == InlineEffect::POWER_TRICK) {
+        Show(run, BattleScript_SkillPowerTrick);
         return TRUE;
     }
     gBattleCommunication[MULTISTRING_CHOOSER] = sInlineStatuses[effect.status].moveEffect;
