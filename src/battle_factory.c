@@ -266,7 +266,7 @@ static void GenerateOpponentMons(void) {
         }
         if (j != 6) continue;
 
-        if (lvlMode == FRONTIER_LVL_50 && monId > FRONTIER_MONS_HIGH_TIER) continue;
+        if (lvlMode == FRONTIER_LVL_50 && monId >= FRONTIER_MONS_HIGH_TIER) continue;
 
         for (k = firstMonId; k < firstMonId + i; k++) {
             if (species[k] == gFacilityTrainerMons[monId].species) break;
@@ -446,6 +446,7 @@ static void GenerateInitialRentalMons(void) {
             monId = GetFactoryMonId(factoryLvlMode, challengeNum, FALSE);
 
         if (gFacilityTrainerMons[monId].species == SPECIES_UNOWN) continue;
+        if (factoryLvlMode == FRONTIER_LVL_50 && monId >= FRONTIER_MONS_HIGH_TIER) continue;
 
         // Cannot have two pokemon of the same species.
         for (j = firstMonId; j < firstMonId + i; j++) {
@@ -606,7 +607,7 @@ void FillFactoryBrainParty(void) {
         u16 monId = GetFactoryMonId(lvlMode, challengeNum, FALSE);
 
         if (gFacilityTrainerMons[monId].species == SPECIES_UNOWN) continue;
-        if (monLevel == 50 && monId > FRONTIER_MONS_HIGH_TIER) continue;
+        if (monLevel == 50 && monId >= FRONTIER_MONS_HIGH_TIER) continue;
 
         for (j = 0; j < 6; j++) {
             if (monId == gSaveBlock2Ptr->frontier.rentalMons[j].monId) break;

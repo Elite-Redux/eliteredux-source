@@ -1241,7 +1241,7 @@ static void FillTrainerParty(u16 trainerId, u8 firstMonId, u8 monCount) {
     otID = Random32();
     while (i != monCount) {
         u16 monId = GetRandomMonIdFromPool(monSet, bfMonCount, level);
-        if ((level == 50 || level == 20) && monId > FRONTIER_MONS_HIGH_TIER) continue;
+        if ((level == 50 || level == 20) && monId >= FRONTIER_MONS_HIGH_TIER) continue;
 
         // Ensure this pokemon species isn't a duplicate.
         for (j = 0; j < i + firstMonId; j++) {
@@ -1337,7 +1337,7 @@ u16 GetRandomFrontierMonFromSet(u16 trainerId) {
 
     do {
         monId = GetRandomMonIdFromPool(monSet, numMons, level);
-    } while ((level == 50 || level == 20) && monId > FRONTIER_MONS_HIGH_TIER);
+    } while ((level == 50 || level == 20) && monId >= FRONTIER_MONS_HIGH_TIER);
 
     return monId;
 }
