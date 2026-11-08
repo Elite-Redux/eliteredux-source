@@ -608,7 +608,7 @@ bool32 ShouldSwitch(void)
     s32 i;
     s32 availableToSwitch;
 
-    if (gBattleTypeFlags & (AI_FLAG_DISABLE_SWITCHING))
+    if (AI_THINKING_STRUCT->aiFlags & AI_FLAG_DISABLE_SWITCHING)
         return FALSE;
     if (gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION))
         return FALSE;
