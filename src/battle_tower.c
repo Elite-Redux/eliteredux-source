@@ -1187,6 +1187,13 @@ static void FillTentTrainerParty(u8 monsCount) {
     FillTentTrainerParty_(gTrainerBattleOpponent_A, 0, monsCount);
 }
 
+// An empty pool picks from every set of the level's tier.
+static u16 GetRandomMonIdFromPool(const u16* monSet, u8 monSetCount, u8 level) {
+    if (monSetCount == 0) return Random() % ((level == 50 || level == 20) ? FRONTIER_MONS_HIGH_TIER : FRONTIER_MONS_COUNT);
+
+    return monSet[Random() % monSetCount];
+}
+
 static void FillTrainerParty(u16 trainerId, u8 firstMonId, u8 monCount) {
     s32 i, j;
     u16 chosenMonIndices[4];
@@ -1233,7 +1240,7 @@ static void FillTrainerParty(u16 trainerId, u8 firstMonId, u8 monCount) {
     i = 0;
     otID = Random32();
     while (i != monCount) {
-        u16 monId = monSet[Random() % bfMonCount];
+        u16 monId = GetRandomMonIdFromPool(monSet, bfMonCount, level);
         if ((level == 50 || level == 20) && monId > FRONTIER_MONS_HIGH_TIER) continue;
 
         // Ensure this pokemon species isn't a duplicate.
@@ -1329,7 +1336,7 @@ u16 GetRandomFrontierMonFromSet(u16 trainerId) {
     }
 
     do {
-        monId = monSet[Random() % numMons];
+        monId = GetRandomMonIdFromPool(monSet, numMons, level);
     } while ((level == 50 || level == 20) && monId > FRONTIER_MONS_HIGH_TIER);
 
     return monId;
