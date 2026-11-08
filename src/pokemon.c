@@ -6315,12 +6315,12 @@ u16 GetHeldItemIfNotDuplicate(u8 partyId) {
 }
 
 AbilityEnum GetExtraAbilityToSetToBattler(u8 abilityNumber, bool8 isEnemy) {
-    if (isEnemy) {
+    if (isEnemy && IsHellTrainerBattle()) {
         u16 trainerId = gTrainerBattleOpponent_A;
         u8 i;
 
-        // Inline skills (extra_ability), hell trainer battles only
-        if (isHellMode() && (gBattleTypeFlags & BATTLE_TYPE_TRAINER) && abilityNumber < HELL_MODE_EXTRA_ABILITIES) {
+        // Inline skills (extra_ability)
+        if (abilityNumber < HELL_MODE_EXTRA_ABILITIES) {
             AbilityEnum ability = gTrainers[trainerId].hellAbilities[abilityNumber];
             if (ability != ABILITY_NONE) return ability;
         }

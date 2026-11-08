@@ -1772,7 +1772,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* party, u16 trainerNum, bool8 fir
 
     // Register battle events (hell mode extra skills) only in hell difficulty.
     // This function is also called for wild mons, not just trainers.
-    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && difficultySetting == DIFFICULTY_HELL) RegisterTrainerBattleEvents(trainerNum);
+    if (IsHellTrainerBattle()) RegisterTrainerBattleEvents(trainerNum);
 
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && !(gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL))) {
         if (firstTrainer == TRUE) ZeroEnemyPartyMons();

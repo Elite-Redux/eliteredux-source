@@ -327,6 +327,7 @@ bool32 IsBattlerGroundedIgnoreType(u8 battlerId);
 int IsSoundMove(int battler, MoveEnum move);
 int IsKeenEdge(int battler, MoveEnum move, Type moveType);
 bool32 IsBattlerAlive(u8 battlerId);
+bool32 IsHellTrainerBattle(void);
 u8 GetBattleMonMoveSlot(struct BattlePokemon* battleMon, MoveEnum move);
 u32 GetBattlerWeight(u8 battlerId);
 s32 CalculateMoveDamage(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8* moveType, s32 fixedBasePower, u8 critRoll, bool32 randomFactor, bool32 updateFlags);

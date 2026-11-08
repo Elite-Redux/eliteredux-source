@@ -6614,9 +6614,16 @@ u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating) {
         return ItemId_GetHoldEffect(gBattleMons[battlerId].item);
 }
 
+// Hell skills, extra abilities and items come from gTrainers, which Frontier, e-Reader, Trainer Hill and
+// Secret Base opponents don't index: their gTrainerBattleOpponent_A is an id in their own tables
+bool32 IsHellTrainerBattle(void) {
+    return isHellMode() && (gBattleTypeFlags & BATTLE_TYPE_TRAINER) &&
+           !(gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL | BATTLE_TYPE_SECRET_BASE));
+}
+
 // Verifies the validity of this item on the hell mode defined items, checks for difficulty and negating pieces
 static const struct HellItem* GetSkillItem(u8 battlerId, u32 holdEffect, bool32 checkNegating) {
-    if (!isHellMode() || !(gBattleTypeFlags & BATTLE_TYPE_TRAINER) || GetBattlerSide(battlerId) != B_SIDE_OPPONENT) return NULL;
+    if (!IsHellTrainerBattle() || GetBattlerSide(battlerId) != B_SIDE_OPPONENT) return NULL;
     if (checkNegating && IsItemNegated(battlerId)) return NULL;
     for (int i = 0; i < HELL_MODE_EXTRA_ITEMS; i++) {
         const struct HellItem* extra = &gTrainers[gTrainerBattleOpponent_A].hellItems[i];
