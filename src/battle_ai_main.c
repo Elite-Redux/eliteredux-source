@@ -292,7 +292,8 @@ static u8 ChooseMoveOrAction_Singles(void) {
 
     gActiveBattler = sBattler_AI;
     // If can switch.
-    if (CountUsablePartyMons(sBattler_AI) > 0 && !IsAbilityPreventingEscape(sBattler_AI) &&
+    if (!(AI_THINKING_STRUCT->aiFlags & AI_FLAG_DISABLE_SWITCHING) &&
+        CountUsablePartyMons(sBattler_AI) > 0 && !IsAbilityPreventingEscape(sBattler_AI) &&
         !(gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION)) && !(gStatuses3[gActiveBattler] & STATUS3_ROOTED) &&
         !(gStatuses4[gActiveBattler] & STATUS4_COMMANDED) && !(gVolatileStructs[gActiveBattler].skyDropped) && !gVolatileStructs[gActiveBattler].fear &&
         !(gBattleTypeFlags & (BATTLE_TYPE_ARENA | BATTLE_TYPE_PALACE)) &&
