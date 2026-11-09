@@ -5417,6 +5417,47 @@ constexpr Ability Impl<ABILITY_PERFECT_PITCH> = {
     },
 };
 
+// The rooms are turned off in IsTrickRoomActive and the others, like Clueless
+template <>
+constexpr Ability Impl<ABILITY_ROOM_BREAKER> = {};
+
+// Unerring for every move
+template <>
+constexpr Ability Impl<ABILITY_TRUE_AIM> = {
+    .onAccuracy = +[](ON_ACCURACY) -> AccuracyPriority { return ACCURACY_HITS_IF_POSSIBLE; },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_RUTHLESS> = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (HasAnyStatusOrAbility(target)) MUL(1.25);
+        },
+    .onChooseDefensiveStat = Impl<ABILITY_EXPLOIT_WEAKNESS>.onChooseDefensiveStat,
+};
+
+// Exploit Weakness against every foe
+template <>
+constexpr Ability Impl<ABILITY_WEAK_SPOT> = {
+    .onChooseDefensiveStat =
+        +[](ON_CHOOSE_DEFENSIVE_STAT) {
+            u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+            u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+            if (def < spDef)
+                *defStatToUse = STAT_DEF;
+            else if (spDef < def)
+                *defStatToUse = STAT_SPDEF;
+        },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_EMPTY_HANDED> = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (!gBattleMons[battler].item) MUL(1.5);
+        },
+};
+
 // Gifted Mind's accuracy part
 template <>
 constexpr Ability Impl<ABILITY_UNERRING> = {
@@ -5424,6 +5465,7 @@ constexpr Ability Impl<ABILITY_UNERRING> = {
         CHECK(IS_MOVE_STATUS(move))
         return ACCURACY_HITS_IF_POSSIBLE;
     },
+    .onMoldBreaker = +[](ON_MOLD_BREAKER) -> int { return IS_MOVE_STATUS(move); },
 };
 
 template <>

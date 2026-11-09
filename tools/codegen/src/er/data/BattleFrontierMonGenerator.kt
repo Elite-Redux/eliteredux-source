@@ -10,17 +10,18 @@ import er.proto.SpeciesEnum
 import java.io.OutputStreamWriter
 
 object BattleFrontierMonGenerator : Generator {
+  // TODO: fail codegen on sets with an ability their species doesn't have once the content team fixed them, instead of dropping them
   val SETS by lazy {
     BATTLE_FRONTIER_SETS.flatMap { mon ->
       mon.setList
-        .filter { it.illegalList.isEmpty() && !it.restricted && it.allowedFormats != DOUBLES_ONLY }
+        .filter { it.illegalList.isEmpty() && !it.restricted && it.allowedFormats != DOUBLES_ONLY && it.ability in mon.id.data.abilityList }
         .map { mon.id to it }
     }
   }
   val RESTRICTED_SETS by lazy {
     BATTLE_FRONTIER_SETS.flatMap { mon ->
       mon.setList
-        .filter { it.illegalList.isEmpty() && it.restricted && it.allowedFormats != DOUBLES_ONLY }
+        .filter { it.illegalList.isEmpty() && it.restricted && it.allowedFormats != DOUBLES_ONLY && it.ability in mon.id.data.abilityList }
         .map { mon.id to it }
     }
   }
@@ -58,46 +59,9 @@ object BattleFrontierMonGenerator : Generator {
   }
 
   override fun generate(writer: OutputStreamWriter) {
-    val sets =
-      BATTLE_FRONTIER_SETS.flatMap { mon ->
-        mon.setList
-          .filter {
-            it.illegalList.isEmpty() && !it.restricted && it.allowedFormats != DOUBLES_ONLY
-          }
-          .map { mon.id to it }
-      }
-    val restrictedSets =
-      BATTLE_FRONTIER_SETS.flatMap { mon ->
-        mon.setList
-          .filter { it.illegalList.isEmpty() && it.restricted && it.allowedFormats != DOUBLES_ONLY }
-          .map { mon.id to it }
-      }
-
     writer.appendLine("const struct FacilityMon gBattleFrontierMons[] = {")
-    val errors = buildList {
-      for ((id, set) in sets) {
-        try {
-          writeSet(id, set, writer)
-        } catch (e: Exception) {
-          add(e)
-        }
-      }
-      writer.appendLine("#define FRONTIER_MONS_HIGH_TIER ${sets.size}")
-      for ((id, set) in restrictedSets) {
-        try {
-          writeSet(id, set, writer)
-        } catch (e: Exception) {
-          add(e)
-        }
-      }
-    }
-
+    for ((id, set) in SETS) writeSet(id, set, writer)
+    for ((id, set) in RESTRICTED_SETS) writeSet(id, set, writer)
     writer.appendLine("};")
-
-    writer.appendLine("""
-    |#ifdef VALIDATE_TRAINERS
-    |${errors.joinToString("\n")}
-    |#endif
-    """.trimMargin())
   }
 }

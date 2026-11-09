@@ -1772,7 +1772,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon* party, u16 trainerNum, bool8 fir
 
     // Register battle events (hell mode extra skills) only in hell difficulty.
     // This function is also called for wild mons, not just trainers.
-    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && difficultySetting == DIFFICULTY_HELL) RegisterTrainerBattleEvents(trainerNum);
+    if (IsHellTrainerBattle()) RegisterTrainerBattleEvents(trainerNum);
 
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && !(gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL))) {
         if (firstTrainer == TRUE) ZeroEnemyPartyMons();
@@ -2704,7 +2704,7 @@ static void BattleStartClearSetData(void) {
     ZERO(gBattleStruct->choicedMove)
     ZERO(gBattleStruct->changedItems)
     ZERO(gBattleStruct->lastTakenMoveFrom)
-    gBattleStruct->ranSkillAnnounce = FALSE;
+    gBattleStruct->skillAnnounceCount = 0;
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++) {
         gVolatileStructs[i].isFirstTurn = 2;
@@ -3358,11 +3358,10 @@ static void TryDoEventsBeforeFirstTurn(void) {
 
     if (AbilityBattleEffects(ABILITYEFFECT_REACTIVE, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0)) return;
 
-    if (!gBattleStruct->ranSkillAnnounce) {
-        int any = FALSE;
-        gBattleStruct->ranSkillAnnounce = TRUE;
-        ON_SKILL(skill->onBattleStart, any = skill->onBattleStart(skillId))
-        if (any) return;
+    // One skill at a time: their announces share the text buffers
+    while (gBattleStruct->skillAnnounceCount < ARRAY_COUNT(gActiveSkills)) {
+        BattleSkillEnum skillId = gActiveSkills[gBattleStruct->skillAnnounceCount++];
+        if (skillId && gBattleSkills[skillId].onBattleStart && gBattleSkills[skillId].onBattleStart(skillId)) return;
     }
 
     // Check all switch in abilities happening from the fastest mon to slowest.

@@ -266,7 +266,7 @@ static void GenerateOpponentMons(void) {
         }
         if (j != 6) continue;
 
-        if (lvlMode == FRONTIER_LVL_50 && monId > FRONTIER_MONS_HIGH_TIER) continue;
+        if (lvlMode == FRONTIER_LVL_50 && monId >= FRONTIER_MONS_HIGH_TIER) continue;
 
         for (k = firstMonId; k < firstMonId + i; k++) {
             if (species[k] == gFacilityTrainerMons[monId].species) break;
@@ -446,6 +446,7 @@ static void GenerateInitialRentalMons(void) {
             monId = GetFactoryMonId(factoryLvlMode, challengeNum, FALSE);
 
         if (gFacilityTrainerMons[monId].species == SPECIES_UNOWN) continue;
+        if (factoryLvlMode == FRONTIER_LVL_50 && monId >= FRONTIER_MONS_HIGH_TIER) continue;
 
         // Cannot have two pokemon of the same species.
         for (j = firstMonId; j < firstMonId + i; j++) {
@@ -606,7 +607,7 @@ void FillFactoryBrainParty(void) {
         u16 monId = GetFactoryMonId(lvlMode, challengeNum, FALSE);
 
         if (gFacilityTrainerMons[monId].species == SPECIES_UNOWN) continue;
-        if (monLevel == 50 && monId > FRONTIER_MONS_HIGH_TIER) continue;
+        if (monLevel == 50 && monId >= FRONTIER_MONS_HIGH_TIER) continue;
 
         for (j = 0; j < 6; j++) {
             if (monId == gSaveBlock2Ptr->frontier.rentalMons[j].monId) break;
@@ -683,26 +684,6 @@ u8 GetNumPastRentalsRank(u8 battleMode, u8 lvlMode) {
         ret = 5;
 
     return ret;
-}
-
-u32 GetAiScriptsInBattleFactory(void) {
-    int lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
-
-    if (lvlMode == FRONTIER_LVL_TENT) {
-        return 0;
-    } else {
-        int battleMode = VarGet(VAR_FRONTIER_BATTLE_MODE);
-        int challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / 7;
-
-        if (gTrainerBattleOpponent_A == TRAINER_FRONTIER_BRAIN)
-            return AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY;
-        else if (challengeNum < 2)
-            return 0;
-        else if (challengeNum < 4)
-            return AI_FLAG_CHECK_BAD_MOVE;
-        else
-            return AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY;
-    }
 }
 
 void SetMonMoveAvoidReturn(struct Pokemon* mon, u16 moveArg, u8 moveSlot) {

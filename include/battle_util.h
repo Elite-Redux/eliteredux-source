@@ -3,6 +3,7 @@
 
 #include "abilities.hh"
 #include "battle_ai_new.h"
+#include "generated/constants/battle_skills.h"
 
 #define MOVE_LIMITATION_ZEROMOVE (1 << 0)
 #define MOVE_LIMITATION_PP (1 << 1)
@@ -325,8 +326,10 @@ bool32 IsMoveMakingContact(MoveEnum move, u8 battlerAtk);
 bool32 IsBattlerGrounded(u8 battlerId);
 bool32 IsBattlerGroundedIgnoreType(u8 battlerId);
 int IsSoundMove(int battler, MoveEnum move);
+bool32 HasTrainerSkill(u8 battler, BattleSkillEnum skill);
 int IsKeenEdge(int battler, MoveEnum move, Type moveType);
 bool32 IsBattlerAlive(u8 battlerId);
+bool32 IsHellTrainerBattle(void);
 u8 GetBattleMonMoveSlot(struct BattlePokemon* battleMon, MoveEnum move);
 u32 GetBattlerWeight(u8 battlerId);
 s32 CalculateMoveDamage(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8* moveType, s32 fixedBasePower, u8 critRoll, bool32 randomFactor, bool32 updateFlags);

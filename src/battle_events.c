@@ -44,6 +44,7 @@ void RegisterBattleEvent(u8 battleEventID, u8 battleEventData0, u8 battleEventDa
 void UnregisterBattlesEvents() {
     gNbBattleEvents = 0;
     gCurrBattleEvent = 0;
+    ZERO(gActiveSkills)
 }
 
 /**
