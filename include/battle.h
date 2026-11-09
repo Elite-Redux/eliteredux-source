@@ -372,7 +372,7 @@ struct AI_ThinkingStruct {
     u8 aiState;
     u8 movesetIndex;
     u16 moveConsidered;
-    s8 score[MAX_MON_MOVES];
+    s16 score[MAX_MON_MOVES];
     u32 funcResult;
     u32 aiFlags;
     u8 aiAction;
@@ -710,7 +710,7 @@ struct BattleStruct {
     u16 hpBefore[MAX_BATTLERS_COUNT];  // Hp of battlers before using a move. For Berserk
     bool8 spriteIgnore0Hp;
     struct Illusion illusion[MAX_BATTLERS_COUNT];
-    s8 aiFinalScore[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES];  // AI, target, moves to make debugging easier
+    s16 aiFinalScore[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES];  // AI, target, moves to make debugging easier
     u8 aiMoveOrAction[MAX_BATTLERS_COUNT];
     u8 aiChosenTarget[MAX_BATTLERS_COUNT];
     u8 soulheartBattlerId;

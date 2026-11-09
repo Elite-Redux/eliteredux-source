@@ -264,7 +264,7 @@ void GetAiLogicData(void) {
 }
 
 static u8 ChooseMoveOrAction_Singles(void) {
-    u8 currentMoveArray[MAX_MON_MOVES];
+    s16 currentMoveArray[MAX_MON_MOVES];
     u8 consideredMoveArray[MAX_MON_MOVES];
     u32 numOfBestMoves;
     s32 i;
@@ -341,7 +341,7 @@ static u8 ChooseMoveOrAction_Doubles(void) {
     s16 bestMovePointsForTarget[MAX_BATTLERS_COUNT];
     s8 mostViableTargetsArray[MAX_BATTLERS_COUNT];
     u8 actionOrMoveIndex[MAX_BATTLERS_COUNT];
-    u8 mostViableMovesScores[MAX_MON_MOVES];
+    s16 mostViableMovesScores[MAX_MON_MOVES];
     u8 mostViableMovesIndices[MAX_MON_MOVES];
     s32 mostViableTargetsNo;
     s32 mostViableMovesNo;
@@ -455,6 +455,8 @@ static void BattleAI_DoAIProcessing(void) {
                         // Call AI function
                         AI_THINKING_STRUCT->score[AI_THINKING_STRUCT->movesetIndex] = sBattleAiFuncTable[AI_THINKING_STRUCT->aiLogicId](
                             sBattler_AI, gBattlerTarget, AI_THINKING_STRUCT->moveConsidered, AI_THINKING_STRUCT->score[AI_THINKING_STRUCT->movesetIndex]);
+                        if (AI_THINKING_STRUCT->score[AI_THINKING_STRUCT->movesetIndex] < 0)
+                            AI_THINKING_STRUCT->score[AI_THINKING_STRUCT->movesetIndex] = 0;
                     }
                 } else {
                     AI_THINKING_STRUCT->score[AI_THINKING_STRUCT->movesetIndex] = 0;
