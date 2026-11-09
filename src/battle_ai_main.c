@@ -213,7 +213,7 @@ u8 ComputeBattleAiScores(u8 battler) {
 
 static void SetBattlerAiData(u8 battlerId) {
     AI_DATA->items[battlerId] = gBattleMons[battlerId].item;
-    AI_DATA->holdEffects[battlerId] = ItemId_GetHoldEffectParam(gBattleMons[battlerId].item);
+    AI_DATA->holdEffects[battlerId] = GetBattlerHoldEffect(battlerId, TRUE);
     AI_DATA->holdEffectParams[battlerId] = GetBattlerHoldEffectParam(battlerId);
     AI_DATA->predictedMoves[battlerId] = gLastMoves[battlerId];
     AI_DATA->hpPercents[battlerId] = ((100 * gBattleMons[battlerId].hp) / gBattleMons[battlerId].maxHP);
