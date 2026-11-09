@@ -23,7 +23,7 @@
 
 u8 ComputeBattleAiScores(u8 battler);
 void BattleAI_SetupItems(void);
-void BattleAI_SetupFlags(void);
+void BattleAI_SetupFlags(u8 battler);
 void BattleAI_SetupAIData(u8 defaultScoreMoves);
 u8 BattleAI_ChooseMoveOrAction(void);
 void GetAiLogicData(void);

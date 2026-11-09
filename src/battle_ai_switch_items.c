@@ -711,6 +711,9 @@ void AI_TrySwitchOrUseItem(void)
 
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
     {
+        // The other opponent may have scored its moves since this battler did.
+        if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)
+            BattleAI_SetupFlags(gActiveBattler);
         if (ShouldSwitch())
         {
             if (*(gBattleStruct->AI_monToSwitchIntoId + gActiveBattler) == PARTY_SIZE)

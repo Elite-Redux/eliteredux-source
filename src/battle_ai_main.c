@@ -128,7 +128,7 @@ static u32 GetWildAiFlags(void) {
     return flags;
 }
 
-void BattleAI_SetupFlags(void) {
+void BattleAI_SetupFlags(u8 battler) {
     if (gBattleTypeFlags & BATTLE_TYPE_RECORDED)
         AI_THINKING_STRUCT->aiFlags = GetAiScriptsInRecordedBattle();
     else if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
@@ -141,8 +141,8 @@ void BattleAI_SetupFlags(void) {
         // Same flags as every story trainer (TrainerPartyGenerator.kt)
         AI_THINKING_STRUCT->aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE |
                                       AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE | AI_FLAG_WILL_SUICIDE;
-    else if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)
-        AI_THINKING_STRUCT->aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE;
+    else if ((gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS) && GetBattlerPosition(battler) == B_POSITION_OPPONENT_RIGHT)
+        AI_THINKING_STRUCT->aiFlags = gTrainers[gTrainerBattleOpponent_B].aiFlags;
     else
         AI_THINKING_STRUCT->aiFlags = gTrainers[gTrainerBattleOpponent_A].aiFlags;
 
@@ -207,6 +207,7 @@ u8 BattleAI_ChooseMoveOrAction(void) {
 // damages/other info computed in GetAIDataAndCalcDmg
 u8 ComputeBattleAiScores(u8 battler) {
     sBattler_AI = battler;
+    if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS) BattleAI_SetupFlags(battler);
     BattleAI_SetupAIData(0xF);
     return BattleAI_ChooseMoveOrAction();
 }
