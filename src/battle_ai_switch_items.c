@@ -507,7 +507,7 @@ static bool8 IsMonHealthyEnoughToSwitch(void)
     if (GetBattlerAbility(gActiveBattler) == ABILITY_REGENERATOR)
         battlerHp = (battlerHp * 133) / 100; // Account for Regenerator healing
     
-    if (CalculateHazardDamage() > battlerHp) // Battler will die to hazards
+    if (CalculateHazardDamage() >= battlerHp) // Battler will die to hazards
         return FALSE;
 
     if (battlerHp < gBattleMons[gActiveBattler].maxHP / 8) // Mon unlikey to be useful, at least for the AI
@@ -528,7 +528,7 @@ static u32 CalculateHazardDamage(void)
         holdEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS)
         return totalHazardDmg;
 
-    if ((gSideTimers[GetBattlerSide(gActiveBattler)].spikesAmount > 0) && !IsBattlerGrounded(gActiveBattler))
+    if ((gSideTimers[GetBattlerSide(gActiveBattler)].spikesAmount > 0) && IsBattlerGrounded(gActiveBattler))
     {
         spikesDmg = (5 - gSideTimers[GetBattlerSide(gActiveBattler)].spikesAmount) * 2;
         spikesDmg = gBattleMons[gActiveBattler].maxHP / (spikesDmg);
