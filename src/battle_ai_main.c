@@ -227,36 +227,31 @@ void GetAiLogicData(void) {
 
     memset(AI_DATA, 0, sizeof(struct AiLogicData));
 
-    if (!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FIRST_BATTLE | BATTLE_TYPE_SAFARI | BATTLE_TYPE_ROAMER) && !IsWildMonSmart())) return;
+    if (!(gBattleTypeFlags & BATTLE_TYPE_HAS_AI) && !IsWildMonSmart()) return;
 
     // get/assume all battler data
     for (i = 0; i < gBattlersCount; i++) {
         if (IsBattlerAlive(i)) {
+            RecordKnownMove(i, gLastMoves[i]);
             SetBattlerAiData(i);
         }
     }
 
-    // simulate AI damage
+    // Threat checks need the opponent's damage too, indexed by actual move slot.
     for (battlerAtk = 0; battlerAtk < gBattlersCount; battlerAtk++) {
-        if (!IsBattlerAlive(battlerAtk) || !IsBattlerAIControlled(battlerAtk)) {
+        if (!IsBattlerAlive(battlerAtk)) {
             continue;
         }
 
         for (battlerDef = 0; battlerDef < gBattlersCount; battlerDef++) {
-            if (battlerAtk == battlerDef) continue;
+            if (battlerAtk == battlerDef || !IsBattlerAlive(battlerDef)) continue;
 
-            RecordKnownMove(battlerDef, gLastMoves[battlerDef]);
             for (i = 0; i < MAX_MON_MOVES; i++) {
                 dmg = 0;
                 move = gBattleMons[battlerAtk].moves[i];
                 effectiveness = AI_EFFECTIVENESS_x0;
-                ;
-                //
 
-                if (move != 0 &&
-                    move != 0xFFFF
-                    //&& gBattleMoves[move].power != 0  /* we want to get effectiveness of status moves */
-                    && !(AI_DATA->moveLimitations[battlerAtk] & gBitTable[i])) {
+                if (HasMove(battlerAtk, move) && !(AI_DATA->moveLimitations[battlerAtk] & gBitTable[i])) {
                     dmg = AI_CalcDamage(move, battlerAtk, battlerDef, &effectiveness);
                 }
 
@@ -2540,7 +2535,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
     if (TestMoveFlags(move, FLAG_HIGH_CRIT) && effectiveness >= AI_EFFECTIVENESS_x2 && AI_RandLessThan(128)) score++;
 
     // check already dead
-    if (!IsBattlerIncapacitated(battlerDef) && CanTargetFaintAi(battlerAtk, battlerDef) &&
+    if (!IsBattlerIncapacitated(battlerDef) && CanTargetFaintAi(battlerDef, battlerAtk) &&
         GetWhoStrikesFirst(battlerAtk, battlerDef, TRUE) == 1)  // opponent should go first
     {
         if (atkPriority > 0)

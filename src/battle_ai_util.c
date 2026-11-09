@@ -537,7 +537,7 @@ void SetBattlerData(u8 battlerId) {
         // TODO: Do something to fix AI not understanding illusion
         if (BATTLE_HISTORY->itemEffects[battlerId] == 0) gBattleMons[battlerId].item = 0;
         for (i = 0; i < 4; i++) {
-            if (BATTLE_HISTORY->usedMoves[battlerId][i] == 0) gBattleMons[battlerId].moves[i] = 0;
+            if (!HasMove(battlerId, gBattleMons[battlerId].moves[i])) gBattleMons[battlerId].moves[i] = 0;
         }
     }
 }
@@ -953,18 +953,7 @@ bool32 IsAiFaster(u8 battler) {
 
 // Check if target has means to faint ai mon.
 bool32 CanTargetFaintAi(u8 battlerDef, u8 battlerAtk) {
-    s32 i;
-    u32 unusable = AI_DATA->moveLimitations[battlerDef];
-    u16* moves = GetMovesArray(battlerDef);
-
-    for (i = 0; i < MAX_MON_MOVES; i++) {
-        if (moves[i] != MOVE_NONE && moves[i] != 0xFFFF && !(unusable & gBitTable[i]) &&
-            AI_DATA->simulatedDmg[battlerDef][battlerAtk][moves[i]] >= gBattleMons[battlerAtk].hp) {
-            return TRUE;
-        }
-    }
-
-    return FALSE;
+    return CanTargetFaintAiWithMod(battlerDef, battlerAtk, 0, 0);
 }
 
 // Check if AI mon has the means to faint the target with any of its moves.
@@ -1006,14 +995,16 @@ bool32 CanTargetFaintAiWithMod(u8 battlerDef, u8 battlerAtk, s32 hpMod, s32 dmgM
     u32 i;
     u32 dmg;
     u32 hpCheck = gBattleMons[battlerAtk].hp + hpMod;
-    u32 unusable = AI_DATA->moveLimitations[battlerAtk];
-    u16* moves = gBattleResources->battleHistory->usedMoves[battlerDef];
+    u32 unusable = AI_DATA->moveLimitations[battlerDef];
+    u16* moves = gBattleMons[battlerDef].moves;
+
+    if (!IsBattlerAlive(battlerDef) || !IsBattlerAlive(battlerAtk)) return FALSE;
 
     for (i = 0; i < MAX_MON_MOVES; i++) {
-        dmg = AI_DATA->simulatedDmg[battlerAtk][battlerDef][i];
+        dmg = AI_DATA->simulatedDmg[battlerDef][battlerAtk][i];
         if (dmgMod) dmg *= dmgMod;
 
-        if (moves[i] != MOVE_NONE && moves[i] != 0xFFFF && !(unusable & gBitTable[i]) && dmg >= hpCheck) {
+        if (HasMove(battlerDef, moves[i]) && !(unusable & gBitTable[i]) && dmg >= hpCheck) {
             return TRUE;
         }
     }
