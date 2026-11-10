@@ -13081,6 +13081,7 @@ template <>
 constexpr Ability Impl<ABILITY_DAZZLING_WINGS> = {
     .onImmune = Impl<ABILITY_DAZZLING>.onImmune,
     .onOffensiveMultiplier = Impl<ABILITY_GIANT_WINGS>.onOffensiveMultiplier,
+    .onImmuneFor = APPLY_ON_ALLY,
 };
 
 template <>
