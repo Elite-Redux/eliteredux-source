@@ -689,6 +689,13 @@
       "elevation": 0,
       "dest_map": "MAP_ROUTE111_OLD_LADYS_REST_STOP",
       "dest_warp_id": "0"
+    },
+    {
+      "x": 16,
+      "y": 45,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE111_DESERT_ENTRANCE",
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [
