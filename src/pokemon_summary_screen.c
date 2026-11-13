@@ -2229,7 +2229,9 @@ static void ChangePageTask(u8 taskId) {
 }
 
 static void PopulateAbilities(AbilityEnum* abilities) {
-    int isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2;
+    // The battle Info page sets VAR_BATTLE_CONTROLLER_PLAYER_F to 2 for every mon it opens here, own ones included,
+    // so the var cannot tell enemies apart; the party being shown can.
+    int isEnemyMon = gMain.inBattle && sMonSummaryScreen->monList.mons == gEnemyParty;
     SpeciesEnum species = sMonSummaryScreen->summary.species;
     int personality = sMonSummaryScreen->summary.pid;
 
