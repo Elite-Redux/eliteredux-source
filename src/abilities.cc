@@ -13155,6 +13155,14 @@ constexpr Ability Impl<ABILITY_POWER_HORNS> = {
         },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_MAGIC_BLANKET> = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(UseEndTurnMove(battler, ability, MOVE_INVERSE_ROOM, 0))
+        return TRUE;
+    },
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
