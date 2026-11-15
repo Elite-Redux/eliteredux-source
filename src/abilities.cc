@@ -13146,6 +13146,15 @@ constexpr Ability Impl<ABILITY_HIGH_RISE> = {
     .mirrorArmor = TRUE,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_POWER_HORNS> = {
+    .onOffensiveMultiplier = Impl<ABILITY_MIGHTY_HORN>.onOffensiveMultiplier,
+    .onChooseDefensiveStat =
+        +[](ON_CHOOSE_DEFENSIVE_STAT) {
+            if (gBattleMoves[move].hornBased) *defStatToUse = STAT_SPDEF;
+        },
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
