@@ -683,7 +683,7 @@ constexpr Ability Impl<ABILITY_IMMUNITY> = {
             if (moveType == TYPE_POISON) RESISTANCE(.5);
         },
     .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
-        CHECK(status & (CHECK_STATUS1 & ~CHECK_SLEEP))
+        CHECK(status & (CHECK_POISON | CHECK_TOXIC))
         return TRUE;
     },
     .breakable = TRUE,
