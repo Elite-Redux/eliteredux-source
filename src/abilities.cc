@@ -13229,7 +13229,6 @@ constexpr Ability Impl<ABILITY_POCUS> = {
 template <>
 constexpr Ability Impl<ABILITY_CRASHOUT> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
-        // Persists through the end-turn phase in case damage later in the end-turn phase would trigger another second attack
         CHECK(RANDOM() % 100 < 5)
         SetOncePerTurnAbilityCounter(battler, ability, GetAbilityState(battler, ability));
         SetAbilityState(battler, ability, FALSE);
@@ -13253,6 +13252,21 @@ constexpr Ability Impl<ABILITY_CRASHOUT> = {
         return TRUE;
     },
 };
+
+template <>
+constexpr Ability Impl<ABILITY_BEACHBALL> ={
+    .onDefender = +[](ON_DEFENDER) -> int {
+        if (moveType == TYPE_FIGHTING) RESISTANCE(0.5);
+        CHECK(ShouldApplyOnHitEffect(battler))
+        CHECK(CanRaiseStat(battler, STAT_SPEED))
+        CHECK(moveType == TYPE_FIGHTING);
+        BattleScriptCall(BattleScript_InflatableActivates);
+        gBattleScripting.battler = battler;
+        return TRUE;
+    },
+};
+
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
