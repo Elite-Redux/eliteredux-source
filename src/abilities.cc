@@ -13163,6 +13163,32 @@ constexpr Ability Impl<ABILITY_MAGIC_BLANKET> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_RABBIT_HAT> = {
+        .onDefender = +[](ON_DEFENDER) -> int {
+        if (gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 3);
+        CHECK_NOT(TestSheerForceFlag(attacker, gCurrentMove))
+        CHECK(CanBattlerBeForceSwitched(battler))
+
+        const u8* script;
+
+        if (gBattleTypeFlags & BATTLE_TYPE_TRAINER || GetBattlerSide(battler) == B_SIDE_PLAYER) {
+            script = BattleScript_EmergencyExit;
+        } else {
+            script = BattleScript_EmergencyExitWild;
+        }
+
+        gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+            .ability = ability,
+            .move = MOVE_TELEPORT,
+            .attacker = (u8)battler,
+            .target = (u8)battler,
+        };
+
+        return FALSE;
+    },
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
