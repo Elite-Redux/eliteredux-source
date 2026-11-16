@@ -1970,6 +1970,7 @@ constexpr Ability Impl<ABILITY_TOXIC_BOOST> = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (gBattleMons[battler].status1 & STATUS1_POISON_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
         },
+    .allowTerrainIfAirborne = TERRAIN_TOXIC,
 };
 
 int FlareBoostHandler(u8 battler, AbilityCallType callType) {
@@ -2428,6 +2429,7 @@ constexpr Ability Impl<ABILITY_GRASS_PELT> = {
         +[](ON_STAT) {
             if (statId == STAT_DEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
         },
+    .allowTerrainIfAirborne = TERRAIN_GRASSY,
 };
 
 template <>
@@ -2436,6 +2438,7 @@ constexpr Ability Impl<ABILITY_FLOWER_NECKLACE> = {
         +[](ON_STAT) {
             if (statId == STAT_SPDEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
         },
+    .allowTerrainIfAirborne = TERRAIN_GRASSY,
 };
 
 template <>
@@ -2822,6 +2825,7 @@ constexpr Ability Impl<ABILITY_SURGE_SURFER> = {
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat *= 1.5;
         },
+    .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
 template <>
@@ -4488,6 +4492,7 @@ constexpr Ability Impl<ABILITY_POISON_ABSORB> = {
     },
     .redirectType = TYPE_POISON,
     .breakable = TRUE,
+    .allowTerrainIfAirborne = TERRAIN_TOXIC,
 };
 
 template <>
@@ -6339,6 +6344,7 @@ constexpr Ability Impl<ABILITY_GENERATOR> = {
         return FALSE;
     },
     .persistent = TRUE,
+    .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
 template <>
@@ -7163,6 +7169,7 @@ constexpr Ability Impl<ABILITY_QUARK_DRIVE> = {
     .onEntry = +[](ON_ENTRY) -> int { return QuarkDriveHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); },
     .onTerrain = +[](ON_TERRAIN) -> int { return QuarkDriveHandler(ability, battler, ABILITY_BS_CALL); },
     .onStat = Impl<ABILITY_PROTOSYNTHESIS>.onStat,
+    .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
 template <>
@@ -7636,6 +7643,7 @@ constexpr Ability Impl<ABILITY_CELESTIAL_BLESSING> = {
         BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
         return TRUE;
     },
+    .allowTerrainIfAirborne = TERRAIN_MISTY,
 };
 
 template <>
@@ -7796,6 +7804,7 @@ constexpr Ability Impl<ABILITY_FLOURISH> = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_GRASS && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) MUL(1.5);
         },
+    .allowTerrainIfAirborne = TERRAIN_GRASSY,
 };
 
 template <>
@@ -10311,6 +10320,7 @@ constexpr Ability Impl<ABILITY_BIOFILM> = {
         +[](ON_STAT) {
             if (statId == STAT_SPDEF && IsTerrainActive(STATUS_FIELD_TOXIC_TERRAIN)) *stat *= 1.5;
         },
+    .allowTerrainIfAirborne = TERRAIN_TOXIC
 };
 
 template <>
@@ -11105,6 +11115,7 @@ constexpr Ability Impl<ABILITY_BACKUP_POWER> = {
         return B_MSG_BACKUP_POWER;
     },
     .persistent = TRUE,
+    .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
 template <>
@@ -12761,12 +12772,14 @@ constexpr Ability Impl<ABILITY_JUNGLE_FEVER> = {
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsTerrainActive(STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
         },
+    .allowTerrainIfAirborne = TERRAIN_GRASSY,
 };
 
 template <>
 constexpr Ability Impl<ABILITY_KING_OF_THE_JUNGLE> = {
     .onEntry = Impl<ABILITY_GRASSY_SURGE>.onEntry,
     .onInfiltrate = Impl<ABILITY_INFILTRATOR>.onInfiltrate,
+    .allowTerrainIfAirborne = TERRAIN_GRASSY,
 };
 
 template <>
@@ -13104,6 +13117,7 @@ constexpr Ability Impl<ABILITY_STATIC_BLOOM> = {
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (moveType == TYPE_ELECTRIC && IsBattlerTerrainAffected(battler, STATUS_FIELD_ELECTRIC_TERRAIN)) MUL(1.5);
         },
+    .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
 };
 
 template <>
