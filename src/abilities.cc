@@ -683,7 +683,7 @@ constexpr Ability Impl<ABILITY_IMMUNITY> = {
             if (moveType == TYPE_POISON) RESISTANCE(.5);
         },
     .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
-        CHECK(status & (CHECK_POISON | CHECK_TOXIC))
+        CHECK(status & CHECK_POISON)
         return TRUE;
     },
     .breakable = TRUE,
@@ -13171,25 +13171,16 @@ constexpr Ability Impl<ABILITY_POWER_HORNS> = {
 template <>
 constexpr Ability Impl<ABILITY_MAGIC_BLANKET> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
-        CHECK(UseEndTurnMove(battler, ability, MOVE_INVERSE_ROOM, 0))
+        CHECK(UseEntryMove(battler, ability, MOVE_INVERSE_ROOM, 0))
         return TRUE;
     },
 };
 
 template <>
 constexpr Ability Impl<ABILITY_RABBIT_HAT> = {
-        .onDefender = +[](ON_DEFENDER) -> int {
-        if (gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 3);
-        CHECK_NOT(TestSheerForceFlag(attacker, gCurrentMove))
+    .onDefender = +[](ON_DEFENDER) -> int {
+        CHECK(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 3)
         CHECK(CanBattlerBeForceSwitched(battler))
-
-        const u8* script;
-
-        if (gBattleTypeFlags & BATTLE_TYPE_TRAINER || GetBattlerSide(battler) == B_SIDE_PLAYER) {
-            script = BattleScript_EmergencyExit;
-        } else {
-            script = BattleScript_EmergencyExitWild;
-        }
 
         gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
             .ability = ability,
@@ -13215,9 +13206,9 @@ constexpr Ability Impl<ABILITY_HOCUS> = {
 
 template <>
 constexpr Ability Impl<ABILITY_ELECTRIC_CURRENT> = {
-    .onOffensiveMultiplier = Impl<ABILITY_STATIC>.onOffensiveMultiplier,
-    .onDefensiveMultiplier = Impl<ABILITY_STATIC>.onDefensiveMultiplier
     .onAttacker = Impl<ABILITY_GRIP_PINCER>.onAttacker,
+    .onOffensiveMultiplier = Impl<ABILITY_STATIC>.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_STATIC>.onDefensiveMultiplier,
     .onAccuracy = Impl<ABILITY_GRIP_PINCER>.onAccuracy,
 };
 
@@ -13229,13 +13220,13 @@ constexpr Ability Impl<ABILITY_POCUS> = {
 template <>
 constexpr Ability Impl<ABILITY_CRASHOUT> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
-        CHECK(RANDOM() % 100 < 5)
+        // Persists through the end-turn phase in case damage later in the end-turn phase would trigger another second attack
         SetOncePerTurnAbilityCounter(battler, ability, GetAbilityState(battler, ability));
         SetAbilityState(battler, ability, FALSE);
         return FALSE;
     },
-        .onReactive = +[](ON_REACTIVE) -> int {
-        CHECK(RANDOM() % 100 < 5)
+    .onReactive = +[](ON_REACTIVE) -> int {
+        CHECK(Random() % 100 < 5)
         CHECK(gRoundStructs[battler].damaged)
         CHECK_NOT(GetAbilityState(battler, ability))
         CHECK_NOT(GetOncePerTurnAbilityCounter(battler, ability))
@@ -13256,14 +13247,18 @@ constexpr Ability Impl<ABILITY_CRASHOUT> = {
 template <>
 constexpr Ability Impl<ABILITY_BEACHBALL> ={
     .onDefender = +[](ON_DEFENDER) -> int {
-        if (moveType == TYPE_FIGHTING) RESISTANCE(0.5);
         CHECK(ShouldApplyOnHitEffect(battler))
+        CHECK(moveType == TYPE_FIGHTING)
         CHECK(CanRaiseStat(battler, STAT_SPEED))
-        CHECK(moveType == TYPE_FIGHTING);
-        BattleScriptCall(BattleScript_InflatableActivates);
-        gBattleScripting.battler = battler;
+
+        SetStatChanger(STAT_SPEED, 1);
+        BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
         return TRUE;
     },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_FIGHTING) RESISTANCE(.5);
+        },
 };
 
 
