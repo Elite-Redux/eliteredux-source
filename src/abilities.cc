@@ -2697,6 +2697,22 @@ constexpr Ability Impl<ABILITY_SHIELDS_DOWN> = {
     },
     .unsuppressable = TRUE,
 };
+template <>
+constexpr Ability Impl<ABILITY_PUFFED_OUT> = {
+    .onEntry = Impl<ABILITY_FORECAST>.onEntry,
+    .onEndTurn = Impl<ABILITY_FORECAST>.onEndTurn,
+    .onAttacker = Impl<ABILITY_SHIELDS_DOWN>.onAttacker,
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
+        CHECK(status & CHECK_STATUS1)
+        switch (gBattleMons[battler].species) {
+            case SPECIES_MINIOR_REDUX:
+                return TRUE;
+
+            default:
+                return FALSE;
+        }
+    }
+};
 
 template <>
 constexpr Ability Impl<ABILITY_STAKEOUT> = {

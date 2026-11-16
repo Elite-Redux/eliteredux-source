@@ -46,6 +46,7 @@ bool32 CanParalyzeType(u8 battlerAttacker, u8 battlerTarget);
 bool32 CanBurnType(u8 battlerAttacker, u8 battlerTarget);
 bool32 CanUseLastResort(u8 battlerId);
 bool32 IsShieldsDownProtected(u32 battler);
+bool32 IsPuffedOutProtected(u32 battler);
 u32 IsAbilityStatusProtected(u32 battler, StatusCheckEnum status);
 int GetMoveEffectChance(int battler, MoveEnum move, int moveEffect, int baseChance);
 #define RESET_ALL_STATS 0
