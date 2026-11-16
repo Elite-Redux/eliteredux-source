@@ -4121,7 +4121,7 @@ constexpr Ability Impl<ABILITY_HIGH_TEMPERATURE> = {
 };
 
 template <>
-constexpr Ability Impl<ABILITY_INSECTEATER> = {
+constexpr Ability Impl<ABILITY_INSECTIVORE> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
             if (IS_BATTLER_OF_TYPE(target, TYPE_BUG)) RESISTANCE(1.5);
@@ -13210,6 +13210,14 @@ constexpr Ability Impl<ABILITY_HOCUS> = {
             if (!IsBattlerAlive(partner)) return;
             if (BattlerHasAbility(partner, ABILITY_HOCUS, FALSE) || BattlerHasAbility(partner, ABILITY_POCUS, FALSE)) MUL(.5);
         },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_ELECTRIC_CURRENT> = {
+    .onOffensiveMultiplier = Impl<ABILITY_STATIC>.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Impl<ABILITY_STATIC>.onDefensiveMultiplier
+    .onAttacker = Impl<ABILITY_GRIP_PINCER>.onAttacker,
+    .onAccuracy = Impl<ABILITY_GRIP_PINCER>.onAccuracy,
 };
 
 template <>
