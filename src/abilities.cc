@@ -13212,6 +13212,7 @@ constexpr Ability Impl<ABILITY_HOCUS> = {
         },
 };
 
+
 template <>
 constexpr Ability Impl<ABILITY_ELECTRIC_CURRENT> = {
     .onOffensiveMultiplier = Impl<ABILITY_STATIC>.onOffensiveMultiplier,
@@ -13225,6 +13226,33 @@ constexpr Ability Impl<ABILITY_POCUS> = {
     .onDefensiveMultiplier = Impl<ABILITY_HOCUS>.onDefensiveMultiplier,
 };
 
+template <>
+constexpr Ability Impl<ABILITY_CRASHOUT> = {
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        // Persists through the end-turn phase in case damage later in the end-turn phase would trigger another second attack
+        CHECK(RANDOM() % 100 < 5)
+        SetOncePerTurnAbilityCounter(battler, ability, GetAbilityState(battler, ability));
+        SetAbilityState(battler, ability, FALSE);
+        return FALSE;
+    },
+        .onReactive = +[](ON_REACTIVE) -> int {
+        CHECK(RANDOM() % 100 < 5)
+        CHECK(gRoundStructs[battler].damaged)
+        CHECK_NOT(GetAbilityState(battler, ability))
+        CHECK_NOT(GetOncePerTurnAbilityCounter(battler, ability))
+
+        SetAbilityState(battler, ability, TRUE);
+
+        gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
+            .ability = ability,
+            .move = MOVE_EXPLOSION,
+            .attacker = (u8)battler,
+            .target = (u8)BATTLE_OPPOSITE(battler),
+        };
+
+        return TRUE;
+    },
+};
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
