@@ -13189,6 +13189,21 @@ constexpr Ability Impl<ABILITY_RABBIT_HAT> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_HOCUS> = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            int partner = BATTLE_PARTNER(battler);
+            if (!IsBattlerAlive(partner)) return;
+            if (BattlerHasAbility(partner, ABILITY_HOCUS, FALSE) || BattlerHasAbility(partner, ABILITY_POCUS, FALSE)) MUL(.5);
+        },
+};
+
+template <>
+constexpr Ability Impl<ABILITY_POCUS> = {
+    .onDefensiveMultiplier = Impl<ABILITY_HOCUS>.onDefensiveMultiplier,
+};
+
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
