@@ -4108,6 +4108,19 @@ constexpr Ability Impl<ABILITY_DRAGONSLAYER> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_HIGH_TEMPERATURE> = {
+    .onOffensiveMultiplier =
+        +[](ON_OFFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(target, TYPE_STEEL)) RESISTANCE(1.5);
+        },
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (IS_BATTLER_OF_TYPE(attacker, TYPE_STEEL)) MUL(.5);
+        },
+    .breakable = TRUE,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_INSECTEATER> = {
     .onOffensiveMultiplier =
         +[](ON_OFFENSIVE_MULTIPLIER) {
