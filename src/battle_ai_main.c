@@ -663,7 +663,8 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) {
                         if (IsShieldsDownProtected(battlerAtk) && IsNonVolatileStatusMoveEffect(moveEffect)) RETURN_SCORE_MINUS(10);
                         break;
                     case ABILITY_PUFFED_OUT:
-                        if (IsPuffedOutProtected(battlerAtk) && IsNonVolatileStatusMoveEffect(moveEffect)) RETURN_SCORE_MINUS(10);
+                        // TODO: Implement IsPuffedOutProtected
+                        //if (IsPuffedOutProtected(battlerAtk) && IsNonVolatileStatusMoveEffect(moveEffect)) RETURN_SCORE_MINUS(10);
                         break;
                     case ABILITY_WONDER_SKIN:
                         if (IS_MOVE_STATUS(move)) accuracy = 50;

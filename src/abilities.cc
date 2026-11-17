@@ -4490,9 +4490,9 @@ constexpr Ability Impl<ABILITY_POISON_ABSORB> = {
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
         return TRUE;
     },
+    .allowTerrainIfAirborne = TERRAIN_TOXIC,
     .redirectType = TYPE_POISON,
     .breakable = TRUE,
-    .allowTerrainIfAirborne = TERRAIN_TOXIC,
 };
 
 template <>
@@ -6343,8 +6343,8 @@ constexpr Ability Impl<ABILITY_GENERATOR> = {
         SetSingleUseAbilityCounter(battler, ability, FALSE);
         return FALSE;
     },
-    .persistent = TRUE,
     .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
+    .persistent = TRUE,
 };
 
 template <>
@@ -11114,8 +11114,8 @@ constexpr Ability Impl<ABILITY_BACKUP_POWER> = {
         CHECK(IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN))
         return B_MSG_BACKUP_POWER;
     },
-    .persistent = TRUE,
     .allowTerrainIfAirborne = TERRAIN_ELECTRIC,
+    .persistent = TRUE,
 };
 
 template <>

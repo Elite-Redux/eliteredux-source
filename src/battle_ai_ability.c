@@ -73,7 +73,7 @@ int ScoreAttackAbility(AbilityEnum ability, int battlerAtk, int battlerDef, int 
             REQUIRE(gBattleMoves[move].effect == EFFECT_SHELL_SMASH)
             REQUIRE_NOT(gBattleMons[battlerAtk].status2 && STATUS2_TRANSFORMED)
             switch (gBattleMons[battlerAtk].species) {
-                case SPECIES_MINIOR_REDUX_INFLATED:
+                case SPECIES_MINIOR_REDUX_INFLATE:
                     return AI_SCORE_FORM_CHANGE(battlerAtk, SPECIES_MINIOR_REDUX);
             }
             break;

@@ -6812,10 +6812,6 @@ static void Cmd_various(void) {
             ptr = READ_PTR_INC;
             if (IsShieldsDownProtected(gActiveBattler)) gBattlescriptCurrInstr = ptr;
             return;
-        case VARIOUS_JUMP_IF_ABILITY_PUFFED_OUT_PROTECTED:
-            ptr = READ_PTR_INC:
-            if(IsPuffedOutProtected(gActiveBattler)) gBattlescriptCurrInstr = ptr;
-            return;
         case VARIOUS_JUMP_IF_NO_HOLD_EFFECT: {
             int holdEffect = READ_8_INC;
             ptr = READ_PTR_INC;

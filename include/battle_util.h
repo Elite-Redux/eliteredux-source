@@ -173,7 +173,7 @@ typedef struct {
     SpeciesEnum lowHpSpecies;
     u8 hpFraction;
 } HpTransformation;
-extern const HpTransformation gHpTransformations[11];
+extern const HpTransformation gHpTransformations[12];
 
 int GetAbilityIndex(int battler, AbilityEnum ability, int checkMoldBreaker);
 s32 CountUsablePartyMons(u8 battlerId);
