@@ -9030,6 +9030,8 @@ bool32 IsHealingMoveEffect(MoveBehaviorEnum effect) {
         case EFFECT_STRENGTH_SAP:
         case EFFECT_DRAIN_BRAIN:
         case EFFECT_PARTY_FAVORS:
+        case EFFECT_REFRESH:
+        case EFFECT_HEAL_BELL:
             return TRUE;
         default:
             return FALSE;
