@@ -12637,8 +12637,9 @@ constexpr Ability Impl<ABILITY_SINISTER_CLAWS> = {
 template <>
 constexpr Ability Impl<ABILITY_PETAL_SHIELD> = {
     .onEntry = +[](ON_ENTRY) -> int {
-        CHECK(gBattleMons[battler].statStages[STAT_DEF] < MAX_STAT_STAGE)
-        gBattleMons[battler].statStages[STAT_DEF] = MAX_STAT_STAGE;
+        CHECK(CanRaiseStat(battler, STAT_DEF))
+
+        SetStatChanger(STAT_DEF, 3);
         return SwitchInAnnounce(B_MSG_SWITCHIN_PETAL_SHIELD);
     },
     .onDefender = +[](ON_DEFENDER) -> int {
