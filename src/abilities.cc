@@ -650,6 +650,39 @@ constexpr Ability Impl<ABILITY_INSOMNIA> = {
 
 template <>
 constexpr Ability Impl<ABILITY_COLOR_CHANGE> = {
+    .onExit = +[](ON_EXIT) -> int {
+        SetSingleUseAbilityCounter(battler, ability, FALSE);
+        return FALSE;
+    },
+    .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
+        CHECK(battler != attacker)
+        CHECK_NOT(CheckAndSetOncePerTurnAbility(battler, ability))
+        SetSingleUseAbilityCounter(battler, ability, TRUE);
+
+        Type bestType = gBattleMons[gBattlerTarget].type1;
+        u16 bestModifier = GetTypeModifier(moveType, bestType, attacker, battler);
+
+        for (Type currentType = TYPE_NORMAL; currentType < NUMBER_OF_MON_TYPES; ++currentType) {
+            u16 currentModifier = GetTypeModifier(moveType, currentType, attacker, battler);
+            if (currentModifier < bestModifier) {
+                bestModifier = currentModifier;
+                bestType = currentType;
+            }
+            if (bestModifier == UQ_4_12(0.0)) break;
+        }
+
+        CHECK_NOT(IS_BATTLER_OF_TYPE(battler, bestType))
+
+        SET_BATTLER_TYPE(battler, bestType);
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, bestType);
+        BattleScriptCall(BattleScript_ColorChangeActivates);
+        return TRUE;
+    },
+    .onBeforeAttackFor = APPLY_ON_TARGET,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_METACHROSIS> = {
     .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
         CHECK(battler != attacker)
         CHECK(CheckAndSetOncePerTurnAbility(battler, ability))
@@ -5852,7 +5885,7 @@ constexpr Ability Impl<ABILITY_PRISMATIC_FUR> = {
     .onDefensiveMultiplier = +[](ON_DEFENSIVE_MULTIPLIER) { MUL(.5); },
     .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
         if (battler == attacker && Impl<ABILITY_RKS_SYSTEM>.onBeforeAttack(DELEGATE_BEFORE_ATTACK)) return TRUE;
-        return Impl<ABILITY_COLOR_CHANGE>.onBeforeAttack(DELEGATE_BEFORE_ATTACK);
+        return Impl<ABILITY_METACHROSIS>.onBeforeAttack(DELEGATE_BEFORE_ATTACK);
     },
     .onBeforeAttackFor = APPLY_ON_ATTACKER_OR_TARGET,
     .randomizerBanned = TRUE,
@@ -7573,15 +7606,8 @@ constexpr Ability Impl<ABILITY_PERMAFROST_CLONE> = {
 
 template <>
 constexpr Ability Impl<ABILITY_GALLANTRY> = {
-    .onEntry = +[](ON_ENTRY) -> int {
-        CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
-
-        BattleScriptPushCursorAndCallback(BattleScript_BattlerHasASingleNoDamageHit);
-        return TRUE;
+    .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_KINGS_SHIELD, 0); },
     },
-    .noDamageHits = 1,
-    .breakable = TRUE,
-    .persistent = TRUE,
 };
 
 template <>
@@ -11935,6 +11961,10 @@ constexpr Ability Impl<ABILITY_OVERCAST> = {
 
 template <>
 constexpr Ability Impl<ABILITY_STEADFAST> = {
+    .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
+        CHECK(status == CHECK_STATUS1)
+        return TRUE;
+    },
     .steadfast = TRUE,
 };
 
@@ -13027,6 +13057,14 @@ constexpr Ability Impl<ABILITY_PHOTON_BURST> = {
 
 template <>
 constexpr Ability Impl<ABILITY_RIPPLING_PUNCH> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(ShouldApplyOnHitEffect(target))
+        CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+        CHECK(Random() % 2)
+        CHECK(StatLowerableOrMirrorArmor(target, STAT_ATK))
+
+        return AbilityStatusEffect(MOVE_EFFECT_ATK_MINUS_1);
+    },
     .onModifyMoveFlags = +[](ON_MODIFY_MOVE_FLAGS) -> int {
         CHECK(flag == MOVE_FLAG_SOUND)
         return gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST;
@@ -13138,12 +13176,20 @@ constexpr Ability Impl<ABILITY_DAZZLING_WINGS> = {
 
 template <>
 constexpr Ability Impl<ABILITY_FEARLESS> = {
+    .onDefensiveMultiplier =
+        +[](ON_DEFENSIVE_MULTIPLIER) {
+            if (moveType == TYPE_GHOST) RESISTANCE(.5);
+        },
     .onStatusImmune = +[](ON_STATUS_IMMUNE) -> int {
         CHECK(status & CHECK_FEAR)
         return TRUE;
     },
+    .onBlockStatDrops = +[](ON_BLOCK_STAT_DROPS) -> StatDropBlockType {
+        CHECK_NOT(selfStatDrop)
+        *script = BattleScript_AbilityNoStatLoss;
+        return STAT_DROP_BLOCK;
+    },
     .breakable = TRUE,
-    .tauntImmune = TRUE,
 };
 
 template <>

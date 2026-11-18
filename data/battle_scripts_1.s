@@ -8627,7 +8627,7 @@ BattleScript_DoTurnDmgEnd:
 	end2
 
 BattleScript_FuneralPyreDamage::
-	hpfractiontodamage BS_STACK_1, 4
+	hpfractiontodamage BS_STACK_1, 8
 	copybyte gBattlerAttacker, gStackBattler1
 	printstring STRINGID_PKMNHURTBYFUNERALPYRE
 	waitmessage B_WAIT_TIME_LONG
