@@ -1292,7 +1292,10 @@ template <>
 constexpr Ability Impl<ABILITY_SWARM> = {
     .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_BUG),
 };
-
+template <>
+constexpr Ability Impl<ABILITY_ENCHANTED> = {
+    .onOffensiveMultiplier = SWARM_MULTIPLIER(TYPE_FAIRY),
+};
 template <>
 constexpr Ability Impl<ABILITY_ROCK_HEAD> = {
     .breakable = TRUE,
