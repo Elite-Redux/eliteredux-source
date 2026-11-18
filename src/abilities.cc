@@ -10812,7 +10812,7 @@ constexpr Ability Impl<ABILITY_ENERGY_TAP> = {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
 
-        gBattleMoveDamage = -gHpDealt / 8;
+        gBattleMoveDamage = -gHpDealt / 6;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
@@ -13079,7 +13079,7 @@ constexpr Ability Impl<ABILITY_BLINKING_FLASH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(gBattleMoves[move].light)
-        CHECK(Random() % 100 < 10)
+        CHECK(Random() % 100 < 25)
         CHECK(StatLowerableOrMirrorArmor(target, STAT_ACC))
 
         return AbilityStatusEffectSafe(MOVE_EFFECT_ACC_MINUS_1, battler, target);
