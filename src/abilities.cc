@@ -5380,6 +5380,11 @@ constexpr Ability Impl<ABILITY_FOREST_RAGE> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_CRESTOFHOPE> = {
+    .onOffensiveMultiplier = BOOSTED_SWARM_MULTIPLIER(TYPE_FAIRY),
+};
+
+template <>
 constexpr Ability Impl<ABILITY_PRIMAL_MAW> = {
     .onParentalBond = +[](ON_PARENTAL_BOND) -> MultihitType {
         CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
