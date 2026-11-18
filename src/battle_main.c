@@ -5124,6 +5124,7 @@ static Type GetMoveTypeInternal(MoveEnum move, int battlerAtk, Type* ateBoost, T
             return TYPE_STELLAR;
 
         case MOVE_WEATHER_BALL:
+        case MOVE_METEOROPATH_BALL:
             if (HasChloroplast(battlerAtk)) return TYPE_FIRE;
             if (HasAuroraBorealis(battlerAtk)) return TYPE_ICE;
             REQUIRE(IsWeatherActive(WEATHER_ANY))
@@ -5133,6 +5134,7 @@ static Type GetMoveTypeInternal(MoveEnum move, int battlerAtk, Type* ateBoost, T
             if (gBattleWeather & WEATHER_HAIL_ANY) return TYPE_ICE;
             if (gBattleWeather & WEATHER_FOG_ANY) return TYPE_GHOST;
             break;
+        
 
         case MOVE_PRESENT:
             *realType = TYPE_MYSTERY;
