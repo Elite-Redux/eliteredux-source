@@ -13298,8 +13298,14 @@ constexpr Ability Impl<ABILITY_BEACHBALL> ={
             if (moveType == TYPE_FIGHTING) RESISTANCE(.5);
         },
 };
-
-
+template <>
+constexpr Ability Impl<ABILITY_FAE_DOMAIN> = {
+    .onEntry = Impl<ABILITY_MISTY_SURGE>.onEntry,
+    .onStatusImmune = Impl<ABILITY_AROMA_VEIL>.onStatusImmune,
+    .allowTerrainIfAirborne = TERRAIN_MISTY,
+    .onStatusImmuneFor = APPLY_ON_ALLY,
+    .breakable = TRUE,
+};
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
