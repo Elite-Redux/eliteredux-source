@@ -10812,7 +10812,7 @@ constexpr Ability Impl<ABILITY_ENERGY_TAP> = {
         CHECK_NOT(BATTLER_MAX_HP(battler))
         CHECK(CanBattlerHeal(battler))
 
-        gBattleMoveDamage = -gHpDealt / 8;
+        gBattleMoveDamage = -gHpDealt / 6;
         if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
@@ -13079,7 +13079,7 @@ constexpr Ability Impl<ABILITY_BLINKING_FLASH> = {
     .onAttacker = +[](ON_ATTACKER) -> int {
         CHECK(ShouldApplyOnHitEffect(target))
         CHECK(gBattleMoves[move].light)
-        CHECK(Random() % 100 < 10)
+        CHECK(Random() % 100 < 25)
         CHECK(StatLowerableOrMirrorArmor(target, STAT_ACC))
 
         return AbilityStatusEffectSafe(MOVE_EFFECT_ACC_MINUS_1, battler, target);
@@ -13298,8 +13298,14 @@ constexpr Ability Impl<ABILITY_BEACHBALL> ={
             if (moveType == TYPE_FIGHTING) RESISTANCE(.5);
         },
 };
-
-
+template <>
+constexpr Ability Impl<ABILITY_FAE_DOMAIN> = {
+    .onEntry = Impl<ABILITY_MISTY_SURGE>.onEntry,
+    .onStatusImmune = Impl<ABILITY_AROMA_VEIL>.onStatusImmune,
+    .allowTerrainIfAirborne = TERRAIN_MISTY,
+    .onStatusImmuneFor = APPLY_ON_ALLY,
+    .breakable = TRUE,
+};
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
     if (Intimidate<abilityId>.statsLowered[0]) count++;
 constexpr u32 IntimidateCount() {
