@@ -9227,6 +9227,16 @@ constexpr Ability Impl<ABILITY_BLADE_DANCE> = {
     },
 };
 
+template <>
+constexpr Ability Impl<ABILITY_SUN_DANCE> = {
+    .onAttacker = +[](ON_ATTACKER) -> int {
+        CHECK(IsDance(battler, move))
+        CHECK(AdjustFollowupMoveTarget(battler, &target, move, FOLLOWUP_ALLOW_SELF))
+
+        return UseAttackerFollowUpMove(battler, target, ability, MOVE_SUNNY_DAY, 0);
+    },
+};
+
 int ApeShiftHandler(u8 battler, AbilityCallType callType) {
     CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
     CHECK(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
@@ -11762,6 +11772,15 @@ template <>
 constexpr Ability Impl<ABILITY_HAND_BARNACLES> = {
     .onParentalBond = Impl<ABILITY_MULTI_HEADED>.onParentalBond,
     .onStab = +[](ON_STAB) -> int { return moveType == TYPE_WATER; },
+    .resistsFortKnox = TRUE,
+};
+
+template <>
+constexpr Ability Impl<ABILITY_BIG_APPLE> = {
+    .onParentalBond = Impl<ABILITY_MULTI_HEADED>.onParentalBond,
+    .onStatusImmune = Impl<ABILITY_AROMA_VEIL>.onStatusImmune,
+    .onStatusImmuneFor = APPLY_ON_ALLY,
+    .breakable = TRUE,
     .resistsFortKnox = TRUE,
 };
 
