@@ -7607,7 +7607,6 @@ constexpr Ability Impl<ABILITY_PERMAFROST_CLONE> = {
 template <>
 constexpr Ability Impl<ABILITY_GALLANTRY> = {
     .onEntry = +[](ON_ENTRY) -> int { return UseEntryMove(battler, ability, MOVE_KINGS_SHIELD, 0); },
-    },
 };
 
 template <>
@@ -13206,7 +13205,7 @@ constexpr Ability Impl<ABILITY_FEARLESS> = {
     .onBlockStatDrops = +[](ON_BLOCK_STAT_DROPS) -> StatDropBlockType {
         CHECK_NOT(selfStatDrop)
         *script = BattleScript_AbilityNoStatLoss;
-        return STAT_DROP_BLOCK;
+        return STAT_DROP_BLOCK_ALL;
     },
     .breakable = TRUE,
 };
@@ -13368,8 +13367,8 @@ template <>
 constexpr Ability Impl<ABILITY_FAE_DOMAIN> = {
     .onEntry = Impl<ABILITY_MISTY_SURGE>.onEntry,
     .onStatusImmune = Impl<ABILITY_AROMA_VEIL>.onStatusImmune,
-    .allowTerrainIfAirborne = TERRAIN_MISTY,
     .onStatusImmuneFor = APPLY_ON_ALLY,
+    .allowTerrainIfAirborne = TERRAIN_MISTY,
     .breakable = TRUE,
 };
 #define FOR_EACH_ABILITY_FUNCTION(abilityId) \
