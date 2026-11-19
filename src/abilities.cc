@@ -11988,6 +11988,7 @@ constexpr Ability Impl<ABILITY_STEADFAST> = {
 
 template <>
 constexpr Ability Impl<ABILITY_SUPERHEAVY> = {
+    .onStatusImmune = Impl<ABILITY_STEADFAST>.onStatusImmune,
     .suctionCups = TRUE,
     .steadfast = TRUE,
 };
