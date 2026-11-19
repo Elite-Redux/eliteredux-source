@@ -650,14 +650,14 @@ constexpr Ability Impl<ABILITY_INSOMNIA> = {
 
 template <>
 constexpr Ability Impl<ABILITY_COLOR_CHANGE> = {
-    .onExit = +[](ON_EXIT) -> int {
-        SetSingleUseAbilityCounter(battler, ability, FALSE);
+    .onEndTurn = +[](ON_END_TURN) -> int {
+        CHECK(GetAbilityState(battler, ability))
+        SetAbilityState(battler, ability, 0);
         return FALSE;
     },
     .onBeforeAttack = +[](ON_BEFORE_ATTACK) -> int {
         CHECK(battler != attacker)
-        CHECK_NOT(CheckAndSetOncePerTurnAbility(battler, ability))
-        SetSingleUseAbilityCounter(battler, ability, TRUE);
+        CHECK_NOT(GetAbilityState(battler, ability))
 
         Type bestType = gBattleMons[gBattlerTarget].type1;
         u16 bestModifier = GetTypeModifier(moveType, bestType, attacker, battler);
@@ -672,10 +672,10 @@ constexpr Ability Impl<ABILITY_COLOR_CHANGE> = {
         }
 
         CHECK_NOT(IS_BATTLER_OF_TYPE(battler, bestType))
-
-        SET_BATTLER_TYPE(battler, bestType);
-        PREPARE_TYPE_BUFFER(gBattleTextBuff1, bestType);
+        SET_BATTLER_TYPE(battler, bestType)
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, bestType)
         BattleScriptCall(BattleScript_ColorChangeActivates);
+        SetAbilityState(battler, ability, 1);
         return TRUE;
     },
     .onBeforeAttackFor = APPLY_ON_TARGET,
