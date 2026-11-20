@@ -14,7 +14,7 @@ script LilycoveCity_MossDeepCityTeleporter_EventScript_NatuAskTeleport{
     msgbox(format("The future is now, young trainer."), MSGBOX_DEFAULT)
     playse(SE_WARP_IN)
     waitse
-    warp(MAP_MOSSDEEP_CITY, 255, 1, 21)
+    warp(MAP_MOSSDEEP_CITY, 255, 28, 17)
     waitstate
     release
     end
