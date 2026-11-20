@@ -1,0 +1,90 @@
+name: er-config proto sync
+
+on:
+  schedule:
+    # For non-cron people: every day, around 3AM UTC
+    - cron: '16 3 * * *'
+  # In case we want to trigger it proactively from the other repo or w/e
+  repository_dispatch:
+    types: [proto-updated]
+  workflow_dispatch:
+
+# Overkill, but best-practices anyway
+concurrency:
+  group: sync-proto
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: upcoming
+          submodules: false
+
+      - name: Bump proto to er-config upcoming
+        id: bump
+        run: |
+          OLD=$(git ls-tree HEAD proto | awk '{print $3}')
+          git submodule sync proto
+          git submodule update --init proto
+          git -C proto fetch -q origin upcoming
+          NEW=$(git -C proto rev-parse FETCH_HEAD)
+
+          if [ "$OLD" = "$NEW" ]; then
+            echo "proto is already at er-config upcoming ($NEW)"
+            exit 0
+          fi
+
+          # Basic check that we didn't fucked-up ancestry by trying to apply ontop of something that's not relative to upcoming
+          if ! git -C proto merge-base --is-ancestor "$OLD" "$NEW"; then
+            echo "Current proto pointer $OLD isn't behind er-config upcoming, leaving it alone"
+            exit 0
+          fi
+
+          git -C proto checkout -q "$NEW"
+          COUNT=$(git -C proto rev-list --count "$OLD..$NEW")
+
+          # A log line looks like: - [`f718f7f`](https://github.com/Elite-Redux/er-config/commit/foobar) Add some foo to the bar
+          # For reference: https://git-scm.com/docs/pretty-formats
+          LOG=$(git -C proto log --no-merges --format='- [`%h`](https://github.com/Elite-Redux/er-config/commit/%H) %s' "$OLD..$NEW" | head -n 50)
+          {
+            echo "changed=true"
+            echo "old=$OLD"
+            echo "new=$NEW"
+            echo "count=$COUNT"
+            echo "log<<__LOG__"
+            echo "$LOG"
+            echo "__LOG__"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the sync PR
+        if: steps.bump.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          # IIRC we need a proper token for PR opening
+          token: ${{ secrets.PROTO_SYNC_TOKEN || github.token }}
+          branch: auto/sync-proto
+          base: upcoming
+          delete-branch: true
+          add-paths: proto
+          # If you wonder why this specific user: https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          commit-message: |
+            Auto-sync proto from er-config
+
+            Bumps proto from ${{ steps.bump.outputs.old }} to ${{ steps.bump.outputs.new }} (${{ steps.bump.outputs.count }} commits)
+          title: Sync proto with er-config upcoming
+          body: |
+            Auto-sync `proto` with er-config `upcoming`.
+
+            [Full diff](https://github.com/Elite-Redux/er-config/compare/${{ steps.bump.outputs.old }}...${{ steps.bump.outputs.new }})
+
+            ${{ steps.bump.outputs.log }}
