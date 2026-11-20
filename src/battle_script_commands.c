@@ -1491,7 +1491,7 @@ static void Cmd_ppreduce(void) {
         gRoundStructs[gBattlerAttacker].notFirstStrike = TRUE;
         // For item Metronome, echoed voice
         if (gCurrentMove == gLastResultingMoves[gBattlerAttacker] && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && !WasUnableToUseMove(gBattlerAttacker) &&
-            (gTurnStructs[gBattlerAttacker].parentalBondOn > 0 &&
+            !(gTurnStructs[gBattlerAttacker].parentalBondOn > 0 &&
              gTurnStructs[gBattlerAttacker].parentalBondOn != gTurnStructs[gBattlerAttacker].parentalBondInitialCount))  // Don't increment counter on first hit
             gBattleStruct->sameMoveTurns[gBattlerAttacker]++;
         else

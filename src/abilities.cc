@@ -8201,7 +8201,7 @@ constexpr Ability Impl<ABILITY_PIERCING_SOLO> = {
 
 template <>
 constexpr Ability Impl<ABILITY_RHYTHMIC> = {
-    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battler]); },
+    .onOffensiveMultiplier = +[](ON_OFFENSIVE_MULTIPLIER) { MulModifier(modifier, UQ_4_12(1.0) + UQ_4_12(0.1) * gBattleStruct->sameMoveTurns[battler]); },
 };
 
 template <>
