@@ -29,14 +29,14 @@
       "y": 8,
       "elevation": 3,
       "dest_map": "MAP_MIRAGE_TOWER_1F",
-      "dest_warp_id": "2"
+      "dest_warp_id": "1"
     },
     {
       "x": 3,
       "y": 4,
       "elevation": 0,
       "dest_map": "MAP_ROUTE111_TUNNEL",
-      "dest_warp_id": "3"
+      "dest_warp_id": "8"
     }
   ],
   "coord_events": [
