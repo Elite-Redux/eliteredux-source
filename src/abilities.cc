@@ -11777,8 +11777,7 @@ constexpr Ability Impl<ABILITY_HAND_BARNACLES> = {
 template <>
 constexpr Ability Impl<ABILITY_BIG_APPLE> = {
     .onParentalBond = Impl<ABILITY_MULTI_HEADED>.onParentalBond,
-    .onStatusImmune = Impl<ABILITY_AROMA_VEIL>.onStatusImmune,
-    .onStatusImmuneFor = APPLY_ON_ALLY,
+    .onEndTurn = Impl<ABILITY_SELF_SUFFICIENT>.onEndTurn,
     .breakable = TRUE,
     .resistsFortKnox = TRUE,
 };
