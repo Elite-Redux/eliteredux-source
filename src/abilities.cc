@@ -13310,9 +13310,8 @@ constexpr Ability Impl<ABILITY_HOCUS> = {
 
 template <>
 constexpr Ability Impl<ABILITY_ELECTRIC_CURRENT> = {
-    .onAttacker = Impl<ABILITY_GRIP_PINCER>.onAttacker,
-    .onOffensiveMultiplier = Impl<ABILITY_STATIC>.onOffensiveMultiplier,
-    .onDefensiveMultiplier = Impl<ABILITY_STATIC>.onDefensiveMultiplier,
+    .onAttacker = +[](ON_ATTACKER) -> int {return Impl<ABILITY_STATIC>.onAttacker(DELEGATE_ATTACKER) | Impl<ABILITY_GRIP_PINCER>.onAttacker(DELEGATE_ATTACKER); },
+    .onDefender = Impl<ABILITY_STATIC>.onDefender,
     .onAccuracy = Impl<ABILITY_GRIP_PINCER>.onAccuracy,
 };
 
