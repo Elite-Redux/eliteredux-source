@@ -11776,8 +11776,8 @@ constexpr Ability Impl<ABILITY_HAND_BARNACLES> = {
 
 template <>
 constexpr Ability Impl<ABILITY_BIG_APPLE> = {
-    .onParentalBond = Impl<ABILITY_MULTI_HEADED>.onParentalBond,
     .onEndTurn = Impl<ABILITY_SELF_SUFFICIENT>.onEndTurn,
+    .onParentalBond = Impl<ABILITY_MULTI_HEADED>.onParentalBond,
     .breakable = TRUE,
     .resistsFortKnox = TRUE,
 };
