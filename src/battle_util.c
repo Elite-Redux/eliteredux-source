@@ -7396,6 +7396,7 @@ static u32 CalcAttackStat(MoveEnum move, u8 battlerAtk, u8 battlerDef, u8 moveTy
             if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PIKACHU_PH_D) MulModifier(&modifier, UQ_4_12(1.6));
             if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PICHU) MulModifier(&modifier, UQ_4_12(1.4));
             if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PICHU_SPIKY_EARED) MulModifier(&modifier, UQ_4_12(1.4));
+            if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_PIKACHU_REDUX) MulModifier(&modifier, UQ_4_12(1.0));
             break;
         case HOLD_EFFECT_LEEK:
             if (GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_FARFETCHD && IS_MOVE_PHYSICAL(move)) MulModifier(&modifier, UQ_4_12(2.0));
