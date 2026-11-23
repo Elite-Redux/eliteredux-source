@@ -1229,7 +1229,7 @@ ON_EITHER(CuteCharm) {
     CHECK(ShouldApplyOnHitEffect(opponent))
     CHECK(IsMoveMakingContact(move, gBattlerAttacker))
     CHECK(CanInfatuate(battler, opponent))
-    CHECK(Random() % 100 < 25)
+    CHECK(Random() % 100 < 30)
 
     AbilityStatusEffectSafe(MOVE_EFFECT_ATTRACT, battler, opponent);
     return TRUE;
