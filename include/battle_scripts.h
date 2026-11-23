@@ -168,6 +168,7 @@ extern const u8 BattleScript_DoRecoil33[];
 extern const u8 BattleScript_Recoil33End[];
 extern const u8 BattleScript_ItemSteal[];
 extern const u8 BattleScript_DrizzleActivates[];
+extern const u8 BattleScript_DownpourActivates[];
 extern const u8 BattleScript_TraceActivates[];
 extern const u8 BattleScript_TraceActivatesEnd3[];
 extern const u8 BattleScript_RainDishActivates[];

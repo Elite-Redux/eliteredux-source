@@ -10449,6 +10449,15 @@ int IsHailImmune(int battler) {
     return FALSE;
 }
 
+int IsDownpourImmune(int battler) {
+    if (IS_BATTLER_OF_TYPE(battler, TYPE_WATER)) return TRUE;
+    if (gStatuses3[battler] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER)) return TRUE;
+    if (BattlerHasHoldEffect(battler, HOLD_EFFECT_SAFETY_GOGGLES, TRUE)) return TRUE;
+    if (IsMagicGuardProtected(battler)) return TRUE;
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, downpourImmune)
+    return FALSE;
+}
+
 static void Cmd_weatherdamage(void) {
     gBattleMoveDamage = 0;
     if (IsBattlerAlive(gBattlerAttacker) && WEATHER_HAS_EFFECT  // Sandstorm damage
@@ -10465,6 +10474,12 @@ static void Cmd_weatherdamage(void) {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                 if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
             }
+        }
+        if (gBattleWeather & WEATHER_RAIN_DOWNPOUR)
+        {
+            if (!IsDownpourImmune(gBattlerAttacker)) {
+                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
+                if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
         }
     }
 

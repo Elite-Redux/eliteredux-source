@@ -454,6 +454,7 @@ static const u8 sInlineWeatherAnims[] = {
     [ENUM_WEATHER_RAIN_PRIMAL] = B_ANIM_RAIN_CONTINUES,
     [ENUM_WEATHER_STRONG_WINDS] = B_ANIM_STRONG_WINDS,
     [ENUM_WEATHER_FOG] = B_ANIM_FOG_CONTINUES,
+    [ENUM_WEATHER_DOWNPOUR] = B_ANIM_RAIN_CONTINUES,
 };
 
 static int SetInlineWeather(const InlineEffect& effect, u8 battler) {

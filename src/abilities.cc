@@ -487,6 +487,20 @@ constexpr Ability Impl<ABILITY_DRIZZLE> = {
     },
 };
 
+template<>
+constexpr Ability Impl<ABILITY_DOWNPOUR> = {
+    .onEntry = +[](ON_ENTRY) -> int {
+        if (TryChangeBattleWeather(battler, ENUM_WEATHER_DOWNPOUR, TRUE)) {
+            BattleScriptPushCursorAndCallback(BattleScript_DownpourActivates);
+            return TRUE;
+        } else if (IsWeatherActive(WEATHER_PRIMAL_ANY)) {
+            BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
+            return NO_ANNOUNCE;
+        }
+        return FALSE;
+    },
+};
+
 template <>
 constexpr Ability Impl<ABILITY_SPEED_BOOST> = {
     .onEndTurn = +[](ON_END_TURN) -> int {
@@ -903,6 +917,7 @@ constexpr Ability Impl<ABILITY_SWIFT_SWIM> = {
         +[](ON_STAT) {
             if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat *= 1.5;
         },
+    .downpourImmune = TRUE,
 };
 
 template <>
@@ -1075,6 +1090,7 @@ constexpr Ability Impl<ABILITY_RAIN_DISH> = {
         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
         return TRUE;
     },
+    .downpourImmune = TRUE,
 };
 
 template <>
@@ -1519,6 +1535,7 @@ constexpr Ability Impl<ABILITY_DRY_SKIN> = {
             if (moveType == TYPE_FIRE) RESISTANCE(1.25);
         },
     .breakable = TRUE,
+    .downpourImmune = TRUE,
 };
 
 template <>
@@ -1561,6 +1578,7 @@ constexpr Ability Impl<ABILITY_HYDRATION> = {
         CHECK(AbilityHealMonStatus(battler, ability));
         return TRUE;
     },
+    .downpourImmune = TRUE,
 };
 
 template <>
@@ -1579,6 +1597,7 @@ constexpr Ability Impl<ABILITY_RAGING_STORM> = {
             if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
             if (IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat *= 1.5;
         },
+    .downpourImmune = TRUE,
 };
 
 template <>
@@ -2102,6 +2121,7 @@ constexpr Ability Impl<ABILITY_OVERCOAT> = {
     .powderImmune = TRUE,
     .sandImmune = TRUE,
     .hailImmune = TRUE,
+    .downpourImmune = TRUE,
 };
 
 template <>
@@ -4655,6 +4675,7 @@ constexpr Ability Impl<ABILITY_SEA_GUARDIAN> = {
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         return TRUE;
     },
+    .downpourImmune = TRUE,
 };
 
 template <>
@@ -11707,6 +11728,7 @@ constexpr Ability Impl<ABILITY_RAIN_SHROUD> = {
     },
     .onAccuracyFor = APPLY_ON_TARGET,
     .breakable = TRUE,
+    .downpourImmune = TRUE,
 };
 
 template <>

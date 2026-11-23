@@ -481,6 +481,7 @@ typedef enum WeatherFlag {
 #define ENUM_WEATHER_RAIN_PRIMAL 6
 #define ENUM_WEATHER_STRONG_WINDS 7
 #define ENUM_WEATHER_FOG 8
+#define ENUM_WEATHER_DOWNPOUR 9
 
 // Battle Terrain as enum
 #define ENUM_TERRAIN_NONE 0

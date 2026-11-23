@@ -9025,6 +9025,13 @@ BattleScript_DrizzleActivates::
 	call BattleScript_OnWeatherChange
 	end3
 
+BattleScript_DownpourActivates::
+	printstring STRINGID_PKMNMADEITRAIN
+	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_BATTLER_0, B_ANIM_RAIN_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
+	end3
+
 BattleScript_StackBattlerStatUp::
 	saveattackertostack3
 	copybyte gBattlerAttacker, gStackBattler1
