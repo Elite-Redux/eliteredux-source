@@ -6485,6 +6485,14 @@ constexpr Ability Impl<ABILITY_WIND_RIDER> = {
 };
 
 template <>
+constexpr Ability Impl<ABILITY_DA_VINCI> = {
+    .onEntry = +[](ON_ENTRY) -> int { return Impl<ABILITY_BIRD_TYPE>.onEntry(DELEGATE_ENTRY) | Impl<ABILITY_WIND_RIDER>.onEntry(DELEGATE_ENTRY); },
+    .onAbsorb = Impl<ABILITY_WIND_RIDER>.onAbsorb,
+    .breakable = TRUE,
+    .addsType = TYPE_FLYING,
+};
+
+template <>
 constexpr Ability Impl<ABILITY_SOOTHING_AROMA> = {
     .onEntry = +[](ON_ENTRY) -> int {
         int anyStatus = FALSE;
