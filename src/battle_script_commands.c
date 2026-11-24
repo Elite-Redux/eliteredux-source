@@ -10480,6 +10480,7 @@ static void Cmd_weatherdamage(void) {
             if (!IsDownpourImmune(gBattlerAttacker)) {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                 if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+            }
         }
     }
 
