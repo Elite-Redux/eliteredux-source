@@ -1994,23 +1994,31 @@ u8 DoFieldEndTurnEffects(void) {
             case ENDTURN_RAIN:
                 gBattleStruct->turnCountersTracker++;
                 REQUIRE(!gFieldTimers.clearSkiesTimer)
+                gBattlescriptCurrInstr = BattleScript_RainContinuesOrEnds;
+
                 if (gBattleWeather & WEATHER_RAIN_ANY) {
                     if (!(gBattleWeather & WEATHER_RAIN_PERMANENT) && !(gBattleWeather & WEATHER_RAIN_PRIMAL)) {
                         if (!gFieldTimers.started.weather && --gWishFutureKnock.weatherDuration == 0) {
                             gBattleWeather &= ~WEATHER_RAIN_TEMPORARY;
                             gBattleWeather &= ~WEATHER_RAIN_DOWNPOUR;
                             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RAIN_STOPPED;
-                        } else if (gBattleWeather & WEATHER_RAIN_DOWNPOUR)
-                            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_DOWNPOUR_CONTINUES;
-                        else
+                        } else if (gBattleWeather & WEATHER_RAIN_DOWNPOUR) {
+                            gBattleScripting.animArg1 = B_ANIM_RAIN_CONTINUES;
+                            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_DOWNPOUR;
+                            gBattlescriptCurrInstr = BattleScript_DamagingWeatherContinues;
+                        }
+                        else {
                             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RAIN_CONTINUES;
+                        }  
                     } else if (gBattleWeather & WEATHER_RAIN_DOWNPOUR) {
-                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_DOWNPOUR_CONTINUES;
+                        gBattleScripting.animArg1 = B_ANIM_RAIN_CONTINUES;
+                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_DOWNPOUR;
+                        gBattlescriptCurrInstr = BattleScript_DamagingWeatherContinues;
                     } else {
                         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RAIN_CONTINUES;
                     }
-
-                    BattleScriptExecute(BattleScript_RainContinuesOrEnds);
+                    
+                    BattleScriptExecute(gBattlescriptCurrInstr);
                     effect++;
                 }
                 break;
@@ -3758,7 +3766,7 @@ static const u16 sWeatherFlagsInfo[][3] = {
     [ENUM_WEATHER_HAIL] = {WEATHER_HAIL_TEMPORARY, WEATHER_HAIL_PERMANENT, HOLD_EFFECT_ICY_ROCK},
     [ENUM_WEATHER_STRONG_WINDS] = {WEATHER_STRONG_WINDS, WEATHER_STRONG_WINDS, HOLD_EFFECT_NONE},
     [ENUM_WEATHER_FOG] = {WEATHER_FOG_TEMPORARY, WEATHER_FOG_PERMANENT, HOLD_EFFECT_SMOKE_BALL},
-    [ENUM_WEATHER_DOWNPOUR] = {WEATHER_DOWNPOUR, WEATHER_DOWNPOUR, HOLD_EFFECT_DAMP_ROCK}
+    [ENUM_WEATHER_DOWNPOUR] = {WEATHER_RAIN_DOWNPOUR, WEATHER_RAIN_DOWNPOUR, HOLD_EFFECT_DAMP_ROCK}
 };
 
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility) {

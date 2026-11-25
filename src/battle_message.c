@@ -1116,6 +1116,8 @@ const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthi
 static const u8 sText_ExtraSkillPermaStickyWeb[] = _("Permanent sticky web has been casted\naround {B_PLAYER_NAME}'s team.");
 static const u8 sText_LightWieldSetUpLightScreen[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s Light Wield\nset up Light Screen!");
 static const u8 sText_PkmnGotOverItsFear[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} got over\nits fear!");
+static const u8 sText_PkmnPeltedByDownpour[] = _("{B_ATK_NAME_WITH_PREFIX} is pelted\nby the downpour!");
+static const u8 sText_DownpourStopped[] = _("The downpour stopped.");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -2015,6 +2017,8 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_EXTRASKILL_PERMA_STICKY_WEB - 12] = sText_ExtraSkillPermaStickyWeb,
     [STRINGID_LIGHT_WIELD_ACTIVATED - 12] = sText_LightWieldSetUpLightScreen,
     [STRINGID_PKMNGOTOVERITSFEAR - 12] = sText_PkmnGotOverItsFear,
+    [STRINGID_PKMNPELTEDBYDOWNPOUR - 12] = sText_PkmnPeltedByDownpour,
+    [STRINGID_DOWNPOURSTOPPED - 12] = sText_DownpourStopped,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2158,18 +2162,21 @@ const u16 gSandStormHailContinuesStringIds[] =
 {
     [B_MSG_SANDSTORM] = STRINGID_SANDSTORMRAGES,
     [B_MSG_HAIL] = STRINGID_HAILCONTINUES,
+    [B_MSG_DOWNPOUR] = STRINGID_DOWNPOURCONTINUES,
 };
 
 const u16 gSandStormHailDmgStringIds[] = 
 {
     [B_MSG_SANDSTORM] = STRINGID_PKMNBUFFETEDBYSANDSTORM,
     [B_MSG_HAIL] = STRINGID_PKMNPELTEDBYHAIL,
+    [B_MSG_DOWNPOUR] = STRINGID_PKMNPELTEDBYDOWNPOUR,
 };
 
 const u16 gSandStormHailEndStringIds[] = 
 {
     [B_MSG_SANDSTORM] = STRINGID_SANDSTORMSUBSIDED,
     [B_MSG_HAIL] = STRINGID_HAILSTOPPED,
+    [B_MSG_DOWNPOUR] = STRINGID_DOWNPOURSTOPPED,
 };
 
 const u16 gRainContinuesStringIds[] = 
