@@ -2619,15 +2619,21 @@ static void PrintStatusTab(void) {
                 printedInfo = TRUE;
                 break;
             case STATUS_INFO_INFATUATION: {
-                for (i = 0; i < gBattlersCount; i++) {
+                u8 k;
+                u8 target = sMenuDataPtr->battlerId;
+                u8 savedBattler = gEffectBattler;
+                
+                for (k = 0; k < gBattlersCount; k++) {
                     if ((gBattleMons[sMenuDataPtr->battlerId].status2 & STATUS2_INFATUATION) &&
-                        (gBattleMons[sMenuDataPtr->battlerId].status2 & STATUS2_INFATUATED_WITH(i)) && i != sMenuDataPtr->battlerId) {
-                        gBattleScripting.battler = i;
+                        (gBattleMons[sMenuDataPtr->battlerId].status2 & STATUS2_INFATUATED_WITH(k)) && k != sMenuDataPtr->battlerId) {
+                        target = k;
                         break;
                     }
                 }
 
+                gEffectBattler = target;
                 BattleStringExpandPlaceholders(sText_Title_Status_Infuation, gStringVar4);
+                gEffectBattler = savedBattler;
                 AddTextPrinterParameterized4(
                     windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar4);
 
