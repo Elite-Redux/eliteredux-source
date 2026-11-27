@@ -3773,8 +3773,8 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility) 
     if (FlagGet(FLAG_PERMANENT_UNCHANGEABLE_WEATHER)) {
         return FALSE;
     }
-    if ((gBattleWeather & WEATHER_PRIMAL_ANY) && !BATTLER_HAS_ABILITY(battler, ABILITY_DESOLATE_LAND) && !BATTLER_HAS_ABILITY(battler, ABILITY_BLISTERING_SUN) &&
-        !BATTLER_HAS_ABILITY(battler, ABILITY_PRIMORDIAL_SEA) && !BATTLER_HAS_ABILITY(battler, ABILITY_DELTA_STREAM)) {
+    if ((gBattleWeather & WEATHER_PRIMAL_ANY) && (!viaAbility || (!BATTLER_HAS_ABILITY(battler, ABILITY_DESOLATE_LAND) && !BATTLER_HAS_ABILITY(battler, ABILITY_BLISTERING_SUN) &&
+        !BATTLER_HAS_ABILITY(battler, ABILITY_PRIMORDIAL_SEA) && !BATTLER_HAS_ABILITY(battler, ABILITY_DELTA_STREAM)))) {
         return FALSE;
     } else if (weatherEnumId != ENUM_WEATHER_SUN_PRIMAL && weatherEnumId != ENUM_WEATHER_RAIN_PRIMAL && weatherEnumId != ENUM_WEATHER_STRONG_WINDS &&
                !WEATHER_HAS_EFFECT) {
