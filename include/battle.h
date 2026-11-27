@@ -243,7 +243,7 @@ struct TurnStruct {
     u8 berryReduced:1;
     u8 gemBoost:1;
     u8 rototillerAffected:1;  // to be affected by rototiller
-    u8 dancerUsedMove:1;
+    u8 usedOutOfTurnMove:1; // used for Dancer, Parroting, etc. to ensure no copying of copied moves
     u8 neutralizingGasRemoved:1;  // See VARIOUS_TRY_END_NEUTRALIZING_GAS
     u8 shouldTriggerSwitchItem:1;
     u8 haloed:1;

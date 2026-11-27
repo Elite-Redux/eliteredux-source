@@ -3808,12 +3808,12 @@ bool32 SetPermanentWeather(u32 weatherEnumId) {
 }
 
 bool8 UseOutOfTurnAttack(u8 battler, u8 target, AbilityEnum ability, MoveEnum move, u8 movePower) {
-    if (gTurnStructs[battler].dancerUsedMove) return FALSE;
+    if (gTurnStructs[battler].usedOutOfTurnMove) return FALSE;
     if (gBattleMons[battler].status1 & (STATUS1_SLEEP | STATUS1_FREEZE)) return FALSE;
     if (!IsBattlerAlive(battler) && !(ability && gBattleMoves[move].effect == EFFECT_EXPLOSION)) return FALSE;
 
-    // Set bit and save Dancer mon's original target
-    gTurnStructs[battler].dancerUsedMove = TRUE;
+    // used for Dancer, Parroting, etc. to ensure no copying of copied moves
+    gTurnStructs[battler].usedOutOfTurnMove = TRUE;
 
     gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct){
         .ability = ability,

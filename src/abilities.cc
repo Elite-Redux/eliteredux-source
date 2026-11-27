@@ -3063,6 +3063,7 @@ template <>
 constexpr Ability Impl<ABILITY_DANCER> = {
     .onCopyMove = +[](ON_COPY_MOVE) -> int {
         CHECK(IsDance(attacker, move))
+        CHECK_NOT(gTurnStructs[attacker].usedOutOfTurnMove)
         return UseOutOfTurnAttack(battler, target, ability, move, 0);
     },
 };
@@ -5248,7 +5249,7 @@ constexpr Ability Impl<ABILITY_SPINNING_TOP> = {
 template <>
 constexpr Ability Impl<ABILITY_RETRIBUTION_BLOW> = {
     .onReactive = +[](ON_REACTIVE) -> int {
-        CHECK_NOT(gTurnStructs[battler].dancerUsedMove)
+        CHECK_NOT(gTurnStructs[battler].usedOutOfTurnMove)
         CHECK(gBattlerAttacker != battler)
         CHECK(IsBattlerAlive(gBattlerAttacker))
         CHECK(gCurrentTurnActionNumber < gBattlersCount || gProcessingExtraAttacks)
@@ -7086,6 +7087,7 @@ constexpr Ability Impl<ABILITY_PARROTING> = {
     .onImmune = Impl<ABILITY_SOUNDPROOF>.onImmune,
     .onCopyMove = +[](ON_COPY_MOVE) -> int {
         CHECK(IsSoundMove(attacker, move))
+        CHECK_NOT(gTurnStructs[attacker].usedOutOfTurnMove)
         return UseOutOfTurnAttack(battler, target, ability, move, 0);
     },
     .breakable = TRUE,
@@ -9058,6 +9060,7 @@ template <>
 constexpr Ability Impl<ABILITY_LUNAR_AFFINITY> = {
     .onCopyMove = +[](ON_COPY_MOVE) -> int {
         CHECK(gBattleMoves[move].lunar)
+        CHECK_NOT(gTurnStructs[attacker].usedOutOfTurnMove)
         return UseOutOfTurnAttack(battler, target, ability, move, 0);
     },
 };

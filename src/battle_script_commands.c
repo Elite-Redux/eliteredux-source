@@ -4888,7 +4888,7 @@ static void Cmd_moveend(void) {
                     // Get list of battlers that can dance
                     for (i = 0; i < gBattlersCount; i++) {
                         FILTER(i != gBattlerAttacker)
-                        FILTER_NOT(gTurnStructs[i].dancerUsedMove)
+                        FILTER_NOT(gTurnStructs[i].usedOutOfTurnMove)
                         FILTER(IsBattlerAlive(i))
                         include |= 1 << i;
                         dancersCount++;
@@ -10061,7 +10061,7 @@ static void Cmd_setbide(void) {
 }
 
 static void Cmd_confuseifrepeatingattackends(void) {
-    if (!(gBattleMons[gBattlerAttacker].status2 & STATUS2_LOCK_CONFUSE) && !gTurnStructs[gBattlerAttacker].dancerUsedMove)
+    if (!(gBattleMons[gBattlerAttacker].status2 & STATUS2_LOCK_CONFUSE) && !gTurnStructs[gBattlerAttacker].usedOutOfTurnMove)
         gBattleScripting.moveEffect = (MOVE_EFFECT_THRASH | MOVE_EFFECT_AFFECTS_USER);
 
     gBattlescriptCurrInstr++;
